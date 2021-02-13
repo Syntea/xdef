@@ -38,66 +38,68 @@ public interface XDValueID {
 	public static final short XD_REGEXRESULT = XD_REGEX + 1; // 15
 	/** Container value ID. */
 	public static final short XD_CONTAINER = XD_REGEXRESULT + 1; // 16
+	/** GPS position. */
+	public static final short XD_GPOSITION = XD_CONTAINER + 1; // 17
 	/** org.w3c.dom.Element value ID. */
-	public static final short XD_ELEMENT = XD_CONTAINER + 1; // 17
+	public static final short XD_ELEMENT = XD_GPOSITION + 1; // 18
 	/** org.w3c.dom.Attr value ID */
-	public static final short XD_ATTR = XD_ELEMENT + 1; // 18
+	public static final short XD_ATTR = XD_ELEMENT + 1; // 19
 	/** org.w3c.dom.Text node value ID */
-	public static final short XD_TEXT = XD_ATTR + 1; // 19
+	public static final short XD_TEXT = XD_ATTR + 1; // 20
 	/** Exception object */
-	public static final short XD_EXCEPTION = XD_TEXT + 1; // 20
+	public static final short XD_EXCEPTION = XD_TEXT + 1; // 21
 	/** Report value ID */
-	public static final short XD_REPORT = XD_EXCEPTION + 1; // 21
+	public static final short XD_REPORT = XD_EXCEPTION + 1; // 22
 	/** value of XPATH */
-	public static final short XD_XPATH = XD_REPORT + 1; // 22
+	public static final short XD_XPATH = XD_REPORT + 1; // 23
 	/** value of XQUERY */
-	public static final short XD_XQUERY = XD_XPATH + 1; // 23
+	public static final short XD_XQUERY = XD_XPATH + 1; // 24
 	/** Database service value (DB Connection etc). */
-	public static final short XD_SERVICE = XD_XQUERY + 1; // 24
+	public static final short XD_SERVICE = XD_XQUERY + 1; // 25
 	/** Service statement. */
-	public static final short XD_STATEMENT = XD_SERVICE + 1; // 25
+	public static final short XD_STATEMENT = XD_SERVICE + 1; // 26
 	/** XDResultSet value. */
-	public static final short XD_RESULTSET = XD_STATEMENT + 1; // 26
+	public static final short XD_RESULTSET = XD_STATEMENT + 1; // 27
 	/** Parser value. */
-	public static final short XD_PARSER = XD_RESULTSET + 1; // 27
+	public static final short XD_PARSER = XD_RESULTSET + 1; // 28
 	/** Parser result value. */
-	public static final short XD_PARSERESULT = XD_PARSER + 1; // 28
+	public static final short XD_PARSERESULT = XD_PARSER + 1; // 29
 	/** Named value. */
-	public static final short XD_NAMEDVALUE = XD_PARSERESULT + 1; // 29
+	public static final short XD_NAMEDVALUE = XD_PARSERESULT + 1; // 30
 	/** XML stream writer. */
-	public static final short XD_XMLWRITER = XD_NAMEDVALUE + 1; // 30
+	public static final short XD_XMLWRITER = XD_NAMEDVALUE + 1; // 31
 	/** Item with Locale values. */
-	public static final short XD_LOCALE = XD_XMLWRITER + 1; // 31
+	public static final short XD_LOCALE = XD_XMLWRITER + 1; // 32
 	/** Key of uniqueSet table. */
-	public static final short XD_UNIQUESET_KEY = XD_LOCALE + 1; // 32
+	public static final short XD_UNIQUESET_KEY = XD_LOCALE + 1; // 33
 	/** Any value (may be null). */
-	public static final short XD_ANY = XD_UNIQUESET_KEY + 1; // 33
+	public static final short XD_ANY = XD_UNIQUESET_KEY + 1; // 34
 	/** Object value. */
-	public static final short XD_OBJECT = XD_ANY + 1; // 34
+	public static final short XD_OBJECT = XD_ANY + 1; // 35
 	/** Null type. */
-	static final short XD_NULL = XD_OBJECT + 1; // 35
+	static final short XD_NULL = XD_OBJECT + 1; // 36
 	/** XXElement value. */
-	public static final short XX_ELEMENT = XD_NULL + 1; // 36
+	public static final short XX_ELEMENT = XD_NULL + 1; // 37
 	/** XXText value. */
-	public static final short XX_TEXT = XX_ELEMENT + 1; // 37
+	public static final short XX_TEXT = XX_ELEMENT + 1; // 38
 	/** XXAttr value. */
-	public static final short XX_ATTR = XX_TEXT + 1; // 38
+	public static final short XX_ATTR = XX_TEXT + 1; // 39
 	/** XXData value (supertype for both XXATTR and XXTEXT). */
-	public static final short XX_DATA = XX_ATTR + 1; // 39
+	public static final short XX_DATA = XX_ATTR + 1; // 40
 	/** XXDocument value. */
-	public static final short XX_DOCUMENT = XX_DATA + 1; // 40
+	public static final short XX_DOCUMENT = XX_DATA + 1; // 41
 	/** XXPI (Processing instruction) value. */
-	public static final short XX_PI = XX_DOCUMENT + 1; // 41
+	public static final short XX_PI = XX_DOCUMENT + 1; // 42
 	/** XXComment (comment) value. */
-	public static final short XX_COMMENT = XX_PI + 1; // 42
+	public static final short XX_COMMENT = XX_PI + 1; // 43
 	/** XXChoice value. */
-	public static final short XX_CHOICE = XX_COMMENT + 1; // 43
+	public static final short XX_CHOICE = XX_COMMENT + 1; // 44
 	/** XXMixed value. */
-	public static final short XX_MIXED = XX_CHOICE + 1; // 44
+	public static final short XX_MIXED = XX_CHOICE + 1; // 45
 	/** XXsequence value. */
-	public static final short XX_SEQUENCE = XX_MIXED + 1; // 45
+	public static final short XX_SEQUENCE = XX_MIXED + 1; // 46
 	/** XModel value. */
-	public static final short XM_MODEL = XX_SEQUENCE + 1; // 46
+	public static final short XM_MODEL = XX_SEQUENCE + 1; // 47
 	/** Undefined type. */
-	public static final short XD_UNDEF = XM_MODEL + 1; // 47
+	public static final short XD_UNDEF = XM_MODEL + 1; // 48
 }

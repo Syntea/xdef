@@ -56,6 +56,7 @@ import java.util.StringTokenizer;
 import javax.xml.XMLConstants;
 import org.w3c.dom.Element;
 import org.xdef.XDValueID;
+import org.xdef.impl.code.DefGPosition;
 import org.xdef.impl.code.DefLocale;
 
 /** Provides invoking of external method from script code.
@@ -816,6 +817,18 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 						stack[sp-1].toString().toUpperCase(),
 						stack[sp].toString());
 					sp -= 2;
+				}
+				return sp;
+			}
+			case NEW_GPOSITION: {
+				if (item.getParam() == 3) {
+					stack[sp - 2] = new DefGPosition(stack[sp-2].doubleValue(),
+						stack[sp-1].doubleValue(), stack[sp].doubleValue());
+					sp -= 2;
+				} else {
+					stack[sp - 1] = new DefGPosition(stack[sp-1].doubleValue(),
+						stack[sp].doubleValue());
+					sp--;
 				}
 				return sp;
 			}

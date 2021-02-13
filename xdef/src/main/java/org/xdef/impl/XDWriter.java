@@ -35,6 +35,7 @@ import org.xdef.XDValueID;
 import org.xdef.impl.code.DefLocale;
 import java.lang.reflect.Method;
 import java.util.Locale;
+import org.xdef.impl.code.DefGPosition;
 
 /** Provides writing of XD objects to OutputStream.
  * @author Vaclav Trojan
@@ -165,6 +166,12 @@ public final class XDWriter extends SObjectWriter {
 							writeXD(y.getXDNamedItem(y.getXDNamedItemName(i)));
 						}
 						return;
+					}
+					case XDValueID.XD_GPOSITION: {
+						DefGPosition y = (DefGPosition) x;
+						writeDouble(y.getLatitude());
+						writeDouble(y.getLongitude());
+						writeDouble(y.getAltitude());
 					}
 					case XDValueID.XD_NAMEDVALUE: {
 						XDNamedValue y = (XDNamedValue) x;

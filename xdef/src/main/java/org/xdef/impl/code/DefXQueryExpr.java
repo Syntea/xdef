@@ -19,6 +19,7 @@ import java.lang.reflect.Constructor;
 import java.math.BigDecimal;
 import org.xdef.XDValueType;
 import java.math.BigInteger;
+import org.xdef.sys.GPosition;
 
 /** Compiled XQuery expression.
  * @author Vaclav Trojan
@@ -54,11 +55,6 @@ public class DefXQueryExpr extends KXqueryExpr implements XDXQueryExpr {
 	 * @param source String with XPath expression.
 	 */
 	public DefXQueryExpr(final String source) {super(source);}
-
-	/** Creates a new instance of DefXqueryExpr
-	 * @param source String with XPath expression.
-	 */
-	private DefXQueryExpr(final KXqueryExpr expr) {super(expr.getSourceExpr());}
 
 	/** Get value of item as String representation of value.
 	 * @return The string representation of value of the object.
@@ -157,6 +153,8 @@ public class DefXQueryExpr extends KXqueryExpr implements XDXQueryExpr {
 	public SDuration durationValue() {return null;}
 	@Override
 	public XDContainer contextValue() {return null;}
+	@Override
+	public GPosition gpsValue() {return null;}
 	@Override
 	public XDService serviceValue(){return null;}
 	@Override

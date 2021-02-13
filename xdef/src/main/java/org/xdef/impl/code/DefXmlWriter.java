@@ -21,6 +21,7 @@ import org.w3c.dom.Node;
 import org.xdef.XDContainer;
 import org.xdef.XDValueType;
 import java.math.BigInteger;
+import org.xdef.sys.GPosition;
 
 /** Provides incremental writing of XML data to a data stream.
  * @author Vaclav Trojan
@@ -31,7 +32,7 @@ public class DefXmlWriter extends KXmlOutStream
 	/** Creates new instance of DefXmlOutStream with java.io.Writer
 	 * @param writer where to write XML.
 	 * @param encoding encoding of XML stream.
-	 * @param writeDocumentHeader if <tt>true</tt> then the XML header is
+	 * @param writeDocumentHeader if true then the XML header is
 	 * written, otherwise no XML header is written.
 	 */
 	public DefXmlWriter(final Writer writer,
@@ -43,7 +44,7 @@ public class DefXmlWriter extends KXmlOutStream
 	/** Creates new instance of DefXmlOutStream with java.io.OutputStream.
 	 * @param out where to write XML.
 	 * @param encoding encoding of XML stream.
-	 * @param writeDocumentHeader if <tt>true</tt> then the XML header is
+	 * @param writeDocumentHeader if true then the XML header is
 	 * written, otherwise no XML header is written.
 	 * @throws IOException if an error occurs.
 	 */
@@ -58,7 +59,7 @@ public class DefXmlWriter extends KXmlOutStream
 	 * only if something was written.
 	 * @param filename the name of file where to write XML.
 	 * @param encoding encoding of XML stream.
-	 * @param writeDocumentHeader if <tt>true</tt> then the XML header is
+	 * @param writeDocumentHeader if true then the XML header is
 	 * written, otherwise no XML header is written.
 	 * @throws IOException if an error occurs.
 	 */
@@ -152,9 +153,11 @@ public class DefXmlWriter extends KXmlOutStream
 	@Override
 	public SDuration durationValue() {return null;}
 	@Override
-	public byte[] getBytes() {return null;}
-	@Override
 	public XDContainer contextValue() {return null;}
+	@Override
+	public GPosition gpsValue() {return null;}
+	@Override
+	public byte[] getBytes() {return null;}
 	@Override
 	public XDService serviceValue() {return null;}
 	@Override

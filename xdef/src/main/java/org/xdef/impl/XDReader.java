@@ -53,6 +53,7 @@ import java.io.InputStream;
 import java.lang.reflect.Method;
 import org.xdef.XDContainer;
 import org.xdef.XDValueID;
+import org.xdef.impl.code.DefGPosition;
 import org.xdef.impl.code.DefLocale;
 
 /** Provides reading of XD objects from InputStream.
@@ -190,6 +191,9 @@ public final class XDReader extends SObjectReader {
 						}
 						return y;
 					}
+					case XDValueID.XD_GPOSITION:
+						return new DefGPosition(
+							readDouble(), readDouble(), readDouble());
 					case XDValueID.XD_LOCALE: {
 						return new DefLocale(
 							readString(), readString(), readString());
