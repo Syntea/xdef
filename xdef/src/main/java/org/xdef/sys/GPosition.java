@@ -57,6 +57,20 @@ public class GPosition {
 	public final void setLongitude(final double x) {_longitude = x;}
 	public final void setAltitude(final double x) {_altitude = x;}
 	@Override
+	public int hashCode() {
+		return (int) Double.doubleToLongBits(27*_latitude +
+			17*(_longitude+19*(_altitude == Double.MIN_VALUE ? 1 : _altitude)));
+	}
+	@Override
+	public boolean equals(Object x) {
+		if (x == null && !(x instanceof GPosition)) {
+			return false;
+		}
+		GPosition y = (GPosition) x;
+		return _latitude == y._latitude && _longitude == y._longitude
+			&& _altitude == y._altitude;
+	}
+	@Override
 	public String toString() {
 		return "G(" + _latitude + ", " + _longitude
 			+ (_altitude != Double.MIN_VALUE ? ", " + _altitude : "") + ')';

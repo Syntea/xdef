@@ -4,7 +4,9 @@ import org.xdef.XDGPosition;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
 import org.xdef.XDValueType;
+import org.xdef.msg.SYS;
 import org.xdef.sys.GPosition;
+import org.xdef.sys.SIllegalArgumentException;
 
 /** The class DefBoolean implements the internal object with GPosition value.
  * @author Vaclav Trojan
@@ -57,6 +59,26 @@ public class DefGPosition extends XDValueAbstract implements XDGPosition {
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDValue interface
 ////////////////////////////////////////////////////////////////////////////////
+	@Override
+	public boolean equals(final XDValue arg) {
+		if (arg instanceof DefGPosition) {
+			DefGPosition x = (DefGPosition) arg;
+			if (_position == null) {
+				return x._position == null;
+			}
+			return _position.equals(x._position);
+		}
+		return false;
+	}
+	@Override
+	public int compareTo(final XDValue arg) throws IllegalArgumentException {
+		if (arg instanceof DefGPosition) {
+			if (this.equals((DefGPosition) arg)) {
+				return 0;
+			}
+		}
+		throw new SIllegalArgumentException(SYS.SYS085);//Incomparable arguments
+	}
 	@Override
 	public short getItemId() {return XD_GPOSITION;}
 	@Override
