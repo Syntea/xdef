@@ -24,6 +24,7 @@ import org.xdef.XDContainer;
 import org.xdef.XDValueType;
 import java.math.BigInteger;
 import org.xdef.impl.XCodeProcessor;
+import org.xdef.sys.GPosition;
 
 /** Implementation of compiled XPath expression.
  * @author Vaclav Trojan
@@ -41,9 +42,9 @@ public final class DefXPathExpr extends KXpathExpr implements XDValue {
 
 	/** Creates a new instance of DefXpathExpr
 	 * @param source the String with XPath expression.
-	 * @param nc NameSpace context or <tt>null</tt>.
-	 * @param fr Function resolver or <tt>null</tt>.
-	 * @param vr Variable resolver or <tt>null</tt>.
+	 * @param nc NameSpace context or null.
+	 * @param fr Function resolver or null.
+	 * @param vr Variable resolver or null.
 	 */
 	public DefXPathExpr(final String source,
 		NamespaceContext nc,
@@ -63,7 +64,7 @@ public final class DefXPathExpr extends KXpathExpr implements XDValue {
 	public KXpathExpr getXPath() {return this;}
 
 	/** Execute XPath expression and return result.
-	 * @param node node or <tt>null</tt>.
+	 * @param node node or null.
 	 * @return result of XPath expression.
 	 */
 	public XDContainer exec(final Node node) {
@@ -214,6 +215,8 @@ public final class DefXPathExpr extends KXpathExpr implements XDValue {
 	public SDuration durationValue() {return null;}
 	@Override
 	public XDContainer contextValue() {return null;}
+	@Override
+	public GPosition gpsValue() {return null;}
 	@Override
 	public XDService serviceValue(){return null;}
 	@Override

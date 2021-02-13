@@ -12,6 +12,7 @@ import test.XDTester;
 import java.net.URL;
 import org.xdef.component.XComponent;
 import org.xdef.json.JNull;
+import org.xdef.sys.GPosition;
 import org.xdef.sys.SUtils;
 
 /** Various tests JSON, X-component.
@@ -98,6 +99,34 @@ public class MyTest_2 extends XDTester {
 		Element el;
 		XComponent xc;
 		ArrayReporter reporter = new ArrayReporter();
+		try {
+			xdef =
+"<xd:def xmlns:xd='" + XDConstants.XDEF40_NS_URI + "' root='A'>\n" +
+"<xd:declaration\n>\n"+
+"  GPosition gps = new GPosition(1,-3);\n"+
+"</xd:declaration>\n"+
+"<A d=\"gps(); finally outln(gps)\" />\n"+
+"<xd:component>\n"+
+"  %class bugreports.data.TY_GPS %link #A;\n"+
+"</xd:component>\n"+
+"</xd:def>";
+			xp = XDFactory.compileXD(null, xdef);
+//			xp = compile(xdef);
+//			xp.displayCode();
+			genXComponent(xp, tempDir);
+//if(true)return;
+			xml = "<A d='G(-1, 3, 0)'/>";
+			xc = xp.createXDDocument().parseXComponent(xml,
+				null, reporter);
+			System.out.println(xc.getClass());
+			xml = "<A d='G(-1, 3, 0)'/>";
+			el = parse(xp, "", xml, reporter);
+			assertNoErrors(reporter);
+			assertEq(xml, el);
+			System.out.println(new GPosition("G(-1.5, -1e-2)"));
+			System.out.println(new GPosition("G(-1.5, 0, -0.5e-3)"));
+if(true)return;
+		} catch (Exception ex) {fail(ex);}
 ////////////////////////////////////////////////////////////////////////////////
 //		try {
 //			xdef =

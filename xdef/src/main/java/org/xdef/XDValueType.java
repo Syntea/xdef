@@ -38,6 +38,8 @@ public enum XDValueType {
 	REGEXRESULT,
 	/** Container value ID. */
 	CONTAINER,
+	/** GPS position. */
+	GPOSITION,
 	/** org.w3c.dom.Element value ID. */
 	ELEMENT,
 	/** org.w3c.dom.Attr value ID */

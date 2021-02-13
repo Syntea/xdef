@@ -235,7 +235,8 @@ TypeIdentifier ::= ("int" | "String" | "float" | "boolean" | "Datetime"
   | "Decimal" | "Duration" | "Exception" | "Container" | "Element" | "Message"
   | "Bytes" | "XmlOutStream" | "BNFGrammar" | "BNFRule" | "Parser" | "Service"
   | "ResultSet" | "Statement" | "ParseResult" | "Locale" | "uniqueSetKey"
-  | "AnyValue" | "Output" | "Input" | "NamedValue" | "Regex") $rule
+  | "AnyValue" | "Output" | "Input" | "NamedValue" | "Regex" | "GPosition")
+  $rule
 
 Value ::= (Constructor | PredefinedConstant | Increment
   | Method | VariableReference | KeyParameterReference | Literal | AttributeName

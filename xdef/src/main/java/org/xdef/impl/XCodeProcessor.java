@@ -3134,6 +3134,7 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 				case NEW_XMLWRITER:
 				case NEW_REPORT:
 				case NEW_LOCALE:
+				case NEW_GPOSITION:
 					sp = XCodeProcessorExt.perform(this, item, sp, _stack);
 					continue;
 				//Other codes (implemented in XCodeProcessorExt)
