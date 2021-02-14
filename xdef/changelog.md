@@ -1,17 +1,17 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 40.1.2, release-date 2021-02-13
+# Version 40.1.2, release-date 2021-02-14
 * corrected the bug in the X-script method `s.contains(s)`.
 * corrected the bug in the construction node of JSON.
 * corrected the bug in JSON parser: duplicated name in object not reported.
 * corrected the bug in JSON parser: after decimal point and before decimal point
   must be a digit.
 * to `org.xdef.XDDocument` it is implemented the new method
-    `Object jcreate(String name, ReportWriter reporter)`
+  `Object jcreate(String name, ReportWriter reporter)`.
   This method allows to construct JSON data acccording to JSON model with given
   name. The method returns constructed JSON object.
 * to `org.xdef.proc.XXNode` it is implemented the new method
-    `public void setJSONContext(Object data)`
+  `public void setJSONContext(Object data)`.
   This method sets the context with JSON data used in the construction mode.
 * to the BNF grammar implemented new inline functions `$skipToNextLine`,
   `$UTFChar`, and it is implemented the possibility to specify case insensitive
