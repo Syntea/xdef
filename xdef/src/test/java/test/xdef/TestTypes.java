@@ -487,6 +487,14 @@ public final class TestTypes extends XDTester {
 			xml = "<a a='2'/>";
 			parse(xp, "", xml, reporter);
 			assertTrue(reporter.errorWarnings(), "Error not reported");
+			xdef = // GPS
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+" <a a='required gps()'/>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			xml = "<a a='gps(1,-2)'/>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
 			xdef = // union - declared type parser
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<xd:declaration> type t union(%item=[decimal,boolean]);</xd:declaration>\n"+

@@ -169,9 +169,9 @@ public final class XDWriter extends SObjectWriter {
 					}
 					case XDValueID.XD_GPOSITION: {
 						DefGPosition y = (DefGPosition) x;
-						writeDouble(y.getLatitude());
-						writeDouble(y.getLongitude());
-						writeDouble(y.getAltitude());
+						writeDouble(y.latitude());
+						writeDouble(y.longitude());
+						writeDouble(y.altitude());
 					}
 					case XDValueID.XD_NAMEDVALUE: {
 						XDNamedValue y = (XDNamedValue) x;
