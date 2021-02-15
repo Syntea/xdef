@@ -124,7 +124,7 @@ public class JsonParser extends StringParser {
 					} else {
 						if (!isChar(':') && i != 1) {
 							//"&{0}"&{1}{ or "}{"} expected
-							error(JSON.JSON002, ",", "}");
+							error(JSON.JSON002, ":");
 						}
 						isSpacesOrComments();
 						o = readValue();
@@ -153,7 +153,7 @@ public class JsonParser extends StringParser {
 						isSpacesOrComments();
 						if (!isChar(':')) {
 							//"&{0}"&{1}{ or "}{"} expected
-							error(JSON.JSON002, ",", "}");
+							error(JSON.JSON002, ":");
 						}
 						isSpacesOrComments();
 						o = readValue();
@@ -199,7 +199,10 @@ public class JsonParser extends StringParser {
 				}
 			}
 			//"&{0}"&{1}{ or "}{"} expected&{#SYS000}
-			fatal(JSON.JSON002, "}");
+			error(JSON.JSON002, "}");
+			if (findOneOfChars("[]{}") == NOCHAR) {// skip to next item
+				setEos();
+			}
 			return result;
 		} else if (isChar('[')) {
 			List<Object> result;
@@ -278,6 +281,9 @@ public class JsonParser extends StringParser {
 				}
 			}
 			error(JSON.JSON002, "]"); //"&{0}"&{1}{ or "}{"} expected
+			if (findOneOfChars("[]{}") == NOCHAR) {// skip to next item
+				setEos();
+			}
 			return result;
 		} else if (isChar('"')) { // string
 			String s = JsonUtil.readJSONString(this);
@@ -348,7 +354,9 @@ public class JsonParser extends StringParser {
 					? new CompileJsonXdef.JValue(_sPosition,number) : number;
 			}
 			error(JSON.JSON010); //JSON value expected
-			findOneOfChars(",[]{}"); // skip to next item
+			if (findOneOfChars("[]{}") == NOCHAR) {// skip to next item
+				setEos();
+			}
 			return _genJObjects
 				? new CompileJsonXdef.JValue(_sPosition, null) : null;
 		}
@@ -368,5 +376,4 @@ public class JsonParser extends StringParser {
 		}
 		return result;
 	}
-
 }
