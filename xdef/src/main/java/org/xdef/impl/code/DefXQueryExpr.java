@@ -19,7 +19,7 @@ import java.lang.reflect.Constructor;
 import java.math.BigDecimal;
 import org.xdef.XDValueType;
 import java.math.BigInteger;
-import org.xdef.sys.GPosition;
+import org.xdef.sys.GPSPosition;
 
 /** Compiled XQuery expression.
  * @author Vaclav Trojan
@@ -154,7 +154,7 @@ public class DefXQueryExpr extends KXqueryExpr implements XDXQueryExpr {
 	@Override
 	public XDContainer contextValue() {return null;}
 	@Override
-	public GPosition gpsValue() {return null;}
+	public GPSPosition GPSValue() {return null;}
 	@Override
 	public XDService serviceValue(){return null;}
 	@Override

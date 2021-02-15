@@ -782,13 +782,13 @@ public interface CodeTable {
 	/** Create XML writer. */
 	static final short NEW_LOCALE = NEW_REPORT + 1;
 	/** Create GPosition. */
-	static final short NEW_GPOSITION = NEW_LOCALE + 1;
+	static final short NEW_GPSPOSITION = NEW_LOCALE + 1;
 
 	////////////////////////////////////////////////////////////////////////////
 	//External methods
 	////////////////////////////////////////////////////////////////////////////
 	/** External method with fixed parameters. */
-	static final short EXTMETHOD =  NEW_GPOSITION + 1;
+	static final short EXTMETHOD =  NEW_GPSPOSITION + 1;
 	/** External method with array of parameters. */
 	static final short EXTMETHOD_ARRAY = EXTMETHOD + 1;
 	/** External check method */
@@ -841,7 +841,12 @@ public interface CodeTable {
 	static final short DURATION_GETEND = DURATION_GETSTART + 1;
 	static final short DURATION_GETNEXTTIME = DURATION_GETEND + 1;
 
-	static final short ELEMENT_CHILDNODES = DURATION_GETNEXTTIME + 1;
+	static final short GPS_LATITUDE = DURATION_GETNEXTTIME + 1;
+	static final short GPS_LONGITUDE = GPS_LATITUDE + 1;
+	static final short GPS_ALTITUDE = GPS_LONGITUDE + 1;
+	static final short GPS_DISTANCETO = GPS_ALTITUDE + 1;
+
+	static final short ELEMENT_CHILDNODES = GPS_DISTANCETO + 1;
 	static final short ELEMENT_NAME = ELEMENT_CHILDNODES + 1;
 	static final short ELEMENT_NSURI = ELEMENT_NAME + 1;
 	static final short ELEMENT_GETTEXT = ELEMENT_NSURI + 1;

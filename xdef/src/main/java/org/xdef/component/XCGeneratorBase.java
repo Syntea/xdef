@@ -259,8 +259,8 @@ class XCGeneratorBase {
 				return "org.xdef.sys.SDuration";
 			case XDValueID.XD_DATETIME:
 				return "org.xdef.sys.SDatetime";
-			case XDValueID.XD_GPOSITION:
-				return "org.xdef.sys.GPosition";
+			case XDValueID.XD_GPSPOSITION:
+				return "org.xdef.sys.GPSPosition";
 			case XDValueID.XD_BYTES:
 				_byteArrayEncoding |= getBytesType(xdata);
 				return "byte[]";
@@ -329,8 +329,8 @@ class XCGeneratorBase {
 				return result + "getParsedValue().durationValue()";
 			case XDValueID.XD_DATETIME:
 				return result + "getParsedValue().datetimeValue()";
-			case XDValueID.XD_GPOSITION:
-				return result + "getParsedValue().gpsValue()";
+			case XDValueID.XD_GPSPOSITION:
+				return result + "getParsedValue().GPSValue()";
 			case XDValueID.XD_BYTES:
 				return result + "getParsedValue().getBytes()";
 			case XDValueID.XD_PARSER:
