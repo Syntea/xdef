@@ -233,9 +233,9 @@ public class Canonize {
 		// register report messages
 		GenReportTables.main();
 
-		// update date in files changelof.md and in pom.xml
+		// update date in files changelog.md and in pom.xml
 		String date = String.format("%tF", new Date()); // actual date
 		updateDateInChangeLog(date);
-		updateDateInPomXml(date);
+//		updateDateInPomXml(date);
 	}
 }

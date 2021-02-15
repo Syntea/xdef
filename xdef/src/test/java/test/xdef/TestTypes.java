@@ -487,14 +487,27 @@ public final class TestTypes extends XDTester {
 			xml = "<a a='2'/>";
 			parse(xp, "", xml, reporter);
 			assertTrue(reporter.errorWarnings(), "Error not reported");
-			xdef = // GPS
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-" <a a='required gps()'/>\n"+
+			xdef = // test GPS
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='A'>\n" +
+"<xd:declaration\n>\n"+
+"  GPSPosition p = new GPSPosition(50.08, 14.42, 399)/* Prague */, q;\n"+
+"  int d; /* distance in km */\n"+
+"</xd:declaration>\n"+
+"<A xd:script='finally d = round(p.distanceTo(q)/1000); /* km */'\n"+
+"   q='GPS(); onTrue q=getParsedValue();'/>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			xml = "<a a='gps(1,-2)'/>";
-			assertEq(xml, parse(xp, "", xml, reporter));
+			xml = "<!-- Vienna --> <A q='GPS(48.2, 16.37, 151)'/>";
+			xd = xp.createXDDocument();
+			el = parse(xd, xml, reporter);
 			assertNoErrors(reporter);
+			assertEq(xml, el);
+			assertEq(253, xd.getVariable("d").intValue());
+			xml = "<!-- London --> <A q='GPS(51.52, -0.09, 0)'/>";
+			el = parse(xd, xml, reporter);
+			assertNoErrors(reporter);
+			assertEq(xml, el);
+			assertEq(1031, xd.getVariable("d").intValue());
 			xdef = // union - declared type parser
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<xd:declaration> type t union(%item=[decimal,boolean]);</xd:declaration>\n"+

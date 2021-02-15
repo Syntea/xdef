@@ -19,14 +19,13 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.List;
 import org.w3c.dom.Element;
-import org.xdef.XDFactory;
-import org.xdef.msg.SYS;
-import org.xdef.sys.SRuntimeException;
+import org.xdef.sys.GPSPosition;
 
 /** Test XComponents.
  * @author Vaclav Trojan
  */
 public final class TestXComponents extends XDTester {
+	String _tempDir;
 
 	public TestXComponents() {super();}
 
@@ -55,19 +54,6 @@ public final class TestXComponents extends XDTester {
 	 * @param xdsources array with path names of sources of X-definitions.
 	 */
 	private XDPool genComponents(final String... xdsources) {
-		File f = new File(getTempDir());
-		if (f.exists() && !f.isDirectory()) {
-			throw new RuntimeException(f.getAbsolutePath()
-				+ " is not directory");
-		}
-		f.mkdir();
-		String tempDir = f.getAbsolutePath().replace('\\', '/');
-		if (!tempDir.endsWith("/")) {
-			tempDir += '/';
-		}
-		if (!f.isDirectory()) {
-			throw new RuntimeException('\"' + tempDir + "\" is not directory");
-		}
 		// ensure that following classes are compiled!
 		TestXComponents_C.class.getClass();
 		TestXComponents_G.class.getClass();
@@ -80,22 +66,9 @@ public final class TestXComponents extends XDTester {
 		TestXComponents_Y08.class.getClass();
 		TestXComponents_Y21enum.class.getClass();
 		// generate XCDPool from sources
-		XDPool xp = XDFactory.compileXD(null,xdsources);
+		XDPool xp = compile(xdsources);
 		// generate and compile XComponents from xp
-		File fdir = new File(tempDir);
-		if (fdir.exists() && !fdir.isDirectory()) {
-			//Directory doesn't exist or isn't accessible: &{0}
-			throw new SRuntimeException(SYS.SYS025, fdir.getAbsolutePath());
-		}
-		if (fdir.exists()) { // ensure the src directory exists.
-			try {
-				SUtils.deleteAll(tempDir, true); // clear this directory
-			} catch (Exception ex) {
-				throw new RuntimeException(ex);
-			}
-		}
-		fdir.mkdirs();
-		genXComponent(xp, fdir);
+		genXComponent(xp, new File(_tempDir));
 		return xp;
 	}
 
@@ -113,6 +86,46 @@ public final class TestXComponents extends XDTester {
 		SDatetime sd;
 		ArrayReporter reporter = new ArrayReporter();
 		final String dataDir = getDataDir() + "test/";
+		File f = new File(getTempDir());
+		if (f.exists() && !f.isDirectory()) {
+			throw new RuntimeException(f.getAbsolutePath()
+				+ " is not directory");
+		}
+		f.mkdir();
+		_tempDir = f.getAbsolutePath().replace('\\', '/');
+		if (!_tempDir.endsWith("/")) {
+			_tempDir += '/';
+		}
+		if (!f.isDirectory()) {
+			throw new RuntimeException('\"' + _tempDir + "\" is not directory");
+		}
+		try {
+			String xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='A'>\n" +
+"<xd:declaration\n>\n"+
+"  GPSPosition p = new GPSPosition(50.08, 14.42, 399)/* Prague */, q;\n"+
+"  int d; /* distance in km */\n"+
+"</xd:declaration>\n"+
+"<A xd:script='finally d = round(p.distanceTo(q)/1000); /* km */'\n"+
+"   q='GPS(); onTrue q=getParsedValue();'/>\n"+
+"<xd:component>\n"+
+"  %class test.xdef.TY_GPS %link #A;\n"+
+"</xd:component>\n"+
+"</xd:def>";
+			XDPool xp = compile(xdef);
+			genXComponent(xp, new File(_tempDir));
+			xml = "<!-- Vienna --> <A q='GPS(48.2, 16.37, 151)'/>";
+			xd = xp.createXDDocument();
+			xc = xd.parseXComponent(xml, null, reporter);
+			assertEq(253, xd.getVariable("d").intValue());
+			assertEq(new GPSPosition(48.2, 16.37, 151),
+				getValueFromGetter(xc, "getq"));
+			xml = "<!-- London --> <A q='GPS(51.52, -0.09, 0)'/>";
+			el = parse(xd, xml, reporter);
+			assertNoErrors(reporter);
+			assertEq(xml, el);
+			assertEq(1031, xd.getVariable("d").intValue());
+		} catch (Exception ex) {fail(ex);}
 		XDPool xp = genComponents(getDataDir() + "test/TestXComponents.xdef",
 			dataDir + "TestXComponent_Z.xdef");
 		try {
@@ -137,12 +150,12 @@ public final class TestXComponents extends XDTester {
 			assertEq("/A/@a", getValueFromGetter(xc, "xposOfa"));
 			assertEq("/A/d[1]/$text", getValueFromGetter(
 				getValueFromGetter(xc, "getd"), "xposOf$value").toString());
-			assertEq(getValueFromGetter(getValueFromGetter(xc, "getd"),
-				"get$value").toString(), "2013-09-14");
 			list = (List) getValueFromGetter(xc,"get$Y");
 			assertEq("1", list.get(0));
 			assertEq("2", list.get(1));
 			assertEq("3", getValueFromGetter(xc,"get$Y_1"));
+			assertEq(getValueFromGetter(getValueFromGetter(xc, "getd"),
+				"get$value").toString(), "2013-09-14");
 			assertEq(getValueFromGetter(getValueFromGetter(xc, "getd"),
 				"get$value"), getValueFromGetter(getValueFromGetter(xc, "getd"),
 				"dateOf$value"));

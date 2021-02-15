@@ -78,6 +78,7 @@ import org.xdef.impl.code.CodeSWTableStr;
 import org.xdef.impl.compile.CompileBase;
 import org.xdef.impl.code.CodeTable;
 import org.xdef.impl.code.CodeXD;
+import org.xdef.impl.code.DefGPSPosition;
 import org.xdef.impl.code.DefLocale;
 import org.xdef.impl.debug.ChkGUIDebug;
 import org.xdef.model.XMDebugInfo;
@@ -1084,6 +1085,26 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 					_stack[++sp] = new DefElement(el);
 					continue;
 				}
+				case GPS_LATITUDE:
+					_stack[sp] =
+						new DefDouble(((DefGPSPosition) _stack[sp]).latitude());
+					continue;
+				case GPS_LONGITUDE:
+					_stack[sp] =
+						new DefDouble(((DefGPSPosition)_stack[sp]).longitude());
+					continue;
+				case GPS_ALTITUDE:
+					_stack[sp] =
+						new DefDouble(((DefGPSPosition) _stack[sp]).altitude());
+					continue;
+				case GPS_DISTANCETO:
+					_stack[sp - 1] =
+						new DefDouble(((DefGPSPosition) _stack[sp - 1])
+							.distanceTo(((DefGPSPosition) _stack[sp])
+								.GPSValue()));
+					sp--;
+					continue;
+
 ////////////////////////////////////////////////////////////////////////////////
 // compile
 ////////////////////////////////////////////////////////////////////////////////
@@ -3134,7 +3155,7 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 				case NEW_XMLWRITER:
 				case NEW_REPORT:
 				case NEW_LOCALE:
-				case NEW_GPOSITION:
+				case NEW_GPSPOSITION:
 					sp = XCodeProcessorExt.perform(this, item, sp, _stack);
 					continue;
 				//Other codes (implemented in XCodeProcessorExt)

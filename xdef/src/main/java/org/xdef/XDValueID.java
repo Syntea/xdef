@@ -39,9 +39,9 @@ public interface XDValueID {
 	/** Container value ID. */
 	public static final short XD_CONTAINER = XD_REGEXRESULT + 1; // 16
 	/** GPS position. */
-	public static final short XD_GPOSITION = XD_CONTAINER + 1; // 17
+	public static final short XD_GPSPOSITION = XD_CONTAINER + 1; // 17
 	/** org.w3c.dom.Element value ID. */
-	public static final short XD_ELEMENT = XD_GPOSITION + 1; // 18
+	public static final short XD_ELEMENT = XD_GPSPOSITION + 1; // 18
 	/** org.w3c.dom.Attr value ID */
 	public static final short XD_ATTR = XD_ELEMENT + 1; // 19
 	/** org.w3c.dom.Text node value ID */

@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 40.1.2, release-date 2021-02-14
+# Version 40.1.2, release-date 2021-02-15
 * corrected the bug in the X-script method `s.contains(s)`.
 * corrected the bug in the construction node of JSON.
 * corrected the bug in JSON parser: duplicated name in object not reported.
@@ -13,7 +13,7 @@
 * to `org.xdef.proc.XXNode` it is implemented the new method
   `public void setJSONContext(Object data)`.
   This method sets the context with JSON data used in the construction mode.
-* to the BNF grammar implemented new inline functions `$skipToNextLine`,
+* to the BNF grammar are implemented new inline functions `$skipToNextLine`,
   `$UTFChar`, and it is implemented the possibility to specify case insensitive
   terminal symbols (when the terminal symbol specification follows percentage
   character).
@@ -21,9 +21,9 @@
   facets `%minInclusive`, `%maxInclusive`, `%minExclusive` or `%maxExclusive`,
   then it is now skipped the test of date validity (which can be set
   by properties or by methods `setMinDate` or `setMaxDate`).
-* method `setBufIndex(int)` in the class org.xdef.sys.StringParser was renamed
-  to `setIndex(int)`.
-* new version of transformation of XML to JSON and of JSON to XML.
+* the method `setBufIndex(int)` in the class org.xdef.sys.StringParser was
+  renamed to `setIndex(int)`.
+* implemented new version of transformation of XML to JSON and of JSON to XML.
 
 # Version 40.1.1, release-date 2020-09-17
 * corrected bugs in BNF syntax of X-definitions

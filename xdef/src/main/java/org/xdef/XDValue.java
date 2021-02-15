@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.xdef.sys.GPosition;
+import org.xdef.sys.GPSPosition;
 
 /** Provides the interface for usage of internal objects of x-script.
  * This interface provides general access methods to values of variables and
@@ -99,7 +99,7 @@ public interface XDValue extends Comparable<XDValue>, XDValueID {
 	/** Get GPS value.
 	 * @return GPS value of this object or return null.
 	 */
-	public GPosition gpsValue();
+	public GPSPosition GPSValue();
 
 	/** Get bytes array representing value.
 	 * @return array of bytes or null.
