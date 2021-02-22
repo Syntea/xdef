@@ -93,11 +93,53 @@ public class MyTest_2 extends XDTester {
 		String s;
 		String json;
 		Object j;
-		Object o;
 		XDDocument xd;
 		Element el;
 		XComponent xc;
 		ArrayReporter reporter = new ArrayReporter();
+		try {
+			xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' name='Example' root='root'>\n"+
+"<xd:declaration>\n" +
+" String base;\n" +
+" GPSPosition baseGPS;\n" +
+" String mesto;\n" +
+" GPSPosition mestoGPS;\n" +
+" void pritDistance() {\n" +
+"   printf('%s to %s: %.1f km\\n',\n"+
+"     base + ' ' + baseGPS,\n"+
+"     mesto + ' ' + mestoGPS,\n"+
+"     baseGPS.distanceTo(mestoGPS)/1000);\n" +
+" }\n" +
+"</xd:declaration>\n" +
+"<root>\n" +
+"  <base name=\"string(); onTrue base = getParsedValue();\"\n"+
+"        GPS=\"GPS(); onTrue baseGPS = getParsedValue();\"/>\n" +
+"  <mesto xd:script=\"*; finally pritDistance();\"\n"+
+"         name=\"string; onTrue mesto = getParsedValue();\"\n"+
+"         GPS=\"GPS(); onTrue mestoGPS = getParsedValue();\"/>\n" +
+"</root>\n" +
+"<xd:component>\n"+
+"  %class bugreports.data.Mesta %link Example#root;\n"+
+"</xd:component>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			genXComponent(xp, tempDir);
+			xml =
+"<root>\n" +
+"  <base name=\"Praha\" GPS=\"GPS(50.08, 14.42, 399.0)\"/>\n" +
+"  <mesto name=\"České_Budějovice\" GPS=\"GPS(48.97, 14.47, 381.0)\"/>\n" +
+"  <mesto name=\"Plzen\" GPS=\"GPS(50.23, 12.87, 447.0)\"/>\n" +
+"  <mesto name=\"Karlovy_Vary\" GPS=\"GPS(50.23, 12.87, 447.0)\"/>\n" +
+"  <mesto name=\"Pardubice=\" GPS=\"GPS(50.04, 15.78, 237.0)\"/>\n" +
+"  <mesto name=\"Hradec_Králové\" GPS=\"GPS(50.21, 15.83, 235.0)\"/>\n" +
+"  <mesto name=\"Brno\" GPS=\"GPS(49.2, 16.62, 237.0)\"/>\n" +
+"  <mesto name=\"Wien\" GPS=\"GPS(48.2, 16.37, 151.0)\"/>\n" +
+"  <mesto name=\"London\" GPS=\"GPS(51.52, -0.09, 0.0)\"/>\n" +
+"</root>";
+			xc = xp.createXDDocument().parseXComponent(xml, null, reporter);
+		} catch (Exception ex) {fail(ex);}
+if(T)return;
 ////////////////////////////////////////////////////////////////////////////////
 //		try {
 //			xdef =
@@ -192,7 +234,7 @@ if(T)return;
 " },\n" +
 " {\"first name\": \"John\",\n" +
 "  \"last name\" : \"Brown\",\n" +
-"  \"age\"       : 1,\n" +
+"  \"age\"       : 1\n" +
 " }\n" +
 "]";
 			xd = xp.createXDDocument();
@@ -255,7 +297,7 @@ $.store.book[0].title			$['store']['book'][0]['title']
 "        \"isbn\": \"0-553-21311-3\",\n" +
 "        \"author\": \"Herman Melville\",\n" +
 "        \"title\": \"Moby Dick\",\n" +
-"        \"category\": \"fiction\",\n" +
+"        \"category\": \"fiction\"\n" +
 "      },\n" +
 "      { \"category\": \"fiction\",\n" +
 "        \"author\": \"J. R. R. Tolkien\",\n" +

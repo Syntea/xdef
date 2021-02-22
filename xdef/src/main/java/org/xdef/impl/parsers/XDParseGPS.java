@@ -12,9 +12,7 @@ import org.xdef.proc.XXNode;
 public class XDParseGPS extends XDParserAbstract {
 	private static final String ROOTBASENAME = "GPS";
 
-	public XDParseGPS() {
-		super();
-	}
+	public XDParseGPS() {super();}
 
 	@Override
 	public void parseObject(XXNode xnode, XDParseResult p) {
@@ -22,7 +20,6 @@ public class XDParseGPS extends XDParserAbstract {
 		int pos = p.getIndex();
 		try {
 			if (p.isToken("GPS(")) {
-				p.isSpaces();
 				int pos1 = p.getIndex();
 				if (p.isChar(')')) {
 					p.setParsedValue(new DefGPSPosition());
@@ -30,29 +27,24 @@ public class XDParseGPS extends XDParserAbstract {
 				} else if ((p.isSignedFloat() || p.isSignedInteger())) {
 					double latitude =
 						Double.parseDouble(p.getBufferPart(pos1, p.getIndex()));
-					p.isSpaces();
 					if (p.isChar(',')) {
-						p.isSpaces();
 						pos1 = p.getIndex();
 						if ((p.isSignedFloat() || p.isSignedInteger())) {
 							double longitude = Double.parseDouble(
 								p.getBufferPart(pos1, p.getIndex()));
-							p.isSpaces();
 							if (p.isChar(',')) {
-								p.isSpaces();
 								pos1 = p.getIndex();
 								if ((p.isSignedFloat() || p.isSignedInteger())){
 									double altitude = Double.parseDouble(
 										p.getBufferPart(pos1, p.getIndex()));
 									p.setParsedValue(new DefGPSPosition(
 										latitude, longitude, altitude));
-									p.isSpaces();
 								}
 							} else {
-								p.setParsedValue(new DefGPSPosition(latitude, longitude));
+								p.setParsedValue(
+									new DefGPSPosition(latitude, longitude));
 							}
 							if (p.isChar(')')) {
-								p.isSpaces();
 								return;
 							}
 						}

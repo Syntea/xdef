@@ -487,27 +487,6 @@ public final class TestTypes extends XDTester {
 			xml = "<a a='2'/>";
 			parse(xp, "", xml, reporter);
 			assertTrue(reporter.errorWarnings(), "Error not reported");
-			xdef = // test GPS
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='A'>\n" +
-"<xd:declaration\n>\n"+
-"  GPSPosition p = new GPSPosition(50.08, 14.42, 399)/* Prague */, q;\n"+
-"  int d; /* distance in km */\n"+
-"</xd:declaration>\n"+
-"<A xd:script='finally d = round(p.distanceTo(q)/1000); /* km */'\n"+
-"   q='GPS(); onTrue q=getParsedValue();'/>\n"+
-"</xd:def>";
-			xp = compile(xdef);
-			xml = "<!-- Vienna --> <A q='GPS(48.2, 16.37, 151)'/>";
-			xd = xp.createXDDocument();
-			el = parse(xd, xml, reporter);
-			assertNoErrors(reporter);
-			assertEq(xml, el);
-			assertEq(253, xd.getVariable("d").intValue());
-			xml = "<!-- London --> <A q='GPS(51.52, -0.09, 0)'/>";
-			el = parse(xd, xml, reporter);
-			assertNoErrors(reporter);
-			assertEq(xml, el);
-			assertEq(1031, xd.getVariable("d").intValue());
 			xdef = // union - declared type parser
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<xd:declaration> type t union(%item=[decimal,boolean]);</xd:declaration>\n"+
@@ -872,7 +851,41 @@ public final class TestTypes extends XDTester {
 				s);
 				assertNoErrorwarnings(reporter);
 				setChkSyntax(false);
-			xdef = // expressions
+			xdef = // test GPS type
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:declaration>\n" +
+" String base, town;\n" +
+" GPSPosition baseGPS, townGPS;\n" +
+" void pritDistance() {\n" +
+"   printf('distance to %s, GPS(%.2f,%.2f): %.1f km\\n',\n"+
+"     town, townGPS.latitude(), townGPS.longitude(),\n"+
+"     baseGPS.distanceTo(townGPS)/1000);\n" +
+" }\n" +
+"</xd:declaration>\n" +
+"<a>\n" +
+"  <base xd:script=\"finally outln('Base ' + base + ', ' + baseGPS);\"\n"+
+"        name=\"string(); onTrue base = getParsedValue();\"\n"+
+"        GPS_position=\"GPS(); onTrue baseGPS = getParsedValue();\"/>\n" +
+"  <town xd:script=\"*; finally pritDistance();\"\n"+
+"         name=\"string; onTrue town = getParsedValue();\"\n"+
+"         GPS_position=\"GPS(); onTrue townGPS = getParsedValue();\"/>\n" +
+"</a>\n" +
+"</xd:def>";
+			xml =
+"<a>\n" +
+"  <base name=\"Praha\" GPS_position=\"GPS(50.08,14.42,399.0)\"/>\n" +
+"  <town name=\"Wien\" GPS_position=\"GPS(48.2,16.37,151.0)\"/>\n" +
+"  <town name=\"London\" GPS_position=\"GPS(51.52,-0.09,0.0)\"/>\n" +
+"</a>";
+			strw = new StringWriter();
+			assertEq(xml, parse(xdef,"", xml, reporter, strw, null, null));
+			assertNoErrors(reporter);
+			strw.close();
+			assertEq(strw.toString(),
+"Base Praha, GPS(50.08,14.42,399.0)\n" +
+"distance to Wien, GPS(48.20,16.37): 252.8 km\n" +
+"distance to London, GPS(51.52,-0.09): 1031.4 km\n");
+			xdef = // expression in type validation
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<xd:declaration>\n"+
 " boolean x(){return int | string;}\n"+
@@ -927,7 +940,7 @@ public final class TestTypes extends XDTester {
 			parse(xp, null, xml, reporter, strw, null, null);
 			assertEq("false", strw.toString());
 			assertErrors(reporter);
-			xdef = // check Parser - combination of sequential and key parameters
+			xdef = // check Parser-combination of sequential and key parameters
 "<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n"+
 "  <a a='decimal(0,2,%totalDigits=3,%fractionDigits=2,%enumeration=[1.21])'\n"+
 "     b='decimal(-2,2,%totalDigits=3,%fractionDigits=2)' c='dec(3,2)'/>\n"+
