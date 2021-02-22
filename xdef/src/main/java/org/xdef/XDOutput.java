@@ -20,8 +20,7 @@ public interface XDOutput extends XDValue {
 	public void putReport(final Report rep);
 
 	/** Get last error report.
-	 * @return last error report (or <tt>null</tt> if last report is not
-	 * available).
+	 * @return last error report (or null if last report is not available).
 	 */
 	public Report getLastErrorReport();
 

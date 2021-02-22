@@ -12,7 +12,7 @@ import org.w3c.dom.NodeList;
 public interface XDXmlOutStream extends XDValue {
 
 	/** Set output will be indented.
-	 * @param indent if <tt>true</tt> then the output will be indented.
+	 * @param indent if true then the output will be indented.
 	 */
 	public void setIndenting(boolean indent);
 

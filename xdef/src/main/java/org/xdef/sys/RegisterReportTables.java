@@ -208,7 +208,7 @@ public class RegisterReportTables {
 		private final String _tableName;
 
 		/** Check if this table is registered.
-		 * @return <tt>true</tt> if and only if the table is registered.
+		 * @return true if and only if the table is registered.
 		 */
 		abstract protected boolean isRegistered();
 
@@ -228,7 +228,7 @@ public class RegisterReportTables {
 
 		/** Get string of reportID from registered report ID.
 		 * @param registeredID registered report ID.
-		 * @return string created from registered report ID or <tt>null</tt>.
+		 * @return string created from registered report ID or null.
 		 */
 		abstract protected String getReportID(final long registeredID);
 
@@ -462,7 +462,7 @@ public class RegisterReportTables {
 
 		/** Get prefix from report ID or report table name.
 		 * @param reportID string with report ID.
-		 * @return prefix extracted from report ID or <tt>null</tt>
+		 * @return prefix extracted from report ID or null
 		 */
 		protected final static String getPrefixFromID(final String reportID) {
 			for (int i = 0; i < reportID.length(); i++) {
@@ -849,6 +849,7 @@ public class RegisterReportTables {
 
 	/** Generate report tables from property files.
 	 * @param files array of name of source files.
+	 * @param reporter where to write messages.
 	 * @return array with ReportTable objects created from properties.
 	 */
 	public final static ReportTable[] readReporTables(final String[] files,
@@ -980,7 +981,8 @@ public class RegisterReportTables {
 	 * generated in specified encoding. If encoding is not specified then it is
 	 * used the default system character encoding.
 	 * @param args the command line arguments with following structure:
-	 * <p>Parameters: source -i input -o outDir [-p package] [-c encoding] [-r]
+	 * <p>
+	 * arguments: source -i input -o outDir [-p package] [-c encoding] [-r]
 	 * </p>
 	 * <p>-i -i input pathname(s) of property file(s) with report texts (the
 	 * file name may contain wildcard characters).</p>
@@ -998,7 +1000,8 @@ public class RegisterReportTables {
 	public static void main(String... args) {
 		final String HDRMSG =
 "RegisterReportTables - generator of registered report tables.\n"+
-"Parameters: source -i input -o outDir [-p package] [-c encoding] [-r]\n"+
+"Command line arguments:\n"+
+"   source -i input -o outDir [-p package] [-c encoding] [-r]\n"+
 "where:\n"+
 "-i input pathname(s) of property file(s) with report texts (the file name\n"+
 "   may contain wildcard characters).\n"+
@@ -1016,7 +1019,7 @@ public class RegisterReportTables {
 		int len = args.length - 1;
 		StringWriter errWriter = new StringWriter();
 		PrintWriter errors = new PrintWriter(errWriter);
-		for (int i = 0, j = 0; i <= len; i++) {
+		for (int i = 0; i <= len; i++) {
 			if (args[i].startsWith("-")) {
 				if (args[i].length() >= 2) {
 					switch (args[i].charAt(1)) {

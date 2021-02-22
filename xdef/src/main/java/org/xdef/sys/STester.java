@@ -125,7 +125,7 @@ public abstract class STester {
 		_err = err;
 	}
 	/** Get arguments.
-	 * @return array of command line arguments or <tt>null</tt>.
+	 * @return array of command line arguments or null.
 	 */
 	public final String[] getArguments() {return _arguments;}
 	/** Set arguments.
@@ -133,25 +133,25 @@ public abstract class STester {
 	 */
 	public final void setArguments(final String... args) {_arguments = args;}
 	/** Get path to project home directory. If the directory doesn't exist put
-	 *  an error message and return <tt>null</tt>.
+	 *  an error message and return null.
 	 *
-	 * @return The string with the path to data directory or <tt>null</tt>.
+	 * @return The string with the path to data directory or null.
 	 */
 	public final String getHomeDir() {return _homeDir;}
 	/** Get path to Java source directory of this class source. If the directory
-	 * doesn't exist put an error message and return <tt>null</tt>.
-	 * @return The string with the path to source directory or <tt>null</tt>.
+	 * doesn't exist put an error message and return null.
+	 * @return The string with the path to source directory or null.
 	 */
 	public final String getSourceDir() {return _sourceDir;}
 	/** Get path to data directory. If data doesn't exist put an error
-	 * message and return <tt>null</tt>.
-	 * @return The string with the path to data directory or <tt>null</tt>.
+	 * message and return null.
+	 * @return The string with the path to data directory or null.
 	 */
 	public final String getDataDir() {return _dataDir;}
 	/** Get path to temporary directory. If the directory doesn't exist try
 	 * to create it. If the directory can't be created put error message
-	 * and return <tt>null</tt>.
-	 * @return The string with the path to temporary directory or <tt>null</tt>.
+	 * and return null.
+	 * @return The string with the path to temporary directory or null.
 	 */
 	public final String getTempDir() {
 		if (_homeDir != null) {
@@ -174,16 +174,16 @@ public abstract class STester {
 	 */
 	public final String getName() {return _name;}
 	/** Get path and name of Java source file. If the file is unknown
-	 * return <tt>null</tt>.
-	 * @return The string with the path to source directory or <tt>null</tt>.
+	 * return null.
+	 * @return The string with the path to source directory or null.
 	 */
 	public final String getSourceName() {return _sourceName;}
 	/** Get output stream.
-	 * @return print stream or <tt>null</tt> if the output is not defined.
+	 * @return print stream or null if the output is not defined.
 	 */
 	public final PrintStream getOutStream() {return _out;}
 	/** Set output stream.
-	 * @param out print stream or <tt>null</tt>.
+	 * @param out print stream or null.
 	 */
 	public final void setOutStream(final PrintStream out) {
 		if ((_out = out) == null) {
@@ -191,11 +191,11 @@ public abstract class STester {
 		}
 	}
 	/** Get error stream.
-	 * @return The print stream or <tt>null</tt> if err stream is not defined.
+	 * @return The print stream or null if err stream is not defined.
 	 */
 	public final PrintStream getErrStream() {return _err;}
 	/** Set error stream.
-	 * @param err print stream or <tt>null</tt>.
+	 * @param err print stream or null.
 	 */
 	public final void setErrStream(final PrintStream err) {
 		if ((_err = err) == null) {
@@ -250,7 +250,7 @@ public abstract class STester {
 	}
 	/** Increase error counter and write the information to the error stream.
 	 * The class from which the error was reported is taken from
-	 * <tt>_className</tt> field.
+	 * <code>_className</code> field.
 	 * @param ex Exception to be printed.
 	 */
 	public final void putErrInfo(final Throwable ex) {
@@ -265,8 +265,8 @@ public abstract class STester {
 		printErr(s.substring(i+1));
 	}
 	/** Increase error counter and write the information to the error stream.
-	 * The class from which the error was reported is taken from
-	 * <tt>_className</tt> field.
+	 * The class from which an error was reported is taken from the field
+	 * <code>_className</code>.
 	 * @param msg Text of error message.
 	 */
 	public final void putErrInfo(final String msg) {
@@ -293,11 +293,11 @@ public abstract class STester {
 		printErr(text + "\n" + s + '\n');
 	}
 	/** Increase error counter and write the default information to the print
-	 * stream. If the print stream is <tt>null</tt> the message is ignored.
+	 * stream. If the print stream is null the message is ignored.
 	 */
 	public final void fail() {putErrInfo("*");}
 	/** Increase error counter and write information of given object.
-	 * If the print stream is <tt>null</tt> the message is ignored.
+	 * If the print stream is null the message is ignored.
 	 * @param obj the report to be displayed as a fail information.
 	 */
 	public final void fail(final Object obj) {
@@ -575,46 +575,46 @@ public abstract class STester {
 		}
 		return a1.equals(a2);
 	}
-	/** Check if the argument is <tt>null</tt>. If not then invoke the method
-	 * <tt>fail</tt>.
-	 * @param a argument to be checked for true.
+	/** Check if the argument is null. If not then invoke the method
+	 * <code>fail</code>.
+	 * @param x argument to be checked for true.
 	 */
-	public final void assertNull(final Object a) {assertNull(a, ""+a);}
-	/** Check if the argument is <tt>null</tt>. If not then invoke the method
-	 * <tt>fail</tt>.
-	 * @param a argument to be checked for true.
+	public final void assertNull(final Object x) {assertNull(x, ""+x);}
+	/** Check if the argument is null. If not then invoke the method
+	 * <code>fail</code>.
+	 * @param x argument to be checked for true.
 	 * @param msg message to be printed or null.
 	 */
-	public final void assertNull(final Object a, final Object msg) {
-		if (a != null) {
+	public final void assertNull(final Object x, final Object msg) {
+		if (x != null) {
 			fail(msg);
 		}
 	}
-	/** Check if the argument is <tt>true</tt>. If not then invoke the method
-	 * <tt>fail</tt>.
-	 * @param a argument to be checked for true.
+	/** Check if the argument is true. If not then invoke the method
+	 * <code>fail</code>.
+	 * @param x argument to be checked for true.
 	 */
-	public final void assertTrue(final boolean a) {assertFalse(!a, null);}
-	/** Check if the argument <tt>a</tt> is <tt>true</tt>. If not then invoke
-	 * the method <tt>fail</tt> with the argument msg.
-	 * @param a argument to be checked for true.
+	public final void assertTrue(final boolean x) {assertFalse(!x, null);}
+	/** Check if the argument <code>x</code> is true. If not then invoke
+	 * the method <code>fail</code> with the argument msg.
+	 * @param x argument to be checked for true.
 	 * @param msg message to be printed or null.
 	 */
-	public final void assertTrue(final boolean a, final Object msg) {
-		assertFalse(!a, msg);
+	public final void assertTrue(final boolean x, final Object msg) {
+		assertFalse(!x, msg);
 	}
-	/** Check if the argument is <tt>false</tt>. If not then invoke the method
-	 * <tt>fail</tt>.
-	 * @param a argument to be checked for false.
+	/** Check if the argument is false. If not then invoke the method
+	 * <code>fail</code>.
+	 * @param x argument to be checked for false.
 	 */
-	public final void assertFalse(final boolean a) {assertFalse(a, null);}
-	/** Check if the argument <tt>a</tt> is <tt>false</tt>. If not then invoke
-	 * the method <tt>fail</tt> with the argument msg.
-	 * @param a argument to be checked for false.
+	public final void assertFalse(final boolean x) {assertFalse(x, null);}
+	/** Check if the argument <code>x</code> is false. If not then invoke
+	 * the method <code>fail</code> with the argument msg.
+	 * @param x argument to be checked for false.
 	 * @param msg message to be printed or null.
 	 */
-	public final void assertFalse(final boolean a, final Object msg) {
-		if (a) {
+	public final void assertFalse(final boolean x, final Object msg) {
+		if (x) {
 			fail(msg);
 		}
 	}
@@ -665,7 +665,7 @@ public abstract class STester {
 		return xml;
 	}
 	/** Check if the reporter does not contain an error. If yes then invoke
-	 * the method <tt>fail</tt> with the argument msg.
+	 * the method <code>fail</code> with the argument msg.
 	 * @param reporter reporter to be checked for no errors.
 	 * @param msg message to be printed or null.
 	 */
@@ -680,7 +680,7 @@ public abstract class STester {
 		}
 	}
 	/** Check if the reporter does not contain an error or warning. If yes then
-	 * invoke the method <tt>fail</tt> with the argument msg.
+	 * invoke the method <code>fail</code> with the argument msg.
 	 * @param reporter the reporter to be checked for no errors and no warnings.
 	 */
 	public final void assertNoErrorwarnings(
@@ -690,7 +690,7 @@ public abstract class STester {
 		}
 	}
 	/** Check if the reporter does not contain an error or warning. If yes then
-	 * invoke the method <tt>fail</tt> with the argument msg.
+	 * invoke the method <code>fail</code> with the argument msg.
 	 * @param reporter the reporter to be checked for no errors and no warnings.
 	 * @param msg message to be printed or null.
 	 */
@@ -711,9 +711,9 @@ public abstract class STester {
 	/** Initialize fields of this class. It is automatically called by the
 	 * method runTest, or it may be called by user. Note all fields are
 	 * reinitialized.
-	 * @param out The print stream for result information or <tt>null</tt>
-	 * @param err The print stream for error messages or <tt>null</tt>.
-	 * @param log The print stream all messages or <tt>null</tt>.
+	 * @param out The print stream for result information or null
+	 * @param err The print stream for error messages or null.
+	 * @param log The print stream all messages or null.
 	 * @param clazz The class from which the method is called.
 	 * @param arguments list of arguments.
 	 */
@@ -826,12 +826,12 @@ public abstract class STester {
 		_timeStamp = System.currentTimeMillis();
 	}
 	/** Run test and print result information.
-	 * @param out The print stream for result information or <tt>null</tt>
-	 * @param err The print stream for error messages or <tt>null</tt>.
-	 * @param log The print stream all messages or <tt>null</tt>.
-	 * @param printOK if <tt>false</tt> then the result if printed only if
+	 * @param out The print stream for result information or null
+	 * @param err The print stream for error messages or null.
+	 * @param log The print stream all messages or null.
+	 * @param printOK if false then the result if printed only if
 	 * an error was reported.
-	 * @param arguments array with arguments or <tt>null</tt>.
+	 * @param arguments array with arguments or null.
 	 * @return the number of errors.
 	 */
 	public final int runTest(final PrintStream out,
@@ -1002,12 +1002,12 @@ public abstract class STester {
 		return at.runTest(out, err, log, printOK);
 	}
 	/** Run tests of the object given by argument and print result information.
-	 * @param out The print stream for result information or <tt>null</tt>
-	 * @param err The print stream for error messages or <tt>null</tt>.
-	 * @param log The print stream all messages or <tt>null</tt>.
+	 * @param out The print stream for result information or null
+	 * @param err The print stream for error messages or null.
+	 * @param log The print stream all messages or null.
 	 * @param tests The array of objects to be tested.
 	 * @param info The information text.
-	 * @param printOK if <tt>false</tt> then the result is printed only if
+	 * @param printOK if false then the result is printed only if
 	 * an error was reported.
 	 * @param args list of arguments.
 	 * @return the number of errors.
@@ -1047,5 +1047,17 @@ public abstract class STester {
 			out.println(s);
 		}
 		return errors;
+	}
+
+	/** Return a string with printable representation of Throwable object.
+	 * @param exception the Exception object to be printed.
+	 * @return string with printable representation of Throwable.
+	 */
+	public final static String printThrowable(final Throwable exception) {
+		java.io.CharArrayWriter chw = new java.io.CharArrayWriter();
+		java.io.PrintWriter pw = new java.io.PrintWriter(chw);
+		exception.printStackTrace(pw);
+		pw.close();
+		return chw.toString();
 	}
 }

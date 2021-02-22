@@ -40,23 +40,20 @@ public final class KXmlUtils extends KDOMUtils {
 		PREFIXMAP.put("xmlns", "");
 	}
 
-	/** Just prevent user to create an instance of KXmlUtils */
-	private KXmlUtils() {}
-
-	/** Creates an XML <tt>Document</tt> object with created document builder
-	 * (see SetDOMImplementation).
-	 * @return new <tt>Document</tt> object.
+	/** Creates an XML <code>Document</code> object with created document
+	 * builder (see SetDOMImplementation).
+	 * @return new <code>Document</code> object.
 	 */
 	public static final Document newDocument() {
 		return new KDOMBuilder().newDocument();
 	}
 
-	/** Creates an XML <tt>Document</tt> object with empty root element
+	/** Creates an XML <code>Document</code> object with empty root element
 	 * created by document builder (see SetDOMImplementation).
 	 * @param nsURI namespace of created root element (or null).
 	 * @param qname qualified name of root element.
 	 * @param docType DocumentType object or null.
-	 * @return new <tt>Document</tt> object with empty root element.
+	 * @return new <code>Document</code> object with empty root element.
 	 */
 	public static final Document newDocument(final String nsURI,
 		final String qname,
@@ -64,9 +61,9 @@ public final class KXmlUtils extends KDOMUtils {
 		return new KDOMBuilder().newDocument(nsURI, qname, docType);
 	}
 
-	/** The <tt>DOMImplementation</tt> object that handles this document.
+	/** The <code>DOMImplementation</code> object that handles this document.
 	 * A DOM application may use objects from multiple implementations.
-	 * @return  The <tt>DOMImplementation</tt> object.
+	 * @return  The <code>DOMImplementation</code> object.
 	 */
 	public static final DOMImplementation getDOMImplementation() {
 		return new KDOMBuilder().getDOMImplementation();
@@ -90,7 +87,7 @@ public final class KXmlUtils extends KDOMUtils {
 
 	/** Removes all namespaces and namespace prefixes from element and its
 	 * attributes and all child nodes. If an attribute with the local name
-	 * already exists then it is left unchanged. All <tt>xmlns</tt>
+	 * already exists then it is left unchanged. All <code>xmlns</code>
 	 * attributes are removed.
 	 * @param elem element if scope of which all prefixes and namespaces
 	 * are removed.
@@ -153,8 +150,8 @@ public final class KXmlUtils extends KDOMUtils {
 	}
 	/** Returns a string in the XML format. All occurrences
 	 * of special characters are replaced with entity references
-	 * <tt>&lt;&gt;&amp;"'</tt>. If the argument ignoreWhiteSpaces
-	 * is <tt>true</tt> then all ignorable white spaces are removed.
+	 * <code>&lt;&gt;&amp;"'</code>. If the argument ignoreWhiteSpaces
+	 * is true then all ignorable white spaces are removed.
 	 * If the argument delimiter is &lt; then the result string is created for
 	 * a text node, otherwise it will be created as a value of attribute and
 	 * delimiter occurrence will be transformed to the appropriate predefined
@@ -289,21 +286,21 @@ public final class KXmlUtils extends KDOMUtils {
 	}
 
 	/** Write node as XML to output stream. Format of result will be
-	 * indented if the argument <tt>indentStep</tt> is string with
-	 * indenting spaces. If argument <tt>indentStep</tt> is <tt>null</tt>
-	 * the output is not indented. If argument <tt>canonical</tt> is
-	 * <tt>true</tt> the output is in canonical form (i.e. without
+	 * indented if the argument <code>indentStep</code> is string with
+	 * indenting spaces. If argument <code>indentStep</code> is null
+	 * the output is not indented. If argument <code>canonical</code> is
+	 * true the output is in canonical form (i.e. without
 	 *  document type, entity references, CDATA  sections are converted to
-	 * text values). If argument <tt>comments</tt> is <tt>false</tt>
-	 * all <tt>Comment</tt> nodes are ignored.
+	 * text values). If argument <code>comments</code> is false
+	 * all <code>Comment</code> nodes are ignored.
 	 * @param out output writer for result.
-	 * @param node <tt>org.w3c.dom.Node</tt> to be converted.
-	 * @param lineStart <tt>null</tt> or the line prefix.
-	 * @param indentStep <tt>null</tt> or the indenting string.
-	 * @param canonical if <tt>true</tt> the output is canonical form.
-	 * @param removeIgnorableWhiteSpaces if <tt>true</tt> white space sequence
-	 * is replaced by one space.
-	 * @param comments if <tt>true</tt> comments are generated.
+	 * @param node <code>org.w3c.dom.Node</code> to be converted.
+	 * @param lineStart null or the line prefix.
+	 * @param indentStep null or the indenting string.
+	 * @param canonical if true the output is canonical form.
+	 * @param removeIgnorableWhiteSpaces if true all white space sequences
+	 * are replaced by one space.
+	 * @param comments if true comments are generated.
 	 * @param namespaceMap map of prefixes.
 	 * @throws IOException if an error occurs.
 	 */
@@ -453,7 +450,7 @@ public final class KXmlUtils extends KDOMUtils {
 							aindent = startLine + "  ";
 						}
 						if (numAttrs == 2 &&
-							(startLine == null || alen + s.length() < 71)) {
+							(startLine == null || alen + s.length() < 79)) {
 							out.write(' ');
 						} else {
 							out.write(aindent);
@@ -487,7 +484,7 @@ public final class KXmlUtils extends KDOMUtils {
 					String value = e.getValue();
 					newPrefixMap.put(key, value);
 					String s = key + "=" + createAttrValue(value, false);
-					if (first && numAttrs <= 1 && alen + s.length() < 71) {
+					if (first && numAttrs <= 1 && alen + s.length() < 79) {
 						out.write(' ');
 						first = false;
 					} else if (startLine != null) {
@@ -624,7 +621,7 @@ public final class KXmlUtils extends KDOMUtils {
 
 	/** Create value of an attribute.
 	 * @param value attribute value.
-	 * @param removeIgnorableWhiteSpaces if <tt>true</tt> the value is trimmed
+	 * @param removeIgnorableWhiteSpaces if true the value is trimmed
 	 * and then all white space sequences are replaced by one space.
 	 * @return quoted string with the created attribute value.
 	 */
@@ -678,7 +675,7 @@ public final class KXmlUtils extends KDOMUtils {
 
 	/** Create string with the attribute.
 	 * @param attr The attribute.
-	 * @param removeIgnorableWhiteSpaces if <tt>true</tt> the value is trimmed
+	 * @param removeIgnorableWhiteSpaces if true the value is trimmed
 	 * and then all white space sequences are replaced by one space.
 	 * @return string with source value of the attribute.
 	 */
@@ -706,8 +703,8 @@ public final class KXmlUtils extends KDOMUtils {
 	 * @param text text value.
 	 * @param isCdata true if CDATA section.
 	 * @param indent indentation prefix or null.
-	 * @param removeIgnorableWhiteSpaces if <tt>true</tt> white space sequence
-	 * is replaced by one space and value is trimmed.
+	 * @param removeIgnorableWhiteSpaces if true all white space sequences
+	 * are replaced by one space and value is trimmed.
 	 * @throws IOException if an error occurs.
 	 */
 	private static void writeText(final Writer out,
@@ -756,7 +753,7 @@ public final class KXmlUtils extends KDOMUtils {
 				case '\n':
 				case ' ':
 					if (removeIgnorableWhiteSpaces) {
-						if (indent != null && pos > 71 && j + 1 < len) {
+						if (indent != null && pos >= 79 && j + 1 < len) {
 							//wrap line
 							out.write(indent);
 							pos = indent.length();
@@ -789,21 +786,21 @@ public final class KXmlUtils extends KDOMUtils {
 	}
 
 	/** Write node to output stream. Result will be indented
-	 * if the argument <tt>indentStep</tt> is a string with indenting
-	 * spaces. If argument <tt>indentStep</tt> is <tt>null</tt> then output
-	 * is not indented. If argument <tt>canonical</tt> is <tt>true</tt>
+	 * if the argument <code>indentStep</code> is a string with indenting
+	 * spaces. If argument <code>indentStep</code> is null then output
+	 * is not indented. If argument <code>canonical</code> is true
 	 * the output is in canonical form (i.e. without entity references,
 	 * CDATA sections are converted to text values). If argument
-	 * <tt>comments</tt> is <tt>false</tt> all <tt>Comment</tt> nodes
+	 * <code>comments</code> is false all <code>Comment</code> nodes
 	 * are ignored.
 	 * @param out output writer used for result.
-	 * @param node <tt>org.w3c.dom.Node</tt> to be converted.
+	 * @param node <code>org.w3c.dom.Node</code> to be converted.
 	 * @param encoding name of output code table.
-	 * @param indentStep <tt>null</tt> or the indenting string.
-	 * @param canonical if <tt>true</tt> the output is canonical form.
-	 * @param removeIgnorableWhiteSpaces if <tt>true</tt> white space sequence
-	 * is replaced by one space.
-	 * @param comments if <tt>true</tt> comments are generated.
+	 * @param indentStep null or the indenting string.
+	 * @param canonical if true the output is canonical form.
+	 * @param removeIgnorableWhiteSpaces if true all white space sequences
+	 * are replaced by one space.
+	 * @param comments if true comments are generated.
 	 * @throws IOException if an error occurs.
 	 */
 	public static final void writeXml(final Writer out,
@@ -828,7 +825,7 @@ public final class KXmlUtils extends KDOMUtils {
 	/** Write node as XML to output stream. The character set encoding is set
 	 * from the outputStreamWriter.
 	 * @param out output writer used for result.
-	 * @param node <tt>org.w3c.dom.Node</tt> to be converted.
+	 * @param node <code>org.w3c.dom.Node</code> to be converted.
 	 * @throws IOException if an error occurs.
 	 */
 	public static final void writeXml(final OutputStreamWriter out,
@@ -850,11 +847,11 @@ public final class KXmlUtils extends KDOMUtils {
 
 	/** Write node in XML format.
 	 * @param out output writer used for result.
-	 * @param node <tt>org.w3c.dom.Node</tt> to be converted.
-	 * @param indenting if <tt>true</tt> the output will be indented.
-	 * @param removeIgnorableWhiteSpaces if <tt>true</tt> white space sequence
-	 * is replaced by one space.
-	 * @param comments if <tt>true</tt> comment nodes are written to output.
+	 * @param node <code>org.w3c.dom.Node</code> to be converted.
+	 * @param indenting if true the output will be indented.
+	 * @param removeIgnorableWhiteSpaces if true all white space sequences
+	 * are replaced by one space.
+	 * @param comments if true comment nodes are written to output.
 	 * @throws IOException if on I/O error occurs.
 	 */
 	public static final void writeXml(final OutputStreamWriter out,
@@ -880,8 +877,8 @@ public final class KXmlUtils extends KDOMUtils {
 	/** Write node in XML format.
 	 * @param fname output file name.
 	 * @param encoding character set name.
-	 * @param node <tt>org.w3c.dom.Node</tt> to be converted.
-	 * @param indenting if <tt>true</tt> the output will be indented.
+	 * @param node <code>org.w3c.dom.Node</code> to be converted.
+	 * @param indenting if true the output will be indented.
 	 * @param comments if true comment nodes are written to output.
 	 * @throws IOException if an I/O error occurs.
 	 */
@@ -905,8 +902,8 @@ public final class KXmlUtils extends KDOMUtils {
 
 	/** Write element in XML format in UTF-8.
 	 * @param fname output file name.
-	 * @param node <tt>org.w3c.dom.Node</tt> to be converted.
-	 * @param indenting if <tt>true</tt> the output will be indented.
+	 * @param node <code>org.w3c.dom.Node</code> to be converted.
+	 * @param indenting if true the output will be indented.
 	 * @param comments if true comment nodes are written to output.
 	 * @throws IOException if an I/O error occurs
 	 */
@@ -920,7 +917,7 @@ public final class KXmlUtils extends KDOMUtils {
 	/** Write element in XML format in given character set.
 	 * @param fname output file name.
 	 * @param encoding character set name.
-	 * @param node <tt>org.w3c.dom.Node</tt> to be converted.
+	 * @param node <code>org.w3c.dom.Node</code> to be converted.
 	 * @throws IOException if an I/O error occurs
 	 */
 	public static final void writeXml(final String fname,
@@ -931,7 +928,7 @@ public final class KXmlUtils extends KDOMUtils {
 
 	/** Write element in XML format in UTF-8 character set.
 	 * @param fname output file name.
-	 * @param node <tt>org.w3c.dom.Node</tt> to be converted.
+	 * @param node <code>org.w3c.dom.Node</code> to be converted.
 	 * @throws IOException if an I/O error occurs
 	 */
 	public static final void writeXml(final String fname,
@@ -942,8 +939,8 @@ public final class KXmlUtils extends KDOMUtils {
 	/** Write node in XML format.
 	 * @param file output file.
 	 * @param encoding character set name.
-	 * @param node <tt>org.w3c.dom.Node</tt> to be converted.
-	 * @param indenting if <tt>true</tt> the output will be indented.
+	 * @param node <code>org.w3c.dom.Node</code> to be converted.
+	 * @param indenting if true the output will be indented.
 	 * @param comments if true comment nodes are written to output.
 	 * @throws IOException if an I/O error occurs
 	 */
@@ -968,7 +965,7 @@ public final class KXmlUtils extends KDOMUtils {
 	/** Write element in XML format in UTF-8 character set.
 	 * @param file output file.
 	 * @param encoding character set name.
-	 * @param node <tt>org.w3c.dom.Node</tt> to be converted.
+	 * @param node <code>org.w3c.dom.Node</code> to be converted.
 	 * @throws IOException if an I/O error occurs.
 	 */
 	public static final void writeXml(final File file,
@@ -979,7 +976,7 @@ public final class KXmlUtils extends KDOMUtils {
 
 	/** Write element in XML format and UTF-8 character set.
 	 * @param file The output file.
-	 * @param node The <tt>org.w3c.dom.Node</tt> to be converted.
+	 * @param node The <code>org.w3c.dom.Node</code> to be converted.
 	 * @throws IOException if an I/O error occurs
 	 */
 	public static final void writeXml(final File file,
@@ -990,11 +987,11 @@ public final class KXmlUtils extends KDOMUtils {
 	/** Create string in XML format from given argument.
 	 * Output format may be either unindented (and without inserted
 	 * new lines) or in the intended form.
-	 * @param node <tt>org.w3c.dom.Node</tt> to be converted.
+	 * @param node <code>org.w3c.dom.Node</code> to be converted.
 	 * @param indent If this parameter is set to true the output string is
 	 * in indented format, otherwise in no indentation is generated.
-	 * @param removeIgnorableWhiteSpaces if <tt>true</tt> white space sequence
-	 * is replaced by one space.
+	 * @param removeIgnorableWhiteSpaces if true all white space sequences
+	 * are replaced by one space.
 	 * @param comments if true comment nodes are written to output.
 	 * @return string with the XML representation of the parameter element.
 	 */
@@ -1020,7 +1017,7 @@ public final class KXmlUtils extends KDOMUtils {
 	/** Create string in XML format from given argument.
 	 * The output format may be either unindented (without inserted new lines)
 	 * or in the intended form.
-	 * @param node <tt>org.w3c.dom.Node</tt> to be converted to the string.
+	 * @param node <code>org.w3c.dom.Node</code> to be converted to the string.
 	 * @param indent If this parameter is set to true the output string is
 	 * in indented format, otherwise in no indentation is generated.
 	 * @return string with the XML representation of the parameter element.
@@ -1064,7 +1061,7 @@ public final class KXmlUtils extends KDOMUtils {
 	}
 
 	/** Parse source file or a string with XMLke format and create
-	 * <tt>org.w3c.dom.Document</tt> (i.e. it starts with &lt;).
+	 * <code>org.w3c.dom.Document</code> (i.e. it starts with &lt;).
 	 * @param source can be the path to a file or a string in XML format.
 	 * @return parsed document.
 	 * @throws SRuntimeException if an error occurs.
@@ -1076,7 +1073,7 @@ public final class KXmlUtils extends KDOMUtils {
 	}
 
 	/** Parse source file or a string with XMLke format and create
-	 * <tt>org.w3c.dom.Document</tt> (i.e. it starts with &lt;).
+	 * <code>org.w3c.dom.Document</code> (i.e. it starts with &lt;).
 	 * @param source can be the path to a file or a string in XML format.
 	 * @param comments if true comment nodes are written to result document.
 	 * @return parsed document.
@@ -1090,7 +1087,7 @@ public final class KXmlUtils extends KDOMUtils {
 		return b.parse(source);
 	}
 
-	/** Parse source file with XML and return <tt>org.w3c.dom.Document</tt>.
+	/** Parse source file with XML and return <code>org.w3c.dom.Document</code>.
 	 * @param in file with the source XML.
 	 * @return parsed document.
 	 * @throws SRuntimeException if an error occurs.
@@ -1101,7 +1098,7 @@ public final class KXmlUtils extends KDOMUtils {
 		return b.parse(in);
 	}
 
-	/** Parse source file with XML and return <tt>org.w3c.dom.Document</tt>.
+	/** Parse source file with XML and return <code>org.w3c.dom.Document</code>.
 	 * @param in The file with the source XML.
 	 * @param comments if true comment nodes are written to result document.
 	 * @return parsed document.
@@ -1115,7 +1112,7 @@ public final class KXmlUtils extends KDOMUtils {
 		return b.parse(in);
 	}
 
-	/** Parse source file with XML and return <tt>org.w3c.dom.Document</tt>.
+	/** Parse source file with XML and return <code>org.w3c.dom.Document</code>.
 	 * @param in URL pointing to the source XML data.
 	 * @return parsed document.
 	 * @throws SRuntimeException if an error occurs.
@@ -1126,7 +1123,7 @@ public final class KXmlUtils extends KDOMUtils {
 		return b.parse(in);
 	}
 
-	/** Parse source file with XML and return <tt>org.w3c.dom.Document</tt>.
+	/** Parse source file with XML and return <code>org.w3c.dom.Document</code>.
 	 * @param in URL pointing to the source XML.
 	 * @param comments if true comment nodes are written to result.
 	 * @return parsed document.
@@ -1139,7 +1136,7 @@ public final class KXmlUtils extends KDOMUtils {
 		return b.parse(in);
 	}
 
-	/** Parse source file with XML and return <tt>org.w3c.dom.Document</tt>.
+	/** Parse source file with XML and return <code>org.w3c.dom.Document</code>.
 	 * @param in input stream with the source XML.
 	 * @return parsed document.
 	 * @throws SRuntimeException if an error occurs.
@@ -1150,7 +1147,7 @@ public final class KXmlUtils extends KDOMUtils {
 		return b.parse(in);
 	}
 
-	/** Parse source file with XML and return <tt>org.w3c.dom.Document</tt>.
+	/** Parse source file with XML and return <code>org.w3c.dom.Document</code>.
 	 * @param in input stream with the source XML.
 	 * @param comments if true comment nodes are written to result.
 	 * @return parsed document.
@@ -1164,7 +1161,7 @@ public final class KXmlUtils extends KDOMUtils {
 		return b.parse(in);
 	}
 
-	/** Parse source file with XML and return <tt>org.w3c.dom.Document</tt>.
+	/** Parse source file with XML and return <code>org.w3c.dom.Document</code>.
 	 * @param in input stream with the source XML.
 	 * @param comments if true comment nodes are written to result.
 	 * @param closeStream if true the input stream is closed after parsing.
@@ -1180,10 +1177,10 @@ public final class KXmlUtils extends KDOMUtils {
 		return b.parse(in, closeStream);
 	}
 
-	/** Append an element from the argument <tt>what</tt> at the child list of
-	 * the element from argument <tt>where</tt>. If the owner of both
-	 * elements are different create new copy of the element <tt>what</tt> in
-	 * the document owner of the element <tt>where</tt>.
+	/** Append an element from the argument <code>what</code> at the child list of
+	 * the element from argument <code>where</code>. If the owner of both
+	 * elements are different create new copy of the element <code>what</code> in
+	 * the document owner of the element <code>where</code>.
 	 * @param what element to be appended.
 	 * @param where element where the element will be appended.
 	 */
@@ -1215,8 +1212,8 @@ public final class KXmlUtils extends KDOMUtils {
 		reporter.error(XML.XML075, p); //Can't parse &{0}
 	}
 
-	/** Compare XML documents. If the method errors() on the resulting reporter
-	 * gives false no differences were recognized.
+	/** Compare XML documents. The result is reporter which contains error
+	 * messages with differences.
 	 * @param xml_A file with the first document.
 	 * @param xml_B file with the second document.
 	 * @return report writer with results of comparing.
@@ -1226,8 +1223,8 @@ public final class KXmlUtils extends KDOMUtils {
 		return compareXML(xml_A, xml_B, null);
 	}
 
-	/** Compare XML documents. If the method errors() on the resulting reporter
-	 * gives false no differences were recognized.
+	/** Compare XML documents. The result is reporter which contains error
+	 * messages with differences.
 	 * @param xml_A file with the first document.
 	 * @param xml_B file with the second document.
 	 * @param reporter report writer or null (the ArrayReporter will be
@@ -1256,8 +1253,8 @@ public final class KXmlUtils extends KDOMUtils {
 		return compareElements(elem_A, elem_B, r);
 	}
 
-	/** Compare XML documents. If the method errors() on the resulting reporter
-	 * gives false no differences were recognized.
+	/** Compare XML documents. The result is reporter which contains error
+	 * messages with differences.
 	 * @param xml_A the first document (or element).
 	 * @param xml_B the second document (or element).
 	 * @return report writer with results of comparing.
@@ -1267,8 +1264,8 @@ public final class KXmlUtils extends KDOMUtils {
 		return compareXML(xml_A, xml_B, false, null);
 	}
 
-	/** Compare XML documents. If the method errors() on the resulting reporter
-	 * gives false no differences were recognized.
+	/** Compare XML documents. The result is reporter which contains error
+	 * messages with differences.
 	 * @param xml_A the first document (or element).
 	 * @param xml_B the second document (or element).
 	 * @param trimText if true then all text values are rimmed before comparing.
@@ -1280,11 +1277,12 @@ public final class KXmlUtils extends KDOMUtils {
 		return compareXML(xml_A, xml_B, trimText, null);
 	}
 
-	/** Compare XML documents. If the method errors() on the resulting reporter
-	 * gives false no differences were recognized.
+	/** Compare XML documents. The result is reporter which contains error
+	 * messages with differences.
 	 * @param xml_A the first document (or element).
 	 * @param xml_B the second document (or element).
-	 * @param trimText if true then text values are trimmed before comparing.
+	 * @param trimText if true then text values are trimmed before comparing
+	 * and empty text nodes are removed.
 	 * @param reporter report writer or null (the ArrayReporter will be
 	 * created).
 	 * @return report writer with results of comparing.
@@ -1312,8 +1310,8 @@ public final class KXmlUtils extends KDOMUtils {
 		return compareElements(elem_A, elem_B, trimText, r);
 	}
 
-	/** Compare XML elements. If the method errors() on the resulting reporter
-	 * gives false no differences were recognized.
+	/** Compare XML elements. The result is reporter which contains error
+	 * messages with differences.
 	 * @param elem_A the first element.
 	 * @param elem_B the second element.
 	 * @return report writer with results of comparing.
@@ -1323,11 +1321,26 @@ public final class KXmlUtils extends KDOMUtils {
 		return compareElements(elem_A, elem_B, null);
 	}
 
-	/** Compare XML elements. If the method errors() on the resulting reporter
-	 * gives false no differences were recognized.
+	/** Compare XML elements. The result is reporter which contains error
+	 * messages with differences.
 	 * @param elem_A the first element.
 	 * @param elem_B the second element.
-	 * @param trimText if true then text values are trimmed before comparing.
+	 * @param trimText if true then text values are trimmed before comparing
+	 * and empty text nodes are removed.
+	 * @return report writer with results of comparing.
+	 */
+	public static final ReportWriter compareElements(final Element elem_A,
+		final Element elem_B,
+		final boolean trimText) {
+		return compareElements(elem_A, elem_B, trimText, null);
+	}
+
+	/** Compare XML elements. The result is reporter which contains error
+	 * messages with differences.
+	 * @param elem_A the first element.
+	 * @param elem_B the second element.
+	 * @param trimText if true then text values are trimmed before comparing
+	 * and empty text nodes are removed.
 	 * @param reporter report writer or null (the ArrayReporter will be
 	 * created).
 	 * @return report writer with results of comparing.
@@ -1364,8 +1377,8 @@ public final class KXmlUtils extends KDOMUtils {
 		return compareElements(a, b, reporter);
 	}
 
-	/** Compare XML elements. If the method errors() on the resulting reporter
-	 * gives false no differences were recognized.
+	/** Compare XML elements. The result is reporter which contains error
+	 * messages with differences.
 	 * @param elem_A the first element.
 	 * @param elem_B the second element.
 	 * @param reporter report writer or null (the ArrayReporter will be
@@ -1392,8 +1405,8 @@ public final class KXmlUtils extends KDOMUtils {
 		return r;
 	}
 
-	/** Compare XML elements. If the method errors() on the resulting reporter
-	 * gives false no differences were recognized.
+	/** Compare XML elements. The result is reporter which contains error
+	 * messages with differences.
 	 * @param A source string with the first element.
 	 * @param elem_B the second element.
 	 * @param trimText if true then text values are trimmed before comparing.
@@ -1409,8 +1422,8 @@ public final class KXmlUtils extends KDOMUtils {
 			elem_B, trimText, reporter);
 	}
 
-	/** Compare XML elements. If the method errors() on the resulting reporter
-	 * gives false no differences were recognized.
+	/** Compare XML elements. The result is reporter which contains error
+	 * messages with differences.
 	 * @param A source string with the first element.
 	 * @param elem_B the second element.
 	 * @param reporter report writer or null (the ArrayReporter will be
@@ -1424,8 +1437,8 @@ public final class KXmlUtils extends KDOMUtils {
 			elem_B, reporter);
 	}
 
-	/** Compare XML elements. If the method errors() on the resulting reporter
-	 * gives false no differences were recognized.
+	/** Compare XML elements. The result is reporter which contains error
+	 * messages with differences.
 	 * @param A source string with the first element.
 	 * @param elem_B the second element.
 	 * @return report writer with results of comparing.
@@ -1435,8 +1448,8 @@ public final class KXmlUtils extends KDOMUtils {
 		return compareElements(parseXml(A).getDocumentElement(), elem_B);
 	}
 
-	/** Compare XML elements. If the method errors() on the resulting reporter
-	 * gives false no differences were recognized.
+	/** Compare XML elements. The result is reporter which contains error
+	 * messages with differences.
 	 * @param elem_A the first element.
 	 * @param B source string with the second element.
 	 * @param trimText if true then text values are trimmed before comparing.
@@ -1452,8 +1465,8 @@ public final class KXmlUtils extends KDOMUtils {
 			parseXml(B).getDocumentElement(), trimText, reporter);
 	}
 
-	/** Compare XML elements. If the method errors() on the resulting reporter
-	 * gives false no differences were recognized.
+	/** Compare XML elements. The result is reporter which contains error
+	 * messages with differences.
 	 * @param elem_A the first element.
 	 * @param B source string with the second element.
 	 * @param reporter report writer or null (the ArrayReporter will be
@@ -1467,8 +1480,8 @@ public final class KXmlUtils extends KDOMUtils {
 			parseXml(B).getDocumentElement(),reporter);
 	}
 
-	/** Compare XML elements. If the method errors() on the resulting reporter
-	 * gives false no differences were recognized.
+	/** Compare XML elements. The result with reporter contains error messages
+	 * with differences.
 	 * @param elem_A the first element.
 	 * @param B source string with the second element.
 	 * @return report writer with results of comparing.
@@ -1479,8 +1492,8 @@ public final class KXmlUtils extends KDOMUtils {
 			parseXml(B).getDocumentElement());
 	}
 
-	/** Compare two elements. Write differences to the reporter
-	 * if differences are recognized.
+	/** Compare two elements. Write error messages with differences to the
+	 * reporter. Return true if and only if no differences were found.
 	 * @param elem_A the first element.
 	 * @param elem_B the second element.
 	 * @param reporter report writer.
@@ -1511,7 +1524,7 @@ public final class KXmlUtils extends KDOMUtils {
 	}
 
 	/** Compare list of attributes of two elements. Write differences to the
-	 * reporter if differences are recognized.
+	 * reporter. Return true if and only if no differences were found.
 	 * @param elem_A the first element.
 	 * @param elem_B the second element.
 	 * @param reporter The report writer.
@@ -1582,7 +1595,7 @@ public final class KXmlUtils extends KDOMUtils {
 	}
 
 	/** Compare list of child nodes of two elements. Write differences to the
-	 * reporter if differences are recognized.
+	 * reporter. Return true if and only if no differences were found.
 	 * @param elem_A the first element.
 	 * @param elem_B the second element.
 	 * @param reporter report writer.

@@ -458,7 +458,7 @@ public class XScriptParser extends StringParser
 				error(XDEF.XDEF400); //'//' comment is not allowed in the script
 				int ndx = getSourceBuffer().indexOf('\n', getIndex() + 1);
 				if (ndx > 0) {
-					setBufIndex(ndx);
+					setIndex(ndx);
 					continue;
 				}
 			} else { //ch == '*'
@@ -467,7 +467,7 @@ public class XScriptParser extends StringParser
 					int i;
 					while ((i = incBufIndex()) < ndx) {}
 					if (ndx + 2 < getEndBufferIndex()) {
-						setBufIndex(ndx + 2);
+						setIndex(ndx + 2);
 						continue;
 					}
 				} else {
@@ -493,7 +493,7 @@ public class XScriptParser extends StringParser
 				//we set position to '.'
 				pos -= _idName.length() - i;
 				_idName = _idName.substring(0, i);
-				setBufIndex(pos);//set position to dot
+				setIndex(pos);//set position to dot
 			}
 		}
 	}
@@ -611,7 +611,7 @@ public class XScriptParser extends StringParser
 			default: {
 				boolean wasDollar;
 				if (!(wasDollar = ch == '$')) {
-					setBufIndex(getIndex() - 1);
+					setIndex(getIndex() - 1);
 				}
 				if (!isXMLName(_xmlVersion)) {
 					return _sym = UNDEF_SYM;
@@ -619,11 +619,11 @@ public class XScriptParser extends StringParser
 				String s =
 					wasDollar ? '$' + getParsedString() : getParsedString();
 				if (s.endsWith("--")) {
-					setBufIndex(getIndex() - 2);//set position before "--"
+					setIndex(getIndex() - 2);//set position before "--"
 					s = s.substring(0, s.length() - 2);
 				} else if (s.endsWith(":") || s.endsWith(".")) {
 					s = s.substring(0, s.length() - 1);
-					setBufIndex(getIndex() - 1);//set position before ":"
+					setIndex(getIndex() - 1);//set position before ":"
 				}
 				// find keyword index
 				int keyindex = KEYWORDS.indexOf(';' + s + ';');
@@ -670,7 +670,7 @@ public class XScriptParser extends StringParser
 					case XOR_SYM:
 					case MOD_SYM:
 						if (getCurrentChar() == '=') {
-							setBufIndex(getIndex() + 1); // ????????????????????
+							setIndex(getIndex() + 1); // ????????????????????
 							switch (keyindex) {
 								case LSH_SYM:
 									return _sym = LSH_EQ_SYM;  //<<=
@@ -839,7 +839,7 @@ public class XScriptParser extends StringParser
 					if (c == '.') {
 						incBufIndex();
 						while((DEC_DIGITS.indexOf(c = getCurrentChar())) >= 0) {
-							setBufIndex(getIndex() + 1);
+							setIndex(getIndex() + 1);
 						}
 					}
 					if ((c == 'e' || c == 'E')) {
@@ -915,7 +915,7 @@ public class XScriptParser extends StringParser
 					}
 					pos = getIndex();
 				} else{//not digit after dec. point
-					setBufIndex(getIndex() - 1);
+					setIndex(getIndex() - 1);
 					wasDecPoint = false;
 				}
 			}
@@ -927,7 +927,7 @@ public class XScriptParser extends StringParser
 				}
 				if ((c = getCurrentChar()) < '0' || c > '9') {
 					if (wasDecPoint) {
-						setBufIndex(pos);
+						setIndex(pos);
 						try {
 							String s = getParsedBufferPartFrom(startNumber - 1);
 							s = SUtils.modifyString(s, "_", "");
@@ -1274,7 +1274,7 @@ public class XScriptParser extends StringParser
 	}
 
 	private boolean resetPosAndReturn(final int pos, final String javaQName) {
-		setBufIndex(pos);
+		setIndex(pos);
 		setParsedString(javaQName);
 		return true;
 	}

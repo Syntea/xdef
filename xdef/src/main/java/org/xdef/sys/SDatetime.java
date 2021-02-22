@@ -2144,7 +2144,7 @@ public class SDatetime extends XMLGregorianCalendar
 	 */
 	public final static SDatetime parseISO8601(final String src, final int pos){
 		StringParser p = new StringParser(src);
-		p.setBufIndex(pos);
+		p.setIndex(pos);
 		if (p.isISO8601Datetime()) {
 			return p.getParsedSDatetime();
 		}
@@ -2170,7 +2170,7 @@ public class SDatetime extends XMLGregorianCalendar
 	 */
 	public final static SDatetime parseRFC822(final String src, final int pos) {
 		StringParser p = new StringParser(src);
-		p.setBufIndex(pos);
+		p.setIndex(pos);
 		if (p.isRFC822Datetime()) {
 			return p.getParsedSDatetime();
 		}
@@ -2205,7 +2205,7 @@ public class SDatetime extends XMLGregorianCalendar
 		int pos,
 		final String format) {
 		StringParser p = new StringParser(src);
-		p.setBufIndex(pos);
+		p.setIndex(pos);
 		if (p.isDatetime(format)) {
 			return p.getParsedSDatetime();
 		}

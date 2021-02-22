@@ -81,8 +81,8 @@ public class GenCollection {
 	 */
 	public static void main(String... args) {
 		final String info =
-"GenCollection - generate collection from X-definitions and/or collections.\n"+
-"Usage:\n"+
+"Generate collection from X-definitions and/or collections.\n"+
+"Command line arguments:\n"+
 " [-m] [-s] [-g] [-e encoding] -o output file -i input_file [input_file1...]\n"+
 " -e encoding ...... name of charset\n" +
 " -m macros will be expanded\n" +

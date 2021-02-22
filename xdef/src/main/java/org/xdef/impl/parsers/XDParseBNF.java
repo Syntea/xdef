@@ -33,7 +33,7 @@ public class XDParseBNF extends XDParserAbstract {
 		XDParseResult r = _rule.perform(parser);
 		p.setParsedValue(r.getParsedValue());
 		p.addReports(p.getReporter());
-		p.setBufIndex(parser.getIndex());
+		p.setIndex(parser.getIndex());
 		p.isSpaces();
 	}
 

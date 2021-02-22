@@ -76,7 +76,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 	private static final int DBG_SHOWCONTEXT = DBG_SHOWELEMENT + 1;		//12
 	private static final int DBG_SHOWERRORS = DBG_SHOWCONTEXT + 1;		//13
 	private static final int DBG_EXIT = DBG_SHOWERRORS + 1;				//14
-	private static final int DBG_HELP = DBG_EXIT + 1;					//15
+//	private static final int DBG_HELP = DBG_EXIT + 1;					//15
 
 	private static final String[] DBG_COMMANDS = {
 		"go/Continue/F5",						// DBG_CONTINUE
@@ -722,7 +722,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 				}
 			}
 		} catch (IOException ex) {
-			ex.printStackTrace(System.err);
+			throw new RuntimeException(ex);
 		}
 		return s;
 	}

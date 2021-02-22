@@ -18,7 +18,7 @@ import java.util.HashSet;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
-/** Validation of XML document with given X-definition.
+/** Validation of XML document with X-definition.
  * <p>
  * Also provides main method for calling the program from command line.
  * (see {@link org.xdef.util.XValidate#main(String[])})</p>
@@ -258,11 +258,14 @@ public class XValidate {
 	 */
 	public static void main(final String... args) {
 		final String info =
-"XValidate: validation of XML document with X-definition.\n"+
-"usage: [-d defList | -p XDPool ] [-x xDefName] [-l logFile] -i xmlFile\n"+
-"    Items in the defList parameter are separated by path separators and may\n"+
-"    contain wildcard charaters in file names.\n"+
-"    Both -d and -p parameters can't be specified.";
+"Validation of XML document with X-definition.\n"+
+"\n"+
+"Command line arguments:\n"+
+"  [-d defList | -p XDPool ] [-x xDefName] [-l logFile] -i xmlFile\n"+
+"\n"+
+"  Items in the defList parameter are separated by path separators and may\n"+
+"  contain wildcard charaters in file names.\n"+
+"  Both -d and -p parameters can't be specified.";
 		if (args.length == 0) {
 			throw new RuntimeException("Parameters missing\n" + info);
 		}

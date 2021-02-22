@@ -16,7 +16,7 @@ public interface XDService extends XDValue {
 		throws SRuntimeException;
 
 	/** Execute statement with parameters.
-	 * @param statement source statement or <tt>null</tt>.
+	 * @param statement source statement or null.
 	 * @param params parameters of statement (sequence of values).
 	 * @return result of execution.
 	 * @throws SRuntimeException if an error occurs.
@@ -26,7 +26,7 @@ public interface XDService extends XDValue {
 
 	/** Invoke query statement with parameters.
 	 * @param statement source statement.
-	 * @param params parameters of statement or <tt>null</tt>.
+	 * @param params parameters of statement or null.
 	 * @return XDResultSet with result of query on this statement.
 	 * @throws SRuntimeException if an error occurs.
 	 */
@@ -36,7 +36,7 @@ public interface XDService extends XDValue {
 	/** Execute query and return the specified items.
 	 * @param statement source statement.
 	 * @param itemName name of items to be returned.
-	 * @param params parameters of statement or <tt>null</tt>.
+	 * @param params parameters of statement or null.
 	 * @return XDResultSet with result of query on this statement.
 	 * @throws SRuntimeException if an error occurs.
 	 */

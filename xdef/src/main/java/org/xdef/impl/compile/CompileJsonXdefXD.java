@@ -3,6 +3,7 @@ package org.xdef.impl.compile;
 import java.util.Map;
 import org.xdef.XDConstants;
 import org.xdef.impl.XOccurrence;
+import org.xdef.json.JsonUtil;
 import org.xdef.msg.JSON;
 import org.xdef.sys.ReportWriter;
 import org.xdef.sys.SBuffer;
@@ -13,6 +14,7 @@ import org.xdef.sys.SUtils;
  * @author Vaclav Trojan
  */
 public class CompileJsonXdefXD extends CompileJsonXdef {
+	private String _jsNamespace = XDConstants.JSON_NS_URI_XD;
 
 	/** Prepare instance of XJSON. */
 	private CompileJsonXdefXD() {super();}
@@ -56,9 +58,9 @@ public class CompileJsonXdefXD extends CompileJsonXdef {
 	 */
 	private void updateKeyInfo(final PNode e, final String key) {
 		String s = SUtils.modifyString(SUtils.modifyString(
-			jstringToSource(key), "\\", "\\\\"), "'", "\\'") ;
-		addMatchExpression(e, '@' + J_KEYATTR + "=='"+ s +"'");
-		setAttr(e, J_KEYATTR, new SBuffer("fixed('"+ s +"');", e._name));
+			JsonUtil.jstringToSource(key), "\\", "\\\\"), "'", "\\'") ;
+		addMatchExpression(e, '@' + JsonUtil.J_KEYATTR + "=='"+ s +"'");
+		setAttr(e, JsonUtil.J_KEYATTR, new SBuffer("fixed('"+ s +"');", e._name));
 	}
 
 	private PNode genJsonMap(final JMap map, final PNode parent) {
@@ -157,8 +159,9 @@ public class CompileJsonXdefXD extends CompileJsonXdef {
 				// if it is not the last and it has xd:script attribute where
 				// the min occurrence differs from max occurrence
 				// and it has the attribute with a value description
-				if (J_ITEM.equals(ee._localName)&&_jsNamespace.equals(ee._nsURI)
-					&& (val = getAttr(ee, J_VALUEATTR)) != null) {
+				if (JsonUtil.J_ITEM.equals(ee._localName)
+					&& _jsNamespace.equals(ee._nsURI)
+					&& (val = getAttr(ee, JsonUtil.J_VALUEATTR)) != null) {
 					PAttr script = getXDAttr(ee, "script");
 					XOccurrence occ = null;
 					if (script != null) {
@@ -189,7 +192,8 @@ public class CompileJsonXdefXD extends CompileJsonXdef {
 							s += "()"; // add brackets
 						}
 						addMatchExpression(ee,
-							s + ".parse((String)@"+J_VALUEATTR + ").matches()");
+							s + ".parse((String)@"
+								+ JsonUtil.J_VALUEATTR + ").matches()");
 					}
 				}
 			}
@@ -199,7 +203,7 @@ public class CompileJsonXdefXD extends CompileJsonXdef {
 
 	private PNode genJsonValue(final JValue jo, final PNode parent) {
 		SBuffer sbf, occ = null;
-		PNode e = genJElement(parent, J_ITEM, jo.getPosition());
+		PNode e = genJElement(parent, JsonUtil.J_ITEM, jo.getPosition());
 		if (jo.getValue() == null) {
 			sbf = new SBuffer("jnull()");
 		} else {
@@ -219,7 +223,7 @@ public class CompileJsonXdefXD extends CompileJsonXdef {
 			if (occ != null) { // occurrence
 				setXDAttr(e, "script", occ);
 			}
-			setAttr(e, J_VALUEATTR, sbf);
+			setAttr(e, JsonUtil.J_VALUEATTR, sbf);
 		}
 		return e;
 	}
@@ -243,7 +247,6 @@ public class CompileJsonXdefXD extends CompileJsonXdef {
 				s = XDConstants.JSON_NS_PREFIX + i; // change prefix
 			}
 		}
-		_jsPrefix = s;
 		_jsNamespace = XDConstants.JSON_NS_URI_W3C;
 		PNode e;
 		if (json instanceof JMap) {

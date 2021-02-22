@@ -830,7 +830,7 @@ public class StringParser extends SReporter implements SParser {
 		// all fields are set to null by Java VM
 		setLineNumber(1L);
 		_endPos = (_source = source).length();
-		setBufIndex(pos);
+		setIndex(pos);
 	}
 
 	/** Creates a new instance of StringParser.
@@ -1063,7 +1063,7 @@ public class StringParser extends SReporter implements SParser {
 				throw new SRuntimeException(SYS.SYS036, ex);
 			}
 		}
-		setBufIndex(0);
+		setIndex(0);
 		if (_endPos == 0) {
 			nextChar();
 		}
@@ -1106,7 +1106,7 @@ public class StringParser extends SReporter implements SParser {
 			if (getIndex() < _endPos) {
 				return true;
 			}
-			setIndex(_endPos);
+			super.setIndex(_endPos);
 			if (_parserStack == null || _parserStack.size() <= 0) {
 				return false;
 			}
@@ -1118,7 +1118,7 @@ public class StringParser extends SReporter implements SParser {
 		int len;
 		try {
 			if (getIndex() > _endPos) {
-				setIndex(_endPos);
+				super.setIndex(_endPos);
 			}
 			if ((len = _reader.read(_cbuf)) <= 0) {
 				int count = 0;
@@ -1141,7 +1141,7 @@ public class StringParser extends SReporter implements SParser {
 					if (getIndex() < _endPos) {
 						return true;
 					}
-					setIndex(_endPos);
+					super.setIndex(_endPos);
 					if (_parserStack == null || _parserStack.size() <= 0) {
 						return false;
 					}
@@ -1167,7 +1167,7 @@ public class StringParser extends SReporter implements SParser {
 					new String(_cbuf) :	new String(_cbuf, 0, len));
 			}
 			setFilePos(getFilePos() + getIndex());
-			setBufIndex(0);
+			setIndex(0);
 			return true;
 		} catch (Exception ex) {
 			//this should never happen
@@ -1193,7 +1193,7 @@ public class StringParser extends SReporter implements SParser {
 
 	/** Increase buffer length for given number of characters.
 	 * @param len length to be ensured.
-	 * @return <tt>true</tt> if buffer was correctly increased.
+	 * @return true if buffer was correctly increased.
 	 */
 	private boolean ensureBuffer(final int len) {
 		int n;
@@ -1201,7 +1201,7 @@ public class StringParser extends SReporter implements SParser {
 			return true;
 		}
 		if (getIndex() > _endPos) {
-			setIndex(_endPos);
+			super.setIndex(_endPos);
 		}
 		if (_reader == null) {
 			return false;
@@ -1221,16 +1221,16 @@ public class StringParser extends SReporter implements SParser {
 							// append remaining buffer part
 							sb.append(getUnparsedBufferPart());
 							setEndBuffer(sb.length()); // update buffer length
-							setIndex(pos);
+							super.setIndex(pos);
 							if (n <= _endPos) { // finished
 								break;
 							}
 							continue;
 						}
-						setIndex(pos); //restore bufffer position
+						super.setIndex(pos); //restore bufffer position
 						continue;
 					}
-					setIndex(pos); //restore bufffer position
+					super.setIndex(pos); //restore bufffer position
 					break; // we have no more parsers.
 				}
 			} catch (Exception ex) {
@@ -1246,7 +1246,7 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	/** Get previous parser from stack.
-	 * @return <tt>true</tt> if parser has something to be parsed.
+	 * @return true if parser has something to be parsed.
 	 */
 	public final boolean popParser() {
 		while (_parserStack != null && _parserStack.size() > 0) {
@@ -1257,7 +1257,7 @@ public class StringParser extends SReporter implements SParser {
 			setStartLine(parser.getStartLine());
 			setLineNumber(parser.getLineNumber());
 			setBuffer(parser.getBuffer());
-			setBufIndex(parser.getIndex());
+			setIndex(parser.getIndex());
 			setSysId(parser.getSysId());
 			copyModificationInfo(parser);
 			setLineInfoFlag(parser.isLineInfoFlag());
@@ -1286,7 +1286,7 @@ public class StringParser extends SReporter implements SParser {
 		parser.setStartLine(getStartLine());
 		parser.setLineNumber(getLineNumber());
 		parser.setBuffer(getBuffer());
-		parser.setBufIndex(getIndex());
+		parser.setIndex(getIndex());
 
 		parser.setSysId(getSysId());
 		parser.copyModificationInfo(this);
@@ -1300,7 +1300,7 @@ public class StringParser extends SReporter implements SParser {
 		setFilePos(0L);
 		setSysId(null);
 		setBuffer("");
-		setBufIndex(0);
+		setIndex(0);
 		clearModificationInfo();
 		_reader = null;
 //		_cbuf = null;
@@ -1331,7 +1331,7 @@ public class StringParser extends SReporter implements SParser {
 		setFilePos(pos);
 		setSysId(sourceName);
 		setBuffer(source);
-		setBufIndex(0);
+		setIndex(0);
 	}
 
 	/** Save old parser and set new source buffer.
@@ -1354,8 +1354,7 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	/** Check if the detailed line positions are required.
-	 * @return <tt>true</tt> if and only if the detailed line positions are
-	 * required.
+	 * @return true if and only if the detailed line positions are required.
 	 */
 	public final boolean isLineInfoFlag() {return _lineInfo;}
 
@@ -1378,7 +1377,7 @@ public class StringParser extends SReporter implements SParser {
 			}
 			return pos;
 		} else {
-			setIndex(_endPos);
+			super.setIndex(_endPos);
 			_ch = NOCHAR;
 			return -1;
 		}
@@ -1424,7 +1423,7 @@ public class StringParser extends SReporter implements SParser {
 
 	/** Get character at the given position in the source buffer
 	 * @param pos position of required character in the source buffer.
-	 * @return required character or <tt>NOCHAR</tt>.
+	 * @return required character or <code>NOCHAR</code>.
 	 */
 	public final char getCharAtPos(int pos) {
 		return pos < _endPos ? _source.charAt(pos) : NOCHAR;
@@ -1432,14 +1431,14 @@ public class StringParser extends SReporter implements SParser {
 
 	@Override
 	/** Set source buffer position.
-	 * @param pos position of the source to be set.
+	 * @param index position to be set.
 	 */
-	public final void setBufIndex(final int index) {
+	public final void setIndex(final int index) {
 		if (index >= _endPos) {
 			_ch = NOCHAR;
-			setIndex(_endPos);
+			super.setIndex(_endPos);
 		} else {
-			setIndex(index);
+			super.setIndex(index);
 			_ch = _source.charAt(index);
 		}
 	}
@@ -1449,7 +1448,7 @@ public class StringParser extends SReporter implements SParser {
 	 */
 	public final boolean chkBufferIndex() {return getIndex() < _endPos;}
 
-	/** Get <tt>SPosition</tt> object.
+	/** Get <code>SPosition</code> object.
 	 * @return actual source position.
 	 */
 	public final SPosition getPosition() {return new SPosition(this);}
@@ -1474,7 +1473,7 @@ public class StringParser extends SReporter implements SParser {
 		setLineNumber(pos.getLineNumber());
 		setStartLine(pos.getStartLine());
 		copyModificationInfo(pos);
-		setBufIndex(x);
+		setIndex(x);
 	}
 
 	/** Set switch if reader should be closed.
@@ -1495,26 +1494,23 @@ public class StringParser extends SReporter implements SParser {
 	public final void setParsedString(final String s){_parsedString = s;}
 
 	/** Get SDuration object with value of parsed duration.
-	 * @return SDuration object with parsed values or <tt>null</tt>.
+	 * @return SDuration object with parsed values or null.
 	 */
 	public final SDuration getParsedSDuration() {return _parsedDuration;}
 
 	/** Get SDatetime object with value of parsed date.
-	 * @return SDatetime object with parsed values or <tt>null</tt>.
+	 * @return SDatetime object with parsed values or null.
 	 */
-	public final SDatetime getParsedSDatetime() {return _parsedDatetime;}
+	public final SDatetime getParsedSDatetime() {
+		return _parsedDatetime == null ? null : new SDatetime(_parsedDatetime);
+	}
 
 	/** Get value of parsed date. Returns instance of Calendar with parsed
 	 * values. Values which were not parsed are set to zero.
-	 * @return Calendar with parsed values.
-	 * @throws SRuntimeException SYS072 Data error
+	 * @return Calendar with parsed values or null.
 	 */
 	public final Calendar getParsedCalendar() {
-		if (_parsedDatetime == null) {
-			//Data error&{0}{: }
-			throw new SRuntimeException(SYS.SYS072, "Datetime");
-		}
-		return _parsedDatetime.getCalendar();
+		return _parsedDatetime == null ? null : _parsedDatetime.getCalendar();
 	}
 
 	/** Skip white spaces.
@@ -1551,7 +1547,7 @@ public class StringParser extends SReporter implements SParser {
 	 * @param minCh minimum of checked interval.
 	 * @param maxCh maximum of checked interval.
 	 * @return the actual character character from actual position,
-	 * otherwise return <tt>NOCHAR</tt>.
+	 * otherwise return <code>NOCHAR</code>.
 	 */
 	public final char isInInterval(final char minCh, final char maxCh) {
 		if (_ch < minCh || _ch > maxCh) {
@@ -1572,7 +1568,7 @@ public class StringParser extends SReporter implements SParser {
 	 * @param minCh minimum of checked interval.
 	 * @param maxCh maximum of checked interval.
 	 * @return the actual character character from actual position,
-	 * otherwise return <tt>NOCHAR</tt>.
+	 * otherwise return <code>NOCHAR</code>.
 	 */
 	public final char notInInterval(final char minCh, final char maxCh) {
 		if (_ch >= minCh && _ch <= maxCh) {
@@ -1590,8 +1586,8 @@ public class StringParser extends SReporter implements SParser {
 	 * the actual position to the next character if given character was
 	 * not in specified interval.
 	 * @param ch Character to be checked.
-	 * @return <tt>true</tt> if character was present at actual position,
-	 * otherwise return <tt>false</tt>.
+	 * @return true if character was present at actual position,
+	 * otherwise return false.
 	 */
 	public final boolean isCharIgnoreCase(final char ch) {
 		if (Character.toLowerCase(_ch)!=Character.toLowerCase(ch)) {
@@ -1623,8 +1619,8 @@ public class StringParser extends SReporter implements SParser {
 
 	/** Check if actual position points to new line. If check is successful
 	 * set the actual position to the next character.
-	 * @return <tt>true</tt> if new line is at actual position,
-	 * otherwise return <tt>false</tt>.
+	 * @return true if new line is at actual position,
+	 * otherwise return false.
 	 */
 	public final boolean isNewLine() {
 		if (_ch != '\n')  {
@@ -1706,7 +1702,7 @@ public class StringParser extends SReporter implements SParser {
 		}
 		if (result != -1) {
 			ensureBuffer(len+1);
-			setIndex(pos += len);
+			super.setIndex(pos += len);
 			_ch = pos + len < _endPos || readNextBuffer()
 				? _source.charAt(getIndex()) : NOCHAR;
 		}
@@ -1736,7 +1732,7 @@ public class StringParser extends SReporter implements SParser {
 		}
 		if (result != -1) {
 			ensureBuffer(len+1);
-			setIndex(pos += len);
+			super.setIndex(pos += len);
 			_ch = pos + len < _endPos || readNextBuffer()
 				? _source.charAt(getIndex()) : NOCHAR;
 		}
@@ -1759,7 +1755,7 @@ public class StringParser extends SReporter implements SParser {
 				if (token.equalsIgnoreCase(
 					_source.substring(pos, pos + len))) {
 					ensureBuffer(len+1);
-					setIndex(pos += len);
+					super.setIndex(pos += len);
 					_ch = pos<_endPos || readNextBuffer()
 						? _source.charAt(getIndex()) : NOCHAR;
 					return true;
@@ -1772,8 +1768,7 @@ public class StringParser extends SReporter implements SParser {
 	@Override
 	/** Check if actual position points to signed integer number. Set the actual
 	 * position to the next character after the number if number was recognized.
-	 * @return <tt>true</tt> if signed integer was parsed, otherwise
-	 * return <tt>false</tt>.
+	 * @return true if signed integer was parsed, otherwise return false.
 	 */
 	public final boolean isSignedInteger() {
 		if (getIndex() + 1 >= _endPos && !readNextBuffer()) {
@@ -1788,7 +1783,7 @@ public class StringParser extends SReporter implements SParser {
 			freeBuffer();
 			return true;
 		}
-		setIndex(startToken);
+		super.setIndex(startToken);
 		_ch = _source.charAt(startToken);
 		freeBuffer();
 		return false;
@@ -1797,8 +1792,7 @@ public class StringParser extends SReporter implements SParser {
 	@Override
 	/** Check if actual position points to signed float number. Set the actual
 	 * position to the next character after the number if number was recognized.
-	 * @return <i>true</i> if number was parsed, otherwise
-	 *  return <tt>false</tt>.
+	 * @return true if number was parsed, otherwise return false.
 	 */
 	public final boolean isSignedFloat() {
 		if (getIndex() + 2 >= _endPos && !readNextBuffer()) {
@@ -1813,14 +1807,14 @@ public class StringParser extends SReporter implements SParser {
 			freeBuffer();
 			return true;
 		}
-		setIndex(startToken);
+		super.setIndex(startToken);
 		_ch = _source.charAt(startToken);
 		freeBuffer();
 		return false;
 	}
 
-	/** Set position to first character of next line.
-	 * @return <tt>true</tt> if and only if next line was reached.
+	/** Set position to first character of next line or to the end od source.
+	 * @return true if and only if next line was reached.
 	 */
 	public final boolean skipToNextLine() {
 		if (_ch == '\n') {
@@ -1836,15 +1830,15 @@ public class StringParser extends SReporter implements SParser {
 			_ch = _source.charAt(getIndex());
 			return true;
 		}
-		setIndex(_endPos);
+		super.setIndex(_endPos);
 		_ch = NOCHAR;
 		return false;
 	}
 
 	@Override
 	/** Skip to specified character. The position is set <b>to</b> the found
-	 * character. Returns <tt>true</tt> and sets position <b>to</b>
-	 * the position of character. Otherwise returns <tt>false</tt> and sets
+	 * character. Returns true and sets position <b>to</b>
+	 * the position of character. Otherwise returns false and sets
 	 * position to the end of source.
 	 * @param ch Character to be searched for.
 	 * @return <i>true</i> if the character was found.
@@ -1861,17 +1855,17 @@ public class StringParser extends SReporter implements SParser {
 				setNewLine();
 			}
 		}
-		setIndex(_endPos);
+		super.setIndex(_endPos);
 		_ch = NOCHAR;
 		return false;
 	}
 
 	/** Skip to next character after the argument. The position is set
-	 * <b>after</b> the found character. Returns <tt>true</tt> and sets
+	 * <b>after</b> the found character. Returns true and sets
 	 * position <b>after</b> the position of character. Otherwise returns
-	 * <tt>false</tt> and sets position to the end of source.
+	 * false and sets position to the end of source.
 	 * @param ch Character to be searched for.
-	 * @return <i>true</i> if the character was found.
+	 * @return true if the character was found.
 	 */
 	public final boolean findCharAndSkip(final char ch) {
 		if (_ch == '\n') {
@@ -1891,7 +1885,7 @@ public class StringParser extends SReporter implements SParser {
 				return true;
 			}
 		}
-		setIndex(_endPos);
+		super.setIndex(_endPos);
 		_ch = NOCHAR;
 		return false;
 	}
@@ -1914,7 +1908,7 @@ public class StringParser extends SReporter implements SParser {
 				setNewLine();
 			}
 		}
-		setIndex(_endPos);
+		super.setIndex(_endPos);
 		return NOCHAR;
 	}
 
@@ -1938,14 +1932,14 @@ public class StringParser extends SReporter implements SParser {
 				return c;
 			}
 		}
-		setIndex(_endPos);
+		super.setIndex(_endPos);
 		return NOCHAR;
 	}
 
 	@Override
-	/** Find token. If the token was found returns <tt>true</tt> and sets
+	/** Find token. If the token was found returns true and sets
 	 * position <b>to</b> the position of token. Otherwise returns
-	 * <tt>false</tt> and sets position to the end of source.
+	 * false and sets position to the end of source.
 	 * @param token Token to be found.
 	 * @return true if the token was found.
 	 */
@@ -1965,7 +1959,7 @@ public class StringParser extends SReporter implements SParser {
 						}
 					}
 					ensureBuffer(len+1);
-					setBufIndex(j);
+					setIndex(j);
 					return true;
 				}
 				if (_ch == '\n') {
@@ -1974,26 +1968,26 @@ public class StringParser extends SReporter implements SParser {
 			}
 			nextChar();
 		}
-		setIndex(_endPos);
+		super.setIndex(_endPos);
 		_ch = NOCHAR;
 		return false;
 	}
 
 	/** Find token in source text and set position to next character after
-	 * the found token. Returns <tt>true</tt> if the token was found, otherwise
-	 * returns <tt>false</tt> and sets position to the end of source.
+	 * the found token. Returns true if the token was found, otherwise
+	 * returns false and sets position to the end of source.
 	 * @param token Token to be found.
 	 * @return true if the token was found.
 	 */
 	public final boolean findTokenAndSkip(final String token) {
 		if (findToken(token)) {
 			int x = getIndex() + token.length();
-			setIndex(x);
+			super.setIndex(x);
 			if ( x >= _endPos) {
 				readNextBuffer();
 				if ( x >= _endPos) {
 					_ch =  NOCHAR;
-					setIndex(_endPos);
+					super.setIndex(_endPos);
 					return true;
 				}
 			}
@@ -2051,7 +2045,7 @@ public class StringParser extends SReporter implements SParser {
 	@Override
 	/** Set position to the end of source data. */
 	public final void setEos() {
-		setIndex(_endPos);
+		super.setIndex(_endPos);
 		closeReader();
 		_ch = NOCHAR;
 	}
@@ -2067,7 +2061,7 @@ public class StringParser extends SReporter implements SParser {
 	 * @param source Source buffer.
 	 */
 	public final void setSourceBuffer(final String source) {
-		setIndex(0);
+		super.setIndex(0);
 		_endPos = (_source = source).length();
 		setFilePos(0L);
 		setStartLine(0L);
@@ -2082,7 +2076,7 @@ public class StringParser extends SReporter implements SParser {
 	 * @param source Parsed string.
 	 */
 	public final void setSourceBuffer(final SBuffer source) {
-		setIndex(0);
+		super.setIndex(0);
 		_source = source.getString();
 		_endPos = _source.length();
 		setFilePos(source.getFilePos());
@@ -2124,7 +2118,7 @@ public class StringParser extends SReporter implements SParser {
 			_endPos = (_source = new StringBuilder(_source)
 				.replace(pos, pos + length, replacement).toString()).length();
 		}
-		setBufIndex(pos);
+		setIndex(pos);
 	}
 
 	/** Get value of parsed integer.
@@ -2194,7 +2188,7 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	/** Check if parsed datetime is valid .
-	 * @return <tt>true</tt> if parsed date is OK.
+	 * @return true if parsed date is OK.
 	 */
 	public boolean testParsedDatetime() {
 		return _parsedDatetime != null && _parsedDatetime.check();
@@ -2202,14 +2196,14 @@ public class StringParser extends SReporter implements SParser {
 
 	@Override
 	/** Check if parser reached the end of source.
-	 * @return <tt>true</tt> if parser reached the end of source, otherwise
-	 * return <tt>false</tt>.
+	 * @return true if parser reached the end of source, otherwise
+	 * return false.
 	 */
 	public final boolean eos() {return (getIndex()>=_endPos&&!readNextBuffer());}
 
 	/** Get character from buffer index.
 	 * @param index index to source buffer.
-	 * @return character or <tt>NOCHAR</tt>.
+	 * @return character or <code>NOCHAR</code>.
 	 */
 	public final char charFromBuffer(final int index) {
 		return index < _endPos ? _source.charAt(index) : NOCHAR;
@@ -2217,8 +2211,8 @@ public class StringParser extends SReporter implements SParser {
 
 	@Override
 	/** Parse white space.
-	 * @return <tt>true</tt> if white space was present at actual position,
-	 * otherwise return <tt>false</tt>.
+	 * @return true if white space was present at actual position,
+	 * otherwise return false.
 	 */
 	public final boolean isSpace() {
 		if (XML_CHARTAB0[_ch] != XML_CHAR_WHITESPACE) {
@@ -2233,8 +2227,8 @@ public class StringParser extends SReporter implements SParser {
 
 	@Override
 	/** Parse one or more white spaces.
-	 * @return <tt>true</tt> if white spaces were present at actual position,
-	 * otherwise return <tt>false</tt>.
+	 * @return true if white spaces were present at actual position,
+	 * otherwise return false.
 	 */
 	public final boolean isSpaces() {
 		if (XML_CHARTAB0[_ch] != XML_CHAR_WHITESPACE) {
@@ -2250,13 +2244,13 @@ public class StringParser extends SReporter implements SParser {
 					setNewLine();
 				}
 				if (incIndex() >= _endPos && !readNextBuffer()) {
-					setIndex(_endPos);
+					super.setIndex(_endPos);
 					_ch = NOCHAR;
 					break;
 				}
 			}
 		} else {
-			setIndex(_endPos);
+			super.setIndex(_endPos);
 			_ch = NOCHAR;
 		}
 		return true;
@@ -2266,8 +2260,8 @@ public class StringParser extends SReporter implements SParser {
 	/** Check if actual position points to given character. Set the actual
 	 * position to the next character if given character was recognized.
 	 * @param ch Character to be checked.
-	 * @return <tt>true</tt> if character was present at actual position,
-	 * otherwise return <tt>false</tt>.
+	 * @return true if character was present at actual position,
+	 * otherwise return false.
 	 */
 	public final boolean isChar(final char ch) {
 		if (_ch != ch)  {
@@ -2297,15 +2291,12 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	@Override
-	/** Check if actual position points to digit as defined in UNICODE (see
-	 * <a href = "http://www.unicode.org"><tt>http://www.unicode.org</tt></a>).
-	 * Set actual position to the next character if digit was recognized and
-	 * return numeric value of digit, otherwise return -1.
-	 * @return number representing digit or -1.
+	/** Check if at the current position is a digit.
+	 * @return digital value of digit or -1;
 	 */
 	public final int isDigit() {
-		if (Character.isDigit(_ch)) {
-			int i = Character.getNumericValue(_ch);
+		if (_ch >= '0' && _ch <= '9') {
+			int i = _ch - '0';
 			nextChar();
 			return i;
 		}
@@ -2360,7 +2351,7 @@ public class StringParser extends SReporter implements SParser {
 					return false;
 				}
 				ensureBuffer(len+1);
-				setBufIndex(getIndex() + len);
+				setIndex(getIndex() + len);
 				return true;
 			}
 		}
@@ -2370,7 +2361,7 @@ public class StringParser extends SReporter implements SParser {
 	@Override
 	/** Parse integer number (ASCII digits '0' .. '9'). Set the actual position
 	 * to the next character after the number.
-	 * @return <tt>true</tt> if and only if integer was parsed.
+	 * @return true if and only if integer was parsed.
 	 */
 	public final boolean isInteger() {
 		if (_ch > '9' || _ch < '0') {
@@ -2378,10 +2369,12 @@ public class StringParser extends SReporter implements SParser {
 		}
 		keepBuffer();
 		int startToken = getIndex();
-		while (isDigit() >= 0) {}
+		while(_ch >= '0' && _ch <= '9') {
+			nextChar();
+		}
 		int x = getIndex();
 		_parsedString = _source.substring(startToken, x);
-		_ch = x <_endPos || readNextBuffer() ? _source.charAt(getIndex()):NOCHAR;
+		_ch = x < _endPos || readNextBuffer()?_source.charAt(getIndex()):NOCHAR;
 		freeBuffer();
 		return true;
 	}
@@ -2409,7 +2402,7 @@ public class StringParser extends SReporter implements SParser {
 			freeBuffer();
 			return true;
 		}
-		setIndex(startToken);
+		super.setIndex(startToken);
 		_ch = _source.charAt(startToken);
 		freeBuffer();
 		return false;
@@ -2418,34 +2411,31 @@ public class StringParser extends SReporter implements SParser {
 	/** Check if actual position points to part of float number. Set the actual
 	 * position to the next character after the number if number part
 	 * was recognized.
-	 * @return <i>true</i> if number was parsed, otherwise
-	 *  return <tt>false</tt>.
+	 * @return true if number was parsed, otherwise return false.
 	 */
 	private boolean isFloatPart() {
 		if (getIndex() >= _endPos) {
 			return false;
 		}
-		char c;
 		int x = getIndex();
 		boolean wasDecPoint;
 		if (wasDecPoint = isChar('.')) {
-			while (isDigit() >= 0) {}
+			while(_ch >= '0' && _ch <= '9') {
+				nextChar();
+			}
 			x = getIndex();
 			_ch = x < _endPos || readNextBuffer()
 				? _source.charAt(x = getIndex()) : NOCHAR;
 		}
 		if (isOneOfChars("eE") > 0) {//exponent
 			isOneOfChars("+-");
-			if (isDigit() < 0) {
-				if (wasDecPoint) {
-					setBufIndex(x);
-					return true;
-				}
-				//missing number after exponent
-				_ch = _source.charAt(x);
+			if (_ch < '0' || _ch > '9') {
+				setIndex(x); //missing number after exponent; reset position x
 				return wasDecPoint;
 			}
-			while (isDigit() >= 0){}
+			while(_ch >= '0' && _ch <= '9') {
+				nextChar();
+			}
 			return true;
 		}
 		return wasDecPoint;
@@ -2458,7 +2448,7 @@ public class StringParser extends SReporter implements SParser {
 	/** Parse date in ISO8601 format (see
 	 * <a href = "http://www.w3.org/TR/NOTE-datetime">
 	 * www.w3.org/TR/NOTE-datetime</a>).
-	 * @return <tt>true</tt> if date on current position suits to ISO8601
+	 * @return true if date on current position suits to ISO8601
 	 * date format.
 	 */
 	public final boolean isISO8601Date() {
@@ -2469,7 +2459,7 @@ public class StringParser extends SReporter implements SParser {
 	/** Parse time in ISO8601 format (see
 	 * <a href = "http://www.w3.org/TR/NOTE-datetime">
 	 * www.w3.org/TR/NOTE-datetime</a>).
-	 * @return <tt>true</tt> if date on current position suits to ISO8601
+	 * @return true if date on current position suits to ISO8601
 	 * time format.
 	 */
 	public final boolean isISO8601Time() {
@@ -2478,7 +2468,7 @@ public class StringParser extends SReporter implements SParser {
 
 	/** Parse date according to RFC822 (email format). (see
 	 * <a href = "http://www.w3.org/Protocols/rfc822/">rfc822</a>).
-	 * @return <tt>true</tt> if date on current position suits to RFC822 date
+	 * @return true if date on current position suits to RFC822 date
 	 * and time format.
 	 */
 	public final boolean isRFC822Datetime() {
@@ -2486,7 +2476,7 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	/** Parse date in the printable form.
-	 * @return <tt>true</tt> if date on current position is in printable form.
+	 * @return true if date on current position is in printable form.
 	 */
 	public final boolean isPrintableDatetime() {
 		return isDatetime("EEE MMM d HH:mm[:ss[.S]][ ZZZZZ] y"
@@ -2496,7 +2486,7 @@ public class StringParser extends SReporter implements SParser {
 	/** Parse date in ISO8601 date or date and time (see
 	 * <a href = "http://www.w3.org/TR/NOTE-datetime">
 	 * www.w3.org/TR/NOTE-datetime</a>).
-	 * @return <tt>true</tt> if date on current position suits to ISO8601
+	 * @return true if date on current position suits to ISO8601
 	 * date and time format.
 	 */
 	public final boolean isISO8601Datetime() {
@@ -2514,8 +2504,7 @@ public class StringParser extends SReporter implements SParser {
 	/** Parse ISO8601 date and time format (see
 	 * <a href = "http://www.w3.org/TR/NOTE-datetime">
 	 * www.w3.org/TR/NOTE-datetime</a>).
-	 * @return <tt>true</tt> if date on current position suits to ISO8601
-	 * date format.
+	 * @return true if date on current position suits to ISO8601 date format.
 	 */
 	public final boolean isISO8601DateAndTime() {
 		return isDatetime("yyyy-M-d'T'H:m[:s[?',.'S]][Z]|" +
@@ -2526,89 +2515,77 @@ public class StringParser extends SReporter implements SParser {
 
 	/** Parse date and/or time. Argument is string with format mask where
 	 * characters are interpreted as follows:
-	 * <ul>
-	 * <li><b>a</b> AM/PM marker</li>
-	 * <li><b>D</b> day in year</li>
-	 * <li><b>d</b> day of month (1 through 31)</li>
-	 * <li><b>E</b> day of week (text)
-	 *  <p> E, EE, EEE - abbreviated day name (Mon, Tue, .. Sun</p>
-	 *  <p> EEEE (and more)- full month name (Monday, Tuesday, .. Sunday</p>
-	 * </li>
-	 * <li><b>e</b> day of week (number 1=Monday, 7=Sunday)</li>
-	 * <li><b>F</b> day of week in month</li>
-	 * <li><b>G</b> era (0=BC, 1=AD)</li>
-	 * <li><b>H</b> hour (0 through 23)</li>
-	 * <li><b>h</b> hour (1..12 with am/pm)</li>
-	 * <li><b>K</b> hour 0..11 with am/pm)</li>
-	 * <li><b>k</b> hour 1..23</li>
-	 * <li><b>M</b> month in year (1=January .. 12=December).
-	 *  <p> M - number without leading zero</p>
-	 *  <p> MM - number with leading zero</p>
-	 *  <p> MMM - abbreviated month name (Jan, Feb, .. Dec</p>
-	 *  <p> MMMM (and more)- full month name (January, February, .. December</p>
-	 * </li>
-	 * <li><b>m</b> minute (0 through 59)</li>
-	 * <li><b>s</b> second (0 through 59, may be 60)</li>
-	 * <li><b>S</b> digits representing a decimal fraction of a second</li>
-	 * <li><b>y</b> year</li>
-	 * <li><b>Y</b> year (ISO variant, including negative numbers and leading
-	 * zeroes)</li>
-	 * <li><b>YY</b> year (two digits specification, century is added from
-	 * the actual year)</li>
-	 * <li><b>RR</b> year - two digits specification, century is added
-	 * according to ORACLE specification:<p>
-	 * Let c is century of actual date and y is number representing the year in
-	 * actual century. Let r be the specified two-digit year; then</p>
+	 * <br><b>a</b> AM/PM marker
+	 * <br><b>D</b> day in year
+	 * <br><b>d</b> day of month (1 through 31)
+	 * <br><b>E</b> day of week (text)
+	 *  <p> E, EE, EEE - abbreviated day name (Mon, Tue, .. Sun
+	 *  <p> EEEE (and more)- full month name (Monday, Tuesday, .. Sunday
+	 * <br><b>e</b> day of week (number 1=Monday, 7=Sunday)
+	 * <br><b>F</b> day of week in month
+	 * <br><b>G</b> era (0=BC, 1=AD)
+	 * <br><b>H</b> hour (0 through 23)
+	 * <br><b>h</b> hour (1..12 with am/pm)
+	 * <br><b>K</b> hour 0..11 with am/pm)
+	 * <br><b>k</b> hour 1..23
+	 * <br><b>M</b> month in year (1=January .. 12=December).
+	 *  <p> M - number without leading zero
+	 *  <p> MM - number with leading zero
+	 *  <p> MMM - abbreviated month name (Jan, Feb, .. Dec
+	 *  <p> MMMM (and more)- full month name (January, February, .. December
+	 * <br><b>m</b> minute (0 through 59)
+	 * <br><b>s</b> second (0 through 59, may be 60)
+	 * <br><b>S</b> digits representing a decimal fraction of a second
+	 * <br><b>y</b> year
+	 * <br><b>Y</b> year (ISO variant, including negative numbers and leading
+	 * zeroes)
+	 * <br><b>YY</b> year (two digits specification, century is added from
+	 * the actual year)
+	 * <br><b>RR</b> year - two digits specification, century is added
+	 * according to ORACLE specification:
+	 * <p>Let c is century of actual date and y is number representing the year
+	 * in actual century. Let r be the specified two-digit year; then
 	 * <p>if 00 &lt;= y &lt;= 49 and 00 &lt;= r &lt;= 49 then
-	 * result = c * 100 + r</p>
+	 * result = c * 100 + r
 	 * <p>if 00 &lt;= y &lt;= 49 and 50 &lt;= r &lt;= 99 then
-	 * result = (c + 1) * 100 + r</p>
+	 * result = (c + 1) * 100 + r
 	 * <p>if 50 &lt;= y &lt;= 99 and 00 &lt;= r &lt;= 49 then
-	 * result = (c - 1) * 100 + r</p>
+	 * result = (c - 1) * 100 + r
 	 * <p>if 50 &lt;= y &lt;= 99 and 50 &lt;= r &lt;= 99 then
-	 * result = c * 100 + r</p>
-	 * </li>
-	 * <li><tt><b>W</b></tt> week in month</li>
-	 * <li><tt><b>w</b></tt> week in year</li>
-	 * <li><tt><b>Z</b></tt> time zone designator (Z or +hh:mm or -hh:mm)
-	 * <p><tt><b>ZZ</b></tt> time zone designator (Z or +h:m or -h:m)</p>
-	 * <p><tt><b>ZZZZZ</b></tt> time zone designator (Z or +hhmm or -hhmm)
-	 * </p>
-	 * <p><tt><b>ZZZZZZ</b></tt> time zone designator (Z or +hh:mm or -hh:mm)
-	 * </p>
-	 * </li>
-	 * <li><tt><b>z</b></tt> zone name
-	 * <p><tt><b>z, zz, zzz</b></tt> abbreviated zone name (CET)</p>
-	 * <p><tt><b>zzzz</b></tt> and more full zone name (Central European Time)
-	 * </p>
-	 * </li>
-	 * </ul>
+	 * result = c * 100 + r
+	 * <br><b>W</b> week in month
+	 * <br><b>w</b> week in year
+	 * <br><b>Z</b> time zone designator (Z or +hh:mm or -hh:mm)
+	 * <p><b>ZZ</b> time zone designator (Z or +h:m or -h:m)
+	 * <p><b>ZZZZZ</b> time zone designator (Z or +hhmm or -hhmm)
+	 * <p><b>ZZZZZZ</b> time zone designator (Z or +hh:mm or -hh:mm)
+	 * <br><b>z</b> zone name
+	 * <p><b>z, zz, zzz</b> abbreviated zone name (CET)
+	 * <p><b>zzzz</b> and more full zone name (Central European Time)
 	 * <p>One occurrence of above characters represent number without leading
 	 * zeroes. Repeated characters M,d,H,h,m and s represents n-digit number
 	 * with leading zeroes. However, the only year specifications 'y', 'yy'
-	 * and 'yyyy' are permitted, otherwise  the exception SYS059 is thrown.</p>
+	 * and 'yyyy' are permitted, otherwise  the exception SYS059 is thrown.
 	 * <p>Other characters are interpreted as strings which must match. If the
 	 * mask should describe one of above characters it must be quoted in
-	 * apostrophes. The character apostrophe itself must be doubled.</p>
-	 * <p>Parts of mask in square brackets are optional (e.g.</p>
-	 * <p><b><tt>"HH:mm[:ss[.SSS]][z]"</tt></b></p>
+	 * apostrophes. The character apostrophe itself must be doubled.
+	 * <p>Parts of mask in square brackets are optional (e.g.:
+	 * <p><b>"HH:mm[:ss[.SSS]][z]"</b>
 	 * <p>describes time specification where fields with seconds, milliseconds
-	 * or zone are optional).</p>
-	 * <p>Variants of mask are separated by bar character '|' (e.g.</p>
-	 * <p><b><tt>"yyyyMMdd|EEE, d MMM y H:m:s"</tt></b></p>
+	 * or zone are optional).
+	 * <p>Variants of mask are separated by bar character '|' (e.g.
+	 * <p><b>"yyyyMMdd|EEE, d MMM y H:m:s"</b>
 	 * <p>allows to specify date in format of number or in "unix" format).
 	 * Specification of default (predefined) value is in {} brackets and must
-	 * preceed each variant specification (e.g.</p>
-	 * <p><b><tt>"{H8m30}[HH:mm]ss|{H8m30}yyyyMMdd[HH:mm]"</tt></b></p>
+	 * precede each variant specification (e.g.:
+	 * <p><b>"{H8m30}[HH:mm]ss|{H8m30}yyyyMMdd[HH:mm]"</b>
 	 * - if hours and minutes are not specified the value is set to 08:30).
 	 * @param mask String with date format.
-	 * @return <tt>true</tt> if the date source on current position suits
+	 * @return true if the date source on current position suits
 	 * to given format.
 	 * @throws SRuntimeException if mask format is incorrect:
-	 * <ul>
-	 * <li>SYS059 incorrect year specification</li>
-	 * <li>SYS049 unclosed quoted literal</li>
-	 * </ul>
+	 * <br>SYS059 incorrect year specification
+	 * <br>SYS049 unclosed quoted literal
 	 */
 	public final boolean isDatetime(final String mask) throws SRuntimeException{
 		if (getIndex() + 10 >= _endPos && !readNextBuffer()) {
@@ -2631,7 +2608,7 @@ public class StringParser extends SReporter implements SParser {
 			char pat;
 			if (failVariant) {
 				if (myDate._chain != null) {
-					setBufIndex(myDate._startPos);
+					setIndex(myDate._startPos);
 					//(year,month,date,hour,minute,second)
 					myDate = myDate._chain;
 					while (fpos < flen) {
@@ -2652,7 +2629,7 @@ public class StringParser extends SReporter implements SParser {
 						}
 					}
 				} else {
-					setBufIndex(startPos); //reset position
+					setIndex(startPos); //reset position
 					while (fpos < flen) {
 						if ((pat = mask.charAt(fpos++)) == '|') {// reset
 							myDate.reset(startPos);
@@ -2703,7 +2680,7 @@ public class StringParser extends SReporter implements SParser {
 					md._endPos = getIndex();
 					_variants.add(md);
 					myDate.reset(startPos);
-					setBufIndex(myDate._startPos);
+					setIndex(myDate._startPos);
 					continue;
 				case '{': //initialize part
 					myDate.reset(startPos); //???
@@ -2797,23 +2774,25 @@ public class StringParser extends SReporter implements SParser {
 					myDate._second = i;
 					continue;
 				case 'S': {//millisecond
-					i = isDigit();
-					if (i < 0) {
+					if (_ch < '0' || _ch > '9') {
 						failVariant = true;
 						continue;
 					}
+					i = _ch - '0';
+					nextChar();
 					double fraction =  i / 10.0;
 					double exp = 10.0;
 					int j = 0;
 					while (n == 0 || ++j < n) {
-						int k = isDigit();
-						if (k < 0) {
+						if (_ch < '0' || _ch > '9') {
 							if (n != 0 ) {
 								failVariant = true;
 								continue loop;
 							}
 							break;
 						}
+						int k = _ch - '0';;
+						nextChar();
 						fraction += k / (exp *= 10.0);
 					}
 					myDate._fraction = fraction;
@@ -3107,7 +3086,7 @@ public class StringParser extends SReporter implements SParser {
 				}
 			}
 			myDate = x;
-			setBufIndex(myDate._endPos);
+			setIndex(myDate._endPos);
 		}
 		_parsedString = _source.substring(startPos, getIndex());
 		if (ampm == 1 && (hourKind == 'h' || hourKind == 'K')) {
@@ -3246,7 +3225,7 @@ public class StringParser extends SReporter implements SParser {
 				return null; //?????
 			}
 			// parsed OK
-			setBufIndex(newPos);
+			setIndex(newPos);
 			if (!zoneOffsetSpec) {
 				return tz;
 			}//after UTC or GMT we still try to read offset!
@@ -3332,7 +3311,7 @@ public class StringParser extends SReporter implements SParser {
 				return true;
 			}
 		} catch (SRuntimeException ex) {}
-		setBufIndex(startPos);
+		setIndex(startPos);
 		freeBuffer();
 		return false;
 	}
@@ -3558,10 +3537,11 @@ public class StringParser extends SReporter implements SParser {
 							_parsedDuration.setSeconds(getParsedInt());
 							double fraction =  0.0;
 							double exp = 1.0;
-							int i;
-							while((i=isDigit()) >= 0) {
-								fraction += i/(exp *= 10.0);
-							}	if (fraction != 0.0) {
+							while(_ch >= '0' && _ch <= '9') {
+								fraction += (_ch - '0')/(exp *= 10.0);
+								nextChar();
+							}
+							if (fraction != 0.0) {
 								_parsedDuration.setFraction(fraction);
 							}	if (exp == 1.0) {//no digits after '.'
 								//Icorrect format of time period
@@ -3589,7 +3569,6 @@ public class StringParser extends SReporter implements SParser {
 		int beg = getIndex();
 		_parsedDatetime = new MyDate(beg);
 		for (;;) {
-			Report r;
 			switch (_ch) {
 				case NOCHAR:
 					//Datetime mask: missing closing character
@@ -3785,7 +3764,7 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	/** Check quoted string.
-	 * @return <tt>null</tt> or Report if format is not valid.
+	 * @return null or Report if format is not valid.
 	 */
 	private Report checkLiteral() {
 		int beg = getIndex();
@@ -3804,7 +3783,7 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	/** Check executable part of mask.
-	 * @return <tt>null</tt> or Report if format is not valid.
+	 * @return null or Report if format is not valid.
 	 */
 	private Report checkDateFormatMask() {
 		if (_ch == '|') {
@@ -3905,7 +3884,7 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	/** Check optional part of mask.
-	 * @return <tt>null</tt> or Report if format is not valid.
+	 * @return null or Report if format is not valid.
 	 */
 	private Report checkDateFormatOptional() {
 		Report r;
@@ -3922,7 +3901,7 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	/** Check if date format is valid.
-	 * @return <tt>null</tt> or Report if format is not valid.
+	 * @return null or Report if format is not valid.
 	 */
 	public final Report checkDateFormat() {
 		Report r;
@@ -3936,7 +3915,7 @@ public class StringParser extends SReporter implements SParser {
 
 	/** Check if date format is valid.
 	 * @param format String with format data.
-	 * @return <tt>null</tt> or Report if format is not valid.
+	 * @return null or Report if format is not valid.
 	 */
 	public final static Report checkDateFormat(final String format) {
 		StringParser p = new StringParser(format);
@@ -3984,7 +3963,7 @@ public class StringParser extends SReporter implements SParser {
 			String s = _parsedString;
 			while(ensureBuffer(2) && isChar('.')) {
 				if (!isJavaName()) {
-					setBufIndex(getIndex() - 1);
+					setIndex(getIndex() - 1);
 					break;
 				}
 				s += "." + _parsedString;
@@ -4009,15 +3988,14 @@ public class StringParser extends SReporter implements SParser {
 ////////////////////////////////////////////////////////////////////////////////
 
 	/** Get type of character. This method returns one of:
-	 * <p>XML_CHAR_ILLEGAL .. unknown type (0)</p>
-	 * <p>XML_CHAR .. valid XML character (1)</p>
-	 * <p>XML_CHAR_WHITESPACE .. space, TAB, CR, LF (2)</p>
-	 * <p>XML_CHAR_COLON .. ':' (4)</p>
-	 * <p>XML_CHAR_NAME_START .. first character of XML name (8)</p>
-	 * <p>XML_CHAR_NAME_EXT .. character of XML name (16)</p>
-	 *
+	 * <br>XML_CHAR_ILLEGAL .. unknown type (0)
+	 * <br>XML_CHAR .. valid XML character (1)
+	 * <br>XML_CHAR_WHITESPACE .. space, TAB, CR, LF (2)
+	 * <br>XML_CHAR_COLON .. ':' (4)
+	 * <br>XML_CHAR_NAME_START .. first character of XML name (8)
+	 * <br>XML_CHAR_NAME_EXT .. character of XML name (16)
 	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1"
-	 * (see org.xdef.impl.XConstants,XMLxx).
+	 * (see cz.syntea.xdef.impl.XConstants,XMLxx).
 	 * @return type of character.
 	 */
 	public final byte getXmlCharType(final byte xmlVersion) {
@@ -4026,11 +4004,11 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	/** Parse Nmtoken.
+	 * [7] Nmtoken::= (NameChar)+
 	 * [4] NameChar::= Letter | Digit | '.' | '-' | '_' | ':'
 	 *                 | CombiningChar | Extender
-	 * [7] Nmtoken::= (NameChar)+
 	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1"
-	 * (see org.xdef.impl.XConstants,XMLxx).
+	 * (see cz.syntea.xdef.impl.XConstants,XMLxx).
 	 * @return true if rule passed.
 	 */
 	public final boolean isNMToken(final byte xmlVersion) {
@@ -4039,7 +4017,7 @@ public class StringParser extends SReporter implements SParser {
 		}
 		if (getIndex() >= _endPos && !readNextBuffer()) {
 			_parsedString = String.valueOf(_ch);
-			setIndex(_endPos);
+			super.setIndex(_endPos);
 			_ch = NOCHAR;
 			return true;
 		}
@@ -4053,7 +4031,7 @@ public class StringParser extends SReporter implements SParser {
 		}
 		_parsedString = result.toString();
 		if (getIndex() >= _endPos) {
-			setIndex(_endPos);
+			super.setIndex(_endPos);
 			_ch = NOCHAR;
 		}
 		return true;
@@ -4064,7 +4042,7 @@ public class StringParser extends SReporter implements SParser {
 	 * [5] NCNameChar::= Letter | Digit | '.' | '-' | '_'
 	 *     | CombiningChar | Extender
 	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1"
-	 * (see org.xdef.impl.XConstants,XMLxx).
+	 * (see cz.syntea.xdef.impl.XConstants,XMLxx).
 	 * @return true if NCNname was recognized.
 	 */
 	public final boolean isNCName(final byte xmlVersion) {
@@ -4073,7 +4051,7 @@ public class StringParser extends SReporter implements SParser {
 		}
 		if (getIndex() >= _endPos && !readNextBuffer()) {
 			_parsedString = String.valueOf(_ch);
-			setIndex(_endPos);
+			super.setIndex(_endPos);
 			_ch = NOCHAR;
 			return true;
 		}
@@ -4087,7 +4065,7 @@ public class StringParser extends SReporter implements SParser {
 		}
 		_parsedString = result.toString();
 		if (getIndex() >= _endPos) {
-			setIndex(_endPos);
+			super.setIndex(_endPos);
 			_ch = NOCHAR;
 		}
 		return true;
@@ -4095,7 +4073,7 @@ public class StringParser extends SReporter implements SParser {
 
 	/** Parse XML name and save result to _parsedString.
 	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1"
-	 * (see org.xdef.impl.XConstants,XMLxx).
+	 * (see cz.syntea.xdef.impl.XConstants,XMLxx).
 	 * @return true if XMLName was parsed.
 	 */
 	public final boolean isXMLName(final byte xmlVersion) {
@@ -4105,7 +4083,7 @@ public class StringParser extends SReporter implements SParser {
 		int pos = getIndex();
 		if (pos >= _endPos && !increaseBuffer()) {
 			_parsedString = String.valueOf(_ch);
-			setIndex(_endPos);
+			super.setIndex(_endPos);
 			_ch = NOCHAR;
 			return true;
 		}
@@ -4133,10 +4111,10 @@ public class StringParser extends SReporter implements SParser {
 			}
 		}
 		setPosition(spos);
-		setBufIndex(pos1);
+		setIndex(pos1);
 		_parsedString = _source.substring(pos, pos1);
 		if (getIndex() >= _endPos) {
-			setIndex(_endPos);
+			super.setIndex(_endPos);
 			_ch = NOCHAR;
 		}
 		return true;
@@ -4144,7 +4122,7 @@ public class StringParser extends SReporter implements SParser {
 
 	/** Parse valid XML character.
 	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1"
-	 * (see org.xdef.impl.XConstants,XMLxx).
+	 * (see cz.syntea.xdef.impl.XConstants,XMLxx).
 	 * @return parsed character or NOCHAR.
 	 */
 	public final char isXMLChar(final byte xmlVersion) {
@@ -4173,7 +4151,7 @@ public class StringParser extends SReporter implements SParser {
 
 	/** Parse XML name start character.
 	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1"
-	 * (see org.xdef.impl.XConstants,XMLxx).
+	 * (see cz.syntea.xdef.impl.XConstants,XMLxx).
 	 * @return parsed character or NOCHAR.
 	 */
 	public final char isXMLNamestartChar(final byte xmlVersion) {
@@ -4187,7 +4165,7 @@ public class StringParser extends SReporter implements SParser {
 
 	/** Parse XML name extension character.
 	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1"
-	 * (see org.xdef.impl.XConstants,XMLxx).
+	 * (see cz.syntea.xdef.impl.XConstants,XMLxx).
 	 * @return parsed character or NOCHAR.
 	 */
 	public final char isXMLNameExtensionChar(final byte xmlVersion) {
@@ -4227,7 +4205,7 @@ public class StringParser extends SReporter implements SParser {
 			}
 		} catch (SRuntimeException ex) {}
 		freeBuffer();
-		setBufIndex(startPos);
+		setIndex(startPos);
 		return false;
 	}
 
@@ -4247,17 +4225,17 @@ public class StringParser extends SReporter implements SParser {
 			return false;
 		}
 		if (_parsedDatetime._tz != null) { //zone can't be here
-			setBufIndex(start);
+			setIndex(start);
 			freeBuffer();
 			return false;
 		}
 		if (!isChar('T')) {
-			setBufIndex(start);
+			setIndex(start);
 			freeBuffer();
 			return false;
 		}
 		if (!readXMLTime()) {
-			setBufIndex(start);
+			setIndex(start);
 			freeBuffer();
 			return false;
 		}
@@ -4278,7 +4256,7 @@ public class StringParser extends SReporter implements SParser {
 		int pos1 = getIndex();
 		int i;
 		if (!isInteger() || getIndex() - pos1 != 2) {
-			setBufIndex(start);
+			setIndex(start);
 			_parsedDatetime._tz = null;
 			return false;
 		}
@@ -4292,7 +4270,7 @@ public class StringParser extends SReporter implements SParser {
 		pos1 = getIndex();
 		if (isChar(':') && isInteger()) {
 			if (getIndex() - pos1 != 3) {
-				setBufIndex(start);
+				setIndex(start);
 				return false;
 			}
 			int j = getParsedInt();
@@ -4307,7 +4285,7 @@ public class StringParser extends SReporter implements SParser {
 			}
 			offset += j * 60000;
 		} else {
-			setBufIndex(start);
+			setIndex(start);
 			return false;
 		}
 		if (sign == '-') {
@@ -4323,27 +4301,27 @@ public class StringParser extends SReporter implements SParser {
 		int pos = getIndex(); //migt be start + 1
 		char firstdigit = getCurrentChar();
 		if (!isInteger()) {
-			setBufIndex(start);
+			setIndex(start);
 			return false;
 		}
 		if (sign == 1 && getIndex() - pos < 4) {
-			setBufIndex(start);
+			setIndex(start);
 			return false;
 		}
 		if (sign == 1 && firstdigit == '0' && getIndex() - pos > 4) {
-			setBufIndex(start);
+			setIndex(start);
 			return false;
 		}
 		_parsedDatetime._year = getParsedInt() * sign;
 		pos = getIndex();
 		if (!isChar('-') || !isInteger() || getIndex() - pos != 3){
-			setBufIndex(start);
+			setIndex(start);
 			return false;
 		}
 		_parsedDatetime._month = getParsedInt();
 		pos = getIndex();
 		if (!isChar('-') || !isInteger() || getIndex() - pos != 3){
-			setBufIndex(start);
+			setIndex(start);
 			return false;
 		}
 		_parsedDatetime._day = getParsedInt();
@@ -4375,25 +4353,25 @@ public class StringParser extends SReporter implements SParser {
 	public final boolean readXMLTime() {
 		int start = getIndex();
 		if (!isInteger() || getIndex() - start != 2) {
-			setBufIndex(start);
+			setIndex(start);
 			return false;
 		}
 		_parsedDatetime._hour = getParsedInt();
 		int pos = getIndex();
 		if (!isChar(':') || !isInteger() || getIndex() - pos != 3) {
-			setBufIndex(start);
+			setIndex(start);
 			return false;
 		}
 		_parsedDatetime._minute = getParsedInt();
 		 pos = getIndex();
 		if (!isChar(':') || !isInteger() || getIndex() - pos != 3){
-			setBufIndex(start);
+			setIndex(start);
 			return false;
 		} else {
 			_parsedDatetime._second = getParsedInt();
 			if (isChar('.')) {
 				if (!isInteger()) {
-					setBufIndex(start);
+					setIndex(start);
 					return false;
 				}
 				_parsedDatetime._fraction =
@@ -4423,7 +4401,7 @@ public class StringParser extends SReporter implements SParser {
 		int start = getIndex();
 		boolean negative = isChar('-');
 		if (!isInteger()) {
-			setBufIndex(start);
+			setIndex(start);
 			return false;
 		}
 		_parsedDatetime._year = getParsedInt() * (negative? -1 : 1);
@@ -4464,24 +4442,24 @@ public class StringParser extends SReporter implements SParser {
 		int pos = getIndex();
 		char firstdigit = getCurrentChar();
 		if (!isInteger()) {
-			setBufIndex(start);
+			setIndex(start);
 			freeBuffer();
 			return false;
 		}
 		if (!negative && getIndex() - pos < 4) {
-			setBufIndex(start);
+			setIndex(start);
 			freeBuffer();
 			return false;
 		}
 		if (!negative && firstdigit == '0' && getIndex() - pos > 4) {
-			setBufIndex(start);
+			setIndex(start);
 			freeBuffer();
 			return false;
 		}
 		_parsedDatetime._year = getParsedInt() * (negative? -1 : 1);
 		pos = getIndex();
 		if (!isChar('-') || !isInteger() || getIndex() - pos != 3) {
-			setBufIndex(start);
+			setIndex(start);
 			freeBuffer();
 			return false;
 		}
@@ -4498,11 +4476,11 @@ public class StringParser extends SReporter implements SParser {
 		}
 		int pos = getIndex();
 		if (!isInteger()) {
-			setBufIndex(start);
+			setIndex(start);
 			return false;
 		}
 		if (getIndex() - pos != 2) {
-			setBufIndex(start);
+			setIndex(start);
 			return false;
 		}
 		_parsedDatetime._month = getParsedInt();
@@ -4547,26 +4525,26 @@ public class StringParser extends SReporter implements SParser {
 		}
 		int pos = getIndex();
 		if (!isInteger()) {
-			setBufIndex(start);
+			setIndex(start);
 			return false;
 		}
 		if (getIndex() - pos != 2) {
-			setBufIndex(start);
+			setIndex(start);
 			return false;
 		}
 		_parsedDatetime._month = getParsedInt();
 		if (!isChar('-')) {
-			setBufIndex(start);
+			setIndex(start);
 			freeBuffer();
 			return false;
 		}
 		pos = getIndex();
 		if (!isInteger()) {
-			setBufIndex(start);
+			setIndex(start);
 			return false;
 		}
 		if (getIndex() - pos != 2) {
-			setBufIndex(start);
+			setIndex(start);
 			return false;
 		}
 		_parsedDatetime._day = getParsedInt();
@@ -4591,11 +4569,11 @@ public class StringParser extends SReporter implements SParser {
 		int start = getIndex();
 		int pos = start;
 		if (!isInteger()) {
-			setBufIndex(start);
+			setIndex(start);
 			return false;
 		}
 		if (getIndex() - pos != 2) {
-			setBufIndex(start);
+			setIndex(start);
 			return false;
 		}
 		_parsedDatetime._day = getParsedInt();
@@ -4610,7 +4588,7 @@ public class StringParser extends SReporter implements SParser {
 
 	/** Check if argument is a whitespace - see {@link StringParser#isSpace()}.
 	 * @param ch character to be checked.
-	 * @return <tt>true</tt> is only if argument is a whitespace according to
+	 * @return true is only if argument is a whitespace according to
 	 * XML specification..
 	 */
 	public static final boolean chkXmlWhiteSpaceChar(final char ch) {
@@ -4621,7 +4599,7 @@ public class StringParser extends SReporter implements SParser {
 	 * StringParser#getXmlCharType(byte)}.
 	 * @param ch character to be checked.
 	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1"
-	 * (see org.xdef.impl.XConstants,XMLxx).
+	 * (see cz.syntea.xdef.impl.XConstants,XMLxx).
 	 * @return type of character.
 	 */
 	public static final byte getXmlCharType(final char ch,
@@ -4633,7 +4611,7 @@ public class StringParser extends SReporter implements SParser {
 	/** Parse NCName - see {@link StringParser#isNCName(byte)}.
 	 * @param name string to be checked.
 	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1"
-	 * (see org.xdef.impl.XConstants,XMLxx).
+	 * (see cz.syntea.xdef.impl.XConstants,XMLxx).
 	 * @return true if the argument is NCName according to XML specification.
 	 */
 	public static final boolean chkNCName(final String name,
@@ -4652,7 +4630,7 @@ public class StringParser extends SReporter implements SParser {
 	/** Parse XML name - see {@link StringParser#isXMLName(byte)}.
 	 * @param name string to be checked.
 	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1"
-	 * (see org.xdef.impl.XConstants,XMLxx).
+	 * (see cz.syntea.xdef.impl.XConstants,XMLxx).
 	 * @return true if the argument is XML name according to XML specification..
 	 * {@link StringParser#isXMLName(byte)}.
 	 */
@@ -4674,7 +4652,7 @@ public class StringParser extends SReporter implements SParser {
 	/** Parse NMToken - see {@link StringParser#isNMToken(byte)}.
 	 * @param name string to be checked.
 	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1"
-	 * (see org.xdef.impl.XConstants,XMLxx).
+	 * (see cz.syntea.xdef.impl.XConstants,XMLxx).
 	 * @return true if the argument is NMToken according to XML specification.
 	 * {@link StringParser#isNMToken(byte)}.
 	 */
@@ -4825,14 +4803,11 @@ public class StringParser extends SReporter implements SParser {
 				return false;
 			}
 			if (_weekInYear >= 0
-				&& getCalendar().get(Calendar.WEEK_OF_YEAR)!=_weekInYear) {
+				&& getCalendar().get(Calendar.WEEK_OF_YEAR) != _weekInYear) {
 				return false;
 			}
-			if (_weekInMonth >= 0
-				&& getCalendar().get(Calendar.WEEK_OF_MONTH)!=_weekInYear){
-				return false;
-			}
-			return true;
+			return _weekInMonth < 0
+				|| getCalendar().get(Calendar.WEEK_OF_MONTH) == _weekInYear;
 		}
 	}
 }

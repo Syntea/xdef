@@ -2,9 +2,10 @@ package org.xdef.impl.compile;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import org.xdef.XDConstants;
 import org.xdef.impl.XConstants;
 import org.xdef.impl.XOccurrence;
-import org.xdef.json.JsonToXml;
+import org.xdef.json.JsonParser;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.ReportWriter;
 import org.xdef.sys.SBuffer;
@@ -13,7 +14,9 @@ import org.xdef.sys.SPosition;
 /** Create X-definition model from xd:json.
  * @author Vaclav Trojan
  */
-public class CompileJsonXdef extends JsonToXml {
+public class CompileJsonXdef extends JsonParser {
+	private String _jsPrefix = "js";
+	private String _jsNamespace = XDConstants.JSON_NS_URI_W3C;
 
 	/** This is the special character used for the $script specification. */
 	public static final String SCRIPT_KEY = "]";
@@ -84,23 +87,6 @@ public class CompileJsonXdef extends JsonToXml {
 		}
 		return null;
 	}
-//
-//	private void addToXDScript(final PNode e, final String s) {
-//		PAttr attr = getXDAttr(e, "script");
-//		SBuffer val;
-//		if (attr != null) {
-//			val = attr._value;
-//		} else {
-//			attr = setXDAttr(e, "script", val = new SBuffer("", e._name));
-//		}
-//		if (!val.getString().trim().isEmpty()) {
-//			if (!val.getString().trim().endsWith(";")) {
-//				val.addString(";");
-//			}
-//			val.addString(" ");
-//		}
-//		val.addString(s);
-//	}
 
 	/** Set X-def attribute.
 	 * @param e PNode where to set attribute.

@@ -25,8 +25,7 @@ public class TestXML extends STester {
 					"eos" : grammar.getParser().getPosition().toString()) +"; ";
 			}
 		} catch (Exception ex) {
-			ex.printStackTrace(System.err);
-			return "Exception " + ex;
+			return printThrowable(ex);
 		}
 	}
 

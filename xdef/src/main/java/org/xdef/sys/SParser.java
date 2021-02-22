@@ -15,7 +15,7 @@ public interface SParser {
 	public String getSourceBuffer();
 
 	/** Set parsed string.
-	 * @param source parsed source string or <tt>null</tt>.
+	 * @param source parsed source string or null.
 	 */
 	public void setSourceBuffer(String source);
 
@@ -25,7 +25,7 @@ public interface SParser {
 	public String getParsedString();
 
 	/** Get part of the unparsed part of source and set EOS..
-	 * @return unparsed part of source or <tt>null</tt> if EOS reached.
+	 * @return unparsed part of source or null if EOS reached.
 	 */
 	public String getUnparsedBufferPart();
 
@@ -44,12 +44,12 @@ public interface SParser {
 	public String getBufferPart(int from, int to);
 
 	/** Get character on current position.
-	 * @return character on current position or <tt>zero</tt>.
+	 * @return character on current position or zero.
 	 */
 	public char getCurrentChar();
 
 	/** Get character for the next current position.
-	 * @return character for the next current position or <tt>zero</tt>.
+	 * @return character for the next current position or zero.
 	 */
 	public char nextChar();
 
@@ -61,10 +61,10 @@ public interface SParser {
 	/** Set current buffer position.
 	 * @param pos source position of parsed object.
 	 */
-	public void setBufIndex(int pos);
+	public void setIndex(int pos);
 
 	/** Check if the position is at the end of source.
-	 * @return <tt>true</tt> if and only if the position of parsed object
+	 * @return true if and only if the position of parsed object
 	 * is at the end of source.
 	 */
 	public boolean eos();
@@ -73,14 +73,14 @@ public interface SParser {
 	public void setEos();
 
 	/** Parse white space.
-	 * @return <tt>true</tt> if white space was present at actual position,
-	 * otherwise return <tt>false</tt>.
+	 * @return true if white space was present at actual position,
+	 * otherwise return false.
 	 */
 	public boolean isSpace();
 
 	/** Skip all white spaces an if at least one was found return
-	 * <tt>true</tt>.
-	 * @return <tt>true</tt> if and only if at least one white space was
+	 * true.
+	 * @return true if and only if at least one white space was
 	 * found.
 	 */
 	public boolean isSpaces();
@@ -88,7 +88,7 @@ public interface SParser {
 	/** Check if the character from argument is at the current source
 	 * position and update current source position.
 	 * @param ch required character.
-	 * @return <tt>true</tt> if and only if the character is at current
+	 * @return true if and only if the character is at current
 	 * position.
 	 */
 	public boolean isChar(char ch);
@@ -108,7 +108,7 @@ public interface SParser {
 	 * @param minCh minimum of checked interval.
 	 * @param maxCh maximum of checked interval.
 	 * @return the actual character character from actual position,
-	 * otherwise return <tt>NOCHAR</tt>.
+	 * otherwise return <code>NOCHAR</code>.
 	 */
 	public char isInInterval(char minCh, char maxCh);
 
@@ -118,7 +118,7 @@ public interface SParser {
 	 * @param minCh minimum of checked interval.
 	 * @param maxCh maximum of checked interval.
 	 * @return the actual character character from actual position,
-	 * otherwise return <tt>NOCHAR</tt>.
+	 * otherwise return <code>NOCHAR</code>.
 	 */
 	public char notInInterval(char minCh, char maxCh);
 
@@ -130,13 +130,13 @@ public interface SParser {
 	 */
 	public char isOneOfChars(String chars);
 
-	/** Check if at the current source position is digit.
+	/** Check if at the current position is a digit.
 	 * @return digital value of digit or -1;
 	 */
 	public int isDigit();
 
 	/** Parse unsigned integer number.
-	 * @return <tt>true</tt> if and only if an integer number was
+	 * @return true if and only if an integer number was
 	 * recognized.
 	 */
 	public boolean isInteger();
@@ -144,8 +144,8 @@ public interface SParser {
 	/** Check if actual position points to signed integer number. Set the
 	 * actual position to the next character after the number if number
 	 * was recognized.
-	 * @return <tt>true</tt> if signed integer was parsed, otherwise
-	 * return <tt>false</tt>.
+	 * @return true if signed integer was parsed, otherwise
+	 * return false.
 	 */
 	public boolean isSignedInteger();
 
@@ -204,7 +204,7 @@ public interface SParser {
 	/** Check if a token from argument is at the current source position and
 	 * update actual source position.
 	 * @param s required token.
-	 * @return <tt>true</tt> if the token is at current position.
+	 * @return true if the token is at current position.
 	 */
 	public boolean isToken(String s);
 
@@ -224,17 +224,17 @@ public interface SParser {
 	 */
 	public int isOneOfTokensIgnoreCase(final String... tokens);
 
-	/** Find token. If the token was found returns <tt>true</tt> and sets
+	/** Find token. If the token was found returns true and sets
 	 * position <b>to</b> the position of token. Otherwise returns
-	 * <tt>false</tt> and sets position to the end of source.
+	 * false and sets position to the end of source.
 	 * @param token Token to be found.
 	 * @return true if the token was found.
 	 */
 	public boolean findToken(final String token);
 
 	/** Skip to specified character. The position is set <b>to</b> the found
-	 * character. Returns <tt>true</tt> and sets position <b>to</b>
-	 * the position of character. Otherwise returns <tt>false</tt> and sets
+	 * character. Returns true and sets position <b>to</b>
+	 * the position of character. Otherwise returns false and sets
 	 * position to the end of source.
 	 * @param ch Character to be searched for.
 	 * @return <i>true</i> if the character was found.
@@ -251,7 +251,7 @@ public interface SParser {
 	public char findOneOfChars(final String chars);
 
 	/** Check if an error was reported (result is same as !matches()).
-	 * @return <tt>true</tt> if and only if data were parsed with an error.
+	 * @return true if and only if data were parsed with an error.
 	 */
 	public boolean errors();
 

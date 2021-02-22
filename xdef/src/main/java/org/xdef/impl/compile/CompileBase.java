@@ -98,6 +98,7 @@ public class CompileBase implements CodeTable, XDValueID {
 		setType(XD_DATETIME, "Datetime", org.xdef.sys.SDatetime.class);
 		setType(XD_DURATION, "Duration", org.xdef.sys.SDuration.class);
 		setType(XD_CONTAINER, "Container", org.xdef.XDContainer.class);
+		setType(XD_GPSPOSITION, "GPSPosition", org.xdef.XDGPSPosition.class);
 		setType(XD_REGEX, "Regex", org.xdef.XDRegex.class);
 		setType(XD_REGEXRESULT, "RegexResult", org.xdef.XDRegexResult.class);
 		setType(XD_BNFGRAMMAR,"BNFGrammar", org.xdef.XDBNFGrammar.class);
@@ -153,6 +154,7 @@ public class CompileBase implements CodeTable, XDValueID {
 			((char) XD_REGEXRESULT) + ";Matcher;" +
 			((char) XD_DURATION) + ";SDuration;" +
 			((char) XD_CONTAINER) + ";XDContainer;" +
+			((char) XD_GPSPOSITION) + ";GPSPosition;" +
 			((char) XD_BNFGRAMMAR) + ";DefBNFGrammar;" +
 			((char) XD_BYTES) + ";byte[];" +
 			((char) XD_LOCALE) + ";Locale;" +
@@ -188,7 +190,13 @@ public class CompileBase implements CodeTable, XDValueID {
 		parser(im, org.xdef.impl.parsers.XSParseBoolean.class,
 			"boolean", "?xs:boolean", "?bool");
 		parser(im, org.xdef.impl.parsers.XDParseJBoolean.class,"jboolean");
+
 		parser(im, org.xdef.impl.parsers.XDParseJNull.class, "jnull");
+		im = genParserMetnod(0, 0, null, XD_GPSPOSITION,
+			keyParam("pattern", XD_STRING, false, -1, false),
+			keyParam("whiteSpace", XD_STRING, false,
+					-1, true, new DefString("collapse")));
+		parser(im, org.xdef.impl.parsers.XDParseGPS.class, "GPS");
 
 		im = genParserMetnod(0, 2, new short[] {XD_DECIMAL, XD_DECIMAL},
 			XD_DECIMAL,
@@ -1047,6 +1055,21 @@ public class CompileBase implements CodeTable, XDValueID {
 			ANY_MODE, 1, 1, XD_EXCEPTION), "getReport");
 		method(ti, genInternalMethod(GET_MESSAGE, XD_STRING,
 			ANY_MODE, 1, 1, XD_EXCEPTION), "getMessage");
+
+////////////////////////////////////////////////////////////////////////////////
+// GPS POSITION
+////////////////////////////////////////////////////////////////////////////////
+		ti = XD_GPSPOSITION;
+		method(ti, genInternalMethod(NEW_GPSPOSITION, XD_GPSPOSITION,
+			ANY_MODE, 2, 3, XD_FLOAT, XD_FLOAT, XD_FLOAT), "#");
+		method(ti, genInternalMethod(GPS_LATITUDE, XD_FLOAT,
+			ANY_MODE, 1, 1, XD_GPSPOSITION), "latitude");
+		method(ti, genInternalMethod(GPS_LONGITUDE, XD_FLOAT,
+			ANY_MODE, 1, 1, XD_GPSPOSITION), "longitude");
+		method(ti, genInternalMethod(GPS_ALTITUDE, XD_FLOAT,
+			ANY_MODE, 1, 1, XD_GPSPOSITION), "altitude");
+		method(ti, genInternalMethod(GPS_DISTANCETO, XD_FLOAT,
+			ANY_MODE, 2, 2, XD_GPSPOSITION,  XD_GPSPOSITION), "distanceTo");
 
 ////////////////////////////////////////////////////////////////////////////////
 // LOCALE

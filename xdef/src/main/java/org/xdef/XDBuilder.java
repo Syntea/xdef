@@ -59,8 +59,7 @@ public interface XDBuilder {
 	 * of files.
 	 * @param sources The string with sources.
 	 * @param sourceIds array of names of source source data corresponding to
-	 * the sources argument (any item or even this argument
-	 * may be <tt>null</tt>).
+	 * the sources argument (any item or even this argument may be null).
 	 * @return this XDBuilde object.
 	 */
 	public XDBuilder setSource(String[] sources, String[] sourceIds);
@@ -89,7 +88,7 @@ public interface XDBuilder {
 	 * @param sources array of input streams with sources.
 	 * @param sourceIds array of names of source source data corresponding to
 	 * streams from the argument sources (any item or even this argument
-	 * may be <tt>null</tt>).
+	 * may be null).
 	 * @return this XDBuilde object.
 	 */
 	public XDBuilder setSource(InputStream[] sources, String[] sourceIds);

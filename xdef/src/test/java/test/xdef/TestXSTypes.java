@@ -553,11 +553,7 @@ public final class TestXSTypes extends XDTester {
 				_msg += "\n";
 			}
 			if (ex.getMessage() == null) {
-				java.io.StringWriter sw = new java.io.StringWriter();
-				java.io.PrintWriter pw = new java.io.PrintWriter(sw);
-				ex.printStackTrace(pw);
-				pw.close();
-				_msg += "XDEF exception:\n"+ sw.toString();
+				_msg += "XDEF exception:\n"+ printThrowable(ex);
 			} else {
 				_msg += "XDEF: " + ex.getMessage();
 			}
@@ -1669,6 +1665,10 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(parse("-16777216E1"), _msg);
 		assertTrue(parse("+1E104"), _msg);
 		assertTrue(parse("1E-149"), _msg);
+		assertTrue(parse(".5"), _msg);
+		assertTrue(parse(".5e+3"), _msg);
+		assertTrue(parse("5."), _msg);
+		assertTrue(parse("5.e+3"), _msg);
 		assertTrue(parse("NaN"), _msg);
 		assertTrue(parse("INF"), _msg);
 		assertTrue(parse("-INF"), _msg);
@@ -1803,6 +1803,10 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(parse("+0.0"), _msg);
 		assertTrue(parse("-0"), _msg);
 		assertTrue(parse("0.0E0"), _msg);
+		assertTrue(parse(".5"), _msg);
+		assertTrue(parse(".5e+3"), _msg);
+		assertTrue(parse("5."), _msg);
+		assertTrue(parse("5.e+3"), _msg);
 
 		// testing errors
 		assertTrue(parseFail("1E1.12"), _msg);

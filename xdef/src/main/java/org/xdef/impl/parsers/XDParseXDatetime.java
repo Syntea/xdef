@@ -64,7 +64,7 @@ public class XDParseXDatetime extends XSAbstractParseComparable {
 		SDatetime d = parser.getParsedSDatetime();
 		//xdatetime errors
 		p.addReports((ArrayReporter) parser.getReportWriter());
-		p.setBufIndex(parser.getIndex());
+		p.setIndex(parser.getIndex());
 		String s = p.getParsedBufferPartFrom(pos);
 		p.isSpaces();
 		p.setParsedValue(new DefDate(d));

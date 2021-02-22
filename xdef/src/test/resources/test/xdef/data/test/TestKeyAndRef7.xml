@@ -47544,7 +47544,7 @@
          <city id="cty-GH-11" country="GH" province="prov-GH-5">
             <name>Tema</name>
             <latitude>5.67</latitude>
-            <longitude>-0</longitude>
+            <longitude>0</longitude>
             <elevation>1</elevation>
             <population year="1970" measured="census">60767</population>
             <population year="1984" measured="census">100052</population>
@@ -57288,7 +57288,7 @@
       <length>499</length>
       <source country="USA">
          <located country="USA" province="prov-United-States-28"/>
-         <from watertype="river" water="river-North_Platte_River river-South_Platte_River "/>
+         <from watertype="river" water="river-North_Platte_River river-South_Platte_River"/>
          <latitude>41.12</latitude>
          <longitude>-100.68</longitude>
          <elevation>845</elevation>

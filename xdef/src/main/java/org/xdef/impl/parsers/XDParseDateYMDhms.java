@@ -30,7 +30,7 @@ public class XDParseDateYMDhms extends XSParseDatetime {
 		SDatetime d = parser.getParsedSDatetime();
 		p.setParsedValue(new DefDate(d));
 		p.addReports((ArrayReporter) parser.getReportWriter());//datetime errors
-		p.setBufIndex(parser.getIndex());
+		p.setIndex(parser.getIndex());
 		String s = p.getParsedBufferPartFrom(pos);
 		p.isSpaces();
 		p.replaceParsedBufferFrom(pos0, s);

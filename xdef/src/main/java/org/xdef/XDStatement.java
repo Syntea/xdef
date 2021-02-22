@@ -26,13 +26,13 @@ public interface XDStatement extends XDValue {
 
 	/** Execute statement.
 	 * @param params parameters of statement (sequence of values).
-	 * @return result of execution or <tt>null</tt>.
+	 * @return result of execution or null.
 	 * @throws SRuntimeException if an error occurs.
 	 */
 	public XDValue execute(XDValue params) throws SRuntimeException;
 
 	/** Execute query.
-	 * @param params parameters of statement or <tt>null</tt>.
+	 * @param params parameters of statement or null.
 	 * @return XDResultSet with result of query on this statement.
 	 * @throws SRuntimeException if an error occurs.
 	 */
@@ -40,7 +40,7 @@ public interface XDStatement extends XDValue {
 
 	/** Execute query and return the specified items.
 	 * @param itemName name of items to be returned.
-	 * @param params parameters of statement or <tt>null</tt>.
+	 * @param params parameters of statement or null.
 	 * @return XDResultSet with result of query on this statement.
 	 * @throws SRuntimeException if an error occurs.
 	 */

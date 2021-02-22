@@ -14,45 +14,40 @@ import java.io.Writer;
 import java.nio.charset.Charset;
 
 /** Preprocessor for Java source files.
- * <p>Preprocessor commands separates source blocks by special Java comments.
+ * <br>Preprocessor commands separates source blocks by special Java comments.
  * Each preprocessor command must start with the sequence "/*#" followed by
  * the name of command and the whole command must be specified on a separated
  * line. The end of command must be either '*&#47;' or '*#/'. Each command block
  * must start with the "/*#if" command and it must be closed with the
- * "/*#end*&#47;" command. </p>
- * <p>There are following preprocessor commands:</p>
- * <ul>
- *  <li><tt>/*#if conditional expression *&#47; .......</tt>
- * start of the conditional section.</li>
- *  <li><tt>/*#elseif conditional expression *&#47; ...</tt>
- * conditioned alternative section (part of "if" command).</li>
- *  <li><tt>/*#else*&#47; .................</tt> optional alternative section
- * (part of "if" command).</li>
- *  <li><tt>/*#end*&#47; ..................</tt> end of section.</li>
- * <li><tt>/*#set switch_list*&#47; ......</tt> set switches separated by "," to
- * ON value.</li>
- * <li><tt>/*#unset switch_list*&#47; ....</tt> set switches separated by "," to
- * OFF value.</li>
- * </ul>
- * <p>
+ * "/*#end*&#47;" command.
+ * <br>There are following preprocessor commands:
+ * <br><code>/*#if conditional expression *&#47; .......</code>
+ * start of the conditional section.
+ * <br><code>/*#elseif conditional expression *&#47; ...</code>
+ * conditioned alternative section (part of "if" command).
+ * <br><code>/*#else*&#47; .................</code> optional alternative section
+ * (part of "if" command).
+ * <br><code>/*#end*&#47; ..................</code> end of section.
+ * <br><code>/*#set switch_list*&#47; ......</code> set switches separated by
+ * "," to ON value.
+ * <br><code>/*#unset switch_list*&#47; ....</code> set switches separated by
+ * "," to OFF value.
+ * <br>
  * If command block of lines starts with 'if' command and ends with the
  * 'end' command. Inside in the command block there may be optionally specified
  * several sections 'elseif' and optionally there may be specified the an "else"
  * section (it must be the the last one section of the command block. Nested
  * "if" command blocks are permitted.
- * </p>
- * <p>Preprocessor works so that it modifies the character sequences ending
+ * <br>Preprocessor works so that it modifies the character sequences ending
  * command lines from '*&#47;' to '*#/' and/or from '*#/' to '*&#47;' according
  * to result of evaluation of the boolean expression given by values of
  * switches specified from outside environment. This causes that some sections
  * of Java source code will either as comments or the others will be
  * "uncommented".
- * </p>
- * <p>The conditional expression contains a list of swith names bounded by
+ * <br>The conditional expression contains a list of swith names bounded by
  * logical operators '&amp;' and '|'. Usage of brackets in the expression is
  * possible. Switch name must be composed from letters, digits, '.', '-' or '_'.
- * </p>
- * Examples of switch expressions:
+ * <br>Examples of switch expressions:
  * <pre><code><b>
  *  Expression                  Explanation</b>
  *  Debug                       true if swith 'Debug' is set
@@ -62,41 +57,36 @@ import java.nio.charset.Charset;
  *  Extended &amp; (J1.4 | J1.5)    true if swith 'Extended' and one of 'J1.4'
  *                              or 'J1.5' is set
  * </code></pre>
- * <p> The <tt>set</tt> command enables to set the value of switches on. The
+ * <br>The <b>set</b> command enables to set the value of switches on. The
  * names of switches in the list are separated by commas. The command MUST be
- * placed in the <tt>if ... end</tt> block and it is executed only if the block
- * is active.</p>
- * <p> The <tt>unset</tt> command enables to set the value of switches off.
+ * placed in the <b>if ... end</b> block and it is executed only if the block
+ * is active.
+ * <br> The <b>unset</b> command enables to set the value of switches off.
  * The names of switches in the list are separated by commas. The command MUST
- * be placed in the <tt>if ... end</tt> block and it is executed only if the
- * block is active.</p>
- * <p>
- * Preprocessor may be invoked from command line with following parameters:</p>
- * <p>
- * <tt>-i input [-o outputDirectory] [-s switch[,switch..]] [-r] [-h]</tt>
- * </p>
- * <p>where:</p>
- * <ul>
- * <li> -i input Input may be specification of the file with input source or the
+ * be placed in the <b>if ... end</b> block and it is executed only if the
+ * block is active.
+ * <br>Preprocessor may be invoked from command line with following parameters:
+ * <code>-i input [-o outputDirectory] [-s switch[,switch..]] [-r] [-h]</code>
+ * <br>where:
+ * <br> -i input Input may be specification of the file with input source or the
  * directory. If the parameter is not directory, also wildcards ('*' or '?' may
  * be used to specify group of files. If this parameter specified a directory
  * only files with the extension '.java' are processed. The parameter
- *  is obligatory.</li>
- * <li> -r dirTree input directory. The parameter is optional and forces to
- * process all subdirectories of the directory where process started.</li>
- * <li> -s switch[,switch..]: the comma separated list of switch names. Each
+ *  is obligatory.
+ * <br> -r dirTree input directory. The parameter is optional and forces to
+ * process all subdirectories of the directory where process started.
+ * <br> -s switch[,switch..]: the comma separated list of switch names. Each
  * switch name is composed from letters, digits, '.' or '_'s. If switch should
  * be set to false it can be either prefixed with '!' or not specified.
- * The parameter is optional.</li>
- * <li> -o outputDirectory: The directory where output files are stored. The
+ * The parameter is optional.
+ * <br> -o outputDirectory: The directory where output files are stored. The
  * parameter is optional. If it is not specified the source file is overwritten.
- * <li> -h The parameter displays help text.</li>
- * </ul>
+ * <br> -h The parameter displays help text.
  * The following example is result after application of the switch Boss"
  * by the command:
- * <pre><tt>
- *    java buildtools.JavaPreprocessor -i Example.java -s Boss</tt>
- * The modified section of the source after modification looks like:<tt>
+ * <pre><code>
+ *    java buildtools.JavaPreprocessor -i Example.java -s Boss
+ * The modified section of the source after modification looks like:
  *          ....
  *          /*#if (Mary &amp; John) | (Alice &amp; Bob)*#/;
  *               System.out.println("Hello, friends!");
@@ -105,27 +95,27 @@ import java.nio.charset.Charset;
  *          /*#else*#/;
  *               System.out.println("I do not know you!");
  *          /*#end*&#47;
- *          .... </tt></pre>
+ *          .... </code></pre>
  * Note that the text printed will be "Hi, Bill!"; the other commands
  * are set as comments.
- * <p> JavaPreprocessor may be executed from command line with following
- * parameters:</p>
- * <p>[-h] [-r] [-t] [-v] -i input [-o output] [-c charset] [-s switches]</p>
- * <p>where</p>
- * <p>-r dirTree process directory tree. The parameter is optional.</p>
- * <p>-t delete trailing spaces. The parameter is optional.</p>
- * <p>-v make verbose output. The parameter is optional.</p>
- * <p>-s switches: The list of switch names. Each switch name is composed from
+ * <br> JavaPreprocessor may be executed from command line with following
+ * parameters:
+ * <br>[-h] [-r] [-t] [-v] -i input [-o output] [-c charset] [-s switches]
+ * <br>where:
+ * <br>-r dirTree process directory tree. The parameter is optional.
+ * <br>-t delete trailing spaces. The parameter is optional.
+ * <br>-v make verbose output. The parameter is optional.
+ * <br>-s switches: The list of switch names. Each switch name is composed from
  *   letters, digits, '.' or '_'s. The switch can be either prefixed with
- *   '!' or not specified. The parameter is optional.</p>
- * <p>-i input: The file name list of the directories with the Java packages.
+ *   '!' or not specified. The parameter is optional.
+ * <br>-i input: The file name list of the directories with the Java packages.
  *   Each directory is supposed to be the root of package. Only the files with
- *   the extension '.java' are processed. The parameter is obligatory.</p>
- * <p>-o output: The directory where the output files are stored. The
- *   parameter is optional. If it is missing the source files are replaced.</p>
- * <p>-c charset: name of character table, if it is not specified then the
- *   default system character set is used. The parameter is optional.</p>
- * <p>-h display the help text.</p>
+ *   the extension '.java' are processed. The parameter is obligatory.
+ * <br>-o output: The directory where the output files are stored. The
+ *   parameter is optional. If it is missing the source files are replaced.
+ * <br>-c charset: name of character table, if it is not specified then the
+ *   default system character set is used. The parameter is optional.
+ * <br>-h display the help text.
  *
  * @author  Vaclav Trojan
  */
@@ -163,7 +153,6 @@ public class JavaPreprocessor {
 	private PrintStream _out;
 	private PrintStream _err;
 	private boolean _verbose;
-	private boolean _extract; //not used
 	private boolean _cutTrailingSpaces;
 
 	/** Creates a new instance of JavaPreprocessor - used internally for
@@ -174,7 +163,6 @@ public class JavaPreprocessor {
 		_line = line;
 		_endPos = line.length();
 		_verbose = false;
-		_extract = false;
 		_cutTrailingSpaces = false;
 	}
 
@@ -204,14 +192,13 @@ public class JavaPreprocessor {
 		setKeys(keys);
 		setCharset(charset);
 		setVerbose(true);
-		setExtract(false);
 		setCutTrailingSpaces(true);
 	}
 
 	/** Process input stream and create modified result.
 	 * @param is input stream.
 	 * @param fname name of input file (information for messages).
-	 * @return <tt>true</tt> if and only if the modified result was created.
+	 * @return true if and only if the modified result was created.
 	 */
 	public boolean processStream(final InputStream is, final String fname) {
 		_errors = 0;
@@ -243,13 +230,13 @@ public class JavaPreprocessor {
 	 * @return number of recognized errors or 0.
 	 */
 	public int getErrorCount() { return _errors; }
-	/** Return <tt>true</tt> if modified source was created.
-	 * @return <tt>true</tt> if and only if modified source was created.
+	/** Return true if modified source was created.
+	 * @return true if and only if modified source was created.
 	 */
 	public boolean isModified() { return _modified; }
 
 	/** Get name of character set.
-	 * @return the name of character set or <tt>null</tt>.
+	 * @return the name of character set or null.
 	 */
 	public String getCharset() { return _charset; }
 
@@ -267,11 +254,6 @@ public class JavaPreprocessor {
 	 * @param verbose  verbose output switch.
 	 */
 	public final void setVerbose(boolean verbose) { _verbose = verbose; }
-
-	/** Set extract switch.
-	 * @param extract the extract switch.
-	 */
-	public final void setExtract(boolean extract) { _extract = extract; }
 
 	/** Set cutTrailingSpaces switch.
 	 * @param cutTrailingSpaces cutTrailingSpaces switch.
@@ -807,8 +789,8 @@ public class JavaPreprocessor {
 	/** Check if actual position points to given character. Set the actual
 	 * position to the next character if given character was recognized.
 	 * @param ch Character to be checked.
-	 * @return <tt>true</tt> if character was present at actual position,
-	 * otherwise return <tt>false</tt>.
+	 * @return true if character was present at actual position,
+	 * otherwise return false.
 	 */
 	private boolean isChar(final char ch) {
 		if (_pos < _endPos && _line.charAt(_pos) == ch) {
@@ -850,7 +832,6 @@ public class JavaPreprocessor {
 
 	private boolean value() {
 		boolean not = false;
-		char c;
 		if (isChar('!')) {
 			not = true;
 			skipBlanks();
@@ -952,7 +933,6 @@ public class JavaPreprocessor {
 			return SRC_LINE;
 		} else {
 			//cut trailing white spaces
-			char c;
 			if (_cutTrailingSpaces && len >= 0) {
 				int i;
 				for (i = len; i >= 0; i--) {
@@ -1057,7 +1037,7 @@ public class JavaPreprocessor {
 
 	/** Print error message.
 	 * @param msg The default text of message.
-	 * @param position if <tt>true</tt> the position information is generated.
+	 * @param position if true the position information is generated.
 	 */
 	private void error(final String msg, final boolean position) {
 		_out.flush();
@@ -1245,20 +1225,20 @@ public class JavaPreprocessor {
 	 * @param input The string with specification of the input file(s) or the
 	 * directory.
 	 * @param outDir The directory where put the changed files. If this argument
-	 * is <tt>null</tt> the changed file will replace the input file.
+	 * is null the changed file will replace the input file.
 	 * @param keys The array with switches used for preprocessing.
-	 * @param dirTree If the value of this argument is <tt>true</tt> the
+	 * @param dirTree If the value of this argument is true the
 	 * preprocessor will scan also subdirectories..
 	 * @param out PrintStream where will be printed output messages.
 	 * @param err PrintStream where will be printed error messages.
-	 * @param verbose If the value of this argument is <tt>true</tt> the
+	 * @param verbose If the value of this argument is true the
 	 * preprocessor will print detailed information to <tt>out</tt>.
-	 * @param extract If the value of this argument is <tt>true</tt> the
+	 * @param extract If the value of this argument is true the
 	 * preprocessor will extract all preprocessor commands.
-	 * @param cutTrailingSpaces If the value of this argument is <tt>true</tt>
+	 * @param cutTrailingSpaces If the value of this argument is true
 	 * the preprocessor will cut all whiteSpaces at the end of lines.
 	 * @return string with error message if the program can't work due to
-	 * parameter error or return <tt>null</tt>.
+	 * parameter error or return null.
 	 */
 	private static String proc(final String input,
 		final String outDir,
@@ -1268,7 +1248,6 @@ public class JavaPreprocessor {
 		final PrintStream err,
 		final String charset,
 		final boolean verbose,
-		final boolean extract,
 		final boolean cutTrailingSpaces) {
 		JavaPreprocessor jp = new JavaPreprocessor();
 		int lines = 0;
@@ -1276,7 +1255,6 @@ public class JavaPreprocessor {
 		jp._err = err == null ? System.err : err;
 		jp._processedCount = jp._modifyCount = jp._count = 0;
 		jp._verbose = verbose;
-		jp._extract = extract;
 		jp._cutTrailingSpaces = cutTrailingSpaces;
 		jp._keys = keys;
 		if (charset != null) {
@@ -1355,7 +1333,7 @@ public class JavaPreprocessor {
 	 * @param out PrintStream where will be printed output messages.
 	 * @param err PrintStream where will be printed error messages.
 	 * @return string with error message if the program can't work due to
-	 * parameter error or return <tt>null</tt>.
+	 * parameter error or return null.
 	 */
 	public static String proc(final String[] args,
 		final PrintStream out,
@@ -1516,7 +1494,7 @@ public class JavaPreprocessor {
 			}
 		}
 		return proc(input, outDir, keys, dirTree, out, err,
-			charset, verbose, extract, cutTrailingSpaces);
+			charset, verbose, cutTrailingSpaces);
 	}
 
 	/** Call JavaPreprocessor from command line.
@@ -1542,18 +1520,6 @@ public class JavaPreprocessor {
 
 		/** Creates new instance of MyStringList. */
 		private MyStringList() { _strings = new String[0]; }
-
-		/** Creates new instance of MyStringList from other MyStringList. */
-		private MyStringList(final MyStringList list) {
-			_strings = new String[list._strings.length];
-			System.arraycopy(list._strings, 0, _strings, 0, list.size());
-		}
-
-		/** Creates new instance of MyStringList from array of strings. */
-		private MyStringList(final String[] list) {
-			_strings = new String[list.length];
-			System.arraycopy(list, 0, _strings, 0, list.length);
-		}
 
 		/** Add string to list*/
 		private void add(final String s) {

@@ -91,7 +91,7 @@ by spaces, if the title element is a type xsd:normalizedString.
 		s = (s == null) ? ""
 			: SUtils.modifyString(SUtils.modifyString(SUtils.modifyString(
 				s, "\n", " "), "\t", " "), "\r", " ");
-		p.setBufIndex(pos0);
+		p.setIndex(pos0);
 		s = p.getParsedBufferPartFrom(0) + s;
 		p.setSourceBuffer(s);
 		if (_whiteSpace == WS_COLLAPSE) {

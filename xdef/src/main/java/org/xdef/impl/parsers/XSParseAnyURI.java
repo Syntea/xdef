@@ -51,7 +51,7 @@ public class XSParseAnyURI extends XSAbstractParseString {
 		p.isSpaces();
 		String s = p.nextToken();
 		try {
-			URI u = new URI(s);
+			new URI(s);
 		} catch (URISyntaxException ex) {
 			//Incorrect value of '&{0}'&{1}{: }
 			p.errorWithString(XDEF.XDEF809, parserName());

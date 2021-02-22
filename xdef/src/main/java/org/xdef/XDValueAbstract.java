@@ -10,6 +10,7 @@ import java.math.BigInteger;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xdef.impl.code.CodeTable;
+import org.xdef.sys.GPSPosition;
 
 /** Abstract class for implementing of XDValues.
  * @author Vaclav Trojan
@@ -57,6 +58,8 @@ public abstract class XDValueAbstract implements XDValue {
 	public SDatetime datetimeValue() {return null;}
 	@Override
 	public SDuration durationValue() {return null;}
+	@Override
+	public GPSPosition GPSValue() {return null;}
 	@Override
 	public byte[] getBytes() {return null;}
 	@Override

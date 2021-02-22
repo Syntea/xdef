@@ -1,0 +1,6 @@
+{ "man": {
+    "name": "Jan",
+    "year": 1990,
+    "auto": [ "bmw", "skoda", { "dog": "Rex" } ]
+  }
+}

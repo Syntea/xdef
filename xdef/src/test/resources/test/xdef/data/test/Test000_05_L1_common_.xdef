@@ -14,7 +14,7 @@
       IdAdresa                   = "optional int();                                                                                 create getIdAdresa()" />
 
 
-   <VozovkaId                    xd:script = "                                                                                    create from('Vozovka')"
+   <VozovkaId                    xd:script = "create from('Vozovka')"
       CisloSilnice               = "optional"
       ZObce                      = "optional"
       DoObce                     = "optional"
@@ -22,7 +22,7 @@
       Okres                      = "optional"
       IdStat                     = "required ;      onTrue setText(getTab('CC_Stat','KodStatu','IdStat'));                          create from('@Stat')" />
 
-   <MistoId                      xd:script = "                                                                                    create from('Misto')"
+   <MistoId                      xd:script = "create from('Misto')"
       IdStat                     = "optional ;      onTrue setText(getTab('CC_Stat','KodStatu','IdStat'));                          create getNonEmptyAttr('Adresa@Stat','Vozovka@Stat')"
       IdAdresa                   = "required int();                                                                                 create getIdAdresa()" >
 
@@ -30,7 +30,7 @@
          optional;
    </MistoId>
 
-   <VozidloId                    xd:script = "                                                                                    create from('Vozidlo')"
+   <VozidloId                    xd:script = "create from('Vozidlo')"
       SPZ                        = "optional"
       IdMPZ                      = "required; onTrue setText(getTab('CC_Stat','KodStatu','IdStat'));                                create from('@MPZ')"
       VIN                        = "optional"
@@ -41,7 +41,7 @@
       RokDoProvozu               = "optional"
       IdBarvaText                = "optional int();                                                                                 create getIdBarvaText('@BarvaText')" />
 
-   <VozidloPSId                  xd:script = "                                                                                    create from('Vozidlo')">
+   <VozidloPSId                  xd:script = "create from('Vozidlo')">
       <VozidloId                 xd:script = "occurs 1;    ref VozidloId" />
       <VlastnikId                xd:script = "occurs 0..1; ref SubjektId;                                                         create from('Vlastnik')" />
       <ProvozovatelId            xd:script = "occurs 0..1; ref SubjektId;                                                         create from('Provozovatel')" />

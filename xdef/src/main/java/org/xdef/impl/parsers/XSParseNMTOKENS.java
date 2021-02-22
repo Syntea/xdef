@@ -41,7 +41,7 @@ public class XSParseNMTOKENS extends XSAbstractParseToken {
 			sb.append(' ').append(s = parser.getParsedString());
 			val.addXDItem(new DefString(s));
 		}
-		p.setBufIndex(parser.getIndex());
+		p.setIndex(parser.getIndex());
 		p.isSpaces();
 		p.replaceParsedBufferFrom(pos0, sb.toString());
 		p.setParsedValue(val);

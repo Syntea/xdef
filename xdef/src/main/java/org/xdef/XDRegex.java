@@ -7,7 +7,7 @@ public interface XDRegex extends XDValue {
 
 	/** Check if given data matches the regular expression.
 	 * @param data The data to be checked.
-	 * @return <tt>true</tt> if and only if the data matches regular expression.
+	 * @return true if and only if the data matches regular expression.
 	 */
 	public boolean matches(String data);
 

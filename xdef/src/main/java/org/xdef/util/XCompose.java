@@ -136,8 +136,11 @@ public class XCompose {
 	 */
 	public static void main(String... args) {
 		final String info =
-"usage: [-d defList] [-x xDefName] [-l logFile] [-e encoding] -o outFile\n" +
-"       [-n rootNameSpace] [-r rootName] -i xmlFile\n"+
+"Process the XML file with the X-definition in construction mode.\n"+
+"\n"+
+"Command line arguments:\n"+
+" [-d defList] [-x xDefName] [-l logFile] [-e encoding] -o outFile\n" +
+" [-n rootNameSpace] [-r rootName] -i xmlFile\n"+
 "(Items in the defList are separated by path separators.)";
 		if (args.length == 0) {
 			throw new RuntimeException("Parameters missing\n" + info);

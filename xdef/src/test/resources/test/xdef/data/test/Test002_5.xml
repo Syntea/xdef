@@ -1,12 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<!--
-    Document   : instance_xdef.xml
-    Created on : 16. září 2007, 18:27
-    Author     : Václav Trojan
-    Description: XDefinition of BPEL instance.
--->
-
 <instance instanceSeq      = "1"
           instanceVersion    = "0001"
           processStatus      = "running"

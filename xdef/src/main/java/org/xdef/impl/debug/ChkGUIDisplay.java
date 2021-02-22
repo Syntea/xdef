@@ -115,7 +115,7 @@ public class ChkGUIDisplay extends GUIScreen implements XEditor {
 									break;
 								}
 							} catch (Exception ex) {
-								ex.printStackTrace(System.err);
+								throw new RuntimeException(ex);
 							}
 						}
 						try {
@@ -133,7 +133,7 @@ public class ChkGUIDisplay extends GUIScreen implements XEditor {
 							prepareSourceMenuItems();
 							setSource(key);
 						} catch (Exception ex) {
-							ex.printStackTrace(System.err);
+							throw new RuntimeException(ex);
 						}
 					}
 				}

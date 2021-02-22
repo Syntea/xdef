@@ -11,7 +11,7 @@
          K dopravní nehodì došlo tak, že øidiè Fiala nezvládl øízení vozu z dùvodu, že s uvedeným typem vozu teprve zaèína jezdit a špatnì odhadl chování naloženého vozidla pøi prùjezdu pravotoèivou zatáèkou. a pøi jízdì s vozidlem Volvo s návìsem na pøepravu døeva vyjel vpravo mimo vozovku, kde narazil do odvodòovacích žlabù, kde se pøevrátil návìs na pravý bok a vysypal se náklad døeva vpravo mimo vozovku.       Dechová zkouška byla provedena pøístrojem DRÄGER, její výsledek byl negativní. Ke zranìní osob nedošlo.  Technická závada jako pøíèina dopravní nehody nebyla na místì ohledáním zjištìna, ani úèastníky uplatnìna.
       </VyliceniDN>
 
-      <ObjStranka DatumCasDN="19.04.2003 08:15" SkodaTisKc="410" HlavniPricina=" ZPÙSOB JÍZDY " Pricina="508">
+      <ObjStranka DatumCasDN="19.04.2003 08:15" SkodaTisKc="410" HlavniPricina="ZPÙSOB JÍZDY" Pricina="508">
          <Misto>
             SILNICI 1.TØÍDY È. 35 V KM 289 V KATASTRU OBCE VELKÝ ÚJEZD DÁLNIÈNÍ PØIVADÌÈ OKRES OLOMOUC VE SMÌRU OD POTŠTÁTU NA OLOMOUC.
          </Misto>
@@ -34,7 +34,7 @@
 
       <Ucastnik OznSegmentu="1-1" TypUcastnika="øidiè" PraxeRizeni="04" ZdravPojistovna="Všeobecná zdravotní pojišovna ÈR - 130 00 Praha 3; Orlická 4/2020" PokutaKc="5000" PokutaZapl="nezaplacena" Pachatel="Pachatel DN">
          <Osoba Jmeno="Luboš" Prijmeni="FIALA" RC="750428/5426" Pohlavi="M" DatumNarozeni="28.04.75" MistoNarozeni="Opava" StatNarozeni="ÈR" StatniPrislusnost="ÈR" Profese="Øidiè">
-            <TrvalyPobyt Ulice="SPORTOVNÍ " CisloPopisne="374" CisloOrientacni="36" Obec="OPAVA MALÉ HOŠTICE" Okres="OPAVA" Stat="ÈR" />
+            <TrvalyPobyt Ulice="SPORTOVNÍ" CisloPopisne="374" CisloOrientacni="36" Obec="OPAVA MALÉ HOŠTICE" Okres="OPAVA" Stat="ÈR" />
          </Osoba>
          <Firma NazevFirmy="Opavská lesní a.s. Praha 4 Krajánkova 11/2390" IC="45193177">
          </Firma>

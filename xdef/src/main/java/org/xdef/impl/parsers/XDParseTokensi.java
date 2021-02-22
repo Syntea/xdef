@@ -24,11 +24,11 @@ public class XDParseTokensi extends XDParseTokens {
 				if (tlen > len) {
 					len = tlen;
 				}
-				p.setBufIndex(pos);
+				p.setIndex(pos);
 			}
 		}
 		if (len != -1) {
-			p.setBufIndex(pos + len);
+			p.setIndex(pos + len);
 		} else {
 			//Incorrect value of '&{0}'&{1}{: }
 			p.errorWithString(XDEF.XDEF809, parserName());

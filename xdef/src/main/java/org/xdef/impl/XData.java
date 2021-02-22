@@ -38,7 +38,7 @@ public class XData extends XCodeDescriptor
 	 * @param name The name of attribute ("$text" if the type is text node).
 	 * @param nsUri NameSpace URI.
 	 * @param xp Refers to the XDefPool object.
-	 * @param kind <tt>ATTRIBUTE</tt> or <tt>TEXT</tt>.
+	 * @param kind <code>ATTRIBUTE</code> or <code>TEXT</code>.
 	 */
 	public XData(final String name,
 		String nsUri,

@@ -50,7 +50,7 @@ public class XSParseNOTATION extends XSAbstractParseString {
 					if (!parser.eos()) {
 						sb.append(' ');
 					} else {
-						parser.setBufIndex(pos1);
+						parser.setIndex(pos1);
 						break;
 					}
 				}

@@ -835,6 +835,7 @@ public class GUIEditor extends GUIScreen {
 	public static void main(String... args) {
 		final String info =
 "Edit and run X-definition in graphical user interface.\n"+
+"Command line arguments:\n"+
 " -p project_file | -v [switches] | [-c [switches] | -g [xml source]\n\n"+
 " -p run a project file\n"+
 " -v compile X-definition and runs validation mode\n"+
@@ -918,8 +919,7 @@ public class GUIEditor extends GUIScreen {
 				displayResult = "true";
 				debug = "true";
 			} catch (Exception ex) {
-				ex.printStackTrace(System.err);
-				return;
+				throw new RuntimeException(ex);
 			}
 		} else {
 			System.err.println("Incorrect parameter: " + arg + "\n" + info);

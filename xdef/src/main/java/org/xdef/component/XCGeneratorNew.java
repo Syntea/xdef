@@ -11,7 +11,7 @@ import org.xdef.impl.XConstants;
 import org.xdef.impl.XData;
 import org.xdef.impl.XElement;
 import org.xdef.impl.XNode;
-import org.xdef.json.JsonToXml;
+import org.xdef.json.JsonUtil;
 import org.xdef.model.XMData;
 import org.xdef.model.XMNode;
 import org.xdef.msg.XDEF;
@@ -22,7 +22,7 @@ import org.xdef.sys.SUtils;
 /** Generation of Java source code of XDComponents.
  * @author Vaclav Trojan
  */
-final class XCGeneratorNew extends XCGeneratorJSON implements XCGenerator {
+class XCGeneratorNew extends XCGeneratorJSON implements XCGenerator {
 
 	/** New instance of this class.*/
 	XCGeneratorNew(final XDPool xp,
@@ -406,7 +406,7 @@ final class XCGeneratorNew extends XCGeneratorJSON implements XCGenerator {
 					}
 					XNode[] xnds = (XNode[]) xe1.getChildNodeModels();
 					if (xe1._json == XConstants.JSON_MODE_W3C) {
-						XData keyAttr = (XData)xe1.getAttr(JsonToXml.J_KEYATTR);
+						XData keyAttr = (XData)xe1.getAttr(JsonUtil.J_KEYATTR);
 						String jname;
 						if (keyAttr != null) {
 							jname = keyAttr.getFixedValue().toString();
@@ -415,7 +415,7 @@ final class XCGeneratorNew extends XCGeneratorJSON implements XCGenerator {
 							jname = ndx >= 0 ? name.substring(ndx + 1) : name;
 						}
 						jname = '"' + jname + '"';
-						if (JsonToXml.J_ITEM.equals(xe1.getLocalName())) {
+						if (JsonUtil.J_ITEM.equals(xe1.getLocalName())) {
 							if (groupKind != XMNode.XMCHOICE) {
 								genJsonItemGetterAndSetter(xe1,typeName,iname,
 									max, setters, getters, sbi, classNames,

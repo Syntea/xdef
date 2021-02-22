@@ -7,8 +7,6 @@ import org.xdef.sys.SDuration;
 import org.xdef.sys.STester;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.Arrays;
 
 /** Test SObjectWriter.
@@ -116,11 +114,7 @@ public class TestObjectWriter extends STester {
 			return "" + (in.read() >= 0 ? "Not eof" : "") +
 				(obj.equals(result) ? "" : ("error:" + result.toString()));
 		} catch (Exception e) { //return string with the exception
-			StringWriter sw = new StringWriter();
-			PrintWriter pw = new PrintWriter(sw);
-			e.printStackTrace(pw);
-			pw.close();
-			return pw.toString();
+			return printThrowable(e);
 		}
 	}
 	@Override

@@ -56,14 +56,13 @@ import java.util.StringTokenizer;
 import javax.xml.XMLConstants;
 import org.w3c.dom.Element;
 import org.xdef.XDValueID;
+import org.xdef.impl.code.DefGPSPosition;
 import org.xdef.impl.code.DefLocale;
 
 /** Provides invoking of external method from script code.
  * @author Vaclav Trojan
  */
 final class XCodeProcessorExt implements CodeTable, XDValueID {
-
-	private XCodeProcessorExt() {}
 
 	static final XDValue perform1v(final XDValue item, final XDValue p) {
 		switch (item.getCode()) {
@@ -818,6 +817,18 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 						stack[sp-1].toString().toUpperCase(),
 						stack[sp].toString());
 					sp -= 2;
+				}
+				return sp;
+			}
+			case NEW_GPSPOSITION: {
+				if (item.getParam() == 3) {
+					stack[sp-2] = new DefGPSPosition(stack[sp-2].doubleValue(),
+						stack[sp-1].doubleValue(), stack[sp].doubleValue());
+					sp -= 2;
+				} else {
+					stack[sp-1] = new DefGPSPosition(stack[sp-1].doubleValue(),
+						stack[sp].doubleValue());
+					sp--;
 				}
 				return sp;
 			}

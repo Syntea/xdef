@@ -130,10 +130,6 @@ public abstract class XDTester extends STester {
 		return chkSyntax((Object[]) xdefs);
 	}
 
-	private ArrayReporter chkSyntax(final InputStream[] xdefs) {
-		return chkSyntax((Object[]) xdefs);
-	}
-
 	private static void removeMacros(final Element el) {
 		NodeList nl = el.getElementsByTagNameNS(el.getNamespaceURI(), "macro");
 		for (int i = nl.getLength() - 1; i >= 0; i--) {
@@ -1270,7 +1266,7 @@ public abstract class XDTester extends STester {
 				ReportPrinter.printListing(System.err,
 					new FileReader(data), reporter, true);
 			} catch (Exception ex) {
-				ex.printStackTrace(System.err);
+				throw new RuntimeException(ex);
 			}
 		}
 		System.err.flush();

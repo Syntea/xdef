@@ -1,0 +1,11 @@
+{ "desc" : "Distances", "updated" : "02014",
+  "cities" : { "Brussels": [
+      {"to": "London", "distance": 322},
+      {"to": "Amsterdam", "distance": 173}
+    ],
+    "Amsterdam": [
+      {"to": "Brussels", "distance": 173},
+      {"to": "Paris", "distance": 431}
+    ]
+  }
+}

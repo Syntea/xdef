@@ -25,9 +25,6 @@ import java.util.Set;
  */
 public class CodeDisplay implements CodeTable, XDValueID {
 
-	//Prevent user to instantiate this class.
-	private CodeDisplay() {}
-
 	/** Get type abbreviation used in display code.
 	 * @param type The type id.
 	 * @return The type name or null.
@@ -399,8 +396,7 @@ public class CodeDisplay implements CodeTable, XDValueID {
 						return f.getName();
 					}
 				} catch (Exception ex) {
-					ex.printStackTrace(System.err);
-					break;
+					throw new RuntimeException(ex);
 				}
 			}
 		}
@@ -419,8 +415,7 @@ public class CodeDisplay implements CodeTable, XDValueID {
 				try {
 					return f.getShort(null);
 				} catch (Exception ex) {
-					ex.printStackTrace(System.err);
-					break;
+					throw new RuntimeException(ex);
 				}
 			}
 		}

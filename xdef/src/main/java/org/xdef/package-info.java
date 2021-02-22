@@ -4,8 +4,8 @@
  * objects used in X-definitions.
  * <p>
  * For any kind of usage it is necessary first to compile X-definition to
- * the object{@link org.xdef.XDPool}. The XDPool object is fully reentrant
- * (so that it can	be declared as static and it can be used by many threads).
+ * the object{@link org.xdef.XDPool}. The XDPool object can be declared
+ * as static and it can be used by more parallel threads.
  * XDPool contains	compiled code generated form of all X-definitions.
  * To compile X-definitions use the {@link org.xdef.XDFactory} - see
  * static methods. To execute a X-definition you must first create an object
@@ -59,11 +59,11 @@
  *
  * <UL>
  * <li>
- * <h2><tt>XDPool</tt></h2>
+ * <h2><code>XDPool</code></h2>
  * Contains pool of X-definitions compiled from the source (see
  * {@link org.xdef.XDFactory}).
  * <p><b>Example:</b></p>
- * <pre><tt>
+ * <pre><code>
  * // Prepare X-definition file
  * File xdef = new File("./src/Example.xdef");
  *
@@ -71,16 +71,16 @@
  * XDPool xpool = XDFactory.genXDPool(null, xdef); //creation of XDPool
  * XDDocument xdoc = xp.createXDDocument(name); //create of XDDocument
  *    ...
- * </tt></pre>
+ * </code></pre>
  * </li>
  *
  * <li>
- * <h2><tt>XDDocument</tt></h2>
+ * <h2><code>XDDocument</code></h2>
  * Validates XML source data (see
  * {@link org.xdef.XDDocument#xparse(Object,
  * org.xdef.sys.ReportWriter)}).
  * <p><b>Example:</b></p>
- * <pre><tt>
+ * <pre><code>
  * // 2. Validate and process source XML data with X-definition.
  * ArrayReporter reporter = new ArrayReporter(); // here will be written errors
  * Element el = xd.xparse(sourceXml, reporter); //validate and process data
@@ -92,7 +92,7 @@
  * } else {//ok, no error or warniong messages
  *     ...
  * }
- * </tt></pre>
+ * </code></pre>
  * </li>
  *
  * <li>Generates XML data from source data (see
@@ -102,7 +102,7 @@
  * org.xdef.sys.ReportWriter)} and
  * {@link org.xdef.XDDocument#getElement()}).
  * <p><b>Example:</b></p>
- * <pre><tt>
+ * <pre><code>
  * // Set to ChkDocument parsed source element.
  * xdoc.setSourceContext(sourcedata); //element with source data
  *
@@ -116,13 +116,13 @@
  * } else {
  *     System.out.println(KXmlUtils.nodeToString(element, true)); //print result
  * }
- * </tt></pre>
+ * </code></pre>
  * </li>
  * </UL>
  *
  * <UL>
  * <li>
- * <h2><tt>GenXDefinition</tt></h2>
+ * <h2><code>GenXDefinition</code></h2>
  * You can create the X-definition from a XML document when you
  * call the class GenXDefinition from command line: see:
  * {@link org.xdef.util.GenXDefinition#main(String[])}.

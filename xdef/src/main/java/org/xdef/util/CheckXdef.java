@@ -68,10 +68,10 @@ public class CheckXdef {
 	 */
 	public static void main(String... args) {
 		final String info =
-"CheckXdef - Check if X-definition is correct.\n" +
-"Usage: FileName [FileName1] [ ... ]\n" +
-"Note: wildcard chars '*' or '?' in the file specification are accepted.\n" +
-"(c)2007 Syntea Software Group";
+"Check if X-definition is correct.\n" +
+"Command line arguments:\n"+
+"   FileName [FileName1] [ ... ]\n" +
+"Note: wildcard chars '*' or '?' in the file specification are accepted.";
 		if (args == null || args.length == 0) {
 			throw new RuntimeException("Parameters missing\n" + info);
 		}
@@ -106,8 +106,7 @@ public class CheckXdef {
 				System.out.println("OK");
 			}
 		} catch (Exception ex) {
-			ex.printStackTrace(System.err);
-			System.exit(1);
+			throw new RuntimeException(ex);
 		}
 	}
 }
