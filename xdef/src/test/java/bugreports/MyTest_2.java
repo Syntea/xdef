@@ -105,7 +105,7 @@ public class MyTest_2 extends XDTester {
 " GPSPosition baseGPS;\n" +
 " String mesto;\n" +
 " GPSPosition mestoGPS;\n" +
-" void pritDistance() {\n" +			
+" void pritDistance() {\n" +
 "   printf('%s to %s: %.1f km\\n',\n"+
 "     base + ' ' + baseGPS,\n"+
 "     mesto + ' ' + mestoGPS,\n"+
@@ -137,8 +137,6 @@ public class MyTest_2 extends XDTester {
 "  <mesto name=\"Wien\" GPS=\"GPS(48.2, 16.37, 151.0)\"/>\n" +
 "  <mesto name=\"London\" GPS=\"GPS(51.52, -0.09, 0.0)\"/>\n" +
 "</root>";
-//			System.out.println(xdef);			
-//			System.out.println(xml);
 			xc = xp.createXDDocument().parseXComponent(xml, null, reporter);
 		} catch (Exception ex) {fail(ex);}
 if(T)return;

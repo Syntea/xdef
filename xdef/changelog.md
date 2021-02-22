@@ -1,5 +1,13 @@
 # Version ${version}, release-date ${release.date}
 
+# Version 40.1.3, release-date 2021-02-22
+* preparing version 40.2
+* added X-definition type GPSPosition. Methods with this object:
+  `latitude()` returns value of GPS latitude in degrees.
+  `longitude()` returns value of GPS longitude in degrees.
+  `altitude()` returns value of GPS altitude in meters.
+  `distanceTo(GPSPosition x)` returns distance to GPS position `x` in meters.
+
 # Version 40.1.2, release-date 2021-02-15
 * corrected the bug in the X-script method `s.contains(s)`.
 * corrected the bug in the construction node of JSON.
