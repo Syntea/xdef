@@ -196,7 +196,7 @@ public class CompileBase implements CodeTable, XDValueID {
 			keyParam("pattern", XD_STRING, false, -1, false),
 			keyParam("whiteSpace", XD_STRING, false,
 					-1, true, new DefString("collapse")));
-		parser(im, org.xdef.impl.parsers.XDParseGPS.class, "GPS");
+		parser(im, org.xdef.impl.parsers.XDParseGPS.class, "gps");
 
 		im = genParserMetnod(0, 2, new short[] {XD_DECIMAL, XD_DECIMAL},
 			XD_DECIMAL,

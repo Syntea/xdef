@@ -105,7 +105,7 @@ public class MyTest_2 extends XDTester {
 " GPSPosition baseGPS;\n" +
 " String mesto;\n" +
 " GPSPosition mestoGPS;\n" +
-" void pritDistance() {\n" +
+" void pritDistance() {\n" +			
 "   printf('%s to %s: %.1f km\\n',\n"+
 "     base + ' ' + baseGPS,\n"+
 "     mesto + ' ' + mestoGPS,\n"+
@@ -114,10 +114,10 @@ public class MyTest_2 extends XDTester {
 "</xd:declaration>\n" +
 "<root>\n" +
 "  <base name=\"string(); onTrue base = getParsedValue();\"\n"+
-"        GPS=\"GPS(); onTrue baseGPS = getParsedValue();\"/>\n" +
+"        GPS=\"gps(); onTrue baseGPS = getParsedValue();\"/>\n" +
 "  <mesto xd:script=\"*; finally pritDistance();\"\n"+
 "         name=\"string; onTrue mesto = getParsedValue();\"\n"+
-"         GPS=\"GPS(); onTrue mestoGPS = getParsedValue();\"/>\n" +
+"         GPS=\"gps(); onTrue mestoGPS = getParsedValue();\"/>\n" +
 "</root>\n" +
 "<xd:component>\n"+
 "  %class bugreports.data.Mesta %link Example#root;\n"+
@@ -127,15 +127,10 @@ public class MyTest_2 extends XDTester {
 			genXComponent(xp, tempDir);
 			xml =
 "<root>\n" +
-"  <base name=\"Praha\" GPS=\"GPS(50.08, 14.42, 399.0)\"/>\n" +
-"  <mesto name=\"České_Budějovice\" GPS=\"GPS(48.97, 14.47, 381.0)\"/>\n" +
-"  <mesto name=\"Plzen\" GPS=\"GPS(50.23, 12.87, 447.0)\"/>\n" +
-"  <mesto name=\"Karlovy_Vary\" GPS=\"GPS(50.23, 12.87, 447.0)\"/>\n" +
-"  <mesto name=\"Pardubice=\" GPS=\"GPS(50.04, 15.78, 237.0)\"/>\n" +
-"  <mesto name=\"Hradec_Králové\" GPS=\"GPS(50.21, 15.83, 235.0)\"/>\n" +
-"  <mesto name=\"Brno\" GPS=\"GPS(49.2, 16.62, 237.0)\"/>\n" +
-"  <mesto name=\"Wien\" GPS=\"GPS(48.2, 16.37, 151.0)\"/>\n" +
-"  <mesto name=\"London\" GPS=\"GPS(51.52, -0.09, 0.0)\"/>\n" +
+"  <base name=\"Praha\" GPS=\"gps(50.08,14.42,399.0)\"/>\n" +
+"  <mesto name=\"České_Budějovice\" GPS=\"gps(48.97,14.47,381.0)\"/>\n" +
+"  <mesto name=\"Plzen\" GPS=\"gps(50.23,12.87,447.0)\"/>\n" +
+"  <mesto name=\"Karlovy_Vary\" gps=\"gps(50.23,12.87,447)\"/>\n" +
 "</root>";
 			xc = xp.createXDDocument().parseXComponent(xml, null, reporter);
 		} catch (Exception ex) {fail(ex);}

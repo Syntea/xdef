@@ -21,7 +21,7 @@ public class GPSPosition {
 	private final double _altitude;
 
 	/** Create new instance of GPosition with all parameters unknown.*/
-	public GPSPosition() {_latitude = _longitude = _altitude = Double.MIN_VALUE;}
+	public GPSPosition() {_latitude=_longitude=_altitude = Double.MIN_VALUE;}
 
 	/** Create new instance of GPosition with latitude and longitude. The value
 	 * of altitude is set fo unknown.
@@ -61,7 +61,7 @@ public class GPSPosition {
 	 */
 	public GPSPosition(final String gps) {
 		StringParser p = new StringParser(gps);
-		if (p.isToken("GPS(")) {
+		if (p.isToken("gps(")) {
 			if (p.isChar(')')) {
 				_latitude = _longitude = _altitude = Double.MIN_VALUE;
 				return;
@@ -166,8 +166,8 @@ public class GPSPosition {
 
 	@Override
 	public String toString() {
-		return _latitude == Double.MIN_VALUE ? "GPS()"
-			: "GPS(" + _latitude + "," + _longitude
+		return _latitude == Double.MIN_VALUE ? "gps()"
+			: "gps(" + _latitude + "," + _longitude
 				+ (_altitude != Double.MIN_VALUE ? "," + _altitude : "") + ')';
 	}
 }

@@ -107,20 +107,20 @@ public final class TestXComponents extends XDTester {
 "  int d; /* distance in km */\n"+
 "</xd:declaration>\n"+
 "<A xd:script='finally d = round(p.distanceTo(q)/1000); /* km */'\n"+
-"   q='GPS(); onTrue q=getParsedValue();'/>\n"+
+"   q='gps(); onTrue q=getParsedValue();'/>\n"+
 "<xd:component>\n"+
 "  %class test.xdef.TY_GPS %link #A;\n"+
 "</xd:component>\n"+
 "</xd:def>";
 			XDPool xp = compile(xdef);
 			genXComponent(xp, new File(_tempDir));
-			xml = "<!-- Vienna --> <A q='GPS(48.2,16.37,151)'/>";
+			xml = "<!-- Vienna --> <A q='gps(48.2,16.37,151)'/>";
 			xd = xp.createXDDocument();
 			xc = xd.parseXComponent(xml, null, reporter);
 			assertEq(253, xd.getVariable("d").intValue());
 			assertEq(new GPSPosition(48.2, 16.37, 151),
 				getValueFromGetter(xc, "getq"));
-			xml = "<!-- London --> <A q='GPS(51.52,-0.09,0)'/>";
+			xml = "<!-- London --> <A q='gps(51.52,-0.09,0)'/>";
 			el = parse(xd, xml, reporter);
 			assertNoErrors(reporter);
 			assertEq(xml, el);
