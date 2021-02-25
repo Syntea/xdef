@@ -10,7 +10,7 @@ import org.xdef.proc.XXNode;
  * @author Vaclav Trojan
  */
 public class XDParseGPS extends XDParserAbstract {
-	private static final String ROOTBASENAME = "GPS";
+	private static final String ROOTBASENAME = "gps";
 
 	public XDParseGPS() {super();}
 
@@ -19,7 +19,7 @@ public class XDParseGPS extends XDParserAbstract {
 		p.isSpaces();
 		int pos = p.getIndex();
 		try {
-			if (p.isToken("GPS(")) {
+			if (p.isToken("gps(")) {
 				int pos1 = p.getIndex();
 				if (p.isChar(')')) {
 					p.setParsedValue(new DefGPSPosition());

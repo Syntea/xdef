@@ -857,7 +857,7 @@ public final class TestTypes extends XDTester {
 " String base, town;\n" +
 " GPSPosition baseGPS, townGPS;\n" +
 " void pritDistance() {\n" +
-"   printf('distance to %s, GPS(%.2f,%.2f): %.1f km\\n',\n"+
+"   printf('distance to %s, gps(%.2f,%.2f): %.1f km\\n',\n"+
 "     town, townGPS.latitude(), townGPS.longitude(),\n"+
 "     baseGPS.distanceTo(townGPS)/1000);\n" +
 " }\n" +
@@ -865,26 +865,26 @@ public final class TestTypes extends XDTester {
 "<a>\n" +
 "  <base xd:script=\"finally outln('Base ' + base + ', ' + baseGPS);\"\n"+
 "        name=\"string(); onTrue base = getParsedValue();\"\n"+
-"        GPS_position=\"GPS(); onTrue baseGPS = getParsedValue();\"/>\n" +
+"        GPS_position=\"gps(); onTrue baseGPS = getParsedValue();\"/>\n" +
 "  <town xd:script=\"*; finally pritDistance();\"\n"+
 "         name=\"string; onTrue town = getParsedValue();\"\n"+
-"         GPS_position=\"GPS(); onTrue townGPS = getParsedValue();\"/>\n" +
+"         GPS_position=\"gps(); onTrue townGPS = getParsedValue();\"/>\n" +
 "</a>\n" +
 "</xd:def>";
 			xml =
 "<a>\n" +
-"  <base name=\"Praha\" GPS_position=\"GPS(50.08,14.42,399.0)\"/>\n" +
-"  <town name=\"Wien\" GPS_position=\"GPS(48.2,16.37,151.0)\"/>\n" +
-"  <town name=\"London\" GPS_position=\"GPS(51.52,-0.09,0.0)\"/>\n" +
+"  <base name=\"Praha\" GPS_position=\"gps(50.08,14.42,399.0)\"/>\n" +
+"  <town name=\"Wien\" GPS_position=\"gps(48.2,16.37,151.0)\"/>\n" +
+"  <town name=\"London\" GPS_position=\"gps(51.52,-0.09,0.0)\"/>\n" +
 "</a>";
 			strw = new StringWriter();
 			assertEq(xml, parse(xdef,"", xml, reporter, strw, null, null));
 			assertNoErrors(reporter);
 			strw.close();
 			assertEq(strw.toString(),
-"Base Praha, GPS(50.08,14.42,399.0)\n" +
-"distance to Wien, GPS(48.20,16.37): 252.8 km\n" +
-"distance to London, GPS(51.52,-0.09): 1031.4 km\n");
+"Base Praha, gps(50.08,14.42,399.0)\n" +
+"distance to Wien, gps(48.20,16.37): 252.8 km\n" +
+"distance to London, gps(51.52,-0.09): 1031.4 km\n");
 			xdef = // expression in type validation
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<xd:declaration>\n"+
