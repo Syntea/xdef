@@ -12,10 +12,10 @@ import org.xdef.sys.SPosition;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.StringParser;
 
-/** Parser of JSON source.
+/** Parser of JSON/XON source.
  * @author Vaclav Trojan
  */
-public class JsonParser extends StringParser {
+public class XonParser extends StringParser {
 
 	/** Flag to accept comments in JSON. */
 	private boolean _acceptComments; // default value = false
@@ -27,7 +27,7 @@ public class JsonParser extends StringParser {
 	private SPosition _sPosition;
 
 	/** Create instance of parser. */
-	public JsonParser() {}
+	public XonParser() {}
 
 	/** Set genJObjects flag (and the _acceptComments flag is also set). */
 	public final void setGenJObjects() {

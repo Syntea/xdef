@@ -5,7 +5,7 @@ import java.util.LinkedHashMap;
 import org.xdef.XDConstants;
 import org.xdef.impl.XConstants;
 import org.xdef.impl.XOccurrence;
-import org.xdef.json.JsonParser;
+import org.xdef.json.XonParser;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.ReportWriter;
 import org.xdef.sys.SBuffer;
@@ -14,7 +14,7 @@ import org.xdef.sys.SPosition;
 /** Create X-definition model from xd:json.
  * @author Vaclav Trojan
  */
-public class CompileJsonXdef extends JsonParser {
+public class CompileJsonXdef extends XonParser {
 	private String _jsPrefix = "js";
 	private String _jsNamespace = XDConstants.JSON_NS_URI_W3C;
 

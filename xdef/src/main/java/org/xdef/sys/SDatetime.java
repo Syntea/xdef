@@ -134,7 +134,7 @@ public class SDatetime extends XMLGregorianCalendar
 	 * @param minute the minute.
 	 * @param second the second.
 	 * @param fraction the fraction of second (must be greater or equal to 0
-	 * @param tz TimeZone or <tt>null</tt>.
+	 * @param tz TimeZone or null.
 	 */
 	public SDatetime(final int year, final int month, final int day,
 		final int hour,
@@ -154,7 +154,7 @@ public class SDatetime extends XMLGregorianCalendar
 	}
 
 	/** Check parsed date.
-	 * @return <tt>true</tt> if parsed date is OK.
+	 * @return true if parsed date is OK.
 	 */
 	public final boolean chkDatetime() {
 		if (_tz != null) {
@@ -467,7 +467,7 @@ public class SDatetime extends XMLGregorianCalendar
 	public final double getFraction() {return _fraction;}
 
 	/** Get TimeZone from this date. If TimeZone is undefined returns
-	 * <tt>null</tt>.
+	 * null.
 	 * @return TimeZone from this date or null.
 	 */
 	public final TimeZone getTZ() {return _tz;}
@@ -781,8 +781,7 @@ public class SDatetime extends XMLGregorianCalendar
 	}
 
 	/** Check if the year from this object is a leap year or not.
-	 * @return <tt>true</tt> if is year is a leap year, otherwise returns
-	 * <tt>false</tt>.
+	 * @return true if is year is a leap year, otherwise returns false.
 	 */
 	public final boolean isLeapYear() {return isLeapYear(_year);}
 
@@ -951,14 +950,12 @@ public class SDatetime extends XMLGregorianCalendar
 
 	@Override
 	/** Compare this SDatetime with the other one.
-	 * <p>Return:</p>
-	 * <ul>
-	 *  <li>-1 if this <tt>SDatetime</tt> is smaler than <tt>other</tt></li>
-	 *  <li>0 if this <tt>SDatetime</tt> is equal to <tt>other</tt></li>
-	 *  <li>+1 if this <tt>SDatetime</tt> is bigger than <tt>other</tt></li>
-	 *  <li>throws SIllegalArgumentException if one of arguments has zone and
-	 *  the second one has no zone and the difference is less then 14 hours</li>
-	 * </ul>
+	 * <p>Return:
+	 *  <br>-1 if this <tt>SDatetime</tt> is smaler than <tt>other</tt>
+	 *  <br>0 if this <tt>SDatetime</tt> is equal to <tt>other</tt>
+	 *  <br>+1 if this <tt>SDatetime</tt> is bigger than <tt>other</tt>
+	 *  <br>throws SIllegalArgumentException if one of arguments has zone and
+	 *  the second one has no zone and the difference is less then 14 hours
 	 * @param arg the other SDatetime
 	 * @return the relationship between <tt>this SDatetime</tt>
 	 * and the <tt>other</tt> parameter.
@@ -1250,50 +1247,44 @@ public class SDatetime extends XMLGregorianCalendar
 
 	/** Append  string with date according to given format to StringBuffer.
 	 * String with format mask contains characters interpreted as follows:
-	 * <ul>
-	 * <li><b>a</b> AM/PM marker</li>
-	 * <li><b>D</b> day in year</li>
-	 * <li><b>d</b> day of month (1 through 31)</li>
-	 * <li><b>E</b> day of week (text)
-	 *  <p>E, EE, EEE - abbreviated day name (Mon, Tue, .. Sun</p>
-	 *  <p>EEEE (and more)- full month name (Monday, Tuesday, .. Sunday</p></li>
-	 * <li><b>e</b> day of week (number 1=Monday, 7=Sunday)</li>
-	 * <li><b>F</b> day of week in month</li>
-	 * <li><b>G</b> era (0=BC, 1=AD)</li>
-	 * <li><b>H</b> hour (0 through 23)</li>
-	 * <li><b>h</b> hour (1..12 with am/pm)</li>
-	 * <li><b>K</b> hour 0..11 with am/pm)</li>
-	 * <li><b>k</b> hour 1..23</li>
-	 * <li><b>M</b> month in year (1=January .. 12=December).
-	 *  <p>M - number without leading zero</p>
-	 *  <p>MM - number with leading zero</p>
-	 *  <p>MMM - abbreviated month name (Jan, Feb, .. Dec</p>
-	 *  <p>MMMM (and more)- full month name (January, February, .. December</p>
-	 * </li>
-	 * <li><b>m</b> minute (0 through 59)</li>
-	 * <li><b>s</b> second (0 through 59)</li>
-	 * <li><b>S</b> digits representing a decimal fraction of a second</li>
-	 * <li><b>y</b> year</li>
-	 * <li><b>W</b> week in month</li>
-	 * <li><b>w</b> week in year</li>
-	 * <li><b>Z</b> time zone designator (Z or +hh:mm or -hh:mm)
-	 * <p>ZZ time zone designator (Z or +h:m or -h:m)</p>
-	 * <p>ZZZZZ time zone designator (Z or +hhmm or -hhmm)</p>
-	 * <p>ZZZZZZ time zone designator (Z or +hh:mm or -hh:mm)</p>
-	 * </li>
-	 * <li><b>z</b> zone name
-	 * <p>z, zz, zzz abbreviated zone name (CET)</p>
-	 * <p>zzzz and more full zone name (Central European Time)</p>
-	 * </li>
-	 * </ul>
+	 * <br><b>a</b> AM/PM marker
+	 * <br><b>D</b> day in year
+	 * <br><b>d</b> day of month (1 through 31)
+	 * <br><b>E</b> day of week (text)
+	 *  <p>E, EE, EEE - abbreviated day name (Mon, Tue, .. Sun
+	 *  <p>EEEE (and more)- full month name (Monday, Tuesday, .. Sunday
+	 * <br><b>e</b> day of week (number 1=Monday, 7=Sunday)
+	 * <br><b>F</b> day of week in month
+	 * <br><b>G</b> era (0=BC, 1=AD)
+	 * <br><b>H</b> hour (0 through 23)
+	 * <br><b>h</b> hour (1..12 with am/pm)
+	 * <br><b>K</b> hour 0..11 with am/pm)
+	 * <br><b>k</b> hour 1..23
+	 * <br><b>M</b> month in year (1=January .. 12=December).
+	 *  <p>M - number without leading zero
+	 *  <p>MM - number with leading zero
+	 *  <p>MMM - abbreviated month name (Jan, Feb, .. Dec
+	 *  <p>MMMM (and more)- full month name (January, February, .. December
+	 *
+	 * <br><b>m</b> minute (0 through 59)
+	 * <br><b>s</b> second (0 through 59)
+	 * <br><b>S</b> digits representing a decimal fraction of a second
+	 * <br><b>y</b> year
+	 * <br><b>W</b> week in month
+	 * <br><b>w</b> week in year
+	 * <br><b>Z</b> time zone designator (Z or +hh:mm or -hh:mm)
+	 * <p>ZZ time zone designator (Z or +h:m or -h:m)
+	 * <p>ZZZZZ time zone designator (Z or +hhmm or -hhmm)
+	 * <p>ZZZZZZ time zone designator (Z or +hh:mm or -hh:mm)
+	 * <br><b>z</b> zone name
+	 * <p>z, zz, zzz abbreviated zone name (CET)
+	 * <p>zzzz and more full zone name (Central European Time)
 	 * @param sb The StringBuffer where to append a string with date.
 	 * @param format The format of created date.
 	 * @throws SRuntimeException
-	 * <ul>
-	 * <li>SYS049 Unclosed string quotation.</li>
-	 * <li>SYS050 Incorrect zone specification in declaration of date and/or
-	 * time format.</li>
-	 * </ul>
+	 * <br>SYS049 Unclosed string quotation.
+	 * <br>SYS050 Incorrect zone specification in declaration of date and/or
+	 * time format.
 	 */
 	public final void formatDate(final StringBuffer sb, final String format) {
 		int flen;
@@ -1302,7 +1293,6 @@ public class SDatetime extends XMLGregorianCalendar
 		}
 		char pat;
 		int fpos = 0;
-//		int i;
 		int ms = 0; //milli seconds
 		// Scan format and find milliseconds format to be able eventualy
 		// to round up millisendonds and seconds fields
@@ -1804,17 +1794,15 @@ public class SDatetime extends XMLGregorianCalendar
 						sb.append('Z');
 						continue;
 					}
+					if (zoneHour < 0) {
+						sb.append('-');
+						zoneHour = -zoneHour;
+					} else {
+						sb.append('+');
+					}
 					zoneHour /= 60000;
 					int zoneMinute = zoneHour % 60;
-					if (zoneMinute < 0) {
-						zoneMinute = -zoneMinute;
-					}
-					if ((zoneHour /= 60) >= 0) {
-						sb.append('+');
-					} else {
-						sb.append('-');
-						zoneHour = - zoneHour;
-					}
+					zoneHour /= 60;
 					formatInt(sb, zoneHour, 2);
 					if (i == 1 || i == 2 || i == 6) {
 						sb.append(':');
@@ -1972,8 +1960,8 @@ public class SDatetime extends XMLGregorianCalendar
 
 	/** Check if the year given by argument is a leap year or not.
 	 * @param year year which is examined.
-	 * @return <tt>true</tt> if is year is a leap year, otherwise returns
-	 * <tt>false</tt>.
+	 * @return true if is year is a leap year, otherwise returns
+	 * false.
 	 */
 	public final static boolean isLeapYear(final int year) {
 //		if ((year modulo 4 is 0) and (year modulo 100 is not 0))
@@ -2108,9 +2096,9 @@ public class SDatetime extends XMLGregorianCalendar
 	 * @return The calendar object or null if date was not recognized.
 	 * @throws SRuntimeException
 	 * <ul>
-	 * <li>SYS049 Unclosed string quotation.</li>
-	 * <li>SYS050 Incorrect zone specification in declaration of date and/or
-	 * time format.</li>
+	 * <br>SYS049 Unclosed string quotation.
+	 * <br>SYS050 Incorrect zone specification in declaration of date and/or
+	 * time format.
 	 * </ul>
 	 */
 	public final static Calendar parseDatetime(final String source,
@@ -2140,7 +2128,7 @@ public class SDatetime extends XMLGregorianCalendar
 	 * @param src String with date.
 	 * @param pos Position from which date is parsed.
 	 * @return parsed SDatetime object if date on current position suits to
-	 * required format, otherwise return <tt>false</tt>.
+	 * required format, otherwise return false.
 	 */
 	public final static SDatetime parseISO8601(final String src, final int pos){
 		StringParser p = new StringParser(src);
@@ -2156,7 +2144,7 @@ public class SDatetime extends XMLGregorianCalendar
 	 * www.w3.org/TR/NOTE-datetime</a>).
 	 * @param src String with date.
 	 * @return parsed SDatetime object if date on current position suits to
-	 * required format, otherwise return <tt>false</tt>.
+	 * required format, otherwise return false.
 	 */
 	public final static SDatetime parseISO8601(final String src) {
 		return parseISO8601(src, 0);
@@ -2166,7 +2154,7 @@ public class SDatetime extends XMLGregorianCalendar
 	 * @param src String with date.
 	 * @param pos Position from which date is parsed.
 	 * @return parsed SDatetime object if date on current position suits to
-	 * required format, otherwise return <tt>false</tt>.
+	 * required format, otherwise return false.
 	 */
 	public final static SDatetime parseRFC822(final String src, final int pos) {
 		StringParser p = new StringParser(src);
@@ -2180,7 +2168,7 @@ public class SDatetime extends XMLGregorianCalendar
 	/** Parse date and time in RFC822 format.
 	 * @param src String with date.
 	 * @return parsed SDatetime object if date on current position suits to
-	 * required format, otherwise return <tt>false</tt>.
+	 * required format, otherwise return false.
 	 */
 	public final static SDatetime parseRFC822(final String src) {
 		return parseRFC822(src, 0);
