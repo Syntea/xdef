@@ -2095,11 +2095,9 @@ public class SDatetime extends XMLGregorianCalendar
 	 * @param format The pattern with format of source.
 	 * @return The calendar object or null if date was not recognized.
 	 * @throws SRuntimeException
-	 * <ul>
 	 * <br>SYS049 Unclosed string quotation.
 	 * <br>SYS050 Incorrect zone specification in declaration of date and/or
 	 * time format.
-	 * </ul>
 	 */
 	public final static Calendar parseDatetime(final String source,
 		final String format) {
