@@ -255,7 +255,7 @@ public class JsonUtil {
 		Object result;
 		if (source.charAt(0) == '{' && source.endsWith("}")
 			|| (source.charAt(0) == '[' && source.endsWith("]"))) {
-			JsonParser jx = new JsonParser();
+			XonParser jx = new XonParser();
 			jx.setSourceBuffer(source);
 			result = jx.parse();
 			jx.getReportWriter().checkAndThrowErrors();
@@ -270,7 +270,7 @@ public class JsonUtil {
 			result = parse(in, sysId);
 		} catch (Exception ex) {
 			if (!new File(source).exists()) {
-				JsonParser jx = new JsonParser();
+				XonParser jx = new XonParser();
 				jx.setSourceBuffer(source);
 				result = jx.parse();
 				jx.getReportWriter().checkAndThrowErrors();
@@ -379,7 +379,7 @@ public class JsonUtil {
 					reader = new InputStreamReader(in, "UTF-32LE");
 				}
 			}
-			JsonParser jx = new JsonParser();
+			XonParser jx = new XonParser();
 			jx.setSourceReader(reader, 0L, s);
 			if (sysid != null && !sysid.isEmpty()) {
 				jx.setSysId(sysid);

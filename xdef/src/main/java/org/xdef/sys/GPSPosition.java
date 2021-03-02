@@ -58,8 +58,9 @@ public class GPSPosition {
 	 * -180.0 to 180.0 or MIN_VALUE if unknown.<br>
 	 * The altitude value is in meters may by in range from EARTH_RADIUS
 	 * in meters (6376500) to MAX_VALUE or MIN_VALUE if unknown.
+	 * @throws SRuntimeException with code XDEF222 if value is not correct.
 	 */
-	public GPSPosition(final String gps) {
+	public GPSPosition(final String gps) throws SRuntimeException {
 		StringParser p = new StringParser(gps);
 		if (p.isToken("gps(")) {
 			if (p.isChar(')')) {
@@ -85,13 +86,14 @@ public class GPSPosition {
 				}
 			}
 		}
+		//Incorrect GPosition &{0}
 		throw new SRuntimeException(XDEF.XDEF222, gps);
 	}
 
 	/** Check if value of GPosition is correct.
 	 * @throws SRuntimeException with code XDEF222 if value is not correct.
 	 */
-	private void checkValue() {
+	private void checkValue() throws SRuntimeException {
 		if ((_latitude == Double.MIN_VALUE
 			|| (_latitude >= -90.0D && _latitude <= 90.0D))
 			&& (_longitude == Double.MIN_VALUE
@@ -121,14 +123,14 @@ public class GPSPosition {
 	 */
 	public final double altitude() {return _altitude;}
 
-	/** Get distance in meters from this position to position from the argument.
+	/** Get distance in meters from this position to position from the argument
+	 * (altitude is ignored).
 	 * @param x position to which the distance is computed.
 	 * @return distance from this position to given position. Note the
 	 * Earth radius used in Haversine formula is 6376500 m.
 	 */
 	public final double distanceTo(final GPSPosition x) {
-		if (_latitude == Double.MIN_VALUE
-			|| x._latitude == Double.MIN_VALUE) {
+		if (_latitude == Double.MIN_VALUE || x._latitude == Double.MIN_VALUE) {
 			return Double.MIN_VALUE; // not computed
 		} else if (_latitude == x._latitude && _longitude == x._longitude) {
 			return 0.0D; // equal positions

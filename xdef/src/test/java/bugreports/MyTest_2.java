@@ -105,7 +105,7 @@ public class MyTest_2 extends XDTester {
 " GPSPosition baseGPS;\n" +
 " String mesto;\n" +
 " GPSPosition mestoGPS;\n" +
-" void pritDistance() {\n" +			
+" void pritDistance() {\n" +
 "   printf('%s to %s: %.1f km\\n',\n"+
 "     base + ' ' + baseGPS,\n"+
 "     mesto + ' ' + mestoGPS,\n"+

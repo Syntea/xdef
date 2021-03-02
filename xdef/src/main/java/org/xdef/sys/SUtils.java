@@ -92,7 +92,7 @@ public class SUtils extends FUtils {
 	 * @param bytes array of bytes to be encoded.
 	 * @param offset offset in the buffer of the first byte to encode.
 	 * @param length number of bytes to read from the buffer.
-	 * @return byte array with the Base64 encoded data.
+	 * @return byte array with the encoded data to hexadecimal digits.
 	 * @throws SRuntimeException when an error occurs.
 	 */
 	public static final byte[] encodeHex(final byte[] bytes,
@@ -153,92 +153,89 @@ public class SUtils extends FUtils {
 		return lx;
 	}
 
-	/** Encodes binary input byte stream <b>fi</b> to the output text writer
-	 * <b>fo</b> as stream of hexadecimal digits.
-	 * @param fi InputStream with binary origin bytes.
-	 * @param fo OutputStream for encoded Base64 result.
+	/** Encodes binary input byte stream <b>in</b> to the output text writer
+	 * <b>out</b> as a stream of hexadecimal digits.
+	 * @param in InputStream with binary origin bytes.
+	 * @param out OutputStream where hexadecimal digits are written.
 	 * @throws SException when I/O error occurs.
 	 */
-	public static final void encodeHex(final InputStream fi,
-		final OutputStream fo) throws SException {
+	public static final void encodeHex(final InputStream in,
+		final OutputStream out) throws SException {
 		final byte[] ibuf = new byte[INPUT_HEXBUFFER_LENGTH];
 		final byte[] obuf;
 		obuf = new byte[ENCODED_LINE_LENGTH];
 		int len;
 		try {
-			if ((len = fi.read(ibuf)) == INPUT_HEXBUFFER_LENGTH) {
+			if ((len = in.read(ibuf)) == INPUT_HEXBUFFER_LENGTH) {
 				for (;;) {
 					encodeHex(obuf, 0, ibuf, 0, INPUT_HEXBUFFER_LENGTH);
-					if ((len = fi.read(ibuf)) > 0) {
-						fo.write(obuf);
+					if ((len = in.read(ibuf)) > 0) {
+						out.write(obuf);
 						if (len < INPUT_HEXBUFFER_LENGTH) {
 							break;
 						}
 					} else {
-						fo.write(obuf, 0, ENCODED_LINE_LENGTH);
+						out.write(obuf, 0, ENCODED_LINE_LENGTH);
 						return;
 					}
 				}
 			}
 			if (len > 0) {
 				len = encodeHex(obuf, 0, ibuf, 0, len);
-				fo.write(obuf, 0, len);
+				out.write(obuf, 0, len);
 			}
 		} catch (IOException ex) {
 			throw new SException(SYS.SYS036, ex); //Program exception &{0}
 		}
 	}
 
-	/** Encodes binary input byte stream <b>fi</b> to the output text writer
-	 * <b>fo</b> as stream of hexadecimal digits.
-	 * @param fi InputStream with binary origin bytes.
-	 * @param fo Writer for encoded Base64 result.
+	/** Encodes binary input byte stream <b>in</b> to the output writer
+	 * <b>out</b> as a stream of hexadecimal digits.
+	 * @param in InputStream with binary origin bytes.
+	 * @param out Writer where hexadecimal digits are written.
 	 * @throws SException when I/O error occurs.
 	 */
-	public static final void encodeHex(final InputStream fi,
-		final Writer fo) throws SException {
+	public static final void encodeHex(final InputStream in,
+		final Writer out) throws SException {
 		final byte[] ibuf = new byte[INPUT_HEXBUFFER_LENGTH];
 		final char[] obuf;
 		obuf = new char[ENCODED_LINE_LENGTH];
 		int len;
 		try {
-			if ((len = fi.read(ibuf)) == INPUT_HEXBUFFER_LENGTH) {
+			if ((len = in.read(ibuf)) == INPUT_HEXBUFFER_LENGTH) {
 				for (;;) {
 					encodeHex(obuf, 0, ibuf, 0, INPUT_HEXBUFFER_LENGTH);
-					if ((len = fi.read(ibuf)) > 0) {
-						fo.write(obuf);
+					if ((len = in.read(ibuf)) > 0) {
+						out.write(obuf);
 						if (len < INPUT_HEXBUFFER_LENGTH) {
 							break;
 						}
 					} else {
-						fo.write(obuf, 0, ENCODED_LINE_LENGTH);
+						out.write(obuf, 0, ENCODED_LINE_LENGTH);
 						return;
 					}
 				}
 			}
 			if (len > 0) {
 				len = encodeHex(obuf, 0, ibuf, 0, len);
-				fo.write(obuf, 0, len);
+				out.write(obuf, 0, len);
 			}
 		} catch (IOException ex) {
 			throw new SException(SYS.SYS036, ex); //Program exception &{0}
 		}
 	}
 
-	/** Decodes input stream in hexadecimal format <b>fi</b> to the output
-	 * stream of bytes.
-	 * @param fi InputStream with hexadecimal digits.
-	 * @param fo decoded byte stream.
-	 * @throws SException
-	 * <br>SYS036 Program exception {msg}.
-	 * <br>SYS047 HEX format error.
+	/** Decodes stream of hexadecimal format <b>in</b> to the stream of bytes.
+	 * @param in InputStream with hexadecimal digits.
+	 * @param out decoded byte stream.
+	 * @throws SException SYS047 HEX format error.
 	 */
-	public static final void decodeHex(final InputStream fi,
-		final OutputStream fo) throws SException {
+	public static final void decodeHex(final InputStream in,
+		final OutputStream out) throws SException {
 		try {
 			int i;
 			byte b = 0;
-			while ((i = fi.read())==' ' || i=='\n' || i=='\r' || i=='\t') {}
+			while ((i = in.read())==' ' || i=='\n' || i=='\r' || i=='\t') {}
 			while (i > 0) {
 				if (i >= '0' && i <= '9')  {
 					b = (byte) (i - '0');
@@ -249,17 +246,17 @@ public class SUtils extends FUtils {
 				} else {
 					throw new SException(SYS.SYS047); //Hexadecimal format error
 				}
-				i = fi.read();
+				i = in.read();
 				if (i >= '0' && i <= '9')  {
-					fo.write((b << 4) + (i - '0'));
+					out.write((b << 4) + (i - '0'));
 				} else if (i >= 'a' && i <= 'f') {
-					fo.write((b << 4) + (i - 'a' + 10));
+					out.write((b << 4) + (i - 'a' + 10));
 				} else if (i >= 'A' && i <= 'F') {
-					fo.write((b << 4) + (i - 'A' + 10));
+					out.write((b << 4) + (i - 'A' + 10));
 				} else {
 					throw new SException(SYS.SYS047); //Hexadecimal format error
 				}
-				if ((i = fi.read())==' ' || i=='\n' || i=='\r' || i=='\t') {
+				if ((i = in.read())==' ' || i=='\n' || i=='\r' || i=='\t') {
 					break;
 				}
 			}
@@ -268,20 +265,17 @@ public class SUtils extends FUtils {
 		}
 	}
 
-	/** Decodes reader in hexadecimal format <b>fi</b> to the output stream
-	 * of bytes.
-	 * @param fi Reader with hexadecimal digits.
-	 * @param fo decoded byte stream.
-	 * @throws SException
-	 * <br>SYS036 Program exception
-	 * <br>SYS047 HEX format error
+	/** Decodes stream of hexadecimal format <b>in</b> to the stream of bytes.
+	 * @param in Reader with hexadecimal digits.
+	 * @param out decoded byte stream.
+	 * @throws SException SYS047 HEX format error.
 	 */
-	public static final void decodeHex(final Reader fi,
-		final OutputStream fo) throws SException {
+	public static final void decodeHex(final Reader in,
+		final OutputStream out) throws SException {
 		try {
 			int i;
 			byte b = 0;
-			while ((i = fi.read())==' ' || i=='\n' || i=='\r' || i=='\t') {}
+			while ((i = in.read())==' ' || i=='\n' || i=='\r' || i=='\t') {}
 			while (i > 0) {
 				if (i == ' ' || i == '\n' || i == '\r' || i == '\t') {
 					continue; //skip white spaces
@@ -295,17 +289,17 @@ public class SUtils extends FUtils {
 				} else {
 					throw new SException(SYS.SYS047); //Hexadecimal format error
 				}
-				i = fi.read();
+				i = in.read();
 				if (i >= '0' && i <= '9')  {
-					fo.write((b << 4) + (i - '0'));
+					out.write((b << 4) + (i - '0'));
 				} else if (i >= 'a' && i <= 'f') {
-					fo.write((b << 4) + (i - 'a' + 10));
+					out.write((b << 4) + (i - 'a' + 10));
 				} else if (i >= 'A' && i <= 'F') {
-					fo.write((b << 4) + (i - 'A' + 10));
+					out.write((b << 4) + (i - 'A' + 10));
 				} else {
 					throw new SException(SYS.SYS047); //Hexadecimal format error
 				}
-				if ((i = fi.read())==' ' || i=='\n' || i=='\r' || i=='\t') {
+				if ((i = in.read())==' ' || i=='\n' || i=='\r' || i=='\t') {
 					break;
 				}
 			}
@@ -314,11 +308,10 @@ public class SUtils extends FUtils {
 		}
 	}
 
-	/** Decodes binary input HEX stream <b>fi</b> to the output stream
-	 * of bytes.
+	/** Decodes array of bytes with hexadecimal digits to the array of bytes.
 	 * @param bytes byte array with hexadecimal data.
-	 * @return byte array decoded from source.
-	 * @throws SException SYS048 Base64 format error.
+	 * @return byte array decoded from the source.
+	 * @throws SException SYS047 HEX format error.
 	 */
 	public static final byte[] decodeHex(final byte[] bytes) throws SException {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -326,11 +319,10 @@ public class SUtils extends FUtils {
 		return out.toByteArray();
 	}
 
-	/** Decodes binary input HEX stream <b>fi</b> to the output stream
-	 * of bytes.
-	 * @param chars The char array with hexadecimal data.
-	 * @return The byte array decoded from source.
-	 * @throws SException SYS048 Base64 format error.
+	/** Decodes array of hexadedimal digits to the array of bytes.
+	 * @param chars array with hexadecimal data.
+	 * @return byte array decoded from the source.
+	 * @throws SException SYS047 HEX format error.
 	 */
 	public static final byte[] decodeHex(final char[] chars) throws SException {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -342,7 +334,7 @@ public class SUtils extends FUtils {
 	 * of bytes.
 	 * @param src The string with hexadecimal data.
 	 * @return The byte array decoded from source.
-	 * @throws SException SYS048 Base64 format error.
+	 * @throws SException SYS047 HEX format error.
 	 */
 	public static final byte[] decodeHex(final String src) throws SException {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -478,14 +470,14 @@ public class SUtils extends FUtils {
 		return lx;
 	}
 
-	/** Encodes binary input byte stream <b>fi</b> to the output stream
+	/** Encodes binary input byte stream <b>in</b> to the output stream
 	 * <b>fo</b> in the form of MIME/BASE64.
-	 * @param fi InputStream with binary origin bytes.
+	 * @param in InputStream with binary origin bytes.
 	 * @param out OutputStream for encoded Base64 result.
 	 * @param lines if true the output is break to lines (72 bytes).
 	 * @throws SException when I/O error occurs.
 	 */
-	public static final void encodeBase64(final InputStream fi,
+	public static final void encodeBase64(final InputStream in,
 		final OutputStream out,
 		final boolean lines) throws SException {
 		byte[] ibuf = new byte[INPUT_B64BUFFER_LENGTH];
@@ -498,10 +490,10 @@ public class SUtils extends FUtils {
 		}
 		int len;
 		try {
-			if ((len = fi.read(ibuf)) == INPUT_B64BUFFER_LENGTH) {
+			if ((len = in.read(ibuf)) == INPUT_B64BUFFER_LENGTH) {
 				for (;;) {
 					encodeBase64(obuf, 0, ibuf, 0, INPUT_B64BUFFER_LENGTH);
-					if ((len = fi.read(ibuf)) > 0) {
+					if ((len = in.read(ibuf)) > 0) {
 						out.write(obuf);
 						if (len < INPUT_B64BUFFER_LENGTH) {
 							break;
@@ -524,12 +516,12 @@ public class SUtils extends FUtils {
 	/** Encodes binary input byte stream <b>in</b> to the output stream
 	 * <b>fo</b> in the form of MIME/BASE64.
 	 * @param in InputStream with binary origin bytes.
-	 * @param fo Writer for encoded Base64 resulting character stream.
+	 * @param out Writer for encoded Base64 resulting character stream.
 	 * @param lines if true the output is broken into lines (72 bytes).
 	 * @throws SException when I/O error occurs.
 	 */
 	public static final void encodeBase64(final InputStream in,
-		final Writer fo,
+		final Writer out,
 		final boolean lines) throws SException {
 		byte[] ibuf = new byte[INPUT_B64BUFFER_LENGTH];
 		char[] obuf;
@@ -545,19 +537,19 @@ public class SUtils extends FUtils {
 				for (;;) {
 					encodeBase64(obuf, 0, ibuf, 0, INPUT_B64BUFFER_LENGTH);
 					if ((len = in.read(ibuf)) > 0) {
-						fo.write(obuf);
+						out.write(obuf);
 						if (len < INPUT_B64BUFFER_LENGTH) {
 							break;
 						}
 					} else {
-						fo.write(obuf, 0, ENCODED_LINE_LENGTH);
+						out.write(obuf, 0, ENCODED_LINE_LENGTH);
 						return;
 					}
 				}
 			}
 			if (len > 0) {
 				len = encodeBase64(obuf, 0, ibuf, 0, len);
-				fo.write(obuf, 0, len);
+				out.write(obuf, 0, len);
 			}
 		} catch (IOException ex) {
 			throw new SException(SYS.SYS036, ex); //Program exception &{0}
@@ -669,16 +661,15 @@ public class SUtils extends FUtils {
 		70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70, //224..239
 		70,70,70,70,70,70,70,70,70,70,70,70,70,70,70,70};//240..255
 
-	/** Decodes binary input MIME/BASE64 stream <b>fi</b> to the output stream
-	 * of bytes.
-	 * @param fi java.io.Reader with Base64 character stream.
-	 * @param fo Writer for decoded byte stream.
+	/** Decode binary input MIME/BASE64 from SReader <b>ii</b> to output stream.
+	 * @param in java.io.Reader with Base64 character stream.
+	 * @param out Output stream for decoded byte stream.
 	 * @throws SException
 	 * <br>SYS036 .. Program exception: {msg}.
 	 * <br>SYS048 .. Base64 format error.
 	 */
-	public static final void decodeBase64(final InputStream fi,
-		final OutputStream fo) throws SException {
+	public static final void decodeBase64(final SReader in,
+		final OutputStream out) throws SException {
 		final int bufmax = 960; //must be multiple of 3!
 		int bx = 0;
 		byte[] buf = new byte[bufmax];
@@ -687,33 +678,33 @@ public class SUtils extends FUtils {
 			for (;;) {
 				//skip white blanks
 				int i;
-				while ((b1 = DECODE_BASE64[(i = fi.read()) & 127]) == 64) {}
+				while ((b1 = DECODE_BASE64[(i = in.read()) & 127]) == 64) {}
 				if (b1 >= 65) {
-					fo.write(buf,0,bx);
+					out.write(buf,0,bx);
 					if (i >= 0 && b1 != 64) {
 						throw new SException(SYS.SYS048); //Base64 format error
 					}
 					return;
 				}
 				//skip white blanks
-				while ((b2 = DECODE_BASE64[(i = fi.read()) & 127]) == 64) {}
+				while ((b2 = DECODE_BASE64[(i = in.read()) & 127]) == 64) {}
 				if (b2 >= 65) {
-					fo.write(buf,0,bx);
+					out.write(buf,0,bx);
 					if (b1 != 65 || i < 0) {
 						throw new SException(SYS.SYS048); //Base64 format error
 					}
-					fo.write(b1 << 2);
+					out.write(b1 << 2);
 					return; //last 6 bites filled by 0 (error???)
 				}
 				buf[bx++] = (byte)((b1 << 2) + (b2 >> 4));
 				//skip white blanks
-				while ((b3 = DECODE_BASE64[(i = fi.read()) & 127]) == 64) {}
+				while ((b3 = DECODE_BASE64[(i = in.read()) & 127]) == 64) {}
 				if (b3 >= 65) {
-					fo.write(buf,0,bx);
+					out.write(buf,0,bx);
 					if (b3 != 65 || i < 0) {
 						throw new SException(SYS.SYS048); //Base64 format error
 					}
-					while (DECODE_BASE64[(i = fi.read()) & 127] == 64) {}
+					while (DECODE_BASE64[(i = in.read()) & 127] == 64) {}
 					if (i != '=') {
 						throw new SException(SYS.SYS048); //Base64 format error
 					}
@@ -724,9 +715,9 @@ public class SUtils extends FUtils {
 				}
 				buf[bx++] = (byte)((b2 << 4)+(b3 >> 2)); //2
 				//skip white blanks
-				while ((b4 = DECODE_BASE64[(i = fi.read()) & 127]) == 64) {}
+				while ((b4 = DECODE_BASE64[(i = in.read()) & 127]) == 64) {}
 				if (b4 >= 65) {
-					fo.write(buf,0,bx);
+					out.write(buf,0,bx);
 					if (b4 != 65 || i < 0) {
 						throw new SException(SYS.SYS048); //Base64 format error
 					}
@@ -737,7 +728,7 @@ public class SUtils extends FUtils {
 				}
 				buf[bx++] = (byte)((b3 << 6) + b4); //3
 				if (bx >= bufmax) {
-					fo.write(buf);
+					out.write(buf);
 					bx = 0;
 				}
 			}
@@ -746,119 +737,92 @@ public class SUtils extends FUtils {
 		}
 	}
 
-	/** Decodes binary input MIME/BASE64 stream <b>fi</b> to the output stream
+	/** Decodes binary input MIME/BASE64 stream <b>in</b> to the output stream
 	 * of bytes.
-	 * @param fi java.io.Reader with Base64 character stream.
-	 * @param fo OutputStream for decoded byte stream.
+	 * @param in java.io.Reader with Base64 character stream.
+	 * @param out Output stream for decoded byte stream.
+	 * @throws SException
+	 * <br>SYS036 .. Program exception: {msg}.
+	 * <br>SYS048 .. Base64 format error.
+	 */
+	public static final void decodeBase64(final InputStream in,
+		final OutputStream out) throws SException {
+		decodeBase64(new SReader() {
+			@Override
+			public int read() throws IOException {return in.read();}}, out);
+	}
+
+	/** Decodes input MIME/BASE64 Reader <b>in</b> to output stream.
+	 * @param in java.io.Reader with Base64 data.
+		 * @param out Output stream for decoded byte stream.
 	 * @throws SException
 	 * <br>SYS036 .. Program exception {msg}.
 	 * <br>SYS048 .. Base64 format error.
 	 */
-	public static final void decodeBase64(final Reader fi,
-		final OutputStream fo) throws SException {
-		final int bufmax = 960; //must be multiple of 3!
-		int bx = 0;
-		byte[] buf = new byte[bufmax];
-		byte b1,b2,b3,b4;
-		try {
-			for (;;) {
-				//skip white blanks
-				int i;
-				while ((b1 = DECODE_BASE64[(i = fi.read()) & 127]) == 64) {}
-				if (b1 >= 65) {
-					fo.write(buf,0,bx);
-					if (i >= 0 && b1 != 64) {
-						throw new SException(SYS.SYS048); //Base64 format error
-					}
-					return;
-				}
-				//skip white blanks
-				while ((b2 = DECODE_BASE64[(i = fi.read()) & 127]) == 64) {}
-				if (b2 >= 65) {
-					fo.write(buf,0,bx);
-					if (b1 != 65 || i < 0) {
-						throw new SException(SYS.SYS048); //Base64 format error
-					}
-					fo.write(b1 << 2);
-					return; //last 6 bites filled by 0 (error???)
-				}
-				buf[bx++] = (byte)((b1 << 2) + (b2 >> 4));
-				//skip white blanks
-				while ((b3 = DECODE_BASE64[(i = fi.read()) & 127]) == 64) {}
-				if (b3 >= 65) {
-					fo.write(buf,0,bx);
-					if (b3 != 65 || i < 0) {
-						throw new SException(SYS.SYS048); //Base64 format error
-					}
-					while (DECODE_BASE64[(i = fi.read()) & 127] == 64) {}
-					if (i != '=') {
-						throw new SException(SYS.SYS048); //Base64 format error
-					}
-					if ((b2 & (byte) 0x0F) != 0) { // last four bits not zero
-						throw new SException(SYS.SYS048); //Base64 format error
-					}
-					return;
-				}
-				buf[bx++] = (byte)((b2 << 4)+(b3 >> 2)); //2
-				//skip white blanks
-				while ((b4 = DECODE_BASE64[(i = fi.read()) & 127]) == 64) {}
-				if (b4 >= 65) {
-					fo.write(buf,0,bx);
-					if (b4 != 65 || i < 0) {
-						throw new SException(SYS.SYS048); //Base64 format error
-					}
-					if ((b3 & (byte) 0x03) != 0) { // last two bits not zero
-						throw new SException(SYS.SYS048); //Base64 format error
-					}
-					return;
-				}
-				buf[bx++] = (byte)((b3 << 6) + b4); //3
-				if (bx >= bufmax) {
-					fo.write(buf);
-					bx = 0;
-				}
-			}
-		} catch (IOException ex) {
-			throw new SException(SYS.SYS036, ex); //Program exception &{0}
-		}
+	public static final void decodeBase64(final Reader in,
+		final OutputStream out) throws SException {
+		decodeBase64(new SReader() {
+			@Override
+			public int read() throws IOException {return in.read();}}, out);
 	}
 
-	/** Decodes binary input MIME/BASE64 stream <b>fi</b> to the output stream
-	 * of bytes.
-	 * @param source byte array with base64 encoded data.
-	 * @return byte array decoded from source.
-	 * @throws SException SYS048 Base64 format error.
+	/** Decodes input MIME/BASE64 from SPaser <b>in</b> to the output stream.
+	 * @param in SAParser with Base64 data.
+	 * @param out Writer for decoded byte stream.
+	 * @throws SException
+	 * <br>SYS036 .. Program exception: {msg}.
+	 * <br>SYS048 .. Base64 format error.
 	 */
-	public static final byte[] decodeBase64(final byte[] source)
-	throws SException {
+	public static final void decodeBase64(final SParser in,
+		final OutputStream out) throws SException {
+		decodeBase64(new SReader() {
+			@Override
+			public int read() {return in.eos() ? -1 : in.peekChar();}}, out);
+	}
+
+	/** Decodes input MIME/BASE64 from SPaser <b>in</b> to byte array.
+	 * @param in SAParser with Base64 data.
+	 * @return byte array decoded from source.
+	 * @throws SException
+	 * <br>SYS036 .. Program exception: {msg}.
+	 * <br>SYS048 .. Base64 format error.
+	 */
+	public static final byte[] decodeBase64(final SParser in) throws SException{
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		decodeBase64(new ByteArrayInputStream(source), out);
+		decodeBase64(in, out);
 		return out.toByteArray();
 	}
 
-	/** Decodes binary input MIME/BASE64 stream <b>fi</b> to the output stream
-	 * of bytes.
-	 * @param source char array with base64 encoded data.
+	/** Decodes input MIME/BASE64 from byte array <b>in</b> to byte array.
+	 * @param in byte array with base64 data.
 	 * @return byte array decoded from source.
 	 * @throws SException SYS048 Base64 format error.
 	 */
-	public static final byte[] decodeBase64(final char[] source)
-	throws SException {
+	public static final byte[] decodeBase64(final byte[] in) throws SException {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		decodeBase64(new CharArrayReader(source), out);
+		decodeBase64(new ByteArrayInputStream(in), out);
 		return out.toByteArray();
 	}
 
-	/** Decodes binary input MIME/BASE64 stream <b>fi</b> to the output stream
-	 * of bytes.
-	 * @param source string with base64 encoded data.
+	/** Decodes input MIME/BASE64 from character array <b>in</b> to byte array.
+	 * @param in char array with base64 encoded data.
 	 * @return byte array decoded from source.
 	 * @throws SException SYS048 Base64 format error.
 	 */
-	public static final byte[] decodeBase64(final String source)
-	throws SException {
+	public static final byte[] decodeBase64(final char[] in) throws SException {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		decodeBase64(new StringReader(source), out);
+		decodeBase64(new CharArrayReader(in), out);
+		return out.toByteArray();
+	}
+
+	/** Decodes binary input MIME/BASE64 string <b>in</b> to byte array.
+	 * @param in string with base64 encoded data.
+	 * @return byte array decoded from source.
+	 * @throws SException SYS048 Base64 format error.
+	 */
+	public static final byte[] decodeBase64(final String in) throws SException {
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		decodeBase64(new StringReader(in), out);
 		return out.toByteArray();
 	}
 
@@ -1196,7 +1160,7 @@ public class SUtils extends FUtils {
 	 * it is passed from the stream from the parameter.
 	 * If waitFlag is true the current thread waits until the executed
 	 * process has been terminated.
-	 * @param cmdArray array containing the command to call and its arguments.
+	 * @param command array containing a command and its arguments.
 	 * @param envVars array of strings, each element of which has environment
 	 * variable settings in format name=value.
 	 * @param actDir the working directory of the subprocess, or null if the
@@ -1209,7 +1173,7 @@ public class SUtils extends FUtils {
 	 * @return Process object for managing the executed subprocess.
 	 * @throws Exception if an error occurs.
 	 */
-	public static final Process execute(final String [] cmdArray,
+	public static final Process execute(final String [] command,
 		final String [] envVars,
 		final File actDir,
 		final PrintStream stdOut,
@@ -1217,7 +1181,7 @@ public class SUtils extends FUtils {
 		final InputStream stdIn,
 		final boolean waitFlag) throws Exception {
 		Runtime runtime = Runtime.getRuntime();
-		Process process = runtime.exec(cmdArray, envVars, actDir);
+		Process process = runtime.exec(command, envVars, actDir);
 		new PipedOutStream(process.getErrorStream(), stdErr, waitFlag).start();
 		new PipedOutStream(process.getInputStream(), stdOut, waitFlag).start();
 		OutputStream os = process.getOutputStream();  //piped input
@@ -1236,13 +1200,12 @@ public class SUtils extends FUtils {
 	}
 
 	/** Executes a separate process with arguments.
-	 * @param cmdarray array of strings with command line arguments.
+	 * @param command array containing a command and its arguments.
 	 * @return Process object for managing the executed subprocess.
 	 * @throws Exception if an error occurs.
 	 */
-	public static final Process execute(final String... cmdarray)
+	public static final Process execute(final String... command)
 		throws Exception {
-		return execute(cmdarray,
-			null, null, System.out, System.err, null, true);
+		return execute(command, null, null, System.out, System.err, null, true);
 	}
 }
