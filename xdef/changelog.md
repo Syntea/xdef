@@ -15,7 +15,7 @@
 	'display()` returns string with printable form of currency (i.e. decimal
       number with recommended number of decimal digits, space and
       ISO 4217 currency code).
-S
+
 # Version 40.1.2, release-date 2021-02-15
 * corrected the bug in the X-script method `s.contains(s)`.
 * corrected the bug in the construction node of JSON.
