@@ -756,9 +756,13 @@ public interface CodeTable {
 	/** create new exception. */
 	static final short NEW_EXCEPTION = CHECK_TYPE + 1;
 	/** create new exception. */
-	static final short NEW_CONTEXT = NEW_EXCEPTION + 1;
+	static final short NEW_CONTAINER = NEW_EXCEPTION + 1;
+	/** Create GPosition. */
+	static final short NEW_GPSPOSITION = NEW_CONTAINER + 1;
+	/** Create GPosition. */
+	static final short NEW_CURRAMOOUNT = NEW_GPSPOSITION + 1;
 	/** create new Element object. */
-	static final short NEW_ELEMENT = NEW_CONTEXT + 1;
+	static final short NEW_ELEMENT = NEW_CURRAMOOUNT + 1;
 	/** Create bytes array. */
 	static final short NEW_BYTES = NEW_ELEMENT + 1;
 	/** Create output stream. */
@@ -781,14 +785,12 @@ public interface CodeTable {
 	static final short NEW_REPORT = NEW_XMLWRITER + 1;
 	/** Create XML writer. */
 	static final short NEW_LOCALE = NEW_REPORT + 1;
-	/** Create GPosition. */
-	static final short NEW_GPSPOSITION = NEW_LOCALE + 1;
 
 	////////////////////////////////////////////////////////////////////////////
 	//External methods
 	////////////////////////////////////////////////////////////////////////////
 	/** External method with fixed parameters. */
-	static final short EXTMETHOD =  NEW_GPSPOSITION + 1;
+	static final short EXTMETHOD =  NEW_LOCALE + 1;
 	/** External method with array of parameters. */
 	static final short EXTMETHOD_ARRAY = EXTMETHOD + 1;
 	/** External check method */
@@ -846,7 +848,12 @@ public interface CodeTable {
 	static final short GPS_ALTITUDE = GPS_LONGITUDE + 1;
 	static final short GPS_DISTANCETO = GPS_ALTITUDE + 1;
 
-	static final short ELEMENT_CHILDNODES = GPS_DISTANCETO + 1;
+	static final short CURRENCY_AMOUNT = GPS_DISTANCETO + 1;
+	static final short CURRENCY_CODE = CURRENCY_AMOUNT + 1;
+	static final short CURRENCY_FRACTDIGITS = CURRENCY_CODE + 1;
+	static final short CURRENCY_DISPLAY = CURRENCY_FRACTDIGITS + 1;
+
+	static final short ELEMENT_CHILDNODES = CURRENCY_DISPLAY + 1;
 	static final short ELEMENT_NAME = ELEMENT_CHILDNODES + 1;
 	static final short ELEMENT_NSURI = ELEMENT_NAME + 1;
 	static final short ELEMENT_GETTEXT = ELEMENT_NSURI + 1;

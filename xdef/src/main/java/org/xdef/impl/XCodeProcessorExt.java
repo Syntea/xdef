@@ -56,6 +56,7 @@ import java.util.StringTokenizer;
 import javax.xml.XMLConstants;
 import org.w3c.dom.Element;
 import org.xdef.XDValueID;
+import org.xdef.impl.code.DefCurrencyAmount;
 import org.xdef.impl.code.DefGPSPosition;
 import org.xdef.impl.code.DefLocale;
 
@@ -657,7 +658,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 ////////////////////////////////////////////////////////////////////////////////
 //Constructors
 ////////////////////////////////////////////////////////////////////////////////
-			case NEW_CONTEXT: {
+			case NEW_CONTAINER: {
 				int i;
 				if ((i = item.getParam()) == 0) {
 					stack[++sp] = DefNull.genNullValue(XD_CONTAINER);
@@ -831,6 +832,11 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 					sp--;
 				}
 				return sp;
+			}
+			case NEW_CURRAMOOUNT: {
+				stack[sp-1] = new DefCurrencyAmount(stack[sp-1].toString(),
+					stack[sp].toString());
+				sp--;
 			}
 		}
 		return sp;
@@ -1140,6 +1146,8 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 									case XX_ATTR:
 									case XX_TEXT:
 									case XD_PARSER:
+									case XD_GPSPOSITION:
+									case XD_CURRAMOUNT:
 										pars[j + k] = stack[i];
 										break;
 									default:

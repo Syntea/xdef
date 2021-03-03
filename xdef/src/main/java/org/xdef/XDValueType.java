@@ -40,6 +40,8 @@ public enum XDValueType {
 	CONTAINER,
 	/** GPS position. */
 	GPSPOSITION,
+	/** Currency amount. */
+	CURRAMOUNT,
 	/** org.w3c.dom.Element value ID. */
 	ELEMENT,
 	/** org.w3c.dom.Attr value ID */
@@ -70,7 +72,7 @@ public enum XDValueType {
 	XMLWRITER,
 	/** Item with Locale values. */
 	LOCALE,
-	/** Item of uniqueSet table. */
+	/** Key of uniqueSet table. */
 	UNIQUESET_KEY,
 	/** Any value (may be null). */
 	ANY,

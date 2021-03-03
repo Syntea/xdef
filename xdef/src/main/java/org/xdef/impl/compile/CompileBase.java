@@ -99,6 +99,7 @@ public class CompileBase implements CodeTable, XDValueID {
 		setType(XD_DURATION, "Duration", org.xdef.sys.SDuration.class);
 		setType(XD_CONTAINER, "Container", org.xdef.XDContainer.class);
 		setType(XD_GPSPOSITION, "GPSPosition", org.xdef.XDGPSPosition.class);
+		setType(XD_CURRAMOUNT,"CurrencyAmount",org.xdef.XDCurrencyAmount.class);
 		setType(XD_REGEX, "Regex", org.xdef.XDRegex.class);
 		setType(XD_REGEXRESULT, "RegexResult", org.xdef.XDRegexResult.class);
 		setType(XD_BNFGRAMMAR,"BNFGrammar", org.xdef.XDBNFGrammar.class);
@@ -197,6 +198,13 @@ public class CompileBase implements CodeTable, XDValueID {
 			keyParam("whiteSpace", XD_STRING, false,
 					-1, true, new DefString("collapse")));
 		parser(im, org.xdef.impl.parsers.XDParseGPS.class, "gps");
+
+		im = genParserMetnod(0, 0, null, XD_CURRAMOUNT,
+			keyParam("pattern", XD_STRING, false, -1, false),
+			keyParam("whiteSpace", XD_STRING, false,
+					-1, true, new DefString("collapse")));
+		parser(im, org.xdef.impl.parsers.XDParseCurrencyAmount.class,
+			"currencyAmount");
 
 		im = genParserMetnod(0, 2, new short[] {XD_DECIMAL, XD_DECIMAL},
 			XD_DECIMAL,
@@ -864,7 +872,7 @@ public class CompileBase implements CodeTable, XDValueID {
 // CONTAINER (general object envelope)
 ////////////////////////////////////////////////////////////////////////////////
 		ti = XD_CONTAINER;
-		method(ti, genInternalMethod(NEW_CONTEXT, XD_CONTAINER,
+		method(ti, genInternalMethod(NEW_CONTAINER, XD_CONTAINER,
 			ANY_MODE, 0, Integer.MAX_VALUE), "#");
 		method(ti, genInternalMethod(CONTEXT_ADDITEM, XD_VOID,
 			ANY_MODE, 2, 2, XD_CONTAINER, XD_ANY), "addItem");
@@ -900,6 +908,21 @@ public class CompileBase implements CodeTable, XDValueID {
 			ANY_MODE, 1, 3, XD_CONTAINER, XD_STRING, XD_BOOLEAN),"sort");
 		method(ti, genInternalMethod(CONTEXT_TO_ELEMENT, XD_ELEMENT,
 			ANY_MODE, 1, 3, XD_CONTAINER, XD_STRING, XD_STRING), "toElement");
+
+////////////////////////////////////////////////////////////////////////////////
+// CURRENCY AMOUNT
+////////////////////////////////////////////////////////////////////////////////
+		ti = XD_CURRAMOUNT;
+		method(ti, genInternalMethod(NEW_CURRAMOOUNT, XD_CURRAMOUNT,
+			ANY_MODE, 2, 3, XD_STRING, XD_STRING), "#");
+		method(ti, genInternalMethod(CURRENCY_AMOUNT, XD_DECIMAL,
+			ANY_MODE, 1, 1, XD_CURRAMOUNT), "amount");
+		method(ti, genInternalMethod(CURRENCY_CODE, XD_STRING,
+			ANY_MODE, 1, 1, XD_CURRAMOUNT), "code");
+		method(ti, genInternalMethod(CURRENCY_FRACTDIGITS, XD_INT,
+			ANY_MODE, 1, 1, XD_CURRAMOUNT), "fractionDigits");
+		method(ti, genInternalMethod(CURRENCY_DISPLAY, XD_STRING,
+			ANY_MODE, 1, 1, XD_CURRAMOUNT), "display");
 
 ////////////////////////////////////////////////////////////////////////////////
 // DATETIME

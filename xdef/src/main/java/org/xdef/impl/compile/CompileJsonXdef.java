@@ -15,8 +15,6 @@ import org.xdef.sys.SPosition;
  * @author Vaclav Trojan
  */
 public class CompileJsonXdef extends XonParser {
-	private String _jsPrefix = "js";
-	private String _jsNamespace = XDConstants.JSON_NS_URI_W3C;
 
 	/** This is the special character used for the $script specification. */
 	public static final String SCRIPT_KEY = "]";
@@ -273,7 +271,8 @@ public class CompileJsonXdef extends XonParser {
 	final PNode genJElement(final PNode parent,
 		final String name,
 		final SPosition spos) {
-		return genPElement(parent, _jsNamespace, _jsPrefix + ":" + name, spos);
+		return genPElement(parent,
+			XDConstants.JSON_NS_URI_W3C, "js:" + name, spos);
 	}
 
 	/** Create PNode as XDef element with given position,

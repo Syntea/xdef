@@ -1028,9 +1028,6 @@ public abstract class XDTester extends STester {
 		final Object obj) {
 		XDDocument xd = xp.createXDDocument(defName);
 		xd.setProperties(_props);
-		if (strw != null) {
-			xd.setStdOut(XDFactory.createXDOutput(strw, false));
-		}
 		return parse(xd, xml, reporter, strw, input, obj);
 	}
 	final public Element parse(final XDDocument xd,
@@ -1072,6 +1069,9 @@ public abstract class XDTester extends STester {
 				xd.setStdIn(XDFactory.createXDInput(
 					(InputStream) input, false));
 			}
+		}
+		if (strw != null) {
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
 		}
 		if (obj != null) {
 			xd.setUserObject(obj);

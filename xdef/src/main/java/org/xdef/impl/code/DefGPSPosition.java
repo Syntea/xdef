@@ -17,7 +17,7 @@ public class DefGPSPosition extends XDValueAbstract implements XDGPSPosition {
 	private final GPSPosition _position;
 
 	/** Create new instance of DefGPosition (null). */
-	public DefGPSPosition() {_position = new GPSPosition();}
+	public DefGPSPosition() {_position = null;}
 
 	/** Create new instance of DefGPosition (the value of altitude is set
 	 * as unknown).
@@ -93,7 +93,8 @@ public class DefGPSPosition extends XDValueAbstract implements XDGPSPosition {
 	public boolean equals(final XDValue arg) {
 		if (arg instanceof DefGPSPosition) {
 			DefGPSPosition x = (DefGPSPosition) arg;
-			return _position.equals(x._position);
+			return _position != null ? _position.equals(x._position)
+				: x._position == null;
 		}
 		return false;
 	}
@@ -118,9 +119,7 @@ public class DefGPSPosition extends XDValueAbstract implements XDGPSPosition {
 			_position.latitude(), _position.longitude(), _position.altitude());
 	}
 	@Override
-	public short getCode() {return CodeTable.LD_CONST;}
-	@Override
-	public boolean isNull() {return _position.latitude() == Double.MIN_VALUE;}
+	public boolean isNull() {return _position == null;}
 	@Override
 	public Object getObject() {return _position;}
 	@Override

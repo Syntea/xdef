@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.xdef.sys.CurrencyAmount;
 import org.xdef.impl.code.CodeTable;
 import org.xdef.sys.GPSPosition;
 
@@ -60,6 +61,8 @@ public abstract class XDValueAbstract implements XDValue {
 	public SDuration durationValue() {return null;}
 	@Override
 	public GPSPosition GPSValue() {return null;}
+	@Override
+	public CurrencyAmount CurrencyAmount() {return null;}
 	@Override
 	public byte[] getBytes() {return null;}
 	@Override
