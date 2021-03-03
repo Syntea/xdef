@@ -1,14 +1,21 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 40.1.3, release-date 2021-03-01
+# Version 40.1.3, release-date 2021-03-03
 * preparing version 40.2
-* added X-definition type GPSPosition. Methods with this object:
+* added X-definition type `GPSPosition`. Methods with this object:
   `latitude()` returns value of GPS latitude in degrees.
   `longitude()` returns value of GPS longitude in degrees.
   `altitude()` returns value of GPS altitude in meters.
   `distanceTo(GPSPosition x)` returns distance to GPS position `x` in meters.
 * corrected display of zone with zero hours and negative minutes in offset.
-
+* added X-definition type `CurrencyAmount`. Methods with this object:
+	`amount()` returns amount of currency as decimal number.
+	`code()` returns ISO 4217 currency code.
+	`fractionDigits()` returns recommended number of fraction digits or -1.
+	'display()` returns string with printable form of currency (i.e. decimal
+      number with recommended number of decimal digits, space and
+      ISO 4217 currency code).
+S
 # Version 40.1.2, release-date 2021-02-15
 * corrected the bug in the X-script method `s.contains(s)`.
 * corrected the bug in the construction node of JSON.

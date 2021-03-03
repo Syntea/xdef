@@ -18,6 +18,7 @@ import java.io.ObjectOutputStream;
 import java.util.Properties;
 import java.util.Stack;
 import org.xdef.XDContainer;
+import org.xdef.XDCurrencyAmount;
 import org.xdef.XDNamedValue;
 import org.xdef.XDOutput;
 import org.xdef.XDParseResult;
@@ -212,6 +213,39 @@ public class MyTest_0 extends XDTester {
 //			xb.compileXD();;
 //		} catch (Exception ex) {fail(ex);}
 //if(true)return;
+		try {
+			xdef = // test CurrencyAmount type
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:declaration>\n" +
+"   CurrencyAmount c = new CurrencyAmount('12', 'USD');\n"+
+"   CurrencyAmount d;\n"+
+" </xd:declaration>\n"+
+"  <a c=\"currencyAmount();\n"+
+"    onTrue out(c.display() + '; ' + (d = getParsedValue()));\" />\n" +
+"</xd:def>";
+			xml = "<a c='#(1.5 CZK)'/>";
+			strw = new StringWriter();
+			xd = compile(xdef).createXDDocument();
+			assertEq(xml, parse(xd, xml, reporter, strw, null, null));
+			assertNoErrors(reporter);
+			assertEq(strw.toString(), "12.00 USD; 1.5 CZK");
+			assertEq("1.50 CZK",
+				((XDCurrencyAmount) xd.getVariable("d")).display());
+//			xdef =
+//"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.0\" root=\"root\" >\n" +
+//" <xd:declaration>\n"+
+//"   CurrencyAmount c = new CurrencyAmount('12', 'CZK');\n"+
+//" </xd:declaration>\n"+
+//"  <root a=\"currencyAmount(); finally outln(c.display());\" />\n" +
+//"</xd:def>";
+//			xp = compile(xdef);
+//			xml = "<root a=\"#(12.5 CZK)\" >\n" +
+//"</root>";
+//			xd = xp.createXDDocument();
+//			xd.xparse(xml, reporter);
+//			assertNoErrors(reporter);
+		} catch (Exception ex) {fail(ex);}
+if(true)return;
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + XDConstants.XDEF40_NS_URI + "' root='A'>\n"+

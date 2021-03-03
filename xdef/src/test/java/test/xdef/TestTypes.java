@@ -21,6 +21,8 @@ import org.xdef.proc.XXNode;
 import org.xdef.xml.KXmlUtils;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import org.xdef.XDCurrencyAmount;
+import static test.XDTester._xdNS;
 
 /** Test of types, AnyValue and null in X-script.
  * @author Vaclav Trojan
@@ -885,6 +887,25 @@ public final class TestTypes extends XDTester {
 "Base Praha, gps(50.08,14.42,399.0)\n" +
 "distance to Wien, gps(48.20,16.37): 252.8 km\n" +
 "distance to London, gps(51.52,-0.09): 1031.4 km\n");
+			xdef = // test CurrencyAmount type
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:declaration>\n" +
+"   CurrencyAmount c = new CurrencyAmount('12', 'USD');\n"+
+"   CurrencyAmount d;\n"+
+" </xd:declaration>\n"+
+"  <a c=\"currencyAmount();\n"+
+"    onTrue out(c.display() + '; ' + (d = getParsedValue()));\" />\n" +
+"</xd:def>";
+			xml = "<a c='#(1.5 CZK)'/>";
+			strw = new StringWriter();
+			xd = compile(xdef).createXDDocument();
+			assertEq(xml, parse(xd, xml, reporter, strw, null, null));
+			assertNoErrors(reporter);
+			assertEq(strw.toString(), "12.00 USD; 1.5 CZK");
+			assertEq("1.50 CZK",
+				((XDCurrencyAmount) xd.getVariable("d")).display());
+			assertEq(2,
+				((XDCurrencyAmount) xd.getVariable("d")).fractionDigits());
 			xdef = // expression in type validation
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<xd:declaration>\n"+

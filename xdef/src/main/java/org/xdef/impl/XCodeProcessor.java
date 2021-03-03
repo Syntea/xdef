@@ -78,6 +78,7 @@ import org.xdef.impl.code.CodeSWTableStr;
 import org.xdef.impl.compile.CompileBase;
 import org.xdef.impl.code.CodeTable;
 import org.xdef.impl.code.CodeXD;
+import org.xdef.impl.code.DefCurrencyAmount;
 import org.xdef.impl.code.DefGPSPosition;
 import org.xdef.impl.code.DefLocale;
 import org.xdef.impl.debug.ChkGUIDebug;
@@ -1103,6 +1104,22 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 							.distanceTo(((DefGPSPosition) _stack[sp])
 								.GPSValue()));
 					sp--;
+					continue;
+				case CURRENCY_AMOUNT:
+					_stack[sp] = new DefDecimal(
+						((DefCurrencyAmount) _stack[sp]).amount());
+					continue;
+				case CURRENCY_CODE:
+					_stack[sp] = new DefString(
+						((DefCurrencyAmount) _stack[sp]).code());
+					continue;
+				case CURRENCY_FRACTDIGITS:
+					_stack[sp] = new DefLong(
+						((DefCurrencyAmount) _stack[sp]).fractionDigits());
+					continue;
+				case CURRENCY_DISPLAY:
+					_stack[sp] = new DefString(
+						((DefCurrencyAmount) _stack[sp]).display());
 					continue;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -3145,7 +3162,7 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 				case REPORT_SETPARAM:
 				case REPORT_SETTYPE: //set report type ('E', 'W', 'F', ...)
 			//Constructors
-				case NEW_CONTEXT:
+				case NEW_CONTAINER:
 				case NEW_ELEMENT:
 				case NEW_BYTES:
 				case NEW_INSTREAM:
@@ -3156,6 +3173,7 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 				case NEW_REPORT:
 				case NEW_LOCALE:
 				case NEW_GPSPOSITION:
+				case NEW_CURRAMOOUNT:
 					sp = XCodeProcessorExt.perform(this, item, sp, _stack);
 					continue;
 				//Other codes (implemented in XCodeProcessorExt)

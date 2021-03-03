@@ -1253,7 +1253,7 @@ public final class CompileCode extends CompileBase {
 					}
 					break;
 				case XD_CONTAINER:
-					addCode(new CodeI1(XD_CONTAINER, NEW_CONTEXT, 1));
+					addCode(new CodeI1(XD_CONTAINER, NEW_CONTAINER, 1));
 					_cstack[_sp] = -1;
 					return;
 				case XD_DATETIME: {
