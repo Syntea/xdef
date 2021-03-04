@@ -6,7 +6,7 @@ import org.xdef.impl.code.DefGPSPosition;
 import org.xdef.msg.XDEF;
 import org.xdef.proc.XXNode;
 
-/** Parse GPS value
+/** Parse GPS value.
  * @author Vaclav Trojan
  */
 public class XDParseGPS extends XDParserAbstract {
@@ -19,34 +19,28 @@ public class XDParseGPS extends XDParserAbstract {
 		p.isSpaces();
 		int pos = p.getIndex();
 		try {
-			if (p.isToken("gps(")) {
-				int pos1 = p.getIndex();
-				if (p.isChar(')')) {
-					p.setParsedValue(new DefGPSPosition());
-					return; // undefined position
-				} else if ((p.isSignedFloat() || p.isSignedInteger())) {
-					double latitude =
-						Double.parseDouble(p.getBufferPart(pos1, p.getIndex()));
-					if (p.isChar(',')) {
-						pos1 = p.getIndex();
-						if ((p.isSignedFloat() || p.isSignedInteger())) {
-							double longitude = Double.parseDouble(
-								p.getBufferPart(pos1, p.getIndex()));
-							if (p.isChar(',')) {
-								pos1 = p.getIndex();
-								if ((p.isSignedFloat() || p.isSignedInteger())){
-									double altitude = Double.parseDouble(
-										p.getBufferPart(pos1, p.getIndex()));
-									p.setParsedValue(new DefGPSPosition(
-										latitude, longitude, altitude));
-								}
-							} else {
-								p.setParsedValue(
-									new DefGPSPosition(latitude, longitude));
+			if (p.isChar('(') && (p.isSignedFloat() || p.isSignedInteger())) {
+				double latitude =
+					Double.parseDouble(p.getParsedString().substring(1));
+				if (p.isChar(',')) {
+					int pos1 = p.getIndex();
+					if ((p.isSignedFloat() || p.isSignedInteger())) {
+						double longitude = Double.parseDouble(
+							p.getBufferPart(pos1, p.getIndex()));
+						if (p.isChar(',')) {
+							pos1 = p.getIndex();
+							if ((p.isSignedFloat() || p.isSignedInteger())){
+								double altitude = Double.parseDouble(
+									p.getBufferPart(pos1, p.getIndex()));
+								p.setParsedValue(new DefGPSPosition(
+									latitude, longitude, altitude));
 							}
-							if (p.isChar(')')) {
-								return;
-							}
+						} else {
+							p.setParsedValue(
+								new DefGPSPosition(latitude, longitude));
+						}
+						if (p.isChar(')')) {
+							return;
 						}
 					}
 				}

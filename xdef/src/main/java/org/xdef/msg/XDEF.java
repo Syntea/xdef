@@ -248,7 +248,7 @@ public interface XDEF {
 	public static final long XDEF382 = 31159025784L;
 	/** Class name &amp;{0} is used in other command&amp;{#SYS000} */
 	public static final long XDEF383 = 31159025785L;
-	/** '//' comment is not allowed in the script&amp;{#SYS000} */
+	/** '//' comment is not allowed in the X-script&amp;{#SYS000} */
 	public static final long XDEF400 = 31159025786L;
 	/** Unclosed comment in the script&amp;{#SYS000} */
 	public static final long XDEF401 = 31159025787L;
@@ -266,7 +266,7 @@ public interface XDEF {
 	public static final long XDEF407 = 31159025793L;
 	/** Float number error&amp;{#SYS000} */
 	public static final long XDEF408 = 31159025794L;
-	/** Decimal number error&amp;{#SYS000} */
+	/** Decimal number error&amp;{0}{: }&amp;{#SYS000} */
 	public static final long XDEF409 = 31159025795L;
 	/** '&amp;{0}' expected&amp;{#SYS000} */
 	public static final long XDEF410 = 31159025796L;

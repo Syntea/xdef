@@ -3,7 +3,6 @@ package org.xdef.sys;
 import java.math.BigDecimal;
 import java.util.Currency;
 import org.xdef.msg.XDEF;
-import org.xdef.sys.SRuntimeException;
 
 /** Financial amount with currency code.
  * @author Vaclav Trojan
@@ -15,18 +14,12 @@ public class CurrencyAmount {
 	private final Currency _currency;
 
 	/** Create instance of CurrencyAmount.
-	 * @param amount currency amount as decimal number string.
-	 * @param code ISO4217 currency code.
-	 */
-	public CurrencyAmount(final String amount, final String code) {
-		this(new BigDecimal(amount), code);
-	}
-
-	/** Create instance of CurrencyAmount.
 	 * @param amount currency amount as decimal number.
 	 * @param code ISO4217 currency code.
+	 * @throws SRuntimeException if an error occurs.
 	 */
-	public CurrencyAmount(final BigDecimal amount, final String code) {
+	public CurrencyAmount(final BigDecimal amount, final String code)
+		throws SRuntimeException {
 		try {
 			_amount = amount;
 			_currency = Currency.getInstance(code);
@@ -66,20 +59,15 @@ public class CurrencyAmount {
 			: String.valueOf(_amount)) + " " + code();
 	}
 	@Override
-	public int hashCode() {
-		return _amount!=null ? 7*_amount.hashCode() + _currency.hashCode() : 0;
-	}
+	public int hashCode() {return 7*_amount.hashCode() + _currency.hashCode();}
 	@Override
 	public boolean equals(Object x) {
 		if (x instanceof CurrencyAmount) {
 			CurrencyAmount y = (CurrencyAmount) x;
-			return _amount != null && _amount.equals(y._amount)
-				&& _currency.equals(y._currency);
+			return _amount.equals(y._amount) && _currency.equals(y._currency);
 		}
 		return false;
 	}
 	@Override
-	public String toString() {
-		return _amount != null ? _amount + " " + _currency.toString() : "null";
-	}
+	public String toString() {return "(" + _amount + " " + code() + ")";}
 }

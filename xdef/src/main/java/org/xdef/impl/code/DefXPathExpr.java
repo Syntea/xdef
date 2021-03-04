@@ -219,7 +219,7 @@ public final class DefXPathExpr extends KXpathExpr implements XDValue {
 	@Override
 	public GPSPosition GPSValue() {return null;}
 	@Override
-	public CurrencyAmount CurrencyAmount() {return null;}
+	public CurrencyAmount currencyValue() {return null;}
 	@Override
 	public XDService serviceValue(){return null;}
 	@Override

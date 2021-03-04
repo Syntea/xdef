@@ -1,19 +1,19 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 40.1.3, release-date 2021-03-03
+# Version 40.1.3, release-date 2021-03-04
 * preparing version 40.2
 * corrected bug in display of zone with zero hours and negative minutes in offset.
 * added new X-definition type `GPSPosition`.
   Methods with this object:
-    `latitude()` returns value of GPS latitude in degrees.
-    `longitude()` returns value of GPS longitude in degrees.
-    `altitude()` returns value of GPS altitude in meters.
+    `latitude()` returns GPS latitude in degrees (-90.0 to 90.0).
+    `longitude()` returns GPS longitude in degrees (-180.0 to 180.0).
+    `altitude()` returns GPS altitude in meters .
   `  distanceTo(GPSPosition x)` returns distance to GPS position `x` in meters.
    Constructors:
     `new GPSPosition(latitude, longitude)`
    or
     `new GPSPosition(latitude, longitude, altitude)`
-   All parameters are float numbers.
+   (all parameters are float numbers).
 * added new X-definition type `CurrencyAmount`.
    Constructor:
     `new CurrencyAmount(amount, code)`

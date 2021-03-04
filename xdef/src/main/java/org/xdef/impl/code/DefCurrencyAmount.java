@@ -6,6 +6,7 @@ import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
 import org.xdef.XDValueType;
 import org.xdef.msg.SYS;
+import org.xdef.msg.XDEF;
 import org.xdef.sys.CurrencyAmount;
 import org.xdef.sys.SIllegalArgumentException;
 import org.xdef.sys.SRuntimeException;
@@ -29,18 +30,14 @@ public class DefCurrencyAmount extends XDValueAbstract
 	 */
 	public DefCurrencyAmount(final String amount, final String code)
 		throws SRuntimeException {
-		_amount = new CurrencyAmount(amount, code);
-	}
-
-	/** Create new instance of DefGPosition.
-	 * @param amount amount as decimal number.
-	 * @param code currency ISO4217 code.
-	 * in meters (-6376500) to MAX_VALUE (or MIN_VALUE if unknown).
-	 * @throws SRuntimeException (code XDEF222) if parameters are incorrect.
-	 */
-	public DefCurrencyAmount(final BigDecimal amount, final String code)
-		throws SRuntimeException {
-		_amount = new CurrencyAmount(amount.toString(), code);
+		BigDecimal d;
+		try {
+			d = new BigDecimal(amount);
+		} catch (Exception ex) {
+			//Decimal number error&{0}{: }
+			throw new SRuntimeException(XDEF.XDEF409, amount);
+		}
+		_amount = new CurrencyAmount(d, code);
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -68,7 +65,7 @@ public class DefCurrencyAmount extends XDValueAbstract
 // Implementation of XDValue interface
 ////////////////////////////////////////////////////////////////////////////////
 	@Override
-	public CurrencyAmount CurrencyAmount() {return _amount;}
+	public CurrencyAmount currencyValue() {return _amount;}
 	@Override
 	public boolean equals(final XDValue arg) {
 		if (arg instanceof DefCurrencyAmount) {

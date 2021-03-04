@@ -261,6 +261,8 @@ class XCGeneratorBase {
 				return "org.xdef.sys.SDatetime";
 			case XDValueID.XD_GPSPOSITION:
 				return "org.xdef.sys.GPSPosition";
+			case XDValueID.XD_CURRAMOUNT:
+				return "org.xdef.sys.CurrencyAmount";
 			case XDValueID.XD_BYTES:
 				_byteArrayEncoding |= getBytesType(xdata);
 				return "byte[]";
@@ -331,6 +333,8 @@ class XCGeneratorBase {
 				return result + "getParsedValue().datetimeValue()";
 			case XDValueID.XD_GPSPOSITION:
 				return result + "getParsedValue().GPSValue()";
+			case XDValueID.XD_CURRAMOUNT:
+				return result + "getParsedValue().currencyValue()";
 			case XDValueID.XD_BYTES:
 				return result + "getParsedValue().getBytes()";
 			case XDValueID.XD_PARSER:

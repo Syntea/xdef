@@ -22,6 +22,7 @@ import org.xdef.xml.KXmlUtils;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import org.xdef.XDCurrencyAmount;
+import org.xdef.XDGPSPosition;
 import static test.XDTester._xdNS;
 
 /** Test of types, AnyValue and null in X-script.
@@ -859,13 +860,13 @@ public final class TestTypes extends XDTester {
 " String base, town;\n" +
 " GPSPosition baseGPS, townGPS;\n" +
 " void pritDistance() {\n" +
-"   printf('distance to %s, gps(%.2f,%.2f): %.1f km\\n',\n"+
+"   printf('distance to %s (%.2f,%.2f): %.1f km\\n',\n"+
 "     town, townGPS.latitude(), townGPS.longitude(),\n"+
 "     baseGPS.distanceTo(townGPS)/1000);\n" +
 " }\n" +
 "</xd:declaration>\n" +
 "<a>\n" +
-"  <base xd:script=\"finally outln('Base ' + base + ', ' + baseGPS);\"\n"+
+"  <base xd:script=\"finally outln('Base ' + base + ' ' + baseGPS);\"\n"+
 "        name=\"string(); onTrue base = getParsedValue();\"\n"+
 "        GPS_position=\"gps(); onTrue baseGPS = getParsedValue();\"/>\n" +
 "  <town xd:script=\"*; finally pritDistance();\"\n"+
@@ -875,18 +876,21 @@ public final class TestTypes extends XDTester {
 "</xd:def>";
 			xml =
 "<a>\n" +
-"  <base name=\"Praha\" GPS_position=\"gps(50.08,14.42,399.0)\"/>\n" +
-"  <town name=\"Wien\" GPS_position=\"gps(48.2,16.37,151.0)\"/>\n" +
-"  <town name=\"London\" GPS_position=\"gps(51.52,-0.09,0.0)\"/>\n" +
+"  <base name=\"Praha\" GPS_position=\"(50.08,14.42,399.0)\"/>\n" +
+"  <town name=\"Wien\" GPS_position=\"(48.2,16.37,151.0)\"/>\n" +
+"  <town name=\"London\" GPS_position=\"(51.52,-0.09,0.0)\"/>\n" +
 "</a>";
 			strw = new StringWriter();
-			assertEq(xml, parse(xdef,"", xml, reporter, strw, null, null));
+			xd = compile(xdef).createXDDocument();
+			assertEq(xml, parse(xd, xml, reporter, strw, null, null));
 			assertNoErrors(reporter);
 			strw.close();
 			assertEq(strw.toString(),
-"Base Praha, gps(50.08,14.42,399.0)\n" +
-"distance to Wien, gps(48.20,16.37): 252.8 km\n" +
-"distance to London, gps(51.52,-0.09): 1031.4 km\n");
+"Base Praha (50.08,14.42,399.0)\n" +
+"distance to Wien (48.20,16.37): 252.8 km\n" +
+"distance to London (51.52,-0.09): 1031.4 km\n");
+			assertEq(50.08,
+				((XDGPSPosition) xd.getVariable("baseGPS")).latitude());
 			xdef = // test CurrencyAmount type
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<xd:declaration>\n" +
@@ -896,12 +900,12 @@ public final class TestTypes extends XDTester {
 "  <a c=\"currencyAmount();\n"+
 "    onTrue out(c.display() + '; ' + (d = getParsedValue()));\" />\n" +
 "</xd:def>";
-			xml = "<a c='#(1.5 CZK)'/>";
+			xml = "<a c='(1.5 CZK)'/>";
 			strw = new StringWriter();
 			xd = compile(xdef).createXDDocument();
 			assertEq(xml, parse(xd, xml, reporter, strw, null, null));
 			assertNoErrors(reporter);
-			assertEq(strw.toString(), "12.00 USD; 1.5 CZK");
+			assertEq(strw.toString(), "12.00 USD; (1.5 CZK)");
 			assertEq("1.50 CZK",
 				((XDCurrencyAmount) xd.getVariable("d")).display());
 			assertEq(2,
