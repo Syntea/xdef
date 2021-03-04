@@ -196,13 +196,13 @@ public class CompileBase implements CodeTable, XDValueID {
 		im = genParserMetnod(0, 0, null, XD_GPSPOSITION,
 			keyParam("pattern", XD_STRING, false, -1, false),
 			keyParam("whiteSpace", XD_STRING, false,
-					-1, true, new DefString("collapse")));
+				-1, true, new DefString("collapse")));
 		parser(im, org.xdef.impl.parsers.XDParseGPS.class, "gps");
 
 		im = genParserMetnod(0, 0, null, XD_CURRAMOUNT,
 			keyParam("pattern", XD_STRING, false, -1, false),
 			keyParam("whiteSpace", XD_STRING, false,
-					-1, true, new DefString("collapse")));
+				-1, true, new DefString("collapse")));
 		parser(im, org.xdef.impl.parsers.XDParseCurrencyAmount.class,
 			"currencyAmount");
 
@@ -1894,11 +1894,11 @@ public class CompileBase implements CodeTable, XDValueID {
 		 */
 		public final short getType() {return _type;}
 		/** Get default value of parameter.
-		 * @return default value of parameter or <tt>null</tt>.
+		 * @return default value of parameter or null.
 		 */
 		public final XDValue[] getLegalValues() {return _legalValues;}
 		/** Get default value of parameter.
-		 * @return default value of parameter or <tt>null</tt>.
+		 * @return default value of parameter or null.
 		 */
 		public final XDValue getDefaultValue() {
 			return _legalValues == null || _legalValues.length == 0 ?

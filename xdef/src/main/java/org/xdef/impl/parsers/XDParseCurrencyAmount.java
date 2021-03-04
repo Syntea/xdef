@@ -8,7 +8,7 @@ import org.xdef.proc.XXNode;
 import org.xdef.sys.Report;
 import org.xdef.sys.SRuntimeException;
 
-/** Parse currency amount value
+/** Parse currency amount value.
  * @author Vaclav Trojan
  */
 public class XDParseCurrencyAmount extends XDParserAbstract {
@@ -20,32 +20,30 @@ public class XDParseCurrencyAmount extends XDParserAbstract {
 	public void parseObject(XXNode xnode, XDParseResult p) {
 		p.isSpaces();
 		int pos = p.getIndex();
-		if (p.isToken("#(")) { // currency
-			if (p.isFloat() || p.isInteger()) {
-				String s = p.getParsedString().substring(2);
-				char ch;
-				if (p.isChar(' ') && ((ch=p.getCurrentChar())>='A' && ch<='Z')){
-					String code = String.valueOf(ch);
-					int i = 0;
-					for (;;) {
-						p.nextChar();
-						if (++i < 3
-							&& ((ch=p.getCurrentChar())>='A' && ch<='Z')) {
-							code += ch;
-						} else {
-							break;
-						}
+		if (p.isChar('(') && (p.isFloat() || p.isInteger())) {
+			String s = p.getParsedString().substring(1);
+			char ch;
+			if (p.isChar(' ') && ((ch=p.getCurrentChar())>='A' && ch<='Z')){
+				String code = String.valueOf(ch);
+				int i = 0;
+				for (;;) {
+					p.nextChar();
+					if (++i < 3
+						&& ((ch=p.getCurrentChar())>='A' && ch<='Z')) {
+						code += ch;
+					} else {
+						break;
 					}
-					if (p.isChar(')') && i == 3) {
-						try {
-							p.setParsedValue(new DefCurrencyAmount(s, code));
-							return;
-						} catch (SRuntimeException ex) {
-							Report r = ex.getReport();
-							p.error(r.getMsgID(), //currency error
-								r.getText(), r.getModification());
-							return;
-						}
+				}
+				if (p.isChar(')') && i == 3) {
+					try {
+						p.setParsedValue(new DefCurrencyAmount(s, code));
+						return;
+					} catch (SRuntimeException ex) {
+						Report r = ex.getReport();
+						p.error(r.getMsgID(), //currency error
+							r.getText(), r.getModification());
+						return;
 					}
 				}
 			}

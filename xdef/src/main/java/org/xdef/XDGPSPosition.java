@@ -8,20 +8,19 @@ import org.xdef.sys.GPSPosition;
 public interface XDGPSPosition extends XDValue {
 
 	/** Get latitude of this position.
-	 * @return latitude latitude of the location; range from -90.0 to 90.0
-	 * or MIN_VALUE if unknown.
+	 * @return latitude latitude of the location; range from -90.0 to 90.0.
 	 */
 	public double latitude();
 
 	/** Get longitude of this position.
-	 * @return longitude of the location; range from -180.0 to 180.0
-	 * or MIN_VALUE if unknown.
+	 * @return longitude of the location; range from -180.0 to 180.0.
 	 */
 	public double longitude();
 
 	/** Get altitude of this position.
-	 * @return altitude value is in meters may by in range from EARTH_RADIUS
-	 * in meters (6376500) to MAX_VALUE or MIN_VALUE if unknown.
+	 * @return altitude value is in meters may by in meters
+	 * (-6376500.0 to MAX_VALUE) or Double.MIN_VALUE if unknown; note
+	 * 6376500.0 is used as the Earth radius in meters).
 	 */
 	public double altitude();
 

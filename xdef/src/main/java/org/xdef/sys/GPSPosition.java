@@ -6,38 +6,33 @@ import org.xdef.msg.XDEF;
  * @author Vaclav Trojan
  */
 public class GPSPosition {
-	/** The constant used for conversion of degrees to radians. */
-	private final double DEG_TO_RAD = Math.PI / 180.0D;
 	/** Earth radius in meters. */
-	private final double EARTH_RADIUS = 6376500.0D; // 6373000.0D?
-	/** The latitude of the location; range from -90.0 to 90.0
-	 * or MIN_VALUE if unknown. */
+	public static final double EARTH_RADIUS = 6376500.0D; // ???
+
+	/** The constant used for conversion of degrees to radians. */
+	private static final double DEG_TO_RAD = Math.PI / 180.0D;
+	/** The latitude of the location; range from -90.0 to 90.0. */
 	private final double _latitude;
-	/** The longitude of the location; range from -180.0 to 180.0
-	 * or MIN_VALUE if unknown. */
+	/** The longitude of the location; range from -180.0 to 180.0. */
 	private final double _longitude;
-	/** The altitude in meters; range from EARTH_RADIUS in meters (6376500)
-	 * to MAX_VALUE or MIN_VALUE if unknown. */
+	/** The altitude in meters; range from -EARTH_RADIUS in meters (6376500.0)
+	 * to MAX_VALUE or Double.MIN_VALUE it it is unknown. */
 	private final double _altitude;
 
 	/** Create new instance of GPosition with latitude and longitude. The value
 	 * of altitude is set fo unknown.
-	 * @param latitude latitude of the location; range from -90.0 to 90.0
-	 * or MIN_VALUE if unknown.
-	 * @param longitude longitude of the location; range from -180.0 to 180.0
-	 * or MIN_VALUE if unknown.
+	 * @param latitude latitude of the location; range from -90.0 to 90.0.
+	 * @param longitude longitude of the location; range from -180.0 to 180.0.
 	 */
 	public GPSPosition(final double latitude, final double longitude) {
 		this(latitude, longitude, Double.MIN_VALUE);
 	}
 
 	/** Create new instance of GPosition with latitude, longitude and altitude.
-	 * @param latitude latitude of the location; range from -90.0 to 90.0
-	 * or MIN_VALUE if unknown.
-	 * @param longitude longitude of the location; range from -180.0 to 180.0
-	 * or MIN_VALUE if unknown.
-	 * @param altitude The altitude in meters; range from EARTH_RADIUS
-	 * in meters (6376500) to MAX_VALUE or MIN_VALUE if unknown.
+	 * @param latitude latitude of the location; range from -90.0 to 90.0.
+	 * @param longitude longitude of the location; range from -180.0 to 180.0.
+	 * @param altitude The altitude in meters; range from -EARTH_RADIUS
+	 * in meters (6376500.0) to MAX_VALUE or Double.MIN_VALUE if it is unknown.
 	 * @throws SRuntimeException if position is incorrect.
 	 */
 	public GPSPosition(final double latitude,
@@ -82,7 +77,7 @@ public class GPSPosition {
 	 * (altitude is ignored).
 	 * @param x position to which the distance is computed.
 	 * @return distance from this position to given position. Note the
-	 * Earth radius used in Haversine formula is 6376500 m.
+	 * Earth radius used in Haversine formula is 6376500.0 m.
 	 */
 	public final double distanceTo(final GPSPosition x) {
 		if (_latitude == x._latitude && _longitude == x._longitude) {
@@ -121,7 +116,7 @@ public class GPSPosition {
 
 	@Override
 	public String toString() {
-		return "gps(" + _latitude + "," + _longitude
+		return "(" + _latitude + "," + _longitude
 			+ (_altitude != Double.MIN_VALUE ? "," + _altitude : "") + ')';
 	}
 }

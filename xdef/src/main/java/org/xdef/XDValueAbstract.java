@@ -62,7 +62,7 @@ public abstract class XDValueAbstract implements XDValue {
 	@Override
 	public GPSPosition GPSValue() {return null;}
 	@Override
-	public CurrencyAmount CurrencyAmount() {return null;}
+	public CurrencyAmount currencyValue() {return null;}
 	@Override
 	public byte[] getBytes() {return null;}
 	@Override

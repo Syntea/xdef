@@ -157,7 +157,7 @@ public class DefXQueryExpr extends KXqueryExpr implements XDXQueryExpr {
 	@Override
 	public GPSPosition GPSValue() {return null;}
 	@Override
-	public CurrencyAmount CurrencyAmount() {return null;}
+	public CurrencyAmount currencyValue() {return null;}
 	@Override
 	public XDService serviceValue(){return null;}
 	@Override

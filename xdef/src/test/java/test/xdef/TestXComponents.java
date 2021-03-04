@@ -19,6 +19,7 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.List;
 import org.w3c.dom.Element;
+import org.xdef.sys.CurrencyAmount;
 import org.xdef.sys.GPSPosition;
 
 /** Test XComponents.
@@ -103,10 +104,12 @@ public final class TestXComponents extends XDTester {
 			String xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='A'>\n" +
 "<xd:declaration\n>\n"+
+"  CurrencyAmount a;\n"+
 "  GPSPosition p = new GPSPosition(50.08, 14.42, 399)/* Prague */, q;\n"+
 "  int d; /* distance in km */\n"+
 "</xd:declaration>\n"+
 "<A xd:script='finally d = round(p.distanceTo(q)/1000); /* km */'\n"+
+"   a='? currencyAmount();onTrue a= getParsedValue();'\n"+
 "   q='gps(); onTrue q=getParsedValue();'/>\n"+
 "<xd:component>\n"+
 "  %class test.xdef.TY_GPS %link #A;\n"+
@@ -114,13 +117,17 @@ public final class TestXComponents extends XDTester {
 "</xd:def>";
 			XDPool xp = compile(xdef);
 			genXComponent(xp, new File(_tempDir));
-			xml = "<!-- Vienna --> <A q='gps(48.2,16.37,151)'/>";
+			xml = "<!-- Vienna --> <A a='(1.25 CZK)' q='(48.2,16.37,151)'/>";
 			xd = xp.createXDDocument();
 			xc = xd.parseXComponent(xml, null, reporter);
+			assertEq("(1.25 CZK)", xd.getVariable("a").stringValue());
 			assertEq(253, xd.getVariable("d").intValue());
 			assertEq(new GPSPosition(48.2, 16.37, 151),
 				getValueFromGetter(xc, "getq"));
-			xml = "<!-- London --> <A q='gps(51.52,-0.09,0)'/>";
+			setValueToSetter(xc, "seta",
+				new CurrencyAmount(new BigDecimal("456.001"), "USD"));
+			assertEq("(456.001 USD)", xc.toXml().getAttribute("a"));
+			xml = "<!-- London --> <A q='(51.52,-0.09,0)'/>";
 			el = parse(xd, xml, reporter);
 			assertNoErrors(reporter);
 			assertEq(xml, el);

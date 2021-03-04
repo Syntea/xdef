@@ -105,7 +105,7 @@ public interface XDValue extends Comparable<XDValue>, XDValueID {
 	/** Get GPS value.
 	 * @return GPS value of this object or return null.
 	 */
-	public CurrencyAmount CurrencyAmount();
+	public CurrencyAmount currencyValue();
 
 	/** Get bytes array representing value.
 	 * @return array of bytes or null.
