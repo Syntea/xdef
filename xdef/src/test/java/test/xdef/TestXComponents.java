@@ -122,7 +122,7 @@ public final class TestXComponents extends XDTester {
 			xc = xd.parseXComponent(xml, null, reporter);
 			assertEq("(1.25 CZK)", xd.getVariable("a").stringValue());
 			assertEq(253, xd.getVariable("d").intValue());
-			assertEq(new GPSPosition(48.2, 16.37, 151),
+			assertEq(new GPSPosition(48.2, 16.37, 151, null),
 				getValueFromGetter(xc, "getq"));
 			setValueToSetter(xc, "seta",
 				new CurrencyAmount(new BigDecimal("456.001"), "USD"));

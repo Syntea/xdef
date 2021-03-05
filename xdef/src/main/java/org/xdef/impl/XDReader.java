@@ -53,8 +53,11 @@ import java.io.InputStream;
 import java.lang.reflect.Method;
 import org.xdef.XDContainer;
 import org.xdef.XDValueID;
+import org.xdef.impl.code.DefCurrencyAmount;
 import org.xdef.impl.code.DefGPSPosition;
 import org.xdef.impl.code.DefLocale;
+import org.xdef.sys.CurrencyAmount;
+import org.xdef.sys.GPSPosition;
 
 /** Provides reading of XD objects from InputStream.
  * @author Vaclav Trojan
@@ -192,8 +195,11 @@ public final class XDReader extends SObjectReader {
 						return y;
 					}
 					case XDValueID.XD_GPSPOSITION:
-						return new DefGPSPosition(
-							readDouble(), readDouble(), readDouble());
+						return new DefGPSPosition(new GPSPosition(readDouble(),
+							readDouble(), readDouble(), readString()));
+					case XDValueID.XD_CURRAMOUNT:
+						return new DefCurrencyAmount(new CurrencyAmount(
+							readBigDecimal(), readString()));
 					case XDValueID.XD_LOCALE: {
 						return new DefLocale(
 							readString(), readString(), readString());

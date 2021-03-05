@@ -1,10 +1,12 @@
 package org.xdef.impl.parsers;
 
+import java.math.BigDecimal;
 import org.xdef.XDParseResult;
 import org.xdef.XDParserAbstract;
 import org.xdef.impl.code.DefCurrencyAmount;
 import org.xdef.msg.XDEF;
 import org.xdef.proc.XXNode;
+import org.xdef.sys.CurrencyAmount;
 import org.xdef.sys.Report;
 import org.xdef.sys.SRuntimeException;
 
@@ -37,7 +39,8 @@ public class XDParseCurrencyAmount extends XDParserAbstract {
 				}
 				if (p.isChar(')') && i == 3) {
 					try {
-						p.setParsedValue(new DefCurrencyAmount(s, code));
+						p.setParsedValue(new DefCurrencyAmount(
+							new CurrencyAmount(new BigDecimal(s), code)));
 						return;
 					} catch (SRuntimeException ex) {
 						Report r = ex.getReport();

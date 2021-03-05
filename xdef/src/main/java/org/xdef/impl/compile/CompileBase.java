@@ -914,7 +914,7 @@ public class CompileBase implements CodeTable, XDValueID {
 ////////////////////////////////////////////////////////////////////////////////
 		ti = XD_CURRAMOUNT;
 		method(ti, genInternalMethod(NEW_CURRAMOOUNT, XD_CURRAMOUNT,
-			ANY_MODE, 2, 3, XD_STRING, XD_STRING), "#");
+			ANY_MODE, 2, 2, XD_ANY, XD_STRING), "#");
 		method(ti, genInternalMethod(CURRENCY_AMOUNT, XD_DECIMAL,
 			ANY_MODE, 1, 1, XD_CURRAMOUNT), "amount");
 		method(ti, genInternalMethod(CURRENCY_CODE, XD_STRING,
@@ -1084,13 +1084,15 @@ public class CompileBase implements CodeTable, XDValueID {
 ////////////////////////////////////////////////////////////////////////////////
 		ti = XD_GPSPOSITION;
 		method(ti, genInternalMethod(NEW_GPSPOSITION, XD_GPSPOSITION,
-			ANY_MODE, 2, 3, XD_FLOAT, XD_FLOAT, XD_FLOAT), "#");
+			ANY_MODE, 2, 4, XD_FLOAT, XD_FLOAT, XD_ANY, XD_STRING), "#");
 		method(ti, genInternalMethod(GPS_LATITUDE, XD_FLOAT,
 			ANY_MODE, 1, 1, XD_GPSPOSITION), "latitude");
 		method(ti, genInternalMethod(GPS_LONGITUDE, XD_FLOAT,
 			ANY_MODE, 1, 1, XD_GPSPOSITION), "longitude");
 		method(ti, genInternalMethod(GPS_ALTITUDE, XD_FLOAT,
 			ANY_MODE, 1, 1, XD_GPSPOSITION), "altitude");
+		method(ti, genInternalMethod(GPS_NAME, XD_STRING,
+			ANY_MODE, 1, 1, XD_GPSPOSITION), "name");
 		method(ti, genInternalMethod(GPS_DISTANCETO, XD_FLOAT,
 			ANY_MODE, 2, 2, XD_GPSPOSITION,  XD_GPSPOSITION), "distanceTo");
 

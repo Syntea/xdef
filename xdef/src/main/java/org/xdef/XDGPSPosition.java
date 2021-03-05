@@ -24,6 +24,11 @@ public interface XDGPSPosition extends XDValue {
 	 */
 	public double altitude();
 
+	/** Get name of this position.
+	 * @return name of the position or null.
+	 */
+	public String name();
+
 	/** Get distance in meters from this position to position from the argument.
 	 * @param x position to which the distance is computed.
 	 * @return distance from this position to given position. Note the

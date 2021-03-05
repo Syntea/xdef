@@ -1,19 +1,26 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 40.1.3, release-date 2021-03-04
+# Version 40.1.3, release-date 2021-03-05
 * preparing version 40.2
 * corrected bug in display of zone with zero hours and negative minutes in offset.
 * added new X-definition type `GPSPosition`.
   Methods with this object:
     `latitude()` returns GPS latitude in degrees (-90.0 to 90.0).
     `longitude()` returns GPS longitude in degrees (-180.0 to 180.0).
-    `altitude()` returns GPS altitude in meters .
+    `altitude()` returns GPS altitude in meters.
+    `name()` returns name of GPS position or null.
   `  distanceTo(GPSPosition x)` returns distance to GPS position `x` in meters.
    Constructors:
     `new GPSPosition(latitude, longitude)`
    or
     `new GPSPosition(latitude, longitude, altitude)`
    (all parameters are float numbers).
+* added new XML validation method `gps` The required form is:
+   '{latitude,longitude,[altitude[name]])'
+    where latitude,longitude,altitude are numbers and name is a string which
+    can not contain ')'.
+    e.g. `(51.52,-0.09,0.0,Lodon)` or `(51.52,-0.09)` (missing altitude
+    and name).
 * added new X-definition type `CurrencyAmount`.
    Constructor:
     `new CurrencyAmount(amount, code)`
@@ -25,6 +32,8 @@
 	'display()` returns string with printable form of currency (i.e. decimal
       number with recommended number of decimal digits, space and
       ISO 4217 currency code).
+* added new XML validation method `currencyAmount`. The required form is:
+   `(decimal_number code)`; e.g. `(12.25 USD)`.
 
 # Version 40.1.2, release-date 2021-02-15
 * corrected the bug in the X-script method `s.contains(s)`.

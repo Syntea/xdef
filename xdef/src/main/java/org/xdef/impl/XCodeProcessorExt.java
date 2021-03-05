@@ -59,6 +59,8 @@ import org.xdef.XDValueID;
 import org.xdef.impl.code.DefCurrencyAmount;
 import org.xdef.impl.code.DefGPSPosition;
 import org.xdef.impl.code.DefLocale;
+import org.xdef.sys.CurrencyAmount;
+import org.xdef.sys.GPSPosition;
 
 /** Provides invoking of external method from script code.
  * @author Vaclav Trojan
@@ -821,34 +823,17 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 				}
 				return sp;
 			}
-			case NEW_GPSPOSITION: {
-				if (item.getParam() == 3) {
-					stack[sp-2] = new DefGPSPosition(stack[sp-2].doubleValue(),
-						stack[sp-1].doubleValue(), stack[sp].doubleValue());
-					sp -= 2;
-				} else {
-					stack[sp-1] = new DefGPSPosition(stack[sp-1].doubleValue(),
-						stack[sp].doubleValue());
-					sp--;
-				}
-				return sp;
-			}
-			case NEW_CURRAMOOUNT: {
-				stack[sp-1] = new DefCurrencyAmount(stack[sp-1].toString(),
-					stack[sp].toString());
-				sp--;
-			}
 		}
 		return sp;
 	}
 
 	/** Execute command.
+	 * @param cp XCodeProcessor object.
 	 * @param cmd command to be executed.
 	 * @param xNode actually processed node.
 	 * @param sp stack pointer.
 	 * @param stack stack.
 	 * @param pc program counter.
-	 * @param reporter reporter where to log errors.
 	 * @return new value of stack pointer.
 	 * @throws Exception
 	 */
@@ -995,6 +980,57 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 				stack[sp] = new DefException(rep,
 					chkNode != null ? chkNode.getXPos() : null, pc);
 				return sp;
+			}
+			case NEW_GPSPOSITION: {
+				double latitude;
+				double longitude;
+				double altitude = Double.MIN_VALUE;
+				String name = null;
+				if (cmd.getParam() == 4) {
+					latitude = stack[sp-3].doubleValue();
+					longitude = stack[sp-2].doubleValue();
+					altitude = stack[sp-1].doubleValue();
+					name = stack[sp].isNull() ? null : stack[sp].stringValue();
+					sp -= 3;
+				} else if (cmd.getParam() == 3) {
+					if (!stack[sp].isNull() || stack[sp].getItemId()==XD_FLOAT
+						|| stack[sp].getItemId()==XD_DECIMAL
+						|| stack[sp].getItemId()==XD_INT){
+						altitude = stack[sp].doubleValue();
+					} else {
+						name = stack[sp].stringValue();
+					}
+					latitude = stack[sp-2].doubleValue();
+					longitude = stack[sp-1].doubleValue();
+					sp -= 2;
+				} else {
+					latitude = stack[sp-1].doubleValue();
+					longitude = stack[sp].doubleValue();
+					sp--;
+				}
+				try {
+					stack[sp] = new DefGPSPosition(
+						new GPSPosition(latitude, longitude, altitude, name));
+				} catch (Exception ex) {
+					 //Incorrect GPS position &amp;{0}
+					 cp.putError(chkNode, XDEF.XDEF222,
+						latitude+","+longitude+","+altitude+","+name);
+					stack[sp] = DefNull.genNullValue(XD_GPSPOSITION);
+				}
+				return sp;
+			}
+			case NEW_CURRAMOOUNT: {
+				try {
+					stack[sp-1] = new DefCurrencyAmount(new CurrencyAmount(
+						new BigDecimal(stack[sp-1].toString()),
+							stack[sp].stringValue()));
+				} catch (Exception ex) {
+					//"Invalid currency code: "{0}"
+					cp.putError(chkNode, XDEF.XDEF575,
+						stack[sp-1].toString() + " " + stack[sp].stringValue());
+					stack[sp-1] = DefNull.genNullValue(XD_CURRAMOUNT);
+				}
+				return --sp;
 			}
 ////////////////////////////////////////////////////////////////////////////////
 // External methods
