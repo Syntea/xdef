@@ -18,27 +18,24 @@ public class GPSPosition {
 	/** The altitude in meters; range from -EARTH_RADIUS in meters (6376500.0)
 	 * to MAX_VALUE or Double.MIN_VALUE it it is unknown. */
 	private final double _altitude;
-
-	/** Create new instance of GPosition with latitude and longitude. The value
-	 * of altitude is set fo unknown.
-	 * @param latitude latitude of the location; range from -90.0 to 90.0.
-	 * @param longitude longitude of the location; range from -180.0 to 180.0.
-	 */
-	public GPSPosition(final double latitude, final double longitude) {
-		this(latitude, longitude, Double.MIN_VALUE);
-	}
+	/** The altitude in meters; range from -EARTH_RADIUS in meters (6376500.0)
+	 * to MAX_VALUE or Double.MIN_VALUE it it is unknown. */
+	private final String _name;
 
 	/** Create new instance of GPosition with latitude, longitude and altitude.
 	 * @param latitude latitude of the location; range from -90.0 to 90.0.
 	 * @param longitude longitude of the location; range from -180.0 to 180.0.
 	 * @param altitude The altitude in meters; range from -EARTH_RADIUS
 	 * in meters (6376500.0) to MAX_VALUE or Double.MIN_VALUE if it is unknown.
+	 * @param name the name of position or null.
 	 * @throws SRuntimeException if position is incorrect.
 	 */
 	public GPSPosition(final double latitude,
 		final double longitude,
-		final double altitude) {
+		final double altitude,
+		final String name) {
 		_latitude = latitude; _longitude = longitude; _altitude = altitude;
+		_name = name;
 		checkValue();
 	}
 
@@ -48,7 +45,8 @@ public class GPSPosition {
 	private void checkValue() throws SRuntimeException {
 		if ((_latitude >= -90.0D && _latitude <= 90.0D)
 			&& (_longitude >= -180.0D && _longitude <= 180.0D)
-			&& (_altitude == Double.MIN_VALUE || _altitude > - EARTH_RADIUS)) {
+			&& (_altitude == Double.MIN_VALUE || _altitude > - EARTH_RADIUS)
+			&& (_name==null || (_name.indexOf('(')<0 && _name.indexOf(')')<0))){
 			return;
 		}
 		 // Incorrect GPosition &{0}{: }
@@ -72,6 +70,11 @@ public class GPSPosition {
 	 * in meters (-6376500) to MAX_VALUE or MIN_VALUE if unknown.
 	 */
 	public final double altitude() {return _altitude;}
+
+	/** Get name of this position.
+	 * @return name of the position or null.
+	 */
+	public final String name() {return _name;}
 
 	/** Get distance in meters from this position to position from the argument
 	 * (altitude is ignored).
@@ -117,6 +120,7 @@ public class GPSPosition {
 	@Override
 	public String toString() {
 		return "(" + _latitude + "," + _longitude
-			+ (_altitude != Double.MIN_VALUE ? "," + _altitude : "") + ')';
+			+ (_altitude != Double.MIN_VALUE ? "," + _altitude : "")
+			+ (_name != null ? "," + _name : "") + ')';
 	}
 }

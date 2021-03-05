@@ -6,10 +6,8 @@ import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
 import org.xdef.XDValueType;
 import org.xdef.msg.SYS;
-import org.xdef.msg.XDEF;
 import org.xdef.sys.CurrencyAmount;
 import org.xdef.sys.SIllegalArgumentException;
-import org.xdef.sys.SRuntimeException;
 
 /** The class implements the internal object with currency amount.
  * @author Vaclav Trojan
@@ -19,26 +17,10 @@ public class DefCurrencyAmount extends XDValueAbstract
 	/** Value of CurrencyAmount. */
 	private final CurrencyAmount _amount;
 
-	/** Create new instance of DefGPosition (null). */
-	public DefCurrencyAmount() {_amount = null;}
-
-	/** Create new instance of DefGPosition (the value of altitude is set
-	 * as unknown).
+	/** Create new instance of DefCurrencyAmount fro CurrencyAmount.
 	 * @param amount string with amount as decimal number.
-	 * @param code currency ISO4217 code.
-	 * @throws SRuntimeException (code XDEF222) if parameters are incorrect.
 	 */
-	public DefCurrencyAmount(final String amount, final String code)
-		throws SRuntimeException {
-		BigDecimal d;
-		try {
-			d = new BigDecimal(amount);
-		} catch (Exception ex) {
-			//Decimal number error&{0}{: }
-			throw new SRuntimeException(XDEF.XDEF409, amount);
-		}
-		_amount = new CurrencyAmount(d, code);
-	}
+	public DefCurrencyAmount(final CurrencyAmount amount) {_amount = amount;}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDCurrencyAmmount interface

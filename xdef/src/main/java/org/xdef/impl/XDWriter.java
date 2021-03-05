@@ -35,6 +35,7 @@ import org.xdef.XDValueID;
 import org.xdef.impl.code.DefLocale;
 import java.lang.reflect.Method;
 import java.util.Locale;
+import org.xdef.impl.code.DefCurrencyAmount;
 import org.xdef.impl.code.DefGPSPosition;
 
 /** Provides writing of XD objects to OutputStream.
@@ -172,6 +173,12 @@ public final class XDWriter extends SObjectWriter {
 						writeDouble(y.latitude());
 						writeDouble(y.longitude());
 						writeDouble(y.altitude());
+						writeString(y.name());
+					}
+					case XDValueID.XD_CURRAMOUNT: {
+						DefCurrencyAmount y = (DefCurrencyAmount) x;
+						writeBigDecimal(y.amount());
+						writeString(y.code());
 					}
 					case XDValueID.XD_NAMEDVALUE: {
 						XDNamedValue y = (XDNamedValue) x;

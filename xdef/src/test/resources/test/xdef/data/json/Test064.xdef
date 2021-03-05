@@ -1,5 +1,5 @@
 <xd:def xmlns:xd="http://www.xdef.org/xdef/4.0" name="Test064" root="a" >
-<xd:json name="a" >
-  {"Prague": "gps()", "Price": "currencyAmount()"}
-</xd:json>
+  <xd:json name="a" >
+    {"GPS": "gps()", "Price": "currencyAmount()"}
+  </xd:json>
 </xd:def>

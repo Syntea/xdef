@@ -846,7 +846,8 @@ public interface CodeTable {
 	static final short GPS_LATITUDE = DURATION_GETNEXTTIME + 1;
 	static final short GPS_LONGITUDE = GPS_LATITUDE + 1;
 	static final short GPS_ALTITUDE = GPS_LONGITUDE + 1;
-	static final short GPS_DISTANCETO = GPS_ALTITUDE + 1;
+	static final short GPS_NAME = GPS_ALTITUDE + 1;
+	static final short GPS_DISTANCETO = GPS_NAME + 1;
 
 	static final short CURRENCY_AMOUNT = GPS_DISTANCETO + 1;
 	static final short CURRENCY_CODE = CURRENCY_AMOUNT + 1;

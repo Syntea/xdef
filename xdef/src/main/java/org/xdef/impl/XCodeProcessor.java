@@ -611,13 +611,13 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 			}
 		}
 	}
-	private void putError(final ChkNode chkNode, final long id) {
+	final void putError(final ChkNode chkNode, final long id) {
 		putReport(chkNode, Report.error(id));
 	}
-	private void putError(final ChkNode chkNode,final long id,final String mod){
+	final void putError(final ChkNode chkNode,final long id,final String mod){
 		putReport(chkNode, Report.error(id, mod));
 	}
-	private void putReport(final ChkNode chkNode, final Report rep) {
+	final void putReport(final ChkNode chkNode, final Report rep) {
 		updateReport(rep, chkNode);
 		_reporter.putReport(rep);
 	}
@@ -1097,6 +1097,10 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 				case GPS_ALTITUDE:
 					_stack[sp] =
 						new DefDouble(((DefGPSPosition) _stack[sp]).altitude());
+					continue;
+				case GPS_NAME:
+					_stack[sp] =
+						new DefString(((DefGPSPosition) _stack[sp]).name());
 					continue;
 				case GPS_DISTANCETO:
 					_stack[sp - 1] =
@@ -3172,8 +3176,6 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 				case NEW_XMLWRITER:
 				case NEW_REPORT:
 				case NEW_LOCALE:
-				case NEW_GPSPOSITION:
-				case NEW_CURRAMOOUNT:
 					sp = XCodeProcessorExt.perform(this, item, sp, _stack);
 					continue;
 				//Other codes (implemented in XCodeProcessorExt)

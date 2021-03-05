@@ -6,7 +6,6 @@ import org.xdef.XDValueType;
 import org.xdef.msg.SYS;
 import org.xdef.sys.GPSPosition;
 import org.xdef.sys.SIllegalArgumentException;
-import org.xdef.sys.SRuntimeException;
 import org.xdef.XDGPSPosition;
 
 /** The class implements the internal object with GpsPosition value.
@@ -19,33 +18,10 @@ public class DefGPSPosition extends XDValueAbstract implements XDGPSPosition {
 	/** Create new instance of DefGPosition (null). */
 	public DefGPSPosition() {_position = null;}
 
-	/** Create new instance of DefGPosition (the value of altitude is set
-	 * as unknown).
-	 * @param latitude latitude of the location; range from -90.0 to 90.0
-	 * (or MIN_VALUE if unknown).
-	 * @param longitude longitude of the location; range from -180.0 to 180.0
-	 * (or MIN_VALUE if unknown).
-	 * @throws SRuntimeException (code XDEF222) if parameters are incorrect.
+	/** Create new instance of GPSPosition given position.
+	 * @param position GPSPosition object.
 	 */
-	public DefGPSPosition(final double latitude, final double longitude)
-		throws SRuntimeException {
-		_position = new GPSPosition(latitude, longitude);
-	}
-
-	/** Create new instance of DefGPosition.
-	 * @param latitude latitude of the location; range from the range
-	 * from -90.0 to 90.0 (or MIN_VALUE if unknown).
-	 * @param longitude longitude of the location; range from the range
-	 * from -180.0 to 180.0 (or MIN_VALUE if unknown).
-	 * @param altitude altitude in meters from the range from -EARTH_RADIUS
-	 * in meters (-6376500) to MAX_VALUE (or MIN_VALUE if unknown).
-	 * @throws SRuntimeException (code XDEF222) if parameters are incorrect.
-	 */
-	public DefGPSPosition(final double latitude,
-		final double longitude,
-		final double altitude) throws SRuntimeException {
-		_position = new GPSPosition(latitude, longitude, altitude);
-	}
+	public DefGPSPosition(final GPSPosition position) {_position = position;}
 
 	@Override
 	/** Get value of GPS. */
@@ -86,6 +62,12 @@ public class DefGPSPosition extends XDValueAbstract implements XDGPSPosition {
 		return _position.distanceTo(x);
 	}
 
+	@Override
+	/** Get name of this position.
+	 * @return name of the position or null.
+	 */
+	public String name() {return _position.name();}
+
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDValue interface
 ////////////////////////////////////////////////////////////////////////////////
@@ -113,11 +95,6 @@ public class DefGPSPosition extends XDValueAbstract implements XDGPSPosition {
 	public XDValueType getItemType() {return XDValueType.GPSPOSITION;}
 	@Override
 	public String stringValue() {return isNull() ? "" : _position.toString();}
-	@Override
-	public XDValue cloneItem() {
-		return new DefGPSPosition(
-			_position.latitude(), _position.longitude(), _position.altitude());
-	}
 	@Override
 	public boolean isNull() {return _position == null;}
 	@Override
