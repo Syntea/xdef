@@ -224,34 +224,6 @@ class JsonFromXml extends JsonUtil {
 		return s; // JSON String
 	}
 
-	/** Create JSON named value from XML name.
-	 * @param name XML name.
-	 * @return JSON name.
-	 */
-	private static String xmlToJsonName(final String name) {
-		if ("_x00_".equals(name)) {
-			return "";
-		}
-		StringBuilder sb = new StringBuilder();
-		int len = name.length();
-		for (int i = 0; i < len; i++) {
-			char ch = name.charAt(i);
-			if (ch == '_' && i + 2 < len) {
-				if (isJChar(name, i)) {
-					int ndx = name.indexOf('_', i+1);
-					int x = Integer.parseInt(name.substring(i+2, ndx), 16);
-					sb.append((char) x);
-					i = ndx;
-				} else {
-					sb.append('_');
-				}
-			} else {
-				sb.append(ch);
-			}
-		}
-		return sb.toString();
-	}
-
 	/** Create list of elements and texts from child nodes of element.
 	 * @param el element from which the list is created.
 	 * @return list elements and texts created from child nodes of element.

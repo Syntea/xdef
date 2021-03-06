@@ -71,7 +71,7 @@ class JsonToXml extends JsonUtil {
 	 * @param mode 0 .. text node, 1.. attribute, 2.. array of simple items
 	 * @return XML form of string from the argument val,
 	 */
-	private static String jstringToXML(final Object val, final int mode) {
+	final static String jstringToXML(final Object val, final int mode) {
 		if (val == null) {
 			return "null";
 		}

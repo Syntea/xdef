@@ -1,15 +1,25 @@
 package org.xdef.json;
 
+import java.io.Reader;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import org.xdef.impl.XConstants;
 import org.xdef.impl.compile.CompileJsonXdef;
 import org.xdef.msg.JSON;
+import org.xdef.msg.XDEF;
+import org.xdef.sys.ArrayReporter;
+import org.xdef.sys.CurrencyAmount;
+import org.xdef.sys.GPSPosition;
+import org.xdef.sys.SException;
+import org.xdef.sys.SParser;
 import org.xdef.sys.SPosition;
 import org.xdef.sys.SRuntimeException;
+import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
 
 /** Parser of JSON/XON source.
@@ -17,17 +27,35 @@ import org.xdef.sys.StringParser;
  */
 public class XonParser extends StringParser {
 
-	/** Flag to accept comments in JSON. */
+	/** Flag to accept comments (true=accept comments). */
 	private boolean _acceptComments; // default value = false
-	/** Flag to generate SPositions when parsing JSON. */
+	/** Flag to generate SPositions (true=generate position). */
 	private boolean _genJObjects; // default value = false
 	/** Flag if the parsed data are in X-definition. */
 	private boolean _jdef; // default value = false
+	/** Flag if parse JSON or XON (false=JSON, true=XON). */
+	private boolean _xon; // default value = false
 	/** Position of processed item.`*/
 	private SPosition _sPosition;
 
 	/** Create instance of parser. */
 	public XonParser() {}
+	/** Create instance of parser.
+	 * @param source String with source data.
+	 */
+	public XonParser(final String source) {super(source);}
+	/** Create instance of parser.
+	 * @param source Reader with source data.
+	 */
+	public XonParser(final Reader source) {
+		super(source, new ArrayReporter());
+	}
+	/** Create instance of parser.
+	 * @param source URL with source data.
+	 */
+	public XonParser(final URL source) {
+		super(source, new ArrayReporter(), 0);
+	}
 
 	/** Set genJObjects flag (and the _acceptComments flag is also set). */
 	public final void setGenJObjects() {
@@ -39,6 +67,12 @@ public class XonParser extends StringParser {
 	public final void setXJsonMode() {
 		setGenJObjects();
 		_jdef = true;
+	}
+
+	/** Set mode that XON is parsed. */
+	public final void setXonMode() {
+		_acceptComments = true;
+		_xon = true;
 	}
 
 	/** Create modification string with source position.
@@ -70,6 +104,53 @@ public class XonParser extends StringParser {
 		return result;
 	}
 
+	/** Returns parsed value.
+	 * @param x parsed value to be returned.
+	 * @return parsed value. If the switch _genJObjects is true, then
+	 * the parsed value contains source position.
+	 */
+	private Object returnValue(final Object x) {
+		return _genJObjects ? new CompileJsonXdef.JValue(_sPosition, x) : x;
+	}
+
+	/** Returns error and parsed value.
+	 * @param x parsed value to be returned.
+	 * @param code code of error message.
+	 * @param skip string with characters to which source will be skipped.
+	 * @param params list od error message parameters (may be empty.)
+	 * @return parsed value. If the switch _genJObjects is true, then
+	 * the parsed value contains source position.
+	 */
+	private Object returnError(final Object x,
+		final long code,
+		final String skip,
+		final Object... params) {
+		error(code, params);
+		if (findOneOfChars(skip) == NOCHAR) {// skip to next item
+			setEos();
+		}
+		return returnValue(x);
+	}
+
+	/** Read name of GPS position. */
+	private String readGPSName() {
+		StringBuilder sb = new StringBuilder();
+		char ch;
+		if ((ch = isLetter()) != SParser.NOCHAR) {
+			sb.append(ch);
+			while ((ch = getCurrentChar()) != SParser.NOCHAR
+				&& (Character.isLetter(ch) || ch == ' ')) {
+				sb.append(peekChar());
+			}
+		}
+		String result = sb.toString().trim();
+		if (result.isEmpty()) {
+			// Incorrect GPosition &{0}{: }
+			throw new SRuntimeException(XDEF.XDEF222, "name: " + result);
+		}
+		return result;
+	}
+
 	/** Read JSON value.
 	 * @return parsed value: List, Map, String, Number, Boolean or null.
 	 * @throws SRuntimeException is an error occurs.
@@ -83,17 +164,17 @@ public class XonParser extends StringParser {
 		if (_genJObjects) {
 			_sPosition = getPosition();
 		}
+		int i;
 		if (isChar('{')) { // Map
-			Map<String, Object> result;
-			result = _genJObjects ? new CompileJsonXdef.JMap(_sPosition)
+			Map<String, Object> map;
+			map = _genJObjects ? new CompileJsonXdef.JMap(_sPosition)
 				: new LinkedHashMap<String,Object>();
 			isSpacesOrComments();
 			if (isChar('}')) { // empty map
-				return result;
+				return map;
 			}
 			boolean wasScript = false;
 			while(!eos()) {
-				int i;
 				if (!wasScript && _jdef
 					&& (i = isOneOfTokens(CompileJsonXdef.SCRIPT_NAME,
 						CompileJsonXdef.ONEOF_NAME)) >= 0) {
@@ -132,18 +213,28 @@ public class XonParser extends StringParser {
 					if (o != null && o instanceof CompileJsonXdef.JValue
 						&& ((CompileJsonXdef.JValue)o).getValue()
 							instanceof String) {
-						if (result.containsKey(CompileJsonXdef.SCRIPT_KEY)) {
+						if (map.containsKey(CompileJsonXdef.SCRIPT_KEY)) {
 							//Value pair &{0} already exists
 							error(JSON.JSON022, CompileJsonXdef.SCRIPT_KEY);
 						} else {
-							result.put(CompileJsonXdef.SCRIPT_KEY, o);
+							map.put(CompileJsonXdef.SCRIPT_KEY, o);
 						}
 					} else {
 						//Value of $script must be string with X-script
 						error(JSON.JSON018);
 					}
 				} else {
-					Object o = readValue();
+					Object o;
+					if (_xon) {
+						if (isNCName(XConstants.XML10)) {
+							// parse JSON named pair
+						   o = getParsedString(); /*xx*/
+						} else {
+							o = null;
+						}
+					} else {
+						o = readValue();
+					}
 					if (o != null && (o instanceof String ||
 						(_genJObjects && o instanceof CompileJsonXdef.JValue)
 						&& ((CompileJsonXdef.JValue) o).getValue()
@@ -151,41 +242,53 @@ public class XonParser extends StringParser {
 						 // parse JSON named pair
 						String name = _genJObjects ? o.toString() : (String) o;
 						isSpacesOrComments();
-						if (!isChar(':')) {
+						if (_xon) {
+							if (!isChar('=')) {
+								//"&{0}"&{1}{ or "}{"} expected
+								error(JSON.JSON002, _xon ? "=" : ":");
+							}
+						} else if (!isChar(':')) {
 							//"&{0}"&{1}{ or "}{"} expected
-							error(JSON.JSON002, ":");
+							error(JSON.JSON002, _xon ? "=" : ":");
 						}
 						isSpacesOrComments();
 						o = readValue();
-						if (result.containsKey(name)) {
-							String s = JsonUtil.jstringToSource(name);
-							if (!s.startsWith("\"") || !s.endsWith("\"")) {
-								s = '"' + s + '"';
+						if (map.containsKey(name)) {
+							String s;
+							if (_xon) {
+								s = name;
+							} else {
+								s = JsonUtil.jstringToSource(name);
+								if (!s.startsWith("\"") || !s.endsWith("\"")) {
+									s = '"' + s + '"';
+								}
 							}
 							//Value pair &{0} already exists
 							error(JSON.JSON022, s);
 						} else {
-							result.put(name, o);
+							map.put(name, o);
 						}
 					} else {
 						fatal(JSON.JSON004); //String with name of item expected
-						return result;
+						return map;
 					}
 				}
 				isSpacesOrComments();
 				if (isChar('}')) {
 					isSpacesOrComments();
-					return result;
+					return map;
 				}
-				if (isChar(',')) {
+				if (isChar(',') || _xon) {
 					SPosition spos = getPosition();
 					isSpacesOrComments();
 					if (isChar('}')) {
-						SPosition spos1 = getPosition();
-						setPosition(spos);
-						error(JSON.JSON020); //redundant comma
-						setPosition(spos1);
-						return result;
+						if (!_xon) {
+							SPosition spos1 = getPosition();
+							setPosition(spos);
+							error(JSON.JSON020); //redundant comma
+							setPosition(spos1);
+						}
+						return map;
 					}
 				} else {
 					if (eos()) {
@@ -203,19 +306,18 @@ public class XonParser extends StringParser {
 			if (findOneOfChars("[]{}") == NOCHAR) {// skip to next item
 				setEos();
 			}
-			return result;
+			return map;
 		} else if (isChar('[')) {
-			List<Object> result;
-			result = _genJObjects ? new CompileJsonXdef.JArray(_sPosition)
+			List<Object> list;
+			list = _genJObjects ? new CompileJsonXdef.JArray(_sPosition)
 				: new ArrayList<Object>();
 			isSpacesOrComments();
 			if (isChar(']')) { // empty array
-				return result;
+				return list;
 			}
 			boolean wasScript = false;
 			boolean wasErrorReported = false;
 			while(!eos()) {
-				int i;
 				if (!wasScript &&_jdef
 					&& (i = isOneOfTokens(CompileJsonXdef.SCRIPT_NAME,
 						CompileJsonXdef.ONEOF_NAME)) >= 0) {
@@ -225,7 +327,7 @@ public class XonParser extends StringParser {
 						Object o = readValue();
 						if (o instanceof CompileJsonXdef.JValue
 							&& ((CompileJsonXdef.JValue)o).getValue()
-							instanceof String){
+							instanceof String) {
 							CompileJsonXdef.JValue jv =
 								(CompileJsonXdef.JValue) o;
 							if (i == 1) {
@@ -235,7 +337,7 @@ public class XonParser extends StringParser {
 									CompileJsonXdef.ONEOF_KEY + jv.getValue();
 								jv = new CompileJsonXdef.JValue(spos, s);
 							}
-							result.add(new CompileJsonXdef.JValue(null, jv));
+							list.add(new CompileJsonXdef.JValue(null, jv));
 						} else {
 							//Value of $script must be string with X-script
 							error(JSON.JSON018);
@@ -247,27 +349,29 @@ public class XonParser extends StringParser {
 						} else {
 							SPosition spos = getPosition();
 							spos.setIndex(spos.getIndex() - 1);
-							result.add(new CompileJsonXdef.JValue(null,
+							list.add(new CompileJsonXdef.JValue(null,
 								new CompileJsonXdef.JValue(spos,
 									CompileJsonXdef.ONEOF_KEY)));
 						}
 					}
 				} else {
-					result.add(readValue());
+					list.add(readValue());
 				}
 				isSpacesOrComments();
 				if (isChar(']')) {
-					return result;
+					return list;
 				}
 				if (isChar(',')) {
 					SPosition spos = getPosition();
 					isSpacesOrComments();
 					if (isChar(']')) {
-						SPosition spos1 = getPosition();
-						setPosition(spos);
-						error(JSON.JSON020); //redundant comma
-						setPosition(spos1);
-						return result;
+						if (!_xon) {
+							SPosition spos1 = getPosition();
+							setPosition(spos);
+							error(JSON.JSON020); //redundant comma
+							setPosition(spos1);
+						}
+						return list;
 					}
 				} else {
 					if (wasErrorReported) {
@@ -284,19 +388,11 @@ public class XonParser extends StringParser {
 			if (findOneOfChars("[]{}") == NOCHAR) {// skip to next item
 				setEos();
 			}
-			return result;
+			return list;
 		} else if (isChar('"')) { // string
-			String s = JsonUtil.readJSONString(this);
-			return _genJObjects ? new CompileJsonXdef.JValue(_sPosition, s) : s;
-		} else if (isToken("null")) {
-			return _genJObjects ? new CompileJsonXdef.JValue(_sPosition, null)
-				: null;
-		} else if (isToken("true")) {
-			return _genJObjects ? new CompileJsonXdef.JValue(_sPosition, true)
-				: true;
-		} else if (isToken("false")) {
-			return _genJObjects ? new CompileJsonXdef.JValue(_sPosition, false)
-				: false;
+			return returnValue(JsonUtil.readJSONString(this));
+		} else if ((i=isOneOfTokens(new String[]{"null","false","true"})) >= 0){
+			return returnValue(i > 0 ? (i==2) : null);
 		} else if (_jdef && isToken(CompileJsonXdef.ANY_NAME)) {
 			isSpacesOrComments();
 			if (isChar(':')) {
@@ -314,8 +410,152 @@ public class XonParser extends StringParser {
 			}
 			return new CompileJsonXdef.JAny(_sPosition, null);
 		} else {
-			int pos;
+			int pos = getIndex();
+			char ch;
 			boolean wasError = false;
+			Object result = null;
+			long errCode = JSON.JSON010; //JSON value expected
+			if (_xon) {
+				if (isChar('\'')) { // character
+					ch = getCurrentChar();
+					if (ch == '\\') {
+						if ((i="u\\bfnrt".indexOf(nextChar())) < 0) {
+							return returnError('?', errCode, "[]{}");
+						} else if (i > 0) {
+							ch = "?\\\b\f\n\r\t".charAt(i);
+							nextChar();
+						} else {
+							nextChar();
+							int x = 0;
+							for (int j = 0; j < 4; j++) {
+								int y = JsonUtil.hexDigit(peekChar());
+								if (y < 0) {
+									//hexadecimal digit expected
+									return returnError(null,
+										JSON.JSON005, "[]{}");
+								}
+								x = (x << 4) + y;
+							}
+							ch = (char) x;
+						}
+					} else {
+						nextChar();
+					}
+					if (!isChar('\'')) {
+						setIndex(pos);
+						//JSON value expected
+						return returnError(ch, errCode, "[]{}");
+					}
+					return returnValue(ch);
+				} else if (isToken("b(")) {
+					try {
+						result = SUtils.decodeBase64(this);
+						if (isChar(')')) {
+							return returnValue(result);
+						}
+					} catch (SException ex) {
+						putReport(ex.getReport());
+					}
+					setIndex(pos);
+					return returnError(null, JSON.JSON010, "[]{}");
+				} else if (isToken("d(")) {
+					if (isDatetime("--M[-d][Z]|" + //month day
+						"---d[Z]|"+ //day
+						"H:m[:s[?',.'S]][Z]]|"+ //time
+						"y-M-d['T'H:m[:s[?',.'S]][Z]]|" +
+//						"y-DDD['T'H:m[:s[?',.'S]][Z]]|" +
+//						"y-'W'w-e['T'H:m[:s[?',.'S]][Z]]|" +
+						"y-MZ|"+ // year month
+						"yZ|"+ // year with zone
+						"y-M|"+ // year month
+						"y")) { // year without zone
+						if (isChar(')')) {
+							return returnValue(getParsedSDatetime());
+						}
+					}
+					setIndex(pos);
+					//JSON value expected
+					return returnError(null, JSON.JSON010, "[]{}");
+				} else if (isToken("p(")) {
+					if (isXMLDuration()) {
+						if (isChar(')')) {
+							return returnValue(getParsedSDuration());
+						}
+					}
+					setIndex(pos);
+					//JSON value expected
+					return returnError(null, JSON.JSON010, "[]{}");
+				} else if (isToken("#(")) { // currency ammount
+					if (isFloat() || isInteger()) {
+						String s = getParsedString();
+						isChar(' ');
+						if ((ch=isLetter()) != SParser.NOCHAR) {
+							String code = String.valueOf(ch);
+							i = 0;
+							for (;;) {
+								if (++i < 3	&& (ch=isLetter())!=SParser.NOCHAR){
+									code += ch;
+								} else {
+									break;
+								}
+							}
+							if (isChar(')') && i == 3) {
+								BigDecimal d;
+								try {
+									d = new BigDecimal(s);
+								} catch (RuntimeException ex) {
+									//Decimal number error&{0}{: }
+									error(XDEF.XDEF409, s);
+									return returnValue(null);
+								}
+								try {
+									return returnValue(
+										new CurrencyAmount(d, code));
+								} catch (SRuntimeException ex) {
+									putReport(ex.getReport());//currency error
+									return returnValue(null);
+								}
+							}
+						}
+					}
+					setIndex(pos);
+					//JSON value expected
+					return returnError(null, JSON.JSON010, "[]{}");
+				} else if (isToken("gps(")) { // GPS position
+					result = null;
+					if (isSignedFloat() || isSignedInteger()) {
+						double latitude = getParsedDouble();
+						if (isChar(',') && (isChar(' ') || true)
+							&& (isSignedFloat() || isSignedInteger())) {
+							double longitude = getParsedDouble();
+							double altitude = Double.MIN_VALUE;
+							String name = null;
+							if (isChar(',') && (isChar(' ') || true)) {
+								if (isSignedFloat() || isSignedInteger()) {
+									altitude = getParsedDouble();
+									if (isChar(',') && (isChar(' ') || true)) {
+										name = readGPSName();
+									}
+								} else {
+									name = readGPSName();
+								}
+							}
+							if (isChar(')')) {
+								try {
+									return returnValue(new GPSPosition(
+										latitude, longitude, altitude, name));
+								} catch(SRuntimeException ex) {
+									putReport(ex.getReport()); // invalid GPS
+								}
+							}
+						}
+					}
+					setIndex(pos);
+					//JSON value expected
+					return returnError(null, JSON.JSON010, "[]{}");
+				}
+			}
+			setIndex(pos);
 			if (isChar('+')) {
 				error(JSON.JSON017, "+");//Not allowed character '&{0}'
 				wasError = true;
@@ -324,19 +564,18 @@ public class XonParser extends StringParser {
 				pos = getIndex();
 				isChar('-');
 			}
-			int pos1 = getIndex() - pos;
+			int firstDigit =  getIndex() - pos; // offset of first digit
 			if (isInteger()) {
-				Number number;
-				boolean isfloat = false;
-				if (isChar('.')) { // decimal point
-					isfloat = true;
+				boolean isfloat;
+				if (isfloat = isChar('.')) { // decimal point
 					if (!isInteger()) {
 						error(JSON.JSON017, ".");//Not allowed character '&{0}'
 						wasError = true;
 					}
 				}
-				char ch = getCurrentChar();
-				if (isChar('e') || isChar('E')) {//exponent
+				ch = getCurrentChar();
+				if (ch == 'e' || ch == 'E') {//exponent
+					nextChar();
 					isfloat = true;
 					if (!isSignedInteger()) {
 						error(JSON.JSON017,""+ch);//Not allowed character '&{0}'
@@ -344,25 +583,50 @@ public class XonParser extends StringParser {
 					}
 				}
 				String s = getBufferPart(pos, getIndex());
-				if (s.charAt(pos1) == '0' && s.length() > 1 &&
-					Character.isDigit(s.charAt(pos1 + 1))) {
+				if (s.charAt(firstDigit) == '0' && s.length() > 1 &&
+					Character.isDigit(s.charAt(firstDigit + 1))) {
 						error(JSON.JSON014); // Illegal leading zero in number
 				}
-				number = wasError ? 0
-					: isfloat ? new BigDecimal(s) : new BigInteger(s);
-				return _genJObjects
-					? new CompileJsonXdef.JValue(_sPosition,number) : number;
+				if (wasError) {
+					return returnValue(0);
+				}
+				if (_xon) {
+					try {
+						if (isChar('D')) {
+							return returnValue(new BigDecimal(s));
+						} else if (isChar('F')) {
+							return returnValue(Double.parseDouble(s));
+						}
+						if (!isfloat) {
+							switch(isOneOfChars("NLISB")) {
+								case 0:	return returnValue(new BigInteger(s));
+								case 1: return returnValue(Long.parseLong(s));
+								case 2: return returnValue(Integer.parseInt(s));
+								case 3: return returnValue(Short.parseShort(s));
+								case 4: return returnValue(Byte.parseByte(s));
+							}
+						}
+					} catch (Exception ex) {
+						return returnError(0, JSON.JSON010, "[]{}");
+					}
+				}
+				if (isfloat) {
+					return returnValue(new BigDecimal(s));
+				} else {
+					try {
+						return returnValue(Long.parseLong(s));
+					} catch (Exception ex) {
+						return returnValue(new BigInteger(s));
+					}
+				}
 			}
-			error(JSON.JSON010); //JSON value expected
-			if (findOneOfChars("[]{}") == NOCHAR) {// skip to next item
-				setEos();
-			}
-			return _genJObjects
-				? new CompileJsonXdef.JValue(_sPosition, null) : null;
+			setIndex(pos);
+			//JSON value expected
+			return returnError(null, JSON.JSON010, "[]{}");
 		}
 	}
 
-	/** Parse JSON source data.
+	/** Parse JSON or XON source data (depends on the flag "_xon").
 	 * @return parsed JSON object.
 	 * @throws SRuntimeException if an error occurs,
 	 */
