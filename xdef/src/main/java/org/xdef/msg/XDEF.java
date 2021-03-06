@@ -557,7 +557,7 @@ public interface XDEF {
 	public static final long XDEF573 = 31159025937L;
 	/** The validation method &amp;{0} can be called only from the X-script of attribute or text node&amp;{#SYS000} */
 	public static final long XDEF574 = 31159025938L;
-	/** "Invalid currency code: "{0}"&amp;{#SYS000} */
+	/** "Invalid currency code: "&amp;{0}"&amp;{#SYS000} */
 	public static final long XDEF575 = 31159025939L;
 	/** Input XML source is empty or does not exist */
 	public static final long XDEF578 = 31159025940L;

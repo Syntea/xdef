@@ -30,11 +30,13 @@ public class GPSPosition {
 	 * @param name the name of position or null.
 	 * @throws SRuntimeException if position is incorrect.
 	 */
-	public GPSPosition(final double latitude,
-		final double longitude,
-		final double altitude,
+	public GPSPosition(final Number latitude,
+		final Number longitude,
+		final Number altitude,
 		final String name) {
-		_latitude = latitude; _longitude = longitude; _altitude = altitude;
+		_latitude = latitude.doubleValue();
+		_longitude = longitude.doubleValue();
+		_altitude = altitude.doubleValue();
 		_name = name;
 		checkValue();
 	}
@@ -119,8 +121,8 @@ public class GPSPosition {
 
 	@Override
 	public String toString() {
-		return "(" + _latitude + "," + _longitude
-			+ (_altitude != Double.MIN_VALUE ? "," + _altitude : "")
-			+ (_name != null ? "," + _name : "") + ')';
+		return "(" + _latitude + ", " + _longitude
+			+ (_altitude != Double.MIN_VALUE ? ", " + _altitude : "")
+			+ (_name != null ? ", " + _name : "") + ')';
 	}
 }
