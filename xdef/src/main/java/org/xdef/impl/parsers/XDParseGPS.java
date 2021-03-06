@@ -26,27 +26,25 @@ public class XDParseGPS extends XDParserAbstract {
 				double latitude =
 					Double.parseDouble(p.getParsedString().substring(1));
 				String name = null;
-				if (p.isChar(',')) {
+				if (p.isChar(',') && (p.isChar(' ') || true)) {
 					int pos1 = p.getIndex();
 					if ((p.isSignedFloat() || p.isSignedInteger())) {
 						double longitude = Double.parseDouble(
 							p.getBufferPart(pos1, p.getIndex()));
 						double altitude = Double.MIN_VALUE;
-						if (p.isChar(',')) {
+						if (p.isChar(',') && (p.isChar(' ') || true)) {
 							pos1 = p.getIndex();
-							if ((p.isSignedFloat() || p.isSignedInteger())){
+							if ((p.isSignedFloat() || p.isSignedInteger())) {
 								altitude = Double.parseDouble(
 									p.getBufferPart(pos1, p.getIndex()));
-								if (p.isChar(',')) {
+								if (p.isChar(',') && (p.isChar(' ') || true)) {
 									name = readGPSName(p);
 								}
 							} else {
 								name = readGPSName(p);
 							}
-						} else {
-							if (p.isChar(',')) {
-								name = readGPSName(p);
-							}
+						} else  if (p.isChar(',') && (p.isChar(' ') || true)) {
+							name = readGPSName(p);
 						}
 						if (p.isChar(')')) {
 							p.setParsedValue(new DefGPSPosition(new GPSPosition(
@@ -82,7 +80,6 @@ public class XDParseGPS extends XDParserAbstract {
 
 	@Override
 	public String parserName() {return ROOTBASENAME;}
-
 	@Override
 	public short parsedType() {return XD_GPSPOSITION;}
 }

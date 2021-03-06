@@ -9,7 +9,7 @@ import org.xdef.msg.SYS;
 import org.xdef.sys.CurrencyAmount;
 import org.xdef.sys.SIllegalArgumentException;
 
-/** The class implements the internal object with currency amount.
+/** Implementation of objects with currency amount.
  * @author Vaclav Trojan
  */
 public class DefCurrencyAmount extends XDValueAbstract
@@ -17,8 +17,8 @@ public class DefCurrencyAmount extends XDValueAbstract
 	/** Value of CurrencyAmount. */
 	private final CurrencyAmount _amount;
 
-	/** Create new instance of DefCurrencyAmount fro CurrencyAmount.
-	 * @param amount string with amount as decimal number.
+	/** Create new instance of DefCurrencyAmount for CurrencyAmount.
+	 * @param amount Object contains amount as decimal number and ISO4217 code.
 	 */
 	public DefCurrencyAmount(final CurrencyAmount amount) {_amount = amount;}
 
@@ -27,18 +27,32 @@ public class DefCurrencyAmount extends XDValueAbstract
 ////////////////////////////////////////////////////////////////////////////////
 
 	@Override
+	/**	Get amount of currency as decimal number.
+	 * @return amount of currency as decimal number.
+	 */
 	public BigDecimal amount() {
 		return _amount != null ? _amount.amount() : null;
 	}
 	@Override
+	/**	Get ISO4217 code of currency.
+	 * @return ISO4217 code of currency..
+	 */
 	public String code() {
 		return _amount != null ? _amount.code() : null;
 	}
 	@Override
+	/** Get the default number of fraction digits used with this currency.
+	 * In the case of pseudo-currencies -1 is returned.
+	 * @return default number of fraction digits used with this currency.
+	 */
 	public int fractionDigits() {
 		return _amount != null ? _amount.fractionDigits() : -1;
 	}
 	@Override
+	/** Get printable form of this currency amount.
+	 * @return printable form of this currency amount with required decimal
+	 * digits.
+	 */
 	public final String display() {
 		return _amount != null ? _amount.display() : "null";
 	}
