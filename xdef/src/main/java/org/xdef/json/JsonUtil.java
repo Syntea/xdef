@@ -535,9 +535,9 @@ public class JsonUtil {
 // Compare two JSON objects.
 ////////////////////////////////////////////////////////////////////////////////
 
-	/** Compare two JSON objects.
-	 * @param j1 first object with JSON data.
-	 * @param j2 second object with JSON data.
+	/** Compare two JSON or XON objects.
+	 * @param j1 first object with JSON or XON data.
+	 * @param j2 second object with JSON or XON data.
 	 * @return true if and only if both objects contains equal data.
 	 */
 	public final static boolean jsonEqual(final Object j1, final Object j2) {

@@ -5,6 +5,10 @@ import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import org.xdef.msg.JSON;
+import org.xdef.sys.CurrencyAmount;
+import org.xdef.sys.GPSPosition;
+import org.xdef.sys.SDatetime;
+import org.xdef.sys.SDuration;
 import org.xdef.sys.SRuntimeException;
 
 /** Provides comparing of JSON objects
@@ -98,7 +102,7 @@ class JsonCompare {
 			n1.getClass().getName(), n2.getClass().getName());
 	}
 
-	/** Check if JSON values from arguments are equal.
+	/** Check if JSON or XON values from arguments are equal.
 	 * @param o1 first value.
 	 * @param o2 second value.
 	 * @return true if and only if both values are equal.
@@ -125,6 +129,18 @@ class JsonCompare {
 		}
 		if (o1 instanceof Boolean) {
 			return ((Boolean) o1).equals(o2);
+		}
+		if (o1 instanceof SDatetime) {
+			return ((SDatetime) o1).equals(o2);
+		}
+		if (o1 instanceof SDuration) {
+			return ((SDuration) o1).equals(o2);
+		}
+		if (o1 instanceof GPSPosition) {
+			return ((GPSPosition) o1).equals(o2);
+		}
+		if (o1 instanceof CurrencyAmount) {
+			return ((CurrencyAmount) o1).equals(o2);
 		}
 		// Incomparable objects &{0} and &{1}
 		throw new SRuntimeException(JSON.JSON012,
