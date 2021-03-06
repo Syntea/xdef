@@ -7,10 +7,10 @@ import org.xdef.sys.StringParser;
 import org.xdef.xml.KXmlUtils;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.io.StringReader;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.List;
@@ -53,7 +53,7 @@ public class JsonUtil {
 	 * @param c character to be converted.
 	 * @return string with converted character.
 	 */
-	public final static String genXmlHexChar(final char c) {
+	final static String genXmlHexChar(final char c) {
 		return "_x" + Integer.toHexString(c) + '_';
 	}
 
@@ -107,7 +107,7 @@ public class JsonUtil {
 	 * @param s raw XML name.
 	 * @return name with colon replaced by "_x3a_".
 	 */
-	public final static String replaceColonInXMLName(final String s) {
+	final static String replaceColonInXMLName(final String s) {
 		int i = s.indexOf(':');
 		return i >= 0 ? s.substring(0, i) + "_x3a_" + s.substring(i + 1) : s;
 	}
@@ -153,6 +153,35 @@ public class JsonUtil {
 		}
 		return sb.toString();
 	}
+
+	/** Create JSON named value from XML name.
+	 * @param name XML name.
+	 * @return JSON name.
+	 */
+	public final static String xmlToJsonName(final String name) {
+		if ("_x00_".equals(name)) {
+			return "";
+		}
+		StringBuilder sb = new StringBuilder();
+		int len = name.length();
+		for (int i = 0; i < len; i++) {
+			char ch = name.charAt(i);
+			if (ch == '_' && i + 2 < len) {
+				if (isJChar(name, i)) {
+					int ndx = name.indexOf('_', i+1);
+					int x = Integer.parseInt(name.substring(i+2, ndx), 16);
+					sb.append((char) x);
+					i = ndx;
+				} else {
+					sb.append('_');
+				}
+			} else {
+				sb.append(ch);
+			}
+		}
+		return sb.toString();
+	}
+
 	/** Create JSON string from source string.
 	 * @param src XML form of string.
 	 * @return XML form of string converted to JSON.
@@ -174,7 +203,10 @@ public class JsonUtil {
 	 */
 	public final static int hexDigit(final char ch) {
 		int i = "0123456789abcdefABCDEF".indexOf(ch);
-		return i > 15 ? i - 6 : i;
+		if (i > 15) {
+			return i - 6;
+		}
+		return i;
 	}
 
 	/** Check if on the position given by index in a string it is the
@@ -183,7 +215,7 @@ public class JsonUtil {
 	 * @param index index where to start inspection.
 	 * @return true if index position represents hexadecimal form of character.
 	 */
-	public final static boolean isJChar(final String s, final int index) {
+	final static boolean isJChar(final String s, final int index) {
 		if (index + 3 > s.length() ||
 			s.charAt(index) != '_' || s.charAt(index+1) != 'x' ||
 			hexDigit(s.charAt(index+2)) < 0) {
@@ -244,100 +276,7 @@ public class JsonUtil {
 // JSON parser
 ////////////////////////////////////////////////////////////////////////////////
 
-	/** Parse JSON document from input source data.
-	 * The source data may be either file pathname or URL or JSON source.
-	 * @param source file pathname or URL or string with JSON source.
-	 * @return parsed JSON object.
-	 * @throws SRuntimeException if an error occurs.
-	 */
-	public final static Object parse(final String source)
-		throws SRuntimeException{
-		Object result;
-		if (source.charAt(0) == '{' && source.endsWith("}")
-			|| (source.charAt(0) == '[' && source.endsWith("]"))) {
-			XonParser jx = new XonParser();
-			jx.setSourceBuffer(source);
-			result = jx.parse();
-			jx.getReportWriter().checkAndThrowErrors();
-			return result;
-		}
-		InputStream in = null;
-		String sysId = null;
-		try {
-			URL url = SUtils.getExtendedURL(source);
-			in = url.openStream();
-			sysId = url.toExternalForm();
-			result = parse(in, sysId);
-		} catch (Exception ex) {
-			if (!new File(source).exists()) {
-				XonParser jx = new XonParser();
-				jx.setSourceBuffer(source);
-				result = jx.parse();
-				jx.getReportWriter().checkAndThrowErrors();
-				return result;
-			}
-			try {
-				result = parse(new File(source));
-			} catch (Exception x) {
-				if (x instanceof RuntimeException) {
-					throw (RuntimeException) x;
-				}
-				//IO error detected on &{0}&{1}{, reason: }
-				throw new SRuntimeException(SYS.SYS034, source, x);
-			}
-		}
-		try {
-			if (in != null) {
-				in.close();
-			}
-		} catch (IOException x) {
-			//IO error detected on &{0}&{1}{, reason: }
-			throw new SRuntimeException(SYS.SYS034, source, x);
-		}
-		return result;
-	}
-
-	/** Parse JSON document from input source data in file.
-	 * @param f input file.
-	 * @return parsed JSON object.
-	 * @throws SRuntimeException if an error occurs.
-	 */
-	public final static Object parse(final File f)
-		throws SRuntimeException {
-		try {
-			FileInputStream in = new FileInputStream(f);
-			return parse(in, f.getCanonicalPath());
-		} catch (Exception ex) {
-			if (ex instanceof RuntimeException) {
-				throw (RuntimeException) ex;
-			}
-			//IO error detected on &{0}&{1}{, reason: }
-			throw new SRuntimeException(SYS.SYS034, f, ex);
-		}
-	}
-
-	/** Parse JSON document from input source data in InputStream.
-	 * @param in input data.
-	 * @return parsed JSON object.
-	 * @throws SRuntimeException if an error occurs.
-	 */
-	public final static Object parse(final InputStream in)
-		throws SRuntimeException {
-		Object result = parse(in, null);
-		try {
-			in.close();
-		} catch (IOException ex) {}
-		return result;
-	}
-
-	/** Parse JSON document from input source data in InputStream.
-	 * @param in input data.
-	 * @param sysid System id.
-	 * @return parsed JSON object.
-	 * @throws SRuntimeException if an error occurs.
-	 */
-	public final static Object parse(final InputStream in,
-		final String sysid) throws SRuntimeException{
+	private static XonParser initParser(final InputStream in, final String id) {
 		try {
 			int i = in.read(); //1st byte from input stream
 			int j = in.read(); //2nd byte from input stream
@@ -380,40 +319,192 @@ public class JsonUtil {
 				}
 			}
 			XonParser jx = new XonParser();
+			if (id != null) {
+				jx.setSysId(id);
+			}
 			jx.setSourceReader(reader, 0L, s);
-			if (sysid != null && !sysid.isEmpty()) {
-				jx.setSysId(sysid);
-			}
-			Object result = jx.parse();
-			jx.getReportWriter().checkAndThrowErrors();
-			return result;
-		} catch (Exception ex) { // never should happen
-			if (ex instanceof RuntimeException) {
-				throw (RuntimeException) ex;
-			}
+			return jx;
+		} catch (Exception ex) {
 			throw new SRuntimeException(SYS.SYS036, ex);//Program exception &{0}
 		}
 	}
 
+	private static XonParser getParser(final Object src, final String id) {
+		if (src instanceof InputStream) {
+			return initParser((InputStream) src, null);
+		}
+		InputStream in;
+		try {
+			Object obj = src;
+			if (obj instanceof String) {
+				String s = (String) obj;
+				try {
+					obj = SUtils.getExtendedURL(s);
+				} catch (Exception ex) {
+					File f = new File(s);
+					obj = f;
+					if (!f.exists()) {
+						obj = new StringReader(s);
+					}
+				}
+			}
+			if (obj instanceof URL) {
+				URL u = (URL) obj;
+				in = u.openStream();
+				return initParser(in, id == null ? u.toExternalForm() : id);
+			}
+			if (obj instanceof File) {
+				File f = (File) obj;
+				return initParser(new FileInputStream(f), f.getCanonicalPath());
+			}
+			if (obj instanceof Reader) {
+				XonParser jx = new XonParser((Reader) obj);
+				if (id != null) {
+					jx.setSysId(id);
+				}
+				return jx;
+			}
+		} catch (Exception ex) {
+			throw new SRuntimeException(SYS.SYS036, ex);//Program exception &{0}
+		}
+		throw new SRuntimeException(SYS.SYS036, "input: " + src.getClass());
+	}
+
+	/** Parse JSON data with prepared parser.
+	 * @param jx prepared parser.
+	 * @return parsed object;
+	 */
+	private static Object parse(final XonParser jx) {
+		Object result = jx.parse();
+		jx.getReportWriter().checkAndThrowErrors();
+		return result;
+	}
+
+	/** Parse JSON document from input reader.
+	 * @param in reader with JSON source.
+		 * @param sysid System id.
+	 * @return parsed JSON object.
+	 * @throws SRuntimeException if an error occurs.
+	 */
+	public final static Object parse(final Reader in, final String sysid) {
+		return parse(getParser(in, sysid));
+	}
+
+	/** Parse JSON document from input source data.
+	 * The source data may be either file pathname or URL or JSON source.
+	 * @param s file pathname or URL or string with JSON source.
+	 * @return parsed JSON object.
+	 * @throws SRuntimeException if an error occurs.
+	 */
+	public final static Object parse(final String s) throws SRuntimeException {
+		return parse(getParser(s, null));
+	}
+
+	/** Parse JSON document from input source data in file.
+	 * @param f input file.
+	 * @return parsed JSON object.
+	 * @throws SRuntimeException if an error occurs.
+	 */
+	public final static Object parse(final File f) throws SRuntimeException {
+		return parse(getParser(f, null));
+	}
+
+	/** Parse JSON document from input source data in InputStream.
+	 * @param in input data.
+	 * @return parsed JSON object.
+	 * @throws SRuntimeException if an error occurs.
+	 */
+	public final static Object parse(final InputStream in)
+		throws SRuntimeException {
+		return parse(getParser(in, null));
+	}
+
+	/** Parse JSON document from input source data in InputStream.
+	 * @param in input data.
+	 * @param sysid System id.
+	 * @return parsed JSON object.
+	 * @throws SRuntimeException if an error occurs.
+	 */
+	public final static Object parse(final InputStream in, final String sysid)
+	 throws SRuntimeException {
+		return parse(getParser(in, sysid));
+	}
+
 	/** Parse source URL to JSON.
-	 * @param in source URL
+	 * @param url source URL
 	 * @return parsed JSON object.
 	 * @throws SRuntimeException if an error occurs,
 	 */
-	public final static Object parse(final URL in) throws SRuntimeException{
-		try {
-			InputStream is = in.openConnection().getInputStream();
-			try {
-				return parse(is, in.toExternalForm());
-			} finally {
-				is.close();
-			}
-		} catch (IOException ex) {
-			//URL &{0} error: &{1}{; }
-			throw new SRuntimeException(SYS.SYS076,in.toExternalForm(), ex);
-		}
+	public final static Object parse(final URL url) throws SRuntimeException {
+		return parse(getParser(url, null));
+	}
+////////////////////////////////////////////////////////////////////////////////
+	private static XonParser getXONParser(final Object src, final String id) {
+		XonParser xx = getParser(src, id);
+		xx.setXonMode();
+		return xx;
 	}
 
+	/** Parse JSON document from input reader.
+	 * @param in reader with JSON source.
+	 * @param sysid System id.
+	 * @return parsed JSON object.
+	 * @throws SRuntimeException if an error occurs.
+	 */
+	public final static Object parseXON(final Reader in, final String sysid) {
+		return parse(getXONParser(in, sysid));
+	}
+
+	/** Parse JSON document from input source data.
+	 * The source data may be either file pathname or URL or JSON source.
+	 * @param s file pathname or URL or string with JSON source.
+	 * @return parsed JSON object.
+	 * @throws SRuntimeException if an error occurs.
+	 */
+	public final static Object parseXON(final String s)throws SRuntimeException{
+		return parse(getXONParser(s, null));
+	}
+
+	/** Parse JSON document from input source data in file.
+	 * @param f input file.
+	 * @return parsed JSON object.
+	 * @throws SRuntimeException if an error occurs.
+	 */
+	public final static Object parseXON(final File f) throws SRuntimeException{
+		return parse(getXONParser(f, null));
+	}
+
+	/** Parse JSON document from input source data in InputStream.
+	 * @param in input data.
+	 * @return parsed JSON object.
+	 * @throws SRuntimeException if an error occurs.
+	 */
+	public final static Object parseXON(final InputStream in)
+		throws SRuntimeException {
+		return parse(getXONParser(in, null));
+	}
+
+	/** Parse XON document from input source data in InputStream.
+	 * @param in input data.
+	 * @param sysid System id.
+	 * @return parsed JSON object.
+	 * @throws SRuntimeException if an error occurs.
+	 */
+	public final static Object parseXON(final InputStream in,final String sysid)
+	 throws SRuntimeException {
+		return parse(getXONParser(in, sysid));
+	}
+
+	/** Parse source URL to JSON.
+	 * @param url source URL
+	 * @return parsed JSON object.
+	 * @throws SRuntimeException if an error occurs,
+	 */
+	public final static Object parseXON(final URL url) throws SRuntimeException{
+		return parse(getXONParser(url, null));
+	}
+
+////////////////////////////////////////////////////////////////////////////////
 	/** Create JSON string from object (no indentation).
 	 * @param obj JSON object.
 	 * @return string with JSON source format.
@@ -574,5 +665,23 @@ public class JsonUtil {
 	 */
 	public final static Element jsonToXmlXD(final Object json) {
 		return JsonToXml.toXmlXD(json);
+	}
+////////////////////////////////////////////////////////////////////////////////
+
+	/** Create string with XON object.
+	 * @param x the XON object.
+	 * @param indent if true the result will be indented.
+	 * @return string with XCN source data.
+	 */
+	public static final String toXonString(final Object x,final boolean indent){
+		return JsonToString.objectToXon(x, indent ? "" : null);
+	}
+
+	/** Create JSON object form XON object.
+	 * @param xon  XON object
+	 * @return JSON object.
+	 */
+	public static final Object xonToJson(Object xon) {
+		return JsonToString.xobjectToJobject(xon);
 	}
 }

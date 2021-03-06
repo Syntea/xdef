@@ -1,7 +1,16 @@
 package org.xdef.json;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import org.xdef.sys.CurrencyAmount;
+import org.xdef.sys.GPSPosition;
+import org.xdef.sys.SDatetime;
+import org.xdef.sys.SDuration;
+import org.xdef.sys.SUtils;
 
 /** Provides conversion of JSON to string.
  * @author Vaclav Trojan
@@ -128,5 +137,142 @@ class JsonToString {
 			sb.append(indent);
 		}
 		sb.append('}');
+	}
+
+////////////////////////////////////////////////////////////////////////////////
+// JSON/XON contertor
+////////////////////////////////////////////////////////////////////////////////
+
+	private static List xlistToJlist(final List xlist) {
+		List<Object> result = new ArrayList<Object>();
+		for (Object x: xlist) {
+			result.add(xobjectToJobject(x));
+		}
+		return result;
+	}
+
+	private static Map xmapToJmap(final Map xmap) {
+		Map<String, Object> result = new LinkedHashMap<String, Object>();
+		for (Object x: xmap.entrySet()) {
+			Map.Entry en = (Map.Entry) x;
+			String key = (String) en.getKey();
+			key = JsonUtil.xmlToJsonName(key);
+			Object y = en.getValue();
+			result.put(key, xobjectToJobject(y));
+		}
+		return result;
+	}
+
+	final static Object xobjectToJobject(final Object x) {
+		if (x == null || x instanceof String || x instanceof Boolean
+			|| x instanceof Number) {
+			return x;
+		} else if (x instanceof Map) {
+			return xmapToJmap((Map) x);
+		} else if (x instanceof List) {
+			return xlistToJlist((List) x);
+		} else if (x instanceof Character) {
+			return String.valueOf(x);
+		} else if (x instanceof SDatetime) {
+			return x.toString();
+		} else if (x instanceof SDuration) {
+			return x.toString();
+		} else if (x instanceof CurrencyAmount) {
+			return "#" + x;
+		} else if (x instanceof GPSPosition) {
+			return "gps" +  x;
+		}
+		try { // try byte array
+			return "b(" + new String(SUtils.encodeBase64((byte[]) x)) + ")";
+		} catch (Exception ex) {}
+		return x.toString();
+	}
+
+	private static String mapToXon(final Map map, final String indent) {
+		String newIndent = indent != null ? indent + "  " : null;
+		String result = "{";
+		boolean wasFirst = false;
+		for (Object x: map.entrySet()) {
+			Map.Entry en = (Map.Entry) x;
+			if (!wasFirst) {
+				wasFirst = true;
+			} else {
+				result += ',';
+			}
+			if (indent != null) {
+				result += "\n" + newIndent;
+			}
+			String key = (String) en.getKey();
+			String value = objectToXon(en.getValue(), newIndent);
+			result += key + (indent == null ? "=" :" = ") + value;
+		}
+		if (wasFirst && indent != null) {
+			result += "\n" + indent;
+		}
+		return result + "}";
+	}
+
+	private static String listToXon(final List list, final String indent) {
+		String newIndent = indent != null ? indent + "  " : null;
+		String result = "[";
+		boolean wasFirst = false;
+		for (Object x: list) {
+			if (!wasFirst) {
+				wasFirst = true;
+			} else {
+				result += ',';
+			}
+			if (indent != null) {
+				result += "\n" + newIndent;
+			}
+			result += objectToXon(x, newIndent);
+		}
+		if (wasFirst && indent != null) {
+			result += "\n" + indent;
+		}
+		return result + "]";
+	}
+
+	final static String objectToXon(final Object x, final String indent) {
+		if (x == null || x instanceof Boolean) {
+			return "" + x;
+		} else if (x instanceof Map) {
+			return mapToXon((Map) x, indent);
+		} else if (x instanceof List) {
+			return listToXon((List) x, indent);
+		} else {
+			if (x instanceof Number) {
+				String result = x.toString();
+				if (x instanceof BigDecimal) {
+					return result + 'D';
+				} else if (x instanceof Double) {
+					return result + 'F';
+				} else if (x instanceof BigInteger) {
+					return result + 'N';
+				} else if (x instanceof Short) {
+					return result + 'S';
+				} else if (x instanceof Integer) {
+					return result + 'I';
+				}
+				return result;
+			} else if (x instanceof String) {
+				return '"' + JsonUtil.jstringToSource((String) x) + '"';
+			} else if (x instanceof Character) {
+				return '"' + JsonUtil.jstringToSource(String.valueOf(x)) + '"';
+			} else if (x instanceof SDatetime) {
+				x.toString();
+				return "d(" + x + ")";
+			} else if (x instanceof SDuration) {
+				return "p(" + x + ")";
+			} else if (x instanceof CurrencyAmount) {
+				return "#" + x;
+			} else if (x instanceof GPSPosition) {
+				return "gps" + x;
+			}
+			try { // try byte array
+				return "b(" + new String(SUtils.encodeBase64((byte[]) x)) + ")";
+			} catch (Exception ex) {}
+			return x.toString();
+		}
 	}
 }
