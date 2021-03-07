@@ -198,8 +198,8 @@ public final class XDReader extends SObjectReader {
 						return new DefGPSPosition(new GPSPosition(readDouble(),
 							readDouble(), readDouble(), readString()));
 					case XDValueID.XD_CURRAMOUNT:
-						return new DefCurrencyAmount(new CurrencyAmount(
-							readBigDecimal(), readString()));
+						return new DefCurrencyAmount(
+							new CurrencyAmount(readDouble(), readString()));
 					case XDValueID.XD_LOCALE: {
 						return new DefLocale(
 							readString(), readString(), readString());

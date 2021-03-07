@@ -1,7 +1,5 @@
 package org.xdef;
 
-import org.xdef.sys.GPSPosition;
-
 /** Value of GPS position in X-script.
  * @author Vaclav Trojan
  */
@@ -30,9 +28,9 @@ public interface XDGPSPosition extends XDValue {
 	public String name();
 
 	/** Get distance in meters from this position to position from the argument.
-	 * @param x position to which the distance is computed.
+	 * @param x GPS position to which the distance is computed.
 	 * @return distance from this position to given position. Note the
 	 * Earth radius used in Haversine formula is 6376500 m.
 	 */
-	public double distanceTo(final GPSPosition x);
+	public double distanceTo(final XDGPSPosition x);
 }

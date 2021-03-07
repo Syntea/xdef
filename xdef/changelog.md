@@ -1,8 +1,8 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 40.1.3, release-date 2021-03-06
+# Version 40.1.3, release-date 2021-03-08
 * preparing version 40.2
-* corrected bug in display of zone with zero hours and negative minutes in offset.
+* corrected display of zone with zero hours and negative minutes in offset.
 * added new X-definition type `GPSPosition`.
   Methods with this object:
     `latitude()` returns GPS latitude in degrees (-90.0 to 90.0).
