@@ -1,16 +1,14 @@
 package org.xdef;
 
-import java.math.BigDecimal;
-
 /** Currency amount objects.
  * @author Vaclav Trojan
  */
 public interface XDCurrencyAmount extends XDValue {
 
-	/**	Get amount of currency as decimal number.
-	 * @return amount of currency as decimal number.
+	/**	Get amount of currency.
+	 * @return amount of currency.
 	 */
-	public BigDecimal amount();
+	public double amount();
 
 	/**	Get ISO4217 code of currency.
 	 * @return ISO4217 code of currency..

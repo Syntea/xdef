@@ -1,6 +1,5 @@
 package org.xdef.impl.code;
 
-import java.math.BigDecimal;
 import org.xdef.XDCurrencyAmount;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
@@ -17,6 +16,9 @@ public class DefCurrencyAmount extends XDValueAbstract
 	/** Value of CurrencyAmount. */
 	private final CurrencyAmount _amount;
 
+	/** Create new instance null DefCurrencyAmount. */
+	public DefCurrencyAmount() {_amount = null;}
+
 	/** Create new instance of DefCurrencyAmount for CurrencyAmount.
 	 * @param amount Object contains amount as decimal number and ISO4217 code.
 	 */
@@ -27,11 +29,11 @@ public class DefCurrencyAmount extends XDValueAbstract
 ////////////////////////////////////////////////////////////////////////////////
 
 	@Override
-	/**	Get amount of currency as decimal number.
-	 * @return amount of currency as decimal number.
+	/**	Get amount of currency.
+	 * @return amount of currency.
 	 */
-	public BigDecimal amount() {
-		return _amount != null ? _amount.amount() : null;
+	public double amount() {
+		return _amount != null ? _amount.amount() : 0;
 	}
 	@Override
 	/**	Get ISO4217 code of currency.

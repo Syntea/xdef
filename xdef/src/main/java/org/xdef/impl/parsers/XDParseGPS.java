@@ -22,9 +22,9 @@ public class XDParseGPS extends XDParserAbstract {
 		p.isSpaces();
 		int pos = p.getIndex();
 		try {
-			if (p.isChar('(') && (p.isSignedFloat() || p.isSignedInteger())) {
+			if ((p.isSignedFloat() || p.isSignedInteger())) {
 				double latitude =
-					Double.parseDouble(p.getParsedString().substring(1));
+					Double.parseDouble(p.getParsedString());
 				String name = null;
 				if (p.isChar(',') && (p.isChar(' ') || true)) {
 					int pos1 = p.getIndex();
@@ -46,17 +46,16 @@ public class XDParseGPS extends XDParserAbstract {
 						} else  if (p.isChar(',') && (p.isChar(' ') || true)) {
 							name = readGPSName(p);
 						}
-						if (p.isChar(')')) {
-							p.setParsedValue(new DefGPSPosition(new GPSPosition(
-								latitude, longitude, altitude, name)));
-							return;
-						}
+						p.setParsedValue(new DefGPSPosition(
+							new GPSPosition(latitude,longitude,altitude,name)));
+						return;
 					}
 				}
 			}
 		} catch (SRuntimeException ex) {
 			p.putReport(ex.getReport());
 		}
+		p.setParsedValue(new DefGPSPosition()); //null GPS
 		//Incorrect value of '&{0}'&{1}{: }
 		p.errorWithString(XDEF.XDEF809, parserName(),
 			p.getBufferPart(pos, p.getIndex()));
@@ -66,16 +65,31 @@ public class XDParseGPS extends XDParserAbstract {
 	private String readGPSName(XDParseResult p) {
 		StringBuilder sb = new StringBuilder();
 		char ch;
-		p.isSpaces();
-		while ((ch = p.getCurrentChar()) != SParser.NOCHAR && ch != ')') {
-			sb.append(p.peekChar());
+		if (p.isChar('"')) {
+			for (;;) {
+				if ((ch = p.peekChar()) == SParser.NOCHAR) {
+					break;
+				}
+				if (ch == '"') {
+					if (!p.isChar('"')) {
+						if (sb.length() > 0) {
+							return sb.toString();
+						}
+						break;
+					}
+				}
+				sb.append(ch);
+			}
+		} else if ((ch=p.isLetter()) != SParser.NOCHAR) {
+			sb.append(ch);
+			while ((ch=p.getCurrentChar()) > ' '
+				&& (Character.isLetterOrDigit(ch) || ch == '_' || ch == '-')) {
+				sb.append(p.peekChar());
+			}
+			return sb.toString();
 		}
-		String result = sb.toString().trim();
-		if (result.isEmpty()) {
-			// Incorrect GPosition &{0}{: }
-			throw new SRuntimeException(XDEF.XDEF222, "name: " + result);
-		}
-		return result;
+		//Incorrect GPS position &amp;{0}{: }
+		throw new SRuntimeException(XDEF.XDEF222, "name error");
 	}
 
 	@Override

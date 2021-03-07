@@ -177,7 +177,7 @@ public final class XDWriter extends SObjectWriter {
 					}
 					case XDValueID.XD_CURRAMOUNT: {
 						DefCurrencyAmount y = (DefCurrencyAmount) x;
-						writeBigDecimal(y.amount());
+						writeDouble(y.amount());
 						writeString(y.code());
 					}
 					case XDValueID.XD_NAMEDVALUE: {

@@ -15,7 +15,7 @@ public class DefGPSPosition extends XDValueAbstract implements XDGPSPosition {
 	/** Value of GPosition. */
 	private final GPSPosition _position;
 
-	/** Create new instance of DefGPosition (null). */
+	/** Create new instance of null GPSPosition. */
 	public DefGPSPosition() {_position = null;}
 
 	/** Create new instance of GPSPosition given position.
@@ -53,13 +53,14 @@ public class DefGPSPosition extends XDValueAbstract implements XDGPSPosition {
 	public final double altitude() {return _position.altitude();}
 
 	@Override
-	/** Get distance in meters from this position to position from the argument.
-	 * @param x position to which the distance is computed.
-	 * @return distance from this position to given position. Note the
-	 * Earth radius used in Haversine formula is 6376500 m.
+	/** Get distance in meters from this position to position from the argument
+	 * (altitude is ignored).
+	 * @param x GPS position to which the distance is computed.
+	 * @return distance from this position to given position (note the
+	 * Earth radius used in Haversine formula is 6376500 m).
 	 */
-	public final double distanceTo(final GPSPosition x) {
-		return _position.distanceTo(x);
+	public final double distanceTo(final XDGPSPosition x) {
+		return _position.distanceTo(x.GPSValue());
 	}
 
 	@Override

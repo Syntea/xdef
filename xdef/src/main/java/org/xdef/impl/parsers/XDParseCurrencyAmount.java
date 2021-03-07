@@ -1,6 +1,5 @@
 package org.xdef.impl.parsers;
 
-import java.math.BigDecimal;
 import org.xdef.XDParseResult;
 import org.xdef.XDParserAbstract;
 import org.xdef.impl.code.DefCurrencyAmount;
@@ -22,8 +21,8 @@ public class XDParseCurrencyAmount extends XDParserAbstract {
 	public void parseObject(XXNode xnode, XDParseResult p) {
 		p.isSpaces();
 		int pos = p.getIndex();
-		if (p.isChar('(') && (p.isFloat() || p.isInteger())) {
-			String s = p.getParsedString().substring(1);
+		if (p.isFloat() || p.isInteger()) {
+			double d = Double.parseDouble(p.getParsedString());
 			char ch;
 			if (p.isChar(' ') && ((ch=p.getCurrentChar())>='A' && ch<='Z')){
 				String code = String.valueOf(ch);
@@ -37,14 +36,14 @@ public class XDParseCurrencyAmount extends XDParserAbstract {
 						break;
 					}
 				}
-				if (p.isChar(')') && i == 3) {
+				if (i == 3) {
 					try {
 						p.setParsedValue(new DefCurrencyAmount(
-							new CurrencyAmount(new BigDecimal(s), code)));
+							new CurrencyAmount(d, code)));
 						return;
 					} catch (SRuntimeException ex) {
 						Report r = ex.getReport();
-						p.error(r.getMsgID(), //currency error
+						p.error(r.getMsgID(), //currency error ?
 							r.getText(), r.getModification());
 						return;
 					}

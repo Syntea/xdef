@@ -1,8 +1,8 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 40.1.3, release-date 2021-03-06
+# Version 40.1.3, release-date 2021-03-08
 * preparing version 40.2
-* corrected bug in display of zone with zero hours and negative minutes in offset.
+* corrected display of zone with zero hours and negative minutes in offset.
 * added new X-definition type `GPSPosition`.
   Methods with this object:
     `latitude()` returns GPS latitude in degrees (-90.0 to 90.0).
@@ -12,19 +12,20 @@
   `  distanceTo(GPSPosition x)` returns distance to GPS position `x` in meters.
    Constructors:
     `new GPSPosition(latitude, longitude)`
-   or
     `new GPSPosition(latitude, longitude, altitude)`
-   (all parameters are float numbers).
+    `new GPSPosition(latitude, longitude, altitude, name)`
+    `new GPSPosition(latitude, longitude, name)`
+   latitude, longitude, altitude float numbers, name is a string.
 * added new XML validation method `gps` The required form is:
    '{latitude,longitude,[altitude[name]])'
-    where latitude,longitude,altitude are numbers and name is a string which
-    can not contain ')'.
-    e.g. `(51.52,-0.09,0.0,Lodon)` or `(51.52,-0.09)` (missing altitude
+    where parameters `latitude`, `longitude`, `altitude` are numbers and `name`
+    is a string either containing only letters or it must be quoted.
+    e.g. `(51.52, -0.09, 0.0, Lodon)` or `(51.52, -0.09)` (missing altitude
     and name).
 * added new X-definition type `CurrencyAmount`.
    Constructor:
     `new CurrencyAmount(amount, code)`
-   `amount` is string with decimal number and `code` is ISO 4217 currency code. 
+   `amount` is a number and `code` is a ISO 4217 currency code. 
    Methods with this object:
 	`amount()` returns amount of currency as decimal number.
 	`code()` returns ISO 4217 currency code.

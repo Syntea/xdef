@@ -611,6 +611,12 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 			}
 		}
 	}
+	final void throwInfo(final ChkNode chkNode,
+		final long errCode,
+		final String inf) {
+		Report r = Report.error(errCode, inf);
+		throw new SRuntimeException(updateReport(r, chkNode));
+	}
 	final void putError(final ChkNode chkNode, final long id) {
 		putReport(chkNode, Report.error(id));
 	}
@@ -685,7 +691,7 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 								CompileBase.getTypeName(xv.getType())
 								+ " " + xv.getName());
 						}
-						_stack[++sp] = new DefNull();
+						_stack[++sp] = DefNull.genNullValue(xv.getType());
 					} else {
 						_stack[++sp] = val;
 					}
@@ -1087,41 +1093,76 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 					continue;
 				}
 				case GPS_LATITUDE:
+					if (_stack[sp].isNull()) {
+						//Null value of &{0}
+						throwInfo(chkNode, XDEF.XDEF573, "GPSPosition");
+					}
 					_stack[sp] =
 						new DefDouble(((DefGPSPosition) _stack[sp]).latitude());
 					continue;
 				case GPS_LONGITUDE:
+					if (_stack[sp].isNull()) {
+						//Null value of &{0}
+						throwInfo(chkNode, XDEF.XDEF573, "GPSPosition");
+					}
 					_stack[sp] =
 						new DefDouble(((DefGPSPosition)_stack[sp]).longitude());
 					continue;
 				case GPS_ALTITUDE:
+					if (_stack[sp].isNull()) {
+						//Null value of &{0}
+						throwInfo(chkNode, XDEF.XDEF573, "GPSPosition");
+					}
 					_stack[sp] =
 						new DefDouble(((DefGPSPosition) _stack[sp]).altitude());
 					continue;
 				case GPS_NAME:
+					if (_stack[sp].isNull()) {
+						//Null value of &{0}
+						throwInfo(chkNode, XDEF.XDEF573, "GPSPosition");
+					}
 					_stack[sp] =
 						new DefString(((DefGPSPosition) _stack[sp]).name());
 					continue;
 				case GPS_DISTANCETO:
-					_stack[sp - 1] =
-						new DefDouble(((DefGPSPosition) _stack[sp - 1])
-							.distanceTo(((DefGPSPosition) _stack[sp])
-								.GPSValue()));
+					if (_stack[sp - 1].isNull() || _stack[sp].isNull()) {
+						//Null value of &{0}
+						throwInfo(chkNode, XDEF.XDEF573, "GPSPosition");
+					}
+					_stack[sp - 1] = new DefDouble(
+						((DefGPSPosition) _stack[sp - 1]).distanceTo(
+							((DefGPSPosition) _stack[sp])));
 					sp--;
 					continue;
 				case CURRENCY_AMOUNT:
-					_stack[sp] = new DefDecimal(
-						((DefCurrencyAmount) _stack[sp]).amount());
+					if (_stack[sp].isNull()) {
+						//Null value of &{0}
+						throwInfo(chkNode, XDEF.XDEF573, "CurrencyAmount");
+					}
+					_stack[sp] =
+						new DefDouble(((DefCurrencyAmount)_stack[sp]).amount());
 					continue;
 				case CURRENCY_CODE:
-					_stack[sp] = new DefString(
-						((DefCurrencyAmount) _stack[sp]).code());
+					if (_stack[sp].isNull()) {
+						//Null value of &{0}
+						throwInfo(chkNode, XDEF.XDEF573, "CurrencyAmount");
+					}
+					_stack[sp] =
+						new DefString(((DefCurrencyAmount) _stack[sp]).code());
 					continue;
 				case CURRENCY_FRACTDIGITS:
+					if (_stack[sp].isNull()) {
+						//Null value of &{0}
+						throwInfo(chkNode, XDEF.XDEF573, "CurrencyAmount");
+					}
 					_stack[sp] = new DefLong(
 						((DefCurrencyAmount) _stack[sp]).fractionDigits());
 					continue;
 				case CURRENCY_DISPLAY:
+					if (_stack[sp].isNull()) {
+						//Null value of &{0}
+						throwInfo(chkNode, XDEF.XDEF573, "CurrencyAmount");
+					}
 					_stack[sp] = new DefString(
 						((DefCurrencyAmount) _stack[sp]).display());
 					continue;
@@ -2237,7 +2278,7 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 					XDValue dv = _stack[sp];
 					if (dv == null || dv.isNull()) {
 						//Null value of &{0}
-						throw new SRuntimeException(XDEF.XDEF573, "Service");
+						throwInfo(chkNode, XDEF.XDEF573, "Service");
 					}
 					_stack[sp] = ((XDService) dv).prepareStatement(query);
 					addToFinalList(chkNode, _stack[sp]);
@@ -2249,8 +2290,7 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 					XDValue dv = _stack[sp - (npar - 1)];
 					if (dv == null || dv.isNull()) {
 						//Null value of &{0}
-						Report r = Report.error(XDEF.XDEF573, "Service");
-						throw new SRuntimeException(updateReport(r, chkNode));
+						throwInfo(chkNode, XDEF.XDEF573, "Service");
 					}
 					short xtype = dv.getItemId();
 					int nx = npar - (xtype == XD_SERVICE ? 2 : 1);
@@ -2264,31 +2304,28 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 					} else {
 						params = null;
 					}
-					XDResultSet result;
 					switch (xtype) {
 						case XD_SERVICE: {
 							String query = _stack[sp--].stringValue();
 							XDService conn = (XDService) dv;
-							result = conn.query(query, params);
+							_stack[sp] = conn.query(query, params);
 							break;
 						}
 						case XD_STATEMENT: {
 							XDStatement ds = (XDStatement) dv;
-							result = ds.query(params);
+							_stack[sp] = ds.query(params);
 							break;
 						}
 						case XD_STRING: { // ???
 							XDStatement ds = (XDStatement) dv;
-							result = ds.query(params);
+							_stack[sp] = ds.query(params);
 							break;
 						}
 						default:
 							//XQuery expression error
-							throw new SRuntimeException(updateReport(
-								Report.error(XDEF.XDEF561),chkNode));
+							throwInfo(chkNode, XDEF.XDEF561, null);
 					}
-					_stack[sp] = result;
-					addToFinalList(chkNode, result);
+					addToFinalList(chkNode, _stack[sp]);
 					continue;
 				}
 				case GET_DBQUERY_ITEM: {
@@ -2297,10 +2334,9 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 					XDValue dv =_stack[sp - (npar - 1)];
 					if (dv == null || dv.isNull()) {
 						//Null value of &{0}
-						Report r = Report.error(XDEF.XDEF573,
-							(dv == null || dv.getItemId() != XD_STATEMENT ?
-							"Service" : "Statement"));
-						throw new SRuntimeException(updateReport(r, chkNode));
+						throwInfo(chkNode, XDEF.XDEF573,
+							dv == null || dv.getItemId() != XD_STATEMENT ?
+							"Service" : "Statement");
 					}
 					short xtype = dv.getItemId();
 					int nx = npar - (xtype == XD_SERVICE ? 3 : 2);
@@ -2314,29 +2350,25 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 					} else {
 						params = null;
 					}
-					XDResultSet result;
 					switch (xtype) {
 						case XD_SERVICE: {
 							String itemName = _stack[sp--].stringValue();
 							String query = _stack[sp--].stringValue();
 							XDService conn = (XDService) dv;
-							result = conn.queryItems(query, itemName, params);
+							_stack[sp] = conn.queryItems(query,itemName,params);
 							break;
 						}
 						case XD_STATEMENT: {
 							String itemName = _stack[sp--].stringValue();
 							XDStatement ds = (XDStatement) dv;
-							result = ds.queryItems(itemName, params);
+							_stack[sp] = ds.queryItems(itemName, params);
 							break;
 						}
 						default:
 							//XQuery expression error
-							throw new SRuntimeException(updateReport(
-								Report.error(XDEF.XDEF561), chkNode));
-
+							throwInfo(chkNode, XDEF.XDEF561, null);
 					}
-					_stack[sp] = result;
-					addToFinalList(chkNode, result);
+					addToFinalList(chkNode, _stack[sp]);
 					continue;
 				}
 				case HAS_DBITEM: {
@@ -2345,10 +2377,9 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 					XDValue dv =_stack[sp - (npar - 1)];
 					if (dv == null || dv.isNull()) {
 						//Null value of &{0}
-						Report r = Report.error(XDEF.XDEF573,
+						throwInfo(chkNode, XDEF.XDEF573,
 							dv == null || dv.getItemId() != XD_STATEMENT ?
 							"Service" : "Statement");
-						throw new SRuntimeException(updateReport(r, chkNode));
 					}
 					short xtype = dv.getItemId();
 					int nx = npar - (xtype == XD_SERVICE ? 2 : 1);
@@ -2379,8 +2410,8 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 						}
 						default: //???? this never happens
 							//XQuery expression error
-							throw new SRuntimeException(updateReport(
-								Report.error(XDEF.XDEF561), chkNode));
+							throwInfo(chkNode, XDEF.XDEF561, null);
+							di = null; //never executed
 					}
 					_stack[sp] = new DefBoolean(di.nextXDItem(chkNode) != null);
 					di.close();
@@ -2392,10 +2423,9 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 					XDValue dv =_stack[sp - (npar - 1)];
 					if (dv == null || dv.isNull()) {
 						//Null value of &{0}
-						Report r = Report.error(XDEF.XDEF573,
+						throwInfo(chkNode, XDEF.XDEF573,
 							dv == null || dv.getItemId()!=XD_STATEMENT ?
 							"Service" : "Statement");
-						throw new SRuntimeException(updateReport(r, chkNode));
 					}
 					short xtype = dv.getItemId();
 					int nx = npar - (xtype == XD_SERVICE ? 2 : 1);
@@ -2421,8 +2451,8 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 							break;
 						default:
 							//Null value of &{0}
-							throw new SRuntimeException(updateReport(
-								Report.error(XDEF.XDEF573, "Service"),chkNode));
+							throwInfo(chkNode, XDEF.XDEF573, "not Statement");
+							ds = null; // never executed
 					}
 					_stack[sp] = ds.execute(params);
 					addToFinalList(chkNode, _stack[sp]);
@@ -2471,8 +2501,7 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 					XDValue dv = _stack[sp--];
 					if (dv == null || dv.isNull()) {
 						//Null value of &{0}
-						throw new SRuntimeException(updateReport(
-							Report.error(XDEF.XDEF573, "Service"), chkNode));
+						throwInfo(chkNode, XDEF.XDEF573, "Service");
 					}
 					((XDService) dv).commit();
 					continue;
@@ -2481,8 +2510,7 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 					XDValue dv = _stack[sp--];
 					if (dv == null || dv.isNull()) {
 						//Null value of &{0}
-						throw new SRuntimeException(updateReport(
-							Report.error(XDEF.XDEF573, "Service"), chkNode));
+						throwInfo(chkNode, XDEF.XDEF573, "Service");
 					}
 					((XDService) dv).rollback();
 					continue;
@@ -2493,8 +2521,7 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 					XDValue dv = _stack[sp];
 					if (dv == null || dv.isNull()) {
 						//Null value of &{0}
-						throw new SRuntimeException(updateReport(
-							Report.error(XDEF.XDEF573, "Service"), chkNode));
+						throwInfo(chkNode, XDEF.XDEF573, "Service");
 					}
 					try {
 						((XDService) dv).setProperty(name, value);
@@ -2784,8 +2811,7 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 					DefBNFRule br =  ((DefBNFGrammar) _stack[sp]).getRule(s);
 					if (br == null || br.isNull()) {
 						//BNF rule '&{0}' not exists
-						Report r = Report.error(XDEF.XDEF572, s);
-						throw new SRuntimeException(updateReport(r, chkNode));
+						throwInfo(chkNode, XDEF.XDEF572, s);
 					}
 					_stack[sp] = br;
 					continue;

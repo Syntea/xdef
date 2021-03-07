@@ -914,8 +914,8 @@ public class CompileBase implements CodeTable, XDValueID {
 ////////////////////////////////////////////////////////////////////////////////
 		ti = XD_CURRAMOUNT;
 		method(ti, genInternalMethod(NEW_CURRAMOOUNT, XD_CURRAMOUNT,
-			ANY_MODE, 2, 2, XD_ANY, XD_STRING), "#");
-		method(ti, genInternalMethod(CURRENCY_AMOUNT, XD_DECIMAL,
+			ANY_MODE, 2, 2, XD_FLOAT, XD_STRING), "#");
+		method(ti, genInternalMethod(CURRENCY_AMOUNT, XD_FLOAT,
 			ANY_MODE, 1, 1, XD_CURRAMOUNT), "amount");
 		method(ti, genInternalMethod(CURRENCY_CODE, XD_STRING,
 			ANY_MODE, 1, 1, XD_CURRAMOUNT), "code");

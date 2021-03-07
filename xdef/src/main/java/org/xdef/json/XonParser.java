@@ -487,7 +487,7 @@ public class XonParser extends StringParser {
 					return returnError(null, JSON.JSON010, "[]{}");
 				} else if (isToken("#(")) { // currency ammount
 					if (isFloat() || isInteger()) {
-						String s = getParsedString();
+						double d = Double.parseDouble(getParsedString());
 						isChar(' ');
 						if ((ch=isLetter()) != SParser.NOCHAR) {
 							String code = String.valueOf(ch);
@@ -500,14 +500,6 @@ public class XonParser extends StringParser {
 								}
 							}
 							if (isChar(')') && i == 3) {
-								BigDecimal d;
-								try {
-									d = new BigDecimal(s);
-								} catch (RuntimeException ex) {
-									//Decimal number error&{0}{: }
-									error(XDEF.XDEF409, s);
-									return returnValue(null);
-								}
 								try {
 									return returnValue(
 										new CurrencyAmount(d, code));

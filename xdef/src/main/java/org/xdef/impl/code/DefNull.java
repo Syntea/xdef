@@ -155,6 +155,10 @@ public final class DefNull extends XDValueAbstract {
 				return new DefDuration();
 			case XD_CONTAINER: // Context value
 				return new DefContainer();
+			case XD_GPSPOSITION: // GPSPosition
+				return new DefGPSPosition();
+			case XD_CURRAMOUNT: // GPSPosition
+				return new DefCurrencyAmount();
 			case XD_REGEX: // Regular expression value
 				return new DefRegex();
 			case XD_REGEXRESULT: //Regular expression result value

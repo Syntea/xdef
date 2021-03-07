@@ -30,13 +30,13 @@ public class GPSPosition {
 	 * @param name the name of position or null.
 	 * @throws SRuntimeException if position is incorrect.
 	 */
-	public GPSPosition(final Number latitude,
-		final Number longitude,
-		final Number altitude,
+	public GPSPosition(final double latitude,
+		final double longitude,
+		final double altitude,
 		final String name) {
-		_latitude = latitude.doubleValue();
-		_longitude = longitude.doubleValue();
-		_altitude = altitude.doubleValue();
+		_latitude = latitude;
+		_longitude = longitude;
+		_altitude = altitude;
 		_name = name;
 		checkValue();
 	}
@@ -47,8 +47,7 @@ public class GPSPosition {
 	private void checkValue() throws SRuntimeException {
 		if ((_latitude >= -90.0D && _latitude <= 90.0D)
 			&& (_longitude >= -180.0D && _longitude <= 180.0D)
-			&& (_altitude == Double.MIN_VALUE || _altitude > - EARTH_RADIUS)
-			&& (_name==null || (_name.indexOf('(')<0 && _name.indexOf(')')<0))){
+			&& (_altitude == Double.MIN_VALUE || _altitude > - EARTH_RADIUS)) {
 			return;
 		}
 		 // Incorrect GPosition &{0}{: }
@@ -121,8 +120,26 @@ public class GPSPosition {
 
 	@Override
 	public String toString() {
-		return "(" + _latitude + ", " + _longitude
-			+ (_altitude != Double.MIN_VALUE ? ", " + _altitude : "")
-			+ (_name != null ? ", " + _name : "") + ')';
+		String result = _latitude + ", " + _longitude
+			+ (_altitude != Double.MIN_VALUE ? ", " + _altitude : "");
+		if (_name == null) {
+			return result;
+		}
+		result += ", ";
+		if (Character.isLetter(_name.charAt(0))) {
+			boolean nodelimiter = true;
+			for (int i = 1; i < _name.length(); i++) {
+				char ch;
+				if (!(Character.isLetterOrDigit(ch =_name.charAt(i))
+					|| ch == '_' || ch == '-')) {
+					nodelimiter = false;
+					break;
+				}
+			}
+			if (nodelimiter) {
+				return result + _name;
+			}
+		}
+		return result + '"' + SUtils.modifyString(_name, "\"", "\"\"") + '"';
 	}
 }

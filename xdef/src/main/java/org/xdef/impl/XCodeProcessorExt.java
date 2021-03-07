@@ -1022,8 +1022,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 			case NEW_CURRAMOOUNT: {
 				try {
 					stack[sp-1] = new DefCurrencyAmount(new CurrencyAmount(
-						new BigDecimal(stack[sp-1].toString()),
-							stack[sp].stringValue()));
+						stack[sp-1].doubleValue(), stack[sp].stringValue()));
 				} catch (Exception ex) {
 					//"Invalid currency code: "{0}"
 					cp.putError(chkNode, XDEF.XDEF575,

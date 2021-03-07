@@ -105,7 +105,7 @@ public final class TestXComponents extends XDTester {
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='A'>\n" +
 "<xd:declaration\n>\n"+
 "  CurrencyAmount a;\n"+
-"  GPSPosition p = new GPSPosition(50.08, 14.42, 399)/* Prague */, q;\n"+
+"  GPSPosition p = new GPSPosition(50.08, 14.42, 399, 'Prague'), q;\n"+
 "  int d; /* distance in km */\n"+
 "</xd:declaration>\n"+
 "<A xd:script='finally d = round(p.distanceTo(q)/1000); /* km */'\n"+
@@ -117,22 +117,25 @@ public final class TestXComponents extends XDTester {
 "</xd:def>";
 			XDPool xp = compile(xdef);
 			genXComponent(xp, new File(_tempDir));
-			xml = "<!-- Vienna --> <A a='(1.25 CZK)' q='(48.2,16.37,151)'/>";
+			xml = "<A a='1.25 CZK' q='48.2, 16.37, 151, Vienna'/>"; //
 			xd = xp.createXDDocument();
 			xc = xd.parseXComponent(xml, null, reporter);
-			assertEq("(1.25 CZK)", xd.getVariable("a").stringValue());
+			assertNoErrors(reporter);
+			assertEq("1.25 CZK", xd.getVariable("a").stringValue());
 			assertEq(253, xd.getVariable("d").intValue());
 			assertEq(new GPSPosition(48.2, 16.37, 151, null),
 				getValueFromGetter(xc, "getq"));
-			setValueToSetter(xc, "seta",
-				new CurrencyAmount(new BigDecimal("456.001"), "USD"));
-			assertEq("(456.001 USD)", xc.toXml().getAttribute("a"));
-			xml = "<!-- London --> <A q='(51.52,-0.09,0)'/>";
+			setValueToSetter(xc, "seta", new CurrencyAmount(456.001, "USD"));
+			assertEq("456.001 USD", xc.toXml().getAttribute("a"));
+			xml = "<A q='51.52,-0.09,0,\"London\"'/>"; //,
 			el = parse(xd, xml, reporter);
 			assertNoErrors(reporter);
 			assertEq(xml, el);
 			assertEq(1031, xd.getVariable("d").intValue());
+			assertEq("51.52, -0.09, 0.0, London",
+				xd.getVariable("q").toString());
 		} catch (Exception ex) {fail(ex);}
+
 		XDPool xp = genComponents(getDataDir() + "test/TestXComponents.xdef",
 			dataDir + "TestXComponent_Z.xdef");
 		try {
@@ -605,7 +608,6 @@ public final class TestXComponents extends XDTester {
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
 		try {
-
 			xml =
 "<X><A><B><E>1</E></B><C/></A><A><B/><B><E>2</E></B><C/><C/></A><A/></X>";
 			xc = parseXC(xp, "X", xml, null, null);
