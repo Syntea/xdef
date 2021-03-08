@@ -32,16 +32,16 @@ public class XonTest extends XDTester {
 "    b = \"a b\",                     /* string */\n"+
 "    c = -123.4e2,                    /* float*/\n"+
 "    d = d(1999-01-12-01:00),         /* date */\n"+
-"    e = d(13:55:00.123456+02:00),    /* time */\n"+ 
-"    f = true,                        /* boolean */\n"+                     
-"    g = p(P1Y1M1DT1H1M1.12S),        /* duration */\n"+        
-"    h = null,                        /* null */\n"+                     
+"    e = d(13:55:00.123456+02:00),    /* time */\n"+
+"    f = true,                        /* boolean */\n"+
+"    g = p(P1Y1M1DT1H1M1.12S),        /* duration */\n"+
+"    h = null,                        /* null */\n"+
 "    i=[],                            /* empty array */\n"+
 "    Towns = [ /* array with towns GPS locations */\n"+
-"      gps(48.2,16.37,151, Wien),\n"+			
-"      gps(51.52,-0.09,0,London),\n"+	
+"      gps(48.2,16.37,151, Wien),\n"+
+"      gps(51.52,-0.09,0,London),\n"+
 "      gps(50.08, 14.42, 399, Praha),\n"+
-"    ]\n"+				
+"    ]\n"+
 "  },\n"+
 "  -3F,                               /* float */\n"+
 "  999999999999999999999999999999999, /* big integer */\n"+
@@ -61,11 +61,11 @@ public class XonTest extends XDTester {
 "  d(2000-1Z),                        /* year month zone */\n"+
 "  d(2000-1-01:00),                   /* year month zone */\n"+
 "  d(2000-1-1T0:0:0.00001-00:01),     /* date and time */\n"+
-"  gps(-0,+1),                        /* GPS */\n"+ 
+"  gps(-0,+1),                        /* GPS */\n"+
 "  gps(90,180,xyz),                   /* GPS */\n"+
 "  b(HbRBHbRBHQw=),                   /* byte aarray */\n"+
-"  #(123.45 CZK),                     /* currency ammount */ \n"+				
-"  #(12 USD),\n"+				
+"  #(123.45 CZK),                     /* currency ammount */ \n"+
+"  #(12 USD),\n"+
 "  '?',                               /* character */\n"+
 "  '\\u0007',                         /* character */\n"+
 "  '\'',                              /* character */\n"+
@@ -73,7 +73,7 @@ public class XonTest extends XDTester {
 "] /***** End of XON test *****/";
 //			System.out.println(s);
 			x = JsonUtil.parseXON(s);
-//if(true)return;			
+//if(true)return;
 			System.out.println(
 				s = JsonUtil.toJsonString(JsonUtil.xonToJson(x), true));
 			JsonUtil.parse(s);
