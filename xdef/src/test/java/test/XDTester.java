@@ -10,9 +10,6 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,8 +51,9 @@ import org.xdef.xml.KXmlUtils;
  */
 public abstract class XDTester extends STester {
 //	public static String _xdNS = XDConstants.XDEF20_NS_URI;
-	public static String _xdNS = XDConstants.XDEF31_NS_URI;
+//	public static String _xdNS = XDConstants.XDEF31_NS_URI;
 //	public static String _xdNS = XDConstants.XDEF32_NS_URI;
+	public static String _xdNS = XDConstants.XDEF40_NS_URI;
 	public static XDPool _xdOfxd = null;
 	public static boolean _fulltestMode = false;
 
@@ -123,10 +121,6 @@ public abstract class XDTester extends STester {
 	}
 
 	private ArrayReporter chkSyntax(final File[] xdefs) {
-		return chkSyntax((Object[]) xdefs);
-	}
-
-	private ArrayReporter chkSyntax(final URL[] xdefs) {
 		return chkSyntax((Object[]) xdefs);
 	}
 
@@ -600,12 +594,10 @@ public abstract class XDTester extends STester {
 		final Class<?>... obj) {
 		return checkExtObjects(XDFactory.compileXD(_props, sources, path, obj));
 	}
-	final public XDPool compile(final URL[] urls, final Class<?>... obj) {
-		chkSyntax(urls).checkAndThrowErrors();
-		return checkExtObjects(XDFactory.compileXD(_props, urls, obj));
+	final public XDPool compile(final URL[] source, final Class<?>... obj) {
+		return checkExtObjects(XDFactory.compileXD(_props, source, obj));
 	}
 	final public XDPool compile(final URL url, final Class<?>... obj) {
-		chkSyntax(url).checkAndThrowErrors();
 		return checkExtObjects(XDFactory.compileXD(	_props, url, obj));
 	}
 	final public XDPool compile(final File[] files, final Class... obj) {
@@ -624,6 +616,7 @@ public abstract class XDTester extends STester {
 		chkSyntax(xdefs).checkAndThrowErrors();
 		return checkExtObjects(XDFactory.compileXD(_props, xdefs, obj));
 	}
+
 	final public Element create(final XDPool xp,
 		final String defName,
 		final ReportWriter reporter,
@@ -1413,164 +1406,5 @@ public abstract class XDTester extends STester {
 		} catch (Exception ex) {
 			throw new SRuntimeException(ex.toString(), ex);
 		}
-	}
-
-	/** Get new instance of object.
-	 * @param name name of class.
-	 * @param params Object where is the filed.
-	 * @return new instance of object.
-	 */
-	public final static Object getNewInstance(String name, Object... params) {
-		try {
-			Class<?> cls = Class.forName(name);
-			Class<?>[] paramTypes = new Class<?>[params.length];
-			for (int i = 0; i < params.length; i++) {
-				paramTypes[i] = params[i].getClass();
-			}
-			Constructor<?> constructor = cls.getConstructor(paramTypes);
-			constructor.setAccessible(true);
-			return constructor.newInstance(params);
-		} catch (Exception ex) {
-			throw new RuntimeException("Constructor not found: " + name);
-		}
-	}
-
-	/** Get value of the field of the class of an object.
-	 * @param className name of class.
-	 * @param name name of filed.
-	 * @return value of field.
-	 */
-	public final static Object getObjectField(String className, String name) {
-		Class<?> cls;
-		try {
-			cls = Class.forName(className);
-		} catch (Exception ex) {
-			throw new RuntimeException("Class not found: " + className);
-		}
-		for (;;) {
-			try {
-				Field f = cls.getDeclaredField(name);
-				f.setAccessible(true);
-				return f.get(null); //static
-			} catch (Exception ex) {
-				cls = cls.getSuperclass();
-				if (cls == null) {
-					break;
-				}
-			}
-		}
-		throw new RuntimeException("Field not found: " + name);
-	}
-
-	/** Get value of the field of the class of an object.
-	 * @param o Object where is the filed.
-	 * @param name name of filed.
-	 * @return value of field.
-	 */
-	public final static Object getObjectField(Object o, String name) {
-		Class<?> cls = o.getClass();
-		for (;;) {
-			try {
-				Field f = cls.getDeclaredField(name);
-				f.setAccessible(true);
-				try {
-					return f.get(o);
-				} catch (Exception ex) {
-					return f.get(null); //static
-				}
-			} catch (Exception ex) {
-				cls = cls.getSuperclass();
-				if (cls == null) {
-					break;
-				}
-			}
-		}
-		throw new RuntimeException("Field not found: " + name);
-	}
-
-	/** Set to the field of the class of an object.
-	 * @param o Object where is the filed.
-	 * @param name name of filed.
-	 * @param v the value to be set.
-	 */
-	public final static void setObjectField(Object o, String name, Object v) {
-		Class<?> cls = o.getClass();
-		for (;;) {
-			try {
-				Field f = cls.getDeclaredField(name);
-				f.setAccessible(true);
-				try {
-					f.set(o, v);
-					return;
-				} catch (Exception ex) {
-					f.set(null, v); // static
-					return;
-				}
-			} catch (Exception ex) {
-				cls = cls.getSuperclass();
-				if (cls == null) {
-					break;
-				}
-			}
-		}
-		throw new RuntimeException("Field not found: " + name);
-	}
-
-	/** Invoke a getter on the object.
-	 * @param o object where is getter.
-	 * @param name name of setter.
-	 * @return value of getter.
-	 */
-	public final static Object getValueFromGetter(Object o, String name) {
-		Class<?> cls = o.getClass();
-		for (;;) {
-			try {
-				Method m = cls.getDeclaredMethod(name);
-				m.setAccessible(true);
-				try {
-					return m.invoke(o);
-				} catch (Exception ex) {
-					return m.invoke(null); //static
-				}
-			} catch (Exception ex) {
-				cls = cls.getSuperclass();
-				if (cls == null) {
-					break;
-				}
-			}
-		}
-		throw new RuntimeException("Getter not found: " + name);
-	}
-
-	/** Invoke a setter on the object.
-	 * @param o the object where is setter.
-	 * @param name name of setter.
-	 * @param v value to be set.
-	 */
-	public final static void setValueToSetter(Object o, String name, Object v) {
-		Class<?> cls = o.getClass();
-		for (;;) {
-			for (Method m: cls.getDeclaredMethods()) {
-				Class<?>[] params = m.getParameterTypes();
-				if (name.equals(m.getName()) && params!=null && params.length==1) {
-					try {
-						m.setAccessible(true);
-						try {
-							m.invoke(o, v);
-							return;
-						} catch (Exception ex) {
-							m.invoke(null, v); // static
-							return;
-						}
-					} catch (Exception ex) {}
-				}
-			}
-			cls = cls.getSuperclass();
-			if (cls == null) {
-				break;
-			}
-		}
-		throw new RuntimeException("Setter " + o.getClass().getName() + '.'
-			+ name + " not found");
 	}
 }

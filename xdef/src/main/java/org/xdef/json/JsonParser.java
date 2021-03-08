@@ -25,54 +25,59 @@ import org.xdef.sys.StringParser;
 /** Parser of JSON/XON source.
  * @author Vaclav Trojan
  */
-public class XonParser extends StringParser {
+public class JsonParser extends StringParser {
 
-	/** Flag to accept comments (true=accept comments). */
-	private boolean _acceptComments; // default value = false
-	/** Flag to generate SPositions (true=generate position). */
-	private boolean _genJObjects; // default value = false
-	/** Flag if the parsed data are in X-definition. */
-	private boolean _jdef; // default value = false
-	/** Flag if parse JSON or XON (false=JSON, true=XON). */
-	private boolean _xon; // default value = false
-	/** Position of processed item.`*/
+	/** Flag to accept comments (default false; true=accept comments). */
+	private boolean _acceptComments;
+	/** Flag if parse JSON or XON (default false; false=JSON, true=XON). */
+	private boolean _xonMode;
+	/** Flag if the parsed data are in X-definition (default false). */
+	private boolean _jdef;
+	/** Flag to generate SPositions (default false; true=generate position). */
+	private boolean _genJObjects;
+	/** Position of processed item (used if genJObjects is true).`*/
 	private SPosition _sPosition;
 
 	/** Create instance of parser. */
-	public XonParser() {}
+	public JsonParser() {}
 	/** Create instance of parser.
 	 * @param source String with source data.
 	 */
-	public XonParser(final String source) {super(source);}
+	public JsonParser(final String source) {super(source);}
 	/** Create instance of parser.
 	 * @param source Reader with source data.
 	 */
-	public XonParser(final Reader source) {
+	public JsonParser(final Reader source) {
 		super(source, new ArrayReporter());
 	}
 	/** Create instance of parser.
 	 * @param source URL with source data.
 	 */
-	public XonParser(final URL source) {
+	public JsonParser(final URL source) {
 		super(source, new ArrayReporter(), 0);
 	}
 
-	/** Set genJObjects flag (and the _acceptComments flag is also set). */
-	public final void setGenJObjects() {
-		_genJObjects = true;
-		_acceptComments = true;
-	}
-
 	/** Set mode that JSON is parsed in X-definition compiler. */
-	public final void setXJsonMode() {
-		setGenJObjects();
-		_jdef = true;
+	public final void setXdefMode() {
+		_genJObjects = _acceptComments = _jdef = true;
+		_xonMode = false;
 	}
 
 	/** Set mode that XON is parsed. */
 	public final void setXonMode() {
+		_genJObjects = _jdef = false;
+		_acceptComments = _xonMode = true;
+	}
+
+	/** Set mode for strict JSON parsing (JSON, no comments). */
+	public final void setJsonMode() {
+		_acceptComments = _xonMode = _genJObjects = _jdef = false;
+	}
+
+	/** Set mode for JSON parsing (with comments). */
+	public final void setJsonCommentsMode() {
+		_xonMode = _genJObjects = _jdef = false;
 		_acceptComments = true;
-		_xon = true;
 	}
 
 	/** Create modification string with source position.
@@ -225,52 +230,48 @@ public class XonParser extends StringParser {
 					}
 				} else {
 					Object o;
-					if (_xon) {
-						if (isNCName(XConstants.XML10)) {
-							// parse JSON named pair
-						   o = getParsedString(); /*xx*/
-						} else {
-							o = null;
-						}
-					} else {
-						o = readValue();
-					}
-					if (o != null && (o instanceof String ||
-						(_genJObjects && o instanceof CompileJsonXdef.JValue)
-						&& ((CompileJsonXdef.JValue) o).getValue()
-							instanceof String)) {
-						 // parse JSON named pair
-						String name = _genJObjects ? o.toString() : (String) o;
+					String name;
+					if (_xonMode && isNCName(XConstants.XML10)) { //XON
+						// parse XON named pair
+						name = getParsedString(); /*xx*/
 						isSpacesOrComments();
-						if (_xon) {
-							if (!isChar('=')) {
-								//"&{0}"&{1}{ or "}{"} expected
-								error(JSON.JSON002, _xon ? "=" : ":");
-							}
-						} else if (!isChar(':')) {
+						if (!isChar('=')) {
 							//"&{0}"&{1}{ or "}{"} expected
-							error(JSON.JSON002, _xon ? "=" : ":");
+							error(JSON.JSON002,"=");
 						}
-						isSpacesOrComments();
+					} else { // JSON
 						o = readValue();
-						if (map.containsKey(name)) {
-							String s;
-							if (_xon) {
-								s = name;
-							} else {
-								s = JsonUtil.jstringToSource(name);
-								if (!s.startsWith("\"") || !s.endsWith("\"")) {
-									s = '"' + s + '"';
-								}
-							}
-							//Value pair &{0} already exists
-							error(JSON.JSON022, s);
+						if (o != null && (o instanceof String ||
+							(_genJObjects&&o instanceof CompileJsonXdef.JValue)
+							&& ((CompileJsonXdef.JValue) o).getValue()
+								instanceof String)) {
+							name = _genJObjects ? o.toString() : (String) o;
+							isSpacesOrComments();
 						} else {
-							map.put(name, o);
+							fatal(JSON.JSON004); //Name of item expected
+							return map;
 						}
+						if (!isChar(':')) {
+							//"&{0}"&{1}{ or "}{"} expected
+							error(JSON.JSON002, ":");
+						}
+					}
+					isSpacesOrComments();
+					o = readValue();
+					if (map.containsKey(name)) {
+						String s;
+						if (_xonMode) {
+							s = name;
+						} else {
+							s = JsonUtil.jstringToSource(name);
+							if (!s.startsWith("\"") || !s.endsWith("\"")) {
+								s = '"' + s + '"';
+							}
+						}
+						//Value pair &{0} already exists
+						error(JSON.JSON022, s);
 					} else {
-						fatal(JSON.JSON004); //String with name of item expected
-						return map;
+						map.put(name, o);
 					}
 				}
 				isSpacesOrComments();
@@ -278,11 +279,11 @@ public class XonParser extends StringParser {
 					isSpacesOrComments();
 					return map;
 				}
-				if (isChar(',') || _xon) {
+				if (isChar(',') || _xonMode) {
 					SPosition spos = getPosition();
 					isSpacesOrComments();
 					if (isChar('}')) {
-						if (!_xon) {
+						if (!_xonMode) {
 							SPosition spos1 = getPosition();
 							setPosition(spos);
 							error(JSON.JSON020); //redundant comma
@@ -290,6 +291,7 @@ public class XonParser extends StringParser {
 						}
 						return map;
 					}
+//				} else if (!_xonMode) {
 				} else {
 					if (eos()) {
 						break;
@@ -365,7 +367,7 @@ public class XonParser extends StringParser {
 					SPosition spos = getPosition();
 					isSpacesOrComments();
 					if (isChar(']')) {
-						if (!_xon) {
+						if (!_xonMode) {
 							SPosition spos1 = getPosition();
 							setPosition(spos);
 							error(JSON.JSON020); //redundant comma
@@ -373,6 +375,7 @@ public class XonParser extends StringParser {
 						}
 						return list;
 					}
+//				} else if (!_xonMode) {
 				} else {
 					if (wasErrorReported) {
 						break;
@@ -411,16 +414,16 @@ public class XonParser extends StringParser {
 			return new CompileJsonXdef.JAny(_sPosition, null);
 		} else {
 			int pos = getIndex();
-			char ch;
 			boolean wasError = false;
 			Object result = null;
-			long errCode = JSON.JSON010; //JSON value expected
-			if (_xon) {
+			char ch;
+			if (_xonMode) {
 				if (isChar('\'')) { // character
 					ch = getCurrentChar();
 					if (ch == '\\') {
 						if ((i="u\\bfnrt".indexOf(nextChar())) < 0) {
-							return returnError('?', errCode, "[]{}");
+							//JSON value expected
+							return returnError('?', JSON.JSON010, "[]{}");
 						} else if (i > 0) {
 							ch = "?\\\b\f\n\r\t".charAt(i);
 							nextChar();
@@ -444,7 +447,7 @@ public class XonParser extends StringParser {
 					if (!isChar('\'')) {
 						setIndex(pos);
 						//JSON value expected
-						return returnError(ch, errCode, "[]{}");
+						return returnError(ch, JSON.JSON010, "',[]{}");
 					}
 					return returnValue(ch);
 				} else if (isToken("b(")) {
@@ -455,6 +458,7 @@ public class XonParser extends StringParser {
 						}
 					} catch (SException ex) {
 						putReport(ex.getReport());
+						return returnValue(null);
 					}
 					setIndex(pos);
 					return returnError(null, JSON.JSON010, "[]{}");
@@ -473,7 +477,7 @@ public class XonParser extends StringParser {
 							return returnValue(getParsedSDatetime());
 						}
 					}
-					setIndex(pos);
+//					setIndex(pos);
 					//JSON value expected
 					return returnError(null, JSON.JSON010, "[]{}");
 				} else if (isToken("p(")) {
@@ -538,6 +542,7 @@ public class XonParser extends StringParser {
 										latitude, longitude, altitude, name));
 								} catch(SRuntimeException ex) {
 									putReport(ex.getReport()); // invalid GPS
+									return returnValue(null);
 								}
 							}
 						}
@@ -582,7 +587,7 @@ public class XonParser extends StringParser {
 				if (wasError) {
 					return returnValue(0);
 				}
-				if (_xon) {
+				if (_xonMode) {
 					try {
 						if (isChar('D')) {
 							return returnValue(new BigDecimal(s));

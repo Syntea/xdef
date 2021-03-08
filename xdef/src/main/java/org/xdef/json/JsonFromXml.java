@@ -17,6 +17,17 @@ import org.w3c.dom.Node;
  * @author Vaclav Trojan
  */
 class JsonFromXml extends JsonUtil {
+////////////////////////////////////////////////////////////////////////////////
+// Keywords of names of JSON types
+////////////////////////////////////////////////////////////////////////////////
+	/** JSON string item. */
+	private final static String J_STRING = "string";
+	/** JSON number item. */
+	private final static String J_NUMBER = "number";
+	/** JSON boolean item. */
+	private final static String J_BOOLEAN = "boolean";
+	/** JSON null item. */
+	private final static String J_NULL = "null";
 
 	private JsonFromXml() {super();}
 

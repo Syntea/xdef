@@ -281,7 +281,7 @@ public class CompileJsonXdefW3C extends CompileJsonXdef {
 		p._name = name;
 		p._nsURI = null; // set no namespace
 		p._nsindex = -1;
-		jx.setXJsonMode();
+		jx.setXdefMode();
 		jx.setReportWriter(reporter);
 		if (p._value == null) {
 			jx.setSourceBuffer(p._name);
