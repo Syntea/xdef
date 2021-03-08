@@ -14,6 +14,9 @@ import java.io.PrintStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.Writer;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.Map;
@@ -29,12 +32,27 @@ public class SUtils extends FUtils {
 	 * E.g. "1.6" is converted to 106. The build version is ignored.
 	 */
 	public static final int JAVA_RUNTIME_VERSION_ID;
-
-	/** The string with the last part of Java VM version information.
+	/** String with the last part of Java VM version information.
 	 * E.g. if version information is "1.6.0_45" it will be "0_45".
 	 */
 	public static final String JAVA_RUNTIME_BUILD;
 
+
+	/** length of line of encoded hex format and base64 format. */
+	private static final int ENCODED_LINE_LENGTH = 72;
+	/** length of input buffer in the line of hexadecimal encoded data. */
+	private static final int INPUT_HEXBUFFER_LENGTH = ENCODED_LINE_LENGTH/2;
+	/** Hexadecimal digits. */
+	private static final byte[] HEXDIGITS = new byte[] {
+		'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
+
+	/** Cache to accelerate 2 letters/3 letter (getISO3Language method).*/
+	private static final Map<String, String> LANGUAGES =
+		 new LinkedHashMap<String, String>();
+
+////////////////////////////////////////////////////////////////////////////////
+// initialize static variables
+////////////////////////////////////////////////////////////////////////////////
 	static {
 		String s;
 		try {
@@ -66,17 +84,9 @@ public class SUtils extends FUtils {
 		JAVA_RUNTIME_BUILD = s;
 	}
 
-	/** length of line of encoded hex format and base64 format. */
-	private static final int ENCODED_LINE_LENGTH = 72;
-	/** length of input buffer in the line of hexadecimal encoded data. */
-	private static final int INPUT_HEXBUFFER_LENGTH = ENCODED_LINE_LENGTH/2;
-	/** Hexadecimal digits. */
-	private static final byte[] HEXDIGITS = new byte[] {
-		'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
-
-	/** Cache to accelerate 2 letters/3 letter (getISO3Language method).*/
-	private static final Map<String, String> LANGUAGES =
-		 new LinkedHashMap<String, String>();
+////////////////////////////////////////////////////////////////////////////////
+// enconding/decoding of hexadecimal format
+////////////////////////////////////////////////////////////////////////////////
 
 	/** Encodes a byte array to hexadecimal format, no blanks or line breaks
 	 * are inserted.
@@ -341,6 +351,10 @@ public class SUtils extends FUtils {
 		decodeHex(new StringReader(src), out);
 		return out.toByteArray();
 	}
+
+////////////////////////////////////////////////////////////////////////////////
+// enconding/decoding of base64 format
+////////////////////////////////////////////////////////////////////////////////
 
 	/** length of input buffer in the line of base64 encoded data. */
 	private static final int INPUT_B64BUFFER_LENGTH = (ENCODED_LINE_LENGTH/4)*3;
@@ -826,6 +840,10 @@ public class SUtils extends FUtils {
 		return out.toByteArray();
 	}
 
+////////////////////////////////////////////////////////////////////////////////
+// String tools
+////////////////////////////////////////////////////////////////////////////////
+
 	/** Returns string of given length created from given characters.
 	 * If argument "length" is less or equal zero then returns the empty string.
 	 * @param length required length of result.
@@ -1004,6 +1022,9 @@ public class SUtils extends FUtils {
 		return System.getProperties().getProperty("user.name");
 	}
 
+////////////////////////////////////////////////////////////////////////////////
+// Localization
+////////////////////////////////////////////////////////////////////////////////
 	/** Get user country setting id.
 	 * @return The country id.
 	 */
@@ -1073,6 +1094,10 @@ public class SUtils extends FUtils {
 		throw new SRuntimeException(SYS.SYS018, language);
 	}
 
+////////////////////////////////////////////////////////////////////////////////
+// Access objects from a class.
+////////////////////////////////////////////////////////////////////////////////
+
 	/** Check if a class implements given interface.
 	 * @param clazz the class to be checked.
 	 * @param interfaceName the qualified name of interface (including package
@@ -1109,6 +1134,185 @@ public class SUtils extends FUtils {
 		}
 		return false;
 	}
+
+	/** Create new instance of object.
+	 * @param className name of class.
+	 * @param pars Object where is the filed.
+	 * @return new instance of object.
+	 * @throws SRuntimeException if the constructor was not found in the class.
+	 */
+	public final static Object getNewInstance(String className, Object... pars){
+		try {
+			Class<?> cls = Class.forName(className);
+			Class<?>[] paramTypes = new Class<?>[pars.length];
+			for (int i = 0; i < pars.length; i++) {
+				paramTypes[i] = pars[i].getClass();
+			}
+			Constructor<?> constructor = cls.getConstructor(paramTypes);
+			constructor.setAccessible(true);
+			return constructor.newInstance(pars);
+		} catch (Exception ex) {
+			//Constructor in the class &{0} not found
+			throw new SRuntimeException(SYS.SYS101, className);
+		}
+	}
+
+	/** Get value of the field of the class of an object.
+	 * @param className name of class.
+	 * @param name name of filed.
+	 * @return value of field.
+	 * @throws SRuntimeException if the class or field was not found in
+	 * given class.
+	 */
+	public final static Object getObjectField(String className, String name) {
+		Class<?> cls;
+		try {
+			cls = Class.forName(className);
+		} catch (Exception ex) {
+			//Class &{0} not found
+			throw new SRuntimeException(SYS.SYS102, className);
+		}
+		for (;;) {
+			try {
+				Field f = cls.getDeclaredField(name);
+				f.setAccessible(true);
+				return f.get(null); //static
+			} catch (Exception ex) {
+				cls = cls.getSuperclass();
+				if (cls == null) {
+					break;
+				}
+			}
+		}
+		//Field &{0} not found in class &{1}
+		throw new SRuntimeException(SYS.SYS103, name, className);
+	}
+
+	/** Get value of the field of the class of an object.
+	 * @param o Object where is the filed.
+	 * @param name name of filed.
+	 * @return value of field.
+	 * @throws SRuntimeException if the field was not found in the object's
+	 * class.
+	 */
+	public final static Object getObjectField(Object o, String name) {
+		Class<?> cls = o.getClass();
+		for (;;) {
+			try {
+				Field f = cls.getDeclaredField(name);
+				f.setAccessible(true);
+				try {
+					return f.get(o);
+				} catch (Exception ex) {
+					return f.get(null); //static
+				}
+			} catch (Exception ex) {
+				cls = cls.getSuperclass();
+				if (cls == null) {
+					break;
+				}
+			}
+		}
+		//Field &{0} not found in class &{1}
+		throw new SRuntimeException(SYS.SYS103, name, cls.getName());
+	}
+
+	/** Set to the field of the class of an object.
+	 * @param o Object where is the filed.
+	 * @param name name of filed.
+	 * @param v the value to be set.
+	 * @throws SRuntimeException if the field was not found in the object's
+	 * class or it is not accessible.
+	 */
+	public final static void setObjectField(Object o, String name, Object v) {
+		Class<?> cls = o.getClass();
+		for (;;) {
+			try {
+				Field f = cls.getDeclaredField(name);
+				f.setAccessible(true);
+				try {
+					f.set(o, v);
+					return;
+				} catch (Exception ex) {
+					f.set(null, v); // static
+					return;
+				}
+			} catch (Exception ex) {
+				cls = cls.getSuperclass();
+				if (cls == null) {
+					break;
+				}
+			}
+		}
+		//Field &{0} not found in class &{1}
+		throw new SRuntimeException(SYS.SYS103, name, cls.getName());
+	}
+
+	/** Invoke a getter on the object.
+	 * @param o object where is getter.
+	 * @param name name of setter.
+	 * @return value of getter.
+	 * @throws SRuntimeException if the getter was not found.
+	 */
+	public final static Object getValueFromGetter(Object o, String name) {
+		Class<?> cls = o.getClass();
+		for (;;) {
+			try {
+				Method m = cls.getDeclaredMethod(name);
+				m.setAccessible(true);
+				try {
+					return m.invoke(o);
+				} catch (Exception ex) {
+					return m.invoke(null); //static
+				}
+			} catch (Exception ex) {
+				cls = cls.getSuperclass();
+				if (cls == null) {
+					break;
+				}
+			}
+		}
+		//Getter &{0} not found in class &{1}
+		throw new SRuntimeException(SYS.SYS104, name, cls.getName());
+	}
+
+	/** Invoke a setter on the object.
+	 * @param o the object where is setter.
+	 * @param name name of setter.
+	 * @param v value to be set.
+	 * @throws SRuntimeException if the setter was not found or it is not
+	 * accessible.
+	 */
+	public final static void setValueToSetter(Object o, String name, Object v) {
+		Class<?> cls = o.getClass();
+		for (;;) {
+			for (Method m: cls.getDeclaredMethods()) {
+				Class<?>[] params = m.getParameterTypes();
+				if (name.equals(m.getName()) && params!=null && params.length==1) {
+					try {
+						m.setAccessible(true);
+						try {
+							m.invoke(o, v);
+							return;
+						} catch (Exception ex) {
+							m.invoke(null, v); // static
+							return;
+						}
+					} catch (Exception ex) {}
+				}
+			}
+			cls = cls.getSuperclass();
+			if (cls == null) {
+				break;
+			}
+		}
+		//SYS105=Setter &{0} not found in class &{1}
+		throw new SRuntimeException(SYS.SYS105, name, cls.getName());
+	}
+
+////////////////////////////////////////////////////////////////////////////////
+// Execute a process.
+////////////////////////////////////////////////////////////////////////////////
 
 	/** This is the auxiliary thread for piping of output streams of method
 	 * execute (stdout, stderr).*/

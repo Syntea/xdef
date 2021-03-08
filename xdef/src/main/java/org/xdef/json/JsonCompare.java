@@ -2,6 +2,7 @@ package org.xdef.json;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import org.xdef.msg.JSON;
@@ -102,7 +103,7 @@ class JsonCompare {
 			n1.getClass().getName(), n2.getClass().getName());
 	}
 
-	/** Check if JSON or XON values from arguments are equal.
+	/** Check if JSON values from arguments are equal.
 	 * @param o1 first value.
 	 * @param o2 second value.
 	 * @return true if and only if both values are equal.
@@ -130,6 +131,9 @@ class JsonCompare {
 		if (o1 instanceof Boolean) {
 			return ((Boolean) o1).equals(o2);
 		}
+		if (o1 instanceof Character) {
+			return ((Character) o1).equals(o2);
+		}
 		if (o1 instanceof SDatetime) {
 			return ((SDatetime) o1).equals(o2);
 		}
@@ -142,6 +146,11 @@ class JsonCompare {
 		if (o1 instanceof CurrencyAmount) {
 			return ((CurrencyAmount) o1).equals(o2);
 		}
+		try {
+			byte[] b1 = (byte[]) o1;
+			byte[] b2 = (byte[]) o2;
+			return Arrays.equals(b2, b1);
+		} catch (Exception ex) {}
 		// Incomparable objects &{0} and &{1}
 		throw new SRuntimeException(JSON.JSON012,
 			o1.getClass().getName(), o2.getClass().getName());
