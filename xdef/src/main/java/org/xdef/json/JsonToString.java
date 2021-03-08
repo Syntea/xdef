@@ -17,77 +17,56 @@ import org.xdef.sys.SUtils;
  */
 class JsonToString {
 
-	/** Add the string created from JSON or XON value object to StringBuilder.
-	 * @param obj JSON object to be created to String.
+	/** Add the a string created from JSON or XON simple value to StringBuilder.
+	 * @param x object to be converted to String.
 	 * @return sb created string.
 	 * @param xon if true then XON else if false JOSN source is generated.
 	 */
-	private static String valueToString(final Object obj, final boolean xon) {
-		if (obj == null) {
+	private static String valueToString(final Object x, final boolean xon) {
+		if (x == null) {
 			return "null";
-		} else if (obj instanceof Boolean) {
-			return obj.toString();
-		} else if (obj instanceof String) {
-			return '"' + JsonUtil.jstringToSource((String) obj) + '"';
+		} else if (x instanceof Boolean) {
+			return x.toString();
+		} else if (x instanceof String) {
+			return '"' + JsonUtil.jstringToSource((String) x) + '"';
 		}
 		if (xon) {
-			if (obj instanceof Number) {
-				String result = obj.toString();
-				if (obj instanceof BigDecimal) {
+			if (x instanceof Number) {
+				String result = x.toString();
+				if (x instanceof BigDecimal) {
 					return result + 'D';
-				} else if (obj instanceof Double) {
+				} else if (x instanceof Double) {
 					return result + 'F';
-				} else if (obj instanceof BigInteger) {
+				} else if (x instanceof BigInteger) {
 					return result + 'N';
-				} else if (obj instanceof Short) {
+				} else if (x instanceof Short) {
 					return result + 'S';
-				} else if (obj instanceof Integer) {
+				} else if (x instanceof Integer) {
 					return result + 'I';
 				}
 				return result;
-			} else if (obj instanceof String) {
-				return '"' + JsonUtil.jstringToSource((String) obj) + '"';
-			} else if (obj instanceof Character) {
-				return '"' + JsonUtil.jstringToSource(String.valueOf(obj)) + '"';
-			} else if (obj instanceof SDatetime) {
-				return "d(" + obj + ")";
-			} else if (obj instanceof SDuration) {
-				return "p(" + obj + ")";
-			} else if (obj instanceof CurrencyAmount) {
-				return "#(" + obj + ')';
-			} else if (obj instanceof GPSPosition) {
-				return "gps(" + obj + ')';
+			} else if (x instanceof String) {
+				return '"' + JsonUtil.jstringToSource((String) x) + '"';
+			} else if (x instanceof Character) {
+				return '\''+ JsonUtil.jstringToSource(String.valueOf(x))+'\'';
+			} else if (x instanceof SDatetime) {
+				return "d(" + x + ")";
+			} else if (x instanceof SDuration) {
+				return "p(" + x + ")";
+			} else if (x instanceof CurrencyAmount) {
+				return "#(" + x + ')';
+			} else if (x instanceof GPSPosition) {
+				return "gps(" + x + ')';
 			}
 			try { // try byte array
-				return "b("+new String(SUtils.encodeBase64((byte[]) obj))+")";
+				return "b("+new String(SUtils.encodeBase64((byte[]) x))+")";
 			} catch (Exception ex) {}
 		}
-		return obj.toString();
+		return x.toString();
 	}
 
-	/** Add the string created from JSON or XON object to StringBuilder.
-	 * @param obj JSON object to be created to String.
-	 * @param indent indentation of result,
-	 * @param sb StringBuilder where to append the created string.
-	 * @param xon if true then XON else if false JOSN source is generated.
-	 */
-	final static void objectToString(final Object obj,
-		final String indent,
-		final StringBuilder sb,
-		final boolean xon) {
-		if (obj instanceof List) {
-			List x = (List) obj;
-			arrayToString(x, indent, sb, xon);
-		} else if (obj instanceof Map) {
-			Map x = (Map) obj;
-			mapToString(x, indent, sb, xon);
-		} else {
-			sb.append(valueToString(obj, xon));
-		}
-	}
-
-	/** Add the string created from JSON od XON array to StringBuilder.
-	 * @param array JSON array to be created to String.
+	/** Add the string created from JSON or XON array to StringBuilder.
+	 * @param array array to be created to String.
 	 * @param indent indentation of result,
 	 * @param sb StringBuilder where to append the created string.
 	 * @param xon if true then XON else if false JOSN source is generated.
@@ -135,8 +114,29 @@ class JsonToString {
 		sb.append(']');
 	}
 
+	/** Add the string created from JSON or XON object to StringBuilder.
+	 * @param obj object to be converted to String.
+	 * @param indent indentation of result,
+	 * @param sb StringBuilder where to append the created string.
+	 * @param xon if true then XON else if false JOSN source is generated.
+	 */
+	final static void objectToString(final Object obj,
+		final String indent,
+		final StringBuilder sb,
+		final boolean xon) {
+		if (obj instanceof List) {
+			List x = (List) obj;
+			arrayToString(x, indent, sb, xon);
+		} else if (obj instanceof Map) {
+			Map x = (Map) obj;
+			mapToString(x, indent, sb, xon);
+		} else {
+			sb.append(valueToString(obj, xon));
+		}
+	}
+
 	/** Add the string created from JSON or XON map to StringBuilder.
-	 * @param map JSON map to be created to String.
+	 * @param map map to be created to String.
 	 * @param indent indentation of result,
 	 * @param sb StringBuilder where to append the created string.
 	 * @param xon if true then XON else if false JOSN source is generated,
