@@ -20,7 +20,7 @@ import org.xdef.sys.SUtils;
  * and create string with JSON source from JSON object.
  * @author Vaclav Trojan
  */
-public class JsonUtil extends JsonTools {
+public class JsonUtil {
 
 ////////////////////////////////////////////////////////////////////////////////
 // JSON parser

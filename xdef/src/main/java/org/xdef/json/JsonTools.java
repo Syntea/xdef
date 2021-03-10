@@ -5,25 +5,10 @@ import org.xdef.msg.JSON;
 import org.xdef.sys.SParser;
 import org.xdef.sys.StringParser;
 
-/** Methods used in JSON/XON parsing and conversions.
+/** Methods used in JSON/XON parsing, processing and conversions.
  * @author Vaclav Trojan
  */
 public class JsonTools {
-
-////////////////////////////////////////////////////////////////////////////////
-// public JSON names in XML conversion
-////////////////////////////////////////////////////////////////////////////////
-
-	/** JSON map local name. */
-	public final static String J_MAP = "map";
-	/** JSON array local name. */
-	public final static String J_ARRAY = "array";
-	/** JSON any item local name (with JSON value. */
-	public final static String J_ITEM = "item";
-	/** JSON map key attribute name. */
-	public final static String J_KEYATTR = "key";
-	/** JSON value attribute name. */
-	public final static String J_VALUEATTR = "value";
 
 ////////////////////////////////////////////////////////////////////////////////
 // methods used in this package

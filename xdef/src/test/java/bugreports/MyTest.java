@@ -29,6 +29,10 @@ public class MyTest extends XDTester {
 	public static int b(String b) {return 0;}
 	public static void c() {}
 
+	private static Object toJson(final XComponent xc) {
+		return JsonUtil.xmlToJson(xc.toXml());
+	}
+
 	@Override
 	/** Run test and display error information. */
 	public void test() {
@@ -143,8 +147,8 @@ public class MyTest extends XDTester {
 			assertTrue(JsonUtil.jsonEqual(j, xd.jparse(s, reporter)));
 			xc = xd.jparseXComponent(s,
 				Class.forName("bugreports.MyTestY"), reporter);
-			assertTrue(JsonUtil.jsonEqual(j, xc.toJson()),
-				JsonUtil.toJsonString(xc.toJson(), true));
+			assertTrue(JsonUtil.jsonEqual(j, toJson(xc)),
+				JsonUtil.toJsonString(toJson(xc), true));
 
 			xd = xp.createXDDocument("");
 			s = "{\"a\": 123}";
@@ -152,8 +156,8 @@ public class MyTest extends XDTester {
 			assertTrue(JsonUtil.jsonEqual(j, xd.jparse(s, reporter)));
 			xc = xd.jparseXComponent(s,
 				Class.forName("bugreports.MyTestY1"), reporter);
-			assertTrue(JsonUtil.jsonEqual(j, xc.toJson()),
-				JsonUtil.toJsonString(xc.toJson(), true));
+			assertTrue(JsonUtil.jsonEqual(j, toJson(xc)),
+				JsonUtil.toJsonString(toJson(xc), true));
 
 			xd = xp.createXDDocument("");
 			s = "[123, 123]";
@@ -161,24 +165,24 @@ public class MyTest extends XDTester {
 			assertTrue(JsonUtil.jsonEqual(j, xd.jparse(s, reporter)));
 			xc = xd.jparseXComponent(s,
 				Class.forName("bugreports.MyTestY2"), reporter);
-			assertTrue(JsonUtil.jsonEqual(j, xc.toJson()),
-				JsonUtil.toJsonString(xc.toJson(), true));
+			assertTrue(JsonUtil.jsonEqual(j, toJson(xc)),
+				JsonUtil.toJsonString(toJson(xc), true));
 			xd = xp.createXDDocument("");
 			s = "[123, 123, -1.23e3]";
 			j = JsonUtil.parse(s);
 			assertTrue(JsonUtil.jsonEqual(j, xd.jparse(s, reporter)));
 				xc = xd.jparseXComponent(s,
 				Class.forName("bugreports.MyTestY2"), reporter);
-			assertTrue(JsonUtil.jsonEqual(j, xc.toJson()),
-				JsonUtil.toJsonString(xc.toJson(), true));
+			assertTrue(JsonUtil.jsonEqual(j, toJson(xc)),
+				JsonUtil.toJsonString(toJson(xc), true));
 			xd = xp.createXDDocument("");
 			s = "[123, 123, -1.23e3, \"abc\"]";
 			j = JsonUtil.parse(s);
 			assertTrue(JsonUtil.jsonEqual(j, xd.jparse(s, reporter)));
 			xc = xd.jparseXComponent(s,
 				Class.forName("bugreports.MyTestY2"), reporter);
-			assertTrue(JsonUtil.jsonEqual(j, xc.toJson()),
-				JsonUtil.toJsonString(xc.toJson(), true));
+			assertTrue(JsonUtil.jsonEqual(j, toJson(xc)),
+				JsonUtil.toJsonString(toJson(xc), true));
 		} catch (Exception ex) {fail(ex);}
 if(true)return;
 		try {

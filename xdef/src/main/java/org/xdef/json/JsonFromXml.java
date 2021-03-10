@@ -16,7 +16,7 @@ import org.w3c.dom.Node;
 /** Test X-definition transformation XML -> JSONL
  * @author Vaclav Trojan
  */
-class JsonFromXml extends JsonUtil {
+class JsonFromXml extends JsonUtil implements JsonNames {
 ////////////////////////////////////////////////////////////////////////////////
 // Keywords of names of JSON types
 ////////////////////////////////////////////////////////////////////////////////
@@ -30,56 +30,6 @@ class JsonFromXml extends JsonUtil {
 	private final static String J_NULL = "null";
 
 	private JsonFromXml() {super();}
-
-	private static String sourceToJstring(final String s)  {
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0;  i < s.length(); i++) {
-			char ch = s.charAt(i);
-			if (ch == '\\') { // escaped characters
-				if (++i >= s.length()) {
-					return s; // missing escape char (error)
-				}
-				switch (ch = s.charAt(i)) {
-					case '"':
-						ch = '"';
-						break;
-					case '\\':
-						ch = '\\';
-						break;
-					case '/':
-						ch = '/';
-						break;
-					case 'b':
-						ch = '\b';
-						break;
-					case 'f':
-						ch = '\f';
-						break;
-					case 'n':
-						ch = '\n';
-						break;
-					case 'r':
-						ch = '\r';
-						break;
-					case 't':
-						ch = '\t';
-						break;
-					case 'u':
-						try {
-							ch = (char) Short.parseShort(
-								s.substring(i+1, i+5), 16);
-							i += 4;
-							break;
-						} catch (Exception ex) {
-							return s; // incorrect UTF-8 char (error)
-						}
-					default: return s; // illegal escape char (error)
-				}
-			}
-			sb.append(ch);
-		}
-		return sb.toString();
-	}
 
 	/** Parse JList (the string which begins with '[').
 	 * @param ar the array where results are stored.
@@ -137,24 +87,7 @@ class JsonFromXml extends JsonUtil {
 					} else {
 						p.setIndex(pos);
 						if (p.isChar('"')) {
-							for(;;) {
-								if (p.isChar('\\')) {
-									if (p.eos()) {
-										throw new RuntimeException("JList err");
-									}
-									p.nextChar();
-								} else if (p.isChar('"')) {
-									String s = p.getBufferPart(pos+1,
-										p.getIndex() - 1);
-									ar.add(sourceToJstring(s));
-									break;
-								} else {
-									p.nextChar();
-								}
-								if (p.eos()) {
-									throw new RuntimeException("JList err");
-								}
-							}
+							ar.add(JsonTools.readJSONString(p));
 						} else {
 							for(;;) {
 								if (p.isChar('\\')) {
@@ -213,7 +146,9 @@ class JsonFromXml extends JsonUtil {
 		int len = s.length();
 		char ch = s.charAt(0);
 		if (ch == '"' && s.charAt(len-1) == '"') {
-			return (len == 1) ? "\"" : sourceToJstring(s.substring(1, len-1));
+			StringParser p = new StringParser(s);
+			p.setIndex(1);
+			return JsonTools.readJSONString(p);
 		}
 		int i = 0;
 		if (ch == '-' && len > 0) {
@@ -287,7 +222,7 @@ class JsonFromXml extends JsonUtil {
 			name = n.getNodeName();
 			if (!(xmlnsName.equals(name = n.getNodeName())
 				&& XDConstants.JSON_NS_URI_XD.equals(el.getNamespaceURI()))) {
-				String attName = xmlToJsonName(name);
+				String attName = JsonTools.xmlToJsonName(name);
 				Object val = xmlToJValue(n.getNodeValue());
 				result.put(attName, val);
 			}
@@ -352,8 +287,8 @@ class JsonFromXml extends JsonUtil {
 		while(n != null) {
 			if (n.getNodeType() == Node.ELEMENT_NODE) {
 				Element e = (Element) n;
-				result.put((String) sourceToJstring(e.getAttribute(J_KEYATTR)),
-					fromXmlW3C(e));
+				StringParser p =new StringParser(e.getAttribute(J_KEYATTR)+'"');
+				result.put(JsonTools.readJSONString(p),fromXmlW3C(e));
 			}
 			n = n.getNextSibling();
 		}
@@ -388,7 +323,7 @@ class JsonFromXml extends JsonUtil {
 	 * @return created JSON object.
 	 */
 	private Object fromXmlXD(final Element elem) {
-		String name = xmlToJsonName(elem.getNodeName());
+		String name = JsonTools.xmlToJsonName(elem.getNodeName());
 		Map<String, Object> attrs = getElementAttributes(elem);
 		List<Object> childNodes = getElementChildList(elem);
 		// result object
@@ -411,7 +346,7 @@ class JsonFromXml extends JsonUtil {
 				for (Object o: childNodes) {
 					if (o instanceof Element) {
 						Element el = (Element) o;
-						name = xmlToJsonName(el.getNodeName());
+						name = JsonTools.xmlToJsonName(el.getNodeName());
 						o = fromXmlXD(el);
 						if (o instanceof Map) {
 							Map m = (Map) o;

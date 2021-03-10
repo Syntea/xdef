@@ -66,7 +66,6 @@ public class D implements org.xdef.component.XComponent{
 	  el.appendChild(x.toXml(doc));
 	return el;
   }
-  @Override
   public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   public D() {}
   public D(org.xdef.component.XComponent p,
@@ -166,7 +165,6 @@ public static class D_1 implements org.xdef.component.XComponent{
 	  : org.xdef.xml.KXmlUtils.newDocument(
 		XD_NamespaceURI, XD_NodeName, null).getDocumentElement();
   }
-  @Override
   public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   public D_1() {}
   public D_1(org.xdef.component.XComponent p,

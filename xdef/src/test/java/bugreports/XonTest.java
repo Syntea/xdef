@@ -11,13 +11,6 @@ public class XonTest extends XDTester {
 
 	public XonTest() {super();}
 
-	private static void printDistance(List list, int i, int j) {
-		GPSPosition p1 = (GPSPosition) list.get(i);
-		GPSPosition p2 = (GPSPosition) list.get(j);
-		System.out.printf("%s - %s: %.2f km.\n",
-			p1.name(), p2.name(), p1.distanceTo(p2)/1000.0D);
-	}
-
 	@Override
 	public void test() {
 		String s;
@@ -41,7 +34,7 @@ public class XonTest extends XDTester {
 "      gps(48.2,16.37,151, Wien),\n"+
 "      gps(51.52,-0.09,0,London),\n"+
 "      gps(50.08, 14.42, 399, Praha),\n"+
-"    ]\n"+
+"    ],\n"+
 "  },\n"+
 "  -3F,                               /* float */\n"+
 "  999999999999999999999999999999999, /* big integer */\n"+
@@ -69,30 +62,36 @@ public class XonTest extends XDTester {
 "  '?',                               /* character */\n"+
 "  '\\u0007',                         /* character */\n"+
 "  '\'',                              /* character */\n"+
-"  '\n'                              /* character */\n"+
+"  '\n',                              /* character */\n"+
 "] /***** End of XON test *****/";
 //			System.out.println(s);
 			x = JsonUtil.parseXON(s);
 //if(true)return;
-			System.out.println(
-				s = JsonUtil.toJsonString(JsonUtil.xonToJson(x), true));
+			s = JsonUtil.toJsonString(JsonUtil.xonToJson(x), true);
+//			System.out.println(s);
 			JsonUtil.parse(s);
-			System.out.println("=======================");
+//			System.out.println("=======================");
 			s = JsonUtil.toXonString(x, true);
-			System.out.println(s);
-			System.out.println("=======================");
+//			System.out.println(s);
+//			System.out.println("=======================");
 			y = JsonUtil.parseXON(s);
 			assertTrue(JsonUtil.jsonEqual(x,y));
 			s = JsonUtil.toXonString(x, false);
-			System.out.println(s);
-			System.out.println("=======================");
+//			System.out.println(s);
+//			System.out.println("=======================");
 			y = JsonUtil.parseXON(s);
 			assertTrue(JsonUtil.jsonEqual(x,y));
 //if(true)return;
 			List list = (List) ((Map) ((List) x).get(0)).get("Towns");
-			printDistance(list, 0, 1);
-			printDistance(list, 0, 2);
-			printDistance(list, 1, 2);
+			assertEq("Wien",((GPSPosition) list.get(0)).name());
+			assertEq("London",((GPSPosition) list.get(1)).name());
+			assertEq("Praha",((GPSPosition) list.get(2)).name());
+			assertEq(1234, Math.round(((GPSPosition) list.get(0)).distanceTo(
+				((GPSPosition) list.get(1)))/1000));
+			assertEq(253,Math.round(((GPSPosition) list.get(0)).distanceTo(
+				((GPSPosition) list.get(2)))/1000));
+			assertEq(1031,Math.round(((GPSPosition) list.get(1)).distanceTo(
+				((GPSPosition) list.get(2)))/1000));
 		} catch (Exception ex) {fail(ex);}
 	}
 

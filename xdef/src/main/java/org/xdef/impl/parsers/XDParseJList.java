@@ -6,7 +6,7 @@ import org.xdef.XDParser;
 import org.xdef.XDValue;
 import org.xdef.impl.code.DefContainer;
 import org.xdef.impl.code.DefParseResult;
-import org.xdef.json.JsonUtil;
+import org.xdef.json.JsonTools;
 import org.xdef.msg.XDEF;
 import org.xdef.proc.XXNode;
 import org.xdef.sys.SRuntimeException;
@@ -79,7 +79,7 @@ public class XDParseJList extends XSAbstractParser {
 				int start, end;
 				start = p.getIndex();
 				if (p.isChar('"')) {
-					String s = JsonUtil.readJSONString(p);
+					String s = JsonTools.readJSONString(p);
 					end = p.getIndex();
 					if (_itemType.parserName().charAt(0) == 'j') {
 						p.setSourceBuffer(p.getBufferPart(0, end));

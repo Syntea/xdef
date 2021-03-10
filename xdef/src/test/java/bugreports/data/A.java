@@ -69,7 +69,6 @@ public class A extends bugreports.data.C implements org.xdef.component.XComponen
 	  el.appendChild(x.toXml(doc));
 	return el;
   }
-  @Override
   public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   public A() {}
   public A(org.xdef.component.XComponent p,
@@ -178,7 +177,6 @@ public static class X implements org.xdef.component.XComponent{
 	  : org.xdef.xml.KXmlUtils.newDocument(
 		XD_NamespaceURI, XD_NodeName, null).getDocumentElement();
   }
-  @Override
   public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   public X() {}
   public X(org.xdef.component.XComponent p,
