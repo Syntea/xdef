@@ -6,16 +6,18 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import org.xdef.impl.XConstants;
 import org.xdef.sys.CurrencyAmount;
 import org.xdef.sys.GPSPosition;
 import org.xdef.sys.SDatetime;
 import org.xdef.sys.SDuration;
 import org.xdef.sys.SUtils;
+import org.xdef.sys.StringParser;
 
-/** Provides conversion of JSON or XON to string.
+/** Conversion of JSON or XON to string.
  * @author Vaclav Trojan
  */
-class JsonToString {
+class JsonToString extends JsonTools {
 
 	/** Add the a string created from JSON or XON simple value to StringBuilder.
 	 * @param x object to be converted to String.
@@ -28,7 +30,7 @@ class JsonToString {
 		} else if (x instanceof Boolean) {
 			return x.toString();
 		} else if (x instanceof String) {
-			return '"' + JsonUtil.jstringToSource((String) x) + '"';
+			return '"' + jstringToSource((String) x) + '"';
 		}
 		if (xon) {
 			if (x instanceof Number) {
@@ -45,10 +47,8 @@ class JsonToString {
 					return result + 'I';
 				}
 				return result;
-			} else if (x instanceof String) {
-				return '"' + JsonUtil.jstringToSource((String) x) + '"';
 			} else if (x instanceof Character) {
-				return '\''+ JsonUtil.jstringToSource(String.valueOf(x))+'\'';
+				return '\''+ jstringToSource(String.valueOf(x))+'\'';
 			} else if (x instanceof SDatetime) {
 				return "d(" + x + ")";
 			} else if (x instanceof SDuration) {
@@ -156,10 +156,12 @@ class JsonToString {
 		for (Object x: map.entrySet()) {
 			Map.Entry e = (Map.Entry) x;
 			String key = (String) e.getKey();
-			if (xon) {
+			boolean xonKey =
+				xon && StringParser.chkNCName(key, XConstants.XML10);
+			if (xonKey) {
 				key += indent == null ? "=" : " = ";
 			} else {
-				key = '"' + JsonUtil.jstringToSource(key) + '"'
+				key = '"' + jstringToSource(key) + '"'
 					+ (indent == null ? ":" : " : ");
 			}
 			if (first) {
@@ -211,7 +213,7 @@ class JsonToString {
 		for (Object x: xmap.entrySet()) {
 			Map.Entry en = (Map.Entry) x;
 			String key = (String) en.getKey();
-			key = JsonUtil.xmlToJsonName(key);
+			key = xmlToJsonName(key);
 			Object y = en.getValue();
 			result.put(key, xonToJson(y));
 		}

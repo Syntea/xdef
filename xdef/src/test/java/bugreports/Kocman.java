@@ -1,6 +1,7 @@
 package bugreports;
 
 import org.xdef.XDPool;
+import org.xdef.json.JsonUtil;
 import org.xdef.sys.ArrayReporter;
 import test.XDTester;
 
@@ -37,7 +38,7 @@ public class Kocman extends XDTester {
 				parseXC(xp,"M", xml , null, reporter);
 			assertNoErrorwarnings(reporter);
 			assertEq(xml, p.toXml());
-			System.out.println(p.toJson());
+System.out.println(JsonUtil.xmlToJson(p.toXml()));
 		} catch (Exception ex) {fail(ex);}
 /*xx*/
 	}

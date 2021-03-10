@@ -15,7 +15,7 @@ import org.w3c.dom.Node;
 public interface XComponent {
 
 	/** Create XML element from this XComponent (marshal).
-	 * If the argument is null <tt>null</tt> then document is created with
+	 * If the argument is null null then document is created with
 	 * created document element.
 	 * @return XML element created from this object.
 	 */
@@ -23,17 +23,12 @@ public interface XComponent {
 
 	/** Create XML element or text node from default model
 	 * as an element created from given document.
-	 * @param doc XML Document or <tt>null</tt>.
-	 * If the argument is null <tt>null</tt> then document is created with
+	 * @param doc XML Document or null.
+	 * If the argument is null null then document is created with
 	 * created document element.
 	 * @return XML node belonging to given document from this XComponent.
 	 */
 	public Node toXml(Document doc);
-
-	/** Create JSON object from this XComponent (marshal to JSON).
-	 * @return JSON object created from this XComponent.
-	 */
-	public Object toJson();
 
 	/** Get name of element used for construction of this object.
 	 * @return name of element used for construction of this object.

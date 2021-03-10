@@ -7,13 +7,17 @@ import org.xdef.XDPool;
 import org.xdef.model.XMElement;
 import org.xdef.model.XMNode;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import javax.xml.namespace.QName;
 import org.w3c.dom.Element;
+import org.xdef.XDConstants;
 import org.xdef.XDContainer;
 import org.xdef.XDParseResult;
 import org.xdef.XDValue;
-import org.xdef.json.JsonUtil;
+import org.xdef.json.JsonNames;
 
 /** Utilities used with XComponents.
  * @author Vaclav Trojan
@@ -118,39 +122,6 @@ public class XComponentUtil {
 			throw new SRuntimeException(XDEF.XDEF372, xm.getXDPosition());
 		}
 		return toXml(xc, (XMElement) xm);
-	}
-
-	/** Create the new JSON object from XComponent according to model.
-	 * @param xc XComponent.
-	 * @param xm model according which element will be constructed.
-	 * @return JSON object created from XComponent created from XComponent.
-	 */
-	public static final Object toJson(final XComponent xc, final XMElement xm) {
-		return JsonUtil.xmlToJson(toXml(xc, xm));
-	}
-
-	/** Create the JSON object from XComponent according to model.
-	 * @param xc XComponent.
-	 * @param xd XDDocument for creation on new Element.
-	 * @param modelName name of model to be created.
-	 * @return JSON object created from XComponent according to model..
-	 */
-	public static final Object toJson(final XComponent xc,
-		final XDDocument xd,
-		final String modelName) {
-		return JsonUtil.xmlToJson(toXml(xc, xd, modelName));
-	}
-
-	/** Create JSON object from XComponent according to given model from XDPool.
-	 * @param xc XComponent.
-	 * @param xp XDPool.
-	 * @param xdPosition the XDPosition of model in XDPool.
-	 * @return JSON object created from XComponent.
-	 */
-	public static final Object toJson(final XComponent xc,
-		final XDPool xp,
-		final String xdPosition) {
-		return JsonUtil.xmlToJson(toXml(xc, xp, xdPosition));
 	}
 
 	/** Create XComponent from XComponent according to given model in XDPool.
@@ -340,4 +311,103 @@ public class XComponentUtil {
 			return x.toString();
 		}
 	}
+
+////////////////////////////////////////////////////////////////////////////////
+// Create XON object from X-component.
+////////////////////////////////////////////////////////////////////////////////
+
+	/** Create XON simple value from XComponent.
+	 * @param xc XComponent
+	 * @return object with XON simple value.
+	 */
+	private static Object toXonItem(final XComponent xc) {
+		Class<?> cls = xc.getClass();
+		try {
+			Method m = cls.getDeclaredMethod("get" + JsonNames.J_VALUEATTR);
+			return m.invoke(xc);
+		} catch (Exception ex) {
+			new RuntimeException("Can't access value", ex);
+		}
+		return null;
+	}
+
+	/** Create XON array from XComponent.
+	 * @param xc XComponent
+	 * @return object with XON array.
+	 */
+	private static List<Object> toXonArray(final XComponent xc) {
+		List<Object> result = new ArrayList<Object>();
+		List list = (List) xc.xGetNodeList();
+		for (Object x : list) {
+			Object o = toXon((XComponent) x);
+			if (o instanceof String) {
+				String s = (String) o;
+				int len = s.length();
+				if (len >= 2 && s.charAt(0) == '"' && s.charAt(len-1) == '"') {
+					o = s.substring(1, len-1);
+				}
+			}
+			result.add(o);
+		}
+		return result;
+	}
+
+	/** Create XON map from XComponent.
+	 * @param xc XComponent
+	 * @return object with XON map.
+	 */
+	private static Map<String, Object> toXonMap(final XComponent xc) {
+		Class<?> cls = xc.getClass();
+		Map<String, Object> result = new LinkedHashMap<String, Object>();
+		Method[] methods = cls.getDeclaredMethods();
+		for (Method x: methods) {
+			if (x.getName().startsWith("getjs$")
+				&& x.getParameterTypes().length == 0) {
+				x.setAccessible(true);
+				Object o = null;
+				try {
+					o = x.invoke(xc);
+				} catch (Exception ex) {
+					new RuntimeException("Can't access getter: " + x.getName());
+				}
+				if (o instanceof XComponent) {
+					String key = null;
+					try {
+						Class<?> cls1 = o.getClass();
+						Method m = cls1.getDeclaredMethod(
+							"get" + JsonNames.J_KEYATTR);
+						key = (String) m.invoke(o);
+					} catch (Exception ex) {
+						new RuntimeException("Not key", ex);
+					}
+					o = toXon((XComponent) o);
+					result.put(key, o);
+				} else {
+					new RuntimeException("Not XComponent").printStackTrace();
+				}
+			}
+		}
+		return result;
+	}
+
+	/** Create XON object from X-component.
+	 * @param xc X-component.
+	 * @return XON object.
+	 */
+	public final static Object toXon(final XComponent xc) {
+		String ns = xc.xGetNamespaceURI();
+		if (XDConstants.JSON_NS_URI_W3C.equals(ns)) {
+			String name = xc.xGetNodeName();
+			if (JsonNames.J_MAP.equals(name)) {
+				return toXonMap(xc);
+			} else if (JsonNames.J_ARRAY.equals(name)) {
+				return toXonArray(xc);
+			} else if (JsonNames.J_ITEM.equals(name)) {
+				return toXonItem(xc);
+			}
+			throw new RuntimeException("Unknown XComponent item: " + name);
+		}
+		throw new RuntimeException("Not namespace JSON_NS_URI_W3C: " + ns);
+	}
+
 }

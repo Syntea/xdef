@@ -1,9 +1,9 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 40.1.3, release-date 2021-03-08
+# Version 40.1.3, release-date 2021-03-10
 * preparing version 40.2
 * corrected display of zone with zero hours and negative minutes in offset.
-* added new X-definition type `GPSPosition`.
+* added new X-definition type of value: `GPSPosition`.
   Methods with this object:
     `latitude()` returns GPS latitude in degrees (-90.0 to 90.0).
     `longitude()` returns GPS longitude in degrees (-180.0 to 180.0).
@@ -17,12 +17,15 @@
     `new GPSPosition(latitude, longitude, name)`
    latitude, longitude, altitude float numbers, name is a string.
 * added new XML validation method `gps` The required form is:
-   '{latitude,longitude,[altitude[name]])'
+   '{latitude, longitude[, altitude[, name]])'
     where parameters `latitude`, `longitude`, `altitude` are numbers and `name`
-    is a string either containing only letters or it must be quoted.
-    e.g. `(51.52, -0.09, 0.0, Lodon)` or `(51.52, -0.09)` (missing altitude
-    and name).
-* added new X-definition type `CurrencyAmount`.
+    is a string either containing only letters. otherwise it must be quoted.
+    After the comma separator is one space. Examples:
+    `(51.52, -0.09, 0.0, Lodon)`
+     or
+     `(51.52, -0.09)` (altitude and name are not specified).
+  The Java implementation is in the class `org.xdef.sys.GPSPosition`.
+* added new X-definition type of value `CurrencyAmount`.
    Constructor:
     `new CurrencyAmount(amount, code)`
    `amount` is a number and `code` is a ISO 4217 currency code. 
@@ -33,8 +36,12 @@
 	'display()` returns string with printable form of currency (i.e. decimal
       number with recommended number of decimal digits, space and
       ISO 4217 currency code).
+  The Java implementation is in the class `org.xdef.sys.CurrencyAmount`.
 * added new XML validation method `currencyAmount`. The required form is:
    `(decimal_number code)`; e.g. `(12.25 USD)`.
+* from the interface `org.xdef.component.XComponent` was removed the redundant
+  method `toJson()`. This method can be replaced in Java code by:
+    'org.xdef.json.JsonUtil.xmlToJson(xc.toXml())' where `xc` is `XComponent`.
 
 # Version 40.1.2, release-date 2021-02-15
 * corrected the bug in the X-script method `s.contains(s)`.

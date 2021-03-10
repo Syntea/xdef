@@ -52,7 +52,6 @@ public class M implements org.xdef.component.XComponent{
 		  .getDocumentElement());
 	}
   }
-  @Override
   public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   public M() {}
   public M(org.xdef.component.XComponent p,

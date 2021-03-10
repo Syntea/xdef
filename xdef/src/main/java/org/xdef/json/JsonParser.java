@@ -180,7 +180,7 @@ public class JsonParser extends StringParser {
 			}
 			boolean wasScript = false;
 			while(!eos()) {
-				if (!wasScript && _jdef
+				if (_jdef && !wasScript
 					&& (i = isOneOfTokens(CompileJsonXdef.SCRIPT_NAME,
 						CompileJsonXdef.ONEOF_NAME)) >= 0) {
 					wasScript = true;
@@ -231,7 +231,8 @@ public class JsonParser extends StringParser {
 				} else {
 					Object o;
 					String name;
-					if (_xonMode && isNCName(XConstants.XML10)) { //XON
+					if (getCurrentChar() != '"'
+						&& _xonMode && isNCName(XConstants.XML10)) { //XON
 						// parse XON named pair
 						name = getParsedString(); /*xx*/
 						isSpacesOrComments();
@@ -263,7 +264,7 @@ public class JsonParser extends StringParser {
 						if (_xonMode) {
 							s = name;
 						} else {
-							s = JsonUtil.jstringToSource(name);
+							s = JsonTools.jstringToSource(name);
 							if (!s.startsWith("\"") || !s.endsWith("\"")) {
 								s = '"' + s + '"';
 							}
@@ -393,7 +394,7 @@ public class JsonParser extends StringParser {
 			}
 			return list;
 		} else if (isChar('"')) { // string
-			return returnValue(JsonUtil.readJSONString(this));
+			return returnValue(JsonTools.readJSONString(this));
 		} else if ((i=isOneOfTokens(new String[]{"null","false","true"})) >= 0){
 			return returnValue(i > 0 ? (i==2) : null);
 		} else if (_jdef && isToken(CompileJsonXdef.ANY_NAME)) {
@@ -431,7 +432,7 @@ public class JsonParser extends StringParser {
 							nextChar();
 							int x = 0;
 							for (int j = 0; j < 4; j++) {
-								int y = JsonUtil.hexDigit(peekChar());
+								int y = JsonTools.hexDigit(peekChar());
 								if (y < 0) {
 									//hexadecimal digit expected
 									return returnError(null,

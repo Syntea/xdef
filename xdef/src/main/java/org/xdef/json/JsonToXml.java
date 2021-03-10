@@ -17,10 +17,10 @@ import org.xdef.impl.compile.CompileJsonXdef;
 import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
 
-/** Test X-definition transformation JSON -> XML
+/** Conversion of JSON/XON to XML
  * @author Vaclav Trojan
  */
-class JsonToXml extends JsonUtil {
+class JsonToXml extends JsonTools implements JsonNames {
 	/** Prefix of JSON namespace. */
 	private String _jsPrefix;
 	/** JSON namespace. */
