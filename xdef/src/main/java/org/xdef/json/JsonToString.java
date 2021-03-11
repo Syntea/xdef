@@ -36,15 +36,20 @@ class JsonToString extends JsonTools {
 			if (x instanceof Number) {
 				String result = x.toString();
 				if (x instanceof BigDecimal) {
-					return result + 'D';
-				} else if (x instanceof Double) {
+					String s = result.toString();
+					return s.charAt(0) == '-' ? "-0d"+s.substring(1) : "0d"+s;
+				} else if (x instanceof Float) {
 					return result + 'F';
-				} else if (x instanceof BigInteger) {
-					return result + 'N';
+				} else if (x instanceof Double) {
+					return result + 'D';
 				} else if (x instanceof Short) {
 					return result + 'S';
 				} else if (x instanceof Integer) {
 					return result + 'I';
+				} else if (x instanceof Long) {
+					return result + 'L';
+				} else if (x instanceof BigInteger) {
+					return result + 'N';
 				}
 				return result;
 			} else if (x instanceof Character) {
@@ -56,7 +61,7 @@ class JsonToString extends JsonTools {
 			} else if (x instanceof CurrencyAmount) {
 				return "#(" + x + ')';
 			} else if (x instanceof GPSPosition) {
-				return "gps(" + x + ')';
+				return "g(" + x + ')';
 			}
 			try { // try byte array
 				return "b("+new String(SUtils.encodeBase64((byte[]) x))+")";

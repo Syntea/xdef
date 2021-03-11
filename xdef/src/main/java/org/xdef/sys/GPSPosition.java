@@ -127,16 +127,16 @@ public class GPSPosition {
 		}
 		result += ", ";
 		if (Character.isLetter(_name.charAt(0))) {
-			boolean nodelimiter = true;
+			boolean notNeadDelimiter = true;
 			for (int i = 1; i < _name.length(); i++) {
 				char ch;
 				if (!(Character.isLetterOrDigit(ch =_name.charAt(i))
 					|| ch == '_' || ch == '-')) {
-					nodelimiter = false;
+					notNeadDelimiter = false;
 					break;
 				}
 			}
-			if (nodelimiter) {
+			if (notNeadDelimiter) {
 				return result + _name;
 			}
 		}
