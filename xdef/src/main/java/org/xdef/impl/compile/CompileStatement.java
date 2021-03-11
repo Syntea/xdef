@@ -2138,15 +2138,12 @@ class CompileStatement extends XScriptParser implements CodeTable {
 				return true;
 			case CATCH_SYM:
 				error(XDEF.XDEF476); // 'catch' whithout 'try'
-				statement();
-				return true;
+				return false;
 			case CASE_SYM:
 				error(XDEF.XDEF477); // 'case' whithout 'switch'
-				return true;
+				return false;
 			case ELSE_SYM:
 				error(XDEF.XDEF478); // 'else' whithout 'if'
-				statement();
-				return true;
 			default:
 				return false;
 		}
