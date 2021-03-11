@@ -87,11 +87,11 @@ public class DefCurrencyAmount extends XDValueAbstract
 	@Override
 	public XDValueType getItemType() {return XDValueType.CURRAMOUNT;}
 	@Override
-	public String stringValue() {return isNull() ? "" : _amount.toString();}
+	public String stringValue() {return isNull() ? "null" : _amount.toString();}
 	@Override
 	public boolean isNull() {return _amount == null;}
 	@Override
 	public Object getObject() {return _amount;}
 	@Override
-	public String toString() {return _amount.toString();}
+	public String toString() {return stringValue();}
 }

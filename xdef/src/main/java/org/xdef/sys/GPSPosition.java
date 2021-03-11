@@ -18,8 +18,8 @@ public class GPSPosition {
 	/** The altitude in meters; range from -EARTH_RADIUS in meters (6376500.0)
 	 * to MAX_VALUE or Double.MIN_VALUE it it is unknown. */
 	private final double _altitude;
-	/** The altitude in meters; range from -EARTH_RADIUS in meters (6376500.0)
-	 * to MAX_VALUE or Double.MIN_VALUE it it is unknown. */
+	/** The altitude in meters; range from -EARTH_RADIUS in meters (-6376500.0
+	 * to MAX_VALUE or Double.MIN_VALUE it it is unknown). */
 	private final String _name;
 
 	/** Create new instance of GPosition with latitude, longitude and altitude.
