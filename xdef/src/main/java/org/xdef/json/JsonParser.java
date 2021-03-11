@@ -141,7 +141,20 @@ public class JsonParser extends StringParser {
 	private String readGPSName() {
 		StringBuilder sb = new StringBuilder();
 		char ch;
-		if ((ch = isLetter()) != SParser.NOCHAR) {
+		if (isChar('"')) { //quoted
+			for (;;) {
+				if (isToken("\\\"")) { // escaped quote
+					sb.append('"');
+				} else if (isChar('"')) { // end of name
+					break;
+				} else if (eos()) { //error (missing quote)
+					sb.setLength(0);
+					break;
+				} else {
+					sb.append(peekChar());
+				}
+			}
+		} else if ((ch = isLetter()) != SParser.NOCHAR) { //not quoted
 			sb.append(ch);
 			while ((ch = getCurrentChar()) != SParser.NOCHAR
 				&& (Character.isLetter(ch) || ch == ' ')) {
@@ -518,7 +531,7 @@ public class JsonParser extends StringParser {
 					setIndex(pos);
 					//JSON value expected
 					return returnError(null, JSON.JSON010, "[]{}");
-				} else if (isToken("gps(")) { // GPS position
+				} else if (isToken("g(")) { // GPS position
 					result = null;
 					if (isSignedFloat() || isSignedInteger()) {
 						double latitude = getParsedDouble();
@@ -554,67 +567,78 @@ public class JsonParser extends StringParser {
 				}
 			}
 			setIndex(pos);
+			boolean minus = false;
 			if (isChar('+')) {
 				error(JSON.JSON017, "+");//Not allowed character '&{0}'
 				wasError = true;
 				pos = getIndex();
 			} else {
 				pos = getIndex();
-				isChar('-');
+				minus = isChar('-');
 			}
-			int firstDigit =  getIndex() - pos; // offset of first digit
-			if (isInteger()) {
-				boolean isfloat;
-				if (isfloat = isChar('.')) { // decimal point
-					if (!isInteger()) {
-						error(JSON.JSON017, ".");//Not allowed character '&{0}'
-						wasError = true;
-					}
-				}
-				ch = getCurrentChar();
-				if (ch == 'e' || ch == 'E') {//exponent
-					nextChar();
-					isfloat = true;
-					if (!isSignedInteger()) {
-						error(JSON.JSON017,""+ch);//Not allowed character '&{0}'
-						wasError = true;
-					}
-				}
-				String s = getBufferPart(pos, getIndex());
-				if (s.charAt(firstDigit) == '0' && s.length() > 1 &&
-					Character.isDigit(s.charAt(firstDigit + 1))) {
-						error(JSON.JSON014); // Illegal leading zero in number
-				}
-				if (wasError) {
-					return returnValue(0);
-				}
-				if (_xonMode) {
-					try {
-						if (isChar('D')) {
-							return returnValue(new BigDecimal(s));
-						} else if (isChar('F')) {
-							return returnValue(Double.parseDouble(s));
+			if (isToken("0d") && (isFloat() || isInteger())) {
+				return returnValue(new BigDecimal(
+					(minus ? "-" : "") + getParsedDouble()));
+			} else {
+				int firstDigit =  getIndex() - pos; // offset of first digit
+				if (isInteger()) {
+					boolean isfloat;
+					if (isfloat = isChar('.')) { // decimal point
+						if (!isInteger()) {
+							error(JSON.JSON017, ".");//Not allowed character '&{0}'
+							wasError = true;
 						}
-						if (!isfloat) {
-							switch(isOneOfChars("NLISB")) {
-								case 0:	return returnValue(new BigInteger(s));
-								case 1: return returnValue(Long.parseLong(s));
-								case 2: return returnValue(Integer.parseInt(s));
-								case 3: return returnValue(Short.parseShort(s));
-								case 4: return returnValue(Byte.parseByte(s));
+					}
+					ch = getCurrentChar();
+					if (ch == 'e' || ch == 'E') {//exponent
+						nextChar();
+						isfloat = true;
+						if (!isSignedInteger()) {
+							error(JSON.JSON017,""+ch);//Not allowed character '&{0}'
+							wasError = true;
+						}
+					}
+					String s = getBufferPart(pos, getIndex());
+					if (s.charAt(firstDigit) == '0' && s.length() > 1 &&
+						Character.isDigit(s.charAt(firstDigit + 1))) {
+							error(JSON.JSON014); // Illegal leading zero in number
+					}
+					if (wasError) {
+						return returnValue(0);
+					}
+					if (_xonMode) {
+						try {
+							if (isChar('F')) {
+								return returnValue(Float.parseFloat(s));
+							} else if (isChar('D')) {
+								return returnValue(Double.parseDouble(s));
 							}
+							if (!isfloat) {
+								switch(isOneOfChars("NLISB")) {
+									case 0:
+										return returnValue(new BigInteger(s));
+									case 1:
+										return returnValue(Long.parseLong(s));
+									case 2:
+										return returnValue(Integer.parseInt(s));
+									case 3:
+										return returnValue(Short.parseShort(s));
+									case 4:
+										return returnValue(Byte.parseByte(s));
+								}
+							}
+						} catch (Exception ex) {
+							return returnError(0, JSON.JSON010, "[]{}");
 						}
-					} catch (Exception ex) {
-						return returnError(0, JSON.JSON010, "[]{}");
 					}
-				}
-				if (isfloat) {
-					return returnValue(new BigDecimal(s));
-				} else {
-					try {
-						return returnValue(Long.parseLong(s));
-					} catch (Exception ex) {
-						return returnValue(new BigInteger(s));
+					if (isfloat) {
+						return returnValue(new BigDecimal(s));
+					} else {
+						try {
+							return returnValue(Long.parseLong(s));
+						} catch (Exception ex) {
+							return returnValue(new BigInteger(s));
+						}
 					}
 				}
 			}
