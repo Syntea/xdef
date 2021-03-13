@@ -9,7 +9,7 @@ import org.w3c.dom.Node;
 
 /** Interface of XComponent (Java class generated from X-definitions according
  * to a model of Element). Java source of the XComponent is possible to generate
- * by {@link cz.syntea.xdef.component.GenXComponent}.
+ * by {@link org.xdef.component.GenXComponent}.
  * @author Vaclav Trojan
  */
 public class XCTextComponent implements XComponent {
@@ -46,13 +46,11 @@ public class XCTextComponent implements XComponent {
 	 * @return XML node belonging to given document from default model.
 	 */
 	public Node toXml(Document doc) {return doc.createTextNode(_value);}
-/*only in cz.syntea.xdef*/
 	@Override
 	/** Create JSON object from this XComponent (marshal to JSON).
 	 * @return JSON object created from this XComponent.
 	 */
 	public Object toJson() {return null;}
-/*only in cz.syntea.xdef*/
 	@Override
 	/** Get name of element model used for construction of this object.
 	 * @return name of element model used for construction of this object.
