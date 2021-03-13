@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -1384,8 +1385,18 @@ public abstract class XDTester extends STester {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-	/** Create X-components from XDPool to the directory from argument "srcDir"
-	 * and compile it.
+	/** Create X-components from the XDPool object to given directory.
+	 * @param xp XDPool from which the X-components created.
+	 * @param dir path to directory where to generate Java sources.
+	 * @return reporter with reported errors and warnings.
+	 * @throws RuntimeException if an error occurs.
+	 */
+	public static final ArrayReporter genXComponent(final XDPool xp,
+		final String dir) {
+		return genXComponent(xp, new File(dir));
+	}
+
+	/** Create X-components from the XDPool object to given directory.
 	 * @param xp XDPool from which the X-components created.
 	 * @param dir directory where to generate Java sources.
 	 * @return reporter with reported errors and warnings.
@@ -1403,7 +1414,7 @@ public abstract class XDTester extends STester {
 			result.checkAndThrowErrors(); // throw exceptiojn if error reported
 			compileSources(dir);
 			return result;
-		} catch (Exception ex) {
+		} catch (IOException ex) {
 			throw new SRuntimeException(ex.toString(), ex);
 		}
 	}

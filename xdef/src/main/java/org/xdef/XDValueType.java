@@ -80,6 +80,11 @@ public enum XDValueType {
 	OBJECT,
 	/** Null type. */
 	NULL,
+//	INT8,
+//	INT16,
+//	INT31,
+//	INT64,
+//	FLOAT32,
 	/** XXElement value. */
 	XXELEMENT,
 	/** XXText value. */

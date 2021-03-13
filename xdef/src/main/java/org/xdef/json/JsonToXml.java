@@ -736,29 +736,32 @@ class JsonToXml extends JsonTools implements JsonNames {
 				|| "true".equals(s) || "false".equals(s)) {
 				return '"' + s + '"';
 			}
-			boolean addQuot = s.indexOf(' ') >= 0 || s.indexOf('\t') >= 0
-				|| s.indexOf('\n') >= 0 || s.indexOf('\r') >= 0
-				|| s.indexOf('\f') >= 0 || s.indexOf('\b') >= 0
-				|| s.indexOf('\\') >= 0 || s.indexOf('"') >= 0;
-			if (!addQuot) {
-				char ch = s.charAt(0);
-				if (ch == '-' || ch >= '0' && ch <= '9') {
-					StringParser p = new StringParser(s);
-					if ((p.isSignedFloat() || p.isSignedInteger()) && p.eos()) {
-						return '"' + s + '"'; // value is number, must be quoted
-					}
+			boolean addQuot = false;
+			for (int i = 0; i < s.length(); i++) {
+				char c = s.charAt(i);
+				if (c <= ' ' || c == '\\' || c == '"'
+					|| !Character.isDefined(c)) {
+					addQuot = true;
+					break;
 				}
 			}
+			char ch = s.charAt(0);
 			if (addQuot) {
-				char ch = s.charAt(0);
 				if (s.equals(s.trim()) && ch != '"' && ch != '[') {
-					// For attributes it is not necessary to add quotes if the data
-					// does not contain leading or trailing white spaces,
+					// For attributes it is not necessary to add quotes if
+					// string does not contain leading or trailing white spaces
 					return s;
 				} else {
 					return '"' + jstringToSource(s) + '"';
 				}
 			} else {
+				if (ch == '-' || ch >= '0' && ch <= '9'
+					&& (ch = s.charAt(s.length() - 1)) >= '0' && ch <= '9') {
+					StringParser p = new StringParser(s);
+					if ((p.isSignedFloat() || p.isSignedInteger()) && p.eos()) {
+						return '"' + s + '"'; // value is number, must be quoted
+					}
+				}
 				return s;
 			}
 		}
@@ -781,9 +784,7 @@ class JsonToXml extends JsonTools implements JsonNames {
 			e = genArrayW3C((List) val);
 		} else {
 			e = genJElementW3C(J_ITEM);
-			e = genJElementW3C(J_ITEM);
 			e.setAttribute(J_VALUEATTR, genSimpleValueToXml(val));
-//			e.setAttribute(J_VALUEATTR, jstringToXML(val, 1));
 		}
 		parent.appendChild(e);
 		return e;

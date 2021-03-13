@@ -1694,12 +1694,13 @@ public class SDatetime extends XMLGregorianCalendar
 					continue;
 				}
 				case 'S': //millisecond
-					if (_second == Integer.MIN_VALUE) {
-						if (!optionals.empty()) {
+					if (_second == Integer.MIN_VALUE || _fraction == 0.0D) {
+						if (optionals.empty()) {
+							sb.append('0'); // not oprional -> force 0 millis
+						} else { //skip this option if it is optional
 							setOptionInvalid(optionals);
 							valid = false;
 						}
-						sb.append("0");
 						continue;
 					}
 					sb.append(millis);

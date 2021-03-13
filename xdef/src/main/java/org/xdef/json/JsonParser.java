@@ -121,17 +121,17 @@ public class JsonParser extends StringParser {
 	/** Returns error and parsed value.
 	 * @param x parsed value to be returned.
 	 * @param code code of error message.
-	 * @param skip string with characters to which source will be skipped.
+	 * @param skipChars string with characters to which source will be skipped.
 	 * @param params list od error message parameters (may be empty.)
 	 * @return parsed value. If the switch _genJObjects is true, then
 	 * the parsed value contains source position.
 	 */
 	private Object returnError(final Object x,
 		final long code,
-		final String skip,
+		final String skipChars,
 		final Object... params) {
 		error(code, params);
-		if (findOneOfChars(skip) == NOCHAR) {// skip to next item
+		if (findOneOfChars(skipChars) == NOCHAR) {// skip to next item
 			setEos();
 		}
 		return returnValue(x);
@@ -477,16 +477,14 @@ public class JsonParser extends StringParser {
 					setIndex(pos);
 					return returnError(null, JSON.JSON010, "[]{}");
 				} else if (isToken("d(")) {
-					if (isDatetime("--M[-d][Z]|" + //month day
-						"---d[Z]|"+ //day
-						"H:m[:s[?',.'S]][Z]]|"+ //time
-						"y-M-d['T'H:m[:s[?',.'S]][Z]]|" +
-//						"y-DDD['T'H:m[:s[?',.'S]][Z]]|" +
-//						"y-'W'w-e['T'H:m[:s[?',.'S]][Z]]|" +
-						"y-MZ|"+ // year month
-						"yZ|"+ // year with zone
-						"y-M|"+ // year month
-						"y")) { // year without zone
+					if (isDatetime("--M[-d][Z]" + //month day
+						"|---d[Z]"+ //day
+						"|H:m:s[.S][Z]"+ //time
+						"|y-M-d['T'H:m:s[.S][Z]]" +
+						"|y-MZ"+ // year month
+						"|yZ"+ // year with zone
+						"|y-M"+ // year month
+						"|y")) { // year without zone
 						if (isChar(')')) {
 							return returnValue(getParsedSDatetime());
 						}
@@ -576,70 +574,78 @@ public class JsonParser extends StringParser {
 				pos = getIndex();
 				minus = isChar('-');
 			}
-			if (isToken("0d") && (isFloat() || isInteger())) {
-				return returnValue(new BigDecimal(
-					(minus ? "-" : "") + getParsedDouble()));
-			} else {
-				int firstDigit =  getIndex() - pos; // offset of first digit
-				if (isInteger()) {
-					boolean isfloat;
-					if (isfloat = isChar('.')) { // decimal point
-						if (!isInteger()) {
-							error(JSON.JSON017, ".");//Not allowed character '&{0}'
-							wasError = true;
-						}
+			int firstDigit =  getIndex() - pos; // offset of first digit
+			if (isInteger()) {
+				boolean isfloat;
+				if (isfloat = isChar('.')) { // decimal point
+					if (!isInteger()) {
+						error(JSON.JSON017, ".");//Not allowed character '&{0}'
+						wasError = true;
 					}
-					ch = getCurrentChar();
-					if (ch == 'e' || ch == 'E') {//exponent
-						nextChar();
-						isfloat = true;
-						if (!isSignedInteger()) {
-							error(JSON.JSON017,""+ch);//Not allowed character '&{0}'
-							wasError = true;
-						}
+				}
+				if ((ch = isOneOfChars("eE")) != SParser.NOCHAR) {//exponent
+					isfloat = true;
+					if (!isSignedInteger()) {//Not allowed character '&{0}'
+						error(JSON.JSON017, ch);
+						wasError = true;
 					}
-					String s = getBufferPart(pos, getIndex());
-					if (s.charAt(firstDigit) == '0' && s.length() > 1 &&
-						Character.isDigit(s.charAt(firstDigit + 1))) {
-							error(JSON.JSON014); // Illegal leading zero in number
-					}
-					if (wasError) {
-						return returnValue(0);
-					}
-					if (_xonMode) {
-						try {
-							if (isChar('F')) {
+				}
+				String s = getBufferPart(pos, getIndex());
+				if (s.charAt(firstDigit) == '0' && s.length() > 1 &&
+					Character.isDigit(s.charAt(firstDigit + 1))) {
+						error(JSON.JSON014); // Illegal leading zero in number
+				}
+				if (wasError) {
+					return returnValue(0);
+				}
+				if (_xonMode) {
+					try {
+						switch(ch = isOneOfChars("FDd")) {
+							case 'F':
 								return returnValue(Float.parseFloat(s));
-							} else if (isChar('D')) {
+							case 'D':
 								return returnValue(Double.parseDouble(s));
-							}
-							if (!isfloat) {
-								switch(isOneOfChars("NLISB")) {
-									case 0:
-										return returnValue(new BigInteger(s));
-									case 1:
-										return returnValue(Long.parseLong(s));
-									case 2:
-										return returnValue(Integer.parseInt(s));
-									case 3:
-										return returnValue(Short.parseShort(s));
-									case 4:
-										return returnValue(Byte.parseByte(s));
-								}
+							case 'd':
+								return returnValue(new BigDecimal(s));
+						}
+					} catch (Exception ex) {
+						//Illegal number value &{0}{ for XON type "}{"}: &{1}
+						error(JSON.JSON023, ch, s);
+					}
+					if (!isfloat) {
+						try {
+							switch(ch = isOneOfChars("NLISB")) {
+								case 'N':
+									return returnValue(new BigInteger(s));
+								case 'L':
+									return returnValue(Long.parseLong(s));
+								case 'I':
+									return returnValue(Integer.parseInt(s));
+								case 'S':
+									return returnValue(Short.parseShort(s));
+								case 'B':
+									return returnValue(Byte.parseByte(s));
 							}
 						} catch (Exception ex) {
-							return returnError(0, JSON.JSON010, "[]{}");
+							//Illegal number value &{0}{ for XON type "}{"}:&{1}
+							error(JSON.JSON023, ch, s);
 						}
 					}
+				}
+				try {
 					if (isfloat) {
 						return returnValue(new BigDecimal(s));
 					} else {
 						try {
 							return returnValue(Long.parseLong(s));
-						} catch (Exception ex) {
+						} catch (Exception exx) {
 							return returnValue(new BigInteger(s));
 						}
 					}
+				} catch (Exception ex) {
+					//Illegal number value &{0}{ for XON type "}{"}:&{1}
+					error(JSON.JSON023, null, s);
+					return returnValue(0);
 				}
 			}
 			setIndex(pos);

@@ -36,8 +36,7 @@ class JsonToString extends JsonTools {
 			if (x instanceof Number) {
 				String result = x.toString();
 				if (x instanceof BigDecimal) {
-					String s = result.toString();
-					return s.charAt(0) == '-' ? "-0d"+s.substring(1) : "0d"+s;
+					return result + 'd';
 				} else if (x instanceof Float) {
 					return result + 'F';
 				} else if (x instanceof Double) {
@@ -239,14 +238,22 @@ class JsonToString extends JsonTools {
 			return xonArraytOJson((List) x);
 		} else if (x instanceof Character) {
 			return String.valueOf(x);
-		} else if (x instanceof SDatetime || x instanceof SDuration
+		} else if (x instanceof SDatetime) {
+			String s = x.toString();
+			StringParser p = new StringParser(s);
+			if (p.isSignedInteger() && p.eos()) {
+				return p.getParsedLong(); // gYear without zone!
+			}
+			return s;
+		} else if (x instanceof SDuration
 			|| x instanceof CurrencyAmount || x instanceof GPSPosition) {
 			return x.toString();
+		} else {
+			try { // try byte array
+				byte[] b = (byte[]) x;
+				return new String(SUtils.encodeBase64(b));
+			} catch (Exception ex) {} // not byte array
 		}
-		try { // try byte array
-			byte[] b = (byte[]) x;
-			return new String(SUtils.encodeBase64(b));
-		} catch (Exception ex) {} // not byte array
 		return x.toString();
 	}
 }
