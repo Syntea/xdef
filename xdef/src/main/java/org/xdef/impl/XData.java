@@ -309,9 +309,9 @@ public class XData extends XCodeDescriptor
 						return '"' + item.getValue().toString() + '"';
 					}
 				}
-				return "\"yyyy-MM-ddTHH:mm:ss[.S][Z]\"";
+				return null;
 			} else if ("dateTime".equals(y.parserName())) {
-				return "\"y-MM-ddTHH:mm:ss[.S][Z]\"";
+				return null;
 			} else if ("date".equals(y.parserName())) {
 				return "\"y-MM-dd[Z]\"";
 			} else if ("gDay".equals(y.parserName())) {

@@ -80,6 +80,12 @@ public interface XDValueID {
 	public static final short XD_OBJECT = XD_ANY + 1; // 36
 	/** Null type. */
 	static final short XD_NULL = XD_OBJECT + 1; // 37
+//	public static final short XD_INT8 = XD_NULL + 1;
+//	public static final short XD_INT16 = XD_INT8 + 1;
+//	public static final short XD_INT32 = XD_INT16 + 1;5
+//	public static final short XD_FLOAT32 = XD_INT32 + 1;
+//	/** XXElement value. */
+//	public static final short XX_ELEMENT = XD_FLOAT32 + 1; // 38
 	/** XXElement value. */
 	public static final short XX_ELEMENT = XD_NULL + 1; // 38
 	/** XXText value. */

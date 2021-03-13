@@ -2070,6 +2070,7 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(parse("24:00:00"), _msg);
 		assertTrue(parse("00:59:00"), _msg);
 		assertTrue(parse("00:00:00.999999"), _msg);
+		assertTrue(parse("07:08:57.0+08:16"), _msg);
 		assertTrue(parse("24:00:00"), _msg); //leap second?
 
 		// testing errors
@@ -2092,6 +2093,8 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(parseFail("00:00:00+01:0"), _msg);
 		assertTrue(parseFail("00:00:00+1:00"), _msg);
 		assertTrue(parseFail("00:00:00+15:30"), _msg);
+		assertTrue(parseFail("07:08"), _msg);
+		assertTrue(parseFail("07:08+08:16"), _msg);
 
 		// testing facets
 		assertTrue(prepare(

@@ -214,7 +214,7 @@ public class JsonTools {
 				char c = p.peekChar();
 				if (c == 'u') {
 					int x = 0;
-					for (int j = 1; j < 4; j++) {
+					for (int j = 0; j < 4; j++) {
 						int y = hexDigit(p.peekChar());
 						if (y < 0) {
 							p.error(JSON.JSON005);//hexadecimal digit expected
