@@ -19,7 +19,7 @@ import java.lang.reflect.Constructor;
 import java.math.BigDecimal;
 import org.xdef.XDValueType;
 import java.math.BigInteger;
-import org.xdef.sys.CurrencyAmount;
+import org.xdef.sys.Price;
 import org.xdef.sys.GPSPosition;
 
 /** Compiled XQuery expression.
@@ -157,7 +157,7 @@ public class DefXQueryExpr extends KXqueryExpr implements XDXQueryExpr {
 	@Override
 	public GPSPosition GPSValue() {return null;}
 	@Override
-	public CurrencyAmount currencyValue() {return null;}
+	public Price priceValue() {return null;}
 	@Override
 	public XDService serviceValue(){return null;}
 	@Override

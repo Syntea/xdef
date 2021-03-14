@@ -2,20 +2,20 @@ package org.xdef.impl.parsers;
 
 import org.xdef.XDParseResult;
 import org.xdef.XDParserAbstract;
-import org.xdef.impl.code.DefCurrencyAmount;
+import org.xdef.impl.code.DefPrice;
 import org.xdef.msg.XDEF;
 import org.xdef.proc.XXNode;
-import org.xdef.sys.CurrencyAmount;
+import org.xdef.sys.Price;
 import org.xdef.sys.Report;
 import org.xdef.sys.SRuntimeException;
 
-/** Parse currency amount value.
+/** Parse price (with currency code).
  * @author Vaclav Trojan
  */
-public class XDParseCurrencyAmount extends XDParserAbstract {
-	private static final String ROOTBASENAME = "currencyAmount";
+public class XDParsePrice extends XDParserAbstract {
+	private static final String ROOTBASENAME = "price";
 
-	public XDParseCurrencyAmount() {super();}
+	public XDParsePrice() {super();}
 
 	@Override
 	public void parseObject(XXNode xnode, XDParseResult p) {
@@ -38,8 +38,8 @@ public class XDParseCurrencyAmount extends XDParserAbstract {
 				}
 				if (i == 3) {
 					try {
-						p.setParsedValue(new DefCurrencyAmount(
-							new CurrencyAmount(d, code)));
+						p.setParsedValue(new DefPrice(
+							new Price(d, code)));
 						return;
 					} catch (SRuntimeException ex) {
 						Report r = ex.getReport();
@@ -57,5 +57,5 @@ public class XDParseCurrencyAmount extends XDParserAbstract {
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 	@Override
-	public short parsedType() {return XD_CURRAMOUNT;}
+	public short parsedType() {return XD_PRICE;}
 }

@@ -1,28 +1,28 @@
 package org.xdef.impl.code;
 
-import org.xdef.XDCurrencyAmount;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
 import org.xdef.XDValueType;
 import org.xdef.msg.SYS;
-import org.xdef.sys.CurrencyAmount;
+import org.xdef.sys.Price;
 import org.xdef.sys.SIllegalArgumentException;
+import org.xdef.XDPrice;
 
-/** Implementation of objects with currency amount.
+/** Price with currency amount.
  * @author Vaclav Trojan
  */
-public class DefCurrencyAmount extends XDValueAbstract
-	implements XDCurrencyAmount {
-	/** Value of CurrencyAmount. */
-	private final CurrencyAmount _amount;
+public class DefPrice extends XDValueAbstract
+	implements XDPrice {
+	/** Value of Price. */
+	private final Price _amount;
 
-	/** Create new instance null DefCurrencyAmount. */
-	public DefCurrencyAmount() {_amount = null;}
+	/** Create new instance null DefPrice. */
+	public DefPrice() {_amount = null;}
 
-	/** Create new instance of DefCurrencyAmount for CurrencyAmount.
+	/** Create new instance of DefPrice for Price.
 	 * @param amount Object contains amount as decimal number and ISO4217 code.
 	 */
-	public DefCurrencyAmount(final CurrencyAmount amount) {_amount = amount;}
+	public DefPrice(final Price amount) {_amount = amount;}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDCurrencyAmmount interface
@@ -39,8 +39,8 @@ public class DefCurrencyAmount extends XDValueAbstract
 	/**	Get ISO4217 code of currency.
 	 * @return ISO4217 code of currency..
 	 */
-	public String code() {
-		return _amount != null ? _amount.code() : null;
+	public String currencyCode() {
+		return _amount != null ? _amount.currencyCode() : null;
 	}
 	@Override
 	/** Get the default number of fraction digits used with this currency.
@@ -63,11 +63,11 @@ public class DefCurrencyAmount extends XDValueAbstract
 // Implementation of XDValue interface
 ////////////////////////////////////////////////////////////////////////////////
 	@Override
-	public CurrencyAmount currencyValue() {return _amount;}
+	public Price priceValue() {return _amount;}
 	@Override
 	public boolean equals(final XDValue arg) {
-		if (arg instanceof DefCurrencyAmount) {
-			DefCurrencyAmount x = (DefCurrencyAmount) arg;
+		if (arg instanceof DefPrice) {
+			DefPrice x = (DefPrice) arg;
 			return _amount != null ? _amount.equals(x._amount)
 				: x._amount == null;
 		}
@@ -75,17 +75,17 @@ public class DefCurrencyAmount extends XDValueAbstract
 	}
 	@Override
 	public int compareTo(final XDValue arg) throws IllegalArgumentException {
-		if (arg instanceof DefCurrencyAmount) {
-			if (this.equals((DefCurrencyAmount) arg)) {
+		if (arg instanceof DefPrice) {
+			if (this.equals((DefPrice) arg)) {
 				return 0;
 			}
 		}
 		throw new SIllegalArgumentException(SYS.SYS085);//Incomparable arguments
 	}
 	@Override
-	public short getItemId() {return XD_CURRAMOUNT;}
+	public short getItemId() {return XD_PRICE;}
 	@Override
-	public XDValueType getItemType() {return XDValueType.CURRAMOUNT;}
+	public XDValueType getItemType() {return XDValueType.PRICE;}
 	@Override
 	public String stringValue() {return isNull() ? "null" : _amount.toString();}
 	@Override

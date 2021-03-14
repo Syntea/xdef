@@ -78,7 +78,7 @@ import org.xdef.impl.code.CodeSWTableStr;
 import org.xdef.impl.compile.CompileBase;
 import org.xdef.impl.code.CodeTable;
 import org.xdef.impl.code.CodeXD;
-import org.xdef.impl.code.DefCurrencyAmount;
+import org.xdef.impl.code.DefPrice;
 import org.xdef.impl.code.DefGPSPosition;
 import org.xdef.impl.code.DefLocale;
 import org.xdef.impl.debug.ChkGUIDebug;
@@ -1134,37 +1134,37 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 							((DefGPSPosition) _stack[sp])));
 					sp--;
 					continue;
-				case CURRENCY_AMOUNT:
+				case PRICE_AMOUNT:
 					if (_stack[sp].isNull()) {
 						//Null value of &{0}
-						throwInfo(chkNode, XDEF.XDEF573, "CurrencyAmount");
+						throwInfo(chkNode, XDEF.XDEF573, "Price");
 					}
 					_stack[sp] =
-						new DefDouble(((DefCurrencyAmount)_stack[sp]).amount());
+						new DefDouble(((DefPrice)_stack[sp]).amount());
 					continue;
-				case CURRENCY_CODE:
+				case PRICE_CURRENCY_CODE:
 					if (_stack[sp].isNull()) {
 						//Null value of &{0}
-						throwInfo(chkNode, XDEF.XDEF573, "CurrencyAmount");
+						throwInfo(chkNode, XDEF.XDEF573, "Price");
 					}
 					_stack[sp] =
-						new DefString(((DefCurrencyAmount) _stack[sp]).code());
+						new DefString(((DefPrice) _stack[sp]).currencyCode());
 					continue;
-				case CURRENCY_FRACTDIGITS:
+				case PRICE_FRACTDIGITS:
 					if (_stack[sp].isNull()) {
 						//Null value of &{0}
-						throwInfo(chkNode, XDEF.XDEF573, "CurrencyAmount");
+						throwInfo(chkNode, XDEF.XDEF573, "Price");
 					}
 					_stack[sp] = new DefLong(
-						((DefCurrencyAmount) _stack[sp]).fractionDigits());
+						((DefPrice) _stack[sp]).fractionDigits());
 					continue;
-				case CURRENCY_DISPLAY:
+				case PRICE_DISPLAY:
 					if (_stack[sp].isNull()) {
 						//Null value of &{0}
-						throwInfo(chkNode, XDEF.XDEF573, "CurrencyAmount");
+						throwInfo(chkNode, XDEF.XDEF573, "Price");
 					}
 					_stack[sp] = new DefString(
-						((DefCurrencyAmount) _stack[sp]).display());
+						((DefPrice) _stack[sp]).display());
 					continue;
 
 ////////////////////////////////////////////////////////////////////////////////

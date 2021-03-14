@@ -1,9 +1,9 @@
 package org.xdef;
 
-/** Currency amount objects.
+/** Price (amount and currency).
  * @author Vaclav Trojan
  */
-public interface XDCurrencyAmount extends XDValue {
+public interface XDPrice extends XDValue {
 
 	/**	Get amount of currency.
 	 * @return amount of currency.
@@ -13,7 +13,7 @@ public interface XDCurrencyAmount extends XDValue {
 	/**	Get ISO4217 code of currency.
 	 * @return ISO4217 code of currency..
 	 */
-	public String code();
+	public String currencyCode();
 
 	/** Get the default number of fraction digits used with this currency.
 	 * In the case of pseudo-currencies, such as IMF Special Drawing Rights,

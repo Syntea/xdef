@@ -56,10 +56,10 @@ import java.util.StringTokenizer;
 import javax.xml.XMLConstants;
 import org.w3c.dom.Element;
 import org.xdef.XDValueID;
-import org.xdef.impl.code.DefCurrencyAmount;
+import org.xdef.impl.code.DefPrice;
 import org.xdef.impl.code.DefGPSPosition;
 import org.xdef.impl.code.DefLocale;
-import org.xdef.sys.CurrencyAmount;
+import org.xdef.sys.Price;
 import org.xdef.sys.GPSPosition;
 
 /** Provides invoking of external method from script code.
@@ -1021,13 +1021,13 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 			}
 			case NEW_CURRAMOOUNT: {
 				try {
-					stack[sp-1] = new DefCurrencyAmount(new CurrencyAmount(
+					stack[sp-1] = new DefPrice(new Price(
 						stack[sp-1].doubleValue(), stack[sp].stringValue()));
 				} catch (Exception ex) {
 					//"Invalid currency code: "{0}"
 					cp.putError(chkNode, XDEF.XDEF575,
 						stack[sp-1].toString() + " " + stack[sp].stringValue());
-					stack[sp-1] = DefNull.genNullValue(XD_CURRAMOUNT);
+					stack[sp-1] = DefNull.genNullValue(XD_PRICE);
 				}
 				return --sp;
 			}
@@ -1182,7 +1182,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 									case XX_TEXT:
 									case XD_PARSER:
 									case XD_GPSPOSITION:
-									case XD_CURRAMOUNT:
+									case XD_PRICE:
 										pars[j + k] = stack[i];
 										break;
 									default:

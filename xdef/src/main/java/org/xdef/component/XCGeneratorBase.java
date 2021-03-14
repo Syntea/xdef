@@ -221,10 +221,10 @@ class XCGeneratorBase {
 		String parserName = xdata.getParserName();
 		if ("byte".equals(parserName)) {
 			return "Byte";
-		} else if ("short".equals(parserName)) {
+		} else if ("short".equals(parserName)
+			|| "unsignedByte".equals(parserName)) {
 			return "Short";
 		} else if ("int".equals(parserName)
-			|| "unsignedByte".equals(parserName)
 			|| "unsignedShort".equals(parserName)) {
 			return "Integer";
 		} else if ("long".equals(parserName)||"unsignedInt".equals(parserName)){
@@ -233,8 +233,11 @@ class XCGeneratorBase {
 			|| "negativeInteger".equals(parserName)
 			|| "nonNegativeInteger".equals(parserName)
 			|| "PositiveInteger".equals(parserName)
-			|| "nonPositiveiveInteger".equals(parserName)) {
+			|| "nonPositiveiveInteger".equals(parserName)
+			|| "unsignedLong".equals(parserName)) {
 			return "java.math.BigInteger";
+		} else if ("float".equals(parserName)) {
+			return "Double";
 		} else if ("decimal".equals(parserName) || "dec".equals(parserName)) {
 			return "java.math.BigDecimal";
 		} else if ("jnumber".equals(parserName)) {
@@ -245,6 +248,8 @@ class XCGeneratorBase {
 //			return "org.xdef.json.JNull";
 		} else if ("jvalue".equals(parserName)) {
 			return "Object";
+		} else if ("xchar".equals(parserName)) {
+			return "Character";
 		}
 		switch (xdata.getParserType()) {
 			case XDValueID.XD_BOOLEAN:
@@ -261,8 +266,8 @@ class XCGeneratorBase {
 				return "org.xdef.sys.SDatetime";
 			case XDValueID.XD_GPSPOSITION:
 				return "org.xdef.sys.GPSPosition";
-			case XDValueID.XD_CURRAMOUNT:
-				return "org.xdef.sys.CurrencyAmount";
+			case XDValueID.XD_PRICE:
+				return "org.xdef.sys.Price";
 			case XDValueID.XD_BYTES:
 				_byteArrayEncoding |= getBytesType(xdata);
 				return "byte[]";
@@ -333,8 +338,8 @@ class XCGeneratorBase {
 				return result + "getParsedValue().datetimeValue()";
 			case XDValueID.XD_GPSPOSITION:
 				return result + "getParsedValue().GPSValue()";
-			case XDValueID.XD_CURRAMOUNT:
-				return result + "getParsedValue().currencyValue()";
+			case XDValueID.XD_PRICE:
+				return result + "getParsedValue().priceValue()";
 			case XDValueID.XD_BYTES:
 				return result + "getParsedValue().getBytes()";
 			case XDValueID.XD_PARSER:

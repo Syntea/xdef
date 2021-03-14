@@ -18,7 +18,6 @@ import java.io.ObjectOutputStream;
 import java.util.Properties;
 import java.util.Stack;
 import org.xdef.XDContainer;
-import org.xdef.XDCurrencyAmount;
 import org.xdef.XDNamedValue;
 import org.xdef.XDOutput;
 import org.xdef.XDParseResult;
@@ -40,6 +39,7 @@ import org.xdef.proc.XXNode;
 import org.xdef.sys.Report;
 import org.xdef.sys.SUtils;
 import org.xdef.util.XdefToXsd;
+import org.xdef.XDPrice;
 
 /** Various tests.
  * @author Vaclav Trojan
@@ -230,7 +230,7 @@ public class MyTest_0 extends XDTester {
 			assertNoErrors(reporter);
 			assertEq(strw.toString(), "12.00 USD; 1.5 CZK");
 			assertEq("1.50 CZK",
-				((XDCurrencyAmount) xd.getVariable("d")).display());
+				((XDPrice) xd.getVariable("d")).display());
 //			xdef =
 //"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.0\" root=\"root\" >\n" +
 //" <xd:declaration>\n"+

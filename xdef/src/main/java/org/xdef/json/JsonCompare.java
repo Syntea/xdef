@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import org.xdef.msg.JSON;
-import org.xdef.sys.CurrencyAmount;
+import org.xdef.sys.Price;
 import org.xdef.sys.GPSPosition;
 import org.xdef.sys.SDatetime;
 import org.xdef.sys.SDuration;
@@ -143,8 +143,8 @@ class JsonCompare {
 		if (o1 instanceof GPSPosition) {
 			return ((GPSPosition) o1).equals(o2);
 		}
-		if (o1 instanceof CurrencyAmount) {
-			return ((CurrencyAmount) o1).equals(o2);
+		if (o1 instanceof Price) {
+			return ((Price) o1).equals(o2);
 		}
 		try {
 			byte[] b1 = (byte[]) o1;

@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 40.1.3, release-date 2021-03-13
+# Version 40.1.3, release-date 2021-03-14
 * preparing version 40.2
 * corrected display of zone with zero hours and negative minutes in offset.
 * added new X-definition type of value: `GPSPosition`.
@@ -25,23 +25,20 @@
      or
      `(51.52, -0.09)` (altitude and name are not specified).
   The Java implementation is in the class `org.xdef.sys.GPSPosition`.
-* added new X-definition type of value `CurrencyAmount`.
+* added new X-definition type of value `Price`.
    Constructor:
-    `new CurrencyAmount(amount, code)`
-   `amount` is a number and `code` is a ISO 4217 currency code. 
+    `new Price(amount, code)`
+   where `amount` is a number and `code` is a ISO 4217 currency code. 
    Methods with this object:
 	`amount()` returns amount of currency as decimal number.
-	`code()` returns ISO 4217 currency code.
+	`currencyCode()` returns ISO 4217 currency code.
 	`fractionDigits()` returns recommended number of fraction digits or -1.
 	'display()` returns string with printable form of currency (i.e. decimal
       number with recommended number of decimal digits, space and
       ISO 4217 currency code).
-  The Java implementation is in the class `org.xdef.sys.CurrencyAmount`.
-* added new XML validation method `currencyAmount`. The required form is:
+  The Java implementation is in the class `org.xdef.sys.Price`.
+* added new XML validation method `price`. The required form is:
    `(decimal_number code)`; e.g. `(12.25 USD)`.
-* from the interface `org.xdef.component.XComponent` was removed the redundant
-  method `toJson()`. This method can be replaced in Java code by:
-    'org.xdef.json.JsonUtil.xmlToJson(xc.toXml())' where `xc` is `XComponent`.
 
 # Version 40.1.2, release-date 2021-02-15
 * corrected the bug in the X-script method `s.contains(s)`.

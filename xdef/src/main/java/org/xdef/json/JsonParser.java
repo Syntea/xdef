@@ -13,7 +13,7 @@ import org.xdef.impl.compile.CompileJsonXdef;
 import org.xdef.msg.JSON;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.ArrayReporter;
-import org.xdef.sys.CurrencyAmount;
+import org.xdef.sys.Price;
 import org.xdef.sys.GPSPosition;
 import org.xdef.sys.SException;
 import org.xdef.sys.SParser;
@@ -517,8 +517,7 @@ public class JsonParser extends StringParser {
 							}
 							if (isChar(')') && i == 3) {
 								try {
-									return returnValue(
-										new CurrencyAmount(d, code));
+									return returnValue(new Price(d, code));
 								} catch (SRuntimeException ex) {
 									putReport(ex.getReport());//currency error
 									return returnValue(null);

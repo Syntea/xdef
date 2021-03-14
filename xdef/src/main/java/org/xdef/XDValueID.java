@@ -40,10 +40,10 @@ public interface XDValueID {
 	public static final short XD_CONTAINER = XD_REGEXRESULT + 1; // 16
 	/** GPS position. */
 	public static final short XD_GPSPOSITION = XD_CONTAINER + 1; // 17
-	/** Currency amount. */
-	public static final short XD_CURRAMOUNT = XD_GPSPOSITION + 1; // 18
+	/** Price (amount with currency). */
+	public static final short XD_PRICE = XD_GPSPOSITION + 1; // 18
 	/** org.w3c.dom.Element value ID. */
-	public static final short XD_ELEMENT = XD_CURRAMOUNT + 1; // 19
+	public static final short XD_ELEMENT = XD_PRICE + 1; // 19
 	/** org.w3c.dom.Attr value ID */
 	public static final short XD_ATTR = XD_ELEMENT + 1; // 20
 	/** org.w3c.dom.Text node value ID */

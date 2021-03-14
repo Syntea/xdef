@@ -19,7 +19,7 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.List;
 import org.w3c.dom.Element;
-import org.xdef.sys.CurrencyAmount;
+import org.xdef.sys.Price;
 import org.xdef.sys.GPSPosition;
 
 /** Test XComponents.
@@ -100,16 +100,16 @@ public final class TestXComponents extends XDTester {
 		if (!f.isDirectory()) {
 			throw new RuntimeException('\"' + _tempDir + "\" is not directory");
 		}
-		try {
+		try { // GPSPosition, Price
 			String xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='A'>\n" +
 "<xd:declaration\n>\n"+
-"  CurrencyAmount a;\n"+
+"  Price a;\n"+
 "  GPSPosition p = new GPSPosition(50.08, 14.42, 399, 'Prague'), q;\n"+
 "  int d; /* distance in km */\n"+
 "</xd:declaration>\n"+
 "<A xd:script='finally d = round(p.distanceTo(q)/1000); /* km */'\n"+
-"   a='? currencyAmount();onTrue a= getParsedValue();'\n"+
+"   a='? price(); onTrue a= getParsedValue();'\n"+
 "   q='gps(); onTrue q=getParsedValue();'/>\n"+
 "<xd:component>\n"+
 "  %class test.xdef.TY_GPS %link #A;\n"+
@@ -125,8 +125,7 @@ public final class TestXComponents extends XDTester {
 			assertEq(253, xd.getVariable("d").intValue());
 			assertEq(new GPSPosition(48.2, 16.37, 151, null),
 				SUtils.getValueFromGetter(xc, "getq"));
-			SUtils.setValueToSetter(
-				xc, "seta", new CurrencyAmount(456.001, "USD"));
+			SUtils.setValueToSetter(xc, "seta", new Price(456.001, "USD"));
 			assertEq("456.001 USD", xc.toXml().getAttribute("a"));
 			xml = "<A q='51.52,-0.09,0,\"London\"'/>"; //,
 			el = parse(xd, xml, reporter);

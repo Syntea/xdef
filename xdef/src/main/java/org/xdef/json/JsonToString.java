@@ -7,7 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import org.xdef.impl.XConstants;
-import org.xdef.sys.CurrencyAmount;
+import org.xdef.sys.Price;
 import org.xdef.sys.GPSPosition;
 import org.xdef.sys.SDatetime;
 import org.xdef.sys.SDuration;
@@ -57,7 +57,7 @@ class JsonToString extends JsonTools {
 				return "d(" + x + ")";
 			} else if (x instanceof SDuration) {
 				return "p(" + x + ")";
-			} else if (x instanceof CurrencyAmount) {
+			} else if (x instanceof Price) {
 				return "#(" + x + ')';
 			} else if (x instanceof GPSPosition) {
 				return "g(" + x + ')';
@@ -246,7 +246,7 @@ class JsonToString extends JsonTools {
 			}
 			return s;
 		} else if (x instanceof SDuration
-			|| x instanceof CurrencyAmount || x instanceof GPSPosition) {
+			|| x instanceof Price || x instanceof GPSPosition) {
 			return x.toString();
 		} else {
 			try { // try byte array

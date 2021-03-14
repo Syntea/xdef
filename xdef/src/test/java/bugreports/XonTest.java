@@ -198,8 +198,8 @@ if (true)return;
 "  \"dateTime()\",\n" +
 "  \"gps()\",\n" +
 "  \"base64Binary()\",\n" +
-"  \"currencyAmount()\",\n" +
-"  \"currencyAmount()\"\n" +
+"  \"price()\",\n" +
+"  \"price()\"\n" +
 "]\n" +
 "</xd:json>\n" +
 "<xd:component>\n"+

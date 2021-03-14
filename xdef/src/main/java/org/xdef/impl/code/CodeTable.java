@@ -849,12 +849,12 @@ public interface CodeTable {
 	static final short GPS_NAME = GPS_ALTITUDE + 1;
 	static final short GPS_DISTANCETO = GPS_NAME + 1;
 
-	static final short CURRENCY_AMOUNT = GPS_DISTANCETO + 1;
-	static final short CURRENCY_CODE = CURRENCY_AMOUNT + 1;
-	static final short CURRENCY_FRACTDIGITS = CURRENCY_CODE + 1;
-	static final short CURRENCY_DISPLAY = CURRENCY_FRACTDIGITS + 1;
+	static final short PRICE_AMOUNT = GPS_DISTANCETO + 1;
+	static final short PRICE_CURRENCY_CODE = PRICE_AMOUNT + 1;
+	static final short PRICE_FRACTDIGITS = PRICE_CURRENCY_CODE + 1;
+	static final short PRICE_DISPLAY = PRICE_FRACTDIGITS + 1;
 
-	static final short ELEMENT_CHILDNODES = CURRENCY_DISPLAY + 1;
+	static final short ELEMENT_CHILDNODES = PRICE_DISPLAY + 1;
 	static final short ELEMENT_NAME = ELEMENT_CHILDNODES + 1;
 	static final short ELEMENT_NSURI = ELEMENT_NAME + 1;
 	static final short ELEMENT_GETTEXT = ELEMENT_NSURI + 1;
