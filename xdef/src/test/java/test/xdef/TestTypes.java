@@ -21,10 +21,10 @@ import org.xdef.proc.XXNode;
 import org.xdef.xml.KXmlUtils;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import org.xdef.XDCurrencyAmount;
 import org.xdef.XDGPSPosition;
-import org.xdef.sys.CurrencyAmount;
+import org.xdef.sys.Price;
 import static test.XDTester._xdNS;
+import org.xdef.XDPrice;
 
 /** Test of types, AnyValue and null in X-script.
  * @author Vaclav Trojan
@@ -886,21 +886,21 @@ public final class TestTypes extends XDTester {
 "Prague (50.08,14.42) distance to Wien (48.20,16.37): 252.8 km\n" +
 "Prague (50.08,14.42) distance to London (51.52,-0.09): 1031.4 km\n");
 			assertEq("Prague", ((XDGPSPosition) xd.getVariable("base")).name());
-			xdef = // test CurrencyAmount type
+			xdef = // test Price type
 "<xd:def xmlns:xd='" + _xdNS + "' root='root'>\n"+
 "  <xd:declaration>\n" +
 "    final Container c = new Container();\n"+
-"    external CurrencyAmount extValue;\n"+
+"    external Price extValue;\n"+
 "    void print() {\n"+
 "      for(int i=0; i LT c.getLength(); i++) {\n"+
-"        outln(((CurrencyAmount)c.item(i)).display());\n"+
+"        outln(((Price)c.item(i)).display());\n"+
 "      }\n"+
 "      outln('extValue: ' + extValue);\n"+
 "    }\n"+
 "  </xd:declaration>\n"+
 "  <root xd:script=\"finally print();\">\n"+
 "   <item xd:script=\"occurs +\">\n"+
-"     currencyAmount(); onTrue c.addItem(getParsedValue());\n" +
+"     price(); onTrue c.addItem(getParsedValue());\n" +
 "   </item>\n"+
 "  </root>\n"+
 "</xd:def>";
@@ -917,11 +917,11 @@ public final class TestTypes extends XDTester {
 			assertEq(strw.toString(),
 				"1.50 CZK\n12.66 USD\n0.657 XAU\nextValue: null\n");
 			assertEq("null",
-				((XDCurrencyAmount) xd.getVariable("extValue")).display());
-			xd.setVariable("extValue", new CurrencyAmount(2.3,"CZK"));
+				((XDPrice) xd.getVariable("extValue")).display());
+			xd.setVariable("extValue", new Price(2.3,"CZK"));
 			assertEq("2.30 CZK",
-				((XDCurrencyAmount) xd.getVariable("extValue")).display());
-			assertEq(2, ((XDCurrencyAmount)
+				((XDPrice) xd.getVariable("extValue")).display());
+			assertEq(2, ((XDPrice)
 				xd.getVariable("extValue")).fractionDigits());
 			xdef = // expression in type validation
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+

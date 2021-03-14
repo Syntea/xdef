@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.xdef.sys.CurrencyAmount;
+import org.xdef.sys.Price;
 import org.xdef.sys.GPSPosition;
 
 /** Provides the interface for usage of internal objects of x-script.
@@ -102,10 +102,10 @@ public interface XDValue extends Comparable<XDValue>, XDValueID {
 	 */
 	public GPSPosition GPSValue();
 
-	/** Get GPS value.
-	 * @return GPS value of this object or return null.
+	/** Get Price value.
+	 * @return price (with currency code) or null.
 	 */
-	public CurrencyAmount currencyValue();
+	public Price priceValue();
 
 	/** Get bytes array representing value.
 	 * @return array of bytes or null.

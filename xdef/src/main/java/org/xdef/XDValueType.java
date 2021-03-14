@@ -40,8 +40,8 @@ public enum XDValueType {
 	CONTAINER,
 	/** GPS position. */
 	GPSPOSITION,
-	/** Currency amount. */
-	CURRAMOUNT,
+	/** Price (amount with currency). */
+	PRICE,
 	/** org.w3c.dom.Element value ID. */
 	ELEMENT,
 	/** org.w3c.dom.Attr value ID */

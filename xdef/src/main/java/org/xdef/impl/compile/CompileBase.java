@@ -99,7 +99,7 @@ public class CompileBase implements CodeTable, XDValueID {
 		setType(XD_DURATION, "Duration", org.xdef.sys.SDuration.class);
 		setType(XD_CONTAINER, "Container", org.xdef.XDContainer.class);
 		setType(XD_GPSPOSITION, "GPSPosition", org.xdef.XDGPSPosition.class);
-		setType(XD_CURRAMOUNT,"CurrencyAmount",org.xdef.XDCurrencyAmount.class);
+		setType(XD_PRICE,"Price",org.xdef.XDPrice.class);
 		setType(XD_REGEX, "Regex", org.xdef.XDRegex.class);
 		setType(XD_REGEXRESULT, "RegexResult", org.xdef.XDRegexResult.class);
 		setType(XD_BNFGRAMMAR,"BNFGrammar", org.xdef.XDBNFGrammar.class);
@@ -156,6 +156,7 @@ public class CompileBase implements CodeTable, XDValueID {
 			((char) XD_DURATION) + ";SDuration;" +
 			((char) XD_CONTAINER) + ";XDContainer;" +
 			((char) XD_GPSPOSITION) + ";GPSPosition;" +
+			((char) XD_PRICE) + ";Price;" +
 			((char) XD_BNFGRAMMAR) + ";DefBNFGrammar;" +
 			((char) XD_BYTES) + ";byte[];" +
 			((char) XD_LOCALE) + ";Locale;" +
@@ -199,12 +200,11 @@ public class CompileBase implements CodeTable, XDValueID {
 				-1, true, new DefString("collapse")));
 		parser(im, org.xdef.impl.parsers.XDParseGPS.class, "gps");
 
-		im = genParserMetnod(0, 0, null, XD_CURRAMOUNT,
+		im = genParserMetnod(0, 0, null, XD_PRICE,
 			keyParam("pattern", XD_STRING, false, -1, false),
 			keyParam("whiteSpace", XD_STRING, false,
 				-1, true, new DefString("collapse")));
-		parser(im, org.xdef.impl.parsers.XDParseCurrencyAmount.class,
-			"currencyAmount");
+		parser(im, org.xdef.impl.parsers.XDParsePrice.class, "price");
 
 		im = genParserMetnod(0, 2, new short[] {XD_DECIMAL, XD_DECIMAL},
 			XD_DECIMAL,
@@ -910,21 +910,6 @@ public class CompileBase implements CodeTable, XDValueID {
 			ANY_MODE, 1, 3, XD_CONTAINER, XD_STRING, XD_STRING), "toElement");
 
 ////////////////////////////////////////////////////////////////////////////////
-// CURRENCY AMOUNT
-////////////////////////////////////////////////////////////////////////////////
-		ti = XD_CURRAMOUNT;
-		method(ti, genInternalMethod(NEW_CURRAMOOUNT, XD_CURRAMOUNT,
-			ANY_MODE, 2, 2, XD_FLOAT, XD_STRING), "#");
-		method(ti, genInternalMethod(CURRENCY_AMOUNT, XD_FLOAT,
-			ANY_MODE, 1, 1, XD_CURRAMOUNT), "amount");
-		method(ti, genInternalMethod(CURRENCY_CODE, XD_STRING,
-			ANY_MODE, 1, 1, XD_CURRAMOUNT), "code");
-		method(ti, genInternalMethod(CURRENCY_FRACTDIGITS, XD_INT,
-			ANY_MODE, 1, 1, XD_CURRAMOUNT), "fractionDigits");
-		method(ti, genInternalMethod(CURRENCY_DISPLAY, XD_STRING,
-			ANY_MODE, 1, 1, XD_CURRAMOUNT), "display");
-
-////////////////////////////////////////////////////////////////////////////////
 // DATETIME
 ////////////////////////////////////////////////////////////////////////////////
 		ti = XD_DATETIME;
@@ -1158,6 +1143,22 @@ public class CompileBase implements CodeTable, XDValueID {
 //			ANY_MODE, 1, 1, XD_STRING), "#");
 		method(ti, genInternalMethod(PARSE_OP, XD_PARSERESULT,
 			ANY_MODE, 1, 2, XD_PARSER, XD_STRING), "parse", "?check");
+
+////////////////////////////////////////////////////////////////////////////////
+// PRICE
+////////////////////////////////////////////////////////////////////////////////
+
+		ti = XD_PRICE;
+		method(ti, genInternalMethod(NEW_CURRAMOOUNT, XD_PRICE,
+			ANY_MODE, 2, 2, XD_FLOAT, XD_STRING), "#");
+		method(ti, genInternalMethod(PRICE_AMOUNT, XD_FLOAT,
+			ANY_MODE, 1, 1, XD_PRICE), "amount");
+		method(ti, genInternalMethod(PRICE_CURRENCY_CODE, XD_STRING,
+			ANY_MODE, 1, 1, XD_PRICE), "code");
+		method(ti, genInternalMethod(PRICE_FRACTDIGITS, XD_INT,
+			ANY_MODE, 1, 1, XD_PRICE), "fractionDigits");
+		method(ti, genInternalMethod(PRICE_DISPLAY, XD_STRING,
+			ANY_MODE, 1, 1, XD_PRICE), "display");
 
 ////////////////////////////////////////////////////////////////////////////////
 // PARSERESULT (result of parsing by parsers)

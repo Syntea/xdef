@@ -236,7 +236,7 @@ TypeIdentifier ::= ("int" | "String" | "float" | "boolean" | "Datetime"
   | "Bytes" | "XmlOutStream" | "BNFGrammar" | "BNFRule" | "Parser" | "Service"
   | "ResultSet" | "Statement" | "ParseResult" | "Locale" | "uniqueSetKey"
   | "AnyValue" | "Output" | "Input" | "NamedValue" | "Regex" | "GPSPosition"
-  | "CurrencyAmount") $rule
+  | "Price") $rule
 
 Value ::= (Constructor | PredefinedConstant | Increment
   | Method | VariableReference | KeyParameterReference | Literal | AttributeName

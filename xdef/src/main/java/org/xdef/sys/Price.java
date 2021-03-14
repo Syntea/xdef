@@ -3,10 +3,10 @@ package org.xdef.sys;
 import java.util.Currency;
 import org.xdef.msg.XDEF;
 
-/** Financial amount with currency code.
+/** Price with currency code.
  * @author Vaclav Trojan
  */
-public class CurrencyAmount {
+public class Price {
 	/** Amount of currency */
 	private final double _amount;
 	/** Currency */
@@ -17,7 +17,7 @@ public class CurrencyAmount {
 	 * @param code ISO4217 currency code.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public CurrencyAmount(final double amount, final String code)
+	public Price(final double amount, final String code)
 		throws SRuntimeException {
 		try {
 			_amount = amount;
@@ -41,7 +41,7 @@ public class CurrencyAmount {
 	/**	Get ISO4217 code of currency.
 	 * @return ISO4217 code of currency..
 	 */
-	public final String code() {return _currency.getCurrencyCode();}
+	public final String currencyCode() {return _currency.getCurrencyCode();}
 
 	/** Get the default number of fraction digits used with this currency.
 	 * In the case of pseudo-currencies, such as IMF Special Drawing Rights,
@@ -59,7 +59,7 @@ public class CurrencyAmount {
 	public final String display() {
 		int i = _currency.getDefaultFractionDigits();
 		return (i >= 0 ? String.format("%." + i + "f", _amount)
-			: String.valueOf(_amount)) + " " + code();
+			: String.valueOf(_amount)) + " " + currencyCode();
 	}
 
 	@Override
@@ -67,13 +67,13 @@ public class CurrencyAmount {
 
 	@Override
 	public boolean equals(Object x) {
-		if (x instanceof CurrencyAmount) {
-			CurrencyAmount y = (CurrencyAmount) x;
+		if (x instanceof Price) {
+			Price y = (Price) x;
 			return _amount == y._amount && _currency.equals(y._currency);
 		}
 		return false;
 	}
 
 	@Override
-	public String toString() {return _amount + " " + code();}
+	public String toString() {return _amount + " " + currencyCode();}
 }

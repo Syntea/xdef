@@ -29,7 +29,7 @@ import org.xdef.XDValueAbstract;
 import org.xdef.impl.code.CodeUniqueset;
 import org.xdef.impl.code.DefBoolean;
 import org.xdef.impl.code.DefContainer;
-import org.xdef.impl.code.DefCurrencyAmount;
+import org.xdef.impl.code.DefPrice;
 import org.xdef.impl.code.DefDate;
 import org.xdef.impl.code.DefDecimal;
 import org.xdef.impl.code.DefDouble;
@@ -52,7 +52,7 @@ import org.xdef.model.XMVariableTable;
 import org.xdef.msg.XDEF;
 import org.xdef.proc.XXNode;
 import org.xdef.sys.ArrayReporter;
-import org.xdef.sys.CurrencyAmount;
+import org.xdef.sys.Price;
 import org.xdef.sys.GPSPosition;
 import org.xdef.sys.Report;
 import org.xdef.sys.ReportWriter;
@@ -519,8 +519,8 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 			setVariable(name, ((BigDecimal) value));
 		} else if (value instanceof Locale) {
 			setVariable(name, (new DefLocale((Locale) value)));
-		} else if (value instanceof CurrencyAmount) {
-			setVariable(name, (new DefCurrencyAmount((CurrencyAmount) value)));
+		} else if (value instanceof Price) {
+			setVariable(name, (new DefPrice((Price) value)));
 		} else if (value instanceof GPSPosition) {
 			setVariable(name, (new DefGPSPosition((GPSPosition) value)));
 		} else {
