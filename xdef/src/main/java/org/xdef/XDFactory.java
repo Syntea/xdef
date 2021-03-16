@@ -60,7 +60,7 @@ public final class XDFactory {
 	 * @return version of this implementation of X-definition.
 	 */
 	public static String getXDVersion() {
-		return XDConstants.BUILD_VERSION + " (" + XDConstants.BUILD_DATE + "]";
+		return XDConstants.BUILD_VERSION + " (" + XDConstants.BUILD_DATE + ")";
 	}
 
 	/** Creates instance of XDBuilder with properties.

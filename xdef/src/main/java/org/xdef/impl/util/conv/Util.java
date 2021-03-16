@@ -17,6 +17,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
+import org.xdef.sys.StringParser;
 
 /** Provides methods for working with XML documents.
  * @author Ilia Alexandrov
@@ -499,7 +500,7 @@ public final class Util {
 				decl.getNamespaceURI(), "name");
 			localNamePrefix = xdName != null ? '_' + xdName + '.' : "_.";
 		}
-		XScriptParser p = new XScriptParser(XConstants.XML10);
+		XScriptParser p = new XScriptParser(StringParser.XMLVER1_0);
 		p.setSource(new SBuffer(KXmlUtils.getTextValue(decl)),
 			"", null, XConstants.XD32, null);
 		while (!p.eos()) {

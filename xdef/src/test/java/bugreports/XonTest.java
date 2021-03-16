@@ -1,13 +1,16 @@
 package bugreports;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import org.xdef.XDPool;
 import org.xdef.component.XComponent;
+import org.xdef.component.XComponentUtil;
 import org.xdef.json.JsonUtil;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.GPSPosition;
+import org.xdef.sys.SUtils;
 import test.XDTester;
 import static test.XDTester.genXComponent;
 
@@ -16,24 +19,74 @@ public class XonTest extends XDTester {
 
 	public XonTest() {super();}
 
-	private static void display(final Object o) {
-		if (o==null) {
-			System.out.println("null");
-		} else if (o instanceof Map) {
-			Map m = (Map) o;
-			for (Object x: m.entrySet()) {
-				Map.Entry en = (Map.Entry) x;
-				System.out.print(en.getKey() + " = ");
-				display(en.getValue());
+	private static void display(final Object x,
+		final Object y, final String id) {
+		if (id != null) {
+			System.out.println("***** BEG " + id + " *****");
+		}
+		if (x==null || "null".equals(x.toString())) {
+			System.out.print("null");
+			if (y != null && !"null".equals(x.toString())) {
+				System.out.print("; Par2: " + y);
 			}
-		} else if (o instanceof List) {
-			List list = (List) o;
-			for (int i=0; i < list.size(); i++) {
-				System.out.print("[" + i + "] ");
-				display(list.get(i));
+		} else if (x instanceof Map) {
+			System.out.println("\nMap");
+			Map m = (Map) x;
+			if (!(y instanceof Map)) {
+				System.out.println("Par2: " + y.getClass().getName());
+			} else {
+				Map n = (Map) y;
+				for (Object z: m.entrySet()) {
+					Map.Entry en = (Map.Entry) z;
+					System.out.print(en.getKey() + " = ");
+					display(en.getValue(), n.get(en.getKey()), null);
+				}
+				System.out.println("Map END");
+			}
+		} else if (x instanceof List) {
+			System.out.println("\nArray");
+			List a = (List) x;
+			if (!(y instanceof List)) {
+				System.out.println("Par2: " + y.getClass().getName());
+			} else {
+				List b = (List) y;
+				for (int i=0; i < a.size(); i++) {
+					System.out.print("[" + i + "] ");
+					display(a.get(i), b.get(i), null);
+				}
+				System.out.println("Array END");
+			}
+		} else if (x instanceof Number) {
+			System.out.print(x + "; " + x.getClass().getName());
+			if (!(y instanceof Number)) {
+				System.out.print("; Par2: "
+					+ (y == null ? "null" : y.getClass().getName()));
+			} else if (((Number)x).doubleValue() != ((Number)y).doubleValue()) {
+				System.out.print("; Par2: " + y + "; "+x.getClass().getName());
 			}
 		} else {
-			System.out.println(o + "; " + o.getClass().getName());
+			System.out.print(x + "; " + x.getClass().getName());
+			try {
+				byte[] b1 = (byte[]) x;
+				byte[] b2 = (byte[]) y;
+				if (!Arrays.equals(b1, b2)) {
+					System.out.print("; Par2: " + y + "; [B");
+				}
+				System.out.println();
+				return;
+			} catch (Exception ex) {}
+			if (!x.equals(y)) {
+				try {
+					System.out.print("; Par2: "
+						+ (y == null ? "null" : y+"; "+y.getClass().getName()));
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+			System.out.println();
+		}
+		if (id != null) {
+			System.out.println("***** END " + id + " *****");
 		}
 	}
 
@@ -87,13 +140,37 @@ public class XonTest extends XDTester {
 if (true)return;
 /*xx*/
 		try {
+			xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='A'>\n"+
+"<xd:json name='A'>\n"+
+"{\"a\":[\"* date\"], \"b\": \"char()\"}\n"+
+"</xd:json>\n"+
+"<xd:component>\n"+
+"  %class bugreports.data.GJson %link #A;\n"+
+"</xd:component>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			XDTester.genXComponent(xp, tempDir);
+			json = "{\"a\":[\"2021-03-10\", \"1999-01-01-01:00\"], \"b\": \"x\"}";
+			x = xp.createXDDocument().jparse(json, reporter);
+			assertNoErrors(reporter);
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), x),
+				JsonUtil.toJsonString(x, true));
+			xc = xp.createXDDocument().jparseXComponent(json,
+				null, reporter);
+			y = JsonUtil.xmlToJson(xc.toXml());
+			assertTrue(JsonUtil.jsonEqual(x,y));
+			y = JsonUtil.xonToJson(XComponentUtil.toXon(xc));
+			assertTrue(JsonUtil.jsonEqual(x,y));
+		} catch (Exception ex) {fail(ex);}
+		try {
 			s =
 "/* Start of XON test */\n" +
 "[ /***** Array *****/\n" +
 "  { /***** Map *****/\n" +
 "    a = 1S,                          /* Short */\n" +
 "    b = \"ab cd\",                     /* string */\n" +
-"    c = -123.4e2,                    /* Double */\n" +
+"    c = -123.4e2D,                    /* Double */\n" +
 "    f = true,                        /* boolean */\n" +
 "    g = p(P1Y1M1DT1H1M1.12S),        /* duration */\n" +
 "    h = null,                        /* null */\n" +
@@ -103,10 +180,10 @@ if (true)return;
 "      g(51.52,-0.09,0,London),\n" +
 "      g(50.08, 14.42, 399, \"Praha (centrum)\"),\n" +
 "    ],\n" +
-"    j = '?',                        /* character */\n" +
-"    k = '\\u0007',                   /* character */\n" +
-"    l = ''',                        /* character */\n" +
-"    \"m\" : '\\n',                     /* character */\n" +
+"    j = '\\u0007',                    /* character */\n" +
+"    k = '\n',                         /* character */\n" +
+"    l = '\"',                         /* character */\n" +
+"    \"m\" : '\'',                     /* character */\n" +
 "    \"name with space\" : \"First\"     /* name with a space must be quoted! */\n" +
 "  }, /**** end of map ****/\n" +
 "  -3F,                               /* float */\n" +
@@ -133,18 +210,13 @@ if (true)return;
 "  #(12 USD),                         /* currency ammoun */\n" +
 "] /**** end of array ****/\n" +
 "/* End of XON test */";
-//			System.out.println(s);
-			System.out.println("=====================");
 			x = JsonUtil.parseXON(s);
-//			display(x);
 			json = JsonUtil.toJsonString(JsonUtil.xonToJson(x), true);
 			JsonUtil.parse(json);
 			s = JsonUtil.toXonString(x, true);
 			y = JsonUtil.parseXON(s);
 			assertTrue(JsonUtil.jsonEqual(x,y));
 			s = JsonUtil.toXonString(x, false);
-			y = JsonUtil.parseXON(s);
-			assertTrue(JsonUtil.jsonEqual(x,y));
 			List list = (List) ((Map) ((List) x).get(0)).get("Towns");
 			assertEq("Wien",((GPSPosition) list.get(0)).name());
 			assertEq("London",((GPSPosition) list.get(1)).name());
@@ -172,10 +244,10 @@ if (true)return;
 "      \"gps()\",\n" +
 "      \"gps()\"\n" +
 "    ],\n" +
-"    \"j\" : \"string()\",\n" +		/* char '?' */
-"    \"k\" : \"string()\",\n" +		/* char '\\u0007' */
-"    \"l\" : \"string()\",\n" +		/* char ''' */
-"    \"m\" : \"string()\",\n" +		//char '\n' */
+"    \"j\" : \"char()\",\n" +		/* char '?' */
+"    \"k\" : \"char()\",\n" +		/* char '\\u0007' */
+"    \"l\" : \"char()\",\n" +		/* char ''' */
+"    \"m\" : \"char()\",\n" +		//char '\n' */
 "    \"name with space\" : \"string()\"\n" +
 "  },\n" +
 "  \"float()\",\n" +
@@ -210,14 +282,19 @@ if (true)return;
 			jparse(xp, "", json, reporter);
 			genXComponent(xp, tempDir);
 			reporter.clear();
-			xc = xp.createXDDocument().jparseXComponent(json,
-				null, reporter);
+			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
 			assertNoErrors(reporter);
-//			assertTrue(JsonUtil.jsonEqual(x, XComponentUtil.toXon(xc)));
+			y = XComponentUtil.toXon(xc);
+			if (!JsonUtil.jsonEqual(x,y)) {
+				display(y, x, "1");
+			}
 			x = xc.toJson();
-//			display(x);
-//			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), x),
-//				json + "\n===\n" + JsonUtil.toJsonString(xc.toJson(), true));
+			if (!JsonUtil.jsonEqual(x,y)) {
+				display(JsonUtil.parse(json), x, "2");
+			}
+		} catch (Exception ex) {fail(ex);}
+		try {
+			SUtils.deleteAll(tempDir, true);
 		} catch (Exception ex) {fail(ex);}
 	}
 

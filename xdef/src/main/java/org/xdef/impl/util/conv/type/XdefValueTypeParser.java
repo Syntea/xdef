@@ -69,7 +69,7 @@ public final class XdefValueTypeParser {
 		if (type.length() == 0) {
 			throw new IllegalArgumentException("Given type string is empty");
 		}
-		_p = new XScriptParser(XConstants.XML10);
+		_p = new XScriptParser(StringParser.XMLVER1_0);
 		_p.setSource(new SBuffer(type), null, null, XConstants.XD32, null);
 		_b = new StringBuffer();
 	}
@@ -1089,17 +1089,6 @@ public final class XdefValueTypeParser {
 		private final Object _expected;
 		/** Found. */
 		private final Object _found;
-
-		private ParserException(String message,
-			Object expected,
-			Object found,
-			String parsed, Throwable cause) {
-			super(message, cause);
-			_message = message;
-			_expected = expected;
-			_found = found;
-			_parsed = parsed;
-		}
 
 		private ParserException(String message,
 			Object expected,

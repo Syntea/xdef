@@ -8,6 +8,7 @@ import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xdef.impl.XConstants;
+import org.xdef.sys.StringParser;
 
 /** Parse script of X-definition.
  * @author Trojan
@@ -624,7 +625,7 @@ public class XDParsedScript {
 	public static final XDParsedScript getXdScript(final String script,
 		final String defName,
 		final boolean isValue) {
-		XScriptParser sp = new XScriptParser(XConstants.XML10);
+		XScriptParser sp = new XScriptParser(StringParser.XMLVER1_0);
 		sp.setSource(new SBuffer(script), defName, null, XConstants.XD32, null);
 		return new XDParsedScript(sp, isValue);
 	}

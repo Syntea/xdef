@@ -21,6 +21,7 @@ import org.w3c.dom.NodeList;
 import org.xdef.impl.XConstants;
 import org.xdef.impl.compile.XScriptParser;
 import org.xdef.sys.SBuffer;
+import org.xdef.sys.StringParser;
 
 /** Represents implementation of X-definition document version 2.0.
  * @author Ilia Alexandrov
@@ -97,7 +98,7 @@ public final class XdDoc_2_0 extends XdDoc {
 			}
 			for (int i = 0; i < nodes.getLength(); i++) {
 				Element declaration = (Element) nodes.item(i);
-				XScriptParser p = new XScriptParser(XConstants.XML10);
+				XScriptParser p = new XScriptParser(StringParser.XMLVER1_0);
 				p.setSource(new SBuffer(KXmlUtils.getTextValue(declaration)),
 					xdname, null, XConstants.XD32, null);
 				// find dedlartation of types

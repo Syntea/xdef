@@ -12,7 +12,6 @@ import javax.xml.XMLConstants;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.xdef.impl.XConstants;
 import org.xdef.impl.compile.CompileJsonXdef;
 import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
@@ -182,9 +181,9 @@ class JsonToXml extends JsonTools implements JsonNames {
 						}
 						break;
 					default:
-						if (ch < ' '
-							|| StringParser.getXmlCharType(ch,XConstants.XML10)
-								== StringParser.XML_CHAR_ILLEGAL) {
+						if (ch < ' '|| StringParser.getXmlCharType(ch,
+							StringParser.XMLVER1_0) ==
+							StringParser.XML_CHAR_ILLEGAL) {
 							if (!addQuot) { // force quote
 								SUtils.modifyStringBuilder(sb, "\\", "\\\\");
 								SUtils.modifyStringBuilder(sb, "\"", "\\\"");
