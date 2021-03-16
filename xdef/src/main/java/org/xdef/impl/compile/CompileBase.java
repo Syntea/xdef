@@ -206,6 +206,12 @@ public class CompileBase implements CodeTable, XDValueID {
 				-1, true, new DefString("collapse")));
 		parser(im, org.xdef.impl.parsers.XDParsePrice.class, "price");
 
+		im = genParserMetnod(0, 0, null, XD_STRING,
+			keyParam("pattern", XD_STRING, false, -1, false),
+			keyParam("whiteSpace", XD_STRING, false,
+				-1, true, new DefString("collapse")));
+		parser(im, org.xdef.impl.parsers.XDParseChar.class, "char");
+
 		im = genParserMetnod(0, 2, new short[] {XD_DECIMAL, XD_DECIMAL},
 			XD_DECIMAL,
 			keyParam("base", XD_STRING, true,-1,false),

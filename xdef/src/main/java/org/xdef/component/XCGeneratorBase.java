@@ -248,7 +248,7 @@ class XCGeneratorBase {
 //			return "org.xdef.json.JNull";
 		} else if ("jvalue".equals(parserName)) {
 			return "Object";
-		} else if ("xchar".equals(parserName)) {
+		} else if ("char".equals(parserName)) {
 			return "Character";
 		}
 		switch (xdata.getParserType()) {
@@ -314,6 +314,8 @@ class XCGeneratorBase {
 			return result + "getParsedValue().integerValue()";
 		} else if ("decimal".equals(parserName)) {
 			return result + "getParsedValue().decimalValue()";
+		} else if ("char".equals(parserName)) {
+			return result + "toString().charAt(0)";
 		} else if ("jnull".equals(parserName)) {
 			return result + "getParsedValue().getObject()";
 		} else if ("jvalue".equals(parserName)) {
@@ -785,24 +787,29 @@ class XCGeneratorBase {
 		final String fn = uri != null
 			? "AttributeNS(\"" + uri + "\", " : "Attribute(";
 		String x;
-		switch (xdata.getParserType()) {
-			case XDValueID.XD_DATETIME: {
-				String s = xdata.getDateMask();
-				x = "get&{name}()." +
-					(s == null ? "toISO8601())" : "formatDate("+s+"))");
-				break;
+		if (("char".equals(xdata.getParserName()))) {
+			x = "get&{name}().toString())"; //typ is Character
+		} else {
+			short typ =  xdata.getParserType();
+			switch (typ) {
+				case XDValueID.XD_DATETIME: {
+					String s = xdata.getDateMask();
+					x = "get&{name}()." +
+						(s == null ? "toISO8601())" : "formatDate("+s+"))");
+					break;
+				}
+				case XDValueID.XD_BYTES:
+					x = (getBytesType(xdata) == 2
+						? "encodeHex" : "encodeBase64") + "(get&{name}()))";
+					break;
+				case XDValueID.XD_NULL: //jnull
+					x = "\"null\")";
+					break;
+				default:
+					x = checkEnumType(xdata) != null ? "get&{name}().name())"
+						: typ == XDValueID.XD_STRING
+							? "get&{name}())" : "get&{name}().toString())";
 			}
-			case XDValueID.XD_BYTES:
-				x = (getBytesType(xdata) == 2
-					? "encodeHex" : "encodeBase64") + "(get&{name}()))";
-				break;
-			case XDValueID.XD_NULL: //jnull
-				x = "\"null\")";
-				break;
-			default:
-				x = checkEnumType(xdata) != null ? "get&{name}().name())"
-					: xdata.getParserType() == XDValueID.XD_STRING
-						? "get&{name}())" : "get&{name}().toString())";
 		}
 		sb.append(modify(
 "\t\tif (get&{name}() != null)"+LN+

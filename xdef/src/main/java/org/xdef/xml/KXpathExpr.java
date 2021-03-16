@@ -18,7 +18,6 @@ import org.xdef.msg.XML;
 import org.xdef.sys.SRuntimeException;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xdef.impl.XConstants;
 import org.xdef.sys.StringParser;
 
 /** XPath expression.
@@ -102,7 +101,7 @@ public class KXpathExpr {
 		int ndx = s.charAt(0) == '@' ? 1 : s.startsWith("self::") ? 6 : 0;
 		s = s.substring(ndx);
 		return s.indexOf("::") < 0
-			&& StringParser.chkXMLName(s, XConstants.XML10) ? ndx : -1;
+			&& StringParser.chkXMLName(s, StringParser.XMLVER1_0) ? ndx : -1;
 	}
 
 	/** Get variable resolver.

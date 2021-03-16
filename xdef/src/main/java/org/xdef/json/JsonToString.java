@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import org.xdef.impl.XConstants;
 import org.xdef.sys.Price;
 import org.xdef.sys.GPSPosition;
 import org.xdef.sys.SDatetime;
@@ -52,7 +51,20 @@ class JsonToString extends JsonTools {
 				}
 				return result;
 			} else if (x instanceof Character) {
-				return '\''+ jstringToSource(String.valueOf(x))+'\'';
+				char ch = (Character) x;
+				int i = "\"\n\b\r\t\f".indexOf(ch);
+				if (i < 0) {
+					if (StringParser.getXmlCharType(ch, StringParser.XMLVER1_0)
+						== StringParser.XML_CHAR_ILLEGAL) {
+						String s = "'\\u";
+						for (int j = 12; j >= 0; j -=4) {
+							s += "0123456789abcdef".charAt((ch >> j) & 0xf);
+						}
+						return s + '\'';
+					}
+					return '\''+ jstringToSource(String.valueOf(x)) +'\'';
+				}
+				return "'\\" + "\"nbrtf".charAt(i) + "'";
 			} else if (x instanceof SDatetime) {
 				return "d(" + x + ")";
 			} else if (x instanceof SDuration) {
@@ -63,7 +75,8 @@ class JsonToString extends JsonTools {
 				return "g(" + x + ')';
 			}
 			try { // try byte array
-				return "b("+new String(SUtils.encodeBase64((byte[]) x))+")";
+				byte[] b = (byte[]) x;
+				return "b("+new String(SUtils.encodeBase64(b))+")";
 			} catch (Exception ex) {}
 		}
 		return x.toString();
@@ -161,7 +174,7 @@ class JsonToString extends JsonTools {
 			Map.Entry e = (Map.Entry) x;
 			String key = (String) e.getKey();
 			boolean xonKey =
-				xon && StringParser.chkNCName(key, XConstants.XML10);
+				xon && StringParser.chkNCName(key, StringParser.XMLVER1_0);
 			if (xonKey) {
 				key += indent == null ? "=" : " = ";
 			} else {

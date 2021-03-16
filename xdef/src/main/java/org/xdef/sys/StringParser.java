@@ -19,13 +19,16 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.Stack;
 import java.util.TimeZone;
-import org.xdef.impl.XConstants;
 
 /** String parser used for constructing specific parsers.
  * @author  Vaclav Trojan
  */
 public class StringParser extends SReporter implements SParser {
 
+	/** XML version 1.0. */
+	public static final byte XMLVER1_0 = 10;
+	/** XML version 1.1. */
+	public static final byte XMLVER1_1 = 11;
 	/** Illegal XML character. */
 	public static final byte XML_CHAR_ILLEGAL = 0;
 	/** Valid XML character. */
@@ -3994,21 +3997,18 @@ public class StringParser extends SReporter implements SParser {
 	 * <br>XML_CHAR_COLON .. ':' (4)
 	 * <br>XML_CHAR_NAME_START .. first character of XML name (8)
 	 * <br>XML_CHAR_NAME_EXT .. character of XML name (16)
-	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1"
-	 * (see org.xdef.impl.XConstants,XMLxx).
+	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1" (see XMLVER1_0 and XMLVER1_1).
 	 * @return type of character.
 	 */
 	public final byte getXmlCharType(final byte xmlVersion) {
-		return xmlVersion == XConstants.XML11
-			? XML_CHARTAB1[_ch] : XML_CHARTAB0[_ch];
+		return xmlVersion == XMLVER1_1 ? XML_CHARTAB1[_ch] : XML_CHARTAB0[_ch];
 	}
 
 	/** Parse Nmtoken.
 	 * [7] Nmtoken::= (NameChar)+
 	 * [4] NameChar::= Letter | Digit | '.' | '-' | '_' | ':'
 	 *                 | CombiningChar | Extender
-	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1"
-	 * (see org.xdef.impl.XConstants,XMLxx).
+	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1" (see XMLVER1_0 and XMLVER1_1).
 	 * @return true if rule passed.
 	 */
 	public final boolean isNMToken(final byte xmlVersion) {
@@ -4041,8 +4041,7 @@ public class StringParser extends SReporter implements SParser {
 	 * [4] NCName::= (Letter | '_') (NCNameChar)* //An XML Name, minus the ":"
 	 * [5] NCNameChar::= Letter | Digit | '.' | '-' | '_'
 	 *     | CombiningChar | Extender
-	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1"
-	 * (see org.xdef.impl.XConstants,XMLxx).
+	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1" (see XMLVER1_0 and XMLVER1_1).
 	 * @return true if NCNname was recognized.
 	 */
 	public final boolean isNCName(final byte xmlVersion) {
@@ -4072,8 +4071,7 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	/** Parse XML name and save result to _parsedString.
-	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1"
-	 * (see org.xdef.impl.XConstants,XMLxx).
+	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1" (see XMLVER1_0 and XMLVER1_1).
 	 * @return true if XMLName was parsed.
 	 */
 	public final boolean isXMLName(final byte xmlVersion) {
@@ -4121,8 +4119,7 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	/** Parse valid XML character.
-	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1"
-	 * (see org.xdef.impl.XConstants,XMLxx).
+	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1" (see XMLVER1_0 and XMLVER1_1).
 	 * @return parsed character or NOCHAR.
 	 */
 	public final char isXMLChar(final byte xmlVersion) {
@@ -4150,8 +4147,7 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	/** Parse XML name start character.
-	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1"
-	 * (see org.xdef.impl.XConstants,XMLxx).
+	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1" (see XMLVER1_0 and XMLVER1_1).
 	 * @return parsed character or NOCHAR.
 	 */
 	public final char isXMLNamestartChar(final byte xmlVersion) {
@@ -4164,8 +4160,7 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	/** Parse XML name extension character.
-	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1"
-	 * (see org.xdef.impl.XConstants,XMLxx).
+	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1" (see XMLVER1_0 and XMLVER1_1).
 	 * @return parsed character or NOCHAR.
 	 */
 	public final char isXMLNameExtensionChar(final byte xmlVersion) {
@@ -4598,20 +4593,17 @@ public class StringParser extends SReporter implements SParser {
 	/** Get type of character - static version of {@link
 	 * StringParser#getXmlCharType(byte)}.
 	 * @param ch character to be checked.
-	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1"
-	 * (see org.xdef.impl.XConstants,XMLxx).
+	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1" (see XMLVER1_0 and XMLVER1_1).
 	 * @return type of character.
 	 */
 	public static final byte getXmlCharType(final char ch,
 		final byte xmlVersion) {
-		return xmlVersion ==
-			XConstants.XML11 ? XML_CHARTAB1[ch] : XML_CHARTAB0[ch];
+		return xmlVersion == XMLVER1_1 ? XML_CHARTAB1[ch] : XML_CHARTAB0[ch];
 	}
 
 	/** Parse NCName - see {@link StringParser#isNCName(byte)}.
 	 * @param name string to be checked.
-	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1"
-	 * (see org.xdef.impl.XConstants,XMLxx).
+	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1" (see XMLVER1_0 and XMLVER1_1).
 	 * @return true if the argument is NCName according to XML specification.
 	 */
 	public static final boolean chkNCName(final String name,
@@ -4629,9 +4621,8 @@ public class StringParser extends SReporter implements SParser {
 
 	/** Parse XML name - see {@link StringParser#isXMLName(byte)}.
 	 * @param name string to be checked.
-	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1"
-	 * (see org.xdef.impl.XConstants,XMLxx).
-	 * @return true if the argument is XML name according to XML specification..
+	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1" (see XMLVER1_0 and XMLVER1_1).
+	 * @return true if the argument is XML name according to XML specification.
 	 * {@link StringParser#isXMLName(byte)}.
 	 */
 	public static final boolean chkXMLName(final String name,
@@ -4651,8 +4642,7 @@ public class StringParser extends SReporter implements SParser {
 
 	/** Parse NMToken - see {@link StringParser#isNMToken(byte)}.
 	 * @param name string to be checked.
-	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1"
-	 * (see org.xdef.impl.XConstants,XMLxx).
+	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1" (see XMLVER1_0 and XMLVER1_1).
 	 * @return true if the argument is NMToken according to XML specification.
 	 * {@link StringParser#isNMToken(byte)}.
 	 */

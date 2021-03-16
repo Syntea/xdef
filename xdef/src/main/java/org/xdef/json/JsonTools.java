@@ -1,6 +1,5 @@
 package org.xdef.json;
 
-import org.xdef.impl.XConstants;
 import org.xdef.msg.JSON;
 import org.xdef.sys.SParser;
 import org.xdef.sys.StringParser;
@@ -130,7 +129,7 @@ public class JsonTools {
 		StringBuilder sb = new StringBuilder();
 		char ch = s.charAt(0);
 		sb.append(ch == ':' || isJChar(s, 0)
-			|| StringParser.getXmlCharType(ch, XConstants.XML10)
+			|| StringParser.getXmlCharType(ch, StringParser.XMLVER1_0)
 			 != StringParser.XML_CHAR_NAME_START
 			? genXmlHexChar(ch) : ch);
 		byte firstcolon = 0;
@@ -144,7 +143,8 @@ public class JsonTools {
 				if (i + 1 < s.length()) {
 					ch=s.charAt(++i);
 					sb.append(isJChar(s,i)
-						|| StringParser.getXmlCharType(ch, XConstants.XML10)
+						|| StringParser.getXmlCharType(ch,
+							StringParser.XMLVER1_0)
 							< StringParser.XML_CHAR_COLON
 					? genXmlHexChar(ch) : ch);
 				} else {
@@ -152,7 +152,7 @@ public class JsonTools {
 				}
 			} else {
 				sb.append(isJChar(s,i)
-					|| StringParser.getXmlCharType(ch, XConstants.XML10)
+					|| StringParser.getXmlCharType(ch, StringParser.XMLVER1_0)
 					< StringParser.XML_CHAR_COLON ? genXmlHexChar(ch) : ch);
 			}
 		}

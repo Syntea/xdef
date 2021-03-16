@@ -3,7 +3,6 @@ package org.xdef.impl.parsers;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.StringParser;
 import org.xdef.XDParseResult;
-import org.xdef.impl.XConstants;
 import org.xdef.proc.XXNode;
 import org.xdef.impl.code.DefContainer;
 import org.xdef.impl.code.DefString;
@@ -23,7 +22,7 @@ public class XSParseNMTOKENS extends XSAbstractParseToken {
 		p.isSpaces();
 		int pos = p.getIndex();
 		StringParser parser = new StringParser(p.getSourceBuffer(), pos);
-		if (!parser.isNMToken(XConstants.XML10)) {
+		if (!parser.isNMToken(StringParser.XMLVER1_0)) {
 			//Incorrect value of '&{0}'&{1}{: }
 			p.errorWithString(XDEF.XDEF809, parserName());
 			return;
@@ -33,7 +32,7 @@ public class XSParseNMTOKENS extends XSAbstractParseToken {
 		DefContainer val = new DefContainer();
 		val.addXDItem(new DefString(s));
 		while (parser.isSpaces() && !parser.eos()) {
-			if (!parser.isNMToken(XConstants.XML10)) {
+			if (!parser.isNMToken(StringParser.XMLVER1_0)) {
 				//Incorrect value of '&{0}'&{1}{: }
 				p.errorWithString(XDEF.XDEF809, parserName());
 				return;

@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import org.xdef.impl.XConstants;
 import org.xdef.impl.compile.CompileJsonXdef;
 import org.xdef.msg.JSON;
 import org.xdef.msg.XDEF;
@@ -120,7 +119,7 @@ public class JsonParser extends StringParser {
 
 	/** Returns error and parsed value.
 	 * @param x parsed value to be returned.
-	 * @param code code of error message.
+	 * @param code currencyCode of error message.
 	 * @param skipChars string with characters to which source will be skipped.
 	 * @param params list od error message parameters (may be empty.)
 	 * @return parsed value. If the switch _genJObjects is true, then
@@ -245,7 +244,7 @@ public class JsonParser extends StringParser {
 					Object o;
 					String name;
 					if (getCurrentChar() != '"'
-						&& _xonMode && isNCName(XConstants.XML10)) { //XON
+						&& _xonMode && isNCName(StringParser.XMLVER1_0)) { //XON
 						// parse XON named pair
 						name = getParsedString(); /*xx*/
 						isSpacesOrComments();
@@ -435,11 +434,11 @@ public class JsonParser extends StringParser {
 				if (isChar('\'')) { // character
 					ch = getCurrentChar();
 					if (ch == '\\') {
-						if ((i="u\\bfnrt".indexOf(nextChar())) < 0) {
+						if ((i="u\\bfnrt\"".indexOf(ch=nextChar())) < 0) {
 							//JSON value expected
 							return returnError('?', JSON.JSON010, "[]{}");
 						} else if (i > 0) {
-							ch = "?\\\b\f\n\r\t".charAt(i);
+							ch = "?\\\b\f\n\r\t\"".charAt(i);
 							nextChar();
 						} else {
 							nextChar();

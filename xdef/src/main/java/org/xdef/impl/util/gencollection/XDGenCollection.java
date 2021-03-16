@@ -34,6 +34,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 import org.xdef.impl.XConstants;
+import org.xdef.sys.StringParser;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -556,7 +557,7 @@ public class XDGenCollection {
 		final HashMap<String, XScriptMacro> macros) {
 		XScriptMacroResolver mr = new XScriptMacroResolver(defName,
 			"1.1".equals(el.getOwnerDocument().getXmlVersion())
-				? XConstants.XML11 : XConstants.XML10,
+				? StringParser.XMLVER1_1 : StringParser.XMLVER1_0,
 			macros,
 			new ArrayReporter());
 		NodeList nl = el.getChildNodes();
@@ -602,7 +603,7 @@ public class XDGenCollection {
 		final String defName,
 		final boolean removeActions,
 		final boolean isValue) {
-		XScriptParser sp = new XScriptParser(XConstants.XML10);
+		XScriptParser sp = new XScriptParser(StringParser.XMLVER1_0);
 		SBuffer sb = new SBuffer(script.trim());
 		sp.setSource(sb, defName, null, XConstants.XD32, null);
 		XDParsedScript xp = new XDParsedScript(sp, isValue);

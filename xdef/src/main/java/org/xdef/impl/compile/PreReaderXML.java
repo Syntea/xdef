@@ -60,7 +60,7 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 				_actPNode,
 				_actPNode==null? (byte) 0 : _actPNode._xdVersion,
 				"1.1".equals(getXmlVersion())
-					? XConstants.XML11 : XConstants.XML10);
+					? StringParser.XMLVER1_1 : StringParser.XMLVER1_0);
 		}
 		String elemPrefix;
 		String elemLocalName;
