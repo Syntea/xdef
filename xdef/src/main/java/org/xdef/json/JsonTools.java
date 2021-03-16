@@ -28,10 +28,7 @@ public class JsonTools {
 	 */
 	final static int hexDigit(final char ch) {
 		int i = "0123456789abcdefABCDEF".indexOf(ch);
-		if (i > 15) {
-			return i - 6;
-		}
-		return i;
+		return (i > 15) ? i - 6 : i;
 	}
 
 	/** Check if on the position given by index in a string it is the

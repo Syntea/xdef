@@ -21,14 +21,13 @@ public interface XConstants {
 
 	/** JSON root element. */
 	public static byte JSON_ROOT = 4;
-
-	@Deprecated
-	/** XML version 1.0.
-	 * @deprecated Please use org.xdef.sys.StringParser.XMLVER1_0. */
-	public static final byte XML10 = org.xdef.sys.StringParser.XMLVER1_0;
-	@Deprecated
-	/** XML version 1.1.
-	 * @deprecated Please use org.xdef.sys.StringParser.XMLVER1_1. */
-	public static final byte XML11 = org.xdef.sys.StringParser.XMLVER1_1;
-
+//
+//	@Deprecated
+//	/** XML version 1.0.
+//	 * @deprecated Please use org.xdef.sys.StringParser.XMLVER1_0. */
+//	public static final byte XML10 = org.xdef.sys.StringParser.XMLVER1_0;
+//	@Deprecated
+//	/** XML version 1.1.
+//	 * @deprecated Please use org.xdef.sys.StringParser.XMLVER1_1. */
+//	public static final byte XML11 = org.xdef.sys.StringParser.XMLVER1_1;
 }
