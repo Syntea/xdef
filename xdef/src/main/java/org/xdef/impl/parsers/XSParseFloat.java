@@ -12,5 +12,5 @@ public class XSParseFloat extends XSParseDouble {
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 	@Override
-	public short parsedType() {return XD_FLOAT;}
+	public short parsedType() {return XD_DOUBLE;}
 }

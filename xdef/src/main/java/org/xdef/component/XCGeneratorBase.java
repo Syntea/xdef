@@ -254,9 +254,9 @@ class XCGeneratorBase {
 		switch (xdata.getParserType()) {
 			case XDValueID.XD_BOOLEAN:
 				return "Boolean";
-			case XDValueID.XD_INT:
+			case XDValueID.XD_LONG:
 				return "Long";
-			case XDValueID.XD_FLOAT:
+			case XDValueID.XD_DOUBLE:
 				return "Double";
 			case XDValueID.XD_DECIMAL:
 				return "java.math.BigDecimal";
@@ -315,7 +315,7 @@ class XCGeneratorBase {
 		} else if ("decimal".equals(parserName)) {
 			return result + "getParsedValue().decimalValue()";
 		} else if ("char".equals(parserName)) {
-			return result + "toString().charAt(0)";
+			return result + "org.xdef.json.JsonTools.readJSONChar(toString())";
 		} else if ("jnull".equals(parserName)) {
 			return result + "getParsedValue().getObject()";
 		} else if ("jvalue".equals(parserName)) {
@@ -328,9 +328,9 @@ class XCGeneratorBase {
 		switch (xdata.getParserType()) {
 			case XDValueID.XD_BOOLEAN:
 				return result + "getParsedValue().booleanValue()";
-			case XDValueID.XD_INT:
+			case XDValueID.XD_LONG:
 				return result + "getParsedValue().longValue()";
-			case XDValueID.XD_FLOAT:
+			case XDValueID.XD_DOUBLE:
 				return result + "getParsedValue().doubleValue()";
 			case XDValueID.XD_DECIMAL:
 				return result + "getParsedValue().decimalValue()";
@@ -861,8 +861,8 @@ class XCGeneratorBase {
 		final String y = max > 1? ".get(i)" : "";
 		switch (xdata.getParserType()) {
 			case XDValueID.XD_BOOLEAN:
-			case XDValueID.XD_INT:
-			case XDValueID.XD_FLOAT:
+			case XDValueID.XD_LONG:
+			case XDValueID.XD_DOUBLE:
 			case XDValueID.XD_DECIMAL:
 			case XDValueID.XD_DURATION:
 				x = (max > 1 ? "listOf" : "get") + "&{name}()"+y+".toString()";

@@ -159,10 +159,10 @@ public class XScriptParser extends StringParser
 
 	// Type ids
 	private static final char BASE_ID = 1600;
-	public static final char LONG_ID_SYM = (char) (BASE_ID + XD_INT);
+	public static final char LONG_ID_SYM = (char) (BASE_ID + XD_LONG);
 	public static final char DECIMAL_ID_SYM = (char) (BASE_ID + XD_DECIMAL);
 	public static final char BOOLEAN_ID_SYM = (char) (BASE_ID + XD_BOOLEAN);
-	public static final char FLOAT_ID_SYM = (char) (BASE_ID + XD_FLOAT);
+	public static final char FLOAT_ID_SYM = (char) (BASE_ID + XD_DOUBLE);
 	public static final char STRING_ID_SYM = (char) (BASE_ID + XD_STRING);
 	public static final char DATETIME_ID_SYM = (char) (BASE_ID + XD_DATETIME);
 	public static final char DURATION_ID_SYM = (char) (BASE_ID + XD_DURATION);
@@ -1128,7 +1128,7 @@ public class XScriptParser extends StringParser
 				occ.setIllegal();
 				break;
 			case CONSTANT_SYM:
-				if (_parsedValue.getItemId() != XD_INT) {
+				if (_parsedValue.getItemId() != XD_LONG) {
 					return false;
 				}
 				if (occ.isSpecified()) {
@@ -1138,7 +1138,7 @@ public class XScriptParser extends StringParser
 				occ.setMaxOccur(occ.minOccurs());
 				if (nextSymbol() == DDOT_SYM) {
 					if (nextSymbol() == CONSTANT_SYM) {
-						if (_parsedValue.getItemId() != XD_INT) {
+						if (_parsedValue.getItemId() != XD_LONG) {
 							//Value of type '&{0}' expected
 							error(XDEF.XDEF423, "int");
 						} else {

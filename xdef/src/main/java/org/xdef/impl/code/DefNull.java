@@ -139,13 +139,13 @@ public final class DefNull extends XDValueAbstract {
 
 	public static XDValue genNullValue(final short type) {
 		switch (type) {
-			case XD_INT: // integer (ie. long) value
+			case XD_LONG: // integer (ie. long) value
 				return new DefLong();
 			case XD_DECIMAL: //BigDecimal value
 				return new DefDecimal();
 			case XD_BOOLEAN: //boolean value
 				return new DefBoolean();
-			case XD_FLOAT: // Float (ie double) value
+			case XD_DOUBLE: // Float (ie double) value
 				return new DefDouble();
 			case XD_STRING: // String value
 				return new DefString();

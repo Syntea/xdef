@@ -66,7 +66,7 @@ public class XSParseDouble extends XSAbstractParseComparable {
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 	@Override
-	public short parsedType() {return XD_FLOAT;}
+	public short parsedType() {return XD_DOUBLE;}
 	@Override
 	public void checkValue(final XDValue x) {
 		if (x.doubleValue()== Double.NaN) {

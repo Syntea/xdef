@@ -1799,10 +1799,10 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 							pars[i] = null;
 						} else {
 							switch (v.getItemId()) {
-								case XD_INT:
+								case XD_LONG:
 									pars[i] = v.longValue();
 									break;
-								case XD_FLOAT:
+								case XD_DOUBLE:
 									pars[i] = v.doubleValue();
 									break;
 								case XD_DATETIME:
@@ -1844,10 +1844,10 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 							pars[i] = null;
 						} else {
 							switch (v.getItemId()) {
-								case XD_INT:
+								case XD_LONG:
 									pars[i] = v.longValue();
 									break;
-								case XD_FLOAT:
+								case XD_DOUBLE:
 									pars[i] = v.doubleValue();
 									break;
 								case XD_DATETIME:
@@ -3502,9 +3502,9 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 						case XD_BOOLEAN:
 							return value.booleanValue() ?
 								Boolean.TRUE : Boolean.FALSE;
-						case XD_INT:
+						case XD_LONG:
 							return value.longValue();
-						case XD_FLOAT:
+						case XD_DOUBLE:
 							return value.doubleValue();
 						case XD_ELEMENT:
 							return value.getElement();

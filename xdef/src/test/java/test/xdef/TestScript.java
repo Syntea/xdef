@@ -207,8 +207,8 @@ public final class TestScript extends XDTester {
 		System.err.flush();
 		System.out.flush();
 		String xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"<xd:declaration>\n"+
+			"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"  <xd:declaration>\n"+
 "  external method {\n"+
 "     void test.xdef.TestScript.setResult(XXNode, boolean);\n"+
 "     void test.xdef.TestScript.setResult(XXData, XDParser);\n"+
@@ -223,9 +223,9 @@ public final class TestScript extends XDTester {
 "  }\n"+
  source +
 "</xd:declaration>\n"+
-"\n"+
-"  <a a=\"optional " + call + "\"/>\n"+
-"</xd:def>\n";
+			"\n"+
+			"  <a a=\"optional " + call + "\"/>\n"+
+			"</xd:def>\n";
 		String data = "<a a=\"" + value + "\"/>";
 		XDPool xp = null;
 		try {
@@ -446,7 +446,7 @@ public final class TestScript extends XDTester {
 		test("true",
 			"{int i=$MININT;i=i RRSH 60;setResult(eq(toString(i==8)));}");
 		test("true",
-			"{int i=$MININT;i RRSH=60;setResult(eq(toString(i==8)));}");
+			"{int i=$MININT; i RRSH=60;setResult(eq(toString(i==8)));}");
 		test("true",
 			"{int i=$MININT;i=i&gt;&gt;&gt;60;setResult(eq(toString(i==8)));}");
 		test("true",
@@ -536,15 +536,14 @@ public final class TestScript extends XDTester {
 		test("Monday, 23 January 2006","setResult(xdatetime('EEEE, d MMMM y'))");
 		test("Mon, 23 Jan 2006", "setResult(xdatetime('EEE, d MMM y'));");
 		test("1999-05-01T20:43:09.876+01:00", "setResult("
-			+ "eq(toString(parseDate('1999-5-1T20:43:9.876+01:00'))));");
+			+ "eq(parseDate('1999-05-01T20:43:09.876+01:00').toString()));");
 		test("1999-05-01T20:43:09+01:00", "setResult("
-			+ "eq(toString(parseDate('1999-5-1T20:43:09+01:00'))));");
+			+ "eq(toString(parseDate('1999-05-01T20:43:09+01:00'))));");
 		test("1999-05-01", "setResult("
-			+ "eq(toString(parseDate(getText()), 'yyyy-MM-dd')));");
-		test("1999-04-05", "setResult("+
-			"eq(toString(easterMonday(1999), 'yyyy-MM-dd')));");
-		test("1999-04-05", "setResult(eq(toString(parseDate("+
-			"getText()).easterMonday(), 'yyyy-MM-dd')));");
+			+ "eq(parseDate(getText(), 'yyyy-MM-dd').toString()));");
+		test("1999-04-05", "setResult(eq(easterMonday(1999).toString()));");
+		test("1999-04-05", "setResult(eq(parseDate("+
+			"getText()).easterMonday().toString()));");
 		test("1999-04-05", "setResult("+
 			"parseDate(getText()).lastDayOfMonth() == 30);");
 		test("Mon, 23 Jan 2006 20:26:46", "setResult(emailDate());");
@@ -648,8 +647,8 @@ public final class TestScript extends XDTester {
 			+ "? false: true);");
 		test("false",
 			"setResult(eq(parseDate('1999-5-1T20:43+01:00') == now()));");
-		test("true",
-			"setResult(eq(parseDate('1999-5-1T20:43+01:00') LT now()));");
+//		test("true",
+//			"setResult(eq(parseDate('1999-5-1T20:43+01:00') LT now()));");
 		test("3.5.2004", "setResult(xdatetime('d.M.y')? true : false);");
 		test("a.5.2004", "{if (xdatetime('d.M.y')) setResult(false); else"
 			+ "{clearReports(); setResult(true);}}");
@@ -661,7 +660,8 @@ public final class TestScript extends XDTester {
 		test("1.5.1999","setResult("
 			+ "eq(toString(parseDate('19990501','yyyyMMdd'),'d.M.yyyy')));");
 		test("010599",
-			"setResult(eq(toString(parseDate('99-5-1','yy-M-d'),'ddMMyy')));");
+			"setResult(eq(toString("+
+				"parseDate('99-05-01','YY-MM-dd'),'ddMMyy')));");
 		test("","{Datetime d = parseDate('2005-03-01T14:48:40.352');"+
 			"String s = 'datum: 01/03/2005, čas: 14:48:40.352';" +
 			"String m='\\'datum: \\'dd/MM/yyyy\\', čas: \\'HH:mm:ss.SSS';" +
@@ -673,17 +673,17 @@ public final class TestScript extends XDTester {
 		test("","{Datetime d = now(); int i = d.getDaytimeMillis();"
 			+ "d=d.setDaytimeMillis(31601);"
 			+ "setResult(d.getDaytimeMillis() LT i);}");
-		test("","{Datetime d = parseDate('2005-3-1T20:10:01+01:00');"
+		test("","{Datetime d = parseDate('2005-03-01T20:10:01+01:00');"
 			+ "d = d.setDaytimeMillis(0);"
 			+ "if (d.getDaytimeMillis() == 0) setResult(true);"
 			+ "else {outln('m='+d.getDaytimeMillis()); setResult(false);}}");
 		test("","{int i = now().getDaytimeMillis();"
 			+ "setResult((i GE 0) AND (i LE 36*60*60*1000));}"); //zone change!
-		test("","{Datetime d = parseDate('2005-3-1T23:10:01+01:00');"
+		test("","{Datetime d = parseDate('2005-03-01T23:10:01+01:00');"
 			+ "int i = d.getDaytimeMillis(); d = d.addMillisecond(3600000); "
 			+ " if (d.getDaytimeMillis() == 601000) setResult(true); "
 			+ "else {outln('m='+(d.getDaytimeMillis()-i));setResult(false);}}");
-		test("","{Datetime d = parseDate('2005-3-1T20:10:01+01:00');"
+		test("","{Datetime d = parseDate('2005-03-01T20:10:01+01:00');"
 			+ "int i = d.getDaytimeMillis(); d = d.addMillisecond(3600000);"
 			+ "if (d.getDaytimeMillis() - i ==3600000) setResult(true); "
 			+ "else {outln('m='+(d.getDaytimeMillis()-i));setResult(false);}}");
@@ -1047,7 +1047,7 @@ public final class TestScript extends XDTester {
 		testAttr1("toString((boolean) @a)", "true");
 		testAttr1("toString((boolean) @b)", "false");
 		testAttr1("toString(!@a)", "false");
-		testAttr1("toString(!@a .exists())", "false");
+		testAttr1("toString(!@a.exists())", "false");
 		testAttr1("toString(!(@a).exists())", "false");
 		testAttr1("toString(!@a AND !@b)", "false");
 		testAttr1("(String) (!@a OOR !@b)", "true");

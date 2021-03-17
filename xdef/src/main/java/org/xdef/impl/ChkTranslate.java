@@ -375,7 +375,7 @@ final class ChkTranslate extends SReporter implements XDValueID {
 					chkElement.updateElement(null); //delete this element
 				}
 				return;
-			case XD_INT:
+			case XD_LONG:
 				if (result.longValue() > 0) {
 					createElement(chkElement, null);
 				} else {
@@ -817,7 +817,7 @@ final class ChkTranslate extends SReporter implements XDValueID {
 						}
 					}
 					if (result == null || result.isNull()
-						|| (result.getItemId() == XD_INT
+						|| (result.getItemId() == XD_LONG
 						&& result.intValue() <= 0)
 						|| (result.getItemId() == XD_BOOLEAN
 						&& !result.booleanValue())) { //nothing generate
@@ -990,13 +990,13 @@ final class ChkTranslate extends SReporter implements XDValueID {
 						continue;
 					}
 					if (result == null || result.isNull()
-						|| (result.getItemId() == XD_INT
+						|| (result.getItemId() == XD_LONG
 						&& result.intValue() <= 0)
 						|| (result.getItemId() == XD_BOOLEAN
 						&& !result.booleanValue())) { //skip the group
 						i = groupNotGenerated(chkEl, xsel);
 						continue;
-					} else if (result.getItemId() == XD_INT) {
+					} else if (result.getItemId() == XD_LONG) {
 						int xnum = (int) ((DefLong) result).intValue();
 						for(int j = 0; j < xsel.maxOccurs() && j < xnum; j++) {
 							createGroup(chkEl,xtxt, sourceEl,

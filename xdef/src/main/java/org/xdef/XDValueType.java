@@ -6,8 +6,16 @@ package org.xdef;
 public enum XDValueType {
 	/** "void" value. */
 	VOID,
-	/** Int value (implemented as long). */
+	/** Int value (implemented as long - 64 bit). */
+	LONG,
+	/** Int value (implemented as int - 32 bit). */
 	INT,
+	/** Int value (implemented as short - 16 bit). */
+	SHORT,
+	/** Int value (implemented as int - 8 bit). */
+	BYTE,
+	/** Character value ID. */
+	CHAR,
 	/** Boolean value ID. */
 	BOOLEAN,
 	/** Duration value ID. */
@@ -20,7 +28,9 @@ public enum XDValueType {
 	DECIMAL,
 	/** BigInteger value ID. */
 	BIGINTEGER,
-	/** Float value ID (implemented as double). */
+	/** Float value ID (implemented as double - 64 bit ). */
+	DOUBLE,
+	/** Float value ID (implemented  as float - 32 bit ). */
 	FLOAT,
 	/** Input stream value. */
 	INPUT,
@@ -80,11 +90,6 @@ public enum XDValueType {
 	OBJECT,
 	/** Null type. */
 	NULL,
-//	INT8,
-//	INT16,
-//	INT31,
-//	INT64,
-//	FLOAT32,
 	/** XXElement value. */
 	XXELEMENT,
 	/** XXText value. */

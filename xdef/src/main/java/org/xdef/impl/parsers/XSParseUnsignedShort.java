@@ -25,7 +25,7 @@ public class XSParseUnsignedShort extends XSParseLong {
 		}
 	}
 	@Override
-	public final short parsedType() {return XD_INT;}
+	public final short parsedType() {return XD_LONG;}
 	@Override
 	public final String parserName() {return ROOTBASENAME;}
 
