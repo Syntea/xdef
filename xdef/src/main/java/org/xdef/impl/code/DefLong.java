@@ -44,12 +44,12 @@ public final class DefLong extends XDValueAbstract {
 	/** Get type of value.
 	 * @return The id of item type.
 	 */
-	public short getItemId() {return XD_INT;}
+	public short getItemId() {return XD_LONG;}
 	@Override
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
-	public XDValueType getItemType() {return XDValueType.INT;}
+	public XDValueType getItemType() {return XDValueType.LONG;}
 	@Override
 	/** Get value as String.
 	 * @return The string from value.

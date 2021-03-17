@@ -145,10 +145,10 @@ public final class XDWriter extends SObjectWriter {
 					case XDValueID.XD_XPATH:
 						writeXPath((DefXPathExpr) x);
 						return;
-					case XDValueID.XD_FLOAT:
+					case XDValueID.XD_DOUBLE:
 						writeDouble(x.doubleValue());
 						return;
-					case XDValueID.XD_INT:
+					case XDValueID.XD_LONG:
 						writeLong(x.longValue());
 						return;
 					case XDValueID.XD_CONTAINER: {

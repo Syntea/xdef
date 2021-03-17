@@ -321,7 +321,7 @@ public class TestSParser extends STester {
 			} else {
 				fail();
 			}
-			p  = new StringParser("1995-2-4T24:00:00+01:30");
+			p  = new StringParser("1995-02-04T24:00:00+01:30");
 			if (p.isISO8601Datetime()) {
 				assertEq("1995-02-05T00:00:00+01:30",
 					p.getParsedSDatetime().toISO8601());
@@ -952,7 +952,7 @@ public class TestSParser extends STester {
 			} else {
 				fail();
 			}
-			s = "---2";
+			s = "---02";
 			p = new StringParser(s);
 			if (p.isISO8601Datetime()) {
 				d = p.getParsedSDatetime();
@@ -988,7 +988,7 @@ public class TestSParser extends STester {
 			} else {
 				fail();
 			}
-			s = "-1234-5";
+			s = "-1234-05";
 			p = new StringParser(s);
 			if (p.isISO8601Datetime()) {
 				d = p.getParsedSDatetime();
@@ -1024,7 +1024,7 @@ public class TestSParser extends STester {
 			} else {
 				fail();
 			}
-			s = "1999-5-1T20:43:09.876+01:00";
+			s = "1999-05-01T20:43:09.876+01:00";
 			p = new StringParser(s);
 			if (p.isISO8601Datetime()) {
 				d = p.getParsedSDatetime();

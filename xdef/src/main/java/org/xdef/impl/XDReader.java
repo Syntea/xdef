@@ -175,9 +175,9 @@ public final class XDReader extends SObjectReader {
 					case XDValueID.XD_EXCEPTION:
 						return new DefException(readReport(),
 							readString(), readInt());
-					case XDValueID.XD_FLOAT:
+					case XDValueID.XD_DOUBLE:
 						return new DefDouble(readDouble());
-					case XDValueID.XD_INT:
+					case XDValueID.XD_LONG:
 						return new DefLong(readLong());
 					case XDValueID.XD_CONTAINER: {
 						int len = readInt();

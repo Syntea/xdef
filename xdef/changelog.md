@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 40.1.3, release-date 2021-03-16
+# Version 40.1.3, release-date 2021-03-17
 * preparing version 40.2
 * corrected display of zone with zero hours and negative minutes in offset.
 * added new X-definition type of value: `GPSPosition`.

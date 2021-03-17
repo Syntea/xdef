@@ -86,6 +86,6 @@ public class XSParseLong extends XSAbstractParseComparable {
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 	@Override
-	public short parsedType() {return XD_INT;}
+	public short parsedType() {return XD_LONG;}
 
 }

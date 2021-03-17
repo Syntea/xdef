@@ -1510,7 +1510,8 @@ public class StringParser extends SReporter implements SParser {
 
 	/** Get value of parsed date. Returns instance of Calendar with parsed
 	 * values. Values which were not parsed are set to zero.
-	 * @return Calendar with parsed values or null.
+	 * @return Calendar with parsed values.
+	 * @throws SRuntimeException SYS072 Data error
 	 */
 	public final Calendar getParsedCalendar() {
 		return _parsedDatetime == null ? null : _parsedDatetime.getCalendar();
@@ -2466,7 +2467,7 @@ public class StringParser extends SReporter implements SParser {
 	 * time format.
 	 */
 	public final boolean isISO8601Time() {
-		return isDatetime("HH:mm[:ss[?',.'S]][Z]");
+		return isDatetime("HH:mm[:ss[.S]][Z]");
 	}
 
 	/** Parse date according to RFC822 (email format). (see
@@ -2475,7 +2476,8 @@ public class StringParser extends SReporter implements SParser {
 	 * and time format.
 	 */
 	public final boolean isRFC822Datetime() {
-		return isDatetime("EEE, d MMM y HH:mm:ss[ ZZZZZ][ (z)]");
+		return isDatetime("EEE, d MMM yyyy HH:mm[:ss][ ZZZZZ][ (z)]"
+			+ "|EEE, d MMM YY HH:mm[:ss][ ZZZZZ][ (z)]");
 	}
 
 	/** Parse date in the printable form.
@@ -2494,14 +2496,14 @@ public class StringParser extends SReporter implements SParser {
 	 */
 	public final boolean isISO8601Datetime() {
 		return isDatetime(
-			"yyyy-M-d['T'H:m[:s[?',.'S]][Z]]|" +
-			"yyyy-DDD['T'H:m[:s[?',.'S]][Z]]|" +
-			"yyyy-'W'w-e['T'H:m[:s[?',.'S]][Z]]|" +
-			"yyyy'W'wwe['T'H:m[:s[?',.'S]]][Z]|" +
-			"--M[-d][Z]|" + //month, month day
-			"---d[Z]|"+ //day
-			"yyyy[-M][Z]|"+ // year
-			"H:m[:s[?',.'S]][Z]]"); //time
+			"yyyy-MM-dd['T'HH:mm[:ss[.S]][Z]]|" +
+			"yyyy-DDD['T'HH:mm[:ss[.S]][Z]]|" +
+			"yyyy-'W'w-e['T'HH:mm[:ss[.S]][Z]]|" +
+			"yyyy'W'wwe['T'HH:mm[:ss[.S]]][Z]|" +
+			"--MM[-dd][Z]|" + //month, month day
+			"---dd[Z]|"+ //day
+			"yyyy[-MM][Z]|"+ // year
+			"HH:mm[:ss[.S]][Z]]"); //time
 	}
 
 	/** Parse ISO8601 date and time format (see
@@ -2510,10 +2512,10 @@ public class StringParser extends SReporter implements SParser {
 	 * @return true if date on current position suits to ISO8601 date format.
 	 */
 	public final boolean isISO8601DateAndTime() {
-		return isDatetime("yyyy-M-d'T'H:m[:s[?',.'S]][Z]|" +
-			"yyyy-DDD'T'H:m[:s[?',.'S]][Z]|" +
-			"yyyy-'W'w-e'T'H:m[:s[?',.'S]][Z]|" +
-			"yyyy'W'wwe'T'H:m[:s[?',.'S]][Z]");
+		return isDatetime("yyyy-MM-dd'T'HH:mm[:ss[.S]][Z]|" +
+			"yyyy-DDD'T'HH:mm[:ss[.S]][Z]|" +
+			"yyyy-'W'w-e'T'HH:mm[:ss[.S]][Z]|" +
+			"yyyy'W'wwe'T'HH:mm[:ss[.S]][Z]");
 	}
 
 	/** Parse date and/or time. Argument is string with format mask where
@@ -2868,7 +2870,7 @@ public class StringParser extends SReporter implements SParser {
 				case 'Y': //year - two digits, century from the actual year
 					if (n != 0 && n != 2) {
 						freeBuffer();
-						//Datetime mask: incorrect year
+						// Datetime mask: incorrect year
 						// specification&{0}{, position: }
 						throw new SRuntimeException(SYS.SYS059,	fpos-3);
 					}
@@ -2919,8 +2921,14 @@ public class StringParser extends SReporter implements SParser {
 						failVariant = true;
 						continue;
 					}
-					if (n == 2 && i < 100) {
-						i += (i < 10) ? 2000 : 1900;
+					if (n == 2 && i < 100) { // this is a nasty feature
+						int century =
+							new GregorianCalendar().get(Calendar.YEAR);
+						int year = century % 100; // actual year in century;
+						century /= 100; // actual century
+						// decrease century if the actual year in in century
+						// is lower then the parsed value.
+						i += ((year < i) ? century - 1 : century) * 100;
 					}
 					myDate._year = i * sign;
 					continue;
@@ -3397,7 +3405,7 @@ public class StringParser extends SReporter implements SParser {
 		boolean time = false;
 		_parsedDuration.setNegative(isChar('-'));
 		if (isChar('P')) {
-			if (!xmlSchema && isDatetime("yyyy-M-dTH:m[:s[?',.'S]][Z]")) {
+			if (!xmlSchema && isDatetime("yyyy-M-dTH:m[:s[.S]][Z]")) {
 				_parsedDuration.setYears(_parsedDatetime._year);
 				_parsedDuration.setMonths(_parsedDatetime._month);
 				_parsedDuration.setDays(_parsedDatetime._day);
@@ -4001,7 +4009,8 @@ public class StringParser extends SReporter implements SParser {
 	 * @return type of character.
 	 */
 	public final byte getXmlCharType(final byte xmlVersion) {
-		return xmlVersion == XMLVER1_1 ? XML_CHARTAB1[_ch] : XML_CHARTAB0[_ch];
+		return xmlVersion == XMLVER1_1
+			? XML_CHARTAB1[_ch] : XML_CHARTAB0[_ch];
 	}
 
 	/** Parse Nmtoken.
@@ -4204,8 +4213,7 @@ public class StringParser extends SReporter implements SParser {
 		return false;
 	}
 
-	/** Parse duration in format format ISO 8061.
-	 * yyyy:MM:ddTHH:mm:ss[.S][Z]
+	/** Parse date in format ISO 8061 (y:MM:ddTHH:mm:ss[.S][Z]).
 	 * @return true if correct format of duration was parsed.
 	 */
 	public final boolean isXMLDatetime() {
@@ -4323,9 +4331,8 @@ public class StringParser extends SReporter implements SParser {
 		return true;
 	}
 
-	/** Parse duration in format format ISO 8061.
-	 * yyyy:MM:dd[Z]
-	 * @return true if correct format of duration was parsed.
+	/** Parse date in format y:MM:dd[Z]
+	 * @return true if correct format of date was parsed.
 	 */
 	public final boolean isXMLDate() {
 		if (getIndex() + 10 >= _endPos && !readNextBuffer()) {
@@ -4342,8 +4349,8 @@ public class StringParser extends SReporter implements SParser {
 		return true;
 	}
 
-	/** Parse duration in format format ISO 8061.
-	 * @return true if correct format of duration was parsed.
+	/** Parse date in format HH:mm:ss[.S][Z].
+	 * @return true if correct format of time was parsed.
 	 */
 	public final boolean readXMLTime() {
 		int start = getIndex();
@@ -4377,9 +4384,8 @@ public class StringParser extends SReporter implements SParser {
 		return true;
 	}
 
-	/** Parse duration in format format ISO 8061.
-	 * HH:mm:ss[Z]
-	 * @return true if correct format of duration was parsed.
+	/** Parse date in format HH:mm:ss[Z].
+	 * @return true if correct format of time was parsed.
 	 */
 	public final boolean isXMLTime() {
 		if (getIndex() + 5 >= _endPos && !readNextBuffer()) {
@@ -4403,9 +4409,8 @@ public class StringParser extends SReporter implements SParser {
 		return true;
 	}
 
-	/** Parse duration in format format ISO 8061.
-	 * yyyy[Z]
-	 * @return true if correct format of duration was parsed.
+	/** Parse date in format y[Z].
+	 * @return true if correct format of date was parsed.
 	 */
 	public final boolean isXMLYear() {
 		if (getIndex() + 1 >= _endPos && !readNextBuffer()) {
@@ -4422,9 +4427,8 @@ public class StringParser extends SReporter implements SParser {
 		return true;
 	}
 
-	/** Parse duration in format format ISO 8061.
-	 * yyyy-MM[Z]
-	 * @return true if correct format of duration was parsed.
+	/** Parse date in format y-MM[Z].
+	 * @return true if correct format of date was parsed.
 	 */
 	public final boolean isXMLYearMonth() {
 		if (getIndex() + 4 >= _endPos && !readNextBuffer()) {
@@ -4482,9 +4486,8 @@ public class StringParser extends SReporter implements SParser {
 		return true;
 	}
 
-	/** Parse duration in format format ISO 8061.
-	 * --MM[Z]
-	 * @return true if correct format of duration was parsed.
+	/** Parse date in format --MM[Z].
+	 * @return true if correct format of date was parsed.
 	 */
 	public final boolean isXMLMonth() {
 		if (getIndex() + 4 >= _endPos && !readNextBuffer()) {
@@ -4500,19 +4503,14 @@ public class StringParser extends SReporter implements SParser {
 		return result;
 	}
 
-	/** Parse duration in format format ISO 8061.
-	 * --MM-dd[Z]
-	 * @return true if correct format of duration was parsed.
+	/** Parse date in format --MM-dd-[Z].
+	 * @return true if correct format of date was parsed.
 	 */
 	public final boolean isXMLMonthDay() {
 		if (getIndex() + 7 >= _endPos && !readNextBuffer()) {
 			return false;
 		}
 		_parsedDatetime = new MyDate(getIndex());
-		_parsedDatetime._year = 1972; //leap year
-		_parsedDatetime._hour = 0;
-		_parsedDatetime._minute = 0;
-		_parsedDatetime._second = 0;
 		keepBuffer();
 		int start = getIndex();
 		if (!isToken("--")) {
@@ -4548,9 +4546,8 @@ public class StringParser extends SReporter implements SParser {
 		return true;
 	}
 
-	/** Parse duration in format format ISO 8061.
-	 * ---dd[Z]
-	 * @return true if correct format of duration was parsed.
+	/** Parse date in format ---dd[Z].
+	 * @return true if correct format of date was parsed.
 	 */
 	public final boolean isXMLDay() {
 		if (getIndex() + 7 >= _endPos && !readNextBuffer()) {

@@ -277,7 +277,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 						}
 						case XD_DATETIME:
 						case XD_DURATION:
-						case XD_FLOAT:
+						case XD_DOUBLE:
 						case XD_STRING: {
 							resultExpr = new DefElement(stringToElement(
 								_rootChkElement, resultExpr.stringValue()));
@@ -325,7 +325,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 		final XDValue expr) {
 		long i = 0;
 		XElement xElem = chkEl._xElement;
-		if (expr.getItemId() == XD_INT) {
+		if (expr.getItemId() == XD_LONG) {
 			if ((i = expr.longValue()) > 0 && xElem.maxOccurs() > 0) {
 				if (xElem.maxOccurs() < i) {
 					i = xElem.maxOccurs() + 1; //enable to put "too many" error
@@ -507,7 +507,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 					chkElement.updateElement(null); //delete this element
 				}
 				return;
-			case XD_INT:
+			case XD_LONG:
 				if (result.longValue() > 0) {
 					createElAndTxt(parentChkElem, chkElement, null, xtxt);
 				} else {
@@ -1150,7 +1150,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 						}
 					}
 					if (result == null || result.isNull()
-						|| (result.getItemId() == XD_INT
+						|| (result.getItemId() == XD_LONG
 						&& result.intValue() <= 0)
 						|| (result.getItemId() == XD_BOOLEAN
 						&& !result.booleanValue())) { //nothing generate
@@ -1319,13 +1319,13 @@ final class ChkComposer extends SReporter implements XDValueID {
 						continue;
 					}
 					if (result == null || result.isNull()
-						|| (result.getItemId() == XD_INT
+						|| (result.getItemId() == XD_LONG
 						&& result.intValue() <= 0)
 						|| (result.getItemId() == XD_BOOLEAN
 						&& !result.booleanValue())) { //skip the group
 						i = groupNotGenerated(chkEl, xsel);
 						continue;
-					} else if (result.getItemId() == XD_INT) {
+					} else if (result.getItemId() == XD_LONG) {
 						int xnum = (int) ((DefLong) result).intValue();
 						for(int j = 0; j < xsel.maxOccurs() && j < xnum; j++) {
 							createGroup(chkEl, sourceEl,

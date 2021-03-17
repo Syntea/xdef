@@ -16,7 +16,9 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Timestamp;
+import java.text.DecimalFormat;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import org.w3c.dom.Element;
 import org.xdef.sys.Price;
@@ -212,7 +214,7 @@ public final class TestXComponents extends XDTester {
 "</A>");
 			SUtils.setValueToSetter(SUtils.getValueFromGetter(xc, "geti"),
 				"set$value", BigInteger.valueOf(3));
-			SDatetime date =  new SDatetime("2013-9-1");
+			SDatetime date =  new SDatetime("2013-09-01");
 			SUtils.setValueToSetter(SUtils.getValueFromGetter(xc, "getd"),
 				"set$value", date);
 			SDatetime time =  new SDatetime("11:21:31");
@@ -550,21 +552,49 @@ public final class TestXComponents extends XDTester {
 			assertEq(xml, xc.toXml()); //  <C>a<D/>c<D/><D/>b</C> =>poradi textu
 		} catch (Exception ex) {fail(ex);}
 		try {
+			int century = new GregorianCalendar().get(Calendar.YEAR);
+			int y = century % 100; // actual year in century;
+			century /= 100; // actual century
+			DecimalFormat df = new DecimalFormat("00");
 			xml =
 "<A>" +
-"<c Kod='1' Cislo='2' Rok='14'/>" +
-"<c Kod='1' Cislo='1' Rok='15'/>" +
-"<c Kod='1' Cislo='3' Rok='16'/>" +
+"<c Kod='1' Cislo='1' Rok='00'/>" +
+"<c Kod='1' Cislo='2' Rok='01'/>" +
+"<c Kod='1' Cislo='3' Rok='10'/>" +
+"<c Kod='1' Cislo='4' Rok='" + df.format(y-1)+ "'/>" +
+"<c Kod='1' Cislo='5' Rok='" + df.format(y)+ "'/>" +
+"<c Kod='1' Cislo='6' Rok='" + df.format(y+1)+ "'/>" +
+"<c Kod='1' Cislo='7' Rok='99'/>" +
 "123456" +
 "<d a='23.6.2015'/>" +
 "</A>";
 			xc = parseXC(xp, "K", xml, null, null);
 			assertEq(xml, xc.toXml());
 			list = (List) SUtils.getValueFromGetter(xc, "listOfc");
-			assertEq(3, list.size());
-			assertEq("2", SUtils.getValueFromGetter(list.get(0), "getCislo"));
-			assertEq("1", SUtils.getValueFromGetter(list.get(1), "getCislo"));
+			assertEq(7, list.size());
+
+			int x;
+			assertEq("1", SUtils.getValueFromGetter(list.get(0), "getCislo"));
+			assertEq(String.valueOf((x=00)+(y<x ? century-1 : century)*100),
+				SUtils.getValueFromGetter(list.get(0), "getRok").toString());
+			assertEq("2", SUtils.getValueFromGetter(list.get(1), "getCislo"));
+			assertEq(String.valueOf((x=01)+(y<x ? century-1 : century)*100),
+				SUtils.getValueFromGetter(list.get(1), "getRok").toString());
 			assertEq("3", SUtils.getValueFromGetter(list.get(2), "getCislo"));
+			assertEq(String.valueOf((x=10)+(y<x ? century-1 : century)*100),
+				SUtils.getValueFromGetter(list.get(2), "getRok").toString());
+			assertEq("4", SUtils.getValueFromGetter(list.get(3), "getCislo"));
+			assertEq(String.valueOf((x=y-1)+(y<x ? century-1 : century)*100),
+				SUtils.getValueFromGetter(list.get(3), "getRok").toString());
+			assertEq("5", SUtils.getValueFromGetter(list.get(4), "getCislo"));
+			assertEq(String.valueOf((x=y)+(y<x ? century-1 : century)*100),
+				SUtils.getValueFromGetter(list.get(4), "getRok").toString());
+			assertEq("6", SUtils.getValueFromGetter(list.get(5), "getCislo"));
+			assertEq(String.valueOf((x=y+1)+(y<x ? century-1 : century)*100),
+				SUtils.getValueFromGetter(list.get(5), "getRok").toString());
+			assertEq("7", SUtils.getValueFromGetter(list.get(6), "getCislo"));
+			assertEq(String.valueOf((x=99)+(y<x ? century-1 : century)*100),
+				SUtils.getValueFromGetter(list.get(6), "getRok").toString());
 			assertEq("123456", "" + SUtils.getValueFromGetter(xc, "get$value"));
 			assertEq("2015-06-23", "" + SUtils.getValueFromGetter(
 				SUtils.getValueFromGetter(xc, "getd"), "geta"));

@@ -537,10 +537,10 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	public final void setVariable(final String name, final long value) {
 		XVariable xv = findVariable(name);
 		switch (xv.getType()) {
-			case XD_FLOAT:
+			case XD_DOUBLE:
 				_scp.setVariable(xv, new DefDouble(value));
 				return;
-			case XD_INT:
+			case XD_LONG:
 				_scp.setVariable(xv, new DefLong(value));
 				return;
 			case XD_DECIMAL:
@@ -562,7 +562,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	public final void setVariable(final String name, final double value) {
 		XVariable xv = findVariable(name);
 		switch (xv.getType()) {
-			case XD_FLOAT:
+			case XD_DOUBLE:
 				_scp.setVariable(xv, new DefDouble(value));
 				return;
 			case XD_STRING:
@@ -611,14 +611,14 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 				case XD_STRING:
 					setVariable(name, value.toString());
 					return;
-				case XD_FLOAT:
-					if (value.getItemId() == XD_INT) {
+				case XD_DOUBLE:
+					if (value.getItemId() == XD_LONG) {
 						setVariable(name, value.doubleValue());
 						return;
 					}
 					break;
-				case XD_INT:
-					if (value.getItemId() == XD_FLOAT) {
+				case XD_LONG:
+					if (value.getItemId() == XD_DOUBLE) {
 						setVariable(name, value.longValue());
 						return;
 					}
@@ -655,11 +655,11 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 				_scp.setVariable(xv, new DefBoolean(value));
 				return;
 			}
-			case XD_FLOAT: {
+			case XD_DOUBLE: {
 				_scp.setVariable(xv, new DefDouble(value));
 				return;
 			}
-			case XD_INT: {
+			case XD_LONG: {
 				_scp.setVariable(xv, new DefLong(value));
 				return;
 			}
@@ -684,10 +684,10 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	private void setVariable(final String name, final BigDecimal value) {
 		XVariable xv = findVariable(name);
 		switch (xv.getType()) {
-			case XD_INT:
+			case XD_LONG:
 				_scp.setVariable(xv, new DefLong(value.longValue()));
 				return;
-			case XD_FLOAT:
+			case XD_DOUBLE:
 				_scp.setVariable(xv, new DefDouble(value.doubleValue()));
 				return;
 			case XD_DECIMAL:

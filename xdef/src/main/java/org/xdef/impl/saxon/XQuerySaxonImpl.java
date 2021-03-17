@@ -85,10 +85,10 @@ public class XQuerySaxonImpl implements XQueryImpl {
 						case XDValueID.XD_DATETIME:
 							x.bindValue(qname, var.datetimeValue());
 							break;
-						case XDValueID.XD_INT:
+						case XDValueID.XD_LONG:
 							x.bindValue(qname, var.longValue());
 							break;
-						case XDValueID.XD_FLOAT:
+						case XDValueID.XD_DOUBLE:
 							x.bindValue(qname, var.doubleValue());
 							break;
 						default:

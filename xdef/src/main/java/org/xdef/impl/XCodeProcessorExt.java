@@ -80,9 +80,9 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 					switch (p.getItemId()) {
 						case XD_BOOLEAN:
 							return new DefBoolean(p.booleanValue());
-						case XD_INT:
+						case XD_LONG:
 							return new DefLong(p.intValue());
-						case XD_FLOAT:
+						case XD_DOUBLE:
 							return new DefDouble(p.floatValue());
 						case XD_DECIMAL:
 							return new DefDecimal(p.decimalValue());
@@ -216,7 +216,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 			case IS_LEAPYEAR: //check leap year.
 				// Return true if date is leap year.
 				return new DefBoolean(SDatetime.isLeapYear(
-					p.getItemId() == XD_INT
+					p.getItemId() == XD_LONG
 						? p.intValue() : p.datetimeValue().getYear()));
 			//String
 			case LOWERCASE: { //set to lower case
@@ -853,7 +853,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 				p.setSourceBuffer(s);
 				stack[sp] = p.isSignedInteger() && p.eos()
 					? new DefLong(p.getParsedLong())
-					: DefNull.genNullValue(XD_INT);
+					: DefNull.genNullValue(XD_LONG);
 				return sp;
 			}
 			case PARSE_FLOAT: {
@@ -863,7 +863,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 				p.setSourceBuffer(s);
 				stack[sp] = p.isSignedFloat() && p.eos()
 					? new DefDouble(p.getParsedDouble())
-					: DefNull.genNullValue(XD_FLOAT);
+					: DefNull.genNullValue(XD_DOUBLE);
 				return sp;
 			}
 			case GET_PARSED_BOOLEAN:
@@ -993,9 +993,9 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 					name = stack[sp].isNull() ? null : stack[sp].stringValue();
 					sp -= 3;
 				} else if (cmd.getParam() == 3) {
-					if (!stack[sp].isNull() || stack[sp].getItemId()==XD_FLOAT
+					if (!stack[sp].isNull() || stack[sp].getItemId()==XD_DOUBLE
 						|| stack[sp].getItemId()==XD_DECIMAL
-						|| stack[sp].getItemId()==XD_INT){
+						|| stack[sp].getItemId()==XD_LONG){
 						altitude = stack[sp].doubleValue();
 					} else {
 						name = stack[sp].stringValue();
@@ -1115,7 +1115,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 									case XD_DECIMAL:
 										pars[j + k] = stack[i].decimalValue();
 										break;
-									case XD_INT: {
+									case XD_LONG: {
 										Class<?> x;
 										if ((x = p[j+k]).equals(Long.TYPE) ||
 											x.equals(Long.class)) {
@@ -1132,7 +1132,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 										}
 										break;
 									}
-									case XD_FLOAT:
+									case XD_DOUBLE:
 										Class<?> x;
 										if ((x=p[j+k]).equals(Double.TYPE)
 											|| x.equals(Double.class)) {
@@ -1231,11 +1231,11 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 										stack[++sp] = new DefDecimal(
 											(BigDecimal) o);
 										break;
-									case XD_INT:
+									case XD_LONG:
 										stack[++sp] =
 											new DefLong(x.longValue());
 										break;
-									case XD_FLOAT:
+									case XD_DOUBLE:
 										stack[++sp] =
 											new DefDouble(x.doubleValue());
 										break;
@@ -1260,11 +1260,11 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 							case XD_DECIMAL:
 								stack[++sp] = new DefDecimal((BigDecimal) o);
 								break;
-							case XD_INT:
+							case XD_LONG:
 								stack[++sp] =
 									new DefLong(((Number) o).longValue());
 								break;
-							case XD_FLOAT:
+							case XD_DOUBLE:
 								stack[++sp] =
 									new DefDouble(((Number) o).doubleValue());
 								break;
