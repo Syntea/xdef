@@ -62,8 +62,12 @@ public interface CodeTable {
 	static final short TO_FLOAT = TO_DECIMAL_X + 1;
 	/** Float from integer on stack item (top - index). */
 	static final short TO_FLOAT_X = TO_FLOAT + 1;
-	/** Set null or a string created from any value on the top of stack. */
-	static final short NULL_OR_TO_STRING = TO_FLOAT_X + 1;
+	/** Integer from object on the stack item (top - index). */
+	static final short TO_INT_X = TO_FLOAT_X + 1;
+	/** Character from object on the stack item (top - index). */
+	static final short TO_CHAR_X = TO_INT_X + 1;
+	/** Null or string from any value on the top of stack. */
+	static final short NULL_OR_TO_STRING = TO_CHAR_X + 1;
 	/** String from any value  on the top of stack. */
 	static final short TO_STRING = NULL_OR_TO_STRING + 1;
 	/** String from any value stack item (top - index). */
@@ -375,8 +379,10 @@ public interface CodeTable {
 	static final short ADD_MILLIS = ADD_SECOND + 1;
 	/** Add nanosecond to date. */
 	static final short ADD_NANOS = ADD_MILLIS + 1;
+	/** Get character from string. */
+	static final short CHAR_AT = ADD_NANOS + 1;
 	/** Check if value contains given argument */
-	static final short CONTAINS = ADD_NANOS + 1;
+	static final short CONTAINS = CHAR_AT + 1;
 	/** Check case insensitive if value contains given argument */
 	static final short CONTAINSI = CONTAINS + 1;
 	/** Set day in date. */

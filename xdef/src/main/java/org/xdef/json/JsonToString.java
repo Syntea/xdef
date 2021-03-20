@@ -66,9 +66,9 @@ class JsonToString extends JsonTools {
 				}
 				return "'\\" + "\"nbrtf".charAt(i) + "'";
 			} else if (x instanceof SDatetime) {
-				return "d(" + x + ")";
+				return "D" + x;
 			} else if (x instanceof SDuration) {
-				return "p(" + x + ")";
+				return x.toString();
 			} else if (x instanceof Price) {
 				return "#(" + x + ')';
 			} else if (x instanceof GPSPosition) {
@@ -243,7 +243,7 @@ class JsonToString extends JsonTools {
 	 */
 	final static Object xonToJson(final Object x) {
 		if (x == null || x instanceof String || x instanceof Boolean
-			|| x instanceof Number) {
+			|| x instanceof Number || x instanceof JNull) {
 			return x;
 		} else if (x instanceof Map) {
 			return xonMapToJson((Map) x);

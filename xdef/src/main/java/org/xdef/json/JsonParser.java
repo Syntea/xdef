@@ -304,7 +304,6 @@ public class JsonParser extends StringParser {
 						}
 						return map;
 					}
-//				} else if (!_xonMode) {
 				} else {
 					if (eos()) {
 						break;
@@ -388,7 +387,6 @@ public class JsonParser extends StringParser {
 						}
 						return list;
 					}
-//				} else if (!_xonMode) {
 				} else {
 					if (wasErrorReported) {
 						break;
@@ -475,7 +473,7 @@ public class JsonParser extends StringParser {
 					}
 					setIndex(pos);
 					return returnError(null, JSON.JSON010, "[]{}");
-				} else if (isToken("d(")) {
+				} else if (isChar('D')) {
 					if (isDatetime("--M[-d][Z]" + //month day
 						"|---d[Z]"+ //day
 						"|H:m:s[.S][Z]"+ //time
@@ -484,18 +482,14 @@ public class JsonParser extends StringParser {
 						"|yZ"+ // year with zone
 						"|y-M"+ // year month
 						"|y")) { // year without zone
-						if (isChar(')')) {
-							return returnValue(getParsedSDatetime());
-						}
+						return returnValue(getParsedSDatetime());
 					}
-//					setIndex(pos);
 					//JSON value expected
 					return returnError(null, JSON.JSON010, "[]{}");
-				} else if (isToken("p(")) {
+				} else if (isChar('P') || isToken("-P")) {
+					setIndex(pos);
 					if (isXMLDuration()) {
-						if (isChar(')')) {
-							return returnValue(getParsedSDuration());
-						}
+						return returnValue(getParsedSDuration());
 					}
 					setIndex(pos);
 					//JSON value expected

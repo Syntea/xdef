@@ -22,10 +22,15 @@ public final class DefChar extends XDValueAbstract {
 	/** Creates a new instance of DefChar as null.*/
 	public DefChar() {_isNull = true; _value = SParser.NOCHAR;}
 
-	/** Creates a new instance of DefChar
+	/** Creates a new instance of DefChar from character.
 	 * @param value The initial value of object.
 	 */
 	public DefChar(final char value) {_value = value; _isNull = false;}
+
+	/** Creates a new instance of DefChar from integer number.
+	 * @param value The initial value of object.
+	 */
+	public DefChar(final long value) {_value = (char) value; _isNull = false;}
 
 	/** Creates a new instance of DefChar
 	 * @param s string representing a character.
@@ -96,25 +101,6 @@ public final class DefChar extends XDValueAbstract {
 	}
 
 	@Override
-	public int hashCode() {return isNull() ? 0 : _value;}
-
-	@Override
-	public boolean equals(final Object arg) {
-		return arg instanceof XDValue ? equals((XDValue) arg) : false;
-	}
-
-	@Override
-	/** Check whether some other XDValue object is "equal to" this one.
-	 * @param arg other XDValue object to which is to be compared.
-	 * @return true if argument is same type as this XDValue and the value
-	 * of the object is comparable and equals to this one.
-	 */
-	public boolean equals(final XDValue arg) {
-		return isNull() ? arg == null || arg.isNull()
-			: charValue() == arg.charValue();
-	}
-
-	@Override
 	/** Compares this object with the other DefBoolean object.
 	 * @param arg other DefBoolean object to which is to be compared.
 	 * @return returns 0 if this object is equal to the specified object.
@@ -136,4 +122,27 @@ public final class DefChar extends XDValueAbstract {
 	 * <tt>false</tt>.
 	 */
 	public boolean isNull() {return _isNull;}
+
+	@Override
+	public int hashCode() {return isNull() ? -1 : _value;}
+
+	@Override
+	public boolean equals(final Object arg) {
+		return arg instanceof XDValue ? equals((XDValue) arg) : false;
+	}
+
+	@Override
+	/** Check whether some other XDValue object is "equal to" this one.
+	 * @param arg other XDValue object to which is to be compared.
+	 * @return true if argument is same type as this XDValue and the value
+	 * of the object is comparable and equals to this one.
+	 */
+	public boolean equals(final XDValue arg) {
+		return isNull() ? arg == null || arg.isNull()
+			: charValue() == arg.charValue();
+	}
+
+	@Override
+	/** Get String created from the value of this object. */
+	public String toString() {return String.valueOf(_value);}
 }
