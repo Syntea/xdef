@@ -87,7 +87,7 @@ public class XDParseDec extends XSParseDecimal {
 
 	@Override
 	public String parserName() {return ROOTBASENAME;}
+
 	@Override
 	public short parsedType() {return XD_DECIMAL;}
-
 }

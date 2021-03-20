@@ -372,9 +372,18 @@ class XCGeneratorJSON extends XCGeneratorBase1 {
 		String s;
 		if (max > 1) { // list of values
 			String typ1 = "java.util.List<" + typ + ">";
-			jGet = "String".equals(typ) && xe.getJsonMode() != 0 ?
-				"org.xdef.json.JsonTools.jstringFromSource(y.getvalue())"
-				: "y.getvalue()";
+			if (xe.getJsonMode() != 0) {
+				jGet = "org.xdef.json.JsonTools.jstringFromSource(";
+				if ("String".equals(typ)) {
+					jGet += "y.getvalue())";
+				} else if ("Character".equals(typ)) {
+					jGet += "String.valueOf(y.getvalue()))";
+				} else {
+					jGet = "y.getvalue()";
+				}
+			} else {
+				jGet = "y.getvalue()";
+			}
 			// getter
 			template =
 (_genJavadoc ? "\t/** Get values of text nodes of &{d}."+LN+
@@ -401,8 +410,18 @@ class XCGeneratorJSON extends XCGeneratorBase1 {
 					"&{typ1}", typ1));
 			}
 			// setter
-			jSet = "String".equals(typ) && xe.getJsonMode() != 0 ?
-				"org.xdef.json.JsonUtil.toJsonString(x,false)" : "x";
+			if (xe.getJsonMode() != 0) {
+				jSet = "org.xdef.json.JsonUtil.toJsonString(";
+				if ("String".equals(typ)) {
+					jSet += "x,false)";
+				} else if ("Character".equals(typ)) {
+					jSet += "String.valueOf(x),false)";
+				} else {
+					jSet = "x";
+				}
+			} else {
+				jSet = "x";
+			}
 			template =
 (_genJavadoc ? "\t/** Add values of textnodes of &{d}. */"+LN : "")+
 "\tpublic void add&{name}(&{typ} x)";

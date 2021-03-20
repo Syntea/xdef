@@ -73,6 +73,8 @@ public class CompileBase implements CodeTable, XDValueID {
 	private final static String[] TYPENAMES = new String[NOTYPE_VALUE_ID];
 	/** Table of type names and type IDs.*/
 	private static final String TYPEIDS;
+	/** Table of names used only in declaration of external objects. */
+	private static final String EXT_TYPEIDS;
 	/** Array of classes corresponding to implemented types. */
 	private final static Class<?>[] TYPECLASSES = new Class<?>[NOTYPE_VALUE_ID];
 	/** Table of internal methods.*/
@@ -90,10 +92,11 @@ public class CompileBase implements CodeTable, XDValueID {
 		// Set type tables.
 		setType(XD_VOID, "void", Void.TYPE);
 		setType(XD_LONG, "int", Long.TYPE);
+		setType(XD_CHAR, "char", Character.TYPE);
+		setType(XD_DOUBLE, "float", Double.TYPE);
+		setType(XD_BOOLEAN, "boolean", Boolean.TYPE);
 		setType(XD_DECIMAL, "Decimal", java.math.BigDecimal.class);
 		setType(XD_BIGINTEGER, "BigInteger", java.math.BigInteger.class);
-		setType(XD_BOOLEAN, "boolean", Boolean.TYPE);
-		setType(XD_DOUBLE, "float", Double.TYPE);
 		setType(XD_STRING, "String", String.class);
 		setType(XD_DATETIME, "Datetime", org.xdef.sys.SDatetime.class);
 		setType(XD_DURATION, "Duration", org.xdef.sys.SDuration.class);
@@ -128,26 +131,15 @@ public class CompileBase implements CodeTable, XDValueID {
 		setType(XD_ANY, "AnyValue", org.xdef.XDValue.class);
 		setType(XD_OBJECT, "Object", java.lang.Object.class);
 		setType(UNIQUESET_M_VALUE, "uniqueSet", null);
+
 		// Table of type names and typeIds
 		TYPEIDS = ((char) XD_VOID) + ";void;" +
-			((char) XD_ANY) + ";XDValue;" +
-			((char) XD_LONG) + ";long;" +
-			((char) XD_LONG) + ";Long;" +
 			((char) XD_LONG) + ";int;" +
-			((char) XD_LONG) + ";Integer;" +
-			((char) XD_LONG) + ";short;" +
-			((char) XD_LONG) + ";Short;" +
-			((char) XD_LONG) + ";byte;" +
-			((char) XD_LONG) + ";Byte;" +
+			((char) XD_CHAR) + ";char;" +
+			((char) XD_DOUBLE) + ";float;" +
+			((char) XD_BOOLEAN) + ";boolean;" +
 			((char) XD_DECIMAL) + ";BigDecimal;" +
 			((char) XD_BIGINTEGER) + ";BigInteger;" +
-			((char) XD_DOUBLE) + ";double;" +
-			((char) XD_DOUBLE) + ";float;" +
-			((char) XD_DOUBLE) + ";Double;" +
-			((char) XD_DOUBLE) + ";float;" +
-			((char) XD_DOUBLE) + ";Float;" +
-			((char) XD_BOOLEAN) + ";boolean;" +
-			((char) XD_BOOLEAN) + ";Boolean;" +
 			((char) XD_STRING) + ";String;" +
 			((char) XD_DATETIME) + ";SDatetime;" +
 			((char) XD_DURATION) + ";SDuration;" +
@@ -161,11 +153,8 @@ public class CompileBase implements CodeTable, XDValueID {
 			((char) XD_BYTES) + ";byte[];" +
 			((char) XD_LOCALE) + ";Locale;" +
 			((char) XD_UNIQUESET_KEY) + ";uniqueSetKey;" +
+			((char) XD_ANY) + ";XDValue;" +
 
-			((char) XX_ELEMENT) + ";XXNode;" + //???
-			((char) XX_ELEMENT) + ";XXElement;" +
-			((char) XX_ATTR) + ";XXAttr;" +
-			((char) XX_DATA) + ";XXData;" +
 			((char) XD_ELEMENT) + ";Element;" +
 			((char) XD_INPUT) + ";XDInput;" +
 			((char) XD_OUTPUT) + ";XDOutput;" +
@@ -180,6 +169,28 @@ public class CompileBase implements CodeTable, XDValueID {
 			((char) XD_RESULTSET) + ";XDResultSet;" +
 			((char) XD_NAMEDVALUE) + ";XDNamedItem;" +
 			((char) XD_XMLWRITER) + ";XDXmlOutStream;";
+
+		// Table of type names used only in an external object declatation.
+		EXT_TYPEIDS =
+			((char) XD_DOUBLE) + ";Double;" +
+			((char) XD_DOUBLE) + ";Float;" +
+			((char) XD_DOUBLE) + ";Double;" +
+			((char) XD_DOUBLE) + ";double;" +
+			((char) XD_DOUBLE) + ";Float;" +
+			((char) XD_LONG) + ";long;" +
+			((char) XD_LONG) + ";Long;" +
+			((char) XD_LONG) + ";int;" +
+			((char) XD_LONG) + ";Integer;" +
+			((char) XD_LONG) + ";Short;" +
+			((char) XD_LONG) + ";short;" +
+			((char) XD_LONG) + ";byte;" +
+			((char) XD_LONG) + ";Byte;" +
+			((char) XD_BOOLEAN) + ";Boolean;" +
+			((char) XD_CHAR) + ";Character;" +
+			((char) XX_ELEMENT) + ";XXNode;" + //???
+			((char) XX_ELEMENT) + ";XXElement;" +
+			((char) XX_ATTR) + ";XXAttr;" +
+			((char) XX_DATA) + ";XXData;";
 
 ///////////////////////////////////////////////////////////////////////////////
 //  parsers
@@ -1604,8 +1615,12 @@ public class CompileBase implements CodeTable, XDValueID {
 	static short getClassTypeID(final String className,
 		final ClassLoader classLoader) {
 		int ndx = TYPEIDS.indexOf(';' + className + ';');
-		if (ndx > 0) {
+		if (ndx > 0) { //names of X-script types
 			return (short) TYPEIDS.charAt(ndx - 1);
+		}
+		ndx = EXT_TYPEIDS.indexOf(';' + className + ';');
+		if (ndx > 0) { // names of parameters of external object declarations.
+			return (short) EXT_TYPEIDS.charAt(ndx - 1);
 		}
 		try {
 			Class<?> clazz = Class.forName(className, false, classLoader);

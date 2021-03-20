@@ -1,6 +1,7 @@
 package org.xdef.impl.parsers;
 
 import org.xdef.XDParseResult;
+import org.xdef.impl.code.DefChar;
 import org.xdef.json.JsonTools;
 import org.xdef.msg.XDEF;
 import org.xdef.proc.XXNode;
@@ -10,9 +11,9 @@ import org.xdef.proc.XXNode;
  */
 public class XDParseChar extends XSAbstractParseToken {
 	private static final String ROOTBASENAME = "char";
-	public XDParseChar() {
-		super();
-	}
+
+	public XDParseChar() {super();}
+
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){
 		int pos0 = p.getIndex();
@@ -30,24 +31,19 @@ public class XDParseChar extends XSAbstractParseToken {
 		p.replaceParsedBufferFrom(pos0, s);
 		checkItem(p);
 	}
+
 	boolean parse(final XDParseResult p) {
-		char ch;
-		if ((ch=p.getCurrentChar()) == 0) {
+		int i = JsonTools.readJSONChar(p);
+		if (i < 0) {
 			return false;
 		}
-		String s;
-		if (p.isChar('"')) {
-			s = JsonTools.readJSONString(p);
-			if (s == null && s.length() != 1) {
-				return false;
-			}
-		} else {
-			s = String.valueOf(ch);
-			p.nextChar();
-		}
-		p.setParsedValue(s);
+		p.setParsedValue(new DefChar((char) i));
 		return true;
 	}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
+
+	@Override
+	public short parsedType() {return XD_CHAR;}
 }

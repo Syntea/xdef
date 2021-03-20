@@ -67,9 +67,9 @@ public class JsonTools {
 // public methods (used also in X-definition compilation and X-components)
 ////////////////////////////////////////////////////////////////////////////////
 
-	/** Create string from JSON source string.
+	/** Create string from JSON/XON source string data.
 	 * @param s JSON string.
-	 * @return string created from JSON string.
+	 * @return string created from JSON/XON string data.
 	 */
 	public final static String jstringToSource(final String s) {
 		StringBuilder sb = new StringBuilder();
@@ -184,7 +184,38 @@ public class JsonTools {
 		return sb.toString();
 	}
 
-	/** Create JSON string from source string.
+	/** Read character representation from JSON/XSON source.
+	 * @param p parser where is source.
+	 * @return decoded character.
+	 */
+	public static int readJSONChar(final SParser p) {
+		if (p.isChar('\\')) {
+			char c = p.peekChar();
+			int i = "u\"\\/bfnrt".indexOf(c);
+			if (i == 0) { //u
+				int x = 0;
+				for (int j = 0; j < 4; j++) {
+					int y = hexDigit(p.peekChar());
+					if (y < 0) {
+						p.error(JSON.JSON005);//hexadecimal digit expected
+						return -1;
+					}
+					x = (x << 4) + y;
+				}
+				return x;
+			} else if (i > 0) { // escaped characters
+				return (int) "u\"\\/\b\f\n\r\t".charAt(i);
+			} else {
+				 // Incorrect escape character in string
+				p.error(JSON.JSON006);
+				return -1;
+			}
+		} else {
+			return p.eos() ? -1 : p.peekChar();
+		}
+	}
+
+	/** Create JSON/XON string from source.
 	 * @param src XML form of string.
 	 * @return XML form of string converted to JSON.
 	 */
@@ -198,6 +229,77 @@ public class JsonTools {
 		return jstringToSource(s);
 	}
 
+	/** Convert a character to JSON/XSON representation.
+	 * @param c character to be converted.
+	 * @return string with converted character.
+	 */
+	public final static String charToJSource(final char c) {
+		int i = "\"\\/bfnrt".indexOf(c);
+		if (i >= 0) {
+			return "\\" + "\"\\/bfnrt".charAt(i);
+		}
+		if (i < 0 && StringParser.getXmlCharType(c, StringParser.XMLVER1_0)
+			== StringParser.XML_CHAR_ILLEGAL) {
+			String s = "\\u";
+			for (int j = 12; j >= 0; j -=4) {
+				s += "0123456789abcdef".charAt((c >> j) & 0x0f);
+			}
+			return s;
+		} else {
+			return String.valueOf(c);
+		}
+	}
+
+	/** Convert simple value to the form XML attribute.
+	 * @param x the object to be converted.
+	 * @return the form the of attribute value created from argument,
+	 */
+	public final static String genXMLValue(final Object x) {
+		if (x == null) {
+			return "null";
+		}
+		String s;
+		if (x instanceof String) {
+			s = (String) x;
+		} else if (x instanceof Character) {
+			s = String.valueOf((Character) x);
+		} else {
+			return x.toString();
+		}
+		if (s.isEmpty() || "null".equals(s)
+			|| "true".equals(s) || "false".equals(s)) {
+			return '"' + s + '"';
+		}
+		boolean addQuot = false;
+		for (int i = 0; i < s.length(); i++) {
+			char c = s.charAt(i);
+			if (c <= ' ' || c == '\\' || c == '"'
+				|| !Character.isDefined(c)) {
+				addQuot = true;
+				break;
+			}
+		}
+		char ch = s.charAt(0);
+		if (addQuot) {
+			if (s.equals(s.trim()) && ch != '"' && ch != '[' && ch != '\\'){
+				// For attributes it is not necessary to add quotes if
+				// string does not contain leading or trailing white spaces
+				return s;
+			} else {
+				return '"' + jstringToSource(s) + '"';
+			}
+		} else {
+			if (ch == '-' || ch >= '0' && ch <= '9'
+				&& (ch = s.charAt(s.length() - 1)) >= '0' && ch <= '9') {
+				StringParser p = new StringParser(s);
+				if ((p.isSignedFloat() || p.isSignedInteger()) && p.eos()) {
+					return '"' + s + '"'; // value is number, must be quoted
+				}
+			}
+			return s;
+		}
+	}
+
 	/** Read value of JSON string.
 	 * @param p parser where the string is on the actual position.
 	 * @return the parsed string.
@@ -207,31 +309,12 @@ public class JsonTools {
 		while (!p.eos()) {
 			if (p.isChar('"')) {
 				return sb.toString();
-			} else if (p.isChar('\\')) {
-				char c = p.peekChar();
-				if (c == 'u') {
-					int x = 0;
-					for (int j = 0; j < 4; j++) {
-						int y = hexDigit(p.peekChar());
-						if (y < 0) {
-							p.error(JSON.JSON005);//hexadecimal digit expected
-							break;
-						}
-						x = (x << 4) + y;
-					}
-					sb.append((char) x);
-				} else {
-					int i = "\"\\/bfnrt".indexOf(c);
-					if (i >= 0) {
-						sb.append("\"\\/\b\f\n\r\t".charAt(i));
-					} else {
-						 // Incorrect escape character in string
-						p.error(JSON.JSON006);
-						return null;
-					}
-				}
 			} else {
-				sb.append(p.peekChar());
+				int i = readJSONChar(p);
+				if (i < 0) {
+					return null;
+				}
+				sb.append((char) i);
 			}
 		}
 		p.error(JSON.JSON001); // end of string ('"') is missing
