@@ -78,6 +78,7 @@ import org.xdef.impl.code.CodeSWTableStr;
 import org.xdef.impl.compile.CompileBase;
 import org.xdef.impl.code.CodeTable;
 import org.xdef.impl.code.CodeXD;
+import org.xdef.impl.code.DefChar;
 import org.xdef.impl.code.DefPrice;
 import org.xdef.impl.code.DefGPSPosition;
 import org.xdef.impl.code.DefLocale;
@@ -767,7 +768,17 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 					continue;
 				case TO_FLOAT_X: {
 					int i = item.getParam();
-					_stack[sp - i] = new DefDouble(_stack[sp - i].doubleValue());
+					_stack[sp - i] = new DefDouble(_stack[sp-i].doubleValue());
+					continue;
+				}
+				case TO_INT_X: {
+					int i = item.getParam();
+					_stack[sp - i] = new DefLong(_stack[sp - i].longValue());
+					continue;
+				}
+				case TO_CHAR_X: {
+					int i = item.getParam();
+					_stack[sp - i] = new DefChar(_stack[sp - i].longValue());
 					continue;
 				}
 				case NULL_OR_TO_STRING:
@@ -1389,6 +1400,12 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 				case COMPILE_REGEX: //string to regex
 					_stack[sp] = new DefRegex(_stack[sp].toString());
 					continue;
+				case CHAR_AT: { // charAt
+					int i = _stack[sp--].intValue();
+					String s = _stack[sp].stringValue();
+					_stack[sp] = new DefChar(s.charAt(i));
+					continue;
+				}
 				case CONTAINS: {
 					String s = _stack[sp--].stringValue();
 					String t = _stack[sp].stringValue();

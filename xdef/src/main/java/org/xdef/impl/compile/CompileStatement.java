@@ -994,6 +994,13 @@ class CompileStatement extends XScriptParser implements CodeTable {
 					_g.addCode(new CodeOp(XD_STRING, ADD_S), -1);
 				}
 			} else {// add or subtract numbers
+				if (xType == XD_LONG && yType == XD_CHAR) {
+					_g.topXToInt(0);
+					yType = XD_LONG;
+				} else if (xType == XD_CHAR && yType == XD_LONG) {
+					_g.topXToInt(1);
+					xType = XD_LONG;
+				}
 				if (xType == XD_LONG && yType == XD_LONG) {
 					if (xValue >= 0 && yValue >= 0) {
 						long x = _g.getCodeItem(xValue).longValue();

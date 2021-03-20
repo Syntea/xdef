@@ -15,7 +15,7 @@ public interface XDValueID {
 	/** Int value (implemented as byte - 8 bit). */
 	public static final short XD_BYTE = XD_SHORT + 1; // 4
 	/** Int value (implemented as long). */
-	public static final short XD_CHAR = XD_SHORT + 1; // 5
+	public static final short XD_CHAR = XD_BYTE + 1; // 5
 	/** Boolean value ID. */
 	public static final short XD_BOOLEAN = XD_CHAR + 1; // 6
 	/** Duration value ID. */

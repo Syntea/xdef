@@ -110,10 +110,10 @@ class JsonCompare {
 	 * @throws SRuntimeException if objects are incomparable
 	 */
 	final static boolean equalValue(final Object o1, final Object o2) {
-		if (o1 == null || o2 instanceof JNull) {
+		if (o1 == null) {
 			return o2 == null || o2 instanceof JNull;
-		} else if (o2 == null || o1 instanceof JNull) {
-			return o1 == null || o1 instanceof JNull;
+		} else if (o1 instanceof JNull) {
+			return o2 == null || o2 instanceof JNull;
 		}
 		if (o1 instanceof Map) {
 			return o2 instanceof Map ? equalMap((Map)o1, (Map)o2) : false;

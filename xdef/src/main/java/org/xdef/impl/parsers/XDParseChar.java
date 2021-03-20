@@ -33,11 +33,21 @@ public class XDParseChar extends XSAbstractParseToken {
 	}
 
 	boolean parse(final XDParseResult p) {
-		int i = JsonTools.readJSONChar(p);
-		if (i < 0) {
-			return false;
+		char ch;
+		if (p.isChar('"')) {
+			String s = JsonTools.readJSONString(p);
+			if (s != null && s.length() == 1) {
+				ch = s.charAt(0);
+			} else {
+				return false;
+			}
+		} else {
+			if (p.eos()) {
+				return false;
+			}
+			ch = p.peekChar();
 		}
-		p.setParsedValue(new DefChar((char) i));
+		p.setParsedValue(new DefChar(ch));
 		return true;
 	}
 

@@ -8,6 +8,7 @@ import org.w3c.dom.Element;
 import org.xdef.XDPool;
 import org.xdef.component.XComponent;
 import org.xdef.component.XComponentUtil;
+import org.xdef.json.JNull;
 import org.xdef.json.JsonUtil;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.GPSPosition;
@@ -26,11 +27,12 @@ public class XonTest extends XDTester {
 		if (id != null) {
 			System.err.println("***** BEG " + id + " *****");
 		}
-		if (x==null || "null".equals(x.toString())) {
+		if (x==null || x instanceof JNull) {
 			System.err.print("null");
-			if (y != null && !"null".equals(y.toString())) {
-				System.err.print("; Par y: " + y);
+			if (y != null && !(y instanceof JNull)) {
+				System.err.print("; Par y: " + y.getClass().getName());
 			}
+			System.err.println();
 		} else if (x instanceof Map) {
 			System.err.println("\nMap");
 			Map m = (Map) x;
@@ -145,22 +147,20 @@ if (true)return;
 		try {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='A'>\n"+
-"<xd:json name='A'>\n"+
-//"{\"a\":[\"* date\"], \"b\": \"char()\"}\n"+
-"{\"b\": \"char()\"}\n"+
-"</xd:json>\n"+
-"<xd:component>\n"+
-"  %class bugreports.data.GJson %link #A;\n"+
-"</xd:component>\n"+
+"  <xd:json name='A'>\n"+
+"    {\"b\": \"char();\"}\n"+
+"  </xd:json>\n"+
+"  <xd:component>\n"+
+"    %class bugreports.data.GJson %link #A;\n"+
+"  </xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			XDTester.genXComponent(xp, tempDir);
 //			json = "{\"a\":[\"2021-03-10\", \"1999-01-01-01:00\"], \"b\": \"\n\"}";
 //			json = "{\"b\": \"x\"}";
 //			json = "{\"b\": \"x\"}";
-			json = "{\"b\": \"\n\"}";
+//			json = "{\"b\": \"\n\"}";
 //			json = "{\"b\": \"\\\\\"}";
-//			json = "{\"b\": \"\\u0007\"}";
+			json = "{\"b\": \"\\u0007\"}";
 //			json = "{\"b\": \"\\\"\"}";
 			x = JsonUtil.parse(json);
 			el = JsonUtil.jsonToXml(x);
@@ -175,6 +175,7 @@ if (true)return;
 			}
 			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), x),
 				JsonUtil.toJsonString(x, true));
+			XDTester.genXComponent(xp, tempDir);
 			xc = xp.createXDDocument().jparseXComponent(json,
 				null, reporter);
 			y = JsonUtil.xmlToJson(xc.toXml());
@@ -204,40 +205,41 @@ if (true)return;
 "    b = \"ab cd\",                     /* string */\n" +
 "    c = -123.4e2D,                    /* Double */\n" +
 "    f = true,                        /* boolean */\n" +
-"    g = p(P1Y1M1DT1H1M1.12S),        /* duration */\n" +
+"    g = P1Y1M1DT1H1M1.12S,        /* duration */\n" +
 "    h = null,                        /* null */\n" +
 "    i=[],                            /* empty array */\n" +
 "    Towns = [ /* array with GPS locations of towns */\n" +
-"      g(48.2,16.37,151, Wien),\n" +
-"      g(51.52,-0.09,0,London),\n" +
+"      g(48.2, 16.37, 151, Wien),\n" +
+"      g(51.52, -0.09, 0, London),\n" +
 "      g(50.08, 14.42, 399, \"Praha (centrum)\"),\n" +
 "    ],\n" +
-"    j = '\\u000d',                    /* character */\n" +
+"    j = '\\u0007',                    /* character */\n" +
 "    k = '\n',                         /* character '\n'*/\n" +
 "    l = '\"',                         /* character '\"' */\n" +
 "    \"m\" : '\'',                     /* character '\' */\n" +
 "    \"n\" : '\\\\',                   /* character '\\' */\n" +
-"    \"name with space\" : \"First\"   /* name with space is quoted! */\n" +
+//"    \"name with space\" : \"    x \t y \"   /* name with space is quoted! */\n" +
+"    \"name with space\" : \"x \t y\"   /* name with space is quoted! */\n" +
 "  }, /**** end of map ****/\n" +
 "  -3F,                               /* float */\n" +
 "  -3d,                               /* decimal */\n" +
 "  999999999999999999999999999999999, /* big integer */\n" +
-"  d(--1),                            /* month */\n" +
-"  d(--1Z),                           /* month zone*/\n" +
-"  d(--1-2),                          /* month day */\n" +
-"  d(--3-4-01:01),                    /* month day zone */\n" +
-"  d(19:23:01),						/* hours, minutes seconds */\n" +
-"  d(19:23:01.012),                   /* hours minutes seconds millis */\n" +
-"  d(0:0:0.00001+00:00),              /* time nanos zone */\n" +
-"  d(2000),                           /* year (without zone) */\n" +
-"  d(-123456789),                     /* year (without zone) */\n" +
-"  d(2000Z),                          /* year zone */\n" +
-"  d(2000-01:00),                     /* year zone */\n" +
-"  d(2000-1),                         /* year month */\n" +
-"  d(2000-1Z),                        /* year month zone */\n" +
-"  d(2000-1-01:00),                   /* year month zone */\n" +
-"  d(2021-01-12T01:10:11.54012-00:01),/* date and time (nanos, zone) */\n" +
-"  g(-0,+1),                          /* GPS */\n" +
+"  D--1,                              /* month */\n" +
+"  D--1Z,                             /* month zone*/\n" +
+"  D--1-2,                            /* month day */\n" +
+"  D--3-4-01:01,                      /* month day zone */\n" +
+"  D19:23:01,						  /* hours, minutes seconds */\n" +
+"  D19:23:01.012,                     /* hours minutes seconds millis */\n" +
+"  D0:0:0.00001+00:00,                /* time nanos zone */\n" +
+"  D2000,                             /* year (without zone) */\n" +
+"  D-123456789,                       /* year (without zone) */\n" +
+"  D2000Z,                            /* year zone */\n" +
+"  D2000-01:00,                       /* year zone */\n" +
+"  D2000-1,                           /* year month */\n" +
+"  D2000-1Z,                          /* year month zone */\n" +
+"  D2000-1-01:00,                     /* year month zone */\n" +
+"  D2021-01-12T01:10:11.54012-00:01,  /* date and time (nanos, zone) */\n" +
+"  g(-0, +1),                          /* GPS */\n" +
 "  b(HbRBHbRBHQw=),                   /* byte array (base64) */\n" +
 "  #(123.45 CZK),                     /* currency ammount */ \n" +
 "  #(12 USD),                         /* currency ammoun */\n" +
@@ -339,8 +341,9 @@ if (true)return;
 				display(x, y, "1");
 			}
 			x = xc.toJson();
+			y = JsonUtil.xonToJson(y);
 			if (!JsonUtil.jsonEqual(x,y)) {
-				display(JsonUtil.parse(json), x, "2");
+				display(x, y, "2");
 			}
 		} catch (Exception ex) {fail(ex);}
 		try {

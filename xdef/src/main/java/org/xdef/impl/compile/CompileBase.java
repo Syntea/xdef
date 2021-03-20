@@ -1336,6 +1336,8 @@ public class CompileBase implements CodeTable, XDValueID {
 // STRING
 ////////////////////////////////////////////////////////////////////////////////
 		ti = XD_STRING;
+		method(ti, genInternalMethod(CHAR_AT, XD_CHAR,
+			ANY_MODE, 2, 2, XD_STRING, XD_LONG), "charAt");
 		method(ti, genInternalMethod(CONTAINS, XD_BOOLEAN,
 			ANY_MODE, 2, 2, XD_STRING,XD_STRING), "contains");
 		method(ti, genInternalMethod(CONTAINSI, XD_BOOLEAN,
