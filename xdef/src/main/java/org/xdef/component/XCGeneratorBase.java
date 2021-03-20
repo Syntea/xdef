@@ -248,14 +248,14 @@ class XCGeneratorBase {
 //			return "org.xdef.json.JNull";
 		} else if ("jvalue".equals(parserName)) {
 			return "Object";
-		} else if ("char".equals(parserName)) {
-			return "Character";
 		}
 		switch (xdata.getParserType()) {
-			case XDValueID.XD_BOOLEAN:
-				return "Boolean";
 			case XDValueID.XD_LONG:
 				return "Long";
+			case XDValueID.XD_BOOLEAN:
+				return "Boolean";
+			case XDValueID.XD_CHAR:
+				return "Character";
 			case XDValueID.XD_DOUBLE:
 				return "Double";
 			case XDValueID.XD_DECIMAL:
@@ -314,8 +314,6 @@ class XCGeneratorBase {
 			return result + "getParsedValue().integerValue()";
 		} else if ("decimal".equals(parserName)) {
 			return result + "getParsedValue().decimalValue()";
-		} else if ("char".equals(parserName)) {
-			return result + "org.xdef.json.JsonTools.readJSONChar(toString())";
 		} else if ("jnull".equals(parserName)) {
 			return result + "getParsedValue().getObject()";
 		} else if ("jvalue".equals(parserName)) {
@@ -328,6 +326,8 @@ class XCGeneratorBase {
 		switch (xdata.getParserType()) {
 			case XDValueID.XD_BOOLEAN:
 				return result + "getParsedValue().booleanValue()";
+			case XDValueID.XD_CHAR:
+				return result + "getParsedValue().charValue()";
 			case XDValueID.XD_LONG:
 				return result + "getParsedValue().longValue()";
 			case XDValueID.XD_DOUBLE:
@@ -787,29 +787,29 @@ class XCGeneratorBase {
 		final String fn = uri != null
 			? "AttributeNS(\"" + uri + "\", " : "Attribute(";
 		String x;
-		if (("char".equals(xdata.getParserName()))) {
-			x = "get&{name}().toString())"; //typ is Character
-		} else {
-			short typ =  xdata.getParserType();
-			switch (typ) {
-				case XDValueID.XD_DATETIME: {
-					String s = xdata.getDateMask();
-					x = "get&{name}()." +
-						(s == null ? "toISO8601())" : "formatDate("+s+"))");
-					break;
-				}
-				case XDValueID.XD_BYTES:
-					x = (getBytesType(xdata) == 2
-						? "encodeHex" : "encodeBase64") + "(get&{name}()))";
-					break;
-				case XDValueID.XD_NULL: //jnull
-					x = "\"null\")";
-					break;
-				default:
-					x = checkEnumType(xdata) != null ? "get&{name}().name())"
-						: typ == XDValueID.XD_STRING
-							? "get&{name}())" : "get&{name}().toString())";
+		short typ =  xdata.getParserType();
+		switch (typ) {
+			case XDValueID.XD_CHAR: {
+				x = "org.xdef.json.JsonTools.genXMLValue(get&{name}()))";
+				break;
 			}
+			case XDValueID.XD_DATETIME: {
+				String s = xdata.getDateMask();
+				x = "get&{name}()." +
+					(s == null ? "toISO8601())" : "formatDate("+s+"))");
+				break;
+			}
+			case XDValueID.XD_BYTES:
+				x = (getBytesType(xdata) == 2
+					? "encodeHex" : "encodeBase64") + "(get&{name}()))";
+				break;
+			case XDValueID.XD_NULL: //jnull
+				x = "\"null\")";
+				break;
+			default:
+				x = checkEnumType(xdata) != null ? "get&{name}().name())"
+					: typ == XDValueID.XD_STRING
+						? "get&{name}())" : "get&{name}().toString())";
 		}
 		sb.append(modify(
 "\t\tif (get&{name}() != null)"+LN+

@@ -720,53 +720,6 @@ class JsonToXml extends JsonTools implements JsonNames {
 		}
 	}
 
-	/** Generate XML form of string,
-	 * @param val Object with value.
-	 * @param attr if true the value is generated for attribute, otherwise
-	 * it is generated for text node value.
-	 * @return XML form of string from the argument val,
-	 */
-	private String genSimpleValueToXml(final Object x) {
-		if (x == null) {
-			return "null";
-		} else if (x instanceof String) {// JSON string to XML form
-			String s = (String) x;
-			if (s.isEmpty() || "null".equals(s)
-				|| "true".equals(s) || "false".equals(s)) {
-				return '"' + s + '"';
-			}
-			boolean addQuot = false;
-			for (int i = 0; i < s.length(); i++) {
-				char c = s.charAt(i);
-				if (c <= ' ' || c == '\\' || c == '"'
-					|| !Character.isDefined(c)) {
-					addQuot = true;
-					break;
-				}
-			}
-			char ch = s.charAt(0);
-			if (addQuot) {
-				if (s.equals(s.trim()) && ch != '"' && ch != '[') {
-					// For attributes it is not necessary to add quotes if
-					// string does not contain leading or trailing white spaces
-					return s;
-				} else {
-					return '"' + jstringToSource(s) + '"';
-				}
-			} else {
-				if (ch == '-' || ch >= '0' && ch <= '9'
-					&& (ch = s.charAt(s.length() - 1)) >= '0' && ch <= '9') {
-					StringParser p = new StringParser(s);
-					if ((p.isSignedFloat() || p.isSignedInteger()) && p.eos()) {
-						return '"' + s + '"'; // value is number, must be quoted
-					}
-				}
-				return s;
-			}
-		}
-		return x.toString();
-	}
-
 	/** Create W3C JSON element with value.
 	 * @param val value of JSON element.
 	 * @param parent parent node where to add created element.
@@ -783,7 +736,7 @@ class JsonToXml extends JsonTools implements JsonNames {
 			e = genArrayW3C((List) val);
 		} else {
 			e = genJElementW3C(J_ITEM);
-			e.setAttribute(J_VALUEATTR, genSimpleValueToXml(val));
+			e.setAttribute(J_VALUEATTR, genXMLValue(val));
 		}
 		parent.appendChild(e);
 		return e;
