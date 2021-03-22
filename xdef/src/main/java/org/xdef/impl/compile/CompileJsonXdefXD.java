@@ -14,7 +14,7 @@ import org.xdef.sys.SUtils;
  * to X-definition specification.
  * @author Vaclav Trojan
  */
-public class CompileJsonXdefXD extends CompileJsonXdef {
+public class CompileJsonXdefXD extends CompileJsonXdef implements JsonNames {
 	private String _jsNamespace = XDConstants.JSON_NS_URI_XD;
 
 	/** Prepare instance of XJSON. */
@@ -60,8 +60,8 @@ public class CompileJsonXdefXD extends CompileJsonXdef {
 	private void updateKeyInfo(final PNode e, final String key) {
 		String s = SUtils.modifyString(SUtils.modifyString(
 			JsonTools.jstringToSource(key), "\\", "\\\\"), "'", "\\'") ;
-		addMatchExpression(e, '@' + JsonNames.J_KEYATTR + "=='"+ s +"'");
-		setAttr(e, JsonNames.J_KEYATTR, new SBuffer("fixed('"+s+"');",e._name));
+		addMatchExpression(e, '@' + J_KEYATTR + "=='"+ s +"'");
+		setAttr(e, J_KEYATTR, new SBuffer("fixed('"+s+"');",e._name));
 	}
 
 	private PNode genJsonMap(final JMap map, final PNode parent) {
@@ -160,9 +160,9 @@ public class CompileJsonXdefXD extends CompileJsonXdef {
 				// if it is not the last and it has xd:script attribute where
 				// the min occurrence differs from max occurrence
 				// and it has the attribute with a value description
-				if (JsonNames.J_ITEM.equals(ee._localName)
+				if (J_ITEM.equals(ee._localName)
 					&& _jsNamespace.equals(ee._nsURI)
-					&& (val = getAttr(ee, JsonNames.J_VALUEATTR)) != null) {
+					&& (val = getAttr(ee, J_VALUEATTR)) != null) {
 					PAttr script = getXDAttr(ee, "script");
 					XOccurrence occ = null;
 					if (script != null) {
@@ -193,8 +193,7 @@ public class CompileJsonXdefXD extends CompileJsonXdef {
 							s += "()"; // add brackets
 						}
 						addMatchExpression(ee,
-							s + ".parse((String)@"
-								+ JsonNames.J_VALUEATTR + ").matches()");
+							s + ".parse((String)@"+J_VALUEATTR+").matches()");
 					}
 				}
 			}
@@ -204,7 +203,7 @@ public class CompileJsonXdefXD extends CompileJsonXdef {
 
 	private PNode genJsonValue(final JValue jo, final PNode parent) {
 		SBuffer sbf, occ = null;
-		PNode e = genJElement(parent, JsonNames.J_ITEM, jo.getPosition());
+		PNode e = genJElement(parent, J_ITEM, jo.getPosition());
 		if (jo.getValue() == null) {
 			sbf = new SBuffer("jnull()");
 		} else {
@@ -224,7 +223,7 @@ public class CompileJsonXdefXD extends CompileJsonXdef {
 			if (occ != null) { // occurrence
 				setXDAttr(e, "script", occ);
 			}
-			setAttr(e, JsonNames.J_VALUEATTR, sbf);
+			setAttr(e, J_VALUEATTR, sbf);
 		}
 		return e;
 	}

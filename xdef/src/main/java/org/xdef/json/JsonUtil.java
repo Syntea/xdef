@@ -1,9 +1,5 @@
 package org.xdef.json;
 
-import org.xdef.msg.JSON;
-import org.xdef.msg.SYS;
-import org.xdef.sys.SRuntimeException;
-import org.xdef.xml.KXmlUtils;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -14,7 +10,11 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.xdef.msg.JSON;
+import org.xdef.msg.SYS;
+import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
+import org.xdef.xml.KXmlUtils;
 
 /** JSON utility (parse JSON source to JSON instance, compare JSON instances,
  * and create string with JSON source from JSON object.
@@ -254,7 +254,7 @@ public class JsonUtil {
 		return parse(getXONParser(url, null));
 	}
 ////////////////////////////////////////////////////////////////////////////////
-// XON parder
+// XON parser
 ////////////////////////////////////////////////////////////////////////////////
 
 	/** Create string with XON object.

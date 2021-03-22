@@ -42,7 +42,7 @@ public class XonTest extends XDTester {
 				Map n = (Map) y;
 				for (Object z: m.entrySet()) {
 					Map.Entry en = (Map.Entry) z;
-					System.err.print(en.getKey() + " = ");
+					System.err.print("'" + en.getKey() + "' = ");
 					display(en.getValue(), n.get(en.getKey()), null);
 				}
 				System.err.println("Map END");
@@ -148,24 +148,19 @@ if (true)return;
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='A'>\n"+
 "  <xd:json name='A'>\n"+
-"    {\"b\": \"char();\"}\n"+
+"    {\" \tspace in name\": \"string();\"}\n"+
 "  </xd:json>\n"+
 "  <xd:component>\n"+
 "    %class bugreports.data.GJson %link #A;\n"+
 "  </xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-//			json = "{\"a\":[\"2021-03-10\", \"1999-01-01-01:00\"], \"b\": \"\n\"}";
-//			json = "{\"b\": \"x\"}";
-//			json = "{\"b\": \"x\"}";
-//			json = "{\"b\": \"\n\"}";
-//			json = "{\"b\": \"\\\\\"}";
-			json = "{\"b\": \"\\u0007\"}";
-//			json = "{\"b\": \"\\\"\"}";
+			json = "{\" \tspace in name\": \" x \t y \"}";
 			x = JsonUtil.parse(json);
 			el = JsonUtil.jsonToXml(x);
-			y = xp.createXDDocument().jparse(json, reporter);
+			y = xp.createXDDocument().jparse(x, reporter);
 			if (!JsonUtil.jsonEqual(x,y)) {
+				System.err.println(KXmlUtils.nodeToString(el, true));
 				display(x, y, "-1");
 				fail();
 			}
@@ -176,8 +171,7 @@ if (true)return;
 			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), x),
 				JsonUtil.toJsonString(x, true));
 			XDTester.genXComponent(xp, tempDir);
-			xc = xp.createXDDocument().jparseXComponent(json,
-				null, reporter);
+			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
 			y = JsonUtil.xmlToJson(xc.toXml());
 			if (!JsonUtil.jsonEqual(x,y)) {
 				System.err.println(KXmlUtils.nodeToString(el, true));
@@ -190,6 +184,7 @@ if (true)return;
 //			assertTrue(JsonUtil.jsonEqual(x,y));
 			y = JsonUtil.xonToJson(XComponentUtil.toXon(xc));
 			if (!JsonUtil.jsonEqual(x,y)) {
+				System.err.println(KXmlUtils.nodeToString(el, true));
 				display(x, y, "-3");
 				fail();
 			}
@@ -218,8 +213,7 @@ if (true)return;
 "    l = '\"',                         /* character '\"' */\n" +
 "    \"m\" : '\'',                     /* character '\' */\n" +
 "    \"n\" : '\\\\',                   /* character '\\' */\n" +
-//"    \"name with space\" : \"    x \t y \"   /* name with space is quoted! */\n" +
-"    \"name with space\" : \"x \t y\"   /* name with space is quoted! */\n" +
+"    \" \tname with space \": \"x \t y\"   /* name with space is quoted! */\n" +
 "  }, /**** end of map ****/\n" +
 "  -3F,                               /* float */\n" +
 "  -3d,                               /* decimal */\n" +
@@ -294,7 +288,7 @@ if (true)return;
 "    \"l\" : \"char()\",\n" +		/* char ''' */
 "    \"m\" : \"char()\",\n" +		//char '\n' */
 "    \"n\" : \"char()\",\n" +		//char '\\' */
-"    \"name with space\" : \"string()\"\n" +
+"    \" \tname with space \": \"jstring()\"\n" +
 "  },\n" +
 "  \"float()\",\n" +
 "  \"decimal()\",\n" +
@@ -327,6 +321,7 @@ if (true)return;
 			xp = compile(xdef);
 			y = jparse(xp, "", json, reporter);
 			if (reporter.errorWarnings()) {
+				System.err.println(json);
 				System.err.println(
 					KXmlUtils.nodeToString(JsonUtil.jsonToXml(json), true));
 				assertNoErrors(reporter);
@@ -342,7 +337,7 @@ if (true)return;
 			}
 			x = xc.toJson();
 			y = JsonUtil.xonToJson(y);
-			if (!JsonUtil.jsonEqual(x,y)) {
+				if (!JsonUtil.jsonEqual(x,y)) {
 				display(x, y, "2");
 			}
 		} catch (Exception ex) {fail(ex);}

@@ -1,7 +1,5 @@
 package org.xdef.json;
 
-import org.xdef.XDConstants;
-import org.xdef.sys.StringParser;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -12,6 +10,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
+import org.xdef.XDConstants;
+import org.xdef.sys.StringParser;
 
 /** Test X-definition transformation XML -> JSONL
  * @author Vaclav Trojan
@@ -288,8 +288,8 @@ class JsonFromXml extends JsonUtil implements JsonNames {
 		while(n != null) {
 			if (n.getNodeType() == Node.ELEMENT_NODE) {
 				Element e = (Element) n;
-				StringParser p =new StringParser(e.getAttribute(J_KEYATTR)+'"');
-				result.put(JsonTools.readJSONString(p),fromXmlW3C(e));
+				String key = JsonTools.xmlToJsonName(e.getAttribute(J_KEYATTR));
+				result.put(key, fromXmlW3C(e));
 			}
 			n = n.getNextSibling();
 		}

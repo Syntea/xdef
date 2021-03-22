@@ -1,7 +1,5 @@
 package org.xdef.impl.compile;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import org.xdef.XDConstants;
 import org.xdef.impl.XConstants;
 import org.xdef.impl.XOccurrence;
@@ -15,17 +13,6 @@ import org.xdef.sys.SPosition;
  * @author Vaclav Trojan
  */
 public class CompileJsonXdef extends JsonParser {
-
-	/** This is the special character used for the $script specification. */
-	public static final String SCRIPT_KEY = "]";
-	/** This is the special character used for the $oneOf specification. */
-	public static final String ONEOF_KEY = ")";
-	/** This keyword used for the $script specification in X-definition. */
-	public static final String SCRIPT_NAME = "$script";
-	/** This keyword used for the $oneOf specification in X-definition. */
-	public static final String ONEOF_NAME = "$oneOf";
-	/** This keyword used for $any specification in X-definition. */
-	public static final String ANY_NAME = "$any";
 	/** Prefix of X-definition namespace. */
 	String _xdPrefix;
 	/** Index of X-definition namespace. */
@@ -303,75 +290,5 @@ public class CompileJsonXdef extends JsonParser {
 		} else {
 			CompileJsonXdefXD.genXdefXD(p, jsonMode, name, reporter);
 		}
-	}
-
-////////////////////////////////////////////////////////////////////////////////
-// Classes used when JSON is parsed from X-definition compiler.
-////////////////////////////////////////////////////////////////////////////////
-
-	public static class JMap extends LinkedHashMap<String, Object>{
-		private final SPosition _position; // SPosition of parsed object
-		public JMap(final SPosition position) {super(); _position = position;}
-		SPosition getPosition() {return _position;}
-	}
-
-	public static class JArray extends ArrayList<Object> {
-		private final SPosition _position; // SPosition of parsed object
-		public JArray(final SPosition position) {super(); _position = position;}
-		SPosition getPosition() {return _position;}
-	}
-
-	public static class JValue {
-		private final SPosition _position; // SPosition of parsed object
-		private final Object _o; // parsed object
-		public JValue(final SPosition position, final Object val) {
-			_position = position;
-			_o = val;
-		}
-		public Object getValue() {return _o;}
-		public SPosition getPosition() {return _position;}
-		private String getString() {return _o == null ? "null" : _o.toString();}
-		public SBuffer getSBuffer(){return new SBuffer(getString(),_position);}
-		@Override
-		public String toString() {return _o == null ? "null" : _o.toString();}
-	}
-
-	public static class JScript {
-		private final SPosition _position; // SPosition of parsed object
-		private final SBuffer _val; // parsed object
-		public JScript(final SPosition position, final JValue val) {
-			_position = position;
-			_val = val != null ? val.getSBuffer() : null;
-		}
-		public SBuffer getSBuffer() {return _val;}
-		public SPosition getPosition() {return _position;}
-		@Override
-		public String toString() {return _val==null ? "null" : _val.toString();}
-	}
-
-	public static class JOneOf {
-		private final SPosition _position; // SPosition of parsed object
-		private final SBuffer _val; // parsed object
-		public JOneOf(final SPosition position, final JValue val) {
-			_position = position;
-			_val = val != null ? val.getSBuffer() : null;
-		}
-		public SBuffer getSBuffer() {return _val;}
-		public SPosition getPosition() {return _position;}
-		@Override
-		public String toString() {return _val==null ? "null" : _val.toString();}
-	}
-
-	public static class JAny {
-		private final SPosition _position; // SPosition of parsed object
-		private final SBuffer _val; // parsed object
-		public JAny(final SPosition position, final SBuffer val) {
-			_position = position;
-			_val = val != null ? val : null;
-		}
-		public SBuffer getSBuffer() {return _val;}
-		public SPosition getPosition() {return _position;}
-		@Override
-		public String toString() {return _val==null ? "null" : _val.toString();}
 	}
 }
