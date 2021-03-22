@@ -624,11 +624,13 @@ public interface CodeTable {
 	static final short BNF_PARSE = GET_BNFRULE + 1;
 	/** Parse string with BNF rule. */
 	static final short BNFRULE_PARSE = BNF_PARSE + 1;
+	/** Parse string with BNF rule. */
+	static final short BNFRULE_VALIDATE = BNFRULE_PARSE + 1;
 	////////////////////////////////////////////////////////////////////////////
 	// Parser
 	////////////////////////////////////////////////////////////////////////////
 	/** Parse string with parser, result is PARSE_RESULT_VALUE. */
-	static final short PARSE_OP = BNFRULE_PARSE + 1;
+	static final short PARSE_OP = BNFRULE_VALIDATE + 1;
 	/** Parse string with parser, result is BOOLEAN_VALUE. */
 	static final short PARSEANDCHECK = PARSE_OP + 1;
 	/** Parse string with parser, result is a XDValue (may be DefNull). */

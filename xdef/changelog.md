@@ -17,12 +17,12 @@
     `new GPSPosition(latitude, longitude, name)`
    latitude, longitude, altitude float numbers, name is a string.
 * added new XML validation method `gps` The required form is:
-   '{latitude, longitude[, altitude[, name]])'
+     '{latitude, longitude[, altitude[, name]])'
     where parameters `latitude`, `longitude`, `altitude` are numbers and `name`
     is a string either containing only letters. otherwise it must be quoted.
     After the comma separator is one space. Examples:
-    `(51.52, -0.09, 0.0, Lodon)`
-     or
+     `(51.52, -0.09, 0.0, Lodon)`
+    or
      `(51.52, -0.09)` (altitude and name are not specified).
   The Java implementation is in the class `org.xdef.sys.GPSPosition`.
 * added new X-definition type of value `Price`.
@@ -30,15 +30,17 @@
     `new Price(amount, code)`
    where `amount` is a number and `code` is a ISO 4217 currency code. 
    Methods with this object:
-	`amount()` returns amount of currency as decimal number.
-	`currencyCode()` returns ISO 4217 currency code.
-	`fractionDigits()` returns recommended number of fraction digits or -1.
-	'display()` returns string with printable form of currency (i.e. decimal
+	 `amount()` returns amount of currency as decimal number.
+	 `currencyCode()` returns ISO 4217 currency code.
+	 `fractionDigits()` returns recommended number of fraction digits or -1.
+	 'display()` returns string with printable form of currency (i.e. decimal
       number with recommended number of decimal digits, space and
       ISO 4217 currency code).
   The Java implementation is in the class `org.xdef.sys.Price`.
 * added new XML validation method `price`. The required form is:
-   `(decimal_number code)`; e.g. `(12.25 USD)`.
+     `(decimal_number code)`; e.g. `(12.25 USD)`.
+* to X-script on `BNFRule` objects added the method `rule.validate(String)`.
+  Result of this method is a `boolean` value.
 
 # Version 40.1.2, release-date 2021-02-15
 * corrected the bug in the X-script method `s.contains(s)`.

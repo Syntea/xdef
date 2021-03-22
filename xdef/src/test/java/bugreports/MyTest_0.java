@@ -214,6 +214,38 @@ public class MyTest_0 extends XDTester {
 //		} catch (Exception ex) {fail(ex);}
 //if(true)return;
 		try {
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"  <xd:declaration scope='local'>\n"+
+"    BNFGrammar g = new BNFGrammar('\n"+
+"      x ::= S? [0-9]+\n"+
+"      y ::= S? [a-zA-Z]+\n"+
+"      S ::= [#9#10#13 ]+ /*skipped white spaces*/\n"+
+"      z ::= x | y\n"+
+"    ');\n"+
+"  </xd:declaration>\n"+
+"  <a>\n"+
+"    <xd:choice>\n"+
+"      <b xd:script=\"1..; match g.rule('x').validate(@n);\"\n" +
+"         n                =\"string()\"/>\n" +
+"      <b xd:script=\"1..; match g.rule('y').validate(@n);\"\n" +
+"         n                =\"string()\"/>\n" +
+"    </xd:choice>\n"+
+"  </a>\n"+
+"</xd:def>";
+			xml = "<a><b n='1'/><b n='456'/></a>";
+			xp = compile(xdef);
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
+			xml = "<a><b n='a'/><b n='Def'/></a>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
+			xml = "<a><b n='123'/><b n='Def'/></a>";
+			parse(xp, "", xml, reporter);
+			assertErrors(reporter);
+		} catch (Exception ex) {fail(ex);}
+if(T){return;}
+		try {
 			xdef = // test CurrencyAmount type
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<xd:declaration>\n" +

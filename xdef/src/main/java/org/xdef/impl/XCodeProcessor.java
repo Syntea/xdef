@@ -2855,6 +2855,13 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 					_stack[sp] = ((DefBNFRule) _stack[sp]).perform(s);
 					continue;
 				}
+				case BNFRULE_VALIDATE: {
+					String s = item.getParam() == 1
+						? chkNode.getTextValue() : _stack[sp--].toString();
+					_stack[sp] = new DefBoolean(
+						((DefBNFRule) _stack[sp]).perform(s).matches());
+					continue;
+				}
 				case PARSE_OP: {
 					String s = item.getParam() == 1
 						? chkNode.getTextValue() : _stack[sp--].toString();

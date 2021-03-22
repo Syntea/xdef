@@ -858,7 +858,9 @@ public class CompileBase implements CodeTable, XDValueID {
 ////////////////////////////////////////////////////////////////////////////////
 		ti = XD_BNFRULE;
 		method(ti, genInternalMethod(BNFRULE_PARSE, XD_PARSERESULT,
-			ANY_MODE, 1, 2, XD_BNFRULE, XD_STRING), "parse", "?check");
+			ANY_MODE, 1, 2, XD_BNFRULE, XD_ANY), "parse", "?check");
+		method(ti, genInternalMethod(BNFRULE_VALIDATE, XD_BOOLEAN,
+			ANY_MODE, 1, 2, XD_BNFRULE, XD_ANY), "validate");
 
 ////////////////////////////////////////////////////////////////////////////////
 // BYTES (array)
@@ -1156,8 +1158,6 @@ public class CompileBase implements CodeTable, XDValueID {
 // PARSER
 ////////////////////////////////////////////////////////////////////////////////
 		ti = XD_PARSER;
-//		method(ti, genInternalMethod(NEW_PARSER, XD_PARSER,
-//			ANY_MODE, 1, 1, XD_STRING), "#");
 		method(ti, genInternalMethod(PARSE_OP, XD_PARSERESULT,
 			ANY_MODE, 1, 2, XD_PARSER, XD_STRING), "parse", "?check");
 
