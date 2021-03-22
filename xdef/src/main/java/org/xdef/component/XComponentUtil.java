@@ -1,11 +1,5 @@
 package org.xdef.component;
 
-import org.xdef.msg.XDEF;
-import org.xdef.sys.SRuntimeException;
-import org.xdef.XDDocument;
-import org.xdef.XDPool;
-import org.xdef.model.XMElement;
-import org.xdef.model.XMNode;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -15,9 +9,17 @@ import javax.xml.namespace.QName;
 import org.w3c.dom.Element;
 import org.xdef.XDConstants;
 import org.xdef.XDContainer;
+import org.xdef.XDDocument;
 import org.xdef.XDParseResult;
+import org.xdef.XDPool;
 import org.xdef.XDValue;
 import org.xdef.json.JsonNames;
+import org.xdef.json.JsonTools;
+import org.xdef.model.XMElement;
+import org.xdef.model.XMNode;
+import org.xdef.msg.XDEF;
+import org.xdef.sys.SRuntimeException;
+import org.xdef.sys.StringParser;
 
 /** Utilities used with XComponents.
  * @author Vaclav Trojan
@@ -324,7 +326,18 @@ public class XComponentUtil {
 		Class<?> cls = xc.getClass();
 		try {
 			Method m = cls.getDeclaredMethod("get" + JsonNames.J_VALUEATTR);
-			return m.invoke(xc);
+//			return m.invoke(xc);
+			Object o = m.invoke(xc);
+			if (o instanceof String) {
+				String s = (String) o;
+				int len = s.length();
+				if (len > 1 && s.charAt(0) == '"' && s.charAt(len-1) == '"') {
+					StringParser p = new StringParser(s);
+					p.setIndex(1);
+					return JsonTools.readJSONString(p);
+				}
+			}
+			return o;
 		} catch (Exception ex) {
 			new RuntimeException("Can't access value", ex);
 		}
@@ -374,9 +387,9 @@ public class XComponentUtil {
 					String key = null;
 					try {
 						Class<?> cls1 = o.getClass();
-						Method m = cls1.getDeclaredMethod(
-							"get" + JsonNames.J_KEYATTR);
-						key = (String) m.invoke(o);
+						Method m = cls1.getMethod("get" + JsonNames.J_KEYATTR);
+						m.setAccessible(true);
+						key = JsonTools.xmlToJsonName((String) m.invoke(o));
 					} catch (Exception ex) {
 						new RuntimeException("Not key", ex);
 					}
@@ -409,5 +422,4 @@ public class XComponentUtil {
 		}
 		throw new RuntimeException("Not namespace JSON_NS_URI_W3C: " + ns);
 	}
-
 }

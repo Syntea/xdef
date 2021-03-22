@@ -1,10 +1,5 @@
 package org.xdef.json;
 
-import org.xdef.XDConstants;
-import org.xdef.impl.xml.KNamespace;
-import org.xdef.msg.JSON;
-import org.xdef.sys.SRuntimeException;
-import org.xdef.xml.KXmlUtils;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -12,9 +7,13 @@ import javax.xml.XMLConstants;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.xdef.impl.compile.CompileJsonXdef;
+import org.xdef.XDConstants;
+import org.xdef.impl.xml.KNamespace;
+import org.xdef.msg.JSON;
+import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
+import org.xdef.xml.KXmlUtils;
 
 /** Conversion of JSON/XON to XML
  * @author Vaclav Trojan
@@ -257,8 +256,8 @@ class JsonToXml extends JsonTools implements JsonNames {
 	public final static boolean isSimpleValue(final Object val) {
 		Object o;
 		return val == null || val instanceof Number || val instanceof Boolean
-			|| val instanceof String || val instanceof CompileJsonXdef.JValue
-			&& ((o=((CompileJsonXdef.JValue) val).getValue()) == null
+			|| val instanceof String || val instanceof JsonParser.JValue
+			&& ((o=((JsonParser.JValue) val).getValue()) == null
 				|| o instanceof Number || o instanceof Boolean
 				|| o instanceof String);
 	}
@@ -764,7 +763,7 @@ class JsonToXml extends JsonTools implements JsonNames {
 		while (it.hasNext()) {
 			Map.Entry entry = (Map.Entry) it.next();
 			Element ee = genValueW3C(entry.getValue(), e);
-			String key = jstringToSource((String) entry.getKey());
+			String key = toXmlName((String) entry.getKey());
 			ee.setAttribute(J_KEYATTR, key);
 		}
 		return e;

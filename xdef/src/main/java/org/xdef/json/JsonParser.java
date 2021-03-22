@@ -8,12 +8,12 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import org.xdef.impl.compile.CompileJsonXdef;
 import org.xdef.msg.JSON;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.ArrayReporter;
-import org.xdef.sys.Price;
 import org.xdef.sys.GPSPosition;
+import org.xdef.sys.Price;
+import org.xdef.sys.SBuffer;
 import org.xdef.sys.SException;
 import org.xdef.sys.SParser;
 import org.xdef.sys.SPosition;
@@ -114,7 +114,7 @@ public class JsonParser extends StringParser {
 	 * the parsed value contains source position.
 	 */
 	private Object returnValue(final Object x) {
-		return _genJObjects ? new CompileJsonXdef.JValue(_sPosition, x) : x;
+		return _genJObjects ? new JValue(_sPosition, x) : x;
 	}
 
 	/** Returns error and parsed value.
@@ -175,8 +175,7 @@ public class JsonParser extends StringParser {
 	private Object readValue() throws SRuntimeException {
 		if (eos()) {
 			fatal(JSON.JSON007); //unexpected eof
-			return _genJObjects
-				? new CompileJsonXdef.JValue(_sPosition, null) : null;
+			return _genJObjects ? new JValue(_sPosition, null) : null;
 		}
 		if (_genJObjects) {
 			_sPosition = getPosition();
@@ -184,7 +183,7 @@ public class JsonParser extends StringParser {
 		int i;
 		if (isChar('{')) { // Map
 			Map<String, Object> map;
-			map = _genJObjects ? new CompileJsonXdef.JMap(_sPosition)
+			map = _genJObjects ? new JMap(_sPosition)
 				: new LinkedHashMap<String,Object>();
 			isSpacesOrComments();
 			if (isChar('}')) { // empty map
@@ -193,8 +192,7 @@ public class JsonParser extends StringParser {
 			boolean wasScript = false;
 			while(!eos()) {
 				if (_jdef && !wasScript
-					&& (i = isOneOfTokens(CompileJsonXdef.SCRIPT_NAME,
-						CompileJsonXdef.ONEOF_NAME)) >= 0) {
+					&& (i = isOneOfTokens(SCRIPT_NAME, ONEOF_NAME)) >= 0) {
 					wasScript = true;
 					SPosition spos = getPosition();
 					isSpacesOrComments();
@@ -205,20 +203,18 @@ public class JsonParser extends StringParser {
 							spos.setIndex(spos.getIndex() - 1);
 							isSpacesOrComments();
 							o = readValue();
-							if (o instanceof CompileJsonXdef.JValue
-								&& ((CompileJsonXdef.JValue)o).getValue()
+							if (o instanceof JValue && ((JValue)o).getValue()
 								instanceof String) {
-								s = CompileJsonXdef.ONEOF_KEY +
-									((CompileJsonXdef.JValue)o).getValue();
+								s = ONEOF_KEY + ((JValue)o).getValue();
 							} else {
 								//Value of $script must be string with X-script
 								error(JSON.JSON018);
-								s = CompileJsonXdef.ONEOF_KEY;
+								s = ONEOF_KEY;
 							}
 						} else {
-							s = CompileJsonXdef.ONEOF_KEY;
+							s = ONEOF_KEY;
 						}
-						o = new CompileJsonXdef.JValue(spos, s);
+						o = new JValue(spos, s);
 					} else {
 						if (!isChar(':') && i != 1) {
 							//"&{0}"&{1}{ or "}{"} expected
@@ -227,14 +223,13 @@ public class JsonParser extends StringParser {
 						isSpacesOrComments();
 						o = readValue();
 					}
-					if (o != null && o instanceof CompileJsonXdef.JValue
-						&& ((CompileJsonXdef.JValue)o).getValue()
-							instanceof String) {
-						if (map.containsKey(CompileJsonXdef.SCRIPT_KEY)) {
+					if (o != null && o instanceof JValue
+						&& ((JValue)o).getValue() instanceof String) {
+						if (map.containsKey(SCRIPT_KEY)) {
 							//Value pair &{0} already exists
-							error(JSON.JSON022, CompileJsonXdef.SCRIPT_KEY);
+							error(JSON.JSON022, SCRIPT_KEY);
 						} else {
-							map.put(CompileJsonXdef.SCRIPT_KEY, o);
+							map.put(SCRIPT_KEY, o);
 						}
 					} else {
 						//Value of $script must be string with X-script
@@ -255,9 +250,8 @@ public class JsonParser extends StringParser {
 					} else { // JSON
 						o = readValue();
 						if (o != null && (o instanceof String ||
-							(_genJObjects&&o instanceof CompileJsonXdef.JValue)
-							&& ((CompileJsonXdef.JValue) o).getValue()
-								instanceof String)) {
+							(_genJObjects&&o instanceof JValue)
+							&& ((JValue) o).getValue() instanceof String)) {
 							name = _genJObjects ? o.toString() : (String) o;
 							isSpacesOrComments();
 						} else {
@@ -323,8 +317,7 @@ public class JsonParser extends StringParser {
 			return map;
 		} else if (isChar('[')) {
 			List<Object> list;
-			list = _genJObjects ? new CompileJsonXdef.JArray(_sPosition)
-				: new ArrayList<Object>();
+			list = _genJObjects ?new JArray(_sPosition):new ArrayList<Object>();
 			isSpacesOrComments();
 			if (isChar(']')) { // empty array
 				return list;
@@ -333,25 +326,21 @@ public class JsonParser extends StringParser {
 			boolean wasErrorReported = false;
 			while(!eos()) {
 				if (!wasScript &&_jdef
-					&& (i = isOneOfTokens(CompileJsonXdef.SCRIPT_NAME,
-						CompileJsonXdef.ONEOF_NAME)) >= 0) {
+					&& (i = isOneOfTokens(SCRIPT_NAME, ONEOF_NAME)) >= 0) {
 					wasScript = true;
 					if (isChar(':')) {
 						isSpacesOrComments();
 						Object o = readValue();
-						if (o instanceof CompileJsonXdef.JValue
-							&& ((CompileJsonXdef.JValue)o).getValue()
-							instanceof String) {
-							CompileJsonXdef.JValue jv =
-								(CompileJsonXdef.JValue) o;
+						if (o instanceof JValue
+							&& ((JValue)o).getValue() instanceof String) {
+							JValue jv =	(JValue) o;
 							if (i == 1) {
 								SPosition spos = jv.getPosition();
 								spos.setIndex(spos.getIndex() - 1);
-								String s =
-									CompileJsonXdef.ONEOF_KEY + jv.getValue();
-								jv = new CompileJsonXdef.JValue(spos, s);
+								String s = ONEOF_KEY + jv.getValue();
+								jv = new JValue(spos, s);
 							}
-							list.add(new CompileJsonXdef.JValue(null, jv));
+							list.add(new JValue(null, jv));
 						} else {
 							//Value of $script must be string with X-script
 							error(JSON.JSON018);
@@ -363,9 +352,8 @@ public class JsonParser extends StringParser {
 						} else {
 							SPosition spos = getPosition();
 							spos.setIndex(spos.getIndex() - 1);
-							list.add(new CompileJsonXdef.JValue(null,
-								new CompileJsonXdef.JValue(spos,
-									CompileJsonXdef.ONEOF_KEY)));
+							list.add(
+								new JValue(null, new JValue(spos, ONEOF_KEY)));
 						}
 					}
 				} else {
@@ -407,22 +395,20 @@ public class JsonParser extends StringParser {
 			return returnValue(JsonTools.readJSONString(this));
 		} else if ((i=isOneOfTokens(new String[]{"null","false","true"})) >= 0){
 			return returnValue(i > 0 ? (i==2) : null);
-		} else if (_jdef && isToken(CompileJsonXdef.ANY_NAME)) {
+		} else if (_jdef && isToken(ANY_NAME)) {
 			isSpacesOrComments();
 			if (isChar(':')) {
 				isSpacesOrComments();
 				Object val = readValue();
-				if (!(val instanceof CompileJsonXdef.JValue)
-					|| (((CompileJsonXdef.JValue) val).getValue()
-						instanceof String)) {
+				if (!(val instanceof JValue)
+					|| (((JValue) val).getValue() instanceof String)) {
 					//After ":" in the command $any must follow a string value
 					error(JSON.JSON021);
 				} else {
-					return new CompileJsonXdef.JAny(
-						_sPosition,((CompileJsonXdef.JValue) val).getSBuffer());
+					return new JAny(_sPosition,((JValue) val).getSBuffer());
 				}
 			}
-			return new CompileJsonXdef.JAny(_sPosition, null);
+			return new JAny(_sPosition, null);
 		} else {
 			int pos = getIndex();
 			boolean wasError = false;
@@ -659,5 +645,86 @@ public class JsonParser extends StringParser {
 			error(JSON.JSON008, genPosMod()); //Text after JSON not allowed
 		}
 		return result;
+	}
+
+////////////////////////////////////////////////////////////////////////////////
+// Constants and classes  used when JSON is parsed from X-definition compiler.
+////////////////////////////////////////////////////////////////////////////////
+
+	/** This is the special character used for the $script specification. */
+	public static final String SCRIPT_KEY = "]";
+	/** This is the special character used for the $oneOf specification. */
+	public static final String ONEOF_KEY = ")";
+	/** This keyword used for the $script specification in X-definition. */
+	public static final String SCRIPT_NAME = "$script";
+	/** This keyword used for the $oneOf specification in X-definition. */
+	public static final String ONEOF_NAME = "$oneOf";
+	/** This keyword used for $any specification in X-definition. */
+	public static final String ANY_NAME = "$any";
+
+	public static class JMap extends LinkedHashMap<String, Object>{
+		private final SPosition _position; // SPosition of parsed object
+		public JMap(final SPosition position) {super(); _position = position;}
+		public SPosition getPosition() {return _position;}
+	}
+
+	public static class JArray extends ArrayList<Object> {
+		private final SPosition _position; // SPosition of parsed object
+		public JArray(final SPosition position) {super(); _position = position;}
+		public SPosition getPosition() {return _position;}
+	}
+
+	public static class JValue {
+		private final SPosition _position; // SPosition of parsed object
+		private final Object _o; // parsed object
+		public JValue(final SPosition position, final Object val) {
+			_position = position;
+			_o = val;
+		}
+		public Object getValue() {return _o;}
+		public SPosition getPosition() {return _position;}
+		private String getString() {return _o == null ? "null" : _o.toString();}
+		public SBuffer getSBuffer(){return new SBuffer(getString(),_position);}
+		@Override
+		public String toString() {return _o == null ? "null" : _o.toString();}
+	}
+
+	public static class JScript {
+		private final SPosition _position; // SPosition of parsed object
+		private final SBuffer _val; // parsed object
+		public JScript(final SPosition position, final JValue val) {
+			_position = position;
+			_val = val != null ? val.getSBuffer() : null;
+		}
+		public SBuffer getSBuffer() {return _val;}
+		public SPosition getPosition() {return _position;}
+		@Override
+		public String toString() {return _val==null ? "null" : _val.toString();}
+	}
+
+	public static class JOneOf {
+		private final SPosition _position; // SPosition of parsed object
+		private final SBuffer _val; // parsed object
+		public JOneOf(final SPosition position, final JValue val) {
+			_position = position;
+			_val = val != null ? val.getSBuffer() : null;
+		}
+		public SBuffer getSBuffer() {return _val;}
+		public SPosition getPosition() {return _position;}
+		@Override
+		public String toString() {return _val==null ? "null" : _val.toString();}
+	}
+
+	public static class JAny {
+		private final SPosition _position; // SPosition of parsed object
+		private final SBuffer _val; // parsed object
+		public JAny(final SPosition position, final SBuffer val) {
+			_position = position;
+			_val = val != null ? val : null;
+		}
+		public SBuffer getSBuffer() {return _val;}
+		public SPosition getPosition() {return _position;}
+		@Override
+		public String toString() {return _val==null ? "null" : _val.toString();}
 	}
 }

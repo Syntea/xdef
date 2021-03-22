@@ -8,7 +8,6 @@ import org.xdef.json.JsonTools;
 import org.xdef.msg.JSON;
 import org.xdef.sys.ReportWriter;
 import org.xdef.sys.SBuffer;
-import org.xdef.sys.SUtils;
 
 /** Create X-definition model from xd:json in the format according
  * to W3C specification.
@@ -58,8 +57,7 @@ public class CompileJsonXdefW3C extends CompileJsonXdef {
 	 * @param key value of key.
 	 */
 	private void updateKeyInfo(final PNode e, final String key) {
-		String s = SUtils.modifyString(SUtils.modifyString(
-			JsonTools.jstringToSource(key), "\\", "\\\\"), "'", "\\'") ;
+		String s = JsonTools.toXmlName(key);
 		addMatchExpression(e, '@' + JsonNames.J_KEYATTR + "=='"+ s +"'");
 		setAttr(e, JsonNames.J_KEYATTR, new SBuffer("fixed('"+s+"');",e._name));
 	}
