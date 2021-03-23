@@ -717,6 +717,8 @@ public class CompileBase implements CodeTable, XDValueID {
 			ANY_MODE, 0, 0), "getParsedFloat");
 		method(ti, genInternalMethod(GET_PARSED_LONG, XD_LONG,
 			ANY_MODE, 0, 0), "getParsedInt");
+		method(ti, genInternalMethod(GET_PARSED_RESULT, XD_PARSERESULT,
+			TEXT_MODE, 0, 0), "getParsedResult");
 		method(ti, genInternalMethod(GET_PARSED_VALUE, XD_ANY,
 			TEXT_MODE, 0, 0), "getParsedValue");
 		method(ti, genInternalMethod(GET_QNLOCALPART, XD_STRING,
@@ -1198,7 +1200,7 @@ public class CompileBase implements CodeTable, XDValueID {
 		method(ti, genInternalMethod(GET_PARSED_LONG, XD_LONG,
 			ANY_MODE, 1, 1, XD_PARSERESULT), "intValue");
 		method(ti, genInternalMethod(SET_PARSED_ERROR, XD_PARSERESULT,
-			ANY_MODE, 2, 4, XD_PARSERESULT, XD_STRING, XD_STRING, XD_STRING),
+			ANY_MODE, 1, 4, XD_PARSERESULT, XD_STRING, XD_STRING, XD_STRING),
 			"error", "?setError");
 		method(ti, genInternalMethod(GET_PARSED_DOUBLE, XD_DOUBLE,
 			ANY_MODE, 1, 1, XD_PARSERESULT), "floatValue");

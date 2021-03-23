@@ -2917,9 +2917,14 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 							id = _stack[sp--].toString();
 							modif = null;
 							break;
-						default:
+						case 2:
 							txt = _stack[sp--].toString();
 							id = modif = null;
+							break;
+						default: // error without parameters
+							//Incorrect value&{0}{ of '}{'}&{1}{: '}{'}
+							((DefParseResult) _stack[sp]).error(XDEF.XDEF809);
+							continue;
 					}
 					((DefParseResult) _stack[sp]).error(id, txt, modif);
 					continue;
@@ -2946,6 +2951,13 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 						? (XDParseResult) _stack[sp--]
 						: chkNode._parseResult;
 					_stack[++sp] = pr.getParsedValue();
+					continue;
+				}
+				case GET_PARSED_RESULT: {//get parsed ewsult
+					XDParseResult pr = (item.getParam() == 1)
+						? (XDParseResult) _stack[sp--]
+						: chkNode._parseResult;
+					_stack[++sp] = pr;
 					continue;
 				}
 				case SET_NAMEDVALUE: {
