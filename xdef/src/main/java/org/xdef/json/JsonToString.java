@@ -40,6 +40,8 @@ class JsonToString extends JsonTools {
 					return result + 'F';
 				} else if (x instanceof Double) {
 					return result + 'D';
+				} else if (x instanceof Byte) {
+					return result + 'B';
 				} else if (x instanceof Short) {
 					return result + 'S';
 				} else if (x instanceof Integer) {

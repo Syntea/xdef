@@ -238,30 +238,28 @@ public class JsonParser extends StringParser {
 				} else {
 					Object o;
 					String name;
+					char separator;
 					if (getCurrentChar() != '"'
 						&& _xonMode && isNCName(StringParser.XMLVER1_0)) { //XON
 						// parse XON named pair
-						name = getParsedString(); /*xx*/
-						isSpacesOrComments();
-						if (!isChar('=')) {
-							//"&{0}"&{1}{ or "}{"} expected
-							error(JSON.JSON002,"=");
-						}
+						name = getParsedString();
+						separator = '=';
 					} else { // JSON
 						o = readValue();
 						if (o != null && (o instanceof String ||
 							(_genJObjects&&o instanceof JValue)
 							&& ((JValue) o).getValue() instanceof String)) {
 							name = _genJObjects ? o.toString() : (String) o;
-							isSpacesOrComments();
+							separator = ':';
 						} else {
 							fatal(JSON.JSON004); //Name of item expected
 							return map;
 						}
-						if (!isChar(':')) {
-							//"&{0}"&{1}{ or "}{"} expected
-							error(JSON.JSON002, ":");
-						}
+					}
+					isSpacesOrComments();
+					if (!isChar(separator)) {
+						//"&{0}"&{1}{ or "}{"} expected
+						error(JSON.JSON002, separator);
 					}
 					isSpacesOrComments();
 					o = readValue();
@@ -460,14 +458,14 @@ public class JsonParser extends StringParser {
 					setIndex(pos);
 					return returnError(null, JSON.JSON010, "[]{}");
 				} else if (isChar('D')) {
-					if (isDatetime("--M[-d][Z]" + //month day
-						"|---d[Z]"+ //day
-						"|H:m:s[.S][Z]"+ //time
-						"|y-M-d['T'H:m:s[.S][Z]]" +
-						"|y-MZ"+ // year month
-						"|yZ"+ // year with zone
-						"|y-M"+ // year month
-						"|y")) { // year without zone
+					if (isDatetime("yyyy-MM-dd['T'HH:mm:ss[.S]][Z]" +
+						"|HH:mm:ss[.S][Z]"+ //time
+						"|--MM[-dd][Z]" + //month day
+						"|---dd[Z]"+ //day
+						"|yyyy-MMZ"+ // year month
+						"|yyyyZ"+ // year with zone
+						"|yyyy-MM"+ // year month
+						"|yyyy")) { // year without zone
 						return returnValue(getParsedSDatetime());
 					}
 					//JSON value expected
@@ -543,13 +541,12 @@ public class JsonParser extends StringParser {
 				}
 			}
 			setIndex(pos);
-			boolean minus = false;
+			boolean minus = isChar('-');
 			if (isChar('+')) {
 				error(JSON.JSON017, "+");//Not allowed character '&{0}'
 				wasError = true;
-				pos = getIndex();
+				pos++;
 			} else {
-				pos = getIndex();
 				minus = isChar('-');
 			}
 			int firstDigit =  getIndex() - pos; // offset of first digit

@@ -215,7 +215,7 @@ public class MyTest_0 extends XDTester {
 //if(true)return;
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a|root'>\n"+
 "  <xd:declaration scope='local'>\n"+
 "    BNFGrammar g = new BNFGrammar('\n"+
 "      x ::= S? [0-9]+\n"+
@@ -223,7 +223,21 @@ public class MyTest_0 extends XDTester {
 "      S ::= [#9#10#13 ]+ /*skipped white spaces*/\n"+
 "      z ::= x | y\n"+
 "    ');\n"+
+"    type t1 int();\n"+
+"    type t2 starts(%argument='wsdl:');\n"+ // 10
+"    uniqueSet u{t:t1};\n"+
+"    ParseResult testAndCheck() {\n"+
+"       if (t2().matches()) {\n"+
+"         setText(((String) getParsedValue()).substring(5));\n"+
+"         return u.t.CHKID();\n"+
+"       }\n"+
+"       return getParsedResult();\n"+
+"    }\n"+
 "  </xd:declaration>\n"+
+"  <root>\n"+
+"    <B xd:script='*' b='u.t.ID;'/>\n"+
+"    <C xd:script='*' c='testAndCheck();'/>\n"+
+"  </root>\n"+
 "  <a>\n"+
 "    <xd:choice>\n"+
 "      <b xd:script=\"1..; match g.rule('x').validate(@n);\"\n" +
@@ -234,7 +248,7 @@ public class MyTest_0 extends XDTester {
 "  </a>\n"+
 "</xd:def>";
 			xml = "<a><b n='1'/><b n='456'/></a>";
-			xp = compile(xdef);
+			xp = XDFactory.compileXD(null, xdef);
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
 			xml = "<a><b n='a'/><b n='Def'/></a>";
@@ -243,8 +257,19 @@ public class MyTest_0 extends XDTester {
 			xml = "<a><b n='123'/><b n='Def'/></a>";
 			parse(xp, "", xml, reporter);
 			assertErrors(reporter);
+			xml = "<root><B b='123'/><C c='wsdl:123'/></root>";
+			parse(xp, "", xml, reporter);
+			assertNoErrors(reporter);
+			xml = "<root><B b='123'/><C c='wsdl:124'/><C c='wsdl:123'/></root>";
+			parse(xp, "", xml, reporter);
+			assertErrors(reporter);
+			System.out.println(reporter);
+			xml = "<root><B b='123'/><C c='wsdx:123'/></root>";
+			parse(xp, "", xml, reporter);
+			assertErrors(reporter);
+			System.out.println(reporter);
 		} catch (Exception ex) {fail(ex);}
-if(T){return;}
+if(true){return;}
 		try {
 			xdef = // test CurrencyAmount type
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+

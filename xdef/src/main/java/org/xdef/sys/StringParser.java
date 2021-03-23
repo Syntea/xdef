@@ -3155,40 +3155,20 @@ public class StringParser extends SReporter implements SParser {
 		int result;
 		if ((result = _ch - '0') >= 0 && result <= 9) {
 			int i;
-			incIndex();
+			nextChar();
 			if (digits == 0) {
-				while (getIndex() < _endPos &&
-					(i = _source.charAt(getIndex()) - '0') >= 0 && i <= 9) {
-					incIndex();
+				while ((i = _ch - '0') >= 0 && i <= 9) {
 					result = result * 10 + i;
-				}
-				if (getIndex() < _endPos) {
-					_ch = _source.charAt(getIndex());
-				} else {
-					if (!increaseBuffer()) {
-						_ch = NOCHAR;
-					} else {
-						_ch = _source.charAt(getIndex());
-					}
+					nextChar();
 				}
 			} else {
 				int ndigits = digits;
 				while (--ndigits > 0) {
-					if (getIndex() >= _endPos ||
-						(i = _source.charAt(getIndex()) - '0') < 0 || i > 9) {
+					if ((i = _ch - '0') < 0 || i > 9) {
 						return Integer.MIN_VALUE;
 					}
-					incIndex();
 					result = result * 10 + i;
-				}
-				if (getIndex() < _endPos) {
-					_ch = _source.charAt(getIndex());
-				} else {
-					if (!increaseBuffer()) {
-						_ch = NOCHAR;
-					} else {
-						_ch = _source.charAt(getIndex());
-					}
+					nextChar();
 				}
 			}
 			return result;

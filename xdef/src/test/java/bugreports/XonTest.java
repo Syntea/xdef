@@ -118,32 +118,6 @@ public class XonTest extends XDTester {
 			fail('\"' + tempDir + "\" is not directory");
 			return;
 		}
-/*xx*
-		try {
-			s = "[d(2000),d(19:23:01.0)]";
-			x = JsonUtil.parseXON(s);
-			json = JsonUtil.toJsonString(JsonUtil.xonToJson(x), true);
-			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='a'>\n"+
-"<xd:json name='a'>\n" +
-"[\"gYear()\", \"time()\"]\n" +
-"</xd:json>\n" +
-"<xd:component>\n"+
-"  %class bugreports.data.Xon0 %link #a;\n"+
-"</xd:component>\n"+
-"</xd:def>";
-			xp = compile(xdef);
-			x = jparse(xp, "", json, reporter);
-			genXComponent(xp, tempDir);
-			xc = xp.createXDDocument().jparseXComponent(json,
-				null, reporter);
-			assertNoErrors(reporter);
-			x = xc.toJson();
-			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), x),
-				json + "\n===\n" + JsonUtil.toJsonString(x, true));
-		} catch (Exception ex) {fail(ex);}
-if (true)return;
-/*xx*/
 		try {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='A'>\n"+
@@ -193,14 +167,14 @@ if (true)return;
 //if (true) return;
 		try {
 			xon =
-"/* Start of XON test */\n" +
+"/* Start of XON example */\n" +
 "[ /***** Array *****/\n" +
 "  { /***** Map *****/\n" +
 "    a = 1S,                          /* Short */\n" +
 "    b = \"ab cd\",                     /* string */\n" +
-"    c = -123.4e2D,                    /* Double */\n" +
-"    f = true,                        /* boolean */\n" +
-"    g = P1Y1M1DT1H1M1.12S,        /* duration */\n" +
+"    c = -123.4e2D,                   /* Double */\n" +
+"    f=true,                          /* boolean */\n" +
+"    g = P1Y1M1DT1H1M1.12S,           /* duration */\n" +
 "    h = null,                        /* null */\n" +
 "    i=[],                            /* empty array */\n" +
 "    Towns = [ /* array with GPS locations of towns */\n" +
@@ -209,36 +183,38 @@ if (true)return;
 "      g(50.08, 14.42, 399, \"Praha (centrum)\"),\n" +
 "    ],\n" +
 "    j = '\\u0007',                    /* character */\n" +
-"    k = '\n',                         /* character '\n'*/\n" +
-"    l = '\"',                         /* character '\"' */\n" +
-"    \"m\" : '\'',                     /* character '\' */\n" +
-"    \"n\" : '\\\\',                   /* character '\\' */\n" +
-"    \" \tname with space \": \"x \t y\"   /* name with space is quoted! */\n" +
+"    k = '\\n',                        /* character */\n" +
+"    l = '\"',                         /* character */\n" +
+"    m = ''',                         /* character */\n" +
+"    n = '\\\\',                        /* character */\n" +
+"    \" name with space \": \"x\\ty\" /* name with space is quoted! */\n" +
 "  }, /**** end of map ****/\n" +
 "  -3F,                               /* float */\n" +
 "  -3d,                               /* decimal */\n" +
-"  999999999999999999999999999999999, /* big integer */\n" +
-"  D--1,                              /* month */\n" +
-"  D--1Z,                             /* month zone*/\n" +
-"  D--1-2,                            /* month day */\n" +
-"  D--3-4-01:01,                      /* month day zone */\n" +
-"  D19:23:01,						  /* hours, minutes seconds */\n" +
+"  -2B,                               /* byte */\n" +
+"  0N,                                /* big integer*/\n" +
+"  999999999999999999999999999999999, /* big integer (authomatic)*/\n" +
+"  D--11,                             /* month */\n" +
+"  D--02Z,                            /* month zone*/\n" +
+"  D--11-22,                          /* month day */\n" +
+"  D--03-04-01:01,                    /* month day zone */\n" +
+"  D19:23:01,                         /* hours, minutes seconds */\n" +
 "  D19:23:01.012,                     /* hours minutes seconds millis */\n" +
-"  D0:0:0.00001+00:00,                /* time nanos zone */\n" +
+"  D00:00:00.00001+00:00,             /* time nanos zone */\n" +
 "  D2000,                             /* year (without zone) */\n" +
 "  D-123456789,                       /* year (without zone) */\n" +
 "  D2000Z,                            /* year zone */\n" +
 "  D2000-01:00,                       /* year zone */\n" +
-"  D2000-1,                           /* year month */\n" +
-"  D2000-1Z,                          /* year month zone */\n" +
-"  D2000-1-01:00,                     /* year month zone */\n" +
+"  D2000-10,                          /* year month */\n" +
+"  D2000-11Z,                         /* year month zone */\n" +
+"  D2000-10-01:00,                    /* year month zone */\n" +
 "  D2021-01-12T01:10:11.54012-00:01,  /* date and time (nanos, zone) */\n" +
-"  g(-0, +1),                          /* GPS */\n" +
+"  g(-0, +1),                         /* GPS */\n" +
 "  b(HbRBHbRBHQw=),                   /* byte array (base64) */\n" +
-"  #(123.45 CZK),                     /* currency ammount */ \n" +
-"  #(12 USD),                         /* currency ammoun */\n" +
+"  #(123.45 CZK),                     /* price */ \n" +
+"  #(12 USD),                         /* price */\n" +
 "] /**** end of array ****/\n" +
-"/* End of XON test */";
+"/* End of XON example */";
 			x = JsonUtil.parseXON(xon);
 			json = JsonUtil.toJsonString(JsonUtil.xonToJson(x), true);
 			JsonUtil.parse(json);
@@ -288,10 +264,12 @@ if (true)return;
 "    \"l\" : \"char()\",\n" +		/* char ''' */
 "    \"m\" : \"char()\",\n" +		//char '\n' */
 "    \"n\" : \"char()\",\n" +		//char '\\' */
-"    \" \tname with space \": \"jstring()\"\n" +
+"    \" name with space \": \"jstring()\"\n" +
 "  },\n" +
 "  \"float()\",\n" +
 "  \"decimal()\",\n" +
+"  \"byte()\",\n" +
+"  \"integer()\",\n" +
 "  \"integer()\",\n" +
 "  \"gMonth()\",\n" +				/* month d(--1) */
 "  \"gMonth()\",\n" +				/* month d(--1Z) */

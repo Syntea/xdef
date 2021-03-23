@@ -621,7 +621,7 @@ public interface XDEF {
 	public static final long XDEF807 = 31159025969L;
 	/** Incorrect combination of maximum and minimum&amp;{#SYS000} */
 	public static final long XDEF808 = 31159025970L;
-	/** Incorrect value of '&amp;{0}'&amp;{1}{: }&amp;{#SYS000} */
+	/** Incorrect value&amp;{0}{ of '}{'}&amp;{1}{: '}{'}&amp;{#SYS000} */
 	public static final long XDEF809 = 31159025971L;
 	/** Doesn't fit enumeration declared in '&amp;{0}'&amp;{1}{: }&amp;{#SYS000} */
 	public static final long XDEF810 = 31159025972L;
@@ -629,7 +629,7 @@ public interface XDEF {
 	public static final long XDEF811 = 31159025973L;
 	/** Parameter '&amp;{0}' can be only '&amp;{1}' for '&amp;{2}'&amp;{#SYS000} */
 	public static final long XDEF812 = 31159025974L;
-	/** Value of '&amp;{0}' does not fit to '&amp;{1}'&amp;{2}{: }&amp;{#SYS000} */
+	/** Value&amp;{0}{ of '}{'} is not correct&amp;{1}{ (does not fit '}{')}'&amp;{2}{: '}{'}&amp;{#SYS000} */
 	public static final long XDEF813 = 31159025975L;
 	/** Length of value of '&amp;{0}' is too short&amp;{1}{: }&amp;{#SYS000} */
 	public static final long XDEF814 = 31159025976L;
