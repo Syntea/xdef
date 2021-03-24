@@ -49,7 +49,7 @@ public class TestSUtils extends STester {
 	/** Run test and print error information. */
 	public void test() {
 		try {
-			String s, s1, s2;
+			String s, s1;
 			StringParser p;
 			Calendar c;
 			s = (SUtils.getActualPath()+"aaa.aaa").replace('\\','/');
@@ -600,7 +600,6 @@ public class TestSUtils extends STester {
 				ByteArrayOutputStream bos;
 				CharArrayReader car;
 				CharArrayWriter caw;
-				int j;
 				///////////////////////////////////////////////////////////////
 				//hex
 				///////////////////////////////////////////////////////////////
@@ -1443,7 +1442,7 @@ public class TestSUtils extends STester {
 			} catch (Exception ex) {fail(ex);}
 			result = new File(s + "f.zip");
 			try {
-				long len = SUtils.filesToZip(s + "x.1", null, result);
+				SUtils.filesToZip(s + "x.1", null, result);
 				fail("filesToZip - exception SYS73 expected");
 			} catch (SException ex) {
 				if (!"SYS073".equals(ex.getMsgID())) {

@@ -50,13 +50,13 @@ public final class DefDouble extends XDValueAbstract {
 	/** Get type of value.
 	 * @return The id of item type.
 	 */
-	public short getItemId() {return XDValueID.XD_FLOAT;}
+	public short getItemId() {return XDValueID.XD_DOUBLE;}
 
 	@Override
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
-	public XDValueType getItemType() {return XDValueType.FLOAT;}
+	public XDValueType getItemType() {return XDValueType.DOUBLE;}
 
 	@Override
 	/** Get value as String.

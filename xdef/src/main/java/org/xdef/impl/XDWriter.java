@@ -35,6 +35,7 @@ import org.xdef.XDValueID;
 import org.xdef.impl.code.DefLocale;
 import java.lang.reflect.Method;
 import java.util.Locale;
+import org.xdef.impl.code.DefPrice;
 import org.xdef.impl.code.DefGPSPosition;
 
 /** Provides writing of XD objects to OutputStream.
@@ -144,10 +145,10 @@ public final class XDWriter extends SObjectWriter {
 					case XDValueID.XD_XPATH:
 						writeXPath((DefXPathExpr) x);
 						return;
-					case XDValueID.XD_FLOAT:
+					case XDValueID.XD_DOUBLE:
 						writeDouble(x.doubleValue());
 						return;
-					case XDValueID.XD_INT:
+					case XDValueID.XD_LONG:
 						writeLong(x.longValue());
 						return;
 					case XDValueID.XD_CONTAINER: {
@@ -172,6 +173,12 @@ public final class XDWriter extends SObjectWriter {
 						writeDouble(y.latitude());
 						writeDouble(y.longitude());
 						writeDouble(y.altitude());
+						writeString(y.name());
+					}
+					case XDValueID.XD_PRICE: {
+						DefPrice y = (DefPrice) x;
+						writeDouble(y.amount());
+						writeString(y.currencyCode());
 					}
 					case XDValueID.XD_NAMEDVALUE: {
 						XDNamedValue y = (XDNamedValue) x;

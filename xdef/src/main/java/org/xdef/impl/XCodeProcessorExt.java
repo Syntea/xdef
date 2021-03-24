@@ -56,8 +56,11 @@ import java.util.StringTokenizer;
 import javax.xml.XMLConstants;
 import org.w3c.dom.Element;
 import org.xdef.XDValueID;
+import org.xdef.impl.code.DefPrice;
 import org.xdef.impl.code.DefGPSPosition;
 import org.xdef.impl.code.DefLocale;
+import org.xdef.sys.Price;
+import org.xdef.sys.GPSPosition;
 
 /** Provides invoking of external method from script code.
  * @author Vaclav Trojan
@@ -77,9 +80,9 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 					switch (p.getItemId()) {
 						case XD_BOOLEAN:
 							return new DefBoolean(p.booleanValue());
-						case XD_INT:
+						case XD_LONG:
 							return new DefLong(p.intValue());
-						case XD_FLOAT:
+						case XD_DOUBLE:
 							return new DefDouble(p.floatValue());
 						case XD_DECIMAL:
 							return new DefDecimal(p.decimalValue());
@@ -213,7 +216,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 			case IS_LEAPYEAR: //check leap year.
 				// Return true if date is leap year.
 				return new DefBoolean(SDatetime.isLeapYear(
-					p.getItemId() == XD_INT
+					p.getItemId() == XD_LONG
 						? p.intValue() : p.datetimeValue().getYear()));
 			//String
 			case LOWERCASE: { //set to lower case
@@ -657,7 +660,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 ////////////////////////////////////////////////////////////////////////////////
 //Constructors
 ////////////////////////////////////////////////////////////////////////////////
-			case NEW_CONTEXT: {
+			case NEW_CONTAINER: {
 				int i;
 				if ((i = item.getParam()) == 0) {
 					stack[++sp] = DefNull.genNullValue(XD_CONTAINER);
@@ -820,29 +823,17 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 				}
 				return sp;
 			}
-			case NEW_GPSPOSITION: {
-				if (item.getParam() == 3) {
-					stack[sp-2] = new DefGPSPosition(stack[sp-2].doubleValue(),
-						stack[sp-1].doubleValue(), stack[sp].doubleValue());
-					sp -= 2;
-				} else {
-					stack[sp-1] = new DefGPSPosition(stack[sp-1].doubleValue(),
-						stack[sp].doubleValue());
-					sp--;
-				}
-				return sp;
-			}
 		}
 		return sp;
 	}
 
 	/** Execute command.
+	 * @param cp XCodeProcessor object.
 	 * @param cmd command to be executed.
 	 * @param xNode actually processed node.
 	 * @param sp stack pointer.
 	 * @param stack stack.
 	 * @param pc program counter.
-	 * @param reporter reporter where to log errors.
 	 * @return new value of stack pointer.
 	 * @throws Exception
 	 */
@@ -862,7 +853,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 				p.setSourceBuffer(s);
 				stack[sp] = p.isSignedInteger() && p.eos()
 					? new DefLong(p.getParsedLong())
-					: DefNull.genNullValue(XD_INT);
+					: DefNull.genNullValue(XD_LONG);
 				return sp;
 			}
 			case PARSE_FLOAT: {
@@ -872,7 +863,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 				p.setSourceBuffer(s);
 				stack[sp] = p.isSignedFloat() && p.eos()
 					? new DefDouble(p.getParsedDouble())
-					: DefNull.genNullValue(XD_FLOAT);
+					: DefNull.genNullValue(XD_DOUBLE);
 				return sp;
 			}
 			case GET_PARSED_BOOLEAN:
@@ -990,6 +981,56 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 					chkNode != null ? chkNode.getXPos() : null, pc);
 				return sp;
 			}
+			case NEW_GPSPOSITION: {
+				double latitude;
+				double longitude;
+				double altitude = Double.MIN_VALUE;
+				String name = null;
+				if (cmd.getParam() == 4) {
+					latitude = stack[sp-3].doubleValue();
+					longitude = stack[sp-2].doubleValue();
+					altitude = stack[sp-1].doubleValue();
+					name = stack[sp].isNull() ? null : stack[sp].stringValue();
+					sp -= 3;
+				} else if (cmd.getParam() == 3) {
+					if (!stack[sp].isNull() || stack[sp].getItemId()==XD_DOUBLE
+						|| stack[sp].getItemId()==XD_DECIMAL
+						|| stack[sp].getItemId()==XD_LONG){
+						altitude = stack[sp].doubleValue();
+					} else {
+						name = stack[sp].stringValue();
+					}
+					latitude = stack[sp-2].doubleValue();
+					longitude = stack[sp-1].doubleValue();
+					sp -= 2;
+				} else {
+					latitude = stack[sp-1].doubleValue();
+					longitude = stack[sp].doubleValue();
+					sp--;
+				}
+				try {
+					stack[sp] = new DefGPSPosition(
+						new GPSPosition(latitude, longitude, altitude, name));
+				} catch (Exception ex) {
+					 //Incorrect GPS position &amp;{0}
+					 cp.putError(chkNode, XDEF.XDEF222,
+						latitude+","+longitude+","+altitude+","+name);
+					stack[sp] = DefNull.genNullValue(XD_GPSPOSITION);
+				}
+				return sp;
+			}
+			case NEW_CURRAMOOUNT: {
+				try {
+					stack[sp-1] = new DefPrice(new Price(
+						stack[sp-1].doubleValue(), stack[sp].stringValue()));
+				} catch (Exception ex) {
+					//"Invalid currency code: "{0}"
+					cp.putError(chkNode, XDEF.XDEF575,
+						stack[sp-1].toString() + " " + stack[sp].stringValue());
+					stack[sp-1] = DefNull.genNullValue(XD_PRICE);
+				}
+				return --sp;
+			}
 ////////////////////////////////////////////////////////////////////////////////
 // External methods
 ////////////////////////////////////////////////////////////////////////////////
@@ -1074,7 +1115,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 									case XD_DECIMAL:
 										pars[j + k] = stack[i].decimalValue();
 										break;
-									case XD_INT: {
+									case XD_LONG: {
 										Class<?> x;
 										if ((x = p[j+k]).equals(Long.TYPE) ||
 											x.equals(Long.class)) {
@@ -1091,7 +1132,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 										}
 										break;
 									}
-									case XD_FLOAT:
+									case XD_DOUBLE:
 										Class<?> x;
 										if ((x=p[j+k]).equals(Double.TYPE)
 											|| x.equals(Double.class)) {
@@ -1140,6 +1181,8 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 									case XX_ATTR:
 									case XX_TEXT:
 									case XD_PARSER:
+									case XD_GPSPOSITION:
+									case XD_PRICE:
 										pars[j + k] = stack[i];
 										break;
 									default:
@@ -1188,11 +1231,11 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 										stack[++sp] = new DefDecimal(
 											(BigDecimal) o);
 										break;
-									case XD_INT:
+									case XD_LONG:
 										stack[++sp] =
 											new DefLong(x.longValue());
 										break;
-									case XD_FLOAT:
+									case XD_DOUBLE:
 										stack[++sp] =
 											new DefDouble(x.doubleValue());
 										break;
@@ -1217,11 +1260,11 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 							case XD_DECIMAL:
 								stack[++sp] = new DefDecimal((BigDecimal) o);
 								break;
-							case XD_INT:
+							case XD_LONG:
 								stack[++sp] =
 									new DefLong(((Number) o).longValue());
 								break;
-							case XD_FLOAT:
+							case XD_DOUBLE:
 								stack[++sp] =
 									new DefDouble(((Number) o).doubleValue());
 								break;

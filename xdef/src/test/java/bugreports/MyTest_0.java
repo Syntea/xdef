@@ -39,6 +39,8 @@ import org.xdef.proc.XXNode;
 import org.xdef.sys.Report;
 import org.xdef.sys.SUtils;
 import org.xdef.util.XdefToXsd;
+import org.xdef.sys.GPSPosition;
+import org.xdef.sys.Price;
 
 /** Various tests.
  * @author Vaclav Trojan
@@ -197,21 +199,62 @@ public class MyTest_0 extends XDTester {
 		Report rep;
 		ArrayReporter reporter = new ArrayReporter();
 ////////////////////////////////////////////////////////////////////////////////
-//		try {
-//			xdef =
-//"<xd:collection xmlns:xd='http://www.xdef.org/xdef/4.0'>\n"+
-//"<xd:def name='A'>\n"+
-//" <xd:declaration scope='global'>Parser p;uniqueSet u{x:p}</xd:declaration>\n"+
-//"</xd:def>\n"+
-//"<xd:def name='B' root='A'>\n"+
-//"  <A id=\"? xdType(); onTrue p = getParsedValue();\" />\n"+
-//"</xd:def>\n"+
-//"</xd:collection>";
-//			xb = XDFactory.getXDBuilder(null, null);
-//			xb.setSource(xdef);
-//			xb.compileXD();;
-//		} catch (Exception ex) {fail(ex);}
-//if(true)return;
+		try {
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root='a|root'>\n"+
+"  <xd:declaration scope='local'>\n"+
+"    BNFGrammar g = new BNFGrammar('\n"+
+"      x ::= S? [0-9]+\n"+
+"      y ::= S? [a-zA-Z]+\n"+
+"      S ::= [#9#10#13 ]+ /*skipped white spaces*/\n"+
+"      z ::= x | y\n"+
+"    ');\n"+
+"    type t1 int();\n"+
+"    type t2 starts(%argument='wsdl:');\n"+ // 10
+"    uniqueSet u{t:t1};\n"+
+"    ParseResult testAndCheck() {\n"+
+"       if (t2().matches()) {\n"+
+"         setText(((String) getParsedValue()).substring(5));\n"+
+"         return u.t.CHKID();\n"+
+"       }\n"+
+"       return getParsedResult();\n"+
+"    }\n"+
+"  </xd:declaration>\n"+
+"  <root>\n"+
+"    <B xd:script='*' b='u.t.ID;'/>\n"+
+"    <C xd:script='*' c='testAndCheck();'/>\n"+
+"  </root>\n"+
+"  <a>\n"+
+"    <xd:choice>\n"+
+"      <b xd:script=\"1..; match g.rule('x').validate(@n);\"\n" +
+"         n                =\"string()\"/>\n" +
+"      <b xd:script=\"1..; match g.rule('y').validate(@n);\"\n" +
+"         n                =\"string()\"/>\n" +
+"    </xd:choice>\n"+
+"  </a>\n"+
+"</xd:def>";
+			xml = "<a><b n='1'/><b n='456'/></a>";
+			xp = XDFactory.compileXD(null, xdef);
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
+			xml = "<a><b n='a'/><b n='Def'/></a>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
+			xml = "<a><b n='123'/><b n='Def'/></a>";
+			parse(xp, "", xml, reporter);
+			assertErrors(reporter);
+			xml = "<root><B b='123'/><C c='wsdl:123'/></root>";
+			parse(xp, "", xml, reporter);
+			assertNoErrors(reporter);
+			xml = "<root><B b='123'/><C c='wsdl:124'/><C c='wsdl:123'/></root>";
+			parse(xp, "", xml, reporter);
+			assertErrors(reporter);
+			System.out.println(reporter);
+			xml = "<root><B b='123'/><C c='wsdx:123'/></root>";
+			parse(xp, "", xml, reporter);
+			assertErrors(reporter);
+		} catch (Exception ex) {fail(ex);}
+if(T){return;}
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + XDConstants.XDEF40_NS_URI + "' root='A'>\n"+
@@ -224,12 +267,10 @@ public class MyTest_0 extends XDTester {
 "  <e xd:script='?' a='u.x.SET' b='? u.x.SET()'/>\n"+
 "</A>\n"+
 "</xd:def>\n";
-//			xp = XDFactory.compileXD(null, xdef);
 			xp = compile(xdef);
 			printXMData(xp.getXMDefinition().getModel(null, "A"));
 			xml = "<A><a a='2'/><b a='1'/><c a='1'/><d a='1'/><e a='3'/></A>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
 "  <xd:declaration>\n"+

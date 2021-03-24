@@ -21,6 +21,10 @@ import org.xdef.proc.XXNode;
 import org.xdef.xml.KXmlUtils;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import org.xdef.XDGPSPosition;
+import org.xdef.sys.Price;
+import static test.XDTester._xdNS;
+import org.xdef.XDPrice;
 
 /** Test of types, AnyValue and null in X-script.
  * @author Vaclav Trojan
@@ -854,37 +858,71 @@ public final class TestTypes extends XDTester {
 			xdef = // test GPS type
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<xd:declaration>\n" +
-" String base, town;\n" +
-" GPSPosition baseGPS, townGPS;\n" +
+" GPSPosition base = new GPSPosition(50.08, 14.42, 399.0, 'Prague');\n" +
+" GPSPosition town;\n" +
 " void pritDistance() {\n" +
-"   printf('distance to %s, GPS(%.2f,%.2f): %.1f km\\n',\n"+
-"     town, townGPS.latitude(), townGPS.longitude(),\n"+
-"     baseGPS.distanceTo(townGPS)/1000);\n" +
+"   printf('%s (%.2f,%.2f) distance to %s (%.2f,%.2f): %.1f km\\n',\n"+
+"     base.name(), base.latitude(), base.longitude(),\n"+
+"     town.name(), town.latitude(), town.longitude(),\n"+
+"     base.distanceTo(town)/1000);\n" +
 " }\n" +
 "</xd:declaration>\n" +
 "<a>\n" +
-"  <base xd:script=\"finally outln('Base ' + base + ', ' + baseGPS);\"\n"+
-"        name=\"string(); onTrue base = getParsedValue();\"\n"+
-"        GPS_position=\"GPS(); onTrue baseGPS = getParsedValue();\"/>\n" +
-"  <town xd:script=\"*; finally pritDistance();\"\n"+
-"         name=\"string; onTrue town = getParsedValue();\"\n"+
-"         GPS_position=\"GPS(); onTrue townGPS = getParsedValue();\"/>\n" +
+"  <town xd:script=\"+; finally pritDistance();\"\n"+
+"      GPS_position=\"gps(); onTrue town = getParsedValue();\"/>\n" +
 "</a>\n" +
 "</xd:def>";
 			xml =
 "<a>\n" +
-"  <base name=\"Praha\" GPS_position=\"GPS(50.08,14.42,399.0)\"/>\n" +
-"  <town name=\"Wien\" GPS_position=\"GPS(48.2,16.37,151.0)\"/>\n" +
-"  <town name=\"London\" GPS_position=\"GPS(51.52,-0.09,0.0)\"/>\n" +
+"  <town GPS_position=\"48.2,16.37,151.0,Wien\"/>\n" +
+"  <town GPS_position=\"51.52,-0.09,London\"/>\n" +
 "</a>";
 			strw = new StringWriter();
-			assertEq(xml, parse(xdef,"", xml, reporter, strw, null, null));
+			xd = compile(xdef).createXDDocument();
+			assertEq(xml, parse(xd, xml, reporter, strw, null, null));
 			assertNoErrors(reporter);
 			strw.close();
 			assertEq(strw.toString(),
-"Base Praha, GPS(50.08,14.42,399.0)\n" +
-"distance to Wien, GPS(48.20,16.37): 252.8 km\n" +
-"distance to London, GPS(51.52,-0.09): 1031.4 km\n");
+"Prague (50.08,14.42) distance to Wien (48.20,16.37): 252.8 km\n" +
+"Prague (50.08,14.42) distance to London (51.52,-0.09): 1031.4 km\n");
+			assertEq("Prague", ((XDGPSPosition) xd.getVariable("base")).name());
+			xdef = // test Price type
+"<xd:def xmlns:xd='" + _xdNS + "' root='root'>\n"+
+"  <xd:declaration>\n" +
+"    final Container c = new Container();\n"+
+"    external Price extValue;\n"+
+"    void print() {\n"+
+"      for(int i=0; i LT c.getLength(); i++) {\n"+
+"        outln(((Price)c.item(i)).display());\n"+
+"      }\n"+
+"      outln('extValue: ' + extValue);\n"+
+"    }\n"+
+"  </xd:declaration>\n"+
+"  <root xd:script=\"finally print();\">\n"+
+"   <item xd:script=\"occurs +\">\n"+
+"     price(); onTrue c.addItem(getParsedValue());\n" +
+"   </item>\n"+
+"  </root>\n"+
+"</xd:def>";
+			xml =
+"<root>\n"+
+"  <item>1.5 CZK</item>\n"+
+"  <item>12.657 USD</item>\n"+
+"  <item>0.657 XAU</item>\n"+
+"</root>";
+			strw = new StringWriter();
+			xd = compile(xdef).createXDDocument();
+			assertEq(xml, parse(xd, xml, reporter, strw, null, null));
+			assertNoErrors(reporter);
+			assertEq(strw.toString(),
+				"1.50 CZK\n12.66 USD\n0.657 XAU\nextValue: null\n");
+			assertEq("null",
+				((XDPrice) xd.getVariable("extValue")).display());
+			xd.setVariable("extValue", new Price(2.3,"CZK"));
+			assertEq("2.30 CZK",
+				((XDPrice) xd.getVariable("extValue")).display());
+			assertEq(2, ((XDPrice)
+				xd.getVariable("extValue")).fractionDigits());
 			xdef = // expression in type validation
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<xd:declaration>\n"+

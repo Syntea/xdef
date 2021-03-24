@@ -3,11 +3,11 @@ package org.xdef.impl.compile;
 import java.util.Map;
 import org.xdef.XDConstants;
 import org.xdef.impl.XOccurrence;
-import org.xdef.json.JsonUtil;
+import org.xdef.json.JsonNames;
+import org.xdef.json.JsonTools;
 import org.xdef.msg.JSON;
 import org.xdef.sys.ReportWriter;
 import org.xdef.sys.SBuffer;
-import org.xdef.sys.SUtils;
 
 /** Create X-definition model from xd:json in the format according
  * to W3C specification.
@@ -57,10 +57,9 @@ public class CompileJsonXdefW3C extends CompileJsonXdef {
 	 * @param key value of key.
 	 */
 	private void updateKeyInfo(final PNode e, final String key) {
-		String s = SUtils.modifyString(SUtils.modifyString(
-			JsonUtil.jstringToSource(key), "\\", "\\\\"), "'", "\\'") ;
-		addMatchExpression(e, '@' + JsonUtil.J_KEYATTR + "=='"+ s +"'");
-		setAttr(e, JsonUtil.J_KEYATTR, new SBuffer("fixed('"+ s +"');", e._name));
+		String s = JsonTools.toXmlName(key);
+		addMatchExpression(e, '@' + JsonNames.J_KEYATTR + "=='"+ s +"'");
+		setAttr(e, JsonNames.J_KEYATTR, new SBuffer("fixed('"+s+"');",e._name));
 	}
 
 	private PNode genJsonMap(final JMap map, final PNode parent) {
@@ -159,9 +158,9 @@ public class CompileJsonXdefW3C extends CompileJsonXdef {
 				// if it is not the last and it has xd:script attribute where
 				// the min occurrence differs from max occurrence
 				// and it has the attribute with a value description
-				if (JsonUtil.J_ITEM.equals(ee._localName)
+				if (JsonNames.J_ITEM.equals(ee._localName)
 					&&_jsNamespace.equals(ee._nsURI)
-					&& (val = getAttr(ee, JsonUtil.J_VALUEATTR)) != null) {
+					&& (val = getAttr(ee, JsonNames.J_VALUEATTR)) != null) {
 					PAttr script = getXDAttr(ee, "script");
 					XOccurrence occ = null;
 					if (script != null) {
@@ -193,7 +192,7 @@ public class CompileJsonXdefW3C extends CompileJsonXdef {
 						}
 						addMatchExpression(ee,
 							s + ".parse((String)@"
-								+ JsonUtil.J_VALUEATTR + ").matches()");
+								+ JsonNames.J_VALUEATTR + ").matches()");
 					}
 				}
 			}
@@ -203,7 +202,7 @@ public class CompileJsonXdefW3C extends CompileJsonXdef {
 
 	private PNode genJsonValue(final JValue jo, final PNode parent) {
 		SBuffer sbf, occ = null;
-		PNode e = genJElement(parent, JsonUtil.J_ITEM, jo.getPosition());
+		PNode e = genJElement(parent, JsonNames.J_ITEM, jo.getPosition());
 		if (jo.getValue() == null) {
 			sbf = new SBuffer("jnull()");
 		} else {
@@ -223,7 +222,7 @@ public class CompileJsonXdefW3C extends CompileJsonXdef {
 			if (occ != null) { // occurrence
 				setXDAttr(e, "script", occ);
 			}
-			setAttr(e, JsonUtil.J_VALUEATTR, sbf);
+			setAttr(e, JsonNames.J_VALUEATTR, sbf);
 		}
 		return e;
 	}
@@ -281,7 +280,7 @@ public class CompileJsonXdefW3C extends CompileJsonXdef {
 		p._name = name;
 		p._nsURI = null; // set no namespace
 		p._nsindex = -1;
-		jx.setXJsonMode();
+		jx.setXdefMode();
 		jx.setReportWriter(reporter);
 		if (p._value == null) {
 			jx.setSourceBuffer(p._name);

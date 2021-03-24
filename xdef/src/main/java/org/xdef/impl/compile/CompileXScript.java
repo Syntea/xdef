@@ -583,10 +583,10 @@ final class CompileXScript extends CompileStatement {
 					case XD_BOOLEAN:
 						_g.genLDC(new DefBoolean(false));
 						break;
-					case XD_FLOAT:
+					case XD_DOUBLE:
 						_g.genLDC(new DefDouble(0));
 						break;
-					case XD_INT:
+					case XD_LONG:
 						_g.genLDC(new DefLong(0));
 						break;
 					case XD_DECIMAL:
@@ -891,7 +891,7 @@ final class CompileXScript extends CompileStatement {
 									if (xType != XD_ELEMENT
 										&& xType != XD_CONTAINER
 										&& xType != XD_RESULTSET
-										&& xType != XD_INT
+										&& xType != XD_LONG
 										&& xType != XD_BOOLEAN
 										&& xType != XD_STRING
 										&& xType != XD_NULL) {

@@ -231,12 +231,12 @@ CastRequest ::= S? "(" S? $rule TypeIdentifier S? ")" S?
 
 UnaryOperator ::= "+" | ("-" | "!" | "NOT" | "~") $rule
 
-TypeIdentifier ::= ("int" | "String" | "float" | "boolean" | "Datetime"
+TypeIdentifier ::= ("int" | "String" | "float" | "boolean" | "char" | "Datetime"
   | "Decimal" | "Duration" | "Exception" | "Container" | "Element" | "Message"
   | "Bytes" | "XmlOutStream" | "BNFGrammar" | "BNFRule" | "Parser" | "Service"
   | "ResultSet" | "Statement" | "ParseResult" | "Locale" | "uniqueSetKey"
-  | "AnyValue" | "Output" | "Input" | "NamedValue" | "Regex" | "GPSPosition")
-  $rule
+  | "AnyValue" | "Output" | "Input" | "NamedValue" | "Regex" | "GPSPosition"
+  | "Price") $rule
 
 Value ::= (Constructor | PredefinedConstant | Increment
   | Method | VariableReference | KeyParameterReference | Literal | AttributeName

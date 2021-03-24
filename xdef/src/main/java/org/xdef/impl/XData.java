@@ -286,7 +286,7 @@ public class XData extends XCodeDescriptor
 
 	@Override
 	/** Get type of parsed value.
-	 * @return value from org.xdef.XDValueTypes.
+	 * @return value from cz.syntea.xdef.XDValueTypes.
 	 */
 	public final short getParserType() {
 		XDValue p = getParseMethod();
@@ -309,11 +309,11 @@ public class XData extends XCodeDescriptor
 						return '"' + item.getValue().toString() + '"';
 					}
 				}
-				return "\"yyyy-MM-ddTHH:mm:ss[.S][Z]\"";
+				return null;
 			} else if ("dateTime".equals(y.parserName())) {
-				return "\"y-MM-ddTHH:mm:ss[.S][Z]\"";
+				return null;
 			} else if ("date".equals(y.parserName())) {
-				return "\"y-MM-dd[Z]\"";
+				return "\"yyyy-MM-dd[Z]\"";
 			} else if ("gDay".equals(y.parserName())) {
 				return "\"---dd[Z]\"";
 			} else if ("gMonth".equals(y.parserName())) {
@@ -321,21 +321,21 @@ public class XData extends XCodeDescriptor
 			} else if ("gMonthDay".equals(y.parserName())) {
 				return "\"--MM-dd[Z]\"";
 			} else if ("\"gYear".equals(y.parserName())) {
-				return "\"y[Z]\"";
+				return "\"yyyy[Z]\"";
 			} else if ("ISOyear".equals(y.parserName())) {
-				return "\"y[Z]\"";
+				return "\"yyyy[Z]\"";
 			} else if ("gYearMonth".equals(y.parserName())) {
-				return "\"y-MM[Z]\"";
+				return "\"yyyy-MM[Z]\"";
 			} else if ("ISOyearMonth".equals(y.parserName())) {
-				return "\"y-MM[Z]\"";
+				return "\"yyyy-MM[Z]\"";
 			} else if ("dateYMDhms".equals(y.parserName())) {
 				return "\"yyyyMMddHHmmss\"";
 			} else if ("ISOdate".equals(y.parserName())) {
-				return "\"y-MM-dd[Z]\"";
+				return "\"yyyy-MM-dd[Z]\"";
 			} else if ("time".equals(y.parserName())) {
 				return "\"HH:mm:ss[.S][Z]\"";
 			} else if ("emailDate".equals(y.parserName())) {
-				return "\"EEE, d MMM y HH:mm:ss[ ZZZZZ][ (z)]\"";
+				return "\"EEE, d MMM yyyy HH:mm:ss[ ZZZZZ][ (z)]\"";
 			}
 		}
 		return null;

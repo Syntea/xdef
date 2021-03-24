@@ -138,40 +138,50 @@ public interface SYS {
 	public static final long SYS092 = 953221185L;
 	/** Can't write this node */
 	public static final long SYS093 = 953221186L;
+	/** Constructor in the class &amp;{0} not found */
+	public static final long SYS101 = 953221187L;
+	/** Class &amp;{0} not found */
+	public static final long SYS102 = 953221188L;
+	/** Field &amp;{0} not found in class &amp;{1} */
+	public static final long SYS103 = 953221189L;
+	/** Getter &amp;{0} not found in class &amp;{1} */
+	public static final long SYS104 = 953221190L;
+	/** Setter &amp;{0} not found in class &amp;{1} */
+	public static final long SYS105 = 953221191L;
 	/** Can't read report source&amp;{0}{: } */
-	public static final long SYS201 = 953221187L;
+	public static final long SYS201 = 953221192L;
 	/** In the report table &amp;{0} are no reports */
-	public static final long SYS203 = 953221188L;
+	public static final long SYS203 = 953221193L;
 	/** Incorrect class of registered report table &amp;{0} */
-	public static final long SYS210 = 953221189L;
+	public static final long SYS210 = 953221194L;
 	/** Unclosed parameter in the text of report &amp;{0}, table &amp;{1} */
-	public static final long SYS212 = 953221190L;
+	public static final long SYS212 = 953221195L;
 	/** Ambiguous default language of reports" &amp;{0} in the table &amp;{1}, set &amp;{2} */
-	public static final long SYS213 = 953221191L;
+	public static final long SYS213 = 953221196L;
 	/** Message prefix is incorrect or not specified: &amp;{0} */
-	public static final long SYS214 = 953221192L;
+	public static final long SYS214 = 953221197L;
 	/** Message language is incorrect or not specified: &amp;{0} */
-	public static final long SYS215 = 953221193L;
+	public static final long SYS215 = 953221198L;
 	/** Incorrect message key: &amp;{0} */
-	public static final long SYS216 = 953221194L;
+	public static final long SYS216 = 953221199L;
 	/** Parameters in tables &amp;{0} and &amp;{1} differs, report: &amp;{2} */
-	public static final long SYS217 = 953221195L;
+	public static final long SYS217 = 953221200L;
 	/** Unclosed parameter in the modification of report &amp;{0} */
-	public static final long SYS218 = 953221196L;
+	public static final long SYS218 = 953221201L;
 	/** Incorrect parameter reference on position: &amp;{0} (report ID: &amp;{1}); */
-	public static final long SYS219 = 953221197L;
+	public static final long SYS219 = 953221202L;
 	/** Default report table is incorrect or missing&amp;{0}(, localized table: ) */
-	public static final long SYS220 = 953221198L;
+	public static final long SYS220 = 953221203L;
 	/** Report &amp;{0} from table &amp;{1} is missing in the default table */
-	public static final long SYS221 = 953221199L;
+	public static final long SYS221 = 953221204L;
 	/** No report tables generated */
-	public static final long SYS223 = 953221200L;
+	public static final long SYS223 = 953221205L;
 	/** Report &amp;{0} which is in the default table is missing in table &amp;{1} */
-	public static final long SYS225 = 953221201L;
+	public static final long SYS225 = 953221206L;
 	/** Can't read properties with reports: &amp;{0} */
-	public static final long SYS226 = 953221202L;
+	public static final long SYS226 = 953221207L;
 	/** System messages of X-definitions */
-	public static final long SYS_DESCRIPTION = 953221203L;
+	public static final long SYS_DESCRIPTION = 953221208L;
 	/** English */
-	public static final long SYS_LANGUAGE = 953221204L;
+	public static final long SYS_LANGUAGE = 953221209L;
 }

@@ -5,12 +5,15 @@ import org.xdef.XDParserAbstract;
 import org.xdef.impl.code.DefGPSPosition;
 import org.xdef.msg.XDEF;
 import org.xdef.proc.XXNode;
+import org.xdef.sys.GPSPosition;
+import org.xdef.sys.SParser;
+import org.xdef.sys.SRuntimeException;
 
-/** Parse GPS value
+/** Parse GPS value.
  * @author Vaclav Trojan
  */
 public class XDParseGPS extends XDParserAbstract {
-	private static final String ROOTBASENAME = "GPS";
+	private static final String ROOTBASENAME = "gps";
 
 	public XDParseGPS() {super();}
 
@@ -19,47 +22,78 @@ public class XDParseGPS extends XDParserAbstract {
 		p.isSpaces();
 		int pos = p.getIndex();
 		try {
-			if (p.isToken("GPS(")) {
-				int pos1 = p.getIndex();
-				if (p.isChar(')')) {
-					p.setParsedValue(new DefGPSPosition());
-					return; // undefined position
-				} else if ((p.isSignedFloat() || p.isSignedInteger())) {
-					double latitude =
-						Double.parseDouble(p.getBufferPart(pos1, p.getIndex()));
-					if (p.isChar(',')) {
-						pos1 = p.getIndex();
-						if ((p.isSignedFloat() || p.isSignedInteger())) {
-							double longitude = Double.parseDouble(
-								p.getBufferPart(pos1, p.getIndex()));
-							if (p.isChar(',')) {
-								pos1 = p.getIndex();
-								if ((p.isSignedFloat() || p.isSignedInteger())){
-									double altitude = Double.parseDouble(
-										p.getBufferPart(pos1, p.getIndex()));
-									p.setParsedValue(new DefGPSPosition(
-										latitude, longitude, altitude));
+			if ((p.isSignedFloat() || p.isSignedInteger())) {
+				double latitude =
+					Double.parseDouble(p.getParsedString());
+				String name = null;
+				if (p.isChar(',') && (p.isChar(' ') || true)) {
+					int pos1 = p.getIndex();
+					if ((p.isSignedFloat() || p.isSignedInteger())) {
+						double longitude = Double.parseDouble(
+							p.getBufferPart(pos1, p.getIndex()));
+						double altitude = Double.MIN_VALUE;
+						if (p.isChar(',') && (p.isChar(' ') || true)) {
+							pos1 = p.getIndex();
+							if ((p.isSignedFloat() || p.isSignedInteger())) {
+								altitude = Double.parseDouble(
+									p.getBufferPart(pos1, p.getIndex()));
+								if (p.isChar(',') && (p.isChar(' ') || true)) {
+									name = readGPSName(p);
 								}
 							} else {
-								p.setParsedValue(
-									new DefGPSPosition(latitude, longitude));
+								name = readGPSName(p);
 							}
-							if (p.isChar(')')) {
-								return;
-							}
+						} else  if (p.isChar(',') && (p.isChar(' ') || true)) {
+							name = readGPSName(p);
 						}
+						p.setParsedValue(new DefGPSPosition(
+							new GPSPosition(latitude,longitude,altitude,name)));
+						return;
 					}
 				}
 			}
-		} catch (Exception ex) {}
+		} catch (SRuntimeException ex) {
+			p.putReport(ex.getReport());
+		}
+		p.setParsedValue(new DefGPSPosition()); //null GPS
 		//Incorrect value of '&{0}'&{1}{: }
 		p.errorWithString(XDEF.XDEF809, parserName(),
 			p.getBufferPart(pos, p.getIndex()));
 	}
 
+	/** Read name of position. */
+	private String readGPSName(XDParseResult p) {
+		StringBuilder sb = new StringBuilder();
+		char ch;
+		if (p.isChar('"')) {
+			for (;;) {
+				if ((ch = p.peekChar()) == SParser.NOCHAR) {
+					break;
+				}
+				if (ch == '"') {
+					if (!p.isChar('"')) {
+						if (sb.length() > 0) {
+							return sb.toString();
+						}
+						break;
+					}
+				}
+				sb.append(ch);
+			}
+		} else if ((ch=p.isLetter()) != SParser.NOCHAR) {
+			sb.append(ch);
+			while ((ch=p.getCurrentChar()) > ' '
+				&& (Character.isLetterOrDigit(ch) || ch == '_' || ch == '-')) {
+				sb.append(p.peekChar());
+			}
+			return sb.toString();
+		}
+		//Incorrect GPS position &amp;{0}{: }
+		throw new SRuntimeException(XDEF.XDEF222, "name error");
+	}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
-
 	@Override
 	public short parsedType() {return XD_GPSPOSITION;}
 }

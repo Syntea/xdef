@@ -1339,7 +1339,7 @@ public final class TestXdef extends XDTester {
 "                   onTrue outln('&lt;' + getElementName() + ' '\n"+
 "                       + getAttrName() + '=\\'' + getText()+ '\\'/&gt;' );\n"+
 "                   finally testparams('a',1, \n"+
-"                           parseDate('1999-5-1T20:43:09+01:00'));\"\n"+
+"                           parseDate('1999-05-01T20:43:09+01:00'));\"\n"+
 "       xd:script= \"match (@Kanal == '123') AND @SeqRef\">\n"+
 "  <child xd:script=\"occurs 1..2; ref abc#child\"/>\n"+
 "  <xd:list ref = \"sq\" />\n"+
@@ -3368,7 +3368,7 @@ public final class TestXdef extends XDTester {
 	public static void myErr(XXNode xel, XDValue[] params) {
 		xel.getTemporaryReporter().clear();
 		if (params.length == 1
-			&& params[0].getItemId() == XDValueID.XD_INT
+			&& params[0].getItemId() == XDValueID.XD_LONG
 			&& params[0].longValue() == 4204) {
 			xel.getTemporaryReporter().clear();
 			_myX = 4204;

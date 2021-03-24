@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.xdef.sys.Price;
 import org.xdef.sys.GPSPosition;
 
 /** Provides the interface for usage of internal objects of x-script.
@@ -100,6 +101,11 @@ public interface XDValue extends Comparable<XDValue>, XDValueID {
 	 * @return GPS value of this object or return null.
 	 */
 	public GPSPosition GPSValue();
+
+	/** Get Price value.
+	 * @return price (with currency code) or null.
+	 */
+	public Price priceValue();
 
 	/** Get bytes array representing value.
 	 * @return array of bytes or null.
@@ -201,5 +207,4 @@ public interface XDValue extends Comparable<XDValue>, XDValueID {
 	 * @param param value of operation parameter.
 	 */
 	public void setParam(final int param);
-
 }

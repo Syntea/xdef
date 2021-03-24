@@ -6,7 +6,7 @@ import org.xdef.proc.XXNode;
 import org.xdef.impl.code.DefBytes;
 import java.io.ByteArrayOutputStream;
 
-/** Parser of Schema "hexBinary" type.
+/** Parser of XML Schema "hexBinary" type.
  * @author Vaclav Trojan
  */
 public class XSParseHexBinary extends XSParseBase64Binary {
@@ -26,7 +26,7 @@ public class XSParseHexBinary extends XSParseBase64Binary {
 			i = i >= 16 ? (i - 6) << 4 : i << 4;
 			int j;
 			p.nextChar();
-			if (((j="0123456789ABCDEFabcdef".indexOf(p.getCurrentChar())) < 0)) {
+			if (((j="0123456789ABCDEFabcdef".indexOf(p.getCurrentChar())) < 0)){
 				//Incorrect value of '&{0}'&{1}{: }
 				p.errorWithString(XDEF.XDEF809,
 					parserName() +" (must be multiple of 2 chars)");

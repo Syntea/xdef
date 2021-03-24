@@ -21,6 +21,7 @@ import org.xdef.impl.code.CodeParser;
 import org.xdef.impl.code.CodeS1;
 import org.xdef.impl.code.DefBNFGrammar;
 import org.xdef.impl.code.DefBoolean;
+import org.xdef.impl.code.DefChar;
 import org.xdef.impl.code.DefContainer;
 import org.xdef.impl.code.DefDate;
 import org.xdef.impl.code.DefDecimal;
@@ -663,7 +664,7 @@ public final class CompileCode extends CompileBase {
 			Class<?>[] params = new Class<?>[numPar];
 			for (int j = 0; j < numPar; j++) {
 				Class<?> c = getTypeClass(
-					(short) (_tstack[_sp - numPar+j+1] - XD_INT + 1));
+					(short) (_tstack[_sp - numPar+j+1] - XD_LONG + 1));
 				params[j] = c;
 			}
 			if ((m = getExtMethod(clazz, name, params)) != null) {
@@ -781,7 +782,7 @@ public final class CompileCode extends CompileBase {
 			params[0] = XXNode.class;
 			for (int j = 0; j < numPar; j++) {
 				params[j + 1] = getTypeClass(
-					(short) (_tstack[_sp-numPar+j+1] - XD_INT + 1));
+					(short) (_tstack[_sp-numPar+j+1] - XD_LONG + 1));
 			}
 			if ((m = getExtMethod(clazz, name, params)) != null) {
 				modifiers = m.getModifiers();
@@ -993,8 +994,8 @@ public final class CompileCode extends CompileBase {
 			}
 			if (xType != var.getType()) {
 				switch (xType) {
-					case XD_FLOAT:
-						if (var.getType() == XD_INT) {
+					case XD_DOUBLE:
+						if (var.getType() == XD_LONG) {
 							topToFloat();
 							break;
 						}
@@ -1003,10 +1004,15 @@ public final class CompileCode extends CompileBase {
 					case XD_STRING:
 						topToString();
 						break;
-					case XD_INT:
+					case XD_LONG:
 						if (var.getType() == XD_DATETIME) {
 							topToMillis();
-							break;
+					} else if (xType == XD_DECIMAL) {
+						addCode(new CodeI1(XD_DECIMAL, TO_DECIMAL_X, 0));
+						_cstack[_sp] = -1;
+						return;
+					} else if (var.getType() == XD_CHAR) {
+							topXToInt(0);
 						}
 						break;
 					case XD_ANY:
@@ -1216,13 +1222,13 @@ public final class CompileCode extends CompileBase {
 				case XD_STRING:
 					topToString();
 					return;
-				case XD_FLOAT:
-					if (xType == XD_INT || xType == XD_DECIMAL) {
+				case XD_DOUBLE:
+					if (xType == XD_LONG || xType == XD_DECIMAL) {
 						topToFloat();
 						return;
 					}
 					break;
-				case XD_INT:
+				case XD_LONG:
 					if (xType == XD_DATETIME) {
 						topToMillis();
 						return;
@@ -1230,10 +1236,20 @@ public final class CompileCode extends CompileBase {
 						addCode(new CodeI1(XD_DECIMAL, TO_DECIMAL_X, 0));
 						_cstack[_sp] = -1;
 						return;
+					} else if (xType == XD_CHAR) {
+						topXToInt(0);
+						return;
+					}
+					break;
+				case XD_CHAR:
+					if (xType == XD_LONG || xType == XD_DOUBLE
+						|| xType == XD_DECIMAL) {
+						topXToChar(0);
+						return;
 					}
 					break;
 				case XD_DECIMAL:
-					if (xType == XD_FLOAT || xType == XD_INT) {
+					if (xType == XD_DOUBLE || xType == XD_LONG) {
 						if (xValue >= 0) {
 							_code.set(xValue, new DefDecimal(
 								getCodeItem(xValue).decimalValue()));
@@ -1246,14 +1262,14 @@ public final class CompileCode extends CompileBase {
 					}
 					break;
 				case XD_BOOLEAN:
-					if (xType == ATTR_REF_VALUE || xType == XD_PARSERESULT ||
-						xType == XD_PARSER) {
+					if (xType == ATTR_REF_VALUE || xType == XD_PARSERESULT
+						|| xType == XD_PARSER) {
 						topToBool();
 						return;
 					}
 					break;
 				case XD_CONTAINER:
-					addCode(new CodeI1(XD_CONTAINER, NEW_CONTEXT, 1));
+					addCode(new CodeI1(XD_CONTAINER, NEW_CONTAINER, 1));
 					_cstack[_sp] = -1;
 					return;
 				case XD_DATETIME: {
@@ -1328,6 +1344,52 @@ public final class CompileCode extends CompileBase {
 	/** Conversion of stack item under top to float. */
 	final void topXToFloat() {topXToFloat(1);}
 
+	/** Conversion of stack item under top to int. */
+	final void topXToInt(final int index) {
+		short xType;
+		int sp = _sp - index;
+		if (sp >= 0 && (xType = _tstack[sp]) != XD_LONG && xType != XD_UNDEF) {
+			if (xType == XD_CHAR || xType == XD_DOUBLE || xType == XD_DECIMAL) {
+				if (_cstack[sp] >= 0) { //constant
+					_code.set(_cstack[sp], new DefLong(
+						getCodeItem(_cstack[sp]).intValue()));
+				} else {
+					//value
+					addCode(new CodeI1(XD_LONG, TO_INT_X, index));
+					_cstack[sp] = -1;
+				}
+			} else {
+				//Value of type 'int' or 'float' expected
+				_parser.error(XDEF.XDEF439);
+				_cstack[sp] = -1;
+			}
+			_tstack[sp] = XD_LONG;
+		}
+	}
+
+	/** Conversion of stack item under top to int. */
+	final void topXToChar(final int index) {
+		short xType;
+		int sp = _sp - index;
+		if (sp >= 0 && (xType = _tstack[sp]) != XD_CHAR && xType != XD_UNDEF) {
+			if (xType == XD_LONG || xType == XD_DOUBLE ||  xType == XD_DECIMAL){
+				if (_cstack[sp] >= 0) { //constant
+					_code.set(_cstack[sp],
+						new DefChar(getCodeItem(_cstack[sp]).intValue()));
+				} else {
+					//value
+					addCode(new CodeI1(XD_LONG, TO_CHAR_X, index));
+					_cstack[sp] = -1;
+				}
+			} else {
+				//Value of type 'int' or 'float' expected
+				_parser.error(XDEF.XDEF439);
+				_cstack[sp] = -1;
+			}
+			_tstack[sp] = XD_CHAR;
+		}
+	}
+
 	/** Conversion of the stack item at top position to null or string. */
 	final void topToNullOrString() {
 		short xType;
@@ -1364,15 +1426,15 @@ public final class CompileCode extends CompileBase {
 	private void topXToFloat(final int index) {
 		short xType;
 		int sp = _sp - index;
-		if (sp >= 0 && (xType=_tstack[sp])!=XD_FLOAT && xType!=XD_UNDEF){
+		if (sp >= 0 && (xType=_tstack[sp])!=XD_DOUBLE && xType!=XD_UNDEF){
 			switch (xType) {
-				case XD_INT:
+				case XD_LONG:
 					if (_cstack[sp] >= 0) { //constant
 						_code.set(_cstack[sp], new DefDouble(
 							getCodeItem(_cstack[sp]).longValue()));
 					} else {
 						//value
-						addCode(new CodeI1(XD_FLOAT, TO_FLOAT_X, index));
+						addCode(new CodeI1(XD_DOUBLE, TO_FLOAT_X, index));
 						_cstack[sp] = -1;
 					}	break;
 				case XD_DECIMAL:
@@ -1390,7 +1452,7 @@ public final class CompileCode extends CompileBase {
 					_cstack[sp] = -1;
 					break;
 			}
-			_tstack[sp] = XD_FLOAT;
+			_tstack[sp] = XD_DOUBLE;
 		}
 	}
 
@@ -1424,7 +1486,7 @@ public final class CompileCode extends CompileBase {
 	/** Conversion of the stack item at top position to float. */
 	final void topToMillis() {
 		short xType;
-		if (_sp >= 0 && (xType=_tstack[_sp]) != XD_INT &&
+		if (_sp >= 0 && (xType=_tstack[_sp]) != XD_LONG &&
 			xType != XD_ANY && xType != XD_UNDEF) {
 			if (xType == XD_DATETIME) {
 				if (_cstack[_sp] >= 0) { //constant
@@ -1432,16 +1494,16 @@ public final class CompileCode extends CompileBase {
 						getCodeItem(_cstack[_sp]).datetimeValue().
 						getTimeInMillis()));
 				} else { //value
-					addCode(new CodeI1(XD_INT, TO_MILLIS));
+					addCode(new CodeI1(XD_LONG, TO_MILLIS));
 					_cstack[_sp] = -1;
 				}
 			} else {
 				//Value of type 'Datetime' or 'int' expected
 				_parser.error(XDEF.XDEF441);
-				_tstack[_sp] = XD_INT;
+				_tstack[_sp] = XD_LONG;
 				_cstack[_sp] = -1;
 			}
-			_tstack[_sp] = XD_INT;
+			_tstack[_sp] = XD_LONG;
 		}
 	}
 
@@ -1454,7 +1516,7 @@ public final class CompileCode extends CompileBase {
 	private void topXToMillis(final int index) {
 		short xType;
 		int sp = _sp - index;
-		if (sp >= 0 && (xType=_tstack[sp])!=XD_INT && xType!=XD_UNDEF) {
+		if (sp >= 0 && (xType=_tstack[sp])!=XD_LONG && xType!=XD_UNDEF) {
 			if (xType == XD_DATETIME) {
 				if (_cstack[sp] >= 0) { // constant
 					_code.set(_cstack[sp],
@@ -1464,12 +1526,12 @@ public final class CompileCode extends CompileBase {
 					addCode(new CodeI1(XD_STRING, TO_MILLIS_X, index));
 					_cstack[sp] = -1;
 				}
-			} else if (xType != XD_INT) {
+			} else if (xType != XD_LONG) {
 				//Value of type 'Datetime' or 'int' expected
 				_parser.error(XDEF.XDEF441);
 				_tstack[sp] = -1;
 			}
-			_tstack[sp] = XD_INT;
+			_tstack[sp] = XD_LONG;
 		}
 	}
 	/** Conversion of the part stack to context..
@@ -1543,8 +1605,8 @@ public final class CompileCode extends CompileBase {
 	final void genDup() {
 		if (_sp >= 0) {
 			short xType = _tstack[_sp];
-			if(xType == XD_INT || xType == XD_BOOLEAN ||
-				xType == XD_FLOAT || xType == XD_STRING) {
+			if(xType == XD_LONG || xType == XD_BOOLEAN ||
+				xType == XD_DOUBLE || xType == XD_STRING) {
 				addCode(new CodeI1(xType, STACK_DUP), 1);
 			} else {
 				//Internal error: &{0}
@@ -2285,11 +2347,11 @@ public final class CompileCode extends CompileBase {
 				if (npar == 2) {
 					topToString();
 					switch (_tstack[_sp - 1]) {
-						case XD_INT:
+						case XD_LONG:
 							code = INTEGER_FORMAT;
 							method.getParamTypes()[0] = INTEGER_FORMAT;
 							break;
-						case XD_FLOAT:
+						case XD_DOUBLE:
 							code = FLOAT_FORMAT;
 							break;
 						case XD_DATETIME:
@@ -2588,8 +2650,8 @@ public final class CompileCode extends CompileBase {
 				short ptype;
 				if (mtype != XD_ANY && mtype != (ptype = _tstack[j])) {
 					if (ptype != XD_ANY && ptype != XD_UNDEF) {
-						if (mtype == XD_FLOAT &&
-							ptype == XD_INT) {
+						if (mtype == XD_DOUBLE &&
+							ptype == XD_LONG) {
 							if (npar - 1 - i == 0) {
 								topToFloat();
 							} else {

@@ -7,9 +7,10 @@ import org.xdef.XDValue;
 import org.xdef.proc.XXNode;
 import org.xdef.impl.code.DefBytes;
 import java.io.ByteArrayOutputStream;
-import java.io.Reader;
+import org.xdef.sys.SParser;
+import org.xdef.sys.SReader;
 
-/** Parser of Schema "base64Binary" type.
+/** Parser of XML Schema "base64Binary" type.
  * @author Vaclav Trojan
  */
 public class XSParseBase64Binary extends XSAbstractParser {
@@ -20,18 +21,18 @@ public class XSParseBase64Binary extends XSAbstractParser {
 
 	public XSParseBase64Binary() {
 		super();
-		_whiteSpace = WS_COLLAPSE;
+		_whiteSpace = 'c';
 		_minLength = _maxLength = -1;
 	}
 	@Override
 	public void initParams() {
-		_whiteSpace = WS_COLLAPSE;
+		_whiteSpace = 'c';
 		_patterns = null;
 		_enumeration = null;
 		_minLength = _maxLength = -1;
 	}
 	@Override
-	public byte getDefaultWhiteSpace() {return WS_COLLAPSE;}
+	public byte getDefaultWhiteSpace() {return 'c';}
 	@Override
 	public int getLegalKeys() {
 		return PATTERN +
@@ -85,7 +86,6 @@ public class XSParseBase64Binary extends XSAbstractParser {
 			XSParseReader r = new XSParseReader(p);
 			ByteArrayOutputStream bw = new ByteArrayOutputStream();
 			SUtils.decodeBase64(r, bw);
-			r.close();
 			p.setParsedValue(new DefBytes(bw.toByteArray()));
 			String s = r.getParsedString();
 			p.isSpaces();
@@ -119,31 +119,14 @@ public class XSParseBase64Binary extends XSAbstractParser {
 	public String parserName() {return ROOTBASENAME;}
 	@Override
 	public short parsedType() {return XD_BYTES;}
-	/** This class is used as reader of parsed string in XSParseHexBinary
-	 * and in XSParseBase94Binary.
-	 */
-	private static final class XSParseReader extends Reader {
-		XDParseResult _p;
-		StringBuffer _sb;
 
-		XSParseReader(XDParseResult p) {
+	/** This class is used as reader of parsed string in XSParseBase94Binary. */
+	private static final class XSParseReader implements SReader {
+		SParser _p;
+		StringBuilder _sb;
+		XSParseReader(SParser p) {
 			_p = p;
-			_sb = new StringBuffer();
-		}
-		@Override
-		public final int read(char[] cbuf, int off, int len) {
-			int x;
-			int i = off;
-			for (; len > 0; i++, len--) {
-				if ((x = read()) > 0) {
-					cbuf[off] = (char) x;
-				} else {
-					i--;
-					break;
-				}
-
-			}
-			return i > off ? off - i : -1;
+			_sb = new StringBuilder();
 		}
 		@Override
 		public final int read() {
@@ -153,22 +136,19 @@ public class XSParseBase64Binary extends XSAbstractParser {
 				}
 				_sb.append(' ');
 			}
-			char result;
-			if ((result = _p.peekChar()) > 0) {
-				_sb.append(result);
-				return result;
+			char ch;
+			if ((ch = _p.peekChar()) != SParser.NOCHAR) {
+				_sb.append(ch);
+				return ch;
 			}
 			return -1;
 		}
-		@Override
-		public final void close() {}
 
-		final String getParsedString() {
-			close();
-			String result = _sb.toString().trim();
+		private String getParsedString() {
+			String s = _sb.toString().trim();
 			_sb = null;
 			_p = null;
-			return result;
+			return s;
 		}
 	}
 }

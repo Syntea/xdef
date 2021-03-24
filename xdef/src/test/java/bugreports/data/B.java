@@ -66,7 +66,6 @@ public class B extends bugreports.data.C implements org.xdef.component.XComponen
 	  el.appendChild(x.toXml(doc));
 	return el;
   }
-  @Override
   public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
   public B() {}
   public B(org.xdef.component.XComponent p,
@@ -91,7 +90,7 @@ public class B extends bugreports.data.C implements org.xdef.component.XComponen
   private String XD_Name_c="c";
   private String _c;
   private C.D _D;
-  public static final String XD_NAME="B";
+//  public static final String XD_NAME="B";
   private org.xdef.component.XComponent XD_Parent;
   private Object XD_Object;
   private String XD_NodeName = "B";

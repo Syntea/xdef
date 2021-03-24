@@ -10,6 +10,7 @@ import org.xdef.XDConstants;
 import org.xdef.XDDocument;
 import org.xdef.XDPool;
 import org.xdef.component.XComponent;
+import org.xdef.json.JsonNames;
 import org.xdef.json.JsonUtil;
 import org.xdef.msg.SYS;
 import org.xdef.sys.ArrayReporter;
@@ -17,6 +18,8 @@ import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
 import test.XDTester;
+import static test.XDTester._xdNS;
+import static test.XDTester.genXComponent;
 
 /** Test processing JSON objects with X-definitions and X-components.
  * @author Vaclav Trojan
@@ -270,7 +273,7 @@ public class TestJsonXdef extends XDTester {
 						+ reporter.printToString()
 						+ "\n"+ KXmlUtils.nodeToString(e, true);
 				}
-				Object o = xc.toJson();
+				Object o = JsonUtil.xmlToJson(xc.toXml());
 				if (!JsonUtil.jsonEqual(json, o)) { ///S
 					result += (result.isEmpty() ? "" : "\n")
 						+ "Error X-component toJsjon " + id + "\n"
@@ -349,89 +352,107 @@ public class TestJsonXdef extends XDTester {
 			XComponent xc;
 			test = "Test008";
 			xc = getXComponent(xp, test, 0);
-			j = getValueFromGetter(xc,"getjs$item");
-			assertEq(1, getValueFromGetter(j,"get" + JsonUtil.J_VALUEATTR));
-			setValueToSetter(j,"set" + JsonUtil.J_VALUEATTR, 3);
-			assertEq(3, getValueFromGetter(j,"get" + JsonUtil.J_VALUEATTR));
-			setValueToSetter(j,"set" + JsonUtil.J_VALUEATTR, null);
-			assertNull(getValueFromGetter(j,"get" + JsonUtil.J_VALUEATTR));
+			j = SUtils.getValueFromGetter(xc,"getjs$item");
+			assertEq(1, SUtils.getValueFromGetter(
+				j,"get"+JsonNames.J_VALUEATTR));
+			SUtils.setValueToSetter(j,"set" + JsonNames.J_VALUEATTR, 3);
+			assertEq(3, SUtils.getValueFromGetter(
+				j,"get" + JsonNames.J_VALUEATTR));
+			SUtils.setValueToSetter(j,"set" + JsonNames.J_VALUEATTR, null);
+			assertNull(SUtils.getValueFromGetter(
+				j,"get" + JsonNames.J_VALUEATTR));
 
 			test = "Test020";
 			xc = getXComponent(xp, test, 0);
-			j = getValueFromGetter(xc,"getjs$item");
-			assertEq("abc", getValueFromGetter(j,"get" + JsonUtil.J_VALUEATTR));
-			setValueToSetter(j,"set" + JsonUtil.J_VALUEATTR, null);
-			assertTrue(getValueFromGetter(j,"get"+JsonUtil.J_VALUEATTR)==null);
+			j = SUtils.getValueFromGetter(xc,"getjs$item");
+			assertEq("abc", SUtils.getValueFromGetter(
+				j,"get" + JsonNames.J_VALUEATTR));
+			SUtils.setValueToSetter(j,"set" + JsonNames.J_VALUEATTR, null);
+			assertTrue(SUtils.getValueFromGetter(
+				j,"get"+JsonNames.J_VALUEATTR)==null);
 
 			xc = getXComponent(xp, test, 1);
-			j = getValueFromGetter(xc,"getjs$item");
-			assertEq(123, getValueFromGetter(j,"get" + JsonUtil.J_VALUEATTR));
-			setValueToSetter(j,"set" + JsonUtil.J_VALUEATTR, "");
-			assertEq("", getValueFromGetter(j,"get" + JsonUtil.J_VALUEATTR));
+			j = SUtils.getValueFromGetter(xc,"getjs$item");
+			assertEq(123, SUtils.getValueFromGetter(
+				j,"get" + JsonNames.J_VALUEATTR));
+			SUtils.setValueToSetter(j,"set" + JsonNames.J_VALUEATTR, "");
+			assertEq("", SUtils.getValueFromGetter(
+				j,"get" + JsonNames.J_VALUEATTR));
 			xc = getXComponent(xp, test, 2);
-			j = getValueFromGetter(xc,"getjs$item");
-			assertEq(false, getValueFromGetter(j,"get"+JsonUtil.J_VALUEATTR));
+			j = SUtils.getValueFromGetter(xc,"getjs$item");
+			assertEq(false, SUtils.getValueFromGetter(
+				j,"get"+JsonNames.J_VALUEATTR));
 			xc = getXComponent(xp, test, 3);
-			j = getValueFromGetter(xc,"getjs$item");
-			assertTrue(getValueFromGetter(j,"get"+JsonUtil.J_VALUEATTR)!=null);
+			j = SUtils.getValueFromGetter(xc,"getjs$item");
+			assertTrue(SUtils.getValueFromGetter(
+				j,"get"+JsonNames.J_VALUEATTR)!=null);
 
 			test = "Test021";
 			xc = getXComponent(xp, test, 0);
-			j = getValueFromGetter(xc,"getjs$item");
-			assertEq("abc", getValueFromGetter(j,"get" +JsonUtil.J_VALUEATTR));
+			j = SUtils.getValueFromGetter(xc,"getjs$item");
+			assertEq("abc", SUtils.getValueFromGetter(
+				j,"get" +JsonNames.J_VALUEATTR));
 			xc = getXComponent(xp, test, 1);
-			j = getValueFromGetter(xc,"getjs$item");
-			assertEq(123, getValueFromGetter(j,"get" +JsonUtil.J_VALUEATTR));
-			setValueToSetter(j,"set" + JsonUtil.J_VALUEATTR, "");
-			assertEq("", getValueFromGetter(j,"get" + JsonUtil.J_VALUEATTR));
-			setValueToSetter(j,"set" + JsonUtil.J_VALUEATTR, " a    b \n ");
-			assertEq(" a    b \n ", getValueFromGetter(j,
-				"get" + JsonUtil.J_VALUEATTR));
+			j = SUtils.getValueFromGetter(xc,"getjs$item");
+			assertEq(123, SUtils.getValueFromGetter(
+				j,"get" +JsonNames.J_VALUEATTR));
+			SUtils.setValueToSetter(j,"set" + JsonNames.J_VALUEATTR, "");
+			assertEq("", SUtils.getValueFromGetter(
+				j,"get" + JsonNames.J_VALUEATTR));
+			SUtils.setValueToSetter(
+				j,"set" + JsonNames.J_VALUEATTR, " a    b \n ");
+			assertEq(" a    b \n ", SUtils.getValueFromGetter(
+				j, "get" + JsonNames.J_VALUEATTR));
 			xc = getXComponent(xp, test, 2);
-			j = getValueFromGetter(xc,"getjs$item");
-			assertEq(false, getValueFromGetter(j,"get" +JsonUtil.J_VALUEATTR));
+			j = SUtils.getValueFromGetter(xc,"getjs$item");
+			assertEq(false, SUtils.getValueFromGetter(
+				j,"get" +JsonNames.J_VALUEATTR));
 			xc = getXComponent(xp, test, 3);
-			j = getValueFromGetter(xc,"getjs$item");
-			assertTrue(getValueFromGetter(j,"get"+JsonUtil.J_VALUEATTR)!=null);
+			j = SUtils.getValueFromGetter(xc,"getjs$item");
+			assertTrue(SUtils.getValueFromGetter(
+				j,"get"+JsonNames.J_VALUEATTR)!=null);
 			xc = getXComponent(xp, test, 4);
-			assertNull(getValueFromGetter(xc,"getjs$item"));
+			assertNull(SUtils.getValueFromGetter(xc,"getjs$item"));
 
 			test = "Test025";
 			xc = getXComponent(xp, test, 0);
-			j = getValueFromGetter(xc,"getjs$item");
-			assertEq("null", getValueFromGetter(j,
-				"get" + JsonUtil.J_VALUEATTR).toString());
-			j = getValueFromGetter(xc,"getjs$item_1");
-			assertEq(12, getValueFromGetter(j,"get" + JsonUtil.J_VALUEATTR));
-			j = getValueFromGetter(xc,"getjs$item_2");
+			j = SUtils.getValueFromGetter(xc,"getjs$item");
+			assertEq("null", SUtils.getValueFromGetter(j,
+				"get" + JsonNames.J_VALUEATTR).toString());
+			j = SUtils.getValueFromGetter(xc,"getjs$item_1");
+			assertEq(12, SUtils.getValueFromGetter(
+				j,"get" + JsonNames.J_VALUEATTR));
+			j = SUtils.getValueFromGetter(xc,"getjs$item_2");
 			assertEq("\" a b \"",
-				getValueFromGetter(j,"get" + JsonUtil.J_VALUEATTR));
+				SUtils.getValueFromGetter(j,"get" + JsonNames.J_VALUEATTR));
 			xc = getXComponent(xp, test, 1);
-			j = getValueFromGetter(xc,"getjs$item");
-			assertEq("null", getValueFromGetter(j,
-				"get" + JsonUtil.J_VALUEATTR).toString());
-			assertNull(getValueFromGetter(xc,"getjs$item_1"));
-			assertNull(getValueFromGetter(xc,"getjs$item_2"));
+			j = SUtils.getValueFromGetter(xc,"getjs$item");
+			assertEq("null", SUtils.getValueFromGetter(j,
+				"get" + JsonNames.J_VALUEATTR).toString());
+			assertNull(SUtils.getValueFromGetter(xc,"getjs$item_1"));
+			assertNull(SUtils.getValueFromGetter(xc,"getjs$item_2"));
 
 			test = "Test026";
 			xc = getXComponent(xp, test, 0);
-			j = getValueFromGetter(xc,"listOfjs$item");
+			j = SUtils.getValueFromGetter(xc,"listOfjs$item");
 			assertEq(2, ((List) j).size());
 			j = ((List) j).get(0);
-			assertEq("null", getValueFromGetter(j,
-				"get" + JsonUtil.J_VALUEATTR).toString());
-			j = getValueFromGetter(xc,"listOfjs$item");
+			assertEq("null", SUtils.getValueFromGetter(j,
+				"get" + JsonNames.J_VALUEATTR).toString());
+			j = SUtils.getValueFromGetter(xc,"listOfjs$item");
 			j = ((List) j).get(1);
-			assertEq("null", getValueFromGetter(j,
-				"get" + JsonUtil.J_VALUEATTR).toString());
+			assertEq("null", SUtils.getValueFromGetter(j,
+				"get" + JsonNames.J_VALUEATTR).toString());
 			xc = getXComponent(xp, test, 0);
-			j = getValueFromGetter(xc,"listOfjs$item_1");
+			j = SUtils.getValueFromGetter(xc,"listOfjs$item_1");
 			assertEq(2, ((List) j).size());
 			j = ((List) j).get(0);
-			assertEq(12, getValueFromGetter(j,"get" + JsonUtil.J_VALUEATTR));
-			j = getValueFromGetter(xc,"listOfjs$item_1");
+			assertEq(12, SUtils.getValueFromGetter(
+				j,"get" + JsonNames.J_VALUEATTR));
+			j = SUtils.getValueFromGetter(xc,"listOfjs$item_1");
 			j = ((List) j).get(1);
-			assertEq(13, getValueFromGetter(j,"get" + JsonUtil.J_VALUEATTR));
+			assertEq(13, SUtils.getValueFromGetter(
+				j,"get" + JsonNames.J_VALUEATTR));
 		} catch (Exception ex) {fail(ex);}
 		// If no errors were reported delete all generated data.
 		// Otherwise, leave them to be able to see the reason of errors.

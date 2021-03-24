@@ -13,6 +13,7 @@ import java.net.URL;
 import org.xdef.component.XComponent;
 import org.xdef.json.JNull;
 import org.xdef.sys.SUtils;
+import static test.XDTester._xdNS;
 
 /** Various tests JSON, X-component.
  * @author Vaclav Trojan
@@ -21,39 +22,9 @@ public class MyTest_2 extends XDTester {
 
 	public MyTest_2() {super();}
 
-////////////////////////////////////////////////////////////////////////////////
-// User methods used in X-definitions tests
-////////////////////////////////////////////////////////////////////////////////
-
-	/** Create X-components from XDPool to the directory from argument "srcDir"
-	 * and compile it. Clear tempDir before generation.
-	 * @param xp XDPool from which the X-components created.
-	 * @param tempDir the directory where to generate Java sources.
-	 * @return reporter with reported errors and warnings.
-	 * @throws RuntimeException if an error occurs.
-	 */
-	private static ArrayReporter genXComponent(final XDPool xp,
-		final String tempDir) {
-		File fdir = new File(tempDir);
-		if (fdir.exists()) { // ensure the src directory exists.
-			if (fdir.isFile()) {
-				throw new RuntimeException(tempDir + " is not directory");
-			}
-			try {
-				SUtils.deleteAll(tempDir, true); // delete this directory
-			} catch (Exception ex) {
-				throw new RuntimeException(ex);
-			}
-		}
-		fdir.mkdirs();
-		try {
-			return genXComponent(xp, fdir);
-		} catch (Exception ex) {
-			return null;
-		}
+	private static Object toJson(final XComponent xc) {
+		return JsonUtil.xmlToJson(xc.toXml());
 	}
-
-////////////////////////////////////////////////////////////////////////////////
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -97,65 +68,37 @@ public class MyTest_2 extends XDTester {
 		Element el;
 		XComponent xc;
 		ArrayReporter reporter = new ArrayReporter();
+////////////////////////////////////////////////////////////////////////////////
 		try {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' name='Example' root='root'>\n"+
 "<xd:declaration>\n" +
-" String base;\n" +
-" GPSPosition baseGPS;\n" +
-" String mesto;\n" +
-" GPSPosition mestoGPS;\n" +
+" GPSPosition base = new GPSPosition(50.08, 14.42, 399.0, 'Praha');\n" +
+" GPSPosition mesto;\n" +
 " void pritDistance() {\n" +
-"   printf('%s to %s: %.1f km\\n',\n"+
-"     base + ' ' + baseGPS,\n"+
-"     mesto + ' ' + mestoGPS,\n"+
-"     baseGPS.distanceTo(mestoGPS)/1000);\n" +
+"   printf('(%s) to (%s): %.1f km\\n',\n"+
+"     base, mesto, base.distanceTo(mesto)/1000);\n" +
 " }\n" +
 "</xd:declaration>\n" +
 "<root>\n" +
-"  <base name=\"string(); onTrue base = getParsedValue();\"\n"+
-"        GPS=\"GPS(); onTrue baseGPS = getParsedValue();\"/>\n" +
 "  <mesto xd:script=\"*; finally pritDistance();\"\n"+
-"         name=\"string; onTrue mesto = getParsedValue();\"\n"+
-"         GPS=\"GPS(); onTrue mestoGPS = getParsedValue();\"/>\n" +
+"         GPS=\"gps(); onTrue mesto = getParsedValue();\"/>\n" +
 "</root>\n" +
 "<xd:component>\n"+
 "  %class bugreports.data.Mesta %link Example#root;\n"+
 "</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			genXComponent(xp, tempDir);
+			genXComponent(xp, new File(tempDir));
 			xml =
 "<root>\n" +
-"  <base name=\"Praha\" GPS=\"GPS(50.08, 14.42, 399.0)\"/>\n" +
-"  <mesto name=\"České_Budějovice\" GPS=\"GPS(48.97, 14.47, 381.0)\"/>\n" +
-"  <mesto name=\"Plzen\" GPS=\"GPS(50.23, 12.87, 447.0)\"/>\n" +
-"  <mesto name=\"Karlovy_Vary\" GPS=\"GPS(50.23, 12.87, 447.0)\"/>\n" +
-"  <mesto name=\"Pardubice=\" GPS=\"GPS(50.04, 15.78, 237.0)\"/>\n" +
-"  <mesto name=\"Hradec_Králové\" GPS=\"GPS(50.21, 15.83, 235.0)\"/>\n" +
-"  <mesto name=\"Brno\" GPS=\"GPS(49.2, 16.62, 237.0)\"/>\n" +
-"  <mesto name=\"Wien\" GPS=\"GPS(48.2, 16.37, 151.0)\"/>\n" +
-"  <mesto name=\"London\" GPS=\"GPS(51.52, -0.09, 0.0)\"/>\n" +
+"  <mesto GPS=\"48.97, 14.47, 381.0, České_Budějovice\"/>\n" +
+"  <mesto GPS=\"50.23, 12.87, 447.0, Plzen\"/>\n" +
+"  <mesto GPS=\"50.23, 12.87, 447, Karlovy_Vary\"/>\n" +
 "</root>";
 			xc = xp.createXDDocument().parseXComponent(xml, null, reporter);
 		} catch (Exception ex) {fail(ex);}
 if(T)return;
-////////////////////////////////////////////////////////////////////////////////
-//		try {
-//			xdef =
-//"<xd:collection xmlns:xd='http://www.xdef.org/xdef/4.0'>\n"+
-//"<xd:def name='A'>\n"+
-//" <xd:declaration scope='global'>Parser p;uniqueSet u{x:p}</xd:declaration>\n"+
-//"</xd:def>\n"+
-//"<xd:def name='B' root='A'>\n"+
-//"  <A id=\"? xdType(); onTrue p = getParsedValue();\" />\n"+
-//"</xd:def>\n"+
-//"</xd:collection>";
-//			xb = XDFactory.getXDBuilder(null, null);
-//			xb.setSource(xdef);
-//			xb.compileXD();;
-//		} catch (Exception ex) {fail(ex);}
-//if(true)return;
 		try {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='A'>\n"+
@@ -166,8 +109,8 @@ if(T)return;
 "  %class bugreports.data.A002 %link #A;\n"+
 "</xd:component>\n"+
 "</xd:def>";
-			xp = XDFactory.compileXD(null, xdef);
-			genXComponent(xp, tempDir);
+			xp = compile(xdef);
+			genXComponent(xp, new File(tempDir));
 			json = "[1, \"2\", 3]"; //error (not string but number!)
 			j = xp.createXDDocument().jparse(json, reporter);
 			assertTrue(reporter.printToString().contains("XDEF809"));
@@ -179,8 +122,8 @@ if(T)return;
 			assertTrue(reporter.getErrorCount() == 2
 				&& reporter.printToString().contains("XDEF809"));
 			assertTrue(JsonUtil.jsonEqual(
-				JsonUtil.parse("[1,\"\",\"\"]"),xc.toJson()),
-				JsonUtil.toJsonString(xc.toJson(), true));
+				JsonUtil.parse("[1,\"\",\"\"]"),toJson(xc)),
+				JsonUtil.toJsonString(toJson(xc), true));
 		} catch (Exception ex) {fail(ex);}
 if(T)return;
 		try {
@@ -210,7 +153,7 @@ if(T)return;
 "  %class bugreports.data.A0 %link #A;\n"+
 "</xd:component>\n"+
 "</xd:def>";
-			xp = XDFactory.compileXD(null, xdef);
+			xp = compile(xdef);
 			json =
 "[\n" +
 " { \"first name\": \"John\",\n" +
@@ -342,7 +285,7 @@ if(T)return;
 			System.out.println(classDir + "bugreports/xp.xp");
 			XDFactory.writeXDPool(classDir + "bugreports/xp.xp", xp);
 			xp = XDFactory.readXDPool("classpath://bugreports.xp.xp");
-			genXComponent(xp, tempDir);
+			genXComponent(xp, new File(tempDir));
 			json = "[{\"a\":false},\"xxx\",125, true]";
 			j = xp.createXDDocument().jparse(json, reporter);
 			assertTrue(reporter.getErrorCount() == 2
@@ -352,13 +295,13 @@ if(T)return;
 				JsonUtil.toJsonString(j, true));
 			xc = xp.createXDDocument().jparseXComponent(json,
 				null, reporter);
-			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), xc.toJson()),
-				JsonUtil.toJsonString(xc.toJson(), true));
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), toJson(xc)),
+				JsonUtil.toJsonString(toJson(xc), true));
 			assertNoErrors(reporter);
 			reporter.clear();
-			assertEq("xxx", getValueFromGetter(xc, "get$item"));
-			assertEq(125, getValueFromGetter(xc, "get$item_1"));
-			assertEq(true, getValueFromGetter(xc, "get$item_2"));
+			assertEq("xxx", SUtils.getValueFromGetter(xc, "get$item"));
+			assertEq(125, SUtils.getValueFromGetter(xc, "get$item_1"));
+			assertEq(true, SUtils.getValueFromGetter(xc, "get$item_2"));
 		} catch (Exception ex) {fail(ex);}
 if(T)return;
 		try {
@@ -381,7 +324,7 @@ if(T)return;
 			System.out.println(classDir + "bugreports/xp.xp");
 			XDFactory.writeXDPool(classDir + "bugreports/xp.xp", xp);
 			xp = XDFactory.readXDPool("classpath://bugreports.xp.xp");
-			genXComponent(xp, tempDir);
+			genXComponent(xp, new File(tempDir));
 			json = "[{\"a\":true},\"xxx\",125, true]";
 			j = xp.createXDDocument().jparse(json, reporter);
 			assertNoErrors(reporter);
@@ -390,13 +333,13 @@ if(T)return;
 				JsonUtil.toJsonString(j, true));
 			xc = xp.createXDDocument().jparseXComponent(json,
 				null, reporter);
-			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), xc.toJson()),
-				JsonUtil.toJsonString(xc.toJson(), true));
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), toJson(xc)),
+				JsonUtil.toJsonString(toJson(xc), true));
 			assertNoErrors(reporter);
 			reporter.clear();
-			assertEq("xxx", getValueFromGetter(xc, "get$item"));
-			assertEq(125, getValueFromGetter(xc, "get$item_1"));
-			assertEq(true, getValueFromGetter(xc, "get$item_2"));
+			assertEq("xxx", SUtils.getValueFromGetter(xc, "get$item"));
+			assertEq(125, SUtils.getValueFromGetter(xc, "get$item_1"));
+			assertEq(true, SUtils.getValueFromGetter(xc, "get$item_2"));
 		} catch (Exception ex) {fail(ex);}
 if(T)return;
 		try {
@@ -445,7 +388,7 @@ if(T)return;
 "</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			genXComponent(xp, tempDir);
+			genXComponent(xp, new File(tempDir));
 			json = "{\"a\":\"aaa\"}";
 			j = xp.createXDDocument().jparse(json, reporter);
 			assertNoErrors(reporter);
@@ -453,15 +396,15 @@ if(T)return;
 				JsonUtil.toJsonString(j, true));
 			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
 			reporter.checkAndThrowErrors();
-			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), xc.toJson()),
-				JsonUtil.toJsonString(xc.toJson(), true));
-			assertEq("aaa", getValueFromGetter(xc, "get$a"));
-			setValueToSetter(xc, "set$a", 123);
-			assertEq(123, getValueFromGetter(xc, "get$a"));
-			setValueToSetter(xc, "set$a", null);
-			assertNull(getValueFromGetter(xc, "get$a"));
-			setValueToSetter(xc, "set$a", " a b \t");
-			assertEq(" a b \t", getValueFromGetter(xc, "get$a"));
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), toJson(xc)),
+				JsonUtil.toJsonString(toJson(xc), true));
+			assertEq("aaa", SUtils.getValueFromGetter(xc, "get$a"));
+			SUtils.setValueToSetter(xc, "set$a", 123);
+			assertEq(123, SUtils.getValueFromGetter(xc, "get$a"));
+			SUtils.setValueToSetter(xc, "set$a", null);
+			assertNull(SUtils.getValueFromGetter(xc, "get$a"));
+			SUtils.setValueToSetter(xc, "set$a", " a b \t");
+			assertEq(" a b \t", SUtils.getValueFromGetter(xc, "get$a"));
 
 			json = "{\"a\":123}";
 			j = xp.createXDDocument().jparse(json, reporter);
@@ -470,9 +413,9 @@ if(T)return;
 				JsonUtil.toJsonString(j, true));
 			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
 			reporter.checkAndThrowErrors();
-			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), xc.toJson()),
-				JsonUtil.toJsonString(xc.toJson(), true));
-			assertEq(123, getValueFromGetter(getValueFromGetter(
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), toJson(xc)),
+				JsonUtil.toJsonString(toJson(xc), true));
+			assertEq(123, SUtils.getValueFromGetter(SUtils.getValueFromGetter(
 				xc, "getjs$item"), "getvalue"));
 
 			json = "{\"a\":false}";
@@ -482,11 +425,11 @@ if(T)return;
 				JsonUtil.toJsonString(j, true));
 			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
 			reporter.checkAndThrowErrors();
-			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), xc.toJson()),
-				JsonUtil.toJsonString(xc.toJson(), true));
-			assertEq(false, getValueFromGetter(xc, "get$a"));
-			setValueToSetter(xc, "set$a", 123);
-			assertEq(123, getValueFromGetter(xc, "get$a"));
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), toJson(xc)),
+				JsonUtil.toJsonString(toJson(xc), true));
+			assertEq(false, SUtils.getValueFromGetter(xc, "get$a"));
+			SUtils.setValueToSetter(xc, "set$a", 123);
+			assertEq(123, SUtils.getValueFromGetter(xc, "get$a"));
 
 			json = "{\"a\":null}";
 			j = xp.createXDDocument().jparse(json, reporter);
@@ -495,9 +438,9 @@ if(T)return;
 				JsonUtil.toJsonString(j, true));
 			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
 			reporter.checkAndThrowErrors();
-			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), xc.toJson()),
-				JsonUtil.toJsonString(xc.toJson(), true));
-			assertEq(JNull.JNULL, getValueFromGetter(xc, "get$a"));
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), toJson(xc)),
+				JsonUtil.toJsonString(toJson(xc), true));
+			assertEq(JNull.JNULL, SUtils.getValueFromGetter(xc, "get$a"));
 
 			json = "{}";
 			j = xp.createXDDocument().jparse(json, reporter);
@@ -506,15 +449,15 @@ if(T)return;
 				JsonUtil.toJsonString(j, true));
 			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
 			reporter.checkAndThrowErrors();
-			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), xc.toJson()),
-				JsonUtil.toJsonString(xc.toJson(), true));
-			assertNull(getValueFromGetter(xc, "get$a"));
-			setValueToSetter(xc, "set$a", 123);
-			assertEq(123, getValueFromGetter(xc, "get$a"));
-			setValueToSetter(xc, "set$a", null);
-			assertNull(getValueFromGetter(xc, "get$a"));
-			setValueToSetter(xc, "set$a", " a b \t");
-			assertEq(" a b \t", getValueFromGetter(xc, "get$a"));
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), toJson(xc)),
+				JsonUtil.toJsonString(toJson(xc), true));
+			assertNull(SUtils.getValueFromGetter(xc, "get$a"));
+			SUtils.setValueToSetter(xc, "set$a", 123);
+			assertEq(123, SUtils.getValueFromGetter(xc, "get$a"));
+			SUtils.setValueToSetter(xc, "set$a", null);
+			assertNull(SUtils.getValueFromGetter(xc, "get$a"));
+			SUtils.setValueToSetter(xc, "set$a", " a b \t");
+			assertEq(" a b \t", SUtils.getValueFromGetter(xc, "get$a"));
 
 			json = "{\"a\":123}";
 			j = xp.createXDDocument().jparse(json, reporter);
@@ -523,9 +466,9 @@ if(T)return;
 				JsonUtil.toJsonString(j, true));
 			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
 			reporter.checkAndThrowErrors();
-			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), xc.toJson()),
-				JsonUtil.toJsonString(xc.toJson(), true));
-			assertEq(123, getValueFromGetter(xc, "get$a"));
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), toJson(xc)),
+				JsonUtil.toJsonString(toJson(xc), true));
+			assertEq(123, SUtils.getValueFromGetter(xc, "get$a"));
 
 			json = "{\"a\":false}";
 			j = xp.createXDDocument().jparse(json, reporter);
@@ -534,11 +477,11 @@ if(T)return;
 				JsonUtil.toJsonString(j, true));
 			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
 			reporter.checkAndThrowErrors();
-			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), xc.toJson()),
-				JsonUtil.toJsonString(xc.toJson(), true));
-			assertEq(false, getValueFromGetter(xc, "get$a"));
-			setValueToSetter(xc, "set$a", JNull.JNULL);
-			assertEq(JNull.JNULL, getValueFromGetter(xc, "get$a"));
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), toJson(xc)),
+				JsonUtil.toJsonString(toJson(xc), true));
+			assertEq(false, SUtils.getValueFromGetter(xc, "get$a"));
+			SUtils.setValueToSetter(xc, "set$a", JNull.JNULL);
+			assertEq(JNull.JNULL, SUtils.getValueFromGetter(xc, "get$a"));
 
 			json = "{\"a\":null}";
 			j = xp.createXDDocument().jparse(json, reporter);
@@ -546,7 +489,7 @@ if(T)return;
 			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
 				JsonUtil.toJsonString(j, true));
 			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
-			assertEq(JNull.JNULL, getValueFromGetter(xc, "get$a"));
+			assertEq(JNull.JNULL, SUtils.getValueFromGetter(xc, "get$a"));
 
 			json = "{}";
 			j = xp.createXDDocument().jparse(json, reporter);
@@ -555,9 +498,9 @@ if(T)return;
 				JsonUtil.toJsonString(j, true));
 			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
 			reporter.checkAndThrowErrors();
-			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), xc.toJson()),
-				JsonUtil.toJsonString(xc.toJson(), true));
-			assertNull(getValueFromGetter(xc, "get$a"));
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), toJson(xc)),
+				JsonUtil.toJsonString(toJson(xc), true));
+			assertNull(SUtils.getValueFromGetter(xc, "get$a"));
 
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='A | B'>\n"+
@@ -573,7 +516,7 @@ if(T)return;
 "</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			genXComponent(xp, tempDir);
+			genXComponent(xp, new File(tempDir));
 			json = "{\"a\":\"aaa\"}";
 			j = xp.createXDDocument().jparse(json, reporter);
 			assertNoErrors(reporter);
@@ -581,15 +524,15 @@ if(T)return;
 				JsonUtil.toJsonString(j, true));
 			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
 			reporter.checkAndThrowErrors();
-			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), xc.toJson()),
-				JsonUtil.toJsonString(xc.toJson(), true));
-			assertEq("aaa", getValueFromGetter(xc, "get$a"));
-			setValueToSetter(xc, "set$a", 123);
-			assertEq(123, getValueFromGetter(xc, "get$a"));
-			setValueToSetter(xc, "set$a", null);
-			assertNull(getValueFromGetter(xc, "get$a"));
-			setValueToSetter(xc, "set$a", "xyz");
-			assertEq("xyz", getValueFromGetter(xc, "get$a"));
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), toJson(xc)),
+				JsonUtil.toJsonString(toJson(xc), true));
+			assertEq("aaa", SUtils.getValueFromGetter(xc, "get$a"));
+			SUtils.setValueToSetter(xc, "set$a", 123);
+			assertEq(123, SUtils.getValueFromGetter(xc, "get$a"));
+			SUtils.setValueToSetter(xc, "set$a", null);
+			assertNull(SUtils.getValueFromGetter(xc, "get$a"));
+			SUtils.setValueToSetter(xc, "set$a", "xyz");
+			assertEq("xyz", SUtils.getValueFromGetter(xc, "get$a"));
 			json = "{\"a\":123}";
 			j = xp.createXDDocument().jparse(json, reporter);
 			reporter.checkAndThrowErrors();
@@ -597,9 +540,9 @@ if(T)return;
 				JsonUtil.toJsonString(j, true));
 			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
 			reporter.checkAndThrowErrors();
-			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), xc.toJson()),
-				JsonUtil.toJsonString(xc.toJson(), true));
-			assertEq(123, getValueFromGetter(xc, "get$a"));
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), toJson(xc)),
+				JsonUtil.toJsonString(toJson(xc), true));
+			assertEq(123, SUtils.getValueFromGetter(xc, "get$a"));
 			json = "{\"a\":false}";
 			j = xp.createXDDocument().jparse(json, reporter);
 			reporter.checkAndThrowErrors();
@@ -607,11 +550,11 @@ if(T)return;
 				JsonUtil.toJsonString(j, true));
 			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
 			reporter.checkAndThrowErrors();
-			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), xc.toJson()),
-				JsonUtil.toJsonString(xc.toJson(), true));
-			assertEq(false, getValueFromGetter(xc, "get$a"));
-			setValueToSetter(xc, "set$a", 123);
-			assertEq(123, getValueFromGetter(xc, "get$a"));
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), toJson(xc)),
+				JsonUtil.toJsonString(toJson(xc), true));
+			assertEq(false, SUtils.getValueFromGetter(xc, "get$a"));
+			SUtils.setValueToSetter(xc, "set$a", 123);
+			assertEq(123, SUtils.getValueFromGetter(xc, "get$a"));
 
 			json = "{\"a\":null}";
 			j = xp.createXDDocument().jparse(json, reporter);
@@ -620,9 +563,9 @@ if(T)return;
 				JsonUtil.toJsonString(j, true));
 			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
 			reporter.checkAndThrowErrors();
-			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), xc.toJson()),
-				JsonUtil.toJsonString(xc.toJson(), true));
-			assertEq(JNull.JNULL, getValueFromGetter(xc, "get$a"));
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), toJson(xc)),
+				JsonUtil.toJsonString(toJson(xc), true));
+			assertEq(JNull.JNULL, SUtils.getValueFromGetter(xc, "get$a"));
 
 			json = "{}";
 			j = xp.createXDDocument().jparse(json, reporter);
@@ -631,9 +574,9 @@ if(T)return;
 				JsonUtil.toJsonString(j, true));
 			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
 			reporter.checkAndThrowErrors();
-			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), xc.toJson()),
-				JsonUtil.toJsonString(xc.toJson(), true));
-			assertNull(getValueFromGetter(xc, "get$a"));
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), toJson(xc)),
+				JsonUtil.toJsonString(toJson(xc), true));
+			assertNull(SUtils.getValueFromGetter(xc, "get$a"));
 
 			json = "[null]";
 			j = xp.createXDDocument().jparse(json, reporter);
@@ -643,9 +586,9 @@ if(T)return;
 			xc = xp.createXDDocument().jparseXComponent(json,
 				Class.forName("bugreports.data.XB"), reporter);
 			reporter.checkAndThrowErrors();
-			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), xc.toJson()),
-				JsonUtil.toJsonString(xc.toJson(), true));
-			assertEq(JNull.JNULL, getValueFromGetter(xc, "get$item"));
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), toJson(xc)),
+				JsonUtil.toJsonString(toJson(xc), true));
+			assertEq(JNull.JNULL, SUtils.getValueFromGetter(xc, "get$item"));
 			json = "[123]";
 			j = xp.createXDDocument().jparse(json, reporter);
 			reporter.checkAndThrowErrors();
@@ -653,9 +596,9 @@ if(T)return;
 				JsonUtil.toJsonString(j, true));
 			xc = xp.createXDDocument().jparseXComponent(json,
 				Class.forName("bugreports.data.XB"), reporter);
-			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), xc.toJson()),
-				JsonUtil.toJsonString(xc.toJson(), true));
-			assertEq(123, getValueFromGetter(xc, "get$item"));
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), toJson(xc)),
+				JsonUtil.toJsonString(toJson(xc), true));
+			assertEq(123, SUtils.getValueFromGetter(xc, "get$item"));
 			json = "[true]";
 			j = xp.createXDDocument().jparse(json, reporter);
 			reporter.checkAndThrowErrors();
@@ -663,9 +606,9 @@ if(T)return;
 				JsonUtil.toJsonString(j, true));
 			xc = xp.createXDDocument().jparseXComponent(json,
 				Class.forName("bugreports.data.XB"), reporter);
-			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), xc.toJson()),
-				JsonUtil.toJsonString(xc.toJson(), true));
-			assertEq(true, getValueFromGetter(xc, "get$item"));
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), toJson(xc)),
+				JsonUtil.toJsonString(toJson(xc), true));
+			assertEq(true, SUtils.getValueFromGetter(xc, "get$item"));
 			json = "[]";
 			j = xp.createXDDocument().jparse(json, reporter);
 			reporter.checkAndThrowErrors();
@@ -673,9 +616,9 @@ if(T)return;
 				JsonUtil.toJsonString(j, true));
 			xc = xp.createXDDocument().jparseXComponent(json,
 				Class.forName("bugreports.data.XB"), reporter);
-			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), xc.toJson()),
-				JsonUtil.toJsonString(xc.toJson(), true));
-			assertNull(getValueFromGetter(xc, "get$item"));
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), toJson(xc)),
+				JsonUtil.toJsonString(toJson(xc), true));
+			assertNull(SUtils.getValueFromGetter(xc, "get$item"));
 
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='json'>\n"+
@@ -687,7 +630,7 @@ if(T)return;
 "</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			genXComponent(xp, tempDir);
+			genXComponent(xp, new File(tempDir));
 			json = "{\"a\":\"aaa\"}";
 			j = xp.createXDDocument().jparse(json, reporter);
 			reporter.checkAndThrowErrors();
@@ -695,10 +638,10 @@ if(T)return;
 				JsonUtil.toJsonString(j, true));
 			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
 			reporter.checkAndThrowErrors();
-			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), xc.toJson()),
-				JsonUtil.toJsonString(xc.toJson(), true));
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), toJson(xc)),
+				JsonUtil.toJsonString(toJson(xc), true));
 			reporter.checkAndThrowErrors();
-			assertEq("aaa", getValueFromGetter(xc, "get$a"));
+			assertEq("aaa", SUtils.getValueFromGetter(xc, "get$a"));
 			json = "{\"a\":123}";
 			j = xp.createXDDocument().jparse(json, reporter);
 			reporter.checkAndThrowErrors();
@@ -706,10 +649,10 @@ if(T)return;
 				JsonUtil.toJsonString(j, true));
 			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
 			reporter.checkAndThrowErrors();
-			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), xc.toJson()),
-				JsonUtil.toJsonString(xc.toJson(), true));
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), toJson(xc)),
+				JsonUtil.toJsonString(toJson(xc), true));
 			reporter.checkAndThrowErrors();
-			assertEq(123, getValueFromGetter(xc, "get$a"));
+			assertEq(123, SUtils.getValueFromGetter(xc, "get$a"));
 			json = "{\"a\":false}";
 			j = xp.createXDDocument().jparse(json, reporter);
 			reporter.checkAndThrowErrors();
@@ -717,10 +660,10 @@ if(T)return;
 				JsonUtil.toJsonString(j, true));
 			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
 			reporter.checkAndThrowErrors();
-			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), xc.toJson()),
-				JsonUtil.toJsonString(xc.toJson(), true));
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), toJson(xc)),
+				JsonUtil.toJsonString(toJson(xc), true));
 			reporter.checkAndThrowErrors();
-			assertTrue(!(Boolean) getValueFromGetter(xc, "get$a"));
+			assertTrue(!(Boolean) SUtils.getValueFromGetter(xc, "get$a"));
 			json = "{\"a\":null}";
 			j = xp.createXDDocument().jparse(json, reporter);
 			reporter.checkAndThrowErrors();
@@ -728,9 +671,9 @@ if(T)return;
 				JsonUtil.toJsonString(j, true));
 			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
 			reporter.checkAndThrowErrors();
-			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), xc.toJson()),
-				JsonUtil.toJsonString(xc.toJson(), true));
-			assertEq(JNull.JNULL, getValueFromGetter(xc, "get$a"));
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), toJson(xc)),
+				JsonUtil.toJsonString(toJson(xc), true));
+			assertEq(JNull.JNULL, SUtils.getValueFromGetter(xc, "get$a"));
 			json = "{}";
 			j = xp.createXDDocument().jparse(json, reporter);
 			reporter.checkAndThrowErrors();
@@ -738,10 +681,10 @@ if(T)return;
 				JsonUtil.toJsonString(j, true));
 			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
 			reporter.checkAndThrowErrors();
-			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), xc.toJson()),
-				JsonUtil.toJsonString(xc.toJson(), true));
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), toJson(xc)),
+				JsonUtil.toJsonString(toJson(xc), true));
 			reporter.checkAndThrowErrors();
-			assertNull(getValueFromGetter(xc, "get$a"));
+			assertNull(SUtils.getValueFromGetter(xc, "get$a"));
 
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='json'>\n"+
@@ -757,7 +700,7 @@ if(T)return;
 "</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			genXComponent(xp, tempDir);
+			genXComponent(xp, new File(tempDir));
 			json = "[null, 12, \" a b \"]";
 			j = xp.createXDDocument().jparse(json, reporter);
 			assertNoErrors(reporter);
@@ -769,9 +712,9 @@ if(T)return;
 			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
 			assertNoErrors(reporter);
 			reporter.clear();
-			assertEq(JNull.JNULL, getValueFromGetter(xc, "get$item"));
-			assertEq(12, getValueFromGetter(xc, "get$item_1"));
-			assertEq(" a b ", getValueFromGetter(xc, "get$item_2"));
+			assertEq(JNull.JNULL, SUtils.getValueFromGetter(xc, "get$item"));
+			assertEq(12, SUtils.getValueFromGetter(xc, "get$item_1"));
+			assertEq(" a b ", SUtils.getValueFromGetter(xc, "get$item_2"));
 			json = "[null]";
 			j = xp.createXDDocument().jparse(json, reporter);
 			assertNoErrors(reporter);
@@ -782,9 +725,9 @@ if(T)return;
 			reporter.clear();
 			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
 			assertNoErrors(reporter);
-			assertEq(JNull.JNULL, getValueFromGetter(xc, "get$item"));
-			assertNull(getValueFromGetter(xc, "get$item_1"));
-			assertNull(getValueFromGetter(xc, "get$item_2"));
+			assertEq(JNull.JNULL, SUtils.getValueFromGetter(xc, "get$item"));
+			assertNull(SUtils.getValueFromGetter(xc, "get$item_1"));
+			assertNull(SUtils.getValueFromGetter(xc, "get$item_2"));
 			json = "[12]";
 			j = xp.createXDDocument().jparse(json, reporter);
 			assertNoErrors(reporter);
@@ -795,9 +738,9 @@ if(T)return;
 			reporter.clear();
 			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
 			assertNoErrors(reporter);
-			assertNull(getValueFromGetter(xc, "get$item"));
-			assertEq(12, getValueFromGetter(xc, "get$item_1"));
-			assertNull(getValueFromGetter(xc, "get$item_2"));
+			assertNull(SUtils.getValueFromGetter(xc, "get$item"));
+			assertEq(12, SUtils.getValueFromGetter(xc, "get$item_1"));
+			assertNull(SUtils.getValueFromGetter(xc, "get$item_2"));
 			json = "[\"\"]";
 			j = xp.createXDDocument().jparse(json, reporter);
 			assertNoErrors(reporter);
@@ -808,9 +751,9 @@ if(T)return;
 			reporter.clear();
 			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
 			assertNoErrors(reporter);
-			assertNull(getValueFromGetter(xc, "get$item"));
-			assertNull(getValueFromGetter(xc, "get$item_1"));
-			assertEq("", getValueFromGetter(xc, "get$item_2"));
+			assertNull(SUtils.getValueFromGetter(xc, "get$item"));
+			assertNull(SUtils.getValueFromGetter(xc, "get$item_1"));
+			assertEq("", SUtils.getValueFromGetter(xc, "get$item_2"));
 		} catch (Exception ex) {fail(ex);}
 if(T){return;}
 		try {
@@ -842,7 +785,7 @@ if(T){return;}
 "</xd:component>\n"+
 "</xd:collection>";
 			xp = compile(xdef);
-			genXComponent(xp, tempDir);
+			genXComponent(xp, new File(tempDir));
 			Class<?> TX = Class.forName("bugreports.data.TX");
 			Class<?> TY = Class.forName("bugreports.data.TY");
 			Class<?> TZ = Class.forName("bugreports.data.TZ");
@@ -859,13 +802,13 @@ if(T){return;}
 			assertNoErrors(reporter);
 			reporter.clear();
 			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
-				xc.toJson());
+				toJson(xc));
 			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
 				JsonUtil.xmlToJson(xc.toXml()));
 			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
-				JsonUtil.xmlToJson(JsonUtil.jsonToXml(xc.toJson())));
+				JsonUtil.xmlToJson(JsonUtil.jsonToXml(toJson(xc))));
 			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
-				JsonUtil.xmlToJson(JsonUtil.jsonToXmlXD(xc.toJson())));
+				JsonUtil.xmlToJson(JsonUtil.jsonToXmlXD(toJson(xc))));
 			json = "[123]";
 			j = xp.createXDDocument("X").jparse(json, reporter);
 			assertNoErrors(reporter);
@@ -877,7 +820,7 @@ if(T){return;}
 			xc = xp.createXDDocument("X").jparseXComponent(json, TX, reporter);
 			assertNoErrors(reporter);
 			reporter.clear();
-			assertEq(123, getValueFromGetter(xc, "get$item"));
+			assertEq(123, SUtils.getValueFromGetter(xc, "get$item"));
 			json = "[{\"a\":true},\"xxx\",125, true]";
 			j = xp.createXDDocument("Y").jparse(json, reporter);
 			assertNoErrors(reporter);
@@ -885,13 +828,13 @@ if(T){return;}
 			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
 				JsonUtil.toJsonString(j, true));
 			xc = xp.createXDDocument("Y").jparseXComponent(json, TY, reporter);
-			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), xc.toJson()),
-				JsonUtil.toJsonString(xc.toJson(), true));
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), toJson(xc)),
+				JsonUtil.toJsonString(toJson(xc), true));
 			assertNoErrors(reporter);
 			reporter.clear();
-			assertEq("xxx", getValueFromGetter(xc, "get$item"));
-			assertEq(125, getValueFromGetter(xc, "get$item_1"));
-			assertEq(true, getValueFromGetter(xc, "get$item_2"));
+			assertEq("xxx", SUtils.getValueFromGetter(xc, "get$item"));
+			assertEq(125, SUtils.getValueFromGetter(xc, "get$item_1"));
+			assertEq(true, SUtils.getValueFromGetter(xc, "get$item_2"));
 			json = "{\"a\":\"2020-01-01\"}";
 			j = xp.createXDDocument("Z").jparse(json, reporter);
 			assertNoErrors(reporter);
@@ -901,7 +844,7 @@ if(T){return;}
 			xc = xp.createXDDocument("Z").jparseXComponent(json, TZ, reporter);
 			assertNoErrors(reporter);
 			reporter.clear();
-			assertEq("2020-01-01", getValueFromGetter(xc, "get$a"));
+			assertEq("2020-01-01", SUtils.getValueFromGetter(xc, "get$a"));
 
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='A|B|json'>\n"+
@@ -953,7 +896,7 @@ if(T){return;}
 "</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			genXComponent(xp, tempDir);
+			genXComponent(xp, new File(tempDir));
 			xd = xp.createXDDocument();
 			xml =
 "<T>\n" +
@@ -999,7 +942,7 @@ if(T){return;}
 "<a><c f='string'/></a>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			genXComponent(xp, tempDir);
+			genXComponent(xp, new File(tempDir));
 			xd = xp.createXDDocument();
 
 			xd.setLexiconLanguage("eng");
@@ -1138,7 +1081,7 @@ if(T){return;}
 "</xd:lexicon>",
 			};
 			xp = compile(params);
-			genXComponent(xp, tempDir);
+			genXComponent(xp, new File(tempDir));
 			xd = xp.createXDDocument();
 			xml =
 "<Smlouva Číslo = \"0123456789\">\n"+

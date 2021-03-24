@@ -112,7 +112,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		_listComponent = _precomp.getPComponents();
 		ClassLoader cloader = Thread.currentThread().getContextClassLoader();
 		_scriptCompiler = new CompileXScript(_codeGenerator,
-			XConstants.XML10, XPreCompiler.DEFINED_PREFIXES, cloader);
+			StringParser.XMLVER1_0, XPreCompiler.DEFINED_PREFIXES, cloader);
 		_scriptCompiler.setReportWriter(reporter);
 	}
 
@@ -1492,7 +1492,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					error(pnode._name, XDEF.XDEF317);
 				} else {
 					String s = sval.getString().trim();
-					if (!StringParser.chkNCName(s, XConstants.XML10)) {
+					if (!StringParser.chkNCName(s, StringParser.XMLVER1_0)) {
 						//The name of JSON model "&{0}" can't contain ":"
 						error(sval, XDEF.XDEF316, s);
 					}

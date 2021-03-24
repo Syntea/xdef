@@ -2,9 +2,14 @@ package org.xdef.json;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import org.xdef.msg.JSON;
+import org.xdef.sys.GPSPosition;
+import org.xdef.sys.Price;
+import org.xdef.sys.SDatetime;
+import org.xdef.sys.SDuration;
 import org.xdef.sys.SRuntimeException;
 
 /** Provides comparing of JSON objects
@@ -105,10 +110,10 @@ class JsonCompare {
 	 * @throws SRuntimeException if objects are incomparable
 	 */
 	final static boolean equalValue(final Object o1, final Object o2) {
-		if (o1 == null || o2 instanceof JNull) {
+		if (o1 == null) {
 			return o2 == null || o2 instanceof JNull;
-		} else if (o2 == null || o1 instanceof JNull) {
-			return o1 == null || o1 instanceof JNull;
+		} else if (o1 instanceof JNull) {
+			return o2 == null || o2 instanceof JNull;
 		}
 		if (o1 instanceof Map) {
 			return o2 instanceof Map ? equalMap((Map)o1, (Map)o2) : false;
@@ -126,6 +131,26 @@ class JsonCompare {
 		if (o1 instanceof Boolean) {
 			return ((Boolean) o1).equals(o2);
 		}
+		if (o1 instanceof Character) {
+			return ((Character) o1).equals(o2);
+		}
+		if (o1 instanceof SDatetime) {
+			return ((SDatetime) o1).equals(o2);
+		}
+		if (o1 instanceof SDuration) {
+			return ((SDuration) o1).equals(o2);
+		}
+		if (o1 instanceof GPSPosition) {
+			return ((GPSPosition) o1).equals(o2);
+		}
+		if (o1 instanceof Price) {
+			return ((Price) o1).equals(o2);
+		}
+		try {
+			byte[] b1 = (byte[]) o1;
+			byte[] b2 = (byte[]) o2;
+			return Arrays.equals(b2, b1);
+		} catch (Exception ex) {}
 		// Incomparable objects &{0} and &{1}
 		throw new SRuntimeException(JSON.JSON012,
 			o1.getClass().getName(), o2.getClass().getName());

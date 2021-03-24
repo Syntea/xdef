@@ -1,10 +1,5 @@
 package org.xdef.json;
 
-import org.xdef.XDConstants;
-import org.xdef.impl.xml.KNamespace;
-import org.xdef.msg.JSON;
-import org.xdef.sys.SRuntimeException;
-import org.xdef.xml.KXmlUtils;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -12,15 +7,18 @@ import javax.xml.XMLConstants;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.xdef.impl.XConstants;
-import org.xdef.impl.compile.CompileJsonXdef;
+import org.xdef.XDConstants;
+import org.xdef.impl.xml.KNamespace;
+import org.xdef.msg.JSON;
+import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
+import org.xdef.xml.KXmlUtils;
 
-/** Test X-definition transformation JSON -> XML
+/** Conversion of JSON/XON to XML
  * @author Vaclav Trojan
  */
-class JsonToXml extends JsonUtil {
+class JsonToXml extends JsonTools implements JsonNames {
 	/** Prefix of JSON namespace. */
 	private String _jsPrefix;
 	/** JSON namespace. */
@@ -71,7 +69,7 @@ class JsonToXml extends JsonUtil {
 	 * @param mode 0 .. text node, 1.. attribute, 2.. array of simple items
 	 * @return XML form of string from the argument val,
 	 */
-	private static String jstringToXML(final Object val, final int mode) {
+	final static String jstringToXML(final Object val, final int mode) {
 		if (val == null) {
 			return "null";
 		}
@@ -182,9 +180,9 @@ class JsonToXml extends JsonUtil {
 						}
 						break;
 					default:
-						if (ch < ' '
-							|| StringParser.getXmlCharType(ch,XConstants.XML10)
-								== StringParser.XML_CHAR_ILLEGAL) {
+						if (ch < ' '|| StringParser.getXmlCharType(ch,
+							StringParser.XMLVER1_0) ==
+							StringParser.XML_CHAR_ILLEGAL) {
 							if (!addQuot) { // force quote
 								SUtils.modifyStringBuilder(sb, "\\", "\\\\");
 								SUtils.modifyStringBuilder(sb, "\"", "\\\"");
@@ -258,8 +256,8 @@ class JsonToXml extends JsonUtil {
 	public final static boolean isSimpleValue(final Object val) {
 		Object o;
 		return val == null || val instanceof Number || val instanceof Boolean
-			|| val instanceof String || val instanceof CompileJsonXdef.JValue
-			&& ((o=((CompileJsonXdef.JValue) val).getValue()) == null
+			|| val instanceof String || val instanceof JsonParser.JValue
+			&& ((o=((JsonParser.JValue) val).getValue()) == null
 				|| o instanceof Number || o instanceof Boolean
 				|| o instanceof String);
 	}
@@ -721,50 +719,6 @@ class JsonToXml extends JsonUtil {
 		}
 	}
 
-	/** Generate XML form of string,
-	 * @param val Object with value.
-	 * @param attr if true the value is generated for attribute, otherwise
-	 * it is generated for text node value.
-	 * @return XML form of string from the argument val,
-	 */
-	private String genSimpleValueToXml(final Object x) {
-		if (x == null) {
-			return "null";
-		} else if (x instanceof String) {// JSON string to XML form
-			String s = (String) x;
-			if (s.isEmpty() || "null".equals(s)
-				|| "true".equals(s) || "false".equals(s)) {
-				return '"' + s + '"';
-			}
-			boolean addQuot = s.indexOf(' ') >= 0 || s.indexOf('\t') >= 0
-				|| s.indexOf('\n') >= 0 || s.indexOf('\r') >= 0
-				|| s.indexOf('\f') >= 0 || s.indexOf('\b') >= 0
-				|| s.indexOf('\\') >= 0 || s.indexOf('"') >= 0;
-			if (!addQuot) {
-				char ch = s.charAt(0);
-				if (ch == '-' || ch >= '0' && ch <= '9') {
-					StringParser p = new StringParser(s);
-					if ((p.isSignedFloat() || p.isSignedInteger()) && p.eos()) {
-						return '"' + s + '"'; // value is number, must be quoted
-					}
-				}
-			}
-			if (addQuot) {
-				char ch = s.charAt(0);
-				if (s.equals(s.trim()) && ch != '"' && ch != '[') {
-					// For attributes it is not necessary to add quotes if the data
-					// does not contain leading or trailing white spaces,
-					return s;
-				} else {
-					return '"' + jstringToSource(s) + '"';
-				}
-			} else {
-				return s;
-			}
-		}
-		return x.toString();
-	}
-
 	/** Create W3C JSON element with value.
 	 * @param val value of JSON element.
 	 * @param parent parent node where to add created element.
@@ -781,9 +735,7 @@ class JsonToXml extends JsonUtil {
 			e = genArrayW3C((List) val);
 		} else {
 			e = genJElementW3C(J_ITEM);
-			e = genJElementW3C(J_ITEM);
-			e.setAttribute(J_VALUEATTR, genSimpleValueToXml(val));
-//			e.setAttribute(J_VALUEATTR, jstringToXML(val, 1));
+			e.setAttribute(J_VALUEATTR, genXMLValue(val));
 		}
 		parent.appendChild(e);
 		return e;
@@ -811,7 +763,7 @@ class JsonToXml extends JsonUtil {
 		while (it.hasNext()) {
 			Map.Entry entry = (Map.Entry) it.next();
 			Element ee = genValueW3C(entry.getValue(), e);
-			String key = jstringToSource((String) entry.getKey());
+			String key = toXmlName((String) entry.getKey());
 			ee.setAttribute(J_KEYATTR, key);
 		}
 		return e;

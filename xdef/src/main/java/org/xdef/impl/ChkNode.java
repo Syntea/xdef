@@ -1,63 +1,68 @@
 package org.xdef.impl;
 
-import org.xdef.impl.code.DefBoolean;
-import org.xdef.impl.code.DefDuration;
-import org.xdef.impl.code.DefDecimal;
-import org.xdef.impl.code.DefContainer;
-import org.xdef.impl.code.DefOutStream;
-import org.xdef.impl.code.DefString;
-import org.xdef.impl.code.DefNull;
-import org.xdef.impl.code.DefInStream;
-import org.xdef.impl.code.DefLong;
-import org.xdef.impl.code.DefDate;
-import org.xdef.impl.code.DefElement;
-import org.xdef.impl.code.DefDouble;
-import org.xdef.msg.XDEF;
-import org.xdef.sys.ArrayReporter;
-import org.xdef.sys.Report;
-import org.xdef.sys.SDatetime;
-import org.xdef.sys.SDuration;
-import org.xdef.sys.SPosition;
-import org.xdef.sys.SReporter;
-import org.xdef.sys.SRuntimeException;
-import org.xdef.impl.xml.KNamespace;
-import org.xdef.xml.KXmlUtils;
+import java.io.File;
+import java.io.InputStream;
+import java.io.PrintStream;
+import java.io.Writer;
+import java.math.BigDecimal;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import javax.xml.xpath.XPathFunctionResolver;
+import javax.xml.xpath.XPathVariableResolver;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.xdef.XDContainer;
 import org.xdef.XDDocument;
 import org.xdef.XDInput;
 import org.xdef.XDOutput;
 import org.xdef.XDParseResult;
 import org.xdef.XDParser;
 import org.xdef.XDPool;
-import org.xdef.proc.XXNode;
 import org.xdef.XDResultSet;
-import org.xdef.XDValueAbstract;
 import org.xdef.XDValue;
-import org.xdef.model.XMDefinition;
-import org.xdef.model.XMElement;
-import org.xdef.model.XMVariableTable;
-import java.io.InputStream;
-import java.io.PrintStream;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import java.io.File;
-import java.io.Writer;
-import java.net.URL;
-import java.util.Calendar;
-import java.util.List;
-import javax.xml.xpath.XPathFunctionResolver;
-import javax.xml.xpath.XPathVariableResolver;
-import org.xdef.sys.ReportWriter;
-import org.xdef.XDContainer;
+import org.xdef.XDValueAbstract;
 import org.xdef.impl.code.CodeUniqueset;
+import org.xdef.impl.code.DefBoolean;
+import org.xdef.impl.code.DefContainer;
+import org.xdef.impl.code.DefPrice;
+import org.xdef.impl.code.DefDate;
+import org.xdef.impl.code.DefDecimal;
+import org.xdef.impl.code.DefDouble;
+import org.xdef.impl.code.DefDuration;
+import org.xdef.impl.code.DefElement;
+import org.xdef.impl.code.DefGPSPosition;
+import org.xdef.impl.code.DefInStream;
 import org.xdef.impl.code.DefLocale;
-import java.util.Locale;
-import java.util.Map;
+import org.xdef.impl.code.DefLong;
+import org.xdef.impl.code.DefNull;
+import org.xdef.impl.code.DefOutStream;
+import org.xdef.impl.code.DefString;
+import org.xdef.impl.xml.KNamespace;
 import org.xdef.json.JsonUtil;
 import org.xdef.model.XMData;
+import org.xdef.model.XMDefinition;
+import org.xdef.model.XMElement;
 import org.xdef.model.XMNode;
+import org.xdef.model.XMVariableTable;
+import org.xdef.msg.XDEF;
+import org.xdef.proc.XXNode;
+import org.xdef.sys.ArrayReporter;
+import org.xdef.sys.Price;
+import org.xdef.sys.GPSPosition;
+import org.xdef.sys.Report;
+import org.xdef.sys.ReportWriter;
+import org.xdef.sys.SDatetime;
+import org.xdef.sys.SDuration;
+import org.xdef.sys.SPosition;
+import org.xdef.sys.SReporter;
+import org.xdef.sys.SRuntimeException;
+import org.xdef.xml.KXmlUtils;
+
 
 /** The abstract class for checking objects.
  * @author Vaclav Trojan
@@ -243,7 +248,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 
 	/** Get default table with references IDS (used internally in the
 	 * processor of XScript).
-	 * @return default table with references IDS or <tt>null</tt>.
+	 * @return default table with references IDS or null.
 	 */
 	public final CodeUniqueset getIdRefTable() {return _scp.getIdRefTable();}
 
@@ -255,7 +260,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	}
 
 	/** Get actual source context for create mode.
-	 * @return source context or <tt>null</tt> if not available.
+	 * @return source context or null if not available.
 	 */
 	public final Object getCreateContext() {return _sourceElem;}
 
@@ -514,6 +519,10 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 			setVariable(name, ((BigDecimal) value));
 		} else if (value instanceof Locale) {
 			setVariable(name, (new DefLocale((Locale) value)));
+		} else if (value instanceof Price) {
+			setVariable(name, (new DefPrice((Price) value)));
+		} else if (value instanceof GPSPosition) {
+			setVariable(name, (new DefGPSPosition((GPSPosition) value)));
 		} else {
 			//Value is not compatible with the type of variable '&{0}'
 			throw new SRuntimeException(XDEF.XDEF564, name);
@@ -528,10 +537,10 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	public final void setVariable(final String name, final long value) {
 		XVariable xv = findVariable(name);
 		switch (xv.getType()) {
-			case XD_FLOAT:
+			case XD_DOUBLE:
 				_scp.setVariable(xv, new DefDouble(value));
 				return;
-			case XD_INT:
+			case XD_LONG:
 				_scp.setVariable(xv, new DefLong(value));
 				return;
 			case XD_DECIMAL:
@@ -553,7 +562,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	public final void setVariable(final String name, final double value) {
 		XVariable xv = findVariable(name);
 		switch (xv.getType()) {
-			case XD_FLOAT:
+			case XD_DOUBLE:
 				_scp.setVariable(xv, new DefDouble(value));
 				return;
 			case XD_STRING:
@@ -602,14 +611,14 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 				case XD_STRING:
 					setVariable(name, value.toString());
 					return;
-				case XD_FLOAT:
-					if (value.getItemId() == XD_INT) {
+				case XD_DOUBLE:
+					if (value.getItemId() == XD_LONG) {
 						setVariable(name, value.doubleValue());
 						return;
 					}
 					break;
-				case XD_INT:
-					if (value.getItemId() == XD_FLOAT) {
+				case XD_LONG:
+					if (value.getItemId() == XD_DOUBLE) {
 						setVariable(name, value.longValue());
 						return;
 					}
@@ -646,11 +655,11 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 				_scp.setVariable(xv, new DefBoolean(value));
 				return;
 			}
-			case XD_FLOAT: {
+			case XD_DOUBLE: {
 				_scp.setVariable(xv, new DefDouble(value));
 				return;
 			}
-			case XD_INT: {
+			case XD_LONG: {
 				_scp.setVariable(xv, new DefLong(value));
 				return;
 			}
@@ -675,10 +684,10 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	private void setVariable(final String name, final BigDecimal value) {
 		XVariable xv = findVariable(name);
 		switch (xv.getType()) {
-			case XD_INT:
+			case XD_LONG:
 				_scp.setVariable(xv, new DefLong(value.longValue()));
 				return;
-			case XD_FLOAT:
+			case XD_DOUBLE:
 				_scp.setVariable(xv, new DefDouble(value.doubleValue()));
 				return;
 			case XD_DECIMAL:

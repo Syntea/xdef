@@ -690,8 +690,8 @@ public final class DefContainer extends XDValueAbstract
 			if (_value[i].getItemId() == XD_STRING ||
 				_value[i].getItemId() == XD_ATTR ||
 //				_value[i].getItemId() == XD_BOOLEAN ||
-//				_value[i].getItemId() == XD_INT ||
-//				_value[i].getItemId() == XD_FLOAT ||
+//				_value[i].getItemId() == XD_LONG ||
+//				_value[i].getItemId() == XD_DOUBLE ||
 //				_value[i].getItemId() == XD_DATETIME ||
 				_value[i].getItemId() == XD_TEXT) {
 				String s = (_value[i]).stringValue();
@@ -789,8 +789,8 @@ public final class DefContainer extends XDValueAbstract
 					switch (x.getItemId()) {
 						case XD_BOOLEAN:
 							return x.booleanValue();
-						case XD_FLOAT:
-						case XD_INT:
+						case XD_DOUBLE:
+						case XD_LONG:
 						case XD_DECIMAL:
 							return x.longValue() != 0;
 						case XD_STRING:
@@ -1049,8 +1049,8 @@ public final class DefContainer extends XDValueAbstract
 								case XD_STRING:
 									mykey =	dc.getXDItem(0).stringValue();
 									break;
-								case XD_FLOAT:
-								case XD_INT:
+								case XD_DOUBLE:
+								case XD_LONG:
 								case XD_DECIMAL:
 								case XD_BOOLEAN:
 								case XD_DATETIME:
@@ -1073,7 +1073,7 @@ public final class DefContainer extends XDValueAbstract
 				mykey = _value[i].stringValue();
 			} else if (type == XD_STRING) {
 				mykey = _value[i].stringValue();
-			} else if (type == XD_INT) {
+			} else if (type == XD_LONG) {
 				mykey = _value[i].longValue();
 			} else if (type == XD_BOOLEAN) {
 				mykey = _value[i].booleanValue() ? 1 : 0;

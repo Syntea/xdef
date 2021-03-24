@@ -10,7 +10,7 @@ public interface JSON {
 	public static final long JSON002 = 13834649601L;
 	/** Number expected&amp;{#SYS000} */
 	public static final long JSON003 = 13834649602L;
-	/** String with name of item expected&amp;{#SYS000} */
+	/** Name of item expected&amp;{#SYS000} */
 	public static final long JSON004 = 13834649603L;
 	/** Hexadecimal digit expected&amp;{#SYS000} */
 	public static final long JSON005 = 13834649604L;
@@ -48,8 +48,10 @@ public interface JSON {
 	public static final long JSON021 = 13834649620L;
 	/** Value pair &amp;{0} already exists */
 	public static final long JSON022 = 13834649621L;
-	/** Messages for JSON */
-	public static final long JSON_DESCRIPTION = 13834649622L;
+	/** Illegal number value&amp;{0}{ for the XON type "}{"}: &amp;{1} */
+	public static final long JSON023 = 13834649622L;
+	/** Messages for JSON and XON */
+	public static final long JSON_DESCRIPTION = 13834649623L;
 	/** English */
-	public static final long JSON_LANGUAGE = 13834649623L;
+	public static final long JSON_LANGUAGE = 13834649624L;
 }

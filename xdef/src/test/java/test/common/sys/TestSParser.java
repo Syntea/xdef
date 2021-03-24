@@ -1,7 +1,6 @@
 package test.common.sys;
 
 import java.math.BigInteger;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
@@ -322,7 +321,7 @@ public class TestSParser extends STester {
 			} else {
 				fail();
 			}
-			p  = new StringParser("1995-2-4T24:00:00+01:30");
+			p  = new StringParser("1995-02-04T24:00:00+01:30");
 			if (p.isISO8601Datetime()) {
 				assertEq("1995-02-05T00:00:00+01:30",
 					p.getParsedSDatetime().toISO8601());
@@ -355,7 +354,7 @@ public class TestSParser extends STester {
 				" 2004-02-18T23:15:06-01:30\n" + //ISO8601 datetime
 				" 2004-02-18T23:15:06Z\n" + //ISO8601 datetime
 				" 2004-02-18T23:15-01:30\n" + //ISO8601 datetime
-				" 2004-02-18T23-01:30\n" + //ISO8601 datetime
+				" 2004-02-18T23-00:05\n" + //ISO8601 datetime
 				" END" +
 				"");
 			p.skipSpaces();
@@ -472,7 +471,7 @@ public class TestSParser extends STester {
 			if (!p.isDatetime("yyyy-MM-ddTHH[:mm[:ss]][Z]")) {
 				fail("c) Error of date parser at position: " + p.getIndex());
 			} else {
-				assertEq("2004-02-18T23:00:00-01:30",
+				assertEq("2004-02-18T23:00:00-00:05",
 					p.getParsedSDatetime().toISO8601());
 			}
 			p.skipSpaces();
@@ -610,8 +609,6 @@ public class TestSParser extends STester {
 				c = p.getParsedCalendar();
 				assertEq(c.getTimeZone().getRawOffset(), 3600000);
 			}
-			SimpleDateFormat sdf =
-				new SimpleDateFormat("d/M/yyyy HH:mm:ss.S z");
 			s = "11/10/2005 17:56:46.395 CESTXYZ";
 			p = new StringParser(s);
 			if (!p.isDatetime("d/M/yyyy HH:mm:ss?',.'S z")) {
@@ -955,7 +952,7 @@ public class TestSParser extends STester {
 			} else {
 				fail();
 			}
-			s = "---2";
+			s = "---02";
 			p = new StringParser(s);
 			if (p.isISO8601Datetime()) {
 				d = p.getParsedSDatetime();
@@ -991,7 +988,7 @@ public class TestSParser extends STester {
 			} else {
 				fail();
 			}
-			s = "-1234-5";
+			s = "-1234-05";
 			p = new StringParser(s);
 			if (p.isISO8601Datetime()) {
 				d = p.getParsedSDatetime();
@@ -1027,7 +1024,7 @@ public class TestSParser extends STester {
 			} else {
 				fail();
 			}
-			s = "1999-5-1T20:43:09.876+01:00";
+			s = "1999-05-01T20:43:09.876+01:00";
 			p = new StringParser(s);
 			if (p.isISO8601Datetime()) {
 				d = p.getParsedSDatetime();

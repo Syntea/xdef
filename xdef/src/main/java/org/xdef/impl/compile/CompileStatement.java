@@ -293,7 +293,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 				String[] sqn;
 				// asterisk as maxLength
 				if (_sym == MUL_SYM && _g._sp - sp == 1
-					&& _g._tstack[_g._sp] == XD_INT
+					&& _g._tstack[_g._sp] == XD_LONG
 					&& (m = CompileCode.getTypeMethod(
 						CompileBase.NOTYPE_VALUE_ID,name)) != null
 					&& m.getResultType() == XD_PARSER
@@ -302,7 +302,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 					&& sqn.length >= 2 && "maxLength".equals(sqn[1])) {
 					nextSymbol();
 					_g.addCode(new DefLong(Long.MAX_VALUE));
-					_g._tstack[++_g._sp] = XD_INT;
+					_g._tstack[++_g._sp] = XD_LONG;
 					_g._cstack[_g._sp] = _g._lastCodeIndex;
 				} else {
 					readParam();
@@ -388,8 +388,8 @@ class CompileStatement extends XScriptParser implements CodeTable {
 				return;
 			}
 			short xType;
-			if ((xType =_g._tstack[_g._sp]) == XD_INT
-				|| xType == XD_FLOAT) {
+			if ((xType =_g._tstack[_g._sp]) == XD_LONG
+				|| xType == XD_DOUBLE) {
 				error(XDEF.XDEF216); //Unexpected character
 				nextSymbol();
 				return;
@@ -423,11 +423,11 @@ class CompileStatement extends XScriptParser implements CodeTable {
 				_g.genDup();
 			}
 			short itemType;
-			if ((itemType = var.getType()) == XD_INT) {
-				_g.addCode(new CodeOp(XD_INT,
+			if ((itemType = var.getType()) == XD_LONG) {
+				_g.addCode(new CodeOp(XD_LONG,
 					op==INC_SYM ? INC_I : DEC_I), 0);
-			} else if (itemType == XD_FLOAT) {
-				_g.addCode(new CodeOp(XD_FLOAT,
+			} else if (itemType == XD_DOUBLE) {
+				_g.addCode(new CodeOp(XD_DOUBLE,
 					op==INC_SYM ? INC_R : DEC_R), 0);
 			} else {
 				if (itemType != CompileBase.XD_UNDEF) {
@@ -800,7 +800,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		switch (unaryoperator) {
 			case PLUS_SYM:
 			case MINUS_SYM: {
-				if (xType != XD_INT && xType != XD_FLOAT
+				if (xType != XD_LONG && xType != XD_DOUBLE
 					 && xType != XD_DECIMAL) {
 					if (xType != CompileBase.XD_UNDEF) {
 						// don't report twice
@@ -810,12 +810,12 @@ class CompileStatement extends XScriptParser implements CodeTable {
 					return true;
 				}
 				if (unaryoperator == MINUS_SYM) { // unary minus (plus is ignored!)
-					if (xType == XD_INT) {
+					if (xType == XD_LONG) {
 						if (xValue >= 0) { // constant
 							long i = _g.getCodeItem(xValue).longValue();
 							_g._code.set(xValue, new DefLong(- i));
 						} else { // not constant
-							_g.addCode(new CodeOp(XD_INT, NEG_I), 0);
+							_g.addCode(new CodeOp(XD_LONG, NEG_I), 0);
 						}
 					} else if (xType == XD_DECIMAL) {
 						if (xValue >= 0) { // constant
@@ -831,14 +831,14 @@ class CompileStatement extends XScriptParser implements CodeTable {
 							double f = _g.getCodeItem(xValue).doubleValue();
 							_g._code.set(xValue, new DefDouble(- f));
 						} else { // not constant
-							_g.addCode(new CodeOp(XD_FLOAT, NEG_R), 0);
+							_g.addCode(new CodeOp(XD_DOUBLE, NEG_R), 0);
 						}
 					}
 				}
 				return true;
 			}
 			case NEG_SYM: {
-				if (xType == XD_INT) {
+				if (xType == XD_LONG) {
 					if (xValue >= 0) { // constant
 						long i = _g.getCodeItem(xValue).longValue();
 						_g._code.set(xValue, new DefLong(~ i));
@@ -917,14 +917,14 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			int yValue = _g._cstack[_g._sp];
 			if ((operator == MUL_SYM) || (operator == DIV_SYM)
 				|| (operator == MOD_SYM)) { // mul | div | modulo
-				if (xType == XD_INT && yType == XD_INT) {
+				if (xType == XD_LONG && yType == XD_LONG) {
 					if (xValue >= 0 && yValue >= 0) { // both constants
 						long x = _g.getCodeItem(xValue).longValue();
 						long y = _g.getCodeItem(yValue).longValue();
 						_g.replaceTwo(new DefLong(operator==MUL_SYM
 							? x * y : operator==DIV_SYM ? x / y : x % y));
 					} else { // not both constants
-						_g.addCode(new CodeOp(XD_INT, operator==MUL_SYM
+						_g.addCode(new CodeOp(XD_LONG, operator==MUL_SYM
 							? MUL_I : operator==DIV_SYM ? DIV_I : MOD_I), -1);
 					}
 				} else { // not both integer => float
@@ -936,7 +936,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 						_g.replaceTwo(new DefDouble(operator==MUL_SYM
 							? x * y : operator==DIV_SYM ? x / y : x % y));
 					} else { // not both constants
-						_g.addCode(new CodeOp(XD_FLOAT, operator==MUL_SYM
+						_g.addCode(new CodeOp(XD_DOUBLE, operator==MUL_SYM
 							? MUL_R	:operator==DIV_SYM ? DIV_R : MOD_R), -1);
 					}
 				}
@@ -994,19 +994,26 @@ class CompileStatement extends XScriptParser implements CodeTable {
 					_g.addCode(new CodeOp(XD_STRING, ADD_S), -1);
 				}
 			} else {// add or subtract numbers
-				if (xType == XD_INT && yType == XD_INT) {
+				if (xType == XD_LONG && yType == XD_CHAR) {
+					_g.topXToInt(0);
+					yType = XD_LONG;
+				} else if (xType == XD_CHAR && yType == XD_LONG) {
+					_g.topXToInt(1);
+					xType = XD_LONG;
+				}
+				if (xType == XD_LONG && yType == XD_LONG) {
 					if (xValue >= 0 && yValue >= 0) {
 						long x = _g.getCodeItem(xValue).longValue();
 						long y = _g.getCodeItem(yValue).longValue();
 						_g.replaceTwo(new DefLong(
 							operator==PLUS_SYM ? x + y : x - y));
 					} else {
-						_g.addCode(new CodeOp(XD_INT,
+						_g.addCode(new CodeOp(XD_LONG,
 							operator==PLUS_SYM ? ADD_I : SUB_I), -1);
 					}
-				} else if (xType == XD_FLOAT && yType == XD_FLOAT
-					|| xType == XD_FLOAT && yType == XD_INT
-					|| xType == XD_INT && yType == XD_FLOAT) {
+				} else if (xType == XD_DOUBLE && yType == XD_DOUBLE
+					|| xType == XD_DOUBLE && yType == XD_LONG
+					|| xType == XD_LONG && yType == XD_DOUBLE) {
 					_g.operandsToFloat();
 					yValue = _g._cstack[_g._sp];
 					if (xValue >= 0 && yValue >= 0) {
@@ -1015,7 +1022,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 						_g.replaceTwo(new DefDouble(
 							operator==PLUS_SYM ? x + y : x - y));
 					} else {
-						_g.addCode(new CodeOp(XD_FLOAT,
+						_g.addCode(new CodeOp(XD_DOUBLE,
 							operator==PLUS_SYM ? ADD_R : SUB_R), -1);
 					}
 				} else {
@@ -1024,7 +1031,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 						//Value of type '&{0}' expected
 						error(XDEF.XDEF423, "number");
 					}
-					_g.addCode(new CodeOp(XD_FLOAT, ADD_R), -1);
+					_g.addCode(new CodeOp(XD_DOUBLE, ADD_R), -1);
 				}
 			}
 		}
@@ -1096,10 +1103,10 @@ class CompileStatement extends XScriptParser implements CodeTable {
 					break;
 				}
 				switch (xType) {
-					case XD_INT: {
+					case XD_LONG: {
 						i = _g.getCodeItem(xValue).longValue();
 						switch (yType) {
-							case XD_INT:
+							case XD_LONG:
 								j = _g.getCodeItem(yValue).longValue();
 								switch (operator) {
 									case LSH_SYM:
@@ -1114,7 +1121,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 								}
 								result = i == j ? 0 : i < j ? - 1 : 1;
 								break;
-							case XD_FLOAT:
+							case XD_DOUBLE:
 								v = _g.getCodeItem(yValue).doubleValue();
 								result = i == v ? 0 : i < v ? - 1 : 1;
 								break;
@@ -1127,14 +1134,14 @@ class CompileStatement extends XScriptParser implements CodeTable {
 						}
 						break;
 					}
-					case XD_FLOAT: {
+					case XD_DOUBLE: {
 						u = _g.getCodeItem(xValue).doubleValue();
 						switch (yType) {
-							case XD_INT:
+							case XD_LONG:
 								j = _g.getCodeItem(yValue).longValue();
 								result = u == j ? 0 : u < j ? - 1 : 1;
 								break;
-							case XD_FLOAT:
+							case XD_DOUBLE:
 								v = _g.getCodeItem(yValue).doubleValue();
 								result = u == v ? 0 : u < v ? - 1 : 1;
 								break;
@@ -1182,7 +1189,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 									incomparable(yType);
 								}
 								break;
-							case XD_INT:
+							case XD_LONG:
 								break;
 							case CompileBase.XD_UNDEF:
 								break;
@@ -1254,24 +1261,24 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			} else {// not both constants, none null
 				short op = CompileBase.UNDEF_CODE;
 				switch (xType) {
-					case XD_INT: {
+					case XD_LONG: {
 						switch (yType) {
-							case XD_INT:
+							case XD_LONG:
 								switch (operator) {
 									case LSH_SYM:
-										_g.addCode(new CodeI1(XD_INT,LSHIFT_I),-1);
+										_g.addCode(new CodeI1(XD_LONG,LSHIFT_I),-1);
 										continue; // while sym is rel. operator
 									case RSH_SYM:
-										_g.addCode(new CodeI1(XD_INT,RSHIFT_I),-1);
+										_g.addCode(new CodeI1(XD_LONG,RSHIFT_I),-1);
 										continue; // while sym is rel. operator
 									case RRSH_SYM:
-										_g.addCode(new CodeI1(XD_INT,
+										_g.addCode(new CodeI1(XD_LONG,
 											RRSHIFT_I),-1);
 										continue; // while sym is rel. operator
 								}
 								op = CMPEQ;
 								break;
-							case XD_FLOAT:
+							case XD_DOUBLE:
 								_g.topXToFloat();
 								op = CMPEQ;
 								break;
@@ -1289,13 +1296,13 @@ class CompileStatement extends XScriptParser implements CodeTable {
 						}
 						break;
 					}
-					case XD_FLOAT: {
+					case XD_DOUBLE: {
 						switch (yType) {
-							case XD_INT:
-								_g.addCode(new CodeOp(XD_FLOAT,TO_FLOAT),0);
+							case XD_LONG:
+								_g.addCode(new CodeOp(XD_DOUBLE,TO_FLOAT),0);
 								op = CMPEQ;
 								break;
-							case XD_FLOAT:
+							case XD_DOUBLE:
 								op = CMPEQ;
 								break;
 							case XD_DECIMAL:
@@ -1353,8 +1360,8 @@ class CompileStatement extends XScriptParser implements CodeTable {
 					}
 					case XD_DECIMAL: {
 						switch (yType) {
-							case XD_INT:
-							case XD_FLOAT:
+							case XD_LONG:
+							case XD_DOUBLE:
 								_g.addCode(new CodeI1(XD_DECIMAL,
 									TO_DECIMAL_X), 0);
 								op = CMPEQ;
@@ -1741,31 +1748,31 @@ class CompileStatement extends XScriptParser implements CodeTable {
 				case LSH_EQ_SYM:
 				case RSH_EQ_SYM:
 				case RRSH_EQ_SYM:
-					if (xType == XD_INT && yType == XD_INT) {
+					if (xType == XD_LONG && yType == XD_LONG) {
 						code = op==LSH_EQ_SYM ?
 							LSHIFT_I : op==RSH_EQ_SYM ? RSHIFT_I : RRSHIFT_I;
 					}
 					break;
 				case MUL_EQ_SYM:
-					if (yType == XD_FLOAT) {
+					if (yType == XD_DOUBLE) {
 						_g.topToFloat();
 						xType = _g._tstack[_g._sp];
 					}
-					code = xType==XD_INT ? MUL_I : MUL_R;
+					code = xType==XD_LONG ? MUL_I : MUL_R;
 					break;
 				case DIV_EQ_SYM:
-					if (yType == XD_FLOAT) {
+					if (yType == XD_DOUBLE) {
 						_g.topToFloat();
 						xType = _g._tstack[_g._sp];
 					}
-					code = xType == XD_INT ? DIV_I : DIV_R;
+					code = xType == XD_LONG ? DIV_I : DIV_R;
 					break;
 				case MOD_EQ_SYM:
-					if (yType == XD_FLOAT) {
+					if (yType == XD_DOUBLE) {
 						_g.topToFloat();
 						xType = _g._tstack[_g._sp];
 					}
-					code = xType == XD_INT ? MOD_I : MOD_R;
+					code = xType == XD_LONG ? MOD_I : MOD_R;
 					break;
 				case AND_EQ_SYM:
 					if (xType == CompileBase.ATTR_REF_VALUE) {
@@ -1779,22 +1786,22 @@ class CompileStatement extends XScriptParser implements CodeTable {
 					if (yType == XD_STRING) {
 						_g.topToString();
 						xType = _g._tstack[_g._sp];
-					} else if (yType == XD_FLOAT) {
+					} else if (yType == XD_DOUBLE) {
 						_g.topToFloat();
 						xType = _g._tstack[_g._sp];
 					}
-					code = xType == XD_INT ? ADD_I
-						: xType == XD_FLOAT ? ADD_R
+					code = xType == XD_LONG ? ADD_I
+						: xType == XD_DOUBLE ? ADD_R
 						: xType == XD_STRING ? ADD_S : code;
 					break;
 				case MINUS_EQ_SYM:
-					if (yType == XD_FLOAT) {
+					if (yType == XD_DOUBLE) {
 						_g.topToFloat();
 						xType = _g._tstack[_g._sp];
 					}
-					if (xType == XD_INT) {
+					if (xType == XD_LONG) {
 						code = SUB_I;
-					} else if (xType == XD_FLOAT) {
+					} else if (xType == XD_DOUBLE) {
 						code = SUB_R;
 					}
 					break;
@@ -2138,15 +2145,12 @@ class CompileStatement extends XScriptParser implements CodeTable {
 				return true;
 			case CATCH_SYM:
 				error(XDEF.XDEF476); // 'catch' whithout 'try'
-				statement();
-				return true;
+				return false;
 			case CASE_SYM:
 				error(XDEF.XDEF477); // 'case' whithout 'switch'
-				return true;
+				return false;
 			case ELSE_SYM:
 				error(XDEF.XDEF478); // 'else' whithout 'if'
-				statement();
-				return true;
 			default:
 				return false;
 		}
@@ -2482,7 +2486,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		int dx = addDebugInfo(true);
 		expression();
 		short xType = _g._sp > sp ? _g._tstack[_g._sp] : XD_VOID;
-		if (xType != XD_INT && xType != XD_STRING
+		if (xType != XD_LONG && xType != XD_STRING
 			&& xType != CompileBase.XD_UNDEF) {
 			xType = CompileBase.XD_UNDEF;
 			error(XDEF.XDEF446); //'int' or 'String' value expected
@@ -2525,9 +2529,9 @@ class CompileStatement extends XScriptParser implements CodeTable {
 					if (xType != CompileBase.XD_UNDEF
 						&& yType != CompileBase.XD_UNDEF) {
 						//Constant expression of type &{0} expected
-						error(XDEF.XDEF448,xType==XD_INT ? "int":"String");
+						error(XDEF.XDEF448,xType==XD_LONG ? "int":"String");
 					}
-				} else if (yType == XD_INT) {
+				} else if (yType == XD_LONG) {
 					Long v = _g.getCodeItem(yValue).longValue();
 					_g._sp--;
 					_g.removeLastCodeItem();
@@ -2589,7 +2593,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			_wasReturn = wasReturn;
 			_wasContinue = wasContinue;
 		}
-		if (xType == XD_INT) {
+		if (xType == XD_LONG) {
 			CodeSWTableInt icode = (CodeSWTableInt) code;
 			icode.setParam(defaultAddr);
 			icode._adrs = new int[ht.size()];
@@ -2646,7 +2650,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 	}
 
 	/** Compile variable declaration statement.
-	 * @param type the type of variable (XD_INT, XD_STRING etc).
+	 * @param type the type of variable (XD_LONG, XD_STRING etc).
 	 * @param varName the name of variable.
 	 * @param isFinal if <tt>true</tt> variable is declared as final.
 	 * @param isExternal if <tt>true</tt> variable is declared as external.

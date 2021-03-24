@@ -66,8 +66,8 @@ public class C implements org.xdef.component.XComponent{
 	  el.appendChild(x.toXml(doc));
 	return el;
   }
-  @Override
   public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
+  public Object toXon() {return org.xdef.component.XComponentUtil.toXon(this);}
   public C() {}
   public C(org.xdef.component.XComponent p,
 	String name, String ns, String xPos, String XDPos) {
@@ -177,8 +177,8 @@ public static class D implements org.xdef.component.XComponent{
 	  el.setAttribute(XD_Name_d, getd());
 	return el;
   }
-  @Override
   public Object toJson() {return org.xdef.json.JsonUtil.xmlToJson(toXml());}
+  public Object toXon() {return org.xdef.component.XComponentUtil.toXon(this);}
   public D() {}
   public D(org.xdef.component.XComponent p,
 	String name, String ns, String xPos, String XDPos) {

@@ -221,10 +221,10 @@ class XCGeneratorBase {
 		String parserName = xdata.getParserName();
 		if ("byte".equals(parserName)) {
 			return "Byte";
-		} else if ("short".equals(parserName)) {
+		} else if ("short".equals(parserName)
+			|| "unsignedByte".equals(parserName)) {
 			return "Short";
 		} else if ("int".equals(parserName)
-			|| "unsignedByte".equals(parserName)
 			|| "unsignedShort".equals(parserName)) {
 			return "Integer";
 		} else if ("long".equals(parserName)||"unsignedInt".equals(parserName)){
@@ -233,8 +233,11 @@ class XCGeneratorBase {
 			|| "negativeInteger".equals(parserName)
 			|| "nonNegativeInteger".equals(parserName)
 			|| "PositiveInteger".equals(parserName)
-			|| "nonPositiveiveInteger".equals(parserName)) {
+			|| "nonPositiveiveInteger".equals(parserName)
+			|| "unsignedLong".equals(parserName)) {
 			return "java.math.BigInteger";
+		} else if ("float".equals(parserName)) {
+			return "Double";
 		} else if ("decimal".equals(parserName) || "dec".equals(parserName)) {
 			return "java.math.BigDecimal";
 		} else if ("jnumber".equals(parserName)) {
@@ -247,11 +250,13 @@ class XCGeneratorBase {
 			return "Object";
 		}
 		switch (xdata.getParserType()) {
+			case XDValueID.XD_LONG:
+				return "Long";
 			case XDValueID.XD_BOOLEAN:
 				return "Boolean";
-			case XDValueID.XD_INT:
-				return "Long";
-			case XDValueID.XD_FLOAT:
+			case XDValueID.XD_CHAR:
+				return "Character";
+			case XDValueID.XD_DOUBLE:
 				return "Double";
 			case XDValueID.XD_DECIMAL:
 				return "java.math.BigDecimal";
@@ -261,6 +266,8 @@ class XCGeneratorBase {
 				return "org.xdef.sys.SDatetime";
 			case XDValueID.XD_GPSPOSITION:
 				return "org.xdef.sys.GPSPosition";
+			case XDValueID.XD_PRICE:
+				return "org.xdef.sys.Price";
 			case XDValueID.XD_BYTES:
 				_byteArrayEncoding |= getBytesType(xdata);
 				return "byte[]";
@@ -319,9 +326,11 @@ class XCGeneratorBase {
 		switch (xdata.getParserType()) {
 			case XDValueID.XD_BOOLEAN:
 				return result + "getParsedValue().booleanValue()";
-			case XDValueID.XD_INT:
+			case XDValueID.XD_CHAR:
+				return result + "getParsedValue().charValue()";
+			case XDValueID.XD_LONG:
 				return result + "getParsedValue().longValue()";
-			case XDValueID.XD_FLOAT:
+			case XDValueID.XD_DOUBLE:
 				return result + "getParsedValue().doubleValue()";
 			case XDValueID.XD_DECIMAL:
 				return result + "getParsedValue().decimalValue()";
@@ -331,6 +340,8 @@ class XCGeneratorBase {
 				return result + "getParsedValue().datetimeValue()";
 			case XDValueID.XD_GPSPOSITION:
 				return result + "getParsedValue().GPSValue()";
+			case XDValueID.XD_PRICE:
+				return result + "getParsedValue().priceValue()";
 			case XDValueID.XD_BYTES:
 				return result + "getParsedValue().getBytes()";
 			case XDValueID.XD_PARSER:
@@ -776,7 +787,12 @@ class XCGeneratorBase {
 		final String fn = uri != null
 			? "AttributeNS(\"" + uri + "\", " : "Attribute(";
 		String x;
-		switch (xdata.getParserType()) {
+		short typ =  xdata.getParserType();
+		switch (typ) {
+			case XDValueID.XD_CHAR: {
+				x = "org.xdef.json.JsonTools.genXMLValue(get&{name}()))";
+				break;
+			}
 			case XDValueID.XD_DATETIME: {
 				String s = xdata.getDateMask();
 				x = "get&{name}()." +
@@ -792,7 +808,7 @@ class XCGeneratorBase {
 				break;
 			default:
 				x = checkEnumType(xdata) != null ? "get&{name}().name())"
-					: xdata.getParserType() == XDValueID.XD_STRING
+					: typ == XDValueID.XD_STRING
 						? "get&{name}())" : "get&{name}().toString())";
 		}
 		sb.append(modify(
@@ -845,8 +861,8 @@ class XCGeneratorBase {
 		final String y = max > 1? ".get(i)" : "";
 		switch (xdata.getParserType()) {
 			case XDValueID.XD_BOOLEAN:
-			case XDValueID.XD_INT:
-			case XDValueID.XD_FLOAT:
+			case XDValueID.XD_LONG:
+			case XDValueID.XD_DOUBLE:
 			case XDValueID.XD_DECIMAL:
 			case XDValueID.XD_DURATION:
 				x = (max > 1 ? "listOf" : "get") + "&{name}()"+y+".toString()";
