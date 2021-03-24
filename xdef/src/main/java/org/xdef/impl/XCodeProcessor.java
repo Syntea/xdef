@@ -1991,44 +1991,44 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 					switch (item.getParam()) {
 						case 1:
 							if (_stack[sp].getItemId() == XD_REPORT) {
-								Report r =
+								Report r =  // report is in argument
 									((DefReport)_stack[sp]).reportValue();
 								_reporter.putReport(Report.error(r.getMsgID(),
 									r.getText(), r.getModification()));
-							} else {
+							} else { // text of report
 								_reporter.putReport(Report.error(null,
-									_stack[sp].stringValue()));
+									_stack[sp].stringValue())); // txt
 							}
 							break;
-						case 2:
+						case 2:  // error(id, txt)
 							putReport(chkNode,
-								Report.error(_stack[sp-1].stringValue(),
-								_stack[sp].stringValue()));
+								Report.error(_stack[sp-1].stringValue(), //id
+								_stack[sp].stringValue())); // txt
 							sp--;
 							break;
-						default:
+						default: // // error(id, txt, modif)
 							putReport(chkNode,
-								Report.error(_stack[sp-2].stringValue(),
-								_stack[sp-1].stringValue(),
-								_stack[sp].stringValue()));
+								Report.error(_stack[sp-2].stringValue(), //id
+								_stack[sp-1].stringValue(), // txt
+								_stack[sp].stringValue())); // modif
 							sp -= 2;
 					}
 					_stack[sp] = new DefBoolean(false);
 					continue;
 				case PUT_ERROR1: //Put error message to stdErr.
 					switch (item.getParam()) {
-						case 2:
+						case 2: // error(txt); 
 							((XDOutput) _stack[sp-1]).putReport(
 								Report.error(null, _stack[sp].stringValue()));
 							sp--;
 							break;
-						case 3:
+						case 3: // error(id, txt);
 							((XDOutput) _stack[sp-2]).putReport(
 								Report.error(_stack[sp-1].stringValue(),
 									_stack[sp].stringValue()));
 							sp -= 2;
 							break;
-						default:
+						default:  // error(id, txt, modif);
 							((XDOutput)_stack[sp-3]).putReport(
 								Report.error(_stack[sp-2].stringValue(),
 									_stack[sp-1].stringValue(),
@@ -2904,27 +2904,26 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 					_stack[sp] =
 						new DefBoolean(((XDParseResult)_stack[sp]).matches());
 					continue;
-				case SET_PARSED_ERROR: {//result.setError()
-					String txt, id, modif;
+				case SET_PARSED_ERROR: {// x.error(...)
+					String id, txt, modif;
 					switch (item.getParam()) {
-						case 4:
+						case 4: // x.error(id, txt, modif)
 							modif = _stack[sp--].toString();
 							txt = _stack[sp--].toString();
 							id = _stack[sp--].toString();
 							break;
-						case 3:
+						case 3: // x.error(id, txt)
 							txt = _stack[sp--].toString();
 							id = _stack[sp--].toString();
 							modif = null;
 							break;
-						case 2:
+						case 2: // x.error(txt)
 							txt = _stack[sp--].toString();
 							id = modif = null;
 							break;
-						default: // error without parameters
-							//Incorrect value&{0}{ of '}{'}&{1}{: '}{'}
-							((DefParseResult) _stack[sp]).error(XDEF.XDEF809);
-							continue;
+						default: // x.error() -> E XDEF809 Incorrect value
+							id = Report.error(XDEF.XDEF809).getMsgID();
+							txt = modif = null;
 					}
 					((DefParseResult) _stack[sp]).error(id, txt, modif);
 					continue;
