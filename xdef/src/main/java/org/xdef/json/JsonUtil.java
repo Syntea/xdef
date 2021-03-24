@@ -132,7 +132,7 @@ public class JsonUtil {
 
 	/** Parse JSON document from input reader.
 	 * @param in reader with JSON source.
-		 * @param sysid System id.
+	 * @param sysid System id.
 	 * @return parsed JSON object.
 	 * @throws SRuntimeException if an error occurs.
 	 */

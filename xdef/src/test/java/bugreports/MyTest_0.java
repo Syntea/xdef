@@ -39,7 +39,8 @@ import org.xdef.proc.XXNode;
 import org.xdef.sys.Report;
 import org.xdef.sys.SUtils;
 import org.xdef.util.XdefToXsd;
-import org.xdef.XDPrice;
+import org.xdef.sys.GPSPosition;
+import org.xdef.sys.Price;
 
 /** Various tests.
  * @author Vaclav Trojan
@@ -198,21 +199,6 @@ public class MyTest_0 extends XDTester {
 		Report rep;
 		ArrayReporter reporter = new ArrayReporter();
 ////////////////////////////////////////////////////////////////////////////////
-//		try {
-//			xdef =
-//"<xd:collection xmlns:xd='http://www.xdef.org/xdef/4.0'>\n"+
-//"<xd:def name='A'>\n"+
-//" <xd:declaration scope='global'>Parser p;uniqueSet u{x:p}</xd:declaration>\n"+
-//"</xd:def>\n"+
-//"<xd:def name='B' root='A'>\n"+
-//"  <A id=\"? xdType(); onTrue p = getParsedValue();\" />\n"+
-//"</xd:def>\n"+
-//"</xd:collection>";
-//			xb = XDFactory.getXDBuilder(null, null);
-//			xb.setSource(xdef);
-//			xb.compileXD();;
-//		} catch (Exception ex) {fail(ex);}
-//if(true)return;
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a|root'>\n"+
@@ -267,42 +253,8 @@ public class MyTest_0 extends XDTester {
 			xml = "<root><B b='123'/><C c='wsdx:123'/></root>";
 			parse(xp, "", xml, reporter);
 			assertErrors(reporter);
-			System.out.println(reporter);
 		} catch (Exception ex) {fail(ex);}
-if(true){return;}
-		try {
-			xdef = // test CurrencyAmount type
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"<xd:declaration>\n" +
-"   CurrencyAmount c = new CurrencyAmount('12', 'USD');\n"+
-"   CurrencyAmount d;\n"+
-" </xd:declaration>\n"+
-"  <a c=\"currencyAmount();\n"+
-"    onTrue out(c.display() + '; ' + (d = getParsedValue()));\" />\n" +
-"</xd:def>";
-			xml = "<a c='#(1.5 CZK)'/>";
-			strw = new StringWriter();
-			xd = compile(xdef).createXDDocument();
-			assertEq(xml, parse(xd, xml, reporter, strw, null, null));
-			assertNoErrors(reporter);
-			assertEq(strw.toString(), "12.00 USD; 1.5 CZK");
-			assertEq("1.50 CZK",
-				((XDPrice) xd.getVariable("d")).display());
-//			xdef =
-//"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.0\" root=\"root\" >\n" +
-//" <xd:declaration>\n"+
-//"   CurrencyAmount c = new CurrencyAmount('12', 'CZK');\n"+
-//" </xd:declaration>\n"+
-//"  <root a=\"currencyAmount(); finally outln(c.display());\" />\n" +
-//"</xd:def>";
-//			xp = compile(xdef);
-//			xml = "<root a=\"#(12.5 CZK)\" >\n" +
-//"</root>";
-//			xd = xp.createXDDocument();
-//			xd.xparse(xml, reporter);
-//			assertNoErrors(reporter);
-		} catch (Exception ex) {fail(ex);}
-if(true)return;
+if(T){return;}
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + XDConstants.XDEF40_NS_URI + "' root='A'>\n"+
@@ -315,12 +267,10 @@ if(true)return;
 "  <e xd:script='?' a='u.x.SET' b='? u.x.SET()'/>\n"+
 "</A>\n"+
 "</xd:def>\n";
-//			xp = XDFactory.compileXD(null, xdef);
 			xp = compile(xdef);
 			printXMData(xp.getXMDefinition().getModel(null, "A"));
 			xml = "<A><a a='2'/><b a='1'/><c a='1'/><d a='1'/><e a='3'/></A>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
 "  <xd:declaration>\n"+
