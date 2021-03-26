@@ -1,8 +1,9 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 40.1.3, release-date 2021-03-23
+# Version 40.1.3, release-date 2021-03-26
 * preparing version 40.2
 * corrected display of zone with zero hours and negative minutes in offset.
+* corrected bug in the method 'setParsedString' of objects 'ParseResult'.
 * added new X-definition type of value: `GPSPosition`.
   Methods with this object:
     `latitude()` returns GPS latitude in degrees (-90.0 to 90.0).

@@ -1147,6 +1147,44 @@ public final class Test001  extends XDTester {
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
 		try {
+			xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' name='Example' root='root'>" +
+"<xd:declaration scope='local'>\n" +
+"    type t1 int();\n" +
+"    type t2 starts(%argument='wsdl:');\n" +
+"    uniqueSet u{t:t1};\n" +
+"    ParseResult testAndCheck() {\n" +
+"       if (t2().matches()) {\n" +
+"         String s = getParsedValue();\n" +
+"         setText(s.substring(5));\n" +
+"         ParseResult p = u.t.CHKID();\n" +
+"         setText(s);\n" +
+"         p.setParsedString(s);\n" +
+"         return p;\n" +
+"       }\n" +
+"       return getParsedResult(); /* error already set by t2 */\n" +
+"    }\n" +
+"  </xd:declaration>\n" +
+"\n" +
+"  <root>\n" +
+"    <B xd:script='*' b='u.t.ID;'/>\n" +
+"    <C xd:script='*' c='testAndCheck();'/>\n" +
+"  </root>\n" +
+"</xd:def>";
+			xml =
+"<root>\n" +
+"  <B b='123'/>\n" +
+"  <B b='125'/>\n" +
+"  <C c='wsdl:123'/>\n" +
+"  <C c='wsdl:124'/> <!-- error: 124 is not in the set u -->\n" +
+"  <C c='wsdx:125'/> <!-- error: fails t2 (wsdx) -->\n" +
+"  <C c='wsdl:125'/>\n" +
+"</root>";
+			xp = XDFactory.compileXD(null, xdef);
+			assertEq(xml, parse(xp, "Example", xml, reporter));
+			assertEq(2, reporter.getErrorCount());
+		} catch (Exception ex) {fail(ex);}
+		try {
 			// check compiling if source items have assignment of sourceId
 			Object[] p1 = new Object[] {
 "<xd:def xmlns:xd='" + _xdNS + "' root='A' name='A'><A a='x'/></xd:def>",
