@@ -1151,6 +1151,26 @@ public final class Test001  extends XDTester {
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' name='Example' root='root'>" +
 "<xd:declaration scope='local'>\n" +
 "    type t1 int();\n" +
+"    boolean b = false;\n" +
+"    ParseResult x() {\n" +
+"       ParseResult p = t1();\n"+
+"       if (p.matches()) {\n"+
+"			b = true;\n"+
+"       }\n"+
+"       return p;\n" +
+"    }\n" +
+"  </xd:declaration>\n" +
+"\n" +
+"  <root a='x(); finally if (!b) error(b);' />\n" +
+"</xd:def>";
+			xml = "<root a='123'/>";
+			xp = compile(xdef);
+			assertEq(xml, parse(xp, "Example", xml, reporter));
+			assertNoErrors(reporter);
+			xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' name='Example' root='root'>" +
+"<xd:declaration scope='local'>\n" +
+"    type t1 int();\n" +
 "    type t2 starts(%argument='wsdl:');\n" +
 "    uniqueSet u{t:t1};\n" +
 "    ParseResult testAndCheck() {\n" +

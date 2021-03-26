@@ -1725,15 +1725,32 @@ public final class CompileCode extends CompileBase {
 			return null;
 		}
 		CompileVariable var = getVariable(name);
-		if (var != null && (var.getType() == UNIQUESET_VALUE
-			&& var.getCodeAddr() == -1
-			|| var.getType() == PARSEITEM_VALUE && numPar == 0)){//check type ID
-			//unique type, unique value
-			CodeI1 op = new CodeI1(XD_BOOLEAN,
-				CALL_OP, var.getParseMethodAddr());
-			addCode(op, 1);
-			// return null if it is OK, otherwise return the name of method
-			return numPar != 0 ? name : null;
+		if (var != null) {
+			int addr;
+			if (var.getType() != UNIQUESET_VALUE
+				&& var.getCodeAddr() == -1
+				&& var.getType() == PARSEITEM_VALUE && numPar == 0
+				&& (addr = var.getParseMethodAddr()) >= 0
+				&& _code.get(addr).getItemId()== XD_PARSER) {
+				if (var.getKind() == 'G'
+					&& _code.get(addr).getCode() == LD_CONST) {
+					_cstack[++_sp] = addr;
+					addCode(new CodeS1(XD_PARSER, LD_CODE, addr, name));
+					addCode(new CodeI1(XD_PARSERESULT, PARSE_OP, 1), 0);
+				} else {
+					genLD(name);
+					addCode(new CodeI1(XD_PARSERESULT, PARSE_OP, 1), 0);
+				}
+				return null; //OK
+			} else if ((var.getType() == UNIQUESET_VALUE
+				&& var.getCodeAddr() == -1
+				|| var.getType() == PARSEITEM_VALUE && numPar == 0)){
+				//check type ID (unique type, unique value)
+				addCode(new CodeI1(XD_BOOLEAN,
+					CALL_OP, var.getParseMethodAddr()), 1);
+				// return null if it is OK, otherwise return method name
+				return numPar != 0 ? name : null;
+			}
 		}
 		if (scriptMethod(extName, numPar)) {
 			return null;
