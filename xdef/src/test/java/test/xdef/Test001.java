@@ -1148,8 +1148,8 @@ public final class Test001  extends XDTester {
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' name='Example' root='root'>" +
-"<xd:declaration scope='local'>\n" +
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' name='Example' root='root'>\n"+
+"  <xd:declaration scope='local'>\n" +
 "    type t1 int();\n" +
 "    boolean b = false;\n" +
 "    ParseResult x() {\n" +
@@ -1168,8 +1168,8 @@ public final class Test001  extends XDTester {
 			assertEq(xml, parse(xp, "Example", xml, reporter));
 			assertNoErrors(reporter);
 			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' name='Example' root='root'>" +
-"<xd:declaration scope='local'>\n" +
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' name='Example' root='root'>\n"+
+"  <xd:declaration scope='local'>\n" +
 "    type t1 int();\n" +
 "    type t2 starts(%argument='wsdl:');\n" +
 "    uniqueSet u{t:t1};\n" +
