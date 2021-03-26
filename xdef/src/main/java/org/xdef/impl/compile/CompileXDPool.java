@@ -170,8 +170,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 	/** Parse InputStream source X-definition and addAttr it to the set
 	 * of definitions.
 	 * @param in input stream with the X-definition.
-	 * @param srcName name of source data used in reporting (SysId) or
-	 * <tt>null</tt>.
+	 * @param srcName name of source data used in reporting (SysId) or null.
 	 */
 	public final void parseStream(final InputStream in, final String srcName) {
 		_precomp.parseStream(in, srcName);
@@ -737,13 +736,12 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						if (texts[i] == null) {
 							badIndexes[i] = false;
 							//Lexicon item "&{0}" is missing for language &{1}
-							error(lexicon.get(i)._name, XDEF.XDEF149,
-								key, t.getLanguages()[i]);
+							error(lexicon.get(i)._name,
+								XDEF.XDEF149, key, t.getLanguages()[i]);
 						}
 					}
 				}
 				if (deflt) {
-					Map<String,String> pp = languages.get(0);
 					int okIndex = 1;
 					for (int i = 1; i < badIndexes.length; i++) {
 						if (!badIndexes[i]) {

@@ -16,7 +16,7 @@
         <Envelope xd:script="occurs 1" encodingStyle="required">
             <Header xd:script="occurs 0..1">
                 <xd:mixed>
-                    <Request
+                  <Request
                         xd:script		= "occurs 1"
                         RemotePartner	= "required tab('VR_DefPartner', 'KodPartnera'); onFalse setErr(4225); onAbsence setErr(4202)"
                         IdentZpravy		= "required int(); onFalse setErr(4208); onAbsence setErr(4202)"
