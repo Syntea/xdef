@@ -170,7 +170,7 @@ public final class TestXComponents extends XDTester {
 			assertEq(SUtils.getValueFromGetter(
 				SUtils.getValueFromGetter(xc, "getd"),
 				"get$value").toString(), "2013-09-14");
-		assertEq(SUtils.getValueFromGetter(
+			assertEq(SUtils.getValueFromGetter(
 				SUtils.getValueFromGetter(xc, "getd"), "get$value"),
 				SUtils.getValueFromGetter(
 					SUtils.getValueFromGetter(xc, "getd"), "dateOf$value"));
