@@ -28,11 +28,14 @@ public class XDParseStarts extends XDParseEq {
 	}
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){
-		if (!p.isToken(_param)) {
+		int i = p.getIndex();
+		if (p.isToken(_param)) {
+			p.setParsedValue(p.getSourceBuffer().substring(i));
+			p.setEos();
+		} else {
 			//Incorrect value of '&{0}'&{1}{: }
 			p.errorWithString(XDEF.XDEF809, parserName());
 		}
-		p.setEos();
 	}
 	@Override
 	public String parserName() {return ROOTBASENAME;}

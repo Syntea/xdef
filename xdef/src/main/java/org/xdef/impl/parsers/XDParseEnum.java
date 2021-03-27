@@ -22,7 +22,9 @@ public class XDParseEnum extends XDParserAbstract {
 	public XDParseEnum() {super();}
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){
-		if (p.isOneOfTokens(_list) >= 0) {
+		int i;
+		if ((i=p.isOneOfTokens(_list)) >= 0) {
+			p.setParsedValue(_list[i]);
 			return;
 		}
 		//Incorrect value of &{0}&{1}{: }

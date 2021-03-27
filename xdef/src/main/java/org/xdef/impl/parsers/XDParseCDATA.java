@@ -35,6 +35,7 @@ public class XDParseCDATA extends XDParserAbstract {
 			//Length of value of '&{0}' is too short&{1}{: }
 			p.errorWithString(XDEF.XDEF814, "string");
 		} else {
+			p.setParsedValue(s);
 			p.setEos();
 		}
 		return p;

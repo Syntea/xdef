@@ -21,6 +21,7 @@ public class XDParseContains extends XDParseEq {
 			//Incorrect value of '&{0}'&{1}{: }
 			p.errorWithString(XDEF.XDEF809, parserName());
 		} else {
+			p.setParsedValue(s);
 			p.setEos();
 		}
 		return p;

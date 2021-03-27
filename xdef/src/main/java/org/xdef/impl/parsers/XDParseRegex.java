@@ -24,10 +24,12 @@ public class XDParseRegex extends XDParserAbstract {
 	}
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){
-		if (!_regex.matches(p.getUnparsedBufferPart())) {
+		String s = p.getUnparsedBufferPart();
+		if (!_regex.matches(s)) {
 				//Incorrect value of '&{0}'&{1}{: }
 				p.errorWithString(XDEF.XDEF809, parserName());
 		} else {
+			p.setParsedValue(s);
 			p.setEos();
 		}
 	}
