@@ -28,11 +28,13 @@ public class XDParseStartsi extends XDParseEqi {
 	}
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p) {
-		if (!p.isTokenIgnoreCase(_param)) {
+		int i = p.getIndex();
+		if (p.isTokenIgnoreCase(_param)) {
+			p.setParsedValue(p.getSourceBuffer().substring(i));
+			p.setEos();
+		} else {
 			//Incorrect value of '&{0}'&{1}{: }
 			p.errorWithString(XDEF.XDEF809, parserName());
-		} else {
-			p.setEos();
 		}
 	}
 	@Override

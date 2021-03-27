@@ -16,7 +16,9 @@ public class XDParseFile extends XDParserAbstract {
 	@Override
 	public void parseObject(XXNode xnode, XDParseResult p) {
 		p.isSpaces();
-		if (chkFile(p, p.getUnparsedBufferPart().trim(), ROOTBASENAME)) {
+		String s = p.getUnparsedBufferPart().trim();
+		if (chkFile(p, s, ROOTBASENAME)) {
+			p.setParsedValue(s);
 			p.setEos();
 		}
 	}

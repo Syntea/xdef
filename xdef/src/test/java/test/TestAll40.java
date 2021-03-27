@@ -3,7 +3,7 @@ package test;
 import org.xdef.XDFactory;
 import org.xdef.impl.code.DefXQueryExpr;
 
-/** Execute all tests fast.
+/** Execute all tests fast (only version 4.0).
  * @author Vaclav Trojan
  */
 public class TestAll40 {

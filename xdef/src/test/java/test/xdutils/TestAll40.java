@@ -5,7 +5,7 @@ import java.io.PrintStream;
 import org.xdef.XDConstants;
 import test.XDTester;
 
-/** Run all available basic tests for package org.xdef.util.
+/** Execute all tests fast (only version 4.0).
  * @author Vaclav Trojan
  */
 public class TestAll40 {

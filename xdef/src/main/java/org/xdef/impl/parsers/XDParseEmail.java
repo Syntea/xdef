@@ -15,7 +15,9 @@ public class XDParseEmail extends XDParserAbstract {
 	@Override
 	public void parseObject(XXNode xnode, XDParseResult p) {
 		p.isSpaces();
-		if (chkEmail(p, p.getUnparsedBufferPart().trim(), ROOTBASENAME)) {
+		String s = p.getUnparsedBufferPart().trim();
+		if (chkEmail(p, s, ROOTBASENAME)) {
+			p.setParsedValue(s);
 			p.setEos();
 		}
 	}
