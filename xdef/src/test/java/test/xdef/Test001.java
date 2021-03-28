@@ -1174,18 +1174,16 @@ public final class Test001  extends XDTester {
 "    type t2 starts(%argument='wsdl:');\n" +
 "    uniqueSet u{t:t1};\n" +
 "    ParseResult testAndCheck() {\n" +
-"       if (t2().matches()) {\n" +
-"         String s = getParsedValue();\n" +
+"       ParseResult p = t2();\n" +
+"       if (p) {\n" +
+"         String s = p.getParsedString();\n" +
 "         setText(s.substring(5));\n" +
-"         ParseResult p = u.t.CHKID();\n" +
+"         p = u.t.CHKID();\n" +
 "         setText(s);\n" +
-"         p.setParsedString(s);\n" +
-"         return p;\n" +
 "       }\n" +
-"       return getParsedResult(); /* error already set by t2 */\n" +
+"       return p;\n" +
 "    }\n" +
 "  </xd:declaration>\n" +
-"\n" +
 "  <root>\n" +
 "    <B xd:script='*' b='u.t.ID;'/>\n" +
 "    <C xd:script='*' c='testAndCheck();'/>\n" +
