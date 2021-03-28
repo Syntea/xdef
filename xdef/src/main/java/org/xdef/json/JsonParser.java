@@ -93,12 +93,17 @@ public class JsonParser extends StringParser {
 	 */
 	public final boolean isSpacesOrComments() {
 		boolean result = isSpaces();
-		while(isToken("/*")) {
+		boolean wasLineComment;
+		while(wasLineComment = isChar('#') || isToken("/*") ) {
 			result = true;
 			if (!_acceptComments) { // omments not allowed
 				warning(JSON.JSON019);  //Comments are not allowed here
 			}
-			if (!findTokenAndSkip("*/")) {
+			if (wasLineComment) {
+				while(!eos() && !isNewLine()) {
+					nextChar();
+				}
+			} else if (!findTokenAndSkip("*/")) {
 				error(JSON.JSON015); //Unclosed comment
 				setEos();
 				return result;
@@ -478,7 +483,7 @@ public class JsonParser extends StringParser {
 					setIndex(pos);
 					//JSON value expected
 					return returnError(null, JSON.JSON010, "[]{}");
-				} else if (isToken("#(")) { // currency ammount
+				} else if (isToken("p(")) { // currency ammount
 					if (isFloat() || isInteger()) {
 						double d = Double.parseDouble(getParsedString());
 						isChar(' ');
@@ -538,6 +543,16 @@ public class JsonParser extends StringParser {
 					setIndex(pos);
 					//JSON value expected
 					return returnError(null, JSON.JSON010, "[]{}");
+				} else if ((i=isOneOfTokens("NaN", "INF", "-INF")) >= 0) {
+					if (isChar('F')) {
+						return returnValue(i == 0 ? Float.NaN
+							: i == 1 ? Float.POSITIVE_INFINITY
+								: Float.NEGATIVE_INFINITY);
+					}
+					isChar('D');
+					return returnValue(i == 0 ? Double.NaN
+						: i == 1 ? Double.POSITIVE_INFINITY
+							: Double.NEGATIVE_INFINITY);
 				}
 			}
 			setIndex(pos);

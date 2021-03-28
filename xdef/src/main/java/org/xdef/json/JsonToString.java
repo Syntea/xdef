@@ -31,14 +31,20 @@ class JsonToString extends JsonTools {
 		} else if (x instanceof String) {
 			return '"' + jstringToSource((String) x) + '"';
 		}
+		String result = x.toString();
 		if (xon) {
 			if (x instanceof Number) {
-				String result = x.toString();
 				if (x instanceof BigDecimal) {
 					return result + 'd';
 				} else if (x instanceof Float) {
+					if (((Float) x).isInfinite()) {
+						return result.charAt(0) == '-' ? "-INFF" : "INFF";
+					}
 					return result + 'F';
 				} else if (x instanceof Double) {
+					if (((Double) x).isInfinite()) {
+						return result.charAt(0) == '-' ? "-INF" : "INF";
+					}
 					return result + 'D';
 				} else if (x instanceof Byte) {
 					return result + 'B';
@@ -72,7 +78,7 @@ class JsonToString extends JsonTools {
 			} else if (x instanceof SDuration) {
 				return x.toString();
 			} else if (x instanceof Price) {
-				return "#(" + x + ')';
+				return "p(" + x + ')';
 			} else if (x instanceof GPSPosition) {
 				return "g(" + x + ')';
 			}
@@ -80,6 +86,10 @@ class JsonToString extends JsonTools {
 				byte[] b = (byte[]) x;
 				return "b("+new String(SUtils.encodeBase64(b))+")";
 			} catch (Exception ex) {}
+		}
+		if (result.equals("NaN") || result.equals("Infinity")
+			|| result.equals("-Infinity")) {
+			return '"' + result + '"';
 		}
 		return x.toString();
 	}
