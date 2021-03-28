@@ -1,99 +1,22 @@
 package bugreports;
 
-import java.io.File;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import org.w3c.dom.Element;
 import org.xdef.XDPool;
 import org.xdef.component.XComponent;
 import org.xdef.component.XComponentUtil;
-import org.xdef.json.JNull;
 import org.xdef.json.JsonUtil;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.GPSPosition;
 import org.xdef.sys.SUtils;
-import org.xdef.xml.KXmlUtils;
 import test.XDTester;
 import static test.XDTester.genXComponent;
 
-/** Test XON data.*/
+/** Test XON data. */
 public class XonTest extends XDTester {
 
 	public XonTest() {super();}
-
-	private static void display(final Object x,
-		final Object y, final String id) {
-		if (id != null) {
-			System.err.println("***** BEG " + id + " *****");
-		}
-		if (x==null || x instanceof JNull) {
-			System.err.print("null");
-			if (y != null && !(y instanceof JNull)) {
-				System.err.print("; Par y: " + y.getClass().getName());
-			}
-			System.err.println();
-		} else if (x instanceof Map) {
-			System.err.println("\nMap");
-			Map m = (Map) x;
-			if (!(y instanceof Map)) {
-				System.err.println("Par y: " + y.getClass().getName());
-			} else {
-				Map n = (Map) y;
-				for (Object z: m.entrySet()) {
-					Map.Entry en = (Map.Entry) z;
-					System.err.print("'" + en.getKey() + "' = ");
-					display(en.getValue(), n.get(en.getKey()), null);
-				}
-				System.err.println("Map END");
-			}
-		} else if (x instanceof List) {
-			System.err.println("\nArray");
-			List a = (List) x;
-			if (!(y instanceof List)) {
-				System.err.println("Par y: " + y.getClass().getName());
-			} else {
-				List b = (List) y;
-				for (int i=0; i < a.size(); i++) {
-					System.err.print("[" + i + "] ");
-					display(a.get(i), b.get(i), null);
-				}
-				System.err.println("Array END");
-			}
-		} else if (x instanceof Number) {
-			System.err.print(x + "; " + x.getClass().getName());
-			if (!(y instanceof Number)) {
-				System.err.print("; Par y: "
-					+ (y == null ? "null" : y.getClass().getName()));
-			} else if (((Number)x).doubleValue() != ((Number)y).doubleValue()) {
-				System.err.print("; Par2: " + y + "; "+x.getClass().getName());
-			}
-			System.err.println();
-		} else {
-			System.err.print(x + "; " + x.getClass().getName());
-			try {
-				byte[] b1 = (byte[]) x;
-				byte[] b2 = (byte[]) y;
-				if (!Arrays.equals(b1, b2)) {
-					System.err.print("; Par2: " + y + "; [B");
-				}
-				System.err.println();
-				return;
-			} catch (Exception ex) {}
-			if (!x.equals(y)) {
-				try {
-					System.err.print("; Par y: "
-						+ (y == null ? "null" : y+"; "+y.getClass().getName()));
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
-			}
-			System.err.println();
-		}
-		if (id != null) {
-			System.err.println("***** END " + id + " *****");
-		}
-	}
 
 	@Override
 	public void test() {
@@ -104,96 +27,63 @@ public class XonTest extends XDTester {
 		Element el;
 		XComponent xc;
 		String tempDir = getTempDir();
-		File f = new File(getTempDir());
-		if (f.exists() && !f.isDirectory()) {
-			throw new RuntimeException(f.getAbsolutePath()
-				+ " is not directory");
-		}
-		f.mkdir();
-		tempDir = f.getAbsolutePath().replace('\\', '/');
-		if (!tempDir.endsWith("/")) {
-			tempDir += '/';
-		}
-		if (!f.isDirectory()) {
-			fail('\"' + tempDir + "\" is not directory");
-			return;
-		}
 		try {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='A'>\n"+
 "  <xd:json name='A'>\n"+
-"    {\" \tspace in name\": \"string();\"}\n"+
+"    {\" \tspace \\u0007\\n\\b in name\\r\": \"string();\"}\n"+
 "  </xd:json>\n"+
 "  <xd:component>\n"+
 "    %class bugreports.data.GJson %link #A;\n"+
 "  </xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			json = "{\" \tspace in name\": \" x \t y \"}";
+			json = "{\" \tspace \\u0007\n\\b in name\\r\": \" x \r\t y \"}";
 			x = JsonUtil.parse(json);
 			el = JsonUtil.jsonToXml(x);
-			y = xp.createXDDocument().jparse(x, reporter);
-			if (!JsonUtil.jsonEqual(x,y)) {
-				System.err.println(KXmlUtils.nodeToString(el, true));
-				display(x, y, "-1");
-				fail();
-			}
-			if (reporter.errors()) {
-				System.err.println(KXmlUtils.nodeToString(el, true));
-				fail(reporter);
-			}
+			y = xp.createXDDocument().jparse(el, reporter);
+			assertTrue(JsonUtil.jsonEqual(x,y));
+			assertNoErrors(reporter);
 			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), x),
 				JsonUtil.toJsonString(x, true));
 			XDTester.genXComponent(xp, tempDir);
 			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
 			y = JsonUtil.xmlToJson(xc.toXml());
-			if (!JsonUtil.jsonEqual(x,y)) {
-				System.err.println(KXmlUtils.nodeToString(el, true));
-				System.err.println(KXmlUtils.nodeToString(xc.toXml(), true));
-				System.err.println(JsonUtil.toJsonString(x, true));
-				System.err.println(JsonUtil.toJsonString(y, true));
-				display(x, y, "-2");
-				fail();
-			}
-//			assertTrue(JsonUtil.jsonEqual(x,y));
+			assertTrue(JsonUtil.jsonEqual(x,y));
 			y = JsonUtil.xonToJson(XComponentUtil.toXon(xc));
-			if (!JsonUtil.jsonEqual(x,y)) {
-				System.err.println(KXmlUtils.nodeToString(el, true));
-				display(x, y, "-3");
-				fail();
-			}
-//			assertTrue(JsonUtil.jsonEqual(x,y));
+			assertTrue(JsonUtil.jsonEqual(x,y));
 		} catch (Exception ex) {fail(ex);}
 //if (true) return;
 		try {
 			xon =
-"/* Start of XON example */\n" +
-"[ /***** Array *****/\n" +
-"  { /***** Map *****/\n" +
-"    a = 1S,                          /* Short */\n" +
-"    b = \"ab cd\",                     /* string */\n" +
-"    c = -123.4e2D,                   /* Double */\n" +
-"    f=true,                          /* boolean */\n" +
-"    g = P1Y1M1DT1H1M1.12S,           /* duration */\n" +
-"    h = null,                        /* null */\n" +
-"    i=[],                            /* empty array */\n" +
-"    Towns = [ /* array with GPS locations of towns */\n" +
-"      g(48.2, 16.37, 151, Wien),\n" +
-"      g(51.52, -0.09, 0, London),\n" +
-"      g(50.08, 14.42, 399, \"Praha (centrum)\"),\n" +
+"# Start of XON example\n" +
+"[ #***** Array *****/\n" +
+"  { #***** Map *****/\n" +
+"    a = 1S,                          # Short\n" +
+"    b = \"ab cd\",                     # String\n" +
+"    c = -123.4e2D,                   # Double\n" +
+"    f=true,                          # Boolean\n" +
+"    g = P1Y1M1DT1H1M1.12S,           # Duration\n" +
+"    h = null,                        # null\n" +
+"    i=[],                            # empty array\n" +
+"    Towns = [ # array with GPS locations of towns\n" +
+"      g(48.2, 16.37, 151, Wien),     # GPS\n" +
+"      g(51.52, -0.09, 0, London),    # GPS\n" +
+"      g(50.08, 14.42, 399, \"Praha (centrum)\"), # GPS\n" +
 "    ],\n" +
-"    j = '\\u0007',                    /* character */\n" +
-"    k = '\\n',                        /* character */\n" +
-"    l = '\"',                         /* character */\n" +
-"    m = ''',                         /* character */\n" +
-"    n = '\\\\',                        /* character */\n" +
+"    j = '\\u0007',                    # Character\n" +
+"    k = '\\n',                        # Character\n" +
+"    l = '\"',                         # Character\n" +
+"    m = ''',                         # Character\n" +
+"    n = '\\\\',                        # Character\n" +
 "    \" name with space \": \"x\\ty\" /* name with space is quoted! */\n" +
 "  }, /**** end of map ****/\n" +
-"  -3F,                               /* float */\n" +
-"  -3d,                               /* decimal */\n" +
-"  -2B,                               /* byte */\n" +
-"  0N,                                /* big integer*/\n" +
+"  -3F,                               # Float\n" +
+"  -3d,                               # BigDecimal\n" +
+"  -2B,                               # Byte\n" +
+"  0N,                                # BigInteger\n" +
 "  999999999999999999999999999999999, /* big integer (authomatic)*/\n" +
+"  D2021-01-11,                       /* date */\n" +
 "  D--11,                             /* month */\n" +
 "  D--02Z,                            /* month zone*/\n" +
 "  D--11-22,                          /* month day */\n" +
@@ -211,25 +101,16 @@ public class XonTest extends XDTester {
 "  D2021-01-12T01:10:11.54012-00:01,  /* date and time (nanos, zone) */\n" +
 "  g(-0, +1),                         /* GPS */\n" +
 "  b(HbRBHbRBHQw=),                   /* byte array (base64) */\n" +
-"  #(123.45 CZK),                     /* price */ \n" +
-"  #(12 USD),                         /* price */\n" +
+"  p(123.45 CZK),                     /* price */ \n" +
+"  p(12 USD),                         /* price */\n" +
 "] /**** end of array ****/\n" +
-"/* End of XON example */";
+"# End of XON example";
 			x = JsonUtil.parseXON(xon);
 			json = JsonUtil.toJsonString(JsonUtil.xonToJson(x), true);
 			JsonUtil.parse(json);
 			s = JsonUtil.toXonString(x, true);
 			y = JsonUtil.parseXON(s);
-			if (!JsonUtil.jsonEqual(x,y)) {
-				System.err.flush();
-				fail(s);
-				System.err.flush();
-				System.err.println(xon);
-				System.err.println("+++");
-				System.err.println(s);
-				System.err.println("+++");
-				display(y, x, "0");
-			}
+			assertTrue(JsonUtil.jsonEqual(x,y));
 //if (true) return;
 			s = JsonUtil.toXonString(x, false);
 			List list = (List) ((Map) ((List) x).get(0)).get("Towns");
@@ -271,6 +152,7 @@ public class XonTest extends XDTester {
 "  \"byte()\",\n" +
 "  \"integer()\",\n" +
 "  \"integer()\",\n" +
+"  \"date()\",\n" +				    /* month d(--1) */
 "  \"gMonth()\",\n" +				/* month d(--1) */
 "  \"gMonth()\",\n" +				/* month d(--1Z) */
 "  \"gMonthDay()\",\n" +			/* --1-2 */
@@ -298,26 +180,16 @@ public class XonTest extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			y = jparse(xp, "", json, reporter);
-			if (reporter.errorWarnings()) {
-				System.err.println(json);
-				System.err.println(
-					KXmlUtils.nodeToString(JsonUtil.jsonToXml(json), true));
-				assertNoErrors(reporter);
-				return;
-			}
+			assertNoErrors(reporter);
 			genXComponent(xp, tempDir);
 			reporter.clear();
 			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
 			assertNoErrors(reporter);
 			y = XComponentUtil.toXon(xc);
-			if (!JsonUtil.jsonEqual(x,y)) {
-				display(x, y, "1");
-			}
+			assertTrue(JsonUtil.jsonEqual(x,y));
 			x = xc.toJson();
 			y = JsonUtil.xonToJson(y);
-				if (!JsonUtil.jsonEqual(x,y)) {
-				display(x, y, "2");
-			}
+				assertTrue(JsonUtil.jsonEqual(x,y));
 		} catch (Exception ex) {fail(ex);}
 		try {
 			SUtils.deleteAll(tempDir, true);
