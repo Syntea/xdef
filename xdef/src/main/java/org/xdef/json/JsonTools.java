@@ -211,7 +211,11 @@ public class JsonTools {
 				return -1;
 			}
 		} else {
-			return p.eos() ? -1 : p.peekChar();
+			if (p.eos()) {
+				p.error(JSON.JSON007); //Unexpected eof
+				return -1;
+			}
+			return p.peekChar();
 		}
 	}
 

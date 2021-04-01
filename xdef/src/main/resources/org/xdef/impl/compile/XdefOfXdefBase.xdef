@@ -92,7 +92,7 @@ SemicolonOrSourceEnd ::= S? (";" S? | $eos)
 /* Keywords of the X-script */
 Keyword ::= "if" | "else" | "do" | "while" | "continue" | "break" | "switch"
   | "case" | "for" | "return" | "def" | "try" | "catch" | "throw" | "finally"
-  | "external" | "new" | "fixed" | "required" | "optional" | "ignore"
+  /* | "fixed" */ | "external" | "new" | "required" | "optional" | "ignore"
   | "illegal" | "occurs" | "onTrue" | "onError" | "onAbsence" | "default"
   | "onExcess" | "onStartElement" | "onIllegalAttr" | "onIllegalText" | "var"
   | "onIllegalElement" | "onIllegalRoot" | "create" | "init" | "options"
@@ -100,6 +100,8 @@ Keyword ::= "if" | "else" | "do" | "while" | "continue" | "break" | "switch"
   | "EQ" | "NE" | "LT" | "LE" | "GT" | "GE" | "LSH" | "RSH" | "RRSH" | "AND"
   | "OR" | "XOR" | "MOD" | "NOT" | "NEG" | "OOR" | "AAND" | "true" | "false"
   | "implements" | "extends" | "onFalse" | "$$$script"
+  /* Note "fixed" is not the keyword since it is used also as the name of
+   validation method. */
 
 /* Predefined constants */
 PredefinedConstant ::= ("$MAXFLOAT" | "$MAXINT" | "$MININT" | "$MINFLOAT" |

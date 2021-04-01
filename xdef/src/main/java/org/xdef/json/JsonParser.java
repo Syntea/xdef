@@ -419,31 +419,12 @@ public class JsonParser extends StringParser {
 			char ch;
 			if (_xonMode) {
 				if (isChar('\'')) { // character
-					ch = getCurrentChar();
-					if (ch == '\\') {
-						if ((i="u\\bfnrt\"".indexOf(ch=nextChar())) < 0) {
-							//JSON value expected
-							return returnError('?', JSON.JSON010, "[]{}");
-						} else if (i > 0) {
-							ch = "?\\\b\f\n\r\t\"".charAt(i);
-							nextChar();
-						} else {
-							nextChar();
-							int x = 0;
-							for (int j = 0; j < 4; j++) {
-								int y = JsonTools.hexDigit(peekChar());
-								if (y < 0) {
-									//hexadecimal digit expected
-									return returnError(null,
-										JSON.JSON005, "[]{}");
-								}
-								x = (x << 4) + y;
-							}
-							ch = (char) x;
-						}
-					} else {
-						nextChar();
+					i = JsonTools.readJSONChar(this);
+					if (i == -1) {
+						//JSON value expected
+						return returnError('?', JSON.JSON010, "[]{}");
 					}
+					ch = (char) i;
 					if (!isChar('\'')) {
 						setIndex(pos);
 						//JSON value expected
@@ -557,14 +538,11 @@ public class JsonParser extends StringParser {
 			}
 			setIndex(pos);
 			boolean minus = isChar('-');
-			if (isChar('+')) {
+			if (!minus && isChar('+')) {
 				error(JSON.JSON017, "+");//Not allowed character '&{0}'
 				wasError = true;
-				pos++;
-			} else {
-				minus = isChar('-');
 			}
-			int firstDigit =  getIndex() - pos; // offset of first digit
+			i = getIndex();
 			if (isInteger()) {
 				boolean isfloat;
 				if (isfloat = isChar('.')) { // decimal point
@@ -580,10 +558,13 @@ public class JsonParser extends StringParser {
 						wasError = true;
 					}
 				}
-				String s = getBufferPart(pos, getIndex());
-				if (s.charAt(firstDigit) == '0' && s.length() > 1 &&
-					Character.isDigit(s.charAt(firstDigit + 1))) {
+				String s = getBufferPart(i, getIndex());
+				if (s.charAt(0) == '0' && s.length() > 1 &&
+					Character.isDigit(s.charAt(1))) {
 						error(JSON.JSON014); // Illegal leading zero in number
+				}
+				if (minus) {
+					s = '-' + s;
 				}
 				if (wasError) {
 					return returnValue(0);
@@ -638,6 +619,7 @@ public class JsonParser extends StringParser {
 					return returnValue(0);
 				}
 			}
+			// error
 			setIndex(pos);
 			//JSON value expected
 			return returnError(null, JSON.JSON010, "[]{}");

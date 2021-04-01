@@ -2,6 +2,7 @@ package org.xdef.json;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -31,8 +32,13 @@ class JsonToString extends JsonTools {
 		} else if (x instanceof String) {
 			return '"' + jstringToSource((String) x) + '"';
 		}
-		String result = x.toString();
+		String result;
 		if (xon) {
+			if (x instanceof byte[]) {// byte array
+				byte[] b = (byte[]) x;
+				return "b("+new String(SUtils.encodeBase64(b))+")";
+			}
+			result = x.toString();
 			if (x instanceof Number) {
 				if (x instanceof BigDecimal) {
 					return result + 'd';
@@ -82,16 +88,21 @@ class JsonToString extends JsonTools {
 			} else if (x instanceof GPSPosition) {
 				return "g(" + x + ')';
 			}
-			try { // try byte array
-				byte[] b = (byte[]) x;
-				return "b("+new String(SUtils.encodeBase64(b))+")";
-			} catch (Exception ex) {}
 		}
+		if (x instanceof byte[]) {// byte array
+			try {
+				byte[] b = (byte[]) x;
+				return '"' + jstringToSource(new String(b, "UTF-8")) + '"';
+			} catch (Exception ex) {
+				throw new RuntimeException(ex);
+			}
+		}
+		result = x.toString();
 		if (result.equals("NaN") || result.equals("Infinity")
 			|| result.equals("-Infinity")) {
 			return '"' + result + '"';
 		}
-		return x.toString();
+		return result;
 	}
 
 	/** Add the string created from JSON or XON array to StringBuilder.
@@ -183,8 +194,18 @@ class JsonToString extends JsonTools {
 		boolean first = true;
 		int lastValuePosition = sb.length();
 		for (Object x: map.entrySet()) {
-			Map.Entry e = (Map.Entry) x;
-			String key = (String) e.getKey();
+			Map.Entry en = (Map.Entry) x;
+			Object y = en.getKey();
+			String key;
+			if (y instanceof String) {
+				key = (String) y;
+			} else {
+				try {
+					key = new String((byte[]) y, "UTF-8");
+				} catch (Exception ex) {
+					throw new RuntimeException(ex);
+				}
+			}
 			boolean xonKey =
 				xon && StringParser.chkNCName(key, StringParser.XMLVER1_0);
 			if (xonKey) {
@@ -208,7 +229,7 @@ class JsonToString extends JsonTools {
 				sb.append(key);
 			}
 			lastValuePosition = sb.length();
-			objectToString(e.getValue(), ind, sb, xon);
+			objectToString(en.getValue(), ind, sb, xon);
 		}
 		if (ind != null
 			&&  (map.size() > 1 || sb.lastIndexOf("\n") > lastValuePosition)) {
@@ -241,7 +262,9 @@ class JsonToString extends JsonTools {
 		Map<String, Object> result = new LinkedHashMap<String, Object>();
 		for (Object x: xmap.entrySet()) {
 			Map.Entry en = (Map.Entry) x;
-			String key = (String) en.getKey();
+			Object o = en.getKey();
+			String key = (o instanceof byte[])
+				? new String((byte[])o, Charset.forName("UTF-8")) : (String) o;
 			key = xmlToJsonName(key);
 			Object y = en.getValue();
 			result.put(key, xonToJson(y));
@@ -273,11 +296,8 @@ class JsonToString extends JsonTools {
 		} else if (x instanceof SDuration
 			|| x instanceof Price || x instanceof GPSPosition) {
 			return x.toString();
-		} else {
-			try { // try byte array
-				byte[] b = (byte[]) x;
-				return new String(SUtils.encodeBase64(b));
-			} catch (Exception ex) {} // not byte array
+		} else if (x instanceof byte[]) {
+			return new String(SUtils.encodeBase64((byte[]) x));
 		}
 		return x.toString();
 	}

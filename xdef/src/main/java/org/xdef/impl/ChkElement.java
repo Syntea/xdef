@@ -717,9 +717,12 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 					case XNode.XMCHOICE: {
 						XChoice xch = (XChoice) xnode;
 						required &= xch.minOccurs() > 0;
-						int j = (xch)._endIndex;
-						if (_counters[j] < xch.minOccurs()) {
-							//Minimum occurrence not reached for &{0}
+						int j = xch._endIndex;
+						int k = 0; // number of occurrences
+						for (int n = xch._begIndex; n <= j; n++) {
+							k += _counters[n];
+						}
+						if (k < xch.minOccurs()) {
 							error(XDEF.XDEF555, "choice");
 							if (xch._onAbsence >= 0) {
 								exec(xch._onAbsence, (byte)'U');

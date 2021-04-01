@@ -271,8 +271,14 @@ public class CompileJsonXdef extends JsonParser {
 	final PNode genXDElement(final PNode parent,
 		final String name,
 		final SPosition spos) {
+/**/
 		return genPElement(parent, _xdNamespace, _xdPrefix + ":" + name, spos);
-//System.out.println(org.xdef.xml.KXmlUtils.nodeToString(p._parent.toXML(),true));
+/**
+		PNode p = genPElement(parent, _xdNamespace, _xdPrefix+":"+name, spos);
+		System.out.println(
+			org.xdef.xml.KXmlUtils.nodeToString(p.toXML(),true));
+		return p;
+/**/
 	}
 
 	/** Create X-definition model from PNode with JSON description.

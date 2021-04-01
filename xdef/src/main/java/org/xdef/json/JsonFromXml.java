@@ -43,7 +43,13 @@ class JsonFromXml extends JsonUtil implements JsonNames {
 				List<Object> ar1 = new ArrayList<Object>();
 				parseJList(ar1, p);
 				ar.add(ar1);
-				continue;
+				p.skipSpaces();
+				if (p.isChar(',')) {
+					continue;
+				} else if (p.isChar(']')) {
+					break;
+				}
+				throw new RuntimeException("JList error");
 			}
 			if (p.isChar(']')) {
 				break;
@@ -93,7 +99,8 @@ class JsonFromXml extends JsonUtil implements JsonNames {
 							for(;;) {
 								if (p.isChar('\\')) {
 									if (p.eos()) {
-										throw new RuntimeException("JList err");
+										throw new RuntimeException(
+											"JList error");
 									}
 									p.nextChar();
 								} else if ((ch = p.getCurrentChar()) == ' '
@@ -104,7 +111,7 @@ class JsonFromXml extends JsonUtil implements JsonNames {
 									break;
 								}
 								if (p.eos()) {
-									throw new RuntimeException("JList err");
+									throw new RuntimeException("JList error");
 								}
 								p.nextChar();
 							}
@@ -117,9 +124,7 @@ class JsonFromXml extends JsonUtil implements JsonNames {
 				break;
 			}
 			if (!p.isChar(',')) {
-				throw new RuntimeException("JList err:\n"
-					+ p.getParsedBufferPart() + "..."
-					+ p.getUnparsedBufferPart());
+				throw new RuntimeException("JList error");
 			}
 		}
 	}
@@ -419,12 +424,28 @@ class JsonFromXml extends JsonUtil implements JsonNames {
 			Object o = childNodes.get(0);
 			if (o instanceof String) {
 				String s = (String) o;
+				boolean genMap = true;
+				if (elem.getParentNode().getNodeType() == Node.DOCUMENT_NODE) {
+					// root element creates map if it has not "xmlns" attribute
+					for (Object x: attrs.keySet()) {
+						if (!((String) x).startsWith("xmlns")) {
+							genMap = false;
+							break;
+						}
+					}
+					if (genMap) {
+						attrs.put(name, xmlToJValue(s));
+						return attrs;
+					}
+				}
 				if (!attrs.isEmpty()) {
 					array.add(attrs);
 				}
 				if (XDConstants.XDEF40_NS_URI.equals(nsURI)
-					&& "json".equals(localName)) {
-					array.add(s);
+					|| XDConstants.XDEF32_NS_URI.equals(nsURI)
+					|| XDConstants.XDEF31_NS_URI.equals(nsURI)) {
+//					&& "json".equals(localName)) {
+					array.add(s); //do not convert text of xd:json elements!
 				} else {
 					addSimpleValue(array, s);
 				}
@@ -445,9 +466,9 @@ class JsonFromXml extends JsonUtil implements JsonNames {
 							return map;
 						}
 						if (val instanceof List
-							&&((List) val).size() == 1
-							&&((List) val).get(0) instanceof Map
-							&&((Map)((List)val).get(0)).isEmpty()){
+							&& ((List) val).size() == 1
+							&& ((List) val).get(0) instanceof Map
+							&& ((Map)((List)val).get(0)).isEmpty()){
 							mm = new LinkedHashMap<String, Object>();
 							List<Object> empty = new ArrayList<Object>();
 							empty.add(new LinkedHashMap<String, Object>());
