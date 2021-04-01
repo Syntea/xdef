@@ -6,7 +6,7 @@
 * fixed bug in the method 'setParsedString' of objects 'ParseResult'.
 * fixed bug in construction mode when in the section `xd:mixed` is embedded
   a section `xd:choice` (an error XDEF555 was incorrectly reported).
-* improved creation of XML form JSON.
+* improved creation of XML from JSON.
 * to the X-script of `BNFRule` objects added the method `rule.validate(String)`.
   Result of this method is a `boolean` value.
 * added new X-definition type of value: `GPSPosition`.
