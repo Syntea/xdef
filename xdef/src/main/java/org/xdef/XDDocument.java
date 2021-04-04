@@ -35,9 +35,9 @@ import javax.xml.namespace.QName;
  * {@link org.xdef.proc.XXNode#getUserObject()},
  * {@link org.xdef.proc.XXNode#getUserObject()},
  * {@link org.xdef.proc.XXNode#setXDContext(org.w3c.dom.Node node)}.
- * {@link org.xdef.proc.XXNode#getXDContext()}.</p>
- * <p>Typical example of validation:</p>
- * <pre><tt>
+ * {@link org.xdef.proc.XXNode#getXDContext()}.
+ * <p>Typical example of validation:
+ * <pre><code>
  * //get instance of XDDocument with X-definition given by name
  * XDDocument xDoc = xp.createXDDocument(name);
  * ArrayReporter reporter = new ArrayReporter(); // here will be written errors
@@ -51,9 +51,9 @@ import javax.xml.namespace.QName;
  * } else {//no errors
  *     ... get variables if necessary - see {@link org.xdef.proc.XXNode}
  *     ....
- * }</tt></pre>
- * <p>Typical example of construction:</p>
- * <pre><tt>
+ * }</code></pre>
+ * <p>Typical example of construction:
+ * <pre><code>
  * //get instance of XDDocument with X-definition given by name
  * XDDocument xDoc = xp.createXDDocument(name);
  * ArrayReporter reporter = new ArrayReporter(); // here will be written errors
@@ -62,7 +62,7 @@ import javax.xml.namespace.QName;
  * Element el = xd.xcreate(nsuri, //namespace of required model or null
  *   name, // name of required model (in given X-definition)
  *   reporter);
- * </tt></pre>
+ * </code></pre>
  * @author Vaclav Trojan
  */
 public interface XDDocument extends XXNode {
@@ -162,7 +162,7 @@ public interface XDDocument extends XXNode {
 	 * @param reporter report writer or null. If this argument is
 	 * null and error reports occurs then SRuntimeException is thrown.
 	 * @return Object with the constructed JSON data.
-	 * @throws SRuntimeException if an was reported.
+	 * @throws SRuntimeException if an error was reported.
 	 */
 	public Object jcreate(String name, ReportWriter reporter)
 		throws SRuntimeException;
@@ -485,4 +485,9 @@ public interface XDDocument extends XXNode {
 		String sourceLanguage,
 		String destLanguage,
 		ReportWriter reporter) throws SRuntimeException;
+
+	/** Get result of XON parsing.
+	 * @return result of XON parsing.
+	 */
+	public Object getXon();
 }

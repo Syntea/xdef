@@ -1,11 +1,12 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 40.1.3, release-date 2021-04-01
+# Version 40.1.3, release-date 2021-04-04
 * preparing version 40.2
 * fixed bug in display of zone with zero hours and negative minutes in offset.
 * fixed bug in the method 'setParsedString' of objects 'ParseResult'.
 * fixed bug in construction mode when in the section `xd:mixed` is embedded
   a section `xd:choice` (an error XDEF555 was incorrectly reported).
+* fixed endless cycle in the X-position with reference to inner selection group.
 * improved creation of XML from JSON.
 * to the X-script of `BNFRule` objects added the method `rule.validate(String)`.
   Result of this method is a `boolean` value.

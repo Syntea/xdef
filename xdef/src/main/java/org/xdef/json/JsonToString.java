@@ -2,7 +2,6 @@ package org.xdef.json;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -76,7 +75,7 @@ class JsonToString extends JsonTools {
 						}
 						return s + '\'';
 					}
-					return '\''+ jstringToSource(String.valueOf(x)) +'\'';
+					return '\'' + jstringToSource(String.valueOf(x)) + '\'';
 				}
 				return "'\\" + "\"nbrtf".charAt(i) + "'";
 			} else if (x instanceof SDatetime) {
@@ -206,14 +205,11 @@ class JsonToString extends JsonTools {
 					throw new RuntimeException(ex);
 				}
 			}
-			boolean xonKey =
-				xon && StringParser.chkNCName(key, StringParser.XMLVER1_0);
-			if (xonKey) {
-				key += indent == null ? "=" : " = ";
-			} else {
-				key = '"' + jstringToSource(key) + '"'
-					+ (indent == null ? ":" : " : ");
+			if (!xon || key.indexOf(':') >= 0
+				|| !StringParser.chkXMLName(key, StringParser.XMLVER1_0)) {
+				key = '"' + jstringToSource(key) + '"';
 			}
+			key += indent == null ? ":" : " : ";
 			if (first) {
 				first = false;
 				if (map.size() > 1) {
@@ -263,9 +259,12 @@ class JsonToString extends JsonTools {
 		for (Object x: xmap.entrySet()) {
 			Map.Entry en = (Map.Entry) x;
 			Object o = en.getKey();
-			String key = (o instanceof byte[])
-				? new String((byte[])o, Charset.forName("UTF-8")) : (String) o;
-			key = xmlToJsonName(key);
+			String key;
+			if (o instanceof byte[]) { // this is because of YAML
+				key = new String((byte[])o);
+			} else {
+				key = (String) o;
+			}
 			Object y = en.getValue();
 			result.put(key, xonToJson(y));
 		}
