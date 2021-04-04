@@ -252,7 +252,7 @@ public class XData extends XCodeDescriptor
 				if (y.getParam() >= 0 && xs + 3 < xv.length
 					&& xv[xs+1].getCode() == CodeTable.NEW_PARSER
 					&& "eq".equals(xv[xs+1].stringValue())
-					&& xv[xs+2].getCode() == CodeTable.PARSEANDCHECK
+					&& xv[xs+2].getCode() == CodeTable.PARSE_OP
 					&& xv[xs+3].getCode() == CodeTable.STOP_OP) {
 					return ((CodeParser) xv[xs+1]).getParser(); // fixed
 				} else {

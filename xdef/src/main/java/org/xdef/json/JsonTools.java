@@ -1,5 +1,9 @@
 package org.xdef.json;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
 import org.xdef.msg.JSON;
 import org.xdef.sys.SParser;
 import org.xdef.sys.StringParser;
@@ -111,6 +115,149 @@ public class JsonTools {
 			}
 		}
 		return sb.toString();
+	}
+
+	/** Parse JList (the string which begins with '[').
+	 * @param ar the array where results are stored.
+	 * @param p String parser with the string.
+	 */
+	private static void parseJList(final List<Object> ar, final StringParser p){
+		for (;;) {
+			p.skipSpaces();
+			if (p.isChar('[')) {
+				List<Object> ar1 = new ArrayList<Object>();
+				parseJList(ar1, p);
+				ar.add(ar1);
+				p.skipSpaces();
+				if (p.isChar(',')) {
+					continue;
+				} else if (p.isChar(']')) {
+					break;
+				}
+				throw new RuntimeException("JList error");
+			}
+			if (p.isChar(']')) {
+				break;
+			}
+			int pos = p.getIndex();
+			char ch;
+			int i;
+			if ((i=p.isOneOfTokens(new String[]{"null","true","false"}))>=0
+				&& (p.eos() || (ch=p.getCurrentChar())<=' '||ch==']'||ch==',')){
+					ar.add(i == 0 ? null : i==1);
+			} else {
+				p.setIndex(pos);
+				if (p.isSignedInteger()
+					&& (p.eos() || (ch = p.getCurrentChar()) <= ' '
+					|| ch == ']' || ch == ',')) {
+					try {
+						ar.add(Long.parseLong(
+							p.getBufferPart(pos, p.getIndex())));
+					} catch (Exception ex) {
+						ar.add(new BigDecimal(
+							p.getBufferPart(pos, p.getIndex())));
+					}
+				} else {
+					p.setIndex(pos);
+					if (p.isSignedFloat()
+						&& (p.eos() || (ch = p.getCurrentChar()) <= ' '
+						|| ch == ']' || ch == ',')) {
+						String s = p.getBufferPart(pos, p.getIndex());
+						if (s.indexOf('.') > 0 || s.indexOf('e') > 0
+							|| s.indexOf('E') > 0) {
+							ar.add(new BigDecimal(
+								p.getBufferPart(pos, p.getIndex())));
+						} else {
+							try {
+								ar.add(Long.parseLong(s));
+							} catch (Exception ex) {
+								ar.add(new BigInteger(
+									p.getBufferPart(pos, p.getIndex())));
+							}
+						}
+					} else {
+						p.setIndex(pos);
+						if (p.isChar('"')) {
+							ar.add(JsonTools.readJSONString(p));
+						} else {
+							for(;;) {
+								if (p.isChar('\\')) {
+									if (p.eos()) {
+										throw new RuntimeException(
+											"JList error");
+									}
+									p.nextChar();
+								} else if ((ch = p.getCurrentChar()) == ' '
+									|| ch == ',' || ch == ']' || ch == '[') {
+									String s =
+										p.getBufferPart(pos, p.getIndex());
+									ar.add(xmlToJValue(s));
+									break;
+								}
+								if (p.eos()) {
+									throw new RuntimeException("JList error");
+								}
+								p.nextChar();
+							}
+						}
+					}
+				}
+			}
+			p.skipSpaces();
+			if (p.isChar(']')) {
+				break;
+			}
+			if (!p.isChar(',')) {
+				throw new RuntimeException("JList error");
+			}
+		}
+	}
+
+	/** Get JSON value from string in XML.
+	 * @param s string with JSON simple value source
+	 * @return object with JSOM value
+	 */
+	public final static Object xmlToJValue(final String s) {
+		if (s.isEmpty()) {
+			return "";
+		} else if (s.charAt(0) == '[') {
+			ArrayList<Object> ar = new ArrayList<Object>();
+			StringParser p = new StringParser(s);
+			p.setIndex(1);
+			parseJList(ar, p);
+			return ar;
+		} else if ("null".equals(s)) {
+			return null;
+		} else if ("true".equals(s)) {
+			return Boolean.TRUE;
+		} else if ("false".equals(s)) {
+			return Boolean.FALSE;
+		}
+		int len = s.length();
+		char ch = s.charAt(0);
+		if (ch == '"' && s.charAt(len-1) == '"') {
+			StringParser p = new StringParser(s);
+			p.setIndex(1);
+			return JsonTools.readJSONString(p);
+		}
+		int i = 0;
+		if (ch == '-' && len > 0) {
+			ch = s.charAt(1);
+			i = 1;
+		}
+		if (ch == '0' && i + 1 < len && s.charAt(i+1) >= '0'
+			&& s.charAt(i+1) <= '9') {
+			return s; //redundant leading zero, => JSON string
+		}
+		if (ch >= '0' && ch <= '9') { // not redundant leading zero
+			try {
+				return Long.parseLong(s);
+			} catch (Exception ex) {}
+			try {
+				return new BigDecimal(s);
+			} catch (Exception ex) {}
+		}
+		return s; // JSON String
 	}
 
 	/** Get XML name created from JSOM pair name.

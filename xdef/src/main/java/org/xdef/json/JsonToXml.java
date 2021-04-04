@@ -1,6 +1,5 @@
 package org.xdef.json;
 
-import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -662,7 +661,7 @@ class JsonToXml extends JsonTools implements JsonNames {
 				String name = (String) entry.getKey();
 				Object y = entry.getValue();
 				if (isSimpleValue(y) && name.startsWith("xmlns")) {
-					setAttr(e, name, y);
+					setAttr(e, name, y); // set only xmlns attributes
 				} else {
 					allXmlns = false;
 				}
@@ -674,6 +673,7 @@ class JsonToXml extends JsonTools implements JsonNames {
 					String name = (String) entry.getKey();
 					if (isSimpleValue(y)) {
 						if (!name.startsWith("xmlns")) {
+							// other attributes
 							setAttr(e, toXmlName(name), y);
 						}
 					} else {
@@ -820,8 +820,12 @@ class JsonToXml extends JsonTools implements JsonNames {
 			Map.Entry en = (Map.Entry) it.next();
 			Element ee = genValueW3C(en.getValue(), e);
 			Object o = en.getKey();
-			String key =(o instanceof byte[])
-				? new String((byte[]) o, Charset.forName("UTF-8")) : (String) o;
+			String key;
+			if (o instanceof byte[]) { // this because of YAML
+				key = new String((byte[]) o);
+			} else {
+				key = (String) o;
+			}
 			ee.setAttribute(J_KEYATTR, toXmlName(key));
 		}
 		return e;

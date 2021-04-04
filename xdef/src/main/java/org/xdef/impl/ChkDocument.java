@@ -95,6 +95,8 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	private XComponent _xComponent;
 	/** Switch to generate XComponent instead of Element; */
 	private boolean _genXComponent;
+	/** XON object, result of JSON parsing */
+	private Object _xon;
 	/** The list of child check elements. */
 	final ArrayList<ChkElement> _chkChildNodes = new ArrayList<ChkElement>();
 
@@ -294,9 +296,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			XNode xe = _xdef._rootSelection.get(xName);
 			if (xe == null) {
 				int i = xName.indexOf(':');
-				String prefix = "";
 				if (i >= 0) {
-					prefix = xName.substring(0, i);
 					xName = xName.substring(i + 1); // XElement local name
 				}
 			}
@@ -401,7 +401,6 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			ignore = true;
 			_xElement = _xdef.createAnyDefElement();
 			_chkRoot = new ChkElement(this, _element, _xElement, ignore);
-
 			String s = uri!=null && !uri.isEmpty()? " (xmlns=\""+uri+"\")" : "";
 			_xPos = "/" + element.getNodeName();
 			if (_xdef._onIllegalRoot >= 0) {
@@ -575,6 +574,9 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			_xElement = null;
 			result = chkAndGetRootElement(parser.getReporter(), reporter==null);
 			parser.closeReader();
+			_xon = _chkRoot._xonArray != null ? _chkRoot._xonArray
+				: _chkRoot._xonMap != null ? _chkRoot._xonMap
+				: _chkRoot._xonValue;
 			return result;
 		} catch (Exception ex) {
 			XDDebug debugger = getDebugger();
@@ -814,6 +816,9 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			_reporter = parser;
 			_refNum = 0; // we must clear counter!
 			parser.xparse(this);
+			_xon = _chkRoot._xonArray != null ? _chkRoot._xonArray
+				: _chkRoot._xonMap != null ? _chkRoot._xonMap
+				: _chkRoot._xonValue;
 			return chkAndGetRootElement(parser, reporter == null);
 		}
 		return xparse(data, null, reporter);
@@ -912,7 +917,10 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		}
 		if (_xElement != null) {
 			xparse(e, reporter);
-			return JsonUtil.xmlToJson(_element);
+			_xon = _chkRoot._xonArray != null ? _chkRoot._xonArray
+				: _chkRoot._xonMap != null ? _chkRoot._xonMap
+				: _chkRoot._xonValue;
+			return JsonUtil.xonToJson(_xon);
 		}
 		//JSON root model&{0}{ of "}{" } is missing in X-definition
 		throw new SRuntimeException(XDEF.XDEF315, e.getNodeName());
@@ -1471,6 +1479,12 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		throw new SRuntimeException(SYS.SYS066, //Internal error&{0}{: }
 			"Unknown variable "+name);
 	}
+
+	@Override
+	/** Get result of XON parsing.
+	 * @return result of XON parsing.
+	 */
+	public Object getXon() {return _xon;}
 
 	@Override
 	/** Translate the input element from the source language to the destination

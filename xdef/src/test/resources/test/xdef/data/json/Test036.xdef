@@ -16,12 +16,12 @@
                "genre()",
                ["occurs 1..*; genre()"]
            ],
-          "ReleaseDate": "xdatetime('yyyy-MM-dd')",
+          "ReleaseDate": "date()",
           "Label": "string()",
           "Tracks": [
             {$script: "occurs 0..*",
               "Title": "string()",
-              "Duration": "xdatetime('mm:ss')",
+              "Duration": "string(%pattern=['[0-9]{2}:[0-9]{2}'])",
               "Writer": "optional string()"
             }
           ]

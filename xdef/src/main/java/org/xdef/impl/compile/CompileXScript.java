@@ -301,7 +301,7 @@ final class CompileXScript extends CompileStatement {
 						sc._check = _g._lastCodeIndex + 1;
 						_g.addCode(new CodeI1(XD_STRING, CALL_OP, addr), 1);
 						_g.internalMethod("eq",1);
-						_g.topToBool();
+						_g.addCode(new CodeI1(XD_PARSERESULT,PARSE_OP,1),0);
 						_g.genStop();
 						_g._sp  = -1;
 						sc._onFalse = _g._lastCodeIndex + 1;

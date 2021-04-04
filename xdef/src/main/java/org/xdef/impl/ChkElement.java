@@ -29,6 +29,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.LinkedHashMap;
+import java.util.List;
 import javax.xml.XMLConstants;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
@@ -37,6 +38,8 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xdef.XDUniqueSetKey;
+import org.xdef.json.JsonNames;
+import org.xdef.json.JsonTools;
 
 /** Provides validation of input data or it can be used as base for construction
  * of XML objects according to a X-definition.
@@ -97,6 +100,13 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	XDUniqueSetKey[] _boundKeys;
 	/** Model of the processed data object.*/
 	XMData _xdata;
+	/** XON object. */
+	Map<String, Object> _xonMap;
+	List<Object> _xonArray;
+	/** XON item name. */
+	String _xonKey;
+	/** XON item value. */
+	Object _xonValue;
 
 	/** The set containing marked unique sets. */
 	final Set<CodeUniqueset> _markedUniqueSets = new HashSet<CodeUniqueset>();
@@ -105,7 +115,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	 * @param xelement X-definition of element.
 	 * @param parent ChkNode parent.
 	 * @param element element with attributes.
-	 * @param ignoreAll if <tt>true</tt> ignore this and all child nodes.
+	 * @param ignoreAll if true ignore this and all child nodes.
 	 */
 	ChkElement(final ChkNode parent,
 		Element element,
@@ -153,9 +163,17 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 				_nil = true;
 			}
 		}
-		if (!_ignoreAll && getElement() != null
-			&& (_xComponent = _parent.getXComponent()) != null) {
-			_xComponent = _xComponent.xCreateXChild(this);
+		if (!_ignoreAll && getElement() != null) {
+			if (_xElement._json > 0) { // XON
+				if (_xElement.getName().endsWith(JsonNames.J_MAP)) {
+					_xonMap = new LinkedHashMap<String, Object>();
+				} else if (_xElement.getName().endsWith(JsonNames.J_ARRAY)) {
+					_xonArray = new ArrayList<Object>();
+				}
+			}
+			if ((_xComponent = _parent.getXComponent()) != null) {// X-component
+				_xComponent = _xComponent.xCreateXChild(this);
+			}
 		}
 	}
 
@@ -574,8 +592,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	/** Check occurrences in a selector of sequence.
 	 * @param selector Selector of group to be investigated.
 	 * @param c Counter (index) of first item of the group.
-	 * @param skipSelectors if <tt>true</tt> the internal selectors are skipped.
-	 * @return <tt>true</tt> if nonempty content is required.
+	 * @param skipSelectors if true the internal selectors are skipped.
+	 * @return true if nonempty content is required.
 	 */
 	private boolean checkSequenceAbsence(final SelectorState selector,
 		final Counter c,
@@ -669,8 +687,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	/** Check occurrences in a selector of mixed.
 	 * @param selector Selector of group to be investigated.
 	 * @param c Counter (index) of first item of the group.
-	 * @param skipSelectors if <tt>true</tt> the internal selectors are skipped.
-	 * @return <tt>true</tt> if nonempty content is required.
+	 * @param skipSelectors if true the internal selectors are skipped.
+	 * @return true if nonempty content is required.
 	 */
 	private boolean checkMixedAbsence(final SelectorState selector,
 		final Counter c,
@@ -805,8 +823,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	/** Check occurrences in a selector of choice.
 	 * @param selector Selector of group to be investigated.
 	 * @param c Counter (index) of first item of the group.
-	 * @param skipSelectors if <tt>true</tt> the internal selectors are skipped.
-	 * @return <tt>true</tt> if nonempty content is required.
+	 * @param skipSelectors if true the internal selectors are skipped.
+	 * @return true if nonempty content is required.
 	 */
 	private boolean checkChoiceAbsence(final SelectorState selector,
 		final Counter c,
@@ -915,8 +933,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	/** Check occurrences in a selector.
 	 * @param selector Selector of group to be investigated.
 	 * @param c Counter (index) of first item of the group.
-	 * @param skipSelectors if <tt>true</tt> the internal selectors are skipped.
-	 * @return <tt>true</tt> if nonempty content is required.
+	 * @param skipSelectors if true the internal selectors are skipped.
+	 * @return true if nonempty content is required.
 	 */
 	final boolean checkAbsence(final SelectorState selector,
 		final Counter c,
@@ -1512,7 +1530,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 
 	/** Add the new attribute to the current element.
 	 * @param att The object with attribute.
-	 * @return <tt>true</tt> if attribute was created according to X-definition.
+	 * @return true if attribute was created according to X-definition.
 	 */
 	final boolean newAttribute(final Attr att) {
 		_node = att;
@@ -1638,6 +1656,28 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 					putTemporaryReport(Report.error(XDEF.XDEF515));
 				}
 			}
+		} else if (_xElement._json > 0) {
+			Object value = _parseResult.getParsedValue();
+			if (value==null) {
+				value = _parseResult.getSourceBuffer();
+			}
+			if (JsonNames.J_KEYATTR.equals(xdata.getName())) {
+				_xonKey = JsonTools.xmlToJsonName(value.toString());
+			} else if (JsonNames.J_VALUEATTR.equals(xdata.getName())) {
+				if (value instanceof String) {
+					_xonValue = JsonTools.xmlToJValue((String)value);
+				} else {
+					if (value instanceof XDValue) {
+						XDValue x = (XDValue) value;
+						_xonValue = x.isNull() ? null : x.getObject();
+					} else {
+						_xonValue = value;
+					}
+					if (_xonValue instanceof String) {
+						_xonValue = JsonTools.xmlToJValue((String)_xonValue);
+					}
+				}
+			}
 		}
 	}
 
@@ -1646,7 +1686,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	 * @param qname The qualified name of attribute (including prefix).
 	 * @param data The value of attribute.
 	 * @param nsURI The value of namespace URI.
-	 * @return <tt>true</tt> if attribute was created according to X-definition.
+	 * @return true if attribute was created according to X-definition.
 	 */
 	public final boolean addAttributeNS(final String nsURI,
 		final String qname,
@@ -1998,7 +2038,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	/** Add the new attribute to the current XXElement.
 	 * @param name name of attribute.
 	 * @param data value of attribute.
-	 * @return <tt>true</tt> if attribute was created according to X-definition.
+	 * @return true if attribute was created according to X-definition.
 	 */
 	public final boolean addAttribute(final String name, final String data) {
 		return addAttributeNS(null, name, data);
@@ -2008,7 +2048,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	 * attribute if exists to prevent report about attribute redefinition.
 	 * @param name The name of attribute.
 	 * @param value The value of attribute.
-	 * @return <tt>true</tt> if attribute was created according to X-definition.
+	 * @return true if attribute was created according to X-definition.
 	 */
 	public final boolean setAttribute(final String name,
 		final String value) {
@@ -2021,7 +2061,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	 * @param name The name of attribute.
 	 * @param data The value of attribute.
 	 * @param nsURI The value of name space URI.
-	 * @return <tt>true</tt> if attribute was created according to X-definition.
+	 * @return true if attribute was created according to X-definition.
 	 */
 	public final boolean setAttribute(final String name,
 		final String data,
@@ -2093,7 +2133,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	/** This method is called when the end of the current element attribute list
 	 * was parsed. The implementation may check the list of attributes and
 	 * may invoke appropriate actions.
-	 * @return <tt>true</tt> if element is compliant with X-definition.
+	 * @return true if element is compliant with X-definition.
 	 */
 	public final boolean checkElement() {
 		_parseResult = null;
@@ -2540,7 +2580,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	@Override
 	/** Add new element as a child of the current element.
 	 * Checks all attributes and child elements for occurrence.
-	 * @return <tt>true</tt> if element was added and complies to X-definition.
+	 * @return true if element was added and complies to X-definition.
 	 */
 	public final boolean addElement() {
 		if (_nil) {
@@ -2594,6 +2634,19 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 				}
 			} else {
 				_parent.incRefNum();
+			}
+		}
+		if (_parent._parent != null && _xElement._json > 0) {//not root; gen XON
+			ChkElement chkEl = (ChkElement) _parent;
+			Object value = JsonNames.J_ITEM.equals(_xElement.getLocalName())
+				? _xonValue : _xonMap != null ? _xonMap : _xonArray;
+			if (chkEl._xonMap != null) {
+				chkEl._xonMap.put(_xonKey, value);
+			} else if (chkEl._xonArray != null) {
+				chkEl._xonArray.add(value);
+			} else {
+				//Internal error&{0}{: }
+				throw new SRuntimeException(SYS.SYS066, "neither Map nor List");
 			}
 		}
 		if (_element != null) {
@@ -2886,7 +2939,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	/** Add new Text node to current element.
 	 * @param data The value of text node.
 	 * @throws SRuntimeException if an error occurs.
-	 * @return <tt>true</tt> if text node is compliant with X-definition.
+	 * @return true if text node is compliant with X-definition.
 	 */
 	public final boolean addText(final String data) {
 		if (_ignoreAll || _element  == null) {
@@ -3162,7 +3215,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	@Override
 	/** Add new Comment node to current element.
 	 * @param data The value of Comment node.
-	 * @return <tt>true</tt> if Comment node is compliant with X-definition.
+	 * @return true if Comment node is compliant with X-definition.
 	 */
 	//TODO
 	public final boolean addComment(final String data) {return true;}
@@ -3172,7 +3225,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	 * @param name The name of the PI node.
 	 * @param X The value of instruction part of the PI node.
 	 * @throws SRuntimeException if an error occurs.
-	 * @return <tt>true</tt> if PI node is compliant with X-definition.
+	 * @return true if PI node is compliant with X-definition.
 	 */
 	//TODO
 	public final boolean addPI(final String name, final String x) {return true;}
@@ -3409,7 +3462,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	@Override
 	/** Check if attribute is legal in the XXElement.
 	 * @param name The name of attribute.
-	 * @return <tt>true</tt> if and only if the attribute is legal in the
+	 * @return true if and only if the attribute is legal in the
 	 * XXElement, otherwise return <tt>false</tt>.
 	 */
 	public final boolean checkAttributeLegal(final String name) {
@@ -3421,7 +3474,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	/** Check if attribute with given namespace is legal in the XXElement.
 	 * @param uri namespace URI.
 	 * @param name name of attribute (optionally with prefix).
-	 * @return <tt>true</tt> if and only if the attribute is legal in the
+	 * @return true if and only if the attribute is legal in the
 	 * XXElement, otherwise return <tt>false</tt>.
 	 */
 	public final boolean checkAttributeNSLegal(final String uri,

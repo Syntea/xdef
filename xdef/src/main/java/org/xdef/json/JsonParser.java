@@ -243,28 +243,35 @@ public class JsonParser extends StringParser {
 				} else {
 					Object o;
 					String name;
-					char separator;
-					if (getCurrentChar() != '"'
-						&& _xonMode && isNCName(StringParser.XMLVER1_0)) { //XON
-						// parse XON named pair
-						name = getParsedString();
-						separator = '=';
-					} else { // JSON
+					if (getCurrentChar() == '"') {
 						o = readValue();
 						if (o != null && (o instanceof String ||
 							(_genJObjects&&o instanceof JValue)
 							&& ((JValue) o).getValue() instanceof String)) {
 							name = _genJObjects ? o.toString() : (String) o;
-							separator = ':';
 						} else {
 							fatal(JSON.JSON004); //Name of item expected
 							return map;
 						}
+					} else if (_xonMode && isXMLName(StringParser.XMLVER1_0)) {
+						name = getParsedString();
+						int ndx = name.indexOf(':');
+						if (ndx == 0) {
+							fatal(JSON.JSON004); //Name of item expected
+							return map;
+						}
+						if (ndx > 0) {
+							setIndex(getIndex() - (name.length() - ndx));
+							name = name.substring(0, ndx);
+						}
+					} else {
+						fatal(JSON.JSON004); //Name of item expected
+						return map;
 					}
 					isSpacesOrComments();
-					if (!isChar(separator)) {
+					if (!isChar(':')) {
 						//"&{0}"&{1}{ or "}{"} expected
-						error(JSON.JSON002, separator);
+						error(JSON.JSON002, ":");
 					}
 					isSpacesOrComments();
 					o = readValue();
