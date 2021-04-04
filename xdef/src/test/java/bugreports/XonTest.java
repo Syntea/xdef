@@ -31,14 +31,14 @@ public class XonTest extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='A'>\n"+
 "  <xd:json name='A'>\n"+
-"    {\" \tspace \\u0007\\n\\b in name\\r\": \"string();\"}\n"+
+"    {\" \tspaces \\u0007\\n\\b in name\\r\": \"jstring();\"}\n"+
 "  </xd:json>\n"+
 "  <xd:component>\n"+
 "    %class bugreports.data.GJson %link #A;\n"+
 "  </xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			json = "{\" \tspace \\u0007\n\\b in name\\r\": \" x \r\t y \"}";
+			json = "{\" \tspaces \\u0007\n\\b in name\\r\": \" x \r\t y \"}";
 			x = JsonUtil.parse(json);
 			el = JsonUtil.jsonToXml(x);
 			y = xp.createXDDocument().jparse(el, reporter);
@@ -59,23 +59,23 @@ public class XonTest extends XDTester {
 "# Start of XON example\n" +
 "[ #***** Array *****/\n" +
 "  { #***** Map *****/\n" +
-"    a = 1S,                          # Short\n" +
-"    b = \"ab cd\",                     # String\n" +
-"    c = -123.4e2D,                   # Double\n" +
-"    f=true,                          # Boolean\n" +
-"    g = P1Y1M1DT1H1M1.12S,           # Duration\n" +
-"    h = null,                        # null\n" +
-"    i=[],                            # empty array\n" +
-"    Towns = [ # array with GPS locations of towns\n" +
+"    a : 1S,                          # Short\n" +
+"    b : \"ab cd\",                     # String\n" +
+"    c : -123.4e2D,                   # Double\n" +
+"    f:true,                        # Boolean\n" +
+"    g : P1Y1M1DT1H1M1.12S,           # Duration\n" +
+"    h : null,                        # null\n" +
+"    i:[],                            # empty array\n" +
+"    Towns : [ # array with GPS locations of towns\n" +
 "      g(48.2, 16.37, 151, Wien),     # GPS\n" +
 "      g(51.52, -0.09, 0, London),    # GPS\n" +
 "      g(50.08, 14.42, 399, \"Praha (centrum)\"), # GPS\n" +
 "    ],\n" +
-"    j = '\\u0007',                    # Character\n" +
-"    k = '\\n',                        # Character\n" +
-"    l = '\"',                         # Character\n" +
-"    m = ''',                         # Character\n" +
-"    n = '\\\\',                        # Character\n" +
+"    j : '\\u0007',                    # Character\n" +
+"    k : '\\n',                        # Character\n" +
+"    l : '\"',                         # Character\n" +
+"    m : ''',                         # Character\n" +
+"    n : '\\\\',                        # Character\n" +
 "    \" name with space \": \"x\\ty\" /* name with space is quoted! */\n" +
 "  }, /**** end of map ****/\n" +
 "  -3F,                               # Float\n" +
@@ -107,6 +107,7 @@ public class XonTest extends XDTester {
 "# End of XON example";
 			x = JsonUtil.parseXON(xon);
 			json = JsonUtil.toJsonString(JsonUtil.xonToJson(x), true);
+//			json = JsonUtil.toJsonString(x, true);
 			JsonUtil.parse(json);
 			s = JsonUtil.toXonString(x, true);
 			y = JsonUtil.parseXON(s);
@@ -129,7 +130,7 @@ public class XonTest extends XDTester {
 "[\n" +
 "  {\n" +
 "    \"a\" : \"short()\",\n" +		/* Short */
-"    \"b\" : \"string()\",\n" +		/* string */
+"    \"b\" : \"jstring()\",\n" +	/* string */
 "    \"c\" : \"double()\",\n" +		/* Double */
 "    \"f\" : \"boolean()\",\n" +	/* boolean */
 "    \"g\" : \"duration()\",\n" +	/* duration */

@@ -10,10 +10,14 @@ import org.xdef.json.JsonUtil;
 import org.xdef.sys.ArrayReporter;
 import test.XDTester;
 import java.net.URL;
+import java.util.List;
+import java.util.Map;
 import org.xdef.component.XComponent;
 import org.xdef.json.JNull;
 import org.xdef.sys.SUtils;
+import org.xdef.xml.KXmlUtils;
 import static test.XDTester._xdNS;
+import static test.XDTester.genXComponent;
 
 /** Various tests JSON, X-component.
  * @author Vaclav Trojan
@@ -24,6 +28,30 @@ public class MyTest_2 extends XDTester {
 
 	private static Object toJson(final XComponent xc) {
 		return JsonUtil.xmlToJson(xc.toXml());
+	}
+
+	private void display(Object o, String indent) {
+		if (o == null) System.err.println(indent + "null");
+		String indent1 = indent + "  ";
+		if (o instanceof Map) {
+			Map m = (Map) o;
+			System.err.println(indent + "MAP:" + m.size());
+			for (Object x : m.entrySet()) {
+				Map.Entry y = (Map.Entry) x;
+				System.err.print(indent1 + y.getKey());
+				display(y.getValue(), " ");
+			}
+			System.err.println(indent + "MAP end");
+		} else if (o instanceof List) {
+			List list = (List) o;
+			System.err.println(indent + "LIST:" + list.size());
+			for (Object x : list) {
+				display(x, indent1);
+			}
+			System.err.println(indent + "LIST end");
+		} else {
+			System.err.println(indent + o + "; " + o.getClass().getName());
+		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -63,40 +91,182 @@ public class MyTest_2 extends XDTester {
 		String xml;
 		String s;
 		String json;
-		Object j;
+		Object o, j;
 		XDDocument xd;
 		Element el;
 		XComponent xc;
 		ArrayReporter reporter = new ArrayReporter();
 ////////////////////////////////////////////////////////////////////////////////
-		try {
+		try {// XON
 			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' name='Example' root='root'>\n"+
-"<xd:declaration>\n" +
-" GPSPosition base = new GPSPosition(50.08, 14.42, 399.0, 'Praha');\n" +
-" GPSPosition mesto;\n" +
-" void pritDistance() {\n" +
-"   printf('(%s) to (%s): %.1f km\\n',\n"+
-"     base, mesto, base.distanceTo(mesto)/1000);\n" +
-" }\n" +
-"</xd:declaration>\n" +
-"<root>\n" +
-"  <mesto xd:script=\"*; finally pritDistance();\"\n"+
-"         GPS=\"gps(); onTrue mesto = getParsedValue();\"/>\n" +
-"</root>\n" +
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.0\" root=\"A\">\n"+
+"<xd:json name='A'>\n"+
+"{ \"_x5f_\": \"date();\" }\n"+
+"</xd:json>\n"+
 "<xd:component>\n"+
-"  %class bugreports.data.Mesta %link Example#root;\n"+
+"  %class bugreports.A %link #A;\n"+
 "</xd:component>\n"+
 "</xd:def>";
-			xp = compile(xdef);
+			xp = XDFactory.compileXD(null, xdef);
 			genXComponent(xp, new File(tempDir));
+			json = "{ \"_x5f_\": D2021-04-04 }";
+			j = JsonUtil.parseXON(json);
+			xd = xp.createXDDocument();
+			o = xd.jparse(j, null);
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.xonToJson(j), o));
+			assertTrue(JsonUtil.jsonEqual(j, xd.getXon()));
+			xd = xp.createXDDocument();
+			xc = xd.jparseXComponent(JsonUtil.xonToJson(j), null, reporter);
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.xonToJson(j), xc.toJson()));
+			assertTrue(JsonUtil.jsonEqual(j, xd.getXon()));
+		} catch (Exception ex) {fail(ex);}
+if (T)return;
+		try {
+			xdef =
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.0\" root=\"array\">\n" +
+"  <array>\n" +
+"    <map xd:script=\"1..*;\">\n" +
+"      <xd:mixed>\n" +
+"        <item key=\"fixed('Name');\"\n" +
+"          value=\"string()\"\n" +
+"          xd:script=\"match @key=='Name';\"/>\n" +
+"        <item key=\"fixed('xxx');\"\n" +
+"          value=\"string()\"\n" +
+"          xd:script=\"?;match @key=='xxx';\"/>\n" +
+"        <xd:choice>\n" +
+"          <item key=\"fixed 'Style';\"\n" +
+"            value=\"string()\"\n" +
+"            xd:script=\"match @key=='Style' AAND string().parse((String)@value).matches();\"/>\n" +
+"          <array key=\"fixed('Style');\" xd:script=\"match @key=='Style';\">\n" +
+"            <item value=\"string()\"\n" +
+"              xd:script=\"occurs 2..*;match string().parse((String)@value).matches();\"/>\n" +
+"          </array>\n" +
+"        </xd:choice>\n" +
+"      </xd:mixed>\n" +
+"    </map>\n" +
+"  </array>\n" +
+"</xd:def>";
+			xp = compile(xdef);
+			xd = xp.createXDDocument("");
 			xml =
-"<root>\n" +
-"  <mesto GPS=\"48.97, 14.47, 381.0, České_Budějovice\"/>\n" +
-"  <mesto GPS=\"50.23, 12.87, 447.0, Plzen\"/>\n" +
-"  <mesto GPS=\"50.23, 12.87, 447, Karlovy_Vary\"/>\n" +
-"</root>";
-			xc = xp.createXDDocument().parseXComponent(xml, null, reporter);
+"<array>\n" +
+"  <map>\n" +
+"    <item key=\"Name\" value=\"Beethoven, Symfonie No 5\"/>\n" +
+"    <item key=\"xxx\" value=\"XXX\"/>\n" +
+"    <item key=\"Style\" value=\"Classic\"/>\n" +
+"  </map>\n" +
+"  <map>\n" +
+"    <item key=\"Name\" value=\"A Day at the Races\"/>\n" +
+"    <item key=\"xxx\" value=\"XXX\"/>\n" +
+"    <array key=\"Style\">\n" +
+"      <item value=\"jazz\"/>\n" +
+"      <item value=\"pop\"/>\n" +
+"    </array>\n" +
+"  </map>\n" +
+"</array>";
+			assertEq(xml, parse(xd, xml, reporter));
+			assertNoErrors(reporter);
+			xd = xp.createXDDocument("");
+//			xd.setJSONContext(j);
+			xd.setXDContext(xml);
+			el = create(xd, "array", reporter);
+			assertNoErrors(reporter);
+			assertEq(xml, el);
+		} catch (Exception ex) {fail(ex);}
+if(T)return;
+		try {
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root='Skladby'>\n"+
+"<xd:json name=\"Skladby\">\n"+
+"  [\n" +
+"    { $script: \"occurs 1..*;\",\n" +
+"       \"Name\": \"string()\",\n" +
+"       \"xxx\": \"? string()\",\n" +
+"       \"Style\": [ $oneOf,\n" +
+"         \"string()\",\n" +
+"         [ \"occurs 2..* string()\" ]\n" +
+"       ]\n" +
+"    }\n" +
+"  ]\n" +
+"</xd:json>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			xd = xp.createXDDocument("");
+			json =
+"[\n" +
+"  { \"Name\": \"Beethoven, Symfonie No 5\",\n" +
+"    \"xxx\": \"XXX\",\n" +
+"    \"Style\": \"Classic\"\n" +
+"  },\n" +
+"  { \"Name\": \"A Day at the Races\",\n" +
+"    \"xxx\": \"XXX\",\n" +
+"    \"Style\": [\"jazz\", \"pop\" ]\n" +
+"  }\n" +
+"]";
+			j = jparse(xd, json, reporter);
+			assertNoErrors(reporter);
+			xd = xp.createXDDocument("");
+//			xd.setJSONContext(j);
+			el = JsonUtil.jsonToXml(j);
+			System.out.println(KXmlUtils.nodeToString(el, true));
+			xd.setXDContext(el);
+			o = jcreate(xd, "Skladby", reporter);
+			assertNoErrors(reporter);
+			assertTrue(JsonUtil.jsonEqual(j, o));
+		} catch (Exception ex) {fail(ex);}
+if(T)return;
+		try {
+			xdef =
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.0\" name=\"Example\" root=\"test\">\n" +
+"  <xd:json name=\"test\">\n" +
+"    { \"cities\"  : [\n" +
+"        { $script: \"occurs 1..*\",\n" +
+"          \"from\": [\n" +
+"            \"string()\",\n" +
+"            { $script: \"occurs 1..*\", \"to\": \"jstring()\", \"distance\": \"int()\" }\n" +
+"    	  ]\n" +
+"        }\n" +
+"      ]\n" +
+"    }\n" +
+"  </xd:json> \n" +
+"</xd:def>";
+			xp = compile(xdef);
+			json =
+"{ \"cities\"  : [ \n" +
+"    { \"from\": [\"Brussels\",\n" +
+"        {\"to\": \"London\", \"distance\": 322}, {\"to\": \"Paris\", \"distance\": 265}\n" +
+"      ]\n" +
+"    },\n" +
+"    { \"from\": [\"London\",\n" +
+"        {\"to\": \"Brussels\", \"distance\": 322}, {\"to\": \"Paris\", \"distance\": 344}\n" +
+"      ]\n" +
+"    }\n" +
+"  ]\n" +
+"}";
+			j = JsonUtil.parseXON(json);
+			xd = xp.createXDDocument("Example");
+			o = xd.jparse(j, reporter);
+			assertNoErrors(reporter);
+			assertTrue(JsonUtil.jsonEqual(j, o));
+			reporter.clear();
+			xd = xp.createXDDocument("Example");
+			el = JsonUtil.jsonToXmlXD(o);
+			o = JsonUtil.xmlToJson(el);
+			assertTrue(JsonUtil.jsonEqual(j, o));
+//			if (KXmlUtils.compareElements(JsonUtil.jsonToXml(j),
+//				JsonUtil.jsonToXml(o), true, null).errorWarnings()) {
+//				System.err.println(KXmlUtils.nodeToString(
+//					JsonUtil.jsonToXml(j), true));
+//				System.err.println(KXmlUtils.nodeToString(
+//					JsonUtil.jsonToXml(o), true));
+//			}
+//			assertEq(JsonUtil.jsonToXml(j), JsonUtil.jsonToXml(o));
+			o = xd.jparse(o, reporter);
+			assertTrue(JsonUtil.jsonEqual(j, o));
+//			System.err.println(KXmlUtils.nodeToString(JsonUtil.jsonToXml(j), true));
+//			System.err.println(KXmlUtils.nodeToString(JsonUtil.jsonToXml(o), true));
+//			assertNoErrors(reporter);
+//			assertTrue(JsonUtil.jsonEqual(j, o));
 		} catch (Exception ex) {fail(ex);}
 if(T)return;
 		try {
@@ -115,10 +285,7 @@ if(T)return;
 			j = xp.createXDDocument().jparse(json, reporter);
 			assertTrue(reporter.printToString().contains("XDEF809"));
 			reporter.clear();
-			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
-				JsonUtil.toJsonString(j, true));
-			xc = xp.createXDDocument().jparseXComponent(json,
-				null, reporter);
+			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
 			assertTrue(reporter.getErrorCount() == 2
 				&& reporter.printToString().contains("XDEF809"));
 			assertTrue(JsonUtil.jsonEqual(

@@ -1664,18 +1664,33 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			if (JsonNames.J_KEYATTR.equals(xdata.getName())) {
 				_xonKey = JsonTools.xmlToJsonName(value.toString());
 			} else if (JsonNames.J_VALUEATTR.equals(xdata.getName())) {
-				if (value instanceof String) {
-					_xonValue = JsonTools.xmlToJValue((String)value);
-				} else {
-					if (value instanceof XDValue) {
-						XDValue x = (XDValue) value;
-						_xonValue = x.isNull() ? null : x.getObject();
+				if (value instanceof XDValue) {
+					XDValue x = (XDValue) value;
+					if (x.isNull()) {
+						_xonValue = null;
 					} else {
-						_xonValue = value;
+						Object obj = x.getObject();
+						if (obj instanceof Number) {
+							String pname = xdata.getParserName();
+							if ("byte".equals(pname)) {
+								_xonValue = x.byteValue();
+							} else if ("short".equals(pname)) {
+								_xonValue = x.shortValue();
+							} else if ("int".equals(pname)) {
+								_xonValue = x.intValue();
+							} else if ("float".equals(pname)) {
+								_xonValue = x.floatValue();
+							} else {
+								_xonValue = obj;
+							}
+						} else if (obj instanceof String) {
+							_xonValue = JsonTools.xmlToJValue((String) obj);
+						} else {
+							_xonValue = obj;
+						}
 					}
-					if (_xonValue instanceof String) {
-						_xonValue = JsonTools.xmlToJValue((String)_xonValue);
-					}
+				} else {
+					_xonValue = value;
 				}
 			}
 		}
