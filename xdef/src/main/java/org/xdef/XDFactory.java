@@ -15,7 +15,6 @@ import java.net.URL;
 import java.sql.Connection;
 import java.util.Properties;
 import org.w3c.dom.Element;
-import org.xdef.msg.SYS;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.FUtils;
 import org.xdef.sys.ReportReader;
@@ -31,10 +30,9 @@ import org.xdef.sys.SRuntimeException;
  * <p>The external methods must be static. The list of external classes with
  * the external methods can be passed as a parameter containing array of
  * classes. If relevant method is not found in the list of classes then the
- * generator of XDPool is searching the the method in the system class path.</p>
- *
- * Typical use of XDFactory:
- * <pre><tt>
+ * generator of XDPool is searching the the method in the system class path.
+ * <p>Typical use of XDFactory:
+ * <pre><code>
  * // 1. Create XDPool from one source and no properties:
  * File xdef = ...
  * XDPool xd = XDFactory.compileXD(null, xdef);
@@ -45,29 +43,16 @@ import org.xdef.sys.SRuntimeException;
  * props.setProperty(key, value); //see {@link org.xdef.XDConstants}
  * XDPool xd = XDFactory.compileXD(props, xdefs);
  * ...
- * </tt></pre>
+ * </code></pre>
  * @author Vaclav Trojan
  */
 public final class XDFactory {
-
-	/** Prevent user to instantiate this class.*/
-	private XDFactory() {
-		//Internal error&{0}{: }
-		throw new SRuntimeException(SYS.SYS066, "Instantiate not accepted");
-	}
-
-	/** Get version of this implementation of X-definition.
-	 * @return version of this implementation of X-definition.
-	 */
-	public static String getXDVersion() {
-		return XDConstants.BUILD_VERSION + " (" + XDConstants.BUILD_DATE + ")";
-	}
 
 	/** Creates instance of XDBuilder with properties.
 	 * @param props Properties or null - see {@link org.xdef.XDConstants}.
 	 * @return created XDBuilder.
 	 */
-	public static XDBuilder getXDBuilder(final Properties props) {
+	public final static XDBuilder getXDBuilder(final Properties props) {
 		return getXDBuilder(null, props);
 	}
 
@@ -76,7 +61,7 @@ public final class XDFactory {
 	 * @param props Properties or null - see {@link org.xdef.XDConstants}.
 	 * @return created XDBuilder.
 	 */
-	public static XDBuilder getXDBuilder(final ReportWriter reporter,
+	public final static XDBuilder getXDBuilder(final ReportWriter reporter,
 		final Properties props) {
 		XDBuilder result = new org.xdef.impl.XBuilder(reporter, props);
 		return result;
@@ -205,7 +190,7 @@ public final class XDFactory {
 	 * @return generated XDPool.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public static XDPool compileXD(final Properties props,
+	public final static XDPool compileXD(final Properties props,
 		final String[] params) throws SRuntimeException {
 		XDBuilder builder = getXDBuilder(props);
 		setParam(builder, params);
@@ -218,7 +203,7 @@ public final class XDFactory {
 	 * @return generated XDPool.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public static XDPool compileXD(final Properties props,
+	public final static XDPool compileXD(final Properties props,
 		final URL[] params) throws SRuntimeException {
 		XDBuilder builder = getXDBuilder(props);
 		setParam(builder, params);
@@ -231,7 +216,7 @@ public final class XDFactory {
 	 * @return generated XDPool.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public static XDPool compileXD(final Properties props,
+	public final static XDPool compileXD(final Properties props,
 		final File[] params) throws SRuntimeException {
 		XDBuilder builder = getXDBuilder(props);
 		setParam(builder, params);
@@ -244,7 +229,7 @@ public final class XDFactory {
 	 * @return generated XDPool.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public static XDPool compileXD(final Properties props,
+	public final static XDPool compileXD(final Properties props,
 		final InputStream[] params) throws SRuntimeException {
 		XDBuilder builder = getXDBuilder(props);
 		setParam(builder, params);
@@ -261,7 +246,7 @@ public final class XDFactory {
 	 * @return generated XDPool.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public static XDPool compileXD(final Properties props,
+	public final static XDPool compileXD(final Properties props,
 		final Object[] sources,
 		final String[] sourceIds) throws SRuntimeException {
 		XDBuilder builder = XDFactory.getXDBuilder(props);
@@ -275,7 +260,7 @@ public final class XDFactory {
 	 * @return generated XDPool.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public static XDPool compileXD(final Properties props,
+	public final static XDPool compileXD(final Properties props,
 		final Object... params)	throws SRuntimeException {
 		return compileXD((ReportWriter) null, props, params);
 	}
@@ -287,7 +272,7 @@ public final class XDFactory {
 	 * @return generated XDPool.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public static XDPool compileXD(final ReportWriter reporter,
+	public final static XDPool compileXD(final ReportWriter reporter,
 		final Properties props,
 		final Object... params)	throws SRuntimeException {
 		if (params == null || params.length == 0) {
@@ -298,13 +283,20 @@ public final class XDFactory {
 		return builder.compileXD();
 	}
 
+	/** Get version of this implementation of X-definition.
+	 * @return version of this implementation of X-definition.
+	 */
+	public final static String getXDVersion() {
+		return XDConstants.BUILD_VERSION + " (" + XDConstants.BUILD_DATE + ")";
+	}
+
 	/** Parse XML with X-definition declared in source input stream.
 	 * @param source where to read XML.
 	 * @param reporter used for error messages or null.
 	 * @return created XDDocument object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public static XDDocument xparse(final InputStream source,
+	public final static XDDocument xparse(final InputStream source,
 		final ReportWriter reporter) throws SRuntimeException {
 		return org.xdef.impl.XBuilder.xparse(source, reporter);
 	}
@@ -315,7 +307,7 @@ public final class XDFactory {
 	 * @return created XDDocument object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public static XDDocument xparse(final String source,
+	public final static XDDocument xparse(final String source,
 		final ReportWriter reporter) throws SRuntimeException {
 		return org.xdef.impl.XBuilder.xparse(source, reporter);
 	}
@@ -326,7 +318,7 @@ public final class XDFactory {
 	 * otherwise in string format.
 	 * @return the XDInput object.
 	 */
-	public static XDInput createXDInput(final InputStream value,
+	public final static XDInput createXDInput(final InputStream value,
 		final boolean xmlFormat) {
 		return new org.xdef.impl.code.DefInStream(value, xmlFormat);
 	}
@@ -337,7 +329,7 @@ public final class XDFactory {
 	 * otherwise in string format.
 	 * @return the XDInput object.
 	 */
-	public static XDInput createXDInput(final InputStreamReader value,
+	public final static XDInput createXDInput(final InputStreamReader value,
 		boolean xmlFormat) {
 		return new org.xdef.impl.code.DefInStream(value, xmlFormat);
 	}
@@ -346,7 +338,7 @@ public final class XDFactory {
 	 * @param value ReportReader.
 	 * @return the XDInput object.
 	 */
-	public static XDInput createXDInput(final ReportReader value) {
+	public final static XDInput createXDInput(final ReportReader value) {
 		return new org.xdef.impl.code.DefInStream(value);
 	}
 
@@ -354,7 +346,7 @@ public final class XDFactory {
 	 * @param value the reporter.
 	 * @return the XDOutput object.
 	 */
-	public static XDOutput createXDOutput(final ReportWriter value) {
+	public final static XDOutput createXDOutput(final ReportWriter value) {
 		return new org.xdef.impl.code.DefOutStream(value);
 	}
 
@@ -364,7 +356,7 @@ public final class XDFactory {
 	 * otherwise in string format.
 	 * @return the XDOutput object.
 	 */
-	public static XDOutput createXDOutput(final Writer value,
+	public final static XDOutput createXDOutput(final Writer value,
 		final boolean xmlFormat) {
 		return new org.xdef.impl.code.DefOutStream(value, xmlFormat);
 	}
@@ -373,7 +365,7 @@ public final class XDFactory {
 	 * @param value PrintStream object.
 	 * @return the XDOutput object.
 	 */
-	public static XDOutput createXDOutput(final PrintStream value) {
+	public final static XDOutput createXDOutput(final PrintStream value) {
 		return new org.xdef.impl.code.DefOutStream(value);
 	}
 
@@ -381,7 +373,7 @@ public final class XDFactory {
 	 * @param el W3C element.
 	 * @return XDElement object.
 	 */
-	public static XDElement createXDElement(Element el) {
+	public final static XDElement createXDElement(final Element el) {
 		return new org.xdef.impl.code.DefElement(el);
 	}
 
@@ -390,7 +382,8 @@ public final class XDFactory {
 	 * @param value value of named value (may be null)
 	 * @return named value.
 	 */
-	public static XDNamedValue createXDNamedValue(String key, Object value) {
+	public final static XDNamedValue createXDNamedValue(final String key,
+		final Object value) {
 		return new org.xdef.impl.code.DefNamedValue(key,
 			value == null || value instanceof XDValue ?
 				(XDValue) value : createXDValue(value));
@@ -399,7 +392,7 @@ public final class XDFactory {
 	/** Creates the empty XDContainer.
 	 * @return the empty XDContainer.
 	 */
-	public static XDContainer createXDContainer() {
+	public final static XDContainer createXDContainer() {
 		return new org.xdef.impl.code.DefContainer();
 	}
 
@@ -407,7 +400,7 @@ public final class XDFactory {
 	 * @param value the object.
 	 * @return the XDContainer object with item created from the object.
 	 */
-	public static XDContainer createXDContainer(Object value) {
+	public final static XDContainer createXDContainer(final Object value) {
 		return new org.xdef.impl.code.DefContainer(value);
 	}
 
@@ -418,7 +411,7 @@ public final class XDFactory {
 	 * @return XDService object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public static XDService createSQLService(final String url,
+	public final static XDService createSQLService(final String url,
 		final String user,
 		final String passw) throws SRuntimeException {
 		return new org.xdef.impl.code.DefSQLService(url, user, passw);
@@ -428,7 +421,7 @@ public final class XDFactory {
 	 * @param conn Database connection.
 	 * @return XDService object.
 	 */
-	public static XDService createSQLService(final Connection conn)
+	public final static XDService createSQLService(final Connection conn)
 		throws SRuntimeException {
 		return new org.xdef.impl.code.DefSQLService(conn);
 	}
@@ -437,7 +430,7 @@ public final class XDFactory {
 	 * @param resultSet the ResultSet object.
 	 * @return XDResultSet object.
 	 */
-	public static XDResultSet createXDResultSet(
+	public final static XDResultSet createXDResultSet(
 		final java.sql.ResultSet resultSet) {
 		return new org.xdef.impl.code.DefSQLResultSet(resultSet);
 	}
@@ -448,7 +441,7 @@ public final class XDFactory {
 	 * @param resultSet the ResultSet object.
 	 * @return XDResultSet object.
 	 */
-	public static XDResultSet createXDResultSet(final String itemName,
+	public final static XDResultSet createXDResultSet(final String itemName,
 		final java.sql.ResultSet resultSet) {
 		return new org.xdef.impl.code.DefSQLResultSet(itemName,resultSet);
 	}
@@ -460,7 +453,7 @@ public final class XDFactory {
 	 * written, otherwise no XML header is written.
 	 * @return XDXmlOutStream object.
 	 */
-	public static XDXmlOutStream createXDXmlOutStream(final Writer writer,
+	public final static XDXmlOutStream createXDXmlOutStream(final Writer writer,
 		final String encoding,
 		final boolean writeDocumentHeader) {
 		return new org.xdef.impl.code.DefXmlWriter(
@@ -468,25 +461,25 @@ public final class XDFactory {
 	}
 
 	/** Creates XDXmlStream writer object from java.io.Writer.
-	 * @param filename where to write XML.
+	 * @param fname where to write XML.
 	 * @param encoding encoding of XML stream.
 	 * @param writeDocumentHeader if true then the XML header is
 	 * written, otherwise no XML header is written.
 	 * @return XDXmlOutStream object.
 	 * @throws IOException if an error occurs.
 	 */
-	public static XDXmlOutStream createXDXmlOutStream(final String filename,
+	public final static XDXmlOutStream createXDXmlOutStream(final String fname,
 		final String encoding,
 		final boolean writeDocumentHeader) throws IOException {
 		return new org.xdef.impl.code.DefXmlWriter(
-			filename, encoding, writeDocumentHeader);
+			fname, encoding, writeDocumentHeader);
 	}
 
 	/** Creates XDParseResult object.
 	 * @param source source which will be set as parsed object.
 	 * @return XDParseResult object.
 	 */
-	public static XDParseResult createParseResult(final String source) {
+	public final static XDParseResult createParseResult(final String source) {
 		return new org.xdef.impl.code.DefParseResult(source);
 	}
 
@@ -494,22 +487,22 @@ public final class XDFactory {
 	 * @param obj the object from which XDValue will be created.
 	 * It may be one of:
 	 * <ul>
-	 * <li>XDValue</li>
-	 * <li>String</li>
-	 * <li>Short, Integer, Long</li>
-	 * <li>Float, Double</li>
-	 * <li>BigDecimal</li>
-	 * <li>BNFGrammar</li>
-	 * <li>BNFRule</li>
-	 * <li>Boolean</li>
-	 * <li>Calendar, SDatetime</li>
-	 * <li>SDuration</li>
+	 * <li>XDValue
+	 * <li>String
+	 * <li>Short, Integer, Long
+	 * <li>Float, Double
+	 * <li>BigDecimal
+	 * <li>BNFGrammar
+	 * <li>BNFRule
+	 * <li>Boolean
+	 * <li>Calendar, SDatetime
+	 * <li>SDuration
 	 * </ul>
 	 * @return new XDValue object.
 	 * @throws RuntimeException if the object from argument is not possible
 	 * to convert to XDValue object.
 	 */
-	public static XDValue createXDValue(final Object obj) {
+	public final static XDValue createXDValue(final Object obj) {
 		return org.xdef.impl.XBuilder.createXDValue(obj);
 	}
 
@@ -518,8 +511,8 @@ public final class XDFactory {
 	 * @param xp XDPool object.
 	 * @throws IOException if an error occurs.
 	 */
-	public final static void writeXDPool(final OutputStream out,final XDPool xp)
-		throws IOException {
+	public final static void writeXDPool(final OutputStream out,
+		final XDPool xp) throws IOException {
 		ObjectOutputStream oout = new ObjectOutputStream(out);
 		oout.writeObject(xp);
 		oout.close();
@@ -580,7 +573,8 @@ public final class XDFactory {
 	 * @return XDPool object.
 	 * @throws IOException if an error occurs.
 	 */
-	public final static XDPool readXDPool(final String fname)throws IOException{
+	public final static XDPool readXDPool(final String fname)
+		throws IOException {
 		if (!new File(fname).exists() && fname.indexOf("://") > 0) {
 			return readXDPool(FUtils.getExtendedURL(fname).openStream());
 		} else {
@@ -596,5 +590,4 @@ public final class XDFactory {
 	public final static XDPool readXDPool(final URL url) throws IOException {
 		return readXDPool(url.openStream());
 	}
-
 }

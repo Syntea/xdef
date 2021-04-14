@@ -9,8 +9,8 @@ import java.net.URL;
  * {@link org.xdef.XDPool}. In most of cases you can create
  * {@link org.xdef.XDPool} with static methods of
  * {@link org.xdef.XDFactory}.
- * <p>Typical use of XDBuilder:</p>
- * <pre><tt>
+ * <p>Typical use of XDBuilder:
+ * <pre><code>
  * // 1. Create XDBuilder with properties.
  * Properties props = new Properties();
  * props.setProperty(key, value); //see {@link org.xdef.XDConstants}
@@ -25,8 +25,7 @@ import java.net.URL;
  * ...
  * XDPool xd = builder.compileXD(); //build XDPool
  * ...
- * </tt></pre>
- *
+ * </code></pre>
  * @author Vaclav Trojan
  */
 public interface XDBuilder {

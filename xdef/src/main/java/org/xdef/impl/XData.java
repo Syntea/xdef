@@ -293,7 +293,7 @@ public class XData extends XCodeDescriptor
 
 	@Override
 	/** Get type of parsed value.
-	 * @return value from cz.syntea.xdef.XDValueTypes.
+	 * @return value from org.xdef.XDValueTypes.
 	 */
 	public final short getParserType() {
 		XDValue p = getParseMethod();

@@ -4,7 +4,7 @@ package org.xdef.msg;
 /** Registered identifiers of reports with the prefix SYS.
  * Default language ISO639-2 id: eng. */
 public interface SYS {
-	/** &amp;{line}{; line=}&amp;{column}{; column=}&amp;{sysId}{; source="}{"}&amp;{xpath}{; xpath=}&amp;{xdpos}{; X-position=} */
+	/** &amp;{line}{; line=}&amp;{column}{; column=}&amp;{sysId}{; source="}{"}&amp;{xpath}{; path=}&amp;{xdpos}{; X-position=} */
 	public static final long SYS000 = 953221120L;
 	/** Compiled: &amp;{c}, build version: &amp;{v}, date: &amp;{d} */
 	public static final long SYS010 = 953221121L;

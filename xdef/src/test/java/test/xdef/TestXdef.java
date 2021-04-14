@@ -473,16 +473,16 @@ public final class TestXdef extends XDTester {
 			assertEq("<a/>", parse(xdef, null, "<a a='c'>d</a>", reporter));
 			s = reporter.printToString();
 			assertTrue(s.indexOf("XDEF809") >= 0  //incorrect value of int ???
-				&& s.indexOf("xpath=/a/text()") >= 0 // ???
+				&& s.indexOf("path=/a/text()") >= 0 // ???
 				&& s.indexOf("XDEF527") >= 0 // missing text ???
 				&& s.indexOf("X1") < 0
 				&& s.indexOf("X2") < 0, s);
 			assertEq("<a/>", parse(xdef, null, "<a/>", reporter));
 			s = reporter.printToString();
 			assertTrue(s.indexOf("XDEF526") >= 0  //missing attribute
-				&& s.indexOf("xpath=/a/text()") >= 0
+				&& s.indexOf("path=/a/text()") >= 0
 				&& s.indexOf("XDEF527") < 0 // missing text should not be!!!
-				&& s.indexOf("xpath=/a/@a") >= 0
+				&& s.indexOf("path=/a/@a") >= 0
 				&& s.indexOf("X1") >= 0
 				&& s.indexOf("X2") >= 0, s);
 			xml = "<a a='1'>1</a>";

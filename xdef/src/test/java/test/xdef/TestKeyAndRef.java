@@ -738,7 +738,7 @@ public final class TestKeyAndRef extends XDTester {
 			assertEq(xml, parse(xp, "", xml, reporter));
 			s = reporter.printToString();
 			assertTrue(reporter.getErrorCount() == 1 &&
-				s.indexOf("xpath=/a/Address[2]") > 0, s);
+				s.indexOf("path=/a/Address[2]") > 0, s);
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xp = compile(dataDir + "TestKeyAndRef2.xdef");

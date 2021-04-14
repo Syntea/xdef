@@ -282,7 +282,7 @@ public final class TestXComponents extends XDTester {
 				xp.createXDDocument("A").xparse(el, null);
 				fail("Error not reported" + el);
 			} catch (Exception ex) {
-				if (ex.getMessage().indexOf("xpath=/A/@dec") < 0) {
+				if (ex.getMessage().indexOf("path=/A/@dec") < 0) {
 					fail(ex);
 				}
 			}
