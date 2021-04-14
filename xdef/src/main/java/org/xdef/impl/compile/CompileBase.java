@@ -254,7 +254,7 @@ public class CompileBase implements CodeTable, XDValueID {
 				new DefString("collapse")));
 		parser(im, org.xdef.impl.parsers.XSParseDouble.class,
 			"double", "?xs:double");
-		parser(im, org.xdef.impl.parsers.XSParseDouble.class,
+		parser(im, org.xdef.impl.parsers.XSParseFloat.class,
 			"float", "?xs:float");
 
 		im = genParserMetnod(0, 2, new short[] {XD_DATETIME, XD_DATETIME},
