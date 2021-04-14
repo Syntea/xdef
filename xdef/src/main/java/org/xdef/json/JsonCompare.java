@@ -68,9 +68,12 @@ class JsonCompare {
 			} else if (n2 instanceof Long || n2 instanceof Integer
 				|| n2 instanceof Short || n2 instanceof Byte) {
 				return equalNumber(n1, new BigDecimal(n2.longValue()));
-			} else if (n2 instanceof Double || n2 instanceof Float) {
+			} else if (n2 instanceof Double) {
 				//this is real equality, decimal can't be exactly converted!
 				return n1.doubleValue() == n2.doubleValue();
+			} else if (n2 instanceof Float) {
+				//this is real equality, decimal can't be exactly converted!
+				return n1.floatValue() == n2.floatValue();
 			}
 		} else if (n1 instanceof BigInteger) {
 			if (n2 instanceof BigInteger) {
@@ -92,15 +95,14 @@ class JsonCompare {
 				|| n2 instanceof BigInteger || n2 instanceof BigDecimal) {
 				return equalNumber(n2, n1);
 			}
-		} else if (n1 instanceof Double || n1 instanceof Float) {
-			if (n2 instanceof BigInteger || n2 instanceof BigDecimal) {
-				return equalNumber(n2, n1);
+		} else if (n2 instanceof BigInteger || n2 instanceof BigDecimal) {
+			return equalNumber(n2, n1);
+		} else if (n1 instanceof Double) {
+			if (n2 instanceof Double) {
+				return n1.doubleValue() == n2.doubleValue();
 			}
-			return n1.doubleValue() == n2.doubleValue();
 		}
-		//Incomparable objects &{0} and &{1}
-		throw new SRuntimeException(JSON.JSON012,
-			n1.getClass().getName(), n2.getClass().getName());
+		return n1.floatValue() == n2.floatValue();
 	}
 
 	/** Check if JSON values from arguments are equal.

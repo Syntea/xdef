@@ -237,6 +237,8 @@ class XCGeneratorBase {
 			|| "unsignedLong".equals(parserName)) {
 			return "java.math.BigInteger";
 		} else if ("float".equals(parserName)) {
+			return "Float";
+		} else if ("double".equals(parserName)) {
 			return "Double";
 		} else if ("decimal".equals(parserName) || "dec".equals(parserName)) {
 			return "java.math.BigDecimal";
@@ -312,6 +314,10 @@ class XCGeneratorBase {
 			|| "PositiveInteger".equals(parserName)
 			|| "nonPositiveiveInteger".equals(parserName)) {
 			return result + "getParsedValue().integerValue()";
+		} else if ("float".equals(parserName)) {
+			return result + "getParsedValue().floatValue()";
+		} else if ("double".equals(parserName)) {
+			return result + "getParsedValue().doubleValue()";
 		} else if ("decimal".equals(parserName)) {
 			return result + "getParsedValue().decimalValue()";
 		} else if ("jnull".equals(parserName)) {
