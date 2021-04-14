@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import org.xdef.XDConstants;
 
-/** Run all available basic tests for package org.xdef.
+/** Execute all tests fast (only version 4.0).
  * @author Vaclav Trojan
  */
 public class TestAll40 {

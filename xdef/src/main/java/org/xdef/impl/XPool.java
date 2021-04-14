@@ -570,6 +570,7 @@ public final class XPool implements XDPool, Serializable {
 		}
 		XMNode[] nodes = xe.getChildNodeModels();
 		int endndx = endIndex == -1 ? nodes.length : endIndex;
+		int j = -1; // used to prevent endless cycle.
 		for (int i = begIndex; i < endndx; i++) {
 			XMNode xn = nodes[i];
 			String name = xn.getName();
@@ -590,6 +591,10 @@ public final class XPool implements XDPool, Serializable {
 			if ("$choice".equals(name) || "$mixed".equals(name)
 				|| "$sequence".equals(name)) {
 				i = ((XMSelector) xn).getEndIndex();
+				if (i == j) {
+					break; // escape endless cycle
+				}
+				j = i;
 			}
 		}
 		return null;

@@ -871,9 +871,7 @@ public final class TestKeyAndRef extends XDTester {
 			parse(xp, "", xml, reporter);
 			assertTrue(reporter.getErrorCount() == 2
 				&& (s = reporter.printToString()).contains("XDEF522")
-				&& s.contains("/Test/uA[1]/uB[1]")
-				&& s.contains("XDEF809") && s.contains("/Test/uA[1]/uB[2]"),
-				reporter);
+				&& s.contains("/Test/uA[1]/uB[2]"), reporter);
 		} catch (Exception ex) {fail(ex);}
 		try { // check xdType
 			xdef =

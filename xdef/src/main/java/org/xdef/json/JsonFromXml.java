@@ -1,7 +1,6 @@
 package org.xdef.json;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -11,7 +10,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.xdef.XDConstants;
-import org.xdef.sys.StringParser;
 
 /** Test X-definition transformation XML -> JSONL
  * @author Vaclav Trojan
@@ -31,145 +29,6 @@ class JsonFromXml extends JsonUtil implements JsonNames {
 	private final static String J_NULL = "null";
 
 	private JsonFromXml() {super();}
-
-	/** Parse JList (the string which begins with '[').
-	 * @param ar the array where results are stored.
-	 * @param p String parser with the string.
-	 */
-	private static void parseJList(final List<Object> ar, final StringParser p){
-		for (;;) {
-			p.skipSpaces();
-			if (p.isChar('[')) {
-				List<Object> ar1 = new ArrayList<Object>();
-				parseJList(ar1, p);
-				ar.add(ar1);
-				continue;
-			}
-			if (p.isChar(']')) {
-				break;
-			}
-			int pos = p.getIndex();
-			char ch;
-			int i;
-			if ((i=p.isOneOfTokens(new String[]{"null","true","false"}))>=0
-				&& (p.eos() || (ch = p.getCurrentChar()) <= ' '
-					|| ch == ']' || ch == ',')) {
-					ar.add(i == 0 ? null : i==1);
-			} else {
-				p.setIndex(pos);
-				if (p.isSignedInteger()
-					&& (p.eos() || (ch = p.getCurrentChar()) <= ' '
-					|| ch == ']' || ch == ',')) {
-					try {
-						ar.add(Long.parseLong(
-							p.getBufferPart(pos, p.getIndex())));
-					} catch (Exception ex) {
-						ar.add(new BigDecimal(
-							p.getBufferPart(pos, p.getIndex())));
-					}
-				} else {
-					p.setIndex(pos);
-					if (p.isSignedFloat()
-						&& (p.eos() || (ch = p.getCurrentChar()) <= ' '
-						|| ch == ']' || ch == ',')) {
-						String s = p.getBufferPart(pos, p.getIndex());
-						if (s.indexOf('.') > 0 || s.indexOf('e') > 0
-							|| s.indexOf('E') > 0) {
-							ar.add(new BigDecimal(
-								p.getBufferPart(pos, p.getIndex())));
-						} else {
-							try {
-								ar.add(Long.parseLong(s));
-							} catch (Exception ex) {
-								ar.add(new BigInteger(
-									p.getBufferPart(pos, p.getIndex())));
-							}
-						}
-					} else {
-						p.setIndex(pos);
-						if (p.isChar('"')) {
-							ar.add(JsonTools.readJSONString(p));
-						} else {
-							for(;;) {
-								if (p.isChar('\\')) {
-									if (p.eos()) {
-										throw new RuntimeException("JList err");
-									}
-									p.nextChar();
-								} else if ((ch = p.getCurrentChar()) == ' '
-									|| ch == ',' || ch == ']' || ch == '[') {
-									String s =
-										p.getBufferPart(pos, p.getIndex());
-									ar.add(xmlToJValue(s));
-									break;
-								}
-								if (p.eos()) {
-									throw new RuntimeException("JList err");
-								}
-								p.nextChar();
-							}
-						}
-					}
-				}
-			}
-			p.skipSpaces();
-			if (p.isChar(']')) {
-				break;
-			}
-			if (!p.isChar(',')) {
-				throw new RuntimeException("JList err:\n"
-					+ p.getParsedBufferPart() + "..."
-					+ p.getUnparsedBufferPart());
-			}
-		}
-	}
-
-	/** Get JSON value from string in XML.
-	 * @param s string with JSON simple value source
-	 * @return object with JSOM value
-	 */
-	private static Object xmlToJValue(final String s) {
-		if (s.isEmpty()) {
-			return "";
-		} else if (s.charAt(0) == '[') {
-			ArrayList<Object> ar = new ArrayList<Object>();
-			StringParser p = new StringParser(s);
-			p.setIndex(1);
-			parseJList(ar, p);
-			return ar;
-		} else if ("null".equals(s)) {
-			return null;
-		} else if ("true".equals(s)) {
-			return Boolean.TRUE;
-		} else if ("false".equals(s)) {
-			return Boolean.FALSE;
-		}
-		int len = s.length();
-		char ch = s.charAt(0);
-		if (ch == '"' && s.charAt(len-1) == '"') {
-			StringParser p = new StringParser(s);
-			p.setIndex(1);
-			return JsonTools.readJSONString(p);
-		}
-		int i = 0;
-		if (ch == '-' && len > 0) {
-			ch = s.charAt(1);
-			i = 1;
-		}
-		if (ch == '0' && i + 1 < len && s.charAt(i+1) >= '0'
-			&& s.charAt(i+1) <= '9') {
-			return s; //redundant leading zero, => JSON string
-		}
-		if (ch >= '0' && ch <= '9') { // not redundant leading zero
-			try {
-				return Long.parseLong(s);
-			} catch (Exception ex) {}
-			try {
-				return new BigDecimal(s);
-			} catch (Exception ex) {}
-		}
-		return s; // JSON String
-	}
 
 	/** Create list of elements and texts from child nodes of element.
 	 * @param el element from which the list is created.
@@ -224,7 +83,7 @@ class JsonFromXml extends JsonUtil implements JsonNames {
 			if (!(xmlnsName.equals(name = n.getNodeName())
 				&& XDConstants.JSON_NS_URI_XD.equals(el.getNamespaceURI()))) {
 				String attName = JsonTools.xmlToJsonName(name);
-				Object val = xmlToJValue(n.getNodeValue());
+				Object val = JsonTools.xmlToJValue(n.getNodeValue());
 				result.put(attName, val);
 			}
 		}
@@ -244,9 +103,9 @@ class JsonFromXml extends JsonUtil implements JsonNames {
 			return createMapW3C(elem);
 		} else if (J_ITEM.equals(elem.getLocalName())) {
 			if (elem.hasAttribute(J_VALUEATTR)) {
-				return xmlToJValue(elem.getAttribute(J_VALUEATTR));
+				return JsonTools.xmlToJValue(elem.getAttribute(J_VALUEATTR));
 			}
-			return xmlToJValue(((Element) elem).getTextContent());
+			return JsonTools.xmlToJValue(((Element) elem).getTextContent());
 		} else if (J_BOOLEAN.equals(elem.getLocalName())) {
 			return ("true".equals(elem.getTextContent().trim()));
 		} else if (J_NULL.equals(elem.getLocalName())) {
@@ -254,7 +113,7 @@ class JsonFromXml extends JsonUtil implements JsonNames {
 		} else if (J_NUMBER.equals(elem.getLocalName())) {
 			return new BigDecimal(elem.getTextContent().trim());
 		} else if (J_STRING.equals(elem.getLocalName())) {
-			return xmlToJValue(elem.getTextContent());
+			return JsonTools.xmlToJValue(elem.getTextContent());
 		}
 		throw new RuntimeException(
 			"Unsupported JSON W3C element: " + elem.getLocalName());
@@ -309,7 +168,7 @@ class JsonFromXml extends JsonUtil implements JsonNames {
 	 * @param s string with values.
 	 */
 	private void addSimpleValue(final List<Object> array, String s) {
-		Object o = xmlToJValue(s);
+		Object o = JsonTools.xmlToJValue(s);
 		if (o instanceof List) {
 			for (Object x: (List) o) {
 				array.add(x);
@@ -335,13 +194,14 @@ class JsonFromXml extends JsonUtil implements JsonNames {
 		if (XDConstants.JSON_NS_URI_XD.equals(nsURI)) {
 			if (J_ITEM.equals(localName)) {
 				if (elem.hasAttribute(J_VALUEATTR)) {
-					return xmlToJValue(elem.getAttribute(J_VALUEATTR));
+					return JsonTools.xmlToJValue(
+						elem.getAttribute(J_VALUEATTR));
 				}
 				String s = elem.getTextContent();
 				if (s != null) {
 					s = s.trim();
 				}
-				return xmlToJValue(s);
+				return JsonTools.xmlToJValue(s);
 			} else if (J_MAP.equals(localName)) {
 				map.putAll(attrs);
 				for (Object o: childNodes) {
@@ -372,7 +232,7 @@ class JsonFromXml extends JsonUtil implements JsonNames {
 						String s = (String) o;
 						if (!s.isEmpty() // if not comment
 							|| !s.startsWith("/*") || !s.endsWith("*/")) {
-							map.put(name, xmlToJValue(s));
+							map.put(name, JsonTools.xmlToJValue(s));
 							throw new RuntimeException(
 								"Text is not allowed in JSON map element: "+s);
 						}
@@ -397,10 +257,10 @@ class JsonFromXml extends JsonUtil implements JsonNames {
 				|| J_NUMBER.equals(localName)
 				|| J_BOOLEAN.equals(localName)) {
 				if (elem.hasAttribute(J_VALUEATTR)) {
-					return xmlToJValue(elem.getAttribute(J_VALUEATTR));
+					return JsonTools.xmlToJValue(elem.getAttribute(J_VALUEATTR));
 				}
 				String s = elem.getTextContent();
-				return xmlToJValue(s);
+				return JsonTools.xmlToJValue(s);
 			}
 			throw new RuntimeException(
 				"Unknown element from JSON namespace: " + name);
@@ -419,12 +279,28 @@ class JsonFromXml extends JsonUtil implements JsonNames {
 			Object o = childNodes.get(0);
 			if (o instanceof String) {
 				String s = (String) o;
+				boolean genMap = true;
+				if (elem.getParentNode().getNodeType() == Node.DOCUMENT_NODE) {
+					// root element creates map if it has not "xmlns" attribute
+					for (Object x: attrs.keySet()) {
+						if (!((String) x).startsWith("xmlns")) {
+							genMap = false;
+							break;
+						}
+					}
+					if (genMap) {
+						attrs.put(name, JsonTools.xmlToJValue(s));
+						return attrs;
+					}
+				}
 				if (!attrs.isEmpty()) {
 					array.add(attrs);
 				}
 				if (XDConstants.XDEF40_NS_URI.equals(nsURI)
-					&& "json".equals(localName)) {
-					array.add(s);
+					|| XDConstants.XDEF32_NS_URI.equals(nsURI)
+					|| XDConstants.XDEF31_NS_URI.equals(nsURI)) {
+//					&& "json".equals(localName)) {
+					array.add(s); //do not convert text of xd:json elements!
 				} else {
 					addSimpleValue(array, s);
 				}
@@ -445,9 +321,9 @@ class JsonFromXml extends JsonUtil implements JsonNames {
 							return map;
 						}
 						if (val instanceof List
-							&&((List) val).size() == 1
-							&&((List) val).get(0) instanceof Map
-							&&((Map)((List)val).get(0)).isEmpty()){
+							&& ((List) val).size() == 1
+							&& ((List) val).get(0) instanceof Map
+							&& ((Map)((List)val).get(0)).isEmpty()){
 							mm = new LinkedHashMap<String, Object>();
 							List<Object> empty = new ArrayList<Object>();
 							empty.add(new LinkedHashMap<String, Object>());

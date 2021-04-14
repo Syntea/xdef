@@ -16,7 +16,9 @@ public class XDParseUrl extends XDParserAbstract {
 	@Override
 	public void parseObject(XXNode xnode, XDParseResult p) {
 		p.isSpaces();
-		if (chkUrl(p, p.getUnparsedBufferPart().trim(), ROOTBASENAME)) {
+		String s = p.getUnparsedBufferPart().trim();
+		if (chkUrl(p, s, ROOTBASENAME)) {
+			p.setParsedValue(s);
 			p.setEos();
 		}
 	}

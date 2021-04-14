@@ -72,7 +72,6 @@ public class CompileJsonXdefW3C extends CompileJsonXdef {
 			isSpacesOrComments();
 			if (isToken(ONEOF_KEY)) {
 				e = genJElement(parent, "map", map.getPosition());
-				ee = e;
 				ee = genXDElement(e, "choice", getPosition());
 				e.addChildNode(ee);
 				skipSemiconsBlanksAndComments();
@@ -82,11 +81,8 @@ public class CompileJsonXdefW3C extends CompileJsonXdef {
 				}
 			} else if (map.size() > 1) {
 				e = genJElement(parent, "map", map.getPosition());
-				ee = e;
-				if (map.size() > 2) {
-					ee = genXDElement(e, "mixed", map.getPosition());
-					e.addChildNode(ee);
-				}
+				ee = genXDElement(e, "mixed", map.getPosition());
+				e.addChildNode(ee);
 				if (!eos()) {
 					setXDAttr(e, "script",
 						new SBuffer(getUnparsedBufferPart(), getPosition()));
@@ -300,5 +296,6 @@ public class CompileJsonXdefW3C extends CompileJsonXdef {
 			jx.error(JSON.JSON011); //Not JSON object&{0}
 		}
 		p._value = null;
+//		System.out.println(org.xdef.xml.KXmlUtils.nodeToString(p.toXML(),true));
 	}
 }

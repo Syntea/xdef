@@ -276,8 +276,7 @@ class JsonToXml extends JsonTools implements JsonNames {
 			if (x instanceof Map) {
 				Map m = (Map) x;
 				Map.Entry en;
-				if (m.size() == 1
-					&& isSimpleValue((en=(Map.Entry) m.entrySet()
+				if (m.size() == 1 && isSimpleValue((en=(Map.Entry) m.entrySet()
 						.iterator().next()).getValue())) {
 					Element e = addJSONElem(elem, J_MAP);
 					setAttr(e, toXmlName((String)en.getKey()), en.getValue());
@@ -285,71 +284,87 @@ class JsonToXml extends JsonTools implements JsonNames {
 				} else {
 					addMapToXmlXD(m, elem, false);
 				}
-			} else if (x instanceof List) {
-				List list = (List) x;
-				Element ee = addJSONElem(elem, J_ARRAY);
-				addArrayItems(ee, list, 0);
-				_ns.popContext();
-			} else { // simpleValue
-				if (i + 1 == len) { // last item
-					addValueAsText((Element) elem, x);
-				} else if (!isSimpleValue(array.get(i+1))) {
-					addValueAsText((Element) elem, x);
-				} else {
-					String s;
-					if (i+1 >= len || !isSimpleValue(array.get(i+1))) {
+			} else {
+				String text;
+				if (x instanceof List) {
+					List list = (List) x;
+					text = genTextFromItem(list, 0);
+					if (text == null) {
+						Element ee = addJSONElem(elem, J_ARRAY);
+						addArrayItems(ee, list, 0);
+						_ns.popContext();
+						continue;
+					}
+				} else { // simpleValue or simple array
+					if (i + 1 == len
+						|| genTextFromItem(array.get(i+1), 2) == null) {
 						addValueAsText((Element) elem, x);
+						continue;
 					} else {
-						StringBuilder sb = new StringBuilder("[ ");
-						Object val = array.get(i);
-						for (;;) {
-							if (sb.length() > 2) {
-								sb.append(", "); // separator
-							}
-							if (val == null) {
-								sb.append("null");
-							} else if (val instanceof String) {
-								sb.append(jstringToXML(val, 2));
-							} else {
-								sb.append(val.toString());
-							}
-							if (i + 1 >= len
-								|| (val = array.get(i+1)) instanceof Map
-								|| val instanceof List) {
-								break;
-							}
-							i++;
-						}
-						s = sb.append(" ]").toString();
-						elem.appendChild(_doc.createTextNode(s));
+						text = jstringToXML(x, 2);
 					}
 				}
+				StringBuilder sb = new StringBuilder("[ ").append(text);
+				for (i = i + 1; i < len; i++) {
+					x = array.get(i);
+					text = genTextFromItem(x, 2);
+					if (text == null) {
+						i--;
+						break;
+					}
+					sb.append(", ").append(text);
+				}
+				sb.append(" ]");
+				elem.appendChild(_doc.createTextNode(sb.toString()));
 			}
 		}
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
 
-	/** Check if it is array of simple arrays.
-	 * @param array array to checked.
-	 * @return true if it is array of simple arrays.
+	/** If all items of the array are simple values or arrays with simple values
+	 * return the string with the array. Otherwise, return null.
+	 * @param list the array to be converted.
+	 * @param mode flag if to generate it to an attribute, text node or JList.
+	 * @return the string with array representation or null.
 	 */
-	private boolean arrayOfArrays(final List array) {
-		if (array.isEmpty()) {
-			return true;
-		}
-		if (array.size() != 1) {
-			for (Object x: array) {
-				if (!isSimpleValue(x)) {
-					return false;
+	private String genTextFromItem(final Object val, final int mode) {
+		if (isSimpleValue(val)) {
+			return jstringToXML(val, mode);
+		} else if (val instanceof List) {
+			List list = (List) val;
+			if (list.isEmpty()) {
+				return "[]";  // empty array
+			}
+			StringBuilder sb = new StringBuilder("[ ");
+			for (Object x: list) {
+				if (isSimpleValue(x)) {
+					if (sb.length() > 2) {
+						sb.append(", "); // separator
+					}
+					if (x == null) {
+						sb.append("null");
+					} else if (x instanceof String) {
+						sb.append(jstringToXML(x, 2));
+					} else {
+						sb.append(x.toString());
+					}
+				} else if (x instanceof List) {
+					String s = genTextFromItem((List) x, 2);
+					if (s == null) {
+						return null; // not converible as string
+					}
+					if (sb.length() > 2) {
+						sb.append(", "); // separator
+					}
+					sb.append(s);
+				} else {
+					return null;  // not converible as string
 				}
 			}
-			return true;
+			return sb + " ]";
 		}
-		if (array.get(0) instanceof List) {
-			return arrayOfArrays((List) array.get(0));
-		}
-		return false;
+		return null;
 	}
 
 	/** Add the element created from an array.
@@ -504,15 +519,14 @@ class JsonToXml extends JsonTools implements JsonNames {
 				return;
 			}
 		}
-		if (array.size() <= 1 && arrayOfArrays(array)) {
-			e = addJSONElem(elem, J_ARRAY);
-		} else {
-			e = elem;
+		if (array.size() <= 1) {
+			String text = genTextFromItem(array, 0);
+			if (text != null) {
+				elem.appendChild(_doc.createTextNode(text));
+				return;
+			}
 		}
-		addArrayItems(e, array, 0);
-		if (e != elem) {
-			_ns.popContext();
-		}
+		addArrayItems(elem, array, 0);
 	}
 
 	/** Get namespace of element which will be created.
@@ -599,8 +613,8 @@ class JsonToXml extends JsonTools implements JsonNames {
 			if (!array.isEmpty() && array.get(0) instanceof Map) {
 				// if the first item is map and there is xmlns item
 				// in the map set this namespace for the element
-				namespace =
-					getElementNamespace((Map) array.get(0), name, namespace);
+				namespace = getElementNamespace((Map) array.get(0),
+					name, namespace);
 			}
 			e = addElem(parent, namespace, name);
 			if (val instanceof List && ((List) val).size() == 1
@@ -647,7 +661,7 @@ class JsonToXml extends JsonTools implements JsonNames {
 				String name = (String) entry.getKey();
 				Object y = entry.getValue();
 				if (isSimpleValue(y) && name.startsWith("xmlns")) {
-					setAttr(e, name, y);
+					setAttr(e, name, y); // set only xmlns attributes
 				} else {
 					allXmlns = false;
 				}
@@ -659,6 +673,7 @@ class JsonToXml extends JsonTools implements JsonNames {
 					String name = (String) entry.getKey();
 					if (isSimpleValue(y)) {
 						if (!name.startsWith("xmlns")) {
+							// other attributes
 							setAttr(e, toXmlName(name), y);
 						}
 					} else {
@@ -669,6 +684,53 @@ class JsonToXml extends JsonTools implements JsonNames {
 			_ns.popContext();
 			return e;
 		}
+	}
+
+	/** Creates root element from map.
+	 * @param map the map from which the root element is created.
+	 */
+	private void createRootElementFromMap(final Map map) {
+		String name = null;
+		String text = null;
+		int numXmlns = 0;
+		for (Object x: map.entrySet()) {
+			Map.Entry en = (Map.Entry) x;
+			String key = (String) en.getKey();
+			Object val = en.getValue();
+			if (key.startsWith("xmlns")) {
+				numXmlns++;
+			} else {
+				if (name != null) { // more simple elements
+					addMapToXmlXD(map, _doc, false); //create normally
+					return;
+				}
+				name = key;
+				text = genTextFromItem(val, 0);
+				if (text == null) { // not simple text, create normally
+					addMapToXmlXD(map, _doc, false);
+					return;
+				}
+			}
+		}
+		if (name == null) {
+			addJSONElem(_doc, J_MAP); // empty map
+		} else {
+			name = toXmlName(name);
+			String namespace = _ns.getNamespaceURI(getNamePrefix(name));
+			namespace = getElementNamespace(map, name, namespace);
+			Element e = addElem(_doc, namespace, name);
+			if (numXmlns > 0) {
+				for (Object x: map.entrySet()) {
+					Map.Entry en = (Map.Entry) x;
+					String key = (String) en.getKey();
+					if (key.startsWith("xmlns")) {
+						setAttr(e, key, jstringToXML(en.getValue(), 1));
+					}
+				}
+			}
+			e.appendChild(_doc.createTextNode(text));
+		}
+		_ns.popContext();
 	}
 
 	/** Create element created from JSON (X-definition mode).
@@ -682,13 +744,7 @@ class JsonToXml extends JsonTools implements JsonNames {
 		x._doc = KXmlUtils.newDocument();
 		x._ns = new KNamespace();
 		if (o instanceof Map) {
-			Map map = (Map) o;
-			boolean forceMap = false;
-			if (map.size() == 1) {
-				Object y = map.values().iterator().next();
-				forceMap = isSimpleValue(y);
-			}
-			x.addMapToXmlXD((Map) o, x._doc, forceMap);
+			x.createRootElementFromMap((Map) o);
 		} else if (o instanceof List) {
 			Element elem = x.addJSONElem(x._doc, J_ARRAY);
 			x.addArrayItems(elem, (List) o, 0);
@@ -761,10 +817,16 @@ class JsonToXml extends JsonTools implements JsonNames {
 		Element e = genJElementW3C(J_MAP);
 		Iterator it = map.entrySet().iterator();
 		while (it.hasNext()) {
-			Map.Entry entry = (Map.Entry) it.next();
-			Element ee = genValueW3C(entry.getValue(), e);
-			String key = toXmlName((String) entry.getKey());
-			ee.setAttribute(J_KEYATTR, key);
+			Map.Entry en = (Map.Entry) it.next();
+			Element ee = genValueW3C(en.getValue(), e);
+			Object o = en.getKey();
+			String key;
+			if (o instanceof byte[]) { // this because of YAML
+				key = new String((byte[]) o);
+			} else {
+				key = (String) o;
+			}
+			ee.setAttribute(J_KEYATTR, toXmlName(key));
 		}
 		return e;
 	}

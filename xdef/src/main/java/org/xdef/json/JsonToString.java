@@ -31,14 +31,25 @@ class JsonToString extends JsonTools {
 		} else if (x instanceof String) {
 			return '"' + jstringToSource((String) x) + '"';
 		}
+		String result;
 		if (xon) {
+			if (x instanceof byte[]) {// byte array
+				byte[] b = (byte[]) x;
+				return "b("+new String(SUtils.encodeBase64(b))+")";
+			}
+			result = x.toString();
 			if (x instanceof Number) {
-				String result = x.toString();
 				if (x instanceof BigDecimal) {
 					return result + 'd';
 				} else if (x instanceof Float) {
+					if (((Float) x).isInfinite()) {
+						return result.charAt(0) == '-' ? "-INFF" : "INFF";
+					}
 					return result + 'F';
 				} else if (x instanceof Double) {
+					if (((Double) x).isInfinite()) {
+						return result.charAt(0) == '-' ? "-INF" : "INF";
+					}
 					return result + 'D';
 				} else if (x instanceof Byte) {
 					return result + 'B';
@@ -64,7 +75,7 @@ class JsonToString extends JsonTools {
 						}
 						return s + '\'';
 					}
-					return '\''+ jstringToSource(String.valueOf(x)) +'\'';
+					return '\'' + jstringToSource(String.valueOf(x)) + '\'';
 				}
 				return "'\\" + "\"nbrtf".charAt(i) + "'";
 			} else if (x instanceof SDatetime) {
@@ -72,16 +83,25 @@ class JsonToString extends JsonTools {
 			} else if (x instanceof SDuration) {
 				return x.toString();
 			} else if (x instanceof Price) {
-				return "#(" + x + ')';
+				return "p(" + x + ')';
 			} else if (x instanceof GPSPosition) {
 				return "g(" + x + ')';
 			}
-			try { // try byte array
-				byte[] b = (byte[]) x;
-				return "b("+new String(SUtils.encodeBase64(b))+")";
-			} catch (Exception ex) {}
 		}
-		return x.toString();
+		if (x instanceof byte[]) {// byte array
+			try {
+				byte[] b = (byte[]) x;
+				return '"' + jstringToSource(new String(b, "UTF-8")) + '"';
+			} catch (Exception ex) {
+				throw new RuntimeException(ex);
+			}
+		}
+		result = x.toString();
+		if (result.equals("NaN") || result.equals("Infinity")
+			|| result.equals("-Infinity")) {
+			return '"' + result + '"';
+		}
+		return result;
 	}
 
 	/** Add the string created from JSON or XON array to StringBuilder.
@@ -173,16 +193,23 @@ class JsonToString extends JsonTools {
 		boolean first = true;
 		int lastValuePosition = sb.length();
 		for (Object x: map.entrySet()) {
-			Map.Entry e = (Map.Entry) x;
-			String key = (String) e.getKey();
-			boolean xonKey =
-				xon && StringParser.chkNCName(key, StringParser.XMLVER1_0);
-			if (xonKey) {
-				key += indent == null ? "=" : " = ";
+			Map.Entry en = (Map.Entry) x;
+			Object y = en.getKey();
+			String key;
+			if (y instanceof String) {
+				key = (String) y;
 			} else {
-				key = '"' + jstringToSource(key) + '"'
-					+ (indent == null ? ":" : " : ");
+				try {
+					key = new String((byte[]) y, "UTF-8");
+				} catch (Exception ex) {
+					throw new RuntimeException(ex);
+				}
 			}
+			if (!xon || key.indexOf(':') >= 0
+				|| !StringParser.chkXMLName(key, StringParser.XMLVER1_0)) {
+				key = '"' + jstringToSource(key) + '"';
+			}
+			key += indent == null ? ":" : " : ";
 			if (first) {
 				first = false;
 				if (map.size() > 1) {
@@ -198,7 +225,7 @@ class JsonToString extends JsonTools {
 				sb.append(key);
 			}
 			lastValuePosition = sb.length();
-			objectToString(e.getValue(), ind, sb, xon);
+			objectToString(en.getValue(), ind, sb, xon);
 		}
 		if (ind != null
 			&&  (map.size() > 1 || sb.lastIndexOf("\n") > lastValuePosition)) {
@@ -231,8 +258,13 @@ class JsonToString extends JsonTools {
 		Map<String, Object> result = new LinkedHashMap<String, Object>();
 		for (Object x: xmap.entrySet()) {
 			Map.Entry en = (Map.Entry) x;
-			String key = (String) en.getKey();
-			key = xmlToJsonName(key);
+			Object o = en.getKey();
+			String key;
+			if (o instanceof byte[]) { // this is because of YAML
+				key = new String((byte[])o);
+			} else {
+				key = (String) o;
+			}
 			Object y = en.getValue();
 			result.put(key, xonToJson(y));
 		}
@@ -263,11 +295,8 @@ class JsonToString extends JsonTools {
 		} else if (x instanceof SDuration
 			|| x instanceof Price || x instanceof GPSPosition) {
 			return x.toString();
-		} else {
-			try { // try byte array
-				byte[] b = (byte[]) x;
-				return new String(SUtils.encodeBase64(b));
-			} catch (Exception ex) {} // not byte array
+		} else if (x instanceof byte[]) {
+			return new String(SUtils.encodeBase64((byte[]) x));
 		}
 		return x.toString();
 	}

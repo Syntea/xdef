@@ -35,7 +35,7 @@ public class TestJsonUtil extends STester {
 	 * @return error message or the empty string if no error was recognized.
 	 */
 	private String testJParse(final File f) {
-		String id = getId(f);
+//		String id = getId(f);
 		Object o1, o2;
 		Element el;
 		try {
@@ -43,21 +43,21 @@ public class TestJsonUtil extends STester {
 			o1 = JsonUtil.parse(f);
 			o2 = JsonUtil.parse(JsonUtil.toJsonString(o1, true));
 			if (!JsonUtil.jsonEqual(o1, o2)) {
-				return "JSON toString error " + id;
+				return "JSON toString error " + f.getName();
 			}
 		} catch (Exception ex) {
-			return "JSON error " + id + "\n" + ex;
+			return "JSON error " + f.getName() + "\n" + ex;
 		}
 		try {
 			// test JSON to XML and XML to JSON (W3C format) JSON
 			el = JsonUtil.jsonToXmlXD(o1);
 			o2 = JsonUtil.xmlToJson(el);
 			if (!JsonUtil.jsonEqual(o1, o2)) {
-				return "JSON xmlToJson (W33) error " + id
-					+ KXmlUtils.nodeToString(el);
+				return "JSON xmlToJson (W3C) error " + f.getName()
+					+ "\n" + KXmlUtils.nodeToString(el);
 			}
 		} catch (Exception ex) {
-			return "Error jsonToXml (XD): Test" + id + ".json\n"
+			return "Error jsonToXml (XD): " + f.getName() + "\n"
 				+ ex + "\n" + JsonUtil.toJsonString(o1, true);
 		}
 		try {
@@ -65,11 +65,11 @@ public class TestJsonUtil extends STester {
 			el = JsonUtil.jsonToXml(o1);
 			o2 = JsonUtil.xmlToJson(el);
 			if (!JsonUtil.jsonEqual(o1, o2)) {
-				return "JSON xmlToJson (W3C) error " + id
-					+ KXmlUtils.nodeToString(el);
+				return "JSON xmlToJson (W3C) error " + f.getName()
+					+ "\n" + KXmlUtils.nodeToString(el);
 			}
 		} catch (Exception ex) {
-			return "Error XmlToJson (W3C): Test" + id + ".json\n"
+			return "Error XmlToJson (W3C): " + f.getName() + "\n"
 				+ ex + "\n" + JsonUtil.toJsonString(o1, true);
 		}
 		return "";
@@ -133,7 +133,7 @@ public class TestJsonUtil extends STester {
 			if (x.isFile() && x.getName().endsWith("json")) {
 				String s = testJParse(x);
 				if (!s.isEmpty()) {
-					fail(s);
+					fail(x + "\n" + s);
 				}
 			}
 		}

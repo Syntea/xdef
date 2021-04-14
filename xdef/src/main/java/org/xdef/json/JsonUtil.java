@@ -268,33 +268,43 @@ public class JsonUtil {
 		return sb.toString();
 	}
 
+	/** Create string with XON object.
+	 * @param x the XON object.
+	 * @return string with XCN source data.
+	 */
+	public static final String toXonString(final Object x){
+		StringBuilder sb = new StringBuilder();
+		JsonToString.objectToString(x, null, sb, true);
+		return sb.toString();
+	}
+
 	/** Create JSON object form XON object.
-	 * @param xon  XON object
+	 * @param x  XON object
 	 * @return JSON object.
 	 */
-	public static final Object xonToJson(Object xon) {
-		return JsonToString.xonToJson(xon);
+	public static final Object xonToJson(Object x) {
+		return JsonToString.xonToJson(x);
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
 //  String from JSON/XON
 ////////////////////////////////////////////////////////////////////////////////
 	/** Create JSON string from object (no indentation).
-	 * @param obj JSON object.
+	 * @param x JSON object.
 	 * @return string with JSON source format.
 	 */
-	public final static String toJsonString(final Object obj) {
-		return toJsonString(obj, false);
+	public final static String toJsonString(final Object x) {
+		return toJsonString(x, false);
 	}
 
 	/** Create JSON string from object. Indentation depends on argument.
-	 * @param obj JSON object.
+	 * @param x JSON object.
 	 * @param indent if true then result will be indented.
 	 * @return string with JSON source format.
 	 */
-	public final static String toJsonString(final Object obj, boolean indent) {
+	public final static String toJsonString(final Object x, boolean indent) {
 		StringBuilder sb = new StringBuilder();
-		JsonToString.objectToString(obj, indent ? "\n" : null, sb, false);
+		JsonToString.objectToString(x, indent ? "\n" : null, sb, false);
 		return sb.toString();
 	}
 

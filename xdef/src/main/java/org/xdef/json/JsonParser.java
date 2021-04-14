@@ -93,12 +93,17 @@ public class JsonParser extends StringParser {
 	 */
 	public final boolean isSpacesOrComments() {
 		boolean result = isSpaces();
-		while(isToken("/*")) {
+		boolean wasLineComment;
+		while((wasLineComment = isChar('#')) || isToken("/*") ) {
 			result = true;
 			if (!_acceptComments) { // omments not allowed
 				warning(JSON.JSON019);  //Comments are not allowed here
 			}
-			if (!findTokenAndSkip("*/")) {
+			if (wasLineComment) {
+				while(!eos() && !isNewLine()) {
+					nextChar();
+				}
+			} else if (!findTokenAndSkip("*/")) {
 				error(JSON.JSON015); //Unclosed comment
 				setEos();
 				return result;
@@ -238,28 +243,35 @@ public class JsonParser extends StringParser {
 				} else {
 					Object o;
 					String name;
-					char separator;
-					if (getCurrentChar() != '"'
-						&& _xonMode && isNCName(StringParser.XMLVER1_0)) { //XON
-						// parse XON named pair
-						name = getParsedString();
-						separator = '=';
-					} else { // JSON
+					if (getCurrentChar() == '"') {
 						o = readValue();
 						if (o != null && (o instanceof String ||
 							(_genJObjects&&o instanceof JValue)
 							&& ((JValue) o).getValue() instanceof String)) {
 							name = _genJObjects ? o.toString() : (String) o;
-							separator = ':';
 						} else {
 							fatal(JSON.JSON004); //Name of item expected
 							return map;
 						}
+					} else if (_xonMode && isXMLName(StringParser.XMLVER1_0)) {
+						name = getParsedString();
+						int ndx = name.indexOf(':');
+						if (ndx == 0) {
+							fatal(JSON.JSON004); //Name of item expected
+							return map;
+						}
+						if (ndx > 0) {
+							setIndex(getIndex() - (name.length() - ndx));
+							name = name.substring(0, ndx);
+						}
+					} else {
+						fatal(JSON.JSON004); //Name of item expected
+						return map;
 					}
 					isSpacesOrComments();
-					if (!isChar(separator)) {
+					if (!isChar(':')) {
 						//"&{0}"&{1}{ or "}{"} expected
-						error(JSON.JSON002, separator);
+						error(JSON.JSON002, ":");
 					}
 					isSpacesOrComments();
 					o = readValue();
@@ -414,31 +426,12 @@ public class JsonParser extends StringParser {
 			char ch;
 			if (_xonMode) {
 				if (isChar('\'')) { // character
-					ch = getCurrentChar();
-					if (ch == '\\') {
-						if ((i="u\\bfnrt\"".indexOf(ch=nextChar())) < 0) {
-							//JSON value expected
-							return returnError('?', JSON.JSON010, "[]{}");
-						} else if (i > 0) {
-							ch = "?\\\b\f\n\r\t\"".charAt(i);
-							nextChar();
-						} else {
-							nextChar();
-							int x = 0;
-							for (int j = 0; j < 4; j++) {
-								int y = JsonTools.hexDigit(peekChar());
-								if (y < 0) {
-									//hexadecimal digit expected
-									return returnError(null,
-										JSON.JSON005, "[]{}");
-								}
-								x = (x << 4) + y;
-							}
-							ch = (char) x;
-						}
-					} else {
-						nextChar();
+					i = JsonTools.readJSONChar(this);
+					if (i == -1) {
+						//JSON value expected
+						return returnError('?', JSON.JSON010, "[]{}");
 					}
+					ch = (char) i;
 					if (!isChar('\'')) {
 						setIndex(pos);
 						//JSON value expected
@@ -478,7 +471,7 @@ public class JsonParser extends StringParser {
 					setIndex(pos);
 					//JSON value expected
 					return returnError(null, JSON.JSON010, "[]{}");
-				} else if (isToken("#(")) { // currency ammount
+				} else if (isToken("p(")) { // currency ammount
 					if (isFloat() || isInteger()) {
 						double d = Double.parseDouble(getParsedString());
 						isChar(' ');
@@ -538,18 +531,25 @@ public class JsonParser extends StringParser {
 					setIndex(pos);
 					//JSON value expected
 					return returnError(null, JSON.JSON010, "[]{}");
+				} else if ((i=isOneOfTokens("NaN", "INF", "-INF")) >= 0) {
+					if (isChar('F')) {
+						return returnValue(i == 0 ? Float.NaN
+							: i == 1 ? Float.POSITIVE_INFINITY
+								: Float.NEGATIVE_INFINITY);
+					}
+					isChar('D');
+					return returnValue(i == 0 ? Double.NaN
+						: i == 1 ? Double.POSITIVE_INFINITY
+							: Double.NEGATIVE_INFINITY);
 				}
 			}
 			setIndex(pos);
 			boolean minus = isChar('-');
-			if (isChar('+')) {
+			if (!minus && isChar('+')) {
 				error(JSON.JSON017, "+");//Not allowed character '&{0}'
 				wasError = true;
-				pos++;
-			} else {
-				minus = isChar('-');
 			}
-			int firstDigit =  getIndex() - pos; // offset of first digit
+			i = getIndex();
 			if (isInteger()) {
 				boolean isfloat;
 				if (isfloat = isChar('.')) { // decimal point
@@ -565,10 +565,13 @@ public class JsonParser extends StringParser {
 						wasError = true;
 					}
 				}
-				String s = getBufferPart(pos, getIndex());
-				if (s.charAt(firstDigit) == '0' && s.length() > 1 &&
-					Character.isDigit(s.charAt(firstDigit + 1))) {
+				String s = getBufferPart(i, getIndex());
+				if (s.charAt(0) == '0' && s.length() > 1 &&
+					Character.isDigit(s.charAt(1))) {
 						error(JSON.JSON014); // Illegal leading zero in number
+				}
+				if (minus) {
+					s = '-' + s;
 				}
 				if (wasError) {
 					return returnValue(0);
@@ -623,6 +626,7 @@ public class JsonParser extends StringParser {
 					return returnValue(0);
 				}
 			}
+			// error
 			setIndex(pos);
 			//JSON value expected
 			return returnError(null, JSON.JSON010, "[]{}");

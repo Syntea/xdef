@@ -2017,7 +2017,7 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 					continue;
 				case PUT_ERROR1: //Put error message to stdErr.
 					switch (item.getParam()) {
-						case 2: // error(txt); 
+						case 2: // error(txt);
 							((XDOutput) _stack[sp-1]).putReport(
 								Report.error(null, _stack[sp].stringValue()));
 							sp--;
@@ -2934,10 +2934,11 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 						new DefReport(x.getReporter().getLastErrorReport());
 					continue;
 				}
-				case SET_PARSED_STRING: //result.setSourceString
-					((XDParseResult) _stack[sp]).setSourceBuffer(
-						_stack[sp--].toString());
+				case SET_PARSED_STRING: {//result.setSourceString
+					String s = _stack[sp--].toString();
+					((XDParseResult) _stack[sp]).setSourceBuffer(s);
 					continue;
+				}
 				case SET_PARSED_VALUE: {//result.setParsedValue
 					XDValue v = _stack[sp--];
 					XDParseResult pr = item.getParam() == 2

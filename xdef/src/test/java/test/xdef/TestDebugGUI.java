@@ -217,7 +217,7 @@ public final class TestDebugGUI extends XDTester {
 "       impl-version = '2.0.0'\n"+
 "       impl-date    = '2.11.2000' />\n"+
 "</x:collection>";
-			xp = compile(xdef, getClass());
+			xp = compile(xdef);
 			xml = "<a><b a = 'b' /><b a = 'c' /></a>";
 			xd = xp.createXDDocument("a");
 			parse(xd, xml, reporter);
@@ -354,5 +354,4 @@ public final class TestDebugGUI extends XDTester {
 		XDTester.setFulltestMode(true);
 		if (runTest(args) > 0) {System.exit(1);}
 	}
-
 }
