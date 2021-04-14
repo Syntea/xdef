@@ -94,7 +94,7 @@ public class JsonParser extends StringParser {
 	public final boolean isSpacesOrComments() {
 		boolean result = isSpaces();
 		boolean wasLineComment;
-		while(wasLineComment = isChar('#') || isToken("/*") ) {
+		while((wasLineComment = isChar('#')) || isToken("/*") ) {
 			result = true;
 			if (!_acceptComments) { // omments not allowed
 				warning(JSON.JSON019);  //Comments are not allowed here

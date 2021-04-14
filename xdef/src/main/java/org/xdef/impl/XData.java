@@ -215,61 +215,68 @@ public class XData extends XCodeDescriptor
 
 	@Override
 	/** Get parser used for parsing of value.
-	 * @return XDParser or null if parser is not available.
+	 * @return XDParser or XDValue of executed code.
 	 */
 	public final XDValue getParseMethod() {
-		int xs = _check; //start of code of parse method.
-		if (xs < 0) {
+		int xi = _check; //start of code of parse method.
+		if (xi < 0) {
 			return DEFAULT_PARSER;
 		}
 		final XDValue[] xv = ((XPool) getXDPool()).getCode();
-		XDValue y = xv[xs];
+		XDValue y = xv[xi];
+		XDValue z = y;
 		if (y.getCode() == CodeTable.JMP_OP
-			|| (xs + 1 < xv.length && y.getCode() == CodeTable.CALL_OP
-				&& xv[xs+1].getCode() == CodeTable.STOP_OP)) {
-			y = xv[xs = y.getParam()];
-		} else if (xs + 2 < xv.length
+			|| (xi + 1 < xv.length && y.getCode() == CodeTable.CALL_OP
+				&& xv[xi+1].getCode() == CodeTable.STOP_OP)) {
+			y = z = xv[xi = y.getParam()];
+		} else if (xi + 2 < xv.length
 			&& (y.getCode() == CodeTable.LD_GLOBAL
 				|| y.getCode() == CodeTable.LD_XMODEL)
-			&& (xv[xs+1].getCode() == CodeTable.UNIQUESET_KEY_SETKEY
-				|| xv[xs+1].getCode() == CodeTable.UNIQUESET_KEY_ID
-				|| xv[xs+1].getCode() == CodeTable.UNIQUESET_KEY_SET
-				|| xv[xs+1].getCode() == CodeTable.UNIQUESET_KEY_IDREF
-				|| xv[xs+1].getCode() == CodeTable.UNIQUESET_KEY_CHKID
-				|| xv[xs+1].getCode() == CodeTable.UNIQUESET_ID
-				|| xv[xs+1].getCode() == CodeTable.UNIQUESET_SET
-				|| xv[xs+1].getCode() == CodeTable.UNIQUESET_IDREF
-				|| xv[xs+1].getCode() == CodeTable.UNIQUESET_IDREFS
-				|| xv[xs+1].getCode() == CodeTable.UNIQUESET_CHKID
-				|| xv[xs+1].getCode() == CodeTable.UNIQUESET_CHKIDS)
-			&& xv[xs+2].getCode() == CodeTable.STOP_OP) {
-			y = xv[xs = xv[xs+1].intValue()]; // this should be parser
+			&& (xv[xi+1].getCode() == CodeTable.UNIQUESET_KEY_SETKEY
+				|| xv[xi+1].getCode() == CodeTable.UNIQUESET_KEY_ID
+				|| xv[xi+1].getCode() == CodeTable.UNIQUESET_KEY_SET
+				|| xv[xi+1].getCode() == CodeTable.UNIQUESET_KEY_IDREF
+				|| xv[xi+1].getCode() == CodeTable.UNIQUESET_KEY_CHKID
+				|| xv[xi+1].getCode() == CodeTable.UNIQUESET_ID
+				|| xv[xi+1].getCode() == CodeTable.UNIQUESET_SET
+				|| xv[xi+1].getCode() == CodeTable.UNIQUESET_IDREF
+				|| xv[xi+1].getCode() == CodeTable.UNIQUESET_IDREFS
+				|| xv[xi+1].getCode() == CodeTable.UNIQUESET_CHKID
+				|| xv[xi+1].getCode() == CodeTable.UNIQUESET_CHKIDS)
+			&& xv[xi+2].getCode() == CodeTable.STOP_OP) {
+			y = xv[xi = xv[xi+1].intValue()]; // this should be parser
 		}
 		for (;;) {
 			if (y.getCode() == CodeTable.JMP_OP) {
-				y = xv[xs = xv[xs].getParam()];
+				y = z = xv[xi = xv[xi].getParam()];
+			} else if (y.getCode() == CodeTable.LD_CODE) {
+				y = xv[y.getParam()];
 			} else if (y.getCode() == CodeTable.CALL_OP) {
-				if (y.getParam() >= 0 && xs + 3 < xv.length
-					&& xv[xs+1].getCode() == CodeTable.NEW_PARSER
-					&& "eq".equals(xv[xs+1].stringValue())
-					&& xv[xs+2].getCode() == CodeTable.PARSE_OP
-					&& xv[xs+3].getCode() == CodeTable.STOP_OP) {
-					return ((CodeParser) xv[xs+1]).getParser(); // fixed
+				if (y.getParam() >= 0 && xi + 3 < xv.length
+					&& xv[xi+1].getCode() == CodeTable.NEW_PARSER
+					&& "eq".equals(xv[xi+1].stringValue())
+					&& xv[xi+2].getCode() == CodeTable.PARSE_OP
+					&& xv[xi+3].getCode() == CodeTable.STOP_OP) {
+					return ((CodeParser) xv[xi+1]).getParser(); // fixed
 				} else {
-					y = xv[xs = y.getParam()];
+					z = y;
+					y = xv[xi = y.getParam()];
 					if (y.getCode() == CodeTable.LD_CONST
 						&& y.getItemId() == XDValueID.XD_PARSER
-						&& xv[xs+1].getCode() == CodeTable.PARSE_OP
-						&& xv[xs+2].getCode() == CodeTable.STOP_OP) {
+						&& xv[xi+1].getCode() == CodeTable.PARSE_OP
+						&& xv[xi+2].getCode() == CodeTable.STOP_OP) {
 						return y;
 					}
 				}
 			} else {
-				return (xs + 2 < xv.length
+				if (xi + 2 < xv.length
 					&& y.getCode() == CodeTable.LD_CONST
 					&& y.getItemId() == XDValueID.XD_PARSER
-					&& xv[xs+1].getCode() == CodeTable.PARSE_OP
-					&& xv[xs+2].getCode() == CodeTable.STOP_OP) ? y : null;
+					&& xv[xi+1].getCode() == CodeTable.PARSE_OP
+					&& xv[xi+2].getCode() == CodeTable.STOP_OP) {
+					return y;
+				}
+				return z;
 			}
 		}
 	}

@@ -16,7 +16,6 @@ import org.xdef.XDContainer;
  */
 public class XDParseCDATA extends XDParserAbstract {
 
-	private static final String ROOTBASENAME = "CDATA";
 	int _minLength, _maxLength;
 
 	public XDParseCDATA() {
