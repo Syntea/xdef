@@ -87,6 +87,17 @@ public class DefBNFGrammar extends XDValueAbstract implements XDBNFGrammar {
 			source, reporter);
 	}
 
+	/** Set source.
+	 * @param source set source form of this grammar.
+	 */
+	public void setSource(final String source) {
+		_source = source;
+	}
+
+////////////////////////////////////////////////////////////////////////////////
+// Implementation of XDBNFGrammar interface
+////////////////////////////////////////////////////////////////////////////////
+
 	@Override
 	public DefBNFRule getRule(final String name) {
 		if (_value == null) {
@@ -100,14 +111,6 @@ public class DefBNFGrammar extends XDValueAbstract implements XDBNFGrammar {
 	 * @return value of this item as BNFGrammar object.
 	 */
 	public BNFGrammar grammarValue() { return _value;}
-
-	@Override
-	/** Set source.
-	 * @param source set source to this object.
-	 */
-	public void setSource(final String source) {
-		_source = source;
-	}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDValue interface

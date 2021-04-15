@@ -5,12 +5,9 @@ package org.xdef.impl.parsers;
  */
 public class XSParseFloat extends XSParseDouble {
 	private static final String ROOTBASENAME = "float";
-
-	public XSParseFloat() {
-		super();
-	}
+	public XSParseFloat() {super();}
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 	@Override
-	public short parsedType() {return XD_DOUBLE;}
+	public short parsedType() {return XD_FLOAT;}
 }

@@ -16,7 +16,6 @@ public class XSParseUnsignedLong extends XSParseInteger {
 	private static final BigDecimal MAX_VALUE =
 		new BigDecimal("18446744073709551615");
 	private int _totalDigits;
-
 	public XSParseUnsignedLong() {super();}
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p) {
@@ -66,9 +65,6 @@ public class XSParseUnsignedLong extends XSParseInteger {
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 	@Override
-	public short parsedType() {return XD_DECIMAL;}
-
-	@Override
 	public void checkValue(final XDValue x) {
 		BigDecimal val = x.decimalValue();
 		if (val.signum() < 0 ||
@@ -77,4 +73,6 @@ public class XSParseUnsignedLong extends XSParseInteger {
 			throw new SRuntimeException(XDEF.XDEF821, ROOTBASENAME);
 		}
 	}
+	@Override
+	public short parsedType() {return XD_DECIMAL;}
 }
