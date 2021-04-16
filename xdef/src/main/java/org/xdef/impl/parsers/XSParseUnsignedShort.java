@@ -10,8 +10,8 @@ import org.xdef.sys.SRuntimeException;
  * @author Vaclav Trojan
  */
 public class XSParseUnsignedShort extends XSParseLong {
-	public XSParseUnsignedShort() {super();}
 	private static final String ROOTBASENAME = "unsignedShort";
+	public XSParseUnsignedShort() {super();}
 	@Override
 	public final void parseObject(final XXNode xnode, final XDParseResult p){
 		super.parseObject(xnode, p);
@@ -25,10 +25,7 @@ public class XSParseUnsignedShort extends XSParseLong {
 		}
 	}
 	@Override
-	public final short parsedType() {return XD_LONG;}
-	@Override
 	public final String parserName() {return ROOTBASENAME;}
-
 	@Override
 	public void checkValue(final XDValue x) {
 		long val = x.longValue();
@@ -37,4 +34,6 @@ public class XSParseUnsignedShort extends XSParseLong {
 			throw new SRuntimeException(XDEF.XDEF821, ROOTBASENAME);
 		}
 	}
+	@Override
+	public short parsedType() {return XD_INT;}
 }

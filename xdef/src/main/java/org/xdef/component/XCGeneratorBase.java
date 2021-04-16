@@ -252,12 +252,20 @@ class XCGeneratorBase {
 			return "Object";
 		}
 		switch (xdata.getParserType()) {
-			case XDValueID.XD_LONG:
-				return "Long";
 			case XDValueID.XD_BOOLEAN:
 				return "Boolean";
 			case XDValueID.XD_CHAR:
 				return "Character";
+			case XDValueID.XD_BYTE:
+				return "Byte";
+			case XDValueID.XD_SHORT:
+				return "Short";
+			case XDValueID.XD_INT:
+				return "Integer";
+			case XDValueID.XD_LONG:
+				return "Long";
+			case XDValueID.XD_FLOAT:
+				return "Float";
 			case XDValueID.XD_DOUBLE:
 				return "Double";
 			case XDValueID.XD_DECIMAL:
@@ -334,8 +342,16 @@ class XCGeneratorBase {
 				return result + "getParsedValue().booleanValue()";
 			case XDValueID.XD_CHAR:
 				return result + "getParsedValue().charValue()";
+			case XDValueID.XD_BYTE:
+				return result + "getParsedValue().byteValue()";
+			case XDValueID.XD_SHORT:
+				return result + "getParsedValue().shortValue()";
+			case XDValueID.XD_INT:
+				return result + "getParsedValue().intValue()";
 			case XDValueID.XD_LONG:
 				return result + "getParsedValue().longValue()";
+			case XDValueID.XD_FLOAT:
+				return result + "getParsedValue().floatValue()";
 			case XDValueID.XD_DOUBLE:
 				return result + "getParsedValue().doubleValue()";
 			case XDValueID.XD_DECIMAL:
@@ -867,7 +883,11 @@ class XCGeneratorBase {
 		final String y = max > 1? ".get(i)" : "";
 		switch (xdata.getParserType()) {
 			case XDValueID.XD_BOOLEAN:
+			case XDValueID.XD_BYTE:
+			case XDValueID.XD_SHORT:
+			case XDValueID.XD_INT:
 			case XDValueID.XD_LONG:
+			case XDValueID.XD_FLOAT:
 			case XDValueID.XD_DOUBLE:
 			case XDValueID.XD_DECIMAL:
 			case XDValueID.XD_DURATION:

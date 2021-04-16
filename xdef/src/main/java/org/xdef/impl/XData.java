@@ -288,6 +288,7 @@ public class XData extends XCodeDescriptor
 	public final XDContainer getParseParams() {
 		XDValue p = getParseMethod();
 		return p != null && p.getItemId() == XDValueID.XD_PARSER
+			&& p instanceof XDParser
 			? ((XDParser) p).getNamedParams() : new DefContainer();
 	}
 
@@ -298,6 +299,7 @@ public class XData extends XCodeDescriptor
 	public final short getParserType() {
 		XDValue p = getParseMethod();
 		return p != null && p.getItemId() == XD_PARSER
+			&& p instanceof XDParser
 			? ((XDParser) p).parsedType() : XD_STRING;
 	}
 
@@ -307,7 +309,8 @@ public class XData extends XCodeDescriptor
 	 */
 	public final String getDateMask() {
 		XDValue p = getParseMethod();
-		if (p != null && p.getItemId()==XDValueID.XD_PARSER) {
+		if (p != null && p.getItemId()==XDValueID.XD_PARSER
+			&& p instanceof XDParser) {
 			XDParser y = (XDParser) p;
 			if ("xdatetime".equals(y.parserName())) {
 				XDContainer c = y.getNamedParams();
@@ -355,6 +358,7 @@ public class XData extends XCodeDescriptor
 	public final String getParserName() {
 		XDValue p = getParseMethod();
 		return p != null && p.getItemId() == XDValueID.XD_PARSER
+			&& p instanceof XDParser
 			? ((XDParser) p).parserName() : "string";
 	}
 

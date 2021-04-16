@@ -11,10 +11,7 @@ import org.xdef.sys.SRuntimeException;
  */
 public class XSParseByte extends XSParseLong {
 	private static final String ROOTBASENAME = "byte";
-
-	public XSParseByte() {
-		super();
-	}
+	public XSParseByte() {super();}
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p) {
 		super.parseObject(xnode, p);
@@ -28,7 +25,6 @@ public class XSParseByte extends XSParseLong {
 	}
 	@Override
 	public String parserName() {return ROOTBASENAME;}
-
 	@Override
 	public void checkValue(final XDValue x) {
 		if (x.longValue() < -128 || x.longValue() > 127) {
@@ -36,4 +32,6 @@ public class XSParseByte extends XSParseLong {
 			throw new SRuntimeException(XDEF.XDEF821, ROOTBASENAME);
 		}
 	}
+	@Override
+	public short parsedType() {return XD_BYTE;}
 }
