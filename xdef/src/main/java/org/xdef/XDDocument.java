@@ -195,14 +195,14 @@ public interface XDDocument extends XXNode {
 		String sourceId,
 		ReportWriter reporter) throws SRuntimeException;
 
-	/** Parse and process JSON data and return processed JSON object.
-	 * @param data JSON object.
+	/** Validate and process JSON data and return processed JSON object.
+	 * @param data JSON/XON object or XML representation of object to validate.
 	 * @param reporter report writer or null. If this argument is
 	 * null and error reports occurs then SRuntimeException is thrown.
 	 * @return JSON object with processed data.
 	 * @throws SRuntimeException if an was reported.
 	 */
-	public Object jparse(Object data, ReportWriter reporter)
+	public Object jvalidate(Object data, ReportWriter reporter)
 		throws SRuntimeException;
 
 	/** Parse and process JSON data and return processed JSON object.

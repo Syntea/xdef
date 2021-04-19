@@ -228,7 +228,7 @@ public class TestJsonXdef extends XDTester {
 			}
 			// parse with jparse
 			try {
-				Object o = xd.jparse(json, null);
+				Object o = xd.jvalidate(json, null);
 				if (!JsonUtil.jsonEqual(json, o)) {
 					result += (result.isEmpty() ? "" : "\n")
 						+ "Error jparse Test" + id + "\n"

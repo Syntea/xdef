@@ -112,7 +112,7 @@ public class MyTest_2 extends XDTester {
 			json = "{ \"_x5f_\": D2021-04-04 }";
 			j = JsonUtil.parseXON(json);
 			xd = xp.createXDDocument();
-			o = xd.jparse(j, null);
+			o = xd.jvalidate(j, null);
 			assertTrue(JsonUtil.jsonEqual(JsonUtil.xonToJson(j), o));
 			assertTrue(JsonUtil.jsonEqual(j, xd.getXon()));
 			xd = xp.createXDDocument();
@@ -245,7 +245,7 @@ if(T)return;
 "}";
 			j = JsonUtil.parseXON(json);
 			xd = xp.createXDDocument("Example");
-			o = xd.jparse(j, reporter);
+			o = xd.jvalidate(j, reporter);
 			assertNoErrors(reporter);
 			assertTrue(JsonUtil.jsonEqual(j, o));
 			reporter.clear();
@@ -261,7 +261,7 @@ if(T)return;
 //					JsonUtil.jsonToXml(o), true));
 //			}
 //			assertEq(JsonUtil.jsonToXml(j), JsonUtil.jsonToXml(o));
-			o = xd.jparse(o, reporter);
+			o = xd.jvalidate(o, reporter);
 			assertTrue(JsonUtil.jsonEqual(j, o));
 //			System.err.println(KXmlUtils.nodeToString(JsonUtil.jsonToXml(j), true));
 //			System.err.println(KXmlUtils.nodeToString(JsonUtil.jsonToXml(o), true));
