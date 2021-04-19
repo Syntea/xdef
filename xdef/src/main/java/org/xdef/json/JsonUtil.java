@@ -26,7 +26,7 @@ public class JsonUtil {
 // JSON parser
 ////////////////////////////////////////////////////////////////////////////////
 
-	private static JsonParser initParser(final InputStream in, final String id) {
+	private static JsonParser initParser(final InputStream in, final String id){
 		try {
 			int i = in.read(); //1st byte from input stream
 			int j = in.read(); //2nd byte from input stream
@@ -81,7 +81,7 @@ public class JsonUtil {
 
 	private static JsonParser getParser(final Object src, final String id) {
 		if (src instanceof InputStream) {
-			return initParser((InputStream) src, null);
+			return initParser((InputStream) src, id);
 		}
 		InputStream in;
 		try {

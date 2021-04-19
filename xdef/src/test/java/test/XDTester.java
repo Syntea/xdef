@@ -1110,7 +1110,7 @@ public abstract class XDTester extends STester {
 		}
 		XDDocument xd = xp.createXDDocument(defName);
 		xd.setProperties(_props);
-		return xd.jparse(json, reporter);
+		return xd.jvalidate(json, reporter);
 	}
 	final public Object jparse(final String xdef,
 		final String defName,
@@ -1131,7 +1131,7 @@ public abstract class XDTester extends STester {
 		if (obj != null) {
 			xd.setUserObject(obj);
 		}
-		return xd.jparse(json, reporter);
+		return xd.jvalidate(json, reporter);
 	}
 	final public Object jparse(final String xdef,
 		final String defName,

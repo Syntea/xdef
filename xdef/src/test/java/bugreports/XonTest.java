@@ -41,7 +41,7 @@ public class XonTest extends XDTester {
 			json = "{\" \tspaces \\u0007\n\\b in name\\r\": \" x \r\t y \"}";
 			x = JsonUtil.parse(json);
 			el = JsonUtil.jsonToXml(x);
-			y = xp.createXDDocument().jparse(el, reporter);
+			y = xp.createXDDocument().jvalidate(el, reporter);
 			assertTrue(JsonUtil.jsonEqual(x,y));
 			assertNoErrors(reporter);
 			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), x),

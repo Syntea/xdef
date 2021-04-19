@@ -51,7 +51,7 @@ import org.xml.sax.XMLReader;
 /** Parsing of the XML source with the X-definition.
  * @author Vaclav Trojan
  */
-final class ChkParser extends DomBaseHandler {
+final class ChkParser extends DomBaseHandler implements XParser {
 	/** SAXParserFactory used in this class. */
 	private static final SAXParserFactory SPF = SAXParserFactory.newInstance();
 	/** The namespace URI for X-definition instance (version 3.1; deprecated).*/
@@ -685,10 +685,13 @@ final class ChkParser extends DomBaseHandler {
 		_sReporter.error(XML.XML075); // XML error
 	}
 
-	/////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+// Implementation of XParser
+////////////////////////////////////////////////////////////////////////////////
 
+	@Override
 	/** Close reader of parsed data. */
-	final void closeReader() {
+	public final void closeReader() {
 		if (_in != null) {
 			try {
 				_in.close();
@@ -698,15 +701,17 @@ final class ChkParser extends DomBaseHandler {
 		}
 	}
 
+	@Override
 	/** Get connected reporter.
 	 * @return connected SReporter.
 	 */
-	final SReporter getReporter() {return _sReporter;}
+	public final SReporter getReporter() {return _sReporter;}
 
+	@Override
 	/** Parse XML source and process check and processing instructions.
 	 * @param chkDoc The ChkDocument object.
 	 */
-	final void xparse(final ChkDocument chkDoc) {
+	public final void xparse(final ChkDocument chkDoc) {
 		try {
 			_level = -1;
 			_chkElemStack = new ChkElement[NODELIST_ALLOC_UNIT];
@@ -765,15 +770,20 @@ final class ChkParser extends DomBaseHandler {
 			throw new SRuntimeException(e.getReport(), e.getCause());
 		}
 	}
+////////////////////////////////////////////////////////////////////////////////
 
-	private static boolean getBooleanProperty(final boolean x,
+	/** Get property as Boolean.
+	 * @param deflt default value.
+	 * @param key property name
+	 * @param props properties.
+	 * @return value from property or default value. 
+	 */
+	private static boolean getBooleanProperty(final boolean deflt,
 		final String key,
 		final Properties props) {
 		String val = SManager.getProperty(props, key);
-		return "true".equals(val) ? true : "false".equals(val) ? false : x;
+		return "true".equals(val) ? true : "false".equals(val) ? false : deflt;
 	}
-
-	////////////////////////////////////////////////////////////////////////////
 
 	/** This method adds cumulated text nodes to the result. */
 	private void processText(final XAbstractReader mr) {
