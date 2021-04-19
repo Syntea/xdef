@@ -776,7 +776,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
 	 * @param deflt default value.
 	 * @param key property name
 	 * @param props properties.
-	 * @return value from property or default value. 
+	 * @return value from property or default value.
 	 */
 	private static boolean getBooleanProperty(final boolean deflt,
 		final String key,

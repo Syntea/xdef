@@ -8,6 +8,8 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xdef.msg.JSON;
@@ -26,107 +28,51 @@ public class JsonUtil {
 // JSON parser
 ////////////////////////////////////////////////////////////////////////////////
 
-	private static JsonParser initParser(final InputStream in, final String id){
-		try {
-			int i = in.read(); //1st byte from input stream
-			int j = in.read(); //2nd byte from input stream
-			if (i < 0 || i == 0 && j < 0) {//EOF
-				//Unexpected eof&{#SYS000}
-				throw new SRuntimeException(JSON.JSON007, "&{line}1&{column}1");
-			}
-			String s;
-			Reader reader;
-			if (i > 0 && j > 0) {
-				// xx xx xx xx  UTF-8
-				s = String.valueOf((char) i) + (char)j;
-				reader = new InputStreamReader(in, Charset.forName("UTF-8"));
-			} else {
-				int k = in.read();
-				int l = in.read();
-				if (l < 0) {//EOF
-					//Unexpected eof&{#SYS000}
-					throw new SRuntimeException(JSON.JSON007,
-						"&{line}1&{column}1");
-				}
-				if (i == 0 && j == 0 && k == 0) {
-					if (l == 0) {// not a character
-						// JSON object or array expected"
-						throw new SRuntimeException(JSON.JSON009,
-							"&{line}1&{column}1");
-					}
-					// 00 00 00 xx  UTF-32BE
-					s = String.valueOf((char) l);
-					reader = new InputStreamReader(in, "UTF-32BE");
-				} else if (i == 0 && k == 0) {// 00 xx 00 xx  UTF-16BE
-					s = String.valueOf((char) j) + (char) l;
-					reader = new InputStreamReader(in, "UTF-16BE");
-				} else if (k != 0) { // xx 00 xx 00  UTF-16LE
-					s = String.valueOf((char) i) + (char) k;
-					reader = new InputStreamReader(in, "UTF-16LE");
-				} else { // xx 00 00 00  UTF-32LE
-					s = String.valueOf((char) i);
-					reader = new InputStreamReader(in, "UTF-32LE");
+	private static List<Object> getReader(Object x) {
+		List<Object> result = new ArrayList<Object>();
+		Reader reader = null;
+		String sysId = null;
+		if (x instanceof String) {
+			String s = (String) x;
+			try {
+				URL url = SUtils.getExtendedURL(s);
+				reader = new InputStreamReader(url.openStream(), "UTF-8");
+				sysId = s;
+			} catch (Exception ex) {
+				File f = new File(s);
+				if (f.exists()) {
 				}
 			}
-			JsonParser jx = new JsonParser();
-			if (id != null) {
-				jx.setSysId(id);
+			if (reader == null) {
+				reader = new StringReader(s);
+				sysId = "STRING";
 			}
-			jx.setSourceReader(reader, 0L, s);
-			return jx;
-		} catch (Exception ex) {
-			throw new SRuntimeException(SYS.SYS036, ex);//Program exception &{0}
+		} else if (x instanceof File) {
+			File f = (File) x;
+			try {
+				reader = new InputStreamReader(
+				new FileInputStream(f), "UTF-8");
+				sysId = f.getCanonicalPath();
+			} catch (Exception ex) {
+				//Program exception &{0}
+				throw new SRuntimeException(SYS.SYS036, ex);
+			}
+		} else if (x instanceof URL) {
+			URL u = (URL) x;
+			try {
+				reader = new InputStreamReader(u.openStream(), "UTF-8");
+				sysId = u.toExternalForm();
+			} catch (Exception ex) {
+				//Program exception &{0}
+				throw new SRuntimeException(SYS.SYS036, ex);
+			}
+		} else {
+			//Program exception &{0}
+			throw new SRuntimeException(SYS.SYS036,
+				"Incorrect parameter of getReader");
 		}
-	}
-
-	private static JsonParser getParser(final Object src, final String id) {
-		if (src instanceof InputStream) {
-			return initParser((InputStream) src, id);
-		}
-		InputStream in;
-		try {
-			Object obj = src;
-			if (obj instanceof String) {
-				String s = (String) obj;
-				try {
-					obj = SUtils.getExtendedURL(s);
-				} catch (Exception ex) {
-					File f = new File(s);
-					obj = f;
-					if (!f.exists()) {
-						obj = new StringReader(s);
-					}
-				}
-			}
-			if (obj instanceof URL) {
-				URL u = (URL) obj;
-				in = u.openStream();
-				return initParser(in, id == null ? u.toExternalForm() : id);
-			}
-			if (obj instanceof File) {
-				File f = (File) obj;
-				return initParser(new FileInputStream(f), f.getCanonicalPath());
-			}
-			if (obj instanceof Reader) {
-				JsonParser jx = new JsonParser((Reader) obj);
-				if (id != null) {
-					jx.setSysId(id);
-				}
-				return jx;
-			}
-		} catch (Exception ex) {
-			throw new SRuntimeException(SYS.SYS036, ex);//Program exception &{0}
-		}
-		throw new SRuntimeException(SYS.SYS036, "input: " + src.getClass());
-	}
-
-	/** Parse JSON data with prepared parser.
-	 * @param jx prepared parser.
-	 * @return parsed object;
-	 */
-	private static Object parse(final JsonParser jx) {
-		Object result = jx.parse();
-		jx.getReportWriter().checkAndThrowErrors();
+		result.add(reader);
+		result.add(sysId);
 		return result;
 	}
 
@@ -137,7 +83,7 @@ public class JsonUtil {
 	 * @throws SRuntimeException if an error occurs.
 	 */
 	public final static Object parse(final Reader in, final String sysid) {
-		return parse(getParser(in, sysid));
+		return XONReader.parseJSON(in, sysid);
 	}
 
 	/** Parse JSON document from input source data.
@@ -147,7 +93,8 @@ public class JsonUtil {
 	 * @throws SRuntimeException if an error occurs.
 	 */
 	public final static Object parse(final String s) throws SRuntimeException {
-		return parse(getParser(s, null));
+		List<Object> x = getReader(s);
+		return parse((Reader) x.get(0), (String) x.get(1));
 	}
 
 	/** Parse JSON document from input source data in file.
@@ -156,7 +103,8 @@ public class JsonUtil {
 	 * @throws SRuntimeException if an error occurs.
 	 */
 	public final static Object parse(final File f) throws SRuntimeException {
-		return parse(getParser(f, null));
+		List<Object> x = getReader(f);
+		return parse((Reader) x.get(0), (String) x.get(1));
 	}
 
 	/** Parse JSON document from input source data in InputStream.
@@ -166,18 +114,22 @@ public class JsonUtil {
 	 */
 	public final static Object parse(final InputStream in)
 		throws SRuntimeException {
-		return parse(getParser(in, null));
+		return parse(in, null);
 	}
 
 	/** Parse JSON document from input source data in InputStream.
 	 * @param in input data.
-	 * @param sysid System id.
+	 * @param sysId System id.
 	 * @return parsed JSON object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public final static Object parse(final InputStream in, final String sysid)
-	 throws SRuntimeException {
-		return parse(getParser(in, sysid));
+	public final static Object parse(final InputStream in, final String sysId)
+		throws SRuntimeException {
+		try {
+			return parse(new InputStreamReader(in, "UTF-8"), sysId);
+		} catch (Exception ex) {
+			throw new SRuntimeException(SYS.SYS036, ex);//Program exception &{0}
+		}
 	}
 
 	/** Parse source URL to JSON.
@@ -186,14 +138,10 @@ public class JsonUtil {
 	 * @throws SRuntimeException if an error occurs,
 	 */
 	public final static Object parse(final URL url) throws SRuntimeException {
-		return parse(getParser(url, null));
+		List<Object> x = getReader(url);
+		return parse((Reader) x.get(0), (String)x.get(1));
 	}
 ////////////////////////////////////////////////////////////////////////////////
-	private static JsonParser getXONParser(final Object src, final String id) {
-		JsonParser xx = getParser(src, id);
-		xx.setXonMode();
-		return xx;
-	}
 
 	/** Parse JSON document from input reader.
 	 * @param in reader with JSON source.
@@ -202,7 +150,7 @@ public class JsonUtil {
 	 * @throws SRuntimeException if an error occurs.
 	 */
 	public final static Object parseXON(final Reader in, final String sysid) {
-		return parse(getXONParser(in, sysid));
+		return XONReader.parseXON(in, sysid);
 	}
 
 	/** Parse JSON document from input source data.
@@ -212,7 +160,8 @@ public class JsonUtil {
 	 * @throws SRuntimeException if an error occurs.
 	 */
 	public final static Object parseXON(final String s)throws SRuntimeException{
-		return parse(getXONParser(s, null));
+		List<Object> x = getReader(s);
+		return parseXON((Reader) x.get(0), (String) x.get(1));
 	}
 
 	/** Parse JSON document from input source data in file.
@@ -221,7 +170,18 @@ public class JsonUtil {
 	 * @throws SRuntimeException if an error occurs.
 	 */
 	public final static Object parseXON(final File f) throws SRuntimeException{
-		return parse(getXONParser(f, null));
+		List<Object> x = getReader(f);
+		return parseXON((Reader) x.get(0), (String) x.get(1));
+	}
+
+	/** Parse source URL to JSON.
+	 * @param url source URL
+	 * @return parsed JSON object.
+	 * @throws SRuntimeException if an error occurs,
+	 */
+	public final static Object parseXON(final URL url) throws SRuntimeException{
+		List<Object> x = getReader(url);
+		return parseXON((Reader) x.get(0), (String) x.get(1));
 	}
 
 	/** Parse JSON document from input source data in InputStream.
@@ -231,27 +191,22 @@ public class JsonUtil {
 	 */
 	public final static Object parseXON(final InputStream in)
 		throws SRuntimeException {
-		return parse(getXONParser(in, null));
+		return parseXON(in, null);
 	}
 
 	/** Parse XON document from input source data in InputStream.
 	 * @param in input data.
-	 * @param sysid System id.
+	 * @param sysId System id.
 	 * @return parsed JSON object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public final static Object parseXON(final InputStream in,final String sysid)
-	 throws SRuntimeException {
-		return parse(getXONParser(in, sysid));
-	}
-
-	/** Parse source URL to JSON.
-	 * @param url source URL
-	 * @return parsed JSON object.
-	 * @throws SRuntimeException if an error occurs,
-	 */
-	public final static Object parseXON(final URL url) throws SRuntimeException{
-		return parse(getXONParser(url, null));
+	public final static Object parseXON(final InputStream in,final String sysId)
+		throws SRuntimeException {
+		try {
+			return parseXON(new InputStreamReader(in, "UTF-8"), sysId);
+		} catch (Exception ex) {
+			throw new SRuntimeException(SYS.SYS036, ex);//Program exception &{0}
+		}
 	}
 ////////////////////////////////////////////////////////////////////////////////
 // XON parser

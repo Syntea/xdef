@@ -25,7 +25,9 @@ import org.xdef.sys.SPosition;
 import org.xdef.sys.SReporter;
 import org.xdef.sys.SRuntimeException;
 
-/** XML W3C parser of JSON/XON object from JSON/XON source.
+/** Parse  JSON/XON object from JSON/XON source and generate XML (W3C format).
+ * Reads source with JSON/XON and generates W3C XML methods invoked in
+ * CHKDocument and CHKElement.
  * @author Vaclav Trojan
  */
 class XonSourceParser implements JParser, XParser {
@@ -52,7 +54,6 @@ class XonSourceParser implements JParser, XParser {
 			FileReader in = new FileReader(f);
 			XONReader p = new XONReader(in, this);
 			p.setXonMode();
-			p.setJObjectsMode();
 			p.setSysId(f.getCanonicalPath());
 			_p = p;
 		} catch (Exception ex) {
@@ -65,7 +66,6 @@ class XonSourceParser implements JParser, XParser {
 			Reader in = new InputStreamReader(url.openStream(), "UTF-8");
 			XONReader p = new XONReader(in, this);
 			p.setXonMode();
-			p.setJObjectsMode();
 			p.setSysId(url.toExternalForm());
 			_p = p;
 		} catch (Exception ex) {
@@ -76,7 +76,6 @@ class XonSourceParser implements JParser, XParser {
 	XonSourceParser(final Reader in, final String sysId) {
 		XONReader p = new XONReader(in, this);
 		p.setXonMode();
-		p.setJObjectsMode();
 		if (sysId != null) {
 			p.setSysId(sysId);
 		}
@@ -88,7 +87,6 @@ class XonSourceParser implements JParser, XParser {
 			Reader in = new InputStreamReader(is, "UTF-8");
 			XONReader p = new XONReader(in, this);
 			p.setXonMode();
-			p.setJObjectsMode();
 			if (sysId != null) {
 				p.setSysId(sysId);
 			}
