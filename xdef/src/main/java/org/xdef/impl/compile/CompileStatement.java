@@ -372,7 +372,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 				}
 			}
 			if ("ListOf".equals(name)) {
-				_g.reportDeprecated(name, "list(type)");
+				_g.reportDeprecated(name,"list(type)");
 			}
 		}
 		classMethod();
@@ -723,6 +723,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 					} else if (var != null
 						&& var.getType()==CompileBase.X_PARSEITEM
 						&& var.getParseMethodAddr() >= 0 // parse method exists
+//						&& var.getValue() == null
 						&& (x=_g._code.get(var.getParseMethodAddr()))
 							.getCode() == 0 // constant
 						&& x.getItemId() == XD_PARSER
@@ -809,7 +810,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 					}
 					return true;
 				}
-				if (unaryoperator == MINUS_SYM) {//unary minus; plus is ignored!
+				if (unaryoperator == MINUS_SYM) {//unary minus, plus is ignored!
 					if (xType == XD_LONG) {
 						if (xValue >= 0) { // constant
 							long i = _g.getCodeItem(xValue).longValue();
@@ -819,8 +820,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 						}
 					} else if (xType == XD_DECIMAL) {
 						if (xValue >= 0) { // constant
-							BigDecimal d =
-								_g.getCodeItem(xValue).decimalValue();
+							BigDecimal d =_g.getCodeItem(xValue).decimalValue();
 							d.negate();
 							_g.setCodeItem(xValue, new DefDecimal(d));
 						} else {
@@ -1047,11 +1047,9 @@ class CompileStatement extends XScriptParser implements CodeTable {
 	}
 
 	/** Parse and compile relation part of expression.
-	 * operatorLevel3 ::= "<" | ">" | "<=" | ">=" | "==" | "!=" | "<<" | ">>" |
-	 *   ">>>"
-	 * expression ::=
-	 *   simpleExpression ( operatorLevel3 simpleExpression )?
-	 *
+	 * operatorLevel3 ::=
+	 *   "<" | ">" | "<=" | ">=" | "==" | "!=" | "<<" | ">>" | ">>>"
+	 * expression ::= simpleExpression ( operatorLevel3 simpleExpression )?
 	 * @return true if simple expression was parsed.
 	 */
 	private boolean relExpression() {
@@ -1267,16 +1265,16 @@ class CompileStatement extends XScriptParser implements CodeTable {
 							case XD_LONG:
 								switch (operator) {
 									case LSH_SYM:
-										_g.addCode(new CodeI1(
-											XD_LONG,LSHIFT_I),-1);
+										_g.addCode(new CodeI1(XD_LONG,
+											LSHIFT_I),-1);
 										continue; // while sym is rel. operator
 									case RSH_SYM:
-										_g.addCode(new CodeI1(
-											XD_LONG,RSHIFT_I),-1);
+										_g.addCode(new CodeI1(XD_LONG,
+											RSHIFT_I), -1);
 										continue; // while sym is rel. operator
 									case RRSH_SYM:
-										_g.addCode(new CodeI1(
-											XD_LONG, RRSHIFT_I),-1);
+										_g.addCode(new CodeI1(XD_LONG,
+											RRSHIFT_I),-1);
 										continue; // while sym is rel. operator
 								}
 								op = CMPEQ;
@@ -1309,8 +1307,8 @@ class CompileStatement extends XScriptParser implements CodeTable {
 								op = CMPEQ;
 								break;
 							case XD_DECIMAL:
-								_g.addCode(new CodeI1(
-									XD_DECIMAL, TO_DECIMAL_X), 0);
+								_g.addCode(new CodeI1(XD_DECIMAL,
+									TO_DECIMAL_X), 0);
 								op = CMPEQ;
 								break;
 							case XD_ANY:
@@ -1565,7 +1563,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 				xValue = _g._cstack[_g._sp];
 			}
 			if (!checkSymbol(COLON_SYM)) {//':'
-				_g._sp++; // if error just simulate stack value or previous type
+				_g._sp++; //if error just simulate stack value or previous type
 				jumpVector.resoveFalseJumps(_g._lastCodeIndex + 1);
 			} else {
 				if (_g._sp >= 0) { // set top of stack is not constant!
@@ -1690,6 +1688,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		}
 		return false;
 	}
+
 	private CompileVariable getVariable(final String name) {
 		for (String s: _importLocals) {
 			CompileVariable var = _g.getVariable(s + name);
@@ -2704,6 +2703,8 @@ class CompileStatement extends XScriptParser implements CodeTable {
 					error(XDEF.XDEF414); //Assignment statement expected
 				} else if (varKind == 'G') {
 					var.setInitialized(true);// default initialization (null...)
+//				} else if (varKind == 'X') {
+//					var.setInitialized(true);// default initialization (null...)
 				}
 			}
 			if (isFinal && var != null) {
@@ -3433,6 +3434,10 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			return Boolean.class;
 		} else if ("BigDecimal".equals(paramClassName)) {
 			return BigDecimal.class;
+		} else if ("char".equals(paramClassName)) {
+			return Character.TYPE;
+		} else if ("Character".equals(paramClassName)) {
+			return Character.class;
 		} else if ("String".equals(paramClassName)) {
 			return String.class;
 		}
@@ -3491,7 +3496,8 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		return _g.getExtMethod(mClass, methodName, pars);
 	}
 
-	/** Compile declaration part - methods, types, variables and init sections.
+	/** Compile declaration part - methods, types, variables and
+	 * thi init sections.
 	 * @param local true if it is a declaration with the local scope.
 	 * within a X-definition.
 	 */
@@ -3944,8 +3950,8 @@ class CompileStatement extends XScriptParser implements CodeTable {
 				var.setParseResultType(CompileBase.XD_UNDEF);
 			}
 			for (int i = 0; i < keys.length; i++) {
-				ParseItem keyItem = keys[i];
-				String keyName = keyItem.getParseName();
+				ParseItem key = keys[i];
+				String keyName = key.getParseName();
 				CompileVariable x = _g.getVariable(uniquesetName+"."+keyName);
 				if (x == null) {
 					x = _g.addVariable(uniquesetName+"."+keyName,
@@ -3962,9 +3968,9 @@ class CompileStatement extends XScriptParser implements CodeTable {
 //					uniquesetName + "." + keyName,
 //					CompileBase.X_UNIQUESET_KEY,
 //					var.getOffset(), varKind, spos);
-				x.setParseMethodAddr(keyItem.getParseMethodAddr());
-				x.setParseResultType(keyItem.getParsedType());
-				x.setKeyRefName(keyItem.getDeclaredTypeName());
+				x.setParseMethodAddr(key.getParseMethodAddr());
+				x.setParseResultType(key.getParsedType());
+				x.setKeyRefName(key.getDeclaredTypeName());
 				x.setKeyIndex(i);
 //				if (varKind == 'G') {
 //					_g._globalVariables.addVariable(x);
@@ -4020,10 +4026,10 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		CodeS1 result = new CodeS1(XD_STRING, (short) 0, start + 1, null);
 		initCompilation(CompileBase.TEXT_MODE, XD_PARSERESULT);
 		if (_sym == BEG_SYM) { // explicite code (method body)
-			if (_xdVersion > XConstants.XD31) {
-				//&{0} is deprecated.&{1}{ Please use }{ instead.}
+			if (_xdVersion >= XConstants.XD31) {
+				//&{0}" is deprecated. Please use "&{1}" instead
 				_g.reportDeprecated("explicit validation code",
-					"union or declare a validation method");
+					"declaration of type method");
 			}
 			// generate call of following method
 			CodeI1 call = new CodeI1(XD_BOOLEAN, CALL_OP, start + 3);
@@ -4097,7 +4103,6 @@ class CompileStatement extends XScriptParser implements CodeTable {
 						}
 					}
 					break;
-
 
 				case CompileBase.XD_UNDEF:
 					break;
