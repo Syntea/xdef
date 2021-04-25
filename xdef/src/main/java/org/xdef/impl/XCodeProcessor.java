@@ -603,12 +603,19 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 					continue;
 				}
 				if (_globalVariables[i] == null) {
-					_globalVariables[i] = DefNull.genNullValue(xv.getType());
+					_globalVariables[i] = xv.getType() == XDValueID.X_PARSEITEM
+						|| xv.getType() == X_UNIQUESET_KEY
+						? new ParseItem(xv.getName(),
+							xv.getKeyRefName(),
+							xv.getParseMethodAddr(),
+							xv.getKeyIndex(),
+							xv.getParseResultType(),
+							true) : DefNull.genNullValue(xv.getType());
 				}
 			}
 			_initialized2 = true; //set initialized
-			if (_init >= 0) { // initFrame code not yet called.
-				exec(_init, null); //call initFrame code
+			if (_init >= 0) { // initFrame currencyCode not yet called.
+				exec(_init, null); //call initFrame currencyCode
 			}
 		}
 	}
