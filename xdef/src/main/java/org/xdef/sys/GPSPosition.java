@@ -6,20 +6,19 @@ import org.xdef.msg.XDEF;
  * @author Vaclav Trojan
  */
 public class GPSPosition {
-	/** Earth radius in meters. */
-	public static final double EARTH_RADIUS = 6376500.0D; // ???
+	/** Earth radius (meters average; see e.g. https://imagine.gsfc.nasa.gov).*/
+	public static final double EARTH_RADIUS = 6367500.0D;
 
-	/** The constant used for conversion of degrees to radians. */
+	/** This constant is used for conversion of degrees to radians. */
 	private static final double DEG_TO_RAD = Math.PI / 180.0D;
-	/** The latitude of the location; range from -90.0 to 90.0. */
+	/** Latitude of the location; range from -90.0 to 90.0. */
 	private final double _latitude;
-	/** The longitude of the location; range from -180.0 to 180.0. */
+	/** Longitude of the location; range from -180.0 to 180.0. */
 	private final double _longitude;
-	/** The altitude in meters; range from -EARTH_RADIUS in meters (6376500.0)
+	/** Altitude in meters; range from -EARTH_RADIUS in meters (6376500.0)
 	 * to MAX_VALUE or Double.MIN_VALUE it it is unknown. */
 	private final double _altitude;
-	/** The altitude in meters; range from -EARTH_RADIUS in meters (-6376500.0
-	 * to MAX_VALUE or Double.MIN_VALUE it it is unknown). */
+	/** Name of locality or null. */
 	private final String _name;
 
 	/** Create new instance of GPosition with latitude, longitude and altitude.
@@ -27,7 +26,7 @@ public class GPSPosition {
 	 * @param longitude longitude of the location; range from -180.0 to 180.0.
 	 * @param altitude The altitude in meters; range from -EARTH_RADIUS
 	 * in meters (6376500.0) to MAX_VALUE or Double.MIN_VALUE if it is unknown.
-	 * @param name the name of position or null.
+	 * @param name the name of locality or null.
 	 * @throws SRuntimeException if position is incorrect.
 	 */
 	public GPSPosition(final double latitude,
@@ -72,7 +71,7 @@ public class GPSPosition {
 	 */
 	public final double altitude() {return _altitude;}
 
-	/** Get name of this position.
+	/** Get locality name.
 	 * @return name of the position or null.
 	 */
 	public final String name() {return _name;}

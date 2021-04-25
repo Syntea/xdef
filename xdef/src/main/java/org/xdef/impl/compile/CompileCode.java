@@ -184,7 +184,7 @@ public final class CompileCode extends CompileBase {
 		var.setInitialized(true);  // prevent to report errors
 		_globalVariables.addVariable(var);
 		var = new CompileVariable("$IDuniqueSet$", // use only internally
-			CompileBase.UNIQUESET_M_VALUE,
+			CompileBase.X_UNIQUESET_M,
 			_globalVariables.getNextOffset(), (byte) 'G', null);
 		var.setInitialized(true); // prevent to report errors
 		_globalVariables.addVariable(var);
@@ -248,7 +248,7 @@ public final class CompileCode extends CompileBase {
 		final short type,
 		final byte kind,
 		final SPosition spos) {
-		if (type != PARSEITEM_VALUE && getTypeId(name) >= 0) {
+		if (type != X_PARSEITEM && getTypeId(name) >= 0) {
 			//Type identifier '&{0}' can't be used here
 			_parser.error(XDEF.XDEF463, name);
 			return new CompileVariable("?", type, -1, (byte) 'L', spos);
@@ -911,7 +911,7 @@ public final class CompileCode extends CompileBase {
 			}
 			_spMax = _sp;
 		}
-		_tstack[_sp] = ATTR_REF_VALUE;
+		_tstack[_sp] = X_ATTR_REF;
 		_cstack[_sp] = -1;
 	}
 
@@ -948,11 +948,11 @@ public final class CompileCode extends CompileBase {
 	 */
 	final boolean genLD(CompileVariable var) {
 		short xType = var.getType();
-		if (xType == UNIQUESET_KEY_VALUE) {
+		if (xType == X_UNIQUESET_KEY) {
 			return false;
 		}
 		if (!var.isInitialized()) {
-			if (xType != PARSEITEM_VALUE) {
+			if (xType != X_PARSEITEM) {
 				//Variable '&{0}' might be not initialized
 				_parser.error(XDEF.XDEF464, var.getName());
 			}
@@ -980,7 +980,7 @@ public final class CompileCode extends CompileBase {
 			_spMax = _sp;
 		}
 		_tstack[_sp] = xType;
-		if (xType != CompileBase.UNIQUESET_NAMED_VALUE && var.isConstant()) {
+		if (xType != CompileBase.X_UNIQUESET_NAMED && var.isConstant()) {
 			addCode(var.getValue().cloneItem());
 			_cstack[_sp] = _lastCodeIndex;
 		} else {
@@ -1271,7 +1271,7 @@ public final class CompileCode extends CompileBase {
 					}
 					break;
 				case XD_BOOLEAN:
-					if (xType == ATTR_REF_VALUE || xType == XD_PARSERESULT
+					if (xType == X_ATTR_REF || xType == XD_PARSERESULT
 						|| xType == XD_PARSER) {
 						topToBool();
 						return;
@@ -1320,7 +1320,7 @@ public final class CompileCode extends CompileBase {
 			int codesize;
 			CodeS1 cs;
 			Object o;
-			if (xType == ATTR_REF_VALUE &&
+			if (xType == X_ATTR_REF &&
 				(codesize = _code.size() - 1) >= 0 &&
 				(o = getCodeItem(codesize)) instanceof CodeS1 &&
 				(cs = (CodeS1) o)._code == ATTR_REF) {
@@ -1405,7 +1405,7 @@ public final class CompileCode extends CompileBase {
 		if (_sp >= 0 && (xType=_tstack[_sp])!=XD_STRING && xType!=XD_UNDEF){
 			int xValue;
 			if ((xValue = _cstack[_sp]) >= 0) {//constant
-				if (xType == ATTR_REF_VALUE) {
+				if (xType == X_ATTR_REF) {
 					_code.set(xValue,
 						new CodeS1(XD_STRING, ATTR_REF,
 							getCodeItem(xValue).stringValue()));
@@ -1474,7 +1474,7 @@ public final class CompileCode extends CompileBase {
 		if (sp >= 0 && (xType=_tstack[sp])!=XD_STRING && xType!=XD_UNDEF){
 			int xValue;
 			if ((xValue = _cstack[sp]) >= 0) {//constant
-				if (xType == ATTR_REF_VALUE) {
+				if (xType == X_ATTR_REF) {
 					_code.set(xValue,
 						new CodeS1(XD_STRING, ATTR_REF,
 							getCodeItem(xValue).stringValue()));
@@ -1727,9 +1727,9 @@ public final class CompileCode extends CompileBase {
 		CompileVariable var = getVariable(name);
 		if (var != null) {
 			int addr;
-			if (var.getType() != UNIQUESET_VALUE
+			if (var.getType() != X_UNIQUESET
 				&& var.getCodeAddr() == -1
-				&& var.getType() == PARSEITEM_VALUE && numPar == 0
+				&& var.getType() == X_PARSEITEM && numPar == 0
 				&& (addr = var.getParseMethodAddr()) >= 0
 				&& _code.get(addr).getItemId()== XD_PARSER) {
 				if (var.getKind() == 'G'
@@ -1742,9 +1742,9 @@ public final class CompileCode extends CompileBase {
 					addCode(new CodeI1(XD_PARSERESULT, PARSE_OP, 1), 0);
 				}
 				return null; //OK
-			} else if ((var.getType() == UNIQUESET_VALUE
+			} else if ((var.getType() == X_UNIQUESET
 				&& var.getCodeAddr() == -1
-				|| var.getType() == PARSEITEM_VALUE && numPar == 0)){
+				|| var.getType() == X_PARSEITEM && numPar == 0)){
 				//check type ID (unique type, unique value)
 				addCode(new CodeI1(XD_BOOLEAN,
 					CALL_OP, var.getParseMethodAddr()), 1);
@@ -1774,7 +1774,7 @@ public final class CompileCode extends CompileBase {
 					s += ',';
 				}
 				short type = _tstack[i];
-				s += type == ATTR_REF_VALUE ?
+				s += type == X_ATTR_REF ?
 					"String" : CompileBase.getTypeName(type);
 			}
 			s += ')';
@@ -1805,7 +1805,7 @@ public final class CompileCode extends CompileBase {
 	 * @param numPar Number of parameters (types of parameters are in stack).
 	 */
 	final boolean internalMethod(final String name, final int numPar) {
-		InternalMethod imethod = getTypeMethod(NOTYPE_VALUE_ID, name);
+		InternalMethod imethod = getTypeMethod(X_NOTYPE_VALUE, name);
 		if (imethod == null) {
 			return false;
 		}
@@ -1848,13 +1848,13 @@ public final class CompileCode extends CompileBase {
 				return true;
 			}
 		}
-		if (xType == ATTR_REF_VALUE && numPar == 0) {
+		if (xType == X_ATTR_REF && numPar == 0) {
 			if ("exists".equals(name)) {
 				topToBool();
 				return true;
 			}
 		}
-		if (xType < 0 || xType >= NOTYPE_VALUE_ID) {
+		if (xType < 0 || xType >= X_NOTYPE_VALUE) {
 			return false;
 		}
 		InternalMethod imethod = getTypeMethod(xType, name);
@@ -1985,7 +1985,7 @@ public final class CompileCode extends CompileBase {
 					par1typ != XD_CONTAINER && par1typ != XD_PARSER) {
 					reportDeprecated("list", "enum");
 					genInternalMethod("enum",
-						npar, getTypeMethod(NOTYPE_VALUE_ID, "enum"));
+						npar, getTypeMethod(X_NOTYPE_VALUE, "enum"));
 					return;
 				}
 				XDParser p =
@@ -2357,14 +2357,14 @@ public final class CompileCode extends CompileBase {
 				break;
 			case GET_ELEMENT:
 				if (npar > 0) {//getElement(list, index)
-					method = getTypeMethod(NOTYPE_VALUE_ID, "#getElement");
+					method = getTypeMethod(X_NOTYPE_VALUE, "#getElement");
 					code = method.getCode();
 					resultType = method.getResultType();
 				}
 				break;
 			case CONTEXT_GETTEXT:
 				if (npar == 0) {//getText()
-					method = getTypeMethod(NOTYPE_VALUE_ID, "#getValue");
+					method = getTypeMethod(X_NOTYPE_VALUE, "#getValue");
 					code = method.getCode();
 					resultType = method.getResultType();
 				}

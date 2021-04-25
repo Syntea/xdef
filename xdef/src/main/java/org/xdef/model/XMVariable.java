@@ -15,6 +15,11 @@ public interface XMVariable {
 	 */
 	public short getType();
 
+	/** Get kind of variable (global, local, XModel).
+	 * @return 'G' .. global, 'L' .. local, 'X' .. XModel.
+	 */
+	public byte getKind();
+
 	/** Get "final" flag.
 	 * @return true if and only if variable is declared as final.
 	 */

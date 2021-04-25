@@ -883,8 +883,8 @@ public final class TestTypes extends XDTester {
 			assertNoErrors(reporter);
 			strw.close();
 			assertEq(strw.toString(),
-"Prague (50.08,14.42) distance to Wien (48.20,16.37): 252.8 km\n" +
-"Prague (50.08,14.42) distance to London (51.52,-0.09): 1031.4 km\n");
+"Prague (50.08,14.42) distance to Wien (48.20,16.37): 252.5 km\n" +
+"Prague (50.08,14.42) distance to London (51.52,-0.09): 1029.9 km\n");
 			assertEq("Prague", ((XDGPSPosition) xd.getVariable("base")).name());
 			xdef = // test Price type
 "<xd:def xmlns:xd='" + _xdNS + "' root='root'>\n"+

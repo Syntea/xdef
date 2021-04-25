@@ -486,6 +486,14 @@ public interface XDDocument extends XXNode {
 		String destLanguage,
 		ReportWriter reporter) throws SRuntimeException;
 
+	/** Parse a string with a type declared in X-definition.
+	 * @param typeName name of type in X-definition.
+	 * @param data string with data to be parsed.
+	 * @return XDParseResult object with parsed data.
+	 */
+	public XDParseResult parseXDType(final String typeName,
+		final String data);
+
 	/** Get result of XON parsing.
 	 * @return result of XON parsing.
 	 */

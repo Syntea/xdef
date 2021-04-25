@@ -37,6 +37,7 @@ import java.lang.reflect.Method;
 import java.util.Locale;
 import org.xdef.impl.code.DefPrice;
 import org.xdef.impl.code.DefGPSPosition;
+import org.xdef.impl.code.ParseItem;
 
 /** Provides writing of XD objects to OutputStream.
  * @author Vaclav Trojan
@@ -215,15 +216,16 @@ public final class XDWriter extends SObjectWriter {
 					case XDValueID.XD_XQUERY:
 						writeString(x.stringValue());
 						return;
-					case CompileBase.UNIQUESET_VALUE:
-					case CompileBase.UNIQUESET_M_VALUE: {
+					case CompileBase.X_UNIQUESET:
+					case CompileBase.X_UNIQUESET_M: {
 						CodeUniqueset y = (CodeUniqueset) x;
-						CodeUniqueset.ParseItem[] keys = y.getParsedItems();
+						ParseItem[] keys = y.getParsedItems();
 						writeLength(keys.length);
-						for (CodeUniqueset.ParseItem key : keys) {
+						for (ParseItem key : keys) {
 							writeString(key.getParseName());
 							writeString(key.getDeclaredTypeName());
 							writeInt(key.getParseMethodAddr());
+							writeInt(key.getKeyIndex());
 							writeShort(key.getParsedType());
 							writeBoolean(key.isOptional());
 						}

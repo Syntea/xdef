@@ -133,8 +133,7 @@ public class XPreCompiler implements PreCompiler {
 		}
 		String name = pa._value.getString().trim();
 		if (name.isEmpty()) {
-			//Incorrect name
-			error(pa._value, XDEF.XDEF258);
+			error(pa._value, XDEF.XDEF258); //Incorrect name
 			return "__UNKNOWN_ATTRIBUTE_NAME_";
 		}
 		if (!XPreCompiler.chkDefName(name, pnode._xmlVersion)) {
@@ -573,6 +572,9 @@ public class XPreCompiler implements PreCompiler {
 						for (PAttr pa : pnode.getAttrs()) {
 							if ("scope".equals(pa._localName)) {
 								local = "local".equals(pa._value.getString());
+							} else {
+								//Attribute '&{0}' not allowed here
+								error(pa._value, XDEF.XDEF254, pa._localName);
 							}
 						}
 						for (PNode x : pnode.getChildNodes()) {

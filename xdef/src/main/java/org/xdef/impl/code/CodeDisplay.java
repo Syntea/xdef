@@ -428,14 +428,14 @@ public class CodeDisplay implements CodeTable, XDValueID {
 	 */
 	public final static String getTypeName(final short type) {
 		switch (type) {
-			case CompileBase.PARSEITEM_VALUE:
+			case CompileBase.X_PARSEITEM:
 				return "#key item";
-			case CompileBase.UNIQUESET_VALUE:
-			case CompileBase.UNIQUESET_M_VALUE:
+			case CompileBase.X_UNIQUESET:
+			case CompileBase.X_UNIQUESET_M:
 				return "uniqueSet";
-			case CompileBase.UNIQUESET_KEY_VALUE:
+			case CompileBase.X_UNIQUESET_KEY:
 				return "#uniqueSet key";
-			case CompileBase.ATTR_REF_VALUE:
+			case CompileBase.X_ATTR_REF:
 				return "#attribute reference";
 		}
 		return CompileBase.getTypeName(type);

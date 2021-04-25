@@ -142,7 +142,7 @@ public class GenPluginInfo {
 			};
 			s = "<SchemaValidationMethod>\n";
 			for (String x : names) {
-				s += getMethodParams(x, CompileBase.NOTYPE_VALUE_ID);
+				s += getMethodParams(x, CompileBase.X_NOTYPE_VALUE);
 			}
 			s += "</SchemaValidationMethod>";
 			s = KXmlUtils.nodeToString(KXmlUtils.parseXml(s), true);
@@ -208,7 +208,7 @@ public class GenPluginInfo {
 				"SET"};
 			s = "<XDValidationMethod>\n";
 			for (String x : names) {
-				s += getMethodParams(x, CompileBase.NOTYPE_VALUE_ID);
+				s += getMethodParams(x, CompileBase.X_NOTYPE_VALUE);
 			}
 			s += "</XDValidationMethod>";
 			s = KXmlUtils.nodeToString(KXmlUtils.parseXml(s), true);

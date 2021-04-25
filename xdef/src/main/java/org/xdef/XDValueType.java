@@ -113,5 +113,23 @@ public enum XDValueType {
 	/** XModel value. */
 	XM_MODEL,
 	/** Undefined type. */
-	XD_UNDEF;
+	XD_UNDEF,
+
+////////////////////////////////////////////////////////////////////////////////
+// Internally used types
+////////////////////////////////////////////////////////////////////////////////
+	/** Attribute reference type. */
+	X_ATTR_REF,
+	/** Attribute reference type. */
+	X_PARSEITEM,
+	/** Value of UNIQUESET. */
+	X_UNIQUESET_M,
+	/** Value type: reference to attribute; used by compiler. */
+	X_UNIQUESET_KEY,
+	/** Named value of UNIQUESET. */
+	X_UNIQUESET_NAMED,
+	/** Attribute ref, undefined type and methods which are not above a type. */
+	X_NOTYPE_VALUE,
+	/** Value of UNIQUESET. */
+	X_UNIQUESET;
 }
