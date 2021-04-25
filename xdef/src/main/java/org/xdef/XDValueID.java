@@ -90,30 +90,46 @@ public interface XDValueID {
 	public static final short XD_OBJECT = XD_ANY + 1; // 40
 	/** Null type. */
 	static final short XD_NULL = XD_OBJECT + 1; // 41
-//	/** XXElement value. */
-//	public static final short XX_ELEMENT = XD_FLOAT32 + 1; // 42
 	/** XXElement value. */
-	public static final short XX_ELEMENT = XD_NULL + 1; // 43
+	public static final short XX_ELEMENT = XD_NULL + 1; // 42
 	/** XXText value. */
-	public static final short XX_TEXT = XX_ELEMENT + 1; // 44
+	public static final short XX_TEXT = XX_ELEMENT + 1; // 43
 	/** XXAttr value. */
-	public static final short XX_ATTR = XX_TEXT + 1; // 45
+	public static final short XX_ATTR = XX_TEXT + 1; // 44
 	/** XXData value (supertype for both XXATTR and XXTEXT). */
-	public static final short XX_DATA = XX_ATTR + 1; // 46
+	public static final short XX_DATA = XX_ATTR + 1; // 45
 	/** XXDocument value. */
-	public static final short XX_DOCUMENT = XX_DATA + 1; // 47
+	public static final short XX_DOCUMENT = XX_DATA + 1; // 46
 	/** XXPI (Processing instruction) value. */
-	public static final short XX_PI = XX_DOCUMENT + 1; // 48
+	public static final short XX_PI = XX_DOCUMENT + 1; // 47
 	/** XXComment (comment) value. */
-	public static final short XX_COMMENT = XX_PI + 1; // 49
+	public static final short XX_COMMENT = XX_PI + 1; // 48
 	/** XXChoice value. */
-	public static final short XX_CHOICE = XX_COMMENT + 1; // 50
+	public static final short XX_CHOICE = XX_COMMENT + 1; // 49
 	/** XXMixed value. */
-	public static final short XX_MIXED = XX_CHOICE + 1; // 51
+	public static final short XX_MIXED = XX_CHOICE + 1; // 50
 	/** XXsequence value. */
-	public static final short XX_SEQUENCE = XX_MIXED + 1; // 52
+	public static final short XX_SEQUENCE = XX_MIXED + 1; // 51
 	/** XModel value. */
-	public static final short XM_MODEL = XX_SEQUENCE + 1; // 53
+	public static final short XM_MODEL = XX_SEQUENCE + 1; // 52
 	/** Undefined type. */
-	public static final short XD_UNDEF = XM_MODEL + 1; // 54
+	public static final short XD_UNDEF = XM_MODEL + 1; // 53
+
+////////////////////////////////////////////////////////////////////////////////
+// Internally used types
+////////////////////////////////////////////////////////////////////////////////
+	/** Attribute reference type. */
+	static final short X_ATTR_REF = XD_UNDEF + 1; // 54
+	/** Attribute reference type. */
+	static final short X_PARSEITEM = X_ATTR_REF + 1; // 55
+	/** Value of UNIQUESET. */
+	static final short X_UNIQUESET_M = X_PARSEITEM + 1; // 56
+	/** Value type: reference to attribute; used by compiler. */
+	static final short X_UNIQUESET_KEY = X_UNIQUESET_M + 1; // 57
+	/** Named value of UNIQUESET. */
+	static final short X_UNIQUESET_NAMED = X_UNIQUESET_KEY+1; // 58
+	/** Attribute ref, undefined type and methods which are not above a type. */
+	static final short X_NOTYPE_VALUE = X_UNIQUESET_NAMED + 1; // 59
+	/** Value of UNIQUESET. */
+	static final short X_UNIQUESET = X_NOTYPE_VALUE + 1; // 60
 }

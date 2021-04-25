@@ -43,7 +43,11 @@ import org.w3c.dom.Node;
 import org.xdef.sys.ReportWriter;
 import org.xdef.XDValueType;
 import javax.xml.namespace.QName;
+import org.xdef.XDParseResult;
 import org.xdef.XDPool;
+import org.xdef.impl.code.CodeUniqueset;
+import org.xdef.impl.code.DefParseResult;
+import org.xdef.impl.code.ParseItem;
 import org.xdef.json.JsonUtil;
 import org.xdef.proc.XDLexicon;
 import org.xdef.sys.GPSPosition;
@@ -1541,12 +1545,6 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	}
 
 	@Override
-	/** Get result of XON parsing.
-	 * @return result of XON parsing.
-	 */
-	public Object getXon() {return _xon;}
-
-	@Override
 	/** Translate the input element from the source language to the destination
 	 * language according to lexicon.
 	 * @param elem the element in the source language.
@@ -1613,6 +1611,60 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		}
 		_destLanguageID =
 			language == null ? -1 : xp._lexicon.getLanguageID(language);
+	}
+
+	@Override
+	/** Get result of XON parsing.
+	 * @return result of XON parsing.
+	 */
+	public Object getXon() {return _xon;}
+
+	@Override
+	/** Parse a string with a type declared in X-definition.
+	 * @param typeName name of type in X-definition.
+	 * @param data string with data to be parsed.
+	 * @return XDParseResult object with parsed data.
+	 */
+	public final XDParseResult parseXDType(final String typeName,
+		final String data) {
+		XPool xp = (XPool) getXDPool();
+		_scp.initscript();
+		XDValue xv = getVariable(typeName);
+		if (xv == null) {
+			throw new SRuntimeException("Typ " + typeName + " not found");
+		}
+		int addr = -1;
+		if (xv.getItemId() == X_PARSEITEM) {
+			addr = ((ParseItem) xv).getParseMethodAddr();
+		} else if (xv.getItemId() == X_UNIQUESET_M) {
+			ParseItem keyItem = ((CodeUniqueset) xv).getParseKeyItem(typeName);
+			if (keyItem != null) {
+				addr = keyItem.getParseMethodAddr();
+			}
+		}
+		if (addr < 0) {
+			throw new SRuntimeException("Name " + typeName + " is not parser");
+		}
+		XElement xel = new XElement("parseXDType", null, _xdef);
+		ChkElement chkel = new ChkElement(this, null, xel, true);
+		chkel.setXXType((byte) 'T');
+		chkel.setTextValue(data);
+		XDValue result = _scp.exec(addr, chkel);
+		if (XDValueType.PARSERESULT.equals(result.getItemType())) {
+			if (!chkel.chkTemporaryErrors()) {
+				//Value error
+				chkel.putTemporaryReport(Report.error(XDEF.XDEF515));
+			}
+			return (XDParseResult) result;
+		} else {
+			DefParseResult x = new DefParseResult(data);
+			if (!result.booleanValue()) {
+				chkel.copyTemporaryReports();
+				x.addReports(
+					(ArrayReporter) chkel.getReporter().getReportWriter());
+			}
+			return x;
+		}
 	}
 
 	@Override

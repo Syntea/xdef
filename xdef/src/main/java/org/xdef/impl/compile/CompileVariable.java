@@ -9,17 +9,11 @@ import org.xdef.sys.SPosition;
 /** Represents variable parameters used by compiler.
  * @author Vaclav Trojan
  */
-final class CompileVariable extends XVariable {
+public final class CompileVariable extends XVariable {
 	/** Object with initial value of a variable. */
 	private XDValue _value;
 	/** Address of final constant (or  -1 such code address not exists). */
 	private int _codeAddr;
-	/** Code address of check method or -1 if it not exists. */
-	private int _parseMethodAddr;
-	/** Type of parsed object or XDValueID.XD_VOID if it not exists. */
-	private short _parseResultType;
-	/** Reference name to declared type (valid only for uniqueset keys).*/
-	private String _refTypeName;
 	/** List of code code addresses where method was called (or null). */
 	private int[] _postdefs;
 	/** Source position where the variable was declared. */
@@ -39,9 +33,7 @@ final class CompileVariable extends XVariable {
 		final SPosition spos) {
 		super(name, type, kind, offset, false, false, false);
 		_spos = spos;
-		_parseMethodAddr = -1;
 		_codeAddr = -1;
-		_parseResultType = XDValueID.XD_VOID;
 //		_postdefs = null; //java does it
 	}
 
@@ -82,18 +74,6 @@ final class CompileVariable extends XVariable {
 	/** Clear post-definition info. */
 	final void clearPostdefs() {_postdefs = null;}
 
-	/** Get parsed result type of variable. */
-	final short getParseResultType() {return _parseResultType;}
-
-	/** Set parsed result type of variable. */
-	final void setParseResultType(short type) {_parseResultType = type;}
-
-	/** Get parse method address. */
-	final int getParseMethodAddr() {return _parseMethodAddr;}
-
-	/** Set parse method address. */
-	final void setParseMethodAddr(int method) {_parseMethodAddr = method;}
-
 	/** Get address of code (of constant).*/
 	final int getCodeAddr() {return _codeAddr;}
 
@@ -109,7 +89,6 @@ final class CompileVariable extends XVariable {
 	/** Check if value of variable is a constant. */
 	final boolean isConstant() {
 		return getType() != XDValueID.XD_BNFGRAMMAR
-//			&& getType() != XDValueID.XD_BNFRULE
 			&& isFinal() && _value != null;
 	}
 
@@ -118,21 +97,12 @@ final class CompileVariable extends XVariable {
 	 */
 	final SPosition getSourcePosition() {return _spos;}
 
-	/** Get reference name of declared type (valid only for uniqueset keys).
-	 * @return reference name of declared type or null.
-	 */
-	public final String getKeyRefName() {return _refTypeName;}
-
-	/** Set reference name of declared type (valid only for uniqueset keys).
-	 * @param x reference name of declared type or null.
-	 */
-	public final void setKeyRefName(final String x) {_refTypeName = x;}
-
 	@Override
 	/** Set value of variable. */
 	public String toString() {return super.toString()
-		+ ", parseMethodAddr=" + _parseMethodAddr + ", codeAddr=" + _codeAddr
-		+ ", parseResultType="  + CompileBase.getTypeName(_parseResultType)
+		+ ", parseMethodAddr=" + getParseMethodAddr()
+		+ ", codeAddr=" + _codeAddr
+		+ ", parseResultType="  + CompileBase.getTypeName(getParseResultType())
 		+ ", val=" + _value;
 	}
 }

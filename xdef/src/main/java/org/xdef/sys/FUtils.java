@@ -68,9 +68,9 @@ public class FUtils {
 	 * @return java.io.File object with directory.
 	 * @throws SException
 	 * <ul>
-	 * <li>SYS020 Can't create directory: {dir}</li>
-	 * <li>SYS025 Directory doesn't exist or isn't accessible: {dir}</li>
-	 * <li>SYS032 File is not directory: {dir}</li>
+	 * <li>SYS020 Can't create directory: {dir}
+	 * <li>SYS025 Directory doesn't exist or isn't accessible: {dir}
+	 * <li>SYS032 File is not directory: {dir}
 	 * </ul>
 	 */
 	public static final File checkDir(final String path, final boolean create)
@@ -84,9 +84,9 @@ public class FUtils {
 	 * @return java.io.File object with directory.
 	 * @throws SException
 	 * <ul>
-	 * <li>SYS020 Can't create directory: {dir}</li>
-	 * <li>SYS025 Directory doesn't exist or isn't accessible: {dir}</li>
-	 * <li>SYS032 File is not directory: {dir}</li>
+	 * <li>SYS020 Can't create directory: {dir}
+	 * <li>SYS025 Directory doesn't exist or isn't accessible: {dir}
+	 * <li>SYS032 File is not directory: {dir}
 	 * </ul>
 	 */
 	public static final File checkDir(final File dir, final boolean create)
@@ -114,9 +114,9 @@ public class FUtils {
 	 * @return java.io.File object created according to arguments.
 	 * @throws SException
 	 * <ul>
-	 * <li>SYS020 Can't create directory: {dir}</li>
-	 * <li>SYS025 Directory doesn't exist or isn't accessible: {dir}</li>
-	 * <li>SYS032 File is not directory: {dir}</li>
+	 * <li>SYS020 Can't create directory: {dir}
+	 * <li>SYS025 Directory doesn't exist or isn't accessible: {dir}
+	 * <li>SYS032 File is not directory: {dir}
 	 * </ul>
 	 */
 	public static final File checkFile(final String fname, final boolean create)
@@ -131,9 +131,9 @@ public class FUtils {
 	 * @return java.io.File object created according to arguments.
 	 * @throws SException
 	 * <ul>
-	 * <li>SYS022 The file is directory: {file}</li>
-	 * <li>SYS024 File doesn't exist: {file}</li>
-	 * <li>SYS026 FCan't create file: {file}</li>
+	 * <li>SYS022 The file is directory: {file}
+	 * <li>SYS024 File doesn't exist: {file}
+	 * <li>SYS026 FCan't create file: {file}
 	 * </ul>
 	 */
 	public static final File checkFile(final File file, final boolean create)
@@ -191,8 +191,8 @@ public class FUtils {
 	 * @return string with the path terminated with file separator.
 	 * @throws SException
 	 * <ul>
-	 * <li>SYS032 File is not directory.</li>
-	 * <li>SYS034 IO error detected on file.</li>
+	 * <li>SYS032 File is not directory.
+	 * <li>SYS034 IO error detected on file.
 	 * </ul>
 	 */
 	public static final String getDirPath(final File dir) throws SException {
@@ -519,12 +519,12 @@ public class FUtils {
 	 * @param append if true input is appended to output.
 	 * @throws SException
 	 * <ul>
-	 * <li>SYS023 Can't write to file: {file}</li>
-	 * <li>SYS024 File doesn't exist: {file}</li>
-	 * <li>SYS026 Can't create file: {file}</li>
-	 * <li>SYS028 Can't read file: {file}</li>
-	 * <li>SYS030 File already exists</li>
-	 * <li>SYS038 File is too big</li>
+	 * <li>SYS023 Can't write to file: {file}
+	 * <li>SYS024 File doesn't exist: {file}
+	 * <li>SYS026 Can't create file: {file}
+	 * <li>SYS028 Can't read file: {file}
+	 * <li>SYS030 File already exists
+	 * <li>SYS038 File is too big
 	 * </ul>
 	 */
 	public static final void copyToFile(final String inName,
@@ -542,13 +542,13 @@ public class FUtils {
 	 * @param append if true the input is appended to the output file.
 	 * @throws SException
 	 * <ul>
-	 * <li>SYS023 Can't write to file: {file}</li>
-	 * <li>SYS024 File doesn't exist: {file}</li>
-	 * <li>SYS026 Can't create file: {file}</li>
-	 * <li>SYS028 Can't read file: {file}</li>
-	 * <li>SYS030 File already exists</li>
-	 * <li>SYS036 Program exception</li>
-	 * <li>SYS038 File is too big</li>
+	 * <li>SYS023 Can't write to file: {file}
+	 * <li>SYS024 File doesn't exist: {file}
+	 * <li>SYS026 Can't create file: {file}
+	 * <li>SYS028 Can't read file: {file}
+	 * <li>SYS030 File already exists
+	 * <li>SYS036 Program exception
+	 * <li>SYS038 File is too big
 	 * </ul>
 	 */
 	public static final void copyToFile(final File inFile,
@@ -594,13 +594,13 @@ public class FUtils {
 	 * exists it is written over by the input data.
 	 * @throws SException
 	 * <ul>
-	 * <li>SYS023 Can't write to file: {file}</li>
-	 * <li>SYS024 File doesn't exist: {file}</li>
-	 * <li>SYS026 Can't create file: {file}</li>
-	 * <li>SYS028 Can't read file: {file}</li>
-	 * <li>SYS030 File already exists</li>
-	 * <li>SYS036 Program exception</li>
-	 * <li>SYS038 File is too big</li>
+	 * <li>SYS023 Can't write to file: {file}
+	 * <li>SYS024 File doesn't exist: {file}
+	 * <li>SYS026 Can't create file: {file}
+	 * <li>SYS028 Can't read file: {file}
+	 * <li>SYS030 File already exists
+	 * <li>SYS036 Program exception
+	 * <li>SYS038 File is too big
 	 * </ul>
 	 */
 	public static final void copyToFile(final File inFile,
@@ -614,11 +614,11 @@ public class FUtils {
 	 * @param append if true the input is appended to output.
 	 * @throws SException
 	 * <ul>
-	 * <li>SYS023 Can't write to file: {file}</li>
-	 * <li>SYS024 File doesn't exist: {file}</li>
-	 * <li>SYS026 Can't create file: {file}</li>
-	 * <li>SYS028 Can't read file: {file}</li>
-	 * <li>SYS030 File already exists</li>
+	 * <li>SYS023 Can't write to file: {file}
+	 * <li>SYS024 File doesn't exist: {file}
+	 * <li>SYS026 Can't create file: {file}
+	 * <li>SYS028 Can't read file: {file}
+	 * <li>SYS030 File already exists
 	 * </ul>
 	 */
 	public static final void copyToFile(final InputStream is,
@@ -633,11 +633,11 @@ public class FUtils {
 	 * @param append if true the input is appended to output.
 	 * @throws SException
 	 * <ul>
-	 * <li>SYS023 Can't write to file: {file}</li>
-	 * <li>SYS024 File doesn't exist: {file}</li>
-	 * <li>SYS026 Can't create file: {file}</li>
-	 * <li>SYS028 Can't read file: {file}</li>
-	 * <li>SYS030 File already exists</li>
+	 * <li>SYS023 Can't write to file: {file}
+	 * <li>SYS024 File doesn't exist: {file}
+	 * <li>SYS026 Can't create file: {file}
+	 * <li>SYS028 Can't read file: {file}
+	 * <li>SYS030 File already exists
 	 * </ul>
 	 */
 	public static final void copyToFile(final InputStream is,
@@ -666,10 +666,10 @@ public class FUtils {
 	 * @param os OutputStream.
 	 * @throws SException
 	 * <ul>
-	 * <li>SYS023 Can't write to file: {file}</li>
-	 * <li>SYS024 File doesn't exist: {file}</li>
-	 * <li>SYS028 Can't read file: {file}</li>
-	 * <li>SYS036 Program exception</li>
+	 * <li>SYS023 Can't write to file: {file}
+	 * <li>SYS024 File doesn't exist: {file}
+	 * <li>SYS028 Can't read file: {file}
+	 * <li>SYS036 Program exception
 	 * </ul>
 	 */
 	public static final void copyToFile(final File inFile,
@@ -689,8 +689,8 @@ public class FUtils {
 	 * @param os OutputStream.
 	 * @throws SException
 	 * <ul>
-	 * <li>SYS023 Can't write to file: {file}</li>
-	 * <li>SYS028 Can't read file: {file}</li>
+	 * <li>SYS023 Can't write to file: {file}
+	 * <li>SYS028 Can't read file: {file}
 	 * </ul>
 	 */
 	public static final void copyToFile(final InputStream is,
@@ -705,8 +705,8 @@ public class FUtils {
 	 * @param outFile name of output file (we need it to report error message).
 	 * @throws SException
 	 * <ul>
-	 * <li>SYS023 Can't write to file: {file}</li>
-	 * <li>SYS028 Can't read file: {file}</li>
+	 * <li>SYS023 Can't write to file: {file}
+	 * <li>SYS028 Can't read file: {file}
 	 * </ul>
 	 */
 	private static void copyToFile(final InputStream is,
@@ -762,7 +762,7 @@ public class FUtils {
 	 * @param to directory where files to be copied.
 	 * @param exclude array with exclude list. If path ends with an string from
 	 * exclude list the input item is skipped. Name of an directory must end
-	 * with separator character "/". If this argument is <tt>null</tt> or the
+	 * with separator character "/". If this argument is <code>null</code> or the
 	 * empty array then no files are excluded.
 	 * @param deep if false the directories are skipped.
 	 * @throws SException if an error occurs.
@@ -813,15 +813,15 @@ public class FUtils {
 	 * set table).
 	 * @param in input stream.
 	 * @param sb StringBuffer where to write. If this argument
-	 * is <tt>null</tt> then the new StringBuffer is created.
+	 * is <code>null</code> then the new StringBuffer is created.
 	 * @param encoding The name of encoding table. If this argument is
-	 * <tt>null</tt> the default encoding is applied.
+	 * <code>null</code> the default encoding is applied.
 	 * @return StringBuffer with result.
 	 * @throws SException
 	 * <ul>
-	 * <li>SYS029 Can't read input stream</li>
-	 * <li>SYS035 Unsupported character set name</li>
-	 * <li>SYS036 Program exception</li>
+	 * <li>SYS029 Can't read input stream
+	 * <li>SYS035 Unsupported character set name
+	 * <li>SYS036 Program exception
 	 * </ul>
 	 */
 	public static final StringBuffer readToStringBuffer(final InputStream in,
@@ -861,7 +861,7 @@ public class FUtils {
 	/** Read input stream to StringBuffer.
 	 * @param is input reader.
 	 * @param sb StringBuffer where to write. If this argument
-	 * is <tt>null</tt> the new StringBuffer is created.
+	 * is <code>null</code> the new StringBuffer is created.
 	 * @return StringBuffer with result.
 	 * @throws SException SYS029 Can't read input stream
 	 */
@@ -893,17 +893,17 @@ public class FUtils {
 	/** Read file to StringBuffer (decoded from given character set table).
 	 * @param file input file.
 	 * @param sb StringBuffer where to write. If this argument
-	 * is <tt>null</tt> the new StringBuffer is created.
+	 * is <code>null</code> the new StringBuffer is created.
 	 * @param encoding name of encoding table. If this argument is
-	 * <tt>null</tt> the decoding from default system character set table
+	 * <code>null</code> the decoding from default system character set table
 	 * is used.
 	 * @return StringBuffer with result.
 	 * @throws SException
 	 * <ul>
-	 * <li>SYS024 File doesn't exist</li>
-	 * <li>SYS028 Can't read file</li>
-	 * <li>SYS035 Unsupported character set name</li>
-	 * <li>SYS036 Program exception</li>
+	 * <li>SYS024 File doesn't exist
+	 * <li>SYS028 Can't read file
+	 * <li>SYS035 Unsupported character set name
+	 * <li>SYS036 Program exception
 	 * </ul>
 	 */
 	public static final StringBuffer readToStringBuffer(final File file,
@@ -933,13 +933,13 @@ public class FUtils {
 	/** Read file to StringBuffer (decoded from default character set table).
 	 * @param file The file.
 	 * @param buf StringBuffer where to write. If this argument
-	 * is <tt>null</tt> the new StringBuffer is created.
+	 * is <code>null</code> the new StringBuffer is created.
 	 * @return StringBuffer with result.
 	 * @throws SException
 	 * <ul>
-	 * <li>SYS024 File doesn't exist: {file}</li>
-	 * <li>SYS028 Can't read file: {file}</li>
-	 * <li>SYS036 Program exception: {msg}</li>
+	 * <li>SYS024 File doesn't exist: {file}
+	 * <li>SYS028 Can't read file: {file}
+	 * <li>SYS036 Program exception: {msg}
 	 * </ul>
 	 */
 	public static final StringBuffer readToStringBuffer(final File file,
@@ -950,13 +950,13 @@ public class FUtils {
 	/** Read string from input stream (decoded from given code table).
 	 * @param in input stream.
 	 * @param encoding name of encoding table. If this argument is
-	 * <tt>null</tt> the default encoding is applied.
+	 * <code>null</code> the default encoding is applied.
 	 * @return The string with result.
 	 * @throws SException
 	 * <ul>
-	 * <li>SYS029 Can't read from input stream</li>
-	 * <li>SYS035 Unsupported character set name</li>
-	 * <li>SYS036 Program exception: {msg}</li>
+	 * <li>SYS029 Can't read from input stream
+	 * <li>SYS035 Unsupported character set name
+	 * <li>SYS036 Program exception: {msg}
 	 * </ul>
 	 */
 	public static final String readString(final InputStream in,
@@ -967,15 +967,15 @@ public class FUtils {
 	/** Read string from file (decoded from given code table).
 	 * @param file The file.
 	 * @param encoding The name of encoding table. If this argument is
-	 * <tt>null</tt> the decoding from default system character set table
+	 * <code>null</code> the decoding from default system character set table
 	 * is used.
 	 * @return string with result.
 	 * @throws SException
 	 * <ul>
-	 * <li>SYS024 File doesn't exist: {file}</li>
-	 * <li>SYS028 Can't read file: {file}</li>
-	 * <li>SYS035 Unsupported character set name</li>
-	 * <li>SYS036 Program exception: {msg}</li>
+	 * <li>SYS024 File doesn't exist: {file}
+	 * <li>SYS028 Can't read file: {file}
+	 * <li>SYS035 Unsupported character set name
+	 * <li>SYS036 Program exception: {msg}
 	 * </ul>
 	 */
 	public static String readString(final File file, final String encoding)
@@ -988,9 +988,9 @@ public class FUtils {
 	 * @return String with result.
 	 * @throws SException
 	 * <ul>
-	 * <li>SYS029 Can't read from input stream</li>
-	 * <li>SYS035 Unsupported character set name</li>
-	 * <li>SYS036 Program exception: {msg}</li>
+	 * <li>SYS029 Can't read from input stream
+	 * <li>SYS035 Unsupported character set name
+	 * <li>SYS036 Program exception: {msg}
 	 * </ul>
 	 */
 	public static final String readString(final InputStream in)
@@ -1003,9 +1003,9 @@ public class FUtils {
 	 * @return String with result.
 	 * @throws SException
 	 * <ul>
-	 * <li>SYS024 File doesn't exist: {file}</li>
-	 * <li>SYS028 Can't read file: {file}</li>
-	 * <li>SYS036 Program exception: {msg}</li>
+	 * <li>SYS024 File doesn't exist: {file}
+	 * <li>SYS028 Can't read file: {file}
+	 * <li>SYS036 Program exception: {msg}
 	 * </ul>
 	 */
 	public static final String readString(final File file) throws SException {
@@ -1066,9 +1066,9 @@ public class FUtils {
 	 * @return byte array with result.
 	 * @throws SException
 	 * <ul>
-	 * <li>SYS019 Unexpected end of data</li>
-	 * <li>SYS024 File doesn't exist: {file}</li>
-	 * <li>SYS028 Can't read file: {file}</li>
+	 * <li>SYS019 Unexpected end of data
+	 * <li>SYS024 File doesn't exist: {file}
+	 * <li>SYS028 Can't read file: {file}
 	 * </ul>
 	 */
 	public static final byte[] readBytes(final File file) throws SException {
@@ -1098,13 +1098,13 @@ public class FUtils {
 	 * @param file file where to write.
 	 * @param buf StringBuffer to be written.
 	 * @param encoding name of encoding table. If this argument is
-	 * <tt>null</tt> then the default encoding is applied.
+	 * <code>null</code> then the default encoding is applied.
 	 * @throws SException
 	 * <ul>
-	 * <li>SYS023 Can't write to file: {file}</li>
-	 * <li>SYS035 Unsupported character set name</li>
-	 * <li>SYS036 Program exception: {msg}</li>
-	 * <li>SYS038 File is too big: {file}</li>
+	 * <li>SYS023 Can't write to file: {file}
+	 * <li>SYS035 Unsupported character set name
+	 * <li>SYS036 Program exception: {msg}
+	 * <li>SYS038 File is too big: {file}
 	 * </ul>
 	 */
 	public static final void writeStringBuffer(final File file,
@@ -1145,10 +1145,10 @@ public class FUtils {
 	 * @param buf StringBuffer to be written.
 	 * @throws SException
 	 * <ul>
-	 * <li>SYS023 Can't write to file: {file}</li>
-	 * <li>SYS027 Can't write to output stream: {msg}</li>
-	 * <li>SYS036 Program exception: {msg}</li>
-	 * <li>SYS038 File is too big: {file}</li>
+	 * <li>SYS023 Can't write to file: {file}
+	 * <li>SYS027 Can't write to output stream: {msg}
+	 * <li>SYS036 Program exception: {msg}
+	 * <li>SYS038 File is too big: {file}
 	 * </ul>
 	 */
 	public static final void writeStringBuffer(final File file,
@@ -1161,11 +1161,11 @@ public class FUtils {
 	 * @param str string to be written.
 	 * @throws SException
 	 * <ul>
-	 * <li>SYS024 File doesn't exist: {file}</li>
-	 * <li>SYS023 Can't write to file: {file}</li>
-	 * <li>SYS027 Can't write to output stream: {msg}</li>
-	 * <li>SYS036 Program exception: {msg}</li>
-	 * <li>SYS038 File is too big: {file}</li>
+	 * <li>SYS024 File doesn't exist: {file}
+	 * <li>SYS023 Can't write to file: {file}
+	 * <li>SYS027 Can't write to output stream: {msg}
+	 * <li>SYS036 Program exception: {msg}
+	 * <li>SYS038 File is too big: {file}
 	 * </ul>
 	 */
 	public static final void writeString(final File file, final String str)
@@ -1187,12 +1187,12 @@ public class FUtils {
 	 * @param out output stream.
 	 * @param str string to be written.
 	 * @param encoding name of encoding table. If this argument is
-	 * <tt>null</tt> then the default encoding is used.
+	 * <code>null</code> then the default encoding is used.
 	 * @throws SException
 	 * <ul>
-	 * <li>SYS023 Can't write to file: {file}</li>
-	 * <li>SYS027 Can't write to output stream: {msg}</li>
-	 * <li>SYS035 Unsupported character set name</li>
+	 * <li>SYS023 Can't write to file: {file}
+	 * <li>SYS027 Can't write to output stream: {msg}
+	 * <li>SYS035 Unsupported character set name
 	 * </ul>
 	 */
 	public static final void writeString(final OutputStream out,
@@ -1226,12 +1226,12 @@ public class FUtils {
 	 * @param file output file.
 	 * @param str string to be written.
 	 * @param encoding name of encoding table. If this argument is
-	 * <tt>null</tt> the default encoding is used.
+	 * <code>null</code> the default encoding is used.
 	 * @throws SException
 	 * <ul>
-	 * <li>SYS023 Can't write to file: {file}</li>
-	 * <li>SYS035 Unsupported character set name</li>
-	 * <li>SYS038 File is too big: {file}</li>
+	 * <li>SYS023 Can't write to file: {file}
+	 * <li>SYS035 Unsupported character set name
+	 * <li>SYS038 File is too big: {file}
 	 * </ul>
 	 */
 	public static final void writeString(final File file,
@@ -1271,7 +1271,7 @@ public class FUtils {
 	/** Write string output writer.
 	 * @param out output writer.
 	 * @param str string to be written.
-	 * <tt>null</tt> the default encoding is used.
+	 * <code>null</code> the default encoding is used.
 	 * @throws SException SYS027 Can't write to output stream: {msg}
 	 */
 	public static final void writeString(final Writer out, final String str)
@@ -1290,9 +1290,9 @@ public class FUtils {
 	 * @param buf byte array to be written.
 	 * @throws SException
 	 * <ul>
-	 * <li>SYS023 Can't write to file: {file}</li>
-	 * <li>SYS038 File is too big: {file}</li>
-	 * <li>SYS038 File is too big: {file}</li>
+	 * <li>SYS023 Can't write to file: {file}
+	 * <li>SYS038 File is too big: {file}
+	 * <li>SYS038 File is too big: {file}
 	 * </ul>
 	 */
 	public static final void writeBytes(final File file, final byte[] buf)
@@ -1326,11 +1326,11 @@ public class FUtils {
 	 * @param rep sequence of characters which replaces key occurrences
 	 * @throws SException
 	 * <ul>
-	 * <li>SYS024 File doesn't exist: {file}</li>
-	 * <li>SYS028 Can't read file: {file}</li>
-	 * <li>SYS035 Unsupported character set name</li>
-	 * <li>SYS036 Program exception: {msg}</li>
-	 * <li>SYS038 File is too big: {file}</li>
+	 * <li>SYS024 File doesn't exist: {file}
+	 * <li>SYS028 Can't read file: {file}
+	 * <li>SYS035 Unsupported character set name
+	 * <li>SYS036 Program exception: {msg}
+	 * <li>SYS038 File is too big: {file}
 	 * </ul>
 	 */
 	public static final void modifyFile(final File file,
@@ -1343,7 +1343,7 @@ public class FUtils {
 
 	/** Very dangerous: if the file is directory it deletes all subdirectories!
 	 * @param files array of files to be deleted.
-	 * @param subdir if <tt>true</tt> then also subdirectories are deleted.
+	 * @param subdir if <code>true</code> then also subdirectories are deleted.
 	 */
 	public static void deleteAll(final File[] files,
 		final boolean subdir) {
@@ -1359,7 +1359,7 @@ public class FUtils {
 
 	/** Very dangerous: if the file is directory it deletes all subdirectories!
 	 * @param file file(s) to be deleted.
-	 * @param subdir if <tt>true</tt> then also subdirectories are deleted.
+	 * @param subdir if <code>true</code> then also subdirectories are deleted.
 	 * @throws SException SYS025 Directory doesn't exist or isn't accessible.
 	 */
 	public static final void deleteAll(final File file, final boolean subdir)
@@ -1373,7 +1373,7 @@ public class FUtils {
 
 	/** Very dangerous: if the file is directory it deletes all subdirectories!
 	 * @param fname file(s) to be deleted.
-	 * @param subdir if <tt>true</tt> then also subdirectories are deleted.
+	 * @param subdir if <code>true</code> then also subdirectories are deleted.
 	 * @throws SException SYS025 Directory doesn't exist or isn't accessible.
 	 */
 	public static final void deleteAll(final String fname, final boolean subdir)
@@ -1390,13 +1390,13 @@ public class FUtils {
 	 * @param pathname name of file to which the copy will be made.
 	 * @throws SException
 	 * <ul>
-	 * <li>SYS021 Can't delete file: {file}</li>
-	 * <li>SYS023 Can't write to file: {file}</li>
-	 * <li>SYS024 File doesn't exist: {file}</li>
-	 * <li>SYS026 Can't create file: {file}</li>
-	 * <li>SYS028 Can't read file: {file}</li>
-	 * <li>SYS031 Can't rename file {f1} to {f2}</li>
-	 * <li>SYS036 Program exception: {msg}</li>
+	 * <li>SYS021 Can't delete file: {file}
+	 * <li>SYS023 Can't write to file: {file}
+	 * <li>SYS024 File doesn't exist: {file}
+	 * <li>SYS026 Can't create file: {file}
+	 * <li>SYS028 Can't read file: {file}
+	 * <li>SYS031 Can't rename file {f1} to {f2}
+	 * <li>SYS036 Program exception: {msg}
 	 * </ul>
 	 */
 	public final static void secureCopy(final InputStream is,
@@ -1412,13 +1412,13 @@ public class FUtils {
 	 * @param file file to which the copy will be made.
 	 * @throws SException
 	 * <ul>
-	 * <li>SYS021 Can't delete file: {file}</li>
-	 * <li>SYS023 Can't write to file: {file}</li>
-	 * <li>SYS024 File doesn't exist: {file}</li>
-	 * <li>SYS026 Can't create file: {file}</li>
-	 * <li>SYS028 Can't read file: {file}</li>
-	 * <li>SYS031 Can't rename file {f1} to {f2}</li>
-	 * <li>SYS036 Program exception: {msg}</li>
+	 * <li>SYS021 Can't delete file: {file}
+	 * <li>SYS023 Can't write to file: {file}
+	 * <li>SYS024 File doesn't exist: {file}
+	 * <li>SYS026 Can't create file: {file}
+	 * <li>SYS028 Can't read file: {file}
+	 * <li>SYS031 Can't rename file {f1} to {f2}
+	 * <li>SYS036 Program exception: {msg}
 	 * </ul>
 	 */
 	public static final void secureCopy(final InputStream is, final File file)
@@ -1457,14 +1457,14 @@ public class FUtils {
 	 * @param out output file.
 	 * @throws SException
 	 * <ul>
-	 * <li>SYS021 Can't delete file: {file}</li>
-	 * <li>SYS023 Can't write to file: {file}</li>
-	 * <li>SYS024 File doesn't exist: {file}</li>
-	 * <li>SYS026 Can't create file: {file}</li>
-	 * <li>SYS028 Can't read file: {file}</li>
-	 * <li>SYS031 Can't rename file {f1} to {f2}</li>
-	 * <li>SYS036 Program exception: {msg}</li>
-	 * <li>SYS038 File is too big: {file}</li>
+	 * <li>SYS021 Can't delete file: {file}
+	 * <li>SYS023 Can't write to file: {file}
+	 * <li>SYS024 File doesn't exist: {file}
+	 * <li>SYS026 Can't create file: {file}
+	 * <li>SYS028 Can't read file: {file}
+	 * <li>SYS031 Can't rename file {f1} to {f2}
+	 * <li>SYS036 Program exception: {msg}
+	 * <li>SYS038 File is too big: {file}
 	 * </ul>
 	 */
 	public static final void secureCopy(final File in, final File out)
@@ -1681,40 +1681,36 @@ public class FUtils {
 			ndx = t.lastIndexOf('/');
 			String wc = t.substring(ndx+1); // wildcard of file name
 			String dir = t.substring(0,ndx).replace('.', '/');
-				ndx = dir.lastIndexOf('.');
-				Enumeration<URL> eu = ClassLoader.getSystemResources(dir);
-				while (eu.hasMoreElements()) {
-					URL u = eu.nextElement();
-					if ("file".equals(u.getProtocol())) {
-						getSourceFileGroup(urls, u.getFile(), wc);
-					} else if ("jar".equals(u.getProtocol())) {
-						String s = u.toExternalForm();
-						ndx = s.indexOf('!');
-						if (ndx >= 0) {
-							URL ux = new URL(s.substring(4, ndx));
-							JarFile jf = new JarFile(ux.getFile());
-							Enumeration<JarEntry> je = jf.entries();
-							while (je.hasMoreElements()) {
-								s = je.nextElement().getName();
-								if (s.startsWith(dir + "/")
-									&& s.length() > dir.length() + 1) {
-									s = s.substring(dir.length() + 1);
-									if (NameWildCardFilter.chkWildcard(wc, s)) {
-										urls.add("classpath://"
-											+ dir.replace('/', '.') + "."+s);
-									}
+			ndx = dir.lastIndexOf('.');
+			Enumeration<URL> eu = ClassLoader.getSystemResources(dir);
+			while (eu.hasMoreElements()) {
+				URL u = eu.nextElement();
+				if ("file".equals(u.getProtocol())) {
+					getSourceFileGroup(urls, u.getFile(), wc);
+				} else if ("jar".equals(u.getProtocol())) {
+					String s = u.toExternalForm();
+					ndx = s.indexOf('!');
+					if (ndx >= 0) {
+						URL ux = new URL(s.substring(4, ndx));
+						JarFile jf = new JarFile(ux.getFile());
+						Enumeration<JarEntry> je = jf.entries();
+						while (je.hasMoreElements()) {
+							s = je.nextElement().getName();
+							if (s.startsWith(dir + "/")
+								&& s.length() > dir.length() + 1) {
+								s = s.substring(dir.length() + 1);
+								if (NameWildCardFilter.chkWildcard(wc, s)) {
+									urls.add("classpath://"
+										+ dir.replace('/', '.') + "."+s);
 								}
 							}
 						}
-					} else {
-						throw new RuntimeException(
-							"Unknown protocol: " + u.getProtocol());
 					}
+				} else {
+					throw new RuntimeException(
+						"Unknown protocol: " + u.getProtocol());
 				}
-//			} else {
-//				urls.add(getExtendedURL(
-//					src).toURI().toURL().toExternalForm());
-//			}
+			}
 		} else if (src.startsWith("file:/")) {
 			int ndx = src.lastIndexOf('/');
 			String wc = src.substring(ndx+1); // wildcard of file name
@@ -1960,7 +1956,7 @@ public class FUtils {
 	/** Store files given by list to zip archive file. Entries of list are
 	 * separated by ";". If the entry is directory there are archived all
 	 * files from the subtree from this directory. The files with extensions
-	 * given by argument <tt>ignore</tt> are ignored. Wild characters in
+	 * given by argument <code>ignore</code> are ignored. Wild characters in
 	 * file names (i.e. "*" or '?') are accepted.
 	 * @param fileList list of files separated by ";".
 	 * @param ignoreList list of extensions to be ignored(separated by ";").
@@ -1968,9 +1964,9 @@ public class FUtils {
 	 * @return sum of length of all archived files.
 	 * @throws SException
 	 * <ul>
-	 * <li>SYS023 Can't write to file: {file}</li>
-	 * <li>SYS028 Can't read file: {file}</li>
-	 * <li>SYS073 Zip file list is empty</li>
+	 * <li>SYS023 Can't write to file: {file}
+	 * <li>SYS028 Can't read file: {file}
+	 * <li>SYS073 Zip file list is empty
 	 * </ul>
 	 */
 	public static final long filesToZip(final String fileList,
@@ -2036,10 +2032,10 @@ public class FUtils {
 	 * @return sum of length of all archived files.
 	 * @throws SException
 	 * <ul>
-	 * <li>SYS023 Can't write to file: {file}</li>
-	 * <li>SYS024 File doesn't exist: {file}</li>
-	 * <li>SYS028 Can't read file: {file}</li>
-	 * <li>SYS073 Zip file list is empty</li>
+	 * <li>SYS023 Can't write to file: {file}
+	 * <li>SYS024 File doesn't exist: {file}
+	 * <li>SYS028 Can't read file: {file}
+	 * <li>SYS073 Zip file list is empty
 	 * </ul>
 	 */
 	public static final long filesToZip(final File[] list,
@@ -2072,10 +2068,10 @@ public class FUtils {
 	 * @param zFileName name of archive (used just for error reports).
 	 * @throws SException
 	 * <ul>
-	 * <li>SYS023 Can't write to file: {file}</li>
-	 * <li>SYS024 File doesn't exist: {file}</li>
-	 * <li>SYS028 Can't read file: {file}</li>
-	 * <li>SYS073 Zip file list is empty</li>
+	 * <li>SYS023 Can't write to file: {file}
+	 * <li>SYS024 File doesn't exist: {file}
+	 * <li>SYS028 Can't read file: {file}
+	 * <li>SYS073 Zip file list is empty
 	 * </ul>
 	 */
 	public static final long filesToZip(final File[] list,
@@ -2122,9 +2118,9 @@ public class FUtils {
 	 * @return sum of length of all archived files.
 	 * @throws SException
 	 * <ul>
-	 * <li>SYS023 Can't write to file: {file}</li>
-	 * <li>SYS024 File doesn't exist: {file}</li>
-	 * <li>SYS028 Can't read file: {file}</li>
+	 * <li>SYS023 Can't write to file: {file}
+	 * <li>SYS024 File doesn't exist: {file}
+	 * <li>SYS028 Can't read file: {file}
 	 * </ul>
 	 */
 	private static long filesToZip(final ZipOutputStream zout,
@@ -2207,12 +2203,12 @@ public class FUtils {
 	 * @return sum of length of all extracted files.
 	 * @throws SException
 	 * <ul>
-	 * <li>SYS023 Can't write to file: {file}</li>
-	 * <li>SYS024 File doesn't exist: {file}</li>
-	 * <li>SYS026 Can't create file: {file}</li>
-	 * <li>SYS028 Can't read file: {file}</li>
-	 * <li>SYS032 File is not directory: {file}</li>
-	 * <li>SYS038 File is too big: {file}</li>
+	 * <li>SYS023 Can't write to file: {file}
+	 * <li>SYS024 File doesn't exist: {file}
+	 * <li>SYS026 Can't create file: {file}
+	 * <li>SYS028 Can't read file: {file}
+	 * <li>SYS032 File is not directory: {file}
+	 * <li>SYS038 File is too big: {file}
 	 * </ul>
 	 */
 	public static final long filesFromZip(final File dir,
@@ -2239,12 +2235,12 @@ public class FUtils {
 	 * @return sum of length of all extracted files.
 	 * @throws SException
 	 * <ul>
-	 * <li>SYS023 Can't write to file: {file}</li>
-	 * <li>SYS024 File doesn't exist: {file}</li>
-	 * <li>SYS026 Can't create file: {file}</li>
-	 * <li>SYS028 Can't read file: {file}</li>
-	 * <li>SYS032 File is not directory: {file}</li>
-	 * <li>SYS038 File is too big: {file}</li>
+	 * <li>SYS023 Can't write to file: {file}
+	 * <li>SYS024 File doesn't exist: {file}
+	 * <li>SYS026 Can't create file: {file}
+	 * <li>SYS028 Can't read file: {file}
+	 * <li>SYS032 File is not directory: {file}
+	 * <li>SYS038 File is too big: {file}
 	 * </ul>
 	 */
 	public static final long filesFromZip(final File dir,

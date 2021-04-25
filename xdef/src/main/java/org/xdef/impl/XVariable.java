@@ -3,9 +3,9 @@ package org.xdef.impl;
 import org.xdef.impl.code.CodeDisplay;
 import org.xdef.model.XMVariable;
 import java.io.IOException;
+import org.xdef.XDValueID;
 
-/** Contains variable parameters.
- * deprecated - will be not public in future versions
+/** Implementation of XMVariable.
  * @author Vaclav Trojan
  */
 public class XVariable implements XMVariable {
@@ -18,11 +18,20 @@ public class XVariable implements XMVariable {
 	/** offset (address) of variable */
 	private int _offset;
 	/** if true variable is final. */
-	private boolean _isFinal; // if represents constant.
+	private boolean _isFinal; // if it is a constant.
 	/** if true variable is external. */
-	private boolean _isExternal; // if  represents externally set value.
+	private boolean _isExternal; // if it is externally set value.
 	/** if true variable was initialized. */
 	private boolean _initialized;
+	/** Type of parsed object or XDValueID.XD_VOID if it not exists. */
+	private short _parseResultType;
+	/** Reference name to declared type (valid only for uniqueset keys).*/
+	/** Code address of check method or -1 if it not exists. */
+	private int _parseMethodAddr;
+	/** Name of key reference. */
+	private String _refTypeName;
+	/** Key index in Uniqueset. */
+	private int _keyIndex;
 
 	/** Create instance of XVariable object.
 	 * @param name name of variable.
@@ -47,48 +56,70 @@ public class XVariable implements XMVariable {
 		_isFinal = isFinal;
 		_isExternal = isExternal;
 		_initialized = initialized;
+		_parseResultType =  XDValueID.XD_VOID; // no parsed type
+		_parseMethodAddr = -1;
+//		_refTypeName = null; // java makes it
+		_keyIndex = -1;
 	}
 
-	/** Create instance of XVariable object.
-	 * @param var variable from which this object will be created.
-	 */
-	protected XVariable(final XVariable var) {
-		_name =  var._name;
-		_kind = var._kind;
-		_type = var._type;
-		_offset = var._offset;
-		_isFinal = var._isFinal;
-		_isExternal = var._isExternal;
-		_initialized = var._initialized;
-	}
-
-	/** Get kind of variable (global, local, XModel).
-	 * @return 'G' .. global, 'L' .. local, 'X' .. XModel.
-	 */
-	public final byte getKind() {return _kind;}
-
+////////////////////////////////////////////////////////////////////////////////
+// internally used methods
+////////////////////////////////////////////////////////////////////////////////
 	/** Set offset of variable.
 	 * @param offset variable offset.
 	 */
 	public final void setOffset(final int offset) {_offset=offset;}
 
-
 	/** Set isExternal flag.
 	 * @param ext value of external flag.
 	 */
 	public final void setExternal(final boolean ext) {_isExternal = ext;}
-
 	/** Set this field is initialized.
 	 * @param init value of initialized flag.
 	 */
-	public final void setInitialized(final boolean init) {_initialized = init;}
-
+	public final void setInitialized(final boolean init) {
+		_initialized = init;
+	}
 	/** Set isFinal flag.
 	 * @param isFinal value of final flag.
 	 */
 	public final void setFinal(final boolean isFinal) {_isFinal = isFinal;}
-
-
+	/** Get parsed result type of variable.
+	 * @return type of parseResult value.
+	 */
+	public final short getParseResultType() {return _parseResultType;}
+	/** Set parsed result type of variable.
+	 * @param type type of parseResult value or void.
+	 */
+	public final void setParseResultType(short type) {_parseResultType = type;}
+	/** Get parse method address.
+	 * @return address of parse method or -1;
+	 */
+	public final int getParseMethodAddr() {return _parseMethodAddr;}
+	/** Set parse method address.
+	 * @param method  address of parse method or -1
+	 */
+	public final void setParseMethodAddr(int method) {_parseMethodAddr=method;}
+	/** Get reference name of declared type (valid only for Uniqueset keys).
+	 * @return reference name of declared type or null.
+	 */
+	public final String getKeyRefName() {return _refTypeName;}
+	/** Set reference name of declared type (valid only for Uniqueset keys).
+	 * @param x reference name of declared type or null.
+	 */
+	public final void setKeyRefName(final String x) {_refTypeName = x;}
+	/** Get key index of Uniqueset key (valid only for Uniqueset key).
+	 * @return key index of Uniqueset key or -1.
+	 */
+	public final int getKeyIndex() {return _keyIndex;}
+	/** Set key index of Uniqueset key (valid only for Uniqueset key).
+	 * @param keyIndex key index of Uniqueset key or -1.
+	 */
+	public final void setKeyIndex(int keyIndex) {_keyIndex = keyIndex;}
+	/** Write this object to XDWriter
+	 * @param xw XDWriter where to write.
+	 * @throws IOException if an error occurs.
+	 */
 	void writeXD(final XDWriter xw) throws IOException {
 		xw.writeString(_name);
 		xw.writeShort(_type);
@@ -97,18 +128,30 @@ public class XVariable implements XMVariable {
 		xw.writeBoolean(_isFinal);
 		xw.writeBoolean(_isExternal);
 		xw.writeBoolean(_initialized);
+		xw.writeShort(_parseResultType);
+		xw.writeInt(_parseMethodAddr);
+		xw.writeString(_refTypeName);
+		xw.writeInt(_keyIndex);
 	}
-
+	/** Read XVariable from XDReader.
+	 * @param xr the XDReader from which to read XVariable.
+	 * @return XVariable read from XDReader.
+	 * @throws IOException if an error occurs.
+	 */
 	static XVariable readXD(final XDReader xr) throws IOException {
-		return new XVariable(xr.readString(),
+		XVariable result = new XVariable(xr.readString(),
 			xr.readShort(),
 			xr.readByte(),
 			xr.readInt(),
 			xr.readBoolean(),
 			xr.readBoolean(),
 			xr.readBoolean());
+		result._parseResultType = xr.readShort();
+		result._parseMethodAddr = xr.readInt();
+		result._refTypeName = xr.readString();
+		result._keyIndex = xr.readInt();
+		return result;
 	}
-
 	@Override
 	public final int hashCode() {return _name.hashCode();}
 	@Override
@@ -122,7 +165,8 @@ public class XVariable implements XMVariable {
 		return (isExternal() ? "external " : "") + (isFinal() ? "final " : "")+
 			CodeDisplay.getTypeName(_type) + " " + getName() +
 			", offset:" + _offset + ", initialized:" + _initialized
-			+ "; kind:" + (char) _kind;
+			+ "; kind:" + (char) _kind + "; parseMethodAddr:" + _parseMethodAddr
+			+ "; keyIndex:" + _keyIndex;
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -138,6 +182,11 @@ public class XVariable implements XMVariable {
 	 * @return type of variable.
 	 */
 	public final short getType() {return _type;}
+	@Override
+	/** Get kind of variable (global, local, XModel).
+	 * @return 'G' .. global, 'L' .. local, 'X' .. XModel.
+	 */
+	public final byte getKind() {return _kind;}
 	@Override
 	/** Get "final" flag.
 	 * @return true if and only if variable is declared as final.
@@ -156,5 +205,4 @@ public class XVariable implements XMVariable {
 	 * @return offset of variable.
 	 */
 	public final int getOffset() {return _offset;}
-
 }

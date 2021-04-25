@@ -124,7 +124,7 @@ public final class TestXComponents extends XDTester {
 			xc = xd.parseXComponent(xml, null, reporter);
 			assertNoErrors(reporter);
 			assertEq("1.25 CZK", xd.getVariable("a").stringValue());
-			assertEq(253, xd.getVariable("d").intValue());
+			assertEq(252, xd.getVariable("d").intValue());
 			assertEq(new GPSPosition(48.2, 16.37, 151, null),
 				SUtils.getValueFromGetter(xc, "getq"));
 			SUtils.setValueToSetter(xc, "seta", new Price(456.001, "USD"));
@@ -133,7 +133,7 @@ public final class TestXComponents extends XDTester {
 			el = parse(xd, xml, reporter);
 			assertNoErrors(reporter);
 			assertEq(xml, el);
-			assertEq(1031, xd.getVariable("d").intValue());
+			assertEq(1030, xd.getVariable("d").intValue());
 			assertEq("51.52, -0.09, 0.0, London",
 				xd.getVariable("q").toString());
 		} catch (Exception ex) {fail(ex);}

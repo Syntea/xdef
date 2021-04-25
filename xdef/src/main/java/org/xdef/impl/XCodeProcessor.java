@@ -82,6 +82,7 @@ import org.xdef.impl.code.DefChar;
 import org.xdef.impl.code.DefPrice;
 import org.xdef.impl.code.DefGPSPosition;
 import org.xdef.impl.code.DefLocale;
+import org.xdef.impl.code.ParseItem;
 import org.xdef.impl.debug.ChkGUIDebug;
 import org.xdef.model.XMDebugInfo;
 import org.xdef.model.XMDefinition;
@@ -465,8 +466,8 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 				if (val != null && !val.isNull()) {
 					short itemId = val.getItemId();
 					switch (itemId) {
-						case CompileBase.UNIQUESET_VALUE:
-						case CompileBase.UNIQUESET_M_VALUE: {
+						case CompileBase.X_UNIQUESET:
+						case CompileBase.X_UNIQUESET_M: {
 							// pending references
 							CodeUniqueset pt = (CodeUniqueset) val;
 							result &= pt.checkAndClear(_reporter);
@@ -573,9 +574,8 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 	 */
 	final CodeUniqueset getIdRefTable() {
 		if (_globalVariables[4] == null) {
-			 CodeUniqueset.ParseItem[] parseItems =
-				new CodeUniqueset.ParseItem[] {
-					new CodeUniqueset.ParseItem("", // no key name
+			 ParseItem[] parseItems = new ParseItem[] {
+					new ParseItem("", // no key name
 						null, // refName
 						-1, // chkAddr,
 						0, // itemIndex,
@@ -596,7 +596,7 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 		if (!_initialized2) { //not initialized.
 			XVariableTable vt =
 				(XVariableTable) _xd.getXDPool().getVariableTable();
-			for (int i = 0; i < vt.size(); i++) {
+			for (int i = 0; i < _globalVariables.length; i++) {
 				//set DefNull(type) to all not initialized global variables.
 				XVariable xv = vt.getXVariable(i);
 				if (xv == null) {
@@ -1574,7 +1574,7 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 				}
 				case UNIQUESET_M_NEWKEY: {
 					CodeUniqueset u = (CodeUniqueset) _stack[sp--];
-					for (CodeUniqueset.ParseItem i : u.getParsedItems()) {
+					for (ParseItem i : u.getParsedItems()) {
 						i.setParsedObject(null);
 					}
 					continue;
@@ -1683,7 +1683,7 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 				case UNIQUESET_KEY_NEWKEY: {
 					CodeUniqueset dt = (CodeUniqueset) _stack[sp];
 					_stack[sp--] = null;
-					CodeUniqueset.ParseItem[] o = dt.getParsedItems();
+					ParseItem[] o = dt.getParsedItems();
 					o[item.getParam()].setParsedObject(null);
 					continue;
 				}
@@ -2584,7 +2584,7 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 					for (int j = 3; j < _globalVariables.length; j++) {
 						XDValue xv;
 						if ((xv = _globalVariables[j]) != null &&
-							xv.getItemId() == CompileBase.UNIQUESET_VALUE) {
+							xv.getItemId() == CompileBase.X_UNIQUESET) {
 							CodeUniqueset x = (CodeUniqueset)xv;
 							idrefTables.put(j, x);
 							_globalVariables[j] = new CodeUniqueset(
@@ -3340,8 +3340,8 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 			case XD_PARSERESULT:
 				y = (XDParseResult) x;
 				break;
-			case CompileBase.UNIQUESET_VALUE:
-			case CompileBase.UNIQUESET_M_VALUE:
+			case CompileBase.X_UNIQUESET:
+			case CompileBase.X_UNIQUESET_M:
 				result = (CodeUniqueset) x;
 			default:
 				y = chkElem._parseResult;
@@ -3433,7 +3433,7 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 
 	/** Get named user object.
 	 * @param id identifier of the object.
-	 * @return value of the object or <tt>null</tt>.
+	 * @return value of the object or null.
 	 */
 	public final Object getUserObject(final String id) {
 		return _userObjects.get(id);

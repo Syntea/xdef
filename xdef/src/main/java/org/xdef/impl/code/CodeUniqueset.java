@@ -4,7 +4,6 @@ import org.xdef.XDContainer;
 import org.xdef.XDUniqueSetKey;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
-import org.xdef.XDValueID;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.Report;
@@ -132,6 +131,22 @@ public final class CodeUniqueset extends XDValueAbstract implements XDUniqueSet{
 	 * @return parse item of key in multiple key array.
 	 */
 	public final ParseItem getParseKeyItem(final int i) {return _parseItems[i];}
+
+	/** Get address of parsing method for key item with given index.
+	 * @param keyName name of key in multiple key array.
+	 * @return parse item with key from multiple key array.
+	 */
+	public final ParseItem getParseKeyItem(final String keyName) {
+		int ndx = keyName.lastIndexOf('.');
+		String s = ndx > 0 ? keyName.substring(0, ndx + 1) : keyName;
+		for (int i = 0; _parseItems != null && i < _parseItems.length; i++) {
+			ParseItem keyItem = _parseItems[i];
+			if (keyName.equals(s + keyItem.getParseName())) {
+				return keyItem;
+			}
+		}
+		return null;
+	}
 
 	/** Write error reports to reporter and clear map.
 	 * @param reporter report writer.
@@ -301,6 +316,7 @@ public final class CodeUniqueset extends XDValueAbstract implements XDUniqueSet{
 		return result;
 	}
 
+	@Override
 	/** Get size of the uniqueSet table.
 	 * @return size of the table.
 	 */
@@ -314,13 +330,13 @@ public final class CodeUniqueset extends XDValueAbstract implements XDUniqueSet{
 	/** Get type id of this object.
 	 * @return The type id of this object.
 	 */
-	public final short getItemId() {return CompileBase.UNIQUESET_M_VALUE;}
+	public final short getItemId() {return CompileBase.X_UNIQUESET_M;}
 
 	@Override
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
-	public final XDValueType getItemType() {return  XDValueType.OBJECT;}
+	public final XDValueType getItemType() {return  XDValueType.X_UNIQUESET_M;}
 
 	@Override
 	public XDValue cloneItem() {
@@ -604,148 +620,5 @@ public final class CodeUniqueset extends XDValueAbstract implements XDUniqueSet{
 			}
 			return false;
 		}
-	}
-
-	/** Implements uniqueSet parse item. */
-	public static final class ParseItem extends XDValueAbstract {
-
-		/** Address of check method. */
-		private final int _parseMethodAddr;
-		/** Type of parsed object. */
-		private final short _itemType;
-		/** True if this key is optional, false if it is required. */
-		private final boolean _optional;
-		/** Key name. */
-		private final String _name;
-		/** Reference name to declared type or null. */
-		private final String _refName;
-		/** Resulting value of parsing. */
-		private XDValue _itemValue;
-		/** Index of key item. */
-		private final int _itemIndex;
-
-		/** Creates a new null instance of UniquesetParseItem. */
-		ParseItem() {this(null, null, -1, -1, XDValueID.XD_OBJECT, false);}
-
-		/** Creates a new instance of UniquesetParseItem (must be public
-		 * because of XDReader).
-		 * @param name name of parse item or null;
-		 * @param chkAddr address of code of the method.
-		 * @param refName name of type;
-		 * @param itemIndex index of this key part
-		 * @param parsedType type of id.
-		 * @param optional if true this key value is required or return
-		 * false if it is optional
-		 */
-		public ParseItem(final String name,
-			final String refName,
-			final int chkAddr,
-			final int itemIndex,
-			final short parsedType,
-			final boolean optional) {
-			_name = name;
-			_refName = refName;
-			_parseMethodAddr = chkAddr;
-			_itemIndex = itemIndex;
-			_itemType = parsedType;
-			_optional = optional;
-			// _itemValue = null; // java mekes it
-		}
-
-		////////////////////////////////////////////////////////////////////////
-		// Implementation of XDUniquesetParseItem interface
-		////////////////////////////////////////////////////////////////////////
-
-		/** Get address of parsing method.
-		 * @return the address of code.
-		 */
-		public final int getParseMethodAddr() {return _parseMethodAddr;}
-
-		/** Get parsed type.
-		 * @return the type id.
-		 */
-		public final short getParsedType() {return _itemType;}
-
-		/** Get parsed type.
-		 * @return the type id.
-		 */
-		public final String getParseName() {return _name;}
-
-		/** Get reference name to declared type.
-		 * @return reference name to declared type or null.
-		 */
-		public final String getDeclaredTypeName() {return _refName;}
-
-		/** Set parsed object (used in XDCodeProcessor).
-		 * @param val the value of parsed object.
-		 */
-		public final void setParsedObject(XDValue val) {_itemValue = val;}
-
-		/** Check if this item is optional or required.
-		 * @return true if this item is required.
-		 */
-		public final boolean isOptional() {return _optional;}
-
-		////////////////////////////////////////////////////////////////////////
-		// Implementation of XDValue interface
-		////////////////////////////////////////////////////////////////////////
-
-		@Override
-		public final short getItemId() {return CompileBase.PARSEITEM_VALUE;}
-
-		@Override
-		/** Get ID of the type of value
-		 * @return enumeration item of this type.
-		 */
-		public XDValueType getItemType() {return XDValueType.OBJECT;}
-
-		@Override
-		public String toString() {
-			return "[" + _itemIndex + "]" + (_name == null ? "null"
-				: ((!_name.isEmpty() ? ":" +_name : "") + "=" + _itemValue));
-		}
-
-		@Override
-		public final String stringValue() {return _itemValue.stringValue();}
-
-		@Override
-		public final XDValue cloneItem() {
-			return new ParseItem(_name,
-				_refName, _parseMethodAddr, _itemIndex, _itemType, _optional);
-		}
-
-		@Override
-		public final boolean isNull() {return _parseMethodAddr == -1;}
-
-		@Override
-		public int hashCode() {return _name.hashCode();}
-
-		@Override
-		public boolean equals(final Object arg) {
-			 return arg != null && arg instanceof XDValue
-				 ? equals((XDValue) arg) : false;
-		}
-
-		@Override
-		public final boolean equals(final XDValue arg) {
-			return arg == null ? false
-				: arg.getItemId() != CompileBase.PARSEITEM_VALUE ? false
-				: _name != null ? _name.equals(((ParseItem)arg)._name)
-				: ((ParseItem) arg)._name == null;
-		}
-
-		////////////////////////////////////////////////////////////////////////
-		// Methods used in CodeUniqueset.
-		////////////////////////////////////////////////////////////////////////
-
-		/** Get index of actual uniqueSet parse item.
-		 * @return parse item index.
-		 */
-		final int getItemIndex() {return _itemIndex;}
-
-		/** Get object of actual uniqueSet parse item.
-		 * @return value of parsed object or null.
-		 */
-		final XDValue getParsedObject() {return _itemValue;}
 	}
 }

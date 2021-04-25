@@ -56,6 +56,7 @@ import org.xdef.XDValueID;
 import org.xdef.impl.code.DefPrice;
 import org.xdef.impl.code.DefGPSPosition;
 import org.xdef.impl.code.DefLocale;
+import org.xdef.impl.code.ParseItem;
 import org.xdef.sys.Price;
 import org.xdef.sys.GPSPosition;
 
@@ -247,18 +248,16 @@ public final class XDReader extends SObjectReader {
 					}
 					case XDValueID.XD_XPATH:
 						return readXPath();
-					case CompileBase.UNIQUESET_VALUE:
-					case CompileBase.UNIQUESET_M_VALUE: {
+					case CompileBase.X_UNIQUESET:
+					case CompileBase.X_UNIQUESET_M: {
 						int len = readLength();
-						CodeUniqueset.ParseItem[] keys =
-							new CodeUniqueset.ParseItem[len];
+						ParseItem[] keys = new ParseItem[len];
 						if (len > 0) {
 							for (int i = 0; i < len; i++) {
-								keys[i] = new CodeUniqueset.ParseItem(
-									readString(), //key name
+								keys[i] = new ParseItem(readString(), //key name
 									readString(), // reference type name
 									readInt(), // address of validation method
-									i, // item index
+									readInt(), // key index
 									readShort(), // parsed type
 									readBoolean()); // optional flag
 							}
@@ -279,7 +278,7 @@ public final class XDReader extends SObjectReader {
 					case XDValueID.XD_RESULTSET:
 						return new DefSQLResultSet();
 					case XDValueID.XD_UNIQUESET_KEY:
-					case CompileBase.PARSEITEM_VALUE: // TODO ???
+					case CompileBase.X_PARSEITEM: // TODO ???
 					case XDValueID.XD_NULL:
 						return new DefNull(type);
 					default:

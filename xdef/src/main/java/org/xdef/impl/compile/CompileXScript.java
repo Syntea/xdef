@@ -592,7 +592,7 @@ final class CompileXScript extends CompileStatement {
 					case XD_DECIMAL:
 						_g.genLDC(new DefDecimal(0));
 						break;
-					case CompileBase.PARSEITEM_VALUE:
+					case CompileBase.X_PARSEITEM:
 					default:
 						_g.genLDC(DefNull.genNullValue(vtype));
 				}
@@ -868,7 +868,7 @@ final class CompileXScript extends CompileStatement {
 							result = -2; //error
 						} else {
 							short xType = _g._tstack[_g._sp];
-							if (xType == CompileBase.ATTR_REF_VALUE) {
+							if (xType == CompileBase.X_ATTR_REF) {
 								if (returnType == XD_BOOLEAN
 									|| returnType == XD_ANY) {
 									_g.topToBool();

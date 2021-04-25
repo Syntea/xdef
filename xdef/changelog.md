@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 40.1.3, release-date 2021-04-22
+# Version 40.1.3, release-date 2021-04-25
 * preparing version 40.2
 * fixed bug in display of zone with zero hours and negative minutes in offset.
 * fixed bug in the method 'setParsedString' of objects 'ParseResult'.
@@ -10,6 +10,10 @@
 * improved creation of XML from JSON.
 * to the X-script of `BNFRule` objects added the method `rule.validate(String)`.
   Result of this method is a `boolean` value.
+* added new method to `XDDocument`
+    `XDParseResult parseXDType(String typeName, String data)`
+  this method invokes a validation method from declared type in X-definition
+  and returns `XDParseResult` object.
 * added new X-definition type of value: `GPSPosition`.
   Methods with this object:
     `latitude()` returns GPS latitude in degrees (-90.0 to 90.0).
