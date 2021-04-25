@@ -14,7 +14,7 @@ public class ParseTypeExample {
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/3.2' name='A'>\n"+
 "  /* This declaration contains types to be checked. */\n"+
 "  <xd:declaration scope='local'>\n"+
-"    type t1 int();\n"+  
+"    type t1 int();\n"+
 "    type t2 starts(%argument='wsdl:');\n"+
 "    uniqueSet u{t:t1; s:t2};\n"+
 "  </xd:declaration>\n"+
@@ -50,7 +50,7 @@ public class ParseTypeExample {
 		XDDocument xd = xp.createXDDocument(xdefName);
 
 		XDParseResult pr;
-		
+
 		String typeName = "t1";
 		pr = xd.parseXDType(typeName, "123");
 		if (pr.errors()) {
@@ -64,7 +64,7 @@ public class ParseTypeExample {
 		} else {
 			System.out.println(typeName + " OK");
 		}
-		
+
 		typeName = "t2";
 		pr = xd.parseXDType(typeName, "wsdl:1");
 		if (pr.errors()) {
@@ -78,7 +78,7 @@ public class ParseTypeExample {
 		} else {
 			System.out.println(typeName + " OK");
 		}
-		
+
 		typeName = "t3";
 		pr = xd.parseXDType(typeName, "abc");
 		if (pr.errors()) {
@@ -92,7 +92,7 @@ public class ParseTypeExample {
 		} else {
 			System.out.println(typeName + " OK");
 		}
-		
+
 		typeName = "t4";
 		pr = xd.parseXDType(typeName, "a1 2x");
 		if (pr.errors()) {
