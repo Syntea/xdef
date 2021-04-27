@@ -1624,6 +1624,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 				if (item.booleanValue()) {
 					if (_xComponent != null && getXMNode() != null
 						&& getXMNode().getXDPosition() != null) {
+						_parseResult.setParsedValue(_data);
 						_xComponent.xSetAttr(this, _parseResult);
 					}
 				} else {
@@ -1636,6 +1637,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			_parseResult = new DefParseResult(_data);
 			if (_xComponent != null && getXMNode() != null
 				&& getXMNode().getXDPosition() != null) {
+				_parseResult.setParsedValue(_data);
 				_xComponent.xSetAttr(this, _parseResult);
 			}
 		}
@@ -3632,6 +3634,5 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			_savedCounters = null;
 			return result;
 		}
-
 	}
 }
