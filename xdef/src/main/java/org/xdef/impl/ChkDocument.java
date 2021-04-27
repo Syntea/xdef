@@ -45,6 +45,7 @@ import org.xdef.XDValueType;
 import javax.xml.namespace.QName;
 import org.xdef.XDParseResult;
 import org.xdef.XDPool;
+import org.xdef.XDValueID;
 import org.xdef.impl.code.CodeUniqueset;
 import org.xdef.impl.code.DefParseResult;
 import org.xdef.impl.code.ParseItem;
@@ -1649,22 +1650,18 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		ChkElement chkel = new ChkElement(this, null, xel, true);
 		chkel.setXXType((byte) 'T');
 		chkel.setTextValue(data);
-		XDValue result = _scp.exec(addr, chkel);
-		if (XDValueType.PARSERESULT.equals(result.getItemType())) {
-			if (!chkel.chkTemporaryErrors()) {
-				//Value error
-				chkel.putTemporaryReport(Report.error(XDEF.XDEF515));
-			}
-			return (XDParseResult) result;
-		} else {
-			DefParseResult x = new DefParseResult(data);
-			if (!result.booleanValue()) {
-				chkel.copyTemporaryReports();
-				x.addReports(
-					(ArrayReporter) chkel.getReporter().getReportWriter());
-			}
-			return x;
+		XDValue x = _scp.exec(addr, chkel);
+		if (x.getItemId() == XDValueID.XD_PARSERESULT) {
+			return (XDParseResult) x;
 		}
+		DefParseResult result = new DefParseResult(data);
+		if (!x.booleanValue()) {
+			result.addReports(chkel.getTemporaryReporter());
+			if (!result.errors()) {
+				result.putDefaultParseError(); //Incorrect value&amp;{0}{: }
+			}
+		}
+		return result;
 	}
 
 	@Override
