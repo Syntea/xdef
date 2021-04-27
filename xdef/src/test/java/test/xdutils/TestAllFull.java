@@ -30,6 +30,7 @@ public class TestAllFull {
 			new TestGenCollection(),
 			new TestGenDTD(),
 			new TestGenXdef(),
+			new TestParseType(),
 			new TestPrettyXdef(),
 			new TestValidate(),
 			new TestXDefUtils(),
