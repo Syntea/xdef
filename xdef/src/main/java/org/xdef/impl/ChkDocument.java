@@ -1655,7 +1655,9 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			return (XDParseResult) x;
 		}
 		DefParseResult result = new DefParseResult(data);
-		if (!x.booleanValue()) {
+		if (x.booleanValue()) { // OK
+			result.setParsedValue(data);
+		} else { // error
 			result.addReports(chkel.getTemporaryReporter());
 			if (!result.errors()) {
 				result.putDefaultParseError(); //Incorrect value&amp;{0}{: }
