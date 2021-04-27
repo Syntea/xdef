@@ -12,24 +12,30 @@ public class TestParseType extends XDTester {
 
 	public TestParseType() {super();}
 
-	private static String test(XDPool xp,
-		String xdName,
-		String type,
-		String dataOK,
-		String dataErr) {
+	// Test declared type with valid data.
+	private static String testValid(XDPool xp, // compiled XDPool
+		String xdName, // name of X-definition
+		String type, // name of declared type
+		String dataOK) {// valid data
 		XDDocument xd = xp.createXDDocument(xdName);
 		XDParseResult pr = xd.parseXDType(type, dataOK);
-		String result = pr.errors() ? "ERR " +  pr.getReporter() : "";
-		pr = xd.parseXDType(type, dataErr);
-		result += pr.errors() ? "" :
-			(result.isEmpty() ? "" : "; ") + "Error not detected";
-		return type + " " + (result.isEmpty() ? "OK" : result);
+		return pr.errors() ? "Error " +  pr.getReporter() : "";
+	}
+
+	// Test declared type with invalid data.
+	private static String testInvalid(XDPool xp, // compiled XDPool
+		String xdName, // name of X-definition
+		String type, // name of declared type
+		String dataOK) {// invalid data
+		XDDocument xd = xp.createXDDocument(xdName);
+		XDParseResult pr = xd.parseXDType(type, dataOK);
+		return !pr.errors() ? "Error not detected" : "";
 	}
 
 	@Override
 	public void test() {
 		String xdef1 =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/3.2' name='A'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' name='A'>\n"+
 "  /* This declaration contains types to be checked. */\n"+
 "  <xd:declaration scope='local'>\n"+
 "    type t1 int();\n"+
@@ -38,7 +44,7 @@ public class TestParseType extends XDTester {
 "  </xd:declaration>\n"+
 "</xd:def>";
 		String xdef2 =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/3.2' name='B'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' name='B'>\n"+
 "  <xd:declaration scope='local'>\n"+
 "    BNFGrammar g = new BNFGrammar('\n"+
 "      x ::= S? [0-9]+\n"+
@@ -50,7 +56,7 @@ public class TestParseType extends XDTester {
 "  </xd:declaration>\n"+
 "</xd:def>";
 		String xdef3 =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/3.2' name='C'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' name='C'>\n"+
 "  <xd:declaration scope='local'>\n"+
 "    type t4 tt();\n"+
 "    boolean tt() {\n"+
@@ -59,20 +65,30 @@ public class TestParseType extends XDTester {
 "  </xd:declaration>\n"+
 "</xd:def>";
 		String xdef4 =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/3.2' name='X'\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' name='X'\n"+
 "        importLocal='A, B, C'>\n"+
 "</xd:def>";
 
 		Properties props = new Properties();
 		XDPool xp = XDFactory.compileXD(props, xdef1, xdef2, xdef3, xdef4);
-		String xdefName = "X";
 
-		assertEq("t1 OK", test(xp, xdefName, "t1", "123", "123s"));
-		assertEq("t2 OK", test(xp, xdefName, "t2", "wsdl:1", "wsdl1"));
-		assertEq("t3 OK", test(xp, xdefName, "t3", "abc", "xy12"));
-		assertEq("t4 OK", test(xp, xdefName, "t4", "a1 2x", "1a 2x"));
-		assertEq("u.t OK", test(xp, xdefName, "u.t", "123", "123x"));
-		assertEq("u.s OK", test(xp, xdefName, "u.s", "wsdl:x", "wdl:x"));
+		assertEq("", testValid(xp, "X","t1","123"));
+		assertEq("", testInvalid(xp, "X","t1","123s"));
+
+		assertEq("", testValid(xp, "X","t2","wsdl:1"));
+		assertEq("", testInvalid(xp, "X","t2","wsdl1"));
+
+		assertEq("", testValid(xp, "X","t3","abc"));
+		assertEq("", testInvalid(xp, "X","t3","xy12"));
+
+		assertEq("", testValid(xp, "X","t4","a1 2x"));
+		assertEq("", testInvalid(xp, "X","t4","1a 2x"));
+
+		assertEq("", testValid(xp, "X","u.t","123"));
+		assertEq("", testInvalid(xp, "X","u.t","123x"));
+
+		assertEq("", testValid(xp, "X","u.s","wsdl:x"));
+		assertEq("", testInvalid(xp, "X","u.s","wdl:x"));
 	}
 
 	/** Run test
