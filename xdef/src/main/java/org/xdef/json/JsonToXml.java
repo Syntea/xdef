@@ -256,8 +256,8 @@ class JsonToXml extends JsonTools implements JsonNames {
 	public final static boolean isSimpleValue(final Object val) {
 		Object o;
 		return val == null || val instanceof Number || val instanceof Boolean
-			|| val instanceof String || val instanceof JsonParser.JValue
-			&& ((o=((JsonParser.JValue) val).getValue()) == null
+			|| val instanceof String || val instanceof XONReader.JValue
+			&& ((o=((XONReader.JValue) val).getValue()) == null
 				|| o instanceof Number || o instanceof Boolean
 				|| o instanceof String);
 	}
@@ -820,12 +820,9 @@ class JsonToXml extends JsonTools implements JsonNames {
 			Map.Entry en = (Map.Entry) it.next();
 			Element ee = genValueW3C(en.getValue(), e);
 			Object o = en.getKey();
-			String key;
-			if (o instanceof byte[]) { // this because of YAML
-				key = new String((byte[]) o);
-			} else {
-				key = (String) o;
-			}
+			// NOTE in YAML it may be a byte array, otherwise it is String
+			String key = o instanceof byte[]? new String((byte[])o) : (String)o;
+			// convert key to XML name
 			ee.setAttribute(J_KEYATTR, toXmlName(key));
 		}
 		return e;

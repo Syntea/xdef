@@ -1,14 +1,21 @@
 package org.xdef.impl.compile;
 
 import java.util.Map;
+import java.util.Stack;
 import org.xdef.XDConstants;
 import org.xdef.impl.XConstants;
 import org.xdef.impl.XOccurrence;
+import org.xdef.json.JParser;
 import org.xdef.json.JsonNames;
-import org.xdef.json.JsonParser;
 import org.xdef.json.JsonTools;
+import org.xdef.json.XONReader;
+import org.xdef.json.XONReader.JArray;
+import org.xdef.json.XONReader.JMap;
+import org.xdef.json.XONReader.JObject;
+import org.xdef.json.XONReader.JValue;
 import org.xdef.msg.JSON;
 import org.xdef.msg.SYS;
+import org.xdef.sys.StringParser;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.ReportWriter;
 import org.xdef.sys.SBuffer;
@@ -18,7 +25,7 @@ import org.xdef.sys.SRuntimeException;
 /** Create X-definition model from xd:json.
  * @author Vaclav Trojan
  */
-public class CompileJsonXdef extends JsonParser {
+public class CompileJsonXdef extends StringParser {
 	/** Prefix of X-definition namespace. */
 	String _xdPrefix;
 	/** Index of X-definition namespace. */
@@ -29,7 +36,7 @@ public class CompileJsonXdef extends JsonParser {
 	String _basePos;
 
 	/** Prepare instance of XJSON. */
-	CompileJsonXdef() {super();}
+	private CompileJsonXdef() {super();}
 
 	/** Set attribute to PNode.
 	 * @param e PNode where to set an attribute.
@@ -106,6 +113,24 @@ public class CompileJsonXdef extends JsonParser {
 		e.setAttr(a);
 		a._xpathPos = _basePos;
 		return a;
+	}
+
+	/** Skip white space separators and comments. Note: line comments are not
+	 * allowed in X-script.
+	 * @return true if a space or comment was found.
+	 */
+	public final boolean isSpacesOrComments() {
+		boolean result = isSpaces();
+		while(isToken("/*") ) {
+			result = true;
+			if (!findTokenAndSkip("*/")) {
+				error(JSON.JSON015); //Unclosed comment
+				setEos();
+				return result;
+			}
+			isSpaces();
+		}
+		return result;
 	}
 
 	/** Skip all blanks, comments and semicolons.
@@ -325,13 +350,13 @@ public class CompileJsonXdef extends JsonParser {
 
 	private PNode genJsonMap(final JMap map, final PNode parent) {
 		PNode e, ee;
-		Object val = map.get(JsonParser.SCRIPT_KEY);
-		if (val != null) {
-			map.remove(JsonParser.SCRIPT_KEY);
-			JValue jv =(JValue) val;
+		Object val = map.get(JsonNames.SCRIPT_NAME);
+		if (val != null && val instanceof JValue) {
+			map.remove(JsonNames.SCRIPT_NAME);
+			JValue jv = (JValue) val;
 			setSourceBuffer(jv.getSBuffer());
 			isSpacesOrComments();
-			if (isToken(JsonParser.ONEOF_KEY)) {
+			if (isToken(JsonNames.ONEOF_NAME)) {
 				e = genJElement(parent, "map", map.getPosition());
 				ee = genXDElement(e, "choice", getPosition());
 				e.addChildNode(ee);
@@ -364,8 +389,8 @@ public class CompileJsonXdef extends JsonParser {
 			e = genJElement(parent, "map", map.getPosition());
 			ee = e;
 		}
-		for (Map.Entry<String, Object> entry: map.entrySet()) {
-			String key = entry.getKey();
+		for (Map.Entry<Object, Object> entry: map.entrySet()) {
+			String key = (String) entry.getKey();
 			val = entry.getValue();
 			PNode ee2 = genJsonModel(val, ee);
 			if (_xdNamespace.equals(ee2._nsURI)
@@ -386,12 +411,12 @@ public class CompileJsonXdef extends JsonParser {
 		int len = array.size();
 		if (len > 0) {
 			Object jo = array.get(0);
-			Object o = jo == null ? null
-				: jo instanceof JValue ? ((JValue) jo).getValue() : jo;
+			Object o = jo == null
+				? null : jo instanceof JValue ? ((JValue) jo).getValue() : jo;
 			if (o != null && o instanceof JValue) {
 				setSourceBuffer(((JValue) o).getSBuffer());
 				isSpacesOrComments();
-				if (isToken(JsonParser.ONEOF_KEY)) {
+				if (isToken(JsonNames.ONEOF_NAME)) {
 					e = genXDElement(parent,
 						"choice", ((JValue) jo).getPosition());
 					skipSemiconsBlanksAndComments();
@@ -537,30 +562,124 @@ public class CompileJsonXdef extends JsonParser {
 		jx._xdNamespace = p._nsURI;
 		jx._xdPrefix = p.getPrefix();
 		jx._xdIndex = p._nsPrefixes.get(jx._xdPrefix);
+		jx._basePos = p._xpathPos + "/text()";
 		p._name = name;
 		p._nsURI = null; // set no namespace
 		p._nsindex = -1;
-		jx.setXdefMode();
-		jx.setReportWriter(reporter);
-		if (p._value == null) {
-			jx.setSourceBuffer(p._name);
-			jx.error(JSON.JSON011); //Not JSON object&{0}
-			return;
-		}
-		jx.setSourceBuffer(p._value);
-		jx._basePos = p._xpathPos + "/text()";
-		Object json = jx.parse(); //////
-		if (json != null && (json instanceof JMap
-			|| json instanceof JArray
-			|| json instanceof JValue
-			|| (json instanceof JValue
-				&& ((JValue) json).getValue() instanceof String))) {
-			jx.genJsonModel(json, p);
-		} else {
-			jx.error(JSON.JSON011); //Not JSON object&{0}
-		}
+		XDBuilder jp = new XDBuilder(jx);
+		XONReader pp = new XONReader(p._value, jp);
+		pp.setXdefMode();
+		pp.parse();
+		JObject json = jp.getResult();
+		jx.genJsonModel(json, p);
+		pp = null;
+		jp = null;
 		p._value = null;
 //System.out.println(org.xdef.xml.KXmlUtils.nodeToString(p.toXML(),true));
 	}
 
+	/** This class provides parsing of JSON source and creates the JSON
+	 * structure composed from JObjets used for compilation of JSON model
+	 * in X-definition.
+	 */
+	private static class XDBuilder implements JParser {
+		private final CompileJsonXdef _jx;
+		private final Stack<Integer> _kinds = new Stack<Integer>();
+		private final Stack<JArray> _arrays = new Stack<JArray>();
+		private final Stack<JMap> _maps = new Stack<JMap>();
+		private int _kind; // 0..value, 1..array, 2..map
+		private final Stack<SBuffer> _names = new Stack<SBuffer>();
+		private JObject _value;
+
+		XDBuilder(CompileJsonXdef jx) {
+			_jx = jx;
+			_kinds.push(_kind = 0);
+		}
+
+		final JObject getResult() {return _value;}
+
+		@Override
+		public void simpleValue(JValue value) {
+			if (_kind == 1) {
+				_arrays.peek().add(value);
+			} else if (_kind == 2) {
+				_maps.peek().put(_names.pop().getString(), value);
+			} else {
+				_value = value;
+			}
+		}
+
+		@Override
+		public void namedValue(SBuffer name) {_names.push(name);}
+
+		@Override
+		public void arrayStart(SPosition pos) {
+			_kinds.push(_kind = 1);
+			_arrays.push(new JArray(pos));
+		}
+
+		@Override
+		public void arrayEnd(SPosition pos) {
+			_kinds.pop();
+			_kind = _kinds.peek();
+			_value = _arrays.peek();
+			_arrays.pop();
+			if (_kind == 2) {
+				_maps.peek().put(_names.pop().getString(), _value);
+			} else if (_kind == 1) {
+				_arrays.peek().add(_value);
+			}
+		}
+
+		@Override
+		public void mapStart(SPosition pos) {
+			_kinds.push(_kind = 2);
+			_maps.push(new JMap(pos));
+		}
+
+		@Override
+		public void mapEnd(SPosition pos) {
+			_kinds.pop();
+			_kind = _kinds.peek();
+			_value = (JObject)_maps.peek();
+			_maps.pop();
+			if (_kind == 2) {
+				_maps.peek().put(_names.pop().getString(), _value);
+			} else if (_kind == 1) {
+				_arrays.peek().add(_value);
+			}
+		}
+
+		@Override
+		public void xdScript(SBuffer name, SBuffer value) {
+			String s = JsonNames.ONEOF_NAME.equals(name.getString())
+				? JsonNames.ONEOF_NAME : "";
+			s += value == null ? "" : value.getString();
+			SPosition spos = value == null ? name : value;
+			JValue jv = new JValue(name, new JValue(spos, s));
+			if (_kind == 1) { // array
+				_arrays.peek().add(jv);
+			} else if (_kind == 2) { // map
+				_maps.peek().put(JsonNames.SCRIPT_NAME, jv);
+			}
+		}
+
+	////////////////////////////////////////////////////////////////////////////
+	// error messages.
+	////////////////////////////////////////////////////////////////////////////
+		@Override
+		public void setSysId(String sysId) {/*never invoded here*/}
+		@Override
+		public void warning(SPosition pos, long ID, Object... params) {
+			_jx.warning(ID, params);
+		}
+		@Override
+		public void error(SPosition pos, long ID, Object... params) {
+			_jx.error(ID, params);
+		}
+		@Override
+		public void fatal(SPosition pos, long ID, Object... params) {
+			_jx.fatal(ID, params);
+		}
+	}
 }
