@@ -15,10 +15,10 @@ import org.w3c.dom.Element;
 import org.xdef.XDConstants;
 import org.xdef.json.JParser;
 import org.xdef.json.JsonNames;
-import org.xdef.json.JsonParser;
 import org.xdef.json.JsonTools;
 import org.xdef.json.XONParsers;
 import org.xdef.json.XONReader;
+import org.xdef.msg.SYS;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.SBuffer;
 import org.xdef.sys.SPosition;
@@ -30,7 +30,7 @@ import org.xdef.sys.SRuntimeException;
  * CHKDocument and CHKElement.
  * @author Vaclav Trojan
  */
-class XonSourceParser implements JParser, XParser {
+public class XonSourceParser implements JParser, XParser {
 	/** Allocation unit for node list. */
 	private static final int NODELIST_ALLOC_UNIT = 8;
 	/** instance of XONReader. */
@@ -47,7 +47,7 @@ class XonSourceParser implements JParser, XParser {
 	/** Name of named item. */
 	private SBuffer _name;
 	/** simpleValue of item. */
-	private JsonParser.JValue _value;
+	private XONReader.JValue _value;
 
 	XonSourceParser(final File f) {
 		try {
@@ -56,20 +56,21 @@ class XonSourceParser implements JParser, XParser {
 			p.setXonMode();
 			p.setSysId(f.getCanonicalPath());
 			_p = p;
-		} catch (Exception ex) {
-			throw new RuntimeException(ex);
-		}
+			return;
+		} catch (Exception ex) {}
+		throw new SRuntimeException(SYS.SYS028, f); //Can't read file: &{0}
 	}
 
 	XonSourceParser(final URL url) {
+		String id = url.toExternalForm();
 		try {
 			Reader in = new InputStreamReader(url.openStream(), "UTF-8");
 			XONReader p = new XONReader(in, this);
 			p.setXonMode();
-			p.setSysId(url.toExternalForm());
+			p.setSysId(id);
 			_p = p;
 		} catch (Exception ex) {
-			throw new RuntimeException(ex);
+			throw new SRuntimeException(SYS.SYS028, id); //Can't read file: &{0}
 		}
 	}
 
@@ -92,7 +93,8 @@ class XonSourceParser implements JParser, XParser {
 			}
 			_p = p;
 		} catch (Exception ex) {
-			throw new RuntimeException(ex);
+			throw new SRuntimeException(SYS.SYS028,  //Can't read file: &{0}
+				"java.io.Reader" + (sysId != null ? " (" + sysId + ")" : ""));
 		}
 	}
 
@@ -174,7 +176,7 @@ class XonSourceParser implements JParser, XParser {
 ////////////////////////////////////////////////////////////////////////////////
 
 	@Override
-	public void simpleValue(JsonParser.JValue value) {
+	public void simpleValue(XONReader.JValue value) {
 		_value = value;
 		elementStart(new SBuffer(JsonNames.J_ITEM, value.getPosition()));
 		elementEnd();
@@ -199,9 +201,7 @@ class XonSourceParser implements JParser, XParser {
 	}
 
 	@Override
-	public void mapEnd(SPosition pos) {
-		elementEnd();
-	}
+	public void mapEnd(SPosition pos) {elementEnd();}
 
 	@Override
 	public void xdScript(SBuffer name, SBuffer value) {}
@@ -289,7 +289,7 @@ class XonObjectParser implements XONParsers {
 			}
 			_jp.arrayEnd(NULPOS);
 		} else {
-			_jp.simpleValue(new JsonParser.JValue(NULPOS, o));
+			_jp.simpleValue(new XONReader.JValue(NULPOS, o));
 		}
 	}
 

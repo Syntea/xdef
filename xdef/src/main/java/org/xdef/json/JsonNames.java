@@ -14,4 +14,14 @@ public interface JsonNames {
 	public final static String J_ITEM = "item";
 	/** XML attribute name of JSON value (in a J_ITEM element). */
 	public final static String J_VALUEATTR = "value";
+
+////////////////////////////////////////////////////////////////////////////////
+// names used in X-definition
+////////////////////////////////////////////////////////////////////////////////
+	/** This keyword used for the $script specification in X-definition. */
+	public static final String SCRIPT_NAME = "$script";
+	/** This keyword used for the $oneOf specification in X-definition. */
+	public static final String ONEOF_NAME = "$oneOf";
+	/** This keyword used for $any specification in X-definition. */
+	public static final String ANY_NAME = "$any";
 }

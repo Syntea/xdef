@@ -899,7 +899,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			result = new XonSourceParser((Reader) x, sysId);
 		} else if (x instanceof InputStream) {
 			result = new XonSourceParser((InputStream) x, sysId);
-		} else {
+		} else {// XON object: Map, List, simplevalue...
 			result = new XonSourceParser(x);
 		}
 		_reporter = new SReporter(reporter);

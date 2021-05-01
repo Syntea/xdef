@@ -46,6 +46,15 @@ public class XONReader extends StringParser implements XONParsers {
 	 * @param jp parser of XON source.
 	 * @param source String with source data.
 	 */
+	public XONReader(final SBuffer source, JParser jp) {
+		super(source);
+		_jp = jp;
+	}
+
+	/** Create instance of parser.
+	 * @param jp parser of XON source.
+	 * @param source String with source data.
+	 */
 	public XONReader(final String source, JParser jp) {
 		super(source);
 		_jp = jp;
@@ -131,34 +140,37 @@ public class XONReader extends StringParser implements XONParsers {
 		int i;
 		while(!eos()) {
 			if (_jdef && !wasScript
-				&& (i = isOneOfTokens(JsonParser.SCRIPT_NAME,
-					JsonParser.ONEOF_NAME)) >= 0) {
-				SBuffer name = new SBuffer(getParsedString(), spos);
+				&& (i = isOneOfTokens(JsonNames.SCRIPT_NAME,
+					JsonNames.ONEOF_NAME)) >= 0) {
+				SBuffer name = new SBuffer(
+					i==0 ? JsonNames.SCRIPT_NAME : JsonNames.ONEOF_NAME,
+					spos);
 				wasScript = true;
 				isSpacesOrComments();
 				SBuffer value = null;
-				if (i == 1) {
+				if (i == 1) { // oneOf
 					if (isChar(':')) {
 						isSpacesOrComments();
 						spos = getPosition();
-						Object o = readSimpleValue();
-						if (o instanceof String) {
-							value = new SBuffer((String) o, spos);
+						JValue jv = readSimpleValue();
+						if (jv.getValue() instanceof String) {
+							value = jv.getSBuffer();
 						} else {
 							//Value of $script must be string with X-script
 							_jp.error(this, JSON.JSON018);
 						}
 					}
 					_jp.xdScript(name, value);
-				} else {
+				} else {  // xscript
 					if (!isChar(':') && i != 1) {
 						//"&{0}"&{1}{ or "}{"} expected
 						_jp.error(this, JSON.JSON002, ":");
 					}
+					isSpacesOrComments();
 					spos = getPosition();
 					Object o = readSimpleValue();
-					if (o != null && o instanceof String) {
-						_jp.xdScript(name, new SBuffer((String) o, spos));
+					if (o != null && o instanceof JValue) {
+						_jp.xdScript(name, ((JValue)o).getSBuffer());
 					} else {
 						//Value of $script must be string with X-script
 						_jp.error(this, JSON.JSON018);
@@ -250,25 +262,25 @@ public class XONReader extends StringParser implements XONParsers {
 			int i;
 			SPosition spos = getPosition();
 			if (!wasScript &&_jdef
-				&& (i = isOneOfTokens(JsonParser.SCRIPT_NAME,
-					JsonParser.ONEOF_NAME))>=0) {
-				SBuffer name = new SBuffer(getParsedString(), spos);
+				&& (i = isOneOfTokens(JsonNames.SCRIPT_NAME,
+					JsonNames.ONEOF_NAME))>=0) {
+				SBuffer name = new SBuffer(
+					i==0 ? JsonNames.SCRIPT_NAME : JsonNames.ONEOF_NAME,
+					spos);
 				wasScript = true;
 				SBuffer value = null;
 				if (isChar(':')) {
 					isSpacesOrComments();
-					JsonParser.JValue jv = readSimpleValue();
+					JValue jv = readSimpleValue();
 					if (jv.getValue() instanceof String) {
-						if (i == 1) {
-							value = new SBuffer((String) jv.getValue(),
+						value = new SBuffer((String) jv.getValue(),
 								jv.getPosition());
-						}
 					} else {
 						//Value of $script must be string with X-script
 						_jp.error(this, JSON.JSON018);
 					}
 				} else {
-					if (i == 0) {
+					if (i == 0) { //JsonNames.SCRIPT_NAME
 						//"&{0}"&{1}{ or "}{"} expected
 					   _jp.error(this, JSON.JSON002, ":");
 					}
@@ -319,8 +331,8 @@ public class XONReader extends StringParser implements XONParsers {
 	 * @return parsed simpleValue. If the switch _genJObjects is true, then
 	 * the parsed simpleValue contains source position.
 	 */
-	private JsonParser.JValue returnValue(SPosition spos, final Object x) {
-		return new JsonParser.JValue(spos, x);
+	private JValue returnValue(SPosition spos, final Object x) {
+		return new JValue(spos, x);
 	}
 
 	/** Returns error and parsed simpleValue.
@@ -331,7 +343,7 @@ public class XONReader extends StringParser implements XONParsers {
 	 * @return parsed simpleValue. If the switch _genJObjects is true, then
 	 * the parsed simpleValue contains source position.
 	 */
-	private JsonParser.JValue returnError(SPosition spos,
+	private JValue returnError(SPosition spos,
 		final Object x,
 		final long code,
 		final String skipChars,
@@ -380,7 +392,7 @@ public class XONReader extends StringParser implements XONParsers {
 	 * (or XON object).
 	 * @throws SRuntimeException is an error occurs.
 	 */
-	private JsonParser.JValue readSimpleValue() throws SRuntimeException {
+	private JValue readSimpleValue() throws SRuntimeException {
 		SPosition spos = getPosition();
 		int i;
 		if (isChar('"')) { // string
@@ -614,16 +626,16 @@ public class XONReader extends StringParser implements XONParsers {
 			readMap();
 		} else if (isChar('[')) {
 			readArray();
-		} else if (_jdef && isToken(JsonParser.ANY_NAME)) {
+		} else if (_jdef && isToken(JsonNames.ANY_NAME)) {
 			SPosition spos = getPosition(); // xdef $ANY
-			spos.setIndex(getIndex() - JsonParser.ANY_NAME.length());
-			SBuffer name = new SBuffer(JsonParser.ANY_NAME, spos);
-			SBuffer val = new SBuffer(JsonParser.ANY_NAME, spos);
+			spos.setIndex(getIndex() - JsonNames.ANY_NAME.length());
+			SBuffer name = new SBuffer(JsonNames.ANY_NAME, spos);
+			SBuffer val = new SBuffer(JsonNames.ANY_NAME, spos);
 			isSpacesOrComments();
 			if (isChar(':')) {
 				isSpacesOrComments();
-				JsonParser.JValue jv = readSimpleValue();
-				if (!(((JsonParser.JValue) jv).getValue() instanceof String)) {
+				JValue jv = readSimpleValue();
+				if (!(((JValue) jv).getValue() instanceof String)) {
 					//After ":" in the command $any must follow simpleValue
 					_jp.error(jv.getPosition(), JSON.JSON021);
 				} else {
@@ -632,7 +644,7 @@ public class XONReader extends StringParser implements XONParsers {
 			}
 			_jp.xdScript(name, val);
 		} else {
-			JsonParser.JValue jv = readSimpleValue();
+			JValue jv = readSimpleValue();
 			_jp.simpleValue(jv);
 		}
 	}
@@ -658,7 +670,7 @@ public class XONReader extends StringParser implements XONParsers {
 		ObjParser jp = new ObjParser();
 		XONReader xr = new XONReader(in, jp);
 		xr._acceptComments = true;
-		xr._xonMode = false;
+		xr._xonMode = true;
 		if (sysId != null) {
 			xr.setSysId(sysId);
 		}
@@ -677,107 +689,163 @@ public class XONReader extends StringParser implements XONParsers {
 		xr.parse();
 		return jp.getResult();
 	}
-}
 
-/** Implementation of JParser for creating XON/JSON object from source data. */
-class ObjParser implements JParser {
+////////////////////////////////////////////////////////////////////////////////
+	/** Implementation of JParser for creating XON/JSON object from source. */
+	private static class ObjParser implements JParser {
 
-	private final Stack<Integer> _kinds = new Stack<Integer>();
-	private final Stack<List<Object>> _arrays = new Stack<List<Object>>();
-	private final Stack<Map<String, Object>> _maps =
-		new Stack<Map<String, Object>>();
-	private int _kind; // 0..value, 1..array, 2..map
-	private final Stack<String> _names = new Stack<String>();
+		private final Stack<Integer> _kinds = new Stack<Integer>();
+		private final Stack<List<Object>> _arrays = new Stack<List<Object>>();
+		private final Stack<Map<String, Object>> _maps =
+			new Stack<Map<String, Object>>();
+		private int _kind; // 0..value, 1..array, 2..map
+		private final Stack<String> _names = new Stack<String>();
+		private Object _value;
 
-	private Object _value;
+		ObjParser() { _kinds.push(_kind = 0); }
 
-	ObjParser() { _kinds.push(_kind = 0); }
+		/** Get result of parser. */
+		public final Object getResult() {return _value;}
 
-	/** Get result of parser. */
-	public Object getResult() {return _value;}
-
-	@Override
-	public void simpleValue(JsonParser.JValue value) {
-		if (_kind == 1) {
-			_arrays.peek().add(value.getValue());
-		} else if (_kind == 2) {
-			_maps.peek().put(_names.pop(), value.getValue());
-		} else {
-			_value = value.getValue();
+		@Override
+		public void simpleValue(JValue value) {
+			if (_kind == 1) {
+				_arrays.peek().add(value.getValue());
+			} else if (_kind == 2) {
+				_maps.peek().put(_names.pop(), value.getValue());
+			} else {
+				_value = value.getValue();
+			}
 		}
-	}
 
-	@Override
-	public void namedValue(SBuffer name) {
-		_names.push(name.getString());
-	}
-
-	@Override
-	public void arrayStart(SPosition pos) {
-		_kinds.push(_kind = 1);
-		_arrays.push(new ArrayList<Object>());
-	}
-
-	@Override
-	public void arrayEnd(SPosition pos) {
-		_kinds.pop();
-		_kind = _kinds.peek();
-		_value = _arrays.peek();
-		_arrays.pop();
-		if (_kind == 2) {
-			_maps.peek().put(_names.pop(), _value);
-		} else if (_kind == 1) {
-			_arrays.peek().add(_value);
+		@Override
+		public void namedValue(SBuffer name) {
+			_names.push(name.getString());
 		}
-	}
 
-	@Override
-	public void mapStart(SPosition pos) {
-		_kinds.push(_kind = 2);
-		_maps.push(new LinkedHashMap<String, Object>());
-	}
-
-	@Override
-	public void mapEnd(SPosition pos) {
-		_kinds.pop();
-		_kind = _kinds.peek();
-		_value = _maps.peek();
-		_maps.pop();
-		if (_kind == 2) {
-			_maps.peek().put(_names.pop(), _value);
-		} else if (_kind == 1) {
-			_arrays.peek().add(_value);
+		@Override
+		public void arrayStart(SPosition pos) {
+			_kinds.push(_kind = 1);
+			_arrays.push(new ArrayList<Object>());
 		}
+
+		@Override
+		public void arrayEnd(SPosition pos) {
+			_kinds.pop();
+			_kind = _kinds.peek();
+			_value = _arrays.peek();
+			_arrays.pop();
+			if (_kind == 2) {
+				_maps.peek().put(_names.pop(), _value);
+			} else if (_kind == 1) {
+				_arrays.peek().add(_value);
+			}
+		}
+
+		@Override
+		public void mapStart(SPosition pos) {
+			_kinds.push(_kind = 2);
+			_maps.push(new LinkedHashMap<String, Object>());
+		}
+
+		@Override
+		public void mapEnd(SPosition pos) {
+			_kinds.pop();
+			_kind = _kinds.peek();
+			_value = _maps.peek();
+			_maps.pop();
+			if (_kind == 2) {
+				_maps.peek().put(_names.pop(), _value);
+			} else if (_kind == 1) {
+				_arrays.peek().add(_value);
+			}
+		}
+
+		/** Get modification string with source position. */
+		private String genPosMod(final SPosition pos) {
+			return "&{line}" + pos.getLineNumber()
+				+ "&{column}" + pos.getColumnNumber()
+				+ (pos.getSysId() != null ? "&{sysId}" + pos.getSysId() : "");
+		}
+
+	////////////////////////////////////////////////////////////////////////////
+	// errors and warnings
+	////////////////////////////////////////////////////////////////////////////
+		@Override
+		public void warning(SPosition pos, long ID, Object... params) {
+			System.err.println(Report.warning(ID, params, genPosMod(pos)));
+		}
+		@Override
+		public void error(SPosition pos, long ID, Object... params) {
+			throw new SRuntimeException(ID, params, genPosMod(pos));
+		}
+		@Override
+		public void fatal(SPosition pos, long ID, Object... params) {
+			throw new SRuntimeException(ID, params, genPosMod(pos));
+		}
+
+	////////////////////////////////////////////////////////////////////////////
+	// Not used methods for JSON/XON parsing
+	////////////////////////////////////////////////////////////////////////////
+		@Override
+		public void setSysId(String sysId) {}
+		@Override
+		public void xdScript(SBuffer name, SBuffer value) {}
+	}
+////////////////////////////////////////////////////////////////////////////////
+// Constants and classes  used when JSON is parsed from X-definition compiler.
+////////////////////////////////////////////////////////////////////////////////
+
+	public interface JObject {
+		public SPosition getPosition();
+		public Object getValue();
+		public SBuffer getSBuffer();
 	}
 
-	/** Get modification string with source position. */
-	private String genPosMod(final SPosition pos) {
-		return "&{line}" + pos.getLineNumber()
-			+ "&{column}" + pos.getColumnNumber()
-			+ (pos.getSysId() != null ? "&{sysId}" + pos.getSysId() : "");
+	public static class JMap extends LinkedHashMap<Object, Object>
+		 implements JObject {
+		private final SPosition _position; // SPosition of parsed object
+		public JMap(final SPosition position) {super(); _position = position;}
+		@Override
+		public SPosition getPosition() {return _position;}
+		@Override
+		public Object getValue() {return null;}
+		@Override
+		public SBuffer getSBuffer() {return null;}
 	}
 
-////////////////////////////////////////////////////////////////////////////////
-// errors and warnings
-////////////////////////////////////////////////////////////////////////////////
-	@Override
-	public void warning(SPosition pos, long ID, Object... params) {
-		System.err.println(Report.warning(ID, params, genPosMod(pos)));
-	}
-	@Override
-	public void error(SPosition pos, long ID, Object... params) {
-		throw new SRuntimeException(ID, params, genPosMod(pos));
-	}
-	@Override
-	public void fatal(SPosition pos, long ID, Object... params) {
-		throw new SRuntimeException(ID, params, genPosMod(pos));
+	public static class JArray extends ArrayList<Object> implements JObject {
+		private final SPosition _position; // SPosition of parsed object
+		public JArray(final SPosition position) {super(); _position = position;}
+		@Override
+		public SPosition getPosition() {return _position;}
+		@Override
+		public Object getValue() {return null;}
+		@Override
+		public SBuffer getSBuffer() {return null;}
 	}
 
-////////////////////////////////////////////////////////////////////////////////
-// Not used methods for JSON/XON parsing
-////////////////////////////////////////////////////////////////////////////////
-	@Override
-	public void setSysId(String sysId) {}
-	@Override
-	public void xdScript(SBuffer name, SBuffer value) {}
+	public static class JValue implements JObject {
+		private final SPosition _position; // SPosition of parsed object
+		private final Object _o; // parsed object
+		public JValue(final SPosition position, final Object val) {
+			_position = position;
+			_o = val;
+		}
+		@Override
+		public SPosition getPosition() {return _position;}
+		@Override
+		public Object getValue() {return _o;}
+		@Override
+		public SBuffer getSBuffer(){return new SBuffer(toString(),_position);}
+		@Override
+		public String toString() {return _o == null ? "null" : _o.toString();}
+	}
+	public static class JAny extends JValue {
+		public JAny(final SPosition position, final SBuffer val) {
+			super(position, val);
+		}
+		@Override
+		public SBuffer getSBuffer() {return (SBuffer) getValue();}
+	}
 }

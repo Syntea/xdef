@@ -7,7 +7,7 @@ import org.xdef.sys.SPosition;
  * @author Vaclav Trojan
  */
 public interface JParser {
-	public void simpleValue(JsonParser.JValue value);
+	public void simpleValue(XONReader.JValue value);
 	public void namedValue(SBuffer name);
 	public void arrayStart(SPosition pos);
 	public void arrayEnd(SPosition pos);
