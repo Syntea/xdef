@@ -563,12 +563,12 @@ public class CompileJsonXdef extends StringParser {
 		jx._xdPrefix = p.getPrefix();
 		jx._xdIndex = p._nsPrefixes.get(jx._xdPrefix);
 		jx._basePos = p._xpathPos + "/text()";
+		jx.setReportWriter(reporter);
 		p._name = name;
 		p._nsURI = null; // set no namespace
 		p._nsindex = -1;
 		XDBuilder jp = new XDBuilder(jx);
 		XONReader pp = new XONReader(p._value, jp);
-		pp.setReportWriter(reporter);
 		pp.setXdefMode();
 		pp.parse();
 		jx.genJsonModel(jp.getResult(), p);
