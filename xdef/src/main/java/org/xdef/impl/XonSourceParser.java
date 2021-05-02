@@ -174,60 +174,51 @@ public class XonSourceParser implements JParser, XParser {
 ////////////////////////////////////////////////////////////////////////////////
 // Interface JParser
 ////////////////////////////////////////////////////////////////////////////////
-
 	@Override
-	public void simpleValue(XONReader.JValue value) {
+	public void simpleValue(final XONReader.JValue value) {
 		_value = value;
 		elementStart(new SBuffer(JsonNames.J_ITEM, value.getPosition()));
 		elementEnd();
 	}
-
 	@Override
-	public void namedValue(SBuffer name) {_name = name;}
-
+	public void namedValue(final SBuffer name) {_name = name;}
 	@Override
-	public void arrayStart(SPosition pos) {
+	public void arrayStart(final SPosition pos) {
 		elementStart(new SBuffer(JsonNames.J_ARRAY, pos));
 	}
-
 	@Override
-	public void arrayEnd(SPosition pos) {
+	public void arrayEnd(final SPosition pos) {
 		elementEnd();
 	}
-
 	@Override
-	public void mapStart(SPosition pos) {
+	public void mapStart(final SPosition pos) {
 		elementStart(new SBuffer(JsonNames.J_MAP, pos));
 	}
-
 	@Override
-	public void mapEnd(SPosition pos) {elementEnd();}
-
+	public void mapEnd(final SPosition pos) {elementEnd();}
 	@Override
-	public void xdScript(SBuffer name, SBuffer value) {}
-
+	public void xdScript(final SBuffer name, SBuffer value) {}
 	@Override
-	public void warning(SPosition pos, long ID, Object... params) {
+	public void warning(final SPosition pos,
+		final long ID,
+		final Object... pars) {
 		_chkDoc.getReporter().setPosition(pos);
-		_chkDoc.warning(ID, params);
+		_chkDoc.warning(ID, pars);
 	}
-
 	@Override
-	public void error(SPosition pos, long ID, Object... params) {
+	public void error(final SPosition pos, final long ID, final Object... pars){
 		_chkDoc.getReporter().setPosition(pos);
-		_chkDoc.error(ID, params);
+		_chkDoc.error(ID, pars);
 	}
-
 	@Override
-	public void fatal(SPosition pos, long ID, Object... params) {
+	public void fatal(final SPosition pos, final long ID, final Object... pars) {
 		_chkDoc.getReporter().setPosition(pos);
-		_chkDoc.fatal(ID, params);
+		_chkDoc.fatal(ID, pars);
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Interface XParser
 ////////////////////////////////////////////////////////////////////////////////
-
 	@Override
 	/** Parse source.
 	 * @param chkDoc The ChkDocument object.
@@ -243,7 +234,6 @@ public class XonSourceParser implements JParser, XParser {
 		_doc = null;
 		_chkEl = null;
 	}
-
 	@Override
 	/** Get connected reporter.
 	 * @return connected SReporter.
@@ -258,49 +248,51 @@ public class XonSourceParser implements JParser, XParser {
 	}
 	@Override
 	public void setSysId(final String sysId) {}
-}
 
-/** XML W3C parser of JSON/XON object from JSON/XON object.
- * @author Vaclav Trojan
- */
-class XonObjectParser implements XONParsers {
-	/** Empty position. */
-	private static final SPosition NULPOS = new SPosition();
-	private final Object _obj;
-	private final JParser _jp;
+	////////////////////////////////////////////////////////////////////////////
+	/** XML W3C parser of JSON/XON object from JSON/XON object.
+	 * @author Vaclav Trojan
+	 */
+	private static class XonObjectParser implements XONParsers {
+		/** Empty position. */
+		private static final SPosition NULPOS = new SPosition();
+		private final Object _obj;
+		private final JParser _jp;
 
-	XonObjectParser(final Object obj, final JParser jp) {
-		_obj = obj;
-		_jp = jp;
-	}
-	private void parse(Object o) {
-		if (o instanceof Map) {
-			_jp.mapStart(NULPOS);
-			for (Object x: ((Map) o).entrySet()) {
-				Map.Entry en = (Map.Entry) x;
-				_jp.namedValue(new SBuffer((String)en.getKey()));
-				parse(en.getValue());
-			}
-			_jp.mapEnd(NULPOS);
-		} else if (o instanceof List) {
-			_jp.arrayStart(NULPOS);
-			for (Object x: ((List) o)) {
-				parse(x);
-			}
-			_jp.arrayEnd(NULPOS);
-		} else {
-			_jp.simpleValue(new XONReader.JValue(NULPOS, o));
+		XonObjectParser(final Object obj, final JParser jp) {
+			_obj = obj;
+			_jp = jp;
 		}
+		/** Parsing of an JSON/XON object.
+		 * @param o the object to parse.
+		 */
+		private void parse(final Object o) {
+			if (o instanceof Map) {
+				_jp.mapStart(NULPOS);
+				for (Object x: ((Map) o).entrySet()) {
+					Map.Entry en = (Map.Entry) x;
+					_jp.namedValue(new SBuffer((String)en.getKey()));
+					parse(en.getValue());
+				}
+				_jp.mapEnd(NULPOS);
+			} else if (o instanceof List) {
+				_jp.arrayStart(NULPOS);
+				for (Object x: ((List) o)) {
+					parse(x);
+				}
+				_jp.arrayEnd(NULPOS);
+			} else {
+				_jp.simpleValue(new XONReader.JValue(NULPOS, o));
+			}
+		}
+		////////////////////////////////////////////////////////////////////////
+		// implementation of the interface XONParsers
+		////////////////////////////////////////////////////////////////////////
+		@Override
+		public SPosition getPosition() {return NULPOS;} // no position
+		@Override
+		public void parse() {parse(_obj);}
+		@Override
+		public void closeReader() {}
 	}
-
-////////////////////////////////////////////////////////////////////////////////
-// interface XONParsers
-////////////////////////////////////////////////////////////////////////////////
-
-	@Override
-	public SPosition getPosition() {return NULPOS;}
-	@Override
-	public void parse() {parse(_obj);}
-	@Override
-	public void closeReader() {}
 }

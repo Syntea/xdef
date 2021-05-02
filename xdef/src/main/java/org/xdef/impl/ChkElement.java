@@ -468,15 +468,20 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			}
 			_actDefIndex = -1;
 		} else {
-			/*xx*/
-			putTemporaryReport(_counters[index] == 0 ?
+			String name = xelem.getName();
+			if (xelem._json > 0 && xelem.getName().endsWith("item")) { // XON
+				String[] x = getPosInfo(xelem.getXDPosition(), null);
+				int ndx = (x[0].indexOf("['"));
+				name = x[0].substring(ndx + 2, x[0].length() - 2);
+			}
+			putTemporaryReport(_counters[index] == 0
 				//Required element '&{0}' is missing
-				Report.error(XDEF.XDEF539, xelem.getName()
-					+ getPosMod(xelem.getXDPosition(), null)) :
+				? Report.error(XDEF.XDEF539,
+					name + getPosMod(xelem.getXDPosition(), null))
 				//Minimum occurrence not reached for &amp;{0}
-				Report.error(XDEF.XDEF555, xelem.getName() +
-					getPosMod(xelem.getXDPosition(),
-						_xPos + "/" + xelem.getName())));
+				: Report.error(XDEF.XDEF555,
+					name + getPosMod(xelem.getXDPosition(),
+						_xPos + "/" + name)));
 		}
 		copyTemporaryReports();
 	}
