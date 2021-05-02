@@ -198,23 +198,6 @@ public class XonSourceParser implements JParser, XParser {
 	public void mapEnd(final SPosition pos) {elementEnd();}
 	@Override
 	public void xdScript(final SBuffer name, SBuffer value) {}
-	@Override
-	public void warning(final SPosition pos,
-		final long ID,
-		final Object... pars) {
-		_chkDoc.getReporter().setPosition(pos);
-		_chkDoc.warning(ID, pars);
-	}
-	@Override
-	public void error(final SPosition pos, final long ID, final Object... pars){
-		_chkDoc.getReporter().setPosition(pos);
-		_chkDoc.error(ID, pars);
-	}
-	@Override
-	public void fatal(final SPosition pos, final long ID, final Object... pars) {
-		_chkDoc.getReporter().setPosition(pos);
-		_chkDoc.fatal(ID, pars);
-	}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Interface XParser
@@ -246,8 +229,6 @@ public class XonSourceParser implements JParser, XParser {
 			_p.closeReader();
 		} catch (Exception ex) {} // ignore it
 	}
-	@Override
-	public void setSysId(final String sysId) {}
 
 	////////////////////////////////////////////////////////////////////////////
 	/** XML W3C parser of JSON/XON object from JSON/XON object.

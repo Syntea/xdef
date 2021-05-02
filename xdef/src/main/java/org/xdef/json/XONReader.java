@@ -14,7 +14,6 @@ import org.xdef.msg.XDEF;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.GPSPosition;
 import org.xdef.sys.Price;
-import org.xdef.sys.Report;
 import org.xdef.sys.SBuffer;
 import org.xdef.sys.SException;
 import org.xdef.sys.SParser;
@@ -157,14 +156,14 @@ public class XONReader extends StringParser implements XONParsers {
 							value = jv.getSBuffer();
 						} else {
 							//Value of $script must be string with X-script
-							_jp.error(this, JSON.JSON018);
+							error(JSON.JSON018);
 						}
 					}
 					_jp.xdScript(name, value);
 				} else {  // xscript
 					if (!isChar(':') && i != 1) {
 						//"&{0}"&{1}{ or "}{"} expected
-						_jp.error(this, JSON.JSON002, ":");
+						error(JSON.JSON002, ":");
 					}
 					isSpacesOrComments();
 					spos = getPosition();
@@ -173,7 +172,7 @@ public class XONReader extends StringParser implements XONParsers {
 						_jp.xdScript(name, ((JValue)o).getSBuffer());
 					} else {
 						//Value of $script must be string with X-script
-						_jp.error(this, JSON.JSON018);
+						error(JSON.JSON018);
 					}
 				}
 			} else {
@@ -184,25 +183,21 @@ public class XONReader extends StringParser implements XONParsers {
 				} else if (_xonMode && isXMLName(StringParser.XMLVER1_0)) {
 					String s = getParsedString();
 					int ndx = s.indexOf(':');
-					if (ndx == 0) {
-						_jp.fatal(this, JSON.JSON004); //Name of item expected
+					if (ndx != 0) {
+						fatal(JSON.JSON004); //Name of item expected
 						_jp.mapEnd(this);
 						return;
 					}
-					if (ndx > 0) {
-						setIndex(getIndex() - (s.length() - ndx));
-						s = s.substring(0, ndx);
-					}
 					name = new SBuffer(s, spos);
 				} else {
-					_jp.fatal(this, JSON.JSON004); //Name of item expected
+					fatal(JSON.JSON004); //Name of item expected
 					_jp.mapEnd(this);
 					return;
 				}
 				isSpacesOrComments();
 				if (!isChar(':')) {
 					//"&{0}"&{1}{ or "}{"} expected
-					_jp.error(this, JSON.JSON002, ":");
+					error(JSON.JSON002, ":");
 				}
 				_jp.namedValue(name);
 				isSpacesOrComments();
@@ -221,7 +216,7 @@ public class XONReader extends StringParser implements XONParsers {
 					if (!_xonMode) {
 						SPosition spos1 = getPosition();
 						setPosition(spos);
-						_jp.error(this, JSON.JSON020); //redundant comma
+						error(JSON.JSON020); //redundant comma
 						setPosition(spos1);
 					}
 					_jp.mapEnd(this);
@@ -232,14 +227,14 @@ public class XONReader extends StringParser implements XONParsers {
 					break;
 				}
 				//"&{0}"&{1}{ or "}{"} expected
-				_jp.error(this, JSON.JSON002, ",", "}");
+				error(JSON.JSON002, ",", "}");
 				if (getCurrentChar() != '"') {
 					break;
 				}
 			}
 		}
 		//"&{0}"&{1}{ or "}{"} expected&{#SYS000}
-		_jp.fatal(this, JSON.JSON002, "}");
+		fatal(JSON.JSON002, "}");
 		if (findOneOfChars("[]{}") == NOCHAR) {// skip to next item
 			setEos();
 		}
@@ -277,12 +272,12 @@ public class XONReader extends StringParser implements XONParsers {
 								jv.getPosition());
 					} else {
 						//Value of $script must be string with X-script
-						_jp.error(this, JSON.JSON018);
+						error(JSON.JSON018);
 					}
 				} else {
 					if (i == 0) { //JsonNames.SCRIPT_NAME
 						//"&{0}"&{1}{ or "}{"} expected
-					   _jp.error(this, JSON.JSON002, ":");
+					   error(JSON.JSON002, ":");
 					}
 				}
 				_jp.xdScript(name, value);
@@ -301,7 +296,7 @@ public class XONReader extends StringParser implements XONParsers {
 					if (!_xonMode) {
 						SPosition spos1 = getPosition();
 						setPosition(spos);
-						_jp.error(this, JSON.JSON020); //redundant comma
+						error(JSON.JSON020); //redundant comma
 						setPosition(spos1);
 					}
 					_jp.arrayEnd(this);
@@ -312,14 +307,14 @@ public class XONReader extends StringParser implements XONParsers {
 					break;
 				}
 				 //"&{0}"&{1}{ or "}{"} expected
-				_jp.error(this, JSON.JSON002,",","]");
+				error(JSON.JSON002,",","]");
 				if (eos()) {
 					break;
 				}
 				wasErrorReported = true;
 			}
 		}
-		_jp.error(this, JSON.JSON002, "]"); //"&{0}"&{1}{ or "}{"} expected
+		error(JSON.JSON002, "]"); //"&{0}"&{1}{ or "}{"} expected
 		if (findOneOfChars("[]{}") == NOCHAR) {// skip to next item
 			setEos();
 		}
@@ -348,7 +343,7 @@ public class XONReader extends StringParser implements XONParsers {
 		final long code,
 		final String skipChars,
 		final Object... params) {
-		_jp.error(this, code, params);
+		error(code, params);
 		if (findOneOfChars(skipChars) == NOCHAR) {// skip to next item
 			setEos();
 		}
@@ -621,7 +616,7 @@ public class XONReader extends StringParser implements XONParsers {
 	 */
 	private void readItem() throws SRuntimeException {
 		if (eos()) {
-			_jp.fatal(this, JSON.JSON007); //unexpected eof
+			fatal(JSON.JSON007); //unexpected eof
 		} else if (isChar('{')) { // Map
 			readMap();
 		} else if (isChar('[')) {
@@ -637,7 +632,7 @@ public class XONReader extends StringParser implements XONParsers {
 				JValue jv = readSimpleValue();
 				if (!(((JValue) jv).getValue() instanceof String)) {
 					//After ":" in the command $any must follow simpleValue
-					_jp.error(jv.getPosition(), JSON.JSON021);
+					error(JSON.JSON021);
 				} else {
 					val = jv.getSBuffer();
 				}
@@ -662,7 +657,7 @@ public class XONReader extends StringParser implements XONParsers {
 		readItem();
 		isSpacesOrComments();
 		if (!eos()) {
-			_jp.error(getPosition(), JSON.JSON008);
+			error(JSON.JSON008);//Text after JSON not allowed
 		}
 	}
 
@@ -768,27 +763,7 @@ public class XONReader extends StringParser implements XONParsers {
 				+ (pos.getSysId() != null ? "&{sysId}" + pos.getSysId() : "");
 		}
 
-	////////////////////////////////////////////////////////////////////////////
-	// errors and warnings
-	////////////////////////////////////////////////////////////////////////////
-		@Override
-		public void warning(SPosition pos, long ID, Object... params) {
-			System.err.println(Report.warning(ID, params, genPosMod(pos)));
-		}
-		@Override
-		public void error(SPosition pos, long ID, Object... params) {
-			throw new SRuntimeException(ID, params, genPosMod(pos));
-		}
-		@Override
-		public void fatal(SPosition pos, long ID, Object... params) {
-			throw new SRuntimeException(ID, params, genPosMod(pos));
-		}
-
-	////////////////////////////////////////////////////////////////////////////
-	// Not used methods for JSON/XON parsing
-	////////////////////////////////////////////////////////////////////////////
-		@Override
-		public void setSysId(String sysId) {}
+		// Not used methods for JSON/XON parsing (used in X-definition compiler)
 		@Override
 		public void xdScript(SBuffer name, SBuffer value) {}
 	}
