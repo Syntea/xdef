@@ -1,7 +1,7 @@
 # Version ${version}, release-date ${release.date}
 
 # Version 40.1.3, release-date 2021-05-02
-* preparing version 40.2
+* This snapshot build prepares features of version 40.2.0
 * fixed bug in display of zone with zero hours and negative minutes in offset.
 * fixed bug in the method 'setParsedString' of objects 'ParseResult'.
 * fixed bug in construction mode when in the section `xd:mixed` is embedded
@@ -33,10 +33,10 @@
     where parameters `latitude`, `longitude`, `altitude` are numbers and `name`
     is a string either containing only letters. otherwise it must be quoted.
     After the comma separator is one space. Examples:
-     `(51.52, -0.09, 0.0, Lodon)`
+     `(51.52, -0.09, 0.0, London)`
     or
-     `(51.52, -0.09)` (altitude and name are not specified).
-  The Java implementation is in the class `org.xdef.sys.GPSPosition`.
+     `(51.52, -0.09)` (altitude and name not specified).
+  The Java implementation is in class `org.xdef.sys.GPSPosition`.
 * added new X-definition type of value `Price`.
    Constructor:
     `new Price(amount, code)`
@@ -48,7 +48,7 @@
 	 'display()` returns string with printable form of currency (i.e. decimal
       number with recommended number of decimal digits, space and
       ISO 4217 currency code).
-  The Java implementation is in the class `org.xdef.sys.Price`.
+  The Java implementation is in class `org.xdef.sys.Price`.
 * added new XML validation method `price`. The required form is:
      `(decimal_number code)`; e.g. `(12.25 USD)`.
 
