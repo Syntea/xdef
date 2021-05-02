@@ -568,10 +568,10 @@ public class CompileJsonXdef extends StringParser {
 		p._nsindex = -1;
 		XDBuilder jp = new XDBuilder(jx);
 		XONReader pp = new XONReader(p._value, jp);
+		pp.setReportWriter(reporter);
 		pp.setXdefMode();
 		pp.parse();
-		JObject json = jp.getResult();
-		jx.genJsonModel(json, p);
+		jx.genJsonModel(jp.getResult(), p);
 		pp = null;
 		jp = null;
 		p._value = null;
@@ -671,15 +671,15 @@ public class CompileJsonXdef extends StringParser {
 		public void setSysId(String sysId) {/*never invoded here*/}
 		@Override
 		public void warning(SPosition pos, long ID, Object... params) {
-			_jx.warning(ID, params);
+			_jx.getReportWriter().warning(ID, params);
 		}
 		@Override
 		public void error(SPosition pos, long ID, Object... params) {
-			_jx.error(ID, params);
+			_jx.getReportWriter().error(ID, params);
 		}
 		@Override
 		public void fatal(SPosition pos, long ID, Object... params) {
-			_jx.fatal(ID, params);
+			_jx.getReportWriter().fatal(ID, params);
 		}
 	}
 }
