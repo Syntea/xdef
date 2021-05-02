@@ -14,8 +14,4 @@ public interface JParser {
 	public void mapStart(SPosition pos);
 	public void mapEnd(SPosition pos);
 	public void xdScript(SBuffer name, SBuffer value);
-	public void warning(SPosition pos, long ID, Object... params);
-	public void error(SPosition pos, long ID, Object... params);
-	public void fatal(SPosition pos, long ID, Object... params);
-	public void setSysId(String sysId);
 }

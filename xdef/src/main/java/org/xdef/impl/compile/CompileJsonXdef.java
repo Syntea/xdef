@@ -22,18 +22,18 @@ import org.xdef.sys.SBuffer;
 import org.xdef.sys.SPosition;
 import org.xdef.sys.SRuntimeException;
 
-/** Create X-definition model from xd:json.
+/** Create X-definition model from xd:json element.
  * @author Vaclav Trojan
  */
 public class CompileJsonXdef extends StringParser {
 	/** Prefix of X-definition namespace. */
-	String _xdPrefix;
+	private String _xdPrefix;
 	/** Index of X-definition namespace. */
-	int _xdIndex;
+	private int _xdIndex;
 	/** Namespace of X-definition.*/
-	String _xdNamespace;
+	private String _xdNamespace;
 	/** XPath position of JSON description.*/
-	String _basePos;
+	private String _basePos;
 
 	/** Prepare instance of XJSON. */
 	private CompileJsonXdef() {super();}
@@ -563,12 +563,12 @@ public class CompileJsonXdef extends StringParser {
 		jx._xdPrefix = p.getPrefix();
 		jx._xdIndex = p._nsPrefixes.get(jx._xdPrefix);
 		jx._basePos = p._xpathPos + "/text()";
-		jx.setReportWriter(reporter);
 		p._name = name;
 		p._nsURI = null; // set no namespace
 		p._nsindex = -1;
 		XDBuilder jp = new XDBuilder(jx);
 		XONReader pp = new XONReader(p._value, jp);
+		pp.setReportWriter(reporter);
 		pp.setXdefMode();
 		pp.parse();
 		jx.genJsonModel(jp.getResult(), p);
@@ -583,7 +583,6 @@ public class CompileJsonXdef extends StringParser {
 	 * in X-definition.
 	 */
 	private static class XDBuilder implements JParser {
-		private final CompileJsonXdef _jx;
 		private final Stack<Integer> _kinds = new Stack<Integer>();
 		private final Stack<JArray> _arrays = new Stack<JArray>();
 		private final Stack<JMap> _maps = new Stack<JMap>();
@@ -592,7 +591,6 @@ public class CompileJsonXdef extends StringParser {
 		private JObject _value;
 
 		XDBuilder(CompileJsonXdef jx) {
-			_jx = jx;
 			_kinds.push(_kind = 0);
 		}
 
@@ -662,24 +660,6 @@ public class CompileJsonXdef extends StringParser {
 			} else if (_kind == 2) { // map
 				_maps.peek().put(JsonNames.SCRIPT_NAME, jv);
 			}
-		}
-
-	////////////////////////////////////////////////////////////////////////////
-	// error messages.
-	////////////////////////////////////////////////////////////////////////////
-		@Override
-		public void setSysId(String sysId) {/*never invoded here*/}
-		@Override
-		public void warning(SPosition pos, long ID, Object... params) {
-			_jx.getReportWriter().warning(ID, params);
-		}
-		@Override
-		public void error(SPosition pos, long ID, Object... params) {
-			_jx.getReportWriter().error(ID, params);
-		}
-		@Override
-		public void fatal(SPosition pos, long ID, Object... params) {
-			_jx.getReportWriter().fatal(ID, params);
 		}
 	}
 }
