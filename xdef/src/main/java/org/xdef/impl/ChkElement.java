@@ -478,7 +478,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		} else {
 			String name = xelem.getName();
 			if (xelem._json > 0) { // XON
-				if (xelem.getName().endsWith("item")) {
+				if ("item".equals(name = xelem.getLocalName())) {
 					String[] x = getPosInfo(xelem.getXDPosition(), null);
 					int ndx = (x[0].lastIndexOf("['"));
 					if (ndx >= 0) {
