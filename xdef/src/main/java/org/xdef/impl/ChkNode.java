@@ -1073,7 +1073,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	 * @return array with two items - the first one is X-position and the
 	 * second one is Xpath.
 	 */
-	private String[] getPosInfo(final String xpos, final String xpath) {
+	final String[] getPosInfo(final String xpos, final String xpath) {
 		String[] result = new String[]{xpos, xpath};
 		if (xpos == null) {
 			return result;
