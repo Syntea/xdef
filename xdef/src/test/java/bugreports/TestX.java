@@ -1,11 +1,11 @@
 package bugreports;
 
-import org.xdef.XDConstants;
 import org.xdef.XDDocument;
 import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.xdef.proc.XXData;
 import java.util.Properties;
+import org.xdef.sys.ArrayReporter;
 import test.XDTester;
 
 /** Tests used for development..
@@ -25,8 +25,9 @@ public class TestX extends XDTester {
 		String json;
 		String xdef;
 		Properties props = new Properties();
+		ArrayReporter reporter = new ArrayReporter();
 	try {
-/**/
+/**
 			xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.0\" name=\"X\" root=\"a\">\n"+
 " <xd:json name='a'>\n"+
@@ -47,11 +48,15 @@ public class TestX extends XDTester {
 "    123\n" +
 "  ]\n" +
 "]";
-			xd.jparse(json, null);
+			reporter.clear();
+			xd.jparse(json, reporter);
+			assertNoErrors(reporter);
 			json = "[\n" +
 "]";
-			xd.jparse(json, null);
-/**/
+			reporter.clear();
+			xd.jparse(json, reporter);
+			assertNoErrors(reporter);
+/**
 			xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.0\" name=\"X\" root=\"a\">\n"+
 " <xd:json name='a'>\n"+
@@ -82,8 +87,10 @@ public class TestX extends XDTester {
 "    \"Genre\": \"C1\"\n" +
 "  }\n" +
 "]";
-			xd.jparse(json, null);
-/**/
+			reporter.clear();
+			xd.jparse(json, reporter);
+			assertNoErrors(reporter);
+/**
 			xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.0\" name=\"X\" root=\"a\">\n"+
 " <xd:json name='a'>\n"+
@@ -97,14 +104,22 @@ public class TestX extends XDTester {
 			xp = XDFactory.compileXD(props, xdef); // no property
 			xd = xp.createXDDocument();
 			json = "{\"manager\": \"BigBoss\"}";
-			xd.jparse(json, null);
+			reporter.clear();
+			xd.jparse(json, reporter);
+			assertNoErrors(reporter);
 			json = "{\"subordinates\": []}";
-			xd.jparse(json, null);
+			reporter.clear();
+			xd.jparse(json, reporter);
+			assertNoErrors(reporter);
 			json = "{\"subordinates\": [\"first\", \"second\"]}";
-			xd.jparse(json, null);
+			reporter.clear();
+			xd.jparse(json, reporter);
+			assertNoErrors(reporter);
 			json = "{}";
-			xd.jparse(json, null);
-/**/
+			reporter.clear();
+			xd.jparse(json, reporter);
+			assertNoErrors(reporter);
+/**
 			xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.0\" name=\"X\" root=\"a\">\n"+
 " <xd:json name='a'>\n"+
@@ -125,9 +140,13 @@ public class TestX extends XDTester {
 "  {\"A\": [\"B1\", \"B2\"]},\n" +
 "  {\"A\": \"C1\"}\n" +
 "]";
-			xd.jparse(json, null);
+			reporter.clear();
+			xd.jparse(json, reporter);
+			assertNoErrors(reporter);
 			json = "[]";
-			xd.jparse(json, null);
+			reporter.clear();
+			xd.jparse(json, reporter);
+			assertNoErrors(reporter);
 /**/
 // Required element 'js:item' is missing; path=$; X-position=Example#test/$.['date']
 			xdef =
@@ -149,10 +168,10 @@ public class TestX extends XDTester {
 			xp = XDFactory.compileXD(props, xdef); // no property
 			xd = xp.createXDDocument();
 			json =
-"{ # \"date\" : \"2020-02-22\",\n" +
+"{ \"date\" : \"2020-02-22\",\n" +
 "\"cities\" : [ \n" +
 " {\"from\": [\"Brussels\",\n" +
-"   {\"to\":\"London\",\"dist\":322},{\"to\":\"Paris\",\"dist\":265}\n" +
+"   {\"to\":\"London\",\"ist\":322},{\"to\":\"Paris\",\"dist\":265}\n" +
 "  ]\n" +
 " },\n" +
 " {\"from\": [\"London\",\n" +
@@ -161,7 +180,8 @@ public class TestX extends XDTester {
 " }\n" +
 "]\n" +
 "}";
-			xd.jparse(json, null);
+			xd.jparse(json, reporter);
+			assertNoErrors(reporter);
 /**/
 		} catch (Exception ex) {fail(ex);}
 	}
