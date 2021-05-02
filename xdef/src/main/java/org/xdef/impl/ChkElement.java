@@ -477,13 +477,15 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			_actDefIndex = -1;
 		} else {
 			String name = xelem.getName();
-			if (xelem._json > 0 && xelem.getName().endsWith("item")) { // XON
-				String[] x = getPosInfo(xelem.getXDPosition(), null);
-				int ndx = (x[0].lastIndexOf("['"));
-				if (ndx >= 0) {
-					int ndx1 = x[0].indexOf("']", ndx);
-					if (ndx1 > 0) {
-						name = x[0].substring(ndx + 2, ndx1);
+			if (xelem._json > 0) { // XON
+				if (xelem.getName().endsWith("item")) {
+					String[] x = getPosInfo(xelem.getXDPosition(), null);
+					int ndx = (x[0].lastIndexOf("['"));
+					if (ndx >= 0) {
+						int ndx1 = x[0].indexOf("']", ndx);
+						if (ndx1 > 0) {
+							name = x[0].substring(ndx + 2, ndx1);
+						}
 					}
 				}
 			}
