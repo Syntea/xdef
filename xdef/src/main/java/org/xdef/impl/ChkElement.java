@@ -395,6 +395,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		}
 		if (result == null) {
 			if (_xElement._moreElements!='T' && _xElement._moreElements!='I') {
+				// Illegal element
 				debugXPos(XDDebug.ONILLEGALELEMENT);
 				if (_xElement._onIllegalElement >= 0) {
 					_elemValue = _element;
@@ -404,8 +405,15 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 					exec(_xElement._onIllegalElement, (byte) 'E');
 					copyTemporaryReports();
 				} else if (textcontent == null) {
-					//Not allowed element '&{0}'
-					error(XDEF.XDEF501, element.getNodeName());
+					if (_xElement._json > 0) {
+						//Not allowed item&{1}{ "}{"} in &{0}
+						Node n = element.getAttributeNode("key");
+						error(XDEF.XDEF507, _xElement.getLocalName(),
+							n==null ? null : n.getNodeValue());
+					} else {
+						//Not allowed element '&{0}'
+						error(XDEF.XDEF501, element.getNodeName());
+					}
 				}
 				result = new ChkElement(this,
 					element, _xElement.createAnyDefElement(), true);
@@ -471,8 +479,13 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			String name = xelem.getName();
 			if (xelem._json > 0 && xelem.getName().endsWith("item")) { // XON
 				String[] x = getPosInfo(xelem.getXDPosition(), null);
-				int ndx = (x[0].indexOf("['"));
-				name = x[0].substring(ndx + 2, x[0].length() - 2);
+				int ndx = (x[0].lastIndexOf("['"));
+				if (ndx >= 0) {
+					int ndx1 = x[0].indexOf("']", ndx);
+					if (ndx1 > 0) {
+						name = x[0].substring(ndx + 2, ndx1);
+					}
+				}
 			}
 			putTemporaryReport(_counters[index] == 0
 				//Required element '&{0}' is missing
@@ -819,8 +832,14 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 				&& selector._prev._count >= selector._prev.minOccurs()) {
 				return required;
 			}
-			error(XDEF.XDEF520, //Sequence "xd:mixed" has no required item
-				getPosMod(_defList[selector._begIndex].getXDPosition(), _xPos));
+			if (_xElement._json > 0) {
+				//Missing required item(s) in &{0}
+				error(XDEF.XDEF541, _xElement.getLocalName());
+			} else {
+				error(XDEF.XDEF520, //Sequence "xd:mixed" has no required item
+					getPosMod(_defList[selector._begIndex].getXDPosition(),
+						_xPos));
+			}
 		}
 		return required;
 	}
@@ -924,12 +943,12 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 				default:
 			}
 		}
-		if (!skipSelectors && selector._occur == false && selector._count == 0
-			&& required) {
+		if (!skipSelectors && selector._occur == false
+			&& selector._count == 0 && required) {
 			// do not report error if onAbsence
 			if (((XSelector) _defList[selector._begIndex])._onAbsence < 0) {
-				//Missing required items in a section
-				error(XDEF.XDEF541, getPosMod(getXDPosition()+"/#choice",_xPos));
+				//Missing required item(s0 in &{0}
+				error(XDEF.XDEF541,getPosMod(getXDPosition()+"/#choice",_xPos));
 			}
 		}
 		return required;
