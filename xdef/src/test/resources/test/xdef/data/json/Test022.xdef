@@ -5,6 +5,5 @@
   "manager": "string()",
   "subordinates":[ "* string();" ]
 }
-
 </xd:json>
 </xd:def>
