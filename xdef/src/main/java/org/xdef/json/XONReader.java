@@ -773,8 +773,9 @@ public class XONReader extends StringParser implements XONParsers {
 		@Override
 		public void xdScript(SBuffer name, SBuffer value) {}
 	}
+
 ////////////////////////////////////////////////////////////////////////////////
-// Constants and classes  used when JSON is parsed from X-definition compiler.
+// Classes used when JSON is parsed from X-definition compiler.
 ////////////////////////////////////////////////////////////////////////////////
 
 	public interface JObject {
@@ -784,7 +785,7 @@ public class XONReader extends StringParser implements XONParsers {
 	}
 
 	public static class JMap extends LinkedHashMap<Object, Object>
-		 implements JObject {
+		implements JObject {
 		private final SPosition _position; // SPosition of parsed object
 		public JMap(final SPosition position) {super(); _position = position;}
 		@Override
@@ -822,6 +823,7 @@ public class XONReader extends StringParser implements XONParsers {
 		@Override
 		public String toString() {return _o == null ? "null" : _o.toString();}
 	}
+
 	public static class JAny extends JValue {
 		public JAny(final SPosition position, final SBuffer val) {
 			super(position, val);
