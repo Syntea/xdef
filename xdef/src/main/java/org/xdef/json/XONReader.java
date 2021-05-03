@@ -640,6 +640,12 @@ public class XONReader extends StringParser implements XONParsers {
 			_jp.xdScript(name, val);
 		} else {
 			JValue jv = readSimpleValue();
+			if (_jdef && (jv == null || jv.getValue() == null
+				|| !(jv.getValue() instanceof String))) {
+				//Value in X-definition must be a string with X-script
+				error(JSON.JSON018);
+				jv = new JValue(jv.getPosition(), "" + jv.getValue());
+			}
 			_jp.simpleValue(jv);
 		}
 	}

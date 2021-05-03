@@ -34,11 +34,11 @@ public interface JSON {
 	public static final long JSON014 = 13834649613L;
 	/** Unclosed comment&amp;{#SYS000} */
 	public static final long JSON015 = 13834649614L;
-	/** Text node is not allowed in this XML representation of JSOM map */
+	/** Text node is not allowed in this XML representation of JSON map */
 	public static final long JSON016 = 13834649615L;
 	/** Not allowed character '&amp;{0}'&amp;{#SYS000} */
 	public static final long JSON017 = 13834649616L;
-	/** Value of $script must be string with X-script&amp;{#SYS000} */
+	/** Value in X-definition must be a string with X-script&amp;{#SYS000} */
 	public static final long JSON018 = 13834649617L;
 	/** Comments are not allowed here&amp;{#SYS000} */
 	public static final long JSON019 = 13834649618L;
