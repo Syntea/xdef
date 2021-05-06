@@ -728,6 +728,19 @@
 </a>
 </xd:def>
 
+<xd:def name='Y26' root='C|D'>
+  <C xd:script="occurs 0..">
+     int();
+  </C>
+  <D>
+    <DD xd:script="occurs 0..; ref C" />
+  </D>
+ <xd:component>
+    %class test.xdef.component.Y26C %link Y26#C;
+    %class test.xdef.component.Y26D %link Y26#D;
+ </xd:component>
+</xd:def>
+
 <!-- ********************** Lexicon test ********************** -->
 <xd:def root="X" name="LEX">
   <X x="string">

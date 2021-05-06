@@ -1098,7 +1098,22 @@ public final class TestXComponents extends XDTester {
 			list = (List) SUtils.getValueFromGetter(xc, "listOfParams");
 			list = (List) SUtils.getValueFromGetter(list.get(0), "listOfParam");
 			assertEq("14.8",SUtils.getValueFromGetter(list.get(1), "getValue"));
+
+			xml = "<C>123</C>";
+			xc = parseXC(xp,"Y26", xml , null, reporter);
+			assertNoErrorwarnings(reporter);
+			assertEq(xml, xc.toXml());
+			xml = "<D><DD>123</DD><DD>456</DD></D>";
+			xc = parseXC(xp,"Y26", xml , null, reporter);
+			assertNoErrorwarnings(reporter);
+			assertEq(xml, xc.toXml());
+			list = (List) SUtils.getValueFromGetter(xc, "get$DD");
+			assertEq(xml, xc.toXml());
+			assertEq(2, list.size());
+			assertEq(123, list.get(0));
+			assertEq(456, list.get(1));
 		} catch (Exception ex) {fail(ex);}
+
 		try { // test lexicon
 			xd = xp.createXDDocument("LEX");
 			xml = "<X x=\"x\"><Y y=\"1\"/><Y y=\"2\"/><Y y=\"3\"/></X>";
