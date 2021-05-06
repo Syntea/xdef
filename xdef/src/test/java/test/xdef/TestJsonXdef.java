@@ -457,11 +457,7 @@ public class TestJsonXdef extends XDTester {
 		// If no errors were reported delete all generated data.
 		// Otherwise, leave them to be able to see the reason of errors.
 		if (getFailCount() == 0) {
-			try {
-				SUtils.deleteAll(_tempDir, true); //delete all generated data
-			} catch (Exception ex) {
-				fail(ex);// should not happen; error when delete generated data
-			}
+			clearTempDir(); // delete temporary files.
 		}
 
 		// Other tests
@@ -469,7 +465,7 @@ public class TestJsonXdef extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' name='Person' root='Person'>\n"+
 "<xd:json name=\"Person\">\n"+
-"{ \"Person\": { \"Name\": \"string(1, 50);\",\n" +
+"{ \"Person\": { \"Name\": \"jstring(1, 50);\",\n" +
 "    \"Pay\": \"int(1000, 99999);\",\n" +
 "    \"Birth date.\": \"date();\"\n" +
 "  }\n" +
@@ -643,7 +639,7 @@ public class TestJsonXdef extends XDTester {
 			xd.setJSONContext(j);
 // TODO!!! - problem of construction of mixted with elements with matches
 //			assertTrue(JsonUtil.jsonEqual(j, jcreate(xd, "Skladby", reporter)));
-//			assertNoErrors(reporter);
+			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xdef =
@@ -766,7 +762,6 @@ public class TestJsonXdef extends XDTester {
 			assertTrue(JsonUtil.jsonEqual(j,
 				jparse(xp, "", (Object) j, reporter)));
 		} catch (Exception ex) {fail(ex);}
-/*xx*/
 	}
 
 	public static void main(String[] args) {

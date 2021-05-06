@@ -142,9 +142,9 @@ public class FileReportWriter implements ReportWriter {
 	 * the output be in the string format of reports.
 	 * @throws SRuntimeException
 	 * <ul>
-	 * <li>SYS023 Can't write to file</li>
-	 * <li>SYS035 Unsupported character set name</li>
-	 * <li>SYS077 Security violation</li>
+	 * <li>SYS023 Can't write to file
+	 * <li>SYS035 Unsupported character set name
+	 * <li>SYS077 Security violation
 	 * </ul>
 	 */
 	public FileReportWriter(final String fileName,
@@ -186,9 +186,9 @@ public class FileReportWriter implements ReportWriter {
 	 * @param encoding The character set name;
 	 * @throws SRuntimeException if an error occurs:
 	 * <ul>
-	 * <li>SYS023 Can't write to file</li>
-	 * <li>SYS035 Unsupported character set name</li>
-	 * <li>SYS077 Security violation</li>
+	 * <li>SYS023 Can't write to file
+	 * <li>SYS035 Unsupported character set name
+	 * <li>SYS077 Security violation
 	 * </ul>
 	 */
 	public FileReportWriter(final File file, final String encoding) {
@@ -202,9 +202,9 @@ public class FileReportWriter implements ReportWriter {
 	 * the output be in the string format of reports.
 	 * @throws SRuntimeException
 	 * <ul>
-	 * <li>SYS023 Can't write to file</li>
-	 * <li>SYS035 Unsupported character set name</li>
-	 * <li>SYS077 Security violation</li>
+	 * <li>SYS023 Can't write to file
+	 * <li>SYS035 Unsupported character set name
+	 * <li>SYS077 Security violation
 	 * </ul>
 	 */
 	public FileReportWriter(final File file,
@@ -287,14 +287,14 @@ public class FileReportWriter implements ReportWriter {
 
 	@Override
 	/** Get last error report.
-	 * @return last error report (or <tt>null</tt> if last report is not
+	 * @return last error report (or null if last report is not
 	 * available).
 	 */
 	public final Report getLastErrorReport() {return _lastErrorReport;}
 
 	@Override
 	/** Clear last error report. If last report has been available it will be
-	 * erased (i.e. result of <tt>getLastReport()</tt> will be null. However,
+	 * erased (i.e. result of getLastReport() will be null. However,
 	 * the report has already been written to the report file.
 	 */
 	public void clearLastErrorReport() {_lastErrorReport = null;}
@@ -603,9 +603,8 @@ public class FileReportWriter implements ReportWriter {
 	@Override
 	/** Close report writer. */
 	public final void close() {
-		if (_file == null) {
-			_out.flush();
-		} else {
+		_out.flush();
+		if (_file != null) {
 			_out.close();
 		}
 	}

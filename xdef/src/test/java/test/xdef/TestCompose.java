@@ -2,7 +2,6 @@ package test.xdef;
 
 import test.XDTester;
 import org.xdef.sys.ArrayReporter;
-import org.xdef.sys.FUtils;
 import org.xdef.sys.Report;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.xml.KXpathExpr;
@@ -49,7 +48,6 @@ final public class TestCompose extends XDTester {
 		String s;
 		Object obj;
 		ArrayReporter reporter = new ArrayReporter();
-		final String tempDir = getTempDir();
 		final String dataDir = getDataDir();
 		try {
 			xdef =
@@ -2740,10 +2738,7 @@ final public class TestCompose extends XDTester {
 			assertEq(el,"<A><B/><C/><D/><E/><F/><G/></A>");
 		} catch (Exception ex) {fail(ex);}
 
-		try {
-			FUtils.deleteAll(tempDir, true); // delete created temporary files
-		} catch (Exception ex) {fail(ex);}
-
+		clearTempDir(); // delete temporary files.
 		resetTester();
 	}
 

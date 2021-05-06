@@ -28,7 +28,6 @@ import org.xdef.sys.GPSPosition;
  * @author Vaclav Trojan
  */
 public final class TestXComponents extends XDTester {
-	String _tempDir;
 
 	public TestXComponents() {super();}
 
@@ -71,7 +70,7 @@ public final class TestXComponents extends XDTester {
 		// generate XCDPool from sources
 		XDPool xp = compile(xdsources);
 		// generate and compile XComponents from xp
-		genXComponent(xp, new File(_tempDir));
+		genXComponent(xp, new File(getTempDir()));
 		return xp;
 	}
 
@@ -88,20 +87,7 @@ public final class TestXComponents extends XDTester {
 		List list, list1;
 		SDatetime sd;
 		ArrayReporter reporter = new ArrayReporter();
-		final String dataDir = getDataDir() + "test/";
-		File f = new File(getTempDir());
-		if (f.exists() && !f.isDirectory()) {
-			throw new RuntimeException(f.getAbsolutePath()
-				+ " is not directory");
-		}
-		f.mkdir();
-		_tempDir = f.getAbsolutePath().replace('\\', '/');
-		if (!_tempDir.endsWith("/")) {
-			_tempDir += '/';
-		}
-		if (!f.isDirectory()) {
-			throw new RuntimeException('\"' + _tempDir + "\" is not directory");
-		}
+		clearTempDir();
 		try { // GPSPosition, Price
 			String xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='A'>\n" +
@@ -118,7 +104,7 @@ public final class TestXComponents extends XDTester {
 "</xd:component>\n"+
 "</xd:def>";
 			XDPool xp = compile(xdef);
-			genXComponent(xp, new File(_tempDir));
+			genXComponent(xp, new File(getTempDir()));
 			xml = "<A a='1.25 CZK' q='48.2, 16.37, 151, Vienna'/>"; //
 			xd = xp.createXDDocument();
 			xc = xd.parseXComponent(xml, null, reporter);
@@ -139,7 +125,7 @@ public final class TestXComponents extends XDTester {
 		} catch (Exception ex) {fail(ex);}
 
 		XDPool xp = genComponents(getDataDir() + "test/TestXComponents.xdef",
-			dataDir + "TestXComponent_Z.xdef");
+			getDataDir() + "test/TestXComponent_Z.xdef");
 		try {
 			xml = "<A a='a' dec='123.45'><W w='wwwwwwww'/></A>";
 			parseXC(xp, "A", xml, null, reporter);
@@ -1162,7 +1148,7 @@ public final class TestXComponents extends XDTester {
 		try {
 			//just force compilation
 			xc = parseXC(xp, "SouborD1A",
-				dataDir + "TestXComponent_Z.xml", null, null);
+				getDataDir() + "test/TestXComponent_Z.xml", null, null);
 			list = (List) SUtils.getValueFromGetter(xc, "listOfZaznamPDN");
 			list1 = (List) SUtils.getValueFromGetter(
 				list.get(1), "listOfVozidlo");
@@ -1177,13 +1163,7 @@ public final class TestXComponents extends XDTester {
 			assertEq("", checkXPos(xc));
 		} catch (Exception ex) {fail(ex);}
 
-		// delete temporary files.
-		if (new File(getTempDir()).exists()) {
-			try {
-				SUtils.deleteAll(getTempDir(), true);//delete all generated data
-			} catch (Exception ex) {}
-		}
-
+		clearTempDir(); // delete temporary files.
 		resetTester();
 	}
 

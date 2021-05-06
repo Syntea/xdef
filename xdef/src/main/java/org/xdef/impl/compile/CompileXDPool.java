@@ -1870,16 +1870,15 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				HashSet<String> classNames = new HashSet<String>();
 				// create map of components
 				Map<String, String> x = new LinkedHashMap<String, String>();
-				for (Map.Entry<String, SBuffer> e:
+				for (Map.Entry<String, SBuffer> en:
 					_codeGenerator._components.entrySet()) {
-					XMNode xn = (XMElement) xdp.findModel(e.getKey());
+					XMNode xn = (XMElement) xdp.findModel(en.getKey());
 					if (xn == null || xn.getKind() != XMNode.XMELEMENT) {
-						SBuffer sbf = e.getValue();
 						//Unresolved reference &{0}
-						error(sbf, XDEF.XDEF353, e.getKey());
+						error(en.getValue(), XDEF.XDEF353, en.getKey());
 					} else {
-						String s = e.getValue().getString();
-						x.put(e.getKey(), s);
+						String s = en.getValue().getString();
+						x.put(en.getKey(), s);
 						if (!s.startsWith("%ref ")) {
 							// Extract qualified class name to be generated
 							if (s.startsWith("interface ")) {
@@ -1891,7 +1890,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 							}
 							if (!classNames.add(s)) {
 								//Class name &{0} is used in other command
-								error(e.getValue(), XDEF.XDEF383, s);
+								error(en.getValue(), XDEF.XDEF383, s);
 							}
 						}
 					}
@@ -1899,49 +1898,49 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				((XPool) xdp).setXComponents(x);
 				// binds
 				x = new LinkedHashMap<String, String>();
-				for (Map.Entry<String, SBuffer> e:
+				for (Map.Entry<String, SBuffer> en:
 					_codeGenerator._binds.entrySet()) {
-					XMNode xn = xdp.findModel(e.getKey());
+					XMNode xn = xdp.findModel(en.getKey());
 					if (xn == null || xn.getKind() != XMNode.XMELEMENT
 						&& xn.getKind() != XMNode.XMATTRIBUTE
 						&& xn.getKind() != XMNode.XMTEXT) {
-						SBuffer sbf = e.getValue();
+						SBuffer sbf = en.getValue();
 						//Unresolved reference &{0}
-						error(sbf, XDEF.XDEF353, e.getKey());
+						error(sbf, XDEF.XDEF353, en.getKey());
 						continue;
 					}
 					// if this bind item is connected to a class (and extends
 					// a component)
-					String s = e.getValue().getString();
+					String s = en.getValue().getString();
 					int ndx = s.indexOf(" %with ");
 					if (ndx > 0) {
 						short typ = getTypeId(xn);
 						// Check if all binds conneted to the same class
 						// have the same type.
-						for (Map.Entry<String, SBuffer> f:
+						for (Map.Entry<String, SBuffer> en1:
 							_codeGenerator._binds.entrySet()) {
-							if (!e.getKey().equals(f.getKey())
-								&& e.getValue().getString().equals(
-									f.getValue().getString())) {
-								XMNode xm = xdp.findModel(f.getKey());
+							if (!en.getKey().equals(en1.getKey())
+								&& en.getValue().getString().equals(
+									en1.getValue().getString())) {
+								XMNode xm = xdp.findModel(en1.getKey());
 								if (xm == null) {
 									//Unresolved reference &{0}
-									error(f.getValue(),
-										XDEF.XDEF353, e.getKey());
+									error(en1.getValue(),
+										XDEF.XDEF353, en.getKey());
 								} else if (typ != getTypeId(xdp.findModel(
-									f.getKey()))) {
+									en1.getKey()))) {
 									// same name in same class must have
 									// same typ
 									s = s.substring(ndx + 7, s.indexOf(' '));
 									//Types of items &{0},&{1} bound
 									//to class &{2} differs
-									error(f.getValue(),XDEF.XDEF358,
-										e.getKey(), f.getKey(), s);
+									error(en1.getValue(),XDEF.XDEF358,
+										en.getKey(), en1.getKey(), s);
 								}
 							}
 						}
 					}
-					x.put(e.getKey(), e.getValue().getString());
+					x.put(en.getKey(), en.getValue().getString());
 				}
 				((XPool) xdp).setXComponentBinds(x);
 				// enumerations

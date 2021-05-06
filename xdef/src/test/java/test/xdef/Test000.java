@@ -2,7 +2,6 @@ package test.xdef;
 
 import test.XDTester;
 import org.xdef.sys.ArrayReporter;
-import org.xdef.sys.FUtils;
 import org.xdef.sys.FileReportReader;
 import org.xdef.sys.FileReportWriter;
 import org.xdef.sys.Report;
@@ -21,13 +20,16 @@ import org.xdef.sys.ReportWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.text.DecimalFormat;
 import java.util.Properties;
+import org.w3c.dom.DocumentType;
 import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 import org.xdef.XDContainer;
 import org.xdef.proc.XXElement;
 import static test.XDTester._xdNS;
@@ -398,12 +400,12 @@ public final class Test000 extends XDTester {
 			el = parse(xp, "root", xml, reporter);
 			assertNoErrors(reporter, xml);
 			assertEq("entity e", el.getAttribute("a"));
-			org.w3c.dom.DocumentType dt = el.getOwnerDocument().getDoctype();
+			DocumentType dt = el.getOwnerDocument().getDoctype();
 			if (dt == null) {
 				fail("Document type missing");
 			} else {
-				org.w3c.dom.NamedNodeMap nm = dt.getEntities();
-				org.w3c.dom.Node n = nm.getNamedItem("e");
+				NamedNodeMap nm = dt.getEntities();
+				Node n = nm.getNamedItem("e");
 				assertFalse(n == null, "missing entity");
 			}
 			xdef = dataDir + "Test000_02.xdef";
@@ -545,16 +547,12 @@ public final class Test000 extends XDTester {
 		} catch (Exception ex) {fail(ex);}
 		try {
 			String defName = "RegistraceSU";
-			File[] defFiles = SUtils.getFileGroup(dataDir + "Test000_05*.xdef");
-			File dataFile = new File(dataDir + "Test000_05.xml");
 			String errFile = tempDir + "Test000_05.err";
 			String lstFile = tempDir + "Test000_05.lst";
+			File[] defFiles = SUtils.getFileGroup(dataDir + "Test000_05*.xdef");
+			String dataFile = dataDir + "Test000_05.xml";
 			DecimalFormat df = new DecimalFormat("0.00");
 			df.setDecimalSeparatorAlwaysShown(true);
-			ReportWriter repw;
-			ReportReader repIn;
-			FileInputStream fis = new FileInputStream(dataFile);
-			String fname = dataFile.getAbsolutePath();
 			long t = System.nanoTime();
 			XDBuilder xb = XDFactory.getXDBuilder(null);
 			xb.setSource(defFiles);
@@ -562,32 +560,30 @@ public final class Test000 extends XDTester {
 			double duration = (System.nanoTime()- t) / 1000000000.0;
 			String durationInfo = "(compile " + df.format(duration) + "s";
 			xd = xp.createXDDocument(defName);
-			FileOutputStream fw = new FileOutputStream(errFile);
-			repw = new FileReportWriter(fw);
+			ReportWriter repw = new FileReportWriter(errFile);
 			t = System.nanoTime();
-			xd.xparse(fis, fname, repw);
+			xd.xparse(dataFile, repw);
 			duration = (System.nanoTime()- t) / 1000000000.0;
 			double kb = dataFile.length()/1000.0;
 			durationInfo += "; process " + df.format(kb) +	"KB " +
 				df.format(duration) + "s (" + df.format(kb/duration) + "KB/s))";
-			fis.close();
-			InputStreamReader isr = new InputStreamReader(
-				new FileInputStream(dataFile));
-			fw.close();
-			FileReader fr = new FileReader(errFile);
-			repIn = new FileReportReader(fr, true);
-			OutputStreamWriter lst =
-				new OutputStreamWriter(new FileOutputStream(lstFile));
+			repw.close();
+			InputStreamReader isr =
+				new InputStreamReader(new FileInputStream(dataFile));
+			ReportReader repIn = new FileReportReader(new File(errFile), true);
+			OutputStream lstStream = new FileOutputStream(lstFile);
+			OutputStreamWriter lst = new OutputStreamWriter(lstStream);
 			ReportPrinter.printListing(lst,isr,repIn, false); //no line numbers
-			fr.close();
+			repIn.close();
 			isr.close();
 			lst.close();
+			lstStream.close();
 			setResultInfo(durationInfo);
 		} catch (Exception ex) {fail(ex);}
 		if (getFailCount() == 0) {
 			try {
-				FUtils.deleteAll(tempDir, true);
-			} catch (Exception ex) {fail(ex);}
+				clearTempDir();
+			} catch (Exception ex) {}
 		}
 		try {//Matej3
 			xp = compile(dataDir + "Test000_06*.xdef");

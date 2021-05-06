@@ -14,6 +14,7 @@ import java.net.URL;
 import java.util.Arrays;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.xdef.msg.SYS;
 import org.xdef.xml.KXmlUtils;
 
 /** Abstract class for creating test classes. This class enables to run tests
@@ -151,23 +152,44 @@ public abstract class STester {
 	/** Get path to temporary directory. If the directory doesn't exist try
 	 * to create it. If the directory can't be created put error message
 	 * and return null.
-	 * @return The string with the path to temporary directory or null.
+	 * @return The string with the path to temporary directory.
+	 * @throws SRuntimeException if temporary directory is not available.
 	 */
-	public final String getTempDir() {
+	public final String getTempDir() throws RuntimeException {
 		if (_homeDir != null) {
 			_tempDir = _homeDir + "temp/";
 			File tempDir = new File(_tempDir);
 			if (!tempDir.exists()) {
 				if (!tempDir.mkdirs()) {
-					throw new RuntimeException(
-						"Can't create directory: " + _tempDir);
+					//Can't create directory: &{0}
+					throw new SRuntimeException(SYS.SYS020, _tempDir);
 				}
 			}
 			return _tempDir;
 		} else {
-			throw new RuntimeException(
-				"Home directory doesn't exist or isn't accessible");
+			_tempDir = null;
+			//Can't create directory: &{0}
+			throw new SRuntimeException(SYS.SYS020, "null");
 		}
+	}
+	/** Delete all files and subdirectories from temporary directory (only those
+	 * which can be deleted).
+	 * @return File object with temporary directory.
+	 * @throws SRuntimeException if temporary directory is not available.
+	 */
+	public final File clearTempDir() {
+		File f = new File(getTempDir());
+		if (f.exists() && f.isDirectory()) {
+			File[] files = f.listFiles();
+			for (File x: files) {
+				try { // try to delete this file
+					FUtils.deleteAll(x, true);
+				} catch (Exception ex) {}
+			}
+		} else {
+			f.mkdir();
+		}
+		return f;
 	}
 	/** Get name of test (the name of class without package prefix).
 	 * @return The name of test class.

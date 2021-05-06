@@ -5,7 +5,6 @@ import org.xdef.sys.ArrayReporter;
 import org.xdef.XDDocument;
 import org.xdef.XDPool;
 import org.xdef.component.XComponent;
-import org.xdef.sys.FUtils;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.util.List;
@@ -25,17 +24,7 @@ public final class TestLexicon extends XDTester {
 	/** Run test and print error information. */
 	public void test() {
 		String tempDir = getTempDir();
-		try {
-			if (new File(tempDir).exists()) {
-				FUtils.deleteAll(tempDir, true);
-			} else {
-				fail("Temporary direcitory is not available");
-				return;
-			}
-		} catch (Exception ex) {
-			fail(ex);
-			return;
-		}
+		clearTempDir();
 		String xdef;
 		String xml;
 		Element el;
@@ -285,14 +274,8 @@ public final class TestLexicon extends XDTester {
 			List<?> list = (List<?>) m.invoke(xc);
 			assertEq(3, list.size());
 		} catch (Exception ex) {fail(ex);}
-		try {
-			if (new File(tempDir).exists()) {
-				FUtils.deleteAll(tempDir, true);
-			}
-		} catch (Exception ex) {
-			fail(ex);
-		}
 
+		clearTempDir(); // delete temporary files.
 		resetTester();
 	}
 
