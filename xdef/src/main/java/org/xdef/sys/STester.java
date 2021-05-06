@@ -42,9 +42,8 @@ import org.xdef.xml.KXmlUtils;
    }
    public static void main(String... args) {
 	 if (runTest(args) &gt; 0) {System.exit(1);}
- *   }
- * }
- * </code></pre>
+   }
+ }</code></pre>
  * @author Vaclav Trojan
  */
 public abstract class STester {
@@ -71,7 +70,7 @@ public abstract class STester {
 	/** Source directory. */
 	private String _sourceDir;
 	/** Temporary directory. */
-	private String _tempDir;
+	private File _tempDir;
 	/** Data directory. */
 	private String _dataDir;
 	/** Class name. */
@@ -157,15 +156,19 @@ public abstract class STester {
 	 */
 	public final String getTempDir() throws RuntimeException {
 		if (_homeDir != null) {
-			_tempDir = _homeDir + "temp/";
-			File tempDir = new File(_tempDir);
-			if (!tempDir.exists()) {
-				if (!tempDir.mkdirs()) {
+			_tempDir = new File(_homeDir + "temp/");
+			if (!_tempDir.exists()) {
+				if (!_tempDir.mkdirs()) {
 					//Can't create directory: &{0}
 					throw new SRuntimeException(SYS.SYS020, _tempDir);
 				}
 			}
-			return _tempDir;
+			try {
+				String s = _tempDir.getCanonicalPath().replace('\\', '/');
+				return s.endsWith("/") ? s : s + '/';
+			} catch (Exception ex) {
+				throw new SRuntimeException(ex); // never happens
+			}
 		} else {
 			_tempDir = null;
 			//Can't create directory: &{0}
@@ -178,18 +181,18 @@ public abstract class STester {
 	 * @throws SRuntimeException if temporary directory is not available.
 	 */
 	public final File clearTempDir() {
-		File f = new File(getTempDir());
-		if (f.exists() && f.isDirectory()) {
-			File[] files = f.listFiles();
+		getTempDir();
+		if (_tempDir.exists() && _tempDir.isDirectory()) {
+			File[] files = _tempDir.listFiles();
 			for (File x: files) {
 				try { // try to delete this file
 					FUtils.deleteAll(x, true);
 				} catch (Exception ex) {}
 			}
 		} else {
-			f.mkdir();
+			_tempDir.mkdir();
 		}
-		return f;
+		return _tempDir;
 	}
 	/** Get name of test (the name of class without package prefix).
 	 * @return The name of test class.
@@ -844,7 +847,7 @@ public abstract class STester {
 				_dataDir = s;
 			}
 		}
-		_tempDir =  _homeDir + "temp/";
+		getTempDir();
 		_timeStamp = System.currentTimeMillis();
 	}
 	/** Run test and print result information.

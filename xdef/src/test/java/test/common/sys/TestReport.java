@@ -440,7 +440,7 @@ public class TestReport extends STester {
 				+ " Čtení za koncem souboru", r.toString());
 		} catch (Exception ex) {fail(ex);}
 
-		new File(getTempDir()).delete(); // clear temporary data
+		clearTempDir(); // clear temporary data
 	}
 
 	/** Run test

@@ -71,7 +71,7 @@ public class MyTest_2 extends XDTester {
 			XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE); // true | false
 ////////////////////////////////////////////////////////////////////////////////
 
-		String tempDir = getTempDir();
+		File tempDir = clearTempDir();
 		XDPool xp;
 		String xdef;
 		String xml;
@@ -87,15 +87,15 @@ public class MyTest_2 extends XDTester {
 			xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.0\" root=\"A\">\n"+
 "<xd:json name='A'>\n"+
-"{ \"_x5f_\": \"date();\" }\n"+
+"[\"int()\", \"int\", \"jstring()\"]\n"+
 "</xd:json>\n"+
 "<xd:component>\n"+
 "  %class bugreports.A %link #A;\n"+
 "</xd:component>\n"+
 "</xd:def>";
 			xp = XDFactory.compileXD(null, xdef);
-			genXComponent(xp, new File(tempDir));
-			json = "{ \"_x5f_\": D2021-04-04 }";
+			genXComponent(xp, tempDir);
+			json = "[1, 2, \"jstring()\"]";
 			j = JsonUtil.parseXON(json);
 			xd = xp.createXDDocument();
 			o = xd.jvalidate(j, null);
@@ -106,7 +106,7 @@ public class MyTest_2 extends XDTester {
 			assertTrue(JsonUtil.jsonEqual(JsonUtil.xonToJson(j), xc.toJson()));
 			assertTrue(JsonUtil.jsonEqual(j, xd.getXon()));
 		} catch (Exception ex) {fail(ex);}
-if (T)return;
+if (T )return;
 		try {
 			xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.0\" root=\"array\">\n" +
@@ -159,7 +159,7 @@ if (T)return;
 			assertNoErrors(reporter);
 			assertEq(xml, el);
 		} catch (Exception ex) {fail(ex);}
-if(T)return;
+if(T )return;
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='Skladby'>\n"+
@@ -254,7 +254,7 @@ if(T)return;
 //			assertNoErrors(reporter);
 //			assertTrue(JsonUtil.jsonEqual(j, o));
 		} catch (Exception ex) {fail(ex);}
-if(T)return;
+if(T )return;
 		try {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='A'>\n"+
@@ -266,11 +266,13 @@ if(T)return;
 "</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			genXComponent(xp, new File(tempDir));
+			genXComponent(xp, tempDir);
 			json = "[1, \"2\", 3]"; //error (not string but number!)
 			j = xp.createXDDocument().jparse(json, reporter);
 			assertTrue(reporter.printToString().contains("XDEF809"));
 			reporter.clear();
+//			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
+//				JsonUtil.toJsonString(j, true));
 			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
 			assertTrue(reporter.getErrorCount() == 2
 				&& reporter.printToString().contains("XDEF809"));
@@ -278,7 +280,7 @@ if(T)return;
 				JsonUtil.parse("[1,\"\",\"\"]"),toJson(xc)),
 				JsonUtil.toJsonString(toJson(xc), true));
 		} catch (Exception ex) {fail(ex);}
-if(T)return;
+if(T )return;
 		try {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='A'>\n"+
@@ -340,7 +342,7 @@ if(T)return;
 			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j),
 				JsonUtil.toJsonString(j, true));
 		} catch (Exception ex) {fail(ex);}
-if(T)return;
+if(T )return;
 		try {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='A'>\n"+
@@ -417,7 +419,7 @@ $.store.book[0].title			$['store']['book'][0]['title']
 				JsonUtil.toJsonString(j, true));
 //System.out.println(JsonUtil.toJsonString(j, true));
 		} catch (Exception ex) {fail(ex);}
-if(T)return;
+if(T )return;
 		try {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='Y'>\n"+
@@ -438,7 +440,7 @@ if(T)return;
 			System.out.println(classDir + "bugreports/xp.xp");
 			XDFactory.writeXDPool(classDir + "bugreports/xp.xp", xp);
 			xp = XDFactory.readXDPool("classpath://bugreports.xp.xp");
-			genXComponent(xp, new File(tempDir));
+			genXComponent(xp, tempDir);
 			json = "[{\"a\":false},\"xxx\",125, true]";
 			j = xp.createXDDocument().jparse(json, reporter);
 			assertTrue(reporter.getErrorCount() == 2
@@ -456,7 +458,7 @@ if(T)return;
 			assertEq(125, SUtils.getValueFromGetter(xc, "get$item_1"));
 			assertEq(true, SUtils.getValueFromGetter(xc, "get$item_2"));
 		} catch (Exception ex) {fail(ex);}
-if(T)return;
+if(T )return;
 		try {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='Y'>\n"+
@@ -477,7 +479,7 @@ if(T)return;
 			System.out.println(classDir + "bugreports/xp.xp");
 			XDFactory.writeXDPool(classDir + "bugreports/xp.xp", xp);
 			xp = XDFactory.readXDPool("classpath://bugreports.xp.xp");
-			genXComponent(xp, new File(tempDir));
+			genXComponent(xp, tempDir);
 			json = "[{\"a\":true},\"xxx\",125, true]";
 			j = xp.createXDDocument().jparse(json, reporter);
 			assertNoErrors(reporter);
@@ -494,7 +496,7 @@ if(T)return;
 			assertEq(125, SUtils.getValueFromGetter(xc, "get$item_1"));
 			assertEq(true, SUtils.getValueFromGetter(xc, "get$item_2"));
 		} catch (Exception ex) {fail(ex);}
-if(T)return;
+if(T )return;
 		try {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='a'>\n" +
@@ -529,7 +531,7 @@ if(T)return;
 			assertNoErrors(reporter);
 			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), j));
 		} catch (Exception ex) {fail(ex);}
-if(T)return;
+if(T )return;
 		try {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='A'>\n"+
@@ -541,7 +543,7 @@ if(T)return;
 "</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			genXComponent(xp, new File(tempDir));
+			genXComponent(xp, tempDir);
 			json = "{\"a\":\"aaa\"}";
 			j = xp.createXDDocument().jparse(json, reporter);
 			assertNoErrors(reporter);
@@ -669,7 +671,7 @@ if(T)return;
 "</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			genXComponent(xp, new File(tempDir));
+			genXComponent(xp, tempDir);
 			json = "{\"a\":\"aaa\"}";
 			j = xp.createXDDocument().jparse(json, reporter);
 			assertNoErrors(reporter);
@@ -783,7 +785,7 @@ if(T)return;
 "</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			genXComponent(xp, new File(tempDir));
+			genXComponent(xp, tempDir);
 			json = "{\"a\":\"aaa\"}";
 			j = xp.createXDDocument().jparse(json, reporter);
 			reporter.checkAndThrowErrors();
@@ -853,7 +855,7 @@ if(T)return;
 "</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			genXComponent(xp, new File(tempDir));
+			genXComponent(xp, tempDir);
 			json = "[null, 12, \" a b \"]";
 			j = xp.createXDDocument().jparse(json, reporter);
 			assertNoErrors(reporter);
@@ -908,7 +910,7 @@ if(T)return;
 			assertNull(SUtils.getValueFromGetter(xc, "get$item_1"));
 			assertEq("", SUtils.getValueFromGetter(xc, "get$item_2"));
 		} catch (Exception ex) {fail(ex);}
-if(T){return;}
+if(T ){return;}
 		try {
 			xdef =
 "<xd:collection xmlns:xd='http://www.xdef.org/xdef/4.0'>\n"+
@@ -938,7 +940,7 @@ if(T){return;}
 "</xd:component>\n"+
 "</xd:collection>";
 			xp = compile(xdef);
-			genXComponent(xp, new File(tempDir));
+			genXComponent(xp, tempDir);
 			Class<?> TX = Class.forName("bugreports.data.TX");
 			Class<?> TY = Class.forName("bugreports.data.TY");
 			Class<?> TZ = Class.forName("bugreports.data.TZ");
@@ -1034,7 +1036,7 @@ if(T){return;}
 			parse(xp, "", el, reporter);
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
-if(T){return;}
+if(T ){return;}
 		try {
 			xdef =
 "<xd:def xmlns:xd='http://www.syntea.cz/xdef/3.1' xd:root='T' >\n" +
@@ -1049,7 +1051,7 @@ if(T){return;}
 "</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			genXComponent(xp, new File(tempDir));
+			genXComponent(xp, tempDir);
 			xd = xp.createXDDocument();
 			xml =
 "<T>\n" +
@@ -1074,7 +1076,7 @@ if(T){return;}
 			assertNoErrors(reporter);
 			assertEq(xml, el);
 		} catch (Exception ex) {fail(ex);}
-if(T){return;}
+if(T ){return;}
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
@@ -1095,7 +1097,7 @@ if(T){return;}
 "<a><c f='string'/></a>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			genXComponent(xp, new File(tempDir));
+			genXComponent(xp, tempDir);
 			xd = xp.createXDDocument();
 
 			xd.setLexiconLanguage("eng");
@@ -1234,7 +1236,7 @@ if(T){return;}
 "</xd:lexicon>",
 			};
 			xp = compile(params);
-			genXComponent(xp, new File(tempDir));
+			genXComponent(xp, tempDir);
 			xd = xp.createXDDocument();
 			xml =
 "<Smlouva Číslo = \"0123456789\">\n"+
@@ -1296,9 +1298,8 @@ if(T){return;}
 			assertNoErrors(reporter);
 			assertEq(xml, el);
 		} catch (Exception ex) {fail(ex);}
-if(T){return;}
 
-		clearTempDir(); // delete temporary files.
+		clearTempDir(); // clear temporary directory
 	}
 
 	/** Run test

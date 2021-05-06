@@ -1,5 +1,6 @@
 package bugreports;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 import org.w3c.dom.Element;
@@ -26,7 +27,7 @@ public class XonTest extends XDTester {
 		ArrayReporter reporter = new ArrayReporter();
 		Element el;
 		XComponent xc;
-		String tempDir = getTempDir();
+		File tempDir = clearTempDir();
 		try {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='A'>\n"+
@@ -118,11 +119,11 @@ public class XonTest extends XDTester {
 			assertEq("Wien",((GPSPosition) list.get(0)).name());
 			assertEq("London",((GPSPosition) list.get(1)).name());
 			assertEq("Praha (centrum)",((GPSPosition) list.get(2)).name());
-			assertEq(1234, Math.round(((GPSPosition) list.get(0)).distanceTo(
+			assertEq(1233, Math.round(((GPSPosition) list.get(0)).distanceTo(
 				((GPSPosition) list.get(1)))/1000));
-			assertEq(253,Math.round(((GPSPosition) list.get(0)).distanceTo(
+			assertEq(252,Math.round(((GPSPosition) list.get(0)).distanceTo(
 				((GPSPosition) list.get(2)))/1000));
-			assertEq(1031,Math.round(((GPSPosition) list.get(1)).distanceTo(
+			assertEq(1030,Math.round(((GPSPosition) list.get(1)).distanceTo(
 				((GPSPosition) list.get(2)))/1000));
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='a'>\n"+
@@ -192,9 +193,8 @@ public class XonTest extends XDTester {
 			y = JsonUtil.xonToJson(y);
 				assertTrue(JsonUtil.jsonEqual(x,y));
 		} catch (Exception ex) {fail(ex);}
-		try {
-			SUtils.deleteAll(tempDir, true);
-		} catch (Exception ex) {fail(ex);}
+
+		clearTempDir(); // clear temporary directory
 	}
 
 	/** Run test

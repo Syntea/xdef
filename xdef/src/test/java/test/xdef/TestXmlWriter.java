@@ -26,7 +26,16 @@ public final class TestXmlWriter extends XDTester {
 		ArrayReporter reporter = new ArrayReporter();
 		XDDocument xd;
 		Element el;
-		String tempDir = super.getTempDir();
+		String tempDir;
+		try {
+			tempDir = clearTempDir().getCanonicalPath().replace('\\', '/');
+			if (!tempDir.endsWith("/")) {
+				tempDir += "/";
+			}
+		} catch (Exception ex) {
+			fail(ex);
+			return;
+		}
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='books'>\n"+
@@ -94,6 +103,7 @@ public final class TestXmlWriter extends XDTester {
 		} catch (Exception ex) {fail(ex);}
 		new File(tempDir + "x.xml").delete();
 
+		clearTempDir(); // delete created temporary files
 		resetTester();
 	}
 
@@ -104,5 +114,4 @@ public final class TestXmlWriter extends XDTester {
 		XDTester.setFulltestMode(true);
 		if (runTest(args) > 0) {System.exit(1);}
 	}
-
 }

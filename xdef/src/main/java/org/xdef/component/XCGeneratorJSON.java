@@ -35,7 +35,7 @@ class XCGeneratorJSON extends XCGeneratorBase1 {
 	/** Generate direct getters/seters for value of the text child node.
 	 * @param xel model of element (has only a text child and no attributes).
 	 * @param name name of variable.
-	 * @param iType name of item variable type.
+	 * @param iName name of item variable type.
 	 * @param isRoot true if it is a root element of X-component.
 	 * @param setters StringBuilder where to generate getters.
 	 * @param getters StringBuilder where to generate setters.
@@ -43,7 +43,7 @@ class XCGeneratorJSON extends XCGeneratorBase1 {
 	 */
 	final void genDirectSetterAndGetter(final XElement xel,
 		final String name,
-		final String iType,
+		final String iName,
 		final boolean isRoot,
 		final StringBuilder setters,
 		final StringBuilder getters,
@@ -51,14 +51,16 @@ class XCGeneratorJSON extends XCGeneratorBase1 {
 		XMData xdata = (XMData) xel.getChildNodeModels()[0];
 		String typeName = getJavaObjectTypeName(xdata);
 		String descr = "text node from element";
-		int max = xel.maxOccurs();
-		genDirectGetter(xel, typeName, name, isRoot, max, descr, getters, sbi);
-		genDirectSetter(typeName, name, iType, isRoot, max, descr, setters,sbi);
+		int max = isRoot ? 1 : xel.maxOccurs(); // root is alweays 1
+		genDirectGetter(xel,
+			typeName, name, iName, isRoot, max, descr, getters, sbi);
+		genDirectSetter(typeName, name, iName, isRoot, max, descr, setters,sbi);
 	}
 
 	/** Generate java code of getter method for child element classes.
 	 * @param typeName name of class representing the child element.
 	 * @param name name of variable.
+	 * @param iType name of item variable type.
 	 * @param isRoot true if it is a root element of X-component.
 	 * @param max maximal number of items.
 	 * @param descr Description text.
@@ -69,6 +71,7 @@ class XCGeneratorJSON extends XCGeneratorBase1 {
 	private void genDirectGetter(XNode xn,
 		final String typeName,
 		final String name,
+		final String iType,
 		final boolean isRoot,
 		final int max,
 		final String descr,
@@ -140,13 +143,14 @@ class XCGeneratorJSON extends XCGeneratorBase1 {
 "\tpublic &{typ} get$&{name}() {"+LN+
 "\t\t&{typ} y ="+LN+
 "\t\t\tnew &{typ1}();"+LN+
-"\t\tfor (&{name} z : listOf&{name}()) {"+LN+
+"\t\tfor (&{iname} z : listOf&{name}()) {"+LN+
 "\t\t\ty.add(z.get$value());"+LN+
 "\t\t}"+LN+
 "\t\treturn y;"+LN+
 "\t}"+LN,
 				"&{xmlName}", xmlName,
 				"&{d}" , d,
+				"&{iname}", iType,
 				"&{name}", name,
 				"&{typ}", typ,
 				"&{typ1}", typ.replace("List<", "ArrayList<")));
@@ -189,7 +193,7 @@ class XCGeneratorJSON extends XCGeneratorBase1 {
 	/** Generate java code of setter method for child element classes.
 	 * @param typeName name typ (class etc).
 	 * @param name name of variable.
-	 * @param iType name of item variable type.
+	 * @param iName name of item variable type.
 	 * @param isRoot true if it is a root element of X-component.
 	 * @param max maximal number of items.
 	 * @param descr Description text.
@@ -198,7 +202,7 @@ class XCGeneratorJSON extends XCGeneratorBase1 {
 	 */
 	private void genDirectSetter(final String typeName,
 		final String name,
-		final String iType,
+		final String iName,
 		final boolean isRoot,
 		final int max,
 		final String descr,
@@ -211,7 +215,7 @@ class XCGeneratorJSON extends XCGeneratorBase1 {
 			x = "if(x!=null)_&{name}.add(x);";
 		} else {
 			x = (isRoot ? "" : "if(_&{name}==null)_&{name}=new "
-				+ iType + "();_&{name}.") + "set$value(x);";
+				+ iName + "();_&{name}.") + "set$value(x);";
 		}
 		if (sbi != null) {
 			sb.append("\t@Override").append(LN);
@@ -261,12 +265,12 @@ class XCGeneratorJSON extends XCGeneratorBase1 {
 "\t * @param x value to be added."+LN+
 "\t */"+LN) : "")+
 "\tpublic void set$&{name}(java.util.List<&{typ}> x) {"+LN+
-"\t\tjava.util.List<&{name}> y = listOf&{name}();"+LN+
+"\t\tjava.util.List<&{iname}> y = listOf&{name}();"+LN+
 "\t\ty.clear();"+LN+
 "\t\tif (x==null)return;"+LN+
 "\t\tfor (&{typ} w : x) {"+LN+
 "\t\t\tif (w != null) {"+LN+
-"\t\t\t\t&{name} z = new &{name}();"+LN+
+"\t\t\t\t&{iname} z = new &{iname}();"+LN+
 "\t\t\t\tz.set$value(w);"+LN+
 "\t\t\t\ty.add(z);"+LN+
 "\t\t\t}\n" +
@@ -274,6 +278,7 @@ class XCGeneratorJSON extends XCGeneratorBase1 {
 "\t}"+LN;
 			sb.append(modify(template,
 				"&{x}", x,
+				"&{iname}", iName,
 				"&{name}", name,
 				"&{d}" , d,
 				"&{xmlName}", name.replace('$', ':'),

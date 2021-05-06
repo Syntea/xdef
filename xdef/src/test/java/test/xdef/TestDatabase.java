@@ -190,20 +190,27 @@ public final class TestDatabase extends XDTester {
 		String xml;
 		String xdef;
 		ArrayReporter reporter = new ArrayReporter();
-		String tempDir = getTempDir();
 		Element el;
 		NodeList nl;
 		String s;
-
-		// creates DB environment
-		createDBEnv(tempDir);
-
+		String tempDir;
+		try {
+			tempDir = clearTempDir().getCanonicalPath().replace('\'', '/');
+			if (!tempDir.endsWith("/")) {
+				tempDir += '/';
+			}
+		} catch (Exception ex) {
+			fail(ex);
+			return;
+		}
 		////////////////////////////////////////////////////////////////////////
 		// Primary tests: test DB environment
 		////////////////////////////////////////////////////////////////////////
 		Statement st = null;
 		ResultSet rs = null;
 		try {
+			// creates DB environment
+			createDBEnv(tempDir);
 			st = _con.createStatement();
 			st.executeUpdate("create table abc(id int)");
 			st.executeUpdate("insert into abc (id) values(1)");
@@ -217,8 +224,8 @@ public final class TestDatabase extends XDTester {
 			rs.getInt(1);
 			fail("In the resultset was no data and no SQLException was "
 					+ "generated.");
-		} catch (Exception ex) {
-			// expected
+		} catch (SQLException ex) {
+			// espected: Invalid cursor state - no current row
 		} finally {
 			try {
 				rs.close();

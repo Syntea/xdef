@@ -1,5 +1,6 @@
 package test.xdutils;
 
+import java.io.File;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.util.GenCollection;
 import org.w3c.dom.Element;
@@ -15,9 +16,10 @@ public class TestXDefUtils extends XDTester {
 
 	@Override
 	public void test() {
-		String tempDir = getTempDir();
+		File tempDir = clearTempDir();
 		try {
-			String outFile = tempDir + "collection.xml";
+			String outFile =
+				new File(tempDir, "collection.xml").getCanonicalPath();
 			GenCollection.main(new String[] {
 				"-m",
 				"-o", outFile,
@@ -35,7 +37,6 @@ public class TestXDefUtils extends XDTester {
 					}
 				}
 			}
-			outFile = tempDir + "collection.xml";
 			GenCollection.main(new String[] {
 				"-m",
 				"-o", outFile,

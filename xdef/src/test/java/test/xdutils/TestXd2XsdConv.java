@@ -31,7 +31,6 @@ public class TestXd2XsdConv extends XDTester {
 
 	private static final String MAIN_DEF_NAME = "main";
 	private static final String MAIN_SCHEMA_FILE_NAME = "main.xsd";
-//    private XdefToXsd _conv;
 	private ReportWriter _repWriter;
 	private File _dataDir;
 	private File _tempDir;
@@ -43,7 +42,6 @@ public class TestXd2XsdConv extends XDTester {
 	private ErrMessage _errMessage;
 
 	private void init() {
-//        _conv = new XdefToXsd();
 		_xsdFactory =
 			SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
 		_repWriter = new ArrayReporter();
@@ -57,8 +55,7 @@ public class TestXd2XsdConv extends XDTester {
 			throw new RuntimeException(
 				"Xsd2xd directory does not exists or is not a directory!");
 		}
-		File tempDir = new File(getTempDir());
-		_tempDir = new File(tempDir, "xd2xsd");
+		_tempDir = new File(clearTempDir(), "xd2xsd");
 		if (!_tempDir.exists()) {
 			_tempDir.mkdir();
 		} else {

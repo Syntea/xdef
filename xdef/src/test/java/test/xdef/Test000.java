@@ -56,7 +56,7 @@ public final class Test000 extends XDTester {
 		XDDocument xd;
 		StringWriter strw;
 		final String dataDir = getDataDir() + "test/";
-		final String tempDir = getTempDir();
+		final File xtempDir = clearTempDir();
 		try {
 			xdef = "<xd:def xmlns:xd='"+_xdNS+"' root='root'><root/></xd:def>";
 			xml = "<?A A?><root><?B B?></root><?C C?>";//processing instructions
@@ -547,8 +547,8 @@ public final class Test000 extends XDTester {
 		} catch (Exception ex) {fail(ex);}
 		try {
 			String defName = "RegistraceSU";
-			String errFile = tempDir + "Test000_05.err";
-			String lstFile = tempDir + "Test000_05.lst";
+			File errFile = new File(xtempDir, "Test000_05.err");
+			File lstFile = new File(xtempDir, "Test000_05.lst");
 			File[] defFiles = SUtils.getFileGroup(dataDir + "Test000_05*.xdef");
 			String dataFile = dataDir + "Test000_05.xml";
 			DecimalFormat df = new DecimalFormat("0.00");
@@ -570,7 +570,7 @@ public final class Test000 extends XDTester {
 			repw.close();
 			InputStreamReader isr =
 				new InputStreamReader(new FileInputStream(dataFile));
-			ReportReader repIn = new FileReportReader(new File(errFile), true);
+			ReportReader repIn = new FileReportReader(errFile, true);
 			OutputStream lstStream = new FileOutputStream(lstFile);
 			OutputStreamWriter lst = new OutputStreamWriter(lstStream);
 			ReportPrinter.printListing(lst,isr,repIn, false); //no line numbers

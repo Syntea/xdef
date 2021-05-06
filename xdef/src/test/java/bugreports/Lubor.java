@@ -18,12 +18,11 @@ public class Lubor extends XDTester {
 			File f1 = new File(getDataDir() + "Lubor_1.xdef");
 			xp = XDFactory.compileXD(null, f, f1);
 			// Generate X-components
-			reporter = org.xdef.component.GenXComponent.genXComponent(
-				xp, "src/test/java", null, false, true);
+			reporter = org.xdef.component.GenXComponent.genXComponent(xp,
+				"src/test/java", null, false, true);
 			if (reporter.errorWarnings()) {
 				reporter.checkAndThrowErrors();
 			}
-/*xx*/
 			xml = "<A c='c'><D d='d'/><X/></A>";
 			bugreports.data.A p = (bugreports.data.A)
 				parseXC(xp,"A", xml, null, reporter);
@@ -34,7 +33,6 @@ public class Lubor extends XDTester {
 				parseXC(xp,"A", xml, null, reporter);
 			assertNoErrorwarnings(reporter);
 			assertEq(xml, q.toXml());
-/*xx*/
 		} catch (Exception ex) {fail(ex);}
 	}
 

@@ -48,11 +48,20 @@ public class TestJsonXdef extends XDTester {
 	 * @throws RuntimeException if an error occurs.
 	 */
 	private XDPool genAll(final String filter) {
+		try {
+			File f = new File(clearTempDir(), "json");
+			f.mkdirs();
+			_tempDir = f.getCanonicalPath().replace('\"', '/');
+			if (!_tempDir.endsWith("/")) {
+				_tempDir += "/";
+			}
+		} catch (Exception ex) {
+			fail(ex);
+			return null;
+		}
 		// Initialize fields, test files and directories
 		_dataDir = getDataDir() + "json/";
 		_jfiles = SUtils.getFileGroup(_dataDir + filter + ".xdef");
-		_tempDir = getTempDir() + "json/";
-		new File(_tempDir).mkdirs();
 		// Generate files and compile X-definitions and X-components.
 		try {
 			boolean rebuild = false;

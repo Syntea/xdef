@@ -36,6 +36,7 @@ import org.xdef.proc.XXData;
 import org.xdef.sys.FileReportWriter;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
+import static test.XDTester._xdNS;
 
 /** All sorts of tests of X-definition.
  * @author Vaclav Trojan
@@ -57,7 +58,16 @@ public final class TestXdef extends XDTester {
 		Report rep;
 		XDOutput out;
 		StringWriter strw;
-		String tempDir = getTempDir();
+		String tempDir;
+		try {
+			tempDir = clearTempDir().getCanonicalPath().replace('\\', '/');
+			if (!tempDir.endsWith("/")) {
+				tempDir += "/";
+			}
+		} catch (Exception ex) {
+			fail(ex);
+			return;
+		}
 		Properties props = new Properties();
 		_myX = 1;
 		boolean chkSyntax = getChkSyntax();
@@ -3319,6 +3329,7 @@ public final class TestXdef extends XDTester {
 		} catch (Exception ex) {fail(ex);}
 		props.clear();
 
+		clearTempDir(); // delete created temporary files
 		resetTester();
 		try {
 			SUtils.deleteAll(tempDir, true); //delete all generated data
