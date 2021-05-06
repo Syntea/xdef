@@ -58,14 +58,6 @@ public class TestXd2XsdConv extends XDTester {
 				"Xsd2xd directory does not exists or is not a directory!");
 		}
 		File tempDir = new File(getTempDir());
-		if (!tempDir.exists()) {
-			tempDir.mkdir();
-		} else {
-			if (!tempDir.isDirectory()) {
-				throw new RuntimeException(
-					"Temporary directory is not a directory!");
-			}
-		}
 		_tempDir = new File(tempDir, "xd2xsd");
 		if (!_tempDir.exists()) {
 			_tempDir.mkdir();
@@ -404,13 +396,8 @@ public class TestXd2XsdConv extends XDTester {
 		assertTrue(prepare("Sisma3_1"), popMessage());
 		assertTrue(parse("Sisma"), popMessage());
 
+		clearTempDir(); // delete temporary files.
 		resetProperties();
-
-		try {
-			FUtils.deleteAll(_tempDir, true);
-		} catch (Exception ex) {
-			throw new RuntimeException("Could not delete temporary files!", ex);
-		}
 	}
 
 ////////////////////////////////////////////////////////////////////////////////

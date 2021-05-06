@@ -39,8 +39,6 @@ import org.xdef.proc.XXNode;
 import org.xdef.sys.Report;
 import org.xdef.sys.SUtils;
 import org.xdef.util.XdefToXsd;
-import org.xdef.sys.GPSPosition;
-import org.xdef.sys.Price;
 
 /** Various tests.
  * @author Vaclav Trojan
@@ -172,25 +170,10 @@ public class MyTest_0 extends XDTester {
 ////////////////////////////////////////////////////////////////////////////////
 
 		String tempDir = getTempDir();
-		File f = new File(getTempDir());
-		if (f.exists() && !f.isDirectory()) {
-			throw new RuntimeException(f.getAbsolutePath()
-				+ " is not directory");
-		}
-		f.mkdir();
-		tempDir = f.getAbsolutePath().replace('\\', '/');
-		if (!tempDir.endsWith("/")) {
-			tempDir += '/';
-		}
-		if (!f.isDirectory()) {
-			fail('\"' + tempDir + "\" is not directory");
-			return;
-		}
 		XDPool xp;
 		String xdef;
 		String xml;
 		String s;
-		Object j;
 		Object o;
 		XDDocument xd;
 		Element el;
@@ -558,7 +541,7 @@ if(T){return;}
 "  </xd:declaration>\n" +
 "  <A>name()</A>" +
 "</xd:def>\n";
-			f = new File(tempDir + "x.xdef");
+			File f = new File(tempDir + "x.xdef");
 			SUtils.writeString(f, xdef);
 			xp = compile(f);
 			xml = "<A>1?xyz</A>";
@@ -1744,11 +1727,7 @@ if(T){return;}
 			assertTrue(reporter.errorWarnings(), "Error not recognized");
 		} catch (Exception ex) {fail(ex);}
 
-		try {
-			if (new File(tempDir).exists()) {
-				SUtils.deleteAll(tempDir, true);
-			}
-		} catch (Exception ex) {fail(ex);}
+		clearTempDir(); // delete temporary files.
 	}
 
 	/** Run test

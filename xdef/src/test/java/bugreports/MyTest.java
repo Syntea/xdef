@@ -1,17 +1,12 @@
 package bugreports;
 
 import java.io.File;
-import java.io.StringWriter;
-import org.w3c.dom.Element;
 import org.xdef.XDConstants;
 import org.xdef.XDDocument;
-import org.xdef.XDOutput;
 import org.xdef.XDPool;
 import org.xdef.component.XComponent;
 import org.xdef.json.JsonUtil;
 import org.xdef.sys.ArrayReporter;
-import org.xdef.sys.Report;
-import org.xdef.sys.SUtils;
 import test.XDTester;
 import static test.XDTester._xdNS;
 import static test.XDTester.genXComponent;
@@ -48,25 +43,11 @@ public class MyTest extends XDTester {
 ////////////////////////////////////////////////////////////////////////////////
 
 		String tempDir = getTempDir();
-		File f = new File(getTempDir());
-		if (f.exists() && !f.isDirectory()) {
-			throw new RuntimeException(f.getAbsolutePath()
-				+ " is not directory");
-		}
-		f.mkdir();
-		tempDir = f.getAbsolutePath().replace('\\', '/');
-		if (!tempDir.endsWith("/")) {
-			tempDir += '/';
-		}
 		XDPool xp;
 		String xdef;
 		String xml;
 		String s;
 		XDDocument xd;
-		Element el;
-		XDOutput xout;
-		StringWriter strw;
-		Report rep;
 		Object j;
 		XComponent xc;
 		ArrayReporter reporter = new ArrayReporter();
@@ -223,12 +204,8 @@ if(true)return;
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
-////////////////////////////////////////////////////////////////////////////////
-		try {
-			if (new File(tempDir).exists()) {
-				SUtils.deleteAll(tempDir, true);
-			}
-		} catch (Exception ex) {fail(ex);}
+
+		clearTempDir(); // delete temporary files.
 	}
 
 	/** Run test

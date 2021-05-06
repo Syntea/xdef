@@ -29,7 +29,7 @@ public class FileReportReader implements ReportReader {
 
 	/** Create new empty KFileReportReader.
 	 * @param fname The pathname of file with the input data.
-	 * @param xmlFormat if <tt>true</tt> the from of input data is in XML,
+	 * @param xmlFormat if true the from of input data is in XML,
 	 * otherwise the input data stream is processed as a stream of source lines.
 	 * @throws SException if an error occurs.
 	 */
@@ -40,9 +40,9 @@ public class FileReportReader implements ReportReader {
 
 	/** Create new empty KFileReportReader.
 	 * @param fname The pathname of file with the input data.
-	 * @param encoding The name of encoding table (<tt>null</tt> =&gt; default
+	 * @param encoding The name of encoding table (null =&gt; default
 	 * encoding).
-	 * @param xmlFormat if <tt>true</tt> the from of input data is in XML,
+	 * @param xmlFormat if true the from of input data is in XML,
 	 * otherwise the input data stream is processed as a stream of source lines.
 	 * @throws SException if an error occurs.
 	 */
@@ -62,7 +62,7 @@ public class FileReportReader implements ReportReader {
 
 	/** Create new empty KFileReportReader.
 	 * @param in The file with the input data.
-	 * @param xmlFormat if <tt>true</tt> the from of input data is in XML,
+	 * @param xmlFormat if true the from of input data is in XML,
 	 * otherwise the input data stream is processed as a stream of source lines.
 	 * @throws SException if an error occurs.
 	 */
@@ -73,9 +73,9 @@ public class FileReportReader implements ReportReader {
 
 	/** Create new empty KFileReportReader.
 	 * @param in The file with the input data.
-	 * @param encoding The name of encoding table (<tt>null</tt> =&gt; default
+	 * @param encoding The name of encoding table (null =&gt; default
 	 * encoding).
-	 * @param xmlFormat if <tt>true</tt> the from of input data is in XML,
+	 * @param xmlFormat if true the from of input data is in XML,
 	 * otherwise the input data stream is processed as a stream of source lines.
 	 * @throws SException if an error occurs.
 	 */
@@ -106,7 +106,7 @@ public class FileReportReader implements ReportReader {
 
 	/** Create new empty KFileReportReader.
 	 * @param in The input stream reader.
-	 * @param xmlFormat if <tt>true</tt> the from of input data is in XML,
+	 * @param xmlFormat if true the from of input data is in XML,
 	 * otherwise the input data stream is processed as a stream of source lines.
 	 */
 	public FileReportReader(final InputStreamReader in,
@@ -260,7 +260,6 @@ public class FileReportReader implements ReportReader {
 			_parser.closeReader();
 			_parser = null;
 		}
-
 	}
 
 	@Override

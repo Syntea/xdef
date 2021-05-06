@@ -1,6 +1,5 @@
 package test.xdutils;
 
-import org.xdef.sys.FUtils;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.util.GenCollection;
 import org.w3c.dom.Element;
@@ -17,10 +16,6 @@ public class TestXDefUtils extends XDTester {
 	@Override
 	public void test() {
 		String tempDir = getTempDir();
-		if (tempDir == null) {
-			fail("Temporary directory is missing, test canceled");
-			return;
-		}
 		try {
 			String outFile = tempDir + "collection.xml";
 			GenCollection.main(new String[] {
@@ -57,14 +52,9 @@ public class TestXDefUtils extends XDTester {
 					}
 				}
 			}
-		} catch (Exception ex) {
-			fail(ex);
-		}
-		try {
-			FUtils.deleteAll(tempDir, true);
-		} catch (Exception ex) {
-			fail(ex);
-		}
+		} catch (Exception ex) {fail(ex);}
+
+		clearTempDir(); // delete temporary files.
 	}
 
 	/** Run test
@@ -74,5 +64,4 @@ public class TestXDefUtils extends XDTester {
 		XDTester.setFulltestMode(true);
 		runTest();
 	}
-
 }

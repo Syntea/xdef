@@ -1,8 +1,6 @@
 package test.xdutils;
 
 import org.xdef.sys.ArrayReporter;
-import org.xdef.sys.FUtils;
-import org.xdef.sys.SException;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.util.GenDTD2XDEF;
 import org.xdef.XDPool;
@@ -644,12 +642,8 @@ if (SUtils.JAVA_RUNTIME_VERSION_ID < 109) {
 //		test(dtdData, "html", xmlData, 2);
 ////		test(dtdData, "html", xmlData, display);
 //=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*
-		try {
-			FUtils.deleteAll(tempDir, true);
-		} catch (SException ex) {
-			throw new RuntimeException("Could not delete temporary files!", ex);
-		}
-////////////////////////////////////////////////////////////////////////////////
+
+		clearTempDir(); // delete temporary files.
 	}
 	/** Run test
 	 * @param args the command line arguments
@@ -658,5 +652,4 @@ if (SUtils.JAVA_RUNTIME_VERSION_ID < 109) {
 		XDTester.setFulltestMode(true);
 		runTest();
 	}
-
 }

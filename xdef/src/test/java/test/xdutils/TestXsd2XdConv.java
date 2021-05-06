@@ -3,7 +3,6 @@ package test.xdutils;
 import org.xdef.XDDocument;
 import org.xdef.XDPool;
 import org.xdef.sys.ArrayReporter;
-import org.xdef.sys.FUtils;
 import org.xdef.util.XsdToXdef;
 import java.io.File;
 import javax.xml.transform.Source;
@@ -46,21 +45,13 @@ public class TestXsd2XdConv extends XDTester {
 				"Xsd2xd directory does not exist or it is not a directory");
 		}
 		File tempDir = new File(getTempDir());
-		if (!tempDir.exists()) {
-			tempDir.mkdir();
-		} else {
-			if (!tempDir.isDirectory()) {
-				throw new RuntimeException(
-					"Temporary directory is not a directory");
-			}
-		}
 		_tempDir = new File(tempDir.getAbsolutePath(),"xsd2xd");
 		if (!_tempDir.exists()) {
 			_tempDir.mkdir();
 		} else {
 			if (!_tempDir.isDirectory()) {
 				throw new RuntimeException(
-					"Temporary 'xsd2xd' directory is not a directory");
+					"Temporary 'xd2xsd' directory is not a directory!");
 			}
 		}
 		_prepared = false;
@@ -374,13 +365,8 @@ public class TestXsd2XdConv extends XDTester {
 		assertTrue(prepare("Sisma_RegistraceSU"), popMessage());
 		assertTrue(parse("Sisma_RegistaceSU"), popMessage());
 
+		clearTempDir(); // delete temporary files.
 		resetProperties();
-
-		try {
-			FUtils.deleteAll(_tempDir, true);
-		} catch (Exception ex) {
-			throw new RuntimeException("Could not delete temporary files", ex);
-		}
    }
 
 	/** Run test

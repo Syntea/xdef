@@ -2,7 +2,6 @@ package test.xdef;
 
 import test.XDTester;
 import org.xdef.sys.ArrayReporter;
-import org.xdef.sys.FUtils;
 import org.xdef.XDDocument;
 import org.xdef.XDFactory;
 import org.xdef.XDPool;
@@ -783,7 +782,7 @@ public final class TestDatabase extends XDTester {
 "  \n"+
 "  <C xd:script= \"occurs 1; create 1;\">"+
 "    <B xd:script= \"occurs *; create service.query('SELECT * \n"+
-"        FROM " + TABLE_B + " WHERE a=' + aVal); finally doCB();\"\n"+
+"        FROM " + TABLE_B + " WHERE a=' + aVal); finally doCB()\"\n"+
 "           a = \"? int\"\n"+
 "           b = \"? string\">\n"+
 "    </B>\n"+
@@ -856,13 +855,9 @@ public final class TestDatabase extends XDTester {
 		 *   Pro externi data ovsem musi uzivatel provest close
 		 *   ve volajicim programu!
 		 */
-		// clean environment created and used for testing database
+		// clear environment created and used for testing database
 		cleanDBEnv(tempDir);
-		// in case of none test failures remove the temporary and test data
-		try {
-			FUtils.deleteAll(tempDir, true);
-		} catch (Exception ex) {fail(ex);}
-
+		clearTempDir(); // delete temporary files.
 		resetTester();
 	}
 

@@ -72,20 +72,6 @@ public class MyTest_2 extends XDTester {
 ////////////////////////////////////////////////////////////////////////////////
 
 		String tempDir = getTempDir();
-		File f = new File(getTempDir());
-		if (f.exists() && !f.isDirectory()) {
-			throw new RuntimeException(f.getAbsolutePath()
-				+ " is not directory");
-		}
-		f.mkdir();
-		tempDir = f.getAbsolutePath().replace('\\', '/');
-		if (!tempDir.endsWith("/")) {
-			tempDir += '/';
-		}
-		if (!f.isDirectory()) {
-			fail('\"' + tempDir + "\" is not directory");
-			return;
-		}
 		XDPool xp;
 		String xdef;
 		String xml;
@@ -1312,11 +1298,7 @@ if(T){return;}
 		} catch (Exception ex) {fail(ex);}
 if(T){return;}
 
-		try {
-			if (new File(tempDir).exists()) {
-				SUtils.deleteAll(tempDir, true);
-			}
-		} catch (Exception ex) {fail(ex);}
+		clearTempDir(); // delete temporary files.
 	}
 
 	/** Run test
