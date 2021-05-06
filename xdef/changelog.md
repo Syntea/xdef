@@ -7,6 +7,8 @@
 * fixed bug in construction mode when in the section `xd:mixed` is embedded
   a section `xd:choice` (an error XDEF555 was incorrectly reported).
 * fixed endless cycle in the X-position with reference to inner selection group.
+* fixed bug in generation of X-components when the root model or the referred
+  model has only the text child node and the occurrence is more then one.
 * improved creation of XML from JSON.
 * improved error reporting in JSON.
 * to the X-script of `BNFRule` objects added the method `rule.validate(String)`.

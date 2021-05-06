@@ -5,7 +5,6 @@ import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.FileReportReader;
-import org.xdef.sys.FUtils;
 import org.xdef.sys.Report;
 import org.xdef.sys.ReportReader;
 import org.xdef.util.XValidate;
@@ -27,7 +26,7 @@ public class TestValidate extends XDTester {
 			fail("Data directory is missing, test canceled");
 			return;
 		}
-		String tempDir = getTempDir();
+		File tempDir = clearTempDir();
 		File xmlFile;
 		XDDocument xd;
 		ArrayReporter reporter = new ArrayReporter();
@@ -50,53 +49,55 @@ public class TestValidate extends XDTester {
 					fail("Errors: " + reporter.printToString()); //2
 				}
 			}
-			XValidate.main(new String[] {"-i", dataDir + "TestValidate.xml",
-				"-l",  tempDir + "TestValidate.log"});
-			repr = new FileReportReader(tempDir + "TestValidate.log");
+			XValidate.main(new String[] {"-i",
+				dataDir + "TestValidate.xml",
+				"-l",
+				new File(tempDir, "TestValidate.log").getCanonicalPath()});
+			repr = new FileReportReader(new File(tempDir, "TestValidate.log"));
 			assertEq(((rep = repr.getReport()) == null ?
 				null: rep.toString()).indexOf("I: File OK: "),
 				0, rep);
 			assertEq(null, rep = repr.getReport(), rep);
 			repr.close();
-			new File(tempDir + "TestValidate.log").delete();
+			new File(tempDir, "TestValidate.log").delete();
 			XValidate.main(new String[] {"-i", dataDir + "TestValidate1.xml",
-				"-l",  tempDir + "TestValidate1.log"});
-			repr = new FileReportReader(tempDir + "TestValidate1.log");
+				"-l",
+				new File(tempDir, "TestValidate1.log").getCanonicalPath()});
+			repr = new FileReportReader(new File(tempDir, "TestValidate1.log"));
 			assertEq(((rep = repr.getReport()) == null
 				? 999 : rep.toString().indexOf("E ")), 0, rep);
 			assertEq(((rep = repr.getReport()) == null
 				? 999 : rep.toString().indexOf("E ")), 0, rep);
 			assertEq(null, rep = repr.getReport(), rep);
 			repr.close();
-			new File(tempDir + "TestValidate1.log").delete();
+			new File(tempDir, "TestValidate1.log").delete();
 			XValidate.main(new String[] {"-i", dataDir + "TestValidate2.xml",
 				"-d", dataDir + "TestValidate.xdef",
 				"-x", "Test1",
-				"-l",  tempDir + "TestValidate2.log"});
-			repr = new FileReportReader(tempDir + "TestValidate2.log");
+				"-l",
+				new File(tempDir, "TestValidate2.log").getCanonicalPath()});
+			repr = new FileReportReader(new File(tempDir, "TestValidate2.log"));
 			assertEq(((rep = repr.getReport()) == null ?
 				null: rep.toString()).indexOf("I: File OK: "),
 				0, rep);
 			assertNull(rep = repr.getReport(), rep);
 			repr.close();
-			new File(tempDir + "TestValidate2.log").delete();
+			new File(tempDir, "TestValidate2.log").delete();
 			XDPool xp =	XDFactory.compileXD(null, dataDir+"TestValidate.xdef");
-			XDFactory.writeXDPool(tempDir + "TestValidate3.xp", xp);
+			XDFactory.writeXDPool(new File(tempDir, "TestValidate3.xp"), xp);
 			XValidate.main(new String[] {"-i", dataDir + "TestValidate2.xml",
-				"-p", tempDir + "TestValidate3.xp",
+				"-p", new File(tempDir, "TestValidate3.xp").getCanonicalPath(),
 				"-x", "Test1",
-				"-l", tempDir + "TestValidate3.log"});
-			repr = new FileReportReader(tempDir + "TestValidate3.log");
+				"-l",
+				new File(tempDir, "TestValidate3.log").getCanonicalPath()});
+			repr = new FileReportReader(new File(tempDir, "TestValidate3.log"));
 			assertEq(((rep = repr.getReport()) == null
 				? 999 : rep.toString().indexOf("I: File OK: ")), 0, rep);
 			assertNull(rep = repr.getReport(), rep);
 			repr.close();
-		} catch (Exception ex) {
-			fail(ex);
-		}
-		try {
-			FUtils.deleteAll(tempDir, true);
-		} catch (Exception ex) {}
+		} catch (Exception ex) {fail(ex);}
+
+		clearTempDir(); // delete temporary files.
 	}
 
 	/** Run test

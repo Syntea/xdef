@@ -12,7 +12,6 @@ import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.SDatetime;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
-import java.io.File;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Timestamp;
@@ -70,7 +69,7 @@ public final class TestXComponents extends XDTester {
 		// generate XCDPool from sources
 		XDPool xp = compile(xdsources);
 		// generate and compile XComponents from xp
-		genXComponent(xp, new File(getTempDir()));
+		genXComponent(xp, clearTempDir());
 		return xp;
 	}
 
@@ -104,7 +103,7 @@ public final class TestXComponents extends XDTester {
 "</xd:component>\n"+
 "</xd:def>";
 			XDPool xp = compile(xdef);
-			genXComponent(xp, new File(getTempDir()));
+			genXComponent(xp, clearTempDir());
 			xml = "<A a='1.25 CZK' q='48.2, 16.37, 151, Vienna'/>"; //
 			xd = xp.createXDDocument();
 			xc = xd.parseXComponent(xml, null, reporter);

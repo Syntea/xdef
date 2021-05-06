@@ -1,15 +1,20 @@
 package bugreports;
 
 import java.io.File;
+import org.w3c.dom.Element;
 import org.xdef.XDConstants;
 import org.xdef.XDDocument;
+import org.xdef.XDParseResult;
+import org.xdef.XDParser;
 import org.xdef.XDPool;
+import org.xdef.XDValue;
 import org.xdef.component.XComponent;
+import org.xdef.impl.code.CodeTable;
 import org.xdef.json.JsonUtil;
+import org.xdef.model.XMData;
 import org.xdef.sys.ArrayReporter;
+import org.xdef.xml.KXmlUtils;
 import test.XDTester;
-import static test.XDTester._xdNS;
-import static test.XDTester.genXComponent;
 
 /** Tests.
  * @author Vaclav Trojan
@@ -24,6 +29,24 @@ public class MyTest extends XDTester {
 	public static int b(String b) {return 0;}
 	public static void c() {}
 
+	private static String testj(String xml, String json) {
+		Object j = JsonUtil.parse(json);
+		Element el = JsonUtil.jsonToXmlXD(j);
+		if (KXmlUtils.compareElements(xml, el, true, null).errorWarnings()) {
+			return "xml != el"+
+				"\njson: "+json+
+				"\nxml:  "+xml+
+				"\nel:   "+KXmlUtils.nodeToString(el);
+		}
+		Object j1 = JsonUtil.xmlToJson(el);
+		if (!JsonUtil.jsonEqual(j, j1)) {
+			return "j != j1"+
+				"\nxml: "+xml+
+				"\nj:   " + JsonUtil.toJsonString(j)+
+				"\nj1:  " + JsonUtil.toJsonString(j1);
+		}
+		return "";
+	}
 	private static Object toJson(final XComponent xc) {
 		return JsonUtil.xmlToJson(xc.toXml());
 	}
@@ -42,7 +65,7 @@ public class MyTest extends XDTester {
 			XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE); // true | false
 ////////////////////////////////////////////////////////////////////////////////
 
-		String tempDir = getTempDir();
+		File tempDir = clearTempDir();
 		XDPool xp;
 		String xdef;
 		String xml;
@@ -51,22 +74,100 @@ public class MyTest extends XDTester {
 		Object j;
 		XComponent xc;
 		ArrayReporter reporter = new ArrayReporter();
-
 ////////////////////////////////////////////////////////////////////////////////
 		try {
 			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:BNFGrammar name=\"g\" scope=\"local\">\n" +
+"   prvek      ::= 'a' | 'a' | 'b' | 'c'\n" +
+"   prvekS     ::=  prvek ',' \n" +
+"   seznam     ::= '(' prvekS* prvek ')'\n" +
+" </xd:BNFGrammar>\n"+
+"<xd:declaration>\n"+
+" type mujtyp1 int(1,10);\n"+
+" type mujtyp2 g.rule('seznam');\n"+
+"</xd:declaration>\n"+
+"<a x='mujtyp1()' y='mujtyp2()'/>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			xp.displayCode();
+			xd = xp.createXDDocument();
+			XMData xmd;
+			XDValue xdv;
+			XDParser xdp;
+			XDParseResult xdr;
+			xmd = (XMData) xp.findModel("#a/@x");
+			System.out.println(xmd.getParserName());
+			xdv = xmd.getParseMethod();
+			System.out.println(xdv);
+			xdp = (XDParser) xdv;
+			xdr = xdp.check(null, "11");
+			System.out.println(xdr.errors());
+			System.out.println(xdr.getReporter());
+			xmd = (XMData) xp.findModel("#a/@y");
+			System.out.println(xmd.getParserName());
+			xdv = xmd.getParseMethod();
+			if (xdv.getCode() == CodeTable.CALL_OP) {
+				System.out.println(xdv);
+			}
+//			xdp = (XDParser) xdv;
+//			xdr = xdp.check(null, "11");
+//			System.out.println(xdr.errors());
+//			System.out.println(xdr.getReporter());
+
+			xml = "<a x='9' y='(a,b)'/>";
+//			assertEq(xml, parse(xp, "", xml, reporter));
+		} catch (Exception ex) {fail(ex);}
+if(true)return;
+//		try {
+//			assertEq("", testj(
+////"<a>[ 1, 2 ][ 3, 4 ]</a>",
+//"<a xmlns:js='http://www.xdef.org/json/4.0'>"+
+//"<js:array>[ 1, 2 ]</js:array>"+
+//"<js:array>[ 3, 4 ]</js:array>"+
+//"</a>",
+//				"{\"a\":[{}, [1,2], [3,4]]}"));
+//if(true)return;
+//			xml = "<a ax='1'><b bx='2'>xxx</b></a>";
+//			el = KXmlUtils.parseXml(xml).getDocumentElement();
+//			j = JsonUtil.xmlToJson(el);
+////			assertEq(xml, JsonUtil.jsonToXmlXD(j));
+////			System.out.println(JsonUtil.toJsonString(j));
+////			assertEq(el, JsonUtil.jsonToXmlXD(j));
+//			assertEq("", testj("<a/>", "{\"a\": {} }"));
+//			assertEq("", testj("<a>aaa</a>", "{\"a\":[{},\"aaa\"]}"));
+////			assertEq("", testj("<a>aaa</a>", "{\"a\": \"aaa\" }"));
+//			assertEq("", testj("<a b='1' c='2'/>",
+//				"{\"a\": {\"b\": 1, \"c\": 2} }"));
+//			assertEq("", testj("<a><b/>aaa<c/></a>",
+//				"{\"a\": [ {},  {\"b\": {} }, \"aaa\", {\"c\": {} } ] }"));
+//			assertEq("", testj("<a ax='1'><b bx='2'>xxx</b></a>",
+//				"{\"a\":[{\"ax\":1},{\"b\":[{\"bx\":2},\"xxx\"]}]}"));
+//			assertEq("", testj("<a>[ 1, 2 ]</a>", "{\"a\":[{},[1,2]]}"));
+//			assertEq("", testj(
+////"<a>[ 1, 2 ][ 3, 4 ]</a>",
+//"<a xmlns:js='http://www.xdef.org/json/4.0'>"+
+//"<js:array>[ 1, 2 ]</js:array>"+
+//"<js:array>[ 3, 4 ]</js:array>"+
+//"</a>",
+//				"{\"a\":[{}, [1,2], [3,4]]}"));
+//		} catch (Exception ex) {fail(ex);}
+//if(true)return;
+		try {
+			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='x|y|y1|y2'>\n"+
-"<xd:json name='y' mode='xdef'>\n"+
+"<xd:json name='y'>\n"+
 "  \"int();\"\n"+
 "</xd:json>\n"+
-"<xd:json name='y1' mode='w3c'>\n"+
+"<xd:json name='y1'>\n"+
 "  {\"a\":\"int();\"}\n"+
 "</xd:json>\n"+
-"<xd:json name='y2' mode='w3c'>\n"+
+"<xd:json name='y2'>\n"+
 "  [\"occurs 2 int();\", \"optional jnumber();\", \"optional string();\"]\n"+
 "</xd:json>\n"+
 "<x>\n"+
 "  <a xd:script='*'>\n"+
+//"    jlist(%item=union(%item=[jnull,boolean(), int, string]))\n"+
 "    jlist(%item=jvalue())\n"+
 "  </a>\n"+
 "  <b xd:script='*'>\n"+
@@ -79,7 +180,9 @@ public class MyTest extends XDTester {
 "    jlist(%item=int())\n"+
 "  </d>\n"+
 "  <e xd:script='*'>\n"+
-"    jlist(2, %item=jlist(2, %item=union(%item=[jnull,int()])))\n"+
+"    <js:array xmlns:js='http://www.xdef.org/json/4.0' xd:script='*'>\n"+
+"		jlist(2, %item=union(%item=[jnull,int()]))\n"+
+"    </js:array>\n"+
 "  </e>\n"+
 "</x>\n"+
 "<xd:component>\n"+
@@ -92,13 +195,13 @@ public class MyTest extends XDTester {
 "</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			genXComponent(xp, new File(tempDir));
+			genXComponent(xp, tempDir);
 //if(true)return;
 			xml =
-"<x>\n"+
-"  <a>[ \"false\" ]</a>\n"+
-"  <a>[ 123, null, false ]</a>\n"+
-"  <a>[ 123 ]</a>\n"+
+"<x xmlns:js='http://www.xdef.org/json/4.0'>\n"+
+"  <a> [ \"false\" ]</a>\n"+
+"  <a>[ 123, null, false ] </a>\n"+
+"  <a> [ 123 ] </a>\n"+
 "  <a>[ 3.14E+3 ]</a>\n"+
 "  <a>[ false ]</a>\n"+
 "  <a>[ \"abc\" ]</a>\n"+
@@ -106,14 +209,16 @@ public class MyTest extends XDTester {
 "  <a>[ 1, false, \"abc\" ]</a>\n"+
 "  <a>[ null, 123, 1, false ]</a>\n"+
 "  <a>[ null, 123, false, \"abc\" ]</a>\n"+
-"  <a>[ null, 123, false, \"abc\", \"\" ]</a>\n"+
-"  <a>[ ]</a>\n"+
+//"  <a>[ null, 123, false, \"abc\", \"\" ]</a>\n"+
+//"  <a>[ ]</a>\n"+ // empty array
 "  <b>[ null ]</b>\n"+
 "  <b>[ true ]</b>\n"+
 "  <b>[ true, null ]</b>\n"+
 "  <b>[ null, true ]</b>\n"+
 "  <b>[ null, true, false, null ]</b>\n"+
-"  <e>[ [ 1, -2 ], [ null, 99 ] ]</e>\n"+
+"  <e><js:array>[ 1, -2 ]</js:array>\n"+
+"     <js:array>[ null, 99 ]</js:array>\n"+
+"  </e>\n"+
 "</x>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);

@@ -44,8 +44,7 @@ public class TestXsd2XdConv extends XDTester {
 			throw new RuntimeException(
 				"Xsd2xd directory does not exist or it is not a directory");
 		}
-		File tempDir = new File(getTempDir());
-		_tempDir = new File(tempDir.getAbsolutePath(),"xsd2xd");
+		_tempDir = new File(clearTempDir(),"xsd2xd");
 		if (!_tempDir.exists()) {
 			_tempDir.mkdir();
 		} else {

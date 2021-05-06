@@ -228,7 +228,7 @@ public class TestSUtils extends STester {
 			for (int i = 0; i < bytes.length; i++) {
 				bytes[i] = (byte)i;
 			}
-			File f = new File(SUtils.getTempDir() + "readBytes.tst");
+			File f = new File(SUtils.getTempDir(), "readBytes.tst");
 			f.delete();
 			try {
 				SUtils.readBytes(f);

@@ -23,8 +23,7 @@ public final class TestLexicon extends XDTester {
 	@Override
 	/** Run test and print error information. */
 	public void test() {
-		String tempDir = getTempDir();
-		clearTempDir();
+		File tempDir = clearTempDir();
 		String xdef;
 		String xml;
 		Element el;
@@ -251,10 +250,9 @@ public final class TestLexicon extends XDTester {
 			assertNoErrors(reporter);
 			assertEq(xml, el);
 			// try X-component
-			String xdir = tempDir + "components";
-			File fdir = new File(xdir);
+			File fdir = new File(tempDir, "components");
 			fdir.mkdirs();
-			if (fdir.exists() && !fdir.isDirectory()) {
+			if (!fdir.exists() || !fdir.isDirectory()) {
 				//Directory doesn't exist or isn't accessible: &{0}
 				throw new SRuntimeException(SYS.SYS025, fdir.getAbsolutePath());
 			}
