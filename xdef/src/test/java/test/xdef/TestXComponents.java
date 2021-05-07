@@ -77,18 +77,18 @@ public final class TestXComponents extends XDTester {
 	@SuppressWarnings("unchecked")
 	/** Run test and print error information. */
 	public void test() {
-		String xml;
 		Element el;
-		XDDocument xd;
-		String s;
-		XComponent xc;
-		Object obj, json;
 		List list, list1;
-		SDatetime sd;
+		Object obj, json;
 		ArrayReporter reporter = new ArrayReporter();
-		clearTempDir();
+		String s, xml, xdef;
+		SDatetime sd;
+		XComponent xc;
+		XDDocument xd;
+		XDPool xp;
+
 		try { // GPSPosition, Price
-			String xdef =
+			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='A'>\n" +
 "<xd:declaration\n>\n"+
 "  Price a;\n"+
@@ -102,7 +102,7 @@ public final class TestXComponents extends XDTester {
 "  %class test.xdef.TY_GPS %link #A;\n"+
 "</xd:component>\n"+
 "</xd:def>";
-			XDPool xp = compile(xdef);
+			xp = compile(xdef);
 			genXComponent(xp, clearTempDir());
 			xml = "<A a='1.25 CZK' q='48.2, 16.37, 151, Vienna'/>"; //
 			xd = xp.createXDDocument();
@@ -122,8 +122,63 @@ public final class TestXComponents extends XDTester {
 			assertEq("51.52, -0.09, 0.0, London",
 				xd.getVariable("q").toString());
 		} catch (Exception ex) {fail(ex);}
-
-		XDPool xp = genComponents(getDataDir() + "test/TestXComponents.xdef",
+		reporter.clear();
+		try { // model with occurrnece > 1
+			xdef =
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.0\"\n" +
+"        xd:name=\"XdPoolCfg\"\n" +
+"        xd:root=\"XdPoolCfg\">\n" +
+"\n" +
+"    <Resource xd:script=\"occurs 0..;\">string();</Resource>\n" +
+"\n" +
+"    <IncludeXDPoolCfg>\n" +
+"        <PoolCfg xd:script=\"occurs 0..; ref Resource\"/>\n" +
+"    </IncludeXDPoolCfg>\n" +
+"    <XdPoolCfg>\n" +
+"        <IncludeExternals xd:script=\"occurs 0..1; ref IncludeXDPoolCfg\"/>\n" +
+"        <Externals xd:script=\"occurs 0..1\">\n" +
+"            <ClassPath xd:script=\"occurs 0..; ref Resource\"/>\n" +
+"        </Externals>\n" +
+"        <XDefs xd:script=\"occurs 0..1\">\n" +
+"            <Resource xd:script=\"occurs 0..; ref Resource\"/>\n" +
+"        </XDefs>\n" +
+"    </XdPoolCfg>\n" +
+"    <xd:component>\n" +
+"        %class bugreports.data.XCIncludeXDPoolCfg\n" +
+"           %link XdPoolCfg#IncludeXDPoolCfg;\n" +
+"        %class bugreports.data.XCXdPoolCfg  %link XdPoolCfg#XdPoolCfg;\n" +
+"        %class bugreports.data.XCExternals %link XdPoolCfg#XdPoolCfg/Externals;\n" +
+"        %class bugreports.data.XCClass\n" +
+"           %link XdPoolCfg#XdPoolCfg/Externals/ClassPath;\n" +
+"        %class bugreports.data.XCXDefs %link XdPoolCfg#XdPoolCfg/XDefs;\n" +
+"        %class bugreports.data.XCResource %link XdPoolCfg#Resource;\n" +
+"    </xd:component>\n" +
+"</xd:def>";
+			xp = compile(xdef);
+			genXComponent(xp, clearTempDir());
+			xd = xp.createXDDocument("XdPoolCfg");
+			xml =
+"<XdPoolCfg>\n"+
+"  <IncludeExternals/>\n"+
+"  <Externals>\n"+
+"    <ClassPath>abc</ClassPath>\n" +
+"    <ClassPath>def</ClassPath>\n" +
+"  </Externals>\n"+
+"  <XDefs>\n" +
+"     <Resource>ghi</Resource>\n" +
+"  </XDefs>\n" +
+"</XdPoolCfg>";
+			assertEq(xml, parse(xdef, "XdPoolCfg", xml, reporter));
+			assertNoErrors(reporter);
+			reporter.clear();
+			xc = xd.parseXComponent(xml, null, reporter);
+			assertNoErrors(reporter);
+			assertEq(xml, xc.toXml());
+		} catch (Exception ex) {fail(ex);}
+		reporter.clear();
+		clearTempDir();
+////////////////////////////////////////////////////////////////////////////////
+		xp = genComponents(getDataDir() + "test/TestXComponents.xdef",
 			getDataDir() + "test/TestXComponent_Z.xdef");
 		try {
 			xml = "<A a='a' dec='123.45'><W w='wwwwwwww'/></A>";
