@@ -1,23 +1,25 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 40.1.3, release-date 2021-05-07
-* This snapshot build prepares features of version 40.2.0
+# Version 40.1.3, release-date 2021-05-08
 * fixed bug in display of zone with zero hours and negative minutes in offset.
 * fixed bug in the method 'setParsedString' of objects 'ParseResult'.
 * fixed bug in construction mode when in the section `xd:mixed` is embedded
   a section `xd:choice` (an error XDEF555 was incorrectly reported).
 * fixed endless cycle in the X-position with reference to inner selection group.
 * fixed bug in generation of X-components when the root model or the referred
-  model has only the text child node and the occurrence is more then one.
+*  model has occurrence more then one and it has only a text child node.
 * improved creation of XML from JSON.
 * improved error reporting in JSON.
-* to the X-script of `BNFRule` objects added the method `rule.validate(String)`.
-  Result of this method is a `boolean` value.
-* added new method to `XDDocument`
-    `XDParseResult parseXDType(String typeName, String data)`
-  this method invokes a validation method from declared type in X-definition
-  and returns `XDParseResult` object.
-* added new X-definition type of value: `GPSPosition`.
+* ===========================================================================
+* NOTE this snapshot build implements some new features for version 41.0.0:
+* ===========================================================================
+* - added the method `rule.validate(String)` to X-script of `BNFRule` objects .
+*  Result of this method is a `boolean` value.
+* - added new method to `XDDocument`
+*    `XDParseResult parseXDType(String typeName, String data)`
+*  this method invokes a validation method from declared type in X-definition
+*  and returns `XDParseResult` object.
+* - added new X-definition type of value: `GPSPosition`.
   Methods with this object:
     `latitude()` returns GPS latitude in degrees (-90.0 to 90.0).
     `longitude()` returns GPS longitude in degrees (-180.0 to 180.0).
@@ -30,7 +32,7 @@
     `new GPSPosition(latitude, longitude, altitude, name)`
     `new GPSPosition(latitude, longitude, name)`
    latitude, longitude, altitude float numbers, name is a string.
-* added new XML validation method `gps` The required form is:
+* - added new XML validation method `gps` The required form is:
      '{latitude, longitude[, altitude[, name]])'
     where parameters `latitude`, `longitude`, `altitude` are numbers and `name`
     is a string either containing only letters. otherwise it must be quoted.
@@ -39,7 +41,7 @@
     or
      `(51.52, -0.09)` (altitude and name not specified).
   The Java implementation is in class `org.xdef.sys.GPSPosition`.
-* added new X-definition type of value `Price`.
+* - added new X-definition type of value `Price`.
    Constructor:
     `new Price(amount, code)`
    where `amount` is a number and `code` is a ISO 4217 currency code. 
@@ -51,7 +53,7 @@
       number with recommended number of decimal digits, space and
       ISO 4217 currency code).
   The Java implementation is in class `org.xdef.sys.Price`.
-* added new XML validation method `price`. The required form is:
+* - added new XML validation method `price`. The required form is:
      `(decimal_number code)`; e.g. `(12.25 USD)`.
 
 # Version 40.1.2, release-date 2021-02-15
