@@ -60,7 +60,7 @@ public class Price {
 	public final String display() {
 		int i = _currency.getDefaultFractionDigits();
 		// Locale.US -> force dot as decimal point
-		return (i >= 0 ? String.format("%." + i + "f", Locale.US, _amount)
+		return (i >= 0 ? String.format(Locale.US, "%." + i + "f", _amount)
 			: String.valueOf(_amount)) + " " + currencyCode();
 	}
 
