@@ -1,5 +1,7 @@
 # Version ${version}, release-date ${release.date}
 
+# Version 40.1.4, release-date 2021-05-10
+
 # Version 40.1.3, release-date 2021-05-08
 * fixed bug in display of zone with zero hours and negative minutes in offset.
 * fixed bug in the method `setParsedString` of objects `ParseResult`.
@@ -11,12 +13,12 @@
 * improved creation of XML from JSON.
 * improved error reporting in JSON.
 * ==================================================================
-* NOTE this version implements some new features for version 41.0.0:
+* NOTE this version implements some new features prepared for version 41.0.0:
 * ==================================================================
-* added the method `rule.validate(String)` to X-script of `BNFRule` objects.
+* added the Java method `rule.validate(String)` to X-script of `BNFRule` objects.
   Result of this method is a `boolean` value.
-* added new method to `XDDocument`
-  `XDParseResult parseXDType(String typeName, String data)`
+* added new Java method to `XDDocument`:
+  * `XDParseResult parseXDType(String typeName, String data)`
   this method invokes a validation method from declared type in X-definition
   and returns `XDParseResult` object.
 * added new X-definition type of value: `GPSPosition`.
@@ -44,7 +46,7 @@
     * Constructor:
         * `new Price(amount, code)`
           where `amount` is a number and `code` is a ISO 4217 currency code. 
-    * Methods with this object:        
+    * Methods with this object:
         * `amount()` returns amount of currency as decimal number.
         * `currencyCode()` returns ISO 4217 currency code.
         * `fractionDigits()` returns recommended number of fraction digits or -1.
@@ -52,7 +54,7 @@
           number with recommended number of decimal digits, space and
           ISO 4217 currency code).
 * added new XML validation method `price`. The required form is:
-  `(decimal_number code)`; e.g. `(12.25 USD)`.
+  * `(decimal_number code)`; e.g. `(12.25 USD)`.
 
 # Version 40.1.2, release-date 2021-02-15
 * corrected the bug in the X-script method `s.contains(s)`.
