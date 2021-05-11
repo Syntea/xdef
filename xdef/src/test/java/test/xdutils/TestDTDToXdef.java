@@ -6,7 +6,6 @@ import org.xdef.util.GenDTD2XDEF;
 import org.xdef.XDPool;
 import org.xdef.sys.SUtils;
 import org.xdef.util.DTDToXdef;
-import java.io.File;
 import org.w3c.dom.Element;
 import test.XDTester;
 
@@ -68,10 +67,9 @@ public class TestDTDToXdef extends XDTester {
 
 	@Override
 	public void test() {
+		clearTempDir();
+		String tempDir = getTempDir();
 		String dataDir = getDataDir();
-		String tempDir = dataDir + "temp/";
-		File f = new File(tempDir);
-		f.mkdirs();
 		String xmlData;
 		String dtdData;
 //		//0..no display, 1 .. display DTD, 2 .. display XDEF, 4 .. display XML
