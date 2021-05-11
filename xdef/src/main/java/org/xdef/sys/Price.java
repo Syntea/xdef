@@ -1,6 +1,7 @@
 package org.xdef.sys;
 
 import java.util.Currency;
+import java.util.Locale;
 import org.xdef.msg.XDEF;
 
 /** Price with currency code.
@@ -58,7 +59,8 @@ public class Price {
 	 */
 	public final String display() {
 		int i = _currency.getDefaultFractionDigits();
-		return (i >= 0 ? String.format("%." + i + "f", _amount)
+		// Locale.US -> force dot as decimal point
+		return (i >= 0 ? String.format("%." + i + "f", Locale.US, _amount)
 			: String.valueOf(_amount)) + " " + currencyCode();
 	}
 

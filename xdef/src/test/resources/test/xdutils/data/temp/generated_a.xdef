@@ -1,2 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<xd:def name="root" root="root" xmlns:xd="http://www.xdef.org/xdef/4.0"><root a1="required string" a2="required string; onAbsence setText('x'y'z')"/></xd:def>

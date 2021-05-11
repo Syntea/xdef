@@ -1,6 +1,8 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 40.1.4, release-date 2021-05-10
+# Version 40.1.4, release-date 2021-05-11
+* fixed bug: decimal point of amount in price is now always '.' (independent on
+* `Locale` settings).
 
 # Version 40.1.3, release-date 2021-05-08
 * fixed bug in display of zone with zero hours and negative minutes in offset.
