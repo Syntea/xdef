@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 40.1.4, release-date 2021-05-11
+# Version 40.1.4, release-date 2021-05-12
 * fixed bug: decimal point of amount in price is now always '.' (independent on
 * `Locale` settings).
 
