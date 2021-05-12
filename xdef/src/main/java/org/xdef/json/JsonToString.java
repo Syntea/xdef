@@ -97,11 +97,14 @@ class JsonToString extends JsonTools {
 			}
 		}
 		result = x.toString();
-		if (result.equals("NaN") || result.equals("Infinity")
-			|| result.equals("-Infinity")) {
-			return '"' + result + '"';
+		if (x instanceof Number) {
+			if (result.equals("NaN") || result.equals("Infinity")
+				|| result.equals("-Infinity")) {
+				return '"' + result + '"';
+			}
+			return result;
 		}
-		return result;
+		return '"' + jstringToSource(result) + '"';
 	}
 
 	/** Add the string created from JSON or XON array to StringBuilder.

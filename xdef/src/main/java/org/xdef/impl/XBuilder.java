@@ -48,19 +48,19 @@ public class XBuilder implements XDBuilder {
 	private XPool _xp;
 
 	/** Creates instance of XDBuilder with properties and external objects.
-	 * @param props Properties or <tt>null</tt>.
+	 * @param props Properties or null.
 	 * @param extObjects The array of classes where are available methods
-	 * referred from definitions (may be <tt>null</tt>).
+	 * referred from definitions (may be null).
 	 */
 	public XBuilder(final Properties props, final Class<?>... extObjects) {
 		this(null, props, extObjects);
 	}
 
 	/** Creates instance of XDBuilder with properties and external objects.
-	 * @param reporter ReportWriter or <tt>null</tt>.
-	 * @param props Properties or <tt>null</tt>.
+	 * @param reporter ReportWriter or null.
+	 * @param props Properties or null.
 	 * @param extObjects The array of classes where are available methods
-	 * referred from definitions (may be <tt>null</tt>).
+	 * referred from definitions (may be null).
 	 */
 	public XBuilder(final ReportWriter reporter,
 		final Properties props,
@@ -111,7 +111,7 @@ public class XBuilder implements XDBuilder {
 	 * @param sources The string with sources.
 	 * @param sourceIds array of names of source source data corresponding to
 	 * the sources argument (any item or even this argument
-	 * may be <tt>null</tt>).
+	 * may be null).
 	 * @return this XDBuilde object.
 	 */
 	public final XDBuilder setSource(final String[] sources,
@@ -145,7 +145,7 @@ public class XBuilder implements XDBuilder {
 	 * @param source The input stream with source.
 	 * @param srcId name of source source data corresponding to
 	 * stream from the argument sources (any item or even this argument
-	 * may be <tt>null</tt>).
+	 * may be null).
 	 * @return this XDBuilde object.
 	 */
 	public final XDBuilder setSource(final InputStream source,
@@ -321,6 +321,7 @@ public class XBuilder implements XDBuilder {
 			p = result._compiler;
 			try {
 				p.compileXPool(result);
+				ar = (ArrayReporter) p.getReportWriter();
 			} catch (Exception ex) {
 				if (!(ex instanceof SThrowable)) {
 					//Program exception&{0}{: }
@@ -334,7 +335,7 @@ public class XBuilder implements XDBuilder {
 
 	/** Parse XML with X-definition declared in source input stream.
 	 * @param source where to read XML.
-	 * @param reporter used for error messages or <tt>null</tt>.
+	 * @param reporter used for error messages or null.
 	 * @return created XDDocument object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
@@ -347,7 +348,7 @@ public class XBuilder implements XDBuilder {
 
 	/** Parse XML with X-definition declared in source.
 	 * @param source URL, pathname direct to XML or direct XML.
-	 * @param reporter used for error messages or <tt>null</tt>.
+	 * @param reporter used for error messages or null.
 	 * @return created XDDocument object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
@@ -362,16 +363,16 @@ public class XBuilder implements XDBuilder {
 	 * @param obj the object from which XDValue will be created.
 	 * It may be one of:
 	 * <ul>
-	 * <li>XDValue</li>
-	 * <li>String</li>
-	 * <li>Short, Integer, Long</li>
-	 * <li>Float, Double</li>
-	 * <li>BigDecimal</li>
-	 * <li>BNFGrammar</li>
-	 * <li>BNFRule</li>
-	 * <li>Boolean</li>
-	 * <li>Calendar, SDatetime</li>
-	 * <li>SDuration</li>
+	 * <li>XDValue
+	 * <li>String
+	 * <li>Short, Integer, Long
+	 * <li>Float, Double
+	 * <li>BigDecimal
+	 * <li>BNFGrammar
+	 * <li>BNFRule
+	 * <li>Boolean
+	 * <li>Calendar, SDatetime
+	 * <li>SDuration
 	 * </ul>
 	 * @return new XDValue object.
 	 * @throws RuntimeException if the object from argument is not possible
