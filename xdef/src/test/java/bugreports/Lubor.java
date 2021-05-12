@@ -5,34 +5,35 @@ import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import test.XDTester;
 import java.io.File;
+import org.xdef.component.XComponent;
 
 public class Lubor extends XDTester {
+
+	public Lubor() {super();}
 
 	@Override
 	public void test() {
 		ArrayReporter reporter = new ArrayReporter();
 		String xml;
 		XDPool xp;
+		XComponent xc;
 		try {
 			File f = new File(getDataDir() + "Lubor_0.xdef");
 			File f1 = new File(getDataDir() + "Lubor_1.xdef");
 			xp = XDFactory.compileXD(null, f, f1);
 			// Generate X-components
-			reporter = org.xdef.component.GenXComponent.genXComponent(xp,
-				"src/test/java", null, false, true);
+			genXComponent(xp, clearTempDir());
 			if (reporter.errorWarnings()) {
 				reporter.checkAndThrowErrors();
 			}
 			xml = "<A c='c'><D d='d'/><X/></A>";
-			bugreports.data.A p = (bugreports.data.A)
-				parseXC(xp,"A", xml, null, reporter);
+			xc = parseXC(xp,"A", xml, null, reporter);
 			assertNoErrorwarnings(reporter);
-			assertEq(xml, p.toXml());
+			assertEq(xml, xc.toXml());
 			xml = "<B c='c'><D d='d'/></B>";
-			bugreports.data.B q = (bugreports.data.B)
-				parseXC(xp,"A", xml, null, reporter);
+			xc = parseXC(xp,"A", xml, null, reporter);
 			assertNoErrorwarnings(reporter);
-			assertEq(xml, q.toXml());
+			assertEq(xml, xc.toXml());
 		} catch (Exception ex) {fail(ex);}
 	}
 
