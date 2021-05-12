@@ -1019,7 +1019,7 @@ if(T){return;}
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xdef =
-"<xd:def xmlns:xd='http://www.syntea.cz/xdef/2.0' root='a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<a>required { switch(getText()) {\n"+
 "                case '1': return true;\n"+
 "                default: return false;\n"+
@@ -1031,7 +1031,7 @@ if(T){return;}
 			assertEq(xml, parse(xdef, "", xml, reporter));
 			assertNoErrors(reporter);
 			xdef =
-"<xd:def xmlns:xd='http://www.syntea.cz/xdef/2.0' root='a'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<xd:declaration>\n"+
 " type t { switch(getText()) {\n"+
 "            case '1': return true;\n"+
