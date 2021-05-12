@@ -3,6 +3,10 @@
 # Version 40.1.4, release-date 2021-05-12
 * fixed bug: decimal point of amount in price is now always '.' (independent on
 * `Locale` settings).
+* corrected bug in XON to JSON conversion: datetime is not converted
+* as JSON string.
+* corrected bug in GUI debugger: not reported errors in source X-definition
+* compilation.
 
 # Version 40.1.3, release-date 2021-05-08
 * fixed bug in display of zone with zero hours and negative minutes in offset.
