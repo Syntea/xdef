@@ -180,15 +180,8 @@ public class XONReader extends StringParser implements XONParsers {
 				spos = getPosition();
 				if (isChar('"')) {
 					name = new SBuffer(JsonTools.readJSONString(this), spos);
-				} else if (_xonMode && isXMLName(StringParser.XMLVER1_0)) {
-					String s = getParsedString();
-					int ndx = s.indexOf(':');
-					if (ndx != 0) {
-						fatal(JSON.JSON004); //Name of item expected
-						_jp.mapEnd(this);
-						return;
-					}
-					name = new SBuffer(s, spos);
+				} else if (_xonMode && isNCName(StringParser.XMLVER1_0)) {
+					name = new SBuffer(getParsedString(), spos);
 				} else {
 					fatal(JSON.JSON004); //Name of item expected
 					_jp.mapEnd(this);
@@ -676,6 +669,11 @@ public class XONReader extends StringParser implements XONParsers {
 			xr.setSysId(sysId);
 		}
 		xr.parse();
+		xr.isSpacesOrComments();
+		if (!xr.eos()) {
+			xr.error(JSON.JSON008);//Text after JSON not allowed
+		}
+		xr.getReportWriter().checkAndThrowErrorWarnings();
 		return jp.getResult();
 	}
 
@@ -688,6 +686,11 @@ public class XONReader extends StringParser implements XONParsers {
 			xr.setSysId(sysId);
 		}
 		xr.parse();
+		xr.isSpacesOrComments();
+		if (!xr.eos()) {
+			xr.error(JSON.JSON008);//Text after JSON not allowed
+		}
+		xr.getReportWriter().checkAndThrowErrorWarnings();
 		return jp.getResult();
 	}
 
