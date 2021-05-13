@@ -19,8 +19,6 @@ import java.util.StringTokenizer;
 import java.util.LinkedHashMap;
 import java.util.HashSet;
 import org.xdef.XDConstants;
-import org.xdef.impl.XElement;
-import org.xdef.impl.XPool;
 import org.xdef.model.XMNode;
 import org.xdef.sys.Report;
 
@@ -287,12 +285,13 @@ public final class GenXComponent {
 					reporter.add(Report.fatal(XDEF.XDEF373, model));
 					continue;
 				}
-				XCGenerator genxc;
-				if (((XPool)xdpool)._oldXomponents && ((XElement) xn)._json==0){
-					genxc = new XCGeneratorOld(xdpool, reporter, genJavadoc);
-				} else {
-					genxc = new XCGeneratorNew(xdpool, reporter, genJavadoc);
-				}
+				XCGenerator genxc =
+					new XCGeneratorNew(xdpool, reporter, genJavadoc);
+//				if (((XPool)xdpool)._oldXomponents && ((XElement) xn)._json==0){
+//					genxc = new XCGeneratorOld(xdpool, reporter, genJavadoc);
+//				} else {
+//					genxc = new XCGeneratorNew(xdpool, reporter, genJavadoc);
+//				}
 				final String result = genxc.genXComponent(model, //model name
 					className, //name of generated class
 					extClass, //class extension
@@ -352,15 +351,15 @@ public final class GenXComponent {
 	 * @param args array with command line arguments:
 	 * <ul>
 	 * <li>-i X-definitions list of files, required. Wildcards are
-	 * supported, required.</li>
+	 * supported, required.
 	 * <li>-x Qualified name of class with XDPool which source will
-	 *  be generated, optional (if not specified, source is not generated)</li>
-	 * <li>-p package name, optional (if not specified no package is used)</li>
-	 * <li>-o Output directory where the sources are generated, required</li>
-	 * <li>-e Encoding name, optional (default is the Java system encoding)</li>
-	 * <li>-d Generate JavaDoc, optional (default is not generate JavaDoc)</li>
-	 * <li>-j Generate JAXB annotations. Optional, default is not generate.</li>
-	 * <li>-h Help message, optional</li>
+	 *  be generated, optional (if not specified, source is not generated)
+	 * <li>-p package name, optional (if not specified no package is used)
+	 * <li>-o Output directory where the sources are generated, required
+	 * <li>-e Encoding name, optional (default is the Java system encoding)
+	 * <li>-d Generate JavaDoc, optional (default is not generate JavaDoc)
+	 * <li>-j Generate JAXB annotations. Optional, default is not generate.
+	 * <li>-h Help message, optional
 	 * </ul>
 	 */
 	public static void main(String... args) {
