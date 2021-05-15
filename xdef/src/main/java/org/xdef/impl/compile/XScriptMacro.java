@@ -32,7 +32,7 @@ public final class XScriptMacro {
 	 * @param params table with macro parameters.
 	 * @param body source of macro body.
 	 * @param reporter reporter where errors are recorded (if this parameter
-	 * is <tt>null</tt> then an runtime exception is thrown when an error
+	 * is <i>null</i> then an runtime exception is thrown when an error
 	 * occurs).
 	 */
 	public XScriptMacro(final String name,
@@ -128,9 +128,9 @@ public final class XScriptMacro {
 	}
 
 	@Override
-	/** This enables to use the method <tt>indexOf(anObject)</tt>.
+	/** This enables to use the method <i>indexOf(anObject)</i>.
 	 * @param anObject The object to be compared with this one.
-	 * @return <tt>true</tt> if and only if the object is considered to be
+	 * @return <i>true</i> if and only if the object is considered to be
 	 * equal with this one.
 	 */
 	public boolean equals(final Object anObject) {

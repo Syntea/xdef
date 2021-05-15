@@ -102,7 +102,7 @@ public class SIOException extends IOException implements SThrowable {
 	}
 
 	@Override
-	/** Get cause of exception. If cause was not set return <tt>null</tt>.
+	/** Get cause of exception. If cause was not set return <i>null</i>.
 	 * @return cause The object with cause data.
 	 */
 	public Throwable getCause() {
@@ -119,7 +119,7 @@ public class SIOException extends IOException implements SThrowable {
 
 	@Override
 	/** Get id of message.
-	 * @return The message id (may be <tt>null</tt>).
+	 * @return The message id (may be <i>null</i>).
 	 */
 	public String getMsgID() {
 		return _msgID;

@@ -121,8 +121,8 @@ public class DefSQLConstructor implements XDConstructor {
 		}
 		@Override
 		/** Check if the object is empty.
-		 * @return <tt>true</tt> if the object is empty; otherwise returns
-		 * <tt>false</tt>.
+		 * @return <i>true</i> if the object is empty; otherwise returns
+		 * <i>false</i>.
 		 */
 		public boolean isEmpty() {
 			try {

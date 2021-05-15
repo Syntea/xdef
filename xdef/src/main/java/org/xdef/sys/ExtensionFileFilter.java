@@ -24,7 +24,7 @@ public class ExtensionFileFilter implements FileFilter {
 	@Override
 	/** Method implementing java.io.FileFilter.accept(file).
 	 * @param pathname The file to be checked.
-	 * @return <tt>true</tt> if file name ends with string specified by
+	 * @return <i>true</i> if file name ends with string specified by
 	 * constructor.
 	 */
 	public boolean accept(final File pathname) {

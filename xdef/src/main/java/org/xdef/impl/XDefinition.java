@@ -102,10 +102,10 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 
 	@Override
 	/** Get Element model with given namespace and name.
-	 * @param nsURI namespace URI of element or <tt>null</tt>.
+	 * @param nsURI namespace URI of element or <i>null</i>.
 	 * @param name name of element (may be prefixed).
 	 * @return Element model with given namespace and name or return
-	 * <tt>null</tt> if such model not exists.
+	 * <i>null</i> if such model not exists.
 	 */
 	public final XMElement getModel(final String nsURI, final String name) {
 		String lockey;
@@ -196,7 +196,7 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 
 	/** Add new XElement as model.
 	 * @param newModel XElement
-	 * @return <tt>true</tt> if and only if the new model was added
+	 * @return <i>true</i> if and only if the new model was added
 	 * to X-definition.
 	 */
 	public final boolean addModel(final XElement newModel) {
@@ -240,7 +240,7 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 	@Override
 	/** Compare X-definition with an object.
 	 * @param o object to be compared.
-	 * @return <tt>true</tt> if and only if the compared object is an
+	 * @return <i>true</i> if and only if the compared object is an
 	 * X-definition and if the name of it is equal to this.
 	 */
 	public final boolean equals(final Object o) {

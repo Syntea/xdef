@@ -48,7 +48,7 @@ abstract class ChkData extends XDValueAbstract implements XXData {
 
 	/** Get default table with references IDS (used internally in the
 	 * processor of XScript).
-	 * @return default table with references IDS or <tt>null</tt>.
+	 * @return default table with references IDS or <i>null</i>.
 	 */
 	public final CodeUniqueset getIdRefTable() {return _parent.getIdRefTable();}
 
@@ -147,7 +147,7 @@ abstract class ChkData extends XDValueAbstract implements XXData {
 	/** Set named user object.
 	 * @param id identifier of the object.
 	 * @param obj user object.
-	 * @return previous value of the object or <tt>null</tt>.
+	 * @return previous value of the object or <i>null</i>.
 	 */
 	public final Object setUserObject(final String id, final Object obj) {
 		return _parent.setUserObject(id, obj);
@@ -156,7 +156,7 @@ abstract class ChkData extends XDValueAbstract implements XXData {
 	@Override
 	/** Remove named user object.
 	 * @param id identifier of the object.
-	 * @return value of the object or <tt>null</tt>.
+	 * @return value of the object or <i>null</i>.
 	 */
 	public final Object removeUserObject(final String id) {
 		return _parent.removeUserObject(id);
@@ -165,7 +165,7 @@ abstract class ChkData extends XDValueAbstract implements XXData {
 	@Override
 	/** Get named user object.
 	 * @param id identifier of the object.
-	 * @return value of the object or <tt>null</tt>.
+	 * @return value of the object or <i>null</i>.
 	 */
 	public final Object getUserObject(final String id) {
 		return _parent.getUserObject(id);
@@ -176,7 +176,7 @@ abstract class ChkData extends XDValueAbstract implements XXData {
 
 	@Override
 	/** Get source position.
-	 * @return source position or <tt>null</tt> if position is not available.
+	 * @return source position or <i>null</i> if position is not available.
 	 */
 	public final SPosition getSPosition() {return _parent.getSPosition();}
 
@@ -373,7 +373,7 @@ abstract class ChkData extends XDValueAbstract implements XXData {
 
 	@Override
 	/** Get XComponent.
-	 * @return The XComponent object (may be <tt>null</tt>).
+	 * @return The XComponent object (may be <i>null</i>).
 	 */
 	public final XComponent getXComponent() {return _parent.getXComponent();}
 

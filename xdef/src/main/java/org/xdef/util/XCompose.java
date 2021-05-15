@@ -48,7 +48,7 @@ public class XCompose {
 	 * @param sourceFile The file with XML.
 	 * @param xdefFiles Array of files with definitions.
 	 * @param xDefName Name of definition.
-	 * @param rootNS namespace of result root element or <tt>null</tt>.
+	 * @param rootNS namespace of result root element or <i>null</i>.
 	 * @param rootName qualified name of result root element.
 	 * @param outFile The file where the result will be created.
 	 * @param encoding The charset name of output encoding.
@@ -121,17 +121,17 @@ public class XCompose {
 	 * from command line.
 	 * @param args Array of strings containing command line arguments.
 	 * <p>
-	 * <tt>[-d defList] [-x xDefName] [-l logFile] [-e encoding] -o outFile
-	 * [-n rootNameSpace] [-r rootName] -i xmlFile</tt></p>
+	 * <i>[-d defList] [-x xDefName] [-l logFile] [-e encoding] -o outFile
+	 * [-n rootNameSpace] [-r rootName] -i xmlFile</i>
 	 * <ul>
-	 *  <li><tt>-d defList</tt> - list of X-definition files</li>
-	 *  <li><tt>-x xDefName</tt> - X-definition name</li>
-	 *  <li><tt>-l logFile</tt> - log file</li>
-	 *  <li><tt>-e encoding</tt> - output file encoding</li>
-	 *  <li><tt>-o outFile</tt> - output file</li>
-	 *  <li><tt>-n rootNameSpace</tt> - root namespace</li>
-	 *  <li><tt>-r rootName</tt> - root name</li>
-	 *  <li><tt>-i xmlFile</tt> - input XML file</li>
+	 *  <li><i>-d defList</i> - list of X-definition files
+	 *  <li><i>-x xDefName</i> - X-definition name
+	 *  <li><i>-l logFile</i> - log file
+	 *  <li><i>-e encoding</i> - output file encoding
+	 *  <li><i>-o outFile</i> - output file
+	 *  <li><i>-n rootNameSpace</i> - root namespace
+	 *  <li><i>-r rootName</i> - root name
+	 *  <li><i>-i xmlFile</i> - input XML file
 	 * </ul>
 	 */
 	public static void main(String... args) {

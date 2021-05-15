@@ -23,7 +23,7 @@ public class Schema_1_0_Processor extends Processor {
 	private final XdefDocument _xdef;
 	/** Error and warning reporter. */
 	private final Reporter _reporter;
-	/** Every <tt>def</tt> as file switch. */
+	/** Every <i>def</i> as file switch. */
 	private final boolean _separately;
 	/** Stack of referencing elements (Element). */
 	private final Stack<Element> _refElementsStack = new Stack<Element>();

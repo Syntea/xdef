@@ -286,12 +286,7 @@ public final class GenXComponent {
 					continue;
 				}
 				XCGenerator genxc =
-					new XCGeneratorNew(xdpool, reporter, genJavadoc);
-//				if (((XPool)xdpool)._oldXomponents && ((XElement) xn)._json==0){
-//					genxc = new XCGeneratorOld(xdpool, reporter, genJavadoc);
-//				} else {
-//					genxc = new XCGeneratorNew(xdpool, reporter, genJavadoc);
-//				}
+					new XCGenerator(xdpool, reporter, genJavadoc);
 				final String result = genxc.genXComponent(model, //model name
 					className, //name of generated class
 					extClass, //class extension

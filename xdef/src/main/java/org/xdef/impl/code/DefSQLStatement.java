@@ -105,14 +105,14 @@ public class DefSQLStatement extends XDValueAbstract implements XDStatement {
 	*/
 	public boolean isClosed() {return _stmt == null;}
 	@Override
-	/** Check if the object is <tt>null</tt>.
-	 * @return <tt>true</tt> if the object is <tt>null</tt> otherwise returns
-	 * <tt>false</tt>.
+	/** Check if the object is <i>null</i>.
+	 * @return <i>true</i> if the object is <i>null</i> otherwise returns
+	 * <i>false</i>.
 	 */
 	public boolean isNull() { return _stmt == null;}
 	@Override
 	/** Execute statement.
-	 * @param params parameters or <tt>null</tt>.
+	 * @param params parameters or <i>null</i>.
 	 * @throws SRuntimeException id an error occurs.
 	 */
 	public final XDValue execute(final XDValue params)
@@ -145,7 +145,7 @@ public class DefSQLStatement extends XDValueAbstract implements XDStatement {
 	@Override
 	/** Execute query and return the specified items.
 	 * @param itemName name of items to be returned.
-	 * @param params parameters of statement or <tt>null</tt>.
+	 * @param params parameters of statement or <i>null</i>.
 	 * @return XDResultSet with result of query on this statement.
 	 * @throws SRuntimeException if an error occurs.
 	 */

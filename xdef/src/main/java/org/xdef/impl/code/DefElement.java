@@ -466,16 +466,16 @@ public final class DefElement extends XDValueAbstract implements XDElement {
 	}
 
 	@Override
-	/** Check if the object is <tt>null</tt>.
-	 * @return <tt>true</tt> if the object is <tt>null</tt> otherwise returns
-	 * <tt>false</tt>.
+	/** Check if the object is <i>null</i>.
+	 * @return <i>true</i> if the object is <i>null</i> otherwise returns
+	 * <i>false</i>.
 	 */
 	public boolean isNull() { return _value == null;}
 
 	@Override
 	/** Check if the object is empty.
-	 * @return <tt>true</tt> if the object is empty; otherwise returns
-	 * <tt>false</tt>.
+	 * @return <i>true</i> if the object is empty; otherwise returns
+	 * <i>false</i>.
 	 */
 	public boolean isEmpty() {
 		NodeList nl = _value.getChildNodes();

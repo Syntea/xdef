@@ -472,7 +472,7 @@ public class XPreCompiler implements PreCompiler {
 	 * of definitions.
 	 * @param in input stream with the X-definition.
 	 * @param srcName name of source data used in reporting (SysId) or
-	 * <tt>null</tt>.
+	 * <i>null</i>.
 	 * @throws RutimeException if an error occurs.
 	 */
 	public final void parseStream(final InputStream in, final String srcName) {

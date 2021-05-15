@@ -52,11 +52,11 @@ public final class DefOutStream extends XDValueAbstract implements XDOutput {
 		_out = new FileReportWriter(writer, true);
 	}
 
-	/** Creates a new instance of DefStream from <tt>OutputStreamWriter</tt>.
+	/** Creates a new instance of DefStream from <i>OutputStreamWriter</i>.
 	 * The output format will be in the XML format or string format according
-	 * to argument <tt>xmlFormat</tt>.
+	 * to argument <i>xmlFormat</i>.
 	 * @param writer the writer where data will be written.
-	 * @param xmlFormat if <tt>true</tt> the output will be in XML format,
+	 * @param xmlFormat if <i>true</i> the output will be in XML format,
 	 * otherwise in string format.
 	 */
 	public DefOutStream(final OutputStreamWriter writer,
@@ -73,7 +73,7 @@ public final class DefOutStream extends XDValueAbstract implements XDOutput {
 
 	/** Creates a new instance of DefStream
 	 * @param printer a printer.
-	 * @param xmlFormat if <tt>true</tt> the output will be in XML format,
+	 * @param xmlFormat if <i>true</i> the output will be in XML format,
 	 * otherwise in string format.
 	 */
 	public DefOutStream(final PrintStream printer, final boolean xmlFormat) {
@@ -89,7 +89,7 @@ public final class DefOutStream extends XDValueAbstract implements XDOutput {
 
 	/** Creates a new instance of DefStream
 	 * @param printer a printer.
-	 * @param xmlFormat if <tt>true</tt> the output will be in XML format,
+	 * @param xmlFormat if <i>true</i> the output will be in XML format,
 	 * otherwise in string format.
 	 */
 	public DefOutStream(final PrintWriter printer, final boolean xmlFormat) {
@@ -106,7 +106,7 @@ public final class DefOutStream extends XDValueAbstract implements XDOutput {
 
 	/** Creates a new instance of DefStream
 	 * @param printer writer as a printer.
-	 * @param xmlFormat if <tt>true</tt> the output will be in XML format,
+	 * @param xmlFormat if <i>true</i> the output will be in XML format,
 	 * otherwise in string format.
 	 */
 	public DefOutStream(final Writer printer, final boolean xmlFormat) {
@@ -133,11 +133,11 @@ public final class DefOutStream extends XDValueAbstract implements XDOutput {
 		_out = new FileReportWriter(os, true);
 	}
 
-	/** Creates a new instance of DefStream from <tt>OutputStream</tt>. The
+	/** Creates a new instance of DefStream from <i>OutputStream</i>. The
 	 * output format will be in the XML format or string format according to
-	 * argument <tt>xmlFormat</tt>.
+	 * argument <i>xmlFormat</i>.
 	 * @param os The OutputStream.
-	 * @param xmlFormat if <tt>true</tt> the output will be in XML format,
+	 * @param xmlFormat if <i>true</i> the output will be in XML format,
 	 * otherwise in string format.
 	 */
 	public DefOutStream(final OutputStream os, final boolean xmlFormat) {
@@ -176,7 +176,7 @@ public final class DefOutStream extends XDValueAbstract implements XDOutput {
 
 	@Override
 	/** Get last error report.
-	 * @return last error report (or <tt>null</tt> if last report is not
+	 * @return last error report (or <i>null</i> if last report is not
 	 * available).
 	 */
 	public Report getLastErrorReport() {

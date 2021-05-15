@@ -32,7 +32,7 @@ public final class XdefValueTypeParser {
 	 * representation object.
 	 * @param type X-definition type declaration to parse.
 	 * @return type representation object.
-	 * @throws NullPointerException if given type is <tt>null</tt> or
+	 * @throws NullPointerException if given type is <i>null</i> or
 	 * IllegalArgumentException if given type is empty or
 	 * TypeParseException if exception occurs during parsing.
 	 */
@@ -59,7 +59,7 @@ public final class XdefValueTypeParser {
 
 	/** Creates instance of type parser.
 	 * @param type type string to parse.
-	 * @throws NullPointerException if given type string is <tt>null</tt>.
+	 * @throws NullPointerException if given type string is <i>null</i>.
 	 * @throws IllegalArgumentException if given type string is empty.
 	 */
 	private XdefValueTypeParser(String type) {

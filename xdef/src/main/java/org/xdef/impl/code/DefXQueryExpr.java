@@ -69,7 +69,7 @@ public class DefXQueryExpr extends KXqueryExpr implements XDXQueryExpr {
 
 	@Override
 	/** Execute XQuery expression and return result.
-	 * @param xNode node model or <tt>null</tt>.
+	 * @param xNode node model or <i>null</i>.
 	 * @return result of execution of this object.
 	 */
 	public XDContainer exec(final Node node, final XXNode xNode) {
@@ -115,7 +115,7 @@ public class DefXQueryExpr extends KXqueryExpr implements XDXQueryExpr {
 	@Override
 	/** Check whether some other XDValue object is "equal to" this one.
 	 * @param arg other XDValue object to which is to be compared.
-	 * @return always <tt>false</tt>.
+	 * @return always <i>false</i>.
 	 */
 	public boolean equals(final XDValue arg) {return this == arg;}
 	@Override

@@ -137,7 +137,7 @@ public final class XsdUtils {
 
 	/** Checks given string.
 	 * @param string string to check.
-	 * @throws NullPointerException if given string is <tt>null</tt>.
+	 * @throws NullPointerException if given string is <i>null</i>.
 	 * @throws IllegalArgumentException if given string is empty.
 	 */
 	private static void checkString(String string) {
@@ -149,14 +149,14 @@ public final class XsdUtils {
 		}
 	}
 
-	/** Get external schema declaration (<tt>import</tt> or <tt>include</tt>)
+	/** Get external schema declaration (<i>import</i> or <i>include</i>)
 	 * element of given external schema file name in given main schema element.
 	 * @param mainSchema main schema element to search in.
 	 * @param extSchemaFileName external schema file name to search for.
-	 * @return external schema declaration or <tt>null</tt> if given schema does
+	 * @return external schema declaration or <i>null</i> if given schema does
 	 * not contain given external schema declaration.
 	 * @throws NullPointerException if given main schema element or external
-	 * schema file name is <tt>null</tt>.
+	 * schema file name is <i>null</i>.
 	 * @throws IllegalArgumentException if given external schema file name is
 	 * empty.
 	 */
@@ -200,11 +200,11 @@ public final class XsdUtils {
 		return new MyQName(Util.getNSPrefix(schema, targetNS), modelName);
 	}
 
-	/** Returns XML Schema <tt>annotation</tt> child element of given schema
-	 * context element or <tt>null</tt> if given context element has no
-	 * <tt>annotation</tt> element as child element.
+	/** Returns XML Schema <i>annotation</i> child element of given schema
+	 * context element or <i>null</i> if given context element has no
+	 * <i>annotation</i> element as child element.
 	 * @param schemaContextElem schema context element.
-	 * @return child <tt>annotation</tt> element or <tt>null</tt>.
+	 * @return child <i>annotation</i> element or <i>null</i>.
 	 */
 	public static Element getAnnotationElem(final Element schemaContextElem) {
 		NodeList children = KXmlUtils.getChildElementsNS(schemaContextElem,
@@ -219,10 +219,10 @@ public final class XsdUtils {
 		return null;
 	}
 
-	/** Returns <tt>true</tt> if given node is valid XML Schema <tt>schema</tt>
+	/** Returns <i>true</i> if given node is valid XML Schema <i>schema</i>
 	 * element.
 	 * @param node node to test.
-	 * @return <tt>true</tt> if given node is valid XML Schema <tt>schema</tt>
+	 * @return <i>true</i> if given node is valid XML Schema <i>schema</i>
 	 * element.
 	 */
 	public static final boolean isSchema(final Node node) {
@@ -230,23 +230,23 @@ public final class XsdUtils {
 			XsdVersion.SCHEMA_1_0.getNSURI(), XsdNames.SCHEMA);
 	}
 
-	/** Returns <tt>true</tt> if given node is a valid schema
-	 * <tt>complexType</tt> declaration element.
+	/** Returns <i>true</i> if given node is a valid schema
+	 * <i>complexType</i> declaration element.
 	 * @param node node to test.
-	 * @return <tt>true</tt> if given node is a valid schema
-	 * <tt>complexType</tt> declaration element.
+	 * @return <i>true</i> if given node is a valid schema
+	 * <i>complexType</i> declaration element.
 	 */
 	public static final boolean isComplexType(final Node node) {
 		return Util.isElement(node,
 			XsdVersion.SCHEMA_1_0.getNSURI(), XsdNames.COMPLEX_TYPE);
 	}
 
-	/** Gets ancestor <tt>schema</tt> element of given node.
+	/** Gets ancestor <i>schema</i> element of given node.
 	 * @param node schema descendant node.
-	 * @return ancestor <tt>schema</tt> element.
-	 * @throws NullPointerException if given node is <tt>null</tt>.
+	 * @return ancestor <i>schema</i> element.
+	 * @throws NullPointerException if given node is <i>null</i>.
 	 * @throws IllegalArgumentException if given node is not a valid
-	 * <tt>schema</tt> descendant.
+	 * <i>schema</i> descendant.
 	 */
 	public static final Element getAncestorSchema(final Node node) {
 		if (isSchema(node)) {
@@ -266,14 +266,14 @@ public final class XsdUtils {
 			"Given node is not a valid schema descendant node!");
 	}
 
-	/** Gets <tt>targetNamesapce</tt> attribute value of given <tt>schema</tt>
+	/** Gets <i>targetNamesapce</i> attribute value of given <i>schema</i>
 	 * element.
-	 * @param schema <tt>schema</tt> element to get target namesapce from.
-	 * @return target namespace URI or <tt>null</tt> if given schema does not
-	 * contain <tt>targetNamespace</tt> attribute.
-	 * @throws NullPointerException if given schema element is <tt>null</tt>.
+	 * @param schema <i>schema</i> element to get target namesapce from.
+	 * @return target namespace URI or <i>null</i> if given schema does not
+	 * contain <i>targetNamespace</i> attribute.
+	 * @throws NullPointerException if given schema element is <i>null</i>.
 	 * @throws IllegalArgumentException if given element is not a valid
-	 * <tt>schema</tt> element.
+	 * <i>schema</i> element.
 	 */
 	public static final String getSchemaTargetNS(final Element schema) {
 		if (schema == null) {
@@ -290,10 +290,10 @@ public final class XsdUtils {
 		return targetNS;
 	}
 
-	/** Get <tt>targetNamespace</tt> attribute value of ancestor <tt>schema</tt>
+	/** Get <i>targetNamespace</i> attribute value of ancestor <i>schema</i>
 	 * element of given schema context element.
 	 * @param schemaContext schema context element.
-	 * @return <tt>targetNamespace</tt> attribute value.
+	 * @return <i>targetNamespace</i> attribute value.
 	 * @throws NullPointerException if given schema context element is null.
 	 */
 	public static final String getTargetNS(final Element schemaContext) {
@@ -305,38 +305,38 @@ public final class XsdUtils {
 		return getSchemaTargetNS(schema);
 	}
 
-	/** Returns <tt>true</tt> if given schema context element contains
-	 * <tt>attribute</tt> declaration element with given attribute name.
+	/** Returns <i>true</i> if given schema context element contains
+	 * <i>attribute</i> declaration element with given attribute name.
 	 * @param schemaContext schema context element to search in.
 	 * @param attrLocalName attribute local name.
-	 * @return <tt>true</tt> if given schema context element contains
+	 * @return <i>true</i> if given schema context element contains
 	 */
 	public static final boolean hasAttributeDecl(final Element schemaContext,
 		final String attrLocalName) {
 		return hasDeclaration(schemaContext, XsdNames.ATTRIBUTE, attrLocalName);
 	}
 
-	/** Returns <tt>true</tt> if given schema context element contains
-	 * <tt>element</tt> declaration element with given name.
+	/** Returns <i>true</i> if given schema context element contains
+	 * <i>element</i> declaration element with given name.
 	 * @param schemaContext schema context element to search in.
 	 * @param elementLocalName element local name.
-	 * @return <tt>true</tt> if given schema context element contains
-	 * <tt>element</tt> declaration element with given name.
+	 * @return <i>true</i> if given schema context element contains
+	 * <i>element</i> declaration element with given name.
 	 */
 	public static final boolean hasElementDecl(final Element schemaContext,
 		final String elementLocalName) {
 		return hasDeclaration(schemaContext, XsdNames.ELEMENT,elementLocalName);
 	}
 
-	/** Returns <tt>true</tt> if given schema context element contains
+	/** Returns <i>true</i> if given schema context element contains
 	 * declaration of given type and with given local name.
 	 * @param schemaContext schema context element to search in.
 	 * @param nodeType node declaration type to search.
 	 * @param localName node local name.
-	 * @return <tt>true</tt> if given schema context element contains
+	 * @return <i>true</i> if given schema context element contains
 	 * declaration of given type and with given local name.
 	 * @throws NullPointerException if given schema context element, node type
-	 * or attribute local name is <tt>null</tt>.
+	 * or attribute local name is <i>null</i>.
 	 * @throws IllegalArgumentException if given node type or attribute local
 	 * name is empty.
 	 */

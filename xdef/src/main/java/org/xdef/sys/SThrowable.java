@@ -13,7 +13,7 @@ public interface SThrowable {
 	 */
 	public void setCause(final Throwable cause);
 
-	/** Get cause of exception. If cause was not set return <tt>null</tt>.
+	/** Get cause of exception. If cause was not set return <i>null</i>.
 	 * @return cause The Throwable object with cause data.
 	 */
 	public Throwable getCause();
@@ -24,7 +24,7 @@ public interface SThrowable {
 	public Report getReport();
 
 	/** Get id of message.
-	 * @return The message id (may be <tt>null</tt>).
+	 * @return The message id (may be <i>null</i>).
 	 */
 	public String getMsgID();
 

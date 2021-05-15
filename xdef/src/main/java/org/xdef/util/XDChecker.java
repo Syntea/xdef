@@ -34,12 +34,12 @@ public class XDChecker {
 	}
 
 	/** Constructor of XDChecker.
-	 * @param classes array with external classes or <tt>null</tt>.
-	 * @param methods string with methods or <tt>null</tt>.
+	 * @param classes array with external classes or <i>null</i>.
+	 * @param methods string with methods or <i>null</i>.
 	 * (see "methods attribute in X-definitions").
 	 * @param declarations string with declaration of variables,
-	 * types and methods or <tt>null</tt>.
-	 * @param options string with options list <tt>null</tt>.
+	 * types and methods or <i>null</i>.
+	 * @param options string with options list <i>null</i>.
 	 * @throws SRuntimeException if there is an error.
 	 */
 	public XDChecker(Class<?>[] classes,

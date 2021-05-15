@@ -54,8 +54,8 @@ public abstract class STester {
 	private PrintStream _outStream;
 	/* Error printer. */
 	private PrintStream _err;
-	/* Debug flag. If true the method <tt>error(exception)</tt> prints stack
-	 * trace information on <tt>System.err</tt>. Default value is true. */
+	/* Debug flag. If true the method <i>error(exception)</i> prints stack
+	 * trace information on <i>System.err</i>. Default value is true. */
 	private boolean _debug;
 	/** Start time of test. */
 	private long _timeStamp;

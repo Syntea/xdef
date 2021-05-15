@@ -160,7 +160,7 @@ class JsonFromXml extends JsonUtil implements JsonNames {
 	/** Add string with a simple value or with the list of simple values.
 	 * to the array from the argument.
 	 * <UL>
-	 * <li> [] -> empty array.</li>
+	 * <li> [] -> empty array.
 	 * <li> [ x ... ,x] -> empty with simple values.
 	 * <li> other -> simple values
 	 * </UL>

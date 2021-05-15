@@ -139,11 +139,11 @@ public class DefSQLResultSet extends XDValueAbstract implements XDResultSet {
 	*/
 	public boolean isClosed() {return _resultSet == null;}
 	@Override
-	/** Get next item of this iterator or <tt>null</tt>. If the object
+	/** Get next item of this iterator or <i>null</i>. If the object
 	 * has to be closed then if no more values are available the close() method
 	 * must be invoked.
 	 * @param xnode XXnode from which this method was called.
-	 * @return the next value of this iterator or return <tt>null</tt>.
+	 * @return the next value of this iterator or return <i>null</i>.
 	 * @throws SRuntimeException id an error occurs.
 	 */
 	public XDValue nextXDItem(XXNode xnode) throws SRuntimeException {
@@ -176,8 +176,8 @@ public class DefSQLResultSet extends XDValueAbstract implements XDResultSet {
 		}
 	}
 	@Override
-	/** Get the item returned by last nextItem method or return <tt>null</tt>.
-	 * @return item returned by last nextItem method or return <tt>null</tt>.
+	/** Get the item returned by last nextItem method or return <i>null</i>.
+	 * @return item returned by last nextItem method or return <i>null</i>.
 	 */
 	public XDValue lastXDItem() {return _item;}
 	@Override
@@ -187,17 +187,17 @@ public class DefSQLResultSet extends XDValueAbstract implements XDResultSet {
 	public int getCount() {return _count;}
 	@Override
 	/** Return value of iterated object if it has value (text of element),
-	 * otherwise return <tt>null</tt>.
-	 * @return value of iterated object or return <tt>null</tt>.
+	 * otherwise return <i>null</i>.
+	 * @return value of iterated object or return <i>null</i>.
 	 */
 	public String itemAsString() {
 		return _itemName == null ? null : _item.stringValue();
 	}
 	@Override
 	/** If the iterated object is an array then return relevant item value,
-	 * otherwise return <tt>null</tt>.
+	 * otherwise return <i>null</i>.
 	 * @param index the index of item.
-	 * @return value of the array item as a string or return <tt>null</tt>.
+	 * @return value of the array item as a string or return <i>null</i>.
 	 */
 	public String itemAsString(int index) {
 		try {
@@ -207,9 +207,9 @@ public class DefSQLResultSet extends XDValueAbstract implements XDResultSet {
 	}
 	@Override
 	/** If the iterated object is a map, then return relevant item value,
-	 * otherwise return <tt>null</tt>.
+	 * otherwise return <i>null</i>.
 	 * @param name the name of map item.
-	 * @return value of map item as a string or return <tt>null</tt>.
+	 * @return value of map item as a string or return <i>null</i>.
 	 */
 	public String itemAsString(String name) {
 		try {
@@ -219,9 +219,9 @@ public class DefSQLResultSet extends XDValueAbstract implements XDResultSet {
 	}
 	@Override
 	/** If the iterated object contains the specified item then return
-	 * <tt>true</tt>.
+	 * <i>true</i>.
 	 * @param name name item.
-	 * @return <tt>true</tt> if and only if the specified item exists.
+	 * @return <i>true</i> if and only if the specified item exists.
 	 */
 	public boolean hasItem(String name) {return itemAsString(name) != null;}
 	@Override
@@ -253,9 +253,9 @@ public class DefSQLResultSet extends XDValueAbstract implements XDResultSet {
 	 */
 	public XDConstructor getXDConstructor() {return _constructor;}
 	@Override
-	/** Check if the object is <tt>null</tt>.
-	 * @return <tt>true</tt> if the object is <tt>null</tt> otherwise returns
-	 * <tt>false</tt>.
+	/** Check if the object is <i>null</i>.
+	 * @return <i>true</i> if the object is <i>null</i> otherwise returns
+	 * <i>false</i>.
 	 */
 	public boolean isNull() { return _resultSet == null;}
 

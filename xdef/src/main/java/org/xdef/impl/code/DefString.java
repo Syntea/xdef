@@ -140,7 +140,7 @@ public final class DefString extends XDValueAbstract {
 	 * @return If both objects are comparable then returns -1, 0, or a 1
 	 * as this XDValue object is less than, equal to, or greater than the
 	 * specified object. If both objects are not comparable the return
-	 * <tt>Integer.MIN_VALUE</tt>.
+	 * <i>Integer.MIN_VALUE</i>.
 	 */
 	public int compareTo(final XDValue arg) {
 		return _value == null ? arg.stringValue() == null ? 0 : -1 :
@@ -148,9 +148,9 @@ public final class DefString extends XDValueAbstract {
 					1 : _value.compareTo(arg.stringValue());
 	}
 	@Override
-	/** Check if the object is <tt>null</tt>.
-	 * @return <tt>true</tt> if the object is <tt>null</tt> otherwise returns
-	 * <tt>false</tt>.
+	/** Check if the object is <i>null</i>.
+	 * @return <i>true</i> if the object is <i>null</i> otherwise returns
+	 * <i>false</i>.
 	 */
 	public boolean isNull() {return _value == null;}
 }

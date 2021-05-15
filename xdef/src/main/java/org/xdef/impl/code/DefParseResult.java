@@ -21,7 +21,7 @@ public final class DefParseResult extends XDValueAbstract
 	private String _source;
 	/** Parsed result object. */
 	private Object _value;
-	/* Messages reported by parser or <tt>null</tt>. */
+	/* Messages reported by parser or <i>null</i>. */
 	private ArrayReporter _ar;
 
 	/** Creates a new empty instance of DefParseResult. */

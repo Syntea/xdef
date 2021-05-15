@@ -10,123 +10,123 @@ public interface XsdNames {
 	//--------------------------------------------------------------------------
 	//                          NODE NAMES
 	//--------------------------------------------------------------------------
-	/** XML Schema <tt>schema</tt> element local name. */
+	/** XML Schema <i>schema</i> element local name. */
 	public static final String SCHEMA = "schema";
-	/** XML Schema <tt>simpleType</tt> element local name. */
+	/** XML Schema <i>simpleType</i> element local name. */
 	public static final String SIMPLE_TYPE = "simpleType";
-	/** XML Schema <tt>group</tt> element local name. */
+	/** XML Schema <i>group</i> element local name. */
 	public static final String GROUP = "group";
-	/** XML Schema <tt>complexType</tt> element local name. */
+	/** XML Schema <i>complexType</i> element local name. */
 	public static final String COMPLEX_TYPE = "complexType";
-	/** XML Schema <tt>attributeGroup</tt> element local name. */
+	/** XML Schema <i>attributeGroup</i> element local name. */
 	public static final String ATTRIBUTE_GROUP = "attributeGroup";
-	/** XML Schema <tt>includeImport</tt> element local name. */
+	/** XML Schema <i>includeImport</i> element local name. */
 	public static final String INCLUDE = "include";
-	/** XML Schema <tt>import</tt> element local name. */
+	/** XML Schema <i>import</i> element local name. */
 	public static final String IMPORT = "import";
-	/** XML Schema <tt>element</tt> element local name. */
+	/** XML Schema <i>element</i> element local name. */
 	public static final String ELEMENT = "element";
-	/** XML Schema <tt>any</tt> element local name. */
+	/** XML Schema <i>any</i> element local name. */
 	public static final String ANY = "any";
-	/** XML Schema <tt>any</tt> element local name. */
+	/** XML Schema <i>any</i> element local name. */
 	public static final String ALL = "all";
-	/** XML Schema <tt>annotation</tt> element local name. */
+	/** XML Schema <i>annotation</i> element local name. */
 	public static final String ANNOTATION = "annotation";
-	/** XML Schema <tt>documentation</tt> element local name. */
+	/** XML Schema <i>documentation</i> element local name. */
 	public static final String DOCUMENTATION = "documentation";
-	/** XML Schema <tt>anyAttribute</tt> element local name. */
+	/** XML Schema <i>anyAttribute</i> element local name. */
 	public static final String ANY_ATTRIBUTE = "anyAttribute";
-	/** XML Schema <tt>attribute</tt> element local name. */
+	/** XML Schema <i>attribute</i> element local name. */
 	public static final String ATTRIBUTE = "attribute";
-	/** XML Schema <tt>complexContent</tt> element local name. */
+	/** XML Schema <i>complexContent</i> element local name. */
 	public static final String COMPLEX_CONTENT = "complexContent";
-	/** XML Schema <tt>choice</tt> element local name. */
+	/** XML Schema <i>choice</i> element local name. */
 	public static final String CHOICE = "choice";
-	/** XML Schema <tt>extension</tt> element local name. */
+	/** XML Schema <i>extension</i> element local name. */
 	public static final String EXTENSION = "extension";
-	/** XML Schema <tt>restriction</tt> element local name. */
+	/** XML Schema <i>restriction</i> element local name. */
 	public static final String RESTRICTION = "restriction";
-	/** XML Schema <tt>sequence</tt> element local name. */
+	/** XML Schema <i>sequence</i> element local name. */
 	public static final String SEQUENCE = "sequence";
-	/** XML Schema <tt>simpleContent</tt> element local name. */
+	/** XML Schema <i>simpleContent</i> element local name. */
 	public static final String SIMPLE_CONTENT = "simpleContent";
-	/** XML Schema <tt>union</tt> element local name. */
+	/** XML Schema <i>union</i> element local name. */
 	public static final String UNION = "union";
-	/** XML Schema <tt>list</tt> element local name. */
+	/** XML Schema <i>list</i> element local name. */
 	public static final String LIST = "list";
-	/** XML Schema <tt>enumeration</tt> element local name. */
+	/** XML Schema <i>enumeration</i> element local name. */
 	public static final String ENUMERATION = "enumeration";
-	/** XML Schema <tt>fractionDigits</tt> element local name. */
+	/** XML Schema <i>fractionDigits</i> element local name. */
 	public static final String FRACTION_DIGITS = "fractionDigits";
-	/** XML Schema <tt>length</tt> element local name. */
+	/** XML Schema <i>length</i> element local name. */
 	public static final String LENGTH = "length";
-	/** XML Schema <tt>maxExclusive</tt> element local name. */
+	/** XML Schema <i>maxExclusive</i> element local name. */
 	public static final String MAX_EXCLUSIVE = "maxExclusive";
-	/** XML Schema <tt>maxInclusive</tt> element local name. */
+	/** XML Schema <i>maxInclusive</i> element local name. */
 	public static final String MAX_INCLUSIVE = "maxInclusive";
-	/** XML Schema <tt>maxLength</tt> element local name. */
+	/** XML Schema <i>maxLength</i> element local name. */
 	public static final String MAX_LENGTH = "maxLength";
-	/** XML Schema <tt>minExclusive</tt> element local name. */
+	/** XML Schema <i>minExclusive</i> element local name. */
 	public static final String MIN_EXCLUSIVE = "minExclusive";
-	/** XML Schema <tt>minInclusive</tt> element local name. */
+	/** XML Schema <i>minInclusive</i> element local name. */
 	public static final String MIN_INCLUSIVE = "minInclusive";
-	/** XML Schema <tt>minLength</tt> element local name. */
+	/** XML Schema <i>minLength</i> element local name. */
 	public static final String MIN_LENGTH = "minLength";
-	/** XML Schema <tt>pattern</tt> element local name. */
+	/** XML Schema <i>pattern</i> element local name. */
 	public static final String PATTERN = "pattern";
-	/** XML Schema <tt>totalDigits</tt> element local name. */
+	/** XML Schema <i>totalDigits</i> element local name. */
 	public static final String TOTAL_DIGITS = "totalDigits";
-	/** XML Schema <tt>whiteSpace</tt> element local name. */
+	/** XML Schema <i>whiteSpace</i> element local name. */
 	public static final String WHITE_SPACE = "whiteSpace";
-	/** XML Schema <tt>memberTypes</tt> attribute local name. */
+	/** XML Schema <i>memberTypes</i> attribute local name. */
 	public static final String MEMBER_TYPES = "memberTypes";
-	/** XML Schema <tt>targetNamespace</tt> attribute local name. */
+	/** XML Schema <i>targetNamespace</i> attribute local name. */
 	public static final String TARGET_NAMESPACE = "targetNamespace";
-	/** XML Schema <tt>name</tt> attribute local name. */
+	/** XML Schema <i>name</i> attribute local name. */
 	public static final String NAME = "name";
-	/** XML Schema <tt>schemaLocation</tt> attribute local name. */
+	/** XML Schema <i>schemaLocation</i> attribute local name. */
 	public static final String SCHEMA_LOCATION = "schemaLocation";
-	/** XML Schema <tt>namespace</tt> attribute local name. */
+	/** XML Schema <i>namespace</i> attribute local name. */
 	public static final String NAMESPACE = "namespace";
-	/** XML Schema <tt>type</tt> attribute local name. */
+	/** XML Schema <i>type</i> attribute local name. */
 	public static final String TYPE = "type";
-	/** XML Schema <tt>default</tt> attribute local name. */
+	/** XML Schema <i>default</i> attribute local name. */
 	public static final String DEFAULT = "default";
-	/** XML Schema <tt>fixed</tt> attribute local name. */
+	/** XML Schema <i>fixed</i> attribute local name. */
 	public static final String FIXED = "fixed";
-	/** XML Schema <tt>minOccurs</tt> attribute local name. */
+	/** XML Schema <i>minOccurs</i> attribute local name. */
 	public static final String MIN_OCCURS = "minOccurs";
-	/** XML Schema <tt>maxOccurs</tt> attribute local name. */
+	/** XML Schema <i>maxOccurs</i> attribute local name. */
 	public static final String MAX_OCCURS = "maxOccurs";
-	/** XML Schema <tt>nillable</tt> attribute local name. */
+	/** XML Schema <i>nillable</i> attribute local name. */
 	public static final String NILLABLE = "nillable";
-	/** XML Schema <tt>mixed</tt> attribute local name. */
+	/** XML Schema <i>mixed</i> attribute local name. */
 	public static final String MIXED = "mixed";
-	/** XML Schema <tt>form</tt> attribute local name. */
+	/** XML Schema <i>form</i> attribute local name. */
 	public static final String FORM = "form";
-	/** XML Schema <tt>value</tt> attribute local name. */
+	/** XML Schema <i>value</i> attribute local name. */
 	public static final String VALUE = "value";
-	/** XML Schema <tt>itemType</tt> attribute local name. */
+	/** XML Schema <i>itemType</i> attribute local name. */
 	public static final String ITEM_TYPE = "itemType";
-	/** XML Schema <tt>processContents</tt> attribute local name. */
+	/** XML Schema <i>processContents</i> attribute local name. */
 	public static final String PROCESS_CONTENTS = "processContents";
-	/** XML Schema <tt>use</tt> attribute local name. */
+	/** XML Schema <i>use</i> attribute local name. */
 	public static final String USE = "use";
-	/** XML Schema <tt>ref</tt> attribute local name. */
+	/** XML Schema <i>ref</i> attribute local name. */
 	public static final String REF = "ref";
-	/** XML Schema <tt>base</tt> attribute local name. */
+	/** XML Schema <i>base</i> attribute local name. */
 	public static final String BASE = "base";
-	/** XML Schema <tt>required</tt> attribute use. */
+	/** XML Schema <i>required</i> attribute use. */
 	public static final String REQUIRED = "required";
-	/** XML Schema <tt>optional</tt> attribute use. */
+	/** XML Schema <i>optional</i> attribute use. */
 	public static final String OPTIONAL = "optional";
-	/** XML Schema <tt>prohibited</tt> attribute use. */
+	/** XML Schema <i>prohibited</i> attribute use. */
 	public static final String PROHIBITED = "prohibited";
-	/** XML Schema <tt>qualified</tt> attribute form. */
+	/** XML Schema <i>qualified</i> attribute form. */
 	public static final String QUALIFIED = "qualified";
-	/** XML Schema <tt>unqualified</tt> attribute form. */
+	/** XML Schema <i>unqualified</i> attribute form. */
 	public static final String UNQUALIFIED = "unqualified";
-	/** XML Schema <tt>unbounded</tt> occurrence attribute value. */
+	/** XML Schema <i>unbounded</i> occurrence attribute value. */
 	public static final String UNBOUNDED = "unbounded";
 	//--------------------------------------------------------------------------
 	//                          TYPE NAMES

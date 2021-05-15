@@ -3,7 +3,7 @@ package org.xdef.sys;
 /** Interface for external method object.
  * External method must be declared in BNF source by command:
  * %define $name: $class_name(parameters)
- * <p>Example:</p><pre><code>
+ * <p>Example:<pre><code>
  * BNF source:
  * %define $p: $test.bnf.Mytest.myproc(int)
  * digit ::= [0-9]

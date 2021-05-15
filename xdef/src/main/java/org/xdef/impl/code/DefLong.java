@@ -75,7 +75,7 @@ public final class DefLong extends XDValueAbstract {
 	@Override
 	/** Check whether some other XDValue object is "equal to" this one.
 	 * @param arg other XDValue object to which is to be compared.
-	 * @return <tt>true</tt> if argument is same type as this XDValue and the
+	 * @return <i>true</i> if argument is same type as this XDValue and the
 	 * value of the object is comparable and equals to this one.
 	 */
 	public boolean equals(final XDValue arg) {
@@ -120,9 +120,9 @@ public final class DefLong extends XDValueAbstract {
 	@Override
 	public boolean booleanValue() {return isNull() ? false : _value != 0;}
 	@Override
-	/** Check if the object is <tt>null</tt>.
-	 * @return <tt>true</tt> if the object is <tt>null</tt> otherwise returns
-	 * <tt>false</tt>.
+	/** Check if the object is <i>null</i>.
+	 * @return <i>true</i> if the object is <i>null</i> otherwise returns
+	 * <i>false</i>.
 	 */
 	public boolean isNull() {return _isNull;}
 }

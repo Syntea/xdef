@@ -94,7 +94,7 @@ public class DefSQLService extends XDValueAbstract implements XDService {
 	@Override
 	/** Execute statement with parameters.
 	 * @param statement source statement.
-	 * @param params parameters of statement or <tt>null</tt>.
+	 * @param params parameters of statement or <i>null</i>.
 	 * @return result of execution.
 	 * @throws SRuntimeException if an error occurs.
 	 */
@@ -113,9 +113,9 @@ public class DefSQLService extends XDValueAbstract implements XDService {
 		}
 	}
 	@Override
-	/** Check if the object is <tt>null</tt>.
-	 * @return <tt>true</tt> if the object is <tt>null</tt> otherwise returns
-	 * <tt>false</tt>.
+	/** Check if the object is <i>null</i>.
+	 * @return <i>true</i> if the object is <i>null</i> otherwise returns
+	 * <i>false</i>.
 	 */
 	public boolean isNull() { return _conn == null;}
    @Override
@@ -181,7 +181,7 @@ public class DefSQLService extends XDValueAbstract implements XDService {
 	@Override
 	/** Get property.
 	 * @param name name of property.
-	 * @return value of property or <tt>null</tt>.
+	 * @return value of property or <i>null</i>.
 	 */
 	public String getProperty(String name) {
 		try {

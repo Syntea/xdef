@@ -17,7 +17,7 @@ import org.xdef.sys.SUtils;
  */
 public abstract class Processor implements Convertor {
 
-	/** All XML Schema <tt>schema</tt> elements table (URL, Element). */
+	/** All XML Schema <i>schema</i> elements table (URL, Element). */
 	protected final Map<URL, Element> _schemaElements;
 	/** Stack of URLs of currently processing schema elements (URL). */
 	protected final Stack<URL> _schemaURLStack = new Stack<URL>();
@@ -203,7 +203,7 @@ public abstract class Processor implements Convertor {
 
 	/** Processes all schema elements and adds proper declaration to given
 	 * Xdefiniton elements
-	 * @param xdefElements X-definition <tt>def</tt> elements.
+	 * @param xdefElements X-definition <i>def</i> elements.
 	 * @throws RuntimeException X-definition elements are not compatible with
 	 * schema elements.
 	 */
@@ -231,9 +231,9 @@ public abstract class Processor implements Convertor {
 		}
 	}
 
-	/** Processes <tt>schema</tt> element.
-	 * @param schemaElement <tt>schema</tt> element to process.
-	 * @param xdefElement <tt>def</tt> element to generate content.
+	/** Processes <i>schema</i> element.
+	 * @param schemaElement <i>schema</i> element to process.
+	 * @param xdefElement <i>def</i> element to generate content.
 	 */
 	protected void processSchema(Element schemaElement, Element xdefElement) {
 		processChildren(schemaElement, xdefElement);
@@ -256,201 +256,201 @@ public abstract class Processor implements Convertor {
 		}
 	}
 
-	/** Processes given schema <tt>all</tt> element and adds proper
+	/** Processes given schema <i>all</i> element and adds proper
 	 * declaration to given X-definition context element.
-	 * @param allElement <tt>all</tt> element to process.
+	 * @param allElement <i>all</i> element to process.
 	 * @param xdefContextElement X-definition context element.
 	 */
 	protected abstract void processAll(Element allElement,
 		Element xdefContextElement);
 
-	/** Processes given schema <tt>annotation</tt> element and adds
+	/** Processes given schema <i>annotation</i> element and adds
 	 * proper declaration to given X-definition context element.
-	 * @param annotationElement <tt>annotation</tt> element to process.
+	 * @param annotationElement <i>annotation</i> element to process.
 	 * @param xdefContextElement X-definition context element.
 	 */
 	protected abstract void processAnnotation(Element annotationElement,
 		Element xdefContextElement);
 
-	/*** Processes given schema <tt>any</tt> element and adds proper
+	/*** Processes given schema <i>any</i> element and adds proper
 	 * declaration to given X-definition context element.
-	 * @param anyElement <tt>any</tt> element to process.
+	 * @param anyElement <i>any</i> element to process.
 	 * @param xdefContextElement X-definition context element.
 	 */
 	protected abstract void processAny(Element anyElement,
 		Element xdefContextElement);
 
-	/** Processes given schema <tt>anyAttribute</tt> element and adds
+	/** Processes given schema <i>anyAttribute</i> element and adds
 	 * proper declaration to given X-definition context element.
-	 * @param anyAttributeElement <tt>anyAttribute</tt> element to process.
+	 * @param anyAttributeElement <i>anyAttribute</i> element to process.
 	 * @param xdefContextElement X-definition context element.
 	 */
 	protected abstract void processAnyAttribute(Element anyAttributeElement,
 		Element xdefContextElement);
 
-	/** Processes given schema <tt>appInfo</tt> element and adds
+	/** Processes given schema <i>appInfo</i> element and adds
 	 * proper declaration to given X-definition context element.
-	 * @param appInfoElement <tt>appInfo</tt> element to process.
+	 * @param appInfoElement <i>appInfo</i> element to process.
 	 * @param xdefContextElement X-definition context element.
 	 */
 	protected abstract void processAppInfo(Element appInfoElement,
 		Element xdefContextElement);
 
-	/** Processes given schema <tt>attribute</tt> element and adds
+	/** Processes given schema <i>attribute</i> element and adds
 	 * proper declaration to given X-definition context element.
-	 * @param attributeElement <tt>attribute</tt> element to process.
+	 * @param attributeElement <i>attribute</i> element to process.
 	 * @param xdefContextElement X-definition context element.
 	 */
 	public abstract void processAttribute(Element attributeElement,
 		Element xdefContextElement);
 
-	/** Processes given schema <tt>attributeGroup</tt> element and adds
+	/** Processes given schema <i>attributeGroup</i> element and adds
 	 * proper declaration to given X-definition context element.
-	 * @param attributeGroupElement <tt>attributeGroup</tt> element to process.
+	 * @param attributeGroupElement <i>attributeGroup</i> element to process.
 	 * @param xdefContextElement X-definition context element.
 	 */
 	public abstract void processAttributeGroup(Element attributeGroupElement,
 		Element xdefContextElement);
 
-	/** Processes given schema <tt>choice</tt> element and adds
+	/** Processes given schema <i>choice</i> element and adds
 	 * proper declaration to given X-definition context element.
-	 * @param choiceElement <tt>choice</tt> element to process.
+	 * @param choiceElement <i>choice</i> element to process.
 	 * @param xdefContextElement X-definition context element.
 	 */
 	protected abstract void processChoice(Element choiceElement,
 		Element xdefContextElement);
 
-	/** Processes given schema <tt>complexContent</tt> element and adds proper
+	/** Processes given schema <i>complexContent</i> element and adds proper
 	 * declaration to given X-definition context element.
-	 * @param complexContentElement <tt>complexContent</tt> element to process.
+	 * @param complexContentElement <i>complexContent</i> element to process.
 	 * @param xdefContextElement X-definition context element.
 	 */
 	protected abstract void processComplexContent(Element complexContentElement,
 		Element xdefContextElement);
 
-	/** Processes given schema <tt>complexType</tt> element and adds
+	/** Processes given schema <i>complexType</i> element and adds
 	 * proper declaration to given X-definition context element.
-	 * @param complexTypeElement <tt>complexType</tt> element to process.
+	 * @param complexTypeElement <i>complexType</i> element to process.
 	 * @param xdefContextElement X-definition context element.
 	 */
 	protected abstract void processComplexType(Element complexTypeElement,
 		Element xdefContextElement);
 
-	/** Processes given schema <tt>documentation</tt> element and adds proper
+	/** Processes given schema <i>documentation</i> element and adds proper
 	 * declaration to given X-definition context element.
-	 * @param documentationElement <tt>documentation</tt> element to process.
+	 * @param documentationElement <i>documentation</i> element to process.
 	 * @param xdefContextElement X-definition context element.
 	 */
 	protected abstract void processDocumentation(Element documentationElement,
 		Element xdefContextElement);
 
-	/** Processes given schema <tt>element</tt> element and adds
+	/** Processes given schema <i>element</i> element and adds
 	 * proper declaration to given X-definition context element.
-	 * @param elementElement <tt>element</tt> element to process.
+	 * @param elementElement <i>element</i> element to process.
 	 * @param xdefContextElement X-definition context element.
 	 */
 	protected abstract void processElement(Element elementElement,
 		Element xdefContextElement);
 
-	/** Processes given schema <tt>extension</tt> element and adds
+	/** Processes given schema <i>extension</i> element and adds
 	 * proper declaration to given X-definition context element.
-	 * @param extensionElement <tt>extension</tt> element to process.
+	 * @param extensionElement <i>extension</i> element to process.
 	 * @param xdefContextElement X-definition context element.
 	 */
 	protected abstract void processExtension(Element extensionElement,
 		Element xdefContextElement);
 
-	/**Processes given schema <tt>field</tt> element and adds
+	/**Processes given schema <i>field</i> element and adds
 	 * proper declaration to given X-definition context element.
-	 * @param fieldElement <tt>field</tt> element to process.
+	 * @param fieldElement <i>field</i> element to process.
 	 * @param xdefContextElement X-definition context element.
 	 */
 	protected abstract void processField(Element fieldElement,
 		Element xdefContextElement);
 
-	/** Processes given schema <tt>group</tt> element and adds
+	/** Processes given schema <i>group</i> element and adds
 	 * proper declaration to given X-definition context element.
-	 * @param groupElement <tt>group</tt> element to process.
+	 * @param groupElement <i>group</i> element to process.
 	 * @param xdefContextElement X-definition context element.
 	 */
 	protected abstract void processGroup(Element groupElement,
 		Element xdefContextElement);
 
-	/** Processes given schema <tt>key</tt> element and
+	/** Processes given schema <i>key</i> element and
 	 * adds proper declaration to given X-definition context element.
-	 * @param keyElement <tt>key</tt> element to process.
+	 * @param keyElement <i>key</i> element to process.
 	 * @param xdefContextElement X-definition context element.
 	 */
 	protected abstract void processKey(Element keyElement,
 		Element xdefContextElement);
 
-	/** Processes given schema <tt>keyref</tt> element and adds
+	/** Processes given schema <i>keyref</i> element and adds
 	 * proper declaration to given X-definition context element.
-	 * @param keyrefElement <tt>keyref</tt> element to process.
+	 * @param keyrefElement <i>keyref</i> element to process.
 	 * @param xdefContextElement X-definition context element.
 	 */
 	protected abstract void processKeyref(Element keyrefElement,
 		Element xdefContextElement);
 
-	/** Processes given schema <tt>notation</tt> element and adds
+	/** Processes given schema <i>notation</i> element and adds
 	 * proper declaration to given X-definition context element.
-	 * @param notationElement <tt>notation</tt> element to process.
+	 * @param notationElement <i>notation</i> element to process.
 	 * @param xdefContextElement X-definition context element.
 	 */
 	protected abstract void processNotation(Element notationElement,
 		Element xdefContextElement);
 
-	/** Processes given schema <tt>redefine</tt> element and adds
+	/** Processes given schema <i>redefine</i> element and adds
 	 * proper declaration to given X-definition context element.
-	 * @param redefineElement <tt>redefine</tt> element to process.
+	 * @param redefineElement <i>redefine</i> element to process.
 	 * @param xdefContextElement X-definition context element.
 	 */
 	protected abstract void processRedefine(Element redefineElement,
 		Element xdefContextElement);
 
-	/** Processes given schema <tt>restriction</tt> element and adds
+	/** Processes given schema <i>restriction</i> element and adds
 	 * proper declaration to given X-definition context element.
-	 * @param restrictionElement <tt>restriction</tt> element to process.
+	 * @param restrictionElement <i>restriction</i> element to process.
 	 * @param xdefContextElement X-definition context element.
 	 */
 	protected abstract void processRestriction(Element restrictionElement,
 		Element xdefContextElement);
 
-	/** Processes given schema <tt>selector</tt> element and adds
+	/** Processes given schema <i>selector</i> element and adds
 	 * proper declaration to given X-definition context element.
-	 * @param selectorElement <tt>selector</tt> element to process.
+	 * @param selectorElement <i>selector</i> element to process.
 	 * @param xdefContextElement X-definition context element.
 	 */
 	protected abstract void processSelector(Element selectorElement,
 		Element xdefContextElement);
 
-	/** Processes given schema <tt>sequence</tt> element and adds
+	/** Processes given schema <i>sequence</i> element and adds
 	 * proper declaration to given X-definition context element.
-	 * @param sequenceElement <tt>sequence</tt> element to process.
+	 * @param sequenceElement <i>sequence</i> element to process.
 	 * @param xdefContextElement X-definition context element.
 	 */
 	protected abstract void processSequence(Element sequenceElement,
 		Element xdefContextElement);
 
-	/** Processes given schema <tt>simpleContent</tt> element and adds
+	/** Processes given schema <i>simpleContent</i> element and adds
 	 * proper declaration to given X-definition context element.
-	 * @param simpleContentElement <tt>simpleContent</tt> element to process.
+	 * @param simpleContentElement <i>simpleContent</i> element to process.
 	 * @param xdefContextElement X-definition context element.
 	 */
 	protected abstract void processSimpleContent(Element simpleContentElement,
 		Element xdefContextElement);
 
-	/** Processes given schema <tt>simpleType</tt> element and adds
+	/** Processes given schema <i>simpleType</i> element and adds
 	 * proper declaration to given X-definition context element.
-	 * @param simpleTypeElement <tt>simpleType</tt> element to process.
+	 * @param simpleTypeElement <i>simpleType</i> element to process.
 	 * @param xdefContextElement X-definition context element.
 	 */
 	protected abstract void processSimpleType(Element simpleTypeElement,
 		Element xdefContextElement);
 
-	/** Processes given schema <tt>unique</tt> element and adds
+	/** Processes given schema <i>unique</i> element and adds
 	 * proper declaration to given X-definition context element.
-	 * @param uniqueElement <tt>unique</tt> element to process.
+	 * @param uniqueElement <i>unique</i> element to process.
 	 * @param xdefContextElement X-definition context element.
 	 */
 	protected abstract void processUnique(Element uniqueElement,
@@ -482,17 +482,17 @@ public abstract class Processor implements Convertor {
 	 */
 	protected abstract void resolveDebugURL(URL schemaURL);
 
-	/** Processes schema <tt>include</tt> element and add
+	/** Processes schema <i>include</i> element and add
 	 * declaration to X-definition context element.
-	 * @param includeElement schema <tt>include</tt> element to process.
+	 * @param includeElement schema <i>include</i> element to process.
 	 * @param xdefContextElement X-definition context element.
 	 */
 	protected abstract void processInclude(Element includeElement,
 		Element xdefContextElement);
 
-	/** Processes schema <tt>import</tt> element and adds declaration to
+	/** Processes schema <i>import</i> element and adds declaration to
 	 * X-definition context element.
-	 * @param importElement schema <tt>import</tt> element to process.
+	 * @param importElement schema <i>import</i> element to process.
 	 * @param xdefContextElement X-definition context element.
 	 */
 	protected abstract void processImport(Element importElement,

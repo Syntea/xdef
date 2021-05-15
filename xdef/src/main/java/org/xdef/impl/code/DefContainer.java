@@ -208,7 +208,7 @@ public final class DefContainer extends XDValueAbstract
 	 * @param name the name of item.
 	 * @param val the value of item.
 	 * @return if the named item not exists in the table of named items then
-	 * return <tt>null</tt> or return the value which was replaced.
+	 * return <i>null</i> or return the value which was replaced.
 	 */
 	public final XDValue setXDNamedItem(final String name, final XDValue val) {
 		XDNamedValue item = new DefNamedValue(name, val);
@@ -235,7 +235,7 @@ public final class DefContainer extends XDValueAbstract
 	@Override
 	/** Check if named item exists in the table of named items.
 	 * @param name the name of named item.
-	 * @return <tt>true</tt> if and only if named item exists in the table.
+	 * @return <i>true</i> if and only if named item exists in the table.
 	 */
 	public final boolean hasXDNamedItem(final String name) {
 		return namedItemIndex(name)>=0;
@@ -244,7 +244,7 @@ public final class DefContainer extends XDValueAbstract
 	@Override
 	/** Get named item from the table of named items.
 	 * @param name the name of named item.
-	 * @return if item not exists in table return <tt>null</tt> or
+	 * @return if item not exists in table return <i>null</i> or
 	 * return the named item from the table of named items.
 	 */
 	public final XDNamedValue getXDNamedItem(final String name) {
@@ -255,7 +255,7 @@ public final class DefContainer extends XDValueAbstract
 	@Override
 	/** Get value of named item from the table of named items.
 	 * @param name the name of named item.
-	 * @return if item not exists the return <tt>null</tt> or
+	 * @return if item not exists the return <i>null</i> or
 	 * return the named item.
 	 */
 	public final XDValue getXDNamedItemValue(final String name) {
@@ -266,7 +266,7 @@ public final class DefContainer extends XDValueAbstract
 	@Override
 	/** Get value of named item from the table of named items as string.
 	 * @param name the name of named item.
-	 * @return if item not exists in table return <tt>null</tt> or
+	 * @return if item not exists in table return <i>null</i> or
 	 * return the value of named item as string.
 	 */
 	public final String getXDNamedItemAsString(final String name) {
@@ -277,7 +277,7 @@ public final class DefContainer extends XDValueAbstract
 	@Override
 	/** Remove named item from the table of named items.
 	 * @param name the name of named item.
-	 * @return the removed named item or <tt>null</tt>.
+	 * @return the removed named item or <i>null</i>.
 	 */
 	public final XDValue removeXDNamedItem(final String name) {
 		int i = namedItemIndex(name);
@@ -325,7 +325,7 @@ public final class DefContainer extends XDValueAbstract
 	@Override
 	/** Set named item to the table of named items.
 	 * @param item the named item.
-	 * @return if the named item not exists then return <tt>null</tt> or return
+	 * @return if the named item not exists then return <i>null</i> or return
 	 * the named item value which was replaced in the table of named items.
 	 */
 	public final XDValue setXDNamedItem(final XDNamedValue item) {
@@ -439,7 +439,7 @@ public final class DefContainer extends XDValueAbstract
 	@Override
 	/** Get the item from sequence at given index.
 	 * @param index index of item.
-	 * @return item at given index or return <tt>null</tt>.
+	 * @return item at given index or return <i>null</i>.
 	 */
 	public final XDValue getXDItem(final int index) {
 		return index < 0 || _value == null || index >= _value.length ?
@@ -735,16 +735,16 @@ public final class DefContainer extends XDValueAbstract
 	public XDValueType getItemType() {return XDValueType.CONTAINER;}
 
 	@Override
-	/** Check if the object is <tt>null</tt>.
-	 * @return <tt>true</tt> if the object is <tt>null</tt> otherwise returns
-	 * <tt>false</tt>.
+	/** Check if the object is <i>null</i>.
+	 * @return <i>true</i> if the object is <i>null</i> otherwise returns
+	 * <i>false</i>.
 	 */
 	public boolean isNull() { return _value == null;}
 
 	@Override
 	/** Check if the object is empty.
-	 * @return <tt>true</tt> if the object is empty; otherwise returns
-	 * <tt>false</tt>.
+	 * @return <i>true</i> if the object is empty; otherwise returns
+	 * <i>false</i>.
 	 */
 	public boolean isEmpty() {
 		return (_value == null || _value.length == 0) &&
@@ -776,7 +776,7 @@ public final class DefContainer extends XDValueAbstract
 
 	@Override
 	/** Get boolean value of this object.
-	 * @return boolean value of this object or <tt>false</tt>.
+	 * @return boolean value of this object or <i>false</i>.
 	 */
 	public final boolean booleanValue() {
 		if (!isEmpty()) {
@@ -811,7 +811,7 @@ public final class DefContainer extends XDValueAbstract
 	}
 	@Override
 	/** Get boolean value of this object.
-	 * @return boolean value of this object or <tt>false</tt>.
+	 * @return boolean value of this object or <i>false</i>.
 	 */
 	public final long longValue() {
 		return (_value != null && _value.length == 1 && _value[0] != null)
@@ -819,7 +819,7 @@ public final class DefContainer extends XDValueAbstract
 	}
 	@Override
 	/** Get boolean value of this object.
-	 * @return boolean value of this object or <tt>false</tt>.
+	 * @return boolean value of this object or <i>false</i>.
 	 */
 	public final double doubleValue() {
 		return (_value != null && _value.length == 1 && _value[0] != null)
@@ -827,7 +827,7 @@ public final class DefContainer extends XDValueAbstract
 	}
 	@Override
 	/** Get boolean value of this object.
-	 * @return boolean value of this object or <tt>false</tt>.
+	 * @return boolean value of this object or <i>false</i>.
 	 */
 	public BigDecimal decimalValue() {
 		return (_value != null && _value.length == 1 && _value[0] != null)

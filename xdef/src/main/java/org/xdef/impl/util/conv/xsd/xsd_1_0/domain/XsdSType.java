@@ -1,6 +1,6 @@
 package org.xdef.impl.util.conv.xsd.xsd_1_0.domain;
 
-/** Represents Schema <tt>simpleType</tt> model.
+/** Represents Schema <i>simpleType</i> model.
  * @author Ilia Alexandrov
  */
 public final class XsdSType extends XsdModel {
@@ -13,7 +13,7 @@ public final class XsdSType extends XsdModel {
 	 * @param schema model schema.
 	 * @param name simple type name.
 	 * @throws NullPointerException if given model schema or simple type name is
-	 * <tt>null</tt>.
+	 * <i>null</i>.
 	 * @throws IllegalArgumentException if given simple type name is empty.
 	 */
 	public XsdSType(XsdSchema schema, String name) {

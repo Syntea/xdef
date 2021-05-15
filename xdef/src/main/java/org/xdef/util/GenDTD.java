@@ -154,7 +154,7 @@ public class GenDTD {
 
 	/** Get values of enumeration type (list, tokens, eq, string).
 	 * @return string array with values specified as enumeration or return
-	 * <tt>null</tt> if specified type is not enumeration of string values.
+	 * <i>null</i> if specified type is not enumeration of string values.
 	 */
 	private static String[] getEnumerationValues(XDValue code) {
 		if (code == null) {
@@ -484,16 +484,16 @@ public class GenDTD {
 
 	/** Calling the program from command line.
 	 * @param args The array of arguments.
-		 * <tt>definition_name#root_element_name output_file_name [-e encoding]
-		 * file_xdef1 [file_xdef2] [...]</tt>
+		 * <code>definition_name#root_element_name output_file_name [-e encoding]
+		 * file_xdef1 [file_xdef2] [...]</code>
 		 *  <ul>
-		 *  <li><tt>definition_name#root_element_name</tt> - name
-		 * of X-definition and name of root element</li>
-		 *  <li><tt>output_file_name</tt> - name of output file</li>
-		 *  <li><tt>[-e encoding]</tt> - output file encoding
-		 * (default is "UTF-8")</li>
-		 *  <li><tt>file_xdef1 [file_xdef2] [...]
-		 * </tt> - X-definition file(s)</li>
+		 *  <li><i>definition_name#root_element_name</i> - name
+		 * of X-definition and name of root element
+		 *  <li><i>output_file_name</i> - name of output file
+		 *  <li><i>[-e encoding]</i> - output file encoding
+		 * (default is "UTF-8")
+		 *  <li><code>file_xdef1 [file_xdef2] [...]
+		 * </code> - X-definition file(s)
 		 * </ul>
 	 */
 	public static void main(final String... args) {

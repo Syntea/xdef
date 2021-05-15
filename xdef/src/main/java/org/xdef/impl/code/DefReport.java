@@ -69,7 +69,7 @@ public final class DefReport extends XDValueAbstract implements XDReport {
 	@Override
 	/** Get value of parameter from modification string.
 	 * @param name parameter name.
-	 * @return value of the parameter or <tt>null</tt>.
+	 * @return value of the parameter or <i>null</i>.
 	 */
 	public String getParameter(final String name) {
 		return _value == null ? null : _value.getParameter(name);
@@ -86,13 +86,13 @@ public final class DefReport extends XDValueAbstract implements XDReport {
 
 	@Override
 	/** Get report ID.
-	 * @return report ID or <tt>null</tt>.
+	 * @return report ID or <i>null</i>.
 	 */
 	public String getMsgID() {return _value == null ? null : _value.getMsgID();}
 
 	@Override
 	/** Get primary text.
-	 * @return the primary text or of the report <tt>null</tt>.
+	 * @return the primary text or of the report <i>null</i>.
 	 */
 	public String getText() {return _value == null ? null : _value.getText();}
 
@@ -135,9 +135,9 @@ public final class DefReport extends XDValueAbstract implements XDReport {
 	 */
 	public XDValueType getItemType() {return XDValueType.REPORT;}
 	@Override
-	/** Check if the object is <tt>null</tt>.
-	 * @return <tt>true</tt> if the object is <tt>null</tt> otherwise returns
-	 * <tt>false</tt>.
+	/** Check if the object is <i>null</i>.
+	 * @return <i>true</i> if the object is <i>null</i> otherwise returns
+	 * <i>false</i>.
 	 */
 	public boolean isNull() { return _value == null;}
 	@Override

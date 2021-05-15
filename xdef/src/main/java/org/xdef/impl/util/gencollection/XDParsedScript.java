@@ -619,7 +619,7 @@ public class XDParsedScript {
 	/** Create XdParsedScript object from the script.
 	 * @param script string with script.
 	 * @param defName name of X-definition.
-	 * @param isValue if <tt>true</tt> then script describes text value.
+	 * @param isValue if <i>true</i> then script describes text value.
 	 * @return XdParsedScript object created from the script.
 	 */
 	public static final XDParsedScript getXdScript(final String script,

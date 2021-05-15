@@ -80,9 +80,9 @@ public class GenXDefinition {
 	/** Generate X-definition from XML (command line parameters).
 	 * @param args array with command line arguments:
 	 * <ul>
-	 * <li><tt><b>-i file</b> ....... </tt>XML input file pathname</li>
-	 * <li><tt><b>-o file</b> ....... </tt>X-definition output file pathname</li>
-	 * <li><tt><b>-e encoding</b> ... </tt>character set name of output</li>
+	 * <li><i><b>-i file</b> ....... </i>XML input file pathname
+	 * <li><i><b>-o file</b> ....... </i>X-definition output file pathname
+	 * <li><i><b>-e encoding</b> ... </i>character set name of output
 	 * </ul>
 	 */
 	public static final void main(String... args) {

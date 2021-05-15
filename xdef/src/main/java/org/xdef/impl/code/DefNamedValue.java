@@ -74,8 +74,8 @@ public final class DefNamedValue extends XDValueAbstract
 	@Override
 	/** Check whether some other XDValue object is "equal to" this one.
 	 * @param arg other XDValue object to which is to be compared.
-	 * @return <tt>true</tt> if result value is the same type and if it is equal
-	 * to the result value of the argument; otherwise return <tt>false</tt>.
+	 * @return <i>true</i> if result value is the same type and if it is equal
+	 * to the result value of the argument; otherwise return <i>false</i>.
 	 */
 	public boolean equals(final XDValue arg) {
 		if (isNull()) {

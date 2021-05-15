@@ -36,27 +36,27 @@ public interface XXElement extends XXNode {
 
 	/** Add constructed element as a child to the XXElement.
 	 * Checks all attributes and child nodes for occurrence.
-	 * @return <tt>true</tt> if element was added and complies to X-definition.
+	 * @return <i>true</i> if element was added and complies to X-definition.
 	 */
 	public boolean addElement();
 
 	/** This method is called when the end of the current element attribute list
 	 * was parsed. The implementation may check the list of attributes and
 	 * may invoke appropriate actions.
-	 * @return <tt>true</tt> if element is compliant with definition.
+	 * @return <i>true</i> if element is compliant with definition.
 	 */
 	public boolean checkElement();
 
 	/** Add new Text node to current element.
 	 * @param textValue The value of text node.
 	 * @throws SRuntimeException if an error occurs.
-	 * @return <tt>true</tt> if text node is compliant with definition.
+	 * @return <i>true</i> if text node is compliant with definition.
 	 */
 	public boolean addText(String textValue);
 
 	/** Add new Comment node to current element.
 	 * @param data The value of Comment node.
-	 * @return <tt>true</tt> if Comment node is compliant with definition.
+	 * @return <i>true</i> if Comment node is compliant with definition.
 	 */
 	public boolean addComment(String data);
 
@@ -64,7 +64,7 @@ public interface XXElement extends XXNode {
 	 * @param name The name of the PI node.
 	 * @param data The value of instruction part of the PI node.
 	 * @throws SRuntimeException if an error occurs.
-	 * @return <tt>true</tt> if PI node is compliant with definition.
+	 * @return <i>true</i> if PI node is compliant with definition.
 	 */
 	public boolean addPI(String name, String data);
 
@@ -72,21 +72,21 @@ public interface XXElement extends XXNode {
 	 * @param qname The qualified name of attribute (including prefix).
 	 * @param value The value of attribute.
 	 * @param nsURI The value of namespace URI.
-	 * @return <tt>true</tt> if attribute was created according to definition.
+	 * @return <i>true</i> if attribute was created according to definition.
 	 */
 	public boolean addAttributeNS(String nsURI, String qname, String value);
 
 	/** Add the new attribute to the current XXElement.
 	 * @param name The name of attribute.
 	 * @param value The value of attribute.
-	 * @return <tt>true</tt> if attribute was created according to definition.
+	 * @return <i>true</i> if attribute was created according to definition.
 	 */
 	public boolean addAttribute(String name, String value);
 
 	/** Check if attribute is legal in the XXElement.
 	 * @param name The name of attribute.
-	 * @return <tt>true</tt> if and only if the attribute is legal in the
-	 * XXElement, otherwise return <tt>false</tt>.
+	 * @return <i>true</i> if and only if the attribute is legal in the
+	 * XXElement, otherwise return <i>false</i>.
 	 */
 	public boolean checkAttributeLegal(String name);
 
@@ -101,8 +101,8 @@ public interface XXElement extends XXNode {
 	/** Check if attribute with given namespace is legal in the XXElement.
 	 * @param uri The namespace of attribute.
 	 * @param name name of attribute (optionally with prefix).
-	 * @return <tt>true</tt> if and only if the attribute is legal in the
-	 * XXElement, otherwise return <tt>false</tt>.
+	 * @return <i>true</i> if and only if the attribute is legal in the
+	 * XXElement, otherwise return <i>false</i>.
 	 */
 	public boolean checkAttributeNSLegal(String uri, final String name);
 

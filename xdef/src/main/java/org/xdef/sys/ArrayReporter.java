@@ -41,7 +41,7 @@ public class ArrayReporter extends ArrayList<Report>
 	@Override
 	/** Appends the specified report to the end of this list.
 	 * @param report report to be appended to this list.
-	 * @return <tt>true</tt> (as per the general contract of Collection.add).
+	 * @return <i>true</i> (as per the general contract of Collection.add).
 	 */
 	public final boolean add(final Report report) {
 		putReport(report);
@@ -51,7 +51,7 @@ public class ArrayReporter extends ArrayList<Report>
 	@Override
 	/** Appends the specified collection of reports to the end of this list.
 	 * @param c collection of reports.
-	 * @return <tt>true</tt> if something was added.
+	 * @return <i>true</i> if something was added.
 	 */
 	public final boolean addAll(final Collection<? extends Report> c) {
 		int len = c.size();
@@ -96,7 +96,7 @@ public class ArrayReporter extends ArrayList<Report>
 
 	/** Remove the report from the list.
 	 * @param msg The report.
-	 * @return <tt>true</tt> if the object was found and removed, otherwise
+	 * @return <i>true</i> if the object was found and removed, otherwise
 	 * return false.
 	 */
 	public final boolean removeReport(final Report msg) {
@@ -148,7 +148,7 @@ public class ArrayReporter extends ArrayList<Report>
 
 	@Override
 	/** Get last error report.
-	 * @return last error report (or <tt>null</tt> if last report is not
+	 * @return last error report (or <i>null</i> if last report is not
 	 * available).
 	 */
 	public final Report getLastErrorReport() {
@@ -157,7 +157,7 @@ public class ArrayReporter extends ArrayList<Report>
 
 	@Override
 	/** Clear last error report. If last report has been available it will be
-	 * erased (i.e. result of <tt>getLastReport()</tt> will be null. However,
+	 * erased (i.e. result of <i>getLastReport()</i> will be null. However,
 	 * the report has already been written to the report file.
 	 */
 	public final void clearLastErrorReport() {_lastErrorReport = -1;}
@@ -174,8 +174,8 @@ public class ArrayReporter extends ArrayList<Report>
 	/** Get report from position.
 	 * @param index index of report to return.
 	 * @return the report at the specified position in this list.
-	 * @throws IndexOutOfBoundsException if index is out of range <tt>(index
-	 * &lt; 0 || index &gt;= size())</tt>.
+	 * @throws IndexOutOfBoundsException if index is out of range <i>(index
+	 * &lt; 0 || index &gt;= size())</i>.
 	 */
 	@Override
 	public final Report get(final int index) {return super.get(index);}
@@ -193,10 +193,10 @@ public class ArrayReporter extends ArrayList<Report>
 
 	@Override
 	/** Returns report reader for reading created report file. If reader
-	 * can't be created <tt>null</tt> is returned. It is implementation
+	 * can't be created <i>null</i> is returned. It is implementation
 	 * dependent if writing of reports can continue, rather it closes the
 	 * report file and resets it to read mode.
-	 * @return The report reader or <tt>null</tt>.
+	 * @return The report reader or <i>null</i>.
 	 */
 	public final ReportReader getReportReader() {
 		_index = 0;

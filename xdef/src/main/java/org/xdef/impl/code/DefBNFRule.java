@@ -164,7 +164,7 @@ public final class DefBNFRule extends XDValueAbstract implements XDBNFRule {
 	@Override
 	/** Check whether some other XDValue object is "equal to" this one.
 	 * @param arg other XDValue object to which is to be compared.
-	 * @return always <tt>false</tt>.
+	 * @return always <i>false</i>.
 	 */
 	public boolean equals(final XDValue arg) {
 		if (isNull()) {

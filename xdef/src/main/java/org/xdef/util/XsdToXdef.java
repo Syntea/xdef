@@ -22,14 +22,11 @@ public class XsdToXdef {
 	/** Constant that represents XML Schema version 1.0. */
 	private static final byte SCHEMA1_0 = 1;
 	/** Prefix of X-definition nodes in output documents. */
-	private String _xdefPrefix;
+	private final String _xdefPrefix;
 	/** Input XML Schema version. */
-	private byte _schemaVersion;
+	private final byte _schemaVersion;
 	/** Reporter for reporting warnings and errors. */
-	private Reporter _reporter;
-
-	/** Prevent user to instantiate this class. */
-	private XsdToXdef() { this(null, null); }
+	private final Reporter _reporter;
 
 	/** Creates instance of Convertor with default settings. X-definition nodes
 	 * prefix as "xd", input XML Schema version as XML Schema 1.0, output
@@ -230,18 +227,14 @@ public class XsdToXdef {
 	 * @param args array of string with command line arguments:
 	 * <ul>
 	 * <li>-in, --input
-	 * <p> &lt;PATH&gt; input main schema location.</p>
-	 * </li>
+	 * <p> &lt;PATH&gt; input main schema location.
 	 * <li>-out, --output
-	 * <p> &lt;PATH&gt; output file or directory.</p>
-	 * </li>
+	 * <p> &lt;PATH&gt; output file or directory.
 	 * <li>-s, --output
-	 * <p> each schema generate to the separate X-definition file.</p>
-	 * </li>
+	 * <p> each schema generate to the separate X-definition file.
 	 * <li>-p
-	 * <p> namespace prefix of X-definitions</p>
-	 * </li>
-	 * <li>-?, -h, --help help</li>
+	 * <p> namespace prefix of X-definitions
+	 * <li>-?, -h, --help help
 	 * </ul>
 	 */
 	public static final void main(final String... args) {

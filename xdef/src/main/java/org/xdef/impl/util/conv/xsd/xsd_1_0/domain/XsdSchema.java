@@ -16,7 +16,7 @@ public final class XsdSchema implements XsdSchemaContainer {
 	 *
 	 * @param name schema file name.
 	 * @param targetNS schema target namespace URI.
-	 * @throws NullPointerException if given schema file name is <tt>null</tt>.
+	 * @throws NullPointerException if given schema file name is <i>null</i>.
 	 * @throws IllegalArgumentException if given schema file name is empty.
 	 */
 	public XsdSchema(String name, String targetNS) {

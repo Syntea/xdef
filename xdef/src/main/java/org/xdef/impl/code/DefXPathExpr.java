@@ -73,7 +73,7 @@ public final class DefXPathExpr extends KXpathExpr implements XDValue {
 	}
 
 	/** Execute XPath expression and return result (it can repeat execution).
-	 * @param node node or <tt>null</tt>.
+	 * @param node node or <i>null</i>.
 	 * @param invoked if false it can be invoke again (if exception thrown)
 	 * @return result of XPath expression.
 	 */
@@ -166,7 +166,7 @@ public final class DefXPathExpr extends KXpathExpr implements XDValue {
 	@Override
 	/** Check whether some other XDValue object is "equal to" this one.
 	 * @param arg other XDValue object to which is to be compared.
-	 * @return always <tt>false</tt>.
+	 * @return always <i>false</i>.
 	 */
 	public boolean equals(final XDValue arg) {return arg == this;}
 
@@ -184,9 +184,9 @@ public final class DefXPathExpr extends KXpathExpr implements XDValue {
 	}
 
 	@Override
-	/** Check if the object is <tt>null</tt>.
-	 * @return <tt>true</tt> if the object is <tt>null</tt> otherwise returns
-	 * <tt>false</tt>.
+	/** Check if the object is <i>null</i>.
+	 * @return <i>true</i> if the object is <i>null</i> otherwise returns
+	 * <i>false</i>.
 	 */
 	public boolean isNull() { return false;}
 

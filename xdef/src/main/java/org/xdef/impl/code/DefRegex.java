@@ -40,7 +40,7 @@ public final class DefRegex extends XDValueAbstract implements XDRegex {
 	@Override
 	/** Check if given data matches the regular expression.
 	 * @param data The data to be checked.
-	 * @return <tt>true</tt> if and only if the data matches regular expression.
+	 * @return <i>true</i> if and only if the data matches regular expression.
 	 */
 	public boolean matches(final String data) {
 		return (_value.matcher(data)).matches();

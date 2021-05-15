@@ -154,9 +154,9 @@ public class DefXmlIterator extends XDValueAbstract implements XDResultSet {
 
 	@Override
 	/** If the iterated object contains the specified item then return
-	 * <tt>true</tt>.
+	 * <i>true</i>.
 	 * @param name name item.
-	 * @return <tt>true</tt> if and only if the specified item exists.
+	 * @return <i>true</i> if and only if the specified item exists.
 	 */
 	public boolean hasItem(String name) {return itemAsString(name) != null;}
 

@@ -24,7 +24,7 @@ public class NullReportWriter implements ReportWriter {
 	public boolean _throwException;
 
 	/** Creates a new instance of NulReportWriter
-	 * @param throwException if true the <tt>putReport</tt> method will
+	 * @param throwException if true the <i>putReport</i> method will
 	 * throw this exception if the message is light error, error or fatal error.
 	 * Otherwise the last error message is just stored to memory.
 	 */
@@ -97,22 +97,22 @@ public class NullReportWriter implements ReportWriter {
 
 	@Override
 	/** Get last error report.
-	 * @return last error report (or <tt>null</tt> if last report is not
+	 * @return last error report (or <i>null</i> if last report is not
 	 * available).
 	 */
    public final Report getLastErrorReport() {return _lastErrorReport;}
 
 	@Override
 	/** Clear last error report. If last report has been available it will be
-	 * erased (i.e. result of <tt>getLastReport()</tt> will be null. However,
+	 * erased (i.e. result of <i>getLastReport()</i> will be null. However,
 	 * the report has already been written to the report file.
 	 */
 	public final void clearLastErrorReport() {_lastErrorReport = null;}
 
 	@Override
-	/** Returns <tt>null</tt> for this implementation.
+	/** Returns <i>null</i> for this implementation.
 	 *
-	 * @return The value <tt>null</tt>.
+	 * @return The value <i>null</i>.
 	 */
 	public final ReportReader getReportReader() {return null;}
 

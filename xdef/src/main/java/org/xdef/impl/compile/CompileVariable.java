@@ -41,8 +41,8 @@ public final class CompileVariable extends XVariable {
 	 * references).
 	 * @param address address of method.
 	 * @param g code generator.
-	 * @return <tt>false</tt> if address was already set(i.e. error), otherwise
-	 * return <tt>true</tt> (i.e. OK).
+	 * @return <i>false</i> if address was already set(i.e. error), otherwise
+	 * return <i>true</i> (i.e. OK).
 	 */
 	final boolean resolvePostDef(final int address, final CompileCode g) {
 		if (getOffset() != -1 || getKind() != 'G') {

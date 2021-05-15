@@ -25,8 +25,8 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 "\t@Override"+LN+
 (_genJavadoc ? ("\t/** Create XML element or text node from default model"+LN+
 "\t * as an element created from given document."+LN+
-"\t * @param doc XML Document or <tt>null</tt>."+LN+
-"\t * If the argument is null <tt>null</tt> then document is created with"+LN+
+"\t * @param doc XML Document or <i>null</i>."+LN+
+"\t * If the argument is null <i>null</i> then document is created with"+LN+
 "\t * created document element."+LN+
 "\t * @return XML element belonging to given document from default model."+LN+
 "\t */"+LN) : "")+
@@ -122,7 +122,7 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 "\tpublic final static byte JSON = " + xe._json + ";" +LN+
 "\t@Override"+LN+
 (_genJavadoc ? ("\t/** Create XML element from this XComponent (marshal)."+LN+
-"\t * If the argument is null <tt>null</tt> then document is created with"+LN+
+"\t * If the argument is null <i>null</i> then document is created with"+LN+
 "\t * created document element."+LN+
 "\t * @return XML element created from thos object."+LN+
 "\t */"+LN) : "") +

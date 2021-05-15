@@ -229,7 +229,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 	}
 
 	/** Read value of method parameter and return true if it was a constant.
-	 * @return <tt>true</tt> if and only if the parameter is a constant.
+	 * @return <i>true</i> if and only if the parameter is a constant.
 	 */
 	private boolean readParam() {
 		int sp = _g._sp;
@@ -1620,9 +1620,9 @@ class CompileStatement extends XScriptParser implements CodeTable {
 	}
 
 	/** Compile boolean expression.
-	 * @param jumpCondition if <tt>true</tt> then result will be generated as
+	 * @param jumpCondition if <i>true</i> then result will be generated as
 	 * conditional jump sequence.
-	 * @return CompileJumpVector object or <tt>null</tt>.
+	 * @return CompileJumpVector object or <i>null</i>.
 	 */
 	private CompileJumpVector boolExpression(final boolean jumpCondition) {
 		int sp = _g._sp;
@@ -2654,8 +2654,8 @@ class CompileStatement extends XScriptParser implements CodeTable {
 	/** Compile variable declaration statement.
 	 * @param type the type of variable (XD_LONG, XD_STRING etc).
 	 * @param varName the name of variable.
-	 * @param isFinal if <tt>true</tt> variable is declared as final.
-	 * @param isExternal if <tt>true</tt> variable is declared as external.
+	 * @param isFinal if <i>true</i> variable is declared as final.
+	 * @param isExternal if <i>true</i> variable is declared as external.
 	 * @param varKind kind of variable ('G' .. global,'L' local,'X' .. X-model).
 	 * @param spos source position where the variable was declared.
 	 */
@@ -2817,10 +2817,10 @@ class CompileStatement extends XScriptParser implements CodeTable {
 
 	/** Parse expression in parenthesis and generate conditioned jump.
 	 * If result of expression is a constant value result of the method is
-	 * fixed jump or <tt>null</tt>.
-	 * <p>parExpression::= "(" expression ")"</p>
+	 * fixed jump or <i>null</i>.
+	 * <p>parExpression::= "(" expression ")"
 	 * @param boolean jumpCondition;
-	 * @return conditioned jump, fixed jump, or <tt>null</tt>;
+	 * @return conditioned jump, fixed jump, or <i>null</i>;
 	 */
 	private CompileJumpVector parBoolExpression(final boolean jumpCondition) {
 		checkSymbol(LPAR_SYM); // '('

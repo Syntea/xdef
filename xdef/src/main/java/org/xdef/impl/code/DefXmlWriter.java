@@ -170,9 +170,9 @@ public class DefXmlWriter extends KXmlOutStream
 	@Override
 	public XDParseResult parseResultValue() {return null;}
 	@Override
-	/** Check if the object is <tt>null</tt>.
-	 * @return <tt>true</tt> if the object is <tt>null</tt> otherwise returns
-	 * <tt>false</tt>.
+	/** Check if the object is <i>null</i>.
+	 * @return <i>true</i> if the object is <i>null</i> otherwise returns
+	 * <i>false</i>.
 	 */
 	public boolean isNull() { return false;}
 	@Override

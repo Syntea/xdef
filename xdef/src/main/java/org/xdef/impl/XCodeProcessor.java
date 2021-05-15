@@ -130,7 +130,6 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 	/** Global variables:<p>
 	 * _globalVariables[i]; i=0 stdOut, 1 stdErr, 2 stdIn.
 	 * 3 $IDParser$, 4 $IDuniqueSet$
-	 * </p>
 	 * Follows global variables from DefPool.
 	 */
 	private XDValue[] _globalVariables;
@@ -516,7 +515,7 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 
 	/** Get value of variable from global variables.
 	 * @param index index to variable block.
-	 * @return XDValue object or <ttt>null</tt>.
+	 * @return XDValue object or <i>null</i>.
 	 */
 	final XDValue getVariable(final String name) {
 		if (_xd != null) {
@@ -3424,7 +3423,7 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 	/** Set named user object.
 	 * @param id identifier of the object.
 	 * @param obj user object.
-	 * @return previous value of the object or <tt>null</tt>.
+	 * @return previous value of the object or <i>null</i>.
 	 */
 	final Object setUserObject(final String id, final Object obj) {
 		return _userObjects.put(id, obj);
@@ -3432,7 +3431,7 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 
 	/** Remove named user object.
 	 * @param id identifier of the object.
-	 * @return value of the object or <tt>null</tt>.
+	 * @return value of the object or <i>null</i>.
 	 */
 	final Object removeUserObject(final String id) {
 		return _userObjects.remove(id);

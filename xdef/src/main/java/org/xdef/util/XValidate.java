@@ -19,9 +19,8 @@ import java.util.Properties;
 import java.util.StringTokenizer;
 
 /** Validation of XML document with X-definition.
- * <p>
- * Also provides main method for calling the program from command line.
- * (see {@link org.xdef.util.XValidate#main(String[])})</p>
+ * <p>Also provides main method for calling the program from command line.
+ * (see {@link org.xdef.util.XValidate#main(String[])})
  * @author  Vaclav Trojan
  */
 public class XValidate {
@@ -35,7 +34,7 @@ public class XValidate {
 	 * @param props properties to be set to X-definitions.
 	 * @param xmlFile The file with XML.
 	 * @param repw Report writer.
-	 * @return The XDDocument object or <tt>null</tt> if the XDDocument was
+	 * @return The XDDocument object or <i>null</i> if the XDDocument was
 	 * not created.
 	 */
 	public static XDDocument validate(final Properties props,
@@ -55,7 +54,7 @@ public class XValidate {
 	 * @param xdefFiles Array of files with definitions.
 	 * @param rootDefName Name of root definition.
 	 * @param repw Report writer.
-	 * @return The XDDocument object or <tt>null</tt> if the XDDocument was
+	 * @return The XDDocument object or <i>null</i> if the XDDocument was
 	 * not created.
 	 */
 	public static XDDocument validate(final Properties props,
@@ -83,7 +82,7 @@ public class XValidate {
 	 * @param xdefFiles Array of files with definitions.
 	 * @param rootDefName Name of root definition.
 	 * @param repw Report writer.
-	 * @return The XDDocument object or <tt>null</tt> if the XDDocument was
+	 * @return The XDDocument object or <i>null</i> if the XDDocument was
 	 * not created.
 	 */
 	public static XDDocument validate(final Properties props,
@@ -108,16 +107,16 @@ public class XValidate {
 	/** Validate XML file with given definition.
 	 * @param props properties to be set to X-definitions.
 	 * @param ext The array of external classes with external methods
-	 * or <tt>null</tt>.
-	 * @param out The DefOutStream used as standard output or <tt>null</tt>.
-	 * @param in The DefInStream used as standard input or <tt>null</tt>.
-	 * @param userObj The user object or <tt>null</tt>.
+	 * or <i>null</i>.
+	 * @param out The DefOutStream used as standard output or <i>null</i>.
+	 * @param in The DefInStream used as standard input or <i>null</i>.
+	 * @param userObj The user object or <i>null</i>.
 	 * @param xmlFile The file with XML.
 	 * @param xdefFiles Array of files with definitions or null.
 	 * @param rootDefName Name of root definition.
-	 * @param repw Report writer; if <tt>null</tt> then an RuntimeEexception
+	 * @param repw Report writer; if <i>null</i> then an RuntimeEexception
 	 * is thrown.
-	 * @return XDDocument object or <tt>null</tt> if the XDDocument was
+	 * @return XDDocument object or <i>null</i> if the XDDocument was
 	 * not created.
 	 */
 	public static XDDocument validate(final Properties props,
@@ -145,17 +144,17 @@ public class XValidate {
 	/** Validate XML file with given definition.
 	 * @param props properties to be set to X-definitions.
 	 * @param ext The array of external classes with external methods
-	 * or <tt>null</tt>.
-	 * @param out The DefOutStream used as standard output or <tt>null</tt>.
-	 * @param in The DefInStream used as standard input or <tt>null</tt>.
-	 * @param userObj The user object or <tt>null</tt>.
+	 * or <i>null</i>.
+	 * @param out The DefOutStream used as standard output or <i>null</i>.
+	 * @param in The DefInStream used as standard input or <i>null</i>.
+	 * @param userObj The user object or <i>null</i>.
 	 * @param xmlFile The file with XML.
 	 * @param poolFile The file with serialized XDPool or null.
 	 * @param xdefFiles Array of files with definitions or null.
 	 * @param rootDefName Name of root definition.
-	 * @param repw Report writer; if <tt>null</tt> then an RuntimeEexception
+	 * @param repw Report writer; if <i>null</i> then an RuntimeEexception
 	 * is thrown.
-	 * @return XDDocument object or <tt>null</tt> if the XDDocument was
+	 * @return XDDocument object or <i>null</i> if the XDDocument was
 	 * not created.
 	 */
 	public static XDDocument validate(final Properties props,
@@ -246,14 +245,14 @@ public class XValidate {
 	/** Validation of pool ox X-definitions. This method is possible to invoke
 	 * from command line.
 	 * @param args Array of strings containing command line arguments.
-		 * <p>Arguments:</p>
+		 * <p>Arguments:
 		 * <ul>
-		 *  <li><tt>-i file</tt> - input XML file to validate</li>
-		 *  <li><tt>-d file</tt> - input X-definition file(s)</li>
-		 *  <li><tt>-p file</tt> - input XDPool file</li>
-		 *  <li><tt>-l file</tt> - log file</li>
-		 *  <li><tt>-x name</tt> - name of X-definition</li>
-		 *  <li><tt>-h | -?</tt> - print help</li>
+		 *  <li><i>-i file</i> - input XML file to validate
+		 *  <li><i>-d file</i> - input X-definition file(s)
+		 *  <li><i>-p file</i> - input XDPool file
+		 *  <li><i>-l file</i> - log file
+		 *  <li><i>-x name</i> - name of X-definition
+		 *  <li><i>-h | -?</i> - print help
 		 * </ul>
 	 */
 	public static void main(final String... args) {

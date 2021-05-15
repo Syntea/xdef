@@ -9,13 +9,13 @@ import org.xdef.XDContainer;
 public interface XMData extends XMNode {
 
 	/** Get value specified as default.
-	 * @return value specified as default or return <tt>null</tt>
+	 * @return value specified as default or return <i>null</i>
 	 * if there was not specified a default value.
 	 */
 	public XDValue getDefaultValue();
 
 	/** Get value specified as fixed.
-	 * @return value specified as fixed or return <tt>null</tt>
+	 * @return value specified as fixed or return <i>null</i>
 	 * if there was not specified a default value.
 	 */
 	public XDValue getFixedValue();
@@ -52,7 +52,7 @@ public interface XMData extends XMNode {
 	public short getParserType();
 
 	/** Get datetime mask from the model parser.
-	 * @return mask of datetime type or <tt>null</tt>.
+	 * @return mask of datetime type or <i>null</i>.
 	 */
 	public String getDateMask();
 

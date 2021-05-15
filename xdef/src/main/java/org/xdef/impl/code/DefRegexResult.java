@@ -24,7 +24,7 @@ public final class DefRegexResult extends XDValueAbstract
 
 	@Override
 	/** Check if given data matches the regular expression.
-	 * @return <tt>true</tt> if and only if the data matches regular expression.
+	 * @return <i>true</i> if and only if the data matches regular expression.
 	 */
 	public boolean matches() {return _value.matches();}
 

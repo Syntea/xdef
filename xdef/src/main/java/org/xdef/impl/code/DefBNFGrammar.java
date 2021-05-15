@@ -37,10 +37,10 @@ public class DefBNFGrammar extends XDValueAbstract implements XDBNFGrammar {
 
 	/** Creates a new instance of BNFGrammar from .
 	 * @param source SBuffer with extended BNF source code.
-	 * @param reporter Report writer or <tt>null</tt>. If this argument is
-	 * <tt>null</tt> and an error occurs then SRuntimeException is thrown.
+	 * @param reporter Report writer or <i>null</i>. If this argument is
+	 * <i>null</i> and an error occurs then SRuntimeException is thrown.
 	 * @throws SRuntimeException if an error occurs and if reporter is
-	 * <tt>null</tt>.
+	 * <i>null</i>.
 	 */
 	public DefBNFGrammar(final String source,
 		final ReportWriter reporter) throws SRuntimeException {
@@ -50,13 +50,13 @@ public class DefBNFGrammar extends XDValueAbstract implements XDBNFGrammar {
 	}
 
 	/** Creates a new instance of BNFGrammar from .
-	 * @param grammar the grammar to be extended or <tt>null</tt>.
+	 * @param grammar the grammar to be extended or <i>null</i>.
 	 * @param extVar index of global variable with grammar to be extended or -1.
 	 * @param source SBuffer with extended BNF source code.
-	 * @param reporter Report writer or <tt>null</tt>. If this argument is
-	 * <tt>null</tt> and an error occurs then SRuntimeException is thrown.
+	 * @param reporter Report writer or <i>null</i>. If this argument is
+	 * <i>null</i> and an error occurs then SRuntimeException is thrown.
 	 * @throws SRuntimeException if an error occurs and if reporter is
-	 * <tt>null</tt>.
+	 * <i>null</i>.
 	 */
 	public DefBNFGrammar(final DefBNFGrammar grammar,
 		final int extVar,
@@ -69,13 +69,13 @@ public class DefBNFGrammar extends XDValueAbstract implements XDBNFGrammar {
 	}
 
 	/** Creates a new instance of BNFGrammar from .
-	 * @param grammar the grammar to be extended or <tt>null</tt>.
+	 * @param grammar the grammar to be extended or <i>null</i>.
 	 * @param extVar index of global variable with grammar to be extended or -1.
 	 * @param source String with extended BNF source code.
-	 * @param reporter Report writer or <tt>null</tt>. If this argument is
-	 * <tt>null</tt> and an error occurs then SRuntimeException is thrown.
+	 * @param reporter Report writer or <i>null</i>. If this argument is
+	 * <i>null</i> and an error occurs then SRuntimeException is thrown.
 	 * @throws SRuntimeException if an error occurs and if reporter is
-	 * <tt>null</tt>.
+	 * <i>null</i>.
 	 */
 	public DefBNFGrammar(final DefBNFGrammar grammar,
 		final int extVar,

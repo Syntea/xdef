@@ -11,15 +11,15 @@ public abstract class XsdModel {
 	public static interface Type {
 
 		/**
-		 * Schema <tt>complexType</tt> model type constant.
+		 * Schema <i>complexType</i> model type constant.
 		 */
 		public static final int COMPLEX_TYPE = 1;
 		/**
-		 * Schema <tt>group</tt> model type constant.
+		 * Schema <i>group</i> model type constant.
 		 */
 		public static final int GROUP = COMPLEX_TYPE + 1;
 		/**
-		 * Schema <tt>simpleType</tt> model type constant.
+		 * Schema <i>simpleType</i> model type constant.
 		 */
 		public static final int SIMPLE_TYPE = GROUP + 1;
 	}

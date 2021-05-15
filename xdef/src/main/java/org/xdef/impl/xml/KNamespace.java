@@ -41,7 +41,7 @@ public class KNamespace implements NamespaceContext {
 	@Override
 	/** Find namespace URI assigned to prefix from argument.
 	 * @param prefix namespace prefix to be searched.
-	 * @return namespace URI or <tt>null</tt> if no URI was found.
+	 * @return namespace URI or <i>null</i> if no URI was found.
 	 */
 	public final String getNamespaceURI(final String prefix) {
 		if (prefix != null && _size > 0) {
@@ -57,7 +57,7 @@ public class KNamespace implements NamespaceContext {
 	@Override
 	/** Find most recent prefix assigned to given namespace URI.
 	 * @param uri namespace URI to be searched.
-	 * @return namespace prefix or <tt>null</tt>.
+	 * @return namespace prefix or <i>null</i>.
 	 */
 	public final String getPrefix(final String uri) {
 		if (uri != null && _size > 0) {

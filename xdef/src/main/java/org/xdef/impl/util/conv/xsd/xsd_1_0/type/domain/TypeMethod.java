@@ -37,7 +37,7 @@ public class TypeMethod {
 	 */
 	public String getMethodName() {return _methodName;}
 
-	/** Gets method parameter at given position or <tt>null</tt> if position
+	/** Gets method parameter at given position or <i>null</i> if position
 	 * is not in bounds of parameters list.
 	 * @param position  position of parameter.
 	 * @return          parameter value.

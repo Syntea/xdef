@@ -373,7 +373,7 @@ public class XDGenCollection {
 
 	/** Check if given node is XDEF element.
 	 * @param n node to be inspected.
-	 * @return <tt>true</tt> if node is element with X-definition namespace.
+	 * @return <i>true</i> if node is element with X-definition namespace.
 	 */
 	private static boolean isXdefElement(final Node n) {
 		String uri = n.getNamespaceURI();
@@ -393,7 +393,7 @@ public class XDGenCollection {
 	/** Check if given node is the XDEF element.
 	 * @param n node to be inspected.
 	 * @param name required name of element.
-	 * @return <tt>true</tt> if node is element with X-definition name space.
+	 * @return <i>true</i> if node is element with X-definition name space.
 	 */
 	public static boolean isXdefElement(final Node n, final String name) {
 		return name.equals(n.getLocalName()) && isXdefElement(n);
@@ -415,7 +415,7 @@ public class XDGenCollection {
 	 * @param el element from which an attribute should be taken.
 	 * @param xdUri namespace URI of X-definition.
 	 * @param localname local name of attribute
-	 * @param remove if <tt>true</tt> then the attribute is removed.
+	 * @param remove if <i>true</i> then the attribute is removed.
 	 * @return value of attribute or an empty string.
 	 */
 	static String getXdefAttr(final Element el,

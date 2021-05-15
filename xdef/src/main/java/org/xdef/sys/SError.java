@@ -100,7 +100,7 @@ public class SError extends Error implements SThrowable {
 	public void setCause(final Throwable cause) {_cause = cause;}
 
 	@Override
-	/** Get cause of exception. If cause was not set return <tt>null</tt>.
+	/** Get cause of exception. If cause was not set return <i>null</i>.
 	 * @return cause The object with cause data.
 	 */
 	public Throwable getCause() {return _cause;}
@@ -115,7 +115,7 @@ public class SError extends Error implements SThrowable {
 
 	@Override
 	/** Get id of message.
-	 * @return The message id (may be <tt>null</tt>).
+	 * @return The message id (may be <i>null</i>).
 	 */
 	public String getMsgID() {return _msgID;}
 

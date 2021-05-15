@@ -32,14 +32,14 @@ public interface XMElement extends XMNode {
 
 	/** Get model of attribute (no name space URI).
 	 * @param name name of attribute.
-	 * @return attribute model or <tt>null</tt> if attribute is hot specified.
+	 * @return attribute model or <i>null</i> if attribute is hot specified.
 	 */
 	public XMData getAttr(String name);
 
 	/** Get model of attribute with name space URI.
-	 * @param nsURI name space URI of attribute or <tt>null</tt>.
+	 * @param nsURI name space URI of attribute or <i>null</i>.
 	 * @param name local name of attribute.
-	 * @return attribute model or <tt>null</tt> if attribute is hot specified.
+	 * @return attribute model or <i>null</i> if attribute is hot specified.
 	 */
 	public XMData getAttrNS(String nsURI, String name);
 
