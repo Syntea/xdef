@@ -92,7 +92,7 @@ public class DTDToXdef {
 	 *
 	 * @param args array of parameters.
 	 * <p><i>[-in | --input] file [-out | --output] file [-r | --root] element
-	 * [-l | --logFile] file</i> 
+	 * [-l | --logFile] file</i>
 	 * <ul>
 	 *  <li><i>[-in | --input] file</i> - input dtd file
 	 *  <li><i>[-out | --output] file</i> - output X-definition file

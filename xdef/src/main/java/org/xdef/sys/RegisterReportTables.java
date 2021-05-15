@@ -43,7 +43,7 @@ public class RegisterReportTables {
 	 * _language = the 3 letters ISO-639 Language Code
 	 * _defaultLanguag = the ISO-639 Language Code (must be specified only once)
 	 * </code></pre>
-	 * <p> All other property names must start with the prefix. 
+	 * <p> All other property names must start with the prefix.
 	 * <p> Reports are divided to separate files for each language. Each report
 	 * has a id. The id is composed of prefix and of a local ID (usually
 	 * a number). The prefix must be a sequence of minimum 3 capital ASCII
