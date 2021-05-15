@@ -2,11 +2,11 @@
 
 # Version 40.1.4, release-date 2021-05-13
 * fixed bug: decimal point of amount in price is now always '.' (independent on
-* `Locale` settings).
+  `Locale` settings).
 * fixed bug in XON to JSON conversion: datetime is not converted
-* as JSON string.
+  as JSON string.
 * fixed bug in GUI debugger: not reported errors in source X-definition
-* compilation.
+  compilation.
 * fixed bug not thrown exception when occurs some errors in JSON/XON parser.
 
 # Version 40.1.3, release-date 2021-05-08
