@@ -124,7 +124,7 @@ public abstract class XNode implements XMNode {
 
 	@Override
 	/** Get position to source X-definition.
-	 * @return position to source X-definition or <tt>null</tt>.
+	 * @return position to source X-definition or <i>null</i>.
 	 */
 	public final SPosition getSPosition() {
 		return _spos == null ? new SPosition() : _spos;
@@ -232,49 +232,49 @@ public abstract class XNode implements XMNode {
 
 	@Override
 	/** Return true if value of occurrence had been specified.
-	 * @return <tt>true</tt> if and only if occurrence is specified.
+	 * @return <i>true</i> if and only if occurrence is specified.
 	 */
 	public final boolean isSpecified() {return _occ.isSpecified();}
 
 	@Override
 	/** Return true if value of occurrence is set as illegal.
-	 * @return <tt>true</tt> if and only if occurrence is set as illegal.
+	 * @return <i>true</i> if and only if occurrence is set as illegal.
 	 */
 	public final boolean isIllegal() {return _occ.isIllegal();}
 
 	@Override
 	/** Return true if value of occurrence is set as ignored.
-	 * @return <tt>true</tt> if and only if occurrence is set as ignored.
+	 * @return <i>true</i> if and only if occurrence is set as ignored.
 	 */
 	public final boolean isIgnore() {return _occ.isIgnore();}
 
 	@Override
 	/** Return true if value of occurrence is set as fixed.
-	 * @return <tt>true</tt> if and only if occurrence is set as fixed.
+	 * @return <i>true</i> if and only if occurrence is set as fixed.
 	 */
 	public final boolean isFixed() {return _occ.isFixed();}
 
 	@Override
 	/** Return true if value of occurrence is set as required.
-	 * @return <tt>true</tt> if and only if occurrence is set as required.
+	 * @return <i>true</i> if and only if occurrence is set as required.
 	 */
 	public final boolean isRequired() {return _occ.isRequired();}
 
 	@Override
 	/** Return true if value of occurrence is set as optional.
-	 * @return <tt>true</tt> if and only if occurrence is set as optional.
+	 * @return <i>true</i> if and only if occurrence is set as optional.
 	 */
 	public final boolean isOptional() {return _occ.isOptional();}
 
 	@Override
 	/** Return true if value of occurrence is set as unbounded.
-	 * @return <tt>true</tt> if and only if occurrence is set as unbounded.
+	 * @return <i>true</i> if and only if occurrence is set as unbounded.
 	 */
 	public final boolean isUnbounded() {return _occ.isUnbounded();}
 
 	@Override
 	/** Return true if minimum is greater then 0 and maximum is unbounded.
-	 * @return <tt>true</tt> if and only if minimum is greater then 0 and
+	 * @return <i>true</i> if and only if minimum is greater then 0 and
 	 * maximum is unbounded..
 	 */
 	public final boolean isMaxUnlimited() {return _occ.isMaxUnlimited();}

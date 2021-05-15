@@ -1540,7 +1540,7 @@ public class CompileBase implements CodeTable, XDValueID {
 	 * @param list true if parameter is list of values.
 	 * @param seqIndex sequential parameter index or -1.
 	 * @param fixed true if value is fixed.
-	 * @param legalValues default value of parameter or <tt>null</tt>.
+	 * @param legalValues default value of parameter or <i>null</i>.
 	 * @return created KeyParam object
 	 */
 	private static KeyParam keyParam(final String key,

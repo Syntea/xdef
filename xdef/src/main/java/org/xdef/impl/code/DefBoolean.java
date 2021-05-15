@@ -135,9 +135,9 @@ public final class DefBoolean extends XDValueAbstract {
 		throw new SIllegalArgumentException(SYS.SYS085);//Incomparable arguments
 	}
 	@Override
-	/** Check if the object is <tt>null</tt>.
-	 * @return <tt>true</tt> if the object is <tt>null</tt> otherwise returns
-	 * <tt>false</tt>.
+	/** Check if the object is <i>null</i>.
+	 * @return <i>true</i> if the object is <i>null</i> otherwise returns
+	 * <i>false</i>.
 	 */
 	public boolean isNull() {return _isNull;}
 }

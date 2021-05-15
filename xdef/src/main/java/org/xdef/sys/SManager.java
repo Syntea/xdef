@@ -105,7 +105,7 @@ public final class SManager implements XDConstants {
 
 	/** Get SManager property.
 	 * @param name property name.
-	 * @return string with property value or <tt>null</tt>.
+	 * @return string with property value or <i>null</i>.
 	 */
 	public static final String getProperty(final String name) {
 		return getProperty(getInstance()._properties, name);
@@ -136,9 +136,9 @@ public final class SManager implements XDConstants {
 
 	/** Set SManager property.
 	 * @param key property name.
-	 * @param value property value (may be <tt>null</tt> - then the property
+	 * @param value property value (may be <i>null</i> - then the property
 	 * is removed).
-	 * @return string with original property value or <tt>null</tt>.
+	 * @return string with original property value or <i>null</i>.
 	 */
 	public static final String setProperty(final String key,
 		final String value) {
@@ -252,8 +252,8 @@ public final class SManager implements XDConstants {
 	/** Get report table associated with given report. If the argument
 	 * language is null, the primary langue table is searched.
 	 * @param reportID report ID.
-	 * @param language language code (ISO-639) or <tt>null</tt>.
-	 * @return report table or <tt>null</tt>.
+	 * @param language language code (ISO-639) or <i>null</i>.
+	 * @return report table or <i>null</i>.
 	 */
 	final ReportTable getReportTable(final String reportID,
 		final String language) {
@@ -494,10 +494,10 @@ public final class SManager implements XDConstants {
 	////////////////////////////////////////////////////////////////////////////
 
 	/** Get text of report from report table. All references to other reports
-	 * are resolved if the argument <tt>resolveReferences</tt> is <tt>true</tt>.
+	 * are resolved if the argument <i>resolveReferences</i> is <i>true</i>.
 	 * @param regID registered report ID.
 	 * @param language language code.
-	 * @param resolveReferences if <tt>true</tt> then all references to other
+	 * @param resolveReferences if <i>true</i> then all references to other
 	 * reports are resolved.
 	 * @return text of report.
 	 */
@@ -510,11 +510,11 @@ public final class SManager implements XDConstants {
 	}
 
 	/** Get text of report from report table. All references to other reports
-	 * are resolved if the argument <tt>resolveReferences</tt> is <tt>true</tt>.
+	 * are resolved if the argument <i>resolveReferences</i> is <i>true</i>.
 	 * @param reportID report ID.
-	 * @param language code of required language or <tt>null</tt> (then
+	 * @param language code of required language or <i>null</i> (then
 	 * the actual setting language is used).
-	 * @param resolveReferences if <tt>true</tt> then all references to other
+	 * @param resolveReferences if <i>true</i> then all references to other
 	 * reports are resolved.
 	 * @return text of report.
 	 */
@@ -547,9 +547,9 @@ public final class SManager implements XDConstants {
 	/** Find available report table for the the actual language or for the
 	 * primary language. If the actual language table is not available then
 	 * a table for the primary language is searched. If none of those was found
-	 * then return <tt>null</tt>.
+	 * then return <i>null</i>.
 	 * @param regID registered report ID.
-	 * @return report table or <tt>null</tt>.
+	 * @return report table or <i>null</i>.
 	 */
 	final ReportTable getReportTable(final long regID) {
 		return findReportTable(regID
@@ -561,7 +561,7 @@ public final class SManager implements XDConstants {
 	 * @param regID registered report ID.
 	 * @param modification The modification string.
 	 * @param language language id (ISO-639).
-	 * @return The text of localized report in given language or <tt>null</tt>.
+	 * @return The text of localized report in given language or <i>null</i>.
 	 */
 	final String getLocalizedText(final long regID,
 		final String modification,
@@ -587,7 +587,7 @@ public final class SManager implements XDConstants {
 	 * @param modelText model text of report.
 	 * @param modification modification string.
 	 * @param language language id (ISO-639).
-	 * @return localized text of report in given language or <tt>null</tt>.
+	 * @return localized text of report in given language or <i>null</i>.
 	 */
 	final String getLocalizedText(final String reportID,
 		final String modelText,
@@ -643,8 +643,8 @@ public final class SManager implements XDConstants {
 
 	/** Get sorted array of parameter names from report text.
 	 * @param reportID report ID.
-	 * @param language language id (ISO-639) or <tt>null</tt>.
-	 * @return The sorted array of parameter names or <tt>null</tt>.
+	 * @param language language id (ISO-639) or <i>null</i>.
+	 * @return The sorted array of parameter names or <i>null</i>.
 	 */
 	final String[] getReportParamNames(final String reportID,
 		final String language) {
@@ -707,7 +707,7 @@ public final class SManager implements XDConstants {
 
 	/** Remove specified report table.
 	 * @param tableID Report table name.
-	 * @return removed table or <tt>null</tt>.
+	 * @return removed table or <i>null</i>.
 	 */
 	private ReportTable removeReportTable(final String tableID) {
 		long id  = RegisterReportTables.getTableID(tableID);
@@ -747,10 +747,10 @@ public final class SManager implements XDConstants {
 	}
 
 	/** Get text of report from report table. All references to other reports
-	 * are resolved if the argument <tt>resolveReferences</tt> is <tt>true</tt>.
+	 * are resolved if the argument <i>resolveReferences</i> is <i>true</i>.
 	 * @param regID registered report ID.
 	 * @param languageID computed language ID or 0.
-	 * @param resolveReferences if <tt>true</tt> then all references to other
+	 * @param resolveReferences if <i>true</i> then all references to other
 	 * reports are resolved.
 	 * @return text of report.
 	 */
@@ -841,7 +841,7 @@ public final class SManager implements XDConstants {
 
 	/** Add report table with the specified table name.
 	 * @param tableName table ID (prefix + '_' + language)
-	 * @return ReportTable or <tt>null</tt> if no table can be added.
+	 * @return ReportTable or <i>null</i> if no table can be added.
 	 */
 	private ReportTable addReportTable(final String tableName){
 		synchronized(this) {
@@ -946,9 +946,9 @@ public final class SManager implements XDConstants {
 	/** Get ReportTable for the actual language or for the primary language.
 	 * If the actual language table is not available then a table for the
 	 * primary language is returned. If none of those was found then return
-	 * <tt>null</tt>.
+	 * <i>null</i>.
 	 * @param tableID registered table ID.
-	 * @return report table or <tt>null</tt>.
+	 * @return report table or <i>null</i>.
 	 */
 	private ReportTable findReportTable(final long tableID) {
 		synchronized(this) {
@@ -988,7 +988,7 @@ public final class SManager implements XDConstants {
 
 	/** Find index of table in sorted array of tables.
 	 * @param id table ID.
-	 * @return index of table if table was found otherwise return <tt>null</tt>.
+	 * @return index of table if table was found otherwise return <i>null</i>.
 	 */
 	private int indexOfTable(final long id) {
 		int last;

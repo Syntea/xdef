@@ -34,12 +34,12 @@ public class DOMUtils {
 		return schemaElement.getAttribute("xmlns");
 	}
 
-	/** Returns <tt>true</tt> if given node is element, has name as given name
+	/** Returns <i>true</i> if given node is element, has name as given name
 	 * and is in given namespace.
 	 * @param node node.
 	 * @param nsURI namespace URI
 	 * @param name local name.
-	 * @return <tt>true</tt> if given node is element, has name as given
+	 * @return <i>true</i> if given node is element, has name as given
 	 * name and is in given namespace.
 	 */
 	public static boolean isElement(Node node, String nsURI, String name) {
@@ -77,12 +77,12 @@ public class DOMUtils {
 			"of element with given namespace URI and local name");
 	}
 
-	/** Returns <tt>true</tt> if given node is child of element with given
+	/** Returns <i>true</i> if given node is child of element with given
 	 * namespace URI and given local name.
 	 * @param node      node.
 	 * @param nsURI     namespace URI of parent element.
 	 * @param localName local name of parent element.
-	 * @return          <tt>true</tt> if given node is child of element with
+	 * @return          <i>true</i> if given node is child of element with
 	 *                  given namespace URI and given local name.
 	 */
 	public static boolean isChild(Node node, String nsURI, String localName) {
@@ -93,10 +93,10 @@ public class DOMUtils {
 			parent.getLocalName().equals(localName);
 	}
 
-	/** Gets prefix of given namespace URI in given element or <tt>null</tt>.
+	/** Gets prefix of given namespace URI in given element or <i>null</i>.
 	 * @param element element node.
 	 * @param namespaceURI namesapce URI.
-	 * @return prefix of namespace URI declaration or <tt>null</tt>.
+	 * @return prefix of namespace URI declaration or <i>null</i>.
 	 */
 	public static String getNamespaceDeclarationPrefix(Element element,
 		String namespaceURI) {
@@ -119,12 +119,12 @@ public class DOMUtils {
 	}
 
 	/** Adds namespace declaration with given prefix nad given namespace URI to
-	 * the element node and returns <tt>true</tt>. If namespace declaration with
-	 * given prefix already exists in given element node returns <tt>false</tt>.
+	 * the element node and returns <i>true</i>. If namespace declaration with
+	 * given prefix already exists in given element node returns <i>false</i>.
 	 * @param element element node to add namespace declaration.
 	 * @param prefix prefix of nemaspace declaration.
 	 * @param namespaceURI namespace URI of namespace declaration.
-	 * @return <tt>true</tt> if namespace declaration was created.
+	 * @return <i>true</i> if namespace declaration was created.
 	 */
 	public static boolean addNamespaceDeclaration(Element element,
 		String prefix,

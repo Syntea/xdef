@@ -47,9 +47,9 @@ public final class DefInStream extends XDValueAbstract implements XDInput {
 
 	/** Creates a new instance of DefStream
 	 * @param fname the name of the file with the input data.
-	 * @param encoding the name of encoding table (<tt>null</tt> =&gt; default
+	 * @param encoding the name of encoding table (<i>null</i> =&gt; default
 	 * encoding).
-	 * @param xmlFormat if <tt>true</tt> the from of input data is in XML,
+	 * @param xmlFormat if <i>true</i> the from of input data is in XML,
 	 * otherwise the input data stream is processed as a stream of source lines.
 	 * @throws SRuntimeException if an error occurs.
 	 */
@@ -64,7 +64,7 @@ public final class DefInStream extends XDValueAbstract implements XDInput {
 
 	/** Creates a new instance of DefStream.
 	 * @param reader the input stream.
-	 * @param xmlFormat if <tt>true</tt> the from of input data is in XML,
+	 * @param xmlFormat if <i>true</i> the from of input data is in XML,
 	 * otherwise the input data stream is processed as a stream of source lines.
 	 * @throws SRuntimeException if an error occurs.
 	 */
@@ -80,7 +80,7 @@ public final class DefInStream extends XDValueAbstract implements XDInput {
 
 	/** Creates a new instance of DefStream.
 	 * @param stream the input stream.
-	 * @param xmlFormat if <tt>true</tt> the from of input data is in XML,
+	 * @param xmlFormat if <i>true</i> the from of input data is in XML,
 	 * otherwise the input data strem is processed as a stream of source lines.
 	 * @throws SRuntimeException if an error occurs.
 	 */
@@ -97,7 +97,7 @@ public final class DefInStream extends XDValueAbstract implements XDInput {
 
 	/** Creates a new instance of DefStream.
 	 * @param name file pathname or "in" (System.in).
-	 * @param xmlFormat if <tt>true</tt> the from of input data is in XML,
+	 * @param xmlFormat if <i>true</i> the from of input data is in XML,
 	 * otherwise the input data stream is processed as a stream of source lines.
 	 * @throws SRuntimeException if an error occurs.
 	 */

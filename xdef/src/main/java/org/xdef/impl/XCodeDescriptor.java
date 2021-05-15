@@ -117,7 +117,7 @@ public abstract class XCodeDescriptor extends XNode {
 
 	/** Creates the new instance as a copy of given argument.
 	 * @param name Name of item.
-	 * @param nsURI namespace of the object (may be <tt>null</tt>).
+	 * @param nsURI namespace of the object (may be <i>null</i>).
 	 * @param kind The kind of object.
 	 * @param x the XCodeDescriptor object from which is the copy created.
 	 */

@@ -951,16 +951,16 @@ public class SDatetime extends XMLGregorianCalendar
 	@Override
 	/** Compare this SDatetime with the other one.
 	 * <p>Return:
-	 *  <br>-1 if this <tt>SDatetime</tt> is smaler than <tt>other</tt>
-	 *  <br>0 if this <tt>SDatetime</tt> is equal to <tt>other</tt>
-	 *  <br>+1 if this <tt>SDatetime</tt> is bigger than <tt>other</tt>
+	 *  <br>-1 if this <i>SDatetime</i> is smaler than <i>other</i>
+	 *  <br>0 if this <i>SDatetime</i> is equal to <i>other</i>
+	 *  <br>+1 if this <i>SDatetime</i> is bigger than <i>other</i>
 	 *  <br>throws SIllegalArgumentException if one of arguments has zone and
 	 *  the second one has no zone and the difference is less then 14 hours
 	 * @param arg the other SDatetime
-	 * @return the relationship between <tt>this SDatetime</tt>
-	 * and the <tt>other</tt> parameter.
+	 * @return the relationship between <i>this SDatetime</i>
+	 * and the <i>other</i> parameter.
 	 * @throws SIllegalArgumentException if  this object is not comparamble
-	 * with the argument <tt>other</tt>.
+	 * with the argument <i>other</i>.
 	 */
 	public final int compareTo(SDatetime arg) throws SIllegalArgumentException {
 		TimeZone tz1 = _tz;

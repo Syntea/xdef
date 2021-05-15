@@ -72,11 +72,11 @@ public class GenCollection {
 	/** Call generation of a collection of X-definitions from a command line.
 	 * @param args array with command line arguments:
 	 * <ul>
-	 * <li><tt>-o file .......... </tt>output file</li>
-	 * <li><tt>[-m .............. </tt>switch macros will be expanded]</li>
-	 * <li><tt>-e encoding ...... </tt>name of character set</li>
-	 * <li><tt>-i file [file1 ... [filen] ]</tt> list of input files (wildcards
-	 * are supported)</li>
+	 * <li><i>-o file .......... </i>output file
+	 * <li><i>[-m .............. </i>switch macros will be expanded]
+	 * <li><i>-e encoding ...... </i>name of character set
+	 * <li><i>-i file [file1 ... [filen] ]</i> list of input files (wildcards
+	 * are supported)
 	 * </ul>
 	 */
 	public static void main(String... args) {

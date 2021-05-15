@@ -305,20 +305,20 @@ public class PrettyXdef extends XReader {
 
 	/** Calling the program from command line.
 	 * @param args The array of strings with arguments.
-	 * <tt>[-d outDir | -o outFile] [-i n] [-e encoding] [-p prefix] file</tt>
+	 * <i>[-d outDir | -o outFile] [-i n] [-e encoding] [-p prefix] file</i>
 	 * <ul>
-	 *  <li><tt>-o outFile</tt> - output file or output directory.
+	 *  <li><i>-o outFile</i> - output file or output directory.
 	 * If this parameter is not specified then input file is replaced by the
-	 * formatted version.</li>
-	 *  <li><tt>-d outDir</tt> - output directory. If this parameter is not
+	 * formatted version.
+	 *  <li><i>-d outDir</i> - output directory. If this parameter is not
 	 * specified the formated files will be replaced by the the formated
-	 * version.</li>
-	 *  <li><tt>-i n</tt> - number of spaces used for indentation. If this
+	 * version.
+	 *  <li><i>-i n</i> - number of spaces used for indentation. If this
 	 * parameter is not specified the parameter is set to 2.
-	 * If n is equal to 0 no indentation is provided.</li>
-	 *  <li><tt>-e encoding</tt> - name of character set. If this parameter
-	 * is not specified it will be used the original character set.</li>
-	 *  <li><tt>file</tt> - the file with source X-definition.</li>
+	 * If n is equal to 0 no indentation is provided.
+	 *  <li><i>-e encoding</i> - name of character set. If this parameter
+	 * is not specified it will be used the original character set.
+	 *  <li><i>file</i> - the file with source X-definition.
 	 * </ul>
 	 * @throws IOException if an error occurs.
 	 */

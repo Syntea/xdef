@@ -1,6 +1,6 @@
 package org.xdef.impl.util.conv.xsd.xsd_1_0.domain;
 
-/** Represents XML Schema <tt>group</tt> model.
+/** Represents XML Schema <i>group</i> model.
  * @author Ilia Alexandrov
  */
 public final class XsdGroup extends XsdModel {
@@ -13,7 +13,7 @@ public final class XsdGroup extends XsdModel {
 	 * @param schema model schema.
 	 * @param name group name.
 	 * @throws NullPointerException if given model schema or group name is
-	 * <tt>null</tt>.
+	 * <i>null</i>.
 	 * @throws IllegalArgumentException if given group name is empty.
 	 */
 	public XsdGroup(XsdSchema schema, String name) {

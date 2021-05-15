@@ -48,9 +48,9 @@ public final class DefNull extends XDValueAbstract {
 	public XDValueType getItemType() {return XDValueType.NULL;}
 
 	@Override
-	/** Check if the object is <tt>null</tt>.
-	 * @return <tt>true</tt> if the object is <tt>null</tt> otherwise returns
-	 * <tt>false</tt>.
+	/** Check if the object is <i>null</i>.
+	 * @return <i>true</i> if the object is <i>null</i> otherwise returns
+	 * <i>false</i>.
 	 */
 	public boolean isNull() {return true;}
 
@@ -120,43 +120,43 @@ public final class DefNull extends XDValueAbstract {
 
 	@Override
 	/** Get SDatetime value.
-	 * @return SDatetime value of this object or return <tt>null</tt>.
+	 * @return SDatetime value of this object or return <i>null</i>.
 	 */
 	public SDatetime datetimeValue() {return null;}
 
 	@Override
 	/** Get SDuration value.
-	 * @return SDuration value of this object or return <tt>null</tt>.
+	 * @return SDuration value of this object or return <i>null</i>.
 	 */
 	public SDuration durationValue() {return null;}
 
 	@Override
 	/** Get XDContext value.
-	 * @return XDContext value of this object or return <tt>null</tt>.
+	 * @return XDContext value of this object or return <i>null</i>.
 	 */
 	public XDContainer contextValue() {return null;}
 
 	@Override
 	/** Get XDService value.
-	 * @return XDService value of this object or return <tt>null</tt>.
+	 * @return XDService value of this object or return <i>null</i>.
 	 */
 	public XDService serviceValue() {return null;}
 
 	@Override
 	/** Get XDStatement value.
-	 * @return XDStatement value of this object or return <tt>null</tt>.
+	 * @return XDStatement value of this object or return <i>null</i>.
 	 */
 	public XDStatement statementValue() {return null;}
 
 	@Override
 	/** Get XDResultSet value.
-	 * @return XDResultSet value of this object or return <tt>null</tt>.
+	 * @return XDResultSet value of this object or return <i>null</i>.
 	 */
 	public XDResultSet resultSetValue() {return null;}
 
 	@Override
 	/** Get XDParseResult value.
-	 * @return XDParseResult value of this object or return <tt>null</tt>.
+	 * @return XDParseResult value of this object or return <i>null</i>.
 	 */
 	public XDParseResult parseResultValue() {return null;}
 

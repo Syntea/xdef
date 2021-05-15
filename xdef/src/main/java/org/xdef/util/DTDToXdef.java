@@ -91,13 +91,13 @@ public class DTDToXdef {
 	/** Calling the program from command line.
 	 *
 	 * @param args array of parameters.
-	 * <p><tt>[-in | --input] file [-out | --output] file [-r | --root] element
-	 * [-l | --logFile] file</tt> </p>
+	 * <p><i>[-in | --input] file [-out | --output] file [-r | --root] element
+	 * [-l | --logFile] file</i> 
 	 * <ul>
-	 *  <li><tt>[-in | --input] file</tt> - input dtd file</li>
-	 *  <li><tt>[-out | --output] file</tt> - output X-definition file</li>
-	 *  <li><tt>[-r | --root] element</tt> - root element name</li>
-	 *  <li><tt>[-l | --logFile] file</tt> - log file</li>
+	 *  <li><i>[-in | --input] file</i> - input dtd file
+	 *  <li><i>[-out | --output] file</i> - output X-definition file
+	 *  <li><i>[-r | --root] element</i> - root element name
+	 *  <li><i>[-l | --logFile] file</i> - log file
 	 * </ul>
 	 */
 	public static void main(String... args) {

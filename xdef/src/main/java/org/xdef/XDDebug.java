@@ -5,7 +5,6 @@ import org.xdef.model.XMDebugInfo;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.Properties;
-import org.xdef.impl.debug.XEditor;
 
 /** Interface for debug mode.
  * @author Vaclav Trojan

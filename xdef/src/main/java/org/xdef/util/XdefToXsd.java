@@ -216,13 +216,13 @@ public final class XdefToXsd {
 	/** Run class from command line.
 	 * @param args array of string with command line arguments:
 	 * <ul>
-	 * <li>-i list of input sources with X-definitions.</li>
-	 * <li>-o output directory.</li>
-	 * <li>-m name of root model (optional).</li>
-	 * <li>-x name of X-definition (optional).</li>
-	 * <li>-sp prefix of XML schema namespace (optional, default is "xs").</li>
-	 * <li>-se extension of schema file (optional, default is "xsd").</li>
-	 * <li>-?, -h, help</li>
+	 * <li>-i list of input sources with X-definitions.
+	 * <li>-o output directory.
+	 * <li>-m name of root model (optional).
+	 * <li>-x name of X-definition (optional).
+	 * <li>-sp prefix of XML schema namespace (optional, default is "xs").
+	 * <li>-se extension of schema file (optional, default is "xsd").
+	 * <li>-?, -h, help
 	 * </ul>
 	 */
 	public final static void main(final String... args) {

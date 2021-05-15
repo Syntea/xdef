@@ -47,7 +47,7 @@ public class SReporter extends SPosition {
 ////////////////////////////////////////////////////////////////////////////////
 
 	/** Get report writer.
-	 * @return Report writer associated with this reporter or <tt>null</tt>.
+	 * @return Report writer associated with this reporter or <i>null</i>.
 	 */
 	public final ReportWriter getReportWriter() {return _reportWriter;}
 
@@ -63,30 +63,30 @@ public class SReporter extends SPosition {
 ////////////////////////////////////////////////////////////////////////////////
 
 	/** Put fatal error message with modification parameters.
-	 * @param id Message id (may be <tt>null</tt>).
+	 * @param id Message id (may be <i>null</i>).
 	 * @param msg Message text.
 	 * @param mod Message modification parameters.
-	 * @throws SRuntimeException if reporter is <tt>null</tt> .
+	 * @throws SRuntimeException if reporter is <i>null</i> .
 	 */
 	public void fatal(final String id, final String msg, final Object... mod) {
 		putReport(Report.fatal(id, msg, mod), _reportWriter);
 	}
 
 	/** Put error message with modification parameters.
-	 * @param id Message id (may be <tt>null</tt>).
+	 * @param id Message id (may be <i>null</i>).
 	 * @param msg Message text.
 	 * @param mod Message modification parameters.
-	 * @throws SRuntimeException if reporter is <tt>null</tt> .
+	 * @throws SRuntimeException if reporter is <i>null</i> .
 	 */
 	public void error(final String id, final String msg, final Object... mod) {
 		putReport(Report.error(id, msg, mod), _reportWriter);
 	}
 
 	/** Put light error message with modification parameters.
-	 * @param id The message id (may be <tt>null</tt>).
+	 * @param id The message id (may be <i>null</i>).
 	 * @param msg The message text.
 	 * @param mod Message modification parameters.
-	 * @throws SRuntimeException if reporter is <tt>null</tt> .
+	 * @throws SRuntimeException if reporter is <i>null</i> .
 	 */
 	public void lightError(final String id,
 		final String msg,
@@ -95,7 +95,7 @@ public class SReporter extends SPosition {
 	}
 
 	/** Put warning message with modification parameters.
-	 * @param id Message id (may be <tt>null</tt>).
+	 * @param id Message id (may be <i>null</i>).
 	 * @param msg The message text.
 	 * @param mod Message modification parameters.
 	 */
@@ -106,7 +106,7 @@ public class SReporter extends SPosition {
 	/** Put fatal error message with modification parameters.
 	 * @param registeredID registered message ID.
 	 * @param mod Message modification parameters.
-	 * @throws SRuntimeException if reporter is <tt>null</tt> .
+	 * @throws SRuntimeException if reporter is <i>null</i> .
 	 */
 	public void fatal(final long registeredID, final Object... mod) {
 		putReport(Report.fatal(registeredID, mod), _reportWriter);
@@ -115,7 +115,7 @@ public class SReporter extends SPosition {
 	/** Put error message with modification parameters.
 	 * @param registeredID registered message ID.
 	 * @param mod Message modification parameters.
-	 * @throws SRuntimeException if reporter is <tt>null</tt> .
+	 * @throws SRuntimeException if reporter is <i>null</i> .
 	 */
 	public void error(final long registeredID, final Object... mod) {
 		putReport(Report.error(registeredID, mod), _reportWriter);
@@ -124,7 +124,7 @@ public class SReporter extends SPosition {
 	/** Put light error message with modification parameters.
 	 * @param registeredID registered message ID.
 	 * @param mod Message modification parameters.
-	 * @throws SRuntimeException if reporter is <tt>null</tt> .
+	 * @throws SRuntimeException if reporter is <i>null</i> .
 	 */
 	public void lightError(final long registeredID, final Object... mod) {
 		putReport(Report.lightError(registeredID, mod), _reportWriter);
@@ -141,8 +141,8 @@ public class SReporter extends SPosition {
 	/** Put report. Type of report may be WARNING, ERROR or FATAL
 	 * (see {@link org.xdef.sys.Report#getMsgID()}).
 	 * @param report The report.
-	 * @throws SRuntimeException if reporter is <tt>null</tt> and if report
-	 * type is <tt>FATAL</tt>, <tt>ERROR</tt> or <tt>LIGHTERROR</tt> .
+	 * @throws SRuntimeException if reporter is <i>null</i> and if report
+	 * type is <i>FATAL</i>, <i>ERROR</i> or <i>LIGHTERROR</i> .
 	 */
 	public void putReport(final Report report) {
 		putReport(report, _reportWriter);
@@ -151,8 +151,8 @@ public class SReporter extends SPosition {
 	/** Put report at position.
 	 * @param pos Source position.
 	 * @param report The report.
-	 * @throws SRuntimeException if reporter is <tt>null</tt> and if report
-	 * type is <tt>FATAL</tt>, <tt>ERROR</tt> or <tt>LIGHTERROR</tt> .
+	 * @throws SRuntimeException if reporter is <i>null</i> and if report
+	 * type is <i>FATAL</i>, <i>ERROR</i> or <i>LIGHTERROR</i> .
 	 */
 	public void putReport(final SPosition pos, final Report report) {
 		pos.putReport(report, _reportWriter);
@@ -172,9 +172,9 @@ public class SReporter extends SPosition {
 		return _reportWriter == null ? 0 : _reportWriter.getWarningCount();
 	}
 
-	/** Return <tt>true</tt> if and only if errors or fatal errors or light
+	/** Return <i>true</i> if and only if errors or fatal errors or light
 	 * errors were generated.
-	 * @return <tt>true</tt> if an error occurred.
+	 * @return <i>true</i> if an error occurred.
 	 */
 	public boolean errors() {
 		return _reportWriter == null ? false : _reportWriter.errors();

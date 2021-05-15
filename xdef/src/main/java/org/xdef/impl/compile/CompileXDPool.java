@@ -2126,7 +2126,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 	/** Resolve references.
 	 * @param xel the XElement.
 	 * @param level The recursion level.
-	 * @param ignoreOccurrence if <tt>true</tt> the occurrence specification
+	 * @param ignoreOccurrence if <i>true</i> the occurrence specification
 	 * from the referred object is ignored.
 	 * @param ar node list.
 	 * @return true if reverence was resolved.
@@ -2472,7 +2472,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 	/** Update selectors.
 	 * @param xel the XElement.
 	 * @param index index of item where updating starts.
-	 * @param selector selector or <tt>null</tt>.
+	 * @param selector selector or <i>null</i>.
 	 * @param ignorableFlag flag if the item can be ignored.
 	 * @param selectiveFlag flag if the item is selective in choice section.
 	 * @param hs hash map with processed X-nodes.

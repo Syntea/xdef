@@ -150,8 +150,8 @@ public final class XdDoc_2_0 extends XdDoc {
 		}
 	}
 
-	/** Initiates given X-definition <tt>collection</tt> element.
-	 * @param collection X-definition <tt>collection</tt> element.
+	/** Initiates given X-definition <i>collection</i> element.
+	 * @param collection X-definition <i>collection</i> element.
 	 */
 	private void initCollection(final Element collection) {
 		initCollection(collection, XDConstants.XDEF20_NS_URI);
@@ -160,8 +160,8 @@ public final class XdDoc_2_0 extends XdDoc {
 		initCollection(collection, XDConstants.XDEF40_NS_URI);
 	}
 
-	/** Initiates given X-definition <tt>def</tt> element.
-	 * @param def X-definition <tt>def</tt> element.
+	/** Initiates given X-definition <i>def</i> element.
+	 * @param def X-definition <i>def</i> element.
 	 * @throws RuntimeException if error occurs during creating X-definition
 	 * or model representation.
 	 */
@@ -203,7 +203,7 @@ public final class XdDoc_2_0 extends XdDoc {
 	/** Gets full element type of given element including referenced element.
 	 * @param element element to get type of.
 	 * @return element type constant.
-	 * @throws NullPointerException if given element is <tt>null</tt>.
+	 * @throws NullPointerException if given element is <i>null</i>.
 	 */
 	public final int getElemType(final Element element) {
 		if (element == null) {

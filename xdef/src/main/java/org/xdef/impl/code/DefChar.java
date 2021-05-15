@@ -117,9 +117,9 @@ public final class DefChar extends XDValueAbstract {
 	}
 
 	@Override
-	/** Check if the object is <tt>null</tt>.
-	 * @return <tt>true</tt> if the object is <tt>null</tt> otherwise returns
-	 * <tt>false</tt>.
+	/** Check if the object is <i>null</i>.
+	 * @return <i>true</i> if the object is <i>null</i> otherwise returns
+	 * <i>false</i>.
 	 */
 	public boolean isNull() {return _isNull;}
 

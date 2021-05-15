@@ -769,31 +769,31 @@ public abstract class XAbstractReader extends Reader {
 	 * (see http://www.w3.org/TR/REC-xml/#charsets).
 	 * <UL>
 	 * <LI>With a Byte Order Mark (BOM):
-	 * <p>EF BB BF: UTF-8</p>
-	 * <p>00 00 FE FF: UCS-4, big-endian machine (1234 order)</p>
-	 * <p>FF FE 00 00: UCS-4, little-endian machine (4321 order)</p>
-	 * <p>00 00 FF FE: UCS-4, unusual octet order (2143)</p>
-	 * <p>FE FF 00 00: UCS-4, unusual octet order (3412)</p>
-	 * <p>FE FF ## ##: UTF-16, big-endian</p>
-	 * <p>FF FE ## ##: UTF-16, little-endian</p>
+	 * <p>EF BB BF: UTF-8
+	 * <p>00 00 FE FF: UCS-4, big-endian machine (1234 order)
+	 * <p>FF FE 00 00: UCS-4, little-endian machine (4321 order)
+	 * <p>00 00 FF FE: UCS-4, unusual octet order (2143)
+	 * <p>FE FF 00 00: UCS-4, unusual octet order (3412)
+	 * <p>FE FF ## ##: UTF-16, big-endian
+	 * <p>FF FE ## ##: UTF-16, little-endian
 	 * </LI>
-	 * <LI><p>Without a Byte Order Mark:</p>
+	 * <LI><p>Without a Byte Order Mark:
 	 * <b>00 00 00 3C, 3C 00 00 00, 00 00 3C 00, 00 3C 00 00:</b>
 	 * <p>UCS-4 or other encoding with a 32-bit code unit and ASCII
 	 * characters encoded as ASCII values, in respectively big-endian(1234),
 	 * little-endian(4321) and two unusual byte orders (2143 and 3412).
 	 * The encoding declaration must be read to determine which of UCS-4 or
-	 * other supported 32-bit encodings applies.</p>
+	 * other supported 32-bit encodings applies.
 	 * <b>00 3C 00 3F</b>
 	 * <p>UTF-16BE or big-endian ISO-10646-UCS-2 or other encoding with a
 	 * 16-bit code unit in big-endian order and ASCII characters encoded as
 	 * ASCII values (the encoding declaration must be read to determine
-	 * which)</p>
+	 * which)
 	 * <b>3C 00 3F 00:</b>
 	 * <p>UTF-16LE or little-endian ISO-10646-UCS-2 or other encoding with a
 	 * 16-bit code unit in little-endian order and ASCII characters encoded
 	 * as ASCII values (the encoding declaration must be read to determine
-	 * which)</p>
+	 * which)
 	 * <b>3C 3F 78 6D:</b>
 	 * <p>UTF-8, ISO 646, ASCII, some part of ISO 8859, Shift-JIS, EUC, or
 	 * any other 7-bit, 8-bit, or mixed-width encoding which ensures that
@@ -801,14 +801,14 @@ public abstract class XAbstractReader extends Reader {
 	 * values; the actual encoding declaration must be read to detect which
 	 * of these applies, but since all of these encodings use the same bit
 	 * patterns for the relevant ASCII characters, the encoding declaration
-	 * itself may be read reliably</p>
+	 * itself may be read reliably
 	 * <b>4C 6F A7 94:</b>
 	 * <p>EBCDIC (in some flavor; the full encoding declaration must be read
-	 * to tell which code page is in use)</p>
+	 * to tell which code page is in use)
 	 * <b>Other:</b>
 	 * <p>UTF-8 without an encoding declaration, or else the data stream
 	 * is mislabeled (lacking a required encoding declaration), corrupt,
-	 * fragmentary, or enclosed in a wrapper of some kind.</p>
+	 * fragmentary, or enclosed in a wrapper of some kind.
 	 * </LI>
 	 * </UL>
 	 * @param in InputStream where to read.

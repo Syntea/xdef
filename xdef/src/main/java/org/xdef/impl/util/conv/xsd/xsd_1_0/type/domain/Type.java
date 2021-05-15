@@ -37,7 +37,7 @@ public abstract class Type {
 	}
 
 	/** Returns instance of type declaration given to complex type element.
-	 * @param complexTypeElement <tt>complexType</tt> element.
+	 * @param complexTypeElement <i>complexType</i> element.
 	 * @param schemaURL URL of schema containing element.
 	 * @param schemaElements table of all schema elements.
 	 * @return type object.

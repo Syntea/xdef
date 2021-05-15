@@ -12,8 +12,8 @@ public interface XQueryImpl {
 
 	/** Execute XQuery expression and return result.
 	 * @param x XQuery expression object.
-	 * @param node node or <tt>null</tt>.
-	 * @param xNode node model or <tt>null</tt>.
+	 * @param node node or <i>null</i>.
+	 * @param xNode node model or <i>null</i>.
 	 * @return result of execution of XQuery expression.
 	 */
 	public XDContainer exec(KXqueryExpr x, Node node, XXNode xNode);

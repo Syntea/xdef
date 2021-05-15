@@ -105,7 +105,7 @@ public class XXException extends RuntimeException implements SThrowable {
 	public final void setCause(final Throwable cause) {_cause = cause;}
 
 	@Override
-	/** Get cause of exception. If cause was not set return <tt>null</tt>.
+	/** Get cause of exception. If cause was not set return <i>null</i>.
 	 * @return cause The object with cause data.
 	 */
 	public Throwable getCause() {return _cause;}

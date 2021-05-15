@@ -214,7 +214,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 
 	@Override
 	/** Get namespace URI of actual node.
-	 * @return namespace URI or <tt>null</tt>.
+	 * @return namespace URI or <i>null</i>.
 	 */
 	public final String getNodeURI() {
 		return (getItemId() != XX_ELEMENT)
@@ -1173,8 +1173,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	 * _actDefIndex .. -1 or index to actually processed XNode item<br/>
 	 * _nextDefIndex .. index to the XNode item to be inspected.<br/>
 	 * _selector .. container of information about actual selection block.<br/>
-	 * @param el the element or <tt>null</tt> it text node is processed.
-	 * @return XNode or ChkElement object or <tt>null</tt>.
+	 * @param el the element or <i>null</i> it text node is processed.
+	 * @return XNode or ChkElement object or <i>null</i>.
 	 */
 	private Object findXNode(final Element el) {
 		XNode xn;
@@ -1473,7 +1473,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	/** Check if element complies with model.
 	 * @param xel the XElement object.
 	 * @param el The source element from which the result is composed.
-	 * @return ChkElement object or <tt>null</tt> if element do not comply.
+	 * @return ChkElement object or <i>null</i> if element do not comply.
 	 */
 	private ChkElement chkElem(final XElement xel, final Element el) {
 		if (!"$any".equals(xel.getName())) {
@@ -2370,8 +2370,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	}
 
 	/** Finish checking of model.
-	 * @param element the element or <tt>null</tt> it text node is processed.
-	 * @return the XNode object from the list or <tt>null</tt>.
+	 * @param element the element or <i>null</i> it text node is processed.
+	 * @return the XNode object from the list or <i>null</i>.
 	 */
 	private void finishModel() {
 		_parseResult = null;
@@ -2591,7 +2591,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	}
 
 	/** Process text white spaces before processing.
-	 * @param xd XData model or <tt>null</tt>.
+	 * @param xd XData model or <i>null</i>.
 	 * @param data String to be processed.
 	 * @return text with processed white spaces.
 	 */
@@ -3405,7 +3405,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	}
 
 	/**
-	 * Look up for the X-Position (XPos) of the element set by <tt>xPath</tt>.
+	 * Look up for the X-Position (XPos) of the element set by <i>xPath</i>.
 	 * For look up is used the hash table with the XPaths and their
 	 * occurrences.
 	 * @param xPath the XPath to the current ChkElement (Element
@@ -3506,7 +3506,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	/** Check if attribute is legal in the XXElement.
 	 * @param name The name of attribute.
 	 * @return true if and only if the attribute is legal in the
-	 * XXElement, otherwise return <tt>false</tt>.
+	 * XXElement, otherwise return <i>false</i>.
 	 */
 	public final boolean checkAttributeLegal(final String name) {
 		XData xatt = getXAttr(name);
@@ -3518,7 +3518,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	 * @param uri namespace URI.
 	 * @param name name of attribute (optionally with prefix).
 	 * @return true if and only if the attribute is legal in the
-	 * XXElement, otherwise return <tt>false</tt>.
+	 * XXElement, otherwise return <i>false</i>.
 	 */
 	public final boolean checkAttributeNSLegal(final String uri,
 		final String name) {
@@ -3559,7 +3559,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 
 	@Override
 	/** Get XComponent.
-	 * @return The XComponent object (may be <tt>null</tt>).
+	 * @return The XComponent object (may be <i>null</i>).
 	 */
 	public final XComponent getXComponent() {return _xComponent;}
 

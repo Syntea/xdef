@@ -95,44 +95,44 @@ public class XOccurrence implements XMOccurrence {
 
 	@Override
 	/** Return true if value of occurrence had been specified.
-	 * @return <tt>true</tt> if and only if occurrence is specified.
+	 * @return <i>true</i> if and only if occurrence is specified.
 	 */
 	public final boolean isSpecified() {return _min != UNDEFINED;}
 
 
 	@Override
 	/** Return true if value of occurrence is set as illegal.
-	 * @return <tt>true</tt> if and only if occurrence is set as illegal.
+	 * @return <i>true</i> if and only if occurrence is set as illegal.
 	 */
 	public final boolean isIllegal() {return _min == ILLEGAL;}
 
 	@Override
 	/** Return true if value of occurrence is set as ignored.
-	 * @return <tt>true</tt> if and only if occurrence is set as ignored.
+	 * @return <i>true</i> if and only if occurrence is set as ignored.
 	 */
 	public final boolean isIgnore() {return _min == IGNORE;}
 
 	@Override
 	/** Return true if value of occurrence is set as fixed.
-	 * @return <tt>true</tt> if and only if occurrence is set as fixed.
+	 * @return <i>true</i> if and only if occurrence is set as fixed.
 	 */
 	public final boolean isFixed() {return _min == XData.FIXED && _max == 1;}
 
 	@Override
 	/** Return true if value of occurrence is set as required.
-	 * @return <tt>true</tt> if and only if occurrence is set as required.
+	 * @return <i>true</i> if and only if occurrence is set as required.
 	 */
 	public final boolean isRequired() {return _min == 1 && _max == 1;}
 
 	@Override
 	/** Return true if value of occurrence is set as optional.
-	 * @return <tt>true</tt> if and only if occurrence is set as optional.
+	 * @return <i>true</i> if and only if occurrence is set as optional.
 	 */
 	public final boolean isOptional() {return _min == 0 && _max == 1;}
 
 	@Override
 	/** Return true if value of occurrence is set as unbounded.
-	 * @return <tt>true</tt> if and only if occurrence is set as unbounded.
+	 * @return <i>true</i> if and only if occurrence is set as unbounded.
 	 */
 	public final boolean isUnbounded() {
 		return _min == 0 && _max == Integer.MAX_VALUE;
@@ -140,7 +140,7 @@ public class XOccurrence implements XMOccurrence {
 
 	@Override
 	/** Return true if minimum is greater then 0 and maximum is unbounded.
-	 * @return <tt>true</tt> if and only if minimum is greater then 0 and
+	 * @return <i>true</i> if and only if minimum is greater then 0 and
 	 * maximum is unbounded..
 	 */
 	public final boolean isMaxUnlimited() {
@@ -173,7 +173,7 @@ public class XOccurrence implements XMOccurrence {
 	}
 
 	/** Get string with canonized form of occurrence specification.
-	 * @param isValue if <tt>true</tt> the script describes a value of
+	 * @param isValue if <i>true</i> the script describes a value of
 	 * an attribute or of a text node, otherwise it is form of en element
 	 * or a sequence.
 	 * @return string with canonized form of the occurrence.

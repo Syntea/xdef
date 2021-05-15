@@ -202,7 +202,7 @@ public class GlobalDeclaration {
 	 * @param schemaURL schema element URL containing searched global
 	 *                  declaration.
 	 * @param type      type of searched global declaration.
-	 * @return          searched global declaration object or <tt>null</tt>
+	 * @return          searched global declaration object or <i>null</i>
 	 *  if declaration could not be found.
 	 */
 	private static GlobalDeclaration getGlobalDeclarationInSchema(

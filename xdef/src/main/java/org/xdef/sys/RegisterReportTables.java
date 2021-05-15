@@ -29,36 +29,35 @@ public class RegisterReportTables {
 
 	/** Implementation of storage of report tables. A report table can be
 	 * localized for language specified by given language argument or the
-	 * language from system property <i><tt>user.language</tt></i>.
+	 * language from system property <i><i>user.language</i></i>.
 	 * The language argument must be valid ISO-639 Language Code (see
 	 * {@link java.util.Locale#getISO3Language()}).
 	 * These codes are lower-case, three-letter codes as defined by ISO-639-2.
 	 * You can find a full list of these codes at a number of sites, such as:
 	 * <p><a href ="http://www.loc.gov/standards/iso639-2">
-	 * <tt>http://www.loc.gov/standards/iso639-2</tt></a>
-	 * </p>
+	 * <i>http://www.loc.gov/standards/iso639-2</i></a>
 	 * <p>The source report table is the properties file with following
-	 * obligatory properties:</p>
+	 * obligatory properties:
 	 * <pre><code>
 	 * _prefix = the prefis of message names in the table
 	 * _language = the 3 letters ISO-639 Language Code
 	 * _defaultLanguag = the ISO-639 Language Code (must be specified only once)
 	 * </code></pre>
-	 * <p> All other property names must start with the prefix. </p>
+	 * <p> All other property names must start with the prefix. 
 	 * <p> Reports are divided to separate files for each language. Each report
 	 * has a id. The id is composed of prefix and of a local ID (usually
 	 * a number). The prefix must be a sequence of minimum 3 capital ASCII
 	 * letters. Messages for the specific language and prefix must be stored to
 	 * the separate file.
 	 * The report files must be available in the package
-	 * <tt>org.xdef.msg</tt>.</p>
-	 * <p>The file name must be composed by following way:</p>
-	 * <tt>prefix_CCC.properties</tt>
+	 * <i>org.xdef.msg</i>.
+	 * <p>The file name must be composed by following way:
+	 * <i>prefix_CCC.properties</i>
 	 * <p>where prefix must be followed by the character
 	 * '_' by three letters representing ISO-639-2 language code corresponding
 	 * to given national language. See examples of the English and German
-	 * version report files. CCC is the language code</p>
-	 * <p>Example of English (MYAPP_eng.properties):</p>
+	 * version report files. CCC is the language code
+	 * <p>Example of English (MYAPP_eng.properties):
 	 * <pre><code>
 	 * # Prefix of messages.
 	 * _prefix=MYAPP
@@ -70,7 +69,7 @@ public class RegisterReportTables {
 	 * MYAPP003=Mrs. &(#MYAPP002)
 	 * MYAPP003=Mr. &(#MYAPP002)
 	 * </code>
-	 * <p>German MYAPP_deu.properties:</p>
+	 * <p>German MYAPP_deu.properties:
 	 * <pre><code>
 	 * _prefix=MYAPP
 	 * _language=deu
@@ -85,13 +84,13 @@ public class RegisterReportTables {
 	 * which is equal to the language id. The text of report can be modified by
 	 * parameters. The parameter is specified by "&amp;{name_of_parameter}". If
 	 * name* of parameter starts with "#" then following part of the name is
-	 * used as reference identifier to other report.</p>
-	 * <p>Example:</p>
+	 * used as reference identifier to other report.
+	 * <p>Example:
 	 * <p>The report tables are searched by report manager in the package
-	 * <tt>org.xdef.msg</tt>. For each prefix should exist a class
+	 * <i>org.xdef.msg</i>. For each prefix should exist a class
 	 * with the name equal to the report prefix. This class may be empty, it
-	 * just helps to find report files by class loader.</p>
-	 * <p><b>example:</b></p>
+	 * just helps to find report files by class loader.
+	 * <p><b>example:</b>
 	 * <pre><code>
 	 * package org.xdef.msg;
 	 * public final class MYAPP {}
@@ -155,7 +154,7 @@ public class RegisterReportTables {
 		@Override
 		/** Get reportID from registered report ID.
 		 * @param registeredID registered report ID.
-		 * @return string with report ID or <tt>null</tt>.
+		 * @return string with report ID or <i>null</i>.
 		 */
 		public final String getReportID(final long registeredID) {
 			int index = getRegisteredReportId(registeredID);
@@ -402,7 +401,7 @@ public class RegisterReportTables {
 		/** Get sorted array of parameters from the report text.
 		 * @param text report text
 		 * @return sorted array of parameters from the report text. Returns
-		 * empty array if no parameters are present or  <tt>null</tt> if
+		 * empty array if no parameters are present or  <i>null</i> if
 		 * an error occurs.
 		 */
 		private static String[] getParams(final String text) {
@@ -543,8 +542,8 @@ public class RegisterReportTables {
 	/** Generate Java source with the interface of registered IDs.
 	 * @param table report table.
 	 * @param dir directory where java source is stored.
-	 * @param pckg name of package or <tt>null</tt> (i.e. org.xdef.msg).
-	 * @param encoding character encoding of source file or <tt>null</tt> (then
+	 * @param pckg name of package or <i>null</i> (i.e. org.xdef.msg).
+	 * @param encoding character encoding of source file or <i>null</i> (then
 	 * the system encoding is used).
 	 * @param reporter where error reports are written.
 	 */
@@ -611,10 +610,10 @@ public class RegisterReportTables {
 	/** Generate Java source class with reports.
 	 * @param table report table.
 	 * @param dir output directory where generated source will be written.
-	 * @param pckg name of Java package or <tt>null</tt>. If the parameter is
-	 * <tt>null</tt> it is used the default value "org.xdef.msg").
-	 * @param encoding character set encoding of output file or <tt>null</tt>.
-	 * If the argument is <tt>null</tt> it is used the default system character
+	 * @param pckg name of Java package or <i>null</i>. If the parameter is
+	 * <i>null</i> it is used the default value "org.xdef.msg").
+	 * @param encoding character set encoding of output file or <i>null</i>.
+	 * If the argument is <i>null</i> it is used the default system character
 	 * set from Java VM.
 	 * @param registeredTable the registered report table.
 	 * @param reporter where error reports are written.
@@ -983,19 +982,18 @@ public class RegisterReportTables {
 	 * @param args the command line arguments with following structure:
 	 * <p>
 	 * arguments: source -i input -o outDir [-p package] [-c encoding] [-r]
-	 * </p>
 	 * <p>-i -i input pathname(s) of property file(s) with report texts (the
-	 * file name may contain wildcard characters).</p>
+	 * file name may contain wildcard characters).
 	 * <p>-o the directory where Java source with report tables
-	 * are generated</p>
+	 * are generated
 	 * <p>-p package name where tables will be generated. Default value is
-	 * "org.xdef.msg"</p>
+	 * "org.xdef.msg"
 	 * <p>-r: generate interface with registered identifiers of given
-	 * table from input.</p>
+	 * table from input.
 	 *<p>-c encoding: character set name of output file (default is the
-	 * system character set).</p>
-	 *<p>-l ISO code of obligatory language of reports(default is "eng")</p>
-	 *<p>-h: help.</p>
+	 * system character set).
+	 *<p>-l ISO code of obligatory language of reports(default is "eng")
+	 *<p>-h: help.
 	 */
 	public static void main(String... args) {
 		final String HDRMSG =

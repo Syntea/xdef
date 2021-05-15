@@ -94,7 +94,7 @@ public class XData extends XCodeDescriptor
 
 	@Override
 	/** Get value specified as default.
-	 * @return value specified as default or return <tt>null</tt>
+	 * @return value specified as default or return <i>null</i>
 	 * if there was not specified a default value.
 	 */
 	public final XDValue getDefaultValue() {
@@ -113,7 +113,7 @@ public class XData extends XCodeDescriptor
 
 	@Override
 	/** Get value specified as fixed.
-	 * @return value specified as fixed or return <tt>null</tt>
+	 * @return value specified as fixed or return <i>null</i>
 	 * if there was not specified a default value.
 	 */
 	public final XDValue getFixedValue() {
@@ -305,7 +305,7 @@ public class XData extends XCodeDescriptor
 
 	@Override
 	/** Get datetime mask from the model parser.
-	 * @return mask of datetime type or <tt>null</tt>.
+	 * @return mask of datetime type or <i>null</i>.
 	 */
 	public final String getDateMask() {
 		XDValue p = getParseMethod();

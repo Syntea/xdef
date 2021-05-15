@@ -37,7 +37,7 @@ public class KParsedAttr {
 	public String getName() {return _name;}
 
 	/* Get namespace URI.
-	 * @return namespace URI or <tt>null</tt>.
+	 * @return namespace URI or <i>null</i>.
 	 */
 	public String getNamespaceURI() {return _nsURI;}
 

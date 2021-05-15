@@ -693,7 +693,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 	/** Execute "compose" action.
 	 * @param chkEl The actual check element.
 	 * @param sourceElem The source element from which the result is composed.
-	 * @return The XDValue object or <tt>null</tt>.
+	 * @return The XDValue object or <i>null</i>.
 	 */
 	private XDValue execComposeElement(final ChkElement chkEl,
 		final Element sourceElem) {
@@ -973,7 +973,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 	 * @param sourceElem actual source element.
 	 * @param savedSource saved source element.
 	 * @param xText text node model.
-	 * @param lastNode last processed text from source item or <tt>null</tt>.
+	 * @param lastNode last processed text from source item or <i>null</i>.
 	 */
 	private Node createTextNode(final ChkElement chkElem,
 		final Element sourceElem,
@@ -1456,7 +1456,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 	 * @param savedSource saved default source element - MUST be null if
 	 * we set the new element as context.
 	 * @param defIndex index to group start, will continue after that.
-	 * @param lastNode last processed text from source item or <tt>null</tt>.
+	 * @param lastNode last processed text from source item or <i>null</i>.
 	 * @param nextDefIndex next index.
 	 * @param savedUserObj user object.
 	 * @return true if something was generated.

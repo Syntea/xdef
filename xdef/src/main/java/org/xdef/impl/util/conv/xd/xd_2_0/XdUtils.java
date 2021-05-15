@@ -29,11 +29,11 @@ public final class XdUtils {
 	//--------------------------------------------------------------------------
 	//                          XDEF NODES UTILS
 	//--------------------------------------------------------------------------
-	/** Returns <tt>true</tt> if given node is a valid X-definition
-	 * <tt>collection</tt> element.
+	/** Returns <i>true</i> if given node is a valid X-definition
+	 * <i>collection</i> element.
 	 * @param node node to test.
-	 * @return <tt>true</tt> if given node is a valid X-definition
-	 * <tt>collection</tt> element.
+	 * @return <i>true</i> if given node is a valid X-definition
+	 * <i>collection</i> element.
 	 */
 	public static boolean isCollection(final Node node) {
 		return Util.isElement(node,
@@ -46,10 +46,10 @@ public final class XdUtils {
 				XDConstants.XDEF40_NS_URI, XdNames.COLLECTION);
 	}
 
-	/** Returns <tt>true</tt> if given node is a valid X-definition <tt>def</tt>
+	/** Returns <i>true</i> if given node is a valid X-definition <i>def</i>
 	 * element.
 	 * @param node node to test.
-	 * @return <tt>true</tt> if given node is a valid X-definition <tt>def</tt>
+	 * @return <i>true</i> if given node is a valid X-definition <i>def</i>
 	 * element.
 	 */
 	public static boolean isDef(final Node node) {
@@ -59,10 +59,10 @@ public final class XdUtils {
 			|| Util.isElement(node, XDConstants.XDEF40_NS_URI, XdNames.DEF);
 	}
 
-	/** Returns <tt>true</tt> if given node is a valid X-definition <tt>def</tt>
+	/** Returns <i>true</i> if given node is a valid X-definition <i>def</i>
 	 * element child.
 	 * @param node node to test.
-	 * @return <tt>true</tt> if given node is a valid X-definition <tt>def</tt>
+	 * @return <i>true</i> if given node is a valid X-definition <i>def</i>
 	 * element child.
 	 */
 	public static boolean isModel(final Node node) {
@@ -72,10 +72,10 @@ public final class XdUtils {
 			|| Util.isChild(node, XDConstants.XDEF40_NS_URI, XdNames.DEF);
 	}
 
-	/** Returns <tt>true</tt> if given node is a valid X-definition
-	 * <tt>mixed</tt> element.
+	/** Returns <i>true</i> if given node is a valid X-definition
+	 * <i>mixed</i> element.
 	 * @param node node to test.
-	 * @return <tt>true</tt> if given node is valid X-definition <tt>mixed</tt>
+	 * @return <i>true</i> if given node is valid X-definition <i>mixed</i>
 	 * element.
 	 */
 	public static boolean isMixed(final Node node) {
@@ -85,10 +85,10 @@ public final class XdUtils {
 			|| Util.isElement(node, XDConstants.XDEF40_NS_URI,XdNames.MIXED);
 	}
 
-	/** Returns <tt>true</tt> if given node is a valid X-definition
-	 * <tt>choice</tt> element.
+	/** Returns <i>true</i> if given node is a valid X-definition
+	 * <i>choice</i> element.
 	 * @param node node to test.
-	 * @return <tt>true</tt> if given node is valid X-definition <tt>choice</tt>
+	 * @return <i>true</i> if given node is valid X-definition <i>choice</i>
 	 * element.
 	 */
 	public static boolean isChoice(final Node node) {
@@ -98,11 +98,11 @@ public final class XdUtils {
 			|| Util.isElement(node,XDConstants.XDEF40_NS_URI,XdNames.CHOICE);
 	}
 
-	/** Returns <tt>true</tt> if given node is a valid X-definition
-	 * <tt>sequence</tt> element.
+	/** Returns <i>true</i> if given node is a valid X-definition
+	 * <i>sequence</i> element.
 	 * @param node node to test.
-	 * @return <tt>true</tt> if given node is a valid X-definition
-	 * <tt>sequence</tt> element.
+	 * @return <i>true</i> if given node is a valid X-definition
+	 * <i>sequence</i> element.
 	 */
 	public static boolean isSequence(final Node node) {
 		return Util.isElement(node,XDConstants.XDEF20_NS_URI, XdNames.SEQUENCE)
@@ -111,11 +111,11 @@ public final class XdUtils {
 			|| Util.isElement(node,XDConstants.XDEF40_NS_URI, XdNames.SEQUENCE);
 	}
 
-	/** Returns <tt>true</tt> if given node is a valid X-definition
-	 * <tt>declaration</tt> element.
+	/** Returns <i>true</i> if given node is a valid X-definition
+	 * <i>declaration</i> element.
 	 * @param node node to test.
-	 * @return <tt>true</tt> if given node is a valid X-definition
-	 * <tt>declaration</tt> element.
+	 * @return <i>true</i> if given node is a valid X-definition
+	 * <i>declaration</i> element.
 	 */
 	public static boolean isDeclaration(final Node node) {
 		return Util.isElement(node,
@@ -128,11 +128,11 @@ public final class XdUtils {
 				XDConstants.XDEF40_NS_URI, XdNames.DECLARATION);
 	}
 
-	/** Returns <tt>true</tt> if given node is a valid X-macro
-	 * <tt>macro</tt> element.
+	/** Returns <i>true</i> if given node is a valid X-macro
+	 * <i>macro</i> element.
 	 * @param node node to test.
-	 * @return <tt>true</tt> if given node is a valid X-macro
-	 * <tt>macro</tt> element.
+	 * @return <i>true</i> if given node is a valid X-macro
+	 * <i>macro</i> element.
 	 */
 	public static boolean isMacro(final Node node) {
 		return Util.isElement(node,
@@ -145,9 +145,9 @@ public final class XdUtils {
 				XDConstants.XDEF40_NS_URI, XdNames.MACRO);
 	}
 
-	/** Returns <tt>true</tt> if given model is declared as root model.
+	/** Returns <i>true</i> if given model is declared as root model.
 	 * @param element model element.
-	 * @return <tt>true</tt> if given model is declared as root model.
+	 * @return <i>true</i> if given model is declared as root model.
 	 */
 	public static boolean isRoot(Element element) {
 		if (!isModel(element)) {
@@ -196,10 +196,10 @@ public final class XdUtils {
 		return false;
 	}
 
-	/** Returns name of given X-definition element as declared in <tt>name</tt>
+	/** Returns name of given X-definition element as declared in <i>name</i>
 	 * attribute.
 	 * @param element element.
-	 * @return name of given X-definition element as declared in <tt>name</tt>
+	 * @return name of given X-definition element as declared in <i>name</i>
 	 * attribute.
 	 */
 	public static String getGroupName(final Element element) {
@@ -222,7 +222,7 @@ public final class XdUtils {
 	/** Gets instance of element properties of given element.
 	 * @param element element to get properties of.
 	 * @return instance of element properties of given element.
-	 * @throws NullPointerException if given element is <tt>null</tt>.
+	 * @throws NullPointerException if given element is <i>null</i>.
 	 */
 	public static ElemProps getElemProps(final Element element) {
 		if (element == null) {
@@ -282,7 +282,7 @@ public final class XdUtils {
 	/** Gets instance of attribute properties of given attribute node.
 	 * @param attr attribute node to get properties from.
 	 * @return instance of attribute properties.
-	 * @throws NullPointerException if given attribute node is <tt>null</tt>.
+	 * @throws NullPointerException if given attribute node is <i>null</i>.
 	 */
 	public static AttrProps getAttrProps(final Attr attr) {
 		if (attr == null) {
@@ -320,7 +320,7 @@ public final class XdUtils {
 	/** Gets occurrence given of X-definition node.
 	 * @param node node to get occurrence from.
 	 * @return instance of node occurrence.
-	 * @throws NullPointerException if given node is <tt>null</tt>.
+	 * @throws NullPointerException if given node is <i>null</i>.
 	 */
 	public static Occurrence getOccurrence(final Node node) {
 		if (node == null) {
@@ -341,12 +341,12 @@ public final class XdUtils {
 	//--------------------------------------------------------------------------
 	//                          DOMAIN UTILS
 	//--------------------------------------------------------------------------
-	/** Creates X-definition representation from given X-definition <tt>def</tt>
+	/** Creates X-definition representation from given X-definition <i>def</i>
 	 * element.
-	 * @param def X-definition <tt>def</tt> element.
+	 * @param def X-definition <i>def</i> element.
 	 * @return X-definition representation.
 	 * @throws IllegalArgumentException if given element is not a valid
-	 * X-definition <tt>def</tt> element.
+	 * X-definition <i>def</i> element.
 	 */
 	public static XdDef getXdDef(final Element def) {
 		if (!isDef(def)) {
@@ -369,8 +369,8 @@ public final class XdUtils {
 	}
 
 	/** Returns set of models name space URIs contained in given X-definition
-	 * <tt>def</tt> element.
-	 * @param def X-definition <tt>def</tt> element.
+	 * <i>def</i> element.
+	 * @param def X-definition <i>def</i> element.
 	 * @return set of (String) models name space URIs.
 	 */
 	public static Set<String> getModelsNS(final Element def) {
@@ -431,7 +431,7 @@ public final class XdUtils {
 	 * @param element X-definition element declaration.
 	 * @return type constant of given X-definition element declaration.
 	 * @throws NullPointerException if given element declaration is
-	 * <tt>null</tt>.
+	 * <i>null</i>.
 	 */
 	public static int getElemType(Element element) {
 		if (element == null) {
@@ -477,10 +477,10 @@ public final class XdUtils {
 		}
 	}
 
-	/** Returns <tt>true</tt> if given X-definition element declaration contains
+	/** Returns <i>true</i> if given X-definition element declaration contains
 	 * child text nodes declaration.
 	 * @param element element to test.
-	 * @return <tt>true</tt> if given X-definition element declaration contains
+	 * @return <i>true</i> if given X-definition element declaration contains
 	 * child text nodes declaration.
 	 */
 	private static boolean hasText(Element element) {
@@ -504,11 +504,11 @@ public final class XdUtils {
 				XDConstants.XDEF40_NS_URI, XdNames.TEXT).getLength() > 0;
 	}
 
-	/** Returns <tt>true</tt> if given X-definition element declaration contains
-	 * attribute or <tt>attr</tt> node declaration.
+	/** Returns <i>true</i> if given X-definition element declaration contains
+	 * attribute or <i>attr</i> node declaration.
 	 * @param element X-definition element declaration.
-	 * @return <tt>true</tt> if given X-definition element declaration contains
-	 * attribute or <tt>attr</tt> node declaration.
+	 * @return <i>true</i> if given X-definition element declaration contains
+	 * attribute or <i>attr</i> node declaration.
 	 */
 	private static boolean hasAttributes(Element element) {
 		NamedNodeMap attrs = element.getAttributes();
@@ -529,13 +529,13 @@ public final class XdUtils {
 		return false;
 	}
 
-	/** Returns <tt>true</tt> if given X-definition element declaration contains
-	 * children element, <tt>any</tt>, <tt>choice</tt>, <tt>mixed</tt>
-	 *  or <tt>sequence</tt> declaration.
+	/** Returns <i>true</i> if given X-definition element declaration contains
+	 * children element, <i>any</i>, <i>choice</i>, <i>mixed</i>
+	 *  or <i>sequence</i> declaration.
 	 * @param element X-definition element declaration.
-	 * @return <tt>true</tt> if given X-definition element declaration contains
-	 * children element, <tt>any</tt>, <tt>choice</tt>, <tt>mixed</tt>
-	 *  or <tt>sequence</tt> declaration.
+	 * @return <i>true</i> if given X-definition element declaration contains
+	 * children element, <i>any</i>, <i>choice</i>, <i>mixed</i>
+	 *  or <i>sequence</i> declaration.
 	 */
 	private static boolean hasChildren(Element element) {
 		NodeList children = KXmlUtils.getChildElements(element);
@@ -560,11 +560,11 @@ public final class XdUtils {
 	}
 
 	/** Returns X-definition reference string from given element
-	 * or <tt>null</tt>if given element does not contain reference.
+	 * or <i>null</i>if given element does not contain reference.
 	 * @param element element to search for reference.
-	 * @return reference string from given element or <tt>null</tt>
+	 * @return reference string from given element or <i>null</i>
 	 * if given element does not contain reference.
-	 * @throws NullPointerException if given element is <tt>null</tt>.
+	 * @throws NullPointerException if given element is <i>null</i>.
 	 */
 	public static String getRef(Element element) {
 		if (element == null) {
@@ -578,11 +578,11 @@ public final class XdUtils {
 	}
 
 	/** Creates X-definition element model representation of referenced element
-	 * from given element node or <tt>null</tt> if given element does not
+	 * from given element node or <i>null</i> if given element does not
 	 * contain reference.
 	 * @param element element to get referenced element representation from.
-	 * @return X-definition element model representation or <tt>null</tt>.
-	 * @throws NullPointerException if given element is <tt>null</tt>.
+	 * @return X-definition element model representation or <i>null</i>.
+	 * @throws NullPointerException if given element is <i>null</i>.
 	 */
 	public static XdElem getRefXdElem(Element element) {
 		if (element == null) {
@@ -719,12 +719,12 @@ public final class XdUtils {
 		throw new IllegalArgumentException("Unknown type constant");
 	}
 
-	/** Gets ancestor <tt>def</tt> element of given node.
-	 * @param node node to get ancestor <tt>def</tt> element from.
-	 * @return ancestor <tt>def</tt> element.
-	 * @throws NullPointerException if given node is <tt>null</tt>.
+	/** Gets ancestor <i>def</i> element of given node.
+	 * @param node node to get ancestor <i>def</i> element from.
+	 * @return ancestor <i>def</i> element.
+	 * @throws NullPointerException if given node is <i>null</i>.
 	 * @throws IllegalArgumentException if given node is not valid X-definition
-	 * <tt>def</tt> element descendant.
+	 * <i>def</i> element descendant.
 	 */
 	public static Element getAncestorDef(Node node) {
 		if (node == null) {
@@ -817,12 +817,12 @@ public final class XdUtils {
 		}
 
 		/** Attribute default value getter.
-		 * @return attribute default value or <tt>null</tt>.
+		 * @return attribute default value or <i>null</i>.
 		 */
 		public String getDefault() {return _default;}
 
 		/** Attribute fixed value getter.
-		 * @return attribute fixed value or <tt>null</tt>.
+		 * @return attribute fixed value or <i>null</i>.
 		 */
 		public String getFixed() {return _fixed;}
 

@@ -99,7 +99,7 @@ public class XVariableTable implements XMVariableTable {
 	/** Check if the name from argument represents a variable
 	 * (search in the whole chain of variable tables).
 	 * @param name the name of variable.
-	 * @return <tt>true</tt> if the name from argument represents a variable.
+	 * @return <i>true</i> if the name from argument represents a variable.
 	 */
 	public final boolean isVariable(final String name) {
 		if (getVariable(name) != null) {

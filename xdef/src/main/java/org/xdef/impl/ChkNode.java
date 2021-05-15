@@ -144,7 +144,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 
 	@Override
 	/** Get namespace URI of the X-model.
-	 * @return namespace URI of node or <tt>null</tt>.
+	 * @return namespace URI of node or <i>null</i>.
 	 */
 	public String getXXNSURI() {
 		return (_xElement == null) ? null : _xElement.getNSUri();
@@ -166,7 +166,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	/** Set named user object.
 	 * @param id identifier of the object.
 	 * @param obj user object.
-	 * @return previous value of the object or <tt>null</tt>.
+	 * @return previous value of the object or <i>null</i>.
 	 */
 	public final Object setUserObject(final String id, final Object obj) {
 		return _scp.setUserObject(id, obj);
@@ -175,7 +175,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	@Override
 	/** Remove named user object.
 	 * @param id identifier of the object.
-	 * @return value of the object or <tt>null</tt>.
+	 * @return value of the object or <i>null</i>.
 	 */
 	public Object removeUserObject(final String id) {
 		return _scp.removeUserObject(id);
@@ -184,7 +184,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	@Override
 	/** Get named user object.
 	 * @param id identifier of the object.
-	 * @return value of the object or <tt>null</tt>.
+	 * @return value of the object or <i>null</i>.
 	 */
 	public final Object getUserObject(final String id) {
 		return _scp.getUserObject(id);
@@ -275,7 +275,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 
 	@Override
 	/** Get actual source context for create mode.
-	 * @return source context or <tt>null</tt> if not available.
+	 * @return source context or <i>null</i> if not available.
 	 */
 	public final XDValue getXDContext() {
 		if (_sourceElem != null) {
@@ -399,7 +399,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	@Override
 	/** Get value of variable from XMDefinition.
 	 * @param name name of variable.
-	 * @return XDValue object or <tt>null</tt>.
+	 * @return XDValue object or <i>null</i>.
 	 */
 	public final XDValue getVariable(final String name) {
 		return _scp.getVariable(name);
@@ -790,7 +790,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 
 	@Override
 	/** Get source position.
-	 * @return source position or <tt>null</tt> if position is not available.
+	 * @return source position or <i>null</i> if position is not available.
 	 */
 	public SPosition getSPosition() {return _rootChkDocument._reporter;}
 
@@ -888,7 +888,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 
 	@Override
 	/** Check if errors, fatal errors, light errors or warnings were reported.
-	 * @return <tt>true</tt> if errors, fatal errors, light errors
+	 * @return <i>true</i> if errors, fatal errors, light errors
 	 * or warnings were reported.
 	 */
 	public boolean errorWarnings() {
@@ -897,7 +897,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 
 	@Override
 	/** Check if errors, fatal errors or light errors were reported.
-	 * @return <tt>true</tt> if errors, fatal errors or light errors were
+	 * @return <i>true</i> if errors, fatal errors or light errors were
 	 * reported.
 	 */
 	public boolean errors() {return _rootChkDocument._reporter.errors();}

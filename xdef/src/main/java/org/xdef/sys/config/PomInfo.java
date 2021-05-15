@@ -10,19 +10,17 @@ import java.util.Properties;
 
 /**
  * Class to read info from pom.xml (see maven). That's: <ul>
- * <li>project.groupId</li>
- * <li>project.artifactId</li>
- * <li>project.version</li>
- * <li>project.name</li>
- * <li>project.description</li>
- * <li>properties.release.date - user's property</li>
+ * <li>project.groupId
+ * <li>project.artifactId
+ * <li>project.version
+ * <li>project.name
+ * <li>project.description
+ * <li>properties.release.date - user's property
  * </ul>
- * <p>
  * Load info from resource "pominfo.properties" that is automatically filled
  * by maven-plugin build/resources/resource/filtering
- * </p><p>
+ * <p>
  * All items must be one-lined or in the format of java.util.Properties.
- * </p>
  */
 public class PomInfo {
 

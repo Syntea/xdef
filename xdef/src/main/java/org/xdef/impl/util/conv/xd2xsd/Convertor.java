@@ -18,7 +18,7 @@ public abstract class Convertor {
 
 	/** Creates instance of convertor.
 	 * @param reporter reporter for reporting warnings and errors.
-	 * @throws NullPointerException if given reporter is <tt>null</tt>.
+	 * @throws NullPointerException if given reporter is <i>null</i>.
 	 */
 	public Convertor(SReporter reporter) {
 		if (reporter == null) {

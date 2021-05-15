@@ -817,19 +817,18 @@ public class GUIEditor extends GUIScreen {
 	/** Call generation of a collection of X-definitions from a command line.
 	 * @param args array with command line arguments:
 	 * <ul>
-	 * <li><tt>-p </tt>file with the project</li>
-	 * <li><tt>-v [switches]</tt>run validation mode</li>
-	 * <li><tt>-c [switches]</tt>run construction mode</li>
-	 * <li><tt>-g [XML source]</tt>Generate X-definition form XML data</li>
+	 * <li><i>-p </i>file with the project
+	 * <li><i>-v [switches]</i>run validation mode
+	 * <li><i>-c [switches]</i>run construction mode
+	 * <li><i>-g [XML source]</i>Generate X-definition form XML data
 	 * </ul>
 	 * Switches:
 	 * <ul>
-	 * <li><tt>-xdef file </tt>specifies the source with the X-definition</li>
-	 * <li><tt>-data file</tt>specifies input data or context</li>
-	 * <li><tt>-debug </tt>sets the debug mode</li>
-	 * <li><tt>-editInput </tt>enables to runEditor input data before execution
-	 * </li>
-	 * <li><tt>-displayResult </tt>displays result XML element</li>
+	 * <li><i>-xdef file </i>specifies the source with the X-definition
+	 * <li><i>-data file</i>specifies input data or context
+	 * <li><i>-debug </i>sets the debug mode
+	 * <li><i>-editInput </i>enables to runEditor input data before execution
+	 * <li><i>-displayResult </i>displays result XML element
 	 * </ul>
 	 */
 	public static void main(String... args) {

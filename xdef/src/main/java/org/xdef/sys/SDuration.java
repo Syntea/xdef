@@ -257,7 +257,7 @@ public class SDuration extends Duration implements Comparable<SDuration> {
 	}
 
 	/** Get fraction of second.
-	 * @return Double with fraction of second or <tt>null</tt>.
+	 * @return Double with fraction of second or <i>null</i>.
 	 */
 	public double getFraction() {return _fraction;}
 
@@ -345,25 +345,24 @@ public class SDuration extends Duration implements Comparable<SDuration> {
 	}
 
 	@Override
-	/** Partial order relation comparison with this <tt>SDuration</tt>
+	/** Partial order relation comparison with this <i>SDuration</i>
 	 * instance.
 	 * <p>Comparison result must be in accordance with
 	 * <a href="http://www.w3.org/TR/xmlschema-2/#duration-order">W3C
 	 * XML Schema 1.0 Part 2, Section 3.2.7.6.2,
-	 * <i>Order relation on duration</i></a>.</p>
-	 *
-	 * <p>Return:</p>
+	 * <i>Order relation on duration</i></a>.
+	 * <p>Return:
 	 * <ul>
-	 *  <li>-1 if this <tt>SDuration</tt> is shorter than parameter rhs</li>
-	 *  <li>0 if this <tt>SDuration</tt> is equal to parameter rhs</li>
-	 *  <li>+1 if this <tt>SDuration</tt> is longer than parameter rhs</li>
+	 *  <li>-1 if this <i>SDuration</i> is shorter than parameter rhs
+	 *  <li>0 if this <i>SDuration</i> is equal to parameter rhs
+	 *  <li>+1 if this <i>SDuration</i> is longer than parameter rhs
 	 * </ul>
 	 * @param other duration to compare
-	 * @return the relationship between <tt>this</tt> <tt>SDuration</tt>
-	 * and <tt>other</tt> parameter.
-	 * @throws NullPointerException if <tt>hs</tt> is <tt>null</tt>.
+	 * @return the relationship between <i>this</i> <i>SDuration</i>
+	 * and <i>other</i> parameter.
+	 * @throws NullPointerException if <i>hs</i> is <i>null</i>.
 	 * @throws SIllegalArgumentException if this object is not comparable
-	 * with the argument <tt>rhs</tt>.
+	 * with the argument <i>rhs</i>.
 	 */
 	public int compareTo(final SDuration other)
 		throws NullPointerException, SIllegalArgumentException {

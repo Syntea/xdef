@@ -1076,7 +1076,7 @@ public final class CompileCode extends CompileBase {
 	 * If argument is an unconditional jump return. If it is a conditional jump
 	 * then:
 	 * <li>1. while the last code item is a logical 'not' operator reverse
-	 * jump true/false condition and remove the last 'not' code item.</li>
+	 * jump true/false condition and remove the last 'not' code item.
 	 * <li>2. if the last code item is a operator (CMPIEQ .. CMPDGT) then
 	 * replace it with the jump item object from argument.
 	 * If jump is JMPF operator reverse condition operator to logical
@@ -1161,7 +1161,7 @@ public final class CompileCode extends CompileBase {
 	}
 
 	/** Generate sequence of two operations:
-	 * <li> LD_TRUE_AND_SKIP_CODE, LDC_FALSE_CODE.</li>
+	 * <li> LD_TRUE_AND_SKIP_CODE, LDC_FALSE_CODE.
 	 */
 	final void genBoolJumpConvertor() {
 		addCode(new CodeI1(XD_BOOLEAN, LD_TRUE_AND_SKIP));
@@ -2708,7 +2708,7 @@ public final class CompileCode extends CompileBase {
 ////////////////////////////////////////////////////////////////////////////////
 
 	/** Return the code item with the last stop of the initialization code
-	 * sequence or return <tt>null</tt>.
+	 * sequence or return <i>null</i>.
 	 */
 	final CodeI1 getLastStop() {
 		//prevents to generate redundant jumps.
@@ -2791,8 +2791,8 @@ final class ScriptMethod {
 	 * references).
 	 * @param address address of method.
 	 * @param g code generator.
-	 * @return <tt>false</tt> if address was already set(i.e. error),
-	 * otherwise return <tt>true</tt> (i.e. OK).
+	 * @return <i>false</i> if address was already set(i.e. error),
+	 * otherwise return <i>true</i> (i.e. OK).
 	 */
 	final boolean resolvePostDef(final int address,
 		final CompileCode g) {

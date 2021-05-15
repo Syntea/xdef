@@ -224,9 +224,9 @@ public final class DefBytes extends XDValueAbstract implements XDBytes {
 		return isNull() || _value.length != 1 ? 0 : (char) _value[0];
 	}
 	@Override
-	/** Check if the object is <tt>null</tt>.
-	 * @return <tt>true</tt> if the object is <tt>null</tt> otherwise returns
-	 * <tt>false</tt>.
+	/** Check if the object is <i>null</i>.
+	 * @return <i>true</i> if the object is <i>null</i> otherwise returns
+	 * <i>false</i>.
 	 */
 	public boolean isNull() {return _value == null;}
 	@Override

@@ -34,15 +34,15 @@ public final class Util {
 	 */
 	public static KDOMBuilder getBuilder() {return BUILDER;}
 
-	/** Returns <tt>true</tt> if given node is element node and has same
+	/** Returns <i>true</i> if given node is element node and has same
 	 * name space as given name space and same local name as given local name.
 	 * @param node node to test.
 	 * @param namespace name space URI.
 	 * @param localName local name.
-	 * @return <tt>true</tt> if given node is element node and has same
+	 * @return <i>true</i> if given node is element node and has same
 	 * name space as given name space and same local name as given local name.
 	 * @throws NullPointerException if given node or element local name is
-	 * <tt>null</tt>.
+	 * <i>null</i>.
 	 * @throws IllegalArgumentException if given element local name is empty.
 	 */
 	public static boolean isElement(final Node node,
@@ -65,15 +65,15 @@ public final class Util {
 				&& localName.equals(node.getLocalName());
 	}
 
-	/** Returns <tt>true</tt> if given child node is a valid child node
+	/** Returns <i>true</i> if given child node is a valid child node
 	 * of parent element with given name space and given local name.
 	 * @param child child node to test.
 	 * @param namespace parent node name space URI.
 	 * @param localName parent node local name.
-	 * @return <tt>true</tt> if given child node is a valid child node of parent
+	 * @return <i>true</i> if given child node is a valid child node of parent
 	 * element with given name space and given local name.
 	 * @throws NullPointerException if given child node or parent node local
-	 * name is <tt>null</tt>.
+	 * name is <i>null</i>.
 	 * @throws IllegalArgumentException if parent node local name is empty.
 	 */
 	public static boolean isChild(final Node child,
@@ -100,7 +100,7 @@ public final class Util {
 	 * @param localName attribute local name.
 	 * @return attribute value.
 	 * @throws NullPointerException if given node or attribute local name is
-	 * <tt>null</tt>.
+	 * <i>null</i>.
 	 * @throws IllegalArgumentException if given attribute local name is empty
 	 * or given node is not an element node or if given node does not contain
 	 * attribute with such name space and local name.
@@ -127,7 +127,7 @@ public final class Util {
 	 * @param value attribute value.
 	 * @return created and added attribute node.
 	 * @throws NullPointerException if given parent element or attribute
-	 * qualified name is <tt>null</tt>.
+	 * qualified name is <i>null</i>.
 	 * @throws IllegalArgumentException if given attribute qualified name
 	 * is empty.
 	 */
@@ -152,7 +152,7 @@ public final class Util {
 	 * @param value attribute value.
 	 * @return created and added attribute node.
 	 * @throws NullPointerException if given parent element or attribute name
-	 * is <tt>null</tt>.
+	 * is <i>null</i>.
 	 * @throws IllegalArgumentException if given attribute name is empty.
 	 * @throws RuntimeException if could not add name space declaration
 	 * attribute to given parent element.
@@ -181,7 +181,7 @@ public final class Util {
 	 * @param attrName name of attribute.
 	 * @param attrValue attribute value.
 	 * @throws NullPointerException if given parent element or attribute name is
-	 * <tt>null</tt>.
+	 * <i>null</i>.
 	 * @throws IllegalArgumentException if given attribute name is empty.
 	 */
 	public static void setAttr(final Element el,
@@ -199,7 +199,7 @@ public final class Util {
 	}
 
 	/** Returns node qualified name according to given prefix and local name.
-	 * @param prefix qualified name prefix or <tt>null</tt>.
+	 * @param prefix qualified name prefix or <i>null</i>.
 	 * @param localName qualified name local part.
 	 * @return full qualified name.
 	 */
@@ -211,11 +211,11 @@ public final class Util {
 	/** Adds namespace declaration attribute with given prefix and namespace URI
 	 * to given element.
 	 * @param element element to add namespace declaration.
-	 * @param prefix prefix of name space or <tt>null</tt>.
+	 * @param prefix prefix of name space or <i>null</i>.
 	 * @param namespaceURI name space URI of name space.
 	 * @return name space declaration attribute declaration.
 	 * @throws NullPointerException if given element or name space URI is
-	 * <tt>null</tt>.
+	 * <i>null</i>.
 	 * @throws IllegalArgumentException if given name space URI is empty.
 	 */
 	public static Attr addNamespaceDecl(final Element element,
@@ -269,7 +269,7 @@ public final class Util {
 	 * @param el element to add to.
 	 * @param inserted element to add.
 	 * @throws NullPointerException if given parent element or inserted element
-	 * is <tt>null</tt>.
+	 * is <i>null</i>.
 	 * @throws RuntimeException if cannot add given inserted element to given
 	 * parent element.
 	 */
@@ -303,10 +303,10 @@ public final class Util {
 	 * contain name space declaration it looks in parent element.
 	 * @param contextNode context node to search in.
 	 * @param namespaceURI name space URI of searched name space declaration.
-	 * @return prefix of name space declaration or <tt>null</tt> if there is
+	 * @return prefix of name space declaration or <i>null</i> if there is
 	 * no such name space declaration.
 	 * @throws NullPointerException if given context element or name space URI
-	 * is <tt>null</tt>.
+	 * is <i>null</i>.
 	 * @throws IllegalArgumentException if given name space URI is empty.
 	 */
 	public static String getNSPrefix(final Node contextNode,
@@ -325,7 +325,7 @@ public final class Util {
 	 * contain name space declaration it looks in parent element.
 	 * @param contextNode context node to search in.
 	 * @param namespaceURI name space URI of searched name space declaration.
-	 * @return prefix of name space declaration or <tt>null</tt> if there is
+	 * @return prefix of name space declaration or <i>null</i> if there is
 	 * no such name space declaration.
 	 */
 	private static String getNSPrefixRec(final Node contextNode,
@@ -359,7 +359,7 @@ public final class Util {
 	 * @param namespaceURI name space URI of name space declaration.
 	 * @return prefix of given name space URI declaration if declaration exists,
 	 * empty string if name space is declared as default name space or
-	 * <tt>null</tt> if given node does not contain name space declaration with
+	 * <i>null</i> if given node does not contain name space declaration with
 	 * given name space URI.
 	 */
 	private static String getNSPrefixInNode(final Node node,
@@ -380,15 +380,15 @@ public final class Util {
 		return null;
 	}
 
-	/** Returns <tt>true</tt> if given element node has attribute node with
+	/** Returns <i>true</i> if given element node has attribute node with
 	 * given name space URI and given local name declaration.
 	 * @param contextElem context element to search in.
-	 * @param attrNS attribute name space URI or <tt>null</tt>.
+	 * @param attrNS attribute name space URI or <i>null</i>.
 	 * @param attrLocalName attribute local name.
-	 * @return <tt>true</tt> if given element node has attribute node with
+	 * @return <i>true</i> if given element node has attribute node with
 	 * given name space URI and given local name declaration.
 	 * @throws NullPointerException if given context element or attribute
-	 * local name is <tt>null</tt>.
+	 * local name is <i>null</i>.
 	 * @throws IllegalArgumentException if given attribute local name is empty.
 	 */
 	public static boolean hasAttrDecl(final Element contextElem,
@@ -411,9 +411,9 @@ public final class Util {
 
 	/** Gets attribute name prefix of given attribute node.
 	 * @param attr attribute node to get prefix from.
-	 * @return attribute name prefix or <tt>null</tt> if given attribute name
+	 * @return attribute name prefix or <i>null</i> if given attribute name
 	 * does not contain prefix.
-	 * @throws NullPointerException if given attribute is <tt>null</tt>.
+	 * @throws NullPointerException if given attribute is <i>null</i>.
 	 */
 	public static String getAttrPrefix(final Attr attr) {
 		return getAttrQName(attr).getPrefix();
@@ -430,7 +430,7 @@ public final class Util {
 	/** Gets qualified name representation of given attribute.
 	 * @param attr attribute to get qualified name from.
 	 * @return qualified name representation.
-	 * @throws NullPointerException if given attribute node is <tt>null</tt>.
+	 * @throws NullPointerException if given attribute node is <i>null</i>.
 	 */
 	private static QName getAttrQName(final Attr attr) {
 		if (attr == null) {
@@ -532,18 +532,18 @@ public final class Util {
 		private final String _name;
 
 		/** Creates instance of QName with given local name part and no prefix
-		 * (prefix is <tt>null</tt>).
+		 * (prefix is <i>null</i>).
 		 * @param name qualified name local part.
-		 * @throws NullPointerException if given name is <tt>null</tt>.
+		 * @throws NullPointerException if given name is <i>null</i>.
 		 * @throws IllegalArgumentException if given name is empty.
 		 */
 		public MyQName(final String name) {this(null, name);}
 
 		/** Creates instance of QName with given prefix and local name.
 		 * @param prefix qualified name prefix (if is empty then
-		 * it is <tt>null</tt>).
+		 * it is <i>null</i>).
 		 * @param name qualified name local part.
-		 * @throws NullPointerException if given name is <tt>null</tt>.
+		 * @throws NullPointerException if given name is <i>null</i>.
 		 * @throws IllegalArgumentException if given name is empty.
 		 */
 		public MyQName(final String prefix, final String name) {

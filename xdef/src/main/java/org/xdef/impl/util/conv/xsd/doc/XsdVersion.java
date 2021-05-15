@@ -16,7 +16,7 @@ public class XsdVersion {
 	/** Creates enumeration of XML Schema version with given namespace URI.
 	 * @param id version id.
 	 * @param nsURI version namespace URI.
-	 * @throws NullPointerException if given version namespace URI is <tt>null</tt>.
+	 * @throws NullPointerException if given version namespace URI is <i>null</i>.
 	 * @throws IllegalArgumentException if given version namespace URI is empty.
 	 */
 	private XsdVersion(int id, String nsURI) {

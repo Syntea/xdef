@@ -72,11 +72,11 @@ wildcardEsc     ::=  '.'
 
 	/** Charset block names which differs in XML schema and Java.
 	 * Each block name is represented by three items:
-	 * <p>1) block name</p>
-	 * <p>2) string with charGroups for this block name or null</p>
+	 * <p>1) block name
+	 * <p>2) string with charGroups for this block name or null
 	 * <p>3) string with charGroups for the complement of this this block name.
 	 * If it is the string with one character "^" the it will be generated
-	 * the complement of the string from 2)</p>
+	 * the complement of the string from 2)
 	 */
 	static private final String[] BLOCKNAMESNOTDIFFERENT = {
 		"Arabic",

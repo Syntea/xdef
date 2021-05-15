@@ -92,9 +92,9 @@ public class ProcessMethods {
 			+ "object group item!");
 	}
 
-	/** Processes <tt>any</tt> schema element and adds declaration
+	/** Processes <i>any</i> schema element and adds declaration
 	 * to given parent XDefnition element.
-	 * @param anyElement schema <tt>any</tt> element to process.
+	 * @param anyElement schema <i>any</i> element to process.
 	 * @param xdefContextElement XDefnition context element.
 	 * @param xdef X-definition document representation.
 	 * @return added element.
@@ -109,9 +109,9 @@ public class ProcessMethods {
 		return any;
 	}
 
-	/** Processes schema <tt>anyAttribute</tt> element and adds declaration
+	/** Processes schema <i>anyAttribute</i> element and adds declaration
 	 * to given parent X-definition element.
-	 * @param anyAttributeElement schema <tt>anyAttribute</tt> element to
+	 * @param anyAttributeElement schema <i>anyAttribute</i> element to
 	 * process.
 	 * @param xdefContextElement XDefnition context element.
 	 * @param xdef the X-definition.
@@ -121,9 +121,9 @@ public class ProcessMethods {
 		xdef.addXdefAttr(xdefContextElement, "attr", "occurs 0..*");
 	}
 
-	/** Processes given <tt>complexType</tt> element and adds declaration
+	/** Processes given <i>complexType</i> element and adds declaration
 	 * to given XDefnition context element. Returns created element.
-	 * @param complexTypeElement <tt>complexType</tt> element to process.
+	 * @param complexTypeElement <i>complexType</i> element to process.
 	 * @param xdefContextElement X-definition context element.
 	 * @param xdef representation of X-definition document.
 	 * @return created element.
@@ -143,9 +143,9 @@ public class ProcessMethods {
 /*VT*/
 	}
 
-	/** Processes given <tt>simpleType</tt> element and adds declaration
+	/** Processes given <i>simpleType</i> element and adds declaration
 	 * to the given X-definition document context element.
-	 * @param simpleTypeElement <tt>simpleType</tt> element.
+	 * @param simpleTypeElement <i>simpleType</i> element.
 	 * @param xdefContextElement X-definition document context element.
 	 * @param xdef X-definition document representation.
 	 * @param schemaURLStack stack of processing schema URLs.

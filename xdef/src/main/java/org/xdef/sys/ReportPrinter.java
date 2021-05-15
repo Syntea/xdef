@@ -190,7 +190,7 @@ public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 	 * @param out The PrintStream where reports are printed.
 	 * @param source The source string (may be a string with XML or pathname).
 	 * @param reports Report file.
-	 * @param lineNumbers if <tt>true</tt> then line numbers are printed.
+	 * @param lineNumbers if <i>true</i> then line numbers are printed.
 	 */
 	public static void printListing(final PrintStream out,
 		final String source,
@@ -208,7 +208,7 @@ public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 	 * @param out The PrintStream where reports are printed.
 	 * @param url The URL of the source.
 	 * @param reports Report file.
-	 * @param lineNumbers if <tt>true</tt> then line numbers are printed.
+	 * @param lineNumbers if <i>true</i> then line numbers are printed.
 	 */
 	public static void printListing(final PrintStream out,
 		final URL url,
@@ -228,7 +228,7 @@ public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 	 * @param out The PrintStream where reports are printed.
 	 * @param file The file with the source.
 	 * @param reports Report file.
-	 * @param lineNumbers if <tt>true</tt> then line numbers are printed.
+	 * @param lineNumbers if <i>true</i> then line numbers are printed.
 	 */
 	public static void printListing(final PrintStream out,
 		final File file,
@@ -249,7 +249,7 @@ public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 	 * @param out The PrintStream where reports are printed.
 	 * @param in The input stream with the source.
 	 * @param reports Report file.
-	 * @param lineNumbers if <tt>true</tt> then line numbers are printed.
+	 * @param lineNumbers if <i>true</i> then line numbers are printed.
 	 */
 	public static void printListing(final PrintStream out,
 		final Reader in,
@@ -264,7 +264,7 @@ public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 	 * @param in The input stream with the source.
 	 * @param reports Report file.
 	 * @param name Filter source name (sysId).
-	 * @param lineNumbers if <tt>true</tt> then line numbers are printed.
+	 * @param lineNumbers if <i>true</i> then line numbers are printed.
 	 */
 	public static void printListing(final PrintStream out,
 		final Reader in,
@@ -279,7 +279,7 @@ public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 	 * @param out The output writer.
 	 * @param file The source file.
 	 * @param reports Report file.
-	 * @param lineNumbers if <tt>true</tt> then line numbers are printed.
+	 * @param lineNumbers if <i>true</i> then line numbers are printed.
 	 */
 	public static void printListing(final Writer out,
 		final File file,
@@ -303,7 +303,7 @@ public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 	 * @param out The output writer.
 	 * @param source The source string.
 	 * @param reports Report file.
-	 * @param lineNumbers if <tt>true</tt> then line numbers are printed.
+	 * @param lineNumbers if <i>true</i> then line numbers are printed.
 	 */
 	public static void printListing(final Writer out,
 		final String source,
@@ -320,7 +320,7 @@ public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 	 * @param out The output print stream.
 	 * @param in The input stream with the source.
 	 * @param reports Report file.
-	 * @param lineNumbers if <tt>true</tt> then line numbers are printed.
+	 * @param lineNumbers if <i>true</i> then line numbers are printed.
 	 */
 	public static void printListing(final Writer out,
 		final Reader in,
@@ -334,7 +334,7 @@ public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 	 * @param out The output print stream.
 	 * @param in The input stream with the source.
 	 * @param reports Report file.
-	 * @param lineNumbers if <tt>true</tt> then line numbers are printed.
+	 * @param lineNumbers if <i>true</i> then line numbers are printed.
 	 * @param name Filter source name (sysId).
 	 */
 	public static void printListing(final Writer out,
@@ -354,7 +354,7 @@ public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 	 * @param maxLineLength maximal length of printed line (longer lines are
 	 * wrapped).
 	 * @param language Language ID or null (i.e. default).
-	 * @param lineNumbers if <tt>true</tt> then line numbers are printed.
+	 * @param lineNumbers if <i>true</i> then line numbers are printed.
 	 */
 	public static void printListing(final Writer out,
 		final Reader reader,
@@ -502,10 +502,10 @@ public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 
 	/** Main - print error file from command line.
 	 * @param args The array of strings with following structure:
-	 * <p>source [output] [-i n]] [-o]</p>
-	 * <p>where:</p>
-	 * <p>-i errfile ... file name with error records</p>
-	 * <p>-o output  ... name of output file (default is standard output)</p>
+	 * <p>source [output] [-i n]] [-o]
+	 * <p>where:
+	 * <p>-i errfile ... file name with error records
+	 * <p>-o output  ... name of output file (default is standard output)
 	 */
 	public static void main(String... args) {
 		if (args.length == 0) {

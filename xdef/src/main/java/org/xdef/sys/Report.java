@@ -15,20 +15,20 @@ import org.w3c.dom.NodeList;
 
 /** Provides container of a report. Report object has following fields:
  * <ul>
- * <li>- type of report (see constants)</li>
+ * <li>- type of report (see constants)
  * <li>- the identifier of the report (composed of the prefix and of the report
- * identifier)</li>
+ * identifier)
  * <li>- the primary text of report used if id was not found
  * in report table (see {@link ReportTable})or if _reportId is
- * <tt>null</tt></li>
+ * <i>null</i>
  * <li>- modification string containing the information for setting parameters
  * of the report. The parameters have the format
- * "<tt>&amp;{parameter_name}</tt>" followed by parameter value</li>
- * <li>- the timestamp information added to report (if required)</li>
+ * "<i>&amp;{parameter_name}</i>" followed by parameter value
+ * <li>- the timestamp information added to report (if required)
  * </ul>
  * <p>The manager of report texts is described in {@link ReportTable}). There is
- * described also the format of report files.</p>
- * <p>If the modification string is not equal to <tt>null</tt>, then it is used
+ * described also the format of report files.
+ * <p>If the modification string is not equal to <i>null</i>, then it is used
  * for modification of parameters in the report text. If parameter specification
  * is followed by the sequence "{inserted_text}", the inserted_text is inserted
  * before the value of the parameter. Specification of
@@ -37,8 +37,8 @@ import org.w3c.dom.NodeList;
  * specification of "(appended_text)" - in this case the appended_text is
  * appended after the value of parameter. If the parameter is not present in the
  * modification string then the whole parameter description is replaced by
- * the empty string.</p>
- * <p>Examples of source report text and modification strings:</p>
+ * the empty string.
+ * <p>Examples of source report text and modification strings:
  * <pre><code><b>
  * report text: "a &amp;{0} &amp;{1} b"
  *   modification string: null
@@ -111,7 +111,7 @@ public class Report {
 	/** Type of report (see constants above). */
 	private final byte _type;
 	/** Report identifier (used as link to associated item in report
-	 * table). Set to <tt>null</tt> if no report ID is associated with
+	 * table). Set to <i>null</i> if no report ID is associated with
 	 * the report (in this case the report can't be localized). */
 	private final String _reportID;
 	/** Primary text of report. If no report Id is specified or if
@@ -143,7 +143,7 @@ public class Report {
 	/** Create new Report object (registered); no time timestamp is generated.
 	 * @param type kind of report.
 	 * @param regID registered report Id.
-	 * @param mod modification string or <tt>null</tt>.
+	 * @param mod modification string or <i>null</i>.
 	 */
 	public Report(final byte type, final long regID, final Object... mod) {
 		_type = registeredType(type);
@@ -344,23 +344,23 @@ public class Report {
 	public final byte getType() {return _type;}
 
 	/** Get report ID.
-	 * @return report ID or <tt>null</tt>.
+	 * @return report ID or <i>null</i>.
 	 */
 	public final String getMsgID() {return _reportID;}
 
 	/** Get primary text.
-	 * @return the primary text or of the report <tt>null</tt>.
+	 * @return the primary text or of the report <i>null</i>.
 	 */
 	public final String getText() {return _text;}
 
 	/** Set primary text.
 	 * @param text the argument will be set as primary text
-	 * (may be<tt>null</tt>).
+	 * (may be<i>null</i>).
 	 */
 	public final void setText(String text) {_text = text;}
 
 	/** Get timestamp in milliseconds.
-	 * @return time in milliseconds or <tt>-1</tt>.
+	 * @return time in milliseconds or <i>-1</i>.
 	 */
 	public final long getTimestamp() {return _timeMillis;}
 
@@ -368,23 +368,23 @@ public class Report {
 	public final void setTimestamp() {setTimestamp(System.currentTimeMillis());}
 
 	/** Set timestamp in milliseconds.
-	 * @param millis time in milliseconds from 1990 or <tt>-1</tt>.
+	 * @param millis time in milliseconds from 1990 or <i>-1</i>.
 	 */
 	public final void setTimestamp(long millis) {_timeMillis = millis;}
 
 	/** Get modification part of the report.
-	 * @return value of the modification or <tt>null</tt>.
+	 * @return value of the modification or <i>null</i>.
 	 */
 	public final String getModification() {return _modification;}
 
 	/** Set modification part of the report.
-	 * @param mod value of the modification or <tt>null</tt>.
+	 * @param mod value of the modification or <i>null</i>.
 	 */
 	public final void setModification(String mod) {_modification = mod;}
 
 	/** Get value of parameter from modification string.
 	 * @param name parameter name.
-	 * @return value of the parameter or <tt>null</tt>.
+	 * @return value of the parameter or <i>null</i>.
 	 */
 	public final String getParameter(final String name) {
 		int ndx;
@@ -486,7 +486,7 @@ public class Report {
 	/** Create localized text of report in the language specified by argument.
 	 * If the text with this language is not available it will be returned the
 	 * in primary language (usually English).
-	 * @param language language id (ISO-639). If this argument is <tt>null</tt>
+	 * @param language language id (ISO-639). If this argument is <i>null</i>
 	 * then it will be used the local language from system settings).
 	 * @return text of report in specified language.
 	 */
@@ -722,7 +722,7 @@ public class Report {
 	 * @param msgText default report text.
 	 * @param modification modification string.
 	 * @param language language code (ISO-639) or null (i.e. default language).
-	 * @return The text of localized report in given language or <tt>null</tt>.
+	 * @return The text of localized report in given language or <i>null</i>.
 	 */
 	public static String getLocalizedText(final String reportID,
 		final String msgText,
@@ -735,7 +735,7 @@ public class Report {
 	/** Get sorted array of parameter names from report text.
 	 * @param reportID report ID.
 	 * @param language language code (ISO-639) or null (i.e. default language).
-	 * @return sorted array of parameter names or <tt>null</tt>.
+	 * @return sorted array of parameter names or <i>null</i>.
 	 */
 	public static String[] getReportParamNames(final String reportID,
 		final String language) {
@@ -747,7 +747,7 @@ public class Report {
 	 * @param registeredID registered report ID.
 	 * @param modification modification string.
 	 * @param language language code (ISO-639) or null (i.e. default language).
-	 * @return text of localized report in given language or <tt>null</tt>.
+	 * @return text of localized report in given language or <i>null</i>.
 	 */
 	public static String getLocalizedText(final long registeredID,
 		final String modification,
@@ -847,7 +847,7 @@ public class Report {
 
 	/** Get string with the report ID created from registered ID.
 	 * @param registeredID registered report ID.
-	 * @return string with report ID or <tt>null</tt>.
+	 * @return string with report ID or <i>null</i>.
 	 */
 	public static String getReportID(final long registeredID) {
 		return SManager.getReportID(registeredID);

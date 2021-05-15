@@ -133,10 +133,10 @@ public final class XPool implements XDPool, Serializable {
 
 	/** Creates instance of XDPool with properties, external objects and
 	 * reporter.
-	 * @param props Properties or <tt>null</tt>.
+	 * @param props Properties or <i>null</i>.
 	 * @param extClasses The array of classes where are available methods
 	 * referred from definitions.
-	 * @param reporter report writer or <tt>null</tt>.
+	 * @param reporter report writer or <i>null</i>.
 	 */
 	XPool(final Properties props,
 		final ReportWriter reporter,
@@ -374,7 +374,7 @@ public final class XPool implements XDPool, Serializable {
 	 * @param sources The string with sources.
 	 * @param sourceIds array of names of source source data corresponding to
 	 * the sources argument used in reporting (any item or even this argument
-	 * may be <tt>null</tt>).
+	 * may be <i>null</i>).
 	 * @throws RuntimeException if source is missing or if an error occurs.
 	 */
 	final void setSource(final String[] sources, final String[] sourceIds) {
@@ -694,7 +694,7 @@ public final class XPool implements XDPool, Serializable {
 
 	/** Get global variable of given name.
 	 * @param name name of global variable.
-	 * @return XMVariable object of the global variable or <tt>null</tt>.
+	 * @return XMVariable object of the global variable or <i>null</i>.
 	 */
 	final XVariable getVariable(final String name) {
 		return _variables!=null ? (XVariable) _variables.getVariable(name):null;
@@ -952,7 +952,7 @@ public final class XPool implements XDPool, Serializable {
 
 	@Override
 	/** Check if exists the X-definition of given name.
-	 * @param name the name of X-definition (or <tt>null</tt>) if
+	 * @param name the name of X-definition (or <i>null</i>) if
 	 * noname X-definition is checked.
 	 * @return true if and only if the X-definition of given name exists in
 	 * the XDPool.
@@ -1025,7 +1025,7 @@ public final class XPool implements XDPool, Serializable {
 
 	@Override
 	/** Create new XDDocument.
-	 * @param id Identifier of X-definition (or <tt>null</tt>).
+	 * @param id Identifier of X-definition (or <i>null</i>).
 	 * @return the XDDocument object.
 	 * @throws SRuntimeException if X-definition doesn't exist.
 	 */

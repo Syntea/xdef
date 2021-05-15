@@ -58,12 +58,12 @@ public class CheckXdef {
 
 	/** Check file with X-definition.
 	 * @param args The array of arguments:
-	 * <p>FileName [FileName ... ]</p>
-	 * <p>where:</p>
+	 * <p>FileName [FileName ... ]
+	 * <p>where:
 	 * <ul>
 	 * <li>FileName the path and name of the source X-definition.
 	 * <i>Note the file names may contain the "wildcards" as '*' or '?' to
-	 * specify the group of source files.</i></li>
+	 * specify the group of source files.</i>
 	 * </ul>
 	 */
 	public static void main(String... args) {

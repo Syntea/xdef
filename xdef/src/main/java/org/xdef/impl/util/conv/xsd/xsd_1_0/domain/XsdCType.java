@@ -1,6 +1,6 @@
 package org.xdef.impl.util.conv.xsd.xsd_1_0.domain;
 
-/** Represents XML Schema <tt>complexType</tt> model.
+/** Represents XML Schema <i>complexType</i> model.
  * @author Ilia Alexandrov
  */
 public final class XsdCType extends XsdModel {
@@ -19,7 +19,7 @@ public final class XsdCType extends XsdModel {
 	 * @param schema model schema.
 	 * @param name complex type name.
 	 * @throws NullPointerException if given model schema or complex type name
-	 * is <tt>null</tt>.
+	 * is <i>null</i>.
 	 * @throws IllegalArgumentException if given complex type name is empty.
 	 */
 	public XsdCType(XsdSchema schema, String name) {
@@ -30,7 +30,7 @@ public final class XsdCType extends XsdModel {
 	 *
 	 * @param attrGrpName external attribute group model name.
 	 * @throws NullPointerException if given attribute group name
-	 * is <tt>null</tt>.
+	 * is <i>null</i>.
 	 * @throws IllegalArgumentException if given attribute group name is empty.
 	 * @throws IllegalStateException if external attribute group name
 	 * is already set.
@@ -55,7 +55,7 @@ public final class XsdCType extends XsdModel {
 
 	/** Sets external group name.
 	 * @param groupName external group name.
-	 * @throws NullPointerException if given group name is <tt>null</tt>.
+	 * @throws NullPointerException if given group name is <i>null</i>.
 	 * @throws IllegalArgumentException if given group name is empty.
 	 * @throws IllegalStateException if external group name is already set.
 	 */
@@ -80,7 +80,7 @@ public final class XsdCType extends XsdModel {
 	/** Sets external simple type name.
 	 *
 	 * @param sTypeName external simple type name.
-	 * @throws NullPointerException if given simple type name is <tt>null</tt>.
+	 * @throws NullPointerException if given simple type name is <i>null</i>.
 	 * @throws IllegalArgumentException if given simple type name is empty.
 	 * @throws IllegalStateException if external simple type is already set.
 	 */
@@ -98,7 +98,7 @@ public final class XsdCType extends XsdModel {
 	}
 
 	/** Gets external simple type name.
-	 * @return external simple type name or <tt>null</tt>.
+	 * @return external simple type name or <i>null</i>.
 	 */
 	public String getSType() {return _extSTypeName;}
 

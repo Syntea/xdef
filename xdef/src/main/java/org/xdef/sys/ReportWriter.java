@@ -147,13 +147,13 @@ public interface ReportWriter {
 	public void string(long registeredID, Object... mod);
 
 	/** Get last error report.
-	 * @return last error report (or <tt>null</tt> if last report is not
+	 * @return last error report (or <i>null</i> if last report is not
 	 * available).
 	 */
 	public Report getLastErrorReport();
 
 	/** Clear last error report. If last report has been available it will be
-	 * erased (i.e. result of <tt>getLastReport()</tt> will be null. However,
+	 * erased (i.e. result of <i>getLastReport()</i> will be null. However,
 	 * the report has already been written to the report file.
 	 */
 	public void clearLastErrorReport();

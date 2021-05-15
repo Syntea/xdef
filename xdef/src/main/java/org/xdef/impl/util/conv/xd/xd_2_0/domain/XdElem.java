@@ -15,7 +15,7 @@ public final class XdElem extends XdModel {
 	 * @param namespace element namespace.
 	 * @param name element name.
 	 * @throws NullPointerException if given model X-definition or element name
-	 * is <tt>null</tt>.
+	 * is <i>null</i>.
 	 * @throws IllegalArgumentException if given element name is empty.
 	 */
 	public XdElem(XdDef def, String namespace, String name) {

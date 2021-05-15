@@ -25,10 +25,10 @@ public interface XMDefinition extends XMNode {
 	public XMElement[] getRootModels();
 
 	/** Get the Element model with given NameSpace and name.
-	 * @param nsURI NameSpace URI of element or <tt>null</tt>.
+	 * @param nsURI NameSpace URI of element or <i>null</i>.
 	 * @param name name of element (may be qualified).
 	 * @return Element model with given NameSpace and name or return
-	 * <tt>null</tt> if such model not exists.
+	 * <i>null</i> if such model not exists.
 	 */
 	public XMElement getModel(String nsURI, String name);
 

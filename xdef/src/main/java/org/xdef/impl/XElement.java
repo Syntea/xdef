@@ -422,15 +422,15 @@ public final class XElement extends XCodeDescriptor
 	@Override
 	/** Get model of attribute (no namespace URI).
 	 * @param name name of attribute.
-	 * @return attribute model or <tt>null</tt> if attribute is hot specified.
+	 * @return attribute model or <i>null</i> if attribute is hot specified.
 	 */
 	public final XMData getAttr(final String name) {return getDefAttr(name, -1);}
 
 	@Override
 	/** Get model of attribute with namespace URI.
-	 * @param nsURI namespace URI of attribute or <tt>null</tt>.
+	 * @param nsURI namespace URI of attribute or <i>null</i>.
 	 * @param name local name of attribute.
-	 * @return attribute model or <tt>null</tt> if attribute is hot specified.
+	 * @return attribute model or <i>null</i> if attribute is hot specified.
 	 */
 	public final XMData getAttrNS(final String nsURI, final String name) {
 		return nsURI == null ? getAttr(name) : getDefAttrNS(nsURI, name,-1);
