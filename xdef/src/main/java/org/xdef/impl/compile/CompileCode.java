@@ -13,7 +13,6 @@ import org.xdef.XDConstants;
 import org.xdef.XDContainer;
 import org.xdef.XDParser;
 import org.xdef.XDValue;
-import org.xdef.impl.XConstants;
 import org.xdef.impl.XDebugInfo;
 import org.xdef.impl.XVariableTable;
 import org.xdef.impl.code.CodeExtMethod;
@@ -881,8 +880,6 @@ public final class CompileCode extends CompileBase {
 		for (Map.Entry<String, Integer> item : _nsPrefixes.entrySet()) {
 			String key = item.getKey();
 			if ("xml".equals(key) || "xmlns".equals(key)
-				|| XConstants.XDEF20_NS_URI.equals(
-					_namespaceURIs.get(item.getValue()))
 				|| XDConstants.XDEF31_NS_URI.equals(
 					_namespaceURIs.get(item.getValue()))
 				|| XDConstants.XDEF32_NS_URI.equals(

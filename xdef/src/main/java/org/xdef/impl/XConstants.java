@@ -4,9 +4,6 @@ package org.xdef.impl;
  * @author Vaclav Trojan
  */
 public interface XConstants {
-
-	/** X-definition version 2.0 ID (deprecated). */
-	public static final byte XD20 = 20;
 	/** X-definition version 3.1 ID. */
 	public static final byte XD31 = 31;
 	/** X-definition version 3.2 ID. */
@@ -21,7 +18,4 @@ public interface XConstants {
 
 	/** JSON root element. */
 	public static byte JSON_ROOT = 4;
-
-	/** URI of X-definition 2.0 (deprecated). */
-	public static final String XDEF20_NS_URI = "http://www.syntea.cz/xdef/2.0";
 }
