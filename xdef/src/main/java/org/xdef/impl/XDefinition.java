@@ -62,8 +62,7 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 		final SPosition sourcePosition,
 		final byte xmlVersion) {
 		super(name, nsURI, (XPool) xdp, XNode.XMDEFINITION);
-		_xdVersion = XConstants.XDEF20_NS_URI.equals(nsURI) ? XConstants.XD20
-			: XDConstants.XDEF31_NS_URI.equals(nsURI) ? XConstants.XD31
+		_xdVersion = XDConstants.XDEF31_NS_URI.equals(nsURI) ? XConstants.XD31
 			: XDConstants.XDEF32_NS_URI.equals(nsURI) ? XConstants.XD32
 			: XDConstants.XDEF40_NS_URI.equals(nsURI) ? XConstants.XD40 : 0;
 		_xmlVersion = xmlVersion;

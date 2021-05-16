@@ -17,7 +17,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xdef.impl.XConstants;
 
 /** Provides static methods for working with X-definition version 2.0 documents.
  * @author Ilia Alexandrov
@@ -38,8 +37,6 @@ public final class XdUtils {
 	 */
 	public static boolean isCollection(final Node node) {
 		return Util.isElement(node,
-			XConstants.XDEF20_NS_URI, XdNames.COLLECTION)
-			|| Util.isElement(node,
 				XDConstants.XDEF31_NS_URI, XdNames.COLLECTION)
 			|| Util.isElement(node,
 				XDConstants.XDEF32_NS_URI, XdNames.COLLECTION)
@@ -54,8 +51,7 @@ public final class XdUtils {
 	 * element.
 	 */
 	public static boolean isDef(final Node node) {
-		return Util.isElement(node, XConstants.XDEF20_NS_URI, XdNames.DEF)
-			|| Util.isElement(node, XDConstants.XDEF31_NS_URI, XdNames.DEF)
+		return Util.isElement(node, XDConstants.XDEF31_NS_URI, XdNames.DEF)
 			|| Util.isElement(node, XDConstants.XDEF32_NS_URI, XdNames.DEF)
 			|| Util.isElement(node, XDConstants.XDEF40_NS_URI, XdNames.DEF);
 	}
@@ -67,8 +63,7 @@ public final class XdUtils {
 	 * element child.
 	 */
 	public static boolean isModel(final Node node) {
-		return Util.isChild(node, XConstants.XDEF20_NS_URI, XdNames.DEF)
-			|| Util.isChild(node, XDConstants.XDEF31_NS_URI, XdNames.DEF)
+		return Util.isChild(node, XDConstants.XDEF31_NS_URI, XdNames.DEF)
 			|| Util.isChild(node, XDConstants.XDEF32_NS_URI, XdNames.DEF)
 			|| Util.isChild(node, XDConstants.XDEF40_NS_URI, XdNames.DEF);
 	}
@@ -80,8 +75,7 @@ public final class XdUtils {
 	 * element.
 	 */
 	public static boolean isMixed(final Node node) {
-		return Util.isElement(node, XConstants.XDEF20_NS_URI, XdNames.MIXED)
-			|| Util.isElement(node, XDConstants.XDEF31_NS_URI, XdNames.MIXED)
+		return Util.isElement(node, XDConstants.XDEF31_NS_URI, XdNames.MIXED)
 			|| Util.isElement(node, XDConstants.XDEF32_NS_URI, XdNames.MIXED)
 			|| Util.isElement(node, XDConstants.XDEF40_NS_URI,XdNames.MIXED);
 	}
@@ -93,8 +87,7 @@ public final class XdUtils {
 	 * element.
 	 */
 	public static boolean isChoice(final Node node) {
-		return Util.isElement(node, XConstants.XDEF20_NS_URI, XdNames.CHOICE)
-			|| Util.isElement(node, XDConstants.XDEF31_NS_URI, XdNames.CHOICE)
+		return Util.isElement(node, XDConstants.XDEF31_NS_URI, XdNames.CHOICE)
 			|| Util.isElement(node, XDConstants.XDEF32_NS_URI,XdNames.CHOICE)
 			|| Util.isElement(node,XDConstants.XDEF40_NS_URI,XdNames.CHOICE);
 	}
@@ -106,8 +99,7 @@ public final class XdUtils {
 	 * <i>sequence</i> element.
 	 */
 	public static boolean isSequence(final Node node) {
-		return Util.isElement(node,XConstants.XDEF20_NS_URI, XdNames.SEQUENCE)
-			|| Util.isElement(node,XDConstants.XDEF31_NS_URI, XdNames.SEQUENCE)
+		return Util.isElement(node,XDConstants.XDEF31_NS_URI, XdNames.SEQUENCE)
 			|| Util.isElement(node,XDConstants.XDEF32_NS_URI, XdNames.SEQUENCE)
 			|| Util.isElement(node,XDConstants.XDEF40_NS_URI, XdNames.SEQUENCE);
 	}
@@ -120,8 +112,6 @@ public final class XdUtils {
 	 */
 	public static boolean isDeclaration(final Node node) {
 		return Util.isElement(node,
-			XConstants.XDEF20_NS_URI, XdNames.DECLARATION)
-			|| Util.isElement(node,
 				XDConstants.XDEF31_NS_URI, XdNames.DECLARATION)
 			|| Util.isElement(node,
 				XDConstants.XDEF32_NS_URI, XdNames.DECLARATION)
@@ -137,8 +127,6 @@ public final class XdUtils {
 	 */
 	public static boolean isMacro(final Node node) {
 		return Util.isElement(node,
-			XConstants.XDEF20_NS_URI, XdNames.MACRO)
-			|| Util.isElement(node,
 				XDConstants.XDEF31_NS_URI, XdNames.MACRO)
 			|| Util.isElement(node,
 				XDConstants.XDEF32_NS_URI, XdNames.MACRO)
@@ -205,11 +193,6 @@ public final class XdUtils {
 	 */
 	public static String getGroupName(final Element element) {
 		String result = Util.getAttrValue(element,
-			XConstants.XDEF20_NS_URI, XdNames.NAME);
-		if (result != null) {
-			return result;
-		}
-		result = Util.getAttrValue(element,
 			XDConstants.XDEF31_NS_URI, XdNames.NAME);
 		if (result != null) {
 			return result;
@@ -242,11 +225,7 @@ public final class XdUtils {
 		}
 		//getting fixed and default
 		NodeList textValues = KXmlUtils.getChildElementsNS(element,
-			XConstants.XDEF20_NS_URI, XdNames.TEXT);
-		if (textValues.getLength() == 0) {
-			textValues = KXmlUtils.getChildElementsNS(element,
 			XDConstants.XDEF31_NS_URI, XdNames.TEXT);
-		}
 		if (textValues.getLength() == 0) {
 			textValues = KXmlUtils.getChildElementsNS(element,
 			XDConstants.XDEF32_NS_URI, XdNames.TEXT);
@@ -487,8 +466,7 @@ public final class XdUtils {
 	private static boolean hasText(Element element) {
 		//TODO: resolve text existence
 		//attribute xd:text is present
-		if (Util.hasAttrDecl(element, XConstants.XDEF20_NS_URI, XdNames.TEXT)
-			|| Util.hasAttrDecl(element, XDConstants.XDEF31_NS_URI,XdNames.TEXT)
+		if (Util.hasAttrDecl(element, XDConstants.XDEF31_NS_URI,XdNames.TEXT)
 			|| Util.hasAttrDecl(element, XDConstants.XDEF32_NS_URI,XdNames.TEXT)
 			|| Util.hasAttrDecl(element, XDConstants.XDEF32_NS_URI,
 				XdNames.TEXT)) {
@@ -496,8 +474,6 @@ public final class XdUtils {
 		}
 		//child element xd:text is present
 		return KXmlUtils.getChildElementsNS(element,
-			XConstants.XDEF20_NS_URI, XdNames.TEXT).getLength() > 0
-			||  KXmlUtils.getChildElementsNS(element,
 				XDConstants.XDEF31_NS_URI, XdNames.TEXT).getLength() > 0
 			||  KXmlUtils.getChildElementsNS(element,
 				XDConstants.XDEF32_NS_URI, XdNames.TEXT).getLength() > 0
@@ -516,8 +492,7 @@ public final class XdUtils {
 		for (int i = 0; i < attrs.getLength(); i++) {
 			Attr attr = (Attr) attrs.item(i);
 			String attrNS = attr.getNamespaceURI();
-			if (!XConstants.XDEF20_NS_URI.equals(attrNS)
-				&& !XDConstants.XDEF31_NS_URI.equals(attrNS)
+			if (!XDConstants.XDEF31_NS_URI.equals(attrNS)
 				&& !XDConstants.XDEF32_NS_URI.equals(attrNS)
 				&& !XDConstants.XDEF40_NS_URI.equals(attrNS)) {
 				return true;
@@ -542,8 +517,7 @@ public final class XdUtils {
 		NodeList children = KXmlUtils.getChildElements(element);
 		for (int i = 0; i < children.getLength(); i++) {
 			Element child = (Element) children.item(i);
-			if (!XConstants.XDEF20_NS_URI.equals(child.getNamespaceURI())
-				&& !XDConstants.XDEF31_NS_URI.equals(child.getNamespaceURI())
+			if (!XDConstants.XDEF31_NS_URI.equals(child.getNamespaceURI())
 				&& !XDConstants.XDEF32_NS_URI.equals(child.getNamespaceURI())
 				&& !XDConstants.XDEF40_NS_URI.equals(child.getNamespaceURI())) {
 				return true;
