@@ -1,4 +1,36 @@
 <xd:collection xmlns:xd="http://www.syntea.cz/xdef/3.1">
+<xd:declaration>
+  external method { 
+    String test.xdutils.TestXd2XsdConv.getKodPartnera();
+    void test.xdutils.TestXd2XsdConv.protocol(XXElement, String, String);
+    void test.xdutils.TestXd2XsdConv.protocol(XXElement, String, long);
+    void test.xdutils.TestXd2XsdConv.outputIVR(XXElement, XDValue[]);
+    void test.xdutils.TestXd2XsdConv.setErr(XXElement chkElem, XDValue[] params);
+    boolean test.xdutils.TestXd2XsdConv.tab(XXElement chkEl, XDValue[] params);
+    void test.xdutils.TestXd2XsdConv.chkEQ_PojistitelFuze(XXElement, XDValue[]);
+    void test.xdutils.TestXd2XsdConv.emptySubjHasAddr(XXElement, XDValue[]);
+    void test.xdutils.TestXd2XsdConv.setDefault_ifEx(XXElement, XDValue[]);
+    void test.xdutils.TestXd2XsdConv.chkOpt_RC_ifEQ(XXElement, XDValue[]);
+    void test.xdutils.TestXd2XsdConv.chk_RC_DatNar_ifEQ(XXElement, XDValue[]);
+    String test.xdutils.TestXd2XsdConv.getIdOsoba(XXElement chkElem);
+    void test.xdutils.TestXd2XsdConv.dateDavka(XXElement, XDValue[]);
+    void test.xdutils.TestXd2XsdConv.subjekt_OsobaOrFirma(XXElement, XDValue[]);
+    void  test.xdutils.TestXd2XsdConv.chkOpt_IC_ifEQ(XXElement, XDValue[]);
+    String test.xdutils.TestXd2XsdConv.getIdSubjekt(XXElement chkElem);
+    void test.xdutils.TestXd2XsdConv.notEmptyMisto(XXElement, XDValue[]);
+    void test.xdutils.TestXd2XsdConv.equal(XXElement, XDValue[]);
+	void test.xdutils.TestXd2XsdConv.chkOpt_CisloTP_ifEQ(XXElement, XDValue[]);
+	String test.xdutils.TestXd2XsdConv.getIdVozidlo(XXElement chkElem);
+    boolean test.xdutils.TestXd2XsdConv.fil0(XXElement, XDValue[]);
+    void test.xdutils.TestXd2XsdConv.hasElement_if(XXElement, XDValue[]);
+    boolean test.xdutils.TestXd2XsdConv.kvadrant(XXElement chkElem);
+    void test.xdutils.TestXd2XsdConv.chk_dec_nonNegative(XXElement, XDValue[]);
+    void test.xdutils.TestXd2XsdConv.chk_TypMinusPlneni_Platba(XXElement, XDValue[]);
+    void test.xdutils.TestXd2XsdConv.chk_dec_nonNegative(XXElement, XDValue[]);
+    void test.xdutils.TestXd2XsdConv.chk_Poj_NeexElement(XXElement, XDValue[]);
+    void test.xdutils.TestXd2XsdConv.initParams(XXElement chkElem);
+  }
+</xd:declaration>
 <xd:def xd:name = "L1"
    impl-version = "2013_09.1"
    impl-date    = "13.02.2014">
@@ -15,7 +47,6 @@
 
 <xd:def xd:name = "DotazSU"
    xd:root      = "DotazSU"
-   xd:classes   = "test.xdutils.TestXd2XsdConv"
    impl-version = "2013_09.1"
    impl-date    = "13.02.2014">
 
@@ -28,7 +59,6 @@
 </xd:def>
 
 <xd:def xd:name = "L1_common"
-   xd:classes   = "test.xdutils.TestXd2XsdConv"
    xd:script    = "options ${L1#Options}"
    impl-version = "2013_09.1"
    impl-date    = "13.02.2014">
@@ -263,7 +293,6 @@
 
 <xd:def xd:name = "Naroky"
    xd:root      = "Naroky"
-   xd:classes   = "test.xdutils.TestXd2XsdConv"
    xd:script    = "options ${L1#Options}"
    impl-version = "2013_09.1"
    impl-date    = "13.02.2014">
@@ -287,7 +316,6 @@
 
 <xd:def xd:name = "NovaIdentPU"
    xd:root      = "NovaIdentPU"
-   xd:classes   = "test.xdutils.TestXd2XsdConv"
    xd:script    = "options ${L1#Options}"
    impl-version = "2013_09.2"
    impl-date    = "21.07.2014">
@@ -310,7 +338,6 @@
 
 <xd:def xd:name = "NovaIdentSU"
    xd:root      = "NovaIdentSU"
-   xd:classes   = "test.xdutils.TestXd2XsdConv"
    xd:script    = "options ${L1#Options}"
    impl-version = "2013_09.2"
    impl-date    = "21.07.2014">
@@ -332,7 +359,6 @@
 
 <xd:def xd:name = "ReaktivacePU"
    xd:root      = "ReaktivacePU"
-   xd:classes   = "test.xdutils.TestXd2XsdConv"
    xd:script    = "options ${L1#Options}"
    impl-version = "2013_09.1"
    impl-date    = "13.02.2014">
@@ -342,7 +368,6 @@
 
 <xd:def xd:name = "ReaktivaceSU"
    xd:root      = "ReaktivaceSU"
-   xd:classes   = "test.xdutils.TestXd2XsdConv"
    xd:script    = "options ${L1#Options}"
    impl-version = "2013_09.1"
    impl-date    = "13.02.2014">
@@ -357,7 +382,6 @@
 
 <xd:def xd:name = "RegistracePU"
    xd:root      = "RegistracePU"
-   xd:classes   = "test.xdutils.TestXd2XsdConv"
    xd:script    = "options ${L1#Options}"
    impl-version = "2013_09.1"
    impl-date    = "13.02.2014">
@@ -367,7 +391,6 @@
 
 <xd:def xd:name = "RegistraceSU"
    xd:root      = "RegistraceSU"
-   xd:classes   = "test.xdutils.TestXd2XsdConv"
    xd:script    = "options ${L1#Options}"
    impl-version = "2013_09.1"
    impl-date    = "13.02.2014">
@@ -381,7 +404,6 @@
 
 <xd:def xd:name = "Regres"
    xd:root      = "Regres"
-   xd:classes   = "test.xdutils.TestXd2XsdConv"
    xd:script    = "options ${L1#Options}"
    impl-version = "2013_09.1"
    impl-date    = "13.02.2014">
@@ -402,7 +424,6 @@
 
 <xd:def xd:name = "main"
      xd:root    = "SouborL1A"
-     xd:classes = "test.xdutils.TestXd2XsdConv"
      xd:script  = "options ${L1#Options}"
      impl-version = "2013_09.1"
      impl-date    = "13.02.2014">
@@ -435,7 +456,6 @@
 
 <xd:def xd:name = "UzavreniPU"
    xd:root      = "UzavreniPU"
-   xd:classes   = "test.xdutils.TestXd2XsdConv"
    xd:script    = "options ${L1#Options}"
    impl-version = "2013_09.1"
    impl-date    = "13.02.2014">
@@ -445,7 +465,6 @@
 
 <xd:def xd:name = "UzavreniSU"
    xd:root      = "UzavreniSU"
-   xd:classes   = "test.xdutils.TestXd2XsdConv"
    xd:script    = "options ${L1#Options}"
    impl-version = "2013_09.1"
    impl-date    = "13.02.2014">
@@ -463,7 +482,6 @@
 
 <xd:def xd:name = "ZmenaPU"
    xd:root      = "ZmenaPU"
-   xd:classes   = "test.xdutils.TestXd2XsdConv"
    xd:script    = "options ${L1#Options}"
    impl-version = "2013_09.1"
    impl-date    = "13.02.2014">
@@ -473,7 +491,6 @@
 
 <xd:def xd:name = "ZmenaSU"
    xd:root      = "ZmenaSU"
-   xd:classes   = "test.xdutils.TestXd2XsdConv"
    xd:script    = "options ${L1#Options}"
    impl-version = "2013_09.1"
    impl-date    = "13.02.2014">
@@ -487,7 +504,6 @@
 
 <xd:def xd:name = "ZruseniNaroku"
    xd:root      = "ZruseniNaroku"
-   xd:classes   = "test.xdutils.TestXd2XsdConv"
    xd:script    = "options ${L1#Options}"
    impl-version = "2013_09.1"
    impl-date    = "13.02.2014">
@@ -507,7 +523,6 @@
 
 <xd:def xd:name = "ZruseniPU"
    xd:root      = "ZruseniPU"
-   xd:classes   = "test.xdutils.TestXd2XsdConv"
    xd:script    = "options ${L1#Options}"
    impl-version = "2013_09.1"
    impl-date    = "13.02.2014">
@@ -525,7 +540,6 @@
 
 <xd:def xd:name = "ZruseniSU"
    xd:root      = "ZruseniSU"
-   xd:classes   = "test.xdutils.TestXd2XsdConv"
    xd:script    = "options ${L1#Options}"
    impl-version = "2013_09.1"
    impl-date    = "13.02.2014">

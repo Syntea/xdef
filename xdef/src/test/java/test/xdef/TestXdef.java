@@ -803,10 +803,11 @@ public final class TestXdef extends XDTester {
 			assertEq(strw.toString(),
 				"1,1.1; 2,2.2; 1,1,1; 2,2,2; 1,1.1; 2,2.2; 1,1,1; 2,2,2");
 			xdef = // "$" identifiers, miscellaneous
-"<xd:collection xmlns:xd='" + XDConstants.XDEF31_NS_URI + "'>\n"+
-"<xd:def xd:classes = 'test.xdef.TestXdef' impl-version = '2.0'\n"+
+"<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
+"<xd:def impl-version = '2.0'\n"+
 "   name='abc' script='options trimText' root='Davka'>\n"+
 "<xd:declaration>\n"+
+"  external method void test.xdef.TestXdef.myProc(XDValue[] p);\n" +
 "  final String myversion = getImplProperty('version');\n"+
 "  final String reg = '[A-Z][A-Z]B';\n"+
 "  final String min = '987654320';\n"+

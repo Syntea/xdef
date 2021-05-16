@@ -333,41 +333,6 @@ public final class TestExtenalMethods extends XDTester {
 			xp = compile(xdef);
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
-
-			xdef =
-"<xd:def xmlns:xd='" + XDConstants.XDEF31_NS_URI + "' root='a'\n"+
-"  classes='test.xdef.TestExtenalMethods_2'>\n"+
-"<a\n"+
-"m00=\"?string;finally{m00();m00(1);}\"\n"+
-"m01=\"?string;\"\n"+ // byte not supported for declared class
-"m02=\"?string;\"\n"+ // Byte not supported for declared class
-"m03=\"?string;\"\n"+ // short not supported for declared class
-"m04=\"?string;\"\n"+ // Short not supported for declared class
-"m05=\"?string;finally{String s=m05(m05());if('1'!=s)setText(s);}\"\n"+
-"m06=\"?string;finally{String s=m06(m06());if('1'!=s)setText(s);}\"\n"+
-"m07=\"?string;finally{String s=m07(m07());if('1'!=s)setText(s);}\"\n"+
-"m08=\"?string;finally{String s=m08(m08());if('1'!=s)setText(s);}\"\n"+
-"m09=\"?string;finally{String s=m09(m09());if('1'!=s)setText(s);}\"\n"+
-"m11=\"?string;finally{String s=m11(m11());if('1.0'!=s)setText(s);}\"\n"+
-"m12=\"?string;finally{String s=m12(m12());if('1.0'!=s)setText(s);}\"\n"+
-"m13=\"?string;finally{String s=m13(m13());if('1.0'!=s)setText(s);}\"\n"+
-"m14=\"?string;finally{String s=m14(m14());if('1.0'!=s)setText(s);}\"\n"+
-"m15=\"?string;finally{String s=m15(m15());if('true'!=s)setText(s);}\"\n"+
-"m16=\"?string;finally{String s=m16(m16());if('true'!=s)setText(s);}\"\n"+
-"m20=\"?string;finally{String s=m20(m20());if('1'!=s)setText(s);}\"\n"+
-"m21=\"?string;finally{int i=m21(m21()+1);if(2!=i)setText(''+i);}\"\n"+
-"m22=\"?string;finally{float f=m22(m22()+1.0);if(2.0!=f)setText(''+f);}\"\n"+
-"m30=\"?string;finally{String s=m30(m30());if('1'!=s)setText(s);}\"\n"+
-"m31=\"?string;finally{String s=m31(m31());if('1'!=s)setText(s);}\"\n"+
-"m32=\"?string;finally{String s=m32(m32());if('1'!=s)setText(s);}\"\n"+
-"m33=\"?string;finally{String s=m33(m33());if('1'!=s)setText(s);}\"\n"+
-"m34=\"?string;finally{String s=m34(m34());if('1'!=s)setText(s);}\"\n"+
-"m35=\"?string;finally{String s=m35(m35());if('1'!=s)setText(s);}\"\n"+
-"/>\n"+
-"</xd:def>";
-			xp = compile(xdef);
-			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<a\n"+
