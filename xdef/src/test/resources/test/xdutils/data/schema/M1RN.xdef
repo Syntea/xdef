@@ -1,11 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<xd:collection xmlns:xd="http://www.syntea.cz/xdef/2.0">
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            impl-version="2.2.0.0"
+<xdef:collection xmlns:xd="http://www.syntea.cz/xdef/3.1">
+  <xdef:def impl-version="2.2.0.0"
             impl-date="17.07.2005"
             name="M1"/>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
             xdef:script="options setAttrUpperCase"
             impl-version="2.2.0.0"
             impl-date="17.07.2005"
@@ -17,8 +14,7 @@
       <VozidloCR xdef:script="occurs 1; ref M1_common#VozidloCR;                                               onAbsence elementErr(4262)"/>
     </BezProvozovateleVO>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
             impl-version="2.2.0.0"
             impl-date="17.07.2005"
             root="BezProvozovateleVO_"
@@ -30,8 +26,7 @@
       <VozidloCRId xdef:script="occurs 1; ref M1_common_#VozidloCRId"/>
     </BezProvozovateleVO_>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
             xdef:script="options setAttrUpperCase"
             impl-version="2.2.0.0"
             impl-date="17.07.2005"
@@ -44,8 +39,7 @@
       <VozidloCR xdef:script="occurs 1; ref M1_common#VozidloCR;   onAbsence elementErr(4262)"/>
     </KonfliktniVO>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
             impl-version="2.2.0.0"
             impl-date="17.07.2005"
             root="KonfliktniVO_#KonfliktniVO_"
@@ -58,8 +52,7 @@
       <VozidloCRId xdef:script="occurs 1; ref M1_common_#VozidloCRId"/>
     </KonfliktniVO_>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
             xdef:script="options setAttrUpperCase"
             impl-version="2.2.0.0"
             impl-date="17.07.2005"
@@ -100,8 +93,7 @@
             Stat="required tab('CC_Stat','KodStatu');                    onFalse setErr(4225); onAbsence setText('CZ')"
             PSC="required string(1,16);                                 onFalse setErr(4208); onAbsence setErr(4203)"/>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
             impl-version="2.2.0.0"
             impl-date="17.07.2005"
             name="M1_common_">
@@ -127,8 +119,7 @@
                       IdAdresa="optional;                                                                                   create getIdAdresa()"
                       IdProvozovatelText="optional; onTrue setText(getTabId('PrTxt.FindProvozovatelText'));                           create from('@ProvozovatelText')"/>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
             xdef:script="options setAttrUpperCase"
             impl-version="2.2.0.0"
             impl-date="17.07.2005"
@@ -137,8 +128,7 @@
     <NeznameVO xdef:script="finally outputIVR('NeznameVO_')"
                IdZmenaVozidlaPS="required int(); onFalse setErr(4208); onAbsence setErr(4202)"/>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
             impl-version="2.2.0.0"
             impl-date="17.07.2005"
             root="NeznameVO_"
@@ -147,8 +137,7 @@
                 IdZmenaVozidlaPS="required int()"
                 DatumVytvoreniDavkyCR="required datetime('yyyyMMdd');     create getDatumdavky()"/>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
             xdef:script="options setAttrUpperCase"
             impl-version="2.2.0.0"
             impl-date="17.07.2005"
@@ -160,8 +149,7 @@
       <ProvozovatelCR xdef:script="occurs 1; onAbsence elementErr(4260); ref M1_common#ProvozovatelCR"/>
     </NoveVO>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
             impl-version="2.2.0.0"
             impl-date="17.07.2005"
             root="NoveVO_"
@@ -173,8 +161,7 @@
       <ProvozovatelCRId xdef:script="occurs 0..1; ref M1_common_#ProvozovatelCRId"/>
     </NoveVO_>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
             xdef:script="options setAttrUpperCase"
             impl-version="2.2.0.0"
             impl-date="17.07.2005"
@@ -187,8 +174,7 @@
       <VozidloCR xdef:script="occurs 1; onAbsence elementErr(4262); ref M1_common#VozidloCR"/>
     </PotvrzeneVO>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
             impl-version="2.2.0.0"
             impl-date="17.07.2005"
             root="PotvrzeneVO_#PotvrzeneVO_"
@@ -201,8 +187,7 @@
       <VozidloCRId xdef:script="occurs 1; ref M1_common_#VozidloCRId"/>
     </PotvrzeneVO_>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
             xdef:script="options setAttrUpperCase"
             impl-version="2.2.0.0"
             impl-date="17.07.2005"
@@ -214,8 +199,7 @@
       <NeznameVO xdef:script="forget; occurs 0..; ref NeznameVO#NeznameVO"/>
     </SouborM1RC>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
             xdef:script="options setAttrUpperCase"
             impl-version="2.2.0.0"
             impl-date="17.07.2005"
@@ -227,8 +211,7 @@
       <KonfliktniVO xdef:script="forget; occurs 0..; ref KonfliktniVO#KonfliktniVO"/>
     </SouborM1RN>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
             xdef:script="options setAttrUpperCase"
             impl-version="2.2.0.0"
             impl-date="17.07.2005"
@@ -240,8 +223,7 @@
       <PotvrzeneVO xdef:script="forget; occurs 0..; ref PotvrzeneVO#PotvrzeneVO"/>
     </SouborM1RS>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
             xdef:script="options setAttrUpperCase"
             impl-version="2.2.0.0"
             impl-date="17.07.2005"
@@ -253,8 +235,7 @@
       <ZmenaStavuVO xdef:script="forget; occurs 0..; ref ZmenaStavuVO#ZmenaStavuVO"/>
     </SouborM1RT>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
             xdef:script="options setAttrUpperCase"
             impl-version="2.2.0.0"
             impl-date="17.07.2005"
@@ -270,8 +251,7 @@
       </xdef:mixed>
     </SouborM1RV>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
             xdef:script="options setAttrUpperCase"
             impl-version="2.2.0.0"
             impl-date="17.07.2005"
@@ -283,8 +263,7 @@
       <ProvozovatelCR xdef:script="occurs 1; onAbsence elementErr(4260); ref M1_common#ProvozovatelCR"/>
     </ZmenaProvozovateleVO>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
             impl-version="2.2.0.0"
             impl-date="17.07.2005"
             root="ZmenaProvozovateleVO_"
@@ -296,8 +275,7 @@
       <ProvozovatelCRId xdef:script="occurs 0..1; ref M1_common_#ProvozovatelCRId"/>
     </ZmenaProvozovateleVO_>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
             xdef:script="options setAttrUpperCase"
             impl-version="2.2.0.0"
             impl-date="17.07.2005"
@@ -308,8 +286,7 @@
                   KodStavuVozidlaCR="required string(1);            onFalse setErr(4208);                         onAbsence setErr(4202)"
                   DatumPosledniEvidZmeny="required datetime('yyyyMMdd'); onTrue dateDavka(4221); onFalse setErr(4208); onAbsence setErr(4202)"/>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.M1R_ChkParser"
             impl-version="2.2.0.0"
             impl-date="17.07.2005"
             root="ZmenaStavuVO_#ZmenaStavuVO_"
@@ -320,4 +297,4 @@
                    DatumPosledniEvidZmeny="required datetime('yyyyMMdd')"
                    IdStavVozidlaCR="required; onTrue setText(getTab('CC_StavVozidlaCR','KodStavuVozidlaCR','IdStavVozidlaCR')); create from('@KodStavuVozidlaCR')"/>
   </xdef:def>
-</xd:collection>
+</xdef:collection>

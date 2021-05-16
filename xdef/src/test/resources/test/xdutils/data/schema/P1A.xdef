@@ -1,11 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<xd:collection xmlns:xd="http://www.syntea.cz/xdef/2.0">
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            impl-version="2.3.2.0"
+<xdef:collection xmlns:xd="http://www.syntea.cz/xdef/3.1">
+  <xdef:def impl-version="2.3.2.0"
             impl-date="05.09.2006"
             name="P1"/>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
             impl-version="2.3.1.2"
             impl-date="15.08.2005"
             root="ChybnyZaznam"
@@ -18,8 +15,7 @@
                   CisloSmlouvy="optional"
                   PoradiVozidla="optional"/>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
             xdef:script="options setAttrUpperCase,ignoreEntities"
             impl-version="2.3.2.0"
             impl-date="05.09.2006"
@@ -31,8 +27,7 @@
              PoradiVozidla="required num(1,10);                                    onFalse setErr(4208); onAbsence setErr(4202)"
              DatumUcinnosti="optional datetime('yyyyMMdd|dd.MM.yyyy','yyyyMMdd');           onTrue dateDavka(4221); onFalse setErr(4208)"/>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
             impl-version="2.3.1.2"
             impl-date="15.08.2005"
             root="DotazPS_"
@@ -45,8 +40,7 @@
               PoradiVozidla="required"
               DatumUcinnosti="optional"/>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
             impl-version="2.3.2.0"
             impl-date="05.09.2006"
             root="InfoSmlouvaPS"
@@ -65,8 +59,7 @@
       <xdef:any xdef:script="occurs 0..;  options moreElements, moreText, moreAttributes"/>
     </InfoSmlouvaPS>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
             xdef:script="options setAttrUpperCase,ignoreEntities"
             impl-version="2.3.2.0"
             impl-date="05.09.2006"
@@ -83,8 +76,7 @@
                       PoradiVozidla="required num(1,10);                                    onFalse setErr(4208); onAbsence setErr(4202)"/>
     </NovaIdentPS>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
             impl-version="2.3.1.2"
             impl-date="15.08.2005"
             root="NovaIdentPS_"
@@ -103,8 +95,7 @@
                       PoradiVozidla="required"/>
     </NovaIdentPS_>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
             xdef:script="options setAttrUpperCase,ignoreEntities"
             impl-version="2.3.2.0"
             impl-date="05.09.2006"
@@ -127,8 +118,7 @@
       <ZdrojovaSmlouva xdef:script="occurs 0..1; ref P1_common#ZdrojovaSmlouva"/>
     </NovaPS>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
             impl-version="2.3.2.0"
             impl-date="13.12.2006"
             root="NovaPS_"
@@ -153,8 +143,7 @@
       <ZdrojovaSmlouvaId xdef:script="occurs 0..1; ref P1_common_#ZdrojovaSmlouvaId"/>
     </NovaPS_>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
             impl-version="2.3.2.0"
             impl-date="05.09.2006"
             root="OperaceP1"
@@ -184,8 +173,7 @@
            Hodnota="optional string(1,255)"
            Popis="optional string()"/>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
             impl-version="2.3.1.2"
             impl-date="15.08.2005"
             root="OperaceP1_"
@@ -217,8 +205,7 @@
            Hodnota="optional"
            Popis="optional"/>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
             xdef:script="options setAttrUpperCase,ignoreEntities"
             impl-version="2.3.2.0"
             impl-date="05.09.2006"
@@ -242,8 +229,7 @@
       <ZdrojovaSmlouva xdef:script="occurs 0..1; ref P1_common#ZdrojovaSmlouva"/>
     </OpravaPolPS>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
             impl-version="2.3.2.0"
             impl-date="13.12.2006"
             root="OpravaPolPS_"
@@ -269,8 +255,7 @@
       <ZdrojovaSmlouvaId xdef:script="occurs 0..1; ref P1_common_#ZdrojovaSmlouvaId"/>
     </OpravaPolPS_>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
             xdef:script="options setAttrUpperCase,ignoreEntities"
             impl-version="2.3.2.0"
             impl-date="05.09.2006"
@@ -293,8 +278,7 @@
       <ZdrojovaSmlouva xdef:script="occurs 0..1; ref P1_common#ZdrojovaSmlouva"/>
     </OpravaPS>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
             impl-version="2.3.2.0"
             impl-date="13.12.2006"
             root="OpravaPS_"
@@ -319,8 +303,7 @@
       <ZdrojovaSmlouvaId xdef:script="occurs 0..1; ref P1_common_#ZdrojovaSmlouvaId"/>
     </OpravaPS_>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
             xdef:script="options setAttrUpperCase,ignoreEntities"
             impl-version="2.4.0.2"
             impl-date="06.04.2007"
@@ -368,8 +351,7 @@
       <ZdrojovaSmlouva xdef:script="occurs 0..1; ref P1_common#ZdrojovaSmlouva"/>
     </OpravaXPolPS>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
             impl-version="2.4.0.2"
             impl-date="06.04.2007"
             root="OpravaXPolPS_"
@@ -436,8 +418,7 @@
     <DobaPojisteni PojisteniOd="optional"
                    PojisteniDo="optional"/>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
             xdef:script="options setAttrUpperCase,ignoreEntities"
             impl-version="2.3.2.0"
             impl-date="04.04.2007"
@@ -497,8 +478,7 @@
                      CisloDokladuPojisteni="optional string(1,35);                                               onFalse setErr(4208)"
                      KontrolaNositele="optional enum('A','N');                                              onFalse setErr(4225); onAbsence setText('A')"/>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
             impl-version="2.3.1.4"
             impl-date="20.04.2006"
             name="P1_common_">
@@ -548,8 +528,7 @@
                        CisloDokladuPojisteni="optional"
                        KontrolaNositele="optional"/>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
             xdef:script="options setAttrUpperCase,ignoreEntities"
             impl-version="2.3.1.2"
             impl-date="20.10.2005"
@@ -562,8 +541,7 @@
       <ZdrojovaSmlouva xdef:script="occurs 1; ref P1_common#ZdrojovaSmlouva;      onAbsence setErr(4271)"/>
     </PrenosPSP>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
             impl-version="2.3.1.2"
             impl-date="15.08.2005"
             root="PrenosPSP_"
@@ -577,8 +555,7 @@
       <ZdrojovaSmlouvaId xdef:script="occurs 1; ref P1_common_#ZdrojovaSmlouvaId"/>
     </PrenosPSP_>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
             xdef:script="options setAttrUpperCase,ignoreEntities"
             impl-version="2.3.2.0"
             impl-date="05.09.2006"
@@ -599,8 +576,7 @@
                    DatumZneplatneni="optional; onTrue setErr(4204)"/>
     </ReaktivacePS>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
             impl-version="2.3.2.0"
             impl-date="05.03.2007"
             root="ReaktivacePS_"
@@ -623,8 +599,7 @@
       <ZelenaKarta xdef:script="occurs 0..1; ref P1_common_#ZelenaKarta"/>
     </ReaktivacePS_>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
             xdef:script="options setAttrUpperCase,ignoreEntities"
             impl-version="2.3.2.0"
             impl-date="05.09.2006"
@@ -654,8 +629,7 @@
       </xdef:mixed>
     </SouborP1A>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
             impl-version="2.3.1.2"
             impl-date="15.08.2005"
             root="SouborP1D"
@@ -669,8 +643,7 @@
       </xdef:mixed>
     </SouborP1D>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
             xdef:script="options setAttrUpperCase,ignoreEntities"
             impl-version="2.3.2.0"
             impl-date="05.09.2006"
@@ -689,8 +662,7 @@
                    DatumZneplatneni="required datetime('yyyyMMdd|dd.MM.yyyy','yyyyMMdd');                                            onFalse setErr(4208); onAbsence setErr(4202)"/>
     </UkonceniPS>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
             impl-version="2.3.1.2"
             impl-date="15.08.2005"
             root="UkonceniPS_"
@@ -711,8 +683,7 @@
       <ZelenaKarta xdef:script="occurs 0..1; ref P1_common_#ZelenaKarta"/>
     </UkonceniPS_>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
             xdef:script="options setAttrUpperCase,ignoreEntities"
             impl-version="2.3.1.2"
             impl-date="15.08.2005"
@@ -726,8 +697,7 @@
                    DatumZneplatneni="optional; onTrue setErr(4204)"/>
     </VydaniZK>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
             impl-version="2.3.1.2"
             impl-date="15.08.2005"
             root="VydaniZK_"
@@ -741,8 +711,7 @@
       <ZelenaKarta xdef:script="occurs 1; ref P1_common_#ZelenaKarta"/>
     </VydaniZK_>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
             xdef:script="options setAttrUpperCase,ignoreEntities"
             impl-version="2.3.2.0"
             impl-date="05.09.2006"
@@ -764,8 +733,7 @@
       <ZdrojovaSmlouva xdef:script="occurs 0..1; ref P1_common#ZdrojovaSmlouva"/>
     </ZmenaPS>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
             impl-version="2.3.2.0"
             impl-date="05.03.2007"
             root="ZmenaPS_"
@@ -789,8 +757,7 @@
       <ZdrojovaSmlouvaId xdef:script="occurs 0..1; ref P1_common_#ZdrojovaSmlouvaId"/>
     </ZmenaPS_>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
             xdef:script="options setAttrUpperCase,ignoreEntities"
             impl-version="2.3.2.0"
             impl-date="15.08.2005"
@@ -804,8 +771,7 @@
                    DatumZneplatneni="required datetime('yyyyMMdd|dd.MM.yyyy','yyyyMMdd');    onFalse setErr(4202)"/>
     </ZneplatneniZK>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
             impl-version="2.3.1.2"
             impl-date="15.08.2005"
             root="ZneplatneniZK_"
@@ -819,8 +785,7 @@
       <ZelenaKarta xdef:script="occurs 1; ref P1_common_#ZelenaKarta"/>
     </ZneplatneniZK_>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
             xdef:script="options setAttrUpperCase,ignoreEntities"
             impl-version="2.3.2.0"
             impl-date="05.09.2006"
@@ -832,8 +797,7 @@
                PoradiVozidla="required num(1,10);                                    onFalse setErr(4208); onAbsence setErr(4202)"
                DatumZruseni="required datetime('yyyyMMdd|dd.MM.yyyy','yyyyMMdd');           onTrue dateDavka(4221); onFalse setErr(4208); onAbsence setErr(4202)"/>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
             impl-version="2.3.1.2"
             impl-date="15.08.2005"
             root="ZruseniPS_"
@@ -847,8 +811,7 @@
                 PoradiVozidla="required"
                 DatumZruseni="required"/>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
             xdef:script="options setAttrUpperCase,ignoreEntities"
             impl-version="2.3.2.0"
             impl-date="05.09.2006"
@@ -862,8 +825,7 @@
       <ZelenaKarta xdef:script="occurs 1; ref P1_common#ZelenaKarta; onAbsence elementErr(4264)"/>
     </ZruseniZK>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.P1A_ChkParser"
             impl-version="2.3.1.2"
             impl-date="15.08.2005"
             root="ZruseniZK_"
@@ -877,4 +839,4 @@
       <ZelenaKarta xdef:script="occurs 1; ref P1_common_#ZelenaKarta"/>
     </ZruseniZK_>
   </xdef:def>
-</xd:collection>
+</xdef:collection>

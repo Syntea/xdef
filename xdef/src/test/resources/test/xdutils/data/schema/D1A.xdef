@@ -1,11 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<xd:collection xmlns:xd="http://www.syntea.cz/xdef/2.0">
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            impl-version="2.3.0.1"
+<xdef:collection xmlns:xd="http://www.syntea.cz/xdef/3.1">
+  <xdef:def impl-version="2.3.0.1"
             impl-date="02.11.2005"
             name="D1"/>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.D1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.D1A_ChkParser"
             xdef:script="options ignoreEntities"
             impl-version="2.3.0.1"
             impl-date="02.11.2005"
@@ -17,8 +14,7 @@
       <ZaznamPDN xdef:script="forget; occurs 1..; ref ZaznamPDN#ZaznamPDN"/>
     </SouborD1A>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.D1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.D1A_ChkParser"
             xdef:script="options ignoreEntities"
             impl-version="2.4.1.0"
             impl-date="15.05.2007"
@@ -237,8 +233,7 @@
       required string();    onTrue trString(4101,4000);                                        onAbsence setErr(4202)
     </Text4000>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.D1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.D1A_ChkParser"
             impl-version="2.4.0.0"
             impl-date="02.11.2005"
             root="ZaznamPDN_"
@@ -445,4 +440,4 @@
       required
     </IntText>
   </xdef:def>
-</xd:collection>
+</xdef:collection>

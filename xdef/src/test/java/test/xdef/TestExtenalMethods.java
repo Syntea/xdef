@@ -335,7 +335,7 @@ public final class TestExtenalMethods extends XDTester {
 			assertNoErrors(reporter);
 
 			xdef =
-"<xd:def xmlns:xd='" + XDConstants.XDEF20_NS_URI + "' root='a'\n"+
+"<xd:def xmlns:xd='" + XDConstants.XDEF31_NS_URI + "' root='a'\n"+
 "  classes='test.xdef.TestExtenalMethods_2'>\n"+
 "<a\n"+
 "m00=\"?string;finally{m00();m00(1);}\"\n"+

@@ -7,7 +7,7 @@
  <wsdl:definitions name="B1_sluzby"
    targetNamespace="http://ws.ckp.cz/pis/B1/ws"
    xmlns:wsb="http://ws.ckp.cz/pis/B1/ws"
-   xmlns:xd="http://www.syntea.cz/xdef/2.0"
+   xmlns:xd="http://www.syntea.cz/xdef/3.1"
    xmlns:b="http://ws.ckp.cz/pis/B1/2008/03"
    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">

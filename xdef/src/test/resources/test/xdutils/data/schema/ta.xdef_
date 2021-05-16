@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="windows-1250"?>
-
-<xd:def xmlns:xd="http://www.syntea.cz/xdef/2.0"
+<xd:def xmlns:xd="http://www.syntea.cz/xdef/3.1"
         xmlns="http://www.syntea.cz/dn/Export/1.0"
         xd:name="Test"
         xd:root="SkpGetNextDavka | SednGetNextDavka | SuborD2A"
         impl-version="1.13.13.0"
         impl-date="29.6.2010">
-
-
    <xd:macro name="JMENO">string(1,24)</xd:macro>
    <xd:macro name="PRIJMENI">string(1,36)</xd:macro>
    <xd:macro name="RC">string(1,10)</xd:macro>
@@ -19,50 +16,34 @@
    <xd:macro name="DATETIME2">datetime('d.M.y H:m:s')</xd:macro>
    <xd:macro name="CASTKA">dec(11,2)</xd:macro>
 
+	<SkpGetNextDavka PosledniDavka   = "required int()" />
 
-	<SkpGetNextDavka
-		PosledniDavka   = "required int()"
-	/>
+ 	<SednGetNextDavka PosledniDavka   ="required int()"
+		TypExportu  ="required int(2,3)" />
 
- 	<SednGetNextDavka
-		PosledniDavka   ="required int()"
-		TypExportu      ="required int(2,3)"
-	/>
-
-
-   <SuborD2A
-      Davka                      = "required int()"
+   <SuborD2A Davka               = "required int()"
       ZoDna                      = "required ${DATETIME2}" >
-
       <ZaznamDN              xd:script= "occurs 0..100; ref ZaznamDN" />
    </SuborD2A>
 
-   <ZaznamDN
-      DnXMLVersion               = "fixed    '1'"
+   <ZaznamDN DnXMLVersion        = "fixed    '1'"
       SeqDnCentrum               = "required int()"
       DnKodUtvarSetri            = "required string(6)"
       KodNdnZaznamPlatSchval     = "required string(1)" >
-
       <DNVerze               xd:script= "occurs 1;    ref DNVerze" />
    </ZaznamDN>
 
    <!-- Verze DN -->
-   <DNVerze
-      SeqDnVerze                 = "required int()"
+   <DNVerze SeqDnVerze           = "required int()"
       DnCj                       = "optional string(0,32)"
-
       KodNdnKniha                = "required num(4)"
       VerzeRokKniha              = "required int(1,99)"
       VerzeCisloKniha            = "optional int(0,99999)"
-
       KodSednOkres               = "required num(4)"
-
       VerzeOznaceni              = "required ${TEXTVETA}"
-
       VerzeDatumCas              = "required ${DATETIME}"
       VerzeDatumCasDo            = "optional ${DATETIME}"
       VerzeUzemiUtvar            = "required string(2)"
-
       KodSednVObci               = "required"
       KodSednMistoDn             = "required"
       KodSednDruhKomunikace      = "required"
@@ -75,12 +56,10 @@
       VerzeGPSDelka              = "optional int()"
       VerzePopisMista            = "optional ${TEXTODSTAVEC}"
       VerzeObec                  = "optional ${TEXTVETA}"
-
       KodNdnStavSetreni          = "required"
       KodNdnStavEvidence         = "required"
       KodNdnKvalEvidence         = "required"
       KodNdnKvalUdalost          = "required"
-
       DatumCasUlozeni            = "required ${DATETIME2}" >
 
       <xd:mixed>
@@ -92,8 +71,7 @@
    </DNVerze>
 
    <!-- Vec na miste nehody -->
-   <Vec
-      SeqKlient                  = "required int()"
+   <Vec SeqKlient                = "required int()"
       KodNdnTypVec               = "required"
       VecOznaceni                = "required ${TEXTVETA}"
       RefVecPredchozi            = "optional int()"
@@ -104,9 +82,7 @@
       VecPopisSkoda              = "optional ${TEXTSTRANKA}"
       VecSkodaNaklad             = "required ${CASTKA}"
       VecPopisSkodaNaklad        = "optional ${TEXTSTRANKA}"
-
       VecKvadrant                = "required string(9)"
-
       VecPopisL                  = "optional ${TEXTODSTAVEC}"
       VecPopisR                  = "optional ${TEXTODSTAVEC}"
       VecPopisF                  = "optional ${TEXTODSTAVEC}"
@@ -116,24 +92,19 @@
       VecPopisN                  = "optional ${TEXTODSTAVEC}"
       VecPopisX                  = "optional ${TEXTODSTAVEC}"
       VecPopisZ                  = "optional ${TEXTODSTAVEC}"
-
       KodNdnZaznamPlat           = "required string(1)">
-
       <xd:choice>
          <Vozidlo                xd:script= "occurs 0..1; ref Vozidlo" />
          <JinaVec                xd:script= "occurs 0..1; ref JinaVec" />
       </xd:choice>
-
       <SubjektDrzitel            xd:script= "occurs 0..; ref SubjektDrzitel "/>
    </Vec>
 
    <!-- Silnicni vozidlo -->
-   <Vozidlo
-      KodNdn1DruhVozidla         = "required"
+   <Vozidlo KodNdn1DruhVozidla   = "required"
       KodNdn2DruhVozidla         = "required string(1,10)"
       SilCisloEv                 = "required string(1,12)"
       KodSednStat                = "required"
-
       SilVIN                     = "optional string(1,26)"
       SilCisloTP                 = "optional string(1,12)"
       SilCisloEvOsvedceni        = "optional ${TEXTVETA}"
@@ -142,19 +113,15 @@
       KodNdn1ZnackaTyp           = "required"
       KodNdn2ZnackaTyp           = "required string(1,10)"
       KodNdnBarva                = "required"
-
       SilCisloPoistenieEv        = "optional ${TEXTVETA}"
       KodNdnPoistovna            = "required int()"
       SilPoistovna               = "optional ${TEXTVETA}"
-
       KodSednSmerJizdy           = "required"
-
       DrazniOznaceni             = "optional ${TEXTVETA}"
    />
 
    <!-- Jina vec -->
-   <JinaVec
-      KodNdnDruhJinaVec          = "required"
+   <JinaVec KodNdnDruhJinaVec    = "required"
       KodSednPrekazka            = "required"
    />
 

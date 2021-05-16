@@ -190,7 +190,7 @@ public final class Test002 extends XDTester {
 			assertEq("t1t2", strw.toString());
 			try {
 				xdef = //test ListOf with XDEF_2_0
-"<xd:def xmlns:xd='"+ XDConstants.XDEF20_NS_URI + "' root='A'>\n"+
+"<xd:def xmlns:xd='"+ XDConstants.XDEF31_NS_URI + "' root='A'>\n"+
 "<xd:declaration>\n"+
 "  boolean t1() {out('t1'); return false;}\n"+
 "  boolean t2() {out('t2'); return true;}\n"+

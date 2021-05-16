@@ -311,7 +311,7 @@ public class XDGenCollection {
 		}
 		String uri = getXDNodeNS(root);
 		if ("collection".equals(root.getLocalName())
-			&& (XDConstants.XDEF20_NS_URI.equals(uri)
+			&& (XConstants.XDEF20_NS_URI.equals(uri)
 			|| XDConstants.XDEF31_NS_URI.equals(uri)
 			|| XDConstants.XDEF32_NS_URI.equals(uri)
 			|| XDConstants.XDEF40_NS_URI.equals(uri))) {
@@ -330,7 +330,7 @@ public class XDGenCollection {
 				}
 			}
 		} else {
-			if (!XDConstants.XDEF20_NS_URI.equals(uri)
+			if (!XConstants.XDEF20_NS_URI.equals(uri)
 				&& !XDConstants.XDEF31_NS_URI.equals(uri)
 				&& !XDConstants.XDEF32_NS_URI.equals(uri)
 				&& !XDConstants.XDEF40_NS_URI.equals(uri)) {
@@ -379,7 +379,7 @@ public class XDGenCollection {
 		String uri = n.getNamespaceURI();
 		if (n.getNodeType() != Node.ELEMENT_NODE
 			|| uri == null || uri.isEmpty()
-			|| !(XDConstants.XDEF20_NS_URI.equals(uri)
+			|| !(XConstants.XDEF20_NS_URI.equals(uri)
 				|| XDConstants.XDEF31_NS_URI.equals(uri)
 				|| XDConstants.XDEF32_NS_URI.equals(uri)
 				|| XDConstants.XDEF40_NS_URI.equals(uri))) {
@@ -791,7 +791,7 @@ public class XDGenCollection {
 					Element e = (Element) nl.item(j);
 					String uri = e.getNamespaceURI();
 					if ("def".equals(e.getLocalName())
-						&& (XDConstants.XDEF20_NS_URI.equals(uri)
+						&& (XConstants.XDEF20_NS_URI.equals(uri)
 							|| XDConstants.XDEF31_NS_URI.equals(uri)
 							|| XDConstants.XDEF32_NS_URI.equals(uri)
 							|| XDConstants.XDEF40_NS_URI.equals(uri))) {
@@ -1069,7 +1069,7 @@ public class XDGenCollection {
 	 */
 	public static byte getXDVersion(final Node n) {
 		String s = findXDNS(n);
-		return XDConstants.XDEF20_NS_URI.equals(s) ? XConstants.XD20
+		return XConstants.XDEF20_NS_URI.equals(s) ? XConstants.XD20
 			: XDConstants.XDEF31_NS_URI.equals(s) ? XConstants.XD31
 			: XDConstants.XDEF32_NS_URI.equals(s) ? XConstants.XD32
 			: XDConstants.XDEF40_NS_URI.equals(s) ? XConstants.XD40 : 0;
@@ -1130,8 +1130,8 @@ public class XDGenCollection {
 		}
 		String localName = e.getLocalName();
 		if ("collection".equals(localName)) {
-			if (e.hasAttributeNS(XDConstants.XDEF20_NS_URI, "metaNamespace")) {
-				return XDConstants.XDEF20_NS_URI;
+			if (e.hasAttributeNS(XConstants.XDEF20_NS_URI, "metaNamespace")) {
+				return XConstants.XDEF20_NS_URI;
 			}
 			if (e.hasAttributeNS(XDConstants.XDEF31_NS_URI, "metaNamespace")) {
 				return XDConstants.XDEF31_NS_URI;
@@ -1142,14 +1142,14 @@ public class XDGenCollection {
 			if (e.hasAttributeNS(XDConstants.XDEF40_NS_URI, "metaNamespace")) {
 				return XDConstants.XDEF40_NS_URI;
 			}
-			return uri.equals(XDConstants.XDEF20_NS_URI)
+			return uri.equals(XConstants.XDEF20_NS_URI)
 				|| uri.equals(XDConstants.XDEF31_NS_URI)
 				|| uri.equals(XDConstants.XDEF32_NS_URI)
 				|| uri.equals(XDConstants.XDEF40_NS_URI) ? uri : null;
 		}
 		if ("def".equals(localName)) {
-			if (e.hasAttributeNS(XDConstants.XDEF20_NS_URI, "metaNamespace")) {
-				return XDConstants.XDEF20_NS_URI;
+			if (e.hasAttributeNS(XConstants.XDEF20_NS_URI, "metaNamespace")) {
+				return XConstants.XDEF20_NS_URI;
 			}
 			if (e.hasAttributeNS(XDConstants.XDEF31_NS_URI, "metaNamespace")) {
 				return XDConstants.XDEF31_NS_URI;
@@ -1160,7 +1160,7 @@ public class XDGenCollection {
 			if (e.hasAttributeNS(XDConstants.XDEF40_NS_URI, "metaNamespace")) {
 				return XDConstants.XDEF40_NS_URI;
 			}
-			String s = uri.equals(XDConstants.XDEF20_NS_URI)
+			String s = uri.equals(XConstants.XDEF20_NS_URI)
 				|| uri.equals(XDConstants.XDEF31_NS_URI)
 				|| uri.equals(XDConstants.XDEF32_NS_URI)
 				|| uri.equals(XDConstants.XDEF40_NS_URI) ? uri : null;
@@ -1170,7 +1170,7 @@ public class XDGenCollection {
 			return getXDNodeNS(e.getParentNode());
 		}
 		if ("declaration".equals(localName)) {
-			String s = uri.equals(XDConstants.XDEF20_NS_URI)
+			String s = uri.equals(XConstants.XDEF20_NS_URI)
 				|| uri.equals(XDConstants.XDEF31_NS_URI)
 				|| uri.equals(XDConstants.XDEF32_NS_URI)
 				|| uri.equals(XDConstants.XDEF40_NS_URI) ? uri : null;

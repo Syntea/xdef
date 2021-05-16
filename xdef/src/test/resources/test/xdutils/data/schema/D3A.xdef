@@ -1,11 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<xd:collection xmlns:xd="http://www.syntea.cz/xdef/2.0">
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            impl-version="2.4.1.0"
+<xdef:collection xmlns:xd="http://www.syntea.cz/xdef/3.1">
+  <xdef:def impl-version="2.4.1.0"
             impl-date="15.05.2007"
             name="D3"/>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.D1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.D1A_ChkParser"
             xdef:script="options ignoreEntities"
             impl-version="2.4.1.0"
             impl-date="15.05.2007"
@@ -24,8 +21,7 @@
                     SeqSouboru="required int(1,999_999)"
                     Repeat="optional enum('A')"/>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.D1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.D1A_ChkParser"
             impl-version="2.4.0.0"
             impl-date="30.11.2005"
             root="InfoPrilohaPDN_"
@@ -44,8 +40,7 @@
                      SeqSouboru="required"
                      Repeat="optional"/>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.D1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.D1A_ChkParser"
             xdef:script="options ignoreEntities"
             impl-version="2.4.1.0"
             impl-date="15.05.2007"
@@ -270,8 +265,7 @@
                       CisloTP="optional string()"
                       DuvodOdeslani="required string()"/>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.D1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.D1A_ChkParser"
             impl-version="2.4.0.0"
             impl-date="30.11.2005"
             root="InfoZaznamPDN_"
@@ -486,8 +480,7 @@
                       CisloTP="optional"
                       DuvodOdeslani="required"/>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.D1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.D1A_ChkParser"
             xdef:script="options ignoreEntities"
             impl-version="2.4.0.0"
             impl-date="30.11.2005"
@@ -502,4 +495,4 @@
       </xdef:mixed>
     </SouborD3A>
   </xdef:def>
-</xd:collection>
+</xdef:collection>

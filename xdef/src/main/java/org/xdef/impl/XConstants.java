@@ -5,7 +5,7 @@ package org.xdef.impl;
  */
 public interface XConstants {
 
-	/** X-definition version 2.0 ID. */
+	/** X-definition version 2.0 ID (deprecated). */
 	public static final byte XD20 = 20;
 	/** X-definition version 3.1 ID. */
 	public static final byte XD31 = 31;
@@ -21,13 +21,7 @@ public interface XConstants {
 
 	/** JSON root element. */
 	public static byte JSON_ROOT = 4;
-//
-//	@Deprecated
-//	/** XML version 1.0.
-//	 * @deprecated Please use org.xdef.sys.StringParser.XMLVER1_0. */
-//	public static final byte XML10 = org.xdef.sys.StringParser.XMLVER1_0;
-//	@Deprecated
-//	/** XML version 1.1.
-//	 * @deprecated Please use org.xdef.sys.StringParser.XMLVER1_1. */
-//	public static final byte XML11 = org.xdef.sys.StringParser.XMLVER1_1;
+
+	/** URI of X-definition 2.0 (deprecated). */
+	public static final String XDEF20_NS_URI = "http://www.syntea.cz/xdef/2.0";
 }

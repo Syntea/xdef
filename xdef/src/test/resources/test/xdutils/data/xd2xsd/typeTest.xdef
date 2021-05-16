@@ -1,6 +1,4 @@
-<!-- Because of usage of the the type ListOf use X-definition 2.0! -->
-<xd:def xmlns:xd="http://www.syntea.cz/xdef/2.0" xd:name="main" xd:root="Types">
-
+<xd:def xmlns:xd="http://www.syntea.cz/xdef/3.1" xd:name="main" xd:root="Types">
     <Types>
         <xd:mixed>
             <an xd:script="occurs *">an</an>

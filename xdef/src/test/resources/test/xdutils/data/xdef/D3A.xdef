@@ -1,8 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<xd:def xmlns:xd="http://www.syntea.cz/xdef/2.0"
-  xd:name="D3A"
-  xd:root="SouborD3A">
+<xd:def xmlns:xd="http://www.syntea.cz/xdef/3.1" name="D3A" root="SouborD3A">
   <xd:declaration>
     type KodUtvaruPolicie_user_Type{parse: string();}
   </xd:declaration>

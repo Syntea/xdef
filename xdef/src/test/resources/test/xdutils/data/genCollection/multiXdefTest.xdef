@@ -10,7 +10,7 @@
                     workerId="required int" />
         </FirmWorkers>
     </xd:def>
-    <xd:def xmlns:xd = "http://www.syntea.cz/xdef/2.0"
+    <xd:def xmlns:xd = "http://www.syntea.cz/xdef/3.1"
             xd:name      =  "ext_1"
             xd:root      =  "hr:Person"
             xmlns:hr = "http://example.com/HumanResources"

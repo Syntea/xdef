@@ -1,13 +1,4 @@
-<?xml version="1.0" encoding="windows-1250"?>
-<!--
-
-    Document   : t024.xdef
-    Created on : 28.7.2010, 13:43:11
-    Author     : Libor Novák
-    Description:
-
--->
-<xd:def xmlns:xd      =  "http://www.syntea.cz/xdef/2.0"
+<xd:def xmlns:xd      =  "http://www.syntea.cz/xdef/3.1"
         xd:name      =  "t024"
         xd:root      =  "a">
     <a>

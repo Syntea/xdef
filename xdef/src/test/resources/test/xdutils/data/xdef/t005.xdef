@@ -1,8 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<xd:def xmlns:xd="http://www.syntea.cz/xdef/2.0"
-  xd:name="t005"
-  xd:root="ZaznamPDN">
+<xd:def xmlns:xd="http://www.syntea.cz/xdef/3.1" name="t005" root="ZaznamPDN">
   <xd:declaration>
     type KodUtvaruPolicie_user_Type{parse: string();}
   </xd:declaration>
