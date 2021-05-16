@@ -2,10 +2,16 @@
 <xd:def xmlns:xd="http://www.syntea.cz/xdef/3.1"
    xd:name	    ="DefSystemStatistics"
    xd:root	    ="DefSystemStatistics"
-   xd:classes   = "test.xdef.Test002"
    xd:script    = "options ignoreEmptyAttributes,ignoreAttrWhiteSpaces,noTrimText,preserveTextWhiteSpaces"
    impl-version = "2.5.0.2"
    impl-date	 = "30.01.2007">
+   <xd:declaration>
+     external method { 
+       void test.xdef.Test002.initData();
+       void test.xdef.Test002.output(String data);
+       boolean test.xdef.Test002.tab(String s1, String s2);
+     }
+   </xd:declaration>
 
    <DefSystemStatistics         xd:script="occurs 1; init initData(); finally output('DefSystemStatistics')"
       KodSystemu                 ="required string(1,4)"

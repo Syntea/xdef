@@ -1,11 +1,23 @@
 <?xml version="1.0" encoding="windows-1250" ?>
 <xd:def xmlns:xd = "http://www.syntea.cz/xdef/3.1"
    xd:script = "options ignoreEmptyAttributes"
-   xd:classes = "test.xdef.Test000"
    xd:name    = "L1_common_"
    impl-version = "2.3.2.2"
    impl-date    = "19.07.2005" >
-
+<xd:declaration>
+  external method {
+    String test.xdef.Test000.getIdOsoba(XXNode, XDValue[]);
+    String test.xdef.Test000.getTab(XXNode, XDValue[]);
+    String test.xdef.Test000.getIdAdresa(XXNode, XDValue[]);
+	String test.xdef.Test000.getIdSubjekt(XXNode, XDValue[]);
+	String test.xdef.Test000.getNonEmptyAttr(XXNode,XDValue[]);
+	String test.xdef.Test000.getIdModelText(XXNode, XDValue[]);
+	String test.xdef.Test000.getTabId(XXNode, XDValue[]);
+	String test.xdef.Test000.getIdPrace(XXNode, XDValue[]);
+	String test.xdef.Test000.getSeqRec(XXNode, XDValue[]);
+	String test.xdef.Test000.getIdPojistitel(XXNode, XDValue[]);
+  }
+</xd:declaration>
    <OsobaId
       IdOsoba                    = "required int();                                                                                 create getIdOsoba()"
       IdAdresa                   = "required int();                                                                                 create getIdAdresa()" />

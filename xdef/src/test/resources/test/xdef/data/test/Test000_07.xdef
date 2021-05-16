@@ -3,16 +3,16 @@
     <xd:def impl-version = "0.0.1"
         impl-date		 = "18.9.2006"
         xd:name		= "XDefSOAP"
-        xd:root		= "Envelope" 
-        xd:classes   = "test.xdef.Test000" >
+        xd:root		= "Envelope" >
+      <xd:declaration>
+        external method {
+          boolean test.xdef.Test000.tab(XXNode c, XDValue[] p);
+          void test.xdef.Test000.outputIOR(XXNode x, String s);
+          void test.xdef.Test000.setErr(XXNode c, XDValue[] p)
+        }
+      </xd:declaration>
 
         <xd:macro name="moreAll">options moreAttributes, moreElements, moreText</xd:macro>
-
-        <!--xd:declaration>
-            boolean tab(String s, String t){return true;}
-            void setErr(int i){}
-            void outputIOR(String s){}
-        </xd:declaration-->
 
         <Envelope xd:script="occurs 1" encodingStyle="required">
             <Header xd:script="occurs 0..1">
