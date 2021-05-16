@@ -83,7 +83,7 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 				|| "component".equals(elemLocalName)
 				|| "BNFGrammar".equals(elemLocalName)
 				|| "collection".equals(elemLocalName))  {
-				String projectNS; // = XDConstants.XDEF20_NS_URI;
+				String projectNS; // = XDConstants.XDEFxxx_NS_URI;
 				KParsedAttr ka;
 				byte ver;
 				if ((ka = parsedElem.getAttrNS(
@@ -101,6 +101,11 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 						? XConstants.XD31
 						: XDConstants.XDEF32_NS_URI.equals(ka.getNamespaceURI())
 						? XConstants.XD32 : XConstants.XD40;
+					if (ver == XConstants.XD20) {
+						//&{0} is deprecated.&{1}{ Please use }{ instead.}
+						warning(ka.getPosition(),XDEF.XDEF998,
+							"X-defifnition vesion 2.0", "higher version");
+					}
 					try {
 						if (projectNS.isEmpty()) {
 							throw new RuntimeException();
@@ -131,6 +136,7 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 					}
 				}
 				if (_pcomp.isChkWarnings()&&"thesaurus".equals(elemLocalName)) {
+					//&{0} is deprecated.&{1}{ Please use }{ instead.}
 					warning(_actPNode._name,XDEF.XDEF998,"thesaurus","lexicon");
 				}
 				_actPNode._xdVersion = ver;
