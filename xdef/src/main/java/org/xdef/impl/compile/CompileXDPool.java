@@ -489,54 +489,59 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		for (int i = 0; i < _xdefPNodes.size(); i++) {
 			PNode pnode = _xdefPNodes.get(i);
 			PAttr pa = _precomp.getXdefAttr(pnode, "methods", false, true);
-			if (pa!= null && !_codeGenerator._ignoreUnresolvedExternals) {
+			if (pa!= null) {
 				if (pnode._xdVersion > XConstants.XD31) {
 					reportDeprecated(pa._value,
 						"Attribute \"methods\"",
 						"<xd:declaration> external method { ... } ...");
 				}
-				_scriptCompiler.setSource(pa._value,
-					_scriptCompiler._actDefName,
-					pnode._xdef,
-					pnode._xdVersion,
-					pnode._nsPrefixes, pnode._xpathPos);
-				_scriptCompiler.compileExtMethods();
+				if (!_codeGenerator._ignoreUnresolvedExternals) {
+					_scriptCompiler.setSource(pa._value,
+						_scriptCompiler._actDefName,
+						pnode._xdef,
+						pnode._xdVersion,
+						pnode._nsPrefixes, pnode._xpathPos);
+					_scriptCompiler.compileExtMethods();
+				}
 			}
 			pa = _precomp.getXdefAttr(pnode, "classes", false, true);
-			if (pa != null && !_codeGenerator._ignoreUnresolvedExternals) {
+			if (pa != null) {
 				if (pnode._xdVersion > XConstants.XD31) {
 					reportDeprecated(pa._value,
 						"Attribute \"classes\"",
 						"<xd:declaration> external method ...");
 				}
-				String value = pa._value.getString();
-				Map<String, Class<?>> ht = new LinkedHashMap<String,Class<?>>();
-				for (Class<?> clazz : _codeGenerator._extClasses) {
-					ht.put(clazz.getName(), clazz);
-				}
-				StringTokenizer st = new StringTokenizer(value," \t\r\n,;");
-				while (st.hasMoreTokens()) {
-					String clsname = st.nextToken();
-					if (!ht.containsKey(clsname)) {
-						Class<?> clazz;
-						try {
-							clazz = Class.forName(clsname,
-								false, _scriptCompiler.getClassLoader());
-						} catch (Exception ex) {
-							clazz = null;
-						}
-						if (clazz != null) {
-							ht.put(clazz.getName(), clazz);
-						} else {
-							//Class &{0} is not available
-							error(pa._value, XDEF.XDEF267, clsname);
+				if (!_codeGenerator._ignoreUnresolvedExternals) {
+					String value = pa._value.getString();
+					Map<String, Class<?>> ht =
+						new LinkedHashMap<String,Class<?>>();
+					for (Class<?> clazz : _codeGenerator._extClasses) {
+						ht.put(clazz.getName(), clazz);
+					}
+					StringTokenizer st = new StringTokenizer(value," \t\r\n,;");
+					while (st.hasMoreTokens()) {
+						String clsname = st.nextToken();
+						if (!ht.containsKey(clsname)) {
+							Class<?> clazz;
+							try {
+								clazz = Class.forName(clsname,
+									false, _scriptCompiler.getClassLoader());
+							} catch (Exception ex) {
+								clazz = null;
+							}
+							if (clazz != null) {
+								ht.put(clazz.getName(), clazz);
+							} else {
+								//Class &{0} is not available
+								error(pa._value, XDEF.XDEF267, clsname);
+							}
 						}
 					}
-				}
-				if (_codeGenerator._extClasses.length == 0) {
-					Class<?>[] exts = new Class<?>[ht.values().size()];
-					ht.values().toArray(exts);
-					_codeGenerator.setExternals(exts);
+					if (_codeGenerator._extClasses.length == 0) {
+						Class<?>[] exts = new Class<?>[ht.values().size()];
+						ht.values().toArray(exts);
+						_codeGenerator.setExternals(exts);
+					}
 				}
 			}
 			pa = _precomp.getXdefAttr(pnode, "importLocal", false, true);
