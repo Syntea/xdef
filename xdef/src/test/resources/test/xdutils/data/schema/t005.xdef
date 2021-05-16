@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="Windows-1250" ?>
-
 <!--  date: 22.08.2003  -->
-<xd:def xmlns:xd = "http://www.syntea.cz/xdef/2.0"
+<xd:def xmlns:xd = "http://www.syntea.cz/xdef/3.1"
           xd:name    = "ZaznamPDN"
           xd:root    = "ZaznamPDN" >
-
 <xd:declaration>
 <![CDATA[
   boolean ciselnik(int i,String utvar, String KodUtvaru) {
@@ -308,5 +306,4 @@
    <Text4000 >
       <xd:text>required string(); onTrue trString(4101,4000); onFalse requiredErr(4100)</xd:text>
    </Text4000>
-
 </xd:def>

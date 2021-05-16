@@ -336,7 +336,7 @@ public final class TestXdef extends XDTester {
 		}
 		try { // recursive reference
 			xdef =
-"<xd:def  xmlns:xd='http://www.syntea.cz/xdef/2.0' root='A' name='Y21'>\n"+
+"<xd:def  xmlns:xd='http://www.syntea.cz/xdef/3.1' root='A' name='Y21'>\n"+
 "  <A>\n"+
 "    <B b='? string()'>\n"+
 "		<B xd:script='*; ref A/B'/>\n"+
@@ -348,7 +348,7 @@ public final class TestXdef extends XDTester {
 			assertEq(xml, parse(xp, "", xml , reporter));
 			assertNoErrors(reporter);
 			xdef =
-"<xd:def  xmlns:xd='http://www.syntea.cz/xdef/2.0' root='A'>\n"+
+"<xd:def  xmlns:xd='http://www.syntea.cz/xdef/3.1' root='A'>\n"+
 "  <A>\n"+
 "    <B xd:script='0..1; ref Y'/>\n"+
 "  </A>\n"+
@@ -803,7 +803,7 @@ public final class TestXdef extends XDTester {
 			assertEq(strw.toString(),
 				"1,1.1; 2,2.2; 1,1,1; 2,2,2; 1,1.1; 2,2.2; 1,1,1; 2,2,2");
 			xdef = // "$" identifiers, miscellaneous
-"<xd:collection xmlns:xd='" + XDConstants.XDEF20_NS_URI + "'>\n"+
+"<xd:collection xmlns:xd='" + XDConstants.XDEF31_NS_URI + "'>\n"+
 "<xd:def xd:classes = 'test.xdef.TestXdef' impl-version = '2.0'\n"+
 "   name='abc' script='options trimText' root='Davka'>\n"+
 "<xd:declaration>\n"+
@@ -2465,16 +2465,6 @@ public final class TestXdef extends XDTester {
 			out.close();
 			assertNoErrors(reporter);
 			assertEq("5", strw.toString());
-			xdef = //X-definition ver 2.0 //////////////////////////////////////
-"<xd:def xmlns:xd='" + XDConstants.XDEF20_NS_URI + "' root='a'\n"+
-"  methods= 'XDParser test.xdef.TestXdef.licheCislo()' >\n"+
-"  <a a='licheCislo'/>\n"+
-"</xd:def>\n";
-			xp = compile(xdef);
-			parse(xp, "", "<a a=\" 1 \"/>", reporter);
-			assertNoErrors(reporter);
-			parse(xp, "", "<a a=\"10\"/>", reporter);
-			assertErrors(reporter);
 			xdef = //X-definition ver 3.1 //////////////////////////////////////
 "<xd:def xmlns:xd='" + XDConstants.XDEF31_NS_URI + "' root='a'>\n"+
 "<xd:declaration>\n"+
@@ -2955,39 +2945,9 @@ public final class TestXdef extends XDTester {
 "</A>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
-// version 2.0
-			xdef =
-"<xd:def xmlns:xd='" + XDConstants.XDEF20_NS_URI + "' root='a'>\n"+
-"  <xd:declaration>type x {parse : {return true;}}</xd:declaration>\n"+
-"  <a x='x'/>\n"+
-"</xd:def>";
-			xp = compile(xdef);
-			xml = "<a x='x'/>";
-			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
-			xdef =  // version 2.0
-"<xd:def xmlns:xd='" + XDConstants.XDEF20_NS_URI + "' root='a'>\n" +
-"    <xd:declaration>\n" +
-"        type gamYear        {parse : {return long(1,2);}}\n" +
-"        type gamDate        {parse : xdatetime('yyyyMMdd');}\n" +
-"        type gamDateTime    {parse:  xdatetime('yyyyMMddHHmmss');}\n" +
-"        type gamS           {parse:  {return true;}}\n" +
-"    </xd:declaration>\n" +
-"  <a a='gamYear' b='gamDate' c='gamDateTime' d='gamS' />\n" +
-"</xd:def>";
-			xp = compile(xdef);
-			xml = "<a a='2' b='20180501' c='20180501122105' d='?'/>";
-			assertEq(xml, parse(xp,"",xml, reporter));
-			assertNoErrors(reporter);
-			try {
-				xdef = SUtils.modifyFirst(xdef, "xdef/2.0'", "xdef/3.1'");
-				compile(xdef);
-			} catch (Exception ex) {
-				if(!ex.toString().contains("W XDEF998")) fail(ex);
-			}
-//test version 20, 32 and 40 in collection
+//test collection
 			xp = compile(
-"<xd:collection xmlns:xd='" + XDConstants.XDEF20_NS_URI + "'>"+
+"<xd:collection xmlns:xd='" + XDConstants.XDEF31_NS_URI + "'>"+
 "<xd:def xd:name='X' xd:root='A' xmlns:xd='" + XDConstants.XDEF40_NS_URI + "'>"+
 "<A a='string()'>"+
 "  <B xd:script='+; ref X#R'/>"+

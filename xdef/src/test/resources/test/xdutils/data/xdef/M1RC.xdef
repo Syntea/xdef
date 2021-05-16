@@ -1,8 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<xd:def xmlns:xd="http://www.syntea.cz/xdef/2.0"
-  xd:name="M1RC"
-  xd:root="SouborM1RC">
+<xd:def xmlns:xd="http://www.syntea.cz/xdef/3.1" name="M1RC" root="SouborM1RC">
   <NeznameVO_NeznameVO_type_cType IdZmenaVozidlaPS="required int()"/>
   <SouborM1RC Davka="required string()"
     ZeDne="required string()">

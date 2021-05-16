@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="windows-1250"?>
-<xd:collection xmlns:xd = "http://www.syntea.cz/xdef/2.0" >
-<xd:def
-   xmlns:xd   = "http://www.syntea.cz/xdef/2.0"
-   xd:name    = "L1_common"
+<xd:collection xmlns:xd = "http://www.syntea.cz/xdef/3.1" >
+<xd:def xd:name    = "L1_common"
    xd:classes = "test.xdef.Test000"
    xd:include = "Matej2_!L1Macros.def"
    xd:script  = "options ${L1#Options}" >
@@ -203,6 +201,5 @@
       <Indikator               xd:script = "occurs 0..;  ref Indikator"/>
       <Likvidator              xd:script = "occurs 0..1; ref Osoba"/>
    </PN>
-
 </xd:def>
 </xd:collection>

@@ -240,7 +240,7 @@ public final class TestErrors extends XDTester {
 //        1         2         3         4        5          6         7
 //234567890123456789012345678901234567890123456789012345678901234567890123456789
 "<!DOCTYPE doc [<!ENTITY e '&#10;entity_e&#10;'>]>\n"+			// 01
-"<xd:def xmlns:xd='"+XDConstants.XDEF20_NS_URI+"' root='a'>\n"+	// 02
+"<xd:def xmlns:xd='"+XDConstants.XDEF31_NS_URI+"' root='a'>\n"+	// 02
 " <a\n"+														// 03
 "  a='fixed a+\"&lt;,\n"+										// 04<=
 "&#x3e;\"+b;'\n"+												// 05<=

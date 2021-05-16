@@ -1,8 +1,7 @@
-<xd:def xmlns:xd = "http://www.syntea.cz/xdef/2.0"
+<xd:def xmlns:xd = "http://www.syntea.cz/xdef/3.1"
   xmlns:a="http://www.w3schools.com"
   xd:name = "Test"
   xd:root = "a:note" >
-
   <a:note att1 = "required string()"
     a:att2 = "required string()">
     <a:to>required string()</a:to>
@@ -10,5 +9,4 @@
     <a:heading>required string()</a:heading>
     <a:body>required string()</a:body>
   </a:note>
-
 </xd:def>

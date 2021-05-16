@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xd:def xmlns:xd     ="http://www.syntea.cz/xdef/2.0"
+<xd:def xmlns:xd     ="http://www.syntea.cz/xdef/3.1"
 		impl-version ="1.0.0.0"
 		impl-date    ="9.3.2008"    
 		xd:name      ="SoapRequestB1A"
@@ -7,8 +7,7 @@
 		xmlns:b1a    ="http://ws.koop.cz/B1A/2008/01"
 		xd:root      ="s:Envelope">
 	
-	<s:Envelope
-		xd:script="occurs 1"
+	<s:Envelope xd:script="occurs 1"
 		s:encodingStyle  ="optional 'http://www.syntea.cz/koop/encoding'" >
 		<s:Header>
 			<xd:mixed>

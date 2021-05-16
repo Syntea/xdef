@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="windows-1250"?>
-
 <!--  ver: 2.3.0.2 date: 04.05.2005  -->
 <!--  ver: 2.3.0.3 date: 22.05.2008 @CisloDokladuPojisteni optional -->
-
 <xdef:def
-   xmlns:xdef = "http://www.syntea.cz/xdef/2.0"
+   xmlns:xdef = "http://www.syntea.cz/xdef/3.1"
    xdef:name  = "ChybnyPSP"
    xdef:root  = "ChybnyPSP">
 

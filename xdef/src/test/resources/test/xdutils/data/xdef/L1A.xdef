@@ -1,8 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<xd:def xmlns:xd="http://www.syntea.cz/xdef/2.0"
-  xd:name="L1A"
-  xd:root="SouborL1A">
+<xd:def xmlns:xd="http://www.syntea.cz/xdef/3.1" name="L1A" root="SouborL1A">
   <xd:declaration>
     type X_Type{parse: dec();}
   </xd:declaration>

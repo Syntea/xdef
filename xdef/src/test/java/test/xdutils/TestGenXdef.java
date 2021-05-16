@@ -153,7 +153,7 @@ dataDir + "../../data/schema/L1A.xml",
 		}
 		try {
 			xml =
-"<d:X xmlns:d=\""+ XDConstants.XDEF20_NS_URI + "\" d:x=\"123\">\n"+
+"<d:X xmlns:d=\""+ XDConstants.XDEF31_NS_URI + "\" d:x=\"123\">\n"+
 "  <d:Y d:y=\"z\"> x </d:Y>\n"+
 "  <d:Y y=\"z\"/>\n"+
 "  <d:Y/>\n"+

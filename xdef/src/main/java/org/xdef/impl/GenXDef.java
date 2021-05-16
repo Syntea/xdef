@@ -337,7 +337,7 @@ public class GenXDef implements XDConstants {
 	private static QName checkQName(final QName qname) {
 		String uri = qname.getNamespaceURI();
 		if (XDEF40_NS_URI.equals(uri) || XDEF32_NS_URI.equals(uri)
-			|| XDEF31_NS_URI.equals(uri) || XDEF20_NS_URI.equals(uri)) {
+			|| XDEF31_NS_URI.equals(uri)) {
 			//Namespace of X-definition is not allowed in XML input data
 			throw new SRuntimeException(XDEF.XDEF882);
 		}

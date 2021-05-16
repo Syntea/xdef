@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="windows-1250"?>
-
 <!-- 15.05.2007 pridan  CilovyPSP -->
-
 <xd:def
-   xmlns:xd     = "http://www.syntea.cz/xdef/2.0"
+   xmlns:xd     = "http://www.syntea.cz/xdef/3.1"
    xd:name      = "B1_common"
    impl-version = "2.5.6.0"
    impl-date    = "05.01.2009" >
-
  <Get_NositelPSP>
    <xd:choice>
      <Nositel            xd:script="ref Id_Nositel" />
@@ -278,5 +275,4 @@
         AddInfo            ="optional enum('0', '1')" >
     <PSP                   xd:script="occurs 0..; ref PSP" />
   </VolnePSP>
-
 </xd:def>

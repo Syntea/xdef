@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="windows-1250"?>
-<xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0" name="D1A_ChkParser" >
+<xdef:def xmlns:xdef="http://www.syntea.cz/xdef/3.1" name="D1A_ChkParser" >
     <xdef:declaration>
 <![CDATA[
       void initParams() {}

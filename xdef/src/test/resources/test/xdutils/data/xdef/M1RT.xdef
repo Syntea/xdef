@@ -1,8 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<xd:def xmlns:xd="http://www.syntea.cz/xdef/2.0"
-  xd:name="M1RT"
-  xd:root="SouborM1RT">
+<xd:def xmlns:xd="http://www.syntea.cz/xdef/3.1" name="M1RT" root="SouborM1RT">
   <xd:declaration>
     type KodStavuVozidlaCR_Type{parse: string(1);}
   </xd:declaration>

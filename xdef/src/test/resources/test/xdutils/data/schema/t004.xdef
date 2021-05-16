@@ -1,7 +1,6 @@
-<xd:def xmlns:xd = "http://www.syntea.cz/xdef/2.0"
+<xd:def xmlns:xd = "http://www.syntea.cz/xdef/3.1"
    xd:name      = "a"
    xd:root      = "a" >
-
   <a a = "optional string(1,8)">
     <xd:mixed>
       <b b = "optional string(1,8)" >required int()</b>

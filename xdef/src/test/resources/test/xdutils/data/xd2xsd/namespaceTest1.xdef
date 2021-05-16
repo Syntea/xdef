@@ -1,9 +1,8 @@
-<xd:def xmlns:xd      =  "http://www.syntea.cz/xdef/2.0"
+<xd:def xmlns:xd      =  "http://www.syntea.cz/xdef/3.1"
         xmlns:car     = "http://example.com/carInfo"
         xmlns:shop    = "http://example.com/eshopInfo"
          xd:name      =  "main"
          xd:root      =  "Cars" >
-
      <Cars>
          <car:Car   xd:script="occurs +"
                     shop:from="required xdatetime('dd.MM.yyyy')">
@@ -13,5 +12,4 @@
             <shop:Info xd:script="occurs ?">required string(1, 500)</shop:Info>
          </car:Car>
      </Cars>
-
 </xd:def>

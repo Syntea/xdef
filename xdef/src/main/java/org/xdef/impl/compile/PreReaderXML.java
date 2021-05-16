@@ -87,7 +87,7 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 				KParsedAttr ka;
 				byte ver;
 				if ((ka = parsedElem.getAttrNS(
-					XDConstants.XDEF20_NS_URI, "metaNamespace")) != null
+					XConstants.XDEF20_NS_URI, "metaNamespace")) != null
 					|| (ka = parsedElem.getAttrNS(
 						XDConstants.XDEF31_NS_URI, "metaNamespace")) != null
 					|| (ka = parsedElem.getAttrNS(
@@ -95,7 +95,7 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 					|| (ka = parsedElem.getAttrNS(
 						XDConstants.XDEF40_NS_URI, "metaNamespace")) != null) {
 					projectNS = ka.getValue().trim();
-					ver = XDConstants.XDEF20_NS_URI.equals(ka.getNamespaceURI())
+					ver = XConstants.XDEF20_NS_URI.equals(ka.getNamespaceURI())
 						? XConstants.XD20
 						: XDConstants.XDEF31_NS_URI.equals(ka.getNamespaceURI())
 						? XConstants.XD31
@@ -112,11 +112,11 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 					}
 					parsedElem.remove(ka);
 				} else {
-					if (XDConstants.XDEF20_NS_URI.equals(uri)
+					if (XConstants.XDEF20_NS_URI.equals(uri)
 						|| XDConstants.XDEF31_NS_URI.equals(uri)
 						|| XDConstants.XDEF32_NS_URI.equals(uri)
 						|| XDConstants.XDEF40_NS_URI.equals(uri)) {
-						ver = XDConstants.XDEF20_NS_URI.equals(uri)
+						ver = XConstants.XDEF20_NS_URI.equals(uri)
 							? XConstants.XD20
 							: XDConstants.XDEF31_NS_URI.equals(uri)
 							? XConstants.XD31

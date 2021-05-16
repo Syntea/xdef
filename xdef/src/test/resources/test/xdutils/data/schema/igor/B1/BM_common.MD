@@ -14,7 +14,7 @@
 <!-- 21.07.2008 v Get_NositelPSP pridan CilovyPSP -->
 
 <xd:def
-   xmlns:xd     = "http://www.syntea.cz/xdef/2.0"
+   xmlns:xd     = "http://www.syntea.cz/xdef/3.1"
    xd:name      = "BM_common"
    impl-version = "2.5.4.0"
    impl-date    = "02.05.2008" >

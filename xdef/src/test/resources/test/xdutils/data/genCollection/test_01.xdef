@@ -1,16 +1,7 @@
 <?xml version="1.0" encoding="windows-1250"?>
-<!--
-
-    Document   : test_01.xdef
-    Created on : 10.1.2011, 11:15:24
-    Author     : Alexandrov Ilia
-    Description: XDefinition containing nested type declarations.
-
--->
-<xd:def xmlns:xd      =  "http://www.syntea.cz/xdef/2.0"
+<xd:def xmlns:xd      =  "http://www.syntea.cz/xdef/3.1"
         name      =  "main"
         root      =  "Root" >
-
     <Root>
         <xd:mixed>
             <Test01>int</Test01>

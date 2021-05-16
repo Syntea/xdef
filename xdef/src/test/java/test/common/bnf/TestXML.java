@@ -59,7 +59,7 @@ public class TestXML extends STester {
 			s =
 "<?xml version = \"1.0\" encoding='UTF-8'?>\n"+
 "<!-- comment -->\n"+
-"<xd:def xmlns:xd='http://www.syntea.cz/xdef/2.0' root='Misto|Udaj|Base'>\n"+
+"<xd:def xmlns:xd='http://www.syntea.cz/xdef/3.2' root='Misto|Udaj|Base'>\n"+
 "<xd:declaration>\n"+
 "<![CDATA[\n"+
 "external Element base; /*V tomto elementu je nase databaze. */\n"+

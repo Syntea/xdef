@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<xd:def xmlns:xd="http://www.syntea.cz/xdef/2.0"
+<xd:def xmlns:xd="http://www.syntea.cz/xdef/3.1"
   root="SouborD5"
   name="SouborD5">
   <Get_AllPDN KodUtvaruPolicie="optional num(6)"

@@ -5,7 +5,7 @@
 <wsdl:definitions name="D5_sluzby"
    targetNamespace="http://ws.ckp.cz/pis/D5/ws"
    xmlns:wsd="http://ws.ckp.cz/pis/D5/ws"
-   xmlns:xd="http://www.syntea.cz/xdef/2.0"
+   xmlns:xd="http://www.syntea.cz/xdef/3.1"
    xmlns:d="http://ws.ckp.cz/pis/D5/2009/01"
    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"

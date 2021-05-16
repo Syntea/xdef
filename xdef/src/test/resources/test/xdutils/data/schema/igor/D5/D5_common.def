@@ -1,7 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-
-<xd:def
-   xmlns:xd     ="http://www.syntea.cz/xdef/2.0"
+<xd:def xmlns:xd="http://www.syntea.cz/xdef/3.1"
    xd:name      ="D5_common"
    impl-version ="2.5.6.0"
    impl-date    ="18.08.2009" >

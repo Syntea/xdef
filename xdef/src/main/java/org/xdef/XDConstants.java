@@ -117,8 +117,6 @@ public interface XDConstants {
 
 	/** Recommended namespace prefix used for X-definition nodes. */
 	public static final String XDEF_NS_PREFIX = "xd";
-	/** URI of X-definition 2.0. */
-	public static final String XDEF20_NS_URI = "http://www.syntea.cz/xdef/2.0";
 	/** URI of X-definition 3.1. */
 	public static final String XDEF31_NS_URI = "http://www.syntea.cz/xdef/3.1";
 	/** URI of X-definition 3.2. */

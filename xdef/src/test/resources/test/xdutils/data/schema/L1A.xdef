@@ -1,11 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<xd:collection xmlns:xd="http://www.syntea.cz/xdef/2.0">
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            impl-version="2.3.3.0"
+<xdef:collection xmlns:xd="http://www.syntea.cz/xdef/3.1">
+  <xdef:def impl-version="2.3.3.0"
             impl-date="15.09.2006"
             name="L1"/>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
             xdef:script="options setAttrUpperCase,ignoreEntities"
             impl-version="2.4.0.0"
             impl-date="05.11.2007"
@@ -167,8 +164,7 @@
                    Mena="required tab('CC_Mena','KodMeny');                               onFalse setErr(4225); onAbsence setText('CZK')"
                    DatumUcinnosti="required datetime('yyyyMMddHHmm|dd.MM.yyyy HH:mm','yyyyMMddHHmm');           onTrue dateDavka(4221);       onFalse setErr(4208); onAbsence setErr(4202)"/>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
             impl-version="2.4.0.0"
             impl-date="05.11.2007"
             name="L1_common_">
@@ -325,8 +321,7 @@
                      IdMena="required; onTrue setText(getTab('CC_Mena','KodMeny','IdMena'));                                 create from('@Mena')"
                      DatumUcinnosti="required"/>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
             xdef:script="options setAttrUpperCase,ignoreEntities"
             impl-version="2.4.0.0"
             impl-date="05.11.2007"
@@ -334,8 +329,7 @@
             name="Naroky">
     <Naroky xdef:script="finally outputIVR('Naroky_'); ref L1_common#Naroky"/>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
             xdef:script="options setAttrUpperCase,ignoreEntities"
             impl-version="2.4.0.0"
             impl-date="05.11.2007"
@@ -343,8 +337,7 @@
             name="Naroky_">
     <Naroky_ xdef:script="ref L1_common_#NarokyId"/>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
             impl-version="2.3.2.6"
             impl-date="15.02.2006"
             root="OperaceL1"
@@ -413,8 +406,7 @@
            Hodnota="optional string(1,255)"
            Popis="optional string(1,255)"/>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
             impl-version="2.3.2.6"
             impl-date="15.02.2006"
             root="OperaceL1_"
@@ -482,21 +474,18 @@
            Hodnota="optional"
            Popis="optional"/>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
             xdef:script="options setAttrUpperCase,ignoreEntities"
             root="ReaktivacePU"
             name="ReaktivacePU">
     <ReaktivacePU xdef:script="finally outputIVR('ReaktivacePU_'); ref L1_common#PU"/>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
             root="ReaktivacePU_"
             name="ReaktivacePU_">
     <ReaktivacePU_ xdef:script="ref L1_common_#PUId"/>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
             xdef:script="options setAttrUpperCase,ignoreEntities"
             impl-version="2.3.2.6"
             impl-date="24.05.2006"
@@ -504,27 +493,23 @@
             name="ReaktivaceSU">
     <ReaktivaceSU xdef:script="ref L1_common#SU; finally {                            chk_ifCond(4208,'@RozhodnaUdalost','A','VozidloPojistnika/Smlouva@DruhPojisteni','HAVPOV','POV');                            outputIVR('ReaktivaceSU_');                         }"/>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
             root="ReaktivaceSU_"
             name="ReaktivaceSU_">
     <ReaktivaceSU_ xdef:script="ref L1_common_#SUId"/>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
             xdef:script="options setAttrUpperCase,ignoreEntities"
             root="RegistracePU"
             name="RegistracePU">
     <RegistracePU xdef:script="finally outputIVR('RegistracePU_'); ref L1_common#PU"/>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
             root="RegistracePU_"
             name="RegistracePU_">
     <RegistracePU_ xdef:script="ref L1_common_#PUId"/>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
             xdef:script="options setAttrUpperCase,ignoreEntities"
             impl-version="2.3.2.6"
             impl-date="24.05.2006"
@@ -532,14 +517,12 @@
             name="RegistraceSU">
     <RegistraceSU xdef:script="ref L1_common#SU; finally {                            chk_ifCond(4208,'@RozhodnaUdalost','A','VozidloPojistnika/Smlouva@DruhPojisteni','HAVPOV','POV');                            outputIVR('RegistraceSU_');                         }"/>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
             root="RegistraceSU_"
             name="RegistraceSU_">
     <RegistraceSU_ xdef:script="ref L1_common_#SUId"/>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
             xdef:script="options setAttrUpperCase,ignoreEntities"
             impl-version="2.3.2.2"
             impl-date="19.07.2005"
@@ -566,8 +549,7 @@
       </xdef:mixed>
     </SouborL1A>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
             root="SouborL1D"
             name="SouborL1D">
     <SouborL1D xdef:script="init initParams()"
@@ -576,21 +558,18 @@
       <OperaceL1 xdef:script="occurs 0..; forget; ref OperaceL1#OperaceL1"/>
     </SouborL1D>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
             xdef:script="options setAttrUpperCase,ignoreEntities"
             root="UzavreniPU"
             name="UzavreniPU">
     <UzavreniPU xdef:script="finally outputIVR('UzavreniPU_'); ref L1_common#PU"/>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
             root="UzavreniPU_"
             name="UzavreniPU_">
     <UzavreniPU_ xdef:script="ref L1_common_#PUId"/>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
             xdef:script="options setAttrUpperCase,ignoreEntities"
             impl-version="2.3.3.0"
             impl-date="15.09.2006"
@@ -602,8 +581,7 @@
                 KodDuvoduUzavreni="required tab('CC_DuvodUzavreniSU','KodDuvoduUzavreniSU');   onFalse setErr(4225); onAbsence setErr(4202)"
                 DatumUcinnosti="required datetime('yyyyMMddHHmm|dd.MM.yyyy HH:mm','yyyyMMddHHmm');           onTrue dateDavka(4221);  onFalse setErr(4208); onAbsence setErr(4202)"/>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
             impl-version="2.3.2.6"
             impl-date="15.05.2006"
             root="UzavreniSU_"
@@ -616,21 +594,18 @@
                  IdDuvodUzavreni="required; onTrue setText(getTab('CC_DuvodUzavreniSU','KodDuvoduUzavreniSU','IdDuvodUzavreniSU')); create from('@KodDuvoduUzavreni')"
                  DatumUcinnosti="required"/>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
             xdef:script="options setAttrUpperCase,ignoreEntities"
             root="ZmenaPU"
             name="ZmenaPU">
     <ZmenaPU xdef:script="finally outputIVR('ZmenaPU_'); ref L1_common#PU"/>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
             root="ZmenaPU_"
             name="ZmenaPU_">
     <ZmenaPU_ xdef:script="ref L1_common_#PUId"/>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
             xdef:script="options setAttrUpperCase,ignoreEntities"
             impl-version="2.3.2.6"
             impl-date="24.05.2006"
@@ -638,14 +613,12 @@
             name="ZmenaSU">
     <ZmenaSU xdef:script="ref L1_common#SU; finally {                            chk_ifCond(4208,'@RozhodnaUdalost','A','VozidloPojistnika/Smlouva@DruhPojisteni','HAVPOV','POV');                            outputIVR('ZmenaSU_');                         }"/>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
             root="ZmenaSU_"
             name="ZmenaSU_">
     <ZmenaSU_ xdef:script="ref L1_common_#SUId"/>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
             xdef:script="options setAttrUpperCase,ignoreEntities"
             impl-version="2.3.2.2"
             impl-date="19.07.2005"
@@ -653,8 +626,7 @@
             name="ZruseniNaroku">
     <ZruseniNaroku xdef:script="finally outputIVR('ZruseniNaroku_'); ref L1_common#ZruseniNaroku"/>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
             xdef:script="options setAttrUpperCase,ignoreEntities"
             impl-version="2.3.2.2"
             impl-date="19.07.2005"
@@ -662,8 +634,7 @@
             name="ZruseniNaroku_">
     <ZruseniNaroku_ xdef:script="ref L1_common_#ZruseniNarokuId"/>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
             xdef:script="options setAttrUpperCase,ignoreEntities"
             impl-version="2.3.3.0"
             impl-date="15.09.2006"
@@ -675,8 +646,7 @@
                CisloPU="required string(3,35);                                      onFalse setErr(4208);   onAbsence setErr(4202)"
                DatumUcinnosti="required datetime('yyyyMMddHHmm|dd.MM.yyyy HH:mm','yyyyMMddHHmm');           onTrue dateDavka(4221);  onFalse setErr(4208);   onAbsence setErr(4202)"/>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
             root="ZruseniPU_"
             name="ZruseniPU_">
     <ZruseniPU_ IdPrace="required int();                              create getIdPrace()"
@@ -687,8 +657,7 @@
                 CisloPU="required"
                 DatumUcinnosti="required"/>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
             xdef:script="options setAttrUpperCase,ignoreEntities"
             impl-version="2.3.3.0"
             impl-date="15.09.2006"
@@ -699,8 +668,7 @@
                CisloSU="required string(3,35);                                      onFalse setErr(4208);   onAbsence setErr(4202)"
                DatumUcinnosti="required datetime('yyyyMMddHHmm|dd.MM.yyyy HH:mm','yyyyMMddHHmm');           onTrue dateDavka(4221);  onFalse setErr(4208);   onAbsence setErr(4202)"/>
   </xdef:def>
-  <xdef:def xmlns:xdef="http://www.syntea.cz/xdef/2.0"
-            xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
+  <xdef:def xdef:classes="cz.syntea.ckp.vr.ivr.L1A_ChkParser"
             root="ZruseniSU_"
             name="ZruseniSU_">
     <ZruseniSU_ IdPrace="required int();                              create getIdPrace()"
@@ -710,4 +678,4 @@
                 CisloSU="required"
                 DatumUcinnosti="required"/>
   </xdef:def>
-</xd:collection>
+</xdef:collection>

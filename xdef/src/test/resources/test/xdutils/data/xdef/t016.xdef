@@ -1,8 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<xd:def xmlns:xd="http://www.syntea.cz/xdef/2.0"
-  xd:name="t016"
-  xd:root="root">
+<xd:def xmlns:xd="http://www.syntea.cz/xdef/3.1" name="t016" root="root">
   <xd:declaration>
     type tokens_Type{parse: string() &amp; enum("ab", "cd");}
     type list_Type{parse: string() &amp; enum("ab", "cd");}
