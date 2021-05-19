@@ -1,15 +1,14 @@
 package bugreports;
 
-import java.io.File;
 import org.w3c.dom.Element;
 import org.xdef.XDConstants;
 import org.xdef.XDDocument;
+import org.xdef.XDFactory;
 import org.xdef.XDParseResult;
 import org.xdef.XDParser;
 import org.xdef.XDPool;
 import org.xdef.XDValue;
 import org.xdef.component.XComponent;
-import org.xdef.impl.code.CodeTable;
 import org.xdef.json.JsonUtil;
 import org.xdef.model.XMData;
 import org.xdef.sys.ArrayReporter;
@@ -65,94 +64,15 @@ public class MyTest extends XDTester {
 			XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE); // true | false
 ////////////////////////////////////////////////////////////////////////////////
 
-		File tempDir = clearTempDir();
 		XDPool xp;
 		String xdef;
 		String xml;
 		String s;
 		XDDocument xd;
+		Element el;
 		Object j;
 		XComponent xc;
 		ArrayReporter reporter = new ArrayReporter();
-////////////////////////////////////////////////////////////////////////////////
-		try {
-			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"<xd:BNFGrammar name=\"g\" scope=\"local\">\n" +
-"   prvek      ::= 'a' | 'a' | 'b' | 'c'\n" +
-"   prvekS     ::=  prvek ',' \n" +
-"   seznam     ::= '(' prvekS* prvek ')'\n" +
-" </xd:BNFGrammar>\n"+
-"<xd:declaration>\n"+
-" type mujtyp1 int(1,10);\n"+
-" type mujtyp2 g.rule('seznam');\n"+
-"</xd:declaration>\n"+
-"<a x='mujtyp1()' y='mujtyp2()'/>\n"+
-"</xd:def>";
-			xp = compile(xdef);
-			xp.displayCode();
-			xd = xp.createXDDocument();
-			XMData xmd;
-			XDValue xdv;
-			XDParser xdp;
-			XDParseResult xdr;
-			xmd = (XMData) xp.findModel("#a/@x");
-			System.out.println(xmd.getParserName());
-			xdv = xmd.getParseMethod();
-			System.out.println(xdv);
-			xdp = (XDParser) xdv;
-			xdr = xdp.check(null, "11");
-			System.out.println(xdr.errors());
-			System.out.println(xdr.getReporter());
-			xmd = (XMData) xp.findModel("#a/@y");
-			System.out.println(xmd.getParserName());
-			xdv = xmd.getParseMethod();
-			if (xdv.getCode() == CodeTable.CALL_OP) {
-				System.out.println(xdv);
-			}
-//			xdp = (XDParser) xdv;
-//			xdr = xdp.check(null, "11");
-//			System.out.println(xdr.errors());
-//			System.out.println(xdr.getReporter());
-
-			xml = "<a x='9' y='(a,b)'/>";
-//			assertEq(xml, parse(xp, "", xml, reporter));
-		} catch (Exception ex) {fail(ex);}
-if(true)return;
-//		try {
-//			assertEq("", testj(
-////"<a>[ 1, 2 ][ 3, 4 ]</a>",
-//"<a xmlns:js='http://www.xdef.org/json/4.0'>"+
-//"<js:array>[ 1, 2 ]</js:array>"+
-//"<js:array>[ 3, 4 ]</js:array>"+
-//"</a>",
-//				"{\"a\":[{}, [1,2], [3,4]]}"));
-//if(true)return;
-//			xml = "<a ax='1'><b bx='2'>xxx</b></a>";
-//			el = KXmlUtils.parseXml(xml).getDocumentElement();
-//			j = JsonUtil.xmlToJson(el);
-////			assertEq(xml, JsonUtil.jsonToXmlXD(j));
-////			System.out.println(JsonUtil.toJsonString(j));
-////			assertEq(el, JsonUtil.jsonToXmlXD(j));
-//			assertEq("", testj("<a/>", "{\"a\": {} }"));
-//			assertEq("", testj("<a>aaa</a>", "{\"a\":[{},\"aaa\"]}"));
-////			assertEq("", testj("<a>aaa</a>", "{\"a\": \"aaa\" }"));
-//			assertEq("", testj("<a b='1' c='2'/>",
-//				"{\"a\": {\"b\": 1, \"c\": 2} }"));
-//			assertEq("", testj("<a><b/>aaa<c/></a>",
-//				"{\"a\": [ {},  {\"b\": {} }, \"aaa\", {\"c\": {} } ] }"));
-//			assertEq("", testj("<a ax='1'><b bx='2'>xxx</b></a>",
-//				"{\"a\":[{\"ax\":1},{\"b\":[{\"bx\":2},\"xxx\"]}]}"));
-//			assertEq("", testj("<a>[ 1, 2 ]</a>", "{\"a\":[{},[1,2]]}"));
-//			assertEq("", testj(
-////"<a>[ 1, 2 ][ 3, 4 ]</a>",
-//"<a xmlns:js='http://www.xdef.org/json/4.0'>"+
-//"<js:array>[ 1, 2 ]</js:array>"+
-//"<js:array>[ 3, 4 ]</js:array>"+
-//"</a>",
-//				"{\"a\":[{}, [1,2], [3,4]]}"));
-//		} catch (Exception ex) {fail(ex);}
-//if(true)return;
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='x|y|y1|y2'>\n"+
@@ -180,9 +100,9 @@ if(true)return;
 "    jlist(%item=int())\n"+
 "  </d>\n"+
 "  <e xd:script='*'>\n"+
-"    <js:array xmlns:js='http://www.xdef.org/json/4.0' xd:script='*'>\n"+
+"    <s:array xmlns:s='abc' xd:script='*'>\n"+
 "		jlist(2, %item=union(%item=[jnull,int()]))\n"+
-"    </js:array>\n"+
+"    </s:array>\n"+
 "  </e>\n"+
 "</x>\n"+
 "<xd:component>\n"+
@@ -194,14 +114,13 @@ if(true)return;
 "     %bind js$yyy %link #y2/js:array/js:item[3];\n"+
 "</xd:component>\n"+
 "</xd:def>";
-			xp = compile(xdef);
-			genXComponent(xp, tempDir);
-//if(true)return;
+			xp = XDFactory.compileXD(null,xdef);
+			genXComponent(xp, clearTempDir());
 			xml =
-"<x xmlns:js='http://www.xdef.org/json/4.0'>\n"+
-"  <a> [ \"false\" ]</a>\n"+
-"  <a>[ 123, null, false ] </a>\n"+
-"  <a> [ 123 ] </a>\n"+
+"<x xmlns:s='abc'>\n"+
+"  <a>[ \"false\" ]</a>\n"+
+"  <a>[ 123, null, false ]</a>\n"+
+"  <a>[ 123 ]</a>\n"+
 "  <a>[ 3.14E+3 ]</a>\n"+
 "  <a>[ false ]</a>\n"+
 "  <a>[ \"abc\" ]</a>\n"+
@@ -216,14 +135,13 @@ if(true)return;
 "  <b>[ true, null ]</b>\n"+
 "  <b>[ null, true ]</b>\n"+
 "  <b>[ null, true, false, null ]</b>\n"+
-"  <e><js:array>[ 1, -2 ]</js:array>\n"+
-"     <js:array>[ null, 99 ]</js:array>\n"+
+"  <e><s:array>[ 1, -2 ]</s:array>\n"+
+"     <s:array>[ null, 99 ]</s:array>\n"+
 "  </e>\n"+
 "</x>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
-			xc = parseXC(xp,
-				"", xml , Class.forName("bugreports.MyTestX"), reporter);
+			xc = parseXC(xp, "", xml , null, reporter);
 			assertNoErrorwarnings(reporter);
 			assertEq(xml, xc.toXml());
 
@@ -271,6 +189,78 @@ if(true)return;
 				JsonUtil.toJsonString(toJson(xc), true));
 		} catch (Exception ex) {fail(ex);}
 if(true)return;
+		try {
+			assertEq("", testj(
+//"<a>[ 1, 2 ][ 3, 4 ]</a>",
+"<a xmlns:js='http://www.xdef.org/json/4.0'>"+
+"<js:array>[ 1, 2 ]</js:array>"+
+"<js:array>[ 3, 4 ]</js:array>"+
+"</a>",
+				"{\"a\":[{}, [1,2], [3,4]]}"));
+if(true)return;
+			xml = "<a ax='1'><b bx='2'>xxx</b></a>";
+			el = KXmlUtils.parseXml(xml).getDocumentElement();
+			j = JsonUtil.xmlToJson(el);
+//			assertEq(xml, JsonUtil.jsonToXmlXD(j));
+//			System.out.println(JsonUtil.toJsonString(j));
+//			assertEq(el, JsonUtil.jsonToXmlXD(j));
+			assertEq("", testj("<a/>", "{\"a\": {} }"));
+			assertEq("", testj("<a>aaa</a>", "{\"a\":[{},\"aaa\"]}"));
+//			assertEq("", testj("<a>aaa</a>", "{\"a\": \"aaa\" }"));
+			assertEq("", testj("<a b='1' c='2'/>",
+				"{\"a\": {\"b\": 1, \"c\": 2} }"));
+			assertEq("", testj("<a><b/>aaa<c/></a>",
+				"{\"a\": [ {},  {\"b\": {} }, \"aaa\", {\"c\": {} } ] }"));
+			assertEq("", testj("<a ax='1'><b bx='2'>xxx</b></a>",
+				"{\"a\":[{\"ax\":1},{\"b\":[{\"bx\":2},\"xxx\"]}]}"));
+			assertEq("", testj("<a>[ 1, 2 ]</a>", "{\"a\":[{},[1,2]]}"));
+			assertEq("", testj(
+//"<a>[ 1, 2 ][ 3, 4 ]</a>",
+"<a xmlns:js='http://www.xdef.org/json/4.0'>"+
+"<js:array>[ 1, 2 ]</js:array>"+
+"<js:array>[ 3, 4 ]</js:array>"+
+"</a>",
+				"{\"a\":[{}, [1,2], [3,4]]}"));
+		} catch (Exception ex) {fail(ex);}
+if(true)return;
+////////////////////////////////////////////////////////////////////////////////
+		try {
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:BNFGrammar name=\"g\" scope=\"local\">\n" +
+"   prvek      ::= 'a' | 'a' | 'b' | 'c'\n" +
+"   prvekS     ::=  prvek ',' \n" +
+"   seznam     ::= '(' prvekS* prvek ')'\n" +
+" </xd:BNFGrammar>\n"+
+"<xd:declaration>\n"+
+" type mujtyp1 int(1,10);\n"+
+" BNFRule r = g.rule('seznam');\n"+
+" type rr r;\n"+
+" type mujtyp2 g.rule('seznam');\n"+
+"</xd:declaration>\n"+
+"<a x='mujtyp1()' y='mujtyp2()' z='r'/>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+//			xp.displayCode();
+			xd = xp.createXDDocument();
+			XMData xmd;
+			XDValue xdv;
+			XDParser xdp;
+			XDParseResult xdr;
+			xmd = (XMData) xp.findModel("#a/@x");
+			assertEq("int", xmd.getParserName());
+			xdv = xmd.getParseMethod();
+			xdp = (XDParser) xdv;
+			xdr = xdp.check(null, "11");
+			assertErrors(xdr.getReporter());
+			xmd = (XMData) xp.findModel("#a/@y");
+			assertEq("string", xmd.getParserName());
+			xdv = xmd.getParseMethod();
+			xml = "<a x='9' y='(a,b)' z='(c)'/>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
+		} catch (Exception ex) {fail(ex);}
+//if(true)return;
 		try {
 			// \p{Lu} capital letters
 			// \p{Ll} small letters

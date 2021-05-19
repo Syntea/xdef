@@ -15,7 +15,7 @@
             <containsi_1 xd:script="occurs *">containsi('AbC')</containsi_1>
             <datetime_1 xd:script="occurs *">xdatetime('yyyy-mm-dd')</datetime_1>
             <dateYMDhms xd:script="occurs *">dateYMDhms</dateYMDhms>
-            <dec xd:script="occurs *">dec</dec>
+            <dec xd:script="occurs *">decimal</dec>
             <dec_1 xd:script="occurs *">dec(5)</dec_1>
             <dec_2 xd:script="occurs *">dec(4,3)</dec_2>
             <ENTITY xd:script="occurs *">ENTITY</ENTITY>
@@ -23,16 +23,16 @@
             <ID xd:script="occurs *">ID</ID>
             <IDREF xd:script="occurs *">IDREF</IDREF>
             <IDREFS xd:script="occurs *">IDREFS</IDREFS>
-            <ISOdateTime xd:script="occurs *">ISOdateTime</ISOdateTime>
-            <ISOdate xd:script="occurs *">ISOdate</ISOdate>
+            <ISOdateTime xd:script="occurs *">dateTime</ISOdateTime>
+            <ISOdate xd:script="occurs *">date</ISOdate>
             <ISOtime xd:script="occurs *">time</ISOtime>
             <ISOday xd:script="occurs *">gDay</ISOday>
             <ISOlanguage xd:script="occurs *">language</ISOlanguage>
             <ISOlanguages xd:script="occurs *">languages</ISOlanguages>
             <ISOmonth xd:script="occurs *">gMonth</ISOmonth>
             <ISOmonthDay xd:script="occurs *">gMonthDay</ISOmonthDay>
-            <ISOyear xd:script="occurs *">ISOyear</ISOyear>
-            <ISOyearMonth xd:script="occurs *">ISOyearMonth</ISOyearMonth>
+            <ISOyear xd:script="occurs *">gYear</ISOyear>
+            <ISOyearMonth xd:script="occurs *">gYearMonth</ISOyearMonth>
             <ISOduration xd:script="occurs *">duration</ISOduration>
             <email xd:script="occurs *">email</email>
             <emailList xd:script="occurs *">emailList</emailList>
@@ -69,9 +69,6 @@
             <pic_1 xd:script="occurs *">pic('9AX')</pic_1>
             <Qname xd:script="occurs *">QName</Qname>
             <QNameURI xd:script="occurs *">QNameURI</QNameURI>
-            <!--
-            <QnameURI_1 xd:script="occurs *">QnameURI('http://abc.de')</QnameURI_1>
-            -->
             <QNameList_1 xd:script="occurs *">QNameList(' ')</QNameList_1>
             <QNameListURI xd:script="occurs *">QNameURIList</QNameListURI>
             <regex_1 xd:script="occurs *">regex('[a]{3}')</regex_1>

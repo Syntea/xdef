@@ -59,12 +59,12 @@ public class XDParseJValue extends XSParseUnion {
 			return false;
 		}
 		XDParseJValue x = (XDParseJValue) o;
-		if (_enumeration == null || _enumeration.length == 0) {
-			if (x._enumeration != null && x._enumeration.length != 0) {
-				return false;
-			}
-		} else if (x._enumeration == null
-			|| _enumeration.length != x._enumeration.length) {
+		if (_enumeration == null) {
+			return x._enumeration == null;
+		} else if (x._enumeration == null) {
+			return false;
+		}
+		if (_enumeration.length != x._enumeration.length) {
 			return false;
 		}
 		for (int i = 0; i < _enumeration.length; i++) {

@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="windows-1250"?>
 <xd:def xmlns:xd = "http://www.syntea.cz/xdef/3.1" xd:root = "Types" >
     <Types>
         <xd:mixed>
@@ -21,16 +20,16 @@
             <ID xd:script="occurs *">ID</ID>
             <IDREF xd:script="occurs *">IDREF</IDREF>
             <IDREFS xd:script="occurs *">IDREFS</IDREFS>
-            <ISOdateTime xd:script="occurs *">ISOdateTime</ISOdateTime>
-            <ISOdate xd:script="occurs *">ISOdate</ISOdate>
+            <ISOdateTime xd:script="occurs *">dateTime</ISOdateTime>
+            <ISOdate xd:script="occurs *">date</ISOdate>
             <ISOtime xd:script="occurs *">time</ISOtime>
             <ISOday xd:script="occurs *">gDay</ISOday>
             <ISOlanguage xd:script="occurs *">language</ISOlanguage>
             <ISOlanguages xd:script="occurs *">languages</ISOlanguages>
             <ISOmonth xd:script="occurs *">gMonth</ISOmonth>
             <ISOmonthDay xd:script="occurs *">gMonthDay</ISOmonthDay>
-            <ISOyear xd:script="occurs *">ISOyear</ISOyear>
-            <ISOyearMonth xd:script="occurs *">ISOyearMonth</ISOyearMonth>
+            <ISOyear xd:script="occurs *">gYear</ISOyear>
+            <ISOyearMonth xd:script="occurs *">gYearMonth</ISOyearMonth>
             <ISOduration xd:script="occurs *">duration</ISOduration>
             <email xd:script="occurs *">email</email>
             <emailList xd:script="occurs *">emailList</emailList>

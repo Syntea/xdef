@@ -50,7 +50,7 @@ public final class TestBNF extends XDTester {
 "  <xd:declaration scope='global'>\n"+
 "     final String myInt = \"intList\"; /* modify as intList or fullName */\n"+
 "     BNFRule $r = $rrr.rule(myInt);\n"+
-"     type myType $r.check();\n"+
+"     type myType $r.parse();\n"+
 "  </xd:declaration>\n"+
 "  <xd:BNFGrammar scope='global' name = \"$base\">\n"+
 "    integer ::= [0-9]+\n"+
@@ -75,7 +75,7 @@ public final class TestBNF extends XDTester {
 "      S       ::= [#9#10#13 ]+ /*skipped white spaces*/\n"+
 "      intList ::= integer (S? \",\" S? integer)*\n"+
 "    ');\n"+
-"  type intList rrr.check('intList');\n"+
+"  type intList rrr.parse('intList');\n"+
 "  </xd:declaration>\n"+
 "<a>required intList()</a>\n"+
 "</xd:def>";
@@ -91,7 +91,7 @@ public final class TestBNF extends XDTester {
 "      S       ::= [#9#10#13 ]+ /*skipped white spaces*/\n"+
 "      intList ::= integer (S? \",\" S? integer)*\n"+
 "    ');\n"+
-"  type intList rrr.check('intList');\n"+
+"  type intList rrr.parse('intList');\n"+
 "  </xd:declaration>\n"+
 "<a>required intList()</a>\n"+
 "</xd:def>";
@@ -107,7 +107,7 @@ public final class TestBNF extends XDTester {
 "      S       ::= [#9#10#13 ]+ /*skipped white spaces*/\n"+
 "      intList ::= integer (S? \",\" S? integer)*\n"+
 "    ');\n"+
-"  type intList rrr.check('intList');\n"+
+"  type intList rrr.rule('intList');\n"+
 "  </xd:declaration>\n"+
 "<a>required intList()</a>\n"+
 "</xd:def>";
@@ -132,7 +132,7 @@ public final class TestBNF extends XDTester {
 "      nameList ::= fullName (S? \",\" S? fullName)*\n"+
 "      list     ::= intList | nameList\n"+
 "    ');\n"+
-"    type myType rrr.check('list');\n"+
+"    type myType rrr.parse('list');\n"+
 //"    type myType{parse: {return BNF(rrr, 'list');}}\n"+
 "  </xd:declaration>\n"+
 "</xd:def>\n"+

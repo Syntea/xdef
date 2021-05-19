@@ -33,7 +33,7 @@ public class FinalRestriction {
 /*VT1*/
 		{"anyURI", "anyURI", "string", "n/a"},
 /*VT1*/
-		{"base64Binary", "base64", "", "n/a"},
+		{"base64Binary", "base64Binary", "", "n/a"},
 		{"boolean", "", "n/a", "n/a"},
 /*VT1*/
 		{"byte", "byte", "n/a", ""},
@@ -58,7 +58,7 @@ public class FinalRestriction {
 		{"gYear", "gYear", "n/a", "n/a"},
 		{"gYearMonth", "gYearMonth", "n/a", "n/a"},
 /*VT1*/
-		{"hexBinary", "hex", "", "n/a"},
+		{"hexBinary", "hexBinary", "", "n/a"},
 		{"ID", "ID", "ID", "n/a"},
 		{"IDREF", "ID", "IDREF", "n/a"},
 		{"IDREFS", "ID", "n/a", "n/a"},
@@ -76,10 +76,10 @@ public class FinalRestriction {
 		{"NMTOKENS", "", "n/a", "n/a"},
 		{"nonNegativeInteger", "nonNegativeInteger", "decimal", ""},
 		{"nonPositiveInteger", "nonPositiveInteger", "decimal", ""},
-		{"normalizedString", "normString", "string", "n/a"},
+		{"normalizedString", "normalizedString", "string", "n/a"},
 		{"NOTATION", "", "n/a", "n/a"},
 		{"positiveInteger", "positiveInteger", "decimal", ""},
-		{"QName", "Qname", "string", "n/a"},
+		{"QName", "QName", "string", "n/a"},
 		{"short", "short", "decimal", ""},
 		{"string", "", "", "n/a"},
 		{"time", "time", "n/a", "n/a"},

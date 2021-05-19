@@ -513,9 +513,9 @@ public final class TestImplementsAndUses extends XDTester {
 			xdef =
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def>\n"+
-"<B a=\"$xscript.check('X');\"/>\n"+
+"<B a=\"$xscript.parse('X');\"/>\n"+
 "<A xd:script=\"uses B\"\n"+
-"   a=\"$xscript.check('X')\"></A>\n"+
+"   a=\"$xscript.parse('X')\"></A>\n"+
 "  <xd:BNFGrammar name = '$xscript'>\n"+
 "    X::= '/*' ( [^*]+ | '*' [^/] )* '*/'\n"+
 "  </xd:BNFGrammar>\n"+

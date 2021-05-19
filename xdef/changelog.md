@@ -1,7 +1,11 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 40.1.5, release-date 2021-05-16
+# Version 40.1.5, release-date 2021-05-19
 * X-definition 2.0 is now deprecated.
+* fixed bug in type method `emailDate`.
+* removed deprecated type methods: `ISODay`, `ISOMonth`, `ISOMonthDay`,
+ `ISOyearMonth`, `ISOYear`, `ISOdateTime`, `ISOdate`, `tokens`, `tokensi`,
+ `ISOduration`, `ISOlanguage`, `parseISODate`, `parseSequence`, `ListOf`.
 
 # Version 40.1.4, release-date 2021-05-13
 * fixed bug: decimal point of amount in price is now always '.' (independent on

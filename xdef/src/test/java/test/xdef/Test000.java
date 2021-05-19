@@ -222,7 +222,7 @@ public final class Test000 extends XDTester {
 				"1->2\n1->3\n2->3\n1->2\n3->1\n3->2\n1->2\n"));
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"  <a xd:script='ref X;' z=\"tokens('I|S|X')\">\n"+
+"  <a xd:script='ref X;' z=\"enum('I','S','X')\">\n"+
 "    <b xd:script='1'>\n"+
 "      <xd:choice xd:script='?'>\n"+
 "        <c xd:script=\"match (xpath('../../@z').toString() EQ 'I');\"\n"+
@@ -1059,12 +1059,12 @@ public final class Test000 extends XDTester {
 "       Date=\"required xdatetime('d.M.y')\"\n"+
 "       xd:script=\"options moreAttributes\">\n"+
 "   <File Name=\"required string(1,256)\"\n"+
-"         Format=\"required tokens('TXT|XML|CTL')\"\n"+
+"         Format=\"required enum('TXT','XML','CTL')\"\n"+
 "         Kind=\"required x();\"\n"+
 "         RecNum=\"required num(8)\"\n"+
 "         xd:script=\"occurs 1..\">\n"+
 "       <xd:mixed>\n"+
-"       <CheckSum Type=\"required tokens('MD5|CRC')\"\n"+
+"       <CheckSum Type=\"required enum('MD5','CRC')\"\n"+
 "                 Value=\"required string()\"\n"+
 "                 xd:script=\"occurs 1\">\n"+
 "         optional\n"+
@@ -1119,11 +1119,11 @@ public final class Test000 extends XDTester {
 			}
 			assertEq(strw.toString(), "<O adr='ulice1'/><O adr='ulice2'/>");
 		} catch (Exception ex) {fail(ex);}
-		try {//ParseResult created with check method and incomplete sequence
+		try {//ParseResult created with parse method and incomplete sequence
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
 "<xd:declaration scope='global'>\n"+
-"  ParseResult p=int.check('123');\n"+
+"  ParseResult p=int.parse('123');\n"+
 "</xd:declaration>\n"+
 "<A a='p.matches()'>\n" +
 "    <xd:sequence>\n" +

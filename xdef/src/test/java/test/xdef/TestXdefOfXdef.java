@@ -141,7 +141,7 @@ public final class TestXdefOfXdef extends XDTester {
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def root='a'><a a='myType'/></xd:def>\n"+
 "<xd:def xd:name='a'>\n"+
-"  <xd:declaration>type myType $rrr.check('intList');</xd:declaration>\n"+
+"  <xd:declaration>type myType $rrr.parse('intList');</xd:declaration>\n"+
 "  <xd:BNFGrammar name='$base'>\n"+
 "    integer  ::= [0-9]+\n"+
 "    S ::= [#9#10#13 ]+ /*skipped white spaces*/\n"+
@@ -168,7 +168,7 @@ public final class TestXdefOfXdef extends XDTester {
 "    fullName ::= name S ([A-Z] \".\")? S name\n"+
 "</xd:BNFGrammar>",
 "<xd:def xmlns:xd='" + _xdNS + "' xd:name='a'>\n"+
-"  <xd:declaration>type myType $rrr.check('intList');</xd:declaration>\n"+
+"  <xd:declaration>type myType $rrr.parse('intList');</xd:declaration>\n"+
 "</xd:def>"});
 			assertNoErrorwarnings(parse(xml), xml);
 			assertNoErrorwarnings(parse(xml), genCollection(xml));
