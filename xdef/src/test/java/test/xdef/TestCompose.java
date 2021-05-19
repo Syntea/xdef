@@ -732,8 +732,8 @@ final public class TestCompose extends XDTester {
 "                 create getAttr('Programx');\"\n"+
 "       IdProces=\"required int()\"\n"+
 "       Prg=\"required string(3,3)\"\n"+
-"       Vysledek=\"required tokens('OK|ERR')\"\n"+
-"       MyAttr=\"required tokensi('ab|cd'); create 'AB';\"\n"+
+"       Vysledek=\"required enum('OK','ERR')\"\n"+
+"       MyAttr=\"required enumi('ab','cd'); create 'AB';\"\n"+
 "       Kanal=\"optional num(2,2)\"\n"+
 "       Souhrn=\"required; create MyProc('@Prg',\n"+
 "                '/omplex/x[1]/text()',\n"+
@@ -890,8 +890,8 @@ final public class TestCompose extends XDTester {
 + "       Program=\"required string(1,4); create getAttr('Programx');\"\n"
 + "       IdProces=\"required int()\"\n"
 + "       Prg=\"required string(3,3)\"\n"
-+ "       Vysledek=\"required tokens('OK|ERR')\"\n"
-+ "       MyAttr=\"required tokensi('ab|cd'); create 'AB'\"\n"
++ "       Vysledek=\"required enum('OK','ERR')\"\n"
++ "       MyAttr=\"required enumi('ab','cd'); create 'AB'\"\n"
 + "       Kanal=\"required num(2,2)\">\n"
 + "  </EndPrgInfo>\n"
 + "  <Complex ver=\"fixed '1.0'\">\n"
@@ -1037,7 +1037,7 @@ final public class TestCompose extends XDTester {
 "    [%Measurement =[%wind='8.7',%temperature='18.1',%time='15:00']],\n"+
 "    [%Measurement =[%wind='3.9',%temperature='16.5',%time='20:00']]\n"+
 "  ]];\n"+
-"  Element el = c.toElement().toContext().toElement(); /*check conversions*/\n"+
+"  Element el = c.toElement().toContainer().toElement(); /*check conversions*/\n"+
 "</xd:declaration>\n"+
 "<Weather date = \"optional xdatetime('yyyy-MM-dd')\" >\n"+
 "  <Measurement xd:script = \"occurs 1..\"\n"+

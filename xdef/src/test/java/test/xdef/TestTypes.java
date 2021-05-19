@@ -297,14 +297,14 @@ public final class TestTypes extends XDTester {
 "    void x() {\n"+
 "	   Element e = xparse(\"<e xmlns:x='x' a='A' x:a='xA'><b/>t1</e>\");\n"+
 "	   Element f = new Element('f');\n"+
-"	   f.setAttr('f', 'F');\n"+
-"	   f.setAttr('x','x:f', 'xF');\n"+
+"	   f.setAttribute('f', 'F');\n"+
+"	   f.setAttribute('x','x:f', 'xF');\n"+
 "	   e.addElement(f);\n"+
 "	   e.addText('t2');\n"+
 //"      outln(e.toString());\n"+
-"      outln(e.getAttr('a'));\n"+
-"      outln(e.getAttr('x','a'));\n"+
-"      outln(e.getAttr('x','x:a'));\n"+
+"      outln(e.getAttribute('a'));\n"+
+"      outln(e.getAttribute('x','a'));\n"+
+"      outln(e.getAttribute('x','x:a'));\n"+
 "      outln(e.getText());\n"+
 "    }\n"+
 "  ]]></xd:declaration>\n"+
@@ -1071,7 +1071,7 @@ public final class TestTypes extends XDTester {
 "       finally {\n"+
 "         Parser p = gYear(%minInclusive=1999);\n"+
 "         ParseResult r = p.parse(z);\n"+
-"         if (!r.check()) {\n"+
+"         if (!r.matches()) {\n"+
 "           error('E001','Check failed: &amp;{p}', '&amp;{p}' + z);\n"+
 "         }\n"+
 "       }\">\n"+

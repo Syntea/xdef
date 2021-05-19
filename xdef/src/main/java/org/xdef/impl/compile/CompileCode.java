@@ -1825,6 +1825,9 @@ public final class CompileCode extends CompileBase {
 		if (imethod == null) {
 			return false;
 		}
+		if (imethod.isDeprecated()) {
+			reportDeprecated(getTypeName(type), imethod.getRecommendedName());
+		}
 		genInternalMethod(getTypeName(type), numPar, imethod);
 		return true;
 	}
@@ -1862,6 +1865,9 @@ public final class CompileCode extends CompileBase {
 			imethod = getTypeMethod(xType, name);
 		}
 		if (imethod != null) {
+			if (imethod.isDeprecated()) {
+				reportDeprecated(name, imethod.getRecommendedName());
+			}
 			genInternalMethod(name, numPar + 1, imethod);
 			return true;
 		}

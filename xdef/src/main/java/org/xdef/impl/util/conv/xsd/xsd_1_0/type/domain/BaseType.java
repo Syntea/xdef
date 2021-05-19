@@ -21,7 +21,7 @@ public class BaseType extends Type {
 		} else if ("anyURI".equals(name)) {
 			_method = new TypeMethod("uri", 'A', new String[0]);
 		} else if ("base64Binary".equals(name)) {
-			_method = new TypeMethod("base64", 'A', new String[0]);
+			_method = new TypeMethod("base64Binary", 'A', new String[0]);
 		} else if ("boolean".equals(name)) {
 			_method = new TypeMethod("boolean", 'B', new String[0]);
 		} else if ("byte".equals(name)) {

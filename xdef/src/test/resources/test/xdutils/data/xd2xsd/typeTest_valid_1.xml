@@ -16,15 +16,10 @@
     <datetime_1>2000-01-01</datetime_1>
     <dateYMDhms>20000101000000</dateYMDhms>
     <dec>123.123</dec>
-    <dec>123,123</dec>
     <dec_1>123.45</dec_1>
-    <dec_1>123,45</dec_1>
     <dec_2>1.234</dec_2>
-    <dec_2>1,234</dec_2>
-    <!--
-    <ENTITY>&entita;</ENTITY>
-    <ENTITIES>&entita; &entita2;</ENTITIES>
-    -->
+    <!--ENTITY>&entita;</ENTITY>
+    <ENTITIES>&entita; &entita2;</ENTITIES-->
     <ID>id</ID>
     <IDREF>id</IDREF>
     <IDREFS>id id</IDREFS>
@@ -41,9 +36,7 @@
     <ISOduration>P01Y20M12D</ISOduration>
     <email>john.doe@server.com</email>
     <emailList>john.doe@server.com, joe.smith@another.server.com</emailList>
-    <!--
-    <emailDate></emailDate>
-    -->
+    <emailDate>17 May 2001 02:36:29 +0100</emailDate>
     <ends_1>abdef</ends_1>
     <endsi_1>ABCDEF</endsi_1>
     <eq_1>abcde</eq_1>
@@ -54,11 +47,9 @@
     <float_2>0</float_2>
     <float_2>100</float_2>
     <hex>1A3F</hex>
-    <!--
-    <hex_1>AFA</hex_1>
-    <hex_2>00</hex_2>
-    -->
-    <hex_2>ffff</hex_2>
+    <hex_1>000000</hex_1>
+    <hex_2>ff00</hex_2>
+    <hex_2>ffffff</hex_2>
     <int>-123</int>
     <int_1>10000</int_1>
     <int_2>0</int_2>

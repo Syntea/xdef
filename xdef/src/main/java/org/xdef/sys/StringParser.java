@@ -2476,16 +2476,16 @@ public class StringParser extends SReporter implements SParser {
 	 * and time format.
 	 */
 	public final boolean isRFC822Datetime() {
-		return isDatetime("EEE, d MMM yyyy HH:mm[:ss][ ZZZZZ][ (z)]"
-			+ "|EEE, d MMM YY HH:mm[:ss][ ZZZZZ][ (z)]");
+		return isDatetime("[EEE, ]d MMM yyyy HH:mm[:ss][ ZZZZZ][ (z)]"
+			+ "|[EEE, ]d MMM YY HH:mm[:ss][ ZZZZZ][ (z)]");
 	}
 
 	/** Parse date in the printable form.
 	 * @return true if date on current position is in printable form.
 	 */
 	public final boolean isPrintableDatetime() {
-		return isDatetime("EEE MMM d HH:mm[:ss[.S]][ ZZZZZ] y"
-			+ "|{L(*)}EEE MMM d HH:mm[:ss[.S]][ ZZZZZ] y");
+		return isDatetime("[EEE ]MMM d HH:mm[:ss[.S]][ ZZZZZ] y"
+			+ "|{L(*)}[EEE ]MMM d HH:mm[:ss[.S]][ ZZZZZ] y");
 	}
 
 	/** Parse date in ISO8601 date or date and time (see
@@ -2495,15 +2495,14 @@ public class StringParser extends SReporter implements SParser {
 	 * date and time format.
 	 */
 	public final boolean isISO8601Datetime() {
-		return isDatetime(
-			"yyyy-MM-dd['T'HH:mm[:ss[.S]][Z]]|" +
-			"yyyy-DDD['T'HH:mm[:ss[.S]][Z]]|" +
-			"yyyy-'W'w-e['T'HH:mm[:ss[.S]][Z]]|" +
-			"yyyy'W'wwe['T'HH:mm[:ss[.S]]][Z]|" +
-			"--MM[-dd][Z]|" + //month, month day
-			"---dd[Z]|"+ //day
-			"yyyy[-MM][Z]|"+ // year
-			"HH:mm[:ss[.S]][Z]]"); //time
+		return isDatetime("yyyy-MM-dd['T'HH:mm[:ss[.S]][Z]]" +
+			"|yyyy-DDD['T'HH:mm[:ss[.S]][Z]]" +
+			"|yyyy-'W'w-e['T'HH:mm[:ss[.S]][Z]]" +
+			"|yyyy'W'wwe['T'HH:mm[:ss[.S]]][Z]" +
+			"|--MM[-dd][Z]" + //month or month day
+			"|---dd[Z]"+ //day
+			"|yyyy[-MM][Z]"+ // year or year momth
+			"|HH:mm[:ss[.S]][Z]]"); //time
 	}
 
 	/** Parse ISO8601 date and time format (see
@@ -2512,10 +2511,10 @@ public class StringParser extends SReporter implements SParser {
 	 * @return true if date on current position suits to ISO8601 date format.
 	 */
 	public final boolean isISO8601DateAndTime() {
-		return isDatetime("yyyy-MM-dd'T'HH:mm[:ss[.S]][Z]|" +
-			"yyyy-DDD'T'HH:mm[:ss[.S]][Z]|" +
-			"yyyy-'W'w-e'T'HH:mm[:ss[.S]][Z]|" +
-			"yyyy'W'wwe'T'HH:mm[:ss[.S]][Z]");
+		return isDatetime("yyyy-MM-dd'T'HH:mm[:ss[.S]][Z]" +
+			"|yyyy-DDD'T'HH:mm[:ss[.S]][Z]" +
+			"|yyyy-'W'w-e'T'HH:mm[:ss[.S]][Z]" +
+			"|yyyy'W'wwe'T'HH:mm[:ss[.S]][Z]");
 	}
 
 	/** Parse date and/or time. Argument is string with format mask where

@@ -978,37 +978,30 @@ public final class Test002 extends XDTester {
 			assertErrors(reporter);
 			xdef = //test hex
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"  <a><b xd:script='+' a=\"hex()\" /></a>\n"+
+"  <a><b xd:script='+' a=\"hexBinary()\" /></a>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			xml = "<a><b a='0' /></a>";
+			xml = "<a><b a='00' /></a>";
 			el = parse(xp, null, xml, reporter);
 			assertNoErrors(reporter);
-			assertEq(el, "<a><b a='0'/></a>");
+			assertEq(el, "<a><b a='00'/></a>");
 			xml = "<a><b a='01'/></a>";
 			parse(xp, null, xml, reporter);
 			assertNoErrors(reporter);
-			xml = "<a><b a='0 1'/></a>";
+			xml = "<a><b a='0012'/></a>";
 			parse(xp, null, xml, reporter);
 			assertNoErrors(reporter);
-			xml = "<a><b a='012'/></a>";
+			xml = "<a><b a='01 02'/></a>";
+			assertNoErrors(reporter);
+			xml = "<a><b a=' 000102 '/></a>";
 			parse(xp, null, xml, reporter);
 			assertNoErrors(reporter);
-			xml = "<a><b a='01 2'/></a>";
-			parse(xp, null, xml, reporter);
-			assertNoErrors(reporter);
-			xml = "<a><b a='0 12'/></a>";
-			parse(xp, null, xml, reporter);
-			assertNoErrors(reporter);
-			xml = "<a><b a=' 0 1 2 '/></a>";
-			parse(xp, null, xml, reporter);
-			assertNoErrors(reporter);
-			xml = "<a><b a=' a B c '/></a>";
+			xml = "<a><b a=' 0aBc '/></a>";
 			parse(xp, null, xml, reporter);
 			assertNoErrors(reporter);
 			xml = "<a><b a='XX'/></a>";
 			parse(xp, null, xml, reporter);
-			assertTrue(reporter.errorWarnings(), "Error not reported");
+			assertErrors(reporter);
 			xdef = // test XMPool.findModel
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def root='a|b#b'>\n"+

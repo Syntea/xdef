@@ -7,11 +7,11 @@ import org.xdef.XDValue;
 import org.xdef.proc.XXNode;
 import org.xdef.impl.code.DefString;
 
-/** Parser of X-Script "ISOLanguages" type.
+/** Parser of X-Script "languages" type.
  * @author Vaclav Trojan
  */
 public class XDParseISOLanguages extends XDParseNCNameList {
-	private static final String ROOTBASENAME = "ISOlanguages";
+	private static final String ROOTBASENAME = "languages";
 
 	public XDParseISOLanguages() {
 		super();

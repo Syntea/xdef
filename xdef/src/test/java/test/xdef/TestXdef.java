@@ -550,8 +550,8 @@ public final class TestXdef extends XDTester {
 			assertErrors(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"  <a a=\"tokens('abc|defg')\">\n"+
-"    <x xd:script='occurs *'>tokens('abc|defg')</x>\n"+
+"  <a a=\"enum('abc','defg')\">\n"+
+"    <x xd:script='occurs *'>enum('abc','defg')</x>\n"+
 "  </a>\n"+
 "</xd:def>";
 			xp = compile(xdef);
@@ -562,21 +562,8 @@ public final class TestXdef extends XDTester {
 			assertErrors(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"  <xd:declaration> String x='abc|defg'; </xd:declaration>\n"+
-"  <a a=\"tokens(x)\">\n"+
-"    <x xd:script='occurs *'>tokens(x)</x>\n"+
-"  </a>\n"+
-"</xd:def>";
-			xp = compile(xdef);
-			xml = "<a a='abc'><x>abc</x><x>defg</x></a>";
-			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrorwarnings(reporter);
-			parse(xp, "", "<a a='xx'><x>xxx</x><x>xxxx</x></a>", reporter);
-			assertErrors(reporter);
-			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"  <a a=\"tokensi('aBc|DeF')\">\n"+
-"    <x xd:script='occurs *'>tokensi('aBc|DeFg')</x>\n"+
+"  <a a=\"enumi('aBc','DeF')\">\n"+
+"    <x xd:script='occurs *'>enumi('aBc','DeFg')</x>\n"+
 "  </a>\n"+
 "</xd:def>";
 			xp = compile(xdef);
@@ -775,19 +762,6 @@ public final class TestXdef extends XDTester {
 				assertEq(xml, parse(xp, "", xml, reporter));
 				assertNoErrors(reporter);
 			}
-			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"  <xd:declaration> String x='aBc|DeFg'; </xd:declaration>\n"+
-"  <a a=\"tokensi(x)\">\n"+
-"    <x xd:script='occurs *'>tokensi(x)</x>\n"+
-"  </a>\n"+
-"</xd:def>";
-			xp = compile(xdef);
-			xml = "<a a='ABC'><x>abc</x><x>defg</x></a>";
-			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrorwarnings(reporter);
-			parse(xp, "", "<a a='xx'><x>xxx</x><x>xxxx</x></a>", reporter);
-			assertErrors(reporter);
 			xdef = // test format, printf
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<xd:declaration> Locale loc = new Locale('cs', 'CZ'); </xd:declaration>\n"+
@@ -849,7 +823,7 @@ public final class TestXdef extends XDTester {
 "       xd:script  = \"finally myProc(1,0.5,'xxx')\">\n"+
 "   <File\n"+
 "           Name       = \"required string(1,256)\"\n"+
-"           Format     = \"required tokens('TXT|XML|CTL')\"\n"+
+"           Format     = \"required enum('TXT','XML','CTL')\"\n"+
 "           Kind       = \"required string(3,3)&amp;(eq('abc')|eq('xyz'))\"\n"+
 "           RecNum     = \"required num(8)\"\n"+
 "           xd:script= \"occurs 1..\">\n"+
@@ -1168,7 +1142,7 @@ public final class TestXdef extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root = 'A'>\n"+
 "<xd:declaration>\n"+
-"  boolean myCheck() {boolean b = tokens('A|B|C'); return b;}\n"+
+"  boolean myCheck() {boolean b = enum('A','B','C'); return b;}\n"+
 "</xd:declaration>\n"+
 "<A a=\"?myCheck\" b='myCheck'/>\n"+
 "</xd:def>";
@@ -1336,7 +1310,7 @@ public final class TestXdef extends XDTester {
 "<xd:def name='abc' root='root | *'>\n"+
 "   <xd:declaration scope='global'>\n"+
 "     void myOut() {vystup.outln(child);}\n"+
-"     boolean myCheck(){return tokens('A|B|C');}\n"+
+"     boolean myCheck(){return enum('A','B','C');}\n"+
 "   </xd:declaration>\n"+
 "<root Verze=\"fixed verze\"\n"+
 "       PlatnostOd=\"optional xdatetime('d.M.yyyy H:mm');\n"+
