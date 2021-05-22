@@ -203,15 +203,18 @@ public class XComponentUtil {
 		final List<XComponent> xc,
 		final Object txt,
 		final int index) {
-		if (txt != null && txt instanceof String && ((String)txt).length() > 0){
-			int xp = 1;
-			for (XComponent c : xc) {
-				if ("$text".equals(c.xGetNodeName())) {
-					xp++;
+		if (txt != null) {
+			String s = txt.toString();
+			if (s.length() > 0){
+				int xp = 1;
+				for (XComponent c : xc) {
+					if ("$text".equals(c.xGetNodeName())) {
+						xp++;
+					}
 				}
+				final String xpos = parent.xGetXPos() + "/$text[" + xp + "]";
+				addXC(xc, new XCTextComponent(txt.toString(), xdPos, xpos, index));
 			}
-			final String xpos = parent.xGetXPos() + "/$text[" + xp + "]";
-			addXC(xc, new XCTextComponent(txt.toString(), xdPos, xpos, index));
 		}
 	}
 

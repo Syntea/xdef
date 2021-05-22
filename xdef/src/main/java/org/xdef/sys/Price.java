@@ -77,5 +77,5 @@ public class Price {
 	}
 
 	@Override
-	public String toString() {return _amount + " " + currencyCode();}
+	public String toString() {return "p("+_amount+" "+currencyCode()+')';}
 }

@@ -1736,8 +1736,7 @@ public final class CompileCode extends CompileBase {
 					addCode(new CodeS1(XD_PARSER, LD_CODE, addr, name));
 					addCode(new CodeI1(XD_PARSERESULT, PARSE_OP, 1), 0);
 				} else {
-					genLD(name);
-					addCode(new CodeI1(XD_PARSERESULT, PARSE_OP, 1), 0);
+					addCode(new CodeI1(XD_BOOLEAN, CALL_OP, addr), 1);
 				}
 				return null; //OK
 			} else if ((var.getType() == X_UNIQUESET

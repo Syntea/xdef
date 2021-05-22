@@ -874,8 +874,8 @@ public final class TestTypes extends XDTester {
 "</xd:def>";
 			xml =
 "<a>\n" +
-"  <town GPS_position=\"48.2,16.37,151.0,Wien\"/>\n" +
-"  <town GPS_position=\"51.52,-0.09,London\"/>\n" +
+"  <town GPS_position=\"g(48.2,16.37,151.0,Wien)\"/>\n" +
+"  <town GPS_position=\"g(51.52,-0.09,London)\"/>\n" +
 "</a>";
 			strw = new StringWriter();
 			xd = compile(xdef).createXDDocument();
@@ -906,9 +906,9 @@ public final class TestTypes extends XDTester {
 "</xd:def>";
 			xml =
 "<root>\n"+
-"  <item>1.5 CZK</item>\n"+
-"  <item>12.657 USD</item>\n"+
-"  <item>0.657 XAU</item>\n"+
+"  <item>p(1.5 CZK)</item>\n"+
+"  <item>p(12.657 USD)</item>\n"+
+"  <item>p(0.657 XAU)</item>\n"+
 "</root>";
 			strw = new StringWriter();
 			xd = compile(xdef).createXDDocument();

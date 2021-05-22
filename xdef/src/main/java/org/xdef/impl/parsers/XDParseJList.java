@@ -59,7 +59,7 @@ public class XDParseJList extends XSAbstractParser {
 	}
 	private void parse(final XXNode xnode,
 		final XDParseResult p,
-		boolean isFinal){
+		boolean isFinal) {
 		DefContainer results = new DefContainer();
 		String source = p.getSourceBuffer();
 		p.setSourceBuffer(source);
@@ -78,7 +78,14 @@ public class XDParseJList extends XSAbstractParser {
 				}
 				int start, end;
 				start = p.getIndex();
-				if (p.isChar('"')) {
+				if (p.getCurrentChar() == '[') {
+					DefParseResult q = new DefParseResult(source);
+					q.setIndex(p.getIndex());
+					parse(xnode, q, isFinal);
+					p.addReports(q.getReporter());
+					p.setParsedValue(q.getParsedValue());
+					end = q.getIndex();
+				} else if (p.isChar('"')) {
 					String s = JsonTools.readJSONString(p);
 					end = p.getIndex();
 					if (_itemType.parserName().charAt(0) == 'j') {
@@ -91,13 +98,6 @@ public class XDParseJList extends XSAbstractParser {
 					}
 					p.setIndex(start);
 					_itemType.parseObject(xnode, p);
-				} else if (p.getCurrentChar() == '[') {
-					DefParseResult q = new DefParseResult(source);
-					q.setIndex(p.getIndex());
-					parse(xnode, q, isFinal);
-					p.addReports(q.getReporter());
-					p.setParsedValue(q.getParsedValue());
-					end = q.getIndex();
 				} else {
 					char ch = 0;
 					while (!p.eos() && (ch=p.getCurrentChar())>' ' && ch!=','
@@ -105,21 +105,11 @@ public class XDParseJList extends XSAbstractParser {
 						p.nextChar();
 					}
 					end = p.getIndex();
-					if (p.getCurrentChar() == '[') { // array in array
-						DefParseResult q = new DefParseResult(source);
-						q.setIndex(start);
-						parse(xnode, q, isFinal);
+						DefParseResult q =
+							new DefParseResult(p.getBufferPart(start, end));
+						_itemType.parseObject(xnode, q);
 						p.addReports(q.getReporter());
 						p.setParsedValue(q.getParsedValue());
-						end = q.getIndex();
-					} else if (p.getCurrentChar() == '"') {
-//					} else {
-//						DefParseResult q =
-//							new DefParseResult(p.getBufferPart(start, end));
-//						_itemType.parseObject(xnode, q);
-//						p.addReports(q.getReporter());
-//						p.setParsedValue(q.getParsedValue());
-					}
 				}
 				if (p.getReporter() != null && p.getReporter().errors()) {
 					break;

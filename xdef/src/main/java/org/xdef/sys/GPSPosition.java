@@ -119,26 +119,28 @@ public class GPSPosition {
 
 	@Override
 	public String toString() {
-		String result = _latitude + ", " + _longitude
+		String result = "g(" + _latitude + ", " + _longitude
 			+ (_altitude != Double.MIN_VALUE ? ", " + _altitude : "");
-		if (_name == null) {
-			return result;
-		}
-		result += ", ";
-		if (Character.isLetter(_name.charAt(0))) {
-			boolean notNeadDelimiter = true;
-			for (int i = 1; i < _name.length(); i++) {
-				char ch;
-				if (!(Character.isLetterOrDigit(ch =_name.charAt(i))
-					|| ch == '_' || ch == '-')) {
-					notNeadDelimiter = false;
-					break;
+		if (_name != null) {
+			result += ", ";
+			boolean notNeadDelimiter = false;
+			if (Character.isLetter(_name.charAt(0))) {
+				notNeadDelimiter = true;
+				for (int i = 1; i < _name.length(); i++) {
+					char ch;
+					if (!(Character.isLetterOrDigit(ch =_name.charAt(i))
+						|| ch == '_' || ch == '-')) {
+						notNeadDelimiter = false;
+						break;
+					}
 				}
 			}
 			if (notNeadDelimiter) {
-				return result + _name;
+				result += _name;
+			} else {
+				result += '"' + SUtils.modifyString(_name, "\"", "\"\"") + '"';
 			}
 		}
-		return result + '"' + SUtils.modifyString(_name, "\"", "\"\"") + '"';
+		return result += ')';
 	}
 }

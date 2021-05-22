@@ -21,39 +21,46 @@ public class XDParseGPS extends XDParserAbstract {
 	public void parseObject(XXNode xnode, XDParseResult p) {
 		p.isSpaces();
 		int pos = p.getIndex();
-		try {
-			if ((p.isSignedFloat() || p.isSignedInteger())) {
-				double latitude =
-					Double.parseDouble(p.getParsedString());
-				String name = null;
-				if (p.isChar(',') && (p.isChar(' ') || true)) {
-					int pos1 = p.getIndex();
-					if ((p.isSignedFloat() || p.isSignedInteger())) {
-						double longitude = Double.parseDouble(
-							p.getBufferPart(pos1, p.getIndex()));
-						double altitude = Double.MIN_VALUE;
-						if (p.isChar(',') && (p.isChar(' ') || true)) {
-							pos1 = p.getIndex();
-							if ((p.isSignedFloat() || p.isSignedInteger())) {
-								altitude = Double.parseDouble(
-									p.getBufferPart(pos1, p.getIndex()));
-								if (p.isChar(',') && (p.isChar(' ') || true)) {
+		if (p.isToken("g(")) {
+			try {
+				p.isSpaces();
+				int pos1 = p.getIndex();
+				if ((p.isSignedFloat() || p.isSignedInteger())) {
+					double latitude =
+						Double.parseDouble(p.getBufferPart(pos1, p.getIndex()));
+					String name = null;
+					if (p.isChar(',') && (p.isChar(' ') || true)) {
+						pos1 = p.getIndex();
+						if ((p.isSignedFloat() || p.isSignedInteger())) {
+							double longitude = Double.parseDouble(
+								p.getBufferPart(pos1, p.getIndex()));
+							double altitude = Double.MIN_VALUE;
+							if (p.isChar(',') && (p.isChar(' ') || true)) {
+								pos1 = p.getIndex();
+								if ((p.isSignedFloat() || p.isSignedInteger())) {
+									altitude = Double.parseDouble(
+										p.getBufferPart(pos1, p.getIndex()));
+									if (p.isChar(',') && (p.isChar(' ') || true)) {
+										name = readGPSName(p);
+									}
+								} else {
 									name = readGPSName(p);
 								}
-							} else {
+							} else  if (p.isChar(',')&&(p.isChar(' ')||true)) {
 								name = readGPSName(p);
 							}
-						} else  if (p.isChar(',') && (p.isChar(' ') || true)) {
-							name = readGPSName(p);
+							if ((p.isSpaces() || true) && p.isChar(')')) {
+								GPSPosition gpos = new GPSPosition(
+									latitude, longitude, altitude, name);
+								p.setParsedValue(new DefGPSPosition(gpos));
+								return;
+							}
 						}
-						p.setParsedValue(new DefGPSPosition(
-							new GPSPosition(latitude,longitude,altitude,name)));
-						return;
 					}
 				}
+			} catch (SRuntimeException ex) {
+				p.putReport(ex.getReport());
 			}
-		} catch (SRuntimeException ex) {
-			p.putReport(ex.getReport());
 		}
 		p.setParsedValue(new DefGPSPosition()); //null GPS
 		//Incorrect value of '&{0}'&{1}{: }

@@ -1,8 +1,9 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 40.1.5, release-date 2021-05-19
-* X-definition 2.0 is now deprecated.
+# Version 40.1.5, release-date 2021-05-22
+* fixed bug in nested type declarations.
 * fixed bug in type method `emailDate`.
+* X-definition 2.0 is now deprecated.
 * removed deprecated type methods: `ISODay`, `ISOMonth`, `ISOMonthDay`,
  `ISOyearMonth`, `ISOYear`, `ISOdateTime`, `ISOdate`, `tokens`, `tokensi`,
  `ISOduration`, `ISOlanguage`, `parseISODate`, `parseSequence`, `ListOf`.

@@ -93,7 +93,7 @@ public final class ParseItem extends XDValueAbstract {
 	////////////////////////////////////////////////////////////////////////
 
 	@Override
-	public final short getItemId() {return CompileBase.X_PARSEITEM;}
+	public final short getItemId() {return XDValueID.X_PARSEITEM;}
 
 	@Override
 	/** Get ID of the type of value

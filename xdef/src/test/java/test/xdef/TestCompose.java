@@ -1037,7 +1037,7 @@ final public class TestCompose extends XDTester {
 "    [%Measurement =[%wind='8.7',%temperature='18.1',%time='15:00']],\n"+
 "    [%Measurement =[%wind='3.9',%temperature='16.5',%time='20:00']]\n"+
 "  ]];\n"+
-"  Element el = c.toElement().toContainer().toElement(); /*check conversions*/\n"+
+"  Element el=c.toElement().toContainer().toElement(); /*check conversions*/\n"+
 "</xd:declaration>\n"+
 "<Weather date = \"optional xdatetime('yyyy-MM-dd')\" >\n"+
 "  <Measurement xd:script = \"occurs 1..\"\n"+
