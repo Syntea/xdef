@@ -21,31 +21,37 @@ public class XDParsePrice extends XDParserAbstract {
 	public void parseObject(XXNode xnode, XDParseResult p) {
 		p.isSpaces();
 		int pos = p.getIndex();
-		if (p.isFloat() || p.isInteger()) {
-			double d = Double.parseDouble(p.getParsedString());
-			char ch;
-			if (p.isChar(' ') && ((ch=p.getCurrentChar())>='A' && ch<='Z')){
-				String code = String.valueOf(ch);
-				int i = 0;
-				for (;;) {
-					p.nextChar();
-					if (++i < 3
-						&& ((ch=p.getCurrentChar())>='A' && ch<='Z')) {
-						code += ch;
-					} else {
-						break;
+		if (p.isToken("p(")) {
+			p.isSpaces();
+			int pos1 = p.getIndex();
+			if (p.isFloat() || p.isInteger()) {
+				double d =
+					Double.parseDouble(p.getBufferPart(pos1, p.getIndex()));
+				char ch;
+				if (p.isChar(' ') && ((ch=p.getCurrentChar())>='A' && ch<='Z')){
+					String code = String.valueOf(ch);
+					int i = 0;
+					for (;;) {
+						p.nextChar();
+						if (++i < 3
+							&& ((ch=p.getCurrentChar())>='A' && ch<='Z')) {
+							code += ch;
+						} else {
+							break;
+						}
 					}
-				}
-				if (i == 3) {
-					try {
-						p.setParsedValue(new DefPrice(
-							new Price(d, code)));
-						return;
-					} catch (SRuntimeException ex) {
-						Report r = ex.getReport();
-						p.error(r.getMsgID(), //currency error ?
-							r.getText(), r.getModification());
-						return;
+					p.isSpaces();
+					if (i == 3 && p.isChar(')')) {
+						try {
+							p.setParsedValue(new DefPrice(
+								new Price(d, code)));
+							return;
+						} catch (SRuntimeException ex) {
+							Report r = ex.getReport();
+							p.error(r.getMsgID(), //currency error ?
+								r.getText(), r.getModification());
+							return;
+						}
 					}
 				}
 			}

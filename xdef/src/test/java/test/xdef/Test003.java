@@ -3,7 +3,6 @@ package test.xdef;
 import test.XDTester;
 import org.xdef.XDConstants;
 import org.xdef.sys.ArrayReporter;
-import org.xdef.sys.Report;
 import org.xdef.XDDocument;
 import org.xdef.XDFactory;
 import org.xdef.XDPool;
@@ -16,7 +15,6 @@ import org.xdef.sys.ReportPrinter;
 import org.xdef.sys.ReportReader;
 import org.xdef.sys.ReportWriter;
 import org.xdef.sys.StringParser;
-import org.xdef.xml.KXmlUtils;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -26,7 +24,6 @@ import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.text.DecimalFormat;
-import org.w3c.dom.Document;
 
 /** Class for testing (miscellaneous).
  * @author Vaclav Trojan
@@ -265,101 +262,6 @@ public final class Test003 extends XDTester {
 					+ "KB/" + df.format(duration)
 					+ "s (" + df.format((datalen / 1000.0)/duration)+"KB/s);");
 			} catch (Exception ex) {fail(ex);}
-			if (XDConstants.XDEF31_NS_URI.equals(XDTester._xdNS)) {
-				try {
-					_count = 0;
-					reporter.clear();
-					DecimalFormat df = new DecimalFormat("0.00");
-					df.setDecimalSeparatorAlwaysShown(true);
-					long t = System.currentTimeMillis();
-					xp = compile(dataDir + "SouborD1A.xdef");
-					float duration =
-						(float) ((System.currentTimeMillis() - t) / 1000.0);
-					String durationInfo = "SouborD1A: compile "
-						+ df.format(duration)+"s";
-					File tmp1 = File.createTempFile("SouborD1A", "err");
-					tmp1.deleteOnExit();
-					fw = new FileOutputStream(tmp1);
-					rw = new FileReportWriter(fw);
-					xd = xp.createXDDocument("SouborD1A");
-					if (!"29.5.2003".equals(xd.getImplProperty("date"))) {
-						fail(xd.getImplProperty("date"));
-					}
-					if (!"1.0.0".equals(xd.getImplProperty("version"))) {
-						fail(xd.getImplProperty("version"));
-					}
-					xd.setUserObject(this);
-					t = System.currentTimeMillis();
-					xd.xparse(dataDir + "SouborD1A.xml", rw);
-					duration = (float)((System.currentTimeMillis() - t)/1000.0);
-					if (!"windows-1250".equalsIgnoreCase(
-						xd.getDocument().getXmlEncoding())) {
-						fail("encoding: " + xd.getDocument().getXmlEncoding());
-					}
-					long datalen = new File(dataDir + "SouborD1A.xml").length();
-					durationInfo += "; data "+df.format(((float)datalen/1000.0))
-						+ "KB/" + df.format(duration)
-						+ "s (" + df.format((datalen/1000.0)/duration)+"KB/s);";
-					isr = new InputStreamReader(new FileInputStream(
-						dataDir + "SouborD1A.xml"));
-					fw.close();
-					FileReader fr = new FileReader(tmp1);
-					ReportReader rr = new FileReportReader(fr, true);
-					File tmp2 = File.createTempFile("SouborD1A", "lst");
-					tmp2.deleteOnExit();
-					OutputStreamWriter lst = new OutputStreamWriter(
-						new FileOutputStream(tmp2));
-					ReportPrinter.printListing(lst,isr,rr,null,80,false,null);
-					fr.close();
-					isr.close();
-					lst.close();
-					assertTrue(rw.getErrorCount() == 362 && _count == 221,
-						"expected errors/count: 362/221, found "
-						+ "detected: " + rw.getErrorCount() + "/" + _count);
-					assertTrue(_myErrFlg, "myErr not invoked");
-					assertEq(_xx, 673, "nonstatic result 673/" + _xx);
-					// Same data, this time called as validation
-					_xx = 0;
-					_myErrFlg = false;
-					_count = 0;
-					Document doc =
-						KXmlUtils.parseXml(dataDir + "SouborD1A.xml", false);
-					String encoding = doc.getXmlEncoding();
-					if (!"windows-1250".equalsIgnoreCase(encoding)) {
-						fail("encoding: " + encoding);
-					}
-					reporter.clear();
-					xd = xp.createXDDocument("SouborD1A");
-					xd.setUserObject(this);
-					xd.xparse(doc, reporter);
-					fr = new FileReader(tmp1);
-					rr = new FileReportReader(fr, true);
-					int count = 0;
-					Report report1;
-					while ((report1 = reporter.getReport()) != null) {
-						Report report2 = rr.getReport();
-						if (report2 == null ||
-							(report1.getMsgID() != report2.getMsgID() &&
-								(report1.getMsgID() == null ||
-							!report1.getMsgID().equals(report2.getMsgID())))) {
-							fail("Report " + count + "\nparser:     " +
-								(report2 == null ? "null"
-									: report2.toString())+ "\n" +
-								"validation: " + report1.toString());
-							break;
-						}
-						count++;
-					}
-					if (!_myErrFlg) {
-						fail("myErr not invoked");
-					}
-					if ( _xx != 673) {
-						fail("nonstatic result 673/" + _xx);
-					}
-					fr.close();
-					setResultInfo(durationInfo);
-				} catch (Exception ex) {fail(ex);}
-			}
 		}
 		try {// check compiling if source items have assignment of sourceId
 			Object[] p1 = new Object[] {

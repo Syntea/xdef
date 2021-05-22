@@ -104,22 +104,22 @@ public final class TestXComponents extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			genXComponent(xp, clearTempDir());
-			xml = "<A a='1.25 CZK' q='48.2, 16.37, 151, Vienna'/>"; //
+			xml = "<A a='p(1.25 CZK)' q='g(48.2, 16.37, 151, Vienna)'/>"; //
 			xd = xp.createXDDocument();
 			xc = xd.parseXComponent(xml, null, reporter);
 			assertNoErrors(reporter);
-			assertEq("1.25 CZK", xd.getVariable("a").stringValue());
+			assertEq("p(1.25 CZK)", xd.getVariable("a").stringValue());
 			assertEq(252, xd.getVariable("d").intValue());
 			assertEq(new GPSPosition(48.2, 16.37, 151, null),
 				SUtils.getValueFromGetter(xc, "getq"));
 			SUtils.setValueToSetter(xc, "seta", new Price(456.001, "USD"));
-			assertEq("456.001 USD", xc.toXml().getAttribute("a"));
-			xml = "<A q='51.52,-0.09,0,\"London\"'/>"; //,
+			assertEq("p(456.001 USD)", xc.toXml().getAttribute("a"));
+			xml = "<A q='g(51.52,-0.09,0,\"London\")'/>"; //,
 			el = parse(xd, xml, reporter);
 			assertNoErrors(reporter);
 			assertEq(xml, el);
 			assertEq(1030, xd.getVariable("d").intValue());
-			assertEq("51.52, -0.09, 0.0, London",
+			assertEq("g(51.52, -0.09, 0.0, London)",
 				xd.getVariable("q").toString());
 		} catch (Exception ex) {fail(ex);}
 		reporter.clear();
