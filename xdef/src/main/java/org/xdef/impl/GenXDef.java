@@ -17,7 +17,9 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xdef.impl.parsers.XDParseEmail;
 import org.xdef.impl.parsers.XDParseEmailDate;
+import org.xdef.impl.parsers.XDParseGPS;
 import org.xdef.impl.parsers.XDParseMD5;
+import org.xdef.impl.parsers.XDParsePrice;
 import org.xdef.impl.parsers.XDParsePrintableDate;
 import org.xdef.impl.parsers.XDParseSHA1;
 import org.xdef.impl.parsers.XSParseBase64Binary;
@@ -43,8 +45,6 @@ import org.xdef.sys.SRuntimeException;
  * @author Vaclav Trojan
  */
 public class GenXDef implements XDConstants {
-	/** Prevent user to create an instance of this class.*/
-	private GenXDef() {}
 
 	/** Model of attribute. */
 	private final static class XAttr {
@@ -515,6 +515,12 @@ public class GenXDef implements XDConstants {
 		}
 		if (new XDParsePrintableDate().check(null, data).matches()) {
 			return "printableDate()";
+		}
+		if (new XDParseGPS().check(null, data).matches()) {
+			return "gps()";
+		}
+		if (new XDParsePrice().check(null, data).matches()) {
+			return "price()";
 		}
 		final StringParser p = new StringParser(data);
 		p.setIndex(0);
