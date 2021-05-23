@@ -99,11 +99,13 @@ public class XDParseJList extends XSAbstractParser {
 					p.setIndex(start);
 					_itemType.parseObject(xnode, p);
 				} else {
-					if (p.isToken("g(") || p.isToken("p(")) {
-						p.setIndex(p.getIndex() - 2);
-						DefParseResult q =
-							new DefParseResult(p.getUnparsedBufferPart());
+					DefParseResult q;
+					if (p.isToken("g(") || p.isToken("p(")) { //gps or price
+						p.setIndex(p.getIndex() - 2); // reset position
+						q = new DefParseResult(p.getUnparsedBufferPart());
 						_itemType.parseObject(xnode, q);
+						p.addReports(q.getReporter());
+						p.setParsedValue(q.getParsedValue());
 						end = start + q.getIndex();
 					} else {
 						char ch = 0;
@@ -112,12 +114,11 @@ public class XDParseJList extends XSAbstractParser {
 							p.nextChar();
 						}
 						end = p.getIndex();
-						DefParseResult q =
-							new DefParseResult(p.getBufferPart(start, end));
+						q = new DefParseResult(p.getBufferPart(start, end));
 						_itemType.parseObject(xnode, q);
-						p.addReports(q.getReporter());
-						p.setParsedValue(q.getParsedValue());
 					}
+					p.addReports(q.getReporter());
+					p.setParsedValue(q.getParsedValue());
 				}
 				if (p.getReporter() != null && p.getReporter().errors()) {
 					break;
@@ -183,7 +184,6 @@ public class XDParseJList extends XSAbstractParser {
 			throw new SRuntimeException(XDEF.XDEF423, "Parser");
 		}
 	}
-
 	@Override
 	public void setLength(long x) { _minLength = _maxLength = x; }
 	@Override
