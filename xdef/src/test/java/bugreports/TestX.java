@@ -27,7 +27,7 @@ public class TestX extends XDTester {
 		Properties props = new Properties();
 		ArrayReporter reporter = new ArrayReporter();
 	try {
-/**
+/**/
 			xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.0\" name=\"X\" root=\"a\">\n"+
 " <xd:json name='a'>\n"+
@@ -56,7 +56,7 @@ public class TestX extends XDTester {
 			reporter.clear();
 			xd.jparse(json, reporter);
 			assertNoErrors(reporter);
-/**
+/**/
 			xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.0\" name=\"X\" root=\"a\">\n"+
 " <xd:json name='a'>\n"+
@@ -90,7 +90,7 @@ public class TestX extends XDTester {
 			reporter.clear();
 			xd.jparse(json, reporter);
 			assertNoErrors(reporter);
-/**
+/**/
 			xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.0\" name=\"X\" root=\"a\">\n"+
 " <xd:json name='a'>\n"+
@@ -119,7 +119,7 @@ public class TestX extends XDTester {
 			reporter.clear();
 			xd.jparse(json, reporter);
 			assertNoErrors(reporter);
-/**
+/**/
 			xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.0\" name=\"X\" root=\"a\">\n"+
 " <xd:json name='a'>\n"+
@@ -162,7 +162,6 @@ public class TestX extends XDTester {
 "        }\n" +
 "      ]\n" +
 "  }\n" +
-"]\n" +
 " </xd:json>\n"+
 "</xd:def>";
 			xp = XDFactory.compileXD(props, xdef); // no property
@@ -171,7 +170,7 @@ public class TestX extends XDTester {
 "{ \"date\" : \"2020-02-22\",\n" +
 "\"cities\" : [ \n" +
 " {\"from\": [\"Brussels\",\n" +
-"   {\"to\":\"London\",\"ist\":322},{\"to\":\"Paris\",\"dist\":265}\n" +
+"   {\"to\":\"London\",\"dist\":322},{\"to\":\"Paris\",\"dist\":265}\n" +
 "  ]\n" +
 " },\n" +
 " {\"from\": [\"London\",\n" +

@@ -18,6 +18,26 @@ import org.xdef.sys.StringParser;
  */
 class JsonToString extends JsonTools {
 
+	/** Create string representation of character.
+	 * @param ch character to be converted.
+	 * @return string representation of character.
+	 */
+	private static String genChar(final char ch) {
+		int i = "\"\\\n\b\r\t\f".indexOf(ch);
+		if (i < 0) {
+			if (StringParser.getXmlCharType(ch, StringParser.XMLVER1_0)
+				== StringParser.XML_CHAR_ILLEGAL) {
+				String s = "c\"\\u";
+				for (int j = 12; j >= 0; j -=4) {
+					s += "0123456789abcdef".charAt((ch >> j) & 0xf);
+				}
+				return s + '"';
+			}
+			return "c\"" + String.valueOf(ch) + '"';
+		}
+		return "c\"\\" + "\"\\nbrtf".charAt(i) + "\"";
+	}
+
 	/** Add the a string created from JSON or XON simple value to StringBuilder.
 	 * @param x object to be converted to String.
 	 * @return sb created string.
@@ -64,20 +84,7 @@ class JsonToString extends JsonTools {
 				}
 				return result;
 			} else if (x instanceof Character) {
-				char ch = (Character) x;
-				int i = "\"\n\b\r\t\f".indexOf(ch);
-				if (i < 0) {
-					if (StringParser.getXmlCharType(ch, StringParser.XMLVER1_0)
-						== StringParser.XML_CHAR_ILLEGAL) {
-						String s = "'\\u";
-						for (int j = 12; j >= 0; j -=4) {
-							s += "0123456789abcdef".charAt((ch >> j) & 0xf);
-						}
-						return s + '\'';
-					}
-					return '\'' + jstringToSource(String.valueOf(x)) + '\'';
-				}
-				return "'\\" + "\"nbrtf".charAt(i) + "'";
+				return genChar((Character) x);
 			} else if (x instanceof SDatetime) {
 				return "D" + x;
 			} else if (x instanceof SDuration || x instanceof Price
@@ -88,12 +95,16 @@ class JsonToString extends JsonTools {
 		if (x instanceof byte[]) {// byte array
 			try {
 				byte[] b = (byte[]) x;
-				return '"' + jstringToSource(new String(b, "UTF-8")) + '"';
+				return '"' + jstringToSource(
+					new String(SUtils.encodeBase64(b), "UTF-8")) + '"';
 			} catch (Exception ex) {
 				throw new RuntimeException(ex);
 			}
+		} else if (x instanceof Character) {// char
+			result = genChar((Character) x);
+		} else {
+			result = x.toString();
 		}
-		result = x.toString();
 		if (x instanceof Number) {
 			if (result.equals("NaN") || result.equals("Infinity")
 				|| result.equals("-Infinity")) {

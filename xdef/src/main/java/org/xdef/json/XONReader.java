@@ -393,14 +393,14 @@ public class XONReader extends StringParser implements XONParsers {
 			Object result = null;
 			char ch;
 			if (_xonMode) {
-				if (isChar('\'')) { // character
+				if (isToken("c\"")) { // character
 					i = JsonTools.readJSONChar(this);
 					if (i == -1) {
 						//JSON simpleValue expected
 						return returnError(spos, '?', JSON.JSON010, "[]{}");
 					}
 					ch = (char) i;
-					if (!isChar('\'')) {
+					if (!isChar('"')) {
 						setIndex(pos);
 						//JSON simpleValue expected
 						return returnError(spos, ch, JSON.JSON010, "',[]{}");

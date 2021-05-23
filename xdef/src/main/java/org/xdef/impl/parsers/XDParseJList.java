@@ -100,8 +100,8 @@ public class XDParseJList extends XSAbstractParser {
 					_itemType.parseObject(xnode, p);
 				} else {
 					DefParseResult q;
-					if (p.isToken("g(") || p.isToken("p(")) { //gps or price
-						p.setIndex(p.getIndex() - 2); // reset position
+					if (p.isToken("g(") || p.isToken("p(") || p.isToken("c(")) {
+						p.setIndex(p.getIndex() - 2); //gps, price, char
 						q = new DefParseResult(p.getUnparsedBufferPart());
 						_itemType.parseObject(xnode, q);
 						p.addReports(q.getReporter());
@@ -224,11 +224,7 @@ public class XDParseJList extends XSAbstractParser {
 			return false;
 		}
 		XDParseJList x = (XDParseJList) o;
-		if (_itemType == null) {
-			return false;
-		} else {
-			return _itemType.equals(x._itemType);
-		}
+		return _itemType == null ? false : _itemType.equals(x._itemType);
 	}
 	@Override
 	public String parserName() {return ROOTBASENAME;}
