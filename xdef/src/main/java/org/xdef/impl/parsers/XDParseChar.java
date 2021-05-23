@@ -11,9 +11,7 @@ import org.xdef.proc.XXNode;
  */
 public class XDParseChar extends XSAbstractParseToken {
 	private static final String ROOTBASENAME = "char";
-
 	public XDParseChar() {super();}
-
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){
 		int pos0 = p.getIndex();
@@ -31,26 +29,24 @@ public class XDParseChar extends XSAbstractParseToken {
 		p.replaceParsedBufferFrom(pos0, s);
 		checkItem(p);
 	}
-
 	boolean parse(final XDParseResult p) {
 		char ch;
-		if (p.isChar('"')) {
-			String s = JsonTools.readJSONString(p);
-			if (s != null && s.length() == 1) {
-				ch = s.charAt(0);
+		if (p.isToken("c\"")) {
+			int i = JsonTools.readJSONChar(p);
+			if (i >= 1) {
+				ch = (char) i;
+				if (!p.isChar('"')) {
+					return false;
+				}
 			} else {
 				return false;
 			}
 		} else {
-			if (p.eos()) {
-				return false;
-			}
-			ch = p.peekChar();
+			return false;
 		}
 		p.setParsedValue(new DefChar(ch));
 		return true;
 	}
-
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 

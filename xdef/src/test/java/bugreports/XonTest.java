@@ -10,7 +10,6 @@ import org.xdef.component.XComponentUtil;
 import org.xdef.json.JsonUtil;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.GPSPosition;
-import org.xdef.sys.SUtils;
 import test.XDTester;
 import static test.XDTester.genXComponent;
 
@@ -70,13 +69,13 @@ public class XonTest extends XDTester {
 "    Towns : [ # array with GPS locations of towns\n" +
 "      g(48.2, 16.37, 151, Wien),     # GPS\n" +
 "      g(51.52, -0.09, 0, London),    # GPS\n" +
-"      g(50.08, 14.42, 399, \"Praha (centrum)\"), # GPS\n" +
+"      g(50.08, 14.42, 399, \"Praha (centrum)\") # GPS\n" +
 "    ],\n" +
-"    j : '\\u0007',                    # Character\n" +
-"    k : '\\n',                        # Character\n" +
-"    l : '\"',                         # Character\n" +
-"    m : ''',                         # Character\n" +
-"    n : '\\\\',                        # Character\n" +
+"    j : c\"\\u0007\",                    # Character\n" +
+"    k : c\"\\n\",                        # Character\n" +
+"    l : c\"\"\",                         # Character\n" +
+"    m : c\")\",                         # Character\n" +
+"    n : c\"\\\\\",                        # Character\n" +
 "    \" name with space \": \"x\\ty\" /* name with space is quoted! */\n" +
 "  }, /**** end of map ****/\n" +
 "  -3F,                               # Float\n" +
@@ -92,8 +91,8 @@ public class XonTest extends XDTester {
 "  D19:23:01,                         /* hours, minutes seconds */\n" +
 "  D19:23:01.012,                     /* hours minutes seconds millis */\n" +
 "  D00:00:00.00001+00:00,             /* time nanos zone */\n" +
-"  D2000,                             /* year (without zone) */\n" +
-"  D-123456789,                       /* year (without zone) */\n" +
+//"  D2000,                             /* year (without zone) */\n" +
+//"  D-123456789,                       /* year (without zone) */\n" +
 "  D2000Z,                            /* year zone */\n" +
 "  D2000-01:00,                       /* year zone */\n" +
 "  D2000-10,                          /* year month */\n" +
@@ -108,13 +107,16 @@ public class XonTest extends XDTester {
 "# End of XON example";
 			x = JsonUtil.parseXON(xon);
 			json = JsonUtil.toJsonString(JsonUtil.xonToJson(x), true);
-//			json = JsonUtil.toJsonString(x, true);
+			json = JsonUtil.toJsonString(x, true);
+//System.out.println(json);
 			JsonUtil.parse(json);
+//if (true) return;
 			s = JsonUtil.toXonString(x, true);
+//System.out.println(s);
 			y = JsonUtil.parseXON(s);
 			assertTrue(JsonUtil.jsonEqual(x,y));
-//if (true) return;
 			s = JsonUtil.toXonString(x, false);
+//if (true) return;
 			List list = (List) ((Map) ((List) x).get(0)).get("Towns");
 			assertEq("Wien",((GPSPosition) list.get(0)).name());
 			assertEq("London",((GPSPosition) list.get(1)).name());
@@ -162,8 +164,8 @@ public class XonTest extends XDTester {
 "  \"time()\",\n" +
 "  \"time()\",\n" +
 "  \"time()\",\n" +
-"  \"gYear()\",\n" +
-"  \"gYear()\",\n" +
+//"  \"gYear()\",\n" +
+//"  \"gYear()\",\n" +
 "  \"gYear()\",\n" +
 "  \"gYear()\",\n" +
 "  \"gYearMonth()\",\n" +
@@ -181,6 +183,7 @@ public class XonTest extends XDTester {
 "</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
+//System.out.println(json);
 			y = jparse(xp, "", json, reporter);
 			assertNoErrors(reporter);
 			genXComponent(xp, tempDir);
