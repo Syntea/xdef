@@ -80,12 +80,9 @@ class JsonToString extends JsonTools {
 				return "'\\" + "\"nbrtf".charAt(i) + "'";
 			} else if (x instanceof SDatetime) {
 				return "D" + x;
-			} else if (x instanceof SDuration) {
+			} else if (x instanceof SDuration || x instanceof Price
+				|| x instanceof GPSPosition) {
 				return x.toString();
-			} else if (x instanceof Price) {
-				return "p(" + x + ')';
-			} else if (x instanceof GPSPosition) {
-				return "g(" + x + ')';
 			}
 		}
 		if (x instanceof byte[]) {// byte array

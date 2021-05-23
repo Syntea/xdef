@@ -99,17 +99,25 @@ public class XDParseJList extends XSAbstractParser {
 					p.setIndex(start);
 					_itemType.parseObject(xnode, p);
 				} else {
-					char ch = 0;
-					while (!p.eos() && (ch=p.getCurrentChar())>' ' && ch!=','
-						&& ch!='[' && ch!=']'){
-						p.nextChar();
-					}
-					end = p.getIndex();
+					if (p.isToken("g(") || p.isToken("p(")) {
+						p.setIndex(p.getIndex() - 2);
+						DefParseResult q =
+							new DefParseResult(p.getUnparsedBufferPart());
+						_itemType.parseObject(xnode, q);
+						end = start + q.getIndex();
+					} else {
+						char ch = 0;
+						while (!p.eos() && (ch=p.getCurrentChar())>' '
+							&& ch!=',' && ch!='[' && ch!=']') {
+							p.nextChar();
+						}
+						end = p.getIndex();
 						DefParseResult q =
 							new DefParseResult(p.getBufferPart(start, end));
 						_itemType.parseObject(xnode, q);
 						p.addReports(q.getReporter());
 						p.setParsedValue(q.getParsedValue());
+					}
 				}
 				if (p.getReporter() != null && p.getReporter().errors()) {
 					break;

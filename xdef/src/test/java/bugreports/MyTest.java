@@ -64,15 +64,35 @@ public class MyTest extends XDTester {
 			XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE); // true | false
 ////////////////////////////////////////////////////////////////////////////////
 
-		XDPool xp;
-		String xdef;
-		String xml;
-		String s;
-		XDDocument xd;
 		Element el;
 		Object j;
+		String json, s, xdef, xml;
+		XDDocument xd;
+		XDPool xp;
 		XComponent xc;
 		ArrayReporter reporter = new ArrayReporter();
+		try {
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:json name='a'>\n"+
+"  [\"gps();\", \"gps();\"]\n"+
+"</xd:json>\n"+
+"<xd:component>\n"+
+"  %class bugreports.MyTesta %link a;\n"+
+"</xd:component>\n"+
+"</xd:def>";
+			xp = XDFactory.compileXD(null,xdef);
+			genXComponent(xp, clearTempDir());
+			json = "[ g(12.50, 1.2), g(2.5, 3.5, -0.1, xxx) ]";
+			xd = xp.createXDDocument("");
+			jparse(xd, json, reporter);
+			assertNoErrors(reporter);
+			System.out.println(JsonUtil.toXonString(xd.getXon(), true));
+			xd = xp.createXDDocument("");
+			xc = xd.jparseXComponent(json, null, reporter);
+			System.out.println(KXmlUtils.nodeToString(xc.toXml(), true));
+		} catch (Exception ex) {fail(ex);}
+if(true)return;
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='x|y|y1|y2'>\n"+
