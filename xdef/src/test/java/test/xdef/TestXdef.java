@@ -3019,7 +3019,7 @@ public final class TestXdef extends XDTester {
 			xp = compile(xdef);
 			xml = "<A>xyz</A>";
 			assertEq(xml, parse(xp,"", xml, null, reporter));
-			assertNoErrorwarnings(reporter);			
+			assertNoErrorwarnings(reporter);
 			xdef = // test addComment,insertComment,addPI,insertPI
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <a xd:script=\"finally {\n"+
