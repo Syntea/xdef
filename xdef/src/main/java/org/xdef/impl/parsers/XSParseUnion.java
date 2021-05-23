@@ -97,7 +97,14 @@ public class XSParseUnion extends XSAbstractParser {
 	}
 	private void parse(final XXNode xnode,
 		final XDParseResult p,
-		final boolean isFinal){
+		final boolean isFinal) {
+		if ( _itemTypes == null) {
+			//Incorrect value&{0}{ of '}{'}&{1}{: '}{'}
+			p.error(XDEF.XDEF809, "union - parse methods missing");
+			p.setSourceBuffer(p.getSourceBuffer());
+			p.setEos();
+			return;
+		}
 		int pos = p.getIndex();
 		String source = p.getSourceBuffer();
 		_whiteSpace = WS_PRESERVE;

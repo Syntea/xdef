@@ -1132,7 +1132,7 @@ public final class TestTypes extends XDTester {
 			setProperty("xdef.maxyear", String.valueOf(year + 200));
 			setProperty("xdef.specdates",
 				"3000-12-31,3000-12-31T00:00:00,3000-12-31T23:59:59");
-			xdef =
+			xdef = // imt - max values
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'><a a='int()' b='int()'/></xd:def>";
 			xp = compile(xdef);
 			xml ="<a a='2147483647' b='-2147483648' />";
@@ -1141,6 +1141,30 @@ public final class TestTypes extends XDTester {
 			xml ="<a a='2147483648' b='-2147483649' />";
 			parse(xp, "", xml, reporter);
 			assertEq(2, reporter.getErrorCount());
+			xdef = // jlist
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<a>jlist(%item=gps());</a>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			xml = "<a>[ g(12.50, 1.2), g(2.5, 3.5, -0.1, xxx) ]</a>";
+			assertEq(xml, el = parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<a>jlist(%item=price());</a>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			xml = "<a>[ p(12.50 CZK), p(2.5 USD) ]</a>";
+			assertEq(xml, el = parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<a>jlist(%item=union(%item=[gps(), price()]));</a>\n"+
+"</xd:def>";
+			xp = XDFactory.compileXD(null,xdef);
+			xml = "<a>[ g(2.5, 3.5, -0.1, xxx), p(12.50 CZK), p(2.5 USD) ]</a>";
+			assertEq(xml, el = parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
 
 			xdef = // check xml schema types
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
