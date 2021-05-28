@@ -16,6 +16,7 @@ import java.util.Properties;
  * <li>project.name
  * <li>project.description
  * <li>properties.release.date - user's property
+ * <li>maven.build.timestamp   - build timestamp
  * </ul>
  * Load info from resource "pominfo.properties" that is automatically filled
  * by maven-plugin build/resources/resource/filtering
@@ -54,15 +55,36 @@ public class PomInfo {
 	}
 
 	private void loadProps(Properties pp) {
-		groupId     = pp.getProperty("project.groupId");
-		artifactId  = pp.getProperty("project.artifactId");
-		version     = pp.getProperty("project.version");
-		name        = pp.getProperty("project.name");
-		description = pp.getProperty("project.description");
-		releaseDate = pp.getProperty("release.date");
+		groupId           = pp.getProperty("project.groupId");
+		artifactId        = pp.getProperty("project.artifactId");
+		version           = pp.getProperty("project.version");
+		name              = pp.getProperty("project.name");
+		description       = pp.getProperty("project.description");
+		releaseDate       = pp.getProperty("release.date");
+		buildTimestamp    = pp.getProperty("build.timestamp");
 	}
+	
+	
 
-	public String getGroupId() {return groupId;}
+	public boolean isVersionSnapshot() {
+	    return version.endsWith("-SNAPSHOT");
+	}
+	
+	
+	
+    /** Get identifier of product.
+     * @return product-identifier
+     */
+    public String getProductIdentifier() {
+        return
+            groupId + ":" + artifactId + ":" + version + " (" +
+            (isVersionSnapshot() ? "built " + buildTimestamp : "released " + releaseDate) + ")"
+        ;
+    }
+
+
+
+    public String getGroupId() {return groupId;}
 
 	public String getArtifactId() {return artifactId;}
 
@@ -73,20 +95,18 @@ public class PomInfo {
 	public String getDescription() {return description;}
 
 	public String getReleaseDate() {return releaseDate;}
+	
+	public String getBuildTimestamp() {return buildTimestamp;}
 
-	/** Get identifier of product.
-	 * @return product-identifier
-	 */
-	public String getProductIdentifier() {
-		return artifactId + "(" + version + ", " + releaseDate + ")";
-	}
-
+	
+	
 	private String groupId        = null;
 	private String artifactId     = null;
 	private String version        = null;
 	private String name           = null;
 	private String description    = null;
 	private String releaseDate    = null;
+	private String buildTimestamp = null;
 
 	private static final String     pomInfoPropsName = "pominfo.properties";
 	/** default charset */
