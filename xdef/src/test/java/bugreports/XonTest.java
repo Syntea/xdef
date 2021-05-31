@@ -27,7 +27,46 @@ public class XonTest extends XDTester {
 		Element el;
 		XComponent xc;
 		File tempDir = clearTempDir();
+/*xx*
 		try {
+			xon = "[D2000Z]";
+			xon = "[ D-2000 ]";
+//System.out.println(xon);
+			x = JsonUtil.parseXON(xon);
+			json = JsonUtil.toJsonString(JsonUtil.xonToJson(x), true);
+//System.out.println(json);
+			json = JsonUtil.toJsonString(x, true);
+//System.out.println(json);
+			JsonUtil.parse(json);
+			s = JsonUtil.toXonString(x, true);
+			y = JsonUtil.parseXON(s);
+			assertTrue(JsonUtil.jsonEqual(x,y));
+			s = JsonUtil.toXonString(x, false);
+			xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='a'>\n"+
+"<xd:json name='a'>\n" +
+"[\"gYear()\"]\n" +
+"</xd:json>\n" +
+"<xd:component>\n"+
+"  %class bugreports.XonGYear %link #a;\n"+
+"</xd:component>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			y = jparse(xp, "", json, reporter);
+			assertNoErrors(reporter);
+			reporter.clear();
+			genXComponent(xp, tempDir);
+			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
+			assertNoErrors(reporter);
+			reporter.clear();
+			y = XComponentUtil.toXon(xc);
+			assertTrue(JsonUtil.jsonEqual(x,y));
+			x = xc.toJson();
+//System.out.println(JsonUtil.toJsonString(x));
+			y = JsonUtil.xonToJson(y);
+//System.out.println(JsonUtil.toJsonString(y));
+			assertTrue(JsonUtil.jsonEqual(x,y));
+//if (true) return;
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='A'>\n"+
 "  <xd:json name='A'>\n"+
@@ -44,6 +83,7 @@ public class XonTest extends XDTester {
 			y = xp.createXDDocument().jvalidate(el, reporter);
 			assertTrue(JsonUtil.jsonEqual(x,y));
 			assertNoErrors(reporter);
+			reporter.clear();
 			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), x),
 				JsonUtil.toJsonString(x, true));
 			XDTester.genXComponent(xp, tempDir);
@@ -53,8 +93,68 @@ public class XonTest extends XDTester {
 			y = JsonUtil.xonToJson(XComponentUtil.toXon(xc));
 			assertTrue(JsonUtil.jsonEqual(x,y));
 		} catch (Exception ex) {fail(ex);}
-//if (true) return;
+if (true) return;
+/*xx*/
 		try {
+			xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='a'>\n"+
+"<xd:json name='a'>\n" +
+"[\n" +
+"  {\n" +
+"    \"a\" : \"? short()\",\n" +		/* Short */
+"    \"b\" : \"? jstring()\",\n" +	/* string */
+"    \"c\" : \"? double()\",\n" +		/* Double */
+"    \"f\" : \"? boolean()\",\n" +	/* boolean */
+"    \"g\" : \"? duration()\",\n" +	/* duration */
+"    \"h\" : \"? jnull()\",\n" +		/* null */
+"    \"i\" : [],\n" +				/* empty array */
+"    \"Towns\" : [\n" +
+"      \"* gps()\"\n" +
+"    ],\n" +
+"    \"j\" : \"? char()\",\n" +		/* char 'a' */
+"    \"k\" : \"? char()\",\n" +		/* char "'" */
+"    \"l\" : \"? char()\",\n" +		/* char "\\"" */
+"    \"m\" : \"? char()\",\n" +		/*char '\u0007' */
+"    \"n\" : \"? char()\",\n" +		/*char "\\\"" */
+"    \"o\" : \"? char()\",\n" +		/*char '\n' */
+"    \"p\" : \"? char()\",\n" +		/*char '\\n' */
+"    \"q\" : \"? char()\",\n" +		/*char ' ' */
+"    \"r\" : \"? char()\",\n" +		/*char not exists */
+"    \"s\" : \"? char()\",\n" +		/*char not exists */
+"    \" name with space \": \"? jstring()\"\n" +
+"  },\n" +
+"  \"float()\",\n" +
+"  \"decimal()\",\n" +
+"  \"byte()\",\n" +
+"  \"integer()\",\n" +
+"  \"integer()\",\n" +
+"  \"date()\",\n" +				    /* month d(--1) */
+"  \"gMonth()\",\n" +				/* month d(--1) */
+"  \"gMonth()\",\n" +				/* month d(--1Z) */
+"  \"gMonthDay()\",\n" +			/* --1-2 */
+"  \"gMonthDay()\",\n" +			/* --1-2-01:01 */
+"  \"time()\",\n" +
+"  \"time()\",\n" +
+"  \"time()\",\n" +
+"  \"gYear()\",\n" +
+"  \"gYear()\",\n" +
+"  \"gYear()\",\n" +
+"  \"gYear()\",\n" +
+"  \"gYearMonth()\",\n" +
+"  \"gYearMonth()\",\n" +
+"  \"gYearMonth\",\n" +
+"  \"dateTime()\",\n" +
+"  \"gps()\",\n" +
+"  \"base64Binary()\",\n" +
+"  \"price()\",\n" +
+"  \"? price()\"\n" +
+"]\n" +
+"</xd:json>\n" +
+"<xd:component>\n"+
+"  %class bugreports.data.Xon %link #a;\n"+
+"</xd:component>\n"+
+"</xd:def>";
+			xp = compile(xdef);
 			xon =
 "# Start of XON example\n" +
 "[ #***** Array *****/\n" +
@@ -71,11 +171,14 @@ public class XonTest extends XDTester {
 "      g(51.52, -0.09, 0, London),    # GPS\n" +
 "      g(50.08, 14.42, 399, \"Praha (centrum)\") # GPS\n" +
 "    ],\n" +
-"    j : c\"\\u0007\",                    # Character\n" +
-"    k : c\"\\n\",                        # Character\n" +
-"    l : c\"\"\",                         # Character\n" +
-"    m : c\")\",                         # Character\n" +
-"    n : c\"\\\\\",                        # Character\n" +
+"    j : c\"a\",                      # Character\n" +
+"    k : c\"'\",                      # Character\n" +
+"    l : c\"\\\"\",                   # Character\n" +
+"    m : c\"\\u0007\",                # Character\n" +
+"    n : c\"\\\\\",                   # Character\n" +
+"    o : c\"\n\",                     # Character\n" +
+"    p : c\"\\n\",                    # Character\n" +
+"    q : c\" \",                      # Character\n" +
 "    \" name with space \": \"x\\ty\" /* name with space is quoted! */\n" +
 "  }, /**** end of map ****/\n" +
 "  -3F,                               # Float\n" +
@@ -91,8 +194,8 @@ public class XonTest extends XDTester {
 "  D19:23:01,                         /* hours, minutes seconds */\n" +
 "  D19:23:01.012,                     /* hours minutes seconds millis */\n" +
 "  D00:00:00.00001+00:00,             /* time nanos zone */\n" +
-//"  D2000,                             /* year (without zone) */\n" +
-//"  D-123456789,                       /* year (without zone) */\n" +
+"  D2000,                             /* year (without zone) */\n" +
+"  D-123456789Z,                      /* year (without zone) */\n" +
 "  D2000Z,                            /* year zone */\n" +
 "  D2000-01:00,                       /* year zone */\n" +
 "  D2000-10,                          /* year month */\n" +
@@ -107,7 +210,7 @@ public class XonTest extends XDTester {
 "# End of XON example";
 			x = JsonUtil.parseXON(xon);
 			json = JsonUtil.toJsonString(JsonUtil.xonToJson(x), true);
-			json = JsonUtil.toJsonString(x, true);
+//			json = JsonUtil.toJsonString(x, true);
 //System.out.println(json);
 			JsonUtil.parse(json);
 //if (true) return;
@@ -127,74 +230,21 @@ public class XonTest extends XDTester {
 				((GPSPosition) list.get(2)))/1000));
 			assertEq(1030,Math.round(((GPSPosition) list.get(1)).distanceTo(
 				((GPSPosition) list.get(2)))/1000));
-			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='a'>\n"+
-"<xd:json name='a'>\n" +
-"[\n" +
-"  {\n" +
-"    \"a\" : \"short()\",\n" +		/* Short */
-"    \"b\" : \"jstring()\",\n" +	/* string */
-"    \"c\" : \"double()\",\n" +		/* Double */
-"    \"f\" : \"boolean()\",\n" +	/* boolean */
-"    \"g\" : \"duration()\",\n" +	/* duration */
-"    \"h\" : \"jnull()\",\n" +		/* null */
-"    \"i\" : [],\n" +				/* empty array */
-"    \"Towns\" : [\n" +
-"      \"gps()\",\n" +
-"      \"gps()\",\n" +
-"      \"gps()\"\n" +
-"    ],\n" +
-"    \"j\" : \"char()\",\n" +		/* char '?' */
-"    \"k\" : \"char()\",\n" +		/* char '\\u0007' */
-"    \"l\" : \"char()\",\n" +		/* char ''' */
-"    \"m\" : \"char()\",\n" +		//char '\n' */
-"    \"n\" : \"char()\",\n" +		//char '\\' */
-"    \" name with space \": \"jstring()\"\n" +
-"  },\n" +
-"  \"float()\",\n" +
-"  \"decimal()\",\n" +
-"  \"byte()\",\n" +
-"  \"integer()\",\n" +
-"  \"integer()\",\n" +
-"  \"date()\",\n" +				    /* month d(--1) */
-"  \"gMonth()\",\n" +				/* month d(--1) */
-"  \"gMonth()\",\n" +				/* month d(--1Z) */
-"  \"gMonthDay()\",\n" +			/* --1-2 */
-"  \"gMonthDay()\",\n" +			/* --1-2-01:01 */
-"  \"time()\",\n" +
-"  \"time()\",\n" +
-"  \"time()\",\n" +
-//"  \"gYear()\",\n" +
-//"  \"gYear()\",\n" +
-"  \"gYear()\",\n" +
-"  \"gYear()\",\n" +
-"  \"gYearMonth()\",\n" +
-"  \"gYearMonth()\",\n" +
-"  \"gYearMonth\",\n" +
-"  \"dateTime()\",\n" +
-"  \"gps()\",\n" +
-"  \"base64Binary()\",\n" +
-"  \"price()\",\n" +
-"  \"price()\"\n" +
-"]\n" +
-"</xd:json>\n" +
-"<xd:component>\n"+
-"  %class bugreports.data.Xon %link #a;\n"+
-"</xd:component>\n"+
-"</xd:def>";
-			xp = compile(xdef);
 //System.out.println(json);
 			y = jparse(xp, "", json, reporter);
 			assertNoErrors(reporter);
-			genXComponent(xp, tempDir);
 			reporter.clear();
+			genXComponent(xp, clearTempDir());
 			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
 			assertNoErrors(reporter);
+			reporter.clear();
 			y = XComponentUtil.toXon(xc);
 			assertTrue(JsonUtil.jsonEqual(x,y));
 			x = xc.toJson();
+//System.out.println("===\n" + JsonUtil.toJsonString(x, true));
 			y = JsonUtil.xonToJson(y);
-				assertTrue(JsonUtil.jsonEqual(x,y));
+//System.out.println(JsonUtil.toJsonString(y, true));
+			assertTrue(JsonUtil.jsonEqual(x,y));
 		} catch (Exception ex) {fail(ex);}
 
 		clearTempDir(); // clear temporary directory
@@ -204,6 +254,32 @@ public class XonTest extends XDTester {
 	 * @param args the command line arguments
 	 */
 	public static void main(String... args) {
-		runTest();
+/**
+		java.util.TimeZone tz;
+		tz = java.util.TimeZone.getTimeZone("CET");
+		System.out.println(tz);
+		tz = java.util.TimeZone.getTimeZone("Europe/Prague");
+		System.out.println(tz);
+		tz = java.util.TimeZone.getTimeZone("UTC");
+		System.out.println(tz);
+		tz = java.util.TimeZone.getTimeZone("CST");
+		System.out.println(tz);
+		tz = java.util.TimeZone.getTimeZone("MST");
+		System.out.println(tz);
+		tz = java.util.TimeZone.getTimeZone("EST");
+		System.out.println(tz);
+		tz = java.util.TimeZone.getTimeZone("PST");
+		System.out.println(tz);
+		tz = java.util.TimeZone.getTimeZone("AST");
+		System.out.println(tz);
+		tz = java.util.TimeZone.getTimeZone("SST");
+		System.out.println(tz);
+		tz = java.util.TimeZone.getTimeZone("AST");
+System.out.println(tz);
+System.out.println(java.util.TimeZone.getAvailableIDs());
+/**/
+		XDTester.setFulltestMode(true);
+		if (runTest(args) > 0) {System.exit(1);}
+/**/
 	}
 }

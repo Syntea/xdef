@@ -101,7 +101,7 @@ class ChkDOMParser extends SReporter {
 					String val = sourceElem.getAttribute(key);
 					if (val != null && !val.isEmpty()) {
 						StringParser p = new StringParser(val);
-						p.skipSpaces();
+						p.isSpaces();
 						String systemLiteral;
 						int i = p.isOneOfTokens("SYSTEM", "PUBLIC");
 						if (i == 1) { //PUBLIC

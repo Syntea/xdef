@@ -42,9 +42,9 @@ public class XOccurrence implements XMOccurrence {
 			return;
 		}
 		StringParser sp = new StringParser(source);
-		sp.skipSpaces();
+		sp.isSpaces();
 		if (sp.isToken("occurs")) {
-			sp.skipSpaces();
+			sp.isSpaces();
 		}
 		if (sp.isToken("required")) {
 			setRequired();
@@ -60,9 +60,9 @@ public class XOccurrence implements XMOccurrence {
 			_min = 1; _max = Integer.MAX_VALUE;
 		} else if (sp.isInteger()) {
 			_min = sp.getParsedInt();
-			sp.skipSpaces();
+			sp.isSpaces();
 			if (sp.isToken("..")) {
-				sp.skipSpaces();
+				sp.isSpaces();
 				if (sp.isInteger()) {
 					_max = sp.getParsedInt();
 				} else {

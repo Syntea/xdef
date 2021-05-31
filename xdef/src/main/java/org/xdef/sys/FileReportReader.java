@@ -165,7 +165,7 @@ public class FileReportReader implements ReportReader {
 				close();
 				return null;
 			}
-			_parser.skipSpaces();
+			_parser.isSpaces();
 			if (_parser.eos()) {
 				close();
 				return null;

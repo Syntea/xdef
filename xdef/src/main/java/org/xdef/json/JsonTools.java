@@ -123,12 +123,12 @@ public class JsonTools {
 	 */
 	private static void parseJList(final List<Object> ar, final StringParser p){
 		for (;;) {
-			p.skipSpaces();
+			p.isSpaces();
 			if (p.isChar('[')) {
 				List<Object> ar1 = new ArrayList<Object>();
 				parseJList(ar1, p);
 				ar.add(ar1);
-				p.skipSpaces();
+				p.isSpaces();
 				if (p.isChar(',')) {
 					continue;
 				} else if (p.isChar(']')) {
@@ -203,7 +203,7 @@ public class JsonTools {
 					}
 				}
 			}
-			p.skipSpaces();
+			p.isSpaces();
 			if (p.isChar(']')) {
 				break;
 			}

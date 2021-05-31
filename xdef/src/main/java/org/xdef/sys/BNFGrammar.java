@@ -2058,7 +2058,7 @@ public final class BNFGrammar {
 				return;
 			}
 			for (;;) {
-				skipSpaces();
+				isSpaces();
 				if (isToken("/*")) {//comment
 					if (!findTokenAndSkip("*/")) {
 						error(BNF002); //Unclosed comment

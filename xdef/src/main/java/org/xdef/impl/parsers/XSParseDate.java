@@ -48,10 +48,6 @@ public class XSParseDate extends XSAbstractParseComparable {
 		p.setIndex(parser.getIndex());
 		String s = p.getParsedBufferPartFrom(pos);
 		SDatetime d = parser.getParsedSDatetime();
-//		if (d.getTZ() == null && (d.getYear() >= 0 || d.getMonth() >= 0
-//			|| d.getDay() >= 0)) {
-//			d.setTZ(TimeZone.getTimeZone("Z"));
-//		}
 		p.isSpaces();
 		p.replaceParsedBufferFrom(pos0, s);
 		p.setParsedValue(new DefDate(d));

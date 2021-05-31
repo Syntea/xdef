@@ -357,56 +357,56 @@ public class TestSParser extends STester {
 				" 2004-02-18T23-00:05\n" + //ISO8601 datetime
 				" END" +
 				"");
-			p.skipSpaces();
+			p.isSpaces();
 			assertTrue(p.isToken("TEXT"));
-			p.skipSpaces();
+			p.isSpaces();
 			assertTrue(p.isChar('?'));
-			p.skipSpaces();
+			p.isSpaces();
 			assertTrue(p.isInteger() && (p.getParsedInt() == 123),
 				"b) isInteger() fails: " + p.getParsedInt());
-			p.skipSpaces();
+			p.isSpaces();
 			assertTrue(p.isSignedInteger() && (p.getParsedInt() == 123),
 				"a) isSignedInteger() fails: " + p.getParsedInt());
-			p.skipSpaces();
+			p.isSpaces();
 			assertTrue(p.isSignedInteger() && (p.getParsedInt() == -123),
 				"b) isSignedInteger() fails: " + p.getParsedInt());
-			p.skipSpaces();
+			p.isSpaces();
 			assertTrue(p.isSignedFloat() && (p.getParsedFloat() == 12e3),
 				"a) isFloat() fails: " + p.getParsedFloat());
-			p.skipSpaces();
+			p.isSpaces();
 			assertTrue(p.isSignedFloat() && p.getParsedFloat() == -12e3,
 				"b) isFloat() fails: " + p.getParsedFloat());
-			p.skipSpaces();
+			p.isSpaces();
 			assertTrue(p.isSignedFloat() && (p.getParsedFloat() == 120e-1),
 				"c) isFloat() fails: " + p.getParsedFloat());
-			p.skipSpaces();
+			p.isSpaces();
 			assertTrue(p.isSignedFloat() && (p.getParsedFloat() == 12.50e+1),
 				"d) isFloat() fails: " + p.getParsedFloat());
-			p.skipSpaces();
+			p.isSpaces();
 			assertTrue(p.isSignedFloat() && (p.getParsedFloat() == .5),
 				"e) isFloat() fails: " + p.getParsedFloat());
-			p.skipSpaces();
+			p.isSpaces();
 			assertTrue(p.isSignedFloat() && (p.getParsedFloat() == .5e1),
 				"f) isFloat() fails: " + p.getParsedFloat());
-			p.skipSpaces();
+			p.isSpaces();
 			assertTrue(p.isSignedFloat() && (p.getParsedFloat() == -.5),
 				"g) isFloat() fails: " + p.getParsedFloat());
-			p.skipSpaces();
+			p.isSpaces();
 			assertTrue(p.isSignedFloat() && (p.getParsedFloat() == -.5e1),
 				"h) isFloat() fails: " + p.getParsedFloat());
-			p.skipSpaces();
+			p.isSpaces();
 			assertTrue(p.isSignedFloat() && (p.getParsedFloat() == 5.),
 				"i) isFloat() fails: " + p.getParsedFloat());
-			p.skipSpaces();
+			p.isSpaces();
 			assertTrue(p.isSignedFloat() && (p.getParsedFloat() == 5.e1),
 				"j) isFloat() fails: " + p.getParsedFloat());
-			p.skipSpaces();
+			p.isSpaces();
 			assertTrue(p.isSignedFloat() && (p.getParsedFloat() == -5.),
 				"k) isFloat() fails: " + p.getParsedFloat());
-			p.skipSpaces();
+			p.isSpaces();
 			assertTrue(p.isSignedFloat() && (p.getParsedFloat() == -5.e1),
 				"l) isFloat() fails: " + p.getParsedFloat());
-			p.skipSpaces();
+			p.isSpaces();
 			if (p.isDatetime("d.M.yyyy")) {
 				c = p.getParsedCalendar();
 				assertEq(29, c.get(Calendar.DAY_OF_MONTH));
@@ -416,65 +416,65 @@ public class TestSParser extends STester {
 			} else {
 				fail("isDate(\"d.M.yyyy\")");
 			}
-			p.skipSpaces();
+			p.isSpaces();
 			assertTrue(p.isDatetime("HH:mm") &&
 				(((13*60+23)*60)+0)*1000+0 ==
 				p.getParsedSDatetime().getDaytimeInMillis(),
 				"a) isTime() fails: " + p.getParsedSDatetime());
-			p.skipSpaces();
+			p.isSpaces();
 			assertTrue(p.isDatetime("H:mm:ss.SSS") &&
 				(((13*60+23)*60)+59)*1000+987 ==
 				p.getParsedSDatetime().getDaytimeInMillis(),
 				"b) isTime() fails: " + p.getParsedSDatetime());
-			p.skipSpaces();
+			p.isSpaces();
 			assertTrue(p.isDatetime("H:mm:ss.S") &&
 				(((13*60+23)*60)+59)*1000+987 ==
 				p.getParsedSDatetime().getDaytimeInMillis(),
 				"c) isTime() fails: " + p.getParsedSDatetime());
-			p.skipSpaces();
+			p.isSpaces();
 			assertTrue(p.isDatetime("H:mm:ss.S") &&
 				(((13*60+23)*60)+59)*1000+988 ==
 				p.getParsedSDatetime().getDaytimeInMillis(),
 				"d) isTime() fails: " + p.getParsedSDatetime());
-			p.skipSpaces();
+			p.isSpaces();
 			assertTrue(p.isDatetime("H:mm:ss.S") &&
 				(((13*60+23)*60)+59)*1000+980 ==
 				p.getParsedSDatetime().getDaytimeInMillis(),
 				"e) isTime() fails: " + p.getParsedSDatetime());
-			p.skipSpaces();
+			p.isSpaces();
 			assertTrue(p.isDatetime("H:mm:ss.S") &&
 				(((13*60+23)*60)+59)*1000+900 ==
 				p.getParsedSDatetime().getDaytimeInMillis(),
 				"f) isTime() fails: " + p.getParsedSDatetime());
-			p.skipSpaces();
+			p.isSpaces();
 			if (!p.isDatetime("yyyy-MM-ddTHH[:mm[:ss]][Z]")) {
 				fail("a) Error of date parser at position: " + p.getIndex());
 			} else {
 				assertEq("2004-02-18T23:15:06-01:30",
 					p.getParsedSDatetime().toISO8601());
 			}
-			p.skipSpaces();
+			p.isSpaces();
 			if (!p.isDatetime("yyyy-MM-ddTHH[:mm[:ss]][Z]")) {
 				fail("b) Error of date parser at position: " + p.getIndex());
 			} else {
 				assertEq("2004-02-18T23:15:06Z",
 					p.getParsedSDatetime().toISO8601());
 			}
-			p.skipSpaces();
+			p.isSpaces();
 			if (!p.isDatetime("yyyy-MM-ddT[HH:mm[:ss]][Z]")) {
 				fail("c) Error of date parser at position: " + p.getIndex());
 			} else {
 				assertEq("2004-02-18T23:15:00-01:30",
 					p.getParsedSDatetime().toISO8601());
 			}
-			p.skipSpaces();
+			p.isSpaces();
 			if (!p.isDatetime("yyyy-MM-ddTHH[:mm[:ss]][Z]")) {
 				fail("c) Error of date parser at position: " + p.getIndex());
 			} else {
 				assertEq("2004-02-18T23:00:00-00:05",
 					p.getParsedSDatetime().toISO8601());
 			}
-			p.skipSpaces();
+			p.isSpaces();
 			assertTrue(p.isToken("END"), "Not recognized token");
 			assertTrue(p.eos(), "End of source expected");
 			p = new StringParser("19731100");
@@ -770,7 +770,7 @@ public class TestSParser extends STester {
 			assertEq(p.getLineNumber(), 1);
 			assertEq(p.getColumnNumber(), 1);
 			assertEq(p.getSourcePosition(), 0);
-			p.skipSpaces();
+			p.isSpaces();
 			assertEq(p.getLineNumber(), 2);
 			assertEq(p.getColumnNumber(), 2);
 			assertEq(p.getSourcePosition(), 2);
@@ -864,7 +864,7 @@ public class TestSParser extends STester {
 			p = new StringParser("Content-Type: multipart/mixed");
 			if (p.isTokenIgnoreCase("content-type")) {
 				if (p.isChar(':')) {
-					p.skipSpaces();
+					p.isSpaces();
 					if (p.isTokenIgnoreCase("Multipart")) {
 						if (p.isChar('/')) {
 							if (!p.isTokenIgnoreCase("miXed")) {
@@ -1141,7 +1141,7 @@ public class TestSParser extends STester {
 			assertTrue(SDatetime.isLeapYear(2000));
 			assertFalse(SDatetime.isLeapYear(1900));
 			// test if XMLGregorianCalendar methods in SDatatiome are the same
-			SDatetime y = new SDatetime("2010-08-11T21:11:01.123CEST");  //DST
+			SDatetime y = new SDatetime("2010-08-11T21:11:01.123+01:00");//zone
 			GregorianCalendar g = y.toGregorianCalendar();
 			DatatypeFactory df = DatatypeFactory.newInstance();
 			XMLGregorianCalendar x = df.newXMLGregorianCalendar(g);
@@ -1177,7 +1177,7 @@ public class TestSParser extends STester {
 			x.clear(); y.clear();
 			assertEq("", checkDateEQ2(x,y));
 
-			y = new SDatetime("2010-01-11T21:11:01.123CEST"); //No DST
+			y = new SDatetime("2010-01-11T21:11:01.123"); //No zone
 			g = y.toGregorianCalendar();
 			x = df.newXMLGregorianCalendar(g);
 			y = new SDatetime(g);

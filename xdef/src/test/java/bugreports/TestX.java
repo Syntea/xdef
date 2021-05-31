@@ -189,6 +189,7 @@ public class TestX extends XDTester {
 	 * @param args not used.
 	 */
 	public static void main(String[] args) {
+		XDTester.setFulltestMode(true);
 		if (runTest(args) > 0) {System.exit(1);}
 	}
 }

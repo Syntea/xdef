@@ -457,7 +457,7 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
 				return false;
 			}
 		}
-		p.skipSpaces();
+		p.isSpaces();
 		return true;
 	}
 	/** [48] cp::= (Name | choice | seq) ('?' | '*' | '+')?
@@ -501,9 +501,9 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
 	}
 
 	private static void skipDeclSep(StringParser p) {
-		p.skipSpaces();
+		p.isSpaces();
 		if (isPEReference(p)) {
-			p.skipSpaces();
+			p.isSpaces();
 		}
 	}
 

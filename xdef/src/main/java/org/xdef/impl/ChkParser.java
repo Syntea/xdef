@@ -809,7 +809,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
 	 * @return string.
 	 */
 	final static String readString(final StringParser p) {
-		p.skipSpaces();
+		p.isSpaces();
 		char delimiter;
 		if ((delimiter = p.isOneOfChars("'\"")) == StringParser.NOCHAR) {
 			return null;
@@ -1002,7 +1002,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
 		StringParser p;
 		if (val != null) {
 			p = new StringParser(val);
-			p.skipSpaces();
+			p.isSpaces();
 		} else {
 			return "";
 		}

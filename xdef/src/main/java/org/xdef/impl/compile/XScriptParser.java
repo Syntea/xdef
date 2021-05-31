@@ -1453,7 +1453,7 @@ public class XScriptParser extends StringParser
 					if (isJavaTypedQName()) {
 						setLastPosition();
 						result += " extends " + getParsedString();
-						skipSpaces();
+						isSpaces();
 					} else {
 						//Specification of class expected
 						error(XDEF.XDEF361);
@@ -1526,7 +1526,7 @@ public class XScriptParser extends StringParser
 					}
 					if (isJavaTypedQName()) {
 						result += " %interface " + getParsedString();
-						skipSpaces();
+						isSpaces();
 					} else {
 						//Specification of class expected
 						error(XDEF.XDEF361);

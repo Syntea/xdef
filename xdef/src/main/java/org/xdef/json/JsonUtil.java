@@ -27,24 +27,19 @@ public class JsonUtil {
 ////////////////////////////////////////////////////////////////////////////////
 
 	private static List<Object> getReader(Object x) {
-		List<Object> result = new ArrayList<Object>();
 		Reader reader = null;
 		String sysId = null;
 		if (x instanceof String) {
 			String s = (String) x;
 			try {
-				URL url = SUtils.getExtendedURL(s);
-				reader = new InputStreamReader(url.openStream(), "UTF-8");
-				sysId = s;
+				return getReader(SUtils.getExtendedURL(s));
 			} catch (Exception ex) {
-				File f = new File(s);
-				if (f.exists()) {
-				}
+				try {
+					return getReader(new File(s));
+				} catch (Exception exx) {}
 			}
-			if (reader == null) {
-				reader = new StringReader(s);
-				sysId = "STRING";
-			}
+			reader = new StringReader(s);
+			sysId = "STRING";
 		} else if (x instanceof File) {
 			File f = (File) x;
 			try {
@@ -64,11 +59,24 @@ public class JsonUtil {
 				//Program exception &{0}
 				throw new SRuntimeException(SYS.SYS036, ex);
 			}
+		} else if (x instanceof InputStream) {
+			try {
+				reader = new InputStreamReader((InputStream) x, "UTF-8");
+				sysId = "INPUT_STREAM";
+			} catch (Exception ex) {
+				//Program exception &{0}
+				throw new SRuntimeException(SYS.SYS036, ex);
+
+			}
+		} else if (x instanceof Reader) {
+			reader = (Reader) x;
+			sysId = "READER";
 		} else {
 			//Program exception &{0}
 			throw new SRuntimeException(SYS.SYS036,
 				"Incorrect parameter of getReader");
 		}
+		List<Object> result = new ArrayList<Object>();
 		result.add(reader);
 		result.add(sysId);
 		return result;

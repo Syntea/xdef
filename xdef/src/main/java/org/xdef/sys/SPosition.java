@@ -139,15 +139,10 @@ public class SPosition {
 	 */
 	public void setIndex(final int pos) {_bufIndex = pos;}
 
-	/** Increase buffer index.
+	/** Increase buffer index (this method is used only in StringParser).
 	 * @return increased index.
 	 */
-	public final int incIndex() {return ++_bufIndex;}
-
-	/** Decrease buffer index.
-	 * @return decreased index.
-	 */
-	public final int decIndex() {return --_bufIndex;}
+	protected final int incIndex() {return ++_bufIndex;}
 
 	/** Get relative position to the beginning of start of line.
 	 * @return relative position to the beginning of start of line.

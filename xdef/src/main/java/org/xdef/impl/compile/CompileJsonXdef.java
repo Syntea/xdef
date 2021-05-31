@@ -597,14 +597,18 @@ public class CompileJsonXdef extends StringParser {
 		final JObject getResult() {return _value;}
 
 		@Override
-		public void simpleValue(JValue value) {
+		public String addValue(JValue value) {
 			if (_kind == 1) {
 				_arrays.peek().add(value);
 			} else if (_kind == 2) {
-				_maps.peek().put(_names.pop().getString(), value);
+				SBuffer name = _names.pop();
+				if (_maps.peek().put(name.getString(), value) != null) {
+					return name.getString();
+				}
 			} else {
 				_value = value;
 			}
+			return null;
 		}
 
 		@Override

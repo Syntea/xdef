@@ -54,8 +54,7 @@ class JsonToString extends JsonTools {
 		String result;
 		if (xon) {
 			if (x instanceof byte[]) {// byte array
-				byte[] b = (byte[]) x;
-				return "b("+new String(SUtils.encodeBase64(b))+")";
+				return "b(" + new String(SUtils.encodeBase64((byte[]) x)) + ")";
 			}
 			result = x.toString();
 			if (x instanceof Number) {
@@ -93,15 +92,13 @@ class JsonToString extends JsonTools {
 			}
 		}
 		if (x instanceof byte[]) {// byte array
-			try {
-				byte[] b = (byte[]) x;
-				return '"' + jstringToSource(
-					new String(SUtils.encodeBase64(b), "UTF-8")) + '"';
-			} catch (Exception ex) {
-				throw new RuntimeException(ex);
+			return "b(" + new String(SUtils.encodeBase64((byte[]) x)) + ")";
+		} else if (x instanceof SDatetime) {
+			String s = x.toString();
+			if (s.matches("-?\\d+\\z")) {
+				return '"' + s + '"';
 			}
-		} else if (x instanceof Character) {// char
-			result = genChar((Character) x);
+			return s;
 		} else {
 			result = x.toString();
 		}
@@ -294,18 +291,6 @@ class JsonToString extends JsonTools {
 			return xonMapToJson((Map) x);
 		} else if (x instanceof List) {
 			return xonArraytOJson((List) x);
-		} else if (x instanceof Character) {
-			return String.valueOf(x);
-		} else if (x instanceof SDatetime) {
-			String s = x.toString();
-			StringParser p = new StringParser(s);
-			if (p.isSignedInteger() && p.eos()) {
-				return p.getParsedLong(); // gYear without zone!
-			}
-			return s;
-		} else if (x instanceof SDuration
-			|| x instanceof Price || x instanceof GPSPosition) {
-			return x.toString();
 		} else if (x instanceof byte[]) {
 			return new String(SUtils.encodeBase64((byte[]) x));
 		}

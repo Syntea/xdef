@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 40.1.5, release-date 2021-05-23
+# Version 40.1.5, release-date 2021-05-31
 * fixed bug in nested type declarations.
 * fixed bug in type method `emailDate`.
 * X-definition 2.0 is now deprecated.
