@@ -709,6 +709,16 @@ public class XONReader extends StringParser implements XONParsers {
 		/** Get result of parser. */
 		public final Object getResult() {return _value;}
 
+		/** Get modification string with source position. */
+		private String genPosMod(final SPosition pos) {
+			return "&{line}" + pos.getLineNumber()
+				+ "&{column}" + pos.getColumnNumber()
+				+ (pos.getSysId() != null ? "&{sysId}" + pos.getSysId() : "");
+		}
+
+////////////////////////////////////////////////////////////////////////////////
+// JParser interface
+////////////////////////////////////////////////////////////////////////////////
 		@Override
 		/** Put value to result.
 		 * @param value JValue to be added to result object.
@@ -728,13 +738,11 @@ public class XONReader extends StringParser implements XONParsers {
 			}
 			return null;
 		}
-
 		@Override
 		/** Set name of value pair.
 		 * @param name value name.
 		 */
 		public void namedValue(SBuffer name) {_names.push(name.getString());}
-
 		@Override
 		/** Array started.
 		 * @param pos source position.
@@ -743,7 +751,6 @@ public class XONReader extends StringParser implements XONParsers {
 			_kinds.push(_kind = 1);
 			_arrays.push(new ArrayList<Object>());
 		}
-
 		@Override
 		/** Array ended.
 		 * @param pos source position.
@@ -768,7 +775,6 @@ public class XONReader extends StringParser implements XONParsers {
 			_kinds.push(_kind = 2);
 			_maps.push(new LinkedHashMap<String, Object>());
 		}
-
 		@Override
 		/** Map ended.
 		 * @param pos source position.
@@ -784,15 +790,6 @@ public class XONReader extends StringParser implements XONParsers {
 				_arrays.peek().add(_value);
 			}
 		}
-
-		/** Get modification string with source position. */
-		private String genPosMod(final SPosition pos) {
-			return "&{line}" + pos.getLineNumber()
-				+ "&{column}" + pos.getColumnNumber()
-				+ (pos.getSysId() != null ? "&{sysId}" + pos.getSysId() : "");
-		}
-
-		//
 		@Override
 		/** X-script item parsed, not used methods for JSON/XON parsing
 		 * (used in X-definition compiler).
