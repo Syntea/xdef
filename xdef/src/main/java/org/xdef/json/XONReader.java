@@ -634,7 +634,7 @@ public class XONReader extends StringParser implements XONParsers {
 				error(JSON.JSON018);
 				jv = new JValue(jv.getPosition(), "" + jv.getValue());
 			}
-			String name = _jp.addValue(jv);
+			String name = _jp.putValue(jv);
 			if (name != null) {
 				error(JSON.JSON022, name); //Value pair &{0} already exists
 			}
@@ -710,7 +710,12 @@ public class XONReader extends StringParser implements XONParsers {
 		public final Object getResult() {return _value;}
 
 		@Override
-		public String addValue(JValue value) {
+		/** Put value to result.
+		 * @param value JValue to be added to result object.
+		 * @return null or name of pair if value pair already exists in
+		 * the currently processed map.
+		 */
+		public String putValue(JValue value) {
 			if (_kind == 1) {
 				_arrays.peek().add(value.getValue());
 			} else if (_kind == 2) {
@@ -725,15 +730,24 @@ public class XONReader extends StringParser implements XONParsers {
 		}
 
 		@Override
+		/** Set name of value pair.
+		 * @param name value name.
+		 */
 		public void namedValue(SBuffer name) {_names.push(name.getString());}
 
 		@Override
+		/** Array started.
+		 * @param pos source position.
+		 */
 		public void arrayStart(SPosition pos) {
 			_kinds.push(_kind = 1);
 			_arrays.push(new ArrayList<Object>());
 		}
 
 		@Override
+		/** Array ended.
+		 * @param pos source position.
+		 */
 		public void arrayEnd(SPosition pos) {
 			_kinds.pop();
 			_kind = _kinds.peek();
@@ -747,12 +761,18 @@ public class XONReader extends StringParser implements XONParsers {
 		}
 
 		@Override
+		/** Map started.
+		 * @param pos source position.
+		 */
 		public void mapStart(SPosition pos) {
 			_kinds.push(_kind = 2);
 			_maps.push(new LinkedHashMap<String, Object>());
 		}
 
 		@Override
+		/** Map ended.
+		 * @param pos source position.
+		 */
 		public void mapEnd(SPosition pos) {
 			_kinds.pop();
 			_kind = _kinds.peek();
@@ -772,8 +792,13 @@ public class XONReader extends StringParser implements XONParsers {
 				+ (pos.getSysId() != null ? "&{sysId}" + pos.getSysId() : "");
 		}
 
-		// Not used methods for JSON/XON parsing (used in X-definition compiler)
+		//
 		@Override
+		/** X-script item parsed, not used methods for JSON/XON parsing
+		 * (used in X-definition compiler).
+		 * @param name name of item.
+		 * @param value value of item.
+		 */
 		public void xdScript(SBuffer name, SBuffer value) {}
 	}
 

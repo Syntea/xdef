@@ -7,13 +7,13 @@ import org.xdef.sys.SPosition;
  * @author Vaclav Trojan
  */
 public interface JParser {
-	/** Add value to result.
-	 * @param value JValue to be added.
+	/** Put value to result.
+	 * @param value JValue to be added to result object.
 	 * @return null or name of pair if value pair already exists in
 	 * the currently processed map.
 	 */
-	public String addValue(XONReader.JValue value);
-	/** Set name  value pair.
+	public String putValue(XONReader.JValue value);
+	/** Set name of value pair.
 	 * @param name value name.
 	 */
 	public void namedValue(SBuffer name);

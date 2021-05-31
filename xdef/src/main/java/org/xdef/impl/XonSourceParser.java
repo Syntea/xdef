@@ -175,29 +175,54 @@ public class XonSourceParser implements JParser, XParser {
 // Interface JParser
 ////////////////////////////////////////////////////////////////////////////////
 	@Override
-	public String addValue(final XONReader.JValue value) {
+	/** Put value to result.
+	 * @param value JValue to be added to result object.
+	 * @return null or name of pair if value pair already exists in
+	 * the currently processed map.
+	 */
+	public String putValue(final XONReader.JValue value) {
 		_value = value;
 		elementStart(new SBuffer(JsonNames.J_ITEM, value.getPosition()));
 		elementEnd();
 		return null;
 	}
 	@Override
+	/** Set name of value pair.
+	 * @param name value name.
+	 */
 	public void namedValue(final SBuffer name) {_name = name;}
 	@Override
+	/** Array started.
+	 * @param pos source position.
+	 */
 	public void arrayStart(final SPosition pos) {
 		elementStart(new SBuffer(JsonNames.J_ARRAY, pos));
 	}
 	@Override
+	/** Array ended.
+	 * @param pos source position.
+	 */
 	public void arrayEnd(final SPosition pos) {
 		elementEnd();
 	}
 	@Override
+	/** Map started.
+	 * @param pos source position.
+	 */
 	public void mapStart(final SPosition pos) {
 		elementStart(new SBuffer(JsonNames.J_MAP, pos));
 	}
 	@Override
+	/** Map ended.
+	 * @param pos source position.
+	 */
 	public void mapEnd(final SPosition pos) {elementEnd();}
 	@Override
+	/** X-script item parsed, not used methods for JSON/XON parsing
+	 * (used in X-definition compiler).
+	 * @param name name of item.
+	 * @param value value of item.
+	 */
 	public void xdScript(final SBuffer name, SBuffer value) {}
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -264,7 +289,7 @@ public class XonSourceParser implements JParser, XParser {
 				}
 				_jp.arrayEnd(NULPOS);
 			} else {
-				_jp.addValue(new XONReader.JValue(NULPOS, o));
+				_jp.putValue(new XONReader.JValue(NULPOS, o));
 			}
 		}
 		////////////////////////////////////////////////////////////////////////
