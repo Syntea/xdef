@@ -41,6 +41,7 @@ public class Lubor extends XDTester {
 	 * @param args the command line arguments
 	 */
 	public static void main(String... args) {
-		runTest();
+		XDTester.setFulltestMode(true);
+		if (runTest(args) > 0) {System.exit(1);}
 	}
 }

@@ -175,10 +175,11 @@ public class XonSourceParser implements JParser, XParser {
 // Interface JParser
 ////////////////////////////////////////////////////////////////////////////////
 	@Override
-	public void simpleValue(final XONReader.JValue value) {
+	public String addValue(final XONReader.JValue value) {
 		_value = value;
 		elementStart(new SBuffer(JsonNames.J_ITEM, value.getPosition()));
 		elementEnd();
+		return null;
 	}
 	@Override
 	public void namedValue(final SBuffer name) {_name = name;}
@@ -263,7 +264,7 @@ public class XonSourceParser implements JParser, XParser {
 				}
 				_jp.arrayEnd(NULPOS);
 			} else {
-				_jp.simpleValue(new XONReader.JValue(NULPOS, o));
+				_jp.addValue(new XONReader.JValue(NULPOS, o));
 			}
 		}
 		////////////////////////////////////////////////////////////////////////

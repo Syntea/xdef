@@ -88,7 +88,7 @@ public class TestErrorReporting extends STester {
 		ArrayReporter reporter;
 		try {
 			p.error("1","1/1");
-			p.skipSpaces();
+			p.isSpaces();
 			p.error("2","3/1");
 			p.isChar('a');
 			p.error("3","3/3");
@@ -96,11 +96,11 @@ public class TestErrorReporting extends STester {
 			p.error("4","3/4");
 			p.isChar('a');
 			p.error("5","3/5");
-			p.skipSpaces();
+			p.isSpaces();
 			p.error("6","4/2");
 			p.isChar('b');
 			p.error("7","3/5");
-			p.skipSpaces();
+			p.isSpaces();
 			p.error("8","4/2");
 			p.error("9","4/2");
 			reporter = (ArrayReporter) p.getReportWriter();

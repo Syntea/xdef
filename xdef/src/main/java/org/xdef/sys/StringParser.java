@@ -1517,33 +1517,6 @@ public class StringParser extends SReporter implements SParser {
 		return _parsedDatetime == null ? null : _parsedDatetime.getCalendar();
 	}
 
-	/** Skip white spaces.
-	 * @return true if a space was skipped.
-	 */
-	public final boolean skipSpaces() {
-		if (XML_CHARTAB0[_ch] != XML_CHAR_WHITESPACE) {
-			return false;
-		}
-		if (_ch == '\n') {
-			setNewLine();
-		}
-		if (incIndex() < _endPos || readNextBuffer()) {
-			while (XML_CHARTAB0[_ch = _source.charAt(getIndex())] ==
-				XML_CHAR_WHITESPACE) {
-				if (_ch == '\n') {
-					setNewLine();
-				}
-				if (incIndex() >= _endPos && !readNextBuffer()) {
-					_ch = NOCHAR;
-					break;
-				}
-			}
-		} else {
-			_ch = NOCHAR;
-		}
-		return true;
-	}
-
 	@Override
 	/** Check if actual position points to a character in given interval. Set
 	 * the actual position to the next character if given character was
@@ -1985,17 +1958,9 @@ public class StringParser extends SReporter implements SParser {
 	 */
 	public final boolean findTokenAndSkip(final String token) {
 		if (findToken(token)) {
-			int x = getIndex() + token.length();
-			super.setIndex(x);
-			if ( x >= _endPos) {
-				readNextBuffer();
-				if ( x >= _endPos) {
-					_ch =  NOCHAR;
-					super.setIndex(_endPos);
-					return true;
-				}
-			}
-			_ch = _source.charAt(x);
+			int len = token.length();
+			ensureBuffer(len+1);
+			setIndex(getIndex() + len);
 			return true;
 		}
 		return false;
@@ -2241,24 +2206,31 @@ public class StringParser extends SReporter implements SParser {
 		if (_ch == '\n') {
 			setNewLine();
 		}
-		if (incIndex() + 1 < _endPos || readNextBuffer()) {
+/*xx*/
+		if (incIndex() < _endPos || readNextBuffer()) {
 			while (XML_CHARTAB0[_ch = _source.charAt(getIndex())] ==
 				XML_CHAR_WHITESPACE) {
 				if (_ch == '\n') {
 					setNewLine();
 				}
 				if (incIndex() >= _endPos && !readNextBuffer()) {
-					super.setIndex(_endPos);
 					_ch = NOCHAR;
 					break;
 				}
 			}
 		} else {
-			super.setIndex(_endPos);
 			_ch = NOCHAR;
 		}
+/*xx*/
 		return true;
 	}
+
+	@Deprecated
+	/** Skip white spaces.
+	 * @Deprecated please use isSpaces instead.
+	 * @return true if a space was skipped.
+	 */
+	public final boolean skipSpaces() {return isSpaces();}
 
 	@Override
 	/** Check if actual position points to given character. Set the actual
@@ -3176,23 +3148,11 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	private TimeZone readTimeZone(final int n, final char pat) {
-		if (_ch == 'Z') { //Z => UTC+00:00
-			char c = _ch;
+		if (pat == 'Z' && _ch == 'Z' && (n == 0 || n == 6)) { //Z => UTC+00:00
 			nextChar();
-			if (_ch == NOCHAR || !Character.isLetter(_ch)) {
-				return TimeZone.getTimeZone("UTC");
-			}
-			decIndex();
-			_ch = c;
-		} else if (_ch != '-' && _ch != '+') { //zone name
-			if (isToken("CEST")) {
-				TimeZone tz = TimeZone.getTimeZone("Europe/Prague");
-				return tz;
-			} else if (ensureBuffer(3) && isToken("CET")) {
-				TimeZone tz = TimeZone.getTimeZone("Europe/Prague");
-				tz.setID("CET");
-				return tz;
-			}
+			return TimeZone.getTimeZone("UTC");
+		} else if ((pat == 'Z' && (n > 0 && n < 6) || pat == 'z')
+			&& _ch != '-' && _ch != '+') {//zone name
 			ParsePosition pp = new ParsePosition(getIndex());
 			boolean zoneOffsetSpec = false;
 			new SimpleDateFormat(
@@ -3201,7 +3161,7 @@ public class StringParser extends SReporter implements SParser {
 			if (newPos != getIndex()) {
 				String s = _source.substring(getIndex(), pp.getIndex());
 				int ndx;
-				if ((ndx=s.indexOf('+')) >= 0 || (ndx=s.indexOf('-')) >= 0) {
+				if ((ndx=s.indexOf('+')) > 0 || (ndx=s.indexOf('-')) > 0) {
 					 newPos = getIndex() + ndx;
 					 zoneOffsetSpec = true;
 				}
@@ -3212,7 +3172,11 @@ public class StringParser extends SReporter implements SParser {
 			TimeZone tz = TimeZone.getTimeZone(s);
 			if (tz == null || "GMT".equals(tz.getID()) &&
 				!(s.equalsIgnoreCase("GMT") || s.equalsIgnoreCase("UTC"))) {
-				return null; //?????
+				if ("CEST". equals(s)) {
+					tz =  TimeZone.getTimeZone("CET");
+				} else {
+					return null; //?????
+				}
 			}
 			// parsed OK
 			setIndex(newPos);
@@ -4081,16 +4045,16 @@ public class StringParser extends SReporter implements SParser {
 		}
 		int pos1 = getIndex();
 		SPosition spos = getPosition();
-		skipSpaces();
+		isSpaces();
 		if (isChar('(')) {
 			int lastDot = _source.substring(pos, pos1).lastIndexOf('.');
 			if (lastDot > 0) {
 				pos1 = pos + lastDot;
 			}
 		} else if (_source.charAt(pos1 - 1) == '.') {
-			skipSpaces();
+			isSpaces();
 			if (isJavaName()) {
-				skipSpaces();
+				isSpaces();
 				if (isChar('(')) {
 					pos1--;
 				}
@@ -4279,6 +4243,7 @@ public class StringParser extends SReporter implements SParser {
 
 	private boolean readXMLDate() {
 		int start = getIndex();
+		boolean wasQuote = isChar('"');
 		int sign = isChar('-') ? -1 : 1;
 		int pos = getIndex(); //migt be start + 1
 		char firstdigit = getCurrentChar();
@@ -4295,6 +4260,14 @@ public class StringParser extends SReporter implements SParser {
 			return false;
 		}
 		_parsedDatetime._year = getParsedInt() * sign;
+		if (wasQuote) {
+			if (!isChar('"')) {
+				setIndex(start);
+				return false;
+			}
+			return true;
+		}
+		freeBuffer();
 		pos = getIndex();
 		if (!isChar('-') || !isInteger() || getIndex() - pos != 3){
 			setIndex(start);
@@ -4379,12 +4352,20 @@ public class StringParser extends SReporter implements SParser {
 
 	private boolean readXMLYear() {
 		int start = getIndex();
+		boolean wasQuote = isChar('"');
 		boolean negative = isChar('-');
 		if (!isInteger()) {
 			setIndex(start);
 			return false;
 		}
 		_parsedDatetime._year = getParsedInt() * (negative? -1 : 1);
+		if (wasQuote) {
+			if (!isChar('"')) {
+				setIndex(start);
+				return false;
+			}
+		}
+		freeBuffer();
 		return true;
 	}
 

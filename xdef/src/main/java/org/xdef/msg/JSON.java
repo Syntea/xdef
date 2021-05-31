@@ -24,17 +24,17 @@ public interface JSON {
 	public static final long JSON009 = 13834649608L;
 	/** JSON value expected&amp;{#SYS000} */
 	public static final long JSON010 = 13834649609L;
-	/** Not JSON object &amp;{0}{: } */
+	/** Not JSON object &amp;{0}{: }&amp;{#SYS000} */
 	public static final long JSON011 = 13834649610L;
-	/** Incomparable objects &amp;{0} and &amp;{1} */
+	/** Incomparable objects &amp;{0} and &amp;{1}&amp;{#SYS000} */
 	public static final long JSON012 = 13834649611L;
-	/** Incorrect XML node name with JSON namespace &amp;{0}{: } */
+	/** Incorrect XML node name with JSON namespace &amp;{0}{: }&amp;{#SYS000} */
 	public static final long JSON013 = 13834649612L;
-	/** Illegal leading zero in number */
+	/** Illegal leading zero in number&amp;{#SYS000} */
 	public static final long JSON014 = 13834649613L;
 	/** Unclosed comment&amp;{#SYS000} */
 	public static final long JSON015 = 13834649614L;
-	/** Text node is not allowed in this XML representation of JSON map */
+	/** Text node is not allowed in this XML representation of JSON map&amp;{#SYS000} */
 	public static final long JSON016 = 13834649615L;
 	/** Not allowed character '&amp;{0}'&amp;{#SYS000} */
 	public static final long JSON017 = 13834649616L;
@@ -46,9 +46,9 @@ public interface JSON {
 	public static final long JSON020 = 13834649619L;
 	/** After ":" in the command $any must follow a string value&amp;{#SYS000} */
 	public static final long JSON021 = 13834649620L;
-	/** Value pair &amp;{0} already exists */
+	/** Value pair &amp;{0} already exists&amp;{#SYS000} */
 	public static final long JSON022 = 13834649621L;
-	/** Illegal number value&amp;{0}{ for the XON type "}{"}: &amp;{1} */
+	/** Illegal number value&amp;{0}{ for the XON type "}{"}: &amp;{1}&amp;{#SYS000} */
 	public static final long JSON023 = 13834649622L;
 	/** Messages for JSON and XON */
 	public static final long JSON_DESCRIPTION = 13834649623L;

@@ -102,9 +102,9 @@ public class XScriptMacroResolver extends StringParser {
 		StringParser p1;
 		int ndx;
 		int level;
-		p.skipSpaces();
+		p.isSpaces();
 		if (p.isChar('(')) { // parameters
-			p.skipSpaces();
+			p.isSpaces();
 			while (isXScriptName(p)) {
 				String parName = p.getParsedString();
 				int index = macro.getParamNames().indexOf(parName);
@@ -113,13 +113,13 @@ public class XScriptMacroResolver extends StringParser {
 					macError(nestingLevel, XDEF.XDEF497, parName, macName);
 					return null;
 				}
-				p.skipSpaces();
+				p.isSpaces();
 				if (!p.isChar('=')) {
 					 //'&{0}' expected
 					macError(nestingLevel, XDEF.XDEF410, "=");
 					return null;
 				}
-				p.skipSpaces();
+				p.isSpaces();
 				char delimiter;
 				if ((delimiter = p.isOneOfChars("'\"")) == NOCHAR) {
 					//String specification expected
@@ -173,9 +173,9 @@ public class XScriptMacroResolver extends StringParser {
 					}
 					params[index] = s;
 				}
-				p.skipSpaces();
+				p.isSpaces();
 				if (p.isChar(',')) {
-					p.skipSpaces();
+					p.isSpaces();
 				} else {
 					break;
 				}

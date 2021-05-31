@@ -18,6 +18,7 @@ import org.xdef.json.JsonTools;
 import org.xdef.model.XMElement;
 import org.xdef.model.XMNode;
 import org.xdef.msg.XDEF;
+import org.xdef.sys.SDatetime;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.StringParser;
 
@@ -368,6 +369,14 @@ public class XComponentUtil {
 		return result;
 	}
 
+	public static final String dateToJstring(final SDatetime x) {
+		String s = x.toISO8601();
+		if (!s.matches("-?\\d+\\z")) { // not number
+			return s;
+		}
+		return '"' + s + '"'; // if number we put it into quotes (JSON string).
+	}
+
 	/** Create XON map from XComponent.
 	 * @param xc XComponent
 	 * @return object with XON map.
@@ -399,7 +408,7 @@ public class XComponentUtil {
 					o = toXon((XComponent) o);
 					result.put(key, o);
 				} else {
-					new RuntimeException("Not XComponent").printStackTrace();
+					new RuntimeException("Not XComponent: " + o);
 				}
 			}
 		}

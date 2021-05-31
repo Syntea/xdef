@@ -817,8 +817,14 @@ class XCGeneratorBase {
 			}
 			case XDValueID.XD_DATETIME: {
 				String s = xdata.getDateMask();
-				x = "get&{name}()." +
-					(s == null ? "toISO8601())" : "formatDate("+s+"))");
+				if (s == null) {
+					x =
+"org.xdef.component.XComponentUtil.dateToJstring(get&{name}()))";
+				} else {
+					x = "get&{name}().formatDate("+s+"))";
+				}
+//				x = "get&{name}()." +
+//					(s == null ? "toISO8601())" : "formatDate("+s+"))");
 				break;
 			}
 			case XDValueID.XD_BYTES:
@@ -895,8 +901,15 @@ class XCGeneratorBase {
 				break;
 			case XDValueID.XD_DATETIME: {
 				String s = xdata.getDateMask();
-				x = (max > 1 ? "listOf" : "get") + "&{name}()"+y+"." +
-					(s!=null ? "formatDate(" + s : "toISO8601(") + ")";
+				if (s == null) {
+					x = "org.xdef.component.XComponentUtil.dateToJstring(" +
+						(max > 1 ? "listOf" : "get") + "&{name}()"+y + ")";
+				} else {
+					x = (max > 1 ? "listOf" : "get") + "&{name}()"+y+"." +
+					"formatDate(" + s + ")";
+				}
+//				x = (max > 1 ? "listOf" : "get") + "&{name}()"+y+"." +
+//					(s!=null ? "formatDate(" + s : "toISO8601(") + ")";
 				break;
 			}
 			case XDValueID.XD_BYTES:

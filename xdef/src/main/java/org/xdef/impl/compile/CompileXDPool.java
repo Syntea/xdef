@@ -944,9 +944,9 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					pnode._xdVersion,
 					pnode._nsPrefixes, pnode._xpathPos);
 				if (xel._template) {
-					_scriptCompiler.skipSpaces();
+					_scriptCompiler.isSpaces();
 					if (_scriptCompiler.isToken("$$$script:")) {
-						_scriptCompiler.skipSpaces();
+						_scriptCompiler.isSpaces();
 						_scriptCompiler.isChar(';');
 						xel._template = false;
 					}
@@ -1030,11 +1030,11 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					xattr.setSPosition(copySPosition(sval));
 					xattr.setXDPosition(xel.getXDPosition()+ "/@" + key);
 					boolean template;
-					_scriptCompiler.skipSpaces();
+					_scriptCompiler.isSpaces();
 					if (template = xel._template) {
-						_scriptCompiler.skipSpaces();
+						_scriptCompiler.isSpaces();
 						if (_scriptCompiler.isToken("$$$script:")) {
-							_scriptCompiler.skipSpaces();
+							_scriptCompiler.isSpaces();
 							_scriptCompiler.isChar(';');
 							template = false;
 						}
@@ -1338,9 +1338,9 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						pnode._xdef,
 						pnode._xdVersion,
 						pnode._nsPrefixes, pnode._xpathPos+"/text()");
-					_scriptCompiler.skipSpaces();
+					_scriptCompiler.isSpaces();
 					if (_scriptCompiler.isToken("$$$script:")) {
-						_scriptCompiler.skipSpaces();
+						_scriptCompiler.isSpaces();
 						_scriptCompiler.isChar(';');
 						_scriptCompiler.compileDataScript(xtxt);
 					} else {
@@ -1354,9 +1354,9 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 //					newPI.setSPosition(new SPosition(sval, false));
 //					_scriptCompiler.setSource(sval,
 //						_scriptCompiler._actDefName, pnode._nsPrefixes); //???=
-//					_scriptCompiler.skipSpaces();
+//					_scriptCompiler.isSpaces();
 //					if (_scriptCompiler.isToken("$$$script:")) {
-//						_scriptCompiler.skipSpaces();
+//						_scriptCompiler.isSpaces();
 //						_scriptCompiler.isChar(';');
 //						_scriptCompiler.compileDataScript(newPI);
 //					} else {
@@ -1374,9 +1374,9 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						pnode._xdef,
 						pnode._xdVersion,
 						pnode._nsPrefixes, pnode._xpathPos);
-					_scriptCompiler.skipSpaces();
+					_scriptCompiler.isSpaces();
 					if (_scriptCompiler.isToken("$$$script:")) {
-						_scriptCompiler.skipSpaces();
+						_scriptCompiler.isSpaces();
 						_scriptCompiler.isChar(';');
 						_scriptCompiler.compileDataScript(xcomment);
 					} else {
@@ -1573,7 +1573,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		}
 		if (pnode._value != null && pnode._value.getString() != null) {
 			_scriptCompiler.setSourceBuffer(pnode._value);
-			_scriptCompiler.skipSpaces();
+			_scriptCompiler.isSpaces();
 			if (!_scriptCompiler.eos()) {
 				//Text value not allowed here
 				_scriptCompiler.lightError(XDEF.XDEF260, "&{xpath}" + pnode._xpathPos);
@@ -1693,7 +1693,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			_scriptCompiler.setSource(sval, defName, pnode._xdef,
 				pnode._xdVersion, pnode._nsPrefixes, pnode._xpathPos);
 			while (true) {
-				_scriptCompiler.skipSpaces();
+				_scriptCompiler.isSpaces();
 				SPosition pos = new SPosition(_scriptCompiler);
 				String refName;
 				String nsURI = null;

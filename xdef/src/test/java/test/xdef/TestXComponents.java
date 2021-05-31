@@ -86,9 +86,8 @@ public final class TestXComponents extends XDTester {
 		XComponent xc;
 		XDDocument xd;
 		XDPool xp;
-
-		try { // GPSPosition, Price
-			xdef =
+		try {
+			xdef = // GPSPosition, Price
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='A'>\n" +
 "<xd:declaration\n>\n"+
 "  Price a;\n"+
@@ -121,6 +120,49 @@ public final class TestXComponents extends XDTester {
 			assertEq(1030, xd.getVariable("d").intValue());
 			assertEq("g(51.52, -0.09, 0.0, London)",
 				xd.getVariable("q").toString());
+			xp = compile(new String[] { // nested declaration of type
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' name='D7_xc'>\n" +
+"  <xd:component>\n" +
+"    %class test.xdef.IdentDN %link D7_#A;\n" +
+"    %class test.xdef.VymazDN extends test.xdef.IdentDN %link D7_#B;\n" +
+"  </xd:component>\n" +
+"</xd:def>",
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' name='D7_' root='A | B'>\n" +
+"    <xd:declaration scope=\"global\">\n" +
+"        type  cisloDN             num(5);\n" +
+"        type  cj                  string(1,50);\n" +
+"        type  plan                gamDate();\n" +
+"        type  rokDN               gamYear();\n" +
+"    </xd:declaration>\n" +
+"    <A RokDN=\"rokDN()\" CisloDN=\"cisloDN()\"/>\n" +
+"    <B xd:script=\"ref A\" C=\"cj()\" P=\"? plan()\"/>\n" +
+"</xd:def>",
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' name='D7_decl'>\n" +
+"    <xd:declaration scope=\"global\">\n" +
+"        type  gamYear          long(1800, 2200);\n" +
+"        type  gamDate          xdatetime('yyyyMMdd');\n" +
+"    </xd:declaration>\n" +
+"</xd:def>"});
+			genXComponent(xp, clearTempDir());
+			xml = "<A RokDN=\"2021\" CisloDN=\"12345\"/>";
+			assertEq(xml, parse(xp, "D7_", xml, reporter));
+			assertNoErrors(reporter);
+			xc = parseXC(xp, "D7_", xml, null, reporter);
+			assertNoErrorwarnings(reporter);
+			assertEq(xml, xc.toXml());
+			assertEq(2021L, SUtils.getValueFromGetter(xc, "getRokDN"));
+			assertEq("12345", SUtils.getValueFromGetter(xc, "getCisloDN"));
+			xml ="<B RokDN=\"2021\" CisloDN=\"12345\" C=\"x\" P=\"20210524\"/>";
+			assertEq(xml, parse(xp, "D7_", xml, reporter));
+			assertNoErrors(reporter);
+			xc = parseXC(xp, "D7_", xml, null, reporter);
+			assertNoErrorwarnings(reporter);
+			assertEq(xml, xc.toXml());
+			assertEq(2021L, SUtils.getValueFromGetter(xc, "getRokDN"));
+			assertEq("12345", SUtils.getValueFromGetter(xc, "getCisloDN"));
+			assertEq("x", SUtils.getValueFromGetter(xc, "getC"));
+			assertEq(new SDatetime("2021-05-24"),
+				SUtils.getValueFromGetter(xc, "getP"));
 		} catch (Exception ex) {fail(ex);}
 		reporter.clear();
 		try { // model with occurrnece > 1

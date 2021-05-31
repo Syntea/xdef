@@ -3331,7 +3331,7 @@ public final class TestXdef extends XDTester {
 		final public void parseObject(final XXNode xnode,
 			final XDParseResult p) {
 			StringParser parser = new StringParser(p.getSourceBuffer());
-			parser.skipSpaces();
+			parser.isSpaces();
 			if (parser.isInteger()) {
 				long x = parser.getParsedLong();
 				if ((x & 1) == 0) {
@@ -3339,7 +3339,7 @@ public final class TestXdef extends XDTester {
 				} else {
 					p.setParsedValue(new DefLong(x));
 				}
-				parser.skipSpaces();
+				parser.isSpaces();
 				p.setIndex(parser.getIndex());
 			} else {
 				p.error(XDEF.XDEF515); // Value error

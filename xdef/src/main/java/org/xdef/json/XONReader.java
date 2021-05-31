@@ -111,9 +111,7 @@ public class XONReader extends StringParser implements XONParsers {
 				warning(JSON.JSON019);  //Comments are not allowed here
 			}
 			if (wasLineComment) {
-				while(!eos() && !isNewLine()) {
-					nextChar();
-				}
+				skipToNextLine();
 			} else if (!findTokenAndSkip("*/")) {
 				error(JSON.JSON015); //Unclosed comment
 				setEos();
@@ -423,11 +421,9 @@ public class XONReader extends StringParser implements XONParsers {
 						"|HH:mm:ss[.S][Z]"+ //time
 						"|--MM[-dd][Z]" + //month day
 						"|---dd[Z]"+ //day
-						"|yyyy-MMZ"+ // year month
-						"|yyyyZ"+ // year with zone
-						"|yyyy-MM"+ // year month
-						"|yyyy")) { // year without zone
-						return returnValue(spos, getParsedSDatetime());
+						"|yyyy-MM[Z]"+ // year month
+						"|yyyy[Z]")) { // year
+							return returnValue(spos, getParsedSDatetime());
 					}
 					//JSON simpleValue expected
 					return returnError(spos, null, JSON.JSON010, "[]{}");
@@ -597,8 +593,7 @@ public class XONReader extends StringParser implements XONParsers {
 					return returnValue(spos, 0);
 				}
 			}
-			// error
-			setIndex(pos);
+			setIndex(pos); // error
 			//JSON simpleValue expected
 			return returnError(spos, null, JSON.JSON010, "[]{}");
 		}
@@ -639,7 +634,10 @@ public class XONReader extends StringParser implements XONParsers {
 				error(JSON.JSON018);
 				jv = new JValue(jv.getPosition(), "" + jv.getValue());
 			}
-			_jp.simpleValue(jv);
+			String name = _jp.addValue(jv);
+			if (name != null) {
+				error(JSON.JSON022, name); //Value pair &{0} already exists
+			}
 		}
 	}
 
@@ -712,20 +710,22 @@ public class XONReader extends StringParser implements XONParsers {
 		public final Object getResult() {return _value;}
 
 		@Override
-		public void simpleValue(JValue value) {
+		public String addValue(JValue value) {
 			if (_kind == 1) {
 				_arrays.peek().add(value.getValue());
 			} else if (_kind == 2) {
-				_maps.peek().put(_names.pop(), value.getValue());
+				String name = _names.pop();
+				if (_maps.peek().put(name, value.getValue()) != null) {
+					return name;
+				}
 			} else {
 				_value = value.getValue();
 			}
+			return null;
 		}
 
 		@Override
-		public void namedValue(SBuffer name) {
-			_names.push(name.getString());
-		}
+		public void namedValue(SBuffer name) {_names.push(name.getString());}
 
 		@Override
 		public void arrayStart(SPosition pos) {
