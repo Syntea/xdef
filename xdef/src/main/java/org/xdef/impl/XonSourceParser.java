@@ -202,9 +202,7 @@ public class XonSourceParser implements JParser, XParser {
 	/** Array ended.
 	 * @param pos source position.
 	 */
-	public void arrayEnd(final SPosition pos) {
-		elementEnd();
-	}
+	public void arrayEnd(final SPosition pos) {elementEnd();}
 	@Override
 	/** Map started.
 	 * @param pos source position.
@@ -270,6 +268,7 @@ public class XonSourceParser implements JParser, XParser {
 			_obj = obj;
 			_jp = jp;
 		}
+
 		/** Parsing of an JSON/XON object.
 		 * @param o the object to parse.
 		 */
@@ -292,9 +291,10 @@ public class XonSourceParser implements JParser, XParser {
 				_jp.putValue(new XONReader.JValue(NULPOS, o));
 			}
 		}
-		////////////////////////////////////////////////////////////////////////
-		// implementation of the interface XONParsers
-		////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////
+// implementation of the interface XONParsers
+////////////////////////////////////////////////////////////////////////////////
 		@Override
 		public SPosition getPosition() {return NULPOS;} // no position
 		@Override
