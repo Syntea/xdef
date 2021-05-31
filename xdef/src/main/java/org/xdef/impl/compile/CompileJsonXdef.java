@@ -597,7 +597,12 @@ public class CompileJsonXdef extends StringParser {
 		final JObject getResult() {return _value;}
 
 		@Override
-		public String addValue(JValue value) {
+	/** Put value to result.
+	 * @param value JValue to be added to result object.
+	 * @return null or name of pair if value pair already exists in
+	 * the currently processed map.
+	 */
+		public String putValue(JValue value) {
 			if (_kind == 1) {
 				_arrays.peek().add(value);
 			} else if (_kind == 2) {
@@ -612,15 +617,24 @@ public class CompileJsonXdef extends StringParser {
 		}
 
 		@Override
+		/** Set name of value pair.
+		 * @param name value name.
+		 */
 		public void namedValue(SBuffer name) {_names.push(name);}
 
 		@Override
+		/** Array started.
+		 * @param pos source position.
+		 */
 		public void arrayStart(SPosition pos) {
 			_kinds.push(_kind = 1);
 			_arrays.push(new JArray(pos));
 		}
 
 		@Override
+		/** Array ended.
+		 * @param pos source position.
+		 */
 		public void arrayEnd(SPosition pos) {
 			_kinds.pop();
 			_kind = _kinds.peek();
@@ -634,12 +648,18 @@ public class CompileJsonXdef extends StringParser {
 		}
 
 		@Override
+		/** Map started.
+		 * @param pos source position.
+		 */
 		public void mapStart(SPosition pos) {
 			_kinds.push(_kind = 2);
 			_maps.push(new JMap(pos));
 		}
 
 		@Override
+		/** Map ended.
+		 * @param pos source position.
+		 */
 		public void mapEnd(SPosition pos) {
 			_kinds.pop();
 			_kind = _kinds.peek();
@@ -653,6 +673,11 @@ public class CompileJsonXdef extends StringParser {
 		}
 
 		@Override
+		/** X-script item parsed, not used methods for JSON/XON parsing
+		 * (used in X-definition compiler).
+		 * @param name name of item.
+		 * @param value value of item.
+		 */
 		public void xdScript(SBuffer name, SBuffer value) {
 			String s = JsonNames.ONEOF_NAME.equals(name.getString())
 				? JsonNames.ONEOF_NAME : "";
