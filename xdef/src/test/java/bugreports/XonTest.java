@@ -11,7 +11,6 @@ import org.xdef.json.JsonUtil;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.GPSPosition;
 import test.XDTester;
-import static test.XDTester.genXComponent;
 
 /** Test XON data. */
 public class XonTest extends XDTester {
@@ -121,6 +120,13 @@ if (true) return;
 "    \"q\" : \"? char()\",\n" +		/*char ' ' */
 "    \"r\" : \"? char()\",\n" +		/*char not exists */
 "    \"s\" : \"? char()\",\n" +		/*char not exists */
+"    \"t\" : \"? gYear()\",\n" +	/*gYear*/
+"    \"u\" : \"? gYear()\",\n" +	/*gYear*/
+"    \"v\" : \"? gYear()\",\n" +	/*gYear*/
+"    \"w\" : \"? gYear()\",\n" +	/*gYear*/
+"    \"x\" : \"? gYear()\",\n" +	/*gYear*/
+"    \"y\" : \"? gYear()\",\n" +	/*gYear*/
+"    \"z\" : \"? gYear()\",\n" +	/*gYear*/
 "    \" name with space \": \"? jstring()\"\n" +
 "  },\n" +
 "  \"float()\",\n" +
@@ -136,10 +142,6 @@ if (true) return;
 "  \"time()\",\n" +
 "  \"time()\",\n" +
 "  \"time()\",\n" +
-"  \"gYear()\",\n" +
-"  \"gYear()\",\n" +
-"  \"gYear()\",\n" +
-"  \"gYear()\",\n" +
 "  \"gYearMonth()\",\n" +
 "  \"gYearMonth()\",\n" +
 "  \"gYearMonth\",\n" +
@@ -179,7 +181,11 @@ if (true) return;
 "    o : c\"\n\",                     # Character\n" +
 "    p : c\"\\n\",                    # Character\n" +
 "    q : c\" \",                      # Character\n" +
-"    \" name with space \": \"x\\ty\" /* name with space is quoted! */\n" +
+"    \"t\" : D0001,                   # year (without zone)\n" +
+"    \"u\" : D-0001,                  # year (without zone)\n" +
+"    \"v\" : D123456789Z,             # year zone\n" +
+"    \"w\" : D-0001-01:00,            # year zone\n" +
+"    \" name with space \": \"x\\ty\" # name with space is quoted!\n" +
 "  }, /**** end of map ****/\n" +
 "  -3F,                               # Float\n" +
 "  -3d,                               # BigDecimal\n" +
@@ -194,13 +200,9 @@ if (true) return;
 "  D19:23:01,                         /* hours, minutes seconds */\n" +
 "  D19:23:01.012,                     /* hours minutes seconds millis */\n" +
 "  D00:00:00.00001+00:00,             /* time nanos zone */\n" +
-"  D2000,                             /* year (without zone) */\n" +
-"  D-123456789Z,                      /* year (without zone) */\n" +
-"  D2000Z,                            /* year zone */\n" +
-"  D2000-01:00,                       /* year zone */\n" +
-"  D2000-10,                          /* year month */\n" +
 "  D2000-11Z,                         /* year month zone */\n" +
 "  D2000-10-01:00,                    /* year month zone */\n" +
+"  D2000-10,                          /* year month; no zone */\n" +
 "  D2021-01-12T01:10:11.54012-00:01,  /* date and time (nanos, zone) */\n" +
 "  g(-0, +1),                         /* GPS */\n" +
 "  b(HbRBHbRBHQw=),                   /* byte array (base64) */\n" +
