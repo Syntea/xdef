@@ -1147,8 +1147,7 @@ if(T ){return;}
 "</Contract>\n"+
 "<Agreement Date=\"required; create toString(now(),'yyyy-MM-dd HH:mm');\"\n"+
 "           Number=\"required num(10); create from('@Number');\" >\n"+
-"  <Owner xd:script= \"occurs 1;\n"+
-"                         create from('Client[@Typ=\\'1\\']');\" \n"+
+"  <Owner xd:script= \"create from('Client[@Typ=\\'1\\']');\" \n"+
 "           ID=\"required num(8); create from('@ID');\"\n"+
 "           Name=\"required string(1,30); create from('@Name');\" />\n"+
 "  <Holder xd:script=\"occurs 1; create from('Client[@Typ=\\'2\\']');\" \n"+
