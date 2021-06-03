@@ -28,44 +28,6 @@ public class XonTest extends XDTester {
 		File tempDir = clearTempDir();
 /*xx*
 		try {
-			xon = "[D2000Z]";
-			xon = "[ D-2000 ]";
-//System.out.println(xon);
-			x = JsonUtil.parseXON(xon);
-			json = JsonUtil.toJsonString(JsonUtil.xonToJson(x), true);
-//System.out.println(json);
-			json = JsonUtil.toJsonString(x, true);
-//System.out.println(json);
-			JsonUtil.parse(json);
-			s = JsonUtil.toXonString(x, true);
-			y = JsonUtil.parseXON(s);
-			assertTrue(JsonUtil.jsonEqual(x,y));
-			s = JsonUtil.toXonString(x, false);
-			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='a'>\n"+
-"<xd:json name='a'>\n" +
-"[\"gYear()\"]\n" +
-"</xd:json>\n" +
-"<xd:component>\n"+
-"  %class bugreports.XonGYear %link #a;\n"+
-"</xd:component>\n"+
-"</xd:def>";
-			xp = compile(xdef);
-			y = jparse(xp, "", json, reporter);
-			assertNoErrors(reporter);
-			reporter.clear();
-			genXComponent(xp, tempDir);
-			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
-			assertNoErrors(reporter);
-			reporter.clear();
-			y = XComponentUtil.toXon(xc);
-			assertTrue(JsonUtil.jsonEqual(x,y));
-			x = xc.toJson();
-//System.out.println(JsonUtil.toJsonString(x));
-			y = JsonUtil.xonToJson(y);
-//System.out.println(JsonUtil.toJsonString(y));
-			assertTrue(JsonUtil.jsonEqual(x,y));
-//if (true) return;
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='A'>\n"+
 "  <xd:json name='A'>\n"+
@@ -93,6 +55,41 @@ public class XonTest extends XDTester {
 			assertTrue(JsonUtil.jsonEqual(x,y));
 		} catch (Exception ex) {fail(ex);}
 if (true) return;
+/*xx*
+		try {
+			xon = "[ D-2000 ]";
+			x = JsonUtil.parseXON(xon);
+			json = JsonUtil.toJsonString(JsonUtil.xonToJson(x), true);
+			json = JsonUtil.toJsonString(x, true);
+			JsonUtil.parse(json);
+			s = JsonUtil.toXonString(x, true);
+			y = JsonUtil.parseXON(s);
+			assertTrue(JsonUtil.jsonEqual(x,y));
+			s = JsonUtil.toXonString(x, false);
+			xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='a'>\n"+
+"<xd:json name='a'>\n" +
+"[\"gYear()\"]\n" +
+"</xd:json>\n" +
+"<xd:component>\n"+
+"  %class bugreports.XonGYear %link #a;\n"+
+"</xd:component>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			y = jparse(xp, "", json, reporter);
+			assertNoErrors(reporter);
+			reporter.clear();
+			genXComponent(xp, tempDir);
+			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
+			assertNoErrors(reporter);
+			reporter.clear();
+			y = XComponentUtil.toXon(xc);
+			assertTrue(JsonUtil.jsonEqual(x,y));
+			x = xc.toJson();
+			y = JsonUtil.xonToJson(y);
+			assertTrue(JsonUtil.jsonEqual(x,y));
+		} catch (Exception ex) {fail(ex);}
+if (true) return;
 /*xx*/
 		try {
 			xdef =
@@ -100,12 +97,12 @@ if (true) return;
 "<xd:json name='a'>\n" +
 "[\n" +
 "  {\n" +
-"    \"a\" : \"? short()\",\n" +		/* Short */
+"    \"a\" : \"? short()\",\n" +	/* Short */
 "    \"b\" : \"? jstring()\",\n" +	/* string */
 "    \"c\" : \"? double()\",\n" +		/* Double */
 "    \"f\" : \"? boolean()\",\n" +	/* boolean */
 "    \"g\" : \"? duration()\",\n" +	/* duration */
-"    \"h\" : \"? jnull()\",\n" +		/* null */
+"    \"h\" : \"? jnull()\",\n" +	/* null */
 "    \"i\" : [],\n" +				/* empty array */
 "    \"Towns\" : [\n" +
 "      \"* gps()\"\n" +
@@ -164,7 +161,7 @@ if (true) return;
 "    a : 1S,                          # Short\n" +
 "    b : \"ab cd\",                     # String\n" +
 "    c : -123.4e2D,                   # Double\n" +
-"    f:true,                        # Boolean\n" +
+"    f:true,                          # Boolean\n" +
 "    g : P1Y1M1DT1H1M1.12S,           # Duration\n" +
 "    h : null,                        # null\n" +
 "    i:[],                            # empty array\n" +
@@ -173,19 +170,19 @@ if (true) return;
 "      g(51.52, -0.09, 0, London),    # GPS\n" +
 "      g(50.08, 14.42, 399, \"Praha (centrum)\") # GPS\n" +
 "    ],\n" +
-"    j : c\"a\",                      # Character\n" +
-"    k : c\"'\",                      # Character\n" +
-"    l : c\"\\\"\",                   # Character\n" +
-"    m : c\"\\u0007\",                # Character\n" +
-"    n : c\"\\\\\",                   # Character\n" +
-"    o : c\"\n\",                     # Character\n" +
-"    p : c\"\\n\",                    # Character\n" +
-"    q : c\" \",                      # Character\n" +
-"    \"t\" : D0001,                   # year (without zone)\n" +
-"    \"u\" : D-0001,                  # year (without zone)\n" +
-"    \"v\" : D123456789Z,             # year zone\n" +
-"    \"w\" : D-0001-01:00,            # year zone\n" +
-"    \" name with space \": \"x\\ty\" # name with space is quoted!\n" +
+"    j : c\"a\",                        # Character\n" +
+"    k : c\"'\",                        # Character\n" +
+"    l : c\"\\\"\",                       # Character\n" +
+"    m : c\"\\u0007\",                    # Character\n" +
+"    n : c\"\\\\\",                       # Character\n" +
+"    o : c\"\n\",                       # Character\n" +
+"    p : c\"\\n\",                        # Character\n" +
+"    q : c\" \",                        # Character\n" +
+"    t : D0001,                       # year (without zone)\n" +
+"    u : D-0001,                      # year (without zone)\n" +
+"    v : D123456789Z,                 # year zone\n" +
+"    w : D-0001-01:00,                # year zone\n" +
+"    \" name with space \": \"x\\ty\"      # name with space is quoted!\n" +
 "  }, /**** end of map ****/\n" +
 "  -3F,                               # Float\n" +
 "  -3d,                               # BigDecimal\n" +
@@ -212,16 +209,15 @@ if (true) return;
 "# End of XON example";
 			x = JsonUtil.parseXON(xon);
 			json = JsonUtil.toJsonString(JsonUtil.xonToJson(x), true);
-//			json = JsonUtil.toJsonString(x, true);
-//System.out.println(json);
 			JsonUtil.parse(json);
-//if (true) return;
+			s = JsonUtil.toJsonString(x, true);
+//System.out.println(s);
+			JsonUtil.parse(s);
 			s = JsonUtil.toXonString(x, true);
 //System.out.println(s);
 			y = JsonUtil.parseXON(s);
 			assertTrue(JsonUtil.jsonEqual(x,y));
 			s = JsonUtil.toXonString(x, false);
-//if (true) return;
 			List list = (List) ((Map) ((List) x).get(0)).get("Towns");
 			assertEq("Wien",((GPSPosition) list.get(0)).name());
 			assertEq("London",((GPSPosition) list.get(1)).name());
@@ -248,6 +244,8 @@ if (true) return;
 //System.out.println(JsonUtil.toJsonString(y, true));
 			assertTrue(JsonUtil.jsonEqual(x,y));
 		} catch (Exception ex) {fail(ex);}
+//if (true) return;
+/*xx*/
 
 		clearTempDir(); // clear temporary directory
 	}

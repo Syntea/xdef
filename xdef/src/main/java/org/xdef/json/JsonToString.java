@@ -93,12 +93,6 @@ class JsonToString extends JsonTools {
 		}
 		if (x instanceof byte[]) {// byte array
 			return "b(" + new String(SUtils.encodeBase64((byte[]) x)) + ")";
-		} else if (x instanceof SDatetime) {
-			String s = x.toString();
-			if (s.matches("-?\\d+\\z")) {
-				return '"' + s + '"';
-			}
-			return s;
 		} else {
 			result = x.toString();
 		}
