@@ -4,12 +4,14 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 import org.w3c.dom.Element;
+import org.xdef.XDDocument;
 import org.xdef.XDPool;
 import org.xdef.component.XComponent;
 import org.xdef.component.XComponentUtil;
 import org.xdef.json.JsonUtil;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.GPSPosition;
+import org.xdef.xml.KXmlUtils;
 import test.XDTester;
 
 /** Test XON data. */
@@ -17,80 +19,83 @@ public class XonTest extends XDTester {
 
 	public XonTest() {super();}
 
-	@Override
-	public void test() {
-		String s, json, xon, xdef;
+	private String testx(final String type, final String xon) {
 		Object x, y;
+		XDDocument xd;
 		XDPool xp;
 		ArrayReporter reporter = new ArrayReporter();
 		Element el;
 		XComponent xc;
-		File tempDir = clearTempDir();
-/*xx*
+		String tempDir = getTempDir();
 		try {
-			xdef =
+			String xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='A'>\n"+
 "  <xd:json name='A'>\n"+
-"    {\" \tspaces \\u0007\\n\\b in name\\r\": \"jstring();\"}\n"+
+"    [\"* " + type + "()\"]\n"+
 "  </xd:json>\n"+
 "  <xd:component>\n"+
-"    %class bugreports.data.GJson %link #A;\n"+
+"    %class bugreports.data.GJ"+ type + " %link #A;\n"+
 "  </xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			json = "{\" \tspaces \\u0007\n\\b in name\\r\": \" x \r\t y \"}";
-			x = JsonUtil.parse(json);
-			el = JsonUtil.jsonToXml(x);
-			y = xp.createXDDocument().jvalidate(el, reporter);
-			assertTrue(JsonUtil.jsonEqual(x,y));
+			x = JsonUtil.parseXON(xon);
+			el = JsonUtil.jsonToXml(JsonUtil.xonToJson(x));
+			xd = xp.createXDDocument();
+			y = xd.jvalidate(el, reporter);
+			if (reporter.errorWarnings()) {
+				return "" + KXmlUtils.nodeToString(el, true) + "\n" + reporter;
+			}
 			assertNoErrors(reporter);
+			if (!JsonUtil.jsonEqual(JsonUtil.xonToJson(x),y)) {
+				return "1\n" + JsonUtil.toJsonString(JsonUtil.xonToJson(x))
+					+ "\n" +  JsonUtil.toJsonString(x);
+			}
+			if (!JsonUtil.jsonEqual(x, xd.getXon())) {
+				return "2\n" + xon + "\n" +  JsonUtil.toXonString(xd.getXon());
+			}
 			reporter.clear();
-			assertTrue(JsonUtil.jsonEqual(JsonUtil.parse(json), x),
+			if (!JsonUtil.jsonEqual(JsonUtil.parseXON(xon), x)) {
+				return "3\n" + xon + "\n" + JsonUtil.toXonString(x);
+			}
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parseXON(xon), x),
 				JsonUtil.toJsonString(x, true));
 			XDTester.genXComponent(xp, tempDir);
-			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
+			xc = xp.createXDDocument().jparseXComponent(xon, null, reporter);
 			y = JsonUtil.xmlToJson(xc.toXml());
-			assertTrue(JsonUtil.jsonEqual(x,y));
-			y = JsonUtil.xonToJson(XComponentUtil.toXon(xc));
-			assertTrue(JsonUtil.jsonEqual(x,y));
-		} catch (Exception ex) {fail(ex);}
-if (true) return;
-/*xx*
-		try {
-			xon = "[ D-2000 ]";
-			x = JsonUtil.parseXON(xon);
-			json = JsonUtil.toJsonString(JsonUtil.xonToJson(x), true);
-			json = JsonUtil.toJsonString(x, true);
-			JsonUtil.parse(json);
-			s = JsonUtil.toXonString(x, true);
-			y = JsonUtil.parseXON(s);
-			assertTrue(JsonUtil.jsonEqual(x,y));
-			s = JsonUtil.toXonString(x, false);
-			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='a'>\n"+
-"<xd:json name='a'>\n" +
-"[\"gYear()\"]\n" +
-"</xd:json>\n" +
-"<xd:component>\n"+
-"  %class bugreports.XonGYear %link #a;\n"+
-"</xd:component>\n"+
-"</xd:def>";
-			xp = compile(xdef);
-			y = jparse(xp, "", json, reporter);
-			assertNoErrors(reporter);
-			reporter.clear();
-			genXComponent(xp, tempDir);
-			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
-			assertNoErrors(reporter);
-			reporter.clear();
+			if (!JsonUtil.jsonEqual(JsonUtil.xonToJson(x),y)) {
+				return "4\n" + JsonUtil.toJsonString(JsonUtil.xonToJson(x))
+					+ "\n" +  JsonUtil.toJsonString(y);
+			}
 			y = XComponentUtil.toXon(xc);
-			assertTrue(JsonUtil.jsonEqual(x,y));
-			x = xc.toJson();
-			y = JsonUtil.xonToJson(y);
-			assertTrue(JsonUtil.jsonEqual(x,y));
-		} catch (Exception ex) {fail(ex);}
-if (true) return;
+			if (!JsonUtil.jsonEqual(x,y)) {
+				return "5\n" + xon + "\n" +  JsonUtil.toXonString(y);
+			}
+			return null;
+		} catch (Exception ex) {
+			return ex.toString();
+		}
+	}
+	
+	@Override
+	public void test() {
 /*xx*/
+		assertNull(testx("date", 
+			"[ D2021-01-12, D1999-01-05+01:01, D1998-12-21Z ]"));
+		assertNull(testx("gYear", 
+			"[ D2021+01:00, D1999, D-0012Z ]"));
+		assertNull(testx("gps", 
+			"[ g(20.21,19.99),g(20.21, 19.99,0.1),g(51.52,-0.09,0,London) ]"));
+		assertNull(testx("price", "[ p(20.21 CZK), p(19.99 USD) ]"));
+		assertNull(testx("char",
+			"[ c\"a\", c\"'\", c\"\\\"\", c\"\\u0007\",  c\"\\\\\" ]"));
+//if (true) return;
+/*xx*/
+		String s, json, xon, xdef;
+		Object x, y;
+		XDPool xp;
+		ArrayReporter reporter = new ArrayReporter();
+		XComponent xc;
+		File tempDir = clearTempDir();
 		try {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='a'>\n"+
@@ -232,7 +237,7 @@ if (true) return;
 			y = jparse(xp, "", json, reporter);
 			assertNoErrors(reporter);
 			reporter.clear();
-			genXComponent(xp, clearTempDir());
+			genXComponent(xp, tempDir);
 			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
 			assertNoErrors(reporter);
 			reporter.clear();
@@ -254,32 +259,7 @@ if (true) return;
 	 * @param args the command line arguments
 	 */
 	public static void main(String... args) {
-/**
-		java.util.TimeZone tz;
-		tz = java.util.TimeZone.getTimeZone("CET");
-		System.out.println(tz);
-		tz = java.util.TimeZone.getTimeZone("Europe/Prague");
-		System.out.println(tz);
-		tz = java.util.TimeZone.getTimeZone("UTC");
-		System.out.println(tz);
-		tz = java.util.TimeZone.getTimeZone("CST");
-		System.out.println(tz);
-		tz = java.util.TimeZone.getTimeZone("MST");
-		System.out.println(tz);
-		tz = java.util.TimeZone.getTimeZone("EST");
-		System.out.println(tz);
-		tz = java.util.TimeZone.getTimeZone("PST");
-		System.out.println(tz);
-		tz = java.util.TimeZone.getTimeZone("AST");
-		System.out.println(tz);
-		tz = java.util.TimeZone.getTimeZone("SST");
-		System.out.println(tz);
-		tz = java.util.TimeZone.getTimeZone("AST");
-System.out.println(tz);
-System.out.println(java.util.TimeZone.getAvailableIDs());
-/**/
 		XDTester.setFulltestMode(true);
 		if (runTest(args) > 0) {System.exit(1);}
-/**/
 	}
 }

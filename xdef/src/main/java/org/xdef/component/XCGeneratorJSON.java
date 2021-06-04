@@ -378,11 +378,9 @@ class XCGeneratorJSON extends XCGeneratorBase1 {
 		if (max > 1) { // list of values
 			String typ1 = "java.util.List<" + typ + ">";
 			if (xe.getJsonMode() != 0) {
-				jGet = "org.xdef.json.JsonTools.jstringFromSource(";
 				if ("String".equals(typ)) {
-					jGet += "y.getvalue())";
-				} else if ("Character".equals(typ)) {
-					jGet += "String.valueOf(y.getvalue()))";
+					jGet = "org.xdef.json.JsonTools.jstringFromSource("
+						+ "y.getvalue())";
 				} else {
 					jGet = "y.getvalue()";
 				}
@@ -416,11 +414,8 @@ class XCGeneratorJSON extends XCGeneratorBase1 {
 			}
 			// setter
 			if (xe.getJsonMode() != 0) {
-				jSet = "org.xdef.json.JsonUtil.toJsonString(";
 				if ("String".equals(typ)) {
-					jSet += "x,false)";
-				} else if ("Character".equals(typ)) {
-					jSet += "String.valueOf(x),false)";
+					jSet = "org.xdef.json.JsonUtil.toJsonString(x,false)";
 				} else {
 					jSet = "x";
 				}

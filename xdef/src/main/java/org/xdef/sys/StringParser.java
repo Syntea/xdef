@@ -4243,7 +4243,7 @@ public class StringParser extends SReporter implements SParser {
 
 	private boolean readXMLDate() {
 		int start = getIndex();
-		boolean wasQuote = isChar('"');
+		boolean wasQuote = isChar('"');//year without zone may be quoted in JSON
 		int sign = isChar('-') ? -1 : 1;
 		int pos = getIndex(); //migt be start + 1
 		char firstdigit = getCurrentChar();
@@ -4260,7 +4260,7 @@ public class StringParser extends SReporter implements SParser {
 			return false;
 		}
 		_parsedDatetime._year = getParsedInt() * sign;
-		if (wasQuote) {
+		if (wasQuote) { //quoted year
 			if (!isChar('"')) {
 				setIndex(start);
 				return false;
@@ -4352,14 +4352,14 @@ public class StringParser extends SReporter implements SParser {
 
 	private boolean readXMLYear() {
 		int start = getIndex();
-		boolean wasQuote = isChar('"');
+		boolean wasQuote = isChar('"');//year without zone may be quoted in JSON
 		boolean negative = isChar('-');
 		if (!isInteger()) {
 			setIndex(start);
 			return false;
 		}
 		_parsedDatetime._year = getParsedInt() * (negative? -1 : 1);
-		if (wasQuote) {
+		if (wasQuote) { //quoted year
 			if (!isChar('"')) {
 				setIndex(start);
 				return false;
