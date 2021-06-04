@@ -1,4 +1,4 @@
-package bugreports;
+package test.xdef;
 
 import java.io.File;
 import java.util.List;
@@ -15,9 +15,9 @@ import org.xdef.xml.KXmlUtils;
 import test.XDTester;
 
 /** Test XON data. */
-public class XonTest extends XDTester {
+public class TestXon extends XDTester {
 
-	public XonTest() {super();}
+	public TestXon() {super();}
 
 	private String testx(final String type, final String xon) {
 		Object x, y;
@@ -79,15 +79,23 @@ public class XonTest extends XDTester {
 	@Override
 	public void test() {
 /*xx*/
+		assertNull(testx("int", "[ ]"));
+		assertNull(testx("byte", "[ 1 ]"));
+		assertNull(testx("short", "[ 1 ]"));
+		assertNull(testx("int", "[ 1 ]"));
+		assertNull(testx("long", "[ 1 ]"));
+		assertNull(testx("integer", "[ 1 ]"));
+		assertNull(testx("float", "[ 1 ]"));
+		assertNull(testx("double", "[ 1 ]"));
+		assertNull(testx("decimal", "[ 1 ]"));
 		assertNull(testx("date",
 			"[ D2021-01-12, D1999-01-05+01:01, D1998-12-21Z ]"));
-		assertNull(testx("gYear",
-			"[ D2021+01:00, D1999, D-0012Z ]"));
+		assertNull(testx("gYear", "[ D2021+01:00, D1999, D-0012Z ]"));
 		assertNull(testx("gps",
 			"[ g(20.21,19.99),g(20.21, 19.99,0.1),g(51.52,-0.09,0,London) ]"));
 		assertNull(testx("price", "[ p(20.21 CZK), p(19.99 USD) ]"));
 		assertNull(testx("char",
-			"[ c\"a\", c\"'\", c\"\\\"\", c\"\\u0007\",  c\"\\\\\" ]"));
+			"[ c\"a\", c\"'\", c\"\\\"\", c\"\\u0007\", c\"\\\\\" ]"));
 //if (true) return;
 /*xx*/
 		String s, json, xon, xdef;
@@ -216,10 +224,8 @@ public class XonTest extends XDTester {
 			json = JsonUtil.toJsonString(JsonUtil.xonToJson(x), true);
 			JsonUtil.parse(json);
 			s = JsonUtil.toJsonString(x, true);
-//System.out.println(s);
 			JsonUtil.parse(s);
 			s = JsonUtil.toXonString(x, true);
-//System.out.println(s);
 			y = JsonUtil.parseXON(s);
 			assertTrue(JsonUtil.jsonEqual(x,y));
 			s = JsonUtil.toXonString(x, false);
@@ -233,7 +239,6 @@ public class XonTest extends XDTester {
 				((GPSPosition) list.get(2)))/1000));
 			assertEq(1030,Math.round(((GPSPosition) list.get(1)).distanceTo(
 				((GPSPosition) list.get(2)))/1000));
-//System.out.println(json);
 			y = jparse(xp, "", json, reporter);
 			assertNoErrors(reporter);
 			reporter.clear();
@@ -244,13 +249,9 @@ public class XonTest extends XDTester {
 			y = XComponentUtil.toXon(xc);
 			assertTrue(JsonUtil.jsonEqual(x,y));
 			x = xc.toJson();
-//System.out.println("===\n" + JsonUtil.toJsonString(x, true));
 			y = JsonUtil.xonToJson(y);
-//System.out.println(JsonUtil.toJsonString(y, true));
 			assertTrue(JsonUtil.jsonEqual(x,y));
 		} catch (Exception ex) {fail(ex);}
-//if (true) return;
-/*xx*/
 
 		clearTempDir(); // clear temporary directory
 	}

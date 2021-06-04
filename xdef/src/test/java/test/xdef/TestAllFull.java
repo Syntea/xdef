@@ -71,6 +71,7 @@ public class TestAllFull {
 			new TestXdef(),
 			new TestXdefOfXdef(),
 			new TestXmlWriter(),
+			new TestXon(),
 		};
 		String xdNS = XDTester._xdNS;
 		XDTester._xdNS = XDConstants.XDEF31_NS_URI;

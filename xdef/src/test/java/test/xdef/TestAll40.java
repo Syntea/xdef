@@ -69,6 +69,7 @@ public class TestAll40 {
 			new TestXdef(),
 			new TestXdefOfXdef(),
 			new TestXmlWriter(),
+			new TestXon(),
 		};
 		String xdNS = XDTester._xdNS;
 		XDTester._xdNS = XDConstants.XDEF40_NS_URI;
