@@ -75,15 +75,15 @@ public class XonTest extends XDTester {
 			return ex.toString();
 		}
 	}
-	
+
 	@Override
 	public void test() {
 /*xx*/
-		assertNull(testx("date", 
+		assertNull(testx("date",
 			"[ D2021-01-12, D1999-01-05+01:01, D1998-12-21Z ]"));
-		assertNull(testx("gYear", 
+		assertNull(testx("gYear",
 			"[ D2021+01:00, D1999, D-0012Z ]"));
-		assertNull(testx("gps", 
+		assertNull(testx("gps",
 			"[ g(20.21,19.99),g(20.21, 19.99,0.1),g(51.52,-0.09,0,London) ]"));
 		assertNull(testx("price", "[ p(20.21 CZK), p(19.99 USD) ]"));
 		assertNull(testx("char",
