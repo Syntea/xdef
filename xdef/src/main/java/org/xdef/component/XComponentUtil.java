@@ -330,7 +330,6 @@ public class XComponentUtil {
 		Class<?> cls = xc.getClass();
 		try {
 			Method m = cls.getDeclaredMethod("get" + JsonNames.J_VALUEATTR);
-//			return m.invoke(xc);
 			Object o = m.invoke(xc);
 			if (o instanceof String) {
 				String s = (String) o;
@@ -371,10 +370,10 @@ public class XComponentUtil {
 
 	public static final String dateToJstring(final SDatetime x) {
 		String s = x.toISO8601();
-		if (!s.matches("-?\\d+\\z")) { // not number
-			return s;
+		if (s.matches("-?\\d+\\z")) { // year without zone
+			s = '"' + s + '"'; // if year is without zone we put it into quotes
 		}
-		return '"' + s + '"'; // if number we put it into quotes (JSON string).
+		return s;
 	}
 
 	/** Create XON map from XComponent.
@@ -421,8 +420,8 @@ public class XComponentUtil {
 	 */
 	public final static Object toXon(final XComponent xc) {
 		String ns = xc.xGetNamespaceURI();
+		String name = xc.xGetNodeName();
 		if (XDConstants.JSON_NS_URI_W3C.equals(ns)) {
-			String name = xc.xGetNodeName();
 			if (JsonNames.J_MAP.equals(name)) {
 				return toXonMap(xc);
 			} else if (JsonNames.J_ARRAY.equals(name)) {
@@ -430,8 +429,7 @@ public class XComponentUtil {
 			} else if (JsonNames.J_ITEM.equals(name)) {
 				return toXonItem(xc);
 			}
-			throw new RuntimeException("Unknown XComponent item: " + name);
 		}
-		throw new RuntimeException("Not namespace JSON_NS_URI_W3C: " + ns);
+		throw new RuntimeException("Unknown item: " + name + "; ns=" + ns);
 	}
 }
