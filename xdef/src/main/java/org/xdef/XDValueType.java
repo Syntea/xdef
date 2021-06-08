@@ -14,45 +14,51 @@ public enum XDValueType {
 	SHORT,
 	/** Int value (implemented as int - 8 bit). */
 	BYTE,
-	/** Character value ID. */
+	/** Character value. */
 	CHAR,
-	/** Boolean value ID. */
+	/** Boolean value. */
 	BOOLEAN,
-	/** Duration value ID. */
+	/** Duration value. */
 	DURATION,
-	/** BNF grammar ID. */
+	/** BNF grammar. */
 	BNFGRAMMAR,
-	/** BNF rule ID. */
+	/** BNF rule. */
 	BNFRULE,
-	/** BigDecimal value ID. */
+	/** BigDecimal value. */
 	DECIMAL,
-	/** BigInteger value ID. */
+	/** BigInteger value. */
 	BIGINTEGER,
-	/** Float value ID (implemented as double - 64 bit ). */
+	/** Float value (implemented as double - 64 bit ). */
 	DOUBLE,
-	/** Float value ID (implemented  as float - 32 bit ). */
+	/** Float value (implemented  as float - 32 bit ). */
 	FLOAT,
-	/** Input stream value. */
-	INPUT,
-	/** Output stream value. */
-	OUTPUT,
 	/** Byte array value. */
 	BYTES,
-	/** String value ID. */
+	/** String value. */
 	STRING,
-	/** Date value ID. */
+	/** Date value. */
 	DATETIME,
-	/** Regular expression value ID. */
-	REGEX,
-	/** Regular expression result value ID. */
-	REGEXRESULT,
-	/** Container value ID. */
+	/**  Uniform resource identifier (URI). */
+	ANYURI,
+	/** Container value. */
 	CONTAINER,
 	/** GPS position. */
 	GPSPOSITION,
 	/** Price (amount with currency). */
 	PRICE,
-	/** org.w3c.dom.Element value ID. */
+	/** File object. */
+	FILE,
+	/** Email address. */
+	EMAIL,
+	/** Regular expression value. */
+	REGEX,
+	/** Regular expression result value. */
+	REGEXRESULT,
+	/** Input stream value. */
+	INPUT,
+	/** Output stream value. */
+	OUTPUT,
+	/** org.w3c.dom.Element value. */
 	ELEMENT,
 	/** org.w3c.dom.Attr value ID */
 	ATTR,
@@ -88,7 +94,7 @@ public enum XDValueType {
 	ANY,
 	/** Object value. */
 	OBJECT,
-	/** Null type. */
+	/** Null value. */
 	NULL,
 	/** XXElement value. */
 	XXELEMENT,
@@ -96,7 +102,7 @@ public enum XDValueType {
 	XXTEXT,
 	/** XXAttr value. */
 	XXATTR,
-	/** XXData value (supertype for both XXATTR and XXTEXT). */
+	/** XXData value (super type for both XXATTR and XXTEXT). */
 	XXDATA,
 	/** XXDocument value. */
 	XXDOCUMENT,
@@ -112,24 +118,24 @@ public enum XDValueType {
 	XX_SEQUENCE,
 	/** XModel value. */
 	XM_MODEL,
-	/** Undefined type. */
+	/** Undefined. */
 	XD_UNDEF,
 
 ////////////////////////////////////////////////////////////////////////////////
 // Internally used types
 ////////////////////////////////////////////////////////////////////////////////
-	/** Attribute reference type. */
+	/** Attribute reference. */
 	X_ATTR_REF,
-	/** Attribute reference type. */
+	/** Parse item. */
 	X_PARSEITEM,
 	/** Value of UNIQUESET. */
 	X_UNIQUESET_M,
-	/** Value type: reference to attribute; used by compiler. */
+	/** Reference to attribute; used by compiler. */
 	X_UNIQUESET_KEY,
 	/** Named value of UNIQUESET. */
 	X_UNIQUESET_NAMED,
-	/** Attribute ref, undefined type and methods which are not above a type. */
-	X_NOTYPE_VALUE,
 	/** Value of UNIQUESET. */
-	X_UNIQUESET;
+	X_UNIQUESET,
+	/** No type: ref, undefined and methods which are not of any above. */
+	X_NOTYPE_VALUE;
 }
