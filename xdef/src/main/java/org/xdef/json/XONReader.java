@@ -1,14 +1,17 @@
 package org.xdef.json;
 
+import java.io.File;
 import java.io.Reader;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
+import org.xdef.impl.code.DefEmail;
 import org.xdef.msg.JSON;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.ArrayReporter;
@@ -404,6 +407,27 @@ public class XONReader extends StringParser implements XONParsers {
 						return returnError(spos, ch, JSON.JSON010, "',[]{}");
 					}
 					return returnValue(spos, ch);
+				} else if (isToken("u\"")) { // URI
+					try {
+						return returnValue(spos,
+							new URI(JsonTools.readJSONString(this)));
+					} catch (Exception ex) {}
+					//JSON value expected
+					return returnError(spos, null, JSON.JSON010, "[]{}");
+				} else if (isToken("e\"")) { // Email address
+					try {
+						return returnValue(spos,
+							new DefEmail(JsonTools.readJSONString(this)));
+					} catch (Exception ex) {}
+					//JSON value expected
+					return returnError(spos, null, JSON.JSON010, "[]{}");
+				} else if (isToken("f\"")) { // File
+					try {
+						return returnValue(spos,
+							new File(JsonTools.readJSONString(this)));
+					} catch (Exception ex) {}
+					//JSON value expected
+					return returnError(spos, null, JSON.JSON010, "[]{}");
 				} else if (isToken("b(")) {
 					try {
 						result = SUtils.decodeBase64(this);
@@ -415,6 +439,7 @@ public class XONReader extends StringParser implements XONParsers {
 						return returnValue(spos, null);
 					}
 					setIndex(pos);
+					//JSON value expected
 					return returnError(spos, null, JSON.JSON010, "[]{}");
 				} else if (isChar('D')) {
 					if (isDatetime("yyyy-MM-dd['T'HH:mm:ss[.S]][Z]" +

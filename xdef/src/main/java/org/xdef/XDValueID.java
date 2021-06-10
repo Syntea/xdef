@@ -136,6 +136,6 @@ public interface XDValueID {
 	static final short X_UNIQUESET_NAMED = X_UNIQUESET_KEY+1; // 62
 	/** Value of UNIQUESET ID. */
 	static final short X_UNIQUESET = X_UNIQUESET_NAMED  + 1; // 63
-	/** No type ID; ref, undefined and methods which are not of any above. */
+	/** No type ID: ref, undefined and methods which are not of any above. */
 	static final short X_NOTYPE_VALUE = X_UNIQUESET + 1; // 64
 }

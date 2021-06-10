@@ -1,21 +1,21 @@
 package org.xdef.impl.compile;
 
+import java.lang.reflect.Constructor;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.LinkedHashMap;
 import org.xdef.XDContainer;
 import org.xdef.XDParser;
 import org.xdef.XDValue;
+import org.xdef.XDValueID;
 import org.xdef.impl.code.CodeOp;
 import org.xdef.impl.code.CodeTable;
 import org.xdef.impl.code.DefContainer;
 import org.xdef.impl.code.DefLong;
 import org.xdef.impl.code.DefString;
 import org.xdef.impl.code.DefXQueryExpr;
-import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.LinkedHashMap;
-import java.util.List;
-import org.xdef.XDValueID;
-import java.util.Locale;
 
 /** Provides the implemented methods.
  * Declared literals and declared objects
@@ -81,9 +81,13 @@ public class CompileBase implements CodeTable, XDValueID {
 		setType(XD_STRING, "String", String.class);
 		setType(XD_DATETIME, "Datetime", org.xdef.sys.SDatetime.class);
 		setType(XD_DURATION, "Duration", org.xdef.sys.SDuration.class);
-		setType(XD_CONTAINER, "Container", org.xdef.XDContainer.class);
+		setType(XD_BYTES, "Bytes", byte[].class);
 		setType(XD_GPSPOSITION, "GPSPosition", org.xdef.XDGPSPosition.class);
 		setType(XD_PRICE,"Price",org.xdef.XDPrice.class);
+		setType(XD_ANYURI,"URI", java.net.URI.class);
+		setType(XD_FILE,"File", java.io.File.class);
+		setType(XD_FILE,"Email", org.xdef.XDEmail.class);
+		setType(XD_CONTAINER, "Container", org.xdef.XDContainer.class);
 		setType(XD_REGEX, "Regex", org.xdef.XDRegex.class);
 		setType(XD_REGEXRESULT, "RegexResult", org.xdef.XDRegexResult.class);
 		setType(XD_BNFGRAMMAR,"BNFGrammar", org.xdef.XDBNFGrammar.class);
@@ -92,7 +96,6 @@ public class CompileBase implements CodeTable, XDValueID {
 		setType(XD_OUTPUT,"Output", org.xdef.XDOutput.class);
 		setType(XX_ELEMENT, "", org.xdef.proc.XXElement.class);
 		setType(XX_DATA, "", org.xdef.proc.XXData.class);
-		setType(XD_BYTES, "Bytes", byte[].class);
 		setType(XD_ELEMENT, "Element", org.w3c.dom.Element.class);
 		setType(XD_EXCEPTION, "Exception", org.xdef.XDException.class);
 		setType(XD_REPORT, "Report", org.xdef.sys.Report.class);
@@ -107,8 +110,7 @@ public class CompileBase implements CodeTable, XDValueID {
 		setType(XD_NAMEDVALUE, "NamedValue", org.xdef.XDNamedValue.class);
 		setType(XD_XMLWRITER, "XmlOutStream", org.xdef.XDXmlOutStream.class);
 		setType(XD_LOCALE, "Locale", Locale.class);
-		setType(XD_UNIQUESET_KEY, "uniqueSetKey",
-			org.xdef.XDUniqueSetKey.class);
+		setType(XD_UNIQUESET_KEY, "uniqueSetKey",org.xdef.XDUniqueSetKey.class);
 		setType(XD_ANY, "AnyValue", org.xdef.XDValue.class);
 		setType(XD_OBJECT, "Object", java.lang.Object.class);
 		setType(X_UNIQUESET_M, "uniqueSet", null);
@@ -124,14 +126,17 @@ public class CompileBase implements CodeTable, XDValueID {
 			((char) XD_STRING) + ";String;" +
 			((char) XD_DATETIME) + ";SDatetime;" +
 			((char) XD_DURATION) + ";SDuration;" +
+			((char) XD_BYTES) + ";byte[];" +
 			((char) XD_REGEX) + ";Pattern;" +
 			((char) XD_REGEXRESULT) + ";Matcher;" +
 			((char) XD_DURATION) + ";SDuration;" +
 			((char) XD_CONTAINER) + ";XDContainer;" +
 			((char) XD_GPSPOSITION) + ";GPSPosition;" +
 			((char) XD_PRICE) + ";Price;" +
+			((char) XD_ANYURI) + ";URI;" +
+			((char) XD_FILE) + ";File;" +
+			((char) XD_EMAIL) + ";Email;" +
 			((char) XD_BNFGRAMMAR) + ";DefBNFGrammar;" +
-			((char) XD_BYTES) + ";byte[];" +
 			((char) XD_LOCALE) + ";Locale;" +
 			((char) XD_UNIQUESET_KEY) + ";uniqueSetKey;" +
 			((char) XD_ANY) + ";XDValue;" +
@@ -326,7 +331,7 @@ public class CompileBase implements CodeTable, XDValueID {
 			"unsignedLong", "?xs:unsignedLong");
 
 		im = genParserMetnod(0, 2, new short[] {XD_LONG,XD_LONG},
-			XD_STRING,
+			XD_ANYURI,
 			keyParam("base", XD_STRING, true, -1,false),
 			keyParam("enumeration", XD_STRING, true, -1, false),
 			keyParam("length", XD_LONG, false,  -1, false),
@@ -627,11 +632,6 @@ public class CompileBase implements CodeTable, XDValueID {
 		parser(im,org.xdef.impl.parsers.XDParseUriList.class, "uriList");
 		parser(im,org.xdef.impl.parsers.XDParseUrl.class, "url");
 		parser(im,org.xdef.impl.parsers.XDParseUrlList.class, "urlList");
-//
-//		// This type is deprecated, replace with "list(%item=typ)"
-//		im = genParserMetnod(1, 1, new short[] {XD_PARSER}, XD_STRING,
-//			keyParam("item", XD_PARSER, true, 0, false));
-//		parser(im, org.xdef.impl.parsers.XSParseList.class, "?ListOf");
 ////////////////////////////////////////////////////////////////////////////////
 // implemented methods
 ////////////////////////////////////////////////////////////////////////////////
