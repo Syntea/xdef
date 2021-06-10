@@ -1,40 +1,13 @@
 package org.xdef.impl;
 
-import org.xdef.impl.code.DefBoolean;
-import org.xdef.impl.code.DefSQLService;
-import org.xdef.impl.code.DefXPathExpr;
-import org.xdef.impl.code.DefParseResult;
-import org.xdef.impl.code.DefLong;
-import org.xdef.impl.code.DefDouble;
-import org.xdef.impl.code.DefDuration;
-import org.xdef.impl.code.DefDecimal;
-import org.xdef.impl.code.DefException;
-import org.xdef.impl.code.DefSQLResultSet;
-import org.xdef.impl.code.DefOutStream;
-import org.xdef.impl.code.DefSQLStatement;
-import org.xdef.impl.code.CodeUniqueset;
-import org.xdef.impl.code.DefBytes;
-import org.xdef.impl.code.DefObject;
-import org.xdef.impl.code.DefDate;
-import org.xdef.impl.code.DefBNFGrammar;
-import org.xdef.impl.code.DefNamedValue;
-import org.xdef.impl.code.DefContainer;
-import org.xdef.impl.code.DefString;
-import org.xdef.impl.code.DefXQueryExpr;
-import org.xdef.impl.code.DefRegex;
-import org.xdef.impl.code.DefElement;
-import org.xdef.impl.code.DefNull;
-import org.xdef.impl.code.DefBNFRule;
-import org.xdef.msg.SYS;
-import org.xdef.sys.SDatetime;
-import org.xdef.sys.SDuration;
-import org.xdef.sys.SException;
-import org.xdef.sys.SIOException;
-import org.xdef.sys.SObjectReader;
-import org.xdef.impl.xml.KNamespace;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Method;
+import org.xdef.XDContainer;
 import org.xdef.XDNamedValue;
 import org.xdef.XDParser;
 import org.xdef.XDValue;
+import org.xdef.XDValueID;
 import org.xdef.impl.code.CodeExtMethod;
 import org.xdef.impl.code.CodeI1;
 import org.xdef.impl.code.CodeI2;
@@ -45,20 +18,50 @@ import org.xdef.impl.code.CodeS1;
 import org.xdef.impl.code.CodeSWTableInt;
 import org.xdef.impl.code.CodeSWTableStr;
 import org.xdef.impl.code.CodeStringList;
-import org.xdef.impl.compile.CompileBase;
 import org.xdef.impl.code.CodeTable;
+import org.xdef.impl.code.CodeUniqueset;
 import org.xdef.impl.code.CodeXD;
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Method;
-import org.xdef.XDContainer;
-import org.xdef.XDValueID;
-import org.xdef.impl.code.DefPrice;
+import org.xdef.impl.code.DefBNFGrammar;
+import org.xdef.impl.code.DefBNFRule;
+import org.xdef.impl.code.DefBoolean;
+import org.xdef.impl.code.DefBytes;
+import org.xdef.impl.code.DefContainer;
+import org.xdef.impl.code.DefDate;
+import org.xdef.impl.code.DefDecimal;
+import org.xdef.impl.code.DefDouble;
+import org.xdef.impl.code.DefDuration;
+import org.xdef.impl.code.DefElement;
+import org.xdef.impl.code.DefEmail;
+import org.xdef.impl.code.DefException;
+import org.xdef.impl.code.DefFile;
 import org.xdef.impl.code.DefGPSPosition;
 import org.xdef.impl.code.DefLocale;
+import org.xdef.impl.code.DefLong;
+import org.xdef.impl.code.DefNamedValue;
+import org.xdef.impl.code.DefNull;
+import org.xdef.impl.code.DefObject;
+import org.xdef.impl.code.DefOutStream;
+import org.xdef.impl.code.DefParseResult;
+import org.xdef.impl.code.DefPrice;
+import org.xdef.impl.code.DefRegex;
+import org.xdef.impl.code.DefSQLResultSet;
+import org.xdef.impl.code.DefSQLService;
+import org.xdef.impl.code.DefSQLStatement;
+import org.xdef.impl.code.DefString;
+import org.xdef.impl.code.DefURI;
+import org.xdef.impl.code.DefXPathExpr;
+import org.xdef.impl.code.DefXQueryExpr;
 import org.xdef.impl.code.ParseItem;
-import org.xdef.sys.Price;
+import org.xdef.impl.compile.CompileBase;
+import org.xdef.impl.xml.KNamespace;
+import org.xdef.msg.SYS;
 import org.xdef.sys.GPSPosition;
+import org.xdef.sys.Price;
+import org.xdef.sys.SDatetime;
+import org.xdef.sys.SDuration;
+import org.xdef.sys.SException;
+import org.xdef.sys.SIOException;
+import org.xdef.sys.SObjectReader;
 
 /** Provides reading of XD objects from InputStream.
  * @author Vaclav Trojan
@@ -171,6 +174,12 @@ public final class XDReader extends SObjectReader {
 						SDuration x = readSDuration();
 						return x==null ? new DefDuration() : new DefDuration(x);
 					}
+					case XDValueID.XD_ANYURI:
+						return new DefURI(readString());
+					case XDValueID.XD_FILE:
+						return new DefFile(readString());
+					case XDValueID.XD_EMAIL:
+						return new DefEmail(readString());
 					case XDValueID.XD_ELEMENT:
 						return new DefElement();
 					case XDValueID.XD_EXCEPTION:

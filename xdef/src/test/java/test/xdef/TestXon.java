@@ -1,10 +1,13 @@
 package test.xdef;
 
 import java.io.File;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.List;
 import java.util.Map;
 import org.w3c.dom.Element;
 import org.xdef.XDDocument;
+import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.xdef.component.XComponent;
 import org.xdef.component.XComponentUtil;
@@ -37,7 +40,7 @@ public class TestXon extends XDTester {
 "    %class bugreports.data.GJ"+ type + " %link #A;\n"+
 "  </xd:component>\n"+
 "</xd:def>";
-			xp = compile(xdef);
+			xp = XDFactory.compileXD(null, xdef);
 			x = JsonUtil.parseXON(xon);
 			el = JsonUtil.jsonToXml(JsonUtil.xonToJson(x));
 			xd = xp.createXDDocument();
@@ -45,12 +48,15 @@ public class TestXon extends XDTester {
 			if (reporter.errorWarnings()) {
 				return "" + KXmlUtils.nodeToString(el, true) + "\n" + reporter;
 			}
-			assertNoErrors(reporter);
+			Object o = JsonUtil.xonToJson(x);
 			if (!JsonUtil.jsonEqual(JsonUtil.xonToJson(x),y)) {
-				return "1\n" + JsonUtil.toJsonString(JsonUtil.xonToJson(x))
-					+ "\n" +  JsonUtil.toJsonString(x);
+				System.err.println("1\n" + JsonUtil.toJsonString(o)
+					+ "\n" +  JsonUtil.toJsonString(y));
+//				return "1\n" + JsonUtil.toJsonString(o)
+//					+ "\n" +  JsonUtil.toJsonString(y);
 			}
-			if (!JsonUtil.jsonEqual(x, xd.getXon())) {
+			o = xd.getXon();
+			if (!JsonUtil.jsonEqual(x, o)) {
 				return "2\n" + xon + "\n" +  JsonUtil.toXonString(xd.getXon());
 			}
 			reporter.clear();
@@ -72,12 +78,16 @@ public class TestXon extends XDTester {
 			}
 			return null;
 		} catch (Exception ex) {
-			return ex.toString();
+			StringWriter swr = new StringWriter();
+			ex.printStackTrace(new PrintWriter(swr));
+			return swr.toString();
 		}
 	}
 
 	@Override
 	public void test() {
+//		assertNull(testx("email", "[ e\"tro@volny.cz\", e\"a b<x@y.zz>\" ]"));
+//if (true) return;
 /*xx*/
 		assertNull(testx("int", "[ ]"));
 		assertNull(testx("byte", "[ 1 ]"));
@@ -96,6 +106,9 @@ public class TestXon extends XDTester {
 		assertNull(testx("price", "[ p(20.21 CZK), p(19.99 USD) ]"));
 		assertNull(testx("char",
 			"[ c\"a\", c\"'\", c\"\\\"\", c\"\\u0007\", c\"\\\\\" ]"));
+		assertNull(testx("anyURI", "[ u\"http://a.b\" ]"));
+		assertNull(testx("file", "[ f\"C:/temp1/a.txt\" ]"));
+		assertNull(testx("email", "[ e\"tro@volny.cz\", e\"a b<x@y.zz>\" ]"));
 //if (true) return;
 /*xx*/
 		String s, json, xon, xdef;

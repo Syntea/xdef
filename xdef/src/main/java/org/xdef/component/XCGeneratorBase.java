@@ -278,6 +278,12 @@ class XCGeneratorBase {
 				return "org.xdef.sys.GPSPosition";
 			case XDValueID.XD_PRICE:
 				return "org.xdef.sys.Price";
+			case XDValueID.XD_ANYURI:
+				return "java.net.URI";
+			case XDValueID.XD_FILE:
+				return "java.io.File";
+			case XDValueID.XD_EMAIL:
+				return "org.xdef.XDEmail";
 			case XDValueID.XD_BYTES:
 				_byteArrayEncoding |= getBytesType(xdata);
 				return "byte[]";
@@ -364,6 +370,13 @@ class XCGeneratorBase {
 				return result + "getParsedValue().GPSValue()";
 			case XDValueID.XD_PRICE:
 				return result + "getParsedValue().priceValue()";
+			case XDValueID.XD_ANYURI:
+				return "(java.net.URI) "+result+"getParsedValue().getObject()";
+			case XDValueID.XD_FILE:
+				return "(java.io.File) "+result+"getParsedValue().getObject()";
+			case XDValueID.XD_EMAIL:
+				return "(org.xdef.XDEmail) "
+					+result + "getParsedValue().getObject()";
 			case XDValueID.XD_BYTES:
 				return result + "getParsedValue().getBytes()";
 			case XDValueID.XD_PARSER:

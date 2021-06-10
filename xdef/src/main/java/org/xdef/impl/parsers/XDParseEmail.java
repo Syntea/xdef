@@ -2,6 +2,7 @@ package org.xdef.impl.parsers;
 
 import org.xdef.XDParseResult;
 import org.xdef.XDParserAbstract;
+import org.xdef.impl.code.DefEmail;
 import org.xdef.proc.XXNode;
 import org.xdef.msg.XDEF;
 
@@ -17,7 +18,6 @@ public class XDParseEmail extends XDParserAbstract {
 		p.isSpaces();
 		String s = p.getUnparsedBufferPart().trim();
 		if (chkEmail(p, s, ROOTBASENAME)) {
-			p.setParsedValue(s);
 			p.setEos();
 		}
 	}
@@ -35,16 +35,18 @@ public class XDParseEmail extends XDParserAbstract {
 			//Incorrect value of &{0}&{1}{: }
 			p.errorWithString(XDEF.XDEF809, parserName);
 		} else {
-			String emailregex = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*"
-				+ "@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
-			if (s.matches(emailregex)) {
+			try {
+				p.setParsedValue(new DefEmail(s));
 				return true;
-			}
+			} catch (Exception ex) {}
 			//Incorrect value of &{0}&{1}&{: }
 			p.errorWithString(XDEF.XDEF809, parserName);
 		}
 		return false;
 	}
+
+	@Override
+	public short parsedType() {return XD_EMAIL;}
 
 	@Override
 	public String parserName() {return ROOTBASENAME;}

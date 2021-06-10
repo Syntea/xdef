@@ -1,10 +1,13 @@
 package org.xdef.json;
 
+import java.io.File;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import org.xdef.XDEmail;
 import org.xdef.msg.JSON;
 import org.xdef.sys.GPSPosition;
 import org.xdef.sys.Price;
@@ -147,6 +150,18 @@ class JsonCompare {
 		}
 		if (o1 instanceof Price) {
 			return ((Price) o1).equals(o2);
+		}
+		if (o1 instanceof URI) {
+			return ((URI) o1).equals(o2);
+		}
+		if (o1 instanceof File) {
+			return ((File) o1).equals(o2);
+		}
+		if (o1 instanceof XDEmail) {
+			if (o2 != null && o2 instanceof XDEmail) {
+				return ((XDEmail) o1).equals((XDEmail) o2);
+			}
+			return false;
 		}
 		try {
 			byte[] b1 = (byte[]) o1;

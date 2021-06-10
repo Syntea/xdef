@@ -1,43 +1,45 @@
 package org.xdef.impl;
 
-import org.xdef.impl.code.DefException;
-import org.xdef.impl.code.DefBNFRule;
-import org.xdef.impl.code.DefXPathExpr;
-import org.xdef.impl.code.CodeUniqueset;
-import org.xdef.impl.code.DefRegex;
-import org.xdef.impl.code.DefParseResult;
-import org.xdef.impl.code.DefBNFGrammar;
-import org.xdef.msg.SYS;
-import org.xdef.sys.SObjectWriter;
-import org.xdef.sys.SError;
-import org.xdef.sys.SIOException;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.lang.reflect.Method;
+import java.net.URI;
+import java.util.Locale;
+import org.xdef.XDContainer;
 import org.xdef.XDNamedValue;
 import org.xdef.XDParser;
 import org.xdef.XDValue;
+import org.xdef.XDValueID;
 import org.xdef.impl.code.CodeExtMethod;
-import org.xdef.impl.code.CodeI2;
 import org.xdef.impl.code.CodeI1;
+import org.xdef.impl.code.CodeI2;
 import org.xdef.impl.code.CodeL2;
-import org.xdef.impl.code.CodeParser;
 import org.xdef.impl.code.CodeOp;
+import org.xdef.impl.code.CodeParser;
 import org.xdef.impl.code.CodeS1;
 import org.xdef.impl.code.CodeSWTableInt;
 import org.xdef.impl.code.CodeSWTableStr;
 import org.xdef.impl.code.CodeStringList;
 import org.xdef.impl.code.CodeTable;
-import java.io.IOException;
-import java.io.OutputStream;
-import org.xdef.impl.xml.KNamespace;
+import org.xdef.impl.code.CodeUniqueset;
 import org.xdef.impl.code.CodeXD;
-import org.xdef.impl.compile.CompileBase;
-import org.xdef.XDContainer;
-import org.xdef.XDValueID;
-import org.xdef.impl.code.DefLocale;
-import java.lang.reflect.Method;
-import java.util.Locale;
-import org.xdef.impl.code.DefPrice;
+import org.xdef.impl.code.DefBNFGrammar;
+import org.xdef.impl.code.DefBNFRule;
+import org.xdef.impl.code.DefException;
 import org.xdef.impl.code.DefGPSPosition;
+import org.xdef.impl.code.DefLocale;
+import org.xdef.impl.code.DefParseResult;
+import org.xdef.impl.code.DefPrice;
+import org.xdef.impl.code.DefRegex;
+import org.xdef.impl.code.DefXPathExpr;
 import org.xdef.impl.code.ParseItem;
+import org.xdef.impl.compile.CompileBase;
+import org.xdef.impl.xml.KNamespace;
+import org.xdef.msg.SYS;
+import org.xdef.sys.SError;
+import org.xdef.sys.SIOException;
+import org.xdef.sys.SObjectWriter;
 
 /** Provides writing of XD objects to OutputStream.
  * @author Vaclav Trojan
@@ -126,7 +128,18 @@ public final class XDWriter extends SObjectWriter {
 						writeSDuration(x.durationValue());
 						return;
 					}
-					case XDValueID.XD_ELEMENT:
+					case XDValueID.XD_ANYURI: {
+						URI u = (URI) x.getObject();
+						writeString(u == null ? null : u.toASCIIString());
+						return;
+					}
+					case XDValueID.XD_FILE: {
+						File f = (File) x.getObject();
+						writeString(f == null ? null : f.getCanonicalPath());
+						return;
+					}
+					case XDValueID.XD_EMAIL:
+						writeString(x.stringValue());
 						return;
 					case XDValueID.XD_EXCEPTION: {
 						DefException y = (DefException) x;
@@ -354,5 +367,4 @@ public final class XDWriter extends SObjectWriter {
 				}
 		}
 	}
-
 }

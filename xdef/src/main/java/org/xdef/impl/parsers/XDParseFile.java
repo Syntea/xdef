@@ -1,10 +1,12 @@
 package org.xdef.impl.parsers;
 
+import java.io.File;
 import org.xdef.XDParseResult;
 import org.xdef.XDParserAbstract;
-import org.xdef.proc.XXNode;
+import static org.xdef.XDValueID.XD_FILE;
+import org.xdef.impl.code.DefFile;
 import org.xdef.msg.XDEF;
-import java.io.File;
+import org.xdef.proc.XXNode;
 
 /** Parse filename.
  * @author Vaclav Trojan
@@ -18,7 +20,6 @@ public class XDParseFile extends XDParserAbstract {
 		p.isSpaces();
 		String s = p.getUnparsedBufferPart().trim();
 		if (chkFile(p, s, ROOTBASENAME)) {
-			p.setParsedValue(s);
 			p.setEos();
 		}
 	}
@@ -34,7 +35,7 @@ public class XDParseFile extends XDParserAbstract {
 		final String parserName) {
 		if (!s.isEmpty()) {
 			try {
-				new File(s).getCanonicalPath();
+				p.setParsedValue(new DefFile(new File(s).getCanonicalPath()));
 				return true;
 			} catch (Exception ex) {}
 		}
@@ -42,6 +43,9 @@ public class XDParseFile extends XDParserAbstract {
 		p.errorWithString(XDEF.XDEF809, ROOTBASENAME);
 		return false;
 	}
+
+	@Override
+	public short parsedType() {return XD_FILE;}
 
 	@Override
 	public String parserName() {return ROOTBASENAME;}

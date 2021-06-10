@@ -1,11 +1,14 @@
 package org.xdef.json;
 
+import java.io.File;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import org.xdef.XDEmail;
 import org.xdef.sys.GPSPosition;
 import org.xdef.sys.Price;
 import org.xdef.sys.SDatetime;
@@ -84,6 +87,12 @@ class JsonToString extends JsonTools {
 				return result;
 			} else if (x instanceof Character) {
 				return genChar((Character) x);
+			} else if (x instanceof URI) {
+				return "u\"" + jstringToSource(((URI) x).toASCIIString()) + '"';
+			} else if (x instanceof File) {
+				return "f\""+jstringToSource(((File) x).getAbsolutePath())+'"';
+			} else if (x instanceof XDEmail) {
+				return "e\""+jstringToSource(((XDEmail) x).getEmailAddr())+'"';
 			} else if (x instanceof SDatetime) {
 				return "D" + x;
 			} else if (x instanceof SDuration || x instanceof Price
@@ -93,6 +102,8 @@ class JsonToString extends JsonTools {
 		}
 		if (x instanceof byte[]) {// byte array
 			return "b(" + new String(SUtils.encodeBase64((byte[]) x)) + ")";
+		} else if (x instanceof File) {// file
+			result = ((File) x).getAbsolutePath();
 		} else {
 			result = x.toString();
 		}
@@ -287,6 +298,8 @@ class JsonToString extends JsonTools {
 			return xonArraytOJson((List) x);
 		} else if (x instanceof byte[]) {
 			return new String(SUtils.encodeBase64((byte[]) x));
+		} else if (x instanceof File) {
+			return ((File) x).getAbsolutePath();
 		}
 		return x.toString();
 	}
