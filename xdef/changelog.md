@@ -7,6 +7,7 @@
 * removed deprecated type methods: `ISODay`, `ISOMonth`, `ISOMonthDay`,
  `ISOyearMonth`, `ISOYear`, `ISOdateTime`, `ISOdate`, `tokens`, `tokensi`,
  `ISOduration`, `ISOlanguage`, `parseISODate`, `parseSequence`, `ListOf`.
+* implemented new X-script types `File`, `URI` and `email`.
 
 # Version 40.1.4, release-date 2021-05-13
 * fixed bug: decimal point of amount in price is now always '.' (independent on
