@@ -63,19 +63,21 @@ public final class BNFGrammar {
 		"push",					//28
 		"pop",					//29
 		"anyChar",				//30
-		"find",					//31
-		"error",				//32
-		"JavaName",				//33
-		"JavaQName",			//34
-		"tokens", 				//35
-		"info",  				//36
-		"eos",  				//37
-		"rule",  				//38
-		"true",  				//39
-		"false",  				//40
-		"skipToNextLine",		//41
-		"UTFChar",				//42
-		"stop",  				//43
+		"ASCIIChar",			//31
+		"ctlrChar",				//32
+		"find",					//33
+		"error",				//34
+		"JavaName",				//35
+		"JavaQName",			//36
+		"tokens", 				//37
+		"info",  				//38
+		"eos",  				//39
+		"rule",  				//40
+		"true",  				//41
+		"false",  				//42
+		"skipToNextLine",		//43
+		"UTFChar",				//44
+		"stop",  				//45
 	};
 
 	/** Inline methods code identifiers. */
@@ -110,7 +112,9 @@ public final class BNFGrammar {
 	private static final int INL_PUSH = INL_CLEAR + 1;
 	private static final int INL_POP = INL_PUSH + 1;
 	private static final int INL_ANYCHAR = INL_POP + 1;
-	private static final int INL_FIND = INL_ANYCHAR + 1;
+	private static final int INL_ASCIICHAR = INL_ANYCHAR + 1;
+	private static final int INL_CTRLCHAR =  INL_ASCIICHAR + 1;
+	private static final int INL_FIND = INL_CTRLCHAR + 1;
 	private static final int INL_ERROR = INL_FIND + 1;
 	private static final int INL_JAVANAME = INL_ERROR + 1;
 	private static final int INL_JAVAQNAME = INL_JAVANAME + 1;
@@ -1858,8 +1862,18 @@ public final class BNFGrammar {
 					return true;
 				case INL_POP: //popParsedObject
 					return popObject() != null;
-				case INL_ANYCHAR: //anyChar
-					return _p.peekChar() != SParser.NOCHAR;
+				case INL_ANYCHAR: {//anyChar
+					char c = _p.peekChar();
+					return c != SParser.NOCHAR && Character.isDefined(c);
+				}
+				case INL_ASCIICHAR: {//asciicharacter
+					char c = _p.peekChar();
+					return c > 0 && c < 127;
+				}
+				case INL_CTRLCHAR: {//control character
+					char c = _p.peekChar();
+					return c != 0 && c < 32;
+				}
 				case INL_FIND:{ //find
 					String s = ((String) _param);
 					return s.length() == 1

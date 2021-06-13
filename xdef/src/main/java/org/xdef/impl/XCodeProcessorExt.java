@@ -55,6 +55,7 @@ import java.util.Locale;
 import java.util.StringTokenizer;
 import javax.xml.XMLConstants;
 import org.w3c.dom.Element;
+import org.xdef.XDEmail;
 import org.xdef.XDValueID;
 import org.xdef.impl.code.DefPrice;
 import org.xdef.impl.code.DefGPSPosition;
@@ -96,6 +97,8 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 							if (item.getParam() == XD_CONTAINER) {
 								return new DefContainer(p);
 							}
+						case XD_EMAIL:
+							return (XDEmail) p;
 					}
 					//Icorrect type conversion from AnyValue
 					throw new SRuntimeException(XDEF.XDEF536);
@@ -1183,6 +1186,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 									case XD_PARSER:
 									case XD_GPSPOSITION:
 									case XD_PRICE:
+									case XD_EMAIL:
 										pars[j + k] = stack[i];
 										break;
 									default:

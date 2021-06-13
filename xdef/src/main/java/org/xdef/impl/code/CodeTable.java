@@ -773,8 +773,10 @@ public interface CodeTable {
 	static final short NEW_CURRAMOOUNT = NEW_GPSPOSITION + 1;
 	/** create new Element object. */
 	static final short NEW_ELEMENT = NEW_CURRAMOOUNT + 1;
+	/** create new Email object. */
+	static final short NEW_EMAIL = NEW_ELEMENT + 1;
 	/** Create bytes array. */
-	static final short NEW_BYTES = NEW_ELEMENT + 1;
+	static final short NEW_BYTES = NEW_EMAIL + 1;
 	/** Create output stream. */
 	static final short NEW_INSTREAM = NEW_BYTES + 1;
 	/** Create output stream. */

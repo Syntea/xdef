@@ -74,6 +74,25 @@ public class MyTest extends XDTester {
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<a>\n"+
+"  email(); onTrue {\n"+
+"              Email e = (Email) getParsedValue();\n"+
+"              outln(getEmailUserName(e));\n"+
+"              outln(getEmailLocalPart(e));\n"+
+"              outln(getEmailDomain(e));\n"+
+"              outln(getEmailAddr(e));\n"+
+"            }\n"+
+"</a>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			xml = "<a>(T. tr) a@b</a>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
+		} catch (Exception ex) {fail(ex);}
+if(true)return;
+		try {
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<xd:json name='a'>\n"+
 "  [\"gps();\", \"gps();\"]\n"+
 "</xd:json>\n"+
