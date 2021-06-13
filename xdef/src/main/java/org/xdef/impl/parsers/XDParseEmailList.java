@@ -4,9 +4,11 @@ import org.xdef.XDContainer;
 import org.xdef.XDParseResult;
 import org.xdef.XDParserAbstract;
 import org.xdef.impl.code.DefContainer;
+import org.xdef.impl.code.DefEmail;
 import org.xdef.proc.XXNode;
 import org.xdef.msg.XDEF;
-import java.util.StringTokenizer;
+import org.xdef.sys.SParser;
+import org.xdef.sys.StringParser;
 
 /** Parse list of email address (separator white space, ',' or ';')..
  * @author Vaclav Trojan
@@ -17,31 +19,24 @@ public class XDParseEmailList extends XDParserAbstract {
 
 	@Override
 	public void parseObject(XXNode xnode, XDParseResult p) {
-		StringTokenizer st = new StringTokenizer(
-			p.getUnparsedBufferPart().trim(), ";,");
-		if (!st.hasMoreTokens()) {
-			//Incorrect value of &{0}&{1}{: }
-			p.errorWithString(XDEF.XDEF809, parserName());
-			return;
-		}
-		XDContainer val = new DefContainer();
-		String t = null;
-		do {
-			String x = st.nextToken().trim();
-			if (!x.isEmpty() ) {
-				if (!XDParseUri.chkUri(p, x, parserName())) {
-					return;
+		try {
+			StringParser q = new StringParser(p.getSourceBuffer());
+			q.setIndex(p.getIndex());
+			XDContainer val = new DefContainer();
+			for(;;) {
+				val.addXDItem(new DefEmail(q));
+				if (q.eos() || q.isOneOfChars(",;") == SParser.NOCHAR) {
+					break;
 				}
-				if (t == null) {
-					t = x;
-				} else {
-					t += ' ' + x;
-				}
-				val.addXDItem(x);
 			}
-		} while (st.hasMoreTokens());
-		p.setParsedValue(val);
-		p.setEos();
+			if (q.eos()) {
+				p.setEos();
+				p.setParsedValue(val);
+				return;
+			}
+		} catch (Exception ex) {}
+		//Incorrect value of &{0}&{1}{: }
+		p.errorWithString(XDEF.XDEF809, parserName());
 	}
 
 	@Override

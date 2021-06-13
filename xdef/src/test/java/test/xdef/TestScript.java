@@ -907,27 +907,29 @@ public final class TestScript extends XDTester {
 		testAttr("http://pes.eunet.cz","onTrue setResult(true); required url();"
 			+ " onFalse setResult(false); ");
 		// test email
-		testAttr("tro@volny.cz","onTrue setResult(true); required email();"
+		testAttr("tr.ab@vol.cz","onTrue setResult(true); required email();"
 			+ " onFalse setResult(false); "); // OK
-		testAttr("trovolny.cz","onTrue setResult(false); required email();"
+		testAttr("1@2","onTrue setResult(true);"
+			+ " required email(); onFalse setResult(false); "); // OK
+		testAttr("tro.cz","onTrue setResult(false); required email();"
 			+ " onFalse setResult(true); "); // missing "@"
 		testAttr("@trovolny.cz","onTrue setResult(false); required email();"
-			+ " onFalse setResult(true); "); // missing name
+			+ " onFalse setResult(true); "); // missing local name
 		testAttr("trovolny.cz@","onTrue setResult(false); required email();"
 			+ " onFalse setResult(true); "); // missing domain
-		testAttr("tro@@volny.cz","onTrue setResult(false); required email();"
+		testAttr("tr@@vol.cz","onTrue setResult(false); required email();"
 			+ " onFalse setResult(true); "); // more than one "@"
-		testAttr("tro@vol@ny.cz","onTrue setResult(false); required email();"
+		testAttr("tr@vol@ny.cz","onTrue setResult(false); required email();"
 			+ " onFalse setResult(true); "); // more than one "@"
-		testAttr("tro@volny","onTrue setResult(false); required email();"
-			+ " onFalse setResult(true); "); // missing top domain
-		testAttr("tro@volny.","onTrue setResult(true); required emailList();"
-			+ " onFalse setResult(true); "); // top domain missing
-		testAttr("tro@volny.c","onTrue setResult(true); required emailList();"
-			+ " onFalse setResult(true); "); // top domain too short
+		testAttr("a b t@v","onTrue setResult(true); required email();"
+			+ " onFalse setResult(true); "); // OK
+		testAttr("t@v.","onTrue setResult(true); required emailList();"
+			+ " onFalse setResult(true); "); // top domain part missing
+		testAttr("t@v.c (ab)","onTrue setResult(true); required emailList();"
+			+ " onFalse setResult(true); "); // OK
 		testAttr("t@v.cc,a@bb.cc","onTrue setResult(true);required emailList();"
 			+ " onFalse setResult(false); "); // OK
-		testAttr(" t@v.cc\t ;\n a@bb.cc ", // Ok, white spaces re allowed
+		testAttr(" t@v.cc\t ;\n a@bb.cc ", // OK, white spaces are allowed
 			"onTrue setResult(true);required emailList();"
 			+ " onFalse setResult(false); ");
 		testAttr("t@v.cc a@bb.cc","onTrue setResult(true);required emailList();"

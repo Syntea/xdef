@@ -15,6 +15,7 @@ import java.math.MathContext;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xdef.XDContainer;
+import org.xdef.XDEmail;
 import org.xdef.XDValueID;
 import org.xdef.impl.ChkNode;
 import org.xdef.impl.code.DefDate;
@@ -182,6 +183,15 @@ public final class XExtUtils {
 		return spos != null ? spos.toString() : "";
 	}
 	public static String getEnv(final String name) {return System.getenv(name);}
+
+	public static String getEmailUserName(final XDEmail x) {
+		return x.getUserName();
+	}
+	public static String getEmailLocalPart(final XDEmail x) {
+		return x.getLocalPart();
+	}
+	public static String getEmailDomain(final XDEmail x) {return x.getDomain();}
+	public static String getEmailAddr(final XDEmail x){return x.getEmailAddr();}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of script methods.
