@@ -74,6 +74,10 @@ public class MyTest extends XDTester {
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:declaration>\n"+
+" Email x = new Email('=?UTF-8?Q?P. B=C3=BDk?= &lt;p@s&gt;');\n"+
+//" Email x;\n"+
+"</xd:declaration>\n"+
 "<a>\n"+
 "  email(); onTrue {\n"+
 "              Email e = (Email) getParsedValue();\n"+
@@ -81,6 +85,7 @@ public class MyTest extends XDTester {
 "              outln(getEmailLocalPart(e));\n"+
 "              outln(getEmailDomain(e));\n"+
 "              outln(getEmailAddr(e));\n"+
+//"              outln(getEmailAddr(x));\n"+
 "            }\n"+
 "</a>\n"+
 "</xd:def>";

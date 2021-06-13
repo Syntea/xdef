@@ -86,7 +86,7 @@ public class CompileBase implements CodeTable, XDValueID {
 		setType(XD_PRICE,"Price",org.xdef.XDPrice.class);
 		setType(XD_ANYURI,"URI", java.net.URI.class);
 		setType(XD_FILE,"File", java.io.File.class);
-		setType(XD_FILE,"Email", org.xdef.XDEmail.class);
+		setType(XD_EMAIL,"Email", org.xdef.XDEmail.class);
 		setType(XD_CONTAINER, "Container", org.xdef.XDContainer.class);
 		setType(XD_REGEX, "Regex", org.xdef.XDRegex.class);
 		setType(XD_REGEXRESULT, "RegexResult", org.xdef.XDRegexResult.class);
