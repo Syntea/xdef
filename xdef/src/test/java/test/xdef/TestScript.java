@@ -43,7 +43,10 @@ public final class TestScript extends XDTester {
 	final public static long myCheck5(double p1, long p2, long p3, String p4) {
 		return 3;
 	}
-	private void display(XDPool defPool, String xdef, String data) {
+
+	private static void display(final XDPool defPool,
+		final String xdef,
+		final String data) {
 		System.out.flush();
 		System.err.flush();
 		System.out.println("\nXdefinition:\n"+ xdef);
@@ -54,7 +57,7 @@ public final class TestScript extends XDTester {
 		System.out.flush();
 	}
 
-	private void test(String value, String source) {
+	private void test(final String value, final String source) {
 		System.out.flush();
 		System.err.flush();
 		String xdef =
@@ -112,7 +115,47 @@ public final class TestScript extends XDTester {
 		}
 	}
 
-	private void testAttr(String value, String source) {
+	private void testAttr1(final String source, final String expected) {
+		System.err.flush();
+		System.out.flush();
+		String xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:declaration>\n"+
+"  String result='?';\n"+
+"</xd:declaration>\n"+
+"  <a a='string' xd:script='finally result=" + source + "'/>\n"+
+"</xd:def>\n";
+		String xml = "<a a='abc'/>";
+		XDPool xp = null;
+		try {
+			xp = compile(xdef);
+			ArrayReporter rep = new ArrayReporter();
+			XDDocument xd = xp.createXDDocument();
+			xd.xparse(xml, rep);
+			if (rep.errorWarnings()) {
+				rep.printReports(System.out);
+				System.out.flush();
+				throw new Exception("Errors returned");
+			}
+			System.out.flush();
+			_result = expected.equals(xd.getVariable("result").toString());
+			if (!_result) {
+				throw new Exception("Incorrect result:" +
+					xd.getVariable("result"));
+			}
+			if (_printCode) {
+				display(xp, xdef, xml);
+			}
+		} catch (Exception ex) {
+			System.out.flush();
+			fail(ex);
+			System.err.flush();
+			display(xp, xdef, xml);
+		}
+		System.err.flush();
+	}
+
+	private void testAttr2(final String value, final String source) {
 		System.err.flush();
 		System.out.flush();
 		String xdef =
@@ -162,48 +205,9 @@ public final class TestScript extends XDTester {
 		}
 	}
 
-	private void testAttr1(String source, String expected) {
-		System.err.flush();
-		System.out.flush();
-		String xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"<xd:declaration>\n"+
-"  String result='?';\n"+
-"</xd:declaration>\n"+
-"  <a a='string' xd:script='finally result=" + source + "'/>\n"+
-"</xd:def>\n";
-		String xml = "<a a='abc'/>";
-		XDPool xp = null;
-		try {
-			xp = compile(xdef);
-			ArrayReporter rep = new ArrayReporter();
-			XDDocument xd = xp.createXDDocument();
-			xd.xparse(xml, rep);
-			if (rep.errorWarnings()) {
-				rep.printReports(System.out);
-				System.out.flush();
-				throw new Exception("Errors returned");
-			}
-			System.out.flush();
-			_result = expected.equals(xd.getVariable("result").toString());
-			if (!_result) {
-				throw new Exception("Incorrect result:" +
-					xd.getVariable("result"));
-			}
-			if (_printCode) {
-				display(xp, xdef, xml);
-			}
-		} catch (Exception ex) {
-			System.out.flush();
-			fail(ex);
-			System.err.flush();
-			display(xp, xdef, xml);
-		}
-		System.err.flush();
-	}
-	private void testCheckMethod(String value,
-		String source,
-		String call) {
+	private void testCheckMethod(final String value,
+		final String source,
+		final String call) {
 		System.err.flush();
 		System.out.flush();
 		String xdef =
@@ -264,6 +268,43 @@ public final class TestScript extends XDTester {
 		setDebug(true);
 		_printCode = true;
 		_printCode = false;
+////////////////////////////////////////////////////////////////////////////////
+		testAttr1("(String)@a", "abc");
+		testAttr1(" (String) @a", "abc");
+		testAttr1("toString(@a)", "abc");
+		testAttr1(" toString (@b ) ", "");
+		testAttr1(" @a.toString() ", "abc");
+		testAttr1("@a. toString()", "abc");
+		testAttr1("@a . toString()", "abc");
+		testAttr1("@a . toString ()", "abc");
+		testAttr1("@a . toString ( )", "abc");
+		testAttr1("toString(@a == \"abc\")", "true");
+		testAttr1("toString(@a EQ \"abc\")", "true");
+		testAttr1("toString(@a LE \"abc\")", "true");
+//		testAttr1("toString(@a &lt;= \"abc\")", "true");
+		testAttr1("toString(@a GE \"abc\")", "true");
+//		testAttr1("toString(@a &gt;= \"abc\")", "true");
+		testAttr1("toString(@a == \"\")", "false");
+		testAttr1("toString(@a GT \"\")", "true");
+		testAttr1("toString(@a > \"\")", "true");
+		testAttr1("toString(@a &gt; \"\")", "true");
+		testAttr1("(@a == \"abc\").toString()", "true");
+		testAttr1("@a?\"true\":\"false\"", "true");
+		testAttr1("@b?\"true\":\"false\"", "false");
+		testAttr1("(String) (boolean) @a", "true");
+		testAttr1("(String) ((boolean) @a)", "true");
+		testAttr1("\"\" + (boolean) @a", "true");
+		testAttr1("toString((boolean) @a)", "true");
+		testAttr1("toString((boolean) @b)", "false");
+		testAttr1("toString(!@a)", "false");
+		testAttr1("toString(!@a.exists())", "false");
+		testAttr1("toString(!(@a).exists())", "false");
+		testAttr1("toString(!@a AND !@b)", "false");
+		testAttr1("(String) (!@a OOR !@b)", "true");
+		testAttr1("(\"\" + (@a) + (@b)) + @a", "abcabc");
+		testAttr1("toString(!(@a OR @b) AND @a)", "false");
+		testAttr1("(String) ((@a | @b) &amp; @a)", "true");
+////////////////////////////////////////////////////////////////////////////////
 		test("","/*koment*/setResult(true);/*koment*/;");
 		test("","/*koment*/setResult/*koment*/(/*koment*/true/*koment*/OR"
 			+ "/*koment*/false/*koment*/)/*koment*/;/*koment*/");
@@ -808,132 +849,138 @@ public final class TestScript extends XDTester {
 		test("1990", "{setResult(!gYear(%minInclusive=1999));}");
 		test("1990", "{setResult(!gYear(%minInclusive=1999).parse());}");
 ////////////////////////////////////////////////////////////////////////////////
-		testAttr("+1.21","onTrue setResult(true); required decimal;"
+		testAttr2("+1.21","onTrue setResult(true); required decimal;"
 			+ " onFalse setResult(false); ");
 //		testAttr("+1.21","onTrue setResult(true); required decimal(3);"
 //			+ " onFalse setResult(false); ");
 //		testAttr("+1.21","onTrue setResult(true); required decimal(3,2);"
 //			+ " onFalse setResult(false); ");
 ////////////////////////////////////////////////////////////////////////////////
-		testAttr("ahoj","required enum('nazdar','ahoj');onTrue setResult(true);"
+		testAttr2("ahoj","required enum('nazdar','ahoj');onTrue setResult(true);"
 			+ "onFalse {clearReports(); setResult(false);}");
-		testAttr("hoj","required enum('nazdar','ahoj');onTrue setResult(false);"
+		testAttr2("hoj","required enum('nazdar','ahoj');onTrue setResult(false);"
 			+ "onFalse {clearReports(); setResult(true);}");
-		testAttr("Ahoj","required enum('nazdar','ahoj');"+
+		testAttr2("Ahoj","required enum('nazdar','ahoj');"+
 			"onTrue setResult(false);"
 			+ "onFalse {clearReports(); setResult(true);}");
-		testAttr("hoj","required  enum('nazdar','ahoj');" +
+		testAttr2("hoj","required  enum('nazdar','ahoj');" +
 			"onTrue setResult(false);"
 			+ "onFalse {clearReports(); setResult(true);}");
 		_printCode = true;
 		_printCode = false;
-		testAttr("ahoj","required; onTrue setResult(true);"
+		testAttr2("ahoj","required; onTrue setResult(true);"
 			+ "onFalse {clearReports(); setResult(false);}");
-		testAttr("ahoj","required string(); onTrue setResult(true);"
+		testAttr2("ahoj","required string(); onTrue setResult(true);"
 			+ "onFalse {clearReports(); setResult(false);}");
-		testAttr("ahoj", "required; finally setResult(true);");
-		testAttr("ahoj", "required; onTrue setResult(true);");
-		testAttr("ahoj", "required eq('ahoj');"
+		testAttr2("ahoj", "required; finally setResult(true);");
+		testAttr2("ahoj", "required; onTrue setResult(true);");
+		testAttr2("ahoj", "required eq('ahoj');"
 			+ "onTrue setResult(true); onFalse setResult(false);");
-		testAttr("ahoj", "required eq('nazdar'); onTrue setResult(false);"
+		testAttr2("ahoj", "required eq('nazdar'); onTrue setResult(false);"
 			+ "onFalse {clearReports(); setResult(true);}");
-		testAttr("ahoj", "required eq('ahoj'); onTrue setResult(false);"
+		testAttr2("ahoj", "required eq('ahoj'); onTrue setResult(false);"
 			+ "onFalse setResult(false); finally setResult(true);");
-		testAttr("nazdar","required eq('nazdar');\n"
+		testAttr2("nazdar","required eq('nazdar');\n"
 			+ " onFalse setResult(false); onTrue setResult(true);");
-		testAttr("nazdar","onTrue setResult(true); required string(1,100);\n"
+		testAttr2("nazdar","onTrue setResult(true); required string(1,100);\n"
 			+ " onFalse setResult(false); ");
-		testAttr("+1.21","onTrue setResult(true); required dec(3,2);"
+		testAttr2("+1.21","onTrue setResult(true); required dec(3,2);"
 			+ " onFalse setResult(false); ");
-		testAttr("+1,21","onTrue setResult(true); required dec(3,2);"
+		testAttr2("+1,21","onTrue setResult(true); required dec(3,2);"
 			+ " onFalse setResult(false); ");
-		testAttr("+0.21","onTrue setResult(true); required dec(3,2);"
+		testAttr2("+0.21","onTrue setResult(true); required dec(3,2);"
 			+ " onFalse setResult(false); ");
-		testAttr("+0,21","onTrue setResult(true); required dec(3,2);"
+		testAttr2("+0,21","onTrue setResult(true); required dec(3,2);"
 			+ " onFalse setResult(false); ");
-		testAttr("+0000000000.21", "onTrue setResult(true); required dec(3,2);"
+		testAttr2("+0000000000.21", "onTrue setResult(true); required dec(3,2);"
 			+ " onFalse setResult(false); ");
-		testAttr("+00000000001.21",
+		testAttr2("+00000000001.21",
 			"onTrue setResult(true); required dec(3,2);"
 			+ " onFalse setResult(false); ");
-		testAttr("+0000000.00","onTrue setResult(true); required dec(3,2);"
+		testAttr2("+0000000.00","onTrue setResult(true); required dec(3,2);"
 			+ " onFalse setResult(false); ");
-		testAttr("+0000000,00","onTrue setResult(true); required dec(3,2);"
+		testAttr2("+0000000,00","onTrue setResult(true); required dec(3,2);"
 			+ " onFalse setResult(false); ");
-		testAttr("+10.21","onTrue setResult(false); required dec(3,2);"
+		testAttr2("+10.21","onTrue setResult(false); required dec(3,2);"
 			+ " onFalse setResult(true); ");
-		testAttr("10.21","onTrue setResult(true); required dec(4);"
+		testAttr2("10.21","onTrue setResult(true); required dec(4);"
 			+ " onFalse setResult(false); ");
-		testAttr("0","onTrue setResult(true); required dec(4);"
+		testAttr2("0","onTrue setResult(true); required dec(4);"
 			+ " onFalse setResult(false); ");
-		testAttr("1234","onTrue setResult(true); required dec(4);"
+		testAttr2("1234","onTrue setResult(true); required dec(4);"
 			+ " onFalse setResult(false); ");
-		testAttr(".1234","onTrue setResult(true); required dec(4);"
+		testAttr2(".1234","onTrue setResult(true); required dec(4);"
 			+ " onFalse setResult(false); ");
-		testAttr(",1234","onTrue setResult(true); required dec(4);"
+		testAttr2(",1234","onTrue setResult(true); required dec(4);"
 			+ " onFalse setResult(false); ");
-		testAttr("0.","onTrue setResult(true); required dec(4);"
+		testAttr2("0.","onTrue setResult(true); required dec(4);"
 			+ " onFalse setResult(false); ");
-		testAttr("0,","onTrue setResult(true); required dec(4);"
+		testAttr2("0,","onTrue setResult(true); required dec(4);"
 			+ " onFalse setResult(false); ");
-		testAttr("12.1234","onTrue {setResult(false);} required dec(4);"
+		testAttr2("12.1234","onTrue {setResult(false);} required dec(4);"
 			+ " onFalse setResult(true); ");
-		testAttr("123456.12345","onTrue setResult(true);required dec(11,5);"
+		testAttr2("123456.12345","onTrue setResult(true);required dec(11,5);"
 			+ " onFalse setResult(false); ");
-		testAttr("1234567.1234", "onTrue setResult(false); required dec(11,5);"
+		testAttr2("1234567.1234", "onTrue setResult(false); required dec(11,5);"
 			+ " onFalse setResult(true); ");
-		testAttr("1234567,1234", "onTrue setResult(false); required dec(11,5);"
+		testAttr2("1234567,1234", "onTrue setResult(false); required dec(11,5);"
 			+ " onFalse setResult(true); ");
-		testAttr("aaacaaacaaa",
+		testAttr2("aaacaaacaaa",
 			"onTrue {setResult(replace(getText(),'aaa','ab') EQ 'abcabcab');}"
 			+ "required string(); onFalse setResult(false); ");
-		testAttr("aaacaaa",
+		testAttr2("aaacaaa",
 			"onTrue {setResult(replaceFirst(getText(),'aaa','a') EQ 'acaaa');}"
 			+ "required string(); onFalse setResult(false); ");
-		testAttr("bcr",
+		testAttr2("bcr",
 			"onTrue {setResult(translate(getText(),'abc','ABa') EQ 'Bar');}"
 			+ "required string(); onFalse setResult(false); ");
-		testAttr("-abc-",
+		testAttr2("-abc-",
 			"onTrue {setResult(translate(getText(),'ab-','BA') EQ 'BAc');}"
 			+ "required string(); onFalse setResult(false); ");
-		testAttr("//X/y","onTrue setResult(true); required file();"
+		testAttr2("//X/y","onTrue setResult(true); required file();"
 			+ " onFalse setResult(false); ");
-		testAttr("Sun, 18 Nov 2001 23:42:39 +0100",
+		testAttr2("Sun, 18 Nov 2001 23:42:39 +0100",
 			"onTrue setResult(true); required emailDate();"
 			+ " onFalse setResult(false); ");
-		testAttr("Tue, 27 Nov 2001 12:17:54 +0100 (CET)",
+		testAttr2("Tue, 27 Nov 2001 12:17:54 +0100 (CET)",
 			"onTrue setResult(true); required emailDate();"
 			+ " onFalse setResult(false); ");
-		testAttr("http://pes.eunet.cz","onTrue setResult(true); required url();"
+		testAttr2("http://pes.eunet.cz","onTrue setResult(true); required url();"
 			+ " onFalse setResult(false); ");
 		// test email
-		testAttr("tr.ab@vol.cz","onTrue setResult(true); required email();"
+		testAttr2("tr.ab@vol.cz","onTrue setResult(true); required email();"
 			+ " onFalse setResult(false); "); // OK
-		testAttr("1@2","onTrue setResult(true);"
-			+ " required email(); onFalse setResult(false); "); // OK
-		testAttr("tro.cz","onTrue setResult(false); required email();"
+		testAttr2("(a a) =?UTF-8?Q?Xx. Yy?=(b)&lt;1@2g>(c)","onTrue setResult("
+			+ "true); required email(); onFalse setResult(false); "); // OK
+		testAttr2("tro.cz","onTrue setResult(false); required email();"
 			+ " onFalse setResult(true); "); // missing "@"
-		testAttr("@trovolny.cz","onTrue setResult(false); required email();"
+		testAttr2("@trovolny.cz","onTrue setResult(false); required email();"
 			+ " onFalse setResult(true); "); // missing local name
-		testAttr("trovolny.cz@","onTrue setResult(false); required email();"
+		testAttr2("trovolny.cz@","onTrue setResult(false); required email();"
 			+ " onFalse setResult(true); "); // missing domain
-		testAttr("tr@@vol.cz","onTrue setResult(false); required email();"
+		testAttr2("tr@@vol.cz","onTrue setResult(false); required email();"
 			+ " onFalse setResult(true); "); // more than one "@"
-		testAttr("tr@vol@ny.cz","onTrue setResult(false); required email();"
+		testAttr2("tr@vol@ny.cz","onTrue setResult(false); required email();"
 			+ " onFalse setResult(true); "); // more than one "@"
-		testAttr("a b t@v","onTrue setResult(true); required email();"
+		testAttr2("a b t@v","onTrue setResult(true); required email();"
 			+ " onFalse setResult(true); "); // OK
-		testAttr("t@v.","onTrue setResult(true); required emailList();"
-			+ " onFalse setResult(true); "); // top domain part missing
-		testAttr("t@v.c (ab)","onTrue setResult(true); required emailList();"
+		testAttr2("t@v.c (ab)","onTrue setResult(true); required emailList();"
 			+ " onFalse setResult(true); "); // OK
-		testAttr("t@v.cc,a@bb.cc","onTrue setResult(true);required emailList();"
+		testAttr2("t@v.cc,a@bb.cc","onTrue setResult(true);required emailList();"
 			+ " onFalse setResult(false); "); // OK
-		testAttr(" t@v.cc\t ;\n a@bb.cc ", // OK, white spaces are allowed
-			"onTrue setResult(true);required emailList();"
+		testAttr2("@v","onTrue setResult(true); required emailList();"
+			+ " onFalse setResult(true); "); // local part missing
+		testAttr2("t@v.","onTrue setResult(true); required emailList();"
+			+ " onFalse setResult(true); "); // top domain part missing
+		// emailList
+		testAttr2(" (x y) t@v.cc\t (a b) ;\n (c d) a@b.cc ", "onTrue setResult("
+			+ "true); required emailList();" // OK, white spaces allowed
 			+ " onFalse setResult(false); ");
-		testAttr("t@v.cc a@bb.cc","onTrue setResult(true);required emailList();"
+		testAttr2("t@v.cc a@bb.cc","onTrue setResult(true);required emailList();"
 			+ " onFalse setResult(true); "); // missing separator (";" or ",")
+////////////////////////////////////////////////////////////////////////////////
+// Test check methods
+////////////////////////////////////////////////////////////////////////////////
 //		_printCode = true;
 		_printCode = false;
 		testCheckMethod("ahoj",
@@ -986,34 +1033,6 @@ public final class TestScript extends XDTester {
 			+ "case'ahoj': setResult(true);return true;"
 			+ "default: setResult(false); return false;}}",
 			"xxx(getText(),999);");
-////////////////////////////////////////////////////////////////////////////////
-		testAttr1("(String)@a", "abc");
-		testAttr1("(String) @a", "abc");
-		testAttr1("toString(@a)", "abc");
-		testAttr1("toString (@b )", "");
-		testAttr1("@a.toString()", "abc");
-		testAttr1("@a. toString()", "abc");
-		testAttr1("@a . toString()", "abc");
-		testAttr1("@a . toString ()", "abc");
-		testAttr1("@a . toString ( )", "abc");
-		testAttr1("toString(@a == \"abc\")", "true");
-		testAttr1("toString(@a == \"\")", "false");
-		testAttr1("(@a == \"abc\").toString()", "true");
-		testAttr1("@a?\"true\":\"false\"", "true");
-		testAttr1("@b?\"true\":\"false\"", "false");
-		testAttr1("(String) (boolean) @a", "true");
-		testAttr1("(String) ((boolean) @a)", "true");
-		testAttr1("\"\" + (boolean) @a", "true");
-		testAttr1("toString((boolean) @a)", "true");
-		testAttr1("toString((boolean) @b)", "false");
-		testAttr1("toString(!@a)", "false");
-		testAttr1("toString(!@a.exists())", "false");
-		testAttr1("toString(!(@a).exists())", "false");
-		testAttr1("toString(!@a AND !@b)", "false");
-		testAttr1("(String) (!@a OOR !@b)", "true");
-		testAttr1("(\"\" + (@a) + (@b)) + @a", "abcabc");
-		testAttr1("toString(!(@a OR @b) AND @a)", "false");
-		testAttr1("(String) ((@a OR @b) AND @a)", "true");
 ////////////////////////////////////////////////////////////////////////////////
 		xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
