@@ -190,8 +190,10 @@ public final class DefEmail extends XDValueAbstract implements XDEmail {
 					}
 				}
 				p.isSpaces();
-				return new String[] {
-					g.getParsedString(), localPart, domain, userName};
+				if (localPart != null && domain != null) {
+					return new String[] {
+						g.getParsedString(), localPart, domain, userName};
+				}
 			}
 		}
 		return null;
