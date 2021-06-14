@@ -973,8 +973,8 @@ public final class TestScript extends XDTester {
 		testAttr2("t@v.","onTrue setResult(true); required emailList();"
 			+ " onFalse setResult(true); "); // top domain part missing
 		// emailList
-		testAttr2(" (x y) t@v.cc\t (a b) ;\n (c d) a@b.cc ", "onTrue setResult("
-			+ "true); required emailList();" // OK, white spaces allowed
+		testAttr2(" x &lt;t@v.cc>\t (a b) ;\n (c d) a@b.cc ", "onTrue setResult"
+			+ "(true); required emailList();" // OK, white spaces allowed
 			+ " onFalse setResult(false); ");
 		testAttr2("t@v.cc a@bb.cc","onTrue setResult(true);required emailList();"
 			+ " onFalse setResult(true); "); // missing separator (";" or ",")
