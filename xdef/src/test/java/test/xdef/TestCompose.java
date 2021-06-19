@@ -502,8 +502,6 @@ final public class TestCompose extends XDTester {
 			assertEq(create(xdef, null, "A", reporter,null,strw,null), "<A/>");
 			assertNoErrors(reporter);
 			assertEq(strw.toString(), "Attribute is missing!");
-		} catch (Exception ex) {fail(ex);}
-		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "'>\n"+
 "<a a=\"xdatetime('d-M-y');"+
@@ -1248,6 +1246,25 @@ final public class TestCompose extends XDTester {
 				}
 				fail(obj.toString());
 			}
+			xdef = // create only elements "b" with child nodes
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n" +
+"  <a>\n" +
+//"    <b xd:script=\"*; create from('b/*/parent::*');\" x=\"string()\">\n" +
+//"    <b xd:script=\"*; create from('b/*/parent::b');\" x=\"string()\">\n" +
+"    <b xd:script=\"*; create from('b/*/..');\" x=\"string()\">\n" +
+"      <c xd:script=\"*\" y=\"string()\"/>\n" +
+"    </b>\n" +
+"  </a> \n" +
+"</xd:def>";
+			xp = compile(xdef);
+			xd = xp.createXDDocument();
+			xml =
+"<a><b x='1'><c y='1'/></b><b x='2'/><b x='3'><c y='2'/></b><b x='4'/></a>";
+			assertEq(xml, parse(xd, xml, reporter));
+			assertNoErrors(reporter);
+			assertEq("<a><b x='1'><c y='1'/></b><b x='3'><c y='2'/></b></a>",
+				create(xd, "a", reporter, xml));
+			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
 		setProperty("xdef.debug", "false");
 		try {

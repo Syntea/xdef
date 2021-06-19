@@ -2094,7 +2094,6 @@ public final class BNFGrammar {
 		private int readSpecChar() {
 			char c;
 			long i;
-			increaseBuffer();
 			if (isChar('x') || isChar('X')) { //hexadecimal
 				if ((c = isOneOfChars("0123456789ABCDEFabcdef")) == NOCHAR) {
 					setIndex(getIndex() - 1);
