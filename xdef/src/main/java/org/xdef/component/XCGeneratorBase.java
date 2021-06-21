@@ -283,7 +283,7 @@ class XCGeneratorBase {
 			case XDValueID.XD_FILE:
 				return "java.io.File";
 			case XDValueID.XD_EMAIL:
-				return "org.xdef.XDEmail";
+				return "org.xdef.XDEmailAddr";
 			case XDValueID.XD_BYTES:
 				_byteArrayEncoding |= getBytesType(xdata);
 				return "byte[]";
@@ -375,7 +375,7 @@ class XCGeneratorBase {
 			case XDValueID.XD_FILE:
 				return "(java.io.File) "+result+"getParsedValue().getObject()";
 			case XDValueID.XD_EMAIL:
-				return "(org.xdef.XDEmail) "
+				return "(org.xdef.XDEmailAddr) "
 					+result + "getParsedValue().getObject()";
 			case XDValueID.XD_BYTES:
 				return result + "getParsedValue().getBytes()";

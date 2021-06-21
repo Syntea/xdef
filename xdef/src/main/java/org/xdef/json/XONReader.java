@@ -11,7 +11,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
-import org.xdef.impl.code.DefEmail;
+import org.xdef.impl.code.DefEmailAddr;
 import org.xdef.msg.JSON;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.ArrayReporter;
@@ -417,7 +417,7 @@ public class XONReader extends StringParser implements XONParsers {
 				} else if (isToken("e\"")) { // Email address
 					try {
 						return returnValue(spos,
-							new DefEmail(JsonTools.readJSONString(this)));
+							new DefEmailAddr(JsonTools.readJSONString(this)));
 					} catch (Exception ex) {}
 					//JSON value expected
 					return returnError(spos, null, JSON.JSON010, "[]{}");

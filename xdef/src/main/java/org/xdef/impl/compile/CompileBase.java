@@ -86,7 +86,7 @@ public class CompileBase implements CodeTable, XDValueID {
 		setType(XD_PRICE,"Price",org.xdef.XDPrice.class);
 		setType(XD_ANYURI,"URI", java.net.URI.class);
 		setType(XD_FILE,"File", java.io.File.class);
-		setType(XD_EMAIL,"Email", org.xdef.XDEmail.class);
+		setType(XD_EMAIL,"EmailAddr", org.xdef.XDEmailAddr.class);
 		setType(XD_CONTAINER, "Container", org.xdef.XDContainer.class);
 		setType(XD_REGEX, "Regex", org.xdef.XDRegex.class);
 		setType(XD_REGEXRESULT, "RegexResult", org.xdef.XDRegexResult.class);
@@ -135,7 +135,7 @@ public class CompileBase implements CodeTable, XDValueID {
 			((char) XD_PRICE) + ";Price;" +
 			((char) XD_ANYURI) + ";URI;" +
 			((char) XD_FILE) + ";File;" +
-			((char) XD_EMAIL) + ";Email;" +
+			((char) XD_EMAIL) + ";EmailAddr;" +
 			((char) XD_BNFGRAMMAR) + ";DefBNFGrammar;" +
 			((char) XD_LOCALE) + ";Locale;" +
 			((char) XD_UNIQUESET_KEY) + ";uniqueSetKey;" +
@@ -623,8 +623,10 @@ public class CompileBase implements CodeTable, XDValueID {
 		parser(im, org.xdef.impl.parsers.XDParseBNF.class, "BNF");
 
 		im = genParserMetnod(0, 0, new short[] {XD_PARSER}, XD_STRING);
-		parser(im,org.xdef.impl.parsers.XDParseEmail.class, "email");
-		parser(im,org.xdef.impl.parsers.XDParseEmailList.class, "emailList");
+		parser(im,org.xdef.impl.parsers.XDParseEmailAddr.class,
+			"emailAddr", "?email");
+		parser(im,org.xdef.impl.parsers.XDParseEmailAddrList.class,
+			"?emailAddrList", "?emailList");
 		parser(im,org.xdef.impl.parsers.XDParseFile.class, "file");
 		parser(im,org.xdef.impl.parsers.XDParseFileList.class,"fileList");
 		parser(im,org.xdef.impl.parsers.XDParseXDType.class, "xdType");
@@ -1023,7 +1025,7 @@ public class CompileBase implements CodeTable, XDValueID {
 			ANY_MODE, 1, 1, XD_DURATION), "getYears");
 
 ////////////////////////////////////////////////////////////////////////////////
-// EMAIL
+// EMAILADDR
 ////////////////////////////////////////////////////////////////////////////////
 		ti = XD_EMAIL;
 		method(ti, genInternalMethod(NEW_EMAIL, XD_EMAIL,

@@ -55,13 +55,13 @@ import java.util.Locale;
 import java.util.StringTokenizer;
 import javax.xml.XMLConstants;
 import org.w3c.dom.Element;
-import org.xdef.XDEmail;
 import org.xdef.XDValueID;
 import org.xdef.impl.code.DefPrice;
 import org.xdef.impl.code.DefGPSPosition;
 import org.xdef.impl.code.DefLocale;
 import org.xdef.sys.Price;
 import org.xdef.sys.GPSPosition;
+import org.xdef.XDEmailAddr;
 
 /** Provides invoking of external method from script code.
  * @author Vaclav Trojan
@@ -98,7 +98,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 								return new DefContainer(p);
 							}
 						case XD_EMAIL:
-							return (XDEmail) p;
+							return (XDEmailAddr) p;
 					}
 					//Icorrect type conversion from AnyValue
 					throw new SRuntimeException(XDEF.XDEF536);

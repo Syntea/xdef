@@ -1,6 +1,6 @@
 package test.common.bnf;
 
-import org.xdef.impl.code.DefEmail;
+import org.xdef.impl.code.DefEmailAddr;
 import org.xdef.sys.STester;
 
 /** Test of email address.
@@ -10,12 +10,14 @@ public class TestEmailAddr extends STester {
 
 	public TestEmailAddr() {super();}
 
-	private String parse(String s) {
+	private DefEmailAddr parse(String s) {
 		try {
-			new DefEmail(s);
-			return s;
+			DefEmailAddr x = new DefEmailAddr(s);
+//			System.out.println("'" + x.getUserName() + "'; "+x.getEmailAddr());
+			return x;
 		} catch (Exception ex) {
-			return printThrowable(ex);
+			ex.printStackTrace();
+			return null;
 		}
 	}
 
@@ -25,25 +27,30 @@ public class TestEmailAddr extends STester {
 		try {
 			String s;
 			s = "1@2";
-			assertEq(s, parse(s));
+			DefEmailAddr d;
+			assertNotNull(d = parse(s));
 			s = "<1E.-J@s-e_.z.cz>";
-			assertEq(s, parse(s));
+			assertNotNull(d = parse(s));
 			s = "(ab)a@b";
-			assertEq(s, parse(s));
-			s = "a@b(ab)";
-			assertEq(s, parse(s));
-			s = "s b <a@b>";
-			assertEq(s, parse(s));
-			s = "(a (b c) b)a@b (de) (fg)";
-			assertEq(s, parse(s));
-			s = "(a (b c) b)a@b (de) (fg)";
-			assertEq(s, parse(s));
+			assertNotNull(d = parse(s));
+			s = "(ab) (cd) a@b";
+			assertNotNull(d = parse(s));
+			s = "a@b(ab) (cd)";
+			assertNotNull(d = parse(s));
+			s = "a b <a@b>";
+			assertNotNull(d = parse(s));
+			s = "(a (c d) b)a@b (ef) (gh)";
+			assertNotNull(d = parse(s));
 			s = "El-,Ji. <EJ@sez.cz>";
-			assertEq(s, parse(s));
-			s = "=?UTF-8?B?RZZhIEt1xb5lbG92w6E=?= <ep@e.c>";
-			assertEq(s, parse(s));
+			assertNotNull(d = parse(s));
+			s = "=?UTF-8?B?xb5lbG92w6E=?= <ep@e.c>";
+			assertNotNull(d = parse(s));
 			s = "=?UTF-8?Q?P. B=C3=BDk?= <p@s>";
-			assertEq(s, parse(s));
+			assertNotNull(d = parse(s));
+			s = "(V. T.)<tr@vo.xz>(u)";
+			assertNotNull(d = parse(s));
+			s = "(a b) \"V. T.\" (c d) <tr@vo.xz> (u v)";
+			assertNotNull(d = parse(s));
 		} catch (Exception ex) {fail(ex);}
 	}
 

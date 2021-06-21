@@ -1,7 +1,6 @@
 package org.xdef.impl.code;
 
 import java.io.ByteArrayOutputStream;
-import org.xdef.XDEmail;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
 import org.xdef.XDValueID;
@@ -13,11 +12,12 @@ import org.xdef.sys.SIllegalArgumentException;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
+import org.xdef.XDEmailAddr;
 
 /** Implements the internal object with Email value.
  * @author Vaclav Trojan
  */
-public final class DefEmail extends XDValueAbstract implements XDEmail {
+public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 	/** BNF grammar of email address. */
 
 	/** Email source value. */
@@ -30,7 +30,7 @@ public final class DefEmail extends XDValueAbstract implements XDEmail {
 	private final String _userName;
 
 	/** Creates a new instance of DefEmail as null.*/
-	public DefEmail() {this((String) null);}
+	public DefEmailAddr() {this((String) null);}
 
 	private static String readStackItem(final StringParser q,
 		final String s,
@@ -76,7 +76,7 @@ public final class DefEmail extends XDValueAbstract implements XDEmail {
 	/** Creates a new instance of DefEmail.
 	 * @param value string with email address.
 	 */
-	public DefEmail(final String value) {
+	public DefEmailAddr(final String value) {
 		if (value == null || value.isEmpty()) {
 			_value = _localPart = _domain = _userName = null;
 			return;
@@ -93,7 +93,7 @@ public final class DefEmail extends XDValueAbstract implements XDEmail {
 		_userName = result[3];
 	}
 
-	public DefEmail(StringParser p) {
+	public DefEmailAddr(StringParser p) {
 		String[] result = parseEmail(p);
 		if (result == null) {
 			//Incorrect value of &{0}&{1}&{: }
@@ -105,7 +105,7 @@ public final class DefEmail extends XDValueAbstract implements XDEmail {
 		_userName = result[3];
 	}
 
-	/** Creates a new instance of DefEmail
+	/** Creates a new instance of DefEmailAddr
 	 * @param p parser with source data.
 	 * @return null if not correct or array of strings where the items are:<p>
 	 * [0] .. text of parsed email source.<p>
@@ -115,24 +115,23 @@ public final class DefEmail extends XDValueAbstract implements XDEmail {
 	 */
 	public final static String[] parseEmail(final StringParser p) {
 		BNFGrammar g = BNFGrammar.compile(
-"S ::= (' ' | #9)+ /* linear white space */\n" +
-"comment ::= commentList $rule\n" +
-"commentList ::= ( '(' commentPart* ')' (S? '(' commentPart* ')')* ) S?\n" +
-"commentPart ::= ($ASCIIChar - [()])+ (S? commentList)?\n" +
-"delimiters  ::=  specials | S | comment\n" +
-"specials ::=  '(' | ')' | '<' | '>' | '@' | ',' | ';' \n" +
-"              | ':' | '\\' | '\"' |  '.' | '[' | ']'\n"+
-"atom ::= ($ASCIIChar - $ctlrChar - specials - ' ')+\n" +
+"S ::= [ #9]+ /* linear white space */\n" +
+"asciiChar ::= [ -~]\n"+
+"comment ::=  S? ( commentList $rule) S?\n" +
+"commentList ::= ( '(' commentPart* ')' (S? '(' commentPart* ')')* )\n" +
+"commentPart ::= (asciiChar - [()])+ (S? commentList)?\n" +
+"specials ::=  [()<>@,;:\\\".#123#125] /*#123='[', #125=']'*/\n"+
+"atom ::= (asciiChar - specials - ' ')+\n" +
 "emailAddr ::= localPart domain $rule\n" +
 "emailAddr1 ::= '<' emailAddr '>' \n" +
 "localPart ::= atom ('.' atom)*\n" +
 "domain ::= '@' atom ('.' atom)*\n" +
 "email ::= (text? S? emailAddr1 | (comment* emailAddr)) (S? comment)*\n"+
-"text ::= ((comment* (textItem | comment)*) | S? ptext)?\n"+
+"text ::= ((comment* (textItem | comment)*) | comment* S? ptext)? comment*\n"+
 "textItem ::= S? '=?' charsetName ('Q?' qtext | 'B?' btext) '?='\n"+
 "charsetName ::= ([a-zA-Z] ('-'? [a-zA-Z0-9]+)*) $rule '?' \n"+
-"ptext ::=  (($ASCIIChar - $ctlrChar - [@><()=])+) $rule\n"+
-"qtext ::= ((hexOctet | $ASCIIChar - $ctlrChar - [=?])+) $rule /*quoted*/\n"+
+"ptext ::= ((asciiChar - [@><()=])+) $rule\n"+
+"qtext ::= ((hexOctet | asciiChar - [=?])+) $rule /*quoted*/\n"+
 "hexOctet ::= '=' [0-9A-F] [0-9A-F]\n"+
 "btext ::= ([a-zA-Z0-9+/]+ '='? '='?) $rule /* base64 */");
 		p.isSpaces();
@@ -167,9 +166,9 @@ public final class DefEmail extends XDValueAbstract implements XDEmail {
 						}
 					} else if ((t = readStackItem(q, "ptext", s)) != null) {
 						if (userName == null) {
-							userName = t;
+							userName = t.trim();
 						} else {
-							userName += t;
+							userName += t.trim();
 						}
 					} else if ((t = readStackItem(q, "charsetName", s)) != null) {
 						charsetName = t;
@@ -237,7 +236,7 @@ public final class DefEmail extends XDValueAbstract implements XDEmail {
 	/** Clone the item.
 	 * @return the object with the copy of this one.
 	 */
-	public XDValue cloneItem() {return new DefEmail(_value);}
+	public XDValue cloneItem() {return new DefEmailAddr(_value);}
 
 	@Override
 	public int hashCode() {
@@ -260,9 +259,9 @@ public final class DefEmail extends XDValueAbstract implements XDEmail {
 			return arg == null || arg.isNull();
 		} else if (arg == null || arg.isNull()) {
 			return false;
-		} else if (arg instanceof XDEmail) {
-			return _localPart.equals(((XDEmail)arg).getLocalPart())
-				&& _domain.equals(((XDEmail)arg).getDomain());
+		} else if (arg instanceof XDEmailAddr) {
+			return _localPart.equals(((XDEmailAddr)arg).getLocalPart())
+				&& _domain.equals(((XDEmailAddr)arg).getDomain());
 		}
 		return false;
 	}
@@ -287,7 +286,7 @@ public final class DefEmail extends XDValueAbstract implements XDEmail {
 	public boolean isNull() {return _value == null;}
 
 ////////////////////////////////////////////////////////////////////////////////
-// Implementation of XDEmail interface
+// Implementation of XDEmailAddr interface
 ////////////////////////////////////////////////////////////////////////////////
 	@Override
 	public String getDomain() {return _domain;}

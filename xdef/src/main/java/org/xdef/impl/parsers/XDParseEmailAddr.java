@@ -2,16 +2,16 @@ package org.xdef.impl.parsers;
 
 import org.xdef.XDParseResult;
 import org.xdef.XDParserAbstract;
-import org.xdef.impl.code.DefEmail;
+import org.xdef.impl.code.DefEmailAddr;
 import org.xdef.proc.XXNode;
 import org.xdef.msg.XDEF;
 
 /** Parse email address.
  * @author Vaclav Trojan
  */
-public class XDParseEmail extends XDParserAbstract {
+public class XDParseEmailAddr extends XDParserAbstract {
 
-	private static final String ROOTBASENAME = "email";
+	private static final String ROOTBASENAME = "emailAddr";
 
 	@Override
 	public void parseObject(XXNode xnode, XDParseResult p) {
@@ -36,7 +36,7 @@ public class XDParseEmail extends XDParserAbstract {
 			p.errorWithString(XDEF.XDEF809, parserName);
 		} else {
 			try {
-				p.setParsedValue(new DefEmail(s));
+				p.setParsedValue(new DefEmailAddr(s));
 				return true;
 			} catch (Exception ex) {}
 			//Incorrect value of &{0}&{1}&{: }

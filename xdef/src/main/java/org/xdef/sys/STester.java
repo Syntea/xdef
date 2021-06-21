@@ -615,6 +615,21 @@ public abstract class STester {
 			fail(msg);
 		}
 	}
+	/** Check if the argument is not null. If it is null then invoke the method
+	 * <code>fail</code>.
+	 * @param x argument to be checked.
+	 */
+	public final void assertNotNull(final Object x) {assertNotNull(x, "null");}
+	/** Check if the argument is not null. If it is null then invoke the method
+	 * <code>fail</code>.
+	 * @param x argument to be checked.
+	 * @param msg message to be printed or null.
+	 */
+	public final void assertNotNull(final Object x, final Object msg) {
+		if (x == null) {
+			fail(msg);
+		}
+	}
 	/** Check if the argument is true. If not then invoke the method
 	 * <code>fail</code>.
 	 * @param x argument to be checked for true.

@@ -78,7 +78,7 @@ public class MyTest extends XDTester {
 " Email x = new Email('=?UTF-8?Q?Pavel B=C3=BDk?= &lt;p@s&gt;');\n"+
 "</xd:declaration>\n"+
 "<a>\n"+
-"  email(); onTrue {\n"+
+"  emailAddr(); onTrue {\n"+
 "              Email e = (Email) getParsedValue();\n"+
 "              outln(getEmailUserName(e));\n"+
 "              outln(getEmailLocalPart(e));\n"+

@@ -101,10 +101,10 @@ public interface XdNames {
 	public static final String ISO_YEAR_MONTH = "ISOyearMonth";
 	/** X-definition <code>ISOduration</code> type name.*/
 	public static final String ISO_DURATION = "ISOduration";
-	/** X-definition <code>email</code> type name.*/
-	public static final String EMAIL = "email";
-	/** X-definition <code>emailList</code> type name.*/
-	public static final String EMAIL_LIST = "emailList";
+	/** X-definition <code>emailAddr</code> type name.*/
+	public static final String EMAILADDR = "emailAddr";
+	/** X-definition <code>emailAddrList</code> type name.*/
+	public static final String EMAILADDR_LIST = "emailAddrList";
 	/** X-definition <code>emailDate</code> type name.*/
 	public static final String EMAIL_DATE = "emailDate";
 	/** X-definition <code>ends</code> type name.*/

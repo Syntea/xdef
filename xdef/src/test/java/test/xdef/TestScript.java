@@ -948,36 +948,36 @@ public final class TestScript extends XDTester {
 		testAttr2("http://pes.eunet.cz","onTrue setResult(true); required url();"
 			+ " onFalse setResult(false); ");
 		// test email
-		testAttr2("tr.ab@vol.cz","onTrue setResult(true); required email();"
+		testAttr2("tr.ab@vol.cz","onTrue setResult(true); required emailAddr();"
 			+ " onFalse setResult(false); "); // OK
 		testAttr2("(a a) =?UTF-8?Q?Xx. Yy?=(b)&lt;1@2g>(c)","onTrue setResult("
-			+ "true); required email(); onFalse setResult(false); "); // OK
-		testAttr2("tro.cz","onTrue setResult(false); required email();"
+			+ "true); required emailAddr(); onFalse setResult(false); "); // OK
+		testAttr2("tro.cz","onTrue setResult(false); required emailAddr();"
 			+ " onFalse setResult(true); "); // missing "@"
-		testAttr2("@trovolny.cz","onTrue setResult(false); required email();"
+		testAttr2("@trovolny.cz","onTrue setResult(false);required emailAddr();"
 			+ " onFalse setResult(true); "); // missing local name
-		testAttr2("trovolny.cz@","onTrue setResult(false); required email();"
+		testAttr2("trovolny.cz@","onTrue setResult(false);required emailAddr();"
 			+ " onFalse setResult(true); "); // missing domain
-		testAttr2("tr@@vol.cz","onTrue setResult(false); required email();"
+		testAttr2("tr@@vol.cz","onTrue setResult(false); required emailAddr();"
 			+ " onFalse setResult(true); "); // more than one "@"
-		testAttr2("tr@vol@ny.cz","onTrue setResult(false); required email();"
+		testAttr2("tr@vol@ny.cz","onTrue setResult(false);required emailAddr();"
 			+ " onFalse setResult(true); "); // more than one "@"
-		testAttr2("a b t@v","onTrue setResult(true); required email();"
+		testAttr2("a b t@v","onTrue setResult(true); required emailAddr();"
 			+ " onFalse setResult(true); "); // OK
-		testAttr2("t@v.c (ab)","onTrue setResult(true); required emailList();"
+		// emailAddrList
+		testAttr2("t@v.c(ab)","onTrue setResult(true);required emailAddrList();"
 			+ " onFalse setResult(true); "); // OK
-		testAttr2("t@v.cc,a@bb.cc","onTrue setResult(true);required emailList();"
-			+ " onFalse setResult(false); "); // OK
-		testAttr2("@v","onTrue setResult(true); required emailList();"
+		testAttr2("t@v.cc,a@bb.cc","onTrue setResult(true);"
+			+ "required emailAddrList();onFalse setResult(false); "); // OK
+		testAttr2("@v","onTrue setResult(true); required emailAddrList();"
 			+ " onFalse setResult(true); "); // local part missing
-		testAttr2("t@v.","onTrue setResult(true); required emailList();"
+		testAttr2("t@v.","onTrue setResult(true); required emailAddrList();"
 			+ " onFalse setResult(true); "); // top domain part missing
-		// emailList
 		testAttr2(" x &lt;t@v.cc>\t (a b) ;\n (c d) a@b.cc ", "onTrue setResult"
-			+ "(true); required emailList();" // OK, white spaces allowed
+			+ "(true); required emailAddrList();" // OK, white spaces allowed
 			+ " onFalse setResult(false); ");
-		testAttr2("t@v.cc a@bb.cc","onTrue setResult(true);required emailList();"
-			+ " onFalse setResult(true); "); // missing separator (";" or ",")
+		testAttr2("t@v.cc a@bb.cc","onTrue setResult(true);required"
+			+ " emailAddrList();onFalse setResult(true);"); //missing ";" or ","
 ////////////////////////////////////////////////////////////////////////////////
 // Test check methods
 ////////////////////////////////////////////////////////////////////////////////

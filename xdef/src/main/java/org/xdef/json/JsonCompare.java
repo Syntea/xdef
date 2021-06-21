@@ -7,13 +7,13 @@ import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import org.xdef.XDEmail;
 import org.xdef.msg.JSON;
 import org.xdef.sys.GPSPosition;
 import org.xdef.sys.Price;
 import org.xdef.sys.SDatetime;
 import org.xdef.sys.SDuration;
 import org.xdef.sys.SRuntimeException;
+import org.xdef.XDEmailAddr;
 
 /** Provides comparing of JSON objects
  * @author Vaclav Trojan
@@ -157,9 +157,9 @@ class JsonCompare {
 		if (o1 instanceof File) {
 			return ((File) o1).equals(o2);
 		}
-		if (o1 instanceof XDEmail) {
-			if (o2 != null && o2 instanceof XDEmail) {
-				return ((XDEmail) o1).equals((XDEmail) o2);
+		if (o1 instanceof XDEmailAddr) {
+			if (o2 != null && o2 instanceof XDEmailAddr) {
+				return ((XDEmailAddr) o1).equals((XDEmailAddr) o2);
 			}
 			return false;
 		}

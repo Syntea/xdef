@@ -79,7 +79,7 @@ import org.xdef.impl.compile.CompileBase;
 import org.xdef.impl.code.CodeTable;
 import org.xdef.impl.code.CodeXD;
 import org.xdef.impl.code.DefChar;
-import org.xdef.impl.code.DefEmail;
+import org.xdef.impl.code.DefEmailAddr;
 import org.xdef.impl.code.DefPrice;
 import org.xdef.impl.code.DefGPSPosition;
 import org.xdef.impl.code.DefLocale;
@@ -3068,7 +3068,7 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 					_stack[sp] = new DefParseResult(_stack[sp].toString());
 					continue;
 				case NEW_EMAIL:
-					_stack[sp] = new DefEmail(_stack[sp].toString());
+					_stack[sp] = new DefEmailAddr(_stack[sp].toString());
 					continue;
 				case NEW_PARSER: {
 					XDParser p = CompileBase.getParser(item.stringValue());

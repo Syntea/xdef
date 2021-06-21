@@ -303,7 +303,7 @@ public final class TestDebugGUI extends XDTester {
 "<xd:json name=\"B\" >\n" +
 "{ \"id\": \"string()\",\n" +
 "   \"name\":{ \"family\":\"jstring()\", \"given\":\"optional jstring()\" },\n"+
-"   \"email\": \"email();\",\n" +
+"   \"email\": \"emailAddr();\",\n" +
 "   \"link\": { $script: \"ref C\" }\n" +
 "}\n" +
 "</xd:json>\n" +
