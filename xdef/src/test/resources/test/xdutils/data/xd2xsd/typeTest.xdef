@@ -34,8 +34,8 @@
             <ISOyear xd:script="occurs *">gYear</ISOyear>
             <ISOyearMonth xd:script="occurs *">gYearMonth</ISOyearMonth>
             <ISOduration xd:script="occurs *">duration</ISOduration>
-            <email xd:script="occurs *">email</email>
-            <emailList xd:script="occurs *">emailList</emailList>
+            <email xd:script="occurs *">emailAddr</email>
+            <emailList xd:script="occurs *">emailAddrList</emailList>
             <emailDate xd:script="occurs *">emailDate</emailDate>
             <ends_1 xd:script="occurs *">ends('ef')</ends_1>
             <endsi_1 xd:script="occurs *">endsi('eF')</endsi_1>

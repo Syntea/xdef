@@ -86,7 +86,7 @@ public class TestXon extends XDTester {
 
 	@Override
 	public void test() {
-//		assertNull(testx("email", "[ e\"tro@volny.cz\", e\"a b<x@y.zz>\" ]"));
+//		assertNull(testx("emailAddr", "[ e\"tro@volny.cz\",e\"a b<x@y.zz>\" ]"));
 //if (true) return;
 /*xx*/
 		assertNull(testx("int", "[ ]"));
@@ -108,7 +108,7 @@ public class TestXon extends XDTester {
 			"[ c\"a\", c\"'\", c\"\\\"\", c\"\\u0007\", c\"\\\\\" ]"));
 		assertNull(testx("anyURI", "[ u\"http://a.b\" ]"));
 		assertNull(testx("file", "[ f\"C:/temp1/a.txt\" ]"));
-		assertNull(testx("email", "[ e\"tro@volny.cz\", e\"a b<x@y.zz>\" ]"));
+		assertNull(testx("emailAddr","[ e\"tro@volny.cz\",e\"a b<x@y.zz>\" ]"));
 //if (true) return;
 /*xx*/
 		String s, json, xon, xdef;

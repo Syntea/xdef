@@ -89,12 +89,12 @@ public class XdefBase {
 	/** <code>ISOduration</code> type.*/
 	public static final XdefBase ISO_DURATION =
 		new XdefBase(Id.ISO_DURATION, XdNames.ISO_DURATION);
-	/** <code>email</code> type.*/
-	public static final XdefBase EMAIL =
-		new XdefBase(Id.EMAIL, XdNames.EMAIL);
-	/** <code>emailList</code> type.*/
-	public static final XdefBase EMAIL_LIST =
-		new XdefBase(Id.EMAIL_LIST, XdNames.EMAIL_LIST);
+	/** <code>emailAddr</code> type.*/
+	public static final XdefBase EMAILADDR =
+		new XdefBase(Id.EMAIL, XdNames.EMAILADDR);
+	/** <code>emailAddrList</code> type.*/
+	public static final XdefBase EMAILADDR_LIST =
+		new XdefBase(Id.EMAIL_LIST, XdNames.EMAILADDR_LIST);
 	/** <code>emailDate</code> type.*/
 	public static final XdefBase EMAIL_DATE =
 		new XdefBase(Id.EMAIL_DATE, XdNames.EMAIL_DATE);
@@ -228,9 +228,9 @@ public class XdefBase {
 		XDEFBASES.add(XDATE_TIME); /*VT*/
 		XDEFBASES.add(DATE_YMDHMS);
 		XDEFBASES.add(DECIMAL);
-		XDEFBASES.add(EMAIL);
+		XDEFBASES.add(EMAILADDR);
 		XDEFBASES.add(EMAIL_DATE);
-		XDEFBASES.add(EMAIL_LIST);
+		XDEFBASES.add(EMAILADDR_LIST);
 		XDEFBASES.add(ENDS);
 		XDEFBASES.add(ENDS_I);
 		XDEFBASES.add(ENTITIES);
@@ -404,9 +404,9 @@ public class XdefBase {
 		public static final int ISO_YEAR_MONTH = ISO_YEAR + 1;
 		/** <code>ISOduration</code> type id.*/
 		public static final int ISO_DURATION = ISO_YEAR_MONTH + 1;
-		/** <code>email</code> type id.*/
+		/** <code>emailAddr</code> type id.*/
 		public static final int EMAIL = ISO_DURATION + 1;
-		/** <code>emailList</code> type id.*/
+		/** <code>emailAddrList</code> type id.*/
 		public static final int EMAIL_LIST = EMAIL + 1;
 		/** <code>emailDate</code> type id.*/
 		public static final int EMAIL_DATE = EMAIL_LIST + 1;

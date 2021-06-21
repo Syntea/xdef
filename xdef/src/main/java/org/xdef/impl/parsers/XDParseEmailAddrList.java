@@ -4,7 +4,7 @@ import org.xdef.XDContainer;
 import org.xdef.XDParseResult;
 import org.xdef.XDParserAbstract;
 import org.xdef.impl.code.DefContainer;
-import org.xdef.impl.code.DefEmail;
+import org.xdef.impl.code.DefEmailAddr;
 import org.xdef.proc.XXNode;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.SParser;
@@ -13,9 +13,9 @@ import org.xdef.sys.StringParser;
 /** Parse list of email address (separator white space, ',' or ';')..
  * @author Vaclav Trojan
  */
-public class XDParseEmailList extends XDParserAbstract {
+public class XDParseEmailAddrList extends XDParserAbstract {
 
-	private static final String ROOTBASENAME = "emailList";
+	private static final String ROOTBASENAME = "emailAddrList";
 
 	@Override
 	public void parseObject(XXNode xnode, XDParseResult p) {
@@ -24,7 +24,7 @@ public class XDParseEmailList extends XDParserAbstract {
 			q.setIndex(p.getIndex());
 			XDContainer val = new DefContainer();
 			for(;;) {
-				val.addXDItem(new DefEmail(q));
+				val.addXDItem(new DefEmailAddr(q));
 				if (q.eos() || q.isOneOfChars(",;") == SParser.NOCHAR) {
 					break;
 				}

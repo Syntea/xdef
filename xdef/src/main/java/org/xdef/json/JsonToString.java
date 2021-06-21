@@ -8,13 +8,13 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import org.xdef.XDEmail;
 import org.xdef.sys.GPSPosition;
 import org.xdef.sys.Price;
 import org.xdef.sys.SDatetime;
 import org.xdef.sys.SDuration;
 import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
+import org.xdef.XDEmailAddr;
 
 /** Conversion of JSON or XON to string.
  * @author Vaclav Trojan
@@ -91,8 +91,8 @@ class JsonToString extends JsonTools {
 				return "u\"" + jstringToSource(((URI) x).toASCIIString()) + '"';
 			} else if (x instanceof File) {
 				return "f\""+jstringToSource(((File) x).getAbsolutePath())+'"';
-			} else if (x instanceof XDEmail) {
-				return "e\""+jstringToSource(((XDEmail) x).getEmailAddr())+'"';
+			} else if (x instanceof XDEmailAddr) {
+				return "e\""+jstringToSource(((XDEmailAddr) x).getEmailAddr())+'"';
 			} else if (x instanceof SDatetime) {
 				return "D" + x;
 			} else if (x instanceof SDuration || x instanceof Price

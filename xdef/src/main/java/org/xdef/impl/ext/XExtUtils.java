@@ -15,13 +15,13 @@ import java.math.MathContext;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xdef.XDContainer;
-import org.xdef.XDEmail;
 import org.xdef.XDValueID;
 import org.xdef.impl.ChkNode;
 import org.xdef.impl.code.DefDate;
 import org.xdef.sys.SDatetime;
 import org.xdef.sys.SPosition;
 import org.xdef.sys.SUtils;
+import org.xdef.XDEmailAddr;
 
 /** External utilities for key definition and key reference.
  * @author Vaclav Trojan
@@ -184,14 +184,14 @@ public final class XExtUtils {
 	}
 	public static String getEnv(final String name) {return System.getenv(name);}
 
-	public static String getEmailUserName(final XDEmail x) {
+	public static String getEmailUserName(final XDEmailAddr x) {
 		return x.getUserName();
 	}
-	public static String getEmailLocalPart(final XDEmail x) {
+	public static String getEmailLocalPart(final XDEmailAddr x) {
 		return x.getLocalPart();
 	}
-	public static String getEmailDomain(final XDEmail x) {return x.getDomain();}
-	public static String getEmailAddr(final XDEmail x){return x.getEmailAddr();}
+	public static String getEmailDomain(final XDEmailAddr x) {return x.getDomain();}
+	public static String getEmailAddr(final XDEmailAddr x){return x.getEmailAddr();}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of script methods.

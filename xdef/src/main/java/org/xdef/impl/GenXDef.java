@@ -15,7 +15,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xdef.impl.parsers.XDParseEmail;
+import org.xdef.impl.parsers.XDParseEmailAddr;
 import org.xdef.impl.parsers.XDParseEmailDate;
 import org.xdef.impl.parsers.XDParseGPS;
 import org.xdef.impl.parsers.XDParseMD5;
@@ -510,7 +510,7 @@ public class GenXDef implements XDConstants {
 		if (new XDParseEmailDate().check(null, data).matches()) {
 			return "emailDate()";
 		}
-		if (new XDParseEmail().check(null, data).matches()) {
+		if (new XDParseEmailAddr().check(null, data).matches()) {
 			return "email()";
 		}
 		if (new XDParsePrintableDate().check(null, data).matches()) {

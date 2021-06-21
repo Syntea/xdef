@@ -9,7 +9,7 @@
                     "family": "string()",
                     "given": "optional string()"
                 },
-                "email": "email();",
+                "email": "emailAddr();",
                 "link": { $oneOf: "optional",
                     "manager": "string();",
                     "subordinates": [
