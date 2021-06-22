@@ -6,7 +6,9 @@ import org.xdef.XDValueAbstract;
 import org.xdef.XDValueID;
 import org.xdef.XDValueType;
 import org.xdef.msg.SYS;
+import org.xdef.msg.XDEF;
 import org.xdef.sys.SIllegalArgumentException;
+import org.xdef.sys.SRuntimeException;
 
 /** Implements the internal object with File value.
  * @author Vaclav Trojan
@@ -26,8 +28,16 @@ public final class DefFile extends XDValueAbstract {
 
 	/** Creates a new instance of DefFile
 	 * @param value The string with initial value of object ("true" or "false").
+	 * @throws SRuntimeException if an error occurs.
 	 */
-	public DefFile(final String value) {_value = new File(value);}
+	public DefFile(final String value) {
+		try {
+			_value = new File(value).getCanonicalFile();
+		} catch (Exception ex) {
+			//Incorrect value of '&{0}'&{1}{: }
+			throw new SRuntimeException(XDEF.XDEF809, "file", value);
+		}
+	}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDValue interface

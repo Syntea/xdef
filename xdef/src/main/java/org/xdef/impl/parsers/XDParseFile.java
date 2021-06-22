@@ -35,7 +35,7 @@ public class XDParseFile extends XDParserAbstract {
 		final String parserName) {
 		if (!s.isEmpty()) {
 			try {
-				p.setParsedValue(new DefFile(new File(s).getCanonicalPath()));
+				p.setParsedValue(new DefFile(new File(s)));
 				return true;
 			} catch (Exception ex) {}
 		}

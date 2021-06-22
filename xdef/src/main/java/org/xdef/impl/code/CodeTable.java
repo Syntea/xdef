@@ -797,12 +797,16 @@ public interface CodeTable {
 	static final short NEW_REPORT = NEW_XMLWRITER + 1;
 	/** Create XML writer. */
 	static final short NEW_LOCALE = NEW_REPORT + 1;
+	/** Create XML writer. */
+	static final short NEW_FILE = NEW_LOCALE + 1;
+	/** Create XML writer. */
+	static final short NEW_URI = NEW_FILE + 1;
 
 	////////////////////////////////////////////////////////////////////////////
 	//External methods
 	////////////////////////////////////////////////////////////////////////////
 	/** External method with fixed parameters. */
-	static final short EXTMETHOD =  NEW_LOCALE + 1;
+	static final short EXTMETHOD =  NEW_URI + 1;
 	/** External method with array of parameters. */
 	static final short EXTMETHOD_ARRAY = EXTMETHOD + 1;
 	/** External check method */

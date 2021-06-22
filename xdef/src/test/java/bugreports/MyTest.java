@@ -75,22 +75,20 @@ public class MyTest extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<xd:declaration>\n"+
-" Email x = new Email('=?UTF-8?Q?Pavel B=C3=BDk?= &lt;p@s&gt;');\n"+
+" final EmailAddr x = new EmailAddr('=?UTF-8?Q?Pavel B=C3=BDk?= &lt;p@s&gt;');\n"+
 "</xd:declaration>\n"+
-"<a>\n"+
-"  emailAddr(); onTrue {\n"+
-"              Email e = (Email) getParsedValue();\n"+
+"<a email='emailAddr(); onTrue {\n"+
+"              EmailAddr e = (EmailAddr) getParsedValue();\n"+
 "              outln(getEmailUserName(e));\n"+
 "              outln(getEmailLocalPart(e));\n"+
 "              outln(getEmailDomain(e));\n"+
 "              outln(getEmailAddr(e));\n"+
 "              outln(getEmailUserName(x));\n"+
 "              outln(getEmailAddr(x));\n"+
-"            }\n"+
-"</a>\n"+
+"            }' />\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			xml = "<a>(T. tr) a@b</a>";
+			xml = "<a email='(T. tr) a@b'/>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
