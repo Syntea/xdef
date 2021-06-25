@@ -46,8 +46,6 @@ public enum XDValueType {
 	GPSPOSITION,
 	/** Price (amount with currency). */
 	PRICE,
-	/** File object. */
-	FILE,
 	/** Email address. */
 	EMAIL,
 	/** Regular expression value. */

@@ -107,8 +107,8 @@ public class TestXon extends XDTester {
 		assertNull(testx("char",
 			"[ c\"a\", c\"'\", c\"\\\"\", c\"\\u0007\", c\"\\\\\" ]"));
 		assertNull(testx("anyURI", "[ u\"http://a.b\" ]"));
-		assertNull(testx("file", "[ f\"C:/temp1/a.txt\" ]"));
 		assertNull(testx("emailAddr","[ e\"tro@volny.cz\",e\"a b<x@y.zz>\" ]"));
+		assertNull(testx("file", "[ \"temp/a.txt\" ]"));
 //if (true) return;
 /*xx*/
 		String s, json, xon, xdef;

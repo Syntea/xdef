@@ -80,7 +80,6 @@ import org.xdef.impl.code.CodeTable;
 import org.xdef.impl.code.CodeXD;
 import org.xdef.impl.code.DefChar;
 import org.xdef.impl.code.DefEmailAddr;
-import org.xdef.impl.code.DefFile;
 import org.xdef.impl.code.DefPrice;
 import org.xdef.impl.code.DefGPSPosition;
 import org.xdef.impl.code.DefLocale;
@@ -3071,9 +3070,6 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 					continue;
 				case NEW_EMAIL:
 					_stack[sp] = new DefEmailAddr(_stack[sp].toString());
-					continue;
-				case NEW_FILE:
-					_stack[sp] = new DefFile(_stack[sp].toString());
 					continue;
 				case NEW_URI:
 					_stack[sp] = new DefURI(_stack[sp].toString());

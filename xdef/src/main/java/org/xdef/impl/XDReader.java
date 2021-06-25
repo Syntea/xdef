@@ -33,7 +33,6 @@ import org.xdef.impl.code.DefDuration;
 import org.xdef.impl.code.DefElement;
 import org.xdef.impl.code.DefEmailAddr;
 import org.xdef.impl.code.DefException;
-import org.xdef.impl.code.DefFile;
 import org.xdef.impl.code.DefGPSPosition;
 import org.xdef.impl.code.DefLocale;
 import org.xdef.impl.code.DefLong;
@@ -176,8 +175,6 @@ public final class XDReader extends SObjectReader {
 					}
 					case XDValueID.XD_ANYURI:
 						return new DefURI(readString());
-					case XDValueID.XD_FILE:
-						return new DefFile(readString());
 					case XDValueID.XD_EMAIL:
 						return new DefEmailAddr(readString());
 					case XDValueID.XD_ELEMENT:

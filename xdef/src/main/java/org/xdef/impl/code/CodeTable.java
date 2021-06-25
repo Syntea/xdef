@@ -798,9 +798,7 @@ public interface CodeTable {
 	/** Create XML writer. */
 	static final short NEW_LOCALE = NEW_REPORT + 1;
 	/** Create XML writer. */
-	static final short NEW_FILE = NEW_LOCALE + 1;
-	/** Create XML writer. */
-	static final short NEW_URI = NEW_FILE + 1;
+	static final short NEW_URI = NEW_LOCALE + 1;
 
 	////////////////////////////////////////////////////////////////////////////
 	//External methods

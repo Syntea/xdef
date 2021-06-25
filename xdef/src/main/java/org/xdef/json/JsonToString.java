@@ -89,8 +89,6 @@ class JsonToString extends JsonTools {
 				return genChar((Character) x);
 			} else if (x instanceof URI) {
 				return "u\"" + jstringToSource(((URI) x).toASCIIString()) + '"';
-			} else if (x instanceof File) {
-				return "f\""+jstringToSource(((File) x).getAbsolutePath())+'"';
 			} else if (x instanceof XDEmailAddr) {
 				return "e\""+jstringToSource(((XDEmailAddr) x).getEmailAddr())+'"';
 			} else if (x instanceof SDatetime) {

@@ -280,8 +280,6 @@ class XCGeneratorBase {
 				return "org.xdef.sys.Price";
 			case XDValueID.XD_ANYURI:
 				return "java.net.URI";
-			case XDValueID.XD_FILE:
-				return "java.io.File";
 			case XDValueID.XD_EMAIL:
 				return "org.xdef.XDEmailAddr";
 			case XDValueID.XD_BYTES:
@@ -372,8 +370,6 @@ class XCGeneratorBase {
 				return result + "getParsedValue().priceValue()";
 			case XDValueID.XD_ANYURI:
 				return "(java.net.URI) "+result+"getParsedValue().getObject()";
-			case XDValueID.XD_FILE:
-				return "(java.io.File) "+result+"getParsedValue().getObject()";
 			case XDValueID.XD_EMAIL:
 				return "(org.xdef.XDEmailAddr) "
 					+result + "getParsedValue().getObject()";
