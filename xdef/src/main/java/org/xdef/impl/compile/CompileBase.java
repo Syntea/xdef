@@ -85,7 +85,6 @@ public class CompileBase implements CodeTable, XDValueID {
 		setType(XD_GPSPOSITION, "GPSPosition", org.xdef.XDGPSPosition.class);
 		setType(XD_PRICE,"Price",org.xdef.XDPrice.class);
 		setType(XD_ANYURI,"URI", java.net.URI.class);
-		setType(XD_FILE,"File", java.io.File.class);
 		setType(XD_EMAIL,"EmailAddr", org.xdef.XDEmailAddr.class);
 		setType(XD_CONTAINER, "Container", org.xdef.XDContainer.class);
 		setType(XD_REGEX, "Regex", org.xdef.XDRegex.class);
@@ -134,7 +133,6 @@ public class CompileBase implements CodeTable, XDValueID {
 			((char) XD_GPSPOSITION) + ";GPSPosition;" +
 			((char) XD_PRICE) + ";Price;" +
 			((char) XD_ANYURI) + ";URI;" +
-			((char) XD_FILE) + ";File;" +
 			((char) XD_EMAIL) + ";EmailAddr;" +
 			((char) XD_BNFGRAMMAR) + ";DefBNFGrammar;" +
 			((char) XD_LOCALE) + ";Locale;" +
@@ -1079,13 +1077,6 @@ public class CompileBase implements CodeTable, XDValueID {
 			ANY_MODE, 1, 1, XD_EXCEPTION), "getReport");
 		method(ti, genInternalMethod(GET_MESSAGE, XD_STRING,
 			ANY_MODE, 1, 1, XD_EXCEPTION), "getMessage");
-
-////////////////////////////////////////////////////////////////////////////////
-// FILE (File object)
-////////////////////////////////////////////////////////////////////////////////
-		ti = XD_FILE;
-		method(ti, genInternalMethod(NEW_FILE, XD_FILE,
-			ANY_MODE, 1, 1, XD_STRING), "#");
 
 ////////////////////////////////////////////////////////////////////////////////
 // GPS POSITION

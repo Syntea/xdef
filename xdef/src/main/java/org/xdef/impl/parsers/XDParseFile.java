@@ -3,8 +3,6 @@ package org.xdef.impl.parsers;
 import java.io.File;
 import org.xdef.XDParseResult;
 import org.xdef.XDParserAbstract;
-import static org.xdef.XDValueID.XD_FILE;
-import org.xdef.impl.code.DefFile;
 import org.xdef.msg.XDEF;
 import org.xdef.proc.XXNode;
 
@@ -35,7 +33,7 @@ public class XDParseFile extends XDParserAbstract {
 		final String parserName) {
 		if (!s.isEmpty()) {
 			try {
-				p.setParsedValue(new DefFile(new File(s)));
+				new File(s).getCanonicalFile();
 				return true;
 			} catch (Exception ex) {}
 		}
@@ -45,7 +43,7 @@ public class XDParseFile extends XDParserAbstract {
 	}
 
 	@Override
-	public short parsedType() {return XD_FILE;}
+	public short parsedType() {return XD_STRING;}
 
 	@Override
 	public String parserName() {return ROOTBASENAME;}

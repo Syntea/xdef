@@ -1,6 +1,5 @@
 package org.xdef.json;
 
-import java.io.File;
 import java.io.Reader;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -418,13 +417,6 @@ public class XONReader extends StringParser implements XONParsers {
 					try {
 						return returnValue(spos,
 							new DefEmailAddr(JsonTools.readJSONString(this)));
-					} catch (Exception ex) {}
-					//JSON value expected
-					return returnError(spos, null, JSON.JSON010, "[]{}");
-				} else if (isToken("f\"")) { // File
-					try {
-						return returnValue(spos,
-							new File(JsonTools.readJSONString(this)));
 					} catch (Exception ex) {}
 					//JSON value expected
 					return returnError(spos, null, JSON.JSON010, "[]{}");

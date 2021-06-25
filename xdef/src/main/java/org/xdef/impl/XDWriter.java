@@ -133,11 +133,6 @@ public final class XDWriter extends SObjectWriter {
 						writeString(u == null ? null : u.toASCIIString());
 						return;
 					}
-					case XDValueID.XD_FILE: {
-						File f = (File) x.getObject();
-						writeString(f == null ? null : f.getCanonicalPath());
-						return;
-					}
 					case XDValueID.XD_EMAIL:
 						writeString(x.stringValue());
 						return;

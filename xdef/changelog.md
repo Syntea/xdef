@@ -1,13 +1,13 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 40.1.5, release-date 2021-06-23
+# Version 40.1.5, release-date 2021-06-25
 * fixed bug in nested type declarations.
 * fixed few bugs in parsing of email address (it's now up to rfc288).
 * X-definition 2.0 is now deprecated.
 * removed deprecated type methods: `ISODay`, `ISOMonth`, `ISOMonthDay`,
  `ISOyearMonth`, `ISOYear`, `ISOdateTime`, `ISOdate`, `tokens`, `tokensi`,
  `ISOduration`, `ISOlanguage`, `parseISODate`, `parseSequence`, `ListOf`.
-* implemented new X-script types `File`, `URI` and `EmailAddr`.
+* implemented new X-script types `URI` and `EmailAddr`.
 * changed names of validation methods: `email` to `emailAddr` and `emailList`
   to `emailAddrList`.
 
