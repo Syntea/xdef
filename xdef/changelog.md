@@ -1,5 +1,8 @@
 # Version ${version}, release-date ${release.date}
 
+# Version 40.1.6, release-date 2021-07-01
+* corrected generation of new lines (CR,LF) of Java source in X-components.
+
 # Version 40.1.5, release-date 2021-06-25
 * fixed bug in nested type declarations.
 * fixed few bugs in parsing of email address (it's now up to rfc288).

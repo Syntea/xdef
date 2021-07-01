@@ -63,28 +63,28 @@ public class PomInfo {
 		releaseDate       = pp.getProperty("release.date");
 		buildTimestamp    = pp.getProperty("build.timestamp");
 	}
-	
-	
+
+
 
 	public boolean isVersionSnapshot() {
-	    return version.endsWith("-SNAPSHOT");
+		return version.endsWith("-SNAPSHOT");
 	}
-	
-	
-	
-    /** Get identifier of product.
-     * @return product-identifier
-     */
-    public String getProductIdentifier() {
-        return
-            groupId + ":" + artifactId + ":" + version + " (" +
-            (isVersionSnapshot() ? "built " + buildTimestamp : "released " + releaseDate) + ")"
-        ;
-    }
 
 
 
-    public String getGroupId() {return groupId;}
+	/** Get identifier of product.
+	 * @return product-identifier
+	 */
+	public String getProductIdentifier() {
+		return
+			groupId + ":" + artifactId + ":" + version + " (" +
+			(isVersionSnapshot() ? "built " + buildTimestamp : "released " + releaseDate) + ")"
+		;
+	}
+
+
+
+	public String getGroupId() {return groupId;}
 
 	public String getArtifactId() {return artifactId;}
 
@@ -95,11 +95,11 @@ public class PomInfo {
 	public String getDescription() {return description;}
 
 	public String getReleaseDate() {return releaseDate;}
-	
+
 	public String getBuildTimestamp() {return buildTimestamp;}
 
-	
-	
+
+
 	private String groupId        = null;
 	private String artifactId     = null;
 	private String version        = null;
