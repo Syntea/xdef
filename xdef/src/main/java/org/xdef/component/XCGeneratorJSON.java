@@ -273,8 +273,8 @@ class XCGeneratorJSON extends XCGeneratorBase1 {
 "\t\t\t\t&{iname} z = new &{iname}();"+LN+
 "\t\t\t\tz.set$value(w);"+LN+
 "\t\t\t\ty.add(z);"+LN+
-"\t\t\t}\n" +
-"\t\t}\n" +
+"\t\t\t}"+LN+
+"\t\t}"+LN+
 "\t}"+LN;
 			sb.append(modify(template,
 				"&{x}", x,
