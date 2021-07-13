@@ -294,7 +294,7 @@ public final class XPool implements XDPool, Serializable {
 			&& (source.startsWith("?") || source.isEmpty())) {
 			if (source.length() <= 1) {
 				setSource(
-"<xd:def xmlns:xd='"+ XDConstants.XDEF40_NS_URI + "' root=\"a\" name=\"a\">\n"+
+"<xd:def xmlns:xd='"+ XDConstants.XDEF41_NS_URI + "' root=\"a\" name=\"a\">\n"+
 "  <a/>\n"+
 "</xd:def>", "String[1]");
 				return;

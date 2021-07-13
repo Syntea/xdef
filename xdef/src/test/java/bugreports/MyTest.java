@@ -63,6 +63,8 @@ public class MyTest extends XDTester {
 		setProperty(XDConstants.XDPROPERTY_WARNINGS, // xdef_warnings
 			XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE); // true | false
 ////////////////////////////////////////////////////////////////////////////////
+			_xdOfxd = XDFactory.compileXD(null,
+					"classpath://org.xdef.impl.compile.XdefOfXdef*.xdef");
 
 		Element el;
 		Object j;

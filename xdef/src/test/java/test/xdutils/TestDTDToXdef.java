@@ -1,5 +1,6 @@
 package test.xdutils;
 
+import java.io.File;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.util.GenDTD2XDEF;
@@ -640,7 +641,8 @@ if (SUtils.JAVA_RUNTIME_VERSION_ID < 109) {
 //		test(dtdData, "html", xmlData, 2);
 ////		test(dtdData, "html", xmlData, display);
 //=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*
-
+		new File(tempDir + "generated_a.xdef").delete();
+		new File(tempDir + "generated_TV.xdef").delete();
 		clearTempDir(); // delete temporary files.
 	}
 	/** Run test

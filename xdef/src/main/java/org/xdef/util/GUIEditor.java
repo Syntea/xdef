@@ -53,7 +53,7 @@ public class GUIEditor extends GUIScreen {
 
 	static {
 		String xdef = // X-definition of project description
-"<xd:def xmlns:xd=\"" + XDConstants.XDEF40_NS_URI + "\" root=\"Project\">\n" +
+"<xd:def xmlns:xd=\"" + XDConstants.XDEF41_NS_URI + "\" root=\"Project\">\n" +
 "  <Project Show=\"? enum('true', 'false');\">\n" +
 "    <xd:mixed>\n" +
 "      <!-- Sources of X-definitions -->\n" +
@@ -1010,7 +1010,7 @@ public class GUIEditor extends GUIScreen {
 			case 'c': { // create
 				if (xdefs.isEmpty()) {
 					xdefs.add(
-"&lt;xd:def xmlns:xd=\"" + XDConstants.XDEF40_NS_URI
+"&lt;xd:def xmlns:xd=\"" + XDConstants.XDEF41_NS_URI
 	+ "\" name=\"test\" root=\"HTML\">\n" +
 "&lt;HTML>\n" +
 "  &lt;HEAD>&lt;TITLE>"
@@ -1056,7 +1056,7 @@ public class GUIEditor extends GUIScreen {
 			case 'v': { // validate
 				if (xdefs.isEmpty()) {
 					xdefs.add(
-"&lt;xd:def xmlns:xd=\"" + XDConstants.XDEF40_NS_URI
+"&lt;xd:def xmlns:xd=\"" + XDConstants.XDEF41_NS_URI
 	+ "\" name=\"test\" root=\"root\">\n" +
 (format == 'x'
 ? "  &lt;root a=\"int();\" >\n" +

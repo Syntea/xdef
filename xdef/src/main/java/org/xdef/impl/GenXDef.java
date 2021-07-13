@@ -336,8 +336,8 @@ public class GenXDef implements XDConstants {
 
 	private static QName checkQName(final QName qname) {
 		String uri = qname.getNamespaceURI();
-		if (XDEF40_NS_URI.equals(uri) || XDEF32_NS_URI.equals(uri)
-			|| XDEF31_NS_URI.equals(uri)) {
+		if (XDEF41_NS_URI.equals(uri) || XDEF40_NS_URI.equals(uri)
+			|| XDEF32_NS_URI.equals(uri) || XDEF31_NS_URI.equals(uri)) {
 			//Namespace of X-definition is not allowed in XML input data
 			throw new SRuntimeException(XDEF.XDEF882);
 		}
@@ -385,9 +385,9 @@ public class GenXDef implements XDConstants {
 		canonizeXML(el);
 		Document doc = el.getOwnerDocument();
 		doc = doc.getImplementation().createDocument(
-			XDEF40_NS_URI, XDEF_NS_PREFIX + ":def", doc.getDoctype());
+			XDEF41_NS_URI, XDEF_NS_PREFIX + ":def", doc.getDoctype());
 		Element xdef = doc.getDocumentElement();
-		xdef.setAttribute("xmlns:" + XDEF_NS_PREFIX, XDEF40_NS_URI);
+		xdef.setAttribute("xmlns:" + XDEF_NS_PREFIX, XDEF41_NS_URI);
 		final String s = el.getNodeName();
 		if (el.getNamespaceURI() != null) {
 			int i = s.indexOf(':');
@@ -619,11 +619,11 @@ public class GenXDef implements XDConstants {
 			s = "occurs 1;";
 		}
 		if (!s.isEmpty()) {
-			model.setAttributeNS(XDEF40_NS_URI, XDEF_NS_PREFIX + ":script", s);
+			model.setAttributeNS(XDEF41_NS_URI, XDEF_NS_PREFIX + ":script", s);
 		}
-		XAttr att = x._atts.get(new QName(XDEF40_NS_URI, "script"));
+		XAttr att = x._atts.get(new QName(XDEF41_NS_URI, "script"));
 		if (att != null) { // to be the first attribute
-			model.setAttributeNS(XDEF40_NS_URI,
+			model.setAttributeNS(XDEF41_NS_URI,
 				XDEF_NS_PREFIX + ":script", att._type);
 			x._atts.remove(att);
 		}
@@ -647,7 +647,7 @@ public class GenXDef implements XDConstants {
 		parent.appendChild(model);
 		if (x._mixed) {
 			final Element el = createElement(model,
-				XDEF40_NS_URI, XDEF_NS_PREFIX + ":mixed");
+				XDEF41_NS_URI, XDEF_NS_PREFIX + ":mixed");
 			model.appendChild(el);
 			model = el;
 		}

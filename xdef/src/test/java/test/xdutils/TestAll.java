@@ -36,12 +36,12 @@ public class TestAll {
 			new TestXsd2XdConv(),
 		};
 		String xdNS = XDTester._xdNS;
-		XDTester._xdNS = XDConstants.XDEF32_NS_URI;
-		System.out.println("Testing X-definition utilities version 3.2");
-		int result = XDTester.runTests(System.out, System.err, log,
-			tests, "package xdutils", XDTester.getFulltestMode(), args);
 		XDTester._xdNS = XDConstants.XDEF40_NS_URI;
 		System.out.println("Testing X-definition utilities version 4.0");
+		int result = XDTester.runTests(System.out, System.err, log,
+			tests, "package xdutils", XDTester.getFulltestMode(), args);
+		XDTester._xdNS = XDConstants.XDEF41_NS_URI;
+		System.out.println("Testing X-definition utilities version 4.1");
 		result += XDTester.runTests(System.out, System.err, log,
 			tests, "package xdutils", XDTester.getFulltestMode(), args);
 		if (log!= null) {

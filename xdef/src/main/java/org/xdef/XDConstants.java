@@ -123,6 +123,8 @@ public interface XDConstants {
 	public static final String XDEF32_NS_URI = "http://www.xdef.org/xdef/3.2";
 	/** URI of X-definition 4.0. */
 	public static final String XDEF40_NS_URI = "http://www.xdef.org/xdef/4.0";
+	/** URI of X-definition 4.1. */
+	public static final String XDEF41_NS_URI = "http://www.xdef.org/xdef/4.1";
 	/** The namespace URI for X-definition instance. */
 	public static final String XDEF_INSTANCE_NS_URI =
 		"http://www.xdef.org/xdef/instance";

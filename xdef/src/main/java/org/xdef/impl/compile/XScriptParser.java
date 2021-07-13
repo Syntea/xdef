@@ -173,6 +173,11 @@ public class XScriptParser extends StringParser
 	public static final char BNFRULE_ID_SYM = (char) (BASE_ID + XD_BNFRULE);
 	public static final char INSTREAM_ID_SYM = (char) (BASE_ID + XD_INPUT);
 	public static final char OUTSTREAM_ID_SYM = (char) (BASE_ID + XD_OUTPUT);
+	public static final char CHAR_ID_SYM = (char) (BASE_ID + XD_CHAR);
+	public static final char EMAIL_ID_SYM = (char) (BASE_ID + XD_EMAIL);
+	public static final char GPS_ID_SYM = (char) (BASE_ID + XD_GPSPOSITION);
+	public static final char PRICE_ID_SYM = (char) (BASE_ID + XD_PRICE);
+	public static final char URI_ID_SYM = (char) (BASE_ID + XD_ANYURI);
 	public static final char BYTES_ID_SYM = (char) (BASE_ID + XD_BYTES);
 	public static final char ELEMENT_ID_SYM = (char) (BASE_ID + XD_ELEMENT);
 	public static final char EXCEPTION_ID_SYM = (char) (BASE_ID + XD_EXCEPTION);
@@ -329,6 +334,7 @@ public class XScriptParser extends StringParser
 		BNFRULE_ID_SYM + ";$BNFRULE;" +
 		BOOLEAN_ID_SYM + ";$BOOLEAN;" +
 		BYTES_ID_SYM + ";$BYTES;" +
+		CHAR_ID_SYM + ";$CHAR;" +
 		CONTEXT_ID_SYM + ";$CONTTAINER;" +
 		DATETIME_ID_SYM + ";$DATETIME;" +
 		DURATION_ID_SYM + ";$DURATION;" +
@@ -336,22 +342,26 @@ public class XScriptParser extends StringParser
 		EXCEPTION_ID_SYM + ";$EXCEPTION;" +
 		LONG_ID_SYM + ";$INT;" +
 		DECIMAL_ID_SYM + ";$DECIMAL;" +
+		EMAIL_ID_SYM + ";$EMAIL;" +
 		FLOAT_ID_SYM + ";$FLOAT;" +
 		INSTREAM_ID_SYM + ";$INPUT;" +
+		GPS_ID_SYM + ";$GPS;" +
+		NAMED_ID_SYM + ";$NAMEDVALUE;" +
 		OBJECT_ID_SYM + ";$OBJECT;" +
 		OUTSTREAM_ID_SYM + ";$OUTPUT;" +
-		NAMED_ID_SYM + ";$NAMEDVALUE;" +
 		PARSER_ID_SYM + ";$PARSER;" +
 		PARSERESULT_ID_SYM + ";$PARSERESULT;" +
+		PRICE_ID_SYM + ";$PRICE;" +
 		REGEX_ID_SYM + ";&REGEX;" +
 		REGEXRESULT_ID_SYM + ";&REGEXRESULT;" +
 		REPORT_ID_SYM + ";$REPORT;" +
 		RESULTSET_ID_SYM + ";$RESULTSET;" +
-		STRING_ID_SYM + ";$STRING;" +
-		XPATH_EXPR_ID_SYM + ";$XPATH;" +
-		XQUERY_EXPR_ID_SYM + ";$XQUERY;" +
 		SERVICE_ID_SYM + ";$SERVICE;" +
 		STATEMENT_ID_SYM + ";$STATEMENT;" +
+		STRING_ID_SYM + ";$STRING;" +
+		URI_ID_SYM + ";$URI;" +
+		XPATH_EXPR_ID_SYM + ";$XPATH;" +
+		XQUERY_EXPR_ID_SYM + ";$XQUERY;" +
 		XMLWRITER_ID_SYM + ";$XMLWRITER;";
 
 	/** Table to convert base symbols to the source form. */

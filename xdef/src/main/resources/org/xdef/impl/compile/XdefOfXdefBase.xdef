@@ -6,7 +6,8 @@
   xmlns:XD3.1     = "http://www.syntea.cz/xdef/3.1"
   xmlns:XD3.2     = "http://www.xdef.org/xdef/3.2"
   xmlns:XD4.0     = "http://www.xdef.org/xdef/4.0"
-  xmlns:w         = "http://www.xdef.org/xdef/4.0"
+  xmlns:XD4.1     = "http://www.xdef.org/xdef/4.1"
+  xmlns:w         = "http://www.xdef.org/xdef/4.1"
   xd:root         = "Ver3.1#XD3.1:def | Ver3.1#XD3.1:collection
                      | Ver3.1#XD3.1:declaration | Ver3.1#XD3.1:component
                      | Ver3.1#XD3.1:thesaurus
@@ -15,7 +16,10 @@
                      | Ver3.2#XD3.2:lexicon
                      | Ver4.0#XD4.0:def | Ver4.0#XD4.0:collection
                      | Ver4.0#XD4.0:declaration | Ver4.0#XD4.0:component
-                     | Ver4.0#XD4.0:lexicon"
+                     | Ver4.0#XD4.0:lexicon
+                     | Ver4.1#XD4.1:def | Ver4.1#XD4.1:collection
+                     | Ver4.1#XD4.1:declaration | Ver4.1#XD4.1:component
+                     | Ver4.1#XD4.1:lexicon"
   w:metaNamespace = "METAXD">
 
 <xd:declaration>
