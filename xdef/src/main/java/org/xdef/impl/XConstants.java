@@ -10,6 +10,8 @@ public interface XConstants {
 	public static final byte XD32 = 32;
 	/** X-definition version 4.0 ID. */
 	public static final byte XD40 = 40;
+	/** X-definition version 4.1 ID. */
+	public static final byte XD41 = 41;
 
 	/** JSON mode W3C format. */
 	public static byte JSON_MODE_W3C = 1;

@@ -89,6 +89,22 @@ public final class TestXdef extends XDTester {
 		} catch (Exception ex) {
 			assertTrue(ex.getMessage().indexOf("XDEF903") > 0, ex);
 		}
+		try {
+			xdef =
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.0\"\n" +
+"  xmlns:tns=\"http://www.w3schools.com\">\n" +
+"  <tns:note>\n" +
+"    <xd:sequence xd:script=\"occurs 1\">\n" +
+"      <tns:to xd:script=\"occurs 1\">required string()</tns:to>\n" +
+"    </xd:sequence>\n" +
+"  </tns:note>\n" +
+"</xd:def>";
+			xp = compile(xdef);
+			parse(xp,"", "<tns:note><tns:to/></tns:note>", reporter);
+			System.out.println("Error not recognized");
+		} catch (Exception ex) {
+			if (!reporter.printToString().contains("XML080")) {fail(ex);}
+		}
 		try { // compile InputStream, String and more
 			xdef =
 "<x:def xmlns:x ='" + _xdNS + "' name='a' root='a'>\n"+
@@ -3158,10 +3174,13 @@ public final class TestXdef extends XDTester {
 "<xd:def xmlns:xd='" + XDConstants.XDEF40_NS_URI + "'>\n"+
 "  <A a='xxxx()'/>\n"+
 "</xd:def>";
-			FileReportWriter frw = new FileReportWriter(tempDir + "a.rep");
+			File f = new File(tempDir, "a.rep");
+			FileReportWriter frw = new FileReportWriter(f);
 			xp = XDFactory.compileXD(frw, null, xdef);
 			assertTrue(frw.getReportReader().printToString().contains(
 				"XDEF443"));
+			frw.close();
+			f.delete();
 		} catch (Exception ex) {fail(ex);}
 		try { // test DOCTYPE not allowed
 			setProperty(XDConstants.XDPROPERTY_DOCTYPE, "false");
@@ -3182,18 +3201,18 @@ public final class TestXdef extends XDTester {
 		try {// test "classpath" and "file" protocol in URL
 			xp = XDFactory.compileXD((Properties) null, //without wildcards
 				"classpath://org.xdef.impl.compile.XdefOfXdefBase.xdef",
-				"classpath://org.xdef.impl.compile.XdefOfXdef20.xdef",
 				"classpath://org.xdef.impl.compile.XdefOfXdef31.xdef",
 				"classpath://org.xdef.impl.compile.XdefOfXdef32.xdef",
-				"classpath://org.xdef.impl.compile.XdefOfXdef40.xdef");
+				"classpath://org.xdef.impl.compile.XdefOfXdef40.xdef",
+				"classpath://org.xdef.impl.compile.XdefOfXdef41.xdef");
 			xp = XDFactory.compileXD((Properties) null, //with wildcards
 				"classpath://org.xdef.impl.compile.XdefOfXdef*.xdef");
 			xp = XDFactory.compileXD((Properties) null, //without wildcards
 "<xd:collection xmlns:xd='" + _xdNS + "'\n"+
-"  xd:include='classpath://org.xdef.impl.compile.XdefOfXdef20.xdef;\n"+
-"    classpath://org.xdef.impl.compile.XdefOfXdef31.xdef;\n"+
+"  xd:include='classpath://org.xdef.impl.compile.XdefOfXdef31.xdef;\n"+
 "    classpath://org.xdef.impl.compile.XdefOfXdef32.xdef;\n"+
 "    classpath://org.xdef.impl.compile.XdefOfXdef40.xdef;\n"+
+"    classpath://org.xdef.impl.compile.XdefOfXdef41.xdef;\n"+
 "    classpath://org.xdef.impl.compile.XdefOfXdefBase.xdef;'/>");
 			xp = XDFactory.compileXD((Properties) null, //with wildcards
 "<xd:collection xmlns:xd='" + _xdNS + "'\n"+

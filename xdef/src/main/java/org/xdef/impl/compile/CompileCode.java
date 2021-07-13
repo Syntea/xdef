@@ -885,6 +885,8 @@ public final class CompileCode extends CompileBase {
 				|| XDConstants.XDEF32_NS_URI.equals(
 					_namespaceURIs.get(item.getValue()))
 				|| XDConstants.XDEF40_NS_URI.equals(
+					_namespaceURIs.get(item.getValue()))
+				|| XDConstants.XDEF41_NS_URI.equals(
 					_namespaceURIs.get(item.getValue()))) {
 				continue;
 			}

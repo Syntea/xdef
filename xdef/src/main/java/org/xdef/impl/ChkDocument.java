@@ -142,10 +142,10 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		super("$root", null);
 		XPool xp = (XPool) new XBuilder(props).setExternals(extObjects)
 			.setSource(
-				"<xd:collection xmlns:xd='"+XDConstants.XDEF40_NS_URI+"'/>")
+				"<xd:collection xmlns:xd='"+XDConstants.XDEF41_NS_URI+"'/>")
 			.compileXD();
 		XDefinition xd = new XDefinition("#",
-			xp, XDConstants.XDEF40_NS_URI, null, XConstants.XD40);
+			xp, XDConstants.XDEF41_NS_URI, null, XConstants.XD41);
 		xp._xdefs.put("#", xd);
 		setDateRestrictions(xd.getXDPool());
 		//create dummy X-definition - will be assigned from attribute

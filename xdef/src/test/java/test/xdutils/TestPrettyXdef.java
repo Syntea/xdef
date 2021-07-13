@@ -40,6 +40,10 @@ public class TestPrettyXdef extends XDTester {
 				new File(tempDir, "Matej2_L1_common.xdef").getCanonicalPath(),
 				"-i", "0",
 				dataDir + "test/Matej2_L1_common.def"));
+
+			new File(tempDir, "TestValidate.xdef").delete();
+			new File(tempDir, "Igor02_xd.xml").delete();
+			new File(tempDir, "Matej2_L1_common.xdef").delete();
 		} catch (Exception ex) {fail(ex);}
 
 		clearTempDir(); // delete temporary files.

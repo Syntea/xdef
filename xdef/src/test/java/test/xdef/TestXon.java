@@ -86,8 +86,6 @@ public class TestXon extends XDTester {
 
 	@Override
 	public void test() {
-//		assertNull(testx("emailAddr", "[ e\"tro@volny.cz\",e\"a b<x@y.zz>\" ]"));
-//if (true) return;
 /*xx*/
 		assertNull(testx("int", "[ ]"));
 		assertNull(testx("byte", "[ 1 ]"));

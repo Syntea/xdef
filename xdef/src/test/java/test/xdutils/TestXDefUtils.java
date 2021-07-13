@@ -53,6 +53,7 @@ public class TestXDefUtils extends XDTester {
 					}
 				}
 			}
+			new File(outFile).delete();
 		} catch (Exception ex) {fail(ex);}
 
 		clearTempDir(); // delete temporary files.

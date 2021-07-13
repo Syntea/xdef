@@ -8,9 +8,9 @@ import test.XDTester;
 /** Execute all tests fast (only version 4.0).
  * @author Vaclav Trojan
  */
-public class TestAll40 {
+public class TestAll41 {
 
-	private TestAll40() {  }
+	private TestAll41() {  }
 
 	/** Run all available tests in this package
 	 * @param args The array of arguments
@@ -36,8 +36,8 @@ public class TestAll40 {
 			new TestXsd2XdConv(),
 		};
 		String xdNS = XDTester._xdNS;
-		XDTester._xdNS = XDConstants.XDEF40_NS_URI;
-		System.out.println("Testing X-definition utilities version 4.0");
+		XDTester._xdNS = XDConstants.XDEF41_NS_URI;
+		System.out.println("Testing X-definition utilities version 4.1");
 		int result = XDTester.runTests(System.out, System.err, log,
 			tests, "package xdutils", XDTester.getFulltestMode(), args);
 		if (log!= null) {

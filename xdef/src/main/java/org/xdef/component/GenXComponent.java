@@ -1,26 +1,26 @@
 package org.xdef.component;
 
-import org.xdef.msg.SYS;
-import org.xdef.msg.XDEF;
-import org.xdef.sys.ArrayReporter;
-import org.xdef.sys.SRuntimeException;
-import org.xdef.sys.SUtils;
-import org.xdef.XDFactory;
-import org.xdef.XDPool;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.StringTokenizer;
-import java.util.LinkedHashMap;
-import java.util.HashSet;
 import org.xdef.XDConstants;
+import org.xdef.XDFactory;
+import org.xdef.XDPool;
 import org.xdef.model.XMNode;
+import org.xdef.msg.SYS;
+import org.xdef.msg.XDEF;
+import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.Report;
+import org.xdef.sys.SRuntimeException;
+import org.xdef.sys.SUtils;
 
 /** Generation of Java source code of XDComponents.
  * @author Vaclav Trojan

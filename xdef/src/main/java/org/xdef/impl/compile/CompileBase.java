@@ -607,13 +607,7 @@ public class CompileBase implements CodeTable, XDValueID {
 		im = genParserMetnod(1, Integer.MAX_VALUE, new short[] {XD_STRING},
 			XD_STRING, keyParam("argument", XD_CONTAINER, true,  0, false));
 		parser(im, org.xdef.impl.parsers.XDParseEnum.class, "enum");
-		parser(im, org.xdef.impl.parsers.XDParseEnumi.class, "enumi");//"?listi"
-//
-//		im = genParserMetnod(1, 1, new short[] {XD_STRING}, XD_STRING,
-//			keyParam("argument", XD_CONTAINER, true,  0, false));
-//		// This type is deprecated, replace with "list(%item=typ)"
-//		parser(im, org.xdef.impl.parsers.XDParseTokens.class, "?tokens");
-//		parser(im, org.xdef.impl.parsers.XDParseTokensi.class, "?tokensi");
+		parser(im, org.xdef.impl.parsers.XDParseEnumi.class, "enumi");
 
 		im = genParserMetnod(1, 2, new short[] {XD_ANY, XD_STRING},
 			XD_STRING, keyParam("a2", XD_ANY, true, 1, false),
@@ -734,14 +728,14 @@ public class CompileBase implements CodeTable, XDValueID {
 			ANY_MODE, 0, 0), "now");
 		method(ti, genInternalMethod(GET_OCCURRENCE, XD_LONG,
 			(byte) (TEXT_MODE + ELEMENT_MODE), 0, 0), "occurrence");
-		method(ti, genInternalMethod(OUT_STREAM, XD_VOID,  //out string
+		method(ti, genInternalMethod(OUT_STREAM, XD_VOID,  //out(String)
 			ANY_MODE, 1, 1, XD_STRING), "out");
-		method(ti, genInternalMethod(OUTLN_STREAM, XD_VOID,//outln(..)
+		method(ti, genInternalMethod(OUTLN_STREAM, XD_VOID,//outln(...)
 			ANY_MODE, 0, 1, XD_STRING), "outln");
-		method(ti, genInternalMethod(PRINTF_STREAM, XD_VOID,//outln(..)
+		method(ti, genInternalMethod(PRINTF_STREAM, XD_VOID,//outln(...)
 			ANY_MODE, 1, Integer.MAX_VALUE, XD_ANY), "printf");
 		method(ti, genInternalMethod(PARSE_DATE, XD_DATETIME,
-			ANY_MODE, 1, 2, XD_STRING, XD_STRING),"parseDate");//"?parseISODate"
+			ANY_MODE, 1, 2, XD_STRING, XD_STRING),"parseDate");
 		method(ti, genInternalMethod(PARSE_FLOAT, XD_DOUBLE,
 			ANY_MODE, 1, 2, XD_STRING, XD_STRING), "parseFloat");
 		method(ti, genInternalMethod(PARSE_INT,XD_LONG,

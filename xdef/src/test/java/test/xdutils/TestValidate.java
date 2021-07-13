@@ -95,6 +95,9 @@ public class TestValidate extends XDTester {
 				? 999 : rep.toString().indexOf("I: File OK: ")), 0, rep);
 			assertNull(rep = repr.getReport(), rep);
 			repr.close();
+
+			new File(tempDir, "TestValidate3.xp").delete();
+			new File(tempDir, "TestValidate3.log").delete();
 		} catch (Exception ex) {fail(ex);}
 
 		clearTempDir(); // delete temporary files.

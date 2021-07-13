@@ -1019,6 +1019,7 @@ public final class TestErrors extends XDTester {
 		}
 
 		resetTester();
+		clearTempDir(); // clear temporary directory
 	}
 
 	final public static void matchFault() {}
