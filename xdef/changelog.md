@@ -1,11 +1,8 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 40.1.7, release-date 2021-07-13
+# Version 40.1.6, release-date 2021-07-13
 * fixed bug if the namespace of root element prefix is not specified (was
   reported only as null pointer Exception).
-
-# Version 40.1.6, release-date 2021-07-11
-* corrected generation of new lines (CR,LF) of Java source in X-components.
 
 # Version 40.1.5, release-date 2021-06-25
 * fixed bug in nested type declarations.
