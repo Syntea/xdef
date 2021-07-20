@@ -1,8 +1,16 @@
 package org.xdef.impl.compile;
 
+import java.io.InputStream;
+import java.net.URI;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 import org.xdef.XDConstants;
 import org.xdef.XDPool;
+import org.xdef.impl.XConstants;
 import org.xdef.impl.XDefinition;
+import org.xdef.impl.xml.KParsedAttr;
+import org.xdef.impl.xml.KParsedElement;
 import org.xdef.msg.SYS;
 import org.xdef.msg.XDEF;
 import org.xdef.msg.XML;
@@ -11,15 +19,7 @@ import org.xdef.sys.SPosition;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SThrowable;
 import org.xdef.sys.StringParser;
-import org.xdef.impl.xml.KParsedElement;
 import org.xdef.xml.KXmlUtils;
-import java.io.InputStream;
-import java.net.URI;
-import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.xdef.impl.XConstants;
-import org.xdef.impl.xml.KParsedAttr;
 
 /** Reads source X-definitions and prepares list of PNodes with X-definitions
  * from XML source data.

@@ -1,20 +1,20 @@
 package org.xdef.impl.code;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import org.xdef.XDContainer;
+import org.xdef.XDUniqueSet;
 import org.xdef.XDUniqueSetKey;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
+import org.xdef.XDValueType;
+import org.xdef.impl.compile.CompileBase;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.Report;
-import org.xdef.impl.compile.CompileBase;
-import java.util.HashMap;
-import java.util.Map;
 import org.xdef.sys.ReportWriter;
-import org.xdef.XDValueType;
-import java.util.HashSet;
-import java.util.Set;
-import org.xdef.XDUniqueSet;
 
 /** Provides unique set (table) of items (rows) which used for validation
  * methods ID, IDREF, CHECKID etc.

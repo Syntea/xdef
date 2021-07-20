@@ -1,14 +1,14 @@
 package org.xdef.impl.code;
 
-import org.xdef.sys.BNFGrammar;
-import org.xdef.sys.SBuffer;
-import org.xdef.sys.SRuntimeException;
 import org.xdef.XDBNFGrammar;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
-import org.xdef.sys.ReportWriter;
 import org.xdef.XDValueID;
 import org.xdef.XDValueType;
+import org.xdef.sys.BNFGrammar;
+import org.xdef.sys.ReportWriter;
+import org.xdef.sys.SBuffer;
+import org.xdef.sys.SRuntimeException;
 
 /** Implementation object containing compiled grammar extended
  * Backus-Naur form.

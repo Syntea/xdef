@@ -1,6 +1,5 @@
 package org.xdef;
 
-import org.xdef.xml.KXmlUtils;
 import java.util.Map;
 import java.util.LinkedHashMap;
 import org.w3c.dom.Attr;
@@ -21,6 +20,7 @@ import org.w3c.dom.Text;
 import org.w3c.dom.TypeInfo;
 import org.w3c.dom.UserDataHandler;
 import org.w3c.dom.DOMConfiguration;
+import org.xdef.xml.KXmlUtils;
 
 /** Abstract class for implementation of "pseudo" elements.
  * @author Vaclav Trojan

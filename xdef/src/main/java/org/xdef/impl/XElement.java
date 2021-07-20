@@ -1,18 +1,5 @@
 package org.xdef.impl;
 
-import org.xdef.msg.SYS;
-import org.xdef.msg.XDEF;
-import org.xdef.sys.ArrayReporter;
-import org.xdef.sys.SObjectWriter;
-import org.xdef.sys.SRuntimeException;
-import org.xdef.sys.SUtils;
-import org.xdef.impl.xml.KNamespace;
-import org.xdef.XDDocument;
-import org.xdef.impl.code.CodeTable;
-import org.xdef.model.XMData;
-import org.xdef.model.XMDefinition;
-import org.xdef.model.XMElement;
-import org.xdef.model.XMNode;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -21,7 +8,20 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import org.xdef.XDDocument;
+import org.xdef.impl.code.CodeTable;
+import org.xdef.impl.xml.KNamespace;
+import org.xdef.model.XMData;
+import org.xdef.model.XMDefinition;
+import org.xdef.model.XMElement;
+import org.xdef.model.XMNode;
+import org.xdef.msg.SYS;
+import org.xdef.msg.XDEF;
 import org.xdef.proc.XDLexicon;
+import org.xdef.sys.ArrayReporter;
+import org.xdef.sys.SObjectWriter;
+import org.xdef.sys.SRuntimeException;
+import org.xdef.sys.SUtils;
 
 /** Implementation of the model of an element.
  * @author Vaclav Trojan

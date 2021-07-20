@@ -1,9 +1,9 @@
 package org.xdef.impl;
 
-import org.xdef.impl.code.CodeDisplay;
-import org.xdef.model.XMVariable;
 import java.io.IOException;
 import org.xdef.XDValueID;
+import org.xdef.impl.code.CodeDisplay;
+import org.xdef.model.XMVariable;
 
 /** Implementation of XMVariable.
  * @author Vaclav Trojan

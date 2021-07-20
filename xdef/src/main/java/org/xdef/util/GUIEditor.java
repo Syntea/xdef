@@ -365,7 +365,7 @@ public class GUIEditor extends GUIScreen {
 	 * @return string with data.
 	 * @throws Exception if an error occurs.
 	 */
-	private static String getData(final Element e, final XDSourceInfo si)
+	private static String getData(final Element e)
 		throws Exception {
 		if (e == null) {
 			return null;
@@ -682,7 +682,7 @@ public class GUIEditor extends GUIScreen {
 			char type = exe.getAttribute("DataType").equals("JSON") ? 'j' : 'x';
 			// get inpout data
 			e = KXmlUtils.firstElementChild(exe, "Input");
-			String data = getData(e, si);
+			String data = getData(e);
 			// create XDDocument
 			XDDocument xd = xp.createXDDocument(xdName);
 			NodeList nl1 = KXmlUtils.getChildElements(exe, "Var");
@@ -695,7 +695,7 @@ public class GUIEditor extends GUIScreen {
 			}
 			// set context
 			e = KXmlUtils.firstElementChild(exe,"Context");
-			String context = getData(e, si);
+			String context = getData(e);
 			if (context != null) {
 				xd.setXDContext(context);
 			}

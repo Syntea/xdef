@@ -1,16 +1,16 @@
 package org.xdef.impl;
 
-import org.xdef.msg.SYS;
-import org.xdef.sys.SIOException;
-import org.xdef.sys.SPosition;
-import org.xdef.XDPool;
-import org.xdef.model.XMNode;
-import org.xdef.model.XMOccurrence;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.xml.namespace.QName;
+import org.xdef.XDPool;
+import org.xdef.model.XMNode;
+import org.xdef.model.XMOccurrence;
+import org.xdef.msg.SYS;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.ArrayReporter;
+import org.xdef.sys.SIOException;
+import org.xdef.sys.SPosition;
 
 /** Abstract XNode (part of X-definition implementation.
  * @author Vaclav Trojan

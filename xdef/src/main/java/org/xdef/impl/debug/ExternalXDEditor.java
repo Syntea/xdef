@@ -1,5 +1,11 @@
 package org.xdef.impl.debug;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Map;
+import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.xdef.impl.XDReader;
 import org.xdef.impl.XDSourceItem;
@@ -10,12 +16,6 @@ import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.FileReportReader;
 import org.xdef.sys.FileReportWriter;
 import org.xdef.sys.SRuntimeException;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.Map;
-import org.xdef.XDFactory;
 
 /** Provides tools for connection of an external editor of X-definitions.
  * @author Vaclav Trojan

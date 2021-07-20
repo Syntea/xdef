@@ -1,8 +1,8 @@
 package org.xdef.impl;
 
+import java.io.IOException;
 import org.xdef.model.XMVariable;
 import org.xdef.model.XMVariableTable;
-import java.io.IOException;
 
 /** Contains table of variables.
  * @author Vaclav Trojan

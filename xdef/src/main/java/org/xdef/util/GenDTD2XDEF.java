@@ -74,8 +74,6 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
 
 	/** Internal reporter for messages. */
 	private ReportWriter _reporter;
-	/** Reporter set by user. */
-	private ReportWriter _rw;
 	/** Root element of generated X-definition. */
 	private Element _xdef;
 	/** Result X-definition */
@@ -93,14 +91,14 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
 	/** true if xml parsing failed. */
 	private boolean _xmlFailed;
 	/** Creates new instance of XDGenerator. */
-	public GenDTD2XDEF() {super(); _rw = null; _reporter = new ArrayReporter();}
+	public GenDTD2XDEF() {super(); _reporter = new ArrayReporter();}
 
 	/** Creates a new instance of XDGenerator with reporter.
 	 * @param rw reporter.
 	 */
 	public GenDTD2XDEF(final ReportWriter rw){
 		super();
-		_reporter = (_rw = rw) == null ? new ArrayReporter() : rw;
+		_reporter = rw == null ? new ArrayReporter() : rw;
 	}
 
 	/** Creates a new instance of XDGenerator with source.
@@ -475,7 +473,6 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
 			isCP(seq1, p);
 			skipDeclSep(p);
 			if (p.isChar(')')) {// one item - let's reduce DTD
-				SeqItem item = seq1.get(0);
 				if ((c = p.isOneOfChars("?*+")) != StringParser.NOCHAR) {
 					seq1._occurs = c;
 				}

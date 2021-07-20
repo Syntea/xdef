@@ -1,12 +1,12 @@
 package org.xdef.impl;
 
-import org.xdef.sys.SPosition;
+import java.io.IOException;
+import java.util.ArrayList;
 import org.xdef.impl.code.CodeDisplay;
 import org.xdef.model.XMDebugInfo;
 import org.xdef.model.XMStatementInfo;
 import org.xdef.model.XMVariable;
-import java.io.IOException;
-import java.util.ArrayList;
+import org.xdef.sys.SPosition;
 
 /** Debug information.
  * @author Vaclav Trojan

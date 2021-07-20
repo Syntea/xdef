@@ -1,8 +1,8 @@
 package org.xdef;
 
 import org.xdef.sys.Report;
-import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.ReportWriter;
+import org.xdef.sys.SRuntimeException;
 
 /** XD output stream/report writer  in x-script.
  * @author Vaclav Trojan

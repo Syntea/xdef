@@ -1,32 +1,32 @@
 package org.xdef.impl;
 
-import org.xdef.impl.code.DefParseResult;
-import org.xdef.sys.ArrayReporter;
-import org.xdef.sys.Report;
-import org.xdef.sys.SPosition;
-import org.xdef.sys.SReporter;
-import org.xdef.impl.xml.KNamespace;
-import org.xdef.component.XComponent;
+import javax.xml.xpath.XPathFunctionResolver;
+import javax.xml.xpath.XPathVariableResolver;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.xdef.XDContainer;
 import org.xdef.XDDocument;
 import org.xdef.XDParseResult;
 import org.xdef.XDPool;
 import org.xdef.XDResultSet;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
-import org.xdef.proc.XXElement;
-import org.xdef.proc.XXData;
-import org.xdef.proc.XXNode;
+import org.xdef.component.XComponent;
+import org.xdef.impl.code.CodeUniqueset;
+import org.xdef.impl.code.DefParseResult;
+import org.xdef.impl.xml.KNamespace;
 import org.xdef.model.XMData;
 import org.xdef.model.XMDefinition;
 import org.xdef.model.XMElement;
 import org.xdef.model.XMNode;
-import javax.xml.xpath.XPathFunctionResolver;
-import javax.xml.xpath.XPathVariableResolver;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
+import org.xdef.proc.XXData;
+import org.xdef.proc.XXElement;
+import org.xdef.proc.XXNode;
+import org.xdef.sys.ArrayReporter;
+import org.xdef.sys.Report;
 import org.xdef.sys.ReportWriter;
-import org.xdef.XDContainer;
-import org.xdef.impl.code.CodeUniqueset;
+import org.xdef.sys.SPosition;
+import org.xdef.sys.SReporter;
 
 /** Contains data from X-definition or it can be used as a base
  * for construction of XML objects according to a X-definition.

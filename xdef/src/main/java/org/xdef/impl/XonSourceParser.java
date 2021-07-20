@@ -215,11 +215,12 @@ public class XonSourceParser implements JParser, XParser {
 	 * @param pos source position.
 	 */
 	public void mapEnd(final SPosition pos) {elementEnd();}
+
 	@Override
 	/** X-script item parsed, not used methods for JSON/XON parsing
 	 * (used in X-definition compiler).
 	 * @param name name of item.
-	 * @param value value of item.
+	 * @param value value value of item.
 	 */
 	public void xdScript(final SBuffer name, SBuffer value) {}
 

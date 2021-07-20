@@ -1,10 +1,10 @@
 package org.xdef.impl.code;
 
-import org.xdef.msg.SYS;
-import org.xdef.sys.SError;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
 import org.xdef.XDValueType;
+import org.xdef.msg.SYS;
+import org.xdef.sys.SError;
 
 /** Code operators.
  * @author Vaclav Trojan

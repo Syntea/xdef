@@ -1,15 +1,15 @@
 package org.xdef.impl.code;
 
-import org.xdef.msg.XDEF;
-import org.xdef.sys.BNFRule;
-import org.xdef.sys.SBuffer;
-import org.xdef.sys.StringParser;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import org.xdef.XDBNFRule;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
 import org.xdef.XDValueType;
-import java.math.BigDecimal;
-import java.math.BigInteger;
+import org.xdef.msg.XDEF;
+import org.xdef.sys.BNFRule;
+import org.xdef.sys.SBuffer;
+import org.xdef.sys.StringParser;
 
 /** Implementation object containing compiled grammar of source of extended
  * Backus-Naur form.

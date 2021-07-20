@@ -3,9 +3,9 @@ package org.xdef.impl.code;
 import org.xdef.XDNamedValue;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
+import org.xdef.XDValueType;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
-import org.xdef.XDValueType;
 
 /** Implementation of script value with org.w3c.dom.Attr.
  * @author  Vaclav Trojan

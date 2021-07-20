@@ -1,27 +1,27 @@
 package org.xdef.impl.ext;
 
-import org.xdef.XDConstants;
-import org.xdef.msg.XDEF;
-import org.xdef.sys.Report;
-import org.xdef.sys.SError;
-import org.xdef.sys.StringParser;
-import org.xdef.XDValue;
-import org.xdef.proc.XXElement;
-import org.xdef.proc.XXNode;
-import org.xdef.impl.code.DefContainer;
-import org.xdef.impl.code.DefXPathExpr;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.xdef.XDConstants;
 import org.xdef.XDContainer;
+import org.xdef.XDEmailAddr;
+import org.xdef.XDValue;
 import org.xdef.XDValueID;
 import org.xdef.impl.ChkNode;
+import org.xdef.impl.code.DefContainer;
 import org.xdef.impl.code.DefDate;
+import org.xdef.impl.code.DefXPathExpr;
+import org.xdef.msg.XDEF;
+import org.xdef.proc.XXElement;
+import org.xdef.proc.XXNode;
+import org.xdef.sys.Report;
 import org.xdef.sys.SDatetime;
+import org.xdef.sys.SError;
 import org.xdef.sys.SPosition;
 import org.xdef.sys.SUtils;
-import org.xdef.XDEmailAddr;
+import org.xdef.sys.StringParser;
 
 /** External utilities for key definition and key reference.
  * @author Vaclav Trojan

@@ -1,20 +1,20 @@
 package org.xdef.impl;
 
-import org.xdef.impl.code.DefContainer;
+import java.io.IOException;
+import java.util.ArrayList;
+import org.xdef.XDContainer;
 import org.xdef.XDNamedValue;
 import org.xdef.XDParser;
 import org.xdef.XDPool;
 import org.xdef.XDValue;
+import org.xdef.XDValueID;
 import org.xdef.impl.code.CodeParser;
 import org.xdef.impl.code.CodeTable;
-import org.xdef.model.XMData;
-import org.xdef.model.XMDefinition;
-import java.io.IOException;
-import java.util.ArrayList;
-import org.xdef.XDContainer;
-import org.xdef.XDValueID;
+import org.xdef.impl.code.DefContainer;
 import org.xdef.impl.compile.CompileBase;
 import org.xdef.impl.parsers.XDParseCDATA;
+import org.xdef.model.XMData;
+import org.xdef.model.XMDefinition;
 import org.xdef.msg.SYS;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.ArrayReporter;

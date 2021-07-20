@@ -1,19 +1,19 @@
 package org.xdef.impl.parsers;
 
+import java.util.Properties;
 import org.xdef.XDConstants;
-import org.xdef.XDParseResult;
-import org.xdef.XDParserAbstract;
-import org.xdef.XDValue;
-import org.xdef.proc.XXNode;
 import org.xdef.XDDocument;
 import org.xdef.XDFactory;
+import org.xdef.XDParseResult;
 import org.xdef.XDParser;
+import org.xdef.XDParserAbstract;
 import org.xdef.XDPool;
+import org.xdef.XDValue;
 import org.xdef.XDValueID;
 import org.xdef.impl.XPool;
 import org.xdef.impl.code.CodeTable;
 import org.xdef.msg.XDEF;
-import java.util.Properties;
+import org.xdef.proc.XXNode;
 
 /** Parse string with a value type specification (e.g. string(%maxLength=10)).
  * @author Vaclav Trojan

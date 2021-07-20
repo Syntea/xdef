@@ -1,22 +1,5 @@
 package org.xdef.impl.debug;
 
-import org.xdef.sys.ArrayReporter;
-import org.xdef.sys.Report;
-import org.xdef.sys.SPosition;
-import org.xdef.xml.KXmlUtils;
-import org.xdef.XDCallItem;
-import org.xdef.XDConstants;
-import org.xdef.XDDebug;
-import org.xdef.XDPool;
-import org.xdef.XDValue;
-import org.xdef.impl.XDSourceInfo;
-import org.xdef.impl.XDSourceItem;
-import org.xdef.proc.XXNode;
-import org.xdef.impl.code.CodeTable;
-import org.xdef.model.XMDebugInfo;
-import org.xdef.model.XMStatementInfo;
-import org.xdef.model.XMVariable;
-import org.xdef.proc.XXData;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -43,12 +26,29 @@ import javax.swing.SwingUtilities;
 import javax.swing.text.Caret;
 import javax.swing.text.Style;
 import javax.swing.text.StyledDocument;
+import org.xdef.XDCallItem;
+import org.xdef.XDConstants;
+import org.xdef.XDDebug;
+import org.xdef.XDPool;
+import org.xdef.XDValue;
 import org.xdef.impl.ChkElement;
+import org.xdef.impl.XDSourceInfo;
+import org.xdef.impl.XDSourceItem;
 import org.xdef.impl.XElement;
 import org.xdef.impl.XVariableTable;
+import org.xdef.impl.code.CodeTable;
+import org.xdef.model.XMDebugInfo;
+import org.xdef.model.XMStatementInfo;
+import org.xdef.model.XMVariable;
+import org.xdef.proc.XXData;
+import org.xdef.proc.XXNode;
+import org.xdef.sys.ArrayReporter;
+import org.xdef.sys.Report;
 import org.xdef.sys.ReportWriter;
 import org.xdef.sys.SManager;
+import org.xdef.sys.SPosition;
 import org.xdef.sys.SUtils;
+import org.xdef.xml.KXmlUtils;
 
 /** Provides debugging tool for X-definition.
  * @author Vaclav Trojan

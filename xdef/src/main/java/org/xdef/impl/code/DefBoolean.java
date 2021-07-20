@@ -1,12 +1,12 @@
 package org.xdef.impl.code;
 
-import org.xdef.msg.SYS;
-import org.xdef.sys.SIllegalArgumentException;
+import java.math.BigDecimal;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
-import java.math.BigDecimal;
 import org.xdef.XDValueID;
 import org.xdef.XDValueType;
+import org.xdef.msg.SYS;
+import org.xdef.sys.SIllegalArgumentException;
 
 /** The class DefBoolean implements the internal object with boolean value.
  * @author Vaclav Trojan

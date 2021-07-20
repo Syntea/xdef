@@ -1,15 +1,15 @@
 package org.xdef.impl.compile;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import org.xdef.XDConstants;
 import org.xdef.impl.XDefinition;
 import org.xdef.sys.ReportWriter;
 import org.xdef.sys.SBuffer;
 import org.xdef.sys.SPosition;
-import org.xdef.XDConstants;
 import org.xdef.xml.KXmlUtils;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.LinkedHashMap;
 
 /** Contains parsed source item.
  * @author Trojan
