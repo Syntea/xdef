@@ -1,11 +1,12 @@
 package org.xdef.impl.code;
 
+import java.io.PrintStream;
+import java.lang.reflect.Field;
+import java.util.Iterator;
+import java.util.Set;
 import org.xdef.XDPool;
 import org.xdef.XDValue;
 import org.xdef.XDValueID;
-import org.xdef.model.XMData;
-import org.xdef.model.XMElement;
-import org.xdef.model.XMNode;
 import org.xdef.impl.XCodeDescriptor;
 import org.xdef.impl.XData;
 import org.xdef.impl.XDebugInfo;
@@ -14,11 +15,10 @@ import org.xdef.impl.XElement;
 import org.xdef.impl.XNode;
 import org.xdef.impl.XSelector;
 import org.xdef.impl.compile.CompileBase;
+import org.xdef.model.XMData;
+import org.xdef.model.XMElement;
+import org.xdef.model.XMNode;
 import org.xdef.model.XMStatementInfo;
-import java.io.PrintStream;
-import java.lang.reflect.Field;
-import java.util.Iterator;
-import java.util.Set;
 
 /** Display compiled objects.
  * @author Vaclav Trojan

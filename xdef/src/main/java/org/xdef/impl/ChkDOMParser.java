@@ -1,33 +1,33 @@
 package org.xdef.impl;
 
-import org.xdef.impl.code.DefOutStream;
-import org.xdef.msg.XDEF;
-import org.xdef.msg.XML;
-import org.xdef.sys.FileReportWriter;
-import org.xdef.sys.Report;
-import org.xdef.sys.SException;
-import org.xdef.sys.SReporter;
-import org.xdef.sys.SRuntimeException;
-import org.xdef.sys.SUtils;
-import org.xdef.sys.StringParser;
-import org.xdef.xml.KXmlUtils;
-import org.xdef.XDConstants;
-import org.xdef.XDOutput;
-import org.xdef.XDPool;
-import org.xdef.model.XMData;
-import org.xdef.model.XMDefinition;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xdef.sys.ReportWriter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
 import org.w3c.dom.ProcessingInstruction;
+import org.xdef.XDConstants;
+import org.xdef.XDOutput;
+import org.xdef.XDPool;
+import org.xdef.impl.code.DefOutStream;
+import org.xdef.model.XMData;
+import org.xdef.model.XMDefinition;
+import org.xdef.msg.XDEF;
+import org.xdef.msg.XML;
+import org.xdef.sys.FileReportWriter;
+import org.xdef.sys.Report;
+import org.xdef.sys.ReportWriter;
+import org.xdef.sys.SException;
+import org.xdef.sys.SReporter;
+import org.xdef.sys.SRuntimeException;
+import org.xdef.sys.SUtils;
+import org.xdef.sys.StringParser;
+import org.xdef.xml.KXmlUtils;
 
 /** Provides processing of an XML document in the form of org.w3c.dom object.
  * @author  Vaclav Trojan

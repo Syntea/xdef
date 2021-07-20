@@ -1,7 +1,7 @@
 package org.xdef.impl.code;
 
-import org.xdef.XDValue;
 import java.lang.reflect.Method;
+import org.xdef.XDValue;
 
 /** Implementation of code of an external methods.
  * @author Vaclav Trojan

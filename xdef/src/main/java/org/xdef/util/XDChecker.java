@@ -1,17 +1,17 @@
 package org.xdef.util;
 
-import org.xdef.XDConstants;
-import org.xdef.msg.XDEF;
-import org.xdef.sys.ArrayReporter;
-import org.xdef.sys.SRuntimeException;
-import org.xdef.sys.SUtils;
+import java.util.Properties;
 import org.xdef.XDBuilder;
+import org.xdef.XDConstants;
 import org.xdef.XDDocument;
 import org.xdef.XDFactory;
 import org.xdef.XDParseResult;
 import org.xdef.XDPool;
+import org.xdef.msg.XDEF;
 import org.xdef.proc.XXElement;
-import java.util.Properties;
+import org.xdef.sys.ArrayReporter;
+import org.xdef.sys.SRuntimeException;
+import org.xdef.sys.SUtils;
 
 /** Provides checking of X-definition types and values.
  * @author Vaclav Trojan

@@ -1,20 +1,18 @@
 package org.xdef.impl;
 
-import org.xdef.XDConstants;
-import org.xdef.sys.StringParser;
-import org.xdef.xml.KXmlUtils;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.LinkedHashMap;
 import javax.xml.namespace.QName;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xdef.XDConstants;
 import org.xdef.impl.parsers.XDParseEmailAddr;
 import org.xdef.impl.parsers.XDParseEmailDate;
 import org.xdef.impl.parsers.XDParseGPS;
@@ -40,6 +38,8 @@ import org.xdef.impl.parsers.XSParseLong;
 import org.xdef.impl.parsers.XSParseTime;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.SRuntimeException;
+import org.xdef.sys.StringParser;
+import org.xdef.xml.KXmlUtils;
 
 /** Generate X-definition from XML.
  * @author Vaclav Trojan

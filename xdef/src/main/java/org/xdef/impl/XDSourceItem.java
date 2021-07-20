@@ -1,12 +1,12 @@
 package org.xdef.impl;
 
-import org.xdef.impl.xml.XInputStream;
-import org.xdef.sys.SUtils;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLDecoder;
+import org.xdef.impl.xml.XInputStream;
+import org.xdef.sys.SUtils;
 
 /** Contains information about X-definition source item.
  * @author Vaclav Trojan

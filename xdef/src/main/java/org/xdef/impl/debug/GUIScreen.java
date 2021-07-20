@@ -1,10 +1,5 @@
 package org.xdef.impl.debug;
 
-import org.xdef.impl.XDSourceInfo;
-import org.xdef.impl.XDSourceItem;
-import org.xdef.sys.ArrayReporter;
-import org.xdef.sys.Report;
-import org.xdef.sys.SUtils;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
@@ -23,6 +18,11 @@ import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoManager;
+import org.xdef.impl.XDSourceInfo;
+import org.xdef.impl.XDSourceItem;
+import org.xdef.sys.ArrayReporter;
+import org.xdef.sys.Report;
+import org.xdef.sys.SUtils;
 
 /** Provides screen (swing Frame) for editing of XML sources.
  * @author Vaclav Trojan

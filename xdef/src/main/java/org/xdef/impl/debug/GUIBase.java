@@ -1,10 +1,5 @@
 package org.xdef.impl.debug;
 
-import org.xdef.XDPool;
-import org.xdef.impl.XDSourceInfo;
-import org.xdef.impl.XDSourceItem;
-import org.xdef.impl.xml.XInputStream;
-import org.xdef.sys.SUtils;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -27,6 +22,11 @@ import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
+import org.xdef.XDPool;
+import org.xdef.impl.XDSourceInfo;
+import org.xdef.impl.XDSourceItem;
+import org.xdef.impl.xml.XInputStream;
+import org.xdef.sys.SUtils;
 
 /** Base of Swing frame for GUI.
  * @author Vaclav Trojan

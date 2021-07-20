@@ -1,9 +1,5 @@
 package org.xdef.impl.debug;
 
-import org.xdef.XDPool;
-import org.xdef.impl.XDSourceInfo;
-import org.xdef.impl.XDSourceItem;
-import org.xdef.sys.ArrayReporter;
 import java.awt.BorderLayout;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
@@ -14,6 +10,10 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
+import org.xdef.XDPool;
+import org.xdef.impl.XDSourceInfo;
+import org.xdef.impl.XDSourceItem;
+import org.xdef.sys.ArrayReporter;
 
 /** Provides GUI for editing of sources of X-definitions.
  * @author Vaclav Trojan

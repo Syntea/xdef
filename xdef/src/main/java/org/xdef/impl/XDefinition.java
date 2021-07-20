@@ -1,19 +1,19 @@
 package org.xdef.impl;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Properties;
 import org.xdef.XDConstants;
-import org.xdef.msg.SYS;
-import org.xdef.sys.SIOException;
-import org.xdef.sys.SPosition;
 import org.xdef.XDDocument;
 import org.xdef.XDPool;
 import org.xdef.model.XMDefinition;
 import org.xdef.model.XMElement;
+import org.xdef.msg.SYS;
+import org.xdef.sys.SIOException;
+import org.xdef.sys.SPosition;
 import org.xdef.sys.SRuntimeException;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Properties;
-import java.util.LinkedHashMap;
 
 /** Implementation of XMDefinition.
  * @author Vaclav Trojan

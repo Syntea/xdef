@@ -29,7 +29,6 @@ import org.xdef.XDValueAbstract;
 import org.xdef.impl.code.CodeUniqueset;
 import org.xdef.impl.code.DefBoolean;
 import org.xdef.impl.code.DefContainer;
-import org.xdef.impl.code.DefPrice;
 import org.xdef.impl.code.DefDate;
 import org.xdef.impl.code.DefDecimal;
 import org.xdef.impl.code.DefDouble;
@@ -41,6 +40,7 @@ import org.xdef.impl.code.DefLocale;
 import org.xdef.impl.code.DefLong;
 import org.xdef.impl.code.DefNull;
 import org.xdef.impl.code.DefOutStream;
+import org.xdef.impl.code.DefPrice;
 import org.xdef.impl.code.DefString;
 import org.xdef.impl.xml.KNamespace;
 import org.xdef.json.JsonUtil;
@@ -52,8 +52,8 @@ import org.xdef.model.XMVariableTable;
 import org.xdef.msg.XDEF;
 import org.xdef.proc.XXNode;
 import org.xdef.sys.ArrayReporter;
-import org.xdef.sys.Price;
 import org.xdef.sys.GPSPosition;
+import org.xdef.sys.Price;
 import org.xdef.sys.Report;
 import org.xdef.sys.ReportWriter;
 import org.xdef.sys.SDatetime;
@@ -62,7 +62,6 @@ import org.xdef.sys.SPosition;
 import org.xdef.sys.SReporter;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.xml.KXmlUtils;
-
 
 /** The abstract class for checking objects.
  * @author Vaclav Trojan

@@ -474,8 +474,7 @@ public class XScriptParser extends StringParser
 			} else { //ch == '*'
 				int ndx;
 				if ((ndx = getSourceBuffer().indexOf("*/", getIndex()+2)) > 0) {
-					int i;
-					while ((i = incBufIndex()) < ndx) {}
+					while (incBufIndex() < ndx) {}
 					if (ndx + 2 < getEndBufferIndex()) {
 						setIndex(ndx + 2);
 						continue;

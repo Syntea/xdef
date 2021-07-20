@@ -1,7 +1,7 @@
 package org.xdef.impl;
 
-import org.xdef.sys.StringParser;
 import org.xdef.model.XMOccurrence;
+import org.xdef.sys.StringParser;
 
 /** Contains minimum and maximum occurrence requirement.
  * @author Trojan

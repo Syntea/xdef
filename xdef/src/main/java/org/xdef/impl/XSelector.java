@@ -1,9 +1,9 @@
 package org.xdef.impl;
 
-import org.xdef.model.XMDefinition;
-import org.xdef.model.XMSelector;
 import java.io.IOException;
 import java.util.ArrayList;
+import org.xdef.model.XMDefinition;
+import org.xdef.model.XMSelector;
 
 /** Implementation of mixture, choice or sequence.
  * @author Vaclav Trojan

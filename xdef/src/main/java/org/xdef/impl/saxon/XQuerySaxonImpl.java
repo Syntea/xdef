@@ -1,20 +1,5 @@
 package org.xdef.impl.saxon;
 
-import org.xdef.sys.SRuntimeException;
-import org.xdef.xml.KXqueryExpr;
-import org.xdef.XDContainer;
-import org.xdef.XDValue;
-import org.xdef.proc.XXNode;
-import org.xdef.impl.code.DefDecimal;
-import org.xdef.impl.code.DefBoolean;
-import org.xdef.impl.code.DefBytes;
-import org.xdef.impl.code.DefContainer;
-import org.xdef.impl.code.DefDate;
-import org.xdef.impl.code.DefDuration;
-import org.xdef.impl.code.DefElement;
-import org.xdef.impl.code.DefDouble;
-import org.xdef.impl.code.DefLong;
-import org.xdef.impl.code.DefString;
 import javax.xml.namespace.QName;
 import javax.xml.xquery.XQItem;
 import javax.xml.xquery.XQItemType;
@@ -22,8 +7,23 @@ import javax.xml.xquery.XQResultSequence;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.xdef.impl.code.XQueryImpl;
+import org.xdef.XDContainer;
+import org.xdef.XDValue;
 import org.xdef.XDValueID;
+import org.xdef.impl.code.DefBoolean;
+import org.xdef.impl.code.DefBytes;
+import org.xdef.impl.code.DefContainer;
+import org.xdef.impl.code.DefDate;
+import org.xdef.impl.code.DefDecimal;
+import org.xdef.impl.code.DefDouble;
+import org.xdef.impl.code.DefDuration;
+import org.xdef.impl.code.DefElement;
+import org.xdef.impl.code.DefLong;
+import org.xdef.impl.code.DefString;
+import org.xdef.impl.code.XQueryImpl;
+import org.xdef.proc.XXNode;
+import org.xdef.sys.SRuntimeException;
+import org.xdef.xml.KXqueryExpr;
 
 /** Saxon implementation of XQuery.
  * @author Vaclav Trojan

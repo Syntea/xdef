@@ -1,5 +1,11 @@
 package org.xdef.impl;
 
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xdef.XDBytes;
 import org.xdef.XDContainer;
 import org.xdef.XDDebug;
@@ -8,10 +14,10 @@ import org.xdef.XDParseResult;
 import org.xdef.XDResultSet;
 import org.xdef.XDValue;
 import org.xdef.XDValueID;
-import org.xdef.impl.code.DefSQLConstructor;
 import org.xdef.impl.code.DefContainer;
-import org.xdef.impl.code.DefLong;
 import org.xdef.impl.code.DefElement;
+import org.xdef.impl.code.DefLong;
+import org.xdef.impl.code.DefSQLConstructor;
 import org.xdef.model.XMDefinition;
 import org.xdef.model.XMElement;
 import org.xdef.model.XMNode;
@@ -24,12 +30,6 @@ import org.xdef.sys.SError;
 import org.xdef.sys.SReporter;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.xml.KXmlUtils;
-import org.w3c.dom.Attr;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 /** Constructs XML object according to X-definition.
  * @author Vaclav Trojan

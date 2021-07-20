@@ -1,10 +1,10 @@
 package org.xdef.impl;
 
-import org.xdef.msg.XDEF;
-import org.xdef.sys.SRuntimeException;
 import java.util.Map;
 import java.util.LinkedHashMap;
+import org.xdef.msg.XDEF;
 import org.xdef.proc.XDLexicon;
+import org.xdef.sys.SRuntimeException;
 
 /** Implementation of XDLexicon.
  * @author Vaclav Trojan

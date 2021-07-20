@@ -1,8 +1,8 @@
 package org.xdef.impl;
 
-import org.xdef.sys.SRuntimeException;
-import org.xdef.XDPool;
 import java.io.IOException;
+import org.xdef.XDPool;
+import org.xdef.sys.SRuntimeException;
 
 /** Script code descriptor.
  * @author  Vaclav Trojan

@@ -1304,7 +1304,7 @@ public class XDGenCollection {
 		boolean resolvemacros,
 		final boolean removeActions,
 		final boolean genModelVariants) throws Exception {
-		XDPool xp = chkXdef(urls);
+		chkXdef(urls); // check if it can be compiled
 		XDGenCollection x = new XDGenCollection();
 		x.parse(urls);
 		for (int i = 0; i < x._includeList.size(); i++) {

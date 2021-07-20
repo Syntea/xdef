@@ -1,8 +1,8 @@
 package org.xdef.impl;
 
-import org.xdef.model.XMDefinition;
 import java.io.IOException;
 import java.util.ArrayList;
+import org.xdef.model.XMDefinition;
 
 /** End mark of selector.
  * @author Vaclav Trojan
