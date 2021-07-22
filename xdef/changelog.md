@@ -3,7 +3,7 @@
 # Version 40.1.6, release-date 2021-07-20
 * fixed bug if the namespace of root element prefix is not specified (was
   reported only as null pointer Exception).
-* preparing version 40.0.
+* preparing version 41.0.
 
 # Version 40.1.5, release-date 2021-06-25
 * fixed bug in nested type declarations.
