@@ -411,6 +411,23 @@ public final class TestXdef extends XDTester {
 "</xd:def>";
 			assertEq(parse(xdef, null, "<a/>", reporter),
 				"<a:x xmlns:a='a'><a:y xmlns:a='a'/><y/>t<z a='a'/></a:x>");
+			assertNoErrors(reporter);
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+" <xd:declaration> type x string(2) AAND enum('ab','bc'); </xd:declaration>\n"+
+"<a a='x()'/>\n"+
+"</xd:def>";
+			xml = "<a a='ab'/>";
+			assertEq(xml, parse(xdef, "", xml, reporter));
+			assertNoErrors(reporter);
+			xml = "<a a='a'/>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertErrors(reporter);
+			xml = "<a a='12'/>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertErrors(reporter);
+		} catch (Exception ex) {fail(ex);}
+		try {
 			xdef = //test of exception in external method.
 "<xd:def xmlns:xd='" + _xdNS + "' xd:root='a'>" +
 "    <a xd:script='finally test.xdef.TestXdef.myError()' />" +

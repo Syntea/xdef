@@ -17,6 +17,7 @@ import org.xdef.impl.XDebugInfo;
 import org.xdef.impl.XVariableTable;
 import org.xdef.impl.code.CodeExtMethod;
 import org.xdef.impl.code.CodeI1;
+import org.xdef.impl.code.CodeOp;
 import org.xdef.impl.code.CodeParser;
 import org.xdef.impl.code.CodeS1;
 import org.xdef.impl.code.DefBNFGrammar;
@@ -1108,12 +1109,12 @@ public final class CompileCode extends CompileBase {
 			}
 			if (_lastCodeIndex > 0) {
 				lastItem = getLastCodeItem();
-				CodeI1 codeItem;
+				XDValue codeItem;
 				if ((_sp < 0 || _cstack[_sp] != -2) &&
 					(code = lastItem.getCode()) >= CMPEQ && code <= CMPGT) {
 					codeItem = (CodeI1) lastItem;
 					if (jumpCode == JMPF_OP) {
-						code = invertCode(codeItem._code);
+						code = invertCode(((CodeI1) codeItem)._code); // JMPT_OP
 						codeItem.setCode(code);
 					}
 					// convert cmpTxx -> jmpTxx
@@ -1126,9 +1127,10 @@ public final class CompileCode extends CompileBase {
 				XDValue prevItem = getCodeItem(_lastCodeIndex - 1);
 				if ((prevItem.getCode()) == LD_TRUE_AND_SKIP) {
 					if (jumpCode == JMPF_OP) {
-						codeItem = (CodeI1) prevItem;
-						codeItem.setCode(JMP_OP);
-						codeItem.setParam(_lastCodeIndex + 1);
+						setCodeItem(_lastCodeIndex - 1, //jump after last item
+							new CodeI1(XD_VOID, JMP_OP, _lastCodeIndex + 1));
+//						codeItem.setCode(JMP_OP);
+//						codeItem.setParam(_lastCodeIndex + 1);
 						jump.setCode(JMP_OP);
 						_code.set(_lastCodeIndex, jump); //replace last code
 					} else {
@@ -1164,7 +1166,7 @@ public final class CompileCode extends CompileBase {
 	 * <li> LD_TRUE_AND_SKIP_CODE, LDC_FALSE_CODE.
 	 */
 	final void genBoolJumpConvertor() {
-		addCode(new CodeI1(XD_BOOLEAN, LD_TRUE_AND_SKIP));
+		addCode(new CodeOp(XD_BOOLEAN, LD_TRUE_AND_SKIP));
 		addCode(new DefBoolean(false), 1);
 		_cstack[_sp] = -1;
 	}
@@ -1733,7 +1735,10 @@ public final class CompileCode extends CompileBase {
 				&& (addr = var.getParseMethodAddr()) >= 0
 				&& _code.get(addr).getItemId()== XD_PARSER) {
 				if (var.getKind() == 'G'
-					&& _code.get(addr).getCode() == LD_CONST) {
+					&& _code.get(addr).getCode() == LD_CONST
+					&& addr + 2 <= _lastCodeIndex
+					&& _code.get(addr+1).getCode() == PARSE_OP
+					&& _code.get(addr+2).getCode() == STOP_OP) {
 					_cstack[++_sp] = addr;
 					addCode(new CodeS1(XD_PARSER, LD_CODE, addr, name));
 					addCode(new CodeI1(XD_PARSERESULT, PARSE_OP, 1), 0);

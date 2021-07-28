@@ -17,5 +17,4 @@ public interface XQueryImpl {
 	 * @return result of execution of XQuery expression.
 	 */
 	public XDContainer exec(KXqueryExpr x, Node node, XXNode xNode);
-
 }

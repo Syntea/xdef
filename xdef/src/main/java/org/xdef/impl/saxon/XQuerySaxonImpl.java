@@ -125,22 +125,31 @@ public class XQuerySaxonImpl implements XQueryImpl {
 							case XQItemType.XQBASETYPE_UNSIGNED_BYTE:
 							case XQItemType.XQBASETYPE_UNSIGNED_INT:
 							case XQItemType.XQBASETYPE_UNSIGNED_SHORT:
+							case XQItemType.XQBASETYPE_NONNEGATIVE_INTEGER:
+							case XQItemType.XQBASETYPE_NONPOSITIVE_INTEGER:
 								result.addXDItem(new DefLong(item.getLong()));
 								continue;
 							case XQItemType.XQBASETYPE_FLOAT:
 							case XQItemType.XQBASETYPE_DOUBLE:
-								result.addXDItem(new DefDouble(item.getDouble()));
+								result.addXDItem(
+									new DefDouble(item.getDouble()));
 								continue;
 							case XQItemType.XQBASETYPE_DECIMAL:
-								result.addXDItem(new DefDecimal(item.getAtomicValue()));
+							case XQItemType.XQBASETYPE_UNSIGNED_LONG:
+								result.addXDItem(new DefDecimal(
+									item.getAtomicValue()));
 							case XQItemType.XQBASETYPE_DURATION:
+							case XQItemType.XQBASETYPE_DAYTIMEDURATION:
+							case XQItemType.XQBASETYPE_YEARMONTHDURATION:
 								result.addXDItem(
 									new DefDuration(item.getAtomicValue()));
 							case XQItemType.XQBASETYPE_DATE:
 							case XQItemType.XQBASETYPE_DATETIME:
 							case XQItemType.XQBASETYPE_GDAY:
 							case XQItemType.XQBASETYPE_GMONTH:
+							case XQItemType.XQBASETYPE_GMONTHDAY:
 							case XQItemType.XQBASETYPE_GYEAR:
+							case XQItemType.XQBASETYPE_GYEARMONTH:
 								result.addXDItem(
 									new DefDate(item.getAtomicValue()));
 							case XQItemType.XQBASETYPE_BASE64BINARY:
@@ -149,6 +158,8 @@ public class XQuerySaxonImpl implements XQueryImpl {
 							case XQItemType.XQBASETYPE_HEXBINARY:
 								result.addXDItem(DefBytes.parseHex(
 									item.getAtomicValue()));
+//							case XQItemType.XQBASETYPE_ENTITY:
+//							case XQItemType.XQBASETYPE_ENTITIES: //????
 							default:
 								result.addXDItem(
 									new DefString(item.getAtomicValue()));
@@ -174,8 +185,6 @@ public class XQuerySaxonImpl implements XQueryImpl {
 					case XQItemType.XQITEMKIND_DOCUMENT_SCHEMA_ELEMENT:
 					case XQItemType.XQITEMKIND_SCHEMA_ATTRIBUTE:
 					case XQItemType.XQITEMKIND_SCHEMA_ELEMENT:
-						result.addXDItem(
-							new DefString(item.getItemAsString(null)));
 						continue;
 					case XQItemType.XQITEMKIND_ITEM: {
 //						Node n = item.getNode();
@@ -186,7 +195,8 @@ public class XQuerySaxonImpl implements XQueryImpl {
 					}
 					default:
 						throw new SRuntimeException(
-							"UNKNOWN RESULT TYPE OF ITEM " + count);
+							"UNKNOWN RESULT TYPE OF ITEM [" + count + "]: "
+								+ item.getItemType().getClass());
 				}
 			}
 			return result;

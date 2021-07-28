@@ -674,11 +674,11 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 					_stack[++sp] = new DefBoolean(true);
 					pc++;
 					continue;
-				case LD_FALSE_AND_SKIP:
-					// Push false on the top of stack and skip next item.
-					_stack[++sp] = new DefBoolean(false);
-					pc++;
-					continue;
+//				case LD_FALSE_AND_SKIP:
+//					// Push false on the top of stack and skip next item.
+//					_stack[++sp] = new DefBoolean(false);
+//					pc++;
+//					continue;
 				case LD_LOCAL:{ // load local variable
 					XDValue v = _localVariables[item.getParam()];
 					_stack[++sp] = v != null ? v : new DefNull();
