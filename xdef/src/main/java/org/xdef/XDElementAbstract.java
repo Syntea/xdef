@@ -381,8 +381,8 @@ implements Element, XDElement, XDValue, NamedNodeMap {
 	}
 
 	@Override
-	/** Create XDContext from this object.
-	 * @return XDContext constructed from this object.
+	/** Create XDContainer from this object.
+	 * @return XDContainer constructed from this object.
 	 */
 	public XDContainer toContext() {
 		throw new UnsupportedOperationException("Not supported.");

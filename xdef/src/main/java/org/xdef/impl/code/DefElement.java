@@ -86,7 +86,7 @@ public final class DefElement extends XDValueAbstract implements XDElement {
 		return s == null ? _value.getNodeName() : s;
 	}
 
-	private static DefContainer elementToContext(Element el) {
+	private static DefContainer elementToContainer(Element el) {
 		DefContainer c = new DefContainer();
 		String name = el.getNodeName();
 		String nsuri = el.getNamespaceURI();
@@ -104,7 +104,7 @@ public final class DefElement extends XDValueAbstract implements XDElement {
 		for (int i = 0; i < nl.getLength(); i++) {
 			Node x = nl.item(i);
 			if (x.getNodeType() == Node.ELEMENT_NODE) {
-				c.addXDItem(elementToContext((Element) x));
+				c.addXDItem(elementToContainer((Element) x));
 			} else if (x.getNodeType() == Node.TEXT_NODE
 				|| x.getNodeType() == Node.CDATA_SECTION_NODE) {
 				String s = x.getNodeValue();
@@ -126,12 +126,11 @@ public final class DefElement extends XDValueAbstract implements XDElement {
 		return c1;
 	}
 
-	@Override
-	/** Create XDContext from this object.
-	 * @return XDContext constructed from this object.
+	/** Create XDContainer from this object.
+	 * @return XDContainer constructed from this object.
 	 */
 	public XDContainer toContext() {
-		return _value == null ? new DefContainer() : elementToContext(_value);
+		return _value == null ? new DefContainer() : elementToContainer(_value);
 	}
 
 	////////////////////////////////////////////////////////////////////////////

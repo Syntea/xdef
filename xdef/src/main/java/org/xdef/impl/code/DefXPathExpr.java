@@ -217,10 +217,6 @@ public final class DefXPathExpr extends KXpathExpr implements XDValue {
 	@Override
 	public XDContainer contextValue() {return null;}
 	@Override
-	public GPSPosition GPSValue() {return null;}
-	@Override
-	public Price priceValue() {return null;}
-	@Override
 	public XDService serviceValue(){return null;}
 	@Override
 	public XDStatement statementValue(){return null;}

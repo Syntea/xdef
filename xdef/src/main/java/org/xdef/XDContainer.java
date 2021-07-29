@@ -124,70 +124,71 @@ public interface XDContainer extends XDValue {
 	 */
 	public int getXDNamedItemsNumber();
 
-	/** Create new XDContainer with all elements from context.
-	 * @return The new XDContainer with elements.
+	/** Create new XDContainer with all elements from XDContainer.
+	 * @return new XDContainer with elements.
 	 */
 	public XDContainer getXDElements();
 
-	/** Get all elements with given name from context.
+	/** Get all elements with given name from XDContainer.
 	 * @param name The name of element.
-	 * @return The new context with elements.
+	 * @return new XDContainer with elements.
 	 */
 	public XDContainer getXDElements(String name);
 
-	/** Get the n-th element from context or null.
+	/** Get the n-th element from XDContainer or null.
 	 * @param n The index of element.
-	 * @return the n-th element from context or null.
+	 * @return the n-th element from XDContainer or null.
 	 */
 	public Element getXDElement(int n);
 
-	/** Create element from context.
+	/** Create element from XDContainer.
 	 * @param nsUri of created element.
 	 * @param name of created element.
-	 * @return element created from this context.
+	 * @return element created from this XDContainer.
 	 */
 	public Element toElement(String nsUri, String name);
 
-	/** Get all elements with given name and namespace from context.
+	/** Get all elements with given name and namespace from XDContainer.
 	 * @param nsURI namespace URI.
 	 * @param localName local name of element.
-	 * @return The new context with all elements with given name and namespace.
+	 * @return new XDContainer with all elements with given name and namespace.
 	 */
 	public XDContainer getXDElementsNS(String nsURI, String localName);
 
 	/** Get all text nodes concatenated as a string.
-	 * @return The string concatenated from all text nodes.
+	 * @return string concatenated from all text nodes.
 	 */
 	public String getXDText();
 
-	/** Get string from n-th item from this context. If the node does not
+	/** Get string from n-th item from this XDContainer. If the node does not
 	 * exist or if it is not text then return the empty string.
 	 * @param n The index of item.
 	 * @return The string.
 	 */
 	public String getXDTextItem(int n);
 
-	/** Check if the object is empty.
+	/** Check if the XDContainer is empty.
 	 * @return true if the object is empty; otherwise returns false.
 	 */
 	public boolean isEmpty();
 
-	/** Sorts this context.
+	/** Sorts this XDContainer.
 	 * If an item is an org.w3c.Node object then as a key it is used
 	 * the text value of an item).
-	 * @param asc if true context will be sorted ascendant, else descendant.
-	 * @return this context sorted.
+	 * @param asc if true the XDContainer will be sorted ascendant,
+	 * otherwise descendant.
+	 * @return this XDContainer sorted.
 	 */
 	public XDContainer sortXD(boolean asc);
 
-	/** Sorts this context.
+	/** Sorts this XDContainer.
 	 * @param key String with xpath expression or null (if null or empty string
 	 * then for org.w3c.Node items it is used as a key the text value of
 	 * an item). For items other then  org.w3c.Node objects this parameter is
 	 * ignored.
-	 * @param asc if true context will be sorted ascendant, else descendant.
-	 * @return this context sorted.
+	 * @param asc if true the XDContainer will be sorted ascendant,
+	 * otherwise descendant.
+	 * @return this XDContainer sorted.
 	 */
 	public XDContainer sortXD(String key, boolean asc);
-
 }

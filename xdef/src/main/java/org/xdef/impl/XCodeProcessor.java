@@ -1333,6 +1333,48 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 					}
 					continue;
 				}
+				case GET_XQUERY: {//execute xquery
+					Node node;
+					if (item.getParam() == 1) {
+						switch (chkNode.getItemId()) {
+							case XX_ATTR:
+							case XX_TEXT:
+								if ((node = chkNode._node) == null) {
+									node = chkNode.getElemValue();
+								}
+								break;
+							default:
+								node = chkNode.getElemValue();
+						}
+					} else {// params == 2
+						if (_stack[sp].getItemId() == XD_ELEMENT) {
+							node = _stack[sp--].getElement();
+						} else {
+							XDContainer dc = ((XDContainer) _stack[sp--]);
+							if (dc.getXDItemsNumber() > 0 &&
+								dc.getXDItem(0).getItemId() == XD_ELEMENT){
+								node = dc.getXDElement(0);
+							} else {
+								_stack[sp]= new DefContainer();
+								continue;
+							}
+						}
+					}
+					try {
+						DefXQueryExpr x;
+						if (_stack[sp].getItemId() == XD_XQUERY) {
+							x = (DefXQueryExpr) _stack[sp];
+						} else {
+							x = new DefXQueryExpr(_stack[sp].toString());
+						}
+						_stack[sp] = x != null ? x.exec(node, chkNode)
+							: new DefContainer();
+					} catch (SRuntimeException ex) {
+						chkNode.putReport(ex.getReport());
+						_stack[sp] = new DefContainer();
+					}
+					continue;
+				}
 				case GETATTR_FROM_CONTEXT: {
 					Element el;
 					if (item.getParam() == 1) {
@@ -2256,48 +2298,6 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 				case GET_XPOS://get actual xpath position
 					_stack[++sp] = new DefString(chkNode.getXPos());
 					continue;
-				case GET_XQUERY: {//execute xquery
-					Node node;
-					if (item.getParam() == 1) {
-						switch (chkNode.getItemId()) {
-							case XX_ATTR:
-							case XX_TEXT:
-								if ((node = chkNode._node) == null) {
-									node = chkNode.getElemValue();
-								}
-								break;
-							default:
-								node = chkNode.getElemValue();
-						}
-					} else {// params == 2
-						if (_stack[sp].getItemId() == XD_ELEMENT) {
-							node = _stack[sp--].getElement();
-						} else {
-							XDContainer dc = ((XDContainer) _stack[sp--]);
-							if (dc.getXDItemsNumber() > 0 &&
-								dc.getXDItem(0).getItemId() == XD_ELEMENT){
-								node = dc.getXDElement(0);
-							} else {
-								_stack[sp]= new DefContainer();
-								continue;
-							}
-						}
-					}
-					try {
-						DefXQueryExpr x;
-						if (_stack[sp].getItemId() == XD_XQUERY) {
-							x = (DefXQueryExpr) _stack[sp];
-						} else {
-							x = new DefXQueryExpr(_stack[sp].toString());
-						}
-						_stack[sp] = x != null ? x.exec(node, chkNode)
-							: new DefContainer();
-					} catch (SRuntimeException ex) {
-						chkNode.putReport(ex.getReport());
-						_stack[sp] = new DefContainer();
-					}
-					continue;
-				}
 				case DB_PREPARESTATEMENT: {
 					String query = _stack[sp--].stringValue();
 					XDValue dv = _stack[sp];

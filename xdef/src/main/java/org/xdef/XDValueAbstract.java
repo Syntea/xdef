@@ -60,10 +60,6 @@ public abstract class XDValueAbstract implements XDValue {
 	@Override
 	public SDuration durationValue() {return null;}
 	@Override
-	public GPSPosition GPSValue() {return null;}
-	@Override
-	public Price priceValue() {return null;}
-	@Override
 	public byte[] getBytes() {return null;}
 	@Override
 	public XDContainer contextValue() {return null;}

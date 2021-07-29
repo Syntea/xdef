@@ -63,8 +63,6 @@ public class DefPrice extends XDValueAbstract
 // Implementation of XDValue interface
 ////////////////////////////////////////////////////////////////////////////////
 	@Override
-	public Price priceValue() {return _amount;}
-	@Override
 	public boolean equals(final XDValue arg) {
 		if (arg instanceof DefPrice) {
 			DefPrice x = (DefPrice) arg;
@@ -91,7 +89,7 @@ public class DefPrice extends XDValueAbstract
 	@Override
 	public boolean isNull() {return _amount == null;}
 	@Override
-	public Object getObject() {return _amount;}
+	public Price getObject() {return _amount;}
 	@Override
 	public String toString() {return stringValue();}
 }

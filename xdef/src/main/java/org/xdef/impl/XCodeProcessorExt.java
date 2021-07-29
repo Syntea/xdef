@@ -510,8 +510,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 				((DefBytes) stack[sp--]).setAt(pos, b);
 				return sp;
 			}
-			//parse Datetime
-			case PARSE_DATE: {
+			case PARSE_DATE: { //parse Datetime
 				String mask = null;
 				if (item.getParam() == 2) {
 					mask = stack[sp].stringValue();
@@ -538,7 +537,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 					: DefNull.genNullValue(XD_ELEMENT);
 				return sp;
 			}
-			case ELEMENT_TOCONTEXT: {
+			case ELEMENT_TOCONTEXT: { // Element to container
 				DefElement e = new DefElement(stack[sp].getElement());
 				stack[sp] = e.toContext();
 				return sp;
