@@ -14,10 +14,8 @@ public interface CodeTable {
 	static final short NO_OP = LD_CONST + 1;
 	/** Load XPath to the stack. */
 	static final short LD_TRUE_AND_SKIP = NO_OP + 1;
-	/** Load false on the top of stack. */
-	static final short LD_FALSE_AND_SKIP = LD_TRUE_AND_SKIP + 1;
 	/** Load local value. */
-	static final short LD_LOCAL = LD_FALSE_AND_SKIP + 1;
+	static final short LD_LOCAL = LD_TRUE_AND_SKIP + 1;
 	/** Load XModel value. */
 	static final short LD_XMODEL = LD_LOCAL + 1;
 	/** Load global value. */

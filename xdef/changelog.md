@@ -1,5 +1,10 @@
 # Version ${version}, release-date ${release.date}
 
+# Version 40.1.7, release-date 2021-07-28
+* fixed bug in type declaration with a boolean expression.
+* fixed bug in XQuery sequence types of item" unsigned integer,
+  non positive integer, nonnegative integer and unsigned long.
+
 # Version 40.1.6, release-date 2021-07-20
 * fixed bug if the namespace of root element prefix is not specified (was
   reported only as null pointer Exception).
