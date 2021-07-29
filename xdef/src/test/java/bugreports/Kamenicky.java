@@ -20,8 +20,8 @@ public class Kamenicky extends XDTester {
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.0\" root=\"a\" >\n" +
 " <xd:declaration scope=\"local\">\n" +
 "     ParseResult pr() {\n" +
-"        ParseResult p = enum(\"ab\",\"cd\");\n" +
-"        if (p.matches()) p = string(2);\n" +
+"        ParseResult p = string(2);\n" +
+"        if (p.matches()) p = enum(\"ab\",\"cd\");\n" +
 "        return p;\n"+
 "     }\n"+
 "   type x pr();\n" +
