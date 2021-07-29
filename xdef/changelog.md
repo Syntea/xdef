@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 40.1.7, release-date 2021-07-28
+# Version 40.1.7, release-date 2021-07-29
 * fixed bug in type declaration with a boolean expression.
 * fixed bug in XQuery sequence types of item" unsigned integer,
   non positive integer, nonnegative integer and unsigned long.

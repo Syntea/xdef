@@ -155,10 +155,6 @@ public class DefXQueryExpr extends KXqueryExpr implements XDXQueryExpr {
 	@Override
 	public XDContainer contextValue() {return null;}
 	@Override
-	public GPSPosition GPSValue() {return null;}
-	@Override
-	public Price priceValue() {return null;}
-	@Override
 	public XDService serviceValue(){return null;}
 	@Override
 	public XDStatement statementValue(){return null;}

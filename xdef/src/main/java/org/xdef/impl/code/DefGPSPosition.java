@@ -23,10 +23,6 @@ public class DefGPSPosition extends XDValueAbstract implements XDGPSPosition {
 	 */
 	public DefGPSPosition(final GPSPosition position) {_position = position;}
 
-	@Override
-	/** Get value of GPS. */
-	public final GPSPosition GPSValue() {return _position;}
-
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDGPosition interface
 ////////////////////////////////////////////////////////////////////////////////
@@ -60,7 +56,7 @@ public class DefGPSPosition extends XDValueAbstract implements XDGPSPosition {
 	 * Earth radius used in Haversine formula is 6376500 m).
 	 */
 	public final double distanceTo(final XDGPSPosition x) {
-		return _position.distanceTo(x.GPSValue());
+		return _position.distanceTo((GPSPosition) x.getObject());
 	}
 
 	@Override
@@ -99,7 +95,7 @@ public class DefGPSPosition extends XDValueAbstract implements XDGPSPosition {
 	@Override
 	public boolean isNull() {return _position == null;}
 	@Override
-	public Object getObject() {return _position;}
+	public GPSPosition getObject() {return _position;}
 	@Override
 	public String toString() {return _position.toString();}
 }

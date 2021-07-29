@@ -126,7 +126,7 @@ public interface XDParser extends XDValue {
 	public XDContainer getNamedParams();
 
 	/** Set named parameters.
-	 * @param params context with named items of parameters.
+	 * @param params XDContainer with named items of parameters.
 	 * @param xnode actual XXNode object or null.
 	 * @throws SException if an error occurs.
 	 */

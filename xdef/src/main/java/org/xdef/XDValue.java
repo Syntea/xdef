@@ -97,16 +97,6 @@ public interface XDValue extends Comparable<XDValue>, XDValueID {
 	 */
 	public SDuration durationValue();
 
-	/** Get GPS value.
-	 * @return GPS value of this object or return null.
-	 */
-	public GPSPosition GPSValue();
-
-	/** Get Price value.
-	 * @return price (with currency code) or null.
-	 */
-	public Price priceValue();
-
 	/** Get bytes array representing value.
 	 * @return array of bytes or null.
 	 */

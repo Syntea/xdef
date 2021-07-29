@@ -365,9 +365,11 @@ class XCGeneratorBase {
 			case XDValueID.XD_DATETIME:
 				return result + "getParsedValue().datetimeValue()";
 			case XDValueID.XD_GPSPOSITION:
-				return result + "getParsedValue().GPSValue()";
+				return "(org.xdef.sys.GPSPosition) " + result
+					+ "getParsedValue().getObject()";
 			case XDValueID.XD_PRICE:
-				return result + "getParsedValue().priceValue()";
+				return "(org.xdef.sys.Price) " + result
+					+ "getParsedValue().getObject()";
 			case XDValueID.XD_ANYURI:
 				return "(java.net.URI) "+result+"getParsedValue().getObject()";
 			case XDValueID.XD_EMAIL:
