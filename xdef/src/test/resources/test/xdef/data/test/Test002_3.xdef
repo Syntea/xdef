@@ -26,15 +26,12 @@
    <!-- durationExpr()->                     -->
    <!-- deadlineExpr()->                     -->
    <!--======================================-->
-
-<xd:def   xmlns:xd='http://www.syntea.cz/xdef/3.1'
+<xd:def   xmlns:xd='http://www.xdef.org/xdef/4.1'
           impl-version ='0.9.0.0'
 		  impl-date    ='20.10.2006'
           xmlns:bl     ='http://www.syntea.cz/xbpel/'
           xd:name      ='Example'
           xd:root      ='Example'>
-
-
    <!--======================================-->
    <!-- Macra  Funkce                        -->
    <!--======================================-->

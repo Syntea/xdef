@@ -1,4 +1,4 @@
-<xd:def xmlns:xd="http://www.syntea.cz/xdef/3.1"
+<xd:def xmlns:xd="http://www.xdef.org/xdef/4.1"
         xd:include = "TestInclude_1.xdef"
         xd:name  = "a"
         xd:root  = "foo" >

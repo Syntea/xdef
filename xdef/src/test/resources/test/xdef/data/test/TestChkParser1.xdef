@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="Windows-1250" ?>
 <!--  date: 22.08.2003  -->
-<xd:def xmlns:xd = "http://www.syntea.cz/xdef/3.1"
+<xd:def xmlns:xd = "http://www.xdef.org/xdef/4.1"
         xd:name  = "ZaznamPDN"
         xd:root  = "ZaznamPDN#ZaznamPDN" >
 

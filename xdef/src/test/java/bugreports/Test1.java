@@ -24,7 +24,7 @@ public class Test1 extends XDTester {
 		StringWriter strw;
 		try {
 			xdef =
-"<xd:def xmlns:xd=\"http://www.syntea.cz/xdef/3.1\" root=\"A|B\" >\n" +
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" root=\"A|B\" >\n" +
 " <A>\n" +
 "   <a xd:script=\"*\" a=\"xdatetime('yyyy-d-M')\"/>\n" +
 " </A>\n" +

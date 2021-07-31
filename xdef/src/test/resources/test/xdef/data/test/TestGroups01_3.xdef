@@ -1,22 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?>
 <xd:collection
     xmlns:xd     = "http://www.syntea.cz/xdef/3.1"
     xmlns        = "http://www.syntea.cz/ISDN/SOD/2.0"
     xmlns:sod    = "http://www.syntea.cz/ISDN/SOD/2.0"
-
     impl-version = "2.0"
-    impl-date    = "2014-05-14"
->
+    impl-date    = "2014-05-14">
 
 <xd:def
     xd:name      = "SODContainer_Template"
     xd:root      = "SODContainer"
-    xd:script    = "options ignoreAttrWhiteSpaces, ignoreTextWhiteSpaces"
->
+    xd:script    = "options ignoreAttrWhiteSpaces, ignoreTextWhiteSpaces">
     <SODContainer xd:script="ref SODContainer#SODContainer; init $phase = 'Template'"/>
 </xd:def>
-
-
 
 <xd:def
     xd:name      = "SODContainer"

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="windows-1250" ?>
 <!-- Věcné struktury (v "abecedním" pořadí) -->
 <!-- Věcné struktury (v "abecedním" pořadí) -->
-<xd:def xmlns:xd='http://www.syntea.cz/xdef/3.1' name='B' >
+<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' name='B' >
 <!-- Věcné struktury (v "abecedním" pořadí) -->
 <!-- Věcné struktury (v "abecedním" pořadí) -->
 <xd:component>

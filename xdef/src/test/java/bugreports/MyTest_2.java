@@ -1039,7 +1039,7 @@ if(T ){return;}
 if(T ){return;}
 		try {
 			xdef =
-"<xd:def xmlns:xd='http://www.syntea.cz/xdef/3.1' xd:root='T' >\n" +
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' xd:root='T' >\n" +
 "  <xd:declaration>\n" +
 "    uniqueSet r {a: string(1,2); b: string(1,2)};\n" +
 "  </xd:declaration>\n" +

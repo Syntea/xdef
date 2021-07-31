@@ -29,12 +29,12 @@ import org.xdef.XDValueType;
 public final class DefContainer extends XDValueAbstract
 	implements XDContainer, XDValueID {
 	/** The NodeList as value of this item. */
-	private XDValue[] _value;
+	private XDValue[] _array;
 	/** The NodeList as value of this item. */
 	private XDNamedValue[] _map;
 
 	/** Creates a new empty instance of DefContext */
-	public DefContainer() {_value = new XDValue[0];}
+	public DefContainer() {_array = new XDValue[0];}
 
 	/** Creates a new instance of DefContext.
 	 * @param value Array of values.
@@ -44,33 +44,17 @@ public final class DefContainer extends XDValueAbstract
 	/** Creates a new instance of DefContext.
 	 * @param value the value.
 	 */
-	public DefContainer(final XDValue value) {initContext(value);}
-
-	private void initContext(final XDValue value) {
-		switch (value.getItemId()) {
-			case XD_CONTAINER: {
-				setValuesFromContext((XDContainer) value);
-				break;
-			}
-			case XD_NAMEDVALUE:
-				_map = new XDNamedValue[]{(XDNamedValue) value};
-				_value = new XDValue[0];
-				break;
-			default:
-				_value = new XDValue[]{value};
-				break;
-		}
-	}
+	public DefContainer(final XDValue value) {initContainer(value);}
 
 	/** Creates a new instance of DefContext from the value of context
 	 * @param value The source XDValue array.
 	 * @param first The index of the first item.
 	 * @param last The index of the last item.
 	 */
-	public DefContainer(final XDValue[] value, final int first, final int last) {
+	public DefContainer(final XDValue[] value, final int first, final int last){
 		int length = last + 1 - first;
 		if (length == 0) {
-			_value = new XDValue[0];
+			_array = new XDValue[0];
 		} else if (length > 1) {
 			XDValue[] v = new XDValue[length];
 			System.arraycopy(value, first, v, 0, length);
@@ -82,9 +66,9 @@ public final class DefContainer extends XDValueAbstract
 			} else {
 				if (v.getItemId() == XD_NAMEDVALUE) {
 					_map = new XDNamedValue[]{(XDNamedValue) v};
-					_value = new XDValue[0];
+					_array = null;
 				} else {
-					_value = new XDValue[]{v};
+					_array = new XDValue[]{v};
 				}
 			}
 		}
@@ -100,26 +84,26 @@ public final class DefContainer extends XDValueAbstract
 	 */
 	public DefContainer(final Object obj) {
 		if (obj == null) {
-			_value = null;
+			_array = null;
 		} else if (obj instanceof XDValue) {
-			initContext((XDValue) obj);
+			initContainer((XDValue) obj);
 		} else if (obj instanceof XDValue[]) {
-			_value = (XDValue[]) obj;
+			_array = (XDValue[]) obj;
 		} else if (obj instanceof XDValue[]) {
 			XDValue[] x = (XDValue[]) obj;
-			_value = new XDValue[x.length];
-			System.arraycopy(x, 0, _value, 0, x.length);
+			_array = new XDValue[x.length];
+			System.arraycopy(x, 0, _array, 0, x.length);
 		} else if (obj instanceof String) {
-			_value = new XDValue[]{new DefString((String) obj)};
+			_array = new XDValue[]{new DefString((String) obj)};
 		} else if (obj instanceof Element) {
-			_value = new XDValue[]{new DefElement((Element) obj)};
+			_array = new XDValue[]{new DefElement((Element) obj)};
 		} else if (obj instanceof Attr) {
-			_value = new XDValue[]{new DefAttr((Attr) obj)};
+			_array = new XDValue[]{new DefAttr((Attr) obj)};
 		} else if (obj instanceof CharacterData) {
-			_value = new XDValue[] {
+			_array = new XDValue[] {
 				new DefString(((CharacterData) obj).getData())};
 		} else if (obj instanceof Properties) {
-			_value = new XDValue[0];
+			_array = new XDValue[0];
 			Properties props = (Properties) obj;
 			int n = props.size();
 			_map = new XDNamedValue[n];
@@ -133,69 +117,64 @@ public final class DefContainer extends XDValueAbstract
 			setNodeListValue((NodeList) obj);
 		} else if (obj instanceof Long || obj instanceof Integer
 			|| obj instanceof Short || obj instanceof Byte) {
-			_value = new XDValue[] {
+			_array = new XDValue[] {
 				new DefLong(((Number) obj).longValue())};
+		} else if (obj instanceof CharacterData) {
+			_array = new XDValue[] {
+				new DefString(((CharacterData) obj).getData())};
 		} else if (obj instanceof Boolean) {
-			_value = new XDValue[] {	new DefBoolean(((Boolean) obj))};
+			_array = new XDValue[] {new DefBoolean(((Boolean) obj))};
 		} else if (obj instanceof Float || obj instanceof Double) {
-			_value = new XDValue[]{
+			_array = new XDValue[] {
 				new DefDouble(((Number) obj).doubleValue())};
 		} else if (obj instanceof String[]) {
 			String[] ss = (String[]) obj;
-			_value = new XDValue[ss.length];
+			_array = new XDValue[ss.length];
 			for (int i = 0; i < ss.length; i++) {
-				_value[i] = new DefString(ss[i]);
+				_array[i] = new DefString(ss[i]);
 			}
 		} else if (obj instanceof Boolean[]) {
 			Boolean[] ss = (Boolean[]) obj;
-			_value = new XDValue[ss.length];
+			_array = new XDValue[ss.length];
 			for (int i = 0; i < ss.length; i++) {
-				_value[i] = new DefBoolean(ss[i]);
+				_array[i] = new DefBoolean(ss[i]);
 			}
 		} else if (obj instanceof Integer[]) {
 			Integer[] ss = (Integer[]) obj;
-			_value = new XDValue[ss.length];
+			_array = new XDValue[ss.length];
 			for (int i = 0; i < ss.length; i++) {
-				_value[i] = new DefLong(ss[i]);
+				_array[i] = new DefLong(ss[i]);
 			}
 		} else if (obj instanceof Long[]) {
 			Long[] ss = (Long[]) obj;
-			_value = new XDValue[ss.length];
+			_array = new XDValue[ss.length];
 			for (int i = 0; i < ss.length; i++) {
-				_value[i] = new DefLong(ss[i]);
+				_array[i] = new DefLong(ss[i]);
 			}
 		} else if (obj instanceof Float[]) {
 			Float[] ss = (Float[]) obj;
-			_value = new XDValue[ss.length];
+			_array = new XDValue[ss.length];
 			for (int i = 0; i < ss.length; i++) {
-				_value[i] = new DefDouble(ss[i].doubleValue());
+				_array[i] = new DefDouble(ss[i].doubleValue());
 			}
 		} else if (obj instanceof Double[]) {
 			Double[] ss = (Double[]) obj;
-			_value = new XDValue[ss.length];
+			_array = new XDValue[ss.length];
 			for (int i = 0; i < ss.length; i++) {
-				_value[i] = new DefDouble(ss[i]);
+				_array[i] = new DefDouble(ss[i]);
 			}
+		} else if (obj instanceof org.xdef.sys.Price) {
+			_array = new XDValue[] {new DefPrice((org.xdef.sys.Price) obj)};
+		} else if (obj instanceof org.xdef.sys.GPSPosition) {
+			_array = new XDValue[] {
+				new DefGPSPosition((org.xdef.sys.GPSPosition) obj)};
+		} else if (obj instanceof java.net.URI) {
+			_array = new XDValue[] {new DefURI((java.net.URI) obj)};
 		} else {
-			_value = new XDValue[]{new DefString("")};
+			_array = new XDValue[]{new DefString("")};
 			//Illegal argument in method: &{0}
 			throw new SIllegalArgumentException(SYS.SYS084,
 				"new " + obj.getClass() + "()");
-		}
-	}
-
-	private void setValuesFromContext(final XDContainer d) {
-		int len = d.getXDItemsNumber();
-		if (len > 0) {
-			_value = new XDValue[len];
-			System.arraycopy(d.getXDItems(), 0, _value, 0, _value.length);
-		} else {
-			_value = new XDValue[0];
-		}
-		len = d.getXDNamedItemsNumber();
-		if (len > 0) {
-			_map = new XDNamedValue[len];
-			System.arraycopy(d.getXDNamedItems(), 0, _map, 0, _map.length);
 		}
 	}
 
@@ -313,7 +292,7 @@ public final class DefContainer extends XDValueAbstract
 	}
 
 	@Override
-	/** Get name of i-th named item.
+	/** Get name of ith named item.
 	 * @param index index of item.
 	 * @return name of item.
 	 */
@@ -351,6 +330,38 @@ public final class DefContainer extends XDValueAbstract
 	////////////////////////////////////////////////////////////////////////////
 	// Private methods
 	////////////////////////////////////////////////////////////////////////////
+
+	private void initContainer(final XDValue value) {
+		switch (value.getItemId()) {
+			case XD_CONTAINER: {
+				setValuesFromContext((XDContainer) value);
+				break;
+			}
+			case XD_NAMEDVALUE:
+				_map = new XDNamedValue[]{(XDNamedValue) value};
+				_array = null;
+				break;
+			default:
+				_array = new XDValue[]{value};
+				break;
+		}
+	}
+
+	private void setValuesFromContext(final XDContainer d) {
+		int len = d.getXDItemsNumber();
+		if (len > 0) {
+			_array = new XDValue[len];
+			System.arraycopy(d.getXDItems(), 0, _array, 0, _array.length);
+		} else {
+			_array = len == 0 ? new XDValue[0] : null;
+		}
+		len = d.getXDNamedItemsNumber();
+		if (len > 0) {
+			_map = new XDNamedValue[len];
+			System.arraycopy(d.getXDNamedItems(), 0, _map, 0, _map.length);
+		}
+	}
+
 	private void init(final XDValue[] value) {
 		if (value != null) {
 			int numOfNamedItems = 0;
@@ -362,20 +373,20 @@ public final class DefContainer extends XDValueAbstract
 			}
 			int len = value.length;
 			int len1 = len - numOfNamedItems;
-			_value = new XDValue[len1];
+			_array = new XDValue[len1];
 			if (len1 > 0 ) {
 				if (numOfNamedItems == 0) {
-					System.arraycopy(value, 0, _value, 0, len1);
+					System.arraycopy(value, 0, _array, 0, len1);
 				} else {
 					for (int i = 0, j = 0; i < len; i++) {
 						if (value[i].getItemId() != XD_NAMEDVALUE) {
-							_value[j++] = value[i];
+							_array[j++] = value[i];
 						}
 					}
 				}
 			}
 		} else {
-			_value = new XDValue[0];
+			_array = null;
 		}
 	}
 
@@ -403,8 +414,8 @@ public final class DefContainer extends XDValueAbstract
 					ar.add(new DefString(node.getNodeValue()));
 			}
 		}
-		_value = new  XDValue[ar.size()];
-		ar.toArray(_value);
+		_array = new  XDValue[ar.size()];
+		ar.toArray(_array);
 	}
 
 	private void setArrayListValue(final Object obj) {
@@ -430,428 +441,11 @@ public final class DefContainer extends XDValueAbstract
 				ar.add(new DefDouble(((Double) item)));
 			}
 		}
-		_value = new  XDValue[ar.size()];
-		ar.toArray(_value);
+		_array = new  XDValue[ar.size()];
+		ar.toArray(_array);
 	}
 
-	////////////////////////////////////////////////////////////////////////////
-
-	@Override
-	/** Get the item from sequence at given index.
-	 * @param index index of item.
-	 * @return item at given index or return <i>null</i>.
-	 */
-	public final XDValue getXDItem(final int index) {
-		return index < 0 || _value == null || index >= _value.length ?
-			null : _value[index];
-	}
-
-	@Override
-	/** Add item to the end of sequence.
-	 * @param value new item.
-	 */
-	public final void addXDItem(final XDValue value) {
-		if (_value == null) {
-			_value = new XDValue[] {value};
-		} else {
-			insertXDItemBefore(_value.length, value);
-		}
-	}
-
-	@Override
-	/** Add item to the end of sequence.
-	 * @param value new item.
-	 */
-	public final void addXDItem(final String value) {
-		XDValue x = new DefString(value);
-		if (_value == null) {
-			_value = new XDValue[] {x};
-		} else {
-			insertXDItemBefore(_value.length, x);
-		}
-	}
-
-	@Override
-	/** Add item to the end of sequence.
-	 * @param value new item.
-	 */
-	public final void addXDItem(final Element value) {
-		XDValue x = new DefElement(value);
-		if (_value == null) {
-			_value = new XDValue[] {x};
-		} else {
-			insertXDItemBefore(_value.length, x);
-		}
-	}
-
-	@Override
-	/** Set item at position given by index.
-	 * @param index index of item item. If index is out of range of items this
-	 * method does nothing.
-	 * @param value of item.
-	 * @return original value or null;
-	 */
-	public XDValue replaceXDItem(final int index, final XDValue value) {
-		if (_value != null && index >= 0 && index < _value.length) {
-			XDValue result = _value[index];
-			_value[index] = value;
-			return result;
-		}
-		return null;
-	}
-
-	@Override
-	/** Insert item before given index to the sequence.
-	 * @param index index of required item.
-	 * @param value item to be inserted.
-	 */
-	public final void insertXDItemBefore(final int index, final XDValue value) {
-		if (index < 0) {
-			return;
-		}
-		if (_value == null) {
-			if (index > 0) {
-				return;
-			}
-			_value = new XDValue[0];
-		}
-		int ndx;
-		if ((ndx = index) > _value.length) {
-			ndx = _value.length;
-		}
-		int len = _value.length + 1;
-		XDValue[] old = _value;
-		_value = new XDValue[len];
-		if (len == 1) {
-			_value[0] = value;
-			return;
-		}
-		if (ndx > 0) {
-			System.arraycopy(old, 0, _value, 0, ndx);
-		}
-		if (ndx < len - 1) {
-			System.arraycopy(old, ndx, _value, ndx + 1, len - ndx - 1);
-		}
-		_value[ndx] = value;
-	}
-
-	@Override
-	/** Remove item from the sequence at given index.
-	 * @param index the index of item in the sequence which will be removed.
-	 * @return removed value or null.
-	 */
-	public final XDValue removeXDItem(final int index) {
-		if (index < 0 || _value == null || index >= _value.length) {
-			return null;
-		}
-		int len = _value.length - 1;
-		XDValue result = _value[index];
-		if (len == 0) {
-			_value = new XDValue[0];
-		} else {
-			XDValue[] old = _value;
-			_value = new XDValue[len];
-			if (index > 0) {
-				System.arraycopy(old, 0, _value, 0, index);
-			}
-			if (index < len) {
-				System.arraycopy(old, index + 1, _value, index, len - index);
-			}
-		}
-		return result;
-	}
-
-	@Override
-	/** Get number of items in the sequence.
-	 * @return number of items in the sequence.
-	 */
-	public final int getXDItemsNumber() {
-		return _value != null ? _value.length : -1;
-	}
-
-	@Override
-	/** Get array of all items in the sequence.
-	 * @return array of all items in the sequence.
-	 */
-	public final XDValue[] getXDItems() {return _value;}
-
-	@Override
-	/** Create new XDContext with all elements from context.
-	 * @return The new XDContext with elements.
-	 */
-	public final XDContainer getXDElements() {
-		if (_value == null) {
-			return new DefContainer();
-		}
-		ArrayList<XDValue> ar = new ArrayList<XDValue>();
-		for (int i = 0; i < _value.length; i++) {
-			if (_value[i].getItemId() == XD_ELEMENT) {
-				ar.add(_value[i]);
-			} else if (_value[i].getItemId() == XD_CONTAINER) {
-				ar.add(new DefElement(
-					((XDContainer)_value[i]).toElement(null, "")));
-			}
-		}
-		DefContainer result = new DefContainer();
-		result._value = new XDValue[ar.size()];
-		ar.toArray(result._value);
-		return result;
-	}
-
-	@Override
-	/** Get the n-th element from context or null.
-	 * @param n The index of element.
-	 * @return the n-th element from context or null..
-	 */
-	public final Element getXDElement(final int n) {
-		if (_value == null) {
-			return null;
-		}
-		if (n >= 0 && n < _value.length) {
-			switch (_value[n].getItemId()) {
-				case XD_ELEMENT:
-					return _value[n].getElement();
-				case XD_CONTAINER:
-					return ((XDContainer)_value[n]).toElement(null, null);
-			}
-			Document doc = KXmlUtils.newDocument(null, "_", null);
-			Element el = doc.getDocumentElement();
-			setAttrs(new LinkedHashMap<String, String>(), el);
-			XDValue val = _value[n];
-			String s = val == null || val.isNull() ? null :
-				val.getItemId() == XD_STRING ?
-				val.stringValue() : val.toString();
-			if (s != null) {
-				el.appendChild(doc.createTextNode(s));
-			}
-			return el;
-		}
-		return null;
-	}
-
-	@Override
-	/** Get all elements with given name from context.
-	 * @param name The name of element.
-	 * @return The new context with elements.
-	 */
-	public final XDContainer getXDElements(final String name) {
-		return getXDElementsNS(null, name);
-	}
-
-	@Override
-	/** Get all elements with given name and NameSpace from context.
-	 * @param nsURI NameSpace URI.
-	 * @param localName local name of element.
-	 * @return The new context with all elements with given name and NameSpace.
-	 */
-	public final XDContainer getXDElementsNS(final String nsURI,
-		final String localName) {
-		if (_value == null) {
-			return new DefContainer();
-		}
-		ArrayList<XDValue> ar = new ArrayList<XDValue>();
-		for (int i = 0; i < _value.length; i++) {
-			if (_value[i].getItemId() == XD_ELEMENT) {
-				Element el = _value[i].getElement();
-				if (nsURI == null) {
-					if (el.getNamespaceURI() != null) {
-						continue;
-					}
-				} else if (!nsURI.equals(el.getNamespaceURI())) {
-					continue;
-				}
-				String s = el.getNodeName();
-				int n = s.indexOf(':');
-				if (n >= 0) {
-					s = s.substring(n + 1);
-				}
-				if (localName.equals(s)) {
-					ar.add(_value[i]);
-				}
-			}
-		}
-		DefContainer result = new DefContainer();
-		result._value = new XDValue[ar.size()];
-		ar.toArray(result._value);
-		return result;
-	}
-
-	@Override
-	/** Get all text nodes concatenated as a string.
-	 * @return The string with all text nodes.
-	 */
-	public final String getXDText() {
-		StringBuilder sb = new StringBuilder();
-		if (_value == null) {
-			return null;
-		}
-		boolean wasItem = false;
-		for (int i = 0; i < _value.length; i++) {
-			if (_value[i].getItemId() == XD_STRING ||
-				_value[i].getItemId() == XD_ATTR ||
-//				_value[i].getItemId() == XD_BOOLEAN ||
-//				_value[i].getItemId() == XD_LONG ||
-//				_value[i].getItemId() == XD_DOUBLE ||
-//				_value[i].getItemId() == XD_DATETIME ||
-				_value[i].getItemId() == XD_TEXT) {
-				String s = (_value[i]).stringValue();
-				wasItem = true;
-				if (s != null && s.length() > 0) {
-					sb.append(s);
-				}
-			}
-		}
-		return wasItem ? sb.toString() : null;
-	}
-
-	@Override
-	/** Get string from n-th item from this context. If the node does not
-	 * exist or if it is not text then return the empty string.
-	 * @param n The index of item.
-	 * @return The string.
-	 */
-	public final String getXDTextItem(final int n) {
-		return n >= 0 && _value != null && n < _value.length &&
-			(_value[n].getItemId() == XD_STRING ||
-			_value[n].getItemId() == XD_TEXT ||
-			_value[n].getItemId() == XD_ATTR) ?
-			_value[n].stringValue() : "";
-	}
-
-////////////////////////////////////////////////////////////////////////////////
-// Implementation of XDValue interface
-////////////////////////////////////////////////////////////////////////////////
-
-	@Override
-	/** Get type of value.
-	 * @return The id of item type.
-	 */
-	public final short getItemId() {return XD_CONTAINER;}
-
-	@Override
-	/** Get ID of the type of value
-	 * @return enumeration item of this type.
-	 */
-	public XDValueType getItemType() {return XDValueType.CONTAINER;}
-
-	@Override
-	/** Check if the object is <i>null</i>.
-	 * @return <i>true</i> if the object is <i>null</i> otherwise returns
-	 * <i>false</i>.
-	 */
-	public boolean isNull() { return _value == null;}
-
-	@Override
-	/** Check if the object is empty.
-	 * @return <i>true</i> if the object is empty; otherwise returns
-	 * <i>false</i>.
-	 */
-	public boolean isEmpty() {
-		return (_value == null || _value.length == 0) &&
-			(_map == null || _map.length == 0);
-	}
-
-	@Override
-	/** Get value as printable string. */
-	public final String toString() {
-		StringBuilder sb = new StringBuilder();
-		if (_map != null) {
-			for (XDNamedValue x: _map) {
-				if (sb.length() > 0) {
-					sb.append('\n');
-				}
-				sb.append(x.toString());
-			}
-		}
-		if (_value != null) {
-			for (int i = 0; i < _value.length; i++) {
-				if (sb.length() > 0) {
-					sb.append('\n');
-				}
-				sb.append(_value[i].toString());
-			}
-		}
-		return sb.toString();
-	}
-
-	@Override
-	/** Get boolean value of this object.
-	 * @return boolean value of this object or <i>false</i>.
-	 */
-	public final boolean booleanValue() {
-		if (!isEmpty()) {
-			if (_map == null && _value != null) {
-				XDValue x;
-				if (_value.length==1 && (x = _value[0])!=null) {
-					if (x.isNull()) {
-						return false;
-					}
-					switch (x.getItemId()) {
-						case XD_BOOLEAN:
-							return x.booleanValue();
-						case XD_DOUBLE:
-						case XD_LONG:
-						case XD_DECIMAL:
-							return x.longValue() != 0;
-						case XD_STRING:
-							return !x.stringValue().isEmpty();
-						default:
-							return true;
-					}
-				}
-				for (XDValue v: _value) {
-					if (v != null && !v.isNull()) {
-						return true;
-					}
-				}
-				return false;
-			}
-		}
-		return false;
-	}
-	@Override
-	/** Get boolean value of this object.
-	 * @return boolean value of this object or <i>false</i>.
-	 */
-	public final long longValue() {
-		return (_value != null && _value.length == 1 && _value[0] != null)
-			? _value[0].longValue() : 0;
-	}
-	@Override
-	/** Get boolean value of this object.
-	 * @return boolean value of this object or <i>false</i>.
-	 */
-	public final double doubleValue() {
-		return (_value != null && _value.length == 1 && _value[0] != null)
-			? _value[0].doubleValue() : Double.NaN;
-	}
-	@Override
-	/** Get boolean value of this object.
-	 * @return boolean value of this object or <i>false</i>.
-	 */
-	public BigDecimal decimalValue() {
-		return (_value != null && _value.length == 1 && _value[0] != null)
-			? _value[0].decimalValue() : null;
-	}
-	@Override
-	/** Get string value of this object.
-	 * @return string value of this object.
-	 */
-	public final String stringValue() {
-		return toString();
-	}
-
-	@Override
-	/** Create element from context.
-	 * @param nsUri of created element.
-	 * @param xmlName name of created element.
-	 * @return element created from this context.
-	 */
-	public final Element toElement(final String nsUri, final String xmlName) {
-		return toElement(new LinkedHashMap<String, String>(), nsUri, xmlName);
-	}
-
-	public final Element toElement(
+	private final Element toElement(
 		LinkedHashMap<String, String> ns,
 		final String nsUri, final String xmlName) {
 		String n = xmlName;
@@ -895,7 +489,8 @@ public final class DefContainer extends XDValueAbstract
 		return el;
 	}
 
-	private void setAttrs(final LinkedHashMap<String, String> ns,final Element el) {
+	private void setAttrs(final LinkedHashMap<String,String> ns,
+		final Element el) {
 		if (_map != null) {
 			for (int i = 0; i < _map.length; i++) {
 				XDValue val = _map[i].getValue();
@@ -905,7 +500,8 @@ public final class DefContainer extends XDValueAbstract
 					if (val.getItemId() == XD_CONTAINER) {
 						XDContainer x = (XDContainer) val;
 						Element el1 = x.toElement(null, t);
-						el.appendChild(el.getOwnerDocument().importNode(el1, true));
+						el.appendChild(el.getOwnerDocument().importNode(
+							el1, true));
 					} else {
 						String s = val.getItemId() == XD_STRING ?
 						val.stringValue() : val.toString();
@@ -925,10 +521,10 @@ public final class DefContainer extends XDValueAbstract
 
 	private void setChildNodes(final LinkedHashMap<String,String> ns,
 		final Element el) {
-		if (_value != null && _value.length > 0) {
+		if (_array != null && _array.length > 0) {
 			Document doc = el.getOwnerDocument();
-			for (int i = 0; i < _value.length; i++) {
-				XDValue item = _value[i];
+			for (int i = 0; i < _array.length; i++) {
+				XDValue item = _array[i];
 				if (item != null) {
 					if (item.getItemId() == XD_ELEMENT) {
 						Element e = item.getElement();
@@ -953,6 +549,631 @@ public final class DefContainer extends XDValueAbstract
 		}
 	}
 
+	/** Sorts this context.
+	 * @param key String with xpath expression or null (if null or empty string
+	 * then for org.w3c.Node items it is used as a key the text value of
+	 * an item). For items other then  org.w3c.Node objects this parameter is
+	 * ignored.
+	 * @param asc if true context will be sorted ascendant, else descendant.
+	 */
+	private void sort1(final String key, final boolean asc) {
+		int len;
+		if ((len = _array != null ? _array.length : 0) <= 1) {
+			return;
+		}
+		Object[] keys = new Object[len];
+		for (int i = len - 1; i >= 0; i--) {
+			switch(_array[i].getItemId()) {
+				case XD_ELEMENT: {
+					Element el = _array[i].getElement();
+					if (el == null) {
+						keys[i] = "";
+					} else {
+						if (key == null || key.length() == 0) {
+							keys[i] = KXmlUtils.getTextValue(el);
+						} else {
+							DefContainer dc =
+								new DefContainer(KXpathExpr.evaluate(el, key));
+							if (dc.getXDItemsNumber() != 1) {
+								keys[i] = "";
+							} else {
+								XDValue dv = dc.getXDItem(0);
+								switch (dv.getItemId()) {
+									case XD_ELEMENT:
+									case XD_ATTR:
+									case XD_TEXT:
+									case XD_STRING:
+										keys[i] = dc.getXDItem(0).stringValue();
+										break;
+									case XD_DOUBLE:
+									case XD_LONG:
+									case XD_DECIMAL:
+									case XD_BOOLEAN:
+									case XD_DATETIME:
+									case XD_REPORT:
+										keys[i] = dv;
+										break;
+									default:
+	//									XD_BYTES, XX_ELEMENT, XX_TEXT,
+	//									XD_CONTAINER, XD_OBJECT, XD_INPUT,
+	//									XD_OUPUT, XD_EXCEPTION, XMLNODE_VALUE,
+	//									BYTE_VALUE, CHAR_VALUE ...
+										keys[i] = "";
+								}
+							}
+						}
+					}
+					break;
+				}
+				case XD_LONG:
+					keys[i] = _array[i].longValue();
+					break;
+				case XD_BOOLEAN:
+					keys[i] = _array[i].booleanValue() ? 1 : 0;
+					break;
+				default:
+					keys[i] = _array[i].stringValue();
+			} // case
+		}
+		sort2(0, _array.length - 1, keys, asc);
+	}
+
+	private void sort2(int low,
+		int high,
+		final Object[] keys,
+		final boolean asc) {
+		if (low >= high) {
+			return;
+		}
+		Object first = keys[low];
+		int i = low - 1;
+		int j = high + 1;
+		if (first instanceof String) {
+			String x = (String) first;
+			if (asc) {
+				while (i < j) {
+					i++;
+					while (x.compareTo((String) keys[i]) > 0) {
+						i++;
+					}
+					j--;
+					while (x.compareTo((String) keys[j]) < 0) {
+						j--;
+					}
+					if (i < j) { //swap item[i] and item[j]
+						Object key = keys[i];
+						keys[i] = keys[j];
+						keys[j] = key;
+						XDValue item = _array[i];
+						_array[i] = _array[j];
+						_array[j] = item;
+					}
+				}
+			} else {
+				while (i < j) {
+					i++;
+					while (x.compareTo((String) keys[i]) < 0) {
+						i++;
+					}
+					j--;
+					while (x.compareTo((String) keys[j]) > 0) {
+						j--;
+					}
+					if (i < j) { //swap item[i] and item[j]
+						Object key = keys[i];
+						keys[i] = keys[j];
+						keys[j] = key;
+						XDValue item = _array[i];
+						_array[i] = _array[j];
+						_array[j] = item;
+					}
+				}
+			}
+		} else if (first instanceof Long) {
+			Long x = (Long) first;
+			if (asc) {
+				while (i < j) {
+					i++;
+					while (x.compareTo((Long) keys[i]) > 0) {
+						i++;
+					}
+					j--;
+					while (x.compareTo((Long) keys[j]) < 0) {
+						j--;
+					}
+					if (i < j) { //swap item[i] and item[j]
+						Object key = keys[i];
+						keys[i] = keys[j];
+						keys[j] = key;
+						XDValue item = _array[i];
+						_array[i] = _array[j];
+						_array[j] = item;
+					}
+				}
+			} else {
+				while (i < j) {
+					i++;
+					while (x.compareTo((Long) keys[i]) < 0) {
+						i++;
+					}
+					j--;
+					while (x.compareTo((Long) keys[j]) > 0) {
+						j--;
+					}
+					if (i < j) { //swap item[i] and item[j]
+						Object key = keys[i];
+						keys[i] = keys[j];
+						keys[j] = key;
+						XDValue item = _array[i];
+						_array[i] = _array[j];
+						_array[j] = item;
+					}
+				}
+			}
+		} else if (first instanceof Double) {
+			Double x = (Double) first;
+			if (asc) {
+				while (i < j) {
+					i++;
+					while (x.compareTo((Double) keys[i]) > 0) {
+						i++;
+					}
+					j--;
+					while (x.compareTo((Double) keys[j]) < 0) {
+						j--;
+					}
+					if (i < j) { //swap item[i] and item[j]
+						Object key = keys[i];
+						keys[i] = keys[j];
+						keys[j] = key;
+						XDValue item = _array[i];
+						_array[i] = _array[j];
+						_array[j] = item;
+					}
+				}
+			} else {
+				while (i < j) {
+					i++;
+					while (x.compareTo((Double) keys[i]) < 0) {
+						i++;
+					}
+					j--;
+					while (x.compareTo((Double) keys[j]) > 0) {
+						j--;
+					}
+					if (i < j) { //swap item[i] and item[j]
+						Object key = keys[i];
+						keys[i] = keys[j];
+						keys[j] = key;
+						XDValue item = _array[i];
+						_array[i] = _array[j];
+						_array[j] = item;
+					}
+				}
+			}
+		}
+		sort2(low, j, keys, asc);
+		sort2(j + 1, high, keys, asc);
+	}
+
+////////////////////////////////////////////////////////////////////////////////
+
+	@Override
+	/** Get the item from sequence at given index.
+	 * @param index index of item.
+	 * @return item at given index or return <i>null</i>.
+	 */
+	public final XDValue getXDItem(final int index) {
+		return index < 0 || _array == null || index >= _array.length ?
+			null : _array[index];
+	}
+
+	@Override
+	/** Add item to the end of sequence.
+	 * @param value new item.
+	 */
+	public final void addXDItem(final XDValue value) {
+		if (_array == null) {
+			_array = new XDValue[] {value};
+		} else {
+			insertXDItemBefore(_array.length, value);
+		}
+	}
+
+	@Override
+	/** Add item to the end of sequence.
+	 * @param value new item.
+	 */
+	public final void addXDItem(final String value) {
+		XDValue x = new DefString(value);
+		if (_array == null) {
+			_array = new XDValue[] {x};
+		} else {
+			insertXDItemBefore(_array.length, x);
+		}
+	}
+
+	@Override
+	/** Add item to the end of sequence.
+	 * @param value new item.
+	 */
+	public final void addXDItem(final Element value) {
+		XDValue x = new DefElement(value);
+		if (_array == null) {
+			_array = new XDValue[] {x};
+		} else {
+			insertXDItemBefore(_array.length, x);
+		}
+	}
+
+	@Override
+	/** Set item at position given by index.
+	 * @param index index of item item. If index is out of range of items this
+	 * method does nothing.
+	 * @param value of item.
+	 * @return original value or null;
+	 */
+	public XDValue replaceXDItem(final int index, final XDValue value) {
+		if (_array != null && index >= 0 && index < _array.length) {
+			XDValue result = _array[index];
+			_array[index] = value;
+			return result;
+		}
+		return null;
+	}
+
+	@Override
+	/** Insert item before given index to the sequence.
+	 * @param index index of required item.
+	 * @param value item to be inserted.
+	 */
+	public final void insertXDItemBefore(final int index, final XDValue value) {
+		if (index < 0) {
+			return;
+		}
+		if (_array == null) {
+			if (index > 0) {
+				return;
+			}
+			_array = new XDValue[] {value};
+			return;
+		}
+		int ndx;
+		if ((ndx = index) > _array.length) {
+			ndx = _array.length;
+		}
+		int len = _array.length + 1;
+		XDValue[] old = _array;
+		_array = new XDValue[len];
+		if (len == 1) {
+			_array[0] = value;
+			return;
+		}
+		if (ndx > 0) {
+			System.arraycopy(old, 0, _array, 0, ndx);
+		}
+		if (ndx < len - 1) {
+			System.arraycopy(old, ndx, _array, ndx + 1, len - ndx - 1);
+		}
+		_array[ndx] = value;
+	}
+
+	@Override
+	/** Remove item from the sequence at given index.
+	 * @param index the index of item in the sequence which will be removed.
+	 * @return removed value or null.
+	 */
+	public final XDValue removeXDItem(final int index) {
+		if (index < 0 || _array == null || index >= _array.length) {
+			return null;
+		}
+		int len = _array.length - 1;
+		XDValue result = _array[index];
+		if (len == 0) {
+			_array = new XDValue[0];
+		} else {
+			XDValue[] old = _array;
+			_array = new XDValue[len];
+			if (index > 0) {
+				System.arraycopy(old, 0, _array, 0, index);
+			}
+			if (index < len) {
+				System.arraycopy(old, index + 1, _array, index, len - index);
+			}
+		}
+		return result;
+	}
+
+	@Override
+	/** Get number of items in the sequence.
+	 * @return number of items in the sequence.
+	 */
+	public final int getXDItemsNumber() {
+		return _array != null ? _array.length : -1;
+	}
+
+	@Override
+	/** Get array of all items in the sequence.
+	 * @return array of all items in the sequence.
+	 */
+	public final XDValue[] getXDItems() {return _array;}
+
+	@Override
+	/** Create new XDContext with all elements from context.
+	 * @return The new XDContext with elements.
+	 */
+	public final XDContainer getXDElements() {
+		if (_array == null) {
+			return new DefContainer();
+		}
+		ArrayList<XDValue> ar = new ArrayList<XDValue>();
+		for (int i = 0; i < _array.length; i++) {
+			if (_array[i].getItemId() == XD_ELEMENT) {
+				ar.add(_array[i]);
+			} else if (_array[i].getItemId() == XD_CONTAINER) {
+				ar.add(new DefElement(
+					((XDContainer)_array[i]).toElement(null, "")));
+			}
+		}
+		DefContainer result = new DefContainer();
+		result._array = new XDValue[ar.size()];
+		ar.toArray(result._array);
+		return result;
+	}
+
+	@Override
+	/** Get the n-th element from context or null.
+	 * @param n The index of element.
+	 * @return the n-th element from context or null..
+	 */
+	public final Element getXDElement(final int n) {
+		if (_array == null) {
+			return null;
+		}
+		if (n >= 0 && n < _array.length) {
+			switch (_array[n].getItemId()) {
+				case XD_ELEMENT:
+					return _array[n].getElement();
+				case XD_CONTAINER:
+					return ((XDContainer)_array[n]).toElement(null, null);
+			}
+			Document doc = KXmlUtils.newDocument(null, "_", null);
+			Element el = doc.getDocumentElement();
+			setAttrs(new LinkedHashMap<String, String>(), el);
+			XDValue val = _array[n];
+			String s = val == null || val.isNull() ? null :
+				val.getItemId() == XD_STRING ?
+				val.stringValue() : val.toString();
+			if (s != null) {
+				el.appendChild(doc.createTextNode(s));
+			}
+			return el;
+		}
+		return null;
+	}
+
+	@Override
+	/** Get all elements with given name from context.
+	 * @param name The name of element.
+	 * @return The new context with elements.
+	 */
+	public final XDContainer getXDElements(final String name) {
+		return getXDElementsNS(null, name);
+	}
+
+	@Override
+	/** Get all elements with given name and NameSpace from context.
+	 * @param nsURI NameSpace URI.
+	 * @param localName local name of element.
+	 * @return The new context with all elements with given name and NameSpace.
+	 */
+	public final XDContainer getXDElementsNS(final String nsURI,
+		final String localName) {
+		if (_array == null) {
+			return new DefContainer();
+		}
+		ArrayList<XDValue> ar = new ArrayList<XDValue>();
+		for (int i = 0; i < _array.length; i++) {
+			if (_array[i].getItemId() == XD_ELEMENT) {
+				Element el = _array[i].getElement();
+				if (nsURI == null) {
+					if (el.getNamespaceURI() != null) {
+						continue;
+					}
+				} else if (!nsURI.equals(el.getNamespaceURI())) {
+					continue;
+				}
+				String s = el.getNodeName();
+				int n = s.indexOf(':');
+				if (n >= 0) {
+					s = s.substring(n + 1);
+				}
+				if (localName.equals(s)) {
+					ar.add(_array[i]);
+				}
+			}
+		}
+		DefContainer result = new DefContainer();
+		result._array = new XDValue[ar.size()];
+		ar.toArray(result._array);
+		return result;
+	}
+
+	@Override
+	/** Get all text nodes concatenated as a string.
+	 * @return The string with all text nodes.
+	 */
+	public final String getXDText() {
+		StringBuilder sb = new StringBuilder();
+		if (_array == null) {
+			return null;
+		}
+		boolean wasItem = false;
+		for (int i = 0; i < _array.length; i++) {
+			if (_array[i].getItemId() == XD_STRING ||
+				_array[i].getItemId() == XD_ATTR ||
+//				_value[i].getItemId() == XD_BOOLEAN ||
+//				_value[i].getItemId() == XD_LONG ||
+//				_value[i].getItemId() == XD_DOUBLE ||
+//				_value[i].getItemId() == XD_DATETIME ||
+				_array[i].getItemId() == XD_TEXT) {
+				String s = (_array[i]).stringValue();
+				wasItem = true;
+				if (s != null && s.length() > 0) {
+					sb.append(s);
+				}
+			}
+		}
+		return wasItem ? sb.toString() : null;
+	}
+
+	@Override
+	/** Get string from n-th item from this context. If the node does not
+	 * exist or if it is not text then return the empty string.
+	 * @param n The index of item.
+	 * @return The string.
+	 */
+	public final String getXDTextItem(final int n) {
+		return n >= 0 && _array != null && n < _array.length &&
+			(_array[n].getItemId() == XD_STRING ||
+			_array[n].getItemId() == XD_TEXT ||
+			_array[n].getItemId() == XD_ATTR) ?
+			_array[n].stringValue() : "";
+	}
+
+////////////////////////////////////////////////////////////////////////////////
+// Implementation of XDValue interface
+////////////////////////////////////////////////////////////////////////////////
+
+	@Override
+	/** Get type of value.
+	 * @return The id of item type.
+	 */
+	public final short getItemId() {return XD_CONTAINER;}
+
+	@Override
+	/** Get ID of the type of value
+	 * @return enumeration item of this type.
+	 */
+	public XDValueType getItemType() {return XDValueType.CONTAINER;}
+
+	@Override
+	/** Check if the object is <i>null</i>.
+	 * @return <i>true</i> if the object is <i>null</i> otherwise returns
+	 * <i>false</i>.
+	 */
+	public boolean isNull() { return _array == null && _map == null;}
+
+	@Override
+	/** Check if the object is empty.
+	 * @return <i>true</i> if the object is empty; otherwise returns
+	 * <i>false</i>.
+	 */
+	public boolean isEmpty() {
+		return (_array == null || _array.length == 0) &&
+			(_map == null || _map.length == 0);
+	}
+
+	@Override
+	/** Get value as printable string. */
+	public final String toString() {
+		StringBuilder sb = new StringBuilder();
+		if (_map != null) {
+			for (XDNamedValue x: _map) {
+				if (sb.length() > 0) {
+					sb.append('\n');
+				}
+				sb.append(x.toString());
+			}
+		}
+		if (_array != null) {
+			for (int i = 0; i < _array.length; i++) {
+				if (sb.length() > 0) {
+					sb.append('\n');
+				}
+				sb.append(_array[i].toString());
+			}
+		}
+		return sb.toString();
+	}
+
+	@Override
+	/** Get boolean value of this object.
+	 * @return boolean value of this object or <i>false</i>.
+	 */
+	public final boolean booleanValue() {
+		if (!isEmpty()) {
+			if (_map == null && _array != null) {
+				XDValue x;
+				if (_array.length==1 && (x = _array[0])!=null) {
+					if (x.isNull()) {
+						return false;
+					}
+					switch (x.getItemId()) {
+						case XD_BOOLEAN:
+							return x.booleanValue();
+						case XD_DOUBLE:
+						case XD_LONG:
+						case XD_DECIMAL:
+							return x.longValue() != 0;
+						case XD_STRING:
+							return !x.stringValue().isEmpty();
+						default:
+							return true;
+					}
+				}
+				for (XDValue v: _array) {
+					if (v != null && !v.isNull()) {
+						return true;
+					}
+				}
+				return false;
+			}
+		}
+		return false;
+	}
+	@Override
+	/** Get boolean value of this object.
+	 * @return boolean value of this object or <i>false</i>.
+	 */
+	public final long longValue() {
+		return (_array != null && _array.length == 1 && _array[0] != null)
+			? _array[0].longValue() : 0;
+	}
+	@Override
+	/** Get boolean value of this object.
+	 * @return boolean value of this object or <i>false</i>.
+	 */
+	public final double doubleValue() {
+		return (_array != null && _array.length == 1 && _array[0] != null)
+			? _array[0].doubleValue() : Double.NaN;
+	}
+	@Override
+	/** Get boolean value of this object.
+	 * @return boolean value of this object or <i>false</i>.
+	 */
+	public BigDecimal decimalValue() {
+		return (_array != null && _array.length == 1 && _array[0] != null)
+			? _array[0].decimalValue() : null;
+	}
+	@Override
+	/** Get string value of this object.
+	 * @return string value of this object.
+	 */
+	public final String stringValue() {
+		return toString();
+	}
+
+	@Override
+	/** Create element from context.
+	 * @param nsUri of created element.
+	 * @param xmlName name of created element.
+	 * @return element created from this context.
+	 */
+	public final Element toElement(final String nsUri, final String xmlName) {
+		return toElement(new LinkedHashMap<String, String>(), nsUri, xmlName);
+	}
+
 	@Override
 	/** Get associated object.
 	 * @return the associated object or null.
@@ -965,12 +1186,12 @@ public final class DefContainer extends XDValueAbstract
 	 */
 	public final XDValue cloneItem() {
 		DefContainer result = new DefContainer();
-		if (_value != null) {
-			result._value = new XDValue[_value.length];
-			for (int i = 0; i < _value.length; i++) {
-				XDValue x = _value[i];
+		if (_array != null) {
+			result._array = new XDValue[_array.length];
+			for (int i = 0; i < _array.length; i++) {
+				XDValue x = _array[i];
 				if (x != null) {
-					result._value[i] = _value[i].cloneItem();
+					result._array[i] = _array[i].cloneItem();
 				}
 			}
 		}
@@ -1010,217 +1231,6 @@ public final class DefContainer extends XDValueAbstract
 		DefContainer dc = new DefContainer(this);
 		sort1(key, asc);
 		return dc;
-	}
-
-	/** Sorts this context.
-	 * @param key String with xpath expression or null (if null or empty string
-	 * then for org.w3c.Node items it is used as a key the text value of
-	 * an item). For items other then  org.w3c.Node objects this parameter is
-	 * ignored.
-	 * @param asc if true context will be sorted ascendant, else descendant.
-	 */
-	private void sort1(final String key, final boolean asc) {
-		int len;
-		if ((len = _value != null ? _value.length : 0) <= 1) {
-			return;
-		}
-		Object[] keys = new Object[len];
-		for (int i = len - 1; i >= 0; i--) {
-			Object mykey;
-			short type;
-			if ((type = _value[i].getItemId()) == XD_ELEMENT){
-				Element el = _value[i].getElement();
-				if (el == null) {
-					mykey = "";
-				} else {
-					if (key == null || key.length() == 0) {
-						mykey = KXmlUtils.getTextValue(el);
-					} else {
-						DefContainer dc =
-							new DefContainer(KXpathExpr.evaluate(el, key));
-						if (dc.getXDItemsNumber() != 1) {
-							mykey = "";
-						} else {
-							XDValue dv = dc.getXDItem(0);
-							switch (dv.getItemId()) {
-								case XD_ELEMENT:
-								case XD_ATTR:
-								case XD_TEXT:
-								case XD_STRING:
-									mykey =	dc.getXDItem(0).stringValue();
-									break;
-								case XD_DOUBLE:
-								case XD_LONG:
-								case XD_DECIMAL:
-								case XD_BOOLEAN:
-								case XD_DATETIME:
-								case XD_REPORT:
-									mykey = dv;
-									break;
-								default:
-//									XD_BYTES, XX_ELEMENT, XX_TEXT,
-//									XD_CONTAINER, XD_OBJECT, XD_INPUT,
-//									XD_OUPUT, XD_EXCEPTION, XMLNODE_VALUE,
-//									BYTE_VALUE, CHAR_VALUE ...
-									mykey =	"";
-							}
-						}
-					}
-				}
-			} else if (type == XD_ATTR) {
-				mykey = _value[i].stringValue();
-			} else if (type == XD_TEXT) {
-				mykey = _value[i].stringValue();
-			} else if (type == XD_STRING) {
-				mykey = _value[i].stringValue();
-			} else if (type == XD_LONG) {
-				mykey = _value[i].longValue();
-			} else if (type == XD_BOOLEAN) {
-				mykey = _value[i].booleanValue() ? 1 : 0;
-			} else {
-				mykey = _value[i].toString();
-			}
-			keys[i] = mykey;
-		}
-		sort2(0, _value.length - 1, keys, asc);
-	}
-
-	private void sort2(int low,
-		int high,
-		final Object[] keys,
-		final boolean asc) {
-		if (low >= high) {
-			return;
-		}
-		Object first = keys[low];
-		int i = low - 1;
-		int j = high + 1;
-		if (first instanceof String) {
-			String x = (String) first;
-			if (asc) {
-				while (i < j) {
-					i++;
-					while (x.compareTo((String) keys[i]) > 0) {
-						i++;
-					}
-					j--;
-					while (x.compareTo((String) keys[j]) < 0) {
-						j--;
-					}
-					if (i < j) { //swap item[i] and item[j]
-						Object key = keys[i];
-						keys[i] = keys[j];
-						keys[j] = key;
-						XDValue item = _value[i];
-						_value[i] = _value[j];
-						_value[j] = item;
-					}
-				}
-			} else {
-				while (i < j) {
-					i++;
-					while (x.compareTo((String) keys[i]) < 0) {
-						i++;
-					}
-					j--;
-					while (x.compareTo((String) keys[j]) > 0) {
-						j--;
-					}
-					if (i < j) { //swap item[i] and item[j]
-						Object key = keys[i];
-						keys[i] = keys[j];
-						keys[j] = key;
-						XDValue item = _value[i];
-						_value[i] = _value[j];
-						_value[j] = item;
-					}
-				}
-			}
-		} else if (first instanceof Long) {
-			Long x = (Long) first;
-			if (asc) {
-				while (i < j) {
-					i++;
-					while (x.compareTo((Long) keys[i]) > 0) {
-						i++;
-					}
-					j--;
-					while (x.compareTo((Long) keys[j]) < 0) {
-						j--;
-					}
-					if (i < j) { //swap item[i] and item[j]
-						Object key = keys[i];
-						keys[i] = keys[j];
-						keys[j] = key;
-						XDValue item = _value[i];
-						_value[i] = _value[j];
-						_value[j] = item;
-					}
-				}
-			} else {
-				while (i < j) {
-					i++;
-					while (x.compareTo((Long) keys[i]) < 0) {
-						i++;
-					}
-					j--;
-					while (x.compareTo((Long) keys[j]) > 0) {
-						j--;
-					}
-					if (i < j) { //swap item[i] and item[j]
-						Object key = keys[i];
-						keys[i] = keys[j];
-						keys[j] = key;
-						XDValue item = _value[i];
-						_value[i] = _value[j];
-						_value[j] = item;
-					}
-				}
-			}
-		} else if (first instanceof Double) {
-			Double x = (Double) first;
-			if (asc) {
-				while (i < j) {
-					i++;
-					while (x.compareTo((Double) keys[i]) > 0) {
-						i++;
-					}
-					j--;
-					while (x.compareTo((Double) keys[j]) < 0) {
-						j--;
-					}
-					if (i < j) { //swap item[i] and item[j]
-						Object key = keys[i];
-						keys[i] = keys[j];
-						keys[j] = key;
-						XDValue item = _value[i];
-						_value[i] = _value[j];
-						_value[j] = item;
-					}
-				}
-			} else {
-				while (i < j) {
-					i++;
-					while (x.compareTo((Double) keys[i]) < 0) {
-						i++;
-					}
-					j--;
-					while (x.compareTo((Double) keys[j]) > 0) {
-						j--;
-					}
-					if (i < j) { //swap item[i] and item[j]
-						Object key = keys[i];
-						keys[i] = keys[j];
-						keys[j] = key;
-						XDValue item = _value[i];
-						_value[i] = _value[j];
-						_value[j] = item;
-					}
-				}
-			}
-		}
-		sort2(low, j, keys, asc);
-		sort2(j + 1, high, keys, asc);
 	}
 
 	@Override

@@ -4,7 +4,7 @@
   <!ENTITY jmeno "required string(5,30)">
   <!ENTITY plat "optional int(1000,99999)">
   <!ENTITY v "fixed '20'">]>
-<xd:def xmlns:xd="http://www.syntea.cz/xdef/3.1"
+<xd:def xmlns:xd="http://www.xdef.org/xdef/4.1"
   xd:name="osoba"
   xd:root="osoba">
 <!-- This is source for testing of indenting -->
