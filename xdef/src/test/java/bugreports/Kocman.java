@@ -18,7 +18,7 @@ public class Kocman extends XDTester {
 		XComponent xc;
 		try {
 			xdef =
-"<xd:def  xmlns:xd='http://www.syntea.cz/xdef/3.1' name='M' root='X'>\n"+
+"<xd:def  xmlns:xd='http://www.xdef.org/xdef/4.1' name='M' root='X'>\n"+
 "<xd:component>%class bugreports.data.M %link X</xd:component>\n"+
 "  <xd:any xd:name='X'\n"+
 "     xd:script='options moreAttributes, moreElements, moreText'/>\n"+

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="windows-1250"?>
-
 <xd:def
-   xmlns:xd     = "http://www.syntea.cz/xdef/3.1"
+   xmlns:xd     = "http://www.xdef.org/xdef/4.1"
    xd:name      = "P1_common"
    xd:script    = "options ${P1#Options}"
    impl-version = "2.3.2.0"

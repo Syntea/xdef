@@ -52,39 +52,15 @@ public final class TestTypes extends XDTester {
 "  Element v = null;\n"+
 "  Container w = null;\n"+
 "  void x(Container c) {\n"+
-"    if (t == null) {\n"+
-"      t += 't';\n"+
-"    }\n"+
-"    if (v == null) {\n"+
-"      t += 'u';\n"+
-"    }\n"+
+"    if (t == null) t += 't';\n"+
+"    if (v == null) t += 'u';\n"+
 "    AnyValue a = c.getNamedItem('a');\n"+
-"    if (a.valueType() == $INT) {\n"+
-"      t += 'ID' + (int) a;\n"+
-"    } else {\n"+
-"      t += 'ERRID';\n"+
-"    }\n"+
+"    if (a.valueType() == $INT) t += 'ID' + (int) a; else t += 'ERRID';\n"+
 "    t+=c.getNamedItem('a').toString();\n"+
-"    if (s == null) {\n"+
-"      t += 'OK1';\n"+
-"    } else {\n"+
-"      t += 'ERR1';\n"+
-"    }\n"+
-"    if (s != null) {\n"+
-"      t += 'ERR2';\n"+
-"    } else {\n"+
-"      t += 'OK2';\n"+
-"    }\n"+
-"    if (null == s) {\n"+
-"      t += 'OK3';\n"+
-"    } else {\n"+
-"      t += 'ERR3';\n"+
-"    }\n"+
-"    if (null != s) {\n"+
-"      t += 'ERR4';\n"+
-"    } else {\n"+
-"      t += 'OK4';\n"+
-"    }\n"+
+"    if (s == null) t += 'OK1'; else t += 'ERR1';\n"+
+"    if (s != null) t += 'ERR2'; else t += 'OK2';\n"+
+"    if (null == s) t += 'OK3'; else t += 'ERR3';\n"+
+"    if (null != s) t += 'ERR4'; else t += 'OK4';\n"+
 "    t += v != null ? null : '!=';\n"+
 "    t += v == null ? '==' : null;\n"+
 "    while (true) {\n"+
@@ -159,7 +135,6 @@ public final class TestTypes extends XDTester {
 			xd = compile(xdef).createXDDocument();
 			xd.xparse("<a/>", reporter);
 			assertNoErrorwarnings(reporter);
-//			assertEq("nullnullnullnullnull", xd.getVariable("t").toString());
 			assertEq("", xd.getVariable("t").toString());
 
 ///////////// Check date limits ////////////////////////////////////////////////
@@ -196,7 +171,6 @@ public final class TestTypes extends XDTester {
 			assertTrue(reporter.errorWarnings(), "Error not reported");
 			resetProperties();
 ////////////////////////////////////////////////////////////////////////////////
-
 			xp = compile(xdef);
 			xd = xp.createXDDocument();
 			xd.checkDateLegal(false);
@@ -224,8 +198,7 @@ public final class TestTypes extends XDTester {
 			assertEq("<a><b a=\"31.12.3000\" b=\"30001231235959\"/></a>",
 				parse(xp, null, xml, reporter));
 			assertNoErrorwarnings(reporter);
-			// name of type equals to name of internal type method
-			xdef =
+			xdef = //name of type equals to name of predefined validation method
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 " <xd:declaration scope='local'> type string string(1,2); </xd:declaration>\n"+
 "<a x='required string'>\n"+
@@ -241,13 +214,8 @@ public final class TestTypes extends XDTester {
 			assertErrors(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-" <xd:declaration>\n"+
-"  type int string(1,2);\n"+
-"  int i;\n"+
-" </xd:declaration>\n"+
-"<a x='required int'>\n"+
-" required int;\n"+
-"</a>\n"+
+" <xd:declaration> type int string(1,2); int i; </xd:declaration>\n"+
+"<a x='required int'>required int;</a>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xml = "<a x='x'>x</a>";
@@ -292,7 +260,6 @@ public final class TestTypes extends XDTester {
 		try { //element type
 			xdef =
 "<xd:def root='a' xmlns:xd='" + _xdNS + "'>\n"+
-"\n"+
 "  <xd:declaration><![CDATA[\n"+
 "    void x() {\n"+
 "	   Element e = xparse(\"<e xmlns:x='x' a='A' x:a='xA'><b/>t1</e>\");\n"+
@@ -301,22 +268,19 @@ public final class TestTypes extends XDTester {
 "	   f.setAttribute('x','x:f', 'xF');\n"+
 "	   e.addElement(f);\n"+
 "	   e.addText('t2');\n"+
-//"      outln(e.toString());\n"+
 "      outln(e.getAttribute('a'));\n"+
 "      outln(e.getAttribute('x','a'));\n"+
 "      outln(e.getAttribute('x','x:a'));\n"+
 "      outln(e.getText());\n"+
 "    }\n"+
 "  ]]></xd:declaration>\n"+
-"\n"+
 "  <a xd:script='finally x();'/>\n"+
 "</xd:def>";
 			strw = new StringWriter();
 			parse(xdef, "", "<a/>", reporter, strw, null, null);
 			strw.close();
 			assertNoErrorwarnings(reporter);
-			s = "A\nxA\nxA\nt1t2\n";
-			assertEq(s, strw.toString());
+			assertEq("A\nxA\nxA\nt1t2\n", strw.toString());
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <xd:declaration>\n"+
@@ -403,9 +367,7 @@ public final class TestTypes extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xdef = //uniqueSet
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"  <xd:declaration>\n"+
-"   uniqueSet id1 {key:int()};" +
-"  </xd:declaration>\n"+
+"  <xd:declaration> uniqueSet id1 {key:int()}; </xd:declaration>\n"+
 "  <a x='id1.key.ID' y='id1.key.ID'>\n"+
 "    <b xd:script='+'>required id1.key.IDREF</b>\n"+
 "  </a>\n"+
@@ -1258,6 +1220,28 @@ public final class TestTypes extends XDTester {
 			assertEq(el.getAttribute("IDREF"), "cs");
 			assertEq("cs cs1", el.getAttribute("IDREFS"));
 			assertEq("1998-1-1T19:30", el.getAttribute("dateTime"));
+			xdef = // test emailAddr
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:declaration>\n"+
+" final EmailAddr x=new EmailAddr('=?UTF-8?Q?Pavel B=C3=BDk?= &lt;p@s&gt;');\n"+
+"</xd:declaration>\n"+
+"<a email='emailAddr(); onTrue {\n"+
+"              EmailAddr e = (EmailAddr) getParsedValue();\n"+
+"              outln(getEmailUserName(e));\n"+
+"              outln(getEmailLocalPart(e));\n"+
+"              outln(getEmailDomain(e));\n"+
+"              outln(getEmailAddr(e));\n"+
+"              outln(getEmailUserName(x));\n"+
+"              outln(getEmailAddr(x));\n"+
+"            }' />\n"+
+"</xd:def>";
+			xml = "<a email='(T. tr) a@b'/>";
+			strw = new StringWriter();
+			assertEq(xml, parse(xdef, "", xml, reporter, strw, null, null));
+			strw.close();
+			assertNoErrors(reporter);
+			assertEq(strw.toString(),
+"T. tr\na\nb\n(T. tr) a@b\nPavel Býk\n=?UTF-8?Q?Pavel B=C3=BDk?= <p@s>\n");
 		} catch (Exception ex) {fail(ex);}
 
 		resetTester();

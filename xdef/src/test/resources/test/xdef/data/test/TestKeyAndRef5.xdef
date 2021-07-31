@@ -1,4 +1,4 @@
-<xd:def xmlns:xd='http://www.syntea.cz/xdef/3.1' xd:root='A' >
+<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' xd:root='A' >
  <xd:declaration>
     type code string(4);
     uniqueSet User {usr: string()};

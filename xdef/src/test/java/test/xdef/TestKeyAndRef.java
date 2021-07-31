@@ -969,7 +969,7 @@ public final class TestKeyAndRef extends XDTester {
 				&& s.contains("XDEF524")
 				&& s.contains("birthday") && s.contains("name"),reporter);
 			xdef =
-"<xd:def xmlns:xd='http://www.syntea.cz/xdef/3.1' xd:root='a'>\n" +
+"<xd:def xmlns:xd='" + _xdNS + "' xd:root='a'>\n" +
 "  <xd:declaration>\n" +
 "    uniqueSet u {var Parser x, int y; a: string(); var String z}\n" +
 "  </xd:declaration>\n" +
@@ -1094,7 +1094,7 @@ public final class TestKeyAndRef extends XDTester {
 			assertEq(parse(compile(xdef).createXDDocument(), xml, reporter), s);
 			assertNoErrors(reporter);
 			xdef = // test reporting iof incomplete key items,
-"<xd:def xmlns:xd='http://www.syntea.cz/xdef/3.1' xd:root='T'>\n" +
+"<xd:def xmlns:xd='" + _xdNS + "' xd:root='T'>\n" +
 "  <xd:declaration>\n" +
 "    uniqueSet r {a: string(1,2); b: string(1,2)};\n" +
 "  </xd:declaration>\n" +

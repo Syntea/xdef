@@ -404,7 +404,7 @@ if(T)return;
 if(true)return;
 //		try {
 //			xdef =
-//"<xd:def xmlns:xd    =\"http://www.syntea.cz/xdef/3.1\"\n" +
+//"<xd:def xmlns:xd    =\"http://www.xdef.org/xdef/4.1\"\n" +
 //"        impl-version=\"3.0.x_dr\" impl-date=\"2020-05-25\"\n" +
 //"        xd:name     =\"CodeBook\"\n" +
 //"        xd:root     =\"CodeBook\">\n" +
@@ -684,7 +684,7 @@ if(T){return;}
 if(T){return;}
 		try {
 			xdef =
-"<xd:def xmlns:xd='http://www.syntea.cz/xdef/3.1' xd:root='T'>\n" +
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' xd:root='T'>\n" +
 "  <xd:declaration>\n" +
 "    uniqueSet r {a: string(); b: int()};\n" +
 "  </xd:declaration>\n" +
@@ -705,7 +705,7 @@ if(T){return;}
 if(T){return;}
 		try {
 			xdef =
-"<xd:def xmlns:xd='http://www.syntea.cz/xdef/3.1' xd:root='a'>\n" +
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' xd:root='a'>\n" +
 "  <xd:declaration>\n" +
 "    uniqueSet u {var Parser x; var int y; a: string(); var String z}\n" +
 "  </xd:declaration>\n" +
@@ -869,7 +869,7 @@ if(T){return;}
 if(T){return;}
 		try {
 			xdef =
-"<xd:def xmlns:xd=\"http://www.syntea.cz/xdef/3.1\" xd:root=\"A\">\n" +
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" xd:root=\"A\">\n" +
 "    <A xd:script=\"create from('/*/*[last()]');\"\n" +
 "       a=\"required string()\" >\n" +
 "        <B xd:script=\"occurs 1..\"\n" +
