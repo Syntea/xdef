@@ -243,9 +243,6 @@ public interface CodeTable {
 	////////////////////////////////////////////////////////////////////////////
 	// methods
 	////////////////////////////////////////////////////////////////////////////
-//	static final short CHK_LIST_START = RELEASE_CATCH_EXCEPTION + 1;
-//	/** End of list method  sequence. */
-//	static final short CHK_LIST_END = CHK_LIST_START + 1;
 	/** Check string greater then */
 	static final short CHK_GT = RELEASE_CATCH_EXCEPTION + 1;
 	/** Check string less then */
