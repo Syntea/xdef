@@ -83,8 +83,8 @@ public abstract class XDParserAbstract extends XDValueAbstract
 
 	@Override
 	/** Set named parameters.
-	 * @param params context with named items of parameters.
 	 * @param xnode actual XXNode object or null.
+	 * @param params container with named items of parameters.
 	 * @throws SException if an error occurs.
 	 */
 	public void setNamedParams(final XXNode xnode, final XDContainer params)

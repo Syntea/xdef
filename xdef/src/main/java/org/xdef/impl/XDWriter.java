@@ -164,7 +164,7 @@ public final class XDWriter extends SObjectWriter {
 						int len = y.getXDItemsNumber();
 						writeInt(len);
 						if (len < 0) {
-							return; //null context
+							return; //null Container
 						}
 						for (int i = 0; i < len; i++) {
 							writeXD(y.getXDItem(i));

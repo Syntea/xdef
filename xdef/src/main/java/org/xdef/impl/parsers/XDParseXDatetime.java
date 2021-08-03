@@ -77,7 +77,7 @@ public class XDParseXDatetime extends XSAbstractParseComparable {
 
 	@Override
 	/** Set named parameters.
-	 * @param params context with named items of parameters.
+	 * @param params Container with named items of parameters.
 	 * @param xnode actual XXNode object.
 	 * @throws SException if an error occurs.
 	 */

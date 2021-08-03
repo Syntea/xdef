@@ -99,22 +99,22 @@ public class XDParseEnum extends XDParserAbstract {
 		if (val == null || val.isNull()) {
 			return;
 		}
-		XDContainer context;
+		XDContainer container;
 		if (val.getItemId() == XD_CONTAINER) {
-			context = (XDContainer) val;
+			container = (XDContainer) val;
 		} else {
 			String s = val.toString().trim();
-			context = tokensToContext(s);
+			container = tokensToContainer(s);
 		}
-		int num = context.getXDItemsNumber();
+		int num = container.getXDItemsNumber();
 		if (num == 0) {
 			//Incorrect value of '&{0}'&{1}{: }
 			throw new SException(XDEF.XDEF809, parserName() + " (argument)",
-				context);
+				container);
 		}
 		ArrayList<String> list = new ArrayList<String>();
 		for(int j = num-1; j >= 0; j--) {
-			String s = context.getXDItem(j).toString();
+			String s = container.getXDItem(j).toString();
 			for (int k=0; k < list.size(); k++) {
 				String t = list.get(k);
 				if (t.equals(s)) {
@@ -134,12 +134,12 @@ public class XDParseEnum extends XDParserAbstract {
 		_list = new String[list.size()];
 		list.toArray(_list);
 	}
-	/** Convert string with tokens separated by "|" to array in context.
+	/** Convert string with tokens separated by "|" to array in Container.
 	 * @param s string with tokens separated by "|".
-	 * @return array of strings in context
+	 * @return array of strings in Container
 	 */
-	public static XDContainer tokensToContext(final String s) {
-		XDContainer context = new DefContainer();
+	public static XDContainer tokensToContainer(final String s) {
+		XDContainer container = new DefContainer();
 		int j = 0;
 		int k;
 		String t = "";
@@ -150,14 +150,14 @@ public class XDParseEnum extends XDParserAbstract {
 				continue;
 			}
 			if (k > 0) {
-				context.addXDItem(new DefString((t+s.substring(j, k)).trim()));
+				container.addXDItem(new DefString((t+s.substring(j,k)).trim()));
 			}
 			t = "";
 			j = k + 1;
 		}
 		t += s.substring(j);
-		context.addXDItem(new DefString(t.trim()));
-		return context;
+		container.addXDItem(new DefString(t.trim()));
+		return container;
 	}
 	@Override
 	public XDContainer getNamedParams() {

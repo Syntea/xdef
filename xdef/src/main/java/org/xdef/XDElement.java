@@ -23,6 +23,5 @@ public interface XDElement extends XDContainer {
 	/** Create XDContainer from this object.
 	 * @return XDContainer constructed from this object.
 	 */
-	public XDContainer toContext();
-
+	public XDContainer toContainer();
 }

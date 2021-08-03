@@ -76,10 +76,10 @@ public interface CodeTable {
 	static final short TO_MILLIS_X = TO_MILLIS + 1;
 	/** Any value to boolean. */
 	static final short TO_BOOLEAN = TO_MILLIS_X + 1;
-	/** Stack to context. */
-	static final short STACK_TO_CONTEXT = TO_BOOLEAN + 1;
+	/** Stack to Container. */
+	static final short STACK_TO_CONTAINER = TO_BOOLEAN + 1;
 	/** Stack to named value. */
-	static final short CREATE_NAMEDVALUE = STACK_TO_CONTEXT + 1;
+	static final short CREATE_NAMEDVALUE = STACK_TO_CONTAINER + 1;
 	/** Set stack item to lower case. */
 	static final short LOWERCASE = CREATE_NAMEDVALUE + 1;
 	/** Set to upper case. */
@@ -514,9 +514,9 @@ public interface CodeTable {
 	static final short GET_RESULTSET_ITEM = GET_XPATH_FROM_SOURCE + 1;
 	/** Check if ResultSet item exists in the actual context. */
 	static final short HAS_RESULTSET_ITEM = GET_RESULTSET_ITEM + 1;
-	/** Get string value from context. */
+	/** Get string value from actual context. */
 	static final short HAS_RESULTSET_NEXT = HAS_RESULTSET_ITEM + 1;
-	/** Get string value from context. */
+	/** Get string value from actual context. */
 	static final short RESULTSET_NEXT = HAS_RESULTSET_NEXT + 1;
 	/** Get number of processed items from ResultSet. */
 	static final short GET_RESULTSET_COUNT = RESULTSET_NEXT + 1;
@@ -529,7 +529,7 @@ public interface CodeTable {
 	////////////////////////////////////////////////////////////////////////////
 	/** Set source element name (deprecated). */
 	static final short FROM_ELEMENT = COMPOSE_OP + 1;
-	/** Get source item (attribute or named item from context). */
+	/** Get source item (attribute or named item from actual context). */
 	static final short GET_ITEM = FROM_ELEMENT + 1;
 	/** Create new element. */
 	static final short CREATE_ELEMENT = GET_ITEM + 1;
@@ -870,8 +870,8 @@ public interface CodeTable {
 	static final short ELEMENT_ADDELEMENT = ELEMENT_GETTEXT + 1;
 	static final short ELEMENT_ADDTEXT = ELEMENT_ADDELEMENT + 1;
 	static final short ELEMENT_TOSTRING = ELEMENT_ADDTEXT + 1;
-	static final short ELEMENT_TOCONTEXT = ELEMENT_TOSTRING + 1;
-	static final short ELEMENT_GETATTR = ELEMENT_TOCONTEXT + 1;
+	static final short ELEMENT_TOCONTAINER = ELEMENT_TOSTRING + 1;
+	static final short ELEMENT_GETATTR = ELEMENT_TOCONTAINER + 1;
 	static final short ELEMENT_HASATTR = ELEMENT_GETATTR + 1;
 	static final short ELEMENT_SETATTR = ELEMENT_HASATTR + 1;
 

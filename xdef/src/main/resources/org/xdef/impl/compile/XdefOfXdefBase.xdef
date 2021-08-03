@@ -533,7 +533,7 @@ ElementOnAbsenceSection ::= "onAbsence" S? Statement?
 ElementCreateSection ::= "create" ElementCreateCode
 
 ElementCreateCode ::= S? (Expression | ExplicitCode) S?
-  /* Expression nebo ExplicitCode must return value of Container or Element. */
+  /* Expression or ExplicitCode must return a value of Container or Element. */
 
 ElementFinallySection ::= "finally" S? Statement?
 

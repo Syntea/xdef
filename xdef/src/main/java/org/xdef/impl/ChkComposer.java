@@ -295,7 +295,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 						}
 						default: {
 							resultExpr =
-								createContext(_rootChkElement, resultExpr);
+								createContainer(_rootChkElement, resultExpr);
 							_rootChkElement._sourceElem = sourceElem;
 						}
 					}
@@ -320,8 +320,8 @@ final class ChkComposer extends SReporter implements XDValueID {
 		}
 	}
 
-	/** Create context with elements from integer or boolean value. */
-	private XDValue createContext(final ChkElement chkEl,
+	/** Create Container with elements from integer or boolean value. */
+	private XDValue createContainer(final ChkElement chkEl,
 		final XDValue expr) {
 		long i = 0;
 		XElement xElem = chkEl._xElement;
@@ -589,7 +589,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 	 * and return true. Otherwise try to find direct child nodes with such name
 	 * and namespace URI, add them to result and return true. If nothing was
 	 * found then return false. Note this is very NASTY trick!
-	 * @param result Context where found elements are added.
+	 * @param result Container where found elements are added.
 	 * @param chkEl actual object ChkElement.
 	 * @param elem where ti search.
 	 * @return true if an element was found and all found elements are added
@@ -747,7 +747,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 						break;
 					}
 					default:
-						return createContext(chkEl, result);
+						return createContainer(chkEl, result);
 				}
 				if (el != null && el.getParentNode() != null) {
 					chkEl._sourceElem = el;

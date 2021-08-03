@@ -384,7 +384,7 @@ implements Element, XDElement, XDValue, NamedNodeMap {
 	/** Create XDContainer from this object.
 	 * @return XDContainer constructed from this object.
 	 */
-	public XDContainer toContext() {
+	public XDContainer toContainer() {
 		throw new UnsupportedOperationException("Not supported.");
 	}
 

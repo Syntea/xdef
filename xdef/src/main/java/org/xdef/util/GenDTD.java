@@ -198,7 +198,7 @@ public class GenDTD {
 					}
 					if ("tokens".equals(name)) {
 						// Convert string to array of strings
-						XDContainer context = XDParseEnum.tokensToContext(s);
+						XDContainer context = XDParseEnum.tokensToContainer(s);
 						int num = context.getXDItemsNumber();
 						if (num == 0) {
 							return null;

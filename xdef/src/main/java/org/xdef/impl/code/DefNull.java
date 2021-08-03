@@ -131,10 +131,10 @@ public final class DefNull extends XDValueAbstract {
 	public SDuration durationValue() {return null;}
 
 	@Override
-	/** Get XDContext value.
+	/** Get XDContainer value.
 	 * @return XDContext value of this object or return <i>null</i>.
 	 */
-	public XDContainer contextValue() {return null;}
+	public XDContainer containerValue() {return null;}
 
 	@Override
 	/** Get XDService value.
@@ -178,7 +178,7 @@ public final class DefNull extends XDValueAbstract {
 				return new DefDate();
 			case XD_DURATION: // Duration value
 				return new DefDuration();
-			case XD_CONTAINER: // Context value
+			case XD_CONTAINER: // Container value
 				return new DefContainer();
 			case XD_GPSPOSITION: // GPSPosition
 				return new DefGPSPosition();

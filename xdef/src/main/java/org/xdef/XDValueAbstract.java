@@ -9,9 +9,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.xdef.sys.Price;
 import org.xdef.impl.code.CodeTable;
-import org.xdef.sys.GPSPosition;
 
 /** Abstract class for implementing of XDValues.
  * @author Vaclav Trojan
@@ -62,7 +60,7 @@ public abstract class XDValueAbstract implements XDValue {
 	@Override
 	public byte[] getBytes() {return null;}
 	@Override
-	public XDContainer contextValue() {return null;}
+	public XDContainer containerValue() {return null;}
 	@Override
 	public XDService serviceValue() {return null;}
 	@Override

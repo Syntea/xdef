@@ -21,8 +21,6 @@ import org.w3c.dom.Node;
 import org.xdef.XDContainer;
 import org.xdef.XDValueType;
 import java.math.BigInteger;
-import org.xdef.sys.Price;
-import org.xdef.sys.GPSPosition;
 
 /** Provides incremental writing of XML data to a data stream.
  * @author Vaclav Trojan
@@ -154,7 +152,7 @@ public class DefXmlWriter extends KXmlOutStream
 	@Override
 	public SDuration durationValue() {return null;}
 	@Override
-	public XDContainer contextValue() {return null;}
+	public XDContainer containerValue() {return null;}
 	@Override
 	public byte[] getBytes() {return null;}
 	@Override

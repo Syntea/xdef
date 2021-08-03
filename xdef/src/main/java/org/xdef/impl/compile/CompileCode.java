@@ -1545,13 +1545,13 @@ public final class CompileCode extends CompileBase {
 			_tstack[sp] = XD_LONG;
 		}
 	}
-	/** Conversion of the part stack to context..
+	/** Conversion of the part stack to Container.
 	 * @param index relative stack position from top.
 	 */
-	private void toContext(final int n) {
+	private void toContainer(final int n) {
 		for (int i = 0; i < n; i++) {
 			if (_cstack[_sp - i] < 0) { // not all constants
-				addCode(new CodeI1(XD_CONTAINER, STACK_TO_CONTEXT, n), -n + 1);
+				addCode(new CodeI1(XD_CONTAINER, STACK_TO_CONTAINER, n), -n + 1);
 				return;
 			}
 		}
@@ -1942,7 +1942,7 @@ public final class CompileCode extends CompileBase {
 				_tstack[sp] = XD_CONTAINER;
 				break;
 			default:
-				// name -> Context
+				// name -> Container
 				_code.set(constPar,
 					new CodeS1(XD_CONTAINER, GETELEMS_FROM_CONTEXT,npar,name));
 				_tstack[sp] = XD_CONTAINER;
@@ -2097,7 +2097,7 @@ public final class CompileCode extends CompileBase {
 						}
 						if (npar > sqParamNames.length) {
 							if (sqParamNames.length == 1) {
-								toContext(npar);
+								toContainer(npar);
 								npar = 1;
 								if (allconst) {
 									npar = 1;
@@ -2359,7 +2359,7 @@ public final class CompileCode extends CompileBase {
 			case SET_ELEMENT:
 				if (npar == 1) {
 					if (par1typ != XD_CONTAINER && par1typ != XD_ELEMENT) {
-						//Parameter type must be 'Context' or 'Element'
+						//Parameter type must be 'Container' or 'Element'
 						_parser.error(XDEF.XDEF468);
 						break;
 					}
