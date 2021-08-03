@@ -1,9 +1,12 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 40.1.7, release-date 2021-07-31
+# Version 40.1.7, release-date 2021-08-03
 * fixed bug in type declaration with a boolean expression.
 * fixed bug in XQuery sequence types of item" unsigned integer,
-  non positive integer, nonnegative integer and unsigned long.
+ non positive integer, nonnegative integer and unsigned long.
+* method `contextValue` in `org.xdef.XDValue` was renamed to `containerValue`.
+* method `toContext` in `org.xdef.XDElement` and in X-script was renamed to
+ `toContainer`.
 
 # Version 40.1.6, release-date 2021-07-20
 * fixed bug if the namespace of root element prefix is not specified (was

@@ -818,7 +818,7 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 				case TO_BOOLEAN:
 					_stack[sp] = new DefBoolean(_stack[sp].booleanValue());
 					continue;
-				case STACK_TO_CONTEXT: { // create context from stack values
+				case STACK_TO_CONTAINER: { // create container from stack values
 					int n = item.getParam(); // number of stack items
 					sp = sp - n + 1;
 					_stack[sp] = new DefContainer(_stack, sp, sp + n - 1);
@@ -2988,7 +2988,7 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 					}
 					continue;
 				}
-				case GET_NAMEDVALUE: {//get named item from context
+				case GET_NAMEDVALUE: {//get named item from Container
 					String name = (item.getParam() == 1) ?
 						item.stringValue() : _stack[sp--].toString();
 					XDValue v =
@@ -2996,14 +2996,14 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 					_stack[sp] = v == null ? new DefString() : v;
 					continue;
 				}
-				case HAS_NAMEDVALUE: {//has named item in context
+				case HAS_NAMEDVALUE: {//has named item in Container
 					String name = (item.getParam() == 1)
 						? item.stringValue() : _stack[sp--].toString();
 					_stack[sp] = new DefBoolean(
 						((XDContainer)_stack[sp]).hasXDNamedItem(name));
 					continue;
 				}
-				case REMOVE_NAMEDVALUE: {//get named item from context
+				case REMOVE_NAMEDVALUE: {//get named item from Container
 					String name = (item.getParam() == 1)
 						? item.stringValue() : _stack[sp--].toString();
 					XDValue v =
@@ -3011,7 +3011,7 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 					_stack[sp] = v == null ? new DefNull() : v;
 					continue;
 				}
-				case GET_NAMED_AS_STRING: {//named item from context as string
+				case GET_NAMED_AS_STRING: {//named item from Container as string
 					String name = (item.getParam() == 1)
 						? item.stringValue() : _stack[sp--].toString();
 					XDValue v =
@@ -3228,7 +3228,7 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 				case ELEMENT_GETATTR:
 				case ELEMENT_HASATTR:
 				case ELEMENT_SETATTR:
-				case ELEMENT_TOCONTEXT:
+				case ELEMENT_TOCONTAINER:
 			//Datetime
 				case PARSE_DATE:
 			//String

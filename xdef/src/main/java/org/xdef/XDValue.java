@@ -103,7 +103,7 @@ public interface XDValue extends Comparable<XDValue>, XDValueID {
 	/** Get XDContainer value.
 	 * @return XDContainer value of this object or return null.
 	 */
-	public XDContainer contextValue();
+	public XDContainer containerValue();
 
 	/** Get XDService value.
 	 * @return XDService value of this object or return null.

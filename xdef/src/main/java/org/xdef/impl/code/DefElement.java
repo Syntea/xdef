@@ -126,10 +126,11 @@ public final class DefElement extends XDValueAbstract implements XDElement {
 		return c1;
 	}
 
+	@Override
 	/** Create XDContainer from this object.
 	 * @return XDContainer constructed from this object.
 	 */
-	public XDContainer toContext() {
+	public XDContainer toContainer() {
 		return _value == null ? new DefContainer() : elementToContainer(_value);
 	}
 
@@ -259,8 +260,8 @@ public final class DefElement extends XDValueAbstract implements XDElement {
 	}
 
 	@Override
-	/** Create new XDContext with all elements from context.
-	 * @return The new XDContext with elements.
+	/** Create new XDContainer with all elements from context.
+	 * @return new XDContainer with elements.
 	 */
 	public XDContainer getXDElements() {
 		return new DefContainer(KXmlUtils.getChildElements(_value));
@@ -281,7 +282,7 @@ public final class DefElement extends XDValueAbstract implements XDElement {
 	@Override
 	/** Get all elements with given name from context.
 	 * @param name The name of element.
-	 * @return The new context with elements.
+	 * @return new Container with elements.
 	 */
 	public XDContainer getXDElements(final String name) {
 		return new DefContainer(KXmlUtils.getChildElements(_value, name));
@@ -291,7 +292,7 @@ public final class DefElement extends XDValueAbstract implements XDElement {
 	/** Get all elements with given name and namespace from context.
 	 * @param nsURI namespace URI.
 	 * @param localName local name of element.
-	 * @return The new context with all elements with given name and namespace.
+	 * @return new Container with all elements with given name and namespace.
 	 */
 	public XDContainer getXDElementsNS(final String nsURI,final String localName){
 		return new DefContainer(KXmlUtils.getChildElementsNS(_value,
@@ -349,10 +350,10 @@ public final class DefElement extends XDValueAbstract implements XDElement {
 	}
 
 	@Override
-	/** Sorts this context.
+	/** Sorts this Container.
 	 * If an item is an org.w3c.Node object then as a key it is used
 	 * the text value of an item).
-	 * @param asc if true context will be sorted ascendant, else descendant.
+	 * @param asc if true Container will be sorted ascendant, else descendant.
 	 */
 	public XDContainer sortXD(final boolean asc) {
 		return new DefContainer(_value.getChildNodes()).sortXD(asc);
@@ -360,11 +361,11 @@ public final class DefElement extends XDValueAbstract implements XDElement {
 
 	@Override
 	/** Sorts this context.
-	 * @param key String with xpath expression or null (if null or empty string
+	 * @param key String with XPath expression or null (if null or empty string
 	 * then for org.w3c.Node items it is used as a key the text value of
 	 * an item). For items other then  org.w3c.Node objects this parameter is
 	 * ignored.
-	 * @param asc if true context will be sorted ascendant, else descendant.
+	 * @param asc if true Container will be sorted ascendant, else descendant.
 	 */
 	public XDContainer sortXD(String key, boolean asc) {
 		return new DefContainer(_value.getChildNodes()).sortXD(key, asc);

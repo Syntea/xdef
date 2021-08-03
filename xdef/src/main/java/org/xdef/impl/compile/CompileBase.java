@@ -1056,7 +1056,7 @@ public class CompileBase implements CodeTable, XDValueID {
 		method(ti, genInternalMethod(ELEMENT_SETATTR, XD_VOID,
 			ANY_MODE, 3,4,XD_ELEMENT,XD_STRING,XD_STRING,XD_STRING),
 			"setAttribute", "?setAttr"); //add text child
-		method(ti, genInternalMethod(ELEMENT_TOCONTEXT, XD_CONTAINER,
+		method(ti, genInternalMethod(ELEMENT_TOCONTAINER, XD_CONTAINER,
 			ANY_MODE, 1, 1, XD_ELEMENT), "toContainer", "?toContext");
 		method(ti, genInternalMethod(ELEMENT_TOSTRING, XD_STRING,
 			ANY_MODE, 1, 2,XD_ELEMENT, XD_BOOLEAN), "toString");

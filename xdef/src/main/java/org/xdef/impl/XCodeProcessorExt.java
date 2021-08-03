@@ -537,9 +537,9 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 					: DefNull.genNullValue(XD_ELEMENT);
 				return sp;
 			}
-			case ELEMENT_TOCONTEXT: { // Element to container
+			case ELEMENT_TOCONTAINER: { // Element to container
 				DefElement e = new DefElement(stack[sp].getElement());
-				stack[sp] = e.toContext();
+				stack[sp] = e.toContainer();
 				return sp;
 			}
 			case ELEMENT_GETATTR: { // Get attribute of the element

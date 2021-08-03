@@ -33,20 +33,20 @@ public final class DefContainer extends XDValueAbstract
 	/** The NodeList as value of this item. */
 	private XDNamedValue[] _map;
 
-	/** Creates a new empty instance of DefContext */
+	/** Creates a new empty instance of DefContainer */
 	public DefContainer() {_array = new XDValue[0];}
 
-	/** Creates a new instance of DefContext.
+	/** Creates a new instance of DefContainer.
 	 * @param value Array of values.
 	 */
 	public DefContainer(final XDValue[] value) {init(value);}
 
-	/** Creates a new instance of DefContext.
+	/** Creates a new instance of DefContainer.
 	 * @param value the value.
 	 */
 	public DefContainer(final XDValue value) {initContainer(value);}
 
-	/** Creates a new instance of DefContext from the value of context
+	/** Creates a new instance of DefContainer from the value of context
 	 * @param value The source XDValue array.
 	 * @param first The index of the first item.
 	 * @param last The index of the last item.
@@ -74,13 +74,13 @@ public final class DefContainer extends XDValueAbstract
 		}
 	}
 
-	/** Creates a new instance of DefContext
+	/** Creates a new instance of DefContainer
 	 * @param nodeList The NodeList object to be set as value of this item.
 	 */
 	public DefContainer(final NodeList nodeList) {setNodeListValue(nodeList);}
 
-	/** Creates a new instance of DefContext
-	 * @param obj The object from which context will be created.
+	/** Creates a new instance of DefContainer
+	 * @param obj The object from which the Container will be created.
 	 */
 	public DefContainer(final Object obj) {
 		if (obj == null) {
@@ -445,9 +445,15 @@ public final class DefContainer extends XDValueAbstract
 		ar.toArray(_array);
 	}
 
-	private final Element toElement(
-		LinkedHashMap<String, String> ns,
-		final String nsUri, final String xmlName) {
+	/** Create element.
+	 * @param nsMap map of namespaces.
+	 * @param nsUri namespace URI.
+	 * @param xmlName name of element.
+	 * @return created element.
+	 */
+	private Element toElement(Map<String, String> nsMap,
+		final String nsUri,
+		final String xmlName) {
 		String n = xmlName;
 		String u = nsUri;
 		DefContainer c = this;
@@ -467,13 +473,13 @@ public final class DefContainer extends XDValueAbstract
 						c.getXDNamedItem("xmlns"+prefix).getValue().toString()
 						: null;
 					if (u != null) {
-						ns.put(ndx > 0 ? n.substring(0, ndx) : "", u);
+						nsMap.put(ndx > 0 ? n.substring(0, ndx) : "", u);
 					} else {
-						u = ns.get(ndx > 0 ? n.substring(0, ndx) : "");
+						u = nsMap.get(ndx > 0 ? n.substring(0, ndx) : "");
 					}
 				} else {
-					return KXmlUtils.newDocument(null,
-						n, null).getDocumentElement();
+					return KXmlUtils.newDocument(
+						null, n, null).getDocumentElement();
 				}
 			} else if (getXDItemsNumber() == 1 &&
 				getXDItem(0).getItemId() == XD_ELEMENT) {
@@ -483,14 +489,17 @@ public final class DefContainer extends XDValueAbstract
 			}
 		}
 		Element el = KXmlUtils.newDocument(u, n, null).getDocumentElement();
-		ns = new LinkedHashMap<String, String>(ns);
-		c.setAttrs(ns, el);
-		c.setChildNodes(ns, el);
+		nsMap = new LinkedHashMap<String, String>(nsMap);
+		c.setAttrs(nsMap, el);
+		c.setChildNodes(nsMap, el);
 		return el;
 	}
 
-	private void setAttrs(final LinkedHashMap<String,String> ns,
-		final Element el) {
+	/** Set attributes from element to this container.
+	 * @param nsMap map with namespace URIs.
+	 * @param e element with attributes.
+	 */
+	private void setAttrs(final Map<String,String> nsMap, final Element e) {
 		if (_map != null) {
 			for (int i = 0; i < _map.length; i++) {
 				XDValue val = _map[i].getValue();
@@ -499,18 +508,18 @@ public final class DefContainer extends XDValueAbstract
 					String t = _map[i].getName();
 					if (val.getItemId() == XD_CONTAINER) {
 						XDContainer x = (XDContainer) val;
-						Element el1 = x.toElement(null, t);
-						el.appendChild(el.getOwnerDocument().importNode(
-							el1, true));
+						e.appendChild(e.getOwnerDocument()
+							.importNode(x.toElement(null, t),
+							true));
 					} else {
 						String s = val.getItemId() == XD_STRING ?
 						val.stringValue() : val.toString();
-						el.setAttribute(t, s);
+						e.setAttribute(t, s);
 						if (t.startsWith("xmlns")) {
 							if (t.length() == 5) {
-								ns.put("", s);
+								nsMap.put("", s);
 							} else {
-								ns.put(t.substring(6), s);
+								nsMap.put(t.substring(6), s);
 							}
 						}
 					}
@@ -519,29 +528,32 @@ public final class DefContainer extends XDValueAbstract
 		}
 	}
 
-	private void setChildNodes(final LinkedHashMap<String,String> ns,
-		final Element el) {
+	/** Add child nodes from element to this container.
+	 * @param ns map with namespace URIs.
+	 * @param e element with child nodes.
+	 */
+	private void setChildNodes(final Map<String,String> ns, final Element e) {
 		if (_array != null && _array.length > 0) {
-			Document doc = el.getOwnerDocument();
+			Document doc = e.getOwnerDocument();
 			for (int i = 0; i < _array.length; i++) {
 				XDValue item = _array[i];
 				if (item != null) {
 					if (item.getItemId() == XD_ELEMENT) {
-						Element e = item.getElement();
-						if (e != null) {
-							el.appendChild(doc.importNode(e, true));
+						Element ee = item.getElement();
+						if (ee != null) {
+							e.appendChild(doc.importNode(ee, true));
 						}
 					} else if (item.getItemId() == XD_CONTAINER) {
 						DefContainer x = ((DefContainer) item);
-						Element e = x.toElement(ns, null, null);
-						el.appendChild(doc.importNode(e, true));
+						e.appendChild(
+							doc.importNode(x.toElement(ns, null, null), true));
 					} else if (item.getItemId() == XD_NAMEDVALUE) {
 						DefNamedValue x = (DefNamedValue) item;
-						el.setAttribute(x.getName(), x.getValue().toString());
+						e.setAttribute(x.getName(), x.getValue().toString());
 					} else {
 						String s = item.stringValue();
 						if (s != null && s.length() > 0) {
-							el.appendChild(doc.createTextNode(s));
+							e.appendChild(doc.createTextNode(s));
 						}
 					}
 				}
@@ -549,12 +561,12 @@ public final class DefContainer extends XDValueAbstract
 		}
 	}
 
-	/** Sorts this context.
-	 * @param key String with xpath expression or null (if null or empty string
+	/** Sorts this Container.
+	 * @param key String with XPath expression or null (if null or empty string
 	 * then for org.w3c.Node items it is used as a key the text value of
 	 * an item). For items other then  org.w3c.Node objects this parameter is
 	 * ignored.
-	 * @param asc if true context will be sorted ascendant, else descendant.
+	 * @param asc if true Container will be sorted ascendant, else descendant.
 	 */
 	private void sort1(final String key, final boolean asc) {
 		int len;
@@ -618,6 +630,12 @@ public final class DefContainer extends XDValueAbstract
 		sort2(0, _array.length - 1, keys, asc);
 	}
 
+	/** Partial recursive sort.
+	 * @param low low index.
+	 * @param high high index.
+	 * @param keys array of keys to be sorted.
+	 * @param asc if true sort ascending, otherwise descending.
+	 */
 	private void sort2(int low,
 		int high,
 		final Object[] keys,
@@ -899,8 +917,8 @@ public final class DefContainer extends XDValueAbstract
 	public final XDValue[] getXDItems() {return _array;}
 
 	@Override
-	/** Create new XDContext with all elements from context.
-	 * @return The new XDContext with elements.
+	/** Create new XDContainer with all elements from context.
+	 * @return The new XDContainer with elements.
 	 */
 	public final XDContainer getXDElements() {
 		if (_array == null) {
@@ -922,9 +940,9 @@ public final class DefContainer extends XDValueAbstract
 	}
 
 	@Override
-	/** Get the n-th element from context or null.
+	/** Get the n-th element from Container or null.
 	 * @param n The index of element.
-	 * @return the n-th element from context or null..
+	 * @return the n-th element from Container or null..
 	 */
 	public final Element getXDElement(final int n) {
 		if (_array == null) {
@@ -953,19 +971,19 @@ public final class DefContainer extends XDValueAbstract
 	}
 
 	@Override
-	/** Get all elements with given name from context.
-	 * @param name The name of element.
-	 * @return The new context with elements.
+	/** Get all elements with given name from this Container.
+	 * @param name name of element.
+	 * @return new Container with elements.
 	 */
 	public final XDContainer getXDElements(final String name) {
 		return getXDElementsNS(null, name);
 	}
 
 	@Override
-	/** Get all elements with given name and NameSpace from context.
+	/** Get all elements with given name and namespace from Container.
 	 * @param nsURI NameSpace URI.
 	 * @param localName local name of element.
-	 * @return The new context with all elements with given name and NameSpace.
+	 * @return new Container with all elements with given name and namespace.
 	 */
 	public final XDContainer getXDElementsNS(final String nsURI,
 		final String localName) {
@@ -1028,10 +1046,10 @@ public final class DefContainer extends XDValueAbstract
 	}
 
 	@Override
-	/** Get string from n-th item from this context. If the node does not
+	/** Get string from n-th item from this Container. If the node does not
 	 * exist or if it is not text then return the empty string.
 	 * @param n The index of item.
-	 * @return The string.
+	 * @return string from n-th item.
 	 */
 	public final String getXDTextItem(final int n) {
 		return n >= 0 && _array != null && n < _array.length &&
@@ -1165,10 +1183,10 @@ public final class DefContainer extends XDValueAbstract
 	}
 
 	@Override
-	/** Create element from context.
+	/** Create element from this Container.
 	 * @param nsUri of created element.
 	 * @param xmlName name of created element.
-	 * @return element created from this context.
+	 * @return element created from this Container.
 	 */
 	public final Element toElement(final String nsUri, final String xmlName) {
 		return toElement(new LinkedHashMap<String, String>(), nsUri, xmlName);
@@ -1208,24 +1226,24 @@ public final class DefContainer extends XDValueAbstract
 	}
 
 	@Override
-	/** Sorts this context.
+	/** Sorts this Container.
 	 * If an item is an org.w3c.Node object then as a key it is used
 	 * the text value of an item).
-	 * @param asc if true context will be sorted ascendant, else descendant.
-	 * @return this context sorted.
+	 * @param asc if true Container will be sorted ascendant, else descendant.
+	 * @return this Container sorted.
 	 */
 	public final XDContainer sortXD(final boolean asc) {
 		return sortXD(null, asc);
 	}
 
 	@Override
-	/** Sorts this context.
-	 * @param key String with xpath expression or null (if null or empty string
+	/** Sorts this Container.
+	 * @param key String with XPath expression or null (if null or empty string
 	 * then for org.w3c.Node items it is used as a key the text value of
 	 * an item). For items other then  org.w3c.Node objects this parameter is
 	 * ignored.
-	 * @param asc if true context will be sorted ascendant, else descendant.
-	 * @return this context sorted.
+	 * @param asc if true Container will be sorted ascendant, else descendant.
+	 * @return this Container sorted.
 	 */
 	public final XDContainer sortXD(final String key, final boolean asc) {
 		DefContainer dc = new DefContainer(this);

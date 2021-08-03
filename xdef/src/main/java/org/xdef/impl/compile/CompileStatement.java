@@ -656,7 +656,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 				}
 				break;
 			}
-			case LSQ_SYM: {// '[' -> Context constructor
+			case LSQ_SYM: {// '[' => Container constructor
 				nextSymbol();
 				int sp = _g._sp;
 				int lastCodeIndex = _g._lastCodeIndex;

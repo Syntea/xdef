@@ -386,7 +386,7 @@ public interface XDEF {
 	public static final long XDEF466 = 31159025852L;
 	/** Incorrect parameter type&amp;{#SYS000} */
 	public static final long XDEF467 = 31159025853L;
-	/** Parameter type must be 'Context' or 'Element'&amp;{#SYS000} */
+	/** Parameter type must be 'Container' or 'Element'&amp;{#SYS000} */
 	public static final long XDEF468 = 31159025854L;
 	/** Format mask supported only for numbers or dates&amp;{#SYS000} */
 	public static final long XDEF469 = 31159025855L;

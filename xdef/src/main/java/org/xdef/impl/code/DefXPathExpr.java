@@ -24,8 +24,6 @@ import org.xdef.XDContainer;
 import org.xdef.XDValueType;
 import java.math.BigInteger;
 import org.xdef.impl.XCodeProcessor;
-import org.xdef.sys.Price;
-import org.xdef.sys.GPSPosition;
 
 /** Implementation of compiled XPath expression.
  * @author Vaclav Trojan
@@ -215,7 +213,7 @@ public final class DefXPathExpr extends KXpathExpr implements XDValue {
 	@Override
 	public SDuration durationValue() {return null;}
 	@Override
-	public XDContainer contextValue() {return null;}
+	public XDContainer containerValue() {return null;}
 	@Override
 	public XDService serviceValue(){return null;}
 	@Override

@@ -64,7 +64,7 @@ public abstract class XDResultSetAbstract extends XDValueAbstract
 	public String itemAsString() {return null;}
 
 	@Override
-	/** If the iterated object is a context then return relevant item value
+	/** If the iterated object is a Container then return relevant item value
 	 * as string; otherwise return null.
 	 * @param index the index of item.
 	 * @return value of the specified item as a string or return null.
