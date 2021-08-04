@@ -253,10 +253,8 @@ final class ChkComposer extends SReporter implements XDValueID {
 										_rootChkElement._name);
 									_rootChkElement._scp.closeResultSet(it);
 								}
-							} catch  (SRuntimeException ex) {
-								Report r = ex.getReport();
-								String m = r.getModification();
-								_rootChkElement.error(r.getMsgID(),r.getText());
+							} catch (SRuntimeException ex) {
+								_rootChkElement.putReport(ex.getReport());
 								return;
 							}
 							break;
@@ -315,7 +313,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 				error(rep.getMsgID(), rep.getText(), rep.getModification());
 				_rootChkElement._rootChkDocument.endDocument();
 			} else {
-				throw new SRuntimeException(e.getReport(), e.getCause());
+				throw new SRuntimeException(e.getMessage(), e.getCause());
 			}
 		}
 	}
@@ -476,8 +474,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 					}
 					chkElem._scp.closeResultSet(chkElem._iterator);
 				} catch (SRuntimeException ex) {
-					Report r = ex.getReport();
-					chkElem.error(r.getMsgID(),r.getText(),r.getModification());
+					chkElem.putReport(ex.getReport());
 					return;
 				}
 				if (n == 0) {
@@ -593,7 +590,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 	 * @param chkEl actual object ChkElement.
 	 * @param elem where ti search.
 	 * @return true if an element was found and all found elements are added
-	 * to the context.
+	 * to the Container from the parameter.
 	 */
 	private boolean getChildElementsByName(final DefContainer result,
 		final ChkElement chkEl,
@@ -719,9 +716,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 								return new DefElement();
 							}
 						} catch (SRuntimeException ex) {
-							Report r = ex.getReport();
-							chkEl.error(r.getMsgID(),
-								r.getText(),r.getModification());
+							chkEl.putReport(ex.getReport());
 						}
 						break;
 					}
@@ -1189,9 +1184,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 								}
 								chkEl._element.removeChild(el);
 							} catch (SRuntimeException ex) {
-								Report r = ex.getReport();
-								chkEl.error(r.getMsgID(), r.getText(),
-									r.getModification());
+								chkEl.putReport(ex.getReport());
 							}
 							chkEl._scp.closeResultSet(it);
 						} else {
@@ -1374,9 +1367,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 								}
 							}
 						} catch (SRuntimeException ex) {
-							Report r = ex.getReport();
-							chkEl.error(r.getMsgID(),
-								r.getText(), r.getModification());
+							chkEl.putReport(ex.getReport());
 						}
 						chkEl._scp.closeResultSet(it);
 					} else {

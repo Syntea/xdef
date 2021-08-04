@@ -353,7 +353,7 @@ public final class TestGroups extends XDTester {
 			xdef = //test any in mixed
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<a>\n"+
-"  <xd:mixed script='optional'>\n"+
+"  <xd:mixed>\n"+
 "    <b/>\n"+
 "    <c/>\n"+
 "    <xd:any xd:script='options moreAttributes,moreElements,moreText'/>\n"+
@@ -364,7 +364,7 @@ public final class TestGroups extends XDTester {
 			xml = "<a><b/><c/><x/></a>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
-			xdef = //test empty blok and repeated items
+			xdef = //test empty blok and repeated items (and mixed optional)
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<a>\n"+
 "  <xd:mixed script='optional'>\n"+
