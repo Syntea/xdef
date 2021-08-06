@@ -11,13 +11,11 @@ import test.XDTester;
  */
 public class TestAllFull {
 
-	private TestAllFull() {  }
-
 	/** Run all available tests in this package
 	 * @param args The array of arguments
 	 * @return number of errors.
 	 */
-	public static int runTests(String[] args) {
+	public static int runTests(String... args) {
 		XDTester.setFulltestMode(true);
 		PrintStream log;
 		try {
@@ -25,19 +23,8 @@ public class TestAllFull {
 		} catch (Exception ex) {
 			log = null;
 		}
-		XDTester[] tests = new XDTester[]{
-			new TestDTDToXdef(),
-			new TestGenCollection(),
-			new TestGenDTD(),
-			new TestGenXdef(),
-			new TestParseType(),
-			new TestPrettyXdef(),
-			new TestValidate(),
-			new TestXDefUtils(),
-			new TestXd2XsdConv(),
-			new TestXsd2XdConv(),
-		};
 		String xdNS = XDTester._xdNS;
+		XDTester[] tests = TestAll.getTests();
 		XDTester._xdNS = XDConstants.XDEF31_NS_URI;
 		System.out.println("Testing X-definition utilities version 3.1");
 		int result = XDTester.runTests(System.out, System.err, log,

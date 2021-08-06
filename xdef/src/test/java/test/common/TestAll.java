@@ -27,21 +27,9 @@ import test.common.bnf.TestEmailAddr;
  * @author Vaclav Trojan
  */
 public class TestAll {
-
-	TestAll() {}
-
-	/** Run all available tests in this package.
-	 * @param args The array of arguments.
-	 * @return  error code (number of errors).
-	 */
-	public static int runTests(String... args) {
-		PrintStream log;
-		try {
-			log = new PrintStream(new FileOutputStream("testCommon.log"));
-		} catch (Exception ex) {
-			log = null;
-		}
-		STester[] tests = new STester[] {
+	
+	public static STester[] getTests() {
+		return new STester[] {
 			// sys
 			new TestReport(),
 			new TestErrorReporting(),
@@ -64,6 +52,20 @@ public class TestAll {
 			new TestXML(),
 			new TestXdScript(),
 		};
+	}
+	
+	/** Run all available tests in this package.
+	 * @param args The array of arguments.
+	 * @return  error code (number of errors).
+	 */
+	public static int runTests(String... args) {
+		PrintStream log;
+		try {
+			log = new PrintStream(new FileOutputStream("testCommon.log"));
+		} catch (Exception ex) {
+			log = null;
+		}
+		STester[] tests = getTests();
 		int result = STester.runTests(System.out, System.err, log,
 			tests, "package common", XDTester.getFulltestMode(), args);
 		if (log != null) {

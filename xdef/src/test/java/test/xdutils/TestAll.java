@@ -9,21 +9,9 @@ import test.XDTester;
  * @author Vaclav Trojan
  */
 public class TestAll {
-
-	private TestAll() {  }
-
-	/** Run all available tests in this package
-	 * @param args The array of arguments
-	 * @return number of errors.
-	 */
-	public static int runTests(String[] args) {
-		PrintStream log;
-		try {
-			log = new PrintStream(new FileOutputStream("testUtils.log"));
-		} catch (Exception ex) {
-			log = null;
-		}
-		XDTester[] tests = new XDTester[]{
+	
+	public static XDTester[] getTests() {
+		 return new XDTester[] {
 			new TestDTDToXdef(),
 			new TestGenCollection(),
 			new TestGenDTD(),
@@ -35,6 +23,20 @@ public class TestAll {
 			new TestXd2XsdConv(),
 			new TestXsd2XdConv(),
 		};
+	}
+
+	/** Run all available tests in this package
+	 * @param args The array of arguments
+	 * @return number of errors.
+	 */
+	public static int runTests(String... args) {
+		PrintStream log;
+		try {
+			log = new PrintStream(new FileOutputStream("testUtils.log"));
+		} catch (Exception ex) {
+			log = null;
+		}
+		XDTester[] tests = getTests();
 		String xdNS = XDTester._xdNS;
 		XDTester._xdNS = XDConstants.XDEF40_NS_URI;
 		System.out.println("Testing X-definition utilities version 4.0");

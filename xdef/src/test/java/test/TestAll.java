@@ -27,7 +27,7 @@ public class TestAll {
 	/** run TestAll in test.common */
 	@Test
 	public static void testCommon() {
-		Assert.assertEquals(test.common.TestAll.runTests(new String[0]), 0);
+		Assert.assertEquals(test.common.TestAll.runTests(), 0);
 	}
 
 	/** run TestAll in test.xdef */

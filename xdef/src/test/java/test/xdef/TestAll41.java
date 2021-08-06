@@ -11,13 +11,11 @@ import org.xdef.XDConstants;
  */
 public class TestAll41 {
 
-	private TestAll41() {}
-
 	/** Run all available tests in this package
 	 * @param args The array of arguments
 	 * @return number of errors.
 	 */
-	public static int runTests(String[] args) {
+	public static int runTests(String... args) {
 		PrintStream log;
 		FileOutputStream fis = null;
 		try {
@@ -31,46 +29,7 @@ public class TestAll41 {
 			}
 			log = null;
 		}
-		XDTester[] tests = new XDTester[] {
-			new Test000(),
-			new Test001(),
-			new Test002(),
-			new Test003(),
-			new TestBNF(),
-			new TestCompose(),
-			new TestConstruct(),
-			new TestDatabase(),
-			new TestDebug(),
-			new TestDOMParse(),
-			new TestDTDTypes(),
-			new TestErrors(),
-			new TestExtenalMethods(),
-			new TestExternalVariables(),
-			new TestGroups(),
-			new TestImplementsAndUses(),
-			new TestInclude(),
-			new TestJsonXdef(),
-			new TestKeyAndRef(),
-			new TestLexicon(),
-			new TestNamespaces(),
-			new TestOptions(),
-			new TestSaxon(),
-			new TestScript(),
-			new TestTemplate(),
-			new TestTryCatch(),
-			new TestTypes(),
-			new TestUserMethods(),
-			new TestUserQuery(),
-			new TestXComponents(),
-			new TestXDChecker(),
-			new TestXDGen(),
-			new TestXDService(),
-			new TestXSTypes(),
-			new TestXdef(),
-			new TestXdefOfXdef(),
-			new TestXmlWriter(),
-			new TestXon(),
-		};
+		XDTester[] tests = TestAll.getTests();
 		String xdNS = XDTester._xdNS;
 		XDTester._xdNS = XDConstants.XDEF41_NS_URI;
 		System.out.println("Testing X-definition version 4.1");

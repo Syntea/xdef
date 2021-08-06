@@ -1646,10 +1646,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 			} else {
 				ArrayReporter ar = (ArrayReporter) cc.getReportWriter();
 				if (ar != reporter) { // do not write to the same reporter!
-					Report rep;
-					while ((rep = ar.getReport()) != null) {
-						reporter.putReport(rep);
-					}
+					reporter.addReports(ar); // copy reportes
 				}
 			}
 		}

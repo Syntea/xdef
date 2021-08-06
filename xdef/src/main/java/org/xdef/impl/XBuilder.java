@@ -212,16 +212,13 @@ public class XBuilder implements XDBuilder {
 				p.getReportWriter().checkAndThrowErrors();
 			}
 		} else if (reporter != userReporter) {
-			Report rep;
 			ReportReader rr;
 			if (reporter instanceof ArrayReporter) {
 				rr = (ArrayReporter) reporter;
 			} else {
 				rr = reporter.getReportReader();
 			}
-			while ((rep = rr.getReport()) != null) {
-				userReporter.putReport(rep);
-			}
+			userReporter.addReports(rr);
 		}
 		result.clearSourcesMap(!result.isDebugMode());
 		return result;
@@ -269,10 +266,7 @@ public class XBuilder implements XDBuilder {
 		} else {
 			ar = new ArrayReporter();
 			ReportReader rr = reporter.getReportReader();
-			Report rep;
-			while((rep = rr.getReport()) != null) {
-				ar.putReport(rep);
-			}
+			ar.addReports(rr);
 			rr.close();
 		}
 		Class<?>[] externals = p.getExternals(); //save external classes
