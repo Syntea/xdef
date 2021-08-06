@@ -12,27 +12,8 @@ import org.xdef.sys.STester;
  */
 public class TestAll {
 
-	private TestAll() {}
-
-	/** Run all available tests in this package
-	 * @param args The array of arguments
-	 * @return number of errors.
-	 */
-	public static int runTests(String[] args) {
-		PrintStream log;
-		FileOutputStream fis = null;
-		try {
-			fis = new FileOutputStream("testXdef.log");
-			log = new PrintStream(fis);
-		} catch (Exception ex) {
-			if (fis != null) {
-				try {
-					fis.close();
-				} catch (IOException x) {}
-			}
-			log = null;
-		}
-		STester[] tests = new STester[] {
+	public static XDTester[] getTests() {
+		 return new XDTester[] {
 			new Test000(),
 			new Test001(),
 			new Test002(),
@@ -72,6 +53,26 @@ public class TestAll {
 			new TestXmlWriter(),
 			new TestXon(),
 		};
+	}
+	/** Run all available tests in this package
+	 * @param args The array of arguments
+	 * @return number of errors.
+	 */
+	public static int runTests(String... args) {
+		PrintStream log;
+		FileOutputStream fis = null;
+		try {
+			fis = new FileOutputStream("testXdef.log");
+			log = new PrintStream(fis);
+		} catch (Exception ex) {
+			if (fis != null) {
+				try {
+					fis.close();
+				} catch (IOException x) {}
+			}
+			log = null;
+		}
+		STester[] tests = getTests();
 		String xdNS = XDTester._xdNS;
 		XDTester._xdNS = XDConstants.XDEF40_NS_URI;
 		System.out.println("Testing X-definition version 4.0");

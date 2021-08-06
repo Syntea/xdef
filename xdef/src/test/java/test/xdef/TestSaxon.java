@@ -1,5 +1,6 @@
 package test.xdef;
 
+import java.io.StringWriter;
 import test.XDTester;
 import static test.XDTester._xdNS;
 import org.xdef.sys.ArrayReporter;
@@ -36,8 +37,28 @@ public class TestSaxon extends XDTester {
 		String xdef, xml;
 		Element el;
 		XDPool xp;
+		StringWriter strw;
 		XDDocument xd;
 		ArrayReporter reporter = new ArrayReporter();
+		try {//xquery in declaration part
+			xdef =
+"<xd:def  xmlns:xd='http://www.xdef.org/xdef/4.1' root='a'>\n"+
+"  <xd:declaration>\n"+
+"    String xp = \"let $b := 'abcd' return (0 to string-length($b))\n"+
+"                  !(substring($b,1,string-length($b) - .))\";\n"+
+"    String s = xquery(xp);\n"+
+"  </xd:declaration>\n"+
+"  <a xd:script='init outln(s);'/>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			xml = "<a/>";
+			xd = xp.createXDDocument();
+			strw = new StringWriter();
+			xd.setStdOut(strw);
+			assertEq(xml, parse(xd, xml , reporter));
+			assertNoErrors(reporter);
+			assertEq("abcd\nabc\nab\na\n\n", strw.toString());
+		} catch (Exception ex) {fail(ex);}
 		try {//fromXQ (xquery)
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='root'>\n"+

@@ -1336,15 +1336,19 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 				case GET_XQUERY: {//execute xquery
 					Node node;
 					if (item.getParam() == 1) {
-						switch (chkNode.getItemId()) {
-							case XX_ATTR:
-							case XX_TEXT:
-								if ((node = chkNode._node) == null) {
+						if (chkNode == null) {
+							node = null;
+						} else {
+							switch (chkNode.getItemId()) {
+								case XX_ATTR:
+								case XX_TEXT:
+									if ((node = chkNode._node) == null) {
+										node = chkNode.getElemValue();
+									}
+									break;
+								default:
 									node = chkNode.getElemValue();
-								}
-								break;
-							default:
-								node = chkNode.getElemValue();
+							}
 						}
 					} else {// params == 2
 						if (_stack[sp].getItemId() == XD_ELEMENT) {
@@ -1370,7 +1374,11 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 						_stack[sp] = x != null ? x.exec(node, chkNode)
 							: new DefContainer();
 					} catch (SRuntimeException ex) {
-						chkNode.putReport(ex.getReport());
+						if (chkNode == null) {
+							_reporter.putReport(ex.getReport());
+						} else {
+							chkNode.putReport(ex.getReport());
+						}
 						_stack[sp] = new DefContainer();
 					}
 					continue;

@@ -10,34 +10,21 @@ import test.XDTester;
  */
 public class TestAll41 {
 
-	private TestAll41() {  }
-
 	/** Run all available tests in this package
 	 * @param args The array of arguments
 	 * @return number of errors.
 	 */
-	public static int runTests(String[] args) {
+	public static int runTests(String... args) {
 		PrintStream log;
 		try {
 			log = new PrintStream(new FileOutputStream("testUtils.log"));
 		} catch (Exception ex) {
 			log = null;
 		}
-		XDTester[] tests = new XDTester[]{
-			new TestDTDToXdef(),
-			new TestGenCollection(),
-			new TestGenDTD(),
-			new TestGenXdef(),
-			new TestParseType(),
-			new TestPrettyXdef(),
-			new TestValidate(),
-			new TestXDefUtils(),
-			new TestXd2XsdConv(),
-			new TestXsd2XdConv(),
-		};
 		String xdNS = XDTester._xdNS;
 		XDTester._xdNS = XDConstants.XDEF41_NS_URI;
 		System.out.println("Testing X-definition utilities version 4.1");
+		XDTester[] tests = TestAll.getTests();
 		int result = XDTester.runTests(System.out, System.err, log,
 			tests, "package xdutils", XDTester.getFulltestMode(), args);
 		if (log!= null) {

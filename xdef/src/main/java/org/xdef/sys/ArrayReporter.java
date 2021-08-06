@@ -548,9 +548,7 @@ public class ArrayReporter extends ArrayList<Report>
 	/** Write reports to String (in actual language).
 	 * @return the String with reports.
 	 */
-	public final String printToString() {
-		return printToString(null);
-	}
+	public final String printToString() {return printToString(null);}
 
 	@Override
 	/** Write reports to String in specified language.
@@ -627,5 +625,4 @@ public class ArrayReporter extends ArrayList<Report>
 			putReport(rep);
 		}
 	}
-
 }

@@ -1938,14 +1938,13 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 								clearTemporaryReporter();
 								exec(xatt._onFalse, (byte) 'A');
 							} else {
-								result = false;
-								//copy errors from parsed result to
+								result = false; // an error found
+								//copy reports from parsed result to
 								//the temporary reporter.
-								for (Report rep: _parseResult.getReporter()) {
-									_scp.getTemporaryReporter().putReport(rep);
-								}
+								_scp.getTemporaryReporter().addReports(
+									_parseResult.getReporter());
 								if (!chkTemporaryErrors()) {
-									putTemporaryReport( //Value error
+									putTemporaryReport( //Incorrect value&{0}
 										Report.error(XDEF.XDEF515));
 								}
 							}

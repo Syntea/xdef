@@ -3,32 +3,13 @@ package test.common;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import org.xdef.sys.STester;
-import test.common.bnf.TestBNF;
-import test.common.bnf.TestExpr;
-import test.common.bnf.TestBNFJSON;
-import test.common.bnf.TestXML;
-import test.common.bnf.TestXdScript;
-import test.common.json.TestJsonUtil;
-import test.common.sys.TestErrorReporting;
-import test.common.sys.TestObjectWriter;
-import test.common.sys.TestReport;
-import test.common.sys.TestSParser;
-import test.common.sys.TestSUtils;
-import test.common.xml.TestKDOMBuilder;
-import test.common.xml.TestKXmlUtils;
-import test.common.xml.TestXmOutStream;
-import test.common.xml.TestXml;
 import test.XDTester;
-import test.common.bnf.TestEmailAddr;
-import test.common.bnf.TestSQL;
 
 /** Run all available tests for package org.xdef.sys with all features
  * of the tester.
  * @author Vaclav Trojan
  */
 public class TestAllFull {
-
-	TestAllFull() {}
 
 	/** Run all available tests in this package.
 	 * @param args The array of arguments.
@@ -42,29 +23,7 @@ public class TestAllFull {
 		} catch (Exception ex) {
 			log = null;
 		}
-		STester[] tests = new STester[] {
-			// sys
-			new TestReport(),
-			new TestErrorReporting(),
-			new TestSParser(),
-			new TestSUtils(),
-			new TestObjectWriter(),
-			// JSON
-			new TestJsonUtil(),
-			// xml
-			new TestXml(),
-			new TestKDOMBuilder(),
-			new TestKXmlUtils(),
-			new TestXmOutStream(),
-			// BNF
-			new TestBNF(),
-			new TestBNFJSON(),
-			new TestEmailAddr(),
-			new TestExpr(),
-			new TestSQL(),
-			new TestXML(),
-			new TestXdScript(),
-		};
+		STester[] tests = TestAll.getTests();
 		int result = STester.runTests(System.out, System.err, log,
 			tests, "package common", XDTester.getFulltestMode(), args);
 		if (log != null) {
