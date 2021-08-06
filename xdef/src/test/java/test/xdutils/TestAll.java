@@ -9,7 +9,7 @@ import test.XDTester;
  * @author Vaclav Trojan
  */
 public class TestAll {
-	
+
 	public static XDTester[] getTests() {
 		 return new XDTester[] {
 			new TestDTDToXdef(),

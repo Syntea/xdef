@@ -27,7 +27,7 @@ import test.common.bnf.TestEmailAddr;
  * @author Vaclav Trojan
  */
 public class TestAll {
-	
+
 	public static STester[] getTests() {
 		return new STester[] {
 			// sys
@@ -53,7 +53,7 @@ public class TestAll {
 			new TestXdScript(),
 		};
 	}
-	
+
 	/** Run all available tests in this package.
 	 * @param args The array of arguments.
 	 * @return  error code (number of errors).

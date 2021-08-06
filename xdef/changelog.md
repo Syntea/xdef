@@ -1,9 +1,10 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 40.1.7, release-date 2021-08-03
+# Version 40.1.7, release-date 2021-08-06
 * fixed bug in type declaration with a boolean expression.
 * fixed bug in XQuery sequence types of item" unsigned integer,
  non positive integer, nonnegative integer and unsigned long.
+* fixed bug in XQuery: NullpointerException if called from declaration part.
 * method `contextValue` in `org.xdef.XDValue` was renamed to `containerValue`.
 * method `toContext` in `org.xdef.XDElement` and in X-script was renamed to
  `toContainer`.

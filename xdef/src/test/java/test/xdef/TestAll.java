@@ -11,7 +11,7 @@ import org.xdef.sys.STester;
  * @author Vaclav Trojan
  */
 public class TestAll {
-	
+
 	public static XDTester[] getTests() {
 		 return new XDTester[] {
 			new Test000(),
