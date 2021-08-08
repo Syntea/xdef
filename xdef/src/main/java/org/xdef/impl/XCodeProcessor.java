@@ -1217,7 +1217,9 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 				case GET_XPATH: {
 					Node node;
 					if (item.getParam() == 1) {
-						if (chkNode.getItemId() != XX_ELEMENT) {
+						if (chkNode == null) {
+							node = KXmlUtils.newDocument(); // empty document
+						} else if (chkNode.getItemId() != XX_ELEMENT) {
 							if ((node = chkNode._node) == null) {
 								node = chkNode.getElement();
 							}
@@ -1240,13 +1242,18 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 							x = ((DefXPathExpr) _stack[sp]);
 						} else {
 							x = new DefXPathExpr(_stack[sp].toString(),
-								chkNode.getXXNamespaceContext(),
+								chkNode == null ? null
+									: chkNode.getXXNamespaceContext(),
 								_functionResolver,
 								_variableResolver);
 						}
 						_stack[sp] = x.exec(node);
 					} catch (SRuntimeException ex) {
-						putReport(chkNode, ex.getReport());
+						if (chkNode == null) {
+							_reporter.putReport(ex.getReport());
+						} else {
+							putReport(chkNode, ex.getReport());
+						}
 						_stack[sp] = new DefContainer();
 					}
 					continue;
