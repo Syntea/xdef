@@ -47,7 +47,6 @@ public class TestXmOutStream extends STester {
 "</a>"+
 "<!-- c2 -->");
 			el = doc.getDocumentElement();
-
 			sw = new StringWriter();
 			w = new KXmlOutStream(sw, "windows-1250", true);
 			w.setIndenting(false);
@@ -65,7 +64,6 @@ public class TestXmOutStream extends STester {
 			w.writeXmlTail(doc);
 			w.closeStream();
 			s = sw.toString();
-//			System.out.println("'" + s + "'");
 			db.parse(s);
 			assertEq(s,
 "<?xml version=\"1.0\" encoding=\"windows-1250\" ?>\n"+
@@ -98,7 +96,6 @@ public class TestXmOutStream extends STester {
 "</a>"+
 "<!-- c2 -->");
 			el = doc.getDocumentElement();
-
 			sw = new StringWriter();
 			w = new KXmlOutStream(sw, "windows-1250", true);
 			w.setIndenting(true);
@@ -116,7 +113,6 @@ public class TestXmOutStream extends STester {
 			w.writeXmlTail(doc);
 			w.closeStream();
 			s = sw.toString();
-//			System.out.println("'" + s + "'");
 			db.parse(s);
 			assertEq(s,
 "<?xml version=\"1.0\" encoding=\"windows-1250\" ?>\n"+
@@ -152,7 +148,6 @@ public class TestXmOutStream extends STester {
 "</f>"+
 "</a>");
 			el = doc.getDocumentElement();
-
 			sw = new StringWriter();
 			w = new KXmlOutStream(sw, "UTF-8", true);
 			w.setIndenting(false);
@@ -170,7 +165,6 @@ public class TestXmOutStream extends STester {
 			w.writeXmlTail(doc);
 			w.closeStream();
 			s = sw.toString();
-//			System.out.println("'" + s + "'");
 			db.parse(s);
 			assertEq(s,
 "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n"+
@@ -200,7 +194,6 @@ public class TestXmOutStream extends STester {
 "</f>\n"+
 "</a>\n");
 			el = doc.getDocumentElement();
-
 			sw = new StringWriter();
 			w = new KXmlOutStream(sw, "UTF-8", true);
 			w.setIndenting(true);
@@ -218,7 +211,6 @@ public class TestXmOutStream extends STester {
 			w.writeXmlTail(doc);
 			w.closeStream();
 			s = sw.toString();
-//			System.out.println("'" + s + "'");
 			db.parse(s);
 			assertEq(s,
 "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n"+
@@ -249,7 +241,6 @@ public class TestXmOutStream extends STester {
 "</soap:Body>"+
 "</soap:Envelope>");
 			el = doc.getDocumentElement();
-
 			sw = new StringWriter();
 			w = new KXmlOutStream(sw, "UTF-8", true);
 			w.setIndenting(false);
@@ -262,7 +253,6 @@ public class TestXmOutStream extends STester {
 			w.writeXmlTail(doc);
 			w.closeStream();
 			s = sw.toString();
-//			System.out.println("'" + s + "'");
 			db.parse(s);
 			assertEq(s,
 "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n"+
@@ -292,7 +282,6 @@ public class TestXmOutStream extends STester {
 "</soap:Body>"+
 "</soap:Envelope>");
 			el = doc.getDocumentElement();
-
 			sw = new StringWriter();
 			w = new KXmlOutStream(sw, "UTF-8", true);
 			w.setIndenting(true);
@@ -305,7 +294,6 @@ public class TestXmOutStream extends STester {
 			w.writeXmlTail(doc);
 			w.closeStream();
 			s = sw.toString();
-//			System.out.println("'" + s + "'");
 			db.parse(s);
 			assertEq(s,
 "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n"+

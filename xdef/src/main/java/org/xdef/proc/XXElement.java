@@ -22,7 +22,8 @@ public interface XXElement extends XXNode {
 	 */
 	public XXElement prepareXXElementNS(String ns, String qname);
 
-	/** Prepare construction of the new element according to X-definition.
+	/** Prepare construction of the new element (without namespace) according
+	 * to X-definition.
 	 * @param name Tag name of the element.
 	 * @return created check element object.
 	 */

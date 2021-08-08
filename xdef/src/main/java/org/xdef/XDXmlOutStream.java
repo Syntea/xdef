@@ -6,7 +6,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /** Interface for incremental writing XML data to a stream in script.
- *
  * @author Vaclav Trojan
  */
 public interface XDXmlOutStream extends XDValue {
@@ -49,5 +48,4 @@ public interface XDXmlOutStream extends XDValue {
 	 * @param doc The document node.
 	 */
 	public void writeXmlTail(Document doc);
-
 }

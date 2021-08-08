@@ -5,8 +5,8 @@ import org.xdef.XDDocument;
 import org.xdef.XDPool;
 import org.xdef.proc.XXElement;
 
-/** Test of construction of element from the program.
- * @author  Vaclav Trojan
+/** Test of construction of element from program.
+ * @author Vaclav Trojan
  */
 public final class TestConstruct extends XDTester {
 
@@ -27,8 +27,7 @@ public final class TestConstruct extends XDTester {
 "            ces     = \"optional; onTrue $stdErr.outln(getElementName()"+
 "                        + '(ces) ' + getText())\"\n"+
 "            eng     = \"optional; onTrue $stdErr.outln(getElementName()"+
-"                        + '(eng) ' + getText())\"\n"+
-"    />\n"+
+"                        + '(eng) ' + getText())\" />\n"+
 "</messages>\n"+
 "</xd:def>\n";
 			xp = compile(xdef);
@@ -37,17 +36,16 @@ public final class TestConstruct extends XDTester {
 			if (rootChkel.errors()) {
 				fail(rootChkel.getXPos());
 			}
-			chkel = rootChkel.prepareXXElement("child");
+			chkel = rootChkel.prepareXXElementNS(null, "child");
 			assertFalse(chkel.errors(), chkel.getXPos());
 			assertTrue(chkel.addElement(), chkel.getXPos());
-			chkel = rootChkel.prepareXXElement("A000");
+			chkel = rootChkel.prepareXXElementNS(null, "A000");
 			assertFalse(chkel.errors(), chkel.getXPos());
 			assertTrue(chkel.addAttribute("ces", "Toto je zprava"),
 				chkel.getXPos());
 			assertTrue(chkel.addAttribute("eng", "This is message"),
 				chkel.getXPos());
-			assertFalse(chkel.addAttribute("rom", "messagos"),
-				chkel.getXPos());
+			assertFalse(chkel.addAttribute("rom", "messagos"), chkel.getXPos());
 			assertTrue(chkel.addElement(), chkel.getXPos());
 			assertTrue(rootChkel.addElement(), rootChkel.getXPos());
 			assertEq(xd.getElement(),
@@ -60,19 +58,16 @@ public final class TestConstruct extends XDTester {
 "        xmlns:b  = \"b.b\"\n"+
 "        xd:name  = \"test\"\n"+
 "        xd:root  = \"a:root\">\n"+
-"\n"+
 "<a:root>\n"+
 "  <b:child/>\n"+
 "  <xd:any xd:script = \"occurs 0..\"\n"+
-"      a:a         = \"optional string()\"\n"+
-"      b:b         = \"optional string()\"\n"+
-"    />\n"+
+"      a:a  = \"optional string()\"\n"+
+"      b:b  = \"optional string()\" />\n"+
 "</a:root>\n"+
 "</xd:def>\n";
 			xp = compile(xdef);
 			xd = xp.createXDDocument("test");
-			rootChkel = xd.prepareRootXXElementNS(
-				"a.a", "x:root", true);
+			rootChkel = xd.prepareRootXXElementNS("a.a", "x:root", true);
 			assertFalse(rootChkel.errors(), rootChkel.getXPos());
 			chkel = rootChkel.prepareXXElementNS("b.b", "y:child");
 			assertFalse(chkel.errors(), chkel.getXPos());

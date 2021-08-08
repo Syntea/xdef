@@ -29,6 +29,7 @@ public class DefXmlWriter extends KXmlOutStream
 	implements XDXmlOutStream, XDValue {
 
 	/** Creates new instance of DefXmlOutStream with java.io.Writer
+	 * @deprecated use OutputStream instead of writer.
 	 * @param writer where to write XML.
 	 * @param encoding encoding of XML stream.
 	 * @param writeDocumentHeader if true then the XML header is
