@@ -104,9 +104,7 @@ public class KXmlOutStream {
 	/** Set output will be indented.
 	 * @param indent if true then the output will be indented.
 	 */
-	public void setIndenting(boolean indent) {
-		_indent = indent ? "\n" : null;
-	}
+	public void setIndenting(boolean indent) {_indent = indent ? "\n" : null;}
 
 	/** Create stack of XML namespace information and add necessary
 	 * xmlns attributes.
@@ -161,18 +159,13 @@ public class KXmlOutStream {
 		boolean somethingWritten;
 		Document doc = node.getNodeType() == Node.DOCUMENT_NODE
 			? (Document) node : node.getOwnerDocument();
-//		if ((!"UTF-8".equalsIgnoreCase(_encoding)) ||
-//			!"1.0".equals(doc.getXmlVersion())) {
-			_writer.write("<?xml version=\"");
-			_writer.write(doc.getXmlVersion());
-			_writer.write("\" encoding=\"");
-			_writer.write(_encoding==null ? "UTF-8" : _encoding);
-			_writer.write("\" ?>");
-			somethingWritten = true;
-			_indent = "\n";
-//		} else {
-//			somethingWritten = false;
-//		}
+		_writer.write("<?xml version=\"");
+		_writer.write(doc.getXmlVersion());
+		_writer.write("\" encoding=\"");
+		_writer.write(_encoding==null ? "UTF-8" : _encoding);
+		_writer.write("\" ?>");
+		somethingWritten = true;
+		_indent = "\n";
 		//write all child nodes before root element
 		Node item = doc.getFirstChild();
 		boolean nodeWritten = false;
@@ -394,7 +387,6 @@ public class KXmlOutStream {
 						} else {
 							_writer.write(c);
 						}
-//						continue;
 				}
 			}
 			_writer.flush();
@@ -485,7 +477,6 @@ public class KXmlOutStream {
 	}
 
 	private void endPendingElements() {
-
 		while (!_names.empty()) {
 			String name = _names.pop();
 			writeElementEnd(name);
@@ -544,5 +535,4 @@ public class KXmlOutStream {
 		}
 		flushStream();
 	}
-
 }
