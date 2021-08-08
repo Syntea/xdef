@@ -8,6 +8,8 @@
 * method `contextValue` in `org.xdef.XDValue` was renamed to `containerValue`.
 * method `toContext` in `org.xdef.XDElement` and in X-script was renamed to
  `toContainer`.
+* parameter Writer in constructors and methods connected with XMLWriters is now
+  deprecated. You can use the OutpuStream instead.
 
 # Version 40.1.6, release-date 2021-07-20
 * fixed bug if the namespace of root element prefix is not specified (was
