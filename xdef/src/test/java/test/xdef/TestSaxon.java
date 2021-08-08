@@ -21,7 +21,7 @@ public class TestSaxon extends XDTester {
 	private void testNoSaxon() {
 		String xdef, xml;
 		ArrayReporter reporter = new ArrayReporter();
-		try {//test binding of XPath variables with XDefinition variables
+		try {//test binding of XPath variabforest with XDefinition variabforest
 			xdef = //integer variable x without leading "$"
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <xd:declaration> int x = 123; </xd:declaration>\n"+
@@ -59,6 +59,23 @@ public class TestSaxon extends XDTester {
 			assertEq(xml, parse(xd, xml , reporter));
 			assertNoErrors(reporter);
 			assertEq("abcd.abc.ab.a..", strw.toString());
+			xdef =
+"<xd:def  xmlns:xd='http://www.xdef.org/xdef/4.1' root='a'>\n"+
+"<xd:declaration>\n" +
+"Container x=xpath(\"serialize(let $b := 'abcd'\n"+
+"            return (0 to string-length($b))\n"+
+"               ! ('&#10;' || substring($b,1,string-length($b) - .)))\");\n" +
+"</xd:declaration>\n" +
+"<a xd:script=\"occurs +;init out(x);\"/>\n" +
+"</xd:def>";
+			xp = compile(xdef);
+			xml = "<a/>";
+			xd = xp.createXDDocument();
+			strw = new StringWriter();
+			xd.setStdOut(strw);
+			assertEq(xml, parse(xd, xml, reporter));
+			assertNoErrors(reporter);
+			assertEq("\nabcd \nabc \nab \na \n", strw.toString());
 		} catch (Exception ex) {fail(ex);}
 		try {//fromXQ (xquery)
 			xdef =
@@ -221,64 +238,61 @@ public class TestSaxon extends XDTester {
 			xml = "<d/>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertErrors(reporter);
-		} catch(Exception ex) {fail(ex);}
-		try {
-			xml =
-"<les>\n"+
-"  <zvirata>\n"+
-"    <hmyz celed=\"mravencovití\" mraveniste=\"vedleJahody\">\n"+
-"      <rod>mravenec</rod>\n"+
-"      <kasta>kralovna</kasta>\n"+
-"    </hmyz>\n"+
-"    <hmyz celed=\"mravencovití\" mraveniste=\"vedleJahody\">\n"+
-"      <rod>mravenec</rod>\n"+
-"      <kasta>samec</kasta>\n"+
-"    </hmyz>\n"+
-"    <hmyz celed=\"mravencovití\" mraveniste=\"vedleJahody\">\n"+
-"      <rod>mravenec</rod>\n"+
-"      <kasta>samec</kasta>\n"+
-"    </hmyz>\n"+
-"    <hmyz celed=\"mravencovití\" mraveniste=\"vedleJahody\">\n"+
-"      <rod>mravenec</rod>\n"+
-"      <kasta>vojak</kasta>\n"+
-"    </hmyz>\n"+
-"    <hmyz celed=\"mravencovití\" mraveniste=\"podSmrkem\">\n"+
-"      <rod>mravenec</rod>\n"+
-"      <kasta>kralovna</kasta>\n"+
-"    </hmyz>\n"+
-"    <hmyz celed=\"mravencovití\" mraveniste=\"podSmrkem\">\n"+
-"      <rod>mravenec</rod>\n"+
-"      <kasta>vojak</kasta>\n"+
-"    </hmyz>\n"+
-"    <hmyz celed=\"mravencovití\" mraveniste=\"podSmrkem\">\n"+
-"      <rod>mravenec</rod>\n"+
-"      <kasta>vojak</kasta>\n"+
-"    </hmyz>\n"+
-"    <hmyz celed=\"mravencovití\" mraveniste=\"podSmrkem\">\n"+
-"      <rod>mravenec</rod>\n"+
-"      <kasta>vojak</kasta>\n"+
-"    </hmyz>\n"+
-"  </zvirata>\n"+
-"  <objekty>\n"+
-"    <mraveniste jmeno=\"vedleJahody\" />\n"+
-"    <mraveniste jmeno=\"podSmrkem\" />\n"+
-"  </objekty>\n"+
-"</les>";
-			//mraveniste, kde jsou vic nez dva vojaci
-			xdef =
+			xdef = //an anthill with more than two soldiers
 "<xd:def xmlns:xd='"+ _xdNS + "'>\n"+
-"  <mraveniste jmeno='string; create xquery(&apos;\n"+
-"    for $i in (//mraveniste)\n"+
-"      return $i[count(//hmyz[kasta/text() = \"vojak\" and\n"+
-"                 @mraveniste = $i/@jmeno]) > 2]/@jmeno\n"+
+"  <anthill name='string; create xquery(&apos;\n"+
+"    for $i in (//anthill)\n"+
+"      return $i[count(//insect[caste/text() = \"soldier\" and\n"+
+"                 @anthill = $i/@name]) > 2]/@name\n"+
 "               &apos;)' />\n"+
 "</xd:def>";
 			xd = compile(xdef).createXDDocument();
+			xml =
+"<forest>\n"+
+"  <animals>\n"+
+"    <insect family=\"anteatersí\" anthill=\"nexToStrawberry\">\n"+
+"      <genus>ant</genus>\n"+
+"      <caste>queen</caste>\n"+
+"    </insect>\n"+
+"    <insect family=\"anteatersí\" anthill=\"nexToStrawberry\">\n"+
+"      <genus>ant</genus>\n"+
+"      <caste>samec</caste>\n"+
+"    </insect>\n"+
+"    <insect family=\"anteatersí\" anthill=\"nexToStrawberry\">\n"+
+"      <genus>ant</genus>\n"+
+"      <caste>samec</caste>\n"+
+"    </insect>\n"+
+"    <insect family=\"anteatersí\" anthill=\"nexToStrawberry\">\n"+
+"      <genus>ant</genus>\n"+
+"      <caste>soldier</caste>\n"+
+"    </insect>\n"+
+"    <insect family=\"anteatersí\" anthill=\"underSpruce\">\n"+
+"      <genus>ant</genus>\n"+
+"      <caste>kralovna</caste>\n"+
+"    </insect>\n"+
+"    <insect family=\"anteatersí\" anthill=\"underSpruce\">\n"+
+"      <genus>ant</genus>\n"+
+"      <caste>soldier</caste>\n"+
+"    </insect>\n"+
+"    <insect family=\"anteatersí\" anthill=\"underSpruce\">\n"+
+"      <genus>ant</genus>\n"+
+"      <caste>soldier</caste>\n"+
+"    </insect>\n"+
+"    <insect family=\"anteatersí\" anthill=\"underSpruce\">\n"+
+"      <genus>ant</genus>\n"+
+"      <caste>soldier</caste>\n"+
+"    </insect>\n"+
+"  </animals>\n"+
+"  <objects>\n"+
+"    <anthill name=\"nexToStrawberry\" />\n"+
+"    <anthill name=\"underSpruce\" />\n"+
+"  </objects>\n"+
+"</forest>";
 			xd.setXDContext(KXmlUtils.parseXml(xml).getDocumentElement());
-			el = create(xd, "mraveniste", reporter);
+			el = create(xd, "anthill", reporter);
 			assertNoErrors(reporter);
-			assertTrue("podSmrkem".equals(el.getAttribute("jmeno")),
-				el.getAttribute("jmeno"));
+			assertTrue("underSpruce".equals(el.getAttribute("name")),
+				el.getAttribute("name"));
 		} catch (Exception ex) {fail(ex);}
 	}
 
