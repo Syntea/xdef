@@ -116,7 +116,6 @@ public final class TestXmlWriter extends XDTester {
 "  </a>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			System.out.println(xdef);
 			xd = xp.createXDDocument();
 			bos = new ByteArrayOutputStream();
 			xd.setVariable("x", XDTools.createXDXmlOutStream(bos,"UTF-8",true));
