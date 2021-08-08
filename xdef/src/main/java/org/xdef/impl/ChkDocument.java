@@ -1280,8 +1280,10 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			new DefXmlWriter(out,encoding,writeDocumentHeader));
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	/** Set writer.
+	 * @deprecated use OutputStream instead of writer.
 	 * @param out stream writer.
 	 * @param encoding encoding of output.
 	 * @param writeDocumentHeader if true full document is written, otherwise

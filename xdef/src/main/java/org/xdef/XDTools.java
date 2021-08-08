@@ -3,6 +3,7 @@ package org.xdef;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.Writer;
 import java.sql.Connection;
@@ -169,6 +170,22 @@ public class XDTools {
 	}
 
 	/** Creates XDXmlStream writer object from java.io.Writer.
+	 * @param out where to write XML.
+	 * @param encoding encoding of XML stream.
+	 * @param writeDocumentHeader if true then the XML header is
+	 * written, otherwise no XML header is written.
+	 * @return XDXmlOutStream object.
+	 * @throws IOException if an error occurs.
+	 */
+	public final static XDXmlOutStream createXDXmlOutStream(
+		final OutputStream out,
+		final String encoding,
+		final boolean writeDocumentHeader) throws IOException {
+		return new DefXmlWriter(out, encoding, writeDocumentHeader);
+	}
+
+	/** Creates XDXmlStream writer object from java.io.Writer.
+	 * @deprecated use OutputStream instead of writer.
 	 * @param writer where to write XML.
 	 * @param encoding encoding of XML stream.
 	 * @param writeDocumentHeader if true then the XML header is

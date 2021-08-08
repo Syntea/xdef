@@ -326,9 +326,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	 */
 	public final XXElement prepareXXElementNS(final String ns,
 		final String qname) {
-		return ns == null
-			? createChkElement(_rootChkDocument._doc.createElement(qname))
-			: createChkElement(_rootChkDocument._doc.createElementNS(ns,qname));
+		return createChkElement(ns == null
+			? _rootChkDocument._doc.createElement(qname)
+			: _rootChkDocument._doc.createElementNS(ns,qname));
 	}
 
 	@Override
@@ -337,7 +337,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	 * @return created check element object.
 	 */
 	public final XXElement prepareXXElement(final String name) {
-		return createChkElement(_rootChkDocument._doc.createElement(name));
+		return prepareXXElementNS(null, name);
 	}
 
 	@Override
