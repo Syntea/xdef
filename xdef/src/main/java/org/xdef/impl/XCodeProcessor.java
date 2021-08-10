@@ -327,9 +327,8 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 		if (_debug) {
 			if (_debugger == null) {
 				String debugEditor = xp.getDebugEditor();
-				if (debugEditor == null) {
-				} else {
-					try {
+				if (debugEditor != null) {
+					try { // try to get external debugger
 						Class<?> cls = Class.forName(debugEditor);
 						Constructor<?> c = cls.getDeclaredConstructor(
 							Properties.class, XDPool.class);
@@ -342,8 +341,7 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 							XDEF.XDEF850, ex, debugEditor);
 					}
 				}
-				if (_debugger == null) {
-					//default debugger
+				if (_debugger == null) { // set default debugger
 					_debugger = new ChkGUIDebug(getProperties(), xp);
 				}
 			}
@@ -1233,7 +1231,7 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 							XDContainer dc = ((XDContainer) _stack[sp--]);
 							node = (dc.getXDItemsNumber() > 0 &&
 								dc.getXDItem(0).getItemId() == XD_ELEMENT)
-								? dc.getXDElement(0) : null;
+								? dc.getXDElement(0) : KXmlUtils.newDocument();
 						}
 					}
 					try {
@@ -1242,8 +1240,8 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 							x = ((DefXPathExpr) _stack[sp]);
 						} else {
 							x = new DefXPathExpr(_stack[sp].toString(),
-								chkNode == null ? null
-									: chkNode.getXXNamespaceContext(),
+								chkNode != null
+									? chkNode.getXXNamespaceContext() : null,
 								_functionResolver,
 								_variableResolver);
 						}

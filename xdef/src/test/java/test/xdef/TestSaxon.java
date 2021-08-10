@@ -247,7 +247,6 @@ public class TestSaxon extends XDTester {
 "               &apos;)' />\n"+
 "</xd:def>";
 			xd = compile(xdef).createXDDocument();
-			System.out.println(xdef);
 			xml =
 "<forest>\n"+
 "  <animals>\n"+
