@@ -2,19 +2,29 @@
 
 # Version 40.1.7, release-date 2021-08-11
 * fixed bug in type declaration with a boolean expression.
-* fixed bug in XQuery sequence types of item" unsigned integer,
- non positive integer, nonnegative integer and unsigned long.
+* fixed bug in XQuery sequence item types: unsigned integer,
+  non positive integer, nonnegative integer and unsigned long.
 * fixed bug in XQuery: NullpointerException if called from declaration part.
 * method `contextValue` in `org.xdef.XDValue` was renamed to `containerValue`.
 * method `toContext` in `org.xdef.XDElement` and in X-script was renamed to
  `toContainer`.
-* parameter Writer in constructors and methods connected with XMLWriters is now
-  deprecated. You can use the OutpuStream instead.
+* parameter java.io.Writer in constructors and methods connected with XMLWriters
+  is now deprecated. You can use the OutpuStream instead.
+* to `org.xdef.XDTools` was added static method:
+	XDXmlOutStream createXDXmlOutStream(OutputStream out,
+		String encoding,
+		boolean writeDocumentHeader) throws IOException
 
 # Version 40.1.6, release-date 2021-07-20
 * fixed bug if the namespace of root element prefix is not specified (was
   reported only as null pointer Exception).
 * preparing version 41.0.
+ * parameter java.io.Writer in constructors and methods connected with XMLWriters
+  is now deprecated. You can use the OutpuStream instead.
+* to `org.xdef.XDTools` was added static method:
+	XDXmlOutStream createXDXmlOutStream(OutputStream out,
+		String encoding,
+		boolean writeDocumentHeader) throws IOException
 
 # Version 40.1.5, release-date 2021-06-25
 * fixed bug in nested type declarations.
