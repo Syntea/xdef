@@ -74,14 +74,18 @@ public interface BNF {
 	public static final long BNF038 = 120717345L;
 	/** Illegal BNF runtime code: &amp;{0}&amp;{#SYS000} */
 	public static final long BNF040 = 120717346L;
+	/** In "all" selection can not be quantifier with maximum occurrence greater as 1&amp;{#SYS000} */
+	public static final long BNF041 = 120717347L;
+	/** "all" selection can not be here&amp;{#SYS000} */
+	public static final long BNF042 = 120717348L;
 	/** Rule "&amp;{0}" does not exist&amp;{#SYS000} */
-	public static final long BNF901 = 120717347L;
+	public static final long BNF901 = 120717349L;
 	/** Exception in external method "&amp;{0}" (rule &amp;{1}): &amp;{2}&amp;{#SYS000} */
-	public static final long BNF902 = 120717348L;
+	public static final long BNF902 = 120717350L;
 	/** External method "&amp;{0}" (rule &amp;{1}) should be static or set user object&amp;{#SYS000} */
-	public static final long BNF903 = 120717349L;
+	public static final long BNF903 = 120717351L;
 	/** Messages for BNF grammar */
-	public static final long BNF_DESCRIPTION = 120717350L;
+	public static final long BNF_DESCRIPTION = 120717352L;
 	/** English */
-	public static final long BNF_LANGUAGE = 120717351L;
+	public static final long BNF_LANGUAGE = 120717353L;
 }

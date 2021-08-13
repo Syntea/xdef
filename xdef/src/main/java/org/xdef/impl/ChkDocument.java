@@ -60,6 +60,7 @@ import org.xdef.xml.KXmlUtils;
  * of the X-definition.
  * @author Vaclav Trojan
  */
+@SuppressWarnings("deprecation")
 final class ChkDocument extends ChkNode	implements XDDocument {
 	////////////////////////////////////////////////////////////////////////////
 	// Options
@@ -1280,7 +1281,6 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			new DefXmlWriter(out,encoding,writeDocumentHeader));
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	/** Set writer.
 	 * @deprecated use OutputStream instead of writer.

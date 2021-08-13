@@ -1129,43 +1129,66 @@ public final class BNFGrammar {
 	}
 
 	private final class BNFSelection extends BNFGroup {
+		boolean _all; // if true it is "all" selection
 		BNFSelection() {super();}
 		@Override
 		final boolean perform() {
 			SPosition startPos = setPosition();
-			int count = 0;
-			for (; count < _max; count++) {
-				SPosition xPos = null; //successfull position
-				Object xUserObject = null;
-				Object[] xParsedObjects = null, parsedObjects = _parsedObjects;
-				Object userObject = _userObject;
-				setPosition();
-				for (int i = 0;  !_p.eos() && i < _items.length; i++) {
-					if (_items[i].perform()) { // success
-						SPosition p = _p.getPosition();
-						if (xPos == null ||
-							xPos.getFilePos() + xPos.getIndex()
-							< p.getFilePos() + p.getIndex()) {
-							xPos = p;
-							xParsedObjects = _parsedObjects;
-							xUserObject = _userObject;
+			if (_all) { // all selection
+				boolean[] processed = new boolean[_items.length];
+				for (int c = 0; c < _items.length; c++) {
+					for (int i = 0;  !_p.eos() && i < _items.length; i++) {
+						int pos = _p.getIndex();
+						if (_items[i].perform() && _p.getIndex() > pos) {
+							if (processed[i]) {
+								resetPosition(startPos);
+								return false;
+							}
+							processed[i] = true; // processed
 						}
 					}
-					_parsedObjects = parsedObjects;
-					_userObject = userObject;
-					resetPosition();
 				}
-				if (xPos == null) { // no variant found
-					if (count < _min) {
-						resetPosition(startPos);
+				for (int i = 0;  i < _items.length; i++) {
+					if (!processed[i] && _items[i]._min == 1) {
 						return false;
 					}
-					break;
-				} else { // set to the most sucessfull variant
-					count++;
-					resetPosition(xPos);
-					_parsedObjects = xParsedObjects;
-					_userObject = xUserObject;
+				}
+			} else {
+				int count = 0;
+				for (; count < _max; count++) {
+					SPosition xPos = null; //successfull position
+					Object xUserObject = null;
+					Object[] xParsedObjects = null,
+						parsedObjects = _parsedObjects;
+					Object userObject = _userObject;
+					setPosition();
+					for (int i = 0;  !_p.eos() && i < _items.length; i++) {
+						if (_items[i].perform()) { // success
+							SPosition p = _p.getPosition();
+							if (xPos == null ||
+								xPos.getFilePos() + xPos.getIndex()
+								< p.getFilePos() + p.getIndex()) {
+								xPos = p;
+								xParsedObjects = _parsedObjects;
+								xUserObject = _userObject;
+							}
+						}
+						_parsedObjects = parsedObjects;
+						_userObject = userObject;
+						resetPosition();
+					}
+					if (xPos == null) { // no variant found
+						if (count < _min) {
+							resetPosition(startPos);
+							return false;
+						}
+						break;
+					} else { // set to the most sucessfull variant
+						count++;
+						resetPosition(xPos);
+						_parsedObjects = xParsedObjects;
+						_userObject = xUserObject;
+					}
 				}
 			}
 			return true;
@@ -1175,6 +1198,7 @@ public final class BNFGrammar {
 			BNFSelection item = grammar.newItemUnion();
 			item._min = _min;
 			item._max = _max;
+			item._all = _all;
 			item._items = new BNFItem[_items.length];
 			for (int i = 0; i < _items.length; i++) {
 				item._items[i] = _items[i].adoptTo(grammar);
@@ -1194,8 +1218,10 @@ public final class BNFGrammar {
 				_items[i].display(sb);
 			}
 			sb.append(")").append(genQuantifier());
+			if (_all) {
+				sb.append('!');
+			}
 		}
-
 		BNFTokens newTokens(final boolean i, final String... tokens) {
 			return new BNFTokens(i, tokens);
 		}
@@ -2623,7 +2649,25 @@ public final class BNFGrammar {
 					if (_sym == RBR_SYM) {
 						item = seq._items.length == 1 ? seq._items[0] :  seq;
 						_item = null;
-						checkQuantifier(item);
+						skipSeparators();
+						if (isChar('!')) { // all command
+							if (item instanceof BNFSelection) {
+								BNFSelection all = (BNFSelection) item;
+								for (int i = 0; i < all._items.length; i++) {
+									if (all._items[i]._max > 1) {
+										 //In "all" selection can not be
+										 //quantifier with maximum occurrence
+										 //greater as 1
+										error(BNF041);
+									}
+								}
+								all._all = true;
+							} else {
+								error(BNF042); //"all" selection can not be here
+							}
+						} else {
+							checkQuantifier(item);
+						}
 						nextSymbol();
 					} else {
 						item = seq;
