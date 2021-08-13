@@ -107,7 +107,8 @@ public class TestExpr extends STester {
 	@Override
 	/** Run test and print error information. */
 	public void test() {
-		BNFGrammar g = BNFGrammar.compile(null,
+		BNFGrammar g;
+		g = BNFGrammar.compile(null,
 			new File(getDataDir() + "TestExpr.bnf"), null);
 		g.setUserObject(this);
 		try {

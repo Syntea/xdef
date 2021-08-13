@@ -283,6 +283,7 @@ public class TestBNF extends STester {
 	public void test() {
 		String bnf;
 		BNFGrammar g, g1;
+		String s;
 		try {
 			g = BNFGrammar.compile("X::= 'A'?");
 			assertEq("", parse(g, "X", ""));
@@ -336,23 +337,54 @@ public class TestBNF extends STester {
 			g = BNFGrammar.compile("%define $x:$stop(1,'x')x::='a'$x'b'");
 			assertEq("a", parse(g, "x", "abc"));
 			assertEq("STOP 1,\"x\"", (String) g.getParsedObjects()[0]);
-			bnf =
+
+			g = BNFGrammar.compile( // test "all" selections
+"A::='a'('A'|'B') !\n" +
+"X::='a'('A'|'B'?)!\n" +
+"Y::='a'('A'?|'B')!\n" +
+"Z::='a'('A'?|'B'?)!");
+			g = BNFGrammar.compile(g.display(false));
+			assertEq(s="aAB", parse(g, "A", s));
+			assertEq(s="aBA", parse(g, "A", s));
+			assertTrue(!(s="a").equals(parse(g, "A", s)));
+			assertTrue(!(s="aA").equals(parse(g, "A", s)));
+			assertTrue(!(s="aB").equals(parse(g, "A", s)));
+			assertTrue(!(s="aBB").equals(parse(g, "A", s)));
+			assertTrue(!(s="aABB").equals(parse(g, "A", s)));
+			assertEq(s="aA", parse(g, "X", s));
+			assertEq(s="aAB", parse(g, "X", s));
+			assertEq(s="aBA", parse(g, "X", s));
+			assertTrue(!(s="aB").equals(parse(g, "X", s)));
+			assertTrue(!(s="a").equals(parse(g, "X", s)));
+			assertTrue(!(s="aABA").equals(parse(g, "X", s)));
+			assertEq(s="aB", parse(g, "Y", s));
+			assertEq(s="aAB", parse(g, "Y", s));
+			assertEq(s="aBA", parse(g, "Y", s));
+			assertTrue(!(s="aA").equals(parse(g, "Y", s)));
+			assertTrue(!(s="a").equals(parse(g, "Y", s)));
+			assertTrue(!(s="aABA").equals(parse(g, "Y", s)));
+			assertEq(s="aAB", parse(g, "Z", s));
+			assertEq(s="aBA", parse(g, "Z", s));
+			assertEq(s="aA", parse(g, "Z", s));
+			assertEq(s="aB", parse(g, "Z", s));
+			assertEq(s="a", parse(g, "Z", s));
+			assertTrue(!(s="aC").equals(parse(g, "Z", s)));
+			assertTrue(!(s="aABB").equals(parse(g, "Z", s)));
+			g = BNFGrammar.compile(
 "S::=$whitespace+XMLName::=$xmlName RefName::=XMLName|XMLName?\"#\"XMLName" +
 " RootList::=S?(RefName|\"*\")(S?\"|\"S?(RefName|\"*\"))*S?" +
-"Reference::=\"ref\"S RefName";
-			g = BNFGrammar.compile(bnf);
+"Reference::=\"ref\"S RefName");
 			assertEq("#A", parse(g, "RefName", "#A"));
 			assertEq("A", parse(g, "RefName", "A"));
 			assertEq("A#B", parse(g, "RefName", "A#B"));
-			bnf =
+			g = BNFGrammar.compile( // whitespaces
 "S ::= $whitespace+\n"+
 "ElementLink ::= (\"implements\" | \"uses\")  S XPosition\n" +
 "XPosition ::= (XDefName? \"#\")? XModelName\n" +
 "  (\"/\" XMLName)*\n" +
 "XMLName ::= $xmlName\n"+
 "XDefName ::= XMLName\n" +
-"XModelName ::= XMLName";
-			g = BNFGrammar.compile(bnf);
+"XModelName ::= XMLName"			);
 			assertEq("implements #A", parse(g, "ElementLink", "implements #A"));
 			assertEq("implements A", parse(g, "ElementLink", "implements A"));
 			assertEq("uses A#B", parse(g, "ElementLink", "uses A#B"));

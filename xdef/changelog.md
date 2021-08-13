@@ -1,6 +1,9 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 40.1.7, release-date 2021-08-11
+# Version 40.1.8, release-date 2021-08-13
+* BNF grammar is extended and has now possibility of "all" selection
+
+# Version 40.1.7, release-date 2021-08-13
 * fixed bug in type declaration with a boolean expression.
 * fixed bug in XQuery sequence item types: unsigned integer,
   non positive integer, nonnegative integer and unsigned long.

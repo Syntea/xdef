@@ -16,6 +16,7 @@ public class TestAll41 {
 			+ (DefXQueryExpr.isXQueryImplementation() ? "with" : "without")
 			+ " Saxon library) ...");
 		XDTester.setFulltestMode(false);
+		test.common.TestAll.runTests(args);
 		test.xdef.TestAll41.runTests(args);
 		test.xdutils.TestAll41.runTests(args);
 	}
