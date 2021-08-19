@@ -117,6 +117,11 @@ public class TestXdScript extends XDTester {
 "I::= G, 'X', 'Z'\n"+
 "J::= (G, 'X') | 'Z'\n"+
 "K::= (G, 'X')? 'Z'?\n"+
+"L::= 'A', 'B' 'Z'\n"+
+"M::= 'A', 'B' | 'Z'\n"+
+"N::= 'Z' | 'A', 'B'\n"+
+"O::= 'A', 'B' | 'C', 'D'\n"+
+"P::= ('A', 'B') | ('C', 'D')\n"+
 "\n";
 			assertEq(s, parse(g, "BNFGrammar", s));
 /**/

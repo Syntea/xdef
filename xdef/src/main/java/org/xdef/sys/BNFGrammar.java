@@ -2627,7 +2627,7 @@ public final class BNFGrammar {
 			_item = null;
 			nextSymbol();
 			BNFItem item;
-			if ((item = isUnionOrAll()) != null) {
+			if ((item = isUnion()) != null) {
 				rule.setItem(item);
 			} else {
 				error(BNF017); //BNF rule body expected
@@ -2651,7 +2651,7 @@ public final class BNFGrammar {
 					_item = null;
 					nextSymbol();
 					BNFSequence seq = _grammar.newItemSequence();
-					if ((item = isUnionOrAll()) == null) {
+					if ((item = isUnion()) == null) {
 						error(BNF023); //Expected BNF command section
 					} else {
 						seq.addItem(item);
@@ -2723,29 +2723,16 @@ public final class BNFGrammar {
 			}
 			return item;
 		}
-
-		/** Parse union or all list.
-		 * @return BNFItem if an union or all list was recognized, otherwise
-		 * return null.
+		
+		/** Parse all list.
+		 * @return BNFItem if an all list was recognized, otherwise return null.
 		 */
-		private BNFItem isUnionOrAll() {
+		private BNFItem isAll () {
 			BNFItem item;
 			if ((item = isSequence()) == null) {
 				return null;
 			}
-			if (_sym == OR_SYM) {
-				BNFSelection union = _grammar.newItemUnion();
-				union.addItem(item);
-				do {
-					nextSymbol();
-					if ((item = isSequence()) == null) {
-						error(BNF025); //BNF Item expected
-					} else {
-						union.addItem(item);
-					}
-				} while (_sym == OR_SYM);
-				return union;
-			} else if (_sym == ALL_SYM) { // all list
+			if (_sym == ALL_SYM) { // all list
 				BNFAll all = _grammar.newItemAll();
 				all.addItem(item);
 				do {
@@ -2757,6 +2744,30 @@ public final class BNFGrammar {
 					}
 				} while (_sym == ALL_SYM);
 				return all;
+			}
+			return item;
+		}
+
+		/** Parse union or all list.
+		 * @return BNFItem if a union was recognized, otherwise return null.
+		 */
+		private BNFItem isUnion() {
+			BNFItem item;
+			if ((item = isAll()) == null) {
+				return null;
+			}
+			if (_sym == OR_SYM) {
+				BNFSelection union = _grammar.newItemUnion();
+				union.addItem(item);
+				do {
+					nextSymbol();
+					if ((item = isAll()) == null) {
+						error(BNF025); //BNF Item expected
+					} else {
+						union.addItem(item);
+					}
+				} while (_sym == OR_SYM);
+				return union;
 			}
 			return item;
 		}

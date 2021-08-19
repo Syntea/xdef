@@ -380,9 +380,13 @@ public class TestBNF extends STester {
 "I::= G, 'X', 'Z'\n"+
 "J::= (G, 'X') | 'Z'\n"+
 "K::= (G, 'X')? 'Z'?\n"+
+"L::= 'A', 'B' 'Z'\n"+
+"M::= 'A', 'B' | 'Z'\n"+
+"N::= 'Z' | 'A', 'B'\n"+
+"O::= 'A', 'B' | 'C', 'D'\n"+
+"P::= ('A', 'B') | ('C', 'D')\n"+
 "");
 			g = BNFGrammar.compile(g.display(false));
-			assertEq(s="aAB", p(g, "A", s));
 			assertEq(s="aBA", p(g, "A", s));
 			assertTrue(!(s="a").equals(p(g, "A", s)));
 			assertTrue(!(s="aA").equals(p(g, "A", s)));
@@ -427,6 +431,20 @@ public class TestBNF extends STester {
 			assertEq(s="aBAYX", p(g, "K", s));
 			assertEq(s="YaABXZ", p(g, "K", s));
 			assertEq(s="Z", p(g, "K", s));
+			assertEq(s="ABZ", p(g, "L", s));
+			assertEq(s="BZA", p(g, "L", s));
+			assertEq(s="AB", p(g, "M", s));
+			assertEq(s="BA", p(g, "M", s));
+			assertEq(s="Z", p(g, "M", s));
+			assertEq(s="Z", p(g, "M", s));
+			assertEq(s="AB", p(g, "N", s));
+			assertEq(s="BA", p(g, "N", s));
+			assertEq(s="Z", p(g, "N", s));
+			assertEq(s="Z", p(g, "N", s));
+			assertEq(s="BA", p(g, "O", s));
+			assertEq(s="DC", p(g, "O", s));
+			assertEq(s="BA", p(g, "P", s));
+			assertEq(s="DC", p(g, "P", s));
 /**/
 ////////////////////////////////////////////////////////////////////////////////
 			bnf =

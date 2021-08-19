@@ -639,17 +639,17 @@ BNFSet ::= "[" ("^"? Char - "]")* "]" BNFQuantifier?
 BNFTerm ::= (BNFTerminalSymbol | BNFSet | BNFRuleReference) BNFQuantifier?
   | BNFParentalExpr
 
-BNFParentalExpr ::= "(" S? BNFExpr S? ")" S? BNFQuantifier?
+BNFParentalExpr ::= "(" S? BNFUnion S? ")" S? BNFQuantifier?
 
 BNFSequence ::= BNFTerm (S? BNFTerm)*
 
 BNFRestriction ::= BNFSequence (S? "-" S? BNFTerm)?
 
-BNFList ::= BNFRestriction (S? "," S? BNFRestriction)*
+BNFAll ::= BNFRestriction (S? "," S? BNFRestriction)*
 
-BNFExpr ::= BNFList (S? "|" S? BNFList)*
+BNFUnion ::=  BNFAll (S? "|" S? BNFAll)*
 
-BNFExpression ::= (BNFExpr S?)+
+BNFExpression ::= (BNFUnion S?)+
 
 /******************************************************************************/
 /* XComponent                                                                 */
