@@ -18,6 +18,12 @@ public class TestXdScript extends XDTester {
 
 	public TestXdScript() {super();}
 
+	/** Parse source with rule with given name from BNF grammar.
+	 * @param grammar BNF grammar.
+	 * @param name rule name.
+	 * @param source source to be parsed.
+	 * @return parsed part of source.
+	 */
 	private static String parse(final BNFGrammar grammar,
 		final String name,
 		final String source) {
@@ -32,7 +38,9 @@ public class TestXdScript extends XDTester {
 			return "Exception " + ex;
 		}
 	}
-
+	/** print array of parsed objects.
+	 * @param g BNF grammar from which to print.
+	 */
 	private static void printCode(final BNFGrammar g) {
 		Object[] o = g.getParsedObjects();
 		if (o == null) {
@@ -47,7 +55,6 @@ public class TestXdScript extends XDTester {
 		}
 	}
 
-////////////////////////////////////////////////////////////////////////////////
 	@Override
 	public void test() {
 		String s;
@@ -63,12 +70,17 @@ public class TestXdScript extends XDTester {
 			if (XDTester.getFulltestMode()) {
 				g = BNFGrammar.compile(null, g.toString(), null);
 			}
+			assertEq(bnfOfBNF, parse(g, "BNFGrammar", bnfOfBNF));
+			s = g.toString();
+			assertEq(s, parse(g, "BNFGrammar", s));
+
 /*labels not implemented yet*
 			s = "{loop : while ( true ) continue loop ;}";
 			assertEq(s, parse(grammar, "Block", s));
 			s = "{loop : while ( true ) break loop ;}";
 			assertEq(s, parse(grammar, "Block", s));
 /*labels not implemented yet*/
+			assertEq(s, parse(g, "BNFRules", s));
 			s = "{parse : {return true;}}";
 			assertEq(s, parse(g, "TypeDeclarationBody", s));
 			s = "{if(true)return true; else return false;}";
@@ -80,25 +92,34 @@ public class TestXdScript extends XDTester {
 			assertEq(s, parse(g, "Expression", s));
 			s = "void x(int a) {out();}";
 			assertEq(s, parse(g, "MethodDeclaration", s));
-//			printCode(g);
 			s = "int x(int a, float b) {out(a+b);\nreturn 1;}";
 			assertEq(s, parse(g, "MethodDeclaration", s));
-//			printCode(g);
 			s = "-a + -0d3 - 0xFE * 1e-2 % 1.2 / 0.5E3 + 'x*y'";
 			assertEq(s, parse(g, "Expression", s));
-//			printCode(g);
 			s = "(aa | !ab AND NOT bc OR !!! (cd AND de))";
 			assertEq(s, parse(g, "Expression", s));
-//			printCode(g);
 			s = "((String)i).substring(1)";
 			assertEq(s, parse(g, "Expression", s));
-//			printCode(g);
 			s = "((String)(i=a>b?c:d)).substring(1)";
 			assertEq(s, parse(g, "Expression", s));
-//			printCode(g);
 			s = "string(3,3)&eq('abc')|eq('xyz')";
 			assertEq(s, parse(g, "Expression", s));
-//			printCode(g);
+/**/
+			s = //"all" selections
+"A::= 'a' ('A', 'B')\n" +
+"B::= 'a' ('A','B'?)\n" +
+"C::= 'a' ('A'?,'B')\n" +
+"D::= 'a' ('A'?,'B'?)\n" +
+"E::= A?, 'Y'?\n"+
+"F::= 'Y'?, A?\n"+
+"G::= A, 'Y'\n"+
+"H::= G, 'X'\n"+
+"I::= G, 'X', 'Z'\n"+
+"J::= (G, 'X') | 'Z'\n"+
+"K::= (G, 'X')? 'Z'?\n"+
+"\n";
+			assertEq(s, parse(g, "BNFGrammar", s));
+/**/
 			s = "int a";
 			assertEq(s, parse(g, "VariableDeclaration", s));
 			s = "final int a=1";
@@ -156,7 +177,6 @@ public class TestXdScript extends XDTester {
 			s = "external Element source";
 			assertEq(s, parse(g, "DeclarationScript", s));
 //			printCode(g);
-
 			s = "{ i ++ ; ++ k ; j += 2;}";
 			assertEq(s, parse(g, "Block", s));
 //			printCode(g);
@@ -261,7 +281,6 @@ public class TestXdScript extends XDTester {
 "String test.xdef.TestExtenalMethods_2.m35(XXElement, int)\n"+
 "}\n";
 			assertEq(s, parse(g,"DeclarationScript", s));
-//			printCode(g);
 			s =
 "  %class test.xdef.component.C2 %link C#Town/Street/House;\n" +
 "  %interface test.xdef.component.CI %link C#Person;\n" +
@@ -270,15 +289,7 @@ public class TestXdScript extends XDTester {
 			assertEq(s, parse(g, "XCComponent", s));
 			s = "void test.xdef.TestXComponents_C.test(XXData)";
 			assertEq(s, parse(g, "ExternalMethod", s));
-			s = "";
-//			printCode(g);
-
-			assertEq(bnfOfBNF, parse(g, "BNFGrammar", bnfOfBNF));
-			s = g.toString();
-			assertEq(s, parse(g, "BNFGrammar", s));
-//			System.out.println(s);
-
-			////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 			java.io.ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			PrintStream ps = new PrintStream(baos, true, "UTF-8");
 			g.trace(ps);

@@ -207,33 +207,31 @@ public final class Test003 extends XDTester {
 		if (getFulltestMode()) {
 			try { // test big XML
 				xdef =
-	"<xd:def xmlns:xd='" + _xdNS + "' xd:root=\"koně\">\n"+
-	"\n"+
-	"  <koně>\n"+
-	"    <kůň xd:script = \"occurs *; forget\"\n" +
-	"      jaký = \"eq('úplně šílený nóbl žluťoučký kůň')\"\n" +
-	"      kde = \"string\"\n" +
-	"      barva = \"an\"\n" +
-	"      co = \"string(3)\"\n" +
-	"      nějaký = \"string(4)\">\n" +
-	"      <kam>pic('AAAAAA')</kam>\n" +
-	"       string(10,999); fixed 'skákal přes louže'\n" +
-	"      <proč>string(7,%pattern=['j.*'])</proč>\n" +
-	"    </kůň>\n"+
-	"  </koně>\n"+
-	"\n"+
-	"</xd:def>";
+"<xd:def xmlns:xd='" + _xdNS + "' xd:root=\"koně\">\n"+
+"  <koně>\n"+
+"    <kůň xd:script = '*; forget'\n" +
+"      jaký = \"eq('úplně šílený nóbl žluťoučký kůň')\"\n" +
+"      kde = 'string'\n" +
+"      barva = 'an'\n" +
+"      co = 'string(3)'\n" +
+"      nějaký = 'string(4)'>\n" +
+"      <kam>pic('AAAAAA')</kam>\n" +
+"       string(10,999); fixed 'skákal přes louže'\n" +
+"      <proč>string(7,%pattern=['j.*'])</proč>\n" +
+"    </kůň>\n"+
+"  </koně>\n"+
+"</xd:def>";
 				xp = compile(xdef);
 				byte[] child = (
-	"  <kůň jaký = \"úplně šílený nóbl žluťoučký kůň\"\r\n" +
-	"    kde = \"louže\"\r\n" +
-	"    barva = \"žluťoučký\"\r\n" +
-	"    co = \"kůň\"\r\n" +
-	"    nějaký = \"nóbl\">\r\n" +
-	"     <kam>daleko</kam>\n " +
-	"     skákal přes louže\n " +
-	"     <proč>jen tak</proč>\n " +
-	" </kůň>\r\n").getBytes("UTF-8");
+"  <kůň jaký = \"úplně šílený nóbl žluťoučký kůň\"\r\n" +
+"    kde = \"louže\"\r\n" +
+"    barva = \"žluťoučký\"\r\n" +
+"    co = \"kůň\"\r\n" +
+"    nějaký = \"nóbl\">\r\n" +
+"     <kam>daleko</kam>\n " +
+"     skákal přes louže\n " +
+"     <proč>jen tak</proč>\n " +
+" </kůň>\r\n").getBytes("UTF-8");
 				// create big XML file
 				//parse created file and get time of processing
 				xd = xp.createXDDocument();
@@ -241,9 +239,6 @@ public final class Test003 extends XDTester {
 				tempfile.deleteOnExit();
 				xml = tempfile.getAbsolutePath();
 				FileOutputStream longfile = new FileOutputStream(xml);
-				longfile.write(
-					"<?xml version = \"1.0\" encoding = \"UTF-8\"?>\r\n".
-					getBytes("UTF-8"));
 				longfile.write("<koně>\r\n".getBytes("UTF-8"));
 				long num = 60000; // 15 Mbytes
 				for (int i = 0; i < num; i++) {
@@ -264,22 +259,19 @@ public final class Test003 extends XDTester {
 			} catch (Exception ex) {fail(ex);}
 		}
 		try {// check compiling if source items have assignment of sourceId
-			Object[] p1 = new Object[] {
+			Object[] p1 = new Object[] { // sources
 "<xd:def  xmlns:xd='" + _xdNS + "' root='A' name='A' ><A/></xd:def>",
 "<xd:def xmlns:xd='" + _xdNS + "' root='B' name='B' ><B/></xd:def>",
 			new ByteArrayInputStream((
 "<xd:def xmlns:xd='" + _xdNS + "' root='C' name='C' ><C/></xd:def>").getBytes(
 				"UTF-8"))};
-			String[] p2 = new String[] {"AA", "AB", "AC"};
+			String[] p2 = new String[] {"AA", "AB", "AC"}; // source names
 			xp = XDFactory.compileXD(null, p1, p2);
-			xml = "<A/>";
-			assertEq(xml, parse(xp, "A", xml, reporter));
+			assertEq(xml = "<A/>", parse(xp, "A", xml, reporter));
 			assertNoErrors(reporter);
-			xml = "<B/>";
-			assertEq(xml, parse(xp, "B", xml, reporter));
+			assertEq(xml = "<B/>", parse(xp, "B", xml, reporter));
 			assertNoErrors(reporter);
-			xml = "<C/>";
-			assertEq(xml, parse(xp, "C", xml, reporter));
+			assertEq(xml = "<C/>", parse(xp, "C", xml, reporter));
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
 

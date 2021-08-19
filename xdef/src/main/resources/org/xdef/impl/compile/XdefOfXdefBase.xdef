@@ -157,8 +157,6 @@ KeyName ::= "%" XMLName
 
 AttributeName ::= "@" XMLName
 
-Reference ::= "ref" S XPosition
-
 XDefName ::= XMLName
 
 XModelName ::= XMLName
@@ -431,18 +429,18 @@ XdefOption ::= "moreAttributes" | "moreElements" | "moreText"
 
 AttributeScript ::= ValueScript
 
-ValueScript ::= ("$$$script:"? S?) ((ValueValidationSection | ValueInitSection
-  | ValueOnTrueSection | ValueOnErrorSection | ValueOnAbsenceSection
-  | ValueDefaultSection | ValueCreateSection | ValueFinallySection
-  | ValueMatchSection | AttributeOptions | Reference | AttributeOnStartSection
-  | ";") S?)*
+ValueScript ::= ("$$$script:"?) (ValueValidationSection | ValueInitSection
+  | ValueOnTrueSection | ValueOnFalseSection | ValueOnErrorSection
+  | ValueOnAbsenceSection | ValueDefaultSection | ValueCreateSection
+  | ValueFinallySection | ValueMatchSection | AttributeOnStartSection
+   | AttributeOptions | Reference | S |";")*
   /* The keyword "$$$script" can be specified only in the template mode.
      Each section can be specified only once.*/
 
 AttributeOnStartSection ::= "onStartElement" S? Statement?
 
-ValueValidationSection ::= "fixed" S $rule (Expression | Block)
-  | (Occurrence S? CheckValueSpecification?) | CheckValueSpecification
+ValueValidationSection ::= ("fixed" S $rule (Expression | Block)
+  | (Occurrence S? CheckValueSpecification?) | CheckValueSpecification)
 
 CheckValueSpecification ::= ExplicitCode | ValidationExpression | TypeMethodName
   /* ExplicitCode must return a value of boolean type or ParseResult. */
@@ -460,20 +458,19 @@ ParseMethod ::= Method
 
 TypeMethodName ::= Identifier
 
-ValueMatchSection ::= "match" S? (Expression | ExplicitCode)
-  /* Expression nebo ExplicitCode must here return a value of boolean type. */
-
 ValueInitSection ::= "init" S? (ExplicitCode | Statement)
 
 ValueOnTrueSection ::= "onTrue" S? (ExplicitCode | Statement)
   /* If Method or ExplicitCode returns a value, it will be ignored. */
 
-ValueOnErrorSection ::= ("onError" | "onFalse") S? (ExplicitCode | Statement)
+ValueOnFalseSection ::= "onFalse" S? (ExplicitCode | Statement)
+
+ValueOnErrorSection ::= "onError" S? (ExplicitCode | Statement)
 
 ValueOnAbsenceSection ::= "onAbsence" S? (ExplicitCode | Statement)
 
 ValueCreateSection ::= "create" S? (ExplicitCode | ValueCreateExpression)
-  /* ExplicitCode must return a value of String type. */
+  (S? ";")* /* ExplicitCode must return a value of String type. */
 
 ValueCreateExpression ::= Expression
   /* ValueCreateExpression must return a value of String type. */
@@ -482,6 +479,9 @@ ValueDefaultSection ::= "default" S? (ExplicitCode | Expression)
   /* Expression nebo ExplicitCode must return the value of the String. */
 
 ValueFinallySection ::= "finally" S? Statement
+
+ValueMatchSection ::= "match" S? (Expression | ExplicitCode)
+  /* Expression nebo ExplicitCode must here return a value of boolean type. */
 
 AttributeOptions ::= ValueOptions
 
@@ -496,6 +496,8 @@ ValueOption ::= "preserveTextWhiteSpaces" | "ignoreTextWhiteSpaces"
   | "setAttrUpperCase" | "setAttrLowerCase" | "trimAttr" | "noTrimAttr"
   | "ignoreEmptyAttributes" | "acceptEmptyAttributes"
   | "acceptQualifiedAttr" | "notAcceptQualifiedAttr" | "preserveTextCase"
+
+Reference ::= "ref" S XPosition
 
 /******************************************************************************/
 /* Script of elements                                                         */
@@ -603,14 +605,6 @@ BNFGrammar ::= S? BNFMethodDeclarationSection? BNFRules S?
 
 BNFMethodDeclarationSection ::= BNFMethodDeclaration (S? BNFMethodDeclaration)*
 
-BNFRuleName ::= RawIdentifier
-
-BNFDefinedMethodName ::= "$" (BNFRuleName | Digit+)
-
-BNFRuleDecl ::= S? BNFRuleName S? "::=" S?
-
-BNFRuleReference ::= BNFDefinedMethodName | (BNFRuleName - BNFRuleDecl)
-
 BNFMethodDeclaration ::= "%define" S BNFDefinedMethodName S? ":"
   S ("$" QualifiedIdentifier | BNFDefinedMethodName) S? BNFMethodparameters?
 
@@ -619,14 +613,22 @@ BNFMethodparameters ::= "(" S?
 
 BNFMethodparameter ::= Digit+ | BNFTerminalSymbol
 
+BNFDefinedMethodName ::= "$" (BNFRuleName | Digit+)
+
+BNFRuleName ::= RawIdentifier
+
+BNFRule ::= BNFRuleDecl BNFExpression
+
+BNFRules ::= BNFRule (BNFRule)*
+
+BNFRuleDecl ::= S? BNFRuleName S? "::=" S?
+
+BNFRuleReference ::= BNFDefinedMethodName | (BNFRuleName - BNFRuleDecl)
+
 BNFTerminalSymbol ::= "'" [^']* "'" | '"' [^"]* '"'
   | (BNFHexaCharacter (S? BNFHexaCharacter)* )
 
 BNFHexaCharacter ::= "#" HexaDigit+
-
-BNFRules ::= BNFRule (BNFRule)*
-
-BNFRule ::= BNFRuleDecl BNFExpression
 
 BNFQuantifier ::= S? ("+" | "*" | "?" | BNFExplicitQuantifier)
 
@@ -643,7 +645,9 @@ BNFSequence ::= BNFTerm (S? BNFTerm)*
 
 BNFRestriction ::= BNFSequence (S? "-" S? BNFTerm)?
 
-BNFExpr ::= BNFRestriction (S? "|" S? BNFRestriction)*
+BNFList ::= BNFRestriction (S? "," S? BNFRestriction)*
+
+BNFExpr ::= BNFList (S? "|" S? BNFList)*
 
 BNFExpression ::= (BNFExpr S?)+
 
