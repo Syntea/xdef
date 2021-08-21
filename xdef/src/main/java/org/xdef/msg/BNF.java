@@ -74,7 +74,7 @@ public interface BNF {
 	public static final long BNF038 = 120717345L;
 	/** Illegal BNF runtime code: &amp;{0}&amp;{#SYS000} */
 	public static final long BNF040 = 120717346L;
-	/** In "all" list can not be quantifier with maximum occurrence greater as 1&amp;{#SYS000} */
+	/** In "all" list can not be quantifier with maximum occurrence greater as 1&amp;{0}{ (rule }{)}&amp;{#SYS000} */
 	public static final long BNF041 = 120717347L;
 	/** Rule "&amp;{0}" does not exist&amp;{#SYS000} */
 	public static final long BNF901 = 120717348L;

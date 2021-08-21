@@ -2406,6 +2406,12 @@ public final class BNFGrammar {
 							(BNFReference)_item, getPosition()));
 					} else {
 						((BNFReference)_item).setRule(cmd);
+						if(cmd._item != null && cmd._item._max > 1
+							&& cmd._item instanceof BNFAll) {
+							//In "all" list can not be quantifier with
+							// maximum occurrence greater as 1
+							error(BNF041, cmd.getName());
+						}
 					}
 					checkQuantifier(_item);
 					return _sym = ITEM_SYM;
@@ -2543,11 +2549,9 @@ public final class BNFGrammar {
 				return false;
 			}
 			while(isRule()){}
-
 			if (!eos()) {
 				error(BNF018); //BNF Syntax error
 			}
-
 			resolveReferences();
 			optimize();
 
@@ -2723,7 +2727,7 @@ public final class BNFGrammar {
 			}
 			return item;
 		}
-		
+
 		/** Parse all list.
 		 * @return BNFItem if an all list was recognized, otherwise return null.
 		 */
@@ -2778,14 +2782,21 @@ public final class BNFGrammar {
 		private boolean resolveReferences() {
 			boolean result = true;
 			for (UnresolvedReference ur: _unresolvedRefs) {
-				BNFRuleObj rule = (BNFRuleObj) _grammar.getRule(ur.getName());
-				if (rule == null) {
+				BNFRuleObj cmd = (BNFRuleObj) _grammar.getRule(ur.getName());
+				if (cmd == null) {
 					result = false;
 					//Undefined rule reference: '&{0}'
 					getPosition().putReport(Report.error(BNF026,
 						ur.getName()),getReportWriter());
 				} else {
-					ur.getReference().setRule(rule);
+					ur.getReference().setRule(cmd);
+					if(cmd._item != null && cmd._item._max > 1
+						&& cmd._item instanceof BNFAll) {
+						//In "all" list can not be quantifier with
+						// maximum occurrence greater as 1
+						ur.getPosition().putReport(Report.error(BNF041,
+							cmd.getName()),getReportWriter());
+					}
 				}
 			}
 			return result;

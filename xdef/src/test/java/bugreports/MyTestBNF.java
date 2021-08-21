@@ -136,7 +136,7 @@ public class MyTestBNF extends XDTester {
 			assertEq(s="DC", p(g, "O", s));
 			assertEq(s="BA", p(g, "P", s));
 			assertEq(s="DC", p(g, "P", s));
-	
+
 		} catch (Exception ex) {fail(ex);}
 if(true)return;
 		try {
