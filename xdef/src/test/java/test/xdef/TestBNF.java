@@ -133,7 +133,6 @@ public final class TestBNF extends XDTester {
 "      list     ::= intList | nameList\n"+
 "    ');\n"+
 "    type myType rrr.parse('list');\n"+
-//"    type myType{parse: {return BNF(rrr, 'list');}}\n"+
 "  </xd:declaration>\n"+
 "</xd:def>\n"+
 "</xd:collection>";
@@ -300,8 +299,6 @@ public final class TestBNF extends XDTester {
 "    M      ::= [#9#10#13 ]*   /*skip white spaces*/\n"+
 "    OD     ::= M \",\" M        /*separator of values*/\n"+
 "    LnPrd  ::= [1-9] | [1-4] [0-9]\n"+
-"    Prd    ::= \"Y\" | \"(Pojistnik)\" | \"(Provozovatel)\" | \"(Vlastnik)\"\n"+
-"               | \"(ZeleneKarta)\" | \"(ZmenaVozidla)\"\n"+
 "    Month  ::= [1-9] | [1] [0-2]\n"+
 "    Months ::= Month ( OD Month )*\n"+
 "    YPrd   ::= LnPrd? \"Y\" \"(\" Months \")\"\n"+

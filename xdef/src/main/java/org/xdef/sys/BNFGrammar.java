@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.LinkedHashMap;
+import static org.xdef.sys.StringParser.XMLVER1_0;
 
 /** Provides BNF grammar parsing and compiling.
  * BNFGrammar object you can create by the static method compile
@@ -517,6 +518,7 @@ public final class BNFGrammar {
 	}
 	private BNFSequence newItemSequence() {return new BNFSequence();}
 	private BNFSelection newItemUnion() {return new BNFSelection();}
+	private BNFAll newItemAll() {return new BNFAll();}
 	private BNFConstrain newItemConstraint() {return new BNFConstrain();}
 	private BNFReference newItemReference() {return new BNFReference();}
 	private BNFSet newItemIsSet() {return new BNFIsSet();}
@@ -1129,66 +1131,44 @@ public final class BNFGrammar {
 	}
 
 	private final class BNFSelection extends BNFGroup {
-		boolean _all; // if true it is "all" selection
 		BNFSelection() {super();}
 		@Override
 		final boolean perform() {
 			SPosition startPos = setPosition();
-			if (_all) { // all selection
-				boolean[] processed = new boolean[_items.length];
-				for (int c = 0; c < _items.length; c++) {
-					for (int i = 0;  !_p.eos() && i < _items.length; i++) {
-						int pos = _p.getIndex();
-						if (_items[i].perform() && _p.getIndex() > pos) {
-							if (processed[i]) {
-								resetPosition(startPos);
-								return false;
-							}
-							processed[i] = true; // processed
+			int count = 0;
+			for (; count < _max; count++) {
+				SPosition xPos = null; //successfull position
+				Object xUserObject = null;
+				Object[] xParsedObjects = null,
+					parsedObjects = _parsedObjects;
+				Object userObject = _userObject;
+				setPosition();
+				for (int i = 0;  !_p.eos() && i < _items.length; i++) {
+					if (_items[i].perform()) { // success
+						SPosition p = _p.getPosition();
+						if (xPos == null ||
+							xPos.getFilePos() + xPos.getIndex()
+							< p.getFilePos() + p.getIndex()) {
+							xPos = p;
+							xParsedObjects = _parsedObjects;
+							xUserObject = _userObject;
 						}
 					}
+					_parsedObjects = parsedObjects;
+					_userObject = userObject;
+					resetPosition();
 				}
-				for (int i = 0;  i < _items.length; i++) {
-					if (!processed[i] && _items[i]._min == 1) {
+				if (xPos == null) { // no variant found
+					if (count < _min) {
+						resetPosition(startPos);
 						return false;
 					}
-				}
-			} else {
-				int count = 0;
-				for (; count < _max; count++) {
-					SPosition xPos = null; //successfull position
-					Object xUserObject = null;
-					Object[] xParsedObjects = null,
-						parsedObjects = _parsedObjects;
-					Object userObject = _userObject;
-					setPosition();
-					for (int i = 0;  !_p.eos() && i < _items.length; i++) {
-						if (_items[i].perform()) { // success
-							SPosition p = _p.getPosition();
-							if (xPos == null ||
-								xPos.getFilePos() + xPos.getIndex()
-								< p.getFilePos() + p.getIndex()) {
-								xPos = p;
-								xParsedObjects = _parsedObjects;
-								xUserObject = _userObject;
-							}
-						}
-						_parsedObjects = parsedObjects;
-						_userObject = userObject;
-						resetPosition();
-					}
-					if (xPos == null) { // no variant found
-						if (count < _min) {
-							resetPosition(startPos);
-							return false;
-						}
-						break;
-					} else { // set to the most sucessfull variant
-						count++;
-						resetPosition(xPos);
-						_parsedObjects = xParsedObjects;
-						_userObject = xUserObject;
-					}
+					break;
+				} else { // set to the most sucessfull variant
+					count++;
+					resetPosition(xPos);
+					_parsedObjects = xParsedObjects;
+					_userObject = xUserObject;
 				}
 			}
 			return true;
@@ -1198,7 +1178,6 @@ public final class BNFGrammar {
 			BNFSelection item = grammar.newItemUnion();
 			item._min = _min;
 			item._max = _max;
-			item._all = _all;
 			item._items = new BNFItem[_items.length];
 			for (int i = 0; i < _items.length; i++) {
 				item._items[i] = _items[i].adoptTo(grammar);
@@ -1218,12 +1197,62 @@ public final class BNFGrammar {
 				_items[i].display(sb);
 			}
 			sb.append(")").append(genQuantifier());
-			if (_all) {
-				sb.append('!');
-			}
 		}
 		BNFTokens newTokens(final boolean i, final String... tokens) {
 			return new BNFTokens(i, tokens);
+		}
+	}
+
+	private final class BNFAll extends BNFGroup {
+		BNFAll() {super();}
+		@Override
+		final boolean perform() {
+			SPosition startPos = setPosition();
+			int[] processed = new int[_items.length];
+			for (int c = 0; c < _items.length; c++) {
+				for (int i = 0;  !_p.eos() && i < _items.length; i++) {
+					int pos = _p.getIndex();
+					if (_items[i].perform() && _p.getIndex() > pos) {
+						processed[i]++; // processed
+						if (processed[i] > _items[i]._max) {
+							resetPosition(startPos);
+							return false;
+						}
+					}
+				}
+			}
+			for (int i = 0;  i < _items.length; i++) {
+				if (processed[i] < _items[i]._min) {
+					resetPosition(startPos);
+					return _min == 0;
+				}
+			}
+			return true;
+		}
+		@Override
+		final BNFItem adoptTo(final BNFGrammar grammar) {
+			BNFSelection item = grammar.newItemUnion();
+			item._min = _min;
+			item._max = _max;
+			item._items = new BNFItem[_items.length];
+			for (int i = 0; i < _items.length; i++) {
+				item._items[i] = _items[i].adoptTo(grammar);
+			}
+			return item;
+		}
+		@Override
+		final void display(final StringBuilder sb) {
+			if (_items.length == 1) {
+				_items[0].display(sb);
+				return;
+			}
+			sb.append("( ");
+			_items[0].display(sb);
+			for (int i = 1; i < _items.length; i++) {
+				sb.append(", ");
+				_items[i].display(sb);
+			}
+			sb.append(")").append(genQuantifier());
 		}
 	}
 
@@ -1563,17 +1592,13 @@ public final class BNFGrammar {
 		/** Get objects from internal stack.
 		 * @return objects from  internal stack.
 		 */
-		public Object[] getParsedStack() {
-			return _actRule.getItem().getStack();
-		}
+		public Object[] getParsedStack() {return _actRule.getItem().getStack();}
 
 		@Override
 		/** Pop value from parsed stack.
 		 * @return the top of parsed stack or null.
 		 */
-		public Object popParsedObject() {
-			return _actRule.getItem().peekStack();
-		}
+		public Object popParsedObject() {return _actRule.getItem().peekStack();}
 
 		@Override
 		/** Get the value of the top of grammar stack.
@@ -1714,9 +1739,6 @@ public final class BNFGrammar {
 					//No parameters are alowed in method &{0}
 					throw new SRuntimeException(BNF.BNF038, name);
 				}
-//			} else { // must be parameter
-//				//Parameter of method &{0} is expected
-//				throw new SRuntimeException(BNF.BNFx037, name);
 			}
 		}
 		private String genMethodParam(Object o) {
@@ -1862,20 +1884,19 @@ public final class BNFGrammar {
 				case INL_HEXDATA: //hexdata
 					return isHexdata();
 				case INL_XMLNAME: //xmlname
-					return _p.isXMLName((byte) 10);
+					return _p.isXMLName(XMLVER1_0);
 				case INL_NCNAME: //ncname
-					return _p.isNCName((byte) 10);
+					return _p.isNCName(XMLVER1_0);
 				case INL_NMTOKEN: //nmtoken
-					return _p.isNMToken((byte) 10);
+					return _p.isNMToken(XMLVER1_0);
 				case INL_XMLCHAR: //xmlchar
-					return _p.isXMLChar((byte) 10) != SParser.NOCHAR;
+					return _p.isXMLChar(XMLVER1_0) != SParser.NOCHAR;
 				case INL_WHITESPACE: //whitespace
 					return _p.isXMLWhitespaceChar() != SParser.NOCHAR;
 				case INL_XMLNAMESTARTCHAR: //xmlNamestartchar
-					return _p.isXMLNamestartChar((byte) 10) != SParser.NOCHAR;
+					return _p.isXMLNamestartChar(XMLVER1_0) != SParser.NOCHAR;
 				case INL_XMLNAMEEXTCHAR: //xmlNameExtchar
-					return
-						_p.isXMLNameExtensionChar((byte) 10) != SParser.NOCHAR;
+					return _p.isXMLNameExtensionChar(XMLVER1_0)!=SParser.NOCHAR;
 				case INL_CLEAR: //clearParsedObjects
 					_parsedObjects = null;
 					return true;
@@ -2022,7 +2043,8 @@ public final class BNFGrammar {
 		private static final short MINUS_SYM = OR_SYM + 1; //minus symbol("-")
 		private static final short LBR_SYM = MINUS_SYM + 1; //left bracket ("(")
 		private static final short RBR_SYM = LBR_SYM + 1;  //right bracket (")")
-		private static final short ERROR_SYM = RBR_SYM + 1;//error(undef symbol)
+		private static final short ALL_SYM = RBR_SYM + 1;  //all list (",")
+		private static final short ERROR_SYM = ALL_SYM + 1;//error(undef symbol)
 
 		/** symbol id of last parsed symbol. */
 		private short _sym;
@@ -2205,19 +2227,16 @@ public final class BNFGrammar {
 		/** Parse set specification. */
 		private void parseSetDecl() {
 			BNFSet item;
-			if (isChar('^')) {
-				item = _grammar.newItemNotSet();
-			} else {
-				item = _grammar.newItemIsSet();
-			}
+			item = isChar('^')
+				? _grammar.newItemNotSet() : _grammar.newItemIsSet();
 			_item = item;
 			_parsedChars.setLength(0);
-			char c, last;
+			char c;
 			if ((c = notOneOfChars("]\n\r")) == NOCHAR) {
 				error(BNF005); //Error in character set
 				return;
 			}
-			last = 0;
+			char last = 0;
 			StringBuilder intervals = new StringBuilder();
 			OUTER:
 			do {
@@ -2243,11 +2262,7 @@ public final class BNFGrammar {
 							}
 							if (c == '#') {
 								int i = readSpecChar();
-								if (i == -1) {
-									c = '#';
-								} else {
-									c = (char) i;
-								}
+								c = i == -1	? '#' : (char) i;
 							}	if (c < last) {
 								error(BNF006); //Incorrect interval in char set
 							} else {
@@ -2389,10 +2404,18 @@ public final class BNFGrammar {
 					if (cmd == null) {
 						_unresolvedRefs.add(new UnresolvedReference(name,
 							(BNFReference)_item, getPosition()));
+						checkQuantifier(_item);
 					} else {
 						((BNFReference)_item).setRule(cmd);
+						SPosition spos = getPosition();
+						checkQuantifier(_item);
+						if(_item._max > 1 && cmd.getItem() instanceof BNFAll) {
+							//In "all" list can not be quantifier with
+							// maximum occurrence greater as 1
+							spos.putReport(Report.error(BNF041),
+								getReportWriter());
+						}
 					}
-					checkQuantifier(_item);
 					return _sym = ITEM_SYM;
 				}
 			} else if (isChar('|')) {
@@ -2413,14 +2436,6 @@ public final class BNFGrammar {
 					_item = _grammar.newItemChar(i, '?');
 					error(BNF009); //Empty literal
 				}
-//				if (_parsedChars.length() > 1) {
-//					_item = _grammar.newItemToken(_parsedChars.toString());
-//				} else if (_parsedChars.length() == 1) {
-//					_item = _grammar.newItemChar(_parsedChars.charAt(0));
-//				} else {
-//					_item = _grammar.newItemChar('?');
-//					error(BNF009); //Empty literal
-//				}
 				checkQuantifier(_item);
 				return _sym = ITEM_SYM;
 			} else if (isChar('[')) {
@@ -2437,6 +2452,9 @@ public final class BNFGrammar {
 			} else if (isChar(')')) {
 				skipSeparators();
 				return _sym = RBR_SYM;
+			} else if (isChar(',')) {
+				skipSeparators();
+				return _sym = ALL_SYM;
 			} else if (isChar('$')) {//externalMethod method or number
 				if (isIdentifier()) { //identifier or integer
 					String name = _parsedChars.toString();
@@ -2533,11 +2551,9 @@ public final class BNFGrammar {
 				return false;
 			}
 			while(isRule()){}
-
 			if (!eos()) {
 				error(BNF018); //BNF Syntax error
 			}
-
 			resolveReferences();
 			optimize();
 
@@ -2649,24 +2665,11 @@ public final class BNFGrammar {
 					if (_sym == RBR_SYM) {
 						item = seq._items.length == 1 ? seq._items[0] :  seq;
 						_item = null;
-						skipSeparators();
-						if (isChar('!')) { // all command
-							if (item instanceof BNFSelection) {
-								BNFSelection all = (BNFSelection) item;
-								for (int i = 0; i < all._items.length; i++) {
-									if (all._items[i]._max > 1) {
-										 //In "all" selection can not be
-										 //quantifier with maximum occurrence
-										 //greater as 1
-										error(BNF041);
-									}
-								}
-								all._all = true;
-							} else {
-								error(BNF042); //"all" selection can not be here
-							}
-						} else {
-							checkQuantifier(item);
+						if (checkQuantifier(item)
+							&& item._max > 1 && item instanceof BNFAll) {
+							//In "all" list can not be quantifier with
+							// maximum occurrence greater as 1
+							error(BNF041);
 						}
 						nextSymbol();
 					} else {
@@ -2727,13 +2730,36 @@ public final class BNFGrammar {
 			return item;
 		}
 
-		/** Parse union.
-		 * @return BNFItem if an union was recognized and parsed otherwise
-		 * return null.
+		/** Parse all list.
+		 * @return BNFItem if an all list was recognized, otherwise return null.
+		 */
+		private BNFItem isAll () {
+			BNFItem item;
+			if ((item = isSequence()) == null) {
+				return null;
+			}
+			if (_sym == ALL_SYM) { // all list
+				BNFAll all = _grammar.newItemAll();
+				all.addItem(item);
+				do {
+					nextSymbol();
+					if ((item = isSequence()) == null) {
+						error(BNF025); //BNF Item expected
+					} else {
+						all.addItem(item);
+					}
+				} while (_sym == ALL_SYM);
+				return all;
+			}
+			return item;
+		}
+
+		/** Parse union or all list.
+		 * @return BNFItem if a union was recognized, otherwise return null.
 		 */
 		private BNFItem isUnion() {
 			BNFItem item;
-			if ((item = isSequence()) == null) {
+			if ((item = isAll()) == null) {
 				return null;
 			}
 			if (_sym == OR_SYM) {
@@ -2741,13 +2767,13 @@ public final class BNFGrammar {
 				union.addItem(item);
 				do {
 					nextSymbol();
-					if ((item = isSequence()) == null) {
+					if ((item = isAll()) == null) {
 						error(BNF025); //BNF Item expected
 					} else {
 						union.addItem(item);
 					}
 				} while (_sym == OR_SYM);
-				item = union;
+				return union;
 			}
 			return item;
 		}
@@ -2758,14 +2784,21 @@ public final class BNFGrammar {
 		private boolean resolveReferences() {
 			boolean result = true;
 			for (UnresolvedReference ur: _unresolvedRefs) {
-				BNFRuleObj rule = (BNFRuleObj) _grammar.getRule(ur.getName());
-				if (rule == null) {
+				BNFRuleObj cmd = (BNFRuleObj) _grammar.getRule(ur.getName());
+				if (cmd == null) {
 					result = false;
 					//Undefined rule reference: '&{0}'
 					getPosition().putReport(Report.error(BNF026,
 						ur.getName()),getReportWriter());
 				} else {
-					ur.getReference().setRule(rule);
+					ur.getReference().setRule(cmd);
+					if(ur.getReference()._max > 1
+						&& cmd.getItem() instanceof BNFAll) {
+						//In "all" list can not be quantifier with
+						// maximum occurrence greater as 1
+						ur.getPosition().putReport(Report.error(BNF041),
+							getReportWriter());
+					}
 				}
 			}
 			return result;
