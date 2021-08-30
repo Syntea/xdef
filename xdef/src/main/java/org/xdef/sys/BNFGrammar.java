@@ -2404,16 +2404,18 @@ public final class BNFGrammar {
 					if (cmd == null) {
 						_unresolvedRefs.add(new UnresolvedReference(name,
 							(BNFReference)_item, getPosition()));
+						checkQuantifier(_item);
 					} else {
 						((BNFReference)_item).setRule(cmd);
-						if(cmd._item != null && cmd._item._max > 1
-							&& cmd._item instanceof BNFAll) {
+						SPosition spos = getPosition();
+						checkQuantifier(_item);
+						if(_item._max > 1 && cmd.getItem() instanceof BNFAll) {
 							//In "all" list can not be quantifier with
 							// maximum occurrence greater as 1
-							error(BNF041, cmd.getName());
+							spos.putReport(Report.error(BNF041),
+								getReportWriter());
 						}
 					}
-					checkQuantifier(_item);
 					return _sym = ITEM_SYM;
 				}
 			} else if (isChar('|')) {
@@ -2790,12 +2792,12 @@ public final class BNFGrammar {
 						ur.getName()),getReportWriter());
 				} else {
 					ur.getReference().setRule(cmd);
-					if(cmd._item != null && cmd._item._max > 1
-						&& cmd._item instanceof BNFAll) {
+					if(ur.getReference()._max > 1
+						&& cmd.getItem() instanceof BNFAll) {
 						//In "all" list can not be quantifier with
 						// maximum occurrence greater as 1
-						ur.getPosition().putReport(Report.error(BNF041,
-							cmd.getName()),getReportWriter());
+						ur.getPosition().putReport(Report.error(BNF041),
+							getReportWriter());
 					}
 				}
 			}
