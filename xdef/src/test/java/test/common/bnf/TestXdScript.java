@@ -125,7 +125,7 @@ public class TestXdScript extends XDTester {
 "\n";
 			assertEq(s, parse(g, "BNFGrammar", s));
 /**/
-			s = "int a";
+			s = "external final int a";
 			assertEq(s, parse(g, "VariableDeclaration", s));
 			s = "final int a=1";
 			assertEq(s, parse(g, "VariableDeclaration", s));
