@@ -62,7 +62,8 @@ class JsonToString extends JsonTools {
 			result = x.toString();
 			if (x instanceof Number) {
 				if (x instanceof BigDecimal) {
-					return result + 'd';
+					return result.charAt(0) == '-'
+						? "-0d" + result.substring(1) : ("0d" + result);
 				} else if (x instanceof Float) {
 					if (((Float) x).isInfinite()) {
 						return result.charAt(0) == '-' ? "-INFF" : "INFF";
@@ -72,7 +73,7 @@ class JsonToString extends JsonTools {
 					if (((Double) x).isInfinite()) {
 						return result.charAt(0) == '-' ? "-INF" : "INF";
 					}
-					return result + 'D';
+					return result;
 				} else if (x instanceof Byte) {
 					return result + 'B';
 				} else if (x instanceof Short) {
@@ -80,9 +81,10 @@ class JsonToString extends JsonTools {
 				} else if (x instanceof Integer) {
 					return result + 'I';
 				} else if (x instanceof Long) {
-					return result + 'L';
+					return result;
 				} else if (x instanceof BigInteger) {
-					return result + 'N';
+					return result.charAt(0) == '-'
+						? "-0i" + result.substring(1) : ("0i" + result);
 				}
 				return result;
 			} else if (x instanceof Character) {

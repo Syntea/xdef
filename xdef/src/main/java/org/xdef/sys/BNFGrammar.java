@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.LinkedHashMap;
-import static org.xdef.sys.StringParser.XMLVER1_0;
 
 /** Provides BNF grammar parsing and compiling.
  * BNFGrammar object you can create by the static method compile
@@ -748,9 +747,9 @@ public final class BNFGrammar {
 		public Object[] getParsedObjects() {return _parsedObjects;}
 
 		@Override
-		/** Parse string assigned to SParser by this rule.
-		 * @param p SParser containing string and position from which parsing
-		 * will be started.
+		/** Parse string assigned to StringParser by this rule.
+		 * @param p StringParser containing string and position from which
+		 * parsing will be started.
 		 * @return true if parsing was successful.
 		 */
 		public final boolean parse(final StringParser p) {
@@ -1604,17 +1603,13 @@ public final class BNFGrammar {
 		/** Get the value of the top of grammar stack.
 		 * @return the top of grammar stack or null.
 		 */
-		public Object peekParsedObject() {
-			return _actRule.getItem().peekStack();
-		}
+		public Object peekParsedObject(){return _actRule.getItem().peekStack();}
 
 		@Override
 		/** Push object to grammar stack.
 		 * @param o object to be pushed.
 		 */
-		public void pushParsedObject(Object o) {
-			_actRule.getItem().pushStack(o);
-		}
+		public void pushParsedObject(Object o){_actRule.getItem().pushStack(o);}
 
 		@Override
 		/**  Get actual BNF rule.
@@ -1635,8 +1630,8 @@ public final class BNFGrammar {
 		public final BNFRule getRootRule() {return _rootRule;}
 
 		@Override
-		/** Get SParser used for parsing.
-		 * @return SParser.
+		/** Get StringParser used for parsing.
+		 * @return StringParser.
 		 */
 		public final StringParser getParser() {return _p;}
 
@@ -1884,19 +1879,21 @@ public final class BNFGrammar {
 				case INL_HEXDATA: //hexdata
 					return isHexdata();
 				case INL_XMLNAME: //xmlname
-					return _p.isXMLName(XMLVER1_0);
+					return _p.isXMLName(StringParser.XMLVER1_0);
 				case INL_NCNAME: //ncname
-					return _p.isNCName(XMLVER1_0);
+					return _p.isNCName(StringParser.XMLVER1_0);
 				case INL_NMTOKEN: //nmtoken
-					return _p.isNMToken(XMLVER1_0);
+					return _p.isNMToken(StringParser.XMLVER1_0);
 				case INL_XMLCHAR: //xmlchar
-					return _p.isXMLChar(XMLVER1_0) != SParser.NOCHAR;
+					return _p.isXMLChar(StringParser.XMLVER1_0)!=SParser.NOCHAR;
 				case INL_WHITESPACE: //whitespace
 					return _p.isXMLWhitespaceChar() != SParser.NOCHAR;
 				case INL_XMLNAMESTARTCHAR: //xmlNamestartchar
-					return _p.isXMLNamestartChar(XMLVER1_0) != SParser.NOCHAR;
+					return _p.isXMLNamestartChar(StringParser.XMLVER1_0)
+						!= SParser.NOCHAR;
 				case INL_XMLNAMEEXTCHAR: //xmlNameExtchar
-					return _p.isXMLNameExtensionChar(XMLVER1_0)!=SParser.NOCHAR;
+					return _p.isXMLNameExtensionChar(StringParser.XMLVER1_0)
+						!= SParser.NOCHAR;
 				case INL_CLEAR: //clearParsedObjects
 					_parsedObjects = null;
 					return true;

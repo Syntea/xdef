@@ -392,138 +392,154 @@ public class XONReader extends StringParser implements XONParsers {
 			boolean wasError = false;
 			Object result = null;
 			char ch;
-			if (_xonMode) {
-				if (isToken("c\"")) { // character
-					i = JsonTools.readJSONChar(this);
-					if (i == -1) {
-						//JSON simpleValue expected
-						return returnError(spos, '?', JSON.JSON010, "[]{}");
-					}
-					ch = (char) i;
-					if (!isChar('"')) {
+			if (_xonMode&&(i=isOneOfTokens(new String[]{"c\"","u\"","e\"","b(",
+				"D","p(","g(","P","-P","NaN","INF","-INF","0d","-0d","0i","-0i"
+				})) >= 0) {
+				switch(i) {
+					case 0: // character
+						i = JsonTools.readJSONChar(this);
+						if (i != -1) {
+							ch = (char) i;
+							if (isChar('"')) {
+								return returnValue(spos, ch);
+							}
+						}
+						break;
+					case 1: // URI
+						try {
+							return returnValue(spos,
+								new URI(JsonTools.readJSONString(this)));
+						} catch (Exception ex) {}
 						setIndex(pos);
-						//JSON simpleValue expected
-						return returnError(spos, ch, JSON.JSON010, "',[]{}");
-					}
-					return returnValue(spos, ch);
-				} else if (isToken("u\"")) { // URI
-					try {
-						return returnValue(spos,
-							new URI(JsonTools.readJSONString(this)));
-					} catch (Exception ex) {}
-					//JSON value expected
-					return returnError(spos, null, JSON.JSON010, "[]{}");
-				} else if (isToken("e\"")) { // Email address
-					try {
-						return returnValue(spos,
-							new DefEmailAddr(JsonTools.readJSONString(this)));
-					} catch (Exception ex) {}
-					//JSON value expected
-					return returnError(spos, null, JSON.JSON010, "[]{}");
-				} else if (isToken("b(")) {
-					try {
-						result = SUtils.decodeBase64(this);
-						if (isChar(')')) {
-							return returnValue(spos, result);
-						}
-					} catch (SException ex) {
-						putReport(ex.getReport());
-						return returnValue(spos, null);
-					}
-					setIndex(pos);
-					//JSON value expected
-					return returnError(spos, null, JSON.JSON010, "[]{}");
-				} else if (isChar('D')) {
-					if (isDatetime("yyyy-MM-dd['T'HH:mm:ss[.S]][Z]" +
-						"|HH:mm:ss[.S][Z]"+ //time
-						"|--MM[-dd][Z]" + //month day
-						"|---dd[Z]"+ //day
-						"|yyyy-MM[Z]"+ // year month
-						"|yyyy[Z]")) { // year
-							return returnValue(spos, getParsedSDatetime());
-					}
-					//JSON simpleValue expected
-					return returnError(spos, null, JSON.JSON010, "[]{}");
-				} else if (isChar('P') || isToken("-P")) {
-					setIndex(pos);
-					if (isXMLDuration()) {
-						return returnValue(spos, getParsedSDuration());
-					}
-					setIndex(pos);
-					//JSON simpleValue expected
-					return returnError(spos, null, JSON.JSON010, "[]{}");
-				} else if (isToken("p(")) { // currency ammount
-					if (isFloat() || isInteger()) {
-						double d = Double.parseDouble(getParsedString());
-						isChar(' ');
-						if ((ch=isLetter()) != SParser.NOCHAR) {
-							String code = String.valueOf(ch);
-							i = 0;
-							for (;;) {
-								if (++i < 3	&& (ch=isLetter())!=SParser.NOCHAR){
-									code += ch;
-								} else {
-									break;
-								}
+						//JSON value expected
+						return returnError(spos, null, JSON.JSON010, "[]{}");
+					case 2:  // Email address
+						try {
+							return returnValue(spos, new DefEmailAddr(
+								JsonTools.readJSONString(this)));
+						} catch (Exception ex) {}
+						break;
+					case 3: // base64 (byte array)
+						try {
+							result = SUtils.decodeBase64(this);
+							if (isChar(')')) {
+								return returnValue(spos, result);
 							}
-							if (isChar(')') && i == 3) {
-								try {
-									return returnValue(spos, new Price(d,code));
-								} catch (SRuntimeException ex) {
-									putReport(ex.getReport());//currency error
-									return returnValue(spos, null);
+						} catch (SException ex) {}
+						break;
+					case 4:  // 'D' datetime
+						if (isDatetime("yyyy-MM-dd['T'HH:mm:ss[.S]][Z]" +
+							"|HH:mm:ss[.S][Z]"+ //time
+							"|--MM[-dd][Z]" + //month day
+							"|---dd[Z]"+ //day
+							"|yyyy-MM[Z]"+ // year month
+							"|yyyy[Z]")) { // year
+								return returnValue(spos, getParsedSDatetime());
+						}
+						break;
+					case 5: //"p(" - currency ammount
+						if (isFloat() || isInteger()) {
+							double d = Double.parseDouble(getParsedString());
+							isChar(' ');
+							if ((ch=isLetter()) != SParser.NOCHAR) {
+								String code = String.valueOf(ch);
+								i = 0;
+								for (;;) {
+									if (++i < 3	&& (ch=isLetter())!=SParser.NOCHAR){
+										code += ch;
+									} else {
+										break;
+									}
+								}
+								if (isChar(')') && i == 3) {
+									try {
+										return returnValue(spos, new Price(d,code));
+									} catch (SRuntimeException ex) {
+										putReport(ex.getReport());//currency error
+										return returnValue(spos, null);
+									}
 								}
 							}
 						}
-					}
-					setIndex(pos);
-					//JSON simpleValue expected
-					return returnError(spos, null, JSON.JSON010, "[]{}");
-				} else if (isToken("g(")) { // GPS position
-					result = null;
-					if (isSignedFloat() || isSignedInteger()) {
-						double latitude = getParsedDouble();
-						if (isChar(',') && (isChar(' ') || true)
-							&& (isSignedFloat() || isSignedInteger())) {
-							double longitude = getParsedDouble();
-							double altitude = Double.MIN_VALUE;
-							String name = null;
-							if (isChar(',') && (isChar(' ') || true)) {
-								if (isSignedFloat() || isSignedInteger()) {
-									altitude = getParsedDouble();
-									if (isChar(',') && (isChar(' ') || true)) {
+						break;
+					case 6: // "g(" - GPS position
+						result = null;
+						if (isSignedFloat() || isSignedInteger()) {
+							double latitude = getParsedDouble();
+							if (isChar(',') && (isChar(' ') || true)
+								&& (isSignedFloat() || isSignedInteger())) {
+								double longitude = getParsedDouble();
+								double altitude = Double.MIN_VALUE;
+								String name = null;
+								if (isChar(',') && (isChar(' ') || true)) {
+									if (isSignedFloat() || isSignedInteger()) {
+										altitude = getParsedDouble();
+										if (isChar(',') && (isChar(' ') || true)) {
+											name = readGPSName();
+										}
+									} else {
 										name = readGPSName();
 									}
-								} else {
-									name = readGPSName();
 								}
-							}
-							if (isChar(')')) {
-								try {
-									return returnValue(spos, new GPSPosition(
-										latitude, longitude, altitude, name));
-								} catch(SRuntimeException ex) {
-									putReport(ex.getReport()); // invalid GPS
-									return returnValue(spos, null);
+								if (isChar(')')) {
+									try {
+										return returnValue(spos,new GPSPosition(
+											latitude,longitude,altitude,name));
+									} catch(SRuntimeException ex) {
+										putReport(ex.getReport()); //invalid GPS
+										return returnValue(spos, null);
+									}
 								}
 							}
 						}
-					}
-					setIndex(pos);
-					//JSON simpleValue expected
-					return returnError(spos, null, JSON.JSON010, "[]{}");
-				} else if ((i=isOneOfTokens("NaN", "INF", "-INF")) >= 0) {
+						break;
+					case 7: 
+					case 8:  // 'D' datetime
+						setIndex(pos);
+						if (isXMLDuration()) {
+							return returnValue(spos, getParsedSDuration());
+						}
+						break;
+					case 9:  // "NaN"
+					case 10:  // "INF"
+					case 11:  // "-INF"
 					if (isChar('F')) {
-						return returnValue(spos, i == 0 ? Float.NaN
-							: i == 1 ? Float.POSITIVE_INFINITY
+						return returnValue(spos, i == 9 ? Float.NaN
+							: i == 10 ? Float.POSITIVE_INFINITY
 								: Float.NEGATIVE_INFINITY);
 					}
 					isChar('D');
 					return returnValue(spos, i == 0 ? Double.NaN
 						: i == 1 ? Double.POSITIVE_INFINITY
 							: Double.NEGATIVE_INFINITY);
+					case 12:  // "0d"number
+					case 13:  // "-0d"number
+						String s = i==13 ? "-" : "";
+						i = getIndex();
+						if (isFloat() || isInteger()) {
+							s += getBufferPart(i, getIndex());
+							BigDecimal d = new BigDecimal(s);
+							if (s.indexOf('e') > 0 || s.indexOf('E') > 0) {
+								// value without exponent specification
+								d = new BigDecimal(d.toPlainString());
+							}
+							return returnValue(spos, d);
+						}
+						break;
+					case 14:  // "0d"number
+					case 15:  // "-0d"number
+						s = i==15 ? "-" : "";
+						i = getIndex();
+						if (isInteger()) {
+							return returnValue(spos, new BigInteger(
+								s + getBufferPart(i, getIndex())));
+						}
 				}
+				setIndex(pos);
+				//JSON simpleValue expected
+				return returnError(spos, null, JSON.JSON010, "',[]{}");
 			}
+			// number
 			setIndex(pos);
 			boolean minus = isChar('-');
 			if (!minus && isChar('+')) {
@@ -559,23 +575,20 @@ public class XONReader extends StringParser implements XONParsers {
 				}
 				if (_xonMode) {
 					try {
-						switch(ch = isOneOfChars("FDd")) {
+						switch(ch = isOneOfChars("FD")) {
 							case 'F':
 								return returnValue(spos, Float.parseFloat(s));
 							case 'D':
 								return returnValue(spos, Double.parseDouble(s));
-							case 'd':
-								return returnValue(spos, new BigDecimal(s));
 						}
 					} catch (Exception ex) {
-						//Illegal number simpleValue &{0}{ for XON type "}{"}: &{1}
+						//Illegal number simpleValue &{0}
+						//{ for XON type "}{"}: &{1}
 						error(JSON.JSON023, ch, s);
 					}
 					if (!isfloat) {
 						try {
-							switch(ch = isOneOfChars("NLISB")) {
-								case 'N':
-									return returnValue(spos, new BigInteger(s));
+							switch(ch = isOneOfChars("LISB")) {
 								case 'L':
 									return returnValue(spos, Long.parseLong(s));
 								case 'I':
