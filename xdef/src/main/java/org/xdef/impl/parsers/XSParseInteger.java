@@ -87,7 +87,6 @@ public class XSParseInteger extends XSAbstractParseComparable {
 				p.error(XDEF.XDEF813, parserName(), "totalDigits", val);
 				return;
 			}
-
 		}
 		checkPatterns(p);
 		checkComparable(p);

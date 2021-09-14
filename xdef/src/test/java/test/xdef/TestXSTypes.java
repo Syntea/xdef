@@ -867,21 +867,20 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(parse("  \t\n\r0000000000000000000000\t\n\r  "), _msg);
 
 		// testing errors
-		//This is not recobnized by Java 1.3
+		// This is not recognized by Java 1.3
 		assertTrue(parseFail(":"), _msg);
 		assertTrue(parseFail(":a"), _msg);
 		assertTrue(parseFail("a:"), _msg);
 		// testing facets
 		assertTrue(prepare("anyURI(%length='3')"), _msg);
 		assertTrue(parse("w.a"), _msg);
-//		assertTrue(parseFail("w a"), _msg); //schema not recognizes
+//		assertTrue(parseFail("w a"), _msg); //schema does not report an error
 
-		assertTrue(prepare("anyURI(%enumeration=['www.a.cz','www.b.cz'])"),
-			_msg);
-		assertTrue(parse("www.a.cz"), _msg);
-		assertTrue(parse("www.b.cz"), _msg);
-		assertTrue(parse(" \n www.a.cz\t ", "www.a.cz"), _msg);
-		assertTrue(parseFail("www.c.cz"), _msg);
+		assertTrue(prepare("anyURI(%enumeration=['www.a.c','www.b.c'])"), _msg);
+		assertTrue(parse("www.a.c"), _msg);
+		assertTrue(parse("www.b.c"), _msg);
+		assertTrue(parse(" \n www.a.c\t ", "www.a.c"), _msg);
+		assertTrue(parseFail("www.c.c"), _msg);
 
 		assertTrue(prepare(
 			"anyURI(%pattern=['ffff','www\\\\.[a-z]+\\\\.cz'])"), _msg);
@@ -962,6 +961,7 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(parse("-1"), _msg);
 		assertTrue(parse("+0"), _msg);
 		assertTrue(parse("-0"), _msg);
+		assertTrue(parse("-.1"), _msg);
 		assertTrue(parse(".00"), _msg);
 		assertTrue(parse("-0.1"), _msg);
 		assertTrue(parse("-1.23"), _msg);
@@ -981,6 +981,10 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(parseFail("  "), _msg);
 		assertTrue(parseFail("..5"), _msg);
 		assertTrue(parseFail("+..5"), _msg);
+		assertTrue(parseFail("+"), _msg);
+		assertTrue(parseFail("-"), _msg);
+		assertTrue(parseFail("."), _msg);
+		assertTrue(parseFail("-."), _msg);
 
 		// testing facets
 		assertTrue(prepare("decimal(%minInclusive='1')"), _msg);
@@ -1679,7 +1683,12 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(parse("1.15"), _msg);
 		assertTrue(parse("0"), _msg);
 		assertTrue(parse("0.0"), _msg);
+		assertTrue(parse(".0"), _msg);
+		assertTrue(parse("-.0"), _msg);
+		assertTrue(parse("0."), _msg);
+		assertTrue(parse("-0."), _msg);
 		assertTrue(parse("0.0E0"), _msg);
+		assertTrue(parse("0.E0"), _msg);
 		assertTrue(parseFail("1E0"), _msg);
 		assertTrue(parseFail("1.12E1"), _msg);
 		assertTrue(parseFail("NaN"), _msg);
@@ -1719,6 +1728,8 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(prepare("float(%minInclusive=1E1)"), _msg);
 		assertTrue(parse("10.0"), _msg);
 		assertTrue(parseFail("9.0"), _msg);
+		assertTrue(parseFail("."), _msg);
+		assertTrue(parseFail("+."), _msg);
 
 		assertTrue(prepare("float(%minExclusive=1E1)"), _msg);
 		assertTrue(parse("10.1"), _msg);
@@ -1790,6 +1801,8 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(parseFail("-NaN"), _msg);
 		assertTrue(parseFail("+NaN"), _msg);
 		assertTrue(parseFail("+INF"), _msg);
+		assertTrue(parseFail("."), _msg);
+		assertTrue(parseFail("+."), _msg);
 
 		//testing enumeration
 		assertTrue(prepare("double(%enumeration=['NaN','INF','-INF'])"), _msg);

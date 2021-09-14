@@ -1,37 +1,35 @@
 package org.xdef.impl.code;
 
-import org.xdef.sys.SIllegalArgumentException;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
 import java.math.BigDecimal;
 import org.xdef.XDValueType;
 import java.math.BigInteger;
 
-/** Implements the internal object with BigDecimal values.
+/** The class DefLong implements the internal object with integer values.
  * @author Vaclav Trojan
  */
-public final class DefDecimal extends XDValueAbstract {
-
+public final class DefBigInteger extends XDValueAbstract {
 	/** The value associated with this item. */
-	private final BigDecimal _value;
+	private final BigInteger _value;
 
 	/** Creates a new instance of DefInteger.*/
-	public DefDecimal() {_value = null;}
+	public DefBigInteger() {_value = null;}
 
-	/** Creates a new instance of DefInteger
+	/** Creates a new instance of DefBigInteger
 	 * @param value The integer value.
 	 */
-	public DefDecimal(final BigDecimal value) {_value = value;}
+	public DefBigInteger(final BigInteger value) {_value = value;}
 
-	/** Creates a new instance of DefInteger
+	/** Creates a new instance of DefBigInteger
 	 * @param value The string with integer value.
 	 */
-	public DefDecimal(final String value) {_value = new BigDecimal(value);}
+	public DefBigInteger(final String value) {_value = new BigInteger(value);}
 
-	/** Creates a new instance of DefInteger
-	 * @param value The integer value.
+	/** Creates a new instance ofDefBigInteger
+	 * @param value The long integer value.
 	 */
-	public DefDecimal(final long value) {_value = new BigDecimal(value);}
+	public DefBigInteger(final long value) {this(String.valueOf(value));}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDValue interface
@@ -45,12 +43,12 @@ public final class DefDecimal extends XDValueAbstract {
 	/** Get type of value.
 	 * @return The id of item type.
 	 */
-	public short getItemId() {return XD_DECIMAL;}
+	public short getItemId() {return XD_BIGINTEGER;}
 	@Override
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
-	public XDValueType getItemType() {return XDValueType.DECIMAL;}
+	public XDValueType getItemType() {return XDValueType.BIGINTEGER;}
 	@Override
 	/** Check if the object is <i>null</i>.
 	 * @return <i>true</i> if the object is <i>null</i> otherwise returns
@@ -90,7 +88,7 @@ public final class DefDecimal extends XDValueAbstract {
 	 */
 	public boolean equals(final XDValue x) {
 		return isNull() ? x == null || x.isNull()
-			: x == null || x.isNull() ? false : _value.equals(x.decimalValue());
+			: x == null || x.isNull() ? false : _value.equals(x.integerValue());
 	}
 	@Override
 	/** Compares this XDValue object with the other XDValue object.
@@ -100,8 +98,8 @@ public final class DefDecimal extends XDValueAbstract {
 	 * specified object.
 	 * @throws SIllegalArgumentException if objects are not comparable.
 	 */
-	public int compareTo(final XDValue x) throws SIllegalArgumentException {
-		return _value.compareTo(x.decimalValue());
+	public int compareTo(final XDValue x) {
+		return _value.compareTo(x.integerValue());
 	}
 	@Override
 	public byte byteValue() {return _value==null ? 0 : _value.byteValue();}
@@ -116,13 +114,11 @@ public final class DefDecimal extends XDValueAbstract {
 	@Override
 	public double doubleValue() {return  _value==null? 0 :_value.doubleValue();}
 	@Override
-	public BigDecimal decimalValue() {return _value;}
+	public BigDecimal decimalValue() {return new BigDecimal(_value);}
 	@Override
-	public BigInteger integerValue() {
-		return  _value==null ? null : _value.toBigInteger();
-	}
+	public BigInteger integerValue() {return _value;}
 	@Override
 	public boolean booleanValue() {
-		return isNull() ? false : !_value.equals(BigDecimal.ZERO);
+		return isNull() ? false : !_value.equals(BigInteger.ZERO);
 	}
 }
