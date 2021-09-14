@@ -92,10 +92,10 @@ public class TestXon extends XDTester {
 		assertNull(testx("short", "[ 1 ]"));
 		assertNull(testx("int", "[ 1 ]"));
 		assertNull(testx("long", "[ 1 ]"));
-		assertNull(testx("integer", "[ 1 ]"));
+		assertNull(testx("integer", "[ 0i0, -0i3 ]"));
 		assertNull(testx("float", "[ 1 ]"));
 		assertNull(testx("double", "[ 1 ]"));
-		assertNull(testx("decimal", "[ 1 ]"));
+		assertNull(testx("decimal", "[ 0d0, 0d1, -0d1, 0d1.5, 0d3.33e-5 ]"));
 		assertNull(testx("date",
 			"[ D2021-01-12, D1999-01-05+01:01, D1998-12-21Z ]"));
 		assertNull(testx("gYear", "[ D2021+01:00, D1999, D-0012Z ]"));
@@ -209,9 +209,9 @@ public class TestXon extends XDTester {
 "    \" name with space \": \"x\\ty\"      # name with space is quoted!\n" +
 "  }, /**** end of map ****/\n" +
 "  -3F,                               # Float\n" +
-"  -3d,                               # BigDecimal\n" +
+"  -0d3.1,                            # BigDecimal\n" +
 "  -2B,                               # Byte\n" +
-"  0N,                                # BigInteger\n" +
+"  0i1,                               # BigInteger\n" +
 "  999999999999999999999999999999999, /* big integer (authomatic)*/\n" +
 "  D2021-01-11,                       /* date */\n" +
 "  D--11,                             /* month */\n" +

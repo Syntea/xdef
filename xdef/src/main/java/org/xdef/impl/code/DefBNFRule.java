@@ -64,8 +64,7 @@ public final class DefBNFRule extends XDValueAbstract implements XDBNFRule {
 							c.addXDItem(
 								new DefDouble(((Float)o).doubleValue()));
 						} else if (o instanceof Double) {
-							c.addXDItem(
-								new DefDouble(((Double)o)));
+							c.addXDItem(new DefDouble(((Double)o)));
 						} else {
 							c.addXDItem(new DefString(o.toString()));
 						}
