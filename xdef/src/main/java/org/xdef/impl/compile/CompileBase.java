@@ -519,7 +519,7 @@ public class CompileBase implements CodeTable, XDValueID {
 			keyParam("minInclusive", XD_DECIMAL,false,-1,false),
 			keyParam("pattern",XD_STRING,true,-1,false),
 			keyParam("totalDigits", XD_LONG,false,0,false));
-		parser(im, org.xdef.impl.parsers.XDParseDec.class, "dec");
+		parser(im, org.xdef.impl.parsers.XDParseDec.class, "?dec");
 
 		im = genParserMetnod(0, 0, null, XD_STRING,
 			keyParam("enumeration", XD_BYTES, true, -1,false),

@@ -93,8 +93,8 @@ public class TestXon extends XDTester {
 		assertNull(testx("int", "[ 1 ]"));
 		assertNull(testx("long", "[ 1 ]"));
 		assertNull(testx("integer", "[ 0i0, -0i3 ]"));
-		assertNull(testx("float", "[ 1 ]"));
-		assertNull(testx("double", "[ 1 ]"));
+		assertNull(testx("float", "[ 1.0 ]"));
+		assertNull(testx("double", "[ 1.0 ]"));
 		assertNull(testx("decimal", "[ 0d0, 0d1, -0d1, 0d1.5, 0d3.33e-5 ]"));
 		assertNull(testx("date",
 			"[ D2021-01-12, D1999-01-05+01:01, D1998-12-21Z ]"));

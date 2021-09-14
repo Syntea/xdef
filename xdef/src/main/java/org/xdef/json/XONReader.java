@@ -493,7 +493,7 @@ public class XONReader extends StringParser implements XONParsers {
 							}
 						}
 						break;
-					case 7: 
+					case 7:
 					case 8:  // 'D' datetime
 						setIndex(pos);
 						if (isXMLDuration()) {
