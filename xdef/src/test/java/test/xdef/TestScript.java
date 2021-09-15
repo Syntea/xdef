@@ -351,6 +351,8 @@ public final class TestScript extends XDTester {
 			+ "== '9223372036854775807');");
 		test("","setResult(toString(-0x7fffffffffffffff)"
 			+ "== '-9223372036854775807');");
+		test("","setResult(toString(-0d999.99) == '-999.99');");
+		test("","setResult(toString(-0i999999) == '-999999');");
 		test("","setResult(toString(0) == '0');");
 		test("","setResult(toString(0.1) == '0.1');");
 		test("","setResult(toString(001.9) == '1.9');");

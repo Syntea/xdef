@@ -125,7 +125,7 @@ BooleanLiteral ::= ("true" | "false") $rule
 
 DecimalInteger ::= ("_"* Digit+)+ ("_")*
 
-IntegerLiteral ::= (("0" [Dd])? DecimalInteger
+IntegerLiteral ::= (("0" [DdIi])? DecimalInteger 
   | "0" [Xx] ("_"* HexaDigit+)+ ("_")*) $rule
   /* Inside a number specification it is possible to insert the character "_".
     This character does not influence the value of the number, it just makes
