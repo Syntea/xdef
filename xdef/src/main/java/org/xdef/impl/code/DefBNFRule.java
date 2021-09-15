@@ -56,8 +56,10 @@ public final class DefBNFRule extends XDValueAbstract implements XDBNFRule {
 					if (o == null) {
 						c.addXDItem(new DefNull());
 					} if (o instanceof Number) {
-						if (o instanceof BigInteger || o instanceof BigDecimal){
+						if (o instanceof BigDecimal) {
 							c.addXDItem(new DefDecimal(o.toString()));
+						} else if (o instanceof BigInteger) {
+							c.addXDItem(new DefBigInteger(o.toString()));
 						} else if (o instanceof Long || o instanceof Integer) {
 							c.addXDItem(new DefLong(o.toString()));
 						} else if (o instanceof Float) {

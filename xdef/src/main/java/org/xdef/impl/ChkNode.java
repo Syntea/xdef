@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.PrintStream;
 import java.io.Writer;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -27,6 +28,7 @@ import org.xdef.XDResultSet;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
 import org.xdef.impl.code.CodeUniqueset;
+import org.xdef.impl.code.DefBigInteger;
 import org.xdef.impl.code.DefBoolean;
 import org.xdef.impl.code.DefContainer;
 import org.xdef.impl.code.DefDate;
@@ -545,6 +547,9 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 			case XD_DECIMAL:
 				_scp.setVariable(xv, new DefDecimal(value));
 				return;
+			case XD_BIGINTEGER:
+				_scp.setVariable(xv, new DefBigInteger(value));
+				return;
 			case XD_STRING:
 				_scp.setVariable(xv, new DefString(String.valueOf(value)));
 				return;
@@ -622,17 +627,15 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 						return;
 					}
 					break;
-				case XD_BOOLEAN: {
+				case XD_BOOLEAN:
 					if (value.getItemId() == XD_STRING) {
 						_scp.setVariable(xv, new DefBoolean(value.toString()));
 						return;
 					}
 					break;
-				}
-				case XD_PARSER: {
+				case XD_PARSER:
 					_scp.setVariable(xv, (XDParser) value);
 					return;
-				}
 			}
 			//Value is not compatible with the type of variable '&{0}'
 			throw new SRuntimeException(XDEF.XDEF564, name);
@@ -650,27 +653,25 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 			case XD_CONTAINER:
 				_scp.setVariable(xv, new DefString(value));
 				return;
-			case XD_BOOLEAN: {
+			case XD_BOOLEAN:
 				_scp.setVariable(xv, new DefBoolean(value));
 				return;
-			}
-			case XD_DOUBLE: {
+			case XD_DOUBLE:
 				_scp.setVariable(xv, new DefDouble(value));
 				return;
-			}
-			case XD_LONG: {
+			case XD_LONG:
 				_scp.setVariable(xv, new DefLong(value));
 				return;
-			}
-			case XD_DECIMAL: {
+			case XD_DECIMAL:
 				_scp.setVariable(xv, new DefDecimal(value));
 				return;
-			}
-			case XD_ELEMENT: {
+			case XD_BIGINTEGER:
+				_scp.setVariable(xv, new DefBigInteger(value));
+				return;
+			case XD_ELEMENT:
 				_scp.setVariable(xv, new DefElement(
 					KXmlUtils.parseXml(value).getDocumentElement()));
 				return;
-			}
 		}
 		//Value is not compatible with the type of variable '&{0}'
 		throw new SRuntimeException(XDEF.XDEF564, name);
@@ -691,6 +692,33 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 				return;
 			case XD_DECIMAL:
 				_scp.setVariable(xv, new DefDecimal(value));
+				return;
+			case XD_STRING:
+				_scp.setVariable(xv, new DefString(value.toString()));
+				return;
+		}
+		//Value is not compatible with the type of variable '&{0}'
+		throw new SRuntimeException(XDEF.XDEF564, name);
+	}
+
+	/** Set variable.
+	 * @param name name name of variable.
+	 * @param value value to be set to the variable.
+	 */
+	private void setVariable(final String name, final BigInteger value) {
+		XVariable xv = findVariable(name);
+		switch (xv.getType()) {
+			case XD_LONG:
+				_scp.setVariable(xv, new DefLong(value.longValue()));
+				return;
+			case XD_DOUBLE:
+				_scp.setVariable(xv, new DefDouble(value.doubleValue()));
+				return;
+			case XD_DECIMAL:
+				_scp.setVariable(xv, new DefDecimal(value.toString()));
+				return;
+			case XD_BIGINTEGER:
+				_scp.setVariable(xv, new DefBigInteger(value));
 				return;
 			case XD_STRING:
 				_scp.setVariable(xv, new DefString(value.toString()));

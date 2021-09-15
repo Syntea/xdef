@@ -266,7 +266,7 @@ public interface XDEF {
 	public static final long XDEF407 = 31159025793L;
 	/** Float number error&amp;{#SYS000} */
 	public static final long XDEF408 = 31159025794L;
-	/** Decimal number error&amp;{0}{: }&amp;{#SYS000} */
+	/** BigInteger or decimal number error&amp;{0}{: }&amp;{#SYS000} */
 	public static final long XDEF409 = 31159025795L;
 	/** '&amp;{0}' expected&amp;{#SYS000} */
 	public static final long XDEF410 = 31159025796L;

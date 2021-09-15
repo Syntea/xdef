@@ -10,6 +10,7 @@ import org.w3c.dom.Node;
 import org.xdef.XDContainer;
 import org.xdef.XDValue;
 import org.xdef.XDValueID;
+import org.xdef.impl.code.DefBigInteger;
 import org.xdef.impl.code.DefBoolean;
 import org.xdef.impl.code.DefBytes;
 import org.xdef.impl.code.DefContainer;
@@ -135,14 +136,19 @@ public class XQuerySaxonImpl implements XQueryImpl {
 									new DefDouble(item.getDouble()));
 								continue;
 							case XQItemType.XQBASETYPE_DECIMAL:
-							case XQItemType.XQBASETYPE_UNSIGNED_LONG:
 								result.addXDItem(new DefDecimal(
 									item.getAtomicValue()));
+								continue;
+							case XQItemType.XQBASETYPE_UNSIGNED_LONG:
+								result.addXDItem(new DefBigInteger(
+									item.getAtomicValue()));
+								continue;
 							case XQItemType.XQBASETYPE_DURATION:
 							case XQItemType.XQBASETYPE_DAYTIMEDURATION:
 							case XQItemType.XQBASETYPE_YEARMONTHDURATION:
 								result.addXDItem(
 									new DefDuration(item.getAtomicValue()));
+								continue;
 							case XQItemType.XQBASETYPE_DATE:
 							case XQItemType.XQBASETYPE_DATETIME:
 							case XQItemType.XQBASETYPE_GDAY:
@@ -152,12 +158,15 @@ public class XQuerySaxonImpl implements XQueryImpl {
 							case XQItemType.XQBASETYPE_GYEARMONTH:
 								result.addXDItem(
 									new DefDate(item.getAtomicValue()));
+								continue;
 							case XQItemType.XQBASETYPE_BASE64BINARY:
 								result.addXDItem(DefBytes.parseBase64(
 									item.getAtomicValue()));
+								continue;
 							case XQItemType.XQBASETYPE_HEXBINARY:
 								result.addXDItem(DefBytes.parseHex(
 									item.getAtomicValue()));
+								continue;
 //							case XQItemType.XQBASETYPE_ENTITY:
 //							case XQItemType.XQBASETYPE_ENTITIES: //????
 							default:

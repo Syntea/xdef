@@ -56,8 +56,10 @@ public interface CodeTable {
 	////////////////////////////////////////////////////////////////////////////
 	/** Convert top of stack to Decimal. */
 	static final short TO_DECIMAL_X = DEC_R + 1;
+	/** Convert top of stack to Decimal. */
+	static final short TO_BIGINTEGER_X = TO_DECIMAL_X + 1;
 	/** Convert top of stack to float. */
-	static final short TO_FLOAT = TO_DECIMAL_X + 1;
+	static final short TO_FLOAT = TO_BIGINTEGER_X + 1;
 	/** Float from integer on stack item (top - index). */
 	static final short TO_FLOAT_X = TO_FLOAT + 1;
 	/** Integer from object on the stack item (top - index). */

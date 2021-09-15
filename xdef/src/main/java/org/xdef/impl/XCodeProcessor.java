@@ -52,6 +52,7 @@ import org.xdef.impl.code.CodeUniqueset;
 import org.xdef.impl.code.CodeXD;
 import org.xdef.impl.code.DefBNFGrammar;
 import org.xdef.impl.code.DefBNFRule;
+import org.xdef.impl.code.DefBigInteger;
 import org.xdef.impl.code.DefBoolean;
 import org.xdef.impl.code.DefBytes;
 import org.xdef.impl.code.DefChar;
@@ -767,6 +768,12 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 					int i = item.getParam();
 					_stack[sp - i] =
 						new DefDecimal(_stack[sp - i].decimalValue());
+					continue;
+				}
+				case TO_BIGINTEGER_X: {
+					int i = item.getParam();
+					_stack[sp - i] =
+						new DefBigInteger(_stack[sp - i].integerValue());
 					continue;
 				}
 				case TO_FLOAT:

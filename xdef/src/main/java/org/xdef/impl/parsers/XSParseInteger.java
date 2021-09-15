@@ -1,10 +1,13 @@
 package org.xdef.impl.parsers;
 
+import java.math.BigDecimal;
 import org.xdef.msg.XDEF;
 import org.xdef.XDParseResult;
 import org.xdef.proc.XXNode;
+import java.math.BigInteger;
+import org.xdef.impl.XConstants;
+import org.xdef.impl.code.DefBigInteger;
 import org.xdef.impl.code.DefDecimal;
-import java.math.BigDecimal;
 
 /** Parser of Schema "integer" type.
  * @author Vaclav Trojan
@@ -72,19 +75,19 @@ public class XSParseInteger extends XSAbstractParseComparable {
 		String s = p.getParsedBufferPartFrom(pos);
 		p.isSpaces();
 		p.replaceParsedBufferFrom(pos0, s);
-		BigDecimal val;
+		BigInteger val;
 		try {
-			val = new BigDecimal(s = sign == '+' ? s.substring(1) : s);
+			val = new BigInteger(s = sign == '+' ? s.substring(1) : s);
 		} catch (Exception ex) {
 			//Incorrect value of '&{0}'&{1}{: }
 			p.error(XDEF.XDEF809, parserName(), s);
 			return;
 		}
-		p.setParsedValue(new DefDecimal(val));
+		p.setParsedValue(new DefBigInteger(val));
 		if (_totalDigits >= 0) {
 			if (totalDigits > _totalDigits) {
 				//Value of '&{0}' doesn't fit to '&{1}'&{2}{: }
-				p.error(XDEF.XDEF813, parserName(), "totalDigits", val);
+				p.error(XDEF.XDEF813, parserName(), "totalDigits", s);
 				return;
 			}
 		}

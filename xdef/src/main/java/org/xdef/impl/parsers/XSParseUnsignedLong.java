@@ -4,9 +4,10 @@ import org.xdef.msg.XDEF;
 import org.xdef.XDParseResult;
 import org.xdef.XDValue;
 import org.xdef.proc.XXNode;
-import org.xdef.impl.code.DefDecimal;
+import org.xdef.impl.code.DefBigInteger;
 import org.xdef.sys.SRuntimeException;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 
 /** Parser of Schema "unsignedLong" type.
  * @author Vaclav Trojan
@@ -40,18 +41,15 @@ public class XSParseUnsignedLong extends XSParseInteger {
 		String s = p.getParsedBufferPartFrom(pos);
 		p.isSpaces();
 		p.replaceParsedBufferFrom(pos0, s);
-		BigDecimal val;
+		BigInteger val;
 		try {
-			val = new BigDecimal(plus ? s = s.substring(1) : s);
-			if (val.signum() < 0 ||	val.compareTo(MAX_VALUE) > 0) {
-				throw new Exception();
-			}
+			val = new BigInteger(plus ? s = s.substring(1) : s);
 		} catch (Exception ex) {
 			//Value of '&{0}' is out of range&{1}{: }
 			p.error(XDEF.XDEF806, parserName(), s);
 			return;
 		}
-		p.setParsedValue(new DefDecimal(val));
+		p.setParsedValue(new DefBigInteger(val));
 		if (_totalDigits >= 0) {
 			if (totalDigits > _totalDigits) {
 				//Value of '&{0}' doesn't fit to '&{1}'&{2}{: }
