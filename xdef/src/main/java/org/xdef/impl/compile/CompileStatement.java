@@ -804,7 +804,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			case PLUS_SYM:
 			case MINUS_SYM: {
 				if (xType != XD_LONG && xType != XD_DOUBLE
-					 && xType != XD_DECIMAL) {
+					 && xType != XD_DECIMAL && xType != XD_BIGINTEGER) {
 					if (xType != CompileBase.XD_UNDEF) {
 						// don't report twice
 						 //Value of type int or float expected
@@ -822,18 +822,16 @@ class CompileStatement extends XScriptParser implements CodeTable {
 						}
 					} else if (xType == XD_DECIMAL) {
 						if (xValue >= 0) { // constant
-							BigDecimal d =_g.getCodeItem(xValue).decimalValue();
-							d.negate();
-							_g.setCodeItem(xValue, new DefDecimal(d));
+							_g.setCodeItem(xValue, new DefDecimal(
+								_g.getCodeItem(xValue).decimalValue()));
 						} else {
 							//Value of type int or float expected
 						   error(XDEF.XDEF439);
 						}
 					} else if (xType == XD_BIGINTEGER) {
 						if (xValue >= 0) { // constant
-							BigInteger d =_g.getCodeItem(xValue).integerValue();
-							d.negate();
-							_g.setCodeItem(xValue, new DefBigInteger(d));
+							_g.setCodeItem(xValue, new DefBigInteger(
+								_g.getCodeItem(xValue).integerValue()));
 						} else {
 							//Value of type int or float expected
 						   error(XDEF.XDEF439);

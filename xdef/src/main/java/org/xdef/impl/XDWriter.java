@@ -123,6 +123,9 @@ public final class XDWriter extends SObjectWriter {
 					case XDValueID.XD_DECIMAL:
 						writeBigDecimal(x.decimalValue());
 						return;
+					case XDValueID.XD_BIGINTEGER:
+						writeBigInteger(x.integerValue());
+						return;
 					case XDValueID.XD_DURATION: {
 						writeSDuration(x.durationValue());
 						return;

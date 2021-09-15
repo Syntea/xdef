@@ -77,7 +77,11 @@ public class MyTest extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<xd:declaration>\n"+
-" final EmailAddr x = new EmailAddr('=?UTF-8?Q?Pavel B=C3=BDk?= &lt;p@s&gt;');\n"+
+" final EmailAddr x=new EmailAddr('=?UTF-8?Q?Pavel B=C3=BDk?= &lt;p@s&gt;');\n"+
+" BigInteger y = -0i9999999999999999999999999999999999999999999999999999999;\n"+
+" BigInteger y1 = 0i9999999999999999999999999999999999999999999999999999999;\n"+
+" Decimal z = -0d9999999999999999999999999999999999999999999999999999999.99;\n"+
+" Decimal z1 = 0d9999999999999999999999999999999999999999999999999999999.99;\n"+
 "</xd:declaration>\n"+
 "<a email='emailAddr(); onTrue {\n"+
 "              EmailAddr e = (EmailAddr) getParsedValue();\n"+
@@ -87,6 +91,10 @@ public class MyTest extends XDTester {
 "              outln(getEmailAddr(e));\n"+
 "              outln(getEmailUserName(x));\n"+
 "              outln(getEmailAddr(x));\n"+
+"              outln(\"y: \" + y);\n"+
+"              outln(\"y1: \" + y1);\n"+
+"              outln(\"z: \" + z);\n"+
+"              outln(\"z1: \" + z1);\n"+
 "            }' />\n"+
 "</xd:def>";
 			xp = compile(xdef);

@@ -3,6 +3,7 @@ package org.xdef.sys;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.nio.charset.Charset;
 
 /** Provides writing of SObjects to output stream.
@@ -84,6 +85,11 @@ public class SObjectWriter {
 	}
 
 	synchronized public final void writeBigDecimal(final BigDecimal x)
+		throws IOException {
+		writeString(x == null ? null : x.toString());
+	}
+
+	synchronized public final void writeBigInteger(final BigInteger x)
 		throws IOException {
 		writeString(x == null ? null : x.toString());
 	}
