@@ -27,6 +27,7 @@ import org.xdef.model.XMNode;
 import java.util.Map;
 import org.xdef.impl.XVariableTable;
 import org.xdef.impl.code.CodeS1;
+import org.xdef.impl.code.DefBigInteger;
 
 /** Compiler of XD script of headers, elements and attributes.
  * @author Vaclav Trojan
@@ -591,6 +592,9 @@ final class CompileXScript extends CompileStatement {
 						break;
 					case XD_DECIMAL:
 						_g.genLDC(new DefDecimal(0));
+						break;
+					case XD_BIGINTEGER:
+						_g.genLDC(new DefBigInteger(0));
 						break;
 					case CompileBase.X_PARSEITEM:
 					default:

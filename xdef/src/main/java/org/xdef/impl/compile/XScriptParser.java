@@ -15,6 +15,7 @@ import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import org.xdef.impl.code.DefBigInteger;
 
 /** XScriptParser - lexical parser for the symbols of XD script. Before parsing
  * all macros are expanded.
@@ -837,8 +838,8 @@ public class XScriptParser extends StringParser
 		int startNumber = getIndex();
 		char c = ch;
 		if (ch == '0' && ((c = getCurrentChar()) == 'x' || c == 'X'
-			 || c == 'd' || c == 'D') ) {
-			// hexadecimal number
+			|| c == 'd' || c == 'D' || c == 'i' || c == 'I') ) {
+			// hexadecimal number, decimal or big integer
 			incBufIndex();
 			if (c == 'd' || c == 'D') { // Decimal
 				if ((c = getCurrentChar()) >= '0' && c <= '9') {
@@ -873,7 +874,26 @@ public class XScriptParser extends StringParser
 						return;
 					} catch (Exception ex) {}
 				}
-				error(XDEF.XDEF409); //Decimal number error
+				error(XDEF.XDEF409); //Decimal or BigInteger number error
+				_parsedValue = new DefDecimal();
+				return;
+			} else if (c == 'i' || c == 'I') { // big integer
+				if ((c = getCurrentChar()) >= '0' && c <= '9') {
+					while ((DEC_DIGITS.indexOf(c = getCurrentChar())) >= 0) {
+						incBufIndex();
+					}
+					String s =  getParsedBufferPartFrom(startNumber + 1);
+					s = SUtils.modifyString(s, "_", ""); // delete all "_"
+					if (_unaryMinus) {
+						s = '-' + s;
+					}
+					setParsedString(s);
+					try {
+						_parsedValue = new DefBigInteger(s);
+						return;
+					} catch (Exception ex) {}
+				}
+				error(XDEF.XDEF409); //Decimal or BigInteger number error
 				_parsedValue = new DefDecimal();
 				return;
 			}

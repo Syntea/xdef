@@ -36,9 +36,11 @@ import java.util.Map;
 import java.util.LinkedHashMap;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.math.BigInteger;
 import java.util.HashMap;
 import org.xdef.impl.XConstants;
 import org.xdef.impl.XDefinition;
+import org.xdef.impl.code.DefBigInteger;
 import org.xdef.impl.code.ParseItem;
 
 /** Compiler of statements in script.
@@ -823,6 +825,15 @@ class CompileStatement extends XScriptParser implements CodeTable {
 							BigDecimal d =_g.getCodeItem(xValue).decimalValue();
 							d.negate();
 							_g.setCodeItem(xValue, new DefDecimal(d));
+						} else {
+							//Value of type int or float expected
+						   error(XDEF.XDEF439);
+						}
+					} else if (xType == XD_BIGINTEGER) {
+						if (xValue >= 0) { // constant
+							BigInteger d =_g.getCodeItem(xValue).integerValue();
+							d.negate();
+							_g.setCodeItem(xValue, new DefBigInteger(d));
 						} else {
 							//Value of type int or float expected
 						   error(XDEF.XDEF439);

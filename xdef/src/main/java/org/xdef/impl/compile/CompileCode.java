@@ -21,6 +21,7 @@ import org.xdef.impl.code.CodeOp;
 import org.xdef.impl.code.CodeParser;
 import org.xdef.impl.code.CodeS1;
 import org.xdef.impl.code.DefBNFGrammar;
+import org.xdef.impl.code.DefBigInteger;
 import org.xdef.impl.code.DefBoolean;
 import org.xdef.impl.code.DefChar;
 import org.xdef.impl.code.DefContainer;
@@ -1269,6 +1270,20 @@ public final class CompileCode extends CompileBase {
 							_cstack[_sp] = -1;
 						}
 						_tstack[_sp] = XD_DECIMAL;
+						return;
+					}
+					break;
+				case XD_BIGINTEGER:
+					if (xType == XD_LONG) {
+						if (xValue >= 0) {
+							_code.set(xValue, new DefBigInteger(
+								getCodeItem(xValue).integerValue()));
+						} else {
+							addCode(
+								new CodeI1(XD_BIGINTEGER, TO_BIGINTEGER_X, 0));
+							_cstack[_sp] = -1;
+						}
+						_tstack[_sp] = XD_BIGINTEGER;
 						return;
 					}
 					break;

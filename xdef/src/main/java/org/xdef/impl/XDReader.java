@@ -23,6 +23,7 @@ import org.xdef.impl.code.CodeUniqueset;
 import org.xdef.impl.code.CodeXD;
 import org.xdef.impl.code.DefBNFGrammar;
 import org.xdef.impl.code.DefBNFRule;
+import org.xdef.impl.code.DefBigInteger;
 import org.xdef.impl.code.DefBoolean;
 import org.xdef.impl.code.DefBytes;
 import org.xdef.impl.code.DefContainer;
@@ -169,6 +170,8 @@ public final class XDReader extends SObjectReader {
 					}
 					case XDValueID.XD_DECIMAL:
 						return new DefDecimal(readBigDecimal());
+					case XDValueID.XD_BIGINTEGER:
+						return new DefBigInteger(readBigInteger());
 					case XDValueID.XD_DURATION: {
 						SDuration x = readSDuration();
 						return x==null ? new DefDuration() : new DefDuration(x);

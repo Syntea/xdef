@@ -71,8 +71,7 @@ public final class DefBigInteger extends XDValueAbstract {
 	 * @return the object with the copy of this one.
 	 */
 	public XDValue cloneItem() {
-		return _value == null ? new DefDecimal() :
-			new DefDecimal(new BigDecimal(_value.toString()));
+		return _value == null ? new DefBigInteger() : new DefBigInteger(_value);
 	}
 	@Override
 	public int hashCode() {return _value == null ? 0 : _value.hashCode();}

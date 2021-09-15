@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.net.URL;
 import java.util.Calendar;
 import java.util.Map;
@@ -14,6 +15,7 @@ import org.xdef.XDPool;
 import org.xdef.XDValue;
 import org.xdef.impl.code.DefBNFGrammar;
 import org.xdef.impl.code.DefBNFRule;
+import org.xdef.impl.code.DefBigInteger;
 import org.xdef.impl.code.DefBoolean;
 import org.xdef.impl.code.DefBytes;
 import org.xdef.impl.code.DefDate;
@@ -386,6 +388,8 @@ public class XBuilder implements XDBuilder {
 			return new DefDouble(((Number) obj).doubleValue());
 		} else if (obj instanceof BigDecimal) {
 			return new DefDecimal((BigDecimal) obj);
+		} else if (obj instanceof BigInteger) {
+			return new DefBigInteger((BigInteger) obj);
 		} else if (obj instanceof byte[]) {
 			return new DefBytes((byte[]) obj);
 		} else if (obj instanceof BNFGrammar) {

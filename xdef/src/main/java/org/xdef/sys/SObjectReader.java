@@ -4,6 +4,7 @@ import org.xdef.msg.SYS;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.nio.charset.Charset;
 
 /** Provides reading of SObjects to output stream.
@@ -107,6 +108,11 @@ public class SObjectReader {
 	public final BigDecimal readBigDecimal() throws IOException {
 		String s = readString();
 		return (s == null) ? null : new BigDecimal(s);
+	}
+
+	public final BigInteger readBigInteger() throws IOException {
+		String s = readString();
+		return (s == null) ? null : new BigInteger(s);
 	}
 
 	public final String readString() throws IOException {

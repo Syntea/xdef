@@ -2,6 +2,7 @@ package org.xdef.impl;
 
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
@@ -22,6 +23,7 @@ import org.xdef.impl.code.CodeDisplay;
 import org.xdef.impl.code.CodeExtMethod;
 import org.xdef.impl.code.CodeTable;
 import org.xdef.impl.code.DefBNFGrammar;
+import org.xdef.impl.code.DefBigInteger;
 import org.xdef.impl.code.DefBoolean;
 import org.xdef.impl.code.DefBytes;
 import org.xdef.impl.code.DefContainer;
@@ -87,6 +89,8 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 							return new DefDouble(p.floatValue());
 						case XD_DECIMAL:
 							return new DefDecimal(p.decimalValue());
+						case XD_BIGINTEGER:
+							return new DefBigInteger(p.integerValue());
 						case XD_DATETIME:
 							return new DefDate(p.datetimeValue());
 						case XD_DURATION:
@@ -1117,6 +1121,9 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 									case XD_DECIMAL:
 										pars[j + k] = stack[i].decimalValue();
 										break;
+									case XD_BIGINTEGER:
+										pars[j + k] = stack[i].integerValue();
+										break;
 									case XD_LONG: {
 										Class<?> x;
 										if ((x = p[j+k]).equals(Long.TYPE) ||
@@ -1234,6 +1241,10 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 										stack[++sp] = new DefDecimal(
 											(BigDecimal) o);
 										break;
+									case XD_BIGINTEGER:
+										stack[++sp] = new DefBigInteger(
+											(BigInteger) o);
+										break;
 									case XD_LONG:
 										stack[++sp] =
 											new DefLong(x.longValue());
@@ -1262,6 +1273,9 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 								break;
 							case XD_DECIMAL:
 								stack[++sp] = new DefDecimal((BigDecimal) o);
+								break;
+							case XD_BIGINTEGER:
+								stack[++sp] = new DefBigInteger((BigInteger) o);
 								break;
 							case XD_LONG:
 								stack[++sp] =

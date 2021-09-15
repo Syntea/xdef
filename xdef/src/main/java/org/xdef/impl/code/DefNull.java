@@ -166,6 +166,8 @@ public final class DefNull extends XDValueAbstract {
 				return new DefLong();
 			case XD_DECIMAL: //BigDecimal value
 				return new DefDecimal();
+			case XD_BIGINTEGER: //BigInteger value
+				return new DefBigInteger();
 			case XD_BOOLEAN: //boolean value
 				return new DefBoolean();
 			case XD_CHAR: // char value
