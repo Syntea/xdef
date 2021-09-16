@@ -82,7 +82,7 @@ public class XONReader extends StringParser implements XONParsers {
 	/** Set mode that JSON is parsed in X-definition compiler. */
 	public final void setXdefMode() {
 		_acceptComments = _jdef = true;
-		_xonMode = false;
+		_xonMode = true;
 	}
 
 	/** Set mode that XON is parsed. */
@@ -148,7 +148,7 @@ public class XONReader extends StringParser implements XONParsers {
 				isSpacesOrComments();
 				SBuffer value = null;
 				if (i == 1) { // oneOf
-					if (isChar(':')) {
+					if (isOneOfChars(":=") != NOCHAR) {
 						isSpacesOrComments();
 						spos = getPosition();
 						JValue jv = readSimpleValue();
@@ -161,7 +161,7 @@ public class XONReader extends StringParser implements XONParsers {
 					}
 					_jp.xdScript(name, value);
 				} else {  // xscript
-					if (!isChar(':') && i != 1) {
+					if (isOneOfChars(":=") == NOCHAR && i != 1) {
 						//"&{0}"&{1}{ or "}{"} expected
 						error(JSON.JSON002, ":");
 					}
@@ -178,19 +178,22 @@ public class XONReader extends StringParser implements XONParsers {
 			} else {
 				SBuffer name;
 				spos = getPosition();
+				char separator;
 				if (isChar('"')) {
 					name = new SBuffer(JsonTools.readJSONString(this), spos);
-				} else if (_xonMode && isNCName(StringParser.XMLVER1_0)) {
+					separator = ':';
+				} else if (_xonMode && isXMLName(StringParser.XMLVER1_0)) {
 					name = new SBuffer(getParsedString(), spos);
+					separator = '=';
 				} else {
 					fatal(JSON.JSON004); //Name of item expected
 					_jp.mapEnd(this);
 					return;
 				}
 				isSpacesOrComments();
-				if (!isChar(':')) {
+				if (!isChar(separator)) {
 					//"&{0}"&{1}{ or "}{"} expected
-					error(JSON.JSON002, ":");
+					error(JSON.JSON002, ":", "=");
 				}
 				_jp.namedValue(name);
 				isSpacesOrComments();
@@ -257,7 +260,7 @@ public class XONReader extends StringParser implements XONParsers {
 					spos);
 				wasScript = true;
 				SBuffer value = null;
-				if (isChar(':')) {
+				if (isOneOfChars(":=") != NOCHAR) {
 					isSpacesOrComments();
 					JValue jv = readSimpleValue();
 					if (jv.getValue() instanceof String) {
@@ -270,7 +273,7 @@ public class XONReader extends StringParser implements XONParsers {
 				} else {
 					if (i == 0) { //JsonNames.SCRIPT_NAME
 						//"&{0}"&{1}{ or "}{"} expected
-					   error(JSON.JSON002, ":");
+					   error(JSON.JSON002, ":", "=");
 					}
 				}
 				_jp.xdScript(name, value);

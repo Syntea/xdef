@@ -727,7 +727,7 @@ object ::= "{" jscript? (members)* S? "}"
 
 members ::= S? pair (S? "," S? pair)*
 
-pair ::= string S? ":" S? value
+pair ::= ($xmlName S? "=" | string S? ":") S? value
 
 array ::= "[" jscript? S? list? S? "]"
 
