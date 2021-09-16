@@ -121,33 +121,33 @@ public class TestXon extends XDTester {
 "<xd:json name='a'>\n" +
 "[\n" +
 "  {\n" +
-"    \"a\" : \"? short()\",\n" +	/* Short */
-"    \"b\" : \"? jstring()\",\n" +	/* string */
-"    \"c\" : \"? double()\",\n" +		/* Double */
-"    \"f\" : \"? boolean()\",\n" +	/* boolean */
-"    \"g\" : \"? duration()\",\n" +	/* duration */
-"    \"h\" : \"? jnull()\",\n" +	/* null */
-"    \"i\" : [],\n" +				/* empty array */
-"    \"Towns\" : [\n" +
+"    a = \"? short()\",\n" +	/* Short */
+"    b = \"? jstring()\",\n" +	/* string */
+"    c = \"? double()\",\n" +		/* Double */
+"    f = \"? boolean()\",\n" +	/* boolean */
+"    g = \"? duration()\",\n" +	/* duration */
+"    h = \"? jnull()\",\n" +	/* null */
+"    i = [],\n" +				/* empty array */
+"    Towns = [\n" +
 "      \"* gps()\"\n" +
 "    ],\n" +
-"    \"j\" : \"? char()\",\n" +		/* char 'a' */
-"    \"k\" : \"? char()\",\n" +		/* char "'" */
-"    \"l\" : \"? char()\",\n" +		/* char "\\"" */
-"    \"m\" : \"? char()\",\n" +		/*char '\u0007' */
-"    \"n\" : \"? char()\",\n" +		/*char "\\\"" */
-"    \"o\" : \"? char()\",\n" +		/*char '\n' */
-"    \"p\" : \"? char()\",\n" +		/*char '\\n' */
-"    \"q\" : \"? char()\",\n" +		/*char ' ' */
-"    \"r\" : \"? char()\",\n" +		/*char not exists */
-"    \"s\" : \"? char()\",\n" +		/*char not exists */
-"    \"t\" : \"? gYear()\",\n" +	/*gYear*/
-"    \"u\" : \"? gYear()\",\n" +	/*gYear*/
-"    \"v\" : \"? gYear()\",\n" +	/*gYear*/
-"    \"w\" : \"? gYear()\",\n" +	/*gYear*/
-"    \"x\" : \"? gYear()\",\n" +	/*gYear*/
-"    \"y\" : \"? gYear()\",\n" +	/*gYear*/
-"    \"z\" : \"? gYear()\",\n" +	/*gYear*/
+"    j = \"? char()\",\n" +		/* char 'a' */
+"    k = \"? char()\",\n" +		/* char "'" */
+"    l = \"? char()\",\n" +		/* char "\\"" */
+"    m = \"? char()\",\n" +		/*char '\u0007' */
+"    n = \"? char()\",\n" +		/*char "\\\"" */
+"    o = \"? char()\",\n" +		/*char '\n' */
+"    p = \"? char()\",\n" +		/*char '\\n' */
+"    q = \"? char()\",\n" +		/*char ' ' */
+"    r = \"? char()\",\n" +		/*char not exists */
+"    s = \"? char()\",\n" +		/*char not exists */
+"    t = \"? gYear()\",\n" +	/*gYear*/
+"    u = \"? gYear()\",\n" +	/*gYear*/
+"    v = \"? gYear()\",\n" +	/*gYear*/
+"    w = \"? gYear()\",\n" +	/*gYear*/
+"    x = \"? gYear()\",\n" +	/*gYear*/
+"    y = \"? gYear()\",\n" +	/*gYear*/
+"    z = \"? gYear()\",\n" +	/*gYear*/
 "    \" name with space \": \"? jstring()\"\n" +
 "  },\n" +
 "  \"float()\",\n" +
@@ -182,31 +182,31 @@ public class TestXon extends XDTester {
 "# Start of XON example\n" +
 "[ #***** Array *****/\n" +
 "  { #***** Map *****/\n" +
-"    a : 1S,                          # Short\n" +
-"    b : \"ab cd\",                     # String\n" +
-"    c : -123.4e2D,                   # Double\n" +
-"    f:true,                          # Boolean\n" +
-"    g : P1Y1M1DT1H1M1.12S,           # Duration\n" +
-"    h : null,                        # null\n" +
-"    i:[],                            # empty array\n" +
-"    Towns : [ # array with GPS locations of towns\n" +
+"    a = 1S,                          # Short\n" +
+"    b = \"ab cd\",                     # String\n" +
+"    c = -123.4e2D,                   # Double\n" +
+"    f=true,                          # Boolean\n" +
+"    g = P1Y1M1DT1H1M1.12S,           # Duration\n" +
+"    h = null,                        # null\n" +
+"    i=[],                            # empty array\n" +
+"    Towns = [ # array with GPS locations of towns\n" +
 "      g(48.2, 16.37, 151, Wien),     # GPS\n" +
 "      g(51.52, -0.09, 0, London),    # GPS\n" +
 "      g(50.08, 14.42, 399, \"Praha (centrum)\") # GPS\n" +
 "    ],\n" +
-"    j : c\"a\",                        # Character\n" +
-"    k : c\"'\",                        # Character\n" +
-"    l : c\"\\\"\",                       # Character\n" +
-"    m : c\"\\u0007\",                    # Character\n" +
-"    n : c\"\\\\\",                       # Character\n" +
-"    o : c\"\n\",                       # Character\n" +
-"    p : c\"\\n\",                        # Character\n" +
-"    q : c\" \",                        # Character\n" +
-"    t : D0001,                       # year (without zone)\n" +
-"    u : D-0001,                      # year (without zone)\n" +
-"    v : D123456789Z,                 # year zone\n" +
-"    w : D-0001-01:00,                # year zone\n" +
-"    \" name with space \": \"x\\ty\"      # name with space is quoted!\n" +
+"    j = c\"a\",                      # Character\n" +
+"    k = c\"'\",                      # Character\n" +
+"    l = c\"\\\"\",                   # Character\n" +
+"    m = c\"\\u0007\",                # Character\n" +
+"    n = c\"\\\\\",                   # Character\n" +
+"    o = c\"\n\",                     # Character\n" +
+"    p = c\"\\n\",                    # Character\n" +
+"    q = c\" \",                      # Character\n" +
+"    t = D0001,                       # year (without zone)\n" +
+"    u = D-0001,                      # year (without zone)\n" +
+"    v = D123456789Z,                 # year zone\n" +
+"    w = D-0001-01:00,                # year zone\n" +
+"    \" name with space \": \"x\\ty\" # name with space is quoted!\n" +
 "  }, /**** end of map ****/\n" +
 "  -3F,                               # Float\n" +
 "  -0d3.1,                            # BigDecimal\n" +

@@ -218,11 +218,13 @@ class JsonToString extends JsonTools {
 					throw new RuntimeException(ex);
 				}
 			}
-			if (!xon || key.indexOf(':') >= 0
-				|| !StringParser.chkXMLName(key, StringParser.XMLVER1_0)) {
+			char separator = '=';
+			if (!xon || !StringParser.chkXMLName(key, StringParser.XMLVER1_0)) {
 				key = '"' + jstringToSource(key) + '"';
+				separator = ':';
 			}
-			key += indent == null ? ":" : " : ";
+			key += indent != null
+				?  " " + separator + " " : String.valueOf(separator);
 			if (first) {
 				first = false;
 				if (map.size() > 1) {
