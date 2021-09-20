@@ -720,8 +720,8 @@ controlcharacter ::= '\"' | '\\' | '\/' | '\b' | '\f' | '\n' | '\r' | '\t' |
 string ::= ('"' ([^\"] | controlcharacter)* '"' |
   "'" ([^\'] | controlcharacter)* "'")
 
-jscript ::= S? ( ("$script" S? ":" S? string)
-  | ( "$oneOf" (S? ":" S? string)? ) ) (S? ",")?
+jscript ::= S? ( ("$script" S? [:=] S? string)
+  | ( "$oneOf" (S? [:=] S? string)? ) ) (S? ",")?
 
 object ::= "{" jscript? (members)* S? "}"
 

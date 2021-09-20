@@ -3,7 +3,7 @@
 <xd:json name="a">
 [ "jvalue()",
   {
-    $script: "occurs 1..*; ref B#person"
+    $script= "occurs 1..*; ref B#person"
   }
 ]
 </xd:json>

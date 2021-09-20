@@ -20,16 +20,6 @@ public class TestJsonUtil extends STester {
 		_files = SUtils.getFileGroup(s + groupName + ".json");
 	}
 
-	/** Get ID from the file name.
-	 * @param f file name
-	 * @return ID (string of file name without the prefix "Test"
-	 * and without file extension.
-	 */
-	private  String getId(final File f) {
-		String s = f.getName();
-		return s.substring(4, s.lastIndexOf('.'));
-	}
-
 	/** Test parser of JSON source, toJSONString utility and JsonToXml convertor.
 	 * @param f file with JSON source.
 	 * @return error message or the empty string if no error was recognized.
