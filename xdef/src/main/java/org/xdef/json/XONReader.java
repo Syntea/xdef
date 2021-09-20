@@ -648,7 +648,7 @@ public class XONReader extends StringParser implements XONParsers {
 			SBuffer name = new SBuffer(JsonNames.ANY_NAME, spos);
 			SBuffer val = new SBuffer(JsonNames.ANY_NAME, spos);
 			isSpacesOrComments();
-			if (isChar(':')) {
+			if (isOneOfChars(":=") != NOCHAR) {
 				isSpacesOrComments();
 				JValue jv = readSimpleValue();
 				if (!(((JValue) jv).getValue() instanceof String)) {
