@@ -88,20 +88,14 @@ public abstract class XDValueAbstract implements XDValue {
 	public String toString() {return stringValue();}
 	@Override
 	public void setItemType(final short type) {
-		//Unsupported operation &{0}&{1}{ on }
-		throw new SUnsupportedOperationException(SYS.SYS090,
-			"setItemType(short)", getClass().getName());
+		throw new SUnsupportedOperationException();
 	}
 	@Override
 	public void setCode(final short code) {
-		//Unsupported operation &{0}&{1}{ on }
-		throw new SUnsupportedOperationException(SYS.SYS090,
-			"setCode(short)", getClass().getName());
+		throw new SUnsupportedOperationException();
 	}
 	@Override
 	public void setParam(final int param) {
-		//Unsupported operation &{0}&{1}{ on }
-		throw new SUnsupportedOperationException(SYS.SYS090,
-			"setParam(int)", getClass().getName());
+		throw new SUnsupportedOperationException();
 	}
 }
