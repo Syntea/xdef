@@ -22,9 +22,7 @@ public class SParseException extends ParseException implements SThrowable {
 	/** Creates a new instance of SException.
 	 * @param errorOffset offset of error.
 	 */
-	public SParseException(int errorOffset) {
-		this(null, "", errorOffset);
-	}
+	public SParseException(final int errorOffset) {this(null, "", errorOffset);}
 
 	/** Creates a new instance of SException with text message.
 	 * @param msg The text of message.
@@ -124,21 +122,29 @@ public class SParseException extends ParseException implements SThrowable {
 	/** Set cause of exception.
 	 * @param cause The object with cause data.
 	 */
-	public void setCause(final Throwable cause) {
-		_cause = cause;
-	}
+	public final void setCause(final Throwable cause) {_cause = cause;}
 
 	@Override
 	/** Get cause of exception. If cause was not set return <i>null</i>.
 	 * @return cause The object with cause data.
 	 */
-	public Throwable getCause() {return _cause;}
+	public final Throwable getCause() {return _cause;}
+
+	@Override
+	/** Set Report message.
+	 * @param report Report of this object.
+	 */
+	public final void setReport(final Report report) {
+		_msgID = report.getMsgID();
+		_modification = report.getModification();
+		_text = report.getText();
+	}
 
 	@Override
 	/** Get Report object associated with this exception.
 	 * @return The Report object.
 	 */
-	public Report getReport() {
+	public final Report getReport() {
 		return Report.error(_msgID, _text, _modification);
 	}
 
@@ -146,30 +152,21 @@ public class SParseException extends ParseException implements SThrowable {
 	/** Get id of message.
 	 * @return The message id (may be <i>null</i>).
 	 */
-	public String getMsgID() {
-		return _msgID;
-	}
+	public final String getMsgID() {return _msgID;}
 
 	@Override
 	/** Creates string with message from this exception.
 	 * @return The text of message.
 	 */
-	public String getMessage() {
-		if (_msgID == null) {
-			return Report.text(null,_text,_modification).toString();
-		}
-		return getReport().toString();
+	public final String getMessage() {
+		return _msgID == null
+			? Report.text(null,_text,_modification).toString()
+			: getReport().toString();
 	}
 
 	@Override
-	/** Creates string with localized text of message from this exception.
-	 * @return The text of message.
+	/** Creates a localized message assigned to this exception.
+	 * @return The text of localized message.
 	 */
-	public String getLocalizedMessage() {
-		if (_msgID == null) {
-			return Report.text( null,_text,_modification).toString();
-		}
-		return getReport().toString();
-	}
-
+	public final String getLocalizedMessage() {return getMessage();}
 }

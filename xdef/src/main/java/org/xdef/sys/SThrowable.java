@@ -22,6 +22,11 @@ public interface SThrowable {
 	 * @return Report object.
 	 */
 	public Report getReport();
+	
+	/** Set Report message.
+	 * @param report Report of this object.
+	 */
+	public void setReport(Report report);
 
 	/** Get id of message.
 	 * @return The message id (may be <i>null</i>).

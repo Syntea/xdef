@@ -18,9 +18,7 @@ public class SRuntimeException extends RuntimeException implements SThrowable {
 	/** Creates a new instance of SException.
 	 * @param ex The object which caused the error.
 	 */
-	public SRuntimeException(final Throwable ex) {
-		this(null, "", ex);
-	}
+	public SRuntimeException(final Throwable ex) {this(null, "", ex);}
 
 	/** Creates a new instance of SException with text message.
 	 * @param msg The text of message.
@@ -40,6 +38,9 @@ public class SRuntimeException extends RuntimeException implements SThrowable {
 		final Object... mod) {
 		this(Report.error(id, mod), ex);
 	}
+
+	/** Creates a new instance of SException. */
+	public SRuntimeException() {this(null, "");}
 
 	/** Creates a new instance of SException.
 	 * @param id The message ID
@@ -64,17 +65,10 @@ public class SRuntimeException extends RuntimeException implements SThrowable {
 		_cause = ex;
 	}
 
-	/** Creates a new instance of SException. */
-	public SRuntimeException() {
-		this(null, "");
-	}
-
 	/** Creates a new instance of SException with text message.
 	 * @param msg The text of message.
 	 */
-	public SRuntimeException(final String msg) {
-		this(null, msg);
-	}
+	public SRuntimeException(final String msg) {this(null, msg);}
 
 	/** Creates a new instance of SRuntimeException with registered message.
 	 * @param registeredID registered message ID.
@@ -109,23 +103,29 @@ public class SRuntimeException extends RuntimeException implements SThrowable {
 	/** Set cause of exception.
 	 * @param cause The object with cause data.
 	 */
-	public void setCause(final Throwable cause) {
-		_cause = cause;
-	}
+	public final void setCause(final Throwable cause) {_cause = cause;}
 
 	@Override
 	/** Get cause of exception. If cause was not set return <i>null</i>.
 	 * @return cause The bject with cause data.
 	 */
-	public Throwable getCause() {
-		return _cause;
+	public final Throwable getCause() {return _cause;}
+
+	@Override
+	/** Set Report message.
+	 * @param report Report of this object.
+	 */
+	public final void setReport(final Report report) {
+		_msgID = report.getMsgID();
+		_modification = report.getModification();
+		_text = report.getText();
 	}
 
 	@Override
 	/** Get Report object associated with this exception.
 	 * @return The Report object.
 	 */
-	public Report getReport() {
+	public final Report getReport() {
 		return Report.error(_msgID, _text, _modification);
 	}
 
@@ -133,29 +133,21 @@ public class SRuntimeException extends RuntimeException implements SThrowable {
 	/** Get id of message.
 	 * @return The message id (may be <i>null</i>).
 	 */
-	public String getMsgID() {
-		return _msgID;
-	}
+	public final String getMsgID() {return _msgID;}
 
 	@Override
 	/** Creates a message assigned to this exception.
-	 * @return The text of localized message.
+	 * @return The text of message.
 	 */
-	public String getMessage() {
-		if (_msgID == null) {
-			return Report.text(null, _text, _modification).toString();
-		}
-		return getReport().toString();
+	public final String getMessage() {
+		return _msgID == null
+			? Report.text(null, _text, _modification).toString()
+			: getReport().toString();
 	}
 
 	@Override
 	/** Creates a localized message assigned to this exception.
 	 * @return The text of localized message.
 	 */
-	public String getLocalizedMessage() {
-		if (_msgID == null) {
-			return Report.text(null, _text, _modification).toString();
-		}
-		return getReport().toString();
-	}
+	public final String getLocalizedMessage() {return getMessage();}
 }

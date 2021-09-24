@@ -1,7 +1,8 @@
 package org.xdef.sys;
 
-/** Extension of SUnsupportedOperationException implementing SThrowable
- * interface.
+import org.xdef.msg.SYS;
+
+/** Extension of SUnsupportedOperationException implementing SThrowable.
  * @author Vaclav Trojan
  */
 public class SUnsupportedOperationException
@@ -20,13 +21,19 @@ public class SUnsupportedOperationException
 	/** Creates a new instance of <code>SUnsupportedOperationException</code>
 	 * without detail message.
 	 */
-	public SUnsupportedOperationException() {this("");}
+	public SUnsupportedOperationException() {
+		super();
+		StackTraceElement ste = getStackTrace()[0];
+		//Unsupported operation &{0}&{1}{; }
+		setReport(Report.error(SYS.SYS090, 
+			ste.getClassName() + '.' + ste.getMethodName()));
+	}
 
 	/** Constructs an instance of <code>SUnsupportedOperationException</code>
 	 * with the specified detail message.
 	 * @param msg the detail message.
 	 */
-	public SUnsupportedOperationException(String msg) {this(null, msg);}
+	public SUnsupportedOperationException(final String msg) {this(null, msg);}
 
 	/** Constructs a new exception with the specified cause and a detail
 	 * message of (cause==null ? null : cause.toString()) (which typically
@@ -38,7 +45,7 @@ public class SUnsupportedOperationException
 	 * Throwable.getCause() method). (A null value is permitted, and indicates
 	 * that the cause is nonexistent or unknown.)
 	 */
-	public SUnsupportedOperationException(Throwable cause) {
+	public SUnsupportedOperationException(final Throwable cause) {
 		this(null, cause == null ? "" : cause.getMessage(), cause);
 	}
 
@@ -48,7 +55,8 @@ public class SUnsupportedOperationException
 	 * Throwable.getCause() method). (A null value is permitted, and indicates
 	 * that the cause is nonexistent or unknown.)
 	 */
-	public SUnsupportedOperationException(String msg, Throwable cause) {
+	public SUnsupportedOperationException(final String msg,
+		final Throwable cause) {
 		this(null, msg, cause);
 	}
 
@@ -104,7 +112,8 @@ public class SUnsupportedOperationException
 	 * @param report The Report object.
 	 * @param ex The object which caused the error.
 	 */
-	public SUnsupportedOperationException(final Report report, Throwable ex) {
+	public SUnsupportedOperationException(final Report report,
+		final Throwable ex) {
 		this(report);
 		_cause = ex;
 	}
@@ -113,23 +122,29 @@ public class SUnsupportedOperationException
 	/** Set cause of exception.
 	 * @param cause The object with cause data.
 	 */
-	public void setCause(final Throwable cause) {
-		_cause = cause;
-	}
+	public final void setCause(final Throwable cause) {_cause = cause;}
 
 	@Override
 	/** Get cause of exception. If cause was not set return <i>null</i>.
 	 * @return cause The object with cause data.
 	 */
-	public Throwable getCause() {
-		return _cause;
+	public final Throwable getCause() {return _cause;}
+
+	@Override
+	/** Set Report message.
+	 * @param report Report of this object.
+	 */
+	public final void setReport(final Report report) {
+		_msgID = report.getMsgID();
+		_modification = report.getModification();
+		_text = report.getText();
 	}
 
 	@Override
 	/** Get Report object associated with this exception.
 	 * @return The Report object.
 	 */
-	public Report getReport() {
+	public final Report getReport() {
 		return Report.error(_msgID, _text, _modification);
 	}
 
@@ -137,29 +152,21 @@ public class SUnsupportedOperationException
 	/** Get id of message.
 	 * @return The message id (may be <i>null</i>).
 	 */
-	public String getMsgID() {
-		return _msgID;
-	}
+	public final String getMsgID() {return _msgID;}
 
 	@Override
 	/** Creates a message text from this exception.
 	 * @return The text of localized message.
 	 */
-	public String getMessage() {
-		if (_msgID == null) {
-			return Report.text(null, _text, _modification).toString();
-		}
-		return getReport().toString();
+	public final String getMessage() {
+		return _msgID == null
+			? Report.text(null, _text, _modification).toString()
+			: getReport().toString();
 	}
 
 	@Override
 	/** Creates a localized message assigned to this exception.
 	 * @return The text of localized message.
 	 */
-	public String getLocalizedMessage() {
-		if (_msgID == null) {
-			return Report.text(null, _text, _modification).toString();
-		}
-		return getReport().toString();
-	}
+	public final String getLocalizedMessage() {return getMessage();}
 }

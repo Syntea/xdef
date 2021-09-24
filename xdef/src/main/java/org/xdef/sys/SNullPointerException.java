@@ -1,6 +1,6 @@
 package org.xdef.sys;
 
-/** Extension of NullPointerException implementing SThrowable interface.
+/** Extension of NullPointerException implementing SThrowable.
  * @author Vaclav Trojan
  */
 public class SNullPointerException extends NullPointerException
@@ -17,9 +17,7 @@ public class SNullPointerException extends NullPointerException
 	private String _modification;
 
 	/** Creates a new instance of SNullPointerException. */
-	public SNullPointerException() {
-		this(null, "");
-	}
+	public SNullPointerException() {this(null, "");}
 
 	/** Creates a new instance of SNullPointerException.
 	 * @param ex The object which caused the error.
@@ -64,9 +62,7 @@ public class SNullPointerException extends NullPointerException
 	/** Creates a new instance of SNullPointerException with text message.
 	 * @param msg The text of message.
 	 */
-	public SNullPointerException(final String msg) {
-		this(null, msg);
-	}
+	public SNullPointerException(final String msg) {this(null, msg);}
 
 	/** Creates a new instance of SNullPointerException with registered message.
 	 * @param registeredID registered message ID.
@@ -110,23 +106,29 @@ public class SNullPointerException extends NullPointerException
 	/** Set cause of exception.
 	 * @param cause The Throwable object with cause data.
 	 */
-	public void setCause(final Throwable cause) {
-		_cause = cause;
-	}
+	public final void setCause(final Throwable cause) {_cause = cause;}
 
 	@Override
 	/** Get cause of exception. If cause was not set return <i>null</i>.
 	 * @return cause The Throwable object with cause data.
 	 */
-	public Throwable getCause() {
-		return _cause;
+	public final Throwable getCause() {return _cause;}
+
+	@Override
+	/** Set Report message.
+	 * @param report Report of this object.
+	 */
+	public final void setReport(final Report report) {
+		_msgID = report.getMsgID();
+		_modification = report.getModification();
+		_text = report.getText();
 	}
 
 	@Override
 	/** Get Report object associated with this exception.
 	 * @return The Report object.
 	 */
-	public Report getReport() {
+	public final Report getReport() {
 		return Report.error(_msgID, _text, _modification);
 	}
 
@@ -134,30 +136,21 @@ public class SNullPointerException extends NullPointerException
 	/** Get id of message.
 	 * @return The message id (may be <i>null</i>).
 	 */
-	public String getMsgID() {
-		return _msgID;
-	}
+	public final String getMsgID() {return _msgID;}
 
 	@Override
 	/** Creates a message assigned to this exception.
-	 * @return The text of localized message.
+	 * @return The text of message.
 	 */
-	public String getMessage() {
-		if (_msgID == null) {
-			return Report.text(null, _text, _modification).toString();
-		}
-		return getReport().toString();
+	public final String getMessage() {
+		return _msgID == null
+			? Report.text(null, _text, _modification).toString()
+			: getReport().toString();
 	}
 
 	@Override
 	/** Creates a localized message assigned to this exception.
 	 * @return The text of localized message.
 	 */
-	public String getLocalizedMessage() {
-		if (_msgID == null) {
-			return Report.text(null, _text, _modification).toString();
-		}
-		return getReport().toString();
-	}
-
+	public final String getLocalizedMessage() {return getMessage();}
 }
