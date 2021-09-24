@@ -96,9 +96,7 @@ public abstract class XDParserAbstract extends XDValueAbstract
 	 * @param param "sequential" parameters.
 	 */
 	public void setParseParam(final Object param) {
-		//Unsupported operation &{0}&{1}{ on }
-		throw new SUnsupportedOperationException(SYS.SYS090,
-			"setParseParam(Object)", getClass().getName());
+		throw new SUnsupportedOperationException();
 	}
 
 	@Override
@@ -107,9 +105,7 @@ public abstract class XDParserAbstract extends XDValueAbstract
 	 * @param par2 the second "sequential" parameter.
 	 */
 	public void setParseParams(Object par1, Object par2) {
-		//Unsupported operation &{0}&{1}{ on }
-		throw new SUnsupportedOperationException(SYS.SYS090,
-			"setParseParam(Object, Object)", getClass().getName());
+		throw new SUnsupportedOperationException();
 	}
 
 	@Override
@@ -128,9 +124,7 @@ public abstract class XDParserAbstract extends XDValueAbstract
 		} else if (params.length == 2) {
 
 		} else {
-			//Unsupported operation &{0}&{1}{ on }
-			throw new SUnsupportedOperationException(SYS.SYS090,
-				"setParseParam(Object, Object, Object)", getClass().getName());
+			throw new SUnsupportedOperationException();
 		}
 	}
 

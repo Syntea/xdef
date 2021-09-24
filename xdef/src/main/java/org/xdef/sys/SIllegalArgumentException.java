@@ -16,12 +16,12 @@ public class SIllegalArgumentException
 	/** Report modification (may be null). */
 	private String _modification;
 
-	/** Creates a new instance of <code>SUnsupportedOperationException</code>
+	/** Creates a new instance of <code>IllegalArgumentException</code>
 	 * without detail message.
 	 */
 	public SIllegalArgumentException() {this("");}
 
-	/** Constructs an instance of <code>SUnsupportedOperationException</code>
+	/** Constructs an instance of <code>SIllegalArgumentException</code>
 	 * with the specified detail message.
 	 * @param msg the detail message.
 	 */
@@ -72,7 +72,7 @@ public class SIllegalArgumentException
 		this(Report.error(id, mod), ex);
 	}
 
-	/** Creates a new instance of SUnsupportedOperationException.
+	/** Creates a new instance of IllegalArgumentException.
 	 * @param id The message ID
 	 * @param msg The text of message.
 	 * @param mod Message modification parameters.
@@ -86,7 +86,7 @@ public class SIllegalArgumentException
 		_cause = ex;
 	}
 
-	/** Creates a new instance of SUnsupportedOperationException.
+	/** Creates a new instance of IllegalArgumentException.
 	 * @param id The message ID
 	 * @param msg The text of message.
 	 * @param mod Message modification parameters.
@@ -97,7 +97,7 @@ public class SIllegalArgumentException
 		this(Report.error(id, msg, mod));
 	}
 
-	/** Creates a new instance of SUnsupportedOperationException.
+	/** Creates a new instance of IllegalArgumentException.
 	 * @param report The Report object.
 	 */
 	public SIllegalArgumentException(final Report report) {
@@ -107,7 +107,7 @@ public class SIllegalArgumentException
 		_modification = report.getModification();
 	}
 
-	/** Creates a new instance of SUnsupportedOperationException.
+	/** Creates a new instance of IllegalArgumentException.
 	 * @param report The Report object.
 	 * @param ex The object which caused the error.
 	 */
