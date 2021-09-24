@@ -2,8 +2,7 @@ package org.xdef.sys;
 
 import java.io.IOException;
 
-/** Extension of java.io.IOException with SThrowable interface.
- *
+/** Extension of java.io.IOException with SThrowable.
  * @author Trojan
  */
 public class SIOException extends IOException implements SThrowable {
@@ -19,29 +18,25 @@ public class SIOException extends IOException implements SThrowable {
 	private String _modification;
 
 	/** Creates a new instance of SIOException. */
-	public SIOException() {
-		this(null, "");
-	}
+	public SIOException() {this(null, "");}
 
 	/** Creates a new instance of SIOException with cause.
 	 * @param ex cause of exception.
 	 */
-	public SIOException(Throwable ex) {
+	public SIOException(final Throwable ex) {
 		this(ex.getMessage() == null ? "" : ex.getMessage(), ex);
 	}
 
 	/** Creates a new instance of SIOException with text message.
 	 * @param msg The text of message.
 	 */
-	public SIOException(final String msg) {
-		this(null, msg);
-	}
+	public SIOException(final String msg) {this(null, msg);}
 
 	/** Creates a new instance of SIOException with text message.
 	 * @param msg The text of message.
 	 * @param ex cause of exception.
 	 */
-	public SIOException(final String msg, Throwable ex) {
+	public SIOException(final String msg, final Throwable ex) {
 		this(null, msg);
 		_cause = ex;
 	}
@@ -77,9 +72,7 @@ public class SIOException extends IOException implements SThrowable {
 	/** Creates a new instance of SIOException.
 	 * @param rep The Report object.
 	 */
-	public SIOException(final Report rep) {
-		super(SException.getMsg(rep), null);
-	}
+	public SIOException(final Report rep) {super(SException.getMsg(rep), null);}
 
 	/** Creates a new instance of SIOException.
 	 * @param rep The Report object.
@@ -97,23 +90,29 @@ public class SIOException extends IOException implements SThrowable {
 	/** Set cause of exception.
 	 * @param cause The object with cause data.
 	 */
-	public void setCause(final Throwable cause) {
-		_cause = cause;
-	}
+	public final void setCause(final Throwable cause) {_cause = cause;}
 
 	@Override
 	/** Get cause of exception. If cause was not set return <i>null</i>.
 	 * @return cause The object with cause data.
 	 */
-	public Throwable getCause() {
-		return _cause;
+	public final Throwable getCause() {return _cause;}
+
+	@Override
+	/** Set Report message.
+	 * @param report Report of this object.
+	 */
+	public final void setReport(final Report report) {
+		_msgID = report.getMsgID();
+		_modification = report.getModification();
+		_text = report.getText();
 	}
 
 	@Override
 	/** Get Report object associated with this exception.
 	 * @return The Report object.
 	 */
-	public Report getReport() {
+	public final Report getReport() {
 		return Report.error(_msgID, _text, _modification);
 	}
 
@@ -121,30 +120,21 @@ public class SIOException extends IOException implements SThrowable {
 	/** Get id of message.
 	 * @return The message id (may be <i>null</i>).
 	 */
-	public String getMsgID() {
-		return _msgID;
-	}
+	public final String getMsgID() {return _msgID;}
 
 	@Override
 	/** Creates the message assigned to this exception.
 	 * @return The text of localized message.
 	 */
-	public String getMessage() {
-		if (_msgID == null) {
-			return Report.text(null,_text,_modification).toString();
-		}
-		return getReport().toString();
+	public final String getMessage() {
+		return _msgID == null
+			? Report.text(null,_text,_modification).toString()
+				: getReport().toString();
 	}
 
 	@Override
-	/** Creates the localized message assigned to this exception.
+	/** Creates a localized message assigned to this exception.
 	 * @return The text of localized message.
 	 */
-	public String getLocalizedMessage() {
-		if (_msgID == null) {
-			return Report.text(null,_text,_modification).toString();
-		}
-		return getReport().toString();
-	}
-
+	public final String getLocalizedMessage() {return getMessage();}
 }

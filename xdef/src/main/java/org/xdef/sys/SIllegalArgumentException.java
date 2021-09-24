@@ -1,7 +1,6 @@
 package org.xdef.sys;
 
-/** Extension of IllegalArgumentException implementing SThrowable
- * interface.
+/** Extension of IllegalArgumentException implementing SThrowable.
  * @author Vaclav Trojan
  */
 public class SIllegalArgumentException
@@ -20,17 +19,13 @@ public class SIllegalArgumentException
 	/** Creates a new instance of <code>SUnsupportedOperationException</code>
 	 * without detail message.
 	 */
-	public SIllegalArgumentException() {
-		this("");
-	}
+	public SIllegalArgumentException() {this("");}
 
 	/** Constructs an instance of <code>SUnsupportedOperationException</code>
 	 * with the specified detail message.
 	 * @param msg the detail message.
 	 */
-	public SIllegalArgumentException(String msg) {
-		this(null, msg);
-	}
+	public SIllegalArgumentException(final String msg) {this(null, msg);}
 
 	/** Constructs a new exception with the specified cause and a detail
 	 * message of (cause==null ? null : cause.toString()) (which typically
@@ -42,7 +37,7 @@ public class SIllegalArgumentException
 	 * Throwable.getCause() method). (A null value is permitted, and indicates
 	 * that the cause is nonexistent or unknown.)
 	 */
-	public SIllegalArgumentException(Throwable cause) {
+	public SIllegalArgumentException(final Throwable cause) {
 		this(null, cause == null ? "" : cause.getMessage(), cause);
 	}
 
@@ -52,7 +47,7 @@ public class SIllegalArgumentException
 	 * Throwable.getCause() method). (A null value is permitted, and indicates
 	 * that the cause is nonexistent or unknown.)
 	 */
-	public SIllegalArgumentException(String msg, Throwable cause) {
+	public SIllegalArgumentException(final String msg, final Throwable cause) {
 		this(null, msg, cause);
 	}
 
@@ -125,23 +120,29 @@ public class SIllegalArgumentException
 	/** Set cause of exception.
 	 * @param cause The object with cause data.
 	 */
-	public void setCause(final Throwable cause) {
-		_cause = cause;
-	}
+	public final void setCause(final Throwable cause) {_cause = cause;}
 
 	@Override
 	/** Get cause of exception. If cause was not set return <i>null</i>.
 	 * @return cause The object with cause data.
 	 */
-	public Throwable getCause() {
-		return _cause;
+	public final Throwable getCause() {return _cause;}
+
+	@Override
+	/** Set Report message.
+	 * @param report Report of this object.
+	 */
+	public final void setReport(final Report report) {
+		_msgID = report.getMsgID();
+		_modification = report.getModification();
+		_text = report.getText();
 	}
 
 	@Override
 	/** Get Report object associated with this exception.
 	 * @return The Report object.
 	 */
-	public Report getReport() {
+	public final Report getReport() {
 		return Report.error(_msgID, _text, _modification);
 	}
 
@@ -149,30 +150,21 @@ public class SIllegalArgumentException
 	/** Get id of message.
 	 * @return The message id (may be <i>null</i>).
 	 */
-	public String getMsgID() {
-		return _msgID;
-	}
+	public final String getMsgID() {return _msgID;}
 
 	@Override
 	/** Creates a message assigned to this exception.
 	 * @return The text of localized message.
 	 */
-	public String getMessage() {
-		if (_msgID == null) {
-			return Report.text(null, _text, _modification).toString();
-		}
-		return getReport().toString();
+	public final String getMessage() {
+		return _msgID == null
+			? Report.text(null, _text, _modification).toString()
+			: getReport().toString();
 	}
 
 	@Override
 	/** Creates a localized message assigned to this exception.
 	 * @return The text of localized message.
 	 */
-	public String getLocalizedMessage() {
-		if (_msgID == null) {
-			return Report.text(null, _text, _modification).toString();
-		}
-		return getReport().toString();
-	}
-
+	public final String getLocalizedMessage() {return getMessage();}
 }

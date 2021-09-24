@@ -17,10 +17,13 @@ public class SException extends Exception implements SThrowable {
 	/** Report modification (may be null). */
 	private String _modification;
 
+	/** Creates a new instance of SException. */
+	public SException() {this(null, "");}
+
 	/** Creates a new instance of SException.
 	 * @param ex The object which caused the error.
 	 */
-	public SException(Throwable ex) {
+	public SException(final Throwable ex) {
 		this();
 		_cause = ex;
 	}
@@ -29,9 +32,7 @@ public class SException extends Exception implements SThrowable {
 	 * @param msg The text of message.
 	 * @param ex The object which caused the error.
 	 */
-	public SException(final String msg, final Throwable ex) {
-		this(null, msg, ex);
-	}
+	public SException(final String msg, final Throwable ex) {this(null,msg,ex);}
 
 	/** Creates a new instance of SException.
 	 * @param id The message ID
@@ -66,17 +67,10 @@ public class SException extends Exception implements SThrowable {
 		_cause = ex;
 	}
 
-	/** Creates a new instance of SException. */
-	public SException() {
-		this(null, "");
-	}
-
 	/** Creates a new instance of SException with text message.
 	 * @param msg The text of message.
 	 */
-	public SException(final String msg) {
-		this(null, msg);
-	}
+	public SException(final String msg) {this(null, msg);}
 
 	/** Creates a new instance of SException with registered message.
 	 * @param registeredID registered message ID.
@@ -111,23 +105,29 @@ public class SException extends Exception implements SThrowable {
 	/** Set cause of exception.
 	 * @param cause The object with cause data.
 	 */
-	public void setCause(final Throwable cause) {
-		_cause = cause;
-	}
+	public final void setCause(final Throwable cause) {_cause = cause;}
 
 	@Override
 	/** Get cause of exception. If cause was not set return <i>null</i>.
 	 * @return cause The object with cause data.
 	 */
-	public Throwable getCause() {
-		return _cause;
+	public final Throwable getCause() {return _cause;}
+
+	@Override
+	/** Set Report message.
+	 * @param report Report of this object.
+	 */
+	public final void setReport(Report report) {
+		_msgID = report.getMsgID();
+		_modification = report.getModification();
+		_text = report.getText();
 	}
 
 	@Override
 	/** Get Report object associated with this exception.
 	 * @return The Report object.
 	 */
-	public Report getReport() {
+	public final Report getReport() {
 		return Report.error(_msgID, _text, _modification);
 	}
 
@@ -135,31 +135,23 @@ public class SException extends Exception implements SThrowable {
 	/** Get id of message.
 	 * @return The message id (may be <i>null</i>).
 	 */
-	public String getMsgID() {
-		return _msgID;
+	public final String getMsgID() {return _msgID;}
+	
+	@Override
+	/** Creates a message assigned to this exception.
+	 * @return The text of message.
+	 */
+	public final String getMessage() {
+		return _msgID == null
+			? Report.text(null, _text, _modification).toString()
+			: getReport().toString();
 	}
 
 	@Override
-	/** Creates string with message from this exception.
-	 * @return The text of message.
+	/** Creates a localized message assigned to this exception.
+	 * @return The text of localized message.
 	 */
-	public String getMessage() {
-		if (_msgID == null) {
-			return Report.text(null,_text,_modification).toString();
-		}
-		return getReport().toString();
-	}
-
-	@Override
-	/** Creates string with localized text of message from this exception.
-	 * @return The text of message.
-	 */
-	public String getLocalizedMessage() {
-		if (_msgID == null) {
-			return Report.text( null,_text,_modification).toString();
-		}
-		return getReport().toString();
-	}
+	public final String getLocalizedMessage() {return getMessage();}
 
 	public static String getMsg(final String id,
 		final String msg,
@@ -174,10 +166,6 @@ public class SException extends Exception implements SThrowable {
 		if (report.getType() == Report.TEXT) {
 			return report.getText();
 		}
-		if (report.getMsgID() == null) {
-			return "";
-		}
-		return report.toString();
+		return report.getMsgID() == null ? "" : report.toString();
 	}
-
 }
