@@ -12,14 +12,14 @@ public class KNamedNodeMap extends KNodeList implements NamedNodeMap {
 
 	public KNamedNodeMap() {super();}
 	public KNamedNodeMap(Node x) {
-		this();
+		super();
 		if (x != null){
 			add(x);
 		}
 	}
 
 	public KNamedNodeMap(final NamedNodeMap x) {
-		this();
+		super();
 		if (x != null){
 			for(int i = 0; i < x.getLength(); i++) {
 				add(x.item(i));
@@ -29,8 +29,7 @@ public class KNamedNodeMap extends KNodeList implements NamedNodeMap {
 
 	@Override
 	public final Node getNamedItem(final String name) {
-		for (int i = 0; i < size(); i++) {
-			Node n = get(i);
+		for (Node n : this) {
 			if (name.equals(n.getNodeName())) {
 				return n;
 			}
@@ -45,8 +44,8 @@ public class KNamedNodeMap extends KNodeList implements NamedNodeMap {
 
 	@Override
 	public final Node removeNamedItem(final String name) throws DOMException {
-		Node n = getNamedItem(name);
-		if (n != null) {
+		Node n;
+		if ((n = getNamedItem(name)) != null) {
 			remove(n);
 		}
 		return n;
@@ -56,8 +55,7 @@ public class KNamedNodeMap extends KNodeList implements NamedNodeMap {
 	public final Node getNamedItemNS(final String ns, final String localName)
 		throws DOMException {
 		QName qname = new QName(ns, localName);
-		for (int i = 0; i < size(); i++) {
-			Node n = get(i);
+		for (Node n: this) {
 			String u = n.getNamespaceURI();
 			QName qn = u == null ?
 				new QName(n.getNodeName()) : new QName(u, n.getLocalName());
@@ -71,28 +69,23 @@ public class KNamedNodeMap extends KNodeList implements NamedNodeMap {
 	@Override
 	public final Node setNamedItemNS(final Node arg) throws DOMException {
 		String ns = arg.getNamespaceURI();
-		Node n;
-		if (ns != null) {
-			n = getNamedItemNS(ns, arg.getLocalName());
-		} else {
-			n = getNamedItem(arg.getNodeName());
-		}
+		Node n = ns != null
+			? getNamedItemNS(ns, arg.getLocalName())
+			: getNamedItem(arg.getNodeName());
 		if (n != null) {
 			remove(n);
 		}
 		add(arg);
 		return n;
-
 	}
 
 	@Override
 	public final Node removeNamedItemNS(final String ns, final String localName)
 		throws DOMException {
-		Node n = getNamedItemNS(ns, localName);
-		if (n != null) {
+		Node n;
+		if ((n = getNamedItemNS(ns, localName)) != null) {
 			remove(n);
 		}
 		return n;
 	}
-
 }

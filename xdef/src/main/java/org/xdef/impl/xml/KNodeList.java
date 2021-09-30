@@ -68,17 +68,4 @@ public class KNodeList extends ArrayList<Node> implements NodeList {
 			add(nl.item(i));
 		}
 	}
-
-	/** Check if an item is in thi list.
-	 * @param node node to be checked.
-	 * @return true if the node exists in the list.
-	 */
-	final boolean containsItem(final Node node) {
-		for (int i = 0; i < getLength(); i++) {
-			if (node == item(i)) {
-				return true;
-			}
-		}
-		return false;
-	}
 }
