@@ -19,7 +19,7 @@ public class SUnsupportedOperationException
 	private String _modification;
 
 	/** Creates a new instance of <code>SUnsupportedOperationException</code>
-	 * without detail message.
+	 * with message containing class name and method name.
 	 */
 	public SUnsupportedOperationException() {
 		super();

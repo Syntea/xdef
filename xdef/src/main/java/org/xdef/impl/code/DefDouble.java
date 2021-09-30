@@ -149,5 +149,4 @@ public final class DefDouble extends XDValueAbstract {
 	 * <i>false</i>.
 	 */
 	public boolean isNull() {return _isNull;}
-
 }
