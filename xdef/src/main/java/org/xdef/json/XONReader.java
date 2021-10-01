@@ -80,10 +80,7 @@ public class XONReader extends StringParser implements XONParsers {
 	}
 
 	/** Set mode that JSON is parsed in X-definition compiler. */
-	public final void setXdefMode() {
-		_acceptComments = _jdef = true;
-		_xonMode = true;
-	}
+	public final void setXdefMode() {_xonMode = _acceptComments = _jdef = true;}
 
 	/** Set mode that XON is parsed. */
 	public final void setXonMode() {
@@ -92,14 +89,10 @@ public class XONReader extends StringParser implements XONParsers {
 	}
 
 	/** Set mode for strict JSON parsing (JSON, no comments). */
-	public final void setJsonMode() {
-		_acceptComments = _xonMode = _jdef = false;
-	}
+	public final void setJsonMode() {_acceptComments=_xonMode=_jdef=false;}
 
 	/** Set mode for JSON parsing (with comments). */
-	public final void setCommentsMode() {
-		_acceptComments = true;
-	}
+	public final void setCommentsMode() {_acceptComments = true;}
 
 	/** Skip white space separators (and comments if accepted).
 	 * @return true if a space or comment was found.
@@ -835,7 +828,7 @@ public class XONReader extends StringParser implements XONParsers {
 		/** Processed comment.
 		 * @param value SBuffer with the value of comment.
 		 */
-		public void comment(SBuffer value){}
+		public void comment(SBuffer value){/*we ingore it here*/}
 		@Override
 		/** X-script item parsed, not used methods for JSON/XON parsing
 		 * (used in X-definition compiler).
