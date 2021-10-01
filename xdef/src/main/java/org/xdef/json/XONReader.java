@@ -107,19 +107,34 @@ public class XONReader extends StringParser implements XONParsers {
 	public final boolean isSpacesOrComments() {
 		boolean result = isSpaces();
 		boolean wasLineComment;
+		StringBuilder sb = null;
+		SPosition spos = null;
 		while((wasLineComment = isChar('#')) || isToken("/*") ) {
 			result = true;
+			if (sb == null) {
+				spos = getPosition();
+				sb = new StringBuilder();
+			}
 			if (!_acceptComments) { // omments not allowed
 				warning(JSON.JSON019);  //Comments are not allowed here
 			}
 			if (wasLineComment) {
-				skipToNextLine();
-			} else if (!findTokenAndSkip("*/")) {
-				error(JSON.JSON015); //Unclosed comment
-				setEos();
-				return result;
+				while (!isNewLine() && !eos()) {
+					sb.append(nextChar());
+				}
+			} else {
+				while (!isToken("*/") && !eos()) {
+					sb.append(nextChar());
+				}
+				if (eos()) {
+					error(JSON.JSON015); //Unclosed comment
+					break;
+				}
 			}
 			isSpaces();
+		}
+		if (sb != null) {
+			_jp.comment(new SBuffer(sb.toString(), spos));
 		}
 		return result;
 	}
@@ -742,13 +757,6 @@ public class XONReader extends StringParser implements XONParsers {
 		/** Get result of parser. */
 		public final Object getResult() {return _value;}
 
-		/** Get modification string with source position. */
-		private String genPosMod(final SPosition pos) {
-			return "&{line}" + pos.getLineNumber()
-				+ "&{column}" + pos.getColumnNumber()
-				+ (pos.getSysId() != null ? "&{sysId}" + pos.getSysId() : "");
-		}
-
 ////////////////////////////////////////////////////////////////////////////////
 // JParser interface
 ////////////////////////////////////////////////////////////////////////////////
@@ -823,6 +831,11 @@ public class XONReader extends StringParser implements XONParsers {
 				_arrays.peek().add(_value);
 			}
 		}
+		@Override
+		/** Processed comment.
+		 * @param value SBuffer with the value of comment.
+		 */
+		public void comment(SBuffer value){}
 		@Override
 		/** X-script item parsed, not used methods for JSON/XON parsing
 		 * (used in X-definition compiler).

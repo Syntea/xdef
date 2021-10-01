@@ -22,7 +22,7 @@ public interface SThrowable {
 	 * @return Report object.
 	 */
 	public Report getReport();
-	
+
 	/** Set Report message.
 	 * @param report Report of this object.
 	 */

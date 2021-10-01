@@ -136,7 +136,7 @@ public class SException extends Exception implements SThrowable {
 	 * @return The message id (may be <i>null</i>).
 	 */
 	public final String getMsgID() {return _msgID;}
-	
+
 	@Override
 	/** Creates a message assigned to this exception.
 	 * @return The text of message.

@@ -217,6 +217,12 @@ public class XonSourceParser implements JParser, XParser {
 	public void mapEnd(final SPosition pos) {elementEnd();}
 
 	@Override
+	/** Processed comment.
+	 * @param value SBuffer with the value of comment.
+	 */
+	public void comment(SBuffer value){}
+
+	@Override
 	/** X-script item parsed, not used methods for JSON/XON parsing
 	 * (used in X-definition compiler).
 	 * @param name name of item.

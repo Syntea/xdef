@@ -619,10 +619,10 @@ public class SUtils extends FUtils {
 	}
 
 	/** Table for Base64 decoding:
-	 * <LI>decoding values 0..63</LI>
-	 * <LI>64 represents white blanks</LI>
-	 * <LI>65 padding character ('=')</LI>
-	 * <LI>66-70 incorrect characters</LI>
+	 * <li>decoding values 0..63
+	 * <li>64 represents white blanks
+	 * <li>65 padding character ('=')
+	 * <li>66-70 incorrect characters
 	 * Syntax of input:
 	 * Base64Binary  ::=  ((B64S B64S B64S B64S)*
 	 *                    ((B64S B64S B64S B64) |
