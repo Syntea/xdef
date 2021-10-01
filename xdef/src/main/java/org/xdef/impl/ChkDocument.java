@@ -1630,7 +1630,6 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 */
 	public final XDParseResult parseXDType(final String typeName,
 		final String data) {
-		XPool xp = (XPool) getXDPool();
 		_scp.initscript();
 		XDValue xv = getVariable(typeName);
 		if (xv == null) {
