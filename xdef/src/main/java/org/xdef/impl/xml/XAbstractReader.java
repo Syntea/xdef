@@ -768,7 +768,7 @@ public abstract class XAbstractReader extends Reader {
 	/** Detect encoding from Byte Order Mark (BOM)
 	 * (see http://www.w3.org/TR/REC-xml/#charsets).
 	 * <UL>
-	 * <LI>With a Byte Order Mark (BOM):
+	 * <li>With a Byte Order Mark (BOM):
 	 * <p>EF BB BF: UTF-8
 	 * <p>00 00 FE FF: UCS-4, big-endian machine (1234 order)
 	 * <p>FF FE 00 00: UCS-4, little-endian machine (4321 order)
@@ -776,8 +776,7 @@ public abstract class XAbstractReader extends Reader {
 	 * <p>FE FF 00 00: UCS-4, unusual octet order (3412)
 	 * <p>FE FF ## ##: UTF-16, big-endian
 	 * <p>FF FE ## ##: UTF-16, little-endian
-	 * </LI>
-	 * <LI><p>Without a Byte Order Mark:
+	 * <li><p>Without a Byte Order Mark:
 	 * <b>00 00 00 3C, 3C 00 00 00, 00 00 3C 00, 00 3C 00 00:</b>
 	 * <p>UCS-4 or other encoding with a 32-bit code unit and ASCII
 	 * characters encoded as ASCII values, in respectively big-endian(1234),
@@ -809,7 +808,6 @@ public abstract class XAbstractReader extends Reader {
 	 * <p>UTF-8 without an encoding declaration, or else the data stream
 	 * is mislabeled (lacking a required encoding declaration), corrupt,
 	 * fragmentary, or enclosed in a wrapper of some kind.
-	 * </LI>
 	 * </UL>
 	 * @param in InputStream where to read.
 	 * @param buf array of four bytes to which first bytes are read.

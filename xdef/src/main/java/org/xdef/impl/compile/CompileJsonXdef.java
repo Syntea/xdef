@@ -671,6 +671,11 @@ public class CompileJsonXdef extends StringParser {
 			}
 		}
 		@Override
+		/** Processed comment.
+		 * @param value SBuffer with the value of comment.
+		 */
+		public void comment(SBuffer value){}
+		@Override
 		/** X-script item parsed, not used methods for JSON/XON parsing
 		 * (used in X-definition compiler).
 		 * @param name name of item.

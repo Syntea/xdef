@@ -33,6 +33,10 @@ public interface JParser {
 	 * @param pos source position.
 	 */
 	public void mapEnd(SPosition pos);
+	/** Processed comment.
+	 * @param value SBuffer with the value of comment.
+	 */
+	public void comment(SBuffer value);
 	/** X-script item parsed.
 	 * @param name name of item.
 	 * @param value value of item.

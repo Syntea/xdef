@@ -5,20 +5,20 @@
  * E.g.:
  * <UL>
  *
- * <LI>
+ * <li>
  * <b><code>getDOMImplementation</code></b> get the
  * <code>org.w3c.dom.DOMImplementation</code>
- * </LI>
+ * </li>
  *
- * <LI>
+ * <li>
  * <b><code>newDocument</code></b> creating of new
  * <code>org.w3c.dom.Documment</code>
- * </LI>
+ * </li>
  *
- * <LI>
+ * <li>
  * <b><code>parse</code></b> parse the XML source data and return the
  * <code>org.w3c.dom.Documment</code>
- * </LI>
+ * </li>
  *
  * </UL>
  *
@@ -37,27 +37,27 @@
  * XML data. Eg:
  * <UL>
  *
- * <LI>
+ * <li>
  * parsing of source XML data and creating of org.w3c.dom.Document
  * (see methods parseXML(...)).
- * </LI>
+ * </li>
  *
- * <LI>writing of XML data from a org.w3c.dom.Node
+ * <li>writing of XML data from a org.w3c.dom.Node
  * (see methods writeXML(...)).
- * </LI>
+ * </li>
  *
- * <LI>
+ * <li>
  * writing of XML data from a org.w3c.dom.Node to string.
  * (see methods nodeToString(...)).
- * </LI>
+ * </li>
  *
- * <LI>
+ * <li>
  * get printable form of XML node (see methods nodeToString(...)).
- * </LI>
+ * </li>
  *
- * <LI>comparing of XML data (see methods compare...(A,B,...)).
+ * <li>comparing of XML data (see methods compare...(A,B,...)).
  * methods designed to compare org.w3c.dom objects.
- * </LI>
+ * </li>
  *
  * </UL>
  */
