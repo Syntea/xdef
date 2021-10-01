@@ -25,7 +25,7 @@ public class SUnsupportedOperationException
 		super();
 		StackTraceElement ste = getStackTrace()[0];
 		//Unsupported operation &{0}&{1}{; }
-		setReport(Report.error(SYS.SYS090, 
+		setReport(Report.error(SYS.SYS090,
 			ste.getClassName() + '.' + ste.getMethodName()));
 	}
 
