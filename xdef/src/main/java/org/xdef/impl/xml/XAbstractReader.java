@@ -50,7 +50,7 @@ public abstract class XAbstractReader extends Reader {
 		}
 	}
 
-	abstract void stopScanning();
+	abstract public void stopScanning();
 
 	////////////////////////////////////////////////////////////////////////////
 	// Implementation of methods from Reader

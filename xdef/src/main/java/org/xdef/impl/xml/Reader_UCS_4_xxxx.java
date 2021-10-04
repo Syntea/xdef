@@ -163,7 +163,7 @@ abstract class Reader_UCS_4_xxxx extends XAbstractReader {
 		}
 	}
 	@Override
-	void stopScanning() {
+	public void stopScanning() {
 		_notScanning = true;
 	}
 

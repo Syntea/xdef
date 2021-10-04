@@ -83,7 +83,7 @@ public class XReader extends XAbstractReader {
 	}
 
 	@Override
-	void stopScanning() {
+	public void stopScanning() {
 		_notScanning = true;
 	}
 }
