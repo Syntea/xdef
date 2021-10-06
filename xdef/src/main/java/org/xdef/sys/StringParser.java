@@ -4616,6 +4616,27 @@ public class StringParser extends SReporter implements SParser {
 		return i == max;
 	}
 
+	/** Read string enclosed in delimiters (' or ").
+	 * string::=  S ('"' ^['"']* '"' | "'" ^["'"]* "'")
+	 * @return string or null if on the source position is not a valid
+	 * string declaration.
+	 */
+	public final String readString() {
+		isSpaces();
+		char delimiter;
+		if ((delimiter = isOneOfChars("'\"")) == NOCHAR) {
+			return null;
+		}
+		int pos = getIndex();
+		char c;
+		while ((c = peekChar()) != NOCHAR) {
+			if (c == delimiter) {
+				return getBufferPart(pos, getIndex() -1);
+			}
+		}
+		return null;
+	}
+
 ////////////////////////////////////////////////////////////////////////////////
 // Auxiliary methods for stream paresr.
 ////////////////////////////////////////////////////////////////////////////////

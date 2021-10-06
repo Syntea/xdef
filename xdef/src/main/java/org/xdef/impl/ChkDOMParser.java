@@ -109,14 +109,13 @@ class ChkDOMParser extends SReporter {
 								//Whitespace expected after '&{0}'
 								error(XML.XML014, "PUBLIC");
 							}
-							if (ChkParser.readString(p) != null) {
+							if (p.readString() != null) {
 								if (!p.isSpaces()) {
 									//Whitespace expected after '&{0}'
 									error(XML.XML014, "PUBLIC");
 									return;
 								}
-								if ((systemLiteral = ChkParser.readString(p))
-									== null) {
+								if ((systemLiteral = p.readString()) == null) {
 									//Quoted string declaration expected"
 									error(XDEF.XDEF504);
 									return;
@@ -131,8 +130,7 @@ class ChkDOMParser extends SReporter {
 								//Whitespace expected after '&{0}'
 								error(XML.XML014, "PUBLIC");
 							}
-							if ((systemLiteral = ChkParser.readString(p)) ==
-								null) {
+							if ((systemLiteral = p.readString()) == null) {
 								//Quoted string declaration expected"
 								error(XDEF.XDEF504);
 								return;
