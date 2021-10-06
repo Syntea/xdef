@@ -36,9 +36,7 @@ public abstract class DomBaseHandler
 			DBF.setIgnoringComments(false);
 			DBF.setFeature( // no xml:base attributes
 			  "http://apache.org/xml/features/xinclude/fixup-base-uris", false);
-		} catch (Exception ex) {
-			throw new RuntimeException(ex);
-		}
+		} catch (Exception ex) {throw new RuntimeException(ex);}
 	}
 
 	public InputSource _is;
@@ -57,9 +55,7 @@ public abstract class DomBaseHandler
 	public DomBaseHandler() {
 		try {
 			_docBuilder = DBF.newDocumentBuilder();
-		} catch (Exception ex) {
-			throw new RuntimeException(ex);
-		}
+		} catch (Exception ex) {throw new RuntimeException(ex);}
 	}
 
 	/////////////////////////////////////////////////////////////
@@ -76,8 +72,7 @@ public abstract class DomBaseHandler
 		myReader.close();
 	}
 
-	public final void doParse(final XReader myReader)
-		throws Exception {
+	public final void doParse(final XReader myReader) throws Exception {
 		InputSource is = new InputSource();
 		is.setSystemId(myReader.getSysId());
 		is.setCharacterStream(myReader);
@@ -87,7 +82,7 @@ public abstract class DomBaseHandler
 
 	public abstract void prepareParse(final InputSource is)
 		throws IOException, SAXException;
-	public final XMLReader getXMLReader() { return _xr; }
+	public final XMLReader getXMLReader() {return _xr;}
 	public final void setXMLReader(final XMLReader x) {_xr = x;}
 	public final void setXmlEncoding(final String x) {_xmlEncoding = x;}
 	public final void setXmlVersion(final String x) {_xmlVersion = x;}
@@ -123,20 +118,23 @@ public abstract class DomBaseHandler
 	// LexicalHandler
 	/////////////////////////////////////////////////////////////
 	@Override
-	public void startEntity(String name) {}
+	public void startEntity(final String name) {}
 	@Override
-	public void endEntity(String name) {}
+	public void endEntity(final String name) {}
 	@Override
 	public void startCDATA() {}
 	@Override
 	public void endCDATA() {}
 	@Override
-	public void startDTD(String name, String publicId, String systemId)
-	{_isDTD = true;}
+	public void startDTD(final String name,
+		final String publicId,
+		final String systemId) {
+		_isDTD=true;
+	}
 	@Override
 	public void endDTD() {_isDTD = false;}
 	@Override
-	public void comment(char[] ch, int start, int length) {}
+	public void comment(final char[] ch, final int start, final int length) {}
 
 	/////////////////////////////////////////////////////////////
 	// XHandler

@@ -45,8 +45,9 @@ public class PomInfo {
 
 	private void loadProps(InputStream ppIs) throws IOException {
 		Properties properties = new Properties();
+		properties.load(new InputStreamReader(ppIs, charsetUTF8));
 		try {
-			properties.load(new InputStreamReader(ppIs, charset));
+			properties.load(new InputStreamReader(ppIs, charsetUTF8));
 		} finally {
 			ppIs.close();
 		}
@@ -110,7 +111,7 @@ public class PomInfo {
 
 	private static final String     pomInfoPropsName = "pominfo.properties";
 	/** default charset */
-	private static final Charset    charset          = Charset.forName("UTF-8");
+	private static final Charset    charsetUTF8      = Charset.forName("UTF-8");
 	/** singleton instance */
 	public static final PomInfo     pomInfo          = new PomInfo();
 }

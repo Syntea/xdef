@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import org.w3c.dom.Element;
@@ -44,7 +45,7 @@ public class JsonUtil {
 			File f = (File) x;
 			try {
 				reader = new InputStreamReader(
-				new FileInputStream(f), "UTF-8");
+					new FileInputStream(f), Charset.forName("UTF-8"));
 				sysId = f.getCanonicalPath();
 			} catch (Exception ex) {
 				//Program exception &{0}
@@ -53,21 +54,17 @@ public class JsonUtil {
 		} else if (x instanceof URL) {
 			URL u = (URL) x;
 			try {
-				reader = new InputStreamReader(u.openStream(), "UTF-8");
+				reader = new InputStreamReader(
+					u.openStream(), Charset.forName("UTF-8"));
 				sysId = u.toExternalForm();
 			} catch (Exception ex) {
 				//Program exception &{0}
 				throw new SRuntimeException(SYS.SYS036, ex);
 			}
 		} else if (x instanceof InputStream) {
-			try {
-				reader = new InputStreamReader((InputStream) x, "UTF-8");
-				sysId = "INPUT_STREAM";
-			} catch (Exception ex) {
-				//Program exception &{0}
-				throw new SRuntimeException(SYS.SYS036, ex);
-
-			}
+			reader = new InputStreamReader(
+				(InputStream) x, Charset.forName("UTF-8"));
+			sysId = "INPUT_STREAM";
 		} else if (x instanceof Reader) {
 			reader = (Reader) x;
 			sysId = "READER";
@@ -131,11 +128,7 @@ public class JsonUtil {
 	 */
 	public final static Object parse(final InputStream in, final String sysId)
 		throws SRuntimeException {
-		try {
-			return parse(new InputStreamReader(in, "UTF-8"), sysId);
-		} catch (Exception ex) {
-			throw new SRuntimeException(SYS.SYS036, ex);//Program exception &{0}
-		}
+		return parse(new InputStreamReader(in, Charset.forName("UTF-8")),sysId);
 	}
 
 	/** Parse source URL to JSON.
@@ -208,11 +201,8 @@ public class JsonUtil {
 	 */
 	public final static Object parseXON(final InputStream in,final String sysId)
 		throws SRuntimeException {
-		try {
-			return parseXON(new InputStreamReader(in, "UTF-8"), sysId);
-		} catch (Exception ex) {
-			throw new SRuntimeException(SYS.SYS036, ex);//Program exception &{0}
-		}
+		return parseXON(new InputStreamReader(
+			in, Charset.forName("UTF-8")), sysId);
 	}
 ////////////////////////////////////////////////////////////////////////////////
 // XON parser

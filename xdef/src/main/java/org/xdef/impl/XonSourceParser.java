@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Map;
 import javax.xml.XMLConstants;
@@ -64,7 +65,8 @@ public class XonSourceParser implements JParser, XParser {
 	XonSourceParser(final URL url) {
 		String id = url.toExternalForm();
 		try {
-			Reader in = new InputStreamReader(url.openStream(), "UTF-8");
+			Reader in = new InputStreamReader(
+				url.openStream(), Charset.forName("UTF-8"));
 			XONReader p = new XONReader(in, this);
 			p.setXonMode();
 			p.setSysId(id);
@@ -84,18 +86,13 @@ public class XonSourceParser implements JParser, XParser {
 	}
 
 	XonSourceParser(final InputStream is, final String sysId) {
-		try {
-			Reader in = new InputStreamReader(is, "UTF-8");
-			XONReader p = new XONReader(in, this);
-			p.setXonMode();
-			if (sysId != null) {
-				p.setSysId(sysId);
-			}
-			_p = p;
-		} catch (Exception ex) {
-			throw new SRuntimeException(SYS.SYS028,  //Can't read file: &{0}
-				"java.io.Reader" + (sysId != null ? " (" + sysId + ")" : ""));
+		Reader in = new InputStreamReader(is, Charset.forName("UTF-8"));
+		XONReader p = new XONReader(in, this);
+		p.setXonMode();
+		if (sysId != null) {
+			p.setSysId(sysId);
 		}
+		_p = p;
 	}
 
 	// validate object
