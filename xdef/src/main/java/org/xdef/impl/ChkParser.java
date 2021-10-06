@@ -803,27 +803,6 @@ final class ChkParser extends DomBaseHandler implements XParser {
 		}
 	}
 
-	/** Read string.
-	 * string::=  S ('"' ^['"']* '"' | "'" ^["'"]* "'")
-	 * @param p string parser
-	 * @return string.
-	 */
-	final static String readString(final StringParser p) {
-		p.isSpaces();
-		char delimiter;
-		if ((delimiter = p.isOneOfChars("'\"")) == StringParser.NOCHAR) {
-			return null;
-		}
-		int pos = p.getIndex();
-		char c;
-		while ((c = p.peekChar()) != StringParser.NOCHAR) {
-			if (c == delimiter) {
-				return p.getBufferPart(pos, p.getIndex() -1);
-			}
-		}
-		return null;
-	}
-
 	/** This method is called after all attributes of the current element
 	 * attribute list was reached. The implementation may check the list of
 	 * attributes and to invoke appropriate actions. The method is invoked
@@ -1015,7 +994,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
 				_sReporter.putReport(val, //Whitespace expected after '&{0}'
 					Report.lightError(XML.XML014, "PUBLIC"));
 			}
-			if (readString(p) == null) {
+			if (p.readString() == null) {
 				//Quoted string declaration expected
 				_sReporter.error(XDEF.XDEF504);
 			}
@@ -1029,7 +1008,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
 			_sReporter.putReport(val, Report.lightError(XML.XML014, "SYSTEM"));
 		}
 		String sourceURL;
-		if ((sourceURL = readString(p)) != null) {
+		if ((sourceURL = p.readString()) != null) {
 			return sourceURL.trim();
 		}
 		_sReporter.error(XDEF.XDEF504); //Quoted string declaration expected
