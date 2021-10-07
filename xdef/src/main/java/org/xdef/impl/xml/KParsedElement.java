@@ -10,16 +10,13 @@ public class KParsedElement {
 
 	private static final int STEP = 16;
 	private static final int STEP2 = 32;
-
-	private KParsedAttr[] _list;
+	private KParsedAttr[] _attrs;
 	private int _size;
 	private String _tagname;
 	private String _nsURI;
 	private SPosition _pos;
 
-	public KParsedElement() {
-//		_tagname = null; _nsURI = null; _pos = null; _size = 0; _list = null;
-	}
+	public KParsedElement() {} // _tagname,_nsURI,_pos,_attrs = null; _size=0;
 
 	/** Get size of the list.
 	 * @return number of attributes.
@@ -30,9 +27,9 @@ public class KParsedElement {
 	public void clear() {
 		if (_size > 0) {
 			if (_size > STEP2) {
-				_list = null;
+				_attrs = null;
 			} else {
-				Arrays.fill(_list, null);
+				Arrays.fill(_attrs, null);
 			}
 			_size = 0;
 		}
@@ -58,23 +55,23 @@ public class KParsedElement {
 	 * @return true if attribute was added.
 	 */
 	public boolean addAttr(KParsedAttr item) {
-		if (_list == null) {
-			_list = new KParsedAttr[STEP];
-			_list[_size++] = item;
+		if (_attrs == null) {
+			_attrs = new KParsedAttr[STEP];
+			_attrs[_size++] = item;
 			return true;
 		}
 		String name = item.getName();
 		for (int i = _size - 1; i >= 0; i--) {
-			if (name.equals(_list[i].getName())) {
+			if (name.equals(_attrs[i].getName())) {
 				return false;
 			}
 		}
-		if (_size >= _list.length) {
-			KParsedAttr[] list = _list;
-			_list = new KParsedAttr[_size + STEP];
-			System.arraycopy(list, 0, _list, 0, _size);
+		if (_size >= _attrs.length) {
+			KParsedAttr[] list = _attrs;
+			_attrs = new KParsedAttr[_size + STEP];
+			System.arraycopy(list, 0, _attrs, 0, _size);
 		}
-		_list[_size++] = item;
+		_attrs[_size++] = item;
 		return true;
 	}
 
@@ -84,11 +81,16 @@ public class KParsedElement {
 	 * @return attribute from given position or <i>null</i>.
 	 */
 	public KParsedAttr getAttr(int index) {
-		if (index < 0 || index > _size) {
+		if (_attrs == null || index < 0 || index > _size) {
 			return null;
 		}
-		return _list[index];
+		return _attrs[index];
 	}
+	
+	/** Get number of attributes in the list.
+	 * @return number of attributes in the list..
+	 */
+	public int getNumOfAttrs() {return _attrs == null ? 0 : _attrs.length;}
 
 	/** Get attribute with given raw name from the list.
 	 * @param name name of required attribute (may be qualified).
@@ -97,7 +99,7 @@ public class KParsedElement {
 	public KParsedAttr getAttr(final String name) {
 		int i;
 		if ((i = indexOf(name)) >= 0) {
-			return _list[i];
+			return _attrs[i];
 		}
 		return null;
 	}
@@ -116,7 +118,7 @@ public class KParsedElement {
 			String localname = i <= 0 ? name : name.substring(i + 1);
 			i = indexOfNS(nsURI, localname);
 		}
-		return i >= 0 ? _list[i] : null;
+		return i >= 0 ? _attrs[i] : null;
 	}
 
 	/** Get index of attribute with given raw name in the list.
@@ -125,7 +127,7 @@ public class KParsedElement {
 	 */
 	public int indexOf(final String name) {
 		for (int i = _size - 1; i >= 0; i--) {
-			if (name.equals(_list[i].getName())) {
+			if (name.equals(_attrs[i].getName())) {
 				return i;
 			}
 		}
@@ -142,10 +144,10 @@ public class KParsedElement {
 			return -1;
 		}
 		for (int i = _size - 1; i >= 0; i--) {
-			if (nsURI.equals(_list[i].getNamespaceURI())) {
+			if (nsURI.equals(_attrs[i].getNamespaceURI())) {
 				int ndx;
 				String name;
-				if ((ndx = (name = _list[i].getName()).indexOf(':')) >= 0) {
+				if ((ndx = (name = _attrs[i].getName()).indexOf(':')) >= 0) {
 					if (localname.equals(name.substring(ndx + 1))) {
 						return i;
 					}
@@ -185,29 +187,29 @@ public class KParsedElement {
 		if (index < 0 || index >= _size) {
 			return null;
 		}
-		KParsedAttr result = _list[index];
+		KParsedAttr result = _attrs[index];
 		if (--_size == 0) {
-			if (_list.length > STEP2) {
-				_list = null; //let gc do the job
+			if (_attrs.length > STEP2) {
+				_attrs = null; //let gc do the job
 			} else {
-				_list[_size] = null; //let gc do the job
+				_attrs[_size] = null; //let gc do the job
 			}
 			return result;
 		}
-		if (_size + STEP2 < _list.length) {
-			KParsedAttr[] list = _list;
-			_list = new KParsedAttr[_size + STEP];
+		if (_size + STEP2 < _attrs.length) {
+			KParsedAttr[] list = _attrs;
+			_attrs = new KParsedAttr[_size + STEP];
 			if (index > 0) {
-				System.arraycopy(list, 0, _list, 0, index);
+				System.arraycopy(list, 0, _attrs, 0, index);
 			}
 			if (index < _size) {
-				System.arraycopy(list, index + 1, _list, index, _size - index);
+				System.arraycopy(list, index + 1, _attrs, index, _size - index);
 			}
 		} else {
 			for (int i = index; i < _size; i++) {
-				_list[i] = _list[i + 1];
+				_attrs[i] = _attrs[i + 1];
 			}
-			_list[_size] = null; //let gc do the job
+			_attrs[_size] = null; //let gc do the job
 		}
 		return result;
 	}
