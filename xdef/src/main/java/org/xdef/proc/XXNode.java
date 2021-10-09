@@ -341,5 +341,4 @@ public interface XXNode extends XDValue {
 	 * @param x XComponent object.
 	 */
 	public void setXComponent(XComponent x);
-
 }

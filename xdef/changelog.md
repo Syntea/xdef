@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 40.1.8, release-date 2021-10-01
+# Version 40.1.8, release-date 2021-10-10
 * BNF grammar is extended and has now possibility of "all" selection
 
 # Version 40.1.7, release-date 2021-08-13

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.xdef.msg.JSON;
 import org.xdef.sys.SParser;
+import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
 
 /** Methods used in JSON/XON parsing, processing and conversions.
@@ -357,13 +358,11 @@ public class JsonTools {
 				p.error(JSON.JSON006);
 				return -1;
 			}
-		} else {
-			if (p.eos()) {
-				p.error(JSON.JSON007); //Unexpected eof
-				return -1;
-			}
+		} else if (!p.eos()) {
 			return p.peekChar();
 		}
+		p.error(JSON.JSON007); //Unexpected eof
+		return -1;
 	}
 
 	/** Create JSON/XON string from source.
@@ -414,6 +413,8 @@ public class JsonTools {
 			s = (String) x;
 		} else if (x instanceof Character) {
 			s = String.valueOf((Character) x);
+		} else if (x instanceof byte[]) {
+			s = new String(SUtils.encodeBase64((byte[]) x));
 		} else {
 			return x.toString();
 		}

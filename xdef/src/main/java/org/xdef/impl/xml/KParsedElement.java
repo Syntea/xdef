@@ -86,11 +86,6 @@ public class KParsedElement {
 		}
 		return _attrs[index];
 	}
-	
-	/** Get number of attributes in the list.
-	 * @return number of attributes in the list..
-	 */
-	public int getNumOfAttrs() {return _attrs == null ? 0 : _attrs.length;}
 
 	/** Get attribute with given raw name from the list.
 	 * @param name name of required attribute (may be qualified).
