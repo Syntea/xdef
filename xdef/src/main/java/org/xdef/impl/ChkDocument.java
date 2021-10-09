@@ -960,11 +960,11 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			_scp.setStdErr(new DefOutStream(reporter));
 			_refNum = 0; // we must clear counter!
 			new XonSourceParser(data).xparse(this);
-			return JsonUtil.xonToJson(getXon());
+			return getXon();
 		} else if (data instanceof File
 			|| data instanceof URL || data instanceof InputStream) {
 			createXonParser(data, reporter, null).xparse(this);
-			return JsonUtil.xonToJson(getXon());
+			return getXon();
 		}
 		Element e = null;
 		if (data instanceof Document) {
@@ -982,7 +982,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			_xon = _chkRoot._xonArray != null ? _chkRoot._xonArray
 				: _chkRoot._xonMap != null ? _chkRoot._xonMap
 				: _chkRoot._xonValue;
-			return JsonUtil.xonToJson(_xon);
+			return _xon;
 		}
 		//JSON root model&{0}{ of "}{" } is missing in X-definition
 		throw new SRuntimeException(XDEF.XDEF315, e.getNodeName());
@@ -998,8 +998,8 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 */
 	public final Object jparse(final String data, final ReportWriter reporter)
 		throws SRuntimeException {
-		createXonParser(data, reporter, null).xparse(this);
-		return JsonUtil.xonToJson(getXon());
+		xparse(new ChkXONParser(reporter, data), reporter);
+		return getXon();
 	}
 
 	@Override
@@ -1013,7 +1013,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	public final Object jparse(final File data, final ReportWriter reporter)
 		throws SRuntimeException {
 		createXonParser(data, reporter, null).xparse(this);
-		return JsonUtil.xonToJson(getXon());
+		return getXon();
 	}
 
 	@Override
@@ -1026,8 +1026,8 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 */
 	public final Object jparse(final URL data, final ReportWriter reporter)
 		throws SRuntimeException {
-		createXonParser(data, reporter, null).xparse(this);
-		return JsonUtil.xonToJson(getXon());
+		xparse(new ChkXONParser(reporter, data), reporter);
+		return getXon();
 	}
 
 	@Override
@@ -1040,8 +1040,8 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 */
 	public final Object jparse(final InputStream data,
 		final ReportWriter reporter) throws SRuntimeException {
-		createXonParser(data, reporter, null).xparse(this);
-		return JsonUtil.xonToJson(getXon());
+		xparse(new ChkXONParser(reporter, data, null), reporter);
+		return getXon();
 	}
 
 	@Override

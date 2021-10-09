@@ -380,7 +380,7 @@ class JsonFromXml extends JsonUtil implements JsonNames {
 	final static Object toJson(final Node node) {
 		Element elem = node.getNodeType() == Node.DOCUMENT_NODE
 			? ((Document) node).getDocumentElement() : (Element) node;
-		JsonFromXml x =new JsonFromXml();
+		JsonFromXml x = new JsonFromXml();
 		if (XDConstants.JSON_NS_URI_W3C.equals(elem.getNamespaceURI())) {
 			return x.fromXmlW3C(elem); // W3C form
 		}

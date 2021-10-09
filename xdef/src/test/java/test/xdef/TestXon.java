@@ -23,7 +23,7 @@ public class TestXon extends XDTester {
 	public TestXon() {super();}
 
 	private String testx(final String type, final String xon) {
-		Object x, y;
+		Object o, x, y;
 		XDDocument xd;
 		XDPool xp;
 		ArrayReporter reporter = new ArrayReporter();
@@ -42,18 +42,15 @@ public class TestXon extends XDTester {
 "</xd:def>";
 			xp = XDFactory.compileXD(null, xdef);
 			x = JsonUtil.parseXON(xon);
-			el = JsonUtil.jsonToXml(JsonUtil.xonToJson(x));
+			el = JsonUtil.jsonToXml(x);
 			xd = xp.createXDDocument();
 			y = xd.jvalidate(el, reporter);
 			if (reporter.errorWarnings()) {
 				return "" + KXmlUtils.nodeToString(el, true) + "\n" + reporter;
 			}
-			Object o = JsonUtil.xonToJson(x);
-			if (!JsonUtil.jsonEqual(JsonUtil.xonToJson(x),y)) {
-				System.err.println("1\n" + JsonUtil.toJsonString(o)
-					+ "\n" +  JsonUtil.toJsonString(y));
-//				return "1\n" + JsonUtil.toJsonString(o)
-//					+ "\n" +  JsonUtil.toJsonString(y);
+			if (!JsonUtil.jsonEqual(x,y)) {
+				return "1\n" + JsonUtil.toXonString(x)
+					+ "\n" +  JsonUtil.toXonString(y);
 			}
 			o = xd.getXon();
 			if (!JsonUtil.jsonEqual(x, o)) {
@@ -232,8 +229,6 @@ public class TestXon extends XDTester {
 "] /**** end of array ****/\n" +
 "# End of XON example";
 			x = JsonUtil.parseXON(xon);
-			json = JsonUtil.toJsonString(JsonUtil.xonToJson(x), true);
-			JsonUtil.parse(json);
 			s = JsonUtil.toJsonString(x, true);
 			JsonUtil.parse(s);
 			s = JsonUtil.toXonString(x, true);
@@ -250,6 +245,9 @@ public class TestXon extends XDTester {
 				((GPSPosition) list.get(2)))/1000));
 			assertEq(1030,Math.round(((GPSPosition) list.get(1)).distanceTo(
 				((GPSPosition) list.get(2)))/1000));
+			assertNoErrors(reporter);
+			json = JsonUtil.toXonString(x, true);
+			JsonUtil.parseXON(json);
 			y = jparse(xp, "", json, reporter);
 			assertNoErrors(reporter);
 			reporter.clear();
