@@ -1,9 +1,9 @@
 package test.common.xml;
 
+import java.io.ByteArrayOutputStream;
 import org.xdef.sys.STester;
 import org.xdef.xml.KDOMBuilder;
 import org.xdef.xml.KXmlOutStream;
-import java.io.StringWriter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -20,7 +20,7 @@ public class TestXmOutStream extends STester {
 	/** Run test and print error information. */
 	public void test() {
 		KXmlOutStream w;
-		StringWriter sw;
+		ByteArrayOutputStream sw;
 		Document doc;
 		Element el;
 		NodeList nl;
@@ -47,7 +47,7 @@ public class TestXmOutStream extends STester {
 "</a>"+
 "<!-- c2 -->");
 			el = doc.getDocumentElement();
-			sw = new StringWriter();
+			sw = new ByteArrayOutputStream();
 			w = new KXmlOutStream(sw, "windows-1250", true);
 			w.setIndenting(false);
 			w.writeElementStart(el);
@@ -72,9 +72,7 @@ public class TestXmOutStream extends STester {
 "<f f=\"&amp;p \"><g><h h=\"H\"/></g> text&amp;1 </f>\n"+
 "</a>\n"+
 "<!-- c2 -->");
-		} catch (Error ex) {
-			fail(ex);
-		}
+		} catch (Exception ex) {fail(ex);}
 		try {// indenting
 			db = new org.xdef.xml.KDOMBuilder();
 			db.setIgnoringComments(false);
@@ -96,7 +94,7 @@ public class TestXmOutStream extends STester {
 "</a>"+
 "<!-- c2 -->");
 			el = doc.getDocumentElement();
-			sw = new StringWriter();
+			sw = new ByteArrayOutputStream();
 			w = new KXmlOutStream(sw, "windows-1250", true);
 			w.setIndenting(true);
 			w.writeElementStart(el);
@@ -125,9 +123,7 @@ public class TestXmOutStream extends STester {
 "  </f>\n"+
 "</a>\n"+
 "<!-- c2 -->");
-		} catch (Error ex) {
-			fail(ex);
-		}
+		} catch (Exception ex) {fail(ex);}
 		try {// namespace, no indenting
 			db = new org.xdef.xml.KDOMBuilder();
 			db.setIgnoringComments(false);
@@ -148,7 +144,7 @@ public class TestXmOutStream extends STester {
 "</f>"+
 "</a>");
 			el = doc.getDocumentElement();
-			sw = new StringWriter();
+			sw = new ByteArrayOutputStream();
 			w = new KXmlOutStream(sw, "UTF-8", true);
 			w.setIndenting(false);
 			w.writeElementStart(el);
@@ -171,9 +167,7 @@ public class TestXmOutStream extends STester {
 "<a xmlns=\"a\" a=\"1\">\n"+
 "<f f=\"&amp;p \"><g><h h=\"H\"/></g> text&amp;1 </f>\n"+
 "</a>");
-		} catch (Error ex) {
-			fail(ex);
-		}
+		} catch (Exception ex) {fail(ex);}
 		try {// namespace, indenting
 			db = new org.xdef.xml.KDOMBuilder();
 			db.setIgnoringComments(false);
@@ -194,7 +188,7 @@ public class TestXmOutStream extends STester {
 "</f>\n"+
 "</a>\n");
 			el = doc.getDocumentElement();
-			sw = new StringWriter();
+			sw = new ByteArrayOutputStream();
 			w = new KXmlOutStream(sw, "UTF-8", true);
 			w.setIndenting(true);
 			w.writeElementStart(el);
@@ -223,9 +217,7 @@ public class TestXmOutStream extends STester {
 "    text&amp;1\n"+
 "  </f>\n"+
 "</a>");
-		} catch (Error ex) {
-			fail(ex);
-		}
+		} catch (Exception ex) {fail(ex);}
 		try {// namespace, no indenting
 			db = new org.xdef.xml.KDOMBuilder();
 			db.setIgnoringComments(false);
@@ -241,7 +233,7 @@ public class TestXmOutStream extends STester {
 "</soap:Body>"+
 "</soap:Envelope>");
 			el = doc.getDocumentElement();
-			sw = new StringWriter();
+			sw = new ByteArrayOutputStream();
 			w = new KXmlOutStream(sw, "UTF-8", true);
 			w.setIndenting(false);
 			w.writeElementStart(el);
@@ -264,9 +256,7 @@ public class TestXmOutStream extends STester {
 "</m:GetStockPrice>"+
 "</soap:Body>"+
 "</soap:Envelope>");
-		} catch (Error ex) {
-			fail(ex);
-		}
+		} catch (Exception ex) {fail(ex);}
 		try {// namespace, no indenting
 			db = new org.xdef.xml.KDOMBuilder();
 			db.setIgnoringComments(false);
@@ -282,7 +272,7 @@ public class TestXmOutStream extends STester {
 "</soap:Body>"+
 "</soap:Envelope>");
 			el = doc.getDocumentElement();
-			sw = new StringWriter();
+			sw = new ByteArrayOutputStream();
 			w = new KXmlOutStream(sw, "UTF-8", true);
 			w.setIndenting(true);
 			w.writeElementStart(el);
@@ -307,9 +297,7 @@ public class TestXmOutStream extends STester {
 "    </m:GetStockPrice>\n"+
 "  </soap:Body>\n"+
 "</soap:Envelope>");
-		} catch (Error ex) {
-			fail(ex);
-		}
+		} catch (Exception ex) {fail(ex);}
 	}
 
 	/** Run test

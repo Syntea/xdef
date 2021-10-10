@@ -34,21 +34,6 @@ public class KXmlOutStream {
 	private final KNamespace _ns = new KNamespace();
 	private final Stack<String> _names = new Stack<String>();
 
-	/** Creates new instance of DefXmlOutStream with java.io.Writer
-	 * @param writer where to write XML.
-	 * @param encoding encoding of XML stream.
-	 * @param writeDocumentHeader if true then the XML header is
-	 * written, otherwise no XML header is written.
-	 */
-	public KXmlOutStream(final Writer writer,
-		final String encoding,
-		final boolean writeDocumentHeader) {
-		_file = null;
-		_writer = writer;
-		_encoding = encoding == null ? "UTF-8" : encoding;
-		_writeDocumentHeader = writeDocumentHeader;
-	}
-
 	/** Creates new instance of DefXmlOutStream with java.io.OutputStream.
 	 * @param out where to write XML.
 	 * @param encoding encoding of XML stream.

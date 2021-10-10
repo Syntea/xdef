@@ -185,21 +185,6 @@ public class XDTools {
 	}
 
 	/** Creates XDXmlStream writer object from java.io.Writer.
-	 * @deprecated use OutputStream instead of writer.
-	 * @param writer where to write XML.
-	 * @param encoding encoding of XML stream.
-	 * @param writeDocumentHeader if true then the XML header is
-	 * written, otherwise no XML header is written.
-	 * @return XDXmlOutStream object.
-	 */
-	public final static XDXmlOutStream createXDXmlOutStream(final Writer writer,
-		final String encoding,
-		final boolean writeDocumentHeader) {
-		return new DefXmlWriter(
-			writer, encoding, writeDocumentHeader);
-	}
-
-	/** Creates XDXmlStream writer object from java.io.Writer.
 	 * @param fname where to write XML.
 	 * @param encoding encoding of XML stream.
 	 * @param writeDocumentHeader if true then the XML header is

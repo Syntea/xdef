@@ -300,17 +300,6 @@ public interface XDDocument extends XXNode {
 		boolean writeDocumentHeader) throws IOException;
 
 	/** Set XML writer.
-	 * @deprecated use OutputStream instead of writer.
-	 * @param out stream writer.
-	 * @param encoding encoding of output.
-	 * @param writeDocumentHeader if true full document is written, otherwise
-	 * only root element.
-	 */
-	public void setStreamWriter(Writer out,
-		String encoding,
-		boolean writeDocumentHeader);
-
-	/** Set XML writer.
 	 * @param xmlWriter XML writer.
 	 */
 	public void setStreamWriter(XDXmlOutStream xmlWriter);
