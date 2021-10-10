@@ -32,7 +32,7 @@ public class TestXon extends XDTester {
 		String tempDir = getTempDir();
 		try {
 			String xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='A'>\n"+
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
 "  <xd:json name='A'>\n"+
 "    [\"* " + type + "()\"]\n"+
 "  </xd:json>\n"+
@@ -114,7 +114,7 @@ public class TestXon extends XDTester {
 		File tempDir = clearTempDir();
 		try {
 			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='a'>\n"+
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='a'>\n"+
 "<xd:json name='a'>\n" +
 "[\n" +
 "  {\n" +

@@ -219,7 +219,7 @@ public class MyTest_0 extends XDTester {
 ////////////////////////////////////////////////////////////////////////////////
 		try {
 //			xdef =
-//"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' name='Example' root='root'\n>"+
+//"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' name='Example' root='root'\n>"+
 //"  <xd:declaration scope='local'>\n" +
 //"    type t1 int();\n" +
 //"    boolean b = false;\n" +
@@ -249,7 +249,7 @@ public class MyTest_0 extends XDTester {
 //System.out.println(Double.parseDouble("-Infinity"));
 //System.out.println("==================");
 			xdef =
-"<X:def xmlns:X='http://www.xdef.org/xdef/4.0' name='Example' root='root'\n>"+
+"<X:def xmlns:X='http://www.xdef.org/xdef/4.1' name='Example' root='root'\n>"+
 "  <X:declaration scope='local'>\n" +
 "    type t1 int();\n" +
 "    type t2 starts(%argument='wsdl:');\n" +
@@ -286,7 +286,7 @@ public class MyTest_0 extends XDTester {
 if(true)return;
 		try {
 			xdef =
-"<xd:collection xmlns:xd='http://www.xdef.org/xdef/4.0'>\n"+
+"<xd:collection xmlns:xd='http://www.xdef.org/xdef/4.1'>\n"+
 "<xd:def name='A'>\n"+
 " <xd:declaration scope='global'>Parser p;uniqueSet u{x:p}</xd:declaration>\n"+
 "</xd:def>\n"+
@@ -356,7 +356,7 @@ if(true)return;
 if(T){return;}
 		try {
 			xdef =
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.0\" name=\"Example\" root=\"root\" >\n" +
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"Example\" root=\"root\" >\n" +
 " <xd:declaration>\n"+
 "   ParseResult xx() {\n"+
 "     ParseResult result = xdatetime('dd.MM.yyyy');\n"+
@@ -385,7 +385,7 @@ if(T){return;}
 if(T)return;
 		try {
 			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='A'>\n"+
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
 " <xd:declaration scope='global'>\n"+
 " type p int;\n"+
 " uniqueSet u{x:int};\n"+

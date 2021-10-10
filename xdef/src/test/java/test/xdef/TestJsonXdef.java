@@ -652,7 +652,7 @@ public class TestJsonXdef extends XDTester {
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='json'>\n"+
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='json'>\n"+
 "<xd:json name='json'>\n"+
 "{\"\": \"optional jstring()\"}\n" +
 "</xd:json>\n"+
@@ -665,7 +665,7 @@ public class TestJsonXdef extends XDTester {
 			j = jparse(xp, "", json, reporter);
 			assertNoErrors(reporter);
 			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='json'>\n"+
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='json'>\n"+
 "<xd:json name='json'>\n"+
 "{\"\": \"optional jstring()\"}\n" +
 "</xd:json>\n"+
@@ -678,7 +678,7 @@ public class TestJsonXdef extends XDTester {
 			j = jparse(xp, "", json, reporter);
 			assertNoErrors(reporter);
 			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='A|B|json'>\n"+
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A|B|json'>\n"+
 "<xd:json name='json'>\n"+
 "[{\"a\":\"boolean\"},\"string()\",\"int()\"]\n" +
 "</xd:json>\n"+
@@ -724,7 +724,7 @@ public class TestJsonXdef extends XDTester {
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xdef =
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.0\" root=\"root\" >\n" +
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" root=\"root\" >\n" +
 "  <xd:json xd:name='root'>\n"+
 "     \"jvalue();\"\n"+
 "  </xd:json>\n"+

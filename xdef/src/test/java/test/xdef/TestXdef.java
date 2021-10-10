@@ -91,7 +91,7 @@ public final class TestXdef extends XDTester {
 		}
 		try {
 			xdef =
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.0\"\n" +
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\"\n" +
 "  xmlns:tns=\"http://www.w3schools.com\">\n" +
 "  <tns:note>\n" +
 "    <xd:sequence xd:script=\"occurs 1\">\n" +
@@ -2874,7 +2874,7 @@ public final class TestXdef extends XDTester {
 			assertTrue(el.getOwnerDocument().getDoctype() != null, "NULL");
 			assertNoErrors(reporter);
 			xdef = //test matches with parsers and declared types
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='a'>\n"+
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='a'>\n"+
 "<xd:declaration scope='local'>\n"+
 "  int i=3, j=4;\n"+
 "  type t int(i,j);\n"+
@@ -2897,7 +2897,7 @@ public final class TestXdef extends XDTester {
 			assertNoErrors(reporter);
 			assertEq("falsextruefalsetrue", strw.toString());
 			xdef = // test choice in root specification
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='A|B|Z'>\n" +
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A|B|Z'>\n" +
 "<xd:choice name='A'>\n" +
 "  <A/>\n" +
 "  <B xd:script='match !@a'/>\n" +
@@ -2933,22 +2933,22 @@ public final class TestXdef extends XDTester {
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
 			xdef = // test metanamespace
-"<xd:def xmlns:xd='meta.b.cz' xmlns:w='http://www.xdef.org/xdef/4.0'\n" +
+"<xd:def xmlns:xd='meta.b.cz' xmlns:w='http://www.xdef.org/xdef/4.1'\n" +
 "  w:metaNamespace='meta.b.cz' name='X' xd:root='A'>\n" +
 "<A a='string'> <w:B xd:script='*'/> </A>\n" +
 "</xd:def>";
 			xp = XDFactory.compileXD(null,xdef);
-			xml = "<A a='a'><x:B xmlns:x='http://www.xdef.org/xdef/4.0'/></A>";
+			xml = "<A a='a'><x:B xmlns:x='http://www.xdef.org/xdef/4.1'/></A>";
 			assertEq(xml, parse(xp, "X", xml, reporter));
 			assertNoErrors(reporter);
 			xdef = // test metanamespace
-"<xd:def xmlns:w='meta.b.cz' xmlns:xd='http://www.xdef.org/xdef/4.0'\n" +
+"<xd:def xmlns:w='meta.b.cz' xmlns:xd='http://www.xdef.org/xdef/4.1'\n" +
 "  xd:metaNamespace='meta.b.cz' name='X' w:root='A'>\n" +
 "<A a='string'> <xd:B w:script='*'/> </A>\n" +
 "</xd:def>";
 			xp = XDFactory.compileXD(null, xdef);
 			xml =
-"<A a='a'> <xd:B xmlns:xd='http://www.xdef.org/xdef/4.0'/> </A>";
+"<A a='a'> <xd:B xmlns:xd='http://www.xdef.org/xdef/4.1'/> </A>";
 			assertEq(xml, parse(xp, "X", xml, reporter));
 			assertNoErrors(reporter);
 			xdef = // test nested type declatation
@@ -2996,7 +2996,7 @@ public final class TestXdef extends XDTester {
 			assertEq("<a>abc<b/>def</a>", parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
 			xdef = // test importLocal attribute
-"<xd:collection xmlns:xd='http://www.xdef.org/xdef/4.0'>\n"+
+"<xd:collection xmlns:xd='http://www.xdef.org/xdef/4.1'>\n"+
 "<xd:def name='A' root='A'>\n"+ // no importLocal
 "<xd:declaration scope='local'>\n"+
 "  void a() {out(xx() + xxx + yy() + yyy);}\n"+
@@ -3148,7 +3148,7 @@ public final class TestXdef extends XDTester {
 		props.clear();
 		xml = "<a a='y' b='z'/>";
 		xdef =
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.0\" name=\"X\" root=\"a\">\n"+
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n"+
 " <a a=\"list('x','y')\" b=\"x()\"> </a>\n"+
 "</xd:def>";
 		try {

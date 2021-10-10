@@ -291,7 +291,7 @@ public final class TestDebugGUI extends XDTester {
 		} catch (Exception ex) {fail(ex);}
 		try {// JSON
 			xdef =
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.0\" name=\"JSON\" root=\"a\">\n"+
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"JSON\" root=\"a\">\n"+
 "<xd:json name=\"a\" >\n" +
 "{ \"personnel\": { \"person\": \n" +
 "      [ $script: \"occurs 1..*\",\n" +

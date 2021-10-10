@@ -1,4 +1,4 @@
-<xd:def xmlns:xd="http://www.xdef.org/xdef/4.0" xd:name  = "b">
+<xd:def xmlns:xd="http://www.xdef.org/xdef/4.1" xd:name  = "b">
   <bar>
     <foo xd:script = "occurs 1..; finally out('b'); ref a#foo"/>
   </bar>

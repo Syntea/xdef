@@ -296,10 +296,10 @@ class JsonFromXml extends JsonUtil implements JsonNames {
 				if (!attrs.isEmpty()) {
 					array.add(attrs);
 				}
-				if (XDConstants.XDEF40_NS_URI.equals(nsURI)
+				if (XDConstants.XDEF41_NS_URI.equals(nsURI)
+					|| XDConstants.XDEF40_NS_URI.equals(nsURI)
 					|| XDConstants.XDEF32_NS_URI.equals(nsURI)
 					|| XDConstants.XDEF31_NS_URI.equals(nsURI)) {
-//					&& "json".equals(localName)) {
 					array.add(s); //do not convert text of xd:json elements!
 				} else {
 					addSimpleValue(array, s);

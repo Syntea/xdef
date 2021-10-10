@@ -29,7 +29,7 @@ public class TestX extends XDTester {
 	try {
 /**/
 			xdef =
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.0\" name=\"X\" root=\"a\">\n"+
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n"+
 " <xd:json name='a'>\n"+
 "[\n" +
 "  [\n" +
@@ -58,7 +58,7 @@ public class TestX extends XDTester {
 			assertNoErrors(reporter);
 /**/
 			xdef =
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.0\" name=\"X\" root=\"a\">\n"+
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n"+
 " <xd:json name='a'>\n"+
 "[\n" +
 "  { $script: \"occurs 1..*\",\n" +
@@ -92,7 +92,7 @@ public class TestX extends XDTester {
 			assertNoErrors(reporter);
 /**/
 			xdef =
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.0\" name=\"X\" root=\"a\">\n"+
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n"+
 " <xd:json name='a'>\n"+
 "{\n" +
 "  $oneOf: \"optional;\",\n" +
@@ -121,7 +121,7 @@ public class TestX extends XDTester {
 			assertNoErrors(reporter);
 /**/
 			xdef =
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.0\" name=\"X\" root=\"a\">\n"+
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n"+
 " <xd:json name='a'>\n"+
 "[\n" +
 "  {\n" +
@@ -150,7 +150,7 @@ public class TestX extends XDTester {
 /**/
 // Required element 'js:item' is missing; path=$; X-position=Example#test/$.['date']
 			xdef =
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.0\" name=\"X\" root=\"a\">\n"+
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n"+
 " <xd:json name='a'>\n"+
 "   { \"date\" : \"date()\",\n" +
 "     \"cities\"  : [\n" +
