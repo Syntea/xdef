@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.StringReader;
-import java.io.Writer;
 import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.util.ArrayList;
@@ -567,6 +566,9 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		copyTemporaryReports();
 	}
 
+	/** Prepare XON result.
+	 * @return result of JSON/XON processing or null.
+	 */
 	private Object prepareXONResult() {
 		return _xon = _chkRoot._xonArray != null ? _chkRoot._xonArray
 			: _chkRoot._xonMap != null ? _chkRoot._xonMap
@@ -617,7 +619,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 				parser.closeReader();
 			}
 			error(rep.getMsgID(), rep.getText(), rep.getModification());
-			return getElement();
+			return null;
 		}
 	}
 
@@ -1283,21 +1285,6 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	}
 
 	@Override
-	/** Set writer.
-	 * @deprecated use OutputStream instead of writer.
-	 * @param out stream writer.
-	 * @param encoding encoding of output.
-	 * @param writeDocumentHeader if true full document is written, otherwise
-	 * only root element.
-	 */
-	public final void setStreamWriter(final Writer out,
-		final String encoding,
-		final boolean writeDocumentHeader) {
-		_scp.setXmlStreamWriter(
-			new DefXmlWriter(out,encoding,writeDocumentHeader));
-	}
-
-	@Override
 	/** Set XML writer.
 	 * @param xmlWriter XML writer.
 	 */
@@ -1317,9 +1304,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	/** Get root XXElement.
 	 * @return root XXElement node.
 	 */
-	public final XXElement getRootXXElement() {
-		return _rootChkDocument._chkRoot;
-	}
+	public final XXElement getRootXXElement(){return _rootChkDocument._chkRoot;}
 
 	@Override
 	/** Get actual associated XXElement.
@@ -1558,7 +1543,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 * @return element converted to the destination language.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public Element xtranslate(final Element elem,
+	public final Element xtranslate(final Element elem,
 		final String sourceLanguage,
 		final String destLanguage,
 		final ReportWriter reporter) throws SRuntimeException {
@@ -1582,10 +1567,10 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 * @return element converted to the destination language.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public Element xtranslate(String elem,
-		String sourceLanguage,
-		String destLanguage,
-		ReportWriter reporter) throws SRuntimeException {
+	public final Element xtranslate(final String elem,
+		final String sourceLanguage,
+		final String destLanguage,
+		final ReportWriter reporter) throws SRuntimeException {
 		return xtranslate(KXmlUtils.parseXml(elem).getDocumentElement(),
 			sourceLanguage, destLanguage, reporter);
 	}
@@ -1621,7 +1606,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	/** Get result of XON parsing.
 	 * @return result of XON parsing.
 	 */
-	public Object getXon() {return _xon;}
+	public final Object getXon() {return _xon;}
 
 	@Override
 	/** Parse a string with a type declared in X-definition.
@@ -1636,14 +1621,14 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		if (xv == null) {
 			throw new SRuntimeException("Typ " + typeName + " not found");
 		}
-		int addr = -1;
+		int addr;
 		if (xv.getItemId() == X_PARSEITEM) {
 			addr = ((ParseItem) xv).getParseMethodAddr();
 		} else if (xv.getItemId() == X_UNIQUESET_M) {
 			ParseItem keyItem = ((CodeUniqueset) xv).getParseKeyItem(typeName);
-			if (keyItem != null) {
-				addr = keyItem.getParseMethodAddr();
-			}
+			addr = keyItem == null ? -1 : keyItem.getParseMethodAddr();
+		} else {
+			addr = -1;
 		}
 		if (addr < 0) {
 			throw new SRuntimeException("Name " + typeName + " is not parser");
@@ -1669,5 +1654,5 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	}
 
 	@Override
-	public String toString() {return "ChkDocument: " + _xElement;}
+	public final String toString() {return "ChkDocument: " + _xElement;}
 }
