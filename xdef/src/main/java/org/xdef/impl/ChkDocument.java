@@ -567,6 +567,12 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		copyTemporaryReports();
 	}
 
+	private Object prepareXONResult() {
+		return _xon = _chkRoot._xonArray != null ? _chkRoot._xonArray
+			: _chkRoot._xonMap != null ? _chkRoot._xonMap
+			: _chkRoot._xonValue;
+	}
+
 	/** Parse and process XML source element.
 	 * @param pasrser XParser object.
 	 * @param reporter report writer or <i>null</i>. If this argument is
@@ -586,9 +592,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			_xElement = null;
 			result = chkAndGetRootElement(parser.getReporter(), reporter==null);
 			parser.closeReader();
-			_xon = _chkRoot._xonArray != null ? _chkRoot._xonArray
-				: _chkRoot._xonMap != null ? _chkRoot._xonMap
-				: _chkRoot._xonValue;
+			prepareXONResult();
 			return result;
 		} catch (Exception ex) {
 			XDDebug debugger = getDebugger();
@@ -828,9 +832,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			_reporter = parser;
 			_refNum = 0; // we must clear counter!
 			parser.xparse(this);
-			_xon = _chkRoot._xonArray != null ? _chkRoot._xonArray
-				: _chkRoot._xonMap != null ? _chkRoot._xonMap
-				: _chkRoot._xonValue;
+			prepareXONResult();
 			return chkAndGetRootElement(parser, reporter == null);
 		}
 		return xparse(data, null, reporter);
@@ -979,10 +981,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			: new QName(e.getNamespaceURI(), e.getLocalName());
 		if ((_xElement = findXElement(qName)) != null) {
 			xparse(e, reporter);
-			_xon = _chkRoot._xonArray != null ? _chkRoot._xonArray
-				: _chkRoot._xonMap != null ? _chkRoot._xonMap
-				: _chkRoot._xonValue;
-			return _xon;
+			return prepareXONResult();
 		}
 		//JSON root model&{0}{ of "}{" } is missing in X-definition
 		throw new SRuntimeException(XDEF.XDEF315, e.getNodeName());
@@ -1214,8 +1213,10 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 				if (models != null && models.length == 1
 					&& ((XElement) x)._json > 0) {
 					_xElement = (XElement) models[0];
-					Element el =  xcreate(models[0].getQName(), reporter);
-					return JsonUtil.xmlToJson(el);
+					xcreate(models[0].getQName(), reporter);
+					return prepareXONResult();
+//					Element el =  xcreate(models[0].getQName(), reporter);
+//					return JsonUtil.xmlToJson(el);
 				}
 				break;
 			}

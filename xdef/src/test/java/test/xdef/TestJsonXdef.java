@@ -494,8 +494,7 @@ public class TestJsonXdef extends XDTester {
 			assertNoErrors(reporter);
 			xd = xp.createXDDocument("Person");
 			xd.setJSONContext(JsonUtil.xonToJson(j));
-			assertTrue(JsonUtil.jsonEqual(JsonUtil.xonToJson(j),
-				jcreate(xd, "Person", reporter)));
+			assertTrue(JsonUtil.jsonEqual(j, jcreate(xd, "Person", reporter)));
 			assertNoErrors(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='Person_list'>\n"+
@@ -541,7 +540,7 @@ public class TestJsonXdef extends XDTester {
 			assertNoErrors(reporter);
 			xd = xp.createXDDocument("");
 			xd.setJSONContext(j);
-			assertTrue(JsonUtil.jsonEqual(JsonUtil.xonToJson(j),
+			assertTrue(JsonUtil.jsonEqual(j,
 				jcreate(xd, "Person_list", reporter)));
 			assertNoErrors(reporter);
 			xdef =
@@ -590,7 +589,7 @@ public class TestJsonXdef extends XDTester {
 			assertNoErrors(reporter);
 			xd = xp.createXDDocument("");
 			xd.setJSONContext(j);
-			assertTrue(JsonUtil.jsonEqual(JsonUtil.xonToJson(j),
+			assertTrue(JsonUtil.jsonEqual(j,
 				jcreate(xd, "Person_list", reporter)));
 			assertNoErrors(reporter);
 			xdef =
