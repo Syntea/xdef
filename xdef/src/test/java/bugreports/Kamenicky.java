@@ -17,7 +17,7 @@ public class Kamenicky extends XDTester {
 		XDPool xp;
 		try {
 			xdef =
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.0\" root=\"a\" >\n" +
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" root=\"a\" >\n" +
 " <xd:declaration scope=\"local\">\n" +
 "     ParseResult pr() {\n" +
 "        ParseResult p = string(2);\n" +

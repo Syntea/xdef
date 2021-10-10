@@ -88,7 +88,7 @@ public final class TestXComponents extends XDTester {
 		XDPool xp;
 		try {
 			xdef = // GPSPosition, Price
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='A'>\n" +
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n" +
 "<xd:declaration\n>\n"+
 "  Price a;\n"+
 "  GPSPosition p = new GPSPosition(50.08, 14.42, 399, 'Prague'), q;\n"+
@@ -121,13 +121,13 @@ public final class TestXComponents extends XDTester {
 			assertEq("g(51.52, -0.09, 0.0, London)",
 				xd.getVariable("q").toString());
 			xp = compile(new String[] { // nested declaration of type
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' name='D7_xc'>\n" +
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' name='D7_xc'>\n" +
 "  <xd:component>\n" +
 "    %class test.xdef.IdentDN %link D7_#A;\n" +
 "    %class test.xdef.VymazDN extends test.xdef.IdentDN %link D7_#B;\n" +
 "  </xd:component>\n" +
 "</xd:def>",
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' name='D7_' root='A | B'>\n" +
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' name='D7_' root='A | B'>\n" +
 "    <xd:declaration scope=\"global\">\n" +
 "        type  cisloDN             num(5);\n" +
 "        type  cj                  string(1,50);\n" +
@@ -137,7 +137,7 @@ public final class TestXComponents extends XDTester {
 "    <A RokDN=\"rokDN()\" CisloDN=\"cisloDN()\"/>\n" +
 "    <B xd:script=\"ref A\" C=\"cj()\" P=\"? plan()\"/>\n" +
 "</xd:def>",
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' name='D7_decl'>\n" +
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' name='D7_decl'>\n" +
 "    <xd:declaration scope=\"global\">\n" +
 "        type  gamYear          long(1800, 2200);\n" +
 "        type  gamDate          xdatetime('yyyyMMdd');\n" +
@@ -167,7 +167,7 @@ public final class TestXComponents extends XDTester {
 		reporter.clear();
 		try { // model with occurrnece > 1
 			xdef =
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.0\"\n" +
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\"\n" +
 "        xd:name=\"XdPoolCfg\"\n" +
 "        xd:root=\"XdPoolCfg\">\n" +
 "\n" +
