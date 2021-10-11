@@ -292,7 +292,7 @@ class XonToString extends XonTools {
 	 */
 	final static Object xonToJson(final Object x) {
 		if (x == null || x instanceof String || x instanceof Boolean
-			|| x instanceof Number || x instanceof XonNull) {
+			|| x instanceof Number || x instanceof XonReader.JNull) {
 			return x;
 		} else if (x instanceof Map) {
 			return xonMapToJson((Map) x);

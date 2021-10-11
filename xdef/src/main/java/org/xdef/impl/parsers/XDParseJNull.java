@@ -3,8 +3,8 @@ package org.xdef.impl.parsers;
 import org.xdef.msg.XDEF;
 import org.xdef.XDParseResult;
 import org.xdef.impl.code.DefJNull;
-import org.xdef.xon.XonNull;
 import org.xdef.proc.XXNode;
+import org.xdef.xon.XonReader;
 
 /** Parser of X-Script "jnull" type.
  * @author Vaclav Trojan
@@ -34,7 +34,7 @@ public class XDParseJNull  extends XSAbstractParser {
 			String s = p.getParsedBufferPartFrom(pos);
 			p.isSpaces();
 			p.replaceParsedBufferFrom(pos0, s);
-			p.setParsedValue(new DefJNull(XonNull.X_NULL));
+			p.setParsedValue(new DefJNull(XonReader.JNULL));
 			checkPatterns(p);
 		}
 	}
