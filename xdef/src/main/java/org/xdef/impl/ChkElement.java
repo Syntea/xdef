@@ -1690,7 +1690,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 				value = _parseResult.getSourceBuffer();
 			}
 			if (XonNames.X_KEYATTR.equals(xdata.getName())) {
-				_xonKey = XonTools.xmlToJsonName(value.toString());
+				_xonKey = XonTools.xmlToJName(value.toString());
 			} else if (XonNames.X_VALUEATTR.equals(xdata.getName())) {
 				if (value instanceof XDValue) {
 					XDValue x = (XDValue) value;

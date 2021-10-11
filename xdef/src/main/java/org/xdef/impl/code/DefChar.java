@@ -36,7 +36,7 @@ public final class DefChar extends XDValueAbstract {
 	 * @param s string representing a character.
 	 */
 	public DefChar(final String s) {
-		int i = XonTools.readJSONChar(new StringParser(s));
+		int i = XonTools.readJChar(new StringParser(s));
 		_value = (i < 0) ? SParser.NOCHAR : (char) i;
 		_isNull = false;
 	}

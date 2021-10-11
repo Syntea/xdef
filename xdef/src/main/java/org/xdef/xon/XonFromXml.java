@@ -82,7 +82,7 @@ class XonFromXml extends XonUtil implements XonNames {
 			name = n.getNodeName();
 			if (!(xmlnsName.equals(name = n.getNodeName())
 				&& XDConstants.JSON_NS_URI_XD.equals(el.getNamespaceURI()))) {
-				String attName = XonTools.xmlToJsonName(name);
+				String attName = XonTools.xmlToJName(name);
 				Object val = XonTools.xmlToJValue(n.getNodeValue());
 				result.put(attName, val);
 			}
@@ -147,7 +147,7 @@ class XonFromXml extends XonUtil implements XonNames {
 		while(n != null) {
 			if (n.getNodeType() == Node.ELEMENT_NODE) {
 				Element e = (Element) n;
-				String key = XonTools.xmlToJsonName(e.getAttribute(X_KEYATTR));
+				String key = XonTools.xmlToJName(e.getAttribute(X_KEYATTR));
 				result.put(key, fromXmlW3C(e));
 			}
 			n = n.getNextSibling();
@@ -183,7 +183,7 @@ class XonFromXml extends XonUtil implements XonNames {
 	 * @return created JSON object.
 	 */
 	private Object fromXmlXD(final Element elem) {
-		String name = XonTools.xmlToJsonName(elem.getNodeName());
+		String name = XonTools.xmlToJName(elem.getNodeName());
 		Map<String, Object> attrs = getElementAttributes(elem);
 		List<Object> childNodes = getElementChildList(elem);
 		// result object
@@ -207,7 +207,7 @@ class XonFromXml extends XonUtil implements XonNames {
 				for (Object o: childNodes) {
 					if (o instanceof Element) {
 						Element el = (Element) o;
-						name = XonTools.xmlToJsonName(el.getNodeName());
+						name = XonTools.xmlToJName(el.getNodeName());
 						o = fromXmlXD(el);
 						if (o instanceof Map) {
 							Map m = (Map) o;

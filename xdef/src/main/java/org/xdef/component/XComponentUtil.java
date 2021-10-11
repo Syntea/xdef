@@ -337,7 +337,7 @@ public class XComponentUtil {
 				if (len > 1 && s.charAt(0) == '"' && s.charAt(len-1) == '"') {
 					StringParser p = new StringParser(s);
 					p.setIndex(1);
-					return XonTools.readJSONString(p);
+					return XonTools.readJString(p);
 				}
 			}
 			return o;
@@ -400,7 +400,7 @@ public class XComponentUtil {
 						Class<?> cls1 = o.getClass();
 						Method m = cls1.getMethod("get" + XonNames.X_KEYATTR);
 						m.setAccessible(true);
-						key = XonTools.xmlToJsonName((String) m.invoke(o));
+						key = XonTools.xmlToJName((String) m.invoke(o));
 					} catch (Exception ex) {
 						new RuntimeException("Not key", ex);
 					}

@@ -249,7 +249,7 @@ class XonToXml extends XonTools implements XonNames {
 	}
 
 	/** Check if the argument is a simple value. Simple value is null,
-	 * Number, Boolean, String or JValue with object which is simple value.
+	 * Number, Boolean, String or X_Value with object which is simple value.
 	 * @param val Object to be tested.
 	 * @return true if the argument is a simple value.
 	 */

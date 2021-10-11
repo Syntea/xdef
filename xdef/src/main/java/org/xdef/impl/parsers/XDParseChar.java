@@ -40,7 +40,7 @@ public class XDParseChar extends XSAbstractParseToken {
 		}
 		char ch = p.peekChar();
 		if (ch == '"') {
-			int i = XonTools.readJSONChar(p);
+			int i = XonTools.readJChar(p);
 			if (i < 1) {
 				return false;
 			}
