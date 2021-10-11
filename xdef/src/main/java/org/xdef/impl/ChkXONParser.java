@@ -218,9 +218,6 @@ final class ChkXONParser implements XParser, JParser {
 				}
 			} catch (RuntimeException ex) {
 				throw ex;
-//			} catch (SAXException ex) {
-//				//XML parser was canceled by exception: &{0}
-//				_sReporter.fatal(XML.XML080, "SAXException; "+ex.getMessage());
 			} catch (Exception ex) {
 				throw new RuntimeException(ex);
 			}
@@ -354,7 +351,11 @@ final class ChkXONParser implements XParser, JParser {
 		if (_kind == 2) { // map
 			SBuffer name = _names.pop();
 			genItem(value, name);
-//			return name.getString();
+			for (SBuffer x : _names) {
+				if (x.getString().equals(name.getString())) {
+					return name.getString(); //stack contains this name
+				}
+			}
 		} else {// simple value or array
 			genItem(value, null);
 		}
