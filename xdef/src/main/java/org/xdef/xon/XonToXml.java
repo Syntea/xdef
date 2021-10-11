@@ -1,4 +1,4 @@
-package org.xdef.json;
+package org.xdef.xon;
 
 import java.util.Iterator;
 import java.util.List;
@@ -18,7 +18,7 @@ import org.xdef.xml.KXmlUtils;
 /** Conversion of JSON/XON to XML
  * @author Vaclav Trojan
  */
-class JsonToXml extends JsonTools implements JsonNames {
+class XonToXml extends XonTools implements XonNames {
 	/** Prefix of JSON namespace. */
 	private String _jsPrefix;
 	/** JSON namespace. */
@@ -28,7 +28,7 @@ class JsonToXml extends JsonTools implements JsonNames {
 	/** Document used to create X-definition. */
 	Document _doc;
 
-	private JsonToXml() {super();}
+	private XonToXml() {super();}
 
 ////////////////////////////////////////////////////////////////////////////////
 // JSON to XML (X-detinition format)
@@ -256,8 +256,8 @@ class JsonToXml extends JsonTools implements JsonNames {
 	public final static boolean isSimpleValue(final Object val) {
 		Object o;
 		return val == null || val instanceof Number || val instanceof Boolean
-			|| val instanceof String || val instanceof XONReader.JValue
-			&& ((o=((XONReader.JValue) val).getValue()) == null
+			|| val instanceof String || val instanceof XonReader.JValue
+			&& ((o=((XonReader.JValue) val).getValue()) == null
 				|| o instanceof Number || o instanceof Boolean
 				|| o instanceof String);
 	}
@@ -278,7 +278,7 @@ class JsonToXml extends JsonTools implements JsonNames {
 				Map.Entry en;
 				if (m.size() == 1 && isSimpleValue((en=(Map.Entry) m.entrySet()
 						.iterator().next()).getValue())) {
-					Element e = addJSONElem(elem, J_MAP);
+					Element e = addJSONElem(elem, X_MAP);
 					setAttr(e, toXmlName((String)en.getKey()), en.getValue());
 					_ns.popContext();
 				} else {
@@ -290,7 +290,7 @@ class JsonToXml extends JsonTools implements JsonNames {
 					List list = (List) x;
 					text = genTextFromItem(list, 0);
 					if (text == null) {
-						Element ee = addJSONElem(elem, J_ARRAY);
+						Element ee = addJSONElem(elem, X_ARRAY);
 						addArrayItems(ee, list, 0);
 						_ns.popContext();
 						continue;
@@ -386,7 +386,7 @@ class JsonToXml extends JsonTools implements JsonNames {
 					// so it will be an empty element
 					return;
 				}
-				e = addJSONElem(elem, J_ARRAY);
+				e = addJSONElem(elem, X_ARRAY);
 				addArrayItems(e, array, 0);
 				_ns.popContext();
 				return;
@@ -461,7 +461,7 @@ class JsonToXml extends JsonTools implements JsonNames {
 			// with those items
 			if (genMap) {
 				if (m.size() != 1) {
-					ee = addJSONElem(elem, J_MAP);
+					ee = addJSONElem(elem, X_MAP);
 				}
 				for (Object x: m.entrySet()) {
 					Map.Entry xe = (Map.Entry) x;
@@ -498,7 +498,7 @@ class JsonToXml extends JsonTools implements JsonNames {
 				} else {
 					if (m.isEmpty()) {
 						// if map is empty nothing was generated yet, so add map
-						addJSONElem(elem, J_MAP);
+						addJSONElem(elem, X_MAP);
 						_ns.popContext();
 					}
 					for (Object x: mm.entrySet()) {
@@ -559,7 +559,7 @@ class JsonToXml extends JsonTools implements JsonNames {
 			Map map = (Map) val;
 			if (map.isEmpty()) {
 				e = addElem(parent, namespace, name);
-				addJSONElem(e, J_MAP);
+				addJSONElem(e, X_MAP);
 				_ns.popContext();
 				_ns.popContext(); // appended element js:map
 				return e;
@@ -592,7 +592,7 @@ class JsonToXml extends JsonTools implements JsonNames {
 			}
 			if (numAttrs < map.size()) {
 				Element ee = (map.size() - numAttrs > 1)
-					? addJSONElem(e, J_MAP) : e;
+					? addJSONElem(e, X_MAP) : e;
 				for (Object x: map.entrySet()) {
 					Map.Entry entry = (Map.Entry) x;
 					String key = (String) entry.getKey();
@@ -626,7 +626,7 @@ class JsonToXml extends JsonTools implements JsonNames {
 			_ns.popContext();
 			return e;
 		} else {
-			e = addJSONElem(parent, J_MAP);
+			e = addJSONElem(parent, X_MAP);
 			setAttr(e, name, val);
 			_ns.popContext();
 			return e;
@@ -643,7 +643,7 @@ class JsonToXml extends JsonTools implements JsonNames {
 		final boolean forceMap) {
 		int size = map.size();
 		if (size == 0) {
-			Element e = addJSONElem(parent, J_MAP);
+			Element e = addJSONElem(parent, X_MAP);
 			_ns.popContext();
 			return e;
 		} else if (!forceMap && size == 1) {
@@ -654,7 +654,7 @@ class JsonToXml extends JsonTools implements JsonNames {
 			}
 			return namedItemToXmlXD(key, o, parent);
 		} else {
-			Element e = addJSONElem(parent, J_MAP);
+			Element e = addJSONElem(parent, X_MAP);
 			boolean allXmlns = true;
 			for (Object x: map.entrySet()) {
 				Map.Entry entry = (Map.Entry) x;
@@ -713,7 +713,7 @@ class JsonToXml extends JsonTools implements JsonNames {
 			}
 		}
 		if (name == null) {
-			addJSONElem(_doc, J_MAP); // empty map
+			addJSONElem(_doc, X_MAP); // empty map
 		} else {
 			name = toXmlName(name);
 			String namespace = _ns.getNamespaceURI(getNamePrefix(name));
@@ -738,7 +738,7 @@ class JsonToXml extends JsonTools implements JsonNames {
 	 * @return created element.
 	 */
 	final static Element toXmlXD(final Object o) {
-		JsonToXml x = new JsonToXml();
+		XonToXml x = new XonToXml();
 		x._jsPrefix = XDConstants.JSON_NS_PREFIX;
 		x._jsNamespace = XDConstants.JSON_NS_URI_XD;
 		x._doc = KXmlUtils.newDocument();
@@ -746,11 +746,11 @@ class JsonToXml extends JsonTools implements JsonNames {
 		if (o instanceof Map) {
 			x.createRootElementFromMap((Map) o);
 		} else if (o instanceof List) {
-			Element elem = x.addJSONElem(x._doc, J_ARRAY);
+			Element elem = x.addJSONElem(x._doc, X_ARRAY);
 			x.addArrayItems(elem, (List) o, 0);
 			x._ns.popContext();
 		} else if (isSimpleValue(o)) {
-			Element e = x.addJSONElem(x._doc, J_ITEM);
+			Element e = x.addJSONElem(x._doc, X_ITEM);
 			x.addValueAsText(e, o);
 			x._ns.popContext();
 		} else {
@@ -783,15 +783,15 @@ class JsonToXml extends JsonTools implements JsonNames {
 	private Element genValueW3C(final Object val, final Node parent) {
 		Element e;
 		if (val == null) {
-			e = genJElementW3C(J_ITEM);
-			e.setAttribute(J_VALUEATTR, "null");
+			e = genJElementW3C(X_ITEM);
+			e.setAttribute(X_VALUEATTR, "null");
 		} else if (val instanceof Map) {
 			e = genMapW3C((Map) val);
 		} else if (val instanceof List) {
 			e = genArrayW3C((List) val);
 		} else {
-			e = genJElementW3C(J_ITEM);
-			e.setAttribute(J_VALUEATTR, genXMLValue(val));
+			e = genJElementW3C(X_ITEM);
+			e.setAttribute(X_VALUEATTR, genXMLValue(val));
 		}
 		parent.appendChild(e);
 		return e;
@@ -802,7 +802,7 @@ class JsonToXml extends JsonTools implements JsonNames {
 	 * @return element with W3C JSON array.
 	 */
 	private Element genArrayW3C(final List array) {
-		Element e = genJElementW3C(J_ARRAY);
+		Element e = genJElementW3C(X_ARRAY);
 		for (Object val: array) {
 			genValueW3C(val, e);
 		}
@@ -814,7 +814,7 @@ class JsonToXml extends JsonTools implements JsonNames {
 	 * @return element with W3C JSON map.
 	 */
 	private Element genMapW3C(final Map map) {
-		Element e = genJElementW3C(J_MAP);
+		Element e = genJElementW3C(X_MAP);
 		Iterator it = map.entrySet().iterator();
 		while (it.hasNext()) {
 			Map.Entry en = (Map.Entry) it.next();
@@ -823,7 +823,7 @@ class JsonToXml extends JsonTools implements JsonNames {
 			// NOTE in YAML it may be a byte array, otherwise it is String
 			String key = o instanceof byte[]? new String((byte[])o) : (String)o;
 			// convert key to XML name
-			ee.setAttribute(J_KEYATTR, toXmlName(key));
+			ee.setAttribute(X_KEYATTR, toXmlName(key));
 		}
 		return e;
 	}
@@ -833,7 +833,7 @@ class JsonToXml extends JsonTools implements JsonNames {
 	 * @return XML element created from JSON data.
 	 */
 	final static Element toXmlW3C(final Object json) {
-		JsonToXml x = new JsonToXml();
+		XonToXml x = new XonToXml();
 		x._jsNamespace = XDConstants.JSON_NS_URI_W3C;
 		x._jsPrefix = "";
 		return x.genValueW3C(json, x._doc = KXmlUtils.newDocument());

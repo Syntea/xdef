@@ -9,7 +9,7 @@ import org.xdef.XDParser;
 import org.xdef.XDPool;
 import org.xdef.XDValue;
 import org.xdef.component.XComponent;
-import org.xdef.json.JsonUtil;
+import org.xdef.xon.XonUtil;
 import org.xdef.model.XMData;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.xml.KXmlUtils;
@@ -29,25 +29,25 @@ public class MyTest extends XDTester {
 	public static void c() {}
 
 	private static String testj(String xml, String json) {
-		Object j = JsonUtil.parse(json);
-		Element el = JsonUtil.jsonToXmlXD(j);
+		Object j = XonUtil.parse(json);
+		Element el = XonUtil.jsonToXmlXD(j);
 		if (KXmlUtils.compareElements(xml, el, true, null).errorWarnings()) {
 			return "xml != el"+
 				"\njson: "+json+
 				"\nxml:  "+xml+
 				"\nel:   "+KXmlUtils.nodeToString(el);
 		}
-		Object j1 = JsonUtil.xmlToJson(el);
-		if (!JsonUtil.jsonEqual(j, j1)) {
+		Object j1 = XonUtil.xmlToJson(el);
+		if (!XonUtil.jsonEqual(j, j1)) {
 			return "j != j1"+
 				"\nxml: "+xml+
-				"\nj:   " + JsonUtil.toJsonString(j)+
-				"\nj1:  " + JsonUtil.toJsonString(j1);
+				"\nj:   " + XonUtil.toJsonString(j)+
+				"\nj1:  " + XonUtil.toJsonString(j1);
 		}
 		return "";
 	}
 	private static Object toJson(final XComponent xc) {
-		return JsonUtil.xmlToJson(xc.toXml());
+		return XonUtil.xmlToJson(xc.toXml());
 	}
 
 	@Override
@@ -119,7 +119,7 @@ if(true)return;
 			xd = xp.createXDDocument("");
 			jparse(xd, json, reporter);
 			assertNoErrors(reporter);
-			System.out.println(JsonUtil.toXonString(xd.getXon(), true));
+			System.out.println(XonUtil.toXonString(xd.getXon(), true));
 			xd = xp.createXDDocument("");
 			xc = xd.jparseXComponent(json, null, reporter);
 			System.out.println(KXmlUtils.nodeToString(xc.toXml(), true));
@@ -199,46 +199,46 @@ if(true)return;
 
 			xd = xp.createXDDocument("");
 			s = "123";
-			j = JsonUtil.parse(s);
-			assertTrue(JsonUtil.jsonEqual(j, xd.jparse(s, reporter)));
+			j = XonUtil.parse(s);
+			assertTrue(XonUtil.jsonEqual(j, xd.jparse(s, reporter)));
 			xc = xd.jparseXComponent(s,
 				Class.forName("bugreports.MyTestY"), reporter);
-			assertTrue(JsonUtil.jsonEqual(j, toJson(xc)),
-				JsonUtil.toJsonString(toJson(xc), true));
+			assertTrue(XonUtil.jsonEqual(j, toJson(xc)),
+				XonUtil.toJsonString(toJson(xc), true));
 
 			xd = xp.createXDDocument("");
 			s = "{\"a\": 123}";
-			j = JsonUtil.parse(s);
-			assertTrue(JsonUtil.jsonEqual(j, xd.jparse(s, reporter)));
+			j = XonUtil.parse(s);
+			assertTrue(XonUtil.jsonEqual(j, xd.jparse(s, reporter)));
 			xc = xd.jparseXComponent(s,
 				Class.forName("bugreports.MyTestY1"), reporter);
-			assertTrue(JsonUtil.jsonEqual(j, toJson(xc)),
-				JsonUtil.toJsonString(toJson(xc), true));
+			assertTrue(XonUtil.jsonEqual(j, toJson(xc)),
+				XonUtil.toJsonString(toJson(xc), true));
 
 			xd = xp.createXDDocument("");
 			s = "[123, 123]";
-			j = JsonUtil.parse(s);
-			assertTrue(JsonUtil.jsonEqual(j, xd.jparse(s, reporter)));
+			j = XonUtil.parse(s);
+			assertTrue(XonUtil.jsonEqual(j, xd.jparse(s, reporter)));
 			xc = xd.jparseXComponent(s,
 				Class.forName("bugreports.MyTestY2"), reporter);
-			assertTrue(JsonUtil.jsonEqual(j, toJson(xc)),
-				JsonUtil.toJsonString(toJson(xc), true));
+			assertTrue(XonUtil.jsonEqual(j, toJson(xc)),
+				XonUtil.toJsonString(toJson(xc), true));
 			xd = xp.createXDDocument("");
 			s = "[123, 123, -1.23e3]";
-			j = JsonUtil.parse(s);
-			assertTrue(JsonUtil.jsonEqual(j, xd.jparse(s, reporter)));
+			j = XonUtil.parse(s);
+			assertTrue(XonUtil.jsonEqual(j, xd.jparse(s, reporter)));
 				xc = xd.jparseXComponent(s,
 				Class.forName("bugreports.MyTestY2"), reporter);
-			assertTrue(JsonUtil.jsonEqual(j, toJson(xc)),
-				JsonUtil.toJsonString(toJson(xc), true));
+			assertTrue(XonUtil.jsonEqual(j, toJson(xc)),
+				XonUtil.toJsonString(toJson(xc), true));
 			xd = xp.createXDDocument("");
 			s = "[123, 123, -1.23e3, \"abc\"]";
-			j = JsonUtil.parse(s);
-			assertTrue(JsonUtil.jsonEqual(j, xd.jparse(s, reporter)));
+			j = XonUtil.parse(s);
+			assertTrue(XonUtil.jsonEqual(j, xd.jparse(s, reporter)));
 			xc = xd.jparseXComponent(s,
 				Class.forName("bugreports.MyTestY2"), reporter);
-			assertTrue(JsonUtil.jsonEqual(j, toJson(xc)),
-				JsonUtil.toJsonString(toJson(xc), true));
+			assertTrue(XonUtil.jsonEqual(j, toJson(xc)),
+				XonUtil.toJsonString(toJson(xc), true));
 		} catch (Exception ex) {fail(ex);}
 if(true)return;
 		try {
@@ -252,7 +252,7 @@ if(true)return;
 if(true)return;
 			xml = "<a ax='1'><b bx='2'>xxx</b></a>";
 			el = KXmlUtils.parseXml(xml).getDocumentElement();
-			j = JsonUtil.xmlToJson(el);
+			j = XonUtil.xmlToJson(el);
 //			assertEq(xml, JsonUtil.jsonToXmlXD(j));
 //			System.out.println(JsonUtil.toJsonString(j));
 //			assertEq(el, JsonUtil.jsonToXmlXD(j));

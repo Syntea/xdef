@@ -1,4 +1,4 @@
-package org.xdef.json;
+package org.xdef.xon;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -12,7 +12,7 @@ import org.xdef.sys.StringParser;
 /** Methods used in JSON/XON parsing, processing and conversions.
  * @author Vaclav Trojan
  */
-public class JsonTools {
+public class XonTools {
 
 ////////////////////////////////////////////////////////////////////////////////
 // methods used in this package
@@ -179,7 +179,7 @@ public class JsonTools {
 					} else {
 						p.setIndex(pos);
 						if (p.isChar('"')) {
-							ar.add(JsonTools.readJSONString(p));
+							ar.add(XonTools.readJSONString(p));
 						} else {
 							for(;;) {
 								if (p.isChar('\\')) {
@@ -239,7 +239,7 @@ public class JsonTools {
 		if (ch == '"' && s.charAt(len-1) == '"') {
 			StringParser p = new StringParser(s);
 			p.setIndex(1);
-			return JsonTools.readJSONString(p);
+			return XonTools.readJSONString(p);
 		}
 		int i = 0;
 		if (ch == '-' && len > 0) {

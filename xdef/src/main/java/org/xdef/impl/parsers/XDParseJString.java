@@ -1,7 +1,7 @@
 package org.xdef.impl.parsers;
 
 import org.xdef.XDParseResult;
-import org.xdef.json.JsonTools;
+import org.xdef.xon.XonTools;
 
 /** Parser of X-Script "jstring" (JSON string) type.
  * @author Vaclav Trojan
@@ -44,7 +44,7 @@ public class XDParseJString extends XDParseAn {
 	boolean parse(final XDParseResult p) {
 		int pos = p.getIndex();
 		if (p.isChar('"')) { // quoted string
-			String s = JsonTools.readJSONString(p);
+			String s = XonTools.readJSONString(p);
 			if (s != null && !p.errors()) {
 				p.setParsedValue(s);
 				return true;

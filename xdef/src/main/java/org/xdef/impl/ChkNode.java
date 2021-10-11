@@ -45,7 +45,7 @@ import org.xdef.impl.code.DefOutStream;
 import org.xdef.impl.code.DefPrice;
 import org.xdef.impl.code.DefString;
 import org.xdef.impl.xml.KNamespace;
-import org.xdef.json.JsonUtil;
+import org.xdef.xon.XonUtil;
 import org.xdef.model.XMData;
 import org.xdef.model.XMDefinition;
 import org.xdef.model.XMElement;
@@ -328,7 +328,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	 */
 	public final void setJSONContext(final String data)
 		throws SRuntimeException {
-		setJSONContext(JsonUtil.parse(data));
+		setJSONContext(XonUtil.parse(data));
 	}
 
 	@Override
@@ -344,13 +344,13 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 		if (data == null || data instanceof Map || data instanceof List
 			|| data instanceof String || data instanceof Number
 			|| data instanceof Boolean) {
-			e = JsonUtil.jsonToXml(data);
+			e = XonUtil.jsonToXml(data);
 		} else if (data instanceof File) {
-			e = JsonUtil.jsonToXml(JsonUtil.parse((File) data));
+			e = XonUtil.jsonToXml(XonUtil.parse((File) data));
 		} else if (data instanceof URL) {
-			e = JsonUtil.jsonToXml(JsonUtil.parse((URL) data));
+			e = XonUtil.jsonToXml(XonUtil.parse((URL) data));
 		} else if (data instanceof InputStream) {
-			e = JsonUtil.jsonToXml(JsonUtil.parse((InputStream) data));
+			e = XonUtil.jsonToXml(XonUtil.parse((InputStream) data));
 		} else if (data instanceof Document) {
 			e = ((Document) data).getDocumentElement();
 		} else if (data instanceof Element){

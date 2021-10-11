@@ -1,4 +1,4 @@
-package org.xdef.json;
+package org.xdef.xon;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -18,7 +18,7 @@ import org.xdef.XDEmailAddr;
 /** Provides comparing of JSON objects
  * @author Vaclav Trojan
  */
-class JsonCompare {
+class XonCompare {
 	/** Check if JSON arrays from arguments are equal.
 	 * @param a1 first array.
 	 * @param a2 second array.
@@ -116,9 +116,9 @@ class JsonCompare {
 	 */
 	final static boolean equalValue(final Object o1, final Object o2) {
 		if (o1 == null) {
-			return o2 == null || o2 instanceof JNull;
-		} else if (o1 instanceof JNull) {
-			return o2 == null || o2 instanceof JNull;
+			return o2 == null || o2 instanceof XonNull;
+		} else if (o1 instanceof XonNull) {
+			return o2 == null || o2 instanceof XonNull;
 		}
 		if (o1 instanceof Map) {
 			return o2 instanceof Map ? equalMap((Map)o1, (Map)o2) : false;

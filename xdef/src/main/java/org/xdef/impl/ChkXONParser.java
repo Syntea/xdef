@@ -17,10 +17,8 @@ import org.w3c.dom.Element;
 import org.xdef.XDConstants;
 import org.xdef.impl.xml.KParsedAttr;
 import org.xdef.impl.xml.KParsedElement;
-import org.xdef.json.JParser;
-import org.xdef.json.JsonNames;
-import org.xdef.json.JsonTools;
-import org.xdef.json.XONReader;
+import org.xdef.xon.XonTools;
+import org.xdef.xon.XonReader;
 import org.xdef.model.XMData;
 import org.xdef.msg.SYS;
 import org.xdef.msg.XDEF;
@@ -34,11 +32,13 @@ import org.xdef.sys.SReporter;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
+import org.xdef.xon.XonParser;
+import org.xdef.xon.XonNames;
 
 /** Parsing of the XML source with the X-definition.
  * @author Vaclav Trojan
  */
-final class ChkXONParser implements XParser, JParser {
+final class ChkXONParser implements XParser, XonParser {
 	/** Allocation unit for node list. */
 	private static final int NODELIST_ALLOC_UNIT = 8;
 	/** Nested level of parsed object.*/
@@ -318,22 +318,22 @@ final class ChkXONParser implements XParser, JParser {
 		return kelem;
 	}
 
-	private void genItem(final XONReader.JValue value, final SBuffer name) {
-		KParsedElement kelem = genKElem(JsonNames.J_ITEM,
+	private void genItem(final XonReader.JValue value, final SBuffer name) {
+		KParsedElement kelem = genKElem(XonNames.X_ITEM,
 			name == null ? value.getPosition() : name);
 		if (name != null) {
-			kelem.addAttr(new KParsedAttr(JsonNames.J_KEYATTR,
-				JsonTools.toXmlName(name.getString()), name));
+			kelem.addAttr(new KParsedAttr(XonNames.X_KEYATTR,
+				XonTools.toXmlName(name.getString()), name));
 		}
-		kelem.addAttr(new KParsedAttr(JsonNames.J_VALUEATTR,
-			JsonTools.genXMLValue(value.getValue()), value.getPosition()));
+		kelem.addAttr(new KParsedAttr(XonNames.X_VALUEATTR,
+			XonTools.genXMLValue(value.getValue()), value.getPosition()));
 		elementStart(kelem);
 		elementEnd();
 	}
 
 	private void doParse() {
 		_kinds.push(_kind = 0);
-		XONReader xr = new XONReader(
+		XonReader xr = new XonReader(
 			new InputStreamReader(_in, Charset.forName("UTF-8")), this);
 		xr.setSysId(_sysId);
 		xr.setReportWriter(_sReporter.getReportWriter());
@@ -347,7 +347,7 @@ final class ChkXONParser implements XParser, JParser {
 	 * @return null or name of pair if value pair already exists in
 	 * the currently processed map.
 	 */
-	public String putValue(final XONReader.JValue value) {
+	public String putValue(final XonReader.JValue value) {
 		if (_kind == 2) { // map
 			SBuffer name = _names.pop();
 			genItem(value, name);
@@ -371,11 +371,11 @@ final class ChkXONParser implements XParser, JParser {
 	 * @param pos source position.
 	 */
 	public final void arrayStart(final SPosition pos) {
-		KParsedElement kelem = genKElem(JsonNames.J_ARRAY, pos);
+		KParsedElement kelem = genKElem(XonNames.X_ARRAY, pos);
 		if (_kind == 2) { // map
 			SBuffer name = _names.peek();
-			kelem.addAttr(new KParsedAttr(JsonNames.J_KEYATTR,
-				JsonTools.toXmlName(name.getString()), name));
+			kelem.addAttr(new KParsedAttr(XonNames.X_KEYATTR,
+				XonTools.toXmlName(name.getString()), name));
 		}
 		elementStart(kelem);
 		_kinds.push(_kind = 1);
@@ -395,11 +395,11 @@ final class ChkXONParser implements XParser, JParser {
 	 * @param pos source position.
 	 */
 	public final void mapStart(final SPosition pos) {
-		KParsedElement kelem = genKElem(JsonNames.J_MAP, pos);
+		KParsedElement kelem = genKElem(XonNames.X_MAP, pos);
 		if (_kind == 2) { // map
 			SBuffer name = _names.peek();
-			kelem.addAttr(new KParsedAttr(JsonNames.J_KEYATTR,
-				JsonTools.toXmlName(name.getString()), name));
+			kelem.addAttr(new KParsedAttr(XonNames.X_KEYATTR,
+				XonTools.toXmlName(name.getString()), name));
 		}
 		elementStart(kelem);
 		_kinds.push(_kind = 2);

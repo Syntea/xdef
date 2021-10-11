@@ -1,4 +1,4 @@
-package org.xdef.json;
+package org.xdef.xon;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ import org.xdef.XDConstants;
 /** Test X-definition transformation XML -> JSONL
  * @author Vaclav Trojan
  */
-class JsonFromXml extends JsonUtil implements JsonNames {
+class XonFromXml extends XonUtil implements XonNames {
 
 ////////////////////////////////////////////////////////////////////////////////
 // Keywords of names of JSON types
@@ -28,7 +28,7 @@ class JsonFromXml extends JsonUtil implements JsonNames {
 	/** JSON null item. */
 	private final static String J_NULL = "null";
 
-	private JsonFromXml() {super();}
+	private XonFromXml() {super();}
 
 	/** Create list of elements and texts from child nodes of element.
 	 * @param el element from which the list is created.
@@ -82,8 +82,8 @@ class JsonFromXml extends JsonUtil implements JsonNames {
 			name = n.getNodeName();
 			if (!(xmlnsName.equals(name = n.getNodeName())
 				&& XDConstants.JSON_NS_URI_XD.equals(el.getNamespaceURI()))) {
-				String attName = JsonTools.xmlToJsonName(name);
-				Object val = JsonTools.xmlToJValue(n.getNodeValue());
+				String attName = XonTools.xmlToJsonName(name);
+				Object val = XonTools.xmlToJValue(n.getNodeValue());
 				result.put(attName, val);
 			}
 		}
@@ -97,15 +97,15 @@ class JsonFromXml extends JsonUtil implements JsonNames {
 	 */
 	private Object fromXmlW3C(final Element elem) {
 		String localName = elem.getLocalName();
-		if (J_ARRAY.equals(localName)) {
+		if (X_ARRAY.equals(localName)) {
 			return createArrayW3C(elem);
-		} else if (J_MAP.equals(localName)) {
+		} else if (X_MAP.equals(localName)) {
 			return createMapW3C(elem);
-		} else if (J_ITEM.equals(elem.getLocalName())) {
-			if (elem.hasAttribute(J_VALUEATTR)) {
-				return JsonTools.xmlToJValue(elem.getAttribute(J_VALUEATTR));
+		} else if (X_ITEM.equals(elem.getLocalName())) {
+			if (elem.hasAttribute(X_VALUEATTR)) {
+				return XonTools.xmlToJValue(elem.getAttribute(X_VALUEATTR));
 			}
-			return JsonTools.xmlToJValue(((Element) elem).getTextContent());
+			return XonTools.xmlToJValue(((Element) elem).getTextContent());
 		} else if (J_BOOLEAN.equals(elem.getLocalName())) {
 			return ("true".equals(elem.getTextContent().trim()));
 		} else if (J_NULL.equals(elem.getLocalName())) {
@@ -113,7 +113,7 @@ class JsonFromXml extends JsonUtil implements JsonNames {
 		} else if (J_NUMBER.equals(elem.getLocalName())) {
 			return new BigDecimal(elem.getTextContent().trim());
 		} else if (J_STRING.equals(elem.getLocalName())) {
-			return JsonTools.xmlToJValue(elem.getTextContent());
+			return XonTools.xmlToJValue(elem.getTextContent());
 		}
 		throw new RuntimeException(
 			"Unsupported JSON W3C element: " + elem.getLocalName());
@@ -147,7 +147,7 @@ class JsonFromXml extends JsonUtil implements JsonNames {
 		while(n != null) {
 			if (n.getNodeType() == Node.ELEMENT_NODE) {
 				Element e = (Element) n;
-				String key = JsonTools.xmlToJsonName(e.getAttribute(J_KEYATTR));
+				String key = XonTools.xmlToJsonName(e.getAttribute(X_KEYATTR));
 				result.put(key, fromXmlW3C(e));
 			}
 			n = n.getNextSibling();
@@ -168,7 +168,7 @@ class JsonFromXml extends JsonUtil implements JsonNames {
 	 * @param s string with values.
 	 */
 	private void addSimpleValue(final List<Object> array, String s) {
-		Object o = JsonTools.xmlToJValue(s);
+		Object o = XonTools.xmlToJValue(s);
 		if (o instanceof List) {
 			for (Object x: (List) o) {
 				array.add(x);
@@ -183,7 +183,7 @@ class JsonFromXml extends JsonUtil implements JsonNames {
 	 * @return created JSON object.
 	 */
 	private Object fromXmlXD(final Element elem) {
-		String name = JsonTools.xmlToJsonName(elem.getNodeName());
+		String name = XonTools.xmlToJsonName(elem.getNodeName());
 		Map<String, Object> attrs = getElementAttributes(elem);
 		List<Object> childNodes = getElementChildList(elem);
 		// result object
@@ -192,22 +192,22 @@ class JsonFromXml extends JsonUtil implements JsonNames {
 		String nsURI = elem.getNamespaceURI(); // nasmespace URI of element
 		String localName = nsURI==null ? elem.getNodeName():elem.getLocalName();
 		if (XDConstants.JSON_NS_URI_XD.equals(nsURI)) {
-			if (J_ITEM.equals(localName)) {
-				if (elem.hasAttribute(J_VALUEATTR)) {
-					return JsonTools.xmlToJValue(
-						elem.getAttribute(J_VALUEATTR));
+			if (X_ITEM.equals(localName)) {
+				if (elem.hasAttribute(X_VALUEATTR)) {
+					return XonTools.xmlToJValue(
+						elem.getAttribute(X_VALUEATTR));
 				}
 				String s = elem.getTextContent();
 				if (s != null) {
 					s = s.trim();
 				}
-				return JsonTools.xmlToJValue(s);
-			} else if (J_MAP.equals(localName)) {
+				return XonTools.xmlToJValue(s);
+			} else if (X_MAP.equals(localName)) {
 				map.putAll(attrs);
 				for (Object o: childNodes) {
 					if (o instanceof Element) {
 						Element el = (Element) o;
-						name = JsonTools.xmlToJsonName(el.getNodeName());
+						name = XonTools.xmlToJsonName(el.getNodeName());
 						o = fromXmlXD(el);
 						if (o instanceof Map) {
 							Map m = (Map) o;
@@ -232,14 +232,14 @@ class JsonFromXml extends JsonUtil implements JsonNames {
 						String s = (String) o;
 						if (!s.isEmpty() // if not comment
 							|| !s.startsWith("/*") || !s.endsWith("*/")) {
-							map.put(name, JsonTools.xmlToJValue(s));
+							map.put(name, XonTools.xmlToJValue(s));
 							throw new RuntimeException(
 								"Text is not allowed in JSON map element: "+s);
 						}
 					}
 				}
 				return map;
-			} else if (J_ARRAY.equals(localName)) {
+			} else if (X_ARRAY.equals(localName)) {
 				if (!attrs.isEmpty()) {
 					array.add(attrs);
 				}
@@ -256,11 +256,11 @@ class JsonFromXml extends JsonUtil implements JsonNames {
 			} else if (J_STRING.equals(localName)
 				|| J_NUMBER.equals(localName)
 				|| J_BOOLEAN.equals(localName)) {
-				if (elem.hasAttribute(J_VALUEATTR)) {
-					return JsonTools.xmlToJValue(elem.getAttribute(J_VALUEATTR));
+				if (elem.hasAttribute(X_VALUEATTR)) {
+					return XonTools.xmlToJValue(elem.getAttribute(X_VALUEATTR));
 				}
 				String s = elem.getTextContent();
-				return JsonTools.xmlToJValue(s);
+				return XonTools.xmlToJValue(s);
 			}
 			throw new RuntimeException(
 				"Unknown element from JSON namespace: " + name);
@@ -289,7 +289,7 @@ class JsonFromXml extends JsonUtil implements JsonNames {
 						}
 					}
 					if (genMap) {
-						attrs.put(name, JsonTools.xmlToJValue(s));
+						attrs.put(name, XonTools.xmlToJValue(s));
 						return attrs;
 					}
 				}
@@ -380,7 +380,7 @@ class JsonFromXml extends JsonUtil implements JsonNames {
 	final static Object toJson(final Node node) {
 		Element elem = node.getNodeType() == Node.DOCUMENT_NODE
 			? ((Document) node).getDocumentElement() : (Element) node;
-		JsonFromXml x = new JsonFromXml();
+		XonFromXml x = new XonFromXml();
 		if (XDConstants.JSON_NS_URI_W3C.equals(elem.getNamespaceURI())) {
 			return x.fromXmlW3C(elem); // W3C form
 		}

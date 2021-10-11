@@ -13,14 +13,14 @@ import org.xdef.XDDocument;
 import org.xdef.XDParseResult;
 import org.xdef.XDPool;
 import org.xdef.XDValue;
-import org.xdef.json.JsonNames;
-import org.xdef.json.JsonTools;
+import org.xdef.xon.XonTools;
 import org.xdef.model.XMElement;
 import org.xdef.model.XMNode;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.SDatetime;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.StringParser;
+import org.xdef.xon.XonNames;
 
 /** Utilities used with XComponents.
  * @author Vaclav Trojan
@@ -329,7 +329,7 @@ public class XComponentUtil {
 	private static Object toXonItem(final XComponent xc) {
 		Class<?> cls = xc.getClass();
 		try {
-			Method m = cls.getDeclaredMethod("get" + JsonNames.J_VALUEATTR);
+			Method m = cls.getDeclaredMethod("get" + XonNames.X_VALUEATTR);
 			Object o = m.invoke(xc);
 			if (o instanceof String) {
 				String s = (String) o;
@@ -337,7 +337,7 @@ public class XComponentUtil {
 				if (len > 1 && s.charAt(0) == '"' && s.charAt(len-1) == '"') {
 					StringParser p = new StringParser(s);
 					p.setIndex(1);
-					return JsonTools.readJSONString(p);
+					return XonTools.readJSONString(p);
 				}
 			}
 			return o;
@@ -398,9 +398,9 @@ public class XComponentUtil {
 					String key = null;
 					try {
 						Class<?> cls1 = o.getClass();
-						Method m = cls1.getMethod("get" + JsonNames.J_KEYATTR);
+						Method m = cls1.getMethod("get" + XonNames.X_KEYATTR);
 						m.setAccessible(true);
-						key = JsonTools.xmlToJsonName((String) m.invoke(o));
+						key = XonTools.xmlToJsonName((String) m.invoke(o));
 					} catch (Exception ex) {
 						new RuntimeException("Not key", ex);
 					}
@@ -422,11 +422,11 @@ public class XComponentUtil {
 		String ns = xc.xGetNamespaceURI();
 		String name = xc.xGetNodeName();
 		if (XDConstants.JSON_NS_URI_W3C.equals(ns)) {
-			if (JsonNames.J_MAP.equals(name)) {
+			if (XonNames.X_MAP.equals(name)) {
 				return toXonMap(xc);
-			} else if (JsonNames.J_ARRAY.equals(name)) {
+			} else if (XonNames.X_ARRAY.equals(name)) {
 				return toXonArray(xc);
-			} else if (JsonNames.J_ITEM.equals(name)) {
+			} else if (XonNames.X_ITEM.equals(name)) {
 				return toXonItem(xc);
 			}
 		}

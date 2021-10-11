@@ -33,7 +33,7 @@ import org.xdef.impl.code.DefParseResult;
 import org.xdef.impl.code.DefXmlWriter;
 import org.xdef.impl.code.ParseItem;
 import org.xdef.impl.xml.KNamespace;
-import org.xdef.json.JsonUtil;
+import org.xdef.xon.XonUtil;
 import org.xdef.model.XMElement;
 import org.xdef.model.XMNode;
 import org.xdef.msg.SYS;
@@ -1107,19 +1107,19 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 				byte jsonVer = // version of JSON to XML transormation
 					(Byte) yClass.getDeclaredField("JSON").get(null);
 				e = jsonVer == XConstants.JSON_MODE_W3C ?
-					JsonUtil.jsonToXml(json) : JsonUtil.jsonToXmlXD(json);
+					XonUtil.jsonToXml(json) : XonUtil.jsonToXmlXD(json);
 			} catch (Exception ex) {
-				e = JsonUtil.jsonToXml(json); // X-definition transormation
+				e = XonUtil.jsonToXml(json); // X-definition transormation
 			}
 			return parseXComponent(e, yClass, reporter);
 		} else if (json instanceof String) {
-			return jparseXComponent(JsonUtil.parse((String) json),
+			return jparseXComponent(XonUtil.parse((String) json),
 				yClass, reporter);
 		} else if (json instanceof File) {
-			return jparseXComponent(JsonUtil.parse((File) json),
+			return jparseXComponent(XonUtil.parse((File) json),
 				yClass, reporter);
 		} else if (json instanceof URL) {
-			return jparseXComponent(JsonUtil.parse((URL) json),
+			return jparseXComponent(XonUtil.parse((URL) json),
 				yClass, reporter);
 		} else if (json instanceof InputStream) {
 			return jparseXComponent((InputStream) json,
@@ -1131,7 +1131,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			} else {
 				e = (Element) json;
 			}
-			return jparseXComponent(JsonUtil.xmlToJson(e),yClass,reporter);
+			return jparseXComponent(XonUtil.xmlToJson(e),yClass,reporter);
 		}
 		throw new SRuntimeException(XDEF.XDEF318); //Incorrect JSON data
 	}

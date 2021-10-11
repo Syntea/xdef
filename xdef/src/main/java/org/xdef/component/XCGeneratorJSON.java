@@ -9,12 +9,12 @@ import org.xdef.impl.XElement;
 import org.xdef.impl.XNode;
 import org.xdef.impl.XPool;
 import org.xdef.impl.code.CodeTable;
-import org.xdef.json.JsonNames;
-import org.xdef.json.JsonTools;
+import org.xdef.xon.XonTools;
 import org.xdef.model.XMData;
 import org.xdef.msg.SYS;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.SRuntimeException;
+import org.xdef.xon.XonNames;
 
 /** Generation of Java source code methods for JSON getters/setters.
  * @author Vaclav Trojan
@@ -342,7 +342,7 @@ class XCGeneratorJSON extends XCGeneratorBase1 {
 		final Set<String> classNames,
 		final Set<String> varNames) {
 		String name = null;
-		XData keyAttr = (XData) xe.getAttr(JsonNames.J_KEYATTR);
+		XData keyAttr = (XData) xe.getAttr(XonNames.X_KEYATTR);
 		if (xe._json==XConstants.JSON_MODE_W3C && xe._match>=0 && keyAttr!=null
 			&& keyAttr._check >= 0) {
 			XDValue[] code = ((XPool)xe.getXDPool()).getCode();
@@ -353,8 +353,7 @@ class XCGeneratorJSON extends XCGeneratorBase1 {
 					continue;
 				}
 				if (item.getCode() == CodeTable.LD_CONST) {
-					name = javaName(
-						"get$" + JsonTools.toXmlName(code[i].stringValue()));
+					name = javaName("get$" + XonTools.toXmlName(code[i].stringValue()));
 					name = getUniqueName(getUniqueName(getUniqueName(name,
 						RESERVED_NAMES), classNames), varNames);
 					varNames.add(name);
@@ -369,7 +368,7 @@ class XCGeneratorJSON extends XCGeneratorBase1 {
 			name = name.substring(4);
 		}
 		String typ =
-			getJavaObjectTypeName((XData) xe.getAttr(JsonNames.J_VALUEATTR));
+			getJavaObjectTypeName((XData) xe.getAttr(XonNames.X_VALUEATTR));
 		boolean isNull = false;
 		String template;
 		// has only a text child
@@ -379,7 +378,7 @@ class XCGeneratorJSON extends XCGeneratorBase1 {
 			String typ1 = "java.util.List<" + typ + ">";
 			if (xe.getJsonMode() != 0) {
 				if ("String".equals(typ)) {
-					jGet = "org.xdef.json.JsonTools.jstringFromSource("
+					jGet = "org.xdef.xon.XonTools.jstringFromSource("
 						+ "y.getvalue())";
 				} else {
 					jGet = "y.getvalue()";
@@ -415,7 +414,7 @@ class XCGeneratorJSON extends XCGeneratorBase1 {
 			// setter
 			if (xe.getJsonMode() != 0) {
 				if ("String".equals(typ)) {
-					jSet = "org.xdef.json.JsonUtil.toJsonString(x,false)";
+					jSet = "org.xdef.xon.XonUtil.toJsonString(x,false)";
 				} else {
 					jSet = "x";
 				}
@@ -477,7 +476,7 @@ class XCGeneratorJSON extends XCGeneratorBase1 {
 "\tpublic &{typ} get$&{name}(){"+LN+
 "\t\treturn _&{iname}==null?null:" +
 	("String".equals(typ) && xe.getJsonMode() != 0 ?
-	"org.xdef.json.JsonTools.jstringFromSource(_&{iname}.getvalue())"
+	"org.xdef.xon.XonTools.jstringFromSource(_&{iname}.getvalue())"
 	: isNull ? typ + ".JNULL" : "_&{iname}.getvalue()") + ";" + LN
 +"\t}"+LN;
 			getters.append(modify(template,
@@ -529,7 +528,7 @@ class XCGeneratorJSON extends XCGeneratorBase1 {
 				}
 			}
 			jSet = "String".equals(typ) && xe.getJsonMode() != 0
-				? "org.xdef.json.JsonUtil.toJsonString(x,false)":"x";
+				? "org.xdef.xon.XonUtil.toJsonString(x,false)":"x";
 			// setter
 			template =
 (_genJavadoc ? "\t/** Set value of textnode of &{d}.*/"+LN : "")+

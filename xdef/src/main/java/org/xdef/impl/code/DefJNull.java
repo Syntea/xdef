@@ -3,7 +3,7 @@ package org.xdef.impl.code;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
 import org.xdef.XDValueType;
-import org.xdef.json.JNull;
+import org.xdef.xon.XonNull;
 import org.xdef.msg.SYS;
 import org.xdef.sys.SIllegalArgumentException;
 
@@ -13,7 +13,7 @@ import org.xdef.sys.SIllegalArgumentException;
 public final class DefJNull extends XDValueAbstract {
 
 	/** The value of item. */
-	private final JNull _value;
+	private final XonNull _value;
 
 	/** Creates a new instance of DefBoolean as null.*/
 	public DefJNull() {_value = null;}
@@ -21,7 +21,7 @@ public final class DefJNull extends XDValueAbstract {
 	/** Creates a new instance of DefBoolean
 	 * @param value The initial value of object.
 	 */
-	public DefJNull(final JNull value) {_value = value!=null?JNull.JNULL:null;}
+	public DefJNull(final XonNull value) {_value = value!=null?XonNull.JNULL:null;}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDValue interface
