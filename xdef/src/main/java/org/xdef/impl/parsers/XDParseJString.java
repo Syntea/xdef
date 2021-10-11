@@ -44,7 +44,7 @@ public class XDParseJString extends XDParseAn {
 	boolean parse(final XDParseResult p) {
 		int pos = p.getIndex();
 		if (p.isChar('"')) { // quoted string
-			String s = XonTools.readJSONString(p);
+			String s = XonTools.readJString(p);
 			if (s != null && !p.errors()) {
 				p.setParsedValue(s);
 				return true;

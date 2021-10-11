@@ -86,7 +86,7 @@ public class XDParseJList extends XSAbstractParser {
 					p.setParsedValue(q.getParsedValue());
 					end = q.getIndex();
 				} else if (p.isChar('"')) {
-					String s = XonTools.readJSONString(p);
+					String s = XonTools.readJString(p);
 					end = p.getIndex();
 					if (_itemType.parserName().charAt(0) == 'j') {
 						p.setSourceBuffer(p.getBufferPart(0, end));

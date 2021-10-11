@@ -118,16 +118,16 @@ public class XonTools {
 		return sb.toString();
 	}
 
-	/** Parse JList (the string which begins with '[').
+	/** Parse JSON/XON array (the string which begins with '[').
 	 * @param ar the array where results are stored.
 	 * @param p String parser with the string.
 	 */
-	private static void parseJList(final List<Object> ar, final StringParser p){
+	private static void parseJArray(final List<Object> ar,final StringParser p){
 		for (;;) {
 			p.isSpaces();
 			if (p.isChar('[')) {
 				List<Object> ar1 = new ArrayList<Object>();
-				parseJList(ar1, p);
+				parseJArray(ar1, p);
 				ar.add(ar1);
 				p.isSpaces();
 				if (p.isChar(',')) {
@@ -179,7 +179,7 @@ public class XonTools {
 					} else {
 						p.setIndex(pos);
 						if (p.isChar('"')) {
-							ar.add(XonTools.readJSONString(p));
+							ar.add(XonTools.readJString(p));
 						} else {
 							for(;;) {
 								if (p.isChar('\\')) {
@@ -214,9 +214,9 @@ public class XonTools {
 		}
 	}
 
-	/** Get JSON value from string in XML.
-	 * @param s string with JSON simple value source
-	 * @return object with JSOM value
+	/** Get JSON/XON value from string in XML.
+	 * @param s string with XON simple value source
+	 * @return object with XON value
 	 */
 	public final static Object xmlToJValue(final String s) {
 		if (s.isEmpty()) {
@@ -225,7 +225,7 @@ public class XonTools {
 			ArrayList<Object> ar = new ArrayList<Object>();
 			StringParser p = new StringParser(s);
 			p.setIndex(1);
-			parseJList(ar, p);
+			parseJArray(ar, p);
 			return ar;
 		} else if ("null".equals(s)) {
 			return null;
@@ -239,7 +239,7 @@ public class XonTools {
 		if (ch == '"' && s.charAt(len-1) == '"') {
 			StringParser p = new StringParser(s);
 			p.setIndex(1);
-			return XonTools.readJSONString(p);
+			return XonTools.readJString(p);
 		}
 		int i = 0;
 		if (ch == '-' && len > 0) {
@@ -261,7 +261,7 @@ public class XonTools {
 		return s; // JSON String
 	}
 
-	/** Get XML name created from JSOM pair name.
+	/** Get XML name created from JSON/XON pair name.
 	 * @param s JSOM pair name.
 	 * @return XML name.
 	 */
@@ -304,11 +304,11 @@ public class XonTools {
 		return sb.toString();
 	}
 
-	/** Create JSON named value from XML name.
+	/** Create JSON/XON named value from XML name.
 	 * @param name XML name.
-	 * @return JSON name.
+	 * @return JSON/XON name.
 	 */
-	public final static String xmlToJsonName(final String name) {
+	public final static String xmlToJName(final String name) {
 		if ("_x00_".equals(name)) {
 			return "";
 		}
@@ -332,11 +332,11 @@ public class XonTools {
 		return sb.toString();
 	}
 
-	/** Read character representation from JSON/XSON source.
+	/** Read character representation from JSON/XON source.
 	 * @param p parser where is source.
 	 * @return decoded character.
 	 */
-	public static int readJSONChar(final SParser p) {
+	public static int readJChar(final SParser p) {
 		if (p.isChar('\\')) {
 			char c = p.peekChar();
 			int i = "u\"\\/bfnrt".indexOf(c);
@@ -379,7 +379,7 @@ public class XonTools {
 		return jstringToSource(s);
 	}
 
-	/** Convert a character to JSON/XSON representation.
+	/** Convert a character to JSON/XON representation.
 	 * @param c character to be converted.
 	 * @return string with converted character.
 	 */
@@ -402,7 +402,7 @@ public class XonTools {
 
 	/** Convert simple value to the form XML attribute.
 	 * @param x the object to be converted.
-	 * @return the form the of attribute value created from argument,
+	 * @return XML form of the of attribute value created from argument.
 	 */
 	public final static String genXMLValue(final Object x) {
 		if (x == null) {
@@ -452,17 +452,17 @@ public class XonTools {
 		}
 	}
 
-	/** Read value of JSON string.
+	/** Read value of JSON/XON string.
 	 * @param p parser where the string is on the actual position.
 	 * @return the parsed string.
 	 */
-	public final static String readJSONString(final SParser p) {
+	public final static String readJString(final SParser p) {
 		StringBuilder sb = new StringBuilder();
 		while (!p.eos()) {
 			if (p.isChar('"')) {
 				return sb.toString();
 			} else {
-				int i = readJSONChar(p);
+				int i = readJChar(p);
 				if (i < 0) {
 					return null;
 				}
