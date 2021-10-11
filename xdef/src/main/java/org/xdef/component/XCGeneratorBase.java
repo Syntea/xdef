@@ -247,7 +247,7 @@ class XCGeneratorBase {
 		} else if ("jboolean".equals(parserName)) {
 			return "Boolean";
 //		} else if ("jnull".equals(parserName)) {
-//			return "org.xdef.json.JNull";
+//			return "org.xdef.xon.XonNull";
 		} else if ("jvalue".equals(parserName)) {
 			return "Object";
 		}
@@ -823,7 +823,7 @@ class XCGeneratorBase {
 		short typ =  xdata.getParserType();
 		switch (typ) {
 			case XDValueID.XD_CHAR: {
-				x = "org.xdef.json.JsonTools.genXMLValue(get&{name}()))";
+				x = "org.xdef.xon.XonTools.genXMLValue(get&{name}()))";
 				break;
 			}
 			case XDValueID.XD_DATETIME: {

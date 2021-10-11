@@ -14,28 +14,28 @@ import javax.xml.namespace.QName;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xdef.XDConstants;
-import org.xdef.json.JParser;
-import org.xdef.json.JsonNames;
-import org.xdef.json.JsonTools;
-import org.xdef.json.XONParsers;
-import org.xdef.json.XONReader;
+import org.xdef.xon.XonTools;
+import org.xdef.xon.XonReader;
 import org.xdef.msg.SYS;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.SBuffer;
 import org.xdef.sys.SPosition;
 import org.xdef.sys.SReporter;
 import org.xdef.sys.SRuntimeException;
+import org.xdef.xon.XonParsers;
+import org.xdef.xon.XonParser;
+import org.xdef.xon.XonNames;
 
 /** Parse  JSON/XON object from JSON/XON source and generate XML (W3C format).
  * Reads source with JSON/XON and generates W3C XML methods invoked in
  * CHKDocument and CHKElement.
  * @author Vaclav Trojan
  */
-public class XonSourceParser implements JParser, XParser {
+public class XonSourceParser implements XonParser, XParser {
 	/** Allocation unit for node list. */
 	private static final int NODELIST_ALLOC_UNIT = 8;
 	/** instance of XONReader. */
-	private final XONParsers _p;
+	private final XonParsers _p;
 
 	/** Nesting level. */
 	private int _level = -1;
@@ -48,12 +48,12 @@ public class XonSourceParser implements JParser, XParser {
 	/** Name of named item. */
 	private SBuffer _name;
 	/** simpleValue of item. */
-	private XONReader.JValue _value;
+	private XonReader.JValue _value;
 
 	XonSourceParser(final File f) {
 		try {
 			FileReader in = new FileReader(f);
-			XONReader p = new XONReader(in, this);
+			XonReader p = new XonReader(in, this);
 			p.setXonMode();
 			p.setSysId(f.getCanonicalPath());
 			_p = p;
@@ -67,7 +67,7 @@ public class XonSourceParser implements JParser, XParser {
 		try {
 			Reader in = new InputStreamReader(
 				url.openStream(), Charset.forName("UTF-8"));
-			XONReader p = new XONReader(in, this);
+			XonReader p = new XonReader(in, this);
 			p.setXonMode();
 			p.setSysId(id);
 			_p = p;
@@ -77,7 +77,7 @@ public class XonSourceParser implements JParser, XParser {
 	}
 
 	XonSourceParser(final Reader in, final String sysId) {
-		XONReader p = new XONReader(in, this);
+		XonReader p = new XonReader(in, this);
 		p.setXonMode();
 		if (sysId != null) {
 			p.setSysId(sysId);
@@ -87,7 +87,7 @@ public class XonSourceParser implements JParser, XParser {
 
 	XonSourceParser(final InputStream is, final String sysId) {
 		Reader in = new InputStreamReader(is, Charset.forName("UTF-8"));
-		XONReader p = new XONReader(in, this);
+		XonReader p = new XonReader(in, this);
 		p.setXonMode();
 		if (sysId != null) {
 			p.setSysId(sysId);
@@ -108,13 +108,13 @@ public class XonSourceParser implements JParser, XParser {
 			elemName.getString());
 		String name = null;
 		if (_name != null) {
-			name = JsonTools.toXmlName(_name.getString());
-			e.setAttribute(JsonNames.J_KEYATTR, name);
+			name = XonTools.toXmlName(_name.getString());
+			e.setAttribute(XonNames.X_KEYATTR, name);
 		}
 		String value = null;
 		if (_value != null) {
-			value = JsonTools.genXMLValue(_value.getValue());
-			e.setAttribute(JsonNames.J_VALUEATTR, value);
+			value = XonTools.genXMLValue(_value.getValue());
+			e.setAttribute(XonNames.X_VALUEATTR, value);
 		}
 		if (++_level == 0) {
 			_el = e;
@@ -145,11 +145,11 @@ public class XonSourceParser implements JParser, XParser {
 		}
 		if (name != null) {
 			_chkDoc.getReporter().setPosition(_name);
-			_chkEl.addAttribute(JsonNames.J_KEYATTR, name);
+			_chkEl.addAttribute(XonNames.X_KEYATTR, name);
 		}
 		if (value != null) {
 			_chkDoc.getReporter().setPosition(_value.getPosition());
-			_chkEl.addAttribute(JsonNames.J_VALUEATTR, value);
+			_chkEl.addAttribute(XonNames.X_VALUEATTR, value);
 		}
 		_chkDoc.getReporter().setPosition(elemName);
 		_name = null;
@@ -177,9 +177,9 @@ public class XonSourceParser implements JParser, XParser {
 	 * @return null or name of pair if value pair already exists in
 	 * the currently processed map.
 	 */
-	public String putValue(final XONReader.JValue value) {
+	public String putValue(final XonReader.JValue value) {
 		_value = value;
-		elementStart(new SBuffer(JsonNames.J_ITEM, value.getPosition()));
+		elementStart(new SBuffer(XonNames.X_ITEM, value.getPosition()));
 		elementEnd();
 		return null;
 	}
@@ -193,7 +193,7 @@ public class XonSourceParser implements JParser, XParser {
 	 * @param pos source position.
 	 */
 	public void arrayStart(final SPosition pos) {
-		elementStart(new SBuffer(JsonNames.J_ARRAY, pos));
+		elementStart(new SBuffer(XonNames.X_ARRAY, pos));
 	}
 	@Override
 	/** Array ended.
@@ -205,7 +205,7 @@ public class XonSourceParser implements JParser, XParser {
 	 * @param pos source position.
 	 */
 	public void mapStart(final SPosition pos) {
-		elementStart(new SBuffer(JsonNames.J_MAP, pos));
+		elementStart(new SBuffer(XonNames.X_MAP, pos));
 	}
 	@Override
 	/** Map ended.
@@ -262,13 +262,13 @@ public class XonSourceParser implements JParser, XParser {
 	/** XML W3C parser of JSON/XON object from JSON/XON object.
 	 * @author Vaclav Trojan
 	 */
-	private static class XonObjectParser implements XONParsers {
+	private static class XonObjectParser implements XonParsers {
 		/** Empty position. */
 		private static final SPosition NULPOS = new SPosition();
 		private final Object _obj;
-		private final JParser _jp;
+		private final XonParser _jp;
 
-		XonObjectParser(final Object obj, final JParser jp) {
+		XonObjectParser(final Object obj, final XonParser jp) {
 			_obj = obj;
 			_jp = jp;
 		}
@@ -292,7 +292,7 @@ public class XonSourceParser implements JParser, XParser {
 				}
 				_jp.arrayEnd(NULPOS);
 			} else {
-				_jp.putValue(new XONReader.JValue(NULPOS, o));
+				_jp.putValue(new XonReader.JValue(NULPOS, o));
 			}
 		}
 

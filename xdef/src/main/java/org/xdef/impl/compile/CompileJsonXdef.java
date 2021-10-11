@@ -5,14 +5,12 @@ import java.util.Stack;
 import org.xdef.XDConstants;
 import org.xdef.impl.XConstants;
 import org.xdef.impl.XOccurrence;
-import org.xdef.json.JParser;
-import org.xdef.json.JsonNames;
-import org.xdef.json.JsonTools;
-import org.xdef.json.XONReader;
-import org.xdef.json.XONReader.JArray;
-import org.xdef.json.XONReader.JMap;
-import org.xdef.json.XONReader.JObject;
-import org.xdef.json.XONReader.JValue;
+import org.xdef.xon.XonTools;
+import org.xdef.xon.XonReader;
+import org.xdef.xon.XonReader.JArray;
+import org.xdef.xon.XonReader.JMap;
+import org.xdef.xon.XonReader.JObject;
+import org.xdef.xon.XonReader.JValue;
 import org.xdef.msg.JSON;
 import org.xdef.msg.SYS;
 import org.xdef.sys.StringParser;
@@ -21,6 +19,8 @@ import org.xdef.sys.ReportWriter;
 import org.xdef.sys.SBuffer;
 import org.xdef.sys.SPosition;
 import org.xdef.sys.SRuntimeException;
+import org.xdef.xon.XonParser;
+import org.xdef.xon.XonNames;
 
 /** Create X-definition model from xd:json element.
  * @author Vaclav Trojan
@@ -343,20 +343,20 @@ public class CompileJsonXdef extends StringParser {
 	 * @param key value of key.
 	 */
 	private void updateKeyInfo(final PNode e, final String key) {
-		String s = JsonTools.toXmlName(key);
-		addMatchExpression(e, '@' + JsonNames.J_KEYATTR + "=='"+ s +"'");
-		setAttr(e, JsonNames.J_KEYATTR, new SBuffer("fixed('"+s+"');",e._name));
+		String s = XonTools.toXmlName(key);
+		addMatchExpression(e, '@' + XonNames.X_KEYATTR + "=='"+ s +"'");
+		setAttr(e, XonNames.X_KEYATTR, new SBuffer("fixed('"+s+"');",e._name));
 	}
 
 	private PNode genJsonMap(final JMap map, final PNode parent) {
 		PNode e, ee;
-		Object val = map.get(JsonNames.SCRIPT_NAME);
+		Object val = map.get(XonNames.SCRIPT_NAME);
 		if (val != null && val instanceof JValue) {
-			map.remove(JsonNames.SCRIPT_NAME);
+			map.remove(XonNames.SCRIPT_NAME);
 			JValue jv = (JValue) val;
 			setSourceBuffer(jv.getSBuffer());
 			isSpacesOrComments();
-			if (isToken(JsonNames.ONEOF_NAME)) {
+			if (isToken(XonNames.ONEOF_NAME)) {
 				e = genJElement(parent, "map", map.getPosition());
 				ee = genXDElement(e, "choice", getPosition());
 				e.addChildNode(ee);
@@ -416,7 +416,7 @@ public class CompileJsonXdef extends StringParser {
 			if (o != null && o instanceof JValue) {
 				setSourceBuffer(((JValue) o).getSBuffer());
 				isSpacesOrComments();
-				if (isToken(JsonNames.ONEOF_NAME)) {
+				if (isToken(XonNames.ONEOF_NAME)) {
 					e = genXDElement(parent,
 						"choice", ((JValue) jo).getPosition());
 					skipSemiconsBlanksAndComments();
@@ -440,9 +440,9 @@ public class CompileJsonXdef extends StringParser {
 				// if it is not the last and it has xd:script attribute where
 				// the min occurrence differs from max occurrence
 				// and it has the attribute with a value description
-				if (JsonNames.J_ITEM.equals(ee._localName)
+				if (XonNames.X_ITEM.equals(ee._localName)
 					&& XDConstants.JSON_NS_URI_W3C.equals(ee._nsURI)
-					&& (val = getAttr(ee, JsonNames.J_VALUEATTR)) != null) {
+					&& (val = getAttr(ee, XonNames.X_VALUEATTR)) != null) {
 					PAttr script = getXDAttr(ee, "script");
 					XOccurrence occ = null;
 					if (script != null) {
@@ -474,7 +474,7 @@ public class CompileJsonXdef extends StringParser {
 						}
 						addMatchExpression(ee,
 							s + ".parse((String)@"
-								+ JsonNames.J_VALUEATTR + ").matches()");
+								+ XonNames.X_VALUEATTR + ").matches()");
 					}
 				}
 			}
@@ -484,7 +484,7 @@ public class CompileJsonXdef extends StringParser {
 
 	private PNode genJsonValue(final JValue jo, final PNode parent) {
 		SBuffer sbf, occ = null;
-		PNode e = genJElement(parent, JsonNames.J_ITEM, jo.getPosition());
+		PNode e = genJElement(parent, XonNames.X_ITEM, jo.getPosition());
 		if (jo.getValue() == null) {
 			sbf = new SBuffer("jnull()");
 		} else {
@@ -504,7 +504,7 @@ public class CompileJsonXdef extends StringParser {
 			if (occ != null) { // occurrence
 				setXDAttr(e, "script", occ);
 			}
-			setAttr(e, JsonNames.J_VALUEATTR, sbf);
+			setAttr(e, XonNames.X_VALUEATTR, sbf);
 		}
 		return e;
 	}
@@ -567,7 +567,7 @@ public class CompileJsonXdef extends StringParser {
 		p._nsURI = null; // set no namespace
 		p._nsindex = -1;
 		XDBuilder jp = new XDBuilder(jx);
-		XONReader pp = new XONReader(p._value, jp);
+		XonReader pp = new XonReader(p._value, jp);
 		pp.setReportWriter(reporter);
 		pp.setXdefMode();
 		pp.parse();
@@ -582,7 +582,7 @@ public class CompileJsonXdef extends StringParser {
 	 * structure composed from JObjets used for compilation of JSON model
 	 * in X-definition.
 	 */
-	private static class XDBuilder implements JParser {
+	private static class XDBuilder implements XonParser {
 		private final Stack<Integer> _kinds = new Stack<Integer>();
 		private final Stack<JArray> _arrays = new Stack<JArray>();
 		private final Stack<JMap> _maps = new Stack<JMap>();
@@ -682,15 +682,15 @@ public class CompileJsonXdef extends StringParser {
 		 * @param value value of item.
 		 */
 		public void xdScript(SBuffer name, SBuffer value) {
-			String s = JsonNames.ONEOF_NAME.equals(name.getString())
-				? JsonNames.ONEOF_NAME : "";
+			String s = XonNames.ONEOF_NAME.equals(name.getString())
+				? XonNames.ONEOF_NAME : "";
 			s += value == null ? "" : value.getString();
 			SPosition spos = value == null ? name : value;
 			JValue jv = new JValue(name, new JValue(spos, s));
 			if (_kind == 1) { // array
 				_arrays.peek().add(jv);
 			} else if (_kind == 2) { // map
-				_maps.peek().put(JsonNames.SCRIPT_NAME, jv);
+				_maps.peek().put(XonNames.SCRIPT_NAME, jv);
 			}
 		}
 	}

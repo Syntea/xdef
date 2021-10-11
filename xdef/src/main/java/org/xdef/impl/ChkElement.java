@@ -25,8 +25,7 @@ import org.xdef.impl.code.DefBoolean;
 import org.xdef.impl.code.DefParseResult;
 import org.xdef.impl.compile.CompileBase;
 import org.xdef.impl.xml.KNamespace;
-import org.xdef.json.JsonNames;
-import org.xdef.json.JsonTools;
+import org.xdef.xon.XonTools;
 import org.xdef.model.XMData;
 import org.xdef.model.XMElement;
 import org.xdef.model.XMNode;
@@ -40,6 +39,7 @@ import org.xdef.sys.Report;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
+import org.xdef.xon.XonNames;
 
 /** Provides validation of input data or it can be used as base for construction
  * of XML objects according to a X-definition.
@@ -165,9 +165,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		}
 		if (!_ignoreAll && getElement() != null) {
 			if (_xElement._json > 0) { // XON
-				if (_xElement.getName().endsWith(JsonNames.J_MAP)) {
+				if (_xElement.getName().endsWith(XonNames.X_MAP)) {
 					_xonMap = new LinkedHashMap<String, Object>();
-				} else if (_xElement.getName().endsWith(JsonNames.J_ARRAY)) {
+				} else if (_xElement.getName().endsWith(XonNames.X_ARRAY)) {
 					_xonArray = new ArrayList<Object>();
 				}
 			}
@@ -1689,9 +1689,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			if (value==null) {
 				value = _parseResult.getSourceBuffer();
 			}
-			if (JsonNames.J_KEYATTR.equals(xdata.getName())) {
-				_xonKey = JsonTools.xmlToJsonName(value.toString());
-			} else if (JsonNames.J_VALUEATTR.equals(xdata.getName())) {
+			if (XonNames.X_KEYATTR.equals(xdata.getName())) {
+				_xonKey = XonTools.xmlToJsonName(value.toString());
+			} else if (XonNames.X_VALUEATTR.equals(xdata.getName())) {
 				if (value instanceof XDValue) {
 					XDValue x = (XDValue) value;
 					if (x.isNull()) {
@@ -1712,7 +1712,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 								_xonValue = obj;
 							}
 						} else if (obj instanceof String) {
-							_xonValue = JsonTools.xmlToJValue((String) obj);
+							_xonValue = XonTools.xmlToJValue((String) obj);
 						} else {
 							_xonValue = obj;
 						}
@@ -2680,7 +2680,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		}
 		if (_parent._parent != null && _xElement._json > 0) {//not root; gen XON
 			ChkElement chkEl = (ChkElement) _parent;
-			Object value = JsonNames.J_ITEM.equals(_xElement.getLocalName())
+			Object value = XonNames.X_ITEM.equals(_xElement.getLocalName())
 				? _xonValue : _xonMap != null ? _xonMap : _xonArray;
 			if (chkEl._xonMap != null) {
 				chkEl._xonMap.put(_xonKey, value);

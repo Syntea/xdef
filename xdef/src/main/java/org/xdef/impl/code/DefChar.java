@@ -7,7 +7,7 @@ import org.xdef.XDValueAbstract;
 import java.math.BigDecimal;
 import org.xdef.XDValueID;
 import org.xdef.XDValueType;
-import org.xdef.json.JsonTools;
+import org.xdef.xon.XonTools;
 import org.xdef.sys.SParser;
 import org.xdef.sys.StringParser;
 
@@ -36,7 +36,7 @@ public final class DefChar extends XDValueAbstract {
 	 * @param s string representing a character.
 	 */
 	public DefChar(final String s) {
-		int i = JsonTools.readJSONChar(new StringParser(s));
+		int i = XonTools.readJSONChar(new StringParser(s));
 		_value = (i < 0) ? SParser.NOCHAR : (char) i;
 		_isNull = false;
 	}
@@ -97,7 +97,7 @@ public final class DefChar extends XDValueAbstract {
 	 * @return string value of this object.
 	 */
 	public String stringValue() {
-		return  isNull() ?"":JsonTools.jstringToSource(String.valueOf(_value));
+		return  isNull() ?"":XonTools.jstringToSource(String.valueOf(_value));
 	}
 
 	@Override

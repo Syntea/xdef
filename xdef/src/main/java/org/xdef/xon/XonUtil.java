@@ -1,4 +1,4 @@
-package org.xdef.json;
+package org.xdef.xon;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -8,8 +8,6 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.List;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xdef.msg.SYS;
@@ -21,13 +19,18 @@ import org.xdef.xml.KXmlUtils;
  * and create string with JSON source from JSON object.
  * @author Vaclav Trojan
  */
-public class JsonUtil {
+public class XonUtil {
 
 ////////////////////////////////////////////////////////////////////////////////
-// JSON parser
+// XON parser
 ////////////////////////////////////////////////////////////////////////////////
 
-	private static List<Object> getReader(Object x) {
+	/** Get XON reader data from argument.
+	 * @param x the object containing XON/JSON data.
+	 * @return array with two items: Reader and System ID.
+	 */
+	private static Object[] getReader(Object x) {
+		Object[] result = new Object[2];
 		Reader reader = null;
 		String sysId = null;
 		if (x instanceof String) {
@@ -39,14 +42,14 @@ public class JsonUtil {
 					return getReader(new File(s));
 				} catch (Exception exx) {}
 			}
-			reader = new StringReader(s);
-			sysId = "STRING";
+			result[0] = new StringReader(s);
+			result[1] = "STRING";
 		} else if (x instanceof File) {
 			File f = (File) x;
 			try {
-				reader = new InputStreamReader(
+				result[0] = new InputStreamReader(
 					new FileInputStream(f), Charset.forName("UTF-8"));
-				sysId = f.getCanonicalPath();
+				result[1] = f.getCanonicalPath();
 			} catch (Exception ex) {
 				//Program exception &{0}
 				throw new SRuntimeException(SYS.SYS036, ex);
@@ -54,28 +57,25 @@ public class JsonUtil {
 		} else if (x instanceof URL) {
 			URL u = (URL) x;
 			try {
-				reader = new InputStreamReader(
+				result[0] = new InputStreamReader(
 					u.openStream(), Charset.forName("UTF-8"));
-				sysId = u.toExternalForm();
+				result[1] = u.toExternalForm();
 			} catch (Exception ex) {
 				//Program exception &{0}
 				throw new SRuntimeException(SYS.SYS036, ex);
 			}
 		} else if (x instanceof InputStream) {
-			reader = new InputStreamReader(
+			result[0] = new InputStreamReader(
 				(InputStream) x, Charset.forName("UTF-8"));
-			sysId = "INPUT_STREAM";
+			result[1] = "INPUT_STREAM";
 		} else if (x instanceof Reader) {
-			reader = (Reader) x;
-			sysId = "READER";
+			result[0] = (Reader) x;
+			result[1] = "READER";
 		} else {
 			//Program exception &{0}
 			throw new SRuntimeException(SYS.SYS036,
 				"Incorrect parameter of getReader");
 		}
-		List<Object> result = new ArrayList<Object>();
-		result.add(reader);
-		result.add(sysId);
 		return result;
 	}
 
@@ -86,7 +86,7 @@ public class JsonUtil {
 	 * @throws SRuntimeException if an error occurs.
 	 */
 	public final static Object parse(final Reader in, final String sysid) {
-		return XONReader.parseJSON(in, sysid);
+		return XonReader.parseJSON(in, sysid);
 	}
 
 	/** Parse JSON document from input source data.
@@ -96,8 +96,8 @@ public class JsonUtil {
 	 * @throws SRuntimeException if an error occurs.
 	 */
 	public final static Object parse(final String s) throws SRuntimeException {
-		List<Object> x = getReader(s);
-		return parse((Reader) x.get(0), (String) x.get(1));
+		Object[] x = getReader(s);
+		return parse((Reader) x[0], (String) x[1]);
 	}
 
 	/** Parse JSON document from input source data in file.
@@ -106,8 +106,18 @@ public class JsonUtil {
 	 * @throws SRuntimeException if an error occurs.
 	 */
 	public final static Object parse(final File f) throws SRuntimeException {
-		List<Object> x = getReader(f);
-		return parse((Reader) x.get(0), (String) x.get(1));
+		Object[] x = getReader(f);
+		return parse((Reader) x[0], (String) x[1]);
+	}
+
+	/** Parse source URL to JSON.
+	 * @param url source URL
+	 * @return parsed JSON object.
+	 * @throws SRuntimeException if an error occurs,
+	 */
+	public final static Object parse(final URL url) throws SRuntimeException {
+		Object[] x = getReader(url);
+		return parse((Reader) x[0], (String) x[1]);
 	}
 
 	/** Parse JSON document from input source data in InputStream.
@@ -130,16 +140,6 @@ public class JsonUtil {
 		throws SRuntimeException {
 		return parse(new InputStreamReader(in, Charset.forName("UTF-8")),sysId);
 	}
-
-	/** Parse source URL to JSON.
-	 * @param url source URL
-	 * @return parsed JSON object.
-	 * @throws SRuntimeException if an error occurs,
-	 */
-	public final static Object parse(final URL url) throws SRuntimeException {
-		List<Object> x = getReader(url);
-		return parse((Reader) x.get(0), (String)x.get(1));
-	}
 ////////////////////////////////////////////////////////////////////////////////
 
 	/** Parse JSON document from input reader.
@@ -149,7 +149,7 @@ public class JsonUtil {
 	 * @throws SRuntimeException if an error occurs.
 	 */
 	public final static Object parseXON(final Reader in, final String sysid) {
-		return XONReader.parseXON(in, sysid);
+		return XonReader.parseXON(in, sysid);
 	}
 
 	/** Parse JSON document from input source data.
@@ -159,8 +159,8 @@ public class JsonUtil {
 	 * @throws SRuntimeException if an error occurs.
 	 */
 	public final static Object parseXON(final String s)throws SRuntimeException{
-		List<Object> x = getReader(s);
-		return parseXON((Reader) x.get(0), (String) x.get(1));
+		Object[] x = getReader(s);
+		return parseXON((Reader) x[0], (String) x[1]);
 	}
 
 	/** Parse JSON document from input source data in file.
@@ -169,8 +169,8 @@ public class JsonUtil {
 	 * @throws SRuntimeException if an error occurs.
 	 */
 	public final static Object parseXON(final File f) throws SRuntimeException{
-		List<Object> x = getReader(f);
-		return parseXON((Reader) x.get(0), (String) x.get(1));
+		Object[] x = getReader(f);
+		return parseXON((Reader) x[0], (String) x[1]);
 	}
 
 	/** Parse source URL to JSON.
@@ -179,8 +179,8 @@ public class JsonUtil {
 	 * @throws SRuntimeException if an error occurs,
 	 */
 	public final static Object parseXON(final URL url) throws SRuntimeException{
-		List<Object> x = getReader(url);
-		return parseXON((Reader) x.get(0), (String) x.get(1));
+		Object[] x = getReader(url);
+		return parseXON((Reader) x[0], (String) x[1]);
 	}
 
 	/** Parse JSON document from input source data in InputStream.
@@ -201,8 +201,8 @@ public class JsonUtil {
 	 */
 	public final static Object parseXON(final InputStream in,final String sysId)
 		throws SRuntimeException {
-		return parseXON(new InputStreamReader(
-			in, Charset.forName("UTF-8")), sysId);
+		return parseXON(new InputStreamReader(in,
+			Charset.forName("UTF-8")), sysId);
 	}
 ////////////////////////////////////////////////////////////////////////////////
 // XON parser
@@ -215,7 +215,7 @@ public class JsonUtil {
 	 */
 	public static final String toXonString(final Object x,final boolean indent){
 		StringBuilder sb = new StringBuilder();
-		JsonToString.objectToString(x, indent ? "\n" : null, sb, true);
+		XonToString.objectToString(x, indent ? "\n" : null, sb, true);
 		return sb.toString();
 	}
 
@@ -225,7 +225,7 @@ public class JsonUtil {
 	 */
 	public static final String toXonString(final Object x){
 		StringBuilder sb = new StringBuilder();
-		JsonToString.objectToString(x, null, sb, true);
+		XonToString.objectToString(x, null, sb, true);
 		return sb.toString();
 	}
 
@@ -234,7 +234,7 @@ public class JsonUtil {
 	 * @return JSON object.
 	 */
 	public static final Object xonToJson(Object x) {
-		return JsonToString.xonToJson(x);
+		return XonToString.xonToJson(x);
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -255,7 +255,7 @@ public class JsonUtil {
 	 */
 	public final static String toJsonString(final Object x, boolean indent) {
 		StringBuilder sb = new StringBuilder();
-		JsonToString.objectToString(x, indent ? "\n" : null, sb, false);
+		XonToString.objectToString(x, indent ? "\n" : null, sb, false);
 		return sb.toString();
 	}
 
@@ -270,7 +270,7 @@ public class JsonUtil {
 	 */
 	public final static boolean jsonEqual(final Object j1, final Object j2) {
 		return (j1 == null && j2 == null) ||
-			(j1 != null && j2 != null && JsonCompare.equalValue(j1,j2));
+			(j1 != null && j2 != null && XonCompare.equalValue(j1,j2));
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -282,7 +282,7 @@ public class JsonUtil {
 	 * @return JSON object.
 	 */
 	public final static Object xmlToJson(final Node node) {
-		return JsonFromXml.toJson(node);
+		return XonFromXml.toJson(node);
 	}
 
 	/** Convert XML document to JSON object.
@@ -326,7 +326,7 @@ public class JsonUtil {
 	 * @return XML element created from JSON data.
 	 */
 	public final static Element jsonToXml(final String json) {
-		return JsonToXml.toXmlW3C(parse(json));
+		return XonToXml.toXmlW3C(parse(json));
 	}
 
 	/** Create XML from JSON object in W3C mode.
@@ -334,7 +334,7 @@ public class JsonUtil {
 	 * @return XML element created from JSON data.
 	 */
 	public final static Element jsonToXml(final File json) {
-		return JsonToXml.toXmlW3C(parse(json));
+		return XonToXml.toXmlW3C(parse(json));
 	}
 
 	/** Create XML from JSON object in W3C mode.
@@ -342,7 +342,7 @@ public class JsonUtil {
 	 * @return XML element created from JSON data.
 	 */
 	public final static Element jsonToXml(final URL json) {
-		return JsonToXml.toXmlW3C(parse(json));
+		return XonToXml.toXmlW3C(parse(json));
 	}
 
 	/** Create XML from JSON object in W3C mode.
@@ -350,7 +350,7 @@ public class JsonUtil {
 	 * @return XML element created from JSON data.
 	 */
 	public final static Element jsonToXml(final InputStream json) {
-		return JsonToXml.toXmlW3C(parse(json));
+		return XonToXml.toXmlW3C(parse(json));
 	}
 
 	/** Create XML from JSON object in X-Definition mode.
@@ -358,7 +358,7 @@ public class JsonUtil {
 	 * @return XML element created from JSON data.
 	 */
 	public final static Element jsonToXml(final Object json) {
-		return JsonToXml.toXmlW3C(json);
+		return XonToXml.toXmlW3C(json);
 	}
 
 	/** Create XML from JSON object in X-Definition mode.
@@ -366,7 +366,7 @@ public class JsonUtil {
 	 * @return XML element created from JSON data.
 	 */
 	public final static Element jsonToXmlXD(final String json) {
-		return JsonToXml.toXmlXD(parse(json));
+		return XonToXml.toXmlXD(parse(json));
 	}
 
 	/** Create XML from JSON object in X-Definition mode.
@@ -374,7 +374,7 @@ public class JsonUtil {
 	 * @return XML element created from JSON data.
 	 */
 	public final static Element jsonToXmlXD(final File json) {
-		return JsonToXml.toXmlXD(parse(json));
+		return XonToXml.toXmlXD(parse(json));
 	}
 
 	/** Create XML from JSON object in X-Definition mode.
@@ -382,7 +382,7 @@ public class JsonUtil {
 	 * @return XML element created from JSON data.
 	 */
 	public final static Element jsonToXmlXD(final URL json) {
-		return JsonToXml.toXmlXD(parse(json));
+		return XonToXml.toXmlXD(parse(json));
 	}
 
 	/** Create XML from JSON object in X-Definition mode.
@@ -390,7 +390,7 @@ public class JsonUtil {
 	 * @return XML element created from JSON data.
 	 */
 	public final static Element jsonToXmlXD(final InputStream json) {
-		return JsonToXml.toXmlXD(parse(json));
+		return XonToXml.toXmlXD(parse(json));
 	}
 
 	/** Create XML from JSON object in X-Definition mode.
@@ -398,6 +398,6 @@ public class JsonUtil {
 	 * @return XML element created from JSON data.
 	 */
 	public final static Element jsonToXmlXD(final Object json) {
-		return JsonToXml.toXmlXD(json);
+		return XonToXml.toXmlXD(json);
 	}
 }

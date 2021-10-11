@@ -11,13 +11,13 @@ import org.xdef.impl.XConstants;
 import org.xdef.impl.XData;
 import org.xdef.impl.XElement;
 import org.xdef.impl.XNode;
-import org.xdef.json.JsonNames;
 import org.xdef.model.XMData;
 import org.xdef.model.XMNode;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.Report;
 import org.xdef.sys.SUtils;
+import org.xdef.xon.XonNames;
 
 /** Generation of Java source code of XDComponents.
  * @author Vaclav Trojan
@@ -406,7 +406,7 @@ class XCGenerator extends XCGeneratorJSON {
 					}
 					XNode[] xnds = (XNode[]) xe1.getChildNodeModels();
 					if (xe1._json == XConstants.JSON_MODE_W3C) {
-						XData keyAttr = (XData)xe1.getAttr(JsonNames.J_KEYATTR);
+						XData keyAttr = (XData)xe1.getAttr(XonNames.X_KEYATTR);
 						String jname;
 						if (keyAttr != null) {
 							jname = keyAttr.getFixedValue().toString();
@@ -415,7 +415,7 @@ class XCGenerator extends XCGeneratorJSON {
 							jname = ndx >= 0 ? name.substring(ndx + 1) : name;
 						}
 						jname = '"' + jname + '"';
-						if (JsonNames.J_ITEM.equals(xe1.getLocalName())) {
+						if (XonNames.X_ITEM.equals(xe1.getLocalName())) {
 							if (groupKind != XMNode.XMCHOICE) {
 								genJsonItemGetterAndSetter(xe1,typeName,iname,
 									max, setters, getters, sbi, classNames,

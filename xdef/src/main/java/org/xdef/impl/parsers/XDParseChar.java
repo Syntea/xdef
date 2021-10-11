@@ -2,7 +2,7 @@ package org.xdef.impl.parsers;
 
 import org.xdef.XDParseResult;
 import org.xdef.impl.code.DefChar;
-import org.xdef.json.JsonTools;
+import org.xdef.xon.XonTools;
 import org.xdef.msg.XDEF;
 import org.xdef.proc.XXNode;
 
@@ -40,7 +40,7 @@ public class XDParseChar extends XSAbstractParseToken {
 		}
 		char ch = p.peekChar();
 		if (ch == '"') {
-			int i = JsonTools.readJSONChar(p);
+			int i = XonTools.readJSONChar(p);
 			if (i < 1) {
 				return false;
 			}

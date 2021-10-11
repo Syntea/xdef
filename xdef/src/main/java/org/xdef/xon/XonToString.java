@@ -1,4 +1,4 @@
-package org.xdef.json;
+package org.xdef.xon;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -19,7 +19,7 @@ import org.xdef.XDEmailAddr;
 /** Conversion of JSON or XON to string.
  * @author Vaclav Trojan
  */
-class JsonToString extends JsonTools {
+class XonToString extends XonTools {
 
 	/** Create string representation of character.
 	 * @param ch character to be converted.
@@ -292,7 +292,7 @@ class JsonToString extends JsonTools {
 	 */
 	final static Object xonToJson(final Object x) {
 		if (x == null || x instanceof String || x instanceof Boolean
-			|| x instanceof Number || x instanceof JNull) {
+			|| x instanceof Number || x instanceof XonNull) {
 			return x;
 		} else if (x instanceof Map) {
 			return xonMapToJson((Map) x);

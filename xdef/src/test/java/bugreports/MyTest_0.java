@@ -7,7 +7,7 @@ import org.xdef.XDConstants;
 import org.xdef.XDDocument;
 import org.xdef.XDFactory;
 import org.xdef.XDPool;
-import org.xdef.json.JsonUtil;
+import org.xdef.xon.XonUtil;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.xml.KXmlUtils;
 import test.XDTester;
@@ -857,8 +857,8 @@ if(T){return;}
 			);
 			xd = xp.createXDDocument("Test1");
 			s = "{\"A\":1234}";
-			assertTrue(JsonUtil.jsonEqual(xd.jparse(s, reporter),
-				JsonUtil.parse(s)));
+			assertTrue(XonUtil.jsonEqual(xd.jparse(s, reporter),
+				XonUtil.parse(s)));
 			assertNoErrors(reporter);
 			reporter.clear();
 			s = "{\"A\":\"abc\"}";
