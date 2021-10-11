@@ -256,8 +256,8 @@ class XonToXml extends XonTools implements XonNames {
 	public final static boolean isSimpleValue(final Object val) {
 		Object o;
 		return val == null || val instanceof Number || val instanceof Boolean
-			|| val instanceof String || val instanceof XonReader.JValue
-			&& ((o=((XonReader.JValue) val).getValue()) == null
+			|| val instanceof String || val instanceof XonTools.JValue
+			&& ((o=((XonTools.JValue) val).getValue()) == null
 				|| o instanceof Number || o instanceof Boolean
 				|| o instanceof String);
 	}

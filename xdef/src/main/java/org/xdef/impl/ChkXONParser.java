@@ -17,6 +17,8 @@ import org.w3c.dom.Element;
 import org.xdef.XDConstants;
 import org.xdef.impl.xml.KParsedAttr;
 import org.xdef.impl.xml.KParsedElement;
+import org.xdef.xon.XonNames;
+import org.xdef.xon.XonParser;
 import org.xdef.xon.XonTools;
 import org.xdef.xon.XonReader;
 import org.xdef.model.XMData;
@@ -32,8 +34,6 @@ import org.xdef.sys.SReporter;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
-import org.xdef.xon.XonParser;
-import org.xdef.xon.XonNames;
 
 /** Parsing of the XML source with the X-definition.
  * @author Vaclav Trojan
@@ -318,7 +318,7 @@ final class ChkXONParser implements XParser, XonParser {
 		return kelem;
 	}
 
-	private void genItem(final XonReader.JValue value, final SBuffer name) {
+	private void genItem(final XonTools.JValue value, final SBuffer name) {
 		KParsedElement kelem = genKElem(XonNames.X_ITEM,
 			name == null ? value.getPosition() : name);
 		if (name != null) {
@@ -347,7 +347,7 @@ final class ChkXONParser implements XParser, XonParser {
 	 * @return null or name of pair if value pair already exists in
 	 * the currently processed map.
 	 */
-	public String putValue(final XonReader.JValue value) {
+	public String putValue(final XonTools.JValue value) {
 		if (_kind == 2) { // map
 			SBuffer name = _names.pop();
 			genItem(value, name);

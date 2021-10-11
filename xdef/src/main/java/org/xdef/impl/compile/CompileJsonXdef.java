@@ -7,9 +7,10 @@ import org.xdef.impl.XConstants;
 import org.xdef.impl.XOccurrence;
 import org.xdef.xon.XonTools;
 import org.xdef.xon.XonReader;
-import org.xdef.xon.XonReader.JArray;
-import org.xdef.xon.XonReader.JMap;
-import org.xdef.xon.XonReader.JValue;
+import org.xdef.xon.XonTools.JArray;
+import org.xdef.xon.XonTools.JObject;
+import org.xdef.xon.XonTools.JMap;
+import org.xdef.xon.XonTools.JValue;
 import org.xdef.msg.JSON;
 import org.xdef.msg.SYS;
 import org.xdef.sys.StringParser;
@@ -20,7 +21,6 @@ import org.xdef.sys.SPosition;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.xon.XonParser;
 import org.xdef.xon.XonNames;
-import org.xdef.xon.XonReader.JObject;
 
 /** Create X-definition model from xd:json element.
  * @author Vaclav Trojan
