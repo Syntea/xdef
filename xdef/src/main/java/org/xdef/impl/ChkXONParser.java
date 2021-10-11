@@ -318,7 +318,7 @@ final class ChkXONParser implements XParser, XonParser {
 		return kelem;
 	}
 
-	private void genItem(final XonReader.X_Value value, final SBuffer name) {
+	private void genItem(final XonReader.JValue value, final SBuffer name) {
 		KParsedElement kelem = genKElem(XonNames.X_ITEM,
 			name == null ? value.getPosition() : name);
 		if (name != null) {
@@ -347,7 +347,7 @@ final class ChkXONParser implements XParser, XonParser {
 	 * @return null or name of pair if value pair already exists in
 	 * the currently processed map.
 	 */
-	public String putValue(final XonReader.X_Value value) {
+	public String putValue(final XonReader.JValue value) {
 		if (_kind == 2) { // map
 			SBuffer name = _names.pop();
 			genItem(value, name);

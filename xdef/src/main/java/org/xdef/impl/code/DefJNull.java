@@ -3,9 +3,9 @@ package org.xdef.impl.code;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
 import org.xdef.XDValueType;
-import org.xdef.xon.XonNull;
 import org.xdef.msg.SYS;
 import org.xdef.sys.SIllegalArgumentException;
+import org.xdef.xon.XonReader;
 
 /** The class JNull implements the internal object with JSON null value.
  * @author Vaclav Trojan
@@ -13,7 +13,7 @@ import org.xdef.sys.SIllegalArgumentException;
 public final class DefJNull extends XDValueAbstract {
 
 	/** The value of item. */
-	private final XonNull _value;
+	private final XonReader.JNull _value;
 
 	/** Creates a new instance of DefBoolean as null.*/
 	public DefJNull() {_value = null;}
@@ -21,7 +21,9 @@ public final class DefJNull extends XDValueAbstract {
 	/** Creates a new instance of DefBoolean
 	 * @param value The initial value of object.
 	 */
-	public DefJNull(final XonNull value) {_value = value!=null?XonNull.X_NULL:null;}
+	public DefJNull(final XonReader.JNull value) {
+		_value = value!=null ? XonReader.JNULL : null;
+	}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDValue interface
