@@ -48,7 +48,7 @@ public class XonSourceParser implements XonParser, XParser {
 	/** Name of named item. */
 	private SBuffer _name;
 	/** simpleValue of item. */
-	private XonReader.JValue _value;
+	private XonReader.X_Value _value;
 
 	XonSourceParser(final File f) {
 		try {
@@ -177,7 +177,7 @@ public class XonSourceParser implements XonParser, XParser {
 	 * @return null or name of pair if value pair already exists in
 	 * the currently processed map.
 	 */
-	public String putValue(final XonReader.JValue value) {
+	public String putValue(final XonReader.X_Value value) {
 		_value = value;
 		elementStart(new SBuffer(XonNames.X_ITEM, value.getPosition()));
 		elementEnd();
@@ -292,7 +292,7 @@ public class XonSourceParser implements XonParser, XParser {
 				}
 				_jp.arrayEnd(NULPOS);
 			} else {
-				_jp.putValue(new XonReader.JValue(NULPOS, o));
+				_jp.putValue(new XonReader.X_Value(NULPOS, o));
 			}
 		}
 

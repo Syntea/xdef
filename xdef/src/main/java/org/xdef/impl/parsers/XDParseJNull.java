@@ -34,7 +34,7 @@ public class XDParseJNull  extends XSAbstractParser {
 			String s = p.getParsedBufferPartFrom(pos);
 			p.isSpaces();
 			p.replaceParsedBufferFrom(pos0, s);
-			p.setParsedValue(new DefJNull(XonNull.JNULL));
+			p.setParsedValue(new DefJNull(XonNull.X_NULL));
 			checkPatterns(p);
 		}
 	}

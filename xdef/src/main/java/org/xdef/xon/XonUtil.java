@@ -31,8 +31,6 @@ public class XonUtil {
 	 */
 	private static Object[] getReader(Object x) {
 		Object[] result = new Object[2];
-		Reader reader = null;
-		String sysId = null;
 		if (x instanceof String) {
 			String s = (String) x;
 			try {
