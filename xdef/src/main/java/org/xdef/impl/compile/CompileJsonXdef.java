@@ -7,10 +7,9 @@ import org.xdef.impl.XConstants;
 import org.xdef.impl.XOccurrence;
 import org.xdef.xon.XonTools;
 import org.xdef.xon.XonReader;
-import org.xdef.xon.XonReader.JArray;
-import org.xdef.xon.XonReader.JMap;
-import org.xdef.xon.XonReader.JObject;
-import org.xdef.xon.XonReader.JValue;
+import org.xdef.xon.XonReader.X_Array;
+import org.xdef.xon.XonReader.X_Map;
+import org.xdef.xon.XonReader.X_Value;
 import org.xdef.msg.JSON;
 import org.xdef.msg.SYS;
 import org.xdef.sys.StringParser;
@@ -21,6 +20,7 @@ import org.xdef.sys.SPosition;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.xon.XonParser;
 import org.xdef.xon.XonNames;
+import org.xdef.xon.XonReader.X_Object;
 
 /** Create X-definition model from xd:json element.
  * @author Vaclav Trojan
@@ -348,12 +348,12 @@ public class CompileJsonXdef extends StringParser {
 		setAttr(e, XonNames.X_KEYATTR, new SBuffer("fixed('"+s+"');",e._name));
 	}
 
-	private PNode genJsonMap(final JMap map, final PNode parent) {
+	private PNode genJsonMap(final X_Map map, final PNode parent) {
 		PNode e, ee;
 		Object val = map.get(XonNames.SCRIPT_NAME);
-		if (val != null && val instanceof JValue) {
+		if (val != null && val instanceof X_Value) {
 			map.remove(XonNames.SCRIPT_NAME);
-			JValue jv = (JValue) val;
+			X_Value jv = (X_Value) val;
 			setSourceBuffer(jv.getSBuffer());
 			isSpacesOrComments();
 			if (isToken(XonNames.ONEOF_NAME)) {
@@ -405,31 +405,31 @@ public class CompileJsonXdef extends StringParser {
 		return e;
 	}
 
-	private PNode genJsonArray(final JArray array, final PNode parent) {
+	private PNode genJsonArray(final X_Array array, final PNode parent) {
 		PNode e = genJElement(parent, "array", array.getPosition());
 		int index = 0;
 		int len = array.size();
 		if (len > 0) {
 			Object jo = array.get(0);
 			Object o = jo == null
-				? null : jo instanceof JValue ? ((JValue) jo).getValue() : jo;
-			if (o != null && o instanceof JValue) {
-				setSourceBuffer(((JValue) o).getSBuffer());
+				? null : jo instanceof X_Value ? ((X_Value) jo).getValue() : jo;
+			if (o != null && o instanceof X_Value) {
+				setSourceBuffer(((X_Value) o).getSBuffer());
 				isSpacesOrComments();
 				if (isToken(XonNames.ONEOF_NAME)) {
 					e = genXDElement(parent,
-						"choice", ((JValue) jo).getPosition());
+						"choice", ((X_Value) jo).getPosition());
 					skipSemiconsBlanksAndComments();
 					String s = getUnparsedBufferPart().trim();
 					if (!s.isEmpty()) {
 						setXDAttr(parent, "script",
-							new SBuffer(s + ';', ((JValue) jo).getSBuffer()));
+							new SBuffer(s + ';', ((X_Value) jo).getSBuffer()));
 					}
 				} else {
 					String s = getUnparsedBufferPart().trim();
 					if (!s.isEmpty()) {
 						setXDAttr(e, "script",
-							new SBuffer(s + ';', ((JValue) jo).getSBuffer()));
+							new SBuffer(s + ';', ((X_Value) jo).getSBuffer()));
 					}
 				}
 				index = 1;
@@ -482,7 +482,7 @@ public class CompileJsonXdef extends StringParser {
 		return e;
 	}
 
-	private PNode genJsonValue(final JValue jo, final PNode parent) {
+	private PNode genJsonValue(final X_Value jo, final PNode parent) {
 		SBuffer sbf, occ = null;
 		PNode e = genJElement(parent, XonNames.X_ITEM, jo.getPosition());
 		if (jo.getValue() == null) {
@@ -529,13 +529,13 @@ public class CompileJsonXdef extends StringParser {
 			}
 		}
 		PNode e;
-		if (json instanceof JMap) {
-			e = genJsonMap((JMap) json, parent);
-		} else if (json instanceof JArray) {
-			e = genJsonArray((JArray) json, parent);
-		} else if (json instanceof JValue
-			&& ((JValue) json).getValue() instanceof String) {
-			e = genJsonValue((JValue) json, parent);
+		if (json instanceof X_Map) {
+			e = genJsonMap((X_Map) json, parent);
+		} else if (json instanceof X_Array) {
+			e = genJsonArray((X_Array) json, parent);
+		} else if (json instanceof X_Value
+			&& ((X_Value) json).getValue() instanceof String) {
+			e = genJsonValue((X_Value) json, parent);
 		} else {
 			error(JSON.JSON011); //Not JSON object&{0}
 			return parent;
@@ -584,17 +584,17 @@ public class CompileJsonXdef extends StringParser {
 	 */
 	private static class XDBuilder implements XonParser {
 		private final Stack<Integer> _kinds = new Stack<Integer>();
-		private final Stack<JArray> _arrays = new Stack<JArray>();
-		private final Stack<JMap> _maps = new Stack<JMap>();
+		private final Stack<X_Array> _arrays = new Stack<X_Array>();
+		private final Stack<X_Map> _maps = new Stack<X_Map>();
 		private int _kind; // 0..value, 1..array, 2..map
 		private final Stack<SBuffer> _names = new Stack<SBuffer>();
-		private JObject _value;
+		private X_Object _value;
 
 		XDBuilder(CompileJsonXdef jx) {
 			_kinds.push(_kind = 0);
 		}
 
-		final JObject getResult() {return _value;}
+		final X_Object getResult() {return _value;}
 
 ////////////////////////////////////////////////////////////////////////////////
 // JParser interface
@@ -606,7 +606,7 @@ public class CompileJsonXdef extends StringParser {
 		 * @return null or name of pair if value pair already exists in
 		 * the currently processed map.
 		 */
-		public String putValue(JValue value) {
+		public String putValue(X_Value value) {
 			if (_kind == 1) {
 				_arrays.peek().add(value);
 			} else if (_kind == 2) {
@@ -630,7 +630,7 @@ public class CompileJsonXdef extends StringParser {
 		 */
 		public void arrayStart(SPosition pos) {
 			_kinds.push(_kind = 1);
-			_arrays.push(new JArray(pos));
+			_arrays.push(new X_Array(pos));
 		}
 		@Override
 		/** Array ended.
@@ -653,7 +653,7 @@ public class CompileJsonXdef extends StringParser {
 		 */
 		public void mapStart(SPosition pos) {
 			_kinds.push(_kind = 2);
-			_maps.push(new JMap(pos));
+			_maps.push(new X_Map(pos));
 		}
 		@Override
 		/** Map ended.
@@ -662,7 +662,7 @@ public class CompileJsonXdef extends StringParser {
 		public void mapEnd(SPosition pos) {
 			_kinds.pop();
 			_kind = _kinds.peek();
-			_value = (JObject)_maps.peek();
+			_value = (X_Object)_maps.peek();
 			_maps.pop();
 			if (_kind == 2) {
 				_maps.peek().put(_names.pop().getString(), _value);
@@ -686,7 +686,7 @@ public class CompileJsonXdef extends StringParser {
 				? XonNames.ONEOF_NAME : "";
 			s += value == null ? "" : value.getString();
 			SPosition spos = value == null ? name : value;
-			JValue jv = new JValue(name, new JValue(spos, s));
+			X_Value jv = new X_Value(name, new X_Value(spos, s));
 			if (_kind == 1) { // array
 				_arrays.peek().add(jv);
 			} else if (_kind == 2) { // map

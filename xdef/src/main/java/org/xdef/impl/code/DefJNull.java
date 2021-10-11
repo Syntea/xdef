@@ -21,7 +21,7 @@ public final class DefJNull extends XDValueAbstract {
 	/** Creates a new instance of DefBoolean
 	 * @param value The initial value of object.
 	 */
-	public DefJNull(final XonNull value) {_value = value!=null?XonNull.JNULL:null;}
+	public DefJNull(final XonNull value) {_value = value!=null?XonNull.X_NULL:null;}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDValue interface

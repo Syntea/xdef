@@ -4,7 +4,7 @@ package org.xdef.xon;
  * @author Vaclav Trojan
  */
 public final class XonNull {
-	public static final XonNull JNULL = new XonNull();
+	public static final XonNull X_NULL = new XonNull();
 	private XonNull() {}
 	@Override
 	public final String toString() {return "null";}
