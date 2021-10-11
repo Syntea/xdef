@@ -5,6 +5,6 @@
  * <p>{@link org.xdef.xon.XonUtil}</p>
  * <p>{@link org.xdef.xon.XonToXml}</p>
  * <p>{@link org.xdef.xon.XonFromXml}</p>
- * <p>{@link org.xdef.xon.XonNull}</p>
+ * <p>{@link org.xdef.xon.XonTools}</p>
  */
 package org.xdef.xon;

@@ -3,9 +3,12 @@ package org.xdef.xon;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import org.xdef.msg.JSON;
+import org.xdef.sys.SBuffer;
 import org.xdef.sys.SParser;
+import org.xdef.sys.SPosition;
 import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
 
@@ -14,6 +17,9 @@ import org.xdef.sys.StringParser;
  */
 public class XonTools {
 
+	/** Value of null in JSON/XON objects. */
+	public static final JNull JNULL = new JNull();
+	
 ////////////////////////////////////////////////////////////////////////////////
 // methods used in this package
 ////////////////////////////////////////////////////////////////////////////////
@@ -471,5 +477,81 @@ public class XonTools {
 		}
 		p.error(JSON.JSON001); // end of string ('"') is missing
 		return null;
+	}
+
+////////////////////////////////////////////////////////////////////////////////
+// Classes used when JSON is parsed from X-definition compiler.
+////////////////////////////////////////////////////////////////////////////////
+
+	/** Interface of JSON/XON object. */
+	public interface JObject {
+		public SPosition getPosition();
+		public Object getValue();
+		public SBuffer getSBuffer();
+	}
+
+	/** JSON/XON map. */
+	public static class JMap extends LinkedHashMap<Object, Object>
+		implements JObject {
+		private final SPosition _position; // SPosition of parsed object
+		public JMap(final SPosition position) {super(); _position = position;}
+		@Override
+		public SPosition getPosition() {return _position;}
+		@Override
+		public Object getValue() {return null;}
+		@Override
+		public SBuffer getSBuffer() {return null;}
+	}
+
+	/** JSON/XON array. */
+	public static class JArray extends ArrayList<Object> implements JObject {
+		private final SPosition _position; // SPosition of parsed object
+		public JArray(final SPosition position) {super(); _position = position;}
+		@Override
+		public SPosition getPosition() {return _position;}
+		@Override
+		public Object getValue() {return null;}
+		@Override
+		public SBuffer getSBuffer() {return null;}
+	}
+
+	/** JSON/XON simple value. */
+	public static class JValue implements JObject {
+		private final SPosition _position; // SPosition of parsed object
+		private final Object _o; // parsed object
+		public JValue(final SPosition position, final Object val) {
+			_position = position;
+			_o = val;
+		}
+		@Override
+		public SPosition getPosition() {return _position;}
+		@Override
+		public Object getValue() {return _o;}
+		@Override
+		public SBuffer getSBuffer(){return new SBuffer(toString(),_position);}
+		@Override
+		public String toString() {return _o == null ? "null" : _o.toString();}
+	}
+
+	/** JSON/XON any object. */
+	public static class JAny extends JValue {
+		public JAny(final SPosition position, final SBuffer val) {
+			super(position, val);
+		}
+		@Override
+		public SBuffer getSBuffer() {return (SBuffer) getValue();}
+	}
+
+	/** Representation of JSON/XON object "null". */
+	public static final class JNull {
+		private JNull() {}
+		@Override
+		public final String toString() {return "null";}
+		@Override
+		public final int hashCode(){return 0;}
+		@Override
+		public final boolean equals(final Object o) {
+			return o==null || o instanceof JNull;
+		}
 	}
 }

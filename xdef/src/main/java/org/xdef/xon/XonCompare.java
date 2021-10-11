@@ -116,9 +116,9 @@ class XonCompare {
 	 */
 	final static boolean equalValue(final Object o1, final Object o2) {
 		if (o1 == null) {
-			return o2 == null || o2 instanceof XonReader.JNull;
-		} else if (o1 instanceof XonReader.JNull) {
-			return o2 == null || o2 instanceof XonReader.JNull;
+			return o2 == null || o2 instanceof XonTools.JNull;
+		} else if (o1 instanceof XonTools.JNull) {
+			return o2 == null || o2 instanceof XonTools.JNull;
 		}
 		if (o1 instanceof Map) {
 			return o2 instanceof Map ? equalMap((Map)o1, (Map)o2) : false;
