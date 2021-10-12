@@ -35,7 +35,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xdef.impl.GenXDef;
-import org.xdef.xon.XonUtil;
+import org.xdef.json.JsonUtil;
 import org.xdef.sys.SThrowable;
 import org.xdef.sys.SUtils;
 
@@ -786,7 +786,7 @@ public class GUIEditor extends GUIScreen {
 						KXmlUtils.writeXml(new File(name), encoding,
 							(Element) result, indent, true);
 					} else { // type = 'j'
-						String s =XonUtil.toJsonString(result, indent);
+						String s =JsonUtil.toJsonString(result, indent);
 						SUtils.writeString(new File(name), s, "UTF-8");
 					}
 				} catch (Exception ex) {
@@ -801,7 +801,7 @@ public class GUIEditor extends GUIScreen {
 					s = result == null
 						? "" : KXmlUtils.nodeToString((Element) result, true);
 				} else {
-					s = XonUtil.toJsonString(result, true);
+					s = JsonUtil.toJsonString(result, true);
 				}
 				if (!strw.toString().isEmpty()) {
 					s += s.isEmpty() ? "" : "\n\n";

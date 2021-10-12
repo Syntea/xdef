@@ -5,12 +5,12 @@ import java.util.Stack;
 import org.xdef.XDConstants;
 import org.xdef.impl.XConstants;
 import org.xdef.impl.XOccurrence;
-import org.xdef.xon.XonTools;
-import org.xdef.xon.XonReader;
-import org.xdef.xon.XonTools.JArray;
-import org.xdef.xon.XonTools.JObject;
-import org.xdef.xon.XonTools.JMap;
-import org.xdef.xon.XonTools.JValue;
+import org.xdef.json.XonTools;
+import org.xdef.json.XonReader;
+import org.xdef.json.XonTools.JArray;
+import org.xdef.json.XonTools.JObject;
+import org.xdef.json.XonTools.JMap;
+import org.xdef.json.XonTools.JValue;
 import org.xdef.msg.JSON;
 import org.xdef.msg.SYS;
 import org.xdef.sys.StringParser;
@@ -19,8 +19,8 @@ import org.xdef.sys.ReportWriter;
 import org.xdef.sys.SBuffer;
 import org.xdef.sys.SPosition;
 import org.xdef.sys.SRuntimeException;
-import org.xdef.xon.XonParser;
-import org.xdef.xon.XonNames;
+import org.xdef.json.XonParser;
+import org.xdef.json.XonNames;
 
 /** Create X-definition model from xd:json element.
  * @author Vaclav Trojan

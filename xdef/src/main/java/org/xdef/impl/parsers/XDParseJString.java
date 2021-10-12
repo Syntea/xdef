@@ -1,7 +1,7 @@
 package org.xdef.impl.parsers;
 
 import org.xdef.XDParseResult;
-import org.xdef.xon.XonTools;
+import org.xdef.json.XonTools;
 
 /** Parser of X-Script "jstring" (JSON string) type.
  * @author Vaclav Trojan

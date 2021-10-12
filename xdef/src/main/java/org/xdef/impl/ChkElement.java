@@ -25,7 +25,7 @@ import org.xdef.impl.code.DefBoolean;
 import org.xdef.impl.code.DefParseResult;
 import org.xdef.impl.compile.CompileBase;
 import org.xdef.impl.xml.KNamespace;
-import org.xdef.xon.XonTools;
+import org.xdef.json.XonTools;
 import org.xdef.model.XMData;
 import org.xdef.model.XMElement;
 import org.xdef.model.XMNode;
@@ -39,7 +39,7 @@ import org.xdef.sys.Report;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
-import org.xdef.xon.XonNames;
+import org.xdef.json.XonNames;
 
 /** Provides validation of input data or it can be used as base for construction
  * of XML objects according to a X-definition.

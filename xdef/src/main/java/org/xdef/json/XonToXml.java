@@ -1,4 +1,4 @@
-package org.xdef.xon;
+package org.xdef.json;
 
 import java.util.Iterator;
 import java.util.List;
