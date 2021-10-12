@@ -1,4 +1,4 @@
-package org.xdef.json;
+package org.xdef.xon;
 
 import org.xdef.sys.SBuffer;
 import org.xdef.sys.SPosition;
@@ -6,13 +6,13 @@ import org.xdef.sys.SPosition;
 /** Interface for parsers of JSON/XON data.
  * @author Vaclav Trojan
  */
-public interface JParser {
+public interface XonParser {
 	/** Put value to result.
-	 * @param value JValue to be added to result object.
+	 * @param value X_Value to be added to result object.
 	 * @return null or name of pair if value pair already exists in
 	 * the currently processed map.
 	 */
-	public String putValue(XONReader.JValue value);
+	public String putValue(XonTools.JValue value);
 	/** Set name of value pair.
 	 * @param name value name.
 	 */

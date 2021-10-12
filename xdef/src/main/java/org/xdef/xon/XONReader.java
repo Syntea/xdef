@@ -1,4 +1,4 @@
-package org.xdef.json;
+package org.xdef.xon;
 
 import java.io.Reader;
 import java.math.BigDecimal;
@@ -27,8 +27,7 @@ import org.xdef.sys.StringParser;
 /** Parser of JSON/XON source.
  * @author Vaclav Trojan
  */
-public class XONReader extends StringParser implements XONParsers {
-
+public class XonReader extends StringParser implements XonParsers {
 	/** Flag to accept comments (default false; true=accept comments). */
 	private boolean _acceptComments;
 	/** Flag if parse JSON or XON (default false; false=JSON, true=XON). */
@@ -36,18 +35,18 @@ public class XONReader extends StringParser implements XONParsers {
 	/** Flag if the parsed data are in X-definition (default false). */
 	private boolean _jdef;
 	/** Parser of XON source. */
-	private final JParser _jp;
+	private final XonParser _jp;
 
 	/** Create instance of parser.
 	 * @param jp parser of XON source.
 	 */
-	XONReader(JParser jp) {_jp = jp;}
+	XonReader(XonParser jp) {_jp = jp;}
 
 	/** Create instance of parser.
 	 * @param jp parser of XON source.
 	 * @param source String with source data.
 	 */
-	public XONReader(final SBuffer source, JParser jp) {
+	public XonReader(final SBuffer source, XonParser jp) {
 		super(source);
 		_jp = jp;
 	}
@@ -56,7 +55,7 @@ public class XONReader extends StringParser implements XONParsers {
 	 * @param jp parser of XON source.
 	 * @param source String with source data.
 	 */
-	public XONReader(final String source, JParser jp) {
+	public XonReader(final String source, XonParser jp) {
 		super(source);
 		_jp = jp;
 	}
@@ -65,7 +64,7 @@ public class XONReader extends StringParser implements XONParsers {
 	 * @param jp parser of XON source.
 	 * @param source Reader with source data.
 	 */
-	public XONReader(final Reader source, JParser jp) {
+	public XonReader(final Reader source, XonParser jp) {
 		super(source, new ArrayReporter());
 		_jp = jp;
 	}
@@ -74,7 +73,7 @@ public class XONReader extends StringParser implements XONParsers {
 	 * @param jp parser of XON source.
 	 * @param source URL with source data.
 	 */
-	public XONReader(final URL source, JParser jp) {
+	public XonReader(final URL source, XonParser jp) {
 		super(source, new ArrayReporter(), 0);
 		_jp = jp;
 	}
@@ -147,10 +146,10 @@ public class XONReader extends StringParser implements XONParsers {
 		int i;
 		while(!eos()) {
 			if (_jdef && !wasScript
-				&& (i = isOneOfTokens(JsonNames.SCRIPT_NAME,
-					JsonNames.ONEOF_NAME)) >= 0) {
+				&& (i = isOneOfTokens(XonNames.SCRIPT_NAME,
+					XonNames.ONEOF_NAME)) >= 0) {
 				SBuffer name = new SBuffer(
-					i==0 ? JsonNames.SCRIPT_NAME : JsonNames.ONEOF_NAME,
+					i==0 ? XonNames.SCRIPT_NAME : XonNames.ONEOF_NAME,
 					spos);
 				wasScript = true;
 				isSpacesOrComments();
@@ -159,7 +158,7 @@ public class XONReader extends StringParser implements XONParsers {
 					if (isOneOfChars(":=") != NOCHAR) {
 						isSpacesOrComments();
 						spos = getPosition();
-						JValue jv = readSimpleValue();
+						XonTools.JValue jv = readSimpleValue();
 						if (jv.getValue() instanceof String) {
 							value = jv.getSBuffer();
 						} else {
@@ -176,8 +175,8 @@ public class XONReader extends StringParser implements XONParsers {
 					isSpacesOrComments();
 					spos = getPosition();
 					Object o = readSimpleValue();
-					if (o != null && o instanceof JValue) {
-						_jp.xdScript(name, ((JValue)o).getSBuffer());
+					if (o != null && o instanceof XonTools.JValue) {
+						_jp.xdScript(name, ((XonTools.JValue)o).getSBuffer());
 					} else {
 						//Value of $script must be string with X-script
 						error(JSON.JSON018);
@@ -188,7 +187,7 @@ public class XONReader extends StringParser implements XONParsers {
 				spos = getPosition();
 				char separator;
 				if (isChar('"')) {
-					name = new SBuffer(JsonTools.readJSONString(this), spos);
+					name = new SBuffer(XonTools.readJString(this), spos);
 					separator = ':';
 				} else if (_xonMode && isXMLName(StringParser.XMLVER1_0)) {
 					name = new SBuffer(getParsedString(), spos);
@@ -261,16 +260,16 @@ public class XONReader extends StringParser implements XONParsers {
 			int i;
 			SPosition spos = getPosition();
 			if (!wasScript &&_jdef
-				&& (i = isOneOfTokens(JsonNames.SCRIPT_NAME,
-					JsonNames.ONEOF_NAME))>=0) {
+				&& (i = isOneOfTokens(XonNames.SCRIPT_NAME,
+					XonNames.ONEOF_NAME))>=0) {
 				SBuffer name = new SBuffer(
-					i==0 ? JsonNames.SCRIPT_NAME : JsonNames.ONEOF_NAME,
+					i==0 ? XonNames.SCRIPT_NAME : XonNames.ONEOF_NAME,
 					spos);
 				wasScript = true;
 				SBuffer value = null;
 				if (isOneOfChars(":=") != NOCHAR) {
 					isSpacesOrComments();
-					JValue jv = readSimpleValue();
+					XonTools.JValue jv = readSimpleValue();
 					if (jv.getValue() instanceof String) {
 						value = new SBuffer((String) jv.getValue(),
 								jv.getPosition());
@@ -330,8 +329,8 @@ public class XONReader extends StringParser implements XONParsers {
 	 * @return parsed simpleValue. If the switch _genJObjects is true, then
 	 * the parsed simpleValue contains source position.
 	 */
-	private JValue returnValue(SPosition spos, final Object x) {
-		return new JValue(spos, x);
+	private XonTools.JValue returnValue(SPosition spos, final Object x) {
+		return new XonTools.JValue(spos, x);
 	}
 
 	/** Returns error and parsed simpleValue.
@@ -342,7 +341,7 @@ public class XONReader extends StringParser implements XONParsers {
 	 * @return parsed simpleValue. If the switch _genJObjects is true, then
 	 * the parsed simpleValue contains source position.
 	 */
-	private JValue returnError(SPosition spos,
+	private XonTools.JValue returnError(SPosition spos,
 		final Object x,
 		final long code,
 		final String skipChars,
@@ -391,11 +390,11 @@ public class XONReader extends StringParser implements XONParsers {
 	 * (or XON object).
 	 * @throws SRuntimeException is an error occurs.
 	 */
-	private JValue readSimpleValue() throws SRuntimeException {
+	private XonTools.JValue readSimpleValue() throws SRuntimeException {
 		SPosition spos = getPosition();
 		int i;
 		if (isChar('"')) { // string
-			return returnValue(spos, JsonTools.readJSONString(this));
+			return returnValue(spos, XonTools.readJString(this));
 		} else if ((i=isOneOfTokens(new String[]{"null","false","true"}))>=0) {
 			return returnValue(spos, i > 0 ? (i==2) : null);
 		} else {
@@ -408,7 +407,7 @@ public class XONReader extends StringParser implements XONParsers {
 				})) >= 0) {
 				switch(i) {
 					case 0: // character
-						i = JsonTools.readJSONChar(this);
+						i = XonTools.readJChar(this);
 						if (i != -1) {
 							ch = (char) i;
 							if (isChar('"')) {
@@ -419,7 +418,7 @@ public class XONReader extends StringParser implements XONParsers {
 					case 1: // URI
 						try {
 							return returnValue(spos,
-								new URI(JsonTools.readJSONString(this)));
+								new URI(XonTools.readJString(this)));
 						} catch (Exception ex) {}
 						setIndex(pos);
 						//JSON value expected
@@ -427,7 +426,7 @@ public class XONReader extends StringParser implements XONParsers {
 					case 2:  // Email address
 						try {
 							return returnValue(spos, new DefEmailAddr(
-								JsonTools.readJSONString(this)));
+								XonTools.readJString(this)));
 						} catch (Exception ex) {}
 						break;
 					case 3: // base64 (byte array)
@@ -650,16 +649,16 @@ public class XONReader extends StringParser implements XONParsers {
 			readMap();
 		} else if (isChar('[')) {
 			readArray();
-		} else if (_jdef && isToken(JsonNames.ANY_NAME)) {
+		} else if (_jdef && isToken(XonNames.ANY_NAME)) {
 			SPosition spos = getPosition(); // xdef $ANY
-			spos.setIndex(getIndex() - JsonNames.ANY_NAME.length());
-			SBuffer name = new SBuffer(JsonNames.ANY_NAME, spos);
-			SBuffer val = new SBuffer(JsonNames.ANY_NAME, spos);
+			spos.setIndex(getIndex() - XonNames.ANY_NAME.length());
+			SBuffer name = new SBuffer(XonNames.ANY_NAME, spos);
+			SBuffer val = new SBuffer(XonNames.ANY_NAME, spos);
 			isSpacesOrComments();
 			if (isOneOfChars(":=") != NOCHAR) {
 				isSpacesOrComments();
-				JValue jv = readSimpleValue();
-				if (!(((JValue) jv).getValue() instanceof String)) {
+				XonTools.JValue jv = readSimpleValue();
+				if (!(((XonTools.JValue) jv).getValue() instanceof String)) {
 					//After ":" in the command $any must follow simpleValue
 					error(JSON.JSON021);
 				} else {
@@ -668,12 +667,12 @@ public class XONReader extends StringParser implements XONParsers {
 			}
 			_jp.xdScript(name, val);
 		} else {
-			JValue jv = readSimpleValue();
+			XonTools.JValue jv = readSimpleValue();
 			if (_jdef && (jv == null || jv.getValue() == null
 				|| !(jv.getValue() instanceof String))) {
 				//Value in X-definition must be a string with X-script
 				error(JSON.JSON018);
-				jv = new JValue(jv.getPosition(), "" + jv.getValue());
+				jv = new XonTools.JValue(jv.getPosition(), "" + jv.getValue());
 			}
 			String name = _jp.putValue(jv);
 			if (name != null) {
@@ -701,7 +700,7 @@ public class XONReader extends StringParser implements XONParsers {
 
 	public final static Object parseXON(Reader in, String sysId) {
 		ObjParser jp = new ObjParser();
-		XONReader xr = new XONReader(in, jp);
+		XonReader xr = new XonReader(in, jp);
 		xr._acceptComments = true;
 		xr._xonMode = true;
 		if (sysId != null) {
@@ -718,7 +717,7 @@ public class XONReader extends StringParser implements XONParsers {
 
 	public final static Object parseJSON(Reader in, String sysId) {
 		ObjParser jp = new ObjParser();
-		XONReader xr = new XONReader(in, jp);
+		XonReader xr = new XonReader(in, jp);
 		xr._acceptComments = true;
 		xr._xonMode = true;
 		if (sysId != null) {
@@ -735,7 +734,7 @@ public class XONReader extends StringParser implements XONParsers {
 
 ////////////////////////////////////////////////////////////////////////////////
 	/** Implementation of JParser for creating XON/JSON object from source. */
-	private static class ObjParser implements JParser {
+	private static class ObjParser implements XonParser {
 
 		private final Stack<Integer> _kinds = new Stack<Integer>();
 		private final Stack<List<Object>> _arrays = new Stack<List<Object>>();
@@ -755,11 +754,11 @@ public class XONReader extends StringParser implements XONParsers {
 ////////////////////////////////////////////////////////////////////////////////
 		@Override
 		/** Put value to result.
-		 * @param value JValue to be added to result object.
+		 * @param value X_Value to be added to result object.
 		 * @return null or name of pair if value pair already exists in
 		 * the currently processed map.
 		 */
-		public String putValue(JValue value) {
+		public String putValue(XonTools.JValue value) {
 			if (_kind == 1) {
 				_arrays.peek().add(value.getValue());
 			} else if (_kind == 2) {
@@ -836,63 +835,5 @@ public class XONReader extends StringParser implements XONParsers {
 		 * @param value value of item.
 		 */
 		public void xdScript(SBuffer name, SBuffer value) {}
-	}
-
-////////////////////////////////////////////////////////////////////////////////
-// Classes used when JSON is parsed from X-definition compiler.
-////////////////////////////////////////////////////////////////////////////////
-
-	public interface JObject {
-		public SPosition getPosition();
-		public Object getValue();
-		public SBuffer getSBuffer();
-	}
-
-	public static class JMap extends LinkedHashMap<Object, Object>
-		implements JObject {
-		private final SPosition _position; // SPosition of parsed object
-		public JMap(final SPosition position) {super(); _position = position;}
-		@Override
-		public SPosition getPosition() {return _position;}
-		@Override
-		public Object getValue() {return null;}
-		@Override
-		public SBuffer getSBuffer() {return null;}
-	}
-
-	public static class JArray extends ArrayList<Object> implements JObject {
-		private final SPosition _position; // SPosition of parsed object
-		public JArray(final SPosition position) {super(); _position = position;}
-		@Override
-		public SPosition getPosition() {return _position;}
-		@Override
-		public Object getValue() {return null;}
-		@Override
-		public SBuffer getSBuffer() {return null;}
-	}
-
-	public static class JValue implements JObject {
-		private final SPosition _position; // SPosition of parsed object
-		private final Object _o; // parsed object
-		public JValue(final SPosition position, final Object val) {
-			_position = position;
-			_o = val;
-		}
-		@Override
-		public SPosition getPosition() {return _position;}
-		@Override
-		public Object getValue() {return _o;}
-		@Override
-		public SBuffer getSBuffer(){return new SBuffer(toString(),_position);}
-		@Override
-		public String toString() {return _o == null ? "null" : _o.toString();}
-	}
-
-	public static class JAny extends JValue {
-		public JAny(final SPosition position, final SBuffer val) {
-			super(position, val);
-		}
-		@Override
-		public SBuffer getSBuffer() {return (SBuffer) getValue();}
 	}
 }
