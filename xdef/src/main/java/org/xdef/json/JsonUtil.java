@@ -1,4 +1,4 @@
-package org.xdef.xon;
+package org.xdef.json;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,11 +15,11 @@ import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
 
-/** JSON utility (parse JSON source to JSON instance, compare JSON instances,
+/** JSON/XON utility (parse JSON source to JSON instance, compare JSON objects,
  * and create string with JSON source from JSON object.
  * @author Vaclav Trojan
  */
-public class XonUtil {
+public class JsonUtil {
 
 ////////////////////////////////////////////////////////////////////////////////
 // XON parser

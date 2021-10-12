@@ -1,4 +1,4 @@
-package org.xdef.xon;
+package org.xdef.json;
 
 import org.xdef.sys.SBuffer;
 import org.xdef.sys.SPosition;

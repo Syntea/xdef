@@ -1,4 +1,4 @@
-package org.xdef.xon;
+package org.xdef.json;
 
 import java.io.Reader;
 import java.math.BigDecimal;

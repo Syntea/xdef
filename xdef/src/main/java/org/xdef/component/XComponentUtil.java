@@ -13,14 +13,14 @@ import org.xdef.XDDocument;
 import org.xdef.XDParseResult;
 import org.xdef.XDPool;
 import org.xdef.XDValue;
-import org.xdef.xon.XonTools;
+import org.xdef.json.XonTools;
 import org.xdef.model.XMElement;
 import org.xdef.model.XMNode;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.SDatetime;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.StringParser;
-import org.xdef.xon.XonNames;
+import org.xdef.json.XonNames;
 
 /** Utilities used with XComponents.
  * @author Vaclav Trojan

@@ -75,7 +75,7 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 "\t * @return JSON object created from this XComponent."+LN+
 "\t */"+LN) : "")+
 "\tpublic Object toJson() {"+
-	"return org.xdef.xon.XonUtil.xmlToJson(toXml());}"+LN;
+	"return org.xdef.json.JsonUtil.xmlToJson(toXml());}"+LN;
 		return toXml;
 	}
 

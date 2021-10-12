@@ -11,7 +11,7 @@ import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.xdef.component.XComponent;
 import org.xdef.component.XComponentUtil;
-import org.xdef.xon.XonUtil;
+import org.xdef.json.JsonUtil;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.GPSPosition;
 import org.xdef.xml.KXmlUtils;
@@ -41,37 +41,37 @@ public class TestXon extends XDTester {
 "  </xd:component>\n"+
 "</xd:def>";
 			xp = XDFactory.compileXD(null, xdef);
-			x = XonUtil.parseXON(xon);
-			el = XonUtil.jsonToXml(x);
+			x = JsonUtil.parseXON(xon);
+			el = JsonUtil.jsonToXml(x);
 			xd = xp.createXDDocument();
 			y = xd.jvalidate(el, reporter);
 			if (reporter.errorWarnings()) {
 				return "" + KXmlUtils.nodeToString(el, true) + "\n" + reporter;
 			}
-			if (!XonUtil.jsonEqual(x,y)) {
-				return "1\n" + XonUtil.toXonString(x)
-					+ "\n" +  XonUtil.toXonString(y);
+			if (!JsonUtil.jsonEqual(x,y)) {
+				return "1\n" + JsonUtil.toXonString(x)
+					+ "\n" +  JsonUtil.toXonString(y);
 			}
 			o = xd.getXon();
-			if (!XonUtil.jsonEqual(x, o)) {
-				return "2\n" + xon + "\n" +  XonUtil.toXonString(xd.getXon());
+			if (!JsonUtil.jsonEqual(x, o)) {
+				return "2\n" + xon + "\n" +  JsonUtil.toXonString(xd.getXon());
 			}
 			reporter.clear();
-			if (!XonUtil.jsonEqual(XonUtil.parseXON(xon), x)) {
-				return "3\n" + xon + "\n" + XonUtil.toXonString(x);
+			if (!JsonUtil.jsonEqual(JsonUtil.parseXON(xon), x)) {
+				return "3\n" + xon + "\n" + JsonUtil.toXonString(x);
 			}
-			assertTrue(XonUtil.jsonEqual(XonUtil.parseXON(xon), x),
-				XonUtil.toJsonString(x, true));
+			assertTrue(JsonUtil.jsonEqual(JsonUtil.parseXON(xon), x),
+				JsonUtil.toJsonString(x, true));
 			XDTester.genXComponent(xp, tempDir);
 			xc = xp.createXDDocument().jparseXComponent(xon, null, reporter);
-			y = XonUtil.xmlToJson(xc.toXml());
-			if (!XonUtil.jsonEqual(XonUtil.xonToJson(x),y)) {
-				return "4\n" + XonUtil.toJsonString(XonUtil.xonToJson(x))
-					+ "\n" +  XonUtil.toJsonString(y);
+			y = JsonUtil.xmlToJson(xc.toXml());
+			if (!JsonUtil.jsonEqual(JsonUtil.xonToJson(x),y)) {
+				return "4\n" + JsonUtil.toJsonString(JsonUtil.xonToJson(x))
+					+ "\n" +  JsonUtil.toJsonString(y);
 			}
 			y = XComponentUtil.toXon(xc);
-			if (!XonUtil.jsonEqual(x,y)) {
-				return "5\n" + xon + "\n" +  XonUtil.toXonString(y);
+			if (!JsonUtil.jsonEqual(x,y)) {
+				return "5\n" + xon + "\n" +  JsonUtil.toXonString(y);
 			}
 			return null;
 		} catch (Exception ex) {
@@ -228,13 +228,13 @@ public class TestXon extends XDTester {
 "  p(12 USD),                         /* price */\n" +
 "] /**** end of array ****/\n" +
 "# End of XON example";
-			x = XonUtil.parseXON(xon);
-			s = XonUtil.toJsonString(x, true);
-			XonUtil.parse(s);
-			s = XonUtil.toXonString(x, true);
-			y = XonUtil.parseXON(s);
-			assertTrue(XonUtil.jsonEqual(x,y));
-			s = XonUtil.toXonString(x, false);
+			x = JsonUtil.parseXON(xon);
+			s = JsonUtil.toJsonString(x, true);
+			JsonUtil.parse(s);
+			s = JsonUtil.toXonString(x, true);
+			y = JsonUtil.parseXON(s);
+			assertTrue(JsonUtil.jsonEqual(x,y));
+			s = JsonUtil.toXonString(x, false);
 			List list = (List) ((Map) ((List) x).get(0)).get("Towns");
 			assertEq("Wien",((GPSPosition) list.get(0)).name());
 			assertEq("London",((GPSPosition) list.get(1)).name());
@@ -246,8 +246,8 @@ public class TestXon extends XDTester {
 			assertEq(1030,Math.round(((GPSPosition) list.get(1)).distanceTo(
 				((GPSPosition) list.get(2)))/1000));
 			assertNoErrors(reporter);
-			json = XonUtil.toXonString(x, true);
-			XonUtil.parseXON(json);
+			json = JsonUtil.toXonString(x, true);
+			JsonUtil.parseXON(json);
 			y = jparse(xp, "", json, reporter);
 			assertNoErrors(reporter);
 			reporter.clear();
@@ -256,10 +256,10 @@ public class TestXon extends XDTester {
 			assertNoErrors(reporter);
 			reporter.clear();
 			y = XComponentUtil.toXon(xc);
-			assertTrue(XonUtil.jsonEqual(x,y));
+			assertTrue(JsonUtil.jsonEqual(x,y));
 			x = xc.toJson();
-			y = XonUtil.xonToJson(y);
-			assertTrue(XonUtil.jsonEqual(x,y));
+			y = JsonUtil.xonToJson(y);
+			assertTrue(JsonUtil.jsonEqual(x,y));
 		} catch (Exception ex) {fail(ex);}
 
 		clearTempDir(); // clear temporary directory
