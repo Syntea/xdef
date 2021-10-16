@@ -590,11 +590,7 @@ public class CompileJsonXdef extends StringParser {
 		private final Stack<SBuffer> _names = new Stack<SBuffer>();
 		private JObject _value;
 
-		XDBuilder(CompileJsonXdef jx) {
-			_kinds.push(_kind = 0);
-		}
-
-		final JObject getResult() {return _value;}
+		XDBuilder(CompileJsonXdef jx) {_kinds.push(_kind = 0);}
 
 ////////////////////////////////////////////////////////////////////////////////
 // JParser interface
@@ -693,5 +689,10 @@ public class CompileJsonXdef extends StringParser {
 				_maps.peek().put(XonNames.SCRIPT_NAME, jv);
 			}
 		}
+		@Override
+		/** Get result of parser.
+		 * @return parsed object.
+		 */
+		public final Object getResult() {return _value;}
 	}
 }
