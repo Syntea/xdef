@@ -746,9 +746,6 @@ public class XonReader extends StringParser implements XonParsers {
 
 		ObjParser() { _kinds.push(_kind = 0); }
 
-		/** Get result of parser. */
-		public final Object getResult() {return _value;}
-
 ////////////////////////////////////////////////////////////////////////////////
 // JParser interface
 ////////////////////////////////////////////////////////////////////////////////
@@ -835,5 +832,10 @@ public class XonReader extends StringParser implements XonParsers {
 		 * @param value value of item.
 		 */
 		public void xdScript(SBuffer name, SBuffer value) {}
-	}
+			@Override
+		/** Get result of parser.
+		 * @return parsed object.
+		 */
+		public final Object getResult() {return _value;}
+}
 }

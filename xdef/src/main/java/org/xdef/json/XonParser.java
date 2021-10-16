@@ -42,4 +42,8 @@ public interface XonParser {
 	 * @param value value of item.
 	 */
 	public void xdScript(SBuffer name, SBuffer value);
+	/** Get result of parser.
+	 * @return parsed object.
+	 */
+	public Object getResult();
 }

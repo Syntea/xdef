@@ -425,4 +425,9 @@ final class ChkXONParser implements XParser, XonParser {
 	 * @param value value of item.
 	 */
 	public final void xdScript(final SBuffer name, final SBuffer value) {}
+	@Override
+	/** Get result of parser.
+	 * @return null here.
+	 */
+	public final Object getResult() {return null;}
 }

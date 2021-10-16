@@ -226,6 +226,9 @@ public class XonSourceParser implements XonParser, XParser {
 	 * @param value value value of item.
 	 */
 	public void xdScript(final SBuffer name, SBuffer value) {}
+	@Override
+	/** Get result of parser. (returns null here) */
+	public final Object getResult() {return null;}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Interface XParser
