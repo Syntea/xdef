@@ -158,6 +158,8 @@ public interface XDConstants {
 	public static final String BUILD_VERSION = PomInfo.pomInfo.getVersion();
 	/** Date of build version from pom.xml */
 	public static final String BUILD_DATE    = PomInfo.pomInfo.getReleaseDate();
+	/** Datetime of build version from pom.xml */
+	public static final String BUILD_DATETIME= PomInfo.pomInfo.getBuildTimestamp();
 	/** Java version of compiler when the X-definition code was compiled. */
 /*#if JAVA_1.6*/
 	public static final String JAVA_VERSION = "Java 1.6";

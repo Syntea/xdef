@@ -32,7 +32,7 @@ public class XDTools {
 	 * @return version of this implementation of X-definition.
 	 */
 	public final static String getXDVersion() {
-		return XDConstants.BUILD_VERSION + " (" + XDConstants.BUILD_DATE + ")";
+		return XDConstants.BUILD_VERSION + " (" + XDConstants.BUILD_DATETIME + ")";
 	}
 
 	/** Creates XDInput from InputStream.
