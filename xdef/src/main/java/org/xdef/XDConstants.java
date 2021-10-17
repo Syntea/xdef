@@ -150,22 +150,21 @@ public interface XDConstants {
 
 ////////////////////////////////////////////////////////////////////////////////
 // Build version information. Do not modify following part of the code!
-// Note that the fields BUILD_VERSION, BUILD_DATE and JAVA_VERSION
+// Note that the fields BUILD_VERSION, BUILD_DATETIME and JAVA_VERSION
 // are generated automatically!
 ////////////////////////////////////////////////////////////////////////////////
 
 	/** Build version of software from pom.xml */
 	public static final String BUILD_VERSION = PomInfo.pomInfo.getVersion();
-	/** Date of build version from pom.xml */
-	public static final String BUILD_DATE    = PomInfo.pomInfo.getReleaseDate();
 	/** Datetime of build version from pom.xml */
-	public static final String BUILD_DATETIME= PomInfo.pomInfo.getBuildTimestamp();
+	public static final String BUILD_DATETIME =
+		PomInfo.pomInfo.getBuildTimestamp();
 	/** Java version of compiler when the X-definition code was compiled. */
-/*#if JAVA_1.6*/
+/*#if JAVA_1.6*#/
 	public static final String JAVA_VERSION = "Java 1.6";
 /*#elseif JAVA_1.7*#/
 	public static final String JAVA_VERSION = "Java 1.7";
-/*#elseif JAVA_1.8*#/
+/*#elseif JAVA_1.8*/
 	public static final String JAVA_VERSION = "Java 1.8";
 /*#elseif JAVA_1.9*#/
 	public static final String JAVA_VERSION = "Java 1.9";
