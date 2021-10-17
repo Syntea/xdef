@@ -20,6 +20,7 @@ import org.w3c.dom.Text;
 import org.w3c.dom.TypeInfo;
 import org.w3c.dom.UserDataHandler;
 import org.w3c.dom.DOMConfiguration;
+import org.xdef.sys.SUnsupportedOperationException;
 import org.xdef.xml.KXmlUtils;
 
 /** Abstract class for implementation of "pseudo" elements.
@@ -56,11 +57,11 @@ implements Element, XDElement, XDValue, NamedNodeMap {
 	public final String getTagName() {return _name;}
 	@Override
 	public void setAttribute(String name, String value) {
-		throw new UnsupportedOperationException("Not supported.");
+		throw new SUnsupportedOperationException();
 	}
 	@Override
 	public void removeAttribute(String name) {
-		throw new UnsupportedOperationException("Not supported.");
+		throw new SUnsupportedOperationException();
 	}
 	@Override
 	public Attr getAttributeNode(String name) {
@@ -71,11 +72,11 @@ implements Element, XDElement, XDValue, NamedNodeMap {
 	}
 	@Override
 	public Attr setAttributeNode(Attr newAttr) {
-		throw new UnsupportedOperationException("Not supported.");
+		throw new SUnsupportedOperationException();
 	}
 	@Override
 	public Attr removeAttributeNode(Attr oldAttr) {
-		throw new UnsupportedOperationException("Not supported.");
+		throw new SUnsupportedOperationException();
 	}
 	@Override
 	public NodeList getElementsByTagName(String name) {return EMPTYNODELIST;}
@@ -85,11 +86,11 @@ implements Element, XDElement, XDValue, NamedNodeMap {
 	}
 	@Override
 	public void setAttributeNS(String nsURI, String qName, String value) {
-		throw new UnsupportedOperationException("Not supported.");
+		throw new SUnsupportedOperationException();
 	}
 	@Override
 	public void removeAttributeNS(String namespaceURI, String localName) {
-		throw new UnsupportedOperationException("Not supported.");
+		throw new SUnsupportedOperationException();
 	}
 	@Override
 	public Attr getAttributeNodeNS(String namespaceURI, String localName) {
@@ -97,7 +98,7 @@ implements Element, XDElement, XDValue, NamedNodeMap {
 	}
 	@Override
 	public Attr setAttributeNodeNS(Attr newAttr) {
-		throw new UnsupportedOperationException("Not supported.");
+		throw new SUnsupportedOperationException();
 	}
 	@Override
 	public NodeList getElementsByTagNameNS(String nsURI, String localName) {
@@ -109,21 +110,21 @@ implements Element, XDElement, XDValue, NamedNodeMap {
 	}
 	@Override
 	public TypeInfo getSchemaTypeInfo() {
-		throw new UnsupportedOperationException("Not supported.");
+		throw new SUnsupportedOperationException();
 	}
 	@Override
 	public void setIdAttribute(String name, boolean isId) {
-		throw new UnsupportedOperationException("Not supported.");
+		throw new SUnsupportedOperationException();
 	}
 	@Override
 	public void setIdAttributeNS(String namespaceURI,
 		String localName,
 		boolean isId) {
-		throw new UnsupportedOperationException("Not supported.");
+		throw new SUnsupportedOperationException();
 	}
 	@Override
 	public void setIdAttributeNode(Attr idAttr, boolean isId) {
-		throw new UnsupportedOperationException("Not supported.");
+		throw new SUnsupportedOperationException();
 	}
 	@Override
 	public String getNodeName() {return _name;}
@@ -131,7 +132,7 @@ implements Element, XDElement, XDValue, NamedNodeMap {
 	public String getNodeValue() {return null;}
 	@Override
 	public void setNodeValue(String nodeValue) {
-		throw new UnsupportedOperationException("Not supported.");
+		throw new SUnsupportedOperationException();
 	}
 	@Override
 	public short getNodeType() {return Node.ELEMENT_NODE;}
@@ -162,29 +163,29 @@ implements Element, XDElement, XDValue, NamedNodeMap {
 	}
 	@Override
 	public Node insertBefore(Node newChild, Node refChild) {
-		throw new UnsupportedOperationException("Not supported.");
+		throw new SUnsupportedOperationException();
 	}
 	@Override
 	public Node replaceChild(Node newChild, Node oldChild) {
-		throw new UnsupportedOperationException("Not supported.");
+		throw new SUnsupportedOperationException();
 	}
 	@Override
 	public Node removeChild(Node oldChild) {
-		throw new UnsupportedOperationException("Not supported.");
+		throw new SUnsupportedOperationException();
 	}
 	@Override
 	public Node appendChild(Node newChild) {
-		throw new UnsupportedOperationException("Not supported.");
+		throw new SUnsupportedOperationException();
 	}
 	@Override
 	public boolean hasChildNodes() {return false;}
 	@Override
 	public Node cloneNode(boolean deep) {
-		throw new UnsupportedOperationException("Not supported.");
+		throw new SUnsupportedOperationException();
 	}
 	@Override
 	public void normalize() {
-		throw new UnsupportedOperationException("Not supported.");
+		throw new SUnsupportedOperationException();
 	}
 	@Override
 	public boolean isSupported(String feature, String version) {return false;}
@@ -194,7 +195,7 @@ implements Element, XDElement, XDValue, NamedNodeMap {
 	public String getPrefix() {return null;}
 	@Override
 	public void setPrefix(String prefix) {
-		throw new UnsupportedOperationException("Not supported.");
+		throw new SUnsupportedOperationException();
 	}
 	@Override
 	public String getLocalName() {return _name;}
@@ -204,13 +205,13 @@ implements Element, XDElement, XDValue, NamedNodeMap {
 	public String getBaseURI() {return null;}
 	@Override
 	public short compareDocumentPosition(Node other) {
-		throw new UnsupportedOperationException("Not supported.");
+		throw new SUnsupportedOperationException();
 	}
 	@Override
 	public String getTextContent() {return null;}
 	@Override
 	public void setTextContent(String textContent) {
-		throw new UnsupportedOperationException("Not supported.");
+		throw new SUnsupportedOperationException();
 	}
 	@Override
 	public boolean isSameNode(Node other) {return other == this;}
@@ -228,7 +229,7 @@ implements Element, XDElement, XDValue, NamedNodeMap {
 	public Object getFeature(String feature, String version) {return null;}
 	@Override
 	public Object setUserData(String key, Object data, UserDataHandler handler) {
-		throw new UnsupportedOperationException("Not supported.");
+		throw new SUnsupportedOperationException();
 	}
 	@Override
 	public Object getUserData(String key) {return null;}
@@ -258,11 +259,11 @@ implements Element, XDElement, XDValue, NamedNodeMap {
 
 	@Override
 	public Node setNamedItem(Node arg) throws DOMException {
-		throw new UnsupportedOperationException("Not supported.");
+		throw new SUnsupportedOperationException();
 	}
 	@Override
 	public Node removeNamedItem(String name) throws DOMException {
-		throw new UnsupportedOperationException("Not supported.");
+		throw new SUnsupportedOperationException();
 	}
 	@Override
 	public Node getNamedItemNS(String nsURI, String localName) {
@@ -270,11 +271,11 @@ implements Element, XDElement, XDValue, NamedNodeMap {
 	}
 	@Override
 	public Node setNamedItemNS(Node arg) throws DOMException {
-		throw new UnsupportedOperationException("Not supported.");
+		throw new SUnsupportedOperationException();
 	}
 	@Override
 	public Node removeNamedItemNS(String nsURI, String localName) {
-		throw new UnsupportedOperationException("Not supported.");
+		throw new SUnsupportedOperationException();
 	}
 
 	////////////////////////////////////////////////////////////////////////////
@@ -294,27 +295,27 @@ implements Element, XDElement, XDValue, NamedNodeMap {
 	public XDValue getXDItem(int index) {return null;}
 	@Override
 	public void addXDItem(XDValue value) {
-		throw new UnsupportedOperationException("Not supported.");
+		throw new SUnsupportedOperationException();
 	}
 	@Override
 	public void addXDItem(String value) {
-		throw new UnsupportedOperationException("Not supported.");
+		throw new SUnsupportedOperationException();
 	}
 	@Override
 	public void addXDItem(Element value) {
-		throw new UnsupportedOperationException("Not supported.");
+		throw new SUnsupportedOperationException();
 	}
 	@Override
 	public XDValue replaceXDItem(final int index, XDValue value) {
-		throw new UnsupportedOperationException("Not supported.");
+		throw new SUnsupportedOperationException();
 	}
 	@Override
 	public void insertXDItemBefore(int index, XDValue value) {
-		throw new UnsupportedOperationException("Not supported.");
+		throw new SUnsupportedOperationException();
 	}
 	@Override
 	public XDValue removeXDItem(int index) {
-		throw new UnsupportedOperationException("Not supported.");
+		throw new SUnsupportedOperationException();
 	}
 	@Override
 	public int getXDItemsNumber() {return 0;}
@@ -322,11 +323,11 @@ implements Element, XDElement, XDValue, NamedNodeMap {
 	public XDValue[] getXDItems() {return new XDValue[0];}
 	@Override
 	public XDValue setXDNamedItem(XDNamedValue item) {
-		throw new UnsupportedOperationException("Not supported.");
+		throw new SUnsupportedOperationException();
 	}
 	@Override
 	public XDValue setXDNamedItem(String name, XDValue value) {
-		throw new UnsupportedOperationException("Not supported.");
+		throw new SUnsupportedOperationException();
 	}
 	@Override
 	public boolean hasXDNamedItem(String name) {return hasAttribute(name);}
@@ -348,7 +349,7 @@ implements Element, XDElement, XDValue, NamedNodeMap {
 	}
 	@Override
 	public XDValue removeXDNamedItem(String name) {
-		throw new UnsupportedOperationException("Not supported.");
+		throw new SUnsupportedOperationException();
 	}
 	@Override
 	public XDContainer getXDElements() {
@@ -385,7 +386,7 @@ implements Element, XDElement, XDValue, NamedNodeMap {
 	 * @return XDContainer constructed from this object.
 	 */
 	public XDContainer toContainer() {
-		throw new UnsupportedOperationException("Not supported.");
+		throw new SUnsupportedOperationException();
 	}
 
 	////////////////////////////////////////////////////////////////////////////
@@ -400,58 +401,58 @@ implements Element, XDElement, XDValue, NamedNodeMap {
 		public DocumentType getDoctype() {return null;}
 		@Override
 		public DOMImplementation getImplementation() {
-			throw new UnsupportedOperationException("Not supported.");
+			throw new SUnsupportedOperationException();
 		}
 		@Override
 		public final Element getDocumentElement() {return _elem;}
 		@Override
 		public Element createElement(String tagName) {
-			throw new UnsupportedOperationException("Not supported.");
+			throw new SUnsupportedOperationException();
 		}
 		@Override
 		public DocumentFragment createDocumentFragment() {
-			throw new UnsupportedOperationException("Not supported.");
+			throw new SUnsupportedOperationException();
 		}
 		@Override
 		public Text createTextNode(String data) {
-			throw new UnsupportedOperationException("Not supported.");
+			throw new SUnsupportedOperationException();
 		}
 		@Override
 		public Comment createComment(String data) {
-			throw new UnsupportedOperationException("Not supported.");
+			throw new SUnsupportedOperationException();
 		}
 		@Override
 		public CDATASection createCDATASection(String data) {
-			throw new UnsupportedOperationException("Not supported.");
+			throw new SUnsupportedOperationException();
 		}
 		@Override
 		public ProcessingInstruction createProcessingInstruction(String target,
 			String data) {
-			throw new UnsupportedOperationException("Not supported.");
+			throw new SUnsupportedOperationException();
 		}
 		@Override
 		public Attr createAttribute(String name) {
-			throw new UnsupportedOperationException("Not supported.");
+			throw new SUnsupportedOperationException();
 		}
 		@Override
 		public EntityReference createEntityReference(String name) {
-			throw new UnsupportedOperationException("Not supported.");
+			throw new SUnsupportedOperationException();
 		}
 		@Override
 		public NodeList getElementsByTagName(String tagname) {
-			throw new UnsupportedOperationException("Not supported.");
+			throw new SUnsupportedOperationException();
 		}
 		@Override
 		public Node importNode(Node importedNode, boolean deep) {
-			throw new UnsupportedOperationException("Not supported.");
+			throw new SUnsupportedOperationException();
 		}
 		@Override
 		public Element createElementNS(String namespaceURI, String qName) {
-			throw new UnsupportedOperationException("Not supported.");
+			throw new SUnsupportedOperationException();
 		}
 		@Override
 		public Attr createAttributeNS(String namespaceURI, String qName) {
-			throw new UnsupportedOperationException("Not supported.");
+			throw new SUnsupportedOperationException();
 		}
 		@Override
 		public NodeList getElementsByTagNameNS(String uri, String localName) {
@@ -479,27 +480,27 @@ implements Element, XDElement, XDValue, NamedNodeMap {
 		public boolean getStrictErrorChecking() {return false;}
 		@Override
 		public void setStrictErrorChecking(boolean strictErrorChecking) {
-			throw new UnsupportedOperationException("Not supported.");
+			throw new SUnsupportedOperationException();
 		}
 		@Override
 		public final String getDocumentURI() {return null;}
 		@Override
 		public void setDocumentURI(String documentURI) {
-			throw new UnsupportedOperationException("Not supported.");
+			throw new SUnsupportedOperationException();
 		}
 		@Override
 		public Node adoptNode(Node source) {
-			throw new UnsupportedOperationException("Not supported.");
+			throw new SUnsupportedOperationException();
 		}
 		@Override
 		public DOMConfiguration getDomConfig() {return null;}
 		@Override
 		public void normalizeDocument() {
-			throw new UnsupportedOperationException("Not supported.");
+			throw new SUnsupportedOperationException();
 		}
 		@Override
 		public Node renameNode(Node n, String namespaceURI, String qualifiedName) {
-			throw new UnsupportedOperationException("Not supported.");
+			throw new SUnsupportedOperationException();
 		}
 		@Override
 		public final String getNodeName() {return "#document";}
@@ -507,7 +508,7 @@ implements Element, XDElement, XDValue, NamedNodeMap {
 		public final String getNodeValue() {return null;}
 		@Override
 		public void setNodeValue(String nodeValue) {
-			throw new UnsupportedOperationException("Not supported.");
+			throw new SUnsupportedOperationException();
 		}
 		@Override
 		public final short getNodeType() {return Node.DOCUMENT_NODE;}
@@ -538,29 +539,29 @@ implements Element, XDElement, XDValue, NamedNodeMap {
 		public Document getOwnerDocument() {return this;}
 		@Override
 		public Node insertBefore(Node newChild, Node refChild) {
-			throw new UnsupportedOperationException("Not supported.");
+			throw new SUnsupportedOperationException();
 		}
 		@Override
 		public Node replaceChild(Node newChild, Node oldChild) {
-			throw new UnsupportedOperationException("Not supported.");
+			throw new SUnsupportedOperationException();
 		}
 		@Override
 		public Node removeChild(Node oldChild) {
-			throw new UnsupportedOperationException("Not supported.");
+			throw new SUnsupportedOperationException();
 		}
 		@Override
 		public Node appendChild(Node newChild) {
-			throw new UnsupportedOperationException("Not supported.");
+			throw new SUnsupportedOperationException();
 		}
 		@Override
 		public final boolean hasChildNodes() {return true;}
 		@Override
 		public Node cloneNode(boolean deep) {
-			throw new UnsupportedOperationException("Not supported.");
+			throw new SUnsupportedOperationException();
 		}
 		@Override
 		public void normalize() {
-			throw new UnsupportedOperationException("Not supported.");
+			throw new SUnsupportedOperationException();
 		}
 		@Override
 		public boolean isSupported(String feature, String version) {
@@ -572,7 +573,7 @@ implements Element, XDElement, XDValue, NamedNodeMap {
 		public final String getPrefix() {return null;}
 		@Override
 		public void setPrefix(String prefix) {
-			throw new UnsupportedOperationException("Not supported.");
+			throw new SUnsupportedOperationException();
 		}
 		@Override
 		public final String getLocalName() {return "#document";}
@@ -582,13 +583,13 @@ implements Element, XDElement, XDValue, NamedNodeMap {
 		public String getBaseURI() {return null;}
 		@Override
 		public short compareDocumentPosition(Node other) {
-			throw new UnsupportedOperationException("Not supported.");
+			throw new SUnsupportedOperationException();
 		}
 		@Override
 		public String getTextContent() {return null;}
 		@Override
 		public void setTextContent(String textContent) {
-			throw new UnsupportedOperationException("Not supported.");
+			throw new SUnsupportedOperationException();
 		}
 		@Override
 		public boolean isSameNode(Node other) {return other == this;}
@@ -596,11 +597,11 @@ implements Element, XDElement, XDValue, NamedNodeMap {
 		public String lookupPrefix(String namespaceURI) {return null;}
 		@Override
 		public boolean isDefaultNamespace(String namespaceURI) {
-			throw new UnsupportedOperationException("Not supported.");
+			throw new SUnsupportedOperationException();
 		}
 		@Override
 		public String lookupNamespaceURI(String prefix) {
-			throw new UnsupportedOperationException("Not supported.");
+			throw new SUnsupportedOperationException();
 		}
 		@Override
 		public boolean isEqualNode(Node arg) {return arg == this;}
@@ -610,7 +611,7 @@ implements Element, XDElement, XDValue, NamedNodeMap {
 		}
 		@Override
 		public Object setUserData(String key, Object data, UserDataHandler h) {
-			throw new UnsupportedOperationException("Not supported.");
+			throw new SUnsupportedOperationException();
 		}
 		@Override
 		public Object getUserData(String key) {return null;}
@@ -650,7 +651,7 @@ implements Element, XDElement, XDValue, NamedNodeMap {
 		public String getValue() {return _value;}
 		@Override
 		public void setValue(String value) {
-			throw new UnsupportedOperationException("Not supported.");
+			throw new SUnsupportedOperationException();
 		}
 		@Override
 		public Element getOwnerElement() {return _elem;}
@@ -664,7 +665,7 @@ implements Element, XDElement, XDValue, NamedNodeMap {
 		public String getNodeValue() {return _value;}
 		@Override
 		public void setNodeValue(String nodeValue) {
-			throw new UnsupportedOperationException("Not supported.");
+			throw new SUnsupportedOperationException();
 		}
 		@Override
 		public short getNodeType() {return Node.ATTRIBUTE_NODE;}
@@ -686,29 +687,29 @@ implements Element, XDElement, XDValue, NamedNodeMap {
 		public Document getOwnerDocument() {return _elem.getOwnerDocument();}
 		@Override
 		public Node insertBefore(Node newChild, Node refChild) {
-			throw new UnsupportedOperationException("Not supported.");
+			throw new SUnsupportedOperationException();
 		}
 		@Override
 		public Node replaceChild(Node newChild, Node oldChild) {
-			throw new UnsupportedOperationException("Not supported.");
+			throw new SUnsupportedOperationException();
 		}
 		@Override
 		public Node removeChild(Node oldChild) {
-			throw new UnsupportedOperationException("Not supported.");
+			throw new SUnsupportedOperationException();
 		}
 		@Override
 		public Node appendChild(Node newChild) {
-			throw new UnsupportedOperationException("Not supported.");
+			throw new SUnsupportedOperationException();
 		}
 		@Override
 		public boolean hasChildNodes() {return false;}
 		@Override
 		public Node cloneNode(boolean deep) {
-			throw new UnsupportedOperationException("Not supported.");
+			throw new SUnsupportedOperationException();
 		}
 		@Override
 		public void normalize() {
-			throw new UnsupportedOperationException("Not supported.");
+			throw new SUnsupportedOperationException();
 		}
 		@Override
 		public boolean isSupported(String feature, String version) {
@@ -720,7 +721,7 @@ implements Element, XDElement, XDValue, NamedNodeMap {
 		public String getPrefix() {return null;}
 		@Override
 		public void setPrefix(String prefix) {
-			throw new UnsupportedOperationException("Not supported.");
+			throw new SUnsupportedOperationException();
 		}
 		@Override
 		public String getLocalName() {return _name;}
@@ -730,13 +731,13 @@ implements Element, XDElement, XDValue, NamedNodeMap {
 		public String getBaseURI() {return null;}
 		@Override
 		public short compareDocumentPosition(Node other) {
-			throw new UnsupportedOperationException("Not supported.");
+			throw new SUnsupportedOperationException();
 		}
 		@Override
 		public String getTextContent() {return null;}
 		@Override
 		public void setTextContent(String textContent) {
-			throw new UnsupportedOperationException("Not supported.");
+			throw new SUnsupportedOperationException();
 		}
 		@Override
 		public boolean isSameNode(Node other) {return other == this;}
@@ -756,10 +757,9 @@ implements Element, XDElement, XDValue, NamedNodeMap {
 		}
 		@Override
 		public Object setUserData(String key, Object data, UserDataHandler h) {
-			throw new UnsupportedOperationException("Not supported.");
+			throw new SUnsupportedOperationException();
 		}
 		@Override
 		public Object getUserData(String key) {return null;}
 	}
-
 }
