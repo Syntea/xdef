@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import org.xdef.model.XMDefinition;
 import org.xdef.model.XMSelector;
+import org.xdef.sys.SUnsupportedOperationException;
 
 /** Implementation of mixture, choice or sequence.
  * @author Vaclav Trojan
@@ -260,40 +261,29 @@ public class XSelector extends XNode implements XMSelector {
 		return x;
 	}
 	@Override
-	public int getCheckCode() {
-		throw new UnsupportedOperationException("Not supported here.");
-	}
+	public int getCheckCode() {throw new SUnsupportedOperationException();}
 	@Override
-	public int getOnTrueCode() {
-		throw new UnsupportedOperationException("Not supported here.");
-	}
+	public int getOnTrueCode() {throw new SUnsupportedOperationException();}
 	@Override
-	public int getOnFalseCode() {
-		throw new UnsupportedOperationException("Not supported here.");
-	}
+	public int getOnFalseCode() {throw new SUnsupportedOperationException();}
 	@Override
-	public int getDefltCode() {
-		throw new UnsupportedOperationException("Not supported here.");
-	}
+	public int getDefltCode() {throw new SUnsupportedOperationException();}
 	@Override
 	public int getOnStartElementCode() {
-		throw new UnsupportedOperationException("Not supported here.");
+		throw new SUnsupportedOperationException();
 	}
 	@Override
 	public int getOnIllegalAttrCode() {
-		throw new UnsupportedOperationException("Not supported here.");
+		throw new SUnsupportedOperationException();
 	}
 	@Override
 	public int getOnIllegalTextCode() {
-		throw new UnsupportedOperationException("Not supported here.");
+		throw new SUnsupportedOperationException();
 	}
 	@Override
 	public int getOnIllegalElementCode() {
-		throw new UnsupportedOperationException("Not supported here.");
+		throw new SUnsupportedOperationException();
 	}
 	@Override
-	public int getVarinitCode() {
-		throw new UnsupportedOperationException("Not supported here.");
-	}
-
+	public int getVarinitCode() {throw new SUnsupportedOperationException();}
 }

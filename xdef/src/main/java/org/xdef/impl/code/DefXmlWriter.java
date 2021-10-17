@@ -20,6 +20,7 @@ import org.w3c.dom.Node;
 import org.xdef.XDContainer;
 import org.xdef.XDValueType;
 import java.math.BigInteger;
+import static org.xdef.XDValueID.XD_XMLWRITER;
 
 /** Provides incremental writing of XML data to a data stream.
  * @author Vaclav Trojan
@@ -66,9 +67,7 @@ public class DefXmlWriter extends KXmlOutStream
 	 * @param type id of type.
 	 */
 	public void setItemType(final short type) {
-		//Unsupported operation &{0}&{1}{ on }
-		throw new SUnsupportedOperationException(SYS.SYS090,
-			"setItemType(short)", getClass().getName());
+		throw new SUnsupportedOperationException();
 	}
 
 	@Override
@@ -78,9 +77,7 @@ public class DefXmlWriter extends KXmlOutStream
 	 * @param code the new code of operation.
 	 */
 	public void setCode(final short code) {
-		//Unsupported operation &{0}&{1}{ on }
-		throw new SUnsupportedOperationException(SYS.SYS090,
-			"setCode(short)", getClass().getName());
+		throw new SUnsupportedOperationException();
 	}
 
 	@Override
@@ -90,9 +87,7 @@ public class DefXmlWriter extends KXmlOutStream
 	 * @param param value of operation parameter.
 	 */
 	public void setParam(final int param) {
-		//Unsupported operation &{0}&{1}{ on }
-		throw new SUnsupportedOperationException(SYS.SYS090,
-			"setParam(int)", getClass().getName());
+		throw new SUnsupportedOperationException();
 	}
 
 ////////////////////////////////////////////////////////////////////////////////

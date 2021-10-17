@@ -3,6 +3,7 @@ package org.xdef.impl;
 import java.io.IOException;
 import java.util.ArrayList;
 import org.xdef.model.XMDefinition;
+import org.xdef.sys.SUnsupportedOperationException;
 
 /** End mark of selector.
  * @author Vaclav Trojan
@@ -21,65 +22,43 @@ public class XSelectorEnd extends XNode {
 	public XMDefinition getXMDefinition() {return null;}
 
 	@Override
-	public int getInitCode() {
-		throw new UnsupportedOperationException("Not supported here.");
-	}
+	public int getInitCode() {throw new SUnsupportedOperationException();}
 	@Override
-	public int getFinallyCode() {
-		throw new UnsupportedOperationException("Not supported here.");
-	}
+	public int getFinallyCode() {throw new SUnsupportedOperationException();}
 	@Override
-	public int getMatchCode() {
-		throw new UnsupportedOperationException("Not supported here.");
-	}
+	public int getMatchCode() {throw new SUnsupportedOperationException();}
 	@Override
-	public int getComposeCode() {
-		throw new UnsupportedOperationException("Not supported here.");
-	}
+	public int getComposeCode() {throw new SUnsupportedOperationException();}
 	@Override
-	public int getCheckCode() {
-		throw new UnsupportedOperationException("Not supported here.");
-	}
+	public int getCheckCode() {throw new SUnsupportedOperationException();}
 	@Override
-	public int getOnTrueCode() {
-		throw new UnsupportedOperationException("Not supported here.");
-	}
+	public int getOnTrueCode() {throw new SUnsupportedOperationException();}
 	@Override
-	public int getOnFalseCode() {
-		throw new UnsupportedOperationException("Not supported here.");
-	}
+	public int getOnFalseCode() {throw new SUnsupportedOperationException();}
 	@Override
-	public int getDefltCode() {
-		throw new UnsupportedOperationException("Not supported here.");
-	}
+	public int getDefltCode() {throw new SUnsupportedOperationException();}
 	@Override
 	public int getOnStartElementCode() {
-		throw new UnsupportedOperationException("Not supported here.");
+		throw new SUnsupportedOperationException();
 	}
 	@Override
-	public int getOnAbsenceCode() {
-		throw new UnsupportedOperationException("Not supported here.");
-	}
+	public int getOnAbsenceCode() {throw new SUnsupportedOperationException();}
 	@Override
-	public int getOnExcessCode() {
-		throw new UnsupportedOperationException("Not supported here.");
-	}
+	public int getOnExcessCode() {throw new SUnsupportedOperationException();}
 	@Override
 	public int getOnIllegalAttrCode() {
-		throw new UnsupportedOperationException("Not supported here.");
+		throw new SUnsupportedOperationException();
 	}
 	@Override
 	public int getOnIllegalTextCode() {
-		throw new UnsupportedOperationException("Not supported here.");
+		throw new SUnsupportedOperationException();
 	}
 	@Override
 	public int getOnIllegalElementCode() {
-		throw new UnsupportedOperationException("Not supported here.");
+		throw new SUnsupportedOperationException();
 	}
 	@Override
-	public int getVarinitCode() {
-		throw new UnsupportedOperationException("Not supported here.");
-	}
+	public int getVarinitCode() {throw new SUnsupportedOperationException();}
 ////////////////////////////////////////////////////////////////////////////////
 
 	@Override

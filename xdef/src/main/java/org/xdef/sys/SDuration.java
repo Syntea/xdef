@@ -490,7 +490,7 @@ public class SDuration extends Duration implements Comparable<SDuration> {
 		if (DatatypeConstants.SECONDS.getId() == field.getId()) {
 			return _seconds*_negative;
 		}
-		throw new UnsupportedOperationException("Field: " + field);
+		throw new SUnsupportedOperationException("Field: " + field);
 	}
 
 	@Override
@@ -513,22 +513,22 @@ public class SDuration extends Duration implements Comparable<SDuration> {
 		if (DatatypeConstants.SECONDS.getId() == field.getId()) {
 			return _seconds != 0;
 		}
-		throw new UnsupportedOperationException("Field: " + field);
+		throw new SUnsupportedOperationException("Field: " + field);
 	}
 
 	@Override
 	public Duration add(final Duration rhs) {
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new SUnsupportedOperationException();
 	}
 
 	@Override
 	public void addTo(final Calendar calendar) {
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new SUnsupportedOperationException();
 	}
 
 	@Override
 	public Duration multiply(final BigDecimal factor) {
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new SUnsupportedOperationException();
 	}
 
 	@Override
@@ -540,7 +540,7 @@ public class SDuration extends Duration implements Comparable<SDuration> {
 
 	@Override
 	public Duration normalizeWith(final Calendar startTimeInstant) {
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new SUnsupportedOperationException();
 	}
 
 	@Override
@@ -548,7 +548,7 @@ public class SDuration extends Duration implements Comparable<SDuration> {
 		if (duration instanceof SDuration) {
 			return compareTo((SDuration) duration);
 		}
-		throw new IllegalArgumentException(
+		throw new SIllegalArgumentException(
 			"Not supported for " + duration.getClass());
 	}
 }
