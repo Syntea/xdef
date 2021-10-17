@@ -734,7 +734,7 @@ public class XonReader extends StringParser implements XonParsers {
 
 ////////////////////////////////////////////////////////////////////////////////
 	/** Implementation of JParser for creating XON/JSON object from source. */
-	private static class ObjParser implements XonParser {
+	public static class ObjParser implements XonParser {
 
 		private final Stack<Integer> _kinds = new Stack<Integer>();
 		private final Stack<List<Object>> _arrays = new Stack<List<Object>>();
@@ -744,7 +744,7 @@ public class XonReader extends StringParser implements XonParsers {
 		private final Stack<String> _names = new Stack<String>();
 		private Object _value;
 
-		ObjParser() { _kinds.push(_kind = 0); }
+		public ObjParser() { _kinds.push(_kind = 0); }
 
 ////////////////////////////////////////////////////////////////////////////////
 // JParser interface
@@ -832,10 +832,10 @@ public class XonReader extends StringParser implements XonParsers {
 		 * @param value value of item.
 		 */
 		public void xdScript(SBuffer name, SBuffer value) {}
-			@Override
+		@Override
 		/** Get result of parser.
 		 * @return parsed object.
 		 */
 		public final Object getResult() {return _value;}
-}
+	}
 }
