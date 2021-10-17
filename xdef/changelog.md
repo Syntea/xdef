@@ -2,6 +2,11 @@
 
 # Version 40.1.8, release-date 2021-10-17
 * BNF grammar is extended and has now possibility of "all" selection
+* In the `org.xdef.XDConstants` was the item `BUILD_DATE` replaced
+  with `BUILD_DATETIME`.
+* In the `org.xdef.XDConstants` was removed the item 'JAVA_VERSION'.
+* added the new reader `org.xdef.json.IniReader` for `.ini`
+  and `.properties` files.
 
 # Version 40.1.7, release-date 2021-08-13
 * fixed bug in type declaration with a boolean expression.
