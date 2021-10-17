@@ -892,7 +892,7 @@ public class Report {
 		return Report.info(SYS.SYS010,
 			"&{c}" + XDConstants.JAVA_VERSION +
 			"&{v}" + XDConstants.BUILD_VERSION +
-			"&{d}" + XDConstants.BUILD_DATE);
+			"&{d}" + XDConstants.BUILD_DATETIME);
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
