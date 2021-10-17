@@ -890,9 +890,8 @@ public class Report {
 	public static Report buildInfo() {
 		//Compiled: &{c}, build version: &{v}, date: &{d}
 		return Report.info(SYS.SYS010,
-			"&{c}" + XDConstants.JAVA_VERSION +
-			"&{v}" + XDConstants.BUILD_VERSION +
-			"&{d}" + XDConstants.BUILD_DATETIME);
+			"&{v}" + XDConstants.BUILD_VERSION
+				+ "&{d}" + XDConstants.BUILD_DATETIME);
 	}
 
 ////////////////////////////////////////////////////////////////////////////////

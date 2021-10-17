@@ -149,26 +149,12 @@ public interface XDConstants {
 	public static final String LINE_SEPARATOR = String.format("%n");
 
 ////////////////////////////////////////////////////////////////////////////////
-// Build version information. Do not modify following part of the code!
-// Note that the fields BUILD_VERSION, BUILD_DATETIME and JAVA_VERSION
-// are generated automatically!
+// Build version information.
 ////////////////////////////////////////////////////////////////////////////////
 
-	/** Build version of software from pom.xml */
+	/** Build version of software build from pom.xml */
 	public static final String BUILD_VERSION = PomInfo.pomInfo.getVersion();
 	/** Datetime of build version from pom.xml */
 	public static final String BUILD_DATETIME =
 		PomInfo.pomInfo.getBuildTimestamp();
-	/** Java version of compiler when the X-definition code was compiled. */
-/*#if JAVA_1.6*#/
-	public static final String JAVA_VERSION = "Java 1.6";
-/*#elseif JAVA_1.7*#/
-	public static final String JAVA_VERSION = "Java 1.7";
-/*#elseif JAVA_1.8*/
-	public static final String JAVA_VERSION = "Java 1.8";
-/*#elseif JAVA_1.9*#/
-	public static final String JAVA_VERSION = "Java 1.9";
-/*#elseif JAVA_1.10*#/
-	public static final String JAVA_VERSION = "Java 1.10";
-/*#end*/
 }
