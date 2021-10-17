@@ -32,8 +32,7 @@ public final class XExtUtils {
 	private XExtUtils() {}
 
 	public final static String getVersionInfo() {
-		return XDConstants.BUILD_VERSION + " " +
-			XDConstants.BUILD_DATETIME + " (" + XDConstants.JAVA_VERSION + ")";
+		return XDConstants.BUILD_VERSION + " " + XDConstants.BUILD_DATETIME;
 	}
 	/**	Get name space URI of qualified name.
 	 * @param qname qualified name

@@ -86,11 +86,11 @@ public class IniReader extends StringParser implements XonParsers {
 		}
 		int j = i;
 		while (i >= 0 && s.charAt(i) == '\\') {
-			i--; 
+			i--;
 		}
 		return ((j - i) & 1) > 0;
 	}
-	
+
 	private SBuffer readPropText() {
 		SBuffer sbuf;
 		StringParser p;
@@ -183,7 +183,7 @@ public class IniReader extends StringParser implements XonParsers {
 		}
 		throw new RuntimeException("'=' expected");
 	}
-	
+
 	private void readIni() {
 		isSpaces();
 		_jp.mapStart(this);
@@ -197,7 +197,7 @@ public class IniReader extends StringParser implements XonParsers {
 			if (p.findChar(']')) {
 				String s = p.getBufferPart(spos.getIndex(), p.getIndex());
 				_jp.namedValue(new SBuffer(s.trim(), spos));
-				_jp.mapStart(spos);				
+				_jp.mapStart(spos);
 				while (putProperty(prop = readPropText())) {}
 				_jp.mapEnd(spos);
 			} else {

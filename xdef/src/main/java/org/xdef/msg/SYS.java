@@ -6,7 +6,7 @@ package org.xdef.msg;
 public interface SYS {
 	/** &amp;{line}{; line=}&amp;{column}{; column=}&amp;{sysId}{; source="}{"}&amp;{xpath}{; path=}&amp;{xdpos}{; X-position=} */
 	public static final long SYS000 = 953221120L;
-	/** Compiled: &amp;{c}, build version: &amp;{v}, date: &amp;{d} */
+	/** Build version: &amp;{v}, datetime: &amp;{d} */
 	public static final long SYS010 = 953221121L;
 	/** Errors detected&amp;{0}{: } */
 	public static final long SYS012 = 953221122L;
