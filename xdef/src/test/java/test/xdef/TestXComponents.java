@@ -5,7 +5,7 @@ import org.xdef.XDPool;
 import org.xdef.XDDocument;
 import org.xdef.component.XComponent;
 import org.xdef.component.XComponentUtil;
-import org.xdef.json.JsonUtil;
+import org.xdef.xon.XonUtil;
 import org.xdef.model.XMElement;
 import org.xdef.model.XMNode;
 import org.xdef.sys.ArrayReporter;
@@ -920,11 +920,11 @@ public final class TestXComponents extends XDTester {
 			Object y = SUtils.getNewInstance("test.xdef.component.Y16a");
 			SUtils.setValueToSetter(y, "sety", 1);
 			SUtils.setValueToSetter(x, "setx$b", y);
-			json = JsonUtil.xmlToJson(KXmlUtils.parseXml(xml)
+			json = XonUtil.xmlToJson(KXmlUtils.parseXml(xml)
 				.getDocumentElement());
 			el = ((XComponent)x).toXml();
 			assertEq(xml, el);
-			if (!JsonUtil.jsonEqual(json, JsonUtil.xmlToJson(el))) {
+			if (!XonUtil.xonEqual(json, XonUtil.xmlToJson(el))) {
 				fail();
 			}
 			x = SUtils.getNewInstance("test.xdef.component.Y16c");
@@ -943,7 +943,7 @@ public final class TestXComponents extends XDTester {
 		try { // construction of XComponent
 			xml = "<a><b a='1'/><c/><b a='x'/></a>";
 			xc = parseXC(xp, "Y17", xml, null, reporter);
-			json = JsonUtil.xmlToJson(KXmlUtils.parseXml(xml)
+			json = XonUtil.xmlToJson(KXmlUtils.parseXml(xml)
 				.getDocumentElement());
 			el = xc.toXml();
 			assertEq(xml, el);
@@ -951,7 +951,7 @@ public final class TestXComponents extends XDTester {
 				"getb_1"), "geta"));
 			assertEq("x", SUtils.getValueFromGetter(
 				SUtils.getValueFromGetter(xc, "getb_2"), "geta"));
-			if (!JsonUtil.jsonEqual(json, JsonUtil.xmlToJson(el))) {
+			if (!XonUtil.xonEqual(json, XonUtil.xmlToJson(el))) {
 				fail();
 			}
 		} catch (Exception ex) {fail(ex);}

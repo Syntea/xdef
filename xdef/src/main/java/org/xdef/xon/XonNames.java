@@ -1,4 +1,4 @@
-package org.xdef.json;
+package org.xdef.xon;
 
 /** Names used in conversion s of JSON/XON to/from XML.
  * @author Vaclav Trojan

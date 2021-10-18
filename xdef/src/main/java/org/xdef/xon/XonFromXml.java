@@ -1,4 +1,4 @@
-package org.xdef.json;
+package org.xdef.xon;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ import org.xdef.XDConstants;
 /** Test X-definition transformation XML -> JSONL
  * @author Vaclav Trojan
  */
-class XonFromXml extends JsonUtil implements XonNames {
+class XonFromXml extends XonUtil implements XonNames {
 
 ////////////////////////////////////////////////////////////////////////////////
 // Keywords of names of JSON types
