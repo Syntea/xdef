@@ -698,7 +698,7 @@ public class XonReader extends StringParser implements XonParsers {
 		}
 	}
 
-	public final static Object parseXON(Reader in, String sysId) {
+	public final static Object parseJSON(Reader in, String sysId) {
 		ObjParser jp = new ObjParser();
 		XonReader xr = new XonReader(in, jp);
 		xr._acceptComments = true;
@@ -715,7 +715,7 @@ public class XonReader extends StringParser implements XonParsers {
 		return jp.getResult();
 	}
 
-	public final static Object parseJSON(Reader in, String sysId) {
+	public final static Object parseXON(Reader in, String sysId) {
 		ObjParser jp = new ObjParser();
 		XonReader xr = new XonReader(in, jp);
 		xr._acceptComments = true;

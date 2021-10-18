@@ -9,7 +9,7 @@ import test.common.bnf.TestExpr;
 import test.common.bnf.TestSQL;
 import test.common.bnf.TestXML;
 import test.common.bnf.TestXdScript;
-import test.common.json.TestJsonUtil;
+import test.common.xon.TestXonUtil;
 import test.common.sys.TestErrorReporting;
 import test.common.sys.TestObjectWriter;
 import test.common.sys.TestReport;
@@ -21,6 +21,7 @@ import test.common.xml.TestXmOutStream;
 import test.common.xml.TestXml;
 import test.XDTester;
 import test.common.bnf.TestEmailAddr;
+import test.common.xon.TestIni;
 
 
 /** Run all available basic tests for package org.xdef.sys.
@@ -36,9 +37,10 @@ public class TestAll {
 			new TestSParser(),
 			new TestSUtils(),
 			new TestObjectWriter(),
-			// JSON
-			new TestJsonUtil(),
-			// xml
+			// XON/INI
+			new TestXonUtil(),
+			new TestIni(),
+			// XML
 			new TestXml(),
 			new TestKDOMBuilder(),
 			new TestKXmlUtils(),

@@ -8,6 +8,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.Map;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xdef.msg.SYS;
@@ -129,7 +130,7 @@ public class XonUtil {
 	}
 
 	/** Parse JSON document from input source data in InputStream.
-	 * @param in input data.
+	 * @param in input data with JSON source.
 	 * @param sysId System id.
 	 * @return parsed JSON object.
 	 * @throws SRuntimeException if an error occurs.
@@ -138,22 +139,23 @@ public class XonUtil {
 		throws SRuntimeException {
 		return parse(new InputStreamReader(in, Charset.forName("UTF-8")),sysId);
 	}
+	
 ////////////////////////////////////////////////////////////////////////////////
 
-	/** Parse JSON document from input reader.
-	 * @param in reader with JSON source.
+	/** Parse XON document from input reader.
+	 * @param in reader with XON source.
 	 * @param sysid System id.
-	 * @return parsed JSON object.
+	 * @return parsed XON object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
 	public final static Object parseXON(final Reader in, final String sysid) {
 		return XonReader.parseXON(in, sysid);
 	}
 
-	/** Parse JSON document from input source data.
+	/** Parse XON document from input source data.
 	 * The source data may be either file pathname or URL or JSON source.
-	 * @param s file pathname or URL or string with JSON source.
-	 * @return parsed JSON object.
+	 * @param s file pathname or URL or string with XON source.
+	 * @return parsed XON object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
 	public final static Object parseXON(final String s)throws SRuntimeException{
@@ -161,9 +163,9 @@ public class XonUtil {
 		return parseXON((Reader) x[0], (String) x[1]);
 	}
 
-	/** Parse JSON document from input source data in file.
+	/** Parse XON document from input source data in file.
 	 * @param f input file.
-	 * @return parsed JSON object.
+	 * @return parsed XON object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
 	public final static Object parseXON(final File f) throws SRuntimeException{
@@ -171,9 +173,9 @@ public class XonUtil {
 		return parseXON((Reader) x[0], (String) x[1]);
 	}
 
-	/** Parse source URL to JSON.
-	 * @param url source URL
-	 * @return parsed JSON object.
+	/** Parse source URL to XON.
+	 * @param url source URL with XON data.
+	 * @return parsed XON object.
 	 * @throws SRuntimeException if an error occurs,
 	 */
 	public final static Object parseXON(final URL url) throws SRuntimeException{
@@ -181,9 +183,9 @@ public class XonUtil {
 		return parseXON((Reader) x[0], (String) x[1]);
 	}
 
-	/** Parse JSON document from input source data in InputStream.
-	 * @param in input data.
-	 * @return parsed JSON object.
+	/** Parse XON document from input source data in InputStream.
+	 * @param in input with XON data.
+	 * @return parsed XON object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
 	public final static Object parseXON(final InputStream in)
@@ -191,10 +193,10 @@ public class XonUtil {
 		return parseXON(in, null);
 	}
 
-	/** Parse XON document from input source data in InputStream.
-	 * @param in input data.
+	/** Parse XON document from InputStream.
+	 * @param in input with XON data.
 	 * @param sysId System id.
-	 * @return parsed JSON object.
+	 * @return parsed XON object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
 	public final static Object parseXON(final InputStream in,final String sysId)
@@ -202,8 +204,77 @@ public class XonUtil {
 		return parseXON(new InputStreamReader(in,
 			Charset.forName("UTF-8")), sysId);
 	}
+	
 ////////////////////////////////////////////////////////////////////////////////
-// XON parser
+
+	/** Parse INI/Properties document from input reader.
+	 * @param in reader with INI/Properties source.
+	 * @param sysid System id.
+	 * @return parsed INI/Properties object.
+	 * @throws SRuntimeException if an error occurs.
+	 */
+	public final static Map<String, Object> parseINI(final Reader in,
+		final String sysid) {
+		return IniReader.parseINI(in, sysid);
+	}
+
+	/** Parse INI/Properties document from input source data.
+	 * @param s file pathname or URL or string with INI/Properties source data.
+	 * @return parsed INI/Properties object.
+	 * @throws SRuntimeException if an error occurs.
+	 */
+	public final static Map<String, Object> parseINI(final String s)
+		throws SRuntimeException {
+		Object[] x = getReader(s);
+		return parseINI((Reader) x[0], (String) x[1]);
+	}
+
+	/** Parse INI/Properties document from input source data in file.
+	 * @param f input file.
+	 * @return parsed INI/Properties object.
+	 * @throws SRuntimeException if an error occurs.
+	 */
+	public final static Map<String, Object> parseINI(final File f)
+		throws SRuntimeException{
+		Object[] x = getReader(f);
+		return parseINI((Reader) x[0], (String) x[1]);
+	}
+
+	/** Parse URL data to INI/Properties.
+	 * @param url URL with INI/Properties data.
+	 * @return parsed INI/Properties object.
+	 * @throws SRuntimeException if an error occurs,
+	 */
+	public final static Map<String, Object> parseINI(final URL url)
+		throws SRuntimeException{
+		Object[] x = getReader(url);
+		return parseINI((Reader) x[0], (String) x[1]);
+	}
+
+	/** Parse INI/Properties document from InputStream.
+	 * @param in input data.
+	 * @return parsed INI/Properties object.
+	 * @throws SRuntimeException if an error occurs.
+	 */
+	public final static Map<String, Object> parseINI(final InputStream in)
+		throws SRuntimeException {
+		return parseINI(in, null);
+	}
+
+	/** Parse INI/Properties document from input source data in InputStream.
+	 * @param in input with INI/Properties data.
+	 * @param sysId System id.
+	 * @return parsed INI/Properties object.
+	 * @throws SRuntimeException if an error occurs.
+	 */
+	public final static Map<String, Object> parseINI(final InputStream in,
+		final String sysId) throws SRuntimeException {
+		return parseINI(
+			new InputStreamReader(in, Charset.forName("UTF-8")), sysId);
+	}
+
+////////////////////////////////////////////////////////////////////////////////
+//  XON to String
 ////////////////////////////////////////////////////////////////////////////////
 
 	/** Create string with XON object.
@@ -236,7 +307,7 @@ public class XonUtil {
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
-//  String from JSON/XON
+//  JSON to String
 ////////////////////////////////////////////////////////////////////////////////
 	/** Create JSON string from object (no indentation).
 	 * @param x JSON object.
@@ -255,6 +326,17 @@ public class XonUtil {
 		StringBuilder sb = new StringBuilder();
 		XonToString.objectToString(x, indent ? "\n" : null, sb, false);
 		return sb.toString();
+	}
+	
+////////////////////////////////////////////////////////////////////////////////
+//  INI to String
+////////////////////////////////////////////////////////////////////////////////
+	/** Create INI/Properties from object.
+	 * @param x INI/Properties object.
+	 * @return string with INI/Properties format.
+	 */
+	public final static String toIniString(final Map<String, Object> x) {
+		return IniReader.toIniString(x);
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
