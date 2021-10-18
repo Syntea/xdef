@@ -155,7 +155,7 @@ public class XonReader extends StringParser implements XonParsers {
 				isSpacesOrComments();
 				SBuffer value = null;
 				if (i == 1) { // oneOf
-					if (isOneOfChars(":=") != NOCHAR) {
+					if (isChar(':')) {
 						isSpacesOrComments();
 						spos = getPosition();
 						XonTools.JValue jv = readSimpleValue();
@@ -168,7 +168,7 @@ public class XonReader extends StringParser implements XonParsers {
 					}
 					_jp.xdScript(name, value);
 				} else {  // xscript
-					if (isOneOfChars(":=") == NOCHAR && i != 1) {
+					if (!isChar(':') && i != 1) {
 						//"&{0}"&{1}{ or "}{"} expected
 						error(JSON.JSON002, ":");
 					}
@@ -200,7 +200,7 @@ public class XonReader extends StringParser implements XonParsers {
 				isSpacesOrComments();
 				if (!isChar(separator)) {
 					//"&{0}"&{1}{ or "}{"} expected
-					error(JSON.JSON002, ":", "=");
+					error(JSON.JSON002, String.valueOf(separator));
 				}
 				_jp.namedValue(name);
 				isSpacesOrComments();
@@ -267,7 +267,7 @@ public class XonReader extends StringParser implements XonParsers {
 					spos);
 				wasScript = true;
 				SBuffer value = null;
-				if (isOneOfChars(":=") != NOCHAR) {
+				if (isChar(':')) {
 					isSpacesOrComments();
 					XonTools.JValue jv = readSimpleValue();
 					if (jv.getValue() instanceof String) {
@@ -280,7 +280,7 @@ public class XonReader extends StringParser implements XonParsers {
 				} else {
 					if (i == 0) { //JsonNames.SCRIPT_NAME
 						//"&{0}"&{1}{ or "}{"} expected
-					   error(JSON.JSON002, ":", "=");
+					   error(JSON.JSON002, ":");
 					}
 				}
 				_jp.xdScript(name, value);
