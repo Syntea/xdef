@@ -14,17 +14,17 @@ import javax.xml.namespace.QName;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xdef.XDConstants;
-import org.xdef.json.XonTools;
-import org.xdef.json.XonReader;
+import org.xdef.xon.XonTools;
+import org.xdef.xon.XonReader;
 import org.xdef.msg.SYS;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.SBuffer;
 import org.xdef.sys.SPosition;
 import org.xdef.sys.SReporter;
 import org.xdef.sys.SRuntimeException;
-import org.xdef.json.XonParsers;
-import org.xdef.json.XonParser;
-import org.xdef.json.XonNames;
+import org.xdef.xon.XonParsers;
+import org.xdef.xon.XonParser;
+import org.xdef.xon.XonNames;
 
 /** Parse  JSON/XON object from JSON/XON source and generate XML (W3C format).
  * Reads source with JSON/XON and generates W3C XML methods invoked in

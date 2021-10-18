@@ -1,4 +1,4 @@
-package org.xdef.json;
+package org.xdef.xon;
 
 import java.io.Reader;
 import java.net.URL;
@@ -162,8 +162,8 @@ public class IniReader extends StringParser implements XonParsers {
 		if (p.findChar('=')) {
 			key = p.getParsedBufferPartFrom(spos.getIndex());
 			p.nextChar();
-			_jp.namedValue(new SBuffer(
-				key.substring(0, key.length()-1).trim(), spos));
+			_jp.namedValue(
+				new SBuffer(key.substring(0, key.length()).trim(), spos));
 			p.isSpaces();
 			spos = p.getPosition();
 			String val = "";

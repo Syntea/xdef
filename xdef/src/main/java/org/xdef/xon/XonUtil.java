@@ -1,4 +1,4 @@
-package org.xdef.json;
+package org.xdef.xon;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -19,7 +19,7 @@ import org.xdef.xml.KXmlUtils;
  * and create string with JSON source from JSON object.
  * @author Vaclav Trojan
  */
-public class JsonUtil {
+public class XonUtil {
 
 ////////////////////////////////////////////////////////////////////////////////
 // XON parser
@@ -258,20 +258,6 @@ public class JsonUtil {
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
-// Compare two JSON/XON objects.
-////////////////////////////////////////////////////////////////////////////////
-
-	/** Compare two JSON or XON objects.
-	 * @param j1 first object with JSON or XON data.
-	 * @param j2 second object with JSON or XON data.
-	 * @return true if and only if both objects contains equal data.
-	 */
-	public final static boolean jsonEqual(final Object j1, final Object j2) {
-		return (j1 == null && j2 == null) ||
-			(j1 != null && j2 != null && XonCompare.equalValue(j1,j2));
-	}
-
-////////////////////////////////////////////////////////////////////////////////
 // XML to JSON
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -397,5 +383,19 @@ public class JsonUtil {
 	 */
 	public final static Element jsonToXmlXD(final Object json) {
 		return XonToXml.toXmlXD(json);
+	}
+
+////////////////////////////////////////////////////////////////////////////////
+// Compare two JSON/XON objects.
+////////////////////////////////////////////////////////////////////////////////
+
+	/** Compare two JSON or XON objects.
+	 * @param j1 first object with JSON or XON data.
+	 * @param j2 second object with JSON or XON data.
+	 * @return true if and only if both objects contains equal data.
+	 */
+	public final static boolean xonEqual(final Object j1, final Object j2) {
+		return (j1 == null && j2 == null) ||
+			(j1 != null && j2 != null && XonCompare.equalValue(j1,j2));
 	}
 }

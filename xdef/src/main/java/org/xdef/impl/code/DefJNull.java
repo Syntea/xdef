@@ -5,7 +5,7 @@ import org.xdef.XDValueAbstract;
 import org.xdef.XDValueType;
 import org.xdef.msg.SYS;
 import org.xdef.sys.SIllegalArgumentException;
-import org.xdef.json.XonTools;
+import org.xdef.xon.XonTools;
 
 /** The class JNull implements the internal object with JSON null value.
  * @author Vaclav Trojan

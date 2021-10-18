@@ -17,7 +17,7 @@ import org.xdef.msg.XDEF;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.Report;
 import org.xdef.sys.SUtils;
-import org.xdef.json.XonNames;
+import org.xdef.xon.XonNames;
 
 /** Generation of Java source code of XDComponents.
  * @author Vaclav Trojan
