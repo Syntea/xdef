@@ -2,6 +2,7 @@ package org.xdef.xon;
 
 import java.io.Reader;
 import java.net.URL;
+import java.util.Map;
 import org.xdef.msg.JSON;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.SBuffer;
@@ -19,7 +20,7 @@ public class IniReader extends StringParser implements XonParsers {
 	private final XonParser _jp;
 
 	/** Create instance of parser.
-	 * @param jp parser of XON source.
+	 * @param jp parser of INI/Properties source.
 	 * @param source String with source data.
 	 */
 	public IniReader(final String source, final XonParser jp) {
@@ -28,7 +29,7 @@ public class IniReader extends StringParser implements XonParsers {
 	}
 
 	/** Create instance of parser.
-	 * @param jp parser of XON source.
+	 * @param jp parser of INI/Properties source.
 	 * @param source Reader with source data.
 	 */
 	public IniReader(final Reader source, final XonParser jp) {
@@ -37,7 +38,7 @@ public class IniReader extends StringParser implements XonParsers {
 	}
 
 	/** Create instance of parser.
-	 * @param jp parser of XON source.
+	 * @param jp parser of INI/Properties source.
 	 * @param source URL with source data.
 	 */
 	public IniReader(final URL source, final XonParser jp) {
@@ -45,7 +46,7 @@ public class IniReader extends StringParser implements XonParsers {
 		_jp = jp;
 	}
 
-	/** Set mode that Ini file is parsed in X-definition compiler. */
+	/** Set mode that INI file is parsed in X-definition compiler. */
 	public final void setXdefMode() { _jdef = true;}
 
 	public Object getValue() {return _jp.getResult();}
@@ -55,11 +56,11 @@ public class IniReader extends StringParser implements XonParsers {
 ////////////////////////////////////////////////////////////////////////////////
 
 	@Override
-	/** Parse JSON or XON source data (depends on the flag "_xon").
+	/** Parse INI/Properties source data.
 	 * @throws SRuntimeException if an error occurs,
 	 */
 	public final void parse() throws SRuntimeException {
-		readIni();
+		readINI();
 		if (!eos()) {
 			error(JSON.JSON008);//Text after JSON not allowed
 		}
@@ -183,8 +184,24 @@ public class IniReader extends StringParser implements XonParsers {
 		}
 		throw new RuntimeException("'=' expected");
 	}
+	
+	@SuppressWarnings("unchecked")
+	public final static Map<String, Object> parseINI(Reader in, String sysId) {
+		XonParser jp = new XonReader.ObjParser();
+		IniReader xr = new IniReader(in, jp);
+		if (sysId != null) {
+			xr.setSysId(sysId);
+		}
+		xr.parse();
+		xr.isSpaces();
+		if (!xr.eos()) {
+			xr.error(JSON.JSON008);//Text after JSON not allowed
+		}
+		xr.getReportWriter().checkAndThrowErrorWarnings();
+		return (Map<String, Object>) jp.getResult();
+	}
 
-	private void readIni() {
+	private void readINI() {
 		isSpaces();
 		_jp.mapStart(this);
 		SBuffer prop;
@@ -205,5 +222,70 @@ public class IniReader extends StringParser implements XonParsers {
 			}
 		}
 		_jp.mapEnd(this);
+	}
+	
+////////////////////////////////////////////////////////////////////////////////
+// INI to String
+////////////////////////////////////////////////////////////////////////////////
+	
+	/** Create INI/Properties source format of a string.
+	 * @param s the string to be converted.
+	 * @return INI/Properties source format of a string.
+	 */
+	private static String toPropertyString(final String s) {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < s.length(); i++) {
+			char ch = s.charAt(i);
+			switch(ch) {
+				case '\\' : sb.append("\\\\"); continue;
+				case '\t' : sb.append("\\t"); continue;
+				case '\n' : sb.append("\\n"); continue;
+				default :
+					if (ch >= ' ' && ch <= 127) {
+						sb.append(ch);
+					} else {
+						sb.append("\\u");
+						for (int x = 12; x >= 0; x -=4) {
+							sb.append("0123456789ABCDEF".charAt((ch >> x)&0xf));
+						}
+					}
+			}
+		}
+		return sb.toString();
+	}
+	
+	/** Create the line of INI/Property item. 
+	 * @param name name of INI/Property item.
+	 * @param val string with value of INI/Property item.
+	 * @return string with line with INI/Property item.
+	 */
+	private static String toPropertyLine(final String name, final String val) {
+		return toPropertyString(name) + "=" + toPropertyString(val) + "\n";
+	}
+	
+	@SuppressWarnings("unchecked")
+	/** Create string with INI/Property source format.
+	 * @param map Map object with INI/Property data.
+	 * @return created string with INI/Property source.
+	 */
+	public final static String toIniString(final Map<String, Object> map) {
+		StringBuilder sb = new StringBuilder();
+		for (Map.Entry<String, Object> x: map.entrySet()) {
+			Object val = ((Map.Entry)x).getValue();
+			if (val instanceof String) {
+				sb.append(toPropertyLine(x.getKey(), (String) val));
+			}
+		}
+		for (Map.Entry<String, Object> x: map.entrySet()) {
+			Object val = x.getValue();
+			if (val instanceof Map) {
+				sb.append('[').append(x.getKey()).append("]\n");
+				for (Map.Entry<String, Object> y 
+					: ((Map<String, Object>) val).entrySet()) {
+					sb.append(toPropertyLine(y.getKey(), (String) y.getValue()));
+				}
+			}
+		}
+		return sb.toString();
 	}
 }

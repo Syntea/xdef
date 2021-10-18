@@ -1,4 +1,4 @@
-package test.common.json;
+package test.common.xon;
 
 import java.io.File;
 import org.w3c.dom.Element;
@@ -8,10 +8,10 @@ import org.xdef.xon.XonUtil;
 import org.xdef.sys.STester;
 
 /** Test JSON utilities, JSON parser and conversion XML / JSON. */
-public class TestJsonUtil extends STester {
+public class TestXonUtil extends STester {
 	File[] _files;
 
-	public TestJsonUtil() {super();}
+	public TestXonUtil() {super();}
 
 	/** Set variables _files and _errors. */
 	private void init(String groupName) {
