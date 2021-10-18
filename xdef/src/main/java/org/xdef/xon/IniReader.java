@@ -169,14 +169,32 @@ public class IniReader extends StringParser implements XonParsers {
 			spos = p.getPosition();
 			String val = "";
 			while (!p.eos()) {
-				if (p.getCurrentChar() =='\\') {
-					int i = XonTools.readJChar(p);
-					if (i < 0) {
-						throw new RuntimeException("");
+				char c = p.peekChar();
+				if (c == '\\') {
+					c = p.peekChar();
+					int i = "u\"\\/bfnrt:".indexOf(c);
+					if (i == 0) { //u
+						int x = 0;
+						for (int j = 0; j < 4; j++) {
+							int y = XonTools.hexDigit(p.peekChar());
+							if (y < 0) {
+								error(JSON.JSON005);//hexadecimal digit expected
+								x = '?';
+								break;
+							} else {
+								x = (x << 4) + y;
+							}
+						}
+						val += (char) x;
+					} else if (i > 0) { // escaped characters
+						val += "u\"\\/\b\f\n\r\t:".charAt(i);
+					} else {
+						// Incorrect escape character in string
+						p.error(JSON.JSON006);
+						val += '?';
 					}
-					val += (char) i;
 				} else {
-					val += p.peekChar();
+					val += c;
 				}
 			}
 			_jp.putValue(new XonTools.JValue(spos, val));
