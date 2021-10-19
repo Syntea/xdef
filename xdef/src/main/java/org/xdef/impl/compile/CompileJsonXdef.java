@@ -19,8 +19,10 @@ import org.xdef.sys.ReportWriter;
 import org.xdef.sys.SBuffer;
 import org.xdef.sys.SPosition;
 import org.xdef.sys.SRuntimeException;
+import org.xdef.xon.IniReader;
 import org.xdef.xon.XonParser;
 import org.xdef.xon.XonNames;
+import org.xdef.xon.XonParsers;
 
 /** Create X-definition model from xd:json element.
  * @author Vaclav Trojan
@@ -547,11 +549,13 @@ public class CompileJsonXdef extends StringParser {
 	/** Create X-definition model from PNode with JSON description.
 	 * @param p PNode with JSON script.
 	 * @param jsonMode version of transformation JSON to XML).
+	 * @param format "json" or "ini".
 	 * @param name name of json model in X-definition.
 	 * @param reporter report writer
 	 */
 	static final void genXdef(final PNode p,
 		final byte jsonMode,
+		final String format,
 		final SBuffer name,
 		final ReportWriter reporter) {
 		if (jsonMode != XConstants.JSON_MODE_W3C) {
@@ -567,7 +571,8 @@ public class CompileJsonXdef extends StringParser {
 		p._nsURI = null; // set no namespace
 		p._nsindex = -1;
 		XDBuilder jp = new XDBuilder(jx);
-		XonReader pp = new XonReader(p._value, jp);
+		XonParsers pp = format.equals("json")
+			? new XonReader(p._value, jp) : new IniReader(p._value, jp);
 		pp.setReportWriter(reporter);
 		pp.setXdefMode();
 		pp.parse();

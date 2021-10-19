@@ -18,6 +18,7 @@ import org.xdef.xon.XonTools;
 import org.xdef.xon.XonReader;
 import org.xdef.msg.SYS;
 import org.xdef.msg.XDEF;
+import org.xdef.sys.ReportWriter;
 import org.xdef.sys.SBuffer;
 import org.xdef.sys.SPosition;
 import org.xdef.sys.SReporter;
@@ -124,8 +125,9 @@ public class XonSourceParser implements XonParser, XParser {
 				: new QName(e.getNamespaceURI(), e.getLocalName());
 			_chkDoc._xElement = _chkDoc.findXElement(qName);
 			if (_chkDoc._xElement == null) {
-				//JSON root model&{0}{ of "}{" } is missing in X-definition
-				throw new SRuntimeException(XDEF.XDEF315, e.getNodeName());
+				//Text with &{0} model&{1}{ of "}{" } is missing in X-definition
+				throw new SRuntimeException(XDEF.XDEF315,
+					"json", e.getNodeName());
 			}
 			_chkEl = _chkDoc.createRootChkElement(_el, true);
 		} else {
@@ -303,10 +305,14 @@ public class XonSourceParser implements XonParser, XParser {
 // implementation of the interface XONParsers
 ////////////////////////////////////////////////////////////////////////////////
 		@Override
-		public SPosition getPosition() {return NULPOS;} // no position
+		public SPosition getPosition() {return NULPOS;} // no position here
 		@Override
 		public void parse() {parse(_obj);}
 		@Override
-		public void closeReader() {}
+		public void closeReader() {} // ignored here
+		@Override
+		public void setXdefMode() {} // ignored here
+		@Override
+		public void setReportWriter(ReportWriter reporter) {} // ignored here
 	}
 }

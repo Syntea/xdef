@@ -48,7 +48,6 @@ public class Test1 extends XDTester {
 			el = parse(xd, xml, reporter);
 			assertEq(3, reporter.getErrorCount(),
 				reporter.printToString());
-			System.out.println(reporter.printToString());
 			assertEq(el, xml);
 			xd = xp.createXDDocument();
 			xd.setMinYear(1800);
@@ -61,20 +60,9 @@ public class Test1 extends XDTester {
 "   <a a='2022-12-7'/>\n"+
 " </B>";
 			el = parse(xd, xml, reporter);
-			System.out.println(reporter.printToString());
 			assertEq(3, reporter.getErrorCount(),
 				reporter.printToString());
 			assertEq(el, xml);
-		} catch (Exception ex) {fail(ex);}
-		try {
-			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n" +
-"  <xd:declaration> Element $e = null; </xd:declaration>\n" +
-"  <a b=\"optional string; create from($e,'@b')\"/>\n" +
-"</xd:def>";
-//			assertEq(xml, parse(xp, "", xml, reporter, strw, null, null));
-//			assertNoErrors(reporter.errorWarnings(), reporter.printToString());
-			assertEq("<a/>", create(compile(xdef), "", reporter, "<a/>"));
 		} catch (Exception ex) {fail(ex);}
 	}
 

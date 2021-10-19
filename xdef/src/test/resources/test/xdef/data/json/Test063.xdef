@@ -1,10 +1,10 @@
 <xd:def xmlns:xd="http://www.xdef.org/xdef/4.1" name="Test063" root="a" >
 <xd:json name="a" >
-  {$script:"ref B"}
+  {$script="ref B"}
 </xd:json>
 <xd:json name="B" >
   /** description: Test of reference to '$onerOf*/
-  {$oneOf: "optional;",
+  {$oneOf="optional;",
      "manager": "string()",
      "subordinates":[ "* int();" ]
   }

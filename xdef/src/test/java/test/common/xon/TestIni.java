@@ -4,7 +4,7 @@ import java.util.Map;
 import org.xdef.xon.XonUtil;
 import org.xdef.sys.STester;
 
-/** Test .properties and .ini files. 
+/** Test .properties and .ini files.
  * @author Vaclav Trojan
  */
 public class TestIni extends STester {
@@ -31,7 +31,7 @@ public class TestIni extends STester {
 "name = John E\\\n"+
 " . \\\n"  +
 " Smith\n"  +
-"  parser.factor.1=')' \\u00E9 esperado.\n" +	
+"  parser.factor.1=')' \\u00E9 esperado.\n" +
 "servertool.serverup=\\u670D\\u52A1\\u5668\\u5DF2\\u5728\\u8FD0\\u884C\\u3002";
 		assertEq("", test(s));
 		s =

@@ -482,7 +482,7 @@ public class TestJsonXdef extends XDTester {
 "<xd:json name=\"Person_list\">\n"+
 "{ \"Seznam\": \n"+
 "  [\n"+
-"    { $script: \"occurs 1..*;\",\n"+
+"    { $script= \"occurs 1..*;\",\n"+
 "      \"Person\": { \"Name\": \"string(1, 50)\",\n" +
 "         \"Pay\": \"int(1000, 99999)\",\n" +
 "         \"Birth date.\": \"date()\"\n" +
@@ -529,7 +529,7 @@ public class TestJsonXdef extends XDTester {
 "<xd:json name=\"Person_list\">\n"+
 "{ \"Seznam\": \n"+
 "  [\n"+
-"    { $script: \"occurs 1..*; ref Person\" }\n"+
+"    { $script = \"occurs 1..*; ref Person\" }\n"+
 "  ]\n"+
 "}\n"+
 "</xd:json>\n"+
@@ -577,7 +577,7 @@ public class TestJsonXdef extends XDTester {
 "<xd:def xmlns:xd='" + _xdNS + "' root='Matrix'>\n"+
 "<xd:json name=\"Matrix\">\n"+
 "  [\n" +
-"    [ $script: \"occurs 3;\",\n" +
+"    [ $script=\"occurs 3;\",\n" +
 "      \"occurs 3; float()\"\n" +
 "    ]\n" +
 "  ]\n"+
@@ -602,7 +602,7 @@ public class TestJsonXdef extends XDTester {
 "<xd:def xmlns:xd='" + _xdNS + "' root='Skladby'>\n"+
 "<xd:json name=\"Skladby\">\n"+
 "  [\n" +
-"    { $script: \"occurs 1..*;\",\n" +
+"    { $script= \"occurs 1..*;\",\n" +
 "       \"Name\": \"string()\",\n" +
 "       \"Style\": [ $oneOf,\n" +
 "         \"string()\",\n" +
@@ -691,7 +691,7 @@ public class TestJsonXdef extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='B'>\n"+
 "<xd:json name='B'>\n"+
-"[$script: \"init out('a'); finally out('b')\", \"int(); finally out('x')\"]\n"+
+"[$script= \"init out('a'); finally out('b')\", \"int(); finally out('x')\"]\n"+
 "</xd:json>\n"+
 "</xd:def>\n";
 			xd = compile(xdef).createXDDocument();
