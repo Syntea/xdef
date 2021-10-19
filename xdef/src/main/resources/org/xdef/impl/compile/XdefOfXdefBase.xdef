@@ -50,7 +50,7 @@
   type yesNo XDScript.rule('YesNo');
   type thesaurus XDScript.rule('Lexicon');
   type importLocal XDScript.rule('importLocal');
-  type json XDJson.rule('json');
+  type xon XDJson.rule('xon');
 
   /** Check element name and namespace URI (used in match section) */
   boolean xdName(String name) {
@@ -693,7 +693,7 @@ Lexicon ::= (S? $rule XPosition S? "=" S? XMLName)* S?
 
 <![CDATA[
 /******************************************************************************/
-/* JSON BNF grammar rules                                                     */
+/* XON BNF grammar rules                                                     */
 /******************************************************************************/
 
 WhiteSpace ::= [#9#10#13 ]
@@ -720,8 +720,8 @@ controlcharacter ::= '\"' | '\\' | '\/' | '\b' | '\f' | '\n' | '\r' | '\t' |
 string ::= ('"' ([^\"] | controlcharacter)* '"' |
   "'" ([^\'] | controlcharacter)* "'")
 
-jscript ::= S? ( ("$script" S? ":" S? string)
-  | ( "$oneOf" (S? ":" S? string)? ) ) (S? ",")?
+jscript ::= S? ( ("$script" S? "=" S? string)
+  | ( "$oneOf" (S? "=" S? string)? ) ) (S? ",")?
 
 object ::= "{" jscript? (members)* S? "}"
 
@@ -735,7 +735,7 @@ list ::= value (S? "," S? value )*
 
 value ::= S? (pair | "null" | boolean | number | string | array | object) S?
 
-json ::= S? (array | object | string)
+xon ::= S? (array | object | string)
 
 ]]>
 

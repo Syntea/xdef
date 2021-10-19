@@ -985,8 +985,8 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			xparse(e, reporter);
 			return prepareXONResult();
 		}
-		//JSON root model&{0}{ of "}{" } is missing in X-definition
-		throw new SRuntimeException(XDEF.XDEF315, e.getNodeName());
+		//Text with &{0} model&{1}{ of "}{" } is missing in X-definition
+		throw new SRuntimeException(XDEF.XDEF315, "json", e.getNodeName());
 	}
 
 	@Override
@@ -1087,8 +1087,8 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 					String className = getXDPool().getXComponents().get(s);
 					try {
 						yClass = Class.forName(className);
-						String jmodel =
-							(String) yClass.getDeclaredField("XD_NAME").get(null);
+						String jmodel = (String) yClass.getDeclaredField(
+							"XD_NAME").get(null);
 						byte jVersion =
 							(Byte) yClass.getDeclaredField("JSON").get(null);
 						if (jVersion > 0) {
@@ -1116,21 +1116,14 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			return jparseXComponent(XonUtil.parse((String) json),
 				yClass, reporter);
 		} else if (json instanceof File) {
-			return jparseXComponent(XonUtil.parse((File) json),
-				yClass, reporter);
+			return jparseXComponent(XonUtil.parse((File) json),yClass,reporter);
 		} else if (json instanceof URL) {
-			return jparseXComponent(XonUtil.parse((URL) json),
-				yClass, reporter);
+			return jparseXComponent(XonUtil.parse((URL) json), yClass,reporter);
 		} else if (json instanceof InputStream) {
-			return jparseXComponent((InputStream) json,
-				yClass, sourceId, reporter);
+			return jparseXComponent((InputStream)json,yClass,sourceId,reporter);
 		} else if (json instanceof Node) {
-			Element e;
-			if (json instanceof Document) {
-				e = ((Document) json).getDocumentElement();
-			} else {
-				e = (Element) json;
-			}
+			Element e = (json instanceof Document)
+				? ((Document) json).getDocumentElement() : (Element) json;
 			return jparseXComponent(XonUtil.xmlToJson(e),yClass,reporter);
 		}
 		throw new SRuntimeException(XDEF.XDEF318); //Incorrect JSON data
@@ -1223,8 +1216,8 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 				break;
 			}
 		}
-		 //JSON root model&amp;{0}{ of "}{" } is missing in X-definition
-		throw new SRuntimeException(XDEF.XDEF315, name);
+		//Text with &{0} model&{1}{ of "}{" } is missing in X-definition
+		throw new SRuntimeException(XDEF.XDEF315, "json", name);
 	}
 
 	@Override

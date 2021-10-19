@@ -78,7 +78,7 @@
               name = "required QName; options acceptQualifiedAttr" />
           <XD3.2:json xd:script = "occurs *;"
               name = "required QName; options acceptQualifiedAttr" >
-              required json;
+              required xon;
           </XD3.2:json>
           <XD3.2:any xd:script = "occurs *;
                             match @XD3.2:name; ref XD3.2:anyDef;

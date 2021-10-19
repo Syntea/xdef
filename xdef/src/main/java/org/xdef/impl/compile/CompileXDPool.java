@@ -1481,7 +1481,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 //					null, xdef.getDefPool(), XNode.XMTEXT);
 //			} else if ("attlist".equals(_actPNode._localName)) { //TODO
 //				newNode = createReference(pnode, pnode._localName, xdef);
-			} else if ("json".equals(name)) {
+			} else if ("json".equals(name) || "ini".equals(name)) { //xon
 				if (pnode._value == null || pnode._value.getString().isEmpty()){
 					//JSON model is missing in JSON definition
 					error(pnode._name, XDEF.XDEF315,"&{xpath}"+pnode._xpathPos);
@@ -1490,14 +1490,14 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				PAttr pa =  _precomp.getXdefAttr(pnode, "name", false, true);
 				sval = pa == null ? null : pa._value;
 				if (sval == null) {
-					sval = new SBuffer("json", pnode._name);
+					sval = new SBuffer(name, pnode._name);
 					//The name of JSON model is required
-					error(pnode._name, XDEF.XDEF317);
+					error(pnode._name, XDEF.XDEF317, name);
 				} else {
 					String s = sval.getString().trim();
 					if (!StringParser.chkNCName(s, StringParser.XMLVER1_0)) {
-						//The name of JSON model "&{0}" can't contain ":"
-						error(sval, XDEF.XDEF316, s);
+						//The name of {0} model "&{0}" can't contain ":"
+						error(sval, XDEF.XDEF316, name, s);
 					}
 				}
 				byte jsonMode =  XConstants.JSON_MODE_W3C; //W3C mode is default
@@ -1517,7 +1517,11 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					//Attribute '&{0}' not allowed here
 					error(pattr._value, XDEF.XDEF254, pattr._name);
 				}
-				CompileJsonXdef.genXdef(pnode, jsonMode, sval, _precomp.getReportWriter());
+				CompileJsonXdef.genXdef(pnode,
+					jsonMode,
+					name,
+					sval,
+					_precomp.getReportWriter());
 				compileXChild(xdef, null, pnode, xdef, 1, jsonMode);
 				return;
 			} else {

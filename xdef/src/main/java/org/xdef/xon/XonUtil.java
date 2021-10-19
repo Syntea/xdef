@@ -139,7 +139,7 @@ public class XonUtil {
 		throws SRuntimeException {
 		return parse(new InputStreamReader(in, Charset.forName("UTF-8")),sysId);
 	}
-	
+
 ////////////////////////////////////////////////////////////////////////////////
 
 	/** Parse XON document from input reader.
@@ -204,7 +204,7 @@ public class XonUtil {
 		return parseXON(new InputStreamReader(in,
 			Charset.forName("UTF-8")), sysId);
 	}
-	
+
 ////////////////////////////////////////////////////////////////////////////////
 
 	/** Parse INI/Properties document from input reader.
@@ -327,7 +327,7 @@ public class XonUtil {
 		XonToString.objectToString(x, indent ? "\n" : null, sb, false);
 		return sb.toString();
 	}
-	
+
 ////////////////////////////////////////////////////////////////////////////////
 //  INI to String
 ////////////////////////////////////////////////////////////////////////////////

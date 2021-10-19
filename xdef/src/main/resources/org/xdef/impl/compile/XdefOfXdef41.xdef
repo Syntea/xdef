@@ -82,9 +82,9 @@
           <XD4.1:list xd:script = "occurs *;
                             match @name || @XD4.1:name; ref XD4.1:listDef"
               name = "required QName; options acceptQualifiedAttr" />
-          <XD4.1:json  xd:script = "occurs *;"
+          <XD4.1:json xd:script = "occurs *;"
               name = "required QName; options acceptQualifiedAttr" >
-              required json;
+              required xon;
           </XD4.1:json>
           <XD4.1:any xd:script = "occurs *;
                             match @XD4.1:name; ref XD4.1:anyDef;

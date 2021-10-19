@@ -159,13 +159,13 @@ if (T )return;
 			assertNoErrors(reporter);
 			assertEq(xml, el);
 		} catch (Exception ex) {fail(ex);}
-if(T )return;
+if(T)return;
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='Skladby'>\n"+
 "<xd:json name=\"Skladby\">\n"+
 "  [\n" +
-"    { $script: \"occurs 1..*;\",\n" +
+"    { $script= \"occurs 1..*;\",\n" +
 "       \"Name\": \"string()\",\n" +
 "       \"xxx\": \"? string()\",\n" +
 "       \"Style\": [ $oneOf,\n" +
@@ -206,10 +206,10 @@ if(T)return;
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"Example\" root=\"test\">\n" +
 "  <xd:json name=\"test\">\n" +
 "    { \"cities\"  : [\n" +
-"        { $script: \"occurs 1..*\",\n" +
+"        {$script=\"occurs 1..*\",\n" +
 "          \"from\": [\n" +
 "            \"string()\",\n" +
-"            { $script: \"occurs 1..*\", \"to\": \"jstring()\", \"distance\": \"int()\" }\n" +
+"            {$script=\"occurs 1..*\", \"to\": \"jstring()\", \"distance\": \"int()\" }\n" +
 "    	  ]\n" +
 "        }\n" +
 "      ]\n" +
@@ -285,17 +285,17 @@ if(T )return;
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
 "<xd:json name='A'>\n"+
 "[\n" +
-" { $script:\"+\",\n" +
+" { $script=\"+\",\n" +
 "  \"first name\": \"? string;\",\n" +
 "  \"last name\" : \"string;\",\n" +
 "  \"age\": \"int(1,100); finally outln(getXPos()+'; '+getXDPosition());\",\n" +
-"  \"address\"  : {$script: \"?\",\n" +
+"  \"address\"  : {$script= \"?\",\n" +
 "    \"street address\": \"string;\",\n"+
 "    \"city\"         : \"string;\",\n" +
 "    \"postal code\"   : \"? string(%pattern='[0-9]+(-[0-9]+)?');\"\n" +
 "  },\n" +
-"  \"phone numbers\": [ $script: \"?\",\n" +
-"    { $script: \"occurs *\",\n" +
+"  \"phone numbers\": [ $script= \"?\",\n" +
+"    { $script= \"occurs *\",\n" +
 "      \"type\"  : \"an;\",\n" +
 "      \"number\": \"string(%pattern='[0-9]+(-[0-9]+)*');finally outln(getXPos());\"\n" +
 "    }\n" +
@@ -348,7 +348,7 @@ if(T )return;
 "<xd:json name='A'>\n"+
 "{ \"store\": {\n" +
 "    \"book\": [\n" +
-"      {$script: \"occurs +\",\n" +
+"      {$script= \"occurs +\",\n" +
 "        \"category\": \"enum('reference', 'fiction')\",\n" +
 "        \"author\": \"string\",\n" +
 "        \"title\": \"string\",\n" +
@@ -945,7 +945,8 @@ if(T ){return;}
 			Class<?> TZ = Class.forName("bugreports.data.TZ");
 			Class<?> TJson = Class.forName("bugreports.data.TJson");
 			json = "[\"2020-01-01\"]";
-			j = xp.createXDDocument("Z").jparse(json, reporter);
+			j = XonUtil.xonToJson(
+				xp.createXDDocument("Z").jparse(json, reporter));
 			assertNoErrors(reporter);
 			reporter.clear();
 			assertTrue(XonUtil.xonEqual(XonUtil.parse(json), j),

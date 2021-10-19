@@ -23,6 +23,15 @@ public class IniReader extends StringParser implements XonParsers {
 	 * @param jp parser of INI/Properties source.
 	 * @param source String with source data.
 	 */
+	public IniReader(final SBuffer source, final XonParser jp) {
+		super(source);
+		_jp = jp;
+	}
+
+	/** Create instance of parser.
+	 * @param jp parser of INI/Properties source.
+	 * @param source String with source data.
+	 */
 	public IniReader(final String source, final XonParser jp) {
 		super(source);
 		_jp = jp;
@@ -202,7 +211,7 @@ public class IniReader extends StringParser implements XonParsers {
 		}
 		throw new RuntimeException("'=' expected");
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public final static Map<String, Object> parseINI(Reader in, String sysId) {
 		XonParser jp = new XonReader.ObjParser();
@@ -241,11 +250,11 @@ public class IniReader extends StringParser implements XonParsers {
 		}
 		_jp.mapEnd(this);
 	}
-	
+
 ////////////////////////////////////////////////////////////////////////////////
 // INI to String
 ////////////////////////////////////////////////////////////////////////////////
-	
+
 	/** Create INI/Properties source format of a string.
 	 * @param s the string to be converted.
 	 * @return INI/Properties source format of a string.
@@ -271,8 +280,8 @@ public class IniReader extends StringParser implements XonParsers {
 		}
 		return sb.toString();
 	}
-	
-	/** Create the line of INI/Property item. 
+
+	/** Create the line of INI/Property item.
 	 * @param name name of INI/Property item.
 	 * @param val string with value of INI/Property item.
 	 * @return string with line with INI/Property item.
@@ -280,7 +289,7 @@ public class IniReader extends StringParser implements XonParsers {
 	private static String toPropertyLine(final String name, final String val) {
 		return toPropertyString(name) + "=" + toPropertyString(val) + "\n";
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	/** Create string with INI/Property source format.
 	 * @param map Map object with INI/Property data.
@@ -298,7 +307,7 @@ public class IniReader extends StringParser implements XonParsers {
 			Object val = x.getValue();
 			if (val instanceof Map) {
 				sb.append('[').append(x.getKey()).append("]\n");
-				for (Map.Entry<String, Object> y 
+				for (Map.Entry<String, Object> y
 					: ((Map<String, Object>) val).entrySet()) {
 					sb.append(toPropertyLine(y.getKey(), (String) y.getValue()));
 				}

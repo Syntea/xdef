@@ -33,7 +33,7 @@ public class TestX extends XDTester {
 " <xd:json name='a'>\n"+
 "[\n" +
 "  [\n" +
-"     $script: \"optional\",\n" +
+"     $script= \"optional\",\n" +
 "     \"boolean();\", \n" +
 "     \"optional int();\"\n" +
 "  ]\n" +
@@ -61,7 +61,7 @@ public class TestX extends XDTester {
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n"+
 " <xd:json name='a'>\n"+
 "[\n" +
-"  { $script: \"occurs 1..*\",\n" +
+"  { $script= \"occurs 1..*\",\n" +
 "    \"Name\": \"string()\",\n" +
 "    \"Genre\": [ $oneOf,\n" +
 "      \"string()\",\n" +
@@ -82,10 +82,10 @@ public class TestX extends XDTester {
 "    \"Name\": \"B\",\n" +
 "    \"Genre\": [\"B1\", \"B2\"]\n" +
 "  },\n" +
-"  {\n" +
-"    \"Name\": \" cc dd \",\n" +
-"    \"Genre\": \"C1\"\n" +
-"  }\n" +
+//"  {\n" +
+//"    \"Name\": \" cc dd \",\n" +
+//"    \"Genre\": \"C1\"\n" +
+//"  }\n" +
 "]";
 			reporter.clear();
 			xd.jparse(json, reporter);
@@ -95,7 +95,7 @@ public class TestX extends XDTester {
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n"+
 " <xd:json name='a'>\n"+
 "{\n" +
-"  $oneOf: \"optional;\",\n" +
+"  $oneOf= \"optional;\",\n" +
 "  \"manager\": \"string()\",\n" +
 "  \"subordinates\":[ \"* string();\" ]\n" +
 "}\n" +
@@ -125,7 +125,7 @@ public class TestX extends XDTester {
 " <xd:json name='a'>\n"+
 "[\n" +
 "  {\n" +
-"    \"A\": [$oneOf: \"occurs *\",\n" +
+"    \"A\": [$oneOf= \"occurs *\",\n" +
 "      \"string()\",\n" +
 "       [\"occurs 1..* string()\"]\n" +
 "    ]\n" +
@@ -138,7 +138,7 @@ public class TestX extends XDTester {
 			json = "[\n" +
 "  {\"A\": [\"A1\"]},\n" +
 "  {\"A\": [\"B1\", \"B2\"]},\n" +
-"  {\"A\": \"C1\"}\n" +
+//"  {\"A\": \"C1\"}\n" +
 "]";
 			reporter.clear();
 			xd.jparse(json, reporter);
@@ -154,10 +154,10 @@ public class TestX extends XDTester {
 " <xd:json name='a'>\n"+
 "   { \"date\" : \"date()\",\n" +
 "     \"cities\"  : [\n" +
-"       { $script: \"occurs 1..*\",\n" +
+"       { $script= \"occurs 1..*\",\n" +
 "         \"from\": [\n" +
 "           \"string()\",\n" +
-"           {$script: \"*\", \"to\":\"jstring()\", \"dist\":\"int()\"}\n" +
+"           {$script= \"*\", \"to\":\"jstring()\", \"dist\":\"int()\"}\n" +
 "    	  ]\n" +
 "        }\n" +
 "      ]\n" +
@@ -182,6 +182,24 @@ public class TestX extends XDTester {
 			xd.jparse(json, reporter);
 			assertNoErrors(reporter);
 /**/
+		} catch (Exception ex) {fail(ex);}
+		try {
+			xdef =
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n"+
+" <xd:ini name='a'>\n"+
+"  {\n" +
+"    \"A\":  \"string()\",\n" +
+"    \"B\":  \"string()\",\n" +
+"  }\n" +
+" </xd:ini>\n"+
+"</xd:def>";
+			xp = XDFactory.compileXD(props, xdef); // no property
+			xd = xp.createXDDocument();
+			json =
+"  {\"A\": \"a\", \"B\": \"b\"}";
+			reporter.clear();
+			xd.jparse(json, reporter);
+			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
 	}
 
