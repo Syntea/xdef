@@ -54,6 +54,7 @@ import org.xdef.sys.SReporter;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
+import org.xdef.xon.XonNames;
 
 /** Provides root check object for generation of check tree and processing
  * of the X-definition.
@@ -618,7 +619,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			if (parser != null) {
 				parser.closeReader();
 			}
-			error(rep.getMsgID(), rep.getText(), rep.getModification());
+			fatal(rep.getMsgID(), rep.getText(), rep.getModification());
 			return null;
 		}
 	}
@@ -943,6 +944,170 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		}
 		return null;
 	}
+
+	@SuppressWarnings("unchecked")
+	private static Element iniToXml(Object ini) {
+		Document doc = KXmlUtils.newDocument(XDConstants.JSON_NS_URI_W3C,
+			"js:"+XonNames.X_MAP, null);
+		Element el = doc.getDocumentElement();
+		iniToXml((Map<String,Object>) ini, el);
+		return el;
+	}
+
+	@SuppressWarnings("unchecked")
+	private static void iniToXml(final Map<String,Object> ini,final Element el){
+		for (Map.Entry<String, Object> x: ini.entrySet()) {
+			String name = x.getKey();
+			Object o = x.getValue();
+			if (!(o instanceof Map)) {
+				Element item = el.getOwnerDocument().createElementNS(
+					XDConstants.JSON_NS_URI_W3C, "js:" + XonNames.X_ITEM);
+				item.setAttribute(XonNames.X_KEYATTR, name);
+				item.setAttribute(XonNames.X_VALUEATTR, o.toString());
+				el.appendChild(item);
+			}
+		}
+		for (Map.Entry<String, Object> x: ini.entrySet()) {
+			String name = x.getKey();
+			Object o = x.getValue();
+			if (o instanceof Map) {
+				Element item = el.getOwnerDocument().createElementNS(
+					XDConstants.JSON_NS_URI_W3C, "js:" + XonNames.X_MAP);
+				item.setAttribute(XonNames.X_KEYATTR, name);
+				iniToXml((Map<String, Object>) o, item);
+				el.appendChild(item);
+			}
+		}
+	}
+
+	@Override
+	/** Validate and process INI/Properties data and return processed XON.
+	 * @param data INI/Properties object or XML representation of object
+	 * to validate.
+	 * @param reporter report writer or null. If this argument is
+	 * null and error reports occurs then SRuntimeException is thrown.
+	 * @return XON object with processed data.
+	 * @throws SRuntimeException if an was reported.
+	 */
+	@SuppressWarnings("unchecked")
+	public final Map<String, Object> ivalidate(final Object data,
+		final ReportWriter reporter)
+		throws SRuntimeException {
+		if (data == null || data instanceof Map || data instanceof String) {
+			_reporter = new SReporter(reporter);
+			_scp.setStdErr(new DefOutStream(reporter));
+			_refNum = 0; // we must clear counter!
+			new XonSourceParser(data).xparse(this);
+			return (Map<String, Object>) getXon();
+		} else if (data instanceof File
+			|| data instanceof URL || data instanceof InputStream) {
+			createXonParser(data, reporter, null).xparse(this);
+			return (Map<String, Object>) getXon();
+		}
+		Element e = null;
+		if (data instanceof Document) {
+			e = ((Document) data).getDocumentElement();
+		} else if (data instanceof Element) {
+			e = (Element) data;
+		}
+		if (e == null) {
+			throw new SRuntimeException(XDEF.XDEF318); //Incorrect JSON data
+		}
+		QName qName = e.getNamespaceURI() == null ? new QName(e.getTagName())
+			: new QName(e.getNamespaceURI(), e.getLocalName());
+		if ((_xElement = findXElement(qName)) != null) {
+			xparse(e, reporter);
+			return (Map<String, Object>) prepareXONResult();
+		}
+		//Text with &{0} model&{1}{ of "}{" } is missing in X-definition
+		throw new SRuntimeException(XDEF.XDEF315, "json", e.getNodeName());
+	}
+
+	@Override
+	/** Parse and process INI/Properties data and return processed object.
+	 * @param data INI/Properties data or file pathname
+	 * @param reporter report writer or null. If this argument is
+	 * null and error reports occurs then SRuntimeException is thrown.
+	 * @return Map with processed data.
+	 * @throws SRuntimeException if an was reported.
+	 */
+	public final Map<String, Object> iparse(final String data,
+		final ReportWriter reporter) throws SRuntimeException {
+		return ivalidate(iniToXml(XonUtil.parseINI(data)), reporter);
+	}
+
+	@Override
+	/** Parse and process INI/Properties data and return processed object.
+	 * @param data File with JSON data.
+	 * @param reporter report writer or null. If this argument is
+	 * null and error reports occurs then SRuntimeException is thrown.
+	 * @return Map with processed data.
+	 * @throws SRuntimeException if an was reported.
+	 */
+	public final Map<String, Object> iparse(final File data,
+		final ReportWriter reporter) throws SRuntimeException {
+		return ivalidate(iniToXml(XonUtil.parseINI(data)), reporter);
+	}
+
+	@Override
+	/** Parse and process INI/Properties data and return processed object.
+	 * @param data URL pointing to JSON data.
+	 * @param reporter report writer or null. If this argument is
+	 * null and error reports occurs then SRuntimeException is thrown.
+	 * @return Map with processed data.
+	 * @throws SRuntimeException if an was reported.
+	 */
+	public final Map<String, Object> iparse(final URL data,
+		final ReportWriter reporter) throws SRuntimeException {
+		return ivalidate(iniToXml(XonUtil.parseINI(data)), reporter);
+	}
+
+	@Override
+	/** Parse and process INI/Properties data and return processed object.
+	 * @param data InputStream with JSON data.
+	 * @param reporter report writer or null. If this argument is
+	 * null and error reports occurs then SRuntimeException is thrown.
+	 * @return Map with processed data.
+	 * @throws SRuntimeException if an was reported.
+	 */
+	public final Map<String, Object> iparse(final InputStream data,
+		final ReportWriter reporter) throws SRuntimeException {
+		return ivalidate(iniToXml(XonUtil.parseINI(data)), reporter);
+	}
+//
+//	@Override
+//	/** Parse source INI/Properties and return XComponent as result.
+//	 * @param json string with pathname of JSON file or JSON source data.
+//	 * @param xClass XCompomnent class (if null, then XComponent class
+//	 * is searched in XDPool).
+//	 * @param reporter report writer or null. If this argument is
+//	 * null and error reports occurs then SRuntimeException is thrown.
+//	 * @return XComponent with parsed data.
+//	 * @throws SRuntimeException if reporter is null and an error is reported.
+//	 */
+//	public final XComponent iparseXComponent(final Object json,
+//		final Class<?> xClass,
+//		final ReportWriter reporter) throws SRuntimeException {
+//		throw new SUnsupportedOperationException();
+//	}
+//
+//	@Override
+//	/** Parse source INI/Properties and return XComponent as result.
+//	 * @param json string with pathname of JSON file or JSON source data.
+//	 * @param xClass XCompomnent class (if null, then XComponent class
+//	 * is searched in XDPool).
+//	 * @param sourceId name of source or null.
+//	 * @param reporter report writer or null. If this argument is
+//	 * null and error reports occurs then SRuntimeException is thrown.
+//	 * @return XComponent with parsed data.
+//	 * @throws SRuntimeException if reporter is null and an error is reported.
+//	 */
+//	public final XComponent iparseXComponent(final Object json,
+//		final Class<?> xClass,
+//		final String sourceId,
+//		final ReportWriter reporter) throws SRuntimeException {
+//		throw new SUnsupportedOperationException();
+//	}
 
 	@Override
 	/** Parse and process JSON data and return processed JSON object.

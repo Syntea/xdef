@@ -186,12 +186,12 @@ public class TestX extends XDTester {
 		try {
 			xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n"+
-" <xd:ini name='a'>\n"+
+" <xd:json name='a'>\n"+
 "  {\n" +
 "    \"A\":  \"string()\",\n" +
 "    \"B\":  \"string()\",\n" +
 "  }\n" +
-" </xd:ini>\n"+
+" </xd:json>\n"+
 "</xd:def>";
 			xp = XDFactory.compileXD(props, xdef); // no property
 			xd = xp.createXDDocument();

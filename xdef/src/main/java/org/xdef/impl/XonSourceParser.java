@@ -23,6 +23,7 @@ import org.xdef.sys.SBuffer;
 import org.xdef.sys.SPosition;
 import org.xdef.sys.SReporter;
 import org.xdef.sys.SRuntimeException;
+import org.xdef.sys.SUnsupportedOperationException;
 import org.xdef.xon.XonParsers;
 import org.xdef.xon.XonParser;
 import org.xdef.xon.XonNames;
@@ -220,7 +221,6 @@ public class XonSourceParser implements XonParser, XParser {
 	 * @param value SBuffer with the value of comment.
 	 */
 	public void comment(SBuffer value){/*we ingore it here*/}
-
 	@Override
 	/** X-script item parsed, not used methods for JSON/XON parsing
 	 * (used in X-definition compiler).
@@ -229,8 +229,8 @@ public class XonSourceParser implements XonParser, XParser {
 	 */
 	public void xdScript(final SBuffer name, SBuffer value) {}
 	@Override
-	/** Get result of parser. (returns null here) */
-	public final Object getResult() {return null;}
+	/** Get result of parser (not supported here). */
+	public final Object getResult(){throw new SUnsupportedOperationException();}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Interface XParser
@@ -258,9 +258,7 @@ public class XonSourceParser implements XonParser, XParser {
 	@Override
 	/** Close reader of parsed data. */
 	public void closeReader() {
-		try {
-			_p.closeReader();
-		} catch (Exception ex) {} // ignore it
+		try {_p.closeReader();} catch (Exception ex) {} // ignore exception
 	}
 
 	////////////////////////////////////////////////////////////////////////////

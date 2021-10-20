@@ -693,11 +693,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
 	/** Close reader of parsed data. */
 	public final void closeReader() {
 		if (_in != null) {
-			try {
-				_in.close();
-			} catch (IOException ex) {
-				throw new SRuntimeException(ex);
-			}
+			try {_in.close();} catch (IOException ex) {} //ignore exception
 		}
 	}
 

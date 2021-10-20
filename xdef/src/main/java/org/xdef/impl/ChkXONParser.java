@@ -32,6 +32,7 @@ import org.xdef.sys.SError;
 import org.xdef.sys.SPosition;
 import org.xdef.sys.SReporter;
 import org.xdef.sys.SRuntimeException;
+import org.xdef.sys.SUnsupportedOperationException;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
 
@@ -164,20 +165,14 @@ final class ChkXONParser implements XParser, XonParser {
 	/** Close reader of parsed data. */
 	public final void closeReader() {
 		if (_in != null) {
-			try {
-				_in.close();
-			} catch (IOException ex) {
-				throw new SRuntimeException(ex);
-			}
+			try {_in.close();} catch (IOException ex) {} // ignore mexception
 		}
 	}
-
 	@Override
 	/** Get connected reporter.
 	 * @return connected SReporter.
 	 */
 	public final SReporter getReporter() {return _sReporter;}
-
 	@Override
 	/** Parse XML generated from XON source.
 	 * @param chkDoc The ChkDocument object.
@@ -340,7 +335,6 @@ final class ChkXONParser implements XParser, XonParser {
 		xr.setXonMode();
 		xr.parse();
 	}
-
 	@Override
 	/** Put value to result.
 	 * @param value JValue to be added to result object.
@@ -389,7 +383,6 @@ final class ChkXONParser implements XParser, XonParser {
 		_kind = _kinds.peek();
 		elementEnd();
 	}
-
 	@Override
 	/** Map started.
 	 * @param pos source position.
@@ -426,8 +419,6 @@ final class ChkXONParser implements XParser, XonParser {
 	 */
 	public final void xdScript(final SBuffer name, final SBuffer value) {}
 	@Override
-	/** Get result of parser.
-	 * @return null here.
-	 */
-	public final Object getResult() {return null;}
+	/** Get result of parser (not supported here). */
+	public final Object getResult(){throw new SUnsupportedOperationException();}
 }

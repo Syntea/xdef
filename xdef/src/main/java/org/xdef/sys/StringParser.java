@@ -1077,9 +1077,7 @@ public class StringParser extends SReporter implements SParser {
 		_keepBufferCounter = 0;
 		if (_reader != null) {
 			if (_closeReader) {
-				try {
-					_reader.close();
-				} catch (IOException ex) {}
+				try {_reader.close();} catch (IOException ex) {}//ignore it
 			}
 			_reader = null;
 		}
