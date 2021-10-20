@@ -1074,40 +1074,40 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		final ReportWriter reporter) throws SRuntimeException {
 		return ivalidate(iniToXml(XonUtil.parseINI(data)), reporter);
 	}
-//
-//	@Override
-//	/** Parse source INI/Properties and return XComponent as result.
-//	 * @param json string with pathname of JSON file or JSON source data.
-//	 * @param xClass XCompomnent class (if null, then XComponent class
-//	 * is searched in XDPool).
-//	 * @param reporter report writer or null. If this argument is
-//	 * null and error reports occurs then SRuntimeException is thrown.
-//	 * @return XComponent with parsed data.
-//	 * @throws SRuntimeException if reporter is null and an error is reported.
-//	 */
-//	public final XComponent iparseXComponent(final Object json,
-//		final Class<?> xClass,
-//		final ReportWriter reporter) throws SRuntimeException {
-//		throw new SUnsupportedOperationException();
-//	}
-//
-//	@Override
-//	/** Parse source INI/Properties and return XComponent as result.
-//	 * @param json string with pathname of JSON file or JSON source data.
-//	 * @param xClass XCompomnent class (if null, then XComponent class
-//	 * is searched in XDPool).
-//	 * @param sourceId name of source or null.
-//	 * @param reporter report writer or null. If this argument is
-//	 * null and error reports occurs then SRuntimeException is thrown.
-//	 * @return XComponent with parsed data.
-//	 * @throws SRuntimeException if reporter is null and an error is reported.
-//	 */
-//	public final XComponent iparseXComponent(final Object json,
-//		final Class<?> xClass,
-//		final String sourceId,
-//		final ReportWriter reporter) throws SRuntimeException {
-//		throw new SUnsupportedOperationException();
-//	}
+
+	@Override
+	/** Parse source INI/Properties and return XComponent as result.
+	 * @param json string with pathname of JSON file or JSON source data.
+	 * @param xClass XCompomnent class (if null, then XComponent class
+	 * is searched in XDPool).
+	 * @param reporter report writer or null. If this argument is
+	 * null and error reports occurs then SRuntimeException is thrown.
+	 * @return XComponent with parsed data.
+	 * @throws SRuntimeException if reporter is null and an error is reported.
+	 */
+	public final XComponent iparseXComponent(final Object json,
+		final Class<?> xClass,
+		final ReportWriter reporter) throws SRuntimeException {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	/** Parse source INI/Properties and return XComponent as result.
+	 * @param json string with pathname of JSON file or JSON source data.
+	 * @param xClass XCompomnent class (if null, then XComponent class
+	 * is searched in XDPool).
+	 * @param sourceId name of source or null.
+	 * @param reporter report writer or null. If this argument is
+	 * null and error reports occurs then SRuntimeException is thrown.
+	 * @return XComponent with parsed data.
+	 * @throws SRuntimeException if reporter is null and an error is reported.
+	 */
+	public final XComponent iparseXComponent(final Object json,
+		final Class<?> xClass,
+		final String sourceId,
+		final ReportWriter reporter) throws SRuntimeException {
+		throw new UnsupportedOperationException();
+	}
 
 	@Override
 	/** Parse and process JSON data and return processed JSON object.
