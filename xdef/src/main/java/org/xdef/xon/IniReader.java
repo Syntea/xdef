@@ -55,25 +55,7 @@ public class IniReader extends StringParser implements XonParsers {
 		_jp = jp;
 	}
 
-	/** Set mode that INI file is parsed in X-definition compiler. */
-	public final void setXdefMode() { _jdef = true;}
-
 	public Object getValue() {return _jp.getResult();}
-
-////////////////////////////////////////////////////////////////////////////////
-// interface XONParsers
-////////////////////////////////////////////////////////////////////////////////
-
-	@Override
-	/** Parse INI/Properties source data.
-	 * @throws SRuntimeException if an error occurs,
-	 */
-	public final void parse() throws SRuntimeException {
-		readINI();
-		if (!eos()) {
-			error(JSON.JSON008);//Text after JSON not allowed
-		}
-	}
 
 	private SBuffer readLine() {
 		if (eos()) {
@@ -181,7 +163,7 @@ public class IniReader extends StringParser implements XonParsers {
 				char c = p.peekChar();
 				if (c == '\\') {
 					c = p.peekChar();
-					int i = "u\"\\/bfnrt:".indexOf(c);
+					int i = "u\"\\/bfnrt01234567:".indexOf(c);
 					if (i == 0) { //u
 						int x = 0;
 						for (int j = 0; j < 4; j++) {
@@ -196,7 +178,7 @@ public class IniReader extends StringParser implements XonParsers {
 						}
 						val += (char) x;
 					} else if (i > 0) { // escaped characters
-						val += "u\"\\/\b\f\n\r\t:".charAt(i);
+						val += "u\"\\/\b\f\n\r\t\0\1\2\3\4\5\6\7:".charAt(i);
 					} else {
 						// Incorrect escape character in string
 						p.error(JSON.JSON006);
@@ -238,18 +220,73 @@ public class IniReader extends StringParser implements XonParsers {
 			p.nextChar();
 			p.isSpaces();
 			SPosition spos = p.getPosition();
-			if (p.findChar(']')) {
-				String s = p.getBufferPart(spos.getIndex(), p.getIndex());
-				_jp.namedValue(new SBuffer(s.trim(), spos));
-				_jp.mapStart(spos);
-				while (putProperty(prop = readPropText())) {}
-				_jp.mapEnd(spos);
+			String name;
+			boolean isScript = _jdef && p.findChar(';');
+			SBuffer p1 = null, p2 = null;
+			if (isScript) {
+				name = p.getBufferPart(spos.getIndex(), p.getIndex());
+				p.nextChar();
+				p.isSpaces();
+				SPosition spos1 = p.getPosition();
+				if (p.isToken(XonNames.SCRIPT_NAME)) {
+					p.isSpaces();
+					if (p.isChar('=')) {
+						p.isSpaces();
+						String t = p.getUnparsedBufferPart();
+						int i = t.lastIndexOf(']');
+						if (i == t.length() - 1) {
+							p1 = new SBuffer(XonNames.SCRIPT_NAME, spos);
+							p2 = new SBuffer(t.substring(0,i), p.getPosition());
+						} else {
+							throw new RuntimeException(" text after \"]\"");
+						}
+					}
+				}
+				if (p1 == null) {
+//					//Value of $script must be string with X-script
+//					error(JSON.JSON018);
+					throw new RuntimeException(" script error");
+				}
 			} else {
-				throw new RuntimeException("] missing");
+				p.setPosition(spos);
+				if (!p.findChar(']')) {
+					throw new RuntimeException("] missing");
+				}
+				name = p.getBufferPart(spos.getIndex(), p.getIndex());
+				p.nextChar();
+				p.isSpaces();
+				if (!p.eos()) {
+					throw new RuntimeException(" text after \"]\"");
+				}
 			}
+			_jp.namedValue(new SBuffer(name.trim(), spos));
+			_jp.mapStart(spos);
+			if (p1 != null) {
+				_jp.xdScript(p1, p2);
+			}
+			while (putProperty(prop = readPropText())) {}
+			_jp.mapEnd(spos);
 		}
 		_jp.mapEnd(this);
 	}
+
+////////////////////////////////////////////////////////////////////////////////
+// interface XONParsers
+////////////////////////////////////////////////////////////////////////////////
+
+	@Override
+	/** Parse INI/Properties source data.
+	 * @throws SRuntimeException if an error occurs,
+	 */
+	public final void parse() throws SRuntimeException {
+		readINI();
+		if (!eos()) {
+			error(JSON.JSON008);//Text after JSON not allowed
+		}
+	}
+	@Override
+	/** Set mode that INI file is parsed in X-definition compiler. */
+	public final void setXdefMode() { _jdef = true;}
 
 ////////////////////////////////////////////////////////////////////////////////
 // INI to String
