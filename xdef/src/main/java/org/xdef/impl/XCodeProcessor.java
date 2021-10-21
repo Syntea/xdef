@@ -523,7 +523,7 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 			XVariable xv = _xd.findVariable(name);
 			if (xv != null) {
 				int addr = xv.getOffset();
-				if (addr >= 0) {
+				if (addr >= 0 && addr < _globalVariables.length) {
 					return _globalVariables[addr];
 				}
 			}
