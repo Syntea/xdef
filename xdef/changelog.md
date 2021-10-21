@@ -6,7 +6,7 @@
   with `BUILD_DATETIME`.
 * In the `org.xdef.XDConstants` was removed the item 'JAVA_VERSION'.
 *******************************************************************
-* preliminary implementation of X-definition version 4.0:
+* preliminary implementation of X-definition version 4.1:
 * utilities for processing JSON, XON, INI and Properties data are now
   in the package 'org.xdef.json'
 * added the new reader `org.xdef.json.IniReader` for `.ini`
