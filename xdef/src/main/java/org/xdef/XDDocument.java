@@ -218,7 +218,7 @@ public interface XDDocument extends XXNode {
 		throws SRuntimeException;
 
 	/** Parse and process INI/Properties data and return processed object.
-	 * @param data File with JSON data.
+	 * @param data File with INI/Properties data.
 	 * @param reporter report writer or null. If this argument is
 	 * null and error reports occurs then SRuntimeException is thrown.
 	 * @return Map with processed data.
@@ -228,7 +228,7 @@ public interface XDDocument extends XXNode {
 		throws SRuntimeException;
 
 	/** Parse and process INI/Properties data and return processed object.
-	 * @param data URL pointing to JSON data.
+	 * @param data URL pointing to INI/Properties data.
 	 * @param reporter report writer or null. If this argument is
 	 * null and error reports occurs then SRuntimeException is thrown.
 	 * @return Map with processed data.
@@ -238,7 +238,7 @@ public interface XDDocument extends XXNode {
 		throws SRuntimeException;
 
 	/** Parse and process INI/Properties data and return processed object.
-	 * @param data InputStream with JSON data.
+	 * @param data InputStream with INI/Properties data.
 	 * @param reporter report writer or null. If this argument is
 	 * null and error reports occurs then SRuntimeException is thrown.
 	 * @return Map with processed data.
@@ -248,7 +248,8 @@ public interface XDDocument extends XXNode {
 		throws SRuntimeException;
 
 	/** Parse source INI/Properties and return XComponent as result.
-	 * @param json string with pathname of JSON file or JSON source data.
+	 * @param ini string with pathname of INI/Properties file
+	 * or INI/Properties source data.
 	 * @param xClass XCompomnent class (if null, then XComponent class
 	 * is searched in XDPool).
 	 * @param reporter report writer or null. If this argument is
@@ -256,12 +257,13 @@ public interface XDDocument extends XXNode {
 	 * @return XComponent with parsed data.
 	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
-	public XComponent iparseXComponent(Object json,
+	public XComponent iparseXComponent(Object ini,
 		Class<?> xClass,
 		ReportWriter reporter) throws SRuntimeException;
 
 	/** Parse source INI/Properties and return XComponent as result.
-	 * @param json string with pathname of JSON file or JSON source data.
+	 * @param ini string with pathname of INI/Properties file
+	 * or INI/Properties source data.
 	 * @param xClass XCompomnent class (if null, then XComponent class
 	 * is searched in XDPool).
 	 * @param sourceId name of source or null.
@@ -270,7 +272,7 @@ public interface XDDocument extends XXNode {
 	 * @return XComponent with parsed data.
 	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
-	public XComponent iparseXComponent(Object json,
+	public XComponent iparseXComponent(Object ini,
 		Class<?> xClass,
 		String sourceId,
 		ReportWriter reporter) throws SRuntimeException;

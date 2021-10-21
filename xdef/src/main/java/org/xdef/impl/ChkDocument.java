@@ -1038,7 +1038,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 
 	@Override
 	/** Parse and process INI/Properties data and return processed object.
-	 * @param data File with JSON data.
+	 * @param data File with INI/Properties data.
 	 * @param reporter report writer or null. If this argument is
 	 * null and error reports occurs then SRuntimeException is thrown.
 	 * @return Map with processed data.
@@ -1051,7 +1051,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 
 	@Override
 	/** Parse and process INI/Properties data and return processed object.
-	 * @param data URL pointing to JSON data.
+	 * @param data URL pointing to INI/Properties data.
 	 * @param reporter report writer or null. If this argument is
 	 * null and error reports occurs then SRuntimeException is thrown.
 	 * @return Map with processed data.
@@ -1064,7 +1064,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 
 	@Override
 	/** Parse and process INI/Properties data and return processed object.
-	 * @param data InputStream with JSON data.
+	 * @param data InputStream with INI/Properties data.
 	 * @param reporter report writer or null. If this argument is
 	 * null and error reports occurs then SRuntimeException is thrown.
 	 * @return Map with processed data.
@@ -1077,7 +1077,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 
 	@Override
 	/** Parse source INI/Properties and return XComponent as result.
-	 * @param json string with pathname of JSON file or JSON source data.
+	 * @param ini string with pathname of JSON file or JSON source data.
 	 * @param xClass XCompomnent class (if null, then XComponent class
 	 * is searched in XDPool).
 	 * @param reporter report writer or null. If this argument is
@@ -1085,15 +1085,16 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 * @return XComponent with parsed data.
 	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
-	public final XComponent iparseXComponent(final Object json,
+	public final XComponent iparseXComponent(final Object ini,
 		final Class<?> xClass,
 		final ReportWriter reporter) throws SRuntimeException {
-		throw new UnsupportedOperationException();
+		return iparseXComponent(ini, xClass, null, reporter);
 	}
 
 	@Override
 	/** Parse source INI/Properties and return XComponent as result.
-	 * @param json string with pathname of JSON file or JSON source data.
+	 * @param ini string with pathname of INI/Properties file
+	 * or INI/Properties source data.
 	 * @param xClass XCompomnent class (if null, then XComponent class
 	 * is searched in XDPool).
 	 * @param sourceId name of source or null.
@@ -1102,11 +1103,53 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 * @return XComponent with parsed data.
 	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
-	public final XComponent iparseXComponent(final Object json,
+
+	public final XComponent iparseXComponent(final Object ini,
 		final Class<?> xClass,
 		final String sourceId,
 		final ReportWriter reporter) throws SRuntimeException {
-		throw new UnsupportedOperationException();
+		Class<?> yClass  = xClass;
+		if (ini == null || ini instanceof Map) {
+			@SuppressWarnings("unchecked")
+			Map<String, Object> map = (Map<String, Object>) ini;
+			if (yClass == null) {
+				for (String s: getXDPool().getXComponents().keySet()) {
+					String className = getXDPool().getXComponents().get(s);
+					try {
+						yClass = Class.forName(className);
+						String jmodel = (String) yClass.getDeclaredField(
+							"XD_NAME").get(null);
+						byte jVersion =
+							(Byte) yClass.getDeclaredField("JSON").get(null);
+						if (jVersion > 0) {
+							XElement xe = selectRoot(jmodel,
+								XDConstants.JSON_NS_URI_W3C, -1);
+							if (xe != null && xe._json != 0) {
+								break;
+							}
+						}
+					} catch (Exception ex) {}
+					yClass = null;
+				}
+			}
+			return parseXComponent(iniToXml(map), yClass, reporter);
+		} else if (ini instanceof String) {
+			return iparseXComponent(XonUtil.parseINI((String) ini),
+				yClass, reporter);
+		} else if (ini instanceof File) {
+			return iparseXComponent(
+				XonUtil.parseINI((File) ini),yClass,reporter);
+		} else if (ini instanceof URL) {
+			return iparseXComponent(
+				XonUtil.parseINI((URL) ini), yClass,reporter);
+		} else if (ini instanceof InputStream) {
+			return iparseXComponent((InputStream)ini,yClass,sourceId,reporter);
+		} else if (ini instanceof Node) {
+			Element e = (ini instanceof Document)
+				? ((Document) ini).getDocumentElement() : (Element) ini;
+			return iparseXComponent(XonUtil.xmlToJson(e),yClass,reporter);
+		}
+		throw new SRuntimeException(XDEF.XDEF318); //Incorrect JSON data
 	}
 
 	@Override
