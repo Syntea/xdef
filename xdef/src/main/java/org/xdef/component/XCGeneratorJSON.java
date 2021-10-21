@@ -51,7 +51,7 @@ class XCGeneratorJSON extends XCGeneratorBase1 {
 		XMData xdata = (XMData) xel.getChildNodeModels()[0];
 		String typeName = getJavaObjectTypeName(xdata);
 		String descr = "text node from element";
-		int max = isRoot ? 1 : xel.maxOccurs(); // root is alweays 1
+		int max = isRoot ? 1 : xel.maxOccurs(); // root is always 1
 		genDirectGetter(xel,
 			typeName, name, iName, isRoot, max, descr, getters, sbi);
 		genDirectSetter(typeName, name, iName, isRoot, max, descr, setters,sbi);
