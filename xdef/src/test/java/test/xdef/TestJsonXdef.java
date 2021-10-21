@@ -13,6 +13,7 @@ import org.xdef.component.XComponent;
 import org.xdef.xon.XonUtil;
 import org.xdef.msg.SYS;
 import org.xdef.sys.ArrayReporter;
+import org.xdef.sys.SDatetime;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
@@ -751,6 +752,37 @@ public class TestJsonXdef extends XDTester {
 			j = null;
 			assertTrue(XonUtil.xonEqual(j,
 				jparse(xp, "", (Object) j, reporter)));
+		} catch (Exception ex) {fail(ex);}
+		try {
+			xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' name='TestINI' root='a'>\n"+
+" <xd:ini name='a'>\n"+
+"   A=?string()\n" +
+"   B=int()\n" +
+"   C=date()\n" +
+"   D=decimal()\n" +
+"   [E; $script=?]\n" +
+"     x = ?int()\n" +
+"   [F]\n" +
+" </xd:ini>\n"+
+" <xd:component>\n" +
+"  %class test.common.json.component.TestINI %link TestINI#a" + ";\n" +
+" </xd:component>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			String ini = "A=a\n B=1\n C=2121-10-19\n D=2.34\n[E]\nx=123\n[F]";
+			xd = xp.createXDDocument("TestINI");
+			String xdir = _tempDir + "x/";
+			File fdir = new File(xdir);
+			fdir.mkdirs();
+			genXComponent(xp, fdir);
+			XComponent xc = xd.iparseXComponent(ini, null, reporter);
+			assertEq("a",SUtils.getValueFromGetter(xc,"get$A"));
+			assertEq(1,SUtils.getValueFromGetter(xc,"get$B"));
+			assertEq(new SDatetime("2121-10-19"),
+				SUtils.getValueFromGetter(xc,"get$C"));
+			assertEq(0, new BigDecimal("2.34").compareTo(
+					(BigDecimal) SUtils.getValueFromGetter(xc,"get$D")));
 		} catch (Exception ex) {fail(ex);}
 	}
 

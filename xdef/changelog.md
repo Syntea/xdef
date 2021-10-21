@@ -1,12 +1,18 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 40.1.8, release-date 2021-10-20
+# Version 40.1.8, release-date 2021-10-21
 * BNF grammar is extended and has now possibility of "all" selection
 * In the `org.xdef.XDConstants` was the item `BUILD_DATE` replaced
   with `BUILD_DATETIME`.
 * In the `org.xdef.XDConstants` was removed the item 'JAVA_VERSION'.
+*******************************************************************
+* preliminary implementation of X-definition version 4.1:
+* utilities for processing JSON, XON, INI and Properties data are now
+  in the package 'org.xdef.json'
 * added the new reader `org.xdef.json.IniReader` for `.ini`
   and `.properties` files.
+* implemented description of JSON/XON models in the element "xd:json"
+* implemented description of INI/Properties models in the element "xd:ini"
 
 # Version 40.1.7, release-date 2021-08-13
 * fixed bug in type declaration with a boolean expression.

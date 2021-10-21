@@ -80,6 +80,10 @@
               name = "required QName; options acceptQualifiedAttr" >
               required xon;
           </XD4.0:json>
+          <XD4.0:ini xd:script = "occurs *;"
+              name = "required QName; options acceptQualifiedAttr" >
+              required iniprops;
+          </XD4.0:ini>
           <XD4.0:any xd:script = "occurs *;
                             match @XD4.0:name; ref XD4.0:anyDef;
                             options moreAttributes, moreElements"
