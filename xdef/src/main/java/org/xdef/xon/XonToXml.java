@@ -739,8 +739,8 @@ class XonToXml extends XonTools implements XonNames {
 	 */
 	final static Element toXmlXD(final Object o) {
 		XonToXml x = new XonToXml();
-		x._jsPrefix = XDConstants.JSON_NS_PREFIX;
-		x._jsNamespace = XDConstants.JSON_NS_URI_XD;
+		x._jsPrefix = XDConstants.XON_NS_PREFIX;
+		x._jsNamespace = XDConstants.XON_NS_URI_XD;
 		x._doc = KXmlUtils.newDocument();
 		x._ns = new KNamespace();
 		if (o instanceof Map) {
@@ -834,7 +834,7 @@ class XonToXml extends XonTools implements XonNames {
 	 */
 	final static Element toXmlW3C(final Object json) {
 		XonToXml x = new XonToXml();
-		x._jsNamespace = XDConstants.JSON_NS_URI_W3C;
+		x._jsNamespace = XDConstants.XON_NS_URI_W;
 		x._jsPrefix = "";
 		return x.genValueW3C(json, x._doc = KXmlUtils.newDocument());
 	}

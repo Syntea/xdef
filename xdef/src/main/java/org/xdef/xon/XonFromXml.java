@@ -81,7 +81,7 @@ class XonFromXml extends XonUtil implements XonNames {
 			Node n = nnm.item(i);
 			name = n.getNodeName();
 			if (!(xmlnsName.equals(name = n.getNodeName())
-				&& XDConstants.JSON_NS_URI_XD.equals(el.getNamespaceURI()))) {
+				&& XDConstants.XON_NS_URI_XD.equals(el.getNamespaceURI()))) {
 				String attName = XonTools.xmlToJName(name);
 				Object val = XonTools.xmlToJValue(n.getNodeValue());
 				result.put(attName, val);
@@ -91,8 +91,8 @@ class XonFromXml extends XonUtil implements XonNames {
 	}
 
 	/** Create JSON object (array, map, or primitive value).
-	 * @param elem element from XDConstants.JSON_NS_URI_XD name space with
-	 * JSON array, map, or primitive value
+	 * @param elem element from XDConstants.XON_NS_URI_XD name space with
+ JSON array, map, or primitive value
 	 * @return JSON array, map, or primitive value.
 	 */
 	private Object fromXmlW3C(final Element elem) {
@@ -122,7 +122,7 @@ class XonFromXml extends XonUtil implements XonNames {
 ////////////////////////////////////////////////////////////////////////////////
 
 	/** Create JSON array from array element.
-	 * @param elem array element from XDConstants.JSON_NS_URI_XD name space.
+	 * @param elem array element from XDConstants.XON_NS_URI_XD name space.
 	 * @return created JSON array.
 	 */
 	private List<Object> createArrayW3C(final Element elem) {
@@ -138,7 +138,7 @@ class XonFromXml extends XonUtil implements XonNames {
 	}
 
 	/** Create JSON object (map) from map element.
-	 * @param elem map element from XDConstants.JSON_NS_URI_XD name space.
+	 * @param elem map element from XDConstants.XON_NS_URI_XD name space.
 	 * @return created JSON object (map).
 	 */
 	private Map<String, Object> createMapW3C(final Element elem) {
@@ -191,7 +191,7 @@ class XonFromXml extends XonUtil implements XonNames {
 		List<Object> array = new ArrayList<Object>();
 		String nsURI = elem.getNamespaceURI(); // nasmespace URI of element
 		String localName = nsURI==null ? elem.getNodeName():elem.getLocalName();
-		if (XDConstants.JSON_NS_URI_XD.equals(nsURI)) {
+		if (XDConstants.XON_NS_URI_XD.equals(nsURI)) {
 			if (X_ITEM.equals(localName)) {
 				if (elem.hasAttribute(X_VALUEATTR)) {
 					return XonTools.xmlToJValue(
@@ -381,7 +381,7 @@ class XonFromXml extends XonUtil implements XonNames {
 		Element elem = node.getNodeType() == Node.DOCUMENT_NODE
 			? ((Document) node).getDocumentElement() : (Element) node;
 		XonFromXml x = new XonFromXml();
-		if (XDConstants.JSON_NS_URI_W3C.equals(elem.getNamespaceURI())) {
+		if (XDConstants.XON_NS_URI_W.equals(elem.getNamespaceURI())) {
 			return x.fromXmlW3C(elem); // W3C form
 		}
 		return x.fromXmlXD(elem);

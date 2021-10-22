@@ -328,7 +328,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	 */
 	public final void setJSONContext(final String data)
 		throws SRuntimeException {
-		setJSONContext(XonUtil.parse(data));
+		setJSONContext(XonUtil.parseJSON(data));
 	}
 
 	@Override
@@ -346,11 +346,11 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 			|| data instanceof Boolean) {
 			e = XonUtil.jsonToXml(data);
 		} else if (data instanceof File) {
-			e = XonUtil.jsonToXml(XonUtil.parse((File) data));
+			e = XonUtil.jsonToXml(XonUtil.parseJSON((File) data));
 		} else if (data instanceof URL) {
 			e = XonUtil.jsonToXml(XonUtil.parse((URL) data));
 		} else if (data instanceof InputStream) {
-			e = XonUtil.jsonToXml(XonUtil.parse((InputStream) data));
+			e = XonUtil.jsonToXml(XonUtil.parseJSON((InputStream) data));
 		} else if (data instanceof Document) {
 			e = ((Document) data).getDocumentElement();
 		} else if (data instanceof Element){

@@ -292,7 +292,9 @@ public class CompileJsonXdef extends StringParser {
 		final String name,
 		final SPosition spos) {
 		return genPElement(parent,
-			XDConstants.JSON_NS_URI_W3C, "js:" + name, spos);
+			XDConstants.XON_NS_URI_W,
+			XDConstants.XON_NS_PREFIX + ":" + name,
+			spos);
 	}
 
 	/** Create PNode as XDef element with given position,
@@ -443,7 +445,7 @@ public class CompileJsonXdef extends StringParser {
 				// the min occurrence differs from max occurrence
 				// and it has the attribute with a value description
 				if (XonNames.X_ITEM.equals(ee._localName)
-					&& XDConstants.JSON_NS_URI_W3C.equals(ee._nsURI)
+					&& XDConstants.XON_NS_URI_W.equals(ee._nsURI)
 					&& (val = getAttr(ee, XonNames.X_VALUEATTR)) != null) {
 					PAttr script = getXDAttr(ee, "script");
 					XOccurrence occ = null;
@@ -518,7 +520,7 @@ public class CompileJsonXdef extends StringParser {
 	 */
 	private PNode genJsonModel(final Object json, final PNode parent) {
 		// set fields _jsprefix and _jsNamespace
-		String s = XDConstants.JSON_NS_PREFIX; // default namespace prefix
+		String s = XDConstants.XON_NS_PREFIX; // default namespace prefix
 		for (int i = 1; ;i++) {
 			Integer x;
 			if ((x = parent._nsPrefixes.get(s)) == null) {
@@ -527,7 +529,7 @@ public class CompileJsonXdef extends StringParser {
 			} else if (x.equals(XPreCompiler.NS_JSON_INDEX)) {
 				break; // prefix is already set
 			} else { // the prefix is already used
-				s = XDConstants.JSON_NS_PREFIX + i; // change prefix
+				s = XDConstants.XON_NS_PREFIX + i; // change prefix
 			}
 		}
 		PNode e;

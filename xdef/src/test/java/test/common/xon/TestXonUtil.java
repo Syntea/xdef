@@ -29,9 +29,9 @@ public class TestXonUtil extends STester {
 		Object o1, o2;
 		Element el;
 		try {
-			// test toJsonString and parse JSON
-			o1 = XonUtil.parse(f);
-			o2 = XonUtil.parse(XonUtil.toJsonString(o1, true));
+			// test toJsonString and parseJSON JSON
+			o1 = XonUtil.parseJSON(f);
+			o2 = XonUtil.parseJSON(XonUtil.toJsonString(o1, true));
 			if (!XonUtil.xonEqual(o1, o2)) {
 				return "JSON toString error " + f.getName();
 			}
@@ -113,7 +113,7 @@ public class TestXonUtil extends STester {
 			+ File.separator).replace('\\', '/') + "TestErr*.json");
 		for (File json: _files) { // test JSON erros
 			try {
-				XonUtil.parse(json);
+				XonUtil.parseJSON(json);
 				fail(json.getName());
 			} catch (Exception ex) {}
 		}

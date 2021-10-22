@@ -29,7 +29,7 @@ public class MyTest extends XDTester {
 	public static void c() {}
 
 	private static String testj(String xml, String json) {
-		Object j = XonUtil.parse(json);
+		Object j = XonUtil.parseJSON(json);
 		Element el = XonUtil.jsonToXmlXD(j);
 		if (KXmlUtils.compareElements(xml, el, true, null).errorWarnings()) {
 			return "xml != el"+
@@ -199,7 +199,7 @@ if(true)return;
 
 			xd = xp.createXDDocument("");
 			s = "123";
-			j = XonUtil.parse(s);
+			j = XonUtil.parseJSON(s);
 			assertTrue(XonUtil.xonEqual(j, xd.jparse(s, reporter)));
 			xc = xd.jparseXComponent(s,
 				Class.forName("bugreports.MyTestY"), reporter);
@@ -208,7 +208,7 @@ if(true)return;
 
 			xd = xp.createXDDocument("");
 			s = "{\"a\": 123}";
-			j = XonUtil.parse(s);
+			j = XonUtil.parseJSON(s);
 			assertTrue(XonUtil.xonEqual(j, xd.jparse(s, reporter)));
 			xc = xd.jparseXComponent(s,
 				Class.forName("bugreports.MyTestY1"), reporter);
@@ -217,7 +217,7 @@ if(true)return;
 
 			xd = xp.createXDDocument("");
 			s = "[123, 123]";
-			j = XonUtil.parse(s);
+			j = XonUtil.parseJSON(s);
 			assertTrue(XonUtil.xonEqual(j, xd.jparse(s, reporter)));
 			xc = xd.jparseXComponent(s,
 				Class.forName("bugreports.MyTestY2"), reporter);
@@ -225,7 +225,7 @@ if(true)return;
 				XonUtil.toJsonString(toJson(xc), true));
 			xd = xp.createXDDocument("");
 			s = "[123, 123, -1.23e3]";
-			j = XonUtil.parse(s);
+			j = XonUtil.parseJSON(s);
 			assertTrue(XonUtil.xonEqual(j, xd.jparse(s, reporter)));
 				xc = xd.jparseXComponent(s,
 				Class.forName("bugreports.MyTestY2"), reporter);
@@ -233,7 +233,7 @@ if(true)return;
 				XonUtil.toJsonString(toJson(xc), true));
 			xd = xp.createXDDocument("");
 			s = "[123, 123, -1.23e3, \"abc\"]";
-			j = XonUtil.parse(s);
+			j = XonUtil.parseJSON(s);
 			assertTrue(XonUtil.xonEqual(j, xd.jparse(s, reporter)));
 			xc = xd.jparseXComponent(s,
 				Class.forName("bugreports.MyTestY2"), reporter);

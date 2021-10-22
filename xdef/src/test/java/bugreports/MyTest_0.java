@@ -236,7 +236,7 @@ public class MyTest_0 extends XDTester {
 //"</xd:def>";
 //			xml = "<root a='123'/>";
 //			xp = compile(xdef);
-//			assertEq(xml, parse(xp, "Example", xml, reporter));
+//			assertEq(xml, parseJSON(xp, "Example", xml, reporter));
 //			assertNoErrors(reporter);
 //double d = Double.NaN;
 //System.out.println(d);
@@ -506,7 +506,7 @@ if(T){return;}
 "  <a a='? t()'/>\n"+
 "  <xd:declaration>\n"+
 "     type t enum(%argument=['a','b']);\n"+
-//"     boolean t() {return enum(%argument=['a','b']).parse().matches();};\n"+
+//"     boolean t() {return enum(%argument=['a','b']).parseJSON().matches();};\n"+
 "  </xd:declaration>\n"+
 "</xd:def>";
 			xp = compile(xdef);
@@ -858,7 +858,7 @@ if(T){return;}
 			xd = xp.createXDDocument("Test1");
 			s = "{\"A\":1234}";
 			assertTrue(XonUtil.xonEqual(xd.jparse(s, reporter),
-				XonUtil.parse(s)));
+				XonUtil.parseJSON(s)));
 			assertNoErrors(reporter);
 			reporter.clear();
 			s = "{\"A\":\"abc\"}";

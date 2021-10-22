@@ -130,16 +130,15 @@ public interface XDConstants {
 		"http://www.xdef.org/xdef/instance";
 
 ////////////////////////////////////////////////////////////////////////////////
-// JSON
+// JSON/XON/INI
 ////////////////////////////////////////////////////////////////////////////////
 
-	/** Recommended namespace prefix used for JSON/XML conversion nodes. */
-	public static final String JSON_NS_PREFIX = "js";
-	/** URI of JSON/XML X-definition conversion. */
-	public static final String JSON_NS_URI_XD = "http://www.xdef.org/json/4.0";
-	/** URI of JSON/XML W3C conversion (https://www.w3.org/TR/xslt-30/#json). */
-	public static final String JSON_NS_URI_W3C =
-		"http://www.w3.org/2005/xpath-functions";
+	/** Recommended namespace prefix used for XON/JSON/INI XML format. */
+	public static final String XON_NS_PREFIX = "XN";
+	/** URI of XON/JSON/INI XML X-definition conversion. */
+	public static final String XON_NS_URI_XD = "http://www.xdef.org/xon/4.0";
+	/** URI of XON/JSON/INI XML W3C like conversion*/
+	public static final String XON_NS_URI_W="http://www.xdef.org/xon/4.0/w";
 
 ////////////////////////////////////////////////////////////////////////////////
 // Platform dependent constants.

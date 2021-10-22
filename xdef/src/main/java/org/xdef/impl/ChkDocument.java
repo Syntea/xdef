@@ -947,8 +947,8 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 
 	@SuppressWarnings("unchecked")
 	private static Element iniToXml(Object ini) {
-		Document doc = KXmlUtils.newDocument(XDConstants.JSON_NS_URI_W3C,
-			"js:"+XonNames.X_MAP, null);
+		Document doc = KXmlUtils.newDocument(XDConstants.XON_NS_URI_W,
+			XDConstants.XON_NS_PREFIX+ ":"+XonNames.X_MAP, null);
 		Element el = doc.getDocumentElement();
 		iniToXml((Map<String,Object>) ini, el);
 		return el;
@@ -961,7 +961,8 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			Object o = x.getValue();
 			if (!(o instanceof Map)) {
 				Element item = el.getOwnerDocument().createElementNS(
-					XDConstants.JSON_NS_URI_W3C, "js:" + XonNames.X_ITEM);
+					XDConstants.XON_NS_URI_W,
+					XDConstants.XON_NS_PREFIX + ":" + XonNames.X_ITEM);
 				item.setAttribute(XonNames.X_KEYATTR, name);
 				item.setAttribute(XonNames.X_VALUEATTR, o.toString());
 				el.appendChild(item);
@@ -972,7 +973,8 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			Object o = x.getValue();
 			if (o instanceof Map) {
 				Element item = el.getOwnerDocument().createElementNS(
-					XDConstants.JSON_NS_URI_W3C, "js:" + XonNames.X_MAP);
+					XDConstants.XON_NS_URI_W, 
+					XDConstants.XON_NS_PREFIX + ":" + XonNames.X_MAP);
 				item.setAttribute(XonNames.X_KEYATTR, name);
 				iniToXml((Map<String, Object>) o, item);
 				el.appendChild(item);
@@ -1123,7 +1125,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 							(Byte) yClass.getDeclaredField("JSON").get(null);
 						if (jVersion > 0) {
 							XElement xe = selectRoot(jmodel,
-								XDConstants.JSON_NS_URI_W3C, -1);
+								XDConstants.XON_NS_URI_W, -1);
 							if (xe != null && xe._json != 0) {
 								break;
 							}
@@ -1301,7 +1303,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 							(Byte) yClass.getDeclaredField("JSON").get(null);
 						if (jVersion > 0) {
 							XElement xe = selectRoot(jmodel,
-								XDConstants.JSON_NS_URI_W3C, -1);
+								XDConstants.XON_NS_URI_W, -1);
 							if (xe != null && xe._json != 0) {
 								break;
 							}
@@ -1321,10 +1323,10 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			}
 			return parseXComponent(e, yClass, reporter);
 		} else if (json instanceof String) {
-			return jparseXComponent(XonUtil.parse((String) json),
+			return jparseXComponent(XonUtil.parseJSON((String) json),
 				yClass, reporter);
 		} else if (json instanceof File) {
-			return jparseXComponent(XonUtil.parse((File) json),yClass,reporter);
+			return jparseXComponent(XonUtil.parseJSON((File) json),yClass,reporter);
 		} else if (json instanceof URL) {
 			return jparseXComponent(XonUtil.parse((URL) json), yClass,reporter);
 		} else if (json instanceof InputStream) {

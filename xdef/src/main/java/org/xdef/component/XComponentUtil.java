@@ -385,7 +385,7 @@ public class XComponentUtil {
 		Map<String, Object> result = new LinkedHashMap<String, Object>();
 		Method[] methods = cls.getDeclaredMethods();
 		for (Method x: methods) {
-			if (x.getName().startsWith("getjs$")
+			if (x.getName().startsWith("get" + XDConstants.XON_NS_PREFIX + "$")
 				&& x.getParameterTypes().length == 0) {
 				x.setAccessible(true);
 				Object o = null;
@@ -421,7 +421,7 @@ public class XComponentUtil {
 	public final static Object toXon(final XComponent xc) {
 		String ns = xc.xGetNamespaceURI();
 		String name = xc.xGetNodeName();
-		if (XDConstants.JSON_NS_URI_W3C.equals(ns)) {
+		if (XDConstants.XON_NS_URI_W.equals(ns)) {
 			if (XonNames.X_MAP.equals(name)) {
 				return toXonMap(xc);
 			} else if (XonNames.X_ARRAY.equals(name)) {
