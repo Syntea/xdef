@@ -109,7 +109,7 @@ public class XPreCompiler implements PreCompiler {
 		_codeGenerator._namespaceURIs.add(XDConstants.XINCLUDE_NS_URI);
 		_codeGenerator._namespaceURIs.add( // XML schema
 			XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI);
-		_codeGenerator._namespaceURIs.add(XDConstants.JSON_NS_URI_W3C); //JSON
+		_codeGenerator._namespaceURIs.add(XDConstants.XON_NS_URI_W); //JSON
 		_macrosProcessed = false;
 		_reporter = reporter == null ? new ArrayReporter() : reporter;
 		_xmlReader = new PreReaderXML(this);

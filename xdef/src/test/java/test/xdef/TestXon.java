@@ -230,7 +230,7 @@ public class TestXon extends XDTester {
 "# End of XON example";
 			x = XonUtil.parseXON(xon);
 			s = XonUtil.toJsonString(x, true);
-			XonUtil.parse(s);
+			XonUtil.parseJSON(s);
 			s = XonUtil.toXonString(x, true);
 			y = XonUtil.parseXON(s);
 			assertTrue(XonUtil.xonEqual(x,y));

@@ -106,7 +106,7 @@ public class XonSourceParser implements XonParser, XParser {
 	 * when parser reaches the end of the attribute list.
 	 */
 	private void elementStart(final SBuffer elemName) {
-		Element e = _doc.createElementNS(XDConstants.JSON_NS_URI_W3C,
+		Element e = _doc.createElementNS(XDConstants.XON_NS_URI_W,
 			elemName.getString());
 		String name = null;
 		if (_name != null) {
@@ -121,7 +121,7 @@ public class XonSourceParser implements XonParser, XParser {
 		if (++_level == 0) {
 			_el = e;
 			_el.setAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
-				"xmlns", XDConstants.JSON_NS_URI_W3C);
+				"xmlns", XDConstants.XON_NS_URI_W);
 			QName qName = e.getNamespaceURI()==null ? new QName(e.getTagName())
 				: new QName(e.getNamespaceURI(), e.getLocalName());
 			_chkDoc._xElement = _chkDoc.findXElement(qName);

@@ -304,10 +304,10 @@ final class ChkXONParser implements XParser, XonParser {
 
 	private KParsedElement genKElem(final String qname, final SPosition spos) {
 		KParsedElement kelem = new KParsedElement();
-		kelem.setParsedNameParams(XDConstants.JSON_NS_URI_W3C, qname, spos);
+		kelem.setParsedNameParams(XDConstants.XON_NS_URI_W, qname, spos);
 		if (!_nsGenerated) {
 			kelem.addAttr(new KParsedAttr(XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
-				"xmlns", XDConstants.JSON_NS_URI_W3C, spos));
+				"xmlns", XDConstants.XON_NS_URI_W, spos));
 			_nsGenerated = true;
 		}
 		return kelem;
