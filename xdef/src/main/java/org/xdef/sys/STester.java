@@ -1,6 +1,5 @@
 package org.xdef.sys;
 
-import java.io.CharArrayWriter;
 import java.io.PrintStream;
 import java.text.DecimalFormat;
 import java.io.File;
@@ -279,12 +278,8 @@ public abstract class STester {
 	 * @param ex Exception to be printed.
 	 */
 	public final void putErrInfo(final Throwable ex) {
-		java.io.CharArrayWriter caw = new java.io.CharArrayWriter();
-		java.io.PrintWriter pw = new java.io.PrintWriter(caw);
-		ex.printStackTrace(pw);
-		pw.close();
-		String s = caw.toString();
 		putErrInfo(ex.toString());
+		String s = printThrowable(ex);
 		int i = s.indexOf("\n\tat ");
 		flushOut();
 		printErr(s.substring(i+1));
@@ -301,11 +296,7 @@ public abstract class STester {
 		// in Java 1.6 is not avalable the method Throwable.getStackTrace()
 		// so we grab the information from printStackTrace and we create
 		// the info string from it.
-		CharArrayWriter caw = new CharArrayWriter();
-		PrintWriter pw = new PrintWriter(caw);
-		new Throwable("").printStackTrace(pw);
-		pw.close();
-		String s = caw.toString();
+		String s = printThrowable(new Throwable(""));
 		int i = s.indexOf(_className + ".");
 		i = s.indexOf('\n', i);
 		if (i >= 0) {
@@ -1094,10 +1085,8 @@ public abstract class STester {
 	 * @return string with printable representation of Throwable.
 	 */
 	public final static String printThrowable(final Throwable exception) {
-		java.io.CharArrayWriter chw = new java.io.CharArrayWriter();
-		java.io.PrintWriter pw = new java.io.PrintWriter(chw);
-		exception.printStackTrace(pw);
-		pw.close();
-		return chw.toString();
+		StringWriter swr = new StringWriter();
+		exception.printStackTrace(new PrintWriter(swr));
+		return swr.toString();
 	}
 }

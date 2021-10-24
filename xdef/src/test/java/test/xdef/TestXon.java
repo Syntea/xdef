@@ -1,8 +1,6 @@
 package test.xdef;
 
 import java.io.File;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.List;
 import java.util.Map;
 import org.w3c.dom.Element;
@@ -42,7 +40,7 @@ public class TestXon extends XDTester {
 "</xd:def>";
 			xp = XDFactory.compileXD(null, xdef);
 			x = XonUtil.parseXON(xon);
-			el = XonUtil.jsonToXml(x);
+			el = XonUtil.xonToXml(x);
 			xd = xp.createXDDocument();
 			y = xd.jvalidate(el, reporter);
 			if (reporter.errorWarnings()) {
@@ -74,16 +72,11 @@ public class TestXon extends XDTester {
 				return "5\n" + xon + "\n" +  XonUtil.toXonString(y);
 			}
 			return null;
-		} catch (Exception ex) {
-			StringWriter swr = new StringWriter();
-			ex.printStackTrace(new PrintWriter(swr));
-			return swr.toString();
-		}
+		} catch (Exception ex) {return printThrowable(ex);}
 	}
 
 	@Override
 	public void test() {
-/*xx*/
 		assertNull(testx("int", "[ ]"));
 		assertNull(testx("byte", "[ 1 ]"));
 		assertNull(testx("short", "[ 1 ]"));
@@ -104,8 +97,6 @@ public class TestXon extends XDTester {
 		assertNull(testx("anyURI", "[ u\"http://a.b\" ]"));
 		assertNull(testx("emailAddr","[ e\"tro@volny.cz\",e\"a b<x@y.zz>\" ]"));
 		assertNull(testx("file", "[ \"temp/a.txt\" ]"));
-//if (true) return;
-/*xx*/
 		String s, json, xon, xdef;
 		Object x, y;
 		XDPool xp;

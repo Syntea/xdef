@@ -30,7 +30,7 @@ public class MyTest extends XDTester {
 
 	private static String testj(String xml, String json) {
 		Object j = XonUtil.parseJSON(json);
-		Element el = XonUtil.jsonToXmlXD(j);
+		Element el = XonUtil.xonToXmlXD(j);
 		if (KXmlUtils.compareElements(xml, el, true, null).errorWarnings()) {
 			return "xml != el"+
 				"\njson: "+json+
@@ -253,9 +253,9 @@ if(true)return;
 			xml = "<a ax='1'><b bx='2'>xxx</b></a>";
 			el = KXmlUtils.parseXml(xml).getDocumentElement();
 			j = XonUtil.xmlToJson(el);
-//			assertEq(xml, XonUtil.jsonToXmlXD(j));
+//			assertEq(xml, XonUtil.xonToXmlXD(j));
 //			System.out.println(XonUtil.toJsonString(j));
-//			assertEq(el, XonUtil.jsonToXmlXD(j));
+//			assertEq(el, XonUtil.xonToXmlXD(j));
 			assertEq("", testj("<a/>", "{\"a\": {} }"));
 			assertEq("", testj("<a>aaa</a>", "{\"a\":[{},\"aaa\"]}"));
 //			assertEq("", testj("<a>aaa</a>", "{\"a\": \"aaa\" }"));
