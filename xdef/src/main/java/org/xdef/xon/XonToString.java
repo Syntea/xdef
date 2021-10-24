@@ -62,7 +62,8 @@ class XonToString extends XonTools {
 			result = x.toString();
 			if (x instanceof Number) {
 				if (x instanceof BigDecimal) {
-					return result + 'd';
+					return result.charAt(0) == '-'
+						? "-0d" + result.substring(1) : ("0d" + result);
 				} else if (x instanceof Float) {
 					if (((Float) x).isInfinite()) {
 						return result.charAt(0) == '-' ? "-INFF" : "INFF";
@@ -82,7 +83,8 @@ class XonToString extends XonTools {
 				} else if (x instanceof Long) {
 					return result;
 				} else if (x instanceof BigInteger) {
-					return result + 'N';
+					return result.charAt(0) == '-'
+						? "-0i" + result.substring(1) : ("0i" + result);
 				}
 				return result;
 			} else if (x instanceof Character) {
