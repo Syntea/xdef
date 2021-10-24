@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 40.1.8, release-date 2021-10-22
+# Version 40.1.8, release-date 2021-10-24
 * fixed bug if an external method throws an exception.
 * BNF grammar is extended and has now possibility of "all" selection
 * In the `org.xdef.XDConstants` was the item `BUILD_DATE` replaced
