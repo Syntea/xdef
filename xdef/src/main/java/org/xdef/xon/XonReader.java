@@ -78,6 +78,7 @@ public class XonReader extends StringParser implements XonParsers {
 		_jp = jp;
 	}
 
+	@Override
 	/** Set mode that JSON is parsed in X-definition compiler. */
 	public final void setXdefMode() {_xonMode = _acceptComments = _jdef = true;}
 
@@ -404,8 +405,7 @@ public class XonReader extends StringParser implements XonParsers {
 			Object result = null;
 			char ch;
 			if (_xonMode&&(i=isOneOfTokens(new String[]{"c\"","u\"","e\"","b(",
-				"D","p(","g(","P","-P","NaN","INF","-INF","0d","-0d","0i","-0i"
-				})) >= 0) {
+				"D","p(","g(","P","-P","NaN","INF","-INF"})) >= 0) {
 				switch(i) {
 					case 0: // character
 						i = XonTools.readJChar(this);
@@ -523,28 +523,6 @@ public class XonReader extends StringParser implements XonParsers {
 					return returnValue(spos, i == 0 ? Double.NaN
 						: i == 1 ? Double.POSITIVE_INFINITY
 							: Double.NEGATIVE_INFINITY);
-					case 12:  // "0d"number
-					case 13:  // "-0d"number
-						String s = i==13 ? "-" : "";
-						i = getIndex();
-						if (isFloat() || isInteger()) {
-							s += getBufferPart(i, getIndex());
-							BigDecimal d = new BigDecimal(s);
-							if (s.indexOf('e') > 0 || s.indexOf('E') > 0) {
-								// value without exponent specification
-								d = new BigDecimal(d.toPlainString());
-							}
-							return returnValue(spos, d);
-						}
-						break;
-					case 14:  // "0d"number
-					case 15:  // "-0d"number
-						s = i==15 ? "-" : "";
-						i = getIndex();
-						if (isInteger()) {
-							return returnValue(spos, new BigInteger(
-								s + getBufferPart(i, getIndex())));
-						}
 				}
 				setIndex(pos);
 				//JSON simpleValue expected
@@ -585,42 +563,50 @@ public class XonReader extends StringParser implements XonParsers {
 					return returnValue(spos,0);
 				}
 				if (_xonMode) {
-					try {
-						switch(ch = isOneOfChars("FD")) {
+					if (isfloat) {
+						switch(ch = isOneOfChars("FDd")) {
 							case 'F':
 								return returnValue(spos, Float.parseFloat(s));
 							case 'D':
 								return returnValue(spos, Double.parseDouble(s));
+							case 'd':
+								return returnValue(spos, new BigDecimal(s));
+							default:
+								return returnValue(spos, Double.parseDouble(s));
 						}
-					} catch (Exception ex) {
-						//Illegal number simpleValue &{0}
-						//{ for XON type "}{"}: &{1}
-						error(JSON.JSON023, ch, s);
-					}
-					if (!isfloat) {
-						try {
-							switch(ch = isOneOfChars("LISB")) {
-								case 'L':
-									return returnValue(spos, Long.parseLong(s));
-								case 'I':
-									return returnValue(spos,
-										Integer.parseInt(s));
-								case 'S':
-									return returnValue(spos,
-										Short.parseShort(s));
-								case 'B':
-									return returnValue(spos, Byte.parseByte(s));
+					} else {
+						switch(ch = isOneOfChars("LISBNFd")) {
+							case 'L':
+								return returnValue(spos, Long.parseLong(s));
+							case 'I':
+								return returnValue(spos,
+									Integer.parseInt(s));
+							case 'S':
+								return returnValue(spos,
+									Short.parseShort(s));
+							case 'B':
+								return returnValue(spos, Byte.parseByte(s));
+							case 'N':
+								return returnValue(spos, new BigInteger(s));
+							case 'F':
+								return returnValue(spos, Float.parseFloat(s));
+							case 'D':
+								return returnValue(spos, Double.parseDouble(s));
+							case 'd':
+								return returnValue(spos, new BigDecimal(s));
+							default:
+							try {
+								return returnValue(spos, Long.parseLong(s));
+							} catch (Exception ex) {
+								try {
+									return returnValue(spos, new BigInteger(s));
+								} catch (Exception exx) {}
 							}
-						} catch (Exception ex) {
-							//Illegal number simpleValue &{0}
-							//{ for XON type "}{"}:&{1}
-							error(JSON.JSON023, ch, s);
 						}
 					}
-				}
-				try {
+				} else {
 					if (isfloat) {
-						return returnValue(spos, new BigDecimal(s));
+						return returnValue(spos, Float.parseFloat(s));
 					} else {
 						try {
 							return returnValue(spos, Long.parseLong(s));
@@ -628,11 +614,10 @@ public class XonReader extends StringParser implements XonParsers {
 							return returnValue(spos, new BigInteger(s));
 						}
 					}
-				} catch (Exception ex) {
-					//Illegal number simpleValue &{0}{ for XON type "}{"}:&{1}
-					error(JSON.JSON023, null, s);
-					return returnValue(spos, 0);
 				}
+				//Illegal number simpleValue &{0}{ for XON type "}{"}:&{1}
+				error(JSON.JSON023, null, s);
+				return returnValue(spos, 0);
 			}
 			setIndex(pos); // error
 			//JSON simpleValue expected

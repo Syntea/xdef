@@ -77,15 +77,17 @@ public class TestXon extends XDTester {
 
 	@Override
 	public void test() {
+//		assertNull(testx("decimal", "[ 0d, 1d, -1d, 1.5d, 3.33e-5d ]"));
+//if (true) return;
 		assertNull(testx("int", "[ ]"));
-		assertNull(testx("byte", "[ 1 ]"));
+		assertNull(testx("byte", "[ 1, -3 ]"));
 		assertNull(testx("short", "[ 1 ]"));
 		assertNull(testx("int", "[ 1 ]"));
 		assertNull(testx("long", "[ 1 ]"));
-		assertNull(testx("integer", "[ 0i0, -0i3 ]"));
+		assertNull(testx("integer", "[ 0N, -3N ]"));
 		assertNull(testx("float", "[ 1.0 ]"));
 		assertNull(testx("double", "[ 1.0 ]"));
-		assertNull(testx("decimal", "[ 0d0, 0d1, -0d1, 0d1.5, 0d3.33e-5 ]"));
+//		assertNull(testx("decimal", "[ 0d, 1d, -1d, 1.5d, 3.33e-5d ]"));
 		assertNull(testx("date",
 			"[ D2021-01-12, D1999-01-05+01:01, D1998-12-21Z ]"));
 		assertNull(testx("gYear", "[ D2021+01:00, D1999, D-0012Z ]"));
@@ -109,33 +111,33 @@ public class TestXon extends XDTester {
 "<xd:json name='a'>\n" +
 "[\n" +
 "  {\n" +
-"    a = \"? short()\",\n" +	/* Short */
-"    b = \"? jstring()\",\n" +	/* string */
-"    c = \"? double()\",\n" +		/* Double */
-"    f = \"? boolean()\",\n" +	/* boolean */
-"    g = \"? duration()\",\n" +	/* duration */
+"    a = \"? short()\",\n" +
+"    b = \"? jstring()\",\n" +
+"    c = \"? double()\",\n" +
+"    f = \"? boolean()\",\n" +
+"    g = \"? duration()\",\n" +
 "    h = \"? jnull()\",\n" +	/* null */
-"    i = [],\n" +				/* empty array */
+"    i = [],\n" +
 "    Towns = [\n" +
 "      \"* gps()\"\n" +
 "    ],\n" +
-"    j = \"? char()\",\n" +		/* char 'a' */
-"    k = \"? char()\",\n" +		/* char "'" */
-"    l = \"? char()\",\n" +		/* char "\\"" */
+"    j = \"? char()\",\n" +
+"    k = \"? char()\",\n" +
+"    l = \"? char()\",\n" +
 "    m = \"? char()\",\n" +		/*char '\u0007' */
-"    n = \"? char()\",\n" +		/*char "\\\"" */
-"    o = \"? char()\",\n" +		/*char '\n' */
-"    p = \"? char()\",\n" +		/*char '\\n' */
-"    q = \"? char()\",\n" +		/*char ' ' */
-"    r = \"? char()\",\n" +		/*char not exists */
-"    s = \"? char()\",\n" +		/*char not exists */
-"    t = \"? gYear()\",\n" +	/*gYear*/
-"    u = \"? gYear()\",\n" +	/*gYear*/
-"    v = \"? gYear()\",\n" +	/*gYear*/
-"    w = \"? gYear()\",\n" +	/*gYear*/
-"    x = \"? gYear()\",\n" +	/*gYear*/
-"    y = \"? gYear()\",\n" +	/*gYear*/
-"    z = \"? gYear()\",\n" +	/*gYear*/
+"    n = \"? char()\",\n" +
+"    o = \"? char()\",\n" +
+"    p = \"? char()\",\n" +
+"    q = \"? char()\",\n" +
+"    r = \"? char()\",\n" +
+"    s = \"? char()\",\n" +
+"    t = \"? gYear()\",\n" +
+"    u = \"? gYear()\",\n" +
+"    v = \"? gYear()\",\n" +
+"    w = \"? gYear()\",\n" +
+"    x = \"? gYear()\",\n" +
+"    y = \"? gYear()\",\n" +
+"    z = \"? gYear()\",\n" +
 "    \" name with space \": \"? jstring()\"\n" +
 "  },\n" +
 "  \"float()\",\n" +
@@ -143,11 +145,11 @@ public class TestXon extends XDTester {
 "  \"byte()\",\n" +
 "  \"integer()\",\n" +
 "  \"integer()\",\n" +
-"  \"date()\",\n" +				    /* month d(--1) */
-"  \"gMonth()\",\n" +				/* month d(--1) */
-"  \"gMonth()\",\n" +				/* month d(--1Z) */
-"  \"gMonthDay()\",\n" +			/* --1-2 */
-"  \"gMonthDay()\",\n" +			/* --1-2-01:01 */
+"  \"date()\",\n" +
+"  \"gMonth()\",\n" +
+"  \"gMonth()\",\n" +
+"  \"gMonthDay()\",\n" +
+"  \"gMonthDay()\",\n" +
 "  \"time()\",\n" +
 "  \"time()\",\n" +
 "  \"time()\",\n" +
@@ -172,24 +174,24 @@ public class TestXon extends XDTester {
 "  { #***** Map *****/\n" +
 "    a = 1S,                          # Short\n" +
 "    b = \"ab cd\",                     # String\n" +
-"    c = -123.4e2D,                   # Double\n" +
+"    c = -123.4e2d,                   # Double\n" +
 "    f=true,                          # Boolean\n" +
 "    g = P1Y1M1DT1H1M1.12S,           # Duration\n" +
 "    h = null,                        # null\n" +
 "    i=[],                            # empty array\n" +
 "    Towns = [ # array with GPS locations of towns\n" +
-"      g(48.2, 16.37, 151, Wien),     # GPS\n" +
-"      g(51.52, -0.09, 0, London),    # GPS\n" +
-"      g(50.08, 14.42, 399, \"Praha (centrum)\") # GPS\n" +
+"      g(48.2, 16.37, 151, Wien),\n" +
+"      g(51.52, -0.09, 0, London),\n" +
+"      g(50.08, 14.42, 399, \"Prague old town\")\n" +
 "    ],\n" +
-"    j = c\"a\",                      # Character\n" +
-"    k = c\"'\",                      # Character\n" +
-"    l = c\"\\\"\",                   # Character\n" +
-"    m = c\"\\u0007\",                # Character\n" +
-"    n = c\"\\\\\",                   # Character\n" +
-"    o = c\"\n\",                     # Character\n" +
-"    p = c\"\\n\",                    # Character\n" +
-"    q = c\" \",                      # Character\n" +
+"    j = c\"a\",                        # Character\n" +
+"    k = c\"'\",                        # Character\n" +
+"    l = c\"\\\"\",                     # Character\n" +
+"    m = c\"\\u0007\",                  # Character\n" +
+"    n = c\"\\\\\",                     # Character\n" +
+"    o = c\"\n\",                       # Character\n" +
+"    p = c\"\\n\",                      # Character\n" +
+"    q = c\" \",                        # Character\n" +
 "    t = D0001,                       # year (without zone)\n" +
 "    u = D-0001,                      # year (without zone)\n" +
 "    v = D123456789Z,                 # year zone\n" +
@@ -197,9 +199,9 @@ public class TestXon extends XDTester {
 "    \" name with space \": \"x\\ty\" # name with space is quoted!\n" +
 "  }, /**** end of map ****/\n" +
 "  -3F,                               # Float\n" +
-"  -0d3.1,                            # BigDecimal\n" +
+"  -3.1d,                             # BigDecimal\n" +
 "  -2B,                               # Byte\n" +
-"  0i1,                               # BigInteger\n" +
+"  1N,                                # BigInteger\n" +
 "  999999999999999999999999999999999, /* big integer (authomatic)*/\n" +
 "  D2021-01-11,                       /* date */\n" +
 "  D--11,                             /* month */\n" +
@@ -229,7 +231,7 @@ public class TestXon extends XDTester {
 			List list = (List) ((Map) ((List) x).get(0)).get("Towns");
 			assertEq("Wien",((GPSPosition) list.get(0)).name());
 			assertEq("London",((GPSPosition) list.get(1)).name());
-			assertEq("Praha (centrum)",((GPSPosition) list.get(2)).name());
+			assertEq("Prague old town",((GPSPosition) list.get(2)).name());
 			assertEq(1233, Math.round(((GPSPosition) list.get(0)).distanceTo(
 				((GPSPosition) list.get(1)))/1000));
 			assertEq(252,Math.round(((GPSPosition) list.get(0)).distanceTo(
