@@ -512,6 +512,51 @@ public class XonUtil {
 	public final static Element iniToXml(final Map<String, Object> ini) {
 		return IniReader.iniToXmlW(ini);
 	}
+
+////////////////////////////////////////////////////////////////////////////////
+// INI/Properties to XML
+////////////////////////////////////////////////////////////////////////////////
+
+	/** Create XML from INI/Properties object in "W" format.
+	 * @param ini path toINI/Properties source data.
+	 * @return XML element created from INI/Properties data.
+	 */
+	public final static Element iniToXml(final String ini) {
+		return IniReader.iniToXml(XonUtil.parseINI(ini));
+	}
+
+	/** Create XML from INI/Properties object in "W" format.
+	 * @param ini file with INI/Properties source data.
+	 * @return XML element created from INI/Properties data.
+	 */
+	public final static Element iniToXml(final File ini) {
+		return IniReader.iniToXml(XonUtil.parseINI(ini));
+	}
+
+	/** Create XML from INI/Properties object in "W" format.
+	 * @param ini URL where is INI/Properties source data.
+	 * @return XML element created from INI/Properties data.
+	 */
+	public final static Element iniToXml(final URL ini) {
+		return IniReader.iniToXml(XonUtil.parseINI(ini));
+	}
+
+	/** Create XML from INI/Properties object in "W" format.
+	 * @param ini Input stream where is INI/Properties source data.
+	 * @return XML element created from INI/Properties data.
+	 */
+	public final static Element iniToXml(final InputStream ini) {
+		return IniReader.iniToXml(XonUtil.parseINI(ini));
+	}
+
+	/** Create XML from INI/Properties object in X-Definition mode.
+	 * @param ini INI/Properties object.
+	 * @return XML element created from INI/Properties object.
+	 */
+	public final static Element iniToXml(final Object ini) {
+		return IniReader.iniToXml(ini);
+	}
+
 	
 ////////////////////////////////////////////////////////////////////////////////
 // Compare two JSON/XON objects.

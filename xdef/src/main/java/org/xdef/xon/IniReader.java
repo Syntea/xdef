@@ -297,11 +297,12 @@ public class IniReader extends StringParser implements XonParsers {
 ////////////////////////////////////////////////////////////////////////////////
 
 	/** Create INI/Properties source format of a string.
+	 * @param sb where to create.
 	 * @param s the string to be converted.
 	 * @return INI/Properties source format of a string.
 	 */
-	private static String toPropertyString(final String s) {
-		StringBuilder sb = new StringBuilder();
+	private static void toPropertyString(final StringBuilder sb,
+		final String s) {
 		for (int i = 0; i < s.length(); i++) {
 			char ch = s.charAt(i);
 			switch(ch) {
@@ -319,16 +320,21 @@ public class IniReader extends StringParser implements XonParsers {
 					}
 			}
 		}
-		return sb.toString();
 	}
 
 	/** Create the line of INI/Property item.
+	 * @param sb where to create.
 	 * @param name name of INI/Property item.
 	 * @param val string with value of INI/Property item.
 	 * @return string with line with INI/Property item.
 	 */
-	private static String toPropertyLine(final String name, final String val) {
-		return toPropertyString(name) + "=" + toPropertyString(val) + "\n";
+	private static void toPropertyLine(final StringBuilder sb,
+		final String name,
+		final String val) {
+		toPropertyString(sb, name);
+		sb.append('=');
+		toPropertyString(sb, val);
+		sb.append('\n');
 	}
 
 	@SuppressWarnings("unchecked")
@@ -341,7 +347,7 @@ public class IniReader extends StringParser implements XonParsers {
 		for (Map.Entry<String, Object> x: map.entrySet()) {
 			Object val = ((Map.Entry)x).getValue();
 			if (val instanceof String) {
-				sb.append(toPropertyLine(x.getKey(), (String) val));
+				toPropertyLine(sb, x.getKey(), (String) val);
 			}
 		}
 		for (Map.Entry<String, Object> x: map.entrySet()) {
@@ -350,11 +356,48 @@ public class IniReader extends StringParser implements XonParsers {
 				sb.append('[').append(x.getKey()).append("]\n");
 				for (Map.Entry<String, Object> y
 					: ((Map<String, Object>) val).entrySet()) {
-					sb.append(toPropertyLine(y.getKey(), (String) y.getValue()));
+					toPropertyLine(sb, y.getKey(), (String) y.getValue());
 				}
 			}
 		}
 		return sb.toString();
+	}
+
+	@SuppressWarnings("unchecked")
+	public final static Element iniToXml(final Object ini) {
+		Document doc = KXmlUtils.newDocument(XDConstants.XON_NS_URI_W,
+			XDConstants.XON_NS_PREFIX+ ":"+XonNames.X_MAP, null);
+		Element el = doc.getDocumentElement();
+		iniToXml((Map<String,Object>) ini, el);
+		return el;
+	}
+
+	@SuppressWarnings("unchecked")
+	private static void iniToXml(final Map<String,Object> ini,final Element el){
+		for (Map.Entry<String, Object> x: ini.entrySet()) {
+			String name = x.getKey();
+			Object o = x.getValue();
+			if (!(o instanceof Map)) {
+				Element item = el.getOwnerDocument().createElementNS(
+					XDConstants.XON_NS_URI_W,
+					XDConstants.XON_NS_PREFIX + ":" + XonNames.X_ITEM);
+				item.setAttribute(XonNames.X_KEYATTR, name);
+				item.setAttribute(XonNames.X_VALUEATTR, o.toString());
+				el.appendChild(item);
+			}
+		}
+		for (Map.Entry<String, Object> x: ini.entrySet()) {
+			String name = x.getKey();
+			Object o = x.getValue();
+			if (o instanceof Map) {
+				Element item = el.getOwnerDocument().createElementNS(
+					XDConstants.XON_NS_URI_W,
+					XDConstants.XON_NS_PREFIX + ":" + XonNames.X_MAP);
+				item.setAttribute(XonNames.X_KEYATTR, name);
+				iniToXml((Map<String, Object>) o, item);
+				el.appendChild(item);
+			}
+		}
 	}
 	
 	/** Add INI/Properties items from INI/Properties object to an Element.

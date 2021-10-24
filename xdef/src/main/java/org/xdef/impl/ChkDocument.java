@@ -107,7 +107,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	private XComponent _xComponent;
 	/** Switch to generate XComponent instead of Element; */
 	private boolean _genXComponent;
-	/** XON object, result of JSON parsing */
+	/** XON object, result of XON/JSON parsing */
 	Object _xon;
 	/** The list of child check elements. */
 	final ArrayList<ChkElement> _chkChildNodes = new ArrayList<ChkElement>();
@@ -1236,8 +1236,8 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	}
 
 	@Override
-	/** Parse URL with JSON source and return XComponent as result.
-	 * @param json InputStream with JSON source data.
+	/** Parse URL with XON/JSON source and return XComponent as result.
+	 * @param xon InputStream with XON/JSON source data.
 	 * @param sourceId name of source or <i>null</i>.
 	 * @param xClass XCompomnent class (if <i>null</i>, then XComponent class
 	 * is searched in XDPool).
@@ -1247,14 +1247,14 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 * @throws SRuntimeException if reporter is <i>null</i> and an error
 	 * was reported.
 	 */
-	public final XComponent jparseXComponent(final Object json,
+	public final XComponent jparseXComponent(final Object xon,
 		final Class<?> xClass,
 		final String sourceId,
 		final ReportWriter reporter) throws SRuntimeException {
 		Class<?> yClass  = xClass;
-		if (json == null || json instanceof Map
-			|| json instanceof List || json instanceof Number
-			|| json instanceof Boolean) {
+		if (xon == null || xon instanceof Map
+			|| xon instanceof List || xon instanceof Number
+			|| xon instanceof Boolean) {
 			if (yClass == null) {
 				for (String s: getXDPool().getXComponents().keySet()) {
 					String className = getXDPool().getXComponents().get(s);
@@ -1280,23 +1280,22 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 				byte jsonVer = // version of JSON to XML transormation
 					(Byte) yClass.getDeclaredField("JSON").get(null);
 				e = jsonVer == XConstants.JSON_MODE_W3C ?
-					XonUtil.xonToXml(json) : XonUtil.jsonToXmlXD(json);
+					XonUtil.xonToXml(xon) : XonUtil.jsonToXmlXD(xon);
 			} catch (Exception ex) {
-				e = XonUtil.xonToXml(json); // X-definition transormation
+				e = XonUtil.xonToXml(xon); // X-definition transormation
 			}
 			return parseXComponent(e, yClass, reporter);
-		} else if (json instanceof String) {
-			return jparseXComponent(XonUtil.parseJSON((String) json),
+		} else if (xon instanceof String) {
+			return jparseXComponent(XonUtil.parseXON((String) xon),
 				yClass, reporter);
-		} else if (json instanceof File) {
-			return jparseXComponent(XonUtil.parseJSON((File) json),yClass,reporter);
-		} else if (json instanceof URL) {
-			return jparseXComponent(XonUtil.parseJSON((URL) json), yClass,reporter);
-		} else if (json instanceof InputStream) {
-			return jparseXComponent((InputStream)json,yClass,sourceId,reporter);
-		} else if (json instanceof Node) {
-			Element e = (json instanceof Document)
-				? ((Document) json).getDocumentElement() : (Element) json;
+		} else if (xon instanceof File) {
+			return jparseXComponent(XonUtil.parseXON((File) xon),
+				yClass,reporter);
+		} else if (xon instanceof InputStream) {
+			return jparseXComponent((InputStream)xon,yClass,sourceId,reporter);
+		} else if (xon instanceof Node) {
+			Element e = (xon instanceof Document)
+				? ((Document) xon).getDocumentElement() : (Element) xon;
 			return jparseXComponent(XonUtil.xmlToJson(e),yClass,reporter);
 		}
 		throw new SRuntimeException(XDEF.XDEF318); //Incorrect JSON data
