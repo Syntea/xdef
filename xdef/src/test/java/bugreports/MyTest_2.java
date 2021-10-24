@@ -236,7 +236,7 @@ if(T)return;
 			assertTrue(XonUtil.xonEqual(j, o));
 			reporter.clear();
 			xd = xp.createXDDocument("Example");
-			el = XonUtil.jsonToXmlXD(o);
+			el = XonUtil.xonToXmlXD(o);
 			o = XonUtil.xmlToJson(el);
 			assertTrue(XonUtil.xonEqual(j, o));
 //			if (KXmlUtils.compareElements(XonUtil.xonToXml(j),
@@ -963,7 +963,7 @@ if(T ){return;}
 			assertTrue(XonUtil.xonEqual(XonUtil.parseJSON(json), j),
 				XonUtil.xmlToJson(XonUtil.xonToXml(toJson(xc))));
 			assertTrue(XonUtil.xonEqual(XonUtil.parseJSON(json), j),
-				XonUtil.xmlToJson(XonUtil.jsonToXmlXD(toJson(xc))));
+				XonUtil.xmlToJson(XonUtil.xonToXmlXD(toJson(xc))));
 			json = "[123]";
 			j = xp.createXDDocument("X").jparse(json, reporter);
 			assertNoErrors(reporter);

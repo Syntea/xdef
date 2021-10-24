@@ -203,8 +203,8 @@ public class XonUtil {
 	 */
 	public final static Object parseXON(final InputStream in,final String sysId)
 		throws SRuntimeException {
-		return parseXON(
-			new InputStreamReader(in, Charset.forName("UTF-8")), sysId);
+		return parseXON(new InputStreamReader(in,
+			Charset.forName("UTF-8")), sysId);
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -386,34 +386,34 @@ public class XonUtil {
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
-// JSON/XON to XML
+// XON/JSON to XML
 ////////////////////////////////////////////////////////////////////////////////
 
-	/** Create XML from XON/JSON object in W3C mode.
+	/** Create XML from XON/JSON object in "W" format.
 	 * @param xon path to XON/JSON source data.
 	 * @return XML element created from XON/JSON data.
 	 */
 	public final static Element xonToXml(final String xon) {
-		return XonToXml.toXmlW(XonUtil.parseXON(xon));
+		return XonToXml.toXmlW(XonUtil.parseJSON(xon));
 	}
 
-	/** Create XML from XON/JSON object in W3C mode.
+	/** Create XML from XON/JSON object in "W" format.
 	 * @param xon file with XON/JSON source data.
 	 * @return XML element created from XON/JSON data.
 	 */
 	public final static Element xonToXml(final File xon) {
-		return XonToXml.toXmlW(XonUtil.parseXON(xon));
+		return XonToXml.toXmlW(XonUtil.parseJSON(xon));
 	}
 
-	/** Create XML from XON/JSON object in W3C mode.
+	/** Create XML from XON/JSON object in "W" format.
 	 * @param xon URL where is XON/JSON source data.
 	 * @return XML element created from XON/JSON data.
 	 */
-	public final static Element jsonToXml(final URL xon) {
-		return XonToXml.toXmlW(parseXON(xon));
+	public final static Element xonToXml(final URL xon) {
+		return XonToXml.toXmlW(parseJSON(xon));
 	}
 
-	/** Create XML from XON/JSON object in W3C mode.
+	/** Create XML from XON/JSON object in "W" format.
 	 * @param xon Input stream where is XON/JSON source data.
 	 * @return XML element created from XON/JSON data.
 	 */
@@ -422,7 +422,7 @@ public class XonUtil {
 	}
 
 	/** Create XML from XON/JSON object in X-Definition mode.
-	 * @param xon JSON object.
+	 * @param xon XON/JSON object.
 	 * @return XML element created from XON/JSON data.
 	 */
 	public final static Element xonToXml(final Object xon) {
@@ -433,8 +433,8 @@ public class XonUtil {
 	 * @param xon path to XON/JSON source data.
 	 * @return XML element created from XON/JSON data.
 	 */
-	public final static Element jsonToXmlXD(final String xon) {
-		return XonToXml.toXmlXD(XonUtil.parseXON(xon));
+	public final static Element xonToXmlXD(final String xon) {
+		return XonToXml.toXmlXD(XonUtil.parseJSON(xon));
 	}
 
 	/** Create XML from XON/JSON object in X-Definition mode.
@@ -442,75 +442,31 @@ public class XonUtil {
 	 * @return XML element created from XON/JSON data.
 	 */
 	public final static Element xonToXmlXD(final File xon) {
-		return XonToXml.toXmlXD(XonUtil.parseXON(xon));
+		return XonToXml.toXmlXD(XonUtil.parseJSON(xon));
 	}
 
 	/** Create XML from XON/JSON object in X-Definition mode.
 	 * @param xon URL with XON/JSON source data.
-	 * @return XML element created from XON/JSON data.
+	 * @return XML element created from JSON XON/data.
 	 */
 	public final static Element xonToXmlXD(final URL xon) {
-		return XonToXml.toXmlXD(parseXON(xon));
+		return XonToXml.toXmlXD(parseJSON(xon));
 	}
 
 	/** Create XML from XON/JSON object in X-Definition mode.
 	 * @param xon InputStream with XON/JSON source data.
-	 * @return XML element created from XON/JSON data.
+	 * @return XML element created from JSON XON/data.
 	 */
 	public final static Element xonToXmlXD(final InputStream xon) {
-		return XonToXml.toXmlXD(XonUtil.parseXON(xon));
+		return XonToXml.toXmlXD(XonUtil.parseJSON(xon));
 	}
 
 	/** Create XML from XON/JSON object in X-Definition mode.
 	 * @param xon XON/JSON object.
-	 * @return XML element created from XON/JSON object.
+	 * @return XML element created from XON/JSON data.
 	 */
-	public final static Element jsonToXmlXD(final Object xon) {
+	public final static Element xonToXmlXD(final Object xon) {
 		return XonToXml.toXmlXD(xon);
-	}
-
-////////////////////////////////////////////////////////////////////////////////
-// INI/Properties to XML
-////////////////////////////////////////////////////////////////////////////////
-
-	/** Create XML from INI/Properties source data in W3C mode.
-	 * @param ini path to INI/Properties data.
-	 * @return XML element created from INI/Properties.
-	 */
-	public final static Element iniToXml(final String ini) {
-		return XonToXml.toXmlW(XonUtil.parseJSON(ini));
-	}
-
-	/** Create XML from INI/Properties object in W3C mode.
-	 * @param ini file with INI/Properties data.
-	 * @return XML element created from INI/Properties.
-	 */
-	public final static Element iniToXml(final File ini) {
-		return XonToXml.toXmlW(XonUtil.parseJSON(ini));
-	}
-
-	/** Create XML from JSON object in W3C mode.
-	 * @param json URL where is JSON source data.
-	 * @return XML element created from INI/Properties.
-	 */
-	public final static Element iniToXml(final URL json) {
-		return XonToXml.toXmlW(parseJSON(json));
-	}
-
-	/** Create XML from INI/Properties object.
-	 * @param ini Input stream with INI/Properties data.
-	 * @return XML element created from INI/Properties.
-	 */
-	public final static Element iniToXml(final InputStream ini) {
-		return IniReader.iniToXmlW(parseINI(ini, null));
-	}
-
-	/** Create XML from INI/Properties object.
-	 * @param ini INI/Properties object.
-	 * @return XML element created from INI/Properties.
-	 */
-	public final static Element iniToXml(final Map<String, Object> ini) {
-		return IniReader.iniToXmlW(ini);
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -557,7 +513,7 @@ public class XonUtil {
 		return IniReader.iniToXml(ini);
 	}
 
-	
+
 ////////////////////////////////////////////////////////////////////////////////
 // Compare two JSON/XON objects.
 ////////////////////////////////////////////////////////////////////////////////

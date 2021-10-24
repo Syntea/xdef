@@ -30,7 +30,7 @@ public class MyTest extends XDTester {
 
 	private static String testj(String xml, String json) {
 		Object j = XonUtil.parseJSON(json);
-		Element el = XonUtil.jsonToXmlXD(j);
+		Element el = XonUtil.xonToXmlXD(j);
 		if (KXmlUtils.compareElements(xml, el, true, null).errorWarnings()) {
 			return "xml != el"+
 				"\njson: "+json+

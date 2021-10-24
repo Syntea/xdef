@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.io.PrintStream;
 import java.io.Writer;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -346,11 +345,11 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 			|| data instanceof Boolean) {
 			e = XonUtil.xonToXml(data);
 		} else if (data instanceof File) {
-			e = XonUtil.xonToXml(XonUtil.parseJSON((File) data));
+			e = XonUtil.xonToXml(XonUtil.parseXON((File) data));
 		} else if (data instanceof URL) {
-			e = XonUtil.xonToXml(XonUtil.parseJSON((URL) data));
+			e = XonUtil.xonToXml(XonUtil.parseXON((URL) data));
 		} else if (data instanceof InputStream) {
-			e = XonUtil.xonToXml(XonUtil.parseJSON((InputStream) data));
+			e = XonUtil.xonToXml(XonUtil.parseXON((InputStream) data));
 		} else if (data instanceof Document) {
 			e = ((Document) data).getDocumentElement();
 		} else if (data instanceof Element){
@@ -700,33 +699,33 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 		//Value is not compatible with the type of variable '&{0}'
 		throw new SRuntimeException(XDEF.XDEF564, name);
 	}
-
-	/** Set variable.
-	 * @param name name name of variable.
-	 * @param value value to be set to the variable.
-	 */
-	private void setVariable(final String name, final BigInteger value) {
-		XVariable xv = findVariable(name);
-		switch (xv.getType()) {
-			case XD_LONG:
-				_scp.setVariable(xv, new DefLong(value.longValue()));
-				return;
-			case XD_DOUBLE:
-				_scp.setVariable(xv, new DefDouble(value.doubleValue()));
-				return;
-			case XD_DECIMAL:
-				_scp.setVariable(xv, new DefDecimal(value.toString()));
-				return;
-			case XD_BIGINTEGER:
-				_scp.setVariable(xv, new DefBigInteger(value));
-				return;
-			case XD_STRING:
-				_scp.setVariable(xv, new DefString(value.toString()));
-				return;
-		}
-		//Value is not compatible with the type of variable '&{0}'
-		throw new SRuntimeException(XDEF.XDEF564, name);
-	}
+//
+//	/** Set variable.
+//	 * @param name name name of variable.
+//	 * @param value value to be set to the variable.
+//	 */
+//	private void setVariable(final String name, final BigInteger value) {
+//		XVariable xv = findVariable(name);
+//		switch (xv.getType()) {
+//			case XD_LONG:
+//				_scp.setVariable(xv, new DefLong(value.longValue()));
+//				return;
+//			case XD_DOUBLE:
+//				_scp.setVariable(xv, new DefDouble(value.doubleValue()));
+//				return;
+//			case XD_DECIMAL:
+//				_scp.setVariable(xv, new DefDecimal(value.toString()));
+//				return;
+//			case XD_BIGINTEGER:
+//				_scp.setVariable(xv, new DefBigInteger(value));
+//				return;
+//			case XD_STRING:
+//				_scp.setVariable(xv, new DefString(value.toString()));
+//				return;
+//		}
+//		//Value is not compatible with the type of variable '&{0}'
+//		throw new SRuntimeException(XDEF.XDEF564, name);
+//	}
 
 	/** Store model variable.
 	 * @param name name of variable.

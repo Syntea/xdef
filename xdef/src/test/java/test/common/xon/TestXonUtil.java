@@ -40,7 +40,7 @@ public class TestXonUtil extends STester {
 		}
 		try {
 			// test JSON to XML and XML to JSON (W3C format) JSON
-			el = XonUtil.jsonToXmlXD(o1);
+			el = XonUtil.xonToXmlXD(o1);
 			o2 = XonUtil.xmlToJson(el);
 			if (!XonUtil.xonEqual(o1, o2)) {
 				return "JSON xmlToJson (W3C) error " + f.getName()
@@ -69,7 +69,7 @@ public class TestXonUtil extends STester {
 		try {
 			Element e1 = KXmlUtils.parseXml(f).getDocumentElement();
 			Object jx1 = XonUtil.xmlToJson(e1);
-			Element e2 = XonUtil.jsonToXmlXD(jx1);
+			Element e2 = XonUtil.xonToXmlXD(jx1);
 			Object jx2 = XonUtil.xmlToJson(e2);
 			if (KXmlUtils.compareElements(e1, e2, true).errors()) {
 				return "XML-error-:  "
