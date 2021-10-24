@@ -699,33 +699,6 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 		//Value is not compatible with the type of variable '&{0}'
 		throw new SRuntimeException(XDEF.XDEF564, name);
 	}
-//
-//	/** Set variable.
-//	 * @param name name name of variable.
-//	 * @param value value to be set to the variable.
-//	 */
-//	private void setVariable(final String name, final BigInteger value) {
-//		XVariable xv = findVariable(name);
-//		switch (xv.getType()) {
-//			case XD_LONG:
-//				_scp.setVariable(xv, new DefLong(value.longValue()));
-//				return;
-//			case XD_DOUBLE:
-//				_scp.setVariable(xv, new DefDouble(value.doubleValue()));
-//				return;
-//			case XD_DECIMAL:
-//				_scp.setVariable(xv, new DefDecimal(value.toString()));
-//				return;
-//			case XD_BIGINTEGER:
-//				_scp.setVariable(xv, new DefBigInteger(value));
-//				return;
-//			case XD_STRING:
-//				_scp.setVariable(xv, new DefString(value.toString()));
-//				return;
-//		}
-//		//Value is not compatible with the type of variable '&{0}'
-//		throw new SRuntimeException(XDEF.XDEF564, name);
-//	}
 
 	/** Store model variable.
 	 * @param name name of variable.
