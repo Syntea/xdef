@@ -40,7 +40,7 @@ public class TestXon extends XDTester {
 "</xd:def>";
 			xp = XDFactory.compileXD(null, xdef);
 			x = XonUtil.parseXON(xon);
-			el = XonUtil.jsonToXml(x);
+			el = XonUtil.xonToXml(x);
 			xd = xp.createXDDocument();
 			y = xd.jvalidate(el, reporter);
 			if (reporter.errorWarnings()) {

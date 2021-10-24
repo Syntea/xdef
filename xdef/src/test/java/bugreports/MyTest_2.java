@@ -193,7 +193,7 @@ if(T)return;
 			assertNoErrors(reporter);
 			xd = xp.createXDDocument("");
 //			xd.setJSONContext(j);
-			el = XonUtil.jsonToXml(j);
+			el = XonUtil.xonToXml(j);
 			System.out.println(KXmlUtils.nodeToString(el, true));
 			xd.setXDContext(el);
 			o = jcreate(xd, "Skladby", reporter);
@@ -239,18 +239,18 @@ if(T)return;
 			el = XonUtil.jsonToXmlXD(o);
 			o = XonUtil.xmlToJson(el);
 			assertTrue(XonUtil.xonEqual(j, o));
-//			if (KXmlUtils.compareElements(XonUtil.jsonToXml(j),
-//				XonUtil.jsonToXml(o), true, null).errorWarnings()) {
+//			if (KXmlUtils.compareElements(XonUtil.xonToXml(j),
+//				XonUtil.xonToXml(o), true, null).errorWarnings()) {
 //				System.err.println(KXmlUtils.nodeToString(
-//					XonUtil.jsonToXml(j), true));
+//					XonUtil.xonToXml(j), true));
 //				System.err.println(KXmlUtils.nodeToString(
-//					XonUtil.jsonToXml(o), true));
+//					XonUtil.xonToXml(o), true));
 //			}
-//			assertEq(XonUtil.jsonToXml(j), XonUtil.jsonToXml(o));
+//			assertEq(XonUtil.xonToXml(j), XonUtil.xonToXml(o));
 			o = xd.jvalidate(o, reporter);
 			assertTrue(XonUtil.xonEqual(j, o));
-//			System.err.println(KXmlUtils.nodeToString(XonUtil.jsonToXml(j), true));
-//			System.err.println(KXmlUtils.nodeToString(XonUtil.jsonToXml(o), true));
+//			System.err.println(KXmlUtils.nodeToString(XonUtil.xonToXml(j), true));
+//			System.err.println(KXmlUtils.nodeToString(XonUtil.xonToXml(o), true));
 //			assertNoErrors(reporter);
 //			assertTrue(XonUtil.xonEqual(j, o));
 		} catch (Exception ex) {fail(ex);}
@@ -961,7 +961,7 @@ if(T ){return;}
 			assertTrue(XonUtil.xonEqual(XonUtil.parseJSON(json), j),
 				XonUtil.xmlToJson(xc.toXml()));
 			assertTrue(XonUtil.xonEqual(XonUtil.parseJSON(json), j),
-				XonUtil.xmlToJson(XonUtil.jsonToXml(toJson(xc))));
+				XonUtil.xmlToJson(XonUtil.xonToXml(toJson(xc))));
 			assertTrue(XonUtil.xonEqual(XonUtil.parseJSON(json), j),
 				XonUtil.xmlToJson(XonUtil.jsonToXmlXD(toJson(xc))));
 			json = "[123]";
@@ -1024,7 +1024,7 @@ if(T ){return;}
 			assertNoErrors(reporter);
 			assertTrue(XonUtil.xonEqual(XonUtil.parseJSON(json), j),
 				XonUtil.toJsonString(j, true));
-			el = XonUtil.jsonToXml(j);
+			el = XonUtil.xonToXml(j);
 			parse(xp, "", el, reporter);
 			assertNoErrors(reporter);
 			json = "{\"a\":1}";
@@ -1032,7 +1032,7 @@ if(T ){return;}
 			assertNoErrors(reporter);
 			assertTrue(XonUtil.xonEqual(XonUtil.parseJSON(json), j),
 				XonUtil.toJsonString(j, true));
-			el = XonUtil.jsonToXml(j);
+			el = XonUtil.xonToXml(j);
 			parse(xp, "", el, reporter);
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}

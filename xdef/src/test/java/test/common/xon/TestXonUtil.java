@@ -52,7 +52,7 @@ public class TestXonUtil extends STester {
 		}
 		try {
 			// test JSON to XML and XML to JSON (W3C format) JSON
-			el = XonUtil.jsonToXml(o1);
+			el = XonUtil.xonToXml(o1);
 			o2 = XonUtil.xmlToJson(el);
 			if (!XonUtil.xonEqual(o1, o2)) {
 				return "JSON xmlToJson (W3C) error " + f.getName()

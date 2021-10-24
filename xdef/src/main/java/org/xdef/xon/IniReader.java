@@ -3,12 +3,16 @@ package org.xdef.xon;
 import java.io.Reader;
 import java.net.URL;
 import java.util.Map;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.xdef.XDConstants;
 import org.xdef.msg.JSON;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.SBuffer;
 import org.xdef.sys.SPosition;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.StringParser;
+import org.xdef.xml.KXmlUtils;
 
 /** Read properties and files.
  * @author Vaclav Trojan
@@ -352,4 +356,47 @@ public class IniReader extends StringParser implements XonParsers {
 		}
 		return sb.toString();
 	}
+	
+	/** Add INI/Properties items from INI/Properties object to an Element.
+	 * @param ini INI/Properties object
+	 * @param el Element where to  add items.
+	 */
+	@SuppressWarnings("unchecked")
+	private static void toXmlW(final Map<String,Object> ini,final Element el) {
+		for (Map.Entry<String, Object> x: ini.entrySet()) {
+			String name = x.getKey();
+			Object o = x.getValue();
+			if (!(o instanceof Map)) {
+				// add the element with items
+				Element item = el.getOwnerDocument().createElementNS(
+					XDConstants.XON_NS_URI_W,
+					XDConstants.XON_NS_PREFIX + ":" + XonNames.X_ITEM);
+				item.setAttribute(XonNames.X_KEYATTR, name);
+				item.setAttribute(XonNames.X_VALUEATTR, o.toString());
+				el.appendChild(item);
+			}
+		}
+		for (Map.Entry<String, Object> x: ini.entrySet()) {
+			String name = x.getKey();
+			Object o = x.getValue();
+			if (o instanceof Map) {
+				Element item = el.getOwnerDocument().createElementNS(
+					XDConstants.XON_NS_URI_W, 
+					XDConstants.XON_NS_PREFIX + ":" + XonNames.X_MAP);
+				item.setAttribute(XonNames.X_KEYATTR, name);
+				toXmlW((Map<String, Object>) o, item);
+				el.appendChild(item);
+			}
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public final static Element iniToXmlW(final Object ini) {
+		Element el = KXmlUtils.newDocument(XDConstants.XON_NS_URI_W,
+			XDConstants.XON_NS_PREFIX + ":"+XonNames.X_MAP, null)
+			.getDocumentElement();
+		toXmlW((Map<String,Object>) ini, el);
+		return el;
+	}
+	
 }

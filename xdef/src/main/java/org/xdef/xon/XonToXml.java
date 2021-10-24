@@ -30,6 +30,18 @@ class XonToXml extends XonTools implements XonNames {
 
 	private XonToXml() {super();}
 
+	/** Create element with given name and JSON namespace and prefix.
+	 * @param name name of item.
+	 * @return element with given name and JSON namespace and prefix..
+	 */
+	private Element genJElement(final String name) {
+		if (_jsPrefix.isEmpty()) {
+			return _doc.createElementNS(_jsNamespace, name);
+		} else {
+			return _doc.createElementNS(_jsNamespace, _jsPrefix + ':' + name);
+		}
+	}
+
 ////////////////////////////////////////////////////////////////////////////////
 // JSON to XML (X-detinition format)
 ////////////////////////////////////////////////////////////////////////////////
@@ -57,7 +69,7 @@ class XonToXml extends XonTools implements XonNames {
 	 * @return created element.
 	 */
 	private Element addJSONElem(final Node n, final String name) {
-		Element e = _doc.createElementNS(_jsNamespace, _jsPrefix + ":" + name);
+		Element e = genJElement(name);
 		_ns.pushContext();
 		_ns.setPrefix(_jsPrefix, _jsNamespace);
 		n.appendChild(e);
@@ -733,92 +745,81 @@ class XonToXml extends XonTools implements XonNames {
 		_ns.popContext();
 	}
 
-	/** Create element created from JSON (X-definition mode).
-	 * @param json JSON object.
+	/** Create element created from XON/JSON (X-definition mode).
+	 * @param xon XON/JSON object.
 	 * @return created element.
 	 */
-	final static Element toXmlXD(final Object o) {
+	final static Element toXmlXD(final Object xon) {
 		XonToXml x = new XonToXml();
 		x._jsPrefix = XDConstants.XON_NS_PREFIX;
 		x._jsNamespace = XDConstants.XON_NS_URI_XD;
 		x._doc = KXmlUtils.newDocument();
 		x._ns = new KNamespace();
-		if (o instanceof Map) {
-			x.createRootElementFromMap((Map) o);
-		} else if (o instanceof List) {
+		if (xon instanceof Map) {
+			x.createRootElementFromMap((Map) xon);
+		} else if (xon instanceof List) {
 			Element elem = x.addJSONElem(x._doc, X_ARRAY);
-			x.addArrayItems(elem, (List) o, 0);
+			x.addArrayItems(elem, (List) xon, 0);
 			x._ns.popContext();
-		} else if (isSimpleValue(o)) {
+		} else if (isSimpleValue(xon)) {
 			Element e = x.addJSONElem(x._doc, X_ITEM);
-			x.addValueAsText(e, o);
+			x.addValueAsText(e, xon);
 			x._ns.popContext();
 		} else {
-			throw new SRuntimeException(JSON.JSON011, o); //Not JSON object&{0}
+			 //Not JSON object&{0}
+			throw new SRuntimeException(JSON.JSON011, xon.getClass());
 		}
 		return x._doc.getDocumentElement();
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
-// JSON to XML (W3C format)
+// JSON to XML ("W" format)
 ////////////////////////////////////////////////////////////////////////////////
 
-	/** Create W3C JSON element with given name.
-	 * @param name name of JSON element.
-	 * @return JSON element with given name.
-	 */
-	private Element genJElementW3C(final String name) {
-		if (_jsPrefix.isEmpty()) {
-			return _doc.createElementNS(_jsNamespace, name);
-		} else {
-			return _doc.createElementNS(_jsNamespace, _jsPrefix + ':' + name);
-		}
-	}
-
-	/** Create W3C JSON element with value.
-	 * @param val value of JSON element.
+	/** Create element in "W" format from an object.
+	 * @param val value.
 	 * @param parent parent node where to add created element.
-	 * @return JSON element with value.
+	 * @return element with value in "W" format.
 	 */
-	private Element genValueW3C(final Object val, final Node parent) {
+	private Element genValueW(final Object val, final Node parent) {
 		Element e;
 		if (val == null) {
-			e = genJElementW3C(X_ITEM);
+			e = genJElement(X_ITEM);
 			e.setAttribute(X_VALUEATTR, "null");
 		} else if (val instanceof Map) {
-			e = genMapW3C((Map) val);
+			e = genMapW((Map) val);
 		} else if (val instanceof List) {
-			e = genArrayW3C((List) val);
+			e = genArrayW((List) val);
 		} else {
-			e = genJElementW3C(X_ITEM);
+			e = genJElement(X_ITEM);
 			e.setAttribute(X_VALUEATTR, genXMLValue(val));
 		}
 		parent.appendChild(e);
 		return e;
 	}
 
-	/** Create element with W3C JSON array.
+	/** Create element in "W" format from array.
 	 * @param array array to be created.
-	 * @return element with W3C JSON array.
+	 * @return element with array in "W" format.
 	 */
-	private Element genArrayW3C(final List array) {
-		Element e = genJElementW3C(X_ARRAY);
+	private Element genArrayW(final List array) {
+		Element e = genJElement(X_ARRAY);
 		for (Object val: array) {
-			genValueW3C(val, e);
+			genValueW(val, e);
 		}
 		return e;
 	}
 
-	/** Create element with W3C JSON map.
+	/** Create element with map in "W" format.
 	 * @param map map to be created.
-	 * @return element with W3C JSON map.
+	 * @return element with map in "W" format..
 	 */
-	private Element genMapW3C(final Map map) {
-		Element e = genJElementW3C(X_MAP);
+	private Element genMapW(final Map map) {
+		Element e = genJElement(X_MAP);
 		Iterator it = map.entrySet().iterator();
 		while (it.hasNext()) {
 			Map.Entry en = (Map.Entry) it.next();
-			Element ee = genValueW3C(en.getValue(), e);
+			Element ee = genValueW(en.getValue(), e);
 			Object o = en.getKey();
 			// NOTE in YAML it may be a byte array, otherwise it is String
 			String key = o instanceof byte[]? new String((byte[])o) : (String)o;
@@ -828,14 +829,14 @@ class XonToXml extends XonTools implements XonNames {
 		return e;
 	}
 
-	/** Create XML from JSON object according to W3C recommendation.
+	/** Create XML in "W" format from JSON/XON object.
 	 * @param json object with JSON data.
-	 * @return XML element created from JSON data.
+	 * @return XML element in "W" format created from JSON/XON data.
 	 */
-	final static Element toXmlW3C(final Object json) {
+	final static Element toXmlW(final Object json) {
 		XonToXml x = new XonToXml();
 		x._jsNamespace = XDConstants.XON_NS_URI_W;
 		x._jsPrefix = "";
-		return x.genValueW3C(json, x._doc = KXmlUtils.newDocument());
+		return x.genValueW(json, x._doc = KXmlUtils.newDocument());
 	}
 }

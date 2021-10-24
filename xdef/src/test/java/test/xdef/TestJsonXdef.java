@@ -91,14 +91,14 @@ public class TestJsonXdef extends XDTester {
 					name = name.substring(0, ndx);
 					Object json = XonUtil.parseJSON(f);
 					// write JSON as XML (W3C modc)
-					el = XonUtil.jsonToXml(json);
+					el = XonUtil.xonToXml(json);
 					SUtils.writeString(new File(_tempDir + name + "a.xml"),
 						KXmlUtils.nodeToString(el,true),"UTF-8");
 					if (!XonUtil.xonEqual(XonUtil.xmlToJson(el),
 						XonUtil.xmlToJson(XonUtil.jsonToXmlXD(json)))) {
 						throw new RuntimeException(rName +
 							" xml transformation to JSON differs:\n" +
-							KXmlUtils.nodeToString(XonUtil.jsonToXml(json),
+							KXmlUtils.nodeToString(XonUtil.xonToXml(json),
 								true) + "\n" +
 							KXmlUtils.nodeToString(XonUtil.jsonToXmlXD(json),
 								true) + "\n");
@@ -679,7 +679,7 @@ public class TestJsonXdef extends XDTester {
 			assertNoErrors(reporter);
 			assertTrue(XonUtil.xonEqual(XonUtil.parseJSON(json), j),
 				XonUtil.toJsonString(j, true));
-			el = XonUtil.jsonToXml(j);
+			el = XonUtil.xonToXml(j);
 			parse(xp, "", el, reporter);
 			assertNoErrors(reporter);
 			json = "{\"a\":1}";
@@ -687,7 +687,7 @@ public class TestJsonXdef extends XDTester {
 			assertNoErrors(reporter);
 			assertTrue(XonUtil.xonEqual(XonUtil.parseJSON(json), j),
 				XonUtil.toJsonString(j, true));
-			el = XonUtil.jsonToXml(j);
+			el = XonUtil.xonToXml(j);
 			parse(xp, "", el, reporter);
 			assertNoErrors(reporter);
 			xdef =

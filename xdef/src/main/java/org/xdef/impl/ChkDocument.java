@@ -945,43 +945,6 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		return null;
 	}
 
-	@SuppressWarnings("unchecked")
-	private static Element iniToXml(Object ini) {
-		Document doc = KXmlUtils.newDocument(XDConstants.XON_NS_URI_W,
-			XDConstants.XON_NS_PREFIX+ ":"+XonNames.X_MAP, null);
-		Element el = doc.getDocumentElement();
-		iniToXml((Map<String,Object>) ini, el);
-		return el;
-	}
-
-	@SuppressWarnings("unchecked")
-	private static void iniToXml(final Map<String,Object> ini,final Element el){
-		for (Map.Entry<String, Object> x: ini.entrySet()) {
-			String name = x.getKey();
-			Object o = x.getValue();
-			if (!(o instanceof Map)) {
-				Element item = el.getOwnerDocument().createElementNS(
-					XDConstants.XON_NS_URI_W,
-					XDConstants.XON_NS_PREFIX + ":" + XonNames.X_ITEM);
-				item.setAttribute(XonNames.X_KEYATTR, name);
-				item.setAttribute(XonNames.X_VALUEATTR, o.toString());
-				el.appendChild(item);
-			}
-		}
-		for (Map.Entry<String, Object> x: ini.entrySet()) {
-			String name = x.getKey();
-			Object o = x.getValue();
-			if (o instanceof Map) {
-				Element item = el.getOwnerDocument().createElementNS(
-					XDConstants.XON_NS_URI_W, 
-					XDConstants.XON_NS_PREFIX + ":" + XonNames.X_MAP);
-				item.setAttribute(XonNames.X_KEYATTR, name);
-				iniToXml((Map<String, Object>) o, item);
-				el.appendChild(item);
-			}
-		}
-	}
-
 	@Override
 	/** Validate and process INI/Properties data and return processed XON.
 	 * @param data INI/Properties object or XML representation of object
@@ -995,7 +958,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	public final Map<String, Object> ivalidate(final Object data,
 		final ReportWriter reporter)
 		throws SRuntimeException {
-		if (data == null || data instanceof Map || data instanceof String) {
+		if (data instanceof Map || data instanceof String) {
 			_reporter = new SReporter(reporter);
 			_scp.setStdErr(new DefOutStream(reporter));
 			_refNum = 0; // we must clear counter!
@@ -1035,7 +998,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 */
 	public final Map<String, Object> iparse(final String data,
 		final ReportWriter reporter) throws SRuntimeException {
-		return ivalidate(iniToXml(XonUtil.parseINI(data)), reporter);
+		return ivalidate(XonUtil.iniToXml(data), reporter);
 	}
 
 	@Override
@@ -1048,7 +1011,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 */
 	public final Map<String, Object> iparse(final File data,
 		final ReportWriter reporter) throws SRuntimeException {
-		return ivalidate(iniToXml(XonUtil.parseINI(data)), reporter);
+		return ivalidate(XonUtil.iniToXml(data), reporter);
 	}
 
 	@Override
@@ -1061,7 +1024,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 */
 	public final Map<String, Object> iparse(final URL data,
 		final ReportWriter reporter) throws SRuntimeException {
-		return ivalidate(iniToXml(XonUtil.parseINI(data)), reporter);
+		return ivalidate(XonUtil.iniToXml(data), reporter);
 	}
 
 	@Override
@@ -1074,7 +1037,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 */
 	public final Map<String, Object> iparse(final InputStream data,
 		final ReportWriter reporter) throws SRuntimeException {
-		return ivalidate(iniToXml(XonUtil.parseINI(data)), reporter);
+		return ivalidate(XonUtil.iniToXml(data), reporter);
 	}
 
 	@Override
@@ -1134,7 +1097,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 					yClass = null;
 				}
 			}
-			return parseXComponent(iniToXml(map), yClass, reporter);
+			return parseXComponent(XonUtil.iniToXml(map), yClass, reporter);
 		} else if (ini instanceof String) {
 			return iparseXComponent(XonUtil.parseINI((String) ini),
 				yClass, reporter);
@@ -1317,9 +1280,9 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 				byte jsonVer = // version of JSON to XML transormation
 					(Byte) yClass.getDeclaredField("JSON").get(null);
 				e = jsonVer == XConstants.JSON_MODE_W3C ?
-					XonUtil.jsonToXml(json) : XonUtil.jsonToXmlXD(json);
+					XonUtil.xonToXml(json) : XonUtil.jsonToXmlXD(json);
 			} catch (Exception ex) {
-				e = XonUtil.jsonToXml(json); // X-definition transormation
+				e = XonUtil.xonToXml(json); // X-definition transormation
 			}
 			return parseXComponent(e, yClass, reporter);
 		} else if (json instanceof String) {
@@ -1328,7 +1291,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		} else if (json instanceof File) {
 			return jparseXComponent(XonUtil.parseJSON((File) json),yClass,reporter);
 		} else if (json instanceof URL) {
-			return jparseXComponent(XonUtil.parse((URL) json), yClass,reporter);
+			return jparseXComponent(XonUtil.parseJSON((URL) json), yClass,reporter);
 		} else if (json instanceof InputStream) {
 			return jparseXComponent((InputStream)json,yClass,sourceId,reporter);
 		} else if (json instanceof Node) {
