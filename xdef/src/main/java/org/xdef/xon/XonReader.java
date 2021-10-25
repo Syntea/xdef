@@ -194,8 +194,9 @@ public class XonReader extends StringParser implements XonParsers {
 					name = new SBuffer(getParsedString(), spos);
 					separator = '=';
 				} else {
-					fatal(JSON.JSON004); //Name of item expected
+					error(JSON.JSON004); //Name of item expected
 					_jp.mapEnd(this);
+					setEos();
 					return;
 				}
 				isSpacesOrComments();
@@ -579,11 +580,9 @@ public class XonReader extends StringParser implements XonParsers {
 							case 'L':
 								return returnValue(spos, Long.parseLong(s));
 							case 'I':
-								return returnValue(spos,
-									Integer.parseInt(s));
+								return returnValue(spos, Integer.parseInt(s));
 							case 'S':
-								return returnValue(spos,
-									Short.parseShort(s));
+								return returnValue(spos, Short.parseShort(s));
 							case 'B':
 								return returnValue(spos, Byte.parseByte(s));
 							case 'N':

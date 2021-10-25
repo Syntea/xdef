@@ -39,6 +39,7 @@ public class XDParseEmailAddr extends XDParserAbstract {
 				p.setParsedValue(new DefEmailAddr(s));
 				return true;
 			} catch (Exception ex) {}
+			p.setParsedValue(new DefEmailAddr()); // null email
 			//Incorrect value of &{0}&{1}&{: }
 			p.errorWithString(XDEF.XDEF809, parserName);
 		}
