@@ -119,10 +119,9 @@ public class GPSPosition {
 
 	@Override
 	public String toString() {
-		String result = "g(" + _latitude + ", " + _longitude
+		String result = _latitude + ", " + _longitude
 			+ (_altitude != Double.MIN_VALUE ? ", " + _altitude : "");
 		if (_name != null) {
-			result += ", ";
 			boolean notNeadDelimiter = false;
 			if (Character.isLetter(_name.charAt(0))) {
 				notNeadDelimiter = true;
@@ -135,12 +134,9 @@ public class GPSPosition {
 					}
 				}
 			}
-			if (notNeadDelimiter) {
-				result += _name;
-			} else {
-				result += '"' + SUtils.modifyString(_name, "\"", "\"\"") + '"';
-			}
+			result += ", " + (notNeadDelimiter ? _name
+				: ('"' + SUtils.modifyString(_name, "\"", "\"\"") + '"'));
 		}
-		return result += ')';
+		return result;
 	}
 }

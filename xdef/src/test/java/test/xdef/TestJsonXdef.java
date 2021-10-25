@@ -243,7 +243,7 @@ public class TestJsonXdef extends XDTester {
 					result += (result.isEmpty() ? "" : "\n")
 						+ "Error jparse Test" + id + "\n"
 						+ XonUtil.toJsonString(json) + "\n"
-						+ XonUtil.toJsonString(o) + "\n";
+						+ XonUtil.toJsonString(XonUtil.xonToJson(o)) + "\n";
 				}
 			} catch (Exception ex) {
 				fail(ex);
@@ -629,7 +629,7 @@ public class TestJsonXdef extends XDTester {
 			assertNoErrors(reporter);
 			xd = xp.createXDDocument("");
 			xd.setJSONContext(j);
-// TODO!!! - problem of construction of mixted with elements with matches
+// TODO!!! - problem of construction of mixed with elements with matches
 //			assertTrue(XonUtil.xonEqual(j, jcreate(xd, "Skladby", reporter)));
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}

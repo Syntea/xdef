@@ -90,11 +90,15 @@ class XonToString extends XonTools {
 			} else if (x instanceof URI) {
 				return "u\"" + jstringToSource(((URI) x).toASCIIString()) + '"';
 			} else if (x instanceof XDEmailAddr) {
-				return "e\""+jstringToSource(((XDEmailAddr) x).getEmailAddr())+'"';
+				return "e\""
+					+ jstringToSource(((XDEmailAddr) x).getEmailAddr()) + '"';
 			} else if (x instanceof SDatetime) {
 				return "D" + x;
-			} else if (x instanceof SDuration || x instanceof Price
-				|| x instanceof GPSPosition) {
+			} else if (x instanceof GPSPosition) {
+				return "g(" + x.toString() + ")";
+			} else if (x instanceof Price) {
+				return "p(" + x.toString() + ")";
+			} else if (x instanceof SDuration) {
 				return x.toString();
 			}
 		}
