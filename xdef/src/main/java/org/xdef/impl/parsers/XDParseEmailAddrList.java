@@ -5,6 +5,7 @@ import org.xdef.XDParseResult;
 import org.xdef.XDParserAbstract;
 import org.xdef.impl.code.DefContainer;
 import org.xdef.impl.code.DefEmailAddr;
+import org.xdef.impl.code.DefNull;
 import org.xdef.proc.XXNode;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.SParser;
@@ -35,6 +36,7 @@ public class XDParseEmailAddrList extends XDParserAbstract {
 				return;
 			}
 		} catch (Exception ex) {}
+		p.setParsedValue(DefNull.genNullValue(parsedType()));
 		//Incorrect value of &{0}&{1}{: }
 		p.errorWithString(XDEF.XDEF809, parserName());
 	}

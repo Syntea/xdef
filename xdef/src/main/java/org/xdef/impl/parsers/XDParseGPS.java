@@ -6,6 +6,7 @@ import org.xdef.impl.code.DefGPSPosition;
 import org.xdef.msg.XDEF;
 import org.xdef.proc.XXNode;
 import org.xdef.sys.GPSPosition;
+import org.xdef.sys.Report;
 import org.xdef.sys.SParser;
 import org.xdef.sys.SRuntimeException;
 
@@ -21,51 +22,53 @@ public class XDParseGPS extends XDParserAbstract {
 	public void parseObject(XXNode xnode, XDParseResult p) {
 		p.isSpaces();
 		int pos = p.getIndex();
-		if (p.isToken("g(")) {
-			try {
-				p.isSpaces();
-				int pos1 = p.getIndex();
-				if ((p.isSignedFloat() || p.isSignedInteger())) {
-					double latitude =
-						Double.parseDouble(p.getBufferPart(pos1, p.getIndex()));
-					String name = null;
-					if (p.isChar(',') && (p.isChar(' ') || true)) {
-						pos1 = p.getIndex();
-						if ((p.isSignedFloat() || p.isSignedInteger())) {
-							double longitude = Double.parseDouble(
-								p.getBufferPart(pos1, p.getIndex()));
-							double altitude = Double.MIN_VALUE;
-							if (p.isChar(',') && (p.isChar(' ') || true)) {
-								pos1 = p.getIndex();
-								if ((p.isSignedFloat() || p.isSignedInteger())) {
-									altitude = Double.parseDouble(
-										p.getBufferPart(pos1, p.getIndex()));
-									if (p.isChar(',') && (p.isChar(' ') || true)) {
-										name = readGPSName(p);
-									}
-								} else {
+		boolean xon;
+		if (xon = p.isToken("g(")) {
+			p.isSpaces();
+		}
+		try {
+			int pos1 = p.getIndex();
+			if ((p.isSignedFloat() || p.isSignedInteger())) {
+				double latitude =
+					Double.parseDouble(p.getBufferPart(pos1, p.getIndex()));
+				String name = null;
+				if (p.isChar(',') && (p.isChar(' ') || true)) {
+					pos1 = p.getIndex();
+					if ((p.isSignedFloat() || p.isSignedInteger())) {
+						double longitude = Double.parseDouble(
+							p.getBufferPart(pos1, p.getIndex()));
+						double altitude = Double.MIN_VALUE;
+						if (p.isChar(',') && (p.isChar(' ') || true)) {
+							pos1 = p.getIndex();
+							if ((p.isSignedFloat() || p.isSignedInteger())) {
+								altitude = Double.parseDouble(
+									p.getBufferPart(pos1, p.getIndex()));
+								if (p.isChar(',') && (p.isChar(' ') || true)) {
 									name = readGPSName(p);
 								}
-							} else  if (p.isChar(',')&&(p.isChar(' ')||true)) {
+							} else {
 								name = readGPSName(p);
 							}
-							if ((p.isSpaces() || true) && p.isChar(')')) {
-								GPSPosition gpos = new GPSPosition(
-									latitude, longitude, altitude, name);
-								p.setParsedValue(new DefGPSPosition(gpos));
-								return;
-							}
+						} else  if (p.isChar(',')&&(p.isChar(' ')||true)) {
+							name = readGPSName(p);
+						}
+						if (!xon || ((p.isSpaces()||true) && p.isChar(')'))) {
+							GPSPosition gpos = new GPSPosition(
+								latitude, longitude, altitude, name);
+							p.setParsedValue(new DefGPSPosition(gpos));
+							return;
 						}
 					}
 				}
-			} catch (SRuntimeException ex) {
-				p.putReport(ex.getReport());
 			}
+		} catch (SRuntimeException ex) {
+			Report r = ex.getReport();
+			p.error(r.getMsgID(), r.getText(), r.getModification());
 		}
 		p.setParsedValue(new DefGPSPosition()); //null GPS
 		//Incorrect value of '&{0}'&{1}{: }
-		p.errorWithString(XDEF.XDEF809, parserName(),
-			p.getBufferPart(pos, p.getIndex()));
+		p.errorWithString(XDEF.XDEF809,
+			parserName(), p.getBufferPart(pos, p.getIndex()));
 	}
 
 	/** Read name of position. */
