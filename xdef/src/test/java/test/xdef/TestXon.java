@@ -77,8 +77,6 @@ public class TestXon extends XDTester {
 
 	@Override
 	public void test() {
-//		assertNull(testx("decimal", "[ 0d, 1d, -1d, 1.5d, 3.33e-5d ]"));
-//if (true) return;
 		assertNull(testx("int", "[ ]"));
 		assertNull(testx("byte", "[ 1, -3 ]"));
 		assertNull(testx("short", "[ 1 ]"));
