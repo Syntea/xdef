@@ -18,8 +18,6 @@ import org.xdef.XDEmailAddr;
  * @author Vaclav Trojan
  */
 public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
-	/** BNF grammar of email address. */
-
 	/** Email source value. */
 	private final String _value;
 	/** Email domain. */
@@ -115,25 +113,25 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 	 */
 	public final static String[] parseEmail(final StringParser p) {
 		BNFGrammar g = BNFGrammar.compile(
-"S ::= [ #9]+ /* linear white space */\n" +
+"S ::= [ #9]+ /* linear white space */\n"+
 "asciiChar ::= [ -~]\n"+
-"comment ::=  S? ( commentList $rule) S?\n" +
-"commentList ::= ( '(' commentPart* ')' (S? '(' commentPart* ')')* )\n" +
-"commentPart ::= (asciiChar - [()])+ (S? commentList)?\n" +
+"comment ::=  S? ( commentList $rule) S?\n"+
+"commentList ::= ( '(' commentPart* ')' (S? '(' commentPart* ')')* )\n"+
+"commentPart ::= (asciiChar - [()])+ (S? commentList)?\n"+
 "specials ::=  [()<>@,;:\\\".#123#125] /*#123='[', #125=']'*/\n"+
-"atom ::= (asciiChar - specials - ' ')+\n" +
-"emailAddr ::= localPart domain $rule\n" +
-"emailAddr1 ::= '<' emailAddr '>' \n" +
-"localPart ::= atom ('.' atom)*\n" +
-"domain ::= '@' atom ('.' atom)*\n" +
-"email ::= (text? S? emailAddr1 | (comment* emailAddr)) (S? comment)*\n"+
+"atom ::= (asciiChar - specials - ' ')+\n"+
+"emailAddr ::= localPart domain $rule\n"+
+"emailAddr1 ::= '<' emailAddr '>' \n"+
+"localPart ::= atom ('.' atom)*\n"+
+"domain ::= '@' atom ('.' atom)*\n"+
 "text ::= ((comment* (textItem | comment)*) | comment* S? ptext)? comment*\n"+
 "textItem ::= S? '=?' charsetName ('Q?' qtext | 'B?' btext) '?='\n"+
 "charsetName ::= ([a-zA-Z] ('-'? [a-zA-Z0-9]+)*) $rule '?' \n"+
 "ptext ::= ((asciiChar - [@><()=])+) $rule\n"+
 "qtext ::= ((hexOctet | asciiChar - [=?])+) $rule /*quoted*/\n"+
 "hexOctet ::= '=' [0-9A-F] [0-9A-F]\n"+
-"btext ::= ([a-zA-Z0-9+/]+ '='? '='?) $rule /* base64 */");
+"btext ::= ([a-zA-Z0-9+/]+ '='? '='?) $rule /* base64 */\n"+
+"email ::= (text? S? emailAddr1 | (comment* emailAddr)) (S? comment)*");
 		p.isSpaces();
 		if (g.parse(p, "email")) {
 			String domain; // Email domain

@@ -267,16 +267,10 @@ public class CompileBase implements CodeTable, XDValueID {
 			"gYearMonth", "?xs:gYearMonth");
 		parser(im, org.xdef.impl.parsers.XSParseTime.class,
 			"time", "?xs:time", "?ISOtime");
-//		parser(im, org.xdef.impl.parsers.XDParseISOYearMonth.class,
-//			"?ISOyearMonth");
 		parser(im, org.xdef.impl.parsers.XDParseDateYMDhms.class, "dateYMDhms");
 		parser(im, org.xdef.impl.parsers.XDParseEmailDate.class, "emailDate");
 		parser(im, org.xdef.impl.parsers.XDParsePrintableDate.class,
 			"printableDate");
-//		parser(im, org.xdef.impl.parsers.XDParseISOYear.class, "?ISOyear");
-//		parser(im, org.xdef.impl.parsers.XDParseISODate.class, "?ISOdate");
-//		parser(im, org.xdef.impl.parsers.XDParseISODateTime.class,
-//			"?ISOdateTime");
 
 		im = genParserMetnod(0, 2, new short[] {XD_LONG, XD_LONG},
 			XD_LONG,
