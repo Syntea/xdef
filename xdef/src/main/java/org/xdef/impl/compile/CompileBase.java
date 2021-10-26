@@ -83,23 +83,24 @@ public class CompileBase implements CodeTable, XDValueID {
 		setType(XD_DURATION, "Duration", org.xdef.sys.SDuration.class);
 		setType(XD_BYTES, "Bytes", byte[].class);
 		setType(XD_GPSPOSITION, "GPSPosition", org.xdef.XDGPSPosition.class);
-		setType(XD_PRICE,"Price",org.xdef.XDPrice.class);
-		setType(XD_ANYURI,"URI", java.net.URI.class);
-		setType(XD_EMAIL,"EmailAddr", org.xdef.XDEmailAddr.class);
+		setType(XD_PRICE, "Price",org.xdef.XDPrice.class);
+		setType(XD_ANYURI, "URI", java.net.URI.class);
+		setType(XD_EMAIL, "EmailAddr", org.xdef.XDEmailAddr.class);
+		setType(XD_INETADDR, "InetAddr", java.net.InetAddress.class);
 		setType(XD_CONTAINER, "Container", org.xdef.XDContainer.class);
 		setType(XD_REGEX, "Regex", org.xdef.XDRegex.class);
 		setType(XD_REGEXRESULT, "RegexResult", org.xdef.XDRegexResult.class);
-		setType(XD_BNFGRAMMAR,"BNFGrammar", org.xdef.XDBNFGrammar.class);
-		setType(XD_BNFRULE,"BNFRule", org.xdef.XDBNFRule.class);
-		setType(XD_INPUT,"Input", org.xdef.XDInput.class);
-		setType(XD_OUTPUT,"Output", org.xdef.XDOutput.class);
+		setType(XD_BNFGRAMMAR, "BNFGrammar", org.xdef.XDBNFGrammar.class);
+		setType(XD_BNFRULE, "BNFRule", org.xdef.XDBNFRule.class);
+		setType(XD_INPUT, "Input", org.xdef.XDInput.class);
+		setType(XD_OUTPUT, "Output", org.xdef.XDOutput.class);
 		setType(XX_ELEMENT, "", org.xdef.proc.XXElement.class);
 		setType(XX_DATA, "", org.xdef.proc.XXData.class);
 		setType(XD_ELEMENT, "Element", org.w3c.dom.Element.class);
 		setType(XD_EXCEPTION, "Exception", org.xdef.XDException.class);
 		setType(XD_REPORT, "Report", org.xdef.sys.Report.class);
 		setType(XD_XPATH, "XpathExpr", org.xdef.xml.KXpathExpr.class);
-		setType(XD_XQUERY,"XqueryExpr", org.xdef.XDXQueryExpr.class);
+		setType(XD_XQUERY, "XqueryExpr", org.xdef.XDXQueryExpr.class);
 		setType(XD_PARSER, "Parser", org.xdef.XDParser.class);
 		setType(XD_PARSERESULT, "ParseResult", org.xdef.XDParseResult.class);
 		setType(XD_SERVICE, "Service", org.xdef.XDService.class);
@@ -134,6 +135,7 @@ public class CompileBase implements CodeTable, XDValueID {
 			((char) XD_PRICE) + ";Price;" +
 			((char) XD_ANYURI) + ";URI;" +
 			((char) XD_EMAIL) + ";EmailAddr;" +
+			((char) XD_INETADDR) + ";InetAddr;" +
 			((char) XD_BNFGRAMMAR) + ";DefBNFGrammar;" +
 			((char) XD_LOCALE) + ";Locale;" +
 			((char) XD_UNIQUESET_KEY) + ";uniqueSetKey;" +
@@ -201,6 +203,12 @@ public class CompileBase implements CodeTable, XDValueID {
 				-1, true, new DefString("collapse")));
 		parser(im, org.xdef.impl.parsers.XDParsePrice.class, "price");
 
+		im = genParserMetnod(0, 0, null, XD_INETADDR,
+			keyParam("pattern", XD_STRING, false, -1, false),
+			keyParam("whiteSpace", XD_STRING, false,
+				-1, true, new DefString("collapse")));
+		parser(im, org.xdef.impl.parsers.XDParseInetAddr.class, "inetAddr");
+		
 		im = genParserMetnod(0, 0, null, XD_CHAR,
 			keyParam("pattern", XD_STRING, false, -1, false),
 			keyParam("whiteSpace", XD_STRING, false,
@@ -1016,6 +1024,14 @@ public class CompileBase implements CodeTable, XDValueID {
 			ANY_MODE, 1, 1, XD_DURATION), "getStart");
 		method(ti, genInternalMethod(DURATION_GETYEARS, XD_LONG,
 			ANY_MODE, 1, 1, XD_DURATION), "getYears");
+
+////////////////////////////////////////////////////////////////////////////////
+// INETADDR
+////////////////////////////////////////////////////////////////////////////////
+		ti = XD_INETADDR;
+		method(ti, genInternalMethod(NEW_INETADDR, XD_INETADDR,
+			ANY_MODE, 1, 1, XD_STRING), "#");
+////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////
 // EMAILADDR

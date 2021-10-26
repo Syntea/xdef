@@ -760,48 +760,50 @@ public interface CodeTable {
 	////////////////////////////////////////////////////////////////////////////
 	//Costructors
 	////////////////////////////////////////////////////////////////////////////
+	/** Create BNF grammar. */
+	static final short NEW_BNFGRAMAR = CHECK_TYPE + 1;
+	/** Create bytes array. */
+	static final short NEW_BYTES = NEW_BNFGRAMAR + 1;
 	/** create new exception. */
-	static final short NEW_EXCEPTION = CHECK_TYPE + 1;
-	/** create new exception. */
-	static final short NEW_CONTAINER = NEW_EXCEPTION + 1;
-	/** Create GPosition. */
-	static final short NEW_GPSPOSITION = NEW_CONTAINER + 1;
-	/** Create GPosition. */
-	static final short NEW_CURRAMOOUNT = NEW_GPSPOSITION + 1;
+	static final short NEW_CONTAINER = NEW_BYTES + 1;
+	/** Create Price. */
+	static final short NEW_CURRAMOOUNT = NEW_CONTAINER + 1;
 	/** create new Element object. */
 	static final short NEW_ELEMENT = NEW_CURRAMOOUNT + 1;
 	/** create new Email object. */
 	static final short NEW_EMAIL = NEW_ELEMENT + 1;
-	/** Create bytes array. */
-	static final short NEW_BYTES = NEW_EMAIL + 1;
+	/** create new exception. */
+	static final short NEW_EXCEPTION = NEW_EMAIL + 1;
+	/** Create new exception. */
+	static final short NEW_INETADDR = NEW_EXCEPTION + 1;
+	/** Create GPosition. */
+	static final short NEW_GPSPOSITION = NEW_INETADDR + 1;
 	/** Create output stream. */
-	static final short NEW_INSTREAM = NEW_BYTES + 1;
+	static final short NEW_INSTREAM = NEW_GPSPOSITION + 1;
+	/** Create XML writer. */
+	static final short NEW_LOCALE = NEW_INSTREAM + 1;
+	/** Create named value. */
+	static final short NEW_NAMEDVALUE = NEW_LOCALE + 1;
 	/** Create output stream. */
-	static final short NEW_OUTSTREAM = NEW_INSTREAM + 1;
-	/** Create BNF grammar. */
-	static final short NEW_BNFGRAMAR = NEW_OUTSTREAM + 1;
+	static final short NEW_OUTSTREAM = NEW_NAMEDVALUE + 1;
 	/** Create parser. */
-	static final short NEW_PARSER = NEW_BNFGRAMAR + 1;
+	static final short NEW_PARSER = NEW_OUTSTREAM + 1;
 	/** Create parse result. */
 	static final short NEW_PARSERESULT = NEW_PARSER + 1;
+	/** Create XML writer. */
+	static final short NEW_REPORT = NEW_PARSERESULT + 1;
 	/** Create DB connection. */
-	static final short NEW_SERVICE = NEW_PARSERESULT + 1;
-	/** Create named value. */
-	static final short NEW_NAMEDVALUE = NEW_SERVICE + 1;
+	static final short NEW_SERVICE = NEW_REPORT + 1;
+	/** Create XML writer. */
+	static final short NEW_URI = NEW_SERVICE + 1;
 	/** Create namedValue. */
-	static final short NEW_XMLWRITER = NEW_NAMEDVALUE + 1;
-	/** Create XML writer. */
-	static final short NEW_REPORT = NEW_XMLWRITER + 1;
-	/** Create XML writer. */
-	static final short NEW_LOCALE = NEW_REPORT + 1;
-	/** Create XML writer. */
-	static final short NEW_URI = NEW_LOCALE + 1;
+	static final short NEW_XMLWRITER = NEW_URI + 1;
 
 	////////////////////////////////////////////////////////////////////////////
 	//External methods
 	////////////////////////////////////////////////////////////////////////////
 	/** External method with fixed parameters. */
-	static final short EXTMETHOD =  NEW_URI + 1;
+	static final short EXTMETHOD =  NEW_XMLWRITER + 1;
 	/** External method with array of parameters. */
 	static final short EXTMETHOD_ARRAY = EXTMETHOD + 1;
 	/** External check method */

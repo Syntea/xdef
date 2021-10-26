@@ -3,6 +3,7 @@ package org.xdef.xon;
 import java.io.Reader;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.net.InetAddress;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
@@ -406,7 +407,7 @@ public class XonReader extends StringParser implements XonParsers {
 			Object result = null;
 			char ch;
 			if (_xonMode&&(i=isOneOfTokens(new String[]{"c\"","u\"","e\"","b(",
-				"D","p(","g(","P","-P","NaN","INF","-INF"})) >= 0) {
+				"D","p(","g(","i(","P","-P","NaN","INF","-INF"})) >= 0) {
 				switch(i) {
 					case 0: // character
 						i = XonTools.readJChar(this);
@@ -505,16 +506,33 @@ public class XonReader extends StringParser implements XonParsers {
 							}
 						}
 						break;
-					case 7:
-					case 8:  // 'D' datetime
+					case 7: {// "i(" inetAddr
+						int pos1 = getIndex();
+						while ((ch = peekChar()) > ' ' && ch != ')') {}
+						int pos2 = getIndex() -1;
+						if (ch == ')' && pos2 > pos1) {
+							String s = getBufferPart(pos1,pos2);
+							try {
+								return returnValue(spos,
+									InetAddress.getByName(s));
+							} catch(Exception ex) {
+								////invalid InetAddr
+								error(XDEF.XDEF809,	"inetAddr",	s);
+								return returnValue(spos, null);
+							}
+						}
+						break;
+					}
+					case 8:  // 'P' duration
+					case 9:  // '-P' duration
 						setIndex(pos);
 						if (isXMLDuration()) {
 							return returnValue(spos, getParsedSDuration());
 						}
 						break;
-					case 9:  // "NaN"
-					case 10:  // "INF"
-					case 11:  // "-INF"
+					case 10:  // "NaN"
+					case 11:  // "INF"
+					case 12:  // "-INF"
 					if (isChar('F')) {
 						return returnValue(spos, i == 9 ? Float.NaN
 							: i == 10 ? Float.POSITIVE_INFINITY
@@ -657,7 +675,10 @@ public class XonReader extends StringParser implements XonParsers {
 				|| !(jv.getValue() instanceof String))) {
 				//Value in X-definition must be a string with X-script
 				error(JSON.JSON018);
-				jv = new XonTools.JValue(jv.getPosition(), "" + jv.getValue());
+				Object val = jv.getValue();
+System.out.println("" + val.toString());
+				jv = new XonTools.JValue(jv.getPosition(),
+					val == null ? "null" : val.toString());
 			}
 			String name = _jp.putValue(jv);
 			if (name != null) {

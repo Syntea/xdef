@@ -3,6 +3,7 @@ package org.xdef.xon;
 import java.io.File;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.net.InetAddress;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
@@ -162,6 +163,9 @@ class XonCompare {
 				return ((XDEmailAddr) o1).equals((XDEmailAddr) o2);
 			}
 			return false;
+		}
+		if (o1 instanceof InetAddress) {
+			return ((InetAddress) o1).equals(o2);
 		}
 		try {
 			byte[] b1 = (byte[]) o1;

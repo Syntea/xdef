@@ -7,6 +7,7 @@ import org.xdef.XDDocument;
 import org.xdef.XDPool;
 import org.xdef.model.XMData;
 import java.io.StringWriter;
+import java.net.InetAddress;
 import org.w3c.dom.Element;
 import org.xdef.XDContainer;
 import org.xdef.XDFactory;
@@ -885,6 +886,36 @@ public final class TestTypes extends XDTester {
 				((XDPrice) xd.getVariable("extValue")).display());
 			assertEq(2, ((XDPrice)
 				xd.getVariable("extValue")).fractionDigits());
+			xdef = // test InetAddr type
+"<xd:def xmlns:xd='" + _xdNS + "' root='root'>\n"+
+"  <xd:declaration>\n" +
+"    final Container c = new Container();\n"+
+"    external InetAddr extValue;\n"+
+"    void print() {\n"+
+"      for(int i=0; i LT c.getLength(); i++) {\n"+
+"        outln(c.item(i));\n"+
+"      }\n"+
+"      outln('ext: ' + extValue);\n"+
+"    }\n"+
+"  </xd:declaration>\n"+
+"  <root xd:script=\"finally print();\">\n"+
+"   <item xd:script=\"occurs +\">\n"+
+"     inetAddr(); onTrue c.addItem(getParsedValue());\n" +
+"   </item>\n"+
+"  </root>\n"+
+"</xd:def>";
+			xml =
+"<root>\n"+
+"  <item>i(129.144.52.38)</item>\n"+
+"  <item>i(1080:0:0:0:8:800:200C:417A)</item>\n"+
+"</root>";
+			strw = new StringWriter();
+			xd = compile(xdef).createXDDocument();
+			xd.setVariable("extValue", InetAddress.getByName("123.45.6.7"));
+			assertEq(xml, parse(xd, xml, reporter, strw, null, null));
+			assertNoErrors(reporter);
+			assertEq(strw.toString(),
+				"129.144.52.38\n1080:0:0:0:8:800:200c:417a\next: 123.45.6.7\n");
 			xdef = // expression in type validation
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<xd:declaration>\n"+

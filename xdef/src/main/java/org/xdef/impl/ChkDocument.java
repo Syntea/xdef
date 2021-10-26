@@ -54,7 +54,6 @@ import org.xdef.sys.SReporter;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
-import org.xdef.xon.XonNames;
 
 /** Provides root check object for generation of check tree and processing
  * of the X-definition.
