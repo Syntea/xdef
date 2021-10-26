@@ -208,7 +208,7 @@ public class CompileBase implements CodeTable, XDValueID {
 			keyParam("whiteSpace", XD_STRING, false,
 				-1, true, new DefString("collapse")));
 		parser(im, org.xdef.impl.parsers.XDParseInetAddr.class, "inetAddr");
-		
+
 		im = genParserMetnod(0, 0, null, XD_CHAR,
 			keyParam("pattern", XD_STRING, false, -1, false),
 			keyParam("whiteSpace", XD_STRING, false,
