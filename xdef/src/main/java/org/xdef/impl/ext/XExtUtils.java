@@ -8,7 +8,6 @@ import org.w3c.dom.Node;
 import org.xdef.XDConstants;
 import org.xdef.XDContainer;
 import org.xdef.XDEmailAddr;
-import org.xdef.XDInetAddr;
 import org.xdef.XDValue;
 import org.xdef.XDValueID;
 import org.xdef.impl.ChkNode;
