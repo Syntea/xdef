@@ -1179,6 +1179,9 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 									case XD_XPATH:
 										pars[j + k] = stack[i].stringValue();
 										break;
+									case XD_INETADDR:
+										pars[j + k] = stack[i].getObject();
+										break;
 									case XD_REGEX:
 									case XD_REGEXRESULT:
 									case XD_INPUT:
@@ -1196,7 +1199,6 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 									case XD_GPSPOSITION:
 									case XD_PRICE:
 									case XD_EMAIL:
-									case XD_INETADDR:
 										pars[j + k] = stack[i];
 										break;
 									default:

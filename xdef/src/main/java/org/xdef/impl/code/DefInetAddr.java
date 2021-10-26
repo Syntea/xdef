@@ -40,15 +40,6 @@ public class DefInetAddr extends XDValueAbstract implements XDInetAddr {
 ////////////////////////////////////////////////////////////////////////////////
 
 	@Override
-	/**	Returns the raw IP address of this InetAddress object.
-	 * The result is in network byte order: the highest order byte
-	 * of the address is in getAddress()[0].
-	 * @return array of bytes of IP address.
-	 */
-	public byte[] getAddress() {
-		return _inetAddr != null ? _inetAddr.getAddress() : null;
-	}
-	@Override
 		/**	Get the raw IP address in a string format.
 	 * @return raw IP address in a string format.
 	 */
@@ -62,6 +53,13 @@ public class DefInetAddr extends XDValueAbstract implements XDInetAddr {
 	@Override
 	public byte[] getBytes() {
 		return _inetAddr != null ? _inetAddr.getAddress(): null;
+	}
+	
+	/**	Check if IP address of this InetAddress object is IPv6.
+	 * @return true if IP address of this InetAddress object is IPv6.
+	 */
+	public boolean isIPv6() {
+		return _inetAddr == null ? false : _inetAddr.getAddress().length == 16;
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
