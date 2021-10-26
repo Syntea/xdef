@@ -29,7 +29,7 @@ public class DefInetAddr extends XDValueAbstract implements XDInetAddr {
 			throw new SRuntimeException(ex);
 		}
 	}
-	
+
 	/** Create new instance of DefInetAddr with InetAddress.
 	 * @param inetAddr InternetAddress.
 	 */
