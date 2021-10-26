@@ -288,7 +288,7 @@ final class ChkXONParser implements XParser, XonParser {
 				_chkEl.newAttribute(_element.getAttributeNode(ka.getName()));
 			}
 		}
-			_sReporter.setPosition(parsedElem.getParsedNameSourcePosition());
+		_sReporter.setPosition(parsedElem.getParsedNameSourcePosition());
 		_chkEl.checkElement();
 	}
 

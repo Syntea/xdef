@@ -97,6 +97,7 @@ public class TestXon extends XDTester {
 		assertNull(testx("anyURI", "[ u\"http://a.b\" ]"));
 		assertNull(testx("emailAddr","[ e\"tro@volny.cz\",e\"a b<x@y.zz>\" ]"));
 		assertNull(testx("file", "[ \"temp/a.txt\" ]"));
+		assertNull(testx("inetAddr", "[i(::FFFF:129.144.52.38),i(0.0.0)]\n"));
 		String s, json, xon, xdef;
 		Object x, y;
 		XDPool xp;
@@ -158,7 +159,9 @@ public class TestXon extends XDTester {
 "  \"gps()\",\n" +
 "  \"base64Binary()\",\n" +
 "  \"price()\",\n" +
-"  \"? price()\"\n" +
+"  \"price()\",\n" +
+"  \"inetAddr()\",\n" +
+"  \"inetAddr()\"\n" +
 "]\n" +
 "</xd:json>\n" +
 "<xd:component>\n"+
@@ -217,6 +220,8 @@ public class TestXon extends XDTester {
 "  b(HbRBHbRBHQw=),                   /* byte array (base64) */\n" +
 "  p(123.45 CZK),                     /* price */ \n" +
 "  p(12 USD),                         /* price */\n" +
+"  i(129.144.52.38),                  /* inetAddr (IPv4) */\n" +
+"  i(1080:0:0:0:8:800:200C:417A),     /* inetAddr (IPv6)  */\n" +
 "] /**** end of array ****/\n" +
 "# End of XON example";
 			x = XonUtil.parseXON(xon);

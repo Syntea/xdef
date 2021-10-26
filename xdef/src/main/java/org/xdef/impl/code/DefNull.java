@@ -186,6 +186,10 @@ public final class DefNull extends XDValueAbstract {
 				return new DefGPSPosition();
 			case XD_PRICE: // GPSPosition
 				return new DefPrice();
+			case XD_EMAIL: // EmailAddr
+				return new DefEmailAddr();
+			case XD_INETADDR: // InetAddr
+				return new DefInetAddr();
 			case XD_REGEX: // Regular expression value
 				return new DefRegex();
 			case XD_REGEXRESULT: //Regular expression result value

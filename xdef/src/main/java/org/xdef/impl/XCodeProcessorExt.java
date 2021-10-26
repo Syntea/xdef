@@ -11,6 +11,7 @@ import javax.xml.XMLConstants;
 import org.w3c.dom.Element;
 import org.xdef.XDEmailAddr;
 import org.xdef.XDException;
+import org.xdef.XDInetAddr;
 import org.xdef.XDOutput;
 import org.xdef.XDParseResult;
 import org.xdef.XDParser;
@@ -103,6 +104,8 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 							}
 						case XD_EMAIL:
 							return (XDEmailAddr) p;
+						case XD_INETADDR:
+							return (XDInetAddr) p;
 					}
 					//Icorrect type conversion from AnyValue
 					throw new SRuntimeException(XDEF.XDEF536);
@@ -1193,6 +1196,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 									case XD_GPSPOSITION:
 									case XD_PRICE:
 									case XD_EMAIL:
+									case XD_INETADDR:
 										pars[j + k] = stack[i];
 										break;
 									default:

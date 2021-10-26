@@ -3,6 +3,7 @@ package org.xdef.xon;
 import java.io.File;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.net.InetAddress;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -98,6 +99,8 @@ class XonToString extends XonTools {
 				return "g(" + x.toString() + ")";
 			} else if (x instanceof Price) {
 				return "p(" + x.toString() + ")";
+			} else if (x instanceof InetAddress) {
+				return "i(" + x.toString().substring(1) + ")";
 			} else if (x instanceof SDuration) {
 				return x.toString();
 			}
@@ -106,6 +109,8 @@ class XonToString extends XonTools {
 			return "b(" + new String(SUtils.encodeBase64((byte[]) x)) + ")";
 		} else if (x instanceof File) {// file
 			result = ((File) x).getAbsolutePath();
+		} else if (x instanceof InetAddress) {
+			result = x.toString().substring(1);
 		} else {
 			result = x.toString();
 		}

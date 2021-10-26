@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.PrintStream;
 import java.io.Writer;
 import java.math.BigDecimal;
+import java.net.InetAddress;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -37,6 +38,7 @@ import org.xdef.impl.code.DefDuration;
 import org.xdef.impl.code.DefElement;
 import org.xdef.impl.code.DefGPSPosition;
 import org.xdef.impl.code.DefInStream;
+import org.xdef.impl.code.DefInetAddr;
 import org.xdef.impl.code.DefLocale;
 import org.xdef.impl.code.DefLong;
 import org.xdef.impl.code.DefNull;
@@ -519,10 +521,12 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 			setVariable(name, ((BigDecimal) value));
 		} else if (value instanceof Locale) {
 			setVariable(name, (new DefLocale((Locale) value)));
-		} else if (value instanceof Price) {
-			setVariable(name, (new DefPrice((Price) value)));
 		} else if (value instanceof GPSPosition) {
 			setVariable(name, (new DefGPSPosition((GPSPosition) value)));
+		} else if (value instanceof Price) {
+			setVariable(name, (new DefPrice((Price) value)));
+		} else if (value instanceof InetAddress) {
+			setVariable(name, (new DefInetAddr((InetAddress) value)));
 		} else {
 			//Value is not compatible with the type of variable '&{0}'
 			throw new SRuntimeException(XDEF.XDEF564, name);

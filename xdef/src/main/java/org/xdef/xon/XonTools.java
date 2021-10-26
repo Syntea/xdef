@@ -2,6 +2,7 @@ package org.xdef.xon;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -419,6 +420,8 @@ public class XonTools {
 			s = (String) x;
 		} else if (x instanceof Character) {
 			s = String.valueOf((Character) x);
+		} else if (x instanceof InetAddress) {
+			return x.toString().substring(1);
 		} else if (x instanceof byte[]) {
 			s = new String(SUtils.encodeBase64((byte[]) x));
 		} else {

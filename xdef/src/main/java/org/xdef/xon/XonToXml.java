@@ -1,5 +1,6 @@
 package org.xdef.xon;
 
+import java.net.InetAddress;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -214,6 +215,8 @@ class XonToXml extends XonTools implements XonNames {
 				return s;
 			}
 			return '"' + sb.toString() + '"';
+		} else if (val instanceof InetAddress) {
+			return val.toString().substring(1);
 		} else {// Number or Boolean
 			return val.toString();
 		}

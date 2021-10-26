@@ -48,6 +48,8 @@ public enum XDValueType {
 	PRICE,
 	/** Email address. */
 	EMAIL,
+	/** Internet IP address. */
+	INETADDR,
 	/** Regular expression value. */
 	REGEX,
 	/** Regular expression result value. */
