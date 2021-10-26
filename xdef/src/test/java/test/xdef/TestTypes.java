@@ -919,10 +919,10 @@ public final class TestTypes extends XDTester {
 			xdef = // expression in type validation
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<xd:declaration>\n"+
-" boolean x(){return int | string;}\n"+
+"  boolean x() { return int | string; }\n"+
 "</xd:declaration>\n"+
 "<A a=\"x()\"/>\n"+
-"<a a='x(); finally out(int | string)'/>\n"+
+"<a a='x(); finally out(int | string);'/>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xml = "<a a='1'/>";
