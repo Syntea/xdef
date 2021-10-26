@@ -2,11 +2,13 @@ package org.xdef.impl.ext;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.net.InetAddress;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xdef.XDConstants;
 import org.xdef.XDContainer;
 import org.xdef.XDEmailAddr;
+import org.xdef.XDInetAddr;
 import org.xdef.XDValue;
 import org.xdef.XDValueID;
 import org.xdef.impl.ChkNode;
@@ -189,8 +191,19 @@ public final class XExtUtils {
 	public static String getEmailLocalPart(final XDEmailAddr x) {
 		return x.getLocalPart();
 	}
-	public static String getEmailDomain(final XDEmailAddr x) {return x.getDomain();}
-	public static String getEmailAddr(final XDEmailAddr x){return x.getEmailAddr();}
+	public static String getEmailDomain(final XDEmailAddr x) {
+		return x.getDomain();
+	}
+ 	public static String getEmailAddr(final XDEmailAddr x){
+		return x.getEmailAddr();
+	}
+	public static String getHostAddress(final InetAddress x){
+		return x.getHostAddress();
+	}
+	public static byte[] getBytes(final InetAddress x){return x.getAddress();}
+	public static boolean isIPv6(final InetAddress x) {
+		return x == null ? false : x.getAddress().length > 4;
+	}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of script methods.
