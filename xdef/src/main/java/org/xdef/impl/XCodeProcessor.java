@@ -807,6 +807,10 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 						_stack[sp] = new DefString(_stack[sp].toString());
 					}
 					continue;
+				case EQUALS_OP:
+					sp--;
+					_stack[sp]=new DefBoolean(_stack[sp].equals(_stack[sp+1]));
+					continue;
 				case TO_STRING_X:
 					_stack[sp - item.getParam()] =
 						new DefString(_stack[sp - item.getParam()].toString());

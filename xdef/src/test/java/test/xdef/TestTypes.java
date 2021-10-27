@@ -891,11 +891,12 @@ public final class TestTypes extends XDTester {
 "  <xd:declaration>\n" +
 "    final Container c = new Container();\n"+
 "    external InetAddr x;\n"+
+"    InetAddr y = new InetAddr(x.toString());\n"+
 "    void print() {\n"+
 "      for(int i=0; i LT c.getLength(); i++) {\n"+
 "        out(c.item(i) + ',');\n"+
 "      }\n"+
-"      out('x: ' + getHostAddress(x));\n"+
+"      out('x: ' + getHostAddress(x) + ';' + equals(x,y));\n"+
 "    }\n"+
 "  </xd:declaration>\n"+
 "  <root xd:script=\"finally print();\">\n"+
@@ -915,14 +916,14 @@ public final class TestTypes extends XDTester {
 			assertEq(xml, parse(xd, xml, reporter, strw, null, null));
 			assertNoErrors(reporter);
 			assertEq(strw.toString(),
-				"129.144.52.38,1080:0:0:0:8:800:200c:417a,x: 123.45.6.7");
+				"129.144.52.38,1080:0:0:0:8:800:200c:417a,x: 123.45.6.7;true");
 			xdef = // expression in type validation
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<xd:declaration>\n"+
-"  boolean x() { return int | string; }\n"+
+" boolean x(){return int | string;}\n"+
 "</xd:declaration>\n"+
 "<A a=\"x()\"/>\n"+
-"<a a='x(); finally out(int | string);'/>\n"+
+"<a a='x(); finally out(int | string)'/>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xml = "<a a='1'/>";

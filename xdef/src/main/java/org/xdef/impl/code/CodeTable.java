@@ -70,8 +70,10 @@ public interface CodeTable {
 	static final short NULL_OR_TO_STRING = TO_CHAR_X + 1;
 	/** String from any value  on the top of stack. */
 	static final short TO_STRING = NULL_OR_TO_STRING + 1;
+	/** Equals of objects. */
+	static final short EQUALS_OP = TO_STRING + 1;
 	/** String from any value stack item (top - index). */
-	static final short TO_STRING_X = TO_STRING + 1;
+	static final short TO_STRING_X = EQUALS_OP + 1;
 	/** Date to milliseconds  on the top of stack. */
 	static final short TO_MILLIS = TO_STRING_X + 1;
 	/** Date to milliseconds on the stack item (top - index). */
