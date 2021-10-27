@@ -1,6 +1,5 @@
 package org.xdef.impl.code;
 
-import org.xdef.sys.StringParser;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
 import org.xdef.XDValueType;
@@ -50,11 +49,7 @@ public final class DefString extends XDValueAbstract {
 					sb.append("\\\\");
 					break;
 				default:
-					if (StringParser.getXmlCharType(c, (byte) 10) == 0) {
-						sb.append(c); //TODO ???
-					} else {
-						sb.append(c);
-					}
+					sb.append(c);
 			}
 		}
 		return sb.append('\'').toString();
@@ -105,13 +100,10 @@ public final class DefString extends XDValueAbstract {
 	 */
 	public XDValue cloneItem() {return new DefString(_value);}
 	@Override
-	public int hashCode() {return _value.hashCode();}
+	public int hashCode() {return _value == null ? 0 : _value.hashCode();}
 	@Override
 	public boolean equals(final Object arg) {
-		if (arg instanceof XDValue) {
-			return equals(((XDValue) arg));
-		}
-		return false;
+		return arg instanceof XDValue ? equals(((XDValue) arg)) : false;
 	}
 	@Override
 	/** Check whether some other XDValue object is "equal to" this one.
@@ -120,20 +112,17 @@ public final class DefString extends XDValueAbstract {
 	 * of the object is comparable and equals to this one.
 	 */
 	public boolean equals(final XDValue arg) {
-		if (isNull()) {
-			return arg == null || arg.isNull();
-		}
-		if (arg == null || arg.isNull() || arg.getItemId() != XD_STRING) {
-			return false;
-		}
-		return _value.equals(arg.stringValue());
+		return isNull() ? arg == null || arg.isNull()
+			: (arg == null || arg.isNull() || arg.getItemId() != XD_STRING)
+				? false : _value.equals(arg.stringValue());
 	}
 	/** Check whether some other DefString object is "equal to" this one.
 	 * @param arg other DefString object to which is to be compared.
 	 * @return true if the value of the argument is equal to this one.
 	 */
 	public boolean equals(final DefString arg) {
-		return _value == null ? arg._value == null : _value.equals(arg._value);}
+		return _value == null ? arg._value == null : _value.equals(arg._value);
+	}
 	@Override
 	/** Compares this XDValue object with the other XDValue object.
 	 * @param arg other XDValue object to which is to be compared.

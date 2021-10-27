@@ -14,17 +14,17 @@ import org.xdef.sys.SRuntimeException;
  */
 public class DefInetAddr extends XDValueAbstract implements XDInetAddr {
 	/** Value of InetAddress. */
-	private final InetAddress _inetAddr;
+	private final InetAddress _value;
 
 	/** Create new instance null DefInetAddr. */
-	public DefInetAddr() {_inetAddr = null;}
+	public DefInetAddr() {_value = null;}
 
 	/** Create new instance of DefInetAddr from source string.
 	 * @param inetAddr String representation of InternetAddress.
 	 */
 	public DefInetAddr(final String inetAddr) {
 		try {
-			_inetAddr = InetAddress.getByName(inetAddr);
+			_value = InetAddress.getByName(inetAddr);
 		} catch (Exception ex) {
 			throw new SRuntimeException(ex);
 		}
@@ -33,7 +33,7 @@ public class DefInetAddr extends XDValueAbstract implements XDInetAddr {
 	/** Create new instance of DefInetAddr with InetAddress.
 	 * @param inetAddr InternetAddress.
 	 */
-	public DefInetAddr(final InetAddress inetAddr) {_inetAddr = inetAddr;}
+	public DefInetAddr(final InetAddress inetAddr) {_value = inetAddr;}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDInetAddr interface
@@ -44,7 +44,7 @@ public class DefInetAddr extends XDValueAbstract implements XDInetAddr {
 	 * @return raw IP address in a string format.
 	 */
 	public String getHostAddress() {
-		return _inetAddr != null ? _inetAddr.getHostAddress() : null;
+		return _value != null ? _value.getHostAddress() : null;
 	}
 
 	/** Get bytes from InetAddress.
@@ -52,25 +52,31 @@ public class DefInetAddr extends XDValueAbstract implements XDInetAddr {
 	 */
 	@Override
 	public byte[] getBytes() {
-		return _inetAddr != null ? _inetAddr.getAddress(): null;
+		return _value != null ? _value.getAddress(): null;
 	}
-	
+
+	@Override
 	/**	Check if IP address of this InetAddress object is IPv6.
 	 * @return true if IP address of this InetAddress object is IPv6.
 	 */
 	public boolean isIPv6() {
-		return _inetAddr == null ? false : _inetAddr.getAddress().length == 16;
+		return _value == null ? false : _value.getAddress().length == 16;
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDValue interface
 ////////////////////////////////////////////////////////////////////////////////
 	@Override
+	public int hashCode() {return _value == null ? 0 : _value.hashCode();}
+	@Override
+	public boolean equals(final Object arg) {
+		return arg instanceof XDValue ? equals((XDValue) arg) : false;
+	}
+	@Override
 	public boolean equals(final XDValue arg) {
 		if (arg instanceof DefInetAddr) {
 			DefInetAddr x = (DefInetAddr) arg;
-			return _inetAddr != null ? _inetAddr.equals(x._inetAddr)
-				: x._inetAddr == null;
+			return _value != null ? _value.equals(x._value) : x._value == null;
 		}
 		return false;
 	}
@@ -89,12 +95,12 @@ public class DefInetAddr extends XDValueAbstract implements XDInetAddr {
 	public XDValueType getItemType() {return XDValueType.INETADDR;}
 	@Override
 	public String stringValue() {
-		return isNull() ? "null"
-			:_inetAddr.toString().substring(1);}
+		return isNull() ? "null" :_value.toString().substring(1);
+	}
 	@Override
-	public boolean isNull() {return _inetAddr == null;}
+	public boolean isNull() {return _value == null;}
 	@Override
-	public InetAddress getObject() {return _inetAddr;}
+	public InetAddress getObject() {return _value;}
 	@Override
 	public String toString() {return stringValue();}
 }
