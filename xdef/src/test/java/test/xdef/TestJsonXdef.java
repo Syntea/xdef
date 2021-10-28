@@ -284,7 +284,7 @@ public class TestJsonXdef extends XDTester {
 						+ "\n"+ KXmlUtils.nodeToString(e, true);
 				}
 				Object o = XonUtil.xmlToJson(xc.toXml());
-				if (!XonUtil.xonEqual(json, o)) { ///S
+				if (!XonUtil.xonEqual(json, XonUtil.xonToJson(o))) { ///S
 					result += (result.isEmpty() ? "" : "\n")
 						+ "Error X-component toJsjon " + id + "\n"
 						+ XonUtil.toJsonString(json) + "\n"

@@ -6,6 +6,7 @@ import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.URI;
 import java.util.Arrays;
+import java.util.Currency;
 import java.util.List;
 import java.util.Map;
 import org.xdef.msg.JSON;
@@ -166,6 +167,9 @@ class XonCompare {
 		}
 		if (o1 instanceof InetAddress) {
 			return ((InetAddress) o1).equals(o2);
+		}
+		if (o1 instanceof Currency) {
+			return ((Currency) o1).equals(o2);
 		}
 		try {
 			byte[] b1 = (byte[]) o1;

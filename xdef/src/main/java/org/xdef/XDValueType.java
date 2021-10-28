@@ -42,6 +42,8 @@ public enum XDValueType {
 	ANYURI,
 	/** Container value. */
 	CONTAINER,
+	/** Currency value. */
+	CURRENCY,
 	/** GPS position. */
 	GPSPOSITION,
 	/** Price (amount with currency). */

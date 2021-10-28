@@ -770,8 +770,10 @@ public interface CodeTable {
 	static final short NEW_CONTAINER = NEW_BYTES + 1;
 	/** Create Price. */
 	static final short NEW_CURRAMOOUNT = NEW_CONTAINER + 1;
+	/** Create Currency. */
+	static final short NEW_CURRENCY = NEW_CONTAINER + 1;
 	/** create new Element object. */
-	static final short NEW_ELEMENT = NEW_CURRAMOOUNT + 1;
+	static final short NEW_ELEMENT = NEW_CURRENCY + 1;
 	/** create new Email object. */
 	static final short NEW_EMAIL = NEW_ELEMENT + 1;
 	/** create new exception. */

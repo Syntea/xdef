@@ -217,7 +217,7 @@ class XonToXml extends XonTools implements XonNames {
 			return '"' + sb.toString() + '"';
 		} else if (val instanceof InetAddress) {
 			return val.toString().substring(1);
-		} else {// Number or Boolean
+		} else {// Number or Boolean or othr objects
 			return val.toString();
 		}
 	}

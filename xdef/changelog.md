@@ -1,5 +1,10 @@
 # Version ${version}, release-date ${release.date}
 
+# Version 41.0.0, release-date 2021-10-28
+* preparing release version 4.1
+* added X-script type `InetAddr`
+* added X-script type `Currency`
+
 # Version 40.1.8, release-date 2021-10-26
 * fixed bug if an external method throws an exception.
 * BNF grammar is extended and has now possibility of "all" selection

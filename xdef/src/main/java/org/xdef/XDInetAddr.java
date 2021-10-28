@@ -9,7 +9,7 @@ public interface XDInetAddr extends XDValue {
 	 * @return raw IP address in a string format.
 	 */
 	public String getHostAddress();
-	
+
 	/**	Check if IP address of this InetAddress object is IPv6.
 	 * @return true if IP address of this InetAddress object is IPv6.
 	 */

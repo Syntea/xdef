@@ -6,6 +6,7 @@ import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -101,6 +102,8 @@ class XonToString extends XonTools {
 				return "p(" + x.toString() + ")";
 			} else if (x instanceof InetAddress) {
 				return "i(" + x.toString().substring(1) + ")";
+			} else if (x instanceof Currency) {
+				return "C(" + ((Currency) x).getCurrencyCode() + ")";
 			} else if (x instanceof SDuration) {
 				return x.toString();
 			}
@@ -111,6 +114,8 @@ class XonToString extends XonTools {
 			result = ((File) x).getAbsolutePath();
 		} else if (x instanceof InetAddress) {
 			result = x.toString().substring(1);
+		} else if (x instanceof Currency) {
+			result = ((Currency) x).getCurrencyCode();
 		} else {
 			result = x.toString();
 		}
@@ -311,6 +316,8 @@ class XonToString extends XonTools {
 			return ((File) x).getAbsolutePath();
 		} else if (x instanceof InetAddress) {
 			return x.toString().substring(1);
+		} else if (x instanceof InetAddress) {
+			return ((Currency) x).getCurrencyCode();
 		}
 		return x.toString();
 	}

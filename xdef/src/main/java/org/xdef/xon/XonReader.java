@@ -7,6 +7,7 @@ import java.net.InetAddress;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -407,7 +408,7 @@ public class XonReader extends StringParser implements XonParsers {
 			Object result = null;
 			char ch;
 			if (_xonMode&&(i=isOneOfTokens(new String[]{"c\"","u\"","e\"","b(",
-				"D","p(","g(","i(","P","-P","NaN","INF","-INF"})) >= 0) {
+				"D","p(","g(","i(","C(","P","-P","NaN","INF","-INF"})) >= 0) {
 				switch(i) {
 					case 0: // character
 						i = XonTools.readJChar(this);
@@ -516,23 +517,39 @@ public class XonReader extends StringParser implements XonParsers {
 								return returnValue(spos,
 									InetAddress.getByName(s));
 							} catch(Exception ex) {
-								////invalid InetAddr
+								//invalid InetAddr
 								error(XDEF.XDEF809,	"inetAddr",	s);
 								return returnValue(spos, null);
 							}
 						}
 						break;
 					}
-					case 8:  // 'P' duration
-					case 9:  // '-P' duration
+					case 8: {// "C(" currency
+						int pos1 = getIndex();
+						while ((ch = peekChar()) > ' ' && ch != ')') {}
+						int pos2 = getIndex() -1;
+						if (ch == ')' && pos2 > pos1) {
+							String s = getBufferPart(pos1,pos2);
+							Currency curr = Currency.getInstance(s);
+							if (curr != null) {
+								return returnValue(spos, curr);
+							}
+							//invalid currency
+							error(XDEF.XDEF809,	"currency",	s);
+							return returnValue(spos, null);
+						}
+						break;
+					}
+					case 9:  // 'P' duration
+					case 10:  // '-P' duration
 						setIndex(pos);
 						if (isXMLDuration()) {
 							return returnValue(spos, getParsedSDuration());
 						}
 						break;
-					case 10:  // "NaN"
-					case 11:  // "INF"
-					case 12:  // "-INF"
+					case 11:  // "NaN"
+					case 12:  // "INF"
+					case 13:  // "-INF"
 					if (isChar('F')) {
 						return returnValue(spos, i == 9 ? Float.NaN
 							: i == 10 ? Float.POSITIVE_INFINITY

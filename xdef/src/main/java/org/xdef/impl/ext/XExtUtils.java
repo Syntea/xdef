@@ -193,7 +193,7 @@ public final class XExtUtils {
 	public static String getEmailDomain(final XDEmailAddr x) {
 		return x.getDomain();
 	}
- 	public static String getEmailAddr(final XDEmailAddr x){
+		public static String getEmailAddr(final XDEmailAddr x){
 		return x.getEmailAddr();
 	}
 	public static String getHostAddress(final InetAddress x){
