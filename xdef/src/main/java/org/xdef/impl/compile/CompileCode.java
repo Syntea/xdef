@@ -1863,25 +1863,19 @@ public final class CompileCode extends CompileBase {
 				_parser.error(XDEF.XDEF438); //Value expected
 			}
 			return true;
-		}
-		if ("equals".equals(name) && numPar == 1) {
+		} else if (xType < 0 || xType >= X_NOTYPE_VALUE) {
+			return false;
+		} else if ("equals".equals(name) && numPar == 1) {
 			addCode(new CodeI1(XD_BOOLEAN, EQUALS_OP, 1), -1);
 			_cstack[_sp] = -1;
 			topToBool();
 			return true;
-		}
-		if ("toString".equals(name) && numPar == 0) {
+		} else if ("toString".equals(name) && numPar == 0) {
 			topToString();
 			return true;
-		}
-		if (xType == X_ATTR_REF && numPar == 0) {
-			if ("exists".equals(name)) {
-				topToBool();
-				return true;
-			}
-		}
-		if (xType < 0 || xType >= X_NOTYPE_VALUE) {
-			return false;
+		} else if ("exists".equals(name) && xType == X_ATTR_REF && numPar == 0){
+			topToBool();
+			return true;
 		}
 		InternalMethod imethod = getTypeMethod(xType, name);
 		if (imethod == null && xType == XD_PARSER) {
