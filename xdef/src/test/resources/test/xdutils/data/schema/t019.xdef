@@ -1,9 +1,0 @@
-<xd:def xmlns:xd="http://www.syntea.cz/xdef/3.1"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    name="t019"
-    root="a">
-    <a>
-      <b xd:text="optional string(1,100)"></b>
-      <c>required int(1,100)</c>
-    </a>
-</xd:def>

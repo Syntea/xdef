@@ -1,7 +1,0 @@
-<root
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:noNamespaceSchemaLocation="t099.xsd">
-  <integer>a16777216</integer>
-  <integer>-a16777216</integer>
-  <integer>-167772160000000000000000000000000000000000000000000000000</integer>
-</root>
