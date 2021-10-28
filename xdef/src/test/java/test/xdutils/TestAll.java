@@ -20,8 +20,6 @@ public class TestAll {
 			new TestPrettyXdef(),
 			new TestValidate(),
 			new TestXDefUtils(),
-			new TestXd2XsdConv(),
-			new TestXsd2XdConv(),
 		};
 	}
 

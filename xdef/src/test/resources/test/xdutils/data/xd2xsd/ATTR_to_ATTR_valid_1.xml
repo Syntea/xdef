@@ -1,8 +1,0 @@
-<Staff>
-    <Worker id="1"
-            name="John"
-            surname="Doe" />
-    <ExternalFirm id="2"
-            name="Syntea"
-            address="Prague" />
-</Staff>
