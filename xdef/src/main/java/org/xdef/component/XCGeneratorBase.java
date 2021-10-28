@@ -847,6 +847,9 @@ class XCGeneratorBase {
 				x = (getBytesType(xdata) == 2
 					? "encodeHex" : "encodeBase64") + "(get&{name}()))";
 				break;
+			case XDValueID.XD_INETADDR:
+				x = "get&{name}().toString().substring(1))";
+				break;
 			case XDValueID.XD_NULL: //jnull
 				x = "\"null\")";
 				break;

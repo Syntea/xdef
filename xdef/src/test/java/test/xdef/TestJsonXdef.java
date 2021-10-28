@@ -141,7 +141,7 @@ public class TestJsonXdef extends XDTester {
 				newFile.delete();
 			}
 			try {
-				SUtils.deleteAll(xdir, true);
+				SUtils.deleteAll(xdir, true);// delete X-components java sources
 			} catch (Exception ex) {}
 			if (!rebuild) {
 				for (File fdef: _jfiles) {
@@ -343,7 +343,7 @@ public class TestJsonXdef extends XDTester {
 		// Generate data (X-definitons, X-components, XML source files).
 		try {
 			xp = genAll("Test*");
-//			xp = genAll("Test028");
+//			xp = genAll("Test064");
 		} catch (Exception ex) {
 			fail(new RuntimeException(ex));
 			return;

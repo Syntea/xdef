@@ -309,6 +309,8 @@ class XonToString extends XonTools {
 			return new String(SUtils.encodeBase64((byte[]) x));
 		} else if (x instanceof File) {
 			return ((File) x).getAbsolutePath();
+		} else if (x instanceof InetAddress) {
+			return x.toString().substring(1);
 		}
 		return x.toString();
 	}
