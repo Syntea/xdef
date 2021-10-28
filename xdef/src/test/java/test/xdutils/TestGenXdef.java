@@ -126,8 +126,6 @@ public class TestGenXdef extends XDTester {
 "</Values>",
 dataDir + "Matej3_out.xml",
 dataDir + "TestValidate2.xml",
-dataDir + "../../data/schema/D1A.xml",
-dataDir + "../../data/schema/L1A.xml",
 		}) {
 			try {
 				el = GenXDefinition.genXdef(x);

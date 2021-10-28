@@ -1,8 +1,0 @@
-<xd:def xmlns:xd = "http://www.syntea.cz/xdef/3.1" name = "a" root = "a" >
-  <a a = "optional string(1,8)">
-    <xd:mixed>
-      <b b = "optional string(1,8)" >required int()</b>
-      <c c = "optional int(1,8)" xd:script ="occurs 0..5">optional int()</c>
-    </xd:mixed>
-  </a>
-</xd:def>
