@@ -1,8 +1,0 @@
-<note xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:noNamespaceSchemaLocation="t006.xsd">
-  <to>Tove</to>
-  <from>Jani</from>
-  <heading>Reminder</heading>
-  <body>Don't forget me this weekend!</body>
-  <date>28.32.1999 23:53</date>
-</note>
