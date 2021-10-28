@@ -87,9 +87,9 @@ final public class TestCompose extends XDTester {
 "  <a>" +
 "    <A xd:script='occurs 0..1; ref B; create from(\"A\")' />" +
 "  </a>" +
-"  <B a='create toString(from(\"@A\"))'>" +
-"    <C a='create toString(from(\"@A\"))'>" +
-"      create toString(from(\"@A\"))" +
+"  <B a='create from(\"@A\").toString()'>" +
+"    <C a='create from(\"@A\").toString()'>" +
+"      create from(\"@A\").toString()" +
 "    </C>" +
 "  </B>" +
 "</xd:def>";
@@ -564,7 +564,7 @@ final public class TestCompose extends XDTester {
 "  <New1 xd:script=\"create from('inside1'); finally myProc2();\"\n"+
 "        P1=\"optional string(); create from('@Q1');\"\n"+
 "        P2=\"optional string();\n"+
-"           create toString(from('@Q2'));\"\n"+
+"           create from('@Q2').toString();\"\n"+
 "        X=\"optional; create myProc1('@Q1');\">\n"+
 "  </New1>\n"+
 "  <inside2 xd:script=\"finally myProc2();\"\n"+
@@ -622,8 +622,8 @@ final public class TestCompose extends XDTester {
 "</xd:declaration>\n"+
 "<New xd:script=\"create from('/Old'); finally myProc2();\"\n"+
 "     VER=\"fixed '2.0'\"\n"+
-"     P1=\"required string(); create toString(from('@Q1'));\"\n"+
-"     P2=\"required string(); create toString(from('@Q2'));\"\n"+
+"     P1=\"required string(); create from('@Q1').toString();\"\n"+
+"     P2=\"required string(); create from('@Q2').toString();\"\n"+
 "     X=\"required; create myProc1('@Q1','/Old/@ver');\">\n"+
 "</New>\n"+
 "<Old ver=\"fixed '1.0'\"\n"+
@@ -856,7 +856,7 @@ final public class TestCompose extends XDTester {
 + "<Seznam_jmen xd:script=\"create from('/Davka')\" >\n"
 + "  <Zamestanec xd:script=\"occurs 1..; create from('Osoba')\"> \n"
 + "    optional string();\n"
-+ "    create @Jmeno + ' ' + toString(from('@Prijmeni'))\n"
++ "    create @Jmeno + ' ' + from('@Prijmeni')\n"
 + "  </Zamestanec>\n"
 + "</Seznam_jmen>\n"
 + "</xd:def>";
@@ -2039,7 +2039,7 @@ final public class TestCompose extends XDTester {
 "          PersonalId =\"required checkId(); create from('@pid')\"\n"+
 "          xd:script=\"occurs 1; create from('Client[@role=\\'2\\']')\"/>\n"+
 "  <Policyholder Title = \"required string(1,30);\n"+
-"                  create toString(from('@name'))+' '+from('@familyname')\"\n"+
+"                  create from('@name')+' '+from('@familyname')\"\n"+
 "          IC    = \"required num(8); create from('@ic')\"\n"+
 "          xd:script = \"occurs 1; create from('Client[@role=\\'3\\']')\"/>\n"+
 "</Contract>\n"+

@@ -1864,6 +1864,12 @@ public final class CompileCode extends CompileBase {
 			}
 			return true;
 		}
+		if ("equals".equals(name) && numPar == 1) {
+			addCode(new CodeI1(XD_BOOLEAN, EQUALS_OP, 1), -1);
+			_cstack[_sp] = -1;
+			topToBool();
+			return true;
+		}
 		if ("toString".equals(name)) {
 			if (numPar == 0) {
 				topToString();
@@ -2875,8 +2881,7 @@ final class ScriptMethod {
 }
 
 /** Object containing the external method. */
-class ExternalMethod {
-
+final class ExternalMethod {
 	/** Name of method (may be alias). */
 	private final String _name;
 	/** External method. */
@@ -2925,9 +2930,6 @@ class ExternalMethod {
 	 * @return Java external method object.
 	 */
 	final Method getMethod() { return _method; }
-
 	@Override
-	public final String toString() {
-		return _name + "; " + _method;
-	}
+	public final String toString() {return _name + "; " + _method;}
 }

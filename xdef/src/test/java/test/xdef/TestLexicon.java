@@ -57,7 +57,7 @@ public final class TestLexicon extends XDTester {
 "  <Mediator xd:script=\"occurs 1; create from('Client[@Typ=\\'3\\']');\"\n"+
 "            ID=\"required num(8); create from('@IČO');\"\n"+
 "            Name=\"required string(1,30);\n"+
-"              create toString(from('@GivenName'))+' '+from('@LastName');\"/>\n"+
+"              create from('@GivenName') + ' ' + from('@LastName');\"/>\n"+
 "</Agreement>\n"+
 "<xd:component>\n"+
 "  %class test.xdef.component.L_Contract %link kontrakt#Contract;\n"+

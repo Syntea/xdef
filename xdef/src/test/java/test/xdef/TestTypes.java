@@ -896,7 +896,7 @@ public final class TestTypes extends XDTester {
 "      for(int i=0; i LT c.getLength(); i++) {\n"+
 "        out(c.item(i) + ',');\n"+
 "      }\n"+
-"      out('x: ' + getHostAddress(x) + ';' + equals(x,y));\n"+
+"      out('x: ' + getHostAddress(x) + ';' + x.equals(y));\n"+
 "    }\n"+
 "  </xd:declaration>\n"+
 "  <root xd:script=\"finally print();\">\n"+

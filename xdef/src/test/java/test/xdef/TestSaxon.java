@@ -145,7 +145,7 @@ public class TestSaxon extends XDTester {
 "<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n"+
 "   <a C='required num(1,9);'>\n"+
 "      <O J='optional string(1,36);\n"+
-"            finally setText(toString(xquery(\".\")) + \"d\");' />\n"+
+"            finally setText(xquery(\".\") + \"d\");' />\n"+
 "   </a>\n"+
 "</xd:def>");
 			xml = "<a C='5'><O J='Abc'/></a>";
