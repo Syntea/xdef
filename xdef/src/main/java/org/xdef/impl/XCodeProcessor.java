@@ -57,6 +57,7 @@ import org.xdef.impl.code.DefBoolean;
 import org.xdef.impl.code.DefBytes;
 import org.xdef.impl.code.DefChar;
 import org.xdef.impl.code.DefContainer;
+import org.xdef.impl.code.DefCurrency;
 import org.xdef.impl.code.DefDate;
 import org.xdef.impl.code.DefDecimal;
 import org.xdef.impl.code.DefDouble;
@@ -3092,6 +3093,9 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 					continue;
 				case NEW_PARSERESULT:
 					_stack[sp] = new DefParseResult(_stack[sp].toString());
+					continue;
+				case NEW_CURRENCY:
+					_stack[sp] = new DefCurrency(_stack[sp].toString());
 					continue;
 				case NEW_EMAIL:
 					_stack[sp] = new DefEmailAddr(_stack[sp].toString());

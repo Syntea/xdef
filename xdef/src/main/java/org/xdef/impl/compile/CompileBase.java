@@ -82,6 +82,7 @@ public class CompileBase implements CodeTable, XDValueID {
 		setType(XD_DATETIME, "Datetime", org.xdef.sys.SDatetime.class);
 		setType(XD_DURATION, "Duration", org.xdef.sys.SDuration.class);
 		setType(XD_BYTES, "Bytes", byte[].class);
+		setType(XD_CURRENCY, "Currency", java.util.Currency.class);
 		setType(XD_GPSPOSITION, "GPSPosition", org.xdef.XDGPSPosition.class);
 		setType(XD_PRICE, "Price",org.xdef.XDPrice.class);
 		setType(XD_ANYURI, "URI", java.net.URI.class);
@@ -134,6 +135,7 @@ public class CompileBase implements CodeTable, XDValueID {
 			((char) XD_GPSPOSITION) + ";GPSPosition;" +
 			((char) XD_PRICE) + ";Price;" +
 			((char) XD_ANYURI) + ";URI;" +
+			((char) XD_CURRENCY) + ";Currency;" +
 			((char) XD_EMAIL) + ";EmailAddr;" +
 			((char) XD_INETADDR) + ";InetAddr;" +
 			((char) XD_BNFGRAMMAR) + ";DefBNFGrammar;" +
@@ -208,6 +210,12 @@ public class CompileBase implements CodeTable, XDValueID {
 			keyParam("whiteSpace", XD_STRING, false,
 				-1, true, new DefString("collapse")));
 		parser(im, org.xdef.impl.parsers.XDParseInetAddr.class, "inetAddr");
+
+		im = genParserMetnod(0, 0, null, XD_CURRENCY,
+			keyParam("pattern", XD_STRING, false, -1, false),
+			keyParam("whiteSpace", XD_STRING, false,
+				-1, true, new DefString("collapse")));
+		parser(im, org.xdef.impl.parsers.XDParseCurrency.class, "currency");
 
 		im = genParserMetnod(0, 0, null, XD_CHAR,
 			keyParam("pattern", XD_STRING, false, -1, false),
@@ -912,6 +920,13 @@ public class CompileBase implements CodeTable, XDValueID {
 			ANY_MODE, 1, 3, XD_CONTAINER, XD_STRING, XD_BOOLEAN),"sort");
 		method(ti, genInternalMethod(CONTEXT_TO_ELEMENT, XD_ELEMENT,
 			ANY_MODE, 1, 3, XD_CONTAINER, XD_STRING, XD_STRING), "toElement");
+
+////////////////////////////////////////////////////////////////////////////////
+// CURRENCY
+////////////////////////////////////////////////////////////////////////////////
+		ti = XD_CURRENCY;
+		method(ti, genInternalMethod(NEW_CURRENCY, XD_CURRENCY,
+			ANY_MODE, 1, 1, XD_STRING), "#");
 
 ////////////////////////////////////////////////////////////////////////////////
 // DATETIME

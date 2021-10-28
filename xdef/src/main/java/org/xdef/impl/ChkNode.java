@@ -9,6 +9,7 @@ import java.net.InetAddress;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Currency;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -31,6 +32,7 @@ import org.xdef.impl.code.CodeUniqueset;
 import org.xdef.impl.code.DefBigInteger;
 import org.xdef.impl.code.DefBoolean;
 import org.xdef.impl.code.DefContainer;
+import org.xdef.impl.code.DefCurrency;
 import org.xdef.impl.code.DefDate;
 import org.xdef.impl.code.DefDecimal;
 import org.xdef.impl.code.DefDouble;
@@ -527,6 +529,9 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 			setVariable(name, (new DefPrice((Price) value)));
 		} else if (value instanceof InetAddress) {
 			setVariable(name, (new DefInetAddr((InetAddress) value)));
+		} else if (value instanceof Currency) {
+			setVariable(name,
+				new DefCurrency(((Currency) value).getCurrencyCode()));
 		} else {
 			//Value is not compatible with the type of variable '&{0}'
 			throw new SRuntimeException(XDEF.XDEF564, name);

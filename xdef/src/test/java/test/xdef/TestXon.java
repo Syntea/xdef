@@ -98,6 +98,7 @@ public class TestXon extends XDTester {
 		assertNull(testx("emailAddr","[ e\"tro@volny.cz\",e\"a b<x@y.zz>\" ]"));
 		assertNull(testx("file", "[ \"temp/a.txt\" ]"));
 		assertNull(testx("inetAddr", "[i(::FFFF:129.144.52.38),i(0.0.0)]\n"));
+		assertNull(testx("currency", "[C(USD), C(CZK)]\n"));
 		String s, json, xon, xdef;
 		Object x, y;
 		XDPool xp;
@@ -160,6 +161,7 @@ public class TestXon extends XDTester {
 "  \"base64Binary()\",\n" +
 "  \"price()\",\n" +
 "  \"price()\",\n" +
+"  \"currency()\",\n" +
 "  \"inetAddr()\",\n" +
 "  \"inetAddr()\"\n" +
 "]\n" +
@@ -220,6 +222,7 @@ public class TestXon extends XDTester {
 "  b(HbRBHbRBHQw=),                   /* byte array (base64) */\n" +
 "  p(123.45 CZK),                     /* price */ \n" +
 "  p(12 USD),                         /* price */\n" +
+"  C(USD),                            /* currency */\n" +
 "  i(129.144.52.38),                  /* inetAddr (IPv4) */\n" +
 "  i(1080:0:0:0:8:800:200C:417A),     /* inetAddr (IPv6)  */\n" +
 "] /**** end of array ****/\n" +

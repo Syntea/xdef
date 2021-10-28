@@ -190,6 +190,8 @@ public final class DefNull extends XDValueAbstract {
 				return new DefEmailAddr();
 			case XD_INETADDR: // InetAddr
 				return new DefInetAddr();
+			case XD_CURRENCY: // Currency
+				return new DefCurrency();
 			case XD_REGEX: // Regular expression value
 				return new DefRegex();
 			case XD_REGEXRESULT: //Regular expression result value

@@ -9,6 +9,7 @@ import java.util.Locale;
 import java.util.StringTokenizer;
 import javax.xml.XMLConstants;
 import org.w3c.dom.Element;
+import org.xdef.XDCurrency;
 import org.xdef.XDEmailAddr;
 import org.xdef.XDException;
 import org.xdef.XDInetAddr;
@@ -104,6 +105,8 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 							}
 						case XD_EMAIL:
 							return (XDEmailAddr) p;
+						case XD_CURRENCY:
+							return (XDCurrency) p;
 						case XD_INETADDR:
 							return (XDInetAddr) p;
 					}
@@ -1180,6 +1183,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 										pars[j + k] = stack[i].stringValue();
 										break;
 									case XD_INETADDR:
+									case XD_CURRENCY:
 										pars[j + k] = stack[i].getObject();
 										break;
 									case XD_REGEX:

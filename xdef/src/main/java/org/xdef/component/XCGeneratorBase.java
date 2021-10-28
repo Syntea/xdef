@@ -282,6 +282,8 @@ class XCGeneratorBase {
 				return "java.net.URI";
 			case XDValueID.XD_EMAIL:
 				return "org.xdef.XDEmailAddr";
+			case XDValueID.XD_CURRENCY:
+				return "java.util.Currency";
 			case XDValueID.XD_INETADDR:
 				return "java.net.InetAddress";
 			case XDValueID.XD_BYTES:
@@ -376,10 +378,13 @@ class XCGeneratorBase {
 				return "(java.net.URI) "+result+"getParsedValue().getObject()";
 			case XDValueID.XD_EMAIL:
 				return "(org.xdef.XDEmailAddr) "
-					+result + "getParsedValue().getObject()";
+					+ result + "getParsedValue().getObject()";
 			case XDValueID.XD_INETADDR:
 				return "(java.net.InetAddress) "
-					+result + "getParsedValue().getObject()";
+					+ result + "getParsedValue().getObject()";
+			case XDValueID.XD_CURRENCY:
+				return "(java.util.Currency) "
+					+ result + "getParsedValue().getObject()";
 			case XDValueID.XD_BYTES:
 				return result + "getParsedValue().getBytes()";
 			case XDValueID.XD_PARSER:
