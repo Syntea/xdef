@@ -1870,11 +1870,9 @@ public final class CompileCode extends CompileBase {
 			topToBool();
 			return true;
 		}
-		if ("toString".equals(name)) {
-			if (numPar == 0) {
-				topToString();
-				return true;
-			}
+		if ("toString".equals(name) && numPar == 0) {
+			topToString();
+			return true;
 		}
 		if (xType == X_ATTR_REF && numPar == 0) {
 			if ("exists".equals(name)) {
