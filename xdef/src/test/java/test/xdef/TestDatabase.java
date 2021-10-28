@@ -464,7 +464,7 @@ public final class TestDatabase extends XDTester {
 "        con.execute('CREATE TABLE ' + xpath('../@name') +\n"+
 "          '.' + @name + ' (' + getText() + ')');\n"+
 "      } catch (Exception ex) {\n"+
-"        error(toString(ex));\n"+
+"        error(ex.toString());\n"+
 "	  }\n"+
 "    </table>\n"+
 "  </schema>\n"+

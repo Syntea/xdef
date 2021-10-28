@@ -64,26 +64,26 @@ public final class Test000 extends XDTester {
 			assertNoErrors(reporter);
 			xdef = //toString(obj) method
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-" <a a='finally if (!toString(12).equals(\"12\")) error(toString(12));'/>\n"+
+" <a a='finally if (!((String) 12).equals(\"12\")) error((String) 12);'/>\n"+
 "</xd:def>";
 			xml = "<a a='x'/>";
 			assertFalse(test(xdef, xml, "",'P'));
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-" <a a='required string; finally if (!(toString(from(\"@a\"))==\"x\"))\n"+
-"       error(toString(from(\"@a\")));'/>\n"+
+" <a a='required string; finally if (!(from(\"@a\").toString()==\"x\"))\n"+
+"       error(from(\"@a\").toString());'/>\n"+
 "</xd:def>";
 			assertFalse(test(xdef, xml, "",'P'));
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-" <a a='required string; finally if (!toString(from(\"@b\")).equals(\"\"))\n"+
-"       error(toString(from(\"@b\")));'/>\n"+
+" <a a='required string; finally if (!from(\"@b\").toString().equals(\"\"))\n"+
+"       error(from(\"@b\").toString());'/>\n"+
 "</xd:def>";
 			assertFalse(test(xdef, xml, "",'P'));
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-" <a a='finally if (!toString(from(getElement(),\"@a\")).equals(\"x\"))\n"+
-"         error(toString(from(\"@a\")));'/>\n"+
+" <a a='finally if (!from(getElement(),\"@a\").toString().equals(\"x\"))\n"+
+"         error(from(\"@a\").toString());'/>\n"+
 "</xd:def>";
 			assertFalse(test(xdef, xml, "",'P'));
 			// declaration of variables in different XDefinitions in collection
@@ -271,7 +271,7 @@ public final class Test000 extends XDTester {
 "<xd:declaration>int n=0; float sum=0.0; </xd:declaration>\n"+
 "<xd:macro name=\"tiskPerson\">finally {n++; outln('Person '+@FirstName\n"+
 "  + ' ' + @LastName + ' earns ' + @Salary + ' (' + getTextContent() + ')');\n"+
-" sum+=int.parse(toString(@Salary)).intValue();}\n"+
+" sum+=int.parse(@Salary.toString()).intValue();}\n"+
 "</xd:macro>\n"+
 "<xd:macro name=\"tisk:Total\">finally outln('Number of people = ' + n + \n"+
 " ', average salary = ' + (sum/n));</xd:macro>\n"+
@@ -327,7 +327,7 @@ public final class Test000 extends XDTester {
 			assertFalse(test(xdef, xml, "",'P'));
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"  <a a=\"string(1,8);onTrue{if (!'1'.equals(toString(@a)))error('á');}\"/>\n"+
+"  <a a=\"string(1,8);onTrue{if (!'1'.equals(@a))error('á');}\"/>\n"+
 "</xd:def>";
 			xml = "<a a=\"1\"/>";
 			assertFalse(test(xdef, xml, "",'P'));

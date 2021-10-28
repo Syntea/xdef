@@ -770,10 +770,8 @@ public class CompileBase implements CodeTable, XDValueID {
 			ANY_MODE, 1, 1, XD_OBJECT), "SetUserObject");
 		method(ti, genInternalMethod(GET_STRING_TAIL, XD_STRING,
 			ANY_MODE, 2, 2, XD_STRING,XD_LONG), "tail");
-		method(ti, genInternalMethod(TO_STRING, XD_STRING,
-			ANY_MODE, 1, 2, XD_ANY,XD_STRING), "toString");
-		method(ti, genInternalMethod(EQUALS_OP, XD_BOOLEAN,
-			ANY_MODE, 2, 2, XD_ANY,XD_ANY), "equals");
+		method(ti, genInternalMethod(TO_STRING, XD_STRING, // toString(x,y)
+			ANY_MODE, 2, 2, XD_ANY,XD_STRING), "toString");
 		method(ti, genInternalMethod(DEBUG_TRACE, XD_VOID, //debug trace
 			ANY_MODE, 0, 2, XD_ANY), "trace");
 		method(ti, genInternalMethod(TRANSLATE_S, XD_STRING,
@@ -1348,8 +1346,6 @@ public class CompileBase implements CodeTable, XDValueID {
 			ANY_MODE, 2, 2, XD_STRING, XD_STRING), "endsWith");
 		method(ti, genInternalMethod(ENDSWITHI, XD_BOOLEAN,
 			ANY_MODE, 2, 2, XD_STRING, XD_STRING), "endsWithi");
-		method(ti,genInternalMethod(CMPEQ, XD_BOOLEAN,
-			ANY_MODE, 2, 2, XD_STRING, XD_STRING), "equals");
 		method(ti,genInternalMethod(EQUALSI, XD_BOOLEAN,
 			ANY_MODE, 2, 2, XD_STRING, XD_STRING), "equalsIgnoreCase");
 		method(ti, genInternalMethod(GET_BYTES_FROM_STRING, XD_BYTES,

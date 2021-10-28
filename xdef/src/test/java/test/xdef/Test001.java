@@ -35,7 +35,6 @@ public final class Test001  extends XDTester {
 "        xd:script = \"occurs 0..1; finally {outln(@attr); \n"+
 "                      outln('1.' + @attr); \n"+
 "                      outln('2.' + (@attr).toString()); \n"+
-"                      outln('3.' + toString(@attr));\n"+
 "                      outln(!(@attr).exists());\n"+
 "                      outln(!(@attr));\n"+
 "                      outln((@attr));\n"+
@@ -52,7 +51,7 @@ public final class Test001  extends XDTester {
 "</a>\n";
 			assertFalse(test(xdef, xml, "",'P',
 				"<a><b attr='xxxx'/>text1<c/>text2</a>",
-				"xxxx\n1.xxxx\n2.xxxx\n3.xxxx\nfalse\n"+
+				"xxxx\n1.xxxx\n2.xxxx\nfalse\n"+
 				"false\nxxxx\nxxxx\ntext: orig1\ntext: \n"));
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='Book'>\n"+
@@ -186,7 +185,7 @@ public final class Test001  extends XDTester {
 "          PersonalId = \"required $checkId(); create from('@pid')\"\n"+
 "          xd:script = \"occurs 1; create from('Client[@role=\\'2\\']')\"/>\n"+
 "  <Policyholder Title = \"required string(1,30);\n"+
-"                  create toString(from('@name'))+' '+from('@familyname')\"\n"+
+"                  create from('@name').toString()+' '+from('@familyname')\"\n"+
 "     IC    = \"required num(8); create from('@ic')\"\n"+
 "     xd:script=\"occurs 1; create from('Client[@role=\\'3\\']')\"/>\n"+
 "</Contract>\n"+
@@ -421,14 +420,14 @@ public final class Test001  extends XDTester {
 "    </h1>\n"+
 "    <li xd:script=\"occurs 1..; create from('/Weather/Measurement')\">\n"+
 "    required string(); create {$num++;\n"+
-"             $sum += parseFloat(toString(from('@temperature')));" +
+"             $sum += parseFloat(from('@temperature').toString());" +
 "outln('sum=' + $sum + ', num=' + $num);\n"+
-"return 'Time: ' + toString(from('@time'))\n"+
-"       + ', wind: ' + toString(from('@wind'))\n"+
-"       + ', temperature: ' + toString(from('@temperature'));}\n"+
+"return 'Time: ' + from('@time').toString()\n"+
+"       + ', wind: ' + from('@wind').toString()\n"+
+"       + ', temperature: ' + from('@temperature').toString();}\n"+
 "     </li>\n"+
 "<p>" +
-"   required; create 'Average temprerature: ' + toString(((float)$sum)/$num)\n"+
+"   required; create 'Average temprerature: ' + (((float) $sum)/$num)\n"+
 "</p>" +
 "  </body>\n"+
 "</html>\n"+
@@ -478,14 +477,14 @@ public final class Test001  extends XDTester {
 "     }\n"+
 "     <li xd:script=\"occurs 1..; create from('/Weather/Measurement')\">\n"+
 "        required string();\n"+
-"        create {$num++; $sum += parseFloat(toString(@temperature));" +
+"        create {$num++; $sum += parseFloat(@temperature.toString());" +
 "          outln('sum=' + $sum + ', num=' + $num);\n"+
-"          return 'Time: ' + toString(from('@time'))\n"+
-"            + ', wind: ' + toString(from('@wind'))\n"+
-"            + ', temperature: ' + toString(from('@temperature'));}\n"+
+"          return 'Time: ' + from('@time').toString()\n"+
+"            + ', wind: ' + from('@wind').toString()\n"+
+"            + ', temperature: ' + from('@temperature').toString();}\n"+
 "     </li>\n"+
 "<p>" +
-"   required; create 'Average temprerature: ' + toString(((float)$sum)/$num)\n"+
+"   required; create 'Average temprerature: ' + (((float)$sum)/$num)\n"+
 "</p>" +
 "  </body>\n"+
 "</html>\n"+
