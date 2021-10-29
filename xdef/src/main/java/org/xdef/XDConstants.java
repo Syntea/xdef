@@ -134,7 +134,7 @@ public interface XDConstants {
 ////////////////////////////////////////////////////////////////////////////////
 
 	/** Recommended namespace prefix used for XON/JSON/INI XML format. */
-	public static final String XON_NS_PREFIX = "XON";
+	public static final String XON_NS_PREFIX = "jx";
 	/** URI of XON/JSON/INI XML X-definition conversion. */
 	public static final String XON_NS_URI_XD = "http://www.xdef.org/xon/4.0";
 	/** URI of XON/JSON/INI XML W3C like conversion*/
