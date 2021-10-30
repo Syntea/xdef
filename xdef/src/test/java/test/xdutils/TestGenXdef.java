@@ -40,7 +40,8 @@ public class TestGenXdef extends XDTester {
 "<A a='a' b='bb' c='1' d='true'></A>",
 "<A>\n"+
 "  <B a='11.06.87'/><B a='11.06.1987'/>\n"+
-"  <C a='11.06.87'/><C a='11.06.1987'/>\n"+
+"  <C a='125.6.1'/><C a='12.06.1987'/>\n"+
+"  <D a='1.5 CZK'/><D a='12 USD'/>\n"+
 "</A>",
 "<T>\n"+
 "  <R A='xx' B='aaa'/>\n"+

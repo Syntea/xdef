@@ -13,9 +13,11 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xdef.XDConstants;
+import org.xdef.impl.parsers.XDParseCurrency;
 import org.xdef.impl.parsers.XDParseEmailAddr;
 import org.xdef.impl.parsers.XDParseEmailDate;
 import org.xdef.impl.parsers.XDParseGPS;
+import org.xdef.impl.parsers.XDParseInetAddr;
 import org.xdef.impl.parsers.XDParseMD5;
 import org.xdef.impl.parsers.XDParsePrice;
 import org.xdef.impl.parsers.XDParsePrintableDate;
@@ -518,6 +520,12 @@ public class GenXDef implements XDConstants {
 		}
 		if (new XDParseGPS().check(null, data).matches()) {
 			return "gps()";
+		}
+//		if (new XDParseCurrency().check(null, data).matches()) {
+//			return "currency()";
+//		}
+		if (new XDParseInetAddr().check(null, data).matches()) {
+			return "inetAddr()";
 		}
 		if (new XDParsePrice().check(null, data).matches()) {
 			return "price()";
