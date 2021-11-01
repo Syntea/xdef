@@ -488,8 +488,7 @@ public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 	 * @param msg The message.
 	 */
 	private static void printUsage(final String msg) {
-		System.err.println(
-"ReportPrinter                                    (c)2006 Syntea Software Group"
+		System.err.println("ReportPrinter"
 			);
 		System.err.println(msg);
 		System.err.println("Usage: -i errfile [-o output]\n"
@@ -514,7 +513,7 @@ public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 		int len = args.length - 1;
 		String inputFname = null;
 		String outputFname = null;
-		for (int i = 0, j = 0; i <= len; i++) {
+		for (int i = 0; i <= len; i++) {
 			if (args[i].startsWith("-")) {
 				if (args[i].length() >= 2) {
 					switch (args[i].charAt(1)) {
@@ -580,5 +579,4 @@ public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 			out.flush();
 		}
 	}
-
 }

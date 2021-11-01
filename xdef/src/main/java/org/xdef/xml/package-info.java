@@ -1,5 +1,5 @@
 /**
- * <H1>Syntea XML tools.</H1>
+ * <H1>XML tools</H1>
  * <H2>KDOMBuilder</H2>
  * Tools for creating, parsing and processing of XML data.
  * E.g.:

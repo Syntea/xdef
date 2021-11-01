@@ -3,7 +3,7 @@ package org.xdef.sys;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 
-/** Interface for exceptions extended with Syntea reporting tools.
+/** Interface for exceptions extended with reporting tools.
  * @author Trojan
  */
 public interface SThrowable {
