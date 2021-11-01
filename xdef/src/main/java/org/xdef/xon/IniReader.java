@@ -198,7 +198,8 @@ public class IniReader extends StringParser implements XonParsers {
 			_jp.putValue(new XonTools.JValue(spos, val));
 			return true;
 		}
-		throw new RuntimeException("'=' expected");
+		//"&{0}"&{1}{ or "}{"} expected
+		throw new SRuntimeException(JSON.JSON002, "=");
 	}
 
 	@SuppressWarnings("unchecked")
@@ -245,25 +246,27 @@ public class IniReader extends StringParser implements XonParsers {
 							p1 = new SBuffer(XonNames.SCRIPT_NAME, spos);
 							p2 = new SBuffer(t.substring(0,i), p.getPosition());
 						} else {
-							throw new RuntimeException(" text after \"]\"");
+							//Not allowed character&{0}{ "}{"}
+							throw new SRuntimeException(JSON.JSON017);
 						}
 					}
 				}
 				if (p1 == null) {
 //					//Value of $script must be string with X-script
-//					error(JSON.JSON018);
-					throw new RuntimeException(" script error");
+					throw new SRuntimeException(JSON.JSON018);
 				}
 			} else {
 				p.setPosition(spos);
 				if (!p.findChar(']')) {
-					throw new RuntimeException("] missing");
+					//"&{0}"&{1}{ or "}{"} expected&
+					throw new SRuntimeException(JSON.JSON002, "]");
 				}
 				name = p.getBufferPart(spos.getIndex(), p.getIndex());
 				p.nextChar();
 				p.isSpaces();
 				if (!p.eos()) {
-					throw new RuntimeException(" text after \"]\"");
+					//Not allowed character&{0}{ "}{"}
+					throw new SRuntimeException(JSON.JSON017);
 				}
 			}
 			_jp.namedValue(new SBuffer(name.trim(), spos));
