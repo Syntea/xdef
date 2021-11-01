@@ -5,6 +5,7 @@ import org.xdef.XDParserAbstract;
 import org.xdef.impl.code.DefIPAddr;
 import org.xdef.msg.XDEF;
 import org.xdef.proc.XXNode;
+import static org.xdef.sys.SParser.NOCHAR;
 
 /** Parse Internet IP address.
  * @author Vaclav Trojan
@@ -19,11 +20,19 @@ public class XDParseIPAddr extends XDParserAbstract {
 		p.isSpaces();
 		p.isChar('/');
 		int pos1 = p.getIndex();
-		while ("0123456789abcdefABCDEF:.".indexOf(p.getCurrentChar()) >= 0) {
+		int parts = 0;
+		while ("0123456789abcdefABCDEF".indexOf(p.getCurrentChar()) >= 0) {
 			p.nextChar();
+			char ch = p.isOneOfChars(":.");
+			if (ch != NOCHAR) {
+				parts++;
+				if(ch == ':') {
+					while(p.isChar(':'));
+				}
+			}
 		}
 		int pos2 = p.getIndex();
-		if (pos2 > pos1) {
+		if (parts > 1) {
 			String s = p.getBufferPart(pos1, pos2);
 			try {
 				p.setParsedValue(new DefIPAddr(s));

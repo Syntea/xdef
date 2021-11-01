@@ -521,9 +521,9 @@ public class GenXDef implements XDConstants {
 		if (new XDParseGPS().check(null, data).matches()) {
 			return "gps()";
 		}
-//		if (new XDParseCurrency().check(null, data).matches()) {
-//			return "currency()";
-//		}
+		if (new XDParseCurrency().check(null, data).matches()) {
+			return "currency()";
+		}
 		if (new XDParseIPAddr().check(null, data).matches()) {
 			return "ipAddr()";
 		}

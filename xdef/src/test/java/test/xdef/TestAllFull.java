@@ -45,6 +45,10 @@ public class TestAllFull {
 		System.out.println("Testing X-definition version 4.0");
 		result += XDTester.runTests(System.out, System.err, log,
 			tests, "package xdef", XDTester.getFulltestMode(), args);
+		XDTester._xdNS = XDConstants.XDEF41_NS_URI;
+		System.out.println("Testing X-definition version 4.1");
+		result += XDTester.runTests(System.out, System.err, log,
+			tests, "package xdef", XDTester.getFulltestMode(), args);
 		if (log != null) {
 			log.close();
 		}

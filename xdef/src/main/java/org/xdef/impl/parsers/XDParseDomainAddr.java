@@ -7,7 +7,7 @@ import org.xdef.proc.XXNode;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.BNFGrammar;
 
-/** Parse email address.
+/** Parse domain address.
  * @author Vaclav Trojan
  */
 public class XDParseDomainAddr extends XDParserAbstract {
@@ -20,9 +20,8 @@ public class XDParseDomainAddr extends XDParserAbstract {
 		String s = p.getUnparsedBufferPart().trim();
 		p.isSpaces();
 		BNFGrammar g = BNFGrammar.compile(
-"asciiChar ::= [ -~]\n"+
-"specials ::=  [()<>@,;:\\\".#123#125] /*#123='[', #125=']'*/\n"+
-"atom ::= (asciiChar - specials - ' ')+\n"+
+"specials ::=  [ ()<>@,;:\\\".#123#125] /*#123='[', #125=']'*/\n"+
+"atom ::= ([ -~] - specials)+\n"+
 "domain ::= atom ('.' atom)*");
 		if (g.parse(s,"domain")) {
 			p.setEos();
