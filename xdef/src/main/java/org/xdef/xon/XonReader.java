@@ -408,7 +408,7 @@ public class XonReader extends StringParser implements XonParsers {
 			Object result = null;
 			char ch;
 			if (_xonMode&&(i=isOneOfTokens(new String[]{"c\"","u\"","e\"","b(",
-				"D","p(","g(","i(","C(","P","-P","NaN","INF","-INF"})) >= 0) {
+				"D","p(","g(","/","C(","P","-P","NaN","INF","-INF"})) >= 0) {
 				switch(i) {
 					case 0: // character
 						i = XonTools.readJChar(this);
@@ -507,22 +507,19 @@ public class XonReader extends StringParser implements XonParsers {
 							}
 						}
 						break;
-					case 7: {// "i(" inetAddr
-						int pos1 = getIndex();
-						while ((ch = peekChar()) > ' ' && ch != ')') {}
-						int pos2 = getIndex() -1;
-						if (ch == ')' && pos2 > pos1) {
-							String s = getBufferPart(pos1,pos2);
-							try {
-								return returnValue(spos,
-									InetAddress.getByName(s));
-							} catch(Exception ex) {
-								//invalid InetAddr
-								error(XDEF.XDEF809,	"inetAddr",	s);
-								return returnValue(spos, null);
-							}
+					case 7: {// "/" ipAddr
+						String s = "";
+						while ("0123456789abcdefABCDEF:."
+							.indexOf(getCurrentChar()) >= 0) {
+							s += peekChar();
 						}
-						break;
+						try {
+							return returnValue(spos, InetAddress.getByName(s));
+						} catch(Exception ex) {
+							//invalid InetAddr
+							error(XDEF.XDEF809,	"ipAddr", s);
+							return returnValue(spos, null);
+						}
 					}
 					case 8: {// "C(" currency
 						int pos1 = getIndex();
@@ -693,7 +690,6 @@ public class XonReader extends StringParser implements XonParsers {
 				//Value in X-definition must be a string with X-script
 				error(JSON.JSON018);
 				Object val = jv.getValue();
-System.out.println("" + val.toString());
 				jv = new XonTools.JValue(jv.getPosition(),
 					val == null ? "null" : val.toString());
 			}

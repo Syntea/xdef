@@ -87,7 +87,7 @@ public class CompileBase implements CodeTable, XDValueID {
 		setType(XD_PRICE, "Price",org.xdef.XDPrice.class);
 		setType(XD_ANYURI, "URI", java.net.URI.class);
 		setType(XD_EMAIL, "EmailAddr", org.xdef.XDEmailAddr.class);
-		setType(XD_INETADDR, "InetAddr", java.net.InetAddress.class);
+		setType(XD_IPADDR, "IPAddr", java.net.InetAddress.class);
 		setType(XD_CONTAINER, "Container", org.xdef.XDContainer.class);
 		setType(XD_REGEX, "Regex", org.xdef.XDRegex.class);
 		setType(XD_REGEXRESULT, "RegexResult", org.xdef.XDRegexResult.class);
@@ -137,7 +137,7 @@ public class CompileBase implements CodeTable, XDValueID {
 			((char) XD_ANYURI) + ";URI;" +
 			((char) XD_CURRENCY) + ";Currency;" +
 			((char) XD_EMAIL) + ";EmailAddr;" +
-			((char) XD_INETADDR) + ";InetAddr;" +
+			((char) XD_IPADDR) + ";IPAddr;" +
 			((char) XD_BNFGRAMMAR) + ";DefBNFGrammar;" +
 			((char) XD_LOCALE) + ";Locale;" +
 			((char) XD_UNIQUESET_KEY) + ";uniqueSetKey;" +
@@ -205,11 +205,11 @@ public class CompileBase implements CodeTable, XDValueID {
 				-1, true, new DefString("collapse")));
 		parser(im, org.xdef.impl.parsers.XDParsePrice.class, "price");
 
-		im = genParserMetnod(0, 0, null, XD_INETADDR,
+		im = genParserMetnod(0, 0, null, XD_IPADDR,
 			keyParam("pattern", XD_STRING, false, -1, false),
 			keyParam("whiteSpace", XD_STRING, false,
 				-1, true, new DefString("collapse")));
-		parser(im, org.xdef.impl.parsers.XDParseInetAddr.class, "inetAddr");
+		parser(im, org.xdef.impl.parsers.XDParseIPAddr.class, "ipAddr");
 
 		im = genParserMetnod(0, 0, null, XD_CURRENCY,
 			keyParam("pattern", XD_STRING, false, -1, false),
@@ -636,6 +636,7 @@ public class CompileBase implements CodeTable, XDValueID {
 		parser(im,org.xdef.impl.parsers.XDParseUriList.class, "uriList");
 		parser(im,org.xdef.impl.parsers.XDParseUrl.class, "url");
 		parser(im,org.xdef.impl.parsers.XDParseUrlList.class, "urlList");
+		parser(im,org.xdef.impl.parsers.XDParseDomainAddr.class, "domainAddr");
 ////////////////////////////////////////////////////////////////////////////////
 // implemented methods
 ////////////////////////////////////////////////////////////////////////////////
@@ -1090,10 +1091,10 @@ public class CompileBase implements CodeTable, XDValueID {
 			ANY_MODE, 1, 1, XD_EXCEPTION), "getMessage");
 
 ////////////////////////////////////////////////////////////////////////////////
-// INETADDR
+// IPADDR
 ////////////////////////////////////////////////////////////////////////////////
-		ti = XD_INETADDR;
-		method(ti, genInternalMethod(NEW_INETADDR, XD_INETADDR,
+		ti = XD_IPADDR;
+		method(ti, genInternalMethod(NEW_IPADDR, XD_IPADDR,
 			ANY_MODE, 1, 1, XD_STRING), "#");
 
 ////////////////////////////////////////////////////////////////////////////////

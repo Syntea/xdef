@@ -51,9 +51,9 @@ public interface XDValueID {
 	/** Email address ID. */
 	public static final short XD_EMAIL = XD_PRICE + 1; // 22
 	/** Internet IP address. */
-	public static final short XD_INETADDR = XD_EMAIL + 1; // 23
+	public static final short XD_IPADDR = XD_EMAIL + 1; // 23
 	/** Regular expression value ID. */
-	public static final short XD_REGEX = XD_INETADDR + 1; // 24
+	public static final short XD_REGEX = XD_IPADDR + 1; // 24
 	/** Regular expression result value ID. */
 	public static final short XD_REGEXRESULT = XD_REGEX + 1; // 25
 	/** Input stream value ID. */

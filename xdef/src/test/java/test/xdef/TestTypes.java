@@ -886,12 +886,12 @@ public final class TestTypes extends XDTester {
 				((XDPrice) xd.getVariable("extValue")).display());
 			assertEq(2, ((XDPrice)
 				xd.getVariable("extValue")).fractionDigits());
-			xdef = // test InetAddr type
+			xdef = // test IPAddr type
 "<xd:def xmlns:xd='" + _xdNS + "' root='root'>\n"+
 "  <xd:declaration>\n" +
 "    final Container c = new Container();\n"+
-"    external InetAddr x;\n"+
-"    InetAddr y = new InetAddr(x.toString());\n"+
+"    external IPAddr x;\n"+
+"    IPAddr y = new IPAddr(x.toString());\n"+
 "    void print() {\n"+
 "      for(int i=0; i LT c.getLength(); i++) {\n"+
 "        out(c.item(i) + ',');\n"+
@@ -901,14 +901,14 @@ public final class TestTypes extends XDTester {
 "  </xd:declaration>\n"+
 "  <root xd:script=\"finally print();\">\n"+
 "   <item xd:script=\"occurs +\">\n"+
-"     inetAddr(); onTrue c.addItem(getParsedValue());\n" +
+"     ipAddr(); onTrue c.addItem(getParsedValue());\n" +
 "   </item>\n"+
 "  </root>\n"+
 "</xd:def>";
 			xml =
 "<root>\n"+
-"  <item>i(129.144.52.38)</item>\n"+
-"  <item>i(1080:0:0:0:8:800:200C:417A)</item>\n"+
+"  <item>/129.144.52.38</item>\n"+
+"  <item>/1080:0:0:0:8:800:200C:417A</item>\n"+
 "</root>";
 			strw = new StringWriter();
 			xd = compile(xdef).createXDDocument();

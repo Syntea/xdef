@@ -30,15 +30,15 @@ public class XonUtil {
 	 * @param x the object containing XON/JSON data.
 	 * @return array with two items: Reader and System ID.
 	 */
-	private static Object[] getReader(Object x) {
+	private static Object[] getReader(final Object x, final Charset charset) {
 		Object[] result = new Object[2];
 		if (x instanceof String) {
 			String s = (String) x;
 			try {
-				return getReader(SUtils.getExtendedURL(s));
+				return getReader(SUtils.getExtendedURL(s), charset);
 			} catch (Exception ex) {
 				try {
-					return getReader(new File(s));
+					return getReader(new File(s), charset);
 				} catch (Exception exx) {}
 			}
 			result[0] = new StringReader(s);
@@ -47,7 +47,8 @@ public class XonUtil {
 			File f = (File) x;
 			try {
 				result[0] = new InputStreamReader(
-					new FileInputStream(f), Charset.forName("UTF-8"));
+					new FileInputStream(f),
+					charset == null ? Charset.forName("UTF-8") : charset);
 				result[1] = f.getCanonicalPath();
 			} catch (Exception ex) {
 				//Program exception &{0}
@@ -56,16 +57,16 @@ public class XonUtil {
 		} else if (x instanceof URL) {
 			URL u = (URL) x;
 			try {
-				result[0] = new InputStreamReader(
-					u.openStream(), Charset.forName("UTF-8"));
+				result[0] = new InputStreamReader(u.openStream(),
+					charset == null ? Charset.forName("UTF-8") : charset);
 				result[1] = u.toExternalForm();
 			} catch (Exception ex) {
 				//Program exception &{0}
 				throw new SRuntimeException(SYS.SYS036, ex);
 			}
 		} else if (x instanceof InputStream) {
-			result[0] = new InputStreamReader(
-				(InputStream) x, Charset.forName("UTF-8"));
+			result[0] = new InputStreamReader((InputStream) x,
+				charset == null ? Charset.forName("UTF-8") : charset);
 			result[1] = "INPUT_STREAM";
 		} else if (x instanceof Reader) {
 			result[0] = (Reader) x;
@@ -96,7 +97,7 @@ public class XonUtil {
 	 */
 	public final static Object parseJSON(final String s)
 		throws SRuntimeException {
-		Object[] x = getReader(s);
+		Object[] x = getReader(s, null);
 		return XonUtil.parseJSON((Reader) x[0], (String) x[1]);
 	}
 
@@ -106,7 +107,7 @@ public class XonUtil {
 	 * @throws SRuntimeException if an error occurs.
 	 */
 	public final static Object parseJSON(final File f) throws SRuntimeException{
-		Object[] x = getReader(f);
+		Object[] x = getReader(f, null);
 		return XonUtil.parseJSON((Reader) x[0], (String) x[1]);
 	}
 
@@ -116,7 +117,7 @@ public class XonUtil {
 	 * @throws SRuntimeException if an error occurs,
 	 */
 	public final static Object parseJSON(final URL url) throws SRuntimeException {
-		Object[] x = getReader(url);
+		Object[] x = getReader(url, null);
 		return XonUtil.parseJSON((Reader) x[0], (String) x[1]);
 	}
 
@@ -136,7 +137,8 @@ public class XonUtil {
 	 * @return parsed JSON object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public final static Object parseJSON(final InputStream in, final String sysId)
+	public final static Object parseJSON(final InputStream in,
+		final String sysId)
 		throws SRuntimeException {
 		return XonUtil.parseJSON(
 			new InputStreamReader(in, Charset.forName("UTF-8")), sysId);
@@ -161,7 +163,7 @@ public class XonUtil {
 	 * @throws SRuntimeException if an error occurs.
 	 */
 	public final static Object parseXON(final String s)throws SRuntimeException{
-		Object[] x = getReader(s);
+		Object[] x = getReader(s, null);
 		return parseXON((Reader) x[0], (String) x[1]);
 	}
 
@@ -171,7 +173,7 @@ public class XonUtil {
 	 * @throws SRuntimeException if an error occurs.
 	 */
 	public final static Object parseXON(final File f) throws SRuntimeException{
-		Object[] x = getReader(f);
+		Object[] x = getReader(f, null);
 		return parseXON((Reader) x[0], (String) x[1]);
 	}
 
@@ -181,7 +183,7 @@ public class XonUtil {
 	 * @throws SRuntimeException if an error occurs,
 	 */
 	public final static Object parseXON(final URL url) throws SRuntimeException{
-		Object[] x = getReader(url);
+		Object[] x = getReader(url, null);
 		return parseXON((Reader) x[0], (String) x[1]);
 	}
 
@@ -227,7 +229,7 @@ public class XonUtil {
 	 */
 	public final static Map<String, Object> parseINI(final String s)
 		throws SRuntimeException {
-		Object[] x = getReader(s);
+		Object[] x = getReader(s, Charset.forName("ISO-8859-1"));
 		return parseINI((Reader) x[0], (String) x[1]);
 	}
 
@@ -238,7 +240,7 @@ public class XonUtil {
 	 */
 	public final static Map<String, Object> parseINI(final File f)
 		throws SRuntimeException{
-		Object[] x = getReader(f);
+		Object[] x = getReader(f, Charset.forName("ISO-8859-1"));
 		return parseINI((Reader) x[0], (String) x[1]);
 	}
 
@@ -249,7 +251,7 @@ public class XonUtil {
 	 */
 	public final static Map<String, Object> parseINI(final URL url)
 		throws SRuntimeException{
-		Object[] x = getReader(url);
+		Object[] x = getReader(url, Charset.forName("ISO-8859-1"));
 		return parseINI((Reader) x[0], (String) x[1]);
 	}
 
@@ -272,7 +274,7 @@ public class XonUtil {
 	public final static Map<String, Object> parseINI(final InputStream in,
 		final String sysId) throws SRuntimeException {
 		return parseINI(
-			new InputStreamReader(in, Charset.forName("UTF-8")), sysId);
+			new InputStreamReader(in, Charset.forName("ISO-8859-1")), sysId);
 	}
 
 ////////////////////////////////////////////////////////////////////////////////

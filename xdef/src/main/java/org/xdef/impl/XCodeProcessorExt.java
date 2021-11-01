@@ -12,7 +12,6 @@ import org.w3c.dom.Element;
 import org.xdef.XDCurrency;
 import org.xdef.XDEmailAddr;
 import org.xdef.XDException;
-import org.xdef.XDInetAddr;
 import org.xdef.XDOutput;
 import org.xdef.XDParseResult;
 import org.xdef.XDParser;
@@ -66,6 +65,7 @@ import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
 import org.xdef.xml.KXmlUtils;
+import org.xdef.XDIPAddr;
 
 /** Provides invoking of external method from script code.
  * @author Vaclav Trojan
@@ -107,8 +107,8 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 							return (XDEmailAddr) p;
 						case XD_CURRENCY:
 							return (XDCurrency) p;
-						case XD_INETADDR:
-							return (XDInetAddr) p;
+						case XD_IPADDR:
+							return (XDIPAddr) p;
 					}
 					//Icorrect type conversion from AnyValue
 					throw new SRuntimeException(XDEF.XDEF536);
@@ -1182,7 +1182,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 									case XD_XPATH:
 										pars[j + k] = stack[i].stringValue();
 										break;
-									case XD_INETADDR:
+									case XD_IPADDR:
 									case XD_CURRENCY:
 										pars[j + k] = stack[i].getObject();
 										break;

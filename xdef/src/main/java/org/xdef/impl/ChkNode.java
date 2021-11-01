@@ -40,7 +40,7 @@ import org.xdef.impl.code.DefDuration;
 import org.xdef.impl.code.DefElement;
 import org.xdef.impl.code.DefGPSPosition;
 import org.xdef.impl.code.DefInStream;
-import org.xdef.impl.code.DefInetAddr;
+import org.xdef.impl.code.DefIPAddr;
 import org.xdef.impl.code.DefLocale;
 import org.xdef.impl.code.DefLong;
 import org.xdef.impl.code.DefNull;
@@ -528,7 +528,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 		} else if (value instanceof Price) {
 			setVariable(name, (new DefPrice((Price) value)));
 		} else if (value instanceof InetAddress) {
-			setVariable(name, (new DefInetAddr((InetAddress) value)));
+			setVariable(name, (new DefIPAddr((InetAddress) value)));
 		} else if (value instanceof Currency) {
 			setVariable(name,
 				new DefCurrency(((Currency) value).getCurrencyCode()));
