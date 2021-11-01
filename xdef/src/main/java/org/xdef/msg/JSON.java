@@ -36,7 +36,7 @@ public interface JSON {
 	public static final long JSON015 = 13834649614L;
 	/** Text node is not allowed in this XML representation of JSON map&amp;{#SYS000} */
 	public static final long JSON016 = 13834649615L;
-	/** Not allowed character '&amp;{0}'&amp;{#SYS000} */
+	/** Not allowed character&amp;{0}{ "}{"}&amp;{#SYS000} */
 	public static final long JSON017 = 13834649616L;
 	/** Value in X-definition must be a string with X-script&amp;{#SYS000} */
 	public static final long JSON018 = 13834649617L;
