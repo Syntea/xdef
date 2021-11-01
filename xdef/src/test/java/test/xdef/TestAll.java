@@ -74,13 +74,9 @@ public class TestAll {
 		}
 		STester[] tests = getTests();
 		String xdNS = XDTester._xdNS;
-		XDTester._xdNS = XDConstants.XDEF40_NS_URI;
-		System.out.println("Testing X-definition version 4.0");
-		int result = STester.runTests(System.out, System.err, log,
-			tests, "package xdef", XDTester.getFulltestMode(), args);
 		XDTester._xdNS = XDConstants.XDEF41_NS_URI;
 		System.out.println("Testing X-definition version 4.1");
-		result += STester.runTests(System.out, System.err, log,
+		int result = STester.runTests(System.out, System.err, log,
 			tests, "package xdef", XDTester.getFulltestMode(), args);
 		if (log != null) {
 			log.close();
