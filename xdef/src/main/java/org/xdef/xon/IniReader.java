@@ -188,7 +188,7 @@ public class IniReader extends StringParser implements XonParsers {
 						val += "u\"\\/\b\f\n\r\t\0\1\2\3\4\5\6\7:".charAt(i);
 					} else {
 						// Incorrect escape character in string
-						p.error(JSON.JSON006);
+						error(JSON.JSON006);
 						val += '?';
 					}
 				} else {
@@ -248,26 +248,26 @@ public class IniReader extends StringParser implements XonParsers {
 						}
 						if (i != t.length() - 1){
 							//Not allowed character&{0}{ "}{"}
-							p.error(JSON.JSON017);
+							error(JSON.JSON017);
 						}
 					}
 				}
 				if (p1 == null) {
 //					//Value of $script must be string with X-script
-					p.error(JSON.JSON018);
+					error(JSON.JSON018);
 				}
 			} else {
 				p.setPosition(spos);
 				if (!p.findChar(']')) {
 					//"&{0}"&{1}{ or "}{"} expected&
-					p.error(JSON.JSON002, "]");
+					error(JSON.JSON002, "]");
 				}
 				name = p.getBufferPart(spos.getIndex(), p.getIndex());
 				p.nextChar();
 				p.isSpaces();
 				if (!p.eos()) {
 					//Not allowed character&{0}{ "}{"}
-					p.error(JSON.JSON017);
+					error(JSON.JSON017);
 				}
 			}
 			_jp.namedValue(new SBuffer(name.trim(), spos));
