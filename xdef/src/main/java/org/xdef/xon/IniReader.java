@@ -337,7 +337,7 @@ public class IniReader extends StringParser implements XonParsers {
 			return val.toString();
 		}
 	}
-	
+
 	/** Create the line of INI/Property item.
 	 * @param sb where to create.
 	 * @param name name of INI/Property item.

@@ -25,7 +25,7 @@ public class XDParseDomainAddr extends XDParserAbstract {
 "atom ::= [-0-9a-zA-Z_]+\n"+
 "domain ::= atom ('.' atom)*");
 		if (g.parse(s,"domain")) {
-			p.setIndex(pos1 + s.length());	
+			p.setIndex(pos1 + s.length());
 			return;
 		}
 		p.setIndex(pos);
