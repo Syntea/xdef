@@ -119,7 +119,7 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 "commentList ::= ( '(' commentPart* ')' (S? '(' commentPart* ')')* )\n"+
 "commentPart ::= (asciiChar - [()])+ (S? commentList)?\n"+
 "specials ::=  [()<>@,;:\\\".#123#125] /*#123='[', #125=']'*/\n"+
-"atom ::= (asciiChar - specials - ' ')+\n"+
+"atom ::= ([!-~] - specials)+\n"+
 "emailAddr ::= localPart domain $rule\n"+
 "emailAddr1 ::= '<' emailAddr '>' \n"+
 "localPart ::= atom ('.' atom)*\n"+

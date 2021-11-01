@@ -17,6 +17,7 @@ public class XDParseIPAddr extends XDParserAbstract {
 
 	@Override
 	public void parseObject(XXNode xnode, XDParseResult p) {
+		int pos = p.getIndex();
 		p.isSpaces();
 		p.isChar('/');
 		int pos1 = p.getIndex();
@@ -27,22 +28,23 @@ public class XDParseIPAddr extends XDParserAbstract {
 			if (ch != NOCHAR) {
 				parts++;
 				if(ch == ':') {
-					while(p.isChar(':'));
+					while(p.isChar(':')){}
 				}
 			}
 		}
 		int pos2 = p.getIndex();
+		String s = "";
 		if (parts > 1) {
-			String s = p.getBufferPart(pos1, pos2);
+			s = p.getBufferPart(pos1, pos2);
 			try {
 				p.setParsedValue(new DefIPAddr(s));
 				return;
 			} catch (Exception ex) {} //inet addr error
-			p.setIndex(pos1);
 		}
+		p.setIndex(pos);
 		p.setParsedValue(new DefIPAddr()); //null IPAddr
 		//Incorrect value of '&{0}'&{1}{: }
-		p.errorWithString(XDEF.XDEF809,parserName(),p.getBufferPart(pos1,pos2));
+		p.errorWithString(XDEF.XDEF809,parserName(), s);
 	}
 	@Override
 	public String parserName() {return ROOTBASENAME;}
