@@ -3,6 +3,7 @@ package org.xdef.impl.parsers;
 import org.xdef.XDParseResult;
 import org.xdef.XDParserAbstract;
 import org.xdef.impl.code.DefEmailAddr;
+import org.xdef.impl.code.DefIPAddr;
 import org.xdef.proc.XXNode;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.BNFGrammar;
@@ -16,16 +17,22 @@ public class XDParseDomainAddr extends XDParserAbstract {
 
 	@Override
 	public void parseObject(XXNode xnode, XDParseResult p) {
+		int pos = p.getIndex();
 		p.isSpaces();
+		int pos1 = p.getIndex();
 		String s = p.getUnparsedBufferPart().trim();
-		p.isSpaces();
 		BNFGrammar g = BNFGrammar.compile(
-"specials ::=  [ ()<>@,;:\\\".#123#125] /*#123='[', #125=']'*/\n"+
-"atom ::= ([ -~] - specials)+\n"+
+"specials ::=  [()<>@,;:\\\".#123#125] /*#123='[', #125=']'*/\n"+
+"atom ::= ([!-~] - specials)+\n"+
 "domain ::= atom ('.' atom)*");
 		if (g.parse(s,"domain")) {
-			p.setEos();
+			p.setIndex(pos1 + s.length());	
+			return;
 		}
+		p.setIndex(pos);
+		p.setParsedValue(new DefIPAddr()); //null IPAddr
+		//Incorrect value of '&{0}'&{1}{: }
+		p.errorWithString(XDEF.XDEF809,parserName(),s);
 	}
 
 	/** Check if the argument contains correct email address.
