@@ -246,9 +246,14 @@ public class IniReader extends StringParser implements XonParsers {
 							p1 = new SBuffer(XonNames.SCRIPT_NAME, spos);
 							p2 = new SBuffer(t.substring(0,i), p.getPosition());
 						}
-						if (i != t.length() - 1){
+						if (i != t.length() - 1) {
+							int pos = getIndex();
+							if (i > 0) {
+								setIndex(pos - i + 1);
+							}
 							//Not allowed character&{0}{ "}{"}
 							error(JSON.JSON017);
+							setIndex(pos);
 						}
 					}
 				}
