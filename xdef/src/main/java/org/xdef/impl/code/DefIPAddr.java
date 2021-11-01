@@ -27,7 +27,7 @@ below.
 Due to some methods of allocating certain styles of IPv6 addresses,
 it will be common for addresses to contain long strings of zero bits. In order
 to make writing addresses containing zero bits easier, a special syntax
-is available to compress the zeros. The use of "::" indicates multiple groups 
+is available to compress the zeros. The use of "::" indicates multiple groups
 of 16-bits of zeros. The "::" can only appear once in an address.
 The "::" can also be used to compress the leading and/or trailing zeros
 in an address. For example,
@@ -91,7 +91,7 @@ at the time the object is created by querying the relevant NetworkInterface.
 Note also, that the numeric scope_id can be retrieved from Inet6Address
 instances returned from the NetworkInterface class. This can be used to
 find out the current scope ids configured on the system.
-	
+
 	*/
 	/** Create new instance null DefIPAddr. */
 	public DefIPAddr() {_value = null;}
