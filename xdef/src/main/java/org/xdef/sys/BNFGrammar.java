@@ -2255,6 +2255,8 @@ public final class BNFGrammar {
 						} else {
 							_parsedChars.setLength(_parsedChars.length() - 1);
 							if ((c = notOneOfChars("]\n\r")) == NOCHAR) {
+								error(BNF006); //Incorrect interval in char set
+								_parsedChars.append('-');
 								break OUTER;
 							}
 							if (c == '#') {
