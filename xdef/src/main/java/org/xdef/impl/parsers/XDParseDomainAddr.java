@@ -22,8 +22,7 @@ public class XDParseDomainAddr extends XDParserAbstract {
 		int pos1 = p.getIndex();
 		String s = p.getUnparsedBufferPart().trim();
 		BNFGrammar g = BNFGrammar.compile(
-"specials ::=  [()<>@,;:\\\".#123#125] /*#123='[', #125=']'*/\n"+
-"atom ::= ([!-~] - specials)+\n"+
+"atom ::= [0-9a-zA-Z_-]+\n"+
 "domain ::= atom ('.' atom)*");
 		if (g.parse(s,"domain")) {
 			p.setIndex(pos1 + s.length());	
