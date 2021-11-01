@@ -1,7 +1,9 @@
 package org.xdef.xon;
 
 import java.io.Reader;
+import java.net.InetAddress;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.Map;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -11,6 +13,7 @@ import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.SBuffer;
 import org.xdef.sys.SPosition;
 import org.xdef.sys.SRuntimeException;
+import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
 import org.xdef.xml.KXmlUtils;
 
@@ -322,6 +325,19 @@ public class IniReader extends StringParser implements XonParsers {
 		}
 	}
 
+	private static String valueToString(final Object val) {
+		if (val == null) {
+			return "";
+		} else if (val instanceof InetAddress) {
+			return ((InetAddress) val).toString().substring(1);
+		} else if (val instanceof byte[]) {
+			return new String(SUtils.encodeHex((byte[]) val),
+				Charset.forName("ISO8859-2"));
+		} else {
+			return val.toString();
+		}
+	}
+	
 	/** Create the line of INI/Property item.
 	 * @param sb where to create.
 	 * @param name name of INI/Property item.
@@ -330,10 +346,10 @@ public class IniReader extends StringParser implements XonParsers {
 	 */
 	private static void toPropertyLine(final StringBuilder sb,
 		final String name,
-		final String val) {
+		final Object val) {
 		toPropertyString(sb, name);
 		sb.append('=');
-		toPropertyString(sb, val);
+		toPropertyString(sb, valueToString(val));
 		sb.append('\n');
 	}
 
@@ -346,17 +362,17 @@ public class IniReader extends StringParser implements XonParsers {
 		StringBuilder sb = new StringBuilder();
 		for (Map.Entry<String, Object> x: map.entrySet()) {
 			Object val = ((Map.Entry)x).getValue();
-			if (val instanceof String) {
-				toPropertyLine(sb, x.getKey(), (String) val);
+			if (val == null || !(val instanceof Map)) {
+				toPropertyLine(sb, x.getKey(), val);
 			}
 		}
 		for (Map.Entry<String, Object> x: map.entrySet()) {
 			Object val = x.getValue();
-			if (val instanceof Map) {
+			if (val != null && (val instanceof Map)) {
 				sb.append('[').append(x.getKey()).append("]\n");
 				for (Map.Entry<String, Object> y
 					: ((Map<String, Object>) val).entrySet()) {
-					toPropertyLine(sb, y.getKey(), (String) y.getValue());
+					toPropertyLine(sb, y.getKey(), y.getValue());
 				}
 			}
 		}
@@ -441,5 +457,4 @@ public class IniReader extends StringParser implements XonParsers {
 		toXmlW((Map<String,Object>) ini, el);
 		return el;
 	}
-
 }
