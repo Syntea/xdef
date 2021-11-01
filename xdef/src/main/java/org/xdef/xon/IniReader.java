@@ -247,13 +247,13 @@ public class IniReader extends StringParser implements XonParsers {
 							p2 = new SBuffer(t.substring(0,i), p.getPosition());
 						}
 						if (i != t.length() - 1) {
-							int pos = getIndex();
+							SPosition sps = getPosition();
 							if (i > 0) {
-								setIndex(pos - i + 1);
+								setPosition(p.getPosition());
 							}
 							//Not allowed character&{0}{ "}{"}
 							error(JSON.JSON017);
-							setIndex(pos);
+							setPosition(sps);
 						}
 					}
 				}
@@ -271,11 +271,11 @@ public class IniReader extends StringParser implements XonParsers {
 				p.nextChar();
 				p.isSpaces();
 				if (!p.eos()) {
-					int pos = getIndex();
-					setIndex(p.getIndex());
+					SPosition sps = getPosition();
+					setPosition(p.getPosition());
 					//Not allowed character&{0}{ "}{"}
 					error(JSON.JSON017);
-					setIndex(pos);
+					setPosition(sps);
 				}
 			}
 			_jp.namedValue(new SBuffer(name.trim(), spos));
