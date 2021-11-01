@@ -1,17 +1,17 @@
 package org.xdef;
 
-/** Price (amount and currency).
+/** Internet IP address. The internally processed object is java.netInetAddress.
  * @author Vaclav Trojan
  */
-public interface XDInetAddr extends XDValue {
+public interface XDIPAddr extends XDValue {
 
 	/**	Get the raw IP address in a string format.
 	 * @return raw IP address in a string format.
 	 */
 	public String getHostAddress();
 
-	/**	Check if IP address of this InetAddress object is IPv6.
-	 * @return true if IP address of this InetAddress object is IPv6.
+	/**	Check if IP address of this InetAddress object is IPv6 version.
+	 * @return true if IP address of this InetAddress object is IPv6 version.
 	 */
 	public boolean isIPv6();
 

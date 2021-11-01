@@ -100,11 +100,9 @@ class XonToString extends XonTools {
 				return "g(" + x.toString() + ")";
 			} else if (x instanceof Price) {
 				return "p(" + x.toString() + ")";
-			} else if (x instanceof InetAddress) {
-				return "i(" + x.toString().substring(1) + ")";
 			} else if (x instanceof Currency) {
 				return "C(" + ((Currency) x).getCurrencyCode() + ")";
-			} else if (x instanceof SDuration) {
+			} else if (x instanceof SDuration || x instanceof InetAddress) {
 				return x.toString();
 			}
 		}

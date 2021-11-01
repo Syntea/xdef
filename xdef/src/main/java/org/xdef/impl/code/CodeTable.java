@@ -779,9 +779,9 @@ public interface CodeTable {
 	/** create new exception. */
 	static final short NEW_EXCEPTION = NEW_EMAIL + 1;
 	/** Create new exception. */
-	static final short NEW_INETADDR = NEW_EXCEPTION + 1;
+	static final short NEW_IPADDR = NEW_EXCEPTION + 1;
 	/** Create GPosition. */
-	static final short NEW_GPSPOSITION = NEW_INETADDR + 1;
+	static final short NEW_GPSPOSITION = NEW_IPADDR + 1;
 	/** Create output stream. */
 	static final short NEW_INSTREAM = NEW_GPSPOSITION + 1;
 	/** Create XML writer. */

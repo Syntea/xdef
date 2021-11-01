@@ -2,7 +2,7 @@
   <xd:json name="a" >
     { "GPS": "gps()",
       "Price": "price()",
-      "Inet": "inetAddr()",
+      "IPAddr": "ipAddr()",
       "Currency": "currency()"
     }
   </xd:json>

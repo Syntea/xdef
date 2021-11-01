@@ -66,7 +66,7 @@ import org.xdef.impl.code.DefEmailAddr;
 import org.xdef.impl.code.DefException;
 import org.xdef.impl.code.DefGPSPosition;
 import org.xdef.impl.code.DefInStream;
-import org.xdef.impl.code.DefInetAddr;
+import org.xdef.impl.code.DefIPAddr;
 import org.xdef.impl.code.DefLocale;
 import org.xdef.impl.code.DefLong;
 import org.xdef.impl.code.DefNamedValue;
@@ -3100,8 +3100,8 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 				case NEW_EMAIL:
 					_stack[sp] = new DefEmailAddr(_stack[sp].toString());
 					continue;
-				case NEW_INETADDR:
-					_stack[sp] = new DefInetAddr(_stack[sp].toString());
+				case NEW_IPADDR:
+					_stack[sp] = new DefIPAddr(_stack[sp].toString());
 					continue;
 				case NEW_URI:
 					_stack[sp] = new DefURI(_stack[sp].toString());

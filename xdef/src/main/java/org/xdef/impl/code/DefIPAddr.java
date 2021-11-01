@@ -1,18 +1,18 @@
 package org.xdef.impl.code;
 
 import java.net.InetAddress;
-import org.xdef.XDInetAddr;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
 import org.xdef.XDValueType;
 import org.xdef.msg.SYS;
 import org.xdef.sys.SIllegalArgumentException;
 import org.xdef.sys.SRuntimeException;
+import org.xdef.XDIPAddr;
 
-/** Internet address.
+/** IP address.
  * @author Vaclav Trojan
  */
-public class DefInetAddr extends XDValueAbstract implements XDInetAddr {
+public class DefIPAddr extends XDValueAbstract implements XDIPAddr {
 	/** Value of InetAddress. */
 	private final InetAddress _value;
 /*
@@ -93,27 +93,27 @@ instances returned from the NetworkInterface class. This can be used to
 find out the current scope ids configured on the system.
 	
 	*/
-	/** Create new instance null DefInetAddr. */
-	public DefInetAddr() {_value = null;}
+	/** Create new instance null DefIPAddr. */
+	public DefIPAddr() {_value = null;}
 
-	/** Create new instance of DefInetAddr from source string.
-	 * @param inetAddr String representation of InternetAddress.
+	/** Create new instance of DefIPAddr from source string.
+	 * @param ipAddr String representation of InternetAddress.
 	 */
-	public DefInetAddr(final String inetAddr) {
+	public DefIPAddr(final String ipAddr) {
 		try {
-			_value = InetAddress.getByName(inetAddr);
+			_value = InetAddress.getByName(ipAddr);
 		} catch (Exception ex) {
 			throw new SRuntimeException(ex);
 		}
 	}
 
-	/** Create new instance of DefInetAddr with InetAddress.
-	 * @param inetAddr InternetAddress.
+	/** Create new instance of DefIPAddr with InetAddress.
+	 * @param ipAddr InternetAddress.
 	 */
-	public DefInetAddr(final InetAddress inetAddr) {_value = inetAddr;}
+	public DefIPAddr(final InetAddress ipAddr) {_value = ipAddr;}
 
 ////////////////////////////////////////////////////////////////////////////////
-// Implementation of XDInetAddr interface
+// Implementation of XDIPAddr interface
 ////////////////////////////////////////////////////////////////////////////////
 
 	@Override
@@ -124,20 +124,20 @@ find out the current scope ids configured on the system.
 		return _value != null ? _value.getHostAddress() : null;
 	}
 
-	/** Get bytes from InetAddress.
+	@Override
+	/**	Check if IP address of this IPAddrress object is IPv6 version.
+	 * @return true if IP address of this IPAddress object is IPv6 version.
+	 */
+	public boolean isIPv6() {
+		return _value == null ? false : _value.getAddress().length == 16;
+	}
+
+	/** Get bytes from the internal InetAddress.
 	 * @return bytes from InetAddress.
 	 */
 	@Override
 	public byte[] getBytes() {
 		return _value != null ? _value.getAddress(): null;
-	}
-
-	@Override
-	/**	Check if IP address of this InetAddress object is IPv6.
-	 * @return true if IP address of this InetAddress object is IPv6.
-	 */
-	public boolean isIPv6() {
-		return _value == null ? false : _value.getAddress().length == 16;
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -151,25 +151,25 @@ find out the current scope ids configured on the system.
 	}
 	@Override
 	public boolean equals(final XDValue arg) {
-		if (arg instanceof DefInetAddr) {
-			DefInetAddr x = (DefInetAddr) arg;
+		if (arg instanceof DefIPAddr) {
+			DefIPAddr x = (DefIPAddr) arg;
 			return _value != null ? _value.equals(x._value) : x._value == null;
 		}
 		return false;
 	}
 	@Override
 	public int compareTo(final XDValue arg) throws IllegalArgumentException {
-		if (arg instanceof DefInetAddr) {
-			if (this.equals((DefInetAddr) arg)) {
+		if (arg instanceof DefIPAddr) {
+			if (this.equals((DefIPAddr) arg)) {
 				return 0;
 			}
 		}
 		throw new SIllegalArgumentException(SYS.SYS085);//Incomparable arguments
 	}
 	@Override
-	public short getItemId() {return XD_INETADDR;}
+	public short getItemId() {return XD_IPADDR;}
 	@Override
-	public XDValueType getItemType() {return XDValueType.INETADDR;}
+	public XDValueType getItemType() {return XDValueType.IPADDR;}
 	@Override
 	public String stringValue() {
 		return isNull() ? "null" :_value.toString().substring(1);

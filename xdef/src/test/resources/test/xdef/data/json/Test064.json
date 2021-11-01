@@ -1,5 +1,5 @@
 { "GPS": "50.08, 14.42, 399.0, Prague",
   "Price": "12.5 CZK",
-  "Inet": "125.34.0.1",
+  "IPAddr": "125.34.0.1",
   "Currency": "USD"
 }
