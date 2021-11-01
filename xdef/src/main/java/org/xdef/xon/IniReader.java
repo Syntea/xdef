@@ -198,8 +198,8 @@ public class IniReader extends StringParser implements XonParsers {
 			_jp.putValue(new XonTools.JValue(spos, val));
 			return true;
 		}
-		//"&{0}"&{1}{ or "}{"} expected
-		throw new SRuntimeException(JSON.JSON002, "=");
+		error(JSON.JSON002, "=");//"&{0}"&{1}{ or "}{"} expected
+		return false;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -242,31 +242,32 @@ public class IniReader extends StringParser implements XonParsers {
 						p.isSpaces();
 						String t = p.getUnparsedBufferPart();
 						int i = t.lastIndexOf(']');
-						if (i == t.length() - 1) {
+						if (i > 0) {
 							p1 = new SBuffer(XonNames.SCRIPT_NAME, spos);
 							p2 = new SBuffer(t.substring(0,i), p.getPosition());
-						} else {
+						}
+						if (i != t.length() - 1){
 							//Not allowed character&{0}{ "}{"}
-							throw new SRuntimeException(JSON.JSON017);
+							p.error(JSON.JSON017);
 						}
 					}
 				}
 				if (p1 == null) {
 //					//Value of $script must be string with X-script
-					throw new SRuntimeException(JSON.JSON018);
+					p.error(JSON.JSON018);
 				}
 			} else {
 				p.setPosition(spos);
 				if (!p.findChar(']')) {
 					//"&{0}"&{1}{ or "}{"} expected&
-					throw new SRuntimeException(JSON.JSON002, "]");
+					p.error(JSON.JSON002, "]");
 				}
 				name = p.getBufferPart(spos.getIndex(), p.getIndex());
 				p.nextChar();
 				p.isSpaces();
 				if (!p.eos()) {
 					//Not allowed character&{0}{ "}{"}
-					throw new SRuntimeException(JSON.JSON017);
+					p.error(JSON.JSON017);
 				}
 			}
 			_jp.namedValue(new SBuffer(name.trim(), spos));
