@@ -81,8 +81,9 @@ public class GenXDef implements XDConstants {
 			result._max =  _max;
 			result._options.addAll(_options);
 			result._mixed =  _mixed;
-			for (QName name : _atts.keySet()) {
-				final XAttr attx = _atts.get(name);
+			for (Map.Entry<QName, XAttr> entry : _atts.entrySet()) {
+				QName name = entry.getKey();
+				XAttr attx = entry.getValue();
 				final XAttr atty = new XAttr(attx._type);
 				atty._required = attx._required;
 				result._atts.put(name, atty);
@@ -227,9 +228,9 @@ public class GenXDef implements XDConstants {
 		}
 
 		private void mergeAttrs(final XModel x) {
-			for (QName name: _atts.keySet()){
-				final XAttr yattr = _atts.get(name);
-				final XAttr xattr = x._atts.get(name);
+			for (Map.Entry<QName, XAttr> entry : _atts.entrySet()) {
+				final XAttr yattr = _atts.get(entry.getKey());
+				final XAttr xattr = x._atts.get(entry.getKey());
 				if (xattr != null) { //has attribute
 					yattr._type = mergeTypes(xattr._type, yattr._type);
 					if (!xattr._required) {
@@ -239,13 +240,13 @@ public class GenXDef implements XDConstants {
 					yattr._required = false;
 				}
 			}
-			for (QName name: x._atts.keySet()){
-				XAttr yattr = _atts.get(name);
+			for (Map.Entry<QName, XAttr> entry : x._atts.entrySet()) {
+				XAttr yattr = _atts.get(entry.getKey());
 				if (yattr == null) {
-					final XAttr xattr = x._atts.get(name);
+					final XAttr xattr = x._atts.get(entry.getKey());
 					yattr = new XAttr(xattr._type);
 					yattr._required = false;
-					_atts.put(name, yattr);
+					_atts.put(entry.getKey(), yattr);
 				}
 			}
 		}
@@ -635,10 +636,10 @@ public class GenXDef implements XDConstants {
 				XDEF_NS_PREFIX + ":script", att._type);
 			x._atts.remove(att);
 		}
-		for (QName name: x._atts.keySet()) {
-			att = x._atts.get(name);
-			String qn = getNameFromQName(name);
-			String uri = name.getNamespaceURI();
+		for (Map.Entry<QName, XAttr> entry : x._atts.entrySet()) {
+			att = x._atts.get(entry.getKey());
+			String qn = getNameFromQName(entry.getKey());
+			String uri = entry.getKey().getNamespaceURI();
 			if (qn.startsWith("xmlns")) {
 				model.setAttributeNS(uri, qn, att._type);
 			} else {
