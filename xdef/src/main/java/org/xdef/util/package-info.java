@@ -18,17 +18,11 @@
  * Create X-definition from XML document.
  * (see {@link org.xdef.util.GenXDefinition#main(String[])}).
  * <H2><b>PrettyXdef</b></H2>
- * Createtes the formatted X-definition source nice and more readable.
+ * Creates the formatted X-definition source nice and more readable.
  * (see {@link org.xdef.util.PrettyXdef#main(String[])}).
  * <H2><b>XCompose</b></H2>
  * Composes the new XML from given source according to given X-definition.
  * (see {@link org.xdef.util.XCompose#main(String[])}).
- * <H2><b>XdefToXsd</b></H2>
- * Create a XML schema document created from a set of X-definitions and/or
- * collections (see {@link org.xdef.util.XdefToXsd#main(String[])}).
- * <H2><b>XsdToXdef</b></H2>
- * Create a X-definition from a XML schema
- * (see {@link org.xdef.util.XsdToXdef#main(String[])}).
  * <H2><b>XValidate</b></H2>
  * Validates and processes the XML data according to given X-definition
  * (see {@link org.xdef.util.XValidate#main(String[])}).
