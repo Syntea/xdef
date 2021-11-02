@@ -7,7 +7,7 @@ import org.xdef.model.XMVariableTable;
 /** Contains table of variables.
  * @author Vaclav Trojan
  */
-public class XVariableTable implements XMVariableTable {
+public final class XVariableTable implements XMVariableTable {
 
 	/** Increase step of size of the table of variables. */
 	private final int STEP = 4;

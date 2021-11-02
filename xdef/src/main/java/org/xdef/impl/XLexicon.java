@@ -9,7 +9,7 @@ import org.xdef.sys.SRuntimeException;
 /** Implementation of XDLexicon.
  * @author Vaclav Trojan
  */
-public class XLexicon implements XDLexicon {
+public final class XLexicon implements XDLexicon {
 	final String[] _languages;
 	final Map<String, String[]> _dictionaries;
 
