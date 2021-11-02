@@ -514,7 +514,7 @@ public class GenXDef implements XDConstants {
 			return "emailDate()";
 		}
 		if (new XDParseEmailAddr().check(null, data).matches()) {
-			return "email()";
+			return "emailAddr()";
 		}
 		if (new XDParsePrintableDate().check(null, data).matches()) {
 			return "printableDate()";
