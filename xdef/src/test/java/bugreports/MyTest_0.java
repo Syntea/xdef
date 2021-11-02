@@ -38,7 +38,6 @@ import org.xdef.proc.XXElement;
 import org.xdef.proc.XXNode;
 import org.xdef.sys.Report;
 import org.xdef.sys.SUtils;
-import org.xdef.util.XdefToXsd;
 
 /*
 [options] bootstrap class path not set in conjunction with -source 1.6
@@ -766,12 +765,6 @@ if(T){return;}
 			xml = "<A>1?xyz</A>";
 			assertEq(xml, parse(xp, "A", xml, reporter));
 			assertNoErrors(reporter);
-			XdefToXsd.main("-i",
-				f.getAbsolutePath(), "-o", tempDir.getAbsolutePath(), "-m","A");
-			File[] ff = SUtils.getFileGroup(tempDir + "*xsd", false);
-			for (File x: ff) {
-				System.out.println(SUtils.readString(x));
-			}
 		} catch (Exception ex) {fail(ex);}
 		if(T){return;}
 		try {
