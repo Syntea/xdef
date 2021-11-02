@@ -33,7 +33,7 @@ import org.xdef.xon.XonNames;
  * CHKDocument and CHKElement.
  * @author Vaclav Trojan
  */
-public class XonSourceParser implements XonParser, XParser {
+public final class XonSourceParser implements XonParser, XParser {
 	/** Allocation unit for node list. */
 	private static final int NODELIST_ALLOC_UNIT = 8;
 	/** instance of XONReader. */

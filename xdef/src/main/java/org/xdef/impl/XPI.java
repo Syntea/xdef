@@ -8,7 +8,7 @@ import org.xdef.model.XMNode;
 /** Implementation of the model of processing instruction.
  * @author Vaclav Trojan
  */
-public class XPI extends XData {
+public final class XPI extends XData {
 
 	/** Creates a new instance of XPI.
 	 * @param name The name of processing instruction.

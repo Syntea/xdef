@@ -8,7 +8,7 @@ import java.util.ArrayList;
 /** Implementation of the model of XML comment.
  * @author Vaclav Trojan
  */
-public class XComment extends XData implements XMNode {
+public final class XComment extends XData implements XMNode {
 
 	/** Creates a new instance of XComment.
 	 * @param xp Refers to the XDefPool object.

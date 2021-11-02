@@ -46,7 +46,7 @@ import org.xdef.xml.KXmlUtils;
 /** Generate X-definition from XML.
  * @author Vaclav Trojan
  */
-public class GenXDef implements XDConstants {
+public final class GenXDef implements XDConstants {
 
 	/** Model of attribute. */
 	private final static class XAttr {
@@ -642,7 +642,28 @@ public class GenXDef implements XDConstants {
 			String uri = entry.getKey().getNamespaceURI();
 			if (qn.startsWith("xmlns")) {
 				model.setAttributeNS(uri, qn, att._type);
-			} else {
+			}
+		}
+		// than set X-definition attributes
+		for (Map.Entry<QName, XAttr> entry : x._atts.entrySet()) {
+			att = x._atts.get(entry.getKey());
+			String qn = getNameFromQName(entry.getKey());
+			String uri = entry.getKey().getNamespaceURI();
+			if (uri.equals(XDEF41_NS_URI) 
+				&& XDEF_NS_PREFIX.equals(entry.getKey().getPrefix())) {
+				final String value =
+					(att._required ? "required" : "optional") +
+					(att._type.length() != 0 ? " " + att._type : "") + ";";
+				model.setAttributeNS(uri, qn, value);
+			}
+		}
+		// and than set other attributes
+		for (Map.Entry<QName, XAttr> entry : x._atts.entrySet()) {
+			att = x._atts.get(entry.getKey());
+			String qn = getNameFromQName(entry.getKey());
+			String uri = entry.getKey().getNamespaceURI();
+			if (!qn.startsWith("xmlns") && !uri.equals(XDEF41_NS_URI)
+				&& !XDEF_NS_PREFIX.equals(entry.getKey().getPrefix())) {
 				final String value =
 					(att._required ? "required" : "optional") +
 					(att._type.length() != 0 ? " " + att._type : "") + ";";

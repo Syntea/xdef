@@ -45,7 +45,7 @@ import org.xdef.sys.SThrowable;
 /** Builder of XPool.
  * @author Vaclav Trojan
  */
-public class XBuilder implements XDBuilder {
+public final class XBuilder implements XDBuilder {
 
 	private XPool _xp;
 

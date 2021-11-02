@@ -8,7 +8,7 @@ import org.xdef.sys.SUnsupportedOperationException;
 /** End mark of selector.
  * @author Vaclav Trojan
  */
-public class XSelectorEnd extends XNode {
+public final class XSelectorEnd extends XNode {
 
 	/* Create the new instance of XSelectorEnd object. */
 	public XSelectorEnd() {
