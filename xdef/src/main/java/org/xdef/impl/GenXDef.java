@@ -203,11 +203,11 @@ public final class GenXDef implements XDConstants {
 				return "long()";
 			} else if (x.equals("int()") && y.equals("integer()")) {
 				return "integer()";
-			} else if (x.equals("long()") && (y.equals("int()")
-				|| y.equals("dateYMDhms()"))) {
+			} else if (x.equals("long()")
+				&& (y.equals("int()") || y.equals("dateYMDhms()"))) {
 				return "long()";
-			} else if (x.equals("long()") && (y.equals("int()")
-				|| y.equals("dateYMDhms()"))) {
+			} else if (x.equals("long()")
+				&& (y.equals("int()") || y.equals("dateYMDhms()"))) {
 				return "long()";
 			} else if (x.equals("long()") && y.equals("integer()")) {
 				return "integer()";
@@ -625,7 +625,7 @@ public final class GenXDef implements XDConstants {
 			s += t + ';';
 		}
 		if (s.isEmpty() && !"xd:def".equals(parent.getNodeName())) {
-			s = "occurs 1;";
+			s = "occurs 1;"; //can be omitted, but it enables to edit occurrence
 		}
 		if (!s.isEmpty()) {
 			model.setAttributeNS(XDEF41_NS_URI, XDEF_NS_PREFIX + ":script", s);
