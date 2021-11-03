@@ -52,7 +52,7 @@ public final class TestXDService extends XDTester {
 "  <Books>\n"+
 "    <Book xd:script=\"occurs *; create ser.vice.query('//Book')\"\n"+
 "     TITLE=\"string\"\n"+
-"     ISBN=\"regex('\\\\d{8,10}')\"\n"+
+"     ISBN=\"string(%pattern='\\\\d{8,10}')\"\n"+
 "     EDITOR=\"optional string\"\n"+
 "     ISSUED=\"optional int\">\n"+
 "      <Author xd:script=\"occurs *;\n"+

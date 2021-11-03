@@ -188,8 +188,11 @@ public final class Test002 extends XDTester {
 			assertNoErrors(reporter);
 			strw.close();
 			assertEq("t1t2", strw.toString());
-			try {
-				xdef = //test ListOf with XDEF_2_0
+			String oldProp = getProperty(XDConstants.XDPROPERTY_WARNINGS);
+			try {//test ListOf with XDEF_3.1
+				setProperty(XDConstants.XDPROPERTY_WARNINGS,
+					XDConstants.XDPROPERTYVALUE_WARNINGS_FALSE);
+				xdef =
 "<xd:def xmlns:xd='"+ XDConstants.XDEF31_NS_URI + "' root='A'>\n"+
 "<xd:declaration>\n"+
 "  boolean t1() {out('t1'); return false;}\n"+
@@ -197,18 +200,55 @@ public final class Test002 extends XDTester {
 "</xd:declaration>\n"+
 "  <A a='t1() OR t2'>ListOf(int(1,10))</A>\n"+
 "</xd:def>";
+				xp = compile(xdef);
 				xml = "<A a='99'>1 2</A>";
 				strw = new StringWriter();
-				el = parse(xdef, "", xml, reporter, strw, null, null);
+				el = parse(xp, "", xml, reporter, strw, null, null);
 				assertEq(xml, el);
 				assertNoErrors(reporter);
 				strw.close();
 				assertEq("t1t2", strw.toString());
+				setProperty(XDConstants.XDPROPERTY_WARNINGS,
+					XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE);
 				compile(xdef);
+				fail("Error not thrown");
+			} catch (Exception ex) {
+				s = ex.getMessage();
+				if (s == null || !s.contains("E XDEF443")) {fail(ex);}
+			}
+			setProperty(XDConstants.XDPROPERTY_WARNINGS,
+				XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE);
+			try {
+				compile(//test pic
+"<xd:def xmlns:xd='"+ _xdNS + "' root='A'>\n"+
+"  <A a=\"pic('999')\"></A>\n"+
+"</xd:def>");
+				fail("Error not thrown");
 			} catch (Exception ex) {
 				s = ex.getMessage();
 				if (s == null || !s.contains("W XDEF998")) {fail(ex);}
 			}
+			try {
+				compile(//test regex with XDEF_3.1
+"<xd:def xmlns:xd='"+ _xdNS + "' root='A'>\n"+
+"  <A a=\"regex('*')\"></A>\n"+
+"</xd:def>");
+				fail("Error not thrown");
+			} catch (Exception ex) {
+				s = ex.getMessage();
+				if (s == null || !s.contains("W XDEF998")) {fail(ex);}
+			}
+			try {
+				compile(//test dec
+"<xd:def xmlns:xd='"+ _xdNS + "' root='A'>\n"+
+"  <A a=\"dec(5,1)\"></A>\n"+
+"</xd:def>");
+				fail("Error not thrown");
+			} catch (Exception ex) {
+				s = ex.getMessage();
+				if (s == null || !s.contains("W XDEF998")) {fail(ex);}
+			}
+			setProperty(XDConstants.XDPROPERTY_WARNINGS, oldProp);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
 "<xd:declaration>\n"+
@@ -465,7 +505,8 @@ public final class Test002 extends XDTester {
 			xdef1 =
 "<x:def xmlns:x='" + _xdNS + "' name='P1_common'>\n"+
 "<Vozidlo\n"+
-"  CisloTP         =\"optional pic('AA999999'); onFalse setErr(4208)\"\n"+
+"  CisloTP         =\"optional string(%pattern='[A-Z]{2}[0-9]{5,6}');\n" +
+"                   onFalse setErr(4208)\"\n"+
 "  VIN             =\"optional string(1,26); onFalse setErr(4208)\"\n"+
 "  SPZ             =\"optional string(2,12); onFalse setErr(4208)\"\n"+
 "  DruhVozidla     =\"required myTest();\n"+
@@ -570,8 +611,8 @@ public final class Test002 extends XDTester {
 "<x:declaration xmlns:x='" + _xdNS + "'>\n"+
 " external method boolean test.xdef.Test002.unknown(XXData, XDValue[]);\n"+
 " external method boolean test.xdef.Test002.known(XXData);\n"+
-"  boolean t1() {return unknown() OOR pic('AA999999');}\n"+
-"  boolean t2() {return NOT known() || pic('AA999999');}\n"+
+"  boolean t1() {return unknown() OOR string(%pattern='[A-Z]{2}[0-9]{6}');}\n"+
+"  boolean t2() {return NOT known() || string(%pattern='[A-Z]{2}[0-9]{6}');}\n"+
 "</x:declaration>\n"+
 "  <a a1=\"optional t1(); onFalse out('ERR1')\"\n"+
 "   a2=\"optional t2(); onFalse out('ERR2')\"/>\n"+

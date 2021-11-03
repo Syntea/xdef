@@ -43,6 +43,7 @@ public final class TestTypes extends XDTester {
 		String xdef, xml, s;
 		ArrayReporter reporter = new ArrayReporter();
 		StringWriter strw;
+		String oldProp = getProperty(XDConstants.XDPROPERTY_WARNINGS);
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root = 'a'>\n"+
@@ -972,6 +973,10 @@ public final class TestTypes extends XDTester {
 			parse(xp, null, xml, reporter, strw, null, null);
 			assertEq("false", strw.toString());
 			assertErrors(reporter);
+		} catch (Exception ex) {fail(ex);}
+		try {//test ListOf with XDEF_3.1
+				setProperty(XDConstants.XDPROPERTY_WARNINGS,
+					XDConstants.XDPROPERTYVALUE_WARNINGS_FALSE);
 			xdef = // check Parser-combination of sequential and key parameters
 "<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n"+
 "  <a a='decimal(0,2,%totalDigits=3,%fractionDigits=2,%enumeration=[1.21])'\n"+
@@ -996,6 +1001,9 @@ public final class TestTypes extends XDTester {
 			xml = "<a a='+1.21' b='-1.21' c='-1.21'/>";
 			parse(xp, "", xml, reporter);
 			assertNoErrors(reporter);
+		} catch (Exception ex) {fail(ex);}
+		setProperty(XDConstants.XDPROPERTY_WARNINGS, oldProp);
+		try{
 			xdef =
 "<xd:def xmlns:xd = '" + _xdNS + "' root='a'>\n"+
 "  <a x=\"list(string, %length = 2);\"/>\n"+

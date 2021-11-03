@@ -806,13 +806,13 @@ public final class TestXdef extends XDTester {
 "     boolean $myCheck(){return myCheck0(getText());}\n"+
 "</xd:declaration>\n"+
 "<Davka Verze      = \"fixed myversion\"\n"+
-"       Kanal      = \"required regex(reg)\"\n"+
+"       Kanal      = \"required string(%pattern=reg)\"\n"+
 "       Seq        = \"required int(myParseInt(min), myParseInt(max))\"\n"+
 "       SeqRef     = \"optional myCheckInt()\"\n"+
 "       Date       = \"required xdatetime('d.M.yyyy')\"\n"+
-"       dp0        = \"required dec\"\n"+
-"       dp1        = \"required dec(3)\"\n"+
-"       dp2        = \"required dec(5,1)\"\n"+
+"       dp0        = \"required decimal\"\n"+
+"       dp1        = \"required decimal(%totalDigits=3)\"\n"+
+"       dp2        = \"required decimal(%totalDigits=5, %fractionDigits=1)\"\n"+
 "       xd:attr    = \"optional\"\n"+
 "       xd:script  = \"finally myProc(1,0.5,'xxx')\">\n"+
 "   <File   Name       = \"required string(1,256)\"\n"+
@@ -2213,12 +2213,20 @@ public final class TestXdef extends XDTester {
 			out.close();
 			assertNoErrors(reporter);
 			assertEq("x", strw.toString());
+		} catch (Exception ex) {fail(ex);}
+		String oldProperty = getProperty(XDConstants.XDPROPERTY_WARNINGS);
+		try {
+			setProperty(XDConstants.XDPROPERTY_WARNINGS,
+				XDConstants.XDPROPERTYVALUE_DEBUG_FALSE);
 			//test complex types
 			xdef = dataDir + "TestXdef_type.xdef";
 			xp = compile(xdef);
 			xml = dataDir + "TestXdef_type_valid_1.xml";
 			parse(xp, "", xml, reporter);
 			assertNoErrorwarnings(reporter);
+		} catch (Exception ex) {fail(ex);}
+		setProperty(XDConstants.XDPROPERTY_WARNINGS, oldProperty);
+		try {
 			xdef = // optional
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'> <a a='? string(0,10);'/> </xd:def>";
 			xml = "<a a=''/>";
@@ -3100,8 +3108,8 @@ public final class TestXdef extends XDTester {
 			File f = new File(tempDir, "a.rep");
 			FileReportWriter frw = new FileReportWriter(f);
 			xp = XDFactory.compileXD(frw, null, xdef);
-			assertTrue(frw.getReportReader().printToString().contains(
-				"XDEF443"));
+			assertTrue(frw.getReportReader().printToString()
+				.contains("XDEF443"));
 			frw.close();
 			f.delete();
 		} catch (Exception ex) {fail(ex);}
@@ -3163,7 +3171,7 @@ public final class TestXdef extends XDTester {
 		try {
 			props.setProperty(XDConstants.XDPROPERTY_WARNINGS,// xdef_warnings
 				XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE); // true
-			xp = XDFactory.compileXD(null, xdef, TestXdef.class);
+			xp = XDFactory.compileXD(props, xdef, TestXdef.class);
 			xd = xp.createXDDocument();
 			xd.xparse(xml, null);
 			fail("Error not thrown");
