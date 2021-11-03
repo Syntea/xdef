@@ -577,7 +577,7 @@ public final class GenXDef implements XDConstants {
 				}
 			}
 		}
-		return "string()";
+		return "string(" + (data.length() == 1 ? "1)" : ")") ;
 	}
 
 	private static void appendText(final Element el, final String text) {
