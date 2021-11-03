@@ -36,7 +36,6 @@ import java.util.Map;
 import java.util.LinkedHashMap;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.math.BigInteger;
 import java.util.HashMap;
 import org.xdef.impl.XConstants;
 import org.xdef.impl.XDefinition;

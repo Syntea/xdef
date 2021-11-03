@@ -1177,7 +1177,7 @@ public final class TestXComponents extends XDTester {
 "<a>\n" +
 "  <DefParams>\n" +
 "    <Param Name=\"Jmeno\" Type=\"string()\" />\n" +
-"    <Param Type=\"dec()\" Name=\"Vyska\"/>\n" +
+"    <Param Type=\"decimal()\" Name=\"Vyska\"/>\n" +
 "    <Param Name=\"DatumNarozeni\" Type=\"date()\" />\n" +
 "  </DefParams>\n" +
 "  <Params>\n" +
@@ -1191,7 +1191,8 @@ public final class TestXComponents extends XDTester {
 			assertEq(xml, xc.toXml());
 			list = (List) SUtils.getValueFromGetter(
 				SUtils.getValueFromGetter(xc, "getDefParams"), "listOfParam");
-			assertEq("dec()",SUtils.getValueFromGetter(list.get(1), "getType"));
+			assertEq("decimal()",
+				SUtils.getValueFromGetter(list.get(1), "getType"));
 			list = (List) SUtils.getValueFromGetter(xc, "listOfParams");
 			list = (List) SUtils.getValueFromGetter(list.get(0), "listOfParam");
 			assertEq("14.8",SUtils.getValueFromGetter(list.get(1), "getValue"));

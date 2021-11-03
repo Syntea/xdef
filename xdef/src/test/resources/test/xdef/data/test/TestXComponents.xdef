@@ -40,7 +40,7 @@
 </xd:declaration>
 
 <xd:def name='A' root='A'>
-  <A a='string' dec='?dec(5,2)'>
+  <A a='string' dec='?decimal(%totalDigits=5,%fractionDigits=2)'>
     <W xd:script='*' w='string(1, 6)'>?string(1, 6)</W>
     <Y xd:script='*'>?num</Y>
     <i xd:script='?'>integer();</i>
@@ -110,9 +110,9 @@
       <X xd:script='*'>hexBinary</X>
       <Y>hexBinary</Y>
     </H>
-    <P A='dec'>
-      <X xd:script='*'>dec</X>
-      <Y>dec</Y>
+    <P A='decimal'>
+      <X xd:script='*'>decimal</X>
+      <Y>decimal</Y>
     </P>
     <Q A='xdatetime("yyyy-MM-dd")'>
       <X xd:script='*'>xdatetime('yyyy-MM-dd')</X>

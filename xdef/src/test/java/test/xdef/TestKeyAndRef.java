@@ -951,7 +951,7 @@ public final class TestKeyAndRef extends XDTester {
 "<A>\n" +
 "  <DefParams>\n" +
 "    <Param Name=\"name\" Type=\"string()\" />\n" +
-"    <Param Type=\"dec()\" Name=\"xxx\"/>\n" +
+"    <Param Type=\"decimal()\" Name=\"xxx\"/>\n" +
 "    <Param Name=\"birthday\" Type=\"xdatetime('dd.MM.yyyy')\"/>\n" +
 "  </DefParams>\n" +
 "  <Params>\n" +
@@ -994,7 +994,7 @@ public final class TestKeyAndRef extends XDTester {
 "<a>\n" +
 "  <DefParams>\n" +
 "    <Param Name=\"Jmeno\" Type=\"string()\" />\n" +
-"    <Param Type=\"dec()\" Name=\"Vyska\"/>\n" +
+"    <Param Type=\"decimal()\" Name=\"Vyska\"/>\n" +
 "    <Param Name=\"DatumNarozeni\" Type=\"xdatetime('dd.MM.yyyy')\" />\n" +
 "  </DefParams>\n" +
 "  <Params>\n" +
@@ -1009,7 +1009,7 @@ public final class TestKeyAndRef extends XDTester {
 			strw = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(strw, false));
 			parse(xd, xml, reporter);
-			assertEq("true,x,false,x,false,x,string,dec,xdatetime,",
+			assertEq("true,x,false,x,false,x,string,decimal,xdatetime,",
 				strw.toString());
 			assertTrue(reporter.getErrorCount() == 2
 				&& (s = reporter.printToString()).contains("XDEF804")

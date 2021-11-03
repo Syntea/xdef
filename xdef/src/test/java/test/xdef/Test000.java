@@ -531,9 +531,9 @@ public final class Test000 extends XDTester {
 "  <xd:declaration>\n"+
 "    external method boolean test.xdef.Test000.known(XXNode, XDValue[]);\n"+
 "    external method boolean test.xdef.Test000.unknown(XXNode, XDValue[]);\n"+
-"    boolean x() {return unknown() OR regex('[A-Z0-9]{6,7}');}\n"+
+"    boolean x() {return unknown() OR string(%pattern='[A-Z0-9]{6,7}');}\n"+
 "    boolean y() {return known() AND string(1,26);}\n"+
-"    boolean z() {return unknown() OR pic('AA999999');}\n"+
+"    boolean z() {return unknown() OR string(%pattern='[A-Z]{2}.*');}\n"+
 "  </xd:declaration>\n"+
 "  <Vozidlo SPZ=\"optional x();\"\n"+
 "    VIN       =\"optional y();\"\n"+
@@ -992,7 +992,7 @@ public final class Test000 extends XDTester {
 			fail("error not reported");
 		} catch (Exception ex) {
 			s = ex.getMessage();
-			if (s == null || s.indexOf("XDEF410") < 0) {
+			if (s == null || s.indexOf("XDEF998") < 0) {
 				fail(ex);
 			}
 		}

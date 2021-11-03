@@ -54,7 +54,7 @@
 </VozidloSmlouvy>
 
 <Vozidlo
-   CisloTP               = "optional pic('AA999999');                                            onFalse setErr(4208)"
+   CisloTP               = "optional string(%pattern='[A-Z]{2}[0-9]{6}');                                            onFalse setErr(4208)"
    VIN                   = "optional string(1,26);                                               onFalse setErr(4208)"
    SPZ                   = "optional string(2,12);                                               onFalse setErr(4208)"
    DruhVozidla           = "required string(1,10000);        onFalse setErr(4225); onAbsence setErr(4202)"

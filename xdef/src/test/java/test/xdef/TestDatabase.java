@@ -538,7 +538,7 @@ public final class TestDatabase extends XDTester {
 "            }\n"+
 "        };\"\n"+
 "     TITLE=\"string\"\n"+
-"     ISBN=\"regex('\\\\d{8,10}')\"\n"+
+"     ISBN=\"string(%pattern='\\\\d{8,10}')\"\n"+
 "     EDITOR=\"optional string\"\n"+
 "     ISSUED=\"optional int\">\n"+
 "     <Author xd:script=\"occurs *\">\n"+
@@ -623,7 +623,7 @@ public final class TestDatabase extends XDTester {
 "  <item xd:script=\"onStartElement insertTitle(toString(@TITLE),\n"+
 "          toString(@EDITOR), toString(@ISBN), toString(@ISSUED))\"\n"+
 "     TITLE=\"string\"\n"+
-"     ISBN=\"regex('\\\\d{8,10}')\"\n"+
+"     ISBN=\"string(%pattern='\\\\d{8,10}')\"\n"+
 "     EDITOR=\"optional string\"\n"+
 "     ISSUED=\"optional int\">\n"+
 "     <Author xd:script=\"occurs *\">\n"+
@@ -665,7 +665,7 @@ public final class TestDatabase extends XDTester {
 "  <Books>\n"+
 "    <Book xd:script=\"occurs *; create rs\"\n"+
 "     TITLE=\"string\"\n"+
-"     ISBN=\"regex('\\\\d{8,10}')\"\n"+
+"     ISBN=\"string(%pattern='\\\\d{8,10}')\"\n"+
 "     EDITOR=\"optional string\"\n"+
 "     ISSUED=\"optional int\">\n"+
 "      <Author xd:script=\"occurs *;\n"+
@@ -715,7 +715,7 @@ public final class TestDatabase extends XDTester {
 "    <Book xd:script=\"occurs *;create service.query(\n"+
 "            'SELECT TITLE FROM MYTEST.TITLE ORDER BY TITLE ASC')\"\n"+
 "     TITLE=\"optional string\"\n"+
-"     ISBN=\"optional regex('\\\\d{8,10}')\"\n"+
+"     ISBN=\"optional string(%pattern='\\\\d{8,10}')\"\n"+
 "     EDITOR=\"optional string\"\n"+
 "     ISSUED=\"optional int\">\n"+
 "    </Book>\n"+

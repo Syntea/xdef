@@ -48,12 +48,12 @@
    </Subjekt>
 
    <Vozovka
-      CisloSilnice             = "optional string(1,15);                                           onFalse setErr(4208)"
-      ZObce                    = "optional string(3,30);                                           onFalse setErr(4208)"
-      DoObce                   = "optional string(3,30);                                           onFalse setErr(4208)"
-      Km                       = "optional dec(5,1);                                               onFalse setErr(4208)"
-      Okres                    = "optional string(1,36);                                           onFalse setErr(4208)"
-      Stat                     = "required tab('CC_Stat','KodStatu');                              onFalse setErr(4225); onAbsence setErr(4202)"
+      CisloSilnic        = "optional string(1,15);                                           onFalse setErr(4208)"
+      ZObce              = "optional string(3,30);                                           onFalse setErr(4208)"
+      DoObce             = "optional string(3,30);                                           onFalse setErr(4208)"
+      Km                 = "optional decimal(%totalDigits=5,%fractionDigits=6);                                               onFalse setErr(4208)"
+      Okres              = "optional string(1,36);                                           onFalse setErr(4208)"
+      Stat               = "required tab('CC_Stat','KodStatu');                              onFalse setErr(4225); onAbsence setErr(4202)"
    />
 
    <Misto                      xd:script = "finally {notEmptyMisto(4300); isEqual(4301,'Adresa@Stat','Vozovka@Stat');}">

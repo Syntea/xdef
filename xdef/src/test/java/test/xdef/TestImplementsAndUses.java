@@ -437,24 +437,24 @@ public final class TestImplementsAndUses extends XDTester {
 			xdef =
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name='A'>\n"+
-" <X a=\"required regex('[A-Z]');\" />\n"+
+" <X a=\"required string(%pattern='[A-Z]');\" />\n"+
 "</xd:def>\n"+
 "\n"+
 "<xd:def xd:name='B' xd:root='X'>\n"+
-" <X xd:script='uses A#X' a=\"required regex('[A-Z]')\" />\n"+
+" <X xd:script='uses A#X' a=\"required string(%pattern='[A-Z]')\" />\n"+
 "</xd:def>\n"+
 "</xd:collection>";
 			compile(xdef);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "'>\n"+
-" <X xd:script='uses Y' a=\"required regex('[A-Z]')\" />\n"+
-" <Y a=\"required regex('[A-Z]');\" />\n"+
+" <X xd:script='uses Y' a=\"required string(%pattern='[A-Z]')\" />\n"+
+" <Y a=\"required string(%pattern='[A-Z]');\" />\n"+
 "</xd:def>";
 			compile(xdef);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "'>\n"+
 " <X xd:script='uses Y' a=\"required\" />\n"+
-" <Y a=\"required regex(' [A-Z]\n ');\" />\n"+
+" <Y a=\"required string(%pattern=' [A-Z]\n ');\" />\n"+
 "</xd:def>";
 			compile(xdef);
 			xdef =

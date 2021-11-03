@@ -529,7 +529,9 @@ public class CompileBase implements CodeTable, XDValueID {
 			keyParam("minInclusive", XD_DECIMAL,false,-1,false),
 			keyParam("pattern",XD_STRING,true,-1,false),
 			keyParam("totalDigits", XD_LONG,false,0,false));
-		parser(im, org.xdef.impl.parsers.XDParseDec.class, "?dec");
+		parser(im, org.xdef.impl.parsers.XDParseDec.class,
+			"method decimal with parameters %totalDigits and %fractionDigits",
+			"?dec");
 
 		im = genParserMetnod(0, 0, null, XD_STRING,
 			keyParam("enumeration", XD_BYTES, true, -1,false),
@@ -611,8 +613,10 @@ public class CompileBase implements CodeTable, XDValueID {
 		parser(im, org.xdef.impl.parsers.XDParseEndsi.class, "endsi");
 		parser(im, org.xdef.impl.parsers.XDParseContains.class,"contains");
 		parser(im, org.xdef.impl.parsers.XDParseContainsi.class, "containsi");
-		parser(im, org.xdef.impl.parsers.XDParsePic.class, "pic");//"?picture"
-		parser(im, org.xdef.impl.parsers.XDParseRegex.class, "regex");
+		parser(im, org.xdef.impl.parsers.XDParsePic.class,
+			"string with parameter pattern", "?pic");
+		parser(im, org.xdef.impl.parsers.XDParseRegex.class,
+			"string with parameter pattern", "?regex");
 
 		im = genParserMetnod(1, Integer.MAX_VALUE, new short[] {XD_STRING},
 			XD_STRING, keyParam("argument", XD_CONTAINER, true,  0, false));
@@ -628,7 +632,7 @@ public class CompileBase implements CodeTable, XDValueID {
 		parser(im,org.xdef.impl.parsers.XDParseEmailAddr.class,
 			"emailAddr", "?email");
 		parser(im,org.xdef.impl.parsers.XDParseEmailAddrList.class,
-			"?emailAddrList", "?emailList");
+			"emailAddrList", "?emailList");
 		parser(im,org.xdef.impl.parsers.XDParseFile.class, "file");
 		parser(im,org.xdef.impl.parsers.XDParseFileList.class,"fileList");
 		parser(im,org.xdef.impl.parsers.XDParseXDType.class, "xdType");
@@ -646,7 +650,7 @@ public class CompileBase implements CodeTable, XDValueID {
 		method(ti, genInternalMethod(CLEAR_REPORTS, XD_VOID,
 			ANY_MODE, 0, 0), "clearReports");
 		method(ti, genInternalMethod(COMPILE_REGEX, XD_REGEX, ANY_MODE, 1,1,
-			XD_STRING), "?compilePattern"); ////////////// remove
+			XD_STRING), "Regex constructor", "?compilePattern"); //remove!
 		method(ti, genInternalMethod(DEFAULT_ERROR, XD_BOOLEAN,
 			ANY_MODE, 0, 0), "defaultError");
 		method(ti, genInternalMethod(GET_EASTERMONDAY, XD_DATETIME,
@@ -994,11 +998,11 @@ public class CompileBase implements CodeTable, XDValueID {
 		method(ti, genInternalMethod(SET_MINUTE, XD_DATETIME,
 			ANY_MODE, 2, 2, XD_DATETIME,XD_LONG), "setMinute");
 		method(ti, genInternalMethod(SET_MILLIS, XD_DATETIME,
-			ANY_MODE, 2, 2, XD_DATETIME, XD_LONG),"setMillis","?setMillisecond");
+			ANY_MODE, 2, 2, XD_DATETIME,XD_LONG),"setMillis","?setMillisecond");
 		method(ti, genInternalMethod(SET_MONTH, XD_DATETIME,
 			ANY_MODE, 2, 2, XD_DATETIME,XD_LONG), "setMonth");
 		method(ti, genInternalMethod(SET_NANOS, XD_DATETIME,
-			ANY_MODE, 2, 2, XD_DATETIME, XD_LONG), "setNanos", "?setNanosecond");
+			ANY_MODE, 2, 2, XD_DATETIME, XD_LONG), "setNanos","?setNanosecond");
 		method(ti, genInternalMethod(SET_SECOND, XD_DATETIME,
 			ANY_MODE, 2, 2, XD_DATETIME, XD_LONG), "setSecond");
 		method(ti, genInternalMethod(SET_YEAR, XD_DATETIME,
