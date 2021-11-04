@@ -440,14 +440,14 @@ final class XCGenerator extends XCGeneratorJSON {
 						jname = '"' + jname + '"';
 						if (XonNames.X_ITEM.equals(xe1.getLocalName())) {
 							if (groupKind != XMNode.XMCHOICE) {
-								genJsonItemGetterAndSetter(xe1, typeName,iname,
+								genJsonItemGetterAndSetter(xe1, typeName, iname,
 									max, setters, getters, sbi, classNames,
 									varNames);
 							}
 						} else if (XonNames.X_MAP.equals(xe1.getLocalName())
 							|| XonNames.X_ARRAY.equals(xe1.getLocalName())) {
 							//TODO
-							genJsonObjects(xe1,iname, max,
+							genJsonObjects(xe1, typeName,iname, max,
 								 setters, getters, sbi, classNames, varNames);							
 						}
 					}

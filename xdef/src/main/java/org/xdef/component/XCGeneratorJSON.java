@@ -321,6 +321,45 @@ class XCGeneratorJSON extends XCGeneratorBase1 {
 		}
 	}
 
+	/** Create unique model name.
+	 * @param xe Element model from which setter/getter is generated.
+	 * @param namePrefix prefix of the name (eg. "get$")
+	 * @param classNames set with class names.
+	 * @param varNames set with variable names.
+	 * @return unique model name.
+	 */
+	private static String getJsonItemName(final XElement xe,
+		final String namePrefix,
+		final Set<String> classNames,
+		final Set<String> varNames) {
+		XData keyAttr = (XData) xe.getAttr(XonNames.X_KEYATTR);
+		String name = null;
+		if (xe._json == XConstants.JSON_MODE_W && xe._match >= 0
+			&& keyAttr != null && keyAttr._check >= 0) {
+			XDValue[] code = ((XPool)xe.getXDPool()).getCode();
+			for (int i = keyAttr._check; i < code.length; i++) {
+				XDValue item = code[i];
+				if (item.getCode() == CodeTable.CALL_OP) {
+					i = item.getParam();
+					continue;
+				}
+				if (item.getCode() == CodeTable.LD_CONST) {
+					name = javaName(
+						namePrefix + XonTools.toXmlName(code[i].stringValue()));
+					name = getUniqueName(getUniqueName(getUniqueName(name,
+						RESERVED_NAMES), classNames), varNames);
+					varNames.add(name);
+					name = name.substring(4);
+					break;
+				}
+			}
+		}
+		if (name == null) {
+			
+		}
+		return name;
+	}
+	
 	/** Create getter and setter of the item model of js:item.
 	 * @param xe Element model from which setter/getter is generated.
 	 * @param typeName the class name of this element X-component.
@@ -341,27 +380,7 @@ class XCGeneratorJSON extends XCGeneratorBase1 {
 		final StringBuilder sbi,
 		final Set<String> classNames,
 		final Set<String> varNames) {
-		String name = null;
-		XData keyAttr = (XData) xe.getAttr(XonNames.X_KEYATTR);
-		if (xe._json==XConstants.JSON_MODE_W && xe._match>=0 && keyAttr!=null
-			&& keyAttr._check >= 0) {
-			XDValue[] code = ((XPool)xe.getXDPool()).getCode();
-			for (int i = keyAttr._check; i < code.length; i++) {
-				XDValue item = code[i];
-				if (item.getCode() == CodeTable.CALL_OP) {
-					i = item.getParam();
-					continue;
-				}
-				if (item.getCode() == CodeTable.LD_CONST) {
-					name = javaName("get$" + XonTools.toXmlName(code[i].stringValue()));
-					name = getUniqueName(getUniqueName(getUniqueName(name,
-						RESERVED_NAMES), classNames), varNames);
-					varNames.add(name);
-					name = name.substring(4);
-					break;
-				}
-			}
-		}
+		String name = getJsonItemName(xe, "get$", classNames, varNames);
 		if (name == null) {
 			name = getUniqueName(getUniqueName("get$item",classNames),varNames);
 			varNames.add(name);
@@ -376,16 +395,9 @@ class XCGeneratorJSON extends XCGeneratorBase1 {
 		String s;
 		if (max > 1) { // list of values
 			String typ1 = "java.util.List<" + typ + ">";
-			if (xe.getJsonMode() != 0) {
-				if ("String".equals(typ)) {
-					jGet = "org.xdef.xon.XonTools.jstringFromSource("
-						+ "y.getvalue())";
-				} else {
-					jGet = "y.getvalue()";
-				}
-			} else {
-				jGet = "y.getvalue()";
-			}
+			jGet = xe.getJsonMode() != 0 && "String".equals(typ)
+				? "org.xdef.xon.XonTools.jstringFromSource(y.getvalue())"
+				: "y.getvalue()";
 			// getter
 			template =
 (_genJavadoc ? "\t/** Get values of text nodes of &{d}."+LN+
@@ -591,6 +603,7 @@ class XCGeneratorJSON extends XCGeneratorBase1 {
 	
 	/** Create getters and setters of model of js:map and js:array.
 	 * @param xe Element model from which setter/getter is generated.
+	 * @param typeName the class name of this element X-component.
 	 * @param iname name of getter/setter of this model.
 	 * @param max maximal occurrence.
 	 * @param setters where to generate setter.
@@ -600,6 +613,7 @@ class XCGeneratorJSON extends XCGeneratorBase1 {
 	 * @param varNames set with variable names.
 	 */
 	final void genJsonObjects(final XElement xe,
+		final String typeName,
 		final String iname,
 		final int max,
 		final StringBuilder setters,
@@ -607,5 +621,11 @@ class XCGeneratorJSON extends XCGeneratorBase1 {
 		final StringBuilder sbi,
 		final Set<String> classNames,
 		final Set<String> varNames) {
+		String name = getJsonItemName(xe, "get$", classNames, varNames);
+		if (name == null) {
+//System.out.println("JS " + xe.getName());
+		} else {
+//System.out.println(name);
+		}
 	}
 }
