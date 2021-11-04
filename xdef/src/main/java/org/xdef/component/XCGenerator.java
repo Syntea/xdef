@@ -412,6 +412,21 @@ final class XCGenerator extends XCGeneratorJSON {
 						choiceStack.push(max);
 					}
 					XNode[] xnds = (XNode[]) xe1.getChildNodeModels();
+					if (!ext) {
+						genVariableFromModel(typeName,iname,max,"element",vars);
+						if (xnds.length==1 && xnds[0].getKind()==XMNode.XMTEXT
+							&& groupKind != XMNode.XMCHOICE
+							&& xe1.getAttrs().length == 0) {//no attrs,only text
+							// direct getters/setters for text child
+							genDirectSetterAndGetter(xe1,
+								iname, typeName, false, setters, getters, sbi);
+						}
+						if (groupKind != XMNode.XMCHOICE){
+							genChildElementGetterSetter(xe1, typeName, iname,
+								max, "element", getters, setters, sbi, "");
+						}
+					}
+					genChildElementCreator(iname,  listNodes, max > 1);
 					if (xe1._json == XConstants.JSON_MODE_W
 						&& XDConstants.XON_NS_URI_W.equals(xe1.getNSUri())) {
 						XData keyAttr = (XData)xe1.getAttr(XonNames.X_KEYATTR);
@@ -436,21 +451,6 @@ final class XCGenerator extends XCGeneratorJSON {
 								 setters, getters, sbi, classNames, varNames);							
 						}
 					}
-					if (!ext) {
-						genVariableFromModel(typeName,iname,max,"element",vars);
-						if (xnds.length==1 && xnds[0].getKind()==XMNode.XMTEXT
-							&& groupKind != XMNode.XMCHOICE
-							&& xe1.getAttrs().length == 0) {//no attrs,only text
-							// direct getters/setters for text child
-							genDirectSetterAndGetter(xe1,
-								iname, typeName, false, setters, getters, sbi);
-						}
-						if (groupKind != XMNode.XMCHOICE){
-							genChildElementGetterSetter(xe1, typeName, iname,
-								max, "element", getters, setters, sbi, "");
-						}
-					}
-					genChildElementCreator(iname,  listNodes, max > 1);
 					// generate if it was not declared as XComponent
 					String xval = (max == 1 ? "1" : "2") + "," + iname + ";";
 					if (xcClass0 == null || xcClass0.startsWith("interface ")) {
