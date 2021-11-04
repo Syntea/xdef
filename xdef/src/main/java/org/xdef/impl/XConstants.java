@@ -14,7 +14,7 @@ public interface XConstants {
 	public static final byte XD41 = 41;
 
 	/** JSON mode W3C format. */
-	public static byte JSON_MODE_W3C = 1;
+	public static byte JSON_MODE_W = 1;
 	/** JSON mode X-definition format. */
 	public static byte JSON_MODE_XD = 2;
 

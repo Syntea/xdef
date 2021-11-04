@@ -343,7 +343,7 @@ class XCGeneratorJSON extends XCGeneratorBase1 {
 		final Set<String> varNames) {
 		String name = null;
 		XData keyAttr = (XData) xe.getAttr(XonNames.X_KEYATTR);
-		if (xe._json==XConstants.JSON_MODE_W3C && xe._match>=0 && keyAttr!=null
+		if (xe._json==XConstants.JSON_MODE_W && xe._match>=0 && keyAttr!=null
 			&& keyAttr._check >= 0) {
 			XDValue[] code = ((XPool)xe.getXDPool()).getCode();
 			for (int i = keyAttr._check; i < code.length; i++) {
@@ -587,5 +587,25 @@ class XCGeneratorJSON extends XCGeneratorBase1 {
 				}
 			}
 		}
+	}
+	
+	/** Create getters and setters of model of js:map and js:array.
+	 * @param xe Element model from which setter/getter is generated.
+	 * @param iname name of getter/setter of this model.
+	 * @param max maximal occurrence.
+	 * @param setters where to generate setter.
+	 * @param getters where to generate getter.
+	 * @param sbi where to generate interface.
+	 * @param classNames set with class names.
+	 * @param varNames set with variable names.
+	 */
+	final void genJsonObjects(final XElement xe,
+		final String iname,
+		final int max,
+		final StringBuilder setters,
+		final StringBuilder getters,
+		final StringBuilder sbi,
+		final Set<String> classNames,
+		final Set<String> varNames) {
 	}
 }

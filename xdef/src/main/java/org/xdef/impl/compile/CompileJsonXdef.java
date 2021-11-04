@@ -560,7 +560,7 @@ public class CompileJsonXdef extends StringParser {
 		final String format,
 		final SBuffer name,
 		final ReportWriter reporter) {
-		if (jsonMode != XConstants.JSON_MODE_W3C) {
+		if (jsonMode != XConstants.JSON_MODE_W) {
 			//Internal error&{0}{: }
 			throw new SRuntimeException(SYS.SYS066, "Namespace W3C expected");
 		}

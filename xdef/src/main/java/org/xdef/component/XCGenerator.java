@@ -6,7 +6,16 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.Stack;
+import org.xdef.XDConstants;
 import org.xdef.XDPool;
+import static org.xdef.component.XCGeneratorBase.LN;
+import static org.xdef.component.XCGeneratorBase.RESERVED_NAMES;
+import static org.xdef.component.XCGeneratorBase.addNSUri;
+import static org.xdef.component.XCGeneratorBase.checkUnique;
+import static org.xdef.component.XCGeneratorBase.genCreatorOfAttribute;
+import static org.xdef.component.XCGeneratorBase.getParsedResultGetter;
+import static org.xdef.component.XCGeneratorBase.getUniqueName;
+import static org.xdef.component.XCGeneratorBase.javaName;
 import org.xdef.impl.XConstants;
 import org.xdef.impl.XData;
 import org.xdef.impl.XElement;
@@ -22,13 +31,11 @@ import org.xdef.xon.XonNames;
 /** Generation of Java source code of XDComponents.
  * @author Vaclav Trojan
  */
-class XCGenerator extends XCGeneratorJSON {
+final class XCGenerator extends XCGeneratorJSON {
 
 	/** New instance of this class.*/
-	XCGenerator(final XDPool xp,
-		final ArrayReporter reporter,
-		final boolean genJavaDoc) {
-		super(xp, reporter, genJavaDoc);
+	XCGenerator(final XDPool xp, final ArrayReporter rep, final boolean genDoc){
+		super(xp, rep, genDoc);
 	}
 
 	/** Generation of Java code of class composed from XDElement.
@@ -405,7 +412,8 @@ class XCGenerator extends XCGeneratorJSON {
 						choiceStack.push(max);
 					}
 					XNode[] xnds = (XNode[]) xe1.getChildNodeModels();
-					if (xe1._json == XConstants.JSON_MODE_W3C) {
+					if (xe1._json == XConstants.JSON_MODE_W
+						&& XDConstants.XON_NS_URI_W.equals(xe1.getNSUri())) {
 						XData keyAttr = (XData)xe1.getAttr(XonNames.X_KEYATTR);
 						String jname;
 						if (keyAttr != null) {
@@ -417,10 +425,15 @@ class XCGenerator extends XCGeneratorJSON {
 						jname = '"' + jname + '"';
 						if (XonNames.X_ITEM.equals(xe1.getLocalName())) {
 							if (groupKind != XMNode.XMCHOICE) {
-								genJsonItemGetterAndSetter(xe1,typeName,iname,
+								genJsonItemGetterAndSetter(xe1, typeName,iname,
 									max, setters, getters, sbi, classNames,
 									varNames);
 							}
+						} else if (XonNames.X_MAP.equals(xe1.getLocalName())
+							|| XonNames.X_ARRAY.equals(xe1.getLocalName())) {
+							//TODO
+							genJsonObjects(xe1,iname, max,
+								 setters, getters, sbi, classNames, varNames);							
 						}
 					}
 					if (!ext) {
@@ -568,7 +581,5 @@ class XCGenerator extends XCGeneratorJSON {
 	}
 
 	/** Get StringBuilder with interface specifications. */
-	final StringBuilder getIinterfaces() {
-		return _interfaces;
-	}
+	final StringBuilder getIinterfaces() {return _interfaces;}
 }
