@@ -1278,7 +1278,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			try {
 				byte jsonVer = // version of JSON to XML transormation
 					(Byte) yClass.getDeclaredField("JSON").get(null);
-				e = jsonVer == XConstants.JSON_MODE_W3C ?
+				e = jsonVer == XConstants.JSON_MODE_W ?
 					XonUtil.xonToXml(xon) : XonUtil.xonToXmlXD(xon);
 			} catch (Exception ex) {
 				e = XonUtil.xonToXml(xon); // X-definition transormation

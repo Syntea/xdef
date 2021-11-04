@@ -1500,7 +1500,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						error(sval, XDEF.XDEF316, name, s);
 					}
 				}
-				byte jsonMode =  XConstants.JSON_MODE_W3C; //W3C mode is default
+				byte jsonMode =  XConstants.JSON_MODE_W; //W3C mode is default
 				pa =  _precomp.getXdefAttr(pnode, "mode", false, true);
 				if (pa != null) {
 					if ("xdef".equalsIgnoreCase(pa._value.getString())) {
