@@ -355,7 +355,12 @@ class XCGeneratorJSON extends XCGeneratorBase1 {
 			}
 		}
 		if (name == null) {
-			
+			name = getUniqueName(getUniqueName(
+				getUniqueName("get$" + xe.getLocalName(),
+					RESERVED_NAMES), classNames), varNames);
+					varNames.add(name);
+			varNames.add(name);
+			name = name.substring(4);			
 		}
 		return name;
 	}
@@ -381,11 +386,6 @@ class XCGeneratorJSON extends XCGeneratorBase1 {
 		final Set<String> classNames,
 		final Set<String> varNames) {
 		String name = getJsonItemName(xe, "get$", classNames, varNames);
-		if (name == null) {
-			name = getUniqueName(getUniqueName("get$item",classNames),varNames);
-			varNames.add(name);
-			name = name.substring(4);
-		}
 		String typ =
 			getJavaObjectTypeName((XData) xe.getAttr(XonNames.X_VALUEATTR));
 		boolean isNull = false;
@@ -622,10 +622,8 @@ class XCGeneratorJSON extends XCGeneratorBase1 {
 		final Set<String> classNames,
 		final Set<String> varNames) {
 		String name = getJsonItemName(xe, "get$", classNames, varNames);
-		if (name == null) {
-//System.out.println("JS " + xe.getName());
-		} else {
-//System.out.println(name);
-		}
+//		String typ = XonNames.X_MAP.equals(xe.getLocalName())
+//			? "java.util.Map<String, Object>" : "java.util.List<Object>";
+//System.out.println(name + ", type= " + typeName + ", getter: " + iname + "; " + typ);
 	}
 }
