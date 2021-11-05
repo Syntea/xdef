@@ -215,7 +215,7 @@ public final class Test003 extends XDTester {
 "      barva = 'an'\n" +
 "      co = 'string(3)'\n" +
 "      nějaký = 'string(4)'>\n" +
-"      <kam>pic('AAAAAA')</kam>\n" +
+"      <kam>string(%pattern='\\\\D{6}')</kam>\n" +
 "       string(10,999); fixed 'skákal přes louže'\n" +
 "      <proč>string(7,%pattern=['j.*'])</proč>\n" +
 "    </kůň>\n"+
