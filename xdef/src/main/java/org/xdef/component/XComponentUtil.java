@@ -415,21 +415,25 @@ public class XComponentUtil {
 	}
 
 	/** Create XON object from X-component.
-	 * @param xc X-component.
+	 * @param x X-component.
 	 * @return XON object.
 	 */
-	public final static Object toXon(final XComponent xc) {
-		String ns = xc.xGetNamespaceURI();
-		String name = xc.xGetNodeName();
+	public final static Object toXon(final XComponent x) {
+		String ns = x.xGetNamespaceURI();
 		if (XDConstants.XON_NS_URI_W.equals(ns)) {
+			String name = x.xGetNodeName();
+			int ndx = name.indexOf(':');
+			if (ndx >= 0) { // ???
+				name = name.substring(ndx + 1);
+			}
 			if (XonNames.X_MAP.equals(name)) {
-				return toXonMap(xc);
+				return toXonMap(x);
 			} else if (XonNames.X_ARRAY.equals(name)) {
-				return toXonArray(xc);
+				return toXonArray(x);
 			} else if (XonNames.X_ITEM.equals(name)) {
-				return toXonItem(xc);
+				return toXonItem(x);
 			}
 		}
-		throw new RuntimeException("Unknown item: " + name + "; ns=" + ns);
+		throw new RuntimeException("Unknown: " + x.xGetNodeName() + "; ns="+ns);
 	}
 }

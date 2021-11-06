@@ -10,8 +10,6 @@ import org.xdef.xon.XonUtil;
 import org.xdef.sys.ArrayReporter;
 import test.XDTester;
 import java.net.URL;
-import java.util.List;
-import java.util.Map;
 import org.xdef.component.XComponent;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
@@ -28,30 +26,6 @@ public class MyTest_2 extends XDTester {
 
 	private static Object toJson(final XComponent xc) {
 		return XonUtil.xmlToJson(xc.toXml());
-	}
-
-	private void display(Object o, String indent) {
-		if (o == null) System.err.println(indent + "null");
-		String indent1 = indent + "  ";
-		if (o instanceof Map) {
-			Map m = (Map) o;
-			System.err.println(indent + "MAP:" + m.size());
-			for (Object x : m.entrySet()) {
-				Map.Entry y = (Map.Entry) x;
-				System.err.print(indent1 + y.getKey());
-				display(y.getValue(), " ");
-			}
-			System.err.println(indent + "MAP end");
-		} else if (o instanceof List) {
-			List list = (List) o;
-			System.err.println(indent + "LIST:" + list.size());
-			for (Object x : list) {
-				display(x, indent1);
-			}
-			System.err.println(indent + "LIST end");
-		} else {
-			System.err.println(indent + o + "; " + o.getClass().getName());
-		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -103,7 +77,8 @@ public class MyTest_2 extends XDTester {
 			assertTrue(XonUtil.xonEqual(j, xd.getXon()));
 			xd = xp.createXDDocument();
 			xc = xd.jparseXComponent(XonUtil.xonToJson(j), null, reporter);
-			assertTrue(XonUtil.xonEqual(XonUtil.xonToJson(j), xc.toJson()));
+			assertTrue(XonUtil.xonEqual(XonUtil.xonToJson(j), 
+				XonUtil.xmlToJson(xc.toXml())));
 			assertTrue(XonUtil.xonEqual(j, xd.getXon()));
 		} catch (Exception ex) {fail(ex);}
 if (T )return;
@@ -570,7 +545,7 @@ if(T )return;
 			assertTrue(XonUtil.xonEqual(XonUtil.parseJSON(json), toJson(xc)),
 				XonUtil.toJsonString(toJson(xc), true));
 			assertEq(123, SUtils.getValueFromGetter(SUtils.getValueFromGetter(
-				xc, "getjs$item"), "getvalue"));
+				xc, "getjx$item"), "getvalue"));
 
 			json = "{\"a\":false}";
 			j = xp.createXDDocument().jparse(json, reporter);

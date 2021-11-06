@@ -256,7 +256,7 @@ public class TestXon extends XDTester {
 			reporter.clear();
 			y = XComponentUtil.toXon(xc);
 			assertTrue(XonUtil.xonEqual(x,y));
-			x = xc.toJson();
+			x = XonUtil.xmlToJson(xc.toXml());
 			y = XonUtil.xonToJson(y);
 			assertTrue(XonUtil.xonEqual(x,y));
 		} catch (Exception ex) {fail(ex);}
