@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 41.0.0, release-date 2021-11-03
+# Version 41.0.0, release-date 2021-11-06
 * Preparing release version 4.1.
 * X-script type methods `dec`, `regex` and `pat` are now deprecated.
 * From this project are removed utilities for conversion XML schema to/from

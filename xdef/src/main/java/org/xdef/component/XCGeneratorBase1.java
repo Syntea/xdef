@@ -120,13 +120,13 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 "\tpublic org.w3c.dom.Element toXml()"+LN+
 "\t\t{return (org.w3c.dom.Element) toXml((org.w3c.dom.Document) null);}"+LN+
 "\t@Override"+LN+
-(_genJavadoc ? 
+(_genJavadoc ?
 "\t/** Get name of XML node used for construction of this object."+LN+
 "\t * @return name of XML node used for construction of this object."+LN+
 "\t */"+LN : "") +
 "\tpublic String xGetNodeName() {return XD_NodeName;}"+LN+
 "\t@Override"+LN+
-(_genJavadoc ? 
+(_genJavadoc ?
 "\t/** Update parameters of XComponent."+LN+
 "\t * @param parent p XComponent."+LN+
 "\t * @param name name of element."+LN+
@@ -138,7 +138,7 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 "\t\tXD_Parent=p; XD_NodeName=name; XD_NamespaceURI=ns; XD_Model=xdPos;"+LN+
 "\t}"+LN+
 "\t@Override"+LN+
-(_genJavadoc ? 
+(_genJavadoc ?
 "\t/** Get namespace of node used for construction of this object."+LN+
 "\t * @return namespace of node used for construction of this object."+LN+
 "\t */"+LN : "") +
