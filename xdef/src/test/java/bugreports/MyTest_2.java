@@ -77,7 +77,7 @@ public class MyTest_2 extends XDTester {
 			assertTrue(XonUtil.xonEqual(j, xd.getXon()));
 			xd = xp.createXDDocument();
 			xc = xd.jparseXComponent(XonUtil.xonToJson(j), null, reporter);
-			assertTrue(XonUtil.xonEqual(XonUtil.xonToJson(j), 
+			assertTrue(XonUtil.xonEqual(XonUtil.xonToJson(j),
 				XonUtil.xmlToJson(xc.toXml())));
 			assertTrue(XonUtil.xonEqual(j, xd.getXon()));
 		} catch (Exception ex) {fail(ex);}

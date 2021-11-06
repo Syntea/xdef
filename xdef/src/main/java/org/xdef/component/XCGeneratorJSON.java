@@ -360,11 +360,11 @@ class XCGeneratorJSON extends XCGeneratorBase1 {
 					RESERVED_NAMES), classNames), varNames);
 					varNames.add(name);
 			varNames.add(name);
-			name = name.substring(4);			
+			name = name.substring(4);
 		}
 		return name;
 	}
-	
+
 	/** Create getter and setter of the item model of js:item.
 	 * @param xe Element model from which setter/getter is generated.
 	 * @param typeName the class name of this element X-component.
@@ -600,7 +600,7 @@ class XCGeneratorJSON extends XCGeneratorBase1 {
 			}
 		}
 	}
-	
+
 	/** Create getters and setters of model of js:map and js:array.
 	 * @param xe Element model from which setter/getter is generated.
 	 * @param typeName the class name of this element X-component.
