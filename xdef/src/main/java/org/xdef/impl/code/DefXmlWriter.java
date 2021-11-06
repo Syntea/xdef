@@ -20,7 +20,6 @@ import org.w3c.dom.Node;
 import org.xdef.XDContainer;
 import org.xdef.XDValueType;
 import java.math.BigInteger;
-import static org.xdef.XDValueID.XD_XMLWRITER;
 
 /** Provides incremental writing of XML data to a data stream.
  * @author Vaclav Trojan

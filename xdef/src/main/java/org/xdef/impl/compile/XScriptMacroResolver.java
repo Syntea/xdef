@@ -3,7 +3,6 @@ package org.xdef.impl.compile;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.ReportWriter;
 import org.xdef.sys.SBuffer;
-import static org.xdef.sys.SParser.NOCHAR;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.StringParser;
 import java.util.Map;

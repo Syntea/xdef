@@ -5,7 +5,7 @@ import org.xdef.XDParserAbstract;
 import org.xdef.impl.code.DefIPAddr;
 import org.xdef.msg.XDEF;
 import org.xdef.proc.XXNode;
-import static org.xdef.sys.SParser.NOCHAR;
+import org.xdef.sys.SParser;
 
 /** Parse Internet IP address.
  * @author Vaclav Trojan
@@ -25,7 +25,7 @@ public class XDParseIPAddr extends XDParserAbstract {
 		while ("0123456789abcdefABCDEF".indexOf(p.getCurrentChar()) >= 0) {
 			p.nextChar();
 			char ch = p.isOneOfChars(":.");
-			if (ch != NOCHAR) {
+			if (ch != SParser.NOCHAR) {
 				parts++;
 				if(ch == ':') {
 					while(p.isChar(':')){}
