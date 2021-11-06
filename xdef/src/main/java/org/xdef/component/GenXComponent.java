@@ -301,7 +301,7 @@ public final class GenXComponent {
 						new OutputStreamWriter(fos, charset);
 					out.append(SUtils.modifyString(result, "\t", "  ")).close();
 				}
-				if (genxc.getIinterfaces() != null) {
+				if (genxc._interfaces != null) {
 					packageName = "";
 					if ((ndx = interfaceName.lastIndexOf('.')) > 0) {
 						packageName = interfaceName.substring(0, ndx);
@@ -315,7 +315,7 @@ public final class GenXComponent {
 						new OutputStreamWriter(fos) :
 						new OutputStreamWriter(fos, charset);
 					out.append(SUtils.modifyString(
-						genxc.getIinterfaces().toString(), "\t", "  ")).close();
+						genxc._interfaces.toString(), "\t", "  ")).close();
 				}
 			}
 		}

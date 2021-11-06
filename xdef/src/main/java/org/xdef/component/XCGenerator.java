@@ -574,7 +574,4 @@ final class XCGenerator extends XCGeneratorJSON {
 		}
 		return sb.append(result).append("}").toString();
 	}
-
-	/** Get StringBuilder with interface specifications. */
-	final StringBuilder getIinterfaces() {return _interfaces;}
 }
