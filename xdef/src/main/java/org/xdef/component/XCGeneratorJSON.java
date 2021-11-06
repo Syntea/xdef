@@ -464,7 +464,7 @@ class XCGeneratorJSON extends XCGeneratorBase1 {
 "\t\tfor (&{typ} y:x){"+LN+
 (isNull ? "\t\t\tadd&{iname}(new &{typeName}());"+LN
 :("\t\t\t&{typeName} z=new &{typeName}();"+LN+
-"\t\t\tadd&{iname}(z);"+LN)) +
+"\t\t\tz.setvalue(y); add&{iname}(z);"+LN)) +
 "\t\t}"+LN+
 "\t}"+LN,
 				"&{name}", name,

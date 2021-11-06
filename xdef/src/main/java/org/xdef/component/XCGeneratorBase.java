@@ -388,9 +388,8 @@ class XCGeneratorBase {
 			case XDValueID.XD_BYTES:
 				return result + "getParsedValue().getBytes()";
 			case XDValueID.XD_PARSER:
-				return result + "getParsedString()";
 //			case XDValueID.XD_CONTAINER:
-//				return result + "getParsedString()";
+				return result + "getParsedString()";
 		}
 		result += "getParsedValue().toString()";
 		String enumType = checkEnumType(xdata);
@@ -838,14 +837,10 @@ class XCGeneratorBase {
 			}
 			case XDValueID.XD_DATETIME: {
 				String s = xdata.getDateMask();
-				if (s == null) {
-					x =
-"org.xdef.component.XComponentUtil.dateToJstring(get&{name}()))";
-				} else {
-					x = "get&{name}().formatDate("+s+"))";
-				}
-//				x = "get&{name}()." +
-//					(s == null ? "toISO8601())" : "formatDate("+s+"))");
+				x = s == null
+					? "org.xdef.component.XComponentUtil"
+					+ ".dateToJstring(get&{name}()))"
+					: "get&{name}().formatDate("+s+"))";
 				break;
 			}
 			case XDValueID.XD_BYTES:
@@ -925,15 +920,11 @@ class XCGeneratorBase {
 				break;
 			case XDValueID.XD_DATETIME: {
 				String s = xdata.getDateMask();
-				if (s == null) {
-					x = "org.xdef.component.XComponentUtil.dateToJstring(" +
-						(max > 1 ? "listOf" : "get") + "&{name}()"+y + ")";
-				} else {
-					x = (max > 1 ? "listOf" : "get") + "&{name}()"+y+"." +
-					"formatDate(" + s + ")";
-				}
-//				x = (max > 1 ? "listOf" : "get") + "&{name}()"+y+"." +
-//					(s!=null ? "formatDate(" + s : "toISO8601(") + ")";
+				x = s == null
+					? "org.xdef.component.XComponentUtil.dateToJstring(" +
+						(max > 1 ? "listOf" : "get") + "&{name}()"+y + ")"
+					: (max > 1 ? "listOf" : "get") + "&{name}()"+y+"." +
+						"formatDate(" + s + ")";
 				break;
 			}
 			case XDValueID.XD_BYTES:
