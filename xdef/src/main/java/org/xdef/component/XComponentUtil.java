@@ -37,7 +37,7 @@ public class XComponentUtil {
 		final String name) throws Exception {
 		try {
 			Class<?> clazz = xc.getClass();
-			final Method method = clazz.getMethod("get" + name);
+			final Method method = clazz.getDeclaredMethod("get" + name);
 			method.setAccessible(true);
 			return method.invoke(xc);
 		} catch (Exception ex) {
@@ -56,10 +56,10 @@ public class XComponentUtil {
 		final Object value) throws Exception {
 		try {
 			final Class<?> clazz = xc.getClass();
-			Method method = clazz.getMethod("get" + name);
+			Method method = clazz.getDeclaredMethod("get" + name);
 			method.setAccessible(true);
 			final Class<?> result = method.getReturnType();
-			method = clazz.getMethod("set" + name, result);
+			method = clazz.getDeclaredMethod("set" + name, result);
 			method.setAccessible(true);
 			method.invoke(xc, value);
 		} catch (Exception ex) {
@@ -398,7 +398,8 @@ public class XComponentUtil {
 					String key = null;
 					try {
 						Class<?> cls1 = o.getClass();
-						Method m = cls1.getMethod("get" + XonNames.X_KEYATTR);
+						Method m =
+							cls1.getDeclaredMethod("get" + XonNames.X_KEYATTR);
 						m.setAccessible(true);
 						key = XonTools.xmlToJName((String) m.invoke(o));
 					} catch (Exception ex) {
