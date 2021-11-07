@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.net.InetAddress;
 import java.util.List;
+import java.util.Map;
 import org.w3c.dom.Element;
 import org.xdef.XDConstants;
 import org.xdef.XDDocument;
@@ -19,7 +21,6 @@ import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
 import test.XDTester;
 import static test.XDTester._xdNS;
-import static test.XDTester.genXComponent;
 import org.xdef.xon.XonNames;
 
 /** Test processing JSON objects with X-definitions and X-components.
@@ -332,14 +333,16 @@ public class TestJsonXdef extends XDTester {
 
 	@Override
 	/** Run test and print error information. */
+	@SuppressWarnings("unchecked")
 	public void test() {
-		String xdef, xml, json;
+		String test, json, xdef, xml;
 		Object j;
-		ArrayReporter reporter = new ArrayReporter();
 		Element el;
-		XDPool xp;
-		XDDocument xd;
+		ArrayReporter reporter = new ArrayReporter();
 		StringWriter strw;
+		XComponent xc;
+		XDDocument xd;
+		XDPool xp;
 		// Generate data (X-definitons, X-components, XML source files).
 		try {
 			xp = genAll("Test*");
@@ -359,8 +362,6 @@ public class TestJsonXdef extends XDTester {
 		// Test X-components
 		String xon = XDConstants.XON_NS_PREFIX + "$";
 		try {
-			String test;
-			XComponent xc;
 			test = "Test008";
 			xc = getXComponent(xp, test, 0);
 			j = SUtils.getValueFromGetter(xc,"get"+xon+"item");
@@ -777,7 +778,7 @@ public class TestJsonXdef extends XDTester {
 			File fdir = new File(xdir);
 			fdir.mkdirs();
 			genXComponent(xp, fdir);
-			XComponent xc = xd.iparseXComponent(ini, null, reporter);
+			xc = xd.iparseXComponent(ini, null, reporter);
 			assertEq("a",SUtils.getValueFromGetter(xc,"get$A"));
 			assertEq(1,SUtils.getValueFromGetter(xc,"get$B"));
 			assertEq(new SDatetime("2121-10-19"),
@@ -785,6 +786,70 @@ public class TestJsonXdef extends XDTester {
 			assertEq(0, new BigDecimal("2.34").compareTo(
 					(BigDecimal) SUtils.getValueFromGetter(xc,"get$D")));
 		} catch (Exception ex) {fail(ex);}
+		try {
+			xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='a'>\n"+
+"<xd:json name='a'>\n" +
+"[\n" +
+"  {\n" +
+"    a = \"? short()\",\n" +
+"    i = [],\n" +
+"    Towns = [\n" +
+"      \"* gps()\"\n" +
+"    ],\n" +
+"    j = \"? char()\"\n" +
+"  },\n" +
+"  \"base64Binary()\",\n" +
+"  \"price()\",\n" +
+"  \"currency()\",\n" +
+"  \"* ipAddr()\"\n" +
+"]\n" +
+"</xd:json>\n" +
+"<xd:component>\n"+
+"  %class mytests.X_on %link #a;\n"+
+"</xd:component>\n"+
+"</xd:def>";
+			test =
+"# Start of XON example\n" +
+"[ #***** Array *****/\n" +
+"  { #***** Map *****/\n" +
+"    a = 1S,                          # Short\n" +
+"    i=[],                            # empty array\n" +
+"    Towns = [ # array with GPS locations of towns\n" +
+"      g(48.2, 16.37, 151, Wien),\n" +
+"      g(51.52, -0.09, 0, London),\n" +
+"      g(50.08, 14.42, 399, \"Prague old town\")\n" +
+"    ],\n" +
+"    j = c\"a\",                        # Character\n" +
+"  }, /**** end of map ****/\n" +
+"  b(HbRBHbRBHQw=),                   /* byte array (base64) */\n" +
+"  p(123.45 CZK),                     /* price */ \n" +
+"  C(USD),                            /* currency */\n" +
+"  /1080:0:0:0:8:800:200C:417A        /* inetAddr (IPv6)  */\n" +
+"] /**** end of array ****/\n" +
+"# End of XON example";
+			xp = compile(xdef);
+			File tempDir = clearTempDir();
+			genXComponent(xp, tempDir);
+			xc = xp.createXDDocument().jparseXComponent(test, null, reporter);
+			assertTrue(XonUtil.xonEqual(XonUtil.parseXON(test),
+				SUtils.getValueFromGetter(xc,"toXon")));
+			List x = (List) SUtils.getValueFromGetter(xc,"listOf$item_3");
+			x.add(InetAddress.getByName("111.22.33.1"));
+			SUtils.setValueToSetter(xc, "setitem_3", x);
+			assertEq(2, ((List) SUtils.getValueFromGetter(
+				xc,"listOf$item_3")).size());
+			assertTrue(SUtils.getValueFromGetter(SUtils.getValueFromGetter(
+				xc,"getjx$map"), "toXon") instanceof Map);
+			assertTrue(((List)SUtils.getValueFromGetter(
+				SUtils.getValueFromGetter(SUtils.getValueFromGetter(
+					xc,"getjx$map"), "getjx$array"),"toXon")).isEmpty());
+			assertEq(3,((List)SUtils.getValueFromGetter(
+				SUtils.getValueFromGetter(SUtils.getValueFromGetter(
+					xc,"getjx$map"), "getjx$array_1"), "toXon")).size());
+		} catch (Exception ex) {fail(ex);}
+
+		clearTempDir(); // delete temporary files.
 	}
 
 	public static void main(String[] args) {

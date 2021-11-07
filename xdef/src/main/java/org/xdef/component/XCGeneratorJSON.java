@@ -1,6 +1,7 @@
 package org.xdef.component;
 
 import java.util.Set;
+import org.xdef.XDConstants;
 import org.xdef.XDPool;
 import org.xdef.XDValue;
 import org.xdef.impl.XConstants;
@@ -122,7 +123,7 @@ class XCGeneratorJSON extends XCGeneratorBase1 {
 "\t * @return value of &{d} as java.sql.Timestamp or null."+LN+
 "\t */"+LN : "")+
 "\tpublic java.sql.Timestamp timestampOf$&{name}();"+LN+
-(_genJavadoc ? "\t/** Get  &{d} \"&{xmlName}\" as java.util.Calendar."+LN+
+(_genJavadoc ? "\t/** Get &{d} \"&{xmlName}\" as java.util.Calendar."+LN+
 "\t * @return value of &{d} as java.util.Calendar or null."+LN+
 "\t */"+LN : "")+
 "\tpublic java.util.Calendar calendarOf$&{name}();"+LN,
@@ -178,7 +179,7 @@ class XCGeneratorJSON extends XCGeneratorBase1 {
 "\t */"+LN : "")+
 "\tpublic java.sql.Timestamp timestampOf$&{name}(){"+
 "return "+x+"timestampOf$value();}"+LN+
-(_genJavadoc ? "\t/** Get  &{d} \"&{xmlName}\" as java.util.Calendar."+LN+
+(_genJavadoc ? "\t/** Get &{d} \"&{xmlName}\" as java.util.Calendar."+LN+
 "\t * @return value of &{d} as java.util.Calendar or null."+LN+
 "\t */"+LN : "")+
 "\tpublic java.util.Calendar calendarOf$&{name}(){"+
@@ -622,8 +623,30 @@ class XCGeneratorJSON extends XCGeneratorBase1 {
 		final Set<String> classNames,
 		final Set<String> varNames) {
 		String name = getJsonItemName(xe, "get$", classNames, varNames);
-//		String typ = XonNames.X_MAP.equals(xe.getLocalName())
-//			? "java.util.Map<String, Object>" : "java.util.List<Object>";
-//System.out.println(name + ", type= " + typeName + ", getter: " + iname + "; " + typ);
 	}
+	
+	final void genToXonMethod(final XElement xe,
+		final StringBuilder getters) {
+		if (xe._json == XConstants.JSON_MODE_W 
+			&& XDConstants.XON_NS_URI_W.equals(xe.getNSUri())) {
+			String s = xe.getLocalName();
+			String typ;
+			if (XonNames.X_ARRAY.equals(s)) {
+				typ = "java.util.List<Object>";
+			} else if (XonNames.X_MAP.equals(s)) {
+				typ = "java.util.Map<String,Object>";
+			} else {
+				return;
+			}
+			s =
+(_genJavadoc ? "\t/** Get XON object from this X-deomponent."+LN+
+"\t * @return object from this X-deomponent."+LN+
+"\t */"+LN : "")+
+"\t@SuppressWarnings(\"unchecked\")"+LN+
+"\tpublic " + typ + " toXon() {"+LN+
+"\t\treturn (" + typ + ") org.xdef.component.XComponentUtil.toXon(this);"+LN+
+"\t}"+LN;
+			getters.append(s);
+		}
+	} 
 }
