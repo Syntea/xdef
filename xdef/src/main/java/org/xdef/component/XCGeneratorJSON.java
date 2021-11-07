@@ -624,10 +624,10 @@ class XCGeneratorJSON extends XCGeneratorBase1 {
 		final Set<String> varNames) {
 		String name = getJsonItemName(xe, "get$", classNames, varNames);
 	}
-	
+
 	final void genToXonMethod(final XElement xe,
 		final StringBuilder getters) {
-		if (xe._json == XConstants.JSON_MODE_W 
+		if (xe._json == XConstants.JSON_MODE_W
 			&& XDConstants.XON_NS_URI_W.equals(xe.getNSUri())) {
 			String s = xe.getLocalName();
 			String typ;
@@ -648,5 +648,5 @@ class XCGeneratorJSON extends XCGeneratorBase1 {
 "\t}"+LN;
 			getters.append(s);
 		}
-	} 
+	}
 }
