@@ -218,36 +218,6 @@ public final class Test002 extends XDTester {
 			}
 			setProperty(XDConstants.XDPROPERTY_WARNINGS,
 				XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE);
-			try {
-				compile(//test pic
-"<xd:def xmlns:xd='"+ _xdNS + "' root='A'>\n"+
-"  <A a=\"pic('999')\"></A>\n"+
-"</xd:def>");
-				fail("Error not thrown");
-			} catch (Exception ex) {
-				s = ex.getMessage();
-				if (s == null || !s.contains("W XDEF998")) {fail(ex);}
-			}
-			try {
-				compile(//test regex with XDEF_3.1
-"<xd:def xmlns:xd='"+ _xdNS + "' root='A'>\n"+
-"  <A a=\"regex('*')\"></A>\n"+
-"</xd:def>");
-				fail("Error not thrown");
-			} catch (Exception ex) {
-				s = ex.getMessage();
-				if (s == null || !s.contains("W XDEF998")) {fail(ex);}
-			}
-			try {
-				compile(//test dec
-"<xd:def xmlns:xd='"+ _xdNS + "' root='A'>\n"+
-"  <A a=\"dec(5,1)\"></A>\n"+
-"</xd:def>");
-				fail("Error not thrown");
-			} catch (Exception ex) {
-				s = ex.getMessage();
-				if (s == null || !s.contains("W XDEF998")) {fail(ex);}
-			}
 			setProperty(XDConstants.XDPROPERTY_WARNINGS, oldProp);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+

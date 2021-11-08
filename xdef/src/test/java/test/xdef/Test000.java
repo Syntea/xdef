@@ -992,7 +992,7 @@ public final class Test000 extends XDTester {
 			fail("error not reported");
 		} catch (Exception ex) {
 			s = ex.getMessage();
-			if (s == null || s.indexOf("XDEF998") < 0) {
+			if (s == null || s.indexOf("XDEF410") < 0) {
 				fail(ex);
 			}
 		}
