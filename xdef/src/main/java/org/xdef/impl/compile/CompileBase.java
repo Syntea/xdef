@@ -529,9 +529,7 @@ public class CompileBase implements CodeTable, XDValueID {
 			keyParam("minInclusive", XD_DECIMAL,false,-1,false),
 			keyParam("pattern",XD_STRING,true,-1,false),
 			keyParam("totalDigits", XD_LONG,false,0,false));
-		parser(im, org.xdef.impl.parsers.XDParseDec.class,
-			"method decimal with parameters %totalDigits and %fractionDigits",
-			"?dec");
+		parser(im, org.xdef.impl.parsers.XDParseDec.class, "dec");
 
 		im = genParserMetnod(0, 0, null, XD_STRING,
 			keyParam("enumeration", XD_BYTES, true, -1,false),
@@ -613,10 +611,8 @@ public class CompileBase implements CodeTable, XDValueID {
 		parser(im, org.xdef.impl.parsers.XDParseEndsi.class, "endsi");
 		parser(im, org.xdef.impl.parsers.XDParseContains.class,"contains");
 		parser(im, org.xdef.impl.parsers.XDParseContainsi.class, "containsi");
-		parser(im, org.xdef.impl.parsers.XDParsePic.class,
-			"string with parameter pattern", "?pic");
-		parser(im, org.xdef.impl.parsers.XDParseRegex.class,
-			"string with parameter pattern", "?regex");
+		parser(im, org.xdef.impl.parsers.XDParsePic.class, "pic");
+		parser(im, org.xdef.impl.parsers.XDParseRegex.class, "regex");
 
 		im = genParserMetnod(1, Integer.MAX_VALUE, new short[] {XD_STRING},
 			XD_STRING, keyParam("argument", XD_CONTAINER, true,  0, false));
