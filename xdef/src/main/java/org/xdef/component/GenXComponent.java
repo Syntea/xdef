@@ -127,11 +127,10 @@ public final class GenXComponent {
 		}
 	}
 
-	/** Generate XComponent Java source class from X-definition.
-	 * @param xdpool XDPool object where is the X-definition with model
-	 * from which Java source will be generated.
-	 * @param dir path to directory where write the source code. The file name
-	 * will be constructed from the argument className as "className.java".
+	/** Generate XComponent Java source classes from XDPool.
+	 * @param xdpool XDPool object with X-components.
+	 * @param fdir path to directory where write the source code. The file name
+	 * will be constructed from %class statements as "className.java".
 	 * @param charset the character set name or null (if null then it is used
 	 * the system character set name).
 	 * @param genJavadoc switch to generate JavaDoc.
@@ -139,24 +138,23 @@ public final class GenXComponent {
 	 * @return ArrayReporter with errors and warnings
 	 * @throws IOException if an error occurs.
 	 */
-	public static ArrayReporter genXComponent(XDPool xdpool,
-		String dir,
-		String charset,
-		boolean genJavadoc,
-		boolean suppressPrintWarnings) throws IOException {
+	public final static ArrayReporter genXComponent(final XDPool xdpool,
+		final String fdir,
+		final String charset,
+		final boolean genJavadoc,
+		final boolean suppressPrintWarnings) throws IOException {
 		return genXComponent(xdpool,
-			new File(dir), charset, genJavadoc, suppressPrintWarnings);
+			new File(fdir), charset, genJavadoc, suppressPrintWarnings);
 	}
 
-	/** Generate XComponent Java source class from X-definition.
-	 * @param xdpool XDPool object where is the X-definition with model
-	 * from which Java source will be generated.
-	 * @param fdir directory where write the source code. The file name
-	 * will be constructed from the argument className as "className.java".
+	/** Generate XComponent Java source classes from XDPool.
+	 * @param xdpool XDPool object with X-components.
+	 * @param fdir directory where write the source code. The file names
+	 * will be constructed from %class statements as "className.java".
 	 * @param charset the character set name or null (if null then it is used
 	 * the system character set name).
 	 * @param genJavadoc switch to generate JavaDoc.
-	 * @param suppressPrintWarnings suppress print of warnings.
+	 * @param suppressPrintWarnings switch suppress print of warnings.
 	 * @return ArrayReporter with errors and warnings
 	 * @throws IOException if an error occurs.
 	 */
@@ -327,16 +325,15 @@ public final class GenXComponent {
 		return reporter;
 	}
 
-	/** Generate XComponent Java source class from X-definition.
-	 * @param xdpool XDPool object where is the X-definition with model
-	 * from which Java source will be generated.
-	 * @param dir path to directory where write the source code. The file name
-	 * will be constructed from the argument className as "className.java".
+	/** Generate XComponent Java source classes from XDPool.
+	 * @param xdpool XDPool object with declared X-components.
+	 * @param dir path to directory where write the source code. The file names
+	 * will be constructed from %class statements as "className.java".
 	 * @param charset the character set name or null (if null then it is used
 	 * the system character set name).
 	 * @throws IOException if an error occurs.
 	 */
-	public static void genXComponent(final XDPool xdpool,
+	public final static void genXComponent(final XDPool xdpool,
 		final String dir,
 		final String charset) throws IOException {
 		genXComponent(xdpool, dir, charset, false, false);

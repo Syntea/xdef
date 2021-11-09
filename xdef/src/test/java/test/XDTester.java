@@ -21,7 +21,6 @@ import javax.xml.namespace.QName;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xdef.component.GenXComponent;
 import org.xdef.component.XComponent;
 import org.xdef.impl.code.DefOutStream;
 import org.xdef.impl.compile.PNode;
@@ -1409,8 +1408,7 @@ public abstract class XDTester extends STester {
 				//Directory doesn't exist or isn't accessible: &{0}
 				throw new SRuntimeException(SYS.SYS025, dir.getAbsolutePath());
 			}
-			ArrayReporter result =
-				GenXComponent.genXComponent(xp, dir, "UTF-8", false, true);
+			ArrayReporter result = xp.genXComponent(dir, "UTF-8", false, true);
 			result.checkAndThrowErrors(); // throw exceptiojn if error reported
 			compileSources(dir);
 			return result;
