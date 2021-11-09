@@ -3,7 +3,6 @@ package bugreports;
 import org.xdef.XDPool;
 import org.xdef.component.XComponent;
 import org.xdef.sys.ArrayReporter;
-import org.xdef.xml.KXmlUtils;
 import test.XDTester;
 
 public class Hotovec extends XDTester {
@@ -18,75 +17,57 @@ public class Hotovec extends XDTester {
 		XDPool xp;
 		XComponent xc;
 		try {
-			xdef =
-"<xd:collection xmlns:xd='http://www.xdef.org/xdef/3.2'>\n"+
-"<xd:def xd:name=\"B\"\n" +
-"    xd:root=\"Truck\">\n" +
-"    <Truck V = \"string()\" MaxWeight = \"required int()\" />\n" +
-" <xd:component>\n" +
-"   %class bugreports.data.Truck %link B#Truck;\n" +
-"   %bind V %with bugreports.data.Truck %link C#Vehicle/@VIN;\n" +
-" </xd:component>\n" +
-"</xd:def>\n" +
-"<xd:def xd:name=\"C\"\n" +
-"    xd:root=\"Vehicle\">\n" +
-"    <Vehicle VIN='string()'/>\n" +
-" <xd:component>\n" +
-"   %class bugreports.data.Vehicle extends bugreports.data.Truck\n" +
-"          %link C#Vehicle;\n" +
-" </xd:component>\n" +
-"</xd:def>\n" +
-"</xd:collection>";
-			System.out.println(xdef);
+			xdef = "<xd:collection xmlns:xd='http://www.xdef.org/xdef/3.2'>\n"
+				+ "<xd:def xd:name=\"B\"\n" + "    xd:root=\"Truck\">\n"
+				+ "    <Truck V = \"string()\" MaxWeight = \"required int()\" />\n"
+				+ " <xd:component>\n"
+				+ "   %class bugreports.data.Truck %link B#Truck;\n"
+				+ "   %bind V %with bugreports.data.Truck %link C#Vehicle/@VIN;\n"
+				+ " </xd:component>\n" + "</xd:def>\n"
+				+ "<xd:def xd:name=\"C\"\n" + "    xd:root=\"Vehicle\">\n"
+				+ "    <Vehicle VIN='string()'/>\n" + " <xd:component>\n"
+				+ "   %class bugreports.data.Vehicle extends bugreports.data.Truck\n"
+				+ "          %link C#Vehicle;\n" + " </xd:component>\n"
+				+ "</xd:def>\n" + "</xd:collection>";
 			xp = compile(xdef);
 			genXComponent(xp, clearTempDir());
-			if (reporter.errorWarnings()) {
-				System.out.println(reporter.printToString());
-			}
+			assertNoErrorwarnings(reporter);
 			xml = "<Truck V = \"123abc\" MaxWeight = \"12345\"/>";
-			System.out.println(xml);
-			assertEq(xml, parse(xp, "B", xml , reporter));
-			assertNoErrors(reporter);
-			xc = parseXC(xp,"B", xml , null, reporter);
+			assertEq(xml, parse(xp, "B", xml, reporter));
+			assertNoErrorwarnings(reporter);
+			xc = parseXC(xp, "B", xml, null, reporter);
 			assertNoErrorwarnings(reporter);
 			assertEq(xml, xc.toXml());
-			System.out.println(KXmlUtils.nodeToString(xc.toXml(), true));
 			clearTempDir(); // delete temporary files.
-		} catch (Exception ex) {fail(ex);}
+		} catch (Exception ex) {
+			fail(ex);
+		}
 		try {
-			xdef =
-"<xd:collection xmlns:xd='http://www.xdef.org/xdef/3.2'>\n"+
-"<xd:def xd:name=\"B1\"\n" +
-"    xd:root=\"Truck1\">\n" +
-"    <Truck1 xd:script=\"ref C1#Vehicle1\" MaxWeight=\"required int()\"/>\n" +
-" <xd:component>\n" +
-"   %class bugreports.data.Truck1 extends bugreports.data.Vehicle1\n" +
-"            %link B1#Truck1;\n" +
-"   %bind VIN %with bugreports.data.Vehicle1 %link B1#Truck1/@VIN;\n" +
-" </xd:component>\n" +
-"</xd:def>\n" +
-"<xd:def xd:name=\"C1\"\n" +
-"    xd:root=\"Vehicle1\">\n" +
-"    <Vehicle1 VIN='string()'/>\n" +
-" <xd:component>\n" +
-"   %class bugreports.data.Vehicle1 %link C1#Vehicle1;\n" +
-" </xd:component>\n" +
-"</xd:def>\n" +
-"</xd:collection>";
+			xdef = "<xd:collection xmlns:xd='http://www.xdef.org/xdef/3.2'>\n"
+				+ "<xd:def xd:name=\"B1\"\n" + "    xd:root=\"Truck1\">\n"
+				+ "    <Truck1 xd:script=\"ref C1#Vehicle1\" MaxWeight=\"required int()\"/>\n"
+				+ " <xd:component>\n"
+				+ "   %class bugreports.data.Truck1 extends bugreports.data.Vehicle1\n"
+				+ "            %link B1#Truck1;\n"
+				+ "   %bind VIN %with bugreports.data.Vehicle1 %link B1#Truck1/@VIN;\n"
+				+ " </xd:component>\n" + "</xd:def>\n"
+				+ "<xd:def xd:name=\"C1\"\n" + "    xd:root=\"Vehicle1\">\n"
+				+ "    <Vehicle1 VIN='string()'/>\n" + " <xd:component>\n"
+				+ "   %class bugreports.data.Vehicle1 %link C1#Vehicle1;\n"
+				+ " </xd:component>\n" + "</xd:def>\n" + "</xd:collection>";
 			xp = compile(xdef);
 			genXComponent(xp, clearTempDir());
-			if (reporter.errorWarnings()) {
-				System.out.println(reporter.printToString());
-			}
+			assertNoErrorwarnings(reporter);
 			xml = "<Truck1 VIN = \"123abc\" MaxWeight = \"12345\"/>";
-			assertEq(xml, parse(xp, "B1", xml , reporter));
-			assertNoErrors(reporter);
-			xc = parseXC(xp,"B1", xml , null, reporter);
+			assertEq(xml, parse(xp, "B1", xml, reporter));
+			assertNoErrorwarnings(reporter);
+			xc = parseXC(xp, "B1", xml, null, reporter);
 			assertNoErrorwarnings(reporter);
 			assertEq(xml, xc.toXml());
-			System.out.println(KXmlUtils.nodeToString(xc.toXml(), true));
 			clearTempDir(); // delete temporary files.
-		} catch (Exception ex) {fail(ex);}
+		} catch (Exception ex) {
+			fail(ex);
+		}
 	}
 
 	/** Run test
@@ -94,6 +75,8 @@ public class Hotovec extends XDTester {
 	 */
 	public static void main(String... args) {
 		XDTester.setFulltestMode(true);
-		if (runTest(args) > 0) {System.exit(1);}
+		if (runTest(args) > 0) {
+			System.exit(1);
+		}
 	}
 }
