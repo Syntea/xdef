@@ -1403,16 +1403,16 @@ public abstract class XDTester extends STester {
 	 */
 	public static final ArrayReporter genXComponent(final XDPool xp,
 		final File dir) {
+		if (!dir.exists() && !dir.isDirectory()) {
+			//Directory doesn't exist or isn't accessible: &{0}
+			throw new SRuntimeException(SYS.SYS025, dir.getAbsolutePath());
+		}
 		try {
-			if (!dir.exists() && !dir.isDirectory()) {
-				//Directory doesn't exist or isn't accessible: &{0}
-				throw new SRuntimeException(SYS.SYS025, dir.getAbsolutePath());
-			}
 			ArrayReporter result = xp.genXComponent(dir, "UTF-8", false, true);
 			result.checkAndThrowErrors(); // throw exceptiojn if error reported
 			compileSources(dir);
 			return result;
-		} catch (IOException ex) {
+		} catch (Exception ex) {
 			throw new SRuntimeException(ex.toString(), ex);
 		}
 	}
