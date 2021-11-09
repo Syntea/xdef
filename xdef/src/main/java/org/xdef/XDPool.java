@@ -1,5 +1,7 @@
 package org.xdef;
 
+import java.io.File;
+import java.io.IOException;
 import org.xdef.impl.XDSourceInfo;
 import org.xdef.sys.SDatetime;
 import org.xdef.model.XMDebugInfo;
@@ -10,6 +12,7 @@ import java.io.PrintStream;
 import java.io.Serializable;
 import java.util.Map;
 import java.util.Properties;
+import org.xdef.sys.ArrayReporter;
 
 /** Provides the interface to object containing compiled code of set of
  * X-definitions. You can create from XDPool the XDDocument.
@@ -215,4 +218,19 @@ public interface XDPool extends Serializable {
 	 * @return class name of the editor of X-definition which will be used).
 	 */
 	public String getXdefEditor();
+
+	/** Generate XComponent Java source classes from XDPool.
+	 * @param fdir directory where write the source code. The file names
+	 * will be constructed from %class statements as "className.java".
+	 * @param charset the character set name or null (if null then it is used
+	 * the system character set name).
+	 * @param genJavadoc switch to generate JavaDoc.
+	 * @param suppressPrintWarnings switch suppress print of warnings.
+	 * @return ArrayReporter with errors and warnings
+	 * @throws IOException if an error occurs.
+	 */
+	public ArrayReporter genXComponent(final File fdir,
+		final String charset,
+		final boolean genJavadoc,
+		final boolean suppressPrintWarnings) throws IOException;
 }

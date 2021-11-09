@@ -1,9 +1,10 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 41.0.0, release-date 2021-11-08
+# Version 41.0.0, release-date 2021-11-09
 * Preparing release version 4.1.
 * From this project are removed utilities for conversion XML schema to/from
   X-definition (classes `org.xdef.util.XdefToXsd`, `org.xdef.util.XsdToXdef`).
+* to the interface 'org.xdef.XDPool' added method `genXComponent`.
 * added X-script type `InetAddr`
 * added X-script type `Currency`
 * X-component generator now generates for XON/JSON components the method `toXon`.

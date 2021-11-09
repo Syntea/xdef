@@ -19,6 +19,7 @@ import org.xdef.XDConstants;
 import org.xdef.XDDocument;
 import org.xdef.XDPool;
 import org.xdef.XDValue;
+import org.xdef.component.GenXComponent;
 import org.xdef.impl.code.CodeDisplay;
 import org.xdef.impl.compile.CompileXDPool;
 import org.xdef.model.XMDebugInfo;
@@ -1458,5 +1459,24 @@ public final class XPool implements XDPool, Serializable {
 				}
 			}
 		}
+	}
+
+	@Override
+	/** Generate XComponent Java source classes from XDPool.
+	 * @param fdir directory where write the source code. The file names
+	 * will be constructed from %class statements as "className.java".
+	 * @param charset the character set name or null (if null then it is used
+	 * the system character set name).
+	 * @param genJavadoc switch to generate JavaDoc.
+	 * @param suppressPrintWarnings switch suppress print of warnings.
+	 * @return ArrayReporter with errors and warnings
+	 * @throws IOException if an error occurs.
+	 */
+	public ArrayReporter genXComponent(final File fdir,
+		final String charset,
+		final boolean genJavadoc,
+		final boolean suppressPrintWarnings) throws IOException {
+		return GenXComponent.genXComponent(this, fdir, charset, genJavadoc,
+			suppressPrintWarnings);
 	}
 }
