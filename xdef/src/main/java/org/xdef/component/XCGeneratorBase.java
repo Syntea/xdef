@@ -587,7 +587,7 @@ class XCGeneratorBase {
 (_genJavadoc ? "\t/** Get list of &{d} \"&{xmlName}\"."+LN+
 "\t * @return value of &{d}"+LN+
 "\t */"+LN : "")+
-"\tpublic &{typ} listOf&{name}() {return _&{name};}"+LN,
+"\tpublic &{typ} listOf&{name}() {"+LN+"\t\treturn _&{name};"+LN+"\t}"+LN,
 				"&{xmlName}", xmlName,
 				"&{d}" , d,
 				"&{name}", name,
@@ -660,9 +660,9 @@ class XCGeneratorBase {
 "\t\t\t\t\tx.xInit(this, \""+modelName+"\", "
 				+ (modelURI != null ? '"' + modelURI + '"' : "null")
 				+ ", \"" + modelXDPos + "\");"+LN
-				+ "\t\t\t_&{name}.add(x);"+LN+"\t\t}"+LN+LN+'\t';
+				+ "\t\t\t_&{name}.add(x);"+LN+"\t\t}"+LN+'\t';
 			} else {
-				x = "if (x!=null) _&{name}.add(x);";
+				x = LN+"\t\tif (x!=null) _&{name}.add(x);"+LN;
 			}
 		} else {
 			if (modelName != null) {
