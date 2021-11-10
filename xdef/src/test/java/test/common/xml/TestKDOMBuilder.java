@@ -307,8 +307,8 @@ public class TestKDOMBuilder extends XDTester {
 				new java.io.OutputStreamWriter(baos, "UTF-8");
 			KXmlUtils.writeXml(osw, doc);
 			osw.close();
-			assertEq("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-				+ "<!--1--><?A A?><?B B?><root><?C C?></root><?D D?><!--2-->",
+			assertEq(
+				"<!--1--><?A A?><?B B?><root><?C C?></root><?D D?><!--2-->",
 				baos.toString());
 			doc = builder.parse(
 				new java.io.ByteArrayInputStream(baos.toByteArray()));
