@@ -298,8 +298,8 @@ public class TestKDOMBuilder extends XDTester {
 			doc.appendChild(el);
 			doc.appendChild(doc.createProcessingInstruction("D", "D"));
 			doc.appendChild(doc.createComment("2"));
-			assertEq("<?xml version=\"1.0\"?>\n"
-				+"<!--1--><?A A?><?B B?><root><?C C?></root><?D D?><!--2-->",
+			assertEq(
+				"<!--1--><?A A?><?B B?><root><?C C?></root><?D D?><!--2-->",
 				KXmlUtils.nodeToString(doc));
 			java.io.ByteArrayOutputStream baos =
 				new java.io.ByteArrayOutputStream();
@@ -307,19 +307,18 @@ public class TestKDOMBuilder extends XDTester {
 				new java.io.OutputStreamWriter(baos, "UTF-8");
 			KXmlUtils.writeXml(osw, doc);
 			osw.close();
-			assertEq("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-				+"<!--1--><?A A?><?B B?><root><?C C?></root><?D D?><!--2-->",
+			assertEq("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+				+ "<!--1--><?A A?><?B B?><root><?C C?></root><?D D?><!--2-->",
 				baos.toString());
 			doc = builder.parse(
 				new java.io.ByteArrayInputStream(baos.toByteArray()));
-			assertEq("<?xml version=\"1.0\"?>\n"
-				+ "<!--1--><?A A?><?B B?><root><?C C?></root><?D D?><!--2-->",
+			assertEq(
+				"<!--1--><?A A?><?B B?><root><?C C?></root><?D D?><!--2-->",
 				KXmlUtils.nodeToString(doc));
 			builder.setIgnoringComments(true);
 			doc = builder.parse(
 				new java.io.ByteArrayInputStream(baos.toByteArray()));
-			assertEq("<?xml version=\"1.0\"?>\n"
-				+ "<?A A?><?B B?><root><?C C?></root><?D D?>",
+			assertEq("<?A A?><?B B?><root><?C C?></root><?D D?>",
 				KXmlUtils.nodeToString(doc));
 			doc = builder.newDocument(null, "root", null);
 			el = doc.getDocumentElement();
@@ -327,8 +326,7 @@ public class TestKDOMBuilder extends XDTester {
 			doc.insertBefore(doc.createProcessingInstruction("A", "A"), el);
 			doc.insertBefore(doc.createProcessingInstruction("B", "B"), el);
 			doc.appendChild(doc.createProcessingInstruction("D", "D"));
-			assertEq("<?xml version=\"1.0\"?>\n"
-				+ "<?A A?><?B B?><root><?C C?></root><?D D?>",
+			assertEq("<?A A?><?B B?><root><?C C?></root><?D D?>",
 				KXmlUtils.nodeToString(doc));
 			baos = new java.io.ByteArrayOutputStream();
 			osw = new java.io.OutputStreamWriter(baos);
@@ -336,8 +334,7 @@ public class TestKDOMBuilder extends XDTester {
 			osw.close();
 			doc = builder.parse(
 				new java.io.ByteArrayInputStream(baos.toByteArray()));
-			assertEq("<?xml version=\"1.0\"?>\n"
-				+ "<?A A?><?B B?><root><?C C?></root><?D D?>",
+			assertEq("<?A A?><?B B?><root><?C C?></root><?D D?>",
 				KXmlUtils.nodeToString(doc));
 			// test KXmlUtils.getTextContent
 			builder = new KDOMBuilder();
