@@ -269,7 +269,8 @@ public final class KXmlUtils extends KDOMUtils {
 
 	private static void writeXmlHdr(final Writer out,
 		final String xmlVersion,
-		final String xmlEncoding) throws IOException {
+		final String xmlEncoding,
+		final String indentStep) throws IOException {
 		if (xmlVersion != null && !"1.0".equals(xmlVersion)
 			|| xmlEncoding != null && !"UTF-8".equalsIgnoreCase(xmlEncoding)) {
 			out.write("<?xml version=\"");
@@ -281,6 +282,9 @@ public final class KXmlUtils extends KDOMUtils {
 				out.write('"');
 			}
 			out.write("?>\n");
+			if (indentStep != null) {
+				out.write('\n');
+			}
 		}
 	}
 
@@ -347,7 +351,7 @@ public final class KXmlUtils extends KDOMUtils {
 				break;
 			case Node.DOCUMENT_NODE: {
 				Document document = (Document)node;
-				writeXmlHdr(out,document.getXmlVersion(), encoding);
+				writeXmlHdr(out,document.getXmlVersion(), encoding, indentStep);
 				Node docType = document.getDoctype();
 				if (docType != null) {
 					writeXml(out,
@@ -415,8 +419,8 @@ public final class KXmlUtils extends KDOMUtils {
 				Map<String, String> unresolved =
 					new LinkedHashMap<String, String>();
 				if (encoding != null) {
-					writeXmlHdr(out,
-						node.getOwnerDocument().getXmlVersion(), encoding);
+					writeXmlHdr(out, node.getOwnerDocument().getXmlVersion(),
+						encoding, indentStep);
 				}
 				out.write('<');
 				String tagName = node.getNodeName();
