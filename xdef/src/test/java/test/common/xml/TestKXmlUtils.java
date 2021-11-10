@@ -265,14 +265,12 @@ public class TestKXmlUtils extends STester {
 			StringWriter sw = new StringWriter();
 			KXmlUtils.writeXml(sw, "UTF-8", el, null, false, false, true);
 			sw.close();
-			assertEq("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-				+ "<a>\nxxx\n  yy  y\n</a>", sw.toString());
+			assertEq("<a>\nxxx\n  yy  y\n</a>", sw.toString());
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			OutputStreamWriter osw = new OutputStreamWriter(baos, "UTF-8");
 			KXmlUtils.writeXml(osw, el, false, false, true);
 			osw.close();
-			assertEq("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-				+ "<a>\nxxx\n  yy  y\n</a>", baos.toString());
+			assertEq("<a>\nxxx\n  yy  y\n</a>", baos.toString());
 		} catch (Exception ex) {fail(ex);}
 		try {
 			s = "<a><b a='a\"' b=\"b'\">\n\nxxx\n yy   y\n\n</b></a>";
