@@ -671,7 +671,9 @@ XCBind ::= "%bind" S XMLName (S "%with" S $JavaQName)? S XCLink
 
 XCClass ::= "%class" S JavaTypedQName (S "extends" S JavaTypedQName)?
   (S "implements" S JavaTypedQName (S? "," S? JavaTypedQName)* )?
-  (S "%interface" S JavaTypedQName)? S XCLink
+  (S "%interface" S JavaTypedQName)? S (XCWith S)? XCLink
+
+XCWith ::= "%with" S JavaTypedQName
 
 XCEnum ::= "%enum" S JavaTypedQName S (Identifier? "#")? XMLName
 
@@ -680,7 +682,7 @@ XCInterface ::= "%interface" S $JavaQName S XCLink
 XCRef ::= "%ref" S ((JavaTypedQName S XCLink)
   | ("%enum" S JavaTypedQName S (Identifier? "#")? XMLName))
 
-XCLink ::= "%link" S ("*" | XPosition)
+XCLink ::= "%link" S ("*" | XPosition (S? "," S? XPosition)*)
 
 Lexicon ::= (S? $rule XPosition S? "=" S? XMLName)* S?
 
