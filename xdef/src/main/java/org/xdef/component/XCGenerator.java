@@ -133,7 +133,7 @@ final class XCGenerator extends XCGeneratorJSON {
 				name = javaName(xdata.getName());
 			}
 			name = addVarName(varNames, name, xdata.getXDPosition(), ext);
-			genAttrNameVariable(name, vars);
+			genAttrNameVariable(name, xdata, vars);
 			if (!ext) {
 				genBaseVarsGettersSetters(xdata, name,
 					1, "attribute", vars, getters, setters, xpathes, sbi);

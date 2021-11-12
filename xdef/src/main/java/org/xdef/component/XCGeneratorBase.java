@@ -398,14 +398,18 @@ class XCGeneratorBase {
 
 	/** Generate declaration of variable of attribute name.
 	 * @param name name of variable.
+	 * @param xdata XData model of data.
 	 * @param sb String builder where the code is generated.
 	 */
 	final void genAttrNameVariable(final String name,
+		final XData xdata,
 		final StringBuilder sb) {
+		String modelName = javaName(xdata.getName());
 		sb.append(modify(
 (_genJavadoc ? "\t/** Name of attribute &{name} in data\".*/"+LN : "") +
-"\tprivate String XD_Name_&{name}=\"&{name}\";"+LN,
-			"&{name}", name));
+"\tprivate String XD_Name_&{name}=\"&{name1}\";"+LN,
+			"&{name}", name,
+			"&{name1}", modelName));
 	}
 
 	/** Generate declaration of variable as Java object from child element.
