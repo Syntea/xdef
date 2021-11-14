@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.StringReader;
+import java.io.Writer;
 import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.util.ArrayList;
@@ -1444,6 +1445,21 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	public final void setStreamWriter(final OutputStream out,
 		final String encoding,
 		final boolean writeDocumentHeader) throws IOException {
+		_scp.setXmlStreamWriter(
+			new DefXmlWriter(out,encoding,writeDocumentHeader));
+	}
+
+	@Override
+	/** Set XML writer.
+	 * @deprecated please use OutputStream instead of Writer.
+	 * @param out stream writer.
+	 * @param encoding encoding of output.
+	 * @param writeDocumentHeader if true full document is written, otherwise
+	 * only root element.
+	 */
+	public final void setStreamWriter(final Writer out,
+		final String encoding,
+		final boolean writeDocumentHeader) {
 		_scp.setXmlStreamWriter(
 			new DefXmlWriter(out,encoding,writeDocumentHeader));
 	}

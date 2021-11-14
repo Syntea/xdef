@@ -51,6 +51,22 @@ public class KXmlOutStream {
 		_writeDocumentHeader = writeDocumentHeader;
 	}
 
+	/** Creates new instance of DefXmlOutStream with java.io.Writer
+	 * @deprecated please use OutputStream instead of Writer.
+	 * @param writer where to write XML.
+	 * @param encoding encoding of XML stream.
+	 * @param writeDocumentHeader if <tt>true</tt> then the XML header is
+	 * written, otherwise no XML header is written.
+	 */
+	public KXmlOutStream(final Writer writer,
+		final String encoding,
+		final boolean writeDocumentHeader) {
+		_file = null;
+		_writer = writer;
+		_encoding = encoding == null ? "UTF-8" : encoding;
+		_writeDocumentHeader = writeDocumentHeader;
+	}
+
 	/** Creates new instance of DefXmlOutStream with the name of output file.
 	 * If the file already exists it is deleted. The file will be created
 	 * only if something was written.

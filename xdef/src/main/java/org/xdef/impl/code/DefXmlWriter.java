@@ -14,6 +14,7 @@ import org.xdef.XDValue;
 import org.xdef.XDXmlOutStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.Writer;
 import java.math.BigDecimal;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -26,6 +27,20 @@ import java.math.BigInteger;
  */
 public class DefXmlWriter extends KXmlOutStream
 	implements XDXmlOutStream, XDValue {
+
+	@SuppressWarnings("deprecation")
+	/** Creates new instance of DefXmlOutStream with java.io.Writer
+	 * @deprecated please use OutputStream instead of Writer.
+	 * @param writer where to write XML.
+	 * @param encoding encoding of XML stream.
+	 * @param writeDocumentHeader if <tt>true</tt> then the XML header is
+	 * written, otherwise no XML header is written.
+	 */
+	public DefXmlWriter(final Writer writer,
+		final String encoding,
+		final boolean writeDocumentHeader) {
+		super(writer, encoding, writeDocumentHeader);
+	}
 
 	/** Creates new instance of DefXmlOutStream with java.io.OutputStream.
 	 * @param out where to write XML.

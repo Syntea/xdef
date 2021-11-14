@@ -1,14 +1,17 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 41.0.0, release-date 2021-11-12
+# Version 41.0.0, release-date 2021-11-14
 * Preparing release version 4.1.
 * From this project are removed utilities for conversion XML schema to/from
   X-definition (classes `org.xdef.util.XdefToXsd`, `org.xdef.util.XsdToXdef`).
 * to the interface 'org.xdef.XDPool' added method `genXComponent`.
 * added X-script type `InetAddr`
 * added X-script type `Currency`
-* X-component generator now generates for XON/JSON components the method `toXon`.
+* X-component generator now generates for XON/JSON components the method `toXon`
 * fixed bug in X-component generation with `%bind` command
+* The method
+  `XDDocument.setStreamWriter(Writer out, String encoding, boolean writeHeader)`
+  is now deprecated. Please use `OutputStream` instead of `Writer`.;
 
 # Version 40.1.8, release-date 2021-10-26
 * fixed bug if an external method throws an exception.
