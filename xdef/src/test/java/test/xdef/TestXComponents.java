@@ -1,5 +1,6 @@
 package test.xdef;
 
+import java.lang.reflect.Constructor;
 import test.XDTester;
 import org.xdef.XDPool;
 import org.xdef.XDDocument;
@@ -17,6 +18,7 @@ import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import org.w3c.dom.Element;
@@ -163,6 +165,35 @@ public final class TestXComponents extends XDTester {
 			assertEq("x", SUtils.getValueFromGetter(xc, "getC"));
 			assertEq(new SDatetime("2021-05-24"),
 				SUtils.getValueFromGetter(xc, "getP"));
+		} catch (Exception ex) {fail(ex);}
+		try { // Construction of document from X-component
+			xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' name='Person' root='Person'>\n"+
+"    <Person Name  = \"  string()\"\n" +
+"            Birth = \"  xdatetime('dd.MM.yyyy')\"\n" +
+"            Sex   = \"  enum('M','W', 'X')\"/>\n" +
+"   <xd:component>\n" +
+"      %class test.xdef.xcomp.XCPerson3\n" +
+"          extends test.xdef.TestXComponents_bindAbstract\n" +
+"          implements test.xdef.TestXComponents_bindInterface\n" +
+"      %link Person#Person;\n" +
+"      %bind Name %with test.xdef.obj.Person %link Person#Person/@Name;\n" +
+"      %bind SBirth %with test.xdef.obj.Person\n" +
+"            %link Person#Person/@Birth;\n" +
+"      %bind SexString %with test.xdef.obj.Person %link Person#Person/@Sex;\n" +
+"   </xd:component>\n" +
+"</xd:def>";
+			xp = compile(xdef);
+			genXComponent(xp, clearTempDir());
+			Class clazz = Class.forName("test.xdef.xcomp.XCPerson3");
+			Constructor c = clazz.getConstructor();
+			xc = (XComponent) c.newInstance();
+			SUtils.setValueToSetter(xc, "setName", "John Brown");
+			long mil = new Date(0).getTime();
+			SUtils.setValueToSetter(xc, "setBirth", new Timestamp(mil));
+			SUtils.setValueToSetter(xc, "setSex", TestXComponents_bindEnum.M);
+			assertEq("<Person Birth='01.01.1970' Name='John Brown' Sex='M'/>",
+				xc.toXml());
 		} catch (Exception ex) {fail(ex);}
 		reporter.clear();
 		try { // model with occurrnece > 1
