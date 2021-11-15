@@ -11,7 +11,7 @@
 * fixed bug in X-component generation with `%bind` command
 * The method
   `XDDocument.setStreamWriter(Writer out, String encoding, boolean writeHeader)`
-  is now deprecated. Please use `OutputStream` instead of `Writer`.;
+  is now deprecated. Please use `OutputStream` instead of `Writer`.
 
 # Version 40.1.8, release-date 2021-10-26
 * fixed bug if an external method throws an exception.
