@@ -541,7 +541,7 @@ class XCGeneratorJSON extends XCGeneratorBase1 {
 				}
 			}
 			jSet = "String".equals(typ) && xe.getJsonMode() != 0
-				? "org.xdef.json.JsonUtil.toJsonString(x,false)":"x";
+				? "org.xdef.xon.XonUtil.toJsonString(x,false)":"x";
 			// setter
 			template =
 (_genJavadoc ? "\t/** Set value of textnode of &{d}.*/"+LN : "")+
