@@ -173,7 +173,7 @@ public final class TestXComponents extends XDTester {
 "            Birth = \"  xdatetime('dd.MM.yyyy')\"\n" +
 "            Sex   = \"  enum('M','W', 'X')\"/>\n" +
 "   <xd:component>\n" +
-"      %class test.xdef.xcomp.XCPerson3\n" +
+"      %class test.xdef.xcomp.XCPerson\n" +
 "          extends test.xdef.TestXComponents_bindAbstract\n" +
 "          implements test.xdef.TestXComponents_bindInterface\n" +
 "      %link Person#Person;\n" +
@@ -185,15 +185,13 @@ public final class TestXComponents extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			genXComponent(xp, clearTempDir());
-			Class clazz = Class.forName("test.xdef.xcomp.XCPerson3");
-			Constructor c = clazz.getConstructor();
-			xc = (XComponent) c.newInstance();
-			SUtils.setValueToSetter(xc, "setName", "John Brown");
-			long mil = new Date(0).getTime();
-			SUtils.setValueToSetter(xc, "setBirth", new Timestamp(mil));
-			SUtils.setValueToSetter(xc, "setSex", TestXComponents_bindEnum.M);
+			obj = SUtils.getNewInstance("test.xdef.xcomp.XCPerson");
+			SUtils.setValueToSetter(obj, "setName", "John Brown");
+			SUtils.setValueToSetter(obj, "setBirth", 
+				new Timestamp(new Date(0).getTime()));
+			SUtils.setValueToSetter(obj, "setSex", TestXComponents_bindEnum.M);
 			assertEq("<Person Birth='01.01.1970' Name='John Brown' Sex='M'/>",
-				xc.toXml());
+				((XComponent) obj).toXml());
 		} catch (Exception ex) {fail(ex);}
 		reporter.clear();
 		try { // model with occurrnece > 1
