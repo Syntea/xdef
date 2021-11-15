@@ -187,7 +187,7 @@ public final class TestXComponents extends XDTester {
 			genXComponent(xp, clearTempDir());
 			obj = SUtils.getNewInstance("test.xdef.xcomp.XCPerson");
 			SUtils.setValueToSetter(obj, "setName", "John Brown");
-			SUtils.setValueToSetter(obj, "setBirth", 
+			SUtils.setValueToSetter(obj, "setBirth",
 				new Timestamp(new Date(0).getTime()));
 			SUtils.setValueToSetter(obj, "setSex", TestXComponents_bindEnum.M);
 			assertEq("<Person Birth='01.01.1970' Name='John Brown' Sex='M'/>",
