@@ -256,11 +256,11 @@ public class TestSaxon extends XDTester {
 "    </insect>\n"+
 "    <insect family=\"anteatersí\" anthill=\"nexToStrawberry\">\n"+
 "      <genus>ant</genus>\n"+
-"      <caste>samec</caste>\n"+
+"      <caste>male</caste>\n"+
 "    </insect>\n"+
 "    <insect family=\"anteatersí\" anthill=\"nexToStrawberry\">\n"+
 "      <genus>ant</genus>\n"+
-"      <caste>samec</caste>\n"+
+"      <caste>male</caste>\n"+
 "    </insect>\n"+
 "    <insect family=\"anteatersí\" anthill=\"nexToStrawberry\">\n"+
 "      <genus>ant</genus>\n"+
@@ -268,7 +268,7 @@ public class TestSaxon extends XDTester {
 "    </insect>\n"+
 "    <insect family=\"anteatersí\" anthill=\"underSpruce\">\n"+
 "      <genus>ant</genus>\n"+
-"      <caste>kralovna</caste>\n"+
+"      <caste>queen</caste>\n"+
 "    </insect>\n"+
 "    <insect family=\"anteatersí\" anthill=\"underSpruce\">\n"+
 "      <genus>ant</genus>\n"+
@@ -294,6 +294,66 @@ public class TestSaxon extends XDTester {
 			assertTrue("underSpruce".equals(el.getAttribute("name")),
 				el.getAttribute("name"));
 		} catch (Exception ex) {fail(ex);}
+		try {
+			xdef =
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\">\n" +
+"<xd:declaration scope = \"local\"> external Element source; </xd:declaration>\n" +
+"<Persons xd:script=\"create xquery(source, '.')\" firma=\"create xquery('@name')\">\n" +
+"  <Office>\n" +
+"    <Kontakt xd:script=\"*; create xquery('Person[Telefon/@typ=\\'office\\']')\">\n" +
+"      <Name xd:script=\"create xquery('Name')\">\n" +
+"        string; create xquery('text()')\n" +
+"      </Name>\n" +
+"      <Telefon xd:script=\"create xquery('Telefon')\">\n" +
+"        create xquery('text()');\n" +
+"      </Telefon>\n" +
+"    </Kontakt>\n" +
+"  </Office>\n" +
+"  <Home>\n" +
+"    <Kontakt xd:script=\"*; create xquery('Person[Telefon/@typ=\\'personal\\']')\">\n" +
+"      <Name xd:script=\"create xquery('Name')\" >\n" +
+"        create xquery('text()');\n" +
+"      </Name>\n" +
+"      <Telefon xd:script=\"create xquery('Telefon')\">\n" +
+"        create xquery('text()');\n" +
+"      </Telefon>\n" +
+"    </Kontakt>\n" +
+"  </Home>\n" +
+"</Persons>\n" +
+"</xd:def>";
+			xp = compile(xdef);
+			xml =
+"<Firma name=\"Syntea software group a.s.\">\n" +
+"    <Person>\n" +
+"      <Name>Josef</Name>\n" +
+"      <Telefon typ=\"office\">773102030</Telefon>\n" +
+"    </Person>\n" +
+"    <Person>\n" +
+"      <Name>Petr</Name>\n" +
+"      <Telefon typ=\"personal\">755001002</Telefon>\n" +
+"    </Person>\n" +
+"    <Person>\n" +
+"      <Name>Martin</Name>\n" +
+"      <Telefon typ=\"office\">775223311</Telefon>\n" +
+"    </Person>\n" +
+"    <Person>\n" +
+"      <Name>Martin</Name>\n" +
+"      <Telefon typ=\"personal\">678901002</Telefon>\n" +
+"    </Person>\n" +
+"    <Person>\n" +
+"      <Name>Petr</Name>\n" +
+"      <Telefon typ=\"office\">777888999</Telefon>\n" +
+"    </Person>\n" +
+"</Firma>";
+			xd = xp.createXDDocument();
+			xd.setVariable("source", xml);
+			el = xd.xcreate("Persons", reporter);
+			assertNoErrors(reporter);
+			assertEq(3, el.getElementsByTagName("Office").item(0)
+					.getChildNodes().getLength());
+			assertEq(2, el.getElementsByTagName("Home").item(0)
+					.getChildNodes().getLength());
+		} catch (Exception ex) {fail(ex);}
 	}
 
 	@Override
@@ -313,5 +373,4 @@ public class TestSaxon extends XDTester {
 		XDTester.setFulltestMode(true);
 		if (runTest(args) > 0) {System.exit(1);}
 	}
-
 }

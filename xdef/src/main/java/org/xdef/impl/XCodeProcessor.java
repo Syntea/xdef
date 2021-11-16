@@ -1381,21 +1381,21 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 								continue;
 							}
 						} else {
-							DefXQueryExpr x = (DefXQueryExpr) _stack[sp--];
-							node = _stack[sp].getElement();
-							_stack[sp] = x.exec(node, chkNode);
+							DefXQueryExpr x = _stack[sp].getItemId()==XD_XQUERY
+								? (DefXQueryExpr) _stack[sp]
+								: new DefXQueryExpr(_stack[sp].toString());
+							sp--;
+							_stack[sp] =
+								x.exec(_stack[sp].getElement(), chkNode);
 							continue;
 						}
 					}
 					try {
-						DefXQueryExpr x;
-						if (_stack[sp].getItemId() == XD_XQUERY) {
-							x = (DefXQueryExpr) _stack[sp];
-						} else {
-							x = new DefXQueryExpr(_stack[sp].toString());
-						}
-						_stack[sp] = x != null ? x.exec(node, chkNode)
-							: new DefContainer();
+						DefXQueryExpr x = _stack[sp].getItemId() == XD_XQUERY
+							? (DefXQueryExpr) _stack[sp]
+							: new DefXQueryExpr(_stack[sp].toString());
+						_stack[sp] = x != null
+							? x.exec(node, chkNode) : new DefContainer();
 					} catch (SRuntimeException ex) {
 						if (chkNode == null) {
 							_reporter.putReport(ex.getReport());
