@@ -1371,7 +1371,7 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 					} else {// params == 2
 						if (_stack[sp].getItemId() == XD_ELEMENT) {
 							node = _stack[sp--].getElement();
-						} else {
+						} else if (_stack[sp].getItemId() == XD_CONTAINER) {
 							XDContainer dc = ((XDContainer) _stack[sp--]);
 							if (dc.getXDItemsNumber() > 0 &&
 								dc.getXDItem(0).getItemId() == XD_ELEMENT){
@@ -1380,6 +1380,11 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 								_stack[sp]= new DefContainer();
 								continue;
 							}
+						} else {
+							DefXQueryExpr x = (DefXQueryExpr) _stack[sp--];
+							node = _stack[sp].getElement();
+							_stack[sp] = x.exec(node, chkNode);
+							continue;
 						}
 					}
 					try {
