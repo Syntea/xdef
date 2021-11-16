@@ -68,6 +68,9 @@ public final class TestXComponents extends XDTester {
 		TestXComponents_Y07Operation.class.getClass();
 		TestXComponents_Y08.class.getClass();
 		TestXComponents_Y21enum.class.getClass();
+		TestXComponents_bindAbstract.class.getClass();
+		TestXComponents_bindEnum.class.getClass();
+		TestXComponents_bindInterface.class.getClass();
 		// generate XCDPool from sources
 		XDPool xp = compile(xdsources);
 		// generate and compile XComponents from xp
