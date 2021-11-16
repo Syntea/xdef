@@ -1,5 +1,8 @@
 # Version ${version}, release-date ${release.date}
 
+# Version 41.0.1, release-date 2021-11-16
+* fixed bug in X-script method `xquery`.
+
 # Version 41.0.0, release-date 2021-11-15
 * Preparing release version 4.1.
 * From this project are removed utilities for conversion XML schema to/from
