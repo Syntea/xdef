@@ -67,7 +67,6 @@ public class XValidate {
 			null,
 			null,
 			null,
-			null,
 			xmlFile,
 			null,
 			xdefFiles,
@@ -93,7 +92,6 @@ public class XValidate {
 		final ReportWriter repw) {
 		//just back compatibility (without poolFile).
 		return validate(props,
-			null, // ext
 			null, // out
 			null, // in
 			null, // userObj
@@ -106,8 +104,6 @@ public class XValidate {
 
 	/** Validate XML file with given definition.
 	 * @param props properties to be set to X-definitions.
-	 * @param ext The array of external classes with external methods
-	 * or <i>null</i>.
 	 * @param out The DefOutStream used as standard output or <i>null</i>.
 	 * @param in The DefInStream used as standard input or <i>null</i>.
 	 * @param userObj The user object or <i>null</i>.
@@ -120,7 +116,6 @@ public class XValidate {
 	 * not created.
 	 */
 	public static XDDocument validate(final Properties props,
-		final Class<?>[] ext,
 		final DefOutStream out,
 		final DefInStream in,
 		final Object userObj,
@@ -130,7 +125,6 @@ public class XValidate {
 		final ReportWriter repw) {
 		//just back compatibility (without poolFile).
 		return validate(props,
-			ext,
 			out,
 			in,
 			userObj,
@@ -143,8 +137,6 @@ public class XValidate {
 
 	/** Validate XML file with given definition.
 	 * @param props properties to be set to X-definitions.
-	 * @param ext The array of external classes with external methods
-	 * or <i>null</i>.
 	 * @param out The DefOutStream used as standard output or <i>null</i>.
 	 * @param in The DefInStream used as standard input or <i>null</i>.
 	 * @param userObj The user object or <i>null</i>.
@@ -158,7 +150,6 @@ public class XValidate {
 	 * not created.
 	 */
 	public static XDDocument validate(final Properties props,
-		final Class<?>[] ext,
 		final DefOutStream out,
 		final DefInStream in,
 		final Object userObj,
@@ -170,7 +161,7 @@ public class XValidate {
 		XDPool xp = null;
 		if (xdefFiles != null && xdefFiles.length > 0) {
 			try {
-				xp = XDFactory.compileXD(props, xdefFiles, ext);
+				xp = XDFactory.compileXD(props, xdefFiles);
 			} catch (Exception ex) {
 				if (ex instanceof SThrowable) {
 					repw.putReport(((SThrowable)ex).getReport());

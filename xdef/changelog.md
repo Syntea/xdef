@@ -1,8 +1,13 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 41.0.1, release-date 2021-11-16
-* fixed bug in X-script method `xquery`.
-
+# Version 41.0.1, release-date 2021-11-17
+* Fixed bug in X-script method `xquery`.
+* The deprecated method `setExternals(...)` from `org.xdef.XDBuilder`
+  was removed.
+* The parameter list of the method `org.xdef.XDFactory(compileXD(...)` no more
+  supports classes with external methods. All external classes must be now
+  declared in X-definitions.
+ 
 # Version 41.0.0, release-date 2021-11-15
 * Preparing release version 4.1.
 * From this project are removed utilities for conversion XML schema to/from

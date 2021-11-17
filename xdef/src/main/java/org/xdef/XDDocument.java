@@ -382,7 +382,6 @@ public interface XDDocument extends XXNode {
 		boolean writeDocumentHeader) throws IOException;
 
 	/** Set XML writer.
-	 * @deprecated please use OutputStream instead of Writer.
 	 * @param out stream writer.
 	 * @param encoding encoding of output.
 	 * @param writeDocumentHeader if true full document is written, otherwise
@@ -573,10 +572,9 @@ public interface XDDocument extends XXNode {
 	 * @param data string with data to be parsed.
 	 * @return XDParseResult object with parsed data.
 	 */
-	public XDParseResult parseXDType(final String typeName,
-		final String data);
+	public XDParseResult parseXDType(final String typeName, final String data);
 
-	/** Get result of XON parsing.
+	/** Get XON result of parsing.
 	 * @return result of XON parsing.
 	 */
 	public Object getXon();

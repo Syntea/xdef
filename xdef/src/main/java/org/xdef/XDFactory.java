@@ -62,7 +62,6 @@ public final class XDFactory extends XDTools {
 		return result;
 	}
 
-	@SuppressWarnings("deprecation")
 	/** Set object from parameter to be prepared for compiling.
 	 * @param b Instance of XDBuilder.
 	 * @param param Object to be analyzed for compiling.
@@ -128,13 +127,6 @@ public final class XDFactory extends XDTools {
 			}
 			for (Object o : x) {
 				setParam(b, o);
-			}
-		} else if (param instanceof Class) {
-			b.setExternals((Class) param);
-		} else if (param instanceof Class[]) {
-			Class[] x = (Class[]) param;
-			for (Class c : x) {
-				b.setExternals(c);
 			}
 		} else if (param instanceof String[]) {
 			String[] x = (String[]) param;

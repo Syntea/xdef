@@ -17,7 +17,6 @@ import java.net.URL;
  * ...
  * XDBuilder buider = XDFactory.getXDBuilder(props);
  * builder.setClassLoader(classloader); // set class loader for externals
- * builder.setExternals(externals); // set external objects
  * ...
  * builder.setSource(source 1); //compile source with X-definition
  * ...
@@ -97,15 +96,6 @@ public interface XDBuilder {
 	 * @return this XDBuilde object.
 	 */
 	public XDBuilder setClassLoader(ClassLoader loader);
-
-	@Deprecated
-	/** Set external classes with external methods.
-	 * @deprecated setExternals will be no more supported. Please use
-	 * declaration of external methods in X-definition.
-	 * @param extClasses array of classes with external methods.
-	 * @return XDBuilde object.
-	 */
-	public XDBuilder setExternals(Class<?>... extClasses);
 
 	/** Compile XDefPool from prepared sources.
 	 * @return compiled XDefPool.

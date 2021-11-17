@@ -17,16 +17,14 @@ public class CheckXdef {
 
 	@SuppressWarnings("deprecation")
 	/** Check X-definitions.
-	 * @param ext Array of classes with external procedures.
 	 * @param sources Array of file names or URLs with X-definitions.
 	 * @return true if no errors are detected.
 	 */
-	public static boolean checkXdef(final Class<?>[] ext,
-		final String... sources) {
+	public static boolean checkXdef(final String... sources) {
 		ReportWriter reporter = new ArrayReporter();
 		try {
 			Properties props = new Properties();
-			XDFactory.getXDBuilder(reporter, props).setExternals(ext)
+			XDFactory.getXDBuilder(reporter, props)
 				.setSource(sources).compileXD();
 			if (reporter.errorWarnings()) {
 				reporter.getReportReader().printReports(System.err);
@@ -102,7 +100,7 @@ public class CheckXdef {
 			throw new RuntimeException(err + info);
 		}
 		try {
-			if (checkXdef(null, ar.toArray(new String[ar.size()]))) {
+			if (checkXdef(ar.toArray(new String[ar.size()]))) {
 				System.out.println("OK");
 			}
 		} catch (Exception ex) {

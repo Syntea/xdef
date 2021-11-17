@@ -418,15 +418,14 @@ public abstract class XDTester extends STester {
 		final String name,
 		final OutputStream out,
 		final ReportWriter reporter,
-		final char mode,
-		final Class<?>... exts) {
+		final char mode) {
 		try {
 			chkSyntax(xdefs).checkAndThrowErrors();
 			if (reporter != null) {
 				reporter.clear();
 			}
 			XDBuilder xb = XDFactory.getXDBuilder(_props);
-			xb.setExternals(exts);
+//			xb.setExternals(exts);
 			xb.setSource(xdefs);
 			XDPool xp = xb.compileXD();
 			xp = checkExtObjects(xp);
@@ -468,9 +467,8 @@ public abstract class XDTester extends STester {
 		final InputStream data,
 		final String name,
 		final OutputStream os,
-		final ReportWriter reporter,
-		final Class[] exts) {
-		return test(new File[]{xn}, data, name, os, reporter, exts);
+		final ReportWriter reporter) {
+		return test(new File[]{xn}, data, name, os, reporter);
 	}
 
 	// if reporter is not null checking of result of data proecessin is
@@ -479,14 +477,13 @@ public abstract class XDTester extends STester {
 		final InputStream data,
 		final String name,
 		final OutputStream os,
-		final ReportWriter reporter,
-		final Class[] exts) {
+		final ReportWriter reporter) {
 		try {
 			ReportWriter myreporter = reporter;
 			if (reporter == null) {
 				myreporter = new ArrayReporter();
 			}
-			Element result = test(xdefs, data, name, os, reporter, 'P', exts);
+			Element result = test(xdefs, data, name, os, reporter, 'P');
 			if (reporter == null) {
 				if (myreporter.errors()) {
 					StringWriter sw = new StringWriter();

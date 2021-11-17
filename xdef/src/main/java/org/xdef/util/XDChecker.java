@@ -18,7 +18,7 @@ import org.xdef.sys.SUtils;
  */
 public class XDChecker {
 
-	private final Class<?>[] _classes;
+//	private final Class<?>[] _classes;
 	private final String _options;
 	private final String _methods;
 	private final String _declarations;
@@ -26,7 +26,7 @@ public class XDChecker {
 
 	/** Constructor of XDChecker.*/
 	public XDChecker() {
-		_classes = null;
+//		_classes = null;
 		_methods = null;
 		_declarations = null;
 		_options = null;
@@ -46,7 +46,7 @@ public class XDChecker {
 		String methods,
 		String declarations,
 		String options) throws SRuntimeException {
-		_classes = classes;
+//		_classes = classes;
 		_methods = methods;
 		_declarations = declarations;
 		_options = options;
@@ -85,9 +85,9 @@ public class XDChecker {
 		XDParseResult result;
 		try {
 			XDBuilder xb = XDFactory.getXDBuilder(ar, _properties);
-			if (_classes != null && _classes.length > 0) {
-				xb.setExternals(_classes);
-			}
+//			if (_classes != null && _classes.length > 0) {
+//				xb.setExternals(_classes);
+//			}
 			String xdef =
 "<x:def xmlns:x='"+ XDConstants.XDEF41_NS_URI + "' root = 'a'>";
 		if (_declarations != null || _methods != null) {

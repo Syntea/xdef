@@ -333,43 +333,43 @@ public final class TestExtenalMethods extends XDTester {
 			xp = compile(xdef);
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
-			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"<a\n"+
-"m00=\"?string;finally{m00();m00(1);}\"\n"+
-"m01=\"?string;\"\n"+ // byte not supported for declared class
-"m02=\"?string;\"\n"+ // Byte not supported for declared class
-"m03=\"?string;\"\n"+ // short not supported for declared class
-"m04=\"?string;\"\n"+ // Short not supported for declared class
-"m05=\"?string;finally{String s=m05(m05());if('1'!=s)setText(s);}\"\n"+
-"m06=\"?string;finally{String s=m06(m06());if('1'!=s)setText(s);}\"\n"+
-"m07=\"?string;finally{String s=m07(m07());if('1'!=s)setText(s);}\"\n"+
-"m08=\"?string;finally{String s=m08(m08());if('1'!=s)setText(s);}\"\n"+
-"m09=\"?string;finally{String s=m09(m09());if('1'!=s)setText(s);}\"\n"+
-"m11=\"?string;finally{String s=m11(m11());if('1.0'!=s)setText(s);}\"\n"+
-"m12=\"?string;finally{String s=m12(m12());if('1.0'!=s)setText(s);}\"\n"+
-"m13=\"?string;finally{String s=m13(m13());if('1.0'!=s)setText(s);}\"\n"+
-"m14=\"?string;finally{String s=m14(m14());if('1.0'!=s)setText(s);}\"\n"+
-"m15=\"?string;finally{String s=m15(m15());if('true'!=s)setText(s);}\"\n"+
-"m16=\"?string;finally{String s=m16(m16());if('true'!=s)setText(s);}\"\n"+
-"m20=\"?string;finally{String s=m20(m20());if('1'!=s)setText(s);}\"\n"+
-"m21=\"?string;finally{int i=m21(m21()+1);if(2!=i)setText(''+i);}\"\n"+
-"m22=\"?string;finally{float f=m22(m22()+1.0);if(2.0!=f)setText(''+f);}\"\n"+
-"m30=\"?string;finally{String s=m30(m30());if('1'!=s)setText(s);}\"\n"+
-"m31=\"?string;finally{String s=m31(m31());if('1'!=s)setText(s);}\"\n"+
-"m32=\"?string;finally{String s=m32(m32());if('1'!=s)setText(s);}\"\n"+
-"m33=\"?string;finally{String s=m33(m33());if('1'!=s)setText(s);}\"\n"+
-"m34=\"?string;finally{String s=m34(m34());if('1'!=s)setText(s);}\"\n"+
-"m35=\"?string;finally{String s=m35(m35());if('1'!=s)setText(s);}\"\n"+
-"/>\n"+
-"</xd:def>";
-			xp = XDFactory.compileXD(props, xdef,
-				TestExtenalMethods_1.class,	TestExtenalMethods_2.class);
-			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
-			xp = XDFactory.compileXD(props, xdef, TestExtenalMethods_2.class);
-			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+//			xdef =
+//"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+//"<a\n"+
+//"m00=\"?string;finally{m00();m00(1);}\"\n"+
+//"m01=\"?string;\"\n"+ // byte not supported for declared class
+//"m02=\"?string;\"\n"+ // Byte not supported for declared class
+//"m03=\"?string;\"\n"+ // short not supported for declared class
+//"m04=\"?string;\"\n"+ // Short not supported for declared class
+//"m05=\"?string;finally{String s=m05(m05());if('1'!=s)setText(s);}\"\n"+
+//"m06=\"?string;finally{String s=m06(m06());if('1'!=s)setText(s);}\"\n"+
+//"m07=\"?string;finally{String s=m07(m07());if('1'!=s)setText(s);}\"\n"+
+//"m08=\"?string;finally{String s=m08(m08());if('1'!=s)setText(s);}\"\n"+
+//"m09=\"?string;finally{String s=m09(m09());if('1'!=s)setText(s);}\"\n"+
+//"m11=\"?string;finally{String s=m11(m11());if('1.0'!=s)setText(s);}\"\n"+
+//"m12=\"?string;finally{String s=m12(m12());if('1.0'!=s)setText(s);}\"\n"+
+//"m13=\"?string;finally{String s=m13(m13());if('1.0'!=s)setText(s);}\"\n"+
+//"m14=\"?string;finally{String s=m14(m14());if('1.0'!=s)setText(s);}\"\n"+
+//"m15=\"?string;finally{String s=m15(m15());if('true'!=s)setText(s);}\"\n"+
+//"m16=\"?string;finally{String s=m16(m16());if('true'!=s)setText(s);}\"\n"+
+//"m20=\"?string;finally{String s=m20(m20());if('1'!=s)setText(s);}\"\n"+
+//"m21=\"?string;finally{int i=m21(m21()+1);if(2!=i)setText(''+i);}\"\n"+
+//"m22=\"?string;finally{float f=m22(m22()+1.0);if(2.0!=f)setText(''+f);}\"\n"+
+//"m30=\"?string;finally{String s=m30(m30());if('1'!=s)setText(s);}\"\n"+
+//"m31=\"?string;finally{String s=m31(m31());if('1'!=s)setText(s);}\"\n"+
+//"m32=\"?string;finally{String s=m32(m32());if('1'!=s)setText(s);}\"\n"+
+//"m33=\"?string;finally{String s=m33(m33());if('1'!=s)setText(s);}\"\n"+
+//"m34=\"?string;finally{String s=m34(m34());if('1'!=s)setText(s);}\"\n"+
+//"m35=\"?string;finally{String s=m35(m35());if('1'!=s)setText(s);}\"\n"+
+//"/>\n"+
+//"</xd:def>";
+//			xp = XDFactory.compileXD(props, xdef,
+//				TestExtenalMethods_1.class,	TestExtenalMethods_2.class);
+//			assertEq(xml, parse(xp, "", xml, reporter));
+//			assertNoErrors(reporter);
+//			xp = XDFactory.compileXD(props, xdef, TestExtenalMethods_2.class);
+//			assertEq(xml, parse(xp, "", xml, reporter));
+//			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
 		try { // using of user defined ClassLoader (fail state)
 			XDBuilder xdb = XDFactory.getXDBuilder(null);
@@ -470,22 +470,6 @@ public final class TestExtenalMethods extends XDTester {
 			assertEq(xml, create(xp, null, "a", reporter, xml, strw, null));
 			assertNoErrors(reporter);
 			assertEq("p12103450433604", strw.toString());
-			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root = 'a'>\n"+
-"  <a xd:script = \"finally {Bytes b = p9();\n"+
-"     AnyValue a = '6'; out(''+p1('p1')+p2('2',1)+p3()+p3()+p3(3,3,3)+\n"+
-"     p4(4)+p5(5) + p8(b) + b.size()); p6(a); p7(); p7(1,'x',2,true);}\"/>\n"+
-"</xd:def>\n";
-			xml ="<a/>";
-			xp = XDFactory.compileXD(props, xdef, getClass());
-			strw = new StringWriter();
-			assertEq(xml, parse(xp, null, xml, reporter, strw, null, null));
-			assertNoErrors(reporter);
-			assertEq("p1210034533604", strw.toString());
-			strw = new StringWriter();
-			assertEq(xml, create(xp, null, "a", reporter, xml, strw, null));
-			assertNoErrors(reporter);
-			assertEq("p1210034533604", strw.toString());
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xdef =
@@ -542,22 +526,6 @@ public final class TestExtenalMethods extends XDTester {
 "        m8(1, %a = 2); m9(9, []); m10(1, %a = 2);}' />\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			xml = "<a a = 'a'/>";
-			xd = xp.createXDDocument();
-			xd.setUserObject(this);
-			xd.xparse(xml, null);
-			assertEq(_m1, 1);
-			assertEq(_m2, 2);
-			assertEq(_m7, 15);
-			assertEq(_m8, 3);
-			assertEq(_m9, 9);
-			assertEq(_m10, 3);
-			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root = 'a'>\n"+
-"  <a a='string; finally {m1();m2(2); m5(m3()); m6(m4()); m7(7,8);\n"+
-"        m8(1, %a = 2); m9(9, []); m10(1, %a = 2);}' />\n"+
-"</xd:def>";
-			xp = XDFactory.compileXD(props, xdef, getClass());
 			xml = "<a a = 'a'/>";
 			xd = xp.createXDDocument();
 			xd.setUserObject(this);

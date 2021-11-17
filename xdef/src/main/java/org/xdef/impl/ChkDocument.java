@@ -60,7 +60,6 @@ import org.xdef.xml.KXmlUtils;
  * of the X-definition.
  * @author Vaclav Trojan
  */
-@SuppressWarnings("deprecation")
 final class ChkDocument extends ChkNode	implements XDDocument {
 	////////////////////////////////////////////////////////////////////////////
 	// Options
@@ -139,9 +138,9 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 * @param extObjects array of objects used to create DefPool.
 	 * @param props Properties used to create DefPool.
 	 */
-	ChkDocument(final Class<?>[] extObjects, final Properties props) {
+	ChkDocument(final Properties props) {
 		super("$root", null);
-		XPool xp = (XPool) new XBuilder(props).setExternals(extObjects)
+		XPool xp = (XPool) new XBuilder(props)//.setExternals(extObjects)
 			.setSource(
 				"<xd:collection xmlns:xd='"+XDConstants.XDEF41_NS_URI+"'/>")
 			.compileXD();
@@ -1451,7 +1450,6 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 
 	@Override
 	/** Set XML writer.
-	 * @deprecated please use OutputStream instead of Writer.
 	 * @param out stream writer.
 	 * @param encoding encoding of output.
 	 * @param writeDocumentHeader if true full document is written, otherwise

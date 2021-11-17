@@ -52,10 +52,9 @@ public class KXmlOutStream {
 	}
 
 	/** Creates new instance of DefXmlOutStream with java.io.Writer
-	 * @deprecated please use OutputStream instead of Writer.
 	 * @param writer where to write XML.
 	 * @param encoding encoding of XML stream.
-	 * @param writeDocumentHeader if <tt>true</tt> then the XML header is
+	 * @param writeDocumentHeader if true then the XML header is
 	 * written, otherwise no XML header is written.
 	 */
 	public KXmlOutStream(final Writer writer,

@@ -41,7 +41,6 @@ import org.xdef.sys.SDuration;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SThrowable;
 
-@SuppressWarnings("deprecation")
 /** Builder of XPool.
  * @author Vaclav Trojan
  */
@@ -176,18 +175,6 @@ public final class XBuilder implements XDBuilder {
 	 */
 	public final XDBuilder setClassLoader(final ClassLoader loader) {
 		_xp._compiler.setClassLoader(loader);
-		return this;
-	}
-
-	@Override
-	/** Set external classes with external methods.
-	 * @deprecated setExternals will be no more supported. Please use
-	 * declaration of external methods in X-definition.
-	 * @param ext array of classes with external methods.
-	 * @return this XDBuilde object.
-	 */
-	public final XDBuilder setExternals(final Class<?>... ext) {
-		_xp._compiler.setExternals(ext);
 		return this;
 	}
 
@@ -337,7 +324,7 @@ public final class XBuilder implements XDBuilder {
 	 */
 	public final static XDDocument xparse(final InputStream source,
 		final ReportWriter reporter) throws SRuntimeException {
-		ChkDocument chkdoc = new ChkDocument(new Class<?>[0], null);
+		ChkDocument chkdoc = new ChkDocument((Properties) null);
 		chkdoc.xparse(source, null, reporter);
 		return chkdoc;
 	}
@@ -350,7 +337,7 @@ public final class XBuilder implements XDBuilder {
 	 */
 	public final static XDDocument xparse(final String source,
 		final ReportWriter reporter) throws SRuntimeException {
-		ChkDocument chkdoc = new ChkDocument(new Class<?>[0], null);
+		ChkDocument chkdoc = new ChkDocument((Properties) null);
 		chkdoc.xparse(source, reporter);
 		return chkdoc;
 	}

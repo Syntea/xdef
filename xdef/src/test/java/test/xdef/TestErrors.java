@@ -96,11 +96,9 @@ public final class TestErrors extends XDTester {
 	 * @return reporter connected to compilation.
 	 */
 	private ArrayReporter test(final Properties props,
-		final String[] xdef,
-		final Class<?>... cls) {
+		final String[] xdef) {
 			ArrayReporter rw = new ArrayReporter();
 			XDBuilder xb = XDFactory.getXDBuilder(rw, props);
-			xb.setExternals(cls);
 			xb.setSource(xdef);
 			xb.compileXD();
 			return rw;

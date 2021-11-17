@@ -66,7 +66,6 @@ public final class TestXdef extends XDTester {
 			fail(ex);
 			return;
 		}
-		Properties props = new Properties();
 		_myX = 1;
 		boolean chkSyntax = getChkSyntax();
 		try {
@@ -106,6 +105,7 @@ public final class TestXdef extends XDTester {
 			if (!reporter.printToString().contains("XML080")) {fail(ex);}
 		}
 		try { // compile InputStream, String and more
+			Properties props = new Properties();
 			xdef =
 "<x:def xmlns:x ='" + _xdNS + "' name='a' root='a'>\n"+
 "<a/>\n"+
@@ -3152,41 +3152,35 @@ public final class TestXdef extends XDTester {
 "  xd:include='classpath://org.xdef.impl.compile.XdefOfXdef*.xdef'/>");
 		} catch (Exception ex) {fail(ex);}
 //Test default property "xdef_warning"s and values "true" and "false".
-		props.clear();
-		xml = "<a a='y' b='z'/>";
-		xdef =
+		try {
+			xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n"+
 " <a a=\"list('x','y')\" b=\"x()\"> </a>\n"+
 "</xd:def>";
-		try {
-			xp = XDFactory.compileXD(props, xdef);// empty property
+			xp = XDFactory.compileXD(new Properties(), xdef);// empty property
 			xd = xp.createXDDocument();
-			xd.xparse(xml, null);
+			xd.xparse("<a a='y' b='z'/>", null);
 			fail("Error not thrown");
 		} catch (Exception ex) {
 			s = ex.getMessage();
 			if (s == null || !s.contains("XDEF998")) {fail(ex);}
 		}
-		try {
-			props.setProperty(XDConstants.XDPROPERTY_WARNINGS,// xdef_warnings
-				XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE); // true
-			xp = XDFactory.compileXD(props, xdef, TestXdef.class);
-			xd = xp.createXDDocument();
-			xd.xparse(xml, null);
-			fail("Error not thrown");
-		} catch (Exception ex) {
-			s = ex.getMessage();
-			if (s == null || !s.contains("XDEF998")) {fail(ex);}
-		}
-		try {
+		try { // test with property xdef_warnings=false
+			xdef =
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n"+
+"  <xd:declaration>\n"+
+"    external method boolean test.xdef.TestXdef.x(XXData x);\n"+
+"  </xd:declaration>\n"+
+"  <a a=\"list('x','y')\" b=\"x()\"> </a>\n"+
+"</xd:def>";
+			Properties props = new Properties();
 			props.setProperty(XDConstants.XDPROPERTY_WARNINGS,// xdef_warnings
 				XDConstants.XDPROPERTYVALUE_WARNINGS_FALSE); // false
-			xp = XDFactory.compileXD(props, xdef, TestXdef.class);
+			xp = XDFactory.compileXD(props, xdef);
 			xd = xp.createXDDocument();
-			xd.xparse(xml, null);
+			xd.xparse("<a a='y' b='z'/>", null);
 		} catch (Exception ex) {fail(ex);}
 
-		props.clear();
 		clearTempDir(); // delete created temporary files
 		resetTester();
 	}
