@@ -4,6 +4,7 @@
         impl-date		 = "18.9.2006"
         xd:name		= "XDefSOAP"
         xd:root		= "Envelope" >
+
       <xd:declaration>
         external method {
           boolean test.xdef.Test000.tab(XXNode c, XDValue[] p);
@@ -12,9 +13,9 @@
         }
       </xd:declaration>
 
-        <xd:macro name="moreAll">options moreAttributes, moreElements, moreText</xd:macro>
+      <xd:macro name="moreAll">options moreAttributes, moreElements, moreText</xd:macro>
 
-        <Envelope xd:script="occurs 1" encodingStyle="required">
+      <Envelope xd:script="occurs 1" encodingStyle="required">
             <Header xd:script="occurs 0..1">
                 <xd:mixed>
                     <Request
@@ -31,11 +32,11 @@
                     <Get_PSP xd:script="occurs 1; ref Id_PSP; finally outputIOR('WS_BM_Get_PSP')"/>
                 </xd:choice>
             </Body>
-        </Envelope>
+      </Envelope>
 
-        <Id_PSP xd:script="occurs 1"/>
+      <Id_PSP xd:script="occurs 1"/>
 
-        <Ping xd:script="occurs 1"/>
+      <Ping xd:script="occurs 1"/>
 
     </xd:def>
 </xd:collection>
