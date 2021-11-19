@@ -139,6 +139,8 @@ public final class TestExtenalMethods extends XDTester {
 	@Override
 	/** Run tests and print error information. */
 	public void test() {
+		test.xdef.TestExtenalMethods_1.class.getClass(); //force compilation
+		test.xdef.TestExtenalMethods_2.class.getClass(); //force compilation
 		XDPool xp;
 		XDDocument xd;
 		String xdef, xml;
