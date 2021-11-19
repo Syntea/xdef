@@ -2319,8 +2319,9 @@ public final class BNFGrammar {
 				while ((c = notChar(d)) != NOCHAR) {
 					_parsedChars.append(c);
 				}
-				if (!isChar(d)) {
-					fatal(BNF004); //Unclosed literal
+				if (!isChar(d)) { // unclosed literal
+					_parsedChars.setLength(0);
+					_parsedChars.append(NOCHAR);
 				}
 			}
 			skipSeparators();
@@ -2424,16 +2425,22 @@ public final class BNFGrammar {
 				skipSeparators();
 				return _sym = MINUS_SYM;
 			} else if ((c = isOneOfChars("#'\"")) != NOCHAR) {
+				SPosition spos = getPosition();
 				readLiteral(c);
 				skipSeparators();
 				boolean i = isChar('%'); // case insensitive
 				if (_parsedChars.length() > 1) {
 					_item = _grammar.newItemToken(i, _parsedChars.toString());
-				} else if (_parsedChars.length() == 1) {
+				} else if (_parsedChars.length() == 1
+					&& _parsedChars.charAt(0) != NOCHAR) {
 					_item = _grammar.newItemChar(i, _parsedChars.charAt(0));
 				} else {
 					_item = _grammar.newItemChar(i, '?');
-					error(BNF009); //Empty literal
+					SPosition spos1 = getPosition();
+					setPosition(spos);
+					error(_parsedChars.length()==1 ? BNF004 //Unclosed literal
+						: BNF009);//Empty literal
+					setPosition(spos1);
 				}
 				checkQuantifier(_item);
 				return _sym = ITEM_SYM;
