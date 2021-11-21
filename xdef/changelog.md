@@ -1,6 +1,8 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 41.0.1, release-date 2021-11-17
+# Version 41.0.1, release-date 2021-11-21
+* Fixed bug in generation of X-component where in the choice section is an item
+  with max occurrence grater then one.
 * Fixed bug in X-script method `xquery`.
 * The deprecated method `setExternals(...)` from `org.xdef.XDBuilder`
   was removed.

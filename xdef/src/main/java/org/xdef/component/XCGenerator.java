@@ -182,11 +182,14 @@ final class XCGenerator extends XCGeneratorJSON {
 					if (groupKind == XMNode.XMCHOICE) {
 						String s = "\t\t";
 						for (int j = choiceStack.size() - 1; j > 0; j -= 5) {
-							String iname = (String) choiceStack.get(j-1);
-							s += '_' + (String) iname + "=null;";
-							int max = (Integer) choiceStack.get(j-3);
-							if (max == groupFirst) {
-								break;
+							s += '_' + (String) choiceStack.get(j-1); //iname
+							if ((Integer)choiceStack.get(j)>1) {//max occurrence
+								s += ".clear();"; // it is final List, clear it!
+							} else {
+								s += "=null;"; // othrewise can set null
+							}
+							if ((Integer) choiceStack.get(j-3) == groupFirst) {
+								break; // index == first, finish;
 							}
 						}
 						s += LN;
