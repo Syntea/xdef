@@ -1,5 +1,8 @@
 # Version ${version}, release-date ${release.date}
 
+# Version 41.0.2, release-date 2021-11-21
+* Corrected generation of X-components from models containing a choice section.
+
 # Version 41.0.1, release-date 2021-11-21
 * Fixed bug in generation of X-component where in the choice section is an item
   with max occurrence grater then one.

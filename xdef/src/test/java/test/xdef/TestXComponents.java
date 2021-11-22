@@ -1,6 +1,5 @@
 package test.xdef;
 
-import java.lang.reflect.Constructor;
 import test.XDTester;
 import org.xdef.XDPool;
 import org.xdef.XDDocument;
@@ -199,38 +198,32 @@ public final class TestXComponents extends XDTester {
 		reporter.clear();
 		try { // model with occurrnece > 1
 			xdef =
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\"\n" +
-"        xd:name=\"XdPoolCfg\"\n" +
-"        xd:root=\"XdPoolCfg\">\n" +
-"\n" +
-"    <Resource xd:script=\"occurs 0..;\">string();</Resource>\n" +
-"\n" +
-"    <IncludeXDPoolCfg>\n" +
-"        <PoolCfg xd:script=\"occurs 0..; ref Resource\"/>\n" +
-"    </IncludeXDPoolCfg>\n" +
-"    <XdPoolCfg>\n" +
-"        <IncludeExternals xd:script=\"occurs 0..1; ref IncludeXDPoolCfg\"/>\n" +
-"        <Externals xd:script=\"occurs 0..1\">\n" +
-"            <ClassPath xd:script=\"occurs 0..; ref Resource\"/>\n" +
-"        </Externals>\n" +
-"        <XDefs xd:script=\"occurs 0..1\">\n" +
-"            <Resource xd:script=\"occurs 0..; ref Resource\"/>\n" +
-"        </XDefs>\n" +
-"    </XdPoolCfg>\n" +
-"    <xd:component>\n" +
-"        %class bugreports.data.XCIncludeXDPoolCfg\n" +
-"           %link XdPoolCfg#IncludeXDPoolCfg;\n" +
-"        %class bugreports.data.XCXdPoolCfg  %link XdPoolCfg#XdPoolCfg;\n" +
-"        %class bugreports.data.XCExternals %link XdPoolCfg#XdPoolCfg/Externals;\n" +
-"        %class bugreports.data.XCClass\n" +
-"           %link XdPoolCfg#XdPoolCfg/Externals/ClassPath;\n" +
-"        %class bugreports.data.XCXDefs %link XdPoolCfg#XdPoolCfg/XDefs;\n" +
-"        %class bugreports.data.XCResource %link XdPoolCfg#Resource;\n" +
-"    </xd:component>\n" +
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' name='X' root='XdPoolCfg'>\n" +
+"  <Resource xd:script=\"occurs 0..;\">string();</Resource>\n" +
+"  <IncludeXDPoolCfg>\n" +
+"    <PoolCfg xd:script=\"occurs 0..; ref Resource\"/>\n" +
+"  </IncludeXDPoolCfg>\n" +
+"  <XdPoolCfg>\n" +
+"    <IncludeExternals xd:script=\"occurs 0..1; ref IncludeXDPoolCfg\"/>\n" +
+"    <Externals xd:script=\"occurs 0..1\">\n" +
+"      <ClassPath xd:script=\"occurs 0..; ref Resource\"/>\n" +
+"    </Externals>\n" +
+"    <XDefs xd:script=\"occurs 0..1\">\n" +
+"      <Resource xd:script=\"occurs 0..; ref Resource\"/>\n" +
+"    </XDefs>\n" +
+"  </XdPoolCfg>\n" +
+"  <xd:component>\n" +
+"    %class bugreports.data.XCIncludeXDPoolCfg %link X#IncludeXDPoolCfg;\n" +
+"    %class bugreports.data.XCXdPoolCfg  %link X#XdPoolCfg;\n" +
+"    %class bugreports.data.XCExternals %link X#XdPoolCfg/Externals;\n" +
+"    %class bugreports.data.XCClass %link X#XdPoolCfg/Externals/ClassPath;\n" +
+"    %class bugreports.data.XCXDefs %link X#XdPoolCfg/XDefs;\n" +
+"    %class bugreports.data.XCResource %link X#Resource;\n" +
+"  </xd:component>\n" +
 "</xd:def>";
 			xp = compile(xdef);
 			genXComponent(xp, clearTempDir());
-			xd = xp.createXDDocument("XdPoolCfg");
+			xd = xp.createXDDocument("X");
 			xml =
 "<XdPoolCfg>\n"+
 "  <IncludeExternals/>\n"+
@@ -242,9 +235,57 @@ public final class TestXComponents extends XDTester {
 "     <Resource>ghi</Resource>\n" +
 "  </XDefs>\n" +
 "</XdPoolCfg>";
-			assertEq(xml, parse(xdef, "XdPoolCfg", xml, reporter));
+			assertEq(xml, parse(xdef, "X", xml, reporter));
 			assertNoErrors(reporter);
 			reporter.clear();
+			xc = xd.parseXComponent(xml, null, reporter);
+			assertNoErrors(reporter);
+			assertEq(xml, xc.toXml());
+		} catch (Exception ex) {fail(ex);}
+		try {
+			xdef =
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name = \"X\" root = \"a\">\n" +
+"  <a>\n" +
+"    <b xd:script = \"occurs 0..\" Name = \"string(1,20)\">\n" +
+"      <Param xd:script = \"occurs 0..\" Name = \"string(1,20)\">\n" +
+"        <xd:choice>\n" +
+"          <ScriptValue  xd:script = \"occurs 1;    ref Script\"/>\n" +
+"          <EnumValue    xd:script = \"occurs 1..;  ref Enum\"/>\n" +
+"          <TabValue     xd:script = \"occurs 1;    ref Tab\"/>\n" +
+"        </xd:choice>\n" +
+"      </Param>\n" +
+"    </b>\n" +
+"  </a>\n" +
+"  <Script Script = \"string(1,255)\" />\n" +
+"  <Enum Value = \"string(1,255)\" Label = \"string(1,255)\" />\n" +
+"  <Tab Value = \"string(1,255)\" Where = \"string(1,255)\" />\n" +
+"  <xd:component>\n" +
+"    %class bugreports.data.DefCommands %link X#a;\n" +
+"    %class bugreports.data.UserDefCommand %link X#a/b;\n" +
+"  </xd:component>\n" +
+"</xd:def>";
+			xp = compile(xdef);
+			genXComponent(xp, clearTempDir());
+			xml =
+"<a>\n"+
+"  <b Name='X1'>\n"+
+"    <Param Name='XP1'><ScriptValue Script='scr' /></Param>\n" +
+"  </b>\n"+
+"  <b Name='X2'>\n"+
+"    <Param Name='XP2'>\n" +
+"      <EnumValue Value='V1' Label= 'L1' />\n" +
+"      <EnumValue Value='V2' Label='L2' />\n" +
+"    </Param>\n" +
+"  </b>\n"+
+"  <b Name='X3'>\n"+
+"    <Param Name='XP3'><TabValue Value='T1' Where='W1' /></Param>\n" +
+"  </b>\n"+
+"  <b Name='X4'/>\n"+
+"</a>";
+			assertEq(xml, parse(xdef, "X", xml, reporter));
+			assertNoErrors(reporter);
+			reporter.clear();
+			xd = xp.createXDDocument("X");
 			xc = xd.parseXComponent(xml, null, reporter);
 			assertNoErrors(reporter);
 			assertEq(xml, xc.toXml());

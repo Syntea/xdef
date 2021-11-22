@@ -655,6 +655,17 @@ class XCGeneratorBase {
 		final String nullChoice) {
 		String x;
 		String d = descr;
+		String clearChoice = "";
+		if (!nullChoice.isEmpty()) {
+			for (String s : nullChoice.split(";")) {
+				if (!((name+"=null").equals(s) || (name+".clear()").equals(s))){
+					clearChoice += '_' + s + ';';
+				}
+			}
+			if (!clearChoice.isEmpty()) {
+				clearChoice = "\t\t" + clearChoice ;
+			}
+		}
 		if (max > 1) {
 			d += 's';
 			if (modelName != null) {
@@ -666,19 +677,19 @@ class XCGeneratorBase {
 				+ ", \"" + modelXDPos + "\");"+LN
 				+ "\t\t\t_&{name}.add(x);"+LN+"\t\t}"+LN+'\t';
 			} else {
-				x = LN+"\t\tif (x!=null) _&{name}.add(x);"+LN;
+				x = LN+"\t\tif (x!=null) _&{name}.add(x);"+LN+'\t';
 			}
 		} else {
 			if (modelName != null) {
-				x = LN + nullChoice +
+				x = LN + (clearChoice.isEmpty() ? "" : clearChoice + LN) +
 "\t\tif (x!=null && x.xGetXPos() == null)"+LN +
 "\t\t\tx.xInit(this, \""+modelName+"\", "
 				+ (modelURI != null ? '"' + modelURI + '"' : "null")
 				+ ", \"" + modelXDPos + "\");"+LN
 				+ "\t\t_&{name}=x;"+LN+"\t";
 			} else {
-				x = (nullChoice.isEmpty() ? "_&{name}=x;"
-					: (LN + nullChoice + "\t\t_&{name}=x;"+LN + "\t\t"));
+				x = (clearChoice.isEmpty() ? "_&{name}=x;"
+					: (LN + clearChoice + LN+"\t\t_&{name}=x;"+LN + "\t"));
 			}
 		}
 		if (sbi != null) {
@@ -743,6 +754,9 @@ class XCGeneratorBase {
 "\t * @param x value to be added."+LN+
 "\t */"+LN) : "")+
 "\tpublic void add&{name}(&{typ} x) {&{x}}"+LN;
+			if (!clearChoice.isEmpty()) {
+				x = LN + clearChoice + x;
+			}
 			sb.append(modify(template,
 				"&{x}", x,
 				"&{name}", name,

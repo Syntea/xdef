@@ -180,9 +180,9 @@ final class XCGenerator extends XCGeneratorJSON {
 				}
 				case XMNode.XMSELECTOR_END: {
 					if (groupKind == XMNode.XMCHOICE) {
-						String s = "\t\t";
+						String s = "";
 						for (int j = choiceStack.size() - 1; j > 0; j -= 5) {
-							s += '_' + (String) choiceStack.get(j-1); //iname
+							s += (String) choiceStack.get(j-1); //iname
 							if ((Integer)choiceStack.get(j)>1) {//max occurrence
 								s += ".clear();"; // it is final List, clear it!
 							} else {
@@ -192,7 +192,6 @@ final class XCGenerator extends XCGeneratorJSON {
 								break; // index == first, finish;
 							}
 						}
-						s += LN;
 						for (;choiceStack.size() >= 5;) {
 							int max = (Integer) choiceStack.pop();
 							String iname = (String) choiceStack.pop();
