@@ -229,6 +229,9 @@ public final class XBuilder implements XDBuilder {
 		ReportWriter userReporter = result._reporter; // user's reporter
 		result._reporter = null;
 		ReportWriter reporter = p.getReportWriter();
+		if (reporter.errors()) {
+			return finishCompilation(result, p, userReporter, reporter);
+		}
 		byte displayMode = result.getDisplayMode();
 		boolean display = displayMode == XPool.DISPLAY_TRUE
 			|| (reporter.errorWarnings()&&(displayMode==XPool.DISPLAY_ERRORS));

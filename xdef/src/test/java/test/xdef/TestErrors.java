@@ -401,10 +401,6 @@ public final class TestErrors extends XDTester {
 			assertEq("", chkReport(reporter, "XDEF255", "6", "2", null));
 			assertEq("", chkReport(reporter, "XML047", "7", "24", null));
 			assertEq("", chkReport(reporter, "XML075", "10", "8", null));
-			assertEq("", chkReport(reporter, "XDEF483", "5", "8", null));
-			assertEq("", chkReport(reporter, "XDEF254", "2", "24", null));
-			assertEq("", chkReport(reporter, "XDEF254", "3", "24", null));
-			assertEq("", chkReport(reporter, "XDEF254", "4", "24", null));
 			assertNull(reporter.getReport(), reporter.printToString());
 		} catch (Exception ex) {fail(ex);}
 		try {//check declaration errors
