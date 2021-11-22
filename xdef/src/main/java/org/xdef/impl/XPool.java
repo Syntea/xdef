@@ -362,7 +362,7 @@ public final class XPool implements XDPool, Serializable {
 					((SThrowable) ex).getReport());
 			} else {
 				//X-definition source is missing or null&{0}{: }
-				_compiler.getReportWriter().error(XDEF.XDEF903, source);
+				_compiler.getReportWriter().error(XDEF.XDEF903);
 			}
 		}
 	}
