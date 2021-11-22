@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 41.0.2, release-date 2021-11-21
+# Version 41.0.2, release-date 2021-11-22
 * Corrected generation of X-components from models containing a choice section.
 
 # Version 41.0.1, release-date 2021-11-21
