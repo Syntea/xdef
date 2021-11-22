@@ -2,6 +2,7 @@
 
 # Version 41.0.2, release-date 2021-11-22
 * Corrected generation of X-components from models containing a choice section.
+* The compilation of X-definitios stops if an XML error occurs.
 
 # Version 41.0.1, release-date 2021-11-21
 * Fixed bug in generation of X-component where in the choice section is an item
