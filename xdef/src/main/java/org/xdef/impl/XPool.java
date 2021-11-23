@@ -323,7 +323,7 @@ public final class XPool implements XDPool, Serializable {
 		}
 		String s = sourceId;
 		if (source == null || source.isEmpty()) {
-			//X-definition source is missing or null&{0}{: }
+			//X-definition source is missing or incorrect&{0}{: }
 			_compiler.getReportWriter().error(XDEF.XDEF903, sourceId);
 			return;
 		}
@@ -345,7 +345,7 @@ public final class XPool implements XDPool, Serializable {
 				if (files == null || files.length == 0) {
 					_sourceInfo.getMap().put(
 						source, new XDSourceItem(source));
-					//X-definition source is missing or null&{0}{: }
+					//X-definition source is missing or incorrect&{0}{: }
 					_compiler.getReportWriter().error(XDEF.XDEF903, source);
 					return;
 				}
@@ -358,11 +358,11 @@ public final class XPool implements XDPool, Serializable {
 				ex = e;
 			}
 			if (ex instanceof SThrowable) {
-				_compiler.getReportWriter().putReport(
-					((SThrowable) ex).getReport());
+				_compiler.getReportWriter()
+					.putReport(((SThrowable) ex).getReport());
 			} else {
-				//X-definition source is missing or null&{0}{: }
-				_compiler.getReportWriter().error(XDEF.XDEF903);
+				//Program exception&{0}{: }
+				_compiler.getReportWriter().error(SYS.SYS036, ex);
 			}
 		}
 	}
@@ -380,7 +380,7 @@ public final class XPool implements XDPool, Serializable {
 	 */
 	final void setSource(final String[] sources, final String[] sourceIds) {
 		if (sources == null || sources.length == 0) {
-			//X-definition source is missing or null&{0}{: }
+			//X-definition source is missing or incorrect&{0}{: }
 			_compiler.getReportWriter().error(XDEF.XDEF903);
 			return;
 		}
@@ -395,7 +395,7 @@ public final class XPool implements XDPool, Serializable {
 	 */
 	final void setSource(final File source) {
 		if (source == null) {
-			//X-definition source is missing or null&{0}{: }
+			//X-definition source is missing or incorrect&{0}{: }
 			_compiler.getReportWriter().error(XDEF.XDEF903);
 			return;
 		}
@@ -411,8 +411,6 @@ public final class XPool implements XDPool, Serializable {
 				_compiler.getReportWriter().putReport(
 					((SThrowable) ex).getReport());
 			} else {
-				//X-definition source is missing or null&{0}{: }
-				_compiler.getReportWriter().error(XDEF.XDEF903, source);
 				//Program exception&{0}{: }
 				_compiler.getReportWriter().error(SYS.SYS036, ex);
 			}
@@ -424,7 +422,7 @@ public final class XPool implements XDPool, Serializable {
 	 */
 	final void setSource(final File[] sources) {
 		if (sources == null || sources.length == 0) {
-			//X-definition source is missing or null&{0}{: }
+			//X-definition source is missing or incorrect&{0}{: }
 			_compiler.getReportWriter().error(XDEF.XDEF903);
 			return;
 		}
@@ -438,7 +436,7 @@ public final class XPool implements XDPool, Serializable {
 	 */
 	final void setSource(final URL source) {
 		if (source == null) {
-			//X-definition source is missing or null&{0}{: }
+			//X-definition source is missing or incorrect&{0}{: }
 			_compiler.getReportWriter().error(XDEF.XDEF903);
 			return;
 		}
@@ -451,8 +449,6 @@ public final class XPool implements XDPool, Serializable {
 				_compiler.getReportWriter().putReport(
 					((SThrowable) ex).getReport());
 			} else {
-				//X-definition source is missing or null&{0}{: }
-				_compiler.getReportWriter().error(XDEF.XDEF903, source);
 				//Program exception&{0}{: }
 				_compiler.getReportWriter().error(SYS.SYS036, ex);
 			}
@@ -464,7 +460,7 @@ public final class XPool implements XDPool, Serializable {
 	 */
 	final void setSource(final URL[] sources) {
 		if (sources == null || sources.length == 0) {
-			//X-definition source is missing or null&{0}{: }
+			//X-definition source is missing or incorrect&{0}{: }
 			_compiler.getReportWriter().error(XDEF.XDEF903);
 			return;
 		}
@@ -484,7 +480,7 @@ public final class XPool implements XDPool, Serializable {
 			s = "Stream_" + (++_streamItem);
 		}
 		if (source == null) {
-			//X-definition source is missing or null&{0}{: }
+			//X-definition source is missing or incorrect&{0}{: }
 			_compiler.getReportWriter().error(XDEF.XDEF903, s);
 			return;
 		}
@@ -501,8 +497,6 @@ public final class XPool implements XDPool, Serializable {
 				_compiler.getReportWriter().putReport(
 					((SThrowable) ex).getReport());
 			} else {
-				//X-definition source is missing or null&{0}{: }
-				_compiler.getReportWriter().error(XDEF.XDEF903, source);
 				//Program exception&{0}{: }
 				_compiler.getReportWriter().error(SYS.SYS036, ex);
 			}
@@ -517,7 +511,7 @@ public final class XPool implements XDPool, Serializable {
 	final void setSource(final InputStream sources[],
 		final String sourceIds[]) {
 		if (sources == null || sources.length == 0) {
-			//X-definition source is missing or null&{0}{: }
+			//X-definition source is missing or incorrect&{0}{: }
 			_compiler.getReportWriter().error(XDEF.XDEF903);
 			return;
 		}

@@ -263,6 +263,7 @@ public final class XDFactory extends XDTools {
 		final Properties props,
 		final Object... params)	throws SRuntimeException {
 		if (params == null || params.length == 0) {
+			//X-definition source is missing or incorrect&{0}{: }
 			throw new SRuntimeException(XDEF.XDEF903);
 		}
 		XDBuilder builder = getXDBuilder(reporter, props);

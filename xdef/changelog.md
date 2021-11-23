@@ -2,11 +2,12 @@
 
 # Version 41.0.2, release-date 2021-11-22
 * Corrected generation of X-components from models containing a choice section.
-* The compilation of X-definitios stops if an XML error occurs.
+* The compilation of X-definitios stops if an XML error occurs in
+  an X-definition source and only the XML errors are reported.
 
 # Version 41.0.1, release-date 2021-11-21
 * Fixed bug in generation of X-component where in the choice section is an item
-  with max occurrence grater then one.
+  with max occurrence greater then one.
 * Fixed bug in X-script method `xquery`.
 * The deprecated method `setExternals(...)` from `org.xdef.XDBuilder`
   was removed.
