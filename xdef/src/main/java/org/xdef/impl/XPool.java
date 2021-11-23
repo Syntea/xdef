@@ -385,8 +385,8 @@ public final class XPool implements XDPool, Serializable {
 			return;
 		}
 		for (int i = 0; i < sources.length; i++) {
-			setSource(sources[i], sourceIds == null ?
-				null : sourceIds.length > i ? sourceIds[i] : null);
+			setSource(sources[i], sourceIds == null
+				? null : sourceIds.length > i ? sourceIds[i] : null);
 		}
 	}
 
@@ -897,8 +897,8 @@ public final class XPool implements XDPool, Serializable {
 		ndx1 = s.indexOf(':');
 		String nsURI = xd._namespaces.get(ndx1 > 0 ? s.substring(0, ndx1) : "");
 		XMElement xe = xd.getModel(nsURI, s);
-		return (ndx < 0 || xe == null) ?
-			xe : findXMNode(xe, path.substring(ndx + 1), 0, -1);
+		return (ndx < 0
+			|| xe == null) ? xe : findXMNode(xe, path.substring(ndx+1), 0, -1);
 	}
 
 	@Override
@@ -906,8 +906,8 @@ public final class XPool implements XDPool, Serializable {
 	 * @return nameless X-definition from this XDPool.
 	 */
 	public final XMDefinition getXMDefinition() {
-		return _xdefs.size() == 1 ?
-			_xdefs.values().iterator().next() : _xdefs.get("");
+		return _xdefs.size() == 1
+			? _xdefs.values().iterator().next() : _xdefs.get("");
 	}
 
 	@Override

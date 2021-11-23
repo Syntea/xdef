@@ -91,7 +91,7 @@ public class GUIScreen extends GUIBase {
 				setSource(_sources.keySet().iterator().next());
 			}
 			_sourceArea.setCaretPosition(
-				_sourceItem!=null && _sourceItem._pos>=0 ? _sourceItem._pos : 0);
+				_sourceItem!=null&&_sourceItem._pos>=0 ? _sourceItem._pos : 0);
 			_sourceArea.requestFocus();
 		}
 	}
@@ -121,9 +121,9 @@ public class GUIScreen extends GUIBase {
 					if (i >=0) {
 						i += 7;
 						j = s.indexOf("&{", i);
-						spos._line = (j > 0) ?
-							Integer.parseInt(s.substring(i, j)) :
-							Integer.parseInt(s.substring(i));
+						spos._line = (j > 0)
+							? Integer.parseInt(s.substring(i, j))
+							: Integer.parseInt(s.substring(i));
 					} else {
 						spos._line = 1;
 					}
@@ -131,9 +131,9 @@ public class GUIScreen extends GUIBase {
 					if (i >=0) {
 						i += 9;
 						j = s.indexOf("&{", i);
-						spos._column = (j > 0) ?
-							Integer.parseInt(s.substring(i, j)) :
-							Integer.parseInt(s.substring(i));
+						spos._column = (j > 0)
+							? Integer.parseInt(s.substring(i, j))
+							: Integer.parseInt(s.substring(i));
 					} else {
 						spos._column = 1;
 					}
@@ -141,8 +141,8 @@ public class GUIScreen extends GUIBase {
 					if (i >=0) {
 						i += 8;
 						j = s.indexOf("&{", i);
-						spos._sysId = (j > 0) ?
-							s.substring(i, j) : s.substring(i);
+						spos._sysId = (j > 0)
+							? s.substring(i, j) : s.substring(i);
 					} else {
 						if ("XDEF903".equals(report.getMsgID())) {
 							i = s.indexOf("&{0}");

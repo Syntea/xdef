@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 41.0.2, release-date 2021-11-22
+# Version 41.0.2, release-date 2021-11-23
 * Corrected generation of X-components from models containing a choice section.
 * The compilation of X-definitios stops if an XML error occurs in
   an X-definition source and only the XML errors are reported.

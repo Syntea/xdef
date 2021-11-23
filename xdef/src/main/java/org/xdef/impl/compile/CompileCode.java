@@ -1793,8 +1793,8 @@ public final class CompileCode extends CompileBase {
 					s += ',';
 				}
 				short type = _tstack[i];
-				s += type == X_ATTR_REF ?
-					"String" : CompileBase.getTypeName(type);
+				s += type == X_ATTR_REF
+					? "String" : CompileBase.getTypeName(type);
 			}
 			s += ')';
 		}
@@ -1912,8 +1912,8 @@ public final class CompileCode extends CompileBase {
 		}
 		int ix = s.charAt(0) == '@' ? 1 : s.startsWith("self::") ? 6 : 0;
 		String name = s.substring(ix);
-		ix = StringParser.chkXMLName(name, (byte) 10) ?
-			name.indexOf("::") < 0 ? ix : -1 : -1;
+		ix = StringParser.chkXMLName(name, (byte) 10)
+			? name.indexOf("::") < 0 ? ix : -1 : -1;
 		if (ix < 0) {
 			return false;
 		}
@@ -2252,14 +2252,14 @@ public final class CompileCode extends CompileBase {
 			case DEL_ATTR:
 			case CREATE_ELEMENTS:
 			case CREATE_ELEMENT: {
-				int xpar = code == CREATE_ELEMENTS ? 2 :
-					code == CREATE_ELEMENT ? 1 : code == SET_ATTR ? 3 : 2;
+				int xpar = code == CREATE_ELEMENTS
+					? 2 : code == CREATE_ELEMENT ? 1 : code == SET_ATTR ? 3 : 2;
 				if (npar == xpar && _cstack[_sp] >= 0 &&
 					_tstack[_sp] == XD_STRING) {
 					String qname = getCodeItem(_cstack[_sp]).toString();
 					int i;
-					String prefix = (i = qname.indexOf(':')) >= 0 ?
-						qname.substring(0, i) : "";
+					String prefix = (i = qname.indexOf(':')) >= 0
+						? qname.substring(0, i) : "";
 					Integer p = _nsPrefixes.get(prefix);
 					if (p == null) {
 						if (prefix.length() > 0) {

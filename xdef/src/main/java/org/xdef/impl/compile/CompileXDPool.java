@@ -1554,8 +1554,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		addNode(parentNode, newNode, level, pnode._name);
 		//compile child nodes
 		for (PNode nodei: pnode.getChildNodes()) {
-			XElement x = newNode.getKind() == XMNode.XMELEMENT ?
-				(XElement) newNode : lastElement;
+			XElement x = newNode.getKind() == XMNode.XMELEMENT
+				? (XElement) newNode : lastElement;
 			if (nodei._xdef == null) {
 				nodei._xdef = xdef;
 			}
@@ -1776,8 +1776,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			return (short) (250 + (((XMElement) xn).maxOccurs() > 1 ? 0 : 1));
 		} else {
 			XDValue p = ((XData)xn).getParseMethod();
-			return p.getItemId() == XDValueID.XD_PARSER ?
-				((XDParser) p).parsedType() : XDValueID.XD_STRING;
+			return p.getItemId() == XDValueID.XD_PARSER
+				? ((XDParser) p).parsedType() : XDValueID.XD_STRING;
 		}
 	}
 
@@ -2522,8 +2522,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 								//Ambiguous group '&{0}' (equal items)
 								// in XDefinition '&{1}'
 								error(x.getSPosition(), XDEF.XDEF234,
-									(selectorKind==XNode.XMCHOICE ?
-									"choice" : "mixed"),
+									(selectorKind == XNode.XMCHOICE
+										? "choice" : "mixed"),
 									xel._definition.getName());
 								notReported = false;
 							}

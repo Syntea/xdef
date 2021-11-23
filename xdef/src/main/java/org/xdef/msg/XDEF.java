@@ -667,7 +667,7 @@ public interface XDEF {
 	public static final long XDEF901 = 31159025992L;
 	/** Can't read X-definition&amp;{0}{: } */
 	public static final long XDEF902 = 31159025993L;
-	/** X-definition source is missing or null&amp;{0}{: } */
+	/** X-definition source is missing or incorrect&amp;{0}{: } */
 	public static final long XDEF903 = 31159025994L;
 	/** Incorrect parameter of compiler of X-definitions&amp;{0}{: } */
 	public static final long XDEF904 = 31159025995L;
