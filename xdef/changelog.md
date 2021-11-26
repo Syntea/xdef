@@ -1,5 +1,8 @@
 # Version ${version}, release-date ${release.date}
 
+# Version 41.0.3, release-date 2026-11-26
+  * creating new snapshot...
+
 # Version 41.0.2, release-date 2021-11-24
 * Corrected generation of X-components from models containing a choice section.
 * The compilation of X-definitions stops if an XML error occurs in
