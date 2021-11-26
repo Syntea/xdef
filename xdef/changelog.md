@@ -2,7 +2,7 @@
 
 # Version 41.0.2, release-date 2021-11-24
 * Corrected generation of X-components from models containing a choice section.
-* The compilation of X-definitios stops if an XML error occurs in
+* The compilation of X-definitions stops if an XML error occurs in
   an X-definition source and only the XML errors are reported.
 
 # Version 41.0.1, release-date 2021-11-21
@@ -14,7 +14,7 @@
 * The parameter list of the method `org.xdef.XDFactory(compileXD(...)` no more
   supports classes with external methods. All external classes must be now
   declared in X-definitions.
- 
+
 # Version 41.0.0, release-date 2021-11-15
 * Preparing release version 4.1.
 * From this project are removed utilities for conversion XML schema to/from
@@ -376,7 +376,3 @@
 * corrected the bug in construction mode. It was not invoked the
   initialization section in the section `var` in the X-script of 
   an element model
-
-# Previous versions
-* the previous versions were distributed by the site `www.syntea.cz`.
-  In this version were renamed the packages `cz.syntea.xdef` to `org.xdef`.
