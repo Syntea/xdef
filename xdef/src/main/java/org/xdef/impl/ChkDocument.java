@@ -1773,7 +1773,9 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	/** Get XON result.
 	 * @return XON  result.
 	 */
-	public final Object getXon() {return _xon;}
+	public final Object getXon() {
+		return _xon != null ? _xon : XonUtil.xmlToJson(getElement());
+	}
 
 	@Override
 	/** Parse a string with a type declared in X-definition.
