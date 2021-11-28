@@ -14,6 +14,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xdef.XDConstants;
 import org.xdef.XDDebug;
 import org.xdef.XDParseResult;
 import org.xdef.XDUniqueSetKey;
@@ -100,8 +101,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	XDUniqueSetKey[] _boundKeys;
 	/** Model of the processed data object.*/
 	XMData _xdata;
-	/** XON object. */
+	/** XON Map. */
 	Map<String, Object> _xonMap;
+	/** XON Array. */
 	List<Object> _xonArray;
 	/** XON item name. */
 	String _xonKey;
@@ -164,10 +166,11 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			}
 		}
 		if (!_ignoreAll && getElement() != null) {
-			if (_xElement._json > 0) { // XON
-				if (_xElement.getName().endsWith(XonNames.X_MAP)) {
+			if (_xElement._json > 0
+				&& XDConstants.XON_NS_URI_W.equals(_xElement.getNSUri())) {//XON
+				if (XonNames.X_MAP.equals(_xElement.getLocalName())) {
 					_xonMap = new LinkedHashMap<String, Object>();
-				} else if (_xElement.getName().endsWith(XonNames.X_ARRAY)) {
+				} else if (XonNames.X_ARRAY.equals(_xElement.getLocalName())) {
 					_xonArray = new ArrayList<Object>();
 				}
 			}
@@ -3659,5 +3662,14 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			_savedCounters = null;
 			return result;
 		}
+	}
+
+	@Override
+	/** Get XON result of processed Element model.
+	 * @return result of XON parsing.
+	 */
+	public Object getXon() {
+		return _xonArray != null
+			? _xonArray : _xonMap != null ? _xonMap : _xonValue;
 	}
 }

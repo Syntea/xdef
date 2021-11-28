@@ -566,15 +566,6 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		copyTemporaryReports();
 	}
 
-	/** Prepare XON result.
-	 * @return result of JSON/XON processing or null.
-	 */
-	private Object prepareXONResult() {
-		return _xon = _chkRoot._xonArray != null ? _chkRoot._xonArray
-			: _chkRoot._xonMap != null ? _chkRoot._xonMap
-			: _chkRoot._xonValue;
-	}
-
 	/** Parse and process XML source element.
 	 * @param pasrser XParser object.
 	 * @param reporter report writer or <i>null</i>. If this argument is
@@ -594,7 +585,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			_xElement = null;
 			result = chkAndGetRootElement(parser.getReporter(), reporter==null);
 			parser.closeReader();
-			prepareXONResult();
+			_xon = _chkRoot.getXon();//prepare XON
 			return result;
 		} catch (Exception ex) {
 			XDDebug debugger = getDebugger();
@@ -834,7 +825,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			_reporter = parser;
 			_refNum = 0; // we must clear counter!
 			parser.xparse(this);
-			prepareXONResult();
+			_xon = _chkRoot.getXon();//prepare XON
 			return chkAndGetRootElement(parser, reporter == null);
 		}
 		return xparse(data, null, reporter);
@@ -981,7 +972,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			: new QName(e.getNamespaceURI(), e.getLocalName());
 		if ((_xElement = findXElement(qName)) != null) {
 			xparse(e, reporter);
-			return (Map<String, Object>) prepareXONResult();
+			return (Map<String, Object>) (_xon=_chkRoot.getXon());//prepare XON;
 		}
 		//Text with &{0} model&{1}{ of "}{" } is missing in X-definition
 		throw new SRuntimeException(XDEF.XDEF315, "json", e.getNodeName());
@@ -1155,7 +1146,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			: new QName(e.getNamespaceURI(), e.getLocalName());
 		if ((_xElement = findXElement(qName)) != null) {
 			xparse(e, reporter);
-			return prepareXONResult();
+			return (_xon = _chkRoot.getXon());//prepare XON
 		}
 		//Text with &{0} model&{1}{ of "}{" } is missing in X-definition
 		throw new SRuntimeException(XDEF.XDEF315, "json", e.getNodeName());
@@ -1380,9 +1371,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 					&& ((XElement) x)._json > 0) {
 					_xElement = (XElement) models[0];
 					xcreate(models[0].getQName(), reporter);
-					return prepareXONResult();
-//					Element el =  xcreate(models[0].getQName(), reporter);
-//					return XonUtil.xmlToJson(el);
+					return (_xon = _chkRoot.getXon());//prepare XON
 				}
 				break;
 			}
@@ -1781,8 +1770,8 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	}
 
 	@Override
-	/** Get result of XON parsing.
-	 * @return result of XON parsing.
+	/** Get XON result.
+	 * @return XON  result.
 	 */
 	public final Object getXon() {return _xon;}
 

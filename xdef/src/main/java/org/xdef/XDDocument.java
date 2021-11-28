@@ -574,8 +574,8 @@ public interface XDDocument extends XXNode {
 	 */
 	public XDParseResult parseXDType(final String typeName, final String data);
 
-	/** Get XON result of parsing.
-	 * @return result of XON parsing.
+	/** Get XON result.
+	 * @return XON  result.
 	 */
 	public Object getXon();
 }
