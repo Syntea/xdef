@@ -985,7 +985,8 @@ public final class TestErrors extends XDTester {
 "<xd:def xmlns:xd='" + _xdNS + "' name  ='Test2' root  ='test2' >\n"+	//04
 "<test2/>\n"+															//05
 "</xd:def>"};															//06
-				String[] names = new String[] {"xd1", "xd2"};//<=(XDEf903 xd1, xd2)
+				//(XDEf903 xd1, xd2)
+				String[] names = new String[] {"xd1", "xd2"};
 				reporter.clear();
 				xb = XDFactory.getXDBuilder(reporter, props);
 				xb.setSource(xdefs);
@@ -998,7 +999,7 @@ public final class TestErrors extends XDTester {
 					assertTrue(s.contains("E XDEF903")||!s.contains("xd1"), s);
 					s = reporter.getReport().toString();
 					assertTrue(s.contains("E XDEF903")||!s.contains("xd2"), s);
-					assertEq("", chkReport(reporter, "XDEF122","1","73",null));
+//					assertEq("", chkReport(reporter, "XDEF122","1","73",null));
 					assertNull(reporter.getReport(), reporter.printToString());
 				}
 			}

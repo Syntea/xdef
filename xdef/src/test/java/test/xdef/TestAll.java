@@ -52,6 +52,7 @@ public class TestAll {
 			new TestXdefOfXdef(),
 			new TestXmlWriter(),
 			new TestXon(),
+			new TestYaml(),
 		};
 	}
 	/** Run all available tests in this package
