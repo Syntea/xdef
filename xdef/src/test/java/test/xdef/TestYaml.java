@@ -1,9 +1,5 @@
 package test.xdef;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 import org.xdef.XDConstants;
 import org.xdef.XDDocument;
 import org.xdef.XDPool;
@@ -18,33 +14,6 @@ import static test.XDTester._xdNS;
  * @author Vaclav Trojan
  */
 public class TestYaml extends XDTester {
-
-	private static Object yamlToJson(final Object o) {
-		if (o == null) return null;
-		if (o instanceof Map) {
-			Map m = (Map) o;
-			Map<String, Object> result = new LinkedHashMap<String, Object>();
-			for (Object x: m.entrySet()) {
-				Map.Entry en = (Map.Entry) x;
-				Object y = en.getKey();
-				String key = (y instanceof byte[])
-					? new String((byte[])y) : (String) y;
-				Object z = yamlToJson(en.getValue());
-				result.put(key, z);
-			}
-			return result;
-		} else if (o instanceof List) {
-			List list = (List) o;
-			List<Object> result = new ArrayList<Object>();
-			for (Object x: list) {
-				result.add(yamlToJson(x));
-			}
-			return result;
-		} else if (o instanceof byte[]) {
-			return new String((byte[]) o);
-		}
-		return o;
-	}
 
 	@Override
 	/** Run test and display error information. */
@@ -107,7 +76,10 @@ public class TestYaml extends XDTester {
 			Object xon = xd.yparse(yaml, reporter);
 			assertNoErrors(reporter);
 			reporter.clear();
-			System.out.println(XonUtil.toYamlString(xon));
+			assertTrue(XonUtil.xonEqual(xon, 
+				xd.yparse(XonUtil.toYamlString(xon), reporter)));
+			assertNoErrors(reporter);
+			reporter.clear();
 		} catch (Exception ex) {fail(ex);}
 	}
 
