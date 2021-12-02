@@ -1,16 +1,26 @@
 package org.xdef.xon;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StringReader;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.InetAddress;
+import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.LinkedHashMap;
 import java.util.List;
 import org.xdef.msg.JSON;
+import org.xdef.msg.SYS;
 import org.xdef.sys.SBuffer;
 import org.xdef.sys.SParser;
 import org.xdef.sys.SPosition;
+import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
 
@@ -559,5 +569,58 @@ public class XonTools {
 		public final boolean equals(final Object o) {
 			return o==null || o instanceof JNull;
 		}
+	}
+
+	/** Get reader data from argument.
+	 * @param x the object containing XON/JSON data.
+	 * @return array with two items: Reader and System ID.
+	 */
+	static final Object[] getReader(final Object x, final Charset charset) {
+		Object[] result = new Object[2];
+		if (x instanceof String) {
+			String s = (String) x;
+			try {
+				return getReader(SUtils.getExtendedURL(s), charset);
+			} catch (Exception ex) {
+				try {
+					return getReader(new File(s), charset);
+				} catch (Exception exx) {}
+			}
+			result[0] = new StringReader(s);
+			result[1] = "STRING";
+		} else if (x instanceof File) {
+			File f = (File) x;
+			try {
+				result[0] = new InputStreamReader(
+					new FileInputStream(f),
+					charset == null ? Charset.forName("UTF-8") : charset);
+				result[1] = f.getCanonicalPath();
+			} catch (Exception ex) {
+				//Program exception &{0}
+				throw new SRuntimeException(SYS.SYS036, ex);
+			}
+		} else if (x instanceof URL) {
+			URL u = (URL) x;
+			try {
+				result[0] = new InputStreamReader(u.openStream(),
+					charset == null ? Charset.forName("UTF-8") : charset);
+				result[1] = u.toExternalForm();
+			} catch (Exception ex) {
+				//Program exception &{0}
+				throw new SRuntimeException(SYS.SYS036, ex);
+			}
+		} else if (x instanceof InputStream) {
+			result[0] = new InputStreamReader((InputStream) x,
+				charset == null ? Charset.forName("UTF-8") : charset);
+			result[1] = "INPUT_STREAM";
+		} else if (x instanceof Reader) {
+			result[0] = (Reader) x;
+			result[1] = "READER";
+		} else {
+			//Program exception &{0}
+			throw new SRuntimeException(SYS.SYS036,
+				"Incorrect parameter of getReader");
+		}
+		return result;
 	}
 }
