@@ -257,6 +257,8 @@ public class IniReader extends StringParser implements XonParsers {
 						}
 					}
 				}
+				_jp.namedValue(new SBuffer(name.trim(), spos));
+				_jp.mapStart(spos);
 				if (p1 == null) {
 //					//Value of $script must be string with X-script
 					error(JSON.JSON018);
@@ -268,13 +270,19 @@ public class IniReader extends StringParser implements XonParsers {
 					error(JSON.JSON002, "]");
 				}
 				name = p.getBufferPart(spos.getIndex(), p.getIndex());
+				_jp.namedValue(new SBuffer(name.trim(), spos));
+				_jp.mapStart(spos);
 				p.nextChar(); //skip ']'
 				p.isSpaces();
-				if (isToken("$script")) {
+				SPosition spos1 = p.getPosition();
+				if (p.isToken("$script")) {
 					p.isSpaces();
-					if (isChar('=')) {
+					if (p.isChar('=')) {
 						p.isSpaces();
-						
+						_jp.xdScript(new SBuffer("$script", spos1),
+							new SBuffer(p.getUnparsedBufferPart().trim(),
+								p.getPosition()));
+						p.setEos();
 					}
 				}
 				if (!p.eos()) {
@@ -285,8 +293,6 @@ public class IniReader extends StringParser implements XonParsers {
 					setPosition(sps);
 				}
 			}
-			_jp.namedValue(new SBuffer(name.trim(), spos));
-			_jp.mapStart(spos);
 			if (p1 != null) {
 				_jp.xdScript(p1, p2);
 			}
@@ -416,7 +422,7 @@ public class IniReader extends StringParser implements XonParsers {
 				Element item = el.getOwnerDocument().createElementNS(
 					XDConstants.XON_NS_URI_W,
 					XDConstants.XON_NS_PREFIX + ":" + XonNames.X_ITEM);
-				item.setAttribute(XonNames.X_KEYATTR, name);
+				item.setAttribute(XonNames.X_KEYATTR, XonTools.toXmlName(name));
 				item.setAttribute(XonNames.X_VALUEATTR, o.toString());
 				el.appendChild(item);
 			}
@@ -428,7 +434,7 @@ public class IniReader extends StringParser implements XonParsers {
 				Element item = el.getOwnerDocument().createElementNS(
 					XDConstants.XON_NS_URI_W,
 					XDConstants.XON_NS_PREFIX + ":" + XonNames.X_MAP);
-				item.setAttribute(XonNames.X_KEYATTR, name);
+				item.setAttribute(XonNames.X_KEYATTR, XonTools.toXmlName(name));
 				iniToXml((Map<String, Object>) o, item);
 				el.appendChild(item);
 			}

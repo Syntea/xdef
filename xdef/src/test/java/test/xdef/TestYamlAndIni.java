@@ -35,7 +35,6 @@ public class TestYamlAndIni extends XDTester {
 		XDPool xp;
 		ArrayReporter reporter = new ArrayReporter();
 		try { // test YAML
-			printlnOut("Test...");
 			org.xdef.xon.XonYaml.prepareYAML();
 			try {
 				xdef =
@@ -99,15 +98,89 @@ public class TestYamlAndIni extends XDTester {
 			String ini =
 "date = 2021-02-03\n"+
 "name = Jan Novak\n"+
-//"email = jan.novak@novak.org\n" +
-"[Server]\n" +
-//"  IPAddr = 123.45.6.7\n" +
-"";
+"[Server]";
 			Map<String, Object> xini = xd.iparse(ini, reporter);
 			assertNoErrors(reporter);
 			reporter.clear();
 			assertTrue(XonUtil.xonEqual(XonUtil.parseINI(ini),
 				XonUtil.parseINI(XonUtil.toIniString(xini))));
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' name=\"A\" root=\"test\">\n" +
+"  <xd:ini name=\"test\">\n" +
+"#this is INI file comment\n" +
+"address=string(); options noTrimAttr\n" +
+"dns = ipAddr()\n"  +
+"name = string()\n"+
+"  parser.factor.1=string()\n" +
+"servertool.up=string()\n"+
+"  </xd:ini>\n"  +
+"</xd:def>";
+			xd = compile(xdef).createXDDocument("A");
+			ini =
+"#this is INI file comment\n" +
+"address=dhcp\1\n" +
+"dns = 192.168.1.1\n"  +
+"name = John E\\\n"+
+" . \\\n"  +
+" Smith\n"  +
+"  parser.factor.1=')' \\u00E9 esperado.\n" +
+"servertool.up=\\u670D\\u52A1\\u5668\\u5DF2\\u5728\\u8FD0\\u884C\\u3002";
+			xini = xd.iparse(ini, reporter);
+			assertTrue(XonUtil.xonEqual(XonUtil.parseINI(ini),
+				XonUtil.parseINI(XonUtil.toIniString(xini))));
+			assertNoErrors(reporter);
+			reporter.clear();
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' name=\"A\" root=\"test\">\n" +
+"  <xd:ini name=\"test\">\n" +
+"proxy type=int(0,9)\n" +
+"hostaddr= ? ipAddr(); options acceptEmptyAttributes\n" + //
+"port= ? int(0, 9999);\n" +
+"[system] $script = optional\n" +
+"autolaunch=int()\n" +
+"[ x.y ]\n" +
+"[selfupdate]\n" +
+"version=ipAddr()\n" +
+"  </xd:ini>\n"  +
+"</xd:def>";
+			xd = compile(xdef).createXDDocument("A");
+			ini =
+"proxy type=0\n" +
+"hostaddr=\n" +
+"hostaddr= 123.45.6.7\n" +
+"port= 0\n" +
+"[system]\n" +
+"autolaunch=0\n" +
+"[ x.y ]\n" +
+"[selfupdate]\n" +
+"version=11.0.0.55";
+			xini = xd.iparse(ini, reporter);
+			assertTrue(XonUtil.xonEqual(XonUtil.parseINI(ini),
+				XonUtil.parseINI(XonUtil.toIniString(xini))));
+			assertNoErrors(reporter);
+			reporter.clear();
+			ini =
+"proxy type=0\n" +
+"hostaddr=\n" +
+"[system]\n" +
+"autolaunch=0\n" +
+"[ x.y ]\n" +
+"[selfupdate]\n" +
+"version=11.0.0.55";
+			xini = xd.iparse(ini, reporter);
+			assertTrue(XonUtil.xonEqual(XonUtil.parseINI(ini),
+				XonUtil.parseINI(XonUtil.toIniString(xini))));
+			assertNoErrors(reporter);
+			reporter.clear();
+			ini =
+"proxy type=0\n" +
+"[ x.y ]\n" +
+"[selfupdate]\n" +
+"version=11.0.0.55";
+			xini = xd.iparse(ini, reporter);
+			assertTrue(XonUtil.xonEqual(XonUtil.parseINI(ini),
+				XonUtil.parseINI(XonUtil.toIniString(xini))));
+			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
 
 		clearTempDir(); // clear temporary directory
