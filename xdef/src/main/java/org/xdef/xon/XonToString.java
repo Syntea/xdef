@@ -27,20 +27,13 @@ class XonToString extends XonTools {
 	 * @param ch character to be converted.
 	 * @return string representation of character.
 	 */
-	private static String genChar(final char ch) {
-		int i = "\"\\\n\b\r\t\f".indexOf(ch);
-		if (i < 0) {
-			if (StringParser.getXmlCharType(ch, StringParser.XMLVER1_0)
-				== StringParser.XML_CHAR_ILLEGAL) {
-				String s = "c\"\\u";
-				for (int j = 12; j >= 0; j -=4) {
-					s += "0123456789abcdef".charAt((ch >> j) & 0xf);
-				}
-				return s + '"';
-			}
-			return "c\"" + String.valueOf(ch) + '"';
-		}
-		return "c\"\\" + "\"\\nbrtf".charAt(i) + "\"";
+	static String genChar(final char ch) {
+		int i = "\"\\\b\f\n\r\t".indexOf(ch);
+		return "c\"" + (i < 0
+			? StringParser.getXmlCharType(ch, StringParser.XMLVER1_0)
+				== StringParser.XML_CHAR_ILLEGAL
+				? XonTools.genCharAsUTF(ch) : String.valueOf(ch)
+			: "\\" + "\"\\bfnrt".charAt(i))  + '"';
 	}
 
 	/** Add the a string created from JSON or XON simple value to StringBuilder.

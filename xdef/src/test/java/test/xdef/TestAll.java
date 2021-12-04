@@ -52,9 +52,10 @@ public class TestAll {
 			new TestXdefOfXdef(),
 			new TestXmlWriter(),
 			new TestXon(),
-			new TestYaml(),
+			new TestYamlAndIni(),
 		};
 	}
+
 	/** Run all available tests in this package
 	 * @param args The array of arguments
 	 * @return number of errors.

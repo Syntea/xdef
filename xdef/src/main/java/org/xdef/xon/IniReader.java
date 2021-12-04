@@ -268,8 +268,15 @@ public class IniReader extends StringParser implements XonParsers {
 					error(JSON.JSON002, "]");
 				}
 				name = p.getBufferPart(spos.getIndex(), p.getIndex());
-				p.nextChar();
+				p.nextChar(); //skip ']'
 				p.isSpaces();
+				if (isToken("$script")) {
+					p.isSpaces();
+					if (isChar('=')) {
+						p.isSpaces();
+						
+					}
+				}
 				if (!p.eos()) {
 					SPosition sps = getPosition();
 					setPosition(p.getPosition());
@@ -322,16 +329,16 @@ public class IniReader extends StringParser implements XonParsers {
 			char ch = s.charAt(i);
 			switch(ch) {
 				case '\\' : sb.append("\\\\"); continue;
-				case '\t' : sb.append("\\t"); continue;
+				case '\b' : sb.append("\\b"); continue;
+				case '\f' : sb.append("\\f"); continue;
 				case '\n' : sb.append("\\n"); continue;
+				case '\r' : sb.append("\\r"); continue;
+				case '\t' : sb.append("\\t"); continue;
 				default :
 					if (ch >= ' ' && ch <= 127) {
 						sb.append(ch);
 					} else {
-						sb.append("\\u");
-						for (int x = 12; x >= 0; x -=4) {
-							sb.append("0123456789ABCDEF".charAt((ch >> x)&0xf));
-						}
+						sb.append(XonTools.genCharAsUTF(ch));
 					}
 			}
 		}

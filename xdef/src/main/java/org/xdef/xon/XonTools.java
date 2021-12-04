@@ -54,6 +54,14 @@ public class XonTools {
 		return (i > 15) ? i - 6 : i;
 	}
 
+	final static String genCharAsUTF(final char ch) {
+		String s = "\\u";
+		for (int j = 12; j >= 0; j -=4) {
+			s += "0123456789abcdef".charAt((ch >> j) & 0xf);
+		}
+		return s;
+	}
+
 	/** Check if on the position given by index in a string it is the
 	 * form of hexadecimal character representation.
 	 * @param s inspected string.

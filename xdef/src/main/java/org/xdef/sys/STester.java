@@ -82,7 +82,7 @@ public abstract class STester {
 	/** Create empty instance. */
 	public STester() {}
 
-	private void printlnOut(final String s) {
+	public final void printlnOut(final String s) {
 		flushErr();
 		_out.println(s);
 		if (_outStream != null) {
@@ -102,7 +102,7 @@ public abstract class STester {
 			_outStream.print(s);
 		}
 	}
-	private void printlnErr(final String s) {
+	public final void printlnErr(final String s) {
 		flushOut();
 		_err.println(s);
 		if (_outStream != null) {

@@ -1,5 +1,6 @@
 package test.xdef;
 
+import java.util.Map;
 import org.xdef.XDConstants;
 import org.xdef.XDDocument;
 import org.xdef.XDPool;
@@ -13,18 +14,11 @@ import static test.XDTester._xdNS;
 /** Test YAML.
  * @author Vaclav Trojan
  */
-public class TestYaml extends XDTester {
+public class TestYamlAndIni extends XDTester {
 
 	@Override
 	/** Run test and display error information. */
 	public void test() {
-		try {
-			org.xdef.xon.XonYaml.prepareYAML();
-		} catch (SRuntimeException ex) {
-			setResultInfo("YAML tests skipped: package "
-				+ "org.yaml.snakeyaml is not available");
-			return;			
-		}
 ////////////////////////////////////////////////////////////////////////////////
 		setProperty(XDConstants.XDPROPERTY_DISPLAY, // xdef_display
 			XDConstants.XDPROPERTYVALUE_DISPLAY_FALSE); // true | errors | false
@@ -37,21 +31,25 @@ public class TestYaml extends XDTester {
 ////////////////////////////////////////////////////////////////////////////////
 
 		String xdef;
-		String yaml;
 		XDDocument xd;
 		XDPool xp;
 		ArrayReporter reporter = new ArrayReporter();
-		try {
-			xdef =
+		try { // test YAML
+			printlnOut("Test...");
+			org.xdef.xon.XonYaml.prepareYAML();
+			try {
+				xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='test' name='A'>\n"+
 "  <xd:json name=\"test\">\n" +
-"    { \"date\" : \"date(); finally outln('Measured on: ' + getText() + '\\n');\",\n" +
+"    { \"date\" : \"date(); finally\n" +
+"                    outln('Measured on: ' + getText() + '\\n');\",\n" +
 "      \"cities\"  : [\n" +
 "        {$script = \"occurs 1..*; finally outln();\",\n" +
 "          \"from\": [\n" +
 "            \"string(); finally outln('From ' + getText());\",\n" +
 "            {$script = \"occurs 1..*; finally outln();\",\n" +
-"              \"to\": \"jstring(); finally out(' to ' + getText() + ' is distance: ');\",\n" +
+"              \"to\": \"jstring(); finally \n" +
+"                         out(' to ' + getText() + ' is distance: ');\",\n" +
 "              \"distance\": \"int(); finally out(getText() + ' (km)');\"\n" +
 "            }\n" +
 "    	  ]\n" +
@@ -60,9 +58,9 @@ public class TestYaml extends XDTester {
 "    }\n" +
 "  </xd:json>\n" +
 "</xd:def>";
-			xp = compile(xdef);
-			xd = xp.createXDDocument("A");
-			yaml =
+				xp = compile(xdef);
+				xd = xp.createXDDocument("A");
+				String yaml =
 "date: '2020-02-22'\n" +
 "cities:\n" +
 "- from:\n" +
@@ -73,14 +71,46 @@ public class TestYaml extends XDTester {
 "  - London\n" +
 "  - {to: Brussels, distance: 322}\n" +
 "  - {to: Paris, distance: 344}\n";
-			Object xon = xd.yparse(yaml, reporter);
+				Object xon = xd.yparse(yaml, reporter);
+				assertNoErrors(reporter);
+				reporter.clear();
+				assertTrue(XonUtil.xonEqual(xon, 
+					xd.yparse(XonUtil.toYamlString(xon), reporter)));
+				assertNoErrors(reporter);
+				reporter.clear();
+			} catch (Exception ex) {fail(ex);}
+		} catch (SRuntimeException exx) {
+			setResultInfo("YAML tests skipped: the package "
+				+ "org.yaml.snakeyaml is not available");
+		}
+		try { // test Windows INI
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root='test' name='A'>\n"+
+"  <xd:ini xd:name = \"test\">\n" +
+"    name = string();\n" +
+"    date = date();\n" +
+"    email = ? emailAddr();\n" +
+"    [Server]\n" +
+"    IPAddr = ? ipAddr();\n" +
+"  </xd:ini>\n" +
+"</xd:def>";
+			xp = compile(xdef);
+			xd = xp.createXDDocument("A");
+			String ini =
+"date = 2021-02-03\n"+
+"name = Jan Novak\n"+
+//"email = jan.novak@novak.org\n" +
+"[Server]\n" +
+//"  IPAddr = 123.45.6.7\n" +
+"";
+			Map<String, Object> xini = xd.iparse(ini, reporter);
 			assertNoErrors(reporter);
 			reporter.clear();
-			assertTrue(XonUtil.xonEqual(xon, 
-				xd.yparse(XonUtil.toYamlString(xon), reporter)));
-			assertNoErrors(reporter);
-			reporter.clear();
+			assertTrue(XonUtil.xonEqual(XonUtil.parseINI(ini),
+				XonUtil.parseINI(XonUtil.toIniString(xini))));
 		} catch (Exception ex) {fail(ex);}
+
+		clearTempDir(); // clear temporary directory
 	}
 
 	/**
