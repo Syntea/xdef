@@ -768,11 +768,11 @@ EscapedChar ::= "\" ( OctalDigit | "n" | "t" | "t" | "f" | ":" | HexaDigit{4} )
 INIChar ::= [#9 -.0-~] | EscapedChar
 
 Prop ::= S? (("#" INIChar* NewLine)
-  | ("[" (INIChar - "]")+ "]" S? NewLine)
+  | ("[" (INIChar - "]")+ "]"
+     S? ("$script" S? "=" S? ($xmlChar - NewLine)*)?  NewLine)
   | ((INIChar - "=")+ "=" S? INIChar*  (NewLine | ("\" NewLine INIChar*)*)))
 
 IniProps ::= Prop*
-
 ]]>
   </xd:BNFGrammar>
 

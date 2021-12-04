@@ -763,7 +763,7 @@ public class TestJsonXdef extends XDTester {
 "   B=int()\n" +
 "   C=date()\n" +
 "   D=decimal()\n" +
-"   [E; $script=?]\n" +
+"   [E] $script=?\n" +
 "     x = ?int()\n" +
 "   [F]\n" +
 " </xd:ini>\n"+
