@@ -53,8 +53,7 @@ public class MyTest extends XDTester {
 	@Override
 	/** Run test and display error information. */
 	public void test() {
-		System.out.println("Version: " + XDConstants.BUILD_VERSION
-			+ "; " + XDConstants.BUILD_DATETIME);
+		System.out.println("X-definition version: " + XDFactory.getXDVersion());
 ////////////////////////////////////////////////////////////////////////////////
 		setProperty(XDConstants.XDPROPERTY_DISPLAY, // xdef_display
 			XDConstants.XDPROPERTYVALUE_DISPLAY_FALSE); // true | errors | false

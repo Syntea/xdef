@@ -1,7 +1,7 @@
 package bugreports;
 
 import org.w3c.dom.Element;
-import org.xdef.XDConstants;
+import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.util.GenXDefinition;
@@ -20,8 +20,7 @@ public class MyTest_1 extends XDTester {
 	@Override
 	/** Run test and print error information. */
 	public void test() {
-		System.out.println("Version: " + XDConstants.BUILD_VERSION
-			+ "; " + XDConstants.BUILD_DATETIME);
+		System.out.println("X-definition version: " + XDFactory.getXDVersion());
 		String dataDir = getDataDir() + "test/";
 		if (dataDir == null) {
 			fail("Data directory is missing, test canceled");

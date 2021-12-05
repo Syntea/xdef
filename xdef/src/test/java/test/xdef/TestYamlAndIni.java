@@ -73,7 +73,7 @@ public class TestYamlAndIni extends XDTester {
 				Object xon = xd.yparse(yaml, reporter);
 				assertNoErrors(reporter);
 				reporter.clear();
-				assertTrue(XonUtil.xonEqual(xon, 
+				assertTrue(XonUtil.xonEqual(xon,
 					xd.yparse(XonUtil.toYamlString(xon), reporter)));
 				assertNoErrors(reporter);
 				reporter.clear();

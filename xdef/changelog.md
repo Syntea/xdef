@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 41.0.3, release-date 2021-12-02
+# Version 41.0.3, release-date 2021-12-05
   * added tools for processing YAML data (see methods `parseYAML`
     and `toYamlString` in the class `org.xdef.xon.XonUtil` and `yparse` in
     'org.xef.XDDocument').
