@@ -1,6 +1,5 @@
 package bugreports;
 
-import java.io.StringWriter;
 import org.w3c.dom.Element;
 import org.xdef.XDDocument;
 import org.xdef.XDFactory;
