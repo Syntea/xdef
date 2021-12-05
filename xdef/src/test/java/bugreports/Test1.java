@@ -14,14 +14,13 @@ public class Test1 extends XDTester {
 
 	@Override
 	public void test() {
+		System.out.println("X-definition version: " + XDFactory.getXDVersion());
 		ArrayReporter reporter = new ArrayReporter();
 		String xml;
 		String xdef;
 		XDPool xp;
 		XDDocument xd;
 		Element el;
-		String s;
-		StringWriter strw;
 		try {
 			xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" root=\"A|B\" >\n" +

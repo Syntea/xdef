@@ -9,11 +9,11 @@ import org.xdef.impl.code.DefXQueryExpr;
 public class FullTestAll {
 	/** @param args the command line arguments. */
 	public static void main(String... args) {
-		System.out.println("Build: " + XDFactory.getXDVersion());
-		System.out.println("Testing java version: "
+		System.out.println("Java version: "
 			+ System.getProperty("java.version") + " ("
 			+ (DefXQueryExpr.isXQueryImplementation() ? "with" : "without")
 			+ " Saxon library) ...");
+		System.out.println("X-definition version: " + XDFactory.getXDVersion());
 		XDTester.setFulltestMode(true);
 		test.common.TestAll.runTests(args);
 		test.xdef.TestAll.runTests(args);

@@ -18,10 +18,11 @@ public class TestAll {
 	@BeforeTest
 	public static void beforeTests() {
 		XDTester.setFulltestMode(false);
-		System.out.println("Testing java version: "
+		System.out.println("Java version: "
 			+ System.getProperty("java.version") + " ("
 			+ (DefXQueryExpr.isXQueryImplementation() ? "with" : "without")
 			+ " Saxon library) ...");
+		System.out.println("X-definition version: " + XDFactory.getXDVersion());
 	}
 
 	/** run TestAll in test.common */
@@ -55,19 +56,18 @@ public class TestAll {
 		testNG.setOutputDirectory("target/test-reports");
 		testNG.run();
 	}
-
-	/** Run all test directly */
-	@SuppressWarnings("unused")
-	private static void mainTest() {
-		beforeTests();
-		testCommon();
-		testXdef();
-		testXDUtils();
-	}
+//
+//	/** Run all test directly */
+//	@SuppressWarnings("unused")
+//	private static void mainTest() {
+//		beforeTests();
+//		testCommon();
+//		testXdef();
+//		testXDUtils();
+//	}
 
 	/** @param args the command line arguments. */
 	public static void main(String... args) {
-		System.out.println("Build: " + XDFactory.getXDVersion());
 		//mainTest();
 		mainTestNG();
 	}

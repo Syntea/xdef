@@ -20,6 +20,7 @@ public class TestIni extends XDTester {
 	@Override
 	/** Run test and display error information. */
 	public void test() {
+		System.out.println("X-definition version: " + XDFactory.getXDVersion());
 		XDPool xp;
 		XDDocument xd;
 		String ini;

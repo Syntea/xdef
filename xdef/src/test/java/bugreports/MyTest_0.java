@@ -179,6 +179,8 @@ public class MyTest_0 extends XDTester {
 	@Override
 	/** Run test and display error information. */
 	public void test() {
+		System.out.println("Version: " + XDConstants.BUILD_VERSION
+			+ "; " + XDConstants.BUILD_DATETIME);
 ////////////////////////////////////////////////////////////////////////////////
 		boolean T = false; // if false, all tests are invoked
 //		T = true; // if true, only the first one test is invoked

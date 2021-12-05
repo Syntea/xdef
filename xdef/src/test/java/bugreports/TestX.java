@@ -20,13 +20,14 @@ public class TestX extends XDTester {
 	@Override
 	/** Run test and display error information. */
 	public void test() {
+		System.out.println("X-definition version: " + XDFactory.getXDVersion());
 		XDPool xp;
 		XDDocument xd;
 		String json;
 		String xdef;
 		Properties props = new Properties();
 		ArrayReporter reporter = new ArrayReporter();
-	try {
+		try {
 /**/
 			xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n"+
