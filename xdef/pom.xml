@@ -37,7 +37,7 @@
             <artifactId>Saxon-HE</artifactId>
             <classifier>xqj</classifier>
         </dependency>
-        
+       
         <!-- test-phase -->
         <!-- ========== -->
         
@@ -52,7 +52,13 @@
             <artifactId>derby</artifactId>
             <scope>test</scope>
         </dependency>
-        
+		<dependency>
+			<groupId>org.yaml</groupId>
+			<artifactId>snakeyaml</artifactId>
+			<version>1.29</version>
+			<scope>test</scope>
+		</dependency>
+		
         <!-- logging -->
         <dependency>
             <groupId>org.slf4j</groupId>
