@@ -1,12 +1,15 @@
 # Version ${version}, release-date ${release.date}
 
+# Version 41.0.4, release-date 2021-12-10
+* ...
+
 # Version 41.0.3, release-date 2021-12-05
-  * added tools for processing YAML data (see methods `parseYAML`
-    and `toYamlString` in the class `org.xdef.xon.XonUtil` and `yparse` in
-    `org.xef.XDDocument`).
-  * added tools for processing Properties and Windows-ini data (see methods
-    and `parseINI` in the class `org.xdef.xon.XonUtil` and `iparse` in
-    `org.xef.XDDocument`).
+* added tools for processing YAML data (see methods `parseYAML`
+  and `toYamlString` in the class `org.xdef.xon.XonUtil` and `yparse` in
+  `org.xef.XDDocument`).
+* added tools for processing Properties and Windows-ini data (see methods
+  and `parseINI` in the class `org.xdef.xon.XonUtil` and `iparse` in
+  `org.xef.XDDocument`).
 
 # Version 41.0.2, release-date 2021-11-24
 * Corrected generation of X-components from models containing a choice section.
