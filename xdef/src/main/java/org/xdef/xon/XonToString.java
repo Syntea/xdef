@@ -230,7 +230,7 @@ class XonToString extends XonTools {
 				?  " " + separator + " " : String.valueOf(separator);
 			if (first) {
 				first = false;
-				if (map.size() > 1) {
+				if (map.size() > 1 && indent != null) {
 					sb.append(' ');
 				}
 				sb.append(key);
