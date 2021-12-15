@@ -387,7 +387,7 @@ public class SDatetime extends XMLGregorianCalendar
 			if (_day != Integer.MIN_VALUE) {
 				return formatDate("---dd" + (_tz==null?"":"Z"));
 			}
-			return formatDate("yyyy-MM-dd" + (_tz==null?"":"Z"));
+			return formatDate("" + (_tz==null?"":"Z"));
 		} else if (_year == Integer.MIN_VALUE
 			&& _minute != Integer.MIN_VALUE) {
 			if (_second == Integer.MIN_VALUE) {

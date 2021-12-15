@@ -49,11 +49,11 @@ class XonToString extends XonTools {
 		} else if (x instanceof String) {
 			return '"' + jstringToSource((String) x) + '"';
 		}
+		if (x instanceof byte[]) {// byte array
+			return "b(" + new String(SUtils.encodeBase64((byte[]) x)) + ")";
+		}
 		String result;
 		if (xon) {
-			if (x instanceof byte[]) {// byte array
-				return "b(" + new String(SUtils.encodeBase64((byte[]) x)) + ")";
-			}
 			result = x.toString();
 			if (x instanceof Number) {
 				if (x instanceof BigDecimal) {
@@ -90,18 +90,16 @@ class XonToString extends XonTools {
 			} else if (x instanceof SDatetime) {
 				return "D" + x;
 			} else if (x instanceof GPSPosition) {
-				return "g(" + x.toString() + ")";
+				return "g(" + x + ')';
 			} else if (x instanceof Price) {
-				return "p(" + x.toString() + ")";
+				return "p(" + x + ')';
 			} else if (x instanceof Currency) {
-				return "C(" + ((Currency) x).getCurrencyCode() + ")";
+				return "C(" + ((Currency) x).getCurrencyCode() + ')';
 			} else if (x instanceof SDuration || x instanceof InetAddress) {
 				return x.toString();
 			}
 		}
-		if (x instanceof byte[]) {// byte array
-			return "b(" + new String(SUtils.encodeBase64((byte[]) x)) + ")";
-		} else if (x instanceof File) {// file
+		if (x instanceof File) {// file
 			result = ((File) x).getAbsolutePath();
 		} else if (x instanceof InetAddress) {
 			result = x.toString().substring(1);
@@ -109,13 +107,10 @@ class XonToString extends XonTools {
 			result = ((Currency) x).getCurrencyCode();
 		} else {
 			result = x.toString();
-		}
-		if (x instanceof Number) {
-			if (result.equals("NaN") || result.equals("Infinity")
-				|| result.equals("-Infinity")) {
-				return '"' + result + '"';
+			if (x instanceof Number) {
+				return result.equals("NaN") || result.equals("Infinity")
+					|| result.equals("-Infinity") ? '"' + result + '"' : result;
 			}
-			return result;
 		}
 		return '"' + jstringToSource(result) + '"';
 	}
