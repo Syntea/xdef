@@ -54,9 +54,13 @@ public class XSParseLanguage extends XSAbstractParseToken {
 		String s = p.getParsedBufferPartFrom(pos);
 		String t;
 		try {
-			Locale lo = Locale.forLanguageTag(s);
-			t = lo == null
-				? "" : s.length()==2 ? lo.getLanguage() : lo.getISO3Language();
+			Locale locale = Locale.forLanguageTag(s);
+			t = locale == null ? "" : locale.getISO3Language();
+			if (t.length() > 0) {
+				if (s.length() == 2) {
+					t = locale.getLanguage();
+				}
+			} 
 		} catch (Exception ex) {
 			t = null;
 		}
