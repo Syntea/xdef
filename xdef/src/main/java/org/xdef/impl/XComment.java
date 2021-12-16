@@ -1,9 +1,9 @@
 package org.xdef.impl;
 
-import org.xdef.XDPool;
-import org.xdef.model.XMNode;
 import java.io.IOException;
 import java.util.ArrayList;
+import org.xdef.XDPool;
+import org.xdef.model.XMNode;
 
 /** Implementation of the model of XML comment.
  * @author Vaclav Trojan

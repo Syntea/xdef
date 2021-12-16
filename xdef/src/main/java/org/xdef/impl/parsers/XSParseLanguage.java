@@ -1,19 +1,18 @@
 package org.xdef.impl.parsers;
 
-import org.xdef.msg.XDEF;
-import org.xdef.sys.SParser;
+import java.util.Locale;
 import org.xdef.XDParseResult;
+import org.xdef.msg.XDEF;
 import org.xdef.proc.XXNode;
+import org.xdef.sys.SParser;
 
-/** Parser of Schema "language" type.
+/** Parser of Schema "language" type (RFC 3066 or IETF BCP 47).
  * @author Vaclav Trojan
  */
 public class XSParseLanguage extends XSAbstractParseToken {
 	private static final String ROOTBASENAME = "language";
 
-	public XSParseLanguage() {
-		super();
-	}
+	public XSParseLanguage() {super();}
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){
 		int pos0 = p.getIndex();
@@ -53,7 +52,20 @@ public class XSParseLanguage extends XSAbstractParseToken {
 			}
 		}
 		String s = p.getParsedBufferPartFrom(pos);
-		p.setParsedValue(s);
+		String t;
+		try {
+			Locale lo = Locale.forLanguageTag(s);
+			t = lo == null
+				? "" : s.length()==2 ? lo.getLanguage() : lo.getISO3Language();
+		} catch (Exception ex) {
+			t = null;
+		}
+		if (t == null || t.isEmpty()) {
+			//Incorrect value of '&{0}'&{1}{: }
+			p.errorWithString(XDEF.XDEF809, parserName());
+			return;
+		}
+		p.setParsedValue(t);
 		p.isSpaces();
 		p.replaceParsedBufferFrom(pos0, s);
 		checkItem(p);

@@ -7,21 +7,19 @@ import org.xdef.XDValue;
 import org.xdef.proc.XXNode;
 import org.xdef.impl.code.DefString;
 
-/** Parser of X-Script "languages" type.
+/** Parser of X-Script "languages" type items (RFC 3066 or IETF BCP 47).
  * @author Vaclav Trojan
  */
 public class XDParseISOLanguages extends XDParseNCNameList {
 	private static final String ROOTBASENAME = "languages";
 
-	public XDParseISOLanguages() {
-		super();
-	}
+	public XDParseISOLanguages() {super();}
 	@Override
-	XDValue parse(final XXNode xnode, final StringParser parser) {
-		int pos = parser.getIndex();
-		while(!parser.eos() && parser.isLetter() != SParser.NOCHAR) {}
+	XDValue parse(final XXNode xnode, final StringParser p) {
+		int pos = p.getIndex();
+		while(!p.eos() && p.isLetter() != SParser.NOCHAR) {}
 		try {
-			String s = parser.getParsedBufferPartFrom(pos);
+			String s = p.getParsedBufferPartFrom(pos);
 			SUtils.getISO3Language(s);
 			return new DefString(s);
 		} catch (Exception ex) {}

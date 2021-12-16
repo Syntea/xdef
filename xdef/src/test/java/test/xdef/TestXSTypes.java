@@ -3140,7 +3140,7 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(parse("ces"), _msg);
 		assertTrue(parse("en"), _msg);
 		assertTrue(parse("eng"), _msg);
-		assertTrue(parse("cz-Czech-old"), _msg);
+		assertTrue(parse("cs-Czech-old"), _msg);
 		assertTrue(parse("ces-Czech-old"), _msg);
 		assertTrue(parse("AB"), _msg);
 		assertTrue(parse(" aB\t"), _msg);
@@ -3171,11 +3171,11 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(parseFail("cc"), _msg);
 
 		assertTrue(prepare("language(%pattern=['[a-z]+'])"), _msg);
-		assertTrue(parse("ffff"), _msg);
 		assertTrue(parse("bc"), _msg);
 		assertTrue(parseFail("acz bcz"), _msg);
 		assertTrue(parseFail("ab.cz"), _msg);
 		assertTrue(parseFail("ab.cz"), _msg);
+//	assertTrue(parseFail("ffff"), _msg); /* XML schema does not report error */
 
 //------------------------------------------------------------------------------
 //                          TESTING NMTOKEN

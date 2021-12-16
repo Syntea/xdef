@@ -10,6 +10,7 @@ import org.w3c.dom.Element;
 import org.xdef.XDConstants;
 import org.xdef.msg.JSON;
 import org.xdef.sys.ArrayReporter;
+import static org.xdef.sys.Report.error;
 import org.xdef.sys.SBuffer;
 import org.xdef.sys.SPosition;
 import org.xdef.sys.SRuntimeException;

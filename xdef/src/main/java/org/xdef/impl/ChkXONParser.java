@@ -17,10 +17,6 @@ import org.w3c.dom.Element;
 import org.xdef.XDConstants;
 import org.xdef.impl.xml.KParsedAttr;
 import org.xdef.impl.xml.KParsedElement;
-import org.xdef.xon.XonNames;
-import org.xdef.xon.XonParser;
-import org.xdef.xon.XonTools;
-import org.xdef.xon.XonReader;
 import org.xdef.model.XMData;
 import org.xdef.msg.SYS;
 import org.xdef.msg.XDEF;
@@ -35,6 +31,10 @@ import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUnsupportedOperationException;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
+import org.xdef.xon.XonNames;
+import org.xdef.xon.XonParser;
+import org.xdef.xon.XonReader;
+import org.xdef.xon.XonTools;
 
 /** Parsing of the XML source with the X-definition.
  * @author Vaclav Trojan

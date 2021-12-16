@@ -10,31 +10,20 @@ import java.util.Currency;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import org.xdef.XDEmailAddr;
 import org.xdef.sys.GPSPosition;
 import org.xdef.sys.Price;
 import org.xdef.sys.SDatetime;
 import org.xdef.sys.SDuration;
 import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
-import org.xdef.XDEmailAddr;
+import static org.xdef.xon.XonTools.charToJSource;
+import static org.xdef.xon.XonTools.jstringToSource;
 
 /** Conversion of JSON or XON to string.
  * @author Vaclav Trojan
  */
 class XonToString extends XonTools {
-
-	/** Create string representation of character.
-	 * @param ch character to be converted.
-	 * @return string representation of character.
-	 */
-	static String genChar(final char ch) {
-		int i = "\"\\\b\f\n\r\t".indexOf(ch);
-		return "c\"" + (i < 0
-			? StringParser.getXmlCharType(ch, StringParser.XMLVER1_0)
-				== StringParser.XML_CHAR_ILLEGAL
-				? XonTools.genCharAsUTF(ch) : String.valueOf(ch)
-			: "\\" + "\"\\bfnrt".charAt(i))  + '"';
-	}
 
 	/** Add the a string created from JSON or XON simple value to StringBuilder.
 	 * @param x object to be converted to String.
@@ -59,15 +48,13 @@ class XonToString extends XonTools {
 				if (x instanceof BigDecimal) {
 					return result + 'd';
 				} else if (x instanceof Float) {
-					if (((Float) x).isInfinite()) {
-						return result.charAt(0) == '-' ? "-INFF" : "INFF";
-					}
-					return result + 'F';
+					return ((Float) x).isInfinite()
+						? result.charAt(0) == '-' ? "-INFF" : "INFF"
+						: result + 'F';
 				} else if (x instanceof Double) {
-					if (((Double) x).isInfinite()) {
-						return result.charAt(0) == '-' ? "-INF" : "INF";
-					}
-					return result;
+					return ((Double) x).isInfinite() 
+						? result.charAt(0) == '-' ? "-INF" : "INF"
+						: result;
 				} else if (x instanceof Byte) {
 					return result + 'B';
 				} else if (x instanceof Short) {
@@ -81,7 +68,7 @@ class XonToString extends XonTools {
 				}
 				return result;
 			} else if (x instanceof Character) {
-				return genChar((Character) x);
+				return "c\"" + charToJSource((Character) x) + '"';
 			} else if (x instanceof URI) {
 				return "u\"" + jstringToSource(((URI) x).toASCIIString()) + '"';
 			} else if (x instanceof XDEmailAddr) {

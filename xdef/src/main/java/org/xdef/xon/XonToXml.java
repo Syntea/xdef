@@ -15,6 +15,15 @@ import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
 import org.xdef.xml.KXmlUtils;
+import static org.xdef.xon.XonNames.X_ARRAY;
+import static org.xdef.xon.XonNames.X_ITEM;
+import static org.xdef.xon.XonNames.X_KEYATTR;
+import static org.xdef.xon.XonNames.X_MAP;
+import static org.xdef.xon.XonNames.X_VALUEATTR;
+import static org.xdef.xon.XonTools.genCharAsUTF;
+import static org.xdef.xon.XonTools.genXMLValue;
+import static org.xdef.xon.XonTools.replaceColonInXMLName;
+import static org.xdef.xon.XonTools.toXmlName;
 
 /** Conversion of JSON/XON to XML
  * @author Vaclav Trojan
@@ -201,11 +210,7 @@ class XonToXml extends XonTools implements XonNames {
 								SUtils.modifyStringBuilder(sb, "\"", "\\\"");
 								addQuot = true;
 							}
-							sb.append("\\u");
-							for (int x = 12; x >= 0; x -=4) {
-								sb.append("0123456789abcdef"
-									.charAt((ch >> x) & 0xf));
-							}
+							sb.append(genCharAsUTF(ch));
 						} else {
 							sb.append(ch);
 						}

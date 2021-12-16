@@ -57,7 +57,7 @@ public class XonTools {
 	final static String genCharAsUTF(final char ch) {
 		String s = "\\u";
 		for (int j = 12; j >= 0; j -=4) {
-			s += "0123456789abcdef".charAt((ch >> j) & 0xf);
+			s += "0123456789ABCDEF".charAt((ch >> j) & 0xf);
 		}
 		return s;
 	}
@@ -133,11 +133,7 @@ public class XonTools {
 					if (ch >= ' ' && Character.isDefined(ch)) {
 						sb.append(ch);
 					} else { // create \\uxxxx
-						sb.append("\\u");
-						for (int x = 12; x >= 0; x -=4) {
-							sb.append("0123456789abcdef"
-								.charAt((ch >> x) & 0xf));
-						}
+						sb.append(genCharAsUTF(ch));
 					}
 			}
 		}
@@ -414,16 +410,9 @@ public class XonTools {
 		if (i >= 0) {
 			return "\\" + "\"\\/bfnrt".charAt(i);
 		}
-		if (i < 0 && StringParser.getXmlCharType(c, StringParser.XMLVER1_0)
-			== StringParser.XML_CHAR_ILLEGAL) {
-			String s = "\\u";
-			for (int j = 12; j >= 0; j -=4) {
-				s += "0123456789abcdef".charAt((c >> j) & 0x0f);
-			}
-			return s;
-		} else {
-			return String.valueOf(c);
-		}
+		return i < 0 && StringParser.getXmlCharType(c, StringParser.XMLVER1_0)
+			== StringParser.XML_CHAR_ILLEGAL
+			? genCharAsUTF(c) : String.valueOf(c);
 	}
 
 	/** Convert simple value to the form XML attribute.

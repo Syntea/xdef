@@ -1,6 +1,7 @@
 package org.xdef.impl;
 
 import org.xdef.model.XMOccurrence;
+import static org.xdef.model.XMOccurrence.FIXED;
 import org.xdef.sys.StringParser;
 
 /** Contains minimum and maximum occurrence requirement.

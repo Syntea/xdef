@@ -21,6 +21,7 @@ import org.xdef.sys.Price;
 import org.xdef.sys.SBuffer;
 import org.xdef.sys.SException;
 import org.xdef.sys.SParser;
+import static org.xdef.sys.SParser.NOCHAR;
 import org.xdef.sys.SPosition;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;

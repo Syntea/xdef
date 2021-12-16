@@ -9,13 +9,13 @@ import java.util.Arrays;
 import java.util.Currency;
 import java.util.List;
 import java.util.Map;
+import org.xdef.XDEmailAddr;
 import org.xdef.msg.JSON;
 import org.xdef.sys.GPSPosition;
 import org.xdef.sys.Price;
 import org.xdef.sys.SDatetime;
 import org.xdef.sys.SDuration;
 import org.xdef.sys.SRuntimeException;
-import org.xdef.XDEmailAddr;
 
 /** Provides comparing of JSON objects
  * @author Vaclav Trojan

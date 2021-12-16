@@ -18,6 +18,7 @@ import java.util.zip.GZIPOutputStream;
 import org.xdef.XDConstants;
 import org.xdef.XDDocument;
 import org.xdef.XDPool;
+import static org.xdef.XDPool.DISPLAY_TRUE;
 import org.xdef.XDValue;
 import org.xdef.component.GenXComponent;
 import org.xdef.impl.code.CodeDisplay;

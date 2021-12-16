@@ -37,7 +37,6 @@ import org.xdef.impl.code.DefParseResult;
 import org.xdef.impl.code.DefXmlWriter;
 import org.xdef.impl.code.ParseItem;
 import org.xdef.impl.xml.KNamespace;
-import org.xdef.xon.XonUtil;
 import org.xdef.model.XMElement;
 import org.xdef.model.XMNode;
 import org.xdef.msg.SYS;
@@ -58,6 +57,7 @@ import org.xdef.sys.SReporter;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
+import org.xdef.xon.XonUtil;
 
 /** Provides root check object for generation of check tree and processing
  * of the X-definition.
