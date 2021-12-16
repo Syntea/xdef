@@ -52,7 +52,7 @@ class XonToString extends XonTools {
 						? result.charAt(0) == '-' ? "-INFF" : "INFF"
 						: result + 'F';
 				} else if (x instanceof Double) {
-					return ((Double) x).isInfinite() 
+					return ((Double) x).isInfinite()
 						? result.charAt(0) == '-' ? "-INF" : "INF"
 						: result;
 				} else if (x instanceof Byte) {

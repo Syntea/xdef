@@ -60,7 +60,7 @@ public class XSParseLanguage extends XSAbstractParseToken {
 				if (s.length() == 2) {
 					t = locale.getLanguage();
 				}
-			} 
+			}
 		} catch (Exception ex) {
 			t = null;
 		}

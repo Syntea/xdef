@@ -19,12 +19,15 @@ import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 import org.w3c.dom.Document;
 import org.xdef.impl.XConstants;
+import static org.xdef.sys.STester.printThrowable;
+import static org.xdef.sys.STester.runTest;
 import org.xdef.sys.StringParser;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
+import static test.XDTester._xdNS;
 
 /** Test XML schema and X-definition types.
  * @author Vaclav Trojan
@@ -3136,7 +3139,7 @@ public final class TestXSTypes extends XDTester {
 
 		// testing correct values
 		assertTrue(prepare("language"), _msg);
-		assertTrue(parse("cz"), _msg);
+		assertTrue(parse("cs"), _msg);
 		assertTrue(parse("ces"), _msg);
 		assertTrue(parse("en"), _msg);
 		assertTrue(parse("eng"), _msg);
@@ -3150,6 +3153,7 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(parseFail(" "), _msg);
 		assertTrue(parseFail("a b"), _msg);
 		assertTrue(parseFail("a?b"), _msg);
+//		assertTrue(parseFail("cz"), _msg);/* XML schema does not report error */
 
 		// testing facets
 		assertTrue(prepare("language(%length='2')"), _msg);
@@ -3163,18 +3167,17 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(parseFail("a"), _msg);
 		assertTrue(parseFail("abcd"), _msg);
 
-
-		assertTrue(prepare("language(%enumeration=['ac','bcz'])"), _msg);
-		assertTrue(parse("ac"), _msg);
-		assertTrue(parse("bcz"), _msg);
-		assertTrue(parse("\nac\t"), _msg);
+		assertTrue(prepare("language(%enumeration=['cs','ces'])"), _msg);
+		assertTrue(parse("cs"), _msg);
+		assertTrue(parse("ces"), _msg);
+		assertTrue(parse("\ncs\t"), _msg);
 		assertTrue(parseFail("cc"), _msg);
 
 		assertTrue(prepare("language(%pattern=['[a-z]+'])"), _msg);
-		assertTrue(parse("bc"), _msg);
-		assertTrue(parseFail("acz bcz"), _msg);
+		assertTrue(parse("cs"), _msg);
+		assertTrue(parseFail("ces eng"), _msg);
 		assertTrue(parseFail("ab.cz"), _msg);
-		assertTrue(parseFail("ab.cz"), _msg);
+		assertTrue(parseFail("en.cs"), _msg);
 //	assertTrue(parseFail("ffff"), _msg); /* XML schema does not report error */
 
 //------------------------------------------------------------------------------
