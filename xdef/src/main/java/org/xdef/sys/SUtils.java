@@ -248,13 +248,13 @@ public class SUtils extends FUtils {
 				int b = "0123456789abcdefABCDEF".indexOf(i);
 				if (b < 0) {
 					throw new SException(SYS.SYS047); //Hexadecimal format error
-				} else if (b >= 16) {
+				} else if (b > 15) {
 					b -= 6;
 				}
 				i = "0123456789abcdefABCDEF".indexOf(in.read());
 				if (i < 0) {
 					throw new SException(SYS.SYS047); //Hexadecimal format error
-				} else if (i >= 16) {
+				} else if (i > 15) {
 					i -= 6;
 				}
 				out.write((b << 4) + i);
@@ -284,13 +284,13 @@ public class SUtils extends FUtils {
 				int b = "0123456789abcdefABCDEF".indexOf(i);
 				if (b < 0) {
 					throw new SException(SYS.SYS047); //Hexadecimal format error
-				} else if (b >= 16) {
+				} else if (b > 15) {
 					b -= 6;
 				}
 				i = "0123456789abcdefABCDEF".indexOf(in.read());
 				if (i < 0) {
 					throw new SException(SYS.SYS047); //Hexadecimal format error
-				} else if (i >= 16) {
+				} else if (i > 15) {
 					i -= 6;
 				}
 				out.write((b << 4) + i);
