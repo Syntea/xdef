@@ -37,10 +37,9 @@ public class SUtils extends FUtils {
 	 */
 	public static final String JAVA_RUNTIME_BUILD;
 
-
-	/** length of line of encoded hex format and base64 format. */
+	/** Length of line of encoded hex format and base64 format. */
 	private static final int ENCODED_LINE_LENGTH = 72;
-	/** length of input buffer in the line of hexadecimal encoded data. */
+	/** ength of input buffer in the line of hexadecimal encoded data. */
 	private static final int INPUT_HEXBUFFER_LENGTH = ENCODED_LINE_LENGTH/2;
 	/** Hexadecimal digits. */
 	private static final byte[] HEXDIGITS = new byte[] {
@@ -244,28 +243,21 @@ public class SUtils extends FUtils {
 		final OutputStream out) throws SException {
 		try {
 			int i;
-			byte b = 0;
 			while ((i = in.read())==' ' || i=='\n' || i=='\r' || i=='\t') {}
 			while (i > 0) {
-				if (i >= '0' && i <= '9')  {
-					b = (byte) (i - '0');
-				} else if (i >= 'a' && i <= 'f') {
-					b = (byte) (i - 'a' + 10);
-				} else if (i >= 'A' && i <= 'F') {
-					b = (byte) (i - 'A' + 10);
-				} else {
+				int b = "0123456789abcdefABCDEF".indexOf(i);
+				if (b < 0) {
 					throw new SException(SYS.SYS047); //Hexadecimal format error
+				} else if (b >= 16) {
+					b -= 6;
 				}
-				i = in.read();
-				if (i >= '0' && i <= '9')  {
-					out.write((b << 4) + (i - '0'));
-				} else if (i >= 'a' && i <= 'f') {
-					out.write((b << 4) + (i - 'a' + 10));
-				} else if (i >= 'A' && i <= 'F') {
-					out.write((b << 4) + (i - 'A' + 10));
-				} else {
+				i = "0123456789abcdefABCDEF".indexOf(in.read());
+				if (i < 0) {
 					throw new SException(SYS.SYS047); //Hexadecimal format error
+				} else if (i >= 16) {
+					i -= 6;
 				}
+				out.write((b << 4) + i);
 				if ((i = in.read())==' ' || i=='\n' || i=='\r' || i=='\t') {
 					break;
 				}
@@ -284,31 +276,24 @@ public class SUtils extends FUtils {
 		final OutputStream out) throws SException {
 		try {
 			int i;
-			byte b = 0;
 			while ((i = in.read())==' ' || i=='\n' || i=='\r' || i=='\t') {}
 			while (i > 0) {
 				if (i == ' ' || i == '\n' || i == '\r' || i == '\t') {
 					continue; //skip white spaces
 				}
-				if (i >= '0' && i <= '9')  {
-					b = (byte) (i - '0');
-				} else if (i >= 'a' && i <= 'f') {
-					b = (byte) (i - 'a' + 10);
-				} else if (i >= 'A' && i <= 'F') {
-					b = (byte) (i - 'A' + 10);
-				} else {
+				int b = "0123456789abcdefABCDEF".indexOf(i);
+				if (b < 0) {
 					throw new SException(SYS.SYS047); //Hexadecimal format error
+				} else if (b >= 16) {
+					b -= 6;
 				}
-				i = in.read();
-				if (i >= '0' && i <= '9')  {
-					out.write((b << 4) + (i - '0'));
-				} else if (i >= 'a' && i <= 'f') {
-					out.write((b << 4) + (i - 'a' + 10));
-				} else if (i >= 'A' && i <= 'F') {
-					out.write((b << 4) + (i - 'A' + 10));
-				} else {
+				i = "0123456789abcdefABCDEF".indexOf(in.read());
+				if (i < 0) {
 					throw new SException(SYS.SYS047); //Hexadecimal format error
+				} else if (i >= 16) {
+					i -= 6;
 				}
+				out.write((b << 4) + i);
 				if ((i = in.read())==' ' || i=='\n' || i=='\r' || i=='\t') {
 					break;
 				}
