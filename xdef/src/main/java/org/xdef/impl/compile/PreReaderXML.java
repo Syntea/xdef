@@ -441,8 +441,9 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 			return;
 		}
 		if (_actPNode._nsindex == XPreCompiler.NS_XDEF_INDEX) {
-			if ("json".equals(_actPNode._localName) //xon
-				|| "ini".equals(_actPNode._localName)) {
+			if ("xon".equals(_actPNode._localName) //xon
+				|| "json".equals(_actPNode._localName) //json
+				|| "ini".equals(_actPNode._localName)) { // ini
 				if (_level != 1) {
 					//Text with &{0} model&{1}{ of "}{" }
 					// is missing in X-definition

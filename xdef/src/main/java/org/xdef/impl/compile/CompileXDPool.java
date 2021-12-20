@@ -1481,7 +1481,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 //					null, xdef.getDefPool(), XNode.XMTEXT);
 //			} else if ("attlist".equals(_actPNode._localName)) { //TODO
 //				newNode = createReference(pnode, pnode._localName, xdef);
-			} else if ("json".equals(name) || "ini".equals(name)) { //xon
+			} else if ("xon".equals(name) || "json".equals(name)
+				|| "ini".equals(name)) { //xon
 				if (pnode._value == null || pnode._value.getString().isEmpty()){
 					//JSON model is missing in JSON definition
 					error(pnode._name, XDEF.XDEF315,"&{xpath}"+pnode._xpathPos);
