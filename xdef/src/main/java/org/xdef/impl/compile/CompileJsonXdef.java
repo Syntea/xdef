@@ -24,7 +24,7 @@ import org.xdef.xon.XonParser;
 import org.xdef.xon.XonNames;
 import org.xdef.xon.XonParsers;
 
-/** Create X-definition model from xd:json element.
+/** Create X-definition model from xd:xon element.
  * @author Vaclav Trojan
  */
 public class CompileJsonXdef extends StringParser {
@@ -310,7 +310,7 @@ public class CompileJsonXdef extends StringParser {
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
-// Create X-definition model from xd:json (use W3C format)
+// Create X-definition model from xd:xon (use W3C format)
 ////////////////////////////////////////////////////////////////////////////////
 
 	/** Add match section to xd:script attribute. If match section already
@@ -573,7 +573,7 @@ public class CompileJsonXdef extends StringParser {
 		p._nsURI = null; // set no namespace
 		p._nsindex = -1;
 		XDBuilder jp = new XDBuilder(jx);
-		XonParsers pp = format.equals("json")
+		XonParsers pp = format.equals("json") || format.equals("xon")
 			? new XonReader(p._value, jp) : new IniReader(p._value, jp);
 		pp.setReportWriter(reporter);
 		pp.setXdefMode();

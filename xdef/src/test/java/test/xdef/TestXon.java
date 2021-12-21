@@ -31,9 +31,9 @@ public class TestXon extends XDTester {
 		try {
 			String xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
-"  <xd:json name='A'>\n"+
+"  <xd:xon name='A'>\n"+
 "    [\"* " + type + "()\"]\n"+
-"  </xd:json>\n"+
+"  </xd:xon>\n"+
 "  <xd:component>\n"+
 "    %class bugreports.data.GJ"+ type + " %link #A;\n"+
 "  </xd:component>\n"+
@@ -108,7 +108,7 @@ public class TestXon extends XDTester {
 		try {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='a'>\n"+
-"<xd:json name='a'>\n" +
+"<xd:xon name='a'>\n" +
 "[\n" +
 "  {\n" +
 "    a = \"? short()\",\n" +
@@ -165,7 +165,7 @@ public class TestXon extends XDTester {
 "  \"ipAddr()\",\n" +
 "  \"ipAddr()\"\n" +
 "]\n" +
-"</xd:json>\n" +
+"</xd:xon>\n" +
 "<xd:component>\n"+
 "  %class bugreports.data.Xon %link #a;\n"+
 "</xd:component>\n"+

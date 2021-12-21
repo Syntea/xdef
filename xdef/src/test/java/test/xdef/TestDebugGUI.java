@@ -292,27 +292,27 @@ public final class TestDebugGUI extends XDTester {
 		try {// JSON
 			xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"JSON\" root=\"a\">\n"+
-"<xd:json name=\"a\" >\n" +
+"<xd:xon name=\"a\" >\n" +
 "{ \"personnel\": { \"person\": \n" +
 "      [ $script: \"occurs 1..*\",\n" +
 "        { $script: \"occurs 1..*; ref B\" }\n" +
 "      ]\n" +
 "  }\n" +
 "}\n" +
-"</xd:json>\n" +
-"<xd:json name=\"B\" >\n" +
+"</xd:xon>\n" +
+"<xd:xon name=\"B\" >\n" +
 "{ \"id\": \"string()\",\n" +
 "   \"name\":{ \"family\":\"jstring()\", \"given\":\"optional jstring()\" },\n"+
 "   \"email\": \"emailAddr();\",\n" +
 "   \"link\": { $script: \"ref C\" }\n" +
 "}\n" +
-"</xd:json>\n" +
-"<xd:json name=\"C\" >\n" +
+"</xd:xon>\n" +
+"<xd:xon name=\"C\" >\n" +
 "{  $oneOf: \"optional;\",\n" +
 "   \"manager\": \"jstring()\",\n" +
 "   \"subordinates\":[ \"* jstring();\" ]\n" +
 "}\n" +
-"</xd:json>\n" +
+"</xd:xon>\n" +
 "</xd:def>";
 			xp = compile(xdef);
 			xd = xp.createXDDocument("JSON");

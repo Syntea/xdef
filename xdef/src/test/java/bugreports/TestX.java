@@ -31,7 +31,7 @@ public class TestX extends XDTester {
 /**/
 			xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n"+
-" <xd:json name='a'>\n"+
+" <xd:xon name='a'>\n"+
 "[\n" +
 "  [\n" +
 "     $script= \"optional\",\n" +
@@ -39,7 +39,7 @@ public class TestX extends XDTester {
 "     \"optional int();\"\n" +
 "  ]\n" +
 "]\n" +
-" </xd:json>\n"+
+" </xd:xon>\n"+
 "</xd:def>";
 			xp = XDFactory.compileXD(props, xdef); // no property
 			xd = xp.createXDDocument();
@@ -60,7 +60,7 @@ public class TestX extends XDTester {
 /**/
 			xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n"+
-" <xd:json name='a'>\n"+
+" <xd:xon name='a'>\n"+
 "[\n" +
 "  { $script= \"occurs 1..*\",\n" +
 "    \"Name\": \"string()\",\n" +
@@ -70,7 +70,7 @@ public class TestX extends XDTester {
 "    ]\n" +
 "  }\n" +
 "]\n" +
-" </xd:json>\n"+
+" </xd:xon>\n"+
 "</xd:def>";
 			xp = XDFactory.compileXD(props, xdef); // no property
 			xd = xp.createXDDocument();
@@ -94,13 +94,13 @@ public class TestX extends XDTester {
 /**/
 			xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n"+
-" <xd:json name='a'>\n"+
+" <xd:xon name='a'>\n"+
 "{\n" +
 "  $oneOf= \"optional;\",\n" +
 "  \"manager\": \"string()\",\n" +
 "  \"subordinates\":[ \"* string();\" ]\n" +
 "}\n" +
-" </xd:json>\n"+
+" </xd:xon>\n"+
 "</xd:def>";
 			xp = XDFactory.compileXD(props, xdef); // no property
 			xd = xp.createXDDocument();
@@ -123,7 +123,7 @@ public class TestX extends XDTester {
 /**/
 			xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n"+
-" <xd:json name='a'>\n"+
+" <xd:xon name='a'>\n"+
 "[\n" +
 "  {\n" +
 "    \"A\": [$oneOf= \"occurs *\",\n" +
@@ -132,7 +132,7 @@ public class TestX extends XDTester {
 "    ]\n" +
 "  }\n" +
 "]\n" +
-" </xd:json>\n"+
+" </xd:xon>\n"+
 "</xd:def>";
 			xp = XDFactory.compileXD(props, xdef); // no property
 			xd = xp.createXDDocument();
@@ -152,7 +152,7 @@ public class TestX extends XDTester {
 // Required element 'js:item' is missing; path=$; X-position=Example#test/$.['date']
 			xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n"+
-" <xd:json name='a'>\n"+
+" <xd:xon name='a'>\n"+
 "   { \"date\" : \"date()\",\n" +
 "     \"cities\"  : [\n" +
 "       { $script= \"occurs 1..*\",\n" +
@@ -163,7 +163,7 @@ public class TestX extends XDTester {
 "        }\n" +
 "      ]\n" +
 "  }\n" +
-" </xd:json>\n"+
+" </xd:xon>\n"+
 "</xd:def>";
 			xp = XDFactory.compileXD(props, xdef); // no property
 			xd = xp.createXDDocument();
@@ -187,12 +187,12 @@ public class TestX extends XDTester {
 		try {
 			xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n"+
-" <xd:json name='a'>\n"+
+" <xd:xon name='a'>\n"+
 "  {\n" +
 "    \"A\":  \"string()\",\n" +
 "    \"B\":  \"string()\",\n" +
 "  }\n" +
-" </xd:json>\n"+
+" </xd:xon>\n"+
 "</xd:def>";
 			xp = XDFactory.compileXD(props, xdef); // no property
 			xd = xp.createXDDocument();

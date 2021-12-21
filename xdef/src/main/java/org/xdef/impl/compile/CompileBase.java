@@ -446,7 +446,8 @@ public class CompileBase implements CodeTable, XDValueID {
 		parser(im, org.xdef.impl.parsers.XSParseQName.class,
 			"QName", "?xs:QName", "?Qname");
 		parser(im, org.xdef.impl.parsers.XSParseLanguage.class,
-			"language", "?xs:language"); //"?ISOlanguage"
+			"language", "?xs:language");
+		parser(im, org.xdef.impl.parsers.XDParseCountry.class, "country");
 
 		im = genParserMetnod(0, 2, new short[] {XD_LONG, XD_LONG}, XD_CONTAINER,
 			keyParam("enumeration", XD_STRING, true, -1, false),
@@ -476,7 +477,7 @@ public class CompileBase implements CodeTable, XDValueID {
 			keyParam("whiteSpace", XD_STRING, false, -1, true,
 				new DefString("collapse")));
 		parser(im, org.xdef.impl.parsers.XSParseDuration.class,
-			"duration", "?xs:duration"); //"?ISOduration"
+			"duration", "?xs:duration");
 
 		im = genParserMetnod(0, 2, new short[] {XD_LONG, XD_LONG}, XD_BYTES,
 			keyParam("base", XD_STRING, true, -1,false),
@@ -556,8 +557,9 @@ public class CompileBase implements CodeTable, XDValueID {
 			"NCNameList", "?NCnameList");
 		parser(im, org.xdef.impl.parsers.XDParseQNameList.class,
 			"QNameList", "?QnameList");
-		parser(im, org.xdef.impl.parsers.XDParseISOLanguages.class,
+		parser(im, org.xdef.impl.parsers.XDParseLanguages.class,
 			"languages", "?ISOlanguages");
+		parser(im, org.xdef.impl.parsers.XDParseCountries.class, "countries");
 
 		im = genParserMetnod(0, 1, null, XD_STRING,
 			keyParam("argument", XD_ANY, true, 0,false),

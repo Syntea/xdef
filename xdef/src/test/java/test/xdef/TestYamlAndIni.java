@@ -39,7 +39,7 @@ public class TestYamlAndIni extends XDTester {
 			try {
 				xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='test' name='A'>\n"+
-"  <xd:json name=\"test\">\n" +
+"  <xd:xon name=\"test\">\n" +
 "    { \"date\" : \"date(); finally\n" +
 "                    outln('Measured on: ' + getText() + '\\n');\",\n" +
 "      \"cities\"  : [\n" +
@@ -55,7 +55,7 @@ public class TestYamlAndIni extends XDTester {
 "        }\n" +
 "      ]\n" +
 "    }\n" +
-"  </xd:json>\n" +
+"  </xd:xon>\n" +
 "</xd:def>";
 				xp = compile(xdef);
 				xd = xp.createXDDocument("A");

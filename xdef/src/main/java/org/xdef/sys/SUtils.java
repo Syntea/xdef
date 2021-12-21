@@ -18,6 +18,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -45,9 +46,12 @@ public class SUtils extends FUtils {
 	private static final byte[] HEXDIGITS = new byte[] {
 		'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
 
-	/** Cache to accelerate 2 letters/3 letter (getISO3Language method).*/
+	/** Cache to accelerate getISO3Language methods.*/
 	private static final Map<String, String> LANGUAGES =
-		 new LinkedHashMap<String, String>();
+		new HashMap<String, String>();
+	/**  Cache to accelerate getISO3Country methods.*/
+	private static final Map<String, Locale> COUNTRYMAP =
+		new HashMap<String, Locale>();
 
 ////////////////////////////////////////////////////////////////////////////////
 // initialize static variables
@@ -1037,7 +1041,7 @@ public class SUtils extends FUtils {
 		return System.getProperties().getProperty("user.language");
 	}
 
-	/** get ISO 639-2 (3 letters) user language ID.
+	/** Get ISO 639-2 (3 letters) user language ID.
 	 * @return ISO 639-2 (3 letters) language ID.
 	 * @throws SRuntimeException code SYS018 if language code is not found.
 	 */
@@ -1077,6 +1081,75 @@ public class SUtils extends FUtils {
 		}
 		//Unsupported language code: &{0}
 		throw new SRuntimeException(SYS.SYS018, language);
+	}
+
+	/** Get ISO 3166-1 alpha-2 country code.
+	 * @param code The country code ISO 3166-1 alpha-2 or
+	 * ISO 3166-1 alpha-2-3 or display name.
+	 * @return ISO 3166-1 alpha-2 code (two letters).
+	 * @throws SRuntimeException code SYS018 if language code is not found.
+	 */
+	public final static String getISO2Country(final String code) {
+		String s = code.toUpperCase();
+		if (s.length() == 3) {
+			Locale loc = COUNTRYMAP.get(s);
+			if (loc != null) {
+				return loc.getCountry();
+			}
+		}
+		try {
+			for (String country : Locale.getISOCountries()) {
+				Locale loc = new Locale("", country);
+				if (s.equals(loc.getCountry()) || s.equals(loc.getISO3Country())
+					|| s.equals(loc.getDisplayCountry().toUpperCase())) {
+					COUNTRYMAP.put(loc.getISO3Country(), loc);
+					return country;
+				}
+			}
+		} catch (Exception ex) {}
+		if ("CZECHIA".equals(s)) {  // "Czechia not registered yet"
+			return "CZ";
+		}
+		//Unsupported country code: &{0}
+		throw new SRuntimeException(SYS.SYS017, code);
+	}
+
+	/** Get ISO 3166-1 alpha-3 country code.
+	 * @param code The country code ISO 3166-1 alpha-2 or
+	 * ISO 3166-1 alpha-3 or display name.
+	 * @return ISO 3166-1 alpha-3 code (three letters).
+	 * @throws SRuntimeException code SYS018 if language code is not found.
+	 */
+	public final static String getISO3Country(final String code) {
+		String s = code.toUpperCase();
+		try {
+			Locale loc = new Locale("", s);
+			String t = loc.getISO3Country();
+			if (t != null) {
+				if (!COUNTRYMAP.containsKey(t)) {
+					COUNTRYMAP.put(loc.getISO3Country(), loc);
+				}
+				return t;
+			}
+		} catch (Exception ex) {}
+		try {
+			for (String country : Locale.getISOCountries()) {
+				Locale loc = new Locale("", country);
+				if (s.equals(country) || s.equals(loc.getISO3Country())
+					|| s.equals(loc.getDisplayCountry().toUpperCase())) {
+					s = loc.getISO3Country();
+					if (s != null) {
+						COUNTRYMAP.put(s, loc);
+					}
+					return loc.getISO3Country();
+				}
+			}
+		} catch (Exception ex) {}
+		if ("CZECHIA".equals(s)) {  // "Czechia not registered yet"
+			return "CZE";
+		}
+		//Unsupported country code: &{0}
+		throw new SRuntimeException(SYS.SYS017, code);
 	}
 
 ////////////////////////////////////////////////////////////////////////////////

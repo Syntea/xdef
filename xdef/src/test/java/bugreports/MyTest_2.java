@@ -61,9 +61,9 @@ public class MyTest_2 extends XDTester {
 		try {// XON
 			xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" root=\"A\">\n"+
-"<xd:json name='A'>\n"+
+"<xd:xon name='A'>\n"+
 "[\"int()\", \"int\", \"jstring()\"]\n"+
-"</xd:json>\n"+
+"</xd:xon>\n"+
 "<xd:component>\n"+
 "  %class bugreports.A %link #A;\n"+
 "</xd:component>\n"+
@@ -139,7 +139,7 @@ if(T)return;
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='Skladby'>\n"+
-"<xd:json name=\"Skladby\">\n"+
+"<xd:xon name=\"Skladby\">\n"+
 "  [\n" +
 "    { $script= \"occurs 1..*;\",\n" +
 "       \"Name\": \"string()\",\n" +
@@ -150,7 +150,7 @@ if(T)return;
 "       ]\n" +
 "    }\n" +
 "  ]\n" +
-"</xd:json>\n"+
+"</xd:xon>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xd = xp.createXDDocument("");
@@ -180,7 +180,7 @@ if(T)return;
 		try {
 			xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"Example\" root=\"test\">\n" +
-"  <xd:json name=\"test\">\n" +
+"  <xd:xon name=\"test\">\n" +
 "    { \"cities\"  : [\n" +
 "        {$script=\"occurs 1..*\",\n" +
 "          \"from\": [\n" +
@@ -190,7 +190,7 @@ if(T)return;
 "        }\n" +
 "      ]\n" +
 "    }\n" +
-"  </xd:json> \n" +
+"  </xd:xon> \n" +
 "</xd:def>";
 			xp = compile(xdef);
 			json =
@@ -234,9 +234,9 @@ if(T )return;
 		try {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
-"<xd:json name='A'>\n"+
+"<xd:xon name='A'>\n"+
 "[\"int()\", \"int\", \"jstring()\"]\n"+
-"</xd:json>\n"+
+"</xd:xon>\n"+
 "<xd:component>\n"+
 "  %class bugreports.data.A002 %link #A;\n"+
 "</xd:component>\n"+
@@ -259,7 +259,7 @@ if(T )return;
 		try {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
-"<xd:json name='A'>\n"+
+"<xd:xon name='A'>\n"+
 "[\n" +
 " { $script=\"+\",\n" +
 "  \"first name\": \"? string;\",\n" +
@@ -278,7 +278,7 @@ if(T )return;
 "  ]\n" +
 " }\n" +
 "]\n" +
-"</xd:json>\n"+
+"</xd:xon>\n"+
 "<xd:component>\n"+
 "  %class bugreports.data.A0 %link #A;\n"+
 "</xd:component>\n"+
@@ -321,7 +321,7 @@ if(T )return;
 		try {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
-"<xd:json name='A'>\n"+
+"<xd:xon name='A'>\n"+
 "{ \"store\": {\n" +
 "    \"book\": [\n" +
 "      {$script= \"occurs +\",\n" +
@@ -338,7 +338,7 @@ if(T )return;
 "    }\n" +
 "  }\n" +
 "}\n" +
-"</xd:json>\n"+
+"</xd:xon>\n"+
 "<xd:component>\n"+
 "  %class bugreports.data.A1 %link #A;\n"+
 "</xd:component>\n"+
@@ -398,9 +398,9 @@ if(T )return;
 		try {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='Y'>\n"+
-"<xd:json name='Y'>\n"+
+"<xd:xon name='Y'>\n"+
 "[{\"a\":\"jboolean\"},\"jstring()\",\"jnumber()\",\"? jboolean()\"]\n" +
-"</xd:json>\n"+
+"</xd:xon>\n"+
 "<xd:component>\n"+
 "  %class bugreports.data.TY_X %link #Y;\n"+
 "</xd:component>\n"+
@@ -437,9 +437,9 @@ if(T )return;
 		try {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='Y'>\n"+
-"<xd:json name='Y'>\n"+
+"<xd:xon name='Y'>\n"+
 "[{\"a\":\"jboolean\"},\"jstring()\",\"jnumber()\",\"? jboolean()\"]\n" +
-"</xd:json>\n"+
+"</xd:xon>\n"+
 "<xd:component>\n"+
 "  %class bugreports.data.TY_X %link #Y;\n"+
 "</xd:component>\n"+
@@ -483,14 +483,14 @@ if(T )return;
 "             \"Punk\", \"Punk_rock\", \"Rap\", \"Rock\", \"R&amp;B\", \"Other\");\n" +
 "  boolean zz = p.parse('Country').matches();\n"+
 "</xd:declaration>\n" +
-"<xd:json name='a'>\n" +
+"<xd:xon name='a'>\n" +
 "{\n" +
 "  \"Genre\": [$oneOf,\n" +
 "     \"genre\",\n" +
 "     [\"occurs 1..*; genre\"]\n" +
 "  ]\n" +
 "}\n" +
-"</xd:json>"+
+"</xd:xon>"+
 "</xd:def>";
 			xp = compile(xdef);
 			json = "{\"Genre\": \"Classic\"}";
@@ -510,9 +510,9 @@ if(T )return;
 		try {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
-"<xd:json name='A'>\n"+
+"<xd:xon name='A'>\n"+
 "{\"a\": \"? jvalue()\"}\n" +
-"</xd:json>\n"+
+"</xd:xon>\n"+
 "<xd:component>\n"+
 "  %class bugreports.data.XAA %link #A;\n"+
 "</xd:component>\n"+
@@ -634,12 +634,12 @@ if(T )return;
 
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A | B'>\n"+
-"<xd:json name='A'>\n"+
+"<xd:xon name='A'>\n"+
 "{\"a\": \"? jvalue()\"}\n" +
-"</xd:json>\n"+
-"<xd:json name='B'>\n"+
+"</xd:xon>\n"+
+"<xd:xon name='B'>\n"+
 "[\"? jvalue()\"]\n" +
-"</xd:json>\n"+
+"</xd:xon>\n"+
 "<xd:component>\n"+
 "  %class bugreports.data.XA %link #A;\n"+
 "  %class bugreports.data.XB %link #B;\n"+
@@ -752,9 +752,9 @@ if(T )return;
 
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='json'>\n"+
-"<xd:json name='json'>\n"+
+"<xd:xon name='json'>\n"+
 "{\"a\": \"? jvalue()\"}\n" +
-"</xd:json>\n"+
+"</xd:xon>\n"+
 "<xd:component>\n"+
 "  %class bugreports.data.XD %link #json;\n"+
 "</xd:component>\n"+
@@ -818,13 +818,13 @@ if(T )return;
 
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='json'>\n"+
-"<xd:json name='json'>\n"+
+"<xd:xon name='json'>\n"+
 "[\n"+
 "    \"? jnull\",\n"+
 "    \"? int()\",\n"+
 "    \"? string()\"\n"+
 "]\n"+
-"</xd:json>\n"+
+"</xd:xon>\n"+
 "<xd:component>\n"+
 "  %class bugreports.data.TJ1 %link #json;\n"+
 "</xd:component>\n"+
@@ -890,22 +890,22 @@ if(T ){return;}
 			xdef =
 "<xd:collection xmlns:xd='http://www.xdef.org/xdef/4.1'>\n"+
 "<xd:def name='X' root='X'>\n"+
-"<xd:json xd:name='X'>\n"+
+"<xd:xon xd:name='X'>\n"+
 "[\"int()\"]\n"+
-"</xd:json>\n"+
+"</xd:xon>\n"+
 "</xd:def>\n"+
 "<xd:def name='Y' root='Y'>\n"+
-"<xd:json name='Y'>\n"+
+"<xd:xon name='Y'>\n"+
 "[{\"a\":\"jboolean\"},\"jstring()\",\"jnumber()\",\"? jboolean()\"]\n" +
-"</xd:json>\n"+
+"</xd:xon>\n"+
 "</xd:def>\n"+
 "<xd:def name='Z' root='Z | json'>\n"+
-"<xd:json name='Z'>\n"+
+"<xd:xon name='Z'>\n"+
 "{\"a\":\"string()\"}\n" +
-"</xd:json>\n"+
-"<xd:json xd:name='json'>\n"+
+"</xd:xon>\n"+
+"<xd:xon xd:name='json'>\n"+
 "[\"date()\"]\n"+
-"</xd:json>\n"+
+"</xd:xon>\n"+
 "</xd:def>\n"+
 "<xd:component>\n"+
 "  %class bugreports.data.TX %link X#X;\n"+
@@ -979,16 +979,16 @@ if(T ){return;}
 
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A|B|json'>\n"+
-"<xd:json name='json'>\n"+
+"<xd:xon name='json'>\n"+
 "[\n"+
 "  {\"a\":\"boolean\"},\n"+
 "  \"string()\",\n"+
 "  \"int()\"\n"+
 "]\n" +
-"</xd:json>\n"+
-"<xd:json name='B'>\n"+
+"</xd:xon>\n"+
+"<xd:xon name='B'>\n"+
 "{\"a\":\"int\"}\n"+
-"</xd:json>\n"+
+"</xd:xon>\n"+
 "  <A/>\n"+
 "</xd:def>";
 			xp = compile(xdef);

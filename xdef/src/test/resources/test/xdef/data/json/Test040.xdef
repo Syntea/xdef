@@ -1,5 +1,5 @@
 <xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' xd:name='Test040' xd:root='a'>
-<xd:json name='a'>
+<xd:xon name='a'>
 { "cities"  : [
     {$script="occurs 1..*",
       "from": [
@@ -9,5 +9,5 @@
     }
   ]
 }
-</xd:json>
+</xd:xon>
 </xd:def>

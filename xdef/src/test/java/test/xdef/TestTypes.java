@@ -1260,6 +1260,16 @@ public final class TestTypes extends XDTester {
 			assertEq(el.getAttribute("IDREF"), "cs");
 			assertEq("cs cs1", el.getAttribute("IDREFS"));
 			assertEq("1998-1-1T19:30", el.getAttribute("dateTime"));
+			xdef = // country, countries
+"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
+"<A country=\"country()\" countries=\"countries()\"/>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			xml =
+"<A country='cz' countries='cze GBR' />";
+			el = parse(xp, "", xml, reporter);
+			assertNoErrors(reporter);
+			assertEq(xml, el);
 			xdef = // test emailAddr
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<xd:declaration>\n"+

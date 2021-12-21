@@ -1,8 +1,8 @@
 <xd:def xmlns:xd="http://www.xdef.org/xdef/4.1" name = "test" root="root">
-  <xd:json name="root">
+  <xd:xon name="root">
 { "root": { "a": "int()",
             "b": ["occurs 3 jstring()" ]
           }
 }
-  </xd:json>
+  </xd:xon>
 </xd:def>

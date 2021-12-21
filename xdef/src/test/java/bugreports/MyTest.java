@@ -107,9 +107,9 @@ if(true)return;
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"<xd:json name='a'>\n"+
+"<xd:xon name='a'>\n"+
 "  [\"gps();\", \"gps();\"]\n"+
-"</xd:json>\n"+
+"</xd:xon>\n"+
 "<xd:component>\n"+
 "  %class bugreports.MyTesta %link a;\n"+
 "</xd:component>\n"+
@@ -129,15 +129,15 @@ if(true)return;
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='x|y|y1|y2'>\n"+
-"<xd:json name='y'>\n"+
+"<xd:xon name='y'>\n"+
 "  \"int();\"\n"+
-"</xd:json>\n"+
-"<xd:json name='y1'>\n"+
+"</xd:xon>\n"+
+"<xd:xon name='y1'>\n"+
 "  {\"a\":\"int();\"}\n"+
-"</xd:json>\n"+
-"<xd:json name='y2'>\n"+
+"</xd:xon>\n"+
+"<xd:xon name='y2'>\n"+
 "  [\"occurs 2 int();\", \"optional jnumber();\", \"optional string();\"]\n"+
-"</xd:json>\n"+
+"</xd:xon>\n"+
 "<x>\n"+
 "  <a xd:script='*'>\n"+
 //"    jlist(%item=union(%item=[jnull,boolean(), int, string]))\n"+

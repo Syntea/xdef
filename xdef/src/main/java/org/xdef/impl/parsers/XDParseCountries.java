@@ -1,30 +1,33 @@
 package org.xdef.impl.parsers;
 
+import org.xdef.XDValue;
+import org.xdef.impl.code.DefString;
+import org.xdef.proc.XXNode;
 import org.xdef.sys.SParser;
 import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
-import org.xdef.XDValue;
-import org.xdef.proc.XXNode;
-import org.xdef.impl.code.DefString;
 
-/** Parser of X-Script "languages" type items (RFC 3066 or IETF BCP 47).
+/**
+ *
  * @author Vaclav Trojan
  */
-public class XDParseISOLanguages extends XDParseNCNameList {
-	private static final String ROOTBASENAME = "languages";
+public class XDParseCountries  extends XDParseNCNameList {
+	private static final String ROOTBASENAME = "countries";
 
-	public XDParseISOLanguages() {super();}
+	public XDParseCountries() {super();}
 	@Override
 	XDValue parse(final XXNode xnode, final StringParser p) {
+		p.isSpaces();
 		int pos = p.getIndex();
-		while(!p.eos() && p.isLetter() != SParser.NOCHAR) {}
+		while(p.getCurrentChar() > ' ') {p.nextChar();}
 		try {
 			String s = p.getParsedBufferPartFrom(pos);
-			SUtils.getISO3Language(s);
+			SUtils.getISO3Country(s);
 			return new DefString(s);
 		} catch (Exception ex) {}
 		return null;
 	}
 	@Override
 	public String parserName() {return ROOTBASENAME;}
+
 }

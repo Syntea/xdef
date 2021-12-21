@@ -843,7 +843,7 @@ if(T){return;}
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "'\n" +
 "   xd:name=\"Test\" xd:root=\"json\">\n" +
-"  <xd:json name='json'>{\"A\":\"int();\"}</xd:json>\n" +
+"  <xd:xon name='json'>{\"A\":\"int();\"}</xd:xon>\n" +
 "</xd:def>";
 			xp = XDFactory.compileXD(null, xdef,
 "<xd:def xmlns:xd='" + _xdNS + "'\n" +
