@@ -299,6 +299,9 @@ final class ChkXONParser implements XParser, XonParser {
 		if (_level >= 0) {
 			_chkEl = _chkElemStack[_level];
 			_element = _chkEl._element;
+			if (_element == null) {
+				throw new SRuntimeException(_sReporter.printToString());
+			}
 		}
 	}
 
