@@ -1262,11 +1262,11 @@ public final class TestTypes extends XDTester {
 			assertEq("1998-1-1T19:30", el.getAttribute("dateTime"));
 			xdef = // country, countries
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
-"<A country=\"country()\" countries=\"countries()\"/>\n"+
+"<A a=\"country()\" b=\"countries()\"/>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xml =
-"<A country='cz' countries='cze GBR' />";
+"<A a='cz' b='CZE gb US CA SK RUS IT LY GE FRA SE usa IL' />";
 			el = parse(xp, "", xml, reporter);
 			assertNoErrors(reporter);
 			assertEq(xml, el);

@@ -18,10 +18,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
-import java.util.LinkedHashMap;
 
 /** Collection of useful methods.
  * @author Vaclav Trojan
@@ -45,13 +42,6 @@ public class SUtils extends FUtils {
 	/** Hexadecimal digits. */
 	private static final byte[] HEXDIGITS = new byte[] {
 		'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
-
-	/** Cache to accelerate getISO3Language methods.*/
-	private static final Map<String, String> LANGUAGES =
-		new HashMap<String, String>();
-	/**  Cache to accelerate getISO3Country methods.*/
-	private static final Map<String, Locale> COUNTRYMAP =
-		new HashMap<String, Locale>();
 
 ////////////////////////////////////////////////////////////////////////////////
 // initialize static variables
@@ -1004,22 +994,9 @@ public class SUtils extends FUtils {
 		return sb.toString();
 	}
 
-	/** Get user name.
-	 * @return The user name.
-	 */
-	public static final String getUserName() {
-		return System.getProperties().getProperty("user.name");
-	}
-
 ////////////////////////////////////////////////////////////////////////////////
 // Localization
 ////////////////////////////////////////////////////////////////////////////////
-	/** Get user country setting id.
-	 * @return The country id.
-	 */
-	public static final String getCountry() {
-		return System.getProperties().getProperty("user.country");
-	}
 
 	/** Check if given argument is supported country code.
 	 * @param country 2-letter country code defined in ISO 3166.
@@ -1034,19 +1011,31 @@ public class SUtils extends FUtils {
 		return false;
 	}
 
-	/** Get user language id.
-	 * @return The language id.
-	 */
-	public static final String getLanguage() {
-		return System.getProperties().getProperty("user.language");
-	}
-
-	/** Get ISO 639-2 (3 letters) user language ID.
-	 * @return ISO 639-2 (3 letters) language ID.
+	/** Get ISO 639-2 (3 letters) language ID.
+	 * @param language The language code (ISO 639 3 letters) or
+	 * (ISO 639-2 3 letters).
+	 * @return the ISO 639-2 language ID (three letters).
 	 * @throws SRuntimeException code SYS018 if language code is not found.
 	 */
-	public static final String getISO3Language() throws SRuntimeException {
-		return getISO3Language(getLanguage());
+	public static final String getISO2Language(final String language)
+	throws SRuntimeException {
+		String result;
+		if (language.length() == 3) {
+			for (Locale x: Locale.getAvailableLocales()) {
+				if (language.equals(x.getISO3Language())) {
+					return x.getLanguage();
+				}
+			}
+		} else {
+			try {
+				result = new Locale(language, "").getLanguage();
+				if (result != null) {
+					return result;
+				}
+			} catch (Exception ex) {}
+		}
+		//Unsupported language code: &{0}
+		throw new SRuntimeException(SYS.SYS018, language);
 	}
 
 	/** Get ISO 639-2 (3 letters) language ID.
@@ -1058,14 +1047,10 @@ public class SUtils extends FUtils {
 	public static final String getISO3Language(final String language)
 	throws SRuntimeException {
 		String result;
-		if ((result = LANGUAGES.get(language)) != null) {
-			return result;
-		}
 		if (language.length() == 3) {
 			for (Locale x: Locale.getAvailableLocales()) {
 				if (language.equals(x.getISO3Language())) {
 					result = x.getISO3Language();
-					LANGUAGES.put(language, result);
 					return result;
 				}
 			}
@@ -1073,8 +1058,6 @@ public class SUtils extends FUtils {
 			try {
 				result = new Locale(language,"").getISO3Language();
 				if (result != null && result.length() == 3) {
-					LANGUAGES.put(language, result);
-					LANGUAGES.put(result, result);
 					return result;
 				}
 			} catch (Exception ex) {}
@@ -1091,25 +1074,15 @@ public class SUtils extends FUtils {
 	 */
 	public final static String getISO2Country(final String code) {
 		String s = code.toUpperCase();
-		if (s.length() == 3) {
-			Locale loc = COUNTRYMAP.get(s);
-			if (loc != null) {
-				return loc.getCountry();
-			}
-		}
 		try {
 			for (String country : Locale.getISOCountries()) {
 				Locale loc = new Locale("", country);
-				if (s.equals(loc.getCountry()) || s.equals(loc.getISO3Country())
-					|| s.equals(loc.getDisplayCountry().toUpperCase())) {
-					COUNTRYMAP.put(loc.getISO3Country(), loc);
+				if (s.equals(loc.getCountry())
+					|| s.equals(loc.getISO3Country())) {
 					return country;
 				}
 			}
 		} catch (Exception ex) {}
-		if ("CZECHIA".equals(s)) {  // "Czechia not registered yet"
-			return "CZ";
-		}
 		//Unsupported country code: &{0}
 		throw new SRuntimeException(SYS.SYS017, code);
 	}
@@ -1126,28 +1099,17 @@ public class SUtils extends FUtils {
 			Locale loc = new Locale("", s);
 			String t = loc.getISO3Country();
 			if (t != null) {
-				if (!COUNTRYMAP.containsKey(t)) {
-					COUNTRYMAP.put(loc.getISO3Country(), loc);
-				}
 				return t;
 			}
 		} catch (Exception ex) {}
 		try {
 			for (String country : Locale.getISOCountries()) {
 				Locale loc = new Locale("", country);
-				if (s.equals(country) || s.equals(loc.getISO3Country())
-					|| s.equals(loc.getDisplayCountry().toUpperCase())) {
-					s = loc.getISO3Country();
-					if (s != null) {
-						COUNTRYMAP.put(s, loc);
-					}
+				if (s.equals(country) || s.equals(loc.getISO3Country())) {
 					return loc.getISO3Country();
 				}
 			}
 		} catch (Exception ex) {}
-		if ("CZECHIA".equals(s)) {  // "Czechia not registered yet"
-			return "CZE";
-		}
 		//Unsupported country code: &{0}
 		throw new SRuntimeException(SYS.SYS017, code);
 	}
@@ -1469,5 +1431,40 @@ public class SUtils extends FUtils {
 	public static final Process execute(final String... command)
 		throws Exception {
 		return execute(command, null, null, System.out, System.err, null, true);
+	}
+
+	/** Get ISO 639-2 (3 letters) System language ID.
+	 * @deprecated please use 
+	 * getISO3Language(System.getProperties().getProperty("user.language"))
+	 * @return ISO 639-2 (3 letters) language ID.
+	 * @throws SRuntimeException code SYS018 if language code is not found.
+	 */
+	public static final String getISO3Language() throws SRuntimeException {
+		return getISO3Language(
+			System.getProperties().getProperty("user.language"));
+	}
+
+	/** Get user name from System properties.
+	 * please use System.getProperties().getProperty("user.name")
+	 * @return SYSTEM user name.
+	 */
+	public static final String getUserName() {
+		return System.getProperties().getProperty("user.name");
+	}
+
+	/** Get system country id from System properties.
+	 * please use System.getProperties().getProperty("user.country")
+	 * @return The country id.
+	 */
+	public static final String getCountry() {
+		return System.getProperties().getProperty("user.country");
+	}
+
+	/** Get System language from System properties.
+	 * please use System.getProperties().getProperty("user.language")
+	 * @return language id.
+	 */
+	public static final String getLanguage() {
+		return System.getProperties().getProperty("user.language");
 	}
 }

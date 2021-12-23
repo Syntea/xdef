@@ -1454,20 +1454,6 @@ public class TestSUtils extends STester {
 				SUtils.deleteAll(f1, true);
 			} catch (Exception ex) {}
 		} catch (Exception ex) {fail(ex);}
-		try {//getCountry
-			String s;
-			s = SUtils.getCountry();
-			if (s == null || s.length() < 2 || s.length() > 3) {
-				fail("getCountry='" + s + "'");
-			}
-		} catch (Exception ex) {fail(ex);}
-		try {//getLanguage
-			String s;
-			s = SUtils.getLanguage();
-			if (s == null || s.length() < 2 || s.length() > 3) {
-				fail("getLanguage='" + s + "'");
-			}
-		} catch (Exception ex) {fail(ex);}
 		try {//getISO3language
 			try {
 				SUtils.getISO3Language("pqrs");
@@ -1477,14 +1463,11 @@ public class TestSUtils extends STester {
 					fail(ex);
 				}
 			}
-			String s = SUtils.getISO3Language(SUtils.getLanguage());
+			String s = SUtils.getISO3Language(
+				System.getProperties().getProperty("user.language"));
 			if (s != null && s.length() != 3) {
-				fail("getISO3Language error '" + SUtils.getLanguage()
-					+ "' -> '" + s + "'");
-			}
-			s = SUtils.getISO3Language();
-			if (s != null && s.length() != 3) {
-				fail("getISO3Language error '" + SUtils.getLanguage()
+				fail("getISO3Language error '"
+					+ System.getProperties().getProperty("user.language")
 					+ "' -> '" + s + "'");
 			}
 		} catch (Exception ex) {fail(ex);}

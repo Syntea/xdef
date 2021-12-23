@@ -20,11 +20,10 @@ import org.xdef.xml.KXmlUtils;
 /** Provides managing of properties, languages and report tables. It exists
  * the singleton instance of SManager. You can get this instance by the static
  * method {@link org.xdef.sys.SManager#getInstance()}.
- *
- * Note the SManager is used as manager of reports. Therefore in such
+ * <p>Note the SManager is used as manager of reports. Therefore in such
  * multi thread applications which requires to have well defined environment for
  * the language, properties and/or message tables you have to synchronize run
- * of such application by:
+ * of such application by:</p>
  * <pre><code><b>
  * synchronize(SManager.getSManager()) {
  * ...
@@ -70,7 +69,9 @@ public final class SManager implements XDConstants {
 	private SManager() {
 		_properties = (Properties) System.getProperties().clone();
 		String s = getProperty(_properties, XDPROPERTY_MSGLANGUAGE);
-		s = (s == null) ? SUtils.getISO3Language() : SUtils.getISO3Language(s);
+		s = (s != null) ? SUtils.getISO3Language(s)
+			: SUtils.getISO3Language(
+				System.getProperties().getProperty("user.language"));
 		_language = new SLanguage(s, "eng");
 	}
 
@@ -157,7 +158,7 @@ public final class SManager implements XDConstants {
 			if (XDPROPERTY_MSGLANGUAGE.equals(newKey)) {
 				String v = value;
 				if (v == null) {
-					v = SUtils.getISO3Language();
+					v = System.getProperties().getProperty("user.language");
 				}
 				sm._language = new SLanguage(SUtils.getISO3Language(v),
 					sm._language.getDefaultLanguage());
@@ -859,7 +860,7 @@ public final class SManager implements XDConstants {
 				// get fields of this class.
 				Field[] fields = c.getDeclaredFields();
 				ArrayList<String> ar = new ArrayList<String>(fields.length-1);
-				for (int i = 0, j = 0; i < fields.length; i++) {
+				for (int i = 0; i < fields.length; i++) {
 					String name = fields[i].getName();
 					if (name.startsWith(prefix) && !prefix.equals(name)) {
 						// only fields of message identifiers
