@@ -1471,6 +1471,35 @@ public class TestSUtils extends STester {
 					+ "' -> '" + s + "'");
 			}
 		} catch (Exception ex) {fail(ex);}
+		try {//getISO2language
+			try {
+				SUtils.getISO3Language("pqrs");
+				fail("getISO3Language - expected exception SYS18 is missing");
+			} catch (SRuntimeException ex) {
+				if (!"SYS018".equals(ex.getMsgID())) {
+					fail(ex);
+				}
+			}
+			String s = SUtils.getISO2Language(
+				System.getProperties().getProperty("user.language"));
+			if (s != null && s.length() != 2) {
+				fail("getISO2Language error '"
+					+ System.getProperties().getProperty("user.language")
+					+ "' -> '" + s + "'");
+			}
+			s = SUtils.getISO2Language("CES");
+			if (s != null && s.length() != 2) {
+				fail("getISO2Language error '"
+					+ System.getProperties().getProperty("user.language")
+					+ "' -> '" + s + "'");
+			}
+			s = SUtils.getISO2Language("he");
+			if (s != null && s.length() != 2) {
+				fail("getISO2Language error '"
+					+ System.getProperties().getProperty("user.language")
+					+ "' -> '" + s + "'");
+			}
+		} catch (Exception ex) {fail(ex);}
 		try {// test StringParser.checkDateFormat
 			Report r;
 			r = StringParser.checkDateFormat(

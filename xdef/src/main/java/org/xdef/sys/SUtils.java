@@ -1019,17 +1019,17 @@ public class SUtils extends FUtils {
 	 */
 	public static final String getISO2Language(final String language)
 	throws SRuntimeException {
-		String result;
+		String result = language.toLowerCase();
 		if (language.length() == 3) {
 			for (Locale x: Locale.getAvailableLocales()) {
-				if (language.equals(x.getISO3Language())) {
+				if (result.equals(x.getISO3Language())) {
 					return x.getLanguage();
 				}
 			}
 		} else {
 			try {
-				result = new Locale(language, "").getLanguage();
-				if (result != null) {
+				result = new Locale(result,"").getLanguage();
+				if (result != null && result.length() == 2) {
 					return result;
 				}
 			} catch (Exception ex) {}
@@ -1046,17 +1046,16 @@ public class SUtils extends FUtils {
 	 */
 	public static final String getISO3Language(final String language)
 	throws SRuntimeException {
-		String result;
+		String result = language.toLowerCase();
 		if (language.length() == 3) {
 			for (Locale x: Locale.getAvailableLocales()) {
-				if (language.equals(x.getISO3Language())) {
-					result = x.getISO3Language();
-					return result;
+				if (result.equals(x.getISO3Language())) {
+					return x.getISO3Language();
 				}
 			}
 		} else {
 			try {
-				result = new Locale(language,"").getISO3Language();
+				result = new Locale(result,"").getISO3Language();
 				if (result != null && result.length() == 3) {
 					return result;
 				}
@@ -1094,15 +1093,15 @@ public class SUtils extends FUtils {
 	 * @throws SRuntimeException code SYS018 if language code is not found.
 	 */
 	public final static String getISO3Country(final String code) {
-		String s = code.toUpperCase();
 		try {
-			Locale loc = new Locale("", s);
+			Locale loc = new Locale("", code);
 			String t = loc.getISO3Country();
 			if (t != null) {
 				return t;
 			}
 		} catch (Exception ex) {}
 		try {
+			String s = code.toUpperCase();
 			for (String country : Locale.getISOCountries()) {
 				Locale loc = new Locale("", country);
 				if (s.equals(country) || s.equals(loc.getISO3Country())) {
@@ -1434,7 +1433,7 @@ public class SUtils extends FUtils {
 	}
 
 	/** Get ISO 639-2 (3 letters) System language ID.
-	 * @deprecated please use 
+	 * @deprecated please use
 	 * getISO3Language(System.getProperties().getProperty("user.language"))
 	 * @return ISO 639-2 (3 letters) language ID.
 	 * @throws SRuntimeException code SYS018 if language code is not found.
