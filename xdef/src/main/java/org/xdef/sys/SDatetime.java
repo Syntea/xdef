@@ -1694,7 +1694,8 @@ public class SDatetime extends XMLGregorianCalendar
 					continue;
 				}
 				case 'S': //millisecond
-					if (_second == Integer.MIN_VALUE || _fraction == 0.0D) {
+					if (_second == Integer.MIN_VALUE
+						|| (_fraction == 0.0D && ms <= 1)) {
 						if (optionals.empty()) {
 							sb.append('0'); // not oprional -> force 0 millis
 						} else { //skip this option if it is optional

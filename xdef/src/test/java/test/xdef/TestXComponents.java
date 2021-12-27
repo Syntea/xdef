@@ -91,6 +91,27 @@ public final class TestXComponents extends XDTester {
 		XDDocument xd;
 		XDPool xp;
 		try {
+			xdef = // test datetime with milliseconds = 0
+"<xd:def  xmlns:xd='http://www.xdef.org/xdef/4.1' name='M' root='X'>\n"+
+"<xd:declaration>type gam xdatetime('yyyyMMddHHmmssSSS');</xd:declaration>\n"+
+"  <X t='gam();' />\n"+
+"<xd:component>%class test.xdef.Mgam %link X</xd:component>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			genXComponent(xp, clearTempDir());
+			if (reporter.errorWarnings()) {
+				System.out.println(reporter.printToString());
+			}
+			xml = "<X t='20201211010101333'/>"; // millius != 0
+			xc = parseXC(xp,"M", xml , null, reporter);
+			assertNoErrorwarnings(reporter);
+			assertEq(xml, xc.toXml());
+			xml = "<X t='20201211010101000'/>"; // millius == 0
+			xc = parseXC(xp,"M", xml , null, reporter);
+			assertNoErrorwarnings(reporter);
+			assertEq(xml, xc.toXml());
+		} catch (Exception ex) {fail(ex);}
+		try {
 			xdef = // GPSPosition, Price
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n" +
 "<xd:declaration\n>\n"+
