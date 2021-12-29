@@ -18,7 +18,9 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 /** Collection of useful methods.
  * @author Vaclav Trojan
@@ -42,6 +44,13 @@ public class SUtils extends FUtils {
 	/** Hexadecimal digits. */
 	private static final byte[] HEXDIGITS = new byte[] {
 		'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
+
+	/** Cache to accelerate 2 letters/3 letter language methods.*/
+	private static final Map<String, Locale> LANGUAGES =
+		 new HashMap<String, Locale>();
+	/** Cache to accelerate 2 letters/3 letter country methods.*/
+	private static final Map<String, Locale> COUNTRIES =
+		 new HashMap<String, Locale>();
 
 ////////////////////////////////////////////////////////////////////////////////
 // initialize static variables
@@ -998,19 +1007,6 @@ public class SUtils extends FUtils {
 // Localization
 ////////////////////////////////////////////////////////////////////////////////
 
-	/** Check if given argument is supported country code.
-	 * @param country 2-letter country code defined in ISO 3166.
-	 * @return true if  country code is supported.
-	 */
-	public static final boolean isCountryCode(final String country) {
-		for (String x: Locale.getISOCountries()) {
-			if (x.equals(country)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
 	/** Get ISO 639-2 (3 letters) language ID.
 	 * @param language The language code (ISO 639 3 letters) or
 	 * (ISO 639-2 3 letters).
@@ -1019,20 +1015,26 @@ public class SUtils extends FUtils {
 	 */
 	public static final String getISO2Language(final String language)
 	throws SRuntimeException {
-		String result = language.toLowerCase();
-		if (language.length() == 3) {
+		String s = language.toLowerCase();
+		Locale loc = LANGUAGES.get(s);
+		if (loc != null) {
+			return loc.getLanguage();
+		}
+		try {
+			loc = new Locale(s,"");
+			String result = loc.getLanguage();
+			if (result != null && result.length() == 2) {
+				LANGUAGES.put(s, loc);
+				return result;
+			}
+		} catch (Exception ex) {}
+		if (s.length() == 3) {
 			for (Locale x: Locale.getAvailableLocales()) {
-				if (result.equals(x.getISO3Language())) {
+				if (s.equals(x.getISO3Language())) {
+					LANGUAGES.put(s, x);
 					return x.getLanguage();
 				}
 			}
-		} else {
-			try {
-				result = new Locale(result,"").getLanguage();
-				if (result != null && result.length() == 2) {
-					return result;
-				}
-			} catch (Exception ex) {}
 		}
 		//Unsupported language code: &{0}
 		throw new SRuntimeException(SYS.SYS018, language);
@@ -1046,23 +1048,38 @@ public class SUtils extends FUtils {
 	 */
 	public static final String getISO3Language(final String language)
 	throws SRuntimeException {
-		String result = language.toLowerCase();
-		if (language.length() == 3) {
+		String s = language.toLowerCase();
+		Locale loc = LANGUAGES.get(s);
+		if (loc != null) {
+			return loc.getISO3Language();
+		}
+		if (s.length() == 3) {
 			for (Locale x: Locale.getAvailableLocales()) {
-				if (result.equals(x.getISO3Language())) {
+				if (s.equals(x.getISO3Language())
+					|| s.equals(x.getLanguage())) {
+					LANGUAGES.put(s, x);
 					return x.getISO3Language();
 				}
 			}
-		} else {
-			try {
-				result = new Locale(result,"").getISO3Language();
-				if (result != null && result.length() == 3) {
-					return result;
-				}
-			} catch (Exception ex) {}
 		}
+		try {
+			loc = new Locale(s,"");
+			String result = loc.getISO3Language();
+			if (result != null) {
+				LANGUAGES.put(s, loc);
+				return result;
+			}
+		} catch (Exception ex) {}
 		//Unsupported language code: &{0}
 		throw new SRuntimeException(SYS.SYS018, language);
+	}
+
+	/** Check if given argument is supported country code (2-letter).
+	 * @param country 2-letter country code defined in ISO 3166.
+	 * @return true if  country code is supported.
+	 */
+	public static final boolean isCountryCode(final String country) {
+		return country.length() == 2 && getISO2Country(country) != null;
 	}
 
 	/** Get ISO 3166-1 alpha-2 country code.
@@ -1073,15 +1090,17 @@ public class SUtils extends FUtils {
 	 */
 	public final static String getISO2Country(final String code) {
 		String s = code.toUpperCase();
-		try {
-			for (String country : Locale.getISOCountries()) {
-				Locale loc = new Locale("", country);
-				if (s.equals(loc.getCountry())
-					|| s.equals(loc.getISO3Country())) {
-					return country;
-				}
+		Locale loc = COUNTRIES.get(s);
+		if (loc != null) {
+			return loc.getCountry();
+		}
+		for (String country : Locale.getISOCountries()) {
+			loc = new Locale("", country);
+			if (s.equals(loc.getCountry())||s.equals(loc.getISO3Country())){
+				COUNTRIES.put(s, loc);
+				return country;
 			}
-		} catch (Exception ex) {}
+		}
 		//Unsupported country code: &{0}
 		throw new SRuntimeException(SYS.SYS017, code);
 	}
@@ -1093,22 +1112,26 @@ public class SUtils extends FUtils {
 	 * @throws SRuntimeException code SYS018 if language code is not found.
 	 */
 	public final static String getISO3Country(final String code) {
+		String s = code.toUpperCase();
+		Locale loc = COUNTRIES.get(s);
+		if (loc != null) {
+			return loc.getISO3Country();
+		}
 		try {
-			Locale loc = new Locale("", code);
-			String t = loc.getISO3Country();
-			if (t != null) {
-				return t;
+			loc = new Locale("", s);
+			String result = loc.getISO3Country();
+			if (result != null) {
+				COUNTRIES.put(s, loc);
+				return result;
 			}
 		} catch (Exception ex) {}
-		try {
-			String s = code.toUpperCase();
-			for (String country : Locale.getISOCountries()) {
-				Locale loc = new Locale("", country);
-				if (s.equals(country) || s.equals(loc.getISO3Country())) {
-					return loc.getISO3Country();
-				}
+		for (String country : Locale.getISOCountries()) {
+			loc = new Locale("", country);
+			if (s.equals(country) || s.equals(loc.getISO3Country())) {
+				COUNTRIES.put(s, loc);
+				return country;
 			}
-		} catch (Exception ex) {}
+		}
 		//Unsupported country code: &{0}
 		throw new SRuntimeException(SYS.SYS017, code);
 	}
@@ -1126,10 +1149,8 @@ public class SUtils extends FUtils {
 	public static final boolean implementsInterface(final Class<?> clazz,
 		String interfaceName) {
 		for (Class<?> x: clazz.getInterfaces()) {
-			if (x.getName().equals(interfaceName)) {
-				return true;
-			}
-			if (implementsInterface(x, interfaceName)) {
+			if (x.getName().equals(interfaceName) 
+				|| implementsInterface(x, interfaceName)) {
 				return true;
 			}
 		}
@@ -1144,10 +1165,8 @@ public class SUtils extends FUtils {
 	public static final boolean implementsInterface(final Class<?> clazz,
 		Class<?> interfaceClass) {
 		for (Class<?> x: clazz.getInterfaces()) {
-			if (x.getName().equals(interfaceClass.getName())) {
-				return true;
-			}
-			if (implementsInterface(x, interfaceClass)) {
+			if (x.getName().equals(interfaceClass.getName())
+				|| implementsInterface(x, interfaceClass)) {
 				return true;
 			}
 		}
@@ -1197,8 +1216,7 @@ public class SUtils extends FUtils {
 				f.setAccessible(true);
 				return f.get(null); //static
 			} catch (Exception ex) {
-				cls = cls.getSuperclass();
-				if (cls == null) {
+				if ((cls = cls.getSuperclass()) == null) {
 					break;
 				}
 			}
@@ -1226,8 +1244,7 @@ public class SUtils extends FUtils {
 					return f.get(null); //static
 				}
 			} catch (Exception ex) {
-				cls = cls.getSuperclass();
-				if (cls == null) {
+				if ((cls = cls.getSuperclass()) == null) {
 					break;
 				}
 			}
@@ -1257,8 +1274,7 @@ public class SUtils extends FUtils {
 					return;
 				}
 			} catch (Exception ex) {
-				cls = cls.getSuperclass();
-				if (cls == null) {
+				if ((cls = cls.getSuperclass()) == null) {
 					break;
 				}
 			}
@@ -1285,8 +1301,7 @@ public class SUtils extends FUtils {
 					return m.invoke(null); //static
 				}
 			} catch (Exception ex) {
-				cls = cls.getSuperclass();
-				if (cls == null) {
+				if ((cls = cls.getSuperclass()) == null) {
 					break;
 				}
 			}
@@ -1320,8 +1335,7 @@ public class SUtils extends FUtils {
 					} catch (Exception ex) {}
 				}
 			}
-			cls = cls.getSuperclass();
-			if (cls == null) {
+			if ((cls = cls.getSuperclass()) == null) {
 				break;
 			}
 		}
@@ -1432,6 +1446,8 @@ public class SUtils extends FUtils {
 		return execute(command, null, null, System.out, System.err, null, true);
 	}
 
+////////////////////////////////////////////////////////////////////////////////
+
 	/** Get ISO 639-2 (3 letters) System language ID.
 	 * @deprecated please use
 	 * getISO3Language(System.getProperties().getProperty("user.language"))
@@ -1444,7 +1460,7 @@ public class SUtils extends FUtils {
 	}
 
 	/** Get user name from System properties.
-	 * please use System.getProperties().getProperty("user.name")
+	 * @deprecated please use System.getProperties().getProperty("user.name")
 	 * @return SYSTEM user name.
 	 */
 	public static final String getUserName() {
@@ -1452,7 +1468,7 @@ public class SUtils extends FUtils {
 	}
 
 	/** Get system country id from System properties.
-	 * please use System.getProperties().getProperty("user.country")
+	 * @deprecated please use System.getProperties().getProperty("user.country")
 	 * @return The country id.
 	 */
 	public static final String getCountry() {
@@ -1460,7 +1476,8 @@ public class SUtils extends FUtils {
 	}
 
 	/** Get System language from System properties.
-	 * please use System.getProperties().getProperty("user.language")
+	 * @deprecated please use
+	 * System.getProperties().getProperty("user.language")
 	 * @return language id.
 	 */
 	public static final String getLanguage() {
