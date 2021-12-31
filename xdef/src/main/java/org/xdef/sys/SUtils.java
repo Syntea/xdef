@@ -1149,7 +1149,7 @@ public class SUtils extends FUtils {
 	public static final boolean implementsInterface(final Class<?> clazz,
 		String interfaceName) {
 		for (Class<?> x: clazz.getInterfaces()) {
-			if (x.getName().equals(interfaceName) 
+			if (x.getName().equals(interfaceName)
 				|| implementsInterface(x, interfaceName)) {
 				return true;
 			}

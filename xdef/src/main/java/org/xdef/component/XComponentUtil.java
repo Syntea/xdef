@@ -21,7 +21,6 @@ import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.StringParser;
 import org.xdef.xon.XonNames;
 import org.xdef.xon.XonTools;
-import org.xdef.xon.XonUtil;
 
 
 /** Utilities used with XComponents.
@@ -414,28 +413,180 @@ public class XComponentUtil {
 		}
 		return result;
 	}
-
-	/** Create XON object from X-component.
-	 * @param x X-component.
-	 * @return XON object.
+	/** Create XON map from XComponent.
+	 * @param xc XComponent
+	 * @return object with XON map.
 	 */
-	public final static Object toXon(final XComponent x) {
-		String ns = x.xGetNamespaceURI();
-		if (XDConstants.XON_NS_URI_W.equals(ns)) {
-			String name = x.xGetNodeName();
-			int ndx = name.indexOf(':');
-			if (ndx >= 0) { // ???
-				name = name.substring(ndx + 1);
-			}
-			if (XonNames.X_MAP.equals(name)) {
-				return toXonMap(x);
-			} else if (XonNames.X_ARRAY.equals(name)) {
-				return toXonArray(x);
-			} else if (XonNames.X_ITEM.equals(name)) {
-				return toXonItem(x);
+	private static Map<String, Object> toXonMapXD(final XComponent xc) {
+		Class<?> cls = xc.getClass();
+		Method[] methods = cls.getDeclaredMethods();
+		Map<String, Object> result = getXonAttrs(xc);
+		for (Method x: methods) {
+			if (x.getName().startsWith("get" + XDConstants.XON_NS_PREFIX + "$")
+				&& x.getParameterTypes().length == 0) {
+				x.setAccessible(true);
+				Object o = null;
+				try {
+					o = x.invoke(xc);
+				} catch (Exception ex) {
+					new RuntimeException("Can't access getter: " + x.getName());
+				}
+				if (o instanceof XComponent) {
+					XComponent y = (XComponent) o;
+					String key = null;
+					if (XDConstants.XON_NS_URI_XD.equals(y.xGetNamespaceURI())){
+						try {
+							Class<?> cls1 = o.getClass();
+							Method m =
+								cls1.getDeclaredMethod("get" + XonNames.X_KEYATTR);
+							m.setAccessible(true);
+							key = XonTools.xmlToJName((String) m.invoke(o));
+						} catch (Exception ex) {
+							new RuntimeException("Not key", ex);
+						}
+						o = toXon((XComponent) o);
+						result.put(key, o);
+					} else {
+						Map z = (Map) toXonXD(y);
+						for (Object k: z.keySet()) {
+							key = (String)k;
+							if (!key.startsWith("xmlns")) {
+								break;
+							}
+						}
+						result.put(key, z.get(key));
+					}
+				} else {
+					new RuntimeException("Not XComponent: " + o);
+				}
 			}
 		}
-		// not JSON model
-		return XonUtil.xmlToJson(x.toXml()); // return JSON created from XML
+		return result;
+	}
+
+	/** Create XON array from XComponent.
+	 * @param xc XComponent
+	 * @return object with XON array.
+	 */
+	private static List<Object> toXonArrayXD(final XComponent xc) {
+		List<Object> result = new ArrayList<Object>();
+		List list = (List) xc.xGetNodeList();
+		for (Object x : list) {
+			result.add(toXon((XComponent) x));
+		}
+		return result;
+	}
+
+	private static Map<String, Object> getXonAttrs(final XComponent xc) {
+		Map<String, Object> result = new LinkedHashMap<String, Object>();
+		Class<?> cls = xc.getClass();
+		Method[] methods = cls.getDeclaredMethods();
+		for (Method x: methods) {
+			String name = x.getName();
+			if (name.startsWith("get")
+				&& x.getParameterTypes().length == 0) {
+				if (name.startsWith("get$")) {
+					continue;
+				}
+//				x.setAccessible(true);
+				Object o = null;
+				try {
+					o = x.invoke(xc);
+				} catch (Exception ex) {
+					new RuntimeException("Can't access getter: " + x.getName());
+				}
+				if (!(o instanceof XComponent || o instanceof List
+					|| o instanceof Map)) {
+					result.put(XonTools.xmlToJName(name.substring(3)), o);
+				}
+
+			}
+		}
+		return result;
+	}
+
+	private static void getXonBody(final XComponent xc,
+		final List<Object> body){
+		List<XComponent> components = xc.xGetNodeList();
+		int textIndex = 0;
+		if (components != null) {
+			for (XComponent x : components) {
+				if ("$text".equals(x.xGetNodeName())) {
+					Class<?> cls = xc.getClass();
+					String mName = "get$value";
+					if (textIndex > 0) {
+						mName += textIndex;
+					}
+					textIndex++;
+					try {
+						Method m = cls.getDeclaredMethod(mName);
+//						m.setAccessible(true);
+						body.add(m.invoke(xc));
+					} catch (Exception ex) {
+						new RuntimeException("Can't access getter: " + mName);
+					}
+				} else {
+					body.add(toXonXD(x));
+				}
+			}
+		}
+	}
+
+	/** Create XON from XComponent (not JSON).
+	 * @param xc XComponent.
+	 * @param ns namespace URI.
+	 * @param localName local name-.
+	 * @return object with XON.
+	 */
+	private static Object toXonXD(final XComponent xc) {
+		String ns = xc.xGetNamespaceURI();
+		String name = xc.xGetNodeName();
+		int ndx = name.indexOf(':');
+		if (XDConstants.XON_NS_URI_XD.equals(ns)) {
+			String localName = ndx >= 0 ? name.substring(ndx + 1) : name;
+			if (XonNames.X_MAP.equals(localName)) {
+				return toXonMapXD(xc);
+			} else if (XonNames.X_ARRAY.equals(localName)) {
+				return toXonArrayXD(xc);
+			} else if (XonNames.X_ITEM.equals(localName)) {
+				return toXonItem(xc);
+			}
+		}
+		Map<String, Object> result = new LinkedHashMap<String, Object>();
+		List<Object> body = new ArrayList<Object>();
+		Map<String, Object> namedValues = getXonAttrs(xc);
+		if (ns != null) {
+			String nsattr = "xmlns"+(ndx>0 ? ":" + name.substring(0,ndx) : "");
+			namedValues.put(nsattr, ns);
+		}
+		if (!namedValues.isEmpty()) {
+			body.add(namedValues);
+		}
+		getXonBody(xc, body);
+		result.put(XonTools.xmlToJName(name), body);
+		return result;
+	}
+
+	/** Create XON object from X-component.
+	 * @param xc X-component.
+	 * @return XON object.
+	 */
+	public final static Object toXon(final XComponent xc) {
+		String ns = xc.xGetNamespaceURI();
+		if (XDConstants.XON_NS_URI_W.equals(ns)) {
+			String localName = xc.xGetNodeName();
+			int ndx = localName.indexOf(':');
+			if (ndx >= 0) { //
+				localName = localName.substring(ndx + 1);
+			}
+			if (XonNames.X_MAP.equals(localName)) {
+				return toXonMap(xc);
+			} else if (XonNames.X_ARRAY.equals(localName)) {
+				return toXonArray(xc);
+			} else if (XonNames.X_ITEM.equals(localName)) {
+				return toXonItem(xc);
+			}
+		}
+		return toXonXD(xc);
 	}
 }
