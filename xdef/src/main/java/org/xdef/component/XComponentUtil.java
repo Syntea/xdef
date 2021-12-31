@@ -386,7 +386,6 @@ public class XComponentUtil {
 		for (Method x: methods) {
 			if (x.getName().startsWith("get" + XDConstants.XON_NS_PREFIX + "$")
 				&& x.getParameterTypes().length == 0) {
-				x.setAccessible(true);
 				Object o = null;
 				try {
 					o = x.invoke(xc);
@@ -399,7 +398,6 @@ public class XComponentUtil {
 						Class<?> cls1 = o.getClass();
 						Method m =
 							cls1.getDeclaredMethod("get" + XonNames.X_KEYATTR);
-						m.setAccessible(true);
 						key = XonTools.xmlToJName((String) m.invoke(o));
 					} catch (Exception ex) {
 						new RuntimeException("Not key", ex);
@@ -424,7 +422,6 @@ public class XComponentUtil {
 		for (Method x: methods) {
 			if (x.getName().startsWith("get" + XDConstants.XON_NS_PREFIX + "$")
 				&& x.getParameterTypes().length == 0) {
-				x.setAccessible(true);
 				Object o = null;
 				try {
 					o = x.invoke(xc);
@@ -437,9 +434,8 @@ public class XComponentUtil {
 					if (XDConstants.XON_NS_URI_XD.equals(y.xGetNamespaceURI())){
 						try {
 							Class<?> cls1 = o.getClass();
-							Method m =
-								cls1.getDeclaredMethod("get" + XonNames.X_KEYATTR);
-							m.setAccessible(true);
+							Method m = cls1.getDeclaredMethod(
+								"get" + XonNames.X_KEYATTR);
 							key = XonTools.xmlToJName((String) m.invoke(o));
 						} catch (Exception ex) {
 							new RuntimeException("Not key", ex);
@@ -470,9 +466,27 @@ public class XComponentUtil {
 	 */
 	private static List<Object> toXonArrayXD(final XComponent xc) {
 		List<Object> result = new ArrayList<Object>();
-		List list = (List) xc.xGetNodeList();
-		for (Object x : list) {
-			result.add(toXon((XComponent) x));
+		List<XComponent> components = xc.xGetNodeList();
+		int textIndex = 0;
+		if (components != null) {
+			for (XComponent x : components) {
+				if ("$text".equals(x.xGetNodeName())) {
+					Class<?> cls = xc.getClass();
+					String mName = "get$value";
+					if (textIndex > 0) {
+						mName += textIndex;
+					}
+					textIndex++;
+					try {
+						Method m = cls.getDeclaredMethod(mName);
+						result.add(m.invoke(xc));
+					} catch (Exception ex) {
+						new RuntimeException("Can't access getter: " + mName);
+					}
+				} else {
+					result.add(toXonXD(x));
+				}
+			}
 		}
 		return result;
 	}
@@ -488,7 +502,6 @@ public class XComponentUtil {
 				if (name.startsWith("get$")) {
 					continue;
 				}
-//				x.setAccessible(true);
 				Object o = null;
 				try {
 					o = x.invoke(xc);
@@ -508,8 +521,8 @@ public class XComponentUtil {
 	private static void getXonBody(final XComponent xc,
 		final List<Object> body){
 		List<XComponent> components = xc.xGetNodeList();
-		int textIndex = 0;
 		if (components != null) {
+			int textIndex = 0;
 			for (XComponent x : components) {
 				if ("$text".equals(x.xGetNodeName())) {
 					Class<?> cls = xc.getClass();
@@ -520,7 +533,6 @@ public class XComponentUtil {
 					textIndex++;
 					try {
 						Method m = cls.getDeclaredMethod(mName);
-//						m.setAccessible(true);
 						body.add(m.invoke(xc));
 					} catch (Exception ex) {
 						new RuntimeException("Can't access getter: " + mName);
