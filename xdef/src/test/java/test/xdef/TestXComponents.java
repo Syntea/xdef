@@ -102,11 +102,11 @@ public final class TestXComponents extends XDTester {
 			if (reporter.errorWarnings()) {
 				System.out.println(reporter.printToString());
 			}
-			xml = "<X t='20201211010101333'/>"; // millius != 0
+			xml = "<X t='20201211010101333'/>"; // millis != 0
 			xc = parseXC(xp,"M", xml , null, reporter);
 			assertNoErrorwarnings(reporter);
 			assertEq(xml, xc.toXml());
-			xml = "<X t='20201211010101000'/>"; // millius == 0
+			xml = "<X t='20201211010101000'/>"; // millis == 0
 			xc = parseXC(xp,"M", xml , null, reporter);
 			assertNoErrorwarnings(reporter);
 			assertEq(xml, xc.toXml());

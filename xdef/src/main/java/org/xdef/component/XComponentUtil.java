@@ -372,10 +372,8 @@ public class XComponentUtil {
 
 	public static final String dateToJstring(final SDatetime x) {
 		String s = x.toISO8601();
-		if (s.matches("-?\\d+\\z")) { // year without zone
-			s = '"' + s + '"'; // if year is without zone we put it into quotes
-		}
-		return s;
+		// if year is without zone put it into quotes
+		return s.matches("-?\\d+\\z") ? '"' + s + '"' : s;
 	}
 
 	/** Create XON map from XComponent.
