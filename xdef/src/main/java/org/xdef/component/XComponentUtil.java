@@ -13,12 +13,12 @@ import org.xdef.XDDocument;
 import org.xdef.XDParseResult;
 import org.xdef.XDPool;
 import org.xdef.XDValue;
+import org.xdef.impl.xml.KNamespace;
 import org.xdef.model.XMElement;
 import org.xdef.model.XMNode;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.SDatetime;
 import org.xdef.sys.SRuntimeException;
-import org.xdef.sys.StringParser;
 import org.xdef.xon.XonNames;
 import org.xdef.xon.XonTools;
 
@@ -322,7 +322,12 @@ public class XComponentUtil {
 ////////////////////////////////////////////////////////////////////////////////
 // Create XON object from X-component.
 ////////////////////////////////////////////////////////////////////////////////
-
+	private static Object toXonObject(final Object o) {
+		if (o instanceof String) {
+			return XonTools.xmlToJValue((String) o);
+		}
+		return o;
+	}
 	/** Create XON simple value from XComponent.
 	 * @param xc XComponent
 	 * @return object with XON simple value.
@@ -331,17 +336,7 @@ public class XComponentUtil {
 		Class<?> cls = xc.getClass();
 		try {
 			Method m = cls.getDeclaredMethod("get" + XonNames.X_VALUEATTR);
-			Object o = m.invoke(xc);
-			if (o instanceof String) {
-				String s = (String) o;
-				int len = s.length();
-				if (len > 1 && s.charAt(0) == '"' && s.charAt(len-1) == '"') {
-					StringParser p = new StringParser(s);
-					p.setIndex(1);
-					return XonTools.readJString(p);
-				}
-			}
-			return o;
+			return toXonObject(m.invoke(xc));
 		} catch (Exception ex) {
 			new RuntimeException("Can't access value", ex);
 		}
@@ -413,14 +408,17 @@ public class XComponentUtil {
 	}
 	/** Create XON map from XComponent.
 	 * @param xc XComponent
+	 * @param nsStack namespace prefixes stack.
 	 * @return object with XON map.
 	 */
-	private static Map<String, Object> toXonMapXD(final XComponent xc) {
+	private static Map<String, Object> toXonMapXD(final XComponent xc,
+		final KNamespace nsStack) {
 		Class<?> cls = xc.getClass();
 		Method[] methods = cls.getDeclaredMethods();
 		Map<String, Object> result = getXonAttrs(xc);
 		for (Method x: methods) {
-			if (x.getName().startsWith("get" + XDConstants.XON_NS_PREFIX + "$")
+			String name = x.getName();
+			if (!name.startsWith("get$") && name.startsWith("get")
 				&& x.getParameterTypes().length == 0) {
 				Object o = null;
 				try {
@@ -443,14 +441,19 @@ public class XComponentUtil {
 						o = toXon((XComponent) o);
 						result.put(key, o);
 					} else {
-						Map z = (Map) toXonXD(y);
+						Map z = (Map) toXonXD(y, nsStack);
 						for (Object k: z.keySet()) {
 							key = (String)k;
 							if (!key.startsWith("xmlns")) {
 								break;
 							}
 						}
-						result.put(key, z.get(key));
+						o = z.get(key);
+						if (o instanceof List && ((List) o).size()==1
+							 && ((List) o).get(0) instanceof String) {
+							o = XonTools.xmlToJValue((String)((List) o).get(0));
+						}
+						result.put(XonTools.xmlToJName(key), o);
 					}
 				} else {
 					new RuntimeException("Not XComponent: " + o);
@@ -462,10 +465,16 @@ public class XComponentUtil {
 
 	/** Create XON array from XComponent.
 	 * @param xc XComponent
+	 * @param nsStack namespace prefixes stack.
 	 * @return object with XON array.
 	 */
-	private static List<Object> toXonArrayXD(final XComponent xc) {
+	private static List<Object> toXonArrayXD(final XComponent xc,
+		final KNamespace nsStack) {
 		List<Object> result = new ArrayList<Object>();
+		Map<String, Object> attrs = getXonAttrs(xc);
+		if (!attrs.isEmpty()) {
+			result.add(attrs);
+		}
 		List<XComponent> components = xc.xGetNodeList();
 		int textIndex = 0;
 		if (components != null) {
@@ -479,18 +488,32 @@ public class XComponentUtil {
 					textIndex++;
 					try {
 						Method m = cls.getDeclaredMethod(mName);
-						result.add(m.invoke(xc));
+						Object o = m.invoke(xc);
+						if (o instanceof String) {
+							o = toXonObject(m.invoke(xc));
+							if (o instanceof List && !((List) o).isEmpty()) {
+								for (Object y: (List) o) {
+									result.add(y);
+								}
+								continue;
+							}
+						}
+						result.add(o);
 					} catch (Exception ex) {
 						new RuntimeException("Can't access getter: " + mName);
 					}
 				} else {
-					result.add(toXonXD(x));
+					result.add(toXonXD(x, nsStack));
 				}
 			}
 		}
 		return result;
 	}
 
+	/** Create map from attributes of an element.
+	 * @param xc XComponent.
+	 * @return object with XON.
+	 */
 	private static Map<String, Object> getXonAttrs(final XComponent xc) {
 		Map<String, Object> result = new LinkedHashMap<String, Object>();
 		Class<?> cls = xc.getClass();
@@ -518,8 +541,14 @@ public class XComponentUtil {
 		return result;
 	}
 
+	/** Create array from child nodes of an element.
+	 * @param xc XComponent.
+	 * @param nsStack namespace prefixes stack.
+	 * @return object with XON.
+	 */
 	private static void getXonBody(final XComponent xc,
-		final List<Object> body){
+		final List<Object> body,
+		final KNamespace nsStack){
 		List<XComponent> components = xc.xGetNodeList();
 		if (components != null) {
 			int textIndex = 0;
@@ -533,12 +562,22 @@ public class XComponentUtil {
 					textIndex++;
 					try {
 						Method m = cls.getDeclaredMethod(mName);
-						body.add(m.invoke(xc));
+						Object o = m.invoke(xc);
+						if (o instanceof String) {
+							o = toXonObject(m.invoke(xc));
+							if (o instanceof List && !((List) o).isEmpty()) {
+								for (Object y: (List) o) {
+									body.add(y);
+								}
+								continue;
+							}
+						}
+						body.add(o);
 					} catch (Exception ex) {
 						new RuntimeException("Can't access getter: " + mName);
 					}
 				} else {
-					body.add(toXonXD(x));
+					body.add(toXonXD(x, nsStack));
 				}
 			}
 		}
@@ -546,20 +585,20 @@ public class XComponentUtil {
 
 	/** Create XON from XComponent (not JSON).
 	 * @param xc XComponent.
-	 * @param ns namespace URI.
-	 * @param localName local name-.
+	 * @param nsStack namespace prefixes stack.
 	 * @return object with XON.
 	 */
-	private static Object toXonXD(final XComponent xc) {
+	private static Object toXonXD(final XComponent xc,
+		final KNamespace nsStack) {
 		String ns = xc.xGetNamespaceURI();
 		String name = xc.xGetNodeName();
 		int ndx = name.indexOf(':');
 		if (XDConstants.XON_NS_URI_XD.equals(ns)) {
 			String localName = ndx >= 0 ? name.substring(ndx + 1) : name;
 			if (XonNames.X_MAP.equals(localName)) {
-				return toXonMapXD(xc);
+				return toXonMapXD(xc, nsStack);
 			} else if (XonNames.X_ARRAY.equals(localName)) {
-				return toXonArrayXD(xc);
+				return toXonArrayXD(xc, nsStack);
 			} else if (XonNames.X_ITEM.equals(localName)) {
 				return toXonItem(xc);
 			}
@@ -567,15 +606,22 @@ public class XComponentUtil {
 		Map<String, Object> result = new LinkedHashMap<String, Object>();
 		List<Object> body = new ArrayList<Object>();
 		Map<String, Object> namedValues = getXonAttrs(xc);
+		String prefix = null;
+		nsStack.pushContext();
 		if (ns != null) {
-			String nsattr = "xmlns"+(ndx>0 ? ":" + name.substring(0,ndx) : "");
-			namedValues.put(nsattr, ns);
+			prefix = ndx>0 ? name.substring(0,ndx) : "";
+			if (!ns.equals(nsStack.getNamespaceURI(prefix))) {
+				String nsattr = "xmlns"+(!prefix.isEmpty() ? ":" + prefix : "");
+				namedValues.put(nsattr, ns);
+				nsStack.setPrefix(prefix, ns);
+			}
 		}
 		if (!namedValues.isEmpty()) {
 			body.add(namedValues);
 		}
-		getXonBody(xc, body);
+		getXonBody(xc, body, nsStack);
 		result.put(XonTools.xmlToJName(name), body);
+		nsStack.popContext();
 		return result;
 	}
 
@@ -599,6 +645,6 @@ public class XComponentUtil {
 				return toXonItem(xc);
 			}
 		}
-		return toXonXD(xc);
+		return toXonXD(xc, new KNamespace());
 	}
 }

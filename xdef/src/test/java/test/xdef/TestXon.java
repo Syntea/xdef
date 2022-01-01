@@ -1,6 +1,5 @@
 package test.xdef;
 
-import java.io.File;
 import java.util.List;
 import java.util.Map;
 import org.w3c.dom.Element;
@@ -27,7 +26,6 @@ public class TestXon extends XDTester {
 		ArrayReporter reporter = new ArrayReporter();
 		Element el;
 		XComponent xc;
-		String tempDir = getTempDir();
 		try {
 			String xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
@@ -35,7 +33,7 @@ public class TestXon extends XDTester {
 "    [\"* " + type + "()\"]\n"+
 "  </xd:xon>\n"+
 "  <xd:component>\n"+
-"    %class bugreports.data.GJ"+ type + " %link #A;\n"+
+"    %class test.xdef.GJ"+ type + " %link #A;\n"+
 "  </xd:component>\n"+
 "</xd:def>";
 			xp = XDFactory.compileXD(null, xdef);
@@ -60,7 +58,7 @@ public class TestXon extends XDTester {
 			}
 			assertTrue(XonUtil.xonEqual(XonUtil.parseXON(xon), x),
 				XonUtil.toJsonString(x, true));
-			XDTester.genXComponent(xp, tempDir);
+			XDTester.genXComponent(xp, clearTempDir());
 			xc = xp.createXDDocument().jparseXComponent(xon, null, reporter);
 			y = XonUtil.xmlToJson(xc.toXml());
 			if (!XonUtil.xonEqual(XonUtil.xonToJson(x),y)) {
@@ -99,12 +97,11 @@ public class TestXon extends XDTester {
 		assertNull(testx("file", "[ \"temp/a.txt\" ]"));
 		assertNull(testx("ipAddr", "[/::FFFF:129.144.52.38,/0.0.0]\n"));
 		assertNull(testx("currency", "[C(USD), C(CZK)]\n"));
-		String s, json, xon, xdef;
-		Object x, y;
+		String s, json, xon, xdef, xml;
+		Object o, x, y;
 		XDPool xp;
 		ArrayReporter reporter = new ArrayReporter();
 		XComponent xc;
-		File tempDir = clearTempDir();
 		try {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='a'>\n"+
@@ -167,7 +164,7 @@ public class TestXon extends XDTester {
 "]\n" +
 "</xd:xon>\n" +
 "<xd:component>\n"+
-"  %class bugreports.data.Xon %link #a;\n"+
+"  %class test.xdef.Xon %link #a;\n"+
 "</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
@@ -250,7 +247,7 @@ public class TestXon extends XDTester {
 			y = jparse(xp, "", json, reporter);
 			assertNoErrors(reporter);
 			reporter.clear();
-			genXComponent(xp, tempDir);
+			genXComponent(xp, clearTempDir());
 			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
 			assertNoErrors(reporter);
 			reporter.clear();
@@ -259,6 +256,74 @@ public class TestXon extends XDTester {
 			x = XonUtil.xmlToJson(xc.toXml());
 			y = XonUtil.xonToJson(y);
 			assertTrue(XonUtil.xonEqual(x,y));
+		} catch (Exception ex) {fail(ex);}
+		try {
+			xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' name='M' root='y:X'\n"+
+"        xmlns:y='a.b'>\n"+
+"<xd:declaration>type gam xdatetime('yyyyMMddHHmmssSS');</xd:declaration>\n"+
+"  <y:X a = '?date()' t='gam();' >? int() <y:Y xd:script='*'/>dec()</y:X>\n"+
+"<xd:component>%class test.xdef.MGam %link y:X</xd:component>\n"+
+//?????????
+//"<xd:component>%class test.xdef.Mgam %link y:X</xd:component>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			genXComponent(xp, clearTempDir());
+			if (reporter.errorWarnings()) {
+				System.out.println(reporter.printToString());
+			}
+			xml =
+"<n:X xmlns:n='a.b' a='2021-12-30' t='2020121101010101'>1<n:Y/><n:Y/>2.0</n:X>";
+			xc = parseXC(xp,"M", xml , null, reporter);
+			assertNoErrorwarnings(reporter);
+			assertEq(xml, xc.toXml());
+			o = XonUtil.parseXON(
+"{n:X = [\n" +
+"    { a = D2021-12-30,\n" +
+"      t = D2020-12-11T01:01:01.01,\n" +
+"      xmlns:n = \"a.b\"\n" +
+"    },\n" +
+"    1I,\n" +
+"    {n:Y = []},\n" +
+"    {n:Y = []},\n" +
+"    2.0d\n" +
+"  ]\n" +
+"}");
+			assertTrue(XonUtil.xonEqual(o, XComponentUtil.toXon(xc)));
+
+			o = XonUtil.parseXON("[{a=1},2]");
+			xml = KXmlUtils.nodeToString(XonUtil.xonToXmlXD(o), true);
+			xdef = // test datetime with milliseconds = 0
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' name='M' root='j:array'\n"+
+"        xmlns:j='http://www.xdef.org/xon/4.0'>\n"+
+"<j:array><j:map a=\"int()\"/>int()</j:array>\n"+
+"<xd:component>%class test.xdef.MArray %link j:array</xd:component>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			genXComponent(xp, clearTempDir());
+			assertNoErrors(reporter);
+			xc = parseXC(xp, "M", xml , null, reporter);
+			assertNoErrorwarnings(reporter);
+			assertEq(xml, xc.toXml());
+			assertTrue(XonUtil.xonEqual(o, XComponentUtil.toXon(xc)));
+
+			o = XonUtil.parseXON("{a=1, b=false, c=[1, \"x\", true,[]]}");
+			xml = KXmlUtils.nodeToString(XonUtil.xonToXmlXD(o), true);
+			xdef = // test datetime with milliseconds = 0
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' name='M' root='j:map'\n"+
+"        xmlns:j='http://www.xdef.org/xon/4.0'>\n"+
+"<j:map xmlns:j=\"http://www.xdef.org/xon/4.0\" a=\"int\" b=\"boolean\">\n" +
+"<c>string</c>\n"+
+"</j:map>\n"+
+"<xd:component>%class test.xdef.MMap %link j:map</xd:component>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			genXComponent(xp, clearTempDir());
+			assertNoErrors(reporter);
+			xc = parseXC(xp,"M", xml , null, reporter);
+			assertNoErrorwarnings(reporter);
+			assertEq(xml, xc.toXml());
+			assertTrue(XonUtil.xonEqual(o, XComponentUtil.toXon(xc)));
 		} catch (Exception ex) {fail(ex);}
 
 		clearTempDir(); // clear temporary directory
