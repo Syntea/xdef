@@ -634,7 +634,7 @@ public class XComponentUtil {
 		if (XDConstants.XON_NS_URI_W.equals(ns)) {
 			String localName = xc.xGetNodeName();
 			int ndx = localName.indexOf(':');
-			if (ndx >= 0) { //
+			if (ndx >= 0) {
 				localName = localName.substring(ndx + 1);
 			}
 			if (XonNames.X_MAP.equals(localName)) {

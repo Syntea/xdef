@@ -718,11 +718,21 @@ public class XonReader extends StringParser implements XonParsers {
 		}
 	}
 
-	public final static Object parseJSON(Reader in, String sysId) {
+////////////////////////////////////////////////////////////////////////////////
+
+	/** Parse XON or JSON source data.
+	 * @param in Reader with XON or JSON source data.
+	 * @param sysId System ID of source position or null.
+	 * @param xonMode if true then XON, if false JSON.
+	 * @return parsed XON or JSON object.
+	 */
+	private static Object parseXonJson(final Reader in,
+		final String sysId,
+		final boolean xonMode) {
 		ObjParser jp = new ObjParser();
 		XonReader xr = new XonReader(in, jp);
-		xr._acceptComments = true;
-		xr._xonMode = true;
+		xr._acceptComments = xonMode;
+		xr._xonMode = xonMode; // XON/JSON mode
 		if (sysId != null) {
 			xr.setSysId(sysId);
 		}
@@ -735,24 +745,26 @@ public class XonReader extends StringParser implements XonParsers {
 		return jp.getResult();
 	}
 
-	public final static Object parseXON(Reader in, String sysId) {
-		ObjParser jp = new ObjParser();
-		XonReader xr = new XonReader(in, jp);
-		xr._acceptComments = true;
-		xr._xonMode = true;
-		if (sysId != null) {
-			xr.setSysId(sysId);
-		}
-		xr.parse();
-		xr.isSpacesOrComments();
-		if (!xr.eos()) {
-			xr.error(JSON.JSON008);//Text after JSON not allowed
-		}
-		xr.getReportWriter().checkAndThrowErrorWarnings();
-		return jp.getResult();
+	/** Parse XON source data.
+	 * @param in Reader with XON source data.
+	 * @param sysId System ID of source position or null.
+	 * @return parsed XON object.
+	 */
+	public final static Object parseXON(final Reader in, final String sysId) {
+		return parseXonJson(in, sysId, true);
+	}
+
+	/** Parse JSON source data.
+	 * @param in Reader with JSON source data.
+	 * @param sysId System ID of source position or null.
+	 * @return parsed JSON object.
+	 */
+	public final static Object parseJSON(Reader in, String sysId) {
+		return parseXonJson(in, sysId, false);
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
+
 	/** Implementation of JParser for creating XON/JSON object from source. */
 	public static class ObjParser implements XonParser {
 
@@ -816,7 +828,6 @@ public class XonReader extends StringParser implements XonParsers {
 				_arrays.peek().add(_value);
 			}
 		}
-
 		@Override
 		/** Map started.
 		 * @param pos source position.
