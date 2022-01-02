@@ -38,7 +38,6 @@ import org.xdef.msg.XDEF;
 import org.xdef.proc.XDLexicon;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.Report;
-import static org.xdef.sys.Report.error;
 import org.xdef.sys.ReportWriter;
 import org.xdef.sys.SError;
 import org.xdef.sys.SReporter;
