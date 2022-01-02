@@ -65,10 +65,10 @@ public interface XMElement extends XMNode {
 	 */
 	public String getReferencePos();
 
-	/** Get mode of JSON model.
-	 * @return 0 .. no JSON, 1 .. w3c mode, 2 .. xd mode.
+	/** Get mode of XON/JSON model.
+	 * @return 0 .. no XON/JSON, 1 .. XON/JSON w3c mode, 2 .. XON/JSON xd mode.
 	 */
-	public byte getJsonMode();
+	public byte getXonMode();
 
 	/** Get message digest of this XDPool.
 	 * @return message digest of this XDPool.

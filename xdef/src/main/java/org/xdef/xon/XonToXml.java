@@ -25,14 +25,14 @@ import static org.xdef.xon.XonTools.genXMLValue;
 import static org.xdef.xon.XonTools.replaceColonInXMLName;
 import static org.xdef.xon.XonTools.toXmlName;
 
-/** Conversion of JSON/XON to XML
+/** Conversion of XON/JSON to XML
  * @author Vaclav Trojan
  */
 class XonToXml extends XonTools implements XonNames {
-	/** Prefix of JSON namespace. */
-	private String _jsPrefix;
-	/** JSON namespace. */
-	private String _jsNamespace;
+	/** Prefix of XON/JSON namespace. */
+	private String _xPrefix;
+	/** XON/JSON namespace. */
+	private String _xNamespace;
 	/** Stack of namespace URI. */
 	KNamespace _ns;
 	/** Document used to create X-definition. */
@@ -40,20 +40,20 @@ class XonToXml extends XonTools implements XonNames {
 
 	private XonToXml() {super();}
 
-	/** Create element with given name and JSON namespace and prefix.
+	/** Create element with given name and XON/JSON namespace and prefix.
 	 * @param name name of item.
-	 * @return element with given name and JSON namespace and prefix..
+	 * @return element with given name and XON/JSON namespace and prefix..
 	 */
 	private Element genJElement(final String name) {
-		if (_jsPrefix.isEmpty()) {
-			return _doc.createElementNS(_jsNamespace, name);
+		if (_xPrefix.isEmpty()) {
+			return _doc.createElementNS(_xNamespace, name);
 		} else {
-			return _doc.createElementNS(_jsNamespace, _jsPrefix + ':' + name);
+			return _doc.createElementNS(_xNamespace, _xPrefix + ':' + name);
 		}
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
-// JSON to XML (X-detinition format)
+// XON/JSON to XML (X-detinition format)
 ////////////////////////////////////////////////////////////////////////////////
 
 	/** Create and append new element and push context.
@@ -73,20 +73,20 @@ class XonToXml extends XonTools implements XonNames {
 		return e;
 	}
 
-	/** Append to node the element with JSON name space.
+	/** Append to node the element with XON/JSON name space.
 	 * @param n node where to append new element.
 	 * @param name local name of element.
 	 * @return created element.
 	 */
-	private Element addJSONElem(final Node n, final String name) {
+	private Element addXonElem(final Node n, final String name) {
 		Element e = genJElement(name);
 		_ns.pushContext();
-		_ns.setPrefix(_jsPrefix, _jsNamespace);
+		_ns.setPrefix(_xPrefix, _xNamespace);
 		n.appendChild(e);
 		return e;
 	}
 
-	/** Generate XML form from JSON string value.
+	/** Generate XML form from XON/JSON string value.
 	 * @param val Object with value.
 	 * @param mode 0 .. text node, 1.. attribute, 2.. array of simple items
 	 * @return XML form of string from the argument val,
@@ -298,7 +298,7 @@ class XonToXml extends XonTools implements XonNames {
 				Map.Entry en;
 				if (m.size() == 1 && isSimpleValue((en=(Map.Entry) m.entrySet()
 						.iterator().next()).getValue())) {
-					Element e = addJSONElem(elem, X_MAP);
+					Element e = addXonElem(elem, X_MAP);
 					setAttr(e, toXmlName((String)en.getKey()), en.getValue());
 					_ns.popContext();
 				} else {
@@ -310,7 +310,7 @@ class XonToXml extends XonTools implements XonNames {
 					List list = (List) x;
 					text = genTextFromItem(list, 0);
 					if (text == null) {
-						Element ee = addJSONElem(elem, X_ARRAY);
+						Element ee = addXonElem(elem, X_ARRAY);
 						addArrayItems(ee, list, 0);
 						_ns.popContext();
 						continue;
@@ -406,7 +406,7 @@ class XonToXml extends XonTools implements XonNames {
 					// so it will be an empty element
 					return;
 				}
-				e = addJSONElem(elem, X_ARRAY);
+				e = addXonElem(elem, X_ARRAY);
 				addArrayItems(e, array, 0);
 				_ns.popContext();
 				return;
@@ -481,7 +481,7 @@ class XonToXml extends XonTools implements XonNames {
 			// with those items
 			if (genMap) {
 				if (m.size() != 1) {
-					ee = addJSONElem(elem, X_MAP);
+					ee = addXonElem(elem, X_MAP);
 				}
 				for (Object x: m.entrySet()) {
 					Map.Entry xe = (Map.Entry) x;
@@ -518,7 +518,7 @@ class XonToXml extends XonTools implements XonNames {
 				} else {
 					if (m.isEmpty()) {
 						// if map is empty nothing was generated yet, so add map
-						addJSONElem(elem, X_MAP);
+						addXonElem(elem, X_MAP);
 						_ns.popContext();
 					}
 					for (Object x: mm.entrySet()) {
@@ -565,7 +565,7 @@ class XonToXml extends XonTools implements XonNames {
 	}
 
 	/** Create named item,
-	 * @param name name (JSON string converted to XML name).
+	 * @param name name (XON/JSON name converted to XML name).
 	 * @param val Object to be created as named item.
 	 * @param parent parent node where the item will be appended.
 	 * @return created element.
@@ -579,7 +579,7 @@ class XonToXml extends XonTools implements XonNames {
 			Map map = (Map) val;
 			if (map.isEmpty()) {
 				e = addElem(parent, namespace, name);
-				addJSONElem(e, X_MAP);
+				addXonElem(e, X_MAP);
 				_ns.popContext();
 				_ns.popContext(); // appended element js:map
 				return e;
@@ -612,7 +612,7 @@ class XonToXml extends XonTools implements XonNames {
 			}
 			if (numAttrs < map.size()) {
 				Element ee = (map.size() - numAttrs > 1)
-					? addJSONElem(e, X_MAP) : e;
+					? addXonElem(e, X_MAP) : e;
 				for (Object x: map.entrySet()) {
 					Map.Entry entry = (Map.Entry) x;
 					String key = (String) entry.getKey();
@@ -646,15 +646,15 @@ class XonToXml extends XonTools implements XonNames {
 			_ns.popContext();
 			return e;
 		} else {
-			e = addJSONElem(parent, X_MAP);
+			e = addXonElem(parent, X_MAP);
 			setAttr(e, name, val);
 			_ns.popContext();
 			return e;
 		}
 	}
 
-	/** Append map with JSON tuples to node.
-	 * @param map map with JSON tuples.
+	/** Append map with XON/JSON tuples to node.
+	 * @param map map with XON/JSON tuples.
 	 * @param forceMap if true the Map element is generated.
 	 * @param parent node where to append map.
 	 */
@@ -663,7 +663,7 @@ class XonToXml extends XonTools implements XonNames {
 		final boolean forceMap) {
 		int size = map.size();
 		if (size == 0) {
-			Element e = addJSONElem(parent, X_MAP);
+			Element e = addXonElem(parent, X_MAP);
 			_ns.popContext();
 			return e;
 		} else if (!forceMap && size == 1) {
@@ -674,7 +674,7 @@ class XonToXml extends XonTools implements XonNames {
 			}
 			return namedItemToXmlXD(key, o, parent);
 		} else {
-			Element e = addJSONElem(parent, X_MAP);
+			Element e = addXonElem(parent, X_MAP);
 			boolean allXmlns = true;
 			for (Object x: map.entrySet()) {
 				Map.Entry entry = (Map.Entry) x;
@@ -733,7 +733,7 @@ class XonToXml extends XonTools implements XonNames {
 			}
 		}
 		if (name == null) {
-			addJSONElem(_doc, X_MAP); // empty map
+			addXonElem(_doc, X_MAP); // empty map
 		} else {
 			name = toXmlName(name);
 			String namespace = _ns.getNamespaceURI(getNamePrefix(name));
@@ -759,29 +759,29 @@ class XonToXml extends XonTools implements XonNames {
 	 */
 	final static Element toXmlXD(final Object xon) {
 		XonToXml x = new XonToXml();
-		x._jsPrefix = XDConstants.XON_NS_PREFIX;
-		x._jsNamespace = XDConstants.XON_NS_URI_XD;
+		x._xPrefix = XDConstants.XON_NS_PREFIX;
+		x._xNamespace = XDConstants.XON_NS_URI_XD;
 		x._doc = KXmlUtils.newDocument();
 		x._ns = new KNamespace();
 		if (xon instanceof Map) {
 			x.createRootElementFromMap((Map) xon);
 		} else if (xon instanceof List) {
-			Element elem = x.addJSONElem(x._doc, X_ARRAY);
+			Element elem = x.addXonElem(x._doc, X_ARRAY);
 			x.addArrayItems(elem, (List) xon, 0);
 			x._ns.popContext();
 		} else if (isSimpleValue(xon)) {
-			Element e = x.addJSONElem(x._doc, X_ITEM);
+			Element e = x.addXonElem(x._doc, X_ITEM);
 			x.addValueAsText(e, xon);
 			x._ns.popContext();
 		} else {
-			 //Not JSON object&{0}
+			 //Not XON/JSON object&{0}
 			throw new SRuntimeException(JSON.JSON011, xon.getClass());
 		}
 		return x._doc.getDocumentElement();
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
-// JSON to XML ("W" format)
+// XON/JSON to XML ("W" format)
 ////////////////////////////////////////////////////////////////////////////////
 
 	/** Create element in "W" format from an object.
@@ -837,14 +837,14 @@ class XonToXml extends XonTools implements XonNames {
 		return e;
 	}
 
-	/** Create XML in "W" format from JSON/XON object.
-	 * @param json object with JSON data.
+	/** Create XML in "W" format from XON/JSON object.
+	 * @param xon object with XON/JSON data.
 	 * @return XML element in "W" format created from JSON/XON data.
 	 */
-	final static Element toXmlW(final Object json) {
+	final static Element toXmlW(final Object xon) {
 		XonToXml x = new XonToXml();
-		x._jsNamespace = XDConstants.XON_NS_URI_W;
-		x._jsPrefix = "";
-		return x.genValueW(json, x._doc = KXmlUtils.newDocument());
+		x._xNamespace = XDConstants.XON_NS_URI_W;
+		x._xPrefix = "";
+		return x.genValueW(xon, x._doc = KXmlUtils.newDocument());
 	}
 }

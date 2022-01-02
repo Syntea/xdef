@@ -13,11 +13,11 @@ public interface XConstants {
 	/** X-definition version 4.1 ID. */
 	public static final byte XD41 = 41;
 
-	/** JSON mode W3C format. */
-	public static byte JSON_MODE_W = 1;
-	/** JSON mode X-definition format. */
-	public static byte JSON_MODE_XD = 2;
+	/** XON/JSON mode W3C format. */
+	public static byte XON_MODE_W = 1;
+	/** XON/JSON mode X-definition format. */
+	public static byte XON_MODE_XD = 2;
 
-	/** JSON root element. */
-	public static byte JSON_ROOT = 4;
+	/** XON/JSON root element. */
+	public static byte XON_ROOT = 4;
 }

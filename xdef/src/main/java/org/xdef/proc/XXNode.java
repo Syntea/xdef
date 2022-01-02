@@ -313,19 +313,19 @@ public interface XXNode extends XDValue {
 	 */
 	public void setXDContext(String source);
 
-	/** Set JSON data as context for create mode.
-	 * @param data the JSON data. It can be either String with pathname or URL.
+	/** Set XON/JSON data as context for create mode.
+	 * @param data the XON/JSON data. It can be either pathname or URL.
 	 * @throws SRuntimeException if data is incorrect or if model is not found.
 	 */
-	public void setJSONContext(String data) throws SRuntimeException;
+	public void setXONContext(String data) throws SRuntimeException;
 
-	/** Set JSON data as context for create mode.
-	 * @param data the JSON data. It can be either JSON object or
-	 * File, URL or InputStream with JSON data* or XDResultSet
-	 * or XML data to be converted to JSON.
+	/** Set XON/JSON data as context for create mode.
+	 * @param data the JSON data. It can be either XON/JSON object or
+	 * File, URL or InputStream with XON/JSON data* or XDResultSet
+	 * or XML data to be converted to XON/JSON.
 	 * @throws SRuntimeException if data is incorrect or if model is not found.
 	 */
-	public void setJSONContext(Object data) throws SRuntimeException;
+	public void setXONContext(Object data) throws SRuntimeException;
 
 	/** Get actual model.
 	 * @return actual model.

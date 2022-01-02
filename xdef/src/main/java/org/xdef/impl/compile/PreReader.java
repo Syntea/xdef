@@ -2,7 +2,7 @@ package org.xdef.impl.compile;
 
 import java.io.InputStream;
 
-/** Interface for readers of source X-definition (SML, JSON).
+/** Interface for readers of source X-definition (XML, XON, JSON ...).
  * @author Vaclav Trojan
  */
 public interface PreReader {

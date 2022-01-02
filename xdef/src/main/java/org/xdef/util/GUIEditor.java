@@ -554,7 +554,7 @@ public class GUIEditor extends GUIScreen {
 
 	/** Run project with GUIEditor.
 	 * @param param 'c' (compose) , 'v' (validate) or 'g' (generate)
-	 * @param dataType 'x' (XML) or 'j' (JSON)
+	 * @param dataType 'x' (XML) or 'j' (XON/JSON)
 	 * @param src source with the project.
 	 */
 	public static final void runEditor(final char param,

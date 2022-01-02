@@ -7,7 +7,7 @@ import org.xdef.msg.SYS;
 import org.xdef.sys.SIllegalArgumentException;
 import org.xdef.xon.XonTools;
 
-/** The class JNull implements the internal object with JSON null value.
+/** The class DefJNull implements the internal object with XON/JSON null value.
  * @author Vaclav Trojan
  */
 public final class DefJNull extends XDValueAbstract {

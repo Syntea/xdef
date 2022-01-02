@@ -17,17 +17,17 @@ import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.xon.XonNames;
 
-/** Generation of Java source code methods for JSON getters/setters.
+/** Generation of Java source code methods for XON/JSON getters/setters.
  * @author Vaclav Trojan
  */
-class XCGeneratorJSON extends XCGeneratorBase1 {
+class XCGeneratorXON extends XCGeneratorBase1 {
 
-	/** Create instance of the class XCGeneratorJSON.
+	/** Create instance of the class XCGeneratorXON.
 	 * @param xp XDPool from which to generate X-components.
 	 * @param reporter Reporter where to write error and warning messages.
 	 * @param genJavadoc if true generate Javadoc to X-definition source.
 	 */
-	XCGeneratorJSON(final XDPool xp,
+	XCGeneratorXON(final XDPool xp,
 		final ArrayReporter reporter,
 		final boolean genJavadoc) {
 		super(xp, reporter, genJavadoc);
@@ -329,13 +329,13 @@ class XCGeneratorJSON extends XCGeneratorBase1 {
 	 * @param varNames set with variable names.
 	 * @return unique model name.
 	 */
-	private static String getJsonItemName(final XElement xe,
+	private static String getXonItemName(final XElement xe,
 		final String namePrefix,
 		final Set<String> classNames,
 		final Set<String> varNames) {
 		XData keyAttr = (XData) xe.getAttr(XonNames.X_KEYATTR);
 		String name = null;
-		if (xe._json == XConstants.JSON_MODE_W && xe._match >= 0
+		if (xe._xon == XConstants.XON_MODE_W && xe._match >= 0
 			&& keyAttr != null && keyAttr._check >= 0) {
 			XDValue[] code = ((XPool)xe.getXDPool()).getCode();
 			for (int i = keyAttr._check; i < code.length; i++) {
@@ -377,7 +377,7 @@ class XCGeneratorJSON extends XCGeneratorBase1 {
 	 * @param classNames set with class names.
 	 * @param varNames set with variable names.
 	 */
-	final void genJsonItemGetterAndSetter(final XElement xe,
+	final void genXonItemGetterAndSetter(final XElement xe,
 		final String typeName,
 		final String iname,
 		final int max,
@@ -386,7 +386,7 @@ class XCGeneratorJSON extends XCGeneratorBase1 {
 		final StringBuilder sbi,
 		final Set<String> classNames,
 		final Set<String> varNames) {
-		String name = getJsonItemName(xe, "get$", classNames, varNames);
+		String name = getXonItemName(xe, "get$", classNames, varNames);
 		String typ =
 			getJavaObjectTypeName((XData) xe.getAttr(XonNames.X_VALUEATTR));
 		boolean isNull = false;
@@ -396,7 +396,7 @@ class XCGeneratorJSON extends XCGeneratorBase1 {
 		String s;
 		if (max > 1) { // list of values
 			String typ1 = "java.util.List<" + typ + ">";
-			jGet = xe.getJsonMode() != 0 && "String".equals(typ)
+			jGet = xe.getXonMode() != 0 && "String".equals(typ)
 				? "org.xdef.xon.XonTools.jstringFromSource(y.getvalue())"
 				: "y.getvalue()";
 			// getter
@@ -425,7 +425,7 @@ class XCGeneratorJSON extends XCGeneratorBase1 {
 					"&{typ1}", typ1));
 			}
 			// setter
-			if (xe.getJsonMode() != 0) {
+			if (xe.getXonMode() != 0) {
 				if ("String".equals(typ)) {
 					jSet = "org.xdef.xon.XonUtil.toJsonString(x,false)";
 				} else {
@@ -483,12 +483,12 @@ class XCGeneratorJSON extends XCGeneratorBase1 {
 		} else { // single value
 			// getter
 			template =
-(_genJavadoc ? "\t/** Get JSON value of textnode of &{d}."+LN+
+(_genJavadoc ? "\t/** Get XON value of textnode of &{d}."+LN+
 "\t * @return value of text of &{d}"+LN+
 "\t */"+LN : "")+
 "\tpublic &{typ} get$&{name}(){"+LN+
 "\t\treturn _&{iname}==null?null:" +
-	("String".equals(typ) && xe.getJsonMode() != 0 ?
+	("String".equals(typ) && xe.getXonMode() != 0 ?
 	"org.xdef.xon.XonTools.jstringFromSource(_&{iname}.getvalue())"
 	: isNull ? typ + ".JNULL" : "_&{iname}.getvalue()") + ";" + LN
 +"\t}"+LN;
@@ -540,7 +540,7 @@ class XCGeneratorJSON extends XCGeneratorBase1 {
 						"&{name}", name));
 				}
 			}
-			jSet = "String".equals(typ) && xe.getJsonMode() != 0
+			jSet = "String".equals(typ) && xe.getXonMode() != 0
 				? "org.xdef.xon.XonUtil.toJsonString(x,false)":"x";
 			// setter
 			template =
@@ -613,7 +613,7 @@ class XCGeneratorJSON extends XCGeneratorBase1 {
 	 * @param classNames set with class names.
 	 * @param varNames set with variable names.
 	 */
-	final void genJsonObjects(final XElement xe,
+	final void genXonObjects(final XElement xe,
 		final String typeName,
 		final String iname,
 		final int max,
@@ -622,12 +622,12 @@ class XCGeneratorJSON extends XCGeneratorBase1 {
 		final StringBuilder sbi,
 		final Set<String> classNames,
 		final Set<String> varNames) {
-		String name = getJsonItemName(xe, "get$", classNames, varNames);
+		String name = getXonItemName(xe, "get$", classNames, varNames);
 	}
 
 	final void genToXonMethod(final XElement xe,
 		final StringBuilder getters) {
-		if (xe._json == XConstants.JSON_MODE_W
+		if (xe._xon == XConstants.XON_MODE_W
 			&& XDConstants.XON_NS_URI_W.equals(xe.getNSUri())) {
 			String s = xe.getLocalName();
 			String typ;

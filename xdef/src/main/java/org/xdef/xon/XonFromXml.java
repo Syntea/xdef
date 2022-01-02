@@ -11,21 +11,21 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.xdef.XDConstants;
 
-/** Test X-definition transformation XML -> JSONL
+/** Test X-definition transformation XML -> XON/JSON.
  * @author Vaclav Trojan
  */
 class XonFromXml extends XonUtil implements XonNames {
 
 ////////////////////////////////////////////////////////////////////////////////
-// Keywords of names of JSON types
+// Keywords of names of XON/JSON types
 ////////////////////////////////////////////////////////////////////////////////
-	/** JSON string item. */
+	/** XON/JSON string item. */
 	private final static String J_STRING = "string";
-	/** JSON number item. */
+	/** XON/JSON number item. */
 	private final static String J_NUMBER = "number";
-	/** JSON boolean item. */
+	/** XON/JSON boolean item. */
 	private final static String J_BOOLEAN = "boolean";
-	/** JSON null item. */
+	/** XON/JSON null item. */
 	private final static String J_NULL = "null";
 
 	private XonFromXml() {super();}
@@ -90,10 +90,10 @@ class XonFromXml extends XonUtil implements XonNames {
 		return result;
 	}
 
-	/** Create JSON object (array, map, or primitive value).
+	/** Create XON/JSON object (array, map, or primitive value).
 	 * @param elem element from XDConstants.XON_NS_URI_XD name space with
- JSON array, map, or primitive value
-	 * @return JSON array, map, or primitive value.
+	 * XON/JSON array, map, or primitive value.
+	 * @return XON/JSON array, map, or primitive value.
 	 */
 	private Object fromXmlW3C(final Element elem) {
 		String localName = elem.getLocalName();
@@ -116,14 +116,14 @@ class XonFromXml extends XonUtil implements XonNames {
 			return XonTools.xmlToJValue(elem.getTextContent());
 		}
 		throw new RuntimeException(
-			"Unsupported JSON W3C element: " + elem.getLocalName());
+			"Unsupported XON/JSON W3C element: " + elem.getLocalName());
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
 
-	/** Create JSON array from array element.
+	/** Create XON/JSON array from array element.
 	 * @param elem array element from XDConstants.XON_NS_URI_XD name space.
-	 * @return created JSON array.
+	 * @return created XON/JSON array.
 	 */
 	private List<Object> createArrayW3C(final Element elem) {
 		List<Object> result = new ArrayList<Object>();
@@ -137,9 +137,9 @@ class XonFromXml extends XonUtil implements XonNames {
 		return result;
 	}
 
-	/** Create JSON object (map) from map element.
+	/** Create XON/JSON object (map) from map element.
 	 * @param elem map element from XDConstants.XON_NS_URI_XD name space.
-	 * @return created JSON object (map).
+	 * @return created XON/JSON object (map).
 	 */
 	private Map<String, Object> createMapW3C(final Element elem) {
 		Map<String,Object> result = new LinkedHashMap<String,Object>();
@@ -178,9 +178,9 @@ class XonFromXml extends XonUtil implements XonNames {
 		}
 	}
 
-	/** Create JSON object form element (XD form).
+	/** Create XON/JSON object form element (XD form).
 	 * @param elem the element form which object will be created.
-	 * @return created JSON object.
+	 * @return created XON/JSON object.
 	 */
 	private Object fromXmlXD(final Element elem) {
 		String name = XonTools.xmlToJName(elem.getNodeName());
@@ -234,7 +234,8 @@ class XonFromXml extends XonUtil implements XonNames {
 							|| !s.startsWith("/*") || !s.endsWith("*/")) {
 							map.put(name, XonTools.xmlToJValue(s));
 							throw new RuntimeException(
-								"Text is not allowed in JSON map element: "+s);
+								"Text is not allowed in XON/JSON map element: "
+								+ s);
 						}
 					}
 				}
@@ -263,7 +264,7 @@ class XonFromXml extends XonUtil implements XonNames {
 				return XonTools.xmlToJValue(s);
 			}
 			throw new RuntimeException(
-				"Unknown element from JSON namespace: " + name);
+				"Unknown element from XON/JSON namespace: " + name);
 		}
 		if (childNodes.isEmpty()) {
 			if (attrs.isEmpty()) {
@@ -300,7 +301,7 @@ class XonFromXml extends XonUtil implements XonNames {
 					|| XDConstants.XDEF40_NS_URI.equals(nsURI)
 					|| XDConstants.XDEF32_NS_URI.equals(nsURI)
 					|| XDConstants.XDEF31_NS_URI.equals(nsURI)) {
-					array.add(s); //do not convert text of xd:json elements!
+					array.add(s); //don't convert text of xd:xon/jsaon elements!
 				} else {
 					addSimpleValue(array, s);
 				}
@@ -373,11 +374,11 @@ class XonFromXml extends XonUtil implements XonNames {
 		return map;
 	}
 
-	/** Create JSON object (map, array or primitive value) from element.
+	/** Create XON/JSON object (map, array or primitive value) from element.
 	 * @param node XML node with JSON data.
-	 * @return created JSON object (map, array or primitive value).
+	 * @return created XON/JSON object (map, array or primitive value).
 	 */
-	final static Object toJson(final Node node) {
+	final static Object toXon(final Node node) {
 		Element elem = node.getNodeType() == Node.DOCUMENT_NODE
 			? ((Document) node).getDocumentElement() : (Element) node;
 		XonFromXml x = new XonFromXml();

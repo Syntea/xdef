@@ -25,7 +25,7 @@ public class MyTest_2 extends XDTester {
 	public MyTest_2() {super();}
 
 	private static Object toJson(final XComponent xc) {
-		return XonUtil.xmlToJson(xc.toXml());
+		return XonUtil.xmlToXon(xc.toXml());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -79,7 +79,7 @@ public class MyTest_2 extends XDTester {
 			xd = xp.createXDDocument();
 			xc = xd.jparseXComponent(XonUtil.xonToJson(j), null, reporter);
 			assertTrue(XonUtil.xonEqual(XonUtil.xonToJson(j),
-				XonUtil.xmlToJson(xc.toXml())));
+				XonUtil.xmlToXon(xc.toXml())));
 			assertTrue(XonUtil.xonEqual(j, xd.getXon()));
 		} catch (Exception ex) {fail(ex);}
 if (T )return;
@@ -129,7 +129,7 @@ if (T )return;
 			assertEq(xml, parse(xd, xml, reporter));
 			assertNoErrors(reporter);
 			xd = xp.createXDDocument("");
-//			xd.setJSONContext(j);
+//			xd.setXONContext(j);
 			xd.setXDContext(xml);
 			el = create(xd, "array", reporter);
 			assertNoErrors(reporter);
@@ -168,7 +168,7 @@ if(T)return;
 			j = jparse(xd, json, reporter);
 			assertNoErrors(reporter);
 			xd = xp.createXDDocument("");
-//			xd.setJSONContext(j);
+//			xd.setXONContext(j);
 			el = XonUtil.xonToXml(j);
 			System.out.println(KXmlUtils.nodeToString(el, true));
 			xd.setXDContext(el);
@@ -213,7 +213,7 @@ if(T)return;
 			reporter.clear();
 			xd = xp.createXDDocument("Example");
 			el = XonUtil.xonToXmlXD(o);
-			o = XonUtil.xmlToJson(el);
+			o = XonUtil.xmlToXon(el);
 			assertTrue(XonUtil.xonEqual(j, o));
 //			if (KXmlUtils.compareElements(XonUtil.xonToXml(j),
 //				XonUtil.xonToXml(o), true, null).errorWarnings()) {
@@ -935,11 +935,11 @@ if(T ){return;}
 			assertTrue(XonUtil.xonEqual(XonUtil.parseJSON(json), j),
 				toJson(xc));
 			assertTrue(XonUtil.xonEqual(XonUtil.parseJSON(json), j),
-				XonUtil.xmlToJson(xc.toXml()));
+				XonUtil.xmlToXon(xc.toXml()));
 			assertTrue(XonUtil.xonEqual(XonUtil.parseJSON(json), j),
-				XonUtil.xmlToJson(XonUtil.xonToXml(toJson(xc))));
+				XonUtil.xmlToXon(XonUtil.xonToXml(toJson(xc))));
 			assertTrue(XonUtil.xonEqual(XonUtil.parseJSON(json), j),
-				XonUtil.xmlToJson(XonUtil.xonToXmlXD(toJson(xc))));
+				XonUtil.xmlToXon(XonUtil.xonToXmlXD(toJson(xc))));
 			json = "[123]";
 			j = xp.createXDDocument("X").jparse(json, reporter);
 			assertNoErrors(reporter);

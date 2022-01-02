@@ -23,7 +23,7 @@ import org.xdef.xon.XonNames;
 /** Generation of Java source code of XDComponents.
  * @author Vaclav Trojan
  */
-final class XCGenerator extends XCGeneratorJSON {
+final class XCGenerator extends XCGeneratorXON {
 
 	/** New instance of this class.*/
 	XCGenerator(final XDPool xp, final ArrayReporter rep, final boolean genDoc){
@@ -58,7 +58,7 @@ final class XCGenerator extends XCGeneratorJSON {
 		_components = components;
 		XElement xe;
 		String xelName = xelem.getName();
-		if (isRoot && xelem.getJsonMode() > 0 //JSON
+		if (isRoot && xelem.getXonMode() > 0 //XON/JSON
 			&& xelem._childNodes.length == 1
 			&& xelem._childNodes[0].getKind() == XMNode.XMELEMENT) {
 			xe = (XElement) xelem._childNodes[0];
@@ -420,7 +420,7 @@ final class XCGenerator extends XCGeneratorJSON {
 						}
 					}
 					genChildElementCreator(iname,  listNodes, max > 1);
-					if (xe1._json == XConstants.JSON_MODE_W
+					if (xe1._xon == XConstants.XON_MODE_W
 						&& XDConstants.XON_NS_URI_W.equals(xe1.getNSUri())) {
 						XData keyAttr = (XData)xe1.getAttr(XonNames.X_KEYATTR);
 						String jname;
@@ -433,7 +433,7 @@ final class XCGenerator extends XCGeneratorJSON {
 						jname = '"' + jname + '"';
 						if (XonNames.X_ITEM.equals(xe1.getLocalName())) {
 							if (groupKind != XMNode.XMCHOICE) {
-								genJsonItemGetterAndSetter(xe1,
+								genXonItemGetterAndSetter(xe1,
 									typeName, iname, max, setters, getters, sbi,
 									classNames, varNames);
 							}
@@ -441,7 +441,7 @@ final class XCGenerator extends XCGeneratorJSON {
 							|| XonNames.X_ARRAY.equals(xe1.getLocalName())) {
 							if (groupKind != XMNode.XMCHOICE) {
 								//TODO
-								genJsonObjects(xe1,
+								genXonObjects(xe1,
 									typeName, iname, max, setters, getters, sbi,
 									classNames, varNames);
 							}

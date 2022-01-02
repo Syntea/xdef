@@ -10,7 +10,6 @@ import org.w3c.dom.Element;
 import org.xdef.XDConstants;
 import org.xdef.msg.JSON;
 import org.xdef.sys.ArrayReporter;
-import static org.xdef.sys.Report.error;
 import org.xdef.sys.SBuffer;
 import org.xdef.sys.SPosition;
 import org.xdef.sys.SRuntimeException;
@@ -205,7 +204,7 @@ public class IniReader extends StringParser implements XonParsers {
 
 	@SuppressWarnings("unchecked")
 	public final static Map<String, Object> parseINI(Reader in, String sysId) {
-		XonParser jp = new XonReader.ObjParser();
+		XonParser jp = new XonObjParser();
 		IniReader xr = new IniReader(in, jp);
 		if (sysId != null) {
 			xr.setSysId(sysId);

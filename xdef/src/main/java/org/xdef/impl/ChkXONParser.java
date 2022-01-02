@@ -415,8 +415,8 @@ final class ChkXONParser implements XParser, XonParser {
 	 */
 	public final void comment(final SBuffer value){} // we ingore it here
 	@Override
-	/** X-script item parsed, not used methods for JSON/XON parsing
-	 * (used in X-definition compiler).
+	/** X-script item parsed (not used methods for XON/JSON parsing,
+	 * used in X-definition compiler).
 	 * @param name name of item.
 	 * @param value value of item.
 	 */

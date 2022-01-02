@@ -28,8 +28,8 @@ import org.xdef.xon.XonParsers;
 import org.xdef.xon.XonReader;
 import org.xdef.xon.XonTools;
 
-/** Parse  JSON/XON object from JSON/XON source and generate XML (W3C format).
- * Reads source with JSON/XON and generates W3C XML methods invoked in
+/** Parse  XON/JSON object from XON/JSON source and generate XML (W3C format).
+ * Reads source with XON/JSON and generates W3C XML methods invoked in
  * CHKDocument and CHKElement.
  * @author Vaclav Trojan
  */
@@ -222,7 +222,7 @@ public final class XonSourceParser implements XonParser, XParser {
 	 */
 	public void comment(SBuffer value){/*we ingore it here*/}
 	@Override
-	/** X-script item parsed, not used methods for JSON/XON parsing
+	/** X-script item parsed, not used methods for XON/JSON parsing
 	 * (used in X-definition compiler).
 	 * @param name name of item.
 	 * @param value value value of item.
@@ -262,7 +262,7 @@ public final class XonSourceParser implements XonParser, XParser {
 	}
 
 	////////////////////////////////////////////////////////////////////////////
-	/** XML W3C parser of JSON/XON object from JSON/XON object.
+	/** XML W3C parser of XON/JSON object from XON/JSON object.
 	 * @author Vaclav Trojan
 	 */
 	private static class XonObjectParser implements XonParsers {
@@ -276,7 +276,7 @@ public final class XonSourceParser implements XonParser, XParser {
 			_jp = jp;
 		}
 
-		/** Parsing of an JSON/XON object.
+		/** Parsing of an XON/JSON object.
 		 * @param o the object to parse.
 		 */
 		private void parse(final Object o) {

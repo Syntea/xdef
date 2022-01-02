@@ -24,12 +24,12 @@ import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
 
-/** Methods used in JSON/XON parsing, processing and conversions.
+/** Methods used in XON/JSON parsing, processing and conversions.
  * @author Vaclav Trojan
  */
 public class XonTools {
 
-	/** Value of null in JSON/XON objects. */
+	/** Value of null in XON/JSON objects. */
 	public static final JNull JNULL = new JNull();
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -98,9 +98,9 @@ public class XonTools {
 // public methods (used also in X-definition compilation and X-components)
 ////////////////////////////////////////////////////////////////////////////////
 
-	/** Create string from JSON/XON source string data.
-	 * @param s JSON string.
-	 * @return string created from JSON/XON string data.
+	/** Create string from XON/JSON source string data.
+	 * @param s XON/JSON string.
+	 * @return string created from XON/JSON string data.
 	 */
 	public final static String jstringToSource(final String s) {
 		StringBuilder sb = new StringBuilder();
@@ -140,7 +140,7 @@ public class XonTools {
 		return sb.toString();
 	}
 
-	/** Parse JSON/XON array (the string which begins with '[').
+	/** Parse XON/JSON array (the string which begins with '[').
 	 * @param ar the array where results are stored.
 	 * @param p String parser with the string.
 	 */
@@ -236,7 +236,7 @@ public class XonTools {
 		}
 	}
 
-	/** Get JSON/XON value from string in XML.
+	/** Get XON/JSON value from string in XML.
 	 * @param s string with XON simple value source
 	 * @return object with XON value
 	 */
@@ -270,7 +270,7 @@ public class XonTools {
 		}
 		if (ch == '0' && i + 1 < len && s.charAt(i+1) >= '0'
 			&& s.charAt(i+1) <= '9') {
-			return s; //redundant leading zero, => JSON string
+			return s; //redundant leading zero, => XON/JSON string
 		}
 		if (ch >= '0' && ch <= '9') { // not redundant leading zero
 			try {
@@ -280,11 +280,11 @@ public class XonTools {
 				return new BigDecimal(s);
 			} catch (Exception ex) {}
 		}
-		return s; // JSON String
+		return s; // XON/JSON String
 	}
 
-	/** Get XML name created from JSON/XON pair name.
-	 * @param s JSOM pair name.
+	/** Get XML name created from XON/JSON pair name.
+	 * @param s XON/JSON pair name.
 	 * @return XML name.
 	 */
 	public final static String toXmlName(final String s) {
@@ -326,9 +326,9 @@ public class XonTools {
 		return sb.toString();
 	}
 
-	/** Create JSON/XON named value from XML name.
+	/** Create XON/JSON named value from XML name.
 	 * @param name XML name.
-	 * @return JSON/XON name.
+	 * @return XON/JSON name.
 	 */
 	public final static String xmlToJName(final String name) {
 		if ("_x00_".equals(name)) {
@@ -354,7 +354,7 @@ public class XonTools {
 		return sb.toString();
 	}
 
-	/** Read character representation from JSON/XON source.
+	/** Read character representation from XON/JSON source.
 	 * @param p parser where is source.
 	 * @return decoded character.
 	 */
@@ -387,9 +387,9 @@ public class XonTools {
 		return -1;
 	}
 
-	/** Create JSON/XON string from source.
+	/** Create XON/JSON string from source.
 	 * @param src XML form of string.
-	 * @return XML form of string converted to JSON.
+	 * @return XML form of string converted to XON/JSON.
 	 */
 	public final static String jstringFromSource(final String src) {
 		if (src == null || src.isEmpty()) {
@@ -401,7 +401,7 @@ public class XonTools {
 		return jstringToSource(s);
 	}
 
-	/** Convert a character to JSON/XON representation.
+	/** Convert a character to XON/JSON representation.
 	 * @param c character to be converted.
 	 * @return string with converted character.
 	 */
@@ -471,7 +471,7 @@ public class XonTools {
 		}
 	}
 
-	/** Read value of JSON/XON string.
+	/** Read value of XON/JSON string.
 	 * @param p parser where the string is on the actual position.
 	 * @return the parsed string.
 	 */
@@ -493,7 +493,7 @@ public class XonTools {
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
-// Classes used when JSON is parsed from X-definition compiler.
+// Interface and classes used when XON/JSON is parsed in X-definition compiler.
 ////////////////////////////////////////////////////////////////////////////////
 
 	/** Interface of JSON/XON object. */
@@ -503,7 +503,7 @@ public class XonTools {
 		public SBuffer getSBuffer();
 	}
 
-	/** JSON/XON map. */
+	/** XON/JSON map. */
 	public static class JMap extends LinkedHashMap<Object, Object>
 		implements JObject {
 		private final SPosition _position; // SPosition of parsed object
@@ -516,7 +516,7 @@ public class XonTools {
 		public SBuffer getSBuffer() {return null;}
 	}
 
-	/** JSON/XON array. */
+	/** XON/JSON array. */
 	public static class JArray extends ArrayList<Object> implements JObject {
 		private final SPosition _position; // SPosition of parsed object
 		public JArray(final SPosition position) {super(); _position = position;}
@@ -528,7 +528,7 @@ public class XonTools {
 		public SBuffer getSBuffer() {return null;}
 	}
 
-	/** JSON/XON simple value. */
+	/** XON/JSON simple value. */
 	public static class JValue implements JObject {
 		private final SPosition _position; // SPosition of parsed object
 		private final Object _o; // parsed object
@@ -546,7 +546,7 @@ public class XonTools {
 		public String toString() {return _o == null ? "null" : _o.toString();}
 	}
 
-	/** JSON/XON any object. */
+	/** XON/JSON any object. */
 	public static class JAny extends JValue {
 		public JAny(final SPosition position, final SBuffer val) {
 			super(position, val);
@@ -555,7 +555,7 @@ public class XonTools {
 		public SBuffer getSBuffer() {return (SBuffer) getValue();}
 	}
 
-	/** Representation of JSON/XON object "null". */
+	/** Representation of XON/JSON object "null". */
 	public static final class JNull {
 		private JNull() {}
 		@Override

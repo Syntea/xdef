@@ -20,12 +20,12 @@ import org.xdef.sys.StringParser;
 import static org.xdef.xon.XonTools.charToJSource;
 import static org.xdef.xon.XonTools.jstringToSource;
 
-/** Conversion of JSON or XON to string.
+/** Conversion of XON/JSON to string.
  * @author Vaclav Trojan
  */
 class XonToString extends XonTools {
 
-	/** Add the a string created from JSON or XON simple value to StringBuilder.
+	/** Add the string created from XON/JSON simple value to StringBuilder.
 	 * @param x object to be converted to String.
 	 * @return sb created string.
 	 * @param xon if true then XON else if false JOSN source is generated.
@@ -102,7 +102,7 @@ class XonToString extends XonTools {
 		return '"' + jstringToSource(result) + '"';
 	}
 
-	/** Add the string created from JSON or XON array to StringBuilder.
+	/** Add the string created from XON/JSON array to StringBuilder.
 	 * @param array array to be created to String.
 	 * @param indent indentation of result,
 	 * @param sb StringBuilder where to append the created string.
@@ -151,7 +151,7 @@ class XonToString extends XonTools {
 		sb.append(']');
 	}
 
-	/** Add the string created from JSON or XON object to StringBuilder.
+	/** Add the string created from XON/JSON object to StringBuilder.
 	 * @param obj object to be converted to String.
 	 * @param indent indentation of result,
 	 * @param sb StringBuilder where to append the created string.
@@ -172,7 +172,7 @@ class XonToString extends XonTools {
 		}
 	}
 
-	/** Add the string created from JSON or XON map to StringBuilder.
+	/** Add the string created from XON/JSON map to StringBuilder.
 	 * @param map map to be created to String.
 	 * @param indent indentation of result,
 	 * @param sb StringBuilder where to append the created string.

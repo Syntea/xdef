@@ -60,7 +60,7 @@ public class TestXon extends XDTester {
 				XonUtil.toJsonString(x, true));
 			XDTester.genXComponent(xp, clearTempDir());
 			xc = xp.createXDDocument().jparseXComponent(xon, null, reporter);
-			y = XonUtil.xmlToJson(xc.toXml());
+			y = XonUtil.xmlToXon(xc.toXml());
 			if (!XonUtil.xonEqual(XonUtil.xonToJson(x),y)) {
 				return "4\n" + XonUtil.toJsonString(XonUtil.xonToJson(x))
 					+ "\n" +  XonUtil.toJsonString(y);
@@ -253,7 +253,7 @@ public class TestXon extends XDTester {
 			reporter.clear();
 			y = XComponentUtil.toXon(xc);
 			assertTrue(XonUtil.xonEqual(x,y));
-			x = XonUtil.xmlToJson(xc.toXml());
+			x = XonUtil.xmlToXon(xc.toXml());
 			y = XonUtil.xonToJson(y);
 			assertTrue(XonUtil.xonEqual(x,y));
 		} catch (Exception ex) {fail(ex);}

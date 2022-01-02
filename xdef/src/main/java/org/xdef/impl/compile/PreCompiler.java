@@ -8,7 +8,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
 
-/** Interface for preparing PNodes from sources for compiler (XML, JSON etc)
+/** Interface for preparing PNodes from sources for compiler (XML,XON.JSON etc)
  * @author Vaclav Trojan
  */
 public interface PreCompiler {

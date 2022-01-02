@@ -12,8 +12,8 @@ import org.w3c.dom.Node;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.xml.KXmlUtils;
 
-/** JSON/XON utility (parseJSON JSON source to JSON/XON instance, compare JSON/XON
- objects, and create string with JSON/XON source from JSON/XON object.
+/** XON/JSON utility (parseJSON source to XON/JSON instance, compare XON/JSON
+ * objects, create string with XON/JSON source from an XON/JSON object.
  * @author Vaclav Trojan
  */
 public class XonUtil {
@@ -364,47 +364,47 @@ public class XonUtil {
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
-// XML to JSON
+// XML to XON
 ////////////////////////////////////////////////////////////////////////////////
 
-	/** Convert XML element to JSON object.
+	/** Convert XML element to XON object.
 	 * @param node XML element or document.
 	 * @return JSON object.
 	 */
-	public final static Object xmlToJson(final Node node) {
-		return XonFromXml.toJson(node);
+	public final static Object xmlToXon(final Node node) {
+		return XonFromXml.toXon(node);
 	}
 
-	/** Convert XML document to JSON object.
+	/** Convert XML document to XON object.
 	 * @param source path or string with source of XML document.
 	 * @return object with JSON data.
 	 */
-	public final static Object xmlToJson(final String source) {
-		return xmlToJson(KXmlUtils.parseXml(source).getDocumentElement());
+	public final static Object xmlToXon(final String source) {
+		return XonUtil.xmlToXon(KXmlUtils.parseXml(source).getDocumentElement());
 	}
 
-	/** Convert XML document to JSON object.
+	/** Convert XML document to XON object.
 	 * @param file file with XML document.
 	 * @return object with JSON data.
 	 */
-	public final static Object xmlToJson(final File file) {
-		return xmlToJson(KXmlUtils.parseXml(file).getDocumentElement());
+	public final static Object xmlToXon(final File file) {
+		return XonUtil.xmlToXon(KXmlUtils.parseXml(file).getDocumentElement());
 	}
 
-	/** Convert XML document to JSON object.
+	/** Convert XML document to XON object.
 	 * @param url URL containing XML document.
 	 * @return object with JSON data.
 	 */
-	public final static Object xmlToJson(final URL url) {
-		return xmlToJson(KXmlUtils.parseXml(url).getDocumentElement());
+	public final static Object xmlToXon(final URL url) {
+		return XonUtil.xmlToXon(KXmlUtils.parseXml(url).getDocumentElement());
 	}
 
-	/** Convert XML document to JSON object.
+	/** Convert XML document to XON object.
 	 * @param in InputStream with XML document.
 	 * @return object with JSON data.
 	 */
-	public final static Object xmlToJson(final InputStream in) {
-		return xmlToJson(KXmlUtils.parseXml(in).getDocumentElement());
+	public final static Object xmlToXon(final InputStream in) {
+		return XonUtil.xmlToXon(KXmlUtils.parseXml(in).getDocumentElement());
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -575,9 +575,9 @@ public class XonUtil {
 // Compare two JSON/XON objects.
 ////////////////////////////////////////////////////////////////////////////////
 
-	/** Compare two JSON or XON objects.
-	 * @param j1 first object with JSON or XON data.
-	 * @param j2 second object with JSON or XON data.
+	/** Compare two XON/JSON objects.
+	 * @param j1 first object with XON/JSON data.
+	 * @param j2 second object with XON/JSON data.
 	 * @return true if and only if both objects contains equal data.
 	 */
 	public final static boolean xonEqual(final Object j1, final Object j2) {

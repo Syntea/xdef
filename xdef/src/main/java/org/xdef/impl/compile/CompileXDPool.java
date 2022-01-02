@@ -57,8 +57,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 
 	/** MAX_REFERENCE max level of nested references */
 	private static final int MAX_REFERENCE = 4096;
-	/** No JSON mode. */
-	private static final byte NOJSON = 0;
+	/** No XON/JSON mode. */
+	private static final byte NOXON = 0;
 
 	/** XPreCompiler instance.  */
 	private final PreCompiler _precomp;
@@ -82,8 +82,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 	private final CompileXScript _scriptCompiler;
 	/** Code generator. */
 	private final CompileCode _codeGenerator;
-	/** Set of JSON names. */
-	Set<String> _jsonNames = new HashSet<String>();
+	/** Set of XON/JSON names. */
+	Set<String> _xonNames = new HashSet<String>();
 
 	/** Creates a new instance of XDefCompiler
 	 * @param xp The XDefPool object.
@@ -1313,7 +1313,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		final PNode pnode,
 		final XDefinition xdef,
 		final int level,
-		final byte json) {
+		final byte xon) {
 		String xchildName = pnode._name.getString();
 		XNode newNode;
 		SBuffer sval;
@@ -1484,7 +1484,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			} else if ("xon".equals(name) || "json".equals(name)
 				|| "ini".equals(name)) { //xon
 				if (pnode._value == null || pnode._value.getString().isEmpty()){
-					//JSON model is missing in JSON definition
+					//XON/JSON model is missing in JSON definition
 					error(pnode._name, XDEF.XDEF315,"&{xpath}"+pnode._xpathPos);
 					return;
 				}
@@ -1492,7 +1492,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				sval = pa == null ? null : pa._value;
 				if (sval == null) {
 					sval = new SBuffer(name, pnode._name);
-					//The name of JSON model is required
+					//The name of XON/JSON model is required
 					error(pnode._name, XDEF.XDEF317, name);
 				} else {
 					String s = sval.getString().trim();
@@ -1501,26 +1501,26 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						error(sval, XDEF.XDEF316, name, s);
 					}
 				}
-				byte jsonMode =  XConstants.JSON_MODE_W; //W3C mode is default
+				byte jsonMode =  XConstants.XON_MODE_W; //W3C mode is default
 				pa =  _precomp.getXdefAttr(pnode, "mode", false, true);
 				if (pa != null) {
 					if ("xdef".equalsIgnoreCase(pa._value.getString())) {
-						jsonMode =  XConstants.JSON_MODE_XD; //X-definition mode
+						jsonMode =  XConstants.XON_MODE_XD; //X-definition mode
 					} else if (!"w3c".equalsIgnoreCase(pa._value.getString())) {
-						//Incorrect attribute "mode" in JSON model: &{0} (must be
-						// "xd" or "w3c")&{#SYS000}
+						//Incorrect attribute "mode" in XON/JSON model: &{0}
+						// (must be "xd" or "w3c")&{#SYS000}
 						error(pa._value, XDEF.XDEF215,
 							sval == null ? "" : sval.getString());
 					}
 				}
-				pnode._jsonMode = (byte) (jsonMode | XConstants.JSON_ROOT);
+				pnode._xonMode = (byte) (jsonMode | XConstants.XON_ROOT);
 				for (PAttr pattr:  pnode.getAttrs()) {
 					//Attribute '&{0}' not allowed here
 					error(pattr._value, XDEF.XDEF254, pattr._name);
 				}
-				CompileJsonXdef.genXdef(pnode,
+				CompileXonXdef.genXdef(pnode,
 					jsonMode,
-					name,
+					name.equals("json") ? "xon" : name,
 					sval,
 					_precomp.getReportWriter());
 				compileXChild(xdef, null, pnode, xdef, 1, jsonMode);
@@ -1560,7 +1560,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			if (nodei._xdef == null) {
 				nodei._xdef = xdef;
 			}
-			compileXChild(newNode, x, nodei, xdef, level + 1, json);
+			compileXChild(newNode, x, nodei, xdef, level + 1, xon);
 		}
 		short newKind = newNode.getKind();
 		if (level == 1) {
@@ -1590,7 +1590,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				_scriptCompiler._g._varBlock =
 					_scriptCompiler._g._varBlock.getParent();
 			}
-			((XElement) newNode)._json = json;
+			((XElement) newNode)._xon = xon;
 		}
 	}
 
@@ -1668,18 +1668,18 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					} else {
 						if ("list".equals(name)) {
 							for (PNode pn: nodei.getChildNodes()){
-								compileXChild(dummy, dummy, pn, def, 2, NOJSON);
+								compileXChild(dummy, dummy, pn, def, 2, NOXON);
 							}
 						} else if (name.startsWith("att")) {
 							compileAttrs(nodei, defName, dummy, true);
 						} else {
-							compileXChild(dummy, dummy, nodei, def, 2, NOJSON);
+							compileXChild(dummy, dummy, nodei, def, 2, NOXON);
 						}
 					}
 				}
 				continue;
 			}
-			compileXChild(def, null, nodei, def, 1, NOJSON);
+			compileXChild(def, null, nodei, def, 1, NOXON);
 		}
 		_nodeList.clear();
 		_scriptCompiler._actDefName = actDefName;

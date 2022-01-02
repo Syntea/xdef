@@ -336,23 +336,23 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	}
 
 	@Override
-	/** Set JSON data as context for create mode.
-	 * @param data the JSON data. It can be either String with pathname or URL.
+	/** Set XON/JSON data as context for create mode.
+	 * @param data the XON/JSON data. It can be either pathname or URL.
 	 * @throws SRuntimeException if data is incorrect or if model is not found.
 	 */
-	public final void setJSONContext(final String data)
+	public final void setXONContext(final String data)
 		throws SRuntimeException {
-		setJSONContext(XonUtil.parseJSON(data));
+		setXONContext(XonUtil.parseJSON(data));
 	}
 
 	@Override
-	/** Set JSON data as context for create mode.
-	 * @param data the JSON data. It can be either JSON object or
-	 * File, URL or InputStream with JSON data* or XDResultSet
-	 * or XML data to be converted to JSON.
+	/** Set XON/JSON data as context for create mode.
+	 * @param data the XON/JSON data. It can be either XON/JSON object or
+	 * File, URL or InputStream with XON/JSON data* or XDResultSet
+	 * or XML data to be converted to XON/JSON.
 	 * @throws SRuntimeException if data is incorrect or if model is not found.
 	 */
-	public final void setJSONContext(final Object data)
+	public final void setXONContext(final Object data)
 		throws SRuntimeException {
 		Element e = null;
 		if (data == null || data instanceof Map || data instanceof List
@@ -377,7 +377,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 			setXDContext(e);
 			return;
 		}
-		throw new SRuntimeException(XDEF.XDEF318); //Incorrect JSON data
+		throw new SRuntimeException(XDEF.XDEF318); //Incorrect XON/JSON data
 	}
 
 	@Override
@@ -1085,8 +1085,8 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 		return "";
 	}
 
-	/** Get X-position and xpath information. If it is JSON, then create
-	 * modified JSON path.
+	/** Get X-position and xpath information. If it is XON/JSON, then create
+	 * modified XON/JSON path.
 	 * @param xpos X-position of model.
 	 * @param xpath Xpath of data (may be null).
 	 * @return array with two items - the first one is X-position and the
@@ -1113,7 +1113,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 			return result;
 		}
 		XMNode[] xx = base.getChildNodeModels();
-		if (xx == null || base.getJsonMode() == 0) {
+		if (xx == null || base.getXonMode() == 0) {
 			return result;
 		}
 		ndx = ndx1 + 1;
@@ -1254,7 +1254,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	 * in message reporting.
 	 * @param xpos string with X-position.
 	 * @param xpath XPath of data (may be null).
-	 * @return modification information (convert to JSON format if JSON).
+	 * @return modification information (convert to XON format if XON).
 	 */
 	final String getPosMod(final String xpos, final String xpath) {
 		String[] x = getPosInfo(xpos, xpath);

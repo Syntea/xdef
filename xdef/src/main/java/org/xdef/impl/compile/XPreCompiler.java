@@ -43,8 +43,8 @@ public class XPreCompiler implements PreCompiler {
 	static final int NS_XINCLUDE_INDEX = NS_XLINK_INDEX + 1;		//4
 	/** index of NameSpace of XML Schema. */
 	static final int NS_XMLSCHEMA_INDEX = NS_XINCLUDE_INDEX + 1;	//5
-	/** index of NameSpace of JSON (W3C). */
-	static final int NS_JSON_INDEX = NS_XMLSCHEMA_INDEX + 1;		//6
+	/** index of NameSpace of XON/JSON (W3C). */
+	static final int NS_XON_INDEX = NS_XMLSCHEMA_INDEX + 1;		//6
 
 	/** Table of NameSpace prefixes. */
 	static final Map<String, Integer> DEFINED_PREFIXES =
@@ -109,7 +109,7 @@ public class XPreCompiler implements PreCompiler {
 		_codeGenerator._namespaceURIs.add(XDConstants.XINCLUDE_NS_URI);
 		_codeGenerator._namespaceURIs.add( // XML schema
 			XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI);
-		_codeGenerator._namespaceURIs.add(XDConstants.XON_NS_URI_W); //JSON
+		_codeGenerator._namespaceURIs.add(XDConstants.XON_NS_URI_W); //XON/JSON
 		_macrosProcessed = false;
 		_reporter = reporter == null ? new ArrayReporter() : reporter;
 		_xmlReader = new PreReaderXML(this);

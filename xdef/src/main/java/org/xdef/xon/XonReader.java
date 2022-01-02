@@ -5,13 +5,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.URI;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.Currency;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Stack;
 import org.xdef.impl.code.DefEmailAddr;
 import org.xdef.msg.JSON;
 import org.xdef.msg.XDEF;
@@ -21,16 +15,15 @@ import org.xdef.sys.Price;
 import org.xdef.sys.SBuffer;
 import org.xdef.sys.SException;
 import org.xdef.sys.SParser;
-import static org.xdef.sys.SParser.NOCHAR;
 import org.xdef.sys.SPosition;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
 
-/** Parser of JSON/XON source.
+/** Parser of XON/JSON source.
  * @author Vaclav Trojan
  */
-public class XonReader extends StringParser implements XonParsers {
+public final class XonReader extends StringParser implements XonParsers {
 	/** Flag to accept comments (default false; true=accept comments). */
 	private boolean _acceptComments;
 	/** Flag if parse JSON or XON (default false; false=JSON, true=XON). */
@@ -56,34 +49,12 @@ public class XonReader extends StringParser implements XonParsers {
 
 	/** Create instance of parser.
 	 * @param jp parser of XON source.
-	 * @param source String with source data.
-	 */
-	public XonReader(final String source, XonParser jp) {
-		super(source);
-		_jp = jp;
-	}
-
-	/** Create instance of parser.
-	 * @param jp parser of XON source.
 	 * @param source Reader with source data.
 	 */
 	public XonReader(final Reader source, XonParser jp) {
 		super(source, new ArrayReporter());
 		_jp = jp;
 	}
-
-	/** Create instance of parser.
-	 * @param jp parser of XON source.
-	 * @param source URL with source data.
-	 */
-	public XonReader(final URL source, XonParser jp) {
-		super(source, new ArrayReporter(), 0);
-		_jp = jp;
-	}
-
-	@Override
-	/** Set mode that JSON is parsed in X-definition compiler. */
-	public final void setXdefMode() {_xonMode = _acceptComments = _jdef = true;}
 
 	/** Set mode that XON is parsed. */
 	public final void setXonMode() {
@@ -94,53 +65,52 @@ public class XonReader extends StringParser implements XonParsers {
 	/** Set mode for strict JSON parsing (JSON, no comments). */
 	public final void setJsonMode() {_acceptComments=_xonMode=_jdef=false;}
 
-	/** Set mode for JSON parsing (with comments). */
+	/** Set mode for XON/JSON parsing (with comments). */
 	public final void setCommentsMode() {_acceptComments = true;}
 
-	/** Skip white space separators (and comments if accepted).
-	 * @return true if a space or comment was found.
-	 */
-	public final boolean isSpacesOrComments() {
-		boolean result = isSpaces();
-		boolean wasLineComment;
+	/** Skip white spaces (and comments if accepted). */
+	public final void skipSpacesOrComments() {
 		StringBuilder sb = null;
 		SPosition spos = null;
-		while((wasLineComment = isChar('#')) || isToken("/*") ) {
-			result = true;
-			if (sb == null) {
-				spos = getPosition();
-				sb = new StringBuilder();
-			}
-			if (!_acceptComments) { // omments not allowed
-				warning(JSON.JSON019);  //Comments are not allowed here
-			}
-			if (wasLineComment) {
-				while (!isNewLine() && !eos()) {
-					sb.append(nextChar());
+		for (;;) {
+			isSpaces();
+			boolean wasLineComment;
+			if ((wasLineComment = isChar('#')) || isToken("/*")) {
+				if (sb == null) {
+					sb = new StringBuilder();
+					spos = getPosition();
+					if (!_acceptComments) { // omments not allowed
+						lightError(JSON.JSON019);//Comments are not allowed here
+					}
+				}
+				if (wasLineComment) {
+					while (!isNewLine() && !eos()) {
+						sb.append(nextChar());
+					}
+				} else {
+					while (!isToken("*/") && !eos()) {
+						sb.append(nextChar());
+					}
+					if (eos()) {
+						error(JSON.JSON015); //Unclosed comment
+						break;
+					}
 				}
 			} else {
-				while (!isToken("*/") && !eos()) {
-					sb.append(nextChar());
+				if (sb != null) {
+					_jp.comment(new SBuffer(sb.toString(), spos));
 				}
-				if (eos()) {
-					error(JSON.JSON015); //Unclosed comment
-					break;
-				}
+				return;
 			}
-			isSpaces();
 		}
-		if (sb != null) {
-			_jp.comment(new SBuffer(sb.toString(), spos));
-		}
-		return result;
 	}
 
-	/** Read JSON/XON map.
+	/** Read XON/JSON map.
 	 * @throws SRuntimeException is an error occurs.
 	 */
 	private void readMap() throws SRuntimeException {
 		_jp.mapStart(getPosition());
-		isSpacesOrComments();
+		skipSpacesOrComments();
 		SPosition spos = getPosition();
 		if (isChar('}')) { // empty map
 			_jp.mapEnd(spos);
@@ -156,11 +126,11 @@ public class XonReader extends StringParser implements XonParsers {
 					i==0 ? XonNames.SCRIPT_NAME : XonNames.ONEOF_NAME,
 					spos);
 				wasScript = true;
-				isSpacesOrComments();
+				skipSpacesOrComments();
 				SBuffer value = null;
 				if (i == 1) { // oneOf
 					if (isChar('=')) {
-						isSpacesOrComments();
+						skipSpacesOrComments();
 						spos = getPosition();
 						XonTools.JValue jv = readSimpleValue();
 						if (jv.getValue() instanceof String) {
@@ -176,7 +146,7 @@ public class XonReader extends StringParser implements XonParsers {
 						//"&{0}"&{1}{ or "}{"} expected
 						error(JSON.JSON002, "=");
 					}
-					isSpacesOrComments();
+					skipSpacesOrComments();
 					spos = getPosition();
 					Object o = readSimpleValue();
 					if (o != null && o instanceof XonTools.JValue) {
@@ -202,24 +172,23 @@ public class XonReader extends StringParser implements XonParsers {
 					setEos();
 					return;
 				}
-				isSpacesOrComments();
+				skipSpacesOrComments();
 				if (!isChar(separator)) {
 					//"&{0}"&{1}{ or "}{"} expected
 					error(JSON.JSON002, String.valueOf(separator));
 				}
 				_jp.namedValue(name);
-				isSpacesOrComments();
 				readItem();
 			}
-			isSpacesOrComments();
+			skipSpacesOrComments();
 			if (isChar('}')) {
-				isSpacesOrComments();
+				skipSpacesOrComments();
 				_jp.mapEnd(this);
 				return;
 			}
 			if (isChar(',') || _xonMode) {
 				spos = getPosition();
-				isSpacesOrComments();
+				skipSpacesOrComments();
 				if (isChar('}')) {
 					if (!_xonMode) {
 						SPosition spos1 = getPosition();
@@ -253,7 +222,7 @@ public class XonReader extends StringParser implements XonParsers {
 	 * @throws SRuntimeException is an error occurs.
 	 */
 	private void readArray() throws SRuntimeException {
-		isSpacesOrComments();
+		skipSpacesOrComments();
 		_jp.arrayStart(getPosition());
 		if (isChar(']')) { // empty array
 			_jp.arrayEnd(getPosition());
@@ -272,9 +241,9 @@ public class XonReader extends StringParser implements XonParsers {
 					spos);
 				wasScript = true;
 				SBuffer value = null;
-				isSpacesOrComments();
+				skipSpacesOrComments();
 				if (isChar('=')) {
-					isSpacesOrComments();
+					skipSpacesOrComments();
 					XonTools.JValue jv = readSimpleValue();
 					if (jv.getValue() instanceof String) {
 						value = new SBuffer((String) jv.getValue(),
@@ -293,14 +262,14 @@ public class XonReader extends StringParser implements XonParsers {
 			} else {
 				readItem();
 			}
-			isSpacesOrComments();
+			skipSpacesOrComments();
 			if (isChar(']')) {
 				_jp.arrayEnd(this);
 				return;
 			}
 			if (isChar(',')) {
 				spos = getPosition();
-				isSpacesOrComments();
+				skipSpacesOrComments();
 				if (isChar(']')) {
 					if (!_xonMode) {
 						SPosition spos1 = getPosition();
@@ -391,7 +360,7 @@ public class XonReader extends StringParser implements XonParsers {
 		return result;
 	}
 
-	/** Read JSON/XON simple simpleValue.
+	/** Read XON/JSON simple simpleValue.
 	 * @return parsed simpleValue: String, Number, Boolean or null
 	 * (or XON object).
 	 * @throws SRuntimeException is an error occurs.
@@ -426,7 +395,7 @@ public class XonReader extends StringParser implements XonParsers {
 								new URI(XonTools.readJString(this)));
 						} catch (Exception ex) {}
 						setIndex(pos);
-						//JSON value expected
+						//XON/JSON value expected
 						return returnError(spos, null, JSON.JSON010, "[]{}");
 					case 2:  // Email address
 						try {
@@ -559,7 +528,7 @@ public class XonReader extends StringParser implements XonParsers {
 							: Double.NEGATIVE_INFINITY);
 				}
 				setIndex(pos);
-				//JSON simpleValue expected
+				//XON/JSON simpleValue expected
 				return returnError(spos, null, JSON.JSON010, "',[]{}");
 			}
 			// number
@@ -657,10 +626,11 @@ public class XonReader extends StringParser implements XonParsers {
 		}
 	}
 
-	/** Read JSON/XON item.
+	/** Read XON/JSON item.
 	 * @throws SRuntimeException if an error occurs.
 	 */
 	private void readItem() throws SRuntimeException {
+		skipSpacesOrComments();
 		if (eos()) {
 			fatal(JSON.JSON007); //unexpected eof
 		} else if (isChar('{')) { // Map
@@ -672,9 +642,9 @@ public class XonReader extends StringParser implements XonParsers {
 			spos.setIndex(getIndex() - XonNames.ANY_NAME.length());
 			SBuffer name = new SBuffer(XonNames.ANY_NAME, spos);
 			SBuffer val = new SBuffer(XonNames.ANY_NAME, spos);
-			isSpacesOrComments();
+			skipSpacesOrComments();
 			if (isOneOfChars(":=") != NOCHAR) {
-				isSpacesOrComments();
+				skipSpacesOrComments();
 				XonTools.JValue jv = readSimpleValue();
 				if (!(((XonTools.JValue) jv).getValue() instanceof String)) {
 					//After ":" in the command $any must follow simpleValue
@@ -706,13 +676,15 @@ public class XonReader extends StringParser implements XonParsers {
 ////////////////////////////////////////////////////////////////////////////////
 
 	@Override
-	/** Parse JSON or XON source data (depends on the flag "_xon").
+	/** Set mode that XON/JSON is parsed in X-definition compiler. */
+	public final void setXdefMode() {_xonMode = _acceptComments = _jdef = true;}
+	@Override
+	/** Parse XON/JSON source data (depends on the flag "_xon").
 	 * @throws SRuntimeException if an error occurs,
 	 */
 	public final void parse() throws SRuntimeException {
-		isSpacesOrComments();
 		readItem();
-		isSpacesOrComments();
+		skipSpacesOrComments();
 		if (!eos()) {
 			error(JSON.JSON008);//Text after JSON not allowed
 		}
@@ -720,8 +692,8 @@ public class XonReader extends StringParser implements XonParsers {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-	/** Parse XON or JSON source data.
-	 * @param in Reader with XON or JSON source data.
+	/** Parse XON/JSON source data.
+	 * @param in Reader with XON/JSON source data.
 	 * @param sysId System ID of source position or null.
 	 * @param xonMode if true then XON, if false JSON.
 	 * @return parsed XON or JSON object.
@@ -729,7 +701,7 @@ public class XonReader extends StringParser implements XonParsers {
 	private static Object parseXonJson(final Reader in,
 		final String sysId,
 		final boolean xonMode) {
-		ObjParser jp = new ObjParser();
+		XonObjParser jp = new XonObjParser();
 		XonReader xr = new XonReader(in, jp);
 		xr._acceptComments = xonMode;
 		xr._xonMode = xonMode; // XON/JSON mode
@@ -737,7 +709,7 @@ public class XonReader extends StringParser implements XonParsers {
 			xr.setSysId(sysId);
 		}
 		xr.parse();
-		xr.isSpacesOrComments();
+		xr.skipSpacesOrComments();
 		if (!xr.eos()) {
 			xr.error(JSON.JSON008);//Text after JSON not allowed
 		}
@@ -761,112 +733,5 @@ public class XonReader extends StringParser implements XonParsers {
 	 */
 	public final static Object parseJSON(Reader in, String sysId) {
 		return parseXonJson(in, sysId, false);
-	}
-
-////////////////////////////////////////////////////////////////////////////////
-
-	/** Implementation of JParser for creating XON/JSON object from source. */
-	public static class ObjParser implements XonParser {
-
-		private final Stack<Integer> _kinds = new Stack<Integer>();
-		private final Stack<List<Object>> _arrays = new Stack<List<Object>>();
-		private final Stack<Map<String, Object>> _maps =
-			new Stack<Map<String, Object>>();
-		private int _kind; // 0..value, 1..array, 2..map
-		private final Stack<String> _names = new Stack<String>();
-		private Object _value;
-
-		public ObjParser() { _kinds.push(_kind = 0); }
-
-////////////////////////////////////////////////////////////////////////////////
-// JParser interface
-////////////////////////////////////////////////////////////////////////////////
-		@Override
-		/** Put value to result.
-		 * @param value X_Value to be added to result object.
-		 * @return null or name of pair if value pair already exists in
-		 * the currently processed map.
-		 */
-		public String putValue(XonTools.JValue value) {
-			if (_kind == 1) {
-				_arrays.peek().add(value.getValue());
-			} else if (_kind == 2) {
-				String name = _names.pop();
-				if (_maps.peek().put(name, value.getValue()) != null) {
-					return name;
-				}
-			} else {
-				_value = value.getValue();
-			}
-			return null;
-		}
-		@Override
-		/** Set name of value pair.
-		 * @param name value name.
-		 */
-		public void namedValue(SBuffer name) {_names.push(name.getString());}
-		@Override
-		/** Array started.
-		 * @param pos source position.
-		 */
-		public void arrayStart(SPosition pos) {
-			_kinds.push(_kind = 1);
-			_arrays.push(new ArrayList<Object>());
-		}
-		@Override
-		/** Array ended.
-		 * @param pos source position.
-		 */
-		public void arrayEnd(SPosition pos) {
-			_kinds.pop();
-			_kind = _kinds.peek();
-			_value = _arrays.peek();
-			_arrays.pop();
-			if (_kind == 2) {
-				_maps.peek().put(_names.pop(), _value);
-			} else if (_kind == 1) {
-				_arrays.peek().add(_value);
-			}
-		}
-		@Override
-		/** Map started.
-		 * @param pos source position.
-		 */
-		public void mapStart(SPosition pos) {
-			_kinds.push(_kind = 2);
-			_maps.push(new LinkedHashMap<String, Object>());
-		}
-		@Override
-		/** Map ended.
-		 * @param pos source position.
-		 */
-		public void mapEnd(SPosition pos) {
-			_kinds.pop();
-			_kind = _kinds.peek();
-			_value = _maps.peek();
-			_maps.pop();
-			if (_kind == 2) {
-				_maps.peek().put(_names.pop(), _value);
-			} else if (_kind == 1) {
-				_arrays.peek().add(_value);
-			}
-		}
-		@Override
-		/** Processed comment.
-		 * @param value SBuffer with the value of comment.
-		 */
-		public void comment(SBuffer value){/*we ingore it here*/}
-		@Override
-		/** X-script item parsed, not used methods for JSON/XON parsing
-		 * (used in X-definition compiler).
-		 * @param name name of item.
-		 * @param value value of item.
-		 */
-		public void xdScript(SBuffer name, SBuffer value) {}
-		@Override
-		/** Get result of parser.
-		 * @return parsed object.
-		 */
-		public final Object getResult() {return _value;}
 	}
 }

@@ -583,7 +583,7 @@ public class XComponentUtil {
 		}
 	}
 
-	/** Create XON from XComponent (not JSON).
+	/** Create XON from XComponent (not XON/JSON).
 	 * @param xc XComponent.
 	 * @param nsStack namespace prefixes stack.
 	 * @return object with XON.

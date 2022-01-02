@@ -201,7 +201,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 		final String qname) {
 		XElement oldXElement = chkDoc._xElement; //Save XElement
 /**XXX*/
-		if (oldXElement == null || oldXElement._json == 0) {
+		if (oldXElement == null || oldXElement._xon == 0) {
 			chkDoc._xElement = null;
 		}
 /**XXX*

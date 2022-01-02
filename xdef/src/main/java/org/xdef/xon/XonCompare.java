@@ -17,11 +17,11 @@ import org.xdef.sys.SDatetime;
 import org.xdef.sys.SDuration;
 import org.xdef.sys.SRuntimeException;
 
-/** Provides comparing of JSON objects
+/** Provides comparing of XON/JSON objects
  * @author Vaclav Trojan
  */
 class XonCompare {
-	/** Check if JSON arrays from arguments are equal.
+	/** Check if XON/JSON arrays from arguments are equal.
 	 * @param a1 first array.
 	 * @param a2 second array.
 	 * @return true if and only if both arrays are equal.
@@ -38,7 +38,7 @@ class XonCompare {
 		return false;
 	}
 
-	/** Check if JSON maps from arguments are equal.
+	/** Check if XON/JSON maps from arguments are equal.
 	 * @param m1 first map.
 	 * @param m2 second map.
 	 * @return true if and only if both maps are equal.
@@ -58,7 +58,7 @@ class XonCompare {
 		return true;
 	}
 
-	/** Check if JSON numbers from arguments are equal.
+	/** Check if XON/JSON numbers from arguments are equal.
 	 * @param n1 first number.
 	 * @param n2 second number.
 	 * @return true if and only if both numbers are equal.
@@ -110,7 +110,7 @@ class XonCompare {
 		return n1.floatValue() == n2.floatValue();
 	}
 
-	/** Check if JSON values from arguments are equal.
+	/** Check if XON/JSON values from arguments are equal.
 	 * @param o1 first value.
 	 * @param o2 second value.
 	 * @return true if and only if both values are equal.

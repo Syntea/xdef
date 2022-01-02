@@ -872,7 +872,7 @@ public abstract class XDTester extends STester {
 			xd.setStdOut(out);
 		}
 		if (json != null) {
-			xd.setJSONContext(json);
+			xd.setXONContext(json);
 		}
 		if (userObj != null) {
 			xd.setUserObject(userObj);

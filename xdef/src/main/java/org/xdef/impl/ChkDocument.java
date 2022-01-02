@@ -221,10 +221,10 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			QName qn = new QName(namespaceURI, nm);
 			for (String xName: _xdef._rootSelection.keySet()) {
 				XElement xe = (XElement) _xdef._rootSelection.get(xName);
-				if (xe._json > 0) {
+				if (xe._xon > 0) {
 					if (qn.equals(xe.getQName())) {
 						return xe;
-					} else if ((xe._json) != 0) {
+					} else if ((xe._xon) != 0) {
 						if (xe._childNodes.length > 0) {
 							for (XNode x: xe._childNodes) {
 								if (qn.equals(x.getQName())) {
@@ -706,7 +706,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		}
 	}
 
-	/** Create parser for JSON/XON objects.
+	/** Create parser for XON/JSON objects.
 	 * @param x Object from which parser will be created.
 	 * @param reporter reporter for error messages.
 	 * @param sysId system id of error messages.
@@ -749,13 +749,13 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		for (XNode x: _xdef._rootSelection.values()) {
 			if (x.getKind() == XMNode.XMELEMENT) {
 				XElement xe = (XElement) x;
-				if (xe.getJsonMode() != 0) {
+				if (xe.getXonMode() != 0) {
 					if (qname.equals(xe.getQName())) {
 						return xe;
 					}
 				} else if (xe._childNodes.length > 0
 					&& xe._childNodes[0].getKind() == XMNode.XMCHOICE) {
-					// XMChoice is root of JSON model of XML
+					// XMChoice is root of XON/JSON model of XML
 					XChoice xch = (XChoice) xe._childNodes[0];
 					for (int i = xch.getBegIndex()+1;
 						i<xch.getEndIndex(); i++){
@@ -1210,7 +1210,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 * @return XON  result.
 	 */
 	public final Object getXon() {
-		return _xon != null ? _xon : XonUtil.xmlToJson(getElement());
+		return _xon != null ? _xon : XonUtil.xmlToXon(getElement());
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1268,7 +1268,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 
 	@Override
 	/** Parse source INI/Properties and return XComponent as result.
-	 * @param ini string with pathname of JSON file or JSON source data.
+	 * @param ini string with pathname of XON/JSON source data.
 	 * @param xClass XCompomnent class (if null, then XComponent class
 	 * is searched in XDPool).
 	 * @param reporter report writer or null. If this argument is
@@ -1310,11 +1310,11 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 						String jmodel = (String) yClass.getDeclaredField(
 							"XD_NAME").get(null);
 						byte jVersion =
-							(Byte) yClass.getDeclaredField("JSON").get(null);
+							(Byte) yClass.getDeclaredField("XON").get(null);
 						if (jVersion > 0) {
 							XElement xe = selectRoot(jmodel,
 								XDConstants.XON_NS_URI_W, -1);
-							if (xe != null && xe._json != 0) {
+							if (xe != null && xe._xon != 0) {
 								break;
 							}
 						}
@@ -1337,9 +1337,9 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		} else if (ini instanceof Node) {
 			Element e = (ini instanceof Document)
 				? ((Document) ini).getDocumentElement() : (Element) ini;
-			return iparseXComponent(XonUtil.xmlToJson(e),yClass,reporter);
+			return iparseXComponent(XonUtil.xmlToXon(e),yClass,reporter);
 		}
-		throw new SRuntimeException(XDEF.XDEF318); //Incorrect JSON data
+		throw new SRuntimeException(XDEF.XDEF318); //Incorrect XON/JSON data
 	}
 
 	@Override
@@ -1373,7 +1373,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			e = (Element) data;
 		}
 		if (e == null) {
-			throw new SRuntimeException(XDEF.XDEF318); //Incorrect JSON data
+			throw new SRuntimeException(XDEF.XDEF318); //Incorrect XON/JSON data
 		}
 		QName qName = e.getNamespaceURI() == null ? new QName(e.getTagName())
 			: new QName(e.getNamespaceURI(), e.getLocalName());
@@ -1387,11 +1387,11 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 
 ////////////////////////////////////////////////////////////////////////////////
 	@Override
-	/** Run create JSON according to the X-definition JSON model.
-	 * @param name name of JSON model.
+	/** Run create XON/JSON according to the X-definition XON/JSON model.
+	 * @param name name of XON/JSON model.
 	 * @param reporter report writer or <i>null</i>. If this argument is
 	 * <i>null</i> and error reports occurs then SRuntimeException is thrown.
-	 * @return Object with the constructed JSON data.
+	 * @return Object with the constructed XON/JSON data.
 	 * @throws SRuntimeException if reporter is <i>null</i> and an error
 	 * was reported.
 	 */
@@ -1401,7 +1401,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			if (name.equals(x.getName())) {
 				XMNode[] models = x.getChildNodeModels();
 				if (models != null && models.length == 1
-					&& ((XElement) x)._json > 0) {
+					&& ((XElement) x)._xon > 0) {
 					_xElement = (XElement) models[0];
 					xcreate(models[0].getQName(), reporter);
 					return (_xon = _chkRoot.getXon());//prepare XON
@@ -1414,8 +1414,8 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	}
 
 	@Override
-	/** Parse and process JSON data and return processed XON object.
-	 * @param data JSON data or pathname
+	/** Parse and process XON/JSON data and return processed XON object.
+	 * @param data XON/JSON data or pathname
 	 * @param reporter report writer or <i>null</i>. If this argument is
 	 * <i>null</i> and error reports occurs then SRuntimeException is thrown.
 	 * @return XON object with processed data.
@@ -1428,8 +1428,8 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	}
 
 	@Override
-	/** Parse and process JSON/XON data and return processed XON object.
-	 * @param data File with JSON/XON data.
+	/** Parse and process XON/JSON data and return processed XON object.
+	 * @param data File with XON/JSON data.
 	 * @param reporter report writer or <i>null</i>. If this argument is
 	 * <i>null</i> and error reports occurs then SRuntimeException is thrown.
 	 * @return XON object with processed data.
@@ -1442,8 +1442,8 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	}
 
 	@Override
-	/** Parse and process JSON/XON data and return processed XON object.
-	 * @param data URL pointing to JSON/XON data.
+	/** Parse and process XON/JSON data and return processed XON object.
+	 * @param data URL pointing to XON/JSON data.
 	 * @param reporter report writer or <i>null</i>. If this argument is
 	 * <i>null</i> and error reports occurs then SRuntimeException is thrown.
 	 * @return XON object with processed data.
@@ -1456,8 +1456,8 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	}
 
 	@Override
-	/** Parse and process JSON/XON data and return processed XON object.
-	 * @param data InputStream with JSON data.
+	/** Parse and process XON/JSON data and return processed XON object.
+	 * @param data InputStream with XON/JSON data.
 	 * @param reporter report writer or <i>null</i>. If this argument is
 	 * <i>null</i> and error reports occurs then SRuntimeException is thrown.
 	 * @return XON object with processed data.
@@ -1470,8 +1470,8 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	}
 
 	@Override
-	/** Parse source JSON/XON and return XComponent as result.
-	 * @param json string with pathname of JSON file or JSON source data.
+	/** Parse source XON/JSON and return XComponent as result.
+	 * @param data string with pathname of XON/JSON source data.
 	 * @param xClass XCompomnent class (if <i>null</i>, then XComponent class
 	 * is searched in XDPool).
 	 * @param reporter report writer or <i>null</i>. If this argument is
@@ -1480,10 +1480,10 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 * @throws SRuntimeException if reporter is <i>null</i> and an error
 	 * was reported.
 	 */
-	public final XComponent jparseXComponent(final Object json,
+	public final XComponent jparseXComponent(final Object data,
 		final Class<?> xClass,
 		final ReportWriter reporter) throws SRuntimeException {
-		return jparseXComponent(json, xClass, null, reporter);
+		return jparseXComponent(data, xClass, null, reporter);
 	}
 
 	@Override
@@ -1514,11 +1514,11 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 						String jmodel = (String) yClass.getDeclaredField(
 							"XD_NAME").get(null);
 						byte jVersion =
-							(Byte) yClass.getDeclaredField("JSON").get(null);
+							(Byte) yClass.getDeclaredField("XON").get(null);
 						if (jVersion > 0) {
 							XElement xe = selectRoot(jmodel,
 								XDConstants.XON_NS_URI_W, -1);
-							if (xe != null && xe._json != 0) {
+							if (xe != null && xe._xon != 0) {
 								break;
 							}
 						}
@@ -1528,9 +1528,9 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			}
 			Element e;
 			try {
-				byte jsonVer = // version of JSON to XML transormation
-					(Byte) yClass.getDeclaredField("JSON").get(null);
-				e = jsonVer == XConstants.JSON_MODE_W ?
+				byte jsonVer = // version of XON/JSON to XML transormation
+					(Byte) yClass.getDeclaredField("XON").get(null);
+				e = jsonVer == XConstants.XON_MODE_W ?
 					XonUtil.xonToXml(xon) : XonUtil.xonToXmlXD(xon);
 			} catch (Exception ex) {
 				e = XonUtil.xonToXml(xon); // X-definition transormation
@@ -1547,18 +1547,18 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		} else if (xon instanceof Node) {
 			Element e = (xon instanceof Document)
 				? ((Document) xon).getDocumentElement() : (Element) xon;
-			return jparseXComponent(XonUtil.xmlToJson(e),yClass,reporter);
+			return jparseXComponent(XonUtil.xmlToXon(e),yClass,reporter);
 		}
-		throw new SRuntimeException(XDEF.XDEF318); //Incorrect JSON data
+		throw new SRuntimeException(XDEF.XDEF318); //Incorrect XON/JSON data
 	}
 
 	@Override
-	/** Parse and process JSON data and return processed JSON object.
-	 * @param data JSON object, of either File, URL, InputStream with JSON data.
-	 *  or XML node wit JSON data.
+	/** Parse and process XON/JSON data and return processed XON object.
+	 * @param data XON/JSON object, or either File, URL, InputStream.
+	 *  or XML node wit XON/JSON data.
 	 * @param reporter report writer or <i>null</i>. If this argument is
 	 * <i>null</i> and error reports occurs then SRuntimeException is thrown.
-	 * @return JSON object with processed data.
+	 * @return XON object with processed data.
 	 * @throws SRuntimeException if an was reported.
 	 */
 	public final Object jvalidate(final Object data,final ReportWriter reporter)
@@ -1585,7 +1585,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			e = (Element) data;
 		}
 		if (e == null) {
-			throw new SRuntimeException(XDEF.XDEF318); //Incorrect JSON data
+			throw new SRuntimeException(XDEF.XDEF318); //Incorrect XON/JSON data
 		}
 		QName qName = e.getNamespaceURI() == null ? new QName(e.getTagName())
 			: new QName(e.getNamespaceURI(), e.getLocalName());
@@ -1802,7 +1802,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 				}
 				if (xn != null && xn.getKind() == XMNode.XMELEMENT) {
 					XElement xe = (XElement) xn;
-					if (xe._json != 0) {
+					if (xe._xon != 0) {
 						_xElement = xe;
 					}
 				}
@@ -1835,11 +1835,11 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	}
 
 	@Override
-	/** Run create XAML according to the X-definition JSON model.
-	 * @param name name of JSON model.
+	/** Run create XAML according to the X-definition XON/JSON model.
+	 * @param name name of XON/JSON model.
 	 * @param reporter report writer or null. If this argument is
 	 * null and error reports occurs then SRuntimeException is thrown.
-	 * @return Object with the constructed JSON data.
+	 * @return Object with the constructed source data.
 	 * @throws SRuntimeException if an error was reported.
 	 */
 	public Object ycreate(String name, ReportWriter reporter)
@@ -1921,7 +1921,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 
 	@Override
 	/** Parse source YAML and return XComponent as result.
-	 * @param json string with pathname of YAML file or YAML source data.
+	 * @param yaml string with pathname of YAML file or YAML source data.
 	 * @param xClass XCompomnent class (if <i>null</i>, then XComponent class
 	 * is searched in XDPool).
 	 * @param reporter report writer or <i>null</i>. If this argument is
@@ -1964,11 +1964,11 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 						String jmodel = (String) yClass.getDeclaredField(
 							"XD_NAME").get(null);
 						byte jVersion =
-							(Byte) yClass.getDeclaredField("JSON").get(null);
+							(Byte) yClass.getDeclaredField("XON").get(null);
 						if (jVersion > 0) {
 							XElement xe = selectRoot(jmodel,
 								XDConstants.XON_NS_URI_W, -1);
-							if (xe != null && xe._json != 0) {
+							if (xe != null && xe._xon != 0) {
 								break;
 							}
 						}
@@ -1978,9 +1978,9 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			}
 			Element e;
 			try {
-				byte jsonVer = // version of JSON to XML transormation
-					(Byte) yClass.getDeclaredField("JSON").get(null);
-				e = jsonVer == XConstants.JSON_MODE_W ?
+				byte xonVer = // version of XON/JSON to XML transormation
+					(Byte) yClass.getDeclaredField("XON").get(null);
+				e = xonVer == XConstants.XON_MODE_W ?
 					XonUtil.xonToXml(yaml) : XonUtil.xonToXmlXD(yaml);
 			} catch (Exception ex) {
 				e = XonUtil.xonToXml(yaml); // X-definition transormation
@@ -1997,9 +1997,9 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		} else if (yaml instanceof Node) {
 			Element e = (yaml instanceof Document)
 				? ((Document) yaml).getDocumentElement() : (Element) yaml;
-			return jparseXComponent(XonUtil.xmlToJson(e),yClass,reporter);
+			return jparseXComponent(XonUtil.xmlToXon(e),yClass,reporter);
 		}
-		throw new SRuntimeException(XDEF.XDEF318); //Incorrect JSON data
+		throw new SRuntimeException(XDEF.XDEF318); //Incorrect XON/JSON data
 	}
 
 	@Override

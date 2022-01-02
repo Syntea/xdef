@@ -712,7 +712,8 @@ public class XDGenCollection {
 					|| "BNFGrammar".equals(el.getLocalName())
 					|| "thesaurus".equals(el.getLocalName())
 					|| "lexicon".equals(el.getLocalName())
-					|| "json".equals(el.getLocalName()))
+					|| "json".equals(el.getLocalName())
+					|| "xon".equals(el.getLocalName()))
 					|| !xdUri.equals(el.getNamespaceURI())) {
 					Text txt = (Text) n;
 					String s = ((Text) n).getData();

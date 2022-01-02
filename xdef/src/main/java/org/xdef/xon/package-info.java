@@ -1,6 +1,6 @@
 /**
  * <p>
- * Provides tools for using JSON/XON in X-definitions.
+ * Provides tools for using XON/JSON in X-definitions.
  * </p>
  * <p>{@link org.xdef.xon.XonUtil}</p>
  * <p>{@link org.xdef.xon.XonToXml}</p>

@@ -37,7 +37,7 @@ public class MyTest extends XDTester {
 				"\nxml:  "+xml+
 				"\nel:   "+KXmlUtils.nodeToString(el);
 		}
-		Object j1 = XonUtil.xmlToJson(el);
+		Object j1 = XonUtil.xmlToXon(el);
 		if (!XonUtil.xonEqual(j, j1)) {
 			return "j != j1"+
 				"\nxml: "+xml+
@@ -47,7 +47,7 @@ public class MyTest extends XDTester {
 		return "";
 	}
 	private static Object toJson(final XComponent xc) {
-		return XonUtil.xmlToJson(xc.toXml());
+		return XonUtil.xmlToXon(xc.toXml());
 	}
 
 	@Override
@@ -253,7 +253,7 @@ if(true)return;
 if(true)return;
 			xml = "<a ax='1'><b bx='2'>xxx</b></a>";
 			el = KXmlUtils.parseXml(xml).getDocumentElement();
-			j = XonUtil.xmlToJson(el);
+			j = XonUtil.xmlToXon(el);
 //			assertEq(xml, XonUtil.xonToXmlXD(j));
 //			System.out.println(XonUtil.toJsonString(j));
 //			assertEq(el, XonUtil.xonToXmlXD(j));

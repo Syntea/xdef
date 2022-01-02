@@ -170,7 +170,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			}
 		}
 		if (!_ignoreAll && getElement() != null) {
-			if (_xElement._json > 0
+			if (_xElement._xon > 0
 				&& XDConstants.XON_NS_URI_W.equals(_xElement.getNSUri())) {//XON
 				if (XonNames.X_MAP.equals(_xElement.getLocalName())) {
 					_xonMap = new LinkedHashMap<String, Object>();
@@ -412,7 +412,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 					exec(_xElement._onIllegalElement, (byte) 'E');
 					copyTemporaryReports();
 				} else if (textcontent == null) {
-					if (_xElement._json > 0) {
+					if (_xElement._xon > 0) {
 						//Not allowed item&{1}{ "}{"} in &{0}
 						Node n = element.getAttributeNode("key");
 						error(XDEF.XDEF507, _xElement.getLocalName(),
@@ -484,7 +484,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			_actDefIndex = -1;
 		} else {
 			String name = xelem.getName();
-			if (xelem._json > 0 && "item".equals(name = xelem.getLocalName())) {
+			if (xelem._xon > 0 && "item".equals(name = xelem.getLocalName())) {
 				String[] x = getPosInfo(xelem.getXDPosition(), null);
 				int ndx = (x[0].lastIndexOf("['"));
 				if (ndx >= 0) {
@@ -839,7 +839,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 				&& selector._prev._count >= selector._prev.minOccurs()) {
 				return required;
 			}
-			if (_xElement._json > 0) {
+			if (_xElement._xon > 0) {
 				//Missing required item(s) in &{0}
 				error(XDEF.XDEF541, _xElement.getLocalName());
 			} else {
@@ -1689,7 +1689,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 					putTemporaryReport(Report.error(XDEF.XDEF515));
 				}
 			}
-		} else if (_xElement._json > 0) {
+		} else if (_xElement._xon > 0) {
 			Object value = _parseResult.getParsedValue();
 			if (value==null) {
 				value = _parseResult.getSourceBuffer();
@@ -2683,7 +2683,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 				_parent.incRefNum();
 			}
 		}
-		if (_parent._parent != null && _xElement._json > 0) {//not root; gen XON
+		if (_parent._parent != null && _xElement._xon > 0) {//not root; gen XON
 			ChkElement chkEl = (ChkElement) _parent;
 			Object value = XonNames.X_ITEM.equals(_xElement.getLocalName())
 				? _xonValue : _xonMap != null ? _xonMap : _xonArray;

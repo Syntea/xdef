@@ -30,7 +30,7 @@ public final class PNode {
 	int _level; //nesting level of this node
 	int _nsindex; //namespace index of this node
 	boolean _template;  //template switch
-	byte _jsonMode = 0; // JSON to XML transformation mode
+	byte _xonMode = 0; // XON/JSON to XML transformation mode
 	String _xpathPos; // xpath position
 
 	/** Creates a new instance of PNode.

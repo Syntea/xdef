@@ -27,18 +27,18 @@ import org.xdef.xon.XonParsers;
 /** Create X-definition model from xd:xon element.
  * @author Vaclav Trojan
  */
-public class CompileJsonXdef extends StringParser {
+public class CompileXonXdef extends StringParser {
 	/** Prefix of X-definition namespace. */
 	private String _xdPrefix;
 	/** Index of X-definition namespace. */
 	private int _xdIndex;
 	/** Namespace of X-definition.*/
 	private String _xdNamespace;
-	/** XPath position of JSON description.*/
+	/** XPath position of XON/JSON description.*/
 	private String _basePos;
 
-	/** Prepare instance of XJSON. */
-	private CompileJsonXdef() {super();}
+	/** Prepare instance of CompileXonXdef. */
+	private CompileXonXdef() {super();}
 
 	/** Set attribute to PNode.
 	 * @param e PNode where to set an attribute.
@@ -282,9 +282,9 @@ public class CompileJsonXdef extends StringParser {
 		return result;
 	}
 
-	/** Create PNode as JSON element with given position,
+	/** Create PNode as XON/JSON element with given position,
 	 * @param parent parent PNode.
-	 * @param name local name of JSON element.
+	 * @param name local name of XON/JSON element.
 	 * @param spos source position
 	 * @return created PNode,
 	 */
@@ -352,7 +352,7 @@ public class CompileJsonXdef extends StringParser {
 		setAttr(e, XonNames.X_KEYATTR, new SBuffer("fixed('"+s+"');",e._name));
 	}
 
-	private PNode genJsonMap(final JMap map, final PNode parent) {
+	private PNode genXonMap(final JMap map, final PNode parent) {
 		PNode e, ee;
 		Object val = map.get(XonNames.SCRIPT_NAME);
 		if (val != null && val instanceof JValue) {
@@ -396,7 +396,7 @@ public class CompileJsonXdef extends StringParser {
 		for (Map.Entry<Object, Object> entry: map.entrySet()) {
 			String key = (String) entry.getKey();
 			val = entry.getValue();
-			PNode ee2 = genJsonModel(val, ee);
+			PNode ee2 = genXonModel(val, ee);
 			if (_xdNamespace.equals(ee2._nsURI)
 				&& "choice".equals(ee2._localName)) {
 				for (PNode n : ee2.getChildNodes()) {
@@ -409,7 +409,7 @@ public class CompileJsonXdef extends StringParser {
 		return e;
 	}
 
-	private PNode genJsonArray(final JArray array, final PNode parent) {
+	private PNode genXonArray(final JArray array, final PNode parent) {
 		PNode e = genJElement(parent, "array", array.getPosition());
 		int index = 0;
 		int len = array.size();
@@ -439,7 +439,7 @@ public class CompileJsonXdef extends StringParser {
 				index = 1;
 			}
 			for(; index < len; index++) {
-				PNode ee = genJsonModel(array.get(index), e);
+				PNode ee = genXonModel(array.get(index), e);
 				PAttr val;
 				// if it is not the last and it has xd:script attribute where
 				// the min occurrence differs from max occurrence
@@ -486,7 +486,7 @@ public class CompileJsonXdef extends StringParser {
 		return e;
 	}
 
-	private PNode genJsonValue(final JValue jo, final PNode parent) {
+	private PNode genXonValue(final JValue jo, final PNode parent) {
 		SBuffer sbf, occ = null;
 		PNode e = genJElement(parent, XonNames.X_ITEM, jo.getPosition());
 		if (jo.getValue() == null) {
@@ -513,58 +513,58 @@ public class CompileJsonXdef extends StringParser {
 		return e;
 	}
 
-	/** Create PNode with JSON model from JSON parsed data.
-	 * @param json JSON parsed data.
+	/** Create PNode with XON/JSON model from XON/JSON parsed data.
+	 * @param xon XON/JSON parsed data.
 	 * @param parent parent PNode,
 	 * @return created PNode.
 	 */
-	private PNode genJsonModel(final Object json, final PNode parent) {
+	private PNode genXonModel(final Object xon, final PNode parent) {
 		// set fields _jsprefix and _jsNamespace
 		String s = XDConstants.XON_NS_PREFIX; // default namespace prefix
 		for (int i = 1; ;i++) {
 			Integer x;
 			if ((x = parent._nsPrefixes.get(s)) == null) {
-				parent._nsPrefixes.put(s, XPreCompiler.NS_JSON_INDEX);
+				parent._nsPrefixes.put(s, XPreCompiler.NS_XON_INDEX);
 				break;
-			} else if (x.equals(XPreCompiler.NS_JSON_INDEX)) {
+			} else if (x.equals(XPreCompiler.NS_XON_INDEX)) {
 				break; // prefix is already set
 			} else { // the prefix is already used
 				s = XDConstants.XON_NS_PREFIX + i; // change prefix
 			}
 		}
 		PNode e;
-		if (json instanceof JMap) {
-			e = genJsonMap((JMap) json, parent);
-		} else if (json instanceof JArray) {
-			e = genJsonArray((JArray) json, parent);
-		} else if (json instanceof JValue
-			&& ((JValue) json).getValue() instanceof String) {
-			e = genJsonValue((JValue) json, parent);
+		if (xon instanceof JMap) {
+			e = genXonMap((JMap) xon, parent);
+		} else if (xon instanceof JArray) {
+			e = genXonArray((JArray) xon, parent);
+		} else if (xon instanceof JValue
+			&& ((JValue) xon).getValue() instanceof String) {
+			e = genXonValue((JValue) xon, parent);
 		} else {
-			error(JSON.JSON011); //Not JSON object&{0}
+			error(JSON.JSON011); //Not XON/JSON object&{0}
 			return parent;
 		}
 		parent.addChildNode(e);
 		return e;
 	}
 
-	/** Create X-definition model from PNode with JSON description.
-	 * @param p PNode with JSON script.
-	 * @param jsonMode version of transformation JSON to XML).
-	 * @param format "json" or "ini".
-	 * @param name name of json model in X-definition.
+	/** Create X-definition model from PNode with XON/JSON description.
+	 * @param p PNode with XON/JSON script.
+	 * @param xonMode version of transformation XON/JSON to XML).
+	 * @param format "xon" or "ini".
+	 * @param name name of XON/JSON model in X-definition.
 	 * @param reporter report writer
 	 */
 	static final void genXdef(final PNode p,
-		final byte jsonMode,
+		final byte xonMode,
 		final String format,
 		final SBuffer name,
 		final ReportWriter reporter) {
-		if (jsonMode != XConstants.JSON_MODE_W) {
+		if (xonMode != XConstants.XON_MODE_W) {
 			//Internal error&{0}{: }
 			throw new SRuntimeException(SYS.SYS066, "Namespace W3C expected");
 		}
-		CompileJsonXdef jx = new CompileJsonXdef();
+		CompileXonXdef jx = new CompileXonXdef();
 		jx._xdNamespace = p._nsURI;
 		jx._xdPrefix = p.getPrefix();
 		jx._xdIndex = p._nsPrefixes.get(jx._xdPrefix);
@@ -573,20 +573,20 @@ public class CompileJsonXdef extends StringParser {
 		p._nsURI = null; // set no namespace
 		p._nsindex = -1;
 		XDBuilder jp = new XDBuilder(jx);
-		XonParsers pp = format.equals("json") || format.equals("xon")
+		XonParsers pp = format.equals("xon")
 			? new XonReader(p._value, jp) : new IniReader(p._value, jp);
 		pp.setReportWriter(reporter);
 		pp.setXdefMode();
 		pp.parse();
-		jx.genJsonModel(jp.getResult(), p);
+		jx.genXonModel(jp.getResult(), p);
 		pp = null;
 		jp = null;
 		p._value = null;
 //System.out.println(org.xdef.xml.KXmlUtils.nodeToString(p.toXML(),true));
 	}
 
-	/** This class provides parsing of JSON source and creates the JSON
-	 * structure composed from JObjets used for compilation of JSON model
+	/** This class provides parsing of XON/JSON source and creates the XON
+	 * structure composed from JObjets used for compilation of XON/JSON model
 	 * in X-definition.
 	 */
 	private static class XDBuilder implements XonParser {
@@ -597,7 +597,7 @@ public class CompileJsonXdef extends StringParser {
 		private final Stack<SBuffer> _names = new Stack<SBuffer>();
 		private JObject _value;
 
-		XDBuilder(CompileJsonXdef jx) {_kinds.push(_kind = 0);}
+		XDBuilder(CompileXonXdef jx) {_kinds.push(_kind = 0);}
 
 ////////////////////////////////////////////////////////////////////////////////
 // JParser interface

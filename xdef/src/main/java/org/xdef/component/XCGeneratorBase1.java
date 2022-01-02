@@ -109,8 +109,8 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 			+ xpathes.toString() +
 "//<editor-fold defaultstate=\"collapsed\" desc=\"Implementation of XComponent interface\">"+LN+
 ////////////////////////////////////////////////////////////////////////////////
-(_genJavadoc?"\t/** Get JSON version: 0 not set, 1 .. W3C, 2 .. XDEF.*/"+LN:"")+
-"\tpublic final static byte JSON = " + xe._json + ";" +LN+
+(_genJavadoc?"\t/** Get JXON version: 0 not set, 1 .. W3C, 2 .. XDEF.*/"+LN:"")+
+"\tpublic final static byte XON = " + xe._xon + ";" +LN+
 "\t@Override"+LN+
 (_genJavadoc ? ("\t/** Create XML element from this XComponent (marshal)."+LN+
 "\t * If the argument is null <i>null</i> then document is created with"+LN+

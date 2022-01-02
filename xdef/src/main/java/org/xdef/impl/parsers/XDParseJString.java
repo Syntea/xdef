@@ -3,7 +3,7 @@ package org.xdef.impl.parsers;
 import org.xdef.XDParseResult;
 import org.xdef.xon.XonTools;
 
-/** Parser of X-Script "jstring" (JSON string) type.
+/** Parser of X-Script "jstring" (XON/JSON string) type.
  * @author Vaclav Trojan
  */
 public class XDParseJString extends XDParseAn {

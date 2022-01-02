@@ -3,7 +3,7 @@ package org.xdef.xon;
 import org.xdef.sys.ReportWriter;
 import org.xdef.sys.SPosition;
 
-/** Interface for JSON/XON parsers.
+/** Interface for XON/JSON parsers.
  * @author Vaclav Trojan
  */
 public interface XonParsers {
@@ -11,7 +11,7 @@ public interface XonParsers {
 	 * @return current source3 position.
 	 */
 	public SPosition getPosition();
-	/** Parse JSON or XON source data.*/
+	/** Parse XON/JSON source data.*/
 	public void parse();
 	/** close the reader. */
 	public void closeReader();
