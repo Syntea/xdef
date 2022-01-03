@@ -12,7 +12,6 @@ import org.xdef.msg.XDEF;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.GPSPosition;
 import org.xdef.sys.Price;
-import static org.xdef.sys.Report.error;
 import org.xdef.sys.SBuffer;
 import org.xdef.sys.SException;
 import org.xdef.sys.SParser;
