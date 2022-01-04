@@ -52,6 +52,7 @@
         <changelist>-SNAPSHOT</changelist><!-- use profile "release" for build release-version -->
         <release.date>2021-12-08</release.date><!-- update when changed version -->
         <specification.version>4.1</specification.version>
+        <build.timestamp>${maven.build.timestamp}</build.timestamp><!-- VT -->
         
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         
