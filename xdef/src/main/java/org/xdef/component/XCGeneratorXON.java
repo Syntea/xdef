@@ -4,6 +4,11 @@ import java.util.Set;
 import org.xdef.XDConstants;
 import org.xdef.XDPool;
 import org.xdef.XDValue;
+import static org.xdef.component.XCGeneratorBase.LN;
+import static org.xdef.component.XCGeneratorBase.RESERVED_NAMES;
+import static org.xdef.component.XCGeneratorBase.getUniqueName;
+import static org.xdef.component.XCGeneratorBase.javaName;
+import static org.xdef.component.XCGeneratorBase.modify;
 import org.xdef.impl.XConstants;
 import org.xdef.impl.XData;
 import org.xdef.impl.XElement;
@@ -289,7 +294,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 (_genJavadoc ? ("\t/** Set value of &{d} \"&{xmlName}\"."+LN+
 "\t * @param x value to be set."+LN+
 "\t */"+LN) : "")+
-"\tpublic void set$&{name}(&{typ} x){&{x}}"+LN;
+"\tpublic void set$&{name}(&{typ} x) {&{x}}"+LN;
 			sb.append(modify(template,
 				"&{x}", x,
 				"&{name}", name,
@@ -462,7 +467,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 			setters.append(modify(template +
 "{"+LN+
 "\t\t_&{iname}.clear(); if (x==null) return;"+LN+
-"\t\tfor (&{typ} y:x){"+LN+
+"\t\tfor (&{typ} y:x) {"+LN+
 (isNull ? "\t\t\tadd&{iname}(new &{typeName}());"+LN
 :("\t\t\t&{typeName} z=new &{typeName}();"+LN+
 "\t\t\tz.setvalue(y); add&{iname}(z);"+LN)) +

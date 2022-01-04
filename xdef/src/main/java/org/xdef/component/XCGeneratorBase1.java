@@ -3,6 +3,8 @@ package org.xdef.component;
 import java.util.Iterator;
 import java.util.Map;
 import org.xdef.XDPool;
+import static org.xdef.component.XCGeneratorBase.LN;
+import static org.xdef.component.XCGeneratorBase.genSeparator;
 import org.xdef.impl.XElement;
 import org.xdef.sys.ArrayReporter;
 
@@ -286,7 +288,7 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 "\t * @param x XXNode object."+LN+
 "\t */"+LN : "")+
 "\tpublic " + clazz +
-"(org.xdef.component.XComponent p,org.xdef.proc.XXNode x){"+LN+
+"(org.xdef.component.XComponent p,org.xdef.proc.XXNode x) {"+LN+
 "\t\torg.w3c.dom.Element el=x.getElement();"+LN+
 "\t\tXD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();"+LN+
 "\t\tXD_XPos=x.getXPos();"+LN+
@@ -465,13 +467,13 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 "\t */"+LN : "");
 		if ("$any".equals(xe.getName()) || "*".equals(xe.getName())) {
 			result +=
-"\tpublic void xAddXChild(org.xdef.component.XComponent x){}"+LN;
+"\tpublic void xAddXChild(org.xdef.component.XComponent x) {}"+LN;
 		} else if (xctab.isEmpty()) {
 			result +=
-"\tpublic void xAddXChild(org.xdef.component.XComponent x){}"+LN;
+"\tpublic void xAddXChild(org.xdef.component.XComponent x) {}"+LN;
 		} else if (xctab.size() == 1) {
 			result +=
-"\tpublic void xAddXChild(org.xdef.component.XComponent x){"+LN+
+"\tpublic void xAddXChild(org.xdef.component.XComponent x) {"+LN+
 "\t\tx.xSetNodeIndex(XD_ndx++);"+LN;
 			String s = xctab.values().iterator().next().replace('#', '.');
 			String typ = s.substring(s.indexOf(";") + 1);
@@ -483,7 +485,7 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 		} else {
 			boolean first = true;
 			result +=
-"\tpublic void xAddXChild(org.xdef.component.XComponent x){"+LN+
+"\tpublic void xAddXChild(org.xdef.component.XComponent x) {"+LN+
 "\t\tx.xSetNodeIndex(XD_ndx++);"+LN+
 "\t\tString s = x.xGetModelPosition();"+LN;
 			for (Iterator<Map.Entry<String, String>> it =

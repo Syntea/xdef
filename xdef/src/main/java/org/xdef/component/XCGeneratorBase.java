@@ -796,7 +796,7 @@ class XCGeneratorBase {
 (_genJavadoc ? ("\t/** Set value of &{d} \"&{xmlName}\"."+LN+
 "\t * @param x value to be set."+LN+
 "\t */"+LN) : "")+
-"\tpublic void set&{name}(&{typ} x){&{x}}"+LN;
+"\tpublic void set&{name}(&{typ} x) {&{x}}"+LN;
 			sb.append(modify(template,
 				"&{x}", x,
 				"&{name}", name,
