@@ -242,7 +242,7 @@ if(T )return;
 "</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			genXComponent(xp, tempDir);
+			genXComponent(xp, tempDir).checkAndThrowErrors();
 			json = "[1, \"2\", 3]"; //error (not string but number!)
 			j = xp.createXDDocument().jparse(json, reporter);
 			assertTrue(reporter.printToString().contains("XDEF809"));
@@ -415,7 +415,7 @@ if(T )return;
 			System.out.println(classDir + "bugreports/xp.xp");
 			XDFactory.writeXDPool(classDir + "bugreports/xp.xp", xp);
 			xp = XDFactory.readXDPool("classpath://bugreports.xp.xp");
-			genXComponent(xp, tempDir);
+			genXComponent(xp, tempDir).checkAndThrowErrors();
 			json = "[{\"a\":false},\"xxx\",125, true]";
 			j = xp.createXDDocument().jparse(json, reporter);
 			assertTrue(reporter.getErrorCount() == 2
@@ -454,7 +454,7 @@ if(T )return;
 			System.out.println(classDir + "bugreports/xp.xp");
 			XDFactory.writeXDPool(classDir + "bugreports/xp.xp", xp);
 			xp = XDFactory.readXDPool("classpath://bugreports.xp.xp");
-			genXComponent(xp, tempDir);
+			genXComponent(xp, tempDir).checkAndThrowErrors();
 			json = "[{\"a\":true},\"xxx\",125, true]";
 			j = xp.createXDDocument().jparse(json, reporter);
 			assertNoErrors(reporter);
@@ -518,7 +518,7 @@ if(T )return;
 "</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			genXComponent(xp, tempDir);
+			genXComponent(xp, tempDir).checkAndThrowErrors();
 			json = "{\"a\":\"aaa\"}";
 			j = xp.createXDDocument().jparse(json, reporter);
 			assertNoErrors(reporter);
@@ -646,7 +646,7 @@ if(T )return;
 "</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			genXComponent(xp, tempDir);
+			genXComponent(xp, tempDir).checkAndThrowErrors();
 			json = "{\"a\":\"aaa\"}";
 			j = xp.createXDDocument().jparse(json, reporter);
 			assertNoErrors(reporter);
@@ -760,7 +760,7 @@ if(T )return;
 "</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			genXComponent(xp, tempDir);
+			genXComponent(xp, tempDir).checkAndThrowErrors();
 			json = "{\"a\":\"aaa\"}";
 			j = xp.createXDDocument().jparse(json, reporter);
 			reporter.checkAndThrowErrors();
@@ -830,7 +830,7 @@ if(T )return;
 "</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			genXComponent(xp, tempDir);
+			genXComponent(xp, tempDir).checkAndThrowErrors();
 			json = "[null, 12, \" a b \"]";
 			j = xp.createXDDocument().jparse(json, reporter);
 			assertNoErrors(reporter);
@@ -915,7 +915,7 @@ if(T ){return;}
 "</xd:component>\n"+
 "</xd:collection>";
 			xp = compile(xdef);
-			genXComponent(xp, tempDir);
+			genXComponent(xp, tempDir).checkAndThrowErrors();
 			Class<?> TX = Class.forName("bugreports.data.TX");
 			Class<?> TY = Class.forName("bugreports.data.TY");
 			Class<?> TZ = Class.forName("bugreports.data.TZ");
@@ -1027,7 +1027,7 @@ if(T ){return;}
 "</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			genXComponent(xp, tempDir);
+			genXComponent(xp, tempDir).checkAndThrowErrors();
 			xd = xp.createXDDocument();
 			xml =
 "<T>\n" +
@@ -1073,7 +1073,7 @@ if(T ){return;}
 "<a><c f='string'/></a>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			genXComponent(xp, tempDir);
+			genXComponent(xp, tempDir).checkAndThrowErrors();
 			xd = xp.createXDDocument();
 
 			xd.setLexiconLanguage("eng");
@@ -1211,7 +1211,7 @@ if(T ){return;}
 "</xd:lexicon>",
 			};
 			xp = compile(params);
-			genXComponent(xp, tempDir);
+			genXComponent(xp, tempDir).checkAndThrowErrors();
 			xd = xp.createXDDocument();
 			xml =
 "<Smlouva Číslo = \"0123456789\">\n"+
