@@ -27,6 +27,20 @@ public class Kalcik extends XDTester {
 			if (reporter.errorWarnings()) {
 				System.out.println(reporter.printToString());
 			}
+			xml =
+"<UserCommands>\n" +
+"    <UserCommand Name = \"Abcd\"\n" +
+"         Label = \"efgh\">\n" +
+"       <Output PlaceName = \"ijk\" >\n" +
+"          <any a='a' />\n" +
+"       </Output>\n" +
+"    </UserCommand>\n" +
+"</UserCommands>";
+			assertEq(xml, parse(xp, "UserCommands", xml , reporter));
+			assertNoErrors(reporter);
+			xc = parseXC(xp,"UserCommands", xml , null, reporter);
+			assertNoErrorwarnings(reporter);
+			assertEq(xml, xc.toXml());
 		} catch (Exception ex) {fail(ex);}
 	}
 
