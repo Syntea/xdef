@@ -205,17 +205,6 @@ public class MyTest_0 extends XDTester {
 		StringWriter strw;
 		Report rep;
 		ArrayReporter reporter = new ArrayReporter();
-//			System.out.println(Report.error("XDEF813", null, "PqR", "xyz", "abc"));
-//			System.out.println(Report.error("XDEF813", null, "PqR", "xyz", null));
-//			System.out.println(Report.error("XDEF813", null, "PqR", null, "abc"));
-//			System.out.println(Report.error("XDEF813", null, null, "xyz", "abc"));
-//			System.out.println(Report.error("XDEF813", null, null, null, "abc"));
-//			System.out.println(Report.error("XDEF813", null));
-//			System.out.println(Report.error("XDEF809", null, "xyz", "abc"));
-//			System.out.println(Report.error("XDEF809", null, null, "abc"));
-//			System.out.println(Report.error("XDEF809", null, "abc"));
-//			System.out.println(Report.error("XDEF809", null));
-//if(true)return;
 ////////////////////////////////////////////////////////////////////////////////
 		try {
 //			xdef =
