@@ -18,15 +18,10 @@ public class Kalcik extends XDTester {
 		String xml;
 		XDPool xp;
 		XComponent xc;
-		String dataDir = getSourceDir() + "data/";
 		try {
-			System.out.println();
-			xdef = dataDir+"UserCommands.xdef";
+			xdef = getDataDir() + "Kalcik.xdef";
 			xp = compile(xdef);
-			genXComponent(xp, clearTempDir());
-			if (reporter.errorWarnings()) {
-				System.out.println(reporter.printToString());
-			}
+			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
 			xml =
 "<UserCommands>\n" +
 "    <UserCommand Name = \"Abcd\" Label = \"efgh\">\n" +

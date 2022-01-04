@@ -50,16 +50,10 @@
     />
 
     <xdef:component>
-
-        %class bugreports.data.UserCommands
-        %link UserCommands#UserCommands;
-
-        %class bugreports.data.UserCommand
-        %link UserCommands#UserCommands/UserCommand;
-
-        %class bugreports.data.Constant
-        %link UserCommands#UserCommands/Constant;
-
+        %class bugreports._UserCommands %link UserCommands#UserCommands;
+        %class bugreports._UserCommand
+            %link UserCommands#UserCommands/UserCommand;
+        %class bugreports._Constant %link UserCommands#UserCommands/Constant;
     </xdef:component>
 
 </xdef:def>
