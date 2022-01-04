@@ -29,11 +29,8 @@ public class Kalcik extends XDTester {
 			}
 			xml =
 "<UserCommands>\n" +
-"    <UserCommand Name = \"Abcd\"\n" +
-"         Label = \"efgh\">\n" +
-"       <Output PlaceName = \"ijk\" >\n" +
-"          <any a='a' />\n" +
-"       </Output>\n" +
+"    <UserCommand Name = \"Abcd\" Label = \"efgh\">\n" +
+"       <Output PlaceName = \"ijk\" ><any a='a' /></Output>\n" +
 "    </UserCommand>\n" +
 "</UserCommands>";
 			assertEq(xml, parse(xp, "UserCommands", xml , reporter));
