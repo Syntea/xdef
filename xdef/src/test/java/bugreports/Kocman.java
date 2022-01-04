@@ -24,10 +24,7 @@ public class Kocman extends XDTester {
 "     xd:script='options moreAttributes, moreElements, moreText'/>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			genXComponent(xp, clearTempDir());
-			if (reporter.errorWarnings()) {
-				System.out.println(reporter.printToString());
-			}
+			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
 			xml = "<A><X b='1'><X b='2'><X b='3'/></X><X b='4'/></X></A>";
 			assertEq(xml, parse(xp, "M", xml , reporter));
 			assertNoErrors(reporter);

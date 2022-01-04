@@ -58,7 +58,7 @@ public class TestXon extends XDTester {
 			}
 			assertTrue(XonUtil.xonEqual(XonUtil.parseXON(xon), x),
 				XonUtil.toJsonString(x, true));
-			XDTester.genXComponent(xp, clearTempDir());
+			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
 			xc = xp.createXDDocument().jparseXComponent(xon, null, reporter);
 			y = XonUtil.xmlToXon(xc.toXml());
 			if (!XonUtil.xonEqual(XonUtil.xonToJson(x),y)) {
@@ -247,7 +247,7 @@ public class TestXon extends XDTester {
 			y = jparse(xp, "", json, reporter);
 			assertNoErrors(reporter);
 			reporter.clear();
-			genXComponent(xp, clearTempDir());
+			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
 			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
 			assertNoErrors(reporter);
 			reporter.clear();
@@ -268,10 +268,7 @@ public class TestXon extends XDTester {
 //"<xd:component>%class test.xdef.Mgam %link y:X</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			genXComponent(xp, clearTempDir());
-			if (reporter.errorWarnings()) {
-				System.out.println(reporter.printToString());
-			}
+			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
 			xml =
 "<n:X xmlns:n='a.b' a='2021-12-30' t='2020121101010101'>1<n:Y/><n:Y/>2.0</n:X>";
 			xc = parseXC(xp,"M", xml , null, reporter);
@@ -300,8 +297,7 @@ public class TestXon extends XDTester {
 "<xd:component>%class test.xdef.MArray %link j:array</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			genXComponent(xp, clearTempDir());
-			assertNoErrors(reporter);
+			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
 			xc = parseXC(xp, "M", xml , null, reporter);
 			assertNoErrorwarnings(reporter);
 			assertEq(xml, xc.toXml());
@@ -318,8 +314,7 @@ public class TestXon extends XDTester {
 "<xd:component>%class test.xdef.MMap %link j:map</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			genXComponent(xp, clearTempDir());
-			assertNoErrors(reporter);
+			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
 			xc = parseXC(xp,"M", xml , null, reporter);
 			assertNoErrorwarnings(reporter);
 			assertEq(xml, xc.toXml());

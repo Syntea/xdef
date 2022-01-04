@@ -257,7 +257,7 @@ public final class TestLexicon extends XDTester {
 				SUtils.deleteAll(fdir, true); // clear this directory
 			}
 			fdir.mkdirs();
-			genXComponent(xp, fdir);
+			genXComponent(xp, fdir).checkAndThrowErrors();
 			Class<?> clazz = Class.forName("test.xdef.component.L_Contract");
 			XComponent xc = parseXC(xd, xml, clazz, reporter);
 			assertNoErrors(reporter);

@@ -1,13 +1,11 @@
 package bugreports;
 
 import java.io.File;
-import java.util.Properties;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import test.XDTester;
 import org.xdef.XDBuilder;
-import org.xdef.XDDocument;
 import org.xdef.impl.XPool;
 import org.xdef.sys.SUtils;
 

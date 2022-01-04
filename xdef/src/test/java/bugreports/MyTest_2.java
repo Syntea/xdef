@@ -69,7 +69,7 @@ public class MyTest_2 extends XDTester {
 "</xd:component>\n"+
 "</xd:def>";
 			xp = XDFactory.compileXD(null, xdef);
-			genXComponent(xp, tempDir);
+			genXComponent(xp, tempDir).checkAndThrowErrors();
 			json = "[1, 2, \"jstring()\"]";
 			j = XonUtil.parseXON(json);
 			xd = xp.createXDDocument();

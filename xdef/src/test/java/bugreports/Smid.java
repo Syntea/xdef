@@ -1,11 +1,8 @@
 package bugreports;
 
 import org.xdef.sys.ArrayReporter;
-import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import test.XDTester;
-import org.xdef.XDBuilder;
-import org.xdef.XDDocument;
 
 public class Smid extends XDTester {
 

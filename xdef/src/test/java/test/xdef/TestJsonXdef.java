@@ -127,7 +127,7 @@ public class TestJsonXdef extends XDTester {
 			}
 			File oldFile, newFile;
 			// Generate X-components to the directory test
-			genXComponent(xp, fdir);
+			genXComponent(xp, fdir).checkAndThrowErrors();
 			String componentDir = _tempDir + "test/common/json/component/";
 			new File(componentDir).mkdirs();
 			String newComponentDir = xdir + "test/common/json/component/";
@@ -777,7 +777,7 @@ public class TestJsonXdef extends XDTester {
 			String xdir = _tempDir + "x/";
 			File fdir = new File(xdir);
 			fdir.mkdirs();
-			genXComponent(xp, fdir);
+			genXComponent(xp, fdir).checkAndThrowErrors();
 			xc = xd.iparseXComponent(ini, null, reporter);
 			assertEq("a",SUtils.getValueFromGetter(xc,"get$A"));
 			assertEq(1,SUtils.getValueFromGetter(xc,"get$B"));
@@ -830,7 +830,7 @@ public class TestJsonXdef extends XDTester {
 "# End of XON example";
 			xp = compile(xdef);
 			File tempDir = clearTempDir();
-			genXComponent(xp, tempDir);
+			genXComponent(xp, tempDir).checkAndThrowErrors();
 			xc = xp.createXDDocument().jparseXComponent(test, null, reporter);
 			assertTrue(XonUtil.xonEqual(XonUtil.parseXON(test),
 				SUtils.getValueFromGetter(xc,"toXon")));

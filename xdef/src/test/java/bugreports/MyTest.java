@@ -115,7 +115,7 @@ if(true)return;
 "</xd:component>\n"+
 "</xd:def>";
 			xp = XDFactory.compileXD(null,xdef);
-			genXComponent(xp, clearTempDir());
+			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
 			json = "[ g(12.50, 1.2), g(2.5, 3.5, -0.1, xxx) ]";
 			xd = xp.createXDDocument("");
 			jparse(xd, json, reporter);
@@ -168,7 +168,7 @@ if(true)return;
 "</xd:component>\n"+
 "</xd:def>";
 			xp = XDFactory.compileXD(null,xdef);
-			genXComponent(xp, clearTempDir());
+			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
 			xml =
 "<x xmlns:s='abc'>\n"+
 "  <a>[ \"false\" ]</a>\n"+

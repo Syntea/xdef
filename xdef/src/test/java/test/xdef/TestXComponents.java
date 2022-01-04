@@ -73,7 +73,7 @@ public final class TestXComponents extends XDTester {
 		// generate XCDPool from sources
 		XDPool xp = compile(xdsources);
 		// generate and compile XComponents from xp
-		genXComponent(xp, clearTempDir());
+		genXComponent(xp, clearTempDir()).checkAndThrowErrors();
 		return xp;
 	}
 
@@ -98,10 +98,7 @@ public final class TestXComponents extends XDTester {
 "<xd:component>%class test.xdef.Mgam %link X</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			genXComponent(xp, clearTempDir());
-			if (reporter.errorWarnings()) {
-				System.out.println(reporter.printToString());
-			}
+			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
 			xml = "<X t='20201211010101333'/>"; // millis != 0
 			xc = parseXC(xp,"M", xml , null, reporter);
 			assertNoErrorwarnings(reporter);
@@ -127,7 +124,7 @@ public final class TestXComponents extends XDTester {
 "</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			genXComponent(xp, clearTempDir());
+			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
 			xml = "<A a='1.25 CZK' q='48.2, 16.37, 151, Vienna'/>"; //
 			xd = xp.createXDDocument();
 			xc = xd.parseXComponent(xml, null, reporter);
@@ -168,7 +165,7 @@ public final class TestXComponents extends XDTester {
 "        type  gamDate          xdatetime('yyyyMMdd');\n" +
 "    </xd:declaration>\n" +
 "</xd:def>"});
-			genXComponent(xp, clearTempDir());
+			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
 			xml = "<A RokDN=\"2021\" CisloDN=\"12345\"/>";
 			assertEq(xml, parse(xp, "D7_", xml, reporter));
 			assertNoErrors(reporter);
@@ -207,7 +204,7 @@ public final class TestXComponents extends XDTester {
 "   </xd:component>\n" +
 "</xd:def>";
 			xp = compile(xdef);
-			genXComponent(xp, clearTempDir());
+			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
 			obj = SUtils.getNewInstance("test.xdef.xcomp.XCPerson");
 			SUtils.setValueToSetter(obj, "setName", "John Brown");
 			SUtils.setValueToSetter(obj, "setBirth",
@@ -243,7 +240,7 @@ public final class TestXComponents extends XDTester {
 "  </xd:component>\n" +
 "</xd:def>";
 			xp = compile(xdef);
-			genXComponent(xp, clearTempDir());
+			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
 			xd = xp.createXDDocument("X");
 			xml =
 "<XdPoolCfg>\n"+
@@ -286,7 +283,7 @@ public final class TestXComponents extends XDTester {
 "  </xd:component>\n" +
 "</xd:def>";
 			xp = compile(xdef);
-			genXComponent(xp, clearTempDir());
+			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
 			xml =
 "<a>\n"+
 "  <b Name='X1'>\n"+
