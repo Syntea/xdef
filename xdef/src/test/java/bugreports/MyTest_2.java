@@ -11,6 +11,7 @@ import org.xdef.sys.ArrayReporter;
 import test.XDTester;
 import java.net.URL;
 import org.xdef.component.XComponent;
+import static org.xdef.sys.STester.runTest;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.xon.XonTools;
@@ -45,7 +46,6 @@ public class MyTest_2 extends XDTester {
 		setProperty(XDConstants.XDPROPERTY_WARNINGS, // xdef_warnings
 			XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE); // true | false
 ////////////////////////////////////////////////////////////////////////////////
-
 		File tempDir = clearTempDir();
 		XDPool xp;
 		String xdef;
@@ -82,7 +82,7 @@ public class MyTest_2 extends XDTester {
 				XonUtil.xmlToXon(xc.toXml())));
 			assertTrue(XonUtil.xonEqual(j, xd.getXon()));
 		} catch (Exception ex) {fail(ex);}
-if (T )return;
+if (T)return;
 		try {
 			xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" root=\"array\">\n" +
@@ -230,7 +230,7 @@ if(T)return;
 //			assertNoErrors(reporter);
 //			assertTrue(XonUtil.xonEqual(j, o));
 		} catch (Exception ex) {fail(ex);}
-if(T )return;
+if(T)return;
 		try {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
@@ -255,7 +255,7 @@ if(T )return;
 			assertTrue(XonUtil.xonEqual(XonUtil.parseJSON("[1,\"\",\"\"]"),toJson(xc)),
 				XonUtil.toJsonString(toJson(xc), true));
 		} catch (Exception ex) {fail(ex);}
-if(T )return;
+if(T)return;
 		try {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
@@ -317,7 +317,7 @@ if(T )return;
 			assertTrue(XonUtil.xonEqual(XonUtil.parseJSON(json), j),
 				XonUtil.toJsonString(j, true));
 		} catch (Exception ex) {fail(ex);}
-if(T )return;
+if(T)return;
 		try {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
@@ -394,7 +394,7 @@ $.store.book[0].title			$['store']['book'][0]['title']
 				XonUtil.toJsonString(j, true));
 //System.out.println(XonUtil.toJsonString(j, true));
 		} catch (Exception ex) {fail(ex);}
-if(T )return;
+if(T)return;
 		try {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='Y'>\n"+
@@ -433,7 +433,7 @@ if(T )return;
 			assertEq(125, SUtils.getValueFromGetter(xc, "get$item_1"));
 			assertEq(true, SUtils.getValueFromGetter(xc, "get$item_2"));
 		} catch (Exception ex) {fail(ex);}
-if(T )return;
+if(T)return;
 		try {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='Y'>\n"+
