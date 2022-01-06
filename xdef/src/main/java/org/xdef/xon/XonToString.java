@@ -129,34 +129,32 @@ class XonToString extends XonTools {
 					break;
 				}
 			}
-			if (sb1!=null&&sb1.length()+sb.length()-sb.lastIndexOf("\n") < 78) {
+			if (sb1!=null&&sb1.length()+sb.length()-sb.lastIndexOf("\n") < 74) {
 				sb.append(ind != null ? "[ " : "[" ).append(sb1).append("]");
 				return;
 			}
 		}
 		sb.append('[');
+		int pos = sb.length();
 		int lastValuePosition = sb.length();
 		boolean first = true;
 		for (Object o: array) {
-			int pos = sb.length();
-			objectToString(o, ind, sb, xon);
-			int lastLine = sb.lastIndexOf("\n", pos);
 			if (first) {
 				first = false;
-				if (ind != null) {
-					sb.insert(pos, lastLine < 0 ? " " : ind);
-				}
 			} else {
-				sb.insert(pos, ',');
+				sb.append(',');
 				if (ind != null) {
-					sb.insert(pos + 1, ind);
+					sb.append(ind);
 				}
 			}
+			objectToString(o, ind, sb, xon);
 		}
 		if (ind != null) {
 			if (sb.lastIndexOf("\n") > lastValuePosition) {
+				sb.insert(pos, indent);
 				sb.append(indent);
 			} else {
+				sb.insert(pos, ' ');
 				sb.append(' ');
 			}
 		}
@@ -197,9 +195,6 @@ class XonToString extends XonTools {
 		String key;
 		if (y instanceof String) {
 			key = (String) y;
-//if ("to".equals(key) && "Paris".equals(en.getValue())) {
-//	System.out.println(en);
-//}
 		} else {
 			try {
 				key = new String((byte[]) y, "UTF-8");
@@ -241,18 +236,14 @@ class XonToString extends XonTools {
 			for (Object x: map.entrySet()) {
 				if (first) {
 					first = false;
-					if (ind != null) {
-						s += ' ';
-					}
 				} else {
-					first = false;
 					s += ind != null ? ", " : ",";
 				}
 				s += entryToString((Map.Entry) x, ind, xon);
 			}
 			if (s.indexOf('\n') < 0
-				&& sb.length() - sb.lastIndexOf("\n") + s.length() < 78) {
-				sb.append(s).append(ind != null? " }" : "}");
+				&& sb.length() - sb.lastIndexOf("\n") + s.length() < 80) {
+				sb.append(s).append("}");
 				return;
 			}
 		}
