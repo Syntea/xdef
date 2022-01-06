@@ -1,13 +1,14 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 41.0.4, release-date 2022-01-04
-* added new type validation methods `country` and `countries`
-* `<xd:json>` model in X-definition changed to `<xd:xon>`
+# Version 41.0.4, release-date 2022-01-06
+* added new type validation methods `country` and `countries`.
+* `<xd:json>` model in X-definition changed to `<xd:xon>`.
 * fixed bug in datetime formationg when mask of a xdatetime contains `SSS`
-  and the value of milliseconds in datetime is zero
-* fixed bug NullpointerException in parsing of incorrect JSON data
+  and the value of milliseconds in datetime is zero.
+* fixed bug NullpointerException in parsing of incorrect JSON data.
 * corrected generation of XON from XComponent
   (`org.xdef.component.XComponentUtil.toXon(...)`.
+* improved generation the indented string from XON/JSON.
 
 # Version 41.0.3, release-date 2021-12-05
 * added tools for processing YAML data (see methods `parseYAML`

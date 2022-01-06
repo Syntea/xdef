@@ -116,37 +116,49 @@ class XonToString extends XonTools {
 			sb.append("[]");
 			return;
 		}
-		if (indent != null && indent.length() > 0 && array.size() == 1) {
-			Object o = array.get(0);
-			if (!(o instanceof Map) && !(o instanceof List)) {
-				String s = valueToString(o, xon);
-				if (s.length() + indent.length() < 72) {
-					sb.append('[').append(s).append(']');
-					return;
+		String ind = (indent != null) ? indent + "  " : null;
+		if (indent != null && indent.length() > 0) {
+			StringBuilder sb1 = new StringBuilder();
+			for (Object o: array) {
+				if (sb1.length() != 0) {
+					sb1.append(", ");
+				}
+				objectToString(o, ind, sb1, xon);
+				if (sb1.indexOf("\n") >= 0) {
+					sb1 = null;
+					break;
 				}
 			}
+			if (sb1!=null&&sb1.length()+sb.length()-sb.lastIndexOf("\n") < 78) {
+				sb.append(ind != null ? "[ " : "[" ).append(sb1).append("]");
+				return;
+			}
 		}
-		int lastValuePosition = sb.length();
 		sb.append('[');
-		String ind = (indent != null) ? indent + "  " : null;
+		int lastValuePosition = sb.length();
 		boolean first = true;
 		for (Object o: array) {
+			int pos = sb.length();
+			objectToString(o, ind, sb, xon);
+			int lastLine = sb.lastIndexOf("\n", pos);
 			if (first) {
 				first = false;
-				if (ind != null && array.size() > 1) {
-					sb.append(ind);
+				if (ind != null) {
+					sb.insert(pos, lastLine < 0 ? " " : ind);
 				}
 			} else {
-				sb.append(',');
+				sb.insert(pos, ',');
 				if (ind != null) {
-					sb.append(ind);
+					sb.insert(pos + 1, ind);
 				}
 			}
-			objectToString(o, ind, sb, xon);
 		}
-		if (ind != null
-			&&  (array.size() > 1 || sb.lastIndexOf("\n") > lastValuePosition)){
-			sb.append(indent);
+		if (ind != null) {
+			if (sb.lastIndexOf("\n") > lastValuePosition) {
+				sb.append(indent);
+			} else {
+				sb.append(' ');
+			}
 		}
 		sb.append(']');
 	}
@@ -172,9 +184,44 @@ class XonToString extends XonTools {
 		}
 	}
 
+	/** Create string from named item.
+	 * @param en named item.
+	 * @param indent indentation of result or null.
+	 * @param xon if true then XON else if false JOSN source is generated,
+	 * @return string created from named item.
+	 */
+	private static String entryToString(final Map.Entry en,
+		final String ind,
+		final boolean xon) {
+		Object y = en.getKey();
+		String key;
+		if (y instanceof String) {
+			key = (String) y;
+//if ("to".equals(key) && "Paris".equals(en.getValue())) {
+//	System.out.println(en);
+//}
+		} else {
+			try {
+				key = new String((byte[]) y, "UTF-8");
+			} catch (Exception ex) {
+				throw new RuntimeException(ex);
+			}
+		}
+		char separator = '=';
+		if (!xon || !StringParser.chkXMLName(key, StringParser.XMLVER1_0)) {
+			key = '"' + jstringToSource(key) + '"';
+			separator = ':';
+		}
+		key = ind != null ? key+" "+separator+" " : (key + separator);
+		StringBuilder sb1 = new StringBuilder();
+		sb1.append(key);
+		objectToString(en.getValue(), ind, sb1, xon);
+		return sb1.toString();
+	}
+
 	/** Add the string created from XON/JSON map to StringBuilder.
 	 * @param map map to be created to String.
-	 * @param indent indentation of result,
+	 * @param indent indentation of result or null.
 	 * @param sb StringBuilder where to append the created string.
 	 * @param xon if true then XON else if false JOSN source is generated,
 	 */
@@ -189,43 +236,44 @@ class XonToString extends XonTools {
 		}
 		String ind = (indent != null) ? indent + "  " : null;
 		boolean first = true;
-		int lastValuePosition = sb.length();
-		for (Object x: map.entrySet()) {
-			Map.Entry en = (Map.Entry) x;
-			Object y = en.getKey();
-			String key;
-			if (y instanceof String) {
-				key = (String) y;
-			} else {
-				try {
-					key = new String((byte[]) y, "UTF-8");
-				} catch (Exception ex) {
-					throw new RuntimeException(ex);
+		if (map.size() <= 2) {
+			String s = "";
+			for (Object x: map.entrySet()) {
+				if (first) {
+					first = false;
+					if (ind != null) {
+						s += ' ';
+					}
+				} else {
+					first = false;
+					s += ind != null ? ", " : ",";
 				}
+				s += entryToString((Map.Entry) x, ind, xon);
 			}
-			char separator = '=';
-			if (!xon || !StringParser.chkXMLName(key, StringParser.XMLVER1_0)) {
-				key = '"' + jstringToSource(key) + '"';
-				separator = ':';
+			if (s.indexOf('\n') < 0
+				&& sb.length() - sb.lastIndexOf("\n") + s.length() < 78) {
+				sb.append(s).append(ind != null? " }" : "}");
+				return;
 			}
-			key += indent != null
-				?  " " + separator + " " : String.valueOf(separator);
+		}
+		int lastValuePosition = sb.length();
+		first = true;
+		for (Object x: map.entrySet()) {
+			String s = entryToString((Map.Entry) x, ind, xon);
+			lastValuePosition = sb.length();
 			if (first) {
 				first = false;
-				if (map.size() > 1 && indent != null) {
+				if (ind != null) {
 					sb.append(' ');
 				}
-				sb.append(key);
+				sb.append(s);
 			} else {
-				lastValuePosition = sb.length();
 				sb.append(',');
 				if (ind != null) {
 					sb.append(ind);
 				}
-				sb.append(key);
+				sb.append(s);
 			}
-			lastValuePosition = sb.length();
-			objectToString(en.getValue(), ind, sb, xon);
 		}
 		if (ind != null
 			&&  (map.size() > 1 || sb.lastIndexOf("\n") > lastValuePosition)) {
