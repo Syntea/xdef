@@ -246,20 +246,18 @@ class XonToString extends XonTools {
 		int pos = sb.length();
 		first = true;
 		for (Object x: map.entrySet()) {
-			String s = entryToString((Map.Entry) x, ind, xon);
 			if (first) {
 				first = false;
 				if (ind != null) {
 					sb.append(' ');
 				}
-				sb.append(s);
 			} else {
 				sb.append(',');
 				if (ind != null) {
 					sb.append(ind);
 				}
-				sb.append(s);
 			}
+			sb.append(entryToString((Map.Entry) x, ind, xon));
 		}
 		if (ind != null && sb.lastIndexOf("\n") > pos) {
 			sb.append(indent);
