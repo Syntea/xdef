@@ -112,8 +112,9 @@ class XonToString extends XonTools {
 		final String indent,
 		final StringBuilder sb,
 		final boolean xon) {
+		sb.append('[');
 		if (array.isEmpty()) {
-			sb.append("[]");
+			sb.append(']');
 			return;
 		}
 		String ind = (indent != null) ? indent + "  " : null;
@@ -130,13 +131,11 @@ class XonToString extends XonTools {
 				}
 			}
 			if (sb1!=null&&sb1.length()+sb.length()-sb.lastIndexOf("\n") < 74) {
-				sb.append(ind != null ? "[ " : "[" ).append(sb1).append("]");
+				sb.append(sb1).append("]");
 				return;
 			}
 		}
-		sb.append('[');
 		int pos = sb.length();
-		int lastValuePosition = sb.length();
 		boolean first = true;
 		for (Object o: array) {
 			if (first) {
@@ -150,12 +149,9 @@ class XonToString extends XonTools {
 			objectToString(o, ind, sb, xon);
 		}
 		if (ind != null) {
-			if (sb.lastIndexOf("\n") > lastValuePosition) {
-				sb.insert(pos, indent);
+			if (sb.lastIndexOf("\n") > pos) {
+				sb.insert(pos, ind);
 				sb.append(indent);
-			} else {
-				sb.insert(pos, ' ');
-				sb.append(' ');
 			}
 		}
 		sb.append(']');
@@ -247,11 +243,10 @@ class XonToString extends XonTools {
 				return;
 			}
 		}
-		int lastValuePosition = sb.length();
+		int pos = sb.length();
 		first = true;
 		for (Object x: map.entrySet()) {
 			String s = entryToString((Map.Entry) x, ind, xon);
-			lastValuePosition = sb.length();
 			if (first) {
 				first = false;
 				if (ind != null) {
@@ -266,8 +261,7 @@ class XonToString extends XonTools {
 				sb.append(s);
 			}
 		}
-		if (ind != null
-			&&  (map.size() > 1 || sb.lastIndexOf("\n") > lastValuePosition)) {
+		if (ind != null && sb.lastIndexOf("\n") > pos) {
 			sb.append(indent);
 		}
 		sb.append('}');
@@ -298,14 +292,9 @@ class XonToString extends XonTools {
 		for (Object x: xmap.entrySet()) {
 			Map.Entry en = (Map.Entry) x;
 			Object o = en.getKey();
-			String key;
-			if (o instanceof byte[]) { // this is because of YAML
-				key = new String((byte[])o);
-			} else {
-				key = (String) o;
-			}
-			Object y = en.getValue();
-			result.put(key, xonToJson(y));
+			String key = o instanceof byte[] // this is because of YAML???
+				? new String((byte[]) o) : (String) o;
+			result.put(key, xonToJson(en.getValue()));
 		}
 		return result;
 	}
