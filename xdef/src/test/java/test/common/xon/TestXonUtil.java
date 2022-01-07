@@ -30,7 +30,7 @@ public class TestXonUtil extends STester {
 		try {
 			// test toJsonString and parseJSON JSON
 			o1 = XonUtil.parseJSON(f);
-			o2 = XonUtil.parseJSON(XonUtil.toJsonString(o1));
+			o2 = XonUtil.parseJSON(XonUtil.toJsonString(o1, true));
 			if (!XonUtil.xonEqual(o1, o2)) {
 				return "JSON toString error " + f.getName();
 			}

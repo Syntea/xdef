@@ -102,6 +102,31 @@ class XonToString extends XonTools {
 		return '"' + jstringToSource(result) + '"';
 	}
 
+	/** Write array item to array or Map.
+	 * @param indent indentation of result,
+	 * @param sb StringBuilder where to append the created string.
+	 * @param sb1 StringBuilder from which append the created string
+	 * @param first true if it is the first item.
+	 * @param oneLine true if all items are on one line.
+	 */
+	private static void writeItem(final String indent,
+		final StringBuilder sb,
+		final StringBuilder sb1,
+		final boolean first,
+		final boolean oneLine) {
+		if (!first) {
+			sb.append(',');
+			if (indent != null) {
+				if (oneLine) {
+					sb.append(' ');
+				} else {
+					sb.append(indent);
+				}
+			}
+		}
+		sb.append(sb1);
+	}
+
 	/** Add the string created from XON/JSON array to StringBuilder.
 	 * @param array array to be created to String.
 	 * @param indent indentation of result,
@@ -117,33 +142,37 @@ class XonToString extends XonTools {
 			sb.append(']');
 			return;
 		}
-		String ind = (indent != null) ? indent + "  " : null;
-		int lineLen = sb.length() - sb.lastIndexOf("\n");
-		StringBuilder sb1 = new StringBuilder();
-		for (Object o: array) {
-			if (sb1.length() != 0) {
-				sb1.append(", ");
-			}
-			objectToString(o, ind, sb1, xon);
-			if (indent != null
-				&& (sb1.indexOf("\n") >= 0 || sb1.length() + lineLen > 74)) {
-				sb1 = null;
-				break;
-			}
-		}
-		if (sb1 != null) {
-			sb.append(sb1).append("]");
-			return;
-		}
 		int pos = sb.length();
+		String ind = (indent != null) ? indent + "  " : null;
+		int lineLen = sb.length() - sb.lastIndexOf("\n"), itemsLen = 0;
+		List<StringBuilder> items = new ArrayList<StringBuilder>();
 		boolean first = true;
 		for (Object o: array) {
-			if (first) {
-				first = false;
+			StringBuilder sb1 = new StringBuilder();
+			objectToString(o, ind, sb1, xon);
+			if (items != null && ind != null
+				&& (sb1.indexOf("\n") >= 0
+				|| (itemsLen += sb1.length() + 1) + lineLen > 74)) {
+				items.add(sb1);
+				for (StringBuilder x : items) {
+					writeItem(ind, sb, x, first, false);
+					first = false;
+				}
+				items = null;
 			} else {
-				sb.append(',').append(ind);
+				if (items == null) {
+					writeItem(ind, sb, sb1, first, false);
+					first = false;
+				} else {
+					items.add(sb1);
+				}
 			}
-			objectToString(o, ind, sb, xon);
+		}
+		if (items != null) {
+			for (StringBuilder x : items) {
+				writeItem(ind, sb, x, first, true);
+				first = false;
+			}
 		}
 		if (sb.lastIndexOf("\n") > pos) {
 			sb.append(indent).insert(pos, ind);
@@ -175,12 +204,11 @@ class XonToString extends XonTools {
 	/** Add named item to StringBuilder.
 	 * @param en named item.
 	 * @param indent indentation of result or null.
-	 * @param sb StringBuilder where to append the created item.
-	 * @param xon if true then XON else if false JSON source is generated,
+	 * @param xon if true then XON else if false JSON source is generated.
+	 * @return StringBuilder with created item.
 	 */
-	private static void addNamedItem(final Map.Entry en,
+	private static StringBuilder createNamedItem(final Map.Entry en,
 		final String ind,
-		StringBuilder sb,
 		final boolean xon) {
 		Object y = en.getKey();
 		String key;
@@ -199,8 +227,10 @@ class XonToString extends XonTools {
 			separator = ':';
 		}
 		key = ind != null ? key+" "+separator+" " : (key + separator);
+		StringBuilder sb = new StringBuilder();
 		sb.append(key);
 		objectToString(en.getValue(), ind, sb, xon);
+		return sb;
 	}
 
 	/** Add the string created from XON/JSON map to StringBuilder.
@@ -218,37 +248,37 @@ class XonToString extends XonTools {
 			sb.append('}');
 			return;
 		}
+		int pos = sb.length();
 		String ind = (indent != null) ? indent + "  " : null;
 		boolean first = true;
-		StringBuilder sb1 = new StringBuilder();
-		int lineLen = sb.length() - sb.lastIndexOf("\n");
-		for (Object x: map.entrySet()) {
-			if (first) {
-				first = false;
-			} else {
-				sb1.append(ind != null ? ", " : ",");
-			}
-			addNamedItem((Map.Entry) x, ind, sb1, xon);
-			if (ind != null &&
-				(sb1.indexOf("\n") >= 0 || sb1.length() + lineLen >= 74)) {
-				sb1 = null;
-				break;
-			}
-		}
-		if (sb1 != null) {
-			sb.append(sb1).append("}");
-			return;
-		}
-		int pos = sb.length();
-		first = true;
-		for (Object x: map.entrySet()) {
-			if (first) {
-				first = false;
+		int lineLen = sb.length() - sb.lastIndexOf("\n"), itemsLen = 0;
+		List<StringBuilder> items = new ArrayList<StringBuilder>();
+		for (Object o: map.entrySet()) {
+			StringBuilder sb1 = createNamedItem((Map.Entry) o, ind, xon);
+			if (items != null && ind != null &&
+				(sb1.indexOf("\n") >= 0
+				|| (itemsLen += sb1.length() + 1) + lineLen >= 74)) {
+				items.add(sb1);
 				sb.append(' ');
+				for (StringBuilder x : items) {
+					writeItem(ind, sb, x, first, false);
+					first = false;
+				}
+				items = null;
 			} else {
-				sb.append(',').append(ind);
+				if (items == null) {
+					writeItem(ind, sb, sb1, first, false);
+					first = false;
+				} else {
+					items.add(sb1);
+				}
 			}
-			addNamedItem((Map.Entry) x, ind, sb, xon);
+		}
+		if (items != null && !items.isEmpty()) {
+			for (StringBuilder x : items) {
+				writeItem(ind, sb, x, first, true);
+				first = false;
+			}
 		}
 		if (sb.lastIndexOf("\n") > pos) {
 			sb.append(indent);
