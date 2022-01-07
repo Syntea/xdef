@@ -125,7 +125,7 @@ class XonToString extends XonTools {
 				sb1.append(", ");
 			}
 			objectToString(o, ind, sb1, xon);
-			if (indent != null 
+			if (indent != null
 				&& (sb1.indexOf("\n") >= 0 || sb1.length() + lineLen > 74)) {
 				sb1 = null;
 				break;
@@ -229,7 +229,7 @@ class XonToString extends XonTools {
 				sb1.append(ind != null ? ", " : ",");
 			}
 			addNamedItem((Map.Entry) x, ind, sb1, xon);
-			if (ind != null && 
+			if (ind != null &&
 				(sb1.indexOf("\n") >= 0 || sb1.length() + lineLen >= 74)) {
 				sb1 = null;
 				break;
