@@ -43,8 +43,8 @@ class XonToString extends XonTools {
 		}
 		String result;
 		if (xon) {
-			result = x.toString();
 			if (x instanceof Number) {
+				result = x.toString();
 				if (x instanceof BigDecimal) {
 					return result + 'd';
 				} else if (x instanceof Float) {
@@ -118,22 +118,22 @@ class XonToString extends XonTools {
 			return;
 		}
 		String ind = (indent != null) ? indent + "  " : null;
-		if (indent != null && indent.length() > 0) {
-			StringBuilder sb1 = new StringBuilder();
-			for (Object o: array) {
-				if (sb1.length() != 0) {
-					sb1.append(", ");
-				}
-				objectToString(o, ind, sb1, xon);
-				if (sb1.indexOf("\n") >= 0) {
-					sb1 = null;
-					break;
-				}
+		int lineLen = sb.length() - sb.lastIndexOf("\n");
+		StringBuilder sb1 = new StringBuilder();
+		for (Object o: array) {
+			if (sb1.length() != 0) {
+				sb1.append(", ");
 			}
-			if (sb1!=null&&sb1.length()+sb.length()-sb.lastIndexOf("\n") < 74) {
-				sb.append(sb1).append("]");
-				return;
+			objectToString(o, ind, sb1, xon);
+			if (indent != null 
+				&& (sb1.indexOf("\n") >= 0 || sb1.length() + lineLen > 74)) {
+				sb1 = null;
+				break;
 			}
+		}
+		if (sb1 != null) {
+			sb.append(sb1).append("]");
+			return;
 		}
 		int pos = sb.length();
 		boolean first = true;
@@ -141,18 +141,12 @@ class XonToString extends XonTools {
 			if (first) {
 				first = false;
 			} else {
-				sb.append(',');
-				if (ind != null) {
-					sb.append(ind);
-				}
+				sb.append(',').append(ind);
 			}
 			objectToString(o, ind, sb, xon);
 		}
-		if (ind != null) {
-			if (sb.lastIndexOf("\n") > pos) {
-				sb.insert(pos, ind);
-				sb.append(indent);
-			}
+		if (sb.lastIndexOf("\n") > pos) {
+			sb.append(indent).insert(pos, ind);
 		}
 		sb.append(']');
 	}
@@ -178,14 +172,15 @@ class XonToString extends XonTools {
 		}
 	}
 
-	/** Create string from named item.
+	/** Add named item to StringBuilder.
 	 * @param en named item.
 	 * @param indent indentation of result or null.
-	 * @param xon if true then XON else if false JOSN source is generated,
-	 * @return string created from named item.
+	 * @param sb StringBuilder where to append the created item.
+	 * @param xon if true then XON else if false JSON source is generated,
 	 */
-	private static String entryToString(final Map.Entry en,
+	private static void addNamedItem(final Map.Entry en,
 		final String ind,
+		StringBuilder sb,
 		final boolean xon) {
 		Object y = en.getKey();
 		String key;
@@ -204,10 +199,8 @@ class XonToString extends XonTools {
 			separator = ':';
 		}
 		key = ind != null ? key+" "+separator+" " : (key + separator);
-		StringBuilder sb1 = new StringBuilder();
-		sb1.append(key);
-		objectToString(en.getValue(), ind, sb1, xon);
-		return sb1.toString();
+		sb.append(key);
+		objectToString(en.getValue(), ind, sb, xon);
 	}
 
 	/** Add the string created from XON/JSON map to StringBuilder.
@@ -227,39 +220,37 @@ class XonToString extends XonTools {
 		}
 		String ind = (indent != null) ? indent + "  " : null;
 		boolean first = true;
-		if (map.size() <= 2) {
-			String s = "";
-			for (Object x: map.entrySet()) {
-				if (first) {
-					first = false;
-				} else {
-					s += ind != null ? ", " : ",";
-				}
-				s += entryToString((Map.Entry) x, ind, xon);
+		StringBuilder sb1 = new StringBuilder();
+		int lineLen = sb.length() - sb.lastIndexOf("\n");
+		for (Object x: map.entrySet()) {
+			if (first) {
+				first = false;
+			} else {
+				sb1.append(ind != null ? ", " : ",");
 			}
-			if (s.indexOf('\n') < 0
-				&& sb.length() - sb.lastIndexOf("\n") + s.length() < 80) {
-				sb.append(s).append("}");
-				return;
+			addNamedItem((Map.Entry) x, ind, sb1, xon);
+			if (ind != null && 
+				(sb1.indexOf("\n") >= 0 || sb1.length() + lineLen >= 74)) {
+				sb1 = null;
+				break;
 			}
+		}
+		if (sb1 != null) {
+			sb.append(sb1).append("}");
+			return;
 		}
 		int pos = sb.length();
 		first = true;
 		for (Object x: map.entrySet()) {
 			if (first) {
 				first = false;
-				if (ind != null) {
-					sb.append(' ');
-				}
+				sb.append(' ');
 			} else {
-				sb.append(',');
-				if (ind != null) {
-					sb.append(ind);
-				}
+				sb.append(',').append(ind);
 			}
-			sb.append(entryToString((Map.Entry) x, ind, xon));
+			addNamedItem((Map.Entry) x, ind, sb, xon);
 		}
-		if (ind != null && sb.lastIndexOf("\n") > pos) {
+		if (sb.lastIndexOf("\n") > pos) {
 			sb.append(indent);
 		}
 		sb.append('}');
@@ -315,7 +306,7 @@ class XonToString extends XonTools {
 			return ((File) x).getAbsolutePath();
 		} else if (x instanceof InetAddress) {
 			return x.toString().substring(1);
-		} else if (x instanceof InetAddress) {
+		} else if (x instanceof Currency) {
 			return ((Currency) x).getCurrencyCode();
 		}
 		return x.toString();
