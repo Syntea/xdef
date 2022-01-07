@@ -117,11 +117,7 @@ class XonToString extends XonTools {
 		if (notFirst) {
 			sb.append(',');
 			if (indent != null) {
-				if (oneLine) {
-					sb.append(' ');
-				} else {
-					sb.append(indent);
-				}
+				sb.append(oneLine ? " " : indent);
 			}
 		}
 		sb.append(sb1);
