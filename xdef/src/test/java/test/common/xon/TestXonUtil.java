@@ -9,7 +9,7 @@ import org.xdef.sys.STester;
 
 /** Test JSON utilities, JSON parser and conversion XML / JSON. */
 public class TestXonUtil extends STester {
-	File[] _files;
+	private File[] _files;
 
 	public TestXonUtil() {super();}
 
@@ -25,13 +25,12 @@ public class TestXonUtil extends STester {
 	 * @return error message or the empty string if no error was recognized.
 	 */
 	private String testJParse(final File f) {
-//		String id = getId(f);
 		Object o1, o2;
 		Element el;
 		try {
 			// test toJsonString and parseJSON JSON
 			o1 = XonUtil.parseJSON(f);
-			o2 = XonUtil.parseJSON(XonUtil.toJsonString(o1, true));
+			o2 = XonUtil.parseJSON(XonUtil.toJsonString(o1));
 			if (!XonUtil.xonEqual(o1, o2)) {
 				return "JSON toString error " + f.getName();
 			}
