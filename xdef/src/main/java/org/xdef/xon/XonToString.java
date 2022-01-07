@@ -106,15 +106,15 @@ class XonToString extends XonTools {
 	 * @param indent indentation of result,
 	 * @param sb StringBuilder where to append the created string.
 	 * @param sb1 StringBuilder from which append the created string
-	 * @param first true if it is the first item.
+	 * @param notFirst true if this item is not the first one.
 	 * @param oneLine true if all items are on one line.
 	 */
 	private static void writeItem(final String indent,
 		final StringBuilder sb,
 		final StringBuilder sb1,
-		final boolean first,
+		final boolean notFirst,
 		final boolean oneLine) {
-		if (!first) {
+		if (notFirst) {
 			sb.append(',');
 			if (indent != null) {
 				if (oneLine) {
@@ -146,7 +146,7 @@ class XonToString extends XonTools {
 		String ind = (indent != null) ? indent + "  " : null;
 		int lineLen = sb.length() - sb.lastIndexOf("\n"), itemsLen = 0;
 		List<StringBuilder> items = new ArrayList<StringBuilder>();
-		boolean first = true;
+		boolean notFirst = false;
 		for (Object o: array) {
 			StringBuilder sb1 = new StringBuilder();
 			objectToString(o, ind, sb1, xon);
@@ -155,14 +155,14 @@ class XonToString extends XonTools {
 				|| (itemsLen += sb1.length() + 1) + lineLen > 74)) {
 				items.add(sb1);
 				for (StringBuilder x : items) {
-					writeItem(ind, sb, x, first, false);
-					first = false;
+					writeItem(ind, sb, x, notFirst, false);
+					notFirst = true;
 				}
 				items = null;
 			} else {
 				if (items == null) {
-					writeItem(ind, sb, sb1, first, false);
-					first = false;
+					writeItem(ind, sb, sb1, notFirst, false);
+					notFirst = true;
 				} else {
 					items.add(sb1);
 				}
@@ -170,8 +170,8 @@ class XonToString extends XonTools {
 		}
 		if (items != null) {
 			for (StringBuilder x : items) {
-				writeItem(ind, sb, x, first, true);
-				first = false;
+				writeItem(ind, sb, x, notFirst, true);
+				notFirst = true;
 			}
 		}
 		if (sb.lastIndexOf("\n") > pos) {
@@ -250,7 +250,7 @@ class XonToString extends XonTools {
 		}
 		int pos = sb.length();
 		String ind = (indent != null) ? indent + "  " : null;
-		boolean first = true;
+		boolean notFirst = false;
 		int lineLen = sb.length() - sb.lastIndexOf("\n"), itemsLen = 0;
 		List<StringBuilder> items = new ArrayList<StringBuilder>();
 		for (Object o: map.entrySet()) {
@@ -261,23 +261,23 @@ class XonToString extends XonTools {
 				items.add(sb1);
 				sb.append(' ');
 				for (StringBuilder x : items) {
-					writeItem(ind, sb, x, first, false);
-					first = false;
+					writeItem(ind, sb, x, notFirst, false);
+					notFirst = true;
 				}
 				items = null;
 			} else {
 				if (items == null) {
-					writeItem(ind, sb, sb1, first, false);
-					first = false;
+					writeItem(ind, sb, sb1, notFirst, false);
+					notFirst = true;
 				} else {
 					items.add(sb1);
 				}
 			}
 		}
-		if (items != null && !items.isEmpty()) {
+		if (items != null) {
 			for (StringBuilder x : items) {
-				writeItem(ind, sb, x, first, true);
-				first = false;
+				writeItem(ind, sb, x, notFirst, true);
+				notFirst = true;
 			}
 		}
 		if (sb.lastIndexOf("\n") > pos) {
