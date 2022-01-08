@@ -20,6 +20,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import javax.xml.namespace.QName;
 import org.w3c.dom.Element;
 import org.xdef.sys.Price;
 import org.xdef.sys.GPSPosition;
@@ -315,6 +316,10 @@ public final class TestXComponents extends XDTester {
 			xc = xd.parseXComponent(xml, null, reporter);
 			assertNoErrors(reporter);
 			assertEq(xml, xc.toXml());
+			xd = xp.createXDDocument("X");
+			xd.setXDContext(xml);
+			xc = xd.xcreateXComponent(null, "a", null, null);
+			assertEq(xml, xc.toXml());			
 		} catch (Exception ex) {fail(ex);}
 		reporter.clear();
 		clearTempDir();
@@ -687,6 +692,10 @@ public final class TestXComponents extends XDTester {
 "</s:H>\n";
 			xc = parseXC(xp, "H", xml, null, null);
 			assertEq(xc.toXml(), xml);
+			xd = xp.createXDDocument("H");
+			xd.setXDContext(xml);
+			xc = xd.xcreateXComponent(new QName("soap", "s:H"), null, null);
+			assertEq(xml, xc.toXml());			
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xml = "<Ping/>";
