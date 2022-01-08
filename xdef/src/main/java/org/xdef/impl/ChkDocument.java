@@ -569,15 +569,6 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		copyTemporaryReports();
 	}
 
-	private XComponent getPparsedComponent() {
-		_genXComponent = false;
-		_element = null;
-		_chkRoot.setElemValue(null);
-		XComponent result = _xComponent;
-		_xComponent = null;
-		return result;
-	}
-
 	private Element chkAndGetRootElement(final SReporter reporter,
 		boolean noreporter) throws SRuntimeException {
 		if (noreporter) {
@@ -1269,7 +1260,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	@Override
 	/** Parse source INI/Properties and return XComponent as result.
 	 * @param ini string with pathname of XON/JSON source data.
-	 * @param xClass XCompomnent class (if null, then XComponent class
+	 * @param xClass XComponent class (if null, then XComponent class
 	 * is searched in XDPool).
 	 * @param reporter report writer or null. If this argument is
 	 * null and error reports occurs then SRuntimeException is thrown.
@@ -1286,7 +1277,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	/** Parse source INI/Properties and return XComponent as result.
 	 * @param ini string with pathname of INI/Properties file
 	 * or INI/Properties source data.
-	 * @param xClass XCompomnent class (if null, then XComponent class
+	 * @param xClass XComponent class (if null, then XComponent class
 	 * is searched in XDPool).
 	 * @param sourceId name of source or null.
 	 * @param reporter report writer or null. If this argument is
@@ -1472,7 +1463,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	@Override
 	/** Parse source XON/JSON and return XComponent as result.
 	 * @param data string with pathname of XON/JSON source data.
-	 * @param xClass XCompomnent class (if <i>null</i>, then XComponent class
+	 * @param xClass XComponent class (if <i>null</i>, then XComponent class
 	 * is searched in XDPool).
 	 * @param reporter report writer or <i>null</i>. If this argument is
 	 * <i>null</i> and error reports occurs then SRuntimeException is thrown.
@@ -1490,7 +1481,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	/** Parse URL with XON/JSON source and return XComponent as result.
 	 * @param xon InputStream with XON/JSON source data.
 	 * @param sourceId name of source or <i>null</i>.
-	 * @param xClass XCompomnent class (if <i>null</i>, then XComponent class
+	 * @param xClass XComponent class (if <i>null</i>, then XComponent class
 	 * is searched in XDPool).
 	 * @param reporter report writer or <i>null</i>. If this argument is
 	 * <i>null</i> and error reports occurs then SRuntimeException is thrown.
@@ -1598,6 +1589,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
+	
 	@Override
 	/** Run create mode - create element according to the X-definition model.
 	 * If the parameter nsUri is not <i>null</i> then its assigned the model
@@ -1658,6 +1650,66 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			}
 		}
 		return xcreate(null, name, reporter);
+	}
+
+	@Override
+	/** Run create mode - create element according to the X-definition model.
+	 * If the parameter nsUri is not <i>null</i> then its assigned the model
+	 * with given namespaceURI; in this case the parameter qname may be
+	 * qualified with a prefix.
+	 * @param nsUri the namespace URI of result element (may be <i>null</i>).
+	 * @param name the name of model of required element (may contain prefix).
+	 * @param xClass XComponent class (if <i>null</i>, then XComponent class
+	 * @param reporter report writer or <i>null</i>. If this argument is
+	 * <i>null</i> and error reports occurs then SRuntimeException is thrown.
+	 * @return XComponent with created data.
+	 * @throws SRuntimeException if reporter is <i>null</i> and an error
+	 * was reported.
+	 */
+	public final XComponent xcreateXComponent(final String nsUri,
+		final String name,
+		Class xClass,
+		final ReportWriter reporter) throws SRuntimeException {
+		prepareXComponent(xClass);
+		_reporter = new SReporter(reporter);
+		_scp.setStdErr(new DefOutStream(_reporter.getReportWriter()));
+		_refNum = 0; // we must clear counter!
+		new ChkComposer(reporter == null ? new ArrayReporter() : reporter)
+			.xcreate(this, nsUri, name);
+		return getParsedComponent();
+	}
+	@Override
+	/** Run create mode - create XComponent according to the X-definition model.
+	 * @param qname the QName of model of required element.
+	 * @param xClass XComponent class (if <i>null</i>, then XComponent class
+	 * @param reporter report writer or <i>null</i>. If this argument is
+	 * <i>null</i> and error reports occurs then SRuntimeException is thrown.
+	 * @return XComponent with created data.
+	 * @throws SRuntimeException if reporter is <i>null</i> and an error
+	 * was reported.
+	 */
+	public final XComponent xcreateXComponent(final QName qname,
+		Class xClass,
+		final ReportWriter reporter) throws SRuntimeException {
+		String s = qname.getPrefix();
+		s = (s != null && !s.isEmpty() ? s + ':' : "") + qname.getLocalPart();
+		return xcreateXComponent(qname.getNamespaceURI(), s, xClass, reporter);
+	}
+
+	@Override
+	/** Run create mode - create XComponent according to the X-definition model.
+	 * @param name the name of model of required element.
+	 * @param xClass XComponent class (if <i>null</i>, then XComponent class
+	 * @param reporter report writer or <i>null</i>. If this argument is
+	 * <i>null</i> and error reports occurs then SRuntimeException is thrown.
+	 * @return XComponent with created data.
+	 * @throws SRuntimeException if reporter is <i>null</i> and an error
+	 * was reported.
+	 */
+	public final XComponent xcreateXComponent(final String name,
+		Class xClass,
+		final ReportWriter reporter) throws SRuntimeException {
+		return xcreateXComponent(null, name, xClass, reporter);
 	}
 
 	/** Parse and process XML source element.
@@ -1770,24 +1822,13 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		}
 		return xparse(parser, reporter);
 	}
-
-	@Override
-	/** Parse source XML and return XCpomonent as result.
-	 * @param xmlData string with pathname of XML file or XML source data.
-	 * @param xClass XCompomnent class (if <i>null</i>, then XComponent class
-	 * is searched in XDPool).
-	 * @param reporter report writer or <i>null</i>. If this argument is
-	 * <i>null</i> and error reports occurs then SRuntimeException is thrown.
-	 * @return root element of parsed data.
-	 * @throws SRuntimeException if reporter is <i>null</i> and an error
-	 * was reported.
+	
+	/** Prepare XComponent,
+	 * @param xClass XComponent class (if <i>null</i>, then XComponent class
 	 */
-	public final XComponent parseXComponent(final Object data,
-		final Class<?> xClass,
-		final ReportWriter reporter) throws SRuntimeException {
+	private void prepareXComponent(final Class<?> xClass) {
 		_genXComponent = true;
-		_xclass = xClass;
-		if (xClass != null) {
+		if ((_xclass = xClass) != null) {
 			try {
 				String s =(String) xClass.getDeclaredField("XD_NAME").get(null);
 				XNode xn = _xdef._rootSelection.get(s);
@@ -1808,14 +1849,43 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 				}
 			} catch (Exception ex) {}
 		}
+	}
+	
+	/** Get XComponent from parsed document.
+	 * @return XComponent from parsed document.
+	 */
+	private XComponent getParsedComponent() {
+		_genXComponent = false;
+		_element = null;
+		_chkRoot.setElemValue(null);
+		XComponent result = _xComponent;
+		_xComponent = null;
+		return result;
+	}
+
+	@Override
+	/** Parse source XML and return XCpomonent as result.
+	 * @param xmlData string with pathname of XML file or XML source data.
+	 * @param xClass XComponent class (if <i>null</i>, then XComponent class
+	 * is searched in XDPool).
+	 * @param reporter report writer or <i>null</i>. If this argument is
+	 * <i>null</i> and error reports occurs then SRuntimeException is thrown.
+	 * @return root element of parsed data.
+	 * @throws SRuntimeException if reporter is <i>null</i> and an error
+	 * was reported.
+	 */
+	public final XComponent parseXComponent(final Object data,
+		final Class<?> xClass,
+		final ReportWriter reporter) throws SRuntimeException {
+		prepareXComponent(xClass);
 		xparse(data, reporter);
-		return getPparsedComponent();
+		return getParsedComponent();
 	}
 
 	@Override
 	/** Parse source XML and return XComponent as result.
 	 * @param xmlData input stream with XML source data.
-	 * @param xClass XCompomnent class (if <i>null</i>, then XComponent class
+	 * @param xClass XComponent class (if <i>null</i>, then XComponent class
 	 * is searched in XDPool).
 	 * @param sourceId name of source or <i>null</i>.
 	 * @param reporter report writer or <i>null</i>. If this argument is
@@ -1831,7 +1901,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		_genXComponent = true;
 		_xclass = xClass;
 		xparse(xmlData, sourceId, reporter);
-		return getPparsedComponent();
+		return getParsedComponent();
 	}
 
 	@Override
@@ -1883,9 +1953,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		try {
 			return jvalidate(XonUtil.parseYAML(new FileInputStream(data)),
 				reporter);
-		} catch (Exception ex) {
-			throw new RuntimeException(ex);
-		}
+		} catch (Exception ex) {throw new RuntimeException(ex);}
 	}
 
 	@Override
@@ -1899,11 +1967,8 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	public final Object yparse(final URL data, final ReportWriter reporter)
 		throws SRuntimeException {
 		try {
-			return jvalidate(XonUtil.parseYAML(data.openStream()),
-				reporter);
-		} catch (Exception ex) {
-			throw new RuntimeException(ex);
-		}
+			return jvalidate(XonUtil.parseYAML(data.openStream()), reporter);
+		} catch (Exception ex) {throw new RuntimeException(ex);}
 	}
 
 	@Override
@@ -1922,7 +1987,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	@Override
 	/** Parse source YAML and return XComponent as result.
 	 * @param yaml string with pathname of YAML file or YAML source data.
-	 * @param xClass XCompomnent class (if <i>null</i>, then XComponent class
+	 * @param xClass XComponent class (if <i>null</i>, then XComponent class
 	 * is searched in XDPool).
 	 * @param reporter report writer or <i>null</i>. If this argument is
 	 * <i>null</i> and error reports occurs then SRuntimeException is thrown.
@@ -1940,7 +2005,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	/** Parse URL with YAML source and return XComponent as result.
 	 * @param xon InputStream with YAML source data.
 	 * @param sourceId name of source or <i>null</i>.
-	 * @param xClass XCompomnent class (if <i>null</i>, then XComponent class
+	 * @param xClass XComponent class (if <i>null</i>, then XComponent class
 	 * is searched in XDPool).
 	 * @param reporter report writer or <i>null</i>. If this argument is
 	 * <i>null</i> and error reports occurs then SRuntimeException is thrown.

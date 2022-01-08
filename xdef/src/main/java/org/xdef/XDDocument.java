@@ -370,7 +370,7 @@ public interface XDDocument extends XXNode {
 	/** Parse source INI/Properties and return XComponent as result.
 	 * @param ini string with pathname of INI/Properties file
 	 * or INI/Properties source data.
-	 * @param xClass XCompomnent class (if null, then XComponent class
+	 * @param xClass XComponent class (if null, then XComponent class
 	 * is searched in XDPool).
 	 * @param reporter report writer or null. If this argument is
 	 * null and error reports occurs then SRuntimeException is thrown.
@@ -384,7 +384,7 @@ public interface XDDocument extends XXNode {
 	/** Parse source INI/Properties and return XComponent as result.
 	 * @param ini string with pathname of INI/Properties file
 	 * or INI/Properties source data.
-	 * @param xClass XCompomnent class (if null, then XComponent class
+	 * @param xClass XComponent class (if null, then XComponent class
 	 * is searched in XDPool).
 	 * @param sourceId name of source or null.
 	 * @param reporter report writer or null. If this argument is
@@ -460,7 +460,7 @@ public interface XDDocument extends XXNode {
 
 	/** Parse source XON/JSON and return XComponent as result.
 	 * @param data string with pathname of XON/JSON source data.
-	 * @param xClass XCompomnent class (if null, then XComponent class
+	 * @param xClass XComponent class (if null, then XComponent class
 	 * is searched in XDPool).
 	 * @param reporter report writer or null. If this argument is
 	 * null and error reports occurs then SRuntimeException is thrown.
@@ -473,7 +473,7 @@ public interface XDDocument extends XXNode {
 
 	/** Parse source JSON/XON and return XComponent as result.
 	 * @param data string with pathname of XON/JSON source data.
-	 * @param xClass XCompomnent class (if null, then XComponent class
+	 * @param xClass XComponent class (if null, then XComponent class
 	 * is searched in XDPool).
 	 * @param sourceId name of source or null.
 	 * @param reporter report writer or null. If this argument is
@@ -555,7 +555,7 @@ public interface XDDocument extends XXNode {
 
 	/** Parse source XML and return XComponent as result.
 	 * @param data string with pathname of XML file or XML source data.
-	 * @param xClass XCompomnent class (if null, then XComponent class
+	 * @param xClass XComponent class (if null, then XComponent class
 	 * is searched in XDPool).
 	 * @param reporter report writer or null. If this argument is
 	 * null and error reports occurs then SRuntimeException is thrown.
@@ -568,7 +568,7 @@ public interface XDDocument extends XXNode {
 
 	/** Parse source XML and return XComponent as result.
 	 * @param data string with pathname of XML file or XML source data.
-	 * @param xClass XCompomnent class (if null, then XComponent class
+	 * @param xClass XComponent class (if null, then XComponent class
 	 * is searched in XDPool).
 	 * @param sourceId name of source or null.
 	 * @param reporter report writer or null. If this argument is
@@ -580,6 +580,50 @@ public interface XDDocument extends XXNode {
 		Class<?> xClass,
 		String sourceId,
 		ReportWriter reporter) throws SRuntimeException;
+
+	/** Run create mode - create element according to the X-definition model.
+	 * If the parameter nsUri is not <i>null</i> then its assigned the model
+	 * with given namespaceURI; in this case the parameter qname may be
+	 * qualified with a prefix.
+	 * @param nsUri the namespace URI of result element (may be <i>null</i>).
+	 * @param name the name of model of required element (may contain prefix).
+	 * @param xClass XComponent class (if <i>null</i>, then XComponent class
+	 * @param reporter report writer or <i>null</i>. If this argument is
+	 * <i>null</i> and error reports occurs then SRuntimeException is thrown.
+	 * @return XComponent with created data.
+	 * @throws SRuntimeException if reporter is <i>null</i> and an error
+	 * was reported.
+	 */
+	public XComponent xcreateXComponent(final String nsUri,
+		final String name,
+		final Class xClass,
+		final ReportWriter reporter) throws SRuntimeException;
+
+	/** Run create mode - create XComponent according to the X-definition model.
+	 * @param qname the QName of model of required element.
+	 * @param xClass XComponent class (if <i>null</i>, then XComponent class
+	 * @param reporter report writer or <i>null</i>. If this argument is
+	 * <i>null</i> and error reports occurs then SRuntimeException is thrown.
+	 * @return XComponent with created data.
+	 * @throws SRuntimeException if reporter is <i>null</i> and an error
+	 * was reported.
+	 */
+	public XComponent xcreateXComponent(final QName qname,
+		final Class xClass,
+		final ReportWriter reporter) throws SRuntimeException;
+
+	/** Run create mode - create XComponent according to the X-definition model.
+	 * @param name the name of model of required element.
+	 * @param xClass XComponent class (if <i>null</i>, then XComponent class
+	 * @param reporter report writer or <i>null</i>. If this argument is
+	 * <i>null</i> and error reports occurs then SRuntimeException is thrown.
+	 * @return XComponent with created data.
+	 * @throws SRuntimeException if reporter is <i>null</i> and an error
+	 * was reported.
+	 */
+	public XComponent xcreateXComponent(final String name,
+		final Class xClass,
+		final ReportWriter reporter) throws SRuntimeException;
 
 	/** Run create XAML according to the X-definition XON model.
 	 * @param name name of XON model.
@@ -633,7 +677,7 @@ public interface XDDocument extends XXNode {
 
 	/** Parse source YAML and return XComponent as result.
 	 * @param data string with pathname of YAML file or YAML source data.
-	 * @param xClass XCompomnent class (if null, then XComponent class
+	 * @param xClass XComponent class (if null, then XComponent class
 	 * is searched in XDPool).
 	 * @param reporter report writer or null. If this argument is
 	 * null and error reports occurs then SRuntimeException is thrown.
@@ -646,7 +690,7 @@ public interface XDDocument extends XXNode {
 
 	/** Parse source YAML and return XComponent as result.
 	 * @param data string with pathname of YAML file or YAML source data.
-	 * @param xClass XCompomnent class (if null, then XComponent class
+	 * @param xClass XComponent class (if null, then XComponent class
 	 * is searched in XDPool).
 	 * @param sourceId name of source or null.
 	 * @param reporter report writer or null. If this argument is

@@ -210,8 +210,12 @@ public final class TestXComponents extends XDTester {
 			SUtils.setValueToSetter(obj, "setBirth",
 				new Timestamp(new Date(0).getTime()));
 			SUtils.setValueToSetter(obj, "setSex", TestXComponents_bindEnum.M);
-			assertEq("<Person Birth='01.01.1970' Name='John Brown' Sex='M'/>",
-				((XComponent) obj).toXml());
+			xml = "<Person Birth='01.01.1970' Name='John Brown' Sex='M'/>";
+			assertEq(xml, ((XComponent) obj).toXml());
+			xd = xp.createXDDocument("Person");
+			xd.setXDContext(xml);
+			xc = xd.xcreateXComponent(null, "Person", null, null);
+			assertEq(xml, xc.toXml());			
 		} catch (Exception ex) {fail(ex);}
 		reporter.clear();
 		try { // model with occurrnece > 1
@@ -259,6 +263,10 @@ public final class TestXComponents extends XDTester {
 			xc = xd.parseXComponent(xml, null, reporter);
 			assertNoErrors(reporter);
 			assertEq(xml, xc.toXml());
+			xd = xp.createXDDocument("X");
+			xd.setXDContext(xml);
+			xc = xd.xcreateXComponent(null, "XdPoolCfg", null, null);
+			assertEq(xml, xc.toXml());			
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xdef =

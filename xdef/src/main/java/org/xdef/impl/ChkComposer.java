@@ -199,13 +199,9 @@ final class ChkComposer extends SReporter implements XDValueID {
 		final String nsURI,
 		final String qname) {
 		XElement oldXElement = chkDoc._xElement; //Save XElement
-/**XXX*/
 		if (oldXElement == null || oldXElement._xon == 0) {
 			chkDoc._xElement = null;
 		}
-/**XXX*
-		chkDoc._xElement = null;
-/**XXX*/
 		setReportWriter(chkDoc.getReportWriter());
 		boolean oldMode = chkDoc.isCreateMode();
 		chkDoc.setCreateMode(true);
