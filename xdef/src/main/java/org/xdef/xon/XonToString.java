@@ -41,32 +41,28 @@ class XonToString extends XonTools {
 		if (x instanceof byte[]) {// byte array
 			return "b(" + new String(SUtils.encodeBase64((byte[]) x)) + ")";
 		}
-		String result;
 		if (xon) {
 			if (x instanceof Number) {
-				result = x.toString();
-				if (x instanceof BigDecimal) {
-					return result + 'd';
-				} else if (x instanceof Float) {
-					return ((Float) x).isInfinite()
-						? result.charAt(0) == '-' ? "-INFF" : "INFF"
-						: result + 'F';
+				String num = x.toString();
+				if (x instanceof Long) {
+					return num;
 				} else if (x instanceof Double) {
 					return ((Double) x).isInfinite()
-						? result.charAt(0) == '-' ? "-INF" : "INF"
-						: result;
+						? num.charAt(0) == '-' ? "-INF" : "INF" : num;
+				} else if (x instanceof Float) {
+					return ((Float) x).isInfinite()
+						? num.charAt(0) == '-' ? "-INFF" : "INFF" : num + 'F';
 				} else if (x instanceof Byte) {
-					return result + 'B';
+					return num + 'B';
 				} else if (x instanceof Short) {
-					return result + 'S';
+					return num + 'S';
 				} else if (x instanceof Integer) {
-					return result + 'I';
-				} else if (x instanceof Long) {
-					return result;
+					return num + 'I';
 				} else if (x instanceof BigInteger) {
-					return result + 'N';
+					return num + 'N';
+				} else if (x instanceof BigDecimal) {
+					return num + 'd';
 				}
-				return result;
 			} else if (x instanceof Character) {
 				return "c\"" + charToJSource((Character) x) + '"';
 			} else if (x instanceof URI) {
@@ -86,6 +82,7 @@ class XonToString extends XonTools {
 				return x.toString();
 			}
 		}
+		String result;
 		if (x instanceof File) {// file
 			result = ((File) x).getAbsolutePath();
 		} else if (x instanceof InetAddress) {
@@ -290,7 +287,7 @@ class XonToString extends XonTools {
 	 * @param xlist XON array.
 	 * @return XON array converted to JSON.
 	 */
-	private static List xonArraytOJson(final List xlist) {
+	private static List xonArrayToJson(final List xlist) {
 		List<Object> result = new ArrayList<Object>();
 		for (Object x: xlist) {
 			result.add(xonToJson(x));
@@ -298,7 +295,8 @@ class XonToString extends XonTools {
 		return result;
 	}
 
-	/** Convert XON map to JSON.
+	/** Convert XON map to JSON (all values except of Number, String, Boolean
+	 * or null are converted to strings).
 	 * @param xmap XON map object
 	 * @return XON map converted to JSON.
 	 */
@@ -325,7 +323,7 @@ class XonToString extends XonTools {
 		} else if (x instanceof Map) {
 			return xonMapToJson((Map) x);
 		} else if (x instanceof List) {
-			return xonArraytOJson((List) x);
+			return xonArrayToJson((List) x);
 		} else if (x instanceof byte[]) {
 			return new String(SUtils.encodeBase64((byte[]) x));
 		} else if (x instanceof File) {
