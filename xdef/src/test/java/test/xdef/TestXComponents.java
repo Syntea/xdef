@@ -93,19 +93,21 @@ public final class TestXComponents extends XDTester {
 		XDPool xp;
 		try {
 			xdef = // test datetime with milliseconds = 0
-"<xd:def  xmlns:xd='http://www.xdef.org/xdef/4.1' name='M' root='X'>\n"+
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='X'>\n"+
 "<xd:declaration>type gam xdatetime('yyyyMMddHHmmssSSS');</xd:declaration>\n"+
-"  <X t='gam();' />\n"+
+"  <X a='gam()'>int()<Y xd:script='*' a='int()'/>? date()</X>\n"+
 "<xd:component>%class test.xdef.Mgam %link X</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
-			xml = "<X t='20201211010101333'/>"; // millis != 0
-			xc = parseXC(xp,"M", xml , null, reporter);
+			xml =
+"<X a='20201211010101333'>3<Y a='1'/><Y a='2'/>2021-12-30</X>";//millis == 333
+			xc = parseXC(xp,"", xml , null, reporter);
 			assertNoErrorwarnings(reporter);
 			assertEq(xml, xc.toXml());
-			xml = "<X t='20201211010101000'/>"; // millis == 0
-			xc = parseXC(xp,"M", xml , null, reporter);
+			xml =
+"<X a='20201211010101000'>3<Y a='1'/><Y a='2'/></X>";//millis == 000
+			xc = parseXC(xp,"", xml , null, reporter);
 			assertNoErrorwarnings(reporter);
 			assertEq(xml, xc.toXml());
 		} catch (Exception ex) {fail(ex);}
@@ -216,7 +218,7 @@ public final class TestXComponents extends XDTester {
 			xd = xp.createXDDocument("Person");
 			xd.setXDContext(xml);
 			xc = xd.xcreateXComponent(null, "Person", null, null);
-			assertEq(xml, xc.toXml());			
+			assertEq(xml, xc.toXml());
 		} catch (Exception ex) {fail(ex);}
 		reporter.clear();
 		try { // model with occurrnece > 1
@@ -267,7 +269,7 @@ public final class TestXComponents extends XDTester {
 			xd = xp.createXDDocument("X");
 			xd.setXDContext(xml);
 			xc = xd.xcreateXComponent(null, "XdPoolCfg", null, null);
-			assertEq(xml, xc.toXml());			
+			assertEq(xml, xc.toXml());
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xdef =
@@ -319,7 +321,7 @@ public final class TestXComponents extends XDTester {
 			xd = xp.createXDDocument("X");
 			xd.setXDContext(xml);
 			xc = xd.xcreateXComponent(null, "a", null, null);
-			assertEq(xml, xc.toXml());			
+			assertEq(xml, xc.toXml());
 		} catch (Exception ex) {fail(ex);}
 		reporter.clear();
 		clearTempDir();
@@ -695,7 +697,7 @@ public final class TestXComponents extends XDTester {
 			xd = xp.createXDDocument("H");
 			xd.setXDContext(xml);
 			xc = xd.xcreateXComponent(new QName("soap", "s:H"), null, null);
-			assertEq(xml, xc.toXml());			
+			assertEq(xml, xc.toXml());
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xml = "<Ping/>";

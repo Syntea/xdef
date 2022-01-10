@@ -1100,6 +1100,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 	 * @param savedSource saved source element.
 	 * @param index index to defList.
 	 * @param lastTextNode last processed text from source item or null.
+	 * @return index to defList.
 	 */
 	private int createChildNodes(final ChkElement chkEl,
 		final Element sourceEl,
@@ -1112,9 +1113,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 		int count;
 		Node lastNode = lastTextNode;
 		XData xtxt = chkEl._xElement.getDefAttr("$text", -1);
-/**/
 		if (xtxt != null) {
-//			&& chkEl.getDefElement(i).getKind() == XNode.XMELEMENT) {
 			if (xtxt._compose < 0) {
 				if (sourceEl != null) {
 					Node n = sourceEl.getFirstChild();
@@ -1286,7 +1285,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 				}
 				case XNode.XMTEXT: {
 					count = chkEl.getRefNum(index);
-					createTextNode(chkEl,
+					lastNode = createTextNode(chkEl,
 						sourceEl, savedSource, (XData) xNode, lastNode);
 					if (chkEl._selector != null
 						&& chkEl._selector._kind == XNode.XMCHOICE

@@ -418,6 +418,19 @@ public interface XDDocument extends XXNode {
 	public Object jcreate(String name, ReportWriter reporter)
 		throws SRuntimeException;
 
+	/** Create XComponent from XON/JSON according to the X-definition model.
+	 * @param name the name of required model.
+	 * @param xClass XComponent class (if <i>null</i>, then XComponent class
+	 * @param reporter report writer or <i>null</i>. If this argument is
+	 * <i>null</i> and error reports occurs then SRuntimeException is thrown.
+	 * @return XComponent with created data.
+	 * @throws SRuntimeException if reporter is <i>null</i> and an error
+	 * was reported.
+	 */
+	public XComponent jcreateXComponent(final String name,
+		final Class xClass,
+		final ReportWriter reporter) throws SRuntimeException;
+
 	/** Parse and process XON/JSON data and return processed XON object.
 	 * @param data XON/JSON data or file pathname
 	 * @param reporter report writer or null. If this argument is

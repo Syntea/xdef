@@ -1377,6 +1377,21 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
+	private XElement findXonModel(final String name, final String typ) {
+		for (XMElement x : _scp.getXDefinition().getModels()) {
+			if (name.equals(x.getName())) {
+				XMNode[] models = x.getChildNodeModels();
+				if (models != null && models.length == 1
+					&& ((XElement) x)._xon > 0) {
+					return (XElement) models[0];
+				}
+				break;
+			}
+		}
+		//Text with &{0} model&{1}{ of "}{" } is missing in X-definition
+		throw new SRuntimeException(XDEF.XDEF315, typ, name);
+	}
+
 	@Override
 	/** Run create XON/JSON according to the X-definition XON/JSON model.
 	 * @param name name of XON/JSON model.
@@ -1388,20 +1403,32 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 */
 	public final Object jcreate(final String name, final ReportWriter reporter)
 		throws SRuntimeException {
-		for (XMElement x : _scp.getXDefinition().getModels()) {
-			if (name.equals(x.getName())) {
-				XMNode[] models = x.getChildNodeModels();
-				if (models != null && models.length == 1
-					&& ((XElement) x)._xon > 0) {
-					_xElement = (XElement) models[0];
-					xcreate(models[0].getQName(), reporter);
-					return (_xon = _chkRoot.getXon());//prepare XON
-				}
-				break;
-			}
-		}
-		//Text with &{0} model&{1}{ of "}{" } is missing in X-definition
-		throw new SRuntimeException(XDEF.XDEF315, "json", name);
+		_xElement = findXonModel(name, "JSON");
+		xcreate(_xElement.getQName(), reporter);
+		return (_xon = _chkRoot.getXon());//prepare XON
+	}
+
+	@Override
+	/** Create XComponent from XON/JSON according to the X-definition model.
+	 * @param name the name of required model.
+	 * @param xClass XComponent class (if <i>null</i>, then XComponent class
+	 * @param reporter report writer or <i>null</i>. If this argument is
+	 * <i>null</i> and error reports occurs then SRuntimeException is thrown.
+	 * @return XComponent with created data.
+	 * @throws SRuntimeException if reporter is <i>null</i> and an error
+	 * was reported.
+	 */
+	public XComponent jcreateXComponent(final String name,
+		final Class xClass,
+		final ReportWriter reporter) throws SRuntimeException {
+		_xElement = findXonModel(name, "JSON");
+		prepareXComponent(xClass);
+		_reporter = new SReporter(reporter);
+		_scp.setStdErr(new DefOutStream(_reporter.getReportWriter()));
+		_refNum = 0; // we must clear counter!
+		new ChkComposer(reporter == null ? new ArrayReporter() : reporter)
+			.xcreate(this, _xElement.getNSUri(), _xElement.getName());
+		return getParsedComponent();
 	}
 
 	@Override
@@ -1589,7 +1616,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
-	
+
 	@Override
 	/** Run create mode - create element according to the X-definition model.
 	 * If the parameter nsUri is not <i>null</i> then its assigned the model
@@ -1822,7 +1849,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		}
 		return xparse(parser, reporter);
 	}
-	
+
 	/** Prepare XComponent,
 	 * @param xClass XComponent class (if <i>null</i>, then XComponent class
 	 */
@@ -1850,7 +1877,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			} catch (Exception ex) {}
 		}
 	}
-	
+
 	/** Get XComponent from parsed document.
 	 * @return XComponent from parsed document.
 	 */
