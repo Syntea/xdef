@@ -582,7 +582,9 @@ public class CompileXonXdef extends StringParser {
 		pp = null;
 		jp = null;
 		p._value = null;
-//System.out.println(org.xdef.xml.KXmlUtils.nodeToString(p.toXML(),true));
+/*#if DEBUGXON*#/
+		System.out.println(org.xdef.xml.KXmlUtils.nodeToString(p.toXML(),true));
+/*#end*/
 	}
 
 	/** This class provides parsing of XON/JSON source and creates the XON
