@@ -1410,6 +1410,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 
 	@Override
 	/** Create XComponent from XON/JSON according to the X-definition model.
+	 * NOTE this method is experimental.
 	 * @param name the name of required model.
 	 * @param xClass XComponent class (if <i>null</i>, then XComponent class
 	 * @param reporter report writer or <i>null</i>. If this argument is
@@ -1418,7 +1419,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 * @throws SRuntimeException if reporter is <i>null</i> and an error
 	 * was reported.
 	 */
-	public XComponent jcreateXComponent(final String name,
+	public XComponent $jcreateXComponent(final String name,
 		final Class xClass,
 		final ReportWriter reporter) throws SRuntimeException {
 		_xElement = findXonModel(name, "JSON");
