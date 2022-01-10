@@ -582,7 +582,7 @@ public class CompileXonXdef extends StringParser {
 		pp = null;
 		jp = null;
 		p._value = null;
-/*#if DEBUGXON*#/
+/*#if SHOWXONMODEL*#/
 		System.out.println(org.xdef.xml.KXmlUtils.nodeToString(p.toXML(),true));
 /*#end*/
 	}
