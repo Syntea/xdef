@@ -102,7 +102,6 @@ public class TestXon extends XDTester {
 		XDPool xp;
 		ArrayReporter reporter = new ArrayReporter();
 		XComponent xc;
-		XDDocument xd;
 		try {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='a'>\n"+
@@ -319,32 +318,6 @@ public class TestXon extends XDTester {
 			xc = parseXC(xp,"M", xml , null, reporter);
 			assertNoErrorwarnings(reporter);
 			assertEq(xml, xc.toXml());
-			assertTrue(XonUtil.xonEqual(o, XComponentUtil.toXon(xc)));
-		} catch (Exception ex) {fail(ex);}
-		try { // test jcreateXComponent
-			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='X'>\n"+
-"<xd:xon name = 'X'>\n"+
-"{a=\"int();\", b=[\"boolean();\"]}\n"+
-"</xd:xon>\n"+
-"<xd:component>%class test.xdef.JCreateX %link X</xd:component>\n"+
-"</xd:def>";
-			xp = compile(xdef);
-			xd = xp.createXDDocument();
-			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
-			s = "{a=1, b=[true]}";
-			o = xd.jparse(s, reporter);
-			assertNoErrors(reporter);
-			assertTrue(XonUtil.xonEqual(o, XonUtil.parseXON(s)));
-			xd = xp.createXDDocument();
-			xc = xd.jparseXComponent(s, null, reporter);
-			assertNoErrorwarnings(reporter);
-			assertTrue(XonUtil.xonEqual(o, XComponentUtil.toXon(xc)));
-			xd = xp.createXDDocument();
-			xd.setXDContext(xc.toXml());
-			xc = xd.jcreateXComponent("X", null, reporter);
-			assertNoErrorwarnings(reporter);
-			System.out.println(XComponentUtil.toXon(xc));
 			assertTrue(XonUtil.xonEqual(o, XComponentUtil.toXon(xc)));
 		} catch (Exception ex) {fail(ex);}
 
