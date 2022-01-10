@@ -9,6 +9,7 @@
 * corrected generation of XON from XComponent
   (`org.xdef.component.XComponentUtil.toXon(...)`.
 * improved generation the indented string from XON/JSON.
+* implemented new methods `org.xdef.XDDocument.xcreateXComponent(...)`.
 
 # Version 41.0.3, release-date 2021-12-05
 * added tools for processing YAML data (see methods `parseYAML`

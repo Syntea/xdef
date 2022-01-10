@@ -613,19 +613,6 @@ public interface XDDocument extends XXNode {
 		final ReportWriter reporter) throws SRuntimeException;
 
 	/** Run create mode - create XComponent according to the X-definition model.
-	 * @param qname the QName of model of required element.
-	 * @param xClass XComponent class (if <i>null</i>, then XComponent class
-	 * @param reporter report writer or <i>null</i>. If this argument is
-	 * <i>null</i> and error reports occurs then SRuntimeException is thrown.
-	 * @return XComponent with created data.
-	 * @throws SRuntimeException if reporter is <i>null</i> and an error
-	 * was reported.
-	 */
-	public XComponent xcreateXComponent(final QName qname,
-		final Class xClass,
-		final ReportWriter reporter) throws SRuntimeException;
-
-	/** Run create mode - create XComponent according to the X-definition model.
 	 * @param name the name of model of required element.
 	 * @param xClass XComponent class (if <i>null</i>, then XComponent class
 	 * @param reporter report writer or <i>null</i>. If this argument is
@@ -635,6 +622,19 @@ public interface XDDocument extends XXNode {
 	 * was reported.
 	 */
 	public XComponent xcreateXComponent(final String name,
+		final Class xClass,
+		final ReportWriter reporter) throws SRuntimeException;
+
+	/** Run create mode - create XComponent according to the X-definition model.
+	 * @param qname the QName of model of required element.
+	 * @param xClass XComponent class (if <i>null</i>, then XComponent class
+	 * @param reporter report writer or <i>null</i>. If this argument is
+	 * <i>null</i> and error reports occurs then SRuntimeException is thrown.
+	 * @return XComponent with created data.
+	 * @throws SRuntimeException if reporter is <i>null</i> and an error
+	 * was reported.
+	 */
+	public XComponent xcreateXComponent(final QName qname,
 		final Class xClass,
 		final ReportWriter reporter) throws SRuntimeException;
 
