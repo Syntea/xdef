@@ -1157,20 +1157,20 @@ public class TestSParser extends STester {
 			assertEq("", checkDateEQ2(x,y));
 			x.setYear(1999); y.setYear(1999);
 			assertEq("",checkDateEQ2(x,y));
-			if (SUtils.JAVA_RUNTIME_VERSION_ID < 109) {
+			if (SUtils.JAVA_RUNTIME_VERSION_ID >= 109) {
 				x.reset(); y.reset();
 				assertEq("", checkDateEQ2(x,y));
 			}
 			x.setYear(Integer.MIN_VALUE); y.setYear(Integer.MIN_VALUE);
 			assertEq("", checkDateEQ2(x,y));
-			if (SUtils.JAVA_RUNTIME_VERSION_ID < 109) {
+			if (SUtils.JAVA_RUNTIME_VERSION_ID >= 109) {
 				x.reset(); y.reset();
 				assertEq("", checkDateEQ2(x,y));
 			}
 			x.setYear(new BigInteger("20000000000100"));
 			y.setYear(new BigInteger("20000000000100"));
 			assertEq("", checkDateEQ2(x,y));
-			if (SUtils.JAVA_RUNTIME_VERSION_ID < 109) {
+			if (SUtils.JAVA_RUNTIME_VERSION_ID >= 109) {
 				x.reset(); y.reset();
 				assertEq("", checkDateEQ2(x,y));
 			}
@@ -1192,20 +1192,20 @@ public class TestSParser extends STester {
 			assertEq("", checkDateEQ2(x,y));
 			x.setYear(1999); y.setYear(1999);
 			assertEq("", checkDateEQ2(x,y));
-			if (SUtils.JAVA_RUNTIME_VERSION_ID < 109) {
+			if (SUtils.JAVA_RUNTIME_VERSION_ID >= 109) {
 				x.reset(); y.reset();
 				assertEq("", checkDateEQ2(x,y));
 			}
 			x.setYear(Integer.MIN_VALUE); y.setYear(Integer.MIN_VALUE);
 			assertEq("", checkDateEQ2(x,y));
-			if (SUtils.JAVA_RUNTIME_VERSION_ID < 109) {
+			if (SUtils.JAVA_RUNTIME_VERSION_ID >= 109) {
 				x.reset(); y.reset();
 				assertEq("", checkDateEQ2(x,y));
 			}
 			x.setYear(new BigInteger("20000000000100"));
 			y.setYear(new BigInteger("20000000000100"));
 			assertEq("", checkDateEQ2(x,y));
-			if (SUtils.JAVA_RUNTIME_VERSION_ID < 109) {
+			if (SUtils.JAVA_RUNTIME_VERSION_ID >= 109) {
 				x.reset(); y.reset();
 				assertEq("", checkDateEQ2(x,y));
 			}
@@ -1221,7 +1221,7 @@ public class TestSParser extends STester {
 			x.setMillisecond(Integer.MIN_VALUE);
 			y.setMillisecond(Integer.MIN_VALUE);
 			assertEq("", checkDateEQ2(x,y));
-			if (SUtils.JAVA_RUNTIME_VERSION_ID < 109) {
+			if (SUtils.JAVA_RUNTIME_VERSION_ID >= 109) {
 				x.reset(); y.reset();
 				assertEq("", checkDateEQ2(x,y));
 			}

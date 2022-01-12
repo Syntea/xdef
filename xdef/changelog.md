@@ -1,11 +1,12 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 41.0.4, release-date 2022-01-10
+# Version 41.0.4, release-date 2022-01-12
 * added new type validation methods `country` and `countries`.
 * `<xd:json>` model in X-definition changed to `<xd:xon>`.
 * fixed bug in datetime formationg when mask of a xdatetime contains `SSS`
   and the value of milliseconds in datetime is zero.
 * fixed bug NullpointerException in parsing of incorrect JSON data.
+* fixed bug in the method `SDatetime.reset()`.
 * corrected generation of XON from XComponent
   (`org.xdef.component.XComponentUtil.toXon(...)`.
 * improved generation the indented string from XON/JSON.

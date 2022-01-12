@@ -44,7 +44,44 @@ public class SDatetime extends XMLGregorianCalendar
 	TimeZone _tz;
 	DateFormatSymbols _dfs;
 	Calendar _calendar;
+	// original values for reset
+	private boolean _origValues;
+	private int _origday;
+	private int _origmonth;
+	private int _origyear;
+	private int _orighour;
+	private int _origminute;
+	private int _origsecond;
+	private double _origfraction; //fraction of second
+	private int _origeon;
+	private TimeZone _origtz;
 
+	private void setOriginalValues() {
+		_origValues = true;
+		_origday = _day;
+		_origmonth = _month;
+		_origyear = _year;
+		_orighour = _hour;
+		_origminute = _minute;
+		_origsecond = _second;
+		_origfraction = _fraction;
+		_origeon = _eon;
+		_origtz = _tz;
+	}
+
+	private void resetOriginalValues() {
+		if (_origValues) {
+			_day = _origday;
+			_month = _origmonth;
+			_year = _origyear;
+			_hour = _orighour;
+			_minute = _origminute;
+			_second = _origsecond;
+			_fraction = _origfraction;
+			_eon = _origeon;
+			_tz = _origtz;
+		}
+	}
 	/** Create new instance of SDatetime with empty parameters.*/
 	public SDatetime() {init();}
 
@@ -63,12 +100,16 @@ public class SDatetime extends XMLGregorianCalendar
 	 */
 	public SDatetime(String source) throws SRuntimeException {
 		this(parse(source));
+		setOriginalValues();
 	}
 
 	/** Create new instance of SDatetime with parameters from argument.
 	 * @param c Calendar object with date.
 	 */
-	public SDatetime(Calendar c) {setCalendar(c);}
+	public SDatetime(Calendar c) {
+		setCalendar(c);
+		setOriginalValues();
+	}
 
 	/** Create new instance of SDatetime with parameters from argument.
 	 * @param d Date object with date.
@@ -78,6 +119,7 @@ public class SDatetime extends XMLGregorianCalendar
 		Calendar c = new GregorianCalendar();
 		c.setTime(d);
 		setCalendar(c);
+		setOriginalValues();
 	}
 
 	/** Create new instance of SDatetime with parameters from argument.
@@ -86,6 +128,7 @@ public class SDatetime extends XMLGregorianCalendar
 	public SDatetime(Timestamp d) {
 		this((Date) d);
 		setNanos(d.getNanos());
+		setOriginalValues();
 	}
 
 	/** Create new instance of SDatetime with parameters from argument.
@@ -109,6 +152,7 @@ public class SDatetime extends XMLGregorianCalendar
 		if (sd._calendar != null) {
 			_calendar = (Calendar) sd._calendar.clone();
 		}
+		setOriginalValues();
 	}
 
 	/** Creates a new instance of SDatetime from a year, month and day.
@@ -124,6 +168,7 @@ public class SDatetime extends XMLGregorianCalendar
 		_minute = Integer.MIN_VALUE;
 		_second = Integer.MIN_VALUE;
 //		_fraction = 0.0D; _tz = null;
+		setOriginalValues();
 	}
 
 	/** Creates a new instance of SDatetime from a year, month and day.
@@ -151,6 +196,7 @@ public class SDatetime extends XMLGregorianCalendar
 		_fraction = fraction;
 		_tz = tz;
 		chkAndThrow();
+		setOriginalValues();
 	}
 
 	/** Check parsed date.
@@ -479,12 +525,7 @@ public class SDatetime extends XMLGregorianCalendar
 	 * @return Milliseconds with parsed values started from midnight.
 	 */
 	public final int getDaytimeInMillis() {
-		int result;
-		if (_hour >= 0) {
-			result = _hour * 3600000;
-		} else {
-			result = 0; //hour not set
-		}
+		int result = _hour >= 0 ? _hour * 3600000 : 0;
 		if (_minute >= 0) {
 			result += _minute * 60000;
 		}
@@ -2409,6 +2450,7 @@ public class SDatetime extends XMLGregorianCalendar
 
 	@Override
 	public final void reset() {
+		resetOriginalValues();
 		_dfs = null;
 		_calendar = null;
 	}
