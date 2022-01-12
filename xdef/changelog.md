@@ -1,8 +1,8 @@
 # Version ${version}, release-date ${release.date}
 
 # Version 41.0.4, release-date 2022-01-12
-* added new type validation methods `country` and `countries`.
-* `<xd:json>` model in X-definition changed to `<xd:xon>`.
+* implemented new type validation methods `country` and `countries`.
+* `<xd:json>` model in X-definition changed now to `<xd:xon>`.
 * fixed bug in datetime formationg when mask of a xdatetime contains `SSS`
   and the value of milliseconds in datetime is zero.
 * fixed bug NullpointerException in parsing of incorrect JSON data.
