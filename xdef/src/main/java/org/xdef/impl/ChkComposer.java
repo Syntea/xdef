@@ -242,20 +242,20 @@ final class ChkComposer extends SReporter implements XDValueID {
 		try {
 			_rootChkElement.getXDDocument().setXDContext(sourceElem);
 			XElement xElement = _rootChkElement._xElement;
-			XDValue resultExpr;
+			XDValue result;
 			if (xElement._compose >= 0) {
-				resultExpr = execComposeElement(_rootChkElement, sourceElem);
-				if (resultExpr != null && !resultExpr.isNull()) {
-					switch (resultExpr.getItemId()) {
+				result = execComposeElement(_rootChkElement, sourceElem);
+				if (result != null && !result.isNull()) {
+					switch (result.getItemId()) {
 						case XD_RESULTSET: {
-							XDResultSet it = (XDResultSet) resultExpr;
+							XDResultSet it = (XDResultSet) result;
 							try {
 								XDValue item = it.nextXDItem(_rootChkElement);
 								if (item == null) {
-									resultExpr = null;
+									result = null;
 									break;
 								}
-								resultExpr = item;
+								result = item;
 								if (it.nextXDItem(_rootChkElement) != null) {
 									//Too many iterator items for &{0}
 									_rootChkElement.error(XDEF.XDEF565,
@@ -269,25 +269,24 @@ final class ChkComposer extends SReporter implements XDValueID {
 							break;
 						}
 						case XD_NAMEDVALUE: {
-							XDNamedValue nv = (XDNamedValue) resultExpr;
+							XDNamedValue nv = (XDNamedValue) result;
 							XDValue v = nv.getValue();
 							if (v == null || v.isNull()) {
-								resultExpr = null;
+								result = null;
 								break;
 							}
 							DefContainer xdc = new DefContainer();
 							xdc.setXDNamedItem(nv);
 							xdc.addXDItem(nv.getValue());
-							resultExpr =
-								setCreateResult(_rootChkElement, xdc, 0);
+							result = setCreateResult(_rootChkElement, xdc, 0);
 							break;
 						}
 						case XD_DATETIME:
 						case XD_DURATION:
 						case XD_DOUBLE:
 						case XD_STRING: {
-							resultExpr = new DefElement(stringToElement(
-								_rootChkElement, resultExpr.stringValue()));
+							result = new DefElement(stringToElement(
+								_rootChkElement, result.stringValue()));
 							_rootChkElement._sourceElem = sourceElem;
 							break;
 						}
@@ -295,22 +294,27 @@ final class ChkComposer extends SReporter implements XDValueID {
 						case XD_ELEMENT:
 							break;
 						case XD_BOOLEAN: {
-							if (!resultExpr.booleanValue()) {
-								resultExpr = null;
+							if (!result.booleanValue()) {
+								result = null;
 								break;
 							}
 						}
 						default: {
-							resultExpr =
-								createContainer(_rootChkElement, resultExpr);
+							result = createContainer(_rootChkElement, result);
 							_rootChkElement._sourceElem = sourceElem;
 						}
 					}
 				}
-			} else { //we create dummy source element
-				resultExpr = createDefaultContext(xElement, sourceElem);
+			} else { //create section not declared => create default result
+				result = (xElement.minOccurs() <= 0) ? null // ignore
+					: (sourceElem == null)//no context -> create default element
+						? new DefElement(KXmlUtils.newDocument() // any?
+							.createElementNS(xElement.getNSUri(),
+							"$any".equals(xElement.getName()) ? "_ANY_" //any
+							: xElement.getName())) // no any, default element
+						: new DefElement(sourceElem); //sourceElem as context
 			}
-			composeElement(null, _rootChkElement, resultExpr, null);
+			composeElement(null, _rootChkElement, result, null);
 			_rootChkElement._rootChkDocument.endDocument();
 			if (_rootChkElement.getElement() == null) {
 				error(XDEF.XDEF556); //Root element was not created
@@ -357,27 +361,27 @@ final class ChkComposer extends SReporter implements XDValueID {
 			}
 		} else {
 			for (int j = 0; j < i; j++) {
-				values[j] = new DefElement(KXmlUtils.newDocument(
-					xElem.getNSUri(),
-					xElem.getName(), null).getDocumentElement());
+				values[j] = new DefElement(
+					KXmlUtils.newDocument(xElem.getNSUri(),xElem.getName(),null)
+						.getDocumentElement());
 			}
 		}
 		return new DefContainer(values);
 	}
 
-	/** Create Element to ChkElement and create following text nodes if
+	/** Compose Element to ChkElement and create following text nodes if
 	 * xtxt object from the attribute xd:text is not null.
 	 * @param chkElement actual ChkElement.
-	 * @param el Element from which to create Element to chkElement (or null).
+	 * @param elem Element from which to create Element to chkElement (or null).
 	 * @param xtxt xtxt object from the attribute xd:text or null.
 	 */
-	private void createElAndTxt(final ChkElement parentChkElem,
+	private void composeElAndTxt(final ChkElement parentChkElem,
 		final ChkElement chkElement,
-		final Element e,
+		final Element elem,
 		final XData xtxt) {
-		createElement(chkElement, e);
+		composeElement(chkElement, elem);
 		if (xtxt != null) {
-			Element e1 = e;
+			Element e1 = elem;
 			if (e1 != null) {
 				Node n = e1.getNextSibling();
 				if (n  == null || n.getNodeType() != Node.CDATA_SECTION_NODE
@@ -386,10 +390,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 				}
 			}
 			createTextNode(parentChkElem == null ? chkElement : parentChkElem,
-				e1, //sourceElem
-				e1, //savedSource
-				xtxt,
-				e); //lastNode
+				e1, e1, xtxt, elem); //lastNode
 		}
 	}
 
@@ -415,7 +416,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 				el = result.getElement();
 				chkElement.setElemValue(el);
 				if (el != null) {
-					createElAndTxt(parentChkElem, chkElement, el, xtxt);
+					composeElAndTxt(parentChkElem, chkElement, el, xtxt);
 				}
 				return;
 			}
@@ -449,7 +450,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 							el = item.getElement();
 							if (el != null) {
 								chkElem.setElemValue(el);
-								createElAndTxt(parentChkElem,chkElem,el,xtxt);
+								composeElAndTxt(parentChkElem,chkElem,el,xtxt);
 								n++;
 								continue;
 							}
@@ -463,7 +464,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 							el = item.getElement();
 							if (el != null) {
 								chkElem.setElemValue(el);
-								createElAndTxt(parentChkElem,chkElem,el,xtxt);
+								composeElAndTxt(parentChkElem,chkElem,el,xtxt);
 								n++;
 								continue;
 							}
@@ -472,8 +473,8 @@ final class ChkComposer extends SReporter implements XDValueID {
 								el = it.getElement();
 								if (el != null) {
 									chkElem.setElemValue(el);
-									createElAndTxt(
-										parentChkElem, chkElem, el, xtxt);
+									composeElAndTxt(parentChkElem,
+										chkElem, el, xtxt);
 									n++;
 									continue;
 								}
@@ -508,14 +509,14 @@ final class ChkComposer extends SReporter implements XDValueID {
 			}
 			case XD_BOOLEAN:
 				if (result.booleanValue()) {
-					createElAndTxt(parentChkElem, chkElement, null, xtxt);
+					composeElAndTxt(parentChkElem, chkElement, null, xtxt);
 				} else {
 					chkElement.updateElement(null); //delete this element
 				}
 				return;
 			case XD_LONG:
 				if (result.longValue() > 0) {
-					createElAndTxt(parentChkElem, chkElement, null, xtxt);
+					composeElAndTxt(parentChkElem, chkElement, null, xtxt);
 				} else {
 					chkElement.updateElement(null); //delete this element
 				}
@@ -529,7 +530,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 				chkElement.updateElement(null);
 			} else {
 				el = xdc.toElement(null, null);
-				createElAndTxt(parentChkElem, chkElement, el, xtxt);
+				composeElAndTxt(parentChkElem, chkElement, el, xtxt);
 			}
 			return;
 		}
@@ -548,7 +549,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 				chkElem = genChkElement(parentChkElem, null, xElem);
 			}
 			chkElem.setElemValue(val.getElement());
-			createElAndTxt(parentChkElem, chkElem, val.getElement(), xtxt);
+			composeElAndTxt(parentChkElem, chkElem, val.getElement(), xtxt);
 		}
 		if (n == 0) {
 			chkElem.updateElement(null);//no source; delete this element
@@ -659,10 +660,9 @@ final class ChkComposer extends SReporter implements XDValueID {
 				if (chkEl._xElement._match > 0) {
 					Element el = chkEl.getElemValue();
 					chkEl.setElemValue(e);
-					XDValue value = chkEl.exec(chkEl._xElement._match, (byte) 'E');
+					XDValue value= chkEl.exec(chkEl._xElement._match,(byte)'E');
 					chkEl.setElemValue(el);
-					if (value == null || value.isNull()
-						|| !value.booleanValue()) {
+					if (value==null || value.isNull() || !value.booleanValue()){
 						continue;
 					}
 				}
@@ -680,10 +680,9 @@ final class ChkComposer extends SReporter implements XDValueID {
 				if (chkEl._xElement._match > 0) {
 					Element el = chkEl.getElemValue();
 					chkEl.setElemValue((Element) node);
-					XDValue value = chkEl.exec(chkEl._xElement._match, (byte) 'E');
+					XDValue value= chkEl.exec(chkEl._xElement._match,(byte)'E');
 					chkEl.setElemValue(el);
-					if (value == null || value.isNull()
-						|| !value.booleanValue()) {
+					if (value==null || value.isNull() || !value.booleanValue()){
 						continue;
 					}
 				}
@@ -736,9 +735,8 @@ final class ChkComposer extends SReporter implements XDValueID {
 						if (dc.getXDItemsNumber() > 0) {
 							el = dc.getXDElement(0);
 							if (el == null) {
-								el = dc.toElement(chkEl.getXXNSURI(),
-									chkEl.getXXName());
-								result = new DefElement(el);
+								result = new DefElement(el = dc.toElement(
+									chkEl.getXXNSURI(), chkEl.getXXName()));
 							}
 						}
 						break;
@@ -831,11 +829,11 @@ final class ChkComposer extends SReporter implements XDValueID {
 			: xmNode.getName();
 	}
 
-	/** Create element from source.
+	/** Compose element from source.
 	 * @param chkElem model of constructed element.
 	 * @param sourceElem source element (or null).
 	 */
-	private void createElement(final ChkElement chkElem,
+	private void composeElement(final ChkElement chkElem,
 		final Element sourceElem) {
 		XElement xel = chkElem._xElement;
 		Element savedSource =  chkElem._sourceElem; //save source element
@@ -927,7 +925,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 		chkElem.setXXType((byte) 'E');
 		chkElem.checkElement();
 		chkElem._sourceElem = savedSource; //reset source
-		createChildNodes(chkElem, sourceElem, savedSource, 0, null);
+		composeChildNodes(chkElem, sourceElem, savedSource, 0, null);
 		chkElem._sourceElem = sourceElem; //set source
 		XData xtxt;
 		if ((xtxt = xel.getDefAttr("$textcontent", -1)) != null) {
@@ -1093,8 +1091,8 @@ final class ChkComposer extends SReporter implements XDValueID {
 		return name1.equals(name);
 	}
 
-	/** Create child nodes. This is very nasty code, should be written better!
-	 * However, it works somehow.
+	/** Compose child nodes.
+	 * This is very nasty code, should be written better! However, it works.
 	 * @param chkElem actual ChkElement object.
 	 * @param sourceEl actual source element.
 	 * @param savedSource saved source element.
@@ -1102,7 +1100,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 	 * @param lastTextNode last processed text from source item or null.
 	 * @return index to defList.
 	 */
-	private int createChildNodes(final ChkElement chkEl,
+	private int composeChildNodes(final ChkElement chkEl,
 		final Element sourceEl,
 		final Element savedSource,
 		final int index,
@@ -1246,7 +1244,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 							if (text != null && !text.isEmpty()) {
 								Element el = stringToElement(childChkEl, text);
 								childChkEl.setElemValue(el);
-								createElement(childChkEl, el);
+								composeElement(childChkEl, el);
 							} else {//empty string is no value!
 								childChkEl.updateElement(null);
 							}
@@ -1254,7 +1252,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 							for (int j = 0;;) {
 								if (j < childChkEl._xElement.maxOccurs()
 									&& result != null && result.booleanValue()){
-									createElement(childChkEl ,null);
+									composeElement(childChkEl ,null);
 									if (childChkEl._xElement == null ||
 										++j>=childChkEl._xElement.maxOccurs()){
 										break; // do not continue
@@ -1329,8 +1327,8 @@ final class ChkComposer extends SReporter implements XDValueID {
 					} else if (result.getItemId() == XD_LONG) {
 						int xnum = (int) ((DefLong) result).intValue();
 						for(int j = 0; j < xsel.maxOccurs() && j < xnum; j++) {
-							createGroup(chkEl, sourceEl,
-								savedSource, i, lastNode, savedUserObj);
+							composeGroup(chkEl,
+								sourceEl,savedSource,i,lastNode,savedUserObj);
 							if (chkEl._selector != null
 								&& xsel.getKind() != XNode.XMMIXED
 								&& chkEl._selector._count > xsel.maxOccurs()) {
@@ -1342,8 +1340,8 @@ final class ChkComposer extends SReporter implements XDValueID {
 						}
 					} else if (result.getItemId() == XD_BOOLEAN) {
 						for(int j = 0; j < xsel.maxOccurs(); j++) {
-							createGroup(chkEl, sourceEl,
-								savedSource, i, lastNode, savedUserObj);
+							composeGroup(chkEl,
+								sourceEl,savedSource,i,lastNode,savedUserObj);
 							result = chkEl.exec(addr, (byte) 'E');
 							chkEl.copyTemporaryReports();
 							if (!result.booleanValue()) {
@@ -1362,10 +1360,10 @@ final class ChkComposer extends SReporter implements XDValueID {
 								item = it.nextXDItem(chkEl), j++) {
 								Element el = item.getElement();
 								if (el == null) {
-									el = prepareElement(chkEl,
-										null, chkEl._xElement);
+									el = prepareElement(
+										chkEl, null, chkEl._xElement);
 								}
-								createGroup(chkEl,
+								composeGroup(chkEl,
 									el, null, i, lastNode, savedUserObj);
 								if (xsel.getKind() != XNode.XMMIXED &&
 									j + 1 >= xsel.maxOccurs()) {
@@ -1391,10 +1389,10 @@ final class ChkComposer extends SReporter implements XDValueID {
 							continue;
 						}
 						Element el = dc.getXDElement(0);
-						int max = xsel.getKind() == XNode.XMMIXED ?
-							len : xsel.maxOccurs();
+						int max = xsel.getKind() == XNode.XMMIXED
+							? len : xsel.maxOccurs();
 						for(int j = 0; j <= max && j < len; j++) {
-							createGroup(chkEl,
+							composeGroup(chkEl,
 								el, null, i, lastNode, savedUserObj);
 							if (j + 1 >= dc.getXDItemsNumber()) {
 								break;
@@ -1449,7 +1447,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 		return i;
 	}
 
-	/** Create a group of objects.
+	/** Compose a group of objects.
 	 * @param chkEl where to generate.
 	 * @param sourceEl source element.
 	 * @param savedSource saved default source element - MUST be null if
@@ -1460,7 +1458,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 	 * @param savedUserObj user object.
 	 * @return true if something was generated.
 	 */
-	private boolean createGroup(final ChkElement chkEl,
+	private boolean composeGroup(final ChkElement chkEl,
 		final Element sourceEl,
 		final Element savedSource,
 		final int defIndex,
@@ -1468,7 +1466,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 		final Object savedUserObj) {
 		chkEl._actDefIndex = -1;
 		int oldnextDefIndex = chkEl._nextDefIndex;
-		createChildNodes(chkEl, sourceEl, savedSource, defIndex + 1, lastNode);
+		composeChildNodes(chkEl, sourceEl, savedSource, defIndex+1, lastNode);
 		chkEl._nextDefIndex = oldnextDefIndex;
 		chkEl.setUserObject(savedUserObj); //reset
 		chkEl._actDefIndex = -1;
@@ -1483,19 +1481,6 @@ final class ChkComposer extends SReporter implements XDValueID {
 		} else {
 			return false;
 		}
-	}
-
-	private XDValue createDefaultContext(final XElement xElem,
-		final Element sourceEl) {
-		if (xElem.minOccurs() <= 0) {
-			return null;
-		}
-		if (sourceEl == null) {
-			return new DefElement(
-				KXmlUtils.newDocument().createElementNS(xElem.getNSUri(),
-				"$any".equals(xElem.getName()) ? "_ANY_" : xElem.getName()));
-		}
-		return new DefElement(sourceEl);
 	}
 
 	/** Creates a new instance of ChkComposer. This constructor is used only
