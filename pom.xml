@@ -51,6 +51,7 @@
         <revision>41.0.5</revision><!-- when changed, change also ${release.date}, see below -->
         <changelist>-SNAPSHOT</changelist><!-- use profile "release" for build release-version -->
         <release.date>2022-01-16</release.date><!-- update when changed version -->
+        <release.timestamp>2022-01-16T18:00:00Z</release.timestamp><!-- update when changed version -->
         <specification.version>4.1</specification.version>
         
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
