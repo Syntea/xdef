@@ -1419,7 +1419,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 * @throws SRuntimeException if reporter is <i>null</i> and an error
 	 * was reported.
 	 */
-	public XComponent $jcreateXComponent(final String name,
+	public XComponent jcreateXComponent(final String name,
 		final Class xClass,
 		final ReportWriter reporter) throws SRuntimeException {
 		_xElement = findXonModel(name, "JSON");

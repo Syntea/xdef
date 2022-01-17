@@ -323,6 +323,49 @@ public final class TestXComponents extends XDTester {
 			xc = xd.xcreateXComponent(null, "a", null, null);
 			assertEq(xml, xc.toXml());
 		} catch (Exception ex) {fail(ex);}
+		try { // test jcreateXComponent
+			xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='X'>\n"+
+"<xd:xon name = 'X'>\n"+
+"{a=\"int();\", b=[\"boolean();\"]}\n"+
+"</xd:xon>\n"+
+"<xd:component>%class bugreports.data.JCreateX1 %link X</xd:component>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			xd = xp.createXDDocument();
+			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
+			s = "{a=1, b=[true]}";
+			json = xd.jparse(s, reporter);
+			assertNoErrors(reporter);
+			assertTrue(XonUtil.xonEqual(json, XonUtil.parseXON(s)));
+			xd = xp.createXDDocument();
+			xc = xd.jparseXComponent(s, null, reporter);
+			assertNoErrorwarnings(reporter);
+			assertTrue(XonUtil.xonEqual(json, XComponentUtil.toXon(xc)));
+			xd = xp.createXDDocument();
+			xd.setXDContext(xc.toXml());
+			xc = xd.jcreateXComponent("X", null, reporter);
+			assertNoErrorwarnings(reporter);
+			assertTrue(XonUtil.xonEqual(json, XComponentUtil.toXon(xc)));
+			xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='X'>\n"+
+"<xd:component>%class bugreports.data.JCreateX2 %link X</xd:component>\n"+
+"<xd:xon name = 'X'>\n"+
+"[\"2 boolean()\", \"boolean()\"]\n"+
+"</xd:xon>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
+			xd = xp.createXDDocument();
+			s = "[true, false, true]";
+			json = XonUtil.parseXON(s);
+			xd.setXONContext(XonUtil.xonToJson(json));
+			xc = xd.jcreateXComponent("X", null, reporter);
+			assertNoErrors(reporter);
+			assertTrue(XonUtil.xonEqual(json, xd.jparse(s, reporter)));
+			assertNoErrors(reporter);
+			assertTrue(XonUtil.xonEqual(json, XComponentUtil.toXon(xc)));
+		} catch (Exception ex) {fail(ex);}
 		reporter.clear();
 		clearTempDir();
 ////////////////////////////////////////////////////////////////////////////////

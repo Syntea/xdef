@@ -75,34 +75,6 @@ public class MyTest extends XDTester {
 		XDPool xp;
 		XComponent xc;
 		ArrayReporter reporter = new ArrayReporter();
-// experimental $jcreateXComponent /////////////////////////////////////////////
-		try { // test jcreateXComponent
-			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='X'>\n"+
-"<xd:xon name = 'X'>\n"+
-"{a=\"int();\", b=[\"boolean();\"]}\n"+
-"</xd:xon>\n"+
-"<xd:component>%class test.xdef.JCreateX %link X</xd:component>\n"+
-"</xd:def>";
-			xp = compile(xdef);
-			xd = xp.createXDDocument();
-			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
-			s = "{a=1, b=[true]}";
-			j = xd.jparse(s, reporter);
-			assertNoErrors(reporter);
-			assertTrue(XonUtil.xonEqual(j, XonUtil.parseXON(s)));
-			xd = xp.createXDDocument();
-			xc = xd.jparseXComponent(s, null, reporter);
-			assertNoErrorwarnings(reporter);
-			assertTrue(XonUtil.xonEqual(j, XComponentUtil.toXon(xc)));
-			xd = xp.createXDDocument();
-			xd.setXDContext(xc.toXml());
-			xc = xd.$jcreateXComponent("X", null, reporter);
-			assertNoErrorwarnings(reporter);
-			System.out.println(XComponentUtil.toXon(xc));
-			assertTrue(XonUtil.xonEqual(j, XComponentUtil.toXon(xc)));
-		} catch (Exception ex) {fail(ex);}
-if(true)return;
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+

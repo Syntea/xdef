@@ -687,9 +687,6 @@ final class ChkComposer extends SReporter implements XDValueID {
 					}
 				}
 				result.addXDItem(new DefElement((Element) node));
-				if (++m >= max) {//the element added
-					break; // we do not nead others
-				}
 			}
 		}
 		return m > 0; // found some elements (added to result context).
@@ -1119,7 +1116,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 						&& (n.getNodeType() == Node.TEXT_NODE
 						|| n.getNodeType() == Node.CDATA_SECTION_NODE)) {
 						lastNode = createTextNode(
-							chkEl,sourceEl,savedSource,xtxt, null);
+							chkEl, sourceEl, savedSource, xtxt, null);
 					}
 				}
 			} else {
@@ -1129,7 +1126,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 					|| xNode.getKind() == XNode.XMTEXT
 					&& ((XData) xNode)._compose < 0) {
 					lastNode = createTextNode(
-						chkEl,sourceEl,savedSource,xtxt, lastNode);
+						chkEl, sourceEl, savedSource, xtxt, lastNode);
 				}
 			}
 		}
@@ -1268,6 +1265,29 @@ final class ChkComposer extends SReporter implements XDValueID {
 							}
 						} else {
 							composeElement(chkEl, childChkEl, result, xtxt);
+							XNode xxn;
+							DefContainer dc;
+							int occnum;
+							// if the create setion is missingand follows the
+							// item with the same name try to add following
+							// items from the default context.
+							while (childDef._compose < 0
+								&& (xxn = chkEl.getDefElement(i+1)) != null
+								&& xNode.getKind() == childDef.getKind()
+								&& xxn.getQName().equals(childDef.getQName())
+								&& ((XElement) xxn)._compose < 0
+								&& result.getItemId() == XD_CONTAINER
+								&& (dc=(DefContainer) result).getXDItemsNumber()
+									> (occnum=childChkEl.getOccurrence())) {
+								for (int ii = 0; ii < occnum; ii++) {
+									dc.removeXDItem(0);
+								}
+								i++;
+								childDef = (XElement) xxn;
+								childChkEl = prepareChkElement(
+									chkEl, null, childDef, i);
+								composeElement(chkEl, childChkEl, result, xtxt);
+							}
 						}
 					}
 					if (chkEl._selector != null

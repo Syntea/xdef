@@ -1,5 +1,8 @@
 # Version ${version}, release-date ${release.date}
 
+# Version 41.0.5, release-date 2022-01-17
+* implemented new method 
+
 # Version 41.0.4, release-date 2022-01-13
 * implemented new type validation methods `country` and `countries`.
 * `<xd:json>` model in X-definition changed now to `<xd:xon>`.
