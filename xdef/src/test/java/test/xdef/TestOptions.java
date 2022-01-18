@@ -1,13 +1,14 @@
 package test.xdef;
 
-import test.XDTester;
-import org.xdef.sys.ArrayReporter;
-import org.xdef.xml.KXmlUtils;
+import java.io.StringWriter;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.xdef.XDDocument;
 import org.xdef.XDPool;
-import java.io.StringWriter;
-import org.w3c.dom.Node;
-import org.w3c.dom.Element;
+import org.xdef.sys.ArrayReporter;
+import org.xdef.xml.KXmlUtils;
+import test.XDTester;
+import static test.XDTester._xdNS;
 
 /** Test of text options and text values.
  * @author Vaclav Trojan
@@ -265,8 +266,7 @@ public final class TestOptions extends XDTester {
 				create(xp, "", "a", reporter, null, strw, null));
 			assertEq("xyzxyz", strw.toString());
 			assertNoErrorwarnings(reporter);
-			//test xd:text attribute
-			xdef =
+			xdef = //test xd:text attribute
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <a xd:text=\"* string; create 'xyz'\">\n"+
 "    optional string(0,100)\n"+
@@ -280,18 +280,41 @@ public final class TestOptions extends XDTester {
 			assertEq("<a>xyz<b/>xyz</a>",
 				create(xp, "", "a", reporter, "<a b='bbb'/>"));
 			assertNoErrorwarnings(reporter);
-			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"  <a xd:text=\"* string; create 'xyz'\">\n"+
-"	<b/>\n"+
-"  </a>\n"+
+			xdef = // option igenoreOther; forget
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' name='rdf' root='rdf:RDF'\n"+
+" xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"\n"+
+" xmlns:dcterms=\"http://purl.org/dc/terms/\">\n"+
+"<xd:declaration> String a; boolean b; </xd:declaration>\n" +
+"<rdf:RDF>\n" +
+"  <rdf:Description xd:script=\"occurs +;options ignoreOther;\n" +
+"    init {a='';b=false;} finally {if (b EQ true) outln(a);} forget;\">\n" +
+"    <dcterms:title xd:script=\"occurs +\">\n" +
+"      onTrue a = getText() + ': ';\n" +
+"    </dcterms:title>\n" +
+"    <dcterms:abstract>\n" +
+"      onTrue {a= a + getText();b=true;}\n" +
+"    </dcterms:abstract>\n" +
+"  </rdf:Description>\n" +
+"</rdf:RDF>\n" +
 "</xd:def>";
 			xp = compile(xdef);
-			xml = "<a>ab<b/>cd</a>";
-			parse(xp, "", xml, reporter);
-			assertEq("<a>xyz<b/>xyz</a>",
-				create(xp, "", "a", reporter, "<a b='bbb'/>"));
-			assertNoErrorwarnings(reporter);
+			xd = xp.createXDDocument();
+			xml =
+"<rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"\n"+
+" xmlns:dcterms=\"http://purl.org/dc/terms/\">\n" +
+"  <rdf:Description>\n" +
+"    <dcterms:title>b c d</dcterms:title>\n" +
+"      all this is ignored: <A><B/></A>somethig<C b='b'/>else\n" +
+"    <dcterms:abstract>Abstract</dcterms:abstract>\n" +
+"  </rdf:Description>\n" +
+"</rdf:RDF>";
+			strw = new StringWriter();
+			el = parse(xp, "rdf", xml, reporter, strw, null, null);
+			assertNoErrors(reporter);
+			assertEq("rdf:RDF", el.getTagName());
+			assertEq(2, el.getAttributes().getLength());//just xmlns attributes
+			assertEq(0, el.getChildNodes().getLength());//all children forgotten
+			assertEq("b c d: Abstract\n", strw.toString());
 			xdef = //option acceptQualifiedAttr
 "<xd:def xmlns:xd='" + _xdNS + "' xmlns:a='a' root='a:a'>\n"+
 "  <a:a xmlns:a='a'\n"+
@@ -323,9 +346,21 @@ public final class TestOptions extends XDTester {
 			xml = "<b:a xmlns:b='a' c='123' d='456'/>";
 			parse(xp, "", xml, reporter);
 			assertNoErrorwarnings(reporter);
-			xdef = // test xd:attr
+			xdef = // xd:text attribute
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"  <a xd:text=\"* string; create 'xyz'\">\n"+
+"	<b/>\n"+
+"  </a>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			xml = "<a>ab<b/>cd</a>";
+			parse(xp, "", xml, reporter);
+			assertEq("<a>xyz<b/>xyz</a>",
+				create(xp, "", "a", reporter, "<a b='bbb'/>"));
+			assertNoErrorwarnings(reporter);
+			xdef = // test xd:attr attribute
 "<xd:def xmlns:xd='" + _xdNS + "' root = 'a'>\n"+
-"<a xd:attr=\"occurs 1..2 int();\"/>\n"+
+"  <a xd:attr=\"occurs 1..2 int();\"/>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xml = "<a/>";
@@ -343,7 +378,7 @@ public final class TestOptions extends XDTester {
 			xdef = //option acceptQualifiedAttr; xd:attr and match.
 "<xd:def xmlns:xd='" + _xdNS + "' xmlns:a='a' root='a:a'>\n"+
 "  <a:a xmlns:a='a'\n"+
-"    xd:attr = 'match @a:a; + int(); options acceptQualifiedAttr' />\n"+
+"    xd:attr='match @a:a; + int(); options acceptQualifiedAttr' />\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			reporter = new ArrayReporter();
@@ -424,7 +459,7 @@ public final class TestOptions extends XDTester {
 			xp = compile(xdef);
 			assertEq("<a a1='A'/>", parse(xp, "a", xml, reporter));
 			assertNoErrors(reporter);
-			//ignore/preserve/accept empty attributes
+//ignore/preserve/accept empty attributes
 			xdef = //optional ignore
 "<xd:def xmlns:xd='" + _xdNS + "' xd:root='a'\n"+
 "  script='options ignoreEmptyAttributes'>\n"+
@@ -477,7 +512,7 @@ public final class TestOptions extends XDTester {
 			assertNoErrorwarnings(reporter);
 			assertTrue(el.hasAttribute("a"));
 			xdef = //required accept
-"<xd:def xmlns:xd='" + _xdNS + "' xd:root='a'\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' xd:root='a'"+
 "  script='options acceptEmptyAttributes'>\n"+
 "  <a a='string;'/>\n"+
 "</xd:def>";
@@ -527,7 +562,7 @@ public final class TestOptions extends XDTester {
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'\n"+
 "xd:script='options setTextUpperCase,setAttrUpperCase,trimText,trimAttr'>\n"+
 "  <A a='string' xd:script=''>\n"+
-"   string\n"+
+"    string();\n"+
 "  </A>\n"+
 "</xd:def>";
 			xp = compile(xdef);
@@ -538,7 +573,7 @@ public final class TestOptions extends XDTester {
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'\n"+
 "xd:script='options setTextLowerCase,setAttrLowerCase,trimText,trimAttr'>\n"+
 "  <A a='string' xd:script=''>\n"+
-"   string\n"+
+"    string()\n"+
 "  </A>\n"+
 "</xd:def>";
 			xp = compile(xdef);
@@ -612,7 +647,7 @@ public final class TestOptions extends XDTester {
 "</xd:def>\n"+
 "<xd:def name='G' root='A'>\n"+
 "  <A xd:script='options ignoreAttrWhiteSpaces, ignoreTextWhiteSpaces;\n"+
-"                ref A#A'/>\n"+
+"     ref A#A'/>\n"+
 "</xd:def>\n"+
 "<xd:def name='H' root='A'\n"+
 "    xd:script='options ignoreAttrWhiteSpaces, ignoreTextWhiteSpaces'>\n"+
@@ -646,9 +681,7 @@ public final class TestOptions extends XDTester {
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name='Log'>\n"+
 "   <Log xd:script='init;'\n"+
-"      Verze='required'\n"+
-"      Misto='required'\n"+
-"      Code='required'/>\n"+
+"      Verze='required' Misto='required' Code='required'/>\n"+
 "</xd:def>\n"+
 "<xd:def name='DN'>\n"+
 "  <Log xd:script='ref Log#Log'/>\n"+
@@ -1485,9 +1518,7 @@ public final class TestOptions extends XDTester {
 "  </A>\n"+
 "</xd:def>";
 			assertEq("<A><B a=''/></A>", create(xdef,"","A",reporter,null));
-		} catch (Exception ex) {fail(ex);}
-		try { // option cdata
-			xdef =
+			xdef = // option cdata
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
 "  <A>string(); option cdata; create 'text'</A>\n"+
 "</xd:def>";
