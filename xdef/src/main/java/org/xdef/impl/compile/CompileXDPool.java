@@ -48,6 +48,9 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
+import static org.xdef.XDValueID.XD_ANY;
+import static org.xdef.XDValueID.XD_BOOLEAN;
+import static org.xdef.XDValueID.XD_VOID;
 import org.xdef.impl.XConstants;
 
 /** Compile X-definitions from source data.
@@ -135,8 +138,6 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 	public final void setClassLoader(final ClassLoader loader) {
 		_scriptCompiler.setClassLoader(loader);
 	}
-
-
 
 	/** Get the ClassLoader used to load Java classes.
 	 * @return ClassLoader used to load Java classes.
@@ -2055,6 +2056,10 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						}
 					}
 				}
+			}
+			// update the flsg group ALL in seletors in XDefinitions models 
+			for (XDefinition x : _xdefs.values()) {
+				x.updateFlagGroupAll();
 			}
 		}
 	}

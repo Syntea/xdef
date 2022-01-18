@@ -10,6 +10,7 @@ import org.xdef.XDDocument;
 import org.xdef.XDPool;
 import org.xdef.model.XMDefinition;
 import org.xdef.model.XMElement;
+import org.xdef.model.XMNode;
 import org.xdef.msg.SYS;
 import org.xdef.sys.SIOException;
 import org.xdef.sys.SPosition;
@@ -79,7 +80,6 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 	 * @return source ID of this X-definition..
 	 */
 	public final SPosition getSourcePosition() {return _sourcePosition;}
-
 	@Override
 	/** Get all Element models from this X-definition.
 	 * @return The array of element models.
@@ -89,7 +89,6 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 		_xElements.toArray(result);
 		return result;
 	}
-
 	@Override
 	/** Get all Element models defined as root from this X-definition.
 	 * @return The array of root element models.
@@ -99,7 +98,6 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 		_rootSelection.values().toArray(result);
 		return (XMElement[]) result;
 	}
-
 	@Override
 	/** Get Element model with given namespace and name.
 	 * @param nsURI namespace URI of element or <i>null</i>.
@@ -147,13 +145,11 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 	 * @return root XMDefinition node.
 	 */
 	public final XMDefinition getXMDefinition() {return this;}
-
 	@Override
 	/** Create XDDocument.
 	 * @return XDDocument created from this XMDefinition.
 	 */
 	public final XDDocument createXDDocument() {return new ChkDocument(this);}
-
 	@Override
 	/** Get version of X-definition.
 	 * @return version of X-definition
@@ -161,13 +157,11 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 	 * or {@link org.xdef.XDConstants#XD3_1}).
 	 */
 	public final byte getXDVersion() {return _xdVersion;}
-
 	@Override
 	/** Get XML version of X-definition source.
 	 * @return XML version of X-definition source ("1.0" -> 10, "1.1" -> 11).
 	 */
 	public final byte getXmlVersion() {return _xmlVersion;}
-
 	@Override
 	/** Check if given name is declared as local in this X-definition.
 	 * @param name the name to be checked.
@@ -193,6 +187,76 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 		}
 		return false;
 	}
+	@Override
+	/** Get implementation properties of X-definition.
+	 * @return the implementation properties of X-definition.
+	 */
+	public final Properties getImplProperties() {return _properties;}
+	@Override
+	/** Get implementation property of X-definition.
+	 * @param name The name of property.
+	 * @return the value implementation property of X-definition.
+	 */
+	public final String getImplProperty(final String name) {
+		return _properties.getProperty(name);
+	}
+	@Override
+	/** Add node as child.
+	 * @param xnode The node to be added.
+	 * @throws SRuntimeException if this method is invoked here.
+	 */
+	public final void addNode(final XNode xnode) {
+		throw new SRuntimeException(SYS.SYS066, //Internal error: &{0}
+			"Attempt to add node to ScriptCodeDescriptor");
+	}
+	@Override
+	/** Write Xdefinition to XDWriter. */
+	public final void writeXNode(final XDWriter xw,
+		final ArrayList<XNode> list) throws IOException {
+		xw.writeSPosition(_sourcePosition);
+		writeXCodeDescriptor(xw);
+		xw.writeByte(_xdVersion);
+		xw.writeByte(_xmlVersion);
+		xw.writeInt(_onIllegalRoot);
+		xw.writeInt(_onXmlError);
+		int len = _properties == null ? 0 : _properties.size();
+		xw.writeLength(len);
+		if (len > 0) {
+			for (Object e: _properties.keySet()) {
+				String key = (String) e;
+				xw.writeString(key);
+				xw.writeString(_properties.getProperty(key));
+			}
+		}
+		xw.writeLength(_namespaces.size());
+		for (Map.Entry<String, String> e: _namespaces.entrySet()) {
+			xw.writeString(e.getKey());
+			xw.writeString(e.getValue());
+		}
+		xw.writeLength(len = _xElements.size());
+		for (int i = 0; i < len; i++) {
+			_xElements.get(i).writeXNode(xw, list);
+		}
+		xw.writeLength(len = _importLocal.length);
+		for (String s: _importLocal) {
+			xw.writeString(s);
+		}
+	}
+	@Override
+	/** Compare X-definition with an object.
+	 * @param o object to be compared.
+	 * @return <i>true</i> if and only if the compared object is an
+	 * X-definition and if the name of it is equal to this.
+	 */
+	public final boolean equals(final Object o) {
+		if (o instanceof String) {
+			return getName().equals((String)o);
+		}
+		return o instanceof XDefinition &&
+			getName().equals(((XDefinition)o).getName());
+	}
+	@Override
+	public final int hashCode() {return getName().hashCode();}
 
 	/** Add new XElement as model.
 	 * @param newModel XElement
@@ -237,71 +301,7 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 		return xp.getVariable(name); // not found in locals, get global
 	}
 
-	@Override
-	/** Compare X-definition with an object.
-	 * @param o object to be compared.
-	 * @return <i>true</i> if and only if the compared object is an
-	 * X-definition and if the name of it is equal to this.
-	 */
-	public final boolean equals(final Object o) {
-		if (o instanceof String) {
-			return getName().equals((String)o);
-		}
-		return o instanceof XDefinition &&
-			getName().equals(((XDefinition)o).getName());
-	}
-
-	@Override
-	public final int hashCode() {return getName().hashCode();}
-
-	@Override
-	/** Get implementation properties of X-definition.
-	 * @return the implementation properties of X-definition.
-	 */
-	public final Properties getImplProperties() {return _properties;}
-
-	@Override
-	/** Get implementation property of X-definition.
-	 * @param name The name of property.
-	 * @return the value implementation property of X-definition.
-	 */
-	public final String getImplProperty(final String name) {
-		return _properties.getProperty(name);
-	}
-
-	@Override
-	public final void writeXNode(final XDWriter xw,
-		final ArrayList<XNode> list) throws IOException {
-		xw.writeSPosition(_sourcePosition);
-		writeXCodeDescriptor(xw);
-		xw.writeByte(_xdVersion);
-		xw.writeByte(_xmlVersion);
-		xw.writeInt(_onIllegalRoot);
-		xw.writeInt(_onXmlError);
-		int len = _properties == null ? 0 : _properties.size();
-		xw.writeLength(len);
-		if (len > 0) {
-			for (Object e: _properties.keySet()) {
-				String key = (String) e;
-				xw.writeString(key);
-				xw.writeString(_properties.getProperty(key));
-			}
-		}
-		xw.writeLength(_namespaces.size());
-		for (Map.Entry<String, String> e: _namespaces.entrySet()) {
-			xw.writeString(e.getKey());
-			xw.writeString(e.getValue());
-		}
-		xw.writeLength(len = _xElements.size());
-		for (int i = 0; i < len; i++) {
-			_xElements.get(i).writeXNode(xw, list);
-		}
-		xw.writeLength(len = _importLocal.length);
-		for (String s: _importLocal) {
-			xw.writeString(s);
-		}
-	}
-
+	/** Read XDefinition from XDReader. */
 	final static XDefinition readXDefinition(final XDReader xr,
 		final XPool xp,
 		final ArrayList<XNode> list) throws IOException {
@@ -340,16 +340,33 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 		for (int i = 0; i < len; i++) {
 			x._importLocal[i] = xr.readString();
 		}
+		x.updateFlagGroupAll();
 		return x;
 	}
 
-	@Override
-	/** Add node as child.
-	 * @param xnode The node to be added.
-	 * @throws SRuntimeException if this method is invoked here.
-	 */
-	public final void addNode(final XNode xnode) {
-		throw new SRuntimeException(SYS.SYS066, //Internal error: &{0}
-			"Attempt to add node to ScriptCodeDescriptor");
+	/** Set flag group All to selectors. */
+	public final void updateFlagGroupAll() {
+		for (XMElement xel: getModels()) {
+			XMNode[] childNodes =  xel.getChildNodeModels();
+			for (int i = 0; i < childNodes.length; i++) {
+				XMNode y = childNodes[i];
+				if (y.getKind() == XMNode.XMMIXED) {
+					XSelector z = (XSelector) y;
+					if (z.maxOccurs() == 1) {
+						boolean allFlag = true;
+						for (++i; i < z.getEndIndex(); i++) {
+							XMNode xn = childNodes[i];
+							if (xn.getKind() != XMNode.XMELEMENT
+								|| xn.maxOccurs() != 1) {
+								allFlag = false;
+								break;
+							}
+						}
+						z.setGroupAll(allFlag);
+					}
+					i = z.getEndIndex();
+				}
+			}
+		}
 	}
 }

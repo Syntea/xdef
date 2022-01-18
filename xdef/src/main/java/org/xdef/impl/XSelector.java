@@ -3,6 +3,8 @@ package org.xdef.impl;
 import java.io.IOException;
 import java.util.ArrayList;
 import org.xdef.model.XMDefinition;
+import static org.xdef.model.XMNode.XMCHOICE;
+import static org.xdef.model.XMNode.XMMIXED;
 import org.xdef.model.XMSelector;
 import org.xdef.sys.SUnsupportedOperationException;
 
@@ -35,6 +37,8 @@ public class XSelector extends XNode implements XMSelector {
 	int _begIndex;
 	/** Where selector ends. */
 	int _endIndex;
+	/** if this selector is "All group". */
+	boolean _isAll;
 
 	/* Creates a new instance of XSelector as the item of Xelement body.
 	 * @param kind The type of selector.
@@ -118,123 +122,54 @@ public class XSelector extends XNode implements XMSelector {
 		_selective = selective;
 	}
 
-	@Override
-	/** Get index where selector begins in child nodes list.
-	 * @return index of beginning of the group.
-	 */
-	public final int getBegIndex() {return _begIndex;}
-
 	/** Set index where selector begins.
 	 * @param begIndex the index of beginning of the group.
 	 */
 	public final void setBegIndex(final int begIndex) {_begIndex = begIndex;}
-
-	@Override
-	/** Get index where selector ends in child nodes list.
-	 * @return the index of beginning of the group.
-	 */
-	public final int getEndIndex() {return _endIndex;}
 
 	/** Set index where selector ends.
 	 * @param endIndex the index of end of the group.
 	 */
 	public final void setEndIndex(final int endIndex) {_endIndex = endIndex;}
 
-	@Override
-	/** Get match code address.
-	 * @return the address of match code or -1.
-	 */
-	public final int getMatchCode() {return _match;}
-
 	/** Set match code address.
 	 * @param addr the address of match code or -1.
 	 */
 	public final void setMatchCode(int addr) {_match = addr;}
-
-	@Override
-	/** Get initialization code address.
-	 * @return the address of initialization code or -1.
-	 */
-	public final int getInitCode() {return _init;}
 
 	/** Set initialization code address.
 	 * @param addr the address if initialization code or -1.
 	 */
 	public final void setInitCode(int addr) {_init = addr;}
 
-	@Override
-	/** Get absence code address.
-	 * @return the address of absence code or -1.
-	 */
-	public final int getOnAbsenceCode() {return _onAbsence;}
-
 	/** Set absence code address.
 	 * @param addr the address of absence code or -1.
 	 */
 	public final void setOnAbsenceCode(int addr) {_onAbsence = addr;}
-
-	@Override
-	/** Get excess code address.
-	 * @return the address of excess code or -1.
-	 */
-	public final int getOnExcessCode() {return _onExcess;}
 
 	/** Set excess code address.
 	 * @param addr the address of excess code or -1.
 	 */
 	public final void setOnExcessCode(int addr) {_onExcess = addr;}
 
-	@Override
-	/** Get create code address.
-	 * @return the address of create code or -1.
-	 */
-	public final int getComposeCode() {return _compose;}
-
 	/** Set create code address.
 	 * @param addr the address of create code or -1.
 	 */
 	public final void setComposeCode(int addr) {_compose = addr;}
 
-	@Override
-	/** Get finally method code address.
-	 * @return the address of finally method or -1.
-	 */
-	public final int getFinallyCode() {return _finaly;}
-
 	/** Set finally method code address.
 	 * @param addr the address of finally method or -1.
 	 */
-	public final void setFinallyCode(int addr) {_finaly = addr;}
+	public final void setFinallyCode(final int addr) {_finaly = addr;}
 
-	@Override
-	/** Get XMDefinition assigned to this node.
-	 * @return root XMDefinition node.
+	/** Set flag group ALL.
+	 * @param x value of the flag
 	 */
-	public XMDefinition getXMDefinition() {return null;}
+	final void setGroupAll(final boolean x) {_isAll = x;}
 
-	@Override
-	public final void writeXNode(final XDWriter xw,
-		final ArrayList<XNode> list) throws IOException {
-		xw.writeShort(getKind());
-		xw.writeInt(minOccurs());
-		xw.writeInt(maxOccurs());
-		xw.writeBoolean(_emptyDeclared);
-		xw.writeBoolean(_empty);
-		xw.writeBoolean(_ignorable);
-		xw.writeBoolean(_selective);
-		xw.writeInt(_match);
-		xw.writeInt(_init);
-		xw.writeInt(_onAbsence);
-		xw.writeInt(_onExcess);
-		xw.writeInt(_compose);
-		xw.writeInt(_finaly);
-		xw.writeInt(_begIndex);
-		xw.writeInt(_endIndex);
-		xw.writeSPosition(getSPosition());
-		xw.writeString(getXDPosition());
-	}
-
-	static XSelector readXSelector(XDReader xr, short kind) throws IOException {
+	/** read selector from reader.*/
+	static final XSelector readXSelector(
+		final XDReader xr, final short kind) throws IOException {
 		XSelector x;
 		if (kind == XMMIXED) {
 			x = new XMixed();
@@ -261,29 +196,84 @@ public class XSelector extends XNode implements XMSelector {
 		return x;
 	}
 	@Override
-	public int getCheckCode() {throw new SUnsupportedOperationException();}
+	public final int getCheckCode(){throw new SUnsupportedOperationException();}
 	@Override
-	public int getOnTrueCode() {throw new SUnsupportedOperationException();}
-	@Override
-	public int getOnFalseCode() {throw new SUnsupportedOperationException();}
-	@Override
-	public int getDefltCode() {throw new SUnsupportedOperationException();}
-	@Override
-	public int getOnStartElementCode() {
+	public final int getOnTrueCode() {
 		throw new SUnsupportedOperationException();
 	}
 	@Override
-	public int getOnIllegalAttrCode() {
+	public final int getOnFalseCode() {
 		throw new SUnsupportedOperationException();
 	}
 	@Override
-	public int getOnIllegalTextCode() {
+	public final int getDefltCode(){throw new SUnsupportedOperationException();}
+	@Override
+	public final int getMatchCode() {return _match;}
+	@Override
+	public final int getInitCode() {return _init;}
+	@Override
+	public final int getFinallyCode() {return _finaly;}
+	@Override
+	public final int getOnAbsenceCode() {return _onAbsence;}
+	@Override
+	public final int getOnStartElementCode() {
 		throw new SUnsupportedOperationException();
 	}
 	@Override
-	public int getOnIllegalElementCode() {
+	public final int getComposeCode() {return _compose;}
+	@Override
+	public final int getOnIllegalAttrCode() {
 		throw new SUnsupportedOperationException();
 	}
 	@Override
-	public int getVarinitCode() {throw new SUnsupportedOperationException();}
+	public final int getOnIllegalTextCode() {
+		throw new SUnsupportedOperationException();
+	}
+	@Override
+	public final int getOnIllegalElementCode() {
+		throw new SUnsupportedOperationException();
+	}
+	@Override
+	public final int getOnExcessCode() {return _onExcess;}
+	@Override
+	public final int getVarinitCode() {
+		throw new SUnsupportedOperationException();
+	}
+	@Override
+	public final XMDefinition getXMDefinition() {return null;}
+////////////////////////////////////////////////////////////////////////////////
+	@Override
+	/** Get index where selector begins in child nodes list.
+	 * @return index of beginning of the group.
+	 */
+	public final int getBegIndex() {return _begIndex;}
+	@Override
+	/** Get index where selector ends in child nodes list.
+	 * @return the index of beginning of the group.
+	 */
+	public final int getEndIndex() {return _endIndex;}
+	@Override
+	/** Check if it is an ALL group.*/
+	public final boolean isGroupAll() {return _isAll;}
+	@Override
+	public final void writeXNode(final XDWriter xw,
+		final ArrayList<XNode> list) throws IOException {
+		xw.writeShort(getKind());
+		xw.writeInt(minOccurs());
+		xw.writeInt(maxOccurs());
+		xw.writeBoolean(_emptyDeclared);
+		xw.writeBoolean(_empty);
+		xw.writeBoolean(_ignorable);
+		xw.writeBoolean(_selective);
+		xw.writeInt(_match);
+		xw.writeInt(_init);
+		xw.writeInt(_onAbsence);
+		xw.writeInt(_onExcess);
+		xw.writeInt(_compose);
+		xw.writeInt(_finaly);
+		xw.writeInt(_begIndex);
+		xw.writeInt(_endIndex);
+		xw.writeSPosition(getSPosition());
+		xw.writeString(getXDPosition());
+	}
 }
