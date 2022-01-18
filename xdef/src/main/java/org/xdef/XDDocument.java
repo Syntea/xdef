@@ -576,7 +576,7 @@ public interface XDDocument extends XXNode {
 	 * @return XComponent with parsed data.
 	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
-	public XComponent parseXComponent(Object data,
+	public XComponent xparseXComponent(Object data,
 		Class<?> xClass,
 		ReportWriter reporter) throws SRuntimeException;
 
@@ -590,7 +590,7 @@ public interface XDDocument extends XXNode {
 	 * @return XComponent with parsed data.
 	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
-	public XComponent parseXComponent(Object data,
+	public XComponent xparseXComponent(Object data,
 		Class<?> xClass,
 		String sourceId,
 		ReportWriter reporter) throws SRuntimeException;
@@ -716,4 +716,37 @@ public interface XDDocument extends XXNode {
 		Class<?> xClass,
 		String sourceId,
 		ReportWriter reporter) throws SRuntimeException;
+
+////////////////////////////////////////////////////////////////////////////////
+
+	/** Parse source XML and return XComponent as result.
+	 * @deprecated please use xparseXComponent instead
+	 * @param data string with pathname of XML file or XML source data.
+	 * @param xClass XComponent class (if null, then XComponent class
+	 * is searched in XDPool).
+	 * @param reporter report writer or null. If this argument is
+	 * null and error reports occurs then SRuntimeException is thrown.
+	 * @return XComponent with parsed data.
+	 * @throws SRuntimeException if reporter is null and an error is reported.
+	 */
+	public XComponent parseXComponent(Object data,
+		Class<?> xClass,
+		ReportWriter reporter) throws SRuntimeException;
+
+	/** Parse source XML and return XComponent as result.
+	 * @deprecated please use xparseXComponent instead
+	 * @param data string with pathname of XML file or XML source data.
+	 * @param xClass XComponent class (if null, then XComponent class
+	 * is searched in XDPool).
+	 * @param sourceId name of source or null.
+	 * @param reporter report writer or null. If this argument is
+	 * null and error reports occurs then SRuntimeException is thrown.
+	 * @return XComponent with parsed data.
+	 * @throws SRuntimeException if reporter is null and an error is reported.
+	 */
+	public XComponent parseXComponent(Object data,
+		Class<?> xClass,
+		String sourceId,
+		ReportWriter reporter) throws SRuntimeException;
+
 }

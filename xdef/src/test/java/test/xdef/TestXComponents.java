@@ -130,7 +130,7 @@ public final class TestXComponents extends XDTester {
 			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
 			xml = "<A a='1.25 CZK' q='48.2, 16.37, 151, Vienna'/>"; //
 			xd = xp.createXDDocument();
-			xc = xd.parseXComponent(xml, null, reporter);
+			xc = xd.xparseXComponent(xml, null, reporter);
 			assertNoErrors(reporter);
 			assertEq("1.25 CZK", xd.getVariable("a").stringValue());
 			assertEq(252, xd.getVariable("d").intValue());
@@ -263,7 +263,7 @@ public final class TestXComponents extends XDTester {
 			assertEq(xml, parse(xdef, "X", xml, reporter));
 			assertNoErrors(reporter);
 			reporter.clear();
-			xc = xd.parseXComponent(xml, null, reporter);
+			xc = xd.xparseXComponent(xml, null, reporter);
 			assertNoErrors(reporter);
 			assertEq(xml, xc.toXml());
 			xd = xp.createXDDocument("X");
@@ -315,7 +315,7 @@ public final class TestXComponents extends XDTester {
 			assertNoErrors(reporter);
 			reporter.clear();
 			xd = xp.createXDDocument("X");
-			xc = xd.parseXComponent(xml, null, reporter);
+			xc = xd.xparseXComponent(xml, null, reporter);
 			assertNoErrors(reporter);
 			assertEq(xml, xc.toXml());
 			xd = xp.createXDDocument("X");

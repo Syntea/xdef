@@ -28,6 +28,9 @@ import org.xdef.XDParseResult;
 import org.xdef.XDPool;
 import org.xdef.XDValue;
 import org.xdef.XDValueID;
+import static org.xdef.XDValueID.XX_DOCUMENT;
+import static org.xdef.XDValueID.X_PARSEITEM;
+import static org.xdef.XDValueID.X_UNIQUESET_M;
 import org.xdef.XDValueType;
 import org.xdef.XDXmlOutStream;
 import org.xdef.component.XComponent;
@@ -1313,7 +1316,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 					yClass = null;
 				}
 			}
-			return parseXComponent(XonUtil.iniToXml(map), yClass, reporter);
+			return xparseXComponent(XonUtil.iniToXml(map), yClass, reporter);
 		} else if (ini instanceof String) {
 			return iparseXComponent(XonUtil.parseINI((String) ini),
 				yClass, reporter);
@@ -1554,7 +1557,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			} catch (Exception ex) {
 				e = XonUtil.xonToXml(xon); // X-definition transormation
 			}
-			return parseXComponent(e, yClass, reporter);
+			return xparseXComponent(e, yClass, reporter);
 		} else if (xon instanceof String) {
 			return jparseXComponent(XonUtil.parseXON((String) xon),
 				yClass, reporter);
@@ -1902,7 +1905,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 * @throws SRuntimeException if reporter is <i>null</i> and an error
 	 * was reported.
 	 */
-	public final XComponent parseXComponent(final Object data,
+	public final XComponent xparseXComponent(final Object data,
 		final Class<?> xClass,
 		final ReportWriter reporter) throws SRuntimeException {
 		prepareXComponent(xClass);
@@ -1922,7 +1925,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 * @throws SRuntimeException if reporter is <i>null</i> and an error
 	 * was reported.
 	 */
-	public final XComponent parseXComponent(final Object xmlData,
+	public final XComponent xparseXComponent(final Object xmlData,
 		final Class<?> xClass,
 		final String sourceId,
 		final ReportWriter reporter) throws SRuntimeException {
@@ -2097,4 +2100,30 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 
 	@Override
 	public final String toString() {return "ChkDocument: " + _xElement;}
+
+////////////////////////////////////////////////////////////////////////////////
+
+	@Override
+	/** Parse source XML and return XComponent as result.
+	 * @deprecated please use xparseXComponent instead
+	 */
+	@SuppressWarnings("deprecation")
+	public XComponent parseXComponent(Object data,
+		Class<?> xClass,
+		ReportWriter reporter) throws SRuntimeException {
+		return xparseXComponent(data, xClass, reporter);
+	}
+
+	@Override
+	@SuppressWarnings("deprecation")
+	/** Parse source XML and return XComponent as result.
+	 * @deprecated please use xparseXComponent instead
+	 */
+	public final XComponent parseXComponent(final Object xmlData,
+		final Class<?> xClass,
+		final String sourceId,
+		final ReportWriter reporter) throws SRuntimeException {
+		return xparseXComponent(xmlData, xClass, sourceId, reporter);
+	}
+
 }

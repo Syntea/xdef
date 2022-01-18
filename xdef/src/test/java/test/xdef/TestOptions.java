@@ -1621,7 +1621,7 @@ public final class TestOptions extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <a xd:script='var int i;'\n"+
-"     xd:text='* string(); create null; option cdata;'>\n"+
+"    xd:text='* string(); create null; option cdata;'>\n"+
 "    <b/>\n"+
 "  </a>\n"+
 "</xd:def>";

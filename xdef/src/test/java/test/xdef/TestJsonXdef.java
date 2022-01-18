@@ -254,7 +254,7 @@ public class TestJsonXdef extends XDTester {
 			}
 			// parseJSON with X-component
 			try {
-				xc = xd.parseXComponent(f, Class.forName(
+				xc = xd.xparseXComponent(f, Class.forName(
 					"test.common.json.component.Test" + id), null);
 				reporter.clear();
 				e = xc.toXml();
@@ -273,7 +273,7 @@ public class TestJsonXdef extends XDTester {
 			// Test X-component.
 			try {
 				xd = xp.createXDDocument("Test" + id);
-				xc = xd.parseXComponent(f, Class.forName(
+				xc = xd.xparseXComponent(f, Class.forName(
 					"test.common.json.component.Test"+id), null);
 				reporter.clear();
 				e = xc.toXml();
@@ -324,7 +324,7 @@ public class TestJsonXdef extends XDTester {
 		final int x) {
 		try {
 			File f = new File(_tempDir + test +	(x > 0 ? "_"+x : "") + "a.xml");
-			return xp.createXDDocument(test).parseXComponent(f,
+			return xp.createXDDocument(test).xparseXComponent(f,
 				Class.forName("test.common.json.component." + test), null);
 		} catch (Exception ex) {
 			throw new RuntimeException("XComponent not found: " + test);

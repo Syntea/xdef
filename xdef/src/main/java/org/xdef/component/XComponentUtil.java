@@ -19,6 +19,7 @@ import org.xdef.model.XMNode;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.SDatetime;
 import org.xdef.sys.SRuntimeException;
+import org.xdef.sys.StringParser;
 import org.xdef.xon.XonNames;
 import org.xdef.xon.XonTools;
 
@@ -84,7 +85,7 @@ public class XComponentUtil {
 		}
 		final Element el = toXml(xc, (XMElement) xm);
 		final XDDocument xd = xp.createXDDocument(xdPosition);
-		return xd.parseXComponent(el, null, null);
+		return xd.xparseXComponent(el, null, null);
 	}
 
 	/** Create the new XML element from XComponent according to model.
@@ -139,7 +140,7 @@ public class XComponentUtil {
 		xd.setXDContext(xc.toXml());
 		final Element el =
 			xd.xcreate(new QName(xm.getNSUri(), xm.getName()), null);
-		return xd.parseXComponent(el, null,  null);
+		return xd.xparseXComponent(el, null,  null);
 	}
 
 	/** Create XComponent from XComponent according to model.
@@ -154,7 +155,7 @@ public class XComponentUtil {
 		xd.setXDContext(xc.toXml());
 		final Element el = xd.xcreate(modelName, null);
 		final XDDocument xd1 = xd.getXDPool().createXDDocument(modelName);
-		return xd1.parseXComponent(el, null, null);
+		return xd1.xparseXComponent(el, null, null);
 	}
 
 	/** Add XComponent to the child list
@@ -366,8 +367,16 @@ public class XComponentUtil {
 
 	public static final String dateToJstring(final SDatetime x) {
 		String s = x.toISO8601();
-		// if year is without zone put it into quotes
-		return s.matches("-?\\d+\\z") ? '"' + s + '"' : s;
+		int i = (s.charAt(0) == '0') ? 1 : 0;
+		int len =  s.length();
+		for (; i < len; i++) {
+			char ch = s.charAt(i);
+			if (ch < '0' || ch > '9') {
+				i = -1;
+				break;
+			}
+		}
+		return i > 0 ? '"' + s + '"' : s; // if it is integer put it into quotes
 	}
 
 	/** Create XON map from XComponent.

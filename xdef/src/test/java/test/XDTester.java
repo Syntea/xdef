@@ -1287,7 +1287,7 @@ public abstract class XDTester extends STester {
 			reporter.clear();
 		}
 		xd.setProperties(_props);
-		return xd.parseXComponent(xml, clazz, reporter);
+		return xd.xparseXComponent(xml, clazz, reporter);
 	}
 
 	public final static XComponent parseXC(final XDDocument xd,
@@ -1297,7 +1297,7 @@ public abstract class XDTester extends STester {
 		if (reporter != null) {
 			reporter.clear();
 		}
-		return xd.parseXComponent(el, clazz, reporter);
+		return xd.xparseXComponent(el, clazz, reporter);
 	}
 
 	/** Add Java sources to parameter list of the Java compiler.

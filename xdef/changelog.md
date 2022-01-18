@@ -1,7 +1,10 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 41.0.5, release-date 2022-01-17
-* implemented new method 
+# Version 41.0.5, release-date 2022-01-18
+* methods `XDDocument.parseXComponent(...)` are now deprecated
+  please use methods `XDDocument.xparseXComponent(...)` instead.
+* implemented new methods `XDDocument.iparseXComponent(...)`,
+  `XDDocument.jparseXComponent(...)` and `XDDocument.yparseXComponent(...)`.
 
 # Version 41.0.4, release-date 2022-01-13
 * implemented new type validation methods `country` and `countries`.
