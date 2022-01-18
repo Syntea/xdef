@@ -16,8 +16,8 @@ public interface XMSelector extends XMNode {
 	public int getEndIndex();
 
 	/** Check if it is an ALL group.
-	 * @return true if it is mixed group and maxOcuurence if <= 1 and
-	 * no items is a group and maxOcuurence of all items is <= 1.
+	 * @return true if it is a mixed group and the maxOcuurence is &lt;= 1 and
+	 * no one item is a group and the maxOcuurence of all items is &lt;= 1.
 	 */
 	public boolean isGroupAll();
 }

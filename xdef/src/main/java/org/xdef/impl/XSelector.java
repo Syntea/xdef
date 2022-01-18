@@ -37,8 +37,8 @@ public class XSelector extends XNode implements XMSelector {
 	int _begIndex;
 	/** Where selector ends. */
 	int _endIndex;
-	/** if this selector is "All group". */
-	boolean _isAll;
+	/** True if this selector is an "ALL" group. */
+	private boolean _isAll;
 
 	/* Creates a new instance of XSelector as the item of Xelement body.
 	 * @param kind The type of selector.
@@ -253,7 +253,6 @@ public class XSelector extends XNode implements XMSelector {
 	 */
 	public final int getEndIndex() {return _endIndex;}
 	@Override
-	/** Check if it is an ALL group.*/
 	public final boolean isGroupAll() {return _isAll;}
 	@Override
 	public final void writeXNode(final XDWriter xw,
