@@ -2057,10 +2057,6 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					}
 				}
 			}
-			// update the flsg group ALL in seletors in XDefinitions models 
-			for (XDefinition x : _xdefs.values()) {
-				x.updateFlagGroupAll();
-			}
 		}
 	}
 

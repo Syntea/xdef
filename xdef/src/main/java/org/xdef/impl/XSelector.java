@@ -253,8 +253,6 @@ public class XSelector extends XNode implements XMSelector {
 	 */
 	public final int getEndIndex() {return _endIndex;}
 	@Override
-	public final boolean isGroupAll() {return _isAll;}
-	@Override
 	public final void writeXNode(final XDWriter xw,
 		final ArrayList<XNode> list) throws IOException {
 		xw.writeShort(getKind());

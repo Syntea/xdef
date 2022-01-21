@@ -3,7 +3,18 @@ package org.xdef.impl.parsers;
 import org.xdef.XDContainer;
 import org.xdef.XDParseResult;
 import org.xdef.XDParser;
+import static org.xdef.XDParser.BASE;
+import static org.xdef.XDParser.ENUMERATION;
+import static org.xdef.XDParser.ITEM;
+import static org.xdef.XDParser.LENGTH;
+import static org.xdef.XDParser.MAXLENGTH;
+import static org.xdef.XDParser.MINLENGTH;
+import static org.xdef.XDParser.PATTERN;
+import static org.xdef.XDParser.WHITESPACE;
+import static org.xdef.XDParser.WS_COLLAPSE;
 import org.xdef.XDValue;
+import static org.xdef.XDValueID.XD_CONTAINER;
+import static org.xdef.XDValueID.XD_PARSER;
 import org.xdef.impl.code.DefContainer;
 import org.xdef.impl.code.DefParseResult;
 import org.xdef.xon.XonTools;
@@ -60,6 +71,8 @@ public class XDParseJList extends XSAbstractParser {
 	private void parse(final XXNode xnode,
 		final XDParseResult p,
 		boolean isFinal) {
+		XDParser itemParser = _itemType != null ? _itemType // item parser
+			: new XDParseJValue(); // default parser jvalue
 		DefContainer results = new DefContainer();
 		String source = p.getSourceBuffer();
 		p.setSourceBuffer(source);
@@ -88,7 +101,7 @@ public class XDParseJList extends XSAbstractParser {
 				} else if (p.isChar('"')) {
 					String s = XonTools.readJString(p);
 					end = p.getIndex();
-					if (_itemType.parserName().charAt(0) == 'j') {
+					if (itemParser.parserName().charAt(0) == 'j') {
 						p.setSourceBuffer(p.getBufferPart(0, end));
 					} else {
 						if (s == null) {
@@ -97,13 +110,13 @@ public class XDParseJList extends XSAbstractParser {
 						p.setSourceBuffer(p.getBufferPart(0,start) + s);
 					}
 					p.setIndex(start);
-					_itemType.parseObject(xnode, p);
+					itemParser.parseObject(xnode, p);
 				} else {
 					DefParseResult q;
 					if (p.isToken("g(") || p.isToken("p(") || p.isToken("c(")) {
 						p.setIndex(p.getIndex() - 2); //gps, price, char
 						q = new DefParseResult(p.getUnparsedBufferPart());
-						_itemType.parseObject(xnode, q);
+						itemParser.parseObject(xnode, q);
 						p.addReports(q.getReporter());
 						p.setParsedValue(q.getParsedValue());
 						end = start + q.getIndex();
@@ -115,7 +128,7 @@ public class XDParseJList extends XSAbstractParser {
 						}
 						end = p.getIndex();
 						q = new DefParseResult(p.getBufferPart(start, end));
-						_itemType.parseObject(xnode, q);
+						itemParser.parseObject(xnode, q);
 					}
 					p.addReports(q.getReporter());
 					p.setParsedValue(q.getParsedValue());

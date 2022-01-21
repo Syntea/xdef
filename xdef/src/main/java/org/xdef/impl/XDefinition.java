@@ -10,7 +10,6 @@ import org.xdef.XDDocument;
 import org.xdef.XDPool;
 import org.xdef.model.XMDefinition;
 import org.xdef.model.XMElement;
-import org.xdef.model.XMNode;
 import org.xdef.msg.SYS;
 import org.xdef.sys.SIOException;
 import org.xdef.sys.SPosition;
@@ -210,7 +209,7 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 			"Attempt to add node to ScriptCodeDescriptor");
 	}
 	@Override
-	/** Write Xdefinition to XDWriter. */
+	/** Write X-definition to XDWriter. */
 	public final void writeXNode(final XDWriter xw,
 		final ArrayList<XNode> list) throws IOException {
 		xw.writeSPosition(_sourcePosition);
@@ -340,33 +339,6 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 		for (int i = 0; i < len; i++) {
 			x._importLocal[i] = xr.readString();
 		}
-		x.updateFlagGroupAll();
 		return x;
-	}
-
-	/** Set flag group All to selectors. */
-	public final void updateFlagGroupAll() {
-		for (XMElement xel: getModels()) {
-			XMNode[] childNodes =  xel.getChildNodeModels();
-			for (int i = 0; i < childNodes.length; i++) {
-				XMNode y = childNodes[i];
-				if (y.getKind() == XMNode.XMMIXED) {
-					XSelector z = (XSelector) y;
-					if (z.maxOccurs() == 1) {
-						boolean allFlag = true;
-						for (++i; i < z.getEndIndex(); i++) {
-							XMNode xn = childNodes[i];
-							if (xn.getKind() != XMNode.XMELEMENT
-								|| xn.maxOccurs() != 1) {
-								allFlag = false;
-								break;
-							}
-						}
-						z.setGroupAll(allFlag);
-					}
-					i = z.getEndIndex();
-				}
-			}
-		}
 	}
 }
