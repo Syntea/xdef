@@ -19,7 +19,6 @@ import org.xdef.model.XMNode;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.SDatetime;
 import org.xdef.sys.SRuntimeException;
-import org.xdef.sys.StringParser;
 import org.xdef.xon.XonNames;
 import org.xdef.xon.XonTools;
 
@@ -326,6 +325,8 @@ public class XComponentUtil {
 	private static Object toXonObject(final Object o) {
 		if (o instanceof String) {
 			return XonTools.xmlToJValue((String) o);
+		} else if (o instanceof XonTools.JNull) {
+			return null;
 		}
 		return o;
 	}

@@ -31,7 +31,7 @@ class XonToString extends XonTools {
 	 * @param xon if true then XON else if false JOSN source is generated.
 	 */
 	private static String valueToString(final Object x, final boolean xon) {
-		if (x == null) {
+		if (x == null || x instanceof JNull) {
 			return "null";
 		} else if (x instanceof Boolean) {
 			return x.toString();
