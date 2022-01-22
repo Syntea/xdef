@@ -23,30 +23,31 @@ public class Canonize {
 
 	/** if true the header (copyright) info text is generated from the file. */
 	static boolean _hdr = false;
-	/** if true the _tail (modification) info text is generated from the file. */
+	/** if true the _tail (modification) info text is generated from the file.*/
 	static boolean _tail = false;
 
 	/** Canonize sources. Remove all trailing white spaces on all lines and
 	 * handle with leading spaces an all lines according to argument
-	 * <tt>tabs</tt>.
+	 * <code>tabs</code>.
 	 * Insert or update header or _tail information to sources
-	 * according to value of arguments <tt>_hdr</tt> and <tt>_tail</tt>. If the
-	 * argument <tt>dirTree</tt> is true, do it with all specified files in
-	 * child directories.
+	 * according to value of arguments <code>_hdr</code> and <code>_tail</code>.
+	 * If the argument <code>dirTree</code> is true, do it with all specified
+	 * files in child directories.
 	 * @param filename The name of file (wildcards are possible).
-	 * @param dirTree If <tt>true<tt> then dirTree process in child
+	 * @param dirTree If <code>true<code> then dirTree process in child
 	 * subdirectories.
-	 * @param hdr If true then leading standard copyright information
-	 * is inserted before the first line of Java source or it replaces the
-	 * existing one. The template for the copyright information is taken from
-	 * the file <tt>hdrinfo.txt</tt>the root directory <tt>java</tt> (under
-	 * which are projects).If the argument's value is false then
-	 * the top of source remains unchanged.
-	 * @param tail If true then log information is added after the last
-	 * line of Java source or it replaces the existing one.The template used for
-	 * the log information is taken from the file <tt>tailinfo.txt</tt> in the
-	 * root directory <tt>java</tt> (under which are projects). If the value
-	 * of this argument is false then the end source remains unchanged.
+	 * @param hdr If <code>true</code> then leading standard copyright
+	 * information is inserted before the first line of Java source or it
+	 * replaces the existing one. The template for the copyright information is
+	 * taken from the file <code>hdrinfo.txt</code>the root directory
+	 * <code>java</code> (under which are projects).If the argument's value
+	 * is <code>false</code> then the top of source remains unchanged.
+	 * @param tail If <code>true</code> then log information is added after the
+	 * last line of Java source or it replaces the existing one.The template
+	 * used for the log information is taken from the file
+	 * <code>tailinfo.txt</code> in the root directory
+	 * <code>java</code> (under which are projects). If the value of this
+	 * argument is <code>false</code> then the end source remains unchanged.
 	 */
 	private static void doSources(final String filename,
 		final boolean dirTree) {
