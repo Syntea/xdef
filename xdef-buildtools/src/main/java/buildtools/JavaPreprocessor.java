@@ -14,40 +14,45 @@ import java.io.Writer;
 import java.nio.charset.Charset;
 
 /** Preprocessor for Java source files.
- * <br>Preprocessor commands separates source blocks by special Java comments.
+ * <p>Preprocessor commands separates source blocks by special Java comments.
  * Each preprocessor command must start with the sequence "/*#" followed by
  * the name of command and the whole command must be specified on a separated
  * line. The end of command must be either '*&#47;' or '*#/'. Each command block
  * must start with the "/*#if" command and it must be closed with the
- * "/*#end*&#47;" command.
- * <br>There are following preprocessor commands:
- * <br><code>/*#if conditional expression *&#47; .......</code>
- * start of the conditional section.
- * <br><code>/*#elseif conditional expression *&#47; ...</code>
- * conditioned alternative section (part of "if" command).
- * <br><code>/*#else*&#47; .................</code> optional alternative section
- * (part of "if" command).
- * <br><code>/*#end*&#47; ..................</code> end of section.
- * <br><code>/*#set switch_list*&#47; ......</code> set switches separated by
- * "," to ON value.
- * <br><code>/*#unset switch_list*&#47; ....</code> set switches separated by
- * "," to OFF value.
- * <br>
+ * "/*#end*&#47;" command. </p>
+ * <p>There are following preprocessor commands:</p>
+ * <ul>
+ *  <li><code>/*#if conditional expression *&#47; .......</code>
+ * start of the conditional section.</li>
+ *  <li><code>/*#elseif conditional expression *&#47; ...</code>
+ * conditioned alternative section (part of "if" command).</li>
+ *  <li><code>/*#else*&#47; .................</code> optional alternative
+ * section (part of "if" command).</li>
+ *  <li><code>/*#end*&#47; ..................</code> end of section.</li>
+ * <li><code>/*#set switch_list*&#47; ......</code> set switches separated
+ * by "," to ON value.</li>
+ * <li><code>/*#unset switch_list*&#47; ....</code> set switches separated
+ * by "," to OFF value.</li>
+ * </ul>
+ * <p>
  * If command block of lines starts with 'if' command and ends with the
  * 'end' command. Inside in the command block there may be optionally specified
  * several sections 'elseif' and optionally there may be specified the an "else"
  * section (it must be the the last one section of the command block. Nested
  * "if" command blocks are permitted.
- * <br>Preprocessor works so that it modifies the character sequences ending
+ * </p>
+ * <p>Preprocessor works so that it modifies the character sequences ending
  * command lines from '*&#47;' to '*#/' and/or from '*#/' to '*&#47;' according
  * to result of evaluation of the boolean expression given by values of
  * switches specified from outside environment. This causes that some sections
  * of Java source code will either as comments or the others will be
  * "uncommented".
- * <br>The conditional expression contains a list of swith names bounded by
+ * </p>
+ * <p>The conditional expression contains a list of swith names bounded by
  * logical operators '&amp;' and '|'. Usage of brackets in the expression is
  * possible. Switch name must be composed from letters, digits, '.', '-' or '_'.
- * <br>Examples of switch expressions:
+ * </p>
+ * Examples of switch expressions:
  * <pre><code><b>
  *  Expression                  Explanation</b>
  *  Debug                       true if swith 'Debug' is set
@@ -57,36 +62,44 @@ import java.nio.charset.Charset;
  *  Extended &amp; (J1.4 | J1.5)    true if swith 'Extended' and one of 'J1.4'
  *                              or 'J1.5' is set
  * </code></pre>
- * <br>The <b>set</b> command enables to set the value of switches on. The
+ * <p> The <code>set</code> command enables to set the value of switches on. The
  * names of switches in the list are separated by commas. The command MUST be
- * placed in the <b>if ... end</b> block and it is executed only if the block
- * is active.
- * <br> The <b>unset</b> command enables to set the value of switches off.
+ * placed in the <code>if ... end</code> block and it is executed only if the block
+ * is active.</p>
+ * <p> The <code>unset</code> command enables to set the value of switches off.
  * The names of switches in the list are separated by commas. The command MUST
- * be placed in the <b>if ... end</b> block and it is executed only if the
- * block is active.
- * <br>Preprocessor may be invoked from command line with following parameters:
+ * be placed in the <code>if ... end</code> block and it is executed only if the
+ * block is active.</p>
+ * <p>
+ * Preprocessor may be invoked from command line with following parameters:</p>
+ * <p>
  * <code>-i input [-o outputDirectory] [-s switch[,switch..]] [-r] [-h]</code>
- * <br>where:
- * <br> -i input Input may be specification of the file with input source or the
+ * </p>
+ * <p>where:</p>
+ * <ul>
+ * <li> -i input Input may be specification of the file with input source or the
  * directory. If the parameter is not directory, also wildcards ('*' or '?' may
  * be used to specify group of files. If this parameter specified a directory
  * only files with the extension '.java' are processed. The parameter
- *  is obligatory.
- * <br> -r dirTree input directory. The parameter is optional and forces to
- * process all subdirectories of the directory where process started.
- * <br> -s switch[,switch..]: the comma separated list of switch names. Each
+ *  is obligatory.</li>
+ * <li> -o outputDirectory: The directory where output files are stored. The
+ * parameter is optional. If it is not specified the source file is overwritten.
+ * </li>
+ * <li> -s switch[,switch..]: the comma separated list of switch names. Each
  * switch name is composed from letters, digits, '.' or '_'s. If switch should
  * be set to false it can be either prefixed with '!' or not specified.
- * The parameter is optional.
- * <br> -o outputDirectory: The directory where output files are stored. The
- * parameter is optional. If it is not specified the source file is overwritten.
- * <br> -h The parameter displays help text.
+ * The parameter is optional.</li>
+ * <li> -r dirTree input directory. The parameter is optional and forces to
+ * process all subdirectories of the directory where process started.</li>
+ * <li> -t parameter is optional and forces to remove all trailing spaces
+ * from lines</li>
+ * <li> -h The parameter displays help text.</li>
+ * </ul>
  * The following example is result after application of the switch Boss"
  * by the command:
  * <pre><code>
- *    java buildtools.JavaPreprocessor -i Example.java -s Boss
- * The modified section of the source after modification looks like:
+ *    java buildtools.JavaPreprocessor -i Example.java -s Boss</code>
+ * The modified section of the source after modification looks like:<code>
  *          ....
  *          /*#if (Mary &amp; John) | (Alice &amp; Bob)*#/;
  *               System.out.println("Hello, friends!");
@@ -98,24 +111,24 @@ import java.nio.charset.Charset;
  *          .... </code></pre>
  * Note that the text printed will be "Hi, Bill!"; the other commands
  * are set as comments.
- * <br> JavaPreprocessor may be executed from command line with following
- * parameters:
- * <br>[-h] [-r] [-t] [-v] -i input [-o output] [-c charset] [-s switches]
- * <br>where:
- * <br>-r dirTree process directory tree. The parameter is optional.
- * <br>-t delete trailing spaces. The parameter is optional.
- * <br>-v make verbose output. The parameter is optional.
- * <br>-s switches: The list of switch names. Each switch name is composed from
+ * <p> JavaPreprocessor may be executed from command line with following
+ * parameters:</p>
+ * <p>[-h] [-r] [-t] [-v] -i input [-o output] [-c charset] [-s switches]</p>
+ * <p>where</p>
+ * <p>-r dirTree process directory tree. The parameter is optional.</p>
+ * <p>-t delete trailing spaces. The parameter is optional.</p>
+ * <p>-v make verbose output. The parameter is optional.</p>
+ * <p>-s switches: The list of switch names. Each switch name is composed from
  *   letters, digits, '.' or '_'s. The switch can be either prefixed with
- *   '!' or not specified. The parameter is optional.
- * <br>-i input: The file name list of the directories with the Java packages.
+ *   '!' or not specified. The parameter is optional.</p>
+ * <p>-i input: The file name list of the directories with the Java packages.
  *   Each directory is supposed to be the root of package. Only the files with
- *   the extension '.java' are processed. The parameter is obligatory.
- * <br>-o output: The directory where the output files are stored. The
- *   parameter is optional. If it is missing the source files are replaced.
- * <br>-c charset: name of character table, if it is not specified then the
- *   default system character set is used. The parameter is optional.
- * <br>-h display the help text.
+ *   the extension '.java' are processed. The parameter is obligatory.</p>
+ * <p>-o output: The directory where the output files are stored. The
+ *   parameter is optional. If it is missing the source files are replaced.</p>
+ * <p>-c charset: name of character table, if it is not specified then the
+ *   default system character set is used. The parameter is optional.</p>
+ * <p>-h display the help text.</p>
  *
  * @author  Vaclav Trojan
  */
@@ -1089,7 +1102,7 @@ public class JavaPreprocessor {
 		/** The name with wildcards */
 		private final String _wildName;
 		/** Length of the name with wildcards */
-		private int _wildNameLen;
+		private final int _wildNameLen;
 
 		/** Creates new instance of FNameWildCardFilter. Supported wildcards are
 		 * Microsoft style: '*' (skip zero or more characters)
@@ -1232,7 +1245,7 @@ public class JavaPreprocessor {
 	 * @param out PrintStream where will be printed output messages.
 	 * @param err PrintStream where will be printed error messages.
 	 * @param verbose If the value of this argument is true the
-	 * preprocessor will print detailed information to <tt>out</tt>.
+	 * preprocessor will print detailed information to <code>out</code>.
 	 * @param extract If the value of this argument is true the
 	 * preprocessor will extract all preprocessor commands.
 	 * @param cutTrailingSpaces If the value of this argument is true
@@ -1543,9 +1556,6 @@ public class JavaPreprocessor {
 		boolean contains(final String s) {
 			return indexOf(s) >= 0;
 		}
-
-		/** Get number of items in the list. */
-		private int size() {return _strings.length;}
 
 		/** remove string from the list. */
 		private boolean remove(final int i) {
