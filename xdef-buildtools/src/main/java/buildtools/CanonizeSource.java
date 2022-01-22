@@ -1102,7 +1102,7 @@ public class CanonizeSource {
 	 * @param args Array of strings with command line parameters (see
 	 * {@link CanonizeSource}).
 	 */
-	public static void main(String[] args) {
+	public static void main(String... args) {
 		if (args == null || args.length == 1 && "-h".equals(args[0])) {
 			cancel(0, null);
 		} else {

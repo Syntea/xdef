@@ -209,7 +209,7 @@ public class Canonize {
 	/** Canonize sources.
 	 * @param args array with command line parameters (no parameters used).
 	 */
-	public static void main(String[] args) {
+	public static void main(String... args) {
 		_hdr = false;
 		_tail = false;
 		String projectBase;

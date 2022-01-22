@@ -1501,7 +1501,7 @@ public class JavaPreprocessor {
 	 * @param args Array of strings with command line parameters (see
 	 * {@link JavaPreprocessor}).
 	 */
-	public static void main(String[] args) {
+	public static void main(String... args) {
 		if (args == null || args.length == 1 && "-h".equals(args[0])) {
 			help();
 		} else {
