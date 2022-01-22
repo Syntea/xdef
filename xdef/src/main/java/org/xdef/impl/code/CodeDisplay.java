@@ -352,12 +352,27 @@ public class CodeDisplay implements CodeTable, XDValueID {
 	 */
 	public final static void displayCode(final XDValue[] code,
 		final PrintStream out) {
-		if (code == null || code.length == 0) {
-			out.println("No code");
-		} else {
-			for (int i = 0; i < code.length; i++) {
-				out.println(new java.text.DecimalFormat("000000").format(i)
-					+ " " + codeToString(code[i]));
+		displayCode(code, out, 0, code != null ? code.length : -1);
+	}
+
+	/** Display script code part.
+	 * @param code array of script code.
+	 * @param out PrintStream where pool is printed.
+	 * @param fromAddr from address.
+	 * @param toAddr to address.
+	 */
+	public final static void displayCode(final XDValue[] code,
+		final PrintStream out,
+		final int fromAddr,
+		final int toAddr) {
+		int from = fromAddr < 0 ? 0 : fromAddr;
+		if (code != null && from < code.length) {
+			int to = toAddr > code.length ? code.length : toAddr;
+			if (to >= fromAddr) {
+				for (int i = from; i < to; i++) {
+					out.println(new java.text.DecimalFormat("000000").format(i)
+						+ " " + codeToString(code[i]));
+				}
 			}
 		}
 	}

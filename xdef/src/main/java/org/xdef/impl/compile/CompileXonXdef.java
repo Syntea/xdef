@@ -582,8 +582,11 @@ public class CompileXonXdef extends StringParser {
 		pp = null;
 		jp = null;
 		p._value = null;
-/*#if SHOWXONMODEL*#/
-		System.out.println(org.xdef.xml.KXmlUtils.nodeToString(p.toXML(),true));
+/*#if DEBUG*#/
+String s = System.getProperty("debug_xdef");
+if (s != null && s.contains("showXON")) {
+	System.out.println(org.xdef.xml.KXmlUtils.nodeToString(p.toXML(),true));
+}
 /*#end*/
 	}
 

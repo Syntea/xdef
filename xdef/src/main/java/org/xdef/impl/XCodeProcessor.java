@@ -3909,13 +3909,14 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 				s += "[" + i + "]: " + _localVariables[i] + "\n";
 			}
 		}
-/*#if DEBUG*#/
 		java.io.ByteArrayOutputStream bs = new java.io.ByteArrayOutputStream();
 		java.io.PrintStream ps = new java.io.PrintStream(bs);
-		org.xdef.impl.code.CodeDisplay.displayCode(_code, ps);
+		org.xdef.impl.code.CodeDisplay.displayCode(_code, ps, pc - 4, pc + 1);
 		ps.close();
-		s += "\nCODE:\n" + bs.toString() + "\n";
-/*#end*/
+		if (!bs.toString().isEmpty()) {
+			s += "\nCODE:\n" + (pc-4 < 0 ? "...\n" : "") + bs.toString();
+			s += (pc + 1 < _code.length ? "..." : "") + '\n';
+		}
 		//put error to reporter.
 		if (xNode != null) {
 			_reporter.error(XDEF.XDEF569, s); //Fatal error&{0}{: }
