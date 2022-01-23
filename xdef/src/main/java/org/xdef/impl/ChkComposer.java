@@ -248,7 +248,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 				if (result != null && !result.isNull()) {
 					switch (result.getItemId()) {
 						case XD_RESULTSET: {
-							XDResultSet it = (XDResultSet) result;
+							XDResultSet it = (XDResultSet) result;// is iterator
 							try {
 								XDValue item = it.nextXDItem(_rootChkElement);
 								if (item == null) {
