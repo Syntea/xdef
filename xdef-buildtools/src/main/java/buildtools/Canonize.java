@@ -144,6 +144,7 @@ public class Canonize {
 	 * @param args array with command line parameters (no parameters used).
 	 */
 	public static void main(String... args) {
+		ResetPreprocessorSwitches.main();
 		_hdr = false;
 		_tail = false;
 		String projectBase;
@@ -170,7 +171,6 @@ public class Canonize {
 		// update date in files changelog.md and in pom.xml
 		String date = String.format("%tF", new Date()); // actual date
 		updateDateInChangeLog(date);
-		ResetAllPreprocessorOptions.main();
 //		updateDateInPomXml(date);
 	}
 }
