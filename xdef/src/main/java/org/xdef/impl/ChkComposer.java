@@ -27,6 +27,7 @@ import static org.xdef.XDValueID.XD_PARSERESULT;
 import static org.xdef.XDValueID.XD_RESULTSET;
 import static org.xdef.XDValueID.XD_STRING;
 import static org.xdef.XDValueID.XX_DOCUMENT;
+import org.xdef.impl.code.DefBoolean;
 import org.xdef.impl.code.DefContainer;
 import org.xdef.impl.code.DefElement;
 import org.xdef.impl.code.DefLong;
@@ -1182,7 +1183,12 @@ final class ChkComposer extends SReporter implements XDValueID {
 						chkEl._selector != null //if selector is mixed set null!
 						&& chkEl._selector._kind == XNode.XMMIXED
 							? null : lastElem);
-					if (childChkEl._xElement._compose < 0 &&
+					if (childChkEl._xElement.getXonMode() != 0
+						&& childChkEl._xElement._compose < 0
+						&& result.getItemId() == XD_CONTAINER
+						&& ((DefContainer) result).getXDItemsNumber() == 0) {
+						((DefContainer) result).addXDItem(new DefBoolean(true));
+					} else if (childChkEl._xElement._compose < 0 &&
 						chkEl._sourceElem != null) {
 						if (result.getItemId() == XD_CONTAINER) {
 							lastElem = ((DefContainer) result).getXDElement(0);

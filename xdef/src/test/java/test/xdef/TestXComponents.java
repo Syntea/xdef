@@ -364,6 +364,7 @@ public final class TestXComponents extends XDTester {
 			json = XonUtil.parseXON(s);
 			assertTrue(XonUtil.xonEqual(json, xd.jparse(s, reporter)));
 			assertNoErrors(reporter);
+			xd = xp.createXDDocument();
 			xd.setXONContext(XonUtil.xonToJson(json));
 			xc = xd.jcreateXComponent("X", null, reporter);
 			assertNoErrors(reporter);
@@ -383,6 +384,7 @@ public final class TestXComponents extends XDTester {
 			json = XonUtil.parseXON(s);
 			assertTrue(XonUtil.xonEqual(json, xd.jparse(s, reporter)));
 			assertNoErrors(reporter);
+			xd = xp.createXDDocument();
 			xd.setXONContext(XonUtil.xonToJson(json));
 			xc = xd.jcreateXComponent("X", null, reporter);
 			assertNoErrors(reporter);
@@ -404,7 +406,47 @@ public final class TestXComponents extends XDTester {
 			assertNoErrorwarnings(reporter);
 			assertTrue(XonUtil.xonEqual(json, XComponentUtil.toXon(xc)));
 			reporter.clear();
+			xd = xp.createXDDocument();
 			xd.setXONContext(json);
+			xc = xd.jcreateXComponent("X", null, reporter);
+			assertNoErrorwarnings(reporter);
+			assertTrue(XonUtil.xonEqual(json, XComponentUtil.toXon(xc)));
+			xdef = // jcreate with create section
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='X'>\n"+
+"<xd:xon name = 'X'>\n"+
+" [ \"boolean(); create 'true'\", \"int(); create '2'\" ]\n"+
+"</xd:xon>\n"+
+"<xd:component>%class test.xdef.JCreateX5 %link X</xd:component>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
+			xd = xp.createXDDocument();
+			json = XonUtil.parseXON("[true, 2]");
+			assertTrue(XonUtil.xonEqual(json, xd.jcreate("X", reporter)));
+			assertNoErrorwarnings(reporter);
+			xd = xp.createXDDocument();
+			xc = xd.jcreateXComponent("X", null, reporter);
+			assertNoErrorwarnings(reporter);
+			assertTrue(XonUtil.xonEqual(json, XComponentUtil.toXon(xc)));
+			xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='X'>\n"+
+"<xd:xon name = 'X'>\n"+
+"{ a=\"int(); create '1'\",\n"+
+"  b=[\n"+
+"    \"boolean(); create 'true'\",\n"+
+"    \"int(); create '2'\"\n"+
+"  ]\n"+
+"}\n"+
+"</xd:xon>\n"+
+"<xd:component>%class test.xdef.JCreateX6 %link X</xd:component>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
+			xd = xp.createXDDocument();
+			json = XonUtil.parseXON("{a=1, b=[true, 2]}");
+			assertTrue(XonUtil.xonEqual(json, xd.jcreate("X", reporter)));
+			assertNoErrorwarnings(reporter);
+			xd = xp.createXDDocument();
 			xc = xd.jcreateXComponent("X", null, reporter);
 			assertNoErrorwarnings(reporter);
 			assertTrue(XonUtil.xonEqual(json, XComponentUtil.toXon(xc)));
