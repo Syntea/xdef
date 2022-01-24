@@ -10,7 +10,7 @@ public class ResetAllPreprocessorOptions {
 	/** Reset all switches in source code.
 	 * @param args the command line arguments
 	 */
-	public static void main(String[] args) {
+	public static void main(String... args) {
 		JavaPreprocessor.main(
 			"-i", new File("src/main/java").getAbsolutePath(), //input directory
 //			"-o", new File("temp").getAbsolutePath(),// output directery

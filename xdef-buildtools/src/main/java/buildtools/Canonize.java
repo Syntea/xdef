@@ -170,6 +170,7 @@ public class Canonize {
 		// update date in files changelog.md and in pom.xml
 		String date = String.format("%tF", new Date()); // actual date
 		updateDateInChangeLog(date);
+		ResetAllPreprocessorOptions.main();
 //		updateDateInPomXml(date);
 	}
 }
