@@ -24,6 +24,9 @@ import javax.xml.namespace.QName;
 import org.w3c.dom.Element;
 import org.xdef.sys.Price;
 import org.xdef.sys.GPSPosition;
+import static org.xdef.sys.STester.runTest;
+import static test.XDTester.genXComponent;
+import static test.XDTester.parseXC;
 
 /** Test XComponents.
  * @author Vaclav Trojan
@@ -359,11 +362,51 @@ public final class TestXComponents extends XDTester {
 			xd = xp.createXDDocument();
 			s = "[true, false, true]";
 			json = XonUtil.parseXON(s);
+			assertTrue(XonUtil.xonEqual(json, xd.jparse(s, reporter)));
+			assertNoErrors(reporter);
 			xd.setXONContext(XonUtil.xonToJson(json));
 			xc = xd.jcreateXComponent("X", null, reporter);
 			assertNoErrors(reporter);
+			assertTrue(XonUtil.xonEqual(json, XComponentUtil.toXon(xc)));
+			reporter.clear();
+			xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='X'>\n"+
+"<xd:component>%class test.xdef.JCreateX3 %link X</xd:component>\n"+
+"<xd:xon name = 'X'>\n"+
+"[\"2 boolean()\", \"boolean()\"]\n"+
+"</xd:xon>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
+			xd = xp.createXDDocument();
+			s = "[true, false, true]";
+			json = XonUtil.parseXON(s);
 			assertTrue(XonUtil.xonEqual(json, xd.jparse(s, reporter)));
 			assertNoErrors(reporter);
+			xd.setXONContext(XonUtil.xonToJson(json));
+			xc = xd.jcreateXComponent("X", null, reporter);
+			assertNoErrors(reporter);
+			reporter.clear();
+			assertTrue(XonUtil.xonEqual(json, XComponentUtil.toXon(xc)));
+			xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='X'>\n"+
+"<xd:xon name=\"X\">\n" +
+"  { b = [ \"int();\", [\"int();\"], \"string();\"] }" +
+"</xd:xon>\n" +
+"<xd:component>%class test.xdef.JCreateX4 %link X</xd:component>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
+			xd = xp.createXDDocument();
+			s = "{b=[1, [2], \"\"]}";
+			json = XonUtil.parseXON(s);
+			xc = xd.jparseXComponent(s, null, reporter);
+			assertNoErrorwarnings(reporter);
+			assertTrue(XonUtil.xonEqual(json, XComponentUtil.toXon(xc)));
+			reporter.clear();
+			xd.setXONContext(json);
+			xc = xd.jcreateXComponent("X", null, reporter);
+			assertNoErrorwarnings(reporter);
 			assertTrue(XonUtil.xonEqual(json, XComponentUtil.toXon(xc)));
 		} catch (Exception ex) {fail(ex);}
 		reporter.clear();
