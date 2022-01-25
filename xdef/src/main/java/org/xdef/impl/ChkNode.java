@@ -342,7 +342,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	 */
 	public final void setXONContext(final String data)
 		throws SRuntimeException {
-		setXONContext(XonUtil.parseJSON(data));
+		setXONContext(XonUtil.parseXON(data));
 	}
 
 	@Override

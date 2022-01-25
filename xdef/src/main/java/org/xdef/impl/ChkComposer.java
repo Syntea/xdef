@@ -1,5 +1,6 @@
 package org.xdef.impl;
 
+import javax.xml.namespace.QName;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -7,6 +8,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xdef.XDBytes;
+import org.xdef.XDConstants;
 import org.xdef.XDContainer;
 import org.xdef.XDDebug;
 import org.xdef.XDNamedValue;
@@ -44,12 +46,16 @@ import org.xdef.sys.SError;
 import org.xdef.sys.SReporter;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.xml.KXmlUtils;
+import org.xdef.xon.XonNames;
 
 /** Constructs XML object according to X-definition.
  * @author Vaclav Trojan
  */
 final class ChkComposer extends SReporter implements XDValueID {
-
+	private final static QName XONITEMW = new QName(XDConstants.XON_NS_URI_W,
+		XonNames.X_ITEM);
+	private final static QName XONITEM = new QName(XDConstants.XON_NS_URI_XD,
+		XonNames.X_ITEM);
 	/** Root check element. */
 	private ChkElement _rootChkElement;
 	/** Lexicon of tag names in different languages.*/
@@ -148,8 +154,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 					el = ((XDContainer) item).toElement(
 						chkel.getXXNSURI(), chkel.getXXName());
 				}
-				XDContainer x = (XDContainer) item;
-				return new DefElement(attrsToElement(el, x));
+				return new DefElement(attrsToElement(el, (XDContainer) item));
 			}
 			case XD_NAMEDVALUE: {
 				XDNamedValue x = (XDNamedValue) item;
@@ -1187,7 +1192,16 @@ final class ChkComposer extends SReporter implements XDValueID {
 						&& childChkEl._xElement._compose < 0
 						&& result.getItemId() == XD_CONTAINER
 						&& ((DefContainer) result).getXDItemsNumber() == 0) {
-						((DefContainer) result).addXDItem(new DefBoolean(true));
+						if (childChkEl._xElement.getXonMode() != 0
+							&&(XONITEMW.equals(childChkEl._xElement.getQName())
+							||XONITEM.equals(childChkEl._xElement.getQName()))
+							&& childChkEl._xElement.getAttr(
+								XonNames.X_VALUEATTR).getComposeCode() < 0){
+							result = new DefBoolean(false);
+						} else {
+							((DefContainer) result).addXDItem(
+								new DefBoolean(true));
+						}
 					} else if (childChkEl._xElement._compose < 0 &&
 						chkEl._sourceElem != null) {
 						if (result.getItemId() == XD_CONTAINER) {
@@ -1318,36 +1332,35 @@ final class ChkComposer extends SReporter implements XDValueID {
 								}
 							}
 						} else {
+							composeElement(chkEl, childChkEl, result, xtxt);
 							if (childDef._compose < 0
 								&& result.getItemId() == XD_CONTAINER) {
 								lastElem =
 									((DefContainer) result).getXDElement(0);
 							}
-							composeElement(chkEl, childChkEl, result, xtxt);
 							XNode xxn;
-							DefContainer dc;
-							int occnum = 0;
 							// if the create setion is missingand follows the
 							// item with the same name try to add following
 							// items from the default context.
-							while (childDef._compose < 0
+							if (childDef._compose < 0
 								&& (xxn = chkEl.getDefElement(i+1)) != null
 								&& xNode.getKind() == childDef.getKind()
 								&& xxn.getQName().equals(childDef.getQName())
 								&& ((XElement) xxn)._compose < 0
-								&& result.getItemId() == XD_CONTAINER
-								&& (dc=(DefContainer) result).getXDItemsNumber()
-									> (occnum=childChkEl.getOccurrence())) {
-								for (int ii = 0; ii < occnum; ii++) {
-									dc.removeXDItem(0);
+								&& result.getItemId() == XD_CONTAINER) {
+								DefContainer dc = (DefContainer) result;
+								while (dc.getXDItemsNumber() > 1
+									&& dc.getXDItemsNumber()
+										> (childChkEl.getOccurrence())) {
+									dc.removeXDItem(0); // remove the first item
+									i++;
+									childDef = (XElement) xxn;
+									childChkEl = prepareChkElement(
+										chkEl, null, childDef, i);
+									composeElement(
+										chkEl, childChkEl, result, xtxt);
+									lastElem = dc.getXDElement(0);
 								}
-								i++;
-								childDef = (XElement) xxn;
-								childChkEl = prepareChkElement(
-									chkEl, null, childDef, i);
-								lastElem =
-									((DefContainer) result).getXDElement(0);
-								composeElement(chkEl, childChkEl, result, xtxt);
 							}
 						}
 					}

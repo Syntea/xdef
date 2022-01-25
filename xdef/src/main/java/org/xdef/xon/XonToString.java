@@ -31,7 +31,7 @@ class XonToString extends XonTools {
 	 * @param xon if true then XON else if false JOSN source is generated.
 	 */
 	private static String valueToString(final Object x, final boolean xon) {
-		if (x == null || x instanceof JNull) {
+		if (x == null || x instanceof XonTools.JNull) {
 			return "null";
 		} else if (x instanceof Boolean) {
 			return x.toString();
@@ -219,9 +219,8 @@ class XonToString extends XonTools {
 			key = '"' + jstringToSource(key) + '"';
 			separator = ':';
 		}
-		key = ind != null ? key+" "+separator+" " : (key + separator);
-		StringBuilder sb = new StringBuilder();
-		sb.append(key);
+		StringBuilder sb = new StringBuilder(
+			ind != null ? key + " " + separator + " " : (key + separator));
 		objectToString(en.getValue(), ind, sb, xon);
 		return sb;
 	}
