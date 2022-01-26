@@ -1334,33 +1334,11 @@ final class ChkComposer extends SReporter implements XDValueID {
 						} else {
 							composeElement(chkEl, childChkEl, result, xtxt);
 							if (childDef._compose < 0
-								&& result.getItemId() == XD_CONTAINER) {
-								lastElem =
-									((DefContainer) result).getXDElement(0);
-							}
-							XNode xxn;
-							// if the create setion is missingand follows the
-							// item with the same name try to add following
-							// items from the default context.
-							if (childDef._compose < 0
-								&& (xxn = chkEl.getDefElement(i+1)) != null
-								&& xNode.getKind() == childDef.getKind()
-								&& xxn.getQName().equals(childDef.getQName())
-								&& ((XElement) xxn)._compose < 0
-								&& result.getItemId() == XD_CONTAINER) {
-								DefContainer dc = (DefContainer) result;
-								while (dc.getXDItemsNumber() > 1
-									&& dc.getXDItemsNumber()
-										> (childChkEl.getOccurrence())) {
-									dc.removeXDItem(0); // remove the first item
-									i++;
-									childDef = (XElement) xxn;
-									childChkEl = prepareChkElement(
-										chkEl, null, childDef, i);
-									composeElement(
-										chkEl, childChkEl, result, xtxt);
-									lastElem = dc.getXDElement(0);
-								}
+								&& result.getItemId() == XD_CONTAINER
+								&& childChkEl.getOccurrence() > 0) {
+								// set last processeed item to lastElem
+								lastElem = ((DefContainer)result).getXDElement(
+									childChkEl.getOccurrence() - 1);
 							}
 						}
 					}

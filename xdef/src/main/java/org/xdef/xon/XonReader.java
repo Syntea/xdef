@@ -90,11 +90,11 @@ public final class XonReader extends StringParser implements XonParsers {
 					}
 				} else {
 					while (!isToken("*/") && !eos()) {
+						if (eos()) {
+							error(JSON.JSON015); //Unclosed comment
+							return;
+						}
 						sb.append(nextChar());
-					}
-					if (eos()) {
-						error(JSON.JSON015); //Unclosed comment
-						break;
 					}
 				}
 			} else {

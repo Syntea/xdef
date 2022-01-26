@@ -167,7 +167,7 @@ class XonToString extends XonTools {
 				notFirst = true;
 			}
 		}
-		if (sb.lastIndexOf("\n") > pos) {
+		if (indent != null && sb.lastIndexOf("\n") > pos) {
 			sb.append(indent).insert(pos, ind);
 		}
 		sb.append(']');
@@ -272,7 +272,7 @@ class XonToString extends XonTools {
 				notFirst = true;
 			}
 		}
-		if (sb.lastIndexOf("\n") > pos) {
+		if (indent != null && sb.lastIndexOf("\n") > pos) {
 			sb.append(indent);
 		}
 		sb.append('}');
