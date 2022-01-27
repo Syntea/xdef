@@ -520,6 +520,19 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		}
 		return (counter > 0) ? "[" + (counter+1) + "]" : "";
 	}
+	private Node getNodeByIndex(final int index) {
+Node x = _element.getChildNodes().item(index);
+		Node n = _element.getFirstChild();
+		for (int i = 0;  n != null && i <= index;
+			n = n.getNextSibling(), i++) {
+			if (i == index) {
+System.out.println("getNodeByIndex: " + (x == n));
+				return n;
+			}
+		}
+System.out.println("getNodeByIndex: Not found! " + (x == null));
+		return null;
+	}
 
 	/** Check absence of a text node in model. */
 	final void chkTextAbsence(final int index,

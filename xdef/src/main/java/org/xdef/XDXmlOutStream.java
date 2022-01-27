@@ -32,11 +32,11 @@ public interface XDXmlOutStream extends XDValue {
 	 * @param node The node to be written.
 	 */
 	public void writeNode(Node node);
-
-	/** Write XML node.
-	 * @param nl The node list to be written.
-	 */
-	public void writeNodeList(NodeList nl);
+//
+//	/** Write XML node list.
+//	 * @param nl The node list to be written.
+//	 */
+//	public void writeNodeList(NodeList nl);
 
 	/** Flush stream writer.*/
 	public void flushStream();
