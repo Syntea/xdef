@@ -62,7 +62,7 @@ public class PomInfo {
 		name              = pp.getProperty("project.name");
 		description       = pp.getProperty("project.description");
 		releaseDate       = pp.getProperty("release.date");
-		buildTimestamp    = pp.getProperty("maven.build.timestamp");
+		buildTimestamp    = pp.getProperty("build.timestamp");
 	}
 
 
