@@ -476,7 +476,7 @@ final class ChkTranslate extends SReporter implements XDValueID {
 				&& ((uri == null || uri.equals(node.getNamespaceURI()))))) {
 				result.addXDItem(new DefElement((Element) node));
 				if (++m >= max) {//the element added
-					break; // we do not nead others
+					return true; // we do not nead others
 				}
 			}
 		}

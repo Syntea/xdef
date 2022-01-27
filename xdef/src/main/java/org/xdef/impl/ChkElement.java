@@ -13,7 +13,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xdef.XDConstants;
 import org.xdef.XDDebug;
 import org.xdef.XDParseResult;
@@ -520,17 +519,14 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		}
 		return (counter > 0) ? "[" + (counter+1) + "]" : "";
 	}
+
 	private Node getNodeByIndex(final int index) {
-Node x = _element.getChildNodes().item(index);
 		Node n = _element.getFirstChild();
-		for (int i = 0;  n != null && i <= index;
-			n = n.getNextSibling(), i++) {
-			if (i == index) {
-System.out.println("getNodeByIndex: " + (x == n));
+		for (int i = 0; n != null; n = n.getNextSibling()) {
+			if (i++ == index) {
 				return n;
 			}
 		}
-System.out.println("getNodeByIndex: Not found! " + (x == null));
 		return null;
 	}
 
@@ -584,21 +580,21 @@ System.out.println("getNodeByIndex: Not found! " + (x == null));
 				Node txt = xtxt._cdata == 'T'
 					? _rootChkDocument._doc.createCDATASection(_data)
 					: _rootChkDocument._doc.createTextNode(_data);
-				NodeList nl = _element.getChildNodes();
+//				NodeList nl = _element.getChildNodes();
 				if (orig == null) {
 					if (c == null) {
 						_element.appendChild(txt);
 					} else {
-						_element.insertBefore(txt, nl.item(c._itemIdex));
+						_element.insertBefore(txt, getNodeByIndex(c._itemIdex));
 						c._itemIdex++;
 					}
 					incRefNum();
 				} else {
-					_element.replaceChild(txt, nl.item(c._itemIdex));
+					_element.replaceChild(txt, getNodeByIndex(c._itemIdex));
 				}
 			}
 		} else if (orig != null) {
-			_element.removeChild(_element.getChildNodes().item(c._itemIdex));
+			_element.removeChild(getNodeByIndex(c._itemIdex));
 			c._itemIdex--;
 			decRefNum();
 			_data = null;
@@ -3597,7 +3593,7 @@ System.out.println("getNodeByIndex: Not found! " + (x == null));
 		int _begIndex;
 		/** Where selector ends */
 		int _endIndex;
-		/** Index of first child of selector in NodeList */
+		/** Index of first child in selector list */
 		int _firstChild;
 		/** Number of selector repetitions */
 		int _count;
