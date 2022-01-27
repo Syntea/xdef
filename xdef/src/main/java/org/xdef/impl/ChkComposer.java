@@ -6,7 +6,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xdef.XDBytes;
 import org.xdef.XDConstants;
 import org.xdef.XDContainer;
@@ -97,15 +96,13 @@ final class ChkComposer extends SReporter implements XDValueID {
 					if (!e.hasAttribute(nv.getName())) {
 						XDValue v = nv.getValue();
 						if (v != null && !v.isNull()) {
-							if (v.getItemId() == XD_CONTAINER) {
-								XDContainer xv = (XDContainer) v;
-								if (xv.getXDNamedItemsNumber() > 0) {
-									for (XDNamedValue x: xv.getXDNamedItems()){
-										if (x.getValue() != null
-											&& !x.getValue().isNull()) {
-											e.setAttribute(x.getName(),
-												x.getValue().stringValue());
-										}
+							XDContainer x;
+							if (v.getItemId() == XD_CONTAINER
+								&&(x=(XDContainer)v).getXDNamedItemsNumber()>0){
+								for (XDNamedValue y: x.getXDNamedItems()){
+									if ((v=y.getValue())!=null && !v.isNull()) {
+										e.setAttribute(y.getName(),
+											v.stringValue());
 									}
 								}
 							} else {
@@ -622,12 +619,10 @@ final class ChkComposer extends SReporter implements XDValueID {
 		if (locnm == null) {
 			locnm = elem.getNodeName();
 		}
-		NodeList nl = elem.getChildNodes();
-		n = nl.getLength();
+		Node first = elem.getFirstChild();
 		if (localName.equals(locnm)
 			&& (uri == null || uri.equals(elem.getNamespaceURI()))) {
-			for (int i = 0; i < n; i++) {
-				Node node = nl.item(i);
+			for (Node node = first; node!=null;  node = node.getNextSibling()) {
 				String u = node.getNamespaceURI();
 				locnm = u==null ? node.getNodeName() : node.getLocalName();
 				if ((u==null && "_".equals(locnm) || ((localName.equals(locnm))
@@ -650,9 +645,8 @@ final class ChkComposer extends SReporter implements XDValueID {
 				result.addXDItem(new DefElement(elem));
 				return; //element is the element itself
 			}
-			n = result.getXDItemsNumber();
 		}
-		if (n == 0) {
+		if (first == null) {
 			return; //nothing found
 		}
 		int m = 0;
@@ -677,17 +671,9 @@ final class ChkComposer extends SReporter implements XDValueID {
 				}
 			}
 		}
-		int j = 0;
-		if (lastElement != null) {
-			for (int i=0; i < n; i++) {
-				if (lastElement == nl.item(i)) {
-					j = i + 1;
-					break;
-				}
-			}
-		}
-		for (int i = j; i < n; i++) {
-			Node node = nl.item(i);
+		Node next = (lastElement!=null && lastElement.getParentNode()==elem)
+			? lastElement.getNextSibling() : first;
+		for (Node node = next; node != null; node = node.getNextSibling()) {
 			String u = node.getNamespaceURI();
 			locnm = u==null ? node.getNodeName() : node.getLocalName();
 			if ("_".equals(locnm) && u==null
@@ -702,15 +688,16 @@ final class ChkComposer extends SReporter implements XDValueID {
 					}
 				}
 				result.addXDItem(new DefElement((Element) node));
-				m++;
+				if (++m > max) {
+					return;
+				}
 			}
 		}
 		if (m > 0) {//the element added
 			return; // we do not nead others
 		}
-		// nothing found, look now from begining
-		for (int i = 0; i < j; i++) {
-			Node node = nl.item(i);
+		// nothing found, look again now from begining
+		for (Node node = first; node != next; node = node.getNextSibling()) {
 			String u = node.getNamespaceURI();
 			locnm = u==null ? node.getNodeName() : node.getLocalName();
 			if ("_".equals(locnm) && u==null
@@ -810,9 +797,8 @@ final class ChkComposer extends SReporter implements XDValueID {
 		//default contex (no script specified)
 		DefContainer result = new DefContainer();
 		if ("$any".equals(chkEl._xElement.getName())) { //any element
-			NodeList nl = sourceElem.getChildNodes();
-			for (int i = 0, max = nl.getLength(); i < max; i++) {
-				Node node = nl.item(i);
+			for (Node node = sourceElem.getFirstChild();
+				node != null; node = node.getNextSibling()) {
 				if (node.getNodeType() == Node.ELEMENT_NODE) {
 					result.addXDItem(new DefElement((Element) node));
 				}
@@ -1183,20 +1169,23 @@ final class ChkComposer extends SReporter implements XDValueID {
 					count = chkEl.getRefNum(i);
 					ChkElement childChkEl =
 						prepareChkElement(chkEl, null, childDef, i);
+					//if selector is mixed set null to lastElem
+					Element lastEl = chkEl._selector != null
+							&& chkEl._selector._kind == XNode.XMMIXED
+						? null : lastElem;
 					XDValue result = execComposeElement(
-						childChkEl, sourceEl,
-						chkEl._selector != null //if selector is mixed set null!
-						&& chkEl._selector._kind == XNode.XMMIXED
-							? null : lastElem);
+						childChkEl, sourceEl, lastEl);
 					if (childChkEl._xElement.getXonMode() != 0
 						&& childChkEl._xElement._compose < 0
 						&& result.getItemId() == XD_CONTAINER
-						&& ((DefContainer) result).getXDItemsNumber() == 0) {
+						&& ((DefContainer) result).isEmpty()) {
+						// xon model of item and empty reslut (Container)
 						if (childChkEl._xElement.getXonMode() != 0
-							&&(XONITEMW.equals(childChkEl._xElement.getQName())
-							||XONITEM.equals(childChkEl._xElement.getQName()))
+							&& (XONITEMW.equals(childChkEl._xElement.getQName())
+							|| XONITEM.equals(childChkEl._xElement.getQName()))
 							&& childChkEl._xElement.getAttr(
 								XonNames.X_VALUEATTR).getComposeCode() < 0){
+							// if create section do not create this node
 							result = new DefBoolean(false);
 						} else {
 							((DefContainer) result).addXDItem(

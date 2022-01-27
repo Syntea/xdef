@@ -568,10 +568,10 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		}
 		if (_data != null) {
 			if (!_data.equals(orig)) {
-				NodeList nl = _element.getChildNodes();
 				Node txt = xtxt._cdata == 'T'
 					? _rootChkDocument._doc.createCDATASection(_data)
 					: _rootChkDocument._doc.createTextNode(_data);
+				NodeList nl = _element.getChildNodes();
 				if (orig == null) {
 					if (c == null) {
 						_element.appendChild(txt);
@@ -585,8 +585,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 				}
 			}
 		} else if (orig != null) {
-			NodeList nl = _element.getChildNodes();
-			_element.removeChild(nl.item(c._itemIdex));
+			_element.removeChild(_element.getChildNodes().item(c._itemIdex));
 			c._itemIdex--;
 			decRefNum();
 			_data = null;
@@ -1411,9 +1410,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		String xPos = _xPos;
 		_xPos += "/text()";
 		int ndx = -1;
-		NodeList nl = _element.getChildNodes();
-		for (int i = 0; i < nl.getLength(); i++) {
-			if (nl.item(i).getNodeType() == Node.TEXT_NODE) {
+		for (Node n=_element.getFirstChild(); n!=null; n=n.getNextSibling()) {
+			if (n.getNodeType() == Node.TEXT_NODE) {
 				ndx++;
 			}
 		}
@@ -2802,9 +2800,10 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 						exec(xatt._onAbsence, (byte) 'T');
 						copyTemporaryReports();
 						if (_data != null) {
-							NodeList nl = _element.getChildNodes();
-							for (int j = nl.getLength() - 1; j >= 0; j--) {
-								_element.removeChild(nl.item(j));
+							for (Node n=_element.getLastChild(); n != null;) {
+								Node m = n.getPreviousSibling();
+								_element.removeChild(n);
+								n = m;
 							}
 							appendTextNode(_data, xatt);
 							_numText++;
@@ -2856,13 +2855,13 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 						}
 						copyTemporaryReports();
 						if (!orig.equals(_data)) {
-							NodeList nl = _element.getChildNodes();
-							for (int j = nl.getLength() - 1; j >= 0; j--) {
-								Node n = nl.item(j);
+							for (Node n=_element.getLastChild(); n != null;) {
+								Node m = n = n.getPreviousSibling();
 								if (n.getNodeType() == Node.TEXT_NODE
 									||n.getNodeType()==Node.CDATA_SECTION_NODE){
 									_element.removeChild(n);
 								}
+								n = m;
 							}
 							appendTextNode(_data, xatt);
 						}
