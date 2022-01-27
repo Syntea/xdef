@@ -39,7 +39,8 @@
         </developer>
     </developers>
     <scm>
-        <!-- nasledujici atributy jsou potreba pro nemodifikovani URL, connection, ale windows-maven na tom pada ("neznamy atribut") 
+        <!-- nasledujici atributy jsou potreba pro nemodifikovani URL, connection,
+            ale windows-maven na tom pada ("neznamy atribut") 
             child.scm.url.inherit.append.path       ="false"
             child.scm.connection.inherit.append.path="false"
         -->
