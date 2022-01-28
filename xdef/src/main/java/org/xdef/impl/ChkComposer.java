@@ -675,7 +675,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 				}
 			}
 		}
-		// this is nasty. we are looking for elements following lastElement
+		// Look for elements following lastElement
 		Node next = (lastElement!=null && lastElement.getParentNode()==elem)
 			? lastElement.getNextSibling() : first;
 		for (Node node = next; node != null; node = node.getNextSibling()) {
@@ -698,10 +698,10 @@ final class ChkComposer extends SReporter implements XDValueID {
 				}
 			}
 		}
-		if (m > 0 || first == next) {//some elements found
-			return; // do not find others from beginning
+		if (m > 0 || first == next) {//some elements found or looked from first
+			return; // do not find from first
 		}
-		// nothing found, look again now from begining
+		// nothing found, look again now from first
 		for (Node node = first; node != next; node = node.getNextSibling()) {
 			String u = node.getNamespaceURI();
 			locnm = u==null ? node.getNodeName() : node.getLocalName();
