@@ -2,6 +2,7 @@ package test.xdef;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import test.XDTester;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.xml.KXmlUtils;
@@ -11,6 +12,8 @@ import org.xdef.XDPool;
 import org.xdef.XDXmlOutStream;
 import org.w3c.dom.Element;
 import org.xdef.XDTools;
+import static org.xdef.sys.STester.runTest;
+import static test.XDTester._xdNS;
 
 /** TestDebug provides testing of XML writer.
  * @author Trojan
@@ -29,16 +32,6 @@ public final class TestXmlWriter extends XDTester {
 		ArrayReporter reporter = new ArrayReporter();
 		XDDocument xd;
 		Element el;
-		String tempDir;
-		try {
-			tempDir = clearTempDir().getCanonicalPath().replace('\\', '/');
-			if (!tempDir.endsWith("/")) {
-				tempDir += "/";
-			}
-		} catch (Exception ex) {
-			fail(ex);
-			return;
-		}
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='books'>\n"+
@@ -69,22 +62,22 @@ public final class TestXmlWriter extends XDTester {
 				XDFactory.createXDXmlOutStream(bos, null, true);
 			xd.setStreamWriter(xmlWriter);
 			el = parse(xd, xml, reporter);
+			xmlWriter.closeStream();
 			assertNoErrors(reporter);
-			bis =
-				new ByteArrayInputStream(bos.toByteArray());
+			bis = new ByteArrayInputStream(bos.toByteArray());
 			assertEq(xml, KXmlUtils.parseXml(bis).getDocumentElement());
 			assertEq("<books/>", el);
 
 			xdef = // Test XmlOutStream methods
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <xd:declaration>\n"+
-"    external String tempDir;\n"+
-"    XmlOutStream x = new XmlOutStream(tempDir + 'x.xml','UTF-8',true);\n"+
+"    external String xmlFile;\n"+
+"    XmlOutStream x = new XmlOutStream(xmlFile,'UTF-8',true);\n"+
 "  </xd:declaration>\n"+
 "  <a x=';' xd:script='onStartElement x.writeElementStart();\n"+
-"                      finally {x.writeElementEnd(); x.close();}'>\n"+
+"             finally {x.writeElementEnd(); x.close();}'>\n"+
 "    <b x=';' xd:script='*; onStartElement x.writeElementStart();\n"+
-"                           finally x.writeElementEnd(); forget'>\n"+
+"               finally x.writeElementEnd(); forget'>\n"+
 "      <c xd:script='*; finally x.writeElement(); forget'>\n"+
 "        string();\n"+
 "      </c>\n"+
@@ -99,16 +92,17 @@ public final class TestXmlWriter extends XDTester {
 "<b x='c'><c>z</c></b>" +
 "</a>";
 			xd = xp.createXDDocument();
-			xd.setVariable("tempDir", tempDir);
+			File xmlFile = new File(clearTempDir(), "x.xml");
+			xd.setVariable("xmlFile", xmlFile.getCanonicalPath());
 			assertEq("<a x='_'/>", parse(xd, xml, reporter));
 			assertNoErrors(reporter);
-			el = KXmlUtils.parseXml(tempDir + "x.xml").getDocumentElement();
+			el = KXmlUtils.parseXml(xmlFile).getDocumentElement();
 			assertEq(xml, el);
 			xdef = // Test XmlOutStream methods
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <xd:declaration> external XmlOutStream x; </xd:declaration>\n"+
-"  <a x=';' xd:script='onStartElement x.writeElementStart();\n"+
-"                      finally {x.writeElementEnd(); x.close();}'>\n"+
+"  <a x='' xd:script='onStartElement x.writeElementStart();\n"+
+"            finally {x.writeElementEnd(); x.close();}'>\n"+
 "    <b x='' xd:script='*; finally x.writeElement(); forget'>\n"+
 "      <c xd:script='*;'>string();</c>\n"+
 "    </b>\n"+
@@ -128,15 +122,14 @@ public final class TestXmlWriter extends XDTester {
 "<d y='2'/>" +
 "</a>";
 			assertEq("<a x='_'/>", parse(xd, xml, reporter));
-			bos.close();
 			assertNoErrors(reporter);
 			bis = new ByteArrayInputStream(bos.toByteArray());
 			el = KXmlUtils.parseXml(bis).getDocumentElement();
 			assertEq(xml, el);
 		} catch (Exception ex) {fail(ex);}
 
-		clearTempDir(); // delete created temporary files
 		resetTester();
+		clearTempDir(); // delete created temporary files
 	}
 
 	/** Run test

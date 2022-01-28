@@ -185,7 +185,11 @@ public abstract class STester {
 			File[] files = _tempDir.listFiles();
 			for (File x: files) {
 				try { // try to delete this file
-					FUtils.deleteAll(x, true);
+					if (x.isDirectory()) {
+						FUtils.deleteAll(x, true);
+					} else if (x.isFile()){
+						x.delete();
+					}
 				} catch (Exception ex) {}
 			}
 		} else {
