@@ -619,9 +619,11 @@ final class ChkComposer extends SReporter implements XDValueID {
 		if (locnm == null) {
 			locnm = elem.getNodeName();
 		}
+		final int max = chkEl.getXMElement().maxOccurs();
 		Node first = elem.getFirstChild();
 		if (localName.equals(locnm)
 			&& (uri == null || uri.equals(elem.getNamespaceURI()))) {
+			int m = 0;
 			for (Node node = first; node!=null;  node = node.getNextSibling()) {
 				String u = node.getNamespaceURI();
 				locnm = u==null ? node.getNodeName() : node.getLocalName();
@@ -639,6 +641,9 @@ final class ChkComposer extends SReporter implements XDValueID {
 						}
 					}
 					result.addXDItem(new DefElement((Element) node));
+					if (++m >= max) {//more elements found then maxOccurs
+						return; // we do not nead others
+					}
 				}
 			}
 			if (result.isEmpty()) {
@@ -650,7 +655,6 @@ final class ChkComposer extends SReporter implements XDValueID {
 			return; //nothing found
 		}
 		int m = 0;
-		int max = chkEl.getXMElement().maxOccurs();
 		for (int i = 0; i < result.getXDItemsNumber(); i++) {
 			Element e = result.getXDElement(i);
 			String u = e.getNamespaceURI();
@@ -666,11 +670,12 @@ final class ChkComposer extends SReporter implements XDValueID {
 						continue;
 					}
 				}
-				if (++m >= max) {//the element added
+				if (++m >= max) {//more elements found then maxOccurs
 					return; // we do not nead others
 				}
 			}
 		}
+		// this is nasty. we are looking for elements following lastElement
 		Node next = (lastElement!=null && lastElement.getParentNode()==elem)
 			? lastElement.getNextSibling() : first;
 		for (Node node = next; node != null; node = node.getNextSibling()) {
@@ -688,13 +693,13 @@ final class ChkComposer extends SReporter implements XDValueID {
 					}
 				}
 				result.addXDItem(new DefElement((Element) node));
-				if (++m > max) {
-					return;
+				if (++m >= max) {//more elements found then maxOccurs
+					return; // we do not nead others
 				}
 			}
 		}
-		if (m > 0) {//the element added
-			return; // we do not nead others
+		if (m > 0 || first == next) {//some elements found
+			return; // do not find others from beginning
 		}
 		// nothing found, look again now from begining
 		for (Node node = first; node != next; node = node.getNextSibling()) {
@@ -711,7 +716,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 						continue;
 					}
 				}
-				if (++m >= max) {//the element added
+				if (++m >= max) {//more elements found then maxOccurs
 					return; // we do not nead others
 				}
 				result.addXDItem(new DefElement((Element) node));
