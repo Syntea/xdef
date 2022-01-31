@@ -124,6 +124,11 @@ public final class XPool implements XDPool, Serializable {
 	/** List of dates to be accepted out of interval _minYear.._maxYear.*/
 	private SDatetime _specialDates[];
 
+/*#if DEBUG*#/
+	// Value of debug switches - used in debugging of implementation.
+	public static String _debugSwitches;
+/*#end*/
+
 ////////////////////////////////////////////////////////////////////////////////
 // Constructors
 ////////////////////////////////////////////////////////////////////////////////
@@ -204,6 +209,15 @@ public final class XPool implements XDPool, Serializable {
 			_reporter != null ? _reporter : new ArrayReporter(),
 			_extClasses,
 			_xdefs);
+/*#if DEBUG*#/
+		_debugSwitches = SManager.getProperty(_props,XConstants.DEBUG_SWITCHES);
+		if (_debugSwitches == null) {
+			_debugSwitches = System.getProperty(XConstants.DEBUG_SWITCHES);
+			if (_debugSwitches == null) {
+				_debugSwitches = "";
+			}
+		}
+/*#end*/
 	}
 
 ////////////////////////////////////////////////////////////////////////////////

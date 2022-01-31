@@ -1497,7 +1497,7 @@ public class JavaPreprocessor {
 		}
 		if (switches.length() == 0) {
 			if (verbose) {
-				out.println("Java preprocessor switches: not set");
+				out.println("Java preprocessor switches list is empty");
 				out.flush();
 			}
 		} else {

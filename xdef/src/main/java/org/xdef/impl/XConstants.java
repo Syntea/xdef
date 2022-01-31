@@ -1,6 +1,6 @@
 package org.xdef.impl;
 
-/** Internally used constants
+/** Internally used constants in this implementation.
  * @author Vaclav Trojan
  */
 public interface XConstants {
@@ -20,4 +20,13 @@ public interface XConstants {
 
 	/** XON/JSON root element. */
 	public static byte XON_ROOT = 4;
+
+/*#if DEBUG*#/
+	/** Names of debug property with switches:
+	 * <p>"showXonModel" display created XON model (see DEBUG_SHOW_XON_MODEL).
+	*#/
+	public static String DEBUG_SWITCHES = "xdef-debug";
+	/** Debug switch to show created XON model. *#/
+	public static String DEBUG_SHOW_XON_MODEL = "showXonModel";
+/*#end*/
 }

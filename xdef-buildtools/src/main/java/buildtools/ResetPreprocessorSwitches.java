@@ -11,9 +11,8 @@ public class ResetPreprocessorSwitches {
 	 * @param args the command line arguments
 	 */
 	public static void main(String... args) {
-		System.out.println("Reset preprocessor switches...");
 		JavaPreprocessor.main(
-			"-i", new File("src/main/java").getAbsolutePath(), //input directory
+			"-i", new File("../xdef/src/main/java").getAbsolutePath(), //input
 //			"-o", new File("temp").getAbsolutePath(),// output directery
 			"-r", // recursive process of directories
 			"-v", // verbose output

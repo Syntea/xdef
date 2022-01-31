@@ -5,6 +5,7 @@ import java.util.Stack;
 import org.xdef.XDConstants;
 import org.xdef.impl.XConstants;
 import org.xdef.impl.XOccurrence;
+import org.xdef.impl.XPool;
 import org.xdef.xon.XonTools;
 import org.xdef.xon.XonReader;
 import org.xdef.xon.XonTools.JArray;
@@ -583,8 +584,8 @@ public class CompileXonXdef extends StringParser {
 		jp = null;
 		p._value = null;
 /*#if DEBUG*#/
-String s = System.getProperty("debug_xdef");
-if (s != null && s.contains("showXON")) {
+if (XPool._debugSwitches.contains(XConstants.DEBUG_SHOW_XON_MODEL)) {
+	// display created model
 	System.out.println(org.xdef.xml.KXmlUtils.nodeToString(p.toXML(),true));
 }
 /*#end*/
