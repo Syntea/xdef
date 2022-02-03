@@ -312,5 +312,9 @@ public final class XonSourceParser implements XonParser, XParser {
 		public void setXdefMode() {} // ignored here
 		@Override
 		public void setReportWriter(ReportWriter reporter) {} // ignored here
+		@Override
+		public void setXonMode() {}
+		@Override
+		public void setJsonMode() {}
 	}
 }

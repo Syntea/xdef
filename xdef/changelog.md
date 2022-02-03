@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 41.0.5, release-date 2022-01-31
+# Version 41.0.5, release-date 2022-02-03
 * methods `XDDocument.parseXComponent(...)` are now deprecated
   please use methods `XDDocument.xparseXComponent(...)` instead.
 * implemented new methods `XDDocument.iparseXComponent(...)`,

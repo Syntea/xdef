@@ -57,15 +57,6 @@ public final class XonReader extends StringParser implements XonParsers {
 		_jp = jp;
 	}
 
-	/** Set mode that XON is parsed. */
-	public final void setXonMode() {
-		_jdef = false;
-		_acceptComments = _xonMode = true;
-	}
-
-	/** Set mode for strict JSON parsing (JSON, no comments). */
-	public final void setJsonMode() {_acceptComments=_xonMode=_jdef=false;}
-
 	/** Set mode for XON/JSON parsing (with comments). */
 	public final void setCommentsMode() {_acceptComments = true;}
 
@@ -679,6 +670,18 @@ public final class XonReader extends StringParser implements XonParsers {
 	@Override
 	/** Set mode that XON/JSON is parsed in X-definition compiler. */
 	public final void setXdefMode() {_xonMode = _acceptComments = _jdef = true;}
+
+	@Override
+	/** Set mode that XON is parsed. */
+	public final void setXonMode() {
+		_jdef = false;
+		_acceptComments = _xonMode = true;
+	}
+
+	@Override
+	/** Set mode for strict JSON parsing (JSON, no comments). */
+	public final void setJsonMode() {_acceptComments=_xonMode=_jdef=false;}
+
 	@Override
 	/** Parse XON/JSON source data (depends on the flag "_xon").
 	 * @throws SRuntimeException if an error occurs,

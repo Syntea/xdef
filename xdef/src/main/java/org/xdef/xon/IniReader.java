@@ -62,14 +62,8 @@ public class IniReader extends StringParser implements XonParsers {
 		_jp = jp;
 	}
 
-	/** Get value of parsed data.
-	 * @return value of parsed data.
-	 */
 	public Object getValue() {return _jp.getResult();}
 
-	/** Read line from INI/Property file.
-	 * @return SBuffer with the text of the parsed line.
-	 */
 	private SBuffer readLine() {
 		if (eos()) {
 			return null;
@@ -82,10 +76,6 @@ public class IniReader extends StringParser implements XonParsers {
 		return new SBuffer(sb.toString(), spos);
 	}
 
-	/** Check if the parsed line ends with backslash.
-	 * @param s parsed line.
-	 * @return true if the parsed line ends with backslash.
-	 */
 	private static boolean endsWithBackslash(String s) {
 		int i = s.length() - 1;
 		for (; i <= 0; i--) {
@@ -100,9 +90,6 @@ public class IniReader extends StringParser implements XonParsers {
 		return ((j - i) & 1) > 0;
 	}
 
-	/** Read text with property.
-	 * @return SBuffer with property text.
-	 */
 	private SBuffer readPropText() {
 		SBuffer sbuf;
 		StringParser p;
@@ -163,10 +150,6 @@ public class IniReader extends StringParser implements XonParsers {
 		return null;
 	}
 
-	/** Put property from source. 
-	 * @param s string with property.
-	 * @return true if it is a property item, false if it is INI section.
-	 */
 	private boolean putProperty(SBuffer s) {
 		if (s == null || s.getString().charAt(0) == '[') {
 			return false;
@@ -240,7 +223,7 @@ public class IniReader extends StringParser implements XonParsers {
 		return (Map<String, Object>) jp.getResult();
 	}
 
-	/** Read INI data from source. */
+	/** Read INI file from source. */
 	private void readINI() {
 		isSpaces();
 		_jp.mapStart(this);
@@ -318,6 +301,10 @@ public class IniReader extends StringParser implements XonParsers {
 	@Override
 	/** Set mode that INI file is parsed in X-definition compiler. */
 	public final void setXdefMode() { _jdef = true;}
+	@Override
+	public void setXonMode() {} // not used here
+	@Override
+	public void setJsonMode() {} // not used here
 
 ////////////////////////////////////////////////////////////////////////////////
 // INI to String
@@ -349,10 +336,6 @@ public class IniReader extends StringParser implements XonParsers {
 		}
 	}
 
-	/** Create string from object from INI data.
-	 * @param val object from INI data.
-	 * @return string created from object from INI data.
-	 */
 	private static String valueToString(final Object val) {
 		if (val == null) {
 			return "";
@@ -407,15 +390,7 @@ public class IniReader extends StringParser implements XonParsers {
 		return sb.toString();
 	}
 
-////////////////////////////////////////////////////////////////////////////////
-// INI to XML
-////////////////////////////////////////////////////////////////////////////////
-
 	@SuppressWarnings("unchecked")
-	/** Create XML element (W form) from INI object.
-	 * @param ini Object with INI data.
-	 * @return XML element created from INI object.
-	 */
 	public final static Element iniToXml(final Object ini) {
 		Document doc = KXmlUtils.newDocument(XDConstants.XON_NS_URI_W,
 			XDConstants.XON_NS_PREFIX+ ":"+XonNames.X_MAP, null);
@@ -425,10 +400,6 @@ public class IniReader extends StringParser implements XonParsers {
 	}
 
 	@SuppressWarnings("unchecked")
-	/** Add XML element to INI element created from INI data.
-	 * @param ini INI data to be added.
-	 * @param el the element where to add.
-	 */
 	private static void iniToXml(final Map<String,Object> ini,final Element el){
 		for (Map.Entry<String, Object> x: ini.entrySet()) {
 			String name = x.getKey();
@@ -490,10 +461,6 @@ public class IniReader extends StringParser implements XonParsers {
 	}
 
 	@SuppressWarnings("unchecked")
-	/** Create W form of XML element from object with INI data.
-	 * @param ini object with INI data.
-	 * @return W form of XML element created from object with INI data.
-	 */
 	public final static Element iniToXmlW(final Object ini) {
 		Element el = KXmlUtils.newDocument(XDConstants.XON_NS_URI_W,
 			XDConstants.XON_NS_PREFIX + ":"+XonNames.X_MAP, null)
