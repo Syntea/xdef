@@ -4,7 +4,6 @@ import org.xdef.impl.code.CodeTable;
 import org.xdef.impl.code.DefContainer;
 import org.xdef.impl.code.DefParseResult;
 import org.xdef.proc.XXNode;
-import org.xdef.msg.SYS;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.SException;
 import org.xdef.sys.SUnsupportedOperationException;

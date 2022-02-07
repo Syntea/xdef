@@ -1,8 +1,5 @@
 package org.xdef.xon;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.net.URL;
@@ -13,7 +10,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xdef.msg.JSON;
 import org.xdef.sys.ArrayReporter;
-import org.xdef.sys.SBuffer;
 import static org.xdef.sys.SParser.NOCHAR;
 import org.xdef.sys.SPosition;
 import org.xdef.sys.SRuntimeException;
@@ -29,24 +25,24 @@ public class CsvReader extends StringParser implements XonParsers {
 	private boolean _jdef;
 	/** Parser of XON source. */
 	private final XonParser _jp;
-
-	/** Create instance of parser.
-	 * @param jp parser of INI/Properties source.
-	 * @param source String with source data.
-	 */
-	public CsvReader(final SBuffer source, final XonParser jp) {
-		super(source);
-		_jp = jp;
-	}
-
-	/** Create instance of parser.
-	 * @param jp parser of INI/Properties source.
-	 * @param source String with source data.
-	 */
-	public CsvReader(final String source, final XonParser jp) {
-		super(source);
-		_jp = jp;
-	}
+//
+//	/** Create instance of parser.
+//	 * @param jp parser of INI/Properties source.
+//	 * @param source String with source data.
+//	 */
+//	public CsvReader(final SBuffer source, final XonParser jp) {
+//		super(source);
+//		_jp = jp;
+//	}
+//
+//	/** Create instance of parser.
+//	 * @param jp parser of INI/Properties source.
+//	 * @param source String with source data.
+//	 */
+//	public CsvReader(final String source, final XonParser jp) {
+//		super(source);
+//		_jp = jp;
+//	}
 
 	/** Create instance of parser.
 	 * @param jp parser of INI/Properties source.
@@ -66,121 +62,14 @@ public class CsvReader extends StringParser implements XonParsers {
 		_jp = jp;
 	}
 
-	/** Parse line from CSV file.
-	 * @param line the string with line.
-	 * @return array with values from the line.
-	 */
-	private static List<Object> readCsvLine(final String line) {
-		List<Object> result = new ArrayList<Object>();
-		StringParser p = new StringParser(line);
-		StringBuilder sb = new StringBuilder();
-		for (;;) {
-			p.isSpaces();
-			while (p.isChar(',')) {
-				p.isSpaces();
-				if (sb.length() == 0) {
-					result.add(null);
-				} else {
-					result.add(sb.toString().trim());
-					sb.setLength(0);
-				}
-				if(p.eos()) {
-					result.add(null);
-					return result;
-				}
-			}
-			if (sb.length() != 0) {
-				result.add(sb.toString().trim());
-				sb.setLength(0);
-			}
-			if(p.eos()) {
-				return result;
-			}
-			char c = p.getCurrentChar();
-			for (;;) {
-				if (c == '\\') {
-					c = p.peekChar();
-					if (c == ',' || c == '"') {
-						sb.append(c);
-					} else {
-						throw new RuntimeException("Escape character error");
-					}
-					c = p.getCurrentChar();
-				} else if (c == '\"') {
-					p.peekChar();
-					if (p.eos()) {
-						throw new RuntimeException("Quote character missing");
-					}
-					for(;;) {
-						if (p.isChar('\"')) {
-							if (p.isChar('\"')) {
-								sb.append('\"');
-							} else {
-								break;
-							}
-						} else {
-							sb.append(p.peekChar());
-						}
-					}
-					c = p.getCurrentChar();
-				} else if (c == NOCHAR || c == ',') {
-					break;
-				} else {
-					sb.append(c);
-					c = p.nextChar();
-				}
-			}
-		}
-	}
-
-	/** Parse CSV from string.
-	 * @param source reader with CSV source data.
-	 * @return parsed object (array of rows).
-	 */
-	public final static List<Object> parseCsv(final String source) {
-		return parseCsv(new StringReader(source));
-	}
-
-	/** Parse CSV from reader.
-	 * @param in input stream with CSV source data.
-	 * @param encoding encoding of input data.
-	 * @return parsed object (array of rows).
-	 */
-	public final static List<Object> parseCsv(final InputStream in,
-		final String encoding) {
-		try {
-			Reader r = encoding == null
-				?new InputStreamReader(in) : new InputStreamReader(in,encoding);
-			return parseCsv(r);
-		} catch (RuntimeException ex) {
-			throw ex;
-		} catch (Exception ex) {
-			throw new RuntimeException(ex);
-		}
-	}
-
-	/** Parse CSV from reader.
-	 * @param in reader with CSV source data.
-	 * @return parsed object (array of rows).
-	 */
-	public final static List<Object> parseCsv(final Reader in) {
-		List<Object> result = new ArrayList<Object>();
-		try {
-			BufferedReader br = new BufferedReader(in);
-			String line;
-			while((line=br.readLine()) != null) {
-				if (!(line = line.trim()).isEmpty()) {
-					List<Object> row = readCsvLine(line);
-					result.add(row);
-				}
-			}
-			return result;
-		} catch (Exception ex) {
-			throw new RuntimeException(ex);
-		}
-	}
-
 ////////////////////////////////////////////////////////////////////////////////
+	/** Parse CSV from reader
+	 * @param in Strinbg with CSV data.
+	 * @return list with parsed CSV data.
+	 */
+	public final static List<Object> parseCSV(String in) {
+		return parseCSV(new StringReader(in), "STRING");
+	}
 
 	@SuppressWarnings("unchecked")
 	/** Parse CSV from reader
@@ -190,7 +79,7 @@ public class CsvReader extends StringParser implements XonParsers {
 	 */
 	public final static List<Object> parseCSV(Reader in, String sysId) {
 		XonParser jp = new XonObjParser();
-		IniReader xr = new IniReader(in, jp);
+		CsvReader xr = new CsvReader(in, jp);
 		if (sysId != null) {
 			xr.setSysId(sysId);
 		}
@@ -214,12 +103,15 @@ public class CsvReader extends StringParser implements XonParsers {
 //			i--;
 //		}
 //	}
-//
-//	public Object getValue() {return _jp.getResult();}
 
+	/** Read line from CSV source */
 	private void readCSVLine() {
 		StringBuilder sb = new StringBuilder();
 		SPosition pos = getPosition();
+		isSpaces();
+		if (eos()) {
+			return;
+		}
 		_jp.arrayStart(this);
 		for (;;) {
 			isSpaces();
@@ -228,19 +120,18 @@ public class CsvReader extends StringParser implements XonParsers {
 				if (sb.length() == 0) {
 					_jp.putValue(
 						new XonTools.JValue(getPosition(), XonTools.JNULL));
+					sb.setLength(0);
 				} else {
-//					_jp.putValue(pos, sb.toString().trim());
+					_jp.putValue(new XonTools.JValue(pos, sb.toString()));
 					sb.setLength(0);
 				}
-				if(eos()) {
-					_jp.putValue(
-						new XonTools.JValue(getPosition(), XonTools.JNULL));
+				if(eos() || isNewLine()) {
 					_jp.arrayEnd(this);
 					return;
 				}
 			}
 			if (sb.length() != 0) {
-//				result.add(sb.toString().trim());
+				_jp.putValue(new XonTools.JValue(pos, sb.toString()));
 				sb.setLength(0);
 			}
 			if(eos()) {
@@ -274,7 +165,11 @@ public class CsvReader extends StringParser implements XonParsers {
 						}
 					}
 					c = getCurrentChar();
-				} else if (c == NOCHAR || c == ',') {
+				} else if (c == '\n' || c == NOCHAR) {
+					_jp.putValue(new XonTools.JValue(pos, sb.toString()));
+					_jp.arrayEnd(this);
+					return;
+				} else if (c == ',') {
 					break;
 				} else {
 					sb.append(c);
@@ -283,9 +178,9 @@ public class CsvReader extends StringParser implements XonParsers {
 			}
 		}
 	}
+
 	/** Read CSV data from source. */
 	private void readCSV() {
-		isSpaces();
 		_jp.arrayStart(this);
 		while (!eos()) {
 			readCSVLine();
@@ -325,7 +220,7 @@ public class CsvReader extends StringParser implements XonParsers {
 	 * @param csv CSV object.
 	 * @return CSV string created from CSV object.
 	 */
-	public final static String toCsvString(final List csv) {
+	public final static String toCsvString(final List<Object> csv) {
 		StringBuilder sb = new StringBuilder();
 		for (Object o : csv) {
 			if (o instanceof List) {
@@ -391,7 +286,6 @@ public class CsvReader extends StringParser implements XonParsers {
 			error(JSON.JSON008);//Text after JSON not allowed
 		}
 	}
-
 	@Override
 	/** Set mode that INI file is parsed in X-definition compiler. */
 	public final void setXdefMode() { _jdef = true;}
@@ -399,8 +293,4 @@ public class CsvReader extends StringParser implements XonParsers {
 	public final void setXonMode() {} // not used
 	@Override
 	public void setJsonMode() {} // not used
-//
-//	public static void main(String... a) {
-//		//TODO
-//	}
 }
