@@ -52,6 +52,8 @@ public enum XDValueType {
 	EMAIL,
 	/** Internet IP address. */
 	IPADDR,
+	/** Telephone number. */
+	TELEPHONE,
 	/** Regular expression value. */
 	REGEX,
 	/** Regular expression result value. */

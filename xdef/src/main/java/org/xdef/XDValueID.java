@@ -52,92 +52,94 @@ public interface XDValueID {
 	public static final short XD_EMAIL = XD_PRICE + 1; // 22
 	/** Internet IP address. */
 	public static final short XD_IPADDR = XD_EMAIL + 1; // 23
+	/** Telephone number. */
+	public static final short XD_TELEPHONE = XD_IPADDR + 1; // 24
 	/** Regular expression value ID. */
-	public static final short XD_REGEX = XD_IPADDR + 1; // 24
+	public static final short XD_REGEX = XD_TELEPHONE + 1; // 25
 	/** Regular expression result value ID. */
-	public static final short XD_REGEXRESULT = XD_REGEX + 1; // 25
+	public static final short XD_REGEXRESULT = XD_REGEX + 1; // 26
 	/** Input stream value ID. */
-	public static final short XD_INPUT = XD_REGEXRESULT + 1; // 26
+	public static final short XD_INPUT = XD_REGEXRESULT + 1; // 27
 	/** Output stream value ID. */
-	public static final short XD_OUTPUT = XD_INPUT + 1; // 27
+	public static final short XD_OUTPUT = XD_INPUT + 1; // 28
 	/** org.w3c.dom.Element value ID. */
-	public static final short XD_ELEMENT = XD_OUTPUT + 1; // 28
+	public static final short XD_ELEMENT = XD_OUTPUT + 1; // 29
 	/** org.w3c.dom.Attr value ID */
-	public static final short XD_ATTR = XD_ELEMENT + 1; // 29
+	public static final short XD_ATTR = XD_ELEMENT + 1; // 30
 	/** org.w3c.dom.Text node value ID */
-	public static final short XD_TEXT = XD_ATTR + 1; // 30
+	public static final short XD_TEXT = XD_ATTR + 1; // 31
 	/** Exception object */
-	public static final short XD_EXCEPTION = XD_TEXT + 1; // 31
+	public static final short XD_EXCEPTION = XD_TEXT + 1; // 32
 	/** Report value ID */
-	public static final short XD_REPORT = XD_EXCEPTION + 1; // 32
+	public static final short XD_REPORT = XD_EXCEPTION + 1; // 33
 	/** value of XPATH */
-	public static final short XD_XPATH = XD_REPORT + 1; // 33
+	public static final short XD_XPATH = XD_REPORT + 1; // 34
 	/** value of XQUERY ID*/
-	public static final short XD_XQUERY = XD_XPATH + 1; // 34
+	public static final short XD_XQUERY = XD_XPATH + 1; // 35
 	/** Database service value (DB Connection etc) ID. */
-	public static final short XD_SERVICE = XD_XQUERY + 1; // 35
+	public static final short XD_SERVICE = XD_XQUERY + 1; // 36
 	/** Service statement ID. */
-	public static final short XD_STATEMENT = XD_SERVICE + 1; // 36
+	public static final short XD_STATEMENT = XD_SERVICE + 1; // 37
 	/** XDResultSet value ID. */
-	public static final short XD_RESULTSET = XD_STATEMENT + 1; // 37
+	public static final short XD_RESULTSET = XD_STATEMENT + 1; // 38
 	/** Parser value ID. */
-	public static final short XD_PARSER = XD_RESULTSET + 1; // 38
+	public static final short XD_PARSER = XD_RESULTSET + 1; // 39
 	/** Parser result value ID. */
-	public static final short XD_PARSERESULT = XD_PARSER + 1; // 39
+	public static final short XD_PARSERESULT = XD_PARSER + 1; // 40
 	/** Named value ID. */
-	public static final short XD_NAMEDVALUE = XD_PARSERESULT + 1; // 40
+	public static final short XD_NAMEDVALUE = XD_PARSERESULT + 1; // 41
 	/** XML stream writer ID. */
-	public static final short XD_XMLWRITER = XD_NAMEDVALUE + 1; // 41
+	public static final short XD_XMLWRITER = XD_NAMEDVALUE + 1; // 42
 	/** Item with Locale values ID. */
-	public static final short XD_LOCALE = XD_XMLWRITER + 1; // 42
+	public static final short XD_LOCALE = XD_XMLWRITER + 1; // 43
 	/** Key of uniqueSet table ID. */
-	public static final short XD_UNIQUESET_KEY = XD_LOCALE + 1; // 43
+	public static final short XD_UNIQUESET_KEY = XD_LOCALE + 1; // 44
 	/** Any value ID (may be null). */
-	public static final short XD_ANY = XD_UNIQUESET_KEY + 1; // 44
+	public static final short XD_ANY = XD_UNIQUESET_KEY + 1; // 45
 	/** Object value ID. */
-	public static final short XD_OBJECT = XD_ANY + 1; // 45
+	public static final short XD_OBJECT = XD_ANY + 1; // 46
 	/** Null value ID. */
-	static final short XD_NULL = XD_OBJECT + 1; // 46
+	static final short XD_NULL = XD_OBJECT + 1; // 47
 	/** XXElement value ID. */
-	public static final short XX_ELEMENT = XD_NULL + 1; // 47
+	public static final short XX_ELEMENT = XD_NULL + 1; // 48
 	/** XXText value ID. */
-	public static final short XX_TEXT = XX_ELEMENT + 1; // 48
+	public static final short XX_TEXT = XX_ELEMENT + 1; // 49
 	/** XXAttr value ID. */
-	public static final short XX_ATTR = XX_TEXT + 1; // 49
+	public static final short XX_ATTR = XX_TEXT + 1; // 50
 	/** XXData value ID (super type for both XXATTR and XXTEXT). */
-	public static final short XX_DATA = XX_ATTR + 1; // 50
+	public static final short XX_DATA = XX_ATTR + 1; // 51
 	/** XXDocument value ID. */
-	public static final short XX_DOCUMENT = XX_DATA + 1; // 51
+	public static final short XX_DOCUMENT = XX_DATA + 1; // 52
 	/** XXPI (Processing instruction) value ID. */
-	public static final short XX_PI = XX_DOCUMENT + 1; // 52
+	public static final short XX_PI = XX_DOCUMENT + 1; // 53
 	/** XXComment (comment) value ID. */
-	public static final short XX_COMMENT = XX_PI + 1; // 53
+	public static final short XX_COMMENT = XX_PI + 1; // 54
 	/** XXChoice value ID. */
-	public static final short XX_CHOICE = XX_COMMENT + 1; // 54
+	public static final short XX_CHOICE = XX_COMMENT + 1; // 55
 	/** XXMixed value ID. */
-	public static final short XX_MIXED = XX_CHOICE + 1; // 55
+	public static final short XX_MIXED = XX_CHOICE + 1; // 56
 	/** XXsequence value ID. */
-	public static final short XX_SEQUENCE = XX_MIXED + 1; // 56
+	public static final short XX_SEQUENCE = XX_MIXED + 1; // 57
 	/** XModel value ID. */
-	public static final short XM_MODEL = XX_SEQUENCE + 1; // 57
+	public static final short XM_MODEL = XX_SEQUENCE + 1; // 58
 	/** Undefined value ID. */
-	public static final short XD_UNDEF = XM_MODEL + 1; // 58
+	public static final short XD_UNDEF = XM_MODEL + 1; // 59
 
 ////////////////////////////////////////////////////////////////////////////////
 // Internally used types
 ////////////////////////////////////////////////////////////////////////////////
 	/** Attribute reference ID. */
-	static final short X_ATTR_REF = XD_UNDEF + 1; // 59
+	static final short X_ATTR_REF = XD_UNDEF + 1; // 60
 	/** Parser item ID. */
-	static final short X_PARSEITEM = X_ATTR_REF + 1; // 60
+	static final short X_PARSEITEM = X_ATTR_REF + 1; // 61
 	/** Value of UNIQUESET ID. */
-	static final short X_UNIQUESET_M = X_PARSEITEM + 1; // 61
+	static final short X_UNIQUESET_M = X_PARSEITEM + 1; // 62
 	/** Reference to attribute ID; used by compiler. */
-	static final short X_UNIQUESET_KEY = X_UNIQUESET_M + 1; // 62
+	static final short X_UNIQUESET_KEY = X_UNIQUESET_M + 1; // 63
 	/** Named value of UNIQUESET ID. */
-	static final short X_UNIQUESET_NAMED = X_UNIQUESET_KEY+1; // 63
+	static final short X_UNIQUESET_NAMED = X_UNIQUESET_KEY+1; // 64
 	/** Value of UNIQUESET ID. */
-	static final short X_UNIQUESET = X_UNIQUESET_NAMED  + 1; // 64
+	static final short X_UNIQUESET = X_UNIQUESET_NAMED  + 1; // 65
 	/** No type ID: ref, undefined and methods which are not of any above. */
-	static final short X_NOTYPE_VALUE = X_UNIQUESET + 1; // 65
+	static final short X_NOTYPE_VALUE = X_UNIQUESET + 1; // 66
 }

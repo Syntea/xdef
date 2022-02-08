@@ -16,7 +16,7 @@ public class DefIPAddr extends XDValueAbstract implements XDIPAddr {
 	/** Value of InetAddress. */
 	private final InetAddress _value;
 /*
-extual representation of IPv6 address used as input to methods takes one of
+textual representation of IPv6 address used as input to methods takes one of
 the following forms:
   The preferred form is x:x:x:x:x:x:x:x, where the 'x's are the hexadecimal
   values of the eight 16-bit pieces of the address. This is the full form.
@@ -91,8 +91,7 @@ at the time the object is created by querying the relevant NetworkInterface.
 Note also, that the numeric scope_id can be retrieved from Inet6Address
 instances returned from the NetworkInterface class. This can be used to
 find out the current scope ids configured on the system.
-
-	*/
+*/
 	/** Create new instance null DefIPAddr. */
 	public DefIPAddr() {_value = null;}
 
