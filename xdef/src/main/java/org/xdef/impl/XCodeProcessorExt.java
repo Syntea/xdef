@@ -160,6 +160,7 @@ import static org.xdef.impl.code.CodeTable.NEW_NAMEDVALUE;
 import static org.xdef.impl.code.CodeTable.NEW_OUTSTREAM;
 import static org.xdef.impl.code.CodeTable.NEW_REPORT;
 import static org.xdef.impl.code.CodeTable.NEW_SERVICE;
+import static org.xdef.impl.code.CodeTable.NEW_TELEPHONE;
 import static org.xdef.impl.code.CodeTable.NEW_XMLWRITER;
 import static org.xdef.impl.code.CodeTable.PARSE_DATE;
 import static org.xdef.impl.code.CodeTable.PARSE_DURATION;
@@ -217,6 +218,7 @@ import org.xdef.impl.code.DefPrice;
 import org.xdef.impl.code.DefReport;
 import org.xdef.impl.code.DefSQLService;
 import org.xdef.impl.code.DefString;
+import org.xdef.impl.code.DefTelephone;
 import org.xdef.impl.code.DefXmlWriter;
 import org.xdef.impl.compile.CompileBase;
 import org.xdef.impl.ext.XExtUtils;
@@ -962,6 +964,9 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 				}
 				return sp;
 			}
+			case NEW_TELEPHONE: 
+				stack[sp] = new DefTelephone(stack[sp].stringValue());
+				return sp;
 			case NEW_XMLWRITER: {
 				boolean writehdr =
 					item.getParam() == 3 ? stack[sp--].booleanValue() : true;

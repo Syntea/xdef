@@ -798,8 +798,10 @@ public interface CodeTable {
 	static final short NEW_REPORT = NEW_PARSERESULT + 1;
 	/** Create DB connection. */
 	static final short NEW_SERVICE = NEW_REPORT + 1;
+	/** Create Telephone object. */
+	static final short NEW_TELEPHONE = NEW_SERVICE + 1;
 	/** Create XML writer. */
-	static final short NEW_URI = NEW_SERVICE + 1;
+	static final short NEW_URI = NEW_TELEPHONE + 1;
 	/** Create namedValue. */
 	static final short NEW_XMLWRITER = NEW_URI + 1;
 

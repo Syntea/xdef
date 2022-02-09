@@ -41,17 +41,29 @@ import org.xdef.XDUniqueSetKey;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
 import org.xdef.XDValueID;
+import static org.xdef.XDValueID.XD_ANY;
+import static org.xdef.XDValueID.XD_BOOLEAN;
 import static org.xdef.XDValueID.XD_CONTAINER;
+import static org.xdef.XDValueID.XD_DATETIME;
+import static org.xdef.XDValueID.XD_DECIMAL;
 import static org.xdef.XDValueID.XD_DOUBLE;
+import static org.xdef.XDValueID.XD_ELEMENT;
 import static org.xdef.XDValueID.XD_LOCALE;
+import static org.xdef.XDValueID.XD_LONG;
+import static org.xdef.XDValueID.XD_NAMEDVALUE;
 import static org.xdef.XDValueID.XD_OUTPUT;
+import static org.xdef.XDValueID.XD_PARSERESULT;
 import static org.xdef.XDValueID.XD_REPORT;
+import static org.xdef.XDValueID.XD_RESULTSET;
 import static org.xdef.XDValueID.XD_SERVICE;
 import static org.xdef.XDValueID.XD_STATEMENT;
+import static org.xdef.XDValueID.XD_STRING;
 import static org.xdef.XDValueID.XD_XPATH;
+import static org.xdef.XDValueID.XD_XQUERY;
 import static org.xdef.XDValueID.XX_ATTR;
 import static org.xdef.XDValueID.XX_ELEMENT;
 import static org.xdef.XDValueID.XX_TEXT;
+import static org.xdef.XDValueID.X_UNIQUESET_KEY;
 import org.xdef.XDValueType;
 import org.xdef.XDXmlOutStream;
 import org.xdef.impl.code.CodeParser;
@@ -300,6 +312,7 @@ import static org.xdef.impl.code.CodeTable.NEW_PARSER;
 import static org.xdef.impl.code.CodeTable.NEW_PARSERESULT;
 import static org.xdef.impl.code.CodeTable.NEW_REPORT;
 import static org.xdef.impl.code.CodeTable.NEW_SERVICE;
+import static org.xdef.impl.code.CodeTable.NEW_TELEPHONE;
 import static org.xdef.impl.code.CodeTable.NEW_URI;
 import static org.xdef.impl.code.CodeTable.NEW_XMLWRITER;
 import static org.xdef.impl.code.CodeTable.NE_NULL;
@@ -3661,6 +3674,7 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 				case NEW_OUTSTREAM:
 				case NEW_BNFGRAMAR:
 				case NEW_SERVICE:
+				case NEW_TELEPHONE:
 				case NEW_XMLWRITER:
 				case NEW_REPORT:
 				case NEW_LOCALE:

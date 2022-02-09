@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.Currency;
 import java.util.List;
 import java.util.Map;
-import org.xdef.XDEmailAddr;
+import org.xdef.XDValue;
 import org.xdef.msg.JSON;
 import org.xdef.sys.GPSPosition;
 import org.xdef.sys.Price;
@@ -21,6 +21,7 @@ import org.xdef.sys.SRuntimeException;
  * @author Vaclav Trojan
  */
 class XonCompare {
+
 	/** Check if XON/JSON arrays from arguments are equal.
 	 * @param a1 first array.
 	 * @param a2 second array.
@@ -121,55 +122,38 @@ class XonCompare {
 			return o2 == null || o2 instanceof XonTools.JNull;
 		} else if (o1 instanceof XonTools.JNull) {
 			return o2 == null || o2 instanceof XonTools.JNull;
-		}
-		if (o1 instanceof Map) {
+		} else if (o1 instanceof Map) {
 			return o2 instanceof Map ? equalMap((Map)o1, (Map)o2) : false;
-		}
-		if (o1 instanceof List) {
+		} else if (o1 instanceof List) {
 			return o2 instanceof List ? equalArray((List) o1, (List) o2) :false;
-		}
-		if (o1 instanceof String) {
+		} else if (o1 instanceof String) {
 			return ((String) o1).equals(o2);
-		}
-		if (o1 instanceof Number) {
+		} else if (o1 instanceof Number) {
 			return (o2 instanceof Number)
 				? equalNumber((Number) o1, (Number) o2) : false;
-		}
-		if (o1 instanceof Boolean) {
+		} else if (o1 instanceof Boolean) {
 			return ((Boolean) o1).equals(o2);
-		}
-		if (o1 instanceof Character) {
+		} else if (o1 instanceof Character) {
 			return ((Character) o1).equals(o2);
-		}
-		if (o1 instanceof SDatetime) {
+		} else if (o1 instanceof SDatetime) {
 			return ((SDatetime) o1).equals(o2);
-		}
-		if (o1 instanceof SDuration) {
+		} else if (o1 instanceof SDuration) {
 			return ((SDuration) o1).equals(o2);
-		}
-		if (o1 instanceof GPSPosition) {
+		} else if (o1 instanceof GPSPosition) {
 			return ((GPSPosition) o1).equals(o2);
-		}
-		if (o1 instanceof Price) {
+		} else if (o1 instanceof Price) {
 			return ((Price) o1).equals(o2);
-		}
-		if (o1 instanceof URI) {
-			return ((URI) o1).equals(o2);
-		}
-		if (o1 instanceof File) {
+		} else if (o1 instanceof File) {
 			return ((File) o1).equals(o2);
-		}
-		if (o1 instanceof XDEmailAddr) {
-			if (o2 != null && o2 instanceof XDEmailAddr) {
-				return ((XDEmailAddr) o1).equals((XDEmailAddr) o2);
-			}
-			return false;
-		}
-		if (o1 instanceof InetAddress) {
-			return ((InetAddress) o1).equals(o2);
-		}
-		if (o1 instanceof Currency) {
+		} else if (o1 instanceof Currency) {
 			return ((Currency) o1).equals(o2);
+		} else if (o1 instanceof InetAddress) {
+			return ((InetAddress) o1).equals(o2);
+		} else if (o1 instanceof URI) {
+			return ((URI) o1).equals(o2);
+		} else if (o1 instanceof XDValue) {
+			return o2 != null && o2 instanceof XDValue
+				? ((XDValue) o1).equals((XDValue) o2) : false;
 		}
 		try {
 			byte[] b1 = (byte[]) o1;
