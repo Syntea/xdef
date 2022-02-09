@@ -11,6 +11,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import org.xdef.XDEmailAddr;
+import org.xdef.XDTelephone;
 import org.xdef.sys.GPSPosition;
 import org.xdef.sys.Price;
 import org.xdef.sys.SDatetime;
@@ -67,6 +68,8 @@ class XonToString extends XonTools {
 				return "c\"" + charToJSource((Character) x) + '"';
 			} else if (x instanceof URI) {
 				return "u\"" + jstringToSource(((URI) x).toASCIIString()) + '"';
+			} else if (x instanceof XDTelephone) {
+				return "T\"" + ((XDTelephone) x).stringValue() + '"';
 			} else if (x instanceof XDEmailAddr) {
 				return "e\""
 					+ jstringToSource(((XDEmailAddr) x).getEmailAddr()) + '"';

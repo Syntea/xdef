@@ -7,6 +7,7 @@ import java.net.InetAddress;
 import java.net.URI;
 import java.util.Currency;
 import org.xdef.impl.code.DefEmailAddr;
+import org.xdef.impl.code.DefTelephone;
 import org.xdef.msg.JSON;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.ArrayReporter;
@@ -370,7 +371,7 @@ public final class XonReader extends StringParser implements XonParsers {
 			Object result = null;
 			char ch;
 			if (_xonMode&&(i=isOneOfTokens(new String[]{"c\"","u\"","e\"","b(",
-				"D","p(","g(","/","C(","P","-P","NaN","INF","-INF"})) >= 0) {
+				"D","p(","g(","/","C(","T\"","P","-P","NaN","INF","-INF"}))>=0){
 				switch(i) {
 					case 0: // character
 						i = XonTools.readJChar(this);
@@ -499,16 +500,28 @@ public final class XonReader extends StringParser implements XonParsers {
 						}
 						break;
 					}
-					case 9:  // 'P' duration
-					case 10:  // '-P' duration
+					case 9: {// Ttelephone
+						int pos1 = getIndex();
+						while ((ch = peekChar()) >= ' ' && ch != '"') {}
+						int pos2 = getIndex() -1;
+						String s = getBufferPart(pos1,pos2);
+						if (ch =='"') {
+							return returnValue(spos, new DefTelephone(s));
+						}
+						//invalid telephone number
+						error(XDEF.XDEF809,	"telephone", s);
+						return returnValue(spos, null);
+					}
+					case 10:  // 'P' duration
+					case 11:  // '-P' duration
 						setIndex(pos);
 						if (isXMLDuration()) {
 							return returnValue(spos, getParsedSDuration());
 						}
 						break;
-					case 11:  // "NaN"
-					case 12:  // "INF"
-					case 13:  // "-INF"
+					case 12:  // "NaN"
+					case 13:  // "INF"
+					case 14:  // "-INF"
 					if (isChar('F')) {
 						return returnValue(spos, i == 9 ? Float.NaN
 							: i == 10 ? Float.POSITIVE_INFINITY

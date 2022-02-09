@@ -3,7 +3,6 @@ package org.xdef.impl.parsers;
 import org.xdef.XDParseResult;
 import org.xdef.XDParserAbstract;
 import static org.xdef.XDValueID.XD_TELEPHONE;
-import org.xdef.impl.code.DefIPAddr;
 import org.xdef.impl.code.DefTelephone;
 import org.xdef.msg.XDEF;
 import org.xdef.proc.XXNode;
@@ -16,42 +15,20 @@ public class XDParseTelephone extends XDParserAbstract {
 	public XDParseTelephone() {super();}
 
 	@Override
-	public void parseObject(XXNode xnode, XDParseResult p) {
-		int pos = p.getIndex();
+	public void parseObject(final XXNode xnode, final XDParseResult p) {
+		int i1 = p.getIndex();
 		p.isSpaces();
-		int pos1 = p.getIndex();
-		int pos2 = pos1;
-		if (p.isChar('+')) {
-			if (p.isInteger()) {
-				if (p.eos() || !p.isSpace()) {
-					pos2 = p.getIndex();
-					p.setParsedValue(new DefTelephone()); //null DefTelephone
-					p.setIndex(pos);
-					//Incorrect value of '&{0}'&{1}{: }
-					p.errorWithString(XDEF.XDEF809,
-						parserName(), p.getBufferPart(pos1, pos2));
-				}
-			}
+		String parsedValue = DefTelephone.parseTelephone(p);
+		p.setParsedValue(new DefTelephone(parsedValue));
+		if (parsedValue == null) {
+			int i2 = p.getIndex();
+			p.setIndex(i1);
+			//Incorrect value of '&{0}'&{1}{: }
+			p.errorWithString(XDEF.XDEF809,parserName(),p.getBufferPart(i1,i2));
 		}
-		while (p.isInteger()) {
-			if (p.eos()) {
-				pos2 = p.getIndex();
-				p.setParsedValue(new DefTelephone(
-					p.getBufferPart(pos1, pos2)));
-				return;
-			}
-			if (!p.isSpace()) {
-				break;
-			}
-		}
-		p.setIndex(pos);
-		p.setParsedValue(new DefIPAddr()); //null IPAddr
-		//Incorrect value of '&{0}'&{1}{: }
-		p.errorWithString(XDEF.XDEF809,
-			parserName(), p.getBufferPart(pos1, pos2));
 	}
 	@Override
-	public String parserName() {return ROOTBASENAME;}	
+	public String parserName() {return ROOTBASENAME;}
 	@Override
 	public short parsedType() {return XD_TELEPHONE;}
 }

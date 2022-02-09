@@ -1467,9 +1467,8 @@ public class SDatetime extends XMLGregorianCalendar
 		String millis = null;
 		double fraction =
 			_fraction>0.0D&&_hour>=0&&_minute>= 0&&_second>=0?_fraction:0.0D;
-		// round fraction
-		if (ms == 0) {
-			if (fraction > 0.5D) {
+		if (ms == 0) {// round seconds according to fraction
+			if (fraction >= 0.5D) {
 				sec++; //seconds can be 60 now - we solve it later!
 			}
 		} else {
@@ -1488,7 +1487,7 @@ public class SDatetime extends XMLGregorianCalendar
 			sec = 0;
 			if (min == 60) {
 				min = 0;
-				hour++; //may be 24:00:00!
+				hour++; //it may be 24:00:00!
 			}
 		}
 		fpos = 0;

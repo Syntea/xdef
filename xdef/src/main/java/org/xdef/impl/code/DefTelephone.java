@@ -6,7 +6,11 @@ import org.xdef.XDValueType;
 import org.xdef.XDValueAbstract;
 import static org.xdef.XDValueID.XD_TELEPHONE;
 import org.xdef.msg.SYS;
+import org.xdef.msg.XDEF;
 import org.xdef.sys.SIllegalArgumentException;
+import org.xdef.sys.SParser;
+import org.xdef.sys.SRuntimeException;
+import org.xdef.sys.StringParser;
 
 /** Telephone number.
  * @author Vaclav Trojan
@@ -20,8 +24,48 @@ public class DefTelephone extends XDValueAbstract implements XDTelephone  {
 
 	/** Create new instance of DefTelephone from source string.
 	 * @param tel String representation of InternetAddress.
+	 * @throws SRuntimeException in telephone number is incorrect.
 	 */
-	public DefTelephone(final String tel) {_value = tel;}
+	public DefTelephone(final String tel) {
+		_value = tel != null ? parseTelephone(new StringParser(tel)) : null;
+		if (_value == null) {
+			throw new SRuntimeException(XDEF.XDEF809, "telehone");
+		}
+	}
+
+	/** Check local part of telephone number and return string with telephone
+	 * number.
+	 * @param p parser (position is after area code).
+	 * @param wasQuote true if number is in quotation marks.
+	 * @return string with telephone number.
+	 */
+	private static String localPart(final SParser p,
+		final int pos1,
+		final boolean wasQuote) {
+		while (p.isInteger()) {
+			if (p.eos() || wasQuote && p.isChar('"')) {
+				return p.getBufferPart(wasQuote ? pos1+1 : pos1,
+					wasQuote ? p.getIndex() - 1 : p.getIndex());
+			} else if (!p.isSpace()) {
+				break;
+			}
+		}
+		return null; // nol XDTelephone
+	}
+
+	/** Parse telephone number.
+	 * @param p SParser with the telephone number.
+	 * @return string with telephone number.
+	 */
+	public static final String parseTelephone(final SParser p) {
+		int pos1 = p.getIndex();
+		boolean wasQuote = p.isChar('"');
+		if (p.isChar('+')) {
+			p.isInteger();
+			p.isSpace();
+		}
+		return localPart(p, pos1, wasQuote);
+	}
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -76,6 +120,8 @@ public class DefTelephone extends XDValueAbstract implements XDTelephone  {
 // Implementation of XDValue interface
 ////////////////////////////////////////////////////////////////////////////////
 	@Override
+	public Object getObject() {return this;}
+	@Override
 	public int hashCode() {return _value == null ? 0 : _value.hashCode();}
 	@Override
 	public boolean equals(final Object arg) {
@@ -107,5 +153,5 @@ public class DefTelephone extends XDValueAbstract implements XDTelephone  {
 	@Override
 	public boolean isNull() {return _value == null;}
 	@Override
-	public String toString() {return stringValue();}	
+	public String toString() {return stringValue();}
 }

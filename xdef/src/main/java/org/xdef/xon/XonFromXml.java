@@ -10,6 +10,11 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.xdef.XDConstants;
+import static org.xdef.xon.XonNames.X_ARRAY;
+import static org.xdef.xon.XonNames.X_ITEM;
+import static org.xdef.xon.XonNames.X_KEYATTR;
+import static org.xdef.xon.XonNames.X_MAP;
+import static org.xdef.xon.XonNames.X_VALUEATTR;
 
 /** Test X-definition transformation XML -> XON/JSON.
  * @author Vaclav Trojan

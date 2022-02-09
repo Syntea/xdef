@@ -535,7 +535,7 @@ public class CompileBase implements CodeTable, XDValueID {
 			keyParam("whiteSpace", XD_STRING, false,
 				-1, true, new DefString("collapse")));
 		parser(im, org.xdef.impl.parsers.XDParseIPAddr.class, "ipAddr");
-		
+
 		im = genParserMetnod(0, 0, null, XD_TELEPHONE,
 			keyParam("pattern", XD_STRING, false, -1, false),
 			keyParam("whiteSpace", XD_STRING, false,
@@ -1725,7 +1725,7 @@ public class CompileBase implements CodeTable, XDValueID {
 ////////////////////////////////////////////////////////////////////////////////
 		ti = XD_TELEPHONE;
 		//TODO
-		
+
 ////////////////////////////////////////////////////////////////////////////////
 // X_UNIQUESET_KEY (part of key list)
 ////////////////////////////////////////////////////////////////////////////////

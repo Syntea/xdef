@@ -11,6 +11,8 @@ import org.xdef.XDPool;
 import org.w3c.dom.Element;
 import org.xdef.XDValue;
 import org.xdef.proc.XXData;
+import static org.xdef.sys.STester.runTest;
+import static test.XDTester._xdNS;
 
 /** TestScript.
  * @author Vaclav Trojan
@@ -265,6 +267,20 @@ public final class TestScript extends XDTester {
 		ArrayReporter reporter = new ArrayReporter();
 		Element el;
 		XDPool xp;
+		xdef = // test rounding seconds acordint to milliseconds
+"<xd:def xmlns:xd='" + _xdNS + "' root='T'>\n" +
+"<xd:declaration>\n" +
+"type x xdatetime('{SSS000}yyyy-MM-dd HH:mm:ss[.S]','yyyy-MM-ddTHH:mm:ss');\n" +
+"</xd:declaration>\n" +
+"  <T D1='required x()' D2='required x()' D3='required x()'/>\n" +
+"</xd:def>";
+		assertEq("<T D1='2022-01-01T12:34:56'"+
+" D2='2022-01-01T12:34:57' D3='2022-01-01T12:34:57'/>",
+			parse(xdef, "",
+"<T D1='2022-01-01 12:34:56.1'" +
+" D2='2022-01-01 12:34:56.5' D3='2022-01-01 12:34:56.6'/>", reporter));
+		assertNoErrors(reporter);
+
 		setDebug(true);
 		_printCode = true;
 		_printCode = false;

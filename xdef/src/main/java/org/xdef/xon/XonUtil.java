@@ -44,12 +44,6 @@ public class XonUtil {
 	 */
 	public final static List<Object> parseCSV(final String s)
 		throws SRuntimeException {
-		if (s.indexOf('\n') < 0) {
-			File f = new File(s);
-			if (f.exists() && f.isFile()) {
-				return parseCSV(f);
-			}
-		}
 		return parseCSV(new StringReader(s), "STRING");
 	}
 
@@ -82,7 +76,7 @@ public class XonUtil {
 			return parseCSV(in, url.toExternalForm());
 		} catch (Exception ex) {
 			//Program exception &{0}
-			throw new SRuntimeException(SYS.SYS036, ex);			
+			throw new SRuntimeException(SYS.SYS036, ex);
 		}
 	}
 
@@ -108,7 +102,7 @@ public class XonUtil {
 			return parseCSV(new InputStreamReader(in), sysId);
 		} catch (Exception ex) {
 			//Program exception &{0}
-			throw new SRuntimeException(SYS.SYS036, ex);			
+			throw new SRuntimeException(SYS.SYS036, ex);
 		}
 	}
 
@@ -177,7 +171,7 @@ public class XonUtil {
 		return parseINI(
 			new InputStreamReader(in, Charset.forName("ISO-8859-1")), sysId);
 	}
-	
+
 	/** Parse JSON document from input reader.
 	 * @param in reader with JSON source.
 	 * @param sysid System id.
@@ -373,7 +367,7 @@ public class XonUtil {
 ////////////////////////////////////////////////////////////////////////////////
 //  to String tools
 ////////////////////////////////////////////////////////////////////////////////
-	
+
 	/** Create CSV string from CSV object.
 	 * @param x CSV object.
 	 * @return CSV string created from CSV object.
@@ -381,7 +375,7 @@ public class XonUtil {
 	public final static String toCsvString(final List<Object> x) {
 		return CsvReader.toCsvString(x);
 	}
-	
+
 	/** Create INI/Properties from object.
 	 * @param x INI/Properties object.
 	 * @return string with INI/Properties format.

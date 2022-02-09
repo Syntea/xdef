@@ -1,6 +1,5 @@
 package org.xdef.xon;
 
-import java.net.InetAddress;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -12,15 +11,12 @@ import org.xdef.XDConstants;
 import org.xdef.impl.xml.KNamespace;
 import org.xdef.msg.JSON;
 import org.xdef.sys.SRuntimeException;
-import org.xdef.sys.SUtils;
-import org.xdef.sys.StringParser;
 import org.xdef.xml.KXmlUtils;
 import static org.xdef.xon.XonNames.X_ARRAY;
 import static org.xdef.xon.XonNames.X_ITEM;
 import static org.xdef.xon.XonNames.X_KEYATTR;
 import static org.xdef.xon.XonNames.X_MAP;
 import static org.xdef.xon.XonNames.X_VALUEATTR;
-import static org.xdef.xon.XonTools.genCharAsUTF;
 import static org.xdef.xon.XonTools.genXMLValue;
 import static org.xdef.xon.XonTools.replaceColonInXMLName;
 import static org.xdef.xon.XonTools.toXmlName;
@@ -86,147 +82,6 @@ class XonToXml extends XonTools implements XonNames {
 		return e;
 	}
 
-	/** Generate XML form from XON/JSON string value.
-	 * @param val Object with value.
-	 * @param mode 0 .. text node, 1.. attribute, 2.. array of simple items
-	 * @return XML form of string from the argument val,
-	 */
-	final static String jstringToXML(final Object val, final int mode) {
-		if (val == null) {
-			return "null";
-		}
-		if (val instanceof String) {
-			String s = (String) val;
-			if (s.isEmpty()) {
-				return mode == 1 ? "" : "\"\"";
-			}
-			if ("true".equals(s) || "false".equals(s) || "null".equals(s)) {
-				return '"' + s + '"';
-			}
-			char ch = s.charAt(0);
-			int len = s.length();
-			boolean addQuot = mode == 2 || mode == 1 && (ch == '[' || ch == '"')
-				|| mode == 0 && (ch <= ' ' || s.charAt(len-1) <= ' ');
-			if (!addQuot) {
-				int i = 0;
-				if (ch == '-' && len > 1) {
-					i = 1;
-					ch = s.charAt(1);
-				}
-				if (ch >= '0' && ch <= '9') { //if it is a number => qoute
-					if (i + 1 == len) {
-						return '"' + s + '"';
-					}
-					if (ch!='0'||(ch=s.charAt(i+1))=='.'||ch=='E'||ch=='e') {
-						// number without redundant leading zeroes
-						StringParser p = new StringParser(s);
-						if ((p.isFloat() || p.isInteger()) && p.eos()) {
-							return '"' + s + '"';
-						}
-					}
-				}
-			}
-			StringBuilder sb = new StringBuilder();
-			for (int i = 0; i < len; i++) {
-				switch (ch = s.charAt(i)) {
-					case '\t':
-						if (mode == 1 || addQuot) { // force quote attributes
-							if (!addQuot) {
-								SUtils.modifyStringBuilder(sb, "\\", "\\\\");
-								SUtils.modifyStringBuilder(sb, "\"", "\\\"");
-								addQuot = true;
-							}
-							sb.append("\\t");
-						} else {
-							sb.append(ch);
-						}
-						break;
-					case '\n':
-						if (mode == 1 || addQuot) {  // force quote attributes
-							if (!addQuot) {
-								SUtils.modifyStringBuilder(sb, "\\", "\\\\");
-								SUtils.modifyStringBuilder(sb, "\"", "\\\"");
-								addQuot = true;
-							}
-							sb.append("\\n");
-						} else {
-							sb.append(ch);
-						}
-						break;
-					case '\r':
-						if (!addQuot) { // force quote
-							SUtils.modifyStringBuilder(sb, "\\", "\\\\");
-							SUtils.modifyStringBuilder(sb, "\"", "\\\"");
-							addQuot = true;
-						}
-						sb.append("\\r");
-						break;
-					case '\f':
-						if (!addQuot) { // force quote
-							SUtils.modifyStringBuilder(sb, "\\", "\\\\");
-								SUtils.modifyStringBuilder(sb, "\"", "\\\"");
-							addQuot = true;
-						}
-						sb.append("\\f");
-						break;
-					case '\b':
-						if (!addQuot) { // force quote
-							SUtils.modifyStringBuilder(sb, "\\", "\\\\");
-							SUtils.modifyStringBuilder(sb, "\"", "\\\"");
-							addQuot = true;
-						}
-						sb.append("\\b");
-						break;
-					case '\\':
-						if (mode == 2 || addQuot) { // force quote array items
-							if (!addQuot) {
-								SUtils.modifyStringBuilder(sb, "\\", "\\\\");
-								SUtils.modifyStringBuilder(sb, "\"", "\\\"");
-								addQuot = true;
-							}
-							sb.append("\\\\");
-						} else {
-							sb.append(ch);
-						}
-						break;
-					case '"':
-						if (mode == 2 || addQuot) { // force quote array items
-							if (!addQuot) {
-								SUtils.modifyStringBuilder(sb, "\\", "\\\\");
-								SUtils.modifyStringBuilder(sb, "\"", "\\\"");
-								addQuot = true;
-							}
-							sb.append("\\\"");
-						} else {
-							sb.append(ch);
-						}
-						break;
-					default:
-						if (ch < ' '|| StringParser.getXmlCharType(ch,
-							StringParser.XMLVER1_0) ==
-							StringParser.XML_CHAR_ILLEGAL) {
-							if (!addQuot) { // force quote
-								SUtils.modifyStringBuilder(sb, "\\", "\\\\");
-								SUtils.modifyStringBuilder(sb, "\"", "\\\"");
-								addQuot = true;
-							}
-							sb.append(genCharAsUTF(ch));
-						} else {
-							sb.append(ch);
-						}
-				}
-			}
-			if (!addQuot) {
-				return s;
-			}
-			return '"' + sb.toString() + '"';
-		} else if (val instanceof InetAddress) {
-			return val.toString().substring(1);
-		} else {// Number or Boolean or othr objects
-			return val.toString();
-		}
-	}
-
 	/** Get prefix of XML name.
 	 * @param s XML name.
 	 * @return prefix of XML name.
@@ -266,20 +121,6 @@ class XonToXml extends XonTools implements XonNames {
 	 */
 	private void addValueAsText(final Element e, final Object val) {
 		e.appendChild(_doc.createTextNode(jstringToXML(val, 0)));
-	}
-
-	/** Check if the argument is a simple value. Simple value is null,
-	 * Number, Boolean, String or X_Value with object which is simple value.
-	 * @param val Object to be tested.
-	 * @return true if the argument is a simple value.
-	 */
-	public final static boolean isSimpleValue(final Object val) {
-		Object o;
-		return val == null || val instanceof Number || val instanceof Boolean
-			|| val instanceof String || val instanceof XonTools.JValue
-			&& ((o=((XonTools.JValue) val).getValue()) == null
-				|| o instanceof Number || o instanceof Boolean
-				|| o instanceof String);
 	}
 
 	/** Add items from array to element starting with given position.
@@ -339,8 +180,6 @@ class XonToXml extends XonTools implements XonNames {
 			}
 		}
 	}
-
-////////////////////////////////////////////////////////////////////////////////
 
 	/** If all items of the array are simple values or arrays with simple values
 	 * return the string with the array. Otherwise, return null.
