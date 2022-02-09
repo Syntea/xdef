@@ -252,6 +252,7 @@ import static org.xdef.impl.code.CodeTable.NEW_OUTSTREAM;
 import static org.xdef.impl.code.CodeTable.NEW_PARSERESULT;
 import static org.xdef.impl.code.CodeTable.NEW_REPORT;
 import static org.xdef.impl.code.CodeTable.NEW_SERVICE;
+import static org.xdef.impl.code.CodeTable.NEW_TELEPHONE;
 import static org.xdef.impl.code.CodeTable.NEW_URI;
 import static org.xdef.impl.code.CodeTable.NEW_XMLWRITER;
 import static org.xdef.impl.code.CodeTable.OUT1_STREAM;
@@ -1724,7 +1725,8 @@ public class CompileBase implements CodeTable, XDValueID {
 // TELEPHONE
 ////////////////////////////////////////////////////////////////////////////////
 		ti = XD_TELEPHONE;
-		//TODO
+		method(ti, genInternalMethod(NEW_TELEPHONE, XD_TELEPHONE,
+			ANY_MODE, 1, 1, XD_STRING), "#");
 
 ////////////////////////////////////////////////////////////////////////////////
 // X_UNIQUESET_KEY (part of key list)
