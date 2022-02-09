@@ -240,7 +240,7 @@ TypeIdentifier ::= ("int" | "String" | "float" | "boolean" | "char" | "Datetime"
   | "Bytes" | "XmlOutStream" | "BNFGrammar" | "BNFRule" | "Parser" | "Service"
   | "ResultSet" | "Statement" | "ParseResult" | "Locale" | "uniqueSetKey"
   | "AnyValue" | "Output" | "Input" | "NamedValue" | "Regex" | "GPSPosition"
-  | "Price" | "URI" | "EmailAddr") $rule
+  | "Price" | "Telephone" | "URI" | "EmailAddr") $rule
 
 Value ::= (Constructor | PredefinedConstant | Increment
   | Method | VariableReference | KeyParameterReference | Literal | AttributeName

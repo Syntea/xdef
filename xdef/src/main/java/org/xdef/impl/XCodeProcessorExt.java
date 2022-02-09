@@ -18,6 +18,7 @@ import org.xdef.XDParseResult;
 import org.xdef.XDParser;
 import org.xdef.XDReport;
 import org.xdef.XDService;
+import org.xdef.XDTelephone;
 import org.xdef.XDValue;
 import org.xdef.XDValueID;
 import static org.xdef.XDValueID.XD_ANY;
@@ -278,6 +279,8 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 							return (XDEmailAddr) p;
 						case XD_CURRENCY:
 							return (XDCurrency) p;
+						case XD_TELEPHONE:
+							return (XDTelephone) p;
 						case XD_IPADDR:
 							return (XDIPAddr) p;
 					}
