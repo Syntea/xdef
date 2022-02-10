@@ -19,6 +19,7 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.Stack;
 import java.util.TimeZone;
+import static org.xdef.sys.SParser.NOCHAR;
 
 /** String parser used for constructing specific parsers.
  * @author  Vaclav Trojan
@@ -3122,22 +3123,19 @@ public class StringParser extends SReporter implements SParser {
 	 */
 	private int readUnsignedIntSpecifiedLength(final int digits) {
 		int result;
-		if ((result = _ch - '0') >= 0 && result <= 9) {
+		if ((result = isDigit()) >= 0) {
 			int i;
-			nextChar();
 			if (digits == 0) {
-				while ((i = _ch - '0') >= 0 && i <= 9) {
+				while((i = isDigit()) >= 0) {
 					result = result * 10 + i;
-					nextChar();
 				}
 			} else {
 				int ndigits = digits;
 				while (--ndigits > 0) {
-					if ((i = _ch - '0') < 0 || i > 9) {
+					if ((i = isDigit()) < 0) {
 						return Integer.MIN_VALUE;
 					}
 					result = result * 10 + i;
-					nextChar();
 				}
 			}
 			return result;
@@ -3146,11 +3144,12 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	private TimeZone readTimeZone(final int n, final char pat) {
-		if (pat == 'Z' && _ch == 'Z' && (n == 0 || n == 6)) { //Z => UTC+00:00
-			nextChar();
+		if (pat == 'Z' && isChar('Z') && (n == 0 || n == 6)) { //Z => UTC+00:00
 			return TimeZone.getTimeZone("UTC");
-		} else if ((pat == 'Z' && (n > 0 && n < 6) || pat == 'z')
-			&& _ch != '-' && _ch != '+') {//zone name
+		}
+		char ch;
+		if ((ch = isOneOfChars("+-")) == NOCHAR
+			&& (pat == 'Z' && (n > 0 && n < 6) || pat == 'z')) {//zone name
 			ParsePosition pp = new ParsePosition(getIndex());
 			boolean zoneOffsetSpec = false;
 			new SimpleDateFormat(
@@ -3160,8 +3159,9 @@ public class StringParser extends SReporter implements SParser {
 				String s = _source.substring(getIndex(), pp.getIndex());
 				int ndx;
 				if ((ndx=s.indexOf('+')) > 0 || (ndx=s.indexOf('-')) > 0) {
-					 newPos = getIndex() + ndx;
-					 zoneOffsetSpec = true;
+					ch = s.charAt(ndx);
+					newPos = getIndex() + ndx;
+					zoneOffsetSpec = true;
 				}
 			} else {
 				return null; //not parsed
@@ -3177,31 +3177,25 @@ public class StringParser extends SReporter implements SParser {
 				}
 			}
 			// parsed OK
-			setIndex(newPos);
 			if (!zoneOffsetSpec) {
+				setIndex(newPos);
 				return tz;
 			}//after UTC or GMT we still try to read offset!
+			setIndex(newPos + 1);
 		}
-		boolean minus = _ch == '-';
-		if (_ch != '+' && !minus) {
+		if (eos() || ch == NOCHAR) {
 			return null; //'+' or '-' expected
 		}
-		if (incIndex() < _endPos) {
-			_ch = _source.charAt(getIndex());
-		} else {
-			return null; //number expected
-		}
+		boolean minus = ch == '-';
 		int j;
 		int i;
 		if (pat == 'Z' && n == 6) {
 			i = readUnsignedIntSpecifiedLength(2);
-			if (_ch == ':') {
-				nextChar();
-			} else {
-				return null;
+			if (!isChar(':')) {
+				return null; // expected explicit zone (+-)HH:mm
 			}
 			j = readUnsignedIntSpecifiedLength(2);
-		} else if (n == 5) {
+		} else if (n == 5) { // expected explicit zone (+-)HHmm
 			i = readUnsignedIntSpecifiedLength(2);
 			j = readUnsignedIntSpecifiedLength(2);
 		} else {
@@ -3211,33 +3205,28 @@ public class StringParser extends SReporter implements SParser {
 			if (i < 0) {
 				return null; //number expected
 			}
-			if (_ch == ':') {
-				if (getIndex() - pos > 2) {
-					return null;
-				}
-				if (incIndex() < _endPos) {
-					pos = getIndex();
-					_ch = _source.charAt(pos);
-					if ((j = readUnsignedIntSpecifiedLength(nn)) < 0 ||
-						getIndex() - pos > 2) {
-						return null; //number expected
-					}
-				} else {
+			if (isChar(':')) {
+				if (getIndex() - pos > 3 || eos()) {
 					return null; //number expected after ':'
+				}
+				pos = getIndex();
+				if ((j = readUnsignedIntSpecifiedLength(nn)) < 0
+					|| getIndex() - pos > 2) {
+					return null; //number expected
 				}
 			} else {
 				if (n != 0 && n != 4) {
 					return null; // ':' required
 				}
-				j = getIndex() - pos;
-				if (j < 3 || j > 4) {
+				if ((j = getIndex() - pos) < 3 || j > 4) {
 					return null; //if not colon then 3 or 4 digits required!!
 				}
-				j = i % 100;
+				j = i % 100; // j was 3 or 4 -> HHmm; we divide it
 				i /= 100;
 			}
 		}
-		if (i == Integer.MIN_VALUE || j == Integer.MIN_VALUE) {
+		if (i == Integer.MIN_VALUE || j == Integer.MIN_VALUE
+			|| i > 14 || j > 59) {
 			return null; //something wrong
 		}
 		i *= 3600000;
@@ -3719,7 +3708,7 @@ public class StringParser extends SReporter implements SParser {
 	 * @return null or Report if format is not valid.
 	 */
 	private Report checkLiteral() {
-		int beg = getIndex();
+		int pos = getIndex();
 		nextChar();
 		while (!eos()) {
 			if (isChar('\'')) {
@@ -3731,7 +3720,7 @@ public class StringParser extends SReporter implements SParser {
 			}
 		}
 		//Datetime mask: unclosed quoted literal &{0}{, position: }
-		return Report.error(SYS.SYS049, beg + 1);
+		return Report.error(SYS.SYS049, pos + 1);
 	}
 
 	/** Check executable part of mask.
