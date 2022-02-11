@@ -14,6 +14,39 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.LinkedHashMap;
+import static org.xdef.msg.BNF.BNF001;
+import static org.xdef.msg.BNF.BNF002;
+import static org.xdef.msg.BNF.BNF003;
+import static org.xdef.msg.BNF.BNF004;
+import static org.xdef.msg.BNF.BNF005;
+import static org.xdef.msg.BNF.BNF006;
+import static org.xdef.msg.BNF.BNF007;
+import static org.xdef.msg.BNF.BNF008;
+import static org.xdef.msg.BNF.BNF009;
+import static org.xdef.msg.BNF.BNF010;
+import static org.xdef.msg.BNF.BNF011;
+import static org.xdef.msg.BNF.BNF012;
+import static org.xdef.msg.BNF.BNF013;
+import static org.xdef.msg.BNF.BNF014;
+import static org.xdef.msg.BNF.BNF015;
+import static org.xdef.msg.BNF.BNF017;
+import static org.xdef.msg.BNF.BNF018;
+import static org.xdef.msg.BNF.BNF019;
+import static org.xdef.msg.BNF.BNF020;
+import static org.xdef.msg.BNF.BNF021;
+import static org.xdef.msg.BNF.BNF022;
+import static org.xdef.msg.BNF.BNF023;
+import static org.xdef.msg.BNF.BNF024;
+import static org.xdef.msg.BNF.BNF025;
+import static org.xdef.msg.BNF.BNF026;
+import static org.xdef.msg.BNF.BNF027;
+import static org.xdef.msg.BNF.BNF028;
+import static org.xdef.msg.BNF.BNF029;
+import static org.xdef.msg.BNF.BNF030;
+import static org.xdef.msg.BNF.BNF031;
+import static org.xdef.msg.BNF.BNF032;
+import static org.xdef.msg.BNF.BNF041;
+import static org.xdef.sys.SParser.NOCHAR;
 
 /** Provides BNF grammar parsing and compiling.
  * BNFGrammar object you can create by the static method compile
@@ -500,16 +533,7 @@ public final class BNFGrammar {
 		return new BNFRuleObj(name, this);
 	}
 
-	private boolean addRule(final BNFRuleObj rule) {
-		for (BNFRule r: _rules) {
-			if (r.getName().equals(rule._name)) {
-				return false;
-			}
-		}
-		_rules.add(rule);
-		return true;
-	}
-	private BNFChar newItemChar(final boolean i,final char c) {
+	private BNFChar newItemChar(final boolean i, final char c) {
 		return new BNFChar(i, c);
 	}
 	private BNFToken newItemToken(final boolean i, final String s) {
@@ -593,10 +617,11 @@ public final class BNFGrammar {
 		return result.toString();
 	}
 
+	/** Special characters for separators. */
 	private final static String SPECCHARS;
 	static {
-		final StringBuilder sb = new StringBuilder();
-		for (char c = 0; c < 32; c++) {
+		final StringBuilder sb = new StringBuilder("\0\1\2\3\4\5\6\7");
+		for (char c = 8; c < 32; c++) {
 			sb.append(c);
 		}
 		SPECCHARS = sb.toString();
@@ -609,9 +634,8 @@ public final class BNFGrammar {
 	 */
 	private static String genBNFString(final String s,
 		final boolean genBrackets) {
-		String separators = SPECCHARS;
-		separators += (s.indexOf('"') >= 0) ? '"' : '\'';
-		StringTokenizer st = new StringTokenizer(s, separators, true);
+		StringTokenizer st = new StringTokenizer(
+			s, SPECCHARS + (s.indexOf('"') >= 0 ? '"' : '\''), true);
 		int numTokens = st.countTokens();
 		final StringBuilder sb = new StringBuilder();
 		if (genBrackets && numTokens > 1) {
@@ -636,11 +660,10 @@ public final class BNFGrammar {
 				sb.append(t);
 				sb.append(delimiter);
 			}
-			if (st.hasMoreElements()) {
-				sb.append(' ');
-			} else {
+			if (!st.hasMoreElements()) {
 				break;
 			}
+			sb.append(' ');
 		}
 		if (genBrackets && numTokens > 1) {
 			sb.append(')');
@@ -856,7 +879,7 @@ public final class BNFGrammar {
 
 	private final class BNFChar extends BNFItem {
 		final char _c;
-		final boolean _i;
+		final boolean _i; // if true case insensitive
 		BNFChar(boolean i, final char c) {super(); _c = c; _i = i;}
 		@Override
 		final boolean perform() {
@@ -894,7 +917,7 @@ public final class BNFGrammar {
 
 	private final class BNFToken extends BNFItem {
 		final String _token;
-		final boolean _i;
+		final boolean _i; // if true case insensitive
 		BNFToken(final boolean i, final String token) {
 			super(); _token = token.intern();
 			_i = i;
@@ -902,8 +925,8 @@ public final class BNFGrammar {
 		@Override
 		final boolean perform() {
 			if (_max == 1) {
-				return _i ? _p.isTokenIgnoreCase(_token) : _p.isToken(_token)
-					|| _min == 0;
+				return _i ? _p.isTokenIgnoreCase(_token)
+					: (_p.isToken(_token) || _min == 0);
 			}
 			setPosition();
 			for (int count = 0; count < _max; count++) {
@@ -936,7 +959,7 @@ public final class BNFGrammar {
 
 	private final class BNFTokens extends BNFItem {
 		final String[] _tokens;
-		final boolean _i;
+		final boolean _i; // if true case insensitive
 		BNFTokens(final boolean i, final String... tokens) {
 			super();
 			_tokens = tokens;
@@ -2337,6 +2360,7 @@ public final class BNFGrammar {
 			}
 			for (;;) {
 				if (eos()) {
+					setIndex(0);
 					error(BNF012); //Missing ')'
 					return;
 				}
@@ -2349,7 +2373,10 @@ public final class BNFGrammar {
 					try {
 						params.add(getParsedDouble());
 					} catch (Exception ex) {
+						int pos = getIndex();
+						setIndex(0);
 						error(BNF013); //Incorrect number
+						setIndex(pos);
 					}
 				} else if (isSignedInteger()) {
 					params.add(getParsedLong());
@@ -2360,8 +2387,7 @@ public final class BNFGrammar {
 				} else if ((c = isOneOfChars("#'\"")) != NOCHAR) {
 					readLiteral(c);
 					skipSeparators();
-					StringBuilder sb = new StringBuilder(
-						_parsedChars.toString());
+					StringBuilder sb=new StringBuilder(_parsedChars.toString());
 					while ((c = isOneOfChars("#'\"")) != NOCHAR) {
 						readLiteral(c);
 						skipSeparators();
@@ -2369,7 +2395,10 @@ public final class BNFGrammar {
 					}
 					params.add(sb.toString());
 				} else {
+					int pos = getIndex();
+					setIndex(0);
 					error(BNF014); //Incorrect method parameter
+					setIndex(pos);
 				}
 				skipSeparators();
 				if (isChar(',')) {
@@ -2377,6 +2406,7 @@ public final class BNFGrammar {
 				} else if (isChar(')')) {
 					return;
 				} else {
+					setIndex(0);
 					error(BNF011); //Expected ',' or ')'
 					return;
 				}
@@ -2513,8 +2543,9 @@ public final class BNFGrammar {
 				fullName = s;
 				if ((ndx = s.indexOf('(')) > 0) {
 					fullName = s.substring(0, ndx);
+					SPosition spos = getPosition();
 					pushParser(null);
-					setSourceBuffer(s.substring(ndx));
+					setSourceBuffer(new SBuffer(s.substring(ndx), spos));
 					readAliasParams(params);
 					popParser();
 				}
@@ -2631,11 +2662,13 @@ public final class BNFGrammar {
 				return false;
 			}
 			String name = _parsedChars.toString();
-			if (_grammar.getRule(name) != null) {
+			BNFRuleObj rule = (BNFRuleObj) _grammar.getRule(name);
+			if (rule != null) {
 				error(BNF019, name); //Redefinifion of rule '&{0}'
+			} else {
+				rule = _grammar.newRule(name);
+				_grammar._rules.add(rule);
 			}
-			BNFRuleObj rule = _grammar.newRule(name);
-			_grammar.addRule(rule);
 			_item = null;
 			nextSymbol();
 			BNFItem item;

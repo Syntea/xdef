@@ -9,6 +9,11 @@ public interface SParser {
 	 * or "no character" value. */
 	public static final char NOCHAR = 0;
 
+	/** Get end index of source buffer.
+	 * @return end index of source buffer.
+	 */
+	public int endPos();
+
 	/** Get the parsed string.
 	 * @return parsed string.
 	 */

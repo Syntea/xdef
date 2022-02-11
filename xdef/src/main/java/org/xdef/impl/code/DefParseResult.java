@@ -9,7 +9,9 @@ import org.xdef.XDParseResult;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
 import java.math.BigDecimal;
+import static org.xdef.XDValueID.XD_PARSERESULT;
 import org.xdef.XDValueType;
+import static org.xdef.sys.SParser.NOCHAR;
 
 /** DefParseResult contains the source and results of parsing.
  * @author Vaclav Trojan
@@ -54,6 +56,8 @@ public final class DefParseResult extends XDValueAbstract
 ////////////////////////////////////////////////////////////////////////////////
 //  Implementation of SParser interface
 ////////////////////////////////////////////////////////////////////////////////
+	@Override
+	public int endPos() {return _source == null ? 0 : _source.length();}
 	@Override
 	public final String getSourceBuffer() {return _source;}
 	@Override
@@ -100,8 +104,7 @@ public final class DefParseResult extends XDValueAbstract
 	@Override
 	public final boolean isSpace() {
 		char ch;
-		if (_srcIndex < _source.length()
-			&& ((ch = _source.charAt(_srcIndex)) == ' '
+		if (_srcIndex < _source.length() && ((ch=_source.charAt(_srcIndex))==' '
 			|| ch == '\n' || ch == '\r' || ch == '\t')) {
 			_srcIndex++;
 			return true;
@@ -111,8 +114,7 @@ public final class DefParseResult extends XDValueAbstract
 	@Override
 	public final boolean isSpaces() {
 		char ch;
-		if (_srcIndex < _source.length()
-			&& ((ch = _source.charAt(_srcIndex)) == ' '
+		if (_srcIndex < _source.length() && ((ch=_source.charAt(_srcIndex))==' '
 			|| ch == '\n' || ch == '\r' || ch == '\t')) {
 			_srcIndex++;
 			while (_srcIndex < _source.length()
@@ -135,7 +137,7 @@ public final class DefParseResult extends XDValueAbstract
 	@Override
 	public final char notChar(final char ch) {
 		char c;
-		if (_srcIndex>=_source.length() || ch==(c=_source.charAt(_srcIndex))){
+		if (_srcIndex>=_source.length() || ch==(c=_source.charAt(_srcIndex))) {
 			return NOCHAR;
 		}
 		_srcIndex++;
@@ -153,8 +155,8 @@ public final class DefParseResult extends XDValueAbstract
 	public final char isUpperCaseLetter() {
 		char ch;
 		if (_srcIndex < _source.length()) {
-			if (Character.isLetter(ch = _source.charAt(_srcIndex)) &&
-				ch == Character.toUpperCase(ch)) {
+			if (Character.isLetter(ch = _source.charAt(_srcIndex))
+				&& ch == Character.toUpperCase(ch)) {
 				char c = ch;
 				return c;
 			}
@@ -165,8 +167,8 @@ public final class DefParseResult extends XDValueAbstract
 	public final char isLowerCaseLetter() {
 		char ch;
 		if (_srcIndex < _source.length()) {
-			if (Character.isLetter(ch = _source.charAt(_srcIndex)) &&
-				ch == Character.toLowerCase(ch)) {
+			if (Character.isLetter(ch = _source.charAt(_srcIndex))
+				&& ch == Character.toLowerCase(ch)) {
 				char c = ch;
 				return c;
 			}
@@ -176,8 +178,8 @@ public final class DefParseResult extends XDValueAbstract
 	@Override
 	public final char isInInterval(final char minCh, final char maxCh) {
 		char c;
-		if (_srcIndex >= _source.length() ||
-			(c = _source.charAt(_srcIndex)) < minCh || c > maxCh) {
+		if (_srcIndex >= _source.length()
+			|| (c = _source.charAt(_srcIndex)) < minCh || c > maxCh) {
 			return NOCHAR;
 		}
 		_srcIndex++;
@@ -186,8 +188,8 @@ public final class DefParseResult extends XDValueAbstract
 	@Override
 	public final char notInInterval(final char minCh, final char maxCh) {
 		char c;
-		if (_srcIndex >= _source.length() ||
-			(c = _source.charAt(_srcIndex)) >= minCh || c <= maxCh) {
+		if (_srcIndex >= _source.length()
+			|| (c = _source.charAt(_srcIndex)) >= minCh || c <= maxCh) {
 			return NOCHAR;
 		}
 		_srcIndex++;
@@ -274,8 +276,7 @@ public final class DefParseResult extends XDValueAbstract
 	}
 	@Override
 	public final char peekChar() {
-		return _srcIndex >= _source.length()
-			? NOCHAR : _source.charAt(_srcIndex++);
+		return _srcIndex>=_source.length()?NOCHAR:_source.charAt(_srcIndex++);
 	}
 	@Override
 	public final char getCurrentChar() {
@@ -283,8 +284,7 @@ public final class DefParseResult extends XDValueAbstract
 	}
 	@Override
 	public final char nextChar() {
-		return _srcIndex < _source.length()
-			? _source.charAt(_srcIndex++) : NOCHAR;
+		return _srcIndex < _source.length()?_source.charAt(_srcIndex++):NOCHAR;
 	}
 	@Override
 	public final boolean isToken(final String s) {
@@ -316,8 +316,7 @@ public final class DefParseResult extends XDValueAbstract
 		for (int i = 0; i < tokens.length; i++) {
 			String token = tokens[i];
 			int tlen = token.length();
-			if (_srcIndex + tlen < _source.length()
-				&& token.equalsIgnoreCase(
+			if (_srcIndex + tlen < _source.length() && token.equalsIgnoreCase(
 					_source.substring(_srcIndex, _srcIndex + tlen))) {
 				if (tlen > len) {
 					result = i;
@@ -333,8 +332,7 @@ public final class DefParseResult extends XDValueAbstract
 	@Override
 	public final boolean isTokenIgnoreCase(String token) {
 		int len = token.length();
-		int end = _source.length();
-		if (_srcIndex + len <= end &&
+		if (_srcIndex + len <= _source.length() &&
 			token.equalsIgnoreCase(_source.substring(_srcIndex,_srcIndex+len))){
 			_srcIndex+= len;
 			return true;
@@ -386,9 +384,8 @@ public final class DefParseResult extends XDValueAbstract
 	public final boolean findToken(final String token) {
 		int len = token.length();
 		char c = token.charAt(0);
-		int endPos = _source.length();
-		while (_srcIndex + len <= endPos) {
-			for (int j = _srcIndex; j + len <= endPos; j++) {
+		while (_srcIndex + len <= _source.length()) {
+			for (int j = _srcIndex; j + len <= _source.length(); j++) {
 			id:
 				if (_source.charAt(j) == c) {
 					for (int i = 1; i < len; i++) {
@@ -402,7 +399,7 @@ public final class DefParseResult extends XDValueAbstract
 			}
 			nextChar();
 		}
-		_srcIndex = endPos;
+		_srcIndex = _source.length();
 		return false;
 	}
 	@Override

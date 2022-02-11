@@ -1385,10 +1385,11 @@ public class StringParser extends SReporter implements SParser {
 		}
 	}
 
-	/** Get length of source buffer.
-	 * @return length of source buffer.
+	@Override
+	/** Get end index of source buffer.
+	 * @return end index of source buffer.
 	 */
-	public int getBufLength() {return _endPos;}
+	public int endPos() {return _endPos;}
 
 	@Override
 	/** Prepare character from the next position.
@@ -1450,7 +1451,7 @@ public class StringParser extends SReporter implements SParser {
 	 */
 	public final boolean chkBufferIndex() {return getIndex() < _endPos;}
 
-	/** Get <code>SPosition</code> object.
+	/** Get actual SPosition of parsed source.
 	 * @return actual source position.
 	 */
 	public final SPosition getPosition() {return new SPosition(this);}

@@ -421,8 +421,7 @@ XdefOption ::= "moreAttributes" | "moreElements" | "moreText"
   | "setTextUpperCase" | "setTextLowerCase"
   | "acceptQualifiedAttr" | "notAcceptQualifiedAttr"
   | "trimAttr" | "noTrimAttr" | "trimText" | "noTrimText"
-  | "resolveEntities" | "ignoreEntities"
-  | "resolveIncludes" | "ignoreIncludes"
+  | "resolveEntities" | "ignoreEntities" | "resolveIncludes" | "ignoreIncludes"
   | "preserveComments" | "ignoreComments"
 
 /******************************************************************************/
