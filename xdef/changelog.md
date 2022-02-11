@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 41.0.5, release-date 2022-02-09
+# Version 41.0.5, release-date 2022-02-11
 * fixed bug rounding of time and millisedonds are equal to 500 (the second was
   not incresed by one).
 * methods `XDDocument.parseXComponent(...)` are now deprecated

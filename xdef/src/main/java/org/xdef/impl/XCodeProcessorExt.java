@@ -967,7 +967,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 				}
 				return sp;
 			}
-			case NEW_TELEPHONE: 
+			case NEW_TELEPHONE:
 				stack[sp] = new DefTelephone(stack[sp].stringValue());
 				return sp;
 			case NEW_XMLWRITER: {
