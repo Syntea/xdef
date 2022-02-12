@@ -1,8 +1,9 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 41.0.5, release-date 2022-02-11
+# Version 41.0.5, release-date 2022-02-12
 * fixed bug rounding of time and millisedonds are equal to 500 (the second was
   not incresed by one).
+* fixed bug in X-components with union types.
 * methods `XDDocument.parseXComponent(...)` are now deprecated
   please use methods `XDDocument.xparseXComponent(...)` instead.
 * implemented new methods `XDDocument.iparseXComponent(...)`,

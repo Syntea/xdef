@@ -669,6 +669,28 @@ public abstract class STester {
 			fail("Error not reported");
 		}
 	}
+	/** Check if the reporter does not contain an error and clear reporter
+	 * after message is reported.
+	 * @param reporter the reporter to be checked for no errors.
+	 */
+	public final void assertNoErrorsAndClear(final ArrayReporter reporter) {
+		if (reporter.errors()) {
+			fail(reporter.toString());
+			reporter.clear();
+		}
+	}
+	/** Check if the reporter does not contain an error or warning. If yes then
+	 * invoke the method <code>fail</code> with the argument msg. Clear reporter
+	 * after message is reported.
+	 * @param reporter the reporter to be checked for no errors and no warnings.
+	 */
+	public final void assertNoErrorwarningsAndClear(
+		final ArrayReporter reporter) {
+		if (reporter.errorWarnings()) {
+			fail(reporter.toString());
+			reporter.clear();
+		}
+	}
 	private static String getListing(final ReportWriter reporetr,
 		final Object msg) {
 		if (msg == null) {

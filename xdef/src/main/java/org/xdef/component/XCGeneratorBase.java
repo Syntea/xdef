@@ -290,6 +290,7 @@ class XCGeneratorBase {
 				_byteArrayEncoding |= getBytesType(xdata);
 				return "byte[]";
 			case XDValueID.XD_NULL: //jnull
+			case XDValueID.XD_ANY: //union etc.
 				return "Object";
 		}
 		String result = checkEnumType(xdata);
@@ -390,6 +391,8 @@ class XCGeneratorBase {
 			case XDValueID.XD_PARSER:
 //			case XDValueID.XD_CONTAINER:
 				return result + "getParsedString()";
+			case XDValueID.XD_ANY:
+				return result + "getParsedValue().getObject()";
 		}
 		result += "getParsedValue().toString()";
 		String enumType = checkEnumType(xdata);
