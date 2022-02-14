@@ -58,7 +58,7 @@ public class XSParseUnion extends XSAbstractParser {
 	@Override
 	public boolean addTypeParser(XDValue x) {
 		if (x.getItemId() != XD_PARSER) {
-			//The value type in the named parameter '%item' in the parser '&{0}'
+			//The value type in the named parameter '%item' of the parser '&{0}'
 			// must be Parser
 			throw new SRuntimeException(XDEF.XDEF474, parserName());
 		}
