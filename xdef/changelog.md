@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 41.0.5, release-date 2022-02-12
+# Version 41.0.5, release-date 2022-02-14
 * fixed bug rounding of time and millisedonds are equal to 500 (the second was
   not incresed by one).
 * fixed bug in X-components with union types.

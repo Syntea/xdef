@@ -69,8 +69,9 @@ public class XDParseSequence extends XSAbstractParser {
 	@Override
 	public boolean addTypeParser(final XDValue x) {
 		if (x.getItemId() != XD_PARSER) {
-			//Value of type '&amp;{0}' expected
-			throw new SRuntimeException(XDEF.XDEF423, "Parser");
+			//The value type in the named parameter '%item' in the parser '&{0}'
+			// must be Parser
+			throw new SRuntimeException(XDEF.XDEF474, parserName());
 		}
 		if (_itemTypes == null) {
 			_itemTypes = new XDParser[1];

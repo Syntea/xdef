@@ -58,8 +58,9 @@ public class XSParseUnion extends XSAbstractParser {
 	@Override
 	public boolean addTypeParser(XDValue x) {
 		if (x.getItemId() != XD_PARSER) {
-			//Value of type '&amp;{0}' expected
-			throw new SRuntimeException(XDEF.XDEF423, "Parser");
+			//The value type in the named parameter '%item' in the parser '&{0}'
+			// must be Parser
+			throw new SRuntimeException(XDEF.XDEF474, parserName());
 		}
 		if (_itemTypes == null) {
 			_itemTypes = new XDParser[1];
@@ -71,14 +72,14 @@ public class XSParseUnion extends XSAbstractParser {
 		System.arraycopy(old, 0, _itemTypes, 0, old.length);
 		_itemTypes[old.length] = (XDParser) x;
 		return true;
-	}	
+	}
 	@Override
 	public void setItem(XDValue item) { //%item
 		if (item.getItemId() == XD_CONTAINER) { // array of parsers
 			DefContainer c = (DefContainer) item;
 			for (int i = 0; i < c.getXDItemsNumber(); i++) {
 				addTypeParser(c.getXDItem(i));
-			}		
+			}
 		} else { // only one parser.
 			addTypeParser(item);
 		}
