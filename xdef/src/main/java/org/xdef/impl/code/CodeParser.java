@@ -14,32 +14,32 @@ public class CodeParser extends CodeS1 {
 	private final String[] _sqParamNames;
 
 	/** Creates a new instance of CodeString.
-	 * @param resultType The type of result.
-	 * @param code The code.
-	 * @param spar The parameter string.
+	 * @param resultType type of result.
+	 * @param code code.
+	 * @param name name of parser.
 	 * @param sqParamNames Array with names of sequential parameters.
 	 */
 	public CodeParser(final short resultType,
 		final short code,
-		final String spar,
+		final String name,
 		final String[] sqParamNames) {
-		this(resultType, code, 0, spar, sqParamNames);
+		this(resultType, code, 0, name, sqParamNames);
 	}
 
 	/** Creates a new instance of CodeString.
-	 * @param resultType The type of result.
-	 * @param code The code.
-	 * @param param The integer parameter.
-	 * @param spar The parameter string.
+	 * @param resultType type of result.
+	 * @param code code.
+	 * @param param integer parameter.
+	 * @param name name of parser.
 	 * @param sqParamNames Array with names of sequential parameters.
 	 */
 	public CodeParser(final short resultType,
 		final short code,
 		int param,
-		final String spar,
+		final String name,
 		final String[] sqParamNames) {
-		super(resultType, code, param, spar);
-		_parser = CompileBase.getParser(spar);
+		super(resultType, code, param, name);
+		_parser = CompileBase.getParser(name);
 		_sqParamNames = sqParamNames;
 	}
 

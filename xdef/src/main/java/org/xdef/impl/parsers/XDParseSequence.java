@@ -7,7 +7,17 @@ import org.xdef.XDValue;
 import org.xdef.proc.XXNode;
 import org.xdef.impl.code.DefContainer;
 import org.xdef.XDContainer;
+import static org.xdef.XDParser.BASE;
+import static org.xdef.XDParser.ENUMERATION;
+import static org.xdef.XDParser.ITEM;
+import static org.xdef.XDParser.PATTERN;
+import static org.xdef.XDParser.SEPARATOR;
+import static org.xdef.XDParser.WHITESPACE;
+import static org.xdef.XDParser.WS_PRESERVE;
 import org.xdef.XDValueID;
+import static org.xdef.XDValueID.XD_CONTAINER;
+import static org.xdef.XDValueID.XD_PARSER;
+import org.xdef.sys.SRuntimeException;
 
 /** Parser of X-Script "sequence" type.
  * @author Vaclav Trojan
@@ -57,7 +67,11 @@ public class XDParseSequence extends XSAbstractParser {
 	@Override
 	public byte getDefaultWhiteSpace() {return WS_PRESERVE;}
 	@Override
-	public boolean addTypeParser(final XDParser x) {
+	public boolean addTypeParser(final XDValue x) {
+		if (x.getItemId() != XD_PARSER) {
+			//Value of type '&amp;{0}' expected
+			throw new SRuntimeException(XDEF.XDEF423, "Parser");
+		}
 		if (_itemTypes == null) {
 			_itemTypes = new XDParser[1];
 			_itemTypes[0] = (XDParser) x;
@@ -97,12 +111,12 @@ public class XDParseSequence extends XSAbstractParser {
 	@Override
 	public void setItem(final XDValue item) {
 		if (item.getItemId() != XDValueID.XD_CONTAINER) {
-			addTypeParser((XDParser) item);
+			addTypeParser(item);
 			return;
 		}
 		DefContainer c = (DefContainer) item;
 		for (int i = 0; i < c.getXDItemsNumber(); i++) {
-			addTypeParser((XDParser) c.getXDItem(i));
+			addTypeParser(c.getXDItem(i));
 		}
 	}
 	@Override

@@ -178,8 +178,12 @@ public class XDParseJList extends XSAbstractParser {
 	@Override
 	public byte getDefaultWhiteSpace() {return WS_COLLAPSE;}
 	@Override
-	public boolean addTypeParser(XDParser x) {
-		_itemType = x;
+	public boolean addTypeParser(XDValue x) {
+		if (x.getItemId() != XD_PARSER) {
+			//Value of type '&amp;{0}' expected
+			throw new SRuntimeException(XDEF.XDEF423, "Parser");
+		}
+		_itemType = (XDParser) x;
 		return true;
 	}
 	@Override

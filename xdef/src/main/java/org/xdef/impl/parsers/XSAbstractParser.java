@@ -16,6 +16,26 @@ import org.xdef.impl.code.DefParseResult;
 import org.xdef.impl.code.DefRegex;
 import org.xdef.impl.code.DefString;
 import org.xdef.XDContainer;
+import static org.xdef.XDParser.ARGUMENT;
+import static org.xdef.XDParser.BASE;
+import static org.xdef.XDParser.ENUMERATION;
+import static org.xdef.XDParser.FORMAT;
+import static org.xdef.XDParser.FRACTIONDIGITS;
+import static org.xdef.XDParser.ITEM;
+import static org.xdef.XDParser.LENGTH;
+import static org.xdef.XDParser.MAXEXCLUSIVE;
+import static org.xdef.XDParser.MAXINCLUSIVE;
+import static org.xdef.XDParser.MAXLENGTH;
+import static org.xdef.XDParser.MINEXCLUSIVE;
+import static org.xdef.XDParser.MININCLUSIVE;
+import static org.xdef.XDParser.MINLENGTH;
+import static org.xdef.XDParser.OUTFORMAT;
+import static org.xdef.XDParser.PARAM_NAMES;
+import static org.xdef.XDParser.PATTERN;
+import static org.xdef.XDParser.SEPARATOR;
+import static org.xdef.XDParser.TOTALDIGITS;
+import static org.xdef.XDParser.WHITESPACE;
+import static org.xdef.XDValueID.XD_CONTAINER;
 
 /** Abstract class as the base for all test value parsers.
  * @author Vaclav Trojan
@@ -453,7 +473,7 @@ public abstract class XSAbstractParser extends XDParserAbstract
 	 */
 	public abstract short parsedType();
 
-	public boolean addTypeParser(final XDParser x) { return true; }
+	public boolean addTypeParser(final XDValue x){return false;}//must be Parser
 	public void setSeparator(String x) {}
 	public String getSeparator() { return null; }
 	public void setFormat(String x) {}

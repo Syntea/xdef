@@ -9,6 +9,17 @@ import org.xdef.impl.code.DefContainer;
 import org.xdef.impl.code.DefParseResult;
 import org.xdef.msg.XDEF;
 import org.xdef.XDContainer;
+import static org.xdef.XDParser.BASE;
+import static org.xdef.XDParser.ENUMERATION;
+import static org.xdef.XDParser.ITEM;
+import static org.xdef.XDParser.LENGTH;
+import static org.xdef.XDParser.MAXLENGTH;
+import static org.xdef.XDParser.MINLENGTH;
+import static org.xdef.XDParser.PATTERN;
+import static org.xdef.XDParser.WHITESPACE;
+import static org.xdef.XDParser.WS_COLLAPSE;
+import static org.xdef.XDValueID.XD_CONTAINER;
+import static org.xdef.XDValueID.XD_PARSER;
 
 /** Parser of Schema "list" type.
  * @author Vaclav Trojan
@@ -56,8 +67,12 @@ public class XSParseList extends XSAbstractParser {
 	@Override
 	public byte getDefaultWhiteSpace() {return WS_COLLAPSE;}
 	@Override
-	public boolean addTypeParser(XDParser x) {
-		_itemType = x;
+	public boolean addTypeParser(XDValue x) {
+		if (x.getItemId() != XD_PARSER) {
+			//Value of type '&amp;{0}' expected
+			throw new SRuntimeException(XDEF.XDEF423, "Parser");
+		}
+		_itemType = (XDParser) x;
 		return true;
 	}
 	@Override

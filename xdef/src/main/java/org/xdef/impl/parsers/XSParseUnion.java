@@ -8,13 +8,22 @@ import org.xdef.XDValue;
 import org.xdef.proc.XXNode;
 import org.xdef.impl.code.DefContainer;
 import org.xdef.XDContainer;
+import static org.xdef.XDParser.BASE;
+import static org.xdef.XDParser.ENUMERATION;
+import static org.xdef.XDParser.ITEM;
+import static org.xdef.XDParser.PATTERN;
+import static org.xdef.XDParser.WS_COLLAPSE;
+import static org.xdef.XDParser.WS_PRESERVE;
+import static org.xdef.XDValueID.XD_ANY;
+import static org.xdef.XDValueID.XD_CONTAINER;
+import static org.xdef.XDValueID.XD_PARSER;
 
 /** Parser of Schema "union" type.
  * @author Vaclav Trojan
  */
 public class XSParseUnion extends XSAbstractParser {
 	private static final String ROOTBASENAME = "union";
-	XDParser[] _itemTypes;
+	XDParser[] _itemTypes = new XDParser[0];
 	XDValue[] _enumeration;
 
 	public XSParseUnion() {super();}
@@ -47,30 +56,31 @@ public class XSParseUnion extends XSAbstractParser {
 	@Override
 	public byte getDefaultWhiteSpace() {return WS_PRESERVE;}
 	@Override
-	public boolean addTypeParser(XDParser x) {
+	public boolean addTypeParser(XDValue x) {
+		if (x.getItemId() != XD_PARSER) {
+			//Value of type '&amp;{0}' expected
+			throw new SRuntimeException(XDEF.XDEF423, "Parser");
+		}
 		if (_itemTypes == null) {
 			_itemTypes = new XDParser[1];
-			_itemTypes[0] = x;
+			_itemTypes[0] = (XDParser) x;
 			return true;
 		}
 		XDParser[] old = _itemTypes;
 		_itemTypes = new XDParser[old.length + 1];
 		System.arraycopy(old, 0, _itemTypes, 0, old.length);
-		_itemTypes[old.length] = x;
+		_itemTypes[old.length] = (XDParser) x;
 		return true;
-	}
+	}	
 	@Override
-	public void setItem(XDValue item) {
-		if (item.getItemId() == XD_PARSER) {
-			addTypeParser((XDParser) item);
-		} else if (item.getItemId() == XD_CONTAINER) {
+	public void setItem(XDValue item) { //%item
+		if (item.getItemId() == XD_CONTAINER) { // array of parsers
 			DefContainer c = (DefContainer) item;
 			for (int i = 0; i < c.getXDItemsNumber(); i++) {
-				addTypeParser((XDParser) c.getXDItem(i));
-			}
-		} else {
-			//Value of type '&amp;{0}' expected
-			throw new SRuntimeException(XDEF.XDEF423, "Parser");
+				addTypeParser(c.getXDItem(i));
+			}		
+		} else { // only one parser.
+			addTypeParser(item);
 		}
 	}
 	@Override

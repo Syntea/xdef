@@ -2011,8 +2011,8 @@ public final class CompileCode extends CompileBase {
 						npar, getTypeMethod(X_NOTYPE_VALUE, "enum"));
 					return;
 				}
-				XDParser p = CompileBase.getParser("CDATA".equals(name)
-					? "string" : name);
+				XDParser p = CompileBase.getParser(
+					"CDATA".equals(name) ? "string" : name);
 				KeyParam[] pars = method.getKeyParams();
 				String[] sqParamNames = method.getSqParamNames();
 				if (npar == 1 && _tstack[_sp] == XD_CONTAINER &&
