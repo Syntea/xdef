@@ -66,8 +66,7 @@ public class XSParseUnion extends XSAbstractParser {
 		} else if (item.getItemId() == XD_CONTAINER) {
 			DefContainer c = (DefContainer) item;
 			for (int i = 0; i < c.getXDItemsNumber(); i++) {
-				XDValue v = c.getXDItem(i);
-				addTypeParser((XDParser) v);
+				addTypeParser((XDParser) c.getXDItem(i));
 			}
 		} else {
 			//Value of type '&amp;{0}' expected

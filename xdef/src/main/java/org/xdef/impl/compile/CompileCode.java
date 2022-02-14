@@ -2011,8 +2011,8 @@ public final class CompileCode extends CompileBase {
 						npar, getTypeMethod(X_NOTYPE_VALUE, "enum"));
 					return;
 				}
-				XDParser p =
-					CompileBase.getParser("CDATA".equals(name) ? "string":name);
+				XDParser p = CompileBase.getParser("CDATA".equals(name)
+					? "string" : name);
 				KeyParam[] pars = method.getKeyParams();
 				String[] sqParamNames = method.getSqParamNames();
 				if (npar == 1 && _tstack[_sp] == XD_CONTAINER &&
@@ -2074,9 +2074,11 @@ public final class CompileCode extends CompileBase {
 						} catch (Exception ex) {
 							if (ex instanceof SThrowable) {
 								_parser.putReport(((SThrowable)ex).getReport());
+							} else if (ex instanceof ClassCastException) {
+								//Incorrect parameter type
+								_parser.error(XDEF.XDEF467);
 							} else {
-								_parser.putReport(
-									//Internal error&{0}{: }
+								_parser.putReport( //Internal error&{0}{: }
 									Report.error(SYS.SYS066, ex, ex));
 							}
 						}
