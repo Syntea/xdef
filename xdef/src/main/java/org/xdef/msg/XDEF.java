@@ -399,7 +399,7 @@ public interface XDEF {
 	public static final long XDEF472 = 31159025858L;
 	/** Parameters are not allowed for method '&amp;{0}'&amp;{#SYS000} */
 	public static final long XDEF473 = 31159025859L;
-	/** The value type in the named parameter '%item' of the parser '&amp;{0}' must be Parser&amp;{#SYS000} */
+	/** The value type in the named parameter '%item' in the parser '&amp;{0}' must be Parser&amp;{#SYS000} */
 	public static final long XDEF474 = 31159025860L;
 	/** Method '&amp;{0}' can't be called here&amp;{#SYS000} */
 	public static final long XDEF475 = 31159025861L;

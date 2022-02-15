@@ -68,12 +68,7 @@ public class XSParseList extends XSAbstractParser {
 	public byte getDefaultWhiteSpace() {return WS_COLLAPSE;}
 	@Override
 	public boolean addTypeParser(XDValue x) {
-		if (x.getItemId() != XD_PARSER) {
-			//The value type in the named parameter '%item' of the parser '&{0}'
-			// must be Parser
-			throw new SRuntimeException(XDEF.XDEF474, parserName());
-		}
-		_itemType = (XDParser) x;
+		_itemType = getParserFromValue(x);
 		return true;
 	}
 	@Override

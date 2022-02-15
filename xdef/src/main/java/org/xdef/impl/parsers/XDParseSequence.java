@@ -68,11 +68,6 @@ public class XDParseSequence extends XSAbstractParser {
 	public byte getDefaultWhiteSpace() {return WS_PRESERVE;}
 	@Override
 	public boolean addTypeParser(final XDValue x) {
-		if (x.getItemId() != XD_PARSER) {
-			//The value type in the named parameter '%item' of the parser '&{0}'
-			// must be Parser
-			throw new SRuntimeException(XDEF.XDEF474, parserName());
-		}
 		if (_itemTypes == null) {
 			_itemTypes = new XDParser[1];
 			_itemTypes[0] = (XDParser) x;
@@ -81,7 +76,7 @@ public class XDParseSequence extends XSAbstractParser {
 		XDParser[] old = _itemTypes;
 		_itemTypes = new XDParser[old.length + 1];
 		System.arraycopy(old, 0, _itemTypes, 0, old.length);
-		_itemTypes[old.length] = (XDParser) x;
+		_itemTypes[old.length] = getParserFromValue(x);
 		return true;
 	}
 	@Override

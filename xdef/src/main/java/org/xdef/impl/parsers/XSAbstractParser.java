@@ -130,6 +130,18 @@ public abstract class XSAbstractParser extends XDParserAbstract
 	 */
 	public byte getWhiteSpaceParam() {return _whiteSpace;}
 
+	/** Check if value is parser and return it as a Parser.
+	 * @param x value to be checked.
+	 * @return return argument as a Parser.
+	 */
+	public final XDParser getParserFromValue(final XDValue x) {
+		if (x == null || x.getItemId() != XD_PARSER) {
+			//The value type in the named parameter '%item' of the parser '&{0}'
+			// must be Parser
+			throw new SRuntimeException(XDEF.XDEF474, parserName());
+		}
+		return (XDParser) x;
+	}
 	public void setMinExclusive(final XDValue x) {}//default not specified
 	public void setMaxExclusive(final XDValue x) {}//default not specified
 	public void setMinInclusive(final XDValue x) {}//default not specified
