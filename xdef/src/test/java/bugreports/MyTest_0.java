@@ -37,6 +37,7 @@ import org.xdef.proc.XXData;
 import org.xdef.proc.XXElement;
 import org.xdef.proc.XXNode;
 import org.xdef.sys.Report;
+import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
 
 /*
@@ -272,7 +273,7 @@ public class MyTest_0 extends XDTester {
 			assertEq(xml, parse(xp, "Example", xml, reporter));
 			assertEq(2, reporter.getErrorCount());
 		} catch (Exception ex) {fail(ex);}
-if(true)return;
+if(T)return;
 		try {
 			xdef =
 "<xd:collection xmlns:xd='http://www.xdef.org/xdef/4.1'>\n"+
@@ -285,7 +286,7 @@ if(true)return;
 "</xd:collection>";
 			compile(xdef);
 		} catch (Exception ex) {fail(ex);}
-if(true)return;
+if(T)return;
 		try {
 			xdef =
 "<X:def xmlns:X='" + _xdNS + "' root='a|root'>\n"+
@@ -382,15 +383,25 @@ if(T)return;
 "   outln('xx ' + p + ', ' + q);\n"+
 " }\n"+
 " </xd:declaration>\n"+
-"  <A id=\"? union(%item=[u.x.ID, p]); finally x(int, ID)\" />\n"+
+//"  <A id=\"? union(%item=[u.x.ID, p]); finally x(int, ID)\" />\n"+
+//"  <A id=\"? union(%item=[eq('ab'), int]); finally x(int, u.x)\" />\n"+
+"  <A id=\"? union(%item=[u.x]);\" />\n"+ // must be check if it is parser
 "</xd:def>";
-			xp = XDFactory.compileXD(null, xdef);
+//			xp = XDFactory.compileXD(null, xdef);
+			xp = compile(null, xdef);
 //			xp.displayCode();
-			xml = "<A id='123'/>";
+			xml =
+"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n" +
+"\n" +
+"\n" +
+"<A id='123'/>";
 			xd = xp.createXDDocument();
 			xd.xparse(xml, reporter);
+			assertNoErrors(reporter);
+		} catch (SRuntimeException ex) {
+			if (!"XDEF474".equals(ex.getMsgID())) fail(ex);
 		} catch (Exception ex) {fail(ex);}
-if(true)return;
+if(T)return;
 //		try {
 //			xdef =
 //"<xd:def xmlns:xd    =\"http://www.xdef.org/xdef/4.1\"\n" +
@@ -460,7 +471,7 @@ if(true)return;
 //"</xd:def>";
 //			xp = compile(xdef);
 //		} catch (Exception ex) {fail(ex);}
-//if(true)return;
+//if(T)return;
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
@@ -756,7 +767,7 @@ if(T){return;}
 			assertEq(xml, parse(xp, "A", xml, reporter));
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
-		if(T){return;}
+if(T){return;}
 		try {
 			s = "D:/cvs/DEV/java/xdef31/resources/"
 				+ "cz/syntea/xdef/impl/compile/XdefOfXdef*.xdef";
@@ -1000,9 +1011,10 @@ if(T){return;}
 			el = KXmlUtils.parseXml(xml).getDocumentElement();
 			assertEq(xml, xd.xparse(el, null));
 		} catch (Exception ex) {fail(ex);}
+if(T){return;}
 		try {
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='" + XDConstants.XDEF40_NS_URI + "' root='a'>\n"+
 "<a>required { switch(getText()) {\n"+
 "                case '1': return true;\n"+
 "                default: return false;\n"+
@@ -1010,11 +1022,13 @@ if(T){return;}
 "            }\n"+
 "</a>\n"+
 "</xd:def>";
-			xml = "<a>1</a>";
-			assertEq(xml, parse(xdef, "", xml, reporter));
-			assertNoErrors(reporter);
+			xp = compile(xdef);
+			fail("deprecation not reported");
+		} catch (Exception ex) {}
+if(T){return;}
+		try {
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='" + XDConstants.XDEF40_NS_URI + "' root='a'>\n"+
 "<xd:declaration>\n"+
 " type t { switch(getText()) {\n"+
 "            case '1': return true;\n"+
@@ -1024,10 +1038,13 @@ if(T){return;}
 "</xd:declaration>\n"+
 "<a>required t; </a>\n"+
 "</xd:def>";
-			assertEq(xml, parse(xdef, "", xml, reporter));
-			assertNoErrors(reporter);
+			xp = compile(xdef);
+			fail("deprecation not reported");
+		} catch (Exception ex) {}
+if(T){return;}
+		try {
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:def xmlns:xd='" + XDConstants.XDEF40_NS_URI + "' root='a'>\n"+
 "<xd:declaration>\n"+
 " boolean t() { switch(getText()) {\n"+
 "                 case '1': return true;\n"+
@@ -1035,8 +1052,9 @@ if(T){return;}
 "               };\n"+
 "        }\n"+
 "</xd:declaration>\n"+
-"<a>required t; </a>\n"+
+"<a>required t(); </a>\n"+
 "</xd:def>";
+			xml = "<a>1</a>";
 			assertEq(xml, parse(xdef, "", xml, reporter));
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
@@ -1050,7 +1068,7 @@ if(T){return;}
 "      S       ::= [#9#10#13 ]+ /*skipped white spaces*/\n"+
 "      intList ::= integer (S? \",\" S? integer)* S?\n"+
 "    ');\n"+
-"    type intList rrr.check('intList');\n"+
+"    type intList rrr.parse('intList');\n"+
 "  </xd:declaration>\n"+
 "<a>required intList()</a>\n"+
 "</xd:def>";
@@ -1173,7 +1191,7 @@ if(T){return;}
 "   ParseResult licheCislo() {\n"+
 "      ParseResult p = int();\n"+
 "      if (p.intValue() % 2 == 0) {\n"+
-"         p.setError(\"Cislo musí byt liche!\");\n"+
+"         p.error(\"Cislo musí byt liche!\");\n"+
 "      }\n"+
 "      return p;\n"+
 "   }\n"+
@@ -1252,7 +1270,7 @@ if(T){return;}
 			assertTrue(reporter.errorWarnings(), "Error not recognized");
 		} catch (Exception ex) {fail(ex);}
 if(T){return;}
-boolean chkSynteax = getChkSyntax();
+		boolean chkSynteax = getChkSyntax();
 		try {
 			setChkSyntax(false);
 			xdef =
@@ -1282,8 +1300,8 @@ boolean chkSynteax = getChkSyntax();
 				fail(ex);
 			}
 		}
+		setChkSyntax(chkSynteax);
 if(T){return;}
-setChkSyntax(chkSynteax);
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
@@ -1582,7 +1600,7 @@ if(T){return;}
 "</xd:def>";
 			xp = compile(xdef);
 			el = parse(xp, "", "<a>x</a>", reporter);
-			assertEq("<a>A,B,1,Y,Z,1,12,%q=Q,Q,Y,1,true</a>", el);
+			assertEq("<a>A,B,1,Y,Z,1,15,%q=Q,Q,Y,1,true</a>", el);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' name = 'test' root = 'a'>\n"+
 "<xd:declaration>\n"+
@@ -1611,7 +1629,7 @@ if(T){return;}
 "      nameList ::= fullName (S? \",\" S? fullName)*\n"+
 "      list     ::= intList | nameList\n"+
 "    ');\n"+
-"    type myType $rrr.check('list');\n"+
+"    type myType $rrr.parse('list');\n"+
 "  </xd:declaration>\n"+
 "</xd:def>\n"+
 "</xd:collection>";
@@ -1630,7 +1648,7 @@ if(T){return;}
 "<xd:def name='Example' root='a'> <a> required myType() </a> </xd:def>\n"+
 "<xd:def xd:name = 'modif'>\n"+
 "  <xd:declaration scope='global'>\n"+
-"     type myType $rrr.check('intList');\n"+
+"     type myType $rrr.parse('intList');\n"+
 "  </xd:declaration>\n"+
 "  <xd:BNFGrammar name = \"$base\" scope='global'>\n"+
 "    integer ::= [0-9]+\n"+
@@ -1655,7 +1673,7 @@ if(T){return;}
 "      S       ::= [#9#10#13 ]+  /*skip redundant white spaces*/\n"+
 "      intList ::= integer (S? \",\" integer)* S?  /*list of integers*/\n"+
 "    ');\n"+
-"    type intList rrr.check('intList');\n"+
+"    type intList rrr.parse('intList');\n"+
 "  </xd:declaration>\n"+
 "\n"+
 "<a>required intList()</a>\n"+
@@ -1794,7 +1812,7 @@ if(T){return;}
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <a a=\"optional; finally \n"+
-"    {if(!gYear(%minInclusive='1999').check()) error('false');}\"/>\n"+
+"    {if(!gYear(%minInclusive='1999').parse()) error('false');}\"/>\n"+
 "</xd:def>";
 			xd = compile(xdef).createXDDocument();
 			parse(xd, "<a a='0999'/>", reporter);
@@ -1928,6 +1946,7 @@ if(T){return;}
 			parse(xd, "<a a=' 1 2' />", reporter);
 			assertTrue(reporter.errorWarnings(), "Error not recognized");
 		} catch (Exception ex) {fail(ex);}
+if(T){return;}
 
 		clearTempDir();
 	}
