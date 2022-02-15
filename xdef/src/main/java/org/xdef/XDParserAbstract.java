@@ -88,6 +88,7 @@ public abstract class XDParserAbstract extends XDValueAbstract
 	 */
 	public void setNamedParams(final XXNode xnode, final XDContainer params)
 		throws SException {
+		throw new SUnsupportedOperationException();
 	}
 
 	@Override
@@ -114,15 +115,11 @@ public abstract class XDParserAbstract extends XDValueAbstract
 	public void setParseParams(final Object[] params) {
 		if (params.length == 0) {
 			return;
-		}
-		if (params.length == 2) {
-			setParseParams(params[0], params[1]);
-		}
-		if (params.length == 1) {
+		} else if (params.length == 1) {
 			setParseParam(params[0]);
 		} else if (params.length == 2) {
-
-		} else {
+			setParseParams(params[0], params[1]);
+		} else { // max 2 sequential parameters
 			throw new SUnsupportedOperationException();
 		}
 	}

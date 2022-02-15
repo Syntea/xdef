@@ -1,13 +1,10 @@
 package org.xdef.impl.parsers;
 
-import java.math.BigDecimal;
 import org.xdef.msg.XDEF;
 import org.xdef.XDParseResult;
 import org.xdef.proc.XXNode;
 import java.math.BigInteger;
-import org.xdef.impl.XConstants;
 import org.xdef.impl.code.DefBigInteger;
-import org.xdef.impl.code.DefDecimal;
 
 /** Parser of Schema "integer" type.
  * @author Vaclav Trojan

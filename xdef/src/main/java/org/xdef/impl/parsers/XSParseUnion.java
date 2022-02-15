@@ -1,7 +1,6 @@
 package org.xdef.impl.parsers;
 
 import org.xdef.msg.XDEF;
-import org.xdef.sys.SRuntimeException;
 import org.xdef.XDParseResult;
 import org.xdef.XDParser;
 import org.xdef.XDValue;
@@ -16,7 +15,6 @@ import static org.xdef.XDParser.WS_COLLAPSE;
 import static org.xdef.XDParser.WS_PRESERVE;
 import static org.xdef.XDValueID.XD_ANY;
 import static org.xdef.XDValueID.XD_CONTAINER;
-import static org.xdef.XDValueID.XD_PARSER;
 
 /** Parser of Schema "union" type.
  * @author Vaclav Trojan

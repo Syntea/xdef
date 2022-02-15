@@ -262,6 +262,11 @@ public interface SParser {
 
 	/** Add error.
 	 * @param id identifier of error (may be null).
+	 */
+	public void error(String id);
+
+	/** Add error.
+	 * @param id identifier of error (may be null).
 	 * @param msg text of error.
 	 * @param mod Message modification parameters.
 	 */

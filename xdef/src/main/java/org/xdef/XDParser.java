@@ -68,11 +68,11 @@ public interface XDParser extends XDValue {
 		"outFormat",		// o
 		"argument",			// a
 	};
-	/** Whitespace preserve. */
+	/** White space preserve. */
 	public final static byte WS_PRESERVE = 0;
-	/** Whitespace collapse. */
+	/** White space collapse. */
 	public final static byte WS_COLLAPSE = 'c';
-	/** Whitespace replace. */
+	/** White space replace. */
 	public final static byte WS_REPLACE = 'r';
 
 	/** Get base parser.

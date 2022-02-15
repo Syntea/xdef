@@ -74,6 +74,14 @@ public class SReporter extends SPosition {
 
 	/** Put error message with modification parameters.
 	 * @param id Message id (may be <i>null</i>).
+	 * @throws SRuntimeException if reporter is <i>null</i> .
+	 */
+	public void error(final String id) {
+		putReport(Report.error(id, null), _reportWriter);
+	}
+
+	/** Put error message with modification parameters.
+	 * @param id Message id (may be <i>null</i>).
 	 * @param msg Message text.
 	 * @param mod Message modification parameters.
 	 * @throws SRuntimeException if reporter is <i>null</i> .

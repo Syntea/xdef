@@ -421,20 +421,16 @@ public final class DefParseResult extends XDValueAbstract
 		return false;
 	}
 	@Override
+	public final void error(final String id) {error(id, null);}
+	@Override
 	public final void error(final String id,
 		final String msg,
 		final Object... mod) {
-		if (_ar == null) {
-			_ar = new ArrayReporter();
-		}
-		_ar.error(id, msg, mod);
+		putReport(Report.error(id, msg, mod));
 	}
 	@Override
 	public final void error(final long registeredID, final Object... mod) {
-		if (_ar == null) {
-			_ar = new ArrayReporter();
-		}
-		_ar.error(registeredID, mod);
+		putReport(Report.error(registeredID, mod));
 	}
 	@Override
 	public final void putReport(final Report report) {

@@ -16,8 +16,6 @@ import static org.xdef.XDParser.WHITESPACE;
 import static org.xdef.XDParser.WS_PRESERVE;
 import org.xdef.XDValueID;
 import static org.xdef.XDValueID.XD_CONTAINER;
-import static org.xdef.XDValueID.XD_PARSER;
-import org.xdef.sys.SRuntimeException;
 
 /** Parser of X-Script "sequence" type.
  * @author Vaclav Trojan

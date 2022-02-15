@@ -110,6 +110,9 @@ public abstract class XSAbstractParser extends XDParserAbstract
 		if (base != null) {
 			int i = p.getIndex();
 			base.check(xnode, p);
+			if (!p.matches()) {
+				return;
+			}
 			p.setIndex(i);
 		}
 		parseObject(xnode, p);
