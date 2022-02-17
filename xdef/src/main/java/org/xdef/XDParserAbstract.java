@@ -1,12 +1,16 @@
 package org.xdef;
 
+import static org.xdef.XDValueID.XD_CONTAINER;
+import static org.xdef.XDValueID.XD_PARSER;
+import static org.xdef.XDValueID.XD_STRING;
 import org.xdef.impl.code.CodeTable;
 import org.xdef.impl.code.DefContainer;
 import org.xdef.impl.code.DefParseResult;
+import org.xdef.impl.code.DefString;
+import org.xdef.impl.parsers.XSAbstractParser;
 import org.xdef.proc.XXNode;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.SException;
-import org.xdef.sys.SUnsupportedOperationException;
 
 /** Abstract parser of string values.
  * @author Vaclav Trojan
@@ -88,41 +92,36 @@ public abstract class XDParserAbstract extends XDValueAbstract
 	 */
 	public void setNamedParams(final XXNode xnode, final XDContainer params)
 		throws SException {
-		throw new SUnsupportedOperationException();
-	}
-
-	@Override
-	/** Set value of one "sequential" parameter of parser.
-	 * @param param "sequential" parameters.
-	 */
-	public void setParseParam(final Object param) {
-		throw new SUnsupportedOperationException();
-	}
-
-	@Override
-	/** Set value of two "sequential" parameters of parser.
-	 * @param par1 the first "sequential" parameter.
-	 * @param par2 the second "sequential" parameter.
-	 */
-	public void setParseParams(Object par1, Object par2) {
-		throw new SUnsupportedOperationException();
-	}
-
-	@Override
-	/** Set value of three "sequential" parameters of parser.
-	 * @param params array with sequential parameters.
-	 */
-	public void setParseParams(final Object[] params) {
-		if (params.length == 0) {
-			return;
-		} else if (params.length == 1) {
-			setParseParam(params[0]);
-		} else if (params.length == 2) {
-			setParseParams(params[0], params[1]);
-		} else { // max 2 sequential parameters
-			throw new SUnsupportedOperationException();
+		for (XDNamedValue nv: params.getXDNamedItems()) {
+			XDValue val = nv.getValue();
+			if (val != null) {
+				switch (nv.getName()) {
+					case "item" : 
+						if (val.getItemId() == XD_CONTAINER) {
+							XDContainer c = (XDContainer) val;
+							for (int i = 0; i <= c.getXDItemsNumber(); i++) {
+								c.replaceXDItem(i,
+									XSAbstractParser.valueToParser(c.getXDItem(i)));
+							}
+							break;
+						}
+					case "base" :
+						nv.setValue(XSAbstractParser.valueToParser(val));
+						break;
+					case "argument":
+						if (val.getItemId() != XD_STRING) {
+							nv.setValue(new DefString(val.toString()));
+						}
+				}
+			}
 		}
 	}
+
+	@Override
+	/** Set value of "sequential" parameters of parser.
+	 * @param param "sequential" parameters.
+	 */
+	public void setParseSQParams(Object... params) {}
 
 	@Override
 	public final short getItemId() {return XD_PARSER;} // do not override

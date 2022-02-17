@@ -15,6 +15,7 @@ import static org.xdef.XDParser.WS_COLLAPSE;
 import static org.xdef.XDParser.WS_PRESERVE;
 import static org.xdef.XDValueID.XD_ANY;
 import static org.xdef.XDValueID.XD_CONTAINER;
+import static org.xdef.impl.parsers.XSAbstractParser.valueToParser;
 
 /** Parser of Schema "union" type.
  * @author Vaclav Trojan
@@ -56,14 +57,13 @@ public class XSParseUnion extends XSAbstractParser {
 	@Override
 	public boolean addTypeParser(XDValue x) {
 		if (_itemTypes == null) {
-			_itemTypes = new XDParser[1];
-			_itemTypes[0] = getParserFromValue(x);
+			_itemTypes = new XDParser[] {valueToParser(x)};
 			return true;
 		}
 		XDParser[] old = _itemTypes;
 		_itemTypes = new XDParser[old.length + 1];
 		System.arraycopy(old, 0, _itemTypes, 0, old.length);
-		_itemTypes[old.length] = getParserFromValue(x);
+		_itemTypes[old.length] = valueToParser(x);
 		return true;
 	}
 	@Override
@@ -76,6 +76,19 @@ public class XSParseUnion extends XSAbstractParser {
 		} else { // only one parser.
 			addTypeParser(item);
 		}
+	}
+
+	@Override
+	public XDContainer getNamedParams() {
+		XDContainer c = new DefContainer();
+		if (_itemTypes != null) {
+			XDContainer c1 = new DefContainer();
+			for (XDParser x : _itemTypes) {
+				c1.addXDItem(x);
+			}
+			c.setXDNamedItem("item", c1);
+		}
+		return c;
 	}
 	@Override
 	public XDValue[] getEnumeration() {return _enumeration;}

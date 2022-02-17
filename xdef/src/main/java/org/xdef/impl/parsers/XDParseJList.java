@@ -17,6 +17,7 @@ import static org.xdef.XDValueID.XD_CONTAINER;
 import static org.xdef.XDValueID.XD_PARSER;
 import org.xdef.impl.code.DefContainer;
 import org.xdef.impl.code.DefParseResult;
+import static org.xdef.impl.parsers.XSAbstractParser.valueToParser;
 import org.xdef.xon.XonTools;
 import org.xdef.msg.XDEF;
 import org.xdef.proc.XXNode;
@@ -179,7 +180,7 @@ public class XDParseJList extends XSAbstractParser {
 	public byte getDefaultWhiteSpace() {return WS_COLLAPSE;}
 	@Override
 	public boolean addTypeParser(XDValue x) {
-		_itemType = getParserFromValue(x);
+		_itemType = valueToParser(x);
 		return true;
 	}
 	@Override
@@ -210,20 +211,18 @@ public class XDParseJList extends XSAbstractParser {
 	@Override
 	public long getMinLength() { return _minLength; }
 	@Override
-	/** Set value of one "sequential" parameter of parser.
-	 * @param par "sequential" parameters.
-	 */
-	public void setParseParam(Object param) {
-		_minLength = _maxLength = Long.parseLong(param.toString());
-	}
-	@Override
-	/** Set value of two "sequential" parameters of parser.
-	 * @param par1 the first "sequential" parameter.
-	 * @param par2 the second "sequential" parameter.
-	 */
-	public void setParseParams(final Object par1, final Object par2) {
-		_minLength = Long.parseLong(par1.toString());
-		_maxLength = "*".equals(par2) ? -1 : Long.parseLong(par2.toString());
+	public void setParseSQParams(final Object... params) {
+		if (params != null && params.length >= 1) {
+			Object par1 = params[0];
+			_minLength = Integer.parseInt(par1.toString());
+			if (params.length == 1) {
+				_maxLength = _minLength;
+			} else if (params.length == 2) {
+				_maxLength = Integer.parseInt(params[1].toString());
+			} else {
+				throw new SRuntimeException("Incorrect number of paameters");
+			}
+		}
 	}
 	@Override
 	public short parsedType() {return XD_CONTAINER;}

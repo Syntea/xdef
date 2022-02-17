@@ -84,7 +84,7 @@ public final class XDWriter extends SObjectWriter {
 	 * @param x the object to be written.
 	 * @throws IOException if an error occurs.
 	 */
-	final void writeXD(final XDValue x) throws IOException {
+	public final void writeXD(final XDValue x) throws IOException {
 		if (x == null) {
 			writeShort((short) -1);
 			return;
@@ -356,9 +356,8 @@ public final class XDWriter extends SObjectWriter {
 					if (x instanceof CodeOp) {
 						writeByte(ID_CODEOP);
 						return;
-					}
-					//Internal error&{0}{: }
-					throw new SIOException(SYS.SYS066,
+					}					
+					throw new SIOException(SYS.SYS066, //Internal error&{0}{: }
 						"Illegal object: " + x.getClass().getName() +
 						"/code=" + code + "/type" + type);
 				}

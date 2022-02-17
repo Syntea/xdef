@@ -5,6 +5,7 @@ import org.xdef.XDParseResult;
 import org.xdef.XDValue;
 import org.xdef.proc.XXNode;
 import org.xdef.impl.code.DefParseResult;
+import org.xdef.sys.SRuntimeException;
 
 /** Parser of X-Script "eqi" type.
  * @author Vaclav Trojan
@@ -26,11 +27,12 @@ public class XDParseEqi extends XDParseEq {
 		return p;
 	}
 	@Override
-	/** Set value of one "sequential" parameter of parser.
-	 * @param par "sequential" parameters.
-	 */
-	public void setParseParam(Object param) {
-		_param = param.toString();
+	public void setParseSQParams(Object... param) {
+		if (param.length == 1) {
+			_param = param.toString();
+		} else {
+			throw new SRuntimeException("Incorrect number of parameters");		
+		}
 	}
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){

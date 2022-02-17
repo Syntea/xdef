@@ -2,7 +2,17 @@ package org.xdef.impl.parsers;
 
 import org.xdef.msg.XDEF;
 import org.xdef.XDParseResult;
+import static org.xdef.XDParser.BASE;
+import static org.xdef.XDParser.ENUMERATION;
+import static org.xdef.XDParser.LENGTH;
+import static org.xdef.XDParser.MAXLENGTH;
+import static org.xdef.XDParser.MINLENGTH;
+import static org.xdef.XDParser.PATTERN;
+import static org.xdef.XDParser.WHITESPACE;
+import static org.xdef.XDParser.WS_COLLAPSE;
 import org.xdef.XDValue;
+import static org.xdef.XDValueID.XD_STRING;
+import org.xdef.sys.SRuntimeException;
 
 /** Abstract parser of tokens.
  * @author Vaclav Trojan
@@ -61,20 +71,18 @@ public abstract class XSAbstractParseToken extends XSAbstractParser {
 	@Override
 	public XDValue[] getEnumeration() {return _enumeration;}
 	@Override
-	/** Set value of one "sequential" parameter of parser.
-	 * @param par "sequential" parameters.
-	 */
-	public void setParseParam(Object param) {
-		_minLength = _maxLength = Long.parseLong(param.toString());
-	}
-	@Override
-	/** Set value of two "sequential" parameters of parser.
-	 * @param par1 the first "sequential" parameter.
-	 * @param par2 the second "sequential" parameter.
-	 */
-	public void setParseParams(final Object par1, final Object par2) {
-		_minLength = Long.parseLong(par1.toString());
-		_maxLength = "*".equals(par2) ? -1 : Long.parseLong(par2.toString());
+	public void setParseSQParams(final Object... params) {
+		if (params != null && params.length >= 1) {
+			Object par1 = params[0];
+			_minLength = Integer.parseInt(par1.toString());
+			if (params.length == 1) {
+				_maxLength = _minLength;
+			} else if (params.length == 2) {
+				_maxLength = Integer.parseInt(params[1].toString());
+			} else {
+				throw new SRuntimeException("Incorrect number of parameters");
+			}
+		}
 	}
 	@Override
 	public void setEnumeration(Object[] o) {

@@ -14,6 +14,9 @@ import org.xdef.impl.code.DefBNFGrammar;
 import org.xdef.impl.code.DefBNFRule;
 import org.xdef.impl.code.DefContainer;
 import org.xdef.XDContainer;
+import static org.xdef.XDValueID.XD_BNFGRAMMAR;
+import static org.xdef.XDValueID.XD_BNFRULE;
+import static org.xdef.XDValueID.XD_CONTAINER;
 
 /** Parse BNF
  * @author Vaclav Trojan
@@ -78,15 +81,11 @@ public class XDParseBNF extends XDParserAbstract {
 		}
 	}
 	@Override
-	/** Set value of two "sequential" parameters of parser.
-	 * @param par1 the first "sequential" parameter.
-	 * @param par2 the second "sequential" parameter.
-	 */
-	public void setParseParams(final Object par1, final Object par2) {
+	public void setParseSQParams(final Object... params) {
 		ArrayReporter reporter = new ArrayReporter();
-		DefBNFGrammar g = new DefBNFGrammar(par1.toString(), reporter);
+		DefBNFGrammar g = new DefBNFGrammar(params[0].toString(), reporter);
 		reporter.checkAndThrowErrors();
-		String ruleName = par2.toString();
+		String ruleName = params[1].toString();
 		_rule = g.getRule(ruleName);
 		if (_rule == null) {
 			// Rule '&{0}' doesn't exist
@@ -103,5 +102,4 @@ public class XDParseBNF extends XDParserAbstract {
 	public String parserName() {return ROOTBASENAME;}
 	@Override
 	public short parsedType() {return XD_CONTAINER;}
-
 }

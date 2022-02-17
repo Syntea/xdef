@@ -12,6 +12,8 @@ import org.xdef.impl.code.DefString;
 import java.util.ArrayList;
 import java.util.Arrays;
 import org.xdef.XDContainer;
+import static org.xdef.XDValueID.XD_CONTAINER;
+import static org.xdef.XDValueID.XD_STRING;
 
 /** Parser of X-Script "enum" type.
  * @author Vaclav Trojan
@@ -31,25 +33,7 @@ public class XDParseEnum extends XDParserAbstract {
 		p.errorWithString(XDEF.XDEF809, parserName());
 	}
 	@Override
-	/** Set value of one "sequential" parameter of parser.
-	 * @param par "sequential" parameters.
-	 */
-	public void setParseParam(Object param) {
-		_list = new String[] {param.toString()};
-	}
-	@Override
-	/** Set value of two "sequential" parameters of parser.
-	 * @param par1 the first "sequential" parameter.
-	 * @param par2 the second "sequential" parameter.
-	 */
-	public void setParseParams(final Object par1, final Object par2) {
-		_list = new String[] {par1.toString(), par2.toString()};
-	}
-	@Override
-	/** Set value of two "sequential" parameters of parser.
-	 * @param params the array "sequential" parameters.
-	 */
-	public void setParseParams(final Object[] params) {
+	public void setParseSQParams(final Object... params) {
 		int n = params.length;
 		_list = new String[n];
 		for (int i = 0; i < n; i++) {
@@ -184,5 +168,4 @@ public class XDParseEnum extends XDParserAbstract {
 		return _list == null && x. _list == null ||
 			 _list != null && Arrays.equals(_list, x._list);
 	}
-
 }

@@ -68,7 +68,7 @@ public class XSParseList extends XSAbstractParser {
 	public byte getDefaultWhiteSpace() {return WS_COLLAPSE;}
 	@Override
 	public boolean addTypeParser(XDValue x) {
-		_itemType = getParserFromValue(x);
+		_itemType = valueToParser(x);
 		return true;
 	}
 	@Override

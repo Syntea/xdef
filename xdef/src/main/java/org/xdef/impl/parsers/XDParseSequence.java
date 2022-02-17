@@ -74,7 +74,7 @@ public class XDParseSequence extends XSAbstractParser {
 		XDParser[] old = _itemTypes;
 		_itemTypes = new XDParser[old.length + 1];
 		System.arraycopy(old, 0, _itemTypes, 0, old.length);
-		_itemTypes[old.length] = getParserFromValue(x);
+		_itemTypes[old.length] = valueToParser(x);
 		return true;
 	}
 	@Override

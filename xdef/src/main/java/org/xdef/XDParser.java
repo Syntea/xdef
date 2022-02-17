@@ -133,21 +133,10 @@ public interface XDParser extends XDValue {
 	public void setNamedParams(XXNode xnode, XDContainer params)
 		throws SException;
 
-	/** Set value of one "sequential" parameter of parser.
+	/** Set value of "sequential" parameters of parser.
 	 * @param param "sequential" parameters.
 	 */
-	public void setParseParam(Object param);
-
-	/** Set value of two "sequential" parameters of parser.
-	 * @param par1 the first "sequential" parameter.
-	 * @param par2 the second "sequential" parameter.
-	 */
-	public void setParseParams(Object par1, Object par2);
-
-	/** Set value of three "sequential" parameters of parser.
-	 * @param params array with sequential parameters.
-	 */
-	public void setParseParams(Object[] params);
+	public void setParseSQParams(Object... param);
 
 	/** Get type of parsed value.
 	 * @return The id of parsed value type.

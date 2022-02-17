@@ -11,6 +11,7 @@ import org.xdef.impl.code.DefContainer;
 import org.xdef.impl.code.DefParseResult;
 import org.xdef.impl.code.DefString;
 import org.xdef.XDContainer;
+import org.xdef.sys.SRuntimeException;
 
 /** Parser of X-Script "eq" type.
  * @author Vaclav Trojan
@@ -42,11 +43,12 @@ public class XDParseEq extends XDParserAbstract {
 		}
 	}
 	@Override
-	/** Set value of one "sequential" parameter of parser.
-	 * @param par "sequential" parameters.
-	 */
-	public void setParseParam(Object param) {
-		_param = param.toString();
+	public void setParseSQParams(Object... param) {
+		if (param.length == 1) {
+			_param = param.toString();
+		} else {
+			throw new SRuntimeException("Incorrect number of parameters");		
+		}
 	}
 	@Override
 	public void setNamedParams(final XXNode xnode, final XDContainer params)
@@ -59,8 +61,8 @@ public class XDParseEq extends XDParserAbstract {
 		XDNamedValue[] items = params.getXDNamedItems();
 		for (int i = 0; i < num; i++) {
 			String name = items[i].getName();
+			XDValue val = items[i].getValue();
 			if ("argument".equals(name)) {
-				XDValue val = items[i].getValue();
 				if (val == null) {
 					//Value of enumeration for 'eq' must be just one
 					throw new SException(XDEF.XDEF816);

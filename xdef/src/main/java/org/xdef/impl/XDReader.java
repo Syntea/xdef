@@ -93,14 +93,10 @@ public final class XDReader extends SObjectReader {
 		} else if ("double".equals(name)) {
 			return java.lang.Double.TYPE;
 		}
-		try {
-			//return class
+		try { //return class
 			return Class.forName(name, false,
 				Thread.currentThread().getContextClassLoader());
 		} catch (ClassNotFoundException ex) {
-			//Internal error&{0}{: }
-			throw new SIOException(SYS.SYS066,"Class not found: "+name+"; "+ex);
-		} catch (Error ex) {
 			//Internal error&{0}{: }
 			throw new SIOException(SYS.SYS066,"Class not found: "+name+"; "+ex);
 		}
@@ -138,7 +134,7 @@ public final class XDReader extends SObjectReader {
 	 * @return the XD object constructed from input stream.
 	 * @throws IOException if an error occurs.
 	 */
-	final XDValue readXD() throws IOException {
+	public final XDValue readXD() throws IOException {
 		short code = readShort();
 		if (code < 0) {
 			if (code == -1) {

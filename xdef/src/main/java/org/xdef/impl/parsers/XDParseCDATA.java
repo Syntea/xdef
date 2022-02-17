@@ -10,6 +10,7 @@ import org.xdef.impl.code.DefContainer;
 import org.xdef.impl.code.DefLong;
 import org.xdef.impl.code.DefParseResult;
 import org.xdef.XDContainer;
+import org.xdef.sys.SRuntimeException;
 
 /** Parser of X-Script "CDATA" type.
  * @author Vaclav Trojan
@@ -81,20 +82,18 @@ public class XDParseCDATA extends XDParserAbstract {
 		}
 	}
 	@Override
-	/** Set value of one "sequential" parameter of parser.
-	 * @param par "sequential" parameters.
-	 */
-	public void setParseParam(Object param) {
-		_minLength = _maxLength = Integer.parseInt(param.toString());
-	}
-	@Override
-	/** Set value of two "sequential" parameters of parser.
-	 * @param par1 the first "sequential" parameter.
-	 * @param par2 the second "sequential" parameter.
-	 */
-	public void setParseParams(final Object par1, final Object par2) {
-		_minLength = Integer.parseInt(par1.toString());
-		_maxLength = Integer.parseInt(par2.toString());
+	public void setParseSQParams(final Object... params) {
+		if (params != null && params.length >= 1) {
+			Object par1 = params[0];
+			_minLength = Integer.parseInt(par1.toString());
+			if (params.length == 1) {
+				_maxLength = _minLength;
+			} else if (params.length == 2) {
+				_maxLength = Integer.parseInt(params[1].toString());
+			} else {
+				throw new SRuntimeException("Incorrect number of parameters");
+			}
+		}
 	}
 	@Override
 	public final XDContainer getNamedParams() {
