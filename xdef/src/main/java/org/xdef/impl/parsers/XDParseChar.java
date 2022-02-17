@@ -39,6 +39,7 @@ public class XDParseChar extends XSAbstractParseToken {
 			return false;
 		}
 		char ch = p.peekChar();
+		boolean xon = p.isChar('c');
 		if (ch == '"') {
 			int i = XonTools.readJChar(p);
 			if (i < 1) {
@@ -48,6 +49,8 @@ public class XDParseChar extends XSAbstractParseToken {
 			if (!p.isChar('"')) {
 				return false;
 			}
+		} else if (xon) {
+			return false;
 		}
 		p.setParsedValue(new DefChar(ch));
 		return true;

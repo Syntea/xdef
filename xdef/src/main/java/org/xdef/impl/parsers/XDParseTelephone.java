@@ -18,6 +18,10 @@ public class XDParseTelephone extends XDParserAbstract {
 	public void parseObject(final XXNode xnode, final XDParseResult p) {
 		int i1 = p.getIndex();
 		p.isSpaces();
+		boolean xon = p.isToken("T\"");
+		if (xon) {
+			p.setIndex(p.getIndex() - 1);
+		}
 		String parsedValue = DefTelephone.parseTelephone(p);
 		p.setParsedValue(new DefTelephone(parsedValue));
 		if (parsedValue == null) {

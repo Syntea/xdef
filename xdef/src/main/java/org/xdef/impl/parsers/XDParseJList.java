@@ -114,8 +114,9 @@ public class XDParseJList extends XSAbstractParser {
 					itemParser.parseObject(xnode, p);
 				} else {
 					DefParseResult q;
-					if (p.isToken("g(") || p.isToken("p(") || p.isToken("c(")) {
-						p.setIndex(p.getIndex() - 2); //gps, price, char
+					int pos = p.getIndex();
+					if (p.isOneOfTokens("g(", "p(", "c\"") >= 0) {
+						p.setIndex(pos);
 						q = new DefParseResult(p.getUnparsedBufferPart());
 						itemParser.parseObject(xnode, q);
 						p.addReports(q.getReporter());
