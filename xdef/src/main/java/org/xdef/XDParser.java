@@ -48,25 +48,25 @@ public interface XDParser extends XDValue {
 
 	/** Table of keyword parameters.*/
 	public final static String[] PARAM_NAMES = new String[] {
-		"pattern",			// p
-		"enumeration",		// e
-		"whiteSpace",		// w
-		"maxInclusive",		// m
-		"maxExclusive",		// m
-		"minInclusive",		// m
-		"minExclusive",		// m
-		"totalDigits",		// t
-		"fractionDigits",	// f
-		"length",			// l
-		"maxLength",		// l
-		"minLength",		// l
-		"normalize",		// n
-		"item",				// i
-		"base",				// b
-		"separator",		// s
-		"format",			// f
-		"outFormat",		// o
-		"argument",			// a
+		"pattern",
+		"enumeration",
+		"whiteSpace",
+		"maxInclusive",
+		"maxExclusive",
+		"minInclusive",
+		"minExclusive",
+		"totalDigits",
+		"fractionDigits",
+		"length",
+		"maxLength",
+		"minLength",
+		"normalize",
+		"item",
+		"base",
+		"separator",
+		"format",
+		"outFormat",
+		"argument",
 	};
 	/** White space preserve. */
 	public final static byte WS_PRESERVE = 0;
@@ -109,7 +109,7 @@ public interface XDParser extends XDValue {
 
 	/** This method provides some final checks which are dependent on the
 	 * context of parsing (such as ENTITY, ENTITIES, ID, IDREF, IDREFS).
-	 * Usualy this method is empty.
+	 * Usually this method is empty.
 	 * @param p Parsed result to be checked.
 	 * @param xnode Actual check node or null.
 	 */
