@@ -832,6 +832,19 @@ public class GUIEditor extends GUIScreen {
 		}
 	}
 
+	private static String genTemporaryFile(final String extension,
+		final String charset,
+		final String data) {
+		try {
+			File f = File.createTempFile("data", "." + extension);
+			f.deleteOnExit();
+			SUtils.writeString(f, data);
+			return f.getAbsolutePath();
+		} catch (Exception ex) {
+			throw new RuntimeException(ex);
+		}
+	}
+	
 	/** Call generation of a collection of X-definitions from a command line.
 	 * @param args array with command line arguments:
 	 * <ul>
@@ -966,10 +979,12 @@ public class GUIEditor extends GUIScreen {
 					return;
 				}
 				String s = args[i++];
-				if (s.equalsIgnoreCase("XML")) {
-					format = 'x';
-				} else if (s.equalsIgnoreCase("JSON")) {
+				if (s.equalsIgnoreCase("JSON")) {
 					format = 'j';
+				} else if (s.equalsIgnoreCase("XML")) {
+					format = 'x';
+				} else if (s.equalsIgnoreCase("INI")) {
+					format = 'i';
 				} else {
 					System.err.println(
 						"Incorrect parameter -format (must be XML or JSON)\n"
@@ -986,9 +1001,6 @@ public class GUIEditor extends GUIScreen {
 				}
 				dataPath = args[i++];
 				continue;
-			}
-			if ("-form".equals(arg)) {
-
 			}
 			if ("-debug".equals(arg)) {
 				if (debug != null) {
@@ -1082,32 +1094,37 @@ public class GUIEditor extends GUIScreen {
 "      ? string(2,3);\n" +
 "    &lt;/b>\n" +
 "  &lt;/root>\n"
-: "&lt;xd:json name=\"root\">\n"+
-"{\"a\": [\"occurs 3 int()\"]}\n"+
-"&lt;/xd:json>\n") +
+: format == 'j'
+? "&lt;xd:json name=\"root\">\n"+
+"{\"a\": [\"occurs 3 int(;)\"]}\n"+
+"&lt;/xd:json>\n"
+: "&lt;xd:ini name=\"root\">\n"+
+"[\n"+
+" [\"occurs + string();\"]\n"+
+"]\n"+
+"&lt;/xd:ini>\n") +
 "&lt;/xd:def>");
 					if (displayResult == null) {
 						displayResult = "true";
 					}
 				}
 				if (dataPath == null) {
-					if (format == 'x') {
-						dataPath =
-						 "&lt;root a=\"1\">\n  &lt;b>xyz&lt;/b>\n&lt;/root>";
-					} else {
-						try {
-							File f = File.createTempFile("data", ".json");
-							f.deleteOnExit();
-							SUtils.writeString(f,"{\"a\": [1, 2, 3]}","UTF-8");
-							dataPath = f.getAbsolutePath();
-						} catch (Exception ex) {
-							throw new RuntimeException(ex);
-						}
+					if (format == 'i') {
+						dataPath = genTemporaryFile("ini", "ascii",
+							"a=1\nb=2");
+					} else if (format == 'x') {
+						dataPath = genTemporaryFile("xml", "UTF-8",
+							"<root a=\"1\">\n  &lt;b>xyz</b>\n</root>");
+					} else if (format == 'j') {
+						dataPath = genTemporaryFile("json", "UTF-8",
+							"{\"a\": [1, 2, 3]}");
 					}
 					debug = editInput = displayResult = "true";
 				}
 				src += "  <Execute Mode=\"validate\"";
-				if (format == 'j') {
+				if (format == 'i') {
+					src += " DataType=\"INI\"";
+				} else if (format == 'j') {
 					src += " DataType=\"JSON\"";
 				}
 				if (displayResult != null) {
