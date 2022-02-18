@@ -235,16 +235,34 @@ public class IniReader extends StringParser implements XonParsers {
 			p.isSpaces();
 			SPosition spos = p.getPosition();
 			String name;
-			boolean isScript = _jdef && p.findChar(';');
 			SBuffer p1 = null, p2 = null;
-			if (isScript) {
+			if (_jdef && p.findChar(';')) {
 				name = p.getBufferPart(spos.getIndex(), p.getIndex());
 				_jp.namedValue(new SBuffer(name.trim(), spos));
 				_jp.mapStart(spos);
+				p.isSpaces();
+				if (p.isChar(';')) {
+					p.isSpaces();
+					SPosition sp = p.getPosition();
+					if(p.isToken("$script")) {
+						p.isSpaces();
+						if (p.isChar('=')) {
+							p.isSpaces();
+							String s = p.getUnparsedBufferPart();
+							int ndx = s.lastIndexOf(']');
+							if (ndx > 0 ) {
+								p1 = new SBuffer("$script",	sp);
+								p2 = new SBuffer(s.substring(0, s.length()-1),
+									p.getPosition());
+							}
+						}
+					}					
+				}
 				if (p1 == null) {
 					//Value of $script must be string with X-script
 					error(JSON.JSON018);
 				}
+				p.findChar(']');
 			} else {
 				p.setPosition(spos);
 				if (!p.findChar(']')) {

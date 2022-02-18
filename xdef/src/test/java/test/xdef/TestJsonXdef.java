@@ -1,6 +1,8 @@
 package test.xdef;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.InputStream;
 import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -10,6 +12,7 @@ import java.util.Map;
 import org.w3c.dom.Element;
 import org.xdef.XDConstants;
 import org.xdef.XDDocument;
+import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.xdef.component.XComponent;
 import org.xdef.xon.XonUtil;
@@ -335,7 +338,7 @@ public class TestJsonXdef extends XDTester {
 	/** Run test and print error information. */
 	@SuppressWarnings("unchecked")
 	public void test() {
-		String test, json, xdef, xml;
+		String test, ini, json, xdef, xml;
 		Object j;
 		Element el;
 		ArrayReporter reporter = new ArrayReporter();
@@ -756,6 +759,76 @@ public class TestJsonXdef extends XDTester {
 				jparse(xp, "", (Object) j, reporter)));
 		} catch (Exception ex) {fail(ex);}
 		try {
+			InputStream in;
+			xdef =
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n"+
+" <xd:ini name='a'>\n"+
+"   A=?string(); finally out(\"A\");\n" +
+"   B=int(); finally out(\"B\");\n" +
+"   C=date(); finally out(\"C\");\n" +
+"   D=decimal(); finally out(\"D\");\n" +
+"   [E; $script=optional; finally out(\"[E]\");]\n" +
+"     x = ?int(); finally out(\"x\");\n" +
+"   [F; $script=finally out(\"[F]\");]\n" +
+" </xd:ini>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			xd = xp.createXDDocument();
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			ini = "A=a\n B = 1\n C=2121-10-19\n D=2.121\n[E]\nx=123\n[F]";
+			j = xd.iparse(ini, reporter);
+			assertNoErrors(reporter);
+			assertEq("ABCDx[E][F]", strw.toString());
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			in = new ByteArrayInputStream(ini.getBytes());
+			j = xd.iparse(in, reporter);
+			assertNoErrors(reporter);
+			assertEq("ABCDx[E][F]", strw.toString());
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			ini = "\n B = 1 \n C=2121-10-19\n D=2.121\n [E] \n[F]";
+			j = xd.iparse(ini, reporter);
+			assertNoErrors(reporter);
+			assertEq("BCD[E][F]", strw.toString());
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			in = new ByteArrayInputStream(ini.getBytes());
+			j = xd.iparse(in, reporter);
+			assertNoErrors(reporter);
+			assertEq("BCD[E][F]", strw.toString());
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			j = xd.iparse(ini, reporter);
+			assertNoErrors(reporter);
+			assertEq("BCD[E][F]", strw.toString());
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			in = new ByteArrayInputStream(ini.getBytes());
+			j = xd.iparse(in, reporter);
+			assertNoErrors(reporter);
+			assertEq("BCD[E][F]", strw.toString());
+			ini = "\n B = 1 \n C=2121-10-19\n D=2.121\n[F]";
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			j = xd.iparse(ini, reporter);
+			assertNoErrors(reporter);
+			assertEq("BCD[F]", strw.toString());
+			in = new ByteArrayInputStream(ini.getBytes());
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			j = xd.iparse(in, reporter);
+			assertNoErrors(reporter);
+			assertEq("BCD[F]", strw.toString());
+			in = new ByteArrayInputStream(ini.getBytes());
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			j = xd.iparse(ini, reporter);
+			assertNoErrors(reporter);
+			assertEq("BCD[F]", strw.toString());
+		} catch (Exception ex) {fail(ex);}
+		try {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' name='TestINI' root='a'>\n"+
 " <xd:ini name='a'>\n"+
@@ -772,7 +845,7 @@ public class TestJsonXdef extends XDTester {
 " </xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			String ini = "A=a\n B=1\n C=2121-10-19\n D=2.34\n[E]\nx=123\n[F]";
+			ini = "A=a\n B=1\n C=2121-10-19\n D=2.34\n[E]\nx=123\n[F]";
 			xd = xp.createXDDocument("TestINI");
 			String xdir = _tempDir + "x/";
 			File fdir = new File(xdir);
