@@ -73,7 +73,7 @@ public class GUIEditor extends GUIScreen {
 "\n" +
 "  <Execute\n" +
 "    XDName=\"? string(1, 1000);\"\n" +
-"    DataType=\"? enum('XML', 'JSON', INI);\"\n" +
+"    DataType=\"? enum('XML', 'JSON', 'INI');\"\n" +
 "    Mode=\"? enum('construct', 'validate');\"\n" +
 "    DisplayResult=\"? enum('true', 'false'); \" >\n" +
 "    <xd:mixed>\n" +
