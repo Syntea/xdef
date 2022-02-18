@@ -23,12 +23,13 @@ public class XDParseTelephone extends XDParserAbstract {
 			p.setIndex(p.getIndex() - 1);
 		}
 		String parsedValue = DefTelephone.parseTelephone(p);
-		p.setParsedValue(new DefTelephone(parsedValue));
 		if (parsedValue == null) {
 			int i2 = p.getIndex();
 			p.setIndex(i1);
 			//Incorrect value of '&{0}'&{1}{: }
 			p.errorWithString(XDEF.XDEF809,parserName(),p.getBufferPart(i1,i2));
+		} else {
+			p.setParsedValue(new DefTelephone(parsedValue));		
 		}
 	}
 	@Override
