@@ -27,6 +27,7 @@ import org.xdef.impl.parsers.XDParseMD5;
 import org.xdef.impl.parsers.XDParsePrice;
 import org.xdef.impl.parsers.XDParsePrintableDate;
 import org.xdef.impl.parsers.XDParseSHA1;
+import org.xdef.impl.parsers.XDParseTelephone;
 import org.xdef.impl.parsers.XSParseBase64Binary;
 import org.xdef.impl.parsers.XSParseBoolean;
 import org.xdef.impl.parsers.XSParseDate;
@@ -535,6 +536,9 @@ public final class GenXDef implements XDConstants {
 		}
 		if (new XDParsePrice().check(null, data).matches()) {
 			return "price()";
+		}
+		if (new XDParseTelephone().check(null, data).matches()) {
+			return "telephone()";
 		}
 		final StringParser p = new StringParser(data);
 		p.setIndex(0);
