@@ -23,6 +23,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Properties;
 import javax.swing.AbstractAction;
 import javax.swing.JFileChooser;
@@ -72,7 +73,7 @@ public class GUIEditor extends GUIScreen {
 "\n" +
 "  <Execute\n" +
 "    XDName=\"? string(1, 1000);\"\n" +
-"    DataType=\"? enum('XML', 'JSON');\"\n" +
+"    DataType=\"? enum('XML', 'JSON', INI);\"\n" +
 "    Mode=\"? enum('construct', 'validate');\"\n" +
 "    DisplayResult=\"? enum('true', 'false'); \" >\n" +
 "    <xd:mixed>\n" +
@@ -662,6 +663,7 @@ public class GUIEditor extends GUIScreen {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	/** Execute project.
 	 * @param project element with the project.
 	 * @param xp compiled XDPool.
@@ -679,7 +681,9 @@ public class GUIEditor extends GUIScreen {
 			Element exe = (Element) nl.item(i);
 			// get name of X-definition
 			String xdName = exe.getAttribute("XDName").trim();
-			char type = exe.getAttribute("DataType").equals("JSON") ? 'j' : 'x';
+			// get data type
+			String t = exe.getAttribute("DataType");
+			char type = "JSON".equals(t) ? 'j' : "INI".equals(t) ? 'i' : 'x';
 			// get inpout data
 			e = KXmlUtils.firstElementChild(exe, "Input");
 			String data = getData(e);
@@ -727,12 +731,20 @@ public class GUIEditor extends GUIScreen {
 						name = n;
 					}
 				}
-				result = xd.xcreate(new QName(uri, name), reporter);
+				if (type == 'i') {
+					result = xd.jcreate(data, reporter);
+				} else if (type == 'j') {
+					result = xd.jcreate(data, reporter);
+				} else { // type = x
+					result = xd.xcreate(new QName(uri, name), reporter);
+				}
 			} else {  // run validation mode
-				if (type == 'x') {
-					result = xd.xparse(data, reporter);
-				} else {
+				if (type == 'i') {
+					result = xd.iparse(data, reporter);
+				} else if (type == 'j') {
 					result = xd.jparse(data, reporter);
+				} else { // type = x
+					result = xd.xparse(data, reporter);
 				}
 			}
 			// set bounds of the window from previous steps
@@ -782,12 +794,16 @@ public class GUIEditor extends GUIScreen {
 					encoding = "UTF-8";
 				}
 				try {
-					if (type == 'x') {
+					if (type == 'i') {
+						String s =
+							XonUtil.toIniString((Map<String, Object>) result);
+						SUtils.writeString(new File(name), s, "ASCII");
+					} else if (type == 'j') {
+						String s = XonUtil.toJsonString(result, indent);
+						SUtils.writeString(new File(name), s, "UTF-8");
+					} else { // type = 'x'
 						KXmlUtils.writeXml(new File(name), encoding,
 							(Element) result, indent, true);
-					} else { // type = 'j'
-						String s =XonUtil.toJsonString(result, indent);
-						SUtils.writeString(new File(name), s, "UTF-8");
 					}
 				} catch (Exception ex) {
 					//GUIEditor can't write XML data to file &{0}
@@ -797,11 +813,13 @@ public class GUIEditor extends GUIScreen {
 			}
 			if ("true".equals(exe.getAttribute("DisplayResult"))) {
 				String s;
-				if (type == 'x') {// // display result XML
+				if (type == 'i') { // display as INI
+					s = XonUtil.toIniString((Map<String, Object>) result);
+				} else if (type == 'j') { // display as JSON
+					s = XonUtil.toJsonString(result, true);
+				} else {// display result XML
 					s = result == null
 						? "" : KXmlUtils.nodeToString((Element) result, true);
-				} else {
-					s = XonUtil.toJsonString(result, true);
 				}
 				if (!strw.toString().isEmpty()) {
 					s += s.isEmpty() ? "" : "\n\n";
