@@ -732,9 +732,9 @@ public class GUIEditor extends GUIScreen {
 					}
 				}
 				if (type == 'i') {
-					result = xd.jcreate(data, reporter);
+					result = xd.jcreate(name, reporter);
 				} else if (type == 'j') {
-					result = xd.jcreate(data, reporter);
+					result = xd.jcreate(name, reporter);
 				} else { // type = x
 					result = xd.xcreate(new QName(uri, name), reporter);
 				}
