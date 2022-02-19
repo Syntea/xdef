@@ -21,6 +21,7 @@ import javax.swing.undo.UndoManager;
 import org.xdef.impl.XDSourceInfo;
 import org.xdef.impl.XDSourceItem;
 import org.xdef.sys.ArrayReporter;
+import org.xdef.sys.FUtils;
 import org.xdef.sys.Report;
 import org.xdef.sys.SUtils;
 
@@ -358,39 +359,49 @@ public class GUIScreen extends GUIBase {
 	}
 
 	/** Save source text from XDSourceItem to a file.
-	 * @param src XDSourceItem object.
+	 * @param si XDSourceItem object.
 	 * @return true is source was saved.
 	 */
-	public final boolean saveSource(final XDSourceItem src) {
+	public final boolean saveSource(final XDSourceItem si) {
 		updateSourceItem();
 		boolean again;
+		File srcFile = si._url!=null && "file".equals(si._url.getProtocol())
+			? new File(si._url.getFile()) : null;
+		if (srcFile == null) {
+			try {
+				srcFile = File.createTempFile("source", ".tmp");
+				srcFile.deleteOnExit();
+				FUtils.writeString(srcFile, si._source);
+			} catch (Exception ex) {
+				JOptionPane.showMessageDialog(null, "Can't write to file ");
+				return false;
+			}
+		}
 		do {
 			again = false;
 			JFileChooser jf = new JFileChooser();
-			if (src._url != null && "file".equals(src._url.getProtocol())) {
-				jf.setSelectedFile(new File(src._url.getFile()));
-			} else {
-				jf.setSelectedFile(new File(".").getAbsoluteFile());
-			}
 			jf.setDialogTitle("Save to file");
 			jf.setToolTipText("Save content of the active window to a file");
+			jf.setSelectedFile(srcFile);
+			jf.setFileSelectionMode(JFileChooser.FILES_ONLY);
+			jf.setCurrentDirectory(srcFile);
 			int retval = jf.showSaveDialog(_frame);
 			jf.setEnabled(false);
 			if (retval == JFileChooser.APPROVE_OPTION) {
-				File f = jf.getSelectedFile();
-				if (f.isFile() && f.exists() && f.canWrite()) {
+				File file = jf.getSelectedFile();
+				if (file.isFile() && file.exists() && file.canWrite()) {
 					if (JOptionPane.showConfirmDialog(null,
-						"File " + f.getName() + " exists, save anyway?",
+						"File " + file.getName() + " exists, save anyway?",
 						null, JOptionPane.OK_CANCEL_OPTION) != 0) {
-						f = null;
+						file = null;
 					}
 				}
-				if (f != null) {
-					if (f.isFile() && f.canWrite()) {
+				if (file != null) {
+					if (file.isFile() && file.canWrite()) {
 						try {
-							SUtils.writeString(f, src._source, src._encoding);
-							src._url = f.toURI().toURL();
-							src._saved = true;
+							SUtils.writeString(file, si._source, si._encoding);
+							si._url = file.toURI().toURL();
+							si._saved = true;
 							return true;
 						} catch (Exception ex) {
 							String s = ex.getMessage();
@@ -398,11 +409,11 @@ public class GUIScreen extends GUIBase {
 								s = "" + ex;
 							}
 							JOptionPane.showConfirmDialog(null,
-								"Error when writing to " + f.getName()+": "+s);
+								"Error when writing to " + file.getName()+": "+s);
 						}
 					}
 					JOptionPane.showMessageDialog(null,
-						"Can't write to file " + f.getName());
+						"Can't write to file " + file.getName());
 					again = true;
 				}
 			}

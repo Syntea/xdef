@@ -58,6 +58,7 @@ import org.xdef.sys.SError;
 import org.xdef.sys.SManager;
 import org.xdef.sys.SReporter;
 import org.xdef.sys.SRuntimeException;
+import org.xdef.sys.SThrowable;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.xon.XonUtil;
@@ -1767,7 +1768,15 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		} catch (Exception ex) {
 			XDDebug debugger = getDebugger();
 			if (debugger != null) {
-				debugger.closeDebugger("Process finished with exception:\n"+ex);
+				if (ex instanceof SThrowable) {
+					SThrowable st = (SThrowable) ex;
+					debugger.closeDebugger(st.getReport().getLocalizedText());
+				} else {
+					debugger.closeDebugger(
+						"Process finished with exception:\n" + ex);
+				}
+//				parser.closeReader();
+				return null;
 			}
 			if (parser != null) {
 				parser.closeReader();

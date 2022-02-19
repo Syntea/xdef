@@ -832,11 +832,12 @@ public class GUIEditor extends GUIScreen {
 		}
 	}
 
-	private static String genTemporaryFile(final String extension,
-		final String charset,
-		final String data) {
+	private static String genTemporaryFile(final String data,
+		final File dir,
+		final String extension,
+		final String charset) {
 		try {
-			File f = File.createTempFile("data", "." + extension);
+			File f = File.createTempFile("data", "." + extension, dir);
 			f.deleteOnExit();
 			SUtils.writeString(f, data);
 			return f.getAbsolutePath();
@@ -905,6 +906,7 @@ public class GUIEditor extends GUIScreen {
 		String debug = null;
 		String editInput = null;
 		String displayResult = null;
+		File tempDir = null;
 		int i = 1;
 		char param;
 		char format = (char) 0;
@@ -1029,12 +1031,49 @@ public class GUIEditor extends GUIScreen {
 				displayResult = "true";
 				continue;
 			}
+			if ("-tempDir".equals(arg)) {
+				if (tempDir != null) {
+					System.err.println(
+						"Redefinition of parameter \"-tempDir\"\n" +info);
+					return;
+				}
+				tempDir = new File(args[i++]);
+				if (!tempDir.exists() || !tempDir.isDirectory()) {
+					System.err.println(
+						"Parameter \"-tempDir\" is not directory\n" +info);
+					return;
+				}
+				continue;
+			}
 			System.err.println("Incorrect parameter \"" + arg + "\"\n" + info);
 			return;
 		}
 		String msg = "";
 		if (format == 0) {
 			format = 'x'; // default is XML
+		}
+		if (tempDir == null) {
+			try {
+				File f = File.createTempFile("{GUI", "}");
+				f.deleteOnExit();
+				tempDir = f.getParentFile();
+//				String dirName = "{X-DEF_GUI}";
+//				File dir;
+//				int ext = 0;
+//				while ((dir = new File(f.getParentFile(), dirName)).exists()) {
+//					dirName = "{X-DEF_GUI}" + (++ext);
+//				}
+//				dir.mkdirs();
+//				dir.deleteOnExit();
+//				if (!dir.isDirectory()) {
+//					System.err.println("Can't create temp directory");
+//					return;
+//				}
+//				tempDir = dir;
+			} catch (Exception ex) {
+				System.err.println("Can't create temp directory");
+				return;
+			}
 		}
 		switch (param) {
 			case 'c': { // create
@@ -1091,7 +1130,7 @@ public class GUIEditor extends GUIScreen {
 (format == 'x'
 ? "  &lt;root a=\"int();\" >\n" +
 "    &lt;b xd:script=\"*\" >\n" +
-"      ? string(2,3);\n" +
+"      ? string();\n" +
 "    &lt;/b>\n" +
 "  &lt;/root>\n"
 : format == 'j'
@@ -1110,14 +1149,18 @@ public class GUIEditor extends GUIScreen {
 				}
 				if (dataPath == null) {
 					if (format == 'i') {
-						dataPath = genTemporaryFile("ini", "ascii",
-							"a=1\nb=2");
+						dataPath = genTemporaryFile(
+							"a=1\nb=2", tempDir, "ini", "ascii");
 					} else if (format == 'x') {
-						dataPath = genTemporaryFile("xml", "UTF-8",
-							"<root a=\"1\">\n  &lt;b>xyz</b>\n</root>");
+						dataPath = genTemporaryFile(
+"<root a=\"123\" >\n" +
+"  <b>text</b>\n" +
+"  <b/>\n" +
+"</root>",
+							tempDir, "xml", "UTF-8");							
 					} else if (format == 'j') {
-						dataPath = genTemporaryFile("json", "UTF-8",
-							"{\"a\": [1, 2, 3]}");
+						dataPath = genTemporaryFile("{\"a\": [1, 2, 3]}",
+							tempDir, "json", "UTF-8");
 					}
 					debug = editInput = displayResult = "true";
 				}
