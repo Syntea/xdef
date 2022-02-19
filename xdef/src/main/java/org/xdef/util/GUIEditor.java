@@ -638,16 +638,16 @@ public class GUIEditor extends GUIScreen {
 		// get X-definition sources
 		NodeList nl = project.getElementsByTagName("XDefinition");
 		try {
-			ArrayList<String> axdefs = new ArrayList<String>();
+			ArrayList<String> xdefs = new ArrayList<String>();
 			for (int i = 0; i < nl.getLength(); i++) {
 				Element e = (Element) nl.item(i);
 				String t = e.getTextContent().trim();
 				if (t != null && !t.isEmpty()) {
-					axdefs.add(t);
+					xdefs.add(t);
 				}
 			}
 			XDPool xp = XDFactory.compileXD(props,
-				axdefs.toArray(new String[axdefs.size()]));
+				xdefs.toArray(new String[xdefs.size()]));
 			XDSourceInfo si = xp.getXDSourceInfo();
 			boolean changed = false;
 			for (String x: si.getMap().keySet()) {
