@@ -882,7 +882,6 @@ public class GUIEditor extends GUIScreen {
 " -debug sets debugging mode when project is executed\n"+
 " -editInput enables to edit input data before execution\n"+
 " -displayResult displays result data\n";
-		args = new String[]{ "-v", "-tempDir", "C:/tempx"};
 		if (args == null || args.length == 0) {
 			System.err.println("No parameters.\n" + info);
 			return;
