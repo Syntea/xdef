@@ -54,7 +54,7 @@ public class GUIEditor extends GUIScreen {
 
 	static {
 		String xdef = // X-definition of project description
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" root=Project>\n" +
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" root=\"Project\">\n" +
 "  <Project\n" +
 "    Show=\"? enum('true','false'); /*if true file with project displayed see"
 			+ " and editable.*/\">\n" +
@@ -62,7 +62,7 @@ public class GUIEditor extends GUIScreen {
 "    <xd:mixed>\n" +
 "<!-- Items with sources of X-definitions -->\n" +
 "      <XDefinition xd:script=\"+\">\n" +
-"        string(); /*this can be a file, url or a XML with X-definition source*/\n" +
+"        string(); /*this can be a file, url or an XML with X-definition source*/\n" +
 "      </XDefinition>\n" +
 "\n" +
 "<!-- Set properties for compiling and executing X-definition -->\n" +
@@ -107,7 +107,8 @@ public class GUIEditor extends GUIScreen {
 "            Encoding=\"? string(); /*name of char encoding*/\"\n" +
 "            File=\"string(); /*file where to store result of procesed X-definition*/\" />\n" +
 "        </xd:mixed>\n" +
-"      </xd:mixed>\n" +
+"	   </Execute>\n" +
+"    </xd:mixed>\n" +
 "  </Project>\n" +
 "</xd:def>";
 		Properties props = new Properties();
