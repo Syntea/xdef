@@ -356,7 +356,7 @@ public final class XDWriter extends SObjectWriter {
 					if (x instanceof CodeOp) {
 						writeByte(ID_CODEOP);
 						return;
-					}					
+					}
 					throw new SIOException(SYS.SYS066, //Internal error&{0}{: }
 						"Illegal object: " + x.getClass().getName() +
 						"/code=" + code + "/type" + type);

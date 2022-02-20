@@ -31,7 +31,7 @@ public class XDParseEqi extends XDParseEq {
 		if (param.length == 1) {
 			_param = param.toString();
 		} else {
-			throw new SRuntimeException("Incorrect number of parameters");		
+			throw new SRuntimeException("Incorrect number of parameters");
 		}
 	}
 	@Override

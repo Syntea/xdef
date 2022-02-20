@@ -96,7 +96,7 @@ public abstract class XDParserAbstract extends XDValueAbstract
 			XDValue val = nv.getValue();
 			if (val != null) {
 				switch (nv.getName()) {
-					case "item" : 
+					case "item" :
 						if (val.getItemId() == XD_CONTAINER) {
 							XDContainer c = (XDContainer) val;
 							for (int i = 0; i <= c.getXDItemsNumber(); i++) {

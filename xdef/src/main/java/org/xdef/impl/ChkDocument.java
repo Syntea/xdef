@@ -1560,11 +1560,11 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			}
 			return xparseXComponent(e, yClass, reporter);
 		} else if (xon instanceof String) {
-			return jparseXComponent(XonUtil.parseXON((String) xon),
-				yClass, reporter);
+			return jparseXComponent(
+				XonUtil.parseXON((String) xon), yClass, reporter);
 		} else if (xon instanceof File) {
-			return jparseXComponent(XonUtil.parseXON((File) xon),
-				yClass,reporter);
+			return jparseXComponent(
+				XonUtil.parseXON((File) xon), yClass,reporter);
 		} else if (xon instanceof InputStream) {
 			return jparseXComponent((InputStream)xon,yClass,sourceId,reporter);
 		} else if (xon instanceof Node) {
@@ -1588,16 +1588,16 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		throws SRuntimeException {
 		if (data == null || data instanceof Map || data instanceof List
 			|| data instanceof String || data instanceof Number
-			|| data instanceof Boolean
-			|| data instanceof SDatetime || data instanceof SDuration
-			|| data instanceof GPSPosition || data instanceof Price) {
+			|| data instanceof Boolean || data instanceof SDatetime
+			|| data instanceof SDuration || data instanceof GPSPosition
+			|| data instanceof Price) {
 			_reporter = new SReporter(reporter);
 			_scp.setStdErr(new DefOutStream(reporter));
 			_refNum = 0; // we must clear counter!
 			new XonSourceParser(data).xparse(this);
 			return getXon();
-		} else if (data instanceof File
-			|| data instanceof URL || data instanceof InputStream) {
+		} else if (data instanceof File || data instanceof URL
+			|| data instanceof InputStream) {
 			createXonParser(data, reporter, null).xparse(this);
 			return getXon();
 		}
@@ -1775,7 +1775,6 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 					debugger.closeDebugger(
 						"Process finished with exception:\n" + ex);
 				}
-//				parser.closeReader();
 				return null;
 			}
 			if (parser != null) {
@@ -1843,16 +1842,12 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	public final Element xparse(final Object data,
 		final String sourceId,
 		final ReportWriter reporter) throws SRuntimeException {
-		ChkParser parser = null;
-		if (data instanceof String) {
-			parser = new ChkParser(reporter, (String) data);
-		} else if (data instanceof File) {
-			parser = new ChkParser(reporter, (File) data);
-		} else if (data instanceof URL) {
-			parser = new ChkParser(reporter, (URL) data);
-		} else if (data instanceof InputStream) {
-			parser = new ChkParser(reporter, (InputStream) data, sourceId);
-		}
+		ChkParser parser =
+			(data instanceof String) ? new ChkParser(reporter, (String) data)
+			: (data instanceof File) ? new ChkParser(reporter, (File) data)
+			: (data instanceof URL) ? new ChkParser(reporter, (URL) data)
+			: (data instanceof InputStream)
+				? new ChkParser(reporter, (InputStream) data, sourceId) : null;
 		if (parser == null) {
 			// Input XML source is empty or doesn't exist.
 			throw new SRuntimeException(Report.error(XDEF.XDEF578));
@@ -1968,16 +1963,11 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	public final Object yparse(final String data, final ReportWriter reporter)
 		throws SRuntimeException {
 		Object o = getSource(data);
-		if (o instanceof String) {
-			 return XonUtil.parseYAML((String) o);
-		} else if (o instanceof URL) {
-			return yparse(((URL) o), reporter);
-		} else if (o instanceof File) {
-			return yparse(((File) o), reporter);
-		}
-		return jvalidate(XonUtil.parseYAML(
-			new ByteArrayInputStream(data.getBytes(Charset.forName("UTF-16")))),
-			reporter);
+		return (o instanceof String) ? XonUtil.parseYAML((String) o)
+			: (o instanceof URL) ? yparse(((URL) o), reporter)
+			: (o instanceof File) ? yparse(((File) o), reporter)
+			: jvalidate(XonUtil.parseYAML(new ByteArrayInputStream(
+				data.getBytes(Charset.forName("UTF-16")))), reporter);
 	}
 
 	@Override
@@ -2058,9 +2048,8 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		final String sourceId,
 		final ReportWriter reporter) throws SRuntimeException {
 		Class<?> yClass  = xClass;
-		if (yaml == null || yaml instanceof Map
-			|| yaml instanceof List || yaml instanceof Number
-			|| yaml instanceof Boolean) {
+		if (yaml == null || yaml instanceof Map || yaml instanceof List
+			|| yaml instanceof Number || yaml instanceof Boolean) {
 			if (yClass == null) {
 				for (String s: getXDPool().getXComponents().keySet()) {
 					String className = getXDPool().getXComponents().get(s);
@@ -2090,7 +2079,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			} catch (Exception ex) {
 				e = XonUtil.xonToXml(yaml); // X-definition transormation
 			}
-			return parseXComponent(e, yClass, reporter);
+			return xparseXComponent(e, yClass, reporter);
 		} else if (yaml instanceof String) {
 			return jparseXComponent(XonUtil.parseXON((String) yaml),
 				yClass, reporter);
@@ -2134,5 +2123,4 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		final ReportWriter reporter) throws SRuntimeException {
 		return xparseXComponent(xmlData, xClass, sourceId, reporter);
 	}
-
 }

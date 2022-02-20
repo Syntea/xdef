@@ -29,7 +29,7 @@ public class XDParseTelephone extends XDParserAbstract {
 			//Incorrect value of '&{0}'&{1}{: }
 			p.errorWithString(XDEF.XDEF809,parserName(),p.getBufferPart(i1,i2));
 		} else {
-			p.setParsedValue(new DefTelephone(parsedValue));		
+			p.setParsedValue(new DefTelephone(parsedValue));
 		}
 	}
 	@Override

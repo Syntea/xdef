@@ -52,7 +52,7 @@ public class XDParseJValue extends XSAbstractParser {
 			0;
 	}
 	@Override
-	public void check(final XXNode x, final XDParseResult p) {parse(x,p,true);}		
+	public void check(final XXNode x, final XDParseResult p) {parse(x,p,true);}
 	@Override
 	public void parseObject(final XXNode x, final XDParseResult p) {
 		parse(x,p,false);

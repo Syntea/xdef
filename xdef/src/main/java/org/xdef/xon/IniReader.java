@@ -256,7 +256,7 @@ public class IniReader extends StringParser implements XonParsers {
 									p.getPosition());
 							}
 						}
-					}					
+					}
 				}
 				if (p1 == null) {
 					//Value of $script must be string with X-script
