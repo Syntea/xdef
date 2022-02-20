@@ -111,14 +111,7 @@ public class GUIEditor extends GUIScreen {
 "    </xd:mixed>\n" +
 "  </Project>\n" +
 "</xd:def>";
-		Properties props = new Properties();
-//		props.setProperty(XDConstants.XDPROPERTY_WARNINGS,
-//			XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE);
-//		props.setProperty(XDConstants.XDPROPERTY_DEBUG,
-//			XDConstants.XDPROPERTYVALUE_DEBUG_FALSE);
-//		props.setProperty(XDConstants.XDPROPERTY_DISPLAY,
-//			XDConstants.XDPROPERTYVALUE_DISPLAY_FALSE);
-		PROJECTXDPOOL = XDFactory.compileXD(props, xdef);
+		PROJECTXDPOOL = XDFactory.compileXD(null, xdef);
 	}
 
 	/** Prepare menu items connected with more sources. */
@@ -1067,19 +1060,6 @@ public class GUIEditor extends GUIScreen {
 				File f = File.createTempFile("{GUI", "}");
 				f.deleteOnExit();
 				tempDir = f.getParentFile();
-//				String dirName = "{X-DEF_GUI}";
-//				File dir;
-//				int ext = 0;
-//				while ((dir = new File(f.getParentFile(), dirName)).exists()) {
-//					dirName = "{X-DEF_GUI}" + (++ext);
-//				}
-//				dir.mkdirs();
-//				dir.deleteOnExit();
-//				if (!dir.isDirectory()) {
-//					System.err.println("Can't create temp directory");
-//					return;
-//				}
-//				tempDir = dir;
 			} catch (Exception ex) {
 				System.err.println("Can't create temp directory");
 				return;
@@ -1135,8 +1115,8 @@ public class GUIEditor extends GUIScreen {
 			case 'v': { // validate
 				if (xdefs.isEmpty()) {
 					xdefs.add(
-"&lt;xd:def xmlns:xd=\"" + XDConstants.XDEF41_NS_URI
-	+ "\" name=\"test\" root=\"root\">\n" +
+"&lt;xd:def xmlns:xd=\""
+	+ XDConstants.XDEF41_NS_URI + "\" name=\"test\" root=\"root\">\n" +
 (format == 'x'
 ? "  &lt;root a=\"int();\" >\n" +
 "    &lt;b xd:script=\"*\" >\n" +
