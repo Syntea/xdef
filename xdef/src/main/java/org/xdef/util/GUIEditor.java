@@ -65,8 +65,8 @@ public class GUIEditor extends GUIScreen {
 "        string(); /*this can be a file, url or XML with X-definition source*/\n"+
 "      </XDefinition>\n" +
 "\n" +
-"<!-- \"Property\" items are uset to set properties for compiling and"
-			+ " executing of the project -->\n" +
+"<!-- \"Property\" items are used to set properties for compiling and"
+			+ " executing the project -->\n" +
 "      <Property xd:script=\"*\"\n" +
 "        Name=\"string();  /*property name*/\"\n" +
 "        Value=\"string(); /*property value*/\" />\n" +
