@@ -54,52 +54,61 @@ public class GUIEditor extends GUIScreen {
 
 	static {
 		String xdef = // X-definition of project description
-"<xd:def xmlns:xd=\"" + XDConstants.XDEF41_NS_URI + "\" root=\"Project\">\n" +
-"  <Project Show=\"? enum('true', 'false');\">\n" +
-"    <xd:mixed>\n" +
-"      <!-- Sources of X-definitions -->\n" +
-"      <XDefinition xd:script=\"+\">\n" +
-"        string();\n" +
-"      </XDefinition>\n" +
-"      <!-- Set property -->\n" +
-"      <Property xd:script=\"*\"\n" +
-"        Name=\"string();\"\n" +
-"        Value=\"string()\" />\n" +
-"      <!-- If \"Execute\" elements are specified the compiled XDPool\n" +
-"        is executed according to the parameters specified there. -->\n" +
-"      <Execute xd:script=\"*; ref Execute\"/>\n" +
-"    </xd:mixed>\n" +
-"  </Project>\n" +
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" root=Project>\n" +
+"  <Project\n" +
+"    Show=\"? enum('true','false'); /*if true file with project displayed see"
+			+ " and editable.*/\">\n" +
 "\n" +
-"  <Execute\n" +
-"    XDName=\"? string(1, 1000);\"\n" +
-"    DataType=\"? enum('XML', 'JSON', 'INI');\"\n" +
-"    Mode=\"? enum('construct', 'validate');\"\n" +
-"    DisplayResult=\"? enum('true', 'false'); \" >\n" +
 "    <xd:mixed>\n" +
-"      <!-- If \"Var\" elements are specified\n" +
-"        the variables are set to the X-definition processor. -->\n" +
-"      <Var xd:script=\"*\" Name=\"string();\">\n" +
-"        string();\n" +
-"      </Var>\n" +
-"      <!-- If \"Context\" element is specified the context\n" +
-"        is set to the X-definition processor. -->\n" +
-"      <Context xd:script=\"?\" Edit=\"? enum('true', 'false');\" >\n" +
-"        string();\n" +
-"      </Context>\n" +
-"      <!-- If \"Input\" element is specified the input data\n" +
-"        is set to the X-definition processor. -->\n" +
-"      <Input xd:script=\"?\" Edit=\"? enum('true', 'false');\">\n" +
-"        string();\n" +
-"      </Input>\n" +
-"      <!-- If \"SaveResult\" element is specified the result\n" +
-"        the processed element will be saved to the specified file. -->\n" +
-"      <SaveResult xd:script=\"?\"\n" +
-"        Indent=\"? string();\"\n" +
-"        Encoding=\"? string();\"\n" +
-"        File=\"string();\" />\n" +
-"    </xd:mixed>\n" +
-"  </Execute>\n" +
+"<!-- Items with sources of X-definitions -->\n" +
+"      <XDefinition xd:script=\"+\">\n" +
+"        string(); /*this can be a file, url or a XML with X-definition source*/\n" +
+"      </XDefinition>\n" +
+"\n" +
+"<!-- Set properties for compiling and executing X-definition -->\n" +
+"      <Property xd:script=\"*\"\n" +
+"        Name=\"string();  /*name of property*/\"\n" +
+"        Value=\"string(); /*value of property*/\" />\n" +
+"\n" +
+"<!-- If \"Execute\" elements are specified the compiled XDPool\n" +
+"   is executed according to the parameters specified there. -->\n" +
+"      <Execute xd:script=\"*;\"\n" +
+"        XDName=\"? string(1, 1000); /*name of root X-definition (may be missing)*/\"\n" +
+"        DataType=\"? enum('XML', 'JSON', 'INI'); /*type of processed data*/\"\n" +
+"        Mode=\"? enum('construct', 'validate'); /*mode of processing*/\"\n" +
+"        DisplayResult=\"? enum('true', 'false');/*it thru the result of processing"
+			+ " is displayed*/\" >\n" +
+"\n" +
+"        <xd:mixed>\n" +
+"<!-- If \"Var\" elements are specified the variables are set to the X-definition"
+			+ " processor. -->\n" +
+"          <Var xd:script=\"*\" Name=\"string(); /*name of variable*/\">\n" +
+"            string(); /*value of variable*/\n" +
+"          </Var>\n" +
+"\n" +
+"<!-- If \"Context\" element is specified the context is set to the X-definition"
+			+ " processor. -->\n" +
+"          <Context xd:script=\"?\"\n" +
+"            Edit=\"? enum('true', 'false'); /*if true the context can be edited*/\" >\n" +
+"            string(); /*the file or data to be used as context*/\n" +
+"          </Context>\n" +
+"\n" +
+"<!-- If \"Input\" element is specified the input data\n" +
+"          is set to the X-definition processor. -->\n" +
+"          <Input xd:script=\"?\"\n" +
+"            Edit=\"? enum('true', 'false'); /*if true input data can be edited*/\">\n" +
+"            string(); /*file with data*/\n" +
+"          </Input>\n" +
+"\n" +
+"<!-- If \"SaveResult\" element is specified the result the processed element\n" +
+"  will be saved to the specified file. -->\n" +
+"          <SaveResult xd:script=\"?\"\n" +
+"            Indent=\"? enum('true', 'false'); /*if true result is indented*/\"\n" +
+"            Encoding=\"? string(); /*name of char encoding*/\"\n" +
+"            File=\"string(); /*file where to store result of procesed X-definition*/\" />\n" +
+"        </xd:mixed>\n" +
+"      </xd:mixed>\n" +
+"  </Project>\n" +
 "</xd:def>";
 		Properties props = new Properties();
 //		props.setProperty(XDConstants.XDPROPERTY_WARNINGS,
