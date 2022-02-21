@@ -853,6 +853,50 @@ public class GUIEditor extends GUIScreen {
 			throw new RuntimeException(ex);
 		}
 	}
+	
+	private static final String INFO =
+"Edit and run X-definition in graphical user interface.\n"+
+"Command line arguments:\n"+
+" -p project_file | -v [switches] | [-c [switches] | -g [xml source]\n\n"+
+" -p run a project file\n"+
+" -v compile X-definition and runs validation mode\n"+
+" -c compile X-definition and runs construction mode\n"+
+" -g generate X-definition and project from input data (optionally follows\n"+
+"  the source file name may follow).\n\n"+
+"Switches\n"+
+" -xdef source with X-definition (input file or data; it may be\n"+
+"    specified more times)\n"+
+" -format specification of data format XML or JSON (default XML) \n"+
+" -data source (input file or data used for validation mode and as\n"+
+"    the context for construction mode or for generation of X-definition).\n"+
+" -debug sets debugging mode when project is executed\n"+
+" -editInput enables to edit input data before execution\n"+
+" -displayResult displays result data\n";
+
+	/** Check or create temp directory.
+	 * @param tempDir file with directory or null.
+	 * @return file with temp directory or null if error occurs.
+	 */
+	private static File getTempDir(final File tempDir) {
+		if (tempDir != null) {
+			if (!tempDir.exists() || !tempDir.isDirectory()) {
+				System.err.println(
+					"Parameter \"-tempDir\" is not directory\n" +INFO);
+				return null;
+			}
+			return tempDir;
+		}
+		try {
+			File f = File.createTempFile("{GUI", "}");
+			f.deleteOnExit();
+			File g = f.getParentFile();
+			f.delete();
+			return g;
+		} catch (Exception ex) {
+			System.err.println("Can't create temp directory");
+			return null;
+		}
+	}
 
 	/** Call generation of a collection of X-definitions from a command line.
 	 * @param args array with command line arguments:
@@ -872,36 +916,18 @@ public class GUIEditor extends GUIScreen {
 	 * </ul>
 	 */
 	public static void main(String... args) {
-		final String info =
-"Edit and run X-definition in graphical user interface.\n"+
-"Command line arguments:\n"+
-" -p project_file | -v [switches] | [-c [switches] | -g [xml source]\n\n"+
-" -p run a project file\n"+
-" -v compile X-definition and runs validation mode\n"+
-" -c compile X-definition and runs construction mode\n"+
-" -g generate X-definition and project from input data (optionally follows\n"+
-"  the source file name may follow).\n\n"+
-"Switches\n"+
-" -xdef source with X-definition (input file or data; it may be\n"+
-"    specified more times)\n"+
-" -format specification of data format XML or JSON (default XML) \n"+
-" -data source (input file or data used for validation mode and as\n"+
-"    the context for construction mode or for generation of X-definition).\n"+
-" -debug sets debugging mode when project is executed\n"+
-" -editInput enables to edit input data before execution\n"+
-" -displayResult displays result data\n";
 		if (args == null || args.length == 0) {
-			System.err.println("No parameters.\n" + info);
+			System.err.println("No parameters.\n" + INFO);
 			return;
 		}
 		String arg = args[0];
 		if ("-h".equals(arg)) {
-			System.out.println(info);
+			System.out.println(INFO);
 			return;
 		}
 		if ("-p".equals(arg)) {
 			if (args.length == 1) {
-				System.err.println("Missing parameter with project\n" + info);
+				System.err.println("Missing parameter with project\n" + INFO);
 			} else {
 				runEditor('p', (char) 0, args[1]);
 			}
@@ -924,18 +950,30 @@ public class GUIEditor extends GUIScreen {
 			param = 'v';
 		} else if ("-g".equals(arg)) { // generate X-definition
 			param = 'g';
-			String xml =
-"<!-- This is just an example of XML data. You can modify it. -->\n" +
-"<root attr = \"123\">\n" +
-"  <a>text</a>\n" +
-"  <a/>\n" +
-"</root>";
-			if (i >= 2) {
+			String xml = null;
+			if (args.length >= 2) {
 				String x = args[1].trim();
 				if (!x.isEmpty() && x.charAt(0)!= '-') {
 					xml = x;
 					i = 2;
 				}
+			}
+			if (args.length > i) {
+				if ("-tempDir".equals(args[i++])) {
+					tempDir = new File(args[i++]);
+				}
+			}
+			tempDir = getTempDir(tempDir);
+			if ((tempDir = getTempDir(tempDir)) == null) {
+				return;
+			}
+			if (xml == null) {
+				xml = genTemporaryFile(
+"<!-- This is just an example of XML data. You can modify it. -->\n" +
+"<root attr = \"123\">\n" +
+"  <a>text</a>\n" +
+"  <a/>\n" +
+"</root>", tempDir, "xdef", "UTF-8");
 			}
 			try {
 				xml = editData("Input data", xml);
@@ -951,7 +989,7 @@ public class GUIEditor extends GUIScreen {
 				w.setTextContent(KXmlUtils.nodeToString(xd, true));
 				s = KXmlUtils.nodeToString(w).substring(3);
 				s = s.substring(0, s.length()-4).trim();
-				xdefs.add(s);
+				xdefs.add(genTemporaryFile(s, tempDir, "xdef", "UTF-8"));
 //				editInput = "true";
 				displayResult = "true";
 				debug = "true";
@@ -959,7 +997,7 @@ public class GUIEditor extends GUIScreen {
 				throw new RuntimeException(ex);
 			}
 		} else {
-			System.err.println("Incorrect parameter: " + arg + "\n" + info);
+			System.err.println("Incorrect parameter: " + arg + "\n" + INFO);
 			return;
 		}
 		while (i < args.length) {
@@ -974,7 +1012,7 @@ public class GUIEditor extends GUIScreen {
 				case "-XML": 
 					if (format != 0) {
 						System.err.println(
-							"Redefinition of format parameter\n" + info);
+							"Redefinition of format parameter\n" + INFO);
 						return;
 					}
 					format = 'x';
@@ -982,7 +1020,7 @@ public class GUIEditor extends GUIScreen {
 				case "-format":
 					if (format != 0) {
 						System.err.println(
-							"Redefinition of format parameter -format\n"+info);
+							"Redefinition of format parameter -format\n"+INFO);
 						return;
 					}
 					String s = args[i++];
@@ -994,14 +1032,14 @@ public class GUIEditor extends GUIScreen {
 						format = 'i';
 					} else {
 						System.err.println(
-							"Incorrect parameter -format\n" + info);
+							"Incorrect parameter -format\n" + INFO);
 						return;
 					}
 					continue;
 				case "-data":
 					if (dataPath != null) {
 						System.err.println(
-							"Redefinition of parameter \"-data\"\n" + info);
+							"Redefinition of parameter \"-data\"\n" + INFO);
 						return;
 					}
 					dataPath = args[i++];
@@ -1009,7 +1047,7 @@ public class GUIEditor extends GUIScreen {
 				case "-debug":
 					if (debug != null) {
 						System.err.println(
-							"Redefinition of parameter \"-debug\"\n" + info);
+							"Redefinition of parameter \"-debug\"\n" + INFO);
 						return;
 					}
 					debug = "true";
@@ -1017,7 +1055,7 @@ public class GUIEditor extends GUIScreen {
 				case "-editInput":
 					if (editInput != null) {
 						System.err.println(
-							"Redefinition of parameter \"-editInput\"\n"+info);
+							"Redefinition of parameter \"-editInput\"\n"+INFO);
 						return;
 					}
 					editInput = "true";
@@ -1026,7 +1064,7 @@ public class GUIEditor extends GUIScreen {
 					if (displayResult != null) {
 						System.err.println(
 							"Redefinition of parameter \"-displayResult\"\n"
-								+info);
+								+INFO);
 						return;
 					}
 					displayResult = "true";
@@ -1034,15 +1072,10 @@ public class GUIEditor extends GUIScreen {
 				case "-tempDir":
 					if (tempDir != null) {
 						System.err.println(
-							"Redefinition of parameter \"-tempDir\"\n" +info);
+							"Redefinition of parameter \"-tempDir\"\n" +INFO);
 						return;
 					}
 					tempDir = new File(args[i++]);
-					if (!tempDir.exists() || !tempDir.isDirectory()) {
-						System.err.println(
-							"Parameter \"-tempDir\" is not directory\n" +info);
-						return;
-					}
 					continue;
 			}
 		}
@@ -1050,20 +1083,14 @@ public class GUIEditor extends GUIScreen {
 		if (format == 0) {
 			format = 'x'; // default is XML
 		}
+		tempDir = getTempDir(tempDir);
 		if (tempDir == null) {
-			try {
-				File f = File.createTempFile("{GUI", "}");
-				f.deleteOnExit();
-				tempDir = f.getParentFile();
-			} catch (Exception ex) {
-				System.err.println("Can't create temp directory");
-				return;
-			}
+			return;
 		}
 		switch (param) {
 			case 'c': { // create
 				if (xdefs.isEmpty()) {
-					xdefs.add(
+					xdefs.add(genTemporaryFile(
 "&lt;xd:def xmlns:xd=\"" + XDConstants.XDEF41_NS_URI
 	+ "\" name=\"test\" root=\"HTML\">\n" +
 "&lt;HTML>\n" +
@@ -1083,7 +1110,7 @@ public class GUIEditor extends GUIScreen {
 "    &lt;/i>\n" +
 "  &lt;/BODY>\n" +
 "&lt;/HTML>\n" +
-"&lt;/xd:def>");
+"&lt;/xd:def>", tempDir, "xdef", "UTF-8"));
 					if (displayResult == null) {
 						displayResult = "true";
 					}
@@ -1109,7 +1136,7 @@ public class GUIEditor extends GUIScreen {
 			case 'g':  // generate X-definition
 			case 'v': { // validate
 				if (xdefs.isEmpty()) {
-					xdefs.add(
+					xdefs.add(genTemporaryFile(
 "&lt;xd:def xmlns:xd=\""
 	+ XDConstants.XDEF41_NS_URI + "\" name=\"test\" root=\"root\">\n" +
 (format == 'x'
@@ -1127,7 +1154,7 @@ public class GUIEditor extends GUIScreen {
 " [\"occurs + string();\"]\n"+
 "]\n"+
 "&lt;/xd:ini>\n") +
-"&lt;/xd:def>");
+"&lt;/xd:def>", tempDir, "xdef", "UTF-8"));
 					if (displayResult == null) {
 						displayResult = "true";
 					}
@@ -1169,7 +1196,7 @@ public class GUIEditor extends GUIScreen {
 			}
 		}
 		if (!msg.isEmpty()) {
-			System.err.println(msg + "\n" + info);
+			System.err.println(msg + "\n" + INFO);
 			return;
 		}
 		// Sources
