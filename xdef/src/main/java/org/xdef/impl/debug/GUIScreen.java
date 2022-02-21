@@ -369,7 +369,7 @@ public class GUIScreen extends GUIBase {
 			? new File(si._url.getFile()) : null;
 		if (srcFile == null) {
 			try {
-				srcFile = File.createTempFile("source", ".tmp");
+				srcFile = File.createTempFile("GUI", ".tmp");
 				srcFile.deleteOnExit();
 				FUtils.writeString(srcFile, si._source);
 			} catch (Exception ex) {
