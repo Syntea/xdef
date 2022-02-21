@@ -941,6 +941,7 @@ public class GUIEditor extends GUIScreen {
 		String editInput = null;
 		String displayResult = null;
 		File tempDir = null;
+		String xml = null;
 		int i = 1;
 		char param;
 		char format = (char) 0;
@@ -950,22 +951,12 @@ public class GUIEditor extends GUIScreen {
 			param = 'v';
 		} else if ("-g".equals(arg)) { // generate X-definition
 			param = 'g';
-			String xml = null;
 			if (args.length >= 2) {
 				String x = args[1].trim();
 				if (!x.isEmpty() && x.charAt(0)!= '-') {
 					xml = x;
-					i = 2;
+					i = i++;
 				}
-			}
-			if (args.length > i) {
-				if ("-tempDir".equals(args[i++])) {
-					tempDir = new File(args[i++]);
-				}
-			}
-			tempDir = getTempDir(tempDir);
-			if ((tempDir = getTempDir(tempDir)) == null) {
-				return;
 			}
 			if (xml == null) {
 				xml = genTemporaryFile(
@@ -974,27 +965,6 @@ public class GUIEditor extends GUIScreen {
 "  <a>text</a>\n" +
 "  <a/>\n" +
 "</root>", tempDir, "xdef", "UTF-8");
-			}
-			try {
-				xml = editData("Input data", xml);
-				Document d = KXmlUtils.parseXml(xml);
-				Element w = d.createElement("W");
-				w.setTextContent(xml);
-				String s = KXmlUtils.nodeToString(w, true).substring(3);
-				s = s.substring(0, s.length()-4);
-				dataPath = s.trim();
-				Element e = d.getDocumentElement();
-				Element xd = GenXDef.genXdef(e);
-				xd.setAttribute("name", "test");
-				w.setTextContent(KXmlUtils.nodeToString(xd, true));
-				s = KXmlUtils.nodeToString(w).substring(3);
-				s = s.substring(0, s.length()-4).trim();
-				xdefs.add(genTemporaryFile(s, tempDir, "xdef", "UTF-8"));
-//				editInput = "true";
-				displayResult = "true";
-				debug = "true";
-			} catch (Exception ex) {
-				throw new RuntimeException(ex);
 			}
 		} else {
 			System.err.println("Incorrect parameter: " + arg + "\n" + INFO);
@@ -1083,8 +1053,7 @@ public class GUIEditor extends GUIScreen {
 		if (format == 0) {
 			format = 'x'; // default is XML
 		}
-		tempDir = getTempDir(tempDir);
-		if (tempDir == null) {
+		if ((tempDir = getTempDir(tempDir)) == null) {
 			return;
 		}
 		switch (param) {
@@ -1134,6 +1103,27 @@ public class GUIEditor extends GUIScreen {
 				break;
 			}
 			case 'g':  // generate X-definition
+				try {
+					xml = editData("Input data", xml);
+					Document d = KXmlUtils.parseXml(xml);
+					Element w = d.createElement("W");
+					w.setTextContent(xml);
+					String s = KXmlUtils.nodeToString(w, true).substring(3);
+					s = s.substring(0, s.length()-4);
+					dataPath = s.trim();
+					Element e = d.getDocumentElement();
+					Element xd = GenXDef.genXdef(e);
+					xd.setAttribute("name", "test");
+					w.setTextContent(KXmlUtils.nodeToString(xd, true));
+					s = KXmlUtils.nodeToString(w).substring(3);
+					s = s.substring(0, s.length()-4).trim();
+					xdefs.add(genTemporaryFile(s, tempDir, "xdef", "UTF-8"));
+	//				editInput = "true";
+					displayResult = "true";
+					debug = "true";
+				} catch (Exception ex) {
+					throw new RuntimeException(ex);
+				}
 			case 'v': { // validate
 				if (xdefs.isEmpty()) {
 					xdefs.add(genTemporaryFile(
