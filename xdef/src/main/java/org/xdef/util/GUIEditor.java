@@ -930,14 +930,11 @@ public class GUIEditor extends GUIScreen {
 "  <a>text</a>\n" +
 "  <a/>\n" +
 "</root>";
-			i = args.length;
-			if (i > 2) {
-				System.err.println("Too many parameters: " + arg + "\n" + info);
-				return;
-			} else if (i == 2) {
+			if (i >= 2) {
 				String x = args[1].trim();
-				if (!x.isEmpty()) {
+				if (!x.isEmpty() && x.charAt(0)!= '-') {
 					xml = x;
+					i = 2;
 				}
 			}
 			try {
@@ -967,94 +964,87 @@ public class GUIEditor extends GUIScreen {
 		}
 		while (i < args.length) {
 			arg = args[i++];
-			if ("-xdef".equals(arg)) {
-				xdefs.add(args[i++]);
-				while (i < args.length && !args[i].startsWith("-")) {
+			switch(arg) {
+				case "-xdef": 
 					xdefs.add(args[i++]);
-				}
-				continue;
-			}
-			if ("-XML".equals(arg)) {
-				if (format != 0) {
-					System.err.println(
-						"Redefinition of format parameter\n" + info);
-					return;
-				}
-				format = 'x';
-			}
-			if ("-format".equals(arg)) {
-				if (format != 0) {
-					System.err.println(
-						"Redefinition of format parameter -format\n" + info);
-					return;
-				}
-				String s = args[i++];
-				if (s.equalsIgnoreCase("JSON")) {
-					format = 'j';
-				} else if (s.equalsIgnoreCase("XML")) {
+					while (i < args.length && !args[i].startsWith("-")) {
+						xdefs.add(args[i++]);
+					}
+					continue;
+				case "-XML": 
+					if (format != 0) {
+						System.err.println(
+							"Redefinition of format parameter\n" + info);
+						return;
+					}
 					format = 'x';
-				} else if (s.equalsIgnoreCase("INI")) {
-					format = 'i';
-				} else {
-					System.err.println(
-						"Incorrect parameter -format (must be XML or JSON)\n"
-							+ info);
-					return;
-				}
-				continue;
+					continue;
+				case "-format":
+					if (format != 0) {
+						System.err.println(
+							"Redefinition of format parameter -format\n"+info);
+						return;
+					}
+					String s = args[i++];
+					if (s.equalsIgnoreCase("JSON")) {
+						format = 'j';
+					} else if (s.equalsIgnoreCase("XML")) {
+						format = 'x';
+					} else if (s.equalsIgnoreCase("INI")) {
+						format = 'i';
+					} else {
+						System.err.println(
+							"Incorrect parameter -format\n" + info);
+						return;
+					}
+					continue;
+				case "-data":
+					if (dataPath != null) {
+						System.err.println(
+							"Redefinition of parameter \"-data\"\n" + info);
+						return;
+					}
+					dataPath = args[i++];
+					continue;
+				case "-debug":
+					if (debug != null) {
+						System.err.println(
+							"Redefinition of parameter \"-debug\"\n" + info);
+						return;
+					}
+					debug = "true";
+					continue;
+				case "-editInput":
+					if (editInput != null) {
+						System.err.println(
+							"Redefinition of parameter \"-editInput\"\n"+info);
+						return;
+					}
+					editInput = "true";
+					continue;
+				case "-displayResult":
+					if (displayResult != null) {
+						System.err.println(
+							"Redefinition of parameter \"-displayResult\"\n"
+								+info);
+						return;
+					}
+					displayResult = "true";
+					continue;
+				case "-tempDir":
+					if (tempDir != null) {
+						System.err.println(
+							"Redefinition of parameter \"-tempDir\"\n" +info);
+						return;
+					}
+					tempDir = new File(args[i++]);
+					if (!tempDir.exists() || !tempDir.isDirectory()) {
+						System.err.println(
+							"Parameter \"-tempDir\" is not directory\n" +info);
+						return;
+					}
+					continue;
 			}
-			if ("-data".equals(arg)) {
-				if (dataPath != null) {
-					System.err.println(
-						"Redefinition of parameter \"-data\"\n" + info);
-					return;
-				}
-				dataPath = args[i++];
-				continue;
-			}
-			if ("-debug".equals(arg)) {
-				if (debug != null) {
-					System.err.println(
-						"Redefinition of parameter \"-debug\"\n" + info);
-					return;
-				}
-				debug = "true";
-				continue;
-			}
-			if ("-editInput".equals(arg)) {
-				if (editInput != null) {
-					System.err.println(
-						"Redefinition of parameter \"-editInput\"\n" + info);
-					return;
-				}
-				editInput = "true";
-				continue;
-			}
-			if ("-displayResult".equals(arg)) {
-				if (displayResult != null) {
-					System.err.println(
-						"Redefinition of parameter \"-displayResult\"\n" +info);
-					return;
-				}
-				displayResult = "true";
-				continue;
-			}
-			if ("-tempDir".equals(arg)) {
-				if (tempDir != null) {
-					System.err.println(
-						"Redefinition of parameter \"-tempDir\"\n" +info);
-					return;
-				}
-				tempDir = new File(args[i++]);
-				if (!tempDir.exists() || !tempDir.isDirectory()) {
-					System.err.println(
-						"Parameter \"-tempDir\" is not directory\n" +info);
-					return;
-				}
-				continue;
-			}
-			System.err.println("Incorrect parameter \"" + arg + "\"\n" + info);
-			return;
 		}
 		String msg = "";
 		if (format == 0) {
