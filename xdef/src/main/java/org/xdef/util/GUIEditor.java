@@ -36,7 +36,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xdef.impl.GenXDef;
-import org.xdef.sys.FUtils;
 import org.xdef.xon.XonUtil;
 import org.xdef.sys.SThrowable;
 import org.xdef.sys.SUtils;
@@ -114,11 +113,12 @@ public class GUIEditor extends GUIScreen {
 "            File=\"file(); /*where to store result of process*/\" />\n" +
 "        </xd:mixed>\n" +
 "      </Execute>\n" +
-"<!-- \"Temp\" item is used to specify the directory where are stored\n" +
+"<!-- \"TempDir\" item is used to specify the directory where are stored\n" +
 "    the temporary files. If it is not specified a temporary directory\n" +
 "    is created and deleted on exit of GUI editor. -->\n" +
-"      <Temp xd:script=\"?;\"\n" +
-"          Directory=\"file(); /*where to store temporary data.*/\" />\n" +
+"      <TempDir xd:script=\"?;\">\n" +
+"          file(); /*Directory where to store temporary data.*/\n" +
+"      </TempDir>\n" +
 "    </xd:mixed>\n" +
 "  </Project>\n" +
 "</xd:def>";
@@ -628,7 +628,6 @@ public class GUIEditor extends GUIScreen {
 						File f = jf.getSelectedFile();
 						KXmlUtils.writeXml(f, "UTF-8", project, true, true);
 					} catch (Exception ex) {
-						ex.printStackTrace(System.err);
 						JOptionPane.showMessageDialog(null,//Can't write
 							Report.error(SYS.SYS036,"Can't write data to file: "
 								+ jf.getSelectedFile() + "\n" + ex));
@@ -697,11 +696,11 @@ public class GUIEditor extends GUIScreen {
 		boolean deleteOnExit;
 
 		// create temporary directory
-		nl = project.getElementsByTagName("Temp");
+		nl = project.getElementsByTagName("TempDir");
 		File f = null;
 		if (nl.getLength() != 0) {
-			e = (Element) nl.item(0);
-			f = new File(e.getAttribute("Directory"));
+			e = (Element) nl.item(0); 
+			f = new File(e.getTextContent());
 		}
 		tempDir = getTempDir(f);
 		deleteOnExit = !tempDir.equals(f);
@@ -1057,10 +1056,10 @@ public class GUIEditor extends GUIScreen {
 					}
 					displayResult = "true";
 					continue;
-				case "-workDir":
+				case "-tempDir":
 					if (tempDir != null) {
 						System.err.println(
-							"Redefinition of parameter \"-workDir\"\n" +info);
+							"Redefinition of parameter \"-tempDir\"\n" +info);
 						return;
 					}
 					tempDir = new File(args[i++]);
@@ -1155,7 +1154,6 @@ public class GUIEditor extends GUIScreen {
 					s = KXmlUtils.nodeToString(xd, true);
 					xdefs.add(genTemporaryFile(s,
 						tempDir, "xdef.xml", deleteOnExit, "UTF-8"));
-//					editInput = "true";
 					displayResult = "true";
 					debug = "true";
 				} catch (Exception ex) {
@@ -1229,8 +1227,10 @@ public class GUIEditor extends GUIScreen {
 		for (String x: xdefs) {
 			src += "  <XDefinition>" + x + "</XDefinition>\n";
 		}
-		if (!deleteOnExit) {
-			src += "  <Temp Directory=\"" + tempDir.getPath() + "\"/>\n";
+		if (!deleteOnExit) { // temp directory was specified
+			String s = SUtils.modifyString(tempDir.getPath(), "&", "&amp;");
+			s = SUtils.modifyString(s, "<", "&lt;");
+			src += "  <TempDir>" + s + "</TempDir>\n";
 		}
 		src += "</Project>";
 		// run generated project
