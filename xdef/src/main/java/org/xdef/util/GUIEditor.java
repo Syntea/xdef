@@ -843,11 +843,14 @@ public class GUIEditor extends GUIScreen {
 	private static String genTemporaryFile(final String data,
 		final File dir,
 		final String name,
+		final boolean deleteOnExit,
 		final String charset) {
 		if (dir != null && dir.exists() && dir.isDirectory()) {
 			try {
 				File f = new File(dir, name);
-				f.deleteOnExit();
+				if (deleteOnExit) {
+					f.deleteOnExit();
+				}
 				SUtils.writeString(f, data);
 				return f.getAbsolutePath();
 			} catch (Exception ex) {}
@@ -921,6 +924,7 @@ public class GUIEditor extends GUIScreen {
 		String editInput = null;
 		String displayResult = null;
 		File tempDir = null;
+		boolean deletoOnExit = false;
 		int i = 1;
 		char param;
 		char format = (char) 0;
@@ -1036,7 +1040,8 @@ public class GUIEditor extends GUIScreen {
 				tempDir = new File(tempDir, "GUITemp");
 				tempDir.mkdirs();
 				tempDir.deleteOnExit();
-				genTemporaryFile(".", tempDir, "~.~", "UTF-8");
+				deletoOnExit = true;
+				genTemporaryFile(".", tempDir, "~.~", deletoOnExit, "UTF-8");
 			} catch (Exception ex) {
 				System.err.println("Can't get temp directory.\n"+info);
 				return;
@@ -1065,7 +1070,7 @@ public class GUIEditor extends GUIScreen {
 "    &lt;/i>\n" +
 "  &lt;/BODY>\n" +
 "&lt;/HTML>\n" +
-"&lt;/xd:def>", tempDir, "xdef", "UTF-8"));
+"&lt;/xd:def>", tempDir, "xdef", deletoOnExit, "UTF-8"));
 					if (displayResult == null) {
 						displayResult = "true";
 					}
@@ -1096,7 +1101,7 @@ public class GUIEditor extends GUIScreen {
 "<root attr = \"123\">\n" +
 "  <a>text</a>\n" +
 "  <a/>\n" +
-"</root>", tempDir, "data.xml", "UTF-8");
+"</root>", tempDir, "data.xml", deletoOnExit, "UTF-8");
 					}
 					dataPath = editData("Input data", dataPath);
 					Document d = KXmlUtils.parseXml(dataPath);
@@ -1109,7 +1114,8 @@ public class GUIEditor extends GUIScreen {
 					Element xd = GenXDef.genXdef(e);
 					xd.setAttribute("name", "test");
 					s = KXmlUtils.nodeToString(xd, true);
-					xdefs.add(genTemporaryFile(s,tempDir, "xdef.xml", "UTF-8"));
+					xdefs.add(genTemporaryFile(s,
+						tempDir, "xdef.xml", deletoOnExit, "UTF-8"));
 //					editInput = "true";
 					displayResult = "true";
 					debug = "true";
@@ -1136,25 +1142,24 @@ public class GUIEditor extends GUIScreen {
 " [\"occurs + string();\"]\n"+
 "]\n"+
 "&lt;/xd:ini>\n") +
-"&lt;/xd:def>", tempDir, "xdef.xml", "UTF-8"));
+"&lt;/xd:def>", tempDir, "xdef.xml", deletoOnExit, "UTF-8"));
 					if (displayResult == null) {
 						displayResult = "true";
 					}
 				}
 				if (dataPath == null) {
 					if (format == 'i') {
-						dataPath = genTemporaryFile(
-							"a=1\nb=2", tempDir, "data.ini", "ascii");
+						dataPath = genTemporaryFile("a=1\nb=2",
+							tempDir, "data.ini", deletoOnExit, "ascii");
 					} else if (format == 'x') {
 						dataPath = genTemporaryFile(
 "<root a=\"123\" >\n" +
 "  <b>text</b>\n" +
 "  <b/>\n" +
-"</root>",
-							tempDir, "data.xml", "UTF-8");
+"</root>", tempDir, "data.xml", deletoOnExit, "UTF-8");
 					} else if (format == 'j') {
 						dataPath = genTemporaryFile("{\"a\": [1, 2, 3]}",
-							tempDir, "data.json", "UTF-8");
+							tempDir, "data.json", deletoOnExit, "UTF-8");
 					}
 					debug = editInput = displayResult = "true";
 				}
@@ -1200,6 +1205,6 @@ public class GUIEditor extends GUIScreen {
 "</Project>";
 		// run generated project
 		runEditor(param, format,
-			genTemporaryFile(src, tempDir, "project.xml", "UTF-8"));
+			genTemporaryFile(src, tempDir, "project.xml",deletoOnExit,"UTF-8"));
 	}
 }
