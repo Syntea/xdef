@@ -1031,7 +1031,7 @@ public class GUIEditor extends GUIScreen {
 		if (tempDir != null && (!tempDir.exists() || !tempDir.isDirectory())) {
 			System.err.println("Can't get temp directory.\n"+info);
 			return;
-		} else {
+		} else if (tempDir == null) {
 			try {
 				tempDir = File.createTempFile("GUI", ".tmp");
 				tempDir.delete();
