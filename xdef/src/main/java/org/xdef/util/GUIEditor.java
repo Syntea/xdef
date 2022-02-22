@@ -597,8 +597,7 @@ public class GUIEditor extends GUIScreen {
 			executeProject(project, xp, props);
 
 			if (param == 'g') { // project was generated
-				editData("Generated project",
-					src.startsWith("<Project") && new File(src).exists() 
+				editData("Generated project", new File(src).exists()
 					? src : KXmlUtils.nodeToString(project, true));
 			} else if (!compareProjects(
 				project = canonizeProject(project), originalProject)) {
@@ -1025,9 +1024,23 @@ public class GUIEditor extends GUIScreen {
 		if (format == 0) {
 			format = 'x'; // default is XML
 		}
-		if (tempDir == null || !tempDir.exists() || !tempDir.isDirectory()) {
+		if (tempDir != null && (!tempDir.exists() || !tempDir.isDirectory())) {
 			System.err.println("Can't get temp directory.\n"+info);
 			return;
+		} else {
+			try {
+				tempDir = File.createTempFile("GUI", ".tmp");
+				tempDir.delete();
+				tempDir.mkdirs();
+				tempDir.deleteOnExit();
+				tempDir = new File(tempDir, "GUITemp");
+				tempDir.mkdirs();
+				tempDir.deleteOnExit();
+				genTemporaryFile(".", tempDir, "~.~", "UTF-8");
+			} catch (Exception ex) {
+				System.err.println("Can't get temp directory.\n"+info);
+				return;
+			}
 		}
 		switch (param) {
 			case 'c': { // create
