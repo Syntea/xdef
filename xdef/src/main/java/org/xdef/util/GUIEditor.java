@@ -36,6 +36,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xdef.impl.GenXDef;
+import org.xdef.sys.FUtils;
 import org.xdef.xon.XonUtil;
 import org.xdef.sys.SThrowable;
 import org.xdef.sys.SUtils;
@@ -355,19 +356,40 @@ public class GUIEditor extends GUIScreen {
 	 */
 	private static String editData(final String title,
 		final String source) throws Exception {
-		String data = source;
 		XDSourceInfo xi = new XDSourceInfo();
-		File f = new File(source);
-		Object o = f.exists() ? f : data;
+		Object o = source;
+		String data = source.trim();
+		String s = getSourceURL(data);
+		File f = null;
+		if (s != null) {
+			URL u = new URL(s);
+			String t = u.getFile();
+			if (t != null) {
+				f = new File(t);
+				if (f.exists()) {
+					o = f;
+				}
+			} else {
+				f = new File(s);
+				if (f.exists()) {
+					o = f;
+				} else if ((f = new File(data)).exists()) {
+					o = f;
+				} else {
+					f = null;
+					o = u;
+				}
+			}
+		}
 		XDSourceItem xsi = new XDSourceItem(o);
-		xi.getMap().put(data, xsi);
+		xi.getMap().put(source, xsi);
 		ArrayReporter rep = new ArrayReporter();
 		editXml(rep, title, o, xi, null);
 		xsi = xi.getMap().values().iterator().next();
 		if (xsi._saved || !source.equals(xsi._source)) {
-			if (xsi._url != null) {
-				if (f.getCanonicalFile().equals(
-					new File(xsi._url.getFile()).getCanonicalFile())) {
+			if (xsi._url != null && f != null) {
+				if (new File(xsi._url.getFile()).getCanonicalFile().equals(
+					f.getCanonicalFile())) {
 					return data;
 				}
 				data = xsi._url.toExternalForm();
@@ -699,7 +721,7 @@ public class GUIEditor extends GUIScreen {
 		nl = project.getElementsByTagName("TempDir");
 		File f = null;
 		if (nl.getLength() != 0) {
-			e = (Element) nl.item(0); 
+			e = (Element) nl.item(0);
 			f = new File(e.getTextContent());
 		}
 		tempDir = getTempDir(f);
@@ -1075,7 +1097,8 @@ public class GUIEditor extends GUIScreen {
 		File f = tempDir;
 		tempDir = getTempDir(f);
 		boolean deleteOnExit = !tempDir.equals(f);
-		String src = "<Project>\n"+
+		String src =
+			"<Project Show=\"true\">\n"+
 "  <Property Name = \"" + XDConstants.XDPROPERTY_WARNINGS
 			+ "\" Value = \""
 			+ XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE	+ "\"/>\n" +
@@ -1115,6 +1138,7 @@ public class GUIEditor extends GUIScreen {
 						displayResult = "true";
 					}
 				}
+				debug = editInput = displayResult = "true";
 				if (dataPath == null) {
 					debug = editInput = displayResult = "true";
 					dataPath =
@@ -1156,8 +1180,7 @@ public class GUIEditor extends GUIScreen {
 					s = KXmlUtils.nodeToString(xd, true);
 					xdefs.add(genTemporaryFile(s,
 						tempDir, "xdef.xml", deleteOnExit, "UTF-8"));
-					displayResult = "true";
-					debug = "true";
+					debug = editInput = displayResult = "true";
 				} catch (Exception ex) {
 					throw new RuntimeException(ex);
 				}
@@ -1238,5 +1261,24 @@ public class GUIEditor extends GUIScreen {
 		// run generated project
 		runEditor(param, format,
 			genTemporaryFile(src, tempDir, "project.xml",deleteOnExit,"UTF-8"));
+		if (deleteOnExit) {
+			JFileChooser jf = new JFileChooser(new File("."));
+			jf.setDialogTitle("Do you want to save the created project?");
+			jf.setToolTipText("Save THE PROJECT to a directory");
+			jf.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+			int retval = jf.showSaveDialog(null);
+				jf.setEnabled(false);
+				if (retval == JFileChooser.APPROVE_OPTION) {
+					try {
+						File dir = jf.getSelectedFile();
+						FUtils.xcopy(
+							tempDir.listFiles(), dir, true, new String[0]);
+					} catch (Exception ex) {
+						JOptionPane.showMessageDialog(null,//Can't write
+							Report.error(SYS.SYS036,"Can't write data to file: "
+								+ jf.getSelectedFile() + "\n" + ex));
+					}
+				}
+		}
 	}
 }
