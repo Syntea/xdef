@@ -923,15 +923,17 @@ public class GUIEditor extends GUIScreen {
 	 */
 	public static void main(String... args) {
 		final String info =
-"Edit and run X-definition in graphical user interface.\n"+
+"Edit and run X-definition in graphical user interface.\n\n"+
 "Command line arguments:\n"+
-" -p project_file | -v [switches] | [-c [switches] | -g [xml source]\n\n"+
+" -p project_file | -v [switches] |\n"+
+" -c [switches] | -g [xml source] [-workDir]\n"+
+"\n"+
 " -p run a project file\n"+
 " -v compile X-definition and runs validation mode\n"+
 " -c compile X-definition and runs construction mode\n"+
 " -g generate X-definition and project from input data (optionally follows\n"+
 "  the source file name may follow).\n\n"+
-"Switches\n"+
+"Switches:\n"+
 " -xdef source with X-definition (input file or data; it may be\n"+
 "    specified more times)\n"+
 " -format specification of data format XML or JSON (default XML) \n"+
