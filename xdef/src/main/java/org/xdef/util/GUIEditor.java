@@ -114,12 +114,12 @@ public class GUIEditor extends GUIScreen {
 "            File=\"file(); /*where to store result of process*/\" />\n" +
 "        </xd:mixed>\n" +
 "      </Execute>\n" +
-"<!-- \"TempDir\" item is used to specify the directory where are stored\n" +
-"    the temporary files. If it is not specified a temporary directory\n" +
+"<!-- \"WorkDir\" item is used to specify the directory where are stored\n" +
+"    the temporary files. If it is not specified a working directory\n" +
 "    is created and deleted on exit of GUI editor. -->\n" +
-"      <TempDir xd:script=\"?;\">\n" +
+"      <WorkDir xd:script=\"?;\">\n" +
 "          file(); /*Directory where to store temporary data.*/\n" +
-"      </TempDir>\n" +
+"      </WorkDir>\n" +
 "    </xd:mixed>\n" +
 "  </Project>\n" +
 "</xd:def>";
@@ -311,7 +311,7 @@ public class GUIEditor extends GUIScreen {
 
 	/** Display (and optionally edit) string.
 	 * @param msg Text of header
-	 * @param tempDir directory for temporary files.
+	 * @param workDir directory for temporary files.
 	 * @param deleteOnExit if true the new file is set to be deleted on exit.
 	 * @param s string displayed.
 	 * @param si source information.
@@ -319,15 +319,15 @@ public class GUIEditor extends GUIScreen {
 	 * @throws Exception if an error occurs.
 	 */
 	private static void displayString(final String msg,
-		final File tempDir,
+		final File workDir,
 		final boolean deleteOnExit,
 		final String s,
 		final XDSourceInfo si,
 		final boolean editable) throws Exception {
 		Object o = s;
-		if (editable && tempDir != null) {
+		if (editable && workDir != null) {
 			o = new File(genTemporaryFile(s,
-				tempDir, "result.tmp", deleteOnExit, "UTF-8"));
+				workDir, "result.tmp", deleteOnExit, "UTF-8"));
 		}
 		new GUIEditor(si).display(null, msg, o, si, editable, null);
 	}
@@ -714,18 +714,18 @@ public class GUIEditor extends GUIScreen {
 		final Properties props) throws Exception {
 		Element e;
 		NodeList nl;
-		File tempDir;
+		File workDir;
 		boolean deleteOnExit;
 
-		// create temporary directory
-		nl = project.getElementsByTagName("TempDir");
+		// create work directory
+		nl = project.getElementsByTagName("WorkDir");
 		File f = null;
 		if (nl.getLength() != 0) {
 			e = (Element) nl.item(0);
 			f = new File(e.getTextContent());
 		}
-		tempDir = getTempDir(f);
-		deleteOnExit = !tempDir.equals(f);
+		workDir = getTempDir(f);
+		deleteOnExit = !workDir.equals(f);
 
 		// execute project
 		nl = project.getElementsByTagName("Execute");
@@ -880,7 +880,7 @@ public class GUIEditor extends GUIScreen {
 				}
 				if (!s.isEmpty()) {// display result, allow editing
 					displayString("Result of processing:",
-						tempDir, deleteOnExit, s, si, true);
+						workDir, deleteOnExit, s, si, true);
 				}
 			}
 		}
@@ -919,7 +919,7 @@ public class GUIEditor extends GUIScreen {
 				tempDir = new File(tempDir, "GUITemp");
 				tempDir.mkdirs();
 				tempDir.deleteOnExit();
-				genTemporaryFile(".", tempDir, "~.~", true, "UTF-8");
+//				genTemporaryFile(".", tempDir, "~.~", true, "UTF-8");
 				return tempDir;
 			}
 		} catch (Exception ex) {}
@@ -965,7 +965,7 @@ public class GUIEditor extends GUIScreen {
 " -editInput enables to edit input data before execution\n"+
 " -displayResult displays result data\n"+
 " -workDir directory where to store created data. This switch is optional;\n"+
-"    if not specified the temporary directory is created and deleted on exit.";
+"    if not specified the work directory is created and deleted on exit.";
 		if (args == null || args.length == 0) {
 			System.err.println("No parameters.\n" + info);
 			return;
@@ -987,10 +987,12 @@ public class GUIEditor extends GUIScreen {
 		}
 		ArrayList<String> xdefs = new ArrayList<String>();
 		String dataPath = null;
+		boolean wasDataPath = false;
+		boolean wasXDefinition = false;
 		String debug = null;
 		String editInput = null;
 		String displayResult = null;
-		File tempDir = null;
+		File workDir = null;
 		int i = 1;
 		char param;
 		char format = (char) 0;
@@ -1015,6 +1017,12 @@ public class GUIEditor extends GUIScreen {
 			arg = args[i++];
 			switch(arg) {
 				case "-xdef":
+					if (param == 'g') {
+						System.err.println(
+							"Parameter -xdef not allowed with -g\n" + info);
+						return;
+					}
+					wasXDefinition = true;
 					xdefs.add(args[i++]);
 					while (i < args.length && !args[i].startsWith("-")) {
 						xdefs.add(args[i++]);
@@ -1048,11 +1056,12 @@ public class GUIEditor extends GUIScreen {
 					}
 					continue;
 				case "-data":
-					if (dataPath != null) {
+					if (wasDataPath) {
 						System.err.println(
 							"Redefinition of parameter \"-data\"\n" + info);
 						return;
 					}
+					wasDataPath = true;
 					dataPath = args[i++];
 					continue;
 				case "-debug":
@@ -1080,13 +1089,13 @@ public class GUIEditor extends GUIScreen {
 					}
 					displayResult = "true";
 					continue;
-				case "-tempDir":
-					if (tempDir != null) {
+				case "-workDir":
+					if (workDir != null) {
 						System.err.println(
 							"Redefinition of parameter \"-tempDir\"\n" +info);
 						return;
 					}
-					tempDir = new File(args[i++]);
+					workDir = new File(args[i++]);
 					continue;
 			}
 		}
@@ -1094,9 +1103,9 @@ public class GUIEditor extends GUIScreen {
 		if (format == 0) {
 			format = 'x'; // default is XML
 		}
-		File f = tempDir;
-		tempDir = getTempDir(f);
-		boolean deleteOnExit = !tempDir.equals(f);
+		File f = workDir;
+		workDir = getTempDir(f);
+		boolean deleteOnExit = !workDir.equals(f);
 		String src =
 			"<Project Show=\"true\">\n"+
 "  <Property Name = \"" + XDConstants.XDPROPERTY_WARNINGS
@@ -1133,13 +1142,13 @@ public class GUIEditor extends GUIScreen {
 "    &lt;/i>\n" +
 "  &lt;/BODY>\n" +
 "&lt;/HTML>\n" +
-"&lt;/xd:def>", tempDir, "xdef", deleteOnExit, "UTF-8"));
+"&lt;/xd:def>", workDir, "xdef", deleteOnExit, "UTF-8"));
 					if (displayResult == null) {
 						displayResult = "true";
 					}
 				}
 				debug = editInput = displayResult = "true";
-				if (dataPath == null) {
+				if (!wasDataPath) {
 					debug = editInput = displayResult = "true";
 					dataPath =
 "&lt;x>\n  &lt;i x=\"Hello\"/>\n  &lt;i x=\"World!\"/>\n&lt;/x>";
@@ -1159,13 +1168,13 @@ public class GUIEditor extends GUIScreen {
 			}
 			case 'g':  // generate X-definition
 				try {
-					if (dataPath == null) {
+					if (!wasDataPath) {
 						dataPath = genTemporaryFile(
 "<!-- This is just an example of XML data. You can modify it. -->\n" +
 "<root attr = \"123\">\n" +
 "  <a>text</a>\n" +
 "  <a/>\n" +
-"</root>", tempDir, "data.xml", deleteOnExit, "UTF-8");
+"</root>", workDir, "data.xml", deleteOnExit, "UTF-8");
 					}
 					dataPath = editData("Input data", dataPath);
 					Document d = KXmlUtils.parseXml(dataPath);
@@ -1179,7 +1188,7 @@ public class GUIEditor extends GUIScreen {
 					xd.setAttribute("name", "test");
 					s = KXmlUtils.nodeToString(xd, true);
 					xdefs.add(genTemporaryFile(s,
-						tempDir, "xdef.xml", deleteOnExit, "UTF-8"));
+						workDir, "xdef.xml", deleteOnExit, "UTF-8"));
 					debug = editInput = displayResult = "true";
 				} catch (Exception ex) {
 					throw new RuntimeException(ex);
@@ -1204,7 +1213,7 @@ public class GUIEditor extends GUIScreen {
 " [\"occurs + string();\"]\n"+
 "]\n"+
 "&lt;/xd:ini>\n") +
-"&lt;/xd:def>", tempDir, "xdef.xml", deleteOnExit, "UTF-8"));
+"&lt;/xd:def>", workDir, "xdef.xml", deleteOnExit, "UTF-8"));
 					if (displayResult == null) {
 						displayResult = "true";
 					}
@@ -1212,16 +1221,16 @@ public class GUIEditor extends GUIScreen {
 				if (dataPath == null) {
 					if (format == 'i') {
 						dataPath = genTemporaryFile("a=1\nb=2",
-							tempDir, "data.ini", deleteOnExit, "ascii");
+							workDir, "data.ini", deleteOnExit, "ascii");
 					} else if (format == 'x') {
 						dataPath = genTemporaryFile(
 "<root a=\"123\" >\n" +
 "  <b>text</b>\n" +
 "  <b/>\n" +
-"</root>", tempDir, "data.xml", deleteOnExit, "UTF-8");
+"</root>", workDir, "data.xml", deleteOnExit, "UTF-8");
 					} else if (format == 'j') {
 						dataPath = genTemporaryFile("{\"a\": [1, 2, 3]}",
-							tempDir, "data.json", deleteOnExit, "UTF-8");
+							workDir, "data.json", deleteOnExit, "UTF-8");
 					}
 					debug = editInput = displayResult = "true";
 				}
@@ -1252,15 +1261,16 @@ public class GUIEditor extends GUIScreen {
 		for (String x: xdefs) {
 			src += "  <XDefinition>" + x + "</XDefinition>\n";
 		}
-		if (!deleteOnExit) { // temp directory was specified
-			String s = SUtils.modifyString(tempDir.getPath(), "&", "&amp;");
+		if (!deleteOnExit) { // work directory was specified
+			String s = SUtils.modifyString(workDir.getPath(), "&", "&amp;");
 			s = SUtils.modifyString(s, "<", "&lt;");
-			src += "  <TempDir>" + s + "</TempDir>\n";
+			src += "  <WorkDir>" + s + "</WorkDir>\n";
 		}
 		src += "</Project>";
 		// run generated project
 		runEditor(param, format,
-			genTemporaryFile(src, tempDir, "project.xml",deleteOnExit,"UTF-8"));
+			genTemporaryFile(src, workDir, "project.xml",deleteOnExit,"UTF-8"));
+//		new File(tempDir, "~.~").delete();
 		if (deleteOnExit) {
 			JFileChooser jf = new JFileChooser(new File("."));
 			jf.setDialogTitle("Do you want to save the created project?");
@@ -1271,14 +1281,39 @@ public class GUIEditor extends GUIScreen {
 			if (retval == JFileChooser.APPROVE_OPTION) {
 				try {
 					File dir = jf.getSelectedFile();
+					int ndx1, ndx2;
+					ndx1 = src.indexOf("<Input");
+					if (!wasDataPath && ndx1 >= 0) {
+						ndx1 = src.indexOf('>', ndx1 + 6);
+						ndx2 = src.indexOf("</Input");
+						String s = src.substring(0, ndx1 + 1)
+							+ new File(dir, "data.xml").getAbsolutePath()
+							+ src.substring(ndx2);
+					}
+					ndx1 = src.indexOf("<XDefinition");
+					if (!wasXDefinition && ndx1 >= 0) {
+						ndx1 = src.indexOf('>', ndx1 + 6);
+						ndx2 = src.indexOf("</XDefinition");
+						src = src.substring(0, ndx1 + 1)
+							+ new File(dir, "xdef.xml").getAbsolutePath()
+							+ src.substring(ndx2);
+					}
 					FUtils.xcopy(
-						tempDir.listFiles(), dir, true, new String[0]);
+						workDir.listFiles(), dir, true, new String[0]);
+					SUtils.writeString(new File(dir, "project.xml"),
+						src, "UTF-8");
+					workDir = dir;
 				} catch (Exception ex) {
-					JOptionPane.showMessageDialog(null,//Can't write
-						Report.error(SYS.SYS036,"Can't write data to file: "
-							+ jf.getSelectedFile() + "\n" + ex));
+						JOptionPane.showMessageDialog(null,//Can't write
+							Report.error(SYS.SYS036,"Can't write data to file: "
+								+ jf.getSelectedFile() + "\n" + ex));
 				}
 			}
+		}
+		if (JOptionPane.showConfirmDialog(null,
+			"Run created project", "Do you want to run created project?",
+			JOptionPane.YES_NO_OPTION) == 0) {
+			runEditor('p', (char)0, new File(workDir, "project.xml").getPath());
 		}
 	}
 }
