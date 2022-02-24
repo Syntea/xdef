@@ -15,7 +15,7 @@ public class TestGUI extends XDTester {
 //		GUIEditor.main("-h");
 //		GUIEditor.main("-g");
 		GUIEditor.main("-g", "-tempDir", "temp");
-		GUIEditor.main("-p", "temp/project.xml") ;
+//		GUIEditor.main("-p", "temp/project.xml") ;
 //		GUIEditor.main("-p",
 //			"src/test/java/mytests/projects/json/project.xml"
 ////			"-workDir", "temp"

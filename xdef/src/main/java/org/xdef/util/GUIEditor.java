@@ -964,8 +964,8 @@ public class GUIEditor extends GUIScreen {
 " -debug sets debugging mode when project is executed\n"+
 " -editInput enables to edit input data before execution\n"+
 " -displayResult displays result data\n"+
-" -workDir directory where to store temporary data. This switch is required\n"+
-"    if a data item is generated.\n";
+" -workDir directory where to store created data. This switch is optional;\n"+
+"    if not specified the temporary directory is created and deleted on exit.";
 		if (args == null || args.length == 0) {
 			System.err.println("No parameters.\n" + info);
 			return;
