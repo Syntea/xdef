@@ -953,12 +953,11 @@ public class GUIEditor extends GUIScreen {
 " -p run a project file\n"+
 " -v compile X-definition and runs validation mode\n"+
 " -c compile X-definition and runs construction mode\n"+
-" -g generate X-definition and project from input data (optionally follows\n"+
-"  the source file name may follow).\n\n"+
+" -g generate X-definition and project from input data (see switch -data).\n\n"+
 "Switches:\n"+
 " -xdef source with X-definition (input file or data; it may be\n"+
 "    specified more times)\n"+
-" -format specification of data format XML or JSON (default XML) \n"+
+" -format specification of data format x - XML or j - JSON (default XML)\n"+
 " -data source (input file or data used for validation mode and as\n"+
 "    the context for construction mode or for generation of X-definition).\n"+
 " -debug sets debugging mode when project is executed\n"+
@@ -1005,8 +1004,8 @@ public class GUIEditor extends GUIScreen {
 			if (args.length >= 2) {
 				String x = args[1].trim();
 				if (!x.isEmpty() && x.charAt(0)!= '-') {
+					i++;
 					dataPath = x;
-					i = i++;
 				}
 			}
 		} else {
@@ -1027,14 +1026,6 @@ public class GUIEditor extends GUIScreen {
 					while (i < args.length && !args[i].startsWith("-")) {
 						xdefs.add(args[i++]);
 					}
-					continue;
-				case "-XML":
-					if (format != 0) {
-						System.err.println(
-							"Redefinition of format parameter\n" + info);
-						return;
-					}
-					format = 'x';
 					continue;
 				case "-format":
 					if (format != 0) {
