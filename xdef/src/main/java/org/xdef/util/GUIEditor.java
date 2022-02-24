@@ -1267,18 +1267,18 @@ public class GUIEditor extends GUIScreen {
 			jf.setToolTipText("Save THE PROJECT to a directory");
 			jf.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 			int retval = jf.showSaveDialog(null);
-				jf.setEnabled(false);
-				if (retval == JFileChooser.APPROVE_OPTION) {
-					try {
-						File dir = jf.getSelectedFile();
-						FUtils.xcopy(
-							tempDir.listFiles(), dir, true, new String[0]);
-					} catch (Exception ex) {
-						JOptionPane.showMessageDialog(null,//Can't write
-							Report.error(SYS.SYS036,"Can't write data to file: "
-								+ jf.getSelectedFile() + "\n" + ex));
-					}
+			jf.setEnabled(false);
+			if (retval == JFileChooser.APPROVE_OPTION) {
+				try {
+					File dir = jf.getSelectedFile();
+					FUtils.xcopy(
+						tempDir.listFiles(), dir, true, new String[0]);
+				} catch (Exception ex) {
+					JOptionPane.showMessageDialog(null,//Can't write
+						Report.error(SYS.SYS036,"Can't write data to file: "
+							+ jf.getSelectedFile() + "\n" + ex));
 				}
+			}
 		}
 	}
 }
