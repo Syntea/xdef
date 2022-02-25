@@ -1267,7 +1267,6 @@ public class GUIEditor extends GUIScreen {
 		// run generated project
 		runEditor(param, format,
 			genTemporaryFile(src, workDir, "project.xml",deleteOnExit,"UTF-8"));
-//		new File(tempDir, "~.~").delete();
 		if (deleteOnExit) {
 			JFileChooser jf = new JFileChooser(new File("."));
 			jf.setDialogTitle("Do you want to save the created project?");

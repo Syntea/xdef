@@ -564,11 +564,6 @@ public class FUtils {
 			throw new SException(SYS.SYS024, inFile); //File doesn't exist: &{0}
 		}
 		if (inFile.length() + 10 > getUsableSpace(outFile)) {
-			if (outFile.getParentFile() != null &&
-				!outFile.getParentFile().exists()) {
-				//File doesn't exist: &{0}
-				throw new SException(SYS.SYS024, outFile);
-			}
 			throw new SException(SYS.SYS038, inFile); //File is too big: &{0}
 		}
 		OutputStream out = null;
@@ -745,13 +740,15 @@ public class FUtils {
 	 * @return true if and only if the file should be skipped.
 	 */
 	private static boolean chkExclude(final File f, final String... exc) {
-		String s = f.getAbsolutePath().replace('\\', '/');
-		if (f.isDirectory() && !s.endsWith("/")) {
-			s += "/";
-		}
-		for (String x: exc) {
-			if (s.endsWith(x.replace('\\', '/'))) {
-				return true;
+		if (exc != null && exc.length > 0) {
+			String s = f.getAbsolutePath().replace('\\', '/');
+			if (f.isDirectory() && !s.endsWith("/")) {
+				s += "/";
+			}
+			for (String x: exc) {
+				if (s.endsWith(x.replace('\\', '/'))) {
+					return true;
+				}
 			}
 		}
 		return false;
@@ -762,8 +759,8 @@ public class FUtils {
 	 * @param to directory where files to be copied.
 	 * @param exclude array with exclude list. If path ends with an string from
 	 * exclude list the input item is skipped. Name of an directory must end
-	 * with separator character "/". If this argument is <code>null</code> or the
-	 * empty array then no files are excluded.
+	 * with separator character "/". If this argument is <code>null</code> or
+	 * the empty array then no files are excluded.
 	 * @param deep if false the directories are skipped.
 	 * @throws SException if an error occurs.
 	 */
@@ -778,8 +775,7 @@ public class FUtils {
 					newDir.mkdirs();
 					xcopy(x.listFiles(), newDir, true, exclude);
 				} else { //file
-					File newFile = new File(to, x.getName());
-					copyToFile(x, newFile);
+					copyToFile(x, new File(to, x.getName()));
 				}
 			}
 		}
@@ -1783,7 +1779,7 @@ public class FUtils {
 	 * in "toDir".
 	 * @param toDir the directory path where files are updated.
 	 * @param extension file extension filter or null.
-	 * @param subdirs if true also subdirectories are updated.
+	 * @param deep if true also subdirectories are updated.
 	 * @param deleteOther if true then all files in "toDir" which not
 	 * exist in "fromDir" are deleted.
 	 * @return string with reports about changes. If no changes were made
@@ -1793,10 +1789,10 @@ public class FUtils {
 	public static final String updateDirectories(final String fromDir,
 		final String toDir,
 		final String extension,
-		final boolean subdirs,
+		final boolean deep,
 		final boolean deleteOther) throws Exception {
 		return updateDirectories(new File (fromDir),
-			new File (toDir), extension, subdirs, deleteOther);
+			new File (toDir), extension, deep, deleteOther);
 	}
 
 	/** Update directories. If a file from the directory "fromDir" not exists
@@ -1809,7 +1805,7 @@ public class FUtils {
 	 * @param fromDir the directory from which the files are updated in "toDir".
 	 * @param toDir  the directory where files are updated.
 	 * @param extension file extension filter or null.
-	 * @param subdirs if true also subdirectories are updated.
+	 * @param deep if true also subdirectories are updated.
 	 * @param deleteOther if true then all files in "toDir" which not
 	 * exist in "fromDir" are deleted.
 	 * @return string with reports about changes. If no changes were made
@@ -1819,10 +1815,10 @@ public class FUtils {
 	public static final String updateDirectories(final File fromDir,
 		final File toDir,
 		final String extension,
-		final boolean subdirs,
+		final boolean deep,
 		final boolean deleteOther) throws Exception {
 		StringBuilder sb = new StringBuilder();
-		updateDirectories(fromDir, toDir, extension, subdirs, deleteOther, sb);
+		updateDirectories(fromDir, toDir, extension, deep, deleteOther, sb);
 		return sb.toString();
 	}
 
@@ -1857,7 +1853,7 @@ public class FUtils {
 	private static void updateDirectories(final File fromDir,
 		final File toDir,
 		final String extension,
-		final boolean subdirs,
+		final boolean deep,
 		final boolean deleteOther,
 		StringBuilder sb) throws Exception {
 		checkDir(fromDir, false);
@@ -1909,7 +1905,7 @@ public class FUtils {
 				}
 			}
 		}
-		if (subdirs) {
+		if (deep) {
 			toFiles = toDir.listFiles();
 			fromFiles = fromDir.listFiles();
 			if (deleteOther) {
@@ -1945,8 +1941,7 @@ public class FUtils {
 							addMessage(sb,
 								"Created dir: " + g.getCanonicalPath());
 						}
-						updateDirectories(
-							f, g, extension, subdirs, deleteOther, sb);
+						updateDirectories(f,g,extension,deep,deleteOther,sb);
 					}
 				}
 			}
