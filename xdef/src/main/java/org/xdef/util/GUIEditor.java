@@ -330,6 +330,12 @@ public class GUIEditor extends GUIScreen {
 				workDir, "result.tmp", deleteOnExit, "UTF-8"));
 		}
 		new GUIEditor(si).display(null, msg, o, si, editable, null);
+		Map<String, XDSourceItem> m = si.getMap();
+		if (m.size() == 1) { //delete the file result.tmp if it was not saved
+			if (!m.values().iterator().next()._saved) {
+				new File(workDir, "result.tmp").delete();
+			}
+		}
 	}
 
 	/** Display editable window with XML.
