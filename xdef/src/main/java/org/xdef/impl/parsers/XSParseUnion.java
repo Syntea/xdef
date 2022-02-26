@@ -15,6 +15,7 @@ import static org.xdef.XDParser.WS_COLLAPSE;
 import static org.xdef.XDParser.WS_PRESERVE;
 import static org.xdef.XDValueID.XD_ANY;
 import static org.xdef.XDValueID.XD_CONTAINER;
+import static org.xdef.impl.parsers.XSAbstractParser.valueToParser;
 
 /** Parser of Schema "union" type.
  * @author Vaclav Trojan
