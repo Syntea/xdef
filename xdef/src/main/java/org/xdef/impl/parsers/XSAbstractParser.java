@@ -183,9 +183,9 @@ public abstract class XSAbstractParser extends XDParserAbstract
 				}
 			}
 		}
-		//The value type in the named parameter '%item' of the parser '&{0}'
+		//The value type in the named parameter '&{0}' of the parser&{1}{ '}{'}
 		// must be Parser
-		throw new SRuntimeException(XDEF.XDEF474);
+		throw new SRuntimeException(XDEF.XDEF474, "%item");
 	}
 	public void setMinExclusive(final XDValue x) {}//default not specified
 	public void setMaxExclusive(final XDValue x) {}//default not specified
@@ -380,6 +380,11 @@ public abstract class XSAbstractParser extends XDParserAbstract
 			}
 		}
 		if ((item = getParam(params, BASE)) != null && !item.isNull()) {
+			if (item.getItemId() != XD_PARSER) { // base must be parser
+				//The value type in the named parameter '&{0}' of the parser
+				//&{1}{ '}{'} must be Parser
+				throw new SRuntimeException(XDEF.XDEF474,"%base", parserName());
+			}
 			setBase((XDParser) item);
 		}
 		if ((item = getParam(params, WHITESPACE)) != null && !item.isNull()) {
