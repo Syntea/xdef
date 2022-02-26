@@ -107,10 +107,9 @@ class XonFromXml extends XonUtil implements XonNames {
 		} else if (X_MAP.equals(localName)) {
 			return createMapW3C(elem);
 		} else if (X_ITEM.equals(elem.getLocalName())) {
-			if (elem.hasAttribute(X_VALUEATTR)) {
-				return XonTools.xmlToJValue(elem.getAttribute(X_VALUEATTR));
-			}
-			return XonTools.xmlToJValue(((Element) elem).getTextContent());
+			return (elem.hasAttribute(X_VALUEATTR))
+				? XonTools.xmlToJValue(elem.getAttribute(X_VALUEATTR))
+				: XonTools.xmlToJValue(((Element) elem).getTextContent());
 		} else if (J_BOOLEAN.equals(elem.getLocalName())) {
 			return ("true".equals(elem.getTextContent().trim()));
 		} else if (J_NULL.equals(elem.getLocalName())) {
@@ -198,13 +197,14 @@ class XonFromXml extends XonUtil implements XonNames {
 		String localName = nsURI==null ? elem.getNodeName():elem.getLocalName();
 		if (XDConstants.XON_NS_URI_XD.equals(nsURI)) {
 			if (X_ITEM.equals(localName)) {
+				String s;
 				if (elem.hasAttribute(X_VALUEATTR)) {
-					return XonTools.xmlToJValue(
-						elem.getAttribute(X_VALUEATTR));
-				}
-				String s = elem.getTextContent();
-				if (s != null) {
-					s = s.trim();
+					s = elem.getAttribute(X_VALUEATTR);
+				} else {
+					s = elem.getTextContent();
+					if (s != null) {
+						s = s.trim();
+					}
 				}
 				return XonTools.xmlToJValue(s);
 			} else if (X_MAP.equals(localName)) {

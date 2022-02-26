@@ -44,7 +44,7 @@ public class DefTelephone extends XDValueAbstract implements XDTelephone  {
 		final boolean wasQuote) {
 		while (p.isInteger()) {
 			if (p.eos() || wasQuote && p.isChar('"')) {
-				return p.getBufferPart(wasQuote ? pos1+1 : pos1,
+				return p.getBufferPart(pos1,
 					wasQuote ? p.getIndex() - 1 : p.getIndex());
 			} else if (!p.isSpace()) {
 				break;
@@ -58,8 +58,8 @@ public class DefTelephone extends XDValueAbstract implements XDTelephone  {
 	 * @return string with telephone number.
 	 */
 	public static final String parseTelephone(final SParser p) {
+		boolean wasQuote = p.isChar('"') || p.isToken("T\"");
 		int pos1 = p.getIndex();
-		boolean wasQuote = p.isChar('"');
 		if (p.isChar('+')) {
 			p.isInteger();
 			p.isSpace();

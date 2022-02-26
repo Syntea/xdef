@@ -15,6 +15,9 @@ import java.util.ArrayList;
 import java.util.Currency;
 import java.util.LinkedHashMap;
 import java.util.List;
+import org.xdef.XDTelephone;
+import org.xdef.impl.code.DefEmailAddr;
+import org.xdef.impl.code.DefTelephone;
 import org.xdef.msg.JSON;
 import org.xdef.msg.SYS;
 import org.xdef.sys.SBuffer;
@@ -258,7 +261,8 @@ public class XonTools {
 		}
 		int len = s.length();
 		char ch = s.charAt(0);
-		if (ch == '"' && s.charAt(len-1) == '"') {
+		char endChar = s.charAt(len-1);
+		if (ch == '"' && endChar == '"') {
 			StringParser p = new StringParser(s);
 			p.setIndex(1);
 			return XonTools.readJString(p);
@@ -278,6 +282,15 @@ public class XonTools {
 			} catch (Exception ex) {}
 			try {
 				return new BigDecimal(s);
+			} catch (Exception ex) {}
+		}
+		if (ch == 'T' && len>2 && s.charAt(1) == '"' && endChar == '"') {
+			try {
+				return new DefTelephone(s);
+			} catch (Exception ex) {}
+		} else if (ch == 'e' && len>2 && s.charAt(1) == '"' && endChar == '"') {
+			try {
+				return new DefEmailAddr(s);
 			} catch (Exception ex) {}
 		}
 		return s; // XON/JSON String
@@ -430,6 +443,8 @@ public class XonTools {
 			s = String.valueOf((Character) x);
 		} else if (x instanceof InetAddress) {
 			return x.toString().substring(1);
+		} else if (x instanceof XDTelephone) {
+			return "T\"" + x.toString() + "\"";
 		} else if (x instanceof Currency) {
 			return ((Currency) x).getCurrencyCode();
 		} else if (x instanceof byte[]) {

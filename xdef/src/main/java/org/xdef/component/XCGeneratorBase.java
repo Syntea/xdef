@@ -289,6 +289,8 @@ class XCGeneratorBase {
 			case XDValueID.XD_BYTES:
 				_byteArrayEncoding |= getBytesType(xdata);
 				return "byte[]";
+			case XDValueID.XD_TELEPHONE:
+				return "org.xdef.XDTelephone";
 			case XDValueID.XD_NULL: //jnull
 			case XDValueID.XD_ANY: //union etc.
 				return "Object";
@@ -388,6 +390,9 @@ class XCGeneratorBase {
 					+ result + "getParsedValue().getObject()";
 			case XDValueID.XD_BYTES:
 				return result + "getParsedValue().getBytes()";
+			case XDValueID.XD_TELEPHONE:
+				return "(org.xdef.XDTelephone) "
+					+ result + "getParsedValue().getObject()";
 			case XDValueID.XD_PARSER:
 //			case XDValueID.XD_CONTAINER:
 				return result + "getParsedString()";
