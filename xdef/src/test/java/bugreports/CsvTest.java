@@ -11,14 +11,9 @@ import org.w3c.dom.Node;
 import org.xdef.XDConstants;
 import org.xdef.XDDocument;
 import org.xdef.XDFactory;
-import org.xdef.XDParseResult;
-import org.xdef.XDParserAbstract;
 import org.xdef.XDPool;
 import org.xdef.component.XComponent;
 import org.xdef.component.XComponentUtil;
-import org.xdef.msg.XDEF;
-import org.xdef.proc.XXData;
-import org.xdef.proc.XXNode;
 import org.xdef.sys.ArrayReporter;
 import static org.xdef.sys.STester.runTest;
 import org.xdef.xml.KXmlUtils;
@@ -32,23 +27,6 @@ import static test.XDTester.genXComponent;
  */
 public class CsvTest extends XDTester {
 	public CsvTest() {super();}
-
-	private class BoolParser extends XDParserAbstract {
-		BoolParser() {}
-		@Override
-		public void parseObject(XXNode xnode, XDParseResult p) {
-			p.setEos();
-			if (tab0((XXData) xnode, "a", "b")) {
-				return;
-			}
-			//Inorrect value&{0}{ of '}{'}&{1}{: '}{'}&{#SYS000}
-			p.error(XDEF.XDEF809, parserName());
-		}
-		@Override
-		public String parserName() {return "tab";}
-	}
-
-	public static boolean tab0(XXNode xnode, String a, String b) {return true;}
 
 	private static Element csvToXml(final List o) {
 		Document doc = KXmlUtils.newDocument(null, "CSV", null);
@@ -110,45 +88,7 @@ public class CsvTest extends XDTester {
 		Element el;
 		ArrayReporter reporter = new ArrayReporter();
 ////////////////////////////////////////////////////////////////////////////////
-/**/
-		try {
-			xdef =
-//"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A|B|C|D'>\n"+
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A|B|C'>\n"+
-"<xd:declaration>\n"+
-" external method boolean bugreports.CsvTest.tab0(XXNode xnode, String a, String b);\n" +
-" boolean tab1(String a, String b){return true;}\n" +
-" Parser parser;\n" +
-"</xd:declaration>\n"+
-"<A a=\"string(%base=parser);\"/>\n" +
-"<B a=\"string(%base=tab0('a', 'b'));\"/>\n" +
-"<C a=\"string(%base=tab1('a', 'b'));\"/>\n" +
-//"<D a=\"string(%base=true);\"/>\n" +
-"</xd:def>";
-			xp = XDFactory.compileXD(null,xdef);
-			xp = compile(xdef);
-			xp.displayCode();
-			xd = xp.createXDDocument();
-			xd.setVariable("parser", new BoolParser());
-			xml = "<A a='a'/>";
-			assertEq(xml, parse(xd, xml, reporter));
-			assertNoErrors(reporter);
-			xd = xp.createXDDocument();
-			xml = "<B a='a'/>";
-			assertEq(xml, parse(xd, xml, reporter));
-			assertNoErrors(reporter);
-			xd = xp.createXDDocument();
-			xml = "<C a='a'/>";
-			assertEq(xml, parse(xd, xml, reporter));
-			assertNoErrors(reporter);
-			xd = xp.createXDDocument();
-			xml = "<D a='a'/>";
-			assertEq(xml, parse(xd, xml, reporter));
-			assertNoErrors(reporter);
-		} catch (Exception ex) {fail(ex);}
 		reporter.clear();
-if(true)return;
-/**/
 		try {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='CSV'>\n"+

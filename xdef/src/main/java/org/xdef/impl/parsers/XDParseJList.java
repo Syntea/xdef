@@ -17,7 +17,6 @@ import static org.xdef.XDValueID.XD_CONTAINER;
 import static org.xdef.XDValueID.XD_PARSER;
 import org.xdef.impl.code.DefContainer;
 import org.xdef.impl.code.DefParseResult;
-import static org.xdef.impl.parsers.XSAbstractParser.valueToParser;
 import org.xdef.xon.XonTools;
 import org.xdef.msg.XDEF;
 import org.xdef.proc.XXNode;

@@ -35,11 +35,7 @@ import static org.xdef.XDParser.PATTERN;
 import static org.xdef.XDParser.SEPARATOR;
 import static org.xdef.XDParser.TOTALDIGITS;
 import static org.xdef.XDParser.WHITESPACE;
-import static org.xdef.XDValueID.XD_ANY;
-import static org.xdef.XDValueID.XD_BOOLEAN;
 import static org.xdef.XDValueID.XD_CONTAINER;
-import static org.xdef.XDValueID.XD_PARSER;
-import static org.xdef.XDValueID.XD_PARSERESULT;
 
 /** Abstract class as the base for all test value parsers.
  * @author Vaclav Trojan
@@ -136,57 +132,6 @@ public abstract class XSAbstractParser extends XDParserAbstract
 	 * @return 0 .. preserve, 'r' .. replace, 'c' .. collapse
 	 */
 	public byte getWhiteSpaceParam() {return _whiteSpace;}
-
-	/** Check if value is parser and return it as a Parser
-	 * or convert it to Parser (if it is possible).
-	 * @param x value to be checked.
-	 * @return return argument as a Parser.
-	 * @throws SRuntimeException with message XDEF474
-	 * if conversion is not possible.
-	 */
-	public static final XDParser valueToParser(final XDValue x) {
-		if (x != null) {
-			switch (x.getItemId()) {
-				case XD_PARSER: return (XDParser) x;
-				case XD_BOOLEAN:
-					return new XDParserAbstract() {
-						@Override
-						public void parseObject(XXNode xnode, XDParseResult p) {
-							p.setEos();
-							if (!x.booleanValue()) {
-								//Inorrect value&{0}{ of '}{'}&{1}{: '}{'}
-								p.error(XDEF.XDEF809, parserName());
-							}
-						}
-						@Override
-						public String parserName() {return "%base=False";}
-					};
-				case XD_PARSERESULT: {
-					XDParseResult y = (XDParseResult) x;
-					return new XDParserAbstract() {
-						@Override
-						public void parseObject(XXNode xnode, XDParseResult p) {
-							XDParseResult y = (XDParseResult) x;
-							p.setSourceBuffer(y.getSourceBuffer());
-							p.setIndex(y.getIndex());
-							p.setParsedValue(y.getParsedValue());
-							p.addReports(y.getReporter());
-						}
-						@Override
-						public short parsedType() {
-							XDValue v = y.getParsedValue();
-							return v == null ? XD_ANY : v.getItemId();
-						}
-						@Override
-						public String parserName() {return "parseResult";}
-					};
-				}
-			}
-		}
-		//The value type in the named parameter '&{0}' of the parser&{1}{ '}{'}
-		// must be Parser
-		throw new SRuntimeException(XDEF.XDEF474, "%item");
-	}
 	public void setMinExclusive(final XDValue x) {}//default not specified
 	public void setMaxExclusive(final XDValue x) {}//default not specified
 	public void setMinInclusive(final XDValue x) {}//default not specified
@@ -380,12 +325,7 @@ public abstract class XSAbstractParser extends XDParserAbstract
 			}
 		}
 		if ((item = getParam(params, BASE)) != null && !item.isNull()) {
-			if (item.getItemId() != XD_PARSER) { // base must be parser
-				//The value type in the named parameter '&{0}' of the parser
-				//&{1}{ '}{'} must be Parser
-				throw new SRuntimeException(XDEF.XDEF474,"%base", parserName());
-			}
-			setBase((XDParser) item);
+			setBase(valueToParser(item));
 		}
 		if ((item = getParam(params, WHITESPACE)) != null && !item.isNull()) {
 			setWhiteSpace(item.toString());

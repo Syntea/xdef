@@ -1,16 +1,19 @@
 package org.xdef;
 
+import static org.xdef.XDValueID.XD_ANY;
+import static org.xdef.XDValueID.XD_BOOLEAN;
 import static org.xdef.XDValueID.XD_CONTAINER;
 import static org.xdef.XDValueID.XD_PARSER;
+import static org.xdef.XDValueID.XD_PARSERESULT;
 import static org.xdef.XDValueID.XD_STRING;
 import org.xdef.impl.code.CodeTable;
 import org.xdef.impl.code.DefContainer;
 import org.xdef.impl.code.DefParseResult;
 import org.xdef.impl.code.DefString;
-import org.xdef.impl.parsers.XSAbstractParser;
 import org.xdef.proc.XXNode;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.SException;
+import org.xdef.sys.SRuntimeException;
 
 /** Abstract parser of string values.
  * @author Vaclav Trojan
@@ -101,12 +104,12 @@ public abstract class XDParserAbstract extends XDValueAbstract
 							XDContainer c = (XDContainer) val;
 							for (int i = 0; i <= c.getXDItemsNumber(); i++) {
 								c.replaceXDItem(i,
-									XSAbstractParser.valueToParser(c.getXDItem(i)));
+									valueToParser(c.getXDItem(i)));
 							}
 							break;
 						}
 					case "base" :
-						nv.setValue(XSAbstractParser.valueToParser(val));
+						nv.setValue(valueToParser(val));
 						break;
 					case "argument":
 						if (val.getItemId() != XD_STRING) {
@@ -163,4 +166,56 @@ public abstract class XDParserAbstract extends XDValueAbstract
 	 * @return integer with bits representing the allowed keyword parameters.
 	 */
 	public int getLegalKeys() {return 0;}
+
+	/** Check if value is parser and return it as a Parser
+	 * or convert it to Parser (if it is possible).
+	 * @param x value to be checked.
+	 * @return return argument as a Parser.
+	 * @throws SRuntimeException with message XDEF474
+	 * if conversion is not possible.
+	 */
+	public final XDParser valueToParser(final XDValue x) {
+		if (x != null) {
+			switch (x.getItemId()) {
+				case XD_PARSER: return (XDParser) x;
+				case XD_BOOLEAN:
+					String parserName = parserName();
+					return new XDParserAbstract() {
+						@Override
+						public void parseObject(XXNode xnode, XDParseResult p) {
+							p.setEos();
+							if (!x.booleanValue()) {
+								//Inorrect value&{0}{ of '}{'}&{1}{: '}{'}
+								p.error(XDEF.XDEF809, parserName());
+							}
+						}
+						@Override
+						public String parserName() {return "generatedParser";}
+					};
+				case XD_PARSERESULT: {
+					XDParseResult y = (XDParseResult) x;
+					return new XDParserAbstract() {
+						@Override
+						public void parseObject(XXNode xnode, XDParseResult p) {
+							XDParseResult y = (XDParseResult) x;
+							p.setSourceBuffer(y.getSourceBuffer());
+							p.setIndex(y.getIndex());
+							p.setParsedValue(y.getParsedValue());
+							p.addReports(y.getReporter());
+						}
+						@Override
+						public short parsedType() {
+							XDValue v = y.getParsedValue();
+							return v == null ? XD_ANY : v.getItemId();
+						}
+						@Override
+						public String parserName() {return "generatedParser";}
+					};
+				}
+			}
+		}
+		//The value type in the named parameter '&{0}' of the parser&{1}{ '}{'}
+		// must be Parser
+		throw new SRuntimeException(XDEF.XDEF474, "%item", parserName());
+	}
 }

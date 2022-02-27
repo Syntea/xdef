@@ -68,7 +68,7 @@ public class XDParseSequence extends XSAbstractParser {
 	public boolean addTypeParser(final XDValue x) {
 		if (_itemTypes == null) {
 			_itemTypes = new XDParser[1];
-			_itemTypes[0] = (XDParser) x;
+			_itemTypes[0] = valueToParser(x);
 			return true;
 		}
 		XDParser[] old = _itemTypes;

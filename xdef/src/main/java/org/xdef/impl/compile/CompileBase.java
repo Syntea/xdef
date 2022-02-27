@@ -514,6 +514,10 @@ public class CompileBase implements CodeTable, XDValueID {
 			keyParam("pattern", XD_STRING, false, -1, false),
 			keyParam("whiteSpace", XD_STRING, false,
 					-1, true, new DefString("collapse")));
+		parser(im, org.xdef.impl.parsers.XDParseFalse.class,
+			"false_parser");
+		parser(im, org.xdef.impl.parsers.XDParseTrue.class,
+			"true_parser");
 		parser(im, org.xdef.impl.parsers.XSParseBoolean.class,
 			"boolean", "?xs:boolean", "?bool");
 		parser(im, org.xdef.impl.parsers.XDParseJBoolean.class,"jboolean");

@@ -24,8 +24,11 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import org.xdef.XDGPSPosition;
 import org.xdef.sys.Price;
-import static test.XDTester._xdNS;
 import org.xdef.XDPrice;
+import org.xdef.msg.XDEF;
+import org.xdef.proc.XXData;
+import static org.xdef.sys.STester.runTest;
+import static test.XDTester._xdNS;
 
 /** Test of types, AnyValue and null in X-script.
  * @author Vaclav Trojan
@@ -243,7 +246,7 @@ public final class TestTypes extends XDTester {
 "    </xd:choice>\n" +
 "  </A>\n" +
 "</xd:def>";
-			xd = XDFactory.compileXD(null, xdef).createXDDocument();
+			xd = compile(xdef).createXDDocument();
 			xml =
 "<A>\n" +
 "    <Test1>1</Test1>\n" +
@@ -1163,9 +1166,60 @@ public final class TestTypes extends XDTester {
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<a>jlist(%item=union(%item=[gps(), price()]));</a>\n"+
 "</xd:def>";
-			xp = XDFactory.compileXD(null,xdef);
+			xp = compile(xdef);
 			xml = "<a>[ g(2.5, 3.5, -0.1, xxx), p(12.50 CZK), p(2.5 USD) ]</a>";
 			assertEq(xml, el = parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
+			xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
+"<A a=\"string(%base=true);\"/>\n" +
+"</xd:def>";
+			xp = compile(xdef);
+			xd = xp.createXDDocument();
+			xml = "<A a='a'/>";
+			assertEq(xml, parse(xd, xml, reporter));
+			assertNoErrors(reporter);
+			xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
+"<A a=\"string(%base=false);\"/>\n" +
+"</xd:def>";
+			xp = compile(xdef);
+			xd = xp.createXDDocument();
+			xml = "<A a='a'/>";
+			assertEq(xml, parse(xd, xml, reporter));
+			if (!reporter.errors()) {
+				fail("Error expected");
+			}
+			xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A|B|C|D'>\n"+
+"<xd:declaration>\n"+
+" external method boolean test.xdef.TestTypes.tab0(XXNode, String, String);\n" +
+" boolean tab1(String a, String b){return true;}\n" +
+" Parser parser;\n" +
+" boolean b = true;\n" +
+"</xd:declaration>\n"+
+"<A a=\"string(%base=parser);\"/>\n" +
+"<B a=\"string(%base=tab0('a', 'b'));\"/>\n" +
+"<C a=\"string(%base=tab1('a', 'b'));\"/>\n" +
+"<D a=\"union(%item=[b, string(%base=b), true]);\"/>\n" +
+"</xd:def>";
+			xp = compile(xdef);
+			xd = xp.createXDDocument();
+			xd.setVariable("parser", new BoolParser());
+			xml = "<A a='a'/>";
+			assertEq(xml, parse(xd, xml, reporter));
+			assertNoErrors(reporter);
+			xd = xp.createXDDocument();
+			xml = "<B a='a'/>";
+			assertEq(xml, parse(xd, xml, reporter));
+			assertNoErrors(reporter);
+			xd = xp.createXDDocument();
+			xml = "<C a='a'/>";
+			assertEq(xml, parse(xd, xml, reporter));
+			assertNoErrors(reporter);
+			xd = xp.createXDDocument();
+			xml = "<D a='a'/>";
+			assertEq(xml, parse(xd, xml, reporter));
 			assertNoErrors(reporter);
 
 			xdef = // check xml schema types
@@ -1334,6 +1388,23 @@ public final class TestTypes extends XDTester {
 			public String parserName() {return "myParser";}
 		};
 	}
+
+	private class BoolParser extends XDParserAbstract {
+		BoolParser() {}
+		@Override
+		public void parseObject(XXNode xnode, XDParseResult p) {
+			p.setEos();
+			if (tab0((XXData) xnode, "a", "b")) {
+				return;
+			}
+			//Inorrect value&{0}{ of '}{'}&{1}{: '}{'}&{#SYS000}
+			p.error(XDEF.XDEF809, parserName());
+		}
+		@Override
+		public String parserName() {return "tab";}
+	}
+
+	public static boolean tab0(XXNode xnode, String a, String b) {return true;}
 
 	/** Run test
 	 * @param args the command line arguments

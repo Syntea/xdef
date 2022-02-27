@@ -11,8 +11,41 @@ import org.xdef.XDBNFGrammar;
 import org.xdef.XDBNFRule;
 import org.xdef.XDConstants;
 import org.xdef.XDContainer;
+import org.xdef.XDNamedValue;
 import org.xdef.XDParser;
 import org.xdef.XDValue;
+import static org.xdef.XDValueID.XD_ANY;
+import static org.xdef.XDValueID.XD_BIGINTEGER;
+import static org.xdef.XDValueID.XD_BNFGRAMMAR;
+import static org.xdef.XDValueID.XD_BNFRULE;
+import static org.xdef.XDValueID.XD_BOOLEAN;
+import static org.xdef.XDValueID.XD_CHAR;
+import static org.xdef.XDValueID.XD_CONTAINER;
+import static org.xdef.XDValueID.XD_DATETIME;
+import static org.xdef.XDValueID.XD_DECIMAL;
+import static org.xdef.XDValueID.XD_DOUBLE;
+import static org.xdef.XDValueID.XD_DURATION;
+import static org.xdef.XDValueID.XD_ELEMENT;
+import static org.xdef.XDValueID.XD_INPUT;
+import static org.xdef.XDValueID.XD_LOCALE;
+import static org.xdef.XDValueID.XD_LONG;
+import static org.xdef.XDValueID.XD_NAMEDVALUE;
+import static org.xdef.XDValueID.XD_NULL;
+import static org.xdef.XDValueID.XD_OUTPUT;
+import static org.xdef.XDValueID.XD_PARSER;
+import static org.xdef.XDValueID.XD_PARSERESULT;
+import static org.xdef.XDValueID.XD_REPORT;
+import static org.xdef.XDValueID.XD_SERVICE;
+import static org.xdef.XDValueID.XD_STATEMENT;
+import static org.xdef.XDValueID.XD_STRING;
+import static org.xdef.XDValueID.XD_UNDEF;
+import static org.xdef.XDValueID.XD_VOID;
+import static org.xdef.XDValueID.XD_XPATH;
+import static org.xdef.XDValueID.X_ATTR_REF;
+import static org.xdef.XDValueID.X_NOTYPE_VALUE;
+import static org.xdef.XDValueID.X_PARSEITEM;
+import static org.xdef.XDValueID.X_UNIQUESET;
+import static org.xdef.XDValueID.X_UNIQUESET_KEY;
 import org.xdef.impl.XDebugInfo;
 import org.xdef.impl.XVariableTable;
 import org.xdef.impl.code.CodeExtMethod;
@@ -20,6 +53,103 @@ import org.xdef.impl.code.CodeI1;
 import org.xdef.impl.code.CodeOp;
 import org.xdef.impl.code.CodeParser;
 import org.xdef.impl.code.CodeS1;
+import static org.xdef.impl.code.CodeTable.ATTR_EXIST;
+import static org.xdef.impl.code.CodeTable.ATTR_REF;
+import static org.xdef.impl.code.CodeTable.BNFRULE_PARSE;
+import static org.xdef.impl.code.CodeTable.CALL_OP;
+import static org.xdef.impl.code.CodeTable.CHECK_TYPE;
+import static org.xdef.impl.code.CodeTable.CMPEQ;
+import static org.xdef.impl.code.CodeTable.CMPGE;
+import static org.xdef.impl.code.CodeTable.CMPGT;
+import static org.xdef.impl.code.CodeTable.CMPLE;
+import static org.xdef.impl.code.CodeTable.CMPLT;
+import static org.xdef.impl.code.CodeTable.CMPNE;
+import static org.xdef.impl.code.CodeTable.COMPILE_REGEX;
+import static org.xdef.impl.code.CodeTable.CONTEXT_GETTEXT;
+import static org.xdef.impl.code.CodeTable.CREATE_ELEMENT;
+import static org.xdef.impl.code.CodeTable.CREATE_ELEMENTS;
+import static org.xdef.impl.code.CodeTable.CREATE_NAMEDVALUE;
+import static org.xdef.impl.code.CodeTable.DATE_FORMAT;
+import static org.xdef.impl.code.CodeTable.DEL_ATTR;
+import static org.xdef.impl.code.CodeTable.EQUALS_OP;
+import static org.xdef.impl.code.CodeTable.EXTMETHOD;
+import static org.xdef.impl.code.CodeTable.EXTMETHOD_CHKEL_XDARRAY;
+import static org.xdef.impl.code.CodeTable.EXTMETHOD_XDARRAY;
+import static org.xdef.impl.code.CodeTable.EXTMETHOD_XXNODE;
+import static org.xdef.impl.code.CodeTable.EXTMETHOD_XXNODE_XDARRAY;
+import static org.xdef.impl.code.CodeTable.FLOAT_FORMAT;
+import static org.xdef.impl.code.CodeTable.FORMAT_STRING;
+import static org.xdef.impl.code.CodeTable.FROM_ELEMENT;
+import static org.xdef.impl.code.CodeTable.GETATTR_FROM_CONTEXT;
+import static org.xdef.impl.code.CodeTable.GETELEMS_FROM_CONTEXT;
+import static org.xdef.impl.code.CodeTable.GETELEM_FROM_CONTEXT;
+import static org.xdef.impl.code.CodeTable.GET_ATTR;
+import static org.xdef.impl.code.CodeTable.GET_ATTR_NAME;
+import static org.xdef.impl.code.CodeTable.GET_BNFRULE;
+import static org.xdef.impl.code.CodeTable.GET_DBQUERY;
+import static org.xdef.impl.code.CodeTable.GET_ELEMENT;
+import static org.xdef.impl.code.CodeTable.GET_NS;
+import static org.xdef.impl.code.CodeTable.GET_XPATH;
+import static org.xdef.impl.code.CodeTable.GET_XPATH_FROM_SOURCE;
+import static org.xdef.impl.code.CodeTable.GET_XQUERY;
+import static org.xdef.impl.code.CodeTable.HAS_ATTR;
+import static org.xdef.impl.code.CodeTable.INTEGER_FORMAT;
+import static org.xdef.impl.code.CodeTable.JMPEQ;
+import static org.xdef.impl.code.CodeTable.JMPF_OP;
+import static org.xdef.impl.code.CodeTable.JMPGE;
+import static org.xdef.impl.code.CodeTable.JMPGT;
+import static org.xdef.impl.code.CodeTable.JMPLE;
+import static org.xdef.impl.code.CodeTable.JMPLT;
+import static org.xdef.impl.code.CodeTable.JMPNE;
+import static org.xdef.impl.code.CodeTable.JMPT_OP;
+import static org.xdef.impl.code.CodeTable.JMP_OP;
+import static org.xdef.impl.code.CodeTable.LD_CODE;
+import static org.xdef.impl.code.CodeTable.LD_CONST;
+import static org.xdef.impl.code.CodeTable.LD_CONST_I;
+import static org.xdef.impl.code.CodeTable.LD_GLOBAL;
+import static org.xdef.impl.code.CodeTable.LD_LOCAL;
+import static org.xdef.impl.code.CodeTable.LD_TRUE_AND_SKIP;
+import static org.xdef.impl.code.CodeTable.LD_XMODEL;
+import static org.xdef.impl.code.CodeTable.NEW_BNFGRAMAR;
+import static org.xdef.impl.code.CodeTable.NEW_CONTAINER;
+import static org.xdef.impl.code.CodeTable.NEW_LOCALE;
+import static org.xdef.impl.code.CodeTable.NEW_PARSER;
+import static org.xdef.impl.code.CodeTable.NOT_B;
+import static org.xdef.impl.code.CodeTable.NULL_OR_TO_STRING;
+import static org.xdef.impl.code.CodeTable.OUT1_STREAM;
+import static org.xdef.impl.code.CodeTable.OUTLN1_STREAM;
+import static org.xdef.impl.code.CodeTable.OUTLN_STREAM;
+import static org.xdef.impl.code.CodeTable.OUT_STREAM;
+import static org.xdef.impl.code.CodeTable.PARSEANDCHECK;
+import static org.xdef.impl.code.CodeTable.PARSERESULT_MATCH;
+import static org.xdef.impl.code.CodeTable.PARSE_DATE;
+import static org.xdef.impl.code.CodeTable.PARSE_FLOAT;
+import static org.xdef.impl.code.CodeTable.PARSE_INT;
+import static org.xdef.impl.code.CodeTable.PARSE_OP;
+import static org.xdef.impl.code.CodeTable.POP_OP;
+import static org.xdef.impl.code.CodeTable.PRINTF_STREAM;
+import static org.xdef.impl.code.CodeTable.PUT_ERROR;
+import static org.xdef.impl.code.CodeTable.PUT_ERROR1;
+import static org.xdef.impl.code.CodeTable.SET_ATTR;
+import static org.xdef.impl.code.CodeTable.SET_ELEMENT;
+import static org.xdef.impl.code.CodeTable.SET_NAMEDVALUE;
+import static org.xdef.impl.code.CodeTable.STACK_DUP;
+import static org.xdef.impl.code.CodeTable.STACK_TO_CONTAINER;
+import static org.xdef.impl.code.CodeTable.STOP_OP;
+import static org.xdef.impl.code.CodeTable.ST_GLOBAL;
+import static org.xdef.impl.code.CodeTable.ST_LOCAL;
+import static org.xdef.impl.code.CodeTable.ST_XMODEL;
+import static org.xdef.impl.code.CodeTable.TO_BIGINTEGER_X;
+import static org.xdef.impl.code.CodeTable.TO_BOOLEAN;
+import static org.xdef.impl.code.CodeTable.TO_CHAR_X;
+import static org.xdef.impl.code.CodeTable.TO_DECIMAL_X;
+import static org.xdef.impl.code.CodeTable.TO_FLOAT;
+import static org.xdef.impl.code.CodeTable.TO_FLOAT_X;
+import static org.xdef.impl.code.CodeTable.TO_INT_X;
+import static org.xdef.impl.code.CodeTable.TO_MILLIS;
+import static org.xdef.impl.code.CodeTable.TO_MILLIS_X;
+import static org.xdef.impl.code.CodeTable.TO_STRING;
+import static org.xdef.impl.code.CodeTable.UNIQUESET_BIND;
 import org.xdef.impl.code.DefBNFGrammar;
 import org.xdef.impl.code.DefBigInteger;
 import org.xdef.impl.code.DefBoolean;
@@ -35,8 +165,19 @@ import org.xdef.impl.code.DefRegex;
 import org.xdef.impl.code.DefString;
 import org.xdef.impl.code.DefXPathExpr;
 import org.xdef.impl.code.DefXQueryExpr;
+import static org.xdef.impl.compile.CompileBase.NO_MODE;
+import static org.xdef.impl.compile.CompileBase.TEXT_MODE;
+import static org.xdef.impl.compile.CompileBase.UNDEF_CODE;
+import static org.xdef.impl.compile.CompileBase.genInternalMethod;
+import static org.xdef.impl.compile.CompileBase.getClassTypeID;
+import static org.xdef.impl.compile.CompileBase.getTypeClass;
+import static org.xdef.impl.compile.CompileBase.getTypeId;
+import static org.xdef.impl.compile.CompileBase.getTypeMethod;
+import static org.xdef.impl.compile.CompileBase.getTypeName;
 import org.xdef.impl.ext.XExtUtils;
 import org.xdef.impl.parsers.XDParseCDATA;
+import org.xdef.impl.parsers.XDParseFalse;
+import org.xdef.impl.parsers.XDParseTrue;
 import org.xdef.impl.xml.KNamespace;
 import org.xdef.model.XMVariable;
 import org.xdef.msg.SYS;
@@ -1824,7 +1965,7 @@ public final class CompileCode extends CompileBase {
 	 * @param numPar Number of parameters (types of parameters are in stack).
 	 */
 	final boolean internalMethod(final String name, final int numPar) {
-		InternalMethod imethod = getTypeMethod(X_NOTYPE_VALUE, name);
+		CompileBase.InternalMethod imethod = getTypeMethod(X_NOTYPE_VALUE, name);
 		if (imethod == null) {
 			return false;
 		}
@@ -1842,7 +1983,7 @@ public final class CompileCode extends CompileBase {
 			}
 			return true; //do not report multiple errors!
 		}
-		InternalMethod imethod = getTypeMethod(type, "#");
+		CompileBase.InternalMethod imethod = getTypeMethod(type, "#");
 		if (imethod == null) {
 			return false;
 		}
@@ -1877,7 +2018,7 @@ public final class CompileCode extends CompileBase {
 			topToBool();
 			return true;
 		}
-		InternalMethod imethod = getTypeMethod(xType, name);
+		CompileBase.InternalMethod imethod = getTypeMethod(xType, name);
 		if (imethod == null && xType == XD_PARSER) {
 			addCode(new CodeI1(XD_PARSERESULT, PARSE_OP, 1), 0);
 			xType = _tstack[_sp - numPar];
@@ -1972,14 +2113,14 @@ public final class CompileCode extends CompileBase {
 	 */
 	private void genInternalMethod(final String name,
 		final int numPar,
-		final InternalMethod imethod) {
+		final CompileBase.InternalMethod imethod) {
 		short code = imethod.getCode();
 		int npar = numPar; //is modified, should be local
 		//first parameter type
 		short par1typ = npar > 0 ? _tstack[_sp - (npar - 1)] : -1;
 		//first parameter value constant pointer or -1
 		int par1const = npar > 0 ? _cstack[_sp - (npar - 1)] : -1;
-		InternalMethod method = imethod;
+		CompileBase.InternalMethod method = imethod;
 		short resultType = method.getResultType();
 		XDValue operator = null;
 		switch (code) {
@@ -2013,7 +2154,7 @@ public final class CompileCode extends CompileBase {
 				}
 				XDParser p = CompileBase.getParser(
 					"CDATA".equals(name) ? "string" : name);
-				KeyParam[] pars = method.getKeyParams();
+				CompileBase.KeyParam[] pars = method.getKeyParams();
 				String[] sqParamNames = method.getSqParamNames();
 				if (npar == 1 && _tstack[_sp] == XD_CONTAINER &&
 					_cstack[_sp] == _lastCodeIndex) {// set named parameters
@@ -2051,9 +2192,35 @@ public final class CompileCode extends CompileBase {
 							_parser.error(XDEF.XDEF801, s);
 						}
 					}
-					for (KeyParam par: pars) {
+					for (CompileBase.KeyParam par: pars) {
 						String parName = par.getName();
-						XDValue val = h.getXDNamedItem(parName);
+						XDNamedValue val = h.getXDNamedItem(parName);
+						boolean err = false;
+						XDValue v = val != null ? val.getValue() : null;
+						if (v != null && "base".equals(parName)) {
+							if (v.getItemId() == XD_BOOLEAN) {
+								val.setValue(v.booleanValue()
+									? new XDParseTrue() : new XDParseFalse());
+							} else if (v.getItemId() != XD_PARSER) {
+								err = true;
+							}
+						} else if (v != null && "item".equals(parName)) {
+							if (v.getItemId() == XD_CONTAINER) {
+								for (XDValue x:((XDContainer)v).getXDItems()){
+									if (x.getItemId() != XD_PARSER) {
+										err = true;
+										break;
+									}
+								}
+							} else if (v.getItemId() != XD_PARSER) {
+								err = true;
+							}
+						}
+						if (err) {
+							//The value type in the named parameter '&{0}'
+							//  of the parser&{1}{ '}{'} must be Parser
+							_parser.error(XDEF.XDEF474, "%item",p.parserName());
+						}
 						if (par.isFixed()) {
 							if (val == null) {
 								h.setXDNamedItem(parName,par.getDefaultValue());
