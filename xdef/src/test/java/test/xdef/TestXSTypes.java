@@ -3618,8 +3618,10 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(parse("1"), _msg);
 		assertTrue(parse("true"), _msg);
 		assertTrue(parseFail("x"), _msg);
-		assertTrue(parseFail("false"), _msg);
-		assertTrue(parseFail("0"), _msg);
+		assertFalse(parse("false"), _msg);
+		assertFalse(parse("0"), _msg);
+//		assertTrue(parseFail("false"), _msg);
+//		assertTrue(parseFail("0"), _msg);
 
 		assertTrue(prepare("union("+
 			"%item=[decimal(%maxInclusive=5), boolean])"), _msg);
