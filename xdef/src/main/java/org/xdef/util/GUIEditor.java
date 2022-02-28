@@ -995,7 +995,7 @@ public class GUIEditor extends GUIScreen {
 "    specified more times)\n"+
 " -external list of classpath items with external resources (may be filenames\n"+
 "  or urls).\n"+
-" -format specification of data format x - XML or j - JSON (default XML)\n"+
+" -format format of processed data (XML or JSON; default is XML)\n"+
 " -data source (input file or data used for validation mode and as\n"+
 "    the context for construction mode or for generation of X-definition).\n"+
 " -debug sets debugging mode when project is executed\n"+
