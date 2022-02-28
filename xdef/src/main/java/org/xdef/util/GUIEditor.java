@@ -19,9 +19,12 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.lang.reflect.Method;
 import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Properties;
@@ -46,16 +49,12 @@ import org.xdef.sys.SUtils;
  */
 public class GUIEditor extends GUIScreen {
 
-	/** Create instance of the screen to display the sources.
-	 * @param si source information.
-	 */
-	private GUIEditor(final XDSourceInfo si) {super(si);}
+	private static final Class[] URLPARAMS = new Class[]{URL.class};
 
 	private static final XDPool PROJECTXDPOOL;
-
 	static {
 		String xdef = // X-definition of project description
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" root=\"Project\">\n" +
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" root=\"Project\" name=\"GUI\">\n" +
 "  <Project\n" +
 "    Show=\"? enum('true','false'); /*if true file with project is displayed"
 			+ " and editable.*/\">\n" +
@@ -65,6 +64,11 @@ public class GUIEditor extends GUIScreen {
 "      <XDefinition xd:script=\"+\">\n" +
 "        string(); /*this can be a file, url or XML with X-definition source*/\n"+
 "      </XDefinition>\n" +
+"\n" +
+"<!-- \"Classpath\" - items to be added to the classpath -->\n" +
+"      <Classpath xd:script=\"*\">\n" +
+"        file() || url(); /*classpath item (url or pathname)*/\n"+
+"      </Classpath>\n" +
 "\n" +
 "<!-- \"Property\" items are used to set properties for compiling and"
 			+ " executing the project -->\n" +
@@ -125,6 +129,11 @@ public class GUIEditor extends GUIScreen {
 "</xd:def>";
 		PROJECTXDPOOL = XDFactory.compileXD(null, xdef);
 	}
+
+	/** Create instance of the screen to display the sources.
+	 * @param si source information.
+	 */
+	private GUIEditor(final XDSourceInfo si) {super(si);}
 
 	/** Prepare menu items connected with more sources. */
 	private void prepareSourceMenuItems() {
@@ -599,6 +608,7 @@ public class GUIEditor extends GUIScreen {
 		return compareNodes(p1, p2, "Execute");
 	}
 
+	@SuppressWarnings("unchecked")
 	/** Run project with GUIEditor.
 	 * @param param 'c' (compose) , 'v' (validate) or 'g' (generate)
 	 * @param dataType 'x' (XML) or 'j' (XON/JSON)
@@ -629,6 +639,26 @@ public class GUIEditor extends GUIScreen {
 				props.setProperty(e.getAttribute("Name"),
 					e.getAttribute("Value"));
 			}
+			// add classspath items
+			nl = project.getElementsByTagName("Classpath");
+			for (int i = 0; i < nl.getLength(); i++) {
+				e = (Element) nl.item(i);
+				String s = e.getTextContent();
+				File f = new File(s);
+				try {
+					URL u = f.exists() ? f.toURI().toURL() : new URL(s);
+					URLClassLoader sysloader =
+						(URLClassLoader) ClassLoader.getSystemClassLoader();
+					Class sysclass = URLClassLoader.class;
+					Method method = sysclass.getDeclaredMethod(
+						"addURL", URLPARAMS);
+					method.setAccessible(true);
+					method.invoke(sysloader, new Object[]{u});
+				} catch (Exception ex) {
+					throw new RuntimeException("Incorrect ClassPath: " + s);
+				}
+			}
+
 			// compile X-definitions
 			XDPool xp = compileProject(project, props);
 			// execute project
