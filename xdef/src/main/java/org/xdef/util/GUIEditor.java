@@ -65,10 +65,10 @@ public class GUIEditor extends GUIScreen {
 "        string(); /*this can be a file, url or XML with X-definition source*/\n"+
 "      </XDefinition>\n" +
 "\n" +
-"<!-- \"Classpath\" - items to be added to the classpath -->\n" +
-"      <Classpath xd:script=\"*\">\n" +
+"<!-- \"External\" - items to be added to the classpath -->\n" +
+"      <External xd:script=\"*\">\n" +
 "        file() || url(); /*classpath item (url or pathname)*/\n"+
-"      </Classpath>\n" +
+"      </External>\n" +
 "\n" +
 "<!-- \"Property\" items are used to set properties for compiling and"
 			+ " executing the project -->\n" +
@@ -640,7 +640,7 @@ public class GUIEditor extends GUIScreen {
 					e.getAttribute("Value"));
 			}
 			// add classspath items
-			nl = project.getElementsByTagName("Classpath");
+			nl = project.getElementsByTagName("External");
 			for (int i = 0; i < nl.getLength(); i++) {
 				e = (Element) nl.item(i);
 				String s = e.getTextContent();
@@ -993,6 +993,8 @@ public class GUIEditor extends GUIScreen {
 "Switches:\n"+
 " -xdef source with X-definition (input file or data; it may be\n"+
 "    specified more times)\n"+
+" -external list of classpath items with external resources (may be filenames\n"+
+"  or urls).\n"+
 " -format specification of data format x - XML or j - JSON (default XML)\n"+
 " -data source (input file or data used for validation mode and as\n"+
 "    the context for construction mode or for generation of X-definition).\n"+
@@ -1028,6 +1030,7 @@ public class GUIEditor extends GUIScreen {
 		String editInput = null;
 		String displayResult = null;
 		File workDir = null;
+		ArrayList<String> external = new ArrayList<String>();
 		int i = 1;
 		char param;
 		char format = (char) 0;
@@ -1063,6 +1066,14 @@ public class GUIEditor extends GUIScreen {
 						xdefs.add(args[i++]);
 					}
 					continue;
+				case "-external":
+					wasXDefinition = true;
+					external.add(args[i++]);
+					while (i < args.length && !args[i].startsWith("-")) {
+						external.add(args[i++]);
+					}
+					continue;
+
 				case "-format":
 					if (format != 0) {
 						System.err.println(
@@ -1287,6 +1298,21 @@ public class GUIEditor extends GUIScreen {
 		// Sources
 		for (String x: xdefs) {
 			src += "  <XDefinition>" + x + "</XDefinition>\n";
+		}
+		// External items added to classPath
+		for (String x: xdefs) {
+			f = new File(x);
+			if (f.exists()) {
+				src += "  <External>" + x + "</External>\n";
+				continue;
+			} else {
+				try {
+					URL u = new URL(x);
+					src += "  <External>" + x + "</External>\n";
+					continue;
+				} catch (Exception ex) {}
+			}
+			throw new RuntimeException("Incorrect classpath: " + x);
 		}
 		if (!deleteOnExit) { // work directory was specified
 			String s = SUtils.modifyString(workDir.getPath(), "&", "&amp;");
