@@ -149,7 +149,7 @@ public class DefTelephone extends XDValueAbstract implements XDTelephone  {
 	@Override
 	public XDValueType getItemType() {return XDValueType.TELEPHONE;}
 	@Override
-	public String stringValue() {return isNull() ? "null" :_value;}
+	public String stringValue() {return isNull() ? "null" : ("T\""+_value+'"');}
 	@Override
 	public boolean isNull() {return _value == null;}
 	@Override

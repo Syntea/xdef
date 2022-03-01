@@ -85,46 +85,12 @@ public class CsvTest extends XDTester {
 		XDDocument xd;
 		XDPool xp;
 		Object x, o;
+		List list;
 		Element el;
 		ArrayReporter reporter = new ArrayReporter();
 ////////////////////////////////////////////////////////////////////////////////
 		reporter.clear();
 		try {
-			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='CSV'>\n"+
-"<xd:component>%class bugreports.CsvTest0 %link CSV</xd:component>\n"+
-"<xd:xon name=\"CSV\">\n"+
-"[\n" +
-"[$script=\"+\",\"string()\",\"union(%item=[emailAddr(), jnull])\",\"union(%item=[string(), jnull])\"]\n"+
-"]\n" +
-"</xd:xon>\n" +
-"</xd:def>";
-			xp = compile(xdef);
-			xp = XDFactory.compileXD(null, xdef);
-/**/
-			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
-//if(true)return;
-/**/
-			xd = xp.createXDDocument();
-			s =
-"[\n" +
-" [\"Helena \\\"\\\"Klímová\\\"\\\"\",\"hklimova@volny.cz\",\"+420 602 345 678\"],\n" +
-" [\"Eva Kuželová, Epor \\\"Prix\\\"\", \"epor@email.cz\", null],\n" +
-" [\"Jirová\", null, null]\n" +
-"]";
-			o = xd.jparse(s, reporter);
-			assertNoErrorsAndClear(reporter);
-			genXComponent(xd.getXDPool(), clearTempDir()).checkAndThrowErrors();
-			xc = xd.jparseXComponent(s, null, reporter);
-			x = XComponentUtil.toXon(xc);
-			assertNoErrorsAndClear(reporter);
-			assertTrue(XonUtil.xonEqual(o, x));
-			List list = (List) ((List) x).get(1);
-			assertNull(list.get(2));
-			list = (List) ((List) x).get(2);
-			assertNull(list.get(1));
-			assertNull(list.get(2));
-//if(true)return;
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='CSV'>\n"+
 "<xd:component>%class bugreports.data.Csv1 %link CSV</xd:component>\n"+
@@ -148,21 +114,12 @@ public class CsvTest extends XDTester {
 			assertEq(xml, parse(xd, xml, reporter));
 			assertNoErrors(reporter);
 			xc = parseXC(xd, xml, null, reporter);
-//			assertEq(xml, xc.toXml());
-//			o = XComponentUtil.toXon(xc);
-//System.out.println(XonUtil.toXonString(o, true));
-//System.out.println(XonUtil.toXonString(o, true));
-//if(true)return;
 			xdef=
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='X'>\n"+
 "<xd:component>%class bugreports.data.Csv3 %link X</xd:component>\n"+
 "<xd:declaration>Telephone t = new Telephone('+420 601349889');</xd:declaration>\n"+
 "<xd:xon name = 'X'>\n"+
 "{\n" +
-//"  A=[\n" +
-//"     $script=\"finally outln(t);\",\n" +
-//"     \"+ jstring()\"],\n" +
-//"  B=[\"+ emailAddr()\"],\n" +
 "  C=[\"+ telephone()\"]\n"+
 "}\n"+
 "</xd:xon>\n"+
@@ -172,8 +129,6 @@ public class CsvTest extends XDTester {
 			genXComponent(xd.getXDPool(), clearTempDir()).checkAndThrowErrors();
 			s =
 "{\n" +
-//"    A=[\"Hele \\\"\\\"Klímová\\\"\\\"\", \"Eva Kuželová, Epor \\\"Prix\\\"\", \"Eliška Jírová\"],\n"+
-//"    B=[e\"klimova<hklimova@volny.cz>\", e\"epor@email.cz\", e\"a@b.cz\"],\n"+
 "    C=[T\"+420 602 345 678\", T\"+420 602345679\", T\"123456789\"]\n"+
 "}";
 			x = XonUtil.parseXON(s);
@@ -187,7 +142,7 @@ public class CsvTest extends XDTester {
 "<xd:component>%class bugreports.data.Csv4 %link X</xd:component>\n"+
 "<xd:xon name = 'X'>\n"+
 "[\n"+
-//" [\"fixed 'Name'\",\"fixed 'Email'\",\"fixed 'Mobile Number'\"],\n"+
+" [\"fixed 'Name'\",\"fixed 'Email'\",\"fixed 'Mobile Number'\"],\n"+
 " [$script=\"occurs 1..*\", \"string()\", \"emailAddr()\", \"? telephone()\"]\n"+
 "]\n"+
 "</xd:xon>\n"+
@@ -197,6 +152,7 @@ public class CsvTest extends XDTester {
 			xd = xp.createXDDocument();
 			s =
 "[\n"+
+" [\"Name\",\"Email\",\"Mobile Number\"],\n"+
 " [\"abc\", e\"a@b.c\", T\"+420 601 349 889\"]\n"+
 "]";
 			x = XonUtil.parseXON(s);
@@ -209,7 +165,6 @@ public class CsvTest extends XDTester {
 			if (!XonUtil.xonEqual(x, o = XComponentUtil.toXon(xc))) {
 				fail(XonUtil.toXonString(o, true));
 			}
-//if(true)return;
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='csv'>\n"+
 "<xd:component>%class bugreports.data.Csv5 %link csv</xd:component>\n"+

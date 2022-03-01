@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Currency;
 import java.util.LinkedHashMap;
 import java.util.List;
-import org.xdef.XDTelephone;
 import org.xdef.impl.code.DefEmailAddr;
 import org.xdef.impl.code.DefTelephone;
 import org.xdef.msg.JSON;
@@ -443,8 +442,6 @@ public class XonTools {
 			s = String.valueOf((Character) x);
 		} else if (x instanceof InetAddress) {
 			return x.toString().substring(1);
-		} else if (x instanceof XDTelephone) {
-			return "T\"" + x.toString() + "\"";
 		} else if (x instanceof Currency) {
 			return ((Currency) x).getCurrencyCode();
 		} else if (x instanceof byte[]) {

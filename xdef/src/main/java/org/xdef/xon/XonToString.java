@@ -68,8 +68,6 @@ class XonToString extends XonTools {
 				return "c\"" + charToJSource((Character) x) + '"';
 			} else if (x instanceof URI) {
 				return "u\"" + jstringToSource(((URI) x).toASCIIString()) + '"';
-			} else if (x instanceof XDTelephone) {
-				return "T\"" + ((XDTelephone) x).stringValue() + '"';
 			} else if (x instanceof XDEmailAddr) {
 				return "e\""
 					+ jstringToSource(((XDEmailAddr) x).getEmailAddr()) + '"';

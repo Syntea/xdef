@@ -4,8 +4,10 @@ import java.util.List;
 import java.util.Map;
 import org.w3c.dom.Element;
 import org.xdef.XDDocument;
+import org.xdef.XDEmailAddr;
 import org.xdef.XDFactory;
 import org.xdef.XDPool;
+import org.xdef.XDTelephone;
 import org.xdef.component.XComponent;
 import org.xdef.component.XComponentUtil;
 import org.xdef.xon.XonUtil;
@@ -64,7 +66,7 @@ public class TestXon extends XDTester {
 			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
 			xc = xp.createXDDocument().jparseXComponent(xon, null, reporter);
 			y = XonUtil.xmlToXon(xc.toXml());
-			if (!XonUtil.xonEqual(XonUtil.xonToJson(x),y)) {
+			if (!XonUtil.xonEqual(XonUtil.xonToJson(x),XonUtil.xonToJson(y))) {
 				return "4\n" + XonUtil.toJsonString(XonUtil.xonToJson(x))
 					+ "\n" +  XonUtil.toJsonString(y);
 			}
@@ -137,11 +139,13 @@ public class TestXon extends XDTester {
 		assertNull(testx("file", "[ \"temp/a.txt\" ]"));
 		assertNull(testx("ipAddr", "[/::FFFF:129.144.52.38,/0.0.0]\n"));
 		assertNull(testx("currency", "[C(USD), C(CZK)]\n"));
+		assertNull(testx("telephone", "[T\"123456\",T\"+420 234 567 890\"]\n"));
 
 		assertNull(testy("? int", "{a=1}"));
 		assertNull(testy("? int", "{ }"));
 
 		String s, json, xon, xdef, xml;
+		List list;
 		Object o, x, y;
 		XDPool xp;
 		XDDocument xd;
@@ -302,7 +306,7 @@ public class TestXon extends XDTester {
 			y = XonUtil.parseXON(s);
 			assertTrue(XonUtil.xonEqual(x,y));
 			s = XonUtil.toXonString(x, false);
-			List list = (List) ((Map) ((List) x).get(0)).get("Towns");
+			list = (List) ((Map) ((List) x).get(0)).get("Towns");
 			assertEq("Wien",((GPSPosition) list.get(0)).name());
 			assertEq("London",((GPSPosition) list.get(1)).name());
 			assertEq("Prague old town",((GPSPosition) list.get(2)).name());
@@ -331,6 +335,53 @@ public class TestXon extends XDTester {
 			xc = xd.jcreateXComponent("A", null, reporter);
 			y = XComponentUtil.toXon(xc);
 			assertTrue(XonUtil.xonEqual(o,y));
+		} catch (Exception ex) {fail(ex);}
+		try { // XON from CSV
+			xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='CSV'>\n"+
+"<xd:component>%class test.xdef.testXON.XonFromCsv %link CSV</xd:component>\n"+
+"<xd:xon name=\"CSV\">\n"+
+"[\n" +
+"  [\"fixed 'Name'\",\"fixed 'Email'\",\"fixed 'Mobile Number'\"],\n"+
+"  [$script=\"+\",\n"+
+"    \"string()\",\n"+
+"    \"union(%item=[emailAddr(), jnull])\",\n"+
+"    \"union(%item=[telephone(), jnull])\"\n"+
+"  ]\n" +
+"]\n" +
+"</xd:xon>\n" +
+"</xd:def>";
+			xp = compile(xdef);
+			xp = XDFactory.compileXD(null, xdef);
+			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
+			xd = xp.createXDDocument();
+			s =
+"[\n" +
+" [\"Name\", \"Email\", \"Mobile Number\"],\n"+
+" [\"Helena \\\"\\\"Klímová\",\"hklimova@volny.cz\",\"+420 602 345 678\"],\n" +
+" [\"Eva Kuželová, Epor \\\"Prix\\\"\", \"epor@email.cz\", null],\n" +
+" [\"Jirová\", null, null]\n" +
+"]";
+			o = xd.jparse(s, reporter);
+			assertNoErrorsAndClear(reporter);
+			genXComponent(xd.getXDPool(), clearTempDir()).checkAndThrowErrors();
+			xc = xd.jparseXComponent(s, null, reporter);
+			x = XComponentUtil.toXon(xc);
+			assertNoErrorsAndClear(reporter);
+			assertTrue(XonUtil.xonEqual(o, x));
+			list = (List) ((List) x).get(0);
+			assertEq("Name", list.get(0));
+			list = (List) ((List) x).get(1);
+			assertEq("Helena \"\"Klímová", list.get(0));
+			assertTrue(list.get(1) instanceof XDEmailAddr);
+			assertEq("hklimova@volny.cz", list.get(1).toString());
+			assertTrue(list.get(2) instanceof XDTelephone);
+			assertEq("T\"+420 602 345 678\"", list.get(2).toString());
+			list = (List) ((List) x).get(2);
+			assertNull(list.get(2));
+			list = (List) ((List) x).get(3);
+			assertNull(list.get(1));
+			assertNull(list.get(2));
 		} catch (Exception ex) {fail(ex);}
 
 		clearTempDir(); // clear temporary directory
