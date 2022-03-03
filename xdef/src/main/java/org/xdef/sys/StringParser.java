@@ -2206,7 +2206,6 @@ public class StringParser extends SReporter implements SParser {
 		if (_ch == '\n') {
 			setNewLine();
 		}
-/*xx*/
 		if (incIndex() < _endPos || readNextBuffer()) {
 			while (XML_CHARTAB0[_ch = _source.charAt(getIndex())] ==
 				XML_CHAR_WHITESPACE) {
@@ -2221,7 +2220,6 @@ public class StringParser extends SReporter implements SParser {
 		} else {
 			_ch = NOCHAR;
 		}
-/*xx*/
 		return true;
 	}
 

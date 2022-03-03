@@ -3,31 +3,23 @@ package org.xdef.impl.compile;
 import java.util.Map;
 import java.util.Stack;
 import org.xdef.XDConstants;
-import org.xdef.impl.XConstants;
 import org.xdef.impl.XOccurrence;
-import org.xdef.xon.XonTools;
-import org.xdef.xon.XonReader;
-import org.xdef.xon.XonTools.JArray;
-import org.xdef.xon.XonTools.JObject;
-import org.xdef.xon.XonTools.JMap;
-import org.xdef.xon.XonTools.JValue;
 import org.xdef.msg.JSON;
-import org.xdef.msg.SYS;
-import org.xdef.sys.StringParser;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.ReportWriter;
 import org.xdef.sys.SBuffer;
 import org.xdef.sys.SPosition;
-import org.xdef.sys.SRuntimeException;
-import org.xdef.xon.IniReader;
-import org.xdef.xon.XonParser;
+import org.xdef.sys.StringParser;
 import org.xdef.xon.XonNames;
+import org.xdef.xon.XonParser;
 import org.xdef.xon.XonParsers;
+import org.xdef.xon.XonReader;
+import org.xdef.xon.XonTools;
 
-/** Create X-definition model from xd:xon element.
+/** Create X-definition model from xd:csv element.
  * @author Vaclav Trojan
  */
-public class CompileXonXdef extends StringParser {
+public class CompileCsvXdef extends StringParser {
 	/** Prefix of X-definition namespace. */
 	private String _xdPrefix;
 	/** Index of X-definition namespace. */
@@ -37,8 +29,8 @@ public class CompileXonXdef extends StringParser {
 	/** XPath position of XON/JSON description.*/
 	private String _basePos;
 
-	/** Prepare instance of CompileXonXdef. */
-	private CompileXonXdef() {super();}
+	/** Prepare instance of CompileCsvXdef. */
+	private CompileCsvXdef() {super();}
 
 	/** Set attribute to PNode.
 	 * @param e PNode where to set an attribute.
@@ -352,12 +344,12 @@ public class CompileXonXdef extends StringParser {
 		setAttr(e, XonNames.X_KEYATTR, new SBuffer("fixed('"+s+"');",e._name));
 	}
 
-	private PNode genXonMap(final JMap map, final PNode parent) {
+	private PNode genXonMap(final XonTools.JMap map, final PNode parent) {
 		PNode e, ee;
 		Object val = map.get(XonNames.SCRIPT_NAME);
-		if (val != null && val instanceof JValue) {
+		if (val != null && val instanceof XonTools.JValue) {
 			map.remove(XonNames.SCRIPT_NAME);
-			JValue jv = (JValue) val;
+			XonTools.JValue jv = (XonTools.JValue) val;
 			setSourceBuffer(jv.getSBuffer());
 			isSpacesOrComments();
 			if (isToken(XonNames.ONEOF_NAME)) {
@@ -396,7 +388,7 @@ public class CompileXonXdef extends StringParser {
 		for (Map.Entry<Object, Object> entry: map.entrySet()) {
 			String key = (String) entry.getKey();
 			val = entry.getValue();
-			PNode ee2 = genXonModel(val, ee);
+			PNode ee2 = genCsvModel(val, ee);
 			if (_xdNamespace.equals(ee2._nsURI)
 				&& "choice".equals(ee2._localName)) {
 				for (PNode n : ee2.getChildNodes()) {
@@ -409,37 +401,37 @@ public class CompileXonXdef extends StringParser {
 		return e;
 	}
 
-	private PNode genXonArray(final JArray array, final PNode parent) {
+	private PNode genXonArray(final XonTools.JArray array, final PNode parent) {
 		PNode e = genJElement(parent, "array", array.getPosition());
 		int index = 0;
 		int len = array.size();
 		if (len > 0) {
 			Object jo = array.get(0);
 			Object o = jo == null
-				? null : jo instanceof JValue ? ((JValue) jo).getValue() : jo;
-			if (o != null && o instanceof JValue) {
-				setSourceBuffer(((JValue) o).getSBuffer());
+				? null : jo instanceof XonTools.JValue ? ((XonTools.JValue) jo).getValue() : jo;
+			if (o != null && o instanceof XonTools.JValue) {
+				setSourceBuffer(((XonTools.JValue) o).getSBuffer());
 				isSpacesOrComments();
 				if (isToken(XonNames.ONEOF_NAME)) {
 					e = genXDElement(parent,
-						"choice", ((JValue) jo).getPosition());
+						"choice", ((XonTools.JValue) jo).getPosition());
 					skipSemiconsBlanksAndComments();
 					String s = getUnparsedBufferPart().trim();
 					if (!s.isEmpty()) {
 						setXDAttr(parent, "script",
-							new SBuffer(s + ';', ((JValue) jo).getSBuffer()));
+							new SBuffer(s + ';', ((XonTools.JValue) jo).getSBuffer()));
 					}
 				} else {
 					String s = getUnparsedBufferPart().trim();
 					if (!s.isEmpty()) {
 						setXDAttr(e, "script",
-							new SBuffer(s + ';', ((JValue) jo).getSBuffer()));
+							new SBuffer(s + ';', ((XonTools.JValue) jo).getSBuffer()));
 					}
 				}
 				index = 1;
 			}
 			for(; index < len; index++) {
-				PNode ee = genXonModel(array.get(index), e);
+				PNode ee = genCsvModel(array.get(index), e);
 				PAttr val;
 				// if it is not the last and it has xd:script attribute where
 				// the min occurrence differs from max occurrence
@@ -486,7 +478,7 @@ public class CompileXonXdef extends StringParser {
 		return e;
 	}
 
-	private PNode genXonValue(final JValue jo, final PNode parent) {
+	private PNode genXonValue(final XonTools.JValue jo, final PNode parent) {
 		SBuffer sbf, occ = null;
 		PNode e = genJElement(parent, XonNames.X_ITEM, jo.getPosition());
 		if (jo.getValue() == null) {
@@ -518,7 +510,7 @@ public class CompileXonXdef extends StringParser {
 	 * @param parent parent PNode,
 	 * @return created PNode.
 	 */
-	private PNode genXonModel(final Object xon, final PNode parent) {
+	private PNode genCsvModel(final Object xon, final PNode parent) {
 		// set fields _jsprefix and _jsNamespace
 		String s = XDConstants.XON_NS_PREFIX; // default namespace prefix
 		for (int i = 1; ;i++) {
@@ -533,13 +525,13 @@ public class CompileXonXdef extends StringParser {
 			}
 		}
 		PNode e;
-		if (xon instanceof JMap) {
-			e = genXonMap((JMap) xon, parent);
-		} else if (xon instanceof JArray) {
-			e = genXonArray((JArray) xon, parent);
-		} else if (xon instanceof JValue
-			&& ((JValue) xon).getValue() instanceof String) {
-			e = genXonValue((JValue) xon, parent);
+		if (xon instanceof XonTools.JMap) {
+			e = genXonMap((XonTools.JMap) xon, parent);
+		} else if (xon instanceof XonTools.JArray) {
+			e = genXonArray((XonTools.JArray) xon, parent);
+		} else if (xon instanceof XonTools.JValue
+			&& ((XonTools.JValue) xon).getValue() instanceof String) {
+			e = genXonValue((XonTools.JValue) xon, parent);
 		} else {
 			error(JSON.JSON011); //Not XON/JSON object&{0}
 			return parent;
@@ -550,21 +542,13 @@ public class CompileXonXdef extends StringParser {
 
 	/** Create X-definition model from PNode with XON/JSON description.
 	 * @param p PNode with XON/JSON script.
-	 * @param xonMode version of transformation XON/JSON to XML).
-	 * @param format "xon" or "ini".
 	 * @param name name of XON/JSON model in X-definition.
 	 * @param reporter report writer
 	 */
-	static final void genXdef(final PNode p,
-		final byte xonMode,
-		final String format,
+	public static final void genXdef(final PNode p,
 		final SBuffer name,
 		final ReportWriter reporter) {
-		if (xonMode != XConstants.XON_MODE_W) {
-			//Internal error&{0}{: }
-			throw new SRuntimeException(SYS.SYS066, "Namespace W3C expected");
-		}
-		CompileXonXdef jx = new CompileXonXdef();
+		CompileCsvXdef jx = new CompileCsvXdef();
 		jx._xdNamespace = p._nsURI;
 		jx._xdPrefix = p.getPrefix();
 		jx._xdIndex = p._nsPrefixes.get(jx._xdPrefix);
@@ -573,16 +557,14 @@ public class CompileXonXdef extends StringParser {
 		p._nsURI = null; // set no namespace
 		p._nsindex = -1;
 		XDBuilder jp = new XDBuilder(jx);
-		XonParsers pp = format.equals("xon")
-			? new XonReader(p._value, jp) : new IniReader(p._value, jp);
+		XonParsers pp = new XonReader(p._value, jp);
 		pp.setReportWriter(reporter);
 		pp.setXdefMode();
 		pp.parse();
-		jx.genXonModel(jp.getResult(), p);
+		jx.genCsvModel(jp.getResult(), p);
 		pp = null;
 		jp = null;
 		p._value = null;
-		org.xdef.impl.XPool xx;
 /*#if DEBUG*#/
 if (org.xdef.impl.XPool._debugSwitches.contains(
 		org.xdef.impl.XConstants.DEBUG_SHOW_XON_MODEL)) {
@@ -598,13 +580,13 @@ if (org.xdef.impl.XPool._debugSwitches.contains(
 	 */
 	private static class XDBuilder implements XonParser {
 		private final Stack<Integer> _kinds = new Stack<Integer>();
-		private final Stack<JArray> _arrays = new Stack<JArray>();
-		private final Stack<JMap> _maps = new Stack<JMap>();
+		private final Stack<XonTools.JArray> _arrays = new Stack<XonTools.JArray>();
+		private final Stack<XonTools.JMap> _maps = new Stack<XonTools.JMap>();
 		private int _kind; // 0..value, 1..array, 2..map
 		private final Stack<SBuffer> _names = new Stack<SBuffer>();
-		private JObject _value;
+		private XonTools.JObject _value;
 
-		XDBuilder(CompileXonXdef jx) {_kinds.push(_kind = 0);}
+		XDBuilder(CompileCsvXdef jx) {_kinds.push(_kind = 0);}
 
 ////////////////////////////////////////////////////////////////////////////////
 // JParser interface
@@ -616,7 +598,7 @@ if (org.xdef.impl.XPool._debugSwitches.contains(
 		 * @return null or name of pair if value pair already exists in
 		 * the currently processed map.
 		 */
-		public String putValue(JValue value) {
+		public String putValue(XonTools.JValue value) {
 			if (_kind == 1) {
 				_arrays.peek().add(value);
 			} else if (_kind == 2) {
@@ -640,7 +622,7 @@ if (org.xdef.impl.XPool._debugSwitches.contains(
 		 */
 		public void arrayStart(SPosition pos) {
 			_kinds.push(_kind = 1);
-			_arrays.push(new JArray(pos));
+			_arrays.push(new XonTools.JArray(pos));
 		}
 		@Override
 		/** Array ended.
@@ -663,7 +645,7 @@ if (org.xdef.impl.XPool._debugSwitches.contains(
 		 */
 		public void mapStart(SPosition pos) {
 			_kinds.push(_kind = 2);
-			_maps.push(new JMap(pos));
+			_maps.push(new XonTools.JMap(pos));
 		}
 		@Override
 		/** Map ended.
@@ -672,7 +654,7 @@ if (org.xdef.impl.XPool._debugSwitches.contains(
 		public void mapEnd(SPosition pos) {
 			_kinds.pop();
 			_kind = _kinds.peek();
-			_value = (JObject)_maps.peek();
+			_value = (XonTools.JObject)_maps.peek();
 			_maps.pop();
 			if (_kind == 2) {
 				_maps.peek().put(_names.pop().getString(), _value);
@@ -696,7 +678,7 @@ if (org.xdef.impl.XPool._debugSwitches.contains(
 				? XonNames.ONEOF_NAME : "";
 			s += value == null ? "" : value.getString();
 			SPosition spos = value == null ? name : value;
-			JValue jv = new JValue(name, new JValue(spos, s));
+			XonTools.JValue jv = new XonTools.JValue(name, new XonTools.JValue(spos, s));
 			if (_kind == 1) { // array
 				_arrays.peek().add(jv);
 			} else if (_kind == 2) { // map
@@ -708,5 +690,19 @@ if (org.xdef.impl.XPool._debugSwitches.contains(
 		 * @return parsed object.
 		 */
 		public final Object getResult() {return _value;}
+	}
+	public static void main(String... a) {
+		PNode p = new PNode("csv",
+				new SPosition(1, 1, "STRING", "STRING"),
+				null,
+				(byte) 0,
+				StringParser.XMLVER1_0);
+		p._value = 
+			new SBuffer(
+"hdr: $script='?; options acceptEmptyAttributes'\n"+
+"  \"fixed 'Name'\", \"fixed 'Email'\", \"fixed 'Mobile Number'\"\n"+
+"row: xd:script='*; options acceptEmptyAttributes'\n"+
+"  \"? string()\", \"? emailAddr()\", \"? telephone()\"\n");
+		
 	}
 }

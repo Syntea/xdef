@@ -1,10 +1,7 @@
 package bugreports;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -18,6 +15,7 @@ import org.xdef.sys.ArrayReporter;
 import static org.xdef.sys.STester.runTest;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.xon.XonTools;
+import org.xdef.xon.XonTools.JNull;
 import org.xdef.xon.XonUtil;
 import test.XDTester;
 import static test.XDTester.genXComponent;
@@ -28,38 +26,141 @@ import static test.XDTester.genXComponent;
 public class CsvTest extends XDTester {
 	public CsvTest() {super();}
 
-	private static Element csvToXml(final List o) {
-		Document doc = KXmlUtils.newDocument(null, "CSV", null);
-		Element result = doc.getDocumentElement();
-		for (Object x: o) {
-			Map m = (Map) x;
-			Element row = doc.createElement("row");
-			for (Object y : m.entrySet()) {
-				Map.Entry en = (Map.Entry) y;
-				String key = (String) en.getKey();
-				Object val = en.getValue();
-				row.setAttribute(key, XonTools.jstringToXML(val.toString(), 1));
+	/** Convert index of column to column name.
+	 * @param index index of column.
+	 * @return column name.
+	 */
+	private static String genColumnName(final int index) {
+		String result = "";
+		int i = index;
+		for (;;) {
+			result = (char) ('A' + (i % ('Z' - 'A' + 1))) + result;
+			if ((i = i / ('Z' - 'A' + 1)) == 0) {
+				return result;
 			}
-			result.appendChild(row);
+			i--;
+		}
+	}
+
+	/** Add element witn CSV line to XML.
+	 * @param result where to add add element.
+	 * @param name name of element.
+	 * @param line array with values of line.
+	 */
+	private static void createLineElem(Element result, String name, List line) {
+		Element e = result.getOwnerDocument().createElement(name);
+		for (int j = 0; j < line.size(); j++) {
+			Object val = line.get(j);
+			String key = genColumnName(j);
+			if (val != null && !(val instanceof JNull)) {
+				e.setAttribute(key, 
+					XonTools.jstringToXML(val.toString(), 1));
+			} else {
+				e.setAttribute(key, "");
+			}
+		}
+		result.appendChild(e);
+	}
+	
+	/** Create XML element from CSV data.
+	 * @param csv object with CSV data.
+	 * @param hdr names of header line.
+	 * @return XML element created from CSV data
+	 */
+	public final static Element csvToXml(final List csv, String[] hdr) {
+		Element result =
+			KXmlUtils.newDocument(null, "CSV", null).getDocumentElement();
+		if (csv.isEmpty()) {
+			return result;
+		}
+		int i = 0;
+		if (hdr != null && csv.size() > 0) {
+			i = 1;
+			List x = (List) csv.get(0);
+			for (int j = 0; j < hdr.length; j++) {
+				String s = hdr[j];
+				if (s != null) {
+					if (!s.equals(x.get(j))) {
+						i = 0;
+						break;
+					}
+				} else {
+					if (x.get(j) != null) {
+						i = 0;
+						break;
+					}
+				} 
+			}
+			if (i == 1) {
+				createLineElem(result, "hdr", x);
+			}
+		}
+		for (; i < csv.size(); i++) {
+			createLineElem(result, "row", (List) csv.get(i));
 		}
 		return result;
 	}
 
-	private static List<Object> xmlToCsv(final Element elem) {
+	/** Get index of column from column name.
+	 * @param name column name.
+	 * @return  index of column.
+	 */
+	private static int getColumnIndex(final String name) {
+		int result = 0;
+		for (int i = 0; i < name.length(); i++) {
+			result = result*24 + name.charAt(i) - 'A';
+		}
+		return result;
+	}
+	
+	/** Create array of column items from XML element.
+	 * @param e XML element.
+	 * @return array of column items.
+	 */
+	private static List<Object> createLineArray(final Element e) {
 		List<Object> result = new ArrayList<Object>();
-		Node node = elem.getFirstChild();
-		while (node != null) {
-			if (node.getNodeType() == Node.ELEMENT_NODE) {
-				Map<String, Object> map = new LinkedHashMap<String, Object>();
-				NamedNodeMap nnm = node.getAttributes();
-				for (int i = 0; i < nnm.getLength(); i++) {
-					Node n = nnm.item(i);
-					map.put(n.getNodeName(),
-						XonTools.xmlToJValue(n.getNodeValue()));
-				}
-				result.add(map);
+		NamedNodeMap nnm = e.getAttributes();
+		if (nnm == null || nnm.getLength() == 0) {
+			return result; // empty line
+		}
+		int lineLen = 0;
+		for (int i = 0; i < nnm.getLength(); i++) {
+			int x = getColumnIndex(nnm.item(i).getNodeName());
+			if (x > lineLen) {
+				lineLen = x;
 			}
+		}
+		for (int i=0; i <= lineLen; i++) {
+			String s = e.getAttribute(genColumnName(i));
+			result.add(s == null || s.isEmpty()
+				? null : XonTools.xmlToJValue(s));
+		}
+		return result;
+	}
+	
+	/** Create CSV data from XML element.
+	 * @param e XML element.
+	 * @return CSV data
+	 */
+	public final static List<Object> xmlToCsv(final Element e) {
+		List<Object> result = new ArrayList<Object>();
+		Node node = e.getFirstChild();
+		while (node != null && node.getNodeType() != Node.ELEMENT_NODE) {
 			node = node.getNextSibling();
+		}
+		if (node != null && "hdr".equals(node.getNodeName())) {
+			result.add(createLineArray((Element) node));
+			node = node.getNextSibling();
+			while (node != null && node.getNodeType() != Node.ELEMENT_NODE) {
+				node = node.getNextSibling();
+			}
+		}
+		while (node != null) {
+			result.add(createLineArray((Element) node));
+			node = node.getNextSibling();
+			while (node != null && node.getNodeType() != Node.ELEMENT_NODE) {
+				node = node.getNextSibling();
+			}
 		}
 		return result;
 	}
@@ -91,6 +192,59 @@ public class CsvTest extends XDTester {
 ////////////////////////////////////////////////////////////////////////////////
 		reporter.clear();
 		try {
+			xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='CSV'>\n"+
+"<CSV>\n"+
+"<hdr xd:script='?; options acceptEmptyAttributes'\n"+
+"   A=\"fixed 'Name'\" B=\"fixed 'Email'\" C=\"fixed 'Mobile Number'\"/>\n"+
+"<row xd:script='*; options acceptEmptyAttributes'\n"+
+"   A=\"? string()\" B=\"? emailAddr()\" C=\"? telephone()\"/>\n"+
+"</CSV>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			xml =
+"<CSV>\n"+
+"<hdr A=\"Name\" B=\"Email\" C=\"Mobile Number\"/>\n"+
+"<row/>\n"+
+"<row A=\"abc\" B=\"a@b.c\" C=\"+420 601 349 889\"/>\n"+
+"<row A=\"null\"/>\n"+
+"<row A=\"def\"/>\n"+
+"</CSV>";	
+			s = 
+"Name, Email, Mobile Number\n"+
+"\n"+
+"abc, a@b.c, +420 601 349 889\n"+
+"xxx,\n"+
+"\n"+
+"def,,\n";
+			o = XonUtil.parseCSV(s);
+			el = csvToXml((List) o,
+				new String[]{"Name", "Email", "Mobile Number"});
+			assertEq(el, el = parse(xp, "", el, reporter));
+			assertNoErrors(reporter);
+			x = xmlToCsv(el);
+			assertTrue(XonUtil.xonEqual(x, o));
+//System.out.println(o);
+//System.out.println(x);
+			assertEq(el, el = csvToXml((List) o,
+				new String[]{"Name", "Email", "Mobile Number"}));
+			s =
+"hdr: $script='?; options acceptEmptyAttributes'\n"+
+"  \"fixed 'Name'\", \"fixed 'Email'\", \"fixed 'Mobile Number'\"\n"+
+"row: xd:script='*; options acceptEmptyAttributes'\n"+
+"  \"? string()\", \"? emailAddr()\", \"? telephone()\"\n";
+
+			xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='csv'>\n"+
+"<csv name = 'CSV'>\n"+
+"hdr: $script='?; options acceptEmptyAttributes'\n"+
+"  \"fixed 'Name'\", \"fixed 'Email'\", \"fixed 'Mobile Number'\"\n"+
+"row: xd:script='*; options acceptEmptyAttributes'\n"+
+"  \"? string()\", \"? emailAddr()\", \"? telephone()\"\n"+
+"</csv>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+if(true)return;
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='CSV'>\n"+
 "<xd:component>%class bugreports.data.Csv1 %link CSV</xd:component>\n"+

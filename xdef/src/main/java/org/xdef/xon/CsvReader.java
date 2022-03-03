@@ -104,43 +104,45 @@ public class CsvReader extends StringParser implements XonParsers {
 //		}
 //	}
 
+	private void putValue(final StringBuilder sb, final SPosition pos) {
+		if (sb.length() == 0) {
+			_jp.putValue(
+				new XonTools.JValue(pos, XonTools.JNULL));
+			sb.setLength(0);
+		} else {
+			_jp.putValue(new XonTools.JValue(pos, sb.toString()));
+			sb.setLength(0);
+		}		
+	}
+	
+	private void skipLeadingSpaces() {
+		while (isChar(' ') || isChar('\t')){} // skip leading spaces
+	}
+	
 	/** Read line from CSV source */
 	private void readCSVLine() {
 		StringBuilder sb = new StringBuilder();
 		SPosition pos = getPosition();
-		isSpaces();
-		if (eos()) {
-			return;
+		for (;;) {
+			skipLeadingSpaces();
+			if (isNewLine()) { // new line or end of source
+				if (eos()) {
+					return;
+				}
+				_jp.arrayStart(this);
+				_jp.arrayEnd(this);
+			} else {
+				break;
+			}
 		}
 		_jp.arrayStart(this);
 		for (;;) {
-			isSpaces();
-			while (isChar(',')) {
-				isSpaces();
-				if (sb.length() == 0) {
-					_jp.putValue(
-						new XonTools.JValue(getPosition(), XonTools.JNULL));
-					sb.setLength(0);
-				} else {
-					_jp.putValue(new XonTools.JValue(pos, sb.toString()));
-					sb.setLength(0);
-				}
-				if(eos() || isNewLine()) {
-					_jp.arrayEnd(this);
-					return;
-				}
-			}
-			if (sb.length() != 0) {
-				_jp.putValue(new XonTools.JValue(pos, sb.toString()));
-				sb.setLength(0);
-			}
-			if(eos()) {
-				_jp.arrayEnd(this);
-				return;
-			}
+			skipLeadingSpaces();
 			char c = getCurrentChar();
 			for (;;) {
-				if (c == '\\') {
+				if (c == ',') { // separator
+					break;
+				} else if (c == '\\') {
 					c = peekChar();
 					if (c == ',' || c == '"') {
 						sb.append(c);
@@ -166,15 +168,24 @@ public class CsvReader extends StringParser implements XonParsers {
 					}
 					c = getCurrentChar();
 				} else if (c == '\n' || c == NOCHAR) {
-					_jp.putValue(new XonTools.JValue(pos, sb.toString()));
+					putValue(sb, pos);
 					_jp.arrayEnd(this);
+					isNewLine();
 					return;
-				} else if (c == ',') {
-					break;
 				} else {
 					sb.append(c);
 					c = nextChar();
 				}
+			}
+//			isSpaces();
+			putValue(sb, pos);
+			if(eos() || isNewLine()) {
+				_jp.arrayEnd(this);
+				return;
+			}
+			isSpaces();
+			if (!isChar(',')) {
+				throw new RuntimeException("incorrect line");
 			}
 		}
 	}
