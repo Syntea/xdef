@@ -96,9 +96,7 @@ public final class DefChar extends XDValueAbstract {
 	/** Get string value of this object.
 	 * @return string value of this object.
 	 */
-	public String stringValue() {
-		return  isNull() ?"":XonTools.jstringToSource(String.valueOf(_value));
-	}
+	public String stringValue() {return isNull() ? "" : String.valueOf(_value);}
 
 	@Override
 	/** Compares this object with the other DefBoolean object.
@@ -144,5 +142,5 @@ public final class DefChar extends XDValueAbstract {
 
 	@Override
 	/** Get String created from the value of this object. */
-	public String toString() {return String.valueOf(_value);}
+	public String toString() {return stringValue();}
 }

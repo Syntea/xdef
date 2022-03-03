@@ -387,9 +387,8 @@ class XonFromXml extends XonUtil implements XonNames {
 		Element elem = node.getNodeType() == Node.DOCUMENT_NODE
 			? ((Document) node).getDocumentElement() : (Element) node;
 		XonFromXml x = new XonFromXml();
-		if (XDConstants.XON_NS_URI_W.equals(elem.getNamespaceURI())) {
-			return x.fromXmlW3C(elem); // W3C form
-		}
-		return x.fromXmlXD(elem);
+		return (XDConstants.XON_NS_URI_W.equals(elem.getNamespaceURI())) 
+			? x.fromXmlW3C(elem) // W3C form
+			: x.fromXmlXD(elem); // XD form
 	}
 }

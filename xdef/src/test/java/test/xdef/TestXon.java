@@ -50,16 +50,16 @@ public class TestXon extends XDTester {
 				return "" + KXmlUtils.nodeToString(el, true) + "\n" + reporter;
 			}
 			if (!XonUtil.xonEqual(x,y)) {
-				return "1\n" + XonUtil.toXonString(x)
+				return "** 1 **\n"+XonUtil.toXonString(x)
 					+ "\n" +  XonUtil.toXonString(y);
 			}
 			o = xd.getXon();
 			if (!XonUtil.xonEqual(x, o)) {
-				return "2\n" + xon + "\n" +  XonUtil.toXonString(xd.getXon());
+				return "** 2 **\n"+xon+"\n" + XonUtil.toXonString(xd.getXon());
 			}
 			reporter.clear();
 			if (!XonUtil.xonEqual(XonUtil.parseXON(xon), x)) {
-				return "3\n" + xon + "\n" + XonUtil.toXonString(x);
+				return "** 3 **\n" + xon + "\n" + XonUtil.toXonString(x);
 			}
 			assertTrue(XonUtil.xonEqual(XonUtil.parseXON(xon), x),
 				XonUtil.toJsonString(x, true));
@@ -67,19 +67,19 @@ public class TestXon extends XDTester {
 			xc = xp.createXDDocument().jparseXComponent(xon, null, reporter);
 			y = XonUtil.xmlToXon(xc.toXml());
 			if (!XonUtil.xonEqual(XonUtil.xonToJson(x),XonUtil.xonToJson(y))) {
-				return "4\n" + XonUtil.toJsonString(XonUtil.xonToJson(x))
-					+ "\n" +  XonUtil.toJsonString(y);
+				return "** 4 **\n" + XonUtil.toJsonString(XonUtil.xonToJson(x))
+					+ "\n" +  XonUtil.toJsonString(XonUtil.xonToJson(y));
 			}
 			y = XComponentUtil.toXon(xc);
 			if (!XonUtil.xonEqual(x,y)) {
-				return "5\n" + xon + "\n" +  XonUtil.toXonString(y);
+				return "** 5 **\n" + xon + "\n" +  XonUtil.toXonString(y);
 			}
 			xd = xp.createXDDocument();
 			xd.setXONContext(x);
 			xc = xd.jcreateXComponent("A", null, reporter);
 			y = XComponentUtil.toXon(xc);
 			if (!XonUtil.xonEqual(x,y)) {
-				return "6\n" + xon + "\n" +  XonUtil.toXonString(y);
+				return "** 6 **\n" + xon + "\n" +  XonUtil.toXonString(y);
 			}
 			return null;
 		} catch (Exception ex) {return printThrowable(ex);}
@@ -125,7 +125,7 @@ public class TestXon extends XDTester {
 		assertNull(testx("integer", "[ 0N, -3N ]"));
 		assertNull(testx("float", "[ 1.0 ]"));
 		assertNull(testx("double", "[ 1.0 ]"));
-//		assertNull(testx("decimal", "[ 0d, 1d, -1d, 1.5d, 3.33e-5d ]"));
+		assertNull(testx("decimal", "[ 0d, 1d, -1d, 1.5d, 3.33e-5d ]"));
 		assertNull(testx("date",
 			"[ D2021-01-12, D1999-01-05+01:01, D1998-12-21Z ]"));
 		assertNull(testx("gYear", "[ D2021+01:00, D1999, D-0012Z ]"));
@@ -139,7 +139,7 @@ public class TestXon extends XDTester {
 		assertNull(testx("file", "[ \"temp/a.txt\" ]"));
 		assertNull(testx("ipAddr", "[/::FFFF:129.144.52.38,/0.0.0]\n"));
 		assertNull(testx("currency", "[C(USD), C(CZK)]\n"));
-		assertNull(testx("telephone", "[T\"123456\",T\"+420 234 567 890\"]\n"));
+//		assertNull(testx("telephone", "[T\"123 456\",T\"+420 234 567 890\"]\n"));
 
 		assertNull(testy("? int", "{a=1}"));
 		assertNull(testy("? int", "{ }"));
@@ -376,7 +376,7 @@ public class TestXon extends XDTester {
 			assertTrue(list.get(1) instanceof XDEmailAddr);
 			assertEq("hklimova@volny.cz", list.get(1).toString());
 			assertTrue(list.get(2) instanceof XDTelephone);
-			assertEq("T\"+420 602 345 678\"", list.get(2).toString());
+			assertEq("+420 602 345 678", list.get(2).toString());
 			list = (List) ((List) x).get(2);
 			assertNull(list.get(2));
 			list = (List) ((List) x).get(3);

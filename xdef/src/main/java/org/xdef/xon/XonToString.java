@@ -332,6 +332,8 @@ class XonToString extends XonTools {
 			return x.toString().substring(1);
 		} else if (x instanceof Currency) {
 			return ((Currency) x).getCurrencyCode();
+		} else if (x instanceof XDTelephone) {
+			return "T\"" + x + "\"";
 		}
 		return x.toString();
 	}

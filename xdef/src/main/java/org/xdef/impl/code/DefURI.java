@@ -61,13 +61,13 @@ public final class DefURI extends XDValueAbstract {
 	/** Get value as String.
 	 * @return The string from value.
 	 */
-	public String toString() {return _value == null ? "" : _value.toString();}
+	public String toString() {return stringValue();}
 
 	@Override
 	/** Get string value of this object.
 	 * @return string value of this object.
 	 */
-	public String stringValue() {return isNull()? null: toString();}
+	public String stringValue() {return _value==null ? "" : _value.toString();}
 
 	@Override
 	/** Clone the item.

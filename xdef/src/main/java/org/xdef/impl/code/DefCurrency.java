@@ -4,6 +4,7 @@ import java.util.Currency;
 import org.xdef.XDCurrency;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
+import static org.xdef.XDValueID.XD_CURRENCY;
 import org.xdef.XDValueType;
 import org.xdef.msg.SYS;
 import org.xdef.msg.XDEF;
@@ -62,7 +63,7 @@ public class DefCurrency extends XDValueAbstract implements XDCurrency {
 	@Override
 	public XDValueType getItemType() {return XDValueType.CURRENCY;}
 	@Override
-	public String stringValue() {return isNull() ? "null" :_value.toString();}
+	public String stringValue() {return isNull()?"":_value.getCurrencyCode();}
 	@Override
 	public boolean isNull() {return _value == null;}
 	@Override

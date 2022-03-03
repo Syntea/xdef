@@ -15,8 +15,16 @@ import java.util.ArrayList;
 import java.util.Currency;
 import java.util.LinkedHashMap;
 import java.util.List;
+import org.xdef.XDParseResult;
+import org.xdef.XDParser;
+import org.xdef.XDTelephone;
 import org.xdef.impl.code.DefEmailAddr;
+import org.xdef.impl.code.DefParseResult;
 import org.xdef.impl.code.DefTelephone;
+import org.xdef.impl.code.DefURI;
+import org.xdef.impl.parsers.XDParseChar;
+import org.xdef.impl.parsers.XDParseCurrency;
+import org.xdef.impl.parsers.XDParseTelephone;
 import org.xdef.msg.JSON;
 import org.xdef.msg.SYS;
 import org.xdef.sys.SBuffer;
@@ -238,6 +246,12 @@ public class XonTools {
 		}
 	}
 
+	private static XDParseResult chkValue(final String s, final XDParser p) {
+		DefParseResult result = new DefParseResult(s);
+		p.parseObject(null, result);
+		return result;
+	}
+
 	/** Get XON/JSON value from string in XML.
 	 * @param s string with XON simple value source
 	 * @return object with XON value
@@ -283,13 +297,26 @@ public class XonTools {
 				return new BigDecimal(s);
 			} catch (Exception ex) {}
 		}
-		if (ch == 'T' && len>2 && s.charAt(1) == '"' && endChar == '"') {
+		XDParseResult r;
+		if (ch == 'T' && endChar == '"') {
 			try {
 				return new DefTelephone(s);
 			} catch (Exception ex) {}
-		} else if (ch == 'e' && len>2 && s.charAt(1) == '"' && endChar == '"') {
+		} else if (ch == 'e' && endChar == '"') {
 			try {
 				return new DefEmailAddr(s);
+			} catch (Exception ex) {}
+		} else if (ch == 'c' && endChar == '"') {
+			if ((r = chkValue(s, new XDParseChar())).matches()) {
+				return r.getParsedValue().getObject();
+			}
+		} else if (ch == 'C' && endChar == ')') {
+			if ((r = chkValue(s, new XDParseCurrency())).matches()) {
+				return r.getParsedValue().getObject();
+			}
+		} else if (ch == 'u' && endChar == '"') {
+			try {
+				return new DefURI(s);
 			} catch (Exception ex) {}
 		}
 		return s; // XON/JSON String
@@ -446,6 +473,8 @@ public class XonTools {
 			return ((Currency) x).getCurrencyCode();
 		} else if (x instanceof byte[]) {
 			s = new String(SUtils.encodeBase64((byte[]) x));
+		} else if (x instanceof XDTelephone) {
+			return "T\"" + x + '"';
 		} else {
 			return x.toString();
 		}

@@ -13,6 +13,7 @@ import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
 import org.xdef.XDEmailAddr;
+import org.xdef.xon.XonTools;
 
 /** Implements the internal object with Email value.
  * @author Vaclav Trojan
@@ -221,13 +222,13 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 	/** Get value as String.
 	 * @return The string from value.
 	 */
-	public String toString() {return isNull() ? "" : _value;}
+	public String toString() {return stringValue();}
 
 	@Override
 	/** Get string value of this object.
 	 * @return string value of this object.
 	 */
-	public String stringValue() {return isNull()? null: toString();}
+	public String stringValue() {return isNull() ? "" : _value;}
 
 	@Override
 	/** Clone the item.

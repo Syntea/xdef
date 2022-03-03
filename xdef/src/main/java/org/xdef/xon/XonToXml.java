@@ -18,6 +18,8 @@ import static org.xdef.xon.XonNames.X_KEYATTR;
 import static org.xdef.xon.XonNames.X_MAP;
 import static org.xdef.xon.XonNames.X_VALUEATTR;
 import static org.xdef.xon.XonTools.genXMLValue;
+import static org.xdef.xon.XonTools.isSimpleValue;
+import static org.xdef.xon.XonTools.jstringToXML;
 import static org.xdef.xon.XonTools.replaceColonInXMLName;
 import static org.xdef.xon.XonTools.toXmlName;
 

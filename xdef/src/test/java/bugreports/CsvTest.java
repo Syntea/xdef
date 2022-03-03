@@ -53,7 +53,7 @@ public class CsvTest extends XDTester {
 			Object val = line.get(j);
 			String key = genColumnName(j);
 			if (val != null && !(val instanceof JNull)) {
-				e.setAttribute(key, 
+				e.setAttribute(key,
 					XonTools.jstringToXML(val.toString(), 1));
 			} else {
 				e.setAttribute(key, "");
@@ -61,7 +61,7 @@ public class CsvTest extends XDTester {
 		}
 		result.appendChild(e);
 	}
-	
+
 	/** Create XML element from CSV data.
 	 * @param csv object with CSV data.
 	 * @param hdr names of header line.
@@ -89,7 +89,7 @@ public class CsvTest extends XDTester {
 						i = 0;
 						break;
 					}
-				} 
+				}
 			}
 			if (i == 1) {
 				createLineElem(result, "hdr", x);
@@ -112,7 +112,7 @@ public class CsvTest extends XDTester {
 		}
 		return result;
 	}
-	
+
 	/** Create array of column items from XML element.
 	 * @param e XML element.
 	 * @return array of column items.
@@ -137,7 +137,7 @@ public class CsvTest extends XDTester {
 		}
 		return result;
 	}
-	
+
 	/** Create CSV data from XML element.
 	 * @param e XML element.
 	 * @return CSV data
@@ -194,6 +194,34 @@ public class CsvTest extends XDTester {
 		try {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='CSV'>\n"+
+//"<xd:declaration>\n"+
+//" type item union(%item=[emailAddr(), telephone(), string()]);\n"+
+//"</xd:declaration>\n"+
+"<xd:json name=\"CSV\">\n"+
+"[\n"+
+"  [\"3..3 string();\"],\n"+
+"  [$script=\"+\", \"0..3 union(%item=[emailAddr(), telephone(), string()])\"]\n"+
+"]\n"+
+"</xd:json>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			xd = xp.createXDDocument();
+			s =
+"[\n"+
+" [\"Name\",\"Email\",\"Mobile Number\"],\n"+
+" [\"abc\", e\"a@b.c\", \"+420 601 349 889\"],\n"+
+" [],\n"+
+" [\"xyz\", e\"d@e.f\"]\n"+
+"]";
+
+			o = xd.jparse(s, reporter);
+			assertNoErrors(reporter);
+			System.out.println(o);
+			System.out.println(((List) ((List) o).get(1)).get(1).getClass());
+			System.out.println(((List) ((List) o).get(1)).get(2).getClass());
+if(true)return;
+			xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='CSV'>\n"+
 "<CSV>\n"+
 "<hdr xd:script='?; options acceptEmptyAttributes'\n"+
 "   A=\"fixed 'Name'\" B=\"fixed 'Email'\" C=\"fixed 'Mobile Number'\"/>\n"+
@@ -209,8 +237,8 @@ public class CsvTest extends XDTester {
 "<row A=\"abc\" B=\"a@b.c\" C=\"+420 601 349 889\"/>\n"+
 "<row A=\"null\"/>\n"+
 "<row A=\"def\"/>\n"+
-"</CSV>";	
-			s = 
+"</CSV>";
+			s =
 "Name, Email, Mobile Number\n"+
 "\n"+
 "abc, a@b.c, +420 601 349 889\n"+
@@ -228,23 +256,6 @@ public class CsvTest extends XDTester {
 //System.out.println(x);
 			assertEq(el, el = csvToXml((List) o,
 				new String[]{"Name", "Email", "Mobile Number"}));
-			s =
-"hdr: $script='?; options acceptEmptyAttributes'\n"+
-"  \"fixed 'Name'\", \"fixed 'Email'\", \"fixed 'Mobile Number'\"\n"+
-"row: xd:script='*; options acceptEmptyAttributes'\n"+
-"  \"? string()\", \"? emailAddr()\", \"? telephone()\"\n";
-
-			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='csv'>\n"+
-"<csv name = 'CSV'>\n"+
-"hdr: $script='?; options acceptEmptyAttributes'\n"+
-"  \"fixed 'Name'\", \"fixed 'Email'\", \"fixed 'Mobile Number'\"\n"+
-"row: xd:script='*; options acceptEmptyAttributes'\n"+
-"  \"? string()\", \"? emailAddr()\", \"? telephone()\"\n"+
-"</csv>\n"+
-"</xd:def>";
-			xp = compile(xdef);
-if(true)return;
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='CSV'>\n"+
 "<xd:component>%class bugreports.data.Csv1 %link CSV</xd:component>\n"+
