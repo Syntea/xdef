@@ -10,6 +10,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xdef.msg.JSON;
 import org.xdef.sys.ArrayReporter;
+import org.xdef.sys.SBuffer;
 import static org.xdef.sys.SParser.NOCHAR;
 import org.xdef.sys.SPosition;
 import org.xdef.sys.SRuntimeException;
@@ -25,24 +26,24 @@ public class CsvReader extends StringParser implements XonParsers {
 	private boolean _jdef;
 	/** Parser of XON source. */
 	private final XonParser _jp;
-//
-//	/** Create instance of parser.
-//	 * @param jp parser of INI/Properties source.
-//	 * @param source String with source data.
-//	 */
-//	public CsvReader(final SBuffer source, final XonParser jp) {
-//		super(source);
-//		_jp = jp;
-//	}
-//
-//	/** Create instance of parser.
-//	 * @param jp parser of INI/Properties source.
-//	 * @param source String with source data.
-//	 */
-//	public CsvReader(final String source, final XonParser jp) {
-//		super(source);
-//		_jp = jp;
-//	}
+
+	/** Create instance of parser.
+	 * @param jp parser of INI/Properties source.
+	 * @param source String with source data.
+	 */
+	public CsvReader(final SBuffer source, final XonParser jp) {
+		super(source);
+		_jp = jp;
+	}
+
+	/** Create instance of parser.
+	 * @param jp parser of INI/Properties source.
+	 * @param source String with source data.
+	 */
+	public CsvReader(final String source, final XonParser jp) {
+		super(source);
+		_jp = jp;
+	}
 
 	/** Create instance of parser.
 	 * @param jp parser of INI/Properties source.

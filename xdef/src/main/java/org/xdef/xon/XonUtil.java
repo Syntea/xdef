@@ -5,7 +5,6 @@ import java.io.FileReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.io.StringReader;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.List;
@@ -14,6 +13,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xdef.msg.SYS;
 import org.xdef.sys.SRuntimeException;
+import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
 
 /** XON/JSON utility (parseJSON source to XON/JSON instance, compare XON/JSON
@@ -44,7 +44,14 @@ public class XonUtil {
 	 */
 	public final static List<Object> parseCSV(final String s)
 		throws SRuntimeException {
-		return parseCSV(new StringReader(s), "STRING");
+		try {
+			parseCSV(SUtils.getExtendedURL(s));
+		} catch (Exception ex) {}
+		File f = new File(s);
+		if (f.isFile()) {
+			parseCSV(f);
+		}
+		return parseCSV(s);
 	}
 
 	/** Parse CSV input data in file.
