@@ -16,11 +16,11 @@ import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
 
-/** XON/JSON utility (parseJSON source to XON/JSON instance, compare XON/JSON
+/** XON/JSON utilities (parseJSON source to XON/JSON instance, compare XON/JSON
  * objects, create string with XON/JSON source from an XON/JSON object.
  * @author Vaclav Trojan
  */
-public class XonUtil {
+public class XonUtils {
 
 ////////////////////////////////////////////////////////////////////////////////
 // parsers
@@ -44,14 +44,16 @@ public class XonUtil {
 	 */
 	public final static List<Object> parseCSV(final String s)
 		throws SRuntimeException {
-		try {
-			parseCSV(SUtils.getExtendedURL(s));
-		} catch (Exception ex) {}
-		File f = new File(s);
-		if (f.isFile()) {
-			parseCSV(f);
+		if (s.indexOf('\n') < 0) { // try URL or file
+			try {
+				parseCSV(SUtils.getExtendedURL(s));
+			} catch (Exception ex) {}
+			File f = new File(s);
+			if (f.isFile()) {
+				parseCSV(f);
+			}
 		}
-		return parseCSV(s);
+		return parseCSV(new java.io.StringReader(s), "STRING");
 	}
 
 	/** Parse CSV input data in file.
@@ -198,7 +200,7 @@ public class XonUtil {
 	public final static Object parseJSON(final String s)
 		throws SRuntimeException {
 		Object[] x = XonTools.getReader(s, null);
-		return XonUtil.parseJSON((Reader) x[0], (String) x[1]);
+		return XonUtils.parseJSON((Reader) x[0], (String) x[1]);
 	}
 
 	/** Parse JSON document from input source data in file.
@@ -208,7 +210,7 @@ public class XonUtil {
 	 */
 	public final static Object parseJSON(final File f) throws SRuntimeException{
 		Object[] x = XonTools.getReader(f, null);
-		return XonUtil.parseJSON((Reader) x[0], (String) x[1]);
+		return XonUtils.parseJSON((Reader) x[0], (String) x[1]);
 	}
 
 	/** Parse source URL to JSON.
@@ -216,9 +218,9 @@ public class XonUtil {
 	 * @return parsed JSON object.
 	 * @throws SRuntimeException if an error occurs,
 	 */
-	public final static Object parseJSON(final URL url) throws SRuntimeException {
+	public final static Object parseJSON(final URL url)throws SRuntimeException{
 		Object[] x = XonTools.getReader(url, null);
-		return XonUtil.parseJSON((Reader) x[0], (String) x[1]);
+		return XonUtils.parseJSON((Reader) x[0], (String) x[1]);
 	}
 
 	/** Parse JSON document from input source data in InputStream.
@@ -228,7 +230,7 @@ public class XonUtil {
 	 */
 	public final static Object parseJSON(final InputStream in)
 		throws SRuntimeException {
-		return XonUtil.parseJSON(in, null);
+		return XonUtils.parseJSON(in, null);
 	}
 
 	/** Parse JSON document from input source data in InputStream.
@@ -240,7 +242,7 @@ public class XonUtil {
 	public final static Object parseJSON(final InputStream in,
 		final String sysId)
 		throws SRuntimeException {
-		return XonUtil.parseJSON(
+		return XonUtils.parseJSON(
 			new InputStreamReader(in, Charset.forName("UTF-8")), sysId);
 	}
 
@@ -472,7 +474,7 @@ public class XonUtil {
 	 * @return object with JSON data.
 	 */
 	public final static Object xmlToXon(final String source) {
-		return XonUtil.xmlToXon(
+		return XonUtils.xmlToXon(
 			KXmlUtils.parseXml(source).getDocumentElement());
 	}
 
@@ -481,7 +483,7 @@ public class XonUtil {
 	 * @return object with JSON data.
 	 */
 	public final static Object xmlToXon(final File file) {
-		return XonUtil.xmlToXon(KXmlUtils.parseXml(file).getDocumentElement());
+		return XonUtils.xmlToXon(KXmlUtils.parseXml(file).getDocumentElement());
 	}
 
 	/** Convert XML document to XON object.
@@ -489,7 +491,7 @@ public class XonUtil {
 	 * @return object with JSON data.
 	 */
 	public final static Object xmlToXon(final URL url) {
-		return XonUtil.xmlToXon(KXmlUtils.parseXml(url).getDocumentElement());
+		return XonUtils.xmlToXon(KXmlUtils.parseXml(url).getDocumentElement());
 	}
 
 	/** Convert XML document to XON object.
@@ -497,7 +499,7 @@ public class XonUtil {
 	 * @return object with JSON data.
 	 */
 	public final static Object xmlToXon(final InputStream in) {
-		return XonUtil.xmlToXon(KXmlUtils.parseXml(in).getDocumentElement());
+		return XonUtils.xmlToXon(KXmlUtils.parseXml(in).getDocumentElement());
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -509,7 +511,7 @@ public class XonUtil {
 	 * @return XML element created from INI/Properties data.
 	 */
 	public final static Element iniToXml(final String ini) {
-		return IniReader.iniToXml(XonUtil.parseINI(ini));
+		return IniReader.iniToXml(XonUtils.parseINI(ini));
 	}
 
 	/** Create XML from INI/Properties object in "W" format.
@@ -517,7 +519,7 @@ public class XonUtil {
 	 * @return XML element created from INI/Properties data.
 	 */
 	public final static Element iniToXml(final File ini) {
-		return IniReader.iniToXml(XonUtil.parseINI(ini));
+		return IniReader.iniToXml(XonUtils.parseINI(ini));
 	}
 
 	/** Create XML from INI/Properties object in "W" format.
@@ -525,7 +527,7 @@ public class XonUtil {
 	 * @return XML element created from INI/Properties data.
 	 */
 	public final static Element iniToXml(final URL ini) {
-		return IniReader.iniToXml(XonUtil.parseINI(ini));
+		return IniReader.iniToXml(XonUtils.parseINI(ini));
 	}
 
 	/** Create XML from INI/Properties object in "W" format.
@@ -533,7 +535,7 @@ public class XonUtil {
 	 * @return XML element created from INI/Properties data.
 	 */
 	public final static Element iniToXml(final InputStream ini) {
-		return IniReader.iniToXml(XonUtil.parseINI(ini));
+		return IniReader.iniToXml(XonUtils.parseINI(ini));
 	}
 
 	/** Create XML from INI/Properties object in X-Definition mode.
@@ -549,7 +551,7 @@ public class XonUtil {
 	 * @return XML element created from XON/JSON data.
 	 */
 	public final static Element xonToXml(final String xon) {
-		return XonToXml.toXmlW(XonUtil.parseJSON(xon));
+		return XonToXml.toXmlW(XonUtils.parseJSON(xon));
 	}
 
 	/** Create XML from XON/JSON object in "W" format.
@@ -557,7 +559,7 @@ public class XonUtil {
 	 * @return XML element created from XON/JSON data.
 	 */
 	public final static Element xonToXml(final File xon) {
-		return XonToXml.toXmlW(XonUtil.parseJSON(xon));
+		return XonToXml.toXmlW(XonUtils.parseJSON(xon));
 	}
 
 	/** Create XML from XON/JSON object in "W" format.
@@ -573,7 +575,7 @@ public class XonUtil {
 	 * @return XML element created from XON/JSON data.
 	 */
 	public final static Element xonToXml(final InputStream xon) {
-		return XonToXml.toXmlW(XonUtil.parseJSON(xon));
+		return XonToXml.toXmlW(XonUtils.parseJSON(xon));
 	}
 
 	/** Create XML from XON/JSON object in X-Definition mode.
@@ -589,7 +591,7 @@ public class XonUtil {
 	 * @return XML element created from XON/JSON data.
 	 */
 	public final static Element xonToXmlXD(final String xon) {
-		return XonToXml.toXmlXD(XonUtil.parseJSON(xon));
+		return XonToXml.toXmlXD(XonUtils.parseJSON(xon));
 	}
 
 	/** Create XML from XON/JSON object in X-Definition mode.
@@ -597,7 +599,7 @@ public class XonUtil {
 	 * @return XML element created from XON/JSON data.
 	 */
 	public final static Element xonToXmlXD(final File xon) {
-		return XonToXml.toXmlXD(XonUtil.parseJSON(xon));
+		return XonToXml.toXmlXD(XonUtils.parseJSON(xon));
 	}
 
 	/** Create XML from XON/JSON object in X-Definition mode.
@@ -613,7 +615,7 @@ public class XonUtil {
 	 * @return XML element created from JSON XON/data.
 	 */
 	public final static Element xonToXmlXD(final InputStream xon) {
-		return XonToXml.toXmlXD(XonUtil.parseJSON(xon));
+		return XonToXml.toXmlXD(XonUtils.parseJSON(xon));
 	}
 
 	/** Create XML from XON/JSON object in X-Definition mode.

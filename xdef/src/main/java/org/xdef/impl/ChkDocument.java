@@ -61,7 +61,7 @@ import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SThrowable;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
-import org.xdef.xon.XonUtil;
+import org.xdef.xon.XonUtils;
 
 /** Provides root check object for generation of check tree and processing
  * of the X-definition.
@@ -1205,10 +1205,27 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 * @return XON  result.
 	 */
 	public final Object getXon() {
-		return _xon != null ? _xon : XonUtil.xmlToXon(getElement());
+		return _xon != null ? _xon : XonUtils.xmlToXon(getElement());
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
+	@Override
+	@SuppressWarnings("unchecked")
+	/** Parse and process CSV data and return processed object.
+	 * @param data reader with CSV data
+	 * @param sourceId name of source or null.
+	 * @param reporter report writer or null. If this argument is
+	 * null and error reports occurs then SRuntimeException is thrown.
+	 * @return List with processed data.
+	 * @throws SRuntimeException if an was reported.
+	 */
+	public List<Object> cparse(Reader data,
+		String sourceId,
+		ReportWriter reporter) throws SRuntimeException {
+		return (List<Object>) jvalidate(
+			XonUtils.parseCSV(data, sourceId), reporter);		
+	}
+
 	@Override
 	/** Parse and process INI/Properties data and return processed object.
 	 * @param data INI/Properties data or file pathname
@@ -1219,7 +1236,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 */
 	public final Map<String, Object> iparse(final String data,
 		final ReportWriter reporter) throws SRuntimeException {
-		return ivalidate(XonUtil.iniToXml(data), reporter);
+		return ivalidate(XonUtils.iniToXml(data), reporter);
 	}
 
 	@Override
@@ -1232,7 +1249,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 */
 	public final Map<String, Object> iparse(final File data,
 		final ReportWriter reporter) throws SRuntimeException {
-		return ivalidate(XonUtil.iniToXml(data), reporter);
+		return ivalidate(XonUtils.iniToXml(data), reporter);
 	}
 
 	@Override
@@ -1245,7 +1262,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 */
 	public final Map<String, Object> iparse(final URL data,
 		final ReportWriter reporter) throws SRuntimeException {
-		return ivalidate(XonUtil.iniToXml(data), reporter);
+		return ivalidate(XonUtils.iniToXml(data), reporter);
 	}
 
 	@Override
@@ -1258,7 +1275,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 */
 	public final Map<String, Object> iparse(final InputStream data,
 		final ReportWriter reporter) throws SRuntimeException {
-		return ivalidate(XonUtil.iniToXml(data), reporter);
+		return ivalidate(XonUtils.iniToXml(data), reporter);
 	}
 
 	@Override
@@ -1317,22 +1334,20 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 					yClass = null;
 				}
 			}
-			return xparseXComponent(XonUtil.iniToXml(map), yClass, reporter);
+			return xparseXComponent(XonUtils.iniToXml(map), yClass, reporter);
 		} else if (ini instanceof String) {
-			return iparseXComponent(XonUtil.parseINI((String) ini),
+			return iparseXComponent(XonUtils.parseINI((String) ini),
 				yClass, reporter);
 		} else if (ini instanceof File) {
-			return iparseXComponent(
-				XonUtil.parseINI((File) ini),yClass,reporter);
+			return iparseXComponent(XonUtils.parseINI((File) ini),yClass,reporter);
 		} else if (ini instanceof URL) {
-			return iparseXComponent(
-				XonUtil.parseINI((URL) ini), yClass,reporter);
+			return iparseXComponent(XonUtils.parseINI((URL) ini), yClass,reporter);
 		} else if (ini instanceof InputStream) {
 			return iparseXComponent((InputStream)ini,yClass,sourceId,reporter);
 		} else if (ini instanceof Node) {
 			Element e = (ini instanceof Document)
 				? ((Document) ini).getDocumentElement() : (Element) ini;
-			return iparseXComponent(XonUtil.xmlToXon(e),yClass,reporter);
+			return iparseXComponent(XonUtils.xmlToXon(e),yClass,reporter);
 		}
 		throw new SRuntimeException(XDEF.XDEF318); //Incorrect XON/JSON data
 	}
@@ -1554,23 +1569,21 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 				byte jsonVer = // version of XON/JSON to XML transormation
 					(Byte) yClass.getDeclaredField("XON").get(null);
 				e = jsonVer == XConstants.XON_MODE_W ?
-					XonUtil.xonToXml(xon) : XonUtil.xonToXmlXD(xon);
+					XonUtils.xonToXml(xon) : XonUtils.xonToXmlXD(xon);
 			} catch (Exception ex) {
-				e = XonUtil.xonToXml(xon); // X-definition transormation
+				e = XonUtils.xonToXml(xon); // X-definition transormation
 			}
 			return xparseXComponent(e, yClass, reporter);
 		} else if (xon instanceof String) {
-			return jparseXComponent(
-				XonUtil.parseXON((String) xon), yClass, reporter);
+			return jparseXComponent(XonUtils.parseXON((String) xon), yClass, reporter);
 		} else if (xon instanceof File) {
-			return jparseXComponent(
-				XonUtil.parseXON((File) xon), yClass,reporter);
+			return jparseXComponent(XonUtils.parseXON((File) xon), yClass,reporter);
 		} else if (xon instanceof InputStream) {
 			return jparseXComponent((InputStream)xon,yClass,sourceId,reporter);
 		} else if (xon instanceof Node) {
 			Element e = (xon instanceof Document)
 				? ((Document) xon).getDocumentElement() : (Element) xon;
-			return jparseXComponent(XonUtil.xmlToXon(e),yClass,reporter);
+			return jparseXComponent(XonUtils.xmlToXon(e),yClass,reporter);
 		}
 		throw new SRuntimeException(XDEF.XDEF318); //Incorrect XON/JSON data
 	}
@@ -1949,7 +1962,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 */
 	public Object ycreate(String name, ReportWriter reporter)
 		throws SRuntimeException {
-		return XonUtil.xonToJson(jcreate(name, reporter));
+		return XonUtils.xonToJson(jcreate(name, reporter));
 	}
 
 	@Override
@@ -1963,10 +1976,10 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	public final Object yparse(final String data, final ReportWriter reporter)
 		throws SRuntimeException {
 		Object o = getSource(data);
-		return (o instanceof String) ? XonUtil.parseYAML((String) o)
+		return (o instanceof String) ? XonUtils.parseYAML((String) o)
 			: (o instanceof URL) ? yparse(((URL) o), reporter)
 			: (o instanceof File) ? yparse(((File) o), reporter)
-			: jvalidate(XonUtil.parseYAML(new ByteArrayInputStream(
+			: jvalidate(XonUtils.parseYAML(new ByteArrayInputStream(
 				data.getBytes(Charset.forName("UTF-16")))), reporter);
 	}
 
@@ -1981,7 +1994,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	public final Object yparse(final File data, final ReportWriter reporter)
 		throws SRuntimeException {
 		try {
-			return jvalidate(XonUtil.parseYAML(new FileInputStream(data)),
+			return jvalidate(XonUtils.parseYAML(new FileInputStream(data)),
 				reporter);
 		} catch (Exception ex) {throw new RuntimeException(ex);}
 	}
@@ -1997,7 +2010,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	public final Object yparse(final URL data, final ReportWriter reporter)
 		throws SRuntimeException {
 		try {
-			return jvalidate(XonUtil.parseYAML(data.openStream()), reporter);
+			return jvalidate(XonUtils.parseYAML(data.openStream()), reporter);
 		} catch (Exception ex) {throw new RuntimeException(ex);}
 	}
 
@@ -2011,7 +2024,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 */
 	public final Object yparse(final InputStream data,
 		final ReportWriter reporter) throws SRuntimeException {
-		return jvalidate(XonUtil.parseYAML(data), reporter);
+		return jvalidate(XonUtils.parseYAML(data), reporter);
 	}
 
 	@Override
@@ -2075,23 +2088,23 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 				byte xonVer = // version of XON/JSON to XML transormation
 					(Byte) yClass.getDeclaredField("XON").get(null);
 				e = xonVer == XConstants.XON_MODE_W ?
-					XonUtil.xonToXml(yaml) : XonUtil.xonToXmlXD(yaml);
+					XonUtils.xonToXml(yaml) : XonUtils.xonToXmlXD(yaml);
 			} catch (Exception ex) {
-				e = XonUtil.xonToXml(yaml); // X-definition transormation
+				e = XonUtils.xonToXml(yaml); // X-definition transormation
 			}
 			return xparseXComponent(e, yClass, reporter);
 		} else if (yaml instanceof String) {
-			return jparseXComponent(XonUtil.parseXON((String) yaml),
+			return jparseXComponent(XonUtils.parseXON((String) yaml),
 				yClass, reporter);
 		} else if (yaml instanceof File) {
-			return jparseXComponent(XonUtil.parseXON((File) yaml),
+			return jparseXComponent(XonUtils.parseXON((File) yaml),
 				yClass,reporter);
 		} else if (yaml instanceof InputStream) {
 			return jparseXComponent((InputStream)yaml,yClass,sourceId,reporter);
 		} else if (yaml instanceof Node) {
 			Element e = (yaml instanceof Document)
 				? ((Document) yaml).getDocumentElement() : (Element) yaml;
-			return jparseXComponent(XonUtil.xmlToXon(e),yClass,reporter);
+			return jparseXComponent(XonUtils.xmlToXon(e),yClass,reporter);
 		}
 		throw new SRuntimeException(XDEF.XDEF318); //Incorrect XON/JSON data
 	}

@@ -4,7 +4,7 @@ import java.io.File;
 import org.w3c.dom.Element;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
-import org.xdef.xon.XonUtil;
+import org.xdef.xon.XonUtils;
 import org.xdef.sys.STester;
 
 /** Test JSON utilities, JSON parser and conversion XML / JSON. */
@@ -29,9 +29,9 @@ public class TestXonUtil extends STester {
 		Element el;
 		try {
 			// test toJsonString and parseJSON JSON
-			o1 = XonUtil.parseJSON(f);
-			o2 = XonUtil.parseJSON(XonUtil.toJsonString(o1, true));
-			if (!XonUtil.xonEqual(o1, o2)) {
+			o1 = XonUtils.parseJSON(f);
+			o2 = XonUtils.parseJSON(XonUtils.toJsonString(o1, true));
+			if (!XonUtils.xonEqual(o1, o2)) {
 				return "JSON toString error " + f.getName();
 			}
 		} catch (Exception ex) {
@@ -39,27 +39,27 @@ public class TestXonUtil extends STester {
 		}
 		try {
 			// test JSON to XML and XML to JSON (W3C format) JSON
-			el = XonUtil.xonToXmlXD(o1);
-			o2 = XonUtil.xmlToXon(el);
-			if (!XonUtil.xonEqual(o1, o2)) {
+			el = XonUtils.xonToXmlXD(o1);
+			o2 = XonUtils.xmlToXon(el);
+			if (!XonUtils.xonEqual(o1, o2)) {
 				return "JSON xmlToJson (W3C) error " + f.getName()
 					+ "\n" + KXmlUtils.nodeToString(el);
 			}
 		} catch (Exception ex) {
 			return "Error jsonToXml (XD): " + f.getName() + "\n"
-				+ ex + "\n" + XonUtil.toJsonString(o1, true);
+				+ ex + "\n" + XonUtils.toJsonString(o1, true);
 		}
 		try {
 			// test JSON to XML and XML to JSON (W3C format) JSON
-			el = XonUtil.xonToXml(o1);
-			o2 = XonUtil.xmlToXon(el);
-			if (!XonUtil.xonEqual(o1, o2)) {
+			el = XonUtils.xonToXml(o1);
+			o2 = XonUtils.xmlToXon(el);
+			if (!XonUtils.xonEqual(o1, o2)) {
 				return "JSON xmlToJson (W3C) error " + f.getName()
 					+ "\n" + KXmlUtils.nodeToString(el);
 			}
 		} catch (Exception ex) {
 			return "Error XmlToJson (W3C): " + f.getName() + "\n"
-				+ ex + "\n" + XonUtil.toJsonString(o1, true);
+				+ ex + "\n" + XonUtils.toJsonString(o1, true);
 		}
 		return "";
 	}
@@ -67,22 +67,22 @@ public class TestXonUtil extends STester {
 	private String testXConvert(final File f) {
 		try {
 			Element e1 = KXmlUtils.parseXml(f).getDocumentElement();
-			Object jx1 = XonUtil.xmlToXon(e1);
-			Element e2 = XonUtil.xonToXmlXD(jx1);
-			Object jx2 = XonUtil.xmlToXon(e2);
+			Object jx1 = XonUtils.xmlToXon(e1);
+			Element e2 = XonUtils.xonToXmlXD(jx1);
+			Object jx2 = XonUtils.xmlToXon(e2);
 			if (KXmlUtils.compareElements(e1, e2, true).errors()) {
 				return "XML-error-:  "
 					+ KXmlUtils.compareElements(e1, e2, true)
 					+ '\n' + KXmlUtils.nodeToString(e1, true)
 					+ '\n' + KXmlUtils.nodeToString(e2, true);
 			}
-			if (!XonUtil.xonEqual(jx1, jx2)) {
-				return "X JSON-error-:  \n" + XonUtil.toJsonString(jx1, true)
-					+ '\n' + XonUtil.toJsonString(jx2, true)
+			if (!XonUtils.xonEqual(jx1, jx2)) {
+				return "X JSON-error-:  \n" + XonUtils.toJsonString(jx1, true)
+					+ '\n' + XonUtils.toJsonString(jx2, true)
 					+ '\n' + KXmlUtils.nodeToString(e1, true);
 			}
 			return KXmlUtils.nodeToString(e1)
-				+ '\n' + XonUtil.toJsonString(jx1, true);
+				+ '\n' + XonUtils.toJsonString(jx1, true);
 		} catch (Exception ex) {
 			return "-error-:  " + printThrowable(ex);
 		}
@@ -112,7 +112,7 @@ public class TestXonUtil extends STester {
 			+ File.separator).replace('\\', '/') + "TestErr*.json");
 		for (File json: _files) { // test JSON erros
 			try {
-				XonUtil.parseJSON(json);
+				XonUtils.parseJSON(json);
 				fail(json.getName());
 			} catch (Exception ex) {}
 		}

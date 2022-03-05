@@ -7,7 +7,7 @@ import org.xdef.XDPool;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.SRuntimeException;
 import static org.xdef.sys.STester.runTest;
-import org.xdef.xon.XonUtil;
+import org.xdef.xon.XonUtils;
 import test.XDTester;
 import static test.XDTester._xdNS;
 
@@ -73,8 +73,8 @@ public class TestYamlAndIni extends XDTester {
 				Object xon = xd.yparse(yaml, reporter);
 				assertNoErrors(reporter);
 				reporter.clear();
-				assertTrue(XonUtil.xonEqual(xon,
-					xd.yparse(XonUtil.toYamlString(xon), reporter)));
+				assertTrue(XonUtils.xonEqual(xon,
+					xd.yparse(XonUtils.toYamlString(xon), reporter)));
 				assertNoErrors(reporter);
 				reporter.clear();
 			} catch (Exception ex) {fail(ex);}
@@ -102,8 +102,8 @@ public class TestYamlAndIni extends XDTester {
 			Map<String, Object> xini = xd.iparse(ini, reporter);
 			assertNoErrors(reporter);
 			reporter.clear();
-			assertTrue(XonUtil.xonEqual(XonUtil.parseINI(ini),
-				XonUtil.parseINI(XonUtil.toIniString(xini))));
+			assertTrue(XonUtils.xonEqual(XonUtils.parseINI(ini),
+				XonUtils.parseINI(XonUtils.toIniString(xini))));
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' name=\"A\" root=\"test\">\n" +
 "  <xd:ini name=\"test\">\n" +
@@ -126,8 +126,8 @@ public class TestYamlAndIni extends XDTester {
 "  parser.factor.1=')' \\u00E9 esperado.\n" +
 "servertool.up=\\u670D\\u52A1\\u5668\\u5DF2\\u5728\\u8FD0\\u884C\\u3002";
 			xini = xd.iparse(ini, reporter);
-			assertTrue(XonUtil.xonEqual(XonUtil.parseINI(ini),
-				XonUtil.parseINI(XonUtil.toIniString(xini))));
+			assertTrue(XonUtils.xonEqual(XonUtils.parseINI(ini),
+				XonUtils.parseINI(XonUtils.toIniString(xini))));
 			assertNoErrors(reporter);
 			reporter.clear();
 			xdef =
@@ -155,8 +155,8 @@ public class TestYamlAndIni extends XDTester {
 "[selfupdate]\n" +
 "version=11.0.0.55";
 			xini = xd.iparse(ini, reporter);
-			assertTrue(XonUtil.xonEqual(XonUtil.parseINI(ini),
-				XonUtil.parseINI(XonUtil.toIniString(xini))));
+			assertTrue(XonUtils.xonEqual(XonUtils.parseINI(ini),
+				XonUtils.parseINI(XonUtils.toIniString(xini))));
 			assertNoErrors(reporter);
 			reporter.clear();
 			ini =
@@ -168,8 +168,8 @@ public class TestYamlAndIni extends XDTester {
 "[selfupdate]\n" +
 "version=11.0.0.55";
 			xini = xd.iparse(ini, reporter);
-			assertTrue(XonUtil.xonEqual(XonUtil.parseINI(ini),
-				XonUtil.parseINI(XonUtil.toIniString(xini))));
+			assertTrue(XonUtils.xonEqual(XonUtils.parseINI(ini),
+				XonUtils.parseINI(XonUtils.toIniString(xini))));
 			assertNoErrors(reporter);
 			reporter.clear();
 			ini =
@@ -178,8 +178,8 @@ public class TestYamlAndIni extends XDTester {
 "[selfupdate]\n" +
 "version=11.0.0.55";
 			xini = xd.iparse(ini, reporter);
-			assertTrue(XonUtil.xonEqual(XonUtil.parseINI(ini),
-				XonUtil.parseINI(XonUtil.toIniString(xini))));
+			assertTrue(XonUtils.xonEqual(XonUtils.parseINI(ini),
+				XonUtils.parseINI(XonUtils.toIniString(xini))));
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
 

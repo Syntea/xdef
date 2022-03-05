@@ -258,7 +258,7 @@ public class CsvReader extends StringParser implements XonParsers {
 		for (Object o : csv) {
 			Element row = doc.createElement("row");
 			row.appendChild(
-				doc.createTextNode(XonUtil.toJsonString(XonUtil.xonToJson(o))));
+				doc.createTextNode(XonUtils.toJsonString(XonUtils.xonToJson(o))));
 			root.appendChild(row);
 		}
 		return root;
@@ -277,7 +277,7 @@ public class CsvReader extends StringParser implements XonParsers {
 		Node node = el.getFirstChild();
 		while (node != null) {
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
-				result.add(XonUtil.parseXON(node.getTextContent()));
+				result.add(XonUtils.parseXON(node.getTextContent()));
 			}
 			node = node.getNextSibling();
 		}

@@ -19,7 +19,7 @@ import static org.xdef.xon.XonNames.X_VALUEATTR;
 /** Test X-definition transformation XML -> XON/JSON.
  * @author Vaclav Trojan
  */
-class XonFromXml extends XonUtil implements XonNames {
+class XonFromXml extends XonUtils implements XonNames {
 
 ////////////////////////////////////////////////////////////////////////////////
 // Keywords of names of XON/JSON types

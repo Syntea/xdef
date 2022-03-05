@@ -46,7 +46,7 @@ public final class XonYaml {
 
 	public static final String toYamlString(final Object o) {
 		try {
-			return (String) _yamlDump.invoke(_yaml, XonUtil.xonToJson(o));
+			return (String) _yamlDump.invoke(_yaml, XonUtils.xonToJson(o));
 		} catch (SRuntimeException ex) {
 			throw ex;
 		} catch (Exception ex) {

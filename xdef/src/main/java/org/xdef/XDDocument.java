@@ -5,8 +5,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.io.Reader;
 import java.io.Writer;
 import java.net.URL;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import org.xdef.proc.XXNode;
@@ -326,6 +328,19 @@ public interface XDDocument extends XXNode {
 	public Object getXon();
 
 ////////////////////////////////////////////////////////////////////////////////
+
+	/** Parse and process CSV data and return processed object.
+	 * @param data reader with CSV data
+	 * @param sourceId name of source or null.
+	 * @param reporter report writer or null. If this argument is
+	 * null and error reports occurs then SRuntimeException is thrown.
+	 * @return List with processed data.
+	 * @throws SRuntimeException if an was reported.
+	 */
+	public List<Object> cparse(Reader data,
+		String sourceId,
+		ReportWriter reporter)
+		throws SRuntimeException;
 
 	/** Parse and process INI/Properties data and return processed object.
 	 * @param data INI/Properties data or file pathname

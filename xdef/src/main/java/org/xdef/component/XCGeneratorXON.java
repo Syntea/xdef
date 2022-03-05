@@ -432,7 +432,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 			// setter
 			if (xe.getXonMode() != 0) {
 				if ("String".equals(typ)) {
-					jSet = "org.xdef.xon.XonUtil.toJsonString(x,false)";
+					jSet = "org.xdef.xon.XonUtils.toJsonString(x,false)";
 				} else {
 					jSet = "x";
 				}
@@ -546,7 +546,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 				}
 			}
 			jSet = "String".equals(typ) && xe.getXonMode() != 0
-				? "org.xdef.xon.XonUtil.toJsonString(x,false)":"x";
+				? "org.xdef.xon.XonUtils.toJsonString(x,false)":"x";
 			// setter
 			template =
 (_genJavadoc ? "\t/** Set value of textnode of &{d}.*/"+LN : "")+

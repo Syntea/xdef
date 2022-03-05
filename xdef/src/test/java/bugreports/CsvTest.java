@@ -1,5 +1,6 @@
 package bugreports;
 
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 import org.w3c.dom.Element;
@@ -16,7 +17,7 @@ import static org.xdef.sys.STester.runTest;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.xon.XonTools;
 import org.xdef.xon.XonTools.JNull;
-import org.xdef.xon.XonUtil;
+import org.xdef.xon.XonUtils;
 import test.XDTester;
 import static test.XDTester.genXComponent;
 
@@ -165,6 +166,19 @@ public class CsvTest extends XDTester {
 		return result;
 	}
 
+	/** Display CSV object. */
+	private static String printCSV(final Object o) {
+		List x = (List) o;
+		String s = "";
+		for (int i = 0; i < x.size(); i++) {
+			s += "Row[" + i + "]\n";
+			for (Object y: (List) x.get(i)) {
+				s += (y != null ? y+"; "+y.getClass() : "*null*") + "\n";
+			}
+		}
+		return s;
+	}
+
 	@Override
 	/** Run test and display error information. */
 	public void test() {
@@ -194,31 +208,50 @@ public class CsvTest extends XDTester {
 		try {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='CSV'>\n"+
-//"<xd:declaration>\n"+
-//" type item union(%item=[emailAddr(), telephone(), string()]);\n"+
-//"</xd:declaration>\n"+
+"<xd:component>%class bugreports.data.Csvxx %link CSV</xd:component>\n"+
+"<xd:declaration>\n"+
+" type item union(%item=[emailAddr(), telephone(), string()]);\n"+
+" type nstring union(%item=[string(),jnull()]);\n"+
+" type nemail union(%item=[emailAddr(),jnull()]);\n"+
+" type ntelephone union(%item=[telephone(),jnull()]);\n"+
+"</xd:declaration>\n"+
 "<xd:json name=\"CSV\">\n"+
 "[\n"+
 "  [\"3..3 string();\"],\n"+
-"  [$script=\"+\", \"0..3 union(%item=[emailAddr(), telephone(), string()])\"]\n"+
+//"  [$script=\"+\", \"0..3 item();\"]\n"+
+"  [$script=\"+\", \"? nstring()\", \"? nemail\", \"? ntelephone()\"]\n"+
 "]\n"+
 "</xd:json>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xd = xp.createXDDocument();
 			s =
+"Name, Email, Mobile Number\n"+
+"abc, a@b.c, +420 601 349 889\n"+
+"\n"+
+"xyz, d@e.f,\n"+
+"xyz,,\n"+
+",,\n"+
+"xyz, , 123 456 789\n";
+			x = xd.cparse(new StringReader(s), null, reporter);
+			assertNoErrors(reporter);
+			reporter.clear();
+			s =
 "[\n"+
 " [\"Name\",\"Email\",\"Mobile Number\"],\n"+
 " [\"abc\", e\"a@b.c\", \"+420 601 349 889\"],\n"+
 " [],\n"+
-" [\"xyz\", e\"d@e.f\"]\n"+
+" [\"xyz\", e\"d@e.f\",null],\n"+
+" [\"xyz\", null, null],\n"+
+" [null, null, null],\n"+
+" [\"xyz\", null, \"123 456 789\"]\n"+
 "]";
-
 			o = xd.jparse(s, reporter);
 			assertNoErrors(reporter);
-			System.out.println(o);
-			System.out.println(((List) ((List) o).get(1)).get(1).getClass());
-			System.out.println(((List) ((List) o).get(1)).get(2).getClass());
+			reporter.clear();
+			if (!XonUtils.xonEqual(o, x)) {				
+				fail( "*** A *\n" + printCSV(x) + "\n*** B *\n" + printCSV(o));
+			}
 if(true)return;
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='CSV'>\n"+
@@ -245,17 +278,16 @@ if(true)return;
 "xxx,\n"+
 "\n"+
 "def,,\n";
-			o = XonUtil.parseCSV(s);
-			el = csvToXml((List) o,
-				new String[]{"Name", "Email", "Mobile Number"});
+			list = XonUtils.parseCSV(new StringReader(s), "STRING");
+			el = csvToXml(list, new String[]{"Name", "Email", "Mobile Number"});
 			assertEq(el, el = parse(xp, "", el, reporter));
 			assertNoErrors(reporter);
 			x = xmlToCsv(el);
-			assertTrue(XonUtil.xonEqual(x, o));
+//			assertTrue(XonUtils.xonEqual(x, o));
 //System.out.println(o);
 //System.out.println(x);
-			assertEq(el, el = csvToXml((List) o,
-				new String[]{"Name", "Email", "Mobile Number"}));
+//			assertEq(el, el = csvToXml((List) o,
+//				new String[]{"Name", "Email", "Mobile Number"}));
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='CSV'>\n"+
 "<xd:component>%class bugreports.data.Csv1 %link CSV</xd:component>\n"+
@@ -296,11 +328,11 @@ if(true)return;
 "{\n" +
 "    C=[T\"+420 602 345 678\", T\"+420 602345679\", T\"123456789\"]\n"+
 "}";
-			x = XonUtil.parseXON(s);
-			assertTrue(XonUtil.xonEqual(x,
-				XonUtil.xmlToXon(XonUtil.xonToXml(x))));
+			x = XonUtils.parseXON(s);
+			assertTrue(XonUtils.xonEqual(x,
+				XonUtils.xmlToXon(XonUtils.xonToXml(x))));
 			o = xd.jparse(s, reporter);
-			assertTrue(XonUtil.xonEqual(o, x));
+			assertTrue(XonUtils.xonEqual(o, x));
 			assertNoErrors(reporter);
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='X'>\n"+
@@ -320,15 +352,15 @@ if(true)return;
 " [\"Name\",\"Email\",\"Mobile Number\"],\n"+
 " [\"abc\", e\"a@b.c\", T\"+420 601 349 889\"]\n"+
 "]";
-			x = XonUtil.parseXON(s);
-			if (!XonUtil.xonEqual(x, o = xd.jparse(s, reporter))) {
-				fail(XonUtil.toXonString(x, true)
-					+ "\n" + XonUtil.toXonString(o, true));
+			x = XonUtils.parseXON(s);
+			if (!XonUtils.xonEqual(x, o = xd.jparse(s, reporter))) {
+				fail(XonUtils.toXonString(x, true)
+					+ "\n" + XonUtils.toXonString(o, true));
 			}
 			assertNoErrors(reporter);
 			xc = xd.jparseXComponent(s, null, reporter);
-			if (!XonUtil.xonEqual(x, o = XComponentUtil.toXon(xc))) {
-				fail(XonUtil.toXonString(o, true));
+			if (!XonUtils.xonEqual(x, o = XComponentUtil.toXon(xc))) {
+				fail(XonUtils.toXonString(o, true));
 			}
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='csv'>\n"+
@@ -340,7 +372,7 @@ if(true)return;
 			xp = compile(xdef);
 			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
 			xd = xp.createXDDocument();
-			el = XonUtil.csvToXml((List) x);
+			el = XonUtils.csvToXml((List) x);
 			assertEq(el, el = parse(xp, "", el, reporter));
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}

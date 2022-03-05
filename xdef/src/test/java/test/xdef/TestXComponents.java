@@ -5,7 +5,7 @@ import org.xdef.XDPool;
 import org.xdef.XDDocument;
 import org.xdef.component.XComponent;
 import org.xdef.component.XComponentUtil;
-import org.xdef.xon.XonUtil;
+import org.xdef.xon.XonUtils;
 import org.xdef.model.XMElement;
 import org.xdef.model.XMNode;
 import org.xdef.sys.ArrayReporter;
@@ -340,17 +340,17 @@ public final class TestXComponents extends XDTester {
 			s = "{a=1, b=[true]}";
 			xon = xd.jparse(s, reporter);
 			assertNoErrors(reporter);
-			assertTrue(XonUtil.xonEqual(xon, XonUtil.parseXON(s)));
+			assertTrue(XonUtils.xonEqual(xon, XonUtils.parseXON(s)));
 			xd = xp.createXDDocument();
 			xc = xd.jparseXComponent(s, null, reporter);
 			assertNoErrorwarnings(reporter);
-			assertTrue(XonUtil.xonEqual(xon,
+			assertTrue(XonUtils.xonEqual(xon,
 				SUtils.getValueFromGetter(xc,"toXon")));
 			xd = xp.createXDDocument();
 			xd.setXDContext(xc.toXml());
 			xc = xd.jcreateXComponent("X", null, reporter);
 			assertNoErrorwarnings(reporter);
-			assertTrue(XonUtil.xonEqual(xon,
+			assertTrue(XonUtils.xonEqual(xon,
 				SUtils.getValueFromGetter(xc,"toXon")));
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='X'>\n"+
@@ -363,15 +363,15 @@ public final class TestXComponents extends XDTester {
 			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
 			xd = xp.createXDDocument();
 			s = "[true, false, true]";
-			xon = XonUtil.parseXON(s);
-			assertTrue(XonUtil.xonEqual(xon, xd.jparse(s, reporter)));
+			xon = XonUtils.parseXON(s);
+			assertTrue(XonUtils.xonEqual(xon, xd.jparse(s, reporter)));
 			assertNoErrors(reporter);
 			xd = xp.createXDDocument();
-			xd.setXONContext(XonUtil.xonToJson(xon));
+			xd.setXONContext(XonUtils.xonToJson(xon));
 			xc = xd.jcreateXComponent("X", null, reporter);
 			assertNoErrors(reporter);
 			reporter.clear();
-			assertTrue(XonUtil.xonEqual(xon,
+			assertTrue(XonUtils.xonEqual(xon,
 				SUtils.getValueFromGetter(xc,"toXon")));
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='X'>\n"+
@@ -384,15 +384,15 @@ public final class TestXComponents extends XDTester {
 			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
 			xd = xp.createXDDocument();
 			s = "[true, false, true]";
-			xon = XonUtil.parseXON(s);
-			assertTrue(XonUtil.xonEqual(xon, xd.jparse(s, reporter)));
+			xon = XonUtils.parseXON(s);
+			assertTrue(XonUtils.xonEqual(xon, xd.jparse(s, reporter)));
 			assertNoErrors(reporter);
 			xd = xp.createXDDocument();
-			xd.setXONContext(XonUtil.xonToJson(xon));
+			xd.setXONContext(XonUtils.xonToJson(xon));
 			xc = xd.jcreateXComponent("X", null, reporter);
 			assertNoErrors(reporter);
 			reporter.clear();
-			assertTrue(XonUtil.xonEqual(xon,
+			assertTrue(XonUtils.xonEqual(xon,
 				SUtils.getValueFromGetter(xc,"toXon")));
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='X'>\n"+
@@ -405,17 +405,17 @@ public final class TestXComponents extends XDTester {
 			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
 			xd = xp.createXDDocument();
 			s = "{b=[1, [2], \"\"]}";
-			xon = XonUtil.parseXON(s);
+			xon = XonUtils.parseXON(s);
 			xc = xd.jparseXComponent(s, null, reporter);
 			assertNoErrorwarnings(reporter);
-			assertTrue(XonUtil.xonEqual(xon,
+			assertTrue(XonUtils.xonEqual(xon,
 				SUtils.getValueFromGetter(xc,"toXon")));
 			reporter.clear();
 			xd = xp.createXDDocument();
 			xd.setXONContext(xon);
 			xc = xd.jcreateXComponent("X", null, reporter);
 			assertNoErrorwarnings(reporter);
-			assertTrue(XonUtil.xonEqual(xon,
+			assertTrue(XonUtils.xonEqual(xon,
 				SUtils.getValueFromGetter(xc,"toXon")));
 			xdef = // jcreate with create section
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='X'>\n"+
@@ -427,13 +427,13 @@ public final class TestXComponents extends XDTester {
 			xp = compile(xdef);
 			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
 			xd = xp.createXDDocument();
-			xon = XonUtil.parseXON("[true, 2]");
-			assertTrue(XonUtil.xonEqual(xon, xd.jcreate("X", reporter)));
+			xon = XonUtils.parseXON("[true, 2]");
+			assertTrue(XonUtils.xonEqual(xon, xd.jcreate("X", reporter)));
 			assertNoErrorwarnings(reporter);
 			xd = xp.createXDDocument();
 			xc = xd.jcreateXComponent("X", null, reporter);
 			assertNoErrorwarnings(reporter);
-			assertTrue(XonUtil.xonEqual(xon,
+			assertTrue(XonUtils.xonEqual(xon,
 				SUtils.getValueFromGetter(xc,"toXon")));
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='X'>\n"+
@@ -450,13 +450,13 @@ public final class TestXComponents extends XDTester {
 			xp = compile(xdef);
 			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
 			xd = xp.createXDDocument();
-			xon = XonUtil.parseXON("{a=1, b=[true, 2]}");
-			assertTrue(XonUtil.xonEqual(xon, xd.jcreate("X", reporter)));
+			xon = XonUtils.parseXON("{a=1, b=[true, 2]}");
+			assertTrue(XonUtils.xonEqual(xon, xd.jcreate("X", reporter)));
 			assertNoErrorwarnings(reporter);
 			xd = xp.createXDDocument();
 			xc = xd.jcreateXComponent("X", null, reporter);
 			assertNoErrorwarnings(reporter);
-			assertTrue(XonUtil.xonEqual(xon,
+			assertTrue(XonUtils.xonEqual(xon,
 				SUtils.getValueFromGetter(xc,"toXon")));
 		} catch (Exception ex) {fail(ex);}
 		reporter.clear();
@@ -1166,11 +1166,11 @@ public final class TestXComponents extends XDTester {
 			Object y = SUtils.getNewInstance("test.xdef.component.Y16a");
 			SUtils.setValueToSetter(y, "sety", 1);
 			SUtils.setValueToSetter(x, "setx$b", y);
-			xon = XonUtil.xmlToXon(KXmlUtils.parseXml(xml)
+			xon = XonUtils.xmlToXon(KXmlUtils.parseXml(xml)
 				.getDocumentElement());
 			el = ((XComponent)x).toXml();
 			assertEq(xml, el);
-			if (!XonUtil.xonEqual(xon, XonUtil.xmlToXon(el))) {
+			if (!XonUtils.xonEqual(xon, XonUtils.xmlToXon(el))) {
 				fail();
 			}
 			x = SUtils.getNewInstance("test.xdef.component.Y16c");
@@ -1189,7 +1189,7 @@ public final class TestXComponents extends XDTester {
 		try { // construction of XComponent
 			xml = "<a><b a='1'/><c/><b a='x'/></a>";
 			xc = parseXC(xp, "Y17", xml, null, reporter);
-			xon = XonUtil.xmlToXon(KXmlUtils.parseXml(xml)
+			xon = XonUtils.xmlToXon(KXmlUtils.parseXml(xml)
 				.getDocumentElement());
 			el = xc.toXml();
 			assertEq(xml, el);
@@ -1197,7 +1197,7 @@ public final class TestXComponents extends XDTester {
 				"getb_1"), "geta"));
 			assertEq("x", SUtils.getValueFromGetter(
 				SUtils.getValueFromGetter(xc, "getb_2"), "geta"));
-			if (!XonUtil.xonEqual(xon, XonUtil.xmlToXon(el))) {
+			if (!XonUtils.xonEqual(xon, XonUtils.xmlToXon(el))) {
 				fail();
 			}
 		} catch (Exception ex) {fail(ex);}

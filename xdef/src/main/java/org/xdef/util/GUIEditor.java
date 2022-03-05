@@ -40,7 +40,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xdef.impl.GenXDef;
 import org.xdef.sys.FUtils;
-import org.xdef.xon.XonUtil;
+import org.xdef.xon.XonUtils;
 import org.xdef.sys.SThrowable;
 import org.xdef.sys.SUtils;
 
@@ -885,10 +885,10 @@ public class GUIEditor extends GUIScreen {
 				try {
 					if (type == 'i') {
 						String s =
-							XonUtil.toIniString((Map<String, Object>) result);
+							XonUtils.toIniString((Map<String, Object>) result);
 						SUtils.writeString(new File(name), s, "ASCII");
 					} else if (type == 'j') {
-						String s = XonUtil.toJsonString(result, indent);
+						String s = XonUtils.toJsonString(result, indent);
 						SUtils.writeString(new File(name), s, "UTF-8");
 					} else { // type = 'x'
 						KXmlUtils.writeXml(new File(name), encoding,
@@ -903,9 +903,9 @@ public class GUIEditor extends GUIScreen {
 			if ("true".equals(exe.getAttribute("DisplayResult"))) {
 				String s;
 				if (type == 'i') { // display as INI
-					s = XonUtil.toIniString((Map<String, Object>) result);
+					s = XonUtils.toIniString((Map<String, Object>) result);
 				} else if (type == 'j') { // display as JSON
-					s = XonUtil.toJsonString(result, true);
+					s = XonUtils.toJsonString(result, true);
 				} else {// display result XML
 					s = result == null
 						? "" : KXmlUtils.nodeToString((Element) result, true);

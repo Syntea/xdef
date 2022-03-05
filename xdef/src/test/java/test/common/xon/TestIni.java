@@ -1,7 +1,7 @@
 package test.common.xon;
 
 import java.util.Map;
-import org.xdef.xon.XonUtil;
+import org.xdef.xon.XonUtils;
 import org.xdef.sys.STester;
 
 /** Test .properties and .ini files.
@@ -12,10 +12,10 @@ public class TestIni extends STester {
 	public TestIni() {super();}
 
 	private static String test(String ini) {
-		Map<String, Object> map = XonUtil.parseINI(ini);
-		String ini1 = XonUtil.toIniString(map);
-		Map<String, Object> map1 = XonUtil.parseINI(ini1);
-		if (!XonUtil.xonEqual(map, map1)) {
+		Map<String, Object> map = XonUtils.parseINI(ini);
+		String ini1 = XonUtils.toIniString(map);
+		Map<String, Object> map1 = XonUtils.parseINI(ini1);
+		if (!XonUtils.xonEqual(map, map1)) {
 			return "Differs:\n" + ini + "\n===\n" + ini1;
 		}
 		return "";

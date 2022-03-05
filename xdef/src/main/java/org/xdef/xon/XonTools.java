@@ -24,7 +24,6 @@ import org.xdef.impl.code.DefTelephone;
 import org.xdef.impl.code.DefURI;
 import org.xdef.impl.parsers.XDParseChar;
 import org.xdef.impl.parsers.XDParseCurrency;
-import org.xdef.impl.parsers.XDParseTelephone;
 import org.xdef.msg.JSON;
 import org.xdef.msg.SYS;
 import org.xdef.sys.SBuffer;
@@ -617,12 +616,14 @@ public class XonTools {
 		Object[] result = new Object[2];
 		if (x instanceof String) {
 			String s = (String) x;
-			try {
-				return getReader(SUtils.getExtendedURL(s), charset);
-			} catch (Exception ex) {
+			if (s.indexOf('\n') < 0) { 
 				try {
-					return getReader(new File(s), charset);
-				} catch (Exception exx) {}
+					return getReader(SUtils.getExtendedURL(s), charset);
+				} catch (Exception ex) {
+					try {
+						return getReader(new File(s), charset);
+					} catch (Exception exx) {}
+				}
 			}
 			result[0] = new StringReader(s);
 			result[1] = "STRING";

@@ -77,7 +77,7 @@ import org.xdef.sys.SPosition;
 import org.xdef.sys.SReporter;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.xml.KXmlUtils;
-import org.xdef.xon.XonUtil;
+import org.xdef.xon.XonUtils;
 
 /** The abstract class for checking objects.
  * @author Vaclav Trojan
@@ -342,7 +342,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	 */
 	public final void setXONContext(final String data)
 		throws SRuntimeException {
-		setXONContext(XonUtil.parseXON(data));
+		setXONContext(XonUtils.parseXON(data));
 	}
 
 	@Override
@@ -358,13 +358,13 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 		if (data == null || data instanceof Map || data instanceof List
 			|| data instanceof String || data instanceof Number
 			|| data instanceof Boolean) {
-			e = XonUtil.xonToXml(data);
+			e = XonUtils.xonToXml(data);
 		} else if (data instanceof File) {
-			e = XonUtil.xonToXml(XonUtil.parseXON((File) data));
+			e = XonUtils.xonToXml(XonUtils.parseXON((File) data));
 		} else if (data instanceof URL) {
-			e = XonUtil.xonToXml(XonUtil.parseXON((URL) data));
+			e = XonUtils.xonToXml(XonUtils.parseXON((URL) data));
 		} else if (data instanceof InputStream) {
-			e = XonUtil.xonToXml(XonUtil.parseXON((InputStream) data));
+			e = XonUtils.xonToXml(XonUtils.parseXON((InputStream) data));
 		} else if (data instanceof Document) {
 			e = ((Document) data).getDocumentElement();
 		} else if (data instanceof Element){

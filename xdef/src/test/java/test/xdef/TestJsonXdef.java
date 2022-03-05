@@ -15,7 +15,7 @@ import org.xdef.XDDocument;
 import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.xdef.component.XComponent;
-import org.xdef.xon.XonUtil;
+import org.xdef.xon.XonUtils;
 import org.xdef.msg.SYS;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.SDatetime;
@@ -93,18 +93,18 @@ public class TestJsonXdef extends XDTester {
 					String name = f.getName();
 					int ndx = name.indexOf(".json");
 					name = name.substring(0, ndx);
-					Object json = XonUtil.parseJSON(f);
+					Object json = XonUtils.parseJSON(f);
 					// write JSON as XML (W3C modc)
-					el = XonUtil.xonToXml(json);
+					el = XonUtils.xonToXml(json);
 					SUtils.writeString(new File(_tempDir + name + "a.xml"),
 						KXmlUtils.nodeToString(el,true),"UTF-8");
-					if (!XonUtil.xonEqual(XonUtil.xmlToXon(el),
-						XonUtil.xmlToXon(XonUtil.xonToXmlXD(json)))) {
+					if (!XonUtils.xonEqual(XonUtils.xmlToXon(el),
+						XonUtils.xmlToXon(XonUtils.xonToXmlXD(json)))) {
 						throw new RuntimeException(rName +
 							" xml transformation to JSON differs:\n" +
-							KXmlUtils.nodeToString(XonUtil.xonToXml(json),
+							KXmlUtils.nodeToString(XonUtils.xonToXml(json),
 								true) + "\n" +
-							KXmlUtils.nodeToString(XonUtil.xonToXmlXD(json),
+							KXmlUtils.nodeToString(XonUtils.xonToXmlXD(json),
 								true) + "\n");
 					}
 				}
@@ -202,7 +202,7 @@ public class TestJsonXdef extends XDTester {
 			String basename = name.substring(0, name.indexOf("a.xml"));
 			// read JSON data
 			try {
-				json = XonUtil.parseJSON(_dataDir + basename + ".json");
+				json = XonUtils.parseJSON(_dataDir + basename + ".json");
 			} catch (Exception ex) {
 				result += (result.isEmpty() ? "" : "\n")
 					+ "Incorrect JSON data Test"+id+".json";
@@ -225,13 +225,13 @@ public class TestJsonXdef extends XDTester {
 						result += (result.isEmpty() ? "" : "\n")
 							+ "ERROR: result differs " + name;
 					} else {
-						Object o = XonUtil.xmlToXon(
+						Object o = XonUtils.xmlToXon(
 							KXmlUtils.nodeToString(e, true));
-						if (!XonUtil.xonEqual(json, o)) {
+						if (!XonUtils.xonEqual(json, o)) {
 							result += (result.isEmpty() ? "" : "\n")
 								+ "ERROR conversion XML to JSON: " + name
-								+ "\n" + XonUtil.toJsonString(json, true)
-								+ '\n' + XonUtil.toJsonString(o, true)
+								+ "\n" + XonUtils.toJsonString(json, true)
+								+ '\n' + XonUtils.toJsonString(o, true)
 								+ '\n' + KXmlUtils.nodeToString(e, true);
 						}
 					}
@@ -243,11 +243,11 @@ public class TestJsonXdef extends XDTester {
 			// parseJSON with jparse
 			try {
 				Object o = xd.jvalidate(json, null);
-				if (!XonUtil.xonEqual(json, XonUtil.xonToJson(o))) {
+				if (!XonUtils.xonEqual(json, XonUtils.xonToJson(o))) {
 					result += (result.isEmpty() ? "" : "\n")
 						+ "Error jparse Test" + id + "\n"
-						+ XonUtil.toJsonString(json) + "\n"
-						+ XonUtil.toJsonString(XonUtil.xonToJson(o)) + "\n";
+						+ XonUtils.toJsonString(json) + "\n"
+						+ XonUtils.toJsonString(XonUtils.xonToJson(o)) + "\n";
 				}
 			} catch (Exception ex) {
 				fail(ex);
@@ -287,12 +287,12 @@ public class TestJsonXdef extends XDTester {
 						+ reporter.printToString()
 						+ "\n"+ KXmlUtils.nodeToString(e, true);
 				}
-				Object o = XonUtil.xmlToXon(xc.toXml());
-				if (!XonUtil.xonEqual(json, XonUtil.xonToJson(o))) { ///S
+				Object o = XonUtils.xmlToXon(xc.toXml());
+				if (!XonUtils.xonEqual(json, XonUtils.xonToJson(o))) { ///S
 					result += (result.isEmpty() ? "" : "\n")
 						+ "Error X-component toJsjon " + id + "\n"
-						+ XonUtil.toJsonString(json) + "\n"
-						+ XonUtil.toJsonString(o) + "\n";
+						+ XonUtils.toJsonString(json) + "\n"
+						+ XonUtils.toJsonString(o) + "\n";
 				}
 			} catch (Exception ex) {
 				result += (result.isEmpty() ? "" : "\n")
@@ -480,8 +480,8 @@ public class TestJsonXdef extends XDTester {
 			j = jparse(xd, json, reporter);
 			assertNoErrors(reporter);
 			xd = xp.createXDDocument("Person");
-			xd.setXONContext(XonUtil.xonToJson(j));
-			assertTrue(XonUtil.xonEqual(j, jcreate(xd, "Person", reporter)));
+			xd.setXONContext(XonUtils.xonToJson(j));
+			assertTrue(XonUtils.xonEqual(j, jcreate(xd, "Person", reporter)));
 			assertNoErrors(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='Person_list'>\n"+
@@ -527,7 +527,7 @@ public class TestJsonXdef extends XDTester {
 			assertNoErrors(reporter);
 			xd = xp.createXDDocument("");
 			xd.setXONContext(j);
-			assertTrue(XonUtil.xonEqual(j,
+			assertTrue(XonUtils.xonEqual(j,
 				jcreate(xd, "Person_list", reporter)));
 			assertNoErrors(reporter);
 			xdef =
@@ -576,7 +576,7 @@ public class TestJsonXdef extends XDTester {
 			assertNoErrors(reporter);
 			xd = xp.createXDDocument("");
 			xd.setXONContext(j);
-			assertTrue(XonUtil.xonEqual(j,
+			assertTrue(XonUtils.xonEqual(j,
 				jcreate(xd, "Person_list", reporter)));
 			assertNoErrors(reporter);
 			xdef =
@@ -601,7 +601,7 @@ public class TestJsonXdef extends XDTester {
 			assertNoErrors(reporter);
 			xd = xp.createXDDocument("");
 			xd.setXONContext(j);
-			assertTrue(XonUtil.xonEqual(j, jcreate(xd, "Matrix", reporter)));
+			assertTrue(XonUtils.xonEqual(j, jcreate(xd, "Matrix", reporter)));
 			assertNoErrors(reporter);
 ////////////////////////////////////////////////////////////////////////////////
 			xdef =
@@ -633,8 +633,7 @@ public class TestJsonXdef extends XDTester {
 			assertNoErrors(reporter);
 			xd = xp.createXDDocument("");
 			xd.setXONContext(j);
-// TODO!!! - problem of construction of mixed with elements with matches
-//			assertTrue(XonUtil.xonEqual(j, jcreate(xd, "Skladby", reporter)));
+			assertTrue(XonUtils.xonEqual(j, jcreate(xd, "Skladby", reporter)));
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
 		try {
@@ -681,17 +680,17 @@ public class TestJsonXdef extends XDTester {
 			json = "[{\"a\":true},\"x\",-1]";
 			j = jparse(xp, "", json, reporter);
 			assertNoErrors(reporter);
-			assertTrue(XonUtil.xonEqual(XonUtil.parseJSON(json), j),
-				XonUtil.toJsonString(j, true));
-			el = XonUtil.xonToXml(j);
+			assertTrue(XonUtils.xonEqual(XonUtils.parseJSON(json), j),
+				XonUtils.toJsonString(j, true));
+			el = XonUtils.xonToXml(j);
 			parse(xp, "", el, reporter);
 			assertNoErrors(reporter);
 			json = "{\"a\":1}";
 			j = jparse(xp, "", json, reporter);
 			assertNoErrors(reporter);
-			assertTrue(XonUtil.xonEqual(XonUtil.parseJSON(json), j),
-				XonUtil.toJsonString(j, true));
-			el = XonUtil.xonToXml(j);
+			assertTrue(XonUtils.xonEqual(XonUtils.parseJSON(json), j),
+				XonUtils.toJsonString(j, true));
+			el = XonUtils.xonToXml(j);
 			parse(xp, "", el, reporter);
 			assertNoErrors(reporter);
 			xdef =
@@ -706,7 +705,7 @@ public class TestJsonXdef extends XDTester {
 			json = "[123]";
 			j = jparse(xd, json, reporter);
 			assertNoErrors(reporter);
-			assertTrue(XonUtil.xonEqual(XonUtil.parseJSON(json), j));
+			assertTrue(XonUtils.xonEqual(XonUtils.parseJSON(json), j));
 			assertEq("axb", strw.toString());
 		} catch (Exception ex) {fail(ex);}
 		try {
@@ -719,43 +718,43 @@ public class TestJsonXdef extends XDTester {
 "";
 			xp = compile(xdef);
 			j = 123;
-			assertTrue(XonUtil.xonEqual(j,
+			assertTrue(XonUtils.xonEqual(j,
 				jparse(xp, "", (Object) j, reporter)));
 			j = -0L;
-			assertTrue(XonUtil.xonEqual(j,
+			assertTrue(XonUtils.xonEqual(j,
 				jparse(xp, "", (Object) j, reporter)));
 			j = -123.45e-1;
-			assertTrue(XonUtil.xonEqual(j,
+			assertTrue(XonUtils.xonEqual(j,
 				jparse(xp, "", (Object) j, reporter)));
 			j = -123.45e-1D;
-			assertTrue(XonUtil.xonEqual(j,
+			assertTrue(XonUtils.xonEqual(j,
 				jparse(xp, "", (Object) j, reporter)));
 			j = new BigInteger("123456789012345678901234567890");
-			assertTrue(XonUtil.xonEqual(j,
+			assertTrue(XonUtils.xonEqual(j,
 				jparse(xp, "", (Object) j, reporter)));
 			j = new BigDecimal("-123456789012345678901234567890e-2");
-			assertTrue(XonUtil.xonEqual(j,
+			assertTrue(XonUtils.xonEqual(j,
 				jparse(xp, "", (Object) j, reporter)));
 			j = true;
-			assertTrue(XonUtil.xonEqual(j,
+			assertTrue(XonUtils.xonEqual(j,
 				jparse(xp, "", (Object) j, reporter)));
 			j = "";
-			assertTrue(XonUtil.xonEqual(j,
+			assertTrue(XonUtils.xonEqual(j,
 				jparse(xp, "", (Object) j, reporter)));
 			j = "abc";
-			assertTrue(XonUtil.xonEqual(j,
+			assertTrue(XonUtils.xonEqual(j,
 				jparse(xp, "", (Object) j, reporter)));
 			j = "ab\nc";
-			assertTrue(XonUtil.xonEqual(j,
+			assertTrue(XonUtils.xonEqual(j,
 				jparse(xp, "", (Object) j, reporter)));
 			j = " ab tc ";
-			assertTrue(XonUtil.xonEqual(j,
+			assertTrue(XonUtils.xonEqual(j,
 				jparse(xp, "", (Object) j, reporter)));
 			j = "ab\n\tc";
-			assertTrue(XonUtil.xonEqual(j,
+			assertTrue(XonUtils.xonEqual(j,
 				jparse(xp, "", (Object) j, reporter)));
 			j = null;
-			assertTrue(XonUtil.xonEqual(j,
+			assertTrue(XonUtils.xonEqual(j,
 				jparse(xp, "", (Object) j, reporter)));
 		} catch (Exception ex) {fail(ex);}
 		try {
@@ -905,7 +904,7 @@ public class TestJsonXdef extends XDTester {
 			File tempDir = clearTempDir();
 			genXComponent(xp, tempDir).checkAndThrowErrors();
 			xc = xp.createXDDocument().jparseXComponent(test, null, reporter);
-			assertTrue(XonUtil.xonEqual(XonUtil.parseXON(test),
+			assertTrue(XonUtils.xonEqual(XonUtils.parseXON(test),
 				SUtils.getValueFromGetter(xc,"toXon")));
 			List x = (List) SUtils.getValueFromGetter(xc,"listOf$item_3");
 			x.add(InetAddress.getByName("111.22.33.1"));
