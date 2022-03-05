@@ -616,7 +616,7 @@ public class XonTools {
 		Object[] result = new Object[2];
 		if (x instanceof String) {
 			String s = (String) x;
-			if (s.indexOf('\n') < 0) { 
+			if (s.indexOf('\n') < 0) {
 				try {
 					return getReader(SUtils.getExtendedURL(s), charset);
 				} catch (Exception ex) {

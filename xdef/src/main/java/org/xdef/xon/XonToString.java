@@ -79,6 +79,8 @@ class XonToString extends XonTools {
 				return "p(" + x + ')';
 			} else if (x instanceof Currency) {
 				return "C(" + ((Currency) x).getCurrencyCode() + ')';
+			} else if (x instanceof XDTelephone) {
+				return "T\"" + x + '"';
 			} else if (x instanceof SDuration || x instanceof InetAddress) {
 				return x.toString();
 			}

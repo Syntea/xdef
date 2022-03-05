@@ -1223,7 +1223,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		String sourceId,
 		ReportWriter reporter) throws SRuntimeException {
 		return (List<Object>) jvalidate(
-			XonUtils.parseCSV(data, sourceId), reporter);		
+			XonUtils.parseCSV(data, sourceId), reporter);
 	}
 
 	@Override

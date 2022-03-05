@@ -113,13 +113,13 @@ public class CsvReader extends StringParser implements XonParsers {
 		} else {
 			_jp.putValue(new XonTools.JValue(pos, sb.toString()));
 			sb.setLength(0);
-		}		
+		}
 	}
-	
+
 	private void skipLeadingSpaces() {
 		while (isChar(' ') || isChar('\t')){} // skip leading spaces
 	}
-	
+
 	/** Read line from CSV source */
 	private void readCSVLine() {
 		StringBuilder sb = new StringBuilder();
@@ -257,8 +257,7 @@ public class CsvReader extends StringParser implements XonParsers {
 		Element root = doc.getDocumentElement();
 		for (Object o : csv) {
 			Element row = doc.createElement("row");
-			row.appendChild(
-				doc.createTextNode(XonUtils.toJsonString(XonUtils.xonToJson(o))));
+			row.appendChild(doc.createTextNode(XonUtils.toXonString(o)));
 			root.appendChild(row);
 		}
 		return root;

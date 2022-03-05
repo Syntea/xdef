@@ -15,6 +15,7 @@ import org.xdef.component.XComponentUtil;
 import org.xdef.sys.ArrayReporter;
 import static org.xdef.sys.STester.runTest;
 import org.xdef.xml.KXmlUtils;
+import org.xdef.xon.CsvReader;
 import org.xdef.xon.XonTools;
 import org.xdef.xon.XonTools.JNull;
 import org.xdef.xon.XonUtils;
@@ -249,8 +250,14 @@ public class CsvTest extends XDTester {
 			o = xd.jparse(s, reporter);
 			assertNoErrors(reporter);
 			reporter.clear();
-			if (!XonUtils.xonEqual(o, x)) {				
+			if (!XonUtils.xonEqual(o, x)) {
 				fail( "*** A *\n" + printCSV(x) + "\n*** B *\n" + printCSV(o));
+			}
+			el = CsvReader.csvToXml((List) o);
+			x = CsvReader.xmlToCsv(el);
+			if (!XonUtils.xonEqual(o, x)) {
+				fail(KXmlUtils.nodeToString(el, true) + "\n"
+					+ "*** A *\n" + printCSV(x) + "\n*** B *\n" + printCSV(o));
 			}
 if(true)return;
 			xdef =
@@ -376,9 +383,7 @@ if(true)return;
 			assertEq(el, el = parse(xp, "", el, reporter));
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
-		if (T) {
-			clearTempDir(); // delete temporary files.
-		}
+		clearTempDir(); // delete temporary files.
 	}
 
 	/** Run test

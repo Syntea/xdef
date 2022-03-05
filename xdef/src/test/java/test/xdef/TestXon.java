@@ -65,21 +65,16 @@ public class TestXon extends XDTester {
 				XonUtils.toJsonString(x, true));
 			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
 			xc = xp.createXDDocument().jparseXComponent(xon, null, reporter);
-			y = XonUtils.xmlToXon(xc.toXml());
-			if (!XonUtils.xonEqual(XonUtils.xonToJson(x),XonUtils.xonToJson(y))) {
-				return "** 4 **\n" + XonUtils.toJsonString(XonUtils.xonToJson(x))
-					+ "\n" +  XonUtils.toJsonString(XonUtils.xonToJson(y));
-			}
 			y = XComponentUtil.toXon(xc);
 			if (!XonUtils.xonEqual(x,y)) {
-				return "** 5 **\n" + xon + "\n" +  XonUtils.toXonString(y);
+				return "** 4 **\n" + xon + "\n" +  XonUtils.toXonString(y);
 			}
 			xd = xp.createXDDocument();
 			xd.setXONContext(x);
 			xc = xd.jcreateXComponent("A", null, reporter);
 			y = XComponentUtil.toXon(xc);
 			if (!XonUtils.xonEqual(x,y)) {
-				return "** 6 **\n" + xon + "\n" +  XonUtils.toXonString(y);
+				return "** 5 **\n" + xon + "\n" +  XonUtils.toXonString(y);
 			}
 			return null;
 		} catch (Exception ex) {return printThrowable(ex);}
@@ -139,7 +134,7 @@ public class TestXon extends XDTester {
 		assertNull(testx("file", "[ \"temp/a.txt\" ]"));
 		assertNull(testx("ipAddr", "[/::FFFF:129.144.52.38,/0.0.0]\n"));
 		assertNull(testx("currency", "[C(USD), C(CZK)]\n"));
-//		assertNull(testx("telephone", "[T\"123 456\",T\"+420 234 567 890\"]\n"));
+		assertNull(testx("telephone", "[T\"123456\",T\"+420 234 567 890\"]\n"));
 
 		assertNull(testy("? int", "{a=1}"));
 		assertNull(testy("? int", "{ }"));
