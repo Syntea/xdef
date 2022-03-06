@@ -68,13 +68,16 @@ public class TestXon extends XDTester {
 			y = XComponentUtil.toXon(xc);
 			if (!XonUtils.xonEqual(x,y)) {
 				return "** 4 **\n" + xon + "\n" +  XonUtils.toXonString(y);
+			}			
+			if (!XonUtils.xonEqual(x,y)) {
+				return "** 5 **\n" + xon + "\n" +  XonUtils.toXonString(y);
 			}
 			xd = xp.createXDDocument();
 			xd.setXONContext(x);
 			xc = xd.jcreateXComponent("A", null, reporter);
 			y = XComponentUtil.toXon(xc);
 			if (!XonUtils.xonEqual(x,y)) {
-				return "** 5 **\n" + xon + "\n" +  XonUtils.toXonString(y);
+				return "** 6 **\n" + xon + "\n" +  XonUtils.toXonString(y);
 			}
 			return null;
 		} catch (Exception ex) {return printThrowable(ex);}
