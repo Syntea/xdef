@@ -3,7 +3,6 @@ package bugreports;
 import java.io.StringReader;
 import java.util.List;
 import org.w3c.dom.Element;
-import org.xdef.XDConstants;
 import org.xdef.XDDocument;
 import org.xdef.XDPool;
 import org.xdef.component.XComponent;
@@ -39,17 +38,6 @@ public class CsvTest extends XDTester {
 	/** Run test and display error information. */
 	public void test() {
 		boolean T = false; // if false, all tests are invoked
-		setProperty(XDConstants.XDPROPERTY_DISPLAY, // xdef_display
-			XDConstants.XDPROPERTYVALUE_DISPLAY_FALSE); // true | errors | false
-//			XDConstants.XDPROPERTYVALUE_DISPLAY_TRUE); // true | errors | false
-//			XDConstants.XDPROPERTYVALUE_DISPLAY_ERRORS);// true | errors | false
-//		setProperty(XDConstants.XDPROPERTY_DEBUG, // xdef_debug
-//			XDConstants.XDPROPERTYVALUE_DEBUG_TRUE); // true | false
-		setProperty(XDConstants.XDPROPERTY_WARNINGS, // xdef_warnings
-			XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE); // true | false
-//		System.setProperty(XConstants.DEBUG_SWITCHES,
-//			XConstants.DEBUG_SHOW_XON_MODEL);
-////////////////////////////////////////////////////////////////////////////////
 		String s;
 		String xdef;
 		XComponent xc;
@@ -58,8 +46,6 @@ public class CsvTest extends XDTester {
 		Object x, o;
 		Element el;
 		ArrayReporter reporter = new ArrayReporter();
-////////////////////////////////////////////////////////////////////////////////
-		reporter.clear();
 		try {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='CSV'>\n"+
@@ -73,7 +59,6 @@ public class CsvTest extends XDTester {
 "<xd:json name=\"CSV\">\n"+
 "[\n"+
 "  [\"3..3 string();\"],\n"+
-//"  [$script=\"+\", \"0..3 item();\"]\n"+
 "  [$script=\"+\", \"? nstring()\", \"? nemail\", \"? ntelephone()\"]\n"+
 "]\n"+
 "</xd:json>\n"+
