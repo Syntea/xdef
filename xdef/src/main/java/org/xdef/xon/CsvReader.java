@@ -24,6 +24,10 @@ import org.xdef.xml.KXmlUtils;
 public class CsvReader extends StringParser implements XonParsers {
 	/** Flag if the parsed data are in X-definition (default false). */
 	private boolean _jdef;
+	/** Value separator character. */
+	private char _separator = ',';
+	/** if true the header line is skipped.*/
+	private boolean _skipHeader;
 	/** Parser of XON source. */
 	private final XonParser _jp;
 
@@ -64,23 +68,35 @@ public class CsvReader extends StringParser implements XonParsers {
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
+
 	/** Parse CSV from reader
-	 * @param in Strinbg with CSV data.
+	 * @param in string with CSV data.
+	 * @param separator value separator character.
+	 * @param skipHeader if true the header line is skipped.
 	 * @return list with parsed CSV data.
 	 */
-	public final static List<Object> parseCSV(String in) {
-		return parseCSV(new StringReader(in), "STRING");
+	public final static List<Object> parseCSV(final String in,
+		final char separator,
+		final boolean skipHeader) {
+		return parseCSV(new StringReader(in), separator, skipHeader, "STRING");
 	}
 
 	@SuppressWarnings("unchecked")
 	/** Parse CSV from reader
 	 * @param in reader with CSV source data.
+	 * @param separator value separator character.
+	 * @param skipHeader if true the header line is skipped.
 	 * @param sysId system ID
 	 * @return list with parsed CSV data.
 	 */
-	public final static List<Object> parseCSV(Reader in, String sysId) {
+	public final static List<Object> parseCSV(final Reader in,
+		final char separator,
+		final boolean skipHeader,
+		final String sysId) {
 		XonParser jp = new XonObjParser();
 		CsvReader xr = new CsvReader(in, jp);
+		xr._separator = separator;
+		xr._skipHeader = skipHeader;
 		if (sysId != null) {
 			xr.setSysId(sysId);
 		}
@@ -129,7 +145,7 @@ public class CsvReader extends StringParser implements XonParsers {
 		if (sb.length() == 0) {
 			_jp.putValue(new XonTools.JValue(pos, XonTools.JNULL));
 		} else {
-			_jp.putValue(new XonTools.JValue(pos, sb.toString()));
+			_jp.putValue(new XonTools.JValue(pos, sb.toString().trim()));
 			sb.setLength(0);
 		}
 	}
@@ -160,11 +176,11 @@ public class CsvReader extends StringParser implements XonParsers {
 			skipLeadingSpaces();
 			char c = getCurrentChar();
 			for (;;) {
-				if (c == ',') { // separator
+				if (c == _separator) { // separator
 					break;
 				} else if (c == '\\') {
 					c = peekChar();
-					if (c == ',' || c == '"') {
+					if (c == _separator || c == '"') {
 						sb.append(c);
 					} else {
 						throw new RuntimeException("Escape character error");
@@ -203,7 +219,7 @@ public class CsvReader extends StringParser implements XonParsers {
 				return;
 			}
 			isSpaces();
-			if (!isChar(',')) {
+			if (!isChar(_separator)) {
 				throw new RuntimeException("incorrect line");
 			}
 		}
@@ -211,6 +227,10 @@ public class CsvReader extends StringParser implements XonParsers {
 
 	/** Read CSV data from source. */
 	private void readCSV() {
+		if (_skipHeader) {
+			skipToNextLine();
+			isNewLine();
+		}
 		_jp.arrayStart(this);
 		while (!eos()) {
 			readCSVLine();
@@ -226,12 +246,15 @@ public class CsvReader extends StringParser implements XonParsers {
 	/** Create line with CSV data.
 	 * @param csvLine the array with CSV data from a row.
 	 * @param sb StringBuilder to which line is added.
+	 * @param separator separator character.
 	 */
-	private static void addCsvLine(List csvLine, StringBuilder sb) {
+	private static void addCsvLine(final List csvLine,
+		final StringBuilder sb,
+		final char separator) {
 		boolean first = true;
 		for (Object o: csvLine) {
 			if (!first) {
-				sb.append(',');
+				sb.append(separator);
 			} else {
 				first = false;
 			}
@@ -246,7 +269,7 @@ public class CsvReader extends StringParser implements XonParsers {
 		sb.append('\n');
 	}
 
-	/** Create CSV string from CSV object.
+	/** Create CSV string from CSV object (separator is comma).
 	 * @param csv CSV object.
 	 * @return CSV string created from CSV object.
 	 */
@@ -254,7 +277,24 @@ public class CsvReader extends StringParser implements XonParsers {
 		StringBuilder sb = new StringBuilder();
 		for (Object o : csv) {
 			if (o instanceof List) {
-				addCsvLine((List) o, sb);
+				addCsvLine((List) o, sb, ',');
+			} else {
+				throw new RuntimeException("Incorrect line: " + o);
+			}
+		}
+		return sb.toString();
+	}
+
+	/** Create CSV string from CSV object (separator is declared by argument).
+	 * @param csv CSV object.
+	 * @return CSV string created from CSV object.
+	 */
+	public final static String toCsvString(final List<Object> csv,
+		final char separator) {
+		StringBuilder sb = new StringBuilder();
+		for (Object o : csv) {
+			if (o instanceof List) {
+				addCsvLine((List) o, sb, separator);
 			} else {
 				throw new RuntimeException("Incorrect line: " + o);
 			}
@@ -273,11 +313,17 @@ public class CsvReader extends StringParser implements XonParsers {
 	public final static Element csvToXml(final List csv) {
 		Document doc = KXmlUtils.newDocument(null, "csv", null);
 		Element root = doc.getDocumentElement();
+		StringBuilder sb = new StringBuilder("[\n");
+		boolean first = true;
 		for (Object o : csv) {
-			Element row = doc.createElement("row");
-			row.appendChild(doc.createTextNode(XonUtils.toXonString(o)));
-			root.appendChild(row);
+			if (first) {
+				first = false;
+			} else {
+				sb.append(",\n");
+			}
+			sb.append(XonUtils.toXonString(o));
 		}
+		root.appendChild(doc.createTextNode(sb.toString()+ "\n]"));
 		return root;
 	}
 
@@ -290,15 +336,8 @@ public class CsvReader extends StringParser implements XonParsers {
 	 * @return created CSV object.
 	 */
 	public final static List<Object> xmlToCsv(final Element el) {
-		List<Object> result = new ArrayList<Object>();
-		Node node = el.getFirstChild();
-		while (node != null) {
-			if (node.getNodeType() == Node.ELEMENT_NODE) {
-				result.add(XonUtils.parseXON(node.getTextContent()));
-			}
-			node = node.getNextSibling();
-		}
-		return result;
+		String s = el.getTextContent();
+		return (List) XonUtils.parseXON(s);
 	}
 
 ////////////////////////////////////////////////////////////////////////////////

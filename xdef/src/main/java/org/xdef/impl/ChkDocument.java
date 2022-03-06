@@ -1209,21 +1209,41 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
+
 	@Override
-	@SuppressWarnings("unchecked")
-	/** Parse and process CSV data and return processed object.
+	/** Parse and process CSV data and return processed object. The separator
+	 * is comma and header is not skipped.
 	 * @param data reader with CSV data
 	 * @param sourceId name of source or null.
 	 * @param reporter report writer or null. If this argument is
 	 * null and error reports occurs then SRuntimeException is thrown.
-	 * @return List with processed data.
-	 * @throws SRuntimeException if an was reported.
+	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
 	public List<Object> cparse(Reader data,
 		String sourceId,
-		ReportWriter reporter) throws SRuntimeException {
+		ReportWriter reporter) {
+		return cparse(data, ',', false, sourceId, reporter);
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	/** Parse and process CSV data and return processed object.
+	 * @param data reader with CSV data
+	 * @param separator value separator character.
+	 * @param skipHeader if true the header line is skipped.
+	 * @param sourceId name of source or null.
+	 * @param reporter report writer or null. If this argument is
+	 * null and error reports occurs then SRuntimeException is thrown.
+	 * @return List with processed data.
+	 * @throws SRuntimeException if reporter is null and an error is reported.
+	 */
+	public List<Object> cparse(final Reader data,
+		final char separator,
+		final boolean skipHeader,
+		final String sourceId,
+		ReportWriter reporter) {
 		return (List<Object>) jvalidate(
-			XonUtils.parseCSV(data, sourceId), reporter);
+			XonUtils.parseCSV(data, separator, skipHeader, sourceId), reporter);
 	}
 
 	@Override

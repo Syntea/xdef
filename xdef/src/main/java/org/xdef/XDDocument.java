@@ -329,25 +329,41 @@ public interface XDDocument extends XXNode {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-	/** Parse and process CSV data and return processed object.
+	/** Parse and process CSV data and return processed object. The separator
+	 * is comma and the first line is processed.
 	 * @param data reader with CSV data
 	 * @param sourceId name of source or null.
 	 * @param reporter report writer or null. If this argument is
 	 * null and error reports occurs then SRuntimeException is thrown.
 	 * @return List with processed data.
-	 * @throws SRuntimeException if an was reported.
+	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
 	public List<Object> cparse(Reader data,
 		String sourceId,
-		ReportWriter reporter)
-		throws SRuntimeException;
+		ReportWriter reporter) throws SRuntimeException;
+
+	/** Parse and process CSV data and return processed object.
+	 * @param data reader with CSV data
+	 * @param separator value separator character.
+	 * @param skipHeader if true the header line is skipped.
+	 * @param sourceId name of source or null.
+	 * @param reporter report writer or null. If this argument is
+	 * null and error reports occurs then SRuntimeException is thrown.
+	 * @return List with processed data.
+	 * @throws SRuntimeException if reporter is null and an error is reported.
+	 */
+	public List<Object> cparse(Reader data,
+		char separator,
+		boolean skipHeader,
+		String sourceId,
+		ReportWriter reporter) throws SRuntimeException;
 
 	/** Parse and process INI/Properties data and return processed object.
 	 * @param data INI/Properties data or file pathname
 	 * @param reporter report writer or null. If this argument is
 	 * null and error reports occurs then SRuntimeException is thrown.
 	 * @return Map with processed data.
-	 * @throws SRuntimeException if an was reported.
+	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
 	public Map<String, Object> iparse(String data, ReportWriter reporter)
 		throws SRuntimeException;
@@ -357,7 +373,7 @@ public interface XDDocument extends XXNode {
 	 * @param reporter report writer or null. If this argument is
 	 * null and error reports occurs then SRuntimeException is thrown.
 	 * @return Map with processed data.
-	 * @throws SRuntimeException if an was reported.
+	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
 	public Map<String, Object> iparse(File data, ReportWriter reporter)
 		throws SRuntimeException;
@@ -367,7 +383,7 @@ public interface XDDocument extends XXNode {
 	 * @param reporter report writer or null. If this argument is
 	 * null and error reports occurs then SRuntimeException is thrown.
 	 * @return Map with processed data.
-	 * @throws SRuntimeException if an was reported.
+	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
 	public Map<String, Object> iparse(URL data, ReportWriter reporter)
 		throws SRuntimeException;
@@ -377,7 +393,7 @@ public interface XDDocument extends XXNode {
 	 * @param reporter report writer or null. If this argument is
 	 * null and error reports occurs then SRuntimeException is thrown.
 	 * @return Map with processed data.
-	 * @throws SRuntimeException if an was reported.
+	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
 	public Map<String, Object> iparse(InputStream data, ReportWriter reporter)
 		throws SRuntimeException;
@@ -418,7 +434,7 @@ public interface XDDocument extends XXNode {
 	 * @param reporter report writer or null. If this argument is
 	 * null and error reports occurs then SRuntimeException is thrown.
 	 * @return Map with processed data.
-	 * @throws SRuntimeException if an was reported.
+	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
 	public Map<String, Object> ivalidate(Object data, ReportWriter reporter)
 		throws SRuntimeException;
@@ -428,7 +444,7 @@ public interface XDDocument extends XXNode {
 	 * @param reporter report writer or null. If this argument is
 	 * null and error reports occurs then SRuntimeException is thrown.
 	 * @return Object with the constructed XON/JSON data.
-	 * @throws SRuntimeException if an error was reported.
+	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
 	public Object jcreate(String name, ReportWriter reporter)
 		throws SRuntimeException;
@@ -440,8 +456,7 @@ public interface XDDocument extends XXNode {
 	 * @param reporter report writer or <i>null</i>. If this argument is
 	 * <i>null</i> and error reports occurs then SRuntimeException is thrown.
 	 * @return XComponent with created data.
-	 * @throws SRuntimeException if reporter is <i>null</i> and an error
-	 * was reported.
+	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
 	public XComponent jcreateXComponent(final String name,
 		final Class xClass,
@@ -452,7 +467,7 @@ public interface XDDocument extends XXNode {
 	 * @param reporter report writer or null. If this argument is
 	 * null and error reports occurs then SRuntimeException is thrown.
 	 * @return XON object with processed data.
-	 * @throws SRuntimeException if an was reported.
+	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
 	public Object jparse(String data, ReportWriter reporter)
 		throws SRuntimeException;
@@ -462,7 +477,7 @@ public interface XDDocument extends XXNode {
 	 * @param reporter report writer or null. If this argument is
 	 * null and error reports occurs then SRuntimeException is thrown.
 	 * @return XON object with processed data.
-	 * @throws SRuntimeException if an was reported.
+	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
 	public Object jparse(File data, ReportWriter reporter)
 		throws SRuntimeException;
@@ -472,7 +487,7 @@ public interface XDDocument extends XXNode {
 	 * @param reporter report writer or null. If this argument is
 	 * null and error reports occurs then SRuntimeException is thrown.
 	 * @return XON object with processed data.
-	 * @throws SRuntimeException if an was reported.
+	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
 	public Object jparse(URL data, ReportWriter reporter)
 		throws SRuntimeException;
@@ -482,7 +497,7 @@ public interface XDDocument extends XXNode {
 	 * @param reporter report writer or null. If this argument is
 	 * null and error reports occurs then SRuntimeException is thrown.
 	 * @return XON object with processed data.
-	 * @throws SRuntimeException if an was reported.
+	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
 	public Object jparse(InputStream data, ReportWriter reporter)
 		throws SRuntimeException;
@@ -620,8 +635,7 @@ public interface XDDocument extends XXNode {
 	 * @param reporter report writer or <i>null</i>. If this argument is
 	 * <i>null</i> and error reports occurs then SRuntimeException is thrown.
 	 * @return XComponent with created data.
-	 * @throws SRuntimeException if reporter is <i>null</i> and an error
-	 * was reported.
+	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
 	public XComponent xcreateXComponent(final String nsUri,
 		final String name,
@@ -634,8 +648,7 @@ public interface XDDocument extends XXNode {
 	 * @param reporter report writer or <i>null</i>. If this argument is
 	 * <i>null</i> and error reports occurs then SRuntimeException is thrown.
 	 * @return XComponent with created data.
-	 * @throws SRuntimeException if reporter is <i>null</i> and an error
-	 * was reported.
+	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
 	public XComponent xcreateXComponent(final String name,
 		final Class xClass,
@@ -659,7 +672,7 @@ public interface XDDocument extends XXNode {
 	 * @param reporter report writer or null. If this argument is
 	 * null and error reports occurs then SRuntimeException is thrown.
 	 * @return XON object with processed data.
-	 * @throws SRuntimeException if an error was reported.
+	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
 	public Object ycreate(String name, ReportWriter reporter)
 		throws SRuntimeException;
@@ -669,7 +682,7 @@ public interface XDDocument extends XXNode {
 	 * @param reporter report writer or null. If this argument is
 	 * null and error reports occurs then SRuntimeException is thrown.
 	 * @return XON object with processed data.
-	 * @throws SRuntimeException if an was reported.
+	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
 	public Object yparse(String data, ReportWriter reporter)
 		throws SRuntimeException;
@@ -679,7 +692,7 @@ public interface XDDocument extends XXNode {
 	 * @param reporter report writer or null. If this argument is
 	 * null and error reports occurs then SRuntimeException is thrown.
 	 * @return XON object with processed data.
-	 * @throws SRuntimeException if an was reported.
+	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
 	public Object yparse(File data, ReportWriter reporter)
 		throws SRuntimeException;
@@ -689,7 +702,7 @@ public interface XDDocument extends XXNode {
 	 * @param reporter report writer or null. If this argument is
 	 * null and error reports occurs then SRuntimeException is thrown.
 	 * @return XON object with processed data.
-	 * @throws SRuntimeException if an was reported.
+	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
 	public Object yparse(URL data, ReportWriter reporter)
 		throws SRuntimeException;
@@ -699,7 +712,7 @@ public interface XDDocument extends XXNode {
 	 * @param reporter report writer or null. If this argument is
 	 * null and error reports occurs then SRuntimeException is thrown.
 	 * @return XON object with processed data.
-	 * @throws SRuntimeException if an was reported.
+	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
 	public Object yparse(InputStream data, ReportWriter reporter)
 		throws SRuntimeException;
@@ -763,5 +776,4 @@ public interface XDDocument extends XXNode {
 		Class<?> xClass,
 		String sourceId,
 		ReportWriter reporter) throws SRuntimeException;
-
 }

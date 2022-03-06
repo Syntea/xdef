@@ -1,19 +1,17 @@
 package org.xdef.xon;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.io.StringReader;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Map;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.xdef.msg.SYS;
 import org.xdef.sys.SRuntimeException;
-import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
 
 /** XON/JSON utilities (parseJSON source to XON/JSON instance, compare XON/JSON
@@ -26,93 +24,33 @@ public class XonUtils {
 // parsers
 ////////////////////////////////////////////////////////////////////////////////
 
-	/** Parse CSV input reader.
+	/** Parse CSV input reader (value separator is comma).
 	 * @param in reader with CSV source.
+	 * @param separator value separator character.
+	 * @param skipHeader if true the header line is skipped.
 	 * @param sysid System id.
 	 * @return parsed CSV object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
 	public final static List<Object> parseCSV(final Reader in,
+		final char separator,
+		final boolean skipHeader,
 		final String sysid) {
-		return CsvReader.parseCSV(in, sysid);
+		return CsvReader.parseCSV(in, separator, skipHeader, sysid);
 	}
 
 	/** Parse CSV input source data.
-	 * @param s file pathname or URL or string with CSV source data.
+	 * @param data string with CSV source data.
+	 * @param separator value separator character.
+	 * @param skipHeader if true the header line is skipped.
 	 * @return parsed CSV object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public final static List<Object> parseCSV(final String s)
+	public final static List<Object> parseCSV(final String data,
+		final char separator,
+		final boolean skipHeader)
 		throws SRuntimeException {
-		if (s.indexOf('\n') < 0) { // try URL or file
-			try {
-				parseCSV(SUtils.getExtendedURL(s));
-			} catch (Exception ex) {}
-			File f = new File(s);
-			if (f.isFile()) {
-				parseCSV(f);
-			}
-		}
-		return parseCSV(new java.io.StringReader(s), "STRING");
-	}
-
-	/** Parse CSV input data in file.
-	 * @param f input file.
-	 * @return parsed CSV object.
-	 * @throws SRuntimeException if an error occurs.
-	 */
-	public final static List<Object> parseCSV(final File f)
-		throws SRuntimeException{
-		Reader in;
-		String id = f.getAbsolutePath();
-		try {
-			in = new FileReader(f);
-		} catch (Exception ex) {
-			throw new SRuntimeException(SYS.SYS024, id);
-		}
-		return parseCSV(in, f.getAbsolutePath());
-	}
-
-	/** Parse URL data to CSV.
-	 * @param url URL with INI/Properties data.
-	 * @return parsed CSV object.
-	 * @throws SRuntimeException if an error occurs,
-	 */
-	public final static List<Object> parseCSV(final URL url)
-		throws SRuntimeException{
-		try {
-			Reader in = new InputStreamReader(url.openStream());
-			return parseCSV(in, url.toExternalForm());
-		} catch (Exception ex) {
-			//Program exception &{0}
-			throw new SRuntimeException(SYS.SYS036, ex);
-		}
-	}
-
-	/** Parse CSV from InputStream.
-	 * @param in input data.
-	 * @return parsed INI/Properties object.
-	 * @throws SRuntimeException if an error occurs.
-	 */
-	public final static List<Object> parseCSV(final InputStream in)
-		throws SRuntimeException {
-		return parseCSV(in, null);
-	}
-
-	/** Parse CSV data in InputStream.
-	 * @param in input CSV data.
-	 * @param sysId System id.
-	 * @return parsed CSV object.
-	 * @throws SRuntimeException if an error occurs.
-	 */
-	public final static List<Object> parseCSV(final InputStream in,
-		final String sysId) throws SRuntimeException {
-		try {
-			return parseCSV(new InputStreamReader(in), sysId);
-		} catch (Exception ex) {
-			//Program exception &{0}
-			throw new SRuntimeException(SYS.SYS036, ex);
-		}
+		return parseCSV(new StringReader(data), separator, skipHeader,"STRING");
 	}
 
 	/** Parse INI/Properties document from input reader.
