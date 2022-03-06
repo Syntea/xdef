@@ -121,17 +121,20 @@ public class CsvReader extends StringParser implements XonParsers {
 //		return result;
 //	}
 
+	/** Put parsed value to XON parser.
+	 * @param sb string with value.
+	 * @param pos source position of parsed value
+	 */
 	private void putValue(final StringBuilder sb, final SPosition pos) {
 		if (sb.length() == 0) {
-			_jp.putValue(
-				new XonTools.JValue(pos, XonTools.JNULL));
-			sb.setLength(0);
+			_jp.putValue(new XonTools.JValue(pos, XonTools.JNULL));
 		} else {
 			_jp.putValue(new XonTools.JValue(pos, sb.toString()));
 			sb.setLength(0);
 		}
 	}
 
+	/** Skip spaces and tabs. */
 	private void skipLeadingSpaces() {
 		while (isChar(' ') || isChar('\t')){} // skip leading spaces
 	}
