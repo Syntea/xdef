@@ -3,11 +3,9 @@ package org.xdef.xon;
 import java.io.Reader;
 import java.io.StringReader;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.xdef.msg.JSON;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.SBuffer;
@@ -287,6 +285,7 @@ public class CsvReader extends StringParser implements XonParsers {
 
 	/** Create CSV string from CSV object (separator is declared by argument).
 	 * @param csv CSV object.
+	 * @param separator separator character.
 	 * @return CSV string created from CSV object.
 	 */
 	public final static String toCsvString(final List<Object> csv,
