@@ -123,7 +123,7 @@ public class CsvReader extends StringParser implements XonParsers {
 
 	/** Put parsed value to XON parser.
 	 * @param sb string with value.
-	 * @param pos source position of parsed value
+	 * @param pos source position of parsed value.
 	 */
 	private void putValue(final StringBuilder sb, final SPosition pos) {
 		if (sb.length() == 0) {
@@ -139,7 +139,7 @@ public class CsvReader extends StringParser implements XonParsers {
 		while (isChar(' ') || isChar('\t')){} // skip leading spaces
 	}
 
-	/** Read line from CSV source */
+	/** Read line from CSV source. */
 	private void readCSVLine() {
 		StringBuilder sb = new StringBuilder();
 		SPosition pos = getPosition();
