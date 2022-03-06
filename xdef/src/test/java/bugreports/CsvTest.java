@@ -7,12 +7,14 @@ import org.xdef.XDConstants;
 import org.xdef.XDDocument;
 import org.xdef.XDPool;
 import org.xdef.component.XComponent;
+import org.xdef.component.XComponentUtil;
 import org.xdef.sys.ArrayReporter;
 import static org.xdef.sys.STester.runTest;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.xon.CsvReader;
 import org.xdef.xon.XonUtils;
 import test.XDTester;
+import static test.XDTester.genXComponent;
 
 /** Test CSV data
  * @author Vaclav Trojan
@@ -49,12 +51,11 @@ public class CsvTest extends XDTester {
 //			XConstants.DEBUG_SHOW_XON_MODEL);
 ////////////////////////////////////////////////////////////////////////////////
 		String s;
-		String xdef, xml;
+		String xdef;
 		XComponent xc;
 		XDDocument xd;
 		XDPool xp;
 		Object x, o;
-		List list;
 		Element el;
 		ArrayReporter reporter = new ArrayReporter();
 ////////////////////////////////////////////////////////////////////////////////
@@ -103,6 +104,13 @@ public class CsvTest extends XDTester {
 			assertNoErrors(reporter);
 			reporter.clear();
 			if (!XonUtils.xonEqual(o, x)) {
+				fail("*** A *\n" + printCSV(x) + "\n*** B *\n" + printCSV(o));
+			}
+			xc = xd.jparseXComponent(o, null, reporter); 		
+			assertNoErrors(reporter);
+			reporter.clear();
+			x = XComponentUtil.toXon(xc);
+			if (!XonUtils.xonEqual(x, o)) {
 				fail("*** A *\n" + printCSV(x) + "\n*** B *\n" + printCSV(o));
 			}
 			s =
