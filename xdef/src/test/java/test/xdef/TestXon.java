@@ -68,7 +68,7 @@ public class TestXon extends XDTester {
 			y = XComponentUtil.toXon(xc);
 			if (!XonUtils.xonEqual(x,y)) {
 				return "** 4 **\n" + xon + "\n" +  XonUtils.toXonString(y);
-			}			
+			}
 			if (!XonUtils.xonEqual(x,y)) {
 				return "** 5 **\n" + xon + "\n" +  XonUtils.toXonString(y);
 			}

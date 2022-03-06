@@ -93,6 +93,10 @@ public class CsvReader extends StringParser implements XonParsers {
 		return (List<Object>) jp.getResult();
 	}
 //
+//	/** Convert index of column to column name.
+//	 * @param index index of column.
+//	 * @return column name.
+//	 */
 //	private static String genColumnName(final int index) {
 //		String result = "";
 //		int i = index;
@@ -103,6 +107,18 @@ public class CsvReader extends StringParser implements XonParsers {
 //			}
 //			i--;
 //		}
+//	}
+//
+//	/** Get index of column from column name.
+//	 * @param name column name.
+//	 * @return  index of column.
+//	 */
+//	private static int getColumnIndex(final String name) {
+//		int result = 0;
+//		for (int i = 0; i < name.length(); i++) {
+//			result = result*24 + name.charAt(i) - 'A';
+//		}
+//		return result;
 //	}
 
 	private void putValue(final StringBuilder sb, final SPosition pos) {
@@ -178,7 +194,6 @@ public class CsvReader extends StringParser implements XonParsers {
 					c = nextChar();
 				}
 			}
-//			isSpaces();
 			putValue(sb, pos);
 			if(eos() || isNewLine()) {
 				_jp.arrayEnd(this);
