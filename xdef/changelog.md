@@ -1,15 +1,15 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 41.0.5, release-date 2022-03-06
+# Version 41.0.5, release-date 2022-03-07
 * fixed bug rounding of time and millisedonds are equal to 500 (the second was
-  not incresed by one).
+  not increased by one).
 * fixed bug in type parse methods with named parameters `%base` and `~item`.
 * fixed bug in X-components with union types.
 * methods `XDDocument.parseXComponent(...)` are now deprecated
   please use methods `XDDocument.xparseXComponent(...)` instead.
 * implemented new methods `XDDocument.iparseXComponent(...)`,
   `XDDocument.jparseXComponent(...)` and `XDDocument.yparseXComponent(...)`.
-* implented `telephone`, the new validation method and the new type of object
+* implemented `telephone`, the new validation method and the new type of object
   `Telephone`.
 
 # Version 41.0.4, release-date 2022-01-13
