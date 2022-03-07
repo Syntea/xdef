@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Project>
+  <Property Name="xdef.warnings" Value="true"/>
+  <Property Name="xdef.display" Value="true"/>
+  <Property Name="xdef.debug" Value="true"/>
+  <XDefinition>src/test/java/bugreports/data/project/json/xdef*.xml</XDefinition>
+  <Execute DisplayResult="true" DataType="JSON" Mode="validate" XDName="test">
+    <Input Edit="true">src/test/java/bugreports/data/project/json/data.json</Input>
+    <SaveResult File="temp/json.tmp"/>
+  </Execute>
+  <WorkDir>temp</WorkDir>
+</Project>

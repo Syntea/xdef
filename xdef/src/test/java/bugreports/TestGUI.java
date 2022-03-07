@@ -13,13 +13,10 @@ public class TestGUI extends XDTester {
 	/** Run test and display error information. */
 	public void test() {
 //		GUIEditor.main("-h");
-		GUIEditor.main("-g");
+		clearTempDir();
 //		GUIEditor.main("-g", "-workDir", "temp");
-//		GUIEditor.main("-p", "temp/project.xml") ;
-//		GUIEditor.main("-p",
-//			"src/test/java/mytests/projects/json/project.xml"
-////			"-workDir", "temp"
-//		);
+		GUIEditor.main("-p",
+			"src/test/java/bugreports/data/project/json/project.xml");
 	}
 	/**
 	 * @param args the command line arguments
