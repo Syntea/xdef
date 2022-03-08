@@ -330,13 +330,14 @@ public class CsvReader extends StringParser implements XonParsers {
 // XML to CSV
 ////////////////////////////////////////////////////////////////////////////////
 
+	@SuppressWarnings("unchecked")
 	/** Create CSV object from XML element.
 	 * @param el element from which the CSV object is created.
 	 * @return created CSV object.
 	 */
 	public final static List<Object> xmlToCsv(final Element el) {
 		String s = el.getTextContent();
-		return (List) XonUtils.parseXON(s);
+		return (List<Object>) XonUtils.parseXON(s);
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
