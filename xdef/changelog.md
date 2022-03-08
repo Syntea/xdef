@@ -1,6 +1,9 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 41.0.5, release-date 2022-03-08
+# Version 41.0.6, release-date 2022-03-08
+* fixed bug in `org.xdef.util.GUIEditor` if X-definition is not a valid XML.
+
+# Version 41.0.5, release-date 2022-03-06
 * fixed bug rounding of time and millisedonds are equal to 500 (the second was
   not increased by one).
 * fixed bug in type parse methods with named parameters `%base` and `~item`.
