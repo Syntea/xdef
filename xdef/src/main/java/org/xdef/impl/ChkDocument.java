@@ -1802,11 +1802,17 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			XDDebug debugger = getDebugger();
 			if (debugger != null) {
 				if (ex instanceof SThrowable) {
-					SThrowable st = (SThrowable) ex;
-					debugger.closeDebugger(st.getReport().getLocalizedText());
+					if (!_reporter.errorWarnings()) {
+						SThrowable st = (SThrowable) ex;
+						debugger.closeDebugger(
+							st.getReport().getLocalizedText());
+					}
 				} else {
 					debugger.closeDebugger(
 						"Process finished with exception:\n" + ex);
+				}
+				if (parser != null) {
+					parser.closeReader();
 				}
 				return null;
 			}

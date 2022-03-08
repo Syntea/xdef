@@ -91,7 +91,7 @@ public class CsvTest extends XDTester {
 			if (!XonUtils.xonEqual(o, x)) {
 				fail("*** A *\n" + printCSV(x) + "\n*** B *\n" + printCSV(o));
 			}
-			xc = xd.jparseXComponent(o, null, reporter); 		
+			xc = xd.jparseXComponent(o, null, reporter);
 			assertNoErrors(reporter);
 			reporter.clear();
 			x = XComponentUtil.toXon(xc);

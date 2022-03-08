@@ -19,7 +19,6 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.Method;
@@ -38,6 +37,7 @@ import javax.xml.namespace.QName;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+import org.xdef.XDBuilder;
 import org.xdef.impl.GenXDef;
 import org.xdef.sys.FUtils;
 import org.xdef.xon.XonUtils;
@@ -721,18 +721,48 @@ public class GUIEditor extends GUIScreen {
 					xdefs.add(t);
 				}
 			}
-			XDPool xp = XDFactory.compileXD(props,
-				xdefs.toArray(new String[xdefs.size()]));
-			XDSourceInfo si = xp.getXDSourceInfo();
 			boolean changed = false;
-			for (String x: si.getMap().keySet()) {
-				XDSourceItem xsi = si.getMap().get(x);
-				changed |= xsi._changed | xsi._saved;
+			XDSourceInfo si;
+			XDPool xp;
+			for(;;) {
+				ArrayReporter reporter = new ArrayReporter();
+				XDBuilder builder = XDFactory.getXDBuilder(reporter, props);
+				builder.setSource(xdefs.toArray(new String[xdefs.size()]));
+				xp = builder.compileXD();
+				si = xp.getXDSourceInfo();
+				for (String x: si.getMap().keySet()) {
+					XDSourceItem xsi = si.getMap().get(x);
+					changed |= xsi._changed | xsi._saved;
+				}
+				if (changed) { //Update X-definitions elements
+					updateXdefList(project, si);
+				}
+				if (reporter.errors()) {
+					XDSourceItem xsi = null;
+					for (XDSourceItem x: si.getMap().values()) {
+						for (Report r: reporter) {
+							if (r.getModification().contains(
+								x._url.toString())) {
+								xsi = x;
+								break;
+							}
+						}
+						if (xsi != null) {
+							break;
+						}
+					}
+					if (xsi == null) {
+						xsi = si.getMap().values().iterator().next();
+					}
+					GUIEditor ge = new GUIEditor(si);
+					ge.display(reporter,
+						"Error in X-definition", xsi._url, si, true, null);
+					ge.closeEdit();
+					reporter.clear();
+				} else {
+					return xp;
+				}
 			}
-			if (changed) {
-				updateXdefList(project, si); //Update X-definitions elements
-			}
-			return xp;
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		}
