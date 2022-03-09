@@ -11,7 +11,6 @@ import org.xdef.impl.debug.GUIScreen;
 import org.xdef.model.XMDefinition;
 import org.xdef.model.XMElement;
 import org.xdef.msg.SYS;
-import org.xdef.msg.XDEF;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.Report;
 import org.xdef.xml.KXmlUtils;
@@ -268,9 +267,10 @@ public class GUIEditor extends GUIScreen {
 	 * @param si source information.
 	 * @param editable true if editing is allowed.
 	 * @param text the text of the <code>JMenuItem</code>
+	 * @return source item.
 	 * @throws Exception if an error occurs.
 	 */
-	private void display(final ArrayReporter err,
+	private XDSourceItem display(final ArrayReporter err,
 		final String msg,
 		final Object obj,
 		final XDSourceInfo si,
@@ -316,6 +316,7 @@ public class GUIEditor extends GUIScreen {
 		si._width = _frame.getWidth();
 		si._height = _frame.getHeight();
 		closeEdit();
+		return xsi;
 	}
 
 	/** Display (and optionally edit) string.
@@ -325,9 +326,10 @@ public class GUIEditor extends GUIScreen {
 	 * @param s string displayed.
 	 * @param si source information.
 	 * @param editable true if editing is allowed.
+	 * @return source item.
 	 * @throws Exception if an error occurs.
 	 */
-	private static void displayString(final String msg,
+	private static XDSourceItem displayString(final String msg,
 		final File workDir,
 		final boolean deleteOnExit,
 		final String s,
@@ -338,29 +340,32 @@ public class GUIEditor extends GUIScreen {
 			o = new File(genTemporaryFile(s,
 				workDir, "result.tmp", deleteOnExit, "UTF-8"));
 		}
-		new GUIEditor(si).display(null, msg, o, si, editable, null);
+		XDSourceItem xsi = 
+			new GUIEditor(si).display(null, msg, o, si, editable, null);
 		Map<String, XDSourceItem> m = si.getMap();
 		if (m.size() == 1) { //delete the file result.tmp if it was not saved
 			if (!m.values().iterator().next()._saved) {
 				new File(workDir, "result.tmp").delete();
 			}
 		}
+		return xsi;
 	}
 
-	/** Display editable window with XML.
+	/** Display editable window with object (XML, JSON, text etc.).
 	 * @param err ArrayReporter with reported errors and messages.
 	 * @param msg Text of header.
 	 * @param o Object with XML (may be Element, file etc.)
 	 * @param si source information.
 	 * @param text the text of the <code>JMenuItem</code>
+	 * @return source item.
 	 * @throws Exception if an error occurs.
 	 */
-	private static void editXml(final ArrayReporter err,
+	private static XDSourceItem editObject(final ArrayReporter err,
 		final String msg,
 		final Object o,
 		final XDSourceInfo si,
 		final String text) throws Exception {
-		new GUIEditor(si).display(err, msg, o, si, true, text);
+		return new GUIEditor(si).display(err, msg, o, si, true, text);
 	}
 
 	/** Display and edit XMl given by the argument source.
@@ -398,9 +403,7 @@ public class GUIEditor extends GUIScreen {
 		}
 		XDSourceItem xsi = new XDSourceItem(o);
 		xi.getMap().put(source, xsi);
-		ArrayReporter rep = new ArrayReporter();
-		editXml(rep, title, o, xi, null);
-		xsi = xi.getMap().values().iterator().next();
+		editObject(null, title, o, xi, null);
 		if (xsi._saved || !source.equals(xsi._source)) {
 			if (xsi._url != null && f != null) {
 				if (new File(xsi._url.getFile()).getCanonicalFile().equals(
@@ -625,7 +628,7 @@ public class GUIEditor extends GUIScreen {
 			if ("true".equals(project.getAttribute("Show"))) {
 				XDSourceInfo sinfo = new XDSourceInfo();
 				Object o = src.charAt(0) == '<' ? src : new File(src);
-				editXml(null, "Project", o, sinfo, null);
+				editObject(null, "Project", o, sinfo, null);
 				project = pxd.xparse(src, null);
 			}
 			project  = canonizeProject(project);
@@ -880,21 +883,17 @@ public class GUIEditor extends GUIScreen {
 				if (data != null && "validate".equals(mode)) {
 					// show result
 					f = new File(new URL(data).getFile());
-					if (data.startsWith("<") && !f.isFile()) {
-						editXml(reporter, "ERROR:", data, si,
-							"Input data changed, run again?");
-					} else {
-						editXml(reporter, "ERROR:", f, si, null);
-					}
-					XDSourceItem x = si.getMap().values().iterator().next();
-					if (x._changed) {
-						data = x._source;
+					XDSourceItem xsi = data.startsWith("<") && !f.isFile()
+						? editObject(reporter, "ERROR:", data, si,
+							"Input data changed, run again?")
+						: editObject(reporter, "ERROR:", f, si, null);
+					if (xsi._saved) {
 						if (JOptionPane.showConfirmDialog(null,
 							"Input data changed, run again?",
 							null, JOptionPane.OK_CANCEL_OPTION) == 0) {
-							i--;
 							e = KXmlUtils.firstElementChild(exe, "Input");
 							e.setTextContent(data);
+							i--;
 							continue;
 						}
 					}
@@ -925,25 +924,33 @@ public class GUIEditor extends GUIScreen {
 							(Element) result, indent, true);
 					}
 				} catch (Exception ex) {
-					//GUIEditor can't write XML data to file &{0}
-					JOptionPane.showMessageDialog(null,
-						Report.error(XDEF.XDEF851,name).toString());
+//					//GUIEditor can't write XML data to file &{0}
+//					JOptionPane.showMessageDialog(null,
+//						Report.error(XDEF.XDEF851,name).toString());
 				}
 			}
 			if ("true".equals(exe.getAttribute("DisplayResult"))) {
 				String s;
-				if (type == 'i') { // display as INI
-					s = XonUtils.toIniString((Map<String, Object>) result);
-				} else if (type == 'j') { // display as JSON
-					s = XonUtils.toJsonString(result, true);
-				} else {// display result XML
-					s = result == null
-						? "" : KXmlUtils.nodeToString((Element) result, true);
+				if (result == null) {
+					s = "Result of process is null\n";					
+				} else {
+					s = "=== Result of process ===\n";
+					if (type == 'i') { // display as INI
+						s += XonUtils.toIniString((Map<String, Object>) result);
+					} else if (type == 'j') { // display as JSON
+						s += XonUtils.toJsonString(result, true);
+					} else {// display result XML
+						s += KXmlUtils.nodeToString((Element) result, true);
+					}
 				}
+//				if (reporter.errorWarnings()) {
+//					s += "\n=== Errors and warnings ===\n"+reporter.toString();
+//				}
 				if (!strw.toString().isEmpty()) {
-					s += s.isEmpty() ? "" : "\n\n";
-					s += "=== System.out ===\n" + strw.toString();
+					s += s.isEmpty() ? "" : "\n";
+					s += "\n=== System output ===\n" + strw.toString();
 				}
+
 				if (!s.isEmpty()) {// display result, allow editing
 					displayString("Result of processing:",
 						workDir, deleteOnExit, s, si, true);
@@ -1380,15 +1387,14 @@ public class GUIEditor extends GUIScreen {
 							+ new File(dir, "xdef.xml").getAbsolutePath()
 							+ src.substring(ndx2);
 					}
-					FUtils.xcopy(
-						workDir.listFiles(), dir, true, new String[0]);
+					FUtils.xcopy(workDir.listFiles(), dir, true, new String[0]);
 					SUtils.writeString(new File(dir, "project.xml"),
 						src, "UTF-8");
 					workDir = dir;
 				} catch (Exception ex) {
-						JOptionPane.showMessageDialog(null,//Can't write
-							Report.error(SYS.SYS036,"Can't write data to file: "
-								+ jf.getSelectedFile() + "\n" + ex));
+					JOptionPane.showMessageDialog(null,//Can't write
+						Report.error(SYS.SYS036,"Can't write data to file: "
+							+ jf.getSelectedFile() + "\n" + ex));
 				}
 			}
 		}

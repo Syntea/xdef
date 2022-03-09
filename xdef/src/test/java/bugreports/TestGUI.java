@@ -4,7 +4,7 @@ import static org.xdef.sys.STester.runTest;
 import org.xdef.util.GUIEditor;
 import test.XDTester;
 
-/**
+/** Test GUI editor.
  * @author Vaclav Trojan
  */
 public class TestGUI extends XDTester {
@@ -15,8 +15,8 @@ public class TestGUI extends XDTester {
 		String projectDir = "src/test/java/bugreports/data/project/";
 		clearTempDir();
 //		GUIEditor.main("-g", "-workDir", "temp");
-		GUIEditor.main("-p", projectDir + "json/project.xml");
-//		GUIEditor.main("-p", projectDir + "validate/project.xml");
+//		GUIEditor.main("-p", projectDir + "json/project.xml");
+		GUIEditor.main("-p", projectDir + "validate/project.xml");
 	}
 	/**
 	 * @param args the command line arguments
