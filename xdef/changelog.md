@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 41.0.6, release-date 2022-03-08
+# Version 41.0.6, release-date 2022-03-09
 * fixed bug in `org.xdef.util.GUIEditor` if X-definition is not a valid XML.
 
 # Version 41.0.5, release-date 2022-03-06

@@ -340,7 +340,7 @@ public class GUIEditor extends GUIScreen {
 			o = new File(genTemporaryFile(s,
 				workDir, "result.tmp", deleteOnExit, "UTF-8"));
 		}
-		XDSourceItem xsi = 
+		XDSourceItem xsi =
 			new GUIEditor(si).display(null, msg, o, si, editable, null);
 		Map<String, XDSourceItem> m = si.getMap();
 		if (m.size() == 1) { //delete the file result.tmp if it was not saved
@@ -932,7 +932,7 @@ public class GUIEditor extends GUIScreen {
 			if ("true".equals(exe.getAttribute("DisplayResult"))) {
 				String s;
 				if (result == null) {
-					s = "Result of process is null\n";					
+					s = "Result of process is null\n";
 				} else {
 					s = "=== Result of process ===\n";
 					if (type == 'i') { // display as INI
