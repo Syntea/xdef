@@ -883,16 +883,16 @@ public class GUIEditor extends GUIScreen {
 				if (data != null && "validate".equals(mode)) {
 					// show result
 					f = new File(new URL(data).getFile());
-					XDSourceItem xsi = data.startsWith("<") && !f.isFile()
+					XDSourceItem xsi = !f.isFile() || !f.exists()
 						? editObject(reporter, "ERROR:", data, si,
 							"Input data changed, run again?")
 						: editObject(reporter, "ERROR:", f, si, null);
-					if (xsi._saved) {
+					if (xsi._saved && xsi._url != null) {
 						if (JOptionPane.showConfirmDialog(null,
 							"Input data changed, run again?",
 							null, JOptionPane.OK_CANCEL_OPTION) == 0) {
 							e = KXmlUtils.firstElementChild(exe, "Input");
-							e.setTextContent(data);
+							e.setTextContent(xsi._url.toExternalForm());
 							i--;
 							continue;
 						}
