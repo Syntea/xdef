@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Project Show="true">
+  <Property Name="xdef.warnings" Value="true"/>
+  <Property Name="xdef.display" Value="true"/>
+  <Property Name="xdef.debug" Value="true"/>
+  <XDefinition>src/test/java/bugreports/data/project/validate/xdef*.xml</XDefinition>
+  <Execute XDName="test1" DisplayResult="true" Mode="validate" DataType="XML">
+    <Var Name="xyz">Toto je test</Var>
+    <Input Edit="true">src/test/java/bugreports/data/project/validate/data.xml</Input>
+    <SaveResult File="temp/validate.xml"/>
+  </Execute>
+  <WorkDir>temp</WorkDir>
+</Project>
