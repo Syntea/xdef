@@ -2332,6 +2332,17 @@ public class StringParser extends SReporter implements SParser {
 		return false;
 	}
 
+	/** Check if the string in argument is signed integer.
+	 * @param s the string to be checked.
+	 * @param sign prefix chars or null.
+	 * @return true if argument is (signed) integer.
+	 */
+	public static final boolean isInteger(final String s, final String sign) {
+		StringParser p = new StringParser(s);
+		return (sign == null || (p.isOneOfChars(sign) != NOCHAR || true))
+			 && p.isInteger() && p.eos();
+	}
+
 	@Override
 	/** Parse integer number (ASCII digits '0' .. '9'). Set the actual position
 	 * to the next character after the number.
@@ -2351,6 +2362,17 @@ public class StringParser extends SReporter implements SParser {
 		_ch = x < _endPos || readNextBuffer()?_source.charAt(getIndex()):NOCHAR;
 		freeBuffer();
 		return true;
+	}
+
+	/** Check if the string in argument is signed float.
+	 * @param s the string to be checked.
+	 * @param sign prefix chars or null.
+	 * @return true if argument is a (signed) float number.
+	 */
+	public static final boolean isFloat(final String s, final String sign) {
+		StringParser p = new StringParser(s);
+		return (sign == null || (p.isOneOfChars(sign) != NOCHAR || true))
+			&& p.isFloat() && p.eos();
 	}
 
 	@Override

@@ -6,6 +6,7 @@ import org.xdef.XDPool;
 import org.xdef.proc.XXData;
 import java.util.Properties;
 import org.xdef.sys.ArrayReporter;
+import org.xdef.xon.XonUtils;
 import test.XDTester;
 
 /** Tests used for development..
@@ -28,6 +29,29 @@ public class TestX extends XDTester {
 		Properties props = new Properties();
 		ArrayReporter reporter = new ArrayReporter();
 		try {
+/**/
+			xdef =
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n"+
+" <xd:xon name='a'>\n"+
+"    [ [$script=\"+\", \"int\", \"jstring()\"] ]\n"+
+" </xd:xon>\n"+
+"</xd:def>";
+			xp = XDFactory.compileXD(props, xdef); // no property
+			xd = xp.createXDDocument();
+			json =
+"[\n" +
+"  [1, \"prvni radek\"],\n" +
+"  [6, true]\n" + // melo by hlasit chybu!
+"]";
+			if (!reporter.errors()) {
+				System.out.println(XonUtils.toJsonString(
+					xd.jparse(json, reporter)));
+				fail("Error not reported");
+			} else {
+				System.out.println(reporter.printToString()); // why 2 times ???
+				reporter.clear();
+			}
+if(true)return;
 /**/
 			xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n"+

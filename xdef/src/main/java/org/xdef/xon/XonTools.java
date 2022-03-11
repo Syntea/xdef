@@ -464,6 +464,12 @@ public class XonTools {
 		String s;
 		if (x instanceof String) {
 			s = (String) x;
+			if (s.isEmpty() || "null".equals(s)
+				|| "true".equals(s) || "false".equals(s)
+				|| StringParser.isInteger(s, "-")
+				|| StringParser.isFloat(s, "-")) {
+				return '"' + s + '"';
+			}
 		} else if (x instanceof Character) {
 			s = String.valueOf((Character) x);
 		} else if (x instanceof InetAddress) {
@@ -476,10 +482,6 @@ public class XonTools {
 			return "T\"" + x + '"';
 		} else {
 			return x.toString();
-		}
-		if (s.isEmpty() || "null".equals(s)
-			|| "true".equals(s) || "false".equals(s)) {
-			return '"' + s + '"';
 		}
 		boolean addQuot = false;
 		for (int i = 0; i < s.length(); i++) {
