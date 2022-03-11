@@ -582,7 +582,6 @@ public class CompileXonXdef extends StringParser {
 		pp = null;
 		jp = null;
 		p._value = null;
-		org.xdef.impl.XPool xx;
 /*#if DEBUG*#/
 if (org.xdef.impl.XPool._debugSwitches.contains(
 		org.xdef.impl.XConstants.DEBUG_SHOW_XON_MODEL)) {
