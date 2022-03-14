@@ -193,7 +193,7 @@ public class TestXon extends XDTester {
 			json =
 "[\n" +
 "  [null, \"prvni radek\"],\n" +
-"  [6, null]\n" + 
+"  [6, null]\n" +
 "]";
 			o = xd.jparse(json, reporter);
 			assertNoErrors(reporter);

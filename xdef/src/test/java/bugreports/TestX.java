@@ -34,34 +34,7 @@ public class TestX extends XDTester {
 		Properties props = new Properties();
 		ArrayReporter reporter = new ArrayReporter();
 		try {
-/**/
 			props.setProperty("xdef-debug", "showXonModel");
-			xdef =
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n"+
-"<xd:component>%class bugreports.data.Csvxx %link a</xd:component>\n"+
-" <xd:xon name='a'>\n"+
-"    [ [$script=\"+\", \"int\", \"string()\"] ]\n"+
-" </xd:xon>\n"+
-"</xd:def>";
-			xp = XDFactory.compileXD(props, xdef); // no property
-//			xp.displayCode();
-			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
-			xd = xp.createXDDocument();
-			json =
-"[\n" +
-"  [null, \"prvni radek\"],\n" +
-"  [6, null]\n" + // melo by hlasit chybu!
-"]";
-			o = xd.jparse(json, reporter);
-			assertNoErrors(reporter);
-			reporter.clear();
-			xc = xd.jparseXComponent(json, null, reporter);
-			if (!XonUtils.xonEqual(o, x = XComponentUtil.toXon(xc))) {
-				fail(XonUtils.toXonString(o, true)
-					+ "\n*****\n" + XonUtils.toXonString(x, true));
-			}
-if(true)return;
-/**/
 			xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n"+
 " <xd:xon name='a'>\n"+
