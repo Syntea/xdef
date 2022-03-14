@@ -13,6 +13,7 @@ import org.xdef.sys.ArrayReporter;
 import static org.xdef.sys.STester.runTest;
 import org.xdef.xon.XonUtils;
 import test.XDTester;
+import static test.XDTester.genXComponent;
 
 /** Tests used for development..
  * @author Vaclav Trojan
@@ -65,23 +66,14 @@ public class TestX extends XDTester {
 "<xd:component>%class test.xdef.Xona %link a</xd:component>\n"+
 " <xd:xon name='a'>\n"+
 "[\n" +
-"  [\n" +
-"     $script= \"optional\",\n" +
-"     \"boolean();\", \n" +
-"     \"optional int();\"\n" +
-"  ]\n" +
+"  [ $script= \"optional\", \"boolean();\", \"optional int();\" ]\n" +
 "]\n" +
 " </xd:xon>\n"+
 "</xd:def>";
 			xp = XDFactory.compileXD(props, xdef); // no property
 			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
 			xd = xp.createXDDocument();
-			json = "[\n" +
-"  [\n" +
-"    true,\n" +
-"    123\n" +
-"  ]\n" +
-"]";
+			json = "[ [ true, 123 ] ]";
 			reporter.clear();
 			o = xd.jparse(json, reporter);
 			assertNoErrors(reporter);
@@ -93,8 +85,7 @@ public class TestX extends XDTester {
 				fail(printObject(o)
 					+ "\n***\n" + printObject(x));
 			}
-			json = "[\n" +
-"]";
+			json = "[\n]";
 			o = xd.jparse(json, reporter);
 			assertNoErrors(reporter);
 			reporter.clear();
@@ -143,8 +134,7 @@ public class TestX extends XDTester {
 			xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n"+
 " <xd:xon name='a'>\n"+
-"{\n" +
-"  $oneOf= \"optional;\",\n" +
+"{ $oneOf= \"optional;\",\n" +
 "  \"manager\": \"string()\",\n" +
 "  \"subordinates\":[ \"* string();\" ]\n" +
 "}\n" +
@@ -168,16 +158,12 @@ public class TestX extends XDTester {
 			reporter.clear();
 			xd.jparse(json, reporter);
 			assertNoErrors(reporter);
-/**/
 			xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n"+
 " <xd:xon name='a'>\n"+
 "[\n" +
 "  {\n" +
-"    \"A\": [$oneOf= \"occurs *\",\n" +
-"      \"string()\",\n" +
-"       [\"occurs 1..* string()\"]\n" +
-"    ]\n" +
+"    \"A\": [$oneOf= \"occurs *\", \"string()\", [\"occurs 1..* string()\"]]\n"+
 "  }\n" +
 "]\n" +
 " </xd:xon>\n"+
@@ -196,7 +182,6 @@ public class TestX extends XDTester {
 			reporter.clear();
 			xd.jparse(json, reporter);
 			assertNoErrors(reporter);
-/**/
 // Required element 'js:item' is missing; path=$; X-position=Example#test/$.['date']
 			xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n"+
