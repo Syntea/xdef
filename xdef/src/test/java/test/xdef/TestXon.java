@@ -147,7 +147,6 @@ public class TestXon extends XDTester {
 		assertNull(testx("jvalue", "[ null, true, 1, \"abc\" ]"));
 
 		assertNull(testy("? int", "{a=1}"));
-		assertNull(testy("? int", "{a=null}"));
 		assertNull(testy("? int", "{ }"));
 
 		String s, json, xon, xdef, xml;
@@ -156,6 +155,7 @@ public class TestXon extends XDTester {
 		XDPool xp;
 		XDDocument xd;
 		ArrayReporter reporter = new ArrayReporter();
+		Element el;
 		XComponent xc;
 		try {
 			xdef =
@@ -235,6 +235,7 @@ public class TestXon extends XDTester {
 "    o = \"? char()\",\n" +
 "    p = \"? char()\",\n" +
 "    q = \"? char()\",\n" +
+"    r = \"? char()\",\n" +  	/*char null */
 "    t = \"? gYear()\",\n" +
 "    u = \"? gYear()\",\n" +
 "    v = \"? gYear()\",\n" +
@@ -242,6 +243,7 @@ public class TestXon extends XDTester {
 "    \" name with space \": \"? jstring()\"\n" +
 "  },\n" +
 "  \"jnull()\",\n" +
+"  \"float()\",\n" +
 "  \"float()\",\n" +
 "  \"decimal()\",\n" +
 "  \"byte()\",\n" +
@@ -287,6 +289,7 @@ public class TestXon extends XDTester {
 "    Towns = [ # array with GPS locations of towns\n" +
 "      g(48.2, 16.37, 151, Wien),\n" +
 "      g(51.52, -0.09, 0, London),\n" +
+"      null,\n" +
 "      g(50.08, 14.42, 399, \"Prague old town\")\n" +
 "    ],\n" +
 "    j = c\"a\",                      # Character\n" +
@@ -297,6 +300,7 @@ public class TestXon extends XDTester {
 "    o = c\"\n\",                     # Character\n" +
 "    p = c\"\\n\",                    # Character\n" +
 "    q = c\" \",                      # Character\n" +
+"    r = null,                        # Character (null)\n" +
 "    t = D0001,                       # year (without zone)\n" +
 "    u = D-0001,                      # year (without zone)\n" +
 "    v = D123456789Z,                 # year zone\n" +
@@ -305,6 +309,7 @@ public class TestXon extends XDTester {
 "  },  /**** end of map ****/\n" +
 "  null,                              # null\n" +
 "  3F,                                # Float\n" +
+"  null,                              # null\n" +
 "  -3.1d,                             # BigDecimal\n" +
 "  -2B,                               # Byte\n" +
 "  1N,                                # BigInteger\n" +
@@ -340,13 +345,13 @@ public class TestXon extends XDTester {
 			list = (List) ((Map) ((List) x).get(0)).get("Towns");
 			assertEq("Wien",((GPSPosition) list.get(0)).name());
 			assertEq("London",((GPSPosition) list.get(1)).name());
-			assertEq("Prague old town",((GPSPosition) list.get(2)).name());
+			assertEq("Prague old town",((GPSPosition) list.get(3)).name());
 			assertEq(1233, Math.round(((GPSPosition) list.get(0)).distanceTo(
 				((GPSPosition) list.get(1)))/1000));
 			assertEq(252,Math.round(((GPSPosition) list.get(0)).distanceTo(
-				((GPSPosition) list.get(2)))/1000));
+				((GPSPosition) list.get(3)))/1000));
 			assertEq(1030,Math.round(((GPSPosition) list.get(1)).distanceTo(
-				((GPSPosition) list.get(2)))/1000));
+				((GPSPosition) list.get(3)))/1000));
 			assertNoErrors(reporter);
 			json = XonUtils.toXonString(x, true);
 			XonUtils.parseXON(json);
@@ -359,8 +364,12 @@ public class TestXon extends XDTester {
 			reporter.clear();
 			o = y = XComponentUtil.toXon(xc);
 			assertTrue(XonUtils.xonEqual(x,y));
-			x = XonUtils.xmlToXon(xc.toXml());
-			assertTrue(XonUtils.xonEqual(x, XonUtils.xonToJson(y)));
+			x = XonUtils.xmlToXon(el = xc.toXml());
+			if (!XonUtils.xonEqual(x, XonUtils.xonToJson(y))) {
+				fail(KXmlUtils.nodeToString(el, true)
+					+ "\n***\n" + XonUtils.toXonString(y, true)
+					+ "\n***\n" + XonUtils.toXonString(x, true));
+			}
 			xd = xp.createXDDocument();
 			xd.setXONContext(xon);
 			xc = xd.jcreateXComponent("A", null, reporter);

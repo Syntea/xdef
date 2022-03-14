@@ -34,13 +34,11 @@ public final class DefJNull extends XDValueAbstract {
 	 * @return the associated object or null.
 	 */
 	public Object getObject() {return _value;}
-
 	@Override
 	/** Get type of value.
 	 * @return The id of item type.
 	 */
 	public short getItemId() {return XD_NULL;}
-
 	@Override
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
@@ -50,7 +48,7 @@ public final class DefJNull extends XDValueAbstract {
 	/** Get value as String.
 	 * @return The string from value.
 	 */
-	public String toString() {return isNull() ? "": "null";}
+	public String toString() {return "null";}
 	@Override
 	/** Get string value of this object.
 	 * @return string value of this object.
@@ -94,5 +92,5 @@ public final class DefJNull extends XDValueAbstract {
 	 * @return <i>true</i> if the object is <i>null</i> otherwise returns
 	 * <i>false</i>.
 	 */
-	public boolean isNull() {return _value != null;}
+	public boolean isNull() {return true;}
 }

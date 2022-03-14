@@ -107,9 +107,11 @@ class XonFromXml extends XonUtils implements XonNames {
 		} else if (X_MAP.equals(localName)) {
 			return createMapW3C(elem);
 		} else if (X_ITEM.equals(elem.getLocalName())) {
-			return (elem.hasAttribute(X_VALUEATTR))
-				? XonTools.xmlToJValue(elem.getAttribute(X_VALUEATTR))
-				: XonTools.xmlToJValue(((Element) elem).getTextContent());
+			if (elem.hasAttribute(X_VALUEATTR)) {
+				return XonTools.xmlToJValue(elem.getAttribute(X_VALUEATTR));
+			}
+			String s = elem.getTextContent();
+			return s == null || s.isEmpty() ? null : XonTools.xmlToJValue(s);
 		} else if (J_BOOLEAN.equals(elem.getLocalName())) {
 			return ("true".equals(elem.getTextContent().trim()));
 		} else if (J_NULL.equals(elem.getLocalName())) {
