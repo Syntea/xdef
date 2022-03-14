@@ -82,6 +82,7 @@ public class TestXon extends XDTester {
 			return null;
 		} catch (Exception ex) {return printThrowable(ex);}
 	}
+
 	private String testy(final String type, final String xon) {
 		XComponent xc;
 		XDPool xp;
@@ -146,6 +147,7 @@ public class TestXon extends XDTester {
 		assertNull(testx("jvalue", "[ null, true, 1, \"abc\" ]"));
 
 		assertNull(testy("? int", "{a=1}"));
+		assertNull(testy("? int", "{a=null}"));
 		assertNull(testy("? int", "{ }"));
 
 		String s, json, xon, xdef, xml;
@@ -187,17 +189,18 @@ public class TestXon extends XDTester {
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n"+
 "<xd:component>%class test.xdef.Csvxx %link a</xd:component>\n"+
 " <xd:xon name='a'>\n"+
-"    [ [$script=\"+\", \"int\", \"string()\"] ]\n"+
+"    [ [$script=\"+\", \"int\", \"int\", \"string()\", \"boolean()\"] ]\n"+
 " </xd:xon>\n"+
 "</xd:def>";
 			xp = compile(xdef); // no property
-//			xp.displayCode();
 			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
 			xd = xp.createXDDocument();
 			json =
 "[\n" +
-"  [null, \"prvni radek\"],\n" +
-"  [6, null]\n" +
+"  [1, 2, \"a\", true],\n" +
+"  [null, 1, \"a\t\n\\\"b\", false],\n" +
+"  [6, null, null, true],\n" +
+"  [null, null, null, null]\n" +
 "]";
 			o = xd.jparse(json, reporter);
 			assertNoErrors(reporter);
@@ -238,6 +241,7 @@ public class TestXon extends XDTester {
 "    w = \"? gYear()\",\n" +
 "    \" name with space \": \"? jstring()\"\n" +
 "  },\n" +
+"  \"jnull()\",\n" +
 "  \"float()\",\n" +
 "  \"decimal()\",\n" +
 "  \"byte()\",\n" +
@@ -299,7 +303,8 @@ public class TestXon extends XDTester {
 "    w = D-0001-01:00,                # year zone\n" +
 "    \" name with space \": \"x\\ty\" # name with space is quoted!\n" +
 "  },  /**** end of map ****/\n" +
-"  -3F,                               # Float\n" +
+"  null,                              # null\n" +
+"  3F,                                # Float\n" +
 "  -3.1d,                             # BigDecimal\n" +
 "  -2B,                               # Byte\n" +
 "  1N,                                # BigInteger\n" +
