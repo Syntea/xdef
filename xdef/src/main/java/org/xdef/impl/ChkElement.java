@@ -1706,7 +1706,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			} else if (XonNames.X_VALUEATTR.equals(xdata.getName())) {
 				if (value instanceof XDValue) {
 					XDValue x = (XDValue) value;
-					if (x.isNull()) {
+					if (x.isNull() || x.getItemId() == XD_NULL) {
 						_xonValue = null;
 					} else {
 						Object obj = x.getObject();
@@ -1720,6 +1720,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 								_xonValue = x.intValue();
 							} else if ("float".equals(pname)) {
 								_xonValue = x.floatValue();
+							} else if ("decimal".equals(pname)
+								|| "dec".equals(pname)) {
+								_xonValue = x.decimalValue();
 							} else {
 								_xonValue = obj;
 							}
@@ -3556,7 +3559,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	/** Get model of the processed data object.
 	 * @return model of the processed data object.
 	 */
-	public final XMData getXMData() {return (XMData) getXMNode();}
+	public final XMData getXMData() {return _xdata;}
 
 	@Override
 	/** Get actual model.

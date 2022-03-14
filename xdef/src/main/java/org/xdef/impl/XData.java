@@ -40,7 +40,7 @@ public class XData extends XCodeDescriptor
 	implements XMData, XDValueID, CodeTable {
 	/** Default parser. */
 	private static final XDParseCDATA DEFAULT_PARSER = new XDParseCDATA();
-	/** Type name of value of data. */
+	/** Type ID of value of data. */
 	short _valueType;
 	/** Type name of value of data. */
 	private String _valueTypeName;

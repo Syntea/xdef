@@ -5,7 +5,10 @@ import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.xdef.proc.XXData;
 import java.util.Properties;
+import org.xdef.component.XComponent;
+import org.xdef.component.XComponentUtil;
 import org.xdef.sys.ArrayReporter;
+import static org.xdef.sys.STester.runTest;
 import org.xdef.xon.XonUtils;
 import test.XDTester;
 
@@ -23,33 +26,39 @@ public class TestX extends XDTester {
 	public void test() {
 		System.out.println("X-definition version: " + XDFactory.getXDVersion());
 		XDPool xp;
+		XComponent xc;
 		XDDocument xd;
 		String json;
+		Object o, x;
 		String xdef;
 		Properties props = new Properties();
 		ArrayReporter reporter = new ArrayReporter();
 		try {
 /**/
+			props.setProperty("xdef-debug", "showXonModel");
 			xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n"+
+"<xd:component>%class bugreports.data.Csvxx %link a</xd:component>\n"+
 " <xd:xon name='a'>\n"+
-"    [ [$script=\"+\", \"int\", \"jstring()\"] ]\n"+
+"    [ [$script=\"+\", \"int\", \"string()\"] ]\n"+
 " </xd:xon>\n"+
 "</xd:def>";
 			xp = XDFactory.compileXD(props, xdef); // no property
+//			xp.displayCode();
+			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
 			xd = xp.createXDDocument();
 			json =
 "[\n" +
-"  [1, \"prvni radek\"],\n" +
-"  [6, true]\n" + // melo by hlasit chybu!
+"  [null, \"prvni radek\"],\n" +
+"  [6, null]\n" + // melo by hlasit chybu!
 "]";
-			if (!reporter.errors()) {
-				System.out.println(XonUtils.toJsonString(
-					xd.jparse(json, reporter)));
-				fail("Error not reported");
-			} else {
-				System.out.println(reporter.printToString()); // why 2 times ???
-				reporter.clear();
+			o = xd.jparse(json, reporter);
+			assertNoErrors(reporter);
+			reporter.clear();
+			xc = xd.jparseXComponent(json, null, reporter);
+			if (!XonUtils.xonEqual(o, x = XComponentUtil.toXon(xc))) {
+				fail(XonUtils.toXonString(o, true)
+					+ "\n*****\n" + XonUtils.toXonString(x, true));
 			}
 if(true)return;
 /**/

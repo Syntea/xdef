@@ -59,7 +59,7 @@ public class XDParseJString extends XDParseAn {
 			}
 			return false;
 		} else {//not quoted string -> check JSON simple values
-			if (((p.isToken("false") || p.isToken("true") || p.isToken("null")
+			if (((p.isOneOfTokens("false","true","null") >= 0
 				|| ((p.isChar('-') || true) && (p.isFloat() || p.isInteger())))
 				&& p.eos()) || p.eos()) {
 				return false;

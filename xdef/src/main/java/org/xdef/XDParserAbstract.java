@@ -8,12 +8,14 @@ import static org.xdef.XDValueID.XD_PARSERESULT;
 import static org.xdef.XDValueID.XD_STRING;
 import org.xdef.impl.code.CodeTable;
 import org.xdef.impl.code.DefContainer;
+import org.xdef.impl.code.DefJNull;
 import org.xdef.impl.code.DefParseResult;
 import org.xdef.impl.code.DefString;
 import org.xdef.proc.XXNode;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.SException;
 import org.xdef.sys.SRuntimeException;
+import org.xdef.xon.XonTools;
 
 /** Abstract parser of string values.
  * @author Vaclav Trojan
@@ -45,7 +47,13 @@ public abstract class XDParserAbstract extends XDValueAbstract
 	 */
 	public XDParseResult check(XXNode xnode, String source) {
 		XDParseResult p = new DefParseResult(source, (XDValue) null);
-		check(xnode, p);
+		if (xnode != null && xnode.getXMElement().getXonMode() != 0
+			&& "null".equals(p.getSourceBuffer())) { // XON mode
+			p.setParsedValue(new DefJNull(XonTools.JNULL));
+			p.setEos();
+		} else {
+			check(xnode, p);
+		}
 		return p;
 	}
 
@@ -55,13 +63,19 @@ public abstract class XDParserAbstract extends XDValueAbstract
 	 * @param xnode actual XXNode object or null.
 	 */
 	public void check(final XXNode xnode, final XDParseResult p) {
-		parseObject(xnode, p);
-		if (p.matches()) {
-			if (!p.eos()) {
-				//After the item '&{0}' follows an illegal character&{1}{: }
-				p.errorWithString(XDEF.XDEF804, parserName());
-			} else {
-				finalCheck(xnode, p);
+		if (xnode != null && xnode.getXMElement().getXonMode() != 0
+			&& "null".equals(p.getSourceBuffer())) { // XON mode
+			p.setParsedValue(new DefJNull(XonTools.JNULL));
+			p.setEos();
+		} else {
+			parseObject(xnode, p);
+			if (p.matches()) {
+				if (!p.eos()) {
+					//After the item '&{0}' follows an illegal character&{1}{: }
+					p.errorWithString(XDEF.XDEF804, parserName());
+				} else {
+					finalCheck(xnode, p);
+				}
 			}
 		}
 	}

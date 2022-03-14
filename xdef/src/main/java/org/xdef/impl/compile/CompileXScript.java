@@ -629,7 +629,7 @@ final class CompileXScript extends CompileStatement {
 	final void compileElementScript(final XElement xel) {
 		nextSymbol();
 		_options = false;
-		if (_sym == TEMPLATE_SYM) { // tremplate script
+		if (_sym == TEMPLATE_SYM) { // template script
 			nextSymbol();
 			xel._template = true;
 			if (_sym == SEMICOLON_SYM) {

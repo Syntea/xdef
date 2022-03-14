@@ -65,7 +65,7 @@ public class XPreCompiler implements PreCompiler {
 	/** Array of component sources. */
 	private final ArrayList<PNode> _listComponent = new ArrayList<PNode>();
 	/** Code generator. */
-	private final CompileCode _codeGenerator;
+	private final CompileCode _g;
 
 	/** Display mode */
 	private final byte _displayMode;
@@ -100,16 +100,15 @@ public class XPreCompiler implements PreCompiler {
 		DEFINED_PREFIXES.put(XMLConstants.XML_NS_PREFIX, NS_XML_INDEX);
 		//"xmlns",
 		DEFINED_PREFIXES.put(XMLConstants.XMLNS_ATTRIBUTE, NS_XMLNS_INDEX);
-		_codeGenerator = new CompileCode(extClasses,
+		_g = new CompileCode(extClasses,
 			2, chkWarnings, debugMode, ignoreUnresolvedExternals);
-		_codeGenerator._namespaceURIs.add("."); //dummy namespace
-		_codeGenerator._namespaceURIs.add(XMLConstants.XML_NS_URI);
-		_codeGenerator._namespaceURIs.add(XMLConstants.XMLNS_ATTRIBUTE_NS_URI);
-		_codeGenerator._namespaceURIs.add(XDConstants.XLINK_NS_URI);
-		_codeGenerator._namespaceURIs.add(XDConstants.XINCLUDE_NS_URI);
-		_codeGenerator._namespaceURIs.add( // XML schema
-			XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI);
-		_codeGenerator._namespaceURIs.add(XDConstants.XON_NS_URI_W); //XON/JSON
+		_g._namespaceURIs.add("."); //dummy namespace
+		_g._namespaceURIs.add(XMLConstants.XML_NS_URI);
+		_g._namespaceURIs.add(XMLConstants.XMLNS_ATTRIBUTE_NS_URI);
+		_g._namespaceURIs.add(XDConstants.XLINK_NS_URI);
+		_g._namespaceURIs.add(XDConstants.XINCLUDE_NS_URI);
+		_g._namespaceURIs.add(XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI);
+		_g._namespaceURIs.add(XDConstants.XON_NS_URI_W); //XON/JSON
 		_macrosProcessed = false;
 		_reporter = reporter == null ? new ArrayReporter() : reporter;
 		_xmlReader = new PreReaderXML(this);
@@ -305,9 +304,7 @@ public class XPreCompiler implements PreCompiler {
 	 * @param i position
 	 * @return uri on this position or null.
 	 */
-	public String getNSURI(final int i) {
-		return _codeGenerator._namespaceURIs.get(i);
-	}
+	public String getNSURI(final int i) {return _g._namespaceURIs.get(i);}
 
 	@Override
 	/** Get namespace URI index of given uri.
@@ -315,7 +312,7 @@ public class XPreCompiler implements PreCompiler {
 	 * @return index of uri from argument.
 	 */
 	public int getNSURIIndex(final String uri) {
-		return _codeGenerator._namespaceURIs.indexOf(uri);
+		return _g._namespaceURIs.indexOf(uri);
 	}
 
 	@Override
@@ -324,12 +321,12 @@ public class XPreCompiler implements PreCompiler {
 	 * @return index of uri.
 	 */
 	public int setNSURI(final String uri) {
-		int i = _codeGenerator._namespaceURIs.indexOf(uri);
+		int i = _g._namespaceURIs.indexOf(uri);
 		if (i >= 0) {
 			return i;
 		}
-		_codeGenerator._namespaceURIs.add(uri);
-		return _codeGenerator._namespaceURIs.size() - 1;
+		_g._namespaceURIs.add(uri);
+		return _g._namespaceURIs.size() - 1;
 	}
 
 	@Override
@@ -339,7 +336,7 @@ public class XPreCompiler implements PreCompiler {
 	 * @return original URI or null.
 	 */
 	public String setURIOnIndex(final int i, final String uri) {
-		return _codeGenerator._namespaceURIs.set(i, uri);
+		return _g._namespaceURIs.set(i, uri);
 	}
 
 	@Override
@@ -625,7 +622,7 @@ public class XPreCompiler implements PreCompiler {
 	/** Get code generator.
 	 * @return the code generator.
 	 */
-	public CompileCode getCodeGenerator() {return _codeGenerator;}
+	public CompileCode getCodeGenerator() {return _g;}
 
 	@Override
 	/** Get sources of X-definitions.
@@ -691,7 +688,7 @@ public class XPreCompiler implements PreCompiler {
 	/** Get switch if the parser will check warnings as errors.
 	 * @return true if the parser checks warnings as errors.
 	 */
-	final public boolean isChkWarnings() {return _codeGenerator._chkWarnings;}
+	final public boolean isChkWarnings() {return _g._chkWarnings;}
 
 	@Override
 	/** Put fatal error message.

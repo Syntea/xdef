@@ -179,6 +179,30 @@ public class TestXon extends XDTester {
 "  ]\n" +
 "}");
 			assertTrue(XonUtils.xonEqual(o, XComponentUtil.toXon(xc)));
+			xdef =
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n"+
+"<xd:component>%class test.xdef.Csvxx %link a</xd:component>\n"+
+" <xd:xon name='a'>\n"+
+"    [ [$script=\"+\", \"int\", \"string()\"] ]\n"+
+" </xd:xon>\n"+
+"</xd:def>";
+			xp = compile(xdef); // no property
+//			xp.displayCode();
+			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
+			xd = xp.createXDDocument();
+			json =
+"[\n" +
+"  [null, \"prvni radek\"],\n" +
+"  [6, null]\n" + 
+"]";
+			o = xd.jparse(json, reporter);
+			assertNoErrors(reporter);
+			reporter.clear();
+			xc = xd.jparseXComponent(json, null, reporter);
+			if (!XonUtils.xonEqual(o, x = XComponentUtil.toXon(xc))) {
+				fail(XonUtils.toXonString(o, true)
+					+ "\n*****\n" + XonUtils.toXonString(x, true));
+			}
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xdef =
