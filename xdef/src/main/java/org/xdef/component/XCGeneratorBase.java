@@ -346,9 +346,11 @@ class XCGeneratorBase {
 		} else if ("jvalue".equals(parserName)) {
 			return "parseResult.getParsedValue().getObject()";
 		} else if ("jnumber".equals(parserName)) {
-			return "(Number) parseResult.getParsedValue().getObject()";
+			return "(Number)(" + result + "getObject())";
 		} else if ("jstring".equals(parserName)) {
-			return "(String) parseResult.getParsedValue().getObject()";
+			return "(String) (" + result + "getObject())";
+		} else if ("jvalue".equals(parserName)) {
+			return result + "getObject()";
 		}
 		switch (xdata.getParserType()) {
 			case XDValueID.XD_BOOLEAN:

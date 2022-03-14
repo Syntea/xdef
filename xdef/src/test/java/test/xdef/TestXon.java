@@ -115,7 +115,6 @@ public class TestXon extends XDTester {
 	@Override
 	public void test() {
 		assertNull(testx("int", "[null, 1 ]"));
-		assertNull(testx("jnull", "[ null ]"));
 		assertNull(testx("byte", "[null, 1, -3 ]"));
 		assertNull(testx("short", "[null, 1 ]"));
 		assertNull(testx("int", "[null, 1 ]"));
@@ -140,6 +139,11 @@ public class TestXon extends XDTester {
 		assertNull(testx("currency", "[null, C(USD), C(CZK)]\n"));
 		assertNull(testx("telephone",
 			"[null, T\"123456\",T\"+420 234 567 890\"]\n"));
+		assertNull(testx("jnull", "[ null, null ]"));
+		assertNull(testx("jboolean", "[ null, true ]"));
+		assertNull(testx("jnumber", "[ null, 1 ]"));
+		assertNull(testx("jstring", "[ null, \"abc\" ]"));
+		assertNull(testx("jvalue", "[ null, true, 1, \"abc\" ]"));
 
 		assertNull(testy("? int", "{a=1}"));
 		assertNull(testy("? int", "{ }"));
