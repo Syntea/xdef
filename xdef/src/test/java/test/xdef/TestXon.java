@@ -162,8 +162,6 @@ public class TestXon extends XDTester {
 "<xd:declaration>type gam xdatetime('yyyyMMddHHmmssSS');</xd:declaration>\n"+
 "  <y:X a = '?date()' t='gam();' >? int() <y:Y xd:script='*'/>dec()</y:X>\n"+
 "<xd:component>%class test.xdef.MGam %link y:X</xd:component>\n"+
-//?????????
-//"<xd:component>%class test.xdef.Mgam %link y:X</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
