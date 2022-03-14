@@ -96,7 +96,6 @@ public class TestX extends XDTester {
 				fail(printObject(o)
 					+ "\n***\n" + printObject(x));
 			}
-/**/
 			xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n"+
 " <xd:xon name='a'>\n"+
@@ -130,7 +129,6 @@ public class TestX extends XDTester {
 			reporter.clear();
 			xd.jparse(json, reporter);
 			assertNoErrors(reporter);
-/**/
 			xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n"+
 " <xd:xon name='a'>\n"+
@@ -215,7 +213,6 @@ public class TestX extends XDTester {
 "}";
 			xd.jparse(json, reporter);
 			assertNoErrors(reporter);
-/**/
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xdef =
@@ -229,8 +226,7 @@ public class TestX extends XDTester {
 "</xd:def>";
 			xp = XDFactory.compileXD(props, xdef); // no property
 			xd = xp.createXDDocument();
-			json =
-"  {\"A\": \"a\", \"B\": \"b\"}";
+			json = "{ \"A\": \"a\", \"B\": \"b\" }";
 			reporter.clear();
 			xd.jparse(json, reporter);
 			assertNoErrors(reporter);
