@@ -1,5 +1,7 @@
 package bugreports;
 
+import java.util.List;
+import java.util.Map;
 import org.xdef.XDDocument;
 import org.xdef.XDFactory;
 import org.xdef.XDPool;
@@ -21,6 +23,29 @@ public class TestX extends XDTester {
 
 	public static boolean x(XXData x) {return true;}
 
+	/** Display object. */
+	private static String printObject(final Object o) {
+		if (o == null) {
+			return "null\n";
+		} else if (o instanceof List) {
+			List x = (List) o;
+			String s = "[\n";
+			for (int i = 0; i < x.size(); i++) {
+				s += "  index " + i + ": " + printObject(x.get(i));
+			}
+			return s + "]\n";
+		} else if (o instanceof Map) {
+			String s = "{\n";
+			for (Object x: ((Map) o).entrySet()) {
+				s += "\n  " + ((Map.Entry) x).getKey() + ": "
+				  + printObject(((Map.Entry) x).getValue());
+			}
+			return s + "}\n";
+		} else {
+			return o + "; " + o.getClass() + "\n";
+		}
+	}
+
 	@Override
 	/** Run test and display error information. */
 	public void test() {
@@ -37,6 +62,7 @@ public class TestX extends XDTester {
 			props.setProperty("xdef-debug", "showXonModel");
 			xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n"+
+"<xd:component>%class test.xdef.Xona %link a</xd:component>\n"+
 " <xd:xon name='a'>\n"+
 "[\n" +
 "  [\n" +
@@ -48,6 +74,7 @@ public class TestX extends XDTester {
 " </xd:xon>\n"+
 "</xd:def>";
 			xp = XDFactory.compileXD(props, xdef); // no property
+			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
 			xd = xp.createXDDocument();
 			json = "[\n" +
 "  [\n" +
@@ -56,13 +83,28 @@ public class TestX extends XDTester {
 "  ]\n" +
 "]";
 			reporter.clear();
-			xd.jparse(json, reporter);
+			o = xd.jparse(json, reporter);
 			assertNoErrors(reporter);
+			reporter.clear();
+			xc = xd.jparseXComponent(json, null, reporter);
+			assertNoErrors(reporter);
+			reporter.clear();
+			if (!XonUtils.xonEqual(o, (x=XComponentUtil.toXon(xc)))) {
+				fail(printObject(o)
+					+ "\n***\n" + printObject(x));
+			}
 			json = "[\n" +
 "]";
-			reporter.clear();
-			xd.jparse(json, reporter);
+			o = xd.jparse(json, reporter);
 			assertNoErrors(reporter);
+			reporter.clear();
+			xc = xd.jparseXComponent(json, null, reporter);
+			assertNoErrors(reporter);
+			reporter.clear();
+			if (!XonUtils.xonEqual(o, (x=XComponentUtil.toXon(xc)))) {
+				fail(printObject(o)
+					+ "\n***\n" + printObject(x));
+			}
 /**/
 			xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n"+

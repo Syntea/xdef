@@ -316,28 +316,29 @@ class XCGeneratorBase {
 			return "org.xdef.component.XComponentUtil.jlistToString("
 				+ "parseResult)";
 		}
-		String result = "parseResult.getParsedValue().isNull() ? null : parseResult.";
+		String result = "parseResult.getParsedValue().isNull()?null:"
+			+ "parseResult.getParsedValue().";
 //		String result = "parseResult.";
 		if ("byte".equals(parserName)) {
-			return result + "getParsedValue().byteValue()";
+			return result + "byteValue()";
 		} else if ("short".equals(parserName)) {
-			return result + "getParsedValue().shortValue()";
+			return result + "shortValue()";
 		} else if ("int".equals(parserName)
 			|| "unsignedByte".equals(parserName)
 			|| "unsignedShort".equals(parserName)) {
-			return result + "getParsedValue().intValue()";
+			return result + "intValue()";
 		} else if ("long".equals(parserName)||"unsignedInt".equals(parserName)){
-			return result + "getParsedValue().longValue()";
+			return result + "longValue()";
 		} else if ("integer".equals(parserName)
 			|| "negativeInteger".equals(parserName)
 			|| "nonNegativeInteger".equals(parserName)
 			|| "PositiveInteger".equals(parserName)
 			|| "nonPositiveiveInteger".equals(parserName)) {
-			return result + "getParsedValue().integerValue()";
+			return result + "integerValue()";
 		} else if ("float".equals(parserName)) {
-			return result + "getParsedValue().floatValue()";
+			return result + "floatValue()";
 		} else if ("double".equals(parserName)) {
-			return result + "getParsedValue().doubleValue()";
+			return result + "doubleValue()";
 		} else if ("decimal".equals(parserName)) {
 			return "parseResult.getParsedValue().decimalValue()";
 		} else if ("jnull".equals(parserName)) {
@@ -351,56 +352,50 @@ class XCGeneratorBase {
 		}
 		switch (xdata.getParserType()) {
 			case XDValueID.XD_BOOLEAN:
-				return "parseResult.getParsedValue().booleanValue()";
+				return result + "booleanValue()";
 			case XDValueID.XD_CHAR:
-				return "parseResult.getParsedValue().charValue()";
+				return result + "charValue()";
 			case XDValueID.XD_BYTE:
-				return "parseResult.getParsedValue().byteValue()";
+				return result + "byteValue()";
 			case XDValueID.XD_SHORT:
-				return "parseResult.getParsedValue().shortValue()";
+				return result + "shortValue()";
 			case XDValueID.XD_INT:
-				return "parseResult.getParsedValue().intValue()";
+				return result + "intValue()";
 			case XDValueID.XD_LONG:
-				return "parseResult.getParsedValue().longValue()";
+				return result + "longValue()";
 			case XDValueID.XD_FLOAT:
-				return "parseResult.getParsedValue().floatValue()";
+				return result + "floatValue()";
 			case XDValueID.XD_DOUBLE:
-				return "parseResult.getParsedValue().doubleValue()";
+				return result + "doubleValue()";
 			case XDValueID.XD_DECIMAL:
-				return "parseResult.getParsedValue().decimalValue()";
+				return result + "decimalValue()";
 			case XDValueID.XD_DURATION:
-				return "parseResult.getParsedValue().durationValue()";
+				return result + "durationValue()";
 			case XDValueID.XD_DATETIME:
-				return "parseResult.getParsedValue().datetimeValue()";
+				return result + "datetimeValue()";
 			case XDValueID.XD_GPSPOSITION:
-				return "(org.xdef.sys.GPSPosition) parseResult."
-					+ "getParsedValue().getObject()";
+				return "(org.xdef.sys.GPSPosition)(" + result + "getObject())";
 			case XDValueID.XD_PRICE:
-				return "(org.xdef.sys.Price) parseResult."
-					+ "getParsedValue().getObject()";
+				return "(org.xdef.sys.Price)(" + result + "getObject())";
 			case XDValueID.XD_ANYURI:
-				return "(java.net.URI)parseResult.getParsedValue().getObject()";
+				return "(java.net.URI)(" + result + "getObject())";
 			case XDValueID.XD_EMAIL:
-				return "(org.xdef.XDEmailAddr)parseResult."
-					+ "getParsedValue().getObject()";
+				return "(org.xdef.XDEmailAddr)(" + result + "getObject())";
 			case XDValueID.XD_IPADDR:
-				return "(java.net.InetAddress)parseResult."
-					+ "getParsedValue().getObject()";
+				return "(java.net.InetAddress)(" + result + "getObject())";
 			case XDValueID.XD_CURRENCY:
-				return "(java.util.Currency)parseResult."
-					+ "getParsedValue().getObject()";
+				return "(java.util.Currency)(" + result + "getObject())";
 			case XDValueID.XD_BYTES:
-				return "parseResult.getParsedValue().getBytes()";
+				return result + "getBytes()";
 			case XDValueID.XD_TELEPHONE:
-				return "(org.xdef.XDTelephone)parseResult."
-					+ "getParsedValue().getObject()";
+				return "(org.xdef.XDTelephone)(" + result + "getObject())";
 			case XDValueID.XD_PARSER:
 //			case XDValueID.XD_CONTAINER:
 				return "parseResult.getParsedString()";
 			case XDValueID.XD_ANY:
 				return "parseResult.getParsedValue().getObject()";
 		}
-		result += "getParsedValue().toString()";
+		result += "toString()";
 		String enumType = checkEnumType(xdata);
 		return enumType != null ? enumType+".toEnum("+ result+")" : result;
 	}

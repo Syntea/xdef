@@ -2,6 +2,7 @@ package bugreports;
 
 import java.io.StringReader;
 import java.util.List;
+import java.util.Map;
 import org.w3c.dom.Element;
 import org.xdef.XDDocument;
 import org.xdef.XDPool;
@@ -21,17 +22,28 @@ import static test.XDTester.genXComponent;
 public class CsvTest extends XDTester {
 	public CsvTest() {super();}
 
-	/** Display CSV object. */
-	private static String printCSV(final Object o) {
-		List x = (List) o;
-		String s = "";
-		for (int i = 0; i < x.size(); i++) {
-			s += "Row[" + i + "]\n";
-			for (Object y: (List) x.get(i)) {
-				s += (y != null ? y+"; "+y.getClass() : "*null*") + "\n";
-			}
+	/** Display object. */
+	private static String printObject(final Object o) {
+		if (o == null) {
+			return "null\n";
 		}
-		return s;
+		if (o instanceof List) {
+			List x = (List) o;
+			String s = "[ ";
+			for (int i = 0; i < x.size(); i++) {
+				s += "index " + i + ": " + printObject(x.get(i));
+			}
+			return s + "]\n";
+		} else if (o instanceof Map) {
+			String s = "{ ";
+			for (Object x: ((Map) o).entrySet()) {
+				s += "\n" + ((Map.Entry) x).getKey() + ": ";
+				s += printObject(((Map.Entry) x).getValue());
+			}
+			return s + "}\n";
+		} else {
+			return o + "; " + o.getClass() + "\n";
+		}
 	}
 
 	@Override
@@ -89,14 +101,14 @@ public class CsvTest extends XDTester {
 			assertNoErrors(reporter);
 			reporter.clear();
 			if (!XonUtils.xonEqual(o, x)) {
-				fail("*** A *\n" + printCSV(x) + "\n*** B *\n" + printCSV(o));
+				fail("*** A *\n" + printObject(x) + "\n*** B *\n" + printObject(o));
 			}
 			xc = xd.jparseXComponent(o, null, reporter);
 			assertNoErrors(reporter);
 			reporter.clear();
 			x = XComponentUtil.toXon(xc);
 			if (!XonUtils.xonEqual(x, o)) {
-				fail("*** A *\n" + printCSV(x) + "\n*** B *\n" + printCSV(o));
+				fail("*** A *\n" + printObject(x) + "\n*** B *\n" + printObject(o));
 			}
 			s =
 "[\n"+
@@ -112,13 +124,13 @@ public class CsvTest extends XDTester {
 			assertNoErrors(reporter);
 			reporter.clear();
 			if (!XonUtils.xonEqual(o, x)) {
-				fail( "*** A *\n" + printCSV(x) + "\n*** B *\n" + printCSV(o));
+				fail( "*** A *\n" + printObject(x) + "\n*** B *\n" + printObject(o));
 			}
 			el = CsvReader.csvToXml((List) o);
 			x = CsvReader.xmlToCsv(el);
 			if (!XonUtils.xonEqual(o, x)) {
 				fail(KXmlUtils.nodeToString(el, true) + "\n"
-					+ "*** A *\n" + printCSV(x) + "\n*** B *\n" + printCSV(o));
+					+ "*** A *\n" + printObject(x) + "\n*** B *\n" + printObject(o));
 			}
 		} catch (Exception ex) {fail(ex);}
 		clearTempDir(); // delete temporary files.

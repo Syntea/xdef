@@ -114,30 +114,32 @@ public class TestXon extends XDTester {
 
 	@Override
 	public void test() {
-		assertNull(testx("int", "[ ]"));
+		assertNull(testx("int", "[null, 1 ]"));
 		assertNull(testx("jnull", "[ null ]"));
-		assertNull(testx("byte", "[ 1, -3 ]"));
-		assertNull(testx("short", "[ 1 ]"));
-		assertNull(testx("int", "[ 1 ]"));
-		assertNull(testx("long", "[ 1 ]"));
-		assertNull(testx("integer", "[ 0N, -3N ]"));
-		assertNull(testx("float", "[ 1.0 ]"));
-		assertNull(testx("double", "[ 1.0 ]"));
-		assertNull(testx("decimal", "[ 0d, 1d, -1d, 1.5d, 3.33e-5d ]"));
+		assertNull(testx("byte", "[null, 1, -3 ]"));
+		assertNull(testx("short", "[null, 1 ]"));
+		assertNull(testx("int", "[null, 1 ]"));
+		assertNull(testx("long", "[null, 1 ]"));
+		assertNull(testx("integer", "[null, 0N, -3N ]"));
+		assertNull(testx("float", "[null, 1.0 ]"));
+		assertNull(testx("double", "[null, 1.0 ]"));
+		assertNull(testx("decimal", "[null, 0d, 1d, -1d, 1.5d, 3.33e-5d ]"));
 		assertNull(testx("date",
-			"[ D2021-01-12, D1999-01-05+01:01, D1998-12-21Z ]"));
-		assertNull(testx("gYear", "[ D2021+01:00, D1999, D-0012Z ]"));
+			"[null, D2021-01-12, D1999-01-05+01:01, D1998-12-21Z ]"));
+		assertNull(testx("gYear", "[null,  D2021+01:00, D1999, D-0012Z ]"));
 		assertNull(testx("gps",
-			"[ g(20.21,19.99),g(20.21, 19.99,0.1),g(51.52,-0.09,0,London) ]"));
-		assertNull(testx("price", "[ p(20.21 CZK), p(19.99 USD) ]"));
+			"[null, g(20.21,19.99),g(20.21, 19.99,0.1),g(51.52,-0.09,0,xxx) ]"));
+		assertNull(testx("price", "[null, p(20.21 CZK), p(19.99 USD) ]"));
 		assertNull(testx("char",
-			"[ c\"a\", c\"'\", c\"\\\"\", c\"\\u0007\", c\"\\\\\" ]"));
-		assertNull(testx("anyURI", "[ u\"http://a.b\" ]"));
-		assertNull(testx("emailAddr","[ e\"tro@volny.cz\",e\"a b<x@y.zz>\" ]"));
-		assertNull(testx("file", "[ \"temp/a.txt\" ]"));
-		assertNull(testx("ipAddr", "[/::FFFF:129.144.52.38,/0.0.0]\n"));
-		assertNull(testx("currency", "[C(USD), C(CZK)]\n"));
-		assertNull(testx("telephone", "[T\"123456\",T\"+420 234 567 890\"]\n"));
+			"[null, c\"a\", c\"'\", c\"\\\"\", c\"\\u0007\", c\"\\\\\" ]"));
+		assertNull(testx("anyURI", "[null, u\"http://a.b\" ]"));
+		assertNull(testx("emailAddr",
+			"[null, e\"tro@volny.cz\",e\"a b<x@y.zz>\" ]"));
+		assertNull(testx("file", "[null, \"temp/a.txt\" ]"));
+		assertNull(testx("ipAddr", "[null, /::FFFF:129.144.52.38,/0.0.0]\n"));
+		assertNull(testx("currency", "[null, C(USD), C(CZK)]\n"));
+		assertNull(testx("telephone",
+			"[null, T\"123456\",T\"+420 234 567 890\"]\n"));
 
 		assertNull(testy("? int", "{a=1}"));
 		assertNull(testy("? int", "{ }"));
