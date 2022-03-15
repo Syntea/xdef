@@ -7,13 +7,9 @@ import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.xdef.proc.XXData;
 import java.util.Properties;
-import org.xdef.component.XComponent;
-import org.xdef.component.XComponentUtil;
 import org.xdef.sys.ArrayReporter;
 import static org.xdef.sys.STester.runTest;
-import org.xdef.xon.XonUtils;
 import test.XDTester;
-import static test.XDTester.genXComponent;
 
 /** Tests used for development..
  * @author Vaclav Trojan
@@ -52,50 +48,13 @@ public class TestX extends XDTester {
 	public void test() {
 		System.out.println("X-definition version: " + XDFactory.getXDVersion());
 		XDPool xp;
-		XComponent xc;
 		XDDocument xd;
 		String json;
-		Object o, x;
 		String xdef;
 		Properties props = new Properties();
 		ArrayReporter reporter = new ArrayReporter();
 		try {
 			props.setProperty("xdef-debug", "showXonModel");
-			xdef =
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n"+
-"<xd:component>%class test.xdef.Xona %link a</xd:component>\n"+
-" <xd:xon name='a'>\n"+
-"[\n" +
-"  [ $script= \"optional\", \"boolean();\", \"optional int();\" ]\n" +
-"]\n" +
-" </xd:xon>\n"+
-"</xd:def>";
-			xp = XDFactory.compileXD(props, xdef); // no property
-			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
-			xd = xp.createXDDocument();
-			json = "[ [ true, 123 ] ]";
-			reporter.clear();
-			o = xd.jparse(json, reporter);
-			assertNoErrors(reporter);
-			reporter.clear();
-			xc = xd.jparseXComponent(json, null, reporter);
-			assertNoErrors(reporter);
-			reporter.clear();
-			if (!XonUtils.xonEqual(o, (x=XComponentUtil.toXon(xc)))) {
-				fail(printObject(o)
-					+ "\n***\n" + printObject(x));
-			}
-			json = "[\n]";
-			o = xd.jparse(json, reporter);
-			assertNoErrors(reporter);
-			reporter.clear();
-			xc = xd.jparseXComponent(json, null, reporter);
-			assertNoErrors(reporter);
-			reporter.clear();
-			if (!XonUtils.xonEqual(o, (x=XComponentUtil.toXon(xc)))) {
-				fail(printObject(o)
-					+ "\n***\n" + printObject(x));
-			}
 			xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n"+
 " <xd:xon name='a'>\n"+
