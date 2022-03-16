@@ -22,7 +22,7 @@ import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
 
-/** Parser of XON/JSON source.
+/** Methods for JSON/XON data.
  * @author Vaclav Trojan
  */
 public final class XonReader extends StringParser implements XonParsers {

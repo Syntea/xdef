@@ -14,8 +14,8 @@ import org.w3c.dom.Node;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.xml.KXmlUtils;
 
-/** XON/JSON utilities (parseJSON source to XON/JSON instance, compare XON/JSON
- * objects, create string with XON/JSON source from an XON/JSON object.
+/** Utilities for XON/JSON/Properties/INI/CSV data (parse source, comparing
+ * XON objects, conversion data to XML and from XML, conversion to String.
  * @author Vaclav Trojan
  */
 public class XonUtils {

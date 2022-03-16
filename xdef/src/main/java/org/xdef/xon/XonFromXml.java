@@ -16,7 +16,7 @@ import static org.xdef.xon.XonNames.X_KEYATTR;
 import static org.xdef.xon.XonNames.X_MAP;
 import static org.xdef.xon.XonNames.X_VALUEATTR;
 
-/** Test X-definition transformation XML -> XON/JSON.
+/** Converter XML -> XON/JSON.
  * @author Vaclav Trojan
  */
 class XonFromXml extends XonUtils implements XonNames {

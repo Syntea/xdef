@@ -8,7 +8,7 @@ import java.util.Stack;
 import org.xdef.sys.SBuffer;
 import org.xdef.sys.SPosition;
 
-/** Implementation of XonParser for creating XON/JSON objects from source.
+/** Implementation of XonParser for creating XON objects from source.
  * @author Vaclav Trojan
  */
 public class XonObjParser implements XonParser {

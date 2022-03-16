@@ -1,6 +1,6 @@
 package org.xdef.xon;
 
-/** Names used in conversion s of XON/JSON to/from XML.
+/** Names used in conversions of XON/JSON to XML and from XML.
  * @author Vaclav Trojan
  */
 public interface XonNames {

@@ -3,7 +3,7 @@ package org.xdef.xon;
 import org.xdef.sys.SBuffer;
 import org.xdef.sys.SPosition;
 
-/** Interface for parsers of XON/JSON data.
+/** Interface for parsers of XON/JSON/Properties/INI/CSV data.
  * @author Vaclav Trojan
  */
 public interface XonParser {

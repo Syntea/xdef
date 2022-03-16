@@ -17,7 +17,7 @@ import org.xdef.sys.SDatetime;
 import org.xdef.sys.SDuration;
 import org.xdef.sys.SRuntimeException;
 
-/** Provides comparing of XON/JSON objects
+/** Provides comparing of XON objects
  * @author Vaclav Trojan
  */
 class XonCompare {

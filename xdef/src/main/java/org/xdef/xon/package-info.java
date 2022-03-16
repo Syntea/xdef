@@ -1,10 +1,10 @@
 /**
- * <p>
- * Provides tools for using XON/JSON in X-definitions.
- * </p>
- * <p>{@link org.xdef.xon.XonUtils}</p>
- * <p>{@link org.xdef.xon.XonToXml}</p>
- * <p>{@link org.xdef.xon.XonFromXml}</p>
- * <p>{@link org.xdef.xon.XonTools}</p>
+ * Provides tools for using XON/JSON/Properties/CSV data in X-definitions.
+ * <UL>
+ *   <li>{@link org.xdef.xon.XonUtils}</li>
+ *   <li>{@link org.xdef.xon.XonToXml}</li>
+ *   <li>{@link org.xdef.xon.XonFromXml}</li>
+ *   <li>{@link org.xdef.xon.XonTools}</li>
+ * </UL>
  */
 package org.xdef.xon;

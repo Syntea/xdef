@@ -3,7 +3,7 @@ package org.xdef.xon;
 import org.xdef.sys.ReportWriter;
 import org.xdef.sys.SPosition;
 
-/** Interface for XON/JSON parsers.
+/** Interface for all XON parsers.
  * @author Vaclav Trojan
  */
 public interface XonParsers {

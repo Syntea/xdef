@@ -16,7 +16,7 @@ import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
 import org.xdef.xml.KXmlUtils;
 
-/** This class contains methods for CSV data.
+/** Methods for CSV data.
  * @author Vaclav Trojan
  */
 public class CsvReader extends StringParser implements XonParsers {

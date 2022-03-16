@@ -33,7 +33,7 @@ import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
 
-/** Methods used in XON/JSON parsing, processing and conversions.
+/** Methods used in XON/JSON/Properties/INI/CSV data processing.
  * @author Vaclav Trojan
  */
 public class XonTools {

@@ -8,8 +8,8 @@ import org.xdef.msg.JSON;
 import org.xdef.sys.SRuntimeException;
 
 /** Tools for YAML.
- * Note for the full function it must be in the classpath available
- * the package org.yaml.snakeyaml.
+ * Note that it requires the the package org.yaml.snakeyaml be available
+ * in classpath.
  * @author Vaclav Trojan
  */
 public final class XonYaml {
@@ -21,10 +21,10 @@ public final class XonYaml {
 
 	/** Prepare YAML object, load  methods and dump method.
 	 * @return instance of org.yaml.snakeyaml.Yaml object.
-	 * @throws SRuntimeException if the library org.yaml.snakeyaml
+	 * @throws SRuntimeException if the package org.yaml.snakeyaml
 	 * is not available.
 	 */
-	public static final Object prepareYAML() throws SRuntimeException {
+	private static void prepareYAML() throws SRuntimeException {
 		if (_yaml == null) {
 			try {
 				Class<?> _yamlClass = Class.forName("org.yaml.snakeyaml.Yaml");
@@ -41,10 +41,10 @@ public final class XonYaml {
 				throw new SRuntimeException(JSON.JSON101);
 			}
 		}
-		return _yaml;
 	}
 
 	public static final String toYamlString(final Object o) {
+		prepareYAML();
 		try {
 			return (String) _yamlDump.invoke(_yaml, XonUtils.xonToJson(o));
 		} catch (SRuntimeException ex) {

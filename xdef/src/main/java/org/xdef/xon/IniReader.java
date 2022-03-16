@@ -17,7 +17,7 @@ import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
 import org.xdef.xml.KXmlUtils;
 
-/** Read properties and files.
+/** Methods for INI/Properties data.
  * @author Vaclav Trojan
  */
 public class IniReader extends StringParser implements XonParsers {

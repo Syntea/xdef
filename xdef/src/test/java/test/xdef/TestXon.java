@@ -6,7 +6,6 @@ import java.util.Map;
 import org.w3c.dom.Element;
 import org.xdef.XDDocument;
 import org.xdef.XDEmailAddr;
-//import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.xdef.XDTelephone;
 import org.xdef.component.XComponent;
@@ -14,41 +13,19 @@ import org.xdef.component.XComponentUtil;
 import org.xdef.xon.XonUtils;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.GPSPosition;
+import org.xdef.sys.SRuntimeException;
 import static org.xdef.sys.STester.printThrowable;
 import static org.xdef.sys.STester.runTest;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.xon.CsvReader;
 import test.XDTester;
+import static test.XDTester._xdNS;
 import static test.XDTester.genXComponent;
 
-/** Test XON data. */
+/** Test XON/JSON/INI/Properties/CSV data. */
 public class TestXon extends XDTester {
 
 	public TestXon() {super();}
-
-	/** Display object. */
-	private static String printObject(final Object o) {
-		if (o == null) {
-			return "null\n";
-		}
-		if (o instanceof List) {
-			List x = (List) o;
-			String s = "[ ";
-			for (int i = 0; i < x.size(); i++) {
-				s += "index " + i + ": " + printObject(x.get(i));
-			}
-			return s + "]\n";
-		} else if (o instanceof Map) {
-			String s = "{ ";
-			for (Object x: ((Map) o).entrySet()) {
-				s += "\n" + ((Map.Entry) x).getKey() + ": ";
-				s += printObject(((Map.Entry) x).getValue());
-			}
-			return s + "}\n";
-		} else {
-			return o + "; " + o.getClass() + "\n";
-		}
-	}
 
 	private String testx(final String type, final String xon) {
 		Object o, x, y;
@@ -422,8 +399,8 @@ public class TestXon extends XDTester {
 			assertNoErrors(reporter);
 			reporter.clear();
 			if (!XonUtils.xonEqual(o, (x=XComponentUtil.toXon(xc)))) {
-				fail(printObject(o)
-					+ "\n***\n" + printObject(x));
+				fail(XonUtils.toXonString(o)
+					+ "\n***\n" + XonUtils.toXonString(x));
 			}
 			json = "[\n]";
 			o = xd.jparse(json, reporter);
@@ -433,8 +410,8 @@ public class TestXon extends XDTester {
 			assertNoErrors(reporter);
 			reporter.clear();
 			if (!XonUtils.xonEqual(o, (x=XComponentUtil.toXon(xc)))) {
-				fail(printObject(o)
-					+ "\n***\n" + printObject(x));
+				fail(XonUtils.toXonString(o)
+					+ "\n***\n" + XonUtils.toXonString(x));
 			}
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='X'>\n"+
@@ -482,6 +459,153 @@ public class TestXon extends XDTester {
 			assertNull(list.get(1));
 			assertNull(list.get(2));
 		} catch (Exception ex) {fail(ex);}
+		try { // test YAML
+				xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root='test' name='A'>\n"+
+"  <xd:xon name=\"test\">\n" +
+"    { \"cities\": [\n" +
+"        \"date();\",\n" +
+"        { $script = \"occurs 1..*;\",\n" +
+"          \"from\": [\n" +
+"            \"string();\",\n" +
+"            { $script = \"occurs 1..*; \",\n" +
+"              \"to\": \"jstring();\",\n" +
+"              \"distance\": \"int();\"\n" +
+"            }\n" +
+"    	  ]\n" +
+"        }\n" +
+"      ]\n" +
+"    }"+
+"  </xd:xon>\n" +
+"</xd:def>";
+				xp = compile(xdef);
+				xd = xp.createXDDocument("A");
+				String yaml =
+"cities:\n" +
+"- '2020-02-22'\n" +
+"- from:\n" +
+"  - Brussels\n" +
+"  - {to: London, distance: 322}\n" +
+"  - {to: Paris, distance: 265}\n" +
+"- from:\n" +
+"  - London\n" +
+"  - {to: Brussels, distance: 322}\n" +
+"  - {to: Paris, distance: 344}\n";
+				x = xd.yparse(yaml, reporter);
+				assertNoErrors(reporter);
+				reporter.clear();
+				assertTrue(XonUtils.xonEqual(x,
+					xd.yparse(XonUtils.toYamlString(x), reporter)));
+				assertNoErrors(reporter);
+				reporter.clear();
+		} catch (SRuntimeException ex) {
+			if ("JSON101".equals(ex.getMsgID())) {
+				setResultInfo("YAML tests skipped: package "
+					+ "org.yaml.snakeyaml not available");
+			} else {
+				fail(ex);
+			}
+		} catch (Exception ex) {fail(ex);}
+		try { // test Windows INI
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root='test' name='A'>\n"+
+"  <xd:ini xd:name = \"test\">\n" +
+"    name = string();\n" +
+"    date = date();\n" +
+"    email = ? emailAddr();\n" +
+"    [Server]\n" +
+"    IPAddr = ? ipAddr();\n" +
+"  </xd:ini>\n" +
+"</xd:def>";
+			xp = compile(xdef);
+			xd = xp.createXDDocument("A");
+			String ini =
+"date = 2021-02-03\n"+
+"name = Jan Novak\n"+
+"[Server]";
+			Map<String, Object> xini = xd.iparse(ini, reporter);
+			assertNoErrors(reporter);
+			reporter.clear();
+			assertTrue(XonUtils.xonEqual(XonUtils.parseINI(ini),
+				XonUtils.parseINI(XonUtils.toIniString(xini))));
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' name=\"A\" root=\"test\">\n" +
+"  <xd:ini name=\"test\">\n" +
+"#this is INI file comment\n" +
+"address=string(); options noTrimAttr\n" +
+"dns = ipAddr()\n"  +
+"name = string()\n"+
+"  parser.factor.1=string()\n" +
+"servertool.up=string()\n"+
+"  </xd:ini>\n"  +
+"</xd:def>";
+			xd = compile(xdef).createXDDocument("A");
+			ini =
+"#this is INI file comment\n" +
+"address=dhcp\1\n" +
+"dns = 192.168.1.1\n"  +
+"name = John E\\\n"+
+" . \\\n"  +
+" Smith\n"  +
+"  parser.factor.1=')' \\u00E9 esperado.\n" +
+"servertool.up=\\u670D\\u52A1\\u5668\\u5DF2\\u5728\\u8FD0\\u884C\\u3002";
+			xini = xd.iparse(ini, reporter);
+			assertTrue(XonUtils.xonEqual(XonUtils.parseINI(ini),
+				XonUtils.parseINI(XonUtils.toIniString(xini))));
+			assertNoErrors(reporter);
+			reporter.clear();
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' name=\"A\" root=\"test\">\n" +
+"  <xd:ini name=\"test\">\n" +
+"proxy type=int(0,9)\n" +
+"hostaddr= ? ipAddr(); options acceptEmptyAttributes\n" + //
+"port= ? int(0, 9999);\n" +
+"[system] $script = optional\n" +
+"autolaunch=int()\n" +
+"[ x.y ]\n" +
+"[selfupdate]\n" +
+"version=ipAddr()\n" +
+"  </xd:ini>\n"  +
+"</xd:def>";
+			xd = compile(xdef).createXDDocument("A");
+			ini =
+"proxy type=0\n" +
+"hostaddr=\n" +
+"hostaddr= 123.45.6.7\n" +
+"port= 0\n" +
+"[system]\n" +
+"autolaunch=0\n" +
+"[ x.y ]\n" +
+"[selfupdate]\n" +
+"version=11.0.0.55";
+			xini = xd.iparse(ini, reporter);
+			assertTrue(XonUtils.xonEqual(XonUtils.parseINI(ini),
+				XonUtils.parseINI(XonUtils.toIniString(xini))));
+			assertNoErrors(reporter);
+			reporter.clear();
+			ini =
+"proxy type=0\n" +
+"hostaddr=\n" +
+"[system]\n" +
+"autolaunch=0\n" +
+"[ x.y ]\n" +
+"[selfupdate]\n" +
+"version=11.0.0.55";
+			xini = xd.iparse(ini, reporter);
+			assertTrue(XonUtils.xonEqual(XonUtils.parseINI(ini),
+				XonUtils.parseINI(XonUtils.toIniString(xini))));
+			assertNoErrors(reporter);
+			reporter.clear();
+			ini =
+"proxy type=0\n" +
+"[ x.y ]\n" +
+"[selfupdate]\n" +
+"version=11.0.0.55";
+			xini = xd.iparse(ini, reporter);
+			assertTrue(XonUtils.xonEqual(XonUtils.parseINI(ini),
+				XonUtils.parseINI(XonUtils.toIniString(xini))));
+			assertNoErrors(reporter);
+		} catch (Exception ex) {fail(ex);}
 		try { //test CSV data
 			// with head
 			xdef =
@@ -520,14 +644,16 @@ public class TestXon extends XDTester {
 			assertNoErrors(reporter);
 			reporter.clear();
 			if (!XonUtils.xonEqual(o, x)) {
-				fail("*** A *\n" + printObject(x) + "\n*** B *\n" + printObject(o));
+				fail("*** A *\n" + XonUtils.toXonString(x)
+					+ "\n*** B *\n" + XonUtils.toXonString(o));
 			}
 			xc = xd.jparseXComponent(o, null, reporter);
 			assertNoErrors(reporter);
 			reporter.clear();
 			x = XComponentUtil.toXon(xc);
 			if (!XonUtils.xonEqual(x, o)) {
-				fail("*** A *\n" + printObject(x) + "\n*** B *\n" + printObject(o));
+				fail("*** A *\n" + XonUtils.toXonString(x)
+					+ "\n*** B *\n" + XonUtils.toXonString(o));
 			}
 			s =
 "[\n"+
@@ -543,15 +669,15 @@ public class TestXon extends XDTester {
 			assertNoErrors(reporter);
 			reporter.clear();
 			if (!XonUtils.xonEqual(o, x)) {
-				fail( "*** A *\n" + printObject(x)
-					+ "\n*** B *\n" + printObject(o));
+				fail( "*** A *\n" + XonUtils.toXonString(x)
+					+ "\n*** B *\n" + XonUtils.toXonString(o));
 			}
 			el = CsvReader.csvToXml((List) o);
 			x = CsvReader.xmlToCsv(el);
 			if (!XonUtils.xonEqual(o, x)) {
 				fail(KXmlUtils.nodeToString(el, true) + "\n"
-					+ "*** A *\n" + printObject(x) 
-					+ "\n*** B *\n" + printObject(o));
+					+ "*** A *\n" + XonUtils.toXonString(x)
+					+ "\n*** B *\n" + XonUtils.toXonString(o));
 			}
 			// no head;
 			xdef =
@@ -586,14 +712,16 @@ public class TestXon extends XDTester {
 			assertNoErrors(reporter);
 			reporter.clear();
 			if (!XonUtils.xonEqual(o, x)) {
-				fail("*** A *\n" + printObject(x) + "\n*** B *\n" + printObject(o));
+				fail("*** A *\n" + XonUtils.toXonString(x)
+					+ "\n*** B *\n" + XonUtils.toXonString(o));
 			}
 			xc = xd.jparseXComponent(o, null, reporter);
 			assertNoErrors(reporter);
 			reporter.clear();
 			x = XComponentUtil.toXon(xc);
 			if (!XonUtils.xonEqual(x, o)) {
-				fail("*** A *\n" + printObject(x) + "\n*** B *\n" + printObject(o));
+				fail("*** A *\n" + XonUtils.toXonString(x)
+					+ "\n*** B *\n" + XonUtils.toXonString(o));
 			}
 			s =
 "[\n"+
@@ -607,15 +735,15 @@ public class TestXon extends XDTester {
 			assertNoErrors(reporter);
 			reporter.clear();
 			if (!XonUtils.xonEqual(o, x)) {
-				fail( "*** A *\n" + printObject(x)
-					+ "\n*** B *\n" + printObject(o));
+				fail( "*** A *\n" + XonUtils.toXonString(x)
+					+ "\n*** B *\n" + XonUtils.toXonString(o));
 			}
 			el = CsvReader.csvToXml((List) o);
 			x = CsvReader.xmlToCsv(el);
 			if (!XonUtils.xonEqual(o, x)) {
 				fail(KXmlUtils.nodeToString(el, true) + "\n"
-					+ "*** A *\n" + printObject(x) 
-					+ "\n*** B *\n" + printObject(o));
+					+ "*** A *\n" + XonUtils.toXonString(x)
+					+ "\n*** B *\n" + XonUtils.toXonString(o));
 			}
 		} catch (Exception ex) {fail(ex);}
 
