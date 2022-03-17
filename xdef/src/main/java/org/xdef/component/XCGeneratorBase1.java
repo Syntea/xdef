@@ -36,12 +36,9 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 		if (xe.getName().endsWith("$any") || "*".equals(xe.getName())) {
 			toXml +=
 "\t\tif (doc==null) {"+LN+
-"\t\t\treturn org.xdef.xml.KXmlUtils.parseXml(XD_Any)"+LN+
-"\t\t\t\t.getDocumentElement();"+LN+
+"\t\t\treturn XD_Any;"+LN+
 "\t\t} else {"+LN+
-"\t\t\treturn (org.w3c.dom.Element)"+LN+
-"\t\t\t\tdoc.adoptNode(org.xdef.xml.KXmlUtils.parseXml(XD_Any)"+LN+
-"\t\t\t\t\t.getDocumentElement());"+LN+
+"\t\t\treturn (org.w3c.dom.Element) doc.adoptNode(XD_Any);"+LN+
 "\t\t}"+LN+
 "\t}"+LN;
 		} else if (creators.length() == 0 && genNodeList.length() == 0) {
@@ -323,7 +320,7 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 "\tprivate String XD_Model=\"" + xe.getXDPosition() + "\";"+LN+
 ("$any".equals(xe.getName()) || "*".equals(xe.getName()) ?
 (_genJavadoc ? "\t/** Content of xd:any.*/"+LN : "") +
-"\tprivate String XD_Any;"+LN : "");
+"\tprivate org.w3c.dom.Element XD_Any;"+LN : "");
 		result +=
 "\t@Override"+LN+
 (_genJavadoc ? "\t/** Set value of text node."+LN+
@@ -524,7 +521,8 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 "\tpublic void xSetAny(org.w3c.dom.Element el) {";
 		if ("$any".equals(xe.getName()) || "*".equals(xe.getName())) {
 			result += LN+
-"\t\tXD_Any = org.xdef.xml.KXmlUtils.nodeToString(el);"+LN+
+"\t\tXD_Any = (org.w3c.dom.Element)"+LN+
+"\t\t\torg.xdef.xml.KXmlUtils.newDocument().adoptNode(el);"+LN+
 "\t}"+LN;
 		} else {
 			result += "}"+LN;

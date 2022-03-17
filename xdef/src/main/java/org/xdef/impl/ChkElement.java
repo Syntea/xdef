@@ -2941,15 +2941,18 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			}
 		}
 		if (_xComponent != null) {
-			if (_xComponent.xGetModelPosition().indexOf("/$any")>0
+			if (_xComponent.xGetModelPosition().indexOf("/$any") > 0
 				|| _xComponent.xGetModelPosition().endsWith("#*")) {
-				_xComponent.xSetAny(_element);
+				if (!(_forget || _xElement._forget == 'T')) { // not forget
+					_xComponent.xSetAny(_element);
+				}
 			}
 			if (_xComponent.xGetParent() != null
 				&& _xComponent != getParent().getXComponent()) {
-				_xComponent.xGetParent().xAddXChild(_xComponent);
+				if (!(_forget || _xElement._forget == 'T')) { // not forget
+					_xComponent.xGetParent().xAddXChild(_xComponent);
+				}
 			}
-			_xComponent = null;
 		}
 		if (!getXDDocument().isCreateMode()
 			&& (_forget || _xElement._forget == 'T' || _xComponent != null)) {
@@ -2959,6 +2962,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			_xElement = null;
 			_element = null;
 		}
+		_xComponent = null;
 		if (_variables != null) {
 			for(int i = 0; i < _variables.length; i++) {
 				XDValue x = _variables[i];

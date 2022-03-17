@@ -1,5 +1,6 @@
 package bugreports;
 
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xdef.XDConstants;
 import org.xdef.XDDocument;
@@ -10,10 +11,15 @@ import org.xdef.XDPool;
 import org.xdef.XDValue;
 import org.xdef.component.XComponent;
 import org.xdef.model.XMData;
+import org.xdef.proc.XXNode;
 import org.xdef.xon.XonUtils;
 import org.xdef.sys.ArrayReporter;
+import static org.xdef.sys.STester.runTest;
 import org.xdef.xml.KXmlUtils;
 import test.XDTester;
+import static test.XDTester._xdNS;
+import static test.XDTester._xdOfxd;
+import static test.XDTester.genXComponent;
 
 /** Tests.
  * @author Vaclav Trojan
@@ -50,6 +56,10 @@ public class MyTest extends XDTester {
 		return XonUtils.xmlToXon(xc.toXml());
 	}
 
+	public static void xxx(XXNode xn) {
+		System.out.println(xn.getXComponent());
+	}
+
 	@Override
 	/** Run test and display error information. */
 	public void test() {
@@ -78,37 +88,10 @@ public class MyTest extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<xd:declaration>\n"+
-" final EmailAddr x=new EmailAddr('=?UTF-8?Q?Pavel B=C3=BDk?= &lt;p@s&gt;');\n"+
-" BigInteger y = -0i9999999999999999999999999999999999999999999999999999999;\n"+
-" BigInteger y1 = 0i9999999999999999999999999999999999999999999999999999999;\n"+
-" Decimal z = -0d9999999999999999999999999999999999999999999999999999999.99;\n"+
-" Decimal z1 = 0d9999999999999999999999999999999999999999999999999999999.99;\n"+
+"  external method void bugreports.MyTest.xxx(XXNode);\n"+
 "</xd:declaration>\n"+
-"<a email='emailAddr(); onTrue {\n"+
-"              EmailAddr e = (EmailAddr) getParsedValue();\n"+
-"              outln(getEmailUserName(e));\n"+
-"              outln(getEmailLocalPart(e));\n"+
-"              outln(getEmailDomain(e));\n"+
-"              outln(getEmailAddr(e));\n"+
-"              outln(getEmailUserName(x));\n"+
-"              outln(getEmailAddr(x));\n"+
-"              outln(\"y: \" + y);\n"+
-"              outln(\"y1: \" + y1);\n"+
-"              outln(\"z: \" + z);\n"+
-"              outln(\"z1: \" + z1);\n"+
-"            }' />\n"+
-"</xd:def>";
-			xp = compile(xdef);
-			xml = "<a email='(T. tr) a@b'/>";
-			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
-		} catch (Exception ex) {fail(ex);}
-if(true)return;
-		try {
-			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<xd:xon name='a'>\n"+
-"  [\"gps();\", \"gps();\"]\n"+
+"  [ $script=\"finally xxx();\", \"gps();\", \"gps();\"]\n"+
 "</xd:xon>\n"+
 "<xd:component>\n"+
 "  %class bugreports.MyTesta %link a;\n"+
@@ -123,7 +106,6 @@ if(true)return;
 			System.out.println(XonUtils.toXonString(xd.getXon(), true));
 			xd = xp.createXDDocument("");
 			xc = xd.jparseXComponent(json, null, reporter);
-			System.out.println(KXmlUtils.nodeToString(xc.toXml(), true));
 		} catch (Exception ex) {fail(ex);}
 if(true)return;
 		try {
