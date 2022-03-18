@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.Random;
 import java.util.SimpleTimeZone;
 import java.util.TimeZone;
+import static org.xdef.sys.STester.runTest;
 
 /** Test SUtils.
  * @author Vaclav Trojan
@@ -136,7 +137,12 @@ public class TestSUtils extends STester {
 			}
 			s1 = p.getParsedSDatetime().formatDate(
 				"{L(es,ES,Traditional_WIN)}MMM");
-			assertTrue("may".equals(s1) || "may.".equals(s1), s1);
+			if (SUtils.JAVA_RUNTIME_VERSION_ID <= 108
+				|| SUtils.JAVA_RUNTIME_VERSION_ID >= 1600) {
+				assertEq("may", s1);
+			} else {
+				assertEq("may.", s1);
+			}
 			if (SUtils.JAVA_RUNTIME_VERSION_ID <= 107) {
 				s = "Po, 2004 V. 31 235943+01:00";
 			} else if (SUtils.JAVA_RUNTIME_VERSION_ID <= 108) {
