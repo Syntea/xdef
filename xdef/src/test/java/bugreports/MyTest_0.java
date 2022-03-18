@@ -238,6 +238,8 @@ public class MyTest_0 extends XDTester {
 //System.out.println(d);
 //System.out.println(Double.parseDouble("-Infinity"));
 //System.out.println("==================");
+
+
 			xdef =
 "<X:def xmlns:X='http://www.xdef.org/xdef/4.1' name='Example' root='root'\n>"+
 "  <X:declaration scope='local'>\n" +

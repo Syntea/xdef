@@ -110,7 +110,7 @@ public final class DefNull extends XDValueAbstract {
 	public double doubleValue() {return 0;}
 
 	@Override
-	public BigDecimal decimalValue() {return new BigDecimal(0);}
+	public BigDecimal decimalValue() {return null;}
 
 	@Override
 	public Node getXMLNode() {return null;}

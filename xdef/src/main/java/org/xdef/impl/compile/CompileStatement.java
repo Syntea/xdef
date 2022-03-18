@@ -1943,7 +1943,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 //		if (nextSymbol() == COLON_SYM && !isFinal) { // ':'
 //			// label
 //			Object o =
-//				_g._progLabels.put(name, new Integer(_g._lastCodeIndex + 1));
+//				_g._progLabels.put(name, Integer.parseInt(_g._lastCodeIndex+1));
 //			if (o != null) {
 //				if (o instanceof ArrayList) {
 //					ArrayList refs = (ArrayList)o;

@@ -410,11 +410,7 @@ public final class XExtUtils {
 		return new BigDecimal(a.toString());
 	}
 	public final static BigDecimal decimalValue(final String a) {
-		try {
-			return new BigDecimal(a);
-		} catch (NumberFormatException ex) {
-			return new BigDecimal(Double.NaN);
-		}
+		return new BigDecimal(a);
 	}
 	public final static BigDecimal decimalValue(final long a) {
 		return new BigDecimal(a);

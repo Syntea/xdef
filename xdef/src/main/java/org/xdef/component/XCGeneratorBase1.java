@@ -38,7 +38,7 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 "\t\tif (doc==null) {"+LN+
 "\t\t\treturn XD_Any;"+LN+
 "\t\t} else {"+LN+
-"\t\t\treturn (org.w3c.dom.Element) doc.adoptNode(XD_Any);"+LN+
+"\t\t\treturn (org.w3c.dom.Element) doc.importNode(XD_Any,true);"+LN+
 "\t\t}"+LN+
 "\t}"+LN;
 		} else if (creators.length() == 0 && genNodeList.length() == 0) {
@@ -522,7 +522,7 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 		if ("$any".equals(xe.getName()) || "*".equals(xe.getName())) {
 			result += LN+
 "\t\tXD_Any = (org.w3c.dom.Element)"+LN+
-"\t\t\torg.xdef.xml.KXmlUtils.newDocument().adoptNode(el);"+LN+
+"\t\t\torg.xdef.xml.KXmlUtils.newDocument().importNode(el,true);"+LN+
 "\t}"+LN;
 		} else {
 			result += "}"+LN;

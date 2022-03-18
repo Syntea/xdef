@@ -83,10 +83,10 @@ public class DefTelephone extends XDValueAbstract implements XDTelephone  {
 		for (int i = 1; i < _value.length(); i++) {
 			char ch;
 			if ((ch = _value.charAt(i)) < '0' || ch > '9') {
-				return (i == 1) ? -1 : new Integer(_value.substring(1, i));
+				return (i == 1) ? -1 : Integer.parseInt(_value.substring(1, i));
 			}
 		}
-		return (_value.length() > 6) ? -1 : new Integer(_value.substring(1));
+		return (_value.length()>6) ? -1 : Integer.parseInt(_value.substring(1));
 	}
 
 	@Override
@@ -113,7 +113,7 @@ public class DefTelephone extends XDValueAbstract implements XDTelephone  {
 				s += ch;
 			}
 		}
-		return s.isEmpty() ? -1 : new Integer(s);
+		return s.isEmpty() ? -1 : Integer.parseInt(s);
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
