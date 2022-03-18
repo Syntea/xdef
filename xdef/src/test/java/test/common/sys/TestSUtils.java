@@ -136,11 +136,7 @@ public class TestSUtils extends STester {
 			}
 			s1 = p.getParsedSDatetime().formatDate(
 				"{L(es,ES,Traditional_WIN)}MMM");
-			if (SUtils.JAVA_RUNTIME_VERSION_ID <= 108) {
-				assertEq("may", s1);
-			} else {
-				assertEq("may.", s1);
-			}
+			assertTrue("may".equals(s1) || "may.".equals(s1), s1);
 			if (SUtils.JAVA_RUNTIME_VERSION_ID <= 107) {
 				s = "Po, 2004 V. 31 235943+01:00";
 			} else if (SUtils.JAVA_RUNTIME_VERSION_ID <= 108) {
