@@ -2961,6 +2961,10 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			_chkChildNodes = null;
 			_xElement = null;
 			_element = null;
+			_xonArray = null;
+			_xonKey = null;
+			_xonMap = null;
+			_xonValue = null;
 		}
 		_xComponent = null;
 		if (_variables != null) {
