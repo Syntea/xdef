@@ -2694,16 +2694,19 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			}
 		}
 		if (_parent._parent != null && _xElement._xon > 0) {//not root; gen XON
-			ChkElement chkEl = (ChkElement) _parent;
-			Object value = XonNames.X_ITEM.equals(_xElement.getLocalName())
-				? _xonValue : _xonMap != null ? _xonMap : _xonArray;
-			if (chkEl._xonMap != null) {
-				chkEl._xonMap.put(_xonKey, value);
-			} else if (chkEl._xonArray != null) {
-				chkEl._xonArray.add(value);
-			} else {
-				//Internal error&{0}{: }
-				throw new SRuntimeException(SYS.SYS066, "neither Map nor List");
+			if (!_forget && _xElement._forget != 'T') {			
+				ChkElement chkEl = (ChkElement) _parent;
+				Object value = XonNames.X_ITEM.equals(_xElement.getLocalName())
+					? _xonValue : _xonMap != null ? _xonMap : _xonArray;
+				if (chkEl._xonMap != null) {
+					chkEl._xonMap.put(_xonKey, value);
+				} else if (chkEl._xonArray != null) {
+					chkEl._xonArray.add(value);
+				} else {
+					//Internal error&{0}{: }
+					throw new SRuntimeException(SYS.SYS066,
+						"neither Map nor List");
+				}
 			}
 		}
 		if (_element != null) {
