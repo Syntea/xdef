@@ -279,8 +279,10 @@ final class ChkXONParser implements XParser, XonParser {
 					ka.getName());
 				att.setValue(ka.getValue());
 				_chkEl.newAttribute(att);
+				parsedElem.remove(ka); // processed, remove from attr list
 			}
 		}
+		// process not processed attributes
 		for (int i = 0, max = parsedElem.getLength(); i < max; i++) {
 			KParsedAttr ka = parsedElem.getAttr(i);
 			if (ka.getValue() != null) {
