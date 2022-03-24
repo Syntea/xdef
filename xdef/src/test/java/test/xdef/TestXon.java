@@ -1,11 +1,13 @@
 package test.xdef;
 
 import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.List;
 import java.util.Map;
 import org.w3c.dom.Element;
 import org.xdef.XDDocument;
 import org.xdef.XDEmailAddr;
+import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.xdef.XDTelephone;
 import org.xdef.component.XComponent;
@@ -160,6 +162,7 @@ public class TestXon extends XDTester {
 		ArrayReporter reporter = new ArrayReporter();
 		Element el;
 		XComponent xc;
+		StringWriter strw;		
 		try {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' name='M' root='y:X'\n"+
@@ -745,6 +748,59 @@ public class TestXon extends XDTester {
 					+ "*** A *\n" + XonUtils.toXonString(x)
 					+ "\n*** B *\n" + XonUtils.toXonString(o));
 			}
+		} catch (Exception ex) {fail(ex);}
+		try { // test forget
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' name=\"Example\" root=\"test\">\n" +
+"  <xd:xon name=\"test\">\n" +
+"    {date= \"date()\",\n" +
+"      cities= [\n" +
+"        { $script = \"occurs 1..*; finally outln(); forget\",\n" +
+"          \"from\": [\n" +
+"            \"string(); finally outln('From ' + getText());\",\n" +
+"            { $script = \"occurs 1..*; finally outln();\",\n" +
+"              \"to\": \"jstring();finally out(' to '+getText()+' is: ');\",\n"+
+"              \"distance\": \"int(); finally out(getText() + ' (km)');\"\n" +
+"            }\n" +
+"    	  ]\n" +
+"        }"+
+"      ]\n" +
+"    }\n" +
+"  </xd:xon>\n" +
+"</xd:def>";
+			s =
+"{ \"date\" : \"2020-02-22\",\n" +
+"  \"cities\" : [ \n" +
+"    { \"from\": [\"Brussels\",\n" +
+"        {\"to\": \"London\", \"distance\": 322},\n" +
+"        {\"to\": \"Paris\", \"distance\": 265}\n" +
+"      ]\n" +
+"    },\n" +
+"    { \"from\": [\"London\",\n" +
+"        {\"to\": \"Brussels\", \"distance\": 322},\n" +
+"        {\"to\": \"Paris\", \"distance\": 344}\n" +
+"      ]\n" +
+"    }\n" +
+"  ]\n" +
+"}";
+			xp = XDFactory.compileXD(null, xdef);
+			xd = xp.createXDDocument("Example");
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			reporter = new ArrayReporter();
+			x = xd.jparse(s, reporter);
+			strw.close();
+			assertEq(strw.toString(),
+"From Brussels\n" +
+" to London is: 322 (km)\n" +
+" to Paris is: 265 (km)\n\n" +
+"From London\n" +
+" to Brussels is: 322 (km)\n" +
+" to Paris is: 344 (km)\n\n");
+//			System.out.println(strw.toString());
+			assertNoErrors(reporter);
+			assertTrue(((Map)x).get("date") != null);
+			assertTrue(((List)((Map)x).get("cities")).isEmpty());
 		} catch (Exception ex) {fail(ex);}
 
 		clearTempDir(); // clear temporary directory
