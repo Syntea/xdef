@@ -15,6 +15,7 @@ import org.xdef.component.XComponentUtil;
 import org.xdef.xon.XonUtils;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.GPSPosition;
+import org.xdef.sys.SDatetime;
 import org.xdef.sys.SRuntimeException;
 import static org.xdef.sys.STester.printThrowable;
 import static org.xdef.sys.STester.runTest;
@@ -751,17 +752,17 @@ public class TestXon extends XDTester {
 		} catch (Exception ex) {fail(ex);}
 		try { // test forget
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' name=\"Example\" root=\"test\">\n" +
-"  <xd:component>%class test.xdef.data.TestForget %link test</xd:component>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root=\"test\">\n" +
+"<xd:component>%class test.xdef.data.TestXonForget %link test</xd:component>\n"+
 "  <xd:xon name=\"test\">\n" +
 "    {date= \"date()\",\n" +
 "      cities= [\n" +
 "        { $script = \"occurs 1..*; finally outln(); forget\",\n" +
 "          \"from\": [\n" +
-"            \"string(); finally outln('From ' + getText());\",\n" +
-"            { $script = \"occurs 1..*; finally outln();\",\n" +
-"              \"to\": \"jstring();finally out(' to '+getText()+' is: ');\",\n"+
-"              \"distance\": \"int(); finally out(getText() + ' (km)');\"\n" +
+"            \"string(); finally out('From ' + getText());\",\n" +
+"            { $script = \"occurs 1..*;\",\n" +
+"              \"to\": \"jstring();finally out(' to '+getText()+' is ');\",\n"+
+"              \"distance\": \"int(); finally out(getText() + ' km');\"\n" +
 "            }\n" +
 "    	  ]\n" +
 "        }"+
@@ -786,29 +787,29 @@ public class TestXon extends XDTester {
 "}";
 			xp = XDFactory.compileXD(null, xdef);
 			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
-			xd = xp.createXDDocument("Example");
+			xd = xp.createXDDocument();
 			strw = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(strw, false));
 			x = xd.jparse(s, reporter);
 			strw.close();
 			assertEq(strw.toString(),
-"From Brussels\n to London is: 322 (km)\n to Paris is: 265 (km)\n\n" +
-"From London\n to Brussels is: 322 (km)\n to Paris is: 344 (km)\n\n");
+"From Brussels to London is 322 km to Paris is 265 km\n" +
+"From London to Brussels is 322 km to Paris is 344 km\n");
 			assertNoErrors(reporter);
 			reporter.clear();
-			assertTrue(((Map)x).get("date") != null);
+			assertEq(((Map)x).get("date"), new SDatetime("2020-02-22"));
 			assertTrue(((List)((Map)x).get("cities")).isEmpty());
-			xd = xp.createXDDocument("Example");
+			xd = xp.createXDDocument();
 			strw = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(strw, false));
 			xc = xd.jparseXComponent(s, null, reporter);
 			strw.close();
 			assertEq(strw.toString(),
-"From Brussels\n to London is: 322 (km)\n to Paris is: 265 (km)\n\n" +
-"From London\n to Brussels is: 322 (km)\n to Paris is: 344 (km)\n\n");
+"From Brussels to London is 322 km to Paris is 265 km\n" +
+"From London to Brussels is 322 km to Paris is 344 km\n");
 			assertNoErrors(reporter);
 			x = XComponentUtil.toXon(xc);
-			assertTrue(((Map)x).get("date") != null);
+			assertEq(((Map)x).get("date"), new SDatetime("2020-02-22"));
 			assertTrue(((List)((Map)x).get("cities")).isEmpty());
 		} catch (Exception ex) {fail(ex);}
 
