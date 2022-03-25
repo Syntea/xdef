@@ -162,7 +162,7 @@ public class TestXon extends XDTester {
 		ArrayReporter reporter = new ArrayReporter();
 		Element el;
 		XComponent xc;
-		StringWriter strw;		
+		StringWriter strw;
 		try {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' name='M' root='y:X'\n"+
@@ -752,6 +752,7 @@ public class TestXon extends XDTester {
 		try { // test forget
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' name=\"Example\" root=\"test\">\n" +
+"  <xd:component>%class test.xdef.data.TestForget %link test</xd:component>\n"+
 "  <xd:xon name=\"test\">\n" +
 "    {date= \"date()\",\n" +
 "      cities= [\n" +
@@ -784,21 +785,29 @@ public class TestXon extends XDTester {
 "  ]\n" +
 "}";
 			xp = XDFactory.compileXD(null, xdef);
+			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
 			xd = xp.createXDDocument("Example");
 			strw = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(strw, false));
-			reporter = new ArrayReporter();
 			x = xd.jparse(s, reporter);
 			strw.close();
 			assertEq(strw.toString(),
-"From Brussels\n" +
-" to London is: 322 (km)\n" +
-" to Paris is: 265 (km)\n\n" +
-"From London\n" +
-" to Brussels is: 322 (km)\n" +
-" to Paris is: 344 (km)\n\n");
-//			System.out.println(strw.toString());
+"From Brussels\n to London is: 322 (km)\n to Paris is: 265 (km)\n\n" +
+"From London\n to Brussels is: 322 (km)\n to Paris is: 344 (km)\n\n");
 			assertNoErrors(reporter);
+			reporter.clear();
+			assertTrue(((Map)x).get("date") != null);
+			assertTrue(((List)((Map)x).get("cities")).isEmpty());
+			xd = xp.createXDDocument("Example");
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			xc = xd.jparseXComponent(s, null, reporter);
+			strw.close();
+			assertEq(strw.toString(),
+"From Brussels\n to London is: 322 (km)\n to Paris is: 265 (km)\n\n" +
+"From London\n to Brussels is: 322 (km)\n to Paris is: 344 (km)\n\n");
+			assertNoErrors(reporter);
+			x = XComponentUtil.toXon(xc);
 			assertTrue(((Map)x).get("date") != null);
 			assertTrue(((List)((Map)x).get("cities")).isEmpty());
 		} catch (Exception ex) {fail(ex);}
