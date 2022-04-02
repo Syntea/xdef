@@ -350,9 +350,10 @@ final class ChkXONParser implements XParser, XonParser {
 		if (_kind == 2) { // map
 			SBuffer name = _names.pop();
 			genItem(value, name);
+			String s = name.getString();
 			for (SBuffer x : _names) {
-				if (x.getString().equals(name.getString())) {
-					return name.getString(); //stack contains this name
+				if (x.getString().equals(s)) {
+					return s; //stack contains this name
 				}
 			}
 		} else {// simple value or array
