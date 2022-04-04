@@ -88,6 +88,7 @@ public abstract class STester {
 		if (_outStream != null) {
 			_outStream.println(s);
 		}
+		flushOut();
 	}
 	private void flushOut() {
 		_out.flush();
@@ -101,6 +102,7 @@ public abstract class STester {
 		if (_outStream != null) {
 			_outStream.print(s);
 		}
+		flushErr();
 	}
 	public final void printlnErr(final String s) {
 		flushOut();
@@ -108,6 +110,7 @@ public abstract class STester {
 		if (_outStream != null) {
 			_outStream.println(s);
 		}
+		flushErr();
 	}
 	private void flushErr() {
 		_err.flush();
@@ -285,7 +288,6 @@ public abstract class STester {
 		putErrInfo(ex.toString());
 		String s = printThrowable(ex);
 		int i = s.indexOf("\n\tat ");
-		flushOut();
 		printErr(s.substring(i+1));
 	}
 	/** Increase error counter and write the information to the error stream.
