@@ -397,7 +397,6 @@ public class CompileXonXdef extends StringParser {
 		for (Map.Entry<Object, Object> entry: map.entrySet()) {
 			String key = (String) entry.getKey();
 			Object o = entry.getValue();
-/*xx*/
 			if (o != null && (o instanceof Map || o instanceof List)) {
 				PNode eee = genXonModel(o, ee);
 				if (_xdNamespace.equals(eee._nsURI)
@@ -416,7 +415,7 @@ public class CompileXonXdef extends StringParser {
 				} else {
 					updateKeyInfo(eee, key);
 				}
-			} else {/*xx*/
+			} else {
 				ee.addChildNode(genXonValue(XonTools.toXmlName(key),
 					(JValue) o, ee));
 			}
