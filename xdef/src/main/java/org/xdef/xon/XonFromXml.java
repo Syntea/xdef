@@ -153,8 +153,21 @@ class XonFromXml extends XonUtils implements XonNames {
 		while(n != null) {
 			if (n.getNodeType() == Node.ELEMENT_NODE) {
 				Element e = (Element) n;
-				String key = XonTools.xmlToJName(e.getAttribute(X_KEYATTR));
-				result.put(key, fromXmlW3C(e));
+				String key = e.getNodeName();
+				if (XDConstants.XON_NS_URI_W.equals(e.getNamespaceURI())
+					&& (key.endsWith(X_ARRAY) || key.endsWith(X_MAP)
+						|| key.endsWith(X_ITEM) || key.endsWith(J_NULL))) {
+					key = XonTools.xmlToJName(e.getAttribute(X_KEYATTR));
+					result.put(key, fromXmlW3C(e));
+				} else {
+					Object val;
+					if (!e.hasAttribute(X_VALUEATTR)) {
+						val = null;
+					} else {
+						val = XonTools.xmlToJValue(e.getAttribute(X_VALUEATTR));
+					}
+					result.put(XonTools.xmlToJName(key),val);
+				}
 			}
 			n = n.getNextSibling();
 		}

@@ -1192,9 +1192,17 @@ final class ChkComposer extends SReporter implements XDValueID {
 								XonNames.X_VALUEATTR).getComposeCode() < 0){
 							// if create section do not create this node
 							result = new DefBoolean(false);
-						} else {
-							((DefContainer) result).addXDItem(
-								new DefBoolean(true));
+						} else if (result != null
+							&& result.getItemId() == XD_CONTAINER){
+							XDContainer c = (XDContainer) result;
+							if (chkEl._selector == null ||
+								chkEl._selector._kind == XNode.XMCHOICE) {
+								if (!c.isEmpty()) {
+									c.addXDItem(new DefBoolean(true));
+								}
+							} else {
+								c.addXDItem(new DefBoolean(true));
+							}
 						}
 					} else if (childChkEl._xElement._compose < 0 &&
 						chkEl._sourceElem != null) {

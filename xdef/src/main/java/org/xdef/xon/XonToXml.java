@@ -632,10 +632,7 @@ class XonToXml extends XonTools implements XonNames {
 	 */
 	private Element genValueW(final Object val, final Node parent) {
 		Element e;
-		if (val == null) {
-			e = genJElement(X_ITEM);
-			e.setAttribute(X_VALUEATTR, "null");
-		} else if (val instanceof Map) {
+		if (val instanceof Map) {
 			e = genMapW((Map) val);
 		} else if (val instanceof List) {
 			e = genArrayW((List) val);
@@ -668,12 +665,20 @@ class XonToXml extends XonTools implements XonNames {
 		Iterator it = map.entrySet().iterator();
 		while (it.hasNext()) {
 			Map.Entry en = (Map.Entry) it.next();
-			Element ee = genValueW(en.getValue(), e);
-			Object o = en.getKey();
+			Object o = en.getKey(); // name
 			// NOTE in YAML it may be a byte array, otherwise it is String
-			String key = o instanceof byte[]? new String((byte[])o) : (String)o;
 			// convert key to XML name
-			ee.setAttribute(X_KEYATTR, toXmlName(key));
+			String key = o instanceof byte[]? new String((byte[])o) : (String)o;
+			key = toXmlName(key);
+			o = en.getValue();
+			if (o != null && (o instanceof Map || o instanceof List)) {
+				Element ee = genValueW(o, e);
+				ee.setAttribute(X_KEYATTR, key);
+			} else {
+				Element ee = _doc.createElement(key);
+				e.appendChild(ee);
+				ee.setAttribute(X_VALUEATTR, genXMLValue(o));
+			}
 		}
 		return e;
 	}
@@ -685,7 +690,7 @@ class XonToXml extends XonTools implements XonNames {
 	final static Element toXmlW(final Object xon) {
 		XonToXml x = new XonToXml();
 		x._xNamespace = XDConstants.XON_NS_URI_W;
-		x._xPrefix = "";
+		x._xPrefix = "jx";
 		return x.genValueW(xon, x._doc = KXmlUtils.newDocument());
 	}
 }

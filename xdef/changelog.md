@@ -1,8 +1,10 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 41.0.6, release-date 2022-03-25
+# Version 41.0.6, release-date 2022-04-05
 * fixed bug in `org.xdef.util.GUIEditor` if X-definition is not a valid XML.
-* values in XON mode can be either null or the specified type.
+* values in XON mode now can be either null or the specified type.
+* improved XON mode converion to XML.
+* fixed bug in XON createmode where is used `$oneOf`.
 
 # Version 41.0.5, release-date 2022-03-06
 * fixed bug rounding of time and millisedonds are equal to 500 (the second was

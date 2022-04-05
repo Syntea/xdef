@@ -1704,6 +1704,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			if (XonNames.X_KEYATTR.equals(xdata.getName())) {
 				_xonKey = XonTools.xmlToJName(value.toString());
 			} else if (XonNames.X_VALUEATTR.equals(xdata.getName())) {
+				if (_xElement.getNSUri() == null ) {
+					_xonKey = XonTools.xmlToJName(_xElement.getName());
+				}
 				if (value instanceof XDValue) {
 					XDValue x = (XDValue) value;
 					if (x.isNull() || x.getItemId() == XD_NULL) {
@@ -2696,7 +2699,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		if (_parent._parent != null && _xElement._xon > 0) {//not root; gen XON
 			if (!_forget && _xElement._forget != 'T') {
 				ChkElement chkEl = (ChkElement) _parent;
-				Object value = XonNames.X_ITEM.equals(_xElement.getLocalName())
+				Object value = !XonNames.X_MAP.equals(_xElement.getLocalName())
+					&& !XonNames.X_ARRAY.equals(_xElement.getLocalName())
 					? _xonValue : _xonMap != null ? _xonMap : _xonArray;
 				if (chkEl._xonMap != null) {
 					chkEl._xonMap.put(_xonKey, value);

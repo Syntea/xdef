@@ -8,6 +8,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Stack;
 import javax.xml.XMLConstants;
@@ -307,10 +309,12 @@ final class ChkXONParser implements XParser, XonParser {
 		}
 	}
 
-	private KParsedElement genKElem(final String qname, final SPosition spos) {
+	private KParsedElement genKElem(final String qname,
+		final String nsuri,
+		final SPosition spos) {
 		KParsedElement kelem = new KParsedElement();
-		kelem.setParsedNameParams(XDConstants.XON_NS_URI_W, qname, spos);
-		if (!_nsGenerated) {
+		kelem.setParsedNameParams(nsuri, qname, spos);
+		if (!_nsGenerated && nsuri != null) {
 			kelem.addAttr(new KParsedAttr(XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
 				"xmlns", XDConstants.XON_NS_URI_W, spos));
 			_nsGenerated = true;
@@ -320,6 +324,7 @@ final class ChkXONParser implements XParser, XonParser {
 
 	private void genItem(final XonTools.JValue value, final SBuffer name) {
 		KParsedElement kelem = genKElem(XonNames.X_ITEM,
+			XDConstants.XON_NS_URI_W,
 			name == null ? value.getPosition() : name);
 		if (name != null) {
 			kelem.addAttr(new KParsedAttr(XonNames.X_KEYATTR,
@@ -349,7 +354,19 @@ final class ChkXONParser implements XParser, XonParser {
 	public String putValue(final XonTools.JValue value) {
 		if (_kind == 2) { // map
 			SBuffer name = _names.pop();
-			genItem(value, name);
+			if (value!=null && (value instanceof Map || value instanceof List)){
+				genItem(value, name);
+			} else {
+				KParsedElement kelem = genKElem(
+					XonTools.toXmlName(name.getString()),
+					null,
+					name == null ? value.getPosition() : name);
+				kelem.addAttr(new KParsedAttr(XonNames.X_VALUEATTR,
+					XonTools.genXMLValue(value.getValue()),
+					value.getPosition()));
+				elementStart(kelem);
+				elementEnd();
+			}
 			String s = name.getString();
 			for (SBuffer x : _names) {
 				if (x.getString().equals(s)) {
@@ -371,7 +388,8 @@ final class ChkXONParser implements XParser, XonParser {
 	 * @param pos source position.
 	 */
 	public final void arrayStart(final SPosition pos) {
-		KParsedElement kelem = genKElem(XonNames.X_ARRAY, pos);
+		KParsedElement kelem = genKElem(XonNames.X_ARRAY,
+			XDConstants.XON_NS_URI_W, pos);
 		if (_kind == 2) { // map
 			SBuffer name = _names.peek();
 			kelem.addAttr(new KParsedAttr(XonNames.X_KEYATTR,
@@ -394,7 +412,8 @@ final class ChkXONParser implements XParser, XonParser {
 	 * @param pos source position.
 	 */
 	public final void mapStart(final SPosition pos) {
-		KParsedElement kelem = genKElem(XonNames.X_MAP, pos);
+		KParsedElement kelem = genKElem(XonNames.X_MAP,
+			XDConstants.XON_NS_URI_W, pos);
 		if (_kind == 2) { // map
 			SBuffer name = _names.peek();
 			kelem.addAttr(new KParsedAttr(XonNames.X_KEYATTR,

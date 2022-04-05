@@ -195,6 +195,9 @@ public class IniReader extends StringParser implements XonParsers {
 					val += c;
 				}
 			}
+			if (val.isEmpty()) {
+				val = "null";
+			}
 			_jp.putValue(new XonTools.JValue(spos, val));
 			return true;
 		}
@@ -419,26 +422,22 @@ public class IniReader extends StringParser implements XonParsers {
 
 	@SuppressWarnings("unchecked")
 	private static void iniToXml(final Map<String,Object> ini,final Element el){
+		Object o;
 		for (Map.Entry<String, Object> x: ini.entrySet()) {
-			String name = x.getKey();
-			Object o = x.getValue();
-			if (!(o instanceof Map)) {
-				Element item = el.getOwnerDocument().createElementNS(
-					XDConstants.XON_NS_URI_W,
-					XDConstants.XON_NS_PREFIX + ":" + XonNames.X_ITEM);
-				item.setAttribute(XonNames.X_KEYATTR, XonTools.toXmlName(name));
+			if (!((o = x.getValue()) instanceof Map)) {
+				Element item = el.getOwnerDocument().createElement(
+					XonTools.toXmlName(x.getKey()));
 				item.setAttribute(XonNames.X_VALUEATTR, o.toString());
 				el.appendChild(item);
 			}
 		}
 		for (Map.Entry<String, Object> x: ini.entrySet()) {
-			String name = x.getKey();
-			Object o = x.getValue();
-			if (o instanceof Map) {
+			if ((o = x.getValue()) instanceof Map) {
 				Element item = el.getOwnerDocument().createElementNS(
 					XDConstants.XON_NS_URI_W,
 					XDConstants.XON_NS_PREFIX + ":" + XonNames.X_MAP);
-				item.setAttribute(XonNames.X_KEYATTR, XonTools.toXmlName(name));
+				item.setAttribute(XonNames.X_KEYATTR,
+					XonTools.toXmlName(x.getKey()));
 				iniToXml((Map<String, Object>) o, item);
 				el.appendChild(item);
 			}

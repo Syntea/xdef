@@ -389,9 +389,11 @@ public class XComponentUtil {
 		Map<String, Object> result = new LinkedHashMap<String, Object>();
 		Method[] methods = cls.getDeclaredMethods();
 		for (Method x: methods) {
-			if (x.getName().startsWith("get" + XDConstants.XON_NS_PREFIX + "$")
+			String methodName = x.getName();
+			Object o;
+			if (methodName.startsWith("get" + XDConstants.XON_NS_PREFIX + "$")
 				&& x.getParameterTypes().length == 0) {
-				Object o = null;
+				o = null;
 				try {
 					o = x.invoke(xc);
 				} catch (Exception ex) {
@@ -411,6 +413,22 @@ public class XComponentUtil {
 					result.put(key, o);
 				} else {
 					new RuntimeException("Not XComponent: " + o);
+				}
+			} else if (methodName.startsWith("get")
+				&& x.getParameterTypes().length == 0) {
+				o = null;
+				try {
+					o = x.invoke(xc);
+					if (o != null && o instanceof XComponent) {
+						Class<?> cls1 = o.getClass();
+						Method m = cls1.getDeclaredMethod("getvalue");
+						o = m.invoke(o);
+						String key=XonTools.xmlToJName(methodName.substring(3));
+						o = toXonObject(o);
+						result.put(key, o);
+					}
+				} catch (Exception ex) {
+					new RuntimeException("Can't access getter: " + x.getName());
 				}
 			}
 		}

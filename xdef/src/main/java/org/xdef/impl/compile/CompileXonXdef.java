@@ -1,5 +1,6 @@
 package org.xdef.impl.compile;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 import org.xdef.XDConstants;
@@ -395,15 +396,29 @@ public class CompileXonXdef extends StringParser {
 		}
 		for (Map.Entry<Object, Object> entry: map.entrySet()) {
 			String key = (String) entry.getKey();
-			val = entry.getValue();
-			PNode ee2 = genXonModel(val, ee);
-			if (_xdNamespace.equals(ee2._nsURI)
-				&& "choice".equals(ee2._localName)) {
-				for (PNode n : ee2.getChildNodes()) {
-					updateKeyInfo(n, key);
+			Object o = entry.getValue();
+/*xx*/
+			if (o != null && (o instanceof Map || o instanceof List)) {
+				PNode eee = genXonModel(o, ee);
+				if (_xdNamespace.equals(eee._nsURI)
+					&& "choice".equals(eee._localName)) {
+					for (PNode n : eee.getChildNodes()) {
+						if (XDConstants.XON_NS_URI_W.equals(n.getNamespace())
+							&& XonNames.X_ITEM.equals(n.getLocalName())) {
+							n._name =
+								new SBuffer(XonTools.toXmlName(key), n._name);
+							n._nsindex = -1;
+							n._nsURI = null;
+						} else {
+							updateKeyInfo(n, key);
+						}
+					}
+				} else {
+					updateKeyInfo(eee, key);
 				}
-			} else {
-				updateKeyInfo(ee2, key);
+			} else {/*xx*/
+				ee.addChildNode(genXonValue(XonTools.toXmlName(key),
+					(JValue) o, ee));
 			}
 		}
 		return e;
@@ -486,9 +501,13 @@ public class CompileXonXdef extends StringParser {
 		return e;
 	}
 
-	private PNode genXonValue(final JValue jo, final PNode parent) {
+	private PNode genXonValue(final String name,
+		final JValue jo,
+		final PNode parent) {
 		SBuffer sbf, occ = null;
-		PNode e = genJElement(parent, XonNames.X_ITEM, jo.getPosition());
+		PNode e = name == null
+			? genJElement(parent, XonNames.X_ITEM, jo.getPosition())
+			: genPElement(parent, null, name, jo.getPosition());
 		if (jo.getValue() == null) {
 			sbf = new SBuffer("jnull()");
 		} else {
@@ -539,7 +558,7 @@ public class CompileXonXdef extends StringParser {
 			e = genXonArray((JArray) xon, parent);
 		} else if (xon instanceof JValue
 			&& ((JValue) xon).getValue() instanceof String) {
-			e = genXonValue((JValue) xon, parent);
+			e = genXonValue(null, (JValue) xon, parent);
 		} else {
 			error(JSON.JSON011); //Not XON/JSON object&{0}
 			return parent;
@@ -586,7 +605,9 @@ public class CompileXonXdef extends StringParser {
 if (org.xdef.impl.XPool._debugSwitches.contains(
 		org.xdef.impl.XConstants.DEBUG_SHOW_XON_MODEL)) {
 	// display created model
+	System.err.flush();
 	System.out.println(org.xdef.xml.KXmlUtils.nodeToString(p.toXML(),true));
+	System.out.flush();
 }
 /*#end*/
 	}
