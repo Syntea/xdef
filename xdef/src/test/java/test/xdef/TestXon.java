@@ -531,7 +531,11 @@ public class TestXon extends XDTester {
 			assertNoErrors(reporter);
 			reporter.clear();
 			assertTrue(XonUtils.xonEqual(XonUtils.parseINI(ini),
-				XonUtils.parseINI(XonUtils.toIniString(xini))));
+				XonUtils.parseINI(s = XonUtils.toIniString(xini))));
+			reporter.clear();
+			assertTrue(XonUtils.xonEqual(xini, xd.iparse(s, reporter)));
+			assertNoErrors(reporter);
+			reporter.clear();
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' name=\"A\" root=\"test\">\n" +
 "  <xd:ini name=\"test\">\n" +
@@ -555,7 +559,10 @@ public class TestXon extends XDTester {
 "servertool.up=\\u670D\\u52A1\\u5668\\u5DF2\\u5728\\u8FD0\\u884C\\u3002";
 			xini = xd.iparse(ini, reporter);
 			assertTrue(XonUtils.xonEqual(XonUtils.parseINI(ini),
-				XonUtils.parseINI(XonUtils.toIniString(xini))));
+				XonUtils.parseINI(s = XonUtils.toIniString(xini))));
+			assertNoErrors(reporter);
+			reporter.clear();
+			assertTrue(XonUtils.xonEqual(xini, xd.iparse(s, reporter)));
 			assertNoErrors(reporter);
 			reporter.clear();
 			xdef =
@@ -584,7 +591,10 @@ public class TestXon extends XDTester {
 "version=11.0.0.55";
 			xini = xd.iparse(ini, reporter);
 			assertTrue(XonUtils.xonEqual(XonUtils.parseINI(ini),
-				XonUtils.parseINI(XonUtils.toIniString(xini))));
+				XonUtils.parseINI(s = XonUtils.toIniString(xini))));
+			assertNoErrors(reporter);
+			reporter.clear();
+			assertTrue(XonUtils.xonEqual(xini, xd.iparse(s, reporter)));
 			assertNoErrors(reporter);
 			reporter.clear();
 			ini =
@@ -597,7 +607,10 @@ public class TestXon extends XDTester {
 "version=11.0.0.55";
 			xini = xd.iparse(ini, reporter);
 			assertTrue(XonUtils.xonEqual(XonUtils.parseINI(ini),
-				XonUtils.parseINI(XonUtils.toIniString(xini))));
+				XonUtils.parseINI(s = XonUtils.toIniString(xini))));
+			assertNoErrors(reporter);
+			reporter.clear();
+			assertTrue(XonUtils.xonEqual(xini, xd.iparse(s, reporter)));
 			assertNoErrors(reporter);
 			reporter.clear();
 			ini =
@@ -607,8 +620,12 @@ public class TestXon extends XDTester {
 "version=11.0.0.55";
 			xini = xd.iparse(ini, reporter);
 			assertTrue(XonUtils.xonEqual(XonUtils.parseINI(ini),
-				XonUtils.parseINI(XonUtils.toIniString(xini))));
+				XonUtils.parseINI(s = XonUtils.toIniString(xini))));
 			assertNoErrors(reporter);
+			reporter.clear();
+			assertTrue(XonUtils.xonEqual(xini, xd.iparse(s, reporter)));
+			assertNoErrors(reporter);
+			reporter.clear();
 		} catch (Exception ex) {fail(ex);}
 		try { //test CSV data
 			// with head
