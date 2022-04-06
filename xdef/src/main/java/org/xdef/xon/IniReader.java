@@ -444,45 +444,12 @@ public class IniReader extends StringParser implements XonParsers {
 		}
 	}
 
-	/** Add INI/Properties items from INI/Properties object to an Element.
-	 * @param ini INI/Properties object
-	 * @param el Element where to  add items.
-	 */
-	@SuppressWarnings("unchecked")
-	private static void toXmlW(final Map<String,Object> ini,final Element el) {
-		for (Map.Entry<String, Object> x: ini.entrySet()) {
-			String name = x.getKey();
-			Object o = x.getValue();
-			if (!(o instanceof Map)) {
-				// add the element with items
-				Element item = el.getOwnerDocument().createElementNS(
-					XDConstants.XON_NS_URI_W,
-					XDConstants.XON_NS_PREFIX + ":" + XonNames.X_ITEM);
-				item.setAttribute(XonNames.X_KEYATTR, name);
-				item.setAttribute(XonNames.X_VALUEATTR, o.toString());
-				el.appendChild(item);
-			}
-		}
-		for (Map.Entry<String, Object> x: ini.entrySet()) {
-			String name = x.getKey();
-			Object o = x.getValue();
-			if (o instanceof Map) {
-				Element item = el.getOwnerDocument().createElementNS(
-					XDConstants.XON_NS_URI_W,
-					XDConstants.XON_NS_PREFIX + ":" + XonNames.X_MAP);
-				item.setAttribute(XonNames.X_KEYATTR, name);
-				toXmlW((Map<String, Object>) o, item);
-				el.appendChild(item);
-			}
-		}
-	}
-
 	@SuppressWarnings("unchecked")
 	public final static Element iniToXmlW(final Object ini) {
 		Element el = KXmlUtils.newDocument(XDConstants.XON_NS_URI_W,
 			XDConstants.XON_NS_PREFIX + ":"+XonNames.X_MAP, null)
 			.getDocumentElement();
-		toXmlW((Map<String,Object>) ini, el);
+		iniToXml((Map<String,Object>) ini, el);
 		return el;
 	}
 }

@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 41.0.6, release-date 2022-04-05
+# Version 41.0.6, release-date 2022-04-06
 * fixed bug in `org.xdef.util.GUIEditor` if X-definition is not a valid XML.
 * values in XON mode now can be either null or the specified type.
 * improved XON mode converion to XML.
