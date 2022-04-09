@@ -432,7 +432,7 @@ public class IniReader extends StringParser implements XonParsers {
 					s = "null";
 				} else if (o instanceof byte[]) {
 					byte[] b = (byte[]) o;
-					s = new String(b.length <= 32 
+					s = new String(b.length <= 32
 						? SUtils.encodeHex(b) : SUtils.encodeBase64(b));
 				} else {
 					s = o.toString();

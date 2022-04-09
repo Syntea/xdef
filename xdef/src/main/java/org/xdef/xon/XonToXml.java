@@ -376,9 +376,14 @@ class XonToXml extends XonTools implements XonNames {
 				}
 				return;
 			} else {
-				addArrayItems(elem, array,
-					array.size() >= 1 && (array.get(0) instanceof Map)
-					&& ((Map)array.get(0)).isEmpty() ? 0 : 1);
+				if (array.size() >= 1 && (array.get(0) instanceof Map)
+					&& ((Map)array.get(0)).isEmpty()) {
+					//force generation of empty map
+					addArrayItems(elem, array, 0);
+				} else {
+					//map was generated
+					addArrayItems(elem, array, 1);
+				}
 				return;
 			}
 		}
