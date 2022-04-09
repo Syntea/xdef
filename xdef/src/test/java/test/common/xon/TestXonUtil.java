@@ -247,7 +247,7 @@ public class TestXonUtil extends STester {
 			el = XonUtils.xonToXmlXD(json);
 			if (!XonUtils.xonEqual(j, XonUtils.xmlToXon(el))) {
 				fail(json + '\n' + XonUtils.toXonString(XonUtils.xmlToXon(el)));
-			}			
+			}
 		} catch (Exception ex) {fail(ex);}
 	}
 

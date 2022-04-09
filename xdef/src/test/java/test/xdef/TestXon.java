@@ -625,7 +625,7 @@ public class TestXon extends XDTester {
 "      MailAddr = emailAddr()\n" +
 "      Signature = SHA1()\n" +
 "  </xd:ini>\n" +
-"</xd:def>";	
+"</xd:def>";
 			xp = compile(xdef);
 			xd = xp.createXDDocument();
 			ini =

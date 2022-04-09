@@ -854,7 +854,7 @@ public class TestJsonXdef extends XDTester {
 			File fdir = new File(xdir);
 			fdir.mkdirs();
 			genXComponent(xp, fdir).checkAndThrowErrors();
-			xc = xd.iparseXComponent(ini, null, reporter);			
+			xc = xd.iparseXComponent(ini, null, reporter);
 			assertEq("a", SUtils.getValueFromGetter(
 				SUtils.getValueFromGetter(xc,"getA"), "getvalue"));
 			assertEq(1,SUtils.getValueFromGetter(
