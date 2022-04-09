@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import org.xdef.XDConstants;
 import org.xdef.XDDocument;
 import org.xdef.impl.code.CodeTable;
 import org.xdef.impl.xml.KNamespace;
@@ -651,6 +652,7 @@ public final class XElement extends XCodeDescriptor
 		try {
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			SObjectWriter xw = new SObjectWriter(baos);
+			xw.writeString(XDConstants.BUILD_VERSION);
 			xw.writeShort(XNode.XMELEMENT);
 			xw.writeString(xe.getName());
 			xw.writeString(xe.getNSUri());
@@ -688,7 +690,7 @@ public final class XElement extends XCodeDescriptor
 				}
 			}
 			xw.close();
-			MessageDigest md = MessageDigest.getInstance("MD5");
+			MessageDigest md = MessageDigest.getInstance("SHA-256");
 			md.update(baos.toByteArray());
 			xe._digest = new String(
 				SUtils.encodeHex(md.digest()), Charset.forName("UTF-8"));
