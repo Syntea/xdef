@@ -14,7 +14,6 @@ import org.xdef.proc.XXNode;
 import org.xdef.xon.XonUtils;
 import org.xdef.sys.ArrayReporter;
 import static org.xdef.sys.STester.runTest;
-import org.xdef.xml.KXmlUtils;
 import test.XDTester;
 import static test.XDTester._xdNS;
 import static test.XDTester._xdOfxd;
@@ -32,25 +31,6 @@ public class MyTest extends XDTester {
 	public static boolean a(boolean a, String b) {return true;}
 	public static int b(String b) {return 0;}
 	public static void c() {}
-
-	private static String testj(String xml, String json) {
-		Object j = XonUtils.parseJSON(json);
-		Element el = XonUtils.xonToXmlXD(j);
-		if (KXmlUtils.compareElements(xml, el, true, null).errorWarnings()) {
-			return "xml != el"+
-				"\njson: "+json+
-				"\nxml:  "+xml+
-				"\nel:   "+KXmlUtils.nodeToString(el);
-		}
-		Object j1 = XonUtils.xmlToXon(el);
-		if (!XonUtils.xonEqual(j, j1)) {
-			return "j != j1"+
-				"\nxml: "+xml+
-				"\nj:   " + XonUtils.toJsonString(j)+
-				"\nj1:  " + XonUtils.toJsonString(j1);
-		}
-		return "";
-	}
 	private static Object toJson(final XComponent xc) {
 		return XonUtils.xmlToXon(xc.toXml());
 	}
