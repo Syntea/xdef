@@ -52,7 +52,7 @@ public final class XPool implements XDPool, Serializable {
 	/** XDPool version.*/
 	private static final String XD_VERSION = "XD" + XDConstants.BUILD_VERSION;
 	/** Last compatible version of XDPool (e.g. 4.0.001.005). */
-	private static final String XD_MIN_VERSION = "4.1.000.000";
+	private static final String XD_MIN_VERSION = "4.1.000.006";
 
 	/** Flag if warnings should be checked.*/
 	private boolean _chkWarnings;
@@ -1285,7 +1285,6 @@ public final class XPool implements XDPool, Serializable {
 			xw.writeString("DebugInfo");
 			_debugInfo.writeXD(xw);
 		}
-		xw.writeShort(XD_MAGIC_ID); //XDPool file ID
 		gout.finish();
 	}
 
@@ -1441,10 +1440,6 @@ public final class XPool implements XDPool, Serializable {
 		if ("DebugInfo".equals(xr.readString())) {
 			_debugInfo = XDebugInfo.readXDebugInfo(xr);
 		}
-		if (XD_MAGIC_ID != xr.readShort()) {
-			//SObject reader: incorrect format of data&{0}{: }
-			throw new SRuntimeException(SYS.SYS039, "Incorrect file format");
-		}
 		ArrayList<XElement> reflist = new ArrayList<XElement>();
 		Set<XElement> refset = new HashSet<XElement>();
 		for(XDefinition xd: _xdefs.values()) {
@@ -1485,7 +1480,7 @@ public final class XPool implements XDPool, Serializable {
 		final String charset,
 		final boolean genJavadoc,
 		final boolean suppressPrintWarnings) throws IOException {
-		return GenXComponent.genXComponent(this, fdir, charset, genJavadoc,
-			suppressPrintWarnings);
+		return GenXComponent.genXComponent(
+			this, fdir, charset, genJavadoc, suppressPrintWarnings);
 	}
 }

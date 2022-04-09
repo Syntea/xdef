@@ -25,7 +25,6 @@ import static org.xdef.sys.STester.runTest;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
 import test.XDTester;
-import static test.XDTester._xdNS;
 import org.xdef.xon.XonNames;
 import static test.XDTester._xdNS;
 import static test.XDTester.genXComponent;
@@ -850,21 +849,16 @@ public class TestJsonXdef extends XDTester {
 			xp = compile(xdef);
 			ini = "A=a\n B=1\n C=2121-10-19\n D=2.34\n[E]\nx=123\n[F]";
 			xd = xp.createXDDocument("TestINI");
-			String xdir = _tempDir + "x/";
-			File fdir = new File(xdir);
-			fdir.mkdirs();
-			genXComponent(xp, fdir).checkAndThrowErrors();
+			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
 			xc = xd.iparseXComponent(ini, null, reporter);
-			assertEq("a", SUtils.getValueFromGetter(
-				SUtils.getValueFromGetter(xc,"getA"), "getvalue"));
-			assertEq(1,SUtils.getValueFromGetter(
-				SUtils.getValueFromGetter(xc,"getB"), "getvalue"));
+			assertEq("a", SUtils.getValueFromGetter(xc,"get$A"));
+			assertEq(1,SUtils.getValueFromGetter(xc,"get$B"));
 			assertEq(new SDatetime("2121-10-19"),
-				SUtils.getValueFromGetter(
-					SUtils.getValueFromGetter(xc,"getC"), "getvalue"));
+				SUtils.getValueFromGetter(xc,"get$C"));
 			assertEq(0, new BigDecimal("2.34").compareTo(
-					(BigDecimal) SUtils.getValueFromGetter(
-						SUtils.getValueFromGetter(xc,"getD"), "getvalue")));
+				(BigDecimal) SUtils.getValueFromGetter(xc,"get$D")));
+			SUtils.setValueToSetter(xc,"set$A", "b");
+			assertEq("b", SUtils.getValueFromGetter(xc,"get$A"));
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xdef =
