@@ -690,7 +690,7 @@ public final class XElement extends XCodeDescriptor
 				}
 			}
 			xw.close();
-			MessageDigest md = MessageDigest.getInstance("MD5");
+			MessageDigest md = MessageDigest.getInstance("MD5"); //SHA-256?
 			md.update(baos.toByteArray());
 			xe._digest = new String(
 				SUtils.encodeHex(md.digest()), Charset.forName("UTF-8"));
