@@ -28,7 +28,7 @@ public class XDParseHex extends XSParseBase64Binary {
 		byte[] bytes;
 		if (len == 0) {
 			if (_minLength == 0) {
-				p.setParsedValue(new DefBytes(new byte[0]));
+				p.setParsedValue(new DefBytes(new byte[0], false));
 				s = "";
 				bytes = new byte[0];
 			} else {
@@ -63,7 +63,7 @@ public class XDParseHex extends XSParseBase64Binary {
 			}
 		}
 		p.replaceParsedBufferFrom(pos0, s);
-		p.setParsedValue(new DefBytes(bytes));
+		p.setParsedValue(new DefBytes(bytes, false));
 		check(p);
 	}
 	@Override

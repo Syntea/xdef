@@ -6,6 +6,8 @@ import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.xon.XonUtils;
 import org.xdef.sys.STester;
+import static org.xdef.sys.STester.printThrowable;
+import static org.xdef.sys.STester.runTest;
 
 /** Test JSON utilities, JSON parser and conversion XML / JSON. */
 public class TestXonUtil extends STester {
@@ -158,6 +160,95 @@ public class TestXonUtil extends STester {
 				}
 			}
 		}
+		try {
+			Element el;
+			Object j;
+			String json;
+			json = "[{}]";
+			j = XonUtils.parseXON(json);
+			el = XonUtils.xonToXmlXD(json);
+			if (!XonUtils.xonEqual(j, XonUtils.xmlToXon(el))) {
+				fail(json + '\n' + XonUtils.toXonString(XonUtils.xmlToXon(el)));
+			}
+			json = "[{a={b=1}}]";
+			j = XonUtils.parseXON(json);
+			el = XonUtils.xonToXmlXD(json);
+			if (!XonUtils.xonEqual(j, XonUtils.xmlToXon(el))) {
+				fail(json + '\n' + XonUtils.toXonString(XonUtils.xmlToXon(el)));
+			}
+			json = "[{a=[]}]";
+			j = XonUtils.parseXON(json);
+			el = XonUtils.xonToXmlXD(json);
+			if (!XonUtils.xonEqual(j, XonUtils.xmlToXon(el))) {
+				fail(json + '\n' + XonUtils.toXonString(XonUtils.xmlToXon(el)));
+			}
+			json = "[{a=[1]}]";
+			j = XonUtils.parseXON(json);
+			el = XonUtils.xonToXmlXD(json);
+			if (!XonUtils.xonEqual(j, XonUtils.xmlToXon(el))) {
+				fail(json + '\n' + XonUtils.toXonString(XonUtils.xmlToXon(el)));
+			}
+			json = "[{a=[[]]}]";
+			j = XonUtils.parseXON(json);
+			el = XonUtils.xonToXmlXD(json);
+			if (!XonUtils.xonEqual(j, XonUtils.xmlToXon(el))) {
+				fail(json + '\n' + XonUtils.toXonString(XonUtils.xmlToXon(el)));
+			}
+			json = "[{a=[{}]}]";
+			j = XonUtils.parseXON(json);
+			el = XonUtils.xonToXmlXD(json);
+			if (!XonUtils.xonEqual(j, XonUtils.xmlToXon(el))) {
+				fail(json + '\n' + XonUtils.toXonString(XonUtils.xmlToXon(el)));
+			}
+			json = "[{a=[{a=1}]}]";
+			j = XonUtils.parseXON(json);
+			el = XonUtils.xonToXmlXD(json);
+			if (!XonUtils.xonEqual(j, XonUtils.xmlToXon(el))) {
+				fail(json + '\n' + XonUtils.toXonString(XonUtils.xmlToXon(el)));
+			}
+			json = "[{a=[{}, 1]}]";
+			j = XonUtils.parseXON(json);
+			el = XonUtils.xonToXmlXD(json);
+			if (!XonUtils.xonEqual(j, XonUtils.xmlToXon(el))) {
+				fail(json + '\n' + XonUtils.toXonString(XonUtils.xmlToXon(el)));
+			}
+			json = "[{a=[{},[1,2],{},[3,4]]}]";
+			j = XonUtils.parseXON(json);
+			el = XonUtils.xonToXmlXD(json);
+			if (!XonUtils.xonEqual(j, XonUtils.xmlToXon(el))) {
+				fail(json + '\n' + XonUtils.toXonString(XonUtils.xmlToXon(el)));
+			}
+			json = "[{a=[{a=1},[1,2],{},[3,4]]}]";
+			j = XonUtils.parseXON(json);
+			el = XonUtils.xonToXmlXD(json);
+			if (!XonUtils.xonEqual(j, XonUtils.xmlToXon(el))) {
+				fail(json + '\n' + XonUtils.toXonString(XonUtils.xmlToXon(el)));
+			}
+			json = "[{a=[[1,2],{},[3,4]]}]";
+			j = XonUtils.parseXON(json);
+			el = XonUtils.xonToXmlXD(json);
+			if (!XonUtils.xonEqual(j, XonUtils.xmlToXon(el))) {
+				fail(json + '\n' + XonUtils.toXonString(XonUtils.xmlToXon(el)));
+			}
+			json = "[{a=[[1,2],{a=1},[30,4]]}]";
+			j = XonUtils.parseXON(json);
+			el = XonUtils.xonToXmlXD(json);
+			if (!XonUtils.xonEqual(j, XonUtils.xmlToXon(el))) {
+				fail(json + '\n' + XonUtils.toXonString(XonUtils.xmlToXon(el)));
+			}
+			json = "[{a=[[1,2],[3,4],{}]}]";
+			j = XonUtils.parseXON(json);
+			el = XonUtils.xonToXmlXD(json);
+			if (!XonUtils.xonEqual(j, XonUtils.xmlToXon(el))) {
+				fail(json + '\n' + XonUtils.toXonString(XonUtils.xmlToXon(el)));
+			}
+			json = "[{a=[[1,2],[3,4],{a=1,b=2}]}]";
+			j = XonUtils.parseXON(json);
+			el = XonUtils.xonToXmlXD(json);
+			if (!XonUtils.xonEqual(j, XonUtils.xmlToXon(el))) {
+				fail(json + '\n' + XonUtils.toXonString(XonUtils.xmlToXon(el)));
+			}			
+		} catch (Exception ex) {fail(ex);}
 	}
 
 	/** Run test

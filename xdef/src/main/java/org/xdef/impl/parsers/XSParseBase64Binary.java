@@ -7,6 +7,14 @@ import org.xdef.XDValue;
 import org.xdef.proc.XXNode;
 import org.xdef.impl.code.DefBytes;
 import java.io.ByteArrayOutputStream;
+import static org.xdef.XDParser.BASE;
+import static org.xdef.XDParser.ENUMERATION;
+import static org.xdef.XDParser.LENGTH;
+import static org.xdef.XDParser.MAXLENGTH;
+import static org.xdef.XDParser.MINLENGTH;
+import static org.xdef.XDParser.PATTERN;
+import static org.xdef.XDParser.WHITESPACE;
+import static org.xdef.XDValueID.XD_BYTES;
 import org.xdef.sys.SParser;
 import org.xdef.sys.SReader;
 
@@ -86,7 +94,7 @@ public class XSParseBase64Binary extends XSAbstractParser {
 			XSParseReader r = new XSParseReader(p);
 			ByteArrayOutputStream bw = new ByteArrayOutputStream();
 			SUtils.decodeBase64(r, bw);
-			p.setParsedValue(new DefBytes(bw.toByteArray()));
+			p.setParsedValue(new DefBytes(bw.toByteArray(), false));
 			String s = r.getParsedString();
 			p.isSpaces();
 			p.replaceParsedBufferFrom(pos0, s);

@@ -302,8 +302,8 @@ class XCGeneratorBase {
 	/** Get encoding parser (i.e. hex or base64) of type bytes. */
 	final static byte getBytesType(final XMData xdata) {
 		final String s = xdata.getParserName();
-		return "base64Binary".equals(s) ?
-			(byte) 1 : "hexBinary".equals(s) ? (byte) 2 : (byte) 0;
+		return "hexBinary".equals(s)||"hex".equals(s)||"SHA1".equals(s)?(byte) 2
+			: "base64Binary".equals(s) ? (byte) 1 : (byte) 0;
 	}
 
 	/** Create ParsedResultGetter.

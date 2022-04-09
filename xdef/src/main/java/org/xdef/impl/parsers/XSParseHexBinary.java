@@ -41,7 +41,7 @@ public class XSParseHexBinary extends XSParseBase64Binary {
 			p.error(XDEF.XDEF809, parserName(), p.getSourceBuffer());
 			return;
 		}
-		p.setParsedValue(new DefBytes(baos.toByteArray()));
+		p.setParsedValue(new DefBytes(baos.toByteArray(), false));
 		p.isSpaces();
 		p.replaceParsedBufferFrom(pos0, s);
 		check(p);

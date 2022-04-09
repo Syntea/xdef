@@ -427,7 +427,17 @@ public class IniReader extends StringParser implements XonParsers {
 			if (!((o = x.getValue()) instanceof Map)) {
 				Element item = el.getOwnerDocument().createElement(
 					XonTools.toXmlName(x.getKey()));
-				item.setAttribute(XonNames.X_VALUEATTR, o.toString());
+				String s;
+				if (o == null) {
+					s = "null";
+				} else if (o instanceof byte[]) {
+					byte[] b = (byte[]) o;
+					s = new String(b.length <= 32 
+						? SUtils.encodeHex(b) : SUtils.encodeBase64(b));
+				} else {
+					s = o.toString();
+				}
+				item.setAttribute(XonNames.X_VALUEATTR, s);
 				el.appendChild(item);
 			}
 		}
