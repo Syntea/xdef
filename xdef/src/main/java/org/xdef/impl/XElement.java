@@ -652,7 +652,7 @@ public final class XElement extends XCodeDescriptor
 		try {
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			SObjectWriter xw = new SObjectWriter(baos);
-//			xw.writeString(XDConstants.BUILD_VERSION //???
+			xw.writeString(XDConstants.BUILD_VERSION); //check build version
 			xw.writeShort(XNode.XMELEMENT);
 			xw.writeString(xe.getName());
 			xw.writeString(xe.getNSUri());
@@ -690,7 +690,7 @@ public final class XElement extends XCodeDescriptor
 				}
 			}
 			xw.close();
-			MessageDigest md = MessageDigest.getInstance("MD5"); //SHA-256?
+			MessageDigest md = MessageDigest.getInstance("SHA-256"); //was MD5
 			md.update(baos.toByteArray());
 			xe._digest = new String(
 				SUtils.encodeHex(md.digest()), Charset.forName("UTF-8"));
