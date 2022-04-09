@@ -5,6 +5,7 @@ import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.util.Locale;
+import org.xdef.XDBytes;
 import org.xdef.XDContainer;
 import org.xdef.XDNamedValue;
 import org.xdef.XDParser;
@@ -115,6 +116,7 @@ public final class XDWriter extends SObjectWriter {
 						return;
 					case XDValueID.XD_BYTES:
 						writeBytes(x.getBytes());
+						writeBoolean(((XDBytes) x).isBase64());
 						return;
 					case XDValueID.XD_DATETIME: {
 						writeSDatetime(x.datetimeValue());

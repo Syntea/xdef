@@ -25,6 +25,7 @@ import org.w3c.dom.Element;
 import org.xdef.sys.Price;
 import org.xdef.sys.GPSPosition;
 import static org.xdef.sys.STester.runTest;
+import static test.XDTester._xdNS;
 import static test.XDTester.genXComponent;
 import static test.XDTester.parseXC;
 
@@ -191,6 +192,25 @@ public final class TestXComponents extends XDTester {
 			assertEq("x", SUtils.getValueFromGetter(xc, "getC"));
 			assertEq(new SDatetime("2021-05-24"),
 				SUtils.getValueFromGetter(xc, "getP"));
+			xdef = // test base64/hex
+"<xd:def xmlns:xd='" + _xdNS + "' root='X'>\n"+
+"<X a='hex()' b='base64Binary()' c='SHA1()'/>\n"+
+"<xd:component>\n"+
+"  %class test.xdef.TestXexBase64 %link X;\n"+
+"</xd:component>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
+			xml =
+"<X a='1FA0' b='ahgkjfd01Q==' c='12AFE0C1D246895A990AB2DD13CE684F012B339C'/>";
+			xd = xp.createXDDocument("");
+			el = parse(xd, xml, reporter);
+			assertNoErrors(reporter);
+			assertEq(xml, el);
+			xd = xp.createXDDocument("");
+			xc = xd.xparseXComponent(xml, null, reporter);
+			assertEq(el,parse(xd, KXmlUtils.nodeToString(xc.toXml()),reporter));
+			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
 		try { // Construction of document from X-component
 			xdef =

@@ -1,6 +1,5 @@
 package bugreports;
 
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xdef.XDConstants;
 import org.xdef.XDDocument;
@@ -56,8 +55,8 @@ public class MyTest extends XDTester {
 		return XonUtils.xmlToXon(xc.toXml());
 	}
 
-	public static void xxx(XXNode xn) {
-		System.out.println(xn.getXComponent());
+	public static String xxx(XXNode xn) {
+		return "" + xn.getXComponent();
 	}
 
 	@Override
@@ -88,26 +87,25 @@ public class MyTest extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<xd:declaration>\n"+
-"  external method void bugreports.MyTest.xxx(XXNode);\n"+
+"  external method String bugreports.MyTest.xxx(XXNode);\n"+
 "</xd:declaration>\n"+
 "<xd:xon name='a'>\n"+
-"  [ $script=\"finally xxx();\", \"gps();\", \"gps();\"]\n"+
+"  [ $script=\"finally outln(xxx());\", \"gps();\", \"gps();\"]\n"+
 "</xd:xon>\n"+
 "<xd:component>\n"+
 "  %class bugreports.MyTesta %link a;\n"+
 "</xd:component>\n"+
 "</xd:def>";
-			xp = XDFactory.compileXD(null,xdef);
+			xp = compile(xdef);
 			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
 			json = "[ g(12.50, 1.2), g(2.5, 3.5, -0.1, xxx) ]";
 			xd = xp.createXDDocument("");
 			jparse(xd, json, reporter);
 			assertNoErrors(reporter);
-			System.out.println(XonUtils.toXonString(xd.getXon(), true));
 			xd = xp.createXDDocument("");
 			xc = xd.jparseXComponent(json, null, reporter);
 		} catch (Exception ex) {fail(ex);}
-if(true)return;
+//if(true)return;
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='x|y|y1|y2'>\n"+
@@ -145,8 +143,8 @@ if(true)return;
 "  %class bugreports.MyTestY %link y;\n"+
 "  %class bugreports.MyTestY1 %link y1;\n"+
 "  %class bugreports.MyTestY2 %link y2;\n"+
-"     %bind js$xxx %link #y2/js:array/js:item[2];\n"+
-"     %bind js$yyy %link #y2/js:array/js:item[3];\n"+
+"     %bind js$xxx %link #y2/jx:array/jx:item[2];\n"+
+"     %bind js$yyy %link #y2/jx:array/jx:item[3];\n"+
 "</xd:component>\n"+
 "</xd:def>";
 			xp = XDFactory.compileXD(null,xdef);
@@ -223,41 +221,7 @@ if(true)return;
 			assertTrue(XonUtils.xonEqual(j, toJson(xc)),
 				XonUtils.toJsonString(toJson(xc), true));
 		} catch (Exception ex) {fail(ex);}
-if(true)return;
-		try {
-			assertEq("", testj(
-//"<a>[ 1, 2 ][ 3, 4 ]</a>",
-"<a xmlns:js='http://www.xdef.org/json/4.0'>"+
-"<js:array>[ 1, 2 ]</js:array>"+
-"<js:array>[ 3, 4 ]</js:array>"+
-"</a>",
-				"{\"a\":[{}, [1,2], [3,4]]}"));
-if(true)return;
-			xml = "<a ax='1'><b bx='2'>xxx</b></a>";
-			el = KXmlUtils.parseXml(xml).getDocumentElement();
-			j = XonUtils.xmlToXon(el);
-//			assertEq(xml, XonUtils.xonToXmlXD(j));
-//			System.out.println(XonUtils.toJsonString(j));
-//			assertEq(el, XonUtils.xonToXmlXD(j));
-			assertEq("", testj("<a/>", "{\"a\": {} }"));
-			assertEq("", testj("<a>aaa</a>", "{\"a\":[{},\"aaa\"]}"));
-//			assertEq("", testj("<a>aaa</a>", "{\"a\": \"aaa\" }"));
-			assertEq("", testj("<a b='1' c='2'/>",
-				"{\"a\": {\"b\": 1, \"c\": 2} }"));
-			assertEq("", testj("<a><b/>aaa<c/></a>",
-				"{\"a\": [ {},  {\"b\": {} }, \"aaa\", {\"c\": {} } ] }"));
-			assertEq("", testj("<a ax='1'><b bx='2'>xxx</b></a>",
-				"{\"a\":[{\"ax\":1},{\"b\":[{\"bx\":2},\"xxx\"]}]}"));
-			assertEq("", testj("<a>[ 1, 2 ]</a>", "{\"a\":[{},[1,2]]}"));
-			assertEq("", testj(
-//"<a>[ 1, 2 ][ 3, 4 ]</a>",
-"<a xmlns:js='http://www.xdef.org/json/4.0'>"+
-"<js:array>[ 1, 2 ]</js:array>"+
-"<js:array>[ 3, 4 ]</js:array>"+
-"</a>",
-				"{\"a\":[{}, [1,2], [3,4]]}"));
-		} catch (Exception ex) {fail(ex);}
-if(true)return;
+//if(true)return;
 ////////////////////////////////////////////////////////////////////////////////
 		try {
 			xdef =
@@ -321,19 +285,7 @@ if(true)return;
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
-		try {
-			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"<xd:declaration>\n"+
-"  external method XDParseResult bugreports.MyTest_0.kp(XXNode, XDValue[]);\n"+
-"</xd:declaration>\n"+
-"<a a='kp(1,5,%totalDigits=1,%enumeration=[1,3],%pattern=[\"\\\\d\"])'/>\n"+
-"</xd:def>";
-			xp = compile(xdef);
-			xml = "<a a='3'/>";
-			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
-		} catch (Exception ex) {fail(ex);}
+//if(true)return;
 
 		clearTempDir(); // delete temporary files.
 	}

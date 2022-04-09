@@ -489,7 +489,7 @@ public class XonUtils {
 	 * @return XML element created from XON/JSON data.
 	 */
 	public final static Element xonToXml(final String xon) {
-		return XonToXml.toXmlW(XonUtils.parseJSON(xon));
+		return XonToXml.toXmlW(XonUtils.parseXON(xon));
 	}
 
 	/** Create XML from XON/JSON object in "W" format.
@@ -497,7 +497,7 @@ public class XonUtils {
 	 * @return XML element created from XON/JSON data.
 	 */
 	public final static Element xonToXml(final File xon) {
-		return XonToXml.toXmlW(XonUtils.parseJSON(xon));
+		return XonToXml.toXmlW(XonUtils.parseXON(xon));
 	}
 
 	/** Create XML from XON/JSON object in "W" format.
@@ -505,7 +505,7 @@ public class XonUtils {
 	 * @return XML element created from XON/JSON data.
 	 */
 	public final static Element xonToXml(final URL xon) {
-		return XonToXml.toXmlW(parseJSON(xon));
+		return XonToXml.toXmlW(parseXON(xon));
 	}
 
 	/** Create XML from XON/JSON object in "W" format.
@@ -513,7 +513,7 @@ public class XonUtils {
 	 * @return XML element created from XON/JSON data.
 	 */
 	public final static Element xonToXml(final InputStream xon) {
-		return XonToXml.toXmlW(XonUtils.parseJSON(xon));
+		return XonToXml.toXmlW(XonUtils.parseXON(xon));
 	}
 
 	/** Create XML from XON/JSON object in X-Definition mode.
@@ -529,7 +529,7 @@ public class XonUtils {
 	 * @return XML element created from XON/JSON data.
 	 */
 	public final static Element xonToXmlXD(final String xon) {
-		return XonToXml.toXmlXD(XonUtils.parseJSON(xon));
+		return XonToXml.toXmlXD(XonUtils.parseXON(xon));
 	}
 
 	/** Create XML from XON/JSON object in X-Definition mode.
@@ -537,7 +537,7 @@ public class XonUtils {
 	 * @return XML element created from XON/JSON data.
 	 */
 	public final static Element xonToXmlXD(final File xon) {
-		return XonToXml.toXmlXD(XonUtils.parseJSON(xon));
+		return XonToXml.toXmlXD(XonUtils.parseXON(xon));
 	}
 
 	/** Create XML from XON/JSON object in X-Definition mode.
@@ -545,7 +545,7 @@ public class XonUtils {
 	 * @return XML element created from JSON XON/data.
 	 */
 	public final static Element xonToXmlXD(final URL xon) {
-		return XonToXml.toXmlXD(parseJSON(xon));
+		return XonToXml.toXmlXD(parseXON(xon));
 	}
 
 	/** Create XML from XON/JSON object in X-Definition mode.
@@ -553,7 +553,7 @@ public class XonUtils {
 	 * @return XML element created from JSON XON/data.
 	 */
 	public final static Element xonToXmlXD(final InputStream xon) {
-		return XonToXml.toXmlXD(XonUtils.parseJSON(xon));
+		return XonToXml.toXmlXD(XonUtils.parseXON(xon));
 	}
 
 	/** Create XML from XON/JSON object in X-Definition mode.

@@ -13,6 +13,7 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Arrays;
 import org.xdef.XDValueID;
+import static org.xdef.XDValueID.XD_BYTES;
 import org.xdef.XDValueType;
 
 /** The class DefBytes implements the internal object with byte array.
@@ -20,8 +21,10 @@ import org.xdef.XDValueType;
  */
 public final class DefBytes extends XDValueAbstract implements XDBytes {
 
-	/** The boolean value of item. */
-	private byte[] _value;
+	/** The bytes value of item. */
+	byte[] _value;
+	/** True if this object was created from base64 otherwise from hex.*/
+	boolean _format;
 
 	/** Creates a new instance of DefBytes */
 	public DefBytes() {_value = null;}
@@ -29,17 +32,28 @@ public final class DefBytes extends XDValueAbstract implements XDBytes {
 	/** Creates a new instance of DefBytes
 	 * @param value The initial value of object.
 	 */
-	public DefBytes(final byte[] value) {_value = value;}
+	public DefBytes(final byte[] value) {
+		_value = value;
+		_format = false;
+	}
+	/** Creates a new instance of DefBytes
+	 * @param value The initial value of object.
+	 */
+	public DefBytes(final byte[] value, final boolean format) {
+		_value = value;
+		_format = format;
+	}
 
 	/** Creates a new instance of DefBytes from string in Base64 format
 	 * @param s The string with encoded Base64 data.
 	 * @return DefBytes object.
-	 * @throws SException if an error occurs.
+	 * @throws SException if an error occurs. 	 * @return 0 .. base64 or 1 hex.
+
 	 */
 	public static DefBytes parseBase64(final String s) throws SException {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		SUtils.decodeBase64(new StringReader(s), out);
-		return new DefBytes(out.toByteArray());
+		return new DefBytes(out.toByteArray(), true);
 	}
 
 	/** Creates a new instance of DefBytes from string in hexadecimal format
@@ -50,7 +64,7 @@ public final class DefBytes extends XDValueAbstract implements XDBytes {
 	public static DefBytes parseHex(final String s) throws SException {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		SUtils.decodeHex(new StringReader(s), out);
-		return new DefBytes(out.toByteArray());
+		return new DefBytes(out.toByteArray(), false);
 	}
 
 	/** Get byte from given position (as positive integer). If position is out
@@ -66,9 +80,8 @@ public final class DefBytes extends XDValueAbstract implements XDBytes {
 		return -1;
 	}
 
-	/** Get byte from given position (as positive integer). If position is out
-	 * of limits the method returns -1.
-	 * @return size of byle array.
+	/** Get size of byte array.
+	 * @return size of byte array.
 	 */
 	public int size() {return _value != null ? _value.length : 0; }
 
@@ -164,6 +177,12 @@ public final class DefBytes extends XDValueAbstract implements XDBytes {
 	}
 
 	@Override
+	/** Return true if the format is base64.
+	 * @return true if the format is base64 otherwise it is hexadecimal.
+	 */
+	public boolean isBase64() {return _format;}
+
+	@Override
 	/** Return the value of DefBytes as string in Base64 format.
 	 * @return string with value of this object in Base64 format.
 	 */
@@ -212,7 +231,9 @@ public final class DefBytes extends XDValueAbstract implements XDBytes {
 	/** Get value as String.
 	 * @return string with hexadecimal created from value.
 	 */
-	public String toString() {return _value == null ? "" : getHex();}
+	public String toString() {
+		return _value == null ? "" : _format ? getBase64() :getHex();
+	}
 	@Override
 	/** Get string in Base64 format of value of this object.
 	 * @return string value of this object.

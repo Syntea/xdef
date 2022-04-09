@@ -159,7 +159,7 @@ public final class XDReader extends SObjectReader {
 					case XDValueID.XD_BOOLEAN:
 						return new DefBoolean(readBoolean());
 					case XDValueID.XD_BYTES:
-						return new DefBytes(readBytes());
+						return new DefBytes(readBytes(), readBoolean());
 					case XDValueID.XD_DATETIME: {
 						SDatetime x = readSDatetime();
 						return x == null ? new DefDate() : new DefDate(x);

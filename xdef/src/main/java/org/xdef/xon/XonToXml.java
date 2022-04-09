@@ -339,7 +339,7 @@ class XonToXml extends XonTools implements XonNames {
 			if (len == 1) {
 				return;
 			}
-			if (array.size() >= 1 && (array.get(1) instanceof Map)) {
+			if (array.size() > 1 && (array.get(1) instanceof Map)) {
 				mm = (Map) array.get(1);
 				if (mm.size() == 1) { // it is element
 					if (array.size() == 1) { // no oter items of array
@@ -376,7 +376,9 @@ class XonToXml extends XonTools implements XonNames {
 				}
 				return;
 			} else {
-				addArrayItems(elem, array, 1);
+				addArrayItems(elem, array,
+					array.size() >= 1 && (array.get(0) instanceof Map)
+					&& ((Map)array.get(0)).isEmpty() ? 0 : 1);
 				return;
 			}
 		}

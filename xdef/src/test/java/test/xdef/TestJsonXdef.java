@@ -20,11 +20,15 @@ import org.xdef.msg.SYS;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.SDatetime;
 import org.xdef.sys.SRuntimeException;
+import static org.xdef.sys.STester.printThrowable;
+import static org.xdef.sys.STester.runTest;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
 import test.XDTester;
 import static test.XDTester._xdNS;
 import org.xdef.xon.XonNames;
+import static test.XDTester._xdNS;
+import static test.XDTester.genXComponent;
 
 /** Test processing JSON objects with X-definitions and X-components.
  * @author Vaclav Trojan
@@ -758,105 +762,109 @@ public class TestJsonXdef extends XDTester {
 				jparse(xp, "", (Object) j, reporter)));
 		} catch (Exception ex) {fail(ex);}
 		try {
-//			InputStream in;
-//			xdef =
-//"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n"+
-//" <xd:ini name='a'>\n"+
-//"   A=?string(); finally out(\"A\");\n" +
-//"   B=int(); finally out(\"B\");\n" +
-//"   C=date(); finally out(\"C\");\n" +
-//"   D=decimal(); finally out(\"D\");\n" +
-//"   [E; $script=optional; finally out(\"[E]\");]\n" +
-//"     x = ?int(); finally out(\"x\");\n" +
-//"   [F; $script=finally out(\"[F]\");]\n" +
-//" </xd:ini>\n"+
-//"</xd:def>";
-//			xp = compile(xdef);
-//			xd = xp.createXDDocument();
-//			strw = new StringWriter();
-//			xd.setStdOut(XDFactory.createXDOutput(strw, false));
-//			ini = "A=a\n B = 1\n C=2121-10-19\n D=2.121\n[E]\nx=123\n[F]";
-//			j = xd.iparse(ini, reporter);
-//			assertNoErrors(reporter);
-//			assertEq("ABCDx[E][F]", strw.toString());
-//			strw = new StringWriter();
-//			xd.setStdOut(XDFactory.createXDOutput(strw, false));
-//			in = new ByteArrayInputStream(ini.getBytes());
-//			j = xd.iparse(in, reporter);
-//			assertNoErrors(reporter);
-//			assertEq("ABCDx[E][F]", strw.toString());
-//			strw = new StringWriter();
-//			xd.setStdOut(XDFactory.createXDOutput(strw, false));
-//			ini = "\n B = 1 \n C=2121-10-19\n D=2.121\n [E] \n[F]";
-//			j = xd.iparse(ini, reporter);
-//			assertNoErrors(reporter);
-//			assertEq("BCD[E][F]", strw.toString());
-//			strw = new StringWriter();
-//			xd.setStdOut(XDFactory.createXDOutput(strw, false));
-//			in = new ByteArrayInputStream(ini.getBytes());
-//			j = xd.iparse(in, reporter);
-//			assertNoErrors(reporter);
-//			assertEq("BCD[E][F]", strw.toString());
-//			strw = new StringWriter();
-//			xd.setStdOut(XDFactory.createXDOutput(strw, false));
-//			j = xd.iparse(ini, reporter);
-//			assertNoErrors(reporter);
-//			assertEq("BCD[E][F]", strw.toString());
-//			strw = new StringWriter();
-//			xd.setStdOut(XDFactory.createXDOutput(strw, false));
-//			in = new ByteArrayInputStream(ini.getBytes());
-//			j = xd.iparse(in, reporter);
-//			assertNoErrors(reporter);
-//			assertEq("BCD[E][F]", strw.toString());
-//			ini = "\n B = 1 \n C=2121-10-19\n D=2.121\n[F]";
-//			strw = new StringWriter();
-//			xd.setStdOut(XDFactory.createXDOutput(strw, false));
-//			j = xd.iparse(ini, reporter);
-//			assertNoErrors(reporter);
-//			assertEq("BCD[F]", strw.toString());
-//			in = new ByteArrayInputStream(ini.getBytes());
-//			strw = new StringWriter();
-//			xd.setStdOut(XDFactory.createXDOutput(strw, false));
-//			j = xd.iparse(in, reporter);
-//			assertNoErrors(reporter);
-//			assertEq("BCD[F]", strw.toString());
-//			in = new ByteArrayInputStream(ini.getBytes());
-//			strw = new StringWriter();
-//			xd.setStdOut(XDFactory.createXDOutput(strw, false));
-//			j = xd.iparse(ini, reporter);
-//			assertNoErrors(reporter);
-//			assertEq("BCD[F]", strw.toString());
+			InputStream in;
+			xdef =
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n"+
+" <xd:ini name='a'>\n"+
+"   A=?string(); finally out(\"A\");\n" +
+"   B=int(); finally out(\"B\");\n" +
+"   C=date(); finally out(\"C\");\n" +
+"   D=decimal(); finally out(\"D\");\n" +
+"   [E; $script=optional; finally out(\"[E]\");]\n" +
+"     x = ?int(); finally out(\"x\");\n" +
+"   [F; $script=finally out(\"[F]\");]\n" +
+" </xd:ini>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			xd = xp.createXDDocument();
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			ini = "A=a\n B = 1\n C=2121-10-19\n D=2.121\n[E]\nx=123\n[F]";
+			j = xd.iparse(ini, reporter);
+			assertNoErrors(reporter);
+			assertEq("ABCDx[E][F]", strw.toString());
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			in = new ByteArrayInputStream(ini.getBytes());
+			j = xd.iparse(in, reporter);
+			assertNoErrors(reporter);
+			assertEq("ABCDx[E][F]", strw.toString());
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			ini = "\n B = 1 \n C=2121-10-19\n D=2.121\n [E] \n[F]";
+			j = xd.iparse(ini, reporter);
+			assertNoErrors(reporter);
+			assertEq("BCD[E][F]", strw.toString());
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			in = new ByteArrayInputStream(ini.getBytes());
+			j = xd.iparse(in, reporter);
+			assertNoErrors(reporter);
+			assertEq("BCD[E][F]", strw.toString());
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			j = xd.iparse(ini, reporter);
+			assertNoErrors(reporter);
+			assertEq("BCD[E][F]", strw.toString());
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			in = new ByteArrayInputStream(ini.getBytes());
+			j = xd.iparse(in, reporter);
+			assertNoErrors(reporter);
+			assertEq("BCD[E][F]", strw.toString());
+			ini = "\n B = 1 \n C=2121-10-19\n D=2.121\n[F]";
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			j = xd.iparse(ini, reporter);
+			assertNoErrors(reporter);
+			assertEq("BCD[F]", strw.toString());
+			in = new ByteArrayInputStream(ini.getBytes());
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			j = xd.iparse(in, reporter);
+			assertNoErrors(reporter);
+			assertEq("BCD[F]", strw.toString());
+			in = new ByteArrayInputStream(ini.getBytes());
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			j = xd.iparse(ini, reporter);
+			assertNoErrors(reporter);
+			assertEq("BCD[F]", strw.toString());
 		} catch (Exception ex) {fail(ex);}
 		try {
-//			xdef =
-//"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' name='TestINI' root='a'>\n"+
-//" <xd:ini name='a'>\n"+
-//"   A=?string()\n" +
-//"   B=int()\n" +
-//"   C=date()\n" +
-//"   D=decimal()\n" +
-//"   [E] $script=?\n" +
-//"     x = ?int()\n" +
-//"   [F]\n" +
-//" </xd:ini>\n"+
-//" <xd:component>\n" +
-//"  %class test.common.json.component.TestINI %link TestINI#a" + ";\n" +
-//" </xd:component>\n"+
-//"</xd:def>";
-//			xp = compile(xdef);
-//			ini = "A=a\n B=1\n C=2121-10-19\n D=2.34\n[E]\nx=123\n[F]";
-//			xd = xp.createXDDocument("TestINI");
-//			String xdir = _tempDir + "x/";
-//			File fdir = new File(xdir);
-//			fdir.mkdirs();
-//			genXComponent(xp, fdir).checkAndThrowErrors();
-//			xc = xd.iparseXComponent(ini, null, reporter);
-//			assertEq("a",SUtils.getValueFromGetter(xc,"get$A"));
-//			assertEq(1,SUtils.getValueFromGetter(xc,"get$B"));
-//			assertEq(new SDatetime("2121-10-19"),
-//				SUtils.getValueFromGetter(xc,"get$C"));
-//			assertEq(0, new BigDecimal("2.34").compareTo(
-//					(BigDecimal) SUtils.getValueFromGetter(xc,"get$D")));
+			xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' name='TestINI' root='a'>\n"+
+" <xd:ini name='a'>\n"+
+"   A=?string()\n" +
+"   B=int()\n" +
+"   C=date()\n" +
+"   D=decimal()\n" +
+"   [E] $script=?\n" +
+"     x = ?int()\n" +
+"   [F]\n" +
+" </xd:ini>\n"+
+" <xd:component>\n" +
+"  %class test.common.json.component.TestINI %link TestINI#a" + ";\n" +
+" </xd:component>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			ini = "A=a\n B=1\n C=2121-10-19\n D=2.34\n[E]\nx=123\n[F]";
+			xd = xp.createXDDocument("TestINI");
+			String xdir = _tempDir + "x/";
+			File fdir = new File(xdir);
+			fdir.mkdirs();
+			genXComponent(xp, fdir).checkAndThrowErrors();
+			xc = xd.iparseXComponent(ini, null, reporter);			
+			assertEq("a", SUtils.getValueFromGetter(
+				SUtils.getValueFromGetter(xc,"getA"), "getvalue"));
+			assertEq(1,SUtils.getValueFromGetter(
+				SUtils.getValueFromGetter(xc,"getB"), "getvalue"));
+			assertEq(new SDatetime("2121-10-19"),
+				SUtils.getValueFromGetter(
+					SUtils.getValueFromGetter(xc,"getC"), "getvalue"));
+			assertEq(0, new BigDecimal("2.34").compareTo(
+					(BigDecimal) SUtils.getValueFromGetter(
+						SUtils.getValueFromGetter(xc,"getD"), "getvalue")));
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xdef =

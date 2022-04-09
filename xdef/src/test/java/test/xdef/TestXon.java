@@ -531,11 +531,7 @@ public class TestXon extends XDTester {
 			assertNoErrors(reporter);
 			reporter.clear();
 			assertTrue(XonUtils.xonEqual(XonUtils.parseINI(ini),
-				XonUtils.parseINI(s = XonUtils.toIniString(xini))));
-			reporter.clear();
-			assertTrue(XonUtils.xonEqual(xini, xd.iparse(s, reporter)));
-			assertNoErrors(reporter);
-			reporter.clear();
+				XonUtils.parseINI(XonUtils.toIniString(xini))));
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' name=\"A\" root=\"test\">\n" +
 "  <xd:ini name=\"test\">\n" +
@@ -559,10 +555,7 @@ public class TestXon extends XDTester {
 "servertool.up=\\u670D\\u52A1\\u5668\\u5DF2\\u5728\\u8FD0\\u884C\\u3002";
 			xini = xd.iparse(ini, reporter);
 			assertTrue(XonUtils.xonEqual(XonUtils.parseINI(ini),
-				XonUtils.parseINI(s = XonUtils.toIniString(xini))));
-			assertNoErrors(reporter);
-			reporter.clear();
-			assertTrue(XonUtils.xonEqual(xini, xd.iparse(s, reporter)));
+				XonUtils.parseINI(XonUtils.toIniString(xini))));
 			assertNoErrors(reporter);
 			reporter.clear();
 			xdef =
@@ -591,10 +584,7 @@ public class TestXon extends XDTester {
 "version=11.0.0.55";
 			xini = xd.iparse(ini, reporter);
 			assertTrue(XonUtils.xonEqual(XonUtils.parseINI(ini),
-				XonUtils.parseINI(s = XonUtils.toIniString(xini))));
-			assertNoErrors(reporter);
-			reporter.clear();
-			assertTrue(XonUtils.xonEqual(xini, xd.iparse(s, reporter)));
+				XonUtils.parseINI(XonUtils.toIniString(xini))));
 			assertNoErrors(reporter);
 			reporter.clear();
 			ini =
@@ -607,10 +597,7 @@ public class TestXon extends XDTester {
 "version=11.0.0.55";
 			xini = xd.iparse(ini, reporter);
 			assertTrue(XonUtils.xonEqual(XonUtils.parseINI(ini),
-				XonUtils.parseINI(s = XonUtils.toIniString(xini))));
-			assertNoErrors(reporter);
-			reporter.clear();
-			assertTrue(XonUtils.xonEqual(xini, xd.iparse(s, reporter)));
+				XonUtils.parseINI(XonUtils.toIniString(xini))));
 			assertNoErrors(reporter);
 			reporter.clear();
 			ini =
@@ -620,10 +607,52 @@ public class TestXon extends XDTester {
 "version=11.0.0.55";
 			xini = xd.iparse(ini, reporter);
 			assertTrue(XonUtils.xonEqual(XonUtils.parseINI(ini),
-				XonUtils.parseINI(s = XonUtils.toIniString(xini))));
+				XonUtils.parseINI(XonUtils.toIniString(xini))));
+			assertNoErrors(reporter);
+			xdef =
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" root=\"TRSconfig\">\n" +
+"  <xd:ini xd:name=\"TRSconfig\">\n" +
+"    TRSUser = string()\n" +
+"    [User]\n" +
+"      Home = file()\n" +
+"      Authority = enum(\"SECURITY\", \"SOFTWARE\", \"CLIENT\", \"UNREGISTRED\")\n" +
+"      ItemSize = int(10000, 15000000)\n" +
+"      ReceiverSleep = int(1, 3600)\n" +
+"    [Server] $script = optional\n" +
+"      RemoteServerURL = url()\n" +
+"      SeverIP = ipAddr()\n" +
+"      SendMailHost = domainAddr()\n" +
+"      MailAddr = emailAddr()\n" +
+"      Signature = SHA1()\n" +
+"  </xd:ini>\n" +
+"</xd:def>";	
+			xp = compile(xdef);
+			xd = xp.createXDDocument();
+			ini =
+"############# TRS configuration #############\n" +
+"# TRS user name\n" +
+"TRSUser = John Smith\n" +
+"[User]\n" +
+"# user directory\n" +
+"Home = D:/TRS_Client/usr/Smith\n" +
+"# authority(SECURITY | SOFTWARE | CLIENT | UNREGISTRED)\n" +
+"Authority=CLIENT\n" +
+"# Maximal item size (10000 .. 15000000)\n" +
+"ItemSize=4000000\n" +
+"# Receiver sleep time in seconds (1 .. 3600).\n" +
+"ReceiverSleep=1\n" +
+"[Server]\n" +
+"# Remote server\n" +
+"RemoteServerURL=http://localhost:8080/TRS/TRSServer\n" +
+"SeverIP = 123.45.67.8\n" +
+"SendMailHost = smtp.synth.cz\n" +
+"MailAddr = jira@synth.cz\n" +
+"Signature = 12afe0c1d246895a990ab2dd13ce684f012b339c\n";
+			xini = xd.iparse(ini, reporter);
 			assertNoErrors(reporter);
 			reporter.clear();
-			assertTrue(XonUtils.xonEqual(xini, xd.iparse(s, reporter)));
+			assertTrue(XonUtils.xonEqual(xini,
+				xd.iparse(XonUtils.toIniString(xini), reporter)));
 			assertNoErrors(reporter);
 			reporter.clear();
 		} catch (Exception ex) {fail(ex);}
@@ -649,7 +678,7 @@ public class TestXon extends XDTester {
 "xyz, d@e.f,\n"+
 "xyz,,\n"+
 ",,\n"+
-"xyz, , 123 456 789\n";
+"xyz, , 123 456 789";
 			x = xd.cparse(new StringReader(s), null, reporter);
 			assertNoErrors(reporter);
 			reporter.clear();
