@@ -367,12 +367,6 @@ final class ChkXONParser implements XParser, XonParser {
 				elementStart(kelem);
 				elementEnd();
 			}
-			String s = name.getString();
-			for (SBuffer x : _names) {
-				if (x.getString().equals(s)) {
-					return s; //stack contains this name
-				}
-			}
 		} else {// simple value or array
 			genItem(value, null);
 		}
