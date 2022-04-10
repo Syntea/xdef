@@ -9,6 +9,7 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 import javax.xml.XMLConstants;
 import javax.xml.namespace.QName;
 import org.w3c.dom.Document;
@@ -51,6 +52,8 @@ public final class XonSourceParser implements XonParser, XParser {
 	private SBuffer _name;
 	/** simpleValue of item. */
 	private XonTools.JValue _value;
+	private Stack<SBuffer> _names;
+	private final Stack<Stack<SBuffer>> _mapNames = new Stack<Stack<SBuffer>>();
 
 	XonSourceParser(final File f) {
 		try {
@@ -180,7 +183,7 @@ public final class XonSourceParser implements XonParser, XParser {
 	 * @return null or name of pair if value pair already exists in
 	 * the currently processed map.
 	 */
-	public String putValue(final XonTools.JValue value) {
+	public void putValue(final XonTools.JValue value) {
 		if (_name != null) { // create element with value
 			String name = XonTools.toXmlName(_name.getString());
 			Element e = _doc.createElement(name);
@@ -213,14 +216,23 @@ public final class XonSourceParser implements XonParser, XParser {
 			elementStart(new SBuffer(XonNames.X_ITEM, value.getPosition()));
 		}
 		elementEnd();
-		return null;
 	}
 	@Override
 	/** Set name of value pair.
 	 * @param name value name.
+	 * @return true if the name of pair already exists otherwise return false.
 	 */
-	public void namedValue(final SBuffer name) {
-		_name = name;
+	public boolean namedValue(final SBuffer name) {
+		String s = name.getString();
+		boolean result = false;
+		for (SBuffer x : _names) {
+			if (s.equals(x.getString())) {
+				result = true;
+				break;
+			}
+		}
+		_names.push(_name = name);
+		return false; /*xx*/
 	}
 	@Override
 	/** Array started.
@@ -240,12 +252,16 @@ public final class XonSourceParser implements XonParser, XParser {
 	 */
 	public void mapStart(final SPosition pos) {
 		elementStart(new SBuffer(XonNames.X_MAP, pos));
+		_mapNames.push(_names = new Stack<SBuffer>());
 	}
 	@Override
 	/** Map ended.
 	 * @param pos source position.
 	 */
-	public void mapEnd(final SPosition pos) {elementEnd();}
+	public void mapEnd(final SPosition pos) {
+		elementEnd();
+		_names = _mapNames.pop();
+	}
 
 	@Override
 	/** Processed comment.

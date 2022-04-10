@@ -170,7 +170,9 @@ public final class XonReader extends StringParser implements XonParsers {
 					//"&{0}"&{1}{ or "}{"} expected
 					error(JSON.JSON002, String.valueOf(separator));
 				}
-				_jp.namedValue(name);
+				if (_jp.namedValue(name)) {
+					error(JSON.JSON022, name); //Value pair &{0} already exists
+				}
 				readItem();
 			}
 			skipSpacesOrComments();
@@ -669,10 +671,7 @@ public final class XonReader extends StringParser implements XonParsers {
 				jv = new XonTools.JValue(jv.getPosition(),
 					val == null ? "null" : val.toString());
 			}
-			String name = _jp.putValue(jv);
-			if (name != null) {
-				error(JSON.JSON022, name); //Value pair &{0} already exists
-			}
+			_jp.putValue(jv);
 		}
 	}
 

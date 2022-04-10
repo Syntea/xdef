@@ -1,11 +1,12 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 41.0.7, release-date 2022-04-09
+# Version 41.0.7, release-date 2022-04-10
 * fixed bug in method `XComponent.toXml()' when parsed value of byte array
   created by validateion method `hex()` was converted to base64 format
   (not to hexadecimal).
 * corrected conversion `XonUtils.xonToXmlXD(xon)` if in an array is the first
   item an empty map.
+* fixed bug in xon parser in map a duplicated name of value pair was not reported.
 
 # Version 41.0.6, release-date 2022-04-06
 * fixed bug in `org.xdef.util.GUIEditor` if X-definition is not a valid XML.

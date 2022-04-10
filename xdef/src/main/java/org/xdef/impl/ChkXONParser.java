@@ -65,14 +65,15 @@ final class ChkXONParser implements XParser, XonParser {
 
 	private final Stack<Integer> _kinds = new Stack<Integer>();
 	private int _kind; // 0..value, 1..array, 2..map
-	private final Stack<SBuffer> _names = new Stack<SBuffer>();
+	private Stack<SBuffer> _names;
+	private final Stack<Stack<SBuffer>> _mapNames = new Stack<Stack<SBuffer>>();
 	private boolean _nsGenerated;
-
 
 	private ChkXONParser(final ReportWriter reporter) {
 		super();
 		_sReporter = new SReporter(
 			reporter == null ?  new ArrayReporter() : reporter);
+		_names = null;
 	}
 
 	/** Creates a new instance of ChkParser and parses given string.
@@ -348,10 +349,8 @@ final class ChkXONParser implements XParser, XonParser {
 	@Override
 	/** Put value to result.
 	 * @param value JValue to be added to result object.
-	 * @return null or name of pair if value pair already exists in
-	 * the currently processed map.
 	 */
-	public String putValue(final XonTools.JValue value) {
+	public void putValue(final XonTools.JValue value) {
 		if (_kind == 2) { // map
 			SBuffer name = _names.pop();
 			if (value!=null && (value instanceof Map || value instanceof List)){
@@ -370,13 +369,25 @@ final class ChkXONParser implements XParser, XonParser {
 		} else {// simple value or array
 			genItem(value, null);
 		}
-		return null;
 	}
 	@Override
 	/** Set name of value pair.
 	 * @param name value name.
+	 * @param name value name.
+	 * @return true if the name of pair already exists otherwise return false.
 	 */
-	public final void namedValue(final SBuffer name) {_names.push(name);}
+	public final boolean namedValue(final SBuffer name) {
+		boolean result = false;
+		String s = name.getString();
+		for (SBuffer x : _names) {
+			if (s.equals(x.getString())) {
+				result = true;
+				break;
+			}
+		}
+		_names.push(name);
+		return result;
+	}
 	@Override
 	/** Array started.
 	 * @param pos source position.
@@ -414,6 +425,7 @@ final class ChkXONParser implements XParser, XonParser {
 				XonTools.toXmlName(name.getString()), name));
 		}
 		elementStart(kelem);
+		_mapNames.push(_names = new Stack<SBuffer>());
 		_kinds.push(_kind = 2);
 	}
 	@Override
@@ -424,6 +436,7 @@ final class ChkXONParser implements XParser, XonParser {
 		_kinds.pop();
 		_kind = _kinds.peek();
 		elementEnd();
+		_names = _mapNames.pop();
 	}
 	@Override
 	/** Processed comment.

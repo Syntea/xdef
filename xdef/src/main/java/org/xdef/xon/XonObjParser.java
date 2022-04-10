@@ -28,27 +28,26 @@ public class XonObjParser implements XonParser {
 	@Override
 	/** Put value to result.
 	 * @param value X_Value to be added to result object.
-	 * @return null or name of pair if value pair already exists in
-	 * the currently processed map.
 	 */
-	public String putValue(XonTools.JValue value) {
+	public void putValue(XonTools.JValue value) {
 		if (_kind == 1) {
 			_arrays.peek().add(value.getValue());
 		} else if (_kind == 2) {
 			String name = _names.pop();
-			if (_maps.peek().put(name, value.getValue()) != null) {
-				return name;
-			}
+			_maps.peek().put(name, value.getValue());
 		} else {
 			_value = value.getValue();
 		}
-		return null;
 	}
 	@Override
 	/** Set name of value pair.
 	 * @param name value name.
+	 * @return true if the name of pair already exists, otherwise return false.
 	 */
-	public void namedValue(SBuffer name) {_names.push(name.getString());}
+	public boolean namedValue(SBuffer name) {
+		_names.push(name.getString());
+		return _maps.peek().containsKey(name.getString());
+	}
 	@Override
 	/** Array started.
 	 * @param pos source position.

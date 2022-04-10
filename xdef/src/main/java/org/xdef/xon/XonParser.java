@@ -9,14 +9,13 @@ import org.xdef.sys.SPosition;
 public interface XonParser {
 	/** Put value to result.
 	 * @param value X_Value to be added to result object.
-	 * @return null or name of pair if value pair already exists in
-	 * the currently processed map.
 	 */
-	public String putValue(XonTools.JValue value);
+	public void putValue(XonTools.JValue value);
 	/** Set name of value pair.
 	 * @param name value name.
+	 * @return true if the name of pair already exists, othrwise return false.
 	 */
-	public void namedValue(SBuffer name);
+	public boolean namedValue(SBuffer name);
 	/** Array started.
 	 * @param pos source position.
 	 */

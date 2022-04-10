@@ -632,27 +632,34 @@ if (org.xdef.impl.XPool._debugSwitches.contains(
 		@Override
 		/** Put value to result.
 		 * @param value JValue to be added to result object.
-		 * @return null or name of pair if value pair already exists in
-		 * the currently processed map.
 		 */
-		public String putValue(JValue value) {
+		public void putValue(JValue value) {
 			if (_kind == 1) {
 				_arrays.peek().add(value);
 			} else if (_kind == 2) {
 				SBuffer name = _names.pop();
-				if (_maps.peek().put(name.getString(), value) != null) {
-					return name.getString();
-				}
+				_maps.peek().put(name.getString(), value);
 			} else {
 				_value = value;
 			}
-			return null;
 		}
 		@Override
 		/** Set name of value pair.
 		 * @param name value name.
+		 * @return true if the name of pair already exists.
 		 */
-		public void namedValue(SBuffer name) {_names.push(name);}
+		public boolean namedValue(SBuffer name) {
+			String s = name.getString();
+			boolean result = false;
+			for (SBuffer x: _names) {
+				if (s.equals(x.getString())) {
+					result = true;
+					break;
+				}
+			}
+			_names.push(name);
+			return result;
+		}
 		@Override
 		/** Array started.
 		 * @param pos source position.
