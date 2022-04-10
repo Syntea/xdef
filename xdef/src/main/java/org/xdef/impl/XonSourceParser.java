@@ -184,37 +184,8 @@ public final class XonSourceParser implements XonParser, XParser {
 	 * the currently processed map.
 	 */
 	public void putValue(final XonTools.JValue value) {
-		if (_name != null) { // create element with value
-			String name = XonTools.toXmlName(_name.getString());
-			Element e = _doc.createElement(name);
-			String val = null;
-			if (value != null) {
-				val = XonTools.genXMLValue(value.getValue());
-				e.setAttribute(XonNames.X_VALUEATTR, val);
-			}
-			_el = e;
-			_chkEl = _chkEl.createChkElement(_el);
-			if (_level >= _chkElemStack.length) { //increase nodelist
-				ChkElement[] newList =
-					new ChkElement[_chkElemStack.length + NODELIST_ALLOC_UNIT];
-				System.arraycopy(_chkElemStack, 0, newList, 0,_chkElemStack.length);
-				_chkElemStack = newList;
-			}
-			_level++;
-			_chkElemStack[_level] = _chkEl;
-			_chkDoc.getReporter().setPosition(_name);
-			if (val != null) {
-				_chkDoc.getReporter().setPosition(value.getPosition());
-				_chkEl.addAttribute(XonNames.X_VALUEATTR, val);
-			}
-			_chkDoc.getReporter().setPosition(_name);
-			_name = null;
-			_value = null;
-			_chkEl.checkElement();
-		} else {
-			_value = value;
-			elementStart(new SBuffer(XonNames.X_ITEM, value.getPosition()));
-		}
+		_value = value;
+		elementStart(new SBuffer(XonNames.X_ITEM, value.getPosition()));
 		elementEnd();
 	}
 	@Override

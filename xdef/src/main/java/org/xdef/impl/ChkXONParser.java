@@ -353,19 +353,7 @@ final class ChkXONParser implements XParser, XonParser {
 	public void putValue(final XonTools.JValue value) {
 		if (_kind == 2) { // map
 			SBuffer name = _names.pop();
-			if (value!=null && (value instanceof Map || value instanceof List)){
-				genItem(value, name);
-			} else {
-				KParsedElement kelem = genKElem(
-					XonTools.toXmlName(name.getString()),
-					null,
-					name == null ? value.getPosition() : name);
-				kelem.addAttr(new KParsedAttr(XonNames.X_VALUEATTR,
-					XonTools.genXMLValue(value.getValue()),
-					value.getPosition()));
-				elementStart(kelem);
-				elementEnd();
-			}
+			genItem(value, name);
 		} else {// simple value or array
 			genItem(value, null);
 		}

@@ -402,15 +402,7 @@ public class CompileXonXdef extends StringParser {
 				if (_xdNamespace.equals(eee._nsURI)
 					&& "choice".equals(eee._localName)) {
 					for (PNode n : eee.getChildNodes()) {
-						if (XDConstants.XON_NS_URI_W.equals(n.getNamespace())
-							&& XonNames.X_ITEM.equals(n.getLocalName())) {
-							n._name =
-								new SBuffer(XonTools.toXmlName(key), n._name);
-							n._nsindex = -1;
-							n._nsURI = null;
-						} else {
-							updateKeyInfo(n, key);
-						}
+						updateKeyInfo(n, key);
 					}
 				} else {
 					updateKeyInfo(eee, key);
@@ -504,9 +496,7 @@ public class CompileXonXdef extends StringParser {
 		final JValue jo,
 		final PNode parent) {
 		SBuffer sbf, occ = null;
-		PNode e = name == null
-			? genJElement(parent, XonNames.X_ITEM, jo.getPosition())
-			: genPElement(parent, null, name, jo.getPosition());
+		PNode e = genJElement(parent, XonNames.X_ITEM, jo.getPosition());
 		if (jo.getValue() == null) {
 			sbf = new SBuffer("jnull()");
 		} else {
@@ -527,6 +517,11 @@ public class CompileXonXdef extends StringParser {
 				setXDAttr(e, "script", occ);
 			}
 			setAttr(e, XonNames.X_VALUEATTR, sbf);
+		}
+		if (name != null) {
+			addMatchExpression(e, '@' + XonNames.X_KEYATTR + "=='"+ name +"'");
+			setAttr(e, XonNames.X_KEYATTR,
+				new SBuffer("fixed('" + name + "');",e._name));
 		}
 		return e;
 	}
@@ -601,13 +596,13 @@ public class CompileXonXdef extends StringParser {
 		jp = null;
 		p._value = null;
 /*#if DEBUG*#/
-if (org.xdef.impl.XPool._debugSwitches.contains(
+	if (org.xdef.impl.XPool._debugSwitches.contains(
 		org.xdef.impl.XConstants.DEBUG_SHOW_XON_MODEL)) {
-	// display created model
-	System.err.flush();
-	System.out.println(org.xdef.xml.KXmlUtils.nodeToString(p.toXML(),true));
-	System.out.flush();
-}
+		// display created model
+		System.err.flush();
+		System.out.println(org.xdef.xml.KXmlUtils.nodeToString(p.toXML(),true));
+		System.out.flush();
+	}
 /*#end*/
 	}
 
