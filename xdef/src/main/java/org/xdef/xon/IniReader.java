@@ -425,7 +425,10 @@ public class IniReader extends StringParser implements XonParsers {
 		Object o;
 		for (Map.Entry<String, Object> x: ini.entrySet()) {
 			if (!((o = x.getValue()) instanceof Map)) {
-				Element item = el.getOwnerDocument().createElement(
+				Element item = el.getOwnerDocument().createElementNS(
+					XDConstants.XON_NS_URI_W,
+					XDConstants.XON_NS_PREFIX + ":" + XonNames.X_ITEM);
+				item.setAttribute(XonNames.X_KEYATTR,
 					XonTools.toXmlName(x.getKey()));
 				String s;
 				if (o == null) {

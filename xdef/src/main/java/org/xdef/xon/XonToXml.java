@@ -678,14 +678,8 @@ class XonToXml extends XonTools implements XonNames {
 			String key = o instanceof byte[]? new String((byte[])o) : (String)o;
 			key = toXmlName(key);
 			o = en.getValue();
-			if (o != null && (o instanceof Map || o instanceof List)) {
-				Element ee = genValueW(o, e);
-				ee.setAttribute(X_KEYATTR, key);
-			} else {
-				Element ee = _doc.createElement(key);
-				e.appendChild(ee);
-				ee.setAttribute(X_VALUEATTR, genXMLValue(o));
-			}
+			Element ee = genValueW(o, e);
+			ee.setAttribute(X_KEYATTR, key);
 		}
 		return e;
 	}

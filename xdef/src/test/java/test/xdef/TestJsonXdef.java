@@ -379,40 +379,43 @@ public class TestJsonXdef extends XDTester {
 
 			test = "Test020";
 			xc = getXComponent(xp, test, 0);
-			j = SUtils.getValueFromGetter(xc,"geta");
-			assertEq("abc", SUtils.getValueFromGetter(j,"get" + XonNames.X_VALUEATTR));
-			SUtils.setValueToSetter(j,"set" + XonNames.X_VALUEATTR, null);
-			assertTrue(SUtils.getValueFromGetter(j,"get"+XonNames.X_VALUEATTR)==null);
+			assertEq("abc", SUtils.getValueFromGetter(xc,"get$a"));
+			SUtils.setValueToSetter(xc,"set$a", null);
+			assertTrue(SUtils.getValueFromGetter(xc,"get$a")==null);
 
 			xc = getXComponent(xp, test, 1);
-			j = SUtils.getValueFromGetter(xc,"geta");
-			assertEq(123, SUtils.getValueFromGetter(j,"get" + XonNames.X_VALUEATTR));
-			SUtils.setValueToSetter(j,"set" + XonNames.X_VALUEATTR, "");
-			assertEq("", SUtils.getValueFromGetter(j,"get" + XonNames.X_VALUEATTR));
+			assertEq(123, SUtils.getValueFromGetter(xc,"get$a"));
+			SUtils.setValueToSetter(xc,"set$a", "");
+			assertEq("", SUtils.getValueFromGetter(xc,"get$a"));
 			xc = getXComponent(xp, test, 2);
-			j = SUtils.getValueFromGetter(xc,"geta");
-			assertEq(false, SUtils.getValueFromGetter(j,"get"+XonNames.X_VALUEATTR));
+			assertEq(false, SUtils.getValueFromGetter(xc,"get$a"));
 			xc = getXComponent(xp, test, 3);
-			j = SUtils.getValueFromGetter(xc,"geta");
-			assertTrue(SUtils.getValueFromGetter(j,"get"+XonNames.X_VALUEATTR)!=null);
+			assertTrue(SUtils.getValueFromGetter(xc,"get$a")!=null);
 
 			test = "Test021";
 			xc = getXComponent(xp, test, 0);
 			j = SUtils.getValueFromGetter(xc,"get"+xon+"item");
-			assertEq("abc", SUtils.getValueFromGetter(j,"get" +XonNames.X_VALUEATTR));
+			assertEq("abc",
+				SUtils.getValueFromGetter(j,"get" +XonNames.X_VALUEATTR));
 			xc = getXComponent(xp, test, 1);
 			j = SUtils.getValueFromGetter(xc,"get"+xon+"item");
-			assertEq(123, SUtils.getValueFromGetter(j,"get" +XonNames.X_VALUEATTR));
+			assertEq(123,
+				SUtils.getValueFromGetter(j,"get" +XonNames.X_VALUEATTR));
 			SUtils.setValueToSetter(j,"set" + XonNames.X_VALUEATTR, "");
-			assertEq("", SUtils.getValueFromGetter(j,"get" + XonNames.X_VALUEATTR));
-			SUtils.setValueToSetter(j,"set" + XonNames.X_VALUEATTR, " a    b \n ");
-			assertEq(" a    b \n ", SUtils.getValueFromGetter(j, "get" + XonNames.X_VALUEATTR));
+			assertEq("",
+				SUtils.getValueFromGetter(j,"get" + XonNames.X_VALUEATTR));
+			SUtils.setValueToSetter(j,
+				"set"+XonNames.X_VALUEATTR, " a    b \n ");
+			assertEq(" a    b \n ",
+				SUtils.getValueFromGetter(j, "get" + XonNames.X_VALUEATTR));
 			xc = getXComponent(xp, test, 2);
 			j = SUtils.getValueFromGetter(xc,"get"+xon+"item");
-			assertEq(false, SUtils.getValueFromGetter(j,"get" +XonNames.X_VALUEATTR));
+			assertEq(false,
+				SUtils.getValueFromGetter(j,"get" +XonNames.X_VALUEATTR));
 			xc = getXComponent(xp, test, 3);
 			j = SUtils.getValueFromGetter(xc,"get"+xon+"item");
-			assertTrue(SUtils.getValueFromGetter(j,"get"+XonNames.X_VALUEATTR)!=null);
+			assertTrue(SUtils.getValueFromGetter(
+				j, "get"+XonNames.X_VALUEATTR)!=null);
 			xc = getXComponent(xp, test, 4);
 			assertNull(SUtils.getValueFromGetter(xc,"get"+xon+"item"));
 
@@ -422,7 +425,8 @@ public class TestJsonXdef extends XDTester {
 			assertEq("null", SUtils.getValueFromGetter(j,
 				"get" + XonNames.X_VALUEATTR).toString());
 			j = SUtils.getValueFromGetter(xc,"get"+xon+"item_1");
-			assertEq(12, SUtils.getValueFromGetter(j,"get" + XonNames.X_VALUEATTR));
+			assertEq(12,
+				SUtils.getValueFromGetter(j,"get" + XonNames.X_VALUEATTR));
 			j = SUtils.getValueFromGetter(xc,"get"+xon+"item_2");
 			assertEq("\" a b \"",
 				SUtils.getValueFromGetter(j,"get" + XonNames.X_VALUEATTR));
@@ -448,10 +452,12 @@ public class TestJsonXdef extends XDTester {
 			j = SUtils.getValueFromGetter(xc,"listOf"+xon+"item_1");
 			assertEq(2, ((List) j).size());
 			j = ((List) j).get(0);
-			assertEq(12, SUtils.getValueFromGetter(j,"get" + XonNames.X_VALUEATTR));
+			assertEq(12,
+				SUtils.getValueFromGetter(j,"get" + XonNames.X_VALUEATTR));
 			j = SUtils.getValueFromGetter(xc,"listOf"+xon+"item_1");
 			j = ((List) j).get(1);
-			assertEq(13, SUtils.getValueFromGetter(j,"get" + XonNames.X_VALUEATTR));
+			assertEq(13,
+				SUtils.getValueFromGetter(j,"get" + XonNames.X_VALUEATTR));
 		} catch (Exception ex) {fail(ex);}
 		// If no errors were reported delete all generated data.
 		// Otherwise, leave them to be able to see the reason of errors.
