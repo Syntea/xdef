@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 41.0.7, release-date 2022-04-10
+# Version 41.0.7, release-date 2022-04-11
 * fixed bug in method `XComponent.toXml()' when parsed value of byte array
   created by validateion method `hex()` was converted to base64 format
   (not to hexadecimal).
