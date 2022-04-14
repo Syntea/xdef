@@ -3,7 +3,6 @@ package org.xdef;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 /** Interface for incremental writing XML data to a stream in script.
  * @author Vaclav Trojan

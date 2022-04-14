@@ -193,7 +193,6 @@ public abstract class XDParserAbstract extends XDValueAbstract
 			switch (x.getItemId()) {
 				case XD_PARSER: return (XDParser) x;
 				case XD_BOOLEAN:
-					String parserName = parserName();
 					return new XDParserAbstract() {
 						@Override
 						public void parseObject(XXNode xnode, XDParseResult p) {
