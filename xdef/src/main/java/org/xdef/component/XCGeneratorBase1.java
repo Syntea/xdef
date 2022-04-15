@@ -2,11 +2,14 @@ package org.xdef.component;
 
 import java.util.Iterator;
 import java.util.Map;
+import org.xdef.XDConstants;
 import org.xdef.XDPool;
 import static org.xdef.component.XCGeneratorBase.LN;
 import static org.xdef.component.XCGeneratorBase.genSeparator;
+import org.xdef.impl.XConstants;
 import org.xdef.impl.XElement;
 import org.xdef.sys.ArrayReporter;
+import org.xdef.xon.XonNames;
 
 /** Methods for generation Java source code of getters/setters.
  * @author Vaclav Trojan
@@ -69,6 +72,37 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 		}
 		return toXml;
 	}
+	/** Generate toXOn() method. */
+	private String genToXonMethod(final XElement xe) {
+		String s;
+		if (xe._xon == XConstants.XON_MODE_W
+			&& XDConstants.XON_NS_URI_W.equals(xe.getNSUri())) {
+			s = xe.getLocalName();
+			String typ;
+			if (XonNames.X_ARRAY.equals(s)) {
+				typ = "java.util.List<Object>";
+			} else if (XonNames.X_MAP.equals(s)) {
+				typ = "java.util.Map<String,Object>";
+			} else {
+				typ = "Object";
+			}
+			s =
+(_genJavadoc ? "\t/** Get XON object from this X-component."+LN+
+"\t * @return object from this X-deomponent."+LN+
+"\t */"+LN : "")+
+("Object".equals(typ) ? "" : "\t@SuppressWarnings(\"unchecked\")"+LN)+
+"\t@Override"+LN+
+"\tpublic " + typ + " toXon() {"+LN+
+"\t\treturn " + ("Object".equals(typ) ? "" : "(" + typ + ")")
+			+ " org.xdef.component.XComponentUtil.toXon(this);"+LN+
+"\t}"+LN;
+		} else {
+			s = 
+(_genJavadoc ? "\t/** Reurn null here from this X-component.*/"+LN : "")+
+"\tpublic Object toXon() {return null;}"+LN;
+		}
+		return s;
+	}
 
 	/** Final generation of Java sources from prepared data. */
 	final String genSource(final XElement xe,
@@ -110,6 +144,7 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 ////////////////////////////////////////////////////////////////////////////////
 (_genJavadoc?"\t/** Get JXON version: 0 not set, 1 .. W3C, 2 .. XDEF.*/"+LN:"")+
 "\tpublic final static byte XON = " + xe._xon + ";" +LN+
+genToXonMethod(xe)+
 "\t@Override"+LN+
 (_genJavadoc ? ("\t/** Create XML element from this XComponent (marshal)."+LN+
 "\t * If the argument is null <i>null</i> then document is created with"+LN+
@@ -325,13 +360,13 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 "\t@Override"+LN+
 (_genJavadoc ? "\t/** Set value of text node."+LN+
 "\t * @param x Actual XXNode (from text node)."+LN+
-"\t * @param parseResult parsed value."+LN+
+"\t * @param value parsed value."+LN+
 "\t */"+LN : "");
 		int ndx;
 		if (txttab.isEmpty()) {
 			result +=
 "\tpublic void xSetText(org.xdef.proc.XXNode x,"+LN+
-"\t\torg.xdef.XDParseResult parseResult){}"+LN;
+"\t\torg.xdef.XDParseResult value){}"+LN;
 		} else if (txttab.size() == 1) {
 			Map.Entry<String, String> e = txttab.entrySet().iterator().next();
 			String val = e.getValue();
@@ -343,14 +378,14 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 				: "\t\tlistOf" + name + "().add("+getter+")";
 			result +=
 "\tpublic void xSetText(org.xdef.proc.XXNode x,"+LN+
-"\t\torg.xdef.XDParseResult parseResult){"+LN+
+"\t\torg.xdef.XDParseResult value){"+LN+
 (val.startsWith("1") ?
 "\t\t_$" + name + "=(char) XD_ndx++;"+LN+ s + ";"+LN+"\t}"+LN
 :"\t\t_$" + name + ".append((char) XD_ndx++);"+LN+ s + ";"+LN+"\t}"+LN);
 		} else {
 			result +=
 "\tpublic void xSetText(org.xdef.proc.XXNode x,"+LN+
-"\t\torg.xdef.XDParseResult parseResult){"+LN;
+"\t\torg.xdef.XDParseResult value){"+LN;
 			String s = "";
 			for(Map.Entry<String, String> e: txttab.entrySet()) {
 				s += (s.isEmpty() ? "\t\t" : "\t\t} else ")
@@ -371,25 +406,25 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 "\t@Override"+LN+
 (_genJavadoc ? "\t/** Set value of attribute."+LN+
 "\t * @param x Actual XXNode (from attribute node)."+LN+
-"\t * @param parseResult parsed value."+LN+
+"\t * @param value parsed value."+LN+
 "\t */"+LN : "");
 		if (atttab.isEmpty()) {
 			result +=
 "\tpublic void xSetAttr(org.xdef.proc.XXNode x,"+LN+
-"\t\torg.xdef.XDParseResult parseResult){}"+LN;
+"\t\torg.xdef.XDParseResult value){}"+LN;
 		} else if (atttab.size() == 1) {
 			String val = atttab.entrySet().iterator().next().getValue();
 			ndx = val.indexOf(';');
 			String getter = val.substring(0, ndx);
 			result +=
 "\tpublic void xSetAttr(org.xdef.proc.XXNode x,"+LN+
-"\t\torg.xdef.XDParseResult parseResult){"+LN+
+"\t\torg.xdef.XDParseResult value){"+LN+
 "\t\tXD_Name_" + val.substring(ndx + 1) + " = x.getNodeName();"+LN+
 "\t\tset" + val.substring(ndx + 1) + "(" + getter + ");"+LN+"\t}"+LN;
 		} else {
 			result +=
 "\tpublic void xSetAttr(org.xdef.proc.XXNode x,"+LN+
-"\t\torg.xdef.XDParseResult parseResult) {"+LN;
+"\t\torg.xdef.XDParseResult value) {"+LN;
 			String s = "";
 			for (Iterator<Map.Entry<String, String>> it =
 				atttab.entrySet().iterator(); it.hasNext();) {

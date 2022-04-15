@@ -8,6 +8,14 @@ import java.util.Set;
 import java.util.Stack;
 import org.xdef.XDConstants;
 import org.xdef.XDPool;
+import static org.xdef.component.XCGeneratorBase.LN;
+import static org.xdef.component.XCGeneratorBase.RESERVED_NAMES;
+import static org.xdef.component.XCGeneratorBase.addNSUri;
+import static org.xdef.component.XCGeneratorBase.checkUnique;
+import static org.xdef.component.XCGeneratorBase.genCreatorOfAttribute;
+import static org.xdef.component.XCGeneratorBase.getParsedResultGetter;
+import static org.xdef.component.XCGeneratorBase.getUniqueName;
+import static org.xdef.component.XCGeneratorBase.javaName;
 import org.xdef.impl.XConstants;
 import org.xdef.impl.XData;
 import org.xdef.impl.XElement;
@@ -89,7 +97,6 @@ final class XCGenerator extends XCGeneratorXON {
 			interfcName.isEmpty() ? null : new StringBuilder();
 		final Properties nsmap = new Properties();
 		addNSUri(nsmap, xe);
-		genToXonMethod(xe, getters);
 		final Map<String, String> atttab = new LinkedHashMap<String, String>();
 		int ndx;
 		// attributes
@@ -406,7 +413,8 @@ final class XCGenerator extends XCGeneratorXON {
 					}
 					XNode[] xnds = (XNode[]) xe1.getChildNodeModels();
 					if (!ext) {
-						genVariableFromModel(typeName,iname,max,"element",vars);
+						genVariableFromModel(null,
+							typeName, iname, max, "element", vars);
 						if (xnds.length==1 && xnds[0].getKind()==XMNode.XMTEXT
 							&& groupKind != XMNode.XMCHOICE
 							&& xe1.getAttrs().length == 0) {//no attrs,only text
@@ -437,14 +445,6 @@ final class XCGenerator extends XCGeneratorXON {
 									genXonItemGetterAndSetter(xe1,
 										typeName, iname, max, setters, getters,
 										sbi, classNames, varNames);
-								}
-							} else if (XonNames.X_MAP.equals(xe1.getLocalName())
-								|| XonNames.X_ARRAY.equals(xe1.getLocalName())){
-								if (groupKind != XMNode.XMCHOICE) {
-									//TODO
-									genXonObjects(xe1,
-										typeName, iname, max, setters, getters, sbi,
-										classNames, varNames);
 								}
 							}
 						} else { // XON map items

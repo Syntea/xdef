@@ -115,21 +115,21 @@ public class XCTextComponent implements XComponent {
 	@Override
 	/** Set value of text node.
 	 * @param xx Actual XXNode (from text node).
-	 * @param parseResult parsed value.
+	 * @param value parsed value.
 	 */
-	public void xSetText(XXNode xx, XDParseResult parseResult) {
+	public void xSetText(XXNode xx, XDParseResult value) {
 		if (xx != null) {
 			_model = xx.getXMNode().getXDPosition();
 			_xpos = xx.getXPos();
 		}
-		_value = parseResult.getSourceBuffer();
+		_value = value.getSourceBuffer();
 	}
 	@Override
 	/** Set value of attribute.
 	 * @param xx Actual XXNode (from attribute model).
-	 * @param parseResult parsed value.
+	 * @param value parsed value.
 	 */
-	public void xSetAttr(XXNode xx, XDParseResult parseResult) {}
+	public void xSetAttr(XXNode xx, XDParseResult value) {}
 	@Override
 	public void xAddXChild(XComponent xc) {}
 	@Override
@@ -139,4 +139,10 @@ public class XCTextComponent implements XComponent {
 	 * @param name name of element.
 	 */
 	public void xInit(XComponent p, String name, String ns, String xPos){}
+	@Override
+	/** Get XON object from this X-component.
+	 * @return XON object if this X-component is created from JSON/XON/INI/CSV.
+	 * Otherwise return null.
+	 */
+	public Object toXon() {return null;}	
 }

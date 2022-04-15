@@ -9,6 +9,7 @@ import org.xdef.XDParser;
 import org.xdef.XDPool;
 import org.xdef.XDValue;
 import org.xdef.XDValueID;
+import static org.xdef.XDValueID.XD_STRING;
 import org.xdef.impl.XData;
 import org.xdef.impl.XElement;
 import org.xdef.impl.XNode;
@@ -313,12 +314,10 @@ class XCGeneratorBase {
 	final static String getParsedResultGetter(final XMData xdata) {
 		String parserName = xdata.getParserName();
 		if ("jlist".equals(parserName)) {
-			return "org.xdef.component.XComponentUtil.jlistToString("
-				+ "parseResult)";
+			return "org.xdef.component.XComponentUtil.jlistToString(value)";
 		}
-		String result = "parseResult.getParsedValue().isNull()?null:"
-			+ "parseResult.getParsedValue().";
-//		String result = "parseResult.";
+		String result = "value.getParsedValue().isNull()?null:"
+			+ "value.getParsedValue().";
 		if ("byte".equals(parserName)) {
 			return result + "byteValue()";
 		} else if ("short".equals(parserName)) {
@@ -340,11 +339,11 @@ class XCGeneratorBase {
 		} else if ("double".equals(parserName)) {
 			return result + "doubleValue()";
 		} else if ("decimal".equals(parserName)) {
-			return "parseResult.getParsedValue().decimalValue()";
+			return "value.getParsedValue().decimalValue()";
 		} else if ("jnull".equals(parserName)) {
-			return "parseResult.getParsedValue().getObject()";
+			return "value.getParsedValue().getObject()";
 		} else if ("jvalue".equals(parserName)) {
-			return "parseResult.getParsedValue().getObject()";
+			return "value.getParsedValue().getObject()";
 		} else if ("jnumber".equals(parserName)) {
 			return "(Number)(" + result + "getObject())";
 		} else if ("jstring".equals(parserName)) {
@@ -392,10 +391,9 @@ class XCGeneratorBase {
 			case XDValueID.XD_TELEPHONE:
 				return "(org.xdef.XDTelephone)(" + result + "getObject())";
 			case XDValueID.XD_PARSER:
-//			case XDValueID.XD_CONTAINER:
-				return "parseResult.getParsedString()";
+				return "value.getParsedString()";
 			case XDValueID.XD_ANY:
-				return "parseResult.getParsedValue().getObject()";
+				return "value.getParsedValue().getObject()";
 		}
 		result += "toString()";
 		String enumType = checkEnumType(xdata);
@@ -419,12 +417,14 @@ class XCGeneratorBase {
 	}
 
 	/** Generate declaration of variable as Java object from child element.
+	 * @param xdata data model.
 	 * @param typeName name of child element Java class.
 	 * @param name name of variable.
 	 * @param descr JavaDoc description.
 	 * @param sb String builder where the code is generated.
 	 */
-	final void genVariableFromModel(final String typeName,
+	final void genVariableFromModel(final XData xdata,
+		final String typeName,
 		final String name,
 		int max,
 		final String descr,
@@ -442,12 +442,18 @@ class XCGeneratorBase {
 		}
 		sb.append(modify(
 (_genJavadoc ? "\t/** Value of &{d} \"&{xmlName}\".*/"+LN : "")+
-"\tprivate"+(max > 1?" final":"") +" &{typ} _&{name}&{x};"+LN,
+"\tprivate"+(max > 1?" final":"")
+	+" &{typ} _&{name}&{x}",
 			"&{d}", d,
 			"&{xmlName}", name.replace('$', ':'),
 			"&{typ}", typ,
 			"&{x}", x,
 			"&{name}", name));
+		XDValue xfixed = xdata != null ? xdata.getFixedValue() : null;
+		if (xfixed != null && xfixed.getItemId() == XD_STRING) {
+			sb.append("=\"").append(xfixed.toString()).append('"');
+		}
+		sb.append(';').append(LN);
 	}
 
 	final void genBaseVarsGettersSetters(final XData xdata,
@@ -460,7 +466,7 @@ class XCGeneratorBase {
 		final StringBuilder xpathes,
 		final StringBuilder sbi) {
 		final String typ = getJavaObjectTypeName(xdata);
-		genVariableFromModel(typ,name,max,descr,vars);
+		genVariableFromModel(xdata,typ,name,max,descr,vars);
 		genGetterMethodFromChildElement(xdata,typ,name,max,descr,getters,sbi);
 		genSetterMethodOfChildElement(typ,
 			name, max, null, null, null, descr, setters, sbi, "");

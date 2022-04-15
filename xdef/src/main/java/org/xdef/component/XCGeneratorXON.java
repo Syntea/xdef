@@ -1,7 +1,6 @@
 package org.xdef.component;
 
 import java.util.Set;
-import org.xdef.XDConstants;
 import org.xdef.XDPool;
 import org.xdef.XDValue;
 import static org.xdef.component.XCGeneratorBase.LN;
@@ -604,54 +603,6 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 						"&{typ}", "java.util.Calendar"));
 				}
 			}
-		}
-	}
-
-	/** Create getters and setters of model of js:map and js:array.
-	 * @param xe Element model from which setter/getter is generated.
-	 * @param typeName the class name of this element X-component.
-	 * @param iname name of getter/setter of this model.
-	 * @param max maximal occurrence.
-	 * @param setters where to generate setter.
-	 * @param getters where to generate getter.
-	 * @param sbi where to generate interface.
-	 * @param classNames set with class names.
-	 * @param varNames set with variable names.
-	 */
-	final void genXonObjects(final XElement xe,
-		final String typeName,
-		final String iname,
-		final int max,
-		final StringBuilder setters,
-		final StringBuilder getters,
-		final StringBuilder sbi,
-		final Set<String> classNames,
-		final Set<String> varNames) {
-		String name = getXonItemName(xe, "get$", classNames, varNames);
-	}
-
-	final void genToXonMethod(final XElement xe,
-		final StringBuilder getters) {
-		if (xe._xon == XConstants.XON_MODE_W
-			&& XDConstants.XON_NS_URI_W.equals(xe.getNSUri())) {
-			String s = xe.getLocalName();
-			String typ;
-			if (XonNames.X_ARRAY.equals(s)) {
-				typ = "java.util.List<Object>";
-			} else if (XonNames.X_MAP.equals(s)) {
-				typ = "java.util.Map<String,Object>";
-			} else {
-				return;
-			}
-			s =
-(_genJavadoc ? "\t/** Get XON object from this X-deomponent."+LN+
-"\t * @return object from this X-deomponent."+LN+
-"\t */"+LN : "")+
-"\t@SuppressWarnings(\"unchecked\")"+LN+
-"\tpublic " + typ + " toXon() {"+LN+
-"\t\treturn (" + typ + ") org.xdef.component.XComponentUtil.toXon(this);"+LN+
-"\t}"+LN;
-			getters.append(s);
 		}
 	}
 }

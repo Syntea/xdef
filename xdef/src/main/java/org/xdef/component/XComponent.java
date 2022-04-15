@@ -108,15 +108,15 @@ public interface XComponent {
 
 	/** Set value of text node.
 	 * @param xx Actual XXNode (from text node).
-	 * @param parseResult parsed value.
+	 * @param value parsed value.
 	 */
-	public void xSetText(XXNode xx, XDParseResult parseResult);
+	public void xSetText(XXNode xx, XDParseResult value);
 
 	/** Set value of attribute.
 	 * @param xx Actual XXNode (from attribute model).
-	 * @param parseResult parsed value.
+	 * @param value parsed value.
 	 */
-	public void xSetAttr(XXNode xx, XDParseResult parseResult);
+	public void xSetAttr(XXNode xx, XDParseResult value);
 
 	/** Update parameters of XComponent.
 	 * @param p parent XComponent.q
@@ -125,4 +125,10 @@ public interface XComponent {
 	 * @param xPos XDPosition.
 	 */
 	public void xInit(XComponent p, String name, String ns, String xPos);
+
+	/** Get XON object from this X-component (if it is possible).
+	 * @return XON object if this X-component is created from JSON/XON/INI/CSV.
+	 * Otherwise return null.
+	 */
+	public Object toXon();
 }
