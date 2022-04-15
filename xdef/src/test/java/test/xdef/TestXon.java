@@ -11,7 +11,6 @@ import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.xdef.XDTelephone;
 import org.xdef.component.XComponent;
-import org.xdef.component.XComponentUtil;
 import org.xdef.xon.XonUtils;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.GPSPosition;
@@ -71,8 +70,7 @@ public class TestXon extends XDTester {
 				XonUtils.toJsonString(x, true));
 			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
 			xc = xp.createXDDocument().jparseXComponent(xon, null, reporter);
-			y = XComponentUtil.toXon(xc);
-			if (!XonUtils.xonEqual(x,y)) {
+			if (!XonUtils.xonEqual(x, y = xc.toXon())) {
 				return "** 4 **\n" + xon + "\n" +  XonUtils.toXonString(y);
 			}
 			if (!XonUtils.xonEqual(x,y)) {
@@ -81,8 +79,7 @@ public class TestXon extends XDTester {
 			xd = xp.createXDDocument();
 			xd.setXONContext(x);
 			xc = xd.jcreateXComponent("A", null, reporter);
-			y = XComponentUtil.toXon(xc);
-			if (!XonUtils.xonEqual(x,y)) {
+			if (!XonUtils.xonEqual(x, y = xc.toXon())) {
 				return "** 6 **\n" + xon + "\n" +  XonUtils.toXonString(y);
 			}
 			return null;
@@ -111,8 +108,7 @@ public class TestXon extends XDTester {
 			XDDocument xd = xp.createXDDocument();
 			xd.setXONContext(o);
 			xc = xd.jcreateXComponent("A", null, null);
-			y = XComponentUtil.toXon(xc);
-			if (!XonUtils.xonEqual(o,y)) {
+			if (!XonUtils.xonEqual(o, y = xc.toXon())) {
 				return "1\n" + xon + "\n" +  XonUtils.toXonString(y);
 			}
 			return null;
@@ -191,7 +187,7 @@ public class TestXon extends XDTester {
 "    2.0d\n" +
 "  ]\n" +
 "}");
-			assertTrue(XonUtils.xonEqual(o, XComponentUtil.toXon(xc)));
+			assertTrue(XonUtils.xonEqual(o, xc.toXon()));
 			xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n"+
 "<xd:component>%class test.xdef.Csvxx %link a</xd:component>\n"+
@@ -213,7 +209,7 @@ public class TestXon extends XDTester {
 			assertNoErrors(reporter);
 			reporter.clear();
 			xc = xd.jparseXComponent(json, null, reporter);
-			if (!XonUtils.xonEqual(o, x = XComponentUtil.toXon(xc))) {
+			if (!XonUtils.xonEqual(o, x = xc.toXon())) {
 				fail(XonUtils.toXonString(o, true)
 					+ "\n*****\n" + XonUtils.toXonString(x, true));
 			}
@@ -369,7 +365,7 @@ public class TestXon extends XDTester {
 			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
 			assertNoErrors(reporter);
 			reporter.clear();
-			o = XComponentUtil.toXon(xc);
+			o = xc.toXon();
 			assertTrue(XonUtils.xonEqual(x,y));
 			x = XonUtils.xonToJson(XonUtils.xmlToXon(el = xc.toXml()));
 			if (!XonUtils.xonEqual(x, y = XonUtils.xonToJson(y))) {
@@ -380,8 +376,7 @@ public class TestXon extends XDTester {
 			xd = xp.createXDDocument();
 			xd.setXONContext(xon);
 			xc = xd.jcreateXComponent("A", null, reporter);
-			y = XComponentUtil.toXon(xc);
-			assertTrue(XonUtils.xonEqual(o,y));
+			assertTrue(XonUtils.xonEqual(o, y = xc.toXon()));
 			xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n"+
 "<xd:component>%class test.xdef.Xona %link a</xd:component>\n"+
@@ -402,7 +397,7 @@ public class TestXon extends XDTester {
 			xc = xd.jparseXComponent(json, null, reporter);
 			assertNoErrors(reporter);
 			reporter.clear();
-			if (!XonUtils.xonEqual(o, (x=XComponentUtil.toXon(xc)))) {
+			if (!XonUtils.xonEqual(o, (x = xc.toXon()))) {
 				fail(XonUtils.toXonString(o)
 					+ "\n***\n" + XonUtils.toXonString(x));
 			}
@@ -413,7 +408,7 @@ public class TestXon extends XDTester {
 			xc = xd.jparseXComponent(json, null, reporter);
 			assertNoErrors(reporter);
 			reporter.clear();
-			if (!XonUtils.xonEqual(o, (x=XComponentUtil.toXon(xc)))) {
+			if (!XonUtils.xonEqual(o, (x = xc.toXon()))) {
 				fail(XonUtils.toXonString(o)
 					+ "\n***\n" + XonUtils.toXonString(x));
 			}
@@ -446,9 +441,8 @@ public class TestXon extends XDTester {
 			assertNoErrorsAndClear(reporter);
 			genXComponent(xd.getXDPool(), clearTempDir()).checkAndThrowErrors();
 			xc = xd.jparseXComponent(s, null, reporter);
-			x = XComponentUtil.toXon(xc);
 			assertNoErrorsAndClear(reporter);
-			assertTrue(XonUtils.xonEqual(o, x));
+			assertTrue(XonUtils.xonEqual(o, x = xc.toXon()));
 			list = (List) ((List) x).get(0);
 			assertEq("Name", list.get(0));
 			list = (List) ((List) x).get(1);
@@ -700,8 +694,7 @@ public class TestXon extends XDTester {
 			xc = xd.jparseXComponent(o, null, reporter);
 			assertNoErrors(reporter);
 			reporter.clear();
-			x = XComponentUtil.toXon(xc);
-			if (!XonUtils.xonEqual(x, o)) {
+			if (!XonUtils.xonEqual(x = xc.toXon(), o)) {
 				fail("*** A *\n" + XonUtils.toXonString(x)
 					+ "\n*** B *\n" + XonUtils.toXonString(o));
 			}
@@ -768,8 +761,7 @@ public class TestXon extends XDTester {
 			xc = xd.jparseXComponent(o, null, reporter);
 			assertNoErrors(reporter);
 			reporter.clear();
-			x = XComponentUtil.toXon(xc);
-			if (!XonUtils.xonEqual(x, o)) {
+			if (!XonUtils.xonEqual(x = xc.toXon(), o)) {
 				fail("*** A *\n" + XonUtils.toXonString(x)
 					+ "\n*** B *\n" + XonUtils.toXonString(o));
 			}
@@ -854,9 +846,8 @@ public class TestXon extends XDTester {
 "From Brussels to London is 322 km to Paris is 265 km\n" +
 "From London to Brussels is 322 km to Paris is 344 km\n");
 			assertNoErrors(reporter);
-			x = XComponentUtil.toXon(xc);
-			assertEq(((Map)x).get("date"), new SDatetime("2020-02-22"));
-			assertTrue(((List)((Map)x).get("cities")).isEmpty());
+			assertTrue(((List)((Map)(x = xc.toXon())).get("cities")).isEmpty());
+			assertEq(((Map) x).get("date"), new SDatetime("2020-02-22"));
 		} catch (Exception ex) {fail(ex);}
 
 		clearTempDir(); // clear temporary directory

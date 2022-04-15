@@ -76,32 +76,28 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 	private String genToXonMethod(final XElement xe) {
 		String s;
 		if (xe._xon == XConstants.XON_MODE_W
-			&& XDConstants.XON_NS_URI_W.equals(xe.getNSUri())) {
-			s = xe.getLocalName();
-			String typ;
-			if (XonNames.X_ARRAY.equals(s)) {
-				typ = "java.util.List<Object>";
-			} else if (XonNames.X_MAP.equals(s)) {
-				typ = "java.util.Map<String,Object>";
-			} else {
-				typ = "Object";
-			}
+			&& XDConstants.XON_NS_URI_W.equals(xe.getNSUri())
+			&& (XonNames.X_ARRAY.equals(xe.getLocalName())
+			|| XonNames.X_MAP.equals(xe.getLocalName()))) {
+			String typ = XonNames.X_ARRAY.equals(xe.getLocalName())
+				? "java.util.List<Object>" : "java.util.Map<String,Object>";
 			s =
-(_genJavadoc ? "\t/** Get XON object from this X-component."+LN+
-"\t * @return object from this X-deomponent."+LN+
-"\t */"+LN : "")+
-("Object".equals(typ) ? "" : "\t@SuppressWarnings(\"unchecked\")"+LN)+
+"\t@SuppressWarnings(\"unchecked\")"+LN+
 "\t@Override"+LN+
 "\tpublic " + typ + " toXon() {"+LN+
-"\t\treturn " + ("Object".equals(typ) ? "" : "(" + typ + ")")
+"\t\treturn " + "(" + typ + ")"
 			+ " org.xdef.component.XComponentUtil.toXon(this);"+LN+
-"\t}"+LN;
+"\t";
 		} else {
-			s =
-(_genJavadoc ? "\t/** Reurn null here from this X-component.*/"+LN : "")+
-"\tpublic Object toXon() {return null;}"+LN;
+			s = 
+"\t@Override"+LN+
+"\tpublic Object toXon(){return org.xdef.component.XComponentUtil.toXon(this);";
 		}
-		return s;
+		return
+(_genJavadoc ? "\t/** Get XON object from this X-component."+LN+
+"\t * @return object created from this X-deomponent."+LN+
+"\t */"+LN : "")
+			+ s + '}' + LN;
 	}
 
 	/** Final generation of Java sources from prepared data. */
