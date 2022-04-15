@@ -138,8 +138,6 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 			+ xpathes.toString() +
 "//<editor-fold defaultstate=\"collapsed\" desc=\"Implementation of XComponent interface\">"+LN+
 ////////////////////////////////////////////////////////////////////////////////
-(_genJavadoc?"\t/** Get JXON version: 0 not set, 1 .. W3C, 2 .. XDEF.*/"+LN:"")+
-"\tpublic final static byte XON = " + xe._xon + ";" +LN+
 genToXonMethod(xe)+
 "\t@Override"+LN+
 (_genJavadoc ? ("\t/** Create XML element from this XComponent (marshal)."+LN+
@@ -226,7 +224,9 @@ genToXonMethod(xe)+
 (_genJavadoc ? "\t/** Get index of model of this XComponent."+LN+
 "\t * @return index of model of this XComponent."+LN+
 "\t */"+LN : "") +
-"\tpublic int xGetModelIndex() {return "+index+";}"+LN;
+"\tpublic int xGetModelIndex() {return "+index+";}"+LN+
+(_genJavadoc?"\t/** Get XON version: 0 not set, 1 .. W mode.*/"+LN:"")+
+"\tpublic final static byte XON = " + xe._xon + ";" +LN;
 
 ////////////////////////////////////////////////////////////////////////////////
 		result += genSeparator("Private methods", _genJavadoc) +
