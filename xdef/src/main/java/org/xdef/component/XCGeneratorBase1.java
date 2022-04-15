@@ -97,7 +97,7 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 			+ " org.xdef.component.XComponentUtil.toXon(this);"+LN+
 "\t}"+LN;
 		} else {
-			s = 
+			s =
 (_genJavadoc ? "\t/** Reurn null here from this X-component.*/"+LN : "")+
 "\tpublic Object toXon() {return null;}"+LN;
 		}

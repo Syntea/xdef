@@ -144,5 +144,5 @@ public class XCTextComponent implements XComponent {
 	 * @return XON object if this X-component is created from JSON/XON/INI/CSV.
 	 * Otherwise return null.
 	 */
-	public Object toXon() {return null;}	
+	public Object toXon() {return null;}
 }
