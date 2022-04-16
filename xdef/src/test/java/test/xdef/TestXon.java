@@ -788,6 +788,50 @@ public class TestXon extends XDTester {
 					+ "\n*** B *\n" + XonUtils.toXonString(o));
 			}
 		} catch (Exception ex) {fail(ex);}
+		try { // test $onoOf
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root=\"test\">\n" +
+"<xd:component>%class test.xdef.MyTestX_OneOf %link test</xd:component>\n"+
+"<xd:xon name=\"test\">\n" +
+"{ a=[ $oneOf,\n" +
+"       \"date(); finally outln('date')\", \n" +
+"       \"ipAddr(); finally outln('ipAddr')\", \n" +
+"       [$script=\"finally outln('[...]')\",\"*int()\"], \n" +
+"       \"string(); finally outln('string')\" \n" +
+"  ]\n" +
+"}\n" +
+"</xd:xon>\n" +
+"</xd:def>";
+//see XCGenerator choiceStack (line 160)
+			xp = XDFactory.compileXD(null, xdef);
+			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
+			s = "{a=\"2022-04-10\"}";
+			xd = xp.createXDDocument();
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			o = xd.jparse(s, reporter);
+			if (reporter.errorWarnings()) {fail(reporter); reporter.clear();}
+			assertEq("date\n", strw.toString());
+			xd = xp.createXDDocument();
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			xc = xd.jparseXComponent(s, null,reporter);
+			if (reporter.errorWarnings()) {fail(reporter); reporter.clear();}
+			assertEq("date\n", strw.toString());
+			s = "{a=\"202.204.1.0\"}";
+			xd = xp.createXDDocument();
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			o = xd.jparse(s, reporter);
+			if (reporter.errorWarnings()) {fail(reporter); reporter.clear();}
+			assertEq("ipAddr\n", strw.toString());
+			xd = xp.createXDDocument();
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			xc = xd.jparseXComponent(s, null,reporter);
+			if (reporter.errorWarnings()) {fail(reporter); reporter.clear();}
+			assertEq("ipAddr\n", strw.toString());
+		} catch (Exception ex) {fail(ex);}
 		try { // test forget
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root=\"test\">\n" +
