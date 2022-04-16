@@ -458,7 +458,7 @@ public class TestXon extends XDTester {
 			assertNull(list.get(2));
 		} catch (Exception ex) {fail(ex);}
 		try { // test YAML
-				xdef =
+			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='test' name='A'>\n"+
 "  <xd:xon name=\"test\">\n" +
 "    { \"cities\": [\n" +
@@ -818,6 +818,7 @@ public class TestXon extends XDTester {
 			xc = xd.jparseXComponent(s, null,reporter);
 			if (reporter.errorWarnings()) {fail(reporter); reporter.clear();}
 			assertEq("date\n", strw.toString());
+			assertEq(o, xc.toXon());
 			s = "{a=\"202.204.1.0\"}";
 			xd = xp.createXDDocument();
 			strw = new StringWriter();
@@ -831,6 +832,35 @@ public class TestXon extends XDTester {
 			xc = xd.jparseXComponent(s, null,reporter);
 			if (reporter.errorWarnings()) {fail(reporter); reporter.clear();}
 			assertEq("ipAddr\n", strw.toString());
+			assertEq(o, xc.toXon());
+			s = "{a=[1,2]}";
+			xd = xp.createXDDocument();
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			o = xd.jparse(s, reporter);
+			if (reporter.errorWarnings()) {fail(reporter); reporter.clear();}
+			assertEq("[...]\n", strw.toString());
+			xd = xp.createXDDocument();
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			xc = xd.jparseXComponent(s, null,reporter);
+			if (reporter.errorWarnings()) {fail(reporter); reporter.clear();}
+			assertEq("[...]\n", strw.toString());
+			assertEq(o, xc.toXon());
+			s = "{a=\"a\tb\n\"}";
+			xd = xp.createXDDocument();
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			o = xd.jparse(s, reporter);
+			if (reporter.errorWarnings()) {fail(reporter); reporter.clear();}
+			assertEq("string\n", strw.toString());
+			xd = xp.createXDDocument();
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			xc = xd.jparseXComponent(s, null,reporter);
+			if (reporter.errorWarnings()) {fail(reporter); reporter.clear();}
+			assertEq("string\n", strw.toString());
+			assertEq(o, xc.toXon());
 		} catch (Exception ex) {fail(ex);}
 		try { // test forget
 			xdef =

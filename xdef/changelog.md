@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 41.0.8, release-date 2022-04-15
+# Version 41.0.8, release-date 2022-04-16
 . added method `toXon()` the the interface `org.xdef.component.XComponent`.
 
 # Version 41.0.7, release-date 2022-04-11

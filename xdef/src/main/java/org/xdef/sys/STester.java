@@ -1,5 +1,6 @@
 package org.xdef.sys;
 
+import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.text.DecimalFormat;
 import java.io.File;
@@ -10,7 +11,11 @@ import java.io.StringWriter;
 import java.lang.reflect.Constructor;
 import java.math.BigDecimal;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import javax.tools.JavaCompiler;
+import javax.tools.ToolProvider;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xdef.msg.SYS;
@@ -1116,5 +1121,73 @@ public abstract class STester {
 		StringWriter swr = new StringWriter();
 		exception.printStackTrace(new PrintWriter(swr));
 		return swr.toString();
+	}
+
+	/** Add Java sources to parameter list of the Java compiler.
+	 * @param f the file or directory.
+	 * @param params parameter list of Java compiler.
+	 */
+	private static void addJavaSource(final File f, final List<String> params) {
+		if (f.isDirectory()) {
+			for (File x: f.listFiles()) {
+				addJavaSource(x, params);
+			}
+		} else if (f.getName().endsWith(".java")) {
+			params.add(f.getAbsolutePath());
+		}
+	}
+
+	/** Compile sources from parameter and save files to the classes directory
+	 *  of tester.
+	 * @param classpath the string with classpath.
+	 * @param classDir the string with directory where to create classes.
+	 * @param files files with Java sources (may be a file or a directory).
+	 * @return string with path to compiled classes.
+	 */
+	public static String compileSources(final String classpath,
+		final String classDir,
+		final File... files) {
+		String sources[] = new String[files.length];
+		for (int i = 0; i < files.length; i++) {
+			sources[i] = files[i].getAbsolutePath();
+		}
+		return compileSources(classpath, classDir, sources);
+	}
+
+	/** Compile sources from parameter and save files to the classes directory
+	 *  of tester.
+	 * @param classpath the string with classpath.
+	 * @param classDir the string with directory where to create classes.
+	 * @param sources paths of Java sources (may be a file or a directory).
+	 * @return string with path to compiled classes.
+	 */
+	public static String compileSources(final String classpath,
+		final String classDir,
+		final String... sources) {
+		// where are compiled classes of X-definitions
+		// prepare parameters
+		ArrayList<String> ar = new ArrayList<String>();
+		ar.add("-classpath");
+		ar.add((classpath.isEmpty()? "" : classpath + File.pathSeparatorChar)
+			+ classDir); // classpath
+		ar.add("-d");
+		ar.add(classDir); // where to write compiled classes
+		// source files
+		for (String source: sources) {
+			addJavaSource(new File (source), ar);
+		}
+		// prepare compiler
+		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+		if (compiler == null) {
+			throw new RuntimeException("Java compiler is not available");
+		}
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		ByteArrayOutputStream err = new ByteArrayOutputStream();
+		// compile sources
+		if (compiler.run(null, out, err, ar.toArray(new String[0])) != 0) {
+			throw new RuntimeException("Java compilation failed:\n"
+				+ new String(err.toByteArray()));
+		}
+		return classDir;
 	}
 }

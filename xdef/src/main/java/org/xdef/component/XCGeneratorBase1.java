@@ -89,7 +89,7 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 			+ " org.xdef.component.XComponentUtil.toXon(this);"+LN+
 "\t";
 		} else {
-			s = 
+			s =
 "\t@Override"+LN+
 "\tpublic Object toXon(){return org.xdef.component.XComponentUtil.toXon(this);";
 		}

@@ -7,6 +7,7 @@ import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.InetAddress;
+import java.net.URL;
 import java.util.List;
 import java.util.Map;
 import org.w3c.dom.Element;
@@ -27,6 +28,7 @@ import org.xdef.xml.KXmlUtils;
 import test.XDTester;
 import org.xdef.xon.XonNames;
 import static test.XDTester._xdNS;
+import static test.XDTester.compileSources;
 import static test.XDTester.genXComponent;
 
 /** Test processing JSON objects with X-definitions and X-components.
@@ -177,7 +179,29 @@ public class TestJsonXdef extends XDTester {
 				for (int i = 0; i < ff.length; i++) {
 					sources[i] = ff[i].getPath();
 				}
-				XDTester.compileSources(sources);
+				Class<?> clazz = XDConstants.class;
+				String className = clazz.getName().replace('.', '/') + ".class";
+				URL u = clazz.getClassLoader().getResource(className);
+				String classpath = u.toExternalForm();
+				if (classpath.startsWith("jar:file:")
+					&& classpath.indexOf('!') > 0) {
+					classpath=classpath.substring(9,classpath.lastIndexOf('!'));
+					classpath =
+						new File(classpath).getAbsolutePath().replace('\\','/');
+				} else {
+					classpath = new File(
+						u.getFile()).getAbsolutePath().replace('\\','/');
+					classpath = classpath.substring(
+						0, classpath.indexOf(className));
+				}
+				// where are compiled classes of tests
+				clazz = XDTester.class;
+				className = clazz.getName().replace('.', '/') + ".class";
+				u = clazz.getClassLoader().getResource(className);
+				String classDir =
+					new File(u.getFile()).getAbsolutePath().replace('\\', '/');
+				classDir = classDir.substring(0, classDir.indexOf(className));
+				compileSources(classDir, classpath, sources);
 			}
 			return xp; // return XDPool with compiled X-definitions
 		} catch (Exception ex) {
