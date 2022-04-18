@@ -16,19 +16,18 @@ import org.xdef.XDDocument;
 import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.xdef.component.XComponent;
-import org.xdef.xon.XonUtils;
 import org.xdef.msg.SYS;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.SDatetime;
 import org.xdef.sys.SRuntimeException;
-import static org.xdef.sys.STester.printThrowable;
+import static org.xdef.sys.STester.compileSources;
 import static org.xdef.sys.STester.runTest;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
-import test.XDTester;
 import org.xdef.xon.XonNames;
+import org.xdef.xon.XonUtils;
+import test.XDTester;
 import static test.XDTester._xdNS;
-import static test.XDTester.compileSources;
 import static test.XDTester.genXComponent;
 
 /** Test processing JSON objects with X-definitions and X-components.
@@ -135,7 +134,7 @@ public class TestJsonXdef extends XDTester {
 			}
 			File oldFile, newFile;
 			// Generate X-components to the directory test
-			genXComponent(xp, fdir).checkAndThrowErrors();
+			genXComponent(xp, fdir);
 			String componentDir = _tempDir + "test/common/json/component/";
 			new File(componentDir).mkdirs();
 			String newComponentDir = xdir + "test/common/json/component/";
@@ -879,7 +878,7 @@ public class TestJsonXdef extends XDTester {
 			xp = compile(xdef);
 			ini = "A=a\n B=1\n C=2121-10-19\n D=2.34\n[E]\nx=123\n[F]";
 			xd = xp.createXDDocument("TestINI");
-			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
+			genXComponent(xp, clearTempDir());
 			xc = xd.iparseXComponent(ini, null, reporter);
 			assertEq("a", SUtils.getValueFromGetter(xc,"get$A"));
 			assertEq(1,SUtils.getValueFromGetter(xc,"get$B"));
@@ -933,8 +932,7 @@ public class TestJsonXdef extends XDTester {
 "] /**** end of array ****/\n" +
 "# End of XON example";
 			xp = compile(xdef);
-			File tempDir = clearTempDir();
-			genXComponent(xp, tempDir).checkAndThrowErrors();
+			genXComponent(xp, clearTempDir());
 			xc = xp.createXDDocument().jparseXComponent(test, null, reporter);
 			assertTrue(XonUtils.xonEqual(XonUtils.parseXON(test),
 				SUtils.getValueFromGetter(xc,"toXon")));

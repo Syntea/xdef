@@ -1305,21 +1305,19 @@ public abstract class XDTester extends STester {
 	/** Create X-components from the XDPool object to given directory.
 	 * @param xp XDPool from which the X-components created.
 	 * @param dir path to directory where to generate Java sources.
-	 * @return reporter with reported errors and warnings.
 	 * @throws RuntimeException if an error occurs.
 	 */
-	public static final ArrayReporter genXComponent(final XDPool xp,
+	public static void genXComponent(final XDPool xp,
 		final String dir) {
-		return genXComponent(xp, new File(dir));
+		genXComponent(xp, new File(dir));
 	}
 
 	/** Create X-components from the XDPool object to given directory.
 	 * @param xp XDPool from which the X-components created.
 	 * @param dir directory where to generate Java sources.
-	 * @return reporter with reported errors and warnings.
 	 * @throws RuntimeException if an error occurs.
 	 */
-	public static final ArrayReporter genXComponent(final XDPool xp,
+	public static final void genXComponent(final XDPool xp,
 		final File dir) {
 		if (!dir.exists() && !dir.isDirectory()) {
 			//Directory doesn't exist or isn't accessible: &{0}
@@ -1327,31 +1325,11 @@ public abstract class XDTester extends STester {
 		}
 		try {
 			ArrayReporter result = xp.genXComponent(dir, "UTF-8", false, true);
-			result.checkAndThrowErrors(); // throw exceptiojn if error reported
+			result.checkAndThrowErrors(); // throw exception if error reported
 			// create classpath item with org.xdef directory
-			Class<?> clazz = XDConstants.class;
-			String className = clazz.getName().replace('.', '/') + ".class";
-			URL u = clazz.getClassLoader().getResource(className);
-			String classpath = u.toExternalForm();
-			if (classpath.startsWith("jar:file:") && classpath.indexOf('!')>0) {
-				classpath = classpath.substring(9,classpath.lastIndexOf('!'));
-				classpath =
-					new File(classpath).getAbsolutePath().replace('\\','/');
-			} else {
-				classpath =
-					new File(u.getFile()).getAbsolutePath().replace('\\','/');
-				classpath =
-					classpath.substring(0, classpath.indexOf(className));
-			}
-			// get directory where are compiled classes of tests
-			clazz = XDTester.class;
-			className = clazz.getName().replace('.', '/') + ".class";
-			u = clazz.getClassLoader().getResource(className);
-			String classDir =
-				new File(u.getFile()).getAbsolutePath().replace('\\', '/');
-			classDir = classDir.substring(0, classDir.indexOf(className));
+			String classpath = getClassSource(XDConstants.class);
+			String classDir = getClassSource(XDTester.class);
 			compileSources(classDir, classpath, dir);
-			return result;
 		} catch (Exception ex) {
 			throw new SRuntimeException(ex.toString(), ex);
 		}

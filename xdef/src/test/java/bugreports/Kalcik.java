@@ -21,7 +21,7 @@ public class Kalcik extends XDTester {
 		try {
 			xdef = getDataDir() + "Kalcik.xdef";
 			xp = compile(xdef);
-			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
+			genXComponent(xp, clearTempDir());
 			xml =
 "<UserCommands>\n" +
 "    <UserCommand Name = \"Abcd\" Label = \"efgh\">\n" +

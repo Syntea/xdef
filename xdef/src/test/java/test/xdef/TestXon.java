@@ -68,7 +68,7 @@ public class TestXon extends XDTester {
 			}
 			assertTrue(XonUtils.xonEqual(XonUtils.parseXON(xon), x),
 				XonUtils.toJsonString(x, true));
-			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
+			genXComponent(xp, clearTempDir());
 			xc = xp.createXDDocument().jparseXComponent(xon, null, reporter);
 			if (!XonUtils.xonEqual(x, y = xc.toXon())) {
 				return "** 4 **\n" + xon + "\n" +  XonUtils.toXonString(y);
@@ -99,7 +99,7 @@ public class TestXon extends XDTester {
 "<xd:component>%class test.xdef.TestEmptyMap %link A</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
+			genXComponent(xp, clearTempDir());
 			o = XonUtils.parseXON(xon);
 			x = xp.createXDDocument().jparse(xon, null);
 			if (!XonUtils.xonEqual(o,x)) {
@@ -169,7 +169,7 @@ public class TestXon extends XDTester {
 "<xd:component>%class test.xdef.MGam %link y:X</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
+			genXComponent(xp, clearTempDir());
 			xml =
 "<n:X xmlns:n='a.b' a='2021-12-30' t='2020121101010101'>1<n:Y/><n:Y/>2.0</n:X>";
 			xc = parseXC(xp,"M", xml , null, reporter);
@@ -196,7 +196,7 @@ public class TestXon extends XDTester {
 " </xd:xon>\n"+
 "</xd:def>";
 			xp = compile(xdef); // no property
-			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
+			genXComponent(xp, clearTempDir());
 			xd = xp.createXDDocument();
 			json =
 "[\n" +
@@ -361,7 +361,7 @@ public class TestXon extends XDTester {
 			y = jparse(xp, "", json, reporter);
 			assertNoErrors(reporter);
 			reporter.clear();
-			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
+			genXComponent(xp, clearTempDir());
 			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
 			assertNoErrors(reporter);
 			reporter.clear();
@@ -387,7 +387,7 @@ public class TestXon extends XDTester {
 " </xd:xon>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
+			genXComponent(xp, clearTempDir());
 			xd = xp.createXDDocument();
 			json = "[ [ true, 123 ] ]";
 			reporter.clear();
@@ -428,7 +428,7 @@ public class TestXon extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			xp = compile(xdef);
-			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
+			genXComponent(xp, clearTempDir());
 			xd = xp.createXDDocument();
 			s =
 "[\n" +
@@ -439,7 +439,7 @@ public class TestXon extends XDTester {
 "]";
 			o = xd.jparse(s, reporter);
 			assertNoErrorsAndClear(reporter);
-			genXComponent(xd.getXDPool(), clearTempDir()).checkAndThrowErrors();
+			genXComponent(xd.getXDPool(), clearTempDir());
 			xc = xd.jparseXComponent(s, null, reporter);
 			assertNoErrorsAndClear(reporter);
 			assertTrue(XonUtils.xonEqual(o, x = xc.toXon()));
@@ -664,7 +664,7 @@ public class TestXon extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			xd = xp.createXDDocument();
-			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
+			genXComponent(xp, clearTempDir());
 			s =
 "Name, Email, Mobile Number\n"+
 "abc, a@b.c, +420 601 349 889\n"+
@@ -734,7 +734,7 @@ public class TestXon extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			xd = xp.createXDDocument();
-			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
+			genXComponent(xp, clearTempDir());
 			s =
 "Name, Email, Mobile Number\n"+
 "abc, a@b.c, +420 601 349 889\n"+
@@ -804,7 +804,7 @@ public class TestXon extends XDTester {
 "</xd:def>";
 //see XCGenerator choiceStack (line 160)
 			xp = XDFactory.compileXD(null, xdef);
-			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
+			genXComponent(xp, clearTempDir());
 			s = "{a=\"2022-04-10\"}";
 			xd = xp.createXDDocument();
 			strw = new StringWriter();
@@ -898,7 +898,7 @@ public class TestXon extends XDTester {
 "  ]\n" +
 "}";
 			xp = XDFactory.compileXD(null, xdef);
-			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
+			genXComponent(xp, clearTempDir());
 			xd = xp.createXDDocument();
 			strw = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(strw, false));

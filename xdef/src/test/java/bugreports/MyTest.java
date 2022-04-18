@@ -77,7 +77,7 @@ public class MyTest extends XDTester {
 "</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
+			genXComponent(xp, clearTempDir());
 			json = "[ g(12.50, 1.2), g(2.5, 3.5, -0.1, xxx) ]";
 			xd = xp.createXDDocument("");
 			jparse(xd, json, reporter);
@@ -128,7 +128,7 @@ public class MyTest extends XDTester {
 "</xd:component>\n"+
 "</xd:def>";
 			xp = XDFactory.compileXD(null,xdef);
-			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
+			genXComponent(xp, clearTempDir());
 			xml =
 "<x xmlns:s='abc'>\n"+
 "  <a>[ \"false\" ]</a>\n"+

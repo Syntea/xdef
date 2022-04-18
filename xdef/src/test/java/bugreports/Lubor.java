@@ -22,7 +22,7 @@ public class Lubor extends XDTester {
 			File f1 = new File(getDataDir() + "Lubor_1.xdef");
 			xp = XDFactory.compileXD(null, f, f1);
 			// Generate X-components
-			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
+			genXComponent(xp, clearTempDir());
 			xml = "<A c='c'><D d='d'/><X/></A>";
 			xc = parseXC(xp,"A", xml, null, reporter);
 			assertNoErrorwarnings(reporter);

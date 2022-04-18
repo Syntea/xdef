@@ -1154,6 +1154,24 @@ public abstract class STester {
 		return compileSources(classpath, classDir, sources);
 	}
 
+	/** Get string with the path where the class is in the current classpath.
+	 * @param clazz the class to be checked.
+	 * @return Get string with path where the class is in the current classpath.
+	 */
+	public static String getClassSource(final Class<?> clazz) {
+		String className = clazz.getName().replace('.', '/') + ".class";
+		URL u = clazz.getClassLoader().getResource(className);
+		String classpath = u.toExternalForm();
+		if (classpath.startsWith("jar:file:") && classpath.indexOf('!')>0) {
+			classpath = classpath.substring(9,classpath.lastIndexOf('!'));
+			return new File(classpath).getAbsolutePath().replace('\\','/');
+		} else {
+			classpath =
+				new File(u.getFile()).getAbsolutePath().replace('\\','/');
+			return classpath.substring(0, classpath.indexOf(className));
+		}
+	}
+
 	/** Compile sources from parameter and save files to the classes directory
 	 *  of tester.
 	 * @param classpath the string with classpath.

@@ -247,17 +247,7 @@ public final class TestLexicon extends XDTester {
 			assertNoErrors(reporter);
 			assertEq(xml, el);
 			// try X-component
-			File fdir = new File(tempDir, "components");
-			fdir.mkdirs();
-			if (!fdir.exists() || !fdir.isDirectory()) {
-				//Directory doesn't exist or isn't accessible: &{0}
-				throw new SRuntimeException(SYS.SYS025, fdir.getAbsolutePath());
-			}
-			if (fdir.exists()) { // ensure the src directory exists.
-				SUtils.deleteAll(fdir, true); // clear this directory
-			}
-			fdir.mkdirs();
-			genXComponent(xp, fdir).checkAndThrowErrors();
+			genXComponent(xp, clearTempDir()); // create and compile X-components
 			Class<?> clazz = Class.forName("test.xdef.component.L_Contract");
 			XComponent xc = parseXC(xd, xml, clazz, reporter);
 			assertNoErrors(reporter);

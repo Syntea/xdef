@@ -35,7 +35,7 @@ public class Hotovec extends XDTester {
 "</xd:def>";
 
 			xp = compile(xdef);
-			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
+			genXComponent(xp, clearTempDir());
 			assertNoErrorwarnings(reporter);
 			xml =
 "<B IdFlow=\"1012931\">\n" +

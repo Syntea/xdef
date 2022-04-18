@@ -78,7 +78,7 @@ public final class TestXComponents extends XDTester {
 		// generate XCDPool from sources
 		XDPool xp = compile(xdsources);
 		// generate and compile XComponents from xp
-		genXComponent(xp, clearTempDir()).checkAndThrowErrors();
+		genXComponent(xp, clearTempDir());
 		return xp;
 	}
 
@@ -103,7 +103,7 @@ public final class TestXComponents extends XDTester {
 "<xd:component>%class test.xdef.Mgam %link X</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
+			genXComponent(xp, clearTempDir());
 			xml =
 "<X a='20201211010101333'>3<Y a='1'/><Y a='2'/>2021-12-30</X>";//millis == 333
 			xc = parseXC(xp,"", xml , null, reporter);
@@ -131,7 +131,7 @@ public final class TestXComponents extends XDTester {
 "</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
+			genXComponent(xp, clearTempDir());
 			xml = "<A a='1.25 CZK' q='48.2, 16.37, 151, Vienna'/>"; //
 			xd = xp.createXDDocument();
 			xc = xd.xparseXComponent(xml, null, reporter);
@@ -172,7 +172,7 @@ public final class TestXComponents extends XDTester {
 "        type  gamDate          xdatetime('yyyyMMdd');\n" +
 "    </xd:declaration>\n" +
 "</xd:def>"});
-			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
+			genXComponent(xp, clearTempDir());
 			xml = "<A RokDN=\"2021\" CisloDN=\"12345\"/>";
 			assertEq(xml, parse(xp, "D7_", xml, reporter));
 			assertNoErrors(reporter);
@@ -200,7 +200,7 @@ public final class TestXComponents extends XDTester {
 "</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
+			genXComponent(xp, clearTempDir());
 			xml =
 "<X a='1FA0' b='ahgkjfd01Q==' c='12AFE0C1D246895A990AB2DD13CE684F012B339C'/>";
 			xd = xp.createXDDocument("");
@@ -230,7 +230,7 @@ public final class TestXComponents extends XDTester {
 "   </xd:component>\n" +
 "</xd:def>";
 			xp = compile(xdef);
-			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
+			genXComponent(xp, clearTempDir());
 			o = SUtils.getNewInstance("test.xdef.xcomp.XCPerson");
 			SUtils.setValueToSetter(o, "setName", "John Brown");
 			SUtils.setValueToSetter(o, "setBirth",
@@ -270,7 +270,7 @@ public final class TestXComponents extends XDTester {
 "  </xd:component>\n" +
 "</xd:def>";
 			xp = compile(xdef);
-			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
+			genXComponent(xp, clearTempDir());
 			xd = xp.createXDDocument("X");
 			xml =
 "<XdPoolCfg>\n"+
@@ -317,7 +317,7 @@ public final class TestXComponents extends XDTester {
 "  </xd:component>\n" +
 "</xd:def>";
 			xp = compile(xdef);
-			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
+			genXComponent(xp, clearTempDir());
 			xml =
 "<a>\n"+
 "  <b Name='X1'>\n"+
@@ -356,7 +356,7 @@ public final class TestXComponents extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			xd = xp.createXDDocument();
-			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
+			genXComponent(xp, clearTempDir());
 			s = "{a=1, b=[true]}";
 			xon = xd.jparse(s, reporter);
 			assertNoErrors(reporter);
@@ -380,7 +380,7 @@ public final class TestXComponents extends XDTester {
 "</xd:xon>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
+			genXComponent(xp, clearTempDir());
 			xd = xp.createXDDocument();
 			s = "[true, false, true]";
 			xon = XonUtils.parseXON(s);
@@ -401,7 +401,7 @@ public final class TestXComponents extends XDTester {
 "</xd:xon>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
+			genXComponent(xp, clearTempDir());
 			xd = xp.createXDDocument();
 			s = "[true, false, true]";
 			xon = XonUtils.parseXON(s);
@@ -422,7 +422,7 @@ public final class TestXComponents extends XDTester {
 "<xd:component>%class test.xdef.JCreateX4 %link X</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
+			genXComponent(xp, clearTempDir());
 			xd = xp.createXDDocument();
 			s = "{b=[1, [2], \"\"]}";
 			xon = XonUtils.parseXON(s);
@@ -445,7 +445,7 @@ public final class TestXComponents extends XDTester {
 "<xd:component>%class test.xdef.JCreateX5 %link X</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
+			genXComponent(xp, clearTempDir());
 			xd = xp.createXDDocument();
 			xon = XonUtils.parseXON("[true, 2]");
 			assertTrue(XonUtils.xonEqual(xon, xd.jcreate("X", reporter)));
@@ -468,7 +468,7 @@ public final class TestXComponents extends XDTester {
 "<xd:component>%class test.xdef.JCreateX6 %link X</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			genXComponent(xp, clearTempDir()).checkAndThrowErrors();
+			genXComponent(xp, clearTempDir());
 			xd = xp.createXDDocument();
 			xon = XonUtils.parseXON("{a=1, b=[true, 2]}");
 			assertTrue(XonUtils.xonEqual(xon, xd.jcreate("X", reporter)));
