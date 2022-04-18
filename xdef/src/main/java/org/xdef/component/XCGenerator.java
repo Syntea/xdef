@@ -1,5 +1,6 @@
 package org.xdef.component;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -27,6 +28,7 @@ import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.Report;
 import org.xdef.sys.SUtils;
 import org.xdef.xon.XonNames;
+import org.xdef.xon.XonTools;
 
 /** Generation of Java source code of XDComponents.
  * @author Vaclav Trojan
@@ -187,9 +189,9 @@ final class XCGenerator extends XCGeneratorXON {
 				}
 				case XMNode.XMSELECTOR_END: {
 					if (groupKind == XMNode.XMCHOICE) {
-						String s = "";
+						String xclear = "";
 						for (int j = choiceStack.size() - 1; j > 0; j -= 5) {
-							s += (String) choiceStack.get(j-1) //iname
+							xclear += (String) choiceStack.get(j-1) //iname
 								+ ((Integer)choiceStack.get(j)>1
 									? ".clear();"//it is final List so clear it!
 									: "=null;"); //othrewise set null
@@ -197,6 +199,7 @@ final class XCGenerator extends XCGeneratorXON {
 								break; // index == first, finish;
 							}
 						}
+						ArrayList<String> keys = new ArrayList<String>();
 						for (;choiceStack.size() >= 5;) {
 							int max = (Integer) choiceStack.pop();
 							String iname = (String) choiceStack.pop();
@@ -206,11 +209,23 @@ final class XCGenerator extends XCGeneratorXON {
 							boolean ext = (Boolean) choiceStack.pop();
 							if (!ext) {
 								genChildElementGetterSetter(xe1, typeName,iname,
-									max, "element", getters, setters, sbi, s);
+									max,"element",getters,setters,sbi,xclear);
+							}
+							XMData keyAttr;
+							if (xe1.getXonMode() != 0 &&
+								(keyAttr=xe1.getAttr(XonNames.X_KEYATTR))!=null
+								&& keyAttr.getFixedValue() != null) {
+								keys.add(keyAttr.getFixedValue().stringValue());
+								keys.add(typeName);
+								keys.add(iname);
 							}
 							if (choiceStack.isEmpty() || k == groupFirst) {
 								break;
 							}
+						}
+						if (!keys.isEmpty()) {// generate named value getters
+							genNamedValueGetters(
+								keys, classNames, varNames, getters);
 						}
 					}
 					groupMax = groupStack.pop(); // groupMax

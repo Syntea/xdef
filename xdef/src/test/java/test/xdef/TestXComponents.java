@@ -1,17 +1,6 @@
 package test.xdef;
 
-import test.XDTester;
-import org.xdef.XDPool;
-import org.xdef.XDDocument;
-import org.xdef.component.XComponent;
-import org.xdef.component.XComponentUtil;
-import org.xdef.xon.XonUtils;
-import org.xdef.model.XMElement;
-import org.xdef.model.XMNode;
-import org.xdef.sys.ArrayReporter;
-import org.xdef.sys.SDatetime;
-import org.xdef.sys.SUtils;
-import org.xdef.xml.KXmlUtils;
+import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Timestamp;
@@ -20,14 +9,30 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Map;
 import javax.xml.namespace.QName;
 import org.w3c.dom.Element;
+import org.xdef.XDPool;
+import org.xdef.XDDocument;
+import org.xdef.XDFactory;
+import static org.xdef.sys.STester.runTest;
+import org.xdef.component.XComponent;
+import org.xdef.component.XComponentUtil;
+import org.xdef.xon.XonUtils;
+import org.xdef.model.XMElement;
+import org.xdef.model.XMNode;
+import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.Price;
 import org.xdef.sys.GPSPosition;
-import static org.xdef.sys.STester.runTest;
+import org.xdef.sys.SDatetime;
+import org.xdef.sys.SUtils;
+import org.xdef.xml.KXmlUtils;
+import test.XDTester;
 import static test.XDTester._xdNS;
 import static test.XDTester.genXComponent;
 import static test.XDTester.parseXC;
+
+
 
 /** Test XComponents.
  * @author Vaclav Trojan
@@ -92,6 +97,7 @@ public final class TestXComponents extends XDTester {
 		ArrayReporter reporter = new ArrayReporter();
 		String s, xml, xdef;
 		SDatetime sd;
+		StringWriter strw;
 		XComponent xc;
 		XDDocument xd;
 		XDPool xp;
@@ -478,6 +484,154 @@ public final class TestXComponents extends XDTester {
 			assertNoErrorwarnings(reporter);
 			assertTrue(XonUtils.xonEqual(xon,
 				SUtils.getValueFromGetter(xc,"toXon")));
+		} catch (Exception ex) {fail(ex);}
+		reporter.clear();
+		try {
+			xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' xd:root='a'>\n" +
+"<xd:component>%class test.xdef.TestX_OneOfa %link a</xd:component>\n"+
+"<xd:xon name='a'>\n" +
+"{\n" +
+"  $oneOf= \"optional;\",\n" +
+"  \"manager\": \"string()\",\n" +
+"  \"subordinates\":[ \"* string();\" ]\n" +
+"}\n" +
+"</xd:xon>\n" +
+"</xd:def>";
+			xp = compile(xdef);
+			genXComponent(xp, clearTempDir());
+			xd = xp.createXDDocument();
+			s = "{\"manager\": \"BigBoss\"}";
+			xd = xp.createXDDocument();
+			o = xd.jparse(s, reporter);
+			assertNoErrors(reporter);
+			reporter.clear();
+			xc = xd.jparseXComponent(s, null, reporter);
+			assertNoErrors(reporter);
+			reporter.clear();
+			assertTrue(XonUtils.xonEqual(o, xc.toXon()));
+			assertEq("BigBoss", SUtils.getValueFromGetter(xc, "get$manager"));
+			assertNull(SUtils.getValueFromGetter(xc, "get$subordinates"));
+			s = "{\"subordinates\": []}";
+			xd = xp.createXDDocument();
+			o = xd.jparse(s, reporter);
+			assertNoErrors(reporter);
+			reporter.clear();
+			xc = xd.jparseXComponent(s, null, reporter);
+			assertNoErrors(reporter);
+			reporter.clear();
+			assertTrue(XonUtils.xonEqual(o, xc.toXon()));
+			assertNull(SUtils.getValueFromGetter(xc, "get$manager"));
+			o = SUtils.getValueFromGetter(xc, "get$subordinates");
+			if (o instanceof List) {
+				assertEq(0, ((List) o).size());
+			} else {
+				fail();
+			}
+			s = "{\"subordinates\": [\"first\", \"second\"]}";
+			xd = xp.createXDDocument();
+			o = xd.jparse(s, reporter);
+			assertNoErrors(reporter);
+			reporter.clear();
+			xc = xd.jparseXComponent(s, null, reporter);
+			assertNoErrors(reporter);
+			reporter.clear();
+			assertTrue(XonUtils.xonEqual(o, xc.toXon()));
+			assertNull(SUtils.getValueFromGetter(xc, "get$manager"));
+			o = SUtils.getValueFromGetter(xc, "get$subordinates");
+			if (o instanceof List) {
+				assertEq(2, ((List) o).size());
+			} else {
+				fail();
+			}
+			s = "{}";
+			xd = xp.createXDDocument();
+			o = xd.jparse(s, reporter);
+			genXComponent(xp, clearTempDir());
+			xc = xd.jparseXComponent(s, null, reporter);
+			assertTrue(XonUtils.xonEqual(o, xc.toXon()));
+			assertNull(SUtils.getValueFromGetter(xc, "get$manager"));
+			assertNull(SUtils.getValueFromGetter(xc, "get$subordinates"));
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root=\"test\">\n" +
+"<xd:component>%class test.xdef.MyTestX_OneOfb %link test</xd:component>\n"+
+"<xd:xon name=\"test\">\n" +
+"{ a=[ $oneOf,\n" +
+"      \"date(); finally outln('date')\",\n" +
+"      \"ipAddr(); finally outln('ipAddr')\",\n" +
+"      [$script=\"finally outln('[...]')\", \"*int()\"],\n" +
+"      {$script=\"finally outln('{ }')\",\n"+
+"         x=\"int()\",y=\"string()\",z=[\"* int()\"]},\n" +
+"      \"string(); finally outln('string')\" \n" +
+"  ]\n" +
+"}\n" +
+"</xd:xon>\n" +
+"</xd:def>";
+			xp = compile(xdef);
+			genXComponent(xp, clearTempDir());
+			s = "{a=\"2022-04-10\"}";
+			xd = xp.createXDDocument();
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			o = xd.jparse(s, reporter);
+			assertNoErrors(reporter);
+			reporter.clear();
+			assertEq("date\n", strw.toString());
+			xd = xp.createXDDocument();
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			xc = xd.jparseXComponent(s, null, reporter);
+			assertNoErrors(reporter);
+			reporter.clear();
+			assertEq("date\n", strw.toString());
+			assertTrue(XonUtils.xonEqual(o, xc.toXon()));
+			assertEq(new SDatetime("2022-04-10"),
+				SUtils.getValueFromGetter(xc, "get$a"));
+			s = "{a=[1, 2]}";
+			xd = xp.createXDDocument();
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			o = xd.jparse(s, reporter);
+			assertNoErrors(reporter);
+			reporter.clear();
+			assertEq("[...]\n", strw.toString());
+			xd = xp.createXDDocument();
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			xc = xd.jparseXComponent(s, null, reporter);
+			assertNoErrors(reporter);
+			reporter.clear();
+			assertEq("[...]\n", strw.toString());
+			assertTrue(XonUtils.xonEqual(o, xc.toXon()));
+			o = SUtils.getValueFromGetter(xc, "get$a");
+			if (o instanceof List) {
+				assertEq(2, ((List) o).size());
+			} else {
+				fail();
+			}
+			s = "{a={x=1, y=\"yyy\", z=[3,4]}}";
+			xd = xp.createXDDocument();
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			o = xd.jparse(s, reporter);
+			assertNoErrors(reporter);
+			reporter.clear();
+			assertEq("{ }\n", strw.toString());
+			xd = xp.createXDDocument();
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			xc = xd.jparseXComponent(s, null, reporter);
+			assertNoErrors(reporter);
+			reporter.clear();
+			assertTrue(XonUtils.xonEqual(o, xc.toXon()));
+			assertEq("{ }\n", strw.toString());
+			o = SUtils.getValueFromGetter(xc, "get$a");
+			if (o instanceof Map) {
+				assertEq(1,((Map) o).get("x"));
+				assertEq("yyy",((Map) o).get("y"));
+				o = ((Map) o).get("z");
+				assertTrue(o instanceof List && ((List) o).size() == 2, "" + o);
+			}
 		} catch (Exception ex) {fail(ex);}
 		reporter.clear();
 		clearTempDir();

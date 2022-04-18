@@ -22,7 +22,6 @@ import org.xdef.sys.SRuntimeException;
 import org.xdef.xon.XonNames;
 import org.xdef.xon.XonTools;
 
-
 /** Utilities used with XComponents.
  * @author Vaclav Trojan
  */
@@ -380,58 +379,83 @@ public class XComponentUtil {
 		return i > 0 ? '"' + s + '"' : s; // if it is integer put it into quotes
 	}
 
-	/** Create XON map from XComponent.
+	/** Put items to XON map from XComponent.
 	 * @param xc XComponent
-	 * @return object with XON map.
+	 * @param methods array with methods.
+	 * @param result the map where put items.
 	 */
-	private static Map<String, Object> toXonMap(final XComponent xc) {
-		Class<?> cls = xc.getClass();
-		Map<String, Object> result = new LinkedHashMap<String, Object>();
-		Method[] methods = cls.getDeclaredMethods();
+	private static void toXonMap(final XComponent xc,
+		final Method[] methods,
+		final Map<String, Object> result) {
 		for (Method x: methods) {
 			String methodName = x.getName();
 			Object o;
 			if (methodName.startsWith("get" + XDConstants.XON_NS_PREFIX + "$")
 				&& x.getParameterTypes().length == 0) {
 				o = null;
+				String key = null;
 				try {
 					o = x.invoke(xc);
-				} catch (Exception ex) {
-					new RuntimeException("Can't access getter: " + x.getName());
-				}
-				if (o instanceof XComponent) {
-					String key = null;
-					try {
-						Class<?> cls1 = o.getClass();
-						Method m =
-							cls1.getDeclaredMethod("get" + XonNames.X_KEYATTR);
-						key = XonTools.xmlToJName((String) m.invoke(o));
-					} catch (Exception ex) {
-						new RuntimeException("Not key", ex);
+					if (o == null) {
+						continue;
 					}
-					o = toXon((XComponent) o);
-					result.put(key, o);
-				} else {
-					new RuntimeException("Not XComponent: " + o);
-				}
-			} else if (methodName.startsWith("get")
-				&& x.getParameterTypes().length == 0) {
-				o = null;
-				try {
-					o = x.invoke(xc);
-					if (o != null && o instanceof XComponent) {
-						Class<?> cls1 = o.getClass();
-						Method m = cls1.getDeclaredMethod("getvalue");
-						o = m.invoke(o);
-						String key=XonTools.xmlToJName(methodName.substring(3));
-						o = toXonObject(o);
+					Method m = o.getClass().getDeclaredMethod(
+						"get" + XonNames.X_KEYATTR);
+					key = XonTools.xmlToJName((String) m.invoke(o));
+					if (o instanceof XComponent) {
+						XComponent xc1 = (XComponent) o;
+						result.put(key, xc1.toXon());
+					} else {
 						result.put(key, o);
 					}
 				} catch (Exception ex) {
-					new RuntimeException("Can't access getter: " + x.getName());
+					continue;
+				}
+			} else if (methodName.startsWith("listOf$")) {
+				o = null;
+
+				try {
+					o = x.invoke(xc);
+					if (o == null) {
+						continue;
+					}
+					String key = methodName.substring(7);
+					result.put(key, o);
+				} catch (Exception ex) {
+					continue;
+				}
+			} else if (x.getParameterTypes().length == 0
+				&& methodName.startsWith(
+					"listOf"+XDConstants.XON_NS_PREFIX+"$")) {
+				o = null;
+				String key = null;
+				try {
+					o = x.invoke(xc);
+					if (o == null) {
+						continue;
+					}
+					if (o instanceof XComponent) {
+						Method m = o.getClass().getDeclaredMethod(
+							"get" + XonNames.X_KEYATTR);
+						key = XonTools.xmlToJName((String) m.invoke(o));
+						XComponent xc1 = (XComponent) o;
+						result.put(key, xc1.toXon());
+					}
+				} catch (Exception ex) {
+					continue;
 				}
 			}
 		}
+	}
+
+	/** Create XON map from XComponent.
+	 * @param xc XComponent
+	 * @return object with XON map.
+	 */
+	private static Map<String, Object> toXonMap(final XComponent xc) {
+		Map<String, Object> result = new LinkedHashMap<String, Object>();
+		Class<?> cls = xc.getClass();
+		toXonMap(xc, cls.getDeclaredMethods(), result);
 		return result;
 	}
 	/** Create XON map from XComponent.

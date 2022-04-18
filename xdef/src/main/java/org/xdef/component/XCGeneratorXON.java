@@ -1,5 +1,6 @@
 package org.xdef.component;
 
+import java.util.List;
 import java.util.Set;
 import org.xdef.XDPool;
 import org.xdef.XDValue;
@@ -324,6 +325,44 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 					"&{typ}", typeName1));
 			}
 		}
+	}
+	
+	/** Create named values getters.
+	 * @param keys array with tripples: key, getter value, result type value.
+	 * @param classNames set with class names.
+	 * @param varNames set with variable names.
+	 * @param getters where to generate getters.
+	 */
+	final void genNamedValueGetters(final List<String> keys,
+		final Set<String> classNames,
+		final Set<String> varNames,
+		final StringBuilder getters) {
+		String key = keys.get(0);
+		String name = javaName(
+			"get$" + XonTools.toXmlName(XonTools.toXmlName(key)));
+		name = getUniqueName(getUniqueName(
+			getUniqueName(name,RESERVED_NAMES), classNames),
+			varNames);
+		varNames.add(name);
+		String s = 
+(_genJavadoc ? "\t/** Getter of named value "+key+".*/"+LN : "")+
+"\tpublic Object "+name+ "() {"+LN;
+		for (int k = 0; k < keys.size(); k += 3) {
+			if (!key.equals(keys.get(k))) { 
+				s += "\t\treturn null;"+LN + "\t}"+LN;
+				key = keys.get(k);
+				name = XonTools.toXmlName(key);
+				s +=
+(_genJavadoc ? "\t/** Getter of named value '"+key+"'.*/"+LN : "")+
+"\tpublic Object get$"+name+ "() {"+LN;
+			}
+			s +=
+"\t\tif(get" + keys.get(k+2) + "()!= null) {"+LN+
+"\t\t\treturn get" + keys.get(k+2) + "().toXon();"+LN+
+"\t\t}"+LN;
+		}
+		s += "\t\treturn null;"+LN + "\t}"+LN;
+		getters.append(s);
 	}
 
 	/** Create unique model name.
