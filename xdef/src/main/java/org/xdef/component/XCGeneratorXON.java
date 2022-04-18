@@ -326,7 +326,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 			}
 		}
 	}
-	
+
 	/** Create named values getters.
 	 * @param keys array with tripples: key, getter value, result type value.
 	 * @param classNames set with class names.
@@ -344,11 +344,11 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 			getUniqueName(name,RESERVED_NAMES), classNames),
 			varNames);
 		varNames.add(name);
-		String s = 
+		String s =
 (_genJavadoc ? "\t/** Getter of named value "+key+".*/"+LN : "")+
 "\tpublic Object "+name+ "() {"+LN;
 		for (int k = 0; k < keys.size(); k += 3) {
-			if (!key.equals(keys.get(k))) { 
+			if (!key.equals(keys.get(k))) {
 				s += "\t\treturn null;"+LN + "\t}"+LN;
 				key = keys.get(k);
 				name = XonTools.toXmlName(key);
