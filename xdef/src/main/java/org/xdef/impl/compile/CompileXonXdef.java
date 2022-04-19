@@ -232,12 +232,13 @@ public class CompileXonXdef extends StringParser {
 	private SBuffer[] parseTypeDeclaration() {
 		skipSemiconsBlanksAndComments();
 		SBuffer[] result = new SBuffer[] {
-			new SBuffer("", getPosition()), new SBuffer("", getPosition())};
+			new SBuffer("",getPosition()),new SBuffer("",getPosition()),null};
 		int pos = getIndex();
 		SPosition spos = getPosition();
 		XOccurrence occ = readOccurrence();
 		if (occ != null) {
 			result[0] = new SBuffer(getParsedBufferPartFrom(pos), spos);
+			result[2] = new SBuffer(String.valueOf(occ.maxOccurs()));
 		}
 		skipSemiconsBlanksAndComments();
 		if (!eos()) {
@@ -507,6 +508,10 @@ public class CompileXonXdef extends StringParser {
 				SBuffer[] parsedScript = parseTypeDeclaration(jo.getSBuffer());
 				if (!parsedScript[0].getString().isEmpty()) { // occurrence
 					occ = parsedScript[0];
+					if (!XonNames.X_ARRAY.equals(parent.getLocalName())
+						&& !"1".equals(parsedScript[2].getString())) {
+						error(XDEF.XDEF262); //("====== " + occ.getString());
+					}
 				}
 				if (eos()) {
 					parsedScript[1] = new SBuffer("jvalue()", jo.getPosition());
@@ -582,6 +587,7 @@ public class CompileXonXdef extends StringParser {
 		jx._xdPrefix = p.getPrefix();
 		jx._xdIndex = p._nsPrefixes.get(jx._xdPrefix);
 		jx._basePos = p._xpathPos + "/text()";
+		jx.setReportWriter(reporter);
 		p._name = name;
 		p._nsURI = null; // set no namespace
 		p._nsindex = -1;
