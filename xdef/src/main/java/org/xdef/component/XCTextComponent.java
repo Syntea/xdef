@@ -7,9 +7,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-/** Interface of XComponent (Java class generated from X-definitions according
- * to a model of Element). Java source of the XComponent is possible to generate
- * by {@link org.xdef.component.GenXComponent}.
+/** Implementation of the interface XComponent for text nodes.
  * @author Vaclav Trojan
  */
 public class XCTextComponent implements XComponent {
@@ -28,7 +26,7 @@ public class XCTextComponent implements XComponent {
 	/** Get value of text node.
 	 * @return parsed value.
 	 */
-	public Object xGetValue() {return null;}
+	public Object xGetValue() {return _value;}
 
 	@Override
 	/** Create XML element from this XComponent (marshal).
@@ -141,8 +139,7 @@ public class XCTextComponent implements XComponent {
 	public void xInit(XComponent p, String name, String ns, String xPos){}
 	@Override
 	/** Get XON object from this X-component.
-	 * @return XON object if this X-component is created from JSON/XON/INI/CSV.
-	 * Otherwise return null.
+	 * @return XON object if this X-component.
 	 */
-	public Object toXon() {return null;}
+	public String toXon() {return _value;}
 }
