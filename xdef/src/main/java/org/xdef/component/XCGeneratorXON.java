@@ -2,6 +2,7 @@ package org.xdef.component;
 
 import java.util.List;
 import java.util.Set;
+import org.xdef.XDConstants;
 import org.xdef.XDPool;
 import org.xdef.XDValue;
 import static org.xdef.component.XCGeneratorBase.LN;
@@ -432,7 +433,6 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 		String name = getXonItemName(xe, "get$", classNames, varNames);
 		String typ =
 			getJavaObjectTypeName((XData) xe.getAttr(XonNames.X_VALUEATTR));
-		boolean isNull = false;
 		String template;
 		// has only a text child
 		String jGet, jSet;
@@ -448,7 +448,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 "\t * @return value of text nodes of &{d}"+LN+
 "\t */"+LN : "")+
 "\tpublic &{typ1} listOf$&{name}()";
-			s = isNull ? typ + ".JNULL" : jGet;
+			s = jGet;
 			getters.append(modify(template +
 "{"+LN+
 "\t\t&{typ1} x=new java.util.ArrayList<&{typ}>();"+LN+
@@ -483,9 +483,8 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 			setters.append(modify(template +
 "{"+LN+
 "\t\tif (x!=null) {"+LN+
-(isNull ? "\t\t\tadd&{iname}(new &{typeName}());"+LN
-:("\t\t\t&{typeName} y=new &{typeName}();"+LN+
-"\t\t\ty.setvalue(" + jSet + "); add&{iname}(y);"+LN))+
+"\t\t\t&{typeName} y=new &{typeName}();"+LN+
+"\t\t\ty.setvalue(" + jSet + "); add&{iname}(y);"+LN+
 "\t\t}"+LN+"\t}"+LN,
 				"&{name}", name,
 				"&{iname}", iname,
@@ -506,9 +505,8 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 "{"+LN+
 "\t\t_&{iname}.clear(); if (x==null) return;"+LN+
 "\t\tfor (&{typ} y:x) {"+LN+
-(isNull ? "\t\t\tadd&{iname}(new &{typeName}());"+LN
-:("\t\t\t&{typeName} z=new &{typeName}();"+LN+
-"\t\t\tz.setvalue(y); add&{iname}(z);"+LN)) +
+"\t\t\t&{typeName} z=new &{typeName}();"+LN+
+"\t\t\tz.setvalue(y); add&{iname}(z);"+LN+
 "\t\t}"+LN+
 "\t}"+LN,
 				"&{name}", name,
@@ -533,7 +531,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 "\t\treturn _&{iname}==null?null:" +
 	("String".equals(typ) && xe.getXonMode() != 0 ?
 	"org.xdef.xon.XonTools.jstringFromSource(_&{iname}.getvalue())"
-	: isNull ? typ + ".JNULL" : "_&{iname}.getvalue()") + ";" + LN
+	: "_&{iname}.getvalue()") + ";" + LN
 +"\t}"+LN;
 			getters.append(modify(template,
 				"&{name}", name,
@@ -589,12 +587,11 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 			template =
 (_genJavadoc ? "\t/** Set value of textnode of &{d}.*/"+LN : "")+
 "\tpublic void set$&{name}(&{typ} x)";
-			s = isNull
-? "\t\tif(_&{iname}==null)set&{iname}(x==null?null:new &{typeName}());"+LN
-: ("\t\tif(x==null) _&{iname}=null; else {"+LN+
+			s =
+"\t\tif(x==null) _&{iname}=null; else {"+LN+
 "\t\t\tif(_&{iname}==null) set&{iname}(new &{typeName}());"+LN+
 "\t\t\t_&{iname}.setvalue(x);"+LN+
-"\t\t}"+LN);
+"\t\t}"+LN;
 			setters.append(modify(template+"{"+LN+ s + "\t}"+LN,
 				"&{name}", name,
 				"&{iname}", iname,
@@ -643,5 +640,47 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 				}
 			}
 		}
+	}
+
+	/** Generate toXOn() method.
+	 * @param xe Element model from which setter/getter is generated.
+	 * @param sb where to generate toXOn() method.
+	 */
+	final String genToXonMethod(final XElement xe) {
+		String s =
+(_genJavadoc ? "\t/** Get XON value of this item."+LN+
+"\t * @return value of this item."+LN+
+"\t */"+LN : "")+
+"\t@Override"+LN;
+		String x;
+		String typ;
+		if (xe.getXonMode()>0&&XDConstants.XON_NS_URI_W.equals(xe.getNSUri())) {
+			if (XonNames.X_ITEM.equals(xe.getLocalName())) {
+				typ = getJavaObjectTypeName(xe.getAttr(XonNames.X_VALUEATTR));
+				x =
+LN+"\t\tObject o = getvalue();"+LN+
+"\t\tif (o instanceof org.xdef.xon.XonTools.JNull) return null;"+LN;
+				if ("String".equals(typ)) {
+					x +=
+"\t\treturn (String) org.xdef.xon.XonTools.xmlToJValue((String)o);"+LN+"\t";
+				} else {
+					x +=
+"\t\treturn ("+typ+")o;"+LN+"\t";
+				}
+			} else {
+				if (XonNames.X_ARRAY.equals(xe.getLocalName())) {
+					typ = "java.util.List<Object>";
+					x = ".toXonArray(this);";
+				} else {
+					typ = "java.util.Map<String, Object>";
+					x = ".toXonMap(this);";
+				}
+				x = LN+"\t\treturn org.xdef.component.XComponentUtil"+x+LN+"\t";
+			}
+		} else {
+			typ = "Object";
+			x = "return org.xdef.component.XComponentUtil.toXon(this);";
+		}
+		return s + "\tpublic " + typ + " toXon(){"+ x + "}"+LN;
 	}
 }

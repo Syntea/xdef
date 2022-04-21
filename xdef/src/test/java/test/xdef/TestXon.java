@@ -427,7 +427,6 @@ public class TestXon extends XDTester {
 "</xd:xon>\n" +
 "</xd:def>";
 			xp = compile(xdef);
-			xp = compile(xdef);
 			genXComponent(xp, clearTempDir());
 			xd = xp.createXDDocument();
 			s =

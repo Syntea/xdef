@@ -256,6 +256,9 @@ public class XonTools {
 	 * @return object with XON value
 	 */
 	public final static Object xmlToJValue(final String s) {
+		if (s == null) {
+			return null;
+		}
 		if (s.isEmpty()) {
 			return "";
 		} else if (s.charAt(0) == '[') {

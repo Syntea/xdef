@@ -2,14 +2,11 @@ package org.xdef.component;
 
 import java.util.Iterator;
 import java.util.Map;
-import org.xdef.XDConstants;
 import org.xdef.XDPool;
 import static org.xdef.component.XCGeneratorBase.LN;
 import static org.xdef.component.XCGeneratorBase.genSeparator;
-import org.xdef.impl.XConstants;
 import org.xdef.impl.XElement;
 import org.xdef.sys.ArrayReporter;
-import org.xdef.xon.XonNames;
 
 /** Methods for generation Java source code of getters/setters.
  * @author Vaclav Trojan
@@ -72,33 +69,6 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 		}
 		return toXml;
 	}
-	/** Generate toXOn() method. */
-	private String genToXonMethod(final XElement xe) {
-		String s;
-		if (xe._xon == XConstants.XON_MODE_W
-			&& XDConstants.XON_NS_URI_W.equals(xe.getNSUri())
-			&& (XonNames.X_ARRAY.equals(xe.getLocalName())
-			|| XonNames.X_MAP.equals(xe.getLocalName()))) {
-			String typ = XonNames.X_ARRAY.equals(xe.getLocalName())
-				? "java.util.List<Object>" : "java.util.Map<String,Object>";
-			s =
-"\t@SuppressWarnings(\"unchecked\")"+LN+
-"\t@Override"+LN+
-"\tpublic " + typ + " toXon() {"+LN+
-"\t\treturn " + "(" + typ + ")"
-			+ " org.xdef.component.XComponentUtil.toXon(this);"+LN+
-"\t";
-		} else {
-			s =
-"\t@Override"+LN+
-"\tpublic Object toXon(){return org.xdef.component.XComponentUtil.toXon(this);";
-		}
-		return
-(_genJavadoc ? "\t/** Get XON object from this X-component."+LN+
-"\t * @return object created from this X-deomponent."+LN+
-"\t */"+LN : "")
-			+ s + '}' + LN;
-	}
 
 	/** Final generation of Java sources from prepared data. */
 	final String genSource(final XElement xe,
@@ -138,7 +108,7 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 			+ xpathes.toString() +
 "//<editor-fold defaultstate=\"collapsed\" desc=\"Implementation of XComponent interface\">"+LN+
 ////////////////////////////////////////////////////////////////////////////////
-genToXonMethod(xe)+
+			vars+
 "\t@Override"+LN+
 (_genJavadoc ? ("\t/** Create XML element from this XComponent (marshal)."+LN+
 "\t * If the argument is null <i>null</i> then document is created with"+LN+
@@ -328,7 +298,6 @@ genToXonMethod(xe)+
 "\t\t\t\torg.xdef.msg.XDEF.XDEF374);"+LN+
 "\t\t}"+LN+
 "\t}"+LN+
-		vars +
 (_genJavadoc ? "\t/** Name of element model.*/"+LN : "") +
 "\tpublic static final String XD_NAME=\"" + xelName + "\";"+LN+
 (_genJavadoc ? "\t/** Parent XComponent node.*/"+LN : "") +

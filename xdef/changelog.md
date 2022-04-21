@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 41.0.8, release-date 2022-04-20
+# Version 41.0.8, release-date 2022-04-21
 . added method `toXon()` the the interface `org.xdef.component.XComponent`.
 . added generation of named items with `$onerOf` option in X-components.
 

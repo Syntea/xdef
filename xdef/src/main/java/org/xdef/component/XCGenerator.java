@@ -28,7 +28,6 @@ import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.Report;
 import org.xdef.sys.SUtils;
 import org.xdef.xon.XonNames;
-import org.xdef.xon.XonTools;
 
 /** Generation of Java source code of XDComponents.
  * @author Vaclav Trojan
@@ -494,6 +493,7 @@ final class XCGenerator extends XCGeneratorXON {
 				}
 			}
 		}
+		vars.append(genToXonMethod(xe));
 		// attributes and child nodes processed
 		if (isRoot) {
 			_interfaces = sbi;

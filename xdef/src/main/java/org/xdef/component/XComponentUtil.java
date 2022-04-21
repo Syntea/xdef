@@ -214,7 +214,7 @@ public class XComponentUtil {
 					}
 				}
 				final String xpos = parent.xGetXPos() + "/$text[" + xp + "]";
-				addXC(xc, new XCTextComponent(txt.toString(), xdPos, xpos, index));
+				addXC(xc, new XCTextComponent(txt.toString(),xdPos,xpos,index));
 			}
 		}
 	}
@@ -348,7 +348,7 @@ public class XComponentUtil {
 	 * @param xc XComponent
 	 * @return object with XON array.
 	 */
-	private static List<Object> toXonArray(final XComponent xc) {
+	public final static List<Object> toXonArray(final XComponent xc) {
 		List<Object> result = new ArrayList<Object>();
 		List list = (List) xc.xGetNodeList();
 		for (Object x : list) {
@@ -413,7 +413,6 @@ public class XComponentUtil {
 				}
 			} else if (methodName.startsWith("listOf$")) {
 				o = null;
-
 				try {
 					o = x.invoke(xc);
 					if (o == null) {
@@ -452,7 +451,7 @@ public class XComponentUtil {
 	 * @param xc XComponent
 	 * @return object with XON map.
 	 */
-	private static Map<String, Object> toXonMap(final XComponent xc) {
+	public static Map<String, Object> toXonMap(final XComponent xc) {
 		Map<String, Object> result = new LinkedHashMap<String, Object>();
 		Class<?> cls = xc.getClass();
 		toXonMap(xc, cls.getDeclaredMethods(), result);
@@ -694,7 +693,7 @@ public class XComponentUtil {
 			} else if (XonNames.X_ARRAY.equals(localName)) {
 				return toXonArray(xc);
 			} else if (XonNames.X_ITEM.equals(localName)) {
-				return toXonItem(xc);
+				return xc.toXon();
 			}
 		}
 		return toXonXD(xc, new KNamespace());
