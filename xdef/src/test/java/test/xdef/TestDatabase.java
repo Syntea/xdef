@@ -577,7 +577,7 @@ public final class TestDatabase extends XDTester {
 "  <Book TITLE='Koran' ISBN='9345478191'/>\n"+
 "</Books>";
 			parse(xd, xml, reporter); //process data
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(5, xd.getVariable("#inserted").intValue());
 			// insert 2
 			xdef =
@@ -799,7 +799,7 @@ public final class TestDatabase extends XDTester {
 			_con = getConnection();
 			create(xdef, null, null, "A", "#service",
 				XDFactory.createSQLService(_con), reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			// check that external Service wasn't closed
 			if(_con.isClosed()) {
 				fail("X-Definition has closed the Service object.");
@@ -846,7 +846,7 @@ public final class TestDatabase extends XDTester {
 			_con = getConnection();
 			create(xdef, null, null, "A", "#service",
 				XDFactory.createSQLService(_con), reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			// check that external Service wasn't closed
 			if(!_con.isClosed()) {
 				fail("X-Definition has't closed the Service object by close() "

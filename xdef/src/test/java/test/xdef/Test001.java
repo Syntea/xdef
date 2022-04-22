@@ -71,7 +71,7 @@ public final class Test001  extends XDTester {
 "</Book>";
 			strw = new StringWriter();
 			assertEq(xml, parse(xp, "", xml, reporter, strw, null, null));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq("isbn: 123456789; The Crash\n", strw.toString());
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n"+
@@ -1064,17 +1064,17 @@ public final class Test001  extends XDTester {
 			strw = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(strw, false));
 			assertEq(xml, parse(xd, xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = "<Misto name='B'/>";
 			el = parse(xd, xml, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(el, xml);
 			xml =
 "<Udaj misto='A' hodnota='1.5'\n"+
 "  od='2012-10-01T10:00:00'\n"+
 "  do='2012-10-01T11:00:00'/>";
 			el = parse(xd, xml, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(el, xml);
 			xml =
 "<Udaj misto='A'\n"+
@@ -1082,7 +1082,7 @@ public final class Test001  extends XDTester {
 "  od='2012-10-02T09:30:00'\n"+
 "  do='2012-10-02T10:45:00'/>";
 			el = parse(xd, xml, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(el, xml);
 			xml =
 "<Udaj misto='B'\n"+
@@ -1090,11 +1090,11 @@ public final class Test001  extends XDTester {
 "  od='2012-10-01T10:30:00'\n"+
 "  do='2012-10-01T10:35:00'/>";
 			el = parse(xd, xml, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(el, xml);
 			xml = "<Misto name='A'/>";
 			el = parse(xd, xml, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(el, xml);
 			xml =
 "<Udaj misto='A'\n"+
@@ -1102,11 +1102,11 @@ public final class Test001  extends XDTester {
 "  od='2012-10-02T09:30:00'\n"+
 "  do='2012-10-02T10:45:00'/>";
 			el = parse(xd, xml, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(el, xml);
 			xml = "<Misto name='C'/>";
 			el = parse(xd, xml, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(el, xml);
 			reporter.clear();
 			assertEq(xd.xparse(base, reporter),
@@ -1120,7 +1120,7 @@ public final class Test001  extends XDTester {
 "</Misto>"+
 "<Misto name='C'/>"+
 "</Base>");
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq("A already defined!\n"+
 				"A/2012-10-02T09:30:00 already exists!\n", strw.toString());
 		} catch (Exception ex) {fail(ex);}
@@ -1137,13 +1137,13 @@ public final class Test001  extends XDTester {
 			xp = XDFactory.compileXD(null, p1, p2);
 			xml = "<A/>";
 			assertEq(xml, parse(xp, "A", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = "<B/>";
 			assertEq(xml, parse(xp, "B", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = "<C/>";
 			assertEq(xml, parse(xp, "C", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xdef =
@@ -1165,7 +1165,7 @@ public final class Test001  extends XDTester {
 			xml = "<root a='123'/>";
 			xp = compile(xdef);
 			assertEq(xml, parse(xp, "Example", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' name='Example' root='root'>\n"+
 "  <xd:declaration scope='local'>\n" +

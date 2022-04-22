@@ -29,7 +29,7 @@ public class Kalcik extends XDTester {
 "    </UserCommand>\n" +
 "</UserCommands>";
 			assertEq(xml, parse(xp, "UserCommands", xml , reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xc = parseXC(xp,"UserCommands", xml , null, reporter);
 			assertNoErrorwarnings(reporter);
 			assertEq(xml, xc.toXml());

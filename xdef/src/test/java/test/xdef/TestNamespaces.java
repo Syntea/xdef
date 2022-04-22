@@ -35,10 +35,10 @@ public final class TestNamespaces extends XDTester {
 				"<c:a xmlns:c='C' c='C'/>" +
 				"</a:a>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = "<a:a xmlns:a = 'B' b = 'b' />";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = "<a:a xmlns:a = 'B' a = 'a' />";
 			parse(xp, "", xml, reporter);
 			assertTrue(reporter.errorWarnings(), "Error not reported");
@@ -68,10 +68,10 @@ public final class TestNamespaces extends XDTester {
 				"<c:a xmlns:c='C' c='C'/>" +
 				"</a:a>";
 			assertEq(xml, parse(xp, "Test", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = "<a:a xmlns:a = 'B' b = 'b' />";
 			assertEq(xml, parse(xp, "Test", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = "<a:a xmlns:a = 'B' a = 'a' />";
 			parse(xp, "Test", xml, reporter);
 			assertTrue(reporter.errorWarnings(), "Error not reported");
@@ -111,7 +111,7 @@ public final class TestNamespaces extends XDTester {
 "<b><c a1='1'/></b>\n"+
 "</a>";
 			parse(xp, "A", xml, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = //2. Named namespace
 "<a:a xmlns:a='abcdef'>\n"+
 "<a:b><a:c a1='1'/>\n"+
@@ -128,11 +128,11 @@ public final class TestNamespaces extends XDTester {
 "<a:b><a:c a1='1'/></a:b>\n"+
 "</a:a>";
 			parse(xp, "A", xml, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = //3. any (with namespace)
 "<a:p xmlns:a='abcdef'><q a='a'><r/></q></a:p>\n";
 			parse(xp, "A", xml, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = //5. here should be error
 "<a:a xmlns:a='abcdef'><q a='a'><r/></q></a:a>\n";
 			parse(xp, "A", xml, reporter);

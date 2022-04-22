@@ -32,13 +32,13 @@ public class Kamenicky extends XDTester {
 			xp.displayCode();
 			xml = "<a a='ab'/>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = "<a a='a'/>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = "<a a='12'/>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertErrors(reporter);
+			assertNoErrorwarnings(reporter);
 		} catch (Exception ex) {fail(ex);}
 	}
 

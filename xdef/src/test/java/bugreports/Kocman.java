@@ -27,7 +27,7 @@ public class Kocman extends XDTester {
 			genXComponent(xp, clearTempDir());
 			xml = "<A><X b='1'><X b='2'><X b='3'/></X><X b='4'/></X></A>";
 			assertEq(xml, parse(xp, "M", xml , reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xc = parseXC(xp,"M", xml , null, reporter);
 			assertNoErrorwarnings(reporter);
 			assertEq(xml, xc.toXml());

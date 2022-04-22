@@ -227,7 +227,7 @@ public class MyTest_0 extends XDTester {
 //			xml = "<root a='123'/>";
 //			xp = compile(xdef);
 //			assertEq(xml, parseJSON(xp, "Example", xml, reporter));
-//			assertNoErrors(reporter);
+//			assertNoErrorwarnings(reporter);
 //double d = Double.NaN;
 //System.out.println(d);
 //System.out.println(Double.parseDouble("NaN"));
@@ -327,16 +327,16 @@ if(T)return;
 			xml = "<a><b n='1'/><b n='456'/></a>";
 			xp = XDFactory.compileXD(null, xdef);
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = "<a><b n='a'/><b n='Def'/></a>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = "<a><b n='123'/><b n='Def'/></a>";
 			parse(xp, "", xml, reporter);
 			assertErrors(reporter);
 			xml = "<root><B b='123'/><C c='wsdl:123'/></root>";
 			parse(xp, "", xml, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml =
 "<root>\n<B b='123'/>\n<C c='wsdl:124'/>\n<C c='wsdl:123'/>\n</root>";
 			parse(xp, "", xml, reporter);
@@ -372,7 +372,7 @@ if(T){return;}
 "</root>";
 			xd = xp.createXDDocument();
 			parse(xd, xml, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 		} catch (Exception ex) {fail(ex);}
 if(T)return;
 		try {
@@ -399,7 +399,7 @@ if(T)return;
 "<A id='123'/>";
 			xd = xp.createXDDocument();
 			xd.xparse(xml, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 		} catch (SRuntimeException ex) {
 			if (!"XDEF474".equals(ex.getMsgID())) fail(ex);
 		} catch (Exception ex) {fail(ex);}
@@ -499,7 +499,7 @@ if(T)return;
 			printXMData(xp.getXMDefinition().getModel(null, "A"));
 			xml = "<A a='x'><X><B a='x'/><C a='x'/></X></A>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 		} catch (Exception ex) {fail(ex);}
 if(T){return;}
 		try {
@@ -523,7 +523,7 @@ System.out.println("ParserName: " + xmd.getParserName());
 			assertEq(xmd.getRefTypeName(), "t");
 			xml = "<a a='b' />";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 		} catch (Exception ex) {fail(ex);}
 if(T){return;}
 		try {
@@ -534,14 +534,14 @@ if(T){return;}
 			xp = compile(xdef);
 			xml = "<a/>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(xml, create(xp, "", "a", reporter, xml));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = "<a>1</a>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(xml, create(xp, "", "a", reporter, xml));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "   <a xd:text='* string()'>\n" +
@@ -551,49 +551,49 @@ if(T){return;}
 			xp = compile(xdef);
 			xml = "<a/>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(xml, create(xp, "", "a", reporter, xml));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = "<a>1</a>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(xml, create(xp, "", "a", reporter, xml));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = "<a><b/>1</a>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(xml, create(xp, "", "a", reporter, xml));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = "<a>1<b/></a>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(xml, create(xp, "", "a", reporter, xml));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = "<a><b/><b/>1</a>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(xml, create(xp, "", "a", reporter, xml));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = "<a>1<b/><b/>2</a>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(xml, create(xp, "", "a", reporter, xml));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = "<a><b/>1<b/></a>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(xml, create(xp, "", "a", reporter, xml));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = "<a>1<b/>2/>3</a>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(xml, create(xp, "", "a", reporter, xml));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = "<a>1<b/>2<b/>3<b/>4</a>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(xml, create(xp, "", "a", reporter, xml));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "   <xd:declaration>int i = 0;</xd:declaration>\n" +
@@ -602,7 +602,7 @@ if(T){return;}
 			xp = compile(xdef);
 			xml = "<a/>";
 			assertEq("<a>1</a>", create(xp, "", "a", reporter, xml));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "   <xd:declaration>int i = 0;</xd:declaration>\n" +
@@ -613,13 +613,13 @@ if(T){return;}
 			xp = compile(xdef);
 			xml = "<a/>";
 			assertEq("<a>1</a>", create(xp, "", "a", reporter, xml));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = "<a><b/></a>";
 			assertEq("<a>1<b/>2</a>", create(xp, "", "a", reporter, xml));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = "<a><b/><b/></a>";
 			assertEq("<a>1<b/>2<b/>3</a>", create(xp, "", "a", reporter, xml));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 		} catch (Exception ex) {fail(ex);}
 if(T){return;}
 		try {
@@ -639,7 +639,7 @@ if(T){return;}
 			xd.setStdOut(xout);
 			assertEq(xml, parse(xd, xml, reporter));
 			xout.close();
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq("T:t1t2t3f:t1t2t3", bos.toString());
 			assertEq("<a>t1<b/>t2<c/>t3</a>",
 				KXmlUtils.nodeToString(xd.getElement()));
@@ -681,7 +681,7 @@ if(T){return;}
 			printXMData(xp.getXMDefinition().getModel(null, "A"));
 			xml = "<A a='x'><X><B a='x'/><C a='x'/></X></A>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 		} catch (Exception ex) {fail(ex);}
 if(T){return;}
 		try {
@@ -767,7 +767,7 @@ if(T){return;}
 			xp = compile(f);
 			xml = "<A>1?xyz</A>";
 			assertEq(xml, parse(xp, "A", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 		} catch (Exception ex) {fail(ex);}
 if(T){return;}
 		try {
@@ -811,7 +811,7 @@ if(T){return;}
 			}
 			xml = "<a/>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 		} catch (Exception ex) {fail(ex);}
 if(T){return;}
 		try {
@@ -838,7 +838,7 @@ if(T){return;}
 			}
 			xml = "<A a='a' b='bb' c='1' d='true'></A>";
 			parse(xp, "", xml, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 		} catch (Exception ex) {fail(ex);}
 if(T){return;}
 		try {
@@ -855,7 +855,7 @@ if(T){return;}
 			s = "{\"A\":1234}";
 			assertTrue(XonUtils.xonEqual(xd.jparse(s, reporter),
 				XonUtils.parseJSON(s)));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			reporter.clear();
 			s = "{\"A\":\"abc\"}";
 			xd.jparse(s, reporter);
@@ -939,7 +939,7 @@ if(T){return;}
 			System.out.println(xmel.getAttr("i"));
 			xml = "<a/>";
 			parse(xp, "", xml, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 		} catch (Exception ex) {fail(ex);}
 if(T){return;}
 		try {
@@ -952,7 +952,7 @@ if(T){return;}
 "</xd:def>";
 			xp = compile(xdef);
 			parse(xp, "", "<A a = 'a'><XXX xx='xx'>xx</XXX></A>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
 " <xd:declaration scope='local'>\n"+
@@ -962,7 +962,7 @@ if(T){return;}
 "</xd:def>";
 			xp = compile(xdef);
 			parse(xp, "", "<A a = 'a'><XXX xx='xx'>xx</XXX></A>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:declaration>\n"+
@@ -975,7 +975,7 @@ if(T){return;}
 "</xd:collection>";
 			xp = compile(xdef);
 			parse(xp, "", "<A a = 'a'><XXX xx='xx'>xx</XXX></A>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xp = compile(new String[] {
 "<xd:declaration xmlns:xd='" + XDConstants.XDEF32_NS_URI + "'>\n"+
 " <xd:macro name='moreAll'>options moreAttributes,moreElements;</xd:macro>\n"+
@@ -985,7 +985,7 @@ if(T){return;}
 "</xd:def>"
 			});
 			parse(xp, "", "<A a='a'><XXX xx='xx'>xx</XXX></A>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 		} catch (Exception ex) {fail(ex);}
 if(T){return;}
 		try {
@@ -1058,7 +1058,7 @@ if(T){return;}
 "</xd:def>";
 			xml = "<a>1</a>";
 			assertEq(xml, parse(xdef, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 		} catch (Exception ex) {fail(ex);}
 if(T){return;}
 		try {
@@ -1076,7 +1076,7 @@ if(T){return;}
 "</xd:def>";
 			xml = "<a>123, 456, 789</a>";
 			assertEq(xml, parse(xdef, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 		} catch (Exception ex) {fail(ex);}
 if(T){return;}
 		try {
@@ -1097,7 +1097,7 @@ if(T){return;}
 			xd.setStdOut(xout);
 			assertEq(xml, parse(xd, xml, reporter));
 			assertEq("", strw.toString());
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 		} catch (Exception ex) {fail(ex);}
 if(T){return;}
 		try {
@@ -1118,7 +1118,7 @@ if(T){return;}
 			xd.setStdOut(xout);
 			assertEq(xml, parse(xd, xml, reporter));
 			assertEq("", strw.toString());
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 		} catch (Exception ex) {fail(ex);}
 if(T){return;}
 		try {
@@ -1139,9 +1139,9 @@ if(T){return;}
 				false, //removeIgnorableWhiteSpaces
 				true); //comments
 			assertEq("<a><![CDATA[123]]></a>",strw.toString());
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			el = create(xd, "a", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			strw = new StringWriter();
 			KXmlUtils.writeXml(strw,
 				null, //encoding
@@ -1202,7 +1202,7 @@ if(T){return;}
 "</xd:def>\n";
 			strw = new StringWriter();
 			parse(xdef, "", "<a a='3'></a>", reporter, strw, null, null);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq("false\n", strw.toString());
 			strw = new StringWriter();
 			parse(xdef, "", "<a a='2'></a>", reporter, strw, null, null);
@@ -1224,7 +1224,7 @@ if(T){return;}
 "<a a=\"required licheCislo()\"/>"+
 "</xd:def>\n";
 			parse(xdef, "", "<a a='1'></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xdef, "", "<a a='2'></a>", reporter);
 			assertErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
@@ -1241,7 +1241,7 @@ if(T){return;}
 "<a a=\"required licheCislo()\"/>"+
 "</xd:def>\n";
 			parse(xdef, "", "<a a='1'></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xdef, "", "<a a='2'></a>", reporter);
 			assertErrors(reporter);
 			xdef = // var in model with reference
@@ -1259,13 +1259,13 @@ if(T){return;}
 "  <Y xd:script=\"var {String t='T';}\"/>\n"+
 "</xd:def>";
 			parse(xdef, "", "<a><O/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xdef, "", "<a><O/><O/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xdef, "", "<a><A><X/></A></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xdef, "", "<a/>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xdef, "", "<a><O/><O/><O/></a>", reporter);
 			assertTrue(reporter.errorWarnings(), "Error not recognized");
 			parse(xdef, "", "<a><O/><A/></a>", reporter);
@@ -1322,7 +1322,7 @@ if(T){return;}
 "</xd:def>\n";
 			xml = "<a><b>0</b>1<c/>2<c/><b>3</b>4<c/>5<c/></a>";
 			el = parse(xdef, "", xml, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(el, xml);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
@@ -1358,25 +1358,25 @@ if(T){return;}
 			xml = "<a><c/></a>";
 			strw = new StringWriter();
 			el = parse(xp, "", xml, reporter, strw, null,null);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq("iaic1fc1fa", strw.toString());
 			assertEq(el, xml);
 			xml = "<a><d/></a>";
 			strw = new StringWriter();
 			el = parse(xp, "", xml, reporter, strw, null,null);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq("iafa", strw.toString());
 			assertEq(el, xml);
 			xml = "<a><d/><c/></a>";
 			strw = new StringWriter();
 			el = parse(xp, "", xml, reporter, strw, null,null);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq("iaic2fc2fa", strw.toString());
 			assertEq(el, xml);
 			xml = "<a><d/><e/></a>";
 			strw = new StringWriter();
 			el = parse(xp, "", xml, reporter, strw, null,null);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq("iaie2fe2fa", strw.toString());
 			assertEq(el, xml);
 			xml = "<a><c/><d/><e/><e/></a>";
@@ -1389,7 +1389,7 @@ if(T){return;}
 			xml = "<a><c/><d/><d/><e/><e/></a>";
 			strw = new StringWriter();
 			el = parse(xp, "", xml, reporter, strw, null,null);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq("iaic1fc1id1fd1ie2fe2ie2fe2fa", strw.toString());
 			assertEq(el, xml);
 			xdef =
@@ -1412,7 +1412,7 @@ if(T){return;}
 			xd.setXDContext(xml);
 			el = create(xd, "A", reporter);
 			xout.close();
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(xml, el);
 			assertEq("iAiSQiBfBiXfXfSQiDfDfA", strw.toString());
 			xd = xp.createXDDocument();
@@ -1421,7 +1421,7 @@ if(T){return;}
 			xd.setStdOut(xout);
 			el = parse(xd, xml, reporter);
 			strw.close();
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(xml, el);
 			assertEq("iAiSQiBfBiXfXfSQiDfDfA", strw.toString());
 			xdef =
@@ -1443,7 +1443,7 @@ if(T){return;}
 			xd.setXDContext(xml);
 			el = xd.xcreate("a", reporter);
 			xout.close();
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq("<a><b/><b/><c/></a>", el);
 			assertEq("iaimibfbixfxfmicfcfa", strw.toString());
 			xd = xp.createXDDocument();
@@ -1452,7 +1452,7 @@ if(T){return;}
 			xd.setStdOut(xout);
 			el = parse(xd, xml, reporter);
 			strw.close();
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(xml, el);
 			assertEq("iaimibfbixfxfmicfcfa", strw.toString());
 			xdef =
@@ -1466,12 +1466,12 @@ if(T){return;}
 			xp = compile(xdef);
 			xml = "<a></a>";
 			el = parse(xp, "", xml, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(xml, el);
 			xd = xp.createXDDocument();
 			xd.setXDContext(xml);
 			el = xd.xcreate("a", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(xml, el);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
@@ -1489,7 +1489,7 @@ if(T){return;}
 			assertErrors(reporter);
 			xp = compile(xdef);
 			parse(xp, "", "<a><b/><c/><p/><q/><z/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <a>\n"+
@@ -1501,9 +1501,9 @@ if(T){return;}
 "</xd:def>";
 			xp = compile(xdef);
 			parse(xp, "", "<a><p/><q/><b/><c/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a><q/><p/><b/><c/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a><b/><c/></a>", reporter);
 			assertErrors(reporter);
 			parse(xp, "", "<a><p/><p/><b/><c/></a>", reporter);
@@ -1520,9 +1520,9 @@ if(T){return;}
 "</xd:def>";
 			xp = compile(xdef);
 			parse(xp, "", "<a><b/><p/><q/><c/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a><b/><q/><p/><c/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a><b/><c/></a>", reporter);
 			assertErrors(reporter);
 			parse(xp, "", "<a><b/><p/><p/><c/></a>", reporter);
@@ -1539,9 +1539,9 @@ if(T){return;}
 "</xd:def>";
 			xp = compile(xdef);
 			parse(xp, "", "<a><b/><c/><p/><q/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a><b/><c/><q/><p/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a><b/><c/></a>", reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
@@ -1613,9 +1613,9 @@ if(T){return;}
 "</xd:def>";
 			xp = compile(xdef);
 			parse(xp, "", "<a a='true 1' />", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a a='false 2' />", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a a='false 1' />", reporter);
 			assertTrue(reporter.errorWarnings(), "Error not recognized");
 			xdef =
@@ -1638,11 +1638,11 @@ if(T){return;}
 			xp = compile(xdef);
 			xd = xp.createXDDocument("Example");
 			parse(xd, "<a>123</a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xd, "<a>123, 456, 789</a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xd, "<a>Arthur C. Clark, Jack London</a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xd, "<a>Arthur C Clark, Jack London</a>", reporter);
 			assertTrue(reporter.errorWarnings(),"error not recognized");
 			xdef =
@@ -1666,7 +1666,7 @@ if(T){return;}
 			xp = compile(xdef);
 			xd = xp.createXDDocument("Example");
 			parse(xd, "<a>123, 456, 789</a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <xd:declaration>\n"+
@@ -1683,7 +1683,7 @@ if(T){return;}
 "</xd:def>";
 			xd = compile(xdef).createXDDocument();
 			parse(xd, "<a> 123, 456, 789 </a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 " <a a='required decimal(%whiteSpace = \"collapse\");\n"+
@@ -1691,9 +1691,9 @@ if(T){return;}
 "</xd:def>";
 			xd = compile(xdef).createXDDocument();
 			parse(xd, "<a a='1' />", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xd, "<a a=' 1' />", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 " <a a='required decimal(%whiteSpace = \"collapse\");\n"+
@@ -1701,18 +1701,18 @@ if(T){return;}
 "</xd:def>";
 			xd = compile(xdef).createXDDocument();
 			parse(xd, "<a a='1' />", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xd, "<a a='   1   ' />", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 " <a a='required decimal; options preserveAttrWhiteSpaces,noTrimAttr'/>\n"+
 "</xd:def>";
 			xd = compile(xdef).createXDDocument();
 			parse(xd, "<a a='1' />", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xd, "<a a=' 1' />", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<xd:declaration>\n"+
@@ -1723,13 +1723,13 @@ if(T){return;}
 "</xd:def>";
 			xd = compile(xdef).createXDDocument();
 			parse(xd, "<a a=' true' />", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xd, "<a a=' 1' />", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xd, "<a a=' 2 ' />", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xd, "<a a='3 4' />", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xd, "<a a=' 7 ' />", reporter);
 			assertTrue(reporter.errorWarnings(), "Error not recognized");
 			parse(xd, "<a a=' true 1 ' />", reporter);
@@ -1745,11 +1745,11 @@ if(T){return;}
 "</xd:def>";
 			xd = compile(xdef).createXDDocument();
 			parse(xd, "<a a=' true 1 ' />", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xd, "<a a=' true ' />", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xd, "<a a='2' />", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xd, "<a a='xyz' />", reporter);
 			assertTrue(reporter.errorWarnings(), "Error not recognized");
 			parse(xd, "<a a=' 1 2' />", reporter);
@@ -1764,9 +1764,9 @@ if(T){return;}
 "</xd:def>";
 			xd = compile(xdef).createXDDocument();
 			parse(xd, "<a a='true 1' />", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xd, "<a a='false 2' />", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xd, "<a a='false 1' />", reporter);
 			assertTrue(reporter.errorWarnings(), "Error not recognized");
 			xdef =
@@ -1779,11 +1779,11 @@ if(T){return;}
 "</xd:def>";
 			xd = compile(xdef).createXDDocument();
 			parse(xd, "<a a='true' />", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xd, "<a a='2' />", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xd, "<a a='xyz' />", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xd, "<a a=' 1 2' />", reporter);
 			assertTrue(reporter.errorWarnings(), "Error not recognized");
 			xdef =
@@ -1797,7 +1797,7 @@ if(T){return;}
 			parse(xd, "<a a='true' />", reporter);
 			assertTrue(reporter.errorWarnings(), "Error not recognized");
 			parse(xd, "<a a='2' />", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xd, "<a a='xyz' />", reporter);
 			assertTrue(reporter.errorWarnings(), "Error not recognized");
 			parse(xd, "<a a=' 1 2' />", reporter);
@@ -1808,7 +1808,7 @@ if(T){return;}
 "</xd:def>";
 			xd = compile(xdef).createXDDocument();
 			parse(xd, "<a a='1'/>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xd, "<a a='2'/>", reporter);
 			assertTrue(reporter.errorWarnings(), "Error not recognized");
 			xdef =
@@ -1820,7 +1820,7 @@ if(T){return;}
 			parse(xd, "<a a='0999'/>", reporter);
 			assertTrue(reporter.errorWarnings(), "Error not recognized");
 			parse(xd, "<a a='1999'/>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<xd:declaration>int $i = 5; </xd:declaration>\n"+
@@ -1832,9 +1832,9 @@ if(T){return;}
 			parse(xd, "<a a='1 4'/>", reporter);
 			assertTrue(reporter.errorWarnings(), "Error not recognized");
 			parse(xd, "<a a='1 3'/>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xd, "<a a='1'/>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xd, "<a a='2000'/>", reporter);
 			assertTrue(reporter.errorWarnings(), "Error not recognized");
 			xdef =
@@ -1843,13 +1843,13 @@ if(T){return;}
 "</xd:def>";
 			xd = compile(xdef).createXDDocument();
 			parse(xd, "<a a='1'/>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xd, "<a a='1 3'/>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xd, "<a a='2000'/>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xd, "<a a='1 4'/>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<xd:declaration>\n"+
@@ -1859,7 +1859,7 @@ if(T){return;}
 "</xd:def>";
 			xd = compile(xdef).createXDDocument();
 			parse(xd, "<a a='1'/>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xd, "<a a='2'/>", reporter);
 			assertTrue(reporter.errorWarnings(), "Error not recognized");
 			xdef =
@@ -1868,11 +1868,11 @@ if(T){return;}
 "</xd:def>";
 			xd = compile(xdef).createXDDocument();
 			parse(xd, "<a a='1.23'/>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xd, "<a a='+1.23'/>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xd, "<a a='-99999999999999999.0000999999'/>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xd, "<a a='--99999999999999999.0000999999'/>", reporter);
 			assertTrue(reporter.errorWarnings(), "Error not recognized");
 			xdef =
@@ -1884,7 +1884,7 @@ if(T){return;}
 "</xd:def>";
 			xd = compile(xdef).createXDDocument();
 			parse(xd, "<a a='1'/>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xd.xparse("<a a='2'/>", reporter);
 			assertTrue(reporter.errorWarnings(), "Error not recognized");
 			xdef =
@@ -1896,7 +1896,7 @@ if(T){return;}
 "</xd:def>";
 			xd = compile(xdef).createXDDocument();
 			parse(xd, "<a a='1'/>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xd.xparse("<a a='2'/>", reporter);
 			assertTrue(reporter.errorWarnings(), "Error not recognized");
 			xdef =
@@ -1907,7 +1907,7 @@ if(T){return;}
 "</xd:def>";
 			xd = compile(xdef).createXDDocument();
 			parse(xd, "<a a='1'/>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xd, "<a a='2'/>", reporter);
 			assertTrue(reporter.errorWarnings(), "Error not recognized");
 			xdef =
@@ -1919,7 +1919,7 @@ if(T){return;}
 "</xd:def>";
 			xd = compile(xdef).createXDDocument();
 			parse(xd, "<a a='1'/>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xd, "<a a='2'/>", reporter);
 			assertTrue(reporter.errorWarnings(), "Error not recognized");
 			xdef =
@@ -1931,7 +1931,7 @@ if(T){return;}
 "</xd:def>";
 			xd = compile(xdef).createXDDocument();
 			parse(xd, "<a a='1'/>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xd, "<a a='2'/>", reporter);
 			assertTrue(reporter.errorWarnings(), "Error not recognized");
 			xdef =
@@ -1940,9 +1940,9 @@ if(T){return;}
 "</xd:def>";
 			xd = compile(xdef).createXDDocument();
 			parse(xd, "<a a='true' />", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xd, "<a a='2' />", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xd, "<a a='xyz' />", reporter);
 			assertTrue(reporter.errorWarnings(), "Error not recognized");
 			parse(xd, "<a a=' 1 2' />", reporter);

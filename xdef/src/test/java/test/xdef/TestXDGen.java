@@ -45,30 +45,35 @@ public class TestXDGen extends XDTester {
 	public void test() {
 		final String dataDir = getDataDir() + "test/";
 		try {
-			assertNoErrors(genXDef("<a></a>"));
-			assertNoErrors(genXDef("<a><b>2015-01-01T23:00</b></a>"));
-			assertNoErrors(genXDef("<a><b>1</b><c/><b a='1'/><b b='x'/></a>"));
-			assertNoErrors(genXDef("<a><b>1<c>text</c></b><b>2<c/></b></a>"));
-			assertNoErrors(genXDef("<z:a xmlns:z='www.a.b'><b>0</b></z:a>"));
-			assertNoErrors(genXDef("<a xmlns='www.a.b'><b>1</b></a>"));
-			assertNoErrors(genXDef("<a><b>1<c>1</c></b></a>"));
-			assertNoErrors(genXDef("<a><b/><b><c/></b></a>"));
-			assertNoErrors(genXDef("<a><b><c/></b><b/></a>"));
-			assertNoErrors(genXDef("<a><b>1<c/></b><b/></a>"));
-			assertNoErrors(genXDef("<a><b>1<c>1</c></b><b/></a>"));
-			assertNoErrors(genXDef("<a><b>1<c>1</c></b><b>xx</b></a>"));
-			assertNoErrors(genXDef("<a>\n <b/>\n <b>1</b><b>1<c/></b>\n</a>"));
-			assertNoErrors(genXDef("<a><b>1<c>1</c></b><b a='a'/><b/></a>"));
-			assertNoErrors(genXDef("<a><b c='a'/><b/><b c='b'/></a>"));
-			assertNoErrors(genXDef(
+			assertNoErrorwarnings(genXDef("<a></a>"));
+			assertNoErrorwarnings(genXDef("<a><b>2015-01-01T23:00</b></a>"));
+			assertNoErrorwarnings(
+				genXDef("<a><b>1</b><c/><b a='1'/><b b='x'/></a>"));
+			assertNoErrorwarnings(
+				genXDef("<a><b>1<c>text</c></b><b>2<c/></b></a>"));
+			assertNoErrorwarnings(
+				genXDef("<z:a xmlns:z='www.a.b'><b>0</b></z:a>"));
+			assertNoErrorwarnings(genXDef("<a xmlns='www.a.b'><b>1</b></a>"));
+			assertNoErrorwarnings(genXDef("<a><b>1<c>1</c></b></a>"));
+			assertNoErrorwarnings(genXDef("<a><b/><b><c/></b></a>"));
+			assertNoErrorwarnings(genXDef("<a><b><c/></b><b/></a>"));
+			assertNoErrorwarnings(genXDef("<a><b>1<c/></b><b/></a>"));
+			assertNoErrorwarnings(genXDef("<a><b>1<c>1</c></b><b/></a>"));
+			assertNoErrorwarnings(genXDef("<a><b>1<c>1</c></b><b>xx</b></a>"));
+			assertNoErrorwarnings(
+				genXDef("<a>\n <b/>\n <b>1</b><b>1<c/></b>\n</a>"));
+			assertNoErrorwarnings(
+				genXDef("<a><b>1<c>1</c></b><b a='a'/><b/></a>"));
+			assertNoErrorwarnings(genXDef("<a><b c='a'/><b/><b c='b'/></a>"));
+			assertNoErrorwarnings(genXDef(
 				"<a r='true'>1<b>1</b><b a='1' b='a'/><b b='c'/></a>"));
-			assertNoErrors(genXDef(
+			assertNoErrorwarnings(genXDef(
 "<a>\n"+
 "  <b>1<c>1</c></b>\n"+
 "  <b a='123'>2<c>2</c></b>\n"+
 "  <b b='xyz'>3<c d=''></c></b>\n"+
 "</a>"));
-			assertNoErrors(genXDef(
+			assertNoErrorwarnings(genXDef(
 "<a>\n"+
 "  <b a='a'>\n"+
 "    <c>a</c>\n"+
@@ -82,7 +87,7 @@ public class TestXDGen extends XDTester {
 "    </c>\n"+
 "  </b>\n"+
 "</a>"));
-			assertNoErrors(genXDef(
+			assertNoErrorwarnings(genXDef(
 "<a>\n"+
 "  <b>\n"+
 "    <c><d/></c>\n"+
@@ -95,7 +100,7 @@ public class TestXDGen extends XDTester {
 "    <c/>\n"+
 "  </b>\n"+
 "</a>"));
-			assertNoErrors(genXDef(
+			assertNoErrorwarnings(genXDef(
 "<a>\n"+
 "  <b>\n"+
 "    <c><d/><f/><e/></c>\n"+
@@ -103,7 +108,7 @@ public class TestXDGen extends XDTester {
 "  </b>\n"+
 "  <b><c/></b>\n"+
 "</a>"));
-			assertNoErrors(genXDef(
+			assertNoErrorwarnings(genXDef(
 "<a>\n"+
 "  <b>\n"+
 "    <c><d/></c>\n"+
@@ -116,26 +121,26 @@ public class TestXDGen extends XDTester {
 "    <c/>\n"+
 "  </b>\n"+
 "</a>"));
-			assertNoErrors(genXDef(dataDir + "Test000_02.xml"));
-			assertNoErrors(genXDef(dataDir + "Test000_02_1.xml"));
-			assertNoErrors(genXDef(dataDir + "Test000_03.xml"));
-			assertNoErrors(genXDef(dataDir + "Test000_04.xml"));
-			assertNoErrors(genXDef(dataDir + "Test000_05.xml"));
-			assertNoErrors(genXDef(dataDir + "Test000_06.xml"));
-			assertNoErrors(genXDef(dataDir + "Test000_06_out.xml"));
-			assertNoErrors(genXDef(dataDir + "Test000_07_1.xml"));
-			assertNoErrors(genXDef(dataDir + "Test000_07_2.xml"));
-			assertNoErrors(genXDef(dataDir + "Test000_rus.xml"));
-			assertNoErrors(genXDef(dataDir + "Test000_rus_1.xml"));
-			assertNoErrors(genXDef(dataDir + "Test000_rus_2.xml"));
-			assertNoErrors(genXDef(dataDir + "Test000_rus_3.xml"));
-			assertNoErrors(genXDef(dataDir + "Test000_rus_4.xml"));
-			assertNoErrors(genXDef(dataDir + "Test000_rus_5.xml"));
-			assertNoErrors(genXDef(dataDir + "Test002_3.xml"));
-			assertNoErrors(genXDef(dataDir + "Test002_5.xml"));
-			assertNoErrors(genXDef(dataDir + "Test002_6.xml"));
-//			assertNoErrors(genXDef(dataDir + "TestErrors3.xml"));
-//			assertNoErrors(genXDef(dataDir + ""));
+			assertNoErrorwarnings(genXDef(dataDir + "Test000_02.xml"));
+			assertNoErrorwarnings(genXDef(dataDir + "Test000_02_1.xml"));
+			assertNoErrorwarnings(genXDef(dataDir + "Test000_03.xml"));
+			assertNoErrorwarnings(genXDef(dataDir + "Test000_04.xml"));
+			assertNoErrorwarnings(genXDef(dataDir + "Test000_05.xml"));
+			assertNoErrorwarnings(genXDef(dataDir + "Test000_06.xml"));
+			assertNoErrorwarnings(genXDef(dataDir + "Test000_06_out.xml"));
+			assertNoErrorwarnings(genXDef(dataDir + "Test000_07_1.xml"));
+			assertNoErrorwarnings(genXDef(dataDir + "Test000_07_2.xml"));
+			assertNoErrorwarnings(genXDef(dataDir + "Test000_rus.xml"));
+			assertNoErrorwarnings(genXDef(dataDir + "Test000_rus_1.xml"));
+			assertNoErrorwarnings(genXDef(dataDir + "Test000_rus_2.xml"));
+			assertNoErrorwarnings(genXDef(dataDir + "Test000_rus_3.xml"));
+			assertNoErrorwarnings(genXDef(dataDir + "Test000_rus_4.xml"));
+			assertNoErrorwarnings(genXDef(dataDir + "Test000_rus_5.xml"));
+			assertNoErrorwarnings(genXDef(dataDir + "Test002_3.xml"));
+			assertNoErrorwarnings(genXDef(dataDir + "Test002_5.xml"));
+			assertNoErrorwarnings(genXDef(dataDir + "Test002_6.xml"));
+//			assertNoErrorwarnings(genXDef(dataDir + "TestErrors3.xml"));
+//			assertNoErrorwarnings(genXDef(dataDir + ""));
 		} catch (Exception ex) {fail(ex);}
 
 		resetTester();

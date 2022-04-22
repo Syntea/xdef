@@ -28,15 +28,15 @@ public class TestPrettyXdef extends XDTester {
 		String dataDir = getDataDir();
 		File tempDir = clearTempDir();
 		try {
-			assertNoErrors(chkPrettyXDef("-o",
+			assertNoErrorwarnings(chkPrettyXDef("-o",
 				new File(tempDir, "TestValidate.xdef").getCanonicalPath(),
 				dataDir + "test/TestValidate.xdef"));
-			assertNoErrors(chkPrettyXDef("-o",
+			assertNoErrorwarnings(chkPrettyXDef("-o",
 				new File(tempDir, "Igor02_xd.xml").getCanonicalPath(),
 				"-i", "8",
 				"-e", "UTF-8",
 				dataDir + "test/Igor02_xd.xml"));
-			assertNoErrors(chkPrettyXDef("-o",
+			assertNoErrorwarnings(chkPrettyXDef("-o",
 				new File(tempDir, "Matej2_L1_common.xdef").getCanonicalPath(),
 				"-i", "0",
 				dataDir + "test/Matej2_L1_common.def"));

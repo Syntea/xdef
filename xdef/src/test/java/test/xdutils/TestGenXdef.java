@@ -133,7 +133,7 @@ dataDir + "TestValidate2.xml",
 				xdef = KXmlUtils.nodeToString(el, true);
 				xp = compile(xdef);
 				assertEq(x, parse(xp, "", x, reporter));
-				assertNoErrors(reporter);
+				assertNoErrorwarnings(reporter);
 			} catch (Exception ex) {fail(ex);}
 		}
 		try {

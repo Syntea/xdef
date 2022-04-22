@@ -92,7 +92,7 @@ public final class TestDebug extends XDTester {
 			xd.setXDContext(xml);
 			xd.xcreate("a", reporter);
 			ps.close();
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			s = baos.toString();
 			assertTrue(s.indexOf("a/a/@a") >= 0 &&
 				s.indexOf("<a a=\"a\"/>") >= 0, s);
@@ -117,7 +117,7 @@ public final class TestDebug extends XDTester {
 			ps = new PrintStream(baos);
 			xd.getDebugger().setOutDebug(ps);
 			parse(xd, xml, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			ps.close();
 			s = baos.toString();
 			assertTrue(s.indexOf("a/@a;") > 0 &&
@@ -147,7 +147,7 @@ public final class TestDebug extends XDTester {
 			xd.setXDContext(xml);
 			create(xd, "a", reporter);
 			ps.close();
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			s = baos.toString();
 			assertTrue(s.indexOf("PAUSE /a") >= 0 &&
 				s.indexOf("PAUSE /a/@a") >= 0 &&
@@ -159,7 +159,7 @@ public final class TestDebug extends XDTester {
 			xd.setXDContext(xml);
 			create(xd, "a", reporter);
 			ps.close();
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			s = baos.toString();
 			assertTrue(s.indexOf("PAUSE /a") >= 0 &&
 				s.indexOf("PAUSE /a/@a") >= 0 &&
@@ -172,7 +172,7 @@ public final class TestDebug extends XDTester {
 			parse(xd, xml, reporter);
 			ps.close();
 			s = SUtils.modifyString(baos.toString(), "\r\n", "\n");
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertTrue(s.indexOf(" /a/b[2]\n") >= 0, s);
 			assertFalse(s.indexOf(" /a\n") >= 0 ||
 				s.indexOf(" /a/@a\n") >= 0, s);

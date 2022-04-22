@@ -39,11 +39,11 @@ public final class TestOptions extends XDTester {
 			xp = compile(xdef);
 			xml = "<a a1=\" a \"> a </a>";
 			assertEq("<a a1=\"a\">a</a>", parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = "<a a1=\" a\t  \n b \"> a\t  \n b </a>";
 			assertEq("<a a1=\"a     b\">a\t  \n b</a>",
 				parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			// ignoreTextWhiteSpaces
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'\n"+
@@ -55,10 +55,10 @@ public final class TestOptions extends XDTester {
 			xp = compile(xdef);
 			xml = "<a a1=\" a \"> a </a>";
 			assertEq("<a a1=\"a\">a</a>", parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = "<a a1=\" a\t  \n b \"> a\t  \n b </a>";
 			assertEq("<a a1=\"a b\">a b</a>", parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			// setAttrLowerCase, setTextLowerCase
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'\n"+
@@ -70,7 +70,7 @@ public final class TestOptions extends XDTester {
 			xp = compile(xdef);
 			xml = "<a a1=\"a\" a2=\"A\">A</a>";
 			assertEq("<a a1=\"a\" a2=\"a\">a</a>", parse(xp, "", xml,reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'\n"+
 " xd:script='options setAttrUpperCase, setTextUpperCase'>\n"+
@@ -81,7 +81,7 @@ public final class TestOptions extends XDTester {
 			xp = compile(xdef);
 			xml = "<a a1=\"a\" a2=\"A\">a</a>";
 			assertEq("<a a1=\"A\" a2=\"A\">A</a>", parse(xp, "", xml,reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <a xd:script='options setAttrLowerCase, setTextLowerCase'\n"+
@@ -92,7 +92,7 @@ public final class TestOptions extends XDTester {
 			xp = compile(xdef);
 			xml = "<a a1=\"a\" a2=\"A\">A</a>";
 			assertEq("<a a1=\"a\" a2=\"a\">a</a>", parse(xp, "", xml,reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <a xd:script='options setAttrUpperCase, setTextUpperCase'\n"+
@@ -103,7 +103,7 @@ public final class TestOptions extends XDTester {
 			xp = compile(xdef);
 			xml = "<a a1=\"a\" a2=\"A\">a</a>";
 			assertEq("<a a1=\"A\" a2=\"A\">A</a>", parse(xp, "", xml,reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <a xd:script='options setTextLowerCase'\n"+
@@ -115,7 +115,7 @@ public final class TestOptions extends XDTester {
 			xp = compile(xdef);
 			xml = "<a a1=\"a\" a2=\"A\">A</a>";
 			assertEq("<a a1=\"a\" a2=\"a\">a</a>", parse(xp, "", xml,reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <a xd:script='options setTextUpperCase'\n"+
@@ -127,7 +127,7 @@ public final class TestOptions extends XDTester {
 			xp = compile(xdef);
 			xml = "<a a1='a' a2='A'>a</a>";
 			assertEq("<a a1='A' a2='A'>A</a>", parse(xp, "", xml,reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <a a1 = 'optional string(0,100); options setAttrLowerCase'\n"+
@@ -138,7 +138,7 @@ public final class TestOptions extends XDTester {
 			xp = compile(xdef);
 			xml = "<a a1='a' a2='A'>A</a>";
 			assertEq("<a a1='a' a2='a'>a</a>", parse(xp, "", xml,reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <a a1 = 'optional string(0,100); options setAttrUpperCase'\n"+
@@ -149,7 +149,7 @@ public final class TestOptions extends XDTester {
 			xp = compile(xdef);
 			xml = "<a a1='a' a2='A'>a</a>";
 			assertEq("<a a1='A' a2='A'>A</a>", parse(xp, "", xml,reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef = //text, texcontent attributes
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <a xd:text=\"1..3 string;" +
@@ -162,7 +162,7 @@ public final class TestOptions extends XDTester {
 			xml = "<a>t1<b/>t2<c/>t3</a>";
 			strw = new StringWriter();
 			assertEq(xml, parse(xp, "", xml, reporter, strw, null, null));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq("T:t1f:t1T:t2f:t2T:t3f:t3", strw.toString());
 			strw = new StringWriter();
 			assertEq(xml, create(xp,"", "a", reporter, xml, strw, null));
@@ -179,7 +179,7 @@ public final class TestOptions extends XDTester {
 			xml = "<a>t1<b/>t2<c/>t3</a>";
 			strw = new StringWriter();
 			assertEq(xml, parse(xp, "", xml, reporter, strw, null, null));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq("T:t1t2t3f:t1t2t3", strw.toString());
 			strw = new StringWriter();
 			assertEq("<a><b/><c/>t1t2t3</a>",
@@ -310,7 +310,7 @@ public final class TestOptions extends XDTester {
 "</rdf:RDF>";
 			strw = new StringWriter();
 			el = parse(xp, "rdf", xml, reporter, strw, null, null);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq("rdf:RDF", el.getTagName());
 			assertEq(2, el.getAttributes().getLength());//just xmlns attributes
 			assertEq(0, el.getChildNodes().getLength());//all children forgotten
@@ -370,7 +370,7 @@ public final class TestOptions extends XDTester {
 			assertErrors(reporter); // should be an error!
 			xml = "<a x='1'/>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter); // OK
+			assertNoErrorwarnings(reporter); // OK
 			xml = "<a x='1' y='1' z='1'/>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertTrue(reporter.toString().contains("XDEF532"),
@@ -447,7 +447,7 @@ public final class TestOptions extends XDTester {
 			xml = "<a a1='a' a2='A'/>";
 			xp = compile(xdef);
 			assertEq("<a a1='A' a2='A'/>", parse(xp, "a", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "  <xd:def name='a' root='x#a' xd:script='options setAttrUpperCase'/>\n"+
@@ -458,7 +458,7 @@ public final class TestOptions extends XDTester {
 			xml = "<a a1='A' a2=''/>";
 			xp = compile(xdef);
 			assertEq("<a a1='A'/>", parse(xp, "a", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 //ignore/preserve/accept empty attributes
 			xdef = //optional ignore
 "<xd:def xmlns:xd='" + _xdNS + "' xd:root='a'\n"+
@@ -557,7 +557,7 @@ public final class TestOptions extends XDTester {
 			xml = "<a a1='a' a2=''/>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertFalse(reporter.errorWarnings(), "reported warning");
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef = //uppercase, lowercase
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'\n"+
 "xd:script='options setTextUpperCase,setAttrUpperCase,trimText,trimAttr'>\n"+
@@ -568,7 +568,7 @@ public final class TestOptions extends XDTester {
 			xp = compile(xdef);
 			xml = "<A a='ab'>cd</A>";
 			assertEq("<A a='AB'>CD</A>", parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'\n"+
 "xd:script='options setTextLowerCase,setAttrLowerCase,trimText,trimAttr'>\n"+
@@ -585,42 +585,42 @@ public final class TestOptions extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			assertEq("<a/>", parse(xp, "", "<a x=''/>", reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <a xd:script='match @x; options ignoreEmptyAttributes'/>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			assertEq("<a/>", parse(xp, "", "<a x=''/>", reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd = '" + _xdNS + "' root='a'>\n"+
 "  <a xd:script=\"match @x==''; options acceptEmptyAttributes\" x=''/>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			assertEq("<a x=''/>", parse(xp, "", "<a x=''/>", reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <a xd:script='match @x; options acceptEmptyAttributes' x=''/>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			assertEq("<a x=''/>", parse(xp, "", "<a x=''/>", reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <a xd:script='match @x==null; options acceptEmptyAttributes' x=''/>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			assertEq("<a/>", parse(xp, "", "<a/>", reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <a xd:script='match !@x; options acceptEmptyAttributes' x=''/>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			assertEq("<a/>", parse(xp, "", "<a/>", reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef = //test options in xdef header and in references
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name='A' root='A'\n"+
@@ -1525,7 +1525,7 @@ public final class TestOptions extends XDTester {
 			xd = compile(xdef).createXDDocument();
 			xml = "<A><![CDATA[text]]></A>";
 			el = parse(xd, xml , reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertTrue(el.getChildNodes().item(0).getNodeType()
 				== Node.CDATA_SECTION_NODE);
 			assertEq("text", el.getChildNodes().item(0).getNodeValue());
@@ -1562,7 +1562,7 @@ public final class TestOptions extends XDTester {
 			xd = compile(xdef).createXDDocument();
 			xml = "<a>t1<b/>t2</a>";
 			el = parse(xd, xml, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			strw = new StringWriter();
 			KXmlUtils.writeXml(strw,
 				null, //encoding
@@ -1572,7 +1572,7 @@ public final class TestOptions extends XDTester {
 				false, //removeIgnorableWhiteSpaces
 				true); //comments
 			assertEq(xml, strw.toString());
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xd = compile(xdef).createXDDocument();
 			el = create(xd, "a", reporter);
 			xml = "<a>x1<b/>x2</a>";
@@ -1597,7 +1597,7 @@ public final class TestOptions extends XDTester {
 			xd = compile(xdef).createXDDocument();
 			xml = "<a>t1<b/>t2</a>";
 			el = parse(xd, xml, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			strw = new StringWriter();
 			KXmlUtils.writeXml(strw,
 				null, //encoding
@@ -1608,7 +1608,7 @@ public final class TestOptions extends XDTester {
 				true); //comments
 			assertEq("<a><![CDATA[t1]]><b/><![CDATA[t2]]></a>",strw.toString());
 			el = create(xd, "a", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			strw = new StringWriter();
 			KXmlUtils.writeXml(strw,
 				null, //encoding
@@ -1627,7 +1627,7 @@ public final class TestOptions extends XDTester {
 "</xd:def>";
 			xd = compile(xdef).createXDDocument();
 			el = create(xd, "a", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			strw = new StringWriter();
 			KXmlUtils.writeXml(strw,
 				null, //encoding
@@ -1648,7 +1648,7 @@ public final class TestOptions extends XDTester {
 			xd = compile(xdef).createXDDocument();
 			xml = "<a>t1<b/></a>";
 			el = parse(xd, xml, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			strw = new StringWriter();
 			KXmlUtils.writeXml(strw,
 				null, //encoding
@@ -1659,7 +1659,7 @@ public final class TestOptions extends XDTester {
 				true); //comments
 			assertEq("<a><![CDATA[t1]]><b/></a>",strw.toString());
 			el = create(xd, "a", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			strw = new StringWriter();
 			KXmlUtils.writeXml(strw,
 				null, //encoding

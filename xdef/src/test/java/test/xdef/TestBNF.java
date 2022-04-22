@@ -40,7 +40,7 @@ public final class TestBNF extends XDTester {
 			xp = compile(xdef);
 			xml = "<root>123, 456, 789</root>";
 			assertEq(xml, parse(xp, "Example", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def xd:name = 'Example' xd:root = 'root'>\n"+
@@ -66,7 +66,7 @@ public final class TestBNF extends XDTester {
 			xp = compile(xdef);
 			xml = "<root>123, 456, 789</root>";
 			assertEq(xml, parse(xp, "Example", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <xd:declaration scope='global'>\n"+
@@ -82,7 +82,7 @@ public final class TestBNF extends XDTester {
 			xp = compile(xdef);
 			xml = "<a>123, 456, 789</a>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <xd:declaration>\n"+
@@ -98,7 +98,7 @@ public final class TestBNF extends XDTester {
 			xp = compile(xdef);
 			xml = "<a>123, 456, 789</a>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <xd:declaration scope='global'>\n"+
@@ -114,7 +114,7 @@ public final class TestBNF extends XDTester {
 			xp = compile(xdef);
 			xml = "<a>123, 456, 789</a>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 		} catch (Exception ex) {fail(ex);}
 		try { // BNF
 			xdef =
@@ -139,13 +139,13 @@ public final class TestBNF extends XDTester {
 			xp = compile(xdef);
 			xml = "<a>123</a>";
 			assertEq(xml, parse(xp, "test", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = "<a>123, 456, 789</a>";
 			assertEq(xml, parse(xp, "test", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = "<a>Arthur C. Clark, Jack London</a>";
 			assertEq(xml, parse(xp, "test", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = "<a>Arthur C Clark, Jack London</a>";
 			parse(xp, "test", xml, reporter);
 			assertErrors(reporter);
@@ -170,7 +170,7 @@ public final class TestBNF extends XDTester {
 			xp = compile(xdef);
 			xml = "<root>4, 5, Arhur C. Klark, Jan Novak, 55</root>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <xd:BNFGrammar name=\"rr\">\n"+
@@ -225,7 +225,7 @@ public final class TestBNF extends XDTester {
 "  <y a='M(1)'>M(31)</y>\n"+
 "</a>";
 			parse(xp, "", xml, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml =
 "<a>\n"+
 "  <y a='M(32)'>M(0)</y>\n"+
@@ -284,7 +284,7 @@ public final class TestBNF extends XDTester {
 "  <y>M(31)</y>\n"+
 "</a>";
 			parse(xp, "", xml, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml =
 "<a>\n"+
 "  <y>M(32)</y>\n"+
@@ -341,7 +341,7 @@ public final class TestBNF extends XDTester {
 "  <y>M(31)</y>\n"+
 "</a>";
 			parse(xp, "", xml, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml =
 "<a>\n"+
 "  <y>M(32)</y>\n"+

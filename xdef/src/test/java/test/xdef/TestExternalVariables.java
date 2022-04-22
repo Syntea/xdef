@@ -41,7 +41,7 @@ public final class TestExternalVariables extends XDTester {
 			xd.xparse(xml, reporter);
 			xd.setVariable("i","2"); //now variable is 2
 			xd.xparse(xml, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			strw.close();
 			assertEq("truetrue\n1falsetrue\n2falsetrue\n", strw.toString());
 			xdef =
@@ -57,14 +57,14 @@ public final class TestExternalVariables extends XDTester {
 			xd = xp.createXDDocument();
 			xd.setStdOut(strw = new StringWriter());
 			parse(xd, xml, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			strw.close();
 			assertEq(strw.toString(),"truetrue");
 			xd = xp.createXDDocument();
 			xd.setStdOut(strw = new StringWriter());
 			xd.setVariable("i", "1");
 			parse(xd, xml, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			try {
 				xd.setVariable("i", "2"); //throws exception - variable is fixed
 				fail("error not reported");
@@ -75,7 +75,7 @@ public final class TestExternalVariables extends XDTester {
 				}
 			}
 			parse(xd, xml, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			strw.close();
 			//variable i remains unchaged
 			assertEq(strw.toString(),"1false1false1false1false");
@@ -92,13 +92,13 @@ public final class TestExternalVariables extends XDTester {
 			xd = xp.createXDDocument();
 			xd.setStdOut(strw = new StringWriter());
 			parse(xd, xml, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(strw.toString(),"truetrue");
 			xd = xp.createXDDocument();
 			xd.setStdOut(strw = new StringWriter());
 			xd.setVariable("#i", "1");
 			parse(xd, xml, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(0, xd.getVariable("#i").intValue());
 			assertEq(strw.toString(),"1false1false");
 		} catch (Exception ex) {fail(ex);}

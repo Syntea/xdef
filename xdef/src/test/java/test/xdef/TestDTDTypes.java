@@ -26,7 +26,7 @@ public final class TestDTDTypes extends XDTester {
 "</xd:def>\n";
 			xp = compile(xdef);
 			parse(xp, "", "<a a = 'X'/>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a a = ''/>", reporter);
 			rep = reporter.getReport();
 			if (rep == null) {
@@ -43,7 +43,7 @@ public final class TestDTDTypes extends XDTester {
 "</xd:def>\n";
 			xp = compile(xdef);
 			parse(xp, "", "<a><b a='a1'/><b a='a2'/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a><b a='a1'/><b a='a1'/></a>", reporter);
 			rep = reporter.getReport();
 			if (rep == null) {
@@ -60,7 +60,7 @@ public final class TestDTDTypes extends XDTester {
 "</xd:def>\n";
 			xp = compile(xdef);
 			parse(xp, "", "<a><b a='a1'/><b a='a2'/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a><b a='a1'/><b a='a1'/></a>", reporter);
 			rep = reporter.getReport();
 			if (rep == null) {
@@ -78,7 +78,7 @@ public final class TestDTDTypes extends XDTester {
 "</xd:def>\n";
 			xp = compile(xdef);
 			parse(xp, "", "<a><a a='a1'/><b a='a1'/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a><a a='a2'/><b a='a1'/></a>", reporter);
 			rep = reporter.getReport();
 			if (rep == null) {
@@ -96,7 +96,7 @@ public final class TestDTDTypes extends XDTester {
 "</xd:def>\n";
 			xp = compile(xdef);
 			parse(xp, "", "<a><a a='a1'/><b a='a1'/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a><a a='a2'/><b a='a1'/></a>", reporter);
 			rep = reporter.getReport();
 			if (rep == null) {
@@ -114,7 +114,7 @@ public final class TestDTDTypes extends XDTester {
 "</xd:def>\n";
 			xp = compile(xdef);
 			parse(xp, "", "<a><b a='a1'/><a a='a1'/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a><b a='a1'/><a a='a2'/></a>", reporter);
 			rep = reporter.getReport();
 			if (rep == null) {
@@ -132,9 +132,9 @@ public final class TestDTDTypes extends XDTester {
 "</xd:def>\n";
 			xp = compile(xdef);
 			parse(xp, "", "<a><a a='a1'/><b a='a1'/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a><a a='a1 a1'/><b a='a1'/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a><a a='a2'/><b a='a1'/></a>", reporter);
 			rep = reporter.getReport();
 			if (rep == null) {
@@ -158,9 +158,9 @@ public final class TestDTDTypes extends XDTester {
 "</xd:def>\n";
 			xp = compile(xdef);
 			parse(xp, "", "<a><a a='a1'/><b a='a1'/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a><a a='a1 a1'/><b a='a1'/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a><a a='a2'/><b a='a1'/></a>", reporter);
 			rep = reporter.getReport();
 			if (rep == null) {
@@ -185,9 +185,9 @@ public final class TestDTDTypes extends XDTester {
 "</xd:def>\n";
 			xp = compile(xdef);
 			parse(xp, "", "<a><b a='a1'/><a a='a1'/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a><b a='a1'/><a a='a1 a1'/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a><b a='a1'/><a a='a2'/></a>", reporter);
 			rep = reporter.getReport();
 			if (rep == null) {
@@ -211,9 +211,9 @@ public final class TestDTDTypes extends XDTester {
 "</xd:def>\n";
 			xp = compile(xdef);
 			parse(xp, "", "<a><b a='a1'/><a a='a1'/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a><b a='a1'/><a a='a1 a1'/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a><b a='a1'/><a a='a2'/></a>", reporter);
 			rep = reporter.getReport();
 			if (rep == null) {
@@ -235,7 +235,7 @@ public final class TestDTDTypes extends XDTester {
 "</xd:def>\n";
 			xp = compile(xdef);
 			parse(xp, "", "<a a = 'X'/>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a a = 'X Y'/>", reporter);
 			assertTrue(reporter.errorWarnings(), "Error not reported");
 			parse(xp, "", "<a a = '?'/>", reporter);
@@ -266,7 +266,7 @@ public final class TestDTDTypes extends XDTester {
 "</xd:def>\n";
 			xp = compile(xdef);
 			parse(xp, "", "<a a = 'X'/>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a a = 'X Y'/>", reporter);
 			assertTrue(reporter.errorWarnings(), "Error not reported");
 			parse(xp, "", "<a a = '?'/>", reporter);
@@ -297,9 +297,9 @@ public final class TestDTDTypes extends XDTester {
 "</xd:def>\n";
 			xp = compile(xdef);
 			parse(xp, "", "<a a = 'X'/>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a a = 'X Y'/>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a a = '?'/>", reporter);
 			rep = reporter.getReport();
 			if (rep == null) {
@@ -321,9 +321,9 @@ public final class TestDTDTypes extends XDTester {
 "</xd:def>\n";
 			xp = compile(xdef);
 			parse(xp, "", "<a a = 'X'/>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a a = 'X Y'/>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a a = '?'/>", reporter);
 			rep = reporter.getReport();
 			if (rep == null) {
@@ -352,7 +352,7 @@ public final class TestDTDTypes extends XDTester {
 "<!ENTITY X SYSTEM '003-2.ent' NDATA nota>\n"+
 "]>\n"+
 "<a a = 'X'/>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a a = 'X X'/>", reporter);
 			assertTrue(reporter.errorWarnings(), "Error not reported");
 			parse(xp, "", "<a a = '?'/>", reporter);
@@ -390,7 +390,7 @@ public final class TestDTDTypes extends XDTester {
 "<!ENTITY X SYSTEM '003-2.ent' NDATA nota>\n"+
 "]>\n"+
 "<a a = 'X'/>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a a = 'X X'/>", reporter);
 			assertTrue(reporter.errorWarnings(), "Error not reported");
 			parse(xp, "", "<a a = '?'/>", reporter);
@@ -427,7 +427,7 @@ public final class TestDTDTypes extends XDTester {
 "<!ENTITY X '003-2.ent'>\n"+
 "]>\n"+
 "<a a = 'X'/>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, "",
 "<!DOCTYPE a [\n"+
 "<!ELEMENT a ANY>\n"+
@@ -436,7 +436,7 @@ public final class TestDTDTypes extends XDTester {
 "<!ENTITY Y SYSTEM '003-3.ent' NDATA nota>\n"+
 "]>\n"+
 "<a a = 'X Y'/>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a a = '?'/>", reporter);
 			rep = reporter.getReport();
 			if (rep == null) {
@@ -464,7 +464,7 @@ public final class TestDTDTypes extends XDTester {
 "<!ENTITY X '003-2.ent'>\n"+
 "]>\n"+
 "<a a = 'X'/>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, "",
 "<!DOCTYPE a [\n"+
 "<!ELEMENT a ANY>\n"+
@@ -473,7 +473,7 @@ public final class TestDTDTypes extends XDTester {
 "<!ENTITY Y SYSTEM '003-3.ent' NDATA nota>\n"+
 "]>\n"+
 "<a a = 'X Y'/>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a a = '?'/>", reporter);
 			rep = reporter.getReport();
 			if (rep == null) {
@@ -499,7 +499,7 @@ public final class TestDTDTypes extends XDTester {
 "<!NOTATION n PUBLIC 'http://xdef.syntea.cz/x'>\n"+
 "]>\n"+
 "<a a = 'n'/>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, "",
 "<!DOCTYPE a [\n"+
 "<!NOTATION n PUBLIC 'http://xdef.syntea.cz/x'>\n"+
@@ -566,7 +566,7 @@ public final class TestDTDTypes extends XDTester {
 "   <f a4 = \"h1\" a5 = \"20070101000001\"/>\n"+            // 21
 "</a>";                                                      // 22
 			parse(xp, "test", xml, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 // Test error reporting
 			xml =
 "<a>\n"+                                                    // 01

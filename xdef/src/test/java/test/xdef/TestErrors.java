@@ -719,7 +719,7 @@ public final class TestErrors extends XDTester {
 			reporter.clear();
 			xml = "<a/>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xdef =

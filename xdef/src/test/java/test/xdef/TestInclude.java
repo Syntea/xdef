@@ -141,7 +141,7 @@ public final class TestInclude extends XDTester {
 			xml = dataDir + "TestInclude_1_1.xml";
 			assertEq("<a><b>&lt;c>text&lt;/c></b></a>",
 				parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = dataDir + "TestInclude_2_1.xml";
 			parse(xp, "", xml, reporter);
 			if (!reporter.errors()) {
@@ -201,7 +201,7 @@ public final class TestInclude extends XDTester {
 			xml = dataDir + "TestInclude_4_1.xml";
 			assertEq("<a><b>&lt;c>text&lt;/c></b></a>",
 				parse(xp, "test", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 		} catch (Exception ex) {fail(ex);}
 		try {
 			setChkSyntax(false);
@@ -245,10 +245,10 @@ public final class TestInclude extends XDTester {
 			xp = compile(dataDir + "TestInclude_8.xdef");
 			xml = dataDir + "TestInclude_8.xml";
 			parse(xp, "A", xml, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = dataDir + "TestInclude_8_6.xml";
 			parse(xp, "A", xml, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 		} catch (Exception ex) {fail(ex);}
 		try {
 			//test Include default (not allowed)
@@ -269,11 +269,11 @@ public final class TestInclude extends XDTester {
 				XDConstants.XDPROPERTYVALUE_XINCLUDE_TRUE);
 			xp = compile(xdef);
 			assertEq("<A><b/></A>", parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xp = compile(xdef);
 			 // from program
 			assertEq("<A><b/></A>", parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			setProperty(XDConstants.XDPROPERTY_XINCLUDE,
 				XDConstants.XDPROPERTYVALUE_XINCLUDE_FALSE);
 			parse(xp, "", xml, reporter);
@@ -291,12 +291,12 @@ public final class TestInclude extends XDTester {
 			//allowed
 			xp = compile(xdef);
 			assertEq("<A><b/></A>", parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xp = compile(xdef);
 			 // from program
 //			xp.setResolveIncludes(true); //resove
 			assertEq("<A><b/></A>", parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			setProperty(XDConstants.XDPROPERTY_XINCLUDE,
 				XDConstants.XDPROPERTYVALUE_XINCLUDE_FALSE);
 //			xp.setResolveIncludes(false);  //not resove
@@ -312,7 +312,7 @@ public final class TestInclude extends XDTester {
 "            classpath://test.xdef.data.test.TestInclude_10.xdef'/>");
 			xml = "<B b='123'/>";
 			assertEq(xml, parse(xp, "B", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			strw = new StringWriter();
 			xml = "<foo/>";
 			parse(xp, "a", xml, reporter, strw, null, null);
@@ -332,13 +332,13 @@ public final class TestInclude extends XDTester {
 			xp = compile(xdef);
 			xml = "<foo/>";
 			assertEq(xml, parse(xp, "A", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(parse(xp,
 				"A",
 				"classpath://test.xdef.data.test.TestInclude_10.xml",
 				reporter),
 				"classpath://test.xdef.data.test.TestInclude_10.xml");
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 		} catch (Exception ex) {fail(ex);}
 
 		resetTester();

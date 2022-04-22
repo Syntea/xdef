@@ -276,9 +276,9 @@ public final class TestImplementsAndUses extends XDTester {
 			xp = compile(xdef);
 			xml = "<A a='1'/>";
 			assertEq(xml, parse(xp, "Y", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq("<A a='123'/>",parse(xp, "Y", "<A/>", reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = "<A a='x'/>";
 			assertEq(xml, parse(xp, "Y", xml, reporter));
 			assertErrors(reporter);
@@ -296,9 +296,9 @@ public final class TestImplementsAndUses extends XDTester {
 			xp = compile(xdef);
 			xml = "<A a='a'/>";
 			assertEq(xml, parse(xp, "Y", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(xml, parse(xp, "Y", "<A/>", reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(xml, parse(xp, "Y", "<A a='x'/>", reporter));
 			assertErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
@@ -375,14 +375,14 @@ public final class TestImplementsAndUses extends XDTester {
 			strw = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(strw, false));
 			assertEq(xml, parse(xd, xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq("a", strw.toString());
 			xd = xp.createXDDocument("Y");
 			xml = "<Z><A a='2'><B/>A<C/></A></Z>";
 			strw = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(strw, false));
 			assertEq(xml, parse(xd, xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq("xz", strw.toString());
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='P'>\n"+

@@ -279,7 +279,7 @@ public final class TestScript extends XDTester {
 			parse(xdef, "",
 "<T D1='2022-01-01 12:34:56.1'" +
 " D2='2022-01-01 12:34:56.5' D3='2022-01-01 12:34:56.6'/>", reporter));
-		assertNoErrors(reporter);
+		assertNoErrorwarnings(reporter);
 
 		setDebug(true);
 		_printCode = true;

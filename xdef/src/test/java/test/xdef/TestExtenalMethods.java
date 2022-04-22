@@ -246,7 +246,7 @@ public final class TestExtenalMethods extends XDTester {
 				+ " m30='x' m31='x' m32='x' m33='x' m34='x' m35='x'"
 				+ "/>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
@@ -334,7 +334,7 @@ public final class TestExtenalMethods extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 //			xdef =
 //"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 //"<a\n"+
@@ -368,10 +368,10 @@ public final class TestExtenalMethods extends XDTester {
 //			xp = XDFactory.compileXD(props, xdef,
 //				TestExtenalMethods_1.class,	TestExtenalMethods_2.class);
 //			assertEq(xml, parse(xp, "", xml, reporter));
-//			assertNoErrors(reporter);
+//			assertNoErrorwarnings(reporter);
 //			xp = XDFactory.compileXD(props, xdef, TestExtenalMethods_2.class);
 //			assertEq(xml, parse(xp, "", xml, reporter));
-//			assertNoErrors(reporter);
+//			assertNoErrorwarnings(reporter);
 		} catch (Exception ex) {fail(ex);}
 		try { // using of user defined ClassLoader (fail state)
 			XDBuilder xdb = XDFactory.getXDBuilder(null);
@@ -410,7 +410,7 @@ public final class TestExtenalMethods extends XDTester {
 			xdb.setClassLoader(new TestClassLoader());
 			xp = xdb.compileXD();
 			parse(xp, "Test", "<Test/>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xdef =
@@ -437,7 +437,7 @@ public final class TestExtenalMethods extends XDTester {
 "  </xd:declaration>\n"+
 "</xd:def>";
 			parse(xdef, null, "<A a='a'/>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xdef =
@@ -466,11 +466,11 @@ public final class TestExtenalMethods extends XDTester {
 			xp = compile(xdef);
 			strw = new StringWriter();
 			assertEq(xml, parse(xp, null, xml, reporter, strw, null, null));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq("p12103450433604", strw.toString());
 			strw = new StringWriter();
 			assertEq(xml, create(xp, null, "a", reporter, xml, strw, null));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq("p12103450433604", strw.toString());
 		} catch (Exception ex) {fail(ex);}
 		try {

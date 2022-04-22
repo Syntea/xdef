@@ -81,7 +81,7 @@ public class MyTest extends XDTester {
 			json = "[ g(12.50, 1.2), g(2.5, 3.5, -0.1, xxx) ]";
 			xd = xp.createXDDocument("");
 			jparse(xd, json, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xd = xp.createXDDocument("");
 			xc = xd.jparseXComponent(json, null, reporter);
 		} catch (Exception ex) {fail(ex);}
@@ -153,7 +153,7 @@ public class MyTest extends XDTester {
 "  </e>\n"+
 "</x>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xc = parseXC(xp, "", xml , null, reporter);
 			assertNoErrorwarnings(reporter);
 			assertEq(xml, xc.toXml());
@@ -237,7 +237,7 @@ public class MyTest extends XDTester {
 			xdv = xmd.getParseMethod();
 			xml = "<a x='9' y='(a,b)' z='(c)'/>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 		} catch (Exception ex) {fail(ex);}
 //if(true)return;
 		try {
@@ -251,19 +251,19 @@ public class MyTest extends XDTester {
 			xp = compile(xdef);
 			xml = "<a a='Novák'/>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = "<a a='P. Novák'/>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = "<a a='Č.'/>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = "<a a='Č. Ž.'/>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = "<a a='F. X. Šalda'/>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 		} catch (Exception ex) {fail(ex);}
 //if(true)return;
 

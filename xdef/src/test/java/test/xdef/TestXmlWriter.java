@@ -63,7 +63,7 @@ public final class TestXmlWriter extends XDTester {
 			xd.setStreamWriter(xmlWriter);
 			el = parse(xd, xml, reporter);
 			xmlWriter.closeStream();
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			bis = new ByteArrayInputStream(bos.toByteArray());
 			assertEq(xml, KXmlUtils.parseXml(bis).getDocumentElement());
 			assertEq("<books/>", el);
@@ -95,7 +95,7 @@ public final class TestXmlWriter extends XDTester {
 			File xmlFile = new File(clearTempDir(), "x.xml");
 			xd.setVariable("xmlFile", xmlFile.getCanonicalPath());
 			assertEq("<a x='_'/>", parse(xd, xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			el = KXmlUtils.parseXml(xmlFile).getDocumentElement();
 			assertEq(xml, el);
 			xdef = // Test XmlOutStream methods
@@ -122,7 +122,7 @@ public final class TestXmlWriter extends XDTester {
 "<d y='2'/>" +
 "</a>";
 			assertEq("<a x='_'/>", parse(xd, xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			bis = new ByteArrayInputStream(bos.toByteArray());
 			el = KXmlUtils.parseXml(bis).getDocumentElement();
 			assertEq(xml, el);

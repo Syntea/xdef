@@ -29,7 +29,7 @@ public class TestSaxon extends XDTester {
 "</xd:def>";
 			xml = "<w><b a='x'/><b a='123'>zxy</b><b>xx</b></w>";
 			assertEq("<a>zxy</a>", create(xdef, "", "a", reporter, xml));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 		} catch (Exception ex) {fail(ex);}
 	}
 
@@ -57,7 +57,7 @@ public class TestSaxon extends XDTester {
 			strw = new StringWriter();
 			xd.setStdOut(strw);
 			assertEq(xml, parse(xd, xml , reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq("abcd.abc.ab.a..", strw.toString());
 			xdef =
 "<xd:def  xmlns:xd='http://www.xdef.org/xdef/4.1' root='a'>\n"+
@@ -74,7 +74,7 @@ public class TestSaxon extends XDTester {
 			strw = new StringWriter();
 			xd.setStdOut(strw);
 			assertEq(xml, parse(xd, xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq("\nabcd \nabc \nab \na \n", strw.toString());
 		} catch (Exception ex) {fail(ex);}
 		try {//fromXQ (xquery)
@@ -96,7 +96,7 @@ public class TestSaxon extends XDTester {
 "<a A=\"B\"><B c=\"e\" d=\"f\"/></a>" +
 "</x>";
 			el = create(xdef, "", "root", reporter, xml);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(el,
 				"<root>" +
 				"<a a=\"A\"><b x=\"c\" y=\"d\"/><b x=\"C\" y=\"D\"/></a>" +
@@ -119,7 +119,7 @@ public class TestSaxon extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			el = xp.createXDDocument().xcreate(new QName("N", "a"), reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(
 "<a xmlns=\"N\"><e/><e f=\"2\"/><x/><x/><g/><g/><i/><i/><j/><j/></a>", el);
 			xdef =
@@ -136,7 +136,7 @@ public class TestSaxon extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			el = xp.createXDDocument().xcreate(new QName("N", "a"), reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq("<a xmlns='N'>" +
 				"<e f='1'/><e f='2'/><f/><f/><g/><g/><h/><h/></a>", el);
 		} catch (Exception ex) {fail(ex);}
@@ -183,16 +183,16 @@ public class TestSaxon extends XDTester {
 			xp = compile(xdef);
 			xml = "<a typ='1'><b/></a>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = "<a typ='2'><b/></a>";
 			parse(xp, "", xml, reporter);
 			assertErrors(reporter);
 			xml = "<a typ='2'><c/></a>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = "<a typ='3'><c/></a>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = "<a typ='1'><c/></a>";
 			parse(xp, "", xml, reporter);
 			assertErrors(reporter);
@@ -202,36 +202,36 @@ public class TestSaxon extends XDTester {
 
 			xml = "<b typ='1'><b/></b>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = "<b typ='2'><b/></b>";
 			parse(xp, "", xml, reporter);
 			assertErrors(reporter);
 			xml = "<b typ='2'><c/></b>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = "<b typ='1'><c/></b>";
 			parse(xp, "", xml, reporter);
 			assertErrors(reporter);
 
 			xml = "<c typ='1'><b/></c>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = "<c typ='2'><b/></c>";
 			parse(xp, "", xml, reporter);
 			assertErrors(reporter);
 			xml = "<c typ='2'><c/></c>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = "<c typ='1'><c/></c>";
 			parse(xp, "", xml, reporter);
 			assertErrors(reporter);
 
 			xml = "<d a='1'/>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = "<d b='2'/>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = "<d a='1' b='2'/>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertErrors(reporter);
@@ -290,7 +290,7 @@ public class TestSaxon extends XDTester {
 "</forest>";
 			xd.setXDContext(KXmlUtils.parseXml(xml).getDocumentElement());
 			el = create(xd, "anthill", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertTrue("underSpruce".equals(el.getAttribute("name")),
 				el.getAttribute("name"));
 		} catch (Exception ex) {fail(ex);}
@@ -348,7 +348,7 @@ public class TestSaxon extends XDTester {
 			xd = xp.createXDDocument();
 			xd.setVariable("source", xml);
 			el = xd.xcreate("Persons", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(3, el.getElementsByTagName("Office").item(0)
 					.getChildNodes().getLength());
 			assertEq(2, el.getElementsByTagName("Home").item(0)

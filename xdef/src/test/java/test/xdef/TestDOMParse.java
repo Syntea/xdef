@@ -234,14 +234,14 @@ public final class TestDOMParse extends XDTester {
 			xp = compile(xdef);
 			strw = new StringWriter();
 			parse(xp, "XDefSOAPEnvelope", xml, reporter, strw, null, null);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq("", strw.toString());
 			//2) ChkDomParser
 			builder = new KDOMBuilder();
 			builder.setNamespaceAware(true);
 			xd = xp.createXDDocument("XDefSOAPEnvelope");
 			parse(xd, xml, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 		} catch (Exception ex) {fail(ex);}
 	}
 

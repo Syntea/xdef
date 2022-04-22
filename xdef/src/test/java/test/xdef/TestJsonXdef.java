@@ -510,11 +510,11 @@ public class TestJsonXdef extends XDTester {
 "}";
 			xd = xp.createXDDocument("Person");
 			j = jparse(xd, json, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xd = xp.createXDDocument("Person");
 			xd.setXONContext(XonUtils.xonToJson(j));
 			assertTrue(XonUtils.xonEqual(j, jcreate(xd, "Person", reporter)));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='Person_list'>\n"+
 "<xd:xon name=\"Person_list\">\n"+
@@ -556,12 +556,12 @@ public class TestJsonXdef extends XDTester {
 "  ]\n" +
 "}";
 			j = jparse(xd, json, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xd = xp.createXDDocument("");
 			xd.setXONContext(j);
 			assertTrue(XonUtils.xonEqual(j,
 				jcreate(xd, "Person_list", reporter)));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='Person_list'>\n"+
 "<xd:xon name=\"Person_list\">\n"+
@@ -605,12 +605,12 @@ public class TestJsonXdef extends XDTester {
 "  ]\n" +
 "}";
 			j = jparse(xd, json, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xd = xp.createXDDocument("");
 			xd.setXONContext(j);
 			assertTrue(XonUtils.xonEqual(j,
 				jcreate(xd, "Person_list", reporter)));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='Matrix'>\n"+
 "<xd:xon name=\"Matrix\">\n"+
@@ -630,11 +630,11 @@ public class TestJsonXdef extends XDTester {
 "  [-5, 33, 0.5]\n" +
 "]";
 			j = jparse(xd, json, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xd = xp.createXDDocument("");
 			xd.setXONContext(j);
 			assertTrue(XonUtils.xonEqual(j, jcreate(xd, "Matrix", reporter)));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 ////////////////////////////////////////////////////////////////////////////////
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='Skladby'>\n"+
@@ -662,11 +662,11 @@ public class TestJsonXdef extends XDTester {
 "  }\n" +
 "]";
 			j = jparse(xd, json, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xd = xp.createXDDocument("");
 			xd.setXONContext(j);
 			assertTrue(XonUtils.xonEqual(j, jcreate(xd, "Skladby", reporter)));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xdef =
@@ -678,10 +678,10 @@ public class TestJsonXdef extends XDTester {
 			xp = compile(xdef);
 			json = "{\"\":\"aaa\"}";
 			j = jparse(xp, "", json, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			json = "{}";
 			j = jparse(xp, "", json, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='json'>\n"+
 "<xd:xon name='json'>\n"+
@@ -691,10 +691,10 @@ public class TestJsonXdef extends XDTester {
 			xp = compile(xdef);
 			json = "{\"\":\"aaa\"}";
 			j = jparse(xp, "", json, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			json = "{}";
 			j = jparse(xp, "", json, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A|B|json'>\n"+
 "<xd:xon name='json'>\n"+
@@ -708,23 +708,23 @@ public class TestJsonXdef extends XDTester {
 			xp = compile(xdef);
 			xml = "<A/>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			json = "[{\"a\":true},\"x\",-1]";
 			j = jparse(xp, "", json, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertTrue(XonUtils.xonEqual(XonUtils.parseJSON(json), j),
 				XonUtils.toJsonString(j, true));
 			el = XonUtils.xonToXml(j);
 			parse(xp, "", el, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			json = "{\"a\":1}";
 			j = jparse(xp, "", json, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertTrue(XonUtils.xonEqual(XonUtils.parseJSON(json), j),
 				XonUtils.toJsonString(j, true));
 			el = XonUtils.xonToXml(j);
 			parse(xp, "", el, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='B'>\n"+
 "<xd:xon name='B'>\n"+
@@ -736,7 +736,7 @@ public class TestJsonXdef extends XDTester {
 			xd.setStdOut(strw);
 			json = "[123]";
 			j = jparse(xd, json, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertTrue(XonUtils.xonEqual(XonUtils.parseJSON(json), j));
 			assertEq("axb", strw.toString());
 		} catch (Exception ex) {fail(ex);}
@@ -809,54 +809,54 @@ public class TestJsonXdef extends XDTester {
 			xd.setStdOut(XDFactory.createXDOutput(strw, false));
 			ini = "A=a\n B = 1\n C=2121-10-19\n D=2.121\n[E]\nx=123\n[F]";
 			j = xd.iparse(ini, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq("ABCDx[E][F]", strw.toString());
 			strw = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(strw, false));
 			in = new ByteArrayInputStream(ini.getBytes());
 			j = xd.iparse(in, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq("ABCDx[E][F]", strw.toString());
 			strw = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(strw, false));
 			ini = "\n B = 1 \n C=2121-10-19\n D=2.121\n [E] \n[F]";
 			j = xd.iparse(ini, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq("BCD[E][F]", strw.toString());
 			strw = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(strw, false));
 			in = new ByteArrayInputStream(ini.getBytes());
 			j = xd.iparse(in, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq("BCD[E][F]", strw.toString());
 			strw = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(strw, false));
 			j = xd.iparse(ini, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq("BCD[E][F]", strw.toString());
 			strw = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(strw, false));
 			in = new ByteArrayInputStream(ini.getBytes());
 			j = xd.iparse(in, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq("BCD[E][F]", strw.toString());
 			ini = "\n B = 1 \n C=2121-10-19\n D=2.121\n[F]";
 			strw = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(strw, false));
 			j = xd.iparse(ini, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq("BCD[F]", strw.toString());
 			in = new ByteArrayInputStream(ini.getBytes());
 			strw = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(strw, false));
 			j = xd.iparse(in, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq("BCD[F]", strw.toString());
 			in = new ByteArrayInputStream(ini.getBytes());
 			strw = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(strw, false));
 			j = xd.iparse(ini, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq("BCD[F]", strw.toString());
 		} catch (Exception ex) {fail(ex);}
 		try {

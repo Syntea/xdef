@@ -31,12 +31,12 @@ public final class TestUserMethods extends XDTester {
 			xml = "<a><A a='x'/></a>";
 			strw = new StringWriter();
 			assertEq(xml, parse(xp, "", xml, reporter, strw, null, null));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(strw.toString(), "AB");
 			strw = new StringWriter();
 			assertEq(xml,
 				create(xp,null,"a",reporter,"<X><A a='x'/></X>",strw,null));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(strw.toString(), "AB");
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
@@ -59,13 +59,13 @@ public final class TestUserMethods extends XDTester {
 			xp = compile(xdef);
 			strw = new StringWriter();
 			assertEq(xml, parse(xp, "", xml, reporter, strw, null,null));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(strw.toString(),
 				"ma ia sa mCH iCH mb ib sb fb fCH mc ic sc fc fa ");
 			strw = new StringWriter();
 			assertEq("<a><b/><c/></a>",
 				create(xp, null, "a", reporter, xml, strw, null));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(strw.toString(),
 				"ia sa iCH mb ib sb fb fCH mc ic sc fc fa ");
 			xdef =
@@ -89,24 +89,24 @@ public final class TestUserMethods extends XDTester {
 			xp = compile(xdef);
 			strw = new StringWriter();
 			assertEq(xml, parse(xp, "", xml, reporter, strw, null, null));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(strw.toString(),
 				"ma ia sa mMX iMX mb ib sb fb fMX mc ic sc fc fa ");
 			strw = new StringWriter();
 			assertEq("<a><b/><c/></a>",
 				create(xp, null, "a", reporter, xml, strw, null));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(strw.toString(),
 				"ia sa iMX mb ib sb fb fMX mc ic sc fc fa ");
 			xml = "<a><b/><x/><c/></a>";
 			strw = new StringWriter();
 			assertEq(xml, parse(xp, "", xml, reporter, strw, null, null));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(strw.toString(),
 				"ma ia sa mMX iMX mb ib sb fb mx ix sx fx fMX mc ic sc fc fa ");
 			strw = new StringWriter();
 			assertEq(xml, create(xp, null, "a", reporter, xml, strw, null));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(strw.toString(),
 				"ia sa iMX mb ib sb fb ix sx fx fMX mc ic sc fc fa ");
 
@@ -132,25 +132,25 @@ public final class TestUserMethods extends XDTester {
 			xml = "<a><x/><c/></a>";
 			strw = new StringWriter();
 			assertEq(xml, parse(xp, "", xml, reporter, strw,null, null));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(strw.toString(),
 				"ma ia sa mCH iCH mx ix sx fx fCH mc ic sc fc fa ");
 			strw = new StringWriter();
 			assertEq("<a><x/><c/></a>",
 				create(xp, null, "a", reporter, xml, strw, null));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(strw.toString(),
 				"ia sa iCH ix sx fx fCH mc ic sc fc fa ");
 			xml = "<a><p/><x/><c/></a>";
 			strw = new StringWriter();
 			assertEq(xml, parse(xp, "", xml, reporter, strw,null, null));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(strw.toString(),
 				"ma ia sa mp ip sp fp mCH iCH mx ix sx fx fCH mc ic sc fc fa ");
 			strw = new StringWriter();
 			assertEq("<a><p/><x/><c/></a>",
 				create(xp, null, "a", reporter, xml, strw, null));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(strw.toString(),
 				"ia sa mp ip sp fp iCH ix sx fx fCH mc ic sc fc fa ");
 
@@ -175,12 +175,12 @@ public final class TestUserMethods extends XDTester {
 			xml = "<a><b/><c/><d/></a>";
 			strw = new StringWriter();
 			assertEq(xml, parse(xp, "", xml, reporter, strw,null, null));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(strw.toString(),
 				"ma ia sa mSQ iSQ mb ib sb fb mx ix sx fx fSQ md id sd fd fa ");
 			strw = new StringWriter();
 			assertEq(xml, create(xp, null, "a", reporter, xml, strw, null));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(strw.toString(),
 				"ia sa iSQ ib sb fb ix sx fx fSQ id sd fd fa ");
 		} catch (Exception ex) {fail(ex);}

@@ -87,7 +87,7 @@ public class TestX extends XDTester {
 "]";
 			reporter.clear();
 			xd.jparse(json, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n"+
 " <xd:xon name='a'>\n"+
@@ -102,19 +102,19 @@ public class TestX extends XDTester {
 			json = "{\"manager\": \"BigBoss\"}";
 			reporter.clear();
 			xd.jparse(json, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			json = "{\"subordinates\": []}";
 			reporter.clear();
 			xd.jparse(json, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			json = "{\"subordinates\": [\"first\", \"second\"]}";
 			reporter.clear();
 			xd.jparse(json, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			json = "{}";
 			reporter.clear();
 			xd.jparse(json, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n"+
 " <xd:xon name='a'>\n"+
@@ -134,11 +134,11 @@ public class TestX extends XDTester {
 "]";
 			reporter.clear();
 			xd.jparse(json, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			json = "[]";
 			reporter.clear();
 			xd.jparse(json, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 // Required element 'js:item' is missing; path=$; X-position=Example#test/$.['date']
 			xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n"+
@@ -171,7 +171,7 @@ public class TestX extends XDTester {
 "]\n" +
 "}";
 			xd.jparse(json, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xdef =
@@ -188,7 +188,7 @@ public class TestX extends XDTester {
 			json = "{ \"A\": \"a\", \"B\": \"b\" }";
 			reporter.clear();
 			xd.jparse(json, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 		} catch (Exception ex) {fail(ex);}
 	}
 

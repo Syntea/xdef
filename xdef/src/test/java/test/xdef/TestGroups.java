@@ -47,9 +47,9 @@ public final class TestGroups extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			parse(xp, null, "<a><p/><b/><c/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><q/><b/><c/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b/><c/></a>", reporter);
 			assertErrors(reporter);
 			parse(xp, null, "<a><p/><q/><b/><c/></a>", reporter);
@@ -69,9 +69,9 @@ public final class TestGroups extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			parse(xp, null, "<a><b/><p/><c/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b/><q/><c/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b/><c/></a>", reporter);
 			assertErrors(reporter);
 			parse(xp, null, "<a><b/><p/><q/><c/></a>", reporter);
@@ -91,9 +91,9 @@ public final class TestGroups extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			parse(xp, null, "<a><b/><c/><p/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b/><c/><q/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b/><c/></a>", reporter);
 			assertErrors(reporter);
 			parse(xp, null, "<a><b/><c/><p/><q/></a>", reporter);
@@ -126,7 +126,7 @@ public final class TestGroups extends XDTester {
 			s = "<a>3<b/>4<b/>5<b/>6<b/>7<b/><c/>3<b/>4<b/>5<b/>6<b/>7<b/></a>";
 			assertEq(s, el);
 			el = parse(xp, "a", s, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(s, el);
 			xdef = // test text in repeated sequence
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
@@ -143,7 +143,7 @@ public final class TestGroups extends XDTester {
 			xp = compile(xdef);
 			xml = "<a><b/><c/>1<b/><c/>2</a>";
 			el = parse(xp, "", xml, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(el, xml);
 			xdef = // Test mixed in sequence
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
@@ -160,9 +160,9 @@ public final class TestGroups extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			parse(xp, null, "<a><p/><q/><b/><c/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><q/><p/><b/><c/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b/><c/></a>", reporter);
 			//nemělo by hlasit dvakrat
 			assertTrue(reporter.printToString().contains("XDEF520"),
@@ -184,9 +184,9 @@ public final class TestGroups extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			parse(xp, null, "<a><b/><p/><q/><c/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b/><q/><p/><c/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b/><c/></a>", reporter);
 			assertErrors(reporter);
 			parse(xp, null, "<a><b/><p/><p/><c/></a>", reporter);
@@ -206,9 +206,9 @@ public final class TestGroups extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			parse(xp, null, "<a><b/><c/><p/><q/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b/><c/><q/><p/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b/><c/></a>", reporter);
 			assertErrors(reporter);
 			parse(xp, null, "<a><b/><c/><p/><p/></a>", reporter);
@@ -228,7 +228,7 @@ public final class TestGroups extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			parse(xp, null, "<a><p/><q/><b/><c/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b/><c/></a>", reporter);
 			assertErrors(reporter);
 			parse(xp, null, "<a><p/><b/><c/></a>", reporter);
@@ -252,7 +252,7 @@ public final class TestGroups extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			parse(xp, null, "<a><b/><p/><q/><c/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b/><c/></a>", reporter);
 			assertErrors(reporter);
 			parse(xp, null, "<a><b/><p/><c/></a>", reporter);
@@ -276,7 +276,7 @@ public final class TestGroups extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			parse(xp, null, "<a><b/><c/><p/><q/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b/><c/></a>", reporter);
 			assertErrors(reporter);
 			parse(xp, null, "<a><b/><c/><p/></a>", reporter);
@@ -323,11 +323,11 @@ public final class TestGroups extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			parse(xp, null, "<A><B/><C/></A>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<A><B/></A>", reporter);
 			assertTrue(reporter.errors());
 			el = create(xp, null, "A", reporter, null);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq("<A><B/><B/><C/><C/></A>", el);
 		} catch (Exception ex) {fail(ex);}
 
@@ -349,7 +349,7 @@ public final class TestGroups extends XDTester {
 			xml =
 "<a><x t='t'/><y t='t'/><d t='t'/><c t='t'/><z t='t'/><b t='t'/></a>";
 			parse(xdef, null, xml, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef = //test any in mixed
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<a>\n"+
@@ -363,7 +363,7 @@ public final class TestGroups extends XDTester {
 			xp = compile(xdef);
 			xml = "<a><b/><c/><x/></a>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef = //test empty blok and repeated items (and mixed optional)
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<a>\n"+
@@ -376,10 +376,10 @@ public final class TestGroups extends XDTester {
 			xml = "<a/>";
 			xp = compile(xdef);
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = "<a><d/><c/><c/><d/><d/><c/></a>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = "<a><d/><c/><c/><d/><d/><c/><d/></a>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertTrue(reporter.errorWarnings(), "Error not recognozed");
@@ -396,7 +396,7 @@ public final class TestGroups extends XDTester {
 			xp = compile(xdef);
 			xml = "<a><b/>1<c/></a>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = "<a><b/>1<c/>1<b/></a>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertTrue(reporter.errorWarnings());
@@ -417,7 +417,7 @@ public final class TestGroups extends XDTester {
 			xp = compile(xdef);
 			xml = "<a><b/><c/>1<d/><b/><c/>2<d/><e/></a>";
 			el = parse(xp, "", xml, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(el, xml);
 			xdef = // Test choice in mixed
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
@@ -434,15 +434,15 @@ public final class TestGroups extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			parse(xp, null, "<a><b/><c/><p/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b/><c/><q/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><q/><c/><b/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b/><p/><c/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b/><c/><p/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b/><c/><p/><p/></a>", reporter);
 			assertErrors(reporter);
 			parse(xp, null, "<a><b/><c/></a>", reporter);
@@ -464,15 +464,15 @@ public final class TestGroups extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			parse(xp, null, "<a><b/><c/><p/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b/><c/><q/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><q/><c/><b/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b/><p/><c/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b/><c/><p/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b/><c/><p/><p/></a>", reporter);
 			assertErrors(reporter);
 			parse(xp, null, "<a><b/><c/></a>", reporter);
@@ -494,15 +494,15 @@ public final class TestGroups extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			parse(xp, null, "<a><b/><c/><p/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b/><c/><q/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><q/><c/><b/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b/><p/><c/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b/><c/><p/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b/><c/><p/><p/></a>", reporter);
 			assertErrors(reporter);
 			parse(xp, null, "<a><b/><c/></a>", reporter);
@@ -524,15 +524,15 @@ public final class TestGroups extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			parse(xp, null, "<a><b/><c/><p/><q/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b/><p/><q/><c/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><p/><q/><c/><b/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><c/><p/><q/><b/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><c/><p/><q/><b/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b/><c/><p/><p/></a>", reporter);
 			assertErrors(reporter);
 			parse(xp, null, "<a><b/><c/></a>", reporter);
@@ -554,15 +554,15 @@ public final class TestGroups extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			parse(xp, null, "<a><b/><c/><p/><q/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b/><p/><q/><c/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><p/><q/><c/><b/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><c/><p/><q/><b/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><c/><p/><q/><b/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b/><c/><p/><p/></a>", reporter);
 			assertErrors(reporter);
 			parse(xp, null, "<a><b/><c/></a>", reporter);
@@ -584,15 +584,15 @@ public final class TestGroups extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			parse(xp, null, "<a><b/><c/><p/><q/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b/><p/><q/><c/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><p/><q/><c/><b/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><c/><p/><q/><b/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><c/><p/><q/><b/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b/><c/><p/><p/></a>", reporter);
 			assertErrors(reporter);
 			parse(xp, null, "<a><b/><c/></a>", reporter);
@@ -614,15 +614,15 @@ public final class TestGroups extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			parse(xp, null, "<a><b/><c/><p/><q/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b/><p/><q/><c/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><p/><q/><c/><b/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><c/><p/><q/><b/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><c/><p/><q/><b/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b/><c/><p/><p/></a>", reporter);
 			assertErrors(reporter);
 			parse(xp, null, "<a><b/><c/></a>", reporter);
@@ -644,15 +644,15 @@ public final class TestGroups extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			parse(xp, null, "<a><b/><c/><p/><q/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b/><p/><q/><c/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><p/><q/><c/><b/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><c/><p/><q/><b/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><c/><p/><q/><b/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b/><c/><p/><p/></a>", reporter);
 			assertErrors(reporter);
 			parse(xp, null, "<a><b/><c/></a>", reporter);
@@ -674,15 +674,15 @@ public final class TestGroups extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			parse(xp, null, "<a><b/><c/><p/><q/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b/><p/><q/><c/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><p/><q/><c/><b/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><c/><p/><q/><b/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><c/><p/><q/><b/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b/><c/><p/><p/></a>", reporter);
 			assertErrors(reporter);
 			parse(xp, null, "<a><b/><c/></a>", reporter);
@@ -705,13 +705,13 @@ public final class TestGroups extends XDTester {
 			strw = new StringWriter();
 			assertEq("<A><B/>Text<C/></A>",
 				parse(xp, null, xml, reporter, strw, null, null));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(strw.toString(), "0");
 			xml = null;
 			strw = new StringWriter();
 			assertEq("<A><B/>Text<C/></A>",
 				create(xp, null, "A", reporter, xml, strw, null));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(strw.toString(), "3");
 			xp = compile(
 "<xd:def xmlns:xd='" + _xdNS + "'>\n" +
@@ -724,7 +724,7 @@ public final class TestGroups extends XDTester {
 "</A>\n" +
 "</xd:def>");
 			assertEq("<A><B/><B/>Text<C/></A>", create(xp, "", "A", reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 		} catch (Exception ex) {fail(ex);}
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -743,11 +743,11 @@ public final class TestGroups extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			parse(xp, null, "<a><b/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><c/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><x/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			// Test choice in choice
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
@@ -764,13 +764,13 @@ public final class TestGroups extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			parse(xp, null, "<a><b/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><c/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><p/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><q/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b/><p/></a>", reporter);
 			assertErrors(reporter);
 			parse(xp, null, "<a/>", reporter);
@@ -790,13 +790,13 @@ public final class TestGroups extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			parse(xp, null, "<a><b/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><p/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><q/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><c/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b/><p/></a>", reporter);
 			assertErrors(reporter);
 			parse(xp, null, "<a/>", reporter);
@@ -816,13 +816,13 @@ public final class TestGroups extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			parse(xp, null, "<a><b/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><p/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><q/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><c/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b/><p/></a>", reporter);
 			assertErrors(reporter);
 			parse(xp, null, "<a/>", reporter);
@@ -842,11 +842,11 @@ public final class TestGroups extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			parse(xp, null, "<a><b/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><c/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><p/><q/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b/><p/><q/></a>", reporter);
 			assertErrors(reporter);
 			parse(xp, null, "<a/>", reporter);
@@ -868,11 +868,11 @@ public final class TestGroups extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			parse(xp, null, "<a><b/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><c/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><p/><q/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b/><p/><q/></a>", reporter);
 			assertErrors(reporter);
 			parse(xp, null, "<a><q/></a>", reporter);
@@ -894,11 +894,11 @@ public final class TestGroups extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			parse(xp, null, "<a><b/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><c/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><p/><q/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b/><p/><q/></a>", reporter);
 			assertErrors(reporter);
 			parse(xp, null, "<a><q/></a>", reporter);
@@ -921,13 +921,13 @@ public final class TestGroups extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			parse(xp, null, "<a><b/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><c/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><p/><q/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><q/><p/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b/><p/><q/></a>", reporter);
 			assertErrors(reporter);
 			parse(xp, null, "<a><q/></a>", reporter);
@@ -949,13 +949,13 @@ public final class TestGroups extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			parse(xp, null, "<a><b/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><c/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><p/><q/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><q/><p/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b/><p/><q/></a>", reporter);
 			assertErrors(reporter);
 			parse(xp, null, "<a><q/></a>", reporter);
@@ -977,13 +977,13 @@ public final class TestGroups extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			parse(xp, null, "<a><b/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><c/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><p/><q/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><q/><p/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b/><p/><q/></a>", reporter);
 			assertErrors(reporter);
 			parse(xp, null, "<a><q/></a>", reporter);
@@ -1115,7 +1115,7 @@ public final class TestGroups extends XDTester {
 			xd = xp.createXDDocument("B");
 			xml = "<a><c y='y'/><b x='x'/></a>\n";
 			assertEq(xml, parse(xd, xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef = //reference to other XDefinition
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def xd:name='B' root='a'>\n"+
@@ -1129,7 +1129,7 @@ public final class TestGroups extends XDTester {
 			xd = xp.createXDDocument("B");
 			xml = "<a><c y='y'/><b x='x'/></a>";
 			assertEq(xml, parse(xd, xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<a>\n"+
@@ -1350,9 +1350,9 @@ public final class TestGroups extends XDTester {
 			xp = compile(xdef);
 			xml = "<a/>";
 			assertEq(xml, parse(xp, null, xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(xml, create(xp, null, "a", reporter, xml, null, null));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "    <a>\n"+
@@ -1420,7 +1420,7 @@ public final class TestGroups extends XDTester {
 			assertTrue(reporter.errorWarnings(),"errors not recognized");
 			xml = "<a><b/><c/><b/><c/></a>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a/>", reporter); //should be error
 			assertErrors(reporter);
 			parse(xp, "", "<a><b/><c/></a>", reporter);
@@ -1440,7 +1440,7 @@ public final class TestGroups extends XDTester {
 			xp = compile(xdef);
 			xml = "<a><b/><c/><b/><c/></a>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a/>", reporter);
 			assertErrors(reporter);
 			parse(xp, "", "<a><b/><c/></a>", reporter);
@@ -1464,7 +1464,7 @@ public final class TestGroups extends XDTester {
 			xp = compile(xdef);
 			xml = "<a><b/><c/><b/><c/></a>";
 			assertEq(xml, parse(xp, "a", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, "a", "<a/>", reporter);
 			assertErrors(reporter);
 			parse(xp, "a", "<a><b/><c/></a>", reporter);
@@ -1488,7 +1488,7 @@ public final class TestGroups extends XDTester {
 			xp = compile(xdef);
 			xml = "<a><b/><c/><b/><c/></a>";
 			assertEq(xml, parse(xp, "a", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, "a", "<a/>", reporter);
 			assertErrors(reporter);
 			parse(xp, "a", "<a><b/><c/></a>", reporter);
@@ -1511,7 +1511,7 @@ public final class TestGroups extends XDTester {
 "</xd:def>";
 			xml = "<a><c/><d/></a>";
 			assertEq(xml, create(xdef, null, "a", reporter, xml));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "'>\n"+
 "<a>\n"+
@@ -1525,7 +1525,7 @@ public final class TestGroups extends XDTester {
 			xml = "<a><b/><d a = 'y'/><c a = 'x'/></a>";
 			assertEq(create(xdef, null, "a", reporter, xml),
 				"<a><b/><c a='x'/></a>");
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "'>\n"+
 "<a>\n"+
@@ -1539,7 +1539,7 @@ public final class TestGroups extends XDTester {
 			xml = "<a><b><d a = 'y'/></b></a>";
 			assertEq(create(xdef, null, "a", reporter, xml),
 				"<a><b/><c a='y'/></a>");
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "'>\n"+
 "<a>\n"+
@@ -1553,7 +1553,7 @@ public final class TestGroups extends XDTester {
 			xp = compile(xdef);
 			assertEq(create(xp, null, "a",reporter,"<a><b><c a='x'/></b></a>"),
 				"<a><b/><c a='x'/></a>");
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(create(xp, null, reporter, "<a><b><d a='y'/></b></a>"),
 				"<a><b/></a>");
 			assertErrors(reporter);
@@ -1571,7 +1571,7 @@ public final class TestGroups extends XDTester {
 "</xd:def>";
 			assertEq("<a><b a='b'/><c a='x'/></a>",
 				create(xdef, "", "a", reporter, null));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			String expected = //Expected result of following tests
 "<Envelope>" +
   "<Header>" +
@@ -1657,7 +1657,7 @@ public final class TestGroups extends XDTester {
 "  <VolnePSP xd:script=\"occurs 1; create from('/VolnePSP_/VolnePSP')\"/>\n"+
 "</xd:def>";
 			assertEq(create(xdef, null, "Envelope", reporter, xml), expected);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1717,7 +1717,7 @@ public final class TestGroups extends XDTester {
 "  <VolnePSP xd:script=\"occurs 1; create from('/VolnePSP_/VolnePSP')\"/>\n"+
 "</xd:def>";
 			assertEq(expected, create(xdef, null, "Envelope", reporter, xml));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 
 ////////////////////////////////////////////////////////////////////////////////
 //3. mixed
@@ -1776,7 +1776,7 @@ public final class TestGroups extends XDTester {
 "  <VolnePSP xd:script=\"occurs 1; create from('/VolnePSP_/VolnePSP')\"/>\n"+
 "</xd:def>";
 			assertEq(expected, create(xdef, null, "Envelope", reporter, xml));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 
 ////////////////////////////////////////////////////////////////////////////////
 //4. choice
@@ -1834,7 +1834,7 @@ public final class TestGroups extends XDTester {
 "  <VolnePSP xd:script=\"occurs 1; create from('/VolnePSP_/VolnePSP')\"/>\n"+
 "</xd:def>";
 			assertEq(create(xdef, null, "Envelope", reporter, xml), expected);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef = //sequence
 "<x:def xmlns:x='" + _xdNS + "' root='a'>\n"+
 "<a>\n"+
@@ -1849,7 +1849,7 @@ public final class TestGroups extends XDTester {
 "</a>\n"+
 "</x:def>";
 			parse(xdef, null, "<a><p/><q/>123<q/><p/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef = //test mixed as last in sequence
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <a>\n"+
@@ -1910,23 +1910,23 @@ public final class TestGroups extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			parse(xp, null, "<a/>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b><c/></b></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b>x</b></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b>x<c/></b></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b><c/>x</b></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b><b/><b><b/><b/></b></b></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b><c/>x</b></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b><c/>x<c/></b></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef = //set choice "+" instead of "*"
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<a>\n"+
@@ -1947,23 +1947,23 @@ public final class TestGroups extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			parse(xp, null, "<a/>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b><c/></b></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b>x</b></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b>x<c/></b></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b><c/>x</b></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b><b/><b><b/><b/></b></b></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b><c/>x</b></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><b><c/>x<c/></b></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef = // check mixed, include 1
 "<x:collection xmlns:x='" + _xdNS + "'>\n"+
 "<xd:def name='a' xd:root='a' xmlns:xd='" + _xdNS + "'\n"+
@@ -1991,7 +1991,7 @@ public final class TestGroups extends XDTester {
 "</xd:def>\n"+
 "</x:collection>";
 			parse(xdef, "a", "<a attr='a'><c/><q/><p/>text<s/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'\n"+
 " script='options ignoreEmptyAttributes'>\n"+
@@ -2017,7 +2017,7 @@ public final class TestGroups extends XDTester {
 "</xd:sequence>\n"+
 "</xd:def>";
 			parse(xdef, null, "<a attr='a'><c/><p/><q/>text<s/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'\n"+
 "        script='options ignoreEmptyAttributes' >\n"+
@@ -2041,7 +2041,7 @@ public final class TestGroups extends XDTester {
 "</xd:choice>\n"+
 "</xd:def>";
 			parse(xdef, null, "<a attr='a'><c/><p/><q/>text<s/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'\n"+
 " script= 'options ignoreEmptyAttributes' >\n"+
@@ -2068,11 +2068,11 @@ public final class TestGroups extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			parse(xp, null, "<a attr='a'><c/><p/><q/>text<s/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a attr='a'><c/><q/><p/>text<s/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a attr='a'><c/><q/><p/>text<r/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a attr='a'><c/>text<r/></a>", reporter);
 			assertErrors(reporter);
 			parse(xp, null, "<a attr='a'><c/><p/>text<r/></a>", reporter);
@@ -2114,7 +2114,7 @@ public final class TestGroups extends XDTester {
 			xml = "<a>\n\n<p p='31122004'/>\n\n<y/>\n"+
 				"<b/>\n<d/>\n<e/>\n<f/>\n<z/>\n</a>";
 			parse(xdef, "a", xml, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 		} catch (Exception ex) {fail(ex);}
 		try {// check mixed, include
 			xdef =
@@ -2129,7 +2129,7 @@ public final class TestGroups extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			parse(xp, null, "<a>t1<b/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a>t1<b/>t2</a>\n", reporter);
 			assertTrue(reporter.errorWarnings());
 			parse(xp, null, "<a/>", reporter);
@@ -2154,7 +2154,7 @@ public final class TestGroups extends XDTester {
 			xp = compile(xdef);
 			xml = "<a><b/><c/>1<b/><c/>2</a>";
 			assertEq(parse(xp, null, xml, reporter), xml);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 		} catch (Exception ex) {fail(ex);}
 /*xx*/
 		try {//test choice
@@ -2171,9 +2171,9 @@ public final class TestGroups extends XDTester {
 			parse(xp, null, "<a/>", reporter);
 			assertTrue(reporter.errorWarnings(), "Error not reported");
 			parse(xp, null, "<a><b/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><c/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, null, "<a><c/><b/></a>", reporter);
 			assertTrue(reporter.errorWarnings(), "Error not reported");
 			parse(xp, null, "<a><b/><c/></a>", reporter);
@@ -2189,13 +2189,13 @@ public final class TestGroups extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			parse(xp, "", "<a><O/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a><O/><O/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a><A/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a/>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a><O/><O/><O/></a>", reporter);
 			assertTrue(reporter.errorWarnings(), "Error not reported");
 			parse(xp, "", "<a><O/><A/></a>", reporter);
@@ -2258,13 +2258,13 @@ public final class TestGroups extends XDTester {
 "</xd:collection>";
 			xp = compile(xdef);
 			parse(xp, "a", "<a><c/><d/><p/><q/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, "a", "<a><c/><d/><q/><p/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, "a", "<a><d/><q/><p/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, "a", "<a><q/><p/></a>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, "a", "<a><c/><d/><p/></a>", reporter);
 			assertTrue(reporter.errorWarnings(), "Not reported missing q");
 			parse(xp, "a", "<a><c/><d/><q/></a>", reporter);
@@ -2302,27 +2302,27 @@ public final class TestGroups extends XDTester {
 			xml = "<a><c/></a>";
 			strw = new StringWriter();
 			assertEq(xml, parse(xp, null, xml, reporter, strw, null, null));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq("ia ic1 fc1 fa ", strw.toString());
 			xml = "<a><d/></a>";
 			strw = new StringWriter();
 			assertEq(xml, parse(xp, null, xml, reporter, strw, null ,null));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq("ia fa ", strw.toString());
 			xml = "<a><d/><c/></a>";
 			strw = new StringWriter();
 			assertEq(xml, parse(xp, null, xml, reporter, strw, null, null));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq("ia ic2 fc2 fa ", strw.toString());
 			xml = "<a><d/><e/></a>";
 			strw = new StringWriter();
 			assertEq(xml, parse(xp, null, xml, reporter, strw, null, null));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq("ia ie2 fe2 fa ", strw.toString());
 			xml = "<a><c/><d/><d/><e/><e/></a>";
 			strw = new StringWriter();
 			assertEq(xml, parse(xp, null, xml, reporter, strw, null, null));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq("ia ic1 fc1 id1 fd1 ie2 fe2 ie2 fe2 fa ", strw.toString());
 			xml = "<a/>"; /*error*/
 			strw = new StringWriter();
@@ -2357,7 +2357,7 @@ public final class TestGroups extends XDTester {
 			xml = "<a><b>0</b>1<c/>2<c/><b>3</b>4<c/>5<c/></a>";
 			strw = new StringWriter();
 			assertEq(parse(xdef, null, xml, reporter, strw, null, null), xml);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq("ia ib1 iT1 fT1 fb1 iSQ1 iT2 fT2 ic1 fc1 fSQ1 iT2 fT2 ic1"
 				+ " fc1 fSQ1 fSQ1 fSQ1 ib2 iT3 fT3 fb2 iSQ2 iT4 fT4 ic2 fc2"
 				+ " fSQ2 iT4 fT4 ic2 fc2 fSQ2 fa ", strw.toString());
@@ -2373,13 +2373,13 @@ public final class TestGroups extends XDTester {
 			xp = compile(xdef);
 			xml = "<X a='1'/>";
 			assertEq(xml, parse(xp,"",xml,reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = "<X b='x'/>";
 			assertEq(xml, parse(xp,"",xml,reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = "<Y/>";
 			assertEq(xml, parse(xp,"",xml,reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp,"", "<X/>", reporter);
 			assertTrue(reporter.printToString().contains("XDEF502"));
 			parse(xp,"", "<Z/>", reporter);
@@ -2389,13 +2389,13 @@ public final class TestGroups extends XDTester {
 			xml = dataDir + "TestGroups01.xml";
 			xdef = dataDir + "TestGroups01_1.xdef";
 			parse(xdef, "SODContainer_Template", xml, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef = dataDir + "TestGroups01_2.xdef";
 			parse(xdef, "SODContainer_Template", xml, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef = dataDir + "TestGroups01_3.xdef";
 			parse(xdef, "SODContainer_Template", xml, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 		} catch (Exception ex) {fail(ex);}
 
 		resetTester();

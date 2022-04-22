@@ -155,7 +155,7 @@ System.out.println("xdef:\n"+ xdef);
 System.out.println("===========");
 				XDPool xp = compile(xdef);
 				assertEq(xml, parse(xp, "", xml, reporter));
-				assertNoErrors(reporter);
+				assertNoErrorwarnings(reporter);
 			} catch (Exception ex) {
 System.out.println(KXmlUtils.nodeToString(KXmlUtils.parseXml(xml),true));
 System.out.println("xdef:\n"+ xdef);

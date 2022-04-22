@@ -60,7 +60,7 @@ public final class TestKeyAndRef extends XDTester {
 			xp = compile(xdef);
 			xml = "<a><b z='1 2'/><c x='1' y='2'/></a>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = "<a><b z='1 3'/><c x='1' y='2'/></a>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertTrue(reporter.getErrorCount() == 1
@@ -74,7 +74,7 @@ public final class TestKeyAndRef extends XDTester {
 			xp = compile(xdef);
 			xml = "<a><b z='x'>a b</b><c x='a' y='b'/></a>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = "<a><b z='x'>a c</b><c x='a' y='b'/></a>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertTrue(reporter.getErrorCount() == 1
@@ -93,7 +93,7 @@ public final class TestKeyAndRef extends XDTester {
 			xp = compile(xdef);
 			xml = "<a><b x='1' y='2'/><c z='1 2'/></a>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = "<a><b x='1' y='2'/><c z='1 3'/></a>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertTrue(reporter.errorWarnings()
@@ -112,11 +112,11 @@ public final class TestKeyAndRef extends XDTester {
 			xp = compile(xdef);
 			xml = "<A/>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml =
 "<A><a><b x='1' y='2'/><c z='1 2'/></a><a><b x='1' y='2'/><c z='1 2'/></a></A>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = "<A><a><b x='1' y='2'/><c z='1 3'/></a></A>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertTrue(reporter.getErrorCount() == 1
@@ -144,7 +144,7 @@ public final class TestKeyAndRef extends XDTester {
 			xp = compile(xdef);
 			xml = "<A><b a='3.1'/><c a='3.1'/></A>";
 			parse(xp, "", xml, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml ="<A><b a='3.1'/><c a='4.1'/></A>";
 			parse(xp, "", xml, reporter);
 			assertTrue(reporter.getErrorCount() == 2
@@ -165,7 +165,7 @@ public final class TestKeyAndRef extends XDTester {
 			xp = compile(xdef);
 			xml = "<A><a a='2'/><b a='1'/><c a='1'/><d a='1'/><e a='3'/></A>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = "<A><a a='2'/><b a='1'/><c a='2'/><d a='3'/><e a='4'/></A>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertTrue(reporter.getErrorCount() == 2
@@ -187,7 +187,7 @@ public final class TestKeyAndRef extends XDTester {
 			xp = compile(xdef);
 			xml = "<A><a a='2'/><b a='1'/><c a='1'/><d a='1'/><e a='3'/></A>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = "<A><a a='2'/><b a='1'/><c a='2'/><d a='3'/><e a='4'/></A>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertTrue(reporter.getErrorCount() == 2
@@ -206,7 +206,7 @@ public final class TestKeyAndRef extends XDTester {
 			xp = compile(xdef);
 			xml = "<A><B b='S-A'/><B b='S-B'/><B b='S-D'/></A>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = "<A><B b='S-A'/><B b='S-B'/><B b='S-A'/></A>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertTrue(reporter.printToString().contains("XDEF523"));
@@ -224,7 +224,7 @@ public final class TestKeyAndRef extends XDTester {
 			xp = compile(xdef);
 			xml = "<A><b a='3.1'/><c a='3.1'/></A>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = "<A><b a='3.1'/><b a='3.1'/><c a='4.1'/></A>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertTrue(reporter.getErrorCount() == 3, reporter.printToString());
@@ -242,7 +242,7 @@ public final class TestKeyAndRef extends XDTester {
 			xp = compile(xdef);
 			xml = "<A><b a='3.1'/><c a='3.1'/></A>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = "<A><b a='3.1'/><b a='3.1'/><c a='4.1'/></A>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertTrue(reporter.getErrorCount() == 3, reporter.printToString());
@@ -258,11 +258,11 @@ public final class TestKeyAndRef extends XDTester {
 			xp = compile(xdef);
 			xml = "<A/>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml =
 "<A><a><b x='1' y='2'/><b x='1' y='3'/><c x='1'>2 3</c></a></A>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = "<A><a><b x='1' y='2'/><c x='1'>1 3</c></a></A>";
 			parse(xp, "", xml, reporter);
 			assertTrue(reporter.errorWarnings()
@@ -284,7 +284,7 @@ public final class TestKeyAndRef extends XDTester {
 "  <a><b x='3' y='a'/><c x='3' y='a'/></a>\n"+
 "</A>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml =
 "<A>\n"+
 "  <a><b x='1' y='a'/><c x='1' y='a'/></a>\n"+
@@ -310,7 +310,7 @@ public final class TestKeyAndRef extends XDTester {
 			xml =
 "<A><a><b x='1' y='2'/><c z='1 2'/></a><a><b x='1' y='2'/><c z='1 2'/></a></A>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = "<A><a><b x='1' y='2'/><c z='1 3'/></a></A>";
 			parse(xp, "", xml, reporter);
 			assertTrue(reporter.getErrorCount()==1
@@ -337,11 +337,11 @@ public final class TestKeyAndRef extends XDTester {
 			xp = compile(xdef);
 			xml = "<A/>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml =
 "<A><a><b x='1' y='2'/><c z='1 2'/></a><a><b x='1' y='2'/><c z='1 2'/></a></A>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = "<A><a><b x='1' y='2'/><c z='1 3'/></a></A>";
 			parse(xp, "", xml, reporter);
 			assertTrue(reporter.errorWarnings()
@@ -369,11 +369,11 @@ public final class TestKeyAndRef extends XDTester {
 			xp = compile(xdef);
 			xml = "<A/>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml =
 "<A><a><b x='1' y='2'/><c z='1 2'/></a><a><b x='1' y='2'/><c z='1 2'/></a></A>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml = "<A><a><b x='1' y='2'/><c z='1 3'/></a></A>";
 			parse(xp, "", xml, reporter);
 			assertTrue(reporter.errorWarnings()
@@ -405,7 +405,7 @@ public final class TestKeyAndRef extends XDTester {
 "<a><b x='3' y='a'/><c x='3' y='a'/></a>"+
 "</A>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml =
 "<A>"+
 "<a><b x='1' y='a'/><c x='1' y='a'/></a>"+
@@ -431,7 +431,7 @@ public final class TestKeyAndRef extends XDTester {
 "  <a><b x='3' y='a'/><c x='3' y='a'/></a>\n"+
 "</A>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml =
 "<A>\n"+
 "  <a><b x='1' y='a'/><c x='1' y='a'/></a>\n"+
@@ -469,7 +469,7 @@ public final class TestKeyAndRef extends XDTester {
 "  </FileType>\n"+
 "</A>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml =
 "<A>\n"+
 "  <FileType FileCode='XYZ'>\n"+
@@ -516,7 +516,7 @@ public final class TestKeyAndRef extends XDTester {
 "  <Address Country=\"CS\" Town=\"Praha\" Street=\"Dlouhá\" House=\"3\" />\n"+
 "</Country>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml =
 "<Country name=\"CS\">\n"+
 "  <Town name=\"Praha\">\n"+
@@ -575,7 +575,7 @@ public final class TestKeyAndRef extends XDTester {
 "  <Locality Country=\"CS\" Town=\"Praha\" />\n"+
 "</Country>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml =
 "<Country name=\"CS\">\n"+
 "  <Town name=\"Praha\">\n"+
@@ -654,7 +654,7 @@ public final class TestKeyAndRef extends XDTester {
 "  <Locality Country='CR' Town='Praha'/>\n"+
 "</Country>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 		} catch (Exception ex) {fail(ex);}
 		try { // test a.d.NEWKEY()
 			xdef =
@@ -724,7 +724,7 @@ public final class TestKeyAndRef extends XDTester {
 "  <Address town='Lhota' number='1'/>\n"+
 "</a>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml =
 "<a>\n"+
 "  <Town name='Praha'>\n"+
@@ -744,18 +744,18 @@ public final class TestKeyAndRef extends XDTester {
 			xp = compile(dataDir + "TestKeyAndRef2.xdef");
 			assertEq(dataDir + "TestKeyAndRef2.xml",
 				parse(xp, "", dataDir + "TestKeyAndRef2.xml",reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xp = compile(dataDir + "TestKeyAndRef3.xdef");
 			assertEq(dataDir + "TestKeyAndRef3.xml",
 				parse(xp, "", dataDir + "TestKeyAndRef3.xml", reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(dataDir + "TestKeyAndRef3_1.xml",
 				parse(xp, "", dataDir + "TestKeyAndRef3_1.xml", reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xp = compile(dataDir + "TestKeyAndRef4.xdef");
 			assertEq(dataDir + "TestKeyAndRef4.xml",
 				parse(xp, "",dataDir + "TestKeyAndRef4.xml", reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			parse(xp, "", dataDir + "TestKeyAndRef4_1.xml" , reporter);
 			assertTrue(reporter.getErrorCount()==1
 				&& reporter.printToString().indexOf("XDEF522")>0,
@@ -767,18 +767,18 @@ public final class TestKeyAndRef extends XDTester {
 			xp = compile(dataDir + "TestKeyAndRef5.xdef");
 			assertEq(dataDir + "TestKeyAndRef5.xml",
 				parse(xp, "", dataDir + "TestKeyAndRef5.xml",reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xp = compile(dataDir + "TestKeyAndRef6.xdef");
 			assertEq(dataDir + "TestKeyAndRef6.xml",
 				parse(xp, "" , dataDir + "TestKeyAndRef6.xml", reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			setProperty(XDConstants.XDPROPERTY_MINYEAR, null);
 			setProperty(XDConstants.XDPROPERTY_MAXYEAR, null);
 			setProperty(XDConstants.XDPROPERTY_SPECDATES, null);
 			xp = compile(dataDir + "TestKeyAndRef7.xdef");
 			assertEq(dataDir + "TestKeyAndRef7.xml",
 				parse(xp, "Mondial" , dataDir + "TestKeyAndRef7.xml",reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef = // test CHIID
 "<xd:def xmlns:xd='" + _xdNS + "' root='A' >\n" +
 " <xd:declaration> uniqueSet s int(); </xd:declaration>\n" +
@@ -887,14 +887,14 @@ public final class TestKeyAndRef extends XDTester {
 			xp = compile(xdef);
 			xml ="<A><B b='int()'/><C c='99'/></A>";
 			parse(xp, "", xml, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml ="<A><B b='int'/><C c='abc'/></A>";
 			parse(xp, "", xml, reporter);
 			assertTrue(reporter.getErrorCount() == 1
 				&& reporter.printToString().contains("XDEF809"), reporter);
 			xml ="<A><B b='int(1,2)'/><C c='1'/></A>";
 			parse(xp, "", xml, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml ="<A><B b='int(1,2)'/><C c='0'/></A>";
 			parse(xp, "", xml, reporter);
 			assertTrue(reporter.getErrorCount() == 1
@@ -910,7 +910,7 @@ public final class TestKeyAndRef extends XDTester {
 				&&  s.contains("XDEF820"), reporter);
 			xml ="<A><B b='xdatetime(\"dd.MM.yyyy\")'/><C c='01.02.1987'/></A>";
 			parse(xp, "", xml, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xml ="<A><B b='xdatetime(\"dd.MM.yyyy\")'/><C c='01.02'/></A>";
 			parse(xp, "", xml, reporter);
 			assertTrue(reporter.getErrorCount() == 1
@@ -1029,12 +1029,12 @@ public final class TestKeyAndRef extends XDTester {
 			xd = xp.createXDDocument();
 			xml = "<a><b N='A'><E N='B'/></b><b N='x'><E N='T'/></b></a>";
 			parse(xd, xml, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xd = xp.createXDDocument(); // parse again
 			parse(xd, xml, reporter);
-			assertNoErrors(reporter); // uniqeue set must be clear!
+			assertNoErrorwarnings(reporter); // uniqeue set must be clear!
 			parse(xd, xml, reporter);
-			assertNoErrors(reporter); // even here uniqeue set must be clear!
+			assertNoErrorwarnings(reporter); // even here uniqeue set must be clear!
 			// method uniqueSet.toContainer()
 			xdef = // explicit variant
 "<xd:def xmlns:xd='" + _xdNS + "' root='List'>\n" +
@@ -1070,9 +1070,9 @@ public final class TestKeyAndRef extends XDTester {
 "<Group Room='B'><Student Name='Bush'/></Group>" +
 "</School>";
 			parse(xd, xml, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(create(xd, "School", reporter), s);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef = // toContainer() - variant with container as context
 "<xd:def xmlns:xd='" + _xdNS + "' root='List' >\n" +
 "<xd:declaration>\n" +
@@ -1092,7 +1092,7 @@ public final class TestKeyAndRef extends XDTester {
 "</School>\n" +
 "</xd:def>";
 			assertEq(parse(compile(xdef).createXDDocument(), xml, reporter), s);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef = // test reporting iof incomplete key items,
 "<xd:def xmlns:xd='" + _xdNS + "' xd:root='T'>\n" +
 "  <xd:declaration>\n" +
@@ -1163,7 +1163,7 @@ public final class TestKeyAndRef extends XDTester {
 			strw = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(strw, false));
 			assertEq(xml, parse(xd, xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq("1,2,3,4,5,2,5,1,4,3,", strw.toString());
 		} catch (Exception ex) {fail(ex);}
 		try { // test of uniqueSetKey and bindSet
@@ -1226,7 +1226,7 @@ public final class TestKeyAndRef extends XDTester {
 "  </Node>\n" +
 "</CodeBook>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xdef = // bindSet
 "<xd:def xmlns:xd='" + XDConstants.XDEF40_NS_URI + "' root='CodeBook'>\n"+
 "  <xd:declaration scope=\"local\">\n" +
@@ -1267,7 +1267,7 @@ public final class TestKeyAndRef extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 		} catch (Exception ex) {fail(ex);}
 
 		resetTester();

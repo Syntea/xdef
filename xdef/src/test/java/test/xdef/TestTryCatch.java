@@ -51,7 +51,7 @@ public final class TestTryCatch extends XDTester {
 			xml = "<a att='xx'/>";
 			strw = new StringWriter();
 			parse(xp, "test", xml, reporter, strw, null, null);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertTrue((s = strw.toString()).indexOf("E: Hi") >= 0, s);
 		} catch (Exception ex) {fail(ex);}
 

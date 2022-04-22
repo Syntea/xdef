@@ -131,7 +131,7 @@ public final class TestLexicon extends XDTester {
 "</Smlouva>";
 			xd.setLexiconLanguage("ces");
 			el = parse(xd, xml, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(xml, el);
 			xd = xp.createXDDocument("contract");
 			xd.setLexiconLanguage("ces");
@@ -152,7 +152,7 @@ public final class TestLexicon extends XDTester {
 "</Contract>";
 			xd.setLexiconLanguage("eng");
 			el = parse(xd, xml, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(xml, el);
 			xp = compile(new String[]{xdef, lexicon1, lexicon2});
 			xd = xp.createXDDocument("contract");
@@ -173,7 +173,7 @@ public final class TestLexicon extends XDTester {
 "</Smlouva>";
 			xd.setLexiconLanguage("ces");
 			el = parse(xd, xml, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(xml, el);
 			lexicon1 =
 "<xd:lexicon xmlns:xd='" + _xdNS + "' language='eng' default='yes'>\n"+
@@ -198,7 +198,7 @@ public final class TestLexicon extends XDTester {
 "</Contract>";
 			xd.setLexiconLanguage("eng");
 			el = parse(xd, xml, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(xml, el);
 			lexicon1 =
 "<xd:lexicon xmlns:xd='" + _xdNS + "' language='eng' default='yes'>\n"+
@@ -221,11 +221,11 @@ public final class TestLexicon extends XDTester {
 "          ID         = \"87654321\" />\n"+
 "</Contract>";
 			el = parse(xd, xml, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(xml, el);
 			xd.setLexiconLanguage("eng");
 			el = parse(xd, xml, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(xml, el);
 			xml =
 "<Smlouva Číslo = \"0123456789\">\n"+
@@ -244,13 +244,13 @@ public final class TestLexicon extends XDTester {
 "</Smlouva>";
 			xd.setLexiconLanguage("ces");
 			el = parse(xd, xml, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(xml, el);
 			// try X-component
 			genXComponent(xp, clearTempDir()); // create and compile X-components
 			Class<?> clazz = Class.forName("test.xdef.component.L_Contract");
 			XComponent xc = parseXC(xd, xml, clazz, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			el = xc.toXml();
 			assertEq(xml, el);
 			assertEq("0123456789", SUtils.getValueFromGetter(xc,"getNumber"));
@@ -322,7 +322,7 @@ public final class TestLexicon extends XDTester {
 "</Town>";
 			xd.setLexiconLanguage("eng");
 			el = parse(xd, xml_eng, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(xml_eng, el);
 			xd = xp.createXDDocument("town");
 			xd.setLexiconLanguage("deu");
@@ -345,15 +345,15 @@ public final class TestLexicon extends XDTester {
 "  </Straße>\n" +
 "</Stadt>";
 			el = parse(xd, xml_deu, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(xml_deu, el);
 			reporter.clear();
 			assertEq(xml_eng, xd.xtranslate(xml_deu, "deu", "eng", reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			xd = xp.createXDDocument("town");
 			xd.setLexiconLanguage("deu");
 			XComponent xc = parseXC(xd, xml_deu, null, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(xml_deu, xc.toXml());
 			assertEq("Nonehill", SUtils.getValueFromGetter(xc,"getName"));
 		} catch (Exception ex) {fail(ex);}

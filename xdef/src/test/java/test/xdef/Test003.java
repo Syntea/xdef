@@ -156,12 +156,12 @@ public final class Test003 extends XDTester {
 			xp = compile(dataDir + "TestChkParser1_1.xdef");
 			xd = xp.createXDDocument("CKP");
 			xd.xparse(new File(dataDir + "TestChkParser1_1.xml"), reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 		} catch(Exception ex) {fail(ex);}
 		try {// X-definition referred from XML
 			reporter.clear();
 			XDFactory.xparse(dataDir + "TestChkParser1.xml", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 		} catch(Exception ex) {fail(ex);}
 		try {
 			String defFile = dataDir + "SouborD1A_.xdef";
@@ -268,11 +268,11 @@ public final class Test003 extends XDTester {
 			String[] p2 = new String[] {"AA", "AB", "AC"}; // source names
 			xp = XDFactory.compileXD(null, p1, p2);
 			assertEq(xml = "<A/>", parse(xp, "A", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(xml = "<B/>", parse(xp, "B", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 			assertEq(xml = "<C/>", parse(xp, "C", xml, reporter));
-			assertNoErrors(reporter);
+			assertNoErrorwarnings(reporter);
 		} catch (Exception ex) {fail(ex);}
 
 		resetTester();
