@@ -52,7 +52,7 @@ public class TestXon extends XDTester {
 			xd = xp.createXDDocument();
 			y = xd.jvalidate(el, reporter);
 			if (reporter.errorWarnings()) {
-				return "** 1 **\n" 
+				return "** 1 **\n"
 					+ KXmlUtils.nodeToString(el, true) + "\n" + reporter;
 			}
 			reporter.clear();

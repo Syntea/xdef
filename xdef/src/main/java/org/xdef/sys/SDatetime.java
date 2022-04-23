@@ -199,6 +199,46 @@ public class SDatetime extends XMLGregorianCalendar
 		setOriginalValues();
 	}
 
+	/** Create SDatetime instance from SDatetime object.
+	 * @param x SDatetime object from which SDatetime object will be created.
+	 * @return SDatetime new instance created from SDatetime object.
+	 */
+	public final static SDatetime createFrom(SDatetime x) {
+		return x == null ? null : new SDatetime(x);
+	}
+
+	/** Create SDatetime instance from Date object.
+	 * @param x Date object from which SDatetime object will be created.
+	 * @return SDatetime new instance created from Date object.
+	 */
+	public final static SDatetime createFrom(Date x) {
+		return x == null ? null : new SDatetime(x);
+	}
+
+	/** Create SDatetime instance from Calendar object.
+	 * @param x Calendar object from which SDatetime object will be created.
+	 * @return SDatetime new instance created from Calendar object.
+	 */
+	public final static SDatetime createFrom(Calendar x) {
+		return x == null ? null : new SDatetime(x);
+	}
+
+	/** Create SDatetime instance from Timestamp object.
+	 * @param x Timestamp object from which SDatetime object will be created.
+	 * @return SDatetime new instance created from Timestamp object.
+	 */
+	public final static SDatetime createFrom(Timestamp x) {
+		return x == null ? null : new SDatetime(x);
+	}
+
+	/** Create SDatetime instance from String.
+	 * @param x String from which SDatetime object will be created.
+	 * @return SDatetime new instance created from String.
+	 */
+	public final static SDatetime createFrom(String x) {
+		return x == null ? null : new SDatetime(x);
+	}
+
 	/** Check parsed date.
 	 * @return true if parsed date is OK.
 	 */

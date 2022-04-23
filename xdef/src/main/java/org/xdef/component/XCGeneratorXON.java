@@ -602,7 +602,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 				template =
 (_genJavadoc ? "\t/** Set value of textnode of &{d}.*/"+LN : "")+
 "\tpublic void set$&{name}(&{typ} x)"+
-"{set$&{name}(x==null?null:new org.xdef.sys.SDatetime(x));}"+LN;
+"{set$&{name}(org.xdef.sys.SDatetime.createFrom(x));}"+LN;
 				setters.append(modify(template,
 					"&{name}", name,
 					"&{d}", xe.getName(),
