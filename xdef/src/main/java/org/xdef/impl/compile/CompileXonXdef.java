@@ -370,6 +370,12 @@ public class CompileXonXdef extends StringParser {
 				if (!eos()) {
 					setXDAttr(ee, "script",
 						new SBuffer(getUnparsedBufferPart(), getPosition()));
+					XOccurrence x = readOccurrence();
+					if (x != null && x.maxOccurs() > 1) {
+						//Specification of occurence of &{0} group
+						// can not be higher then 1
+						error(XDEF.XDEF252, XonNames.ONEOF_NAME);
+					}
 				}
 			} else if (map.size() > 1) {
 				e = genJElement(parent, "map", map.getPosition());
@@ -428,23 +434,23 @@ public class CompileXonXdef extends StringParser {
 				setSourceBuffer(((JValue) o).getSBuffer());
 				isSpacesOrComments();
 				if (isToken(XonNames.ONEOF_NAME)) {
-					e = genXDElement(parent,
-						"choice", ((JValue) jo).getPosition());
+					e = genXDElement(
+						parent, "choice", ((JValue) jo).getPosition());
 					skipSemiconsBlanksAndComments();
 					String s = getUnparsedBufferPart().trim();
 					if (!s.isEmpty()) {
 						if (!s.endsWith(";")) {
 							s += ";";
 						}
+						setXDAttr(
+							parent, "script", new SBuffer(s,getPosition()));
 						XOccurrence x = readOccurrence(new SBuffer(s));
-						if (x != null && x.isOptional()
+						if (x != null && x.minOccurs() == 0
 							&& "map".equals(parent.getLocalName())) {
-							// set optional to map element
-							setXDAttr(e, "script", new SBuffer(x.toString(),
-								((JValue) jo).getSBuffer()));
+							// set optional occurrence to choice model
+							setXDAttr(
+								e, "script", new SBuffer("?", getPosition()));
 						}
-						setXDAttr(parent, "script", new SBuffer(s,
-							((JValue) jo).getSBuffer()));
 					}
 				} else {
 					String s = getUnparsedBufferPart().trim();
