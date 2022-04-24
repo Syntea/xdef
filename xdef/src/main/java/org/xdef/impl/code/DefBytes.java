@@ -3,6 +3,7 @@ package org.xdef.impl.code;
 import org.xdef.msg.SYS;
 import org.xdef.sys.SException;
 import org.xdef.sys.SIllegalArgumentException;
+import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
 import org.xdef.XDBytes;
 import org.xdef.XDValue;
@@ -36,19 +37,20 @@ public final class DefBytes extends XDValueAbstract implements XDBytes {
 		_value = value;
 		_format = false;
 	}
+
 	/** Creates a new instance of DefBytes
-	 * @param value The initial value of object.
+	 * @param value initial value of object.
+	 * @param format true if this object was created from base64, false if hex.
 	 */
 	public DefBytes(final byte[] value, final boolean format) {
 		_value = value;
 		_format = format;
 	}
 
-	/** Creates a new instance of DefBytes from string in Base64 format
-	 * @param s The string with encoded Base64 data.
-	 * @return DefBytes object.
-	 * @throws SException if an error occurs. 	 * @return 0 .. base64 or 1 hex.
-
+	/** Creates new instance of DefBytes from a string in Base64 format.
+	 * @param s string with encoded Base64 data.
+	 * @return parsed DefBytes object.
+	 * @throws SException if an error occurs.
 	 */
 	public static DefBytes parseBase64(final String s) throws SException {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -56,9 +58,9 @@ public final class DefBytes extends XDValueAbstract implements XDBytes {
 		return new DefBytes(out.toByteArray(), true);
 	}
 
-	/** Creates a new instance of DefBytes from string in hexadecimal format
-	 * @param s The string with encoded hexadecimal data.
-	 * @return DefBytes object.
+	/** Creates a new instance of DefBytes from a string in hexadecimal format.
+	 * @param s string with encoded hexadecimal data.
+	 * @return parsed DefBytes object.
 	 * @throws SException if an error occurs.
 	 */
 	public static DefBytes parseHex(final String s) throws SException {
@@ -67,17 +69,14 @@ public final class DefBytes extends XDValueAbstract implements XDBytes {
 		return new DefBytes(out.toByteArray(), false);
 	}
 
-	/** Get byte from given position (as positive integer). If position is out
+	/** Get byte from given position (as a positive integer). If position is out
 	 * of limits the method returns -1.
-	 * @param pos The position (index).
-	 * @return integer value of byte from given position
+	 * @param pos position (index).
+	 * @return integer value of byte from given position or -1.
 	 */
 	public int getAt(int pos) {
-		if (pos >= 0 && _value != null && pos < _value.length) {
-			byte b = _value[pos];
-			return b < 0 ? 256 + b : b;
-		}
-		return -1;
+		return _value != null && pos >= 0 && pos < _value.length
+			? 0x000000ff & _value[pos] : -1;
 	}
 
 	/** Get size of byte array.
@@ -91,7 +90,7 @@ public final class DefBytes extends XDValueAbstract implements XDBytes {
 	 * @param b inserted byte.
 	 */
 	public void setAt(final int pos, final int b) {
-		if (pos >= 0 && _value != null && pos < _value.length) {
+		if (_value != null && pos >= 0 && pos < _value.length) {
 			_value[pos] = (byte) b;
 		}
 	}
@@ -103,63 +102,60 @@ public final class DefBytes extends XDValueAbstract implements XDBytes {
 	 * @param b added byte.
 	 */
 	public void add(final int b) {
-		if (_value == null) {
+		if (_value == null || _value.length == 0) {
 			_value = new byte[] {(byte) b};
 		} else {
 			int len = _value.length;
-			if (len > 0) {
-				byte[] old = _value;
-				_value = new byte[len + 1];
-				System.arraycopy(old, 0, _value, 0, len);
-			} else {
-				_value = new byte[1];
-			}
+			byte[] old = _value;
+			_value = new byte[len + 1];
+			System.arraycopy(old, 0, _value, 0, len);
 			_value[len] = (byte) b;
 		}
 	}
-
-	/** Insert byte before given position. If position is out of limits the
-	 * method does nothing.
-	 * @param pos The position (index).
+	/** Insert byte before given position. If position is out of bounds of the
+	 * byte array the SRuntimeException is thrown.
+	 * @param pos position (index).
 	 * @param b inserted byte.
+	 * @throws SRuntimeException if position is out of bounds.
 	 */
 	public void insertBefore(final int pos, final int b) {
 		int len;
-		if (pos < 0 || _value == null || pos > (len = _value.length)) {
+		if (_value != null && pos >= 0 && pos <= (len = _value.length)) {
+			if (pos == 0 && len == 0) {
+				_value = new byte[] {(byte) b};
+			} else {
+				byte[] old = _value;
+				_value = new byte[len + 1];
+				if (pos == len) {
+					if (len > 0) {
+						System.arraycopy(old, 0, _value, 0, len);
+					}
+					_value[len] = (byte) b;
+				} else if (pos == 0) {
+					System.arraycopy(old, 0, _value, 1, len);
+					_value[0] = (byte) b;
+				} else {
+					System.arraycopy(old, 0, _value, 0, pos);
+					System.arraycopy(old, pos, _value, pos + 1, len - pos);
+					_value[pos] = (byte) b;
+				}
+			}
 			return;
 		}
-		byte[] old = _value;
-		_value = new byte[len + 1];
-		if (pos == len) {
-			if (len > 0) {
-				System.arraycopy(old, 0, _value, 0, len);
-			}
-			_value[len] = (byte) b;
-		} else if (pos == 0) {
-			System.arraycopy(old, 0, _value, 1, len);
-			_value[0] = (byte) b;
-		} else {
-			System.arraycopy(old, 0, _value, 0, pos);
-			System.arraycopy(old, pos, _value, pos + 1, len - pos);
-			_value[pos] = (byte) b;
-		}
+		throw new SRuntimeException(SYS.SYS080);//Index out of array
 	}
 
-	/** Remove byte(s) from given position. Ignore positions out of limits.
-	 * @param pos The position (index).
-	 * @param size number of removed bytes.
+	/** Remove byte(s) from given position. If size exceeds end of byte array
+	 * those bytes are ignored.
+	 * @param pos position (index).
+	 * @param size number of bytes to be removed.
 	 */
 	public void remove(final int pos, final int size) {
 		int len;
 		if (size<=0 || pos<0 || _value==null || pos>=(len= _value.length)) {
 			return;
 		}
-		int csize; //corrected size
-		if (pos + size > len) {
-			csize = len - pos;
-		} else {
-			csize = size;
-		}
+		int csize = pos + size > len ? len - pos : size; //corrected size
 		int newLen = len - csize; //new length of data
 		byte[] old = _value;
 		_value = new byte[newLen];
