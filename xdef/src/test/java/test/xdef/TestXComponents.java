@@ -557,13 +557,12 @@ public final class TestXComponents extends XDTester {
 "<xd:def xmlns:xd='" + _xdNS + "' root=\"test\">\n" +
 "<xd:component>%class test.xdef.MyTestX_OneOfb %link test</xd:component>\n"+
 "<xd:xon name=\"test\">\n" +
-"{ a=[ $oneOf,\n" +
-"      \"date(); finally outln('date')\",\n" +
-"      \"ipAddr(); finally outln('ipAddr')\",\n" +
-"      [$script=\"finally outln('[...]')\", \"*int()\"],\n" +
-"      {$script=\"finally outln('{ }')\",\n"+
-"         x=\"int()\",y=\"string()\",z=[\"* int()\"]},\n" +
-"      \"string(); finally outln('string')\" \n" +
+"{ a=[ $oneOf=\"?\",\n" +
+"       \"date(); finally outln('date')\", \n" +
+"       \"ipAddr(); finally outln('ipAddr')\", \n" +
+"       [$script=\"finally outln('[...]')\",\"*int()\"], \n" +
+"       {$script=\"finally outln('{ . }')\",x=\"? int()\",y=\"? string()\"},\n"+
+"       \"string(); finally outln('string')\" \n" +
 "  ]\n" +
 "}\n" +
 "</xd:xon>\n" +
@@ -575,18 +574,46 @@ public final class TestXComponents extends XDTester {
 			strw = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(strw, false));
 			o = xd.jparse(s, reporter);
-			assertNoErrorwarningsAndClear(reporter);
 			assertEq("date\n", strw.toString());
 			xd = xp.createXDDocument();
 			strw = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(strw, false));
 			xc = xd.jparseXComponent(s, null, reporter);
-			assertNoErrorwarningsAndClear(reporter);
 			assertEq("date\n", strw.toString());
+			o = SUtils.getValueFromGetter(xc, "getjx$item");
+			SUtils.setValueToSetter(o, "setvalue", new SDatetime("2022-04-15"));
+			assertEq(new SDatetime("2022-04-15"), ((Map)xc.toXon()).get("a"));
+			s = "{a=\"202.2.4.10\"}";
+			xd = xp.createXDDocument();
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			o = xd.jparse(s, reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			assertEq("ipAddr\n", strw.toString());
+			xd = xp.createXDDocument();
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			xc = xd.jparseXComponent(s, null, reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			assertEq("ipAddr\n", strw.toString());
 			assertTrue(XonUtils.xonEqual(o, xc.toXon()));
-			assertEq(new SDatetime("2022-04-10"),
-				SUtils.getValueFromGetter(xc, "get$a"));
-			s = "{a=[1, 2]}";
+			s = "{a={x=1, y=\" ab\tcd \"}}";
+			xd = xp.createXDDocument();
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			o = xd.jparse(s, reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			assertEq("{ . }\n", strw.toString());
+			assertEq(1,((Map)((Map) o).get("a")).get("x"));
+			xd = xp.createXDDocument();
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			xc = xd.jparseXComponent(s, null, reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			assertEq("{ . }\n", strw.toString());
+			assertEq(" ab\tcd ",((Map)((Map) xc.toXon()).get("a")).get("y"));
+			assertTrue(XonUtils.xonEqual(o, xc.toXon()));
+			s = "{a=[1,2]}";
 			xd = xp.createXDDocument();
 			strw = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(strw, false));
@@ -600,41 +627,29 @@ public final class TestXComponents extends XDTester {
 			assertNoErrorwarningsAndClear(reporter);
 			assertEq("[...]\n", strw.toString());
 			assertTrue(XonUtils.xonEqual(o, xc.toXon()));
-			o = SUtils.getValueFromGetter(xc, "get$a");
-			if (o instanceof java.util.List) {
-				assertEq(2, ((java.util.List) o).size());
-			} else {
-				fail();
-			}
-			s = "{a={x=1, y=\"yyy\", z=[3,4]}}";
+			s = "{a={}}";
 			xd = xp.createXDDocument();
 			strw = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(strw, false));
 			o = xd.jparse(s, reporter);
 			assertNoErrorwarningsAndClear(reporter);
-			assertEq("{ }\n", strw.toString());
+			assertEq("{ . }\n", strw.toString());
 			xd = xp.createXDDocument();
 			strw = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(strw, false));
 			xc = xd.jparseXComponent(s, null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
+			assertEq("{ . }\n", strw.toString());
 			assertTrue(XonUtils.xonEqual(o, xc.toXon()));
-			assertEq("{ }\n", strw.toString());
-			o = SUtils.getValueFromGetter(xc, "get$a");
-			if (o instanceof Map) {
-				assertEq(1,((Map) o).get("x"));
-				assertEq("yyy",((Map) o).get("y"));
-				o = ((Map) o).get("z");
-				assertTrue(o instanceof java.util.List
-					&& ((java.util.List) o).size() == 2, "" + o);
-			}
 			s = "{a=null}";
 			xd = xp.createXDDocument();
 			strw = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(strw, false));
 			o = xd.jparse(s, reporter);
 			assertNoErrorwarningsAndClear(reporter);
-			assertEq("date\n", strw.toString());
+			assertEq("date\n", strw.toString()); //????, however it is OK
+			assertNull(((Map) o).get("a"));
+			assertTrue(((Map) o).containsKey("a"));
 			xd = xp.createXDDocument();
 			strw = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(strw, false));
@@ -642,6 +657,26 @@ public final class TestXComponents extends XDTester {
 			assertNoErrorwarningsAndClear(reporter);
 			assertEq("date\n", strw.toString());
 			assertNull(SUtils.getValueFromGetter(xc, "get$a"));
+			assertNull(((Map) xc.toXon()).get("a"));
+			assertTrue(((Map) xc.toXon()).containsKey("a"));
+			s = "{}";
+			xd = xp.createXDDocument();
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			o = xd.jparse(s, reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			assertEq("", strw.toString()); //????
+			assertNull(((Map) o).get("a"));
+			assertFalse(((Map) o).containsKey("a"));
+			xd = xp.createXDDocument();
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			xc = xd.jparseXComponent(s, null, reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			assertEq("", strw.toString());
+			assertNull(SUtils.getValueFromGetter(xc, "get$a"));
+			assertNull(((Map) xc.toXon()).get("a"));
+			assertFalse(((Map) xc.toXon()).containsKey("a"));
 		} catch (Exception ex) {fail(ex);}
 		reporter.clear();
 		clearTempDir();

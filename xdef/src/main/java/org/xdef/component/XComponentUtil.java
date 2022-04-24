@@ -337,6 +337,7 @@ public class XComponentUtil {
 		Class<?> cls = xc.getClass();
 		try {
 			Method m = cls.getDeclaredMethod("get" + XonNames.X_VALUEATTR);
+			m.setAccessible(true);
 			return toXonObject(m.invoke(xc));
 		} catch (Exception ex) {
 			new RuntimeException("Can't access value", ex);
@@ -395,12 +396,14 @@ public class XComponentUtil {
 				o = null;
 				String key = null;
 				try {
+					x.setAccessible(true);
 					o = x.invoke(xc);
 					if (o == null) {
 						continue;
 					}
 					Method m = o.getClass().getDeclaredMethod(
 						"get" + XonNames.X_KEYATTR);
+					m.setAccessible(true);
 					key = XonTools.xmlToJName((String) m.invoke(o));
 					if (o instanceof XComponent) {
 						XComponent xc1 = (XComponent) o;
@@ -414,6 +417,7 @@ public class XComponentUtil {
 			} else if (methodName.startsWith("listOf$")) {
 				o = null;
 				try {
+					x.setAccessible(true);
 					o = x.invoke(xc);
 					if (o == null) {
 						continue;
@@ -429,6 +433,7 @@ public class XComponentUtil {
 				o = null;
 				String key = null;
 				try {
+					x.setAccessible(true);
 					o = x.invoke(xc);
 					if (o == null) {
 						continue;
@@ -436,6 +441,7 @@ public class XComponentUtil {
 					if (o instanceof XComponent) {
 						Method m = o.getClass().getDeclaredMethod(
 							"get" + XonNames.X_KEYATTR);
+						m.setAccessible(true);
 						key = XonTools.xmlToJName((String) m.invoke(o));
 						XComponent xc1 = (XComponent) o;
 						result.put(key, xc1.toXon());
@@ -473,6 +479,7 @@ public class XComponentUtil {
 				&& x.getParameterTypes().length == 0) {
 				Object o = null;
 				try {
+					x.setAccessible(true);
 					o = x.invoke(xc);
 				} catch (Exception ex) {
 					new RuntimeException("Can't access getter: " + x.getName());
@@ -485,6 +492,7 @@ public class XComponentUtil {
 							Class<?> cls1 = o.getClass();
 							Method m = cls1.getDeclaredMethod(
 								"get" + XonNames.X_KEYATTR);
+							m.setAccessible(true);
 							key = XonTools.xmlToJName((String) m.invoke(o));
 						} catch (Exception ex) {
 							new RuntimeException("Not key", ex);
@@ -539,9 +547,10 @@ public class XComponentUtil {
 					textIndex++;
 					try {
 						Method m = cls.getDeclaredMethod(mName);
+						m.setAccessible(true);
 						Object o = m.invoke(xc);
 						if (o instanceof String) {
-							o = toXonObject(m.invoke(xc));
+							o = toXonObject(o);
 							if (o instanceof List && !((List) o).isEmpty()) {
 								for (Object y: (List) o) {
 									result.add(y);
@@ -569,18 +578,19 @@ public class XComponentUtil {
 		Map<String, Object> result = new LinkedHashMap<String, Object>();
 		Class<?> cls = xc.getClass();
 		Method[] methods = cls.getDeclaredMethods();
-		for (Method x: methods) {
-			String name = x.getName();
+		for (Method m: methods) {
+			String name = m.getName();
 			if (name.startsWith("get")
-				&& x.getParameterTypes().length == 0) {
+				&& m.getParameterTypes().length == 0) {
 				if (name.startsWith("get$")) {
 					continue;
 				}
 				Object o = null;
 				try {
-					o = x.invoke(xc);
+					m.setAccessible(true);
+					o = m.invoke(xc);
 				} catch (Exception ex) {
-					new RuntimeException("Can't access getter: " + x.getName());
+					new RuntimeException("Can't access getter: " + m.getName());
 				}
 				if (!(o instanceof XComponent || o instanceof List
 					|| o instanceof Map)) {
@@ -613,9 +623,10 @@ public class XComponentUtil {
 					textIndex++;
 					try {
 						Method m = cls.getDeclaredMethod(mName);
+						m.setAccessible(true);
 						Object o = m.invoke(xc);
 						if (o instanceof String) {
-							o = toXonObject(m.invoke(xc));
+							o = toXonObject(o);
 							if (o instanceof List && !((List) o).isEmpty()) {
 								for (Object y: (List) o) {
 									body.add(y);

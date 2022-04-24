@@ -433,8 +433,18 @@ public class CompileXonXdef extends StringParser {
 					skipSemiconsBlanksAndComments();
 					String s = getUnparsedBufferPart().trim();
 					if (!s.isEmpty()) {
-						setXDAttr(parent, "script",
-							new SBuffer(s + ';', ((JValue) jo).getSBuffer()));
+						if (!s.endsWith(";")) {
+							s += ";";
+						}
+						XOccurrence x = readOccurrence(new SBuffer(s));
+						if (x != null && x.isOptional()
+							&& "map".equals(parent.getLocalName())) {
+							// set optional to map element
+							setXDAttr(e, "script", new SBuffer(x.toString(),
+								((JValue) jo).getSBuffer()));
+						}
+						setXDAttr(parent, "script", new SBuffer(s,
+							((JValue) jo).getSBuffer()));
 					}
 				} else {
 					String s = getUnparsedBufferPart().trim();
