@@ -126,11 +126,22 @@ public class CheckReportTables {
 	 * @throws Exception if an error occurs.
 	 */
 	public static void main(String... args) throws Exception {
-		String dir = new File("..").getCanonicalPath().replace('\\', '/');
-		if (!dir.endsWith("/")) {
-			dir += '/';
+		String dir;
+		try {
+			File baseDir = args == null || args.length == 0
+				? new File("../xdef") : new File(args[0]);
+			if (!baseDir.exists() || !baseDir.isDirectory()) {
+				throw new RuntimeException("Base is not directory.");
+			}
+			dir = baseDir.getCanonicalPath().replace('\\', '/');
+			if (!dir.endsWith("/")) {
+				dir += '/';
+			}
+		} catch (Exception ex) {
+			throw new RuntimeException("Can't find project base directory");
 		}
-		dir += "xdef/src/main/java/";
+		
+		dir += "src/main/java/";
 		System.out.println(dir);
 		String[] dirs = getJavaDirectiories(
 			new String[] {dir + "org"},	new String[] {"org/xdef/msg"});

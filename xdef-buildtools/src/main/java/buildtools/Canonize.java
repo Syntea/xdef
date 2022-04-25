@@ -33,7 +33,8 @@ public class Canonize {
 	 * according to value of arguments <code>_hdr</code> and <code>_tail</code>.
 	 * If the argument <code>dirTree</code> is true, do it with all specified
 	 * files in child directories.
-	 * @param filename The name of file (wildcards are possible).
+	 * @param projectBase file name of project directory.
+	 * @param filename name of file (wildcards are possible).
 	 * @param dirTree If <code>true<code> then dirTree process in child
 	 * subdirectories.
 	 * @param hdr If <code>true</code> then leading standard copyright
@@ -49,10 +50,11 @@ public class Canonize {
 	 * <code>java</code> (under which are projects). If the value of this
 	 * argument is <code>false</code> then the end source remains unchanged.
 	 */
-	private static void doSources(final String filename,
+	private static void doSources(final String projectBase,
+		final String filename,
 		final boolean dirTree) {
 		try {
-			File f = new File(filename).getCanonicalFile();
+			File f = new File(projectBase, filename).getCanonicalFile();
 			if (!f.exists() || !f.isDirectory()) {
 				System.err.println(f.getAbsolutePath()
 					+ " not exists or it is not directory");
@@ -100,11 +102,13 @@ public class Canonize {
 	}
 
 	/** Update release date in the file changelog.md.
+	 * @param projectBase base project directory.
 	 * @param date actual date.
 	 */
-	private static void updateDateInChangeLog(final String date) {
+	private static void updateDateInChangeLog(final String projectBase,
+		final String date) {
 		try {
-			File f = new File("../xdef/changelog.md");
+			File f = new File(projectBase, "changelog.md");
 			Reader fr = new InputStreamReader(new FileInputStream(f),
 				Charset.forName("UTF-8"));
 			BufferedReader bufrdr = new BufferedReader(fr);
@@ -144,33 +148,36 @@ public class Canonize {
 	 * @param args array with command line parameters (no parameters used).
 	 */
 	public static void main(String... args) {
-		ResetPreprocessorSwitches.main();
-		_hdr = false;
-		_tail = false;
 		String projectBase;
 		try {
-			projectBase = new File(".").getCanonicalPath().replace('\\', '/');
+			File baseDir = args == null || args.length == 0
+				? new File("../xdef") : new File(args[0]);
+			if (!baseDir.exists() || !baseDir.isDirectory()) {
+				throw new RuntimeException("Base is not directory.");
+			}
+			projectBase = baseDir.getCanonicalPath().replace('\\', '/');
 		} catch (Exception ex) {
 			throw new RuntimeException("Can't find project base directory");
 		}
+		ResetPreprocessorSwitches.main(projectBase);
+		_hdr = false;
+		_tail = false;
 		int i = projectBase.lastIndexOf('/');
 		if (i < 0) {
 			throw new RuntimeException("Unknown build structure");
 		}
 		// Canonize sources: replace leading spaces with tabs and remove
 		// trailing white spaces.
-		doSources("../xdef/src/main/java", true);
-		doSources("../xdef/src/main/resources/org", true);
-		doSources("../xdef/src/test/java", true);
-
-		doSources("src/main/java/buildtools", true); //this project
+		doSources(projectBase, "/src/main/java", true);
+		doSources(projectBase, "/src/main/resources/org", true);
+		doSources(projectBase, "/src/test/java", true);
 
 		// register report messages
-		GenReportTables.main();
+		GenReportTables.main(projectBase);
 
 		// update date in files changelog.md and in pom.xml
 		String date = String.format("%tF", new Date()); // actual date
-		updateDateInChangeLog(date);
+		updateDateInChangeLog(projectBase, date);
 //		updateDateInPomXml(date);
 	}
 }
