@@ -241,14 +241,10 @@ final class CompileXScript extends CompileStatement {
 				continue;
 			}
 			if (isOccurrence(occ)) {
-				if (occ.maxOccurs() > 1 && !sc.getName().startsWith("$")) {
-					//xd:attr or xd:text
-					if (occ.isIgnore()) {
-						occ.setMaxOccur(1);
-					} else {
-						//Occurrence of attribute can't be more then one
-						error (XDEF.XDEF262);
-					}
+				if (!occ.isIgnore() && occ.maxOccurs() > 1
+					&& !sc.getName().startsWith("$")) {
+					//Occurrence of attribute or text value can't be more then 1
+					error (XDEF.XDEF262);
 				}
 				compileTypeCheck(sc);
 				continue;

@@ -76,7 +76,7 @@ public class XData extends XCodeDescriptor
 	 */
 	public final XMDefinition getXMDefinition() {
 		String s = getXDPosition();
-		int ndx = s.indexOf("#");
+		int ndx = s == null ? -1 : s.indexOf("#");
 		return getXDPool().getXMDefinition(ndx >= 0 ? s.substring(0, ndx) : s);
 	}
 

@@ -958,7 +958,7 @@ public abstract class STester {
 			c.setAccessible(true);
 			return (STester) c.newInstance(new Object[0]);
 		} catch (Exception ex) {
-			throw new RuntimeException("Can't invoke: new " + className + "()");
+			throw new RuntimeException("Can't invoke: new "+className+"()",ex);
 		}
 	}
 	private static void cancel(final String msg) {
