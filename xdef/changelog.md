@@ -1,9 +1,9 @@
 # Version ${version}, release-date ${release.date}
 
 # Version 41.0.8, release-date 2022-04-26
-. added method `toXon()` the the interface `org.xdef.component.XComponent`.
-. added generation of named items with `$oneOf` option in X-components.
-. fixed bug in XON generation in models with `$oneOf` option.
+* added method `toXon()` the the interface `org.xdef.component.XComponent`.
+* added generation of named items with `$oneOf` option in X-components.
+* fixed bug in XON generation in models with `$oneOf` option.
 
 # Version 41.0.7, release-date 2022-04-11
 * fixed bug in method `XComponent.toXml()' when parsed value of byte array
