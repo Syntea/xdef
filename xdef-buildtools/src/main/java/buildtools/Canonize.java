@@ -20,7 +20,9 @@ import java.util.Date;
 public class Canonize {
 
 	private Canonize() {}
-
+	
+	/** Charset of sources. */
+	static final String JAVA_SOURCE_CHARSET = "UTF-8";
 	/** if true the header (copyright) info text is generated from the file. */
 	static boolean _hdr = false;
 	/** if true the _tail (modification) info text is generated from the file.*/
@@ -75,27 +77,27 @@ public class Canonize {
 				dirTree,
 				true,
 				4,
-				hdrTemplate, tailTemplate, Constants.JAVA_SOURCE_CHARSET);
+				hdrTemplate, tailTemplate, JAVA_SOURCE_CHARSET);
 //			CanonizeSource.canonize(home + "*.xml",
 //				dirTree,
 //				false,
 //				-1,
-//				null, null, Constants.JAVA_SOURCE_CHARSET);
+//				null, null, JAVA_SOURCE_CHARSET);
 //			CanonizeSource.canonize(home + "*.html",
 //				dirTree,
 //				false,
 //				-1,
-//				null, null, Constants.JAVA_SOURCE_CHARSET);
+//				null, null, JAVA_SOURCE_CHARSET);
 //			CanonizeSource.canonize(home + "*.xdef",
 //				dirTree,
 //				false,
 //				-1,
-//				null, null, Constants.JAVA_SOURCE_CHARSET);
+//				null, null, JAVA_SOURCE_CHARSET);
 			CanonizeSource.canonize(home + "*.properties",
 				dirTree,
 				false,
 				-1,
-				null, null, Constants.JAVA_SOURCE_CHARSET);
+				null, null, JAVA_SOURCE_CHARSET);
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		}
