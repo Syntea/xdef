@@ -6,7 +6,7 @@
 # Version 41.0.8, release-date 2022-04-26
 . added method `toXon()` the the interface `org.xdef.component.XComponent`.
 . added generation of named items with `$oneOf` option in X-components.
-. fixed bug in XON generation in models with `$oneOf` option.
+. fixed bug in XON generation of models with `$oneOf` option.
 
 # Version 41.0.7, release-date 2022-04-11
 * fixed bug in method `XComponent.toXml()' when parsed value of byte array
@@ -14,7 +14,7 @@
   (not to hexadecimal).
 * corrected conversion `XonUtils.xonToXmlXD(xon)` if in an array is the first
   item an empty map.
-* fixed bug in xon parser in map a duplicated name of value pair was not reported.
+* fixed bug in XON parser in map with duplicated name pair not reported error.
 
 # Version 41.0.6, release-date 2022-04-06
 * fixed bug in `org.xdef.util.GUIEditor` if X-definition is not a valid XML.
