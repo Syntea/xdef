@@ -301,7 +301,7 @@ public abstract class STester {
 	 * @param msg Text of error message.
 	 */
 	public final void putErrInfo(final String msg) {
-		String text = "[ERROR] " + _name + 
+		String text = "[ERROR] " + _name +
 			(msg != null && !msg.trim().isEmpty() ? '\n' + msg.trim() : "");
 		_errors++;
 		// in Java 1.6 is not avalable the method Throwable.getStackTrace()

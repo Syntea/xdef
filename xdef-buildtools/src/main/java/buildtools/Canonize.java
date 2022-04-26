@@ -18,15 +18,15 @@ import java.util.Date;
  * @author  Vaclav Trojan
  */
 public class Canonize {
-
-	private Canonize() {}
-	
 	/** Charset of sources. */
 	static final String JAVA_SOURCE_CHARSET = "UTF-8";
 	/** if true the header (copyright) info text is generated from the file. */
 	static boolean _hdr = false;
 	/** if true the _tail (modification) info text is generated from the file.*/
 	static boolean _tail = false;
+
+	/** just prevent user to create an instance of this class. */
+	private Canonize() {}
 
 	/** Canonize sources. Remove all trailing white spaces on all lines and
 	 * handle with leading spaces an all lines according to argument

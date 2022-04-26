@@ -138,7 +138,7 @@ public interface XDEF {
 	public static final long XDEF258 = 31159025729L;
 	/** Text value is not allowed here&amp;{#SYS000} */
 	public static final long XDEF260 = 31159025730L;
-	/** Occurrence of attribute or text value can't be more then one&amp;{#SYS000} */
+	/** Occurrence maximum of attribute or text value can't be higher then one&amp;{#SYS000} */
 	public static final long XDEF262 = 31159025731L;
 	/** Attribute 'empty' is allowed only in the group 'xd:mixed'&amp;{#SYS000} */
 	public static final long XDEF263 = 31159025732L;
