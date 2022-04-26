@@ -291,7 +291,7 @@ public abstract class STester {
 	 */
 	public final void putErrInfo(final Throwable ex) {
 		putErrInfo(ex.toString());
-		String s = printThrowable(ex);
+		String s = "[ERROR] " + printThrowable(ex);
 		int i = s.indexOf("\n\tat ");
 		printErr(s.substring(i+1));
 	}
@@ -301,7 +301,7 @@ public abstract class STester {
 	 * @param msg Text of error message.
 	 */
 	public final void putErrInfo(final String msg) {
-		String text = _name + " fail" +
+		String text = "[ERROR] " + _name + 
 			(msg != null && !msg.trim().isEmpty() ? '\n' + msg.trim() : "");
 		_errors++;
 		// in Java 1.6 is not avalable the method Throwable.getStackTrace()
@@ -928,13 +928,12 @@ public abstract class STester {
 			}
 			if (_errors == 0) {
 				flushErr();
-				printlnOut("OK " + _name
+				printlnOut("[OK] " + _name
 					+ "; time=" + new DecimalFormat("0.00").format(duration)
 					+ "s" + _resultInfo);
 			} else {
 				flushOut();
-				printlnErr(
-					"Errors in " + _name + ": " + _errors + _resultInfo);
+				printlnErr("[ERROR] in "+_name+": " + _errors + _resultInfo);
 			}
 		}
 		return _errors;
@@ -1094,15 +1093,16 @@ public abstract class STester {
 		out.flush();
 		String s;
 		if (errors > 0) {
-			s = String.valueOf(errors) + " error" + (errors > 1 ? "s": "") +
-				(info != null ? " " + info : "") +
+			s = "[ERROR] " +
+				String.valueOf(errors) + "error" + (errors > 1 ? "s": "") +
+				(info != null ? info : "") +
 				", total time: " + df.format(duration) + "s";
 			if (log != null) {
 				log.println(s);
 			}
 			err.println(s);
 		} else {
-			s = "OK " + (info != null ? " " + info : "") +
+			s = "[OK] " + (info != null ? info : "") +
 				", total time: " + df.format(duration) + "s";
 			err.flush();
 			if (log != null) {

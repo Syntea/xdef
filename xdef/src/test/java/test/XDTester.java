@@ -134,6 +134,7 @@ public abstract class XDTester extends STester {
 				_xdOfxd = XDFactory.compileXD(null,
 					"classpath://org.xdef.impl.compile.XdefOfXdef*.xdef");
 			} catch (Exception ex) {
+				ex.printStackTrace();
 				new RuntimeException("XdefOfXdef is not available", ex);
 			}
 		}
