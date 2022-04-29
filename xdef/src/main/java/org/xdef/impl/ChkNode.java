@@ -1033,6 +1033,12 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	 */
 	public XDParseResult getParseResult() {return _parseResult;}
 
+	@Override
+	/** Get XON mode.
+	 * @return XON mode or zero.
+	 */
+	public byte getXonMode() {return _xElement == null ? 0 : _xElement._xon;}
+
 ////////////////////////////////////////////////////////////////////////////////
 // Message reporting
 ////////////////////////////////////////////////////////////////////////////////

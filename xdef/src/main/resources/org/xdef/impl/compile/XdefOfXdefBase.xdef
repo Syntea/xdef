@@ -100,10 +100,10 @@ Keyword ::= "if" | "else" | "do" | "while" | "continue" | "break" | "switch"
   | "illegal" | "occurs" | "onTrue" | "onError" | "onAbsence" | "default"
   | "onExcess" | "onStartElement" | "onIllegalAttr" | "onIllegalText" | "var"
   | "onIllegalElement" | "onIllegalRoot" | "create" | "init" | "options"
-  | "ref" | "match" | "final" | "forget" | "template" | "type" | "uniqueSet"
-  | "EQ" | "NE" | "LT" | "LE" | "GT" | "GE" | "LSH" | "RSH" | "RRSH" | "AND"
-  | "OR" | "XOR" | "MOD" | "NOT" | "NEG" | "OOR" | "AAND" | "true" | "false"
-  | "implements" | "extends" | "onFalse" | "$$$script"
+  | "option" | "ref" | "match" | "final" | "forget" | "template" | "type" 
+  | "uniqueSet" | "EQ" | "NE" | "LT" | "LE" | "GT" | "GE" | "LSH" | "RSH" 
+  | "RRSH" | "AND" | "OR" | "XOR" | "MOD" | "NOT" | "NEG" | "OOR" | "AAND"
+  | "true" | "false" | "implements" | "extends" | "onFalse" | "$$$script"
   /* Note "fixed" is not the keyword since it is used also as the name of
    validation method. */
 
@@ -405,7 +405,7 @@ XdefOnIllegalRoot ::= "onIllegalRoot" S Statement
 
 XdefOnXmlError ::= "onXmlError" S Statement
 
-XdefOptions ::= "options" S XdefOptionsList
+XdefOptions ::= ("options" | "option") S XdefOptionsList
 
 XdefOptionsList ::= XdefOption (S? "," S? XdefOption)*
   /* Each option can be specified only once. */
@@ -486,7 +486,7 @@ ValueMatchSection ::= "match" S? (Expression | ExplicitCode)
 
 AttributeOptions ::= ValueOptions
 
-ValueOptions ::= "options" S? ValueOptionsList
+ValueOptions ::= ("options" | "option") S? ValueOptionsList
 
 ValueOptionsList ::= ValueOption (S? "," S? ValueOption)*
   /* Each option can be specified only once. */
@@ -544,7 +544,7 @@ ElementForgetSection ::= "forget"
 
 ElementStructureCompare ::= ("implements" | "uses") S XPosition
 
-ElementOptions ::= "options" S? ElementOptionsList
+ElementOptions ::= ("options" | "option") S? ElementOptionsList
 
 ElementOptionsList ::=  ElementOption (S?  "," S? ElementOption)*
   /* Each option can be specified only once. */

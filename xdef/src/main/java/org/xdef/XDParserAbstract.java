@@ -48,7 +48,7 @@ public abstract class XDParserAbstract extends XDValueAbstract
 	public XDParseResult check(XXNode xnode, String source) {
 		XDParseResult p = new DefParseResult(source, (XDValue) null);
 		if (xnode != null && xnode.getXMElement().getXonMode() != 0
-			&& "null".equals(p.getSourceBuffer())) { // XON mode
+			&& "null".equals(source)) { // XON mode
 			p.setParsedValue(new DefJNull(XonTools.JNULL));
 			p.setEos();
 		} else {

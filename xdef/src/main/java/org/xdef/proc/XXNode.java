@@ -341,4 +341,9 @@ public interface XXNode extends XDValue {
 	 * @param x XComponent object.
 	 */
 	public void setXComponent(XComponent x);
+
+	/** Get XON mode.
+	 * @return 0 or XON mode.
+	 */
+	public byte getXonMode();
 }

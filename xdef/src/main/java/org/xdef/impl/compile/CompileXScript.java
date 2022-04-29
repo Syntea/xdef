@@ -25,9 +25,73 @@ import org.xdef.impl.XSelector;
 import org.xdef.impl.XVariable;
 import org.xdef.model.XMNode;
 import java.util.Map;
+import static org.xdef.XDValueID.XD_ANY;
+import static org.xdef.XDValueID.XD_BIGINTEGER;
+import static org.xdef.XDValueID.XD_BOOLEAN;
+import static org.xdef.XDValueID.XD_CONTAINER;
+import static org.xdef.XDValueID.XD_DECIMAL;
+import static org.xdef.XDValueID.XD_DOUBLE;
+import static org.xdef.XDValueID.XD_ELEMENT;
+import static org.xdef.XDValueID.XD_LONG;
+import static org.xdef.XDValueID.XD_NULL;
+import static org.xdef.XDValueID.XD_PARSER;
+import static org.xdef.XDValueID.XD_PARSERESULT;
+import static org.xdef.XDValueID.XD_RESULTSET;
+import static org.xdef.XDValueID.XD_STRING;
+import static org.xdef.XDValueID.XD_VOID;
 import org.xdef.impl.XVariableTable;
 import org.xdef.impl.code.CodeS1;
+import static org.xdef.impl.code.CodeTable.CALL_OP;
+import static org.xdef.impl.code.CodeTable.INIT_NOPARAMS_OP;
+import static org.xdef.impl.code.CodeTable.LD_CONST;
+import static org.xdef.impl.code.CodeTable.PARSERESULT_MATCH;
+import static org.xdef.impl.code.CodeTable.PARSE_OP;
+import static org.xdef.impl.code.CodeTable.RETV_OP;
+import static org.xdef.impl.code.CodeTable.STOP_OP;
 import org.xdef.impl.code.DefBigInteger;
+import static org.xdef.impl.compile.XScriptParser.ASSGN_SYM;
+import static org.xdef.impl.compile.XScriptParser.BEG_SYM;
+import static org.xdef.impl.compile.XScriptParser.COLON_SYM;
+import static org.xdef.impl.compile.XScriptParser.COMMA_SYM;
+import static org.xdef.impl.compile.XScriptParser.CONSTANT_SYM;
+import static org.xdef.impl.compile.XScriptParser.CREATE_SYM;
+import static org.xdef.impl.compile.XScriptParser.DEFAULT_SYM;
+import static org.xdef.impl.compile.XScriptParser.END_SYM;
+import static org.xdef.impl.compile.XScriptParser.EXTERNAL_SYM;
+import static org.xdef.impl.compile.XScriptParser.FINALLY_SYM;
+import static org.xdef.impl.compile.XScriptParser.FINAL_SYM;
+import static org.xdef.impl.compile.XScriptParser.FIXED_SYM;
+import static org.xdef.impl.compile.XScriptParser.FORGET_SYM;
+import static org.xdef.impl.compile.XScriptParser.IDENTIFIER_SYM;
+import static org.xdef.impl.compile.XScriptParser.IMPLEMENTS_SYM;
+import static org.xdef.impl.compile.XScriptParser.INIT_SYM;
+import static org.xdef.impl.compile.XScriptParser.LPAR_SYM;
+import static org.xdef.impl.compile.XScriptParser.MATCH_SYM;
+import static org.xdef.impl.compile.XScriptParser.NOT_SYM;
+import static org.xdef.impl.compile.XScriptParser.ON_ABSENCE_SYM;
+import static org.xdef.impl.compile.XScriptParser.ON_EXCESS_SYM;
+import static org.xdef.impl.compile.XScriptParser.ON_FALSE_SYM;
+import static org.xdef.impl.compile.XScriptParser.ON_ILLEGAL_ATTR_SYM;
+import static org.xdef.impl.compile.XScriptParser.ON_ILLEGAL_ELEMENT_SYM;
+import static org.xdef.impl.compile.XScriptParser.ON_ILLEGAL_ROOT_SYM;
+import static org.xdef.impl.compile.XScriptParser.ON_ILLEGAL_TEXT_SYM;
+import static org.xdef.impl.compile.XScriptParser.ON_START_ELEMENT_SYM;
+import static org.xdef.impl.compile.XScriptParser.ON_TRUE_SYM;
+import static org.xdef.impl.compile.XScriptParser.ON_XML_ERROR_SYM;
+import static org.xdef.impl.compile.XScriptParser.OPTIONS_SYM;
+import static org.xdef.impl.compile.XScriptParser.OPTION_SYM;
+import static org.xdef.impl.compile.XScriptParser.REFERENCE_SYM;
+import static org.xdef.impl.compile.XScriptParser.REF_SYM;
+import static org.xdef.impl.compile.XScriptParser.SCRIPT_SEPARATORS;
+import static org.xdef.impl.compile.XScriptParser.SEMICOLON_SYM;
+import static org.xdef.impl.compile.XScriptParser.TEMPLATE_SYM;
+import static org.xdef.impl.compile.XScriptParser.TYPE_SYM;
+import static org.xdef.impl.compile.XScriptParser.UNDEF_SYM;
+import static org.xdef.impl.compile.XScriptParser.UNIQUE_SET_SYM;
+import static org.xdef.impl.compile.XScriptParser.USES_SYM;
+import static org.xdef.impl.compile.XScriptParser.VAR_SYM;
+import static org.xdef.impl.compile.XScriptParser.symToName;
+import static org.xdef.sys.SParser.NOCHAR;
 
 /** Compiler of XD script of headers, elements and attributes.
  * @author Vaclav Trojan
@@ -103,6 +167,7 @@ final class CompileXScript extends CompileStatement {
 			switch (sym) {
 				case SEMICOLON_SYM:
 					continue;
+				case OPTION_SYM:
 				case OPTIONS_SYM:
 					readOptions(def);
 					continue;
@@ -261,6 +326,7 @@ final class CompileXScript extends CompileStatement {
 			char sym = _sym;
 			nextSymbol();
 			switch (sym) {
+				case OPTION_SYM:
 				case OPTIONS_SYM:
 					readOptions(sc);
 					continue;
@@ -633,7 +699,7 @@ final class CompileXScript extends CompileStatement {
 					nextSymbol();
 				}
 				xel._trimText = xel._definition._trimText;
-				if (_sym == OPTIONS_SYM) {
+				if (_sym == OPTION_SYM || _sym == OPTIONS_SYM) {
 					nextSymbol();
 					readOptions(xel);
 				}
@@ -682,6 +748,7 @@ final class CompileXScript extends CompileStatement {
 					// refered
 					elementVarDeclaration(xel);
 					continue;
+				case OPTION_SYM:
 				case OPTIONS_SYM:
 					readOptions(xel);
 					continue;
