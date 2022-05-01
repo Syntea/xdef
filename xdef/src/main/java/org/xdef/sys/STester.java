@@ -1094,19 +1094,19 @@ public abstract class STester {
 		float duration = ((float)((System.currentTimeMillis() - t) / 1000.0));
 		String s;
 		out.flush();
+		err.flush();
+		log.flush();
 		if (errors > 0) {
-			s = "[ERROR] " + errors + " error" + (errors > 1 ? "s": "") +
+			s = "[FAIL] " + errors + " error" + (errors > 1 ? "s": "") +
 				(info != null ? ", " + info : "") +
 				", total time: " + df.format(duration) + "s";
 			if (log != null) {
 				log.println(s);
 				log.flush();
 			}
-			out.flush();
-			err.println(s);
-			err.flush();
+			out.println(s);
 		} else {
-			s = "[OK] " + (info != null ? ", " + info : "") +
+			s = "[OK] " + (info != null ? info + ", " : "") +
 				"total time: " + df.format(duration) + "s";
 			err.flush();
 			if (log != null) {
@@ -1114,8 +1114,8 @@ public abstract class STester {
 				log.flush();
 			}
 			out.println(s);
-			out.flush();
 		}
+		out.flush();
 		return errors;
 	}
 
