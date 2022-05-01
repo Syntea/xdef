@@ -1095,8 +1095,8 @@ public abstract class STester {
 		String s;
 		out.flush();
 		if (errors > 0) {
-			s = "[ERROR] " + errors + " error" + (errors > 1 ? "s, ": ", ") +
-				(info != null ? info : "") +
+			s = "[ERROR] " + errors + " error" + (errors > 1 ? "s": "") +
+				(info != null ? ", " + info : "") +
 				", total time: " + df.format(duration) + "s";
 			if (log != null) {
 				log.println(s);
@@ -1106,8 +1106,8 @@ public abstract class STester {
 			err.println(s);
 			err.flush();
 		} else {
-			s = "[OK] " + (info != null ? info : "") +
-				", total time: " + df.format(duration) + "s";
+			s = "[OK] " + (info != null ? ", " + info : "") +
+				"total time: " + df.format(duration) + "s";
 			err.flush();
 			if (log != null) {
 				log.println(s);
