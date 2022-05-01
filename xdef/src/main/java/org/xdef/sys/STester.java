@@ -1092,12 +1092,9 @@ public abstract class STester {
 		DecimalFormat df = new DecimalFormat("0.00");
 		df.setDecimalSeparatorAlwaysShown(true);
 		float duration = ((float)((System.currentTimeMillis() - t) / 1000.0));
-		String s;
-		out.flush();
-		err.flush();
-		log.flush();
+		String s = "[INFO] ";
 		if (errors > 0) {
-			s = "[FAIL] " + errors + " error" + (errors > 1 ? "s": "") +
+			s += errors + " error" + (errors > 1 ? "s": "") +
 				(info != null ? ", " + info : "") +
 				", total time: " + df.format(duration) + "s";
 			if (log != null) {
@@ -1106,15 +1103,17 @@ public abstract class STester {
 			}
 			out.println(s);
 		} else {
-			s = "[OK] " + (info != null ? info + ", " : "") +
+			s += "OK, " + (info != null ? info + ", " : "") +
 				"total time: " + df.format(duration) + "s";
-			err.flush();
-			if (log != null) {
-				log.println(s);
-				log.flush();
-			}
-			out.println(s);
 		}
+		out.flush();
+		err.flush();
+		log.flush();
+		if (log != null) {
+			log.println(s);
+			log.flush();
+		}
+		out.println(s);
 		out.flush();
 		return errors;
 	}
