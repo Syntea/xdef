@@ -10,9 +10,8 @@ import org.xdef.impl.code.DefDecimal;
  */
 public class XDParseJNumber extends XSParseDouble {
 	private static final String ROOTBASENAME = "jnumber";
-	public XDParseJNumber() {
-		super();
-	}
+
+	public XDParseJNumber() {super();}
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p) {
 		int pos0 = p.getIndex();

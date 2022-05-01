@@ -14,9 +14,7 @@ import org.xdef.proc.XXNode;
 public class XDParseCHKIDS extends XSParseENTITIES {
 	private static final String ROOTBASENAME = "CHKIDS";
 
-	public XDParseCHKIDS() {
-		super();
-	}
+	public XDParseCHKIDS() {super();}
 	@Override
 	public void finalCheck(final XXNode xnode, final XDParseResult result) {
 		if (xnode == null) {

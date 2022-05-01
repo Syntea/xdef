@@ -13,9 +13,7 @@ public class XSParseNegativeInteger extends XSParseInteger {
 
 	private static final String ROOTBASENAME = "negativeInteger";
 
-	public XSParseNegativeInteger() {
-		super();
-	}
+	public XSParseNegativeInteger() {super();}
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){
 		super.parseObject(xnode, p);

@@ -15,7 +15,6 @@ public class XDParseDateYMDhms extends XSParseDatetime {
 	private static final String ROOTBASENAME = "dateYMDhms";
 
 	public XDParseDateYMDhms() {super();}
-
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){
 		int pos0 = p.getIndex();

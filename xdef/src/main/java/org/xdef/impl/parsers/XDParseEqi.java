@@ -12,9 +12,8 @@ import org.xdef.sys.SRuntimeException;
  */
 public class XDParseEqi extends XDParseEq {
 	private static final String ROOTBASENAME = "eqi";
-	public XDParseEqi() {
-		super();
-	}
+
+	public XDParseEqi() {super();}
 	@Override
 	public XDParseResult check(final XXNode xnode, final String s) {
 		XDParseResult p = new DefParseResult(s);
@@ -27,7 +26,7 @@ public class XDParseEqi extends XDParseEq {
 		return p;
 	}
 	@Override
-	public void setParseSQParams(Object... param) {
+	public void setParseSQParams(final Object... param) {
 		if (param.length == 1) {
 			_param = param.toString();
 		} else {
@@ -50,7 +49,6 @@ public class XDParseEqi extends XDParseEq {
 		if (!super.equals(o) || !(o instanceof XDParseEqi) ) {
 			return false;
 		}
-		XDParseEqi x = (XDParseEqi) o;
-		return _param.equals(x._param);
+		return _param.equals(((XDParseEqi) o)._param);
 	}
 }

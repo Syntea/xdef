@@ -13,9 +13,8 @@ import org.xdef.XDContainer;
  */
 public class XDParseEnumi extends XDParseEnum {
 	private static final String ROOTBASENAME = "enumi";
-	public XDParseEnumi() {
-		super();
-	}
+
+	public XDParseEnumi() {super();}
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p) {
 		int pos = p.getIndex();

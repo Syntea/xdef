@@ -54,7 +54,7 @@ public class XSParseUnion extends XSAbstractParser {
 	@Override
 	public byte getDefaultWhiteSpace() {return WS_PRESERVE;}
 	@Override
-	public boolean addTypeParser(XDValue x) {
+	public boolean addTypeParser(final XDValue x) {
 		if (_itemTypes == null) {
 			_itemTypes = new XDParser[] {valueToParser(x)};
 			return true;
@@ -66,7 +66,7 @@ public class XSParseUnion extends XSAbstractParser {
 		return true;
 	}
 	@Override
-	public void setItem(XDValue item) { //%item
+	public void setItem(final XDValue item) { //%item
 		if (item.getItemId() == XD_CONTAINER) { // array of parsers
 			DefContainer c = (DefContainer) item;
 			for (int i = 0; i < c.getXDItemsNumber(); i++) {
@@ -92,7 +92,7 @@ public class XSParseUnion extends XSAbstractParser {
 	@Override
 	public XDValue[] getEnumeration() {return _enumeration;}
 	@Override
-	public void setEnumeration(Object[] o) {
+	public void setEnumeration(final Object[] o) {
 		if (o == null || o.length == 0) {
 			return;
 		}
@@ -104,7 +104,7 @@ public class XSParseUnion extends XSAbstractParser {
 	}
 	@Override
 	public void check(final XXNode xnode, final XDParseResult p) {
-		parse(xnode, p, true);
+		parse(xnode,p,true);
 	}
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){
@@ -173,7 +173,7 @@ public class XSParseUnion extends XSAbstractParser {
 		p.errorWithString(XDEF.XDEF809, parserName());
 	}
 	@Override
-	public void addNamedParams(XDContainer map) {
+	public void addNamedParams(final XDContainer map) {
 		map.setXDNamedItem("item", new DefContainer(_itemTypes));
 	}
 	@Override

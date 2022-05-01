@@ -13,9 +13,8 @@ public class XDParseCurrency extends XDParserAbstract {
 	private static final String ROOTBASENAME = "currency";
 
 	public XDParseCurrency() {super();}
-
 	@Override
-	public void parseObject(XXNode xnode, XDParseResult p) {
+	public void parseObject(final XXNode xnode, final XDParseResult p) {
 		p.isSpaces();
 		boolean xon;
 		if (xon = p.isToken("C(")) {

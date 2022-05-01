@@ -558,6 +558,7 @@ public final class TestXComponents extends XDTester {
 "<xd:component>%class test.xdef.MyTestX_OneOfb %link test</xd:component>\n"+
 "<xd:xon name=\"test\">\n" +
 "{ a=[ $oneOf=\"?\",\n" +
+"       \"jnull(); finally outln('null')\", \n" + // must be first
 "       \"date(); finally outln('date')\", \n" +
 "       \"ipAddr(); finally outln('ipAddr')\", \n" +
 "       [$script=\"finally outln('[...]')\",\"*int()\"], \n" +
@@ -580,7 +581,7 @@ public final class TestXComponents extends XDTester {
 			xd.setStdOut(XDFactory.createXDOutput(strw, false));
 			xc = xd.jparseXComponent(s, null, reporter);
 			assertEq("date\n", strw.toString());
-			o = SUtils.getValueFromGetter(xc, "getjx$item");
+			o = SUtils.getValueFromGetter(xc, "getjx$item_1");
 			SUtils.setValueToSetter(o, "setvalue", new SDatetime("2022-04-15"));
 			assertEq(new SDatetime("2022-04-15"), ((Map)xc.toXon()).get("a"));
 			s = "{a=\"202.2.4.10\"}";
@@ -647,7 +648,7 @@ public final class TestXComponents extends XDTester {
 			xd.setStdOut(XDFactory.createXDOutput(strw, false));
 			o = xd.jparse(s, reporter);
 			assertNoErrorwarningsAndClear(reporter);
-			assertEq("date\n", strw.toString()); //????, however it is OK
+			assertEq("null\n", strw.toString()); //????, however it is OK
 			assertNull(((Map) o).get("a"));
 			assertTrue(((Map) o).containsKey("a"));
 			xd = xp.createXDDocument();
@@ -655,7 +656,7 @@ public final class TestXComponents extends XDTester {
 			xd.setStdOut(XDFactory.createXDOutput(strw, false));
 			xc = xd.jparseXComponent(s, null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
-			assertEq("date\n", strw.toString());
+			assertEq("null\n", strw.toString());
 			assertNull(SUtils.getValueFromGetter(xc, "get$a"));
 			assertNull(((Map) xc.toXon()).get("a"));
 			assertTrue(((Map) xc.toXon()).containsKey("a"));

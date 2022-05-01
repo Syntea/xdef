@@ -9,6 +9,7 @@ import org.xdef.proc.XXNode;
  */
 public class XDParseAn extends XSAbstractParseToken {
 	private static final String ROOTBASENAME = "an";
+
 	public XDParseAn() {super();}
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){

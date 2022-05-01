@@ -60,15 +60,15 @@ public abstract class XSAbstractParseString extends XSAbstractParser {
 			0;
 	}
 	@Override
-	public void setLength(long x) { _minLength = _maxLength = x; }
+	public void setLength(final long x) { _minLength = _maxLength = x; }
 	@Override
 	public long getLength() {return _minLength == _maxLength ? _minLength: -1;}
 	@Override
-	public void setMaxLength(long x) { _maxLength = x; }
+	public void setMaxLength(final long x) { _maxLength = x; }
 	@Override
 	public long getMaxLength() { return _maxLength; }
 	@Override
-	public void setMinLength(long x) { _minLength = x; }
+	public void setMinLength(final long x) { _minLength = x; }
 	@Override
 	public long getMinLength() { return _minLength; }
 	@Override
@@ -88,7 +88,7 @@ public abstract class XSAbstractParseString extends XSAbstractParser {
 		}
 	}
 	@Override
-	public void setEnumeration(Object[] o) {
+	public void setEnumeration(final Object[] o) {
 		_enumeration = null;
 		if (o == null || o.length == 0) {
 			return;
@@ -191,7 +191,7 @@ public abstract class XSAbstractParseString extends XSAbstractParser {
 			}
 		}
 	}
-	void checkEnumeration(XDParseResult p, XXNode xnode) {
+	void checkEnumeration(final XDParseResult p, final XXNode xnode) {
 		if (p.matches()) {
 			boolean found = false;
 			int i = 0;

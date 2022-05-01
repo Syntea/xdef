@@ -10,7 +10,6 @@ import org.xdef.proc.XXNode;
  * @author Vaclav Trojan
  */
 public class XDParseFile extends XDParserAbstract {
-
 	private static final String ROOTBASENAME = "file";
 
 	@Override
@@ -21,7 +20,6 @@ public class XDParseFile extends XDParserAbstract {
 			p.setEos();
 		}
 	}
-
 	/** Check if the argument contains correct filename.
 	 * @param p XDParseResult where to set en error information.
 	 * @param s string with filename.
@@ -41,10 +39,8 @@ public class XDParseFile extends XDParserAbstract {
 		p.errorWithString(XDEF.XDEF809, ROOTBASENAME);
 		return false;
 	}
-
 	@Override
 	public short parsedType() {return XD_STRING;}
-
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 }

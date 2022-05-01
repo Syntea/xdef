@@ -28,7 +28,6 @@ import org.xdef.sys.SRuntimeException;
 public class XDParseJList extends XSAbstractParser {
 	/** Name of parser. */
 	private static final String ROOTBASENAME = "jlist";
-
 	long _minLength;
 	long _maxLength;
 	XDParser _itemType;
@@ -39,7 +38,6 @@ public class XDParseJList extends XSAbstractParser {
 		_whiteSpace = WS_COLLAPSE;
 		_minLength = _maxLength = -1;
 	}
-
 	@Override
 	public void initParams() {
 		_patterns = null;
@@ -179,18 +177,18 @@ public class XDParseJList extends XSAbstractParser {
 	@Override
 	public byte getDefaultWhiteSpace() {return WS_COLLAPSE;}
 	@Override
-	public boolean addTypeParser(XDValue x) {
+	public boolean addTypeParser(final XDValue x) {
 		_itemType = valueToParser(x);
 		return true;
 	}
 	@Override
-	public void addNamedParams(XDContainer map) {
+	public void addNamedParams(final XDContainer map) {
 		if (_itemType != null) {
 			map.setXDNamedItem("item", _itemType);
 		}
 	}
 	@Override
-	public void setItem(XDValue item) {
+	public void setItem(final XDValue item) {
 		if (item.getItemId() == XD_PARSER) {
 			_itemType = (XDParser) item;
 		} else {
@@ -199,15 +197,15 @@ public class XDParseJList extends XSAbstractParser {
 		}
 	}
 	@Override
-	public void setLength(long x) { _minLength = _maxLength = x; }
+	public void setLength(final long x) { _minLength = _maxLength = x; }
 	@Override
 	public long getLength() {return _minLength == _maxLength ? _minLength: -1;}
 	@Override
-	public void setMaxLength(long x) { _maxLength = x; }
+	public void setMaxLength(final long x) { _maxLength = x; }
 	@Override
 	public long getMaxLength() { return _maxLength; }
 	@Override
-	public void setMinLength(long x) { _minLength = x; }
+	public void setMinLength(final long x) { _minLength = x; }
 	@Override
 	public long getMinLength() { return _minLength; }
 	@Override
@@ -227,7 +225,7 @@ public class XDParseJList extends XSAbstractParser {
 	@Override
 	public short parsedType() {return XD_CONTAINER;}
 	@Override
-	public void parseObject(XXNode xnode, XDParseResult p) {
+	public void parseObject(final XXNode xnode, final XDParseResult p) {
 		parse(xnode, p, false);
 	}
 	@Override

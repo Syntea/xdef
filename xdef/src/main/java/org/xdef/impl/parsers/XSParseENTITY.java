@@ -14,9 +14,7 @@ import org.w3c.dom.NamedNodeMap;
 public class XSParseENTITY extends XSParseQName {
 	private static final String ROOTBASENAME = "ENTITY";
 
-	public XSParseENTITY() {
-		super();
-	}
+	public XSParseENTITY() {super();}
 	@Override
 	public void finalCheck(final XXNode xnode, XDParseResult p) {
 		if (xnode == null) {

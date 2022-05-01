@@ -10,18 +10,16 @@ import org.xdef.msg.XDEF;
  * @author Vaclav Trojan
  */
 public class XDParseEmailAddr extends XDParserAbstract {
-
 	private static final String ROOTBASENAME = "emailAddr";
 
 	@Override
-	public void parseObject(XXNode xnode, XDParseResult p) {
+	public void parseObject(final XXNode xnode, final XDParseResult p) {
 		p.isSpaces();
-		String s = p.getUnparsedBufferPart().trim();
+		String s = p.getUnparsedBufferPart();
 		if (chkEmail(p, s, ROOTBASENAME)) {
 			p.setEos();
 		}
 	}
-
 	/** Check if the argument contains correct email address.
 	 * @param p XDParseResult where to set en error information.
 	 * @param s string with email address.
@@ -45,10 +43,8 @@ public class XDParseEmailAddr extends XDParserAbstract {
 		}
 		return false;
 	}
-
 	@Override
 	public short parsedType() {return XD_EMAIL;}
-
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 }

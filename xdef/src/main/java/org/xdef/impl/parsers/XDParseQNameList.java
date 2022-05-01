@@ -10,9 +10,8 @@ import org.xdef.impl.code.DefString;
  */
 public class XDParseQNameList extends XDParseNCNameList {
 	private static final String ROOTBASENAME = "QNameList";
-	public XDParseQNameList() {
-		super();
-	}
+
+	public XDParseQNameList() {super();}
 	@Override
 	XDValue parse(final XXNode xnode, final StringParser p) {
 		if (!p.isXMLName((byte) 10)) {

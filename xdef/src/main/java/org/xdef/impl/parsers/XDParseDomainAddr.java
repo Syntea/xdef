@@ -12,11 +12,10 @@ import org.xdef.sys.BNFGrammar;
  * @author Vaclav Trojan
  */
 public class XDParseDomainAddr extends XDParserAbstract {
-
 	private static final String ROOTBASENAME = "domainAddr";
 
 	@Override
-	public void parseObject(XXNode xnode, XDParseResult p) {
+	public void parseObject(final XXNode xnode, final XDParseResult p) {
 		int pos = p.getIndex();
 		p.isSpaces();
 		int pos1 = p.getIndex();
@@ -33,7 +32,6 @@ public class XDParseDomainAddr extends XDParserAbstract {
 		//Incorrect value of '&{0}'&{1}{: }
 		p.errorWithString(XDEF.XDEF809,parserName(),s);
 	}
-
 	/** Check if the argument contains correct email address.
 	 * @param p XDParseResult where to set en error information.
 	 * @param s string with domain address.
@@ -57,10 +55,8 @@ public class XDParseDomainAddr extends XDParserAbstract {
 		}
 		return false;
 	}
-
 	@Override
 	public short parsedType() {return XD_EMAIL;}
-
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 }

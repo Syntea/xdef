@@ -14,7 +14,7 @@ public class XDParseUrl extends XDParserAbstract {
 	private static final String ROOTBASENAME = "url";
 
 	@Override
-	public void parseObject(XXNode xnode, XDParseResult p) {
+	public void parseObject(final XXNode xnode, final XDParseResult p) {
 		p.isSpaces();
 		String s = p.getUnparsedBufferPart().trim();
 		if (chkUrl(p, s, ROOTBASENAME)) {
@@ -22,7 +22,6 @@ public class XDParseUrl extends XDParserAbstract {
 			p.setEos();
 		}
 	}
-
 	/** Check if the argument contains correct URL.
 	 * @param p XDParseResult where to set en error information.
 	 * @param s string with URL.
@@ -41,7 +40,6 @@ public class XDParseUrl extends XDParserAbstract {
 		p.errorWithString(XDEF.XDEF809, ROOTBASENAME);
 		return false;
 	}
-
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 }

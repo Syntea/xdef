@@ -33,7 +33,6 @@ public class XDParseSequence extends XSAbstractParser {
 		super();
 		_minLength = _maxLength = -1;
 	}
-
 	@Override
 	public void initParams() {
 		_patterns = null;

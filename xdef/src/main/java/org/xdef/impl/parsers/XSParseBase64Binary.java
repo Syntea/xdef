@@ -62,21 +62,21 @@ public class XSParseBase64Binary extends XSAbstractParser {
 			0;
 	}
 	@Override
-	public void setLength(long x) { _minLength = _maxLength = x; }
+	public void setLength(final long x) { _minLength = _maxLength = x; }
 	@Override
 	public long getLength() {return _minLength == _maxLength ? _minLength: -1;}
 	@Override
-	public void setMaxLength(long x) { _maxLength = x; }
+	public void setMaxLength(final long x) { _maxLength = x; }
 	@Override
 	public long getMaxLength() { return _maxLength; }
 	@Override
-	public void setMinLength(long x) { _minLength = x; }
+	public void setMinLength(final long x) { _minLength = x; }
 	@Override
 	public long getMinLength() { return _minLength; }
 	@Override
 	public XDValue[] getEnumeration() {return _enumeration;}
 	@Override
-	public void setEnumeration(Object[] o) {
+	public void setEnumeration(final Object[] o) {
 		if (o == null || o.length == 0) {
 			return;
 		}
@@ -109,7 +109,7 @@ public class XSParseBase64Binary extends XSAbstractParser {
 	 * @param p object to be checked.
 	 * @return result with added errors.
 	 */
-	void check(XDParseResult p) {
+	void check(final XDParseResult p) {
 		if (p.matches()) {
 			checkEnumeration(p);
 			checkPatterns(p);
@@ -132,7 +132,7 @@ public class XSParseBase64Binary extends XSAbstractParser {
 	private static final class XSParseReader implements SReader {
 		SParser _p;
 		StringBuilder _sb;
-		XSParseReader(SParser p) {
+		XSParseReader(final SParser p) {
 			_p = p;
 			_sb = new StringBuilder();
 		}

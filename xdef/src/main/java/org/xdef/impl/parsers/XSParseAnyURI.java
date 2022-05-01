@@ -81,15 +81,15 @@ public class XSParseAnyURI extends XSAbstractParser {
 		checkEnumeration(p);
 	}
 	@Override
-	public void setLength(long x) { _minLength = _maxLength = x; }
+	public void setLength(final long x) { _minLength = _maxLength = x; }
 	@Override
 	public long getLength() {return _minLength == _maxLength ? _minLength: -1;}
 	@Override
-	public void setMaxLength(long x) { _maxLength = x; }
+	public void setMaxLength(final long x) { _maxLength = x; }
 	@Override
 	public long getMaxLength() { return _maxLength; }
 	@Override
-	public void setMinLength(long x) { _minLength = x; }
+	public void setMinLength(final long x) { _minLength = x; }
 	@Override
 	public long getMinLength() { return _minLength; }
 	@Override
@@ -109,7 +109,7 @@ public class XSParseAnyURI extends XSAbstractParser {
 		}
 	}
 	@Override
-	public void setEnumeration(Object[] o) {
+	public void setEnumeration(final Object[] o) {
 		_enumeration = null;
 		if (o == null || o.length == 0) {
 			return;
@@ -135,7 +135,7 @@ public class XSParseAnyURI extends XSAbstractParser {
 		}
 		_enumeration = e;
 	}
-	void checkLength(XDParseResult p) {
+	void checkLength(final XDParseResult p) {
 		if (p.matches()) {
 			String s = p.getParsedValue().toString();
 			int len = s.length();

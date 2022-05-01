@@ -10,6 +10,7 @@ import org.xdef.sys.SUtils;
  */
 public class XDParseCountry extends XSAbstractParseToken {
 	private static final String ROOTBASENAME = "country";
+
 	public XDParseCountry() {super();}
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){

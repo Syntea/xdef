@@ -17,9 +17,7 @@ public class XDParseQNameURI extends XSAbstractParseToken {
 	private static final String ROOTBASENAME = "QNameURI";
 	Element _elem;
 
-	public XDParseQNameURI() {
-		super();
-	}
+	public XDParseQNameURI() {super();}
 
 	@Override
 	public int getLegalKeys() {
@@ -76,7 +74,9 @@ public class XDParseQNameURI extends XSAbstractParseToken {
 		return new DefString(parser.getParsedString());
 	}
 
-	private void checkParams(XDParseResult p, int pos0, int pos) {
+	private void checkParams(final XDParseResult p,
+		final int pos0,
+		final int pos) {
 		if (p.matches()) {
 			String s = p.getBufferPart(pos, p.getIndex());
 			if (_whiteSpace == WS_COLLAPSE) {
@@ -107,7 +107,7 @@ public class XDParseQNameURI extends XSAbstractParseToken {
 		}
 	}
 	@Override
-	public void setArgument(XDValue x) {_elem = x.getElement();}
+	public void setArgument(final XDValue x) {_elem = x.getElement();}
 	@Override
 	public XDValue getArgument() {return new DefElement(_elem);}
 	@Override

@@ -52,10 +52,12 @@ public class XDParseJValue extends XSAbstractParser {
 			0;
 	}
 	@Override
-	public void check(final XXNode x, final XDParseResult p) {parse(x,p,true);}
+	public void check(final XXNode xnode, final XDParseResult p) {
+		parse(xnode,p,true);
+	}
 	@Override
-	public void parseObject(final XXNode x, final XDParseResult p) {
-		parse(x,p,false);
+	public void parseObject(final XXNode xnode, final XDParseResult p) {
+		parse(xnode,p,false);
 	}
 	private void parse(final XXNode xnode,
 		final XDParseResult p,
@@ -118,7 +120,7 @@ public class XDParseJValue extends XSAbstractParser {
 	@Override
 	public XDValue[] getEnumeration() {return _enumeration;}
 	@Override
-	public void setEnumeration(Object[] o) {
+	public void setEnumeration(final Object[] o) {
 		if (o == null || o.length == 0) {
 			return;
 		}

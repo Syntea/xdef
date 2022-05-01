@@ -16,7 +16,6 @@ import org.xdef.sys.SRuntimeException;
  * @author Vaclav Trojan
  */
 public class XDParseCDATA extends XDParserAbstract {
-
 	int _minLength, _maxLength;
 
 	public XDParseCDATA() {

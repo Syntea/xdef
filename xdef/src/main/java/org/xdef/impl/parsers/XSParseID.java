@@ -13,9 +13,7 @@ import org.xdef.sys.Report;
 public class XSParseID extends XSParseQName {
 	private static final String ROOTBASENAME = "ID";
 
-	public XSParseID() {
-		super();
-	}
+	public XSParseID() {super();}
 	@Override
 	public void finalCheck(final XXNode xnode, final XDParseResult result) {
 		if (xnode == null) {

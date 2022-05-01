@@ -12,9 +12,7 @@ import org.xdef.sys.SRuntimeException;
 public class XSParseNonPositiveInteger extends XSParseInteger {
 	private static final String ROOTBASENAME = "nonPositiveInteger";
 
-	public XSParseNonPositiveInteger() {
-		super();
-	}
+	public XSParseNonPositiveInteger() {super();}
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){
 		super.parseObject(xnode, p);

@@ -3,7 +3,6 @@ package org.xdef.impl.parsers;
 import org.xdef.XDValue;
 import org.xdef.impl.code.DefString;
 import org.xdef.proc.XXNode;
-import org.xdef.sys.SParser;
 import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
 
@@ -29,5 +28,4 @@ public class XDParseCountries  extends XDParseNCNameList {
 	}
 	@Override
 	public String parserName() {return ROOTBASENAME;}
-
 }

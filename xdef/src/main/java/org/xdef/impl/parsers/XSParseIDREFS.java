@@ -14,9 +14,7 @@ import org.xdef.impl.code.DefContainer;
 public class XSParseIDREFS extends XSParseENTITIES {
 	private static final String ROOTBASENAME = "IDREFS";
 
-	public XSParseIDREFS() {
-		super();
-	}
+	public XSParseIDREFS() {super();}
 	@Override
 	public void finalCheck(final XXNode xnode, final XDParseResult result) {
 		if (xnode == null) {

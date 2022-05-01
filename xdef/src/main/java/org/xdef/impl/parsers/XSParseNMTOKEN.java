@@ -11,9 +11,7 @@ import org.xdef.proc.XXNode;
 public class XSParseNMTOKEN extends XSAbstractParseToken {
 	private static final String ROOTBASENAME = "NMTOKEN";
 
-	public XSParseNMTOKEN() {
-		super();
-	}
+	public XSParseNMTOKEN() {super();}
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){
 		int pos0 = p.getIndex();

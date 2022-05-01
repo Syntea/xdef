@@ -11,9 +11,8 @@ import org.xdef.impl.code.DefParseResult;
  */
 public class XDParseContains extends XDParseEq {
 	private static final String ROOTBASENAME = "contains";
-	public XDParseContains() {
-		super();
-	}
+
+	public XDParseContains() {super();}
 	@Override
 	public XDParseResult check(final XXNode xnode, final String s) {
 		XDParseResult p = new DefParseResult(s);

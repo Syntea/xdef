@@ -20,7 +20,6 @@ public class XDParseXDatetime extends XSAbstractParseComparable {
 	private String _outFormat;
 
 	public XDParseXDatetime() {super();}
-
 	@Override
 	public void initParams() {
 		super.initParams();
@@ -81,7 +80,7 @@ public class XDParseXDatetime extends XSAbstractParseComparable {
 	 * @param xnode actual XXNode object.
 	 * @throws SException if an error occurs.
 	 */
-	public void setNamedParams(XXNode xnode, XDContainer params)
+	public void setNamedParams(final XXNode xnode, final XDContainer params)
 		throws SException {
 		super.setNamedParams(xnode, params);
 		if (_format == null) {
@@ -90,15 +89,15 @@ public class XDParseXDatetime extends XSAbstractParseComparable {
 		}
 	}
 	@Override
-	public void setFormat(String x) {_format = x;}
+	public void setFormat(final String x) {_format = x;}
 	@Override
 	public String getFormat() { return _format; }
 	@Override
-	public void setOutFormat(String x) {_outFormat = x;}
+	public void setOutFormat(final String x) {_outFormat = x;}
 	@Override
 	public String getOutFormat() { return _outFormat; }
 	@Override
-	public void addNamedParams(XDContainer map) {
+	public void addNamedParams(final XDContainer map) {
 		if (_format != null) {
 			map.setXDNamedItem("format", new DefString(_format));
 		}

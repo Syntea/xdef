@@ -11,9 +11,8 @@ import org.xdef.impl.code.DefParseResult;
  */
 public class XDParsePic extends XDParseEq {
 	private static final String ROOTBASENAME = "pic";
-	public XDParsePic() {
-		super();
-	}
+
+	public XDParsePic() {super();}
 	@Override
 	public XDParseResult check(final XXNode xnode, final String s) {
 		XDParseResult p = new DefParseResult(s);

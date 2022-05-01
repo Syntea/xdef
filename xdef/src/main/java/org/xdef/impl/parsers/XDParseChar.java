@@ -11,6 +11,7 @@ import org.xdef.proc.XXNode;
  */
 public class XDParseChar extends XSAbstractParseToken {
 	private static final String ROOTBASENAME = "char";
+
 	public XDParseChar() {
 		super();
 		_whiteSpace = WS_PRESERVE;
@@ -57,7 +58,6 @@ public class XDParseChar extends XSAbstractParseToken {
 	}
 	@Override
 	public String parserName() {return ROOTBASENAME;}
-
 	@Override
 	public short parsedType() {return XD_CHAR;}
 }

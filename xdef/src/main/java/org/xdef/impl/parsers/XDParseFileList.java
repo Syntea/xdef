@@ -16,7 +16,7 @@ public class XDParseFileList extends XDParserAbstract {
 	private static final String ROOTBASENAME = "fileList";
 
 	@Override
-	public void parseObject(XXNode xnode, XDParseResult p) {
+	public void parseObject(final XXNode xnode, final XDParseResult p) {
 		String s = p.getUnparsedBufferPart().trim();
 		StringTokenizer st = new StringTokenizer(s, ";: \n\t\r");
 		if (!st.hasMoreTokens()) {
@@ -41,7 +41,6 @@ public class XDParseFileList extends XDParserAbstract {
 		p.setParsedValue(val);
 		p.setEos();
 	}
-
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 	@Override

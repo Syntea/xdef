@@ -14,7 +14,6 @@ public class XDParseDec extends XSParseDecimal {
 	private static final String ROOTBASENAME = "dec";
 
 	public XDParseDec() {super();}
-
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p) {
 		int pos0 = p.getIndex();
@@ -84,10 +83,8 @@ public class XDParseDec extends XSParseDecimal {
 		checkPatterns(p);
 		checkComparable(p);
 	}
-
 	@Override
 	public String parserName() {return ROOTBASENAME;}
-
 	@Override
 	public short parsedType() {return XD_DECIMAL;}
 }

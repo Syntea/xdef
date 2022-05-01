@@ -17,9 +17,8 @@ public class XDParseGPS extends XDParserAbstract {
 	private static final String ROOTBASENAME = "gps";
 
 	public XDParseGPS() {super();}
-
 	@Override
-	public void parseObject(XXNode xnode, XDParseResult p) {
+	public void parseObject(final XXNode xnode, final XDParseResult p) {
 		p.isSpaces();
 		int pos = p.getIndex();
 		boolean xon;
@@ -70,9 +69,8 @@ public class XDParseGPS extends XDParserAbstract {
 		p.errorWithString(XDEF.XDEF809,
 			parserName(), p.getBufferPart(pos, p.getIndex()));
 	}
-
 	/** Read name of position. */
-	private String readGPSName(XDParseResult p) {
+	private String readGPSName(final XDParseResult p) {
 		StringBuilder sb = new StringBuilder();
 		char ch;
 		if (p.isChar('"')) {

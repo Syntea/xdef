@@ -12,8 +12,8 @@ import org.xdef.proc.XXNode;
  */
 public class XDParseTelephone extends XDParserAbstract {
 	private static final String ROOTBASENAME = "telephone";
-	public XDParseTelephone() {super();}
 
+	public XDParseTelephone() {super();}
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p) {
 		int i1 = p.getIndex();

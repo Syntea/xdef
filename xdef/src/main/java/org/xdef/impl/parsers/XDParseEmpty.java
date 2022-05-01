@@ -7,6 +7,7 @@ import org.xdef.XDValue;
  */
 public class XDParseEmpty extends XDParseCDATA {
 	private static final String ROOTBASENAME = "empty";
+
 	public XDParseEmpty() {
 		super();
 		_minLength = _maxLength = 0;

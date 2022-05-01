@@ -11,14 +11,13 @@ import org.xdef.impl.code.DefParseResult;
  */
 public class XDParseEndsi extends XDParseEqi {
 	private static final String ROOTBASENAME = "endsi";
-	public XDParseEndsi() {
-		super();
-	}
+
+	public XDParseEndsi() {super();}
 	@Override
 	public XDParseResult check(final XXNode xnode, final String s) {
-		XDParseResult result;
-		parseObject(xnode, result = new DefParseResult(s));
-		return result;
+		XDParseResult p = new DefParseResult(s);
+		parseObject(xnode, p);
+		return p;
 	}
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p) {
@@ -38,7 +37,6 @@ public class XDParseEndsi extends XDParseEqi {
 		if (!super.equals(o) || !(o instanceof XDParseEndsi) ) {
 			return false;
 		}
-		XDParseEndsi x = (XDParseEndsi) o;
-		return _param.equals(x._param);
+		return _param.equals(((XDParseEndsi) o)._param);
 	}
 }

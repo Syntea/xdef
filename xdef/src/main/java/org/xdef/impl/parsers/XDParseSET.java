@@ -12,9 +12,7 @@ import org.xdef.proc.XXNode;
 public class XDParseSET extends XSParseQName {
 	private static final String ROOTBASENAME = "SET";
 
-	public XDParseSET() {
-		super();
-	}
+	public XDParseSET() {super();}
 	@Override
 	public void finalCheck(final XXNode xnode, final XDParseResult result) {
 		if (xnode == null) {

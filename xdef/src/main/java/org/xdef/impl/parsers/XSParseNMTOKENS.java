@@ -13,9 +13,7 @@ import org.xdef.impl.code.DefString;
 public class XSParseNMTOKENS extends XSAbstractParseToken {
 	private static final String ROOTBASENAME = "NMTOKENS";
 
-	public XSParseNMTOKENS() {
-		super();
-	}
+	public XSParseNMTOKENS() {super();}
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){
 		int pos0 = p.getIndex();

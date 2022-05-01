@@ -14,9 +14,8 @@ public class XDParseIPAddr extends XDParserAbstract {
 	private static final String ROOTBASENAME = "ipAddr";
 
 	public XDParseIPAddr() {super();}
-
 	@Override
-	public void parseObject(XXNode xnode, XDParseResult p) {
+	public void parseObject(final XXNode xnode, final XDParseResult p) {
 		int pos = p.getIndex();
 		p.isSpaces();
 		p.isChar('/');

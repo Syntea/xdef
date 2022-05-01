@@ -16,9 +16,8 @@ public class XDParsePrice extends XDParserAbstract {
 	private static final String ROOTBASENAME = "price";
 
 	public XDParsePrice() {super();}
-
 	@Override
-	public void parseObject(XXNode xnode, XDParseResult p) {
+	public void parseObject(final XXNode xnode, final XDParseResult p) {
 		p.isSpaces();
 		int pos = p.getIndex();
 		boolean xon;

@@ -21,6 +21,7 @@ import static org.xdef.XDValueID.XD_STRING;
 public class XDParseEnum extends XDParserAbstract {
 	private static final String ROOTBASENAME = "enum";
 	String[] _list;
+
 	public XDParseEnum() {super();}
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){
@@ -72,7 +73,6 @@ public class XDParseEnum extends XDParserAbstract {
 			}
 		}
 	}
-
 	/** Create _list of strings sorted descendant according to length
 	 * and equal items are ignored.
 	 * @param val argument to be converted.

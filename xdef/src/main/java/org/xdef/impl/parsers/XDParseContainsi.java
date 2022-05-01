@@ -11,9 +11,8 @@ import org.xdef.impl.code.DefParseResult;
  */
 public class XDParseContainsi extends XDParseEqi {
 	private static final String ROOTBASENAME = "containsi";
-	public XDParseContainsi() {
-		super();
-	}
+
+	public XDParseContainsi() {super();}
 	@Override
 	public XDParseResult check(final XXNode xnode, final String s) {
 		XDParseResult p = new DefParseResult(s);

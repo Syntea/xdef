@@ -56,16 +56,9 @@ collapsing. When whitespace isn't significant, xsd:token is preferred.
 This datatype corresponds neither to the XPath function normalize-space() (which
 performs whitespace trimming and collapsing) nor to the DOM normalize method
 (which is a merge of adjacent text objects).
-
-<title lang="en">
-  Being a Dog Is
-  a Full-Time Job
-</title>
-"  Being a Dog Is a Full-Time Job ", in which all whitespace has been replaced
-by spaces, if the title element is a type xsd:normalizedString.
 */
 	@Override
-	public void setEnumeration(Object[] o) {
+	public void setEnumeration(final Object[] o) {
 		if (o == null || o.length == 0) {
 			return;
 		}

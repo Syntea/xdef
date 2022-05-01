@@ -12,9 +12,7 @@ import java.io.ByteArrayOutputStream;
 public class XSParseHexBinary extends XSParseBase64Binary {
 	private static final String ROOTBASENAME = "hexBinary";
 
-	public XSParseHexBinary() {
-		super();
-	}
+	public XSParseHexBinary() {super();}
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){
 		int pos0 = p.getIndex();

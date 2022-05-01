@@ -653,12 +653,12 @@ public class TestXon extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='CSV'>\n"+
 "<xd:component>%class test.xdef.CsvTest %link CSV</xd:component>\n"+
-"<xd:json name=\"CSV\">\n"+
+"<xd:xon name=\"CSV\">\n"+
 "[\n"+
 "  [\"3..3 string();\"],\n"+ // head
 "  [$script=\"+\", \"? string()\", \"? emailAddr\", \"? telephone()\"]\n"+
 "]\n"+
-"</xd:json>\n"+
+"</xd:xon>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xd = xp.createXDDocument();
@@ -720,11 +720,11 @@ public class TestXon extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='CSV'>\n"+
 "<xd:component>%class test.xdef.CsvTest1 %link CSV</xd:component>\n"+
-"<xd:json name=\"CSV\">\n"+
+"<xd:xon name=\"CSV\">\n"+
 "[\n"+
 "  [$script=\"+\", \"? string()\", \"? emailAddr\", \"? telephone()\"]\n"+
 "]\n"+
-"</xd:json>\n"+
+"</xd:xon>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xd = xp.createXDDocument();

@@ -10,11 +10,10 @@ import java.net.URI;
  * @author Vaclav Trojan
  */
 public class XDParseUri extends XDParserAbstract {
-
 	private static final String ROOTBASENAME = "uri";
 
 	@Override
-	public void parseObject(XXNode xnode, XDParseResult p) {
+	public void parseObject(final XXNode xnode, final XDParseResult p) {
 		p.isSpaces();
 		String s = p.getUnparsedBufferPart().trim();
 		if (chkUri(p, s, ROOTBASENAME)) {
@@ -22,7 +21,6 @@ public class XDParseUri extends XDParserAbstract {
 			p.setEos();
 		}
 	}
-
 	/** Check if the argument contains correct URI.
 	 * @param p XDParseResult where to set en error information.
 	 * @param s string with URI.
@@ -41,7 +39,6 @@ public class XDParseUri extends XDParserAbstract {
 		p.errorWithString(XDEF.XDEF809, ROOTBASENAME);
 		return false;
 	}
-
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 }

@@ -476,13 +476,13 @@ public abstract class XSAbstractParser extends XDParserAbstract
 	public abstract short parsedType();
 
 	public boolean addTypeParser(final XDValue x){return false;}//must be Parser
-	public void setSeparator(String x) {}
+	public void setSeparator(final String x) {}
 	public String getSeparator() { return null; }
-	public void setFormat(String x) {}
+	public void setFormat(final String x) {}
 	public String getFormat() { return null; }
-	public void setOutFormat(String x) {}
+	public void setOutFormat(final String x) {}
 	public String getOutFormat() { return null; }
-	public void setArgument(XDValue x) {}
+	public void setArgument(final XDValue x) {}
 	public XDValue getArgument() { return null; }
 	protected final int getIdIndex(final int id, final int[] legalIds) {
 		for (int i = 0; i < legalIds.length; i++) {

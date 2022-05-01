@@ -11,9 +11,7 @@ import org.xdef.proc.XXNode;
 public class XSParseNCName extends XSAbstractParseToken {
 	private static final String ROOTBASENAME = "NCName";
 
-	public XSParseNCName() {
-		super();
-	}
+	public XSParseNCName() {super();}
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){
 		int pos0 = p.getIndex();

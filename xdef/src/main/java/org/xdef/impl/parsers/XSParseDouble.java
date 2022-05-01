@@ -72,7 +72,6 @@ public class XSParseDouble extends XSAbstractParseComparable {
 		if (x.doubleValue()== Double.NaN) {
 			//Incorrect range specification of &{0}
 			throw new SRuntimeException(XDEF.XDEF821, ROOTBASENAME);
-
 		}
 	}
 }

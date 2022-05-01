@@ -115,11 +115,11 @@ public class XSParseDecimal extends XSAbstractParseComparable {
 		checkComparable(p);
 	}
 	@Override
-	public void setTotalDigits(long x) { _totalDigits = x; }
+	public void setTotalDigits(final long x) {_totalDigits = x;}
 	@Override
-	public long getTotalDigits() { return _totalDigits; }
+	public long getTotalDigits() {return _totalDigits;}
 	@Override
-	public void setFractionDigits(long x) {_fractionDigits = x;}
+	public void setFractionDigits(final long x) {_fractionDigits = x;}
 	@Override
 	public long getFractionDigits() {return _fractionDigits;}
 	@Override

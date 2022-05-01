@@ -67,24 +67,24 @@ public class XSParseList extends XSAbstractParser {
 	@Override
 	public byte getDefaultWhiteSpace() {return WS_COLLAPSE;}
 	@Override
-	public boolean addTypeParser(XDValue x) {
+	public boolean addTypeParser(final XDValue x) {
 		_itemType = valueToParser(x);
 		return true;
 	}
 	@Override
-	public void setLength(long x) { _minLength = _maxLength = x; }
+	public void setLength(final long x) { _minLength = _maxLength = x; }
 	@Override
 	public long getLength() {return _minLength == _maxLength ? _minLength: -1;}
 	@Override
-	public void setMaxLength(long x) { _maxLength = x; }
+	public void setMaxLength(final long x) { _maxLength = x; }
 	@Override
 	public long getMaxLength() { return _maxLength; }
 	@Override
-	public void setMinLength(long x) { _minLength = x; }
+	public void setMinLength(final long x) { _minLength = x; }
 	@Override
 	public long getMinLength() { return _minLength; }
 	@Override
-	public void setItem(XDValue item) {
+	public void setItem(final XDValue item) {
 		if (item.getItemId() == XD_PARSER) {
 			_itemType = (XDParser) item;
 		} else {
@@ -95,7 +95,7 @@ public class XSParseList extends XSAbstractParser {
 	@Override
 	public XDValue[] getEnumeration() {return _enumeration;}
 	@Override
-	public void setEnumeration(Object[] o) {
+	public void setEnumeration(final Object[] o) {
 		if (o == null || o.length == 0) {
 			return;
 		}
@@ -107,7 +107,7 @@ public class XSParseList extends XSAbstractParser {
 	}
 	@Override
 	public void check(final XXNode xnode, final XDParseResult p) {
-		parse(xnode, p, true);
+		parse(xnode,p,true);
 	}
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){

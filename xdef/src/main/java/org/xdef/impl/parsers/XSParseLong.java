@@ -38,7 +38,7 @@ public class XSParseLong extends XSAbstractParseComparable {
 			0;
 	}
 	@Override
-	public void setTotalDigits(long x) { _totalDigits = x; }
+	public void setTotalDigits(final long x) { _totalDigits = x; }
 	@Override
 	public long getTotalDigits() { return _totalDigits; }
 	@Override
@@ -87,5 +87,4 @@ public class XSParseLong extends XSAbstractParseComparable {
 	public String parserName() {return ROOTBASENAME;}
 	@Override
 	public short parsedType() {return XD_LONG;}
-
 }

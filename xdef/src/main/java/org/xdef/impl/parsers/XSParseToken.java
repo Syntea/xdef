@@ -10,9 +10,7 @@ import org.xdef.proc.XXNode;
 public class XSParseToken extends XSAbstractParseToken {
 	private static final String ROOTBASENAME = "token";
 
-	public XSParseToken() {
-		super();
-	}
+	public XSParseToken() {super();}
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){
 		int pos0 = p.getIndex();

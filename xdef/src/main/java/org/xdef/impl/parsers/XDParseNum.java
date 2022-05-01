@@ -7,9 +7,8 @@ import org.xdef.XDParseResult;
  */
 public class XDParseNum extends XDParseAn {
 	private static final String ROOTBASENAME = "num";
-	public XDParseNum() {
-		super();
-	}
+
+	public XDParseNum() {super();}
 	@Override
 	public boolean parse(final XDParseResult p) {
 		int pos = p.getIndex();

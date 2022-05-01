@@ -19,9 +19,8 @@ import org.xdef.msg.XDEF;
 public class XDParseRegex extends XDParserAbstract {
 	private static final String ROOTBASENAME = "regex";
 	private XDRegex _regex;
-	public XDParseRegex() {
-		super();
-	}
+
+	public XDParseRegex() {super();}
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){
 		String s = p.getUnparsedBufferPart();

@@ -19,9 +19,8 @@ import org.xdef.sys.SRuntimeException;
 public class XDParseEq extends XDParserAbstract {
 	private static final String ROOTBASENAME = "eq";
 	String _param;
-	public XDParseEq() {
-		super();
-	}
+
+	public XDParseEq() {super();}
 	@Override
 	public XDParseResult check(final XXNode xnode, final String s) {
 		XDParseResult p = new DefParseResult(s);
@@ -43,7 +42,7 @@ public class XDParseEq extends XDParserAbstract {
 		}
 	}
 	@Override
-	public void setParseSQParams(Object... param) {
+	public void setParseSQParams(final Object... param) {
 		if (param.length == 1) {
 			_param = param.toString();
 		} else {
@@ -74,7 +73,6 @@ public class XDParseEq extends XDParserAbstract {
 			}
 		}
 	}
-
 	@Override
 	public final XDContainer getNamedParams() {
 		XDContainer map = new DefContainer();

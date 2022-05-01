@@ -17,9 +17,7 @@ public class XDParseNCNameList extends XSAbstractParseToken {
 	private static final String ROOTBASENAME = "NCNameList";
 	private String _separator;
 
-	public XDParseNCNameList() {
-		super();
-	}
+	public XDParseNCNameList() {super();}
 	@Override
 	public int getLegalKeys() {
 		return PATTERN +
@@ -97,7 +95,7 @@ public class XDParseNCNameList extends XSAbstractParseToken {
 		checkItem(p);
 	}
 	@Override
-	public void addNamedParams(XDContainer map) {
+	public void addNamedParams(final XDContainer map) {
 		if (_separator != null) {
 			map.setXDNamedItem("separator", new DefString(_separator));
 		}
@@ -110,7 +108,7 @@ public class XDParseNCNameList extends XSAbstractParseToken {
 		return new DefString(parser.getParsedString());
 	}
 	@Override
-	public void setSeparator(String x) {_separator = x;}
+	public void setSeparator(final String x) {_separator = x;}
 	@Override
 	public String getSeparator() {return _separator;}
 	@Override

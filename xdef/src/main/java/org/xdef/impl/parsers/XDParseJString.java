@@ -15,8 +15,8 @@ import org.xdef.xon.XonTools;
  * @author Vaclav Trojan
  */
 public class XDParseJString extends XDParseAn {
-
 	private static final String ROOTBASENAME = "jstring";
+
 	public XDParseJString() {
 		super();
 		_whiteSpace = WS_PRESERVE;

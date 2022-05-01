@@ -5,6 +5,7 @@ package org.xdef.impl.parsers;
  */
 public class XDParseMD5 extends XSParseHexBinary {
 	private static final String ROOTBASENAME = "MD5";
+
 	public XDParseMD5() {
 		super();
 		_minLength = _maxLength = 16;

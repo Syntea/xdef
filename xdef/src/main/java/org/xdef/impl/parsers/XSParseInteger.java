@@ -46,7 +46,7 @@ public class XSParseInteger extends XSAbstractParseComparable {
 			0;
 	}
 	@Override
-	public void setTotalDigits(long x) { _totalDigits = x; }
+	public void setTotalDigits(final long x) { _totalDigits = x; }
 	@Override
 	public long getTotalDigits() { return _totalDigits; }
 	@Override

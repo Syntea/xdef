@@ -11,9 +11,8 @@ import org.xdef.impl.code.DefParseResult;
  */
 public class XDParseStartsi extends XDParseEqi {
 	private static final String ROOTBASENAME = "startsi";
-	public XDParseStartsi() {
-		super();
-	}
+
+	public XDParseStartsi() {super();}
 	@Override
 	public XDParseResult check(final XXNode xnode, final String s) {
 		XDParseResult p = new DefParseResult(s);
@@ -44,7 +43,6 @@ public class XDParseStartsi extends XDParseEqi {
 		if (!super.equals(o) || !(o instanceof XDParseStartsi) ) {
 			return false;
 		}
-		XDParseStartsi x = (XDParseStartsi) o;
-		return _param.equals(x._param);
+	return _param.equals(((XDParseStartsi) o)._param);
 	}
 }

@@ -1,5 +1,5 @@
 <xd:def xmlns:xd="http://www.syntea.cz/xdef/3.1" name = "test" root="test">
-<xd:json name="test">
+<xd:xon name="test">
 { "cities"  : [
     "date(); finally outln('Measurements taken on: ' + getText() + '\n');",
     { $script = "occurs 1..*; finally outln();",
@@ -13,5 +13,5 @@
     }
   ]
 }
-</xd:json>
+</xd:xon>
 </xd:def>

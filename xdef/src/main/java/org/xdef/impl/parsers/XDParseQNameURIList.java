@@ -16,10 +16,8 @@ import org.xdef.XDContainer;
 public class XDParseQNameURIList extends XDParseNCNameList {
 	private static final String ROOTBASENAME = "QNameURIList";
 	Element _elem;
-	public XDParseQNameURIList() {
-		super();
-	}
 
+	public XDParseQNameURIList() {super();}
 	@Override
 	public int getLegalKeys() {
 		return PATTERN +
@@ -59,14 +57,14 @@ public class XDParseQNameURIList extends XDParseNCNameList {
 		return new DefString(parser.getParsedString());
 	}
 	@Override
-	public void addNamedParams(XDContainer map) {
+	public void addNamedParams(final XDContainer map) {
 		super.addNamedParams(map);
 		if (_elem == null) {
 			map.setXDNamedItem("argument", new DefElement(_elem));
 		}
 	}
 	@Override
-	public void setArgument(XDValue x) {_elem = x.getElement();}
+	public void setArgument(final XDValue x) {_elem = x.getElement();}
 	@Override
 	public XDValue getArgument() {return new DefElement(_elem);}
 	@Override

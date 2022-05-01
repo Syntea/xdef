@@ -23,7 +23,7 @@ public class XDParseXDType extends XDParserAbstract {
 	private static final String ROOTBASENAME = "xdType";
 
 	@Override
-	public void parseObject(XXNode xnode, XDParseResult p) {
+	public void parseObject(final XXNode xnode, final XDParseResult p) {
 		p.isSpaces();
 		String s = p.getUnparsedBufferPart().trim();
 		try {

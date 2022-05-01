@@ -15,9 +15,7 @@ import org.xdef.sys.SReporter;
 public class XDParseCHKID extends XSParseQName {
 	private final static String ROOTBASENAME = "CHKID";
 
-	public XDParseCHKID() {
-		super();
-	}
+	public XDParseCHKID() {super();}
 	@Override
 	public void finalCheck(final XXNode xnode, final XDParseResult result) {
 		if (xnode == null) {
