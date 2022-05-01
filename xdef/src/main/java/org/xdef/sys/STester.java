@@ -920,23 +920,28 @@ public abstract class STester {
 		if (_resultInfo == null) {
 			_resultInfo = "";
 		}
+		if (log != null) {
+			log.flush();
+		}
+		err.flush();
+		out.flush();
 		if (printOK && out != null) {
+			String s = "[INFO] ";
 			float duration =
 				((float) ((System.currentTimeMillis() - _timeStamp) / 1000.0));
-			if (!_resultInfo.isEmpty()) {
-				_resultInfo = "; " + _resultInfo;
-			}
 			if (_errors == 0) {
-				flushErr();
-				printlnOut("[OK] " + _name
-					+ "; time=" + new DecimalFormat("0.00").format(duration)
-					+ "s" + _resultInfo);
+				s += "OK ";
 			} else {
-				flushOut();
-				printlnErr("[ERROR] in "
-					+_name+" error"+(_errors>1?"s: ":": ")
-					+ _errors + ";" + _resultInfo);
+				s += _errors + " error"+(_errors>1?"s":"") + " in ";
 			}
+			s += _name + (_resultInfo.isEmpty() ? "" : ", " + _resultInfo)
+				+ ", time=" + new DecimalFormat("0.00").format(duration) + "s";
+			if (log != null) {
+				log.println(s);
+				log.flush();
+			}
+			out.println(s);
+			out.flush();
 		}
 		return _errors;
 	}
@@ -1092,23 +1097,13 @@ public abstract class STester {
 		DecimalFormat df = new DecimalFormat("0.00");
 		df.setDecimalSeparatorAlwaysShown(true);
 		float duration = ((float)((System.currentTimeMillis() - t) / 1000.0));
-		String s = "[INFO] ";
-		if (errors > 0) {
-			s += errors + " error" + (errors > 1 ? "s": "") +
-				(info != null ? ", " + info : "") +
-				", total time: " + df.format(duration) + "s";
-			if (log != null) {
-				log.println(s);
-				log.flush();
-			}
-			out.println(s);
-		} else {
-			s += "OK, " + (info != null ? info + ", " : "") +
-				"total time: " + df.format(duration) + "s";
-		}
 		out.flush();
 		err.flush();
 		log.flush();
+		String s = "[INFO] " +
+			(errors > 0 ? errors + " error" + (errors > 1 ? "s,": ",") : "OK")
+			+ " " + (info != null ? info + ", ": "") +
+			"total time: " + df.format(duration) + "s";
 		if (log != null) {
 			log.println(s);
 			log.flush();
