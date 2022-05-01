@@ -933,8 +933,9 @@ public abstract class STester {
 					+ "s" + _resultInfo);
 			} else {
 				flushOut();
-				printlnErr("[ERROR] in "+_name+" error"+(_errors>1?"s: ":": ")
-					 + _errors + ";" + _resultInfo);
+				printlnErr("[ERROR] in "
+					+_name+" error"+(_errors>1?"s: ":": ")
+					+ _errors + ";" + _resultInfo);
 			}
 		}
 		return _errors;
@@ -1091,26 +1092,29 @@ public abstract class STester {
 		DecimalFormat df = new DecimalFormat("0.00");
 		df.setDecimalSeparatorAlwaysShown(true);
 		float duration = ((float)((System.currentTimeMillis() - t) / 1000.0));
-		out.flush();
 		String s;
+		out.flush();
 		if (errors > 0) {
-			s = "[ERROR] " +
-				String.valueOf(errors) + "error" + (errors > 1 ? "s": "") +
+			s = "[ERROR] " + errors + " error" + (errors > 1 ? "s, ": ", ") +
 				(info != null ? info : "") +
 				", total time: " + df.format(duration) + "s";
 			if (log != null) {
 				log.println(s);
+				log.flush();
 			}
 			out.flush();
 			err.println(s);
+			err.flush();
 		} else {
 			s = "[OK] " + (info != null ? info : "") +
 				", total time: " + df.format(duration) + "s";
 			err.flush();
 			if (log != null) {
 				log.println(s);
+				log.flush();
 			}
 			out.println(s);
+			out.flush();
 		}
 		return errors;
 	}

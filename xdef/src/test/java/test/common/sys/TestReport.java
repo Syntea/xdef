@@ -439,7 +439,6 @@ public class TestReport extends STester {
 			assertEq("E SYS076: Chyba URL Chyba dat: ;"
 				+ " Čtení za koncem souboru", r.toString());
 		} catch (Exception ex) {fail(ex);}
-
 		clearTempDir(); // clear temporary data
 	}
 
