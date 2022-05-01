@@ -933,7 +933,8 @@ public abstract class STester {
 					+ "s" + _resultInfo);
 			} else {
 				flushOut();
-				printlnErr("[ERROR] in "+_name+": " + _errors + _resultInfo);
+				printlnErr("[ERROR] in "+_name+" error"+(_errors>1?"s: ":": ")
+					 + _errors + ";" + _resultInfo);
 			}
 		}
 		return _errors;
@@ -1100,6 +1101,7 @@ public abstract class STester {
 			if (log != null) {
 				log.println(s);
 			}
+			out.flush();
 			err.println(s);
 		} else {
 			s = "[OK] " + (info != null ? info : "") +
