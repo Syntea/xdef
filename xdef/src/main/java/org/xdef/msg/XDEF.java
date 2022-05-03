@@ -4,7 +4,7 @@ package org.xdef.msg;
 /** Registered identifiers of reports with the prefix XDEF.
  * Default language ISO639-2 id: eng. */
 public interface XDEF {
-	/** Can't create root element. */
+	/** Can't create root element */
 	public static final long XDEF103 = 31159025664L;
 	/** Name of model expected&amp;{#SYS000} */
 	public static final long XDEF104 = 31159025665L;

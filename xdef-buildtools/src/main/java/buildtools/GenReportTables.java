@@ -52,6 +52,7 @@ public class GenReportTables {
 				"-i", msgPath + "*.properties",
 				"-p", packageName,
 				"-c", "UTF-8",
+				"-l",
 				"-o", temp.getAbsolutePath().replace('\\', '/')});
 			String msg =
 				FUtils.updateDirectories(temp, srcDir, "java", true, false);

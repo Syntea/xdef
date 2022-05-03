@@ -772,6 +772,7 @@ public class RegisterReportTables {
 	 * @param outDir directory where to generate.
 	 * @param encoding required code table name for generated Java code.
 	 * If null the actual code of system is used.
+	 * @param crlf if true end line will generated CR and LF, otherwise only LF.
 	 * @param pckg package name of generated classes. If null the package
 	 * name will be org.common.msg.
 	 * @param reporter ArrqayReporter where to put error messages.
@@ -779,6 +780,7 @@ public class RegisterReportTables {
 	private static void genRegisteredJavaTables(final ReportTableImpl[] tables,
 		final File outDir,
 		final String encoding,
+		final boolean crlf,
 		final String pckg,
 		ArrayReporter reporter) {
 		//gen default tables
@@ -1006,6 +1008,7 @@ public class RegisterReportTables {
 "-o the directory where Java source with report tables are generated\n"+
 "-p package name of generated tables. Default value: \"org.xdef.msg\"\n"+
 "-c endoding: character set name of output file (default is UTF-8).\n"+
+"-l lines are separated by the couple of CR LF. The parameter is optional.\n"+
 "-h: help.";
 		if (args == null || args.length == 0) {
 			throw new RuntimeException("Missing parameters.\n\n" + HDRMSG);
@@ -1014,6 +1017,7 @@ public class RegisterReportTables {
 		String pckg = null;
 		String encoding = null;
 		File outDir = null;
+		boolean crlf = false;
 		int len = args.length - 1;
 		StringWriter errWriter = new StringWriter();
 		PrintWriter errors = new PrintWriter(errWriter);
@@ -1095,6 +1099,12 @@ public class RegisterReportTables {
 								}
 							}
 							continue;
+						case 'l':
+							if (crlf) {
+								errors.println("Duplicated parameter -l");
+							}
+							crlf = true;
+							continue;
 						case 'p':
 							if (pckg != null) {
 								errors.println(
@@ -1133,7 +1143,7 @@ public class RegisterReportTables {
 			readReporTables(files, reporter);
 		if (msgTables != null) {
 			genRegisteredJavaTables(msgTables,
-				outDir, encoding, pckg, reporter);
+				outDir, encoding, crlf, pckg, reporter);
 		} else {
 			//No report tables generated
 			throw new SRuntimeException(SYS.SYS223);
