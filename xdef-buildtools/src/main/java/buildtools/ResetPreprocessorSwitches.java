@@ -26,6 +26,7 @@ public class ResetPreprocessorSwitches {
 			"-i", new File(projectBase, "src/main/java").getAbsolutePath(),
 //			"-o", new File("temp").getAbsolutePath(),// output directery
 			"-r", // recursive process of directories
+			"-l", // generate CR and LF as the end of line
 			"-v", // verbose output
 			"-t"); // remove trailibg white sapces
 	}

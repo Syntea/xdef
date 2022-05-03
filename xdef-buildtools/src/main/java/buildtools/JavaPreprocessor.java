@@ -128,6 +128,8 @@ import java.nio.charset.Charset;
  *   parameter is optional. If it is missing the source files are replaced.</p>
  * <p>-c charset: name of character table, if it is not specified then the
  *   default system character set is used. The parameter is optional.</p>
+ * <p>-l if specified all the end of all lines are generated as CR LF,
+ * otherwise only LF.</p>
  * <p>-h display the help text.</p>
  *
  * @author  Vaclav Trojan
@@ -148,6 +150,7 @@ public class JavaPreprocessor {
 
 	private BufferedReader _in;
 	private String _charset;
+	private String _nl;
 	private MyStringList _keys;
 	private String _line;
 	private int _lineNumber;
@@ -548,7 +551,7 @@ public class JavaPreprocessor {
 			false);
 	}
 
-	/** Modify nested "if" comand as comment. */
+	/** Modify nested "if" command as comment. */
 	private void ignoreNestedIfCommand() throws IOException {
 		boolean modify = canonizeAndChageCommand(true);
 		int command = modifyToCommand(true, modify);
@@ -641,12 +644,12 @@ public class JavaPreprocessor {
 				continue; //skip leading whitespaces
 			}
 			if (_line.charAt(i) == '*') {
-				_line = _line.substring(0, i + 1) + "#/\n";
+				_line = _line.substring(0, i + 1) + "#/" + _nl;
 				_modified = true;
 				break;
 			} else {
 				if (i + 1 < len) {
-					_line = _line.substring(0, i + 1) + "\n";
+					_line = _line.substring(0, i + 1) + _nl;
 					_modified = true;
 				}
 				break;
@@ -941,7 +944,7 @@ public class JavaPreprocessor {
 		_lineNumber++;
 		int len = _line.length() - 1;
 		if (len < 0) {
-			_line = "\n";
+			_line = _nl;
 			_endPos = 0;
 			return SRC_LINE;
 		} else {
@@ -956,7 +959,7 @@ public class JavaPreprocessor {
 				if (i != len) {
 					_modified = true;
 					if (i < 0) {
-						_line = "\n";
+						_line = _nl;
 						return SRC_LINE;
 					} else {
 						_line = _line.substring(0, i + 1);
@@ -965,7 +968,7 @@ public class JavaPreprocessor {
 				}
 			}
 			_endPos = len + 1;
-			_line += '\n';
+			_line += _nl;
 		}
 		skipBlanks();
 		if (isToken("/*#")) {
@@ -1227,6 +1230,7 @@ public class JavaPreprocessor {
 "-encoding charset name: if it is not specified then the system\n"+
 "   default character set is used. The parameter is optional.\n"+
 "-x extract preprocessor commands\n"+
+"-l if specified the end of lines are generated as CR LF, otherwise only LF.\n"+
 "-h display the help text\n");
 		System.err.flush();
 		if (exitCode >= 0) {
@@ -1244,6 +1248,8 @@ public class JavaPreprocessor {
 	 * preprocessor will scan also subdirectories..
 	 * @param out PrintStream where will be printed output messages.
 	 * @param err PrintStream where will be printed error messages.
+	 * @param charset name of charset name of output or null.
+	 * @param crlf if true end line will generated CR and LF, otherwise only LF.
 	 * @param verbose If the value of this argument is true the
 	 * preprocessor will print detailed information to <code>out</code>.
 	 * @param extract If the value of this argument is true the
@@ -1260,6 +1266,7 @@ public class JavaPreprocessor {
 		final PrintStream out,
 		final PrintStream err,
 		final String charset,
+		final boolean crlf,
 		final boolean verbose,
 		final boolean cutTrailingSpaces) {
 		JavaPreprocessor jp = new JavaPreprocessor();
@@ -1273,6 +1280,7 @@ public class JavaPreprocessor {
 		if (charset != null) {
 			jp._charset = charset;
 		}
+		jp._nl = crlf ? "\r\n" : "\n";
 		File f;
 		String s = outDir;
 		if (s == null || (s = s.trim()).length() == 0) {
@@ -1362,6 +1370,7 @@ public class JavaPreprocessor {
 		boolean verbose = false;
 		boolean extract = false;
 		String charset = null;
+		boolean crlf = false;
 		boolean cutTrailingSpaces = false;
 		for (int i = 0; i < args.length; i++) {
 			if ("-r".equals(args[i])) {
@@ -1369,6 +1378,12 @@ public class JavaPreprocessor {
 					return "'-r' redefined.";
 				}
 				dirTree = true;
+			} else if ("-l".equals(args[i])) {
+				if (crlf) {
+					return "'-l' redefined.";
+				}
+				crlf = true;
+				
 			} else if (args[i].equals("-t")) {
 				if (cutTrailingSpaces) {
 					return "'-t' redefined.";
@@ -1507,7 +1522,7 @@ public class JavaPreprocessor {
 			}
 		}
 		return proc(input, outDir, keys, dirTree, out, err,
-			charset, verbose, cutTrailingSpaces);
+			charset, crlf, verbose, cutTrailingSpaces);
 	}
 
 	/** Call JavaPreprocessor from command line.

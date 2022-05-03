@@ -969,6 +969,7 @@ public class CanonizeSource {
 	 * Note the information is considered in the form of Java or "C" comment.
 	 * @param charset name of character set of data. If it is null then the
 	 * default system encoding is used.
+	 * @param crlf if true end line will generated CR and LF, otherwise only LF.
 	 */
 	public static void canonize(final String sources,
 		final boolean dirTree,
@@ -976,7 +977,8 @@ public class CanonizeSource {
 		final int n,
 		final String header,
 		final String tail,
-		final String charset) {
+		final String charset,
+		final boolean crlf) {
 		try {
 			int len = 3;
 			if (dirTree) {
@@ -1079,6 +1081,7 @@ public class CanonizeSource {
 +"-ee end the file with the final information (existing one is not replaced)\n"
 +"-encoding charset name of character setof data, if it is not specified then\n"
 +"   the system character set is used. The parameter is optional.\n"
++"-l if specified the end of lines are generated as CR LF, otherwise only LF.\n"
 +"-h: displays the help text.\n"
 +"The switches -t and -s are exclusive. If none of them is specified the\n"
 +"the default value is set to '-s 4'.\n"

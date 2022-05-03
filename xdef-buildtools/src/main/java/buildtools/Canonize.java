@@ -77,27 +77,27 @@ public class Canonize {
 				dirTree,
 				true,
 				4,
-				hdrTemplate, tailTemplate, JAVA_SOURCE_CHARSET);
+				hdrTemplate, tailTemplate, JAVA_SOURCE_CHARSET, true);
 //			CanonizeSource.canonize(home + "*.xml",
 //				dirTree,
 //				false,
 //				-1,
-//				null, null, JAVA_SOURCE_CHARSET);
+//				null, null, JAVA_SOURCE_CHARSET, true);
 //			CanonizeSource.canonize(home + "*.html",
 //				dirTree,
 //				false,
 //				-1,
-//				null, null, JAVA_SOURCE_CHARSET);
+//				null, null, JAVA_SOURCE_CHARSET, true);
 //			CanonizeSource.canonize(home + "*.xdef",
 //				dirTree,
 //				false,
 //				-1,
-//				null, null, JAVA_SOURCE_CHARSET);
+//				null, null, JAVA_SOURCE_CHARSET, true);
 			CanonizeSource.canonize(home + "*.properties",
 				dirTree,
 				false,
 				-1,
-				null, null, JAVA_SOURCE_CHARSET);
+				null, null, JAVA_SOURCE_CHARSET, true);
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		}
