@@ -1008,7 +1008,7 @@ public class RegisterReportTables {
 "-o the directory where Java source with report tables are generated\n"+
 "-p package name of generated tables. Default value: \"org.xdef.msg\"\n"+
 "-c endoding: character set name of output file (default is UTF-8).\n"+
-"-l lines are separated by the couple of CR LF. The parameter is optional.\n"+
+"-l lines are separated by the couple of CR LF (if not specified only LF).\n"+
 "-h: help.";
 		if (args == null || args.length == 0) {
 			throw new RuntimeException("Missing parameters.\n\n" + HDRMSG);
@@ -1028,6 +1028,12 @@ public class RegisterReportTables {
 						case 'h':
 							System.out.println(HDRMSG);
 							return;
+						case 'l':
+							if (crlf) {
+								errors.println("Duplicated parameter -l");
+							}
+							crlf = true;
+							continue;
 						case 'i':
 							ArrayList<String> ar = new ArrayList<String>();
 							while (i + 1 <= len && !args[i+1].startsWith("-")) {
@@ -1098,12 +1104,6 @@ public class RegisterReportTables {
 									errors.println("Missing encoding");
 								}
 							}
-							continue;
-						case 'l':
-							if (crlf) {
-								errors.println("Duplicated parameter -l");
-							}
-							crlf = true;
 							continue;
 						case 'p':
 							if (pckg != null) {
