@@ -25,7 +25,7 @@ import java.util.TreeSet;
 public class RegisterReportTables {
 
 	/** Platform-dependent new line. */
-	private static final String LN = XDConstants.LINE_SEPARATOR;
+//	private String LN = "\n";
 
 	/** Implementation of storage of report tables. A report table can be
 	 * localized for language specified by given language argument or the
@@ -544,6 +544,7 @@ public class RegisterReportTables {
 	 * @param dir directory where java source is stored.
 	 * @param pckg name of package or <i>null</i> (i.e. org.xdef.msg).
 	 * @param encoding character encoding of source file or <i>null</i> (then
+	 * @param crlf if true end line will generated CR and LF, otherwise only LF.
 	 * the system encoding is used).
 	 * @param reporter where error reports are written.
 	 */
@@ -551,7 +552,9 @@ public class RegisterReportTables {
 		final File dir,
 		final String pckg,
 		String encoding,
+		boolean crlf,
 		ReportWriter reporter) {
+		String LN = crlf ? "\r\t" : "\n";
 		String prefix = table.getPrefix();
 		int prefixLen = prefix.length();
 		ArrayList<String> ar = new ArrayList<String>();
@@ -615,6 +618,7 @@ public class RegisterReportTables {
 	 * @param encoding character set encoding of output file or <i>null</i>.
 	 * If the argument is <i>null</i> it is used the default system character
 	 * set from Java VM.
+	 * @param crlf if true end line will generated CR and LF, otherwise only LF.
 	 * @param registeredTable the registered report table.
 	 * @param reporter where error reports are written.
 	 */
@@ -622,6 +626,7 @@ public class RegisterReportTables {
 		final File dir,
 		final String pckg,
 		final String encoding,
+		final boolean crlf,
 		final ReportTableImpl registeredTable,
 		final ReportWriter reporter) {
 		String prefix = table.getPrefix();
@@ -635,7 +640,7 @@ public class RegisterReportTables {
 		}
 		if (table == registeredTable) {
 			//generate registration java source
-			genRegIDsInterface(table, dir, pckg, encoding, reporter);
+			genRegIDsInterface(table, dir, pckg, encoding, crlf, reporter);
 		}
 		try {
 			if (table != registeredTable) {
@@ -698,7 +703,7 @@ public class RegisterReportTables {
 		} catch (Exception ex) {
 			String msg = ex.getMessage();
 			if (!reporter.toString().isEmpty()) {
-				msg = (msg != null ? msg + LN : "") + reporter.toString();
+				msg = (msg != null ? msg + '\n' : "") + reporter.toString();
 			}
 			throw new RuntimeException(msg, ex);
 		}
@@ -796,7 +801,8 @@ public class RegisterReportTables {
 						}
 					}
 				}
-				genJavaSource(table, outDir, pckg, encoding, table, reporter);
+				genJavaSource(
+					table, outDir, pckg, encoding, crlf, table, reporter);
 			}
 		}
 		for (int j = 0; j < tables.length; j++) {
@@ -831,7 +837,7 @@ public class RegisterReportTables {
 					table1 = t;
 				}
 			}
-			genJavaSource(table, outDir, pckg, encoding, table1, reporter);
+			genJavaSource(table, outDir, pckg, encoding, crlf, table1,reporter);
 		}
 		reporter.checkAndThrowErrors();
 		if (reporter.errorWarnings()) {
@@ -1136,7 +1142,7 @@ public class RegisterReportTables {
 		}
 		errors.close();
 		if (!errWriter.toString().isEmpty()) {
-			throw new RuntimeException(errWriter.toString() + LN + HDRMSG);
+			throw new RuntimeException(errWriter.toString() + '\n' + HDRMSG);
 		}
 		ArrayReporter reporter = new ArrayReporter();
 		ReportTableImpl[] msgTables = (ReportTableImpl[])
