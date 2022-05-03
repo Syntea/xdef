@@ -26,7 +26,7 @@ public interface XConstants {
 	 * <p>"showXonModel" display created XON model (see DEBUG_SHOW_XON_MODEL).
 	*#/
 	public static String DEBUG_SWITCHES = "xdef-debug";
-	/** Debug switch to show created XON model. *##/
+	/** Debug switch to show created XON model. *#/
 	public static String DEBUG_SHOW_XON_MODEL = "showXonModel";
 /*#end*/
 }
