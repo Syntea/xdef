@@ -1,6 +1,5 @@
 package org.xdef.sys;
 
-import org.xdef.XDConstants;
 import org.xdef.msg.SYS;
 import java.io.File;
 import java.io.FileInputStream;
@@ -23,9 +22,6 @@ import java.util.TreeSet;
  * @author Vaclav Trojan
  */
 public class RegisterReportTables {
-
-	/** Platform-dependent new line. */
-//	private String LN = "\n";
 
 	/** Implementation of storage of report tables. A report table can be
 	 * localized for language specified by given language argument or the
@@ -1000,7 +996,7 @@ public class RegisterReportTables {
 	 * table from input.
 	 *<p>-c encoding: character set name of output file (default is the
 	 * system character set).
-	 *<p>-l ISO code of obligatory language of reports(default is "eng")
+	 *<p>-l lines are separated by the  CR LF (if not specified only LF)
 	 *<p>-h: help.
 	 */
 	public static void main(String... args) {
@@ -1013,7 +1009,8 @@ public class RegisterReportTables {
 "   may contain wildcard characters).\n"+
 "-o the directory where Java source with report tables are generated\n"+
 "-p package name of generated tables. Default value: \"org.xdef.msg\"\n"+
-"-c endoding: character set name of output file (default is UTF-8).\n"+
+"-c endoding: character set name of output file (default is the system\n"+
+"   character set).\n"+
 "-l lines are separated by the couple of CR LF (if not specified only LF).\n"+
 "-h: help.";
 		if (args == null || args.length == 0) {
