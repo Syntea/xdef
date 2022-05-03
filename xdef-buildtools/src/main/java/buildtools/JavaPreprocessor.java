@@ -134,6 +134,7 @@ import java.nio.charset.Charset;
  */
 public class JavaPreprocessor {
 
+	private static final String ENDLINE = String.format("%n"); // end of line
 	private final static int MAX_STACK = 256; //max. stack for expressions
 
 	private static final int END_COMMAND = 1;
@@ -641,12 +642,12 @@ public class JavaPreprocessor {
 				continue; //skip leading whitespaces
 			}
 			if (_line.charAt(i) == '*') {
-				_line = _line.substring(0, i + 1) + "#/\n";
+				_line = _line.substring(0, i + 1) + "#/" + ENDLINE;
 				_modified = true;
 				break;
 			} else {
 				if (i + 1 < len) {
-					_line = _line.substring(0, i + 1) + "\n";
+					_line = _line.substring(0, i + 1) + ENDLINE;
 					_modified = true;
 				}
 				break;
@@ -941,7 +942,7 @@ public class JavaPreprocessor {
 		_lineNumber++;
 		int len = _line.length() - 1;
 		if (len < 0) {
-			_line = "\n";
+			_line = ENDLINE;
 			_endPos = 0;
 			return SRC_LINE;
 		} else {
@@ -956,7 +957,7 @@ public class JavaPreprocessor {
 				if (i != len) {
 					_modified = true;
 					if (i < 0) {
-						_line = "\n";
+						_line = ENDLINE;
 						return SRC_LINE;
 					} else {
 						_line = _line.substring(0, i + 1);
@@ -965,7 +966,7 @@ public class JavaPreprocessor {
 				}
 			}
 			_endPos = len + 1;
-			_line += '\n';
+			_line += ENDLINE;
 		}
 		skipBlanks();
 		if (isToken("/*#")) {

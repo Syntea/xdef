@@ -47,7 +47,7 @@ import org.xdef.sys.NameWildCardFilter;
  * @author  Vaclav Trojan
  */
 public class CanonizeSource {
-
+	private static final String ENDLINE = String.format("%n"); // end of line
 	//parameters:
 	private PrintStream _out;
 	private PrintStream _err;
@@ -57,7 +57,6 @@ public class CanonizeSource {
 	private int _oldIndent;
 	private String _indentSpaces;
 	private String _mask;
-	private boolean _genCR;
 	private String _header;
 	private boolean _headerKeep;
 	private String _tail;
@@ -151,10 +150,7 @@ public class CanonizeSource {
 					modified = true;
 				} else {
 					modified |= i != len;
-					if (_genCR) {
-						_sb.append('\r'); //add CR
-					}
-					_sb.append('\n'); //add LF
+					_sb.append(ENDLINE); // line end
 				}
 				continue;
 			}
@@ -231,10 +227,7 @@ public class CanonizeSource {
 					}
 				}
 			}
-			if (_genCR) {
-				_sb.append('\r'); //add CR
-			}
-			_sb.append('\n'); //add LF
+			_sb.append(ENDLINE); // line end
 		}
 		in.close();
 		return modified;
@@ -627,7 +620,6 @@ public class CanonizeSource {
 		final PrintStream out,
 		final PrintStream err,
 		final boolean verbose,
-		final boolean genCR,
 		final boolean spacesToTab,
 		final int indentSize,
 		final int newIndent,
@@ -655,17 +647,13 @@ public class CanonizeSource {
 			//read header template file
 			cs._header = updateInfo(header, datetime, user, "header", charset);
 			if (cs._header != null && cs._header.length() > 0) {
-				if (genCR) {
-					cs._header += "\r\n\r\n";
-				} else  {
-					cs._header += "\n\n";
-				}
+				cs._header += ENDLINE + ENDLINE;
 			}
 			cs._headerKeep = headerKeep;
 			//read tail template file
 			cs._tail = updateInfo(tail, datetime, user, "tail", charset);
 			if (cs._tail != null && cs._tail.length() > 0) {
-				cs._tail = (genCR ? "\r\n\r\n" :"\n\n") + cs._tail;
+				cs._tail = ENDLINE + ENDLINE + cs._tail;
 			}
 			cs._tailKeep = tailKeep;
 		} catch (Exception ex) {
@@ -693,7 +681,6 @@ public class CanonizeSource {
 			cs._indentSpaces += " ";
 		}
 		String inp = input.replace('\\', '/');
-		cs._genCR = genCR;
 		File dir = null;
 		if (dirTree) {
 			int i = inp.lastIndexOf('/');
@@ -758,7 +745,6 @@ public class CanonizeSource {
 		int spacesToTab = 0;
 		int replacement = 4;
 		int newIndent = -1;
-		boolean genCR = false;
 		String charset = null;
 		for (int i = 0; i < args.length; i++) {
 			if ("-r".equals(args[i])) {
@@ -835,11 +821,6 @@ public class CanonizeSource {
 					return "'-v' is redefined (verbose).";
 				}
 				verbose = true;
-			} else if (args[i].equals("-cr")) {
-				if (genCR) {
-					return "'-cr' is redefined (generate CR and LF).";
-				}
-				genCR = true;
 			} else if (args[i].startsWith("-o")) {
 				if (outDir != null) {
 					return "-o is redefined (output directrory).";
@@ -937,7 +918,6 @@ public class CanonizeSource {
 			out,
 			err,
 			verbose,
-			genCR,
 			spacesToTab == 2,
 			replacement,
 			newIndent,
