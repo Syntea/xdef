@@ -1235,7 +1235,6 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		}
 		if (_selector!= null) {
 			if (_selector._kind == XNode.XMMIXED) {
-				// TODO xx if mixed is finished set endidex ??
 				_nextDefIndex = _selector._begIndex + 1;
 			}
 		}
@@ -1265,7 +1264,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 								&& _defList[_selector._prev._begIndex]
 									.maxOccurs() > 0
 								&& _selector._kind == XNode.XMMIXED) {
-								// test if full xx
+								// test if full
 								boolean all = true;
 								for (int i = _selector._begIndex + 1;
 									i < _selector._endIndex; i++) {
@@ -1308,7 +1307,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 									&& _defList[_selector._prev._begIndex]
 										.maxOccurs() > 0
 									&& _selector._kind == XNode.XMMIXED) {
-									// test if full xx
+									// test if full
 									boolean all = true;
 									for (int i = _selector._begIndex + 1;
 										i < _selector._endIndex; i++) {

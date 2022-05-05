@@ -203,7 +203,7 @@ public final class XonSourceParser implements XonParser, XParser {
 			}
 		}
 		_names.push(_name = name);
-		return false; /*xx*/
+		return false;
 	}
 	@Override
 	/** Array started.

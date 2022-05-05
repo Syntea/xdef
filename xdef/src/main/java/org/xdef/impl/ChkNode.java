@@ -521,8 +521,10 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 				return;
 			}
 		}
-		if (value instanceof String) {setVariable(name, (String) value);
-		} else if (value instanceof Long) {setVariable(name, (Long) value);
+		if (value instanceof String) {
+			setVariable(name, (String) value);
+		} else if (value instanceof Long) {
+			setVariable(name, (Long) value);
 		} else if (value instanceof Integer) {
 			setVariable(name, ((Integer) value).longValue());
 		} else if (value instanceof Double) {setVariable(name, (Double) value);
@@ -1091,12 +1093,12 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 		return "";
 	}
 
-	/** Get X-position and xpath information. If it is XON/JSON, then create
+	/** Get X-position and XPath information. If it is XON/JSON, then create
 	 * modified XON/JSON path.
 	 * @param xpos X-position of model.
-	 * @param xpath Xpath of data (may be null).
+	 * @param xpath XPath of data (may be null).
 	 * @return array with two items - the first one is X-position and the
-	 * second one is Xpath.
+	 * second one is XPath.
 	 */
 	final String[] getPosInfo(final String xpos, final String xpath) {
 		String[] result = new String[]{xpos, xpath};
@@ -1118,8 +1120,8 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 		if (base == null) {
 			return result;
 		}
-		XMNode[] xx = base.getChildNodeModels();
-		if (xx == null || base.getXonMode() == 0) {
+		XMNode[] xnodes = base.getChildNodeModels();
+		if (xnodes == null || base.getXonMode() == 0) {
 			return result;
 		}
 		ndx = ndx1 + 1;
@@ -1179,54 +1181,55 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 				wasArray = false;
 			}
 			if (s.startsWith("array")) {
-				XMNode[] yy = xx;
-				xx = null;
-				for (int i=0, j=0; i < yy.length; i++) {
-					XMNode x = yy[i];
+				XMNode[] ynodes = xnodes;
+				xnodes = null;
+				for (int i=0, j=0; i < ynodes.length; i++) {
+					XMNode x = ynodes[i];
 					if ("array".equals(x.getLocalName())) {
 						if (j == m) { // model found
 							xdpath += getItemName(x) + arrayInfo1;
 							jpath += !t.isEmpty() ?getItemName(x)+arrayInfo2:"";
 							arrayInfo1 = arrayInfo2 = "";
-							xx = ((XMElement)x).getChildNodeModels();
+							xnodes = ((XMElement)x).getChildNodeModels();
 							wasArray = true;
 							break;
 						}
 						j++;
 					}
 				}
-				if (xx==null) {
+				if (xnodes==null) {
 					return result;
 				}
 			} else if (s.startsWith("map")) {
-				XMNode[] yy = xx;
-				xx = null;
-				for (int i=0, j=0; i < yy.length; i++) {
-					XMNode x = yy[i];
+				XMNode[] ynodes = xnodes;
+				xnodes = null;
+				for (int i=0, j=0; i < ynodes.length; i++) {
+					XMNode x = ynodes[i];
 					if ("map".equals(x.getLocalName())) {
 						if (j == m) { // model found
 							xdpath += getItemName(x) + arrayInfo1;
 							jpath += !t.isEmpty() ?getItemName(x)+arrayInfo2 :"";
 							wasArray = false;
 							arrayInfo1 = arrayInfo2 = "";
-							xx = ((XMElement)x).getChildNodeModels();
+							xnodes = ((XMElement)x).getChildNodeModels();
 							break;
 						}
 						j++;
 					}
 				}
-				if (xx==null) {
+				if (xnodes==null) {
 					return result;
 				}
 			} else if (s.startsWith("item")) {
-				XMNode[] yy = xx;
-				xx = null;
-				for (int i=0, j=0; i < yy.length; i++) {
-					XMNode x = yy[i];
-					if ("item".equals(x.getLocalName())) {
+				XMNode[] ynodes = xnodes;
+				xnodes = null;
+				for (int i=0, j=0; i < ynodes.length; i++) {
+					XMNode xn = ynodes[i];
+					if ("item".equals(xn.getLocalName())) {
 						if (j == m) { // model found
-							xdpath += getItemName(x) + arrayInfo1;
-							jpath += !t.isEmpty() ?getItemName(x)+arrayInfo2:"";
+							xdpath += getItemName(xn) + arrayInfo1;
+							jpath += !t.isEmpty()
+								? getItemName(xn) + arrayInfo2 : "";
 							arrayInfo1 = arrayInfo2 = "";
 							wasArray = false;
 							return new String[]{xdpath, xpath!=null?jpath:null};

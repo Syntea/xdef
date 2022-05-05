@@ -96,7 +96,7 @@ public interface XDDebug {
 	public void setInDebug(InputStream inDebug);
 
 	/** This method is called from x-script methods pause or trace.
-	 * @param xxNode actual XXNode.
+	 * @param xnode actual XXNode.
 	 * @param code executive code.
 	 * @param pc program counter.
 	 * @param sp stack pointer.
@@ -108,7 +108,7 @@ public interface XDDebug {
 	 * @return step mode.
 	 * @throws Error if program should stop.
 	 */
-	public int debug(final XXNode xxNode,
+	public int debug(final XXNode xnode,
 		final XDValue[] code,
 		final int pc,
 		final int sp,

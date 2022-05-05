@@ -91,10 +91,10 @@ public interface XComponent {
 	public List<XComponent> xGetNodeList();
 
 	/** Create instance of child XComponent.
-	 * @param xx actual XXNode.
+	 * @param xn actual XXNode.
 	 * @return new empty child XCopmponent object.
 	 */
-	public XComponent xCreateXChild(XXNode xx);
+	public XComponent xCreateXChild(XXNode xn);
 
 	/** Add XComponent object to local variable.
 	 * @param xc XComponent to be added.
@@ -107,16 +107,16 @@ public interface XComponent {
 	public void xSetAny(Element el);
 
 	/** Set value of text node.
-	 * @param xx Actual XXNode (from text node).
+	 * @param xn Actual XXNode (from text node).
 	 * @param value parsed value.
 	 */
-	public void xSetText(XXNode xx, XDParseResult value);
+	public void xSetText(XXNode xn, XDParseResult value);
 
 	/** Set value of attribute.
-	 * @param xx Actual XXNode (from attribute model).
+	 * @param xn Actual XXNode (from attribute model).
 	 * @param value parsed value.
 	 */
-	public void xSetAttr(XXNode xx, XDParseResult value);
+	public void xSetAttr(XXNode xn, XDParseResult value);
 
 	/** Update parameters of XComponent.
 	 * @param p parent XComponent.q

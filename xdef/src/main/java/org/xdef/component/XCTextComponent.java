@@ -112,22 +112,22 @@ public class XCTextComponent implements XComponent {
 	public XCTextComponent xCreateXChild(XXNode xn) {return null;}
 	@Override
 	/** Set value of text node.
-	 * @param xx Actual XXNode (from text node).
+	 * @param xnode Actual XXNode (from text node).
 	 * @param value parsed value.
 	 */
-	public void xSetText(XXNode xx, XDParseResult value) {
-		if (xx != null) {
-			_model = xx.getXMNode().getXDPosition();
-			_xpos = xx.getXPos();
+	public void xSetText(XXNode xnode, XDParseResult value) {
+		if (xnode != null) {
+			_model = xnode.getXMNode().getXDPosition();
+			_xpos = xnode.getXPos();
 		}
 		_value = value.getSourceBuffer();
 	}
 	@Override
 	/** Set value of attribute.
-	 * @param xx Actual XXNode (from attribute model).
+	 * @param xnode Actual XXNode (from attribute model).
 	 * @param value parsed value.
 	 */
-	public void xSetAttr(XXNode xx, XDParseResult value) {}
+	public void xSetAttr(XXNode xnode, XDParseResult value) {}
 	@Override
 	public void xAddXChild(XComponent xc) {}
 	@Override

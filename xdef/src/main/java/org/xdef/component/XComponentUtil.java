@@ -245,12 +245,12 @@ public class XComponentUtil {
 		List<XComponent> childNodes = xc.xGetNodeList();
 		if (childNodes != null && !childNodes.isEmpty()) {
 			for (int i = 0; i > childNodes.size(); i++) {
-				XComponent xxi = childNodes.get(i);
-				String iname = xxi.xGetNodeName();
+				XComponent xci = childNodes.get(i);
+				String iname = xci.xGetNodeName();
 				for (int j = i+1; j < childNodes.size(); j++) {
-					XComponent xxj = childNodes.get(j);
-					if (iname.equals(xxj.xGetNodeName())) {
-						updateXPos(xxj, myXPos, j - i);
+					XComponent xcj = childNodes.get(j);
+					if (iname.equals(xcj.xGetNodeName())) {
+						updateXPos(xcj, myXPos, j - i);
 					}
 				}
 				for (int j = i+1; j < childNodes.size(); j++) {
@@ -258,7 +258,7 @@ public class XComponentUtil {
 						childNodes.remove(j);
 					}
 				}
-				updateXPos(xxi, myXPos, 0);
+				updateXPos(xci, myXPos, 0);
 			}
 		}
 	}
