@@ -62,7 +62,7 @@ public class MyTest extends XDTester {
 		setProperty(XDConstants.XDPROPERTY_WARNINGS, // xdef_warnings
 			XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE); // true | false
 ////////////////////////////////////////////////////////////////////////////////
-	
+
 		Element el;
 		Object j;
 		String json, s, xdef, xml;
@@ -74,7 +74,22 @@ public class MyTest extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
 "<xd:declaration>\n"+
-"    type x list(xdatetime('y-M-d'));\n" +
+"    type x xdatetime('y-M-d', 'yyyyMMdd');\n" +
+"    type y xdatetime('y-M-d', 'yyyyMMdd');\n" +
+"</xd:declaration>\n"+
+"  <A a='? x();'>? y()</A>\n"+
+"</xd:def>";
+			xp = XDFactory.compileXD(null, xdef);
+			xd = xp.createXDDocument();
+			xml = "<A a='2022-5-8'>2022-5-8</A>";
+			assertEq("<A a='20220508'>20220508</A>", parse(xp, "", xml));
+			assertNoErrors(reporter);
+		} catch (Exception ex) {fail(ex);}
+		try {
+			xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
+"<xd:declaration>\n"+
+"    type x list(xdatetime('y-M-d', 'yyyyMMdd'));\n" +
 "    type y list(xdatetime('y-M-d', 'yyyyMMdd'));\n" +
 "</xd:declaration>\n"+
 "  <A a='? x();'>* y()</A>\n"+
@@ -82,7 +97,7 @@ public class MyTest extends XDTester {
 			xp = XDFactory.compileXD(null, xdef);
 			xd = xp.createXDDocument();
 			xml = "<A a='2022-5-8'>2022-5-8</A>";
-			assertEq("<A a='2022-5-8'>20220508</A>", parse(xp, "", xml));
+			assertEq("<A a='2022-5-8'>2022-5-8</A>", parse(xp, "", xml));
 			assertNoErrors(reporter);
 			xdef =
 "<xd:def xmlns:xd ='" + _xdNS + "' name='a' root='a'\n"+
@@ -119,7 +134,7 @@ public class MyTest extends XDTester {
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
 "<xd:declaration>\n"+
 "    type x list(xdatetime('y-M-d'));\n" +
-"    type y list(xdatetime('y-M-d', 'yyyyMMdd'));\n" +				
+"    type y list(xdatetime('y-M-d', 'yyyyMMdd'));\n" +
 "</xd:declaration>\n"+
 "  <A a='? y();'></A>\n"+
 "</xd:def>";
@@ -129,7 +144,6 @@ public class MyTest extends XDTester {
 			assertEq(xml, parse(xp, "", xml));
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
-if(true)return;
 		_xdOfxd = XDFactory.compileXD(null,
 					"classpath://org.xdef.impl.compile.XdefOfXdef*.xdef");
 		try {

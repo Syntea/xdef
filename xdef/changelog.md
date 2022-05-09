@@ -1,7 +1,8 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 41.0.9, release-date 2022-05-03
-. preparing new release...
+# Version 41.0.9, release-date 2022-05-09
+. Asterisk (`*`) may be now used for sequential parameters specifying
+  `minLength`, `maxLength`, `minInclusive` or  `maxInclusive`.
 
 # Version 41.0.8, release-date 2022-04-26
 * added method `toXon()` the the interface `org.xdef.component.XComponent`.

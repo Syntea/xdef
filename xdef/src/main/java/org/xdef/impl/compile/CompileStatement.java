@@ -37,10 +37,173 @@ import java.util.LinkedHashMap;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
+import static org.xdef.XDValueID.XD_ANY;
+import static org.xdef.XDValueID.XD_BIGINTEGER;
+import static org.xdef.XDValueID.XD_BNFGRAMMAR;
+import static org.xdef.XDValueID.XD_BNFRULE;
+import static org.xdef.XDValueID.XD_BOOLEAN;
+import static org.xdef.XDValueID.XD_BYTES;
+import static org.xdef.XDValueID.XD_CHAR;
+import static org.xdef.XDValueID.XD_CONTAINER;
+import static org.xdef.XDValueID.XD_DATETIME;
+import static org.xdef.XDValueID.XD_DECIMAL;
+import static org.xdef.XDValueID.XD_DOUBLE;
+import static org.xdef.XDValueID.XD_DURATION;
+import static org.xdef.XDValueID.XD_ELEMENT;
+import static org.xdef.XDValueID.XD_EXCEPTION;
+import static org.xdef.XDValueID.XD_LONG;
+import static org.xdef.XDValueID.XD_NAMEDVALUE;
+import static org.xdef.XDValueID.XD_NULL;
+import static org.xdef.XDValueID.XD_OBJECT;
+import static org.xdef.XDValueID.XD_PARSER;
+import static org.xdef.XDValueID.XD_PARSERESULT;
+import static org.xdef.XDValueID.XD_STRING;
+import static org.xdef.XDValueID.XD_UNDEF;
+import static org.xdef.XDValueID.XD_VOID;
 import org.xdef.impl.XConstants;
 import org.xdef.impl.XDefinition;
+import static org.xdef.impl.code.CodeTable.ADD_I;
+import static org.xdef.impl.code.CodeTable.ADD_R;
+import static org.xdef.impl.code.CodeTable.ADD_S;
+import static org.xdef.impl.code.CodeTable.AND_B;
+import static org.xdef.impl.code.CodeTable.BNFRULE_PARSE;
+import static org.xdef.impl.code.CodeTable.CALL_OP;
+import static org.xdef.impl.code.CodeTable.CMPEQ;
+import static org.xdef.impl.code.CodeTable.DEC_I;
+import static org.xdef.impl.code.CodeTable.DEC_R;
+import static org.xdef.impl.code.CodeTable.DIV_I;
+import static org.xdef.impl.code.CodeTable.DIV_R;
+import static org.xdef.impl.code.CodeTable.EQ_NULL;
+import static org.xdef.impl.code.CodeTable.INC_I;
+import static org.xdef.impl.code.CodeTable.INC_R;
+import static org.xdef.impl.code.CodeTable.INIT_NOPARAMS_OP;
+import static org.xdef.impl.code.CodeTable.INIT_PARAMS_OP;
+import static org.xdef.impl.code.CodeTable.JMPF_OP;
+import static org.xdef.impl.code.CodeTable.JMPT_OP;
+import static org.xdef.impl.code.CodeTable.JMP_OP;
+import static org.xdef.impl.code.CodeTable.LD_CODE;
+import static org.xdef.impl.code.CodeTable.LD_CONST;
+import static org.xdef.impl.code.CodeTable.LD_GLOBAL;
+import static org.xdef.impl.code.CodeTable.LD_LOCAL;
+import static org.xdef.impl.code.CodeTable.LD_XMODEL;
+import static org.xdef.impl.code.CodeTable.LSHIFT_I;
+import static org.xdef.impl.code.CodeTable.MOD_I;
+import static org.xdef.impl.code.CodeTable.MOD_R;
+import static org.xdef.impl.code.CodeTable.MUL_I;
+import static org.xdef.impl.code.CodeTable.MUL_R;
+import static org.xdef.impl.code.CodeTable.NEG_BINARY;
+import static org.xdef.impl.code.CodeTable.NEG_I;
+import static org.xdef.impl.code.CodeTable.NEG_R;
+import static org.xdef.impl.code.CodeTable.NEW_NAMEDVALUE;
+import static org.xdef.impl.code.CodeTable.NE_NULL;
+import static org.xdef.impl.code.CodeTable.NOT_B;
+import static org.xdef.impl.code.CodeTable.OR_B;
+import static org.xdef.impl.code.CodeTable.PARSE_OP;
+import static org.xdef.impl.code.CodeTable.RELEASE_CATCH_EXCEPTION;
+import static org.xdef.impl.code.CodeTable.RETV_OP;
+import static org.xdef.impl.code.CodeTable.RET_OP;
+import static org.xdef.impl.code.CodeTable.RRSHIFT_I;
+import static org.xdef.impl.code.CodeTable.RSHIFT_I;
+import static org.xdef.impl.code.CodeTable.SET_CATCH_EXCEPTION;
+import static org.xdef.impl.code.CodeTable.STACK_DUP;
+import static org.xdef.impl.code.CodeTable.STOP_OP;
+import static org.xdef.impl.code.CodeTable.SUB_I;
+import static org.xdef.impl.code.CodeTable.SUB_R;
+import static org.xdef.impl.code.CodeTable.THROW_EXCEPTION;
+import static org.xdef.impl.code.CodeTable.TO_DECIMAL_X;
+import static org.xdef.impl.code.CodeTable.TO_FLOAT;
+import static org.xdef.impl.code.CodeTable.UNIQUESET_CHKID;
+import static org.xdef.impl.code.CodeTable.UNIQUESET_CHKIDS;
+import static org.xdef.impl.code.CodeTable.UNIQUESET_GETVALUEX;
+import static org.xdef.impl.code.CodeTable.UNIQUESET_ID;
+import static org.xdef.impl.code.CodeTable.UNIQUESET_IDREF;
+import static org.xdef.impl.code.CodeTable.UNIQUESET_IDREFS;
+import static org.xdef.impl.code.CodeTable.UNIQUESET_KEY_CHKID;
+import static org.xdef.impl.code.CodeTable.UNIQUESET_KEY_ID;
+import static org.xdef.impl.code.CodeTable.UNIQUESET_KEY_IDREF;
+import static org.xdef.impl.code.CodeTable.UNIQUESET_KEY_NEWKEY;
+import static org.xdef.impl.code.CodeTable.UNIQUESET_KEY_SET;
+import static org.xdef.impl.code.CodeTable.UNIQUESET_KEY_SETKEY;
+import static org.xdef.impl.code.CodeTable.UNIQUESET_NEWINSTANCE;
+import static org.xdef.impl.code.CodeTable.UNIQUESET_SET;
+import static org.xdef.impl.code.CodeTable.UNIQUESET_SETVALUEX;
+import static org.xdef.impl.code.CodeTable.XOR_B;
 import org.xdef.impl.code.DefBigInteger;
 import org.xdef.impl.code.ParseItem;
+import static org.xdef.impl.compile.XScriptParser.AAND_SYM;
+import static org.xdef.impl.compile.XScriptParser.AND_EQ_SYM;
+import static org.xdef.impl.compile.XScriptParser.AND_SYM;
+import static org.xdef.impl.compile.XScriptParser.ASK_SYM;
+import static org.xdef.impl.compile.XScriptParser.ASSGN_SYM;
+import static org.xdef.impl.compile.XScriptParser.ATCHAR_SYM;
+import static org.xdef.impl.compile.XScriptParser.BEG_SYM;
+import static org.xdef.impl.compile.XScriptParser.BREAK_SYM;
+import static org.xdef.impl.compile.XScriptParser.CASE_SYM;
+import static org.xdef.impl.compile.XScriptParser.CATCH_SYM;
+import static org.xdef.impl.compile.XScriptParser.COLON_SYM;
+import static org.xdef.impl.compile.XScriptParser.COMMA_SYM;
+import static org.xdef.impl.compile.XScriptParser.CONSTANT_SYM;
+import static org.xdef.impl.compile.XScriptParser.CONTINUE_SYM;
+import static org.xdef.impl.compile.XScriptParser.DEC_SYM;
+import static org.xdef.impl.compile.XScriptParser.DEFAULT_SYM;
+import static org.xdef.impl.compile.XScriptParser.DIV_EQ_SYM;
+import static org.xdef.impl.compile.XScriptParser.DIV_SYM;
+import static org.xdef.impl.compile.XScriptParser.DOT_SYM;
+import static org.xdef.impl.compile.XScriptParser.DO_SYM;
+import static org.xdef.impl.compile.XScriptParser.ELSE_SYM;
+import static org.xdef.impl.compile.XScriptParser.END_SYM;
+import static org.xdef.impl.compile.XScriptParser.EQ_SYM;
+import static org.xdef.impl.compile.XScriptParser.EXTERNAL_SYM;
+import static org.xdef.impl.compile.XScriptParser.FINAL_SYM;
+import static org.xdef.impl.compile.XScriptParser.FOR_SYM;
+import static org.xdef.impl.compile.XScriptParser.GE_SYM;
+import static org.xdef.impl.compile.XScriptParser.GT_SYM;
+import static org.xdef.impl.compile.XScriptParser.IDENTIFIER_SYM;
+import static org.xdef.impl.compile.XScriptParser.IF_SYM;
+import static org.xdef.impl.compile.XScriptParser.INC_SYM;
+import static org.xdef.impl.compile.XScriptParser.LE_SYM;
+import static org.xdef.impl.compile.XScriptParser.LPAR_SYM;
+import static org.xdef.impl.compile.XScriptParser.LSH_EQ_SYM;
+import static org.xdef.impl.compile.XScriptParser.LSH_SYM;
+import static org.xdef.impl.compile.XScriptParser.LSQ_SYM;
+import static org.xdef.impl.compile.XScriptParser.LT_SYM;
+import static org.xdef.impl.compile.XScriptParser.MINUS_EQ_SYM;
+import static org.xdef.impl.compile.XScriptParser.MINUS_SYM;
+import static org.xdef.impl.compile.XScriptParser.MOD_EQ_SYM;
+import static org.xdef.impl.compile.XScriptParser.MOD_SYM;
+import static org.xdef.impl.compile.XScriptParser.MUL_EQ_SYM;
+import static org.xdef.impl.compile.XScriptParser.MUL_SYM;
+import static org.xdef.impl.compile.XScriptParser.NEG_SYM;
+import static org.xdef.impl.compile.XScriptParser.NEW_SYM;
+import static org.xdef.impl.compile.XScriptParser.NE_SYM;
+import static org.xdef.impl.compile.XScriptParser.NOT_SYM;
+import static org.xdef.impl.compile.XScriptParser.NULL_SYM;
+import static org.xdef.impl.compile.XScriptParser.OOR_SYM;
+import static org.xdef.impl.compile.XScriptParser.OPTIONAL_SYM;
+import static org.xdef.impl.compile.XScriptParser.OR_EQ_SYM;
+import static org.xdef.impl.compile.XScriptParser.OR_SYM;
+import static org.xdef.impl.compile.XScriptParser.PLUS_EQ_SYM;
+import static org.xdef.impl.compile.XScriptParser.PLUS_SYM;
+import static org.xdef.impl.compile.XScriptParser.RETURN_SYM;
+import static org.xdef.impl.compile.XScriptParser.RPAR_SYM;
+import static org.xdef.impl.compile.XScriptParser.RRSH_EQ_SYM;
+import static org.xdef.impl.compile.XScriptParser.RRSH_SYM;
+import static org.xdef.impl.compile.XScriptParser.RSH_EQ_SYM;
+import static org.xdef.impl.compile.XScriptParser.RSH_SYM;
+import static org.xdef.impl.compile.XScriptParser.RSQ_SYM;
+import static org.xdef.impl.compile.XScriptParser.SEMICOLON_SYM;
+import static org.xdef.impl.compile.XScriptParser.SWITCH_SYM;
+import static org.xdef.impl.compile.XScriptParser.THROW_SYM;
+import static org.xdef.impl.compile.XScriptParser.TRY_SYM;
+import static org.xdef.impl.compile.XScriptParser.TYPE_SYM;
+import static org.xdef.impl.compile.XScriptParser.UNIQUE_SET_SYM;
+import static org.xdef.impl.compile.XScriptParser.VAR_SYM;
+import static org.xdef.impl.compile.XScriptParser.WHILE_SYM;
+import static org.xdef.impl.compile.XScriptParser.XOR_EQ_SYM;
+import static org.xdef.impl.compile.XScriptParser.XOR_SYM;
+import static org.xdef.impl.compile.XScriptParser.symToName;
+import static org.xdef.sys.SParser.NOCHAR;
+import static org.xdef.sys.StringParser.isJavaName;
 
 /** Compiler of statements in script.
  * @author Vaclav Trojan
@@ -293,19 +456,21 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			} else {
 				CompileBase.InternalMethod m;
 				String[] sqnames;
-				if (_sym == MUL_SYM && _g._sp - sp == 1
-					&& _g._tstack[_g._sp] == XD_LONG
+				if (_sym == MUL_SYM &&  _g._sp - sp < 2
 					&& (m = CompileCode.getTypeMethod(
 						CompileBase.X_NOTYPE_VALUE,name)) != null
 					&& m.getResultType() == XD_PARSER
-					&& m.getParsedResult() == XD_STRING
 					&& (sqnames = m.getSqParamNames()) != null
-					&& sqnames.length >= 2 && "maxLength".equals(sqnames[1])) {
-					// asterisk as maxLength
-					nextSymbol();
-					_g.addCode(new DefLong(Long.MAX_VALUE));
-					_g._tstack[++_g._sp] = XD_LONG;
+					&& sqnames.length == 2
+					&&(sqnames[0].startsWith("minLength")
+						&& sqnames[1].startsWith("maxLength")
+						|| sqnames[0].startsWith("minInclusive")
+						&& sqnames[1].startsWith("maxInclusive"))) {
+					// asterisk an be as minxxx or maxxxx
+					_g.addCode(DefNull.NULL_VALUE);
+					_g._tstack[++_g._sp] = XD_ANY;
 					_g._cstack[_g._sp] = _g._lastCodeIndex;
+					nextSymbol();
 				} else {
 					readParam();
 				}

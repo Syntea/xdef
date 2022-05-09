@@ -401,8 +401,6 @@ public final class TestTypes extends XDTester {
 			c = ((XMData) xp.findModel("#a/text()")).getParseParams();
 			assertEq("y-M-d", c.getXDNamedItemValue("format").stringValue());
 			assertEq("d.M.y", c.getXDNamedItemValue("outFormat").stringValue());
-		} catch (Exception ex) {fail(ex);}
-		try {
 			xdef = // external method with key params
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<xd:declaration>\n"+
@@ -417,25 +415,6 @@ public final class TestTypes extends XDTester {
 			xml = "<a a='2'/>";
 			parse(xp, "", xml, reporter);
 			assertTrue(reporter.errorWarnings(), "Error not reported");
-			xdef = // test combine seq and key params
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"<a a='string(2,%maxLength=3)'/>\n"+
-"</xd:def>";
-			parse(xdef, "", "<a a='abc'/>", reporter);
-			assertNoErrorwarnings(reporter);
-			parse(xdef, "", "<a a='abcd'/>", reporter);
-			assertTrue(reporter.errorWarnings(), "Error not reported");
-			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"  <a a='string(3,%maxLength=3)' b='int(3, %maxInclusive=3)' />\n"+
-"</xd:def>";
-			xp = compile(xdef);
-			parse(xp, null, "<a a='a12' b='3'/>", reporter);
-			assertNoErrorwarnings(reporter);
-			parse(xp, null, "<a a='a1' b ='2'/>", reporter);
-			assertFalse(reporter.getErrorCount() != 2,reporter.printToString());
-			parse(xp, null, "<a a='a124' b ='4'/>", reporter);
-			assertFalse(reporter.getErrorCount() != 2,reporter.printToString());
 			xdef = //decimal
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'><a a='decimal(0,1)'/></xd:def>";
 			compile(xdef).createXDDocument();
@@ -977,6 +956,26 @@ public final class TestTypes extends XDTester {
 			assertEq("false", strw.toString());
 			assertErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
+		try { // test combine seq and key params
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<a a=\"string(3,%pattern=['[a-d]+'])\"/>\n"+
+"</xd:def>";
+			parse(xdef, "", "<a a='abc'/>", reporter);
+			assertNoErrorwarnings(reporter);
+			parse(xdef, "", "<a a='abcd'/>", reporter);
+			assertTrue(reporter.errorWarnings(), "Error not reported");
+			xdef = // test incorrect combinetion of seq and key params
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"  <a a='string(3,%maxLength=3)' b='int(3, %maxInclusive=3)' />\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			fail("error not reported");
+		} catch (Exception ex) {
+			if (ex.getMessage().indexOf("XDEF442") < 0) {
+				fail(ex);
+			}
+		}
 		try {//test ListOf with XDEF_3.1
 				setProperty(XDConstants.XDPROPERTY_WARNINGS,
 					XDConstants.XDPROPERTYVALUE_WARNINGS_FALSE);

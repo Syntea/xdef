@@ -2106,6 +2106,23 @@ public final class CompileCode extends CompileBase {
 		return true;
 	}
 
+	/** Set sequential parameter as named parameter.
+	 * @param d Container with parameters.
+	 * @param val value of parameter.
+	 * @param name name of named parameter.
+	 */
+	private void setSeqParam(final XDContainer d,
+		final XDValue val,
+		final String name) {
+		if (d.hasXDNamedItem(name)) {
+			//Conflict of sequential parameter and named parameter: &{0}
+			_parser.error(XDEF.XDEF442, name);
+		}
+		if (!val.isNull()) { // ignore it if it is null
+			d.setXDNamedItem(name, val);
+		}
+	}
+
 	/** Generation of internal method code.
 	 * @param name The name of method.
 	 * @param numPar Number of parameters (types of parameters are in stack).
@@ -2160,6 +2177,7 @@ public final class CompileCode extends CompileBase {
 					_cstack[_sp] == _lastCodeIndex) {// set named parameters
 					DefContainer h = (DefContainer) getLastCodeItem();
 					int len = h.getXDNamedItemsNumber();
+					// check named parameters
 					for (int i = len - 1; i >= 0; i--) {
 						String s = h.getXDNamedItemName(i);
 						boolean found = false;
@@ -2277,25 +2295,28 @@ public final class CompileCode extends CompileBase {
 						if ("string".equals(name)) {
 							p = new XDParseCDATA();
 						}
-						if (npar > sqParamNames.length) {
-							if (sqParamNames.length == 1) {
-								toContainer(npar);
-								npar = 1;
-								if (allconst) {
-									XDValue val = removeLastCodeItem();
-									_sp--;
-									XDContainer d = new DefContainer();
-									d.setXDNamedItem(sqParamNames[0], val);
-									try {
-										p.setNamedParams(null, d);
-										genLDC(p);
-									} catch (Exception ex) {} //never happens
+						if (npar > sqParamNames.length
+							&& sqParamNames.length == 1) {
+							toContainer(npar);
+							npar = 1;
+							if (allconst) {
+								XDValue val = removeLastCodeItem();
+								_sp--;
+								XDContainer d = new DefContainer();
+								d.setXDNamedItem(sqParamNames[0], val);
+								try {
+									p.setNamedParams(null, d);
+									genLDC(p);
 									return;
-								} else {
-									addCode(new CodeS1(XD_NAMEDVALUE,
-										CREATE_NAMEDVALUE, sqParamNames[0]),0);
-								}
+								} catch (Exception ex) {} //never happens
+							} else {
+								addCode(new CodeS1(XD_NAMEDVALUE,
+									CREATE_NAMEDVALUE, sqParamNames[0]),0);
+								addCode(new CodeParser(resultType, NEW_PARSER,
+									npar, p.parserName(), sqParamNames),
+									-npar + 1);
 							}
+							return;
 						}
 					}
 					if (allconst) {
@@ -2311,44 +2332,52 @@ public final class CompileCode extends CompileBase {
 						} else {
 							d = new DefContainer(); //empty map
 						}
-						if (--npar >= 0) { // sequential parameters
-							if (sqParamNames!=null && sqParamNames.length > 0) {
-								if (sqParamNames.length - 1 < npar) {
-									//Too many of sequential parameters
-									_parser.error(XDEF.XDEF465);
-								} else if (npar == 0 && sqParamNames.length >=2
-									&& (("minInclusive".equals(sqParamNames[0])
-									  && "maxInclusive".equals(sqParamNames[1]))
-									|| ("minLength".equals(sqParamNames[0])
-									  && "maxLength".equals(sqParamNames[1])))){
-									// one parameter, expand it to two
-									if (!d.hasXDNamedItem(sqParamNames[0])) {
-										d.setXDNamedItem(sqParamNames[0], val);
-									} else {
-										// Conflict of sequential parameter and
-										// named parameter: &{0}
+						if (npar > 0 && npar <= 2 && sqParamNames!=null
+							&& sqParamNames.length == 2){
+							String s1 = sqParamNames[0]; //1. parameter name
+							String s2 = sqParamNames.length > 1
+								? sqParamNames[1] : s1; //2. parameter name
+							if (npar-- == 1) {// only one sequential parameter
+								if ("minLength".equals(s1)
+									&& "maxLength".equals(s2)) {
+									if (d.hasXDNamedItem(s1)
+										|| d.hasXDNamedItem(s2)) {
+										//Conflict of sequential parameter
+										//and named parameter: &{0}
 										_parser.error(XDEF.XDEF442,
-											sqParamNames[0]);
+											name+"/"+s1+"/"+s2);
+									} else {
+										setSeqParam(d, val, "length");
 									}
-									if (!d.hasXDNamedItem(sqParamNames[1])
-										&& !("maxLength".equals(sqParamNames[1])
-										&& d.hasXDNamedItem("trimTo"))) {
-										d.setXDNamedItem(sqParamNames[1], val);
-									}
-									npar--;
 								} else {
-									while (npar > 0) {
-										d.setXDNamedItem(
-											sqParamNames[npar], val);
-										val = removeLastCodeItem();
-										_sp--;
-										npar--;
+									if (sqParamNames.length > 1
+										&& s1.startsWith("min")
+										&& s2.startsWith("max")) {
+										setSeqParam(d, val, s1);
+										setSeqParam(d, val, s2);
+									} else {
+										setSeqParam(d, val, s1);
 									}
-									d.setXDNamedItem(sqParamNames[0], val);
 								}
-							} else {
+							} else {// two sequential parameters
+								setSeqParam(d, val, s2);
+								npar--;
+								val = removeLastCodeItem(); // first parameter
+								_sp--;
+								setSeqParam(d, val, s1);
+							}
+						} else  {
+							if (sqParamNames==null
+								|| npar > sqParamNames.length) {
 								//Too many of sequential parameters
 								_parser.error(XDEF.XDEF465);
+							} else {
+								while (--npar > 0) {
+									setSeqParam(d, val, sqParamNames[npar]);
+									val = removeLastCodeItem();
+									_sp--;
+								}
+								setSeqParam(d, val, sqParamNames[0]);
 							}
 						}
 						try {
