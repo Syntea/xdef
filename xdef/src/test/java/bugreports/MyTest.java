@@ -72,6 +72,19 @@ public class MyTest extends XDTester {
 		ArrayReporter reporter = new ArrayReporter();
 		try {
 			xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
+"<xd:declaration>\n"+
+"    type x list(xdatetime('y-M-d'));\n" +
+"    type y list(xdatetime('y-M-d', 'yyyyMMdd'));\n" +
+"</xd:declaration>\n"+
+"  <A a='? x();'>* y()</A>\n"+
+"</xd:def>";
+			xp = XDFactory.compileXD(null, xdef);
+			xd = xp.createXDDocument();
+			xml = "<A a='2022-5-8'>2022-5-8</A>";
+			assertEq("<A a='2022-5-8'>20220508</A>", parse(xp, "", xml));
+			assertNoErrors(reporter);
+			xdef =
 "<xd:def xmlns:xd ='" + _xdNS + "' name='a' root='a'\n"+
 "   script='options preserveEmptyAttributes," +
 "           preserveAttrWhiteSpaces, noTrimAttr'>\n"+
@@ -90,9 +103,6 @@ public class MyTest extends XDTester {
 			assertEq(xml, parse(xp, "", xml));
 			assertNoErrors(reporter);
 			assertTrue(_xxx);
-		} catch (Exception ex) {fail(ex);}
-if(true)return;
-		try {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
 "<xd:declaration>\n"+
@@ -105,16 +115,13 @@ if(true)return;
 			xml = "<A a='2022'></A>";
 			assertEq(xml, parse(xp, "", xml));
 			assertNoErrors(reporter);
-		} catch (Exception ex) {fail(ex);}
-//if(true)return;
-		try {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
 "<xd:declaration>\n"+
 "    type x list(xdatetime('y-M-d'));\n" +
 "    type y list(xdatetime('y-M-d', 'yyyyMMdd'));\n" +				
 "</xd:declaration>\n"+
-"  <A a='? x();'></A>\n"+
+"  <A a='? y();'></A>\n"+
 "</xd:def>";
 			xp = XDFactory.compileXD(null, xdef);
 			xd = xp.createXDDocument();
@@ -122,7 +129,7 @@ if(true)return;
 			assertEq(xml, parse(xp, "", xml));
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
-//if(true)return;
+if(true)return;
 		_xdOfxd = XDFactory.compileXD(null,
 					"classpath://org.xdef.impl.compile.XdefOfXdef*.xdef");
 		try {
