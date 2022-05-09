@@ -2282,7 +2282,6 @@ public final class CompileCode extends CompileBase {
 								toContainer(npar);
 								npar = 1;
 								if (allconst) {
-									npar = 1;
 									XDValue val = removeLastCodeItem();
 									_sp--;
 									XDContainer d = new DefContainer();
@@ -2290,8 +2289,8 @@ public final class CompileCode extends CompileBase {
 									try {
 										p.setNamedParams(null, d);
 										genLDC(p);
-										return;
 									} catch (Exception ex) {} //never happens
+									return;
 								} else {
 									addCode(new CodeS1(XD_NAMEDVALUE,
 										CREATE_NAMEDVALUE, sqParamNames[0]),0);

@@ -10,6 +10,7 @@ import org.xdef.XDPool;
 import org.xdef.XDValue;
 import org.xdef.component.XComponent;
 import org.xdef.model.XMData;
+import org.xdef.proc.XXData;
 import org.xdef.proc.XXNode;
 import org.xdef.xon.XonUtils;
 import org.xdef.sys.ArrayReporter;
@@ -18,6 +19,7 @@ import test.XDTester;
 import static test.XDTester._xdNS;
 import static test.XDTester._xdOfxd;
 import static test.XDTester.genXComponent;
+import test.xdef.TestScript;
 
 /** Tests.
  * @author Vaclav Trojan
@@ -34,9 +36,16 @@ public class MyTest extends XDTester {
 	private static Object toJson(final XComponent xc) {
 		return XonUtils.xmlToXon(xc.toXml());
 	}
-
-	public static String xxx(XXNode xn) {
-		return "" + xn.getXComponent();
+	public static String xxx(XXNode xn) {return "" + xn.getXComponent();}
+	private static boolean _xxx;
+	final public static void setResult(XXNode xnode, boolean result) {
+		_xxx = result;
+	}
+	final public static void setResult(XXData xnode, XDParser parser) {
+		setResult(xnode, parser.check(null, xnode.getTextValue()));
+	}
+	final public static void setResult(XXNode xnode, XDParseResult result) {
+		setResult(xnode, !result.errors());
 	}
 
 	@Override
@@ -53,9 +62,7 @@ public class MyTest extends XDTester {
 		setProperty(XDConstants.XDPROPERTY_WARNINGS, // xdef_warnings
 			XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE); // true | false
 ////////////////////////////////////////////////////////////////////////////////
-			_xdOfxd = XDFactory.compileXD(null,
-					"classpath://org.xdef.impl.compile.XdefOfXdef*.xdef");
-
+	
 		Element el;
 		Object j;
 		String json, s, xdef, xml;
@@ -63,6 +70,61 @@ public class MyTest extends XDTester {
 		XDPool xp;
 		XComponent xc;
 		ArrayReporter reporter = new ArrayReporter();
+		try {
+			xdef =
+"<xd:def xmlns:xd ='" + _xdNS + "' name='a' root='a'\n"+
+"   script='options preserveEmptyAttributes," +
+"           preserveAttrWhiteSpaces, noTrimAttr'>\n"+
+"<xd:declaration>\n"+
+"  external method {\n"+
+"     void bugreports.MyTest.setResult(XXNode, boolean);\n"+
+"     void bugreports.MyTest.setResult(XXData, XDParser);\n"+
+"     void bugreports.MyTest.setResult(XXNode, XDParseResult);\n"+
+"  }\n"+
+"</xd:declaration>\n"+
+"  <a a=\"optional; finally {setResult(int(1,3,%enumeration=[1,3]));}\"/>\n"+
+"</xd:def>\n";
+			xp = XDFactory.compileXD(null, xdef);
+			xd = xp.createXDDocument();
+			xml = "<a a='3'></a>";
+			assertEq(xml, parse(xp, "", xml));
+			assertNoErrors(reporter);
+			assertTrue(_xxx);
+		} catch (Exception ex) {fail(ex);}
+if(true)return;
+		try {
+			xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
+"<xd:declaration>\n"+
+"    type x list(int());\n" +
+"</xd:declaration>\n"+
+"  <A a='? x();'></A>\n"+
+"</xd:def>";
+			xp = XDFactory.compileXD(null, xdef);
+			xd = xp.createXDDocument();
+			xml = "<A a='2022'></A>";
+			assertEq(xml, parse(xp, "", xml));
+			assertNoErrors(reporter);
+		} catch (Exception ex) {fail(ex);}
+//if(true)return;
+		try {
+			xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
+"<xd:declaration>\n"+
+"    type x list(xdatetime('y-M-d'));\n" +
+"    type y list(xdatetime('y-M-d', 'yyyyMMdd'));\n" +				
+"</xd:declaration>\n"+
+"  <A a='? x();'></A>\n"+
+"</xd:def>";
+			xp = XDFactory.compileXD(null, xdef);
+			xd = xp.createXDDocument();
+			xml = "<A a='2022-5-8'></A>";
+			assertEq(xml, parse(xp, "", xml));
+			assertNoErrors(reporter);
+		} catch (Exception ex) {fail(ex);}
+//if(true)return;
+		_xdOfxd = XDFactory.compileXD(null,
+					"classpath://org.xdef.impl.compile.XdefOfXdef*.xdef");
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+

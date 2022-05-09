@@ -292,16 +292,16 @@ class CompileStatement extends XScriptParser implements CodeTable {
 				break;
 			} else {
 				CompileBase.InternalMethod m;
-				String[] sqn;
-				// asterisk as maxLength
+				String[] sqnames;
 				if (_sym == MUL_SYM && _g._sp - sp == 1
 					&& _g._tstack[_g._sp] == XD_LONG
 					&& (m = CompileCode.getTypeMethod(
 						CompileBase.X_NOTYPE_VALUE,name)) != null
 					&& m.getResultType() == XD_PARSER
 					&& m.getParsedResult() == XD_STRING
-					&& (sqn = m.getSqParamNames()) != null
-					&& sqn.length >= 2 && "maxLength".equals(sqn[1])) {
+					&& (sqnames = m.getSqParamNames()) != null
+					&& sqnames.length >= 2 && "maxLength".equals(sqnames[1])) {
+					// asterisk as maxLength
 					nextSymbol();
 					_g.addCode(new DefLong(Long.MAX_VALUE));
 					_g._tstack[++_g._sp] = XD_LONG;
