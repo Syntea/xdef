@@ -82,7 +82,7 @@ public class MyTest extends XDTester {
 			xp = XDFactory.compileXD(null, xdef);
 			xd = xp.createXDDocument();
 			xml = "<A a='2022-5-8'>2022-5-8</A>";
-			assertEq("<A a='20220508'>20220508</A>", parse(xp, "", xml));
+			assertEq("<A a='20220508'>20220508</A>", parse(xp,"",xml,reporter));
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
 		try {

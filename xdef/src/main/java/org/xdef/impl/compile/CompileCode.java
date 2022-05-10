@@ -454,7 +454,7 @@ public final class CompileCode extends CompileBase {
 	 * @param name name of item.
 	 * @param sp Source position of declared item or null.
 	 */
-	final void putRedefinedError(SPosition actpos,
+	final void putRedefinedError(final SPosition actpos,
 		final long id,
 		final String name,
 		final SPosition sp) {
@@ -1089,7 +1089,7 @@ public final class CompileCode extends CompileBase {
 	 * @param name The name of local variable.
 	 * @return false if variable not exists.
 	 */
-	final boolean genLD(CompileVariable var) {
+	final boolean genLD(final CompileVariable var) {
 		short xType = var.getType();
 		if (xType == X_UNIQUESET_KEY) {
 			return false;
@@ -1159,11 +1159,11 @@ public final class CompileCode extends CompileBase {
 					case XD_LONG:
 						if (var.getType() == XD_DATETIME) {
 							topToMillis();
-					} else if (xType == XD_DECIMAL) {
-						addCode(new CodeI1(XD_DECIMAL, TO_DECIMAL_X, 0));
-						_cstack[_sp] = -1;
-						return;
-					} else if (var.getType() == XD_CHAR) {
+						} else if (xType == XD_DECIMAL) {
+							addCode(new CodeI1(XD_DECIMAL, TO_DECIMAL_X, 0));
+							_cstack[_sp] = -1;
+							return;
+						} else if (var.getType() == XD_CHAR) {
 							topXToInt(0);
 						}
 						break;
@@ -1271,8 +1271,6 @@ public final class CompileCode extends CompileBase {
 					if (jumpCode == JMPF_OP) {
 						setCodeItem(_lastCodeIndex - 1, //jump after last item
 							new CodeI1(XD_VOID, JMP_OP, _lastCodeIndex + 1));
-//						codeItem.setCode(JMP_OP);
-//						codeItem.setParam(_lastCodeIndex + 1);
 						jump.setCode(JMP_OP);
 						_code.set(_lastCodeIndex, jump); //replace last code
 					} else {
@@ -1319,20 +1317,20 @@ public final class CompileCode extends CompileBase {
 	 * @param code inspected code.
 	 * @return inverted code or -1.
 	 */
-	private short invertCode(short code) {
+	private short invertCode(final short code) {
 		switch (code) {
 			case CMPEQ: // CMPxEQ -> CMPxNE
 			case JMPEQ: // JMPxEQ -> JMPxNE
 			case CMPGE: // CMPxGE -> CMPxLT
 			case JMPGE: // JMPxGE -> JMPxLT
 			case JMPF_OP: // JMPF -> JMPT
-				return ++code;
+				return (short) (code + 1);
 			case CMPNE: // CMPxNE -> CMPxEQ
 			case JMPNE: // JMPxNE -> JMPxEQ
 			case CMPLT: // CMPxLT -> CMPxGE
 			case JMPLT: // JMPxLT -> JMPxGE
 			case JMPT_OP: // JMPT -> JMPF
-				return --code;
+				return (short) (code - 1);
 			case CMPLE: // CMPxLE -> CMPxGT
 			case JMPLE: // JMPxLE -> JMPxGT
 				return (short) (code +  3);
@@ -2338,26 +2336,13 @@ public final class CompileCode extends CompileBase {
 							String s2 = sqParamNames.length > 1
 								? sqParamNames[1] : s1; //2. parameter name
 							if (npar-- == 1) {// only one sequential parameter
-								if ("minLength".equals(s1)
-									&& "maxLength".equals(s2)) {
-									if (d.hasXDNamedItem(s1)
-										|| d.hasXDNamedItem(s2)) {
-										//Conflict of sequential parameter
-										//and named parameter: &{0}
-										_parser.error(XDEF.XDEF442,
-											name+"/"+s1+"/"+s2);
-									} else {
-										setSeqParam(d, val, "length");
-									}
+								if (sqParamNames.length > 1
+									&& s1.startsWith("min")
+									&& s2.startsWith("max")) {
+									setSeqParam(d, val, s1);
+									setSeqParam(d, val, s2);
 								} else {
-									if (sqParamNames.length > 1
-										&& s1.startsWith("min")
-										&& s2.startsWith("max")) {
-										setSeqParam(d, val, s1);
-										setSeqParam(d, val, s2);
-									} else {
-										setSeqParam(d, val, s1);
-									}
+									setSeqParam(d, val, s1);
 								}
 							} else {// two sequential parameters
 								setSeqParam(d, val, s2);
@@ -2388,6 +2373,12 @@ public final class CompileCode extends CompileBase {
 									d.getXDNamedItemValue("maxLength");
 								if (minlen != null && maxlen != null
 									&& minlen.equals(maxlen)) {
+									if (d.hasXDNamedItem("length")) {
+										//Conflict of sequential parameter
+										//and named parameter: &{0}
+										_parser.error(XDEF.XDEF442, "length");
+
+									}
 									d.removeXDNamedItem("minLength");
 									d.removeXDNamedItem("maxLength");
 									d.setXDNamedItem("length", minlen);

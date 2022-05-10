@@ -456,20 +456,25 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			} else {
 				CompileBase.InternalMethod m;
 				String[] sqnames;
-				if (_sym == MUL_SYM &&  _g._sp - sp < 2
-					&& (m = CompileCode.getTypeMethod(
-						CompileBase.X_NOTYPE_VALUE,name)) != null
-					&& m.getResultType() == XD_PARSER
-					&& (sqnames = m.getSqParamNames()) != null
-					&& sqnames.length == 2
-					&&(sqnames[0].startsWith("minLength")
+				if (_sym == MUL_SYM) {
+					if (_g._sp - sp < 2
+						&& (m = CompileCode.getTypeMethod(
+							CompileBase.X_NOTYPE_VALUE,name)) != null
+						&& m.getResultType() == XD_PARSER
+						&& (sqnames = m.getSqParamNames()) != null
+						&& sqnames.length == 2
+						&& (sqnames[0].startsWith("minLength")
 						&& sqnames[1].startsWith("maxLength")
 						|| sqnames[0].startsWith("minInclusive")
 						&& sqnames[1].startsWith("maxInclusive"))) {
-					// asterisk an be as minxxx or maxxxx
-					_g.addCode(DefNull.NULL_VALUE);
-					_g._tstack[++_g._sp] = XD_ANY;
-					_g._cstack[_g._sp] = _g._lastCodeIndex;
+						// asterisk can be as minxxx or maxxxx
+						_g.addCode(DefNull.NULL_VALUE);
+						_g._tstack[++_g._sp] = XD_ANY;
+						_g._cstack[_g._sp] = _g._lastCodeIndex;
+					} else {
+						//Unexpected character&{0}{: '}{'}
+						error(XDEF.XDEF216, "*");
+					}
 					nextSymbol();
 				} else {
 					readParam();
@@ -557,7 +562,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			short xType;
 			if ((xType =_g._tstack[_g._sp]) == XD_LONG
 				|| xType == XD_DOUBLE) {
-				error(XDEF.XDEF216); //Unexpected character
+				error(XDEF.XDEF216);//Unexpected character&{0}{: '}{'}
 				nextSymbol();
 				return;
 			}
@@ -760,7 +765,6 @@ class CompileStatement extends XScriptParser implements CodeTable {
 	 * Method ::= MethodName "(" ParameterList ")"
 	 * AttrReference ::= "@" QName
 	 * ParameterList ::= ( "$ChkElement" | Expression ) ( "," Expression )*
-	 *
 	 * @return true if factor was parsed.
 	 */
 	private boolean factor() {
@@ -889,7 +893,6 @@ class CompileStatement extends XScriptParser implements CodeTable {
 					} else if (var != null
 						&& var.getType()==CompileBase.X_PARSEITEM
 						&& var.getParseMethodAddr() >= 0 // parse method exists
-//						&& var.getValue() == null
 						&& (x=_g._code.get(var.getParseMethodAddr()))
 							.getCode() == 0 // constant
 						&& x.getItemId() == XD_PARSER
@@ -1792,7 +1795,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		return jumpVector;
 	}
 
-	/** Compile boolean expression.
+	/** Compile Boolean expression.
 	 * @param jumpCondition if <i>true</i> then result will be generated as
 	 * conditional jump sequence.
 	 * @return CompileJumpVector object or <i>null</i>.
@@ -1846,7 +1849,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 	}
 
 	/** Parse expression. Create jump vector and return true, if result parsed
-	 * expression was jump boolean vector.
+	 * expression was jump Boolean vector.
 	 * expression ::=  andExpression (operatorLevel5  andExpression )*
 	 * operatorLevel5 ::= ( "|" | "^" | "||" )
 	 *   ( "?" expression ":"  expression )?
@@ -2876,8 +2879,6 @@ class CompileStatement extends XScriptParser implements CodeTable {
 					error(XDEF.XDEF414); //Assignment statement expected
 				} else if (varKind == 'G') {
 					var.setInitialized(true);// default initialization (null...)
-//				} else if (varKind == 'X') {
-//					var.setInitialized(true);// default initialization (null...)
 				}
 			}
 			if (isFinal && var != null) {
@@ -3240,7 +3241,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 				} else if (_sym == CONSTANT_SYM) {
 					if (_parsedValue == null
 						|| _parsedValue.getItemId() != XD_STRING) {
-						error(XDEF.XDEF216);//Unexpected character
+						error(XDEF.XDEF216);//Unexpected character&{0}{: '}{'}
 					} else {
 						props.put(key, _parsedValue.stringValue());
 					}
@@ -3257,7 +3258,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			}
 		}
 		if (!eos()) {
-			error(XDEF.XDEF216);//Unexpected character
+			error(XDEF.XDEF216);//Unexpected character&{0}{: '}{'}
 		}
 	}
 
@@ -3570,52 +3571,69 @@ class CompileStatement extends XScriptParser implements CodeTable {
 	}
 
 	/** Get class corresponding to class name of parameter of method.
-	 * @param paramClassName name of class of parameter.
+	 * @param clsName name of class of parameter.
 	 * @param cl actual class loader.
 	 * @return class corresponding to class name of parameter of method.
 	 */
-	private static Class<?> getClassParam(final String paramClassName,
+	private static Class<?> getClassParam(final String clsName,
 		final ClassLoader cl) {
-		if (paramClassName.indexOf('.') >= 0) {
+		if (clsName.indexOf('.') >= 0) {
 			try {
-				return Class.forName(paramClassName, false, cl);
+				return Class.forName(clsName, false, cl);
 			} catch (ClassNotFoundException ex) {}
 		}
-		if ("Long".equals(paramClassName)) {
+//		switch (clsName) { // must be Java 1.6, so we must use if
+//			case "Long": return Long.class;
+//			case "int": return Integer.TYPE;
+//			case "Integer": return Integer.class;
+//			case "short": return Short.TYPE;
+//			case "Short": return Short.class;
+//			case "byte": return Byte.TYPE;
+//			case "Byte": return Byte.class;
+//			case "Double": return Double.class;
+//			case "float": return Float.TYPE;
+//			case "Float": return Float.class;
+//			case "boolean": return Boolean.TYPE;
+//			case "Boolean": return Boolean.class;
+//			case "BigDecimal": return BigDecimal.class;
+//			case "char": return Character.TYPE;
+//			case "Character": return Character.class;
+//			case "String": return String.class;
+//		}
+		if ("Long".equals(clsName)) {
 			return Long.class;
-		} else if ("int".equals(paramClassName)) {
+		} else if ("int".equals(clsName)) {
 			return Integer.TYPE;
-		} else if ("Integer".equals(paramClassName)) {
+		} else if ("Integer".equals(clsName)) {
 			return Integer.class;
-		} else if ("short".equals(paramClassName)) {
+		} else if ("short".equals(clsName)) {
 			return Short.TYPE;
-		} else if ("Short".equals(paramClassName)) {
+		} else if ("Short".equals(clsName)) {
 			return Short.class;
-		} else if ("byte".equals(paramClassName)) {
+		} else if ("byte".equals(clsName)) {
 			return Byte.TYPE;
-		} else if ("Byte".equals(paramClassName)) {
+		} else if ("Byte".equals(clsName)) {
 			return Byte.class;
-		} else if ("Double".equals(paramClassName)) {
+		} else if ("Double".equals(clsName)) {
 			return Double.class;
-		} else if ("float".equals(paramClassName)) {
+		} else if ("float".equals(clsName)) {
 			return Float.TYPE;
-		} else if ("Float".equals(paramClassName)) {
+		} else if ("Float".equals(clsName)) {
 			return Float.class;
-		} else if ("boolean".equals(paramClassName)) {
+		} else if ("boolean".equals(clsName)) {
 			return Boolean.TYPE;
-		} else if ("Boolean".equals(paramClassName)) {
+		} else if ("Boolean".equals(clsName)) {
 			return Boolean.class;
-		} else if ("BigDecimal".equals(paramClassName)) {
+		} else if ("BigDecimal".equals(clsName)) {
 			return BigDecimal.class;
-		} else if ("char".equals(paramClassName)) {
+		} else if ("char".equals(clsName)) {
 			return Character.TYPE;
-		} else if ("Character".equals(paramClassName)) {
+		} else if ("Character".equals(clsName)) {
 			return Character.class;
-		} else if ("String".equals(paramClassName)) {
+		} else if ("String".equals(clsName)) {
 			return String.class;
 		}
-		return CompileBase.getTypeClass(
-			CompileBase.getClassTypeID(paramClassName, cl));
+		return CompileBase.getTypeClass(CompileBase.getClassTypeID(clsName,cl));
 	}
 
 	/** Get external method item.
@@ -4130,26 +4148,11 @@ class CompileStatement extends XScriptParser implements CodeTable {
 					x = _g.addVariable(uniquesetName+"."+keyName,
 						CompileBase.X_UNIQUESET_KEY, varKind, spos);
 					x.setOffset(var.getOffset());
-//					XVariableTable vartab = varKind == 'G'
-//						? _g._globalVariables : _g._varBlock;
-//					x = new CompileVariable(uniquesetName + "." + keyName,
-//						CompileBase.X_UNIQUESET_KEY,
-//						var.getOffset(), varKind, spos);
-//					vartab.addVariable(x);
 				}
-//				CompileVariable x = new CompileVariable(
-//					uniquesetName + "." + keyName,
-//					CompileBase.X_UNIQUESET_KEY,
-//					var.getOffset(), varKind, spos);
 				x.setParseMethodAddr(key.getParseMethodAddr());
 				x.setParseResultType(key.getParsedType());
 				x.setKeyRefName(key.getDeclaredTypeName());
 				x.setKeyIndex(i);
-//				if (varKind == 'G') {
-//					_g._globalVariables.addVariable(x);
-//				} else {
-//					_g._varBlock.addVariable(x);
-//				}
 				x.setCodeAddr(x.getCodeAddr());
 				x.setValue(new DefLong(i));
 				x.setFinal(true);

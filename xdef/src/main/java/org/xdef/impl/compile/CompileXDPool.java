@@ -1756,7 +1756,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			}
 			_scriptCompiler.skipBlanksAndComments();
 			if (!_scriptCompiler.eos()) {
-				_scriptCompiler.error(sval,XDEF.XDEF216); //Unexpected character
+				//Unexpected character&{0}{: '}{'}
+				_scriptCompiler.error(sval,XDEF.XDEF216);
 			}
 		}
 		//process attributes of XDefinition

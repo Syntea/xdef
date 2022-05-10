@@ -28,7 +28,7 @@ import org.xdef.xon.XonParsers;
 /** Create X-definition model from xd:xon element.
  * @author Vaclav Trojan
  */
-public class CompileXonXdef extends StringParser {
+public final class CompileXonXdef extends StringParser {
 	/** Prefix of X-definition namespace. */
 	private String _xdPrefix;
 	/** Index of X-definition namespace. */
