@@ -17,9 +17,7 @@ import org.xdef.sys.ArrayReporter;
 import static org.xdef.sys.STester.runTest;
 import test.XDTester;
 import static test.XDTester._xdNS;
-import static test.XDTester._xdOfxd;
 import static test.XDTester.genXComponent;
-import test.xdef.TestScript;
 
 /** Tests.
  * @author Vaclav Trojan
@@ -79,10 +77,10 @@ public class MyTest extends XDTester {
 "</xd:declaration>\n"+
 "  <A a='? x();'>? y()</A>\n"+
 "</xd:def>";
-			xp = XDFactory.compileXD(null, xdef);
+			xp = compile(xdef);
 			xd = xp.createXDDocument();
 			xml = "<A a='2022-5-8'>2022-5-8</A>";
-			assertEq("<A a='20220508'>20220508</A>", parse(xp,"",xml,reporter));
+			assertEq("<A a='20220508'>20220508</A>", parse(xd, xml, reporter));
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
 		try {
@@ -94,10 +92,10 @@ public class MyTest extends XDTester {
 "</xd:declaration>\n"+
 "  <A a='? x();'>* y()</A>\n"+
 "</xd:def>";
-			xp = XDFactory.compileXD(null, xdef);
+			xp = compile(xdef);
 			xd = xp.createXDDocument();
 			xml = "<A a='2022-5-8'>2022-5-8</A>";
-			assertEq("<A a='2022-5-8'>2022-5-8</A>", parse(xp, "", xml));
+			assertEq("<A a='2022-5-8'>2022-5-8</A>", parse(xd, xml, reporter));
 			assertNoErrors(reporter);
 			xdef =
 "<xd:def xmlns:xd ='" + _xdNS + "' name='a' root='a'\n"+
@@ -112,10 +110,10 @@ public class MyTest extends XDTester {
 "</xd:declaration>\n"+
 "  <a a=\"optional; finally {setResult(int(1,3,%enumeration=[1,3]));}\"/>\n"+
 "</xd:def>\n";
-			xp = XDFactory.compileXD(null, xdef);
+			xp = compile(xdef);
 			xd = xp.createXDDocument();
 			xml = "<a a='3'></a>";
-			assertEq(xml, parse(xp, "", xml));
+			assertEq(xml, parse(xd, xml, reporter));
 			assertNoErrors(reporter);
 			assertTrue(_xxx);
 			xdef =
@@ -125,10 +123,10 @@ public class MyTest extends XDTester {
 "</xd:declaration>\n"+
 "  <A a='? x();'></A>\n"+
 "</xd:def>";
-			xp = XDFactory.compileXD(null, xdef);
+			xp = compile(xdef);
 			xd = xp.createXDDocument();
 			xml = "<A a='2022'></A>";
-			assertEq(xml, parse(xp, "", xml));
+			assertEq(xml, parse(xd, xml, reporter));
 			assertNoErrors(reporter);
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
@@ -138,14 +136,12 @@ public class MyTest extends XDTester {
 "</xd:declaration>\n"+
 "  <A a='? y();'></A>\n"+
 "</xd:def>";
-			xp = XDFactory.compileXD(null, xdef);
+			xp = compile(xdef);
 			xd = xp.createXDDocument();
 			xml = "<A a='2022-5-8'></A>";
-			assertEq(xml, parse(xp, "", xml));
+			assertEq(xml, parse(xd, xml, reporter));
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
-		_xdOfxd = XDFactory.compileXD(null,
-					"classpath://org.xdef.impl.compile.XdefOfXdef*.xdef");
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+

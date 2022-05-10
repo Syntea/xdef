@@ -906,7 +906,7 @@ public final class TestTypes extends XDTester {
 " boolean x(){return int | string;}\n"+
 "</xd:declaration>\n"+
 "<A a=\"x()\"/>\n"+
-"<a a='x(); finally out(int | string)'/>\n"+
+"<a a='x(); finally out(x());'/>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xml = "<a a='1'/>";
@@ -924,7 +924,7 @@ public final class TestTypes extends XDTester {
 "<xd:declaration>\n"+
 " boolean x(){return int AND string;}\n"+
 "</xd:declaration>\n"+
-"<a a='x(); finally out(int AND string)'/>\n"+
+"<a a='x(); finally out(x());'/>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xml = "<a a='1'/>";
@@ -942,7 +942,7 @@ public final class TestTypes extends XDTester {
 "<xd:declaration>\n"+
 " boolean x(){return int AAND string;}\n"+
 "</xd:declaration>\n"+
-"<a a='x(); finally out(int AAND string)'/>\n"+
+"<a a='x(); finally out(x());'/>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xml = "<a a='1'/>";
@@ -955,9 +955,7 @@ public final class TestTypes extends XDTester {
 			parse(xp, null, xml, reporter, strw, null, null);
 			assertEq("false", strw.toString());
 			assertErrors(reporter);
-		} catch (Exception ex) {fail(ex);}
-		try { // test combine seq and key params
-			xdef =
+			xdef = // test combine seq and key params
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<a a=\"string(3,%pattern=['[a-d]+'])\"/>\n"+
 "</xd:def>";
@@ -965,17 +963,43 @@ public final class TestTypes extends XDTester {
 			assertNoErrorwarnings(reporter);
 			parse(xdef, "", "<a a='abcd'/>", reporter);
 			assertTrue(reporter.errorWarnings(), "Error not reported");
-			xdef = // test incorrect combinetion of seq and key params
+			try {
+				xdef = // test error of combinetion of seq and key params
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"  <a a='string(3,%maxLength=3)' b='int(3, %maxInclusive=3)' />\n"+
+"  <a a='string(3,%maxLength=3)'/>\n"+
 "</xd:def>";
-			xp = compile(xdef);
-			fail("error not reported");
-		} catch (Exception ex) {
-			if (ex.getMessage().indexOf("XDEF442") < 0) {
-				fail(ex);
+				xp = compile(xdef);
+				fail("error not reported");
+			} catch (Exception ex) {
+				if (ex.getMessage().indexOf("XDEF442") < 0) {
+					fail(ex);
+				}
 			}
-		}
+			try { // test error of combinetion of seq and key params
+				xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"  <a a='int(3, %minInclusive=3)' />\n"+
+"</xd:def>";
+				xp = compile(xdef);
+				fail("error not reported");
+			} catch (Exception ex) {
+				if (ex.getMessage().indexOf("XDEF442") < 0) {
+					fail(ex);
+				}
+			}
+			try { // test error of combinetion of seq and key params
+				xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"  <a a='uri(*, 3)'/>\n"+
+"</xd:def>";
+				xp = compile(xdef);
+				fail("error not reported");
+			} catch (Exception ex) {
+				if (ex.getMessage().indexOf("XDEF216") < 0) {
+					fail(ex);
+				}
+			}
+		} catch (Exception ex) {fail(ex);}
 		try {//test ListOf with XDEF_3.1
 				setProperty(XDConstants.XDPROPERTY_WARNINGS,
 					XDConstants.XDPROPERTYVALUE_WARNINGS_FALSE);
