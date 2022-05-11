@@ -1027,6 +1027,30 @@ public final class TestTypes extends XDTester {
 			xml = "<A a='123'>123</A>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
+			xdef = // asterisk and variable
+"<xd:def xmlns:xd ='" + _xdNS + "' name='a' root='a'>"+
+"<xd:declaration> Datetime d=new Datetime(\"2021-06-10\");</xd:declaration>\n"+
+"  <a a=\"date(d, *)\"/>\n"+
+"</xd:def>\n";
+			xp = XDFactory.compileXD(null, xdef);
+			xml = "<a a='2021-06-11'></a>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
+			xml = "<a a='2021-06-09'></a>";
+			parse(xp, "", xml, reporter);
+			assertErrors(reporter);
+			xdef = // asterisk and variable
+"<xd:def xmlns:xd ='" + _xdNS + "' name='a' root='a'>"+
+"<xd:declaration> Datetime d=new Datetime(\"2021-06-10\");</xd:declaration>\n"+
+"  <a a=\"date(*, d)\"/>\n"+
+"</xd:def>\n";
+			xp = XDFactory.compileXD(null, xdef);
+			xml = "<a a='2021-06-09'></a>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
+			xml = "<a a='2021-06-11'></a>";
+			parse(xp, "", xml, reporter);
+			assertErrors(reporter);
 			xdef = // test combine seq and key params
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<a a=\"string(3,%pattern=['[a-d]+'])\"/>\n"+

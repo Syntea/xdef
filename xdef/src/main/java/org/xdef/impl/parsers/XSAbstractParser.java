@@ -188,7 +188,9 @@ public abstract class XSAbstractParser extends XDParserAbstract
 				String name = PARAM_NAMES[i];
 				for (int j = 0; j < params.length; j+=2) {
 					if (name.equals(params[j].toString())) {
-						return params[j+1];
+						XDValue result = params[j+1];
+						return result != null
+							? result.isNull() ? null : result : null;
 					}
 				}
 				break;
