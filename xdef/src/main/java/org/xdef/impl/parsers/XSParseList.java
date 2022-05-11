@@ -138,14 +138,9 @@ public class XSParseList extends XSAbstractParser {
 					(_maxLength == _minLength?"length":"maxLength"), t);
 				return;
 			}
-			if (count == 1) {
-				s = t;
-			} else {
-				s += ' ' + t;
-			}
 			XDParseResult r = new DefParseResult(t);
 			_itemType.parseObject(xnode, r);
-			if (r.errors()) {
+			if (r.errors() || !r.eos()) {
 				p.addReports(r.getReporter());
 				return;
 			} else {
@@ -157,6 +152,11 @@ public class XSParseList extends XSAbstractParser {
 				}
 				XDValue val = r.getParsedValue();
 				results.addXDItem(val);
+				if (count == 1) {
+					s = r.getParsedString();
+				} else {
+					s += ' ' + r.getParsedString();
+				}
 				int pos1 = p.getIndex();
 				p.isSpaces();
 				t = p.nextToken();

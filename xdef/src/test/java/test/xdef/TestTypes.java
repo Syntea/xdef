@@ -955,6 +955,78 @@ public final class TestTypes extends XDTester {
 			parse(xp, null, xml, reporter, strw, null, null);
 			assertEq("false", strw.toString());
 			assertErrors(reporter);
+			xdef = // test enum
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
+"<xd:declaration>\n"+
+"    type x enum('123', '456', '678');\n" +
+"    type y enum('123');\n" +
+"</xd:declaration>\n"+
+"  <A a='x();'>y();</A>\n"+
+"</xd:def>";
+			xp = XDFactory.compileXD(null, xdef);
+			xml = "<A a='456'>123</A>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
+			xdef = // test output format of xdatetime
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
+"  <A a=\"xdatetime('y-M-d','yyyyMMdd');\">xdatetime('y-M-d','yyyyMMdd')</A>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			xml = "<A a='2022-5-8'>2022-5-8</A>";
+			assertEq("<A a='20220508'>20220508</A>", parse(xp,"",xml,reporter));
+			assertNoErrors(reporter);
+			xdef = // test output format of xdatetime in list
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
+"<xd:declaration>\n"+
+"    type x list(xdatetime('y-M-d', 'yyyyMMdd'));\n" +
+"</xd:declaration>\n"+
+"  <A a='? x();'>* x()</A>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			xml = "<A a='2022-5-8'>2022-5-8</A>";
+			assertEq("<A a='20220508'>20220508</A>", parse(xp,"",xml,reporter));
+			assertNoErrors(reporter);
+			xdef = // test output format of xdatetime in union
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
+"<xd:declaration>\n"+
+"    type x union(%item=[xdatetime('y-M-d', 'yyyyMMdd'), boolean()]);\n" +
+"</xd:declaration>\n"+
+"  <A a='? x();'>* x()</A>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			xml = "<A a='2022-5-8'>2022-5-8</A>";
+			assertEq("<A a='20220508'>20220508</A>", parse(xp,"",xml,reporter));
+			assertNoErrors(reporter);
+			xml = "<A a='true'>false</A>";
+			assertEq(xml, parse(xp,"",xml,reporter));
+			assertNoErrors(reporter);
+			xdef = // test asterisk as minimum and maximum
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
+"  <A a='string(*,3);'>string(1,*);</A>\n"+
+"</xd:def>";
+			xp = XDFactory.compileXD(null, xdef);
+			xd = xp.createXDDocument();
+			xml = "<A a='abc'>def</A>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
+			xdef = // test asterisk as minimum and maximum
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
+"  <A a='string(*,3);'>string(1,*);</A>\n"+
+"</xd:def>";
+			xp = XDFactory.compileXD(null, xdef);
+			xd = xp.createXDDocument();
+			xml = "<A a='abc'>def</A>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
+			xdef = // test asterisk as minimum and maximum
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
+"  <A a='int(*,123);'>int(123,*);</A>\n"+
+"</xd:def>";
+			xp = XDFactory.compileXD(null, xdef);
+			xd = xp.createXDDocument();
+			xml = "<A a='123'>123</A>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
 			xdef = // test combine seq and key params
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<a a=\"string(3,%pattern=['[a-d]+'])\"/>\n"+
@@ -964,7 +1036,7 @@ public final class TestTypes extends XDTester {
 			parse(xdef, "", "<a a='abcd'/>", reporter);
 			assertTrue(reporter.errorWarnings(), "Error not reported");
 			try {
-				xdef = // test error of combinetion of seq and key params
+				xdef = // test error of combination of seq and key params
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <a a='string(3,%maxLength=3)'/>\n"+
 "</xd:def>";
@@ -975,7 +1047,7 @@ public final class TestTypes extends XDTester {
 					fail(ex);
 				}
 			}
-			try { // test error of combinetion of seq and key params
+			try { // test error of combination of seq and key params
 				xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <a a='int(3, %minInclusive=3)' />\n"+
@@ -987,7 +1059,7 @@ public final class TestTypes extends XDTester {
 					fail(ex);
 				}
 			}
-			try { // test error of combinetion of seq and key params
+			try { // test error of combination of seq and key params
 				xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <a a='uri(*, 3)'/>\n"+
@@ -1001,8 +1073,8 @@ public final class TestTypes extends XDTester {
 			}
 		} catch (Exception ex) {fail(ex);}
 		try {//test ListOf with XDEF_3.1
-				setProperty(XDConstants.XDPROPERTY_WARNINGS,
-					XDConstants.XDPROPERTYVALUE_WARNINGS_FALSE);
+			setProperty(XDConstants.XDPROPERTY_WARNINGS,
+				XDConstants.XDPROPERTYVALUE_WARNINGS_FALSE);
 			xdef = // check Parser-combination of sequential and key parameters
 "<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n"+
 "  <a a='decimal(0,2,%totalDigits=3,%fractionDigits=2,%enumeration=[1.21])'\n"+

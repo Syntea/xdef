@@ -70,34 +70,6 @@ public class MyTest extends XDTester {
 		ArrayReporter reporter = new ArrayReporter();
 		try {
 			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
-"<xd:declaration>\n"+
-"    type x xdatetime('y-M-d', 'yyyyMMdd');\n" +
-"    type y xdatetime('y-M-d', 'yyyyMMdd');\n" +
-"</xd:declaration>\n"+
-"  <A a='? x();'>? y()</A>\n"+
-"</xd:def>";
-			xp = compile(xdef);
-			xd = xp.createXDDocument();
-			xml = "<A a='2022-5-8'>2022-5-8</A>";
-			assertEq("<A a='20220508'>20220508</A>", parse(xd, xml, reporter));
-			assertNoErrors(reporter);
-		} catch (Exception ex) {fail(ex);}
-		try {
-			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
-"<xd:declaration>\n"+
-"    type x list(xdatetime('y-M-d', 'yyyyMMdd'));\n" +
-"    type y list(xdatetime('y-M-d', 'yyyyMMdd'));\n" +
-"</xd:declaration>\n"+
-"  <A a='? x();'>* y()</A>\n"+
-"</xd:def>";
-			xp = compile(xdef);
-			xd = xp.createXDDocument();
-			xml = "<A a='2022-5-8'>2022-5-8</A>";
-			assertEq("<A a='2022-5-8'>2022-5-8</A>", parse(xd, xml, reporter));
-			assertNoErrors(reporter);
-			xdef =
 "<xd:def xmlns:xd ='" + _xdNS + "' name='a' root='a'\n"+
 "   script='options preserveEmptyAttributes," +
 "           preserveAttrWhiteSpaces, noTrimAttr'>\n"+
@@ -119,18 +91,6 @@ public class MyTest extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
 "<xd:declaration>\n"+
-"    type x list(int());\n" +
-"</xd:declaration>\n"+
-"  <A a='? x();'></A>\n"+
-"</xd:def>";
-			xp = compile(xdef);
-			xd = xp.createXDDocument();
-			xml = "<A a='2022'></A>";
-			assertEq(xml, parse(xd, xml, reporter));
-			assertNoErrors(reporter);
-			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
-"<xd:declaration>\n"+
 "    type x list(xdatetime('y-M-d'));\n" +
 "    type y list(xdatetime('y-M-d', 'yyyyMMdd'));\n" +
 "</xd:declaration>\n"+
@@ -138,8 +98,8 @@ public class MyTest extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			xd = xp.createXDDocument();
-			xml = "<A a='2022-5-8'></A>";
-			assertEq(xml, parse(xd, xml, reporter));
+			xml = "<A a=' 2022-5-8   2022-5-11 '></A>";
+			assertEq("<A a='20220508 20220511'></A>", parse(xd, xml, reporter));
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
 		try {
