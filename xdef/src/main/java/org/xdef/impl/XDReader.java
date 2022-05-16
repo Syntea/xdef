@@ -154,7 +154,7 @@ public final class XDReader extends SObjectReader {
 					case XDValueID.XD_BNFGRAMMAR:
 						return readBNF();
 					case XDValueID.XD_BNFRULE:
-//						return new DefBNFRule(null, readString());
+						readString(); // ???
 						return new DefBNFRule(null);
 					case XDValueID.XD_BOOLEAN:
 						return new DefBoolean(readBoolean());

@@ -108,7 +108,7 @@ public final class XDWriter extends SObjectWriter {
 						return;
 					case XDValueID.XD_BNFRULE: {
 						DefBNFRule y = (DefBNFRule) x;
-						writeString(y.getName());
+						writeString(y.getName()); // ???
 						return;
 					}
 					case XDValueID.XD_BOOLEAN:
