@@ -13,7 +13,6 @@ import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
 import org.xdef.XDEmailAddr;
-import org.xdef.xon.XonTools;
 
 /** Implements the internal object with Email value.
  * @author Vaclav Trojan
@@ -136,9 +135,9 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 		if (g.parse(p, "email")) {
 			String domain; // Email domain
 			String localPart; // Email user
-			String userName; // Email user name
 			String charsetName; // name of text charset name
-			domain = localPart = userName = charsetName = null;
+			domain = localPart = charsetName = null;
+			String userName = ""; // Email user name
 			Object[] code = g.getParsedObjects();
 			String s = p.getParsedBufferPart();
 			if (code != null) {
@@ -153,37 +152,21 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 						t = (t = t.trim()).substring(1, t.length() -1).trim();
 						if (!t.isEmpty()) {
 							if (localPart == null) {
-								if (userName == null) {
-									userName = t;
-								} else {
-									userName += t;
-								}
-							} else if (userName == null) {
+								userName += t;
+							} else {
 								userName = t;
 							}
 						}
 					} else if ((t = readStackItem(q, "ptext", s)) != null) {
-						if (userName == null) {
-							userName = t.trim();
-						} else {
-							userName += t.trim();
-						}
+						userName += t.trim();
 					} else if ((t = readStackItem(q, "charsetName", s)) != null) {
 						charsetName = t;
 					} else if ((t = readStackItem(q, "qtext", s)) != null) {
 						t = readQtext(t, charsetName);
-						if (userName == null) {
-							userName = t;
-						} else {
-							userName += t;
-						}
+						userName += t;
 					} else if ((t = readStackItem(q, "btext", s)) != null) {
 						t = readBtext(t, charsetName);
-						if (userName == null) {
-							userName = t;
-						} else {
-							userName += t;
-						}
+						userName += t;
 					}
 				}
 				p.isSpaces();
@@ -287,11 +270,23 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 // Implementation of XDEmailAddr interface
 ////////////////////////////////////////////////////////////////////////////////
 	@Override
+	/** Get domain part of this email address.
+	 * @return string with domain part of this email address.
+	 */
 	public String getDomain() {return _domain;}
 	@Override
+	/** Get local part of email this address (user).
+	 * @return string with local part of this email address.
+	 */
 	public String getLocalPart() {return _localPart;}
 	@Override
+	/** Get user name (display form) of this email address.
+	 * @return string with user name of email this address (or an empty string).
+	 */
 	public String getUserName() {return _userName;}
 	@Override
+	/** Get source form of this email address.
+	 * @return source form of this email address.
+	 */
 	public String getEmailAddr() {return _value;}
 }
