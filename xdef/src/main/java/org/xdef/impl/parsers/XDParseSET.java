@@ -6,7 +6,7 @@ import org.xdef.impl.ChkNode;
 import org.xdef.impl.code.CodeUniqueset;
 import org.xdef.proc.XXNode;
 
-/** Parser of X-script "SET" type.
+/** Parser of X-script "SET" type (Unique key).
  * @author Vaclav Trojan
  */
 public class XDParseSET extends XSParseQName {
