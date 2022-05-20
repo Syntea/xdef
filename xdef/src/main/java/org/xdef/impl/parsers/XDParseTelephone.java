@@ -18,7 +18,7 @@ public class XDParseTelephone extends XDParserAbstract {
 	public void parseObject(final XXNode xnode, final XDParseResult p) {
 		int i1 = p.getIndex();
 		p.isSpaces();
-		boolean xon = p.isToken("T\"");
+		boolean xon = p.isToken("t\"");
 		if (xon) {
 			p.setIndex(p.getIndex() - 1);
 		}

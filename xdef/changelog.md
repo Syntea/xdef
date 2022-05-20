@@ -1,8 +1,10 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 41.0.9, release-date 2022-05-17
+# Version 41.0.9, release-date 2022-05-20
 * Asterisk (`*`) may be now used for sequential parameters specifying minimum
   or maximum of `minLength`, `maxLength`, `minInclusive`, or  `maxInclusive`.
+* In XON format it is now possible to write `=` (equal sign) after a name of
+  named value even if it is quoted.
 
 # Version 41.0.8, release-date 2022-04-26
 * added method `toXon()` the the interface `org.xdef.component.XComponent`.

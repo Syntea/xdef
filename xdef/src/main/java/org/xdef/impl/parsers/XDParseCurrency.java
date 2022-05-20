@@ -2,6 +2,7 @@ package org.xdef.impl.parsers;
 
 import org.xdef.XDParseResult;
 import org.xdef.XDParserAbstract;
+import static org.xdef.XDValueID.XD_CURRENCY;
 import org.xdef.impl.code.DefCurrency;
 import org.xdef.msg.XDEF;
 import org.xdef.proc.XXNode;
@@ -17,7 +18,7 @@ public class XDParseCurrency extends XDParserAbstract {
 	public void parseObject(final XXNode xnode, final XDParseResult p) {
 		p.isSpaces();
 		boolean xon;
-		if (xon = p.isToken("C(")) {
+		if (xon = p.isToken("c(")) {
 			p.isSpaces();
 		}
 		int pos1 = p.getIndex();

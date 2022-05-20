@@ -330,9 +330,9 @@ public class XonTools {
 	 */
 	public final static String toXmlName(final String s) {
 		if (s.isEmpty()) {
-			return "_x00_"; // empty string
-		} else if (("_x00_").equals(s)) {
-			return "_x5f_x00_";
+			return "_x_"; // empty string
+		} else if (("_x_").equals(s)) {
+			return "_x5f_x_";
 		}
 		StringBuilder sb = new StringBuilder();
 		char ch = s.charAt(0);
@@ -372,7 +372,7 @@ public class XonTools {
 	 * @return XON/JSON name.
 	 */
 	public final static String xmlToJName(final String name) {
-		if ("_x00_".equals(name)) {
+		if ("_x_".equals(name)) {
 			return "";
 		}
 		StringBuilder sb = new StringBuilder();
@@ -482,7 +482,7 @@ public class XonTools {
 		} else if (x instanceof byte[]) {
 			s = new String(SUtils.encodeBase64((byte[]) x));
 		} else if (x instanceof XDTelephone) {
-			return "T\"" + x + '"';
+			return "t\"" + x + '"';
 		} else {
 			return x.toString();
 		}

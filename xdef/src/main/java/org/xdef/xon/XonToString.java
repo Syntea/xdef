@@ -49,20 +49,23 @@ class XonToString extends XonTools {
 					return num;
 				} else if (x instanceof Double) {
 					return ((Double) x).isInfinite()
-						? num.charAt(0) == '-' ? "-INF" : "INF" : num;
+						? num.charAt(0) == '-' ? "-INF" : "INF" :
+						num.indexOf('.') < 0 && num.indexOf('e') < 0
+							&& num.indexOf('E') < 0 ?  num + 'd' : num;
 				} else if (x instanceof Float) {
 					return ((Float) x).isInfinite()
-						? num.charAt(0) == '-' ? "-INFF" : "INFF" : num + 'F';
+						? num.charAt(0) == '-' ? "-INFf" : "INFf" :
+						((Float) x).isNaN() ? "NaNf" : num + 'f';
 				} else if (x instanceof Byte) {
-					return num + 'B';
+					return num + 'b';
 				} else if (x instanceof Short) {
-					return num + 'S';
+					return num + 's';
 				} else if (x instanceof Integer) {
-					return num + 'I';
+					return num + 'i';
 				} else if (x instanceof BigInteger) {
 					return num + 'N';
 				} else if (x instanceof BigDecimal) {
-					return num + 'd';
+					return num + 'D';
 				}
 			} else if (x instanceof Character) {
 				return "c\"" + charToJSource((Character) x) + '"';
@@ -72,15 +75,15 @@ class XonToString extends XonTools {
 				return "e\""
 					+ jstringToSource(((XDEmailAddr) x).getEmailAddr()) + '"';
 			} else if (x instanceof SDatetime) {
-				return "D" + x;
+				return "d" + x;
 			} else if (x instanceof GPSPosition) {
 				return "g(" + x + ')';
 			} else if (x instanceof Price) {
 				return "p(" + x + ')';
 			} else if (x instanceof Currency) {
-				return "C(" + ((Currency) x).getCurrencyCode() + ')';
+				return "c(" + ((Currency) x).getCurrencyCode() + ')';
 			} else if (x instanceof XDTelephone) {
-				return "T\"" + x + '"';
+				return "t\"" + x + '"';
 			} else if (x instanceof SDuration || x instanceof InetAddress) {
 				return x.toString();
 			}
@@ -335,7 +338,7 @@ class XonToString extends XonTools {
 		} else if (x instanceof Currency) {
 			return ((Currency) x).getCurrencyCode();
 		} else if (x instanceof XDTelephone) {
-			return "T\"" + x + "\"";
+			return "t\"" + x + "\"";
 		}
 		return x.toString();
 	}

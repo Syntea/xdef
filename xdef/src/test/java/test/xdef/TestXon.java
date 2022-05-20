@@ -128,18 +128,17 @@ public class TestXon extends XDTester {
 
 	@Override
 	public void test() {
-		assertNull(testx("int", "[null, 1 ]"));
-		assertNull(testx("byte", "[null, 1, -3 ]"));
-		assertNull(testx("short", "[null, 1 ]"));
-		assertNull(testx("int", "[null, 1 ]"));
+		assertNull(testx("byte", "[null, 1b, -3b ]"));
+		assertNull(testx("short", "[null, 1s ]"));
+		assertNull(testx("int", "[null, 1i ]"));
 		assertNull(testx("long", "[null, 1 ]"));
 		assertNull(testx("integer", "[null, 0N, -3N ]"));
-		assertNull(testx("float", "[null, 1.0 ]"));
+		assertNull(testx("float", "[null, 1.0f ]"));
 		assertNull(testx("double", "[null, 1.0 ]"));
-		assertNull(testx("decimal", "[null, 0d, 1d, -1d, 1.5d, 3.33e-5d ]"));
+		assertNull(testx("decimal", "[null, 0D, 1D, -1D, 1.5D, 3.33e-5D ]"));
 		assertNull(testx("date",
-			"[null, D2021-01-12, D1999-01-05+01:01, D1998-12-21Z ]"));
-		assertNull(testx("gYear", "[null,  D2021+01:00, D1999, D-0012Z ]"));
+			"[null, d2021-01-12, d1999-01-05+01:01, d1998-12-21Z ]"));
+		assertNull(testx("gYear", "[null,  d2021+01:00, d1999, d-0012Z ]"));
 		assertNull(testx("gps",
 			"[null, g(20.21,19.99),g(20.21, 19.99,0.1),g(51.52,-0.09,0,xxx) ]"));
 		assertNull(testx("price", "[null, p(20.21 CZK), p(19.99 USD) ]"));
@@ -150,9 +149,9 @@ public class TestXon extends XDTester {
 			"[null, e\"tro@volny.cz\",e\"a b<x@y.zz>\" ]"));
 		assertNull(testx("file", "[null, \"temp/a.txt\" ]"));
 		assertNull(testx("ipAddr", "[null, /::FFFF:129.144.52.38,/0.0.0]\n"));
-		assertNull(testx("currency", "[null, C(USD), C(CZK)]\n"));
+		assertNull(testx("currency", "[null, c(USD), c(CZK)]\n"));
 		assertNull(testx("telephone",
-			"[null, T\"123456\",T\"+420 234 567 890\"]\n"));
+			"[null, t\"123456\",t\"+420 234 567 890\"]\n"));
 		assertNull(testx("jnull", "[ null, null ]"));
 		assertNull(testx("jboolean", "[ null, true ]"));
 		assertNull(testx("jnumber", "[ null, 1 ]"));
@@ -188,14 +187,14 @@ public class TestXon extends XDTester {
 			assertEq(xml, xc.toXml());
 			o = XonUtils.parseXON(
 "{n:X = [\n" +
-"    { a = D2021-12-30,\n" +
-"      t = D2020-12-11T01:01:01.01,\n" +
+"    { a = d2021-12-30,\n" +
+"      t = d2020-12-11T01:01:01.01,\n" +
 "      xmlns:n = \"a.b\"\n" +
 "    },\n" +
-"    1I,\n" +
+"    1i,\n" +
 "    {n:Y = []},\n" +
 "    {n:Y = []},\n" +
-"    2.0d\n" +
+"    2.0D\n" +
 "  ]\n" +
 "}");
 			assertTrue(XonUtils.xonEqual(o, xc.toXon()));
@@ -293,9 +292,9 @@ public class TestXon extends XDTester {
 "/**** Start of XON example ****/\n" +
 "[                                    # Array\n" +
 "  {                                  # Map\n" +
-"    a = 1S,                          # Short\n" +
+"    a = 1s,                          # Short\n" +
 "    b = \"ab cd\",                     # String\n" +
-"    c = -123.4e2d,                   # Double\n" +
+"    c = -123d,                       # Double\n" +
 "    f=true,                          # Boolean\n" +
 "    g = P1Y1M1DT1H1M1.12S,           # Duration\n" +
 "    h = null,                        # null\n" +
@@ -315,36 +314,36 @@ public class TestXon extends XDTester {
 "    p = c\"\\n\",                    # Character\n" +
 "    q = c\" \",                      # Character\n" +
 "    r = null,                        # Character (null)\n" +
-"    t = D0001,                       # year (without zone)\n" +
-"    u = D-0001,                      # year (without zone)\n" +
-"    v = D123456789Z,                 # year zone\n" +
-"    w = D-0001-01:00,                # year zone\n" +
+"    t = d0001,                       # year (without zone)\n" +
+"    u = d-0001,                      # year (without zone)\n" +
+"    v = d123456789Z,                 # year zone\n" +
+"    w = d-0001-01:00,                # year zone\n" +
 "    \" name with space \": \"x\\ty\" # name with space is quoted!\n" +
 "  },  /**** end of map ****/\n" +
 "  null,                              # null\n" +
-"  3F,                                # Float\n" +
+"  3f,                                # Float\n" +
 "  null,                              # null\n" +
 "  -3.1d,                             # BigDecimal\n" +
-"  -2B,                               # Byte\n" +
+"  -2b,                               # Byte\n" +
 "  1N,                                # BigInteger\n" +
 "  999999999999999999999999999999999, # big integer (authomatic)\n" +
-"  D2021-01-11,                       # date\n" +
-"  D--11,                             # month\n" +
-"  D--02Z,                            # month zone\n" +
-"  D--11-22,                          # month day\n" +
-"  D--03-04-01:01,                    # month day zone\n" +
-"  D19:23:01,                         # hours, minutes seconds\n" +
-"  D19:23:01.012,                     # hours minutes seconds millis\n" +
-"  D00:00:00.00001+00:00,             # time nanos zone\n" +
-"  D2000-11Z,                         # year month zone\n" +
-"  D2000-10-01:00,                    # year month zone\n" +
-"  D2000-10,                          # year month; no zone\n" +
-"  D2021-01-12T01:10:11.54012-00:01,  # date and time (nanos, zone)\n" +
+"  d2021-01-11,                       # date\n" +
+"  d--11,                             # month\n" +
+"  d--02Z,                            # month zone\n" +
+"  d--11-22,                          # month day\n" +
+"  d--03-04-01:01,                    # month day zone\n" +
+"  d19:23:01,                         # hours, minutes seconds\n" +
+"  d19:23:01.012,                     # hours minutes seconds millis\n" +
+"  d00:00:00.00001+00:00,             # time nanos zone\n" +
+"  d2000-11Z,                         # year month zone\n" +
+"  d2000-10-01:00,                    # year month zone\n" +
+"  d2000-10,                          # year month; no zone\n" +
+"  d2021-01-12T01:10:11.54012-00:01,  # date and time (nanos, zone)\n" +
 "  g(-0, +1),                         # GPS\n" +
 "  b(HbRBHbRBHQw=),                   # byte array (base64)\n" +
 "  p(123.45 CZK),                     # price\n" +
 "  p(12 USD),                         # price\n" +
-"  C(USD),                            # currency\n" +
+"  c(USD),                            # currency\n" +
 "  /129.144.52.38,                    # inetAddr (IPv4)\n" +
 "  /1080:0:0:0:8:800:200C:417A,       # inetAddr (IPv6)\n" +
 "] /**** end of array ****/\n" +

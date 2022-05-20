@@ -58,7 +58,7 @@ public class DefTelephone extends XDValueAbstract implements XDTelephone  {
 	 * @return string with telephone number.
 	 */
 	public static final String parseTelephone(final SParser p) {
-		boolean wasQuote = p.isChar('"') || p.isToken("T\"");
+		boolean wasQuote = p.isChar('"') || p.isToken("t\"");
 		int pos1 = p.getIndex();
 		if (p.isChar('+')) {
 			p.isInteger();

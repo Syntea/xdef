@@ -2,6 +2,7 @@ package org.xdef.impl.parsers;
 
 import org.xdef.XDParseResult;
 import org.xdef.XDParserAbstract;
+import static org.xdef.XDValueID.XD_PRICE;
 import org.xdef.impl.code.DefPrice;
 import org.xdef.msg.XDEF;
 import org.xdef.proc.XXNode;

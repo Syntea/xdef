@@ -121,8 +121,9 @@ public final class XonReader extends StringParser implements XonParsers {
 				wasScript = true;
 				skipSpacesOrComments();
 				SBuffer value = null;
+				char separator;
 				if (i == 1) { // oneOf
-					if (isChar('=')) {
+					if ((separator=isOneOfChars("=:")) > 0) {
 						skipSpacesOrComments();
 						spos = getPosition();
 						XonTools.JValue jv = readSimpleValue();
@@ -135,7 +136,7 @@ public final class XonReader extends StringParser implements XonParsers {
 					}
 					_jp.xdScript(name, value);
 				} else {  // xscript
-					if (!isChar('=') && i != 1) {
+					if ((separator=isOneOfChars("=:")) <= 0) {
 						//"&{0}"&{1}{ or "}{"} expected
 						error(JSON.JSON002, "=");
 					}
@@ -155,20 +156,26 @@ public final class XonReader extends StringParser implements XonParsers {
 				char separator;
 				if (isChar('"')) {
 					name = new SBuffer(XonTools.readJString(this), spos);
-					separator = ':';
+					skipSpacesOrComments();
+					separator=isOneOfChars("=:");
 				} else if (_xonMode && isXMLName(StringParser.XMLVER1_0)) {
 					name = new SBuffer(getParsedString(), spos);
-					separator = '=';
+					skipSpacesOrComments();
+					separator = separator=isOneOfChars("=:");
+					if (separator == NOCHAR || separator == ':') {
+						//"&{0}"&{1}{ or "}{"} expected
+						error(JSON.JSON002, "=");
+						separator = '=';
+					}
 				} else {
 					error(JSON.JSON004); //Name of item expected
 					_jp.mapEnd(this);
 					setEos();
 					return;
 				}
-				skipSpacesOrComments();
-				if (!isChar(separator)) {
+				if (separator == NOCHAR) {
 					//"&{0}"&{1}{ or "}{"} expected
-					error(JSON.JSON002, String.valueOf(separator));
+					error(JSON.JSON002, _xonMode ? "=" : ":");
 				}
 				if (_jp.namedValue(name)) {
 					error(JSON.JSON022, name); //Value pair &{0} already exists
@@ -373,7 +380,7 @@ public final class XonReader extends StringParser implements XonParsers {
 			Object result = null;
 			char ch;
 			if (_xonMode&&(i=isOneOfTokens(new String[]{"c\"","u\"","e\"","b(",
-				"D","p(","g(","/","C(","T\"","P","-P","NaN","INF","-INF"}))>=0){
+				"d","p(","g(","/","c(","t\"","P","-P","NaN","INF","-INF"}))>=0){
 				switch(i) {
 					case 0: // character
 						i = XonTools.readJChar(this);
@@ -406,7 +413,7 @@ public final class XonReader extends StringParser implements XonParsers {
 							}
 						} catch (SException ex) {}
 						break;
-					case 4:  // 'D' datetime
+					case 4:  // 'd' datetime
 						if (isDatetime("yyyy-MM-dd['T'HH:mm:ss[.S]][Z]" +
 							"|HH:mm:ss[.S][Z]"+ //time
 							"|--MM[-dd][Z]" + //month day
@@ -486,7 +493,7 @@ public final class XonReader extends StringParser implements XonParsers {
 							return returnValue(spos, null);
 						}
 					}
-					case 8: {// "C(" currency
+					case 8: {// "c(" currency
 						int pos1 = getIndex();
 						while ((ch = peekChar()) > ' ' && ch != ')') {}
 						int pos2 = getIndex() -1;
@@ -502,7 +509,7 @@ public final class XonReader extends StringParser implements XonParsers {
 						}
 						break;
 					}
-					case 9: {// Ttelephone
+					case 9: {// "t telephone
 						int pos1 = getIndex();
 						while ((ch = peekChar()) >= ' ' && ch != '"') {}
 						int pos2 = getIndex() -1;
@@ -574,34 +581,34 @@ public final class XonReader extends StringParser implements XonParsers {
 				}
 				if (_xonMode) {
 					if (isfloat) {
-						switch(ch = isOneOfChars("FDd")) {
-							case 'F':
+						switch(ch = isOneOfChars("fDd")) {
+							case 'f':
 								return returnValue(spos, Float.parseFloat(s));
-							case 'D':
-								return returnValue(spos, Double.parseDouble(s));
 							case 'd':
+								return returnValue(spos, Double.parseDouble(s));
+							case 'D':
 								return returnValue(spos, new BigDecimal(s));
 							default:
 								return returnValue(spos, Double.parseDouble(s));
 						}
 					} else {
-						switch(ch = isOneOfChars("LISBNFd")) {
-							case 'L':
+						switch(ch = isOneOfChars("lisbNfDd")) {
+							case 'l':
 								return returnValue(spos, Long.parseLong(s));
-							case 'I':
+							case 'i':
 								return returnValue(spos, Integer.parseInt(s));
-							case 'S':
+							case 's':
 								return returnValue(spos, Short.parseShort(s));
-							case 'B':
+							case 'b':
 								return returnValue(spos, Byte.parseByte(s));
 							case 'N':
 								return returnValue(spos, new BigInteger(s));
-							case 'F':
+							case 'f':
 								return returnValue(spos, Float.parseFloat(s));
 							case 'D':
-								return returnValue(spos, Double.parseDouble(s));
-							case 'd':
 								return returnValue(spos, new BigDecimal(s));
+							case 'd':
+								return returnValue(spos, Double.parseDouble(s));
 							default:
 							try {
 								return returnValue(spos, Long.parseLong(s));

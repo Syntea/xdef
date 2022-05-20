@@ -39,8 +39,8 @@ public class XDParseChar extends XSAbstractParseToken {
 		if (p.eos()) {
 			return false;
 		}
-		char ch = p.peekChar();
 		boolean xon = p.isChar('c');
+		char ch = p.peekChar();
 		if (ch == '"') {
 			int i = XonTools.readJChar(p);
 			if (i < 1) {
