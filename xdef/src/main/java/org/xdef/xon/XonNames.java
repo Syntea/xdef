@@ -10,10 +10,19 @@ public interface XonNames {
 	public final static String X_ARRAY = "array";
 	/** XML attribute name of XON/JSON named item in a map. */
 	public final static String X_KEYATTR = "key";
-	/** XML element name XON/JSON value (value value is in attribute. */
+	/** XML element name XON/JSON value (value is in attribute. */
 	public final static String X_ITEM = "item";
 	/** XML attribute name of XON/JSON value (in the X_ITEM element). */
 	public final static String X_VALUEATTR = "value";
+
+	/** XML element name of XON/JSON map (internal form). */
+	public static final String I_MAP = "_x5f_MAP";
+	/** XML element name of XON/JSON array. */
+	public static final String I_ARRAY = "_x5f_ARR";
+	/** XML element name XON/JSON value (internal form, value is in attribute.*/
+	public static final String I_ITEM = "_x5f_";
+	/** XML attribute name of XON/JSON value (internal form). */
+	public static final String I_VALUEATTR = "V";
 
 ////////////////////////////////////////////////////////////////////////////////
 // names used in X-definition

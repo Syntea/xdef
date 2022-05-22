@@ -99,16 +99,42 @@ public class TestXonUtil extends STester {
 		return false;
 	}
 
+	private static String testX(String s) {return testX1(XonUtils.parseXON(s));}
+
+	private static String testX(File f) {return testX1(XonUtils.parseXON(f));}
+
+	private static String testX1(Object o) {
+		Element el = XonUtils.xonToXmlX(o);
+		Object o1 = XonUtils.xmlToXon(el);
+		return XonUtils.xonEqual(o, o1) ? ""
+			: ("/n***\n" + KXmlUtils.nodeToString(el, true) +
+			"/n***\n" + XonUtils.toXonString(o1, true));
+	}
+
+	private static String testXD(String s) {
+		return testXD1(XonUtils.parseXON(s));
+	}
+
+	private static String testXD(File f) {
+		return testXD1(XonUtils.parseXON(f));
+	}
+
+	private static String testXD1(Object o) {
+		Element el = XonUtils.xonToXmlXD(o);
+		Object o1 = XonUtils.xmlToXon(el);
+		return XonUtils.xonEqual(o, o1) ? ""
+			: ("/n***\n" + KXmlUtils.nodeToString(el, true) +
+			"/n***\n" + XonUtils.toXonString(o1, true));
+	}
+
 	@Override
 	/** Run test and print error information. */
 	public void test() {
 		init("Test*"); //init directories and test files
 //		init("Test105");
 		for (File json: _files) { // test JSON parser
-			String s = testJParse(json);
-			if (!s.isEmpty()) {
-				fail(s);
-			}
+			assertEq("", testJParse(json), json.getAbsolutePath());
+			assertEq("", testX(json), json.getAbsolutePath());
 		}
 		_files = SUtils.getFileGroup((new File(getDataDir()).getAbsolutePath()
 			+ File.separator).replace('\\', '/') + "TestErr*.json");
@@ -122,10 +148,8 @@ public class TestXonUtil extends STester {
 		File directory = new File(getDataDir() + "../../../xdef/data/json/");
 		for (File x: directory.listFiles()) {
 			if (x.isFile() && x.getName().endsWith("json")) {
-				String s = testJParse(x);
-				if (!s.isEmpty()) {
-					fail(x + "\n" + s);
-				}
+				assertEq("", testJParse(x), x.getAbsolutePath());
+				assertEq("", testX(x), x.getAbsolutePath());
 			}
 		}
 		for (File x: directory.listFiles()) {
@@ -160,95 +184,40 @@ public class TestXonUtil extends STester {
 				}
 			}
 		}
-		try {
-			Element el;
-			Object j;
-			String json;
-			json = "[{}]";
-			j = XonUtils.parseXON(json);
-			el = XonUtils.xonToXmlXD(json);
-			if (!XonUtils.xonEqual(j, XonUtils.xmlToXon(el))) {
-				fail(json + '\n' + XonUtils.toXonString(XonUtils.xmlToXon(el)));
-			}
-			json = "[{a={b=1}}]";
-			j = XonUtils.parseXON(json);
-			el = XonUtils.xonToXmlXD(json);
-			if (!XonUtils.xonEqual(j, XonUtils.xmlToXon(el))) {
-				fail(json + '\n' + XonUtils.toXonString(XonUtils.xmlToXon(el)));
-			}
-			json = "[{a=[]}]";
-			j = XonUtils.parseXON(json);
-			el = XonUtils.xonToXmlXD(json);
-			if (!XonUtils.xonEqual(j, XonUtils.xmlToXon(el))) {
-				fail(json + '\n' + XonUtils.toXonString(XonUtils.xmlToXon(el)));
-			}
-			json = "[{a=[1]}]";
-			j = XonUtils.parseXON(json);
-			el = XonUtils.xonToXmlXD(json);
-			if (!XonUtils.xonEqual(j, XonUtils.xmlToXon(el))) {
-				fail(json + '\n' + XonUtils.toXonString(XonUtils.xmlToXon(el)));
-			}
-			json = "[{a=[[]]}]";
-			j = XonUtils.parseXON(json);
-			el = XonUtils.xonToXmlXD(json);
-			if (!XonUtils.xonEqual(j, XonUtils.xmlToXon(el))) {
-				fail(json + '\n' + XonUtils.toXonString(XonUtils.xmlToXon(el)));
-			}
-			json = "[{a=[{}]}]";
-			j = XonUtils.parseXON(json);
-			el = XonUtils.xonToXmlXD(json);
-			if (!XonUtils.xonEqual(j, XonUtils.xmlToXon(el))) {
-				fail(json + '\n' + XonUtils.toXonString(XonUtils.xmlToXon(el)));
-			}
-			json = "[{a=[{a=1}]}]";
-			j = XonUtils.parseXON(json);
-			el = XonUtils.xonToXmlXD(json);
-			if (!XonUtils.xonEqual(j, XonUtils.xmlToXon(el))) {
-				fail(json + '\n' + XonUtils.toXonString(XonUtils.xmlToXon(el)));
-			}
-			json = "[{a=[{}, 1]}]";
-			j = XonUtils.parseXON(json);
-			el = XonUtils.xonToXmlXD(json);
-			if (!XonUtils.xonEqual(j, XonUtils.xmlToXon(el))) {
-				fail(json + '\n' + XonUtils.toXonString(XonUtils.xmlToXon(el)));
-			}
-			json = "[{a=[{},[1,2],{},[3,4]]}]";
-			j = XonUtils.parseXON(json);
-			el = XonUtils.xonToXmlXD(json);
-			if (!XonUtils.xonEqual(j, XonUtils.xmlToXon(el))) {
-				fail(json + '\n' + XonUtils.toXonString(XonUtils.xmlToXon(el)));
-			}
-			json = "[{a=[{a=1},[1,2],{},[3,4]]}]";
-			j = XonUtils.parseXON(json);
-			el = XonUtils.xonToXmlXD(json);
-			if (!XonUtils.xonEqual(j, XonUtils.xmlToXon(el))) {
-				fail(json + '\n' + XonUtils.toXonString(XonUtils.xmlToXon(el)));
-			}
-			json = "[{a=[[1,2],{},[3,4]]}]";
-			j = XonUtils.parseXON(json);
-			el = XonUtils.xonToXmlXD(json);
-			if (!XonUtils.xonEqual(j, XonUtils.xmlToXon(el))) {
-				fail(json + '\n' + XonUtils.toXonString(XonUtils.xmlToXon(el)));
-			}
-			json = "[{a=[[1,2],{a=1},[30,4]]}]";
-			j = XonUtils.parseXON(json);
-			el = XonUtils.xonToXmlXD(json);
-			if (!XonUtils.xonEqual(j, XonUtils.xmlToXon(el))) {
-				fail(json + '\n' + XonUtils.toXonString(XonUtils.xmlToXon(el)));
-			}
-			json = "[{a=[[1,2],[3,4],{}]}]";
-			j = XonUtils.parseXON(json);
-			el = XonUtils.xonToXmlXD(json);
-			if (!XonUtils.xonEqual(j, XonUtils.xmlToXon(el))) {
-				fail(json + '\n' + XonUtils.toXonString(XonUtils.xmlToXon(el)));
-			}
-			json = "[{a=[[1,2],[3,4],{a=1,b=2}]}]";
-			j = XonUtils.parseXON(json);
-			el = XonUtils.xonToXmlXD(json);
-			if (!XonUtils.xonEqual(j, XonUtils.xmlToXon(el))) {
-				fail(json + '\n' + XonUtils.toXonString(XonUtils.xmlToXon(el)));
-			}
-		} catch (Exception ex) {fail(ex);}
+		for (String s : new String[] {
+			"true",
+			"\"true\"",
+			"null",
+			"1l", //long
+			"-1.25e-3f",
+			"{}",
+			"{\"\"=\"\"}",
+			"[]",
+			"[[]]",
+			"[[{}]]",
+			"[[[]]]",
+			"[[[1b]]]",
+			"[[],[]]",
+			"[[1d,2D],[null,4s]]",
+			"[{a={b=1}}]",
+			"[{a=[]}]",
+			"[{a=[1]}]",
+			"[{a=[[]]}]",
+			"[{a=[{}]}]",
+			"[{a=[{a=1}]}]",
+			"[1, -1.25e-3, true, \"abc\", null]",
+			"[1, { _x69_=1, _x5f_map=null, \"a_x\tb\"=[null], item={}}]",
+			"[1, { a = 1, b = \"a\", \"\"=false, array = [], map={}}, \"abc\"]",
+			"[{a=[{},[1,2],{},[3,4]]}]",
+			"[{a=[{a=1},[1,2],{},[3,4]]}]",
+			"[{a=[[1,2],{},[3,4]]}]",
+			"[{a=[[1,2],{a=1},[30,4]]}]",
+			"[{a=[[1,2],[3,4],{}]}]",
+			"[{a=[[1,2],[3,4],{a=1,b=2}]}]",
+			}) {
+			assertEq("", testX(s), s);
+			assertEq("", testXD(s), s);
+		}
 	}
 
 	/** Run test
