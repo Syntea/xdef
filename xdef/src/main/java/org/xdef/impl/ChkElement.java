@@ -18,6 +18,7 @@ import org.xdef.XDDebug;
 import org.xdef.XDParseResult;
 import org.xdef.XDUniqueSetKey;
 import org.xdef.XDValue;
+import static org.xdef.XDValueID.XD_NULL;
 import static org.xdef.XDValueID.XD_PARSERESULT;
 import static org.xdef.XDValueID.XX_ATTR;
 import static org.xdef.XDValueID.XX_ELEMENT;
@@ -44,6 +45,7 @@ import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.xon.XonNames;
+import static org.xdef.xon.XonNames.X_ITEM;
 
 /** Provides validation of input data or it can be used as base for construction
  * of XML objects according to a X-definition.
@@ -483,7 +485,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			_actDefIndex = -1;
 		} else {
 			String name = xelem.getName();
-			if (xelem._xon > 0 && "item".equals(name = xelem.getLocalName())) {
+			if (xelem._xon > 0 && X_ITEM.equals(name = xelem.getLocalName())) {
 				String[] x = getPosInfo(xelem.getXDPosition(), null);
 				int ndx = (x[0].lastIndexOf("['"));
 				if (ndx >= 0) {
@@ -2296,7 +2298,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 						copyTemporaryReports();
 						continue; // skip default method
 					}
-					removeTemporaryReport(rep); // not report "missing" twice
+					removeTemporaryReport(rep); // don't report "missing" twice
 					copyTemporaryReports();
 				}
 				if (xatt.minOccurs() == XData.REQUIRED) {

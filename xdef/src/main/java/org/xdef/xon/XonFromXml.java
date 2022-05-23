@@ -24,7 +24,7 @@ import static org.xdef.xon.XonNames.X_VALUEATTR;
 /** Converter XML -> XON/JSON.
  * @author Vaclav Trojan
  */
-class XonFromXml extends XonUtils implements XonNames {
+class XonFromXml extends XonUtils {
 
 ////////////////////////////////////////////////////////////////////////////////
 // Keywords of names of XON/JSON types

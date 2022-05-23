@@ -21,8 +21,15 @@ import org.xdef.sys.SBuffer;
 import org.xdef.sys.SPosition;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.xon.IniReader;
+import static org.xdef.xon.XonNames.X_MAP;
 import org.xdef.xon.XonParser;
-import org.xdef.xon.XonNames;
+import static org.xdef.xon.XonNames.ONEOF_NAME;
+import static org.xdef.xon.XonNames.SCRIPT_NAME;
+import static org.xdef.xon.XonNames.X_ARRAY;
+import static org.xdef.xon.XonNames.X_ITEM;
+import static org.xdef.xon.XonNames.X_KEYATTR;
+import static org.xdef.xon.XonNames.X_MAP;
+import static org.xdef.xon.XonNames.X_VALUEATTR;
 import org.xdef.xon.XonParsers;
 
 /** Create X-definition model from xd:xon element.
@@ -350,20 +357,20 @@ public final class CompileXonXdef extends StringParser {
 	 */
 	private void updateKeyInfo(final PNode e, final String key) {
 		String s = XonTools.toXmlName(key);
-		addMatchExpression(e, '@' + XonNames.X_KEYATTR + "=='"+ s +"'");
-		setAttr(e, XonNames.X_KEYATTR, new SBuffer("fixed('"+s+"');",e._name));
+		addMatchExpression(e, '@' + X_KEYATTR + "=='"+ s +"'");
+		setAttr(e, X_KEYATTR, new SBuffer("fixed('"+s+"');",e._name));
 	}
 
 	private PNode genXonMap(final JMap map, final PNode parent) {
 		PNode e, ee;
-		Object val = map.get(XonNames.SCRIPT_NAME);
+		Object val = map.get(SCRIPT_NAME);
 		if (val != null && val instanceof JValue) {
-			map.remove(XonNames.SCRIPT_NAME);
+			map.remove(SCRIPT_NAME);
 			JValue jv = (JValue) val;
 			setSourceBuffer(jv.getSBuffer());
 			isSpacesOrComments();
-			if (isToken(XonNames.ONEOF_NAME)) {
-				e = genJElement(parent, "map", map.getPosition());
+			if (isToken(ONEOF_NAME)) {
+				e = genJElement(parent, X_MAP, map.getPosition());
 				ee = genXDElement(e, "choice", getPosition());
 				e.addChildNode(ee);
 				skipSemiconsBlanksAndComments();
@@ -374,11 +381,11 @@ public final class CompileXonXdef extends StringParser {
 					if (x != null && x.maxOccurs() > 1) {
 						//Specification of occurence of &{0} group
 						// can not be higher then 1
-						error(XDEF.XDEF252, XonNames.ONEOF_NAME);
+						error(XDEF.XDEF252, ONEOF_NAME);
 					}
 				}
 			} else if (map.size() > 1) {
-				e = genJElement(parent, "map", map.getPosition());
+				e = genJElement(parent, X_MAP, map.getPosition());
 				ee = genXDElement(e, "mixed", map.getPosition());
 				e.addChildNode(ee);
 				if (!eos()) {
@@ -386,7 +393,7 @@ public final class CompileXonXdef extends StringParser {
 						new SBuffer(getUnparsedBufferPart(), getPosition()));
 				}
 			} else {
-				e = genJElement(parent, "map", map.getPosition());
+				e = genJElement(parent, X_MAP, map.getPosition());
 				ee = e;
 				if (!eos()) {
 					setXDAttr(e, "script",
@@ -394,11 +401,11 @@ public final class CompileXonXdef extends StringParser {
 				}
 			}
 		} else if (map.size() > 1) {
-			e = genJElement(parent, "map", map.getPosition());
+			e = genJElement(parent, X_MAP, map.getPosition());
 			ee = genXDElement(e, "mixed", map.getPosition());
 			e.addChildNode(ee);
 		} else {
-			e = genJElement(parent, "map", map.getPosition());
+			e = genJElement(parent, X_MAP, map.getPosition());
 			ee = e;
 		}
 		for (Map.Entry<Object, Object> entry: map.entrySet()) {
@@ -423,7 +430,7 @@ public final class CompileXonXdef extends StringParser {
 	}
 
 	private PNode genXonArray(final JArray array, final PNode parent) {
-		PNode e = genJElement(parent, "array", array.getPosition());
+		PNode e = genJElement(parent, X_ARRAY, array.getPosition());
 		int index = 0;
 		int len = array.size();
 		if (len > 0) {
@@ -433,7 +440,7 @@ public final class CompileXonXdef extends StringParser {
 			if (o != null && o instanceof JValue) {
 				setSourceBuffer(((JValue) o).getSBuffer());
 				isSpacesOrComments();
-				if (isToken(XonNames.ONEOF_NAME)) {
+				if (isToken(ONEOF_NAME)) {
 					e = genXDElement(
 						parent, "choice", ((JValue) jo).getPosition());
 					skipSemiconsBlanksAndComments();
@@ -446,7 +453,7 @@ public final class CompileXonXdef extends StringParser {
 							parent, "script", new SBuffer(s,getPosition()));
 						XOccurrence x = readOccurrence(new SBuffer(s));
 						if (x != null && x.minOccurs() == 0
-							&& "map".equals(parent.getLocalName())) {
+							&& X_MAP.equals(parent.getLocalName())) {
 							// set optional occurrence to choice model
 							setXDAttr(
 								e, "script", new SBuffer("?", getPosition()));
@@ -467,9 +474,9 @@ public final class CompileXonXdef extends StringParser {
 				// if it is not the last and it has xd:script attribute where
 				// the min occurrence differs from max occurrence
 				// and it has the attribute with a value description
-				if (XonNames.X_ITEM.equals(ee._localName)
+				if (X_ITEM.equals(ee._localName)
 					&& XDConstants.XON_NS_URI_W.equals(ee._nsURI)
-					&& (val = getAttr(ee, XonNames.X_VALUEATTR)) != null) {
+					&& (val = getAttr(ee, X_VALUEATTR)) != null) {
 					PAttr script = getXDAttr(ee, "script");
 					XOccurrence occ = null;
 					if (script != null) {
@@ -501,7 +508,7 @@ public final class CompileXonXdef extends StringParser {
 						}
 						addMatchExpression(ee,
 							s + ".parse((String)@"
-								+ XonNames.X_VALUEATTR + ").matches()");
+								+ X_VALUEATTR + ").matches()");
 					}
 				}
 			}
@@ -513,7 +520,7 @@ public final class CompileXonXdef extends StringParser {
 		final JValue jo,
 		final PNode parent) {
 		SBuffer sbf, occ = null;
-		PNode e = genJElement(parent, XonNames.X_ITEM, jo.getPosition());
+		PNode e = genJElement(parent, X_ITEM, jo.getPosition());
 		if (jo.getValue() == null) {
 			sbf = new SBuffer("jnull()");
 		} else {
@@ -524,7 +531,7 @@ public final class CompileXonXdef extends StringParser {
 				SBuffer[] parsedScript = parseTypeDeclaration(jo.getSBuffer());
 				if (!parsedScript[0].getString().isEmpty()) { // occurrence
 					occ = parsedScript[0];
-					if (!XonNames.X_ARRAY.equals(parent.getLocalName())
+					if (!X_ARRAY.equals(parent.getLocalName())
 						&& !"1".equals(parsedScript[2].getString())) {
 						error(XDEF.XDEF262); //("====== " + occ.getString());
 					}
@@ -537,11 +544,11 @@ public final class CompileXonXdef extends StringParser {
 			if (occ != null) { // occurrence
 				setXDAttr(e, "script", occ);
 			}
-			setAttr(e, XonNames.X_VALUEATTR, sbf);
+			setAttr(e, X_VALUEATTR, sbf);
 		}
 		if (name != null) {
-			addMatchExpression(e, '@' + XonNames.X_KEYATTR + "=='"+ name +"'");
-			setAttr(e, XonNames.X_KEYATTR,
+			addMatchExpression(e, '@' + X_KEYATTR + "=='"+ name +"'");
+			setAttr(e, X_KEYATTR,
 				new SBuffer("fixed('" + name + "');",e._name));
 		}
 		return e;
@@ -735,15 +742,14 @@ public final class CompileXonXdef extends StringParser {
 		 * @param value value of item.
 		 */
 		public void xdScript(SBuffer name, SBuffer value) {
-			String s = XonNames.ONEOF_NAME.equals(name.getString())
-				? XonNames.ONEOF_NAME : "";
+			String s = ONEOF_NAME.equals(name.getString()) ? ONEOF_NAME : "";
 			s += value == null ? "" : value.getString();
 			SPosition spos = value == null ? name : value;
 			JValue jv = new JValue(name, new JValue(spos, s));
 			if (_kind == 1) { // array
 				_arrays.peek().add(jv);
 			} else if (_kind == 2) { // map
-				_maps.peek().put(XonNames.SCRIPT_NAME, jv);
+				_maps.peek().put(SCRIPT_NAME, jv);
 			}
 		}
 		@Override

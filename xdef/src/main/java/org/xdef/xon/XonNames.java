@@ -4,6 +4,10 @@ package org.xdef.xon;
  * @author Vaclav Trojan
  */
 public interface XonNames {
+
+////////////////////////////////////////////////////////////////////////////////
+// names used in XON DX and W3C format
+////////////////////////////////////////////////////////////////////////////////
 	/** XML element name of XON/JSON map. */
 	public final static String X_MAP = "map";
 	/** XML element name of XON/JSON array. */
@@ -15,17 +19,20 @@ public interface XonNames {
 	/** XML attribute name of XON/JSON value (in the X_ITEM element). */
 	public final static String X_VALUEATTR = "value";
 
+////////////////////////////////////////////////////////////////////////////////
+// names used in XON internal format
+////////////////////////////////////////////////////////////////////////////////
 	/** XML element name of XON/JSON map (internal form). */
-	public static final String I_MAP = "_x5f_MAP";
+	public static final String I_MAP = "_x5f_M";
 	/** XML element name of XON/JSON array. */
-	public static final String I_ARRAY = "_x5f_ARR";
+	public static final String I_ARRAY = "_x5f_A";
 	/** XML element name XON/JSON value (internal form, value is in attribute.*/
-	public static final String I_ITEM = "_x5f_";
+	public static final String I_ITEM = "_x5f_I";
 	/** XML attribute name of XON/JSON value (internal form). */
-	public static final String I_VALUEATTR = "V";
+	public static final String I_VALUEATTR = "_x5f_V";
 
 ////////////////////////////////////////////////////////////////////////////////
-// names used in X-definition
+// names used in X-definition moldel
 ////////////////////////////////////////////////////////////////////////////////
 	/** This keyword used for the $script specification in X-definition. */
 	public static final String SCRIPT_NAME = "$script";

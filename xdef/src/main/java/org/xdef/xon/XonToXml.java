@@ -12,6 +12,10 @@ import org.xdef.impl.xml.KNamespace;
 import org.xdef.msg.JSON;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.xml.KXmlUtils;
+import static org.xdef.xon.XonNames.I_ARRAY;
+import static org.xdef.xon.XonNames.I_ITEM;
+import static org.xdef.xon.XonNames.I_MAP;
+import static org.xdef.xon.XonNames.I_VALUEATTR;
 import static org.xdef.xon.XonNames.X_ARRAY;
 import static org.xdef.xon.XonNames.X_ITEM;
 import static org.xdef.xon.XonNames.X_KEYATTR;
@@ -26,7 +30,7 @@ import static org.xdef.xon.XonTools.toXmlName;
 /** Conversion of XON/JSON to XML
  * @author Vaclav Trojan
  */
-class XonToXml extends XonTools implements XonNames {
+class XonToXml extends XonTools {
 	/** Prefix of XON/JSON namespace. */
 	private String _xPrefix;
 	/** XON/JSON namespace. */

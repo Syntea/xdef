@@ -77,6 +77,9 @@ import org.xdef.sys.SPosition;
 import org.xdef.sys.SReporter;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.xml.KXmlUtils;
+import static org.xdef.xon.XonNames.X_ARRAY;
+import static org.xdef.xon.XonNames.X_ITEM;
+import static org.xdef.xon.XonNames.X_MAP;
 import org.xdef.xon.XonUtils;
 
 /** The abstract class for checking objects.
@@ -1180,12 +1183,12 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 				arrayInfo2 = !t.isEmpty() ? "[" + n + "]" : "";
 				wasArray = false;
 			}
-			if (s.startsWith("array")) {
+			if (s.startsWith(X_ARRAY)) {
 				XMNode[] ynodes = xnodes;
 				xnodes = null;
 				for (int i=0, j=0; i < ynodes.length; i++) {
 					XMNode x = ynodes[i];
-					if ("array".equals(x.getLocalName())) {
+					if (X_ARRAY.equals(x.getLocalName())) {
 						if (j == m) { // model found
 							xdpath += getItemName(x) + arrayInfo1;
 							jpath += !t.isEmpty() ?getItemName(x)+arrayInfo2:"";
@@ -1200,12 +1203,12 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 				if (xnodes==null) {
 					return result;
 				}
-			} else if (s.startsWith("map")) {
+			} else if (s.startsWith(X_MAP)) {
 				XMNode[] ynodes = xnodes;
 				xnodes = null;
 				for (int i=0, j=0; i < ynodes.length; i++) {
 					XMNode x = ynodes[i];
-					if ("map".equals(x.getLocalName())) {
+					if (X_MAP.equals(x.getLocalName())) {
 						if (j == m) { // model found
 							xdpath += getItemName(x) + arrayInfo1;
 							jpath += !t.isEmpty() ?getItemName(x)+arrayInfo2 :"";
@@ -1220,12 +1223,12 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 				if (xnodes==null) {
 					return result;
 				}
-			} else if (s.startsWith("item")) {
+			} else if (s.startsWith(X_ITEM)) {
 				XMNode[] ynodes = xnodes;
 				xnodes = null;
 				for (int i=0, j=0; i < ynodes.length; i++) {
 					XMNode xn = ynodes[i];
-					if ("item".equals(xn.getLocalName())) {
+					if (X_ITEM.equals(xn.getLocalName())) {
 						if (j == m) { // model found
 							xdpath += getItemName(xn) + arrayInfo1;
 							jpath += !t.isEmpty()

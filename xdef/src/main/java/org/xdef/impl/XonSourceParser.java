@@ -23,7 +23,11 @@ import org.xdef.sys.SPosition;
 import org.xdef.sys.SReporter;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUnsupportedOperationException;
-import org.xdef.xon.XonNames;
+import static org.xdef.xon.XonNames.X_ARRAY;
+import static org.xdef.xon.XonNames.X_ITEM;
+import static org.xdef.xon.XonNames.X_KEYATTR;
+import static org.xdef.xon.XonNames.X_MAP;
+import static org.xdef.xon.XonNames.X_VALUEATTR;
 import org.xdef.xon.XonParser;
 import org.xdef.xon.XonParsers;
 import org.xdef.xon.XonReader;
@@ -114,12 +118,12 @@ public final class XonSourceParser implements XonParser, XParser {
 		String name = null;
 		if (_name != null) {
 			name = XonTools.toXmlName(_name.getString());
-			e.setAttribute(XonNames.X_KEYATTR, name);
+			e.setAttribute(X_KEYATTR, name);
 		}
 		String value = null;
 		if (_value != null) {
 			value = XonTools.genXMLValue(_value.getValue());
-			e.setAttribute(XonNames.X_VALUEATTR, value);
+			e.setAttribute(X_VALUEATTR, value);
 		}
 		if (++_level == 0) {
 			_el = e;
@@ -151,11 +155,11 @@ public final class XonSourceParser implements XonParser, XParser {
 		}
 		if (name != null) {
 			_chkDoc.getReporter().setPosition(_name);
-			_chkEl.addAttribute(XonNames.X_KEYATTR, name);
+			_chkEl.addAttribute(X_KEYATTR, name);
 		}
 		if (value != null) {
 			_chkDoc.getReporter().setPosition(_value.getPosition());
-			_chkEl.addAttribute(XonNames.X_VALUEATTR, value);
+			_chkEl.addAttribute(X_VALUEATTR, value);
 		}
 		_chkDoc.getReporter().setPosition(elemName);
 		_name = null;
@@ -185,7 +189,7 @@ public final class XonSourceParser implements XonParser, XParser {
 	 */
 	public void putValue(final XonTools.JValue value) {
 		_value = value;
-		elementStart(new SBuffer(XonNames.X_ITEM, value.getPosition()));
+		elementStart(new SBuffer(X_ITEM, value.getPosition()));
 		elementEnd();
 	}
 	@Override
@@ -210,7 +214,7 @@ public final class XonSourceParser implements XonParser, XParser {
 	 * @param pos source position.
 	 */
 	public void arrayStart(final SPosition pos) {
-		elementStart(new SBuffer(XonNames.X_ARRAY, pos));
+		elementStart(new SBuffer(X_ARRAY, pos));
 	}
 	@Override
 	/** Array ended.
@@ -222,7 +226,7 @@ public final class XonSourceParser implements XonParser, XParser {
 	 * @param pos source position.
 	 */
 	public void mapStart(final SPosition pos) {
-		elementStart(new SBuffer(XonNames.X_MAP, pos));
+		elementStart(new SBuffer(X_MAP, pos));
 		_mapNames.push(_names = new Stack<SBuffer>());
 	}
 	@Override
