@@ -283,7 +283,10 @@ public class XonTools {
 			return XonTools.readJString(p);
 		}
 		int i = 0;
-		if (ch == '-' && len > 0) {
+		if (ch == '-') {
+			if (len == 1) {
+				return "-";
+			}
 			ch = s.charAt(1);
 			i = 1;
 		}
