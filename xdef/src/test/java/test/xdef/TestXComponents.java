@@ -497,7 +497,7 @@ public final class TestXComponents extends XDTester {
 "<xd:component>%class test.xdef.TestX_OneOfa %link a</xd:component>\n"+
 "<xd:xon name='a'>\n" +
 "{\n" +
-"  $oneOf= \"optional;\",\n" +
+"  :oneOf= \"optional;\",\n" +
 "  \"manager\": \"string()\",\n" +
 "  \"subordinates\":[ \"* string();\" ]\n" +
 "}\n" +
@@ -557,12 +557,12 @@ public final class TestXComponents extends XDTester {
 "<xd:def xmlns:xd='" + _xdNS + "' root=\"test\">\n" +
 "<xd:component>%class test.xdef.MyTestX_OneOfb %link test</xd:component>\n"+
 "<xd:xon name=\"test\">\n" +
-"{ a=[ $oneOf=\"?\",\n" +
+"{ a=[ :oneOf=\"?\",\n" +
 "       \"jnull(); finally outln('null')\", \n" + // must be first
 "       \"date(); finally outln('date')\", \n" +
 "       \"ipAddr(); finally outln('ipAddr')\", \n" +
-"       [$script=\"finally outln('[...]')\",\"*int()\"], \n" +
-"       {$script=\"finally outln('{ . }')\",x=\"? int()\",y=\"? string()\"},\n"+
+"       [:script=\"finally outln('[...]')\",\"*int()\"], \n" +
+"       {:script=\"finally outln('{ . }')\",x=\"? int()\",y=\"? string()\"},\n"+
 "       \"string(); finally outln('string')\" \n" +
 "  ]\n" +
 "}\n" +

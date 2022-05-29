@@ -20,7 +20,7 @@ import org.xdef.xml.KXmlUtils;
 /** Methods for INI/Properties data.
  * @author Vaclav Trojan
  */
-public class IniReader extends StringParser implements XonParsers {
+public class IniReader extends StringParser implements XonParsers, XonNames {
 	/** Flag if the parsed data are in X-definition (default false). */
 	private boolean _jdef;
 	/** Parser of XON source. */
@@ -247,14 +247,14 @@ public class IniReader extends StringParser implements XonParsers {
 				if (p.isChar(';')) {
 					p.isSpaces();
 					SPosition sp = p.getPosition();
-					if(p.isToken("$script")) {
+					if(p.isToken(SCRIPT_NAME)) {
 						p.isSpaces();
 						if (p.isChar('=')) {
 							p.isSpaces();
 							String s = p.getUnparsedBufferPart();
 							int ndx = s.lastIndexOf(']');
 							if (ndx > 0 ) {
-								p1 = new SBuffer("$script",	sp);
+								p1 = new SBuffer(SCRIPT_NAME,	sp);
 								p2 = new SBuffer(s.substring(0, s.length()-1),
 									p.getPosition());
 							}
@@ -262,7 +262,7 @@ public class IniReader extends StringParser implements XonParsers {
 					}
 				}
 				if (p1 == null) {
-					//Value of $script must be string with X-script
+					//Value of :script must be string with X-script
 					error(JSON.JSON018);
 				}
 				p.findChar(']');
@@ -278,11 +278,11 @@ public class IniReader extends StringParser implements XonParsers {
 				p.nextChar(); //skip ']'
 				p.isSpaces();
 				SPosition spos1 = p.getPosition();
-				if (p.isToken("$script")) {
+				if (p.isToken(SCRIPT_NAME)) {
 					p.isSpaces();
 					if (p.isChar('=')) {
 						p.isSpaces();
-						_jp.xdScript(new SBuffer("$script", spos1),
+						_jp.xdScript(new SBuffer(SCRIPT_NAME, spos1),
 							new SBuffer(p.getUnparsedBufferPart().trim(),
 								p.getPosition()));
 						p.setEos();

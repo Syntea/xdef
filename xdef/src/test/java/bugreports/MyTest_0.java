@@ -23,6 +23,7 @@ import org.xdef.XDOutput;
 import org.xdef.XDParseResult;
 import org.xdef.XDParser;
 import org.xdef.XDValue;
+import org.xdef.component.XComponent;
 import org.xdef.impl.XDefinition;
 import org.xdef.impl.compile.CompileBase;
 import org.xdef.impl.parsers.XSAbstractParser;
@@ -196,10 +197,11 @@ public class MyTest_0 extends XDTester {
 
 		File tempDir = clearTempDir();
 		XDPool xp;
+		XComponent xc;
 		String xdef;
 		String xml;
-		String s;
-		Object o;
+		String s, json;
+		Object o, x;
 		XDDocument xd;
 		Element el;
 		XDOutput xout;
@@ -207,6 +209,33 @@ public class MyTest_0 extends XDTester {
 		Report rep;
 		ArrayReporter reporter = new ArrayReporter();
 ////////////////////////////////////////////////////////////////////////////////
+		try {
+			xdef =
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n"+
+"<xd:component>%class bugreports.Csvxx %link a</xd:component>\n"+
+" <xd:xon name='a'>\n"+
+"    [ [:script=\"+\", \"int\", \"int\", \"string()\", \"boolean()\"] ]\n"+
+" </xd:xon>\n"+
+"</xd:def>";
+			xp = XDFactory.compileXD(null, xdef); // no property
+			genXComponent(xp, clearTempDir());
+			xd = xp.createXDDocument();
+			json =
+"[\n" +
+"  [1, 2, \"a\", true],\n" +
+"  [null, 1, \"a\t\n\\\"b\", false],\n" +
+"  [6, null, null, true],\n" +
+"  [null, null, null, null]\n" +
+"]";
+			o = xd.jparse(json, reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			xc = xd.jparseXComponent(json, null, reporter);
+			if (!XonUtils.xonEqual(o, x = xc.toXon())) {
+				fail(XonUtils.toXonString(o, true)
+					+ "\n*****\n" + XonUtils.toXonString(x, true));
+			}
+		} catch (Exception ex) {fail(ex);}
+if(T)return;
 		try {
 //			xdef =
 //"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' name='Example' root='root'\n>"+
@@ -831,9 +860,9 @@ if(T){return;}
 			xp = compile(xdef);
 			XDefinition xmd = (XDefinition) xp.getXMDefinitions()[0];
 			XMElement xme = xmd.getModel(null, "A");
-			for (XMNode x : xme.getChildNodeModels()) {
-				if (x instanceof XMData) {
-					displayData((XMData) x);
+			for (XMNode xn : xme.getChildNodeModels()) {
+				if (xn instanceof XMData) {
+					displayData((XMData) xn);
 				}
 			}
 			xml = "<A a='a' b='bb' c='1' d='true'></A>";

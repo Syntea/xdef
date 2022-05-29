@@ -34,10 +34,10 @@ public interface XonNames {
 ////////////////////////////////////////////////////////////////////////////////
 // names used in X-definition moldel
 ////////////////////////////////////////////////////////////////////////////////
-	/** This keyword used for the $script specification in X-definition. */
-	public static final String SCRIPT_NAME = "$script";
-	/** This keyword used for the $oneOf specification in X-definition. */
-	public static final String ONEOF_NAME = "$oneOf";
+	/** This keyword used for the script specification in X-definition. */
+	public static final String SCRIPT_NAME = ":script";
+	/** This keyword used for the oneOf specification in X-definition. */
+	public static final String ONEOF_NAME = ":oneOf";
 	/** This keyword used for $any specification in X-definition. */
 	public static final String ANY_NAME = "$any";
 }

@@ -109,7 +109,7 @@ public class MyTest extends XDTester {
 "  external method String bugreports.MyTest.xxx(XXNode);\n"+
 "</xd:declaration>\n"+
 "<xd:xon name='a'>\n"+
-"  [ $script=\"finally outln(xxx());\", \"gps();\", \"gps();\"]\n"+
+"  [ :script=\"finally outln(xxx());\", \"gps();\", \"gps();\"]\n"+
 "</xd:xon>\n"+
 "<xd:component>\n"+
 "  %class bugreports.MyTesta %link a;\n"+

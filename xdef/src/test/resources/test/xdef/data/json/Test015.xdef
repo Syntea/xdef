@@ -4,7 +4,7 @@
   "jnull()",
   "double()",
   "string()",
-  [$script= "optional",
+  [:script= "optional",
      "boolean();", 
      "optional int();"
   ]

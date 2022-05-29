@@ -130,7 +130,7 @@ public final class XonReader extends StringParser implements XonParsers {
 						if (jv.getValue() instanceof String) {
 							value = jv.getSBuffer();
 						} else {
-							//Value of $script must be string with X-script
+							//Value of :script must be string with X-script
 							error(JSON.JSON018);
 						}
 					}
@@ -146,7 +146,7 @@ public final class XonReader extends StringParser implements XonParsers {
 					if (o != null && o instanceof XonTools.JValue) {
 						_jp.xdScript(name, ((XonTools.JValue)o).getSBuffer());
 					} else {
-						//Value of $script must be string with X-script
+						//Value of :script must be string with X-script
 						error(JSON.JSON018);
 					}
 				}
@@ -251,7 +251,7 @@ public final class XonReader extends StringParser implements XonParsers {
 						value = new SBuffer((String) jv.getValue(),
 								jv.getPosition());
 					} else {
-						//Value of $script must be string with X-script
+						//Value of :script must be string with X-script
 						error(JSON.JSON018);
 					}
 				} else {

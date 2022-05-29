@@ -285,7 +285,7 @@ public class XonTools {
 		int i = 0;
 		if (ch == '-') {
 			if (len == 1) {
-				return "-";
+				return "-"; // only minus char -> string
 			}
 			ch = s.charAt(1);
 			i = 1;
@@ -355,8 +355,7 @@ public class XonTools {
 					ch=s.charAt(++i);
 					sb.append(isJChar(s,i)
 						|| StringParser.getXmlCharType(ch,
-							StringParser.XMLVER1_0)
-							< StringParser.XML_CHAR_COLON
+							StringParser.XMLVER1_0)<StringParser.XML_CHAR_COLON
 					? genXmlHexChar(ch) : ch);
 				} else {
 					i--;
@@ -459,6 +458,20 @@ public class XonTools {
 			? genCharAsUTF(c) : String.valueOf(c);
 	}
 
+	/** Check if the string in argument is a JSON number notation.
+	 * @param s the string to be checked.
+	 * @return true if argument is a (signed) float number.
+	 */
+	public static final boolean isNumber(final String s) {
+		StringParser p = new StringParser(s);
+		boolean minus = p.isChar('-');
+		if (p.isInteger() && p.eos()) {
+			return true;
+		}
+		p.setIndex(minus ? 1 : 0);
+		return p.isFloat() && p.eos();
+	}
+
 	/** Convert simple value to the form XML attribute.
 	 * @param x the object to be converted.
 	 * @return XML form of the of attribute value created from argument.
@@ -470,10 +483,8 @@ public class XonTools {
 		String s;
 		if (x instanceof String) {
 			s = (String) x;
-			if (s.isEmpty() || "null".equals(s)
-				|| "true".equals(s) || "false".equals(s)
-				|| StringParser.isInteger(s, "-")
-				|| StringParser.isFloat(s, "-")) {
+			if (s.isEmpty() || "null".equals(s) || "true".equals(s)
+				|| "false".equals(s) || "-".equals(s) || isNumber(s)) {
 				return '"' + s + '"';
 			}
 		} else if (x instanceof Character) {

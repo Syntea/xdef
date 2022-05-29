@@ -520,7 +520,7 @@ public class TestJsonXdef extends XDTester {
 "<xd:xon name=\"Person_list\">\n"+
 "{ \"Seznam\": \n"+
 "  [\n"+
-"    { $script= \"occurs 1..*;\",\n"+
+"    { :script= \"occurs 1..*;\",\n"+
 "      \"Person\": { \"Name\": \"string(1, 50)\",\n" +
 "         \"Pay\": \"int(1000, 99999)\",\n" +
 "         \"Birth date.\": \"date()\"\n" +
@@ -567,7 +567,7 @@ public class TestJsonXdef extends XDTester {
 "<xd:xon name=\"Person_list\">\n"+
 "{ \"Seznam\": \n"+
 "  [\n"+
-"    { $script = \"occurs 1..*; ref Person\" }\n"+
+"    { :script = \"occurs 1..*; ref Person\" }\n"+
 "  ]\n"+
 "}\n"+
 "</xd:xon>\n"+
@@ -615,7 +615,7 @@ public class TestJsonXdef extends XDTester {
 "<xd:def xmlns:xd='" + _xdNS + "' root='Matrix'>\n"+
 "<xd:xon name=\"Matrix\">\n"+
 "  [\n" +
-"    [ $script=\"occurs 3;\",\n" +
+"    [ :script=\"occurs 3;\",\n" +
 "      \"occurs 3; float()\"\n" +
 "    ]\n" +
 "  ]\n"+
@@ -640,9 +640,9 @@ public class TestJsonXdef extends XDTester {
 "<xd:def xmlns:xd='" + _xdNS + "' root='Skladby'>\n"+
 "<xd:xon name=\"Skladby\">\n"+
 "  [\n" +
-"    { $script= \"occurs 1..*;\",\n" +
+"    { :script= \"occurs 1..*;\",\n" +
 "       \"Name\": \"string()\",\n" +
-"       \"Style\": [ $oneOf,\n" +
+"       \"Style\": [ :oneOf,\n" +
 "         \"string()\",\n" +
 "         [ \"occurs 2..* string()\" ]\n" +
 "       ]\n" +
@@ -728,7 +728,7 @@ public class TestJsonXdef extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='B'>\n"+
 "<xd:xon name='B'>\n"+
-"[$script= \"init out('a'); finally out('b')\", \"int(); finally out('x')\"]\n"+
+"[:script= \"init out('a'); finally out('b')\", \"int(); finally out('x')\"]\n"+
 "</xd:xon>\n"+
 "</xd:def>\n";
 			xd = compile(xdef).createXDDocument();
@@ -798,9 +798,9 @@ public class TestJsonXdef extends XDTester {
 "   B=int(); finally out(\"B\");\n" +
 "   C=date(); finally out(\"C\");\n" +
 "   D=decimal(); finally out(\"D\");\n" +
-"   [E; $script=optional; finally out(\"[E]\");]\n" +
+"   [E; :script=optional; finally out(\"[E]\");]\n" +
 "     x = ?int(); finally out(\"x\");\n" +
-"   [F; $script=finally out(\"[F]\");]\n" +
+"   [F; :script=finally out(\"[F]\");]\n" +
 " </xd:ini>\n"+
 "</xd:def>";
 			xp = compile(xdef);
@@ -867,7 +867,7 @@ public class TestJsonXdef extends XDTester {
 "   B=int()\n" +
 "   C=date()\n" +
 "   D=decimal()\n" +
-"   [E] $script=?\n" +
+"   [E] :script=?\n" +
 "     x = ?int()\n" +
 "   [F]\n" +
 " </xd:ini>\n"+

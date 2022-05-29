@@ -2,10 +2,10 @@
 <xd:xon name="test">
 { "cities"  : [
     "date(); finally outln('Measurements taken on: ' + getText() + '\n');",
-    { $script = "occurs 1..*; finally outln();",
+    { :script = "occurs 1..*; finally outln();",
       "from": [
         "string(); finally outln('From ' + getText());",
-        { $script = "occurs 1..*; finally outln();",
+        { :script = "occurs 1..*; finally outln();",
           "to": "jstring(); finally out(' to ' + getText() + ' is distance: ');",
           "distance": "int(); finally out(getText() + ' (km)');"
         }
