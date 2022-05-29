@@ -7,6 +7,9 @@
   named value even if it is quoted.
 * prepared new internal format of XON -> XMl contersion (see methods
   `org.xdef.xon.XonUtils.xonToXmlX(...)`).
+* In XON format follows after the name of value a colon (instead of equal sign).
+* XON command names in X-definition models are now `:script`, and `:oneOf`
+  instead of `$script` and `$oneOf`.
 
 # Version 41.0.8, release-date 2022-04-26
 * added method `toXon()` the the interface `org.xdef.component.XComponent`.
