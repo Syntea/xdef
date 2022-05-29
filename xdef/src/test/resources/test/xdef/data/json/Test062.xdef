@@ -5,7 +5,7 @@
 <xd:xon name="B" >
   { "Genre": [:oneOf,
       "string()",
-       ["occurs *;string()"]
+       ["occurs *; string()"]
     ]
   }
 </xd:xon>

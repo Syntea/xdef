@@ -723,16 +723,16 @@ controlcharacter ::= '\"' | '\\' | '\/' | '\b' | '\f' | '\n' | '\r' | '\t' |
 string ::= ('"' ([^\"] | controlcharacter)* '"' |
   "'" ([^\'] | controlcharacter)* "'")
 
-jscript ::= S? ( (":script" S? "=" S? string)
+xscript ::= S? ( (":script" S? "=" S? string)
   | ( ":oneOf" (S? "=" S? string)? ) ) (S? ",")?
 
-object ::= "{" jscript? (members)* S? "}"
+object ::= "{" xscript? (members)* S? "}"
 
 members ::= S? pair (S? "," S? pair)*
 
-pair ::= ($xmlName S? "=" | string S? ":") S? value
+pair ::= ($ncName | string) S? ":" S? value
 
-array ::= "[" jscript? S? list? S? "]"
+array ::= "[" xscript? S? list? S? "]"
 
 list ::= value (S? "," S? value )*
 

@@ -220,13 +220,11 @@ class XonToString extends XonTools {
 				throw new RuntimeException(ex);
 			}
 		}
-		char separator = '=';
-		if (!xon || !StringParser.chkXMLName(key, StringParser.XMLVER1_0)) {
+		if (!xon || !StringParser.chkNCName(key, StringParser.XMLVER1_0)) {
 			key = '"' + jstringToSource(key) + '"';
-			separator = ':';
 		}
 		StringBuilder sb = new StringBuilder(
-			ind != null ? key + " " + separator + " " : (key + separator));
+			ind != null ? key + " : " : (key + ':'));
 		objectToString(en.getValue(), ind, sb, xon);
 		return sb;
 	}

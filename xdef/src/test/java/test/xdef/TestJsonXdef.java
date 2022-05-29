@@ -895,12 +895,12 @@ public class TestJsonXdef extends XDTester {
 "<xd:xon name='a'>\n" +
 "[\n" +
 "  {\n" +
-"    a = \"? short()\",\n" +
-"    i = [],\n" +
-"    Towns = [\n" +
+"    a : \"? short()\",\n" +
+"    i : [],\n" +
+"    Towns : [\n" +
 "      \"* gps()\"\n" +
 "    ],\n" +
-"    j = \"? char()\"\n" +
+"    j : \"? char()\"\n" +
 "  },\n" +
 "  \"base64Binary()\",\n" +
 "  \"price()\",\n" +
@@ -916,14 +916,14 @@ public class TestJsonXdef extends XDTester {
 "# Start of XON example\n" +
 "[ #***** Array *****/\n" +
 "  { #***** Map *****/\n" +
-"    a = 1s,                          # Short\n" +
-"    i=[],                            # empty array\n" +
-"    Towns = [ # array with GPS locations of towns\n" +
+"    a : 1s,                          # Short\n" +
+"    i:[],                            # empty array\n" +
+"    Towns : [ # array with GPS locations of towns\n" +
 "      g(48.2, 16.37, 151, Wien),\n" +
 "      g(51.52, -0.09, 0, London),\n" +
 "      g(50.08, 14.42, 399, \"Prague old town\")\n" +
 "    ],\n" +
-"    j = c\"a\",                        # Character\n" +
+"    j : c\"a\",                        # Character\n" +
 "  }, /**** end of map ****/\n" +
 "  b(HbRBHbRBHQw=),                   /* byte array (base64) */\n" +
 "  p(123.45 CZK),                     /* price */ \n" +

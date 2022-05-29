@@ -363,14 +363,14 @@ public final class TestXComponents extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='X'>\n"+
 "<xd:xon name = 'X'>\n"+
-"{a=\"int();\", b=[\"boolean();\"]}\n"+
+"{a:\"int();\", b:[\"boolean();\"]}\n"+
 "</xd:xon>\n"+
 "<xd:component>%class bugreports.data.JCreateX1 %link X</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xd = xp.createXDDocument();
 			genXComponent(xp, clearTempDir());
-			s = "{a=1, b=[true]}";
+			s = "{a:1, b:[true]}";
 			xon = xd.jparse(s, reporter);
 			assertNoErrorwarningsAndClear(reporter);
 			assertTrue(XonUtils.xonEqual(xon, XonUtils.parseXON(s)));
@@ -428,14 +428,14 @@ public final class TestXComponents extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='X'>\n"+
 "<xd:xon name=\"X\">\n" +
-"  { b = [ \"int();\", [\"int();\"], \"string();\"] }" +
+"  { b : [ \"int();\", [\"int();\"], \"string();\"] }" +
 "</xd:xon>\n" +
 "<xd:component>%class test.xdef.JCreateX4 %link X</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			genXComponent(xp, clearTempDir());
 			xd = xp.createXDDocument();
-			s = "{b=[1, [2], \"\"]}";
+			s = "{b:[1, [2], \"\"]}";
 			xon = XonUtils.parseXON(s);
 			xc = xd.jparseXComponent(s, null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
@@ -468,8 +468,8 @@ public final class TestXComponents extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='X'>\n"+
 "<xd:xon name = 'X'>\n"+
-"{ a=\"int(); create '1'\",\n"+
-"  b=[\n"+
+"{ a:\"int(); create '1'\",\n"+
+"  b:[\n"+
 "    \"boolean(); create 'true'\",\n"+
 "    \"int(); create '2'\"\n"+
 "  ]\n"+
@@ -480,7 +480,7 @@ public final class TestXComponents extends XDTester {
 			xp = compile(xdef);
 			genXComponent(xp, clearTempDir());
 			xd = xp.createXDDocument();
-			xon = XonUtils.parseXON("{a=1, b=[true, 2]}");
+			xon = XonUtils.parseXON("{a:1, b:[true, 2]}");
 			assertTrue(XonUtils.xonEqual(xon, xd.jcreate("X", reporter)));
 			assertNoErrorwarningsAndClear(reporter);
 			xd = xp.createXDDocument();
@@ -557,12 +557,12 @@ public final class TestXComponents extends XDTester {
 "<xd:def xmlns:xd='" + _xdNS + "' root=\"test\">\n" +
 "<xd:component>%class test.xdef.MyTestX_OneOfb %link test</xd:component>\n"+
 "<xd:xon name=\"test\">\n" +
-"{ a=[ :oneOf=\"?\",\n" +
+"{ a:[ :oneOf=\"?\",\n" +
 "       \"jnull(); finally outln('null')\", \n" + // must be first
 "       \"date(); finally outln('date')\", \n" +
 "       \"ipAddr(); finally outln('ipAddr')\", \n" +
 "       [:script=\"finally outln('[...]')\",\"*int()\"], \n" +
-"       {:script=\"finally outln('{ . }')\",x=\"? int()\",y=\"? string()\"},\n"+
+"       {:script=\"finally outln('{ . }')\",x:\"? int()\",y:\"? string()\"},\n"+
 "       \"string(); finally outln('string')\" \n" +
 "  ]\n" +
 "}\n" +
@@ -570,7 +570,7 @@ public final class TestXComponents extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			genXComponent(xp, clearTempDir());
-			s = "{a=\"2022-04-10\"}";
+			s = "{a:\"2022-04-10\"}";
 			xd = xp.createXDDocument();
 			strw = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(strw, false));
@@ -584,7 +584,7 @@ public final class TestXComponents extends XDTester {
 			o = SUtils.getValueFromGetter(xc, "getjx$item_1");
 			SUtils.setValueToSetter(o, "setvalue", new SDatetime("2022-04-15"));
 			assertEq(new SDatetime("2022-04-15"), ((Map)xc.toXon()).get("a"));
-			s = "{a=\"202.2.4.10\"}";
+			s = "{a:\"202.2.4.10\"}";
 			xd = xp.createXDDocument();
 			strw = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(strw, false));
@@ -598,7 +598,7 @@ public final class TestXComponents extends XDTester {
 			assertNoErrorwarningsAndClear(reporter);
 			assertEq("ipAddr\n", strw.toString());
 			assertTrue(XonUtils.xonEqual(o, xc.toXon()));
-			s = "{a={x=1, y=\" ab\tcd \"}}";
+			s = "{a:{x:1, y:\" ab\tcd \"}}";
 			xd = xp.createXDDocument();
 			strw = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(strw, false));
@@ -614,7 +614,7 @@ public final class TestXComponents extends XDTester {
 			assertEq("{ . }\n", strw.toString());
 			assertEq(" ab\tcd ",((Map)((Map) xc.toXon()).get("a")).get("y"));
 			assertTrue(XonUtils.xonEqual(o, xc.toXon()));
-			s = "{a=[1,2]}";
+			s = "{a:[1,2]}";
 			xd = xp.createXDDocument();
 			strw = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(strw, false));
@@ -628,7 +628,7 @@ public final class TestXComponents extends XDTester {
 			assertNoErrorwarningsAndClear(reporter);
 			assertEq("[...]\n", strw.toString());
 			assertTrue(XonUtils.xonEqual(o, xc.toXon()));
-			s = "{a={}}";
+			s = "{a:{}}";
 			xd = xp.createXDDocument();
 			strw = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(strw, false));
@@ -642,7 +642,7 @@ public final class TestXComponents extends XDTester {
 			assertNoErrorwarningsAndClear(reporter);
 			assertEq("{ . }\n", strw.toString());
 			assertTrue(XonUtils.xonEqual(o, xc.toXon()));
-			s = "{a=null}";
+			s = "{a:null}";
 			xd = xp.createXDDocument();
 			strw = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(strw, false));

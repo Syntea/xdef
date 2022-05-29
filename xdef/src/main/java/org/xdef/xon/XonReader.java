@@ -123,7 +123,7 @@ public final class XonReader extends StringParser implements XonParsers {
 				SBuffer value = null;
 				char separator;
 				if (i == 1) { // oneOf
-					if ((separator=isOneOfChars("=:")) > 0) {
+					if (isChar('=')) {
 						skipSpacesOrComments();
 						spos = getPosition();
 						XonTools.JValue jv = readSimpleValue();
@@ -136,7 +136,7 @@ public final class XonReader extends StringParser implements XonParsers {
 					}
 					_jp.xdScript(name, value);
 				} else {  // xscript
-					if ((separator=isOneOfChars("=:")) <= 0) {
+					if (!isChar('=')) {
 						//"&{0}"&{1}{ or "}{"} expected
 						error(JSON.JSON002, "=");
 					}
@@ -153,29 +153,20 @@ public final class XonReader extends StringParser implements XonParsers {
 			} else {
 				SBuffer name;
 				spos = getPosition();
-				char separator;
 				if (isChar('"')) {
 					name = new SBuffer(XonTools.readJString(this), spos);
-					skipSpacesOrComments();
-					separator=isOneOfChars("=:");
-				} else if (_xonMode && isXMLName(StringParser.XMLVER1_0)) {
+				} else if (_xonMode && isNCName(StringParser.XMLVER1_0)) {
 					name = new SBuffer(getParsedString(), spos);
-					skipSpacesOrComments();
-					separator = separator=isOneOfChars("=:");
-					if (separator == NOCHAR || separator == ':') {
-						//"&{0}"&{1}{ or "}{"} expected
-						error(JSON.JSON002, "=");
-						separator = '=';
-					}
 				} else {
 					error(JSON.JSON004); //Name of item expected
 					_jp.mapEnd(this);
 					setEos();
 					return;
 				}
-				if (separator == NOCHAR) {
+				skipSpacesOrComments();
+				if (!isChar(':')) {
 					//"&{0}"&{1}{ or "}{"} expected
-					error(JSON.JSON002, _xonMode ? "=" : ":");
+					error(JSON.JSON002, ":");
 				}
 				if (_jp.namedValue(name)) {
 					error(JSON.JSON022, name); //Value pair &{0} already exists
@@ -657,7 +648,7 @@ public final class XonReader extends StringParser implements XonParsers {
 			SBuffer name = new SBuffer(XonNames.ANY_NAME, spos);
 			SBuffer val = new SBuffer(XonNames.ANY_NAME, spos);
 			skipSpacesOrComments();
-			if (isOneOfChars(":=") != NOCHAR) {
+			if (isChar('=')) {
 				skipSpacesOrComments();
 				XonTools.JValue jv = readSimpleValue();
 				if (!(((XonTools.JValue) jv).getValue() instanceof String)) {

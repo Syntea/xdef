@@ -105,7 +105,7 @@ public class TestXon extends XDTester {
 			String xdef = // Test map
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
 "<xd:xon name='A'>\n" +
-"{ a=\"" + type + "();\" }\n" +
+"{ a :\"" + type + "();\" }\n" +
 "</xd:xon>\n" +
 "<xd:component>%class test.xdef.TestEmptyMap %link A</xd:component>\n"+
 "</xd:def>";
@@ -158,7 +158,7 @@ public class TestXon extends XDTester {
 		assertNull(testx("jstring", "[ null, \"abc\" ]"));
 		assertNull(testx("jvalue", "[ null, true, 1, \"abc\" ]"));
 
-		assertNull(testy("? int", "{a=1}"));
+		assertNull(testy("? int", "{a:1}"));
 		assertNull(testy("? int", "{ }"));
 
 		String s, json, xon, xdef, xml;
@@ -186,14 +186,14 @@ public class TestXon extends XDTester {
 			assertNoErrorwarningsAndClear(reporter);
 			assertEq(xml, xc.toXml());
 			o = XonUtils.parseXON(
-"{n:X = [\n" +
-"    { a = d2021-12-30,\n" +
-"      t = d2020-12-11T01:01:01.01,\n" +
-"      xmlns:n = \"a.b\"\n" +
+"{\"n:X\" : [\n" +
+"    { a : d2021-12-30,\n" +
+"      t : d2020-12-11T01:01:01.01,\n" +
+"      \"xmlns:n\" : \"a.b\"\n" +
 "    },\n" +
 "    1i,\n" +
-"    {n:Y = []},\n" +
-"    {n:Y = []},\n" +
+"    {\"n:Y\" : []},\n" +
+"    {\"n:Y\" : []},\n" +
 "    2.0D\n" +
 "  ]\n" +
 "}");
@@ -230,29 +230,29 @@ public class TestXon extends XDTester {
 "<xd:xon name='A'>\n" +
 "[\n" +
 "  {\n" +
-"    a = \"? short()\",\n" +
-"    b = \"? jstring()\",\n" +
-"    c = \"? double()\",\n" +
-"    f = \"? boolean()\",\n" +
-"    g = \"? duration()\",\n" +
-"    h = \"? jnull()\",\n" +	/* null */
-"    i = [],\n" +
-"    Towns = [\n" +
+"    a : \"? short()\",\n" +
+"    b : \"? jstring()\",\n" +
+"    c : \"? double()\",\n" +
+"    f : \"? boolean()\",\n" +
+"    g : \"? duration()\",\n" +
+"    h : \"? jnull()\",\n" +	/* null */
+"    i : [],\n" +
+"    Towns : [\n" +
 "      \"* gps()\"\n" +
 "    ],\n" +
-"    j = \"? char()\",\n" +
-"    k = \"? char()\",\n" +
-"    l = \"? char()\",\n" +
-"    m = \"? char()\",\n" +		/*char '\u0007' */
-"    n = \"? char()\",\n" +
-"    o = \"? char()\",\n" +
-"    p = \"? char()\",\n" +
-"    q = \"? char()\",\n" +
-"    r = \"? char()\",\n" +  	/*char null */
-"    t = \"? gYear()\",\n" +
-"    u = \"? gYear()\",\n" +
-"    v = \"? gYear()\",\n" +
-"    w = \"? gYear()\",\n" +
+"    j : \"? char()\",\n" +
+"    k : \"? char()\",\n" +
+"    l : \"? char()\",\n" +
+"    m : \"? char()\",\n" +		/*char '\u0007' */
+"    n : \"? char()\",\n" +
+"    o : \"? char()\",\n" +
+"    p : \"? char()\",\n" +
+"    q : \"? char()\",\n" +
+"    r : \"? char()\",\n" +  	/*char null */
+"    t : \"? gYear()\",\n" +
+"    u : \"? gYear()\",\n" +
+"    v : \"? gYear()\",\n" +
+"    w : \"? gYear()\",\n" +
 "    \" name with space \": \"? jstring()\"\n" +
 "  },\n" +
 "  \"jnull()\",\n" +
@@ -292,32 +292,32 @@ public class TestXon extends XDTester {
 "/**** Start of XON example ****/\n" +
 "[                                    # Array\n" +
 "  {                                  # Map\n" +
-"    a = 1s,                          # Short\n" +
-"    b = \"ab cd\",                     # String\n" +
-"    c = -123d,                       # Double\n" +
-"    f=true,                          # Boolean\n" +
-"    g = P1Y1M1DT1H1M1.12S,           # Duration\n" +
-"    h = null,                        # null\n" +
-"    i=[],                            # empty array\n" +
-"    Towns = [ # array with GPS locations of towns\n" +
+"    a : 1s,                          # Short\n" +
+"    b : \"ab cd\",                     # String\n" +
+"    c : -123d,                       # Double\n" +
+"    f:true,                          # Boolean\n" +
+"    g : P1Y1M1DT1H1M1.12S,           # Duration\n" +
+"    h : null,                        # null\n" +
+"    i:[],                            # empty array\n" +
+"    Towns : [ # array with GPS locations of towns\n" +
 "      g(48.2, 16.37, 151, Wien),\n" +
 "      g(51.52, -0.09, 0, London),\n" +
 "      null,\n" +
 "      g(50.08, 14.42, 399, \"Prague old town\")\n" +
 "    ],\n" +
-"    j = c\"a\",                      # Character\n" +
-"    k = c\"'\",                      # Character\n" +
-"    l = c\"\\\"\",                   # Character\n" +
-"    m = c\"\\u0007\",                # Character\n" +
-"    n = c\"\\\\\",                   # Character\n" +
-"    o = c\"\n\",                     # Character\n" +
-"    p = c\"\\n\",                    # Character\n" +
-"    q = c\" \",                      # Character\n" +
-"    r = null,                        # Character (null)\n" +
-"    t = d0001,                       # year (without zone)\n" +
-"    u = d-0001,                      # year (without zone)\n" +
-"    v = d123456789Z,                 # year zone\n" +
-"    w = d-0001-01:00,                # year zone\n" +
+"    j : c\"a\",                      # Character\n" +
+"    k : c\"'\",                      # Character\n" +
+"    l : c\"\\\"\",                   # Character\n" +
+"    m : c\"\\u0007\",                # Character\n" +
+"    n : c\"\\\\\",                   # Character\n" +
+"    o : c\"\n\",                     # Character\n" +
+"    p : c\"\\n\",                    # Character\n" +
+"    q : c\" \",                      # Character\n" +
+"    r : null,                        # Character (null)\n" +
+"    t : d0001,                       # year (without zone)\n" +
+"    u : d-0001,                      # year (without zone)\n" +
+"    v : d123456789Z,                 # year zone\n" +
+"    w : d-0001-01:00,                # year zone\n" +
 "    \" name with space \": \"x\\ty\" # name with space is quoted!\n" +
 "  },  /**** end of map ****/\n" +
 "  null,                              # null\n" +
@@ -783,7 +783,7 @@ public class TestXon extends XDTester {
 "<xd:def xmlns:xd='" + _xdNS + "' root=\"test\">\n" +
 "<xd:component>%class test.xdef.MyTestX_OneOf %link test</xd:component>\n"+
 "<xd:xon name=\"test\">\n" +
-"{ a=[ :oneOf,\n" +
+"{ a:[ :oneOf,\n" +
 "       \"date(); finally outln('date')\", \n" +
 "       \"ipAddr(); finally outln('ipAddr')\", \n" +
 "       [:script=\"finally outln('[...]')\",\"*int()\"], \n" +
@@ -795,7 +795,7 @@ public class TestXon extends XDTester {
 //see XCGenerator choiceStack (line 160)
 			xp = XDFactory.compileXD(null, xdef);
 			genXComponent(xp, clearTempDir());
-			s = "{a=\"2022-04-10\"}";
+			s = "{a:\"2022-04-10\"}";
 			xd = xp.createXDDocument();
 			strw = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(strw, false));
@@ -809,7 +809,7 @@ public class TestXon extends XDTester {
 			assertNoErrorwarningsAndClear(reporter);
 			assertEq("date\n", strw.toString());
 			assertEq(o, xc.toXon());
-			s = "{a=\"202.204.1.0\"}";
+			s = "{a:\"202.204.1.0\"}";
 			xd = xp.createXDDocument();
 			strw = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(strw, false));
@@ -823,7 +823,7 @@ public class TestXon extends XDTester {
 			assertNoErrorwarningsAndClear(reporter);
 			assertEq("ipAddr\n", strw.toString());
 			assertEq(o, xc.toXon());
-			s = "{a=[1,2]}";
+			s = "{a:[1,2]}";
 			xd = xp.createXDDocument();
 			strw = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(strw, false));
@@ -837,7 +837,7 @@ public class TestXon extends XDTester {
 			assertNoErrorwarningsAndClear(reporter);
 			assertEq("[...]\n", strw.toString());
 			assertEq(o, xc.toXon());
-			s = "{a=\"a\tb\n\"}";
+			s = "{a:\"a\tb\n\"}";
 			xd = xp.createXDDocument();
 			strw = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(strw, false));
@@ -857,8 +857,8 @@ public class TestXon extends XDTester {
 "<xd:def xmlns:xd='" + _xdNS + "' root=\"test\">\n" +
 "<xd:component>%class test.xdef.data.TestXonForget %link test</xd:component>\n"+
 "  <xd:xon name=\"test\">\n" +
-"    {date= \"date()\",\n" +
-"      cities= [\n" +
+"    {date: \"date()\",\n" +
+"      cities: [\n" +
 "        { :script = \"occurs 1..*; finally outln(); forget\",\n" +
 "          \"from\": [\n" +
 "            \"string(); finally out('From ' + getText());\",\n" +
