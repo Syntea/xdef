@@ -16,6 +16,7 @@ import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
 import org.xdef.xml.KXmlUtils;
+import static org.xdef.xon.XonNames.SCRIPT_NAME;
 
 /** Methods for INI/Properties data.
  * @author Vaclav Trojan

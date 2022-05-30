@@ -32,12 +32,12 @@ public interface XonNames {
 	public static final String I_VALUEATTR = "_x5f_V";
 
 ////////////////////////////////////////////////////////////////////////////////
-// names used in X-definition moldel
+// names used in X-definition moldels
 ////////////////////////////////////////////////////////////////////////////////
-	/** This keyword used for the script specification in X-definition. */
+	/** This keyword used for the specification of script in X-definition. */
 	public static final String SCRIPT_NAME = ":script";
-	/** This keyword used for the oneOf specification in X-definition. */
+	/** This keyword used for the specification of oneOf in X-definition. */
 	public static final String ONEOF_NAME = ":oneOf";
-	/** This keyword used for $any specification in X-definition. */
-	public static final String ANY_NAME = "$any";
+	/** This keyword used for the specification of any in X-definition. */
+	public static final String ANY_NAME = ":any";
 }

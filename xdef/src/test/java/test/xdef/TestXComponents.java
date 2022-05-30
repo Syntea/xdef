@@ -32,8 +32,6 @@ import static test.XDTester._xdNS;
 import static test.XDTester.genXComponent;
 import static test.XDTester.parseXC;
 
-
-
 /** Test XComponents.
  * @author Vaclav Trojan
  */

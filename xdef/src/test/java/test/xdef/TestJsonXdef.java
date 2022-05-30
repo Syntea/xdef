@@ -798,7 +798,7 @@ public class TestJsonXdef extends XDTester {
 "   B=int(); finally out(\"B\");\n" +
 "   C=date(); finally out(\"C\");\n" +
 "   D=decimal(); finally out(\"D\");\n" +
-"   [E; :script=optional; finally out(\"[E]\");]\n" +
+"   [E; :script = optional; finally out(\"[E]\");]\n" +
 "     x = ?int(); finally out(\"x\");\n" +
 "   [F; :script=finally out(\"[F]\");]\n" +
 " </xd:ini>\n"+
