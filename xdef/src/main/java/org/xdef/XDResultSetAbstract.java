@@ -103,5 +103,4 @@ public abstract class XDResultSetAbstract extends XDValueAbstract
 	* @return true if and only if this object is closed.
 	*/
 	abstract public boolean isClosed();
-
 }

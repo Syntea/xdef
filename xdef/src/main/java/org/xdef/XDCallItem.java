@@ -19,5 +19,4 @@ public interface XDCallItem {
 	 * @return debug mode (see constants in org.xdef.XXDebug).
 	 */
 	public int getDebugMode();
-
 }

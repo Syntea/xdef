@@ -40,5 +40,4 @@ public interface XDOutput extends XDValue {
 	 * @throws SRuntimeException if an error occurs.
 	 */
 	public XDInput getXDInput() throws SRuntimeException;
-
 }

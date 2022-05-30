@@ -31,5 +31,4 @@ public interface BNFRule {
 	 * @return true if parsing was successful.
 	 */
 	public boolean parse(StringParser parser);
-
 }

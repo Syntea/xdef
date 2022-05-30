@@ -35,5 +35,4 @@ public interface XDRegexResult extends XDValue {
 	 * @return offset after the last character of the subsequence or -1.
 	 */
 	public int groupEnd(int index);
-
 }

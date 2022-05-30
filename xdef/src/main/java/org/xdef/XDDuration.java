@@ -11,5 +11,4 @@ public interface XDDuration extends XDValue {
 	 * @param value SDuration object.
 	 */
 	public void setDuration(SDuration value);
-
 }

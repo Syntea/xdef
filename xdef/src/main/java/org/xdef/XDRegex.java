@@ -21,10 +21,4 @@ public interface XDRegex extends XDValue {
 	 * @return The string representation of value of the object.
 	 */
 	public String sourceValue();
-
-//	/** Check if regular expression was correctly compiled.
-//	 * @return true if regular expression was correctly compiled.
-//	 */
-//	public boolean isCompiled();
-
 }

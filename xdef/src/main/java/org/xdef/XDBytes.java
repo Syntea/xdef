@@ -18,5 +18,4 @@ public interface XDBytes extends XDValue {
 	 * @return true if the format is base64 otherwise it is hexadecimal.
 	 */
 	public boolean isBase64();
-
 }

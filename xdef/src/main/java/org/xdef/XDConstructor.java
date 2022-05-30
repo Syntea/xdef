@@ -15,5 +15,4 @@ public interface XDConstructor {
 	 * @return created XDObject or null.
 	 */
 	public XDValue construct(XDResultSet resultSet, XXNode xNode);
-
 }

@@ -27,12 +27,6 @@ public final class DefBNFRule extends XDValueAbstract implements XDBNFRule {
 	public DefBNFRule(final BNFRule rule) {_rule = rule;}
 
 	@Override
-	public DefParseResult perform(final XDValue source) {
-		StringParser p = new StringParser(source.toString());
-		return perform(p);
-	}
-
-	@Override
 	public DefParseResult perform(final String source) {
 		StringParser p = new StringParser(source);
 		return perform(p);
@@ -176,5 +170,4 @@ public final class DefBNFRule extends XDValueAbstract implements XDBNFRule {
 		}
 		return arg == this || toString().equals(arg.toString());
 	}
-
 }

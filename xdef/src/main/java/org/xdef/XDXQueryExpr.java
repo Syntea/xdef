@@ -14,5 +14,4 @@ public interface XDXQueryExpr extends XDValue {
 	 * @return result of execution of this object.
 	 */
 	public XDContainer exec(Node node, XXNode xNode);
-
 }

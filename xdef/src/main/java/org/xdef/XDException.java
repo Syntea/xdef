@@ -21,5 +21,4 @@ public interface XDException extends XDValue {
 	 * @return position of actual XML node.
 	 */
 	public String getXPos();
-
 }

@@ -83,5 +83,4 @@ public interface XDService extends XDValue {
 	* @return true if and only if this object is closed.
 	*/
 	public boolean isClosed();
-
 }

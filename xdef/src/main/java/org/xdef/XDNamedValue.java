@@ -20,5 +20,4 @@ public interface XDNamedValue extends XDValue {
 	 * @return original value of pair.
 	 */
 	public XDValue setValue(XDValue newValue);
-
 }

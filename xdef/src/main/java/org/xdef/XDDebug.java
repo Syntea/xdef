@@ -156,5 +156,4 @@ public interface XDDebug {
 	 * @param xpos the string with XPos item.
 	 */
 	public void removeXpos(String xpos);
-
 }
