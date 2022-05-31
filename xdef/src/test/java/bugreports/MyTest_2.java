@@ -141,10 +141,10 @@ if(T)return;
 "<xd:def xmlns:xd='" + _xdNS + "' root='Skladby'>\n"+
 "<xd:xon name=\"Skladby\">\n"+
 "  [\n" +
-"    { :script= \"occurs 1..*;\",\n" +
+"    { x:script= \"occurs 1..*;\",\n" +
 "       \"Name\": \"string()\",\n" +
 "       \"xxx\": \"? string()\",\n" +
-"       \"Style\": [ :oneOf,\n" +
+"       \"Style\": [ x:oneOf,\n" +
 "         \"string()\",\n" +
 "         [ \"occurs 2..* string()\" ]\n" +
 "       ]\n" +
@@ -182,10 +182,10 @@ if(T)return;
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"Example\" root=\"test\">\n" +
 "  <xd:xon name=\"test\">\n" +
 "    { \"cities\"  : [\n" +
-"        {:script=\"occurs 1..*\",\n" +
+"        {x:script=\"occurs 1..*\",\n" +
 "          \"from\": [\n" +
 "            \"string()\",\n" +
-"            {:script=\"occurs 1..*\", \"to\": \"jstring()\", \"distance\": \"int()\" }\n" +
+"            {x:script=\"occurs 1..*\", \"to\": \"jstring()\", \"distance\": \"int()\" }\n" +
 "    	  ]\n" +
 "        }\n" +
 "      ]\n" +
@@ -258,17 +258,17 @@ if(T)return;
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
 "<xd:xon name='A'>\n"+
 "[\n" +
-" { :script=\"+\",\n" +
+" { x:script=\"+\",\n" +
 "  \"first name\": \"? string;\",\n" +
 "  \"last name\" : \"string;\",\n" +
 "  \"age\": \"int(1,100); finally outln(getXPos()+'; '+getXDPosition());\",\n" +
-"  \"address\"  : {:script= \"?\",\n" +
+"  \"address\"  : {x:script= \"?\",\n" +
 "    \"street address\": \"string;\",\n"+
 "    \"city\"         : \"string;\",\n" +
 "    \"postal code\"   : \"? string(%pattern='[0-9]+(-[0-9]+)?');\"\n" +
 "  },\n" +
-"  \"phone numbers\": [ :script= \"?\",\n" +
-"    { :script= \"occurs *\",\n" +
+"  \"phone numbers\": [ x:script= \"?\",\n" +
+"    { x:script= \"occurs *\",\n" +
 "      \"type\"  : \"an;\",\n" +
 "      \"number\": \"string(%pattern='[0-9]+(-[0-9]+)*');finally outln(getXPos());\"\n" +
 "    }\n" +
@@ -320,7 +320,7 @@ if(T)return;
 "<xd:xon name='A'>\n"+
 "{ \"store\": {\n" +
 "    \"book\": [\n" +
-"      {:script= \"occurs +\",\n" +
+"      {x:script= \"occurs +\",\n" +
 "        \"category\": \"enum('reference', 'fiction')\",\n" +
 "        \"author\": \"string\",\n" +
 "        \"title\": \"string\",\n" +
@@ -481,7 +481,7 @@ if(T )return;
 "</xd:declaration>\n" +
 "<xd:xon name='a'>\n" +
 "{\n" +
-"  \"Genre\": [:oneOf,\n" +
+"  \"Genre\": [x:oneOf,\n" +
 "     \"genre\",\n" +
 "     [\"occurs 1..*; genre\"]\n" +
 "  ]\n" +
@@ -542,7 +542,7 @@ if(T )return;
 			assertTrue(XonUtils.xonEqual(XonUtils.parseJSON(json), toJson(xc)),
 				XonUtils.toJsonString(toJson(xc), true));
 			assertEq(123, SUtils.getValueFromGetter(SUtils.getValueFromGetter(
-				xc, "getjx$item"), "getvalue"));
+				xc, "getjx$item"), "getval"));
 
 			json = "{\"a\":false}";
 			j = xp.createXDDocument().jparse(json, reporter);

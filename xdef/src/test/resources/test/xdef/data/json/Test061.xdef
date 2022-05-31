@@ -2,7 +2,7 @@
 <xd:def name="Test061" root="a">
 <xd:xon name="a">
 [ "jvalue()",
-  {:script="occurs 1..*; ref B#person"}
+  {x:script="occurs 1..*; ref B#person"}
 ]
 </xd:xon>
 </xd:def>

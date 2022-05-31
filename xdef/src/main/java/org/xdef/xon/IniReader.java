@@ -263,7 +263,7 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 					}
 				}
 				if (p1 == null) {
-					//Value of :script must be string with X-script
+					//Value of x:script must be string with X-script
 					error(JSON.JSON018);
 				}
 				p.findChar(']');

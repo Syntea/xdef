@@ -722,8 +722,8 @@ controlcharacter ::= '\"' | '\\' | '\/' | '\b' | '\f' | '\n' | '\r' | '\t' |
 string ::= ('"' ([^\"] | controlcharacter)* '"' |
   "'" ([^\'] | controlcharacter)* "'")
 
-xscript ::= S? ( (":script" S? "=" S? string)
-  | ( ":oneOf" (S? "=" S? string)? ) ) (S? ",")?
+xscript ::= S? ( ("x:script" S? "=" S? string)
+  | ( "x:oneOf" (S? "=" S? string)? ) ) (S? ",")?
 
 object ::= "{" xscript? (members)* S? "}"
 
@@ -767,7 +767,7 @@ INIChar ::= [#9 -.0-~] | EscapedChar
 
 Prop ::= S? (("#" INIChar* NewLine)
   | ("[" (INIChar - "]")+ "]"
-     S? (":script" S? "=" S? ($xmlChar - NewLine)*)?  NewLine)
+     S? ("x:script" S? "=" S? ($xmlChar - NewLine)*)?  NewLine)
   | ((INIChar - "=")+ "=" S? INIChar*  (NewLine | ("\" NewLine INIChar*)*)))
 
 IniProps ::= Prop*

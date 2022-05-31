@@ -53,22 +53,22 @@ public class XDChecker {
 		_properties = new Properties();
 		// just check if all parameters are correct
 		String xdef =
-"<x:def xmlns:x='"+ XDConstants.XDEF41_NS_URI + "' root = 'a'>\n";
+"<xd:def xmlns:xd='"+ XDConstants.XDEF41_NS_URI + "' root = 'a'>\n";
 		if (_declarations != null || _methods != null) {
-			xdef +=	"<x:declaration>\n";
+			xdef +=	"<xd:declaration>\n";
 			if (_methods != null) {
 				xdef +=	"external method {\n" + _methods + "\n}\n";
 			}
 			if (_declarations != null) {
 				xdef += _declarations +"\n";
 			}
-			xdef += "</x:declaration>\n";
+			xdef += "</xd:declaration>\n";
 		}
 		xdef += "<a";
 		if (_options != null) {
-			xdef += " x:script = 'options " + _options + "'\n  ";
+			xdef += " xd:script = 'options " + _options + "'\n  ";
 		}
-		xdef += " a='?'/>\n</x:def>";
+		xdef += " a='?'/>\n</xd:def>";
 		XDFactory.compileXD(_properties, xdef);
 	}
 
