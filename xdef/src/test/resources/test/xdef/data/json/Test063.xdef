@@ -3,7 +3,7 @@
   {x:script="ref B"}
 </xd:xon>
 <xd:xon name="B" >
-  /** description: Test of reference to '$onerOf*/
+  /** description: Test of reference to 'x:oneOf*/
   {x:oneOf="optional;",
      "manager": "string()",
      "subordinates":[ "* int();" ]
