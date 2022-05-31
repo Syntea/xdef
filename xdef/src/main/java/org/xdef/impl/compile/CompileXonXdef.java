@@ -29,8 +29,8 @@ import static org.xdef.xon.XonNames.X_ARRAY;
 import static org.xdef.xon.XonNames.X_ITEM;
 import static org.xdef.xon.XonNames.X_KEYATTR;
 import static org.xdef.xon.XonNames.X_MAP;
-import static org.xdef.xon.XonNames.X_VALUEATTR;
 import org.xdef.xon.XonParsers;
+import static org.xdef.xon.XonNames.X_VALATTR;
 
 /** Create X-definition model from xd:xon element.
  * @author Vaclav Trojan
@@ -476,7 +476,7 @@ public final class CompileXonXdef extends StringParser {
 				// and it has the attribute with a value description
 				if (X_ITEM.equals(ee._localName)
 					&& XDConstants.XON_NS_URI_W.equals(ee._nsURI)
-					&& (val = getAttr(ee, X_VALUEATTR)) != null) {
+					&& (val = getAttr(ee, X_VALATTR)) != null) {
 					PAttr script = getXDAttr(ee, "script");
 					XOccurrence occ = null;
 					if (script != null) {
@@ -508,7 +508,7 @@ public final class CompileXonXdef extends StringParser {
 						}
 						addMatchExpression(ee,
 							s + ".parse((String)@"
-								+ X_VALUEATTR + ").matches()");
+								+ X_VALATTR + ").matches()");
 					}
 				}
 			}
@@ -544,7 +544,7 @@ public final class CompileXonXdef extends StringParser {
 			if (occ != null) { // occurrence
 				setXDAttr(e, "script", occ);
 			}
-			setAttr(e, X_VALUEATTR, sbf);
+			setAttr(e, X_VALATTR, sbf);
 		}
 		if (name != null) {
 			addMatchExpression(e, '@' + X_KEYATTR + "=='"+ name +"'");

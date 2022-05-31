@@ -336,7 +336,7 @@ public class XComponentUtil {
 	private static Object toXonItem(final XComponent xc) {
 		Class<?> cls = xc.getClass();
 		try {
-			Method m = cls.getDeclaredMethod("get" + XonNames.X_VALUEATTR);
+			Method m = cls.getDeclaredMethod("get" + XonNames.X_VALATTR);
 			m.setAccessible(true);
 			return toXonObject(m.invoke(xc));
 		} catch (Exception ex) {

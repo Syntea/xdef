@@ -1704,7 +1704,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			}
 			if (XonNames.X_KEYATTR.equals(xdata.getName())) {
 				_xonKey = XonTools.xmlToJName(value.toString());
-			} else if (XonNames.X_VALUEATTR.equals(xdata.getName())) {
+			} else if (XonNames.X_VALATTR.equals(xdata.getName())) {
 				if (_xElement.getNSUri() == null ) {
 					_xonKey = XonTools.xmlToJName(_xElement.getName());
 				}

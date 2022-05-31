@@ -331,7 +331,7 @@ final class ChkXONParser implements XParser, XonParser {
 			kelem.addAttr(new KParsedAttr(XonNames.X_KEYATTR,
 				XonTools.toXmlName(name.getString()), name));
 		}
-		kelem.addAttr(new KParsedAttr(XonNames.X_VALUEATTR,
+		kelem.addAttr(new KParsedAttr(XonNames.X_VALATTR,
 			XonTools.genXMLValue(value.getValue()), value.getPosition()));
 		elementStart(kelem);
 		elementEnd();

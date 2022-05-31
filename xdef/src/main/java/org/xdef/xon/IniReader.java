@@ -441,7 +441,7 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 				} else {
 					s = o.toString();
 				}
-				item.setAttribute(XonNames.X_VALUEATTR, s);
+				item.setAttribute(XonNames.X_VALATTR, s);
 				el.appendChild(item);
 			}
 		}

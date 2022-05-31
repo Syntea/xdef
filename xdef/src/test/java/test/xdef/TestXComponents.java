@@ -27,6 +27,7 @@ import org.xdef.sys.GPSPosition;
 import org.xdef.sys.SDatetime;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
+import org.xdef.xon.XonNames;
 import test.XDTester;
 import static test.XDTester._xdNS;
 import static test.XDTester.genXComponent;
@@ -580,7 +581,8 @@ public final class TestXComponents extends XDTester {
 			xc = xd.jparseXComponent(s, null, reporter);
 			assertEq("date\n", strw.toString());
 			o = SUtils.getValueFromGetter(xc, "getjx$item_1");
-			SUtils.setValueToSetter(o, "setvalue", new SDatetime("2022-04-15"));
+			SUtils.setValueToSetter(o,
+				"set"+XonNames.X_VALATTR, new SDatetime("2022-04-15"));
 			assertEq(new SDatetime("2022-04-15"), ((Map)xc.toXon()).get("a"));
 			s = "{a:\"202.2.4.10\"}";
 			xd = xp.createXDDocument();

@@ -27,11 +27,11 @@ import static org.xdef.xon.XonNames.X_ARRAY;
 import static org.xdef.xon.XonNames.X_ITEM;
 import static org.xdef.xon.XonNames.X_KEYATTR;
 import static org.xdef.xon.XonNames.X_MAP;
-import static org.xdef.xon.XonNames.X_VALUEATTR;
 import org.xdef.xon.XonParser;
 import org.xdef.xon.XonParsers;
 import org.xdef.xon.XonReader;
 import org.xdef.xon.XonTools;
+import static org.xdef.xon.XonNames.X_VALATTR;
 
 /** Parse  XON/JSON object from XON/JSON source and generate XML (W3C format).
  * Reads source with XON/JSON and generates W3C XML methods invoked in
@@ -123,7 +123,7 @@ public final class XonSourceParser implements XonParser, XParser {
 		String value = null;
 		if (_value != null) {
 			value = XonTools.genXMLValue(_value.getValue());
-			e.setAttribute(X_VALUEATTR, value);
+			e.setAttribute(X_VALATTR, value);
 		}
 		if (++_level == 0) {
 			_el = e;
@@ -159,7 +159,7 @@ public final class XonSourceParser implements XonParser, XParser {
 		}
 		if (value != null) {
 			_chkDoc.getReporter().setPosition(_value.getPosition());
-			_chkEl.addAttribute(X_VALUEATTR, value);
+			_chkEl.addAttribute(X_VALATTR, value);
 		}
 		_chkDoc.getReporter().setPosition(elemName);
 		_name = null;

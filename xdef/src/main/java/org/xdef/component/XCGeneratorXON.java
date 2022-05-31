@@ -22,11 +22,15 @@ import org.xdef.msg.SYS;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.xon.XonNames;
+import static org.xdef.xon.XonNames.X_ARRAY;
+import static org.xdef.xon.XonNames.X_ITEM;
+import static org.xdef.xon.XonNames.X_KEYATTR;
+import static org.xdef.xon.XonNames.X_VALATTR;
 
 /** Generation of Java source code methods for XON/JSON getters/setters.
  * @author Vaclav Trojan
  */
-class XCGeneratorXON extends XCGeneratorBase1 {
+class XCGeneratorXON extends XCGeneratorBase1 implements XonNames {
 
 	/** Create instance of the class XCGeneratorXON.
 	 * @param xp XDPool from which to generate X-components.
@@ -377,7 +381,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 		final String namePrefix,
 		final Set<String> classNames,
 		final Set<String> varNames) {
-		XData keyAttr = (XData) xe.getAttr(XonNames.X_KEYATTR);
+		XData keyAttr = (XData) xe.getAttr(X_KEYATTR);
 		String name = null;
 		if (xe._xon == XConstants.XON_MODE_W && xe._match >= 0
 			&& keyAttr != null && keyAttr._check >= 0) {
@@ -432,7 +436,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 		final Set<String> varNames) {
 		String name = getXonItemName(xe, "get$", classNames, varNames);
 		String typ =
-			getJavaObjectTypeName((XData) xe.getAttr(XonNames.X_VALUEATTR));
+			getJavaObjectTypeName((XData) xe.getAttr(X_VALATTR));
 		String template;
 		// has only a text child
 		String jGet, jSet;
@@ -440,8 +444,8 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 		if (max > 1) { // list of values
 			String typ1 = "java.util.List<" + typ + ">";
 			jGet = xe.getXonMode() != 0 && "String".equals(typ)
-				? "org.xdef.xon.XonTools.jstringFromSource(y.getvalue())"
-				: "y.getvalue()";
+				?"org.xdef.xon.XonTools.jstringFromSource(y.get"+X_VALATTR+"())"
+				: "y.get"+X_VALATTR+"()";
 			// getter
 			template =
 (_genJavadoc ? "\t/** Get values of text nodes of &{d}."+LN+
@@ -484,7 +488,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 "{"+LN+
 "\t\tif (x!=null) {"+LN+
 "\t\t\t&{typeName} y=new &{typeName}();"+LN+
-"\t\t\ty.setvalue(" + jSet + "); add&{iname}(y);"+LN+
+"\t\t\ty.set"+X_VALATTR+"(" + jSet + "); add&{iname}(y);"+LN+
 "\t\t}"+LN+"\t}"+LN,
 				"&{name}", name,
 				"&{iname}", iname,
@@ -506,7 +510,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 "\t\t_&{iname}.clear(); if (x==null) return;"+LN+
 "\t\tfor (&{typ} y:x) {"+LN+
 "\t\t\t&{typeName} z=new &{typeName}();"+LN+
-"\t\t\tz.setvalue(y); add&{iname}(z);"+LN+
+"\t\t\tz.set"+X_VALATTR+"(y); add&{iname}(z);"+LN+
 "\t\t}"+LN+
 "\t}"+LN,
 				"&{name}", name,
@@ -530,8 +534,8 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 "\tpublic &{typ} get$&{name}(){"+LN+
 "\t\treturn _&{iname}==null?null:" +
 	("String".equals(typ) && xe.getXonMode() != 0 ?
-	"org.xdef.xon.XonTools.jstringFromSource(_&{iname}.getvalue())"
-	: "_&{iname}.getvalue()") + ";" + LN
+	"org.xdef.xon.XonTools.jstringFromSource(_&{iname}.get"+X_VALATTR+"())"
+	: "_&{iname}.get"+X_VALATTR+"()") + ";" + LN
 +"\t}"+LN;
 			getters.append(modify(template,
 				"&{name}", name,
@@ -590,7 +594,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 			s =
 "\t\tif(x==null) _&{iname}=null; else {"+LN+
 "\t\t\tif(_&{iname}==null) set&{iname}(new &{typeName}());"+LN+
-"\t\t\t_&{iname}.setvalue(x);"+LN+
+"\t\t\t_&{iname}.set"+X_VALATTR+"(x);"+LN+
 "\t\t}"+LN;
 			setters.append(modify(template+"{"+LN+ s + "\t}"+LN,
 				"&{name}", name,
@@ -655,10 +659,10 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 		String x;
 		String typ;
 		if (xe.getXonMode()>0&&XDConstants.XON_NS_URI_W.equals(xe.getNSUri())) {
-			if (XonNames.X_ITEM.equals(xe.getLocalName())) {
-				typ = getJavaObjectTypeName(xe.getAttr(XonNames.X_VALUEATTR));
+			if (X_ITEM.equals(xe.getLocalName())) {
+				typ = getJavaObjectTypeName(xe.getAttr(X_VALATTR));
 				x =
-LN+"\t\tObject o = getvalue();"+LN+
+LN+"\t\tObject o = get"+X_VALATTR+"();"+LN+
 "\t\tif (o instanceof org.xdef.xon.XonTools.JNull) return null;"+LN;
 				if ("String".equals(typ)) {
 					x +=
@@ -668,7 +672,7 @@ LN+"\t\tObject o = getvalue();"+LN+
 "\t\treturn ("+typ+")o;"+LN+"\t";
 				}
 			} else {
-				if (XonNames.X_ARRAY.equals(xe.getLocalName())) {
+				if (X_ARRAY.equals(xe.getLocalName())) {
 					typ = "java.util.List<Object>";
 					x = ".toXonArray(this);";
 				} else {

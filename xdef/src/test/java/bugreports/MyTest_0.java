@@ -235,7 +235,7 @@ public class MyTest_0 extends XDTester {
 					+ "\n*****\n" + XonUtils.toXonString(x, true));
 			}
 		} catch (Exception ex) {fail(ex);}
-if(T)return;
+if(true)return;
 		try {
 //			xdef =
 //"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' name='Example' root='root'\n>"+

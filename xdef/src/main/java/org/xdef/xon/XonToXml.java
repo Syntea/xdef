@@ -15,17 +15,17 @@ import org.xdef.xml.KXmlUtils;
 import static org.xdef.xon.XonNames.I_ARRAY;
 import static org.xdef.xon.XonNames.I_ITEM;
 import static org.xdef.xon.XonNames.I_MAP;
-import static org.xdef.xon.XonNames.I_VALUEATTR;
 import static org.xdef.xon.XonNames.X_ARRAY;
 import static org.xdef.xon.XonNames.X_ITEM;
 import static org.xdef.xon.XonNames.X_KEYATTR;
 import static org.xdef.xon.XonNames.X_MAP;
-import static org.xdef.xon.XonNames.X_VALUEATTR;
 import static org.xdef.xon.XonTools.genXMLValue;
 import static org.xdef.xon.XonTools.isSimpleValue;
 import static org.xdef.xon.XonTools.jstringToXML;
 import static org.xdef.xon.XonTools.replaceColonInXMLName;
 import static org.xdef.xon.XonTools.toXmlName;
+import static org.xdef.xon.XonNames.I_VALATTR;
+import static org.xdef.xon.XonNames.X_VALATTR;
 
 /** Conversion of XON/JSON to XML
  * @author Vaclav Trojan
@@ -649,7 +649,7 @@ class XonToXml extends XonTools {
 			e = genArrayW((List) val);
 		} else {
 			e = genJElement(X_ITEM);
-			e.setAttribute(X_VALUEATTR, genXMLValue(val));
+			e.setAttribute(X_VALATTR, genXMLValue(val));
 		}
 		parent.appendChild(e);
 		return e;
@@ -718,7 +718,7 @@ class XonToXml extends XonTools {
 			e = genArrayX((List) val, doc);
 		} else {
 			e = doc.createElement(I_ITEM);
-			e.setAttribute(I_VALUEATTR, genXMLValue(val));
+			e.setAttribute(I_VALATTR, genXMLValue(val));
 		}
 		parent.appendChild(e);
 		return e;
@@ -760,7 +760,7 @@ class XonToXml extends XonTools {
 			} else if (o instanceof Map) {
 				item.appendChild(genMapX((Map) o, doc));
 			} else {
-				item.setAttribute(I_VALUEATTR, genXMLValue(o));
+				item.setAttribute(I_VALATTR, genXMLValue(o));
 			}
 		}
 		return e;

@@ -1188,8 +1188,7 @@ final class ChkComposer extends SReporter implements XDValueID {
 						if (childChkEl._xElement.getXonMode() != 0
 							&& (XONITEMW.equals(childChkEl._xElement.getQName())
 							|| XONITEM.equals(childChkEl._xElement.getQName()))
-							&& childChkEl._xElement.getAttr(
-								XonNames.X_VALUEATTR).getComposeCode() < 0){
+							&& childChkEl._xElement.getAttr(XonNames.X_VALATTR).getComposeCode() < 0){
 							// if create section do not create this node
 							result = new DefBoolean(false);
 						} else if (result != null

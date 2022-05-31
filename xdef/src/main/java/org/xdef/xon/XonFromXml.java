@@ -14,12 +14,12 @@ import org.xdef.XDConstants;
 import static org.xdef.xon.XonNames.I_ARRAY;
 import static org.xdef.xon.XonNames.I_ITEM;
 import static org.xdef.xon.XonNames.I_MAP;
-import static org.xdef.xon.XonNames.I_VALUEATTR;
 import static org.xdef.xon.XonNames.X_ARRAY;
 import static org.xdef.xon.XonNames.X_ITEM;
 import static org.xdef.xon.XonNames.X_KEYATTR;
 import static org.xdef.xon.XonNames.X_MAP;
-import static org.xdef.xon.XonNames.X_VALUEATTR;
+import static org.xdef.xon.XonNames.I_VALATTR;
+import static org.xdef.xon.XonNames.X_VALATTR;
 
 /** Converter XML -> XON/JSON.
  * @author Vaclav Trojan
@@ -112,8 +112,8 @@ class XonFromXml extends XonUtils {
 		} else if (X_MAP.equals(localName)) {
 			return createMapW3C(elem);
 		} else if (X_ITEM.equals(elem.getLocalName())) {
-			if (elem.hasAttribute(X_VALUEATTR)) {
-				return XonTools.xmlToJValue(elem.getAttribute(X_VALUEATTR));
+			if (elem.hasAttribute(X_VALATTR)) {
+				return XonTools.xmlToJValue(elem.getAttribute(X_VALATTR));
 			}
 			String s = elem.getTextContent();
 			return s == null || s.isEmpty() ? null : XonTools.xmlToJValue(s);
@@ -166,10 +166,10 @@ class XonFromXml extends XonUtils {
 					result.put(key, fromXmlW3C(e));
 				} else {
 					Object val;
-					if (!e.hasAttribute(X_VALUEATTR)) {
+					if (!e.hasAttribute(X_VALATTR)) {
 						val = null;
 					} else {
-						val = XonTools.xmlToJValue(e.getAttribute(X_VALUEATTR));
+						val = XonTools.xmlToJValue(e.getAttribute(X_VALATTR));
 					}
 					result.put(XonTools.xmlToJName(key),val);
 				}
@@ -218,8 +218,8 @@ class XonFromXml extends XonUtils {
 		if (XDConstants.XON_NS_URI_XD.equals(nsURI)) {
 			if (X_ITEM.equals(localName)) {
 				String s;
-				if (elem.hasAttribute(X_VALUEATTR)) {
-					s = elem.getAttribute(X_VALUEATTR);
+				if (elem.hasAttribute(X_VALATTR)) {
+					s = elem.getAttribute(X_VALATTR);
 				} else {
 					s = elem.getTextContent();
 					if (s != null) {
@@ -282,8 +282,8 @@ class XonFromXml extends XonUtils {
 			} else if (J_STRING.equals(localName)
 				|| J_NUMBER.equals(localName)
 				|| J_BOOLEAN.equals(localName)) {
-				if (elem.hasAttribute(X_VALUEATTR)) {
-					return XonTools.xmlToJValue(elem.getAttribute(X_VALUEATTR));
+				if (elem.hasAttribute(X_VALATTR)) {
+					return XonTools.xmlToJValue(elem.getAttribute(X_VALATTR));
 				}
 				String s = elem.getTextContent();
 				return XonTools.xmlToJValue(s);
@@ -429,7 +429,7 @@ class XonFromXml extends XonUtils {
 				Element e = (Element) n;
 				String key = e.getNodeName();
 				key = XonTools.xmlToJName(key);
-				Attr attr = e.getAttributeNode(I_VALUEATTR);
+				Attr attr = e.getAttributeNode(I_VALATTR);
 				if (attr != null) { // item with simple value
 					result.put(key, XonTools.xmlToJValue(attr.getValue()));
 				} else { // array or map
@@ -463,7 +463,7 @@ class XonFromXml extends XonUtils {
 		} else if (I_MAP.equals(name)) { // map
 			return createMapX(elem);
 		} else if (I_ITEM.equals(name)) { // item
-			Attr attr = elem.getAttributeNode(I_VALUEATTR);
+			Attr attr = elem.getAttributeNode(I_VALATTR);
 			if (attr != null) {
 				return XonTools.xmlToJValue(attr.getNodeValue());
 			}
