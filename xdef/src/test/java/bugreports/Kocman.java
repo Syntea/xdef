@@ -1,5 +1,6 @@
 package bugreports;
 
+import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.xdef.component.XComponent;
 import org.xdef.sys.ArrayReporter;
@@ -16,6 +17,38 @@ public class Kocman extends XDTester {
 		String xml;
 		XDPool xp;
 		XComponent xc;
+		try {
+			String xdef1 =
+"<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+"<xd:def  xmlns:xd     =\"http://www.xdef.org/xdef/4.0\"\n" +
+"         xmlns:s      =\"http://schemas.xmlsoap.org/soap/envelope\"\n" +
+"         xd:name      =\"SoapRequest\"\n" +
+"         xd:root      =\"s:Envelope\">\n" +
+"\n" +
+"    <s:Envelope>\n" +
+"        <Header>\n" +
+"        </Header>\n" +
+"        <Body>\n" +
+"        </Body>\n" +
+"    </s:Envelope>\n" +
+"</xd:def>";
+			String xdef2 =
+"<xd:def  xmlns:xd     =\"http://www.xdef.org/xdef/4.0\"\n" +
+"         xmlns:s      =\"http://schemas.xmlsoap.org/soap/envelope\"\n" +
+"         xd:name      =\"SoapRequest_impl\"\n" +
+"         xd:root      =\"s:Envelope\">\n" +
+"\n" +
+//"    <s:Envelope  xd:script=\"implements SoapRequest#s:Envelope\">\n" +
+"    <s:Envelope  xd:script=\"implements SoapRequest#s:Envelope\">\n" +
+"        <Header>\n" +
+"        </Header>\n" +
+"        <Body>\n" +
+"        </Body>\n" +
+"    </s:Envelope>\n" +
+"</xd:def>";
+			xp = XDFactory.compileXD(null, new String[]{xdef1, xdef2});
+			
+		} catch (Exception ex) {fail(ex);}
 		try {
 			xdef =
 "<xd:def  xmlns:xd='http://www.xdef.org/xdef/4.1' name='M' root='X'>\n"+
