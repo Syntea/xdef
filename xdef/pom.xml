@@ -252,7 +252,7 @@
                     <url>${mrmUrl}/private-snapshot</url>
                 </snapshotRepository>
             </distributionManagement>
-        </profile> 
+        </profile>
     </profiles>
     
 </project>
