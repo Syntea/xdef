@@ -22,11 +22,11 @@ public interface XConstants {
 	public static byte XON_ROOT = 4;
 
 /*#if DEBUG*#/
-	/** Names of debug property with switches:
-	 * <p>"showXonModel" display created XON model (see DEBUG_SHOW_XON_MODEL).
-	*#/
+	// Names of debug property with switches
+	////////////////////////////////////////
+	// "showXonModel" display created XON model (see DEBUG_SHOW_XON_MODEL).
 	public static String DEBUG_SWITCHES = "xdef-debug";
-	/** Debug switch to show created XON model. *#/
+	// Debug switch to show created XON model.
 	public static String DEBUG_SHOW_XON_MODEL = "showXonModel";
 /*#end*/
 }

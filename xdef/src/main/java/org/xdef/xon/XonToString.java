@@ -217,7 +217,7 @@ class XonToString extends XonTools {
 			try {
 				key = new String((byte[]) y, "UTF-8");
 			} catch (Exception ex) {
-				throw new RuntimeException(ex);
+				throw new RuntimeException("Invalid key: " + y, ex);
 			}
 		}
 		if (!xon || !StringParser.chkNCName(key, StringParser.XMLVER1_0)) {

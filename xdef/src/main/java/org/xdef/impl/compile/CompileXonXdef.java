@@ -614,7 +614,7 @@ public final class CompileXonXdef extends StringParser {
 		p._name = name;
 		p._nsURI = null; // set no namespace
 		p._nsindex = -1;
-		XDBuilder jp = new XDBuilder(jx);
+		XonModelParser jp = new XonModelParser(jx);
 		XonParsers pp = format.equals("xon")
 			? new XonReader(p._value, jp) : new IniReader(p._value, jp);
 		pp.setReportWriter(reporter);
@@ -639,15 +639,31 @@ public final class CompileXonXdef extends StringParser {
 	 * structure composed from JObjets used for compilation of XON/JSON model
 	 * in X-definition.
 	 */
-	private static class XDBuilder implements XonParser {
+	private static class XonModelParser implements XonParser {
+		/** kind undefined */
+		private final int UNDEFINED = 0;
+		/** kind array */
+		private final int ARRAY = 1;
+		/** kind map */
+		private final int MAP = 2;
+		/** kind simple value */
+		private final int VALUE = 3;
+		
+		/** stack with kinds of nested items. */
 		private final Stack<Integer> _kinds = new Stack<Integer>();
+		/** stack with kinds of arrays. */
 		private final Stack<JArray> _arrays = new Stack<JArray>();
+		/** stack with kinds of maps. */
 		private final Stack<JMap> _maps = new Stack<JMap>();
-		private int _kind; // 0..value, 1..array, 2..map
+		/** stack of names in map. */
 		private final Stack<SBuffer> _names = new Stack<SBuffer>();
+		/** actual kind (VALUE, ARRAY or MAP). */ 
+		private int _kind; // ARRAY, MAP, VALUE or UNDEFINED
+		/** parsed value. */
 		private JObject _value;
 
-		XDBuilder(CompileXonXdef jx) {_kinds.push(_kind = 0);}
+		/** Create new instance of XonModelParser. */
+		XonModelParser(CompileXonXdef jx) {_kinds.push(_kind = UNDEFINED);}
 
 ////////////////////////////////////////////////////////////////////////////////
 // JParser interface
@@ -658,12 +674,12 @@ public final class CompileXonXdef extends StringParser {
 		 * @param value JValue to be added to result object.
 		 */
 		public void putValue(JValue value) {
-			if (_kind == 1) {
+			if (_kind == ARRAY) {
 				_arrays.peek().add(value);
-			} else if (_kind == 2) {
+			} else if (_kind == MAP) {
 				SBuffer name = _names.pop();
 				_maps.peek().put(name.getString(), value);
-			} else {
+			} else { // musr be VALUE
 				_value = value;
 			}
 		}
@@ -689,8 +705,9 @@ public final class CompileXonXdef extends StringParser {
 		 * @param pos source position.
 		 */
 		public void arrayStart(SPosition pos) {
-			_kinds.push(_kind = 1);
-			_arrays.push(new JArray(pos));
+			 //add ARRAY to kins stack and set it to kind 
+			_kinds.push(_kind = ARRAY);
+			_arrays.push(new JArray(pos));  // new item to array stack
 		}
 		@Override
 		/** Array ended.
@@ -701,19 +718,20 @@ public final class CompileXonXdef extends StringParser {
 			_kind = _kinds.peek();
 			_value = _arrays.peek();
 			_arrays.pop();
-			if (_kind == 2) {
+			if (_kind == MAP) {
 				_maps.peek().put(_names.pop().getString(), _value);
-			} else if (_kind == 1) {
+			} else if (_kind == ARRAY) {
 				_arrays.peek().add(_value);
-			}
+			} // else it is VALUE
 		}
 		@Override
 		/** Map started.
 		 * @param pos source position.
 		 */
 		public void mapStart(SPosition pos) {
-			_kinds.push(_kind = 2);
-			_maps.push(new JMap(pos));
+			//add MAP to kins stack and set it to kind 
+			_kinds.push(_kind = MAP);  
+			_maps.push(new JMap(pos)); // new item to map stack
 		}
 		@Override
 		/** Map ended.
@@ -724,11 +742,11 @@ public final class CompileXonXdef extends StringParser {
 			_kind = _kinds.peek();
 			_value = (JObject)_maps.peek();
 			_maps.pop();
-			if (_kind == 2) {
+			if (_kind == MAP) { // parent is map
 				_maps.peek().put(_names.pop().getString(), _value);
-			} else if (_kind == 1) {
+			} else if (_kind == ARRAY) { // parent array
 				_arrays.peek().add(_value);
-			}
+			} // parent is value
 		}
 		@Override
 		/** Processed comment.

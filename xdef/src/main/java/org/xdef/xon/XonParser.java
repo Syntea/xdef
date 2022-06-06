@@ -13,7 +13,7 @@ public interface XonParser {
 	public void putValue(XonTools.JValue value);
 	/** Set name of value pair.
 	 * @param name value name.
-	 * @return true if the name of pair already exists, othrwise return false.
+	 * @return true if the name of pair already exists, otherwise return false.
 	 */
 	public boolean namedValue(SBuffer name);
 	/** Array started.

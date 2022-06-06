@@ -2700,9 +2700,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		if (_parent._parent != null && _xElement._xon > 0) {//not root; gen XON
 			if (!_forget && _xElement._forget != 'T') {
 				ChkElement chkEl = (ChkElement) _parent;
-				Object value = !XonNames.X_MAP.equals(_xElement.getLocalName())
-					&& !XonNames.X_ARRAY.equals(_xElement.getLocalName())
-					? _xonValue : _xonMap != null ? _xonMap : _xonArray;
+				Object value = XonNames.X_MAP.equals(_xElement.getLocalName())
+					?_xonMap : XonNames.X_ARRAY.equals(_xElement.getLocalName())
+					?_xonArray : _xonValue;
 				if (chkEl._xonMap != null) {
 					chkEl._xonMap.put(_xonKey, value);
 				} else if (chkEl._xonArray != null) {
