@@ -130,7 +130,6 @@ public final class PNode {
 	public final void addChildNode(final PNode p) {
 		_childNodes.add(p);
 		p._xpathPos = p.getXPath();
-
 	}
 
 	/** Get text value of PNode.

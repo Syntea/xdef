@@ -1,5 +1,6 @@
 package bugreports;
 
+import java.util.Properties;
 import org.w3c.dom.Element;
 import org.xdef.XDConstants;
 import org.xdef.XDDocument;
@@ -68,6 +69,36 @@ public class MyTest extends XDTester {
 		XDPool xp;
 		XComponent xc;
 		ArrayReporter reporter = new ArrayReporter();
+/*xx*/
+		try {
+			xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='network'>\n" +
+"<xd:xon name='network'>\n" +
+"{\n" +
+"  a: \"optionalstring();\"\n" +
+"  b: {x:script=\"optional\", a: \"optional string();\"}\n" +
+"  c: [x:script=\"optional\", \"int();\", { a: \"int();\"}]\n" +
+"}\n" +
+"</xd:xon>\n" +
+"</xd:def>";
+			Properties props = new Properties();
+			props.setProperty("xdef-debug", "showXonModel");
+			xp = XDFactory.compileXD(props, xdef);
+//			xp.display();
+			xd = xp.createXDDocument();
+			json =
+//"{ }";
+//"{ a:\"fda88\" }";
+"{ b: {a: \"x\"} }";
+//"{ c:[1, {a:2}] }";
+//"{ a:\"fda88\", b: {a: \"xyz\"}, c:[1, {a:2}] }";
+			Object o = XonUtils.parseXON(json);
+			assertTrue(XonUtils.xonEqual(o, o = xd.jparse(json, reporter)),
+				XonUtils.toXonString(o, true));
+			assertNoErrors(reporter);
+		} catch (Exception ex) {fail(ex);}
+if(true)return;
+/*xx*/
 		try {
 			xdef =
 "<xd:def xmlns:xd ='" + _xdNS + "' name='a' root='a'\n"+
