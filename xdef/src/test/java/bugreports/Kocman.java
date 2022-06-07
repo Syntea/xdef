@@ -47,7 +47,7 @@ public class Kocman extends XDTester {
 "    </s:Envelope>\n" +
 "</xd:def>";
 			xp = XDFactory.compileXD(null, new String[]{xdef1, xdef2});
-			
+
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xdef =
