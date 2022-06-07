@@ -648,7 +648,7 @@ public final class CompileXonXdef extends StringParser {
 		private final int MAP = 2;
 		/** kind simple value */
 		private final int VALUE = 3;
-		
+
 		/** stack with kinds of nested items. */
 		private final Stack<Integer> _kinds = new Stack<Integer>();
 		/** stack with kinds of arrays. */
@@ -657,7 +657,7 @@ public final class CompileXonXdef extends StringParser {
 		private final Stack<JMap> _maps = new Stack<JMap>();
 		/** stack of names in map. */
 		private final Stack<SBuffer> _names = new Stack<SBuffer>();
-		/** actual kind (VALUE, ARRAY or MAP). */ 
+		/** actual kind (VALUE, ARRAY or MAP). */
 		private int _kind; // ARRAY, MAP, VALUE or UNDEFINED
 		/** parsed value. */
 		private JObject _value;
@@ -705,7 +705,7 @@ public final class CompileXonXdef extends StringParser {
 		 * @param pos source position.
 		 */
 		public void arrayStart(SPosition pos) {
-			 //add ARRAY to kins stack and set it to kind 
+			 //add ARRAY to kins stack and set it to kind
 			_kinds.push(_kind = ARRAY);
 			_arrays.push(new JArray(pos));  // new item to array stack
 		}
@@ -729,8 +729,8 @@ public final class CompileXonXdef extends StringParser {
 		 * @param pos source position.
 		 */
 		public void mapStart(SPosition pos) {
-			//add MAP to kins stack and set it to kind 
-			_kinds.push(_kind = MAP);  
+			//add MAP to kins stack and set it to kind
+			_kinds.push(_kind = MAP);
 			_maps.push(new JMap(pos)); // new item to map stack
 		}
 		@Override
