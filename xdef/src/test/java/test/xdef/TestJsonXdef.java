@@ -99,16 +99,16 @@ public class TestJsonXdef extends XDTester {
 					name = name.substring(0, ndx);
 					Object json = XonUtils.parseJSON(f);
 					// write JSON as XML (W3C modc)
-					el = XonUtils.xonToXml(json);
+					el = XonUtils.xonToXmW(json);
 					SUtils.writeString(new File(_tempDir + name + "a.xml"),
 						KXmlUtils.nodeToString(el,true),"UTF-8");
 					if (!XonUtils.xonEqual(XonUtils.xmlToXon(el),
-						XonUtils.xmlToXon(XonUtils.xonToXmlXD(json)))) {
+						XonUtils.xmlToXon(XonUtils.xonToXml(json)))) {
 						throw new RuntimeException(rName +
 							" xml transformation to JSON differs:\n" +
-							KXmlUtils.nodeToString(XonUtils.xonToXml(json),
+							KXmlUtils.nodeToString(XonUtils.xonToXmW(json),
 								true) + "\n" +
-							KXmlUtils.nodeToString(XonUtils.xonToXmlXD(json),
+							KXmlUtils.nodeToString(XonUtils.xonToXml(json),
 								true) + "\n");
 					}
 				}
@@ -714,7 +714,7 @@ public class TestJsonXdef extends XDTester {
 			assertNoErrorwarnings(reporter);
 			assertTrue(XonUtils.xonEqual(XonUtils.parseJSON(json), j),
 				XonUtils.toJsonString(j, true));
-			el = XonUtils.xonToXml(j);
+			el = XonUtils.xonToXmW(j);
 			parse(xp, "", el, reporter);
 			assertNoErrorwarnings(reporter);
 			json = "{\"a\":1}";
@@ -722,7 +722,7 @@ public class TestJsonXdef extends XDTester {
 			assertNoErrorwarnings(reporter);
 			assertTrue(XonUtils.xonEqual(XonUtils.parseJSON(json), j),
 				XonUtils.toJsonString(j, true));
-			el = XonUtils.xonToXml(j);
+			el = XonUtils.xonToXmW(j);
 			parse(xp, "", el, reporter);
 			assertNoErrorwarnings(reporter);
 			xdef =

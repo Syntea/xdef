@@ -48,7 +48,7 @@ public class TestXon extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			x = XonUtils.parseXON(xon);
-			el = XonUtils.xonToXml(x);
+			el = XonUtils.xonToXmW(x);
 			xd = xp.createXDDocument();
 			y = xd.jvalidate(el, reporter);
 			if (reporter.errorWarnings()) {

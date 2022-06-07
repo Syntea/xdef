@@ -361,13 +361,13 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 		if (data == null || data instanceof Map || data instanceof List
 			|| data instanceof String || data instanceof Number
 			|| data instanceof Boolean) {
-			e = XonUtils.xonToXml(data);
+			e = XonUtils.xonToXmW(data);
 		} else if (data instanceof File) {
-			e = XonUtils.xonToXml(XonUtils.parseXON((File) data));
+			e = XonUtils.xonToXmW(XonUtils.parseXON((File) data));
 		} else if (data instanceof URL) {
-			e = XonUtils.xonToXml(XonUtils.parseXON((URL) data));
+			e = XonUtils.xonToXmW(XonUtils.parseXON((URL) data));
 		} else if (data instanceof InputStream) {
-			e = XonUtils.xonToXml(XonUtils.parseXON((InputStream) data));
+			e = XonUtils.xonToXmW(XonUtils.parseXON((InputStream) data));
 		} else if (data instanceof Document) {
 			e = ((Document) data).getDocumentElement();
 		} else if (data instanceof Element){

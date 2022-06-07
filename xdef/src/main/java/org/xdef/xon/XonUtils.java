@@ -488,7 +488,7 @@ public class XonUtils {
 	 * @param xon path to XON/JSON source data.
 	 * @return XML element created from XON/JSON data.
 	 */
-	public final static Element xonToXml(final String xon) {
+	public final static Element xonToXmlW(final String xon) {
 		return XonToXml.toXmlW(XonUtils.parseXON(xon));
 	}
 
@@ -496,7 +496,7 @@ public class XonUtils {
 	 * @param xon file with XON/JSON source data.
 	 * @return XML element created from XON/JSON data.
 	 */
-	public final static Element xonToXml(final File xon) {
+	public final static Element xonToXmlW(final File xon) {
 		return XonToXml.toXmlW(XonUtils.parseXON(xon));
 	}
 
@@ -504,7 +504,7 @@ public class XonUtils {
 	 * @param xon URL where is XON/JSON source data.
 	 * @return XML element created from XON/JSON data.
 	 */
-	public final static Element xonToXml(final URL xon) {
+	public final static Element xonToXmlW(final URL xon) {
 		return XonToXml.toXmlW(parseXON(xon));
 	}
 
@@ -512,7 +512,7 @@ public class XonUtils {
 	 * @param xon Input stream where is XON/JSON source data.
 	 * @return XML element created from XON/JSON data.
 	 */
-	public final static Element xonToXml(final InputStream xon) {
+	public final static Element xonToXmlW(final InputStream xon) {
 		return XonToXml.toXmlW(XonUtils.parseXON(xon));
 	}
 
@@ -520,7 +520,7 @@ public class XonUtils {
 	 * @param xon XON/JSON object.
 	 * @return XML element created from XON/JSON data.
 	 */
-	public final static Element xonToXml(final Object xon) {
+	public final static Element xonToXmW(final Object xon) {
 		return XonToXml.toXmlW(xon);
 	}
 
@@ -568,7 +568,7 @@ public class XonUtils {
 	 * @param xon path to XON source data.
 	 * @return XML element created from XON/JSON data.
 	 */
-	public final static Element xonToXmlXD(final String xon) {
+	public final static Element xonToXml(final String xon) {
 		return XonToXml.toXmlXD(XonUtils.parseXON(xon));
 	}
 
@@ -576,7 +576,7 @@ public class XonUtils {
 	 * @param xon File with XON/JSON source data.
 	 * @return XML element created from XON/JSON data.
 	 */
-	public final static Element xonToXmlXD(final File xon) {
+	public final static Element xonToXml(final File xon) {
 		return XonToXml.toXmlXD(XonUtils.parseXON(xon));
 	}
 
@@ -584,7 +584,7 @@ public class XonUtils {
 	 * @param xon URL with XON/JSON source data.
 	 * @return XML element created from JSON XON/data.
 	 */
-	public final static Element xonToXmlXD(final URL xon) {
+	public final static Element xonToXml(final URL xon) {
 		return XonToXml.toXmlXD(parseXON(xon));
 	}
 
@@ -592,7 +592,7 @@ public class XonUtils {
 	 * @param xon InputStream with XON/JSON source data.
 	 * @return XML element created from JSON XON/data.
 	 */
-	public final static Element xonToXmlXD(final InputStream xon) {
+	public final static Element xonToXml(final InputStream xon) {
 		return XonToXml.toXmlXD(XonUtils.parseXON(xon));
 	}
 
@@ -600,7 +600,7 @@ public class XonUtils {
 	 * @param xon XON/JSON object.
 	 * @return XML element created from XON/JSON data.
 	 */
-	public final static Element xonToXmlXD(final Object xon) {
+	public final static Element xonToXml(final Object xon) {
 		return XonToXml.toXmlXD(xon);
 	}
 	/** Create XML in "W" format from string with YAML source.
