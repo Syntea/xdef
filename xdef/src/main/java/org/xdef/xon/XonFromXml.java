@@ -11,14 +11,10 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.xdef.XDConstants;
-import static org.xdef.xon.XonNames.I_ARRAY;
-import static org.xdef.xon.XonNames.I_ITEM;
-import static org.xdef.xon.XonNames.I_MAP;
 import static org.xdef.xon.XonNames.X_ARRAY;
 import static org.xdef.xon.XonNames.X_ITEM;
 import static org.xdef.xon.XonNames.X_KEYATTR;
 import static org.xdef.xon.XonNames.X_MAP;
-import static org.xdef.xon.XonNames.I_VALATTR;
 import static org.xdef.xon.XonNames.X_VALATTR;
 
 /** Converter XML -> XON/JSON.
@@ -401,79 +397,6 @@ class XonFromXml extends XonUtils {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-	/** Create XON array from array element (internal from).
-	 * @param elem internal form of array element .
-	 * @return created XON array.
-	 */
-	private static List<Object> createArrayX(final Element elem) {
-		List<Object> result = new ArrayList<Object>();
-		Node n = elem.getFirstChild();
-		while(n != null) {
-			if (n.getNodeType() == Node.ELEMENT_NODE) {
-				result.add(fromXmlX((Element) n));
-			}
-			n = n.getNextSibling();
-		}
-		return result;
-	}
-
-	/** Create XON map from map element (internal form).
-	 * @param elem internal form of map element.
-	 * @return created XON object (map).
-	 */
-	private static Map<String, Object> createMapX(final Element elem) {
-		Map<String,Object> result = new LinkedHashMap<String,Object>();
-		Node n = elem.getFirstChild();
-		while(n != null) {
-			if (n.getNodeType() == Node.ELEMENT_NODE) {
-				Element e = (Element) n;
-				String key = e.getNodeName();
-				key = XonTools.xmlToJName(key);
-				Attr attr = e.getAttributeNode(I_VALATTR);
-				if (attr != null) { // item with simple value
-					result.put(key, XonTools.xmlToJValue(attr.getValue()));
-				} else { // array or map
-					Node nn = e.getFirstChild();
-					while (nn != null) {
-						if (nn.getNodeType() == Node.ELEMENT_NODE) {
-							result.put(key, fromXmlX((Element) nn));
-							break;
-						}
-						nn = nn.getNextSibling();
-					}
-					if (nn == null) {
-						throw new RuntimeException(
-							"Missing child element (internal form)");
-					}
-				}
-			}
-			n = n.getNextSibling();
-		}
-		return result;
-	}
-
-	/** Create XON object from element with array,map,or value (internal form).
-	 * @param elem element with XON object in internal form.
-	 * @return XON object.
-	 */
-	private static Object fromXmlX(final Element elem) {
-		String name = elem.getNodeName();
-		if (I_ARRAY.equals(name)) { // array
-			return createArrayX(elem);
-		} else if (I_MAP.equals(name)) { // map
-			return createMapX(elem);
-		} else if (I_ITEM.equals(name)) { // item
-			Attr attr = elem.getAttributeNode(I_VALATTR);
-			if (attr != null) {
-				return XonTools.xmlToJValue(attr.getNodeValue());
-			}
-		}
-		throw new RuntimeException(
-			"Unsupported XON internal form element: " + elem.getTagName());
-	}
-
-////////////////////////////////////////////////////////////////////////////////
-
 	/** Create XON/JSON object (map, array or primitive value) from an element.
 	 * @param node XML node with XON/JSON data.
 	 * @return created XON/JSON object (map, array or primitive value).
@@ -483,14 +406,9 @@ class XonFromXml extends XonUtils {
 			? ((Document) node).getDocumentElement() : (Element) node;
 		String name = elem.getTagName();
 		String uri = elem.getNamespaceURI();
-		if ((uri == null || uri.isEmpty())
-			&& (I_ARRAY.equals(name)||I_MAP.equals(name)||I_ITEM.equals(name))){
-			return fromXmlX(elem); // internal rormat
-		} else {
-			XonFromXml x = new XonFromXml();
-			return (XDConstants.XON_NS_URI_W.equals(uri))
-				? x.fromXmlW3C(elem)// W3C format
-				: x.fromXmlXD(elem); // XD format
-		}
+		XonFromXml x = new XonFromXml();
+		return (XDConstants.XON_NS_URI_W.equals(uri))
+			? x.fromXmlW3C(elem)// W3C format
+			: x.fromXmlXD(elem); // XD format
 	}
 }

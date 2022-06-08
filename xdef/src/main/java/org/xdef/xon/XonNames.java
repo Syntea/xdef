@@ -20,18 +20,6 @@ public interface XonNames {
 	public final static String X_VALATTR = "val";
 
 ////////////////////////////////////////////////////////////////////////////////
-// names used in XON internal format (Experimental version)
-////////////////////////////////////////////////////////////////////////////////
-	/** XML element name of XON/JSON map (internal form). */
-	public static final String I_MAP = "_x5f_M";
-	/** XML element name of XON/JSON array. */
-	public static final String I_ARRAY = "_x5f_A";
-	/** XML element name XON/JSON value (internal form, value is in attribute.*/
-	public static final String I_ITEM = "_x5f_I";
-	/** XML attribute name of XON/JSON value. */
-	public static final String I_VALATTR = "val";
-
-////////////////////////////////////////////////////////////////////////////////
 // names used in X-definition moldels
 ////////////////////////////////////////////////////////////////////////////////
 	/** This keyword used for the specification of script in X-definition. */
