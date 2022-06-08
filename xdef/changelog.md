@@ -1,6 +1,9 @@
 # Version ${version}, release-date ${release.date}
 
 # Version 41.0.9, release-date 2022-06-08
+* This build version is a preparation for X=definition version 4.2.
+  It contains UNOFFICIALLY additional implementation of JSON, XON,
+  Properties, Windows INI and CSV data formats.
 * Asterisk (`*`) may be now used for sequential parameters specifying minimum
   or maximum of `minLength`, `maxLength`, `minInclusive`, or  `maxInclusive`.
 * In XON format it is now possible to write `=` (equal sign) after a name of
