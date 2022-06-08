@@ -229,11 +229,9 @@ public class XonXml_X {
 			? ((Document) node).getDocumentElement() : (Element) node;
 		String name = elem.getTagName();
 		String uri = elem.getNamespaceURI();
-		if (XDConstants.XON_NS_URI_W.equals(uri)
-			|| XDConstants.XON_NS_URI_XD.equals(uri)) {
-			return XonUtils.xmlToXon(elem); // W3C format or  XD format
-		}
-		return fromXmlX(elem);
+		return XON_NS_URI_X.equals(uri)
+			? fromXmlX(elem) // X format
+			: XonUtils.xmlToXon(elem); // W or XD formats
 	}
 
 }
