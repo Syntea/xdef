@@ -2,6 +2,7 @@ package test.common.xon;
 
 import java.io.File;
 import org.w3c.dom.Element;
+import org.xdef.impl.XonXml_X;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.xon.XonUtils;
@@ -104,8 +105,8 @@ public class TestXonUtil extends STester {
 	private static String testX(File f) {return testX1(XonUtils.parseXON(f));}
 
 	private static String testX1(Object o) {
-		Element el = XonUtils.xonToXmlX(o);
-		Object o1 = XonUtils.xmlToXon(el);
+		Element el = XonXml_X.xonToXmlX(o);
+		Object o1 = XonXml_X.toXon(el);
 		return XonUtils.xonEqual(o, o1) ? ""
 			: ("/n***\n" + KXmlUtils.nodeToString(el, true) +
 			"/n***\n" + XonUtils.toXonString(o1, true));
@@ -215,8 +216,8 @@ public class TestXonUtil extends STester {
 			"[{a:[[1,2],[3,4],{}]}]",
 			"[{a:[[1,2],[3,4],{a:1,b:2}]}]",
 			}) {
-			assertEq("", testX(s), s);
 			assertEq("", testXD(s), s);
+			assertEq("", testX(s), s); //Internal version
 		}
 	}
 

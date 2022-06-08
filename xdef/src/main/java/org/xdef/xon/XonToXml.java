@@ -12,9 +12,6 @@ import org.xdef.impl.xml.KNamespace;
 import org.xdef.msg.JSON;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.xml.KXmlUtils;
-import static org.xdef.xon.XonNames.I_ARRAY;
-import static org.xdef.xon.XonNames.I_ITEM;
-import static org.xdef.xon.XonNames.I_MAP;
 import static org.xdef.xon.XonNames.X_ARRAY;
 import static org.xdef.xon.XonNames.X_ITEM;
 import static org.xdef.xon.XonNames.X_KEYATTR;
@@ -24,7 +21,6 @@ import static org.xdef.xon.XonTools.isSimpleValue;
 import static org.xdef.xon.XonTools.jstringToXML;
 import static org.xdef.xon.XonTools.replaceColonInXMLName;
 import static org.xdef.xon.XonTools.toXmlName;
-import static org.xdef.xon.XonNames.I_VALATTR;
 import static org.xdef.xon.XonNames.X_VALATTR;
 
 /** Conversion of XON/JSON to XML
@@ -697,81 +693,5 @@ class XonToXml extends XonTools {
 		x._xNamespace = XDConstants.XON_NS_URI_W;
 		x._xPrefix = "jx";
 		return x.genValueW(xon, x._doc = KXmlUtils.newDocument());
-	}
-////////////////////////////////////////////////////////////////////////////////
-// XON to XML (internal format)
-////////////////////////////////////////////////////////////////////////////////
-
-	/** Create internal XML format of XML from an XON object.
-	 * @param val value.
-	 * @param parent parent node where to add created element.
-	 * @param doc owner document.
-	 * @return element with value internal format.
-	 */
-	private static Element genValueX(final Object val,
-		final Node parent,
-		final Document doc) {
-		Element e;
-		if (val instanceof Map) {
-			e = genMapX((Map) val, doc);
-		} else if (val instanceof List) {
-			e = genArrayX((List) val, doc);
-		} else {
-			e = doc.createElement(I_ITEM);
-			e.setAttribute(I_VALATTR, genXMLValue(val));
-		}
-		parent.appendChild(e);
-		return e;
-	}
-
-	/** Create XML from array (internal form).
-	 * @param array array to be created.
-	 * @param doc owner document.
-	 * @return element with array (internal form).
-	 */
-	private static Element genArrayX(final List array, final Document doc) {
-		Element e = doc.createElement(I_ARRAY);
-		for (Object val: array) {
-			genValueX(val, e, doc);
-		}
-		return e;
-	}
-
-	/** Create XML from map (internal form).
-	 * @param map map to be created.
-	 * @param doc owner document.
-	 * @return element with map (internal form).
-	 */
-	private static Element genMapX(final Map map, final Document doc) {
-		Element e = doc.createElement(I_MAP);
-		Iterator it = map.entrySet().iterator();
-		while (it.hasNext()) {
-			Map.Entry en = (Map.Entry) it.next();
-			Object o = en.getKey(); // name
-			// NOTE in YAML it may be a byte array, otherwise it is String
-			// convert key to XML name
-			String key = o instanceof byte[]? new String((byte[])o) : (String)o;
-			key = toXmlName(key);
-			Element item = doc.createElement(key);
-			e.appendChild(item);
-			o = en.getValue();
-			if (o instanceof List) {
-				item.appendChild(genArrayX((List) o, doc));
-			} else if (o instanceof Map) {
-				item.appendChild(genMapX((Map) o, doc));
-			} else {
-				item.setAttribute(I_VALATTR, genXMLValue(o));
-			}
-		}
-		return e;
-	}
-
-	/** Create XML from XON object (internal form).
-	 * @param xon object with XON data.
-	 * @return XML element created from XON data (internal form).
-	 */
-	final static Element toXmlX(final Object xon) {
-		Document doc = KXmlUtils.newDocument();
-		return genValueX(xon, doc, doc);
 	}
 }

@@ -524,46 +524,6 @@ public class XonUtils {
 		return XonToXml.toXmlW(xon);
 	}
 
-	/** Create XML from XON object (internal form).
-	 * @param xon path to XON source data.
-	 * @return XML element created from XON data.
-	 */
-	public final static Element xonToXmlX(final String xon) {
-		return XonToXml.toXmlX(XonUtils.parseXON(xon));
-	}
-
-	/** Create XML from XON object (internal form).
-	 * @param xon file with XON source data.
-	 * @return XML element created from XON data.
-	 */
-	public final static Element xonToXmlX(final File xon) {
-		return XonToXml.toXmlX(XonUtils.parseXON(xon));
-	}
-
-	/** Create XML from XON object (internal form).
-	 * @param xon URL where is XON source data.
-	 * @return XML element created from XON data.
-	 */
-	public final static Element xonToXmlX(final URL xon) {
-		return XonToXml.toXmlX(parseXON(xon));
-	}
-
-	/** Create XML from XON object (internal form).
-	 * @param xon Input stream where is XON source data.
-	 * @return XML element created from XON data.
-	 */
-	public final static Element xonToXmlX(final InputStream xon) {
-		return XonToXml.toXmlX(XonUtils.parseXON(xon));
-	}
-
-	/** Create XML from XON object (internal form).
-	 * @param xon XON object.
-	 * @return XML element created from XON data.
-	 */
-	public final static Element xonToXmlX(final Object xon) {
-		return XonToXml.toXmlX(xon);
-	}
-
 	/** Create XML from XON object in X-Definition mode.
 	 * @param xon path to XON source data.
 	 * @return XML element created from XON/JSON data.
