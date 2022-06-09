@@ -909,7 +909,7 @@ public class TestJsonXdef extends XDTester {
 "]\n" +
 "</xd:xon>\n" +
 "<xd:component>\n"+
-"  %class mytests.X_on %link #a;\n"+
+"  %class test.xdef.X_on %link #a;\n"+
 "</xd:component>\n"+
 "</xd:def>";
 			test =
