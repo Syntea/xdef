@@ -520,7 +520,7 @@ public class XonUtils {
 	 * @param xon XON/JSON object.
 	 * @return XML element created from XON/JSON data.
 	 */
-	public final static Element xonToXmW(final Object xon) {
+	public final static Element xonToXmlW(final Object xon) {
 		return XonToXml.toXmlW(xon);
 	}
 
