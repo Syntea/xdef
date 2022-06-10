@@ -1589,9 +1589,9 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 				byte jsonVer = // version of XON/JSON to XML transormation
 					(Byte) yClass.getDeclaredField("XON").get(null);
 				e = jsonVer == XConstants.XON_MODE_W ?
-					XonUtils.xonToXmW(xon) : XonUtils.xonToXml(xon);
+					XonUtils.xonToXmlW(xon) : XonUtils.xonToXml(xon);
 			} catch (Exception ex) {
-				e = XonUtils.xonToXmW(xon); // X-definition transormation
+				e = XonUtils.xonToXmlW(xon); // X-definition transormation
 			}
 			return xparseXComponent(e, yClass, reporter);
 		} else if (xon instanceof String) {
@@ -2114,9 +2114,9 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 				byte xonVer = // version of XON/JSON to XML transormation
 					(Byte) yClass.getDeclaredField("XON").get(null);
 				e = xonVer == XConstants.XON_MODE_W ?
-					XonUtils.xonToXmW(yaml) : XonUtils.xonToXml(yaml);
+					XonUtils.xonToXmlW(yaml) : XonUtils.xonToXml(yaml);
 			} catch (Exception ex) {
-				e = XonUtils.xonToXmW(yaml); // X-definition transormation
+				e = XonUtils.xonToXmlW(yaml); // X-definition transormation
 			}
 			return xparseXComponent(e, yClass, reporter);
 		} else if (yaml instanceof String) {
