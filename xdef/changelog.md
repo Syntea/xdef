@@ -2,6 +2,9 @@
 
 # Version 41.0.9, release-date 2022-06-10
 * This build is a pre-release of version 4.2 of X-definition.
+
+# Version 41.0.9, release-date 2022-06-09
+* This build is a pre-release of version 4.2 of X-definition.
   It supports implementation of data formats JSON, XON, Properties,
   and Windows INI, and CSV. Those features are undocumented yet.
   However, this buld supports all features of version 4.1.
