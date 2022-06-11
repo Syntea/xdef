@@ -625,13 +625,14 @@ public final class CompileXonXdef extends StringParser {
 		jp = null;
 		p._value = null;
 /*#if DEBUG*#/
-	if (org.xdef.impl.XPool._debugSwitches.contains(
-		org.xdef.impl.XConstants.DEBUG_SHOW_XON_MODEL)) {
-		// display created model
-		System.err.flush();
-		System.out.println(org.xdef.xml.KXmlUtils.nodeToString(p.toXML(),true));
-		System.out.flush();
-	}
+		String dbgSwitches = System.getProperty("xdef-xon_debug");
+		if (dbgSwitches != null && dbgSwitches.contains("showModel")) {
+			// display created model
+			System.err.flush();
+			System.out.println(
+				org.xdef.xml.KXmlUtils.nodeToString(p.toXML(),true));
+			System.out.flush();
+		}
 /*#end*/
 	}
 

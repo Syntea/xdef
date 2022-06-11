@@ -318,10 +318,11 @@ class XonFromXml extends XonUtils {
 				if (!attrs.isEmpty()) {
 					array.add(attrs);
 				}
-				if (XDConstants.XDEF41_NS_URI.equals(nsURI)
-					|| XDConstants.XDEF40_NS_URI.equals(nsURI)
+				if (XDConstants.XDEF31_NS_URI.equals(nsURI)
 					|| XDConstants.XDEF32_NS_URI.equals(nsURI)
-					|| XDConstants.XDEF31_NS_URI.equals(nsURI)) {
+					|| XDConstants.XDEF40_NS_URI.equals(nsURI)
+					|| XDConstants.XDEF41_NS_URI.equals(nsURI)
+					|| XDConstants.XDEF42_NS_URI.equals(nsURI)) {
 					array.add(s); //don't convert text of xd:xon/jsaon elements!
 				} else {
 					addSimpleValue(array, s);

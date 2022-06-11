@@ -53,7 +53,7 @@ public class XDChecker {
 		_properties = new Properties();
 		// just check if all parameters are correct
 		String xdef =
-"<xd:def xmlns:xd='"+ XDConstants.XDEF41_NS_URI + "' root = 'a'>\n";
+"<xd:def xmlns:xd='"+ XDConstants.XDEF42_NS_URI + "' root = 'a'>\n";
 		if (_declarations != null || _methods != null) {
 			xdef +=	"<xd:declaration>\n";
 			if (_methods != null) {
@@ -89,7 +89,7 @@ public class XDChecker {
 //				xb.setExternals(_classes);
 //			}
 			String xdef =
-"<x:def xmlns:x='"+ XDConstants.XDEF41_NS_URI + "' root = 'a'>";
+"<x:def xmlns:x='"+ XDConstants.XDEF42_NS_URI + "' root = 'a'>";
 		if (_declarations != null || _methods != null) {
 			xdef +=	"<x:declaration>\n";
 			if (_methods != null) {

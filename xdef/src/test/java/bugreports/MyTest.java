@@ -1,6 +1,5 @@
 package bugreports;
 
-import java.util.Properties;
 import org.w3c.dom.Element;
 import org.xdef.XDConstants;
 import org.xdef.XDDocument;
@@ -81,9 +80,8 @@ public class MyTest extends XDTester {
 "}\n" +
 "</xd:xon>\n" +
 "</xd:def>";
-			Properties props = new Properties();
-			props.setProperty("xdef-debug", "showXonModel");
-			xp = XDFactory.compileXD(props, xdef);
+			System.setProperty("xdef-xon_debug", "showModel");
+			xp = XDFactory.compileXD(null, xdef);
 //			xp.display();
 			xd = xp.createXDDocument();
 			json =
@@ -97,7 +95,8 @@ public class MyTest extends XDTester {
 				XonUtils.toXonString(o, true));
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
-if(true)return;
+		System.setProperty("xdef-xon_debug", "");
+//if(T)return;
 /*xx*/
 		try {
 			xdef =
@@ -309,7 +308,7 @@ if(true)return;
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrorwarnings(reporter);
 		} catch (Exception ex) {fail(ex);}
-//if(true)return;
+if(true)return;
 		try {
 			// \p{Lu} capital letters
 			// \p{Ll} small letters
