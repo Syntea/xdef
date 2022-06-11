@@ -41,6 +41,10 @@ public class TestAllFull {
 		System.out.println("Testing X-definition utilities version 4.1");
 		result += XDTester.runTests(System.out, System.err, log,
 			tests, "package xdutils", XDTester.getFulltestMode(), args);
+		XDTester._xdNS = XDConstants.XDEF42_NS_URI;
+		System.out.println("Testing X-definition utilities version 4.2");
+		result += XDTester.runTests(System.out, System.err, log,
+			tests, "package xdutils", XDTester.getFulltestMode(), args);
 		if (log!= null) {
 			log.close();
 		}
