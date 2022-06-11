@@ -550,7 +550,7 @@ public class RegisterReportTables {
 		String encoding,
 		boolean crlf,
 		ReportWriter reporter) {
-		String LN = crlf ? "\r\t" : "\n";
+		String LN = crlf ? "\r\n" : "\n";
 		String prefix = table.getPrefix();
 		int prefixLen = prefix.length();
 		ArrayList<String> ar = new ArrayList<String>();
