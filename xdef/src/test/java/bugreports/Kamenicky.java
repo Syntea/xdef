@@ -3,6 +3,7 @@ package bugreports;
 import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.xdef.sys.ArrayReporter;
+import static org.xdef.sys.STester.runTest;
 import test.XDTester;
 
 public class Kamenicky extends XDTester {
@@ -35,10 +36,10 @@ public class Kamenicky extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xml = "<a a='a'/>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrorwarnings(reporter);
+			assertErrors(reporter);
 			xml = "<a a='12'/>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrorwarnings(reporter);
+			assertErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
 	}
 

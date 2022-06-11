@@ -36,8 +36,8 @@ public class TestAll {
 		}
 		XDTester[] tests = getTests();
 		String xdNS = XDTester._xdNS;
-		XDTester._xdNS = XDConstants.XDEF41_NS_URI;
-		System.out.println("Testing X-definition utilities version 4.1");
+		XDTester._xdNS = XDConstants.XDEF42_NS_URI;
+		System.out.println("Testing X-definition utilities version 4.2");
 		int result = XDTester.runTests(System.out, System.err, log,
 			tests, "package xdutils", XDTester.getFulltestMode(), args);
 		if (log!= null) {
