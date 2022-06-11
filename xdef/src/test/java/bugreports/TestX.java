@@ -54,7 +54,7 @@ public class TestX extends XDTester {
 		Properties props = new Properties();
 		ArrayReporter reporter = new ArrayReporter();
 		try {
-			props.setProperty("xdef-debug", "showXonModel");
+			props.setProperty("xdef-xon_debug", "showModel");
 			xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n"+
 " <xd:xon name='a'>\n"+

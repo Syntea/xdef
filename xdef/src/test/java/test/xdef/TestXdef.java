@@ -3170,19 +3170,24 @@ public final class TestXdef extends XDTester {
 				"classpath://org.xdef.impl.compile.XdefOfXdef31.xdef",
 				"classpath://org.xdef.impl.compile.XdefOfXdef32.xdef",
 				"classpath://org.xdef.impl.compile.XdefOfXdef40.xdef",
-				"classpath://org.xdef.impl.compile.XdefOfXdef41.xdef");
+				"classpath://org.xdef.impl.compile.XdefOfXdef41.xdef",
+				"classpath://org.xdef.impl.compile.XdefOfXdef42.xdef");
 			xp = XDFactory.compileXD((Properties) null, //with wildcards
 				"classpath://org.xdef.impl.compile.XdefOfXdef*.xdef");
-			xp = XDFactory.compileXD((Properties) null, //without wildcards
+			 //collection without wildcards
+			xp = XDFactory.compileXD((Properties) null,
 "<xd:collection xmlns:xd='" + _xdNS + "'\n"+
 "  xd:include='classpath://org.xdef.impl.compile.XdefOfXdef31.xdef;\n"+
 "    classpath://org.xdef.impl.compile.XdefOfXdef32.xdef;\n"+
 "    classpath://org.xdef.impl.compile.XdefOfXdef40.xdef;\n"+
 "    classpath://org.xdef.impl.compile.XdefOfXdef41.xdef;\n"+
+"    classpath://org.xdef.impl.compile.XdefOfXdef42.xdef;\n"+
 "    classpath://org.xdef.impl.compile.XdefOfXdefBase.xdef;'/>");
-			xp = XDFactory.compileXD((Properties) null, //with wildcards
+			//collection with wildcards
+			xp = XDFactory.compileXD((Properties) null,
 "<xd:collection xmlns:xd='" + _xdNS + "'\n"+
 "  xd:include='classpath://org.xdef.impl.compile.XdefOfXdef*.xdef'/>");
+			//X-definition with imports with wildcards
 			xp = XDFactory.compileXD((Properties) null, //with wildcards
 "<xd:def xmlns:xd='" + _xdNS + "' name='xxx'\n"+
 "  xd:include='classpath://org.xdef.impl.compile.XdefOfXdef*.xdef'/>");

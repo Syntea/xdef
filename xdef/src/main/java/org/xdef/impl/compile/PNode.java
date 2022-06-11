@@ -209,7 +209,8 @@ public final class PNode {
 			&& (XDConstants.XDEF31_NS_URI.equals(_nsURI)
 				|| XDConstants.XDEF32_NS_URI.equals(_nsURI)
 				|| XDConstants.XDEF40_NS_URI.equals(_nsURI)
-				|| XDConstants.XDEF41_NS_URI.equals(_nsURI))) {
+				|| XDConstants.XDEF41_NS_URI.equals(_nsURI)
+				|| XDConstants.XDEF42_NS_URI.equals(_nsURI))) {
 			return; // it is not a macro definition
 		}
 		XScriptMacroResolver p = new XScriptMacroResolver(

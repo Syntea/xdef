@@ -1198,7 +1198,7 @@ public class GUIEditor extends GUIScreen {
 			case 'c': { // create
 				if (xdefs.isEmpty()) {
 					xdefs.add(genTemporaryFile(
-"&lt;xd:def xmlns:xd=\"" + XDConstants.XDEF41_NS_URI
+"&lt;xd:def xmlns:xd=\"" + XDConstants.XDEF42_NS_URI
 	+ "\" name=\"test\" root=\"HTML\">\n" +
 "&lt;HTML>\n" +
 "  &lt;HEAD>&lt;TITLE>"
@@ -1272,7 +1272,7 @@ public class GUIEditor extends GUIScreen {
 				if (xdefs.isEmpty()) {
 					xdefs.add(genTemporaryFile(
 "&lt;xd:def xmlns:xd=\""
-	+ XDConstants.XDEF41_NS_URI + "\" name=\"test\" root=\"root\">\n" +
+	+ XDConstants.XDEF42_NS_URI + "\" name=\"test\" root=\"root\">\n" +
 (format == 'x'
 ? "  &lt;root a=\"int();\" >\n" +
 "    &lt;b xd:script=\"*\" >\n" +

@@ -40,7 +40,8 @@ public class TestDTDToXdef extends XDTester {
 			}
 			XDPool xdp;
 			try {
-				xdp = compile(KXmlUtils.nodeToString(elxd, true));
+				String src = KXmlUtils.nodeToString(elxd, true);
+				xdp = compile(src);
 			} catch (Exception e) {
 				fail(e);
 				fail(KXmlUtils.nodeToString(elxd, true));

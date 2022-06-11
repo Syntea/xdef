@@ -12,6 +12,8 @@ public interface XConstants {
 	public static final byte XD40 = 40;
 	/** X-definition version 4.1 ID. */
 	public static final byte XD41 = 41;
+	/** X-definition version 4.1 ID. */
+	public static final byte XD42 = 42;
 
 	/** XON/JSON mode W3C format. */
 	public static byte XON_MODE_W = 1;
@@ -20,13 +22,4 @@ public interface XConstants {
 
 	/** XON/JSON root element. */
 	public static byte XON_ROOT = 4;
-
-/*#if DEBUG*#/
-	// Names of debug property with switches
-	////////////////////////////////////////
-	// "showXonModel" display created XON model (see DEBUG_SHOW_XON_MODEL).
-	public static String DEBUG_SWITCHES = "xdef-debug";
-	// Debug switch to show created XON model.
-	public static String DEBUG_SHOW_XON_MODEL = "showXonModel";
-/*#end*/
 }
