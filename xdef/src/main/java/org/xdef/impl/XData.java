@@ -450,7 +450,7 @@ public class XData extends XCodeDescriptor
 	protected final boolean compareData(final XData y,
 		final ArrayReporter rep,
 		final boolean full) {
-		boolean result = compareName(y, rep) &&
+		boolean result = compareNameAndNS(y, rep) &&
 			compareOccurrence(y, rep);
 		if ("$text".equals(getName())) {
 			if (_textValuesCase != y._textValuesCase ||

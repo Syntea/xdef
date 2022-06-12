@@ -290,13 +290,16 @@ public abstract class XNode implements XMNode {
 // Protected methods
 ////////////////////////////////////////////////////////////////////////////////
 
-	/** Compare local name of node from argument with the name of this node.
+	/** Compare local name and NS of node from argument with this node.
 	 * @param y XNode to be compared.
 	 * @param rep reporter where to put errors.
 	 * @return true if both local names are equal.
 	 */
-	protected final boolean compareName(final XNode y, final ArrayReporter rep){
-		if (!getLocalName().equals(y.getLocalName())) {
+	protected final boolean compareNameAndNS(final XNode y
+		, final ArrayReporter rep){
+		if (!getLocalName().equals(y.getLocalName())
+			|| getNSUri() != null && !getNSUri().equals(y.getNSUri())
+			|| getNSUri() == null && y.getNSUri() != null) {
 			//Names differs: &{0} and &{1}
 			rep.error(XDEF.XDEF289, getXDPosition(), y.getXDPosition());
 			compareNamespace(y, rep);
@@ -343,7 +346,7 @@ public abstract class XNode implements XMNode {
 	 */
 	protected final boolean compareNameAndOccurrence(final XNode y,
 		final ArrayReporter rep) {
-		return compareName(y, rep)
+		return compareNameAndNS(y, rep)
 			&& compareNamespace(y, rep) && compareOccurrence(y, rep);
 	}
 

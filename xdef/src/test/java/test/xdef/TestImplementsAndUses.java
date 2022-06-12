@@ -523,6 +523,59 @@ public final class TestImplementsAndUses extends XDTester {
 "</xd:collection>";
 			compile(xdef);
 		} catch (Exception ex) {fail(ex);}
+		try {
+			String xdef1 =
+"<xd:def  xmlns:xd='"+_xdNS+"' xmlns:s='a.b' name='A' root='s:A'>\n" +
+"    <s:A><B/><C/></s:A>\n" +
+"</xd:def>";
+			String xdef2 =
+"<xd:def  xmlns:xd='"+_xdNS+"' xmlns:s='a.b' name='B' root='s:A'>\n" +
+"    <s:A xd:script='implements A#s:A'><B/><C/></s:A>\n" +
+"</xd:def>";
+			xp = XDFactory.compileXD(null, new String[]{xdef1, xdef2});
+		} catch (Exception ex) {fail(ex);}
+		try {
+			String xdef1 =
+"<xd:def xmlns:xd='"+_xdNS+"' xmlns:s='a.b' name='A' root='s:A'>\n" +
+"    <s:A><B/><C/></s:A>\n" +
+"</xd:def>";
+			String xdef2 =
+"<xd:def xmlns:xd='"+_xdNS+"' xmlns:t='a.b' name='B' root='t:A'>\n" +
+"    <t:A xd:script='implements A#t:A'><B/><C/></t:A>\n" +
+"</xd:def>";
+			xp = XDFactory.compileXD(null, new String[]{xdef1, xdef2});
+		} catch (Exception ex) {fail(ex);}
+		try {
+			String xdef1 =
+"<xd:def xmlns:xd='"+_xdNS+"' xmlns:s='a.b' name='A' root='s:A'>\n" +
+"    <s:A><B/><C/></s:A>\n" +
+"</xd:def>";
+			String xdef2 =
+"<xd:def xmlns:xd='"+_xdNS+"' xmlns:s='b.c' name='B' root='s:A'>\n" +
+"    <s:A xd:script='implements A#s:A'><B/><C/></s:A>\n" +
+"</xd:def>";
+			xp = XDFactory.compileXD(null, new String[]{xdef1, xdef2});
+		} catch (Exception ex) {
+			if (ex.getMessage().indexOf("XDEF122") < 0) { // comparing skipped
+				fail(ex);
+			}
+		}
+		try {
+			String xdef1 =
+"<xd:def xmlns:xd='"+_xdNS+"' xmlns:s='a.b' name='A' root='s:A'>\n" +
+"    <s:A><B/><C/></s:A>\n" +
+"</xd:def>";
+			String xdef2 =
+"<xd:def xmlns:xd='"+_xdNS+"' xmlns:s='b.c' name='B' root='s:A'\n" +
+" xmlns:t='a.b'>\n" +
+"    <s:A xd:script='implements A#t:A'><B/><C/></s:A>\n" +
+"</xd:def>";
+			xp = XDFactory.compileXD(null, new String[]{xdef1, xdef2});
+		} catch (Exception ex) {
+			if (ex.getMessage().indexOf("XDEF122") < 0) { // comparing skipped
+				fail(ex);
+			}
+		}
 
 		resetTester();
 	}

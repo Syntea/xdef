@@ -167,7 +167,14 @@ final class CompileReference extends XNode {
 		}
 		int ndx = name.indexOf('/');
 		String mName = ndx > 0 ? name.substring(0, ndx) : name; //model name
-		XElement xe = (XElement) xdef.getModel(getNSUri(), mName);
+		String uri;
+		if (getKind() <= 1 && _parent.getXMDefinition() != xdef) {
+			// uses or inplements
+			uri = _parent.getNSUri();
+		} else {
+			uri = getNSUri();
+		}
+		XElement xe = (XElement) xdef.getModel(uri, mName);
 		if (xe == null) {
 			String s = mName + "$any";
 			xe = (XElement) xdef.getModel(getNSUri(), s);

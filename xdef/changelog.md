@@ -1,9 +1,12 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 41.0.9, release-date 2022-06-11
+# Version 41.0.9, release-date 2022-06-12
 * This version ensures full backward compatibility with previous versions
 * of X-definition.
 * This build is a pre-release of version 4.2 of X-definition.
+*
+* corrected bug in `uses` and `implements` in X-script when it refers 
+* to a node with namespace URI.
 
 # Version 41.0.9, release-date 2022-06-09
 * This build is a pre-release of version 4.2 of X-definition.
