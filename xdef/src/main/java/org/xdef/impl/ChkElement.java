@@ -171,12 +171,14 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			}
 		}
 		if (!_ignoreAll && getElement() != null) {
-			if (_xElement._xon > 0
-				&& XDConstants.XON_NS_URI_W.equals(_xElement.getNSUri())) {//XON
-				if (XonNames.X_MAP.equals(_xElement.getLocalName())) {
-					_xonMap = new LinkedHashMap<String, Object>();
-				} else if (XonNames.X_ARRAY.equals(_xElement.getLocalName())) {
-					_xonArray = new ArrayList<Object>();
+			if (_xElement._xon > 0) { //XON
+				if (XDConstants.XON_NS_URI_W.equals(_xElement.getNSUri())) {
+					if (XonNames.X_MAP.equals(_xElement.getLocalName())) {
+						_xonMap = new LinkedHashMap<String, Object>();
+					} else if (XonNames.X_ARRAY.equals(
+						_xElement.getLocalName())) {
+						_xonArray = new ArrayList<Object>();
+					}
 				}
 			}
 			if ((_xComponent = _parent.getXComponent()) != null) {// X-component

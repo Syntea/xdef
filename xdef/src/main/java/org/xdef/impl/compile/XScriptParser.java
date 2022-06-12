@@ -488,40 +488,42 @@ public class XScriptParser extends StringParser
 		}
 		for (;;) {
 			char ch;
-			if ("\n\t\r ".indexOf(ch = getCurrentChar()) >= 0) {
+			if ((ch = getCurrentChar())==' '||ch=='\t'||ch=='\n'||ch=='\r') {
 				if (ch == '\n') {
 					setNewLine();
 				}
-				while (incBufIndex() >= 0 &&
-					"\n\t\r ".indexOf(ch = getCurrentChar()) >= 0) {
+				while (incBufIndex() >= 0 && ((ch = getCurrentChar())==' '
+					|| ch=='\t' || ch=='\n' || ch=='\r')) {
 				}
 			}
-			if (ch != '/' || getIndex() + 1 >= getEndBufferIndex() ||
-				((ch = getCharAtPos(getIndex() + 1)) != '*' && ch != '/')) {
+			if (ch != '/' || getIndex() + 1 >= getEndBufferIndex()) {
 				return;
 			}
-			if (ch == '/') {
+			if ((ch = getCharAtPos(getIndex() + 1)) == '*') {
+				SPosition lastpos = _lastSPos;
+				setLastPosition();
+				if (isToken("/*/")) {
+					error(XDEF.XDEF401); //Unclosed comment in the script
+					_lastSPos = lastpos;
+					continue;
+				} else if (findTokenAndSkip("*/")) {
+					_lastSPos = lastpos;
+					continue;
+				} else {
+					error(XDEF.XDEF401); //Unclosed comment in the script
+					_lastSPos = lastpos;
+					setEos();
+				}
+			} else if (ch == '/') { // line comment ("//")
+				SPosition lastpos = _lastSPos;
 				setLastPosition();
 				error(XDEF.XDEF400); //'//' comment is not allowed in the script
-				int ndx = getSourceBuffer().indexOf('\n', getIndex() + 1);
-				if (ndx > 0) {
-					setIndex(ndx);
+				_lastSPos = lastpos;
+				if (skipToNextLine() || eos()) {
 					continue;
 				}
-			} else { //ch == '*'
-				int ndx;
-				if ((ndx = getSourceBuffer().indexOf("*/", getIndex()+2)) > 0) {
-					while (incBufIndex() < ndx) {}
-					if (ndx + 2 < getEndBufferIndex()) {
-						setIndex(ndx + 2);
-						continue;
-					}
-				} else {
-					setLastPosition();
-					error(XDEF.XDEF401); //Unclosed comment in the script
-				}
+				setEos();
 			}
-			setEos();
 			return;
 		}
 	}

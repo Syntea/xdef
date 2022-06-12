@@ -530,6 +530,8 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 	ArrayReporter _reporter;
 	/** XML writer for default output. */
 	private XDXmlOutStream _outWriter;
+	/** flag to generate XON. */
+/*xx*/ boolean _genXon; //TODO
 	/** Stream writer for output of XML result. */
 	boolean _flushed;
 	/** flag 'init1' processed. */
