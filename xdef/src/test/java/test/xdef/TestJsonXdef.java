@@ -21,6 +21,7 @@ import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.SDatetime;
 import org.xdef.sys.SRuntimeException;
 import static org.xdef.sys.STester.compileSources;
+import static org.xdef.sys.STester.printThrowable;
 import static org.xdef.sys.STester.runTest;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
@@ -807,7 +808,7 @@ public class TestJsonXdef extends XDTester {
 			xd = xp.createXDDocument();
 			strw = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(strw, false));
-			ini = "A=a\n B = 1\n C=2121-10-19\n D=2.121\n[E]\nx=123\n[F]";
+			ini = "#a\nA=a\n\n B= 1\n C=2121-10-19\nD =2.1\n[E]\nx=3\n[F]\n#b";
 			j = xd.iparse(ini, reporter);
 			assertNoErrorwarnings(reporter);
 			assertEq("ABCDx[E][F]", strw.toString());
@@ -819,7 +820,7 @@ public class TestJsonXdef extends XDTester {
 			assertEq("ABCDx[E][F]", strw.toString());
 			strw = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(strw, false));
-			ini = "\n B = 1 \n C=2121-10-19\n D=2.121\n [E] \n[F]";
+			ini = "#\n B = 1 \n C=2121-10-19\n D=2.121\n [E] \n[F]\n#";
 			j = xd.iparse(ini, reporter);
 			assertNoErrorwarnings(reporter);
 			assertEq("BCD[E][F]", strw.toString());
