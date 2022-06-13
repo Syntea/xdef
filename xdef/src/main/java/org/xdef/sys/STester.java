@@ -189,7 +189,9 @@ public abstract class STester {
 	 */
 	public final File clearTempDir() {
 		getTempDir();
-		if (_tempDir.exists() && _tempDir.isDirectory()) {
+		if (!_tempDir.exists()) {
+			_tempDir.mkdirs();
+		} else if (_tempDir.isDirectory()) {
 			File[] files = _tempDir.listFiles();
 			for (File x: files) {
 				try { // try to delete this file
@@ -201,7 +203,8 @@ public abstract class STester {
 				} catch (Exception ex) {}
 			}
 		} else {
-			_tempDir.mkdir();
+			//Can't create directory: &{0}
+			throw new SRuntimeException(SYS.SYS020, _tempDir.getAbsolutePath());
 		}
 		return _tempDir;
 	}
