@@ -1206,8 +1206,15 @@ public abstract class STester {
 		ByteArrayOutputStream err = new ByteArrayOutputStream();
 		// compile sources
 		if (compiler.run(null, out, err, ar.toArray(new String[0])) != 0) {
-			throw new RuntimeException("Java compilation failed:\n"
-				+ new String(err.toByteArray()));
+			try {
+				err.write("Compiler params:\n".getBytes());
+				for (String s : ar.toArray(new String[0])) {
+					err.write((s + '\n').getBytes());
+				}
+				err.write("End params\n".getBytes());
+			} catch (Exception ex) {} // never sould happen
+			throw new RuntimeException(
+				"Java compilation failed:\n" + err.toString());
 		}
 		return classDir;
 	}

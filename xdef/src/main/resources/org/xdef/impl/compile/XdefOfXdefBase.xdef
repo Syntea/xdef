@@ -761,19 +761,21 @@ WhiteSpace ::= [#9 ]
 
 S ::= WhiteSpace+
 
-NewLine ::= #10? #13
+NewLine ::=  (#13 #10 | #10)
 
 HexaDigit ::= [0-9a-fA-F]
 OctalDigit ::= [0-7]
 
 EscapedChar ::= "\" ( OctalDigit | "n" | "t" | "t" | "f" | ":" | HexaDigit{4} )
 
-INIChar ::= [#9 -.0-~] | EscapedChar
+BaseChar ::= WhiteSpace | [ -Z^-~]/*ASCII - newline,backslash*/
 
-Prop ::= S? ( ("#" INIChar* NewLine)
-  | ( "[" (INIChar - "]")+ "]"
-     ( S? "x:script" S? "=" S? ($xmlChar - NewLine)* )?  NewLine )
-  | ( (INIChar - "=")+ "=" S? INIChar* (NewLine | ( "\" NewLine INIChar*) *) ) )
+INIChar ::= BaseChar | EscapedChar
+
+Prop ::= (NewLine | S)* ( ("#" INIChar* NewLine)
+  | ( "[" (INIChar - ";")+ S?
+     ( ";" S? "x:script" S? "=" S? ($xmlChar - NewLine)* )? "]"  NewLine )
+  | ( (INIChar - "=")+ "=" S? INIChar* ( "\" NewLine INIChar*)* NewLine ) )
 
 IniProps ::= Prop*
 ]]>
