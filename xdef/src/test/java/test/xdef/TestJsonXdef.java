@@ -799,9 +799,9 @@ public class TestJsonXdef extends XDTester {
 "   B=int(); finally out(\"B\");\n" +
 "   C=date(); finally out(\"C\");\n" +
 "   D=decimal(); finally out(\"D\");\n" +
-"   [E; x:script = optional; finally out(\"[E]\");]\n" +
+"   [E ; x:script = optional; finally out(\"[E]\");]\n" +
 "     x = ?int(); finally out(\"x\");\n" +
-"   [F; x:script=finally out(\"[F]\");]\n" +
+"   [F;x:script=finally out(\"[F]\");]\n" +
 " </xd:ini>\n"+
 "</xd:def>";
 			xp = compile(xdef);
@@ -868,18 +868,28 @@ public class TestJsonXdef extends XDTester {
 "   B=int()\n" +
 "   C=date()\n" +
 "   D=decimal()\n" +
-"   [E] x:script=?\n" +
+"   [ E-F.G ; x:script=?]\n" +
 "     x = ?int()\n" +
-"   [F]\n" +
+"   [ F ]\n" +
 " </xd:ini>\n"+
 " <xd:component>\n" +
 "  %class test.common.json.component.TestINI %link TestINI#a" + ";\n" +
 " </xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			ini = "A=a\n B=1\n C=2121-10-19\n D=2.34\n[E]\nx=123\n[F]";
+			ini = "A=a\n B=1\n C=2121-10-19\n D=2.34\n[ E-F.G ]\nx=123\n[F]";
 			xd = xp.createXDDocument("TestINI");
 			genXComponent(xp, clearTempDir());
+			xc = xd.iparseXComponent(ini, null, reporter);
+			assertEq("a", SUtils.getValueFromGetter(xc,"get$A"));
+			assertEq(1,SUtils.getValueFromGetter(xc,"get$B"));
+			assertEq(new SDatetime("2121-10-19"),
+				SUtils.getValueFromGetter(xc,"get$C"));
+			assertEq(0, new BigDecimal("2.34").compareTo(
+				(BigDecimal) SUtils.getValueFromGetter(xc,"get$D")));
+			SUtils.setValueToSetter(xc,"set$A", "b");
+			assertEq("b", SUtils.getValueFromGetter(xc,"get$A"));
+			ini = "A=a\n B=1\n C=2121-10-19\n D=2.34\n[F]";
 			xc = xd.iparseXComponent(ini, null, reporter);
 			assertEq("a", SUtils.getValueFromGetter(xc,"get$A"));
 			assertEq(1,SUtils.getValueFromGetter(xc,"get$B"));
