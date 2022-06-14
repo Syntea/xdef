@@ -7,16 +7,16 @@
   "author"  : "jnull();",
   "cities"  : {
     "Brussels": [
-      { x:script="occurs 1..5", "to": "jstring()", "distance": "int()"}
+      { $:script="occurs 1..5", "to": "jstring()", "distance": "int()"}
     ],
     "London": [
-      { x:script="occurs 1..5", "to": "jstring()", "distance": "int()"}
+      { $:script="occurs 1..5", "to": "jstring()", "distance": "int()"}
     ],
     "Paris": [
-      { x:script="occurs 1..5", "to": "jstring()", "distance": "int()"}
+      { $:script="occurs 1..5", "to": "jstring()", "distance": "int()"}
     ],
     "Amsterdam": [
-      { x:script="occurs 1..5", "to": "jstring()", "distance": "int()"}
+      { $:script="occurs 1..5", "to": "jstring()", "distance": "int()"}
     ]
   }
 }

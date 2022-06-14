@@ -1,9 +1,9 @@
 <xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' xd:name='Test017' xd:root='a'>
 <xd:xon name='a'>
 [
-  { x:script= "occurs 1..*",
+  { $:script= "occurs 1..*",
     "Name": "string()",
-    "Genre": [ x:oneOf,
+    "Genre": [ $:oneOf,
       "string()",
        ["occurs 1..* string()"]
     ]
