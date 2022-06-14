@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 41.0.9, release-date 2022-06-13
+# Version 41.0.9, release-date 2022-06-14
 * This version ensures full backward compatibility with previous versions
 * of X-definition.
 * This build is a pre-release of version 4.2 of X-definition.

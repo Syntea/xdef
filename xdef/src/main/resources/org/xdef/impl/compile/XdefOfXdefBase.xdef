@@ -55,8 +55,8 @@
   type yesNo XDScript.rule('YesNo');
   type thesaurus XDScript.rule('Lexicon');
   type importLocal XDScript.rule('importLocal');
-  type xon XDJson.rule('xon');
-  type iniprops XDIniProps.rule('IniProps');
+  type xon XDScript.rule('xon');
+  type iniprops XDScript.rule('INIProps');
 
   /** Check element name and namespace URI (used in match section) */
   boolean xdName(String name) {
@@ -92,7 +92,11 @@ S ::= (WhiteSpace | Comment)+ /* Sequence of whitespaces or comments */
 
 Digit ::= [0-9]
 
+Digits ::= [0-9]+
+
 HexaDigit ::= Digit | [a-fA-F]
+
+HexaDigits ::= (Digit | [a-fA-F])+
 
 SemicolonOrSourceEnd ::= S? (";" S? | $eos)
 /* At the end of the parsed source text the semicolon is not required. */
@@ -129,10 +133,10 @@ QualifiedIdentifier ::= JavaIdentifier ("." JavaIdentifier)+ | JavaIdentifier
 
 BooleanLiteral ::= ("true" | "false") $rule
 
-DecimalInteger ::= ("_"* Digit+)+ ("_")*
+DecimalInteger ::= ("_"* Digits)+ ("_")*
 
 IntegerLiteral ::= (("0" [DdIi])? DecimalInteger 
-  | "0" [Xx] ("_"* HexaDigit+)+ ("_")*) $rule
+  | "0" [Xx] ("_"* HexaDigits)+ ("_")*) $rule
   /* Inside a number specification it is possible to insert the character "_".
     This character does not influence the value of the number, it just makes
     a number more readable. E.g. the number 123456789 you can be written
@@ -173,7 +177,7 @@ XPosition ::= (XDefName? "#")? XModelName
   ("/" (XMLName | XGroupRererence | XAnyReference) XPositionIndex?)*
   ("/" (XAttrReference | XTextReference))?
 
-XPositionIndex ::= "[" Digit+ "]"
+XPositionIndex ::= "[" Digits "]"
 
 XGroupRererence ::= "$mixed" | "$choice" | "$sequence"
 
@@ -616,9 +620,9 @@ BNFMethodDeclaration ::= "%define" S BNFDefinedMethodName S? ":"
 BNFMethodparameters ::= "(" S?
   (BNFMethodparameter (S? "," S? BNFMethodparameter)* ) ? S? ")"
 
-BNFMethodparameter ::= Digit+ | BNFTerminalSymbol
+BNFMethodparameter ::= Digits | BNFTerminalSymbol
 
-BNFDefinedMethodName ::= "$" (BNFRuleName | Digit+)
+BNFDefinedMethodName ::= "$" (BNFRuleName | Digits)
 
 BNFRuleName ::= RawIdentifier
 
@@ -633,11 +637,11 @@ BNFRuleReference ::= BNFDefinedMethodName | (BNFRuleName - BNFRuleDecl)
 BNFTerminalSymbol ::= "'" [^']* "'" | '"' [^"]* '"'
   | (BNFHexaCharacter (S? BNFHexaCharacter)* )
 
-BNFHexaCharacter ::= "#" HexaDigit+
+BNFHexaCharacter ::= "#" HexaDigits
 
 BNFQuantifier ::= S? ("+" | "*" | "?" | BNFExplicitQuantifier)
 
-BNFExplicitQuantifier ::= "{" S? Digit+ (S? "," S? Digit+)? S? "}"
+BNFExplicitQuantifier ::= "{" S? Digits (S? "," S? Digits)? S? "}"
 
 BNFSet ::= "[" ("^"? Char - "]")* "]" BNFQuantifier?
 
@@ -687,97 +691,83 @@ XCRef ::= "%ref" S ((JavaTypedQName S XCLink)
 
 XCLink ::= "%link" S ("*" | XPosition (S? "," S? XPosition)*)
 
+/******************************************************************************/
+/* Lexicon grammar rules                                               */
+/******************************************************************************/
+
 Lexicon ::= (S? $rule XPosition S? "=" S? XMLName)* S?
 
-]]>
-
-  </xd:BNFGrammar>
-
-/******************************************************************************/
-/* Declaration of BNF grammar for JSON                                        */
-/******************************************************************************/
-  <xd:BNFGrammar name = "XDJson">
-
-<![CDATA[
-/******************************************************************************/
-/* XON BNF grammar rules                                                     */
-/******************************************************************************/
-
-WhiteSpace ::= [#9#10#13 ]
-
-Comment ::= "/*" ([^*]+ | "*" - "*/")* "*/"
-
-S ::= (WhiteSpace | Comment)+ /* sequence of whitespaces or comments */
-
-boolean ::= "true" | "false"
-
-number ::= int frac exp | int frac | int exp | int
-
-int ::= "-"? digits
-
-digits ::= [0-9]+
-
-frac ::= "." digits
-
-exp ::= [eE] ("+" | "-")? digits
-
-controlcharacter ::= '\"' | '\\' | '\/' | '\b' | '\f' | '\n' | '\r' | '\t' |
-  ('\u' [0-9a-fA-F]{4})
-
-string ::= ('"' ([^\"] | controlcharacter)* '"' |
-  "'" ([^\'] | controlcharacter)* "'")
-
-xscript ::= S? ( ("x:script" S? "=" S? string)
-  | ( "x:oneOf" (S? "=" S? string)? ) ) (S? ",")?
-
-object ::= "{" xscript? (members)* S? "}"
-
-members ::= S? pair (S? "," S? pair)*
-
-pair ::= ($ncName | string) S? ":" S? value
-
-array ::= "[" xscript? S? list? S? "]"
-
-list ::= value (S? "," S? value )*
-
-value ::= S? (pair | "null" | boolean | number | string | array | object) S?
-
-xon ::= S? (array | object | string)
-
-]]>
-  </xd:BNFGrammar>
-
-/******************************************************************************/
-/* Declaration of BNF grammar for INI/Properties                              */
-/******************************************************************************/
-  <xd:BNFGrammar name = "XDIniProps">
-
-<![CDATA[
 /******************************************************************************/
 /* INI/Properties grammar rules                                               */
 /******************************************************************************/
 
-WhiteSpace ::= [#9 ]
+INISP ::= [#9 ]+
 
-S ::= WhiteSpace+
+ININewLine ::=  (#13 #10 | #10)+
 
-NewLine ::=  (#13 #10 | #10)
+INIOctalDigit ::= [0-7]
 
-HexaDigit ::= [0-9a-fA-F]
-OctalDigit ::= [0-7]
+INIEscapedChar ::=
+   "\" ( INIOctalDigit | "n" | "t" | "t" | "f" | ":" | HexaDigit{4} )
 
-EscapedChar ::= "\" ( OctalDigit | "n" | "t" | "t" | "f" | ":" | HexaDigit{4} )
+INIBaseChar ::= INISP | [ -Z^-~]/*ASCII - newline,backslash*/
 
-BaseChar ::= WhiteSpace | [ -Z^-~]/*ASCII - newline,backslash*/
+INIChar ::= INIEscapedChar | INIBaseChar
 
-INIChar ::= BaseChar | EscapedChar
+INISeparator ::= (ININewLine | INISP)*
 
-Prop ::= (NewLine | S)* ( ("#" INIChar* NewLine)
-  | ( "[" (INIChar - ";")+ S?
-     ( ";" S? "x:script" S? "=" S? ($xmlChar - NewLine)* )? "]"  NewLine )
-  | ( (INIChar - "=")+ "=" S? INIChar* ( "\" NewLine INIChar*)* NewLine ) )
+INICommand ::= INISeparator (INIComment | INIProp | INISection) INISeparator
 
-IniProps ::= Prop*
+INIComment ::= "#" INIChar*
+
+INIProp ::= (INIChar - "=")+ "=" AttributeScript?
+
+INISection::= "[" (INIChar - ";")+ INISP?
+   ( ";" INISP? ( "x:script" INISP? "=" INISP? ElementScript? )? INISP? )? "]"
+
+INIProps ::= INICommand*
+
+
+/******************************************************************************/
+/* XON BNF grammar rules                                                     */
+/******************************************************************************/
+
+XONComment ::= "/*" ([^*]+ | "*" - "*/")* "*/"
+
+XONSP ::= (WhiteSpace | XONComment)+ /* sequence of whitespaces and comments */
+
+XONInt ::= "-"? Digits /* sequence of digits */
+
+XONExp ::= [eE] ("+" | "-")? Digits
+
+XONFrac ::= "." Digits
+
+XONNumber ::= XONInt XONFrac XONExp | XONInt XONFrac | XONInt XONExp | XONInt
+
+XONControlchar ::= '\"' | '\\' | '\/' | '\b' | '\f' | '\n' | '\r' | '\t' |
+  ('\u' [0-9a-fA-F]{4})
+
+XONString ::= ('"' ([^\"] | XONControlchar )* '"' |
+  "'" ([^\'] | XONControlchar )* "'")
+
+XONXscript ::= XONSP? ( ("x:script" XONSP? "=" XONSP? XONString)
+  | ( "x:oneOf" (XONSP? "=" XONSP? XONString)? ) ) (XONSP? ",")?
+
+XONObject ::= "{" XONXscript? (XONMembers)* XONSP? "}"
+
+XONPair ::= ($ncName | XONString) XONSP? ":" XONSP? XONValue
+
+XONMembers ::= XONSP? XONPair (XONSP? "," XONSP? XONPair)*
+
+XONArray ::= "[" XONXscript? XONSP? XONList? XONSP? "]"
+
+XONList ::= XONValue (XONSP? "," XONSP? XONValue )*
+
+XONValue ::= XONSP? ( XONPair | "null" | "true" | "false" | XONNumber
+  | XONString | XONArray | XONObject) XONSP?
+
+xon ::= XONSP? (XONArray | XONObject | XONString)
+
 ]]>
   </xd:BNFGrammar>
 
