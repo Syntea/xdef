@@ -2,7 +2,7 @@
 <xd:xon name='a'>
 /* Matrix 3 x 3 */
 [
-   [ x:script = "occurs 3", "occurs 3 jvalue()" ]
+   [ $:script = "occurs 3", "occurs 3 jvalue()" ]
 ]
 </xd:xon>
 </xd:def>

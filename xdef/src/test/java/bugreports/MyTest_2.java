@@ -141,10 +141,10 @@ if(T)return;
 "<xd:def xmlns:xd='" + _xdNS + "' root='Skladby'>\n"+
 "<xd:xon name=\"Skladby\">\n"+
 "  [\n" +
-"    { x:script= \"occurs 1..*;\",\n" +
+"    { $:script= \"occurs 1..*;\",\n" +
 "       \"Name\": \"string()\",\n" +
 "       \"xxx\": \"? string()\",\n" +
-"       \"Style\": [ x:oneOf,\n" +
+"       \"Style\": [ $:oneOf,\n" +
 "         \"string()\",\n" +
 "         [ \"occurs 2..* string()\" ]\n" +
 "       ]\n" +
@@ -182,10 +182,10 @@ if(T)return;
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"Example\" root=\"test\">\n" +
 "  <xd:xon name=\"test\">\n" +
 "    { \"cities\"  : [\n" +
-"        {x:script=\"occurs 1..*\",\n" +
+"        {$:script=\"occurs 1..*\",\n" +
 "          \"from\": [\n" +
 "            \"string()\",\n" +
-"            {x:script=\"occurs 1..*\", \"to\": \"jstring()\", \"distance\": \"int()\" }\n" +
+"            {$:script=\"occurs 1..*\", \"to\": \"jstring()\", \"distance\": \"int()\" }\n" +
 "    	  ]\n" +
 "        }\n" +
 "      ]\n" +
@@ -258,17 +258,17 @@ if(T)return;
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
 "<xd:xon name='A'>\n"+
 "[\n" +
-" { x:script=\"+\",\n" +
+" { $:script=\"+\",\n" +
 "  \"first name\": \"? string;\",\n" +
 "  \"last name\" : \"string;\",\n" +
 "  \"age\": \"int(1,100); finally outln(getXPos()+'; '+getXDPosition());\",\n" +
-"  \"address\"  : {x:script= \"?\",\n" +
+"  \"address\"  : {$:script= \"?\",\n" +
 "    \"street address\": \"string;\",\n"+
 "    \"city\"         : \"string;\",\n" +
 "    \"postal code\"   : \"? string(%pattern='[0-9]+(-[0-9]+)?');\"\n" +
 "  },\n" +
-"  \"phone numbers\": [ x:script= \"?\",\n" +
-"    { x:script= \"occurs *\",\n" +
+"  \"phone numbers\": [ $:script= \"?\",\n" +
+"    { $:script= \"occurs *\",\n" +
 "      \"type\"  : \"an;\",\n" +
 "      \"number\": \"string(%pattern='[0-9]+(-[0-9]+)*');finally outln(getXPos());\"\n" +
 "    }\n" +
@@ -320,7 +320,7 @@ if(T)return;
 "<xd:xon name='A'>\n"+
 "{ \"store\": {\n" +
 "    \"book\": [\n" +
-"      {x:script= \"occurs +\",\n" +
+"      {$:script= \"occurs +\",\n" +
 "        \"category\": \"enum('reference', 'fiction')\",\n" +
 "        \"author\": \"string\",\n" +
 "        \"title\": \"string\",\n" +
@@ -481,7 +481,7 @@ if(T )return;
 "</xd:declaration>\n" +
 "<xd:xon name='a'>\n" +
 "{\n" +
-"  \"Genre\": [x:oneOf,\n" +
+"  \"Genre\": [$:oneOf,\n" +
 "     \"genre\",\n" +
 "     [\"occurs 1..*; genre\"]\n" +
 "  ]\n" +

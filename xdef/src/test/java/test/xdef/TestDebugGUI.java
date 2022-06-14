@@ -294,8 +294,8 @@ public final class TestDebugGUI extends XDTester {
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"JSON\" root=\"a\">\n"+
 "<xd:xon name=\"a\" >\n" +
 "{ \"personnel\": { \"person\": \n" +
-"      [ x:script= \"occurs 1..*\",\n" +
-"        { x:script= \"occurs 1..*; ref B\" }\n" +
+"      [ $:script= \"occurs 1..*\",\n" +
+"        { $:script= \"occurs 1..*; ref B\" }\n" +
 "      ]\n" +
 "  }\n" +
 "}\n" +
@@ -304,11 +304,11 @@ public final class TestDebugGUI extends XDTester {
 "{ \"id\": \"string()\",\n" +
 "   \"name\":{ \"family\":\"jstring()\", \"given\":\"optional jstring()\" },\n"+
 "   \"email\": \"emailAddr();\",\n" +
-"   \"link\": { x:script= \"ref C\" }\n" +
+"   \"link\": { $:script= \"ref C\" }\n" +
 "}\n" +
 "</xd:xon>\n" +
 "<xd:xon name=\"C\" >\n" +
-"{  x:oneOf= \"optional;\",\n" +
+"{  $:oneOf= \"optional;\",\n" +
 "   \"manager\": \"jstring()\",\n" +
 "   \"subordinates\":[ \"* jstring();\" ]\n" +
 "}\n" +

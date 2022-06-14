@@ -1,12 +1,31 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 41.0.9, release-date 2022-06-14
+# Version 42.0.0, release-date 2022-06-14
+********************************************************************************
+* NOTE:
+********************************************************************************
+*
+* This is a pre-release of the version 4.2 of X-definition.
+*
 * This version ensures full backward compatibility with previous versions
-* of X-definition.
-* This build is a pre-release of version 4.2 of X-definition.
+* of X-definition (i.e. from version 3.1 to 4.1).
+*
+* This version of X-definition supports JSON, YAML, Propreties, Windows INI,
+* CSV and XON data processing. See the documentation for this release.
+*
+********************************************************************************
+* New things:
+********************************************************************************
+*
+* Implementation of JSON, YAML, Propreties, Windows INI, CSV and XON
+*
+********************************************************************************
+* Corrected bugs from previous versions: 
+********************************************************************************
 *
 * corrected bug in `uses` and `implements` in X-script when it refers 
-* to a node with namespace URI.
+* to a node with specified namespace URI.
+
 
 # Version 41.0.9, release-date 2022-06-09
 * This build is a pre-release of version 4.2 of X-definition.

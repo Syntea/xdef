@@ -2,7 +2,7 @@
 <xd:xon name='a'>
 [
   {
-    "A": [x:oneOf= "occurs *",
+    "A": [$:oneOf= "occurs *",
       "string()",
        ["occurs 1..* string()"]
     ]

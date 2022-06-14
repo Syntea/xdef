@@ -214,7 +214,7 @@ public class MyTest_0 extends XDTester {
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n"+
 "<xd:component>%class bugreports.Csvxx %link a</xd:component>\n"+
 " <xd:xon name='a'>\n"+
-"    [ [x:script=\"+\", \"int\", \"int\", \"string()\", \"boolean()\"] ]\n"+
+"    [ [$:script=\"+\", \"int\", \"int\", \"string()\", \"boolean()\"] ]\n"+
 " </xd:xon>\n"+
 "</xd:def>";
 			xp = XDFactory.compileXD(null, xdef); // no property

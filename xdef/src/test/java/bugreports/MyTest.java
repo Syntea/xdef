@@ -75,8 +75,8 @@ public class MyTest extends XDTester {
 "<xd:xon name='network'>\n" +
 "{\n" +
 "  a: \"optionalstring();\"\n" +
-"  b: {x:script=\"optional\", a: \"optional string();\"}\n" +
-"  c: [x:script=\"optional\", \"int();\", { a: \"int();\"}]\n" +
+"  b: {$:script=\"optional\", a: \"optional string();\"}\n" +
+"  c: [$:script=\"optional\", \"int();\", { a: \"int();\"}]\n" +
 "}\n" +
 "</xd:xon>\n" +
 "</xd:def>";
@@ -139,7 +139,7 @@ public class MyTest extends XDTester {
 "  external method String bugreports.MyTest.xxx(XXNode);\n"+
 "</xd:declaration>\n"+
 "<xd:xon name='a'>\n"+
-"  [ x:script=\"finally outln(xxx());\", \"gps();\", \"gps();\"]\n"+
+"  [ $:script=\"finally outln(xxx());\", \"gps();\", \"gps();\"]\n"+
 "</xd:xon>\n"+
 "<xd:component>\n"+
 "  %class bugreports.MyTesta %link a;\n"+

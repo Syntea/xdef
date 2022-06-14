@@ -723,7 +723,7 @@ INIComment ::= "#" INIChar*
 INIProp ::= (INIChar - "=")+ "=" AttributeScript?
 
 INISection::= "[" (INIChar - ";")+ INISP?
-   ( ";" INISP? ( "x:script" INISP? "=" INISP? ElementScript? )? INISP? )? "]"
+   ( ";" INISP? ( "$:script" INISP? "=" INISP? ElementScript? )? INISP? )? "]"
 
 INIProps ::= INICommand*
 
@@ -750,8 +750,8 @@ XONControlchar ::= '\"' | '\\' | '\/' | '\b' | '\f' | '\n' | '\r' | '\t' |
 XONString ::= ('"' ([^\"] | XONControlchar )* '"' |
   "'" ([^\'] | XONControlchar )* "'")
 
-XONXscript ::= XONSP? ( ("x:script" XONSP? "=" XONSP? XONString)
-  | ( "x:oneOf" (XONSP? "=" XONSP? XONString)? ) ) (XONSP? ",")?
+XONXscript ::= XONSP? ( ("$:script" XONSP? "=" XONSP? XONString)
+  | ( "$:oneOf" (XONSP? "=" XONSP? XONString)? ) ) (XONSP? ",")?
 
 XONObject ::= "{" XONXscript? (XONMembers)* XONSP? "}"
 

@@ -23,9 +23,9 @@ public interface XonNames {
 // names used in X-definition moldels
 ////////////////////////////////////////////////////////////////////////////////
 	/** This keyword used for the specification of script in X-definition. */
-	public static final String SCRIPT_NAME = "x:script";
+	public static final String SCRIPT_NAME = "$:script";
 	/** This keyword used for the specification of oneOf in X-definition. */
-	public static final String ONEOF_NAME = "x:oneOf";
+	public static final String ONEOF_NAME = "$:oneOf";
 	/** This keyword used for the specification of any in X-definition. */
-	public static final String ANY_NAME = "x:any";
+	public static final String ANY_NAME = "$:any";
 }
