@@ -24,6 +24,23 @@ public class Price {
 //	}
 
 	/** Create instance of CurrencyAmount.
+	 * @param source string with price.
+	 * @throws SRuntimeException if an error occurs.
+	 */
+	public Price(final String source) throws SRuntimeException {
+			int ndx = source.indexOf(' ');
+			if (ndx > 0) {
+				try {
+					_amount = new BigDecimal(source.substring(0, ndx));
+					_currency = Currency.getInstance(source.substring(ndx + 1));
+				} catch (Exception ex) {
+			}
+		}
+		//Incorrect value of '&{0}'&{1}{: }
+		throw new SRuntimeException(XDEF.XDEF809, "price", source);
+	}
+
+	/** Create instance of CurrencyAmount.
 	 * @param amount currency amount.
 	 * @param code ISO4217 currency code.
 	 * @throws SRuntimeException if an error occurs.
