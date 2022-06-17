@@ -1,5 +1,6 @@
 package org.xdef.impl.code;
 
+import java.math.BigDecimal;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
 import org.xdef.XDValueType;
@@ -32,9 +33,7 @@ public class DefPrice extends XDValueAbstract
 	/**	Get amount of currency.
 	 * @return amount of currency.
 	 */
-	public double amount() {
-		return _amount != null ? _amount.amount() : 0;
-	}
+	public BigDecimal amount() {return _amount!=null ? _amount.amount() : null;}
 	@Override
 	/**	Get ISO4217 code of currency.
 	 * @return ISO4217 code of currency..

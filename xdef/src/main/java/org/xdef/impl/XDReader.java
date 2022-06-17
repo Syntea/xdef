@@ -205,7 +205,7 @@ public final class XDReader extends SObjectReader {
 							readDouble(), readDouble(), readString()));
 					case XDValueID.XD_PRICE:
 						return new DefPrice(
-							new Price(readDouble(), readString()));
+							new Price(readBigDecimal(), readString()));
 					case XDValueID.XD_LOCALE: {
 						return new DefLocale(
 							readString(), readString(), readString());

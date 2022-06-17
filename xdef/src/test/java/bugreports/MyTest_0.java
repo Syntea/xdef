@@ -15,6 +15,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.List;
 import java.util.Properties;
 import java.util.Stack;
 import org.xdef.XDContainer;
@@ -209,6 +210,31 @@ public class MyTest_0 extends XDTester {
 		Report rep;
 		ArrayReporter reporter = new ArrayReporter();
 ////////////////////////////////////////////////////////////////////////////////
+		try {
+			xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='a'>\n"+
+"<xd:xon name='a'>\n" +
+" [\"price()\"]\n"+
+"</xd:xon>\n"+
+"<xd:component>\n"+
+"  %class bugreports.X_on %link #a;\n"+
+"</xd:component>\n"+
+"</xd:def>";
+			xp = XDFactory.compileXD(null, xdef); // no property
+			genXComponent(xp, clearTempDir());
+			xd = xp.createXDDocument();
+			json = "[ \"p(123.45 CZK)\" ]";
+			o = xd.jparse(json, reporter);
+			System.out.println(((List) o).get(0));
+			assertNoErrorwarningsAndClear(reporter);
+			xc = xd.jparseXComponent(json, null, reporter);
+			System.out.println(((List) xc.toXon()).get(0));
+			if (!XonUtils.xonEqual(o, x = xc.toXon())) {
+				fail(XonUtils.toXonString(o, true)
+					+ "\n*****\n" + XonUtils.toXonString(x, true));
+			}
+		} catch (Exception ex) {fail(ex);}
+if(T)return;
 		try {
 			xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n"+

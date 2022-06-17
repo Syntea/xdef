@@ -7,6 +7,7 @@ import org.xdef.XDDocument;
 import org.xdef.XDPool;
 import org.xdef.model.XMData;
 import java.io.StringWriter;
+import java.math.BigDecimal;
 import java.net.InetAddress;
 import org.w3c.dom.Element;
 import org.xdef.XDContainer;
@@ -856,15 +857,15 @@ public final class TestTypes extends XDTester {
 "  <item>p(12.657 USD)</item>\n"+
 "  <item>p(0.657 XAU)</item>\n"+
 "</root>";
-			strw = new StringWriter();
 			xd = compile(xdef).createXDDocument();
+			strw = new StringWriter();
 			assertEq(xml, parse(xd, xml, reporter, strw, null, null));
 			assertNoErrorwarnings(reporter);
 			assertEq(strw.toString(),
 				"1.50 CZK\n12.66 USD\n0.657 XAU\nextValue: null\n");
 			assertEq("null",
 				((XDPrice) xd.getVariable("extValue")).display());
-			xd.setVariable("extValue", new Price(2.3,"CZK"));
+			xd.setVariable("extValue", new Price(new BigDecimal(2.3),"CZK"));
 			assertEq("2.30 CZK",
 				((XDPrice) xd.getVariable("extValue")).display());
 			assertEq(2, ((XDPrice)

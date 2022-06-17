@@ -1560,7 +1560,7 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 						throwInfo(chkNode, XDEF.XDEF573, "Price");
 					}
 					_stack[sp] =
-						new DefDouble(((DefPrice)_stack[sp]).amount());
+						new DefDecimal(((DefPrice)_stack[sp]).amount());
 					continue;
 				case PRICE_CURRENCY_CODE:
 					if (_stack[sp].isNull()) {

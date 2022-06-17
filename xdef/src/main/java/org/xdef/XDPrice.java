@@ -1,5 +1,7 @@
 package org.xdef;
 
+import java.math.BigDecimal;
+
 /** Price (amount and currency).
  * @author Vaclav Trojan
  */
@@ -8,7 +10,7 @@ public interface XDPrice extends XDValue {
 	/**	Get amount of currency.
 	 * @return amount of currency.
 	 */
-	public double amount();
+	public BigDecimal amount();
 
 	/**	Get ISO4217 code of currency.
 	 * @return ISO4217 code of currency..
