@@ -1,5 +1,6 @@
 package org.xdef.sys;
 
+import java.math.BigDecimal;
 import java.util.Currency;
 import java.util.Locale;
 import org.xdef.msg.XDEF;
@@ -9,16 +10,25 @@ import org.xdef.msg.XDEF;
  */
 public class Price {
 	/** Amount of currency */
-	private final double _amount;
+	private final BigDecimal _amount;
 	/** Currency */
 	private final Currency _currency;
+//
+//	/** Create instance of CurrencyAmount.
+//	 * @param amount currency amount.
+//	 * @param code ISO4217 currency code.
+//	 * @throws SRuntimeException if an error occurs.
+//	 */
+//	public Price(final double amount, final String code) {
+//		this(new BigDecimal(amount), code);
+//	}
 
 	/** Create instance of CurrencyAmount.
 	 * @param amount currency amount.
 	 * @param code ISO4217 currency code.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public Price(final double amount, final String code)
+	public Price(final BigDecimal amount, final String code)
 		throws SRuntimeException {
 		try {
 			_amount = amount;
@@ -37,7 +47,7 @@ public class Price {
 	/**	Get amount of currency as decimal number.
 	 * @return amount of currency as decimal number.
 	 */
-	public final double amount() {return _amount;}
+	public final BigDecimal amount() {return _amount;}
 
 	/**	Get ISO4217 code of currency.
 	 * @return ISO4217 code of currency..
@@ -65,13 +75,13 @@ public class Price {
 	}
 
 	@Override
-	public int hashCode() {return 7*((int)_amount) + _currency.hashCode();}
+	public int hashCode() {return 7*_amount.hashCode() + _currency.hashCode();}
 
 	@Override
 	public boolean equals(Object x) {
 		if (x instanceof Price) {
 			Price y = (Price) x;
-			return _amount == y._amount && _currency.equals(y._currency);
+			return _amount.equals(y._amount) && _currency.equals(y._currency);
 		}
 		return false;
 	}

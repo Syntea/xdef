@@ -416,7 +416,7 @@ public final class XonReader extends StringParser implements XonParsers {
 						break;
 					case 5: //"p(" - currency ammount
 						if (isFloat() || isInteger()) {
-							double d = Double.parseDouble(getParsedString());
+							BigDecimal d = new BigDecimal(getParsedString());
 							isChar(' ');
 							if ((ch=isLetter()) != SParser.NOCHAR) {
 								String code = String.valueOf(ch);

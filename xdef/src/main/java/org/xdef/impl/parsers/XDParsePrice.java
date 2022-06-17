@@ -1,5 +1,6 @@
 package org.xdef.impl.parsers;
 
+import java.math.BigDecimal;
 import org.xdef.XDParseResult;
 import org.xdef.XDParserAbstract;
 import static org.xdef.XDValueID.XD_PRICE;
@@ -27,7 +28,7 @@ public class XDParsePrice extends XDParserAbstract {
 		}
 		int pos1 = p.getIndex();
 		if (p.isFloat() || p.isInteger()) {
-			double d = Double.parseDouble(p.getBufferPart(pos1, p.getIndex()));
+			BigDecimal d = new BigDecimal(p.getBufferPart(pos1, p.getIndex()));
 			char ch;
 			if (p.isChar(' ') && ((ch=p.getCurrentChar())>='A' && ch<='Z')) {
 				String code = String.valueOf(ch);

@@ -147,7 +147,8 @@ public final class TestXComponents extends XDTester {
 			assertEq(252, xd.getVariable("d").intValue());
 			assertEq(new GPSPosition(48.2, 16.37, 151, null),
 				SUtils.getValueFromGetter(xc, "getq"));
-			SUtils.setValueToSetter(xc, "seta", new Price(456.001, "USD"));
+			SUtils.setValueToSetter(xc, "seta",
+				new Price(new BigDecimal("456.001"), "USD"));
 			assertEq("456.001 USD", xc.toXml().getAttribute("a"));
 			xml = "<A q='51.52,-0.09,0,\"London\"'/>"; //,
 			el = parse(xd, xml, reporter);

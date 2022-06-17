@@ -1998,7 +1998,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 							if (!wasError) {
 								for (XDValue item: names) {
 									s = item==null ? null : item.stringValue();
-									if (!StringParser.isJavaName(s)) {
+									if (!StringParser.chkJavaName(s)) {
 										wasError = true;
 										//Type &{0} can't be converted to
 										//enumeration &{1} because value

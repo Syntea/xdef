@@ -3886,15 +3886,6 @@ public class StringParser extends SReporter implements SParser {
 		return false;
 	}
 
-	/** Check if the string in argument is Java identifier.
-	 * @param s the string to be checked.
-	 * @return true if argument is Java identifier.
-	 */
-	public static final boolean isJavaName(final String s) {
-		StringParser p = new StringParser(s);
-		return p.isJavaName() && p.eos();
-	}
-
 	/** Parse Java fully qualified identifier and save result to _parsedString.
 	 * @return true if actual input is Java fully qualified identifier.
 	 */
@@ -3912,15 +3903,6 @@ public class StringParser extends SReporter implements SParser {
 			return true;
 		}
 		return false;
-	}
-
-	/** Check if the string in argument is Java qualified identifier.
-	 * @param s the string to be checked.
-	 * @return true if argument is Java qualified identifier.
-	 */
-	public static final boolean isJavaQName(final String s) {
-		StringParser p = new StringParser(s);
-		return p.isJavaQName() && p.eos();
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -4520,88 +4502,6 @@ public class StringParser extends SReporter implements SParser {
 		return true;
 	}
 
-////////////////////////////////////////////////////////////////////////////////
-// XML static methods
-////////////////////////////////////////////////////////////////////////////////
-
-	/** Check if argument is a whitespace - see {@link StringParser#isSpace()}.
-	 * @param ch character to be checked.
-	 * @return true is only if argument is a whitespace according to
-	 * XML specification..
-	 */
-	public static final boolean chkXmlWhiteSpaceChar(final char ch) {
-		return XML_CHARTAB0[ch] == XML_CHAR_WHITESPACE;
-	}
-
-	/** Get type of character - static version of {@link
-	 * StringParser#getXmlCharType(byte)}.
-	 * @param ch character to be checked.
-	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1" (see XMLVER1_0 and XMLVER1_1).
-	 * @return type of character.
-	 */
-	public static final byte getXmlCharType(final char ch,
-		final byte xmlVersion) {
-		return xmlVersion == XMLVER1_1 ? XML_CHARTAB1[ch] : XML_CHARTAB0[ch];
-	}
-
-	/** Parse NCName - see {@link StringParser#isNCName(byte)}.
-	 * @param name string to be checked.
-	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1" (see XMLVER1_0 and XMLVER1_1).
-	 * @return true if the argument is NCName according to XML specification.
-	 */
-	public static final boolean chkNCName(final String name,
-		final byte xmlVersion) {
-		int max;
-		if (name == null || (max = name.length()) == 0 ||
-			getXmlCharType(name.charAt(0), xmlVersion) != XML_CHAR_NAME_START) {
-			return false;
-		}
-		int i = 0;
-		while ((++i < max) &&
-			getXmlCharType(name.charAt(i), xmlVersion) >= XML_CHAR_NAME_START){}
-		return i == max;
-	}
-
-	/** Parse XML name - see {@link StringParser#isXMLName(byte)}.
-	 * @param name string to be checked.
-	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1" (see XMLVER1_0 and XMLVER1_1).
-	 * @return true if the argument is XML name according to XML specification.
-	 * {@link StringParser#isXMLName(byte)}.
-	 */
-	public static final boolean chkXMLName(final String name,
-		final byte xmlVersion) {
-		int max;
-		byte type;
-		if (name == null || (max = name.length()) == 0 ||
-			(type = getXmlCharType(name.charAt(0), xmlVersion)) !=
-			XML_CHAR_NAME_START && type != XML_CHAR_COLON) {
-			return false;
-		}
-		int i = 0;
-		while ((++i < max) &&
-			getXmlCharType(name.charAt(i), xmlVersion) >= XML_CHAR_COLON) {}
-		return i == max;
-	}
-
-	/** Parse NMToken - see {@link StringParser#isNMToken(byte)}.
-	 * @param name string to be checked.
-	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1" (see XMLVER1_0 and XMLVER1_1).
-	 * @return true if the argument is NMToken according to XML specification.
-	 * {@link StringParser#isNMToken(byte)}.
-	 */
-	public static final boolean chkNMToken(final String name,
-		final byte xmlVersion) {
-		int max;
-		if (name == null || (max = name.length()) == 0 ||
-			getXmlCharType(name.charAt(0),  xmlVersion) < XML_CHAR_COLON) {
-			return false;
-		}
-		int i = 0;
-		while ((++i < max) &&
-			getXmlCharType(name.charAt(i),  xmlVersion) >= XML_CHAR_COLON) {}
-		return i == max;
-	}
-
 	/** Read string enclosed in delimiters (' or ").
 	 * string::=  S ('"' ^['"']* '"' | "'" ^["'"]* "'")
 	 * @return string or null if on the source position is not a valid
@@ -4763,5 +4663,138 @@ public class StringParser extends SReporter implements SParser {
 			return _weekInMonth < 0
 				|| getCalendar().get(Calendar.WEEK_OF_MONTH) == _weekInYear;
 		}
+	}
+
+////////////////////////////////////////////////////////////////////////////////
+// static methods
+////////////////////////////////////////////////////////////////////////////////
+
+	/** Check if the string in argument is a number (can be negative).
+	 * @param s the string to be checked.
+	 * @return true if argument is a number.
+	 */
+	public static final boolean chkNumber(final String s) {
+		StringParser p = new StringParser(s);
+		p.isChar('-');
+		return (p.isFloat() || p.isInteger()) && p.eos();
+	}
+
+	/** Check if the string in argument is Java identifier.
+	 * @param s the string to be checked.
+	 * @return true if argument is Java identifier.
+	 */
+	public static final boolean chkJavaName(final String s) {
+		StringParser p = new StringParser(s);
+		return p.isJavaName() && p.eos();
+	}
+
+	/** Check if the string in argument is Java qualified identifier.
+	 * @param s the string to be checked.
+	 * @return true if argument is Java qualified identifier.
+	 */
+	public static final boolean chkJavaQName(final String s) {
+		StringParser p = new StringParser(s);
+		return p.isJavaQName() && p.eos();
+	}
+
+	/** Check if argument is a whitespace - see {@link StringParser#isSpace()}.
+	 * @param ch character to be checked.
+	 * @return true is only if argument is a whitespace according to
+	 * XML specification..
+	 */
+	public static final boolean chkXmlWhiteSpaceChar(final char ch) {
+		return XML_CHARTAB0[ch] == XML_CHAR_WHITESPACE;
+	}
+
+	/** Get type of character - static version of {@link
+	 * StringParser#getXmlCharType(byte)}.
+	 * @param ch character to be checked.
+	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1" (see XMLVER1_0 and XMLVER1_1).
+	 * @return type of character.
+	 */
+	public static final byte getXmlCharType(final char ch,
+		final byte xmlVersion) {
+		return xmlVersion == XMLVER1_1 ? XML_CHARTAB1[ch] : XML_CHARTAB0[ch];
+	}
+
+	/** Parse NCName - see {@link StringParser#isNCName(byte)}.
+	 * @param name string to be checked.
+	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1" (see XMLVER1_0 and XMLVER1_1).
+	 * @return true if the argument is NCName according to XML specification.
+	 */
+	public static final boolean chkNCName(final String name,
+		final byte xmlVersion) {
+		int max;
+		if (name == null || (max = name.length()) == 0 ||
+			getXmlCharType(name.charAt(0), xmlVersion) != XML_CHAR_NAME_START) {
+			return false;
+		}
+		int i = 0;
+		while ((++i < max) &&
+			getXmlCharType(name.charAt(i), xmlVersion) >= XML_CHAR_NAME_START){}
+		return i == max;
+	}
+
+	/** Parse XML name - see {@link StringParser#isXMLName(byte)}.
+	 * @param name string to be checked.
+	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1" (see XMLVER1_0 and XMLVER1_1).
+	 * @return true if the argument is XML name according to XML specification.
+	 * {@link StringParser#isXMLName(byte)}.
+	 */
+	public static final boolean chkXMLName(final String name,
+		final byte xmlVersion) {
+		int max;
+		byte type;
+		if (name == null || (max = name.length()) == 0 ||
+			(type = getXmlCharType(name.charAt(0), xmlVersion)) !=
+			XML_CHAR_NAME_START && type != XML_CHAR_COLON) {
+			return false;
+		}
+		int i = 0;
+		while ((++i < max) &&
+			getXmlCharType(name.charAt(i), xmlVersion) >= XML_CHAR_COLON) {}
+		return i == max;
+	}
+
+	/** Parse NMToken - see {@link StringParser#isNMToken(byte)}.
+	 * @param name string to be checked.
+	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1" (see XMLVER1_0 and XMLVER1_1).
+	 * @return true if the argument is NMToken according to XML specification.
+	 * {@link StringParser#isNMToken(byte)}.
+	 */
+	public static final boolean chkNMToken(final String name,
+		final byte xmlVersion) {
+		int max;
+		if (name == null || (max = name.length()) == 0 ||
+			getXmlCharType(name.charAt(0),  xmlVersion) < XML_CHAR_COLON) {
+			return false;
+		}
+		int i = 0;
+		while ((++i < max) &&
+			getXmlCharType(name.charAt(i),  xmlVersion) >= XML_CHAR_COLON) {}
+		return i == max;
+	}
+
+////////////////////////////////////////////////////////////////////////////////
+// deprecated methods
+////////////////////////////////////////////////////////////////////////////////
+
+	/** Check if the string in argument is Java identifier.
+	 * @deprecated Please use StringParser.5Name instead.
+	 * @param s the string to be checked.
+	 * @return true if argument is Java identifier.
+	 */
+	public static final boolean isJavaName(final String s) {
+		return chkJavaName(s);
+	}
+
+	/** Check if the string in argument is Java qualified identifier.
+	 * @deprecated Please use StringParser.chkJavaQName instead.
+	 * @param s the string to be checked.
+	 * @return true if argument is Java qualified identifier.
+	 */
+	public static final boolean isJavaQName(final String s) {
+		StringParser p = new StringParser(s);
+		return p.isJavaQName() && p.eos();
 	}
 }

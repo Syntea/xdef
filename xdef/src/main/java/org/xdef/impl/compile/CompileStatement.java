@@ -203,7 +203,7 @@ import static org.xdef.impl.compile.XScriptParser.XOR_EQ_SYM;
 import static org.xdef.impl.compile.XScriptParser.XOR_SYM;
 import static org.xdef.impl.compile.XScriptParser.symToName;
 import static org.xdef.sys.SParser.NOCHAR;
-import static org.xdef.sys.StringParser.isJavaName;
+import static org.xdef.sys.StringParser.chkJavaName;
 
 /** Compiler of statements in script.
  * @author Vaclav Trojan
@@ -3185,7 +3185,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			pnode._xdef, pnode._xdVersion, pnode._nsPrefixes, pnode._xpathPos);
 		String language;
 		if (lang == null || (language = lang.getString().trim()).isEmpty()
-			|| !isJavaName(language)) {
+			|| !chkJavaName(language)) {
 			error(XDEF.XDEF410, "language name");//'&{0}' expected
 			return;
 		}
