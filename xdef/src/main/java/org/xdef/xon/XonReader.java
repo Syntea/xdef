@@ -371,7 +371,7 @@ public final class XonReader extends StringParser implements XonParsers {
 			Object result = null;
 			char ch;
 			if (_xonMode&&(i=isOneOfTokens(new String[]{"c\"","u\"","e\"","b(",
-				"d","p(","g(","/","c(","t\"","P","-P","NaN","INF","-INF"}))>=0){
+				"d","p(","g(","/","C(","t\"","P","-P","NaN","INF","-INF"}))>=0){
 				switch(i) {
 					case 0: // character
 						i = XonTools.readJChar(this);
@@ -612,7 +612,7 @@ public final class XonReader extends StringParser implements XonParsers {
 					}
 				} else {
 					if (isfloat) {
-						return returnValue(spos, Float.parseFloat(s));
+						return returnValue(spos, Double.parseDouble(s));
 					} else {
 						try {
 							return returnValue(spos, Long.parseLong(s));

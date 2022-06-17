@@ -149,7 +149,7 @@ public class TestXon extends XDTester {
 			"[null, e\"tro@volny.cz\",e\"a b<x@y.zz>\" ]"));
 		assertNull(testx("file", "[null, \"temp/a.txt\" ]"));
 		assertNull(testx("ipAddr", "[null, /::FFFF:129.144.52.38,/0.0.0]\n"));
-		assertNull(testx("currency", "[null, c(USD), c(CZK)]\n"));
+		assertNull(testx("currency", "[null, C(USD), C(CZK)]\n"));
 		assertNull(testx("telephone",
 			"[null, t\"123456\",t\"+420 234 567 890\"]\n"));
 		assertNull(testx("jnull", "[ null, null ]"));
@@ -343,7 +343,7 @@ public class TestXon extends XDTester {
 "  b(HbRBHbRBHQw=),                   # byte array (base64)\n" +
 "  p(123.45 CZK),                     # price\n" +
 "  p(12 USD),                         # price\n" +
-"  c(USD),                            # currency\n" +
+"  C(USD),                            # currency\n" +
 "  /129.144.52.38,                    # inetAddr (IPv4)\n" +
 "  /1080:0:0:0:8:800:200C:417A,       # inetAddr (IPv6)\n" +
 "] /**** end of array ****/\n" +

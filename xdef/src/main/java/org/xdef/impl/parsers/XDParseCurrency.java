@@ -18,7 +18,7 @@ public class XDParseCurrency extends XDParserAbstract {
 	public void parseObject(final XXNode xnode, final XDParseResult p) {
 		p.isSpaces();
 		boolean xon;
-		if (xon = p.isToken("c(")) {
+		if (xon = p.isToken("C(")) {
 			p.isSpaces();
 		}
 		int pos1 = p.getIndex();

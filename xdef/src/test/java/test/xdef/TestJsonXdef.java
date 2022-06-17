@@ -938,7 +938,7 @@ public class TestJsonXdef extends XDTester {
 "  }, /**** end of map ****/\n" +
 "  b(HbRBHbRBHQw=),                   /* byte array (base64) */\n" +
 "  p(123.45 CZK),                     /* price */ \n" +
-"  c(USD),                            /* currency */\n" +
+"  C(USD),                            /* currency */\n" +
 "  /1080:0:0:0:8:800:200C:417A        /* inetAddr (IPv6)  */\n" +
 "] /**** end of array ****/\n" +
 "# End of XON example";

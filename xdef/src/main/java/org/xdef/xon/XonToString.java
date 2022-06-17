@@ -81,7 +81,7 @@ class XonToString extends XonTools {
 			} else if (x instanceof Price) {
 				return "p(" + x + ')';
 			} else if (x instanceof Currency) {
-				return "c(" + ((Currency) x).getCurrencyCode() + ')';
+				return "C(" + ((Currency) x).getCurrencyCode() + ')';
 			} else if (x instanceof XDTelephone) {
 				return "t\"" + x + '"';
 			} else if (x instanceof SDuration || x instanceof InetAddress) {
