@@ -955,19 +955,20 @@ public class TestXon extends XDTester {
 			reporter.clear();
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
-"  <xd:xon name='A'>\n"+
-"    { \"cities\" : [\n" +
-"        \"date(); finally outln('Measurements taken on: ' + getText() + '\\n');\",\n"+
-"        { $:script = \"occurs 1..*;\",\n" +
-"          $:any: [$:script = \"occurs 1..*; init outln('Distance from ' + @key + ' to');\",\n" +
-"            { $:script = \"occurs 1..*; finally outln();\",\n" +
-"              \"to\" : \"jstring();finally out(' - ' + getText() + ' = ');\",\n" +
-"              \"distance\" : \"int(); finally out(getText() + '(km)');\"\n" +
-"            }\n" +
-"    	  ]\n" +
+"<xd:xon name='A'>\n"+
+"{ \"cities\" : [\n" +
+"    \"date(); finally outln('Measurements taken on: '+getText()+'\\n');\",\n"+
+"    { $:script = \"occurs 1..*;\",\n" +
+"      $:any: [$:script = \"occurs 1..*;\n"+
+"                init outln('Distance from ' + getXonKey() + '\nto:');\",\n" +
+"        { $:script = \"occurs 1..*; finally outln();\",\n" +
+"          \"to\" : \"jstring();finally out(' - ' + getText() + ' = ');\",\n" +
+"          \"distance\" : \"int(); finally out(getText() + '(km)');\"\n" +
 "        }\n" +
 "      ]\n" +
-"    }\n"+
+"    }\n" +
+"  ]\n" +
+"}\n"+
 "</xd:xon>\n"+
 "</xd:def>";
 			xp = compile(xdef);
@@ -997,10 +998,12 @@ public class TestXon extends XDTester {
 			assertEq(strw.toString(),
 "Measurements taken on: 2020-02-22\n" +
 "\n" +
-"Distance from Brussels to\n" +
+"Distance from Brussels\n" +
+"to:\n" +
 " - London = 322(km)\n" +
 " - Paris = 265(km)\n" +
-"Distance from London to\n" +
+"Distance from London\n" +
+"to:\n" +
 " - Brussels = 322(km)\n" +
 " - Paris = 344(km)\n" +
 "");
