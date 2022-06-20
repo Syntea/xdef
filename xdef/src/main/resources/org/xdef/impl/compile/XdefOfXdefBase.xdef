@@ -736,13 +736,15 @@ XONComment ::= "/*" ([^*]+ | "*" - "*/")* "*/"
 
 XONSP ::= (WhiteSpace | XONComment)+ /* sequence of whitespaces and comments */
 
-XONInt ::= "-"? Digits /* sequence of digits */
+XONInt ::= "-"? Digits
 
 XONExp ::= [eE] ("+" | "-")? Digits
 
 XONFrac ::= "." Digits
 
-XONNumber ::= XONInt XONFrac XONExp | XONInt XONFrac | XONInt XONExp | XONInt
+XONFloat ::= XONInt XONFrac XONExp | XONInt XONFrac | XONInt XONExp
+
+XONNumber ::= XONFloat | XONInt
 
 XONControlchar ::= '\"' | '\\' | '\/' | '\b' | '\f' | '\n' | '\r' | '\t' |
   ('\u' [0-9a-fA-F]{4})
@@ -755,7 +757,7 @@ XONXscript ::= XONSP? ( ("$:script" XONSP? "=" XONSP? XONString)
 
 XONObject ::= "{" XONXscript? (XONMembers)* XONSP? "}"
 
-XONPair ::= ($ncName | XONString) XONSP? ":" XONSP? XONValue
+XONPair ::= ("$:any" | $ncName | XONString) XONSP? ":" XONSP? XONValue
 
 XONMembers ::= XONSP? XONPair (XONSP? "," XONSP? XONPair)*
 

@@ -16,7 +16,7 @@ public class FullTestAll {
 		System.out.println("X-definition version: " + XDFactory.getXDVersion());
 		XDTester.setFulltestMode(true);
 		test.common.TestAll.runTests(args);
-		test.xdef.TestAll.runTests(args);
+		test.xdef.TestAllFull.runTests(args);
 		test.xdutils.TestAll.runTests(args);
 	}
 }

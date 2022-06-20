@@ -733,6 +733,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		_reporter = new SReporter(reporter);
 		_scp.setStdErr(new DefOutStream(reporter));
 		_refNum = 0; // we must clear counter!
+		result.setReporter(reporter);
 		return result;
 	}
 
@@ -1619,8 +1620,24 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 */
 	public final Object jvalidate(final Object data,final ReportWriter reporter)
 		throws SRuntimeException {
+		if (data instanceof String) {
+			String s = (String) data;
+			File f = new File(s);
+			Object x = f;
+			if (!f.exists()) {
+				try {
+					URL u = new URL(s);
+					u.openConnection();
+					x = u;
+				} catch (Exception ex) {
+					x = new StringReader(s);
+				}
+			}
+			createXonParser(x, reporter, null).xparse(this);
+			return getXon();
+		}
 		if (data == null || data instanceof Map || data instanceof List
-			|| data instanceof String || data instanceof Number
+			|| data instanceof Number
 			|| data instanceof Boolean || data instanceof SDatetime
 			|| data instanceof SDuration || data instanceof GPSPosition
 			|| data instanceof Price) {
@@ -1630,7 +1647,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			new XonSourceParser(data).xparse(this);
 			return getXon();
 		} else if (data instanceof File || data instanceof URL
-			|| data instanceof InputStream) {
+			|| data instanceof InputStream || data instanceof Reader) {
 			createXonParser(data, reporter, null).xparse(this);
 			return getXon();
 		}

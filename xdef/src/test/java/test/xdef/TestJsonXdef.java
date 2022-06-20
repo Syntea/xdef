@@ -765,29 +765,38 @@ public class TestJsonXdef extends XDTester {
 			j = new BigInteger("123456789012345678901234567890");
 			assertTrue(XonUtils.xonEqual(j,
 				jparse(xp, "", (Object) j, reporter)));
-			j = new BigDecimal("-123456789012345678901234567890e-2");
+			j = new BigDecimal("-123456789012345678901234567890.1e-2");
 			assertTrue(XonUtils.xonEqual(j,
 				jparse(xp, "", (Object) j, reporter)));
 			j = true;
 			assertTrue(XonUtils.xonEqual(j,
 				jparse(xp, "", (Object) j, reporter)));
-			j = "";
-			assertTrue(XonUtils.xonEqual(j,
-				jparse(xp, "", (Object) j, reporter)));
-			j = "abc";
-			assertTrue(XonUtils.xonEqual(j,
-				jparse(xp, "", (Object) j, reporter)));
-			j = "ab\nc";
-			assertTrue(XonUtils.xonEqual(j,
-				jparse(xp, "", (Object) j, reporter)));
-			j = " ab tc ";
-			assertTrue(XonUtils.xonEqual(j,
-				jparse(xp, "", (Object) j, reporter)));
-			j = "ab\n\tc";
-			assertTrue(XonUtils.xonEqual(j,
-				jparse(xp, "", (Object) j, reporter)));
 			j = null;
 			assertTrue(XonUtils.xonEqual(j,
+				jparse(xp, "", (Object) j, reporter)));
+			j = "true";
+			assertTrue(XonUtils.xonEqual(true,
+				jparse(xp, "", (Object) j, reporter)));
+			j = "-123";
+			assertTrue(XonUtils.xonEqual(-123,
+				jparse(xp, "", (Object) j, reporter)));
+			j = "null";
+			assertTrue(XonUtils.xonEqual(null,
+				jparse(xp, "", (Object) j, reporter)));
+			j = "\"\"";
+			assertTrue(XonUtils.xonEqual("",
+				jparse(xp, "", (Object) j, reporter)));
+			j = "\"abc\"";
+			assertTrue(XonUtils.xonEqual("abc",
+				jparse(xp, "", (Object) j, reporter)));
+			j = "\"ab\nc\"";
+			assertTrue(XonUtils.xonEqual("ab\nc",
+				jparse(xp, "", (Object) j, reporter)));
+			j = "\" ab tc \"";
+			assertTrue(XonUtils.xonEqual(" ab tc ",
+				jparse(xp, "", (Object) j, reporter)));
+			j = "\"ab\\n\\tc\"";
+			assertTrue(XonUtils.xonEqual("ab\n\tc",
 				jparse(xp, "", (Object) j, reporter)));
 		} catch (Exception ex) {fail(ex);}
 		try {

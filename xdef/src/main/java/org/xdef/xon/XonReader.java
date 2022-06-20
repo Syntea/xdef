@@ -14,6 +14,7 @@ import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.GPSPosition;
 import org.xdef.sys.Price;
 import org.xdef.sys.SBuffer;
+import org.xdef.sys.SDatetime;
 import org.xdef.sys.SException;
 import org.xdef.sys.SParser;
 import static org.xdef.sys.SParser.NOCHAR;
@@ -110,6 +111,7 @@ public final class XonReader extends StringParser implements XonParsers {
 			return;
 		}
 		boolean wasScript = false;
+		boolean wasAnyName = false;
 		int i;
 		while(!eos()) {
 			if (_jdef && !wasScript
@@ -121,7 +123,6 @@ public final class XonReader extends StringParser implements XonParsers {
 				wasScript = true;
 				skipSpacesOrComments();
 				SBuffer value = null;
-				char separator;
 				if (i == 1) { // oneOf
 					if (isChar('=')) {
 						skipSpacesOrComments();
@@ -153,23 +154,32 @@ public final class XonReader extends StringParser implements XonParsers {
 			} else {
 				SBuffer name;
 				spos = getPosition();
-				if (isChar('"')) {
-					name = new SBuffer(XonTools.readJString(this), spos);
-				} else if (_xonMode && isNCName(StringParser.XMLVER1_0)) {
-					name = new SBuffer(getParsedString(), spos);
+				if (_jdef && isToken(XonNames.ANY_NAME)) {
+					if (wasAnyName) {
+						//Value pair &{0} already exists
+						error(JSON.JSON022, spos);
+					}
+					_jp.xdScript(new SBuffer(XonNames.ANY_NAME, spos),null);
 				} else {
-					error(JSON.JSON004); //Name of item expected
-					_jp.mapEnd(this);
-					setEos();
-					return;
+					if (isChar('"')) {
+						name = new SBuffer(XonTools.readJString(this), spos);
+					} else if (_xonMode && isNCName(StringParser.XMLVER1_0)) {
+						name = new SBuffer(getParsedString(), spos);
+					} else {
+						error(JSON.JSON004); //Name of item expected
+						_jp.mapEnd(this);
+						setEos();
+						return;
+					}
+					if (_jp.namedValue(name)) {
+						//Value pair &{0} already exists
+						error(JSON.JSON022, name);
+					}
 				}
 				skipSpacesOrComments();
 				if (!isChar(':')) {
 					//"&{0}"&{1}{ or "}{"} expected
 					error(JSON.JSON002, ":");
-				}
-				if (_jp.namedValue(name)) {
-					error(JSON.JSON022, name); //Value pair &{0} already exists
 				}
 				readItem();
 			}
@@ -361,14 +371,145 @@ public final class XonReader extends StringParser implements XonParsers {
 	private XonTools.JValue readSimpleValue() throws SRuntimeException {
 		SPosition spos = getPosition();
 		int i;
+		boolean minus, floatNumber;
+		int pos = getIndex();
 		if (isChar('"')) { // string
-			return returnValue(spos, XonTools.readJString(this));
+			String s = XonTools.readJString(this);
+			if (!_xonMode) {
+				return returnValue(spos, s);
+			} else {
+				char ch;
+				if ((ch=isOneOfChars("cuebdpgiCtP"))== NOCHAR) {
+					return returnValue(spos, s);
+				}
+				switch(ch) {
+					case 'c': // character
+						return returnValue(spos, s.charAt(0));
+					case 'u': // URI
+						try {
+							return returnValue(spos, new URI(s));
+						} catch (Exception ex) {}
+						setIndex(pos);
+						break;
+					case 'e':
+						try {
+							return returnValue(spos, new DefEmailAddr(s));
+						} catch (Exception ex) {}
+						break;
+					case 'b':
+						try {
+							return returnValue(spos, SUtils.decodeBase64(s));
+						} catch (SException ex) {}
+						break;
+					case 'd':
+						try {
+							return returnValue(spos, SDatetime.parse(s,
+								"yyyy-MM-dd['T'HH:mm:ss[.S]][Z]" +
+								"|HH:mm:ss[.S][Z]"+ //time
+								"|--MM[-dd][Z]" + //month day
+								"|---dd[Z]"+ //day
+								"|yyyy-MM[Z]"+ // year month
+								"|yyyy[Z]")); // year
+						} catch (Exception ex) {}
+						break;
+					case 'p':
+						try {
+							return returnValue(spos, new Price(s));
+						} catch (Exception ex) {}
+						break;
+					case 'g':
+					case 'i':
+					case 'C':
+					case 't':
+					case 'P':
+					default:
+						return returnValue(spos, s);
+				}
+			}
 		} else if ((i=isOneOfTokens(new String[]{"null","false","true"}))>=0) {
 			return returnValue(spos, i > 0 ? (i==2) : null);
+		} else if (_xonMode
+			&& (i=isOneOfTokens(new String[]{"NaN","INF","-INF"})) >= 0) {
+			if (isChar('f')) {
+				switch(i) {
+					case 0: return returnValue(spos, Float.NaN);
+					case 1: return returnValue(spos, Float.POSITIVE_INFINITY);
+					default: return returnValue(spos, Float.NEGATIVE_INFINITY);
+				}
+			} else {
+				switch(i) {
+					case 0: return returnValue(spos, Double.NaN);
+					case 1: return returnValue(spos, Double.POSITIVE_INFINITY);
+					default: return returnValue(spos, Double.NEGATIVE_INFINITY);
+				}
+			}
+		} else if ((minus=isChar('-')) && ((floatNumber=isFloat())||isInteger())
+			|| ((floatNumber=isFloat()) || isInteger())) {
+			String s = getBufferPart(minus ? pos + 1 : pos, getIndex());
+			if (s.charAt(0) == '0' && s.length() > 1 &&
+				Character.isDigit(s.charAt(1))) {
+					error(JSON.JSON014); // Illegal leading zero in number
+			}
+			if (minus) {
+				s = '-' + s;
+			}
+			if (_xonMode) {
+				char ch;
+				if (floatNumber) {
+					switch(ch = isOneOfChars("fDd")) {
+						case 'f':
+							return returnValue(spos, Float.parseFloat(s));
+						case 'd':
+							return returnValue(spos, Double.parseDouble(s));
+						case 'D':
+							return returnValue(spos, new BigDecimal(s));
+						default:
+							return returnValue(spos, Double.parseDouble(s));
+					}
+				} else {
+					switch(ch = isOneOfChars("lisbNfDd")) {
+						case 'l':
+							return returnValue(spos, Long.parseLong(s));
+						case 'i':
+							return returnValue(spos, Integer.parseInt(s));
+						case 's':
+							return returnValue(spos, Short.parseShort(s));
+						case 'b':
+							return returnValue(spos, Byte.parseByte(s));
+						case 'N':
+							return returnValue(spos, new BigInteger(s));
+						case 'f':
+							return returnValue(spos, Float.parseFloat(s));
+						case 'D':
+							return returnValue(spos, new BigDecimal(s));
+						case 'd':
+							return returnValue(spos, Double.parseDouble(s));
+						default:
+						try {
+							return returnValue(spos, Long.parseLong(s));
+						} catch (Exception ex) {
+							try {
+								return returnValue(spos, new BigInteger(s));
+							} catch (Exception exx) {}
+						}
+					}
+				}
+			} else {
+				if (floatNumber) {
+					return returnValue(spos, Float.parseFloat(s));
+				} else {
+					try {
+						return returnValue(spos, Long.parseLong(s));
+					} catch (Exception exx) {
+						return returnValue(spos, new BigInteger(s));
+					}
+				}
+			}
+			//Illegal number simpleValue &{0}{ for XON type "}{"}:&{1}
+			error(JSON.JSON023, null, s);
+			return returnValue(spos, 0);
 		} else {
-			int pos = getIndex();
-			boolean wasError = false;
-			Object result = null;
+			Object result;
 			char ch;
 			if (_xonMode&&(i=isOneOfTokens(new String[]{"c\"","u\"","e\"","b(",
 				"d","p(","g(","/","C(","t\"","P","-P","NaN","INF","-INF"}))>=0){
@@ -532,103 +673,11 @@ public final class XonReader extends StringParser implements XonParsers {
 						: i == 1 ? Double.POSITIVE_INFINITY
 							: Double.NEGATIVE_INFINITY);
 				}
-				setIndex(pos);
-				//XON/JSON simpleValue expected
-				return returnError(spos, null, JSON.JSON010, "',[]{}");
 			}
-			// number
-			setIndex(pos);
-			boolean minus = isChar('-');
-			if (!minus && isChar('+')) {
-				error(JSON.JSON017, "+");//Not allowed character '&{0}'
-				wasError = true;
-			}
-			i = getIndex();
-			if (isInteger()) {
-				boolean isfloat;
-				if (isfloat = isChar('.')) { // decimal point
-					if (!isInteger()) {
-						error(JSON.JSON017, ".");//Not allowed character '&{0}'
-						wasError = true;
-					}
-				}
-				if ((ch = isOneOfChars("eE")) != SParser.NOCHAR) {//exponent
-					isfloat = true;
-					if (!isSignedInteger()) {//Not allowed character '&{0}'
-						error(JSON.JSON017, ch);
-						wasError = true;
-					}
-				}
-				String s = getBufferPart(i, getIndex());
-				if (s.charAt(0) == '0' && s.length() > 1 &&
-					Character.isDigit(s.charAt(1))) {
-						error(JSON.JSON014); // Illegal leading zero in number
-				}
-				if (minus) {
-					s = '-' + s;
-				}
-				if (wasError) {
-					return returnValue(spos,0);
-				}
-				if (_xonMode) {
-					if (isfloat) {
-						switch(ch = isOneOfChars("fDd")) {
-							case 'f':
-								return returnValue(spos, Float.parseFloat(s));
-							case 'd':
-								return returnValue(spos, Double.parseDouble(s));
-							case 'D':
-								return returnValue(spos, new BigDecimal(s));
-							default:
-								return returnValue(spos, Double.parseDouble(s));
-						}
-					} else {
-						switch(ch = isOneOfChars("lisbNfDd")) {
-							case 'l':
-								return returnValue(spos, Long.parseLong(s));
-							case 'i':
-								return returnValue(spos, Integer.parseInt(s));
-							case 's':
-								return returnValue(spos, Short.parseShort(s));
-							case 'b':
-								return returnValue(spos, Byte.parseByte(s));
-							case 'N':
-								return returnValue(spos, new BigInteger(s));
-							case 'f':
-								return returnValue(spos, Float.parseFloat(s));
-							case 'D':
-								return returnValue(spos, new BigDecimal(s));
-							case 'd':
-								return returnValue(spos, Double.parseDouble(s));
-							default:
-							try {
-								return returnValue(spos, Long.parseLong(s));
-							} catch (Exception ex) {
-								try {
-									return returnValue(spos, new BigInteger(s));
-								} catch (Exception exx) {}
-							}
-						}
-					}
-				} else {
-					if (isfloat) {
-						return returnValue(spos, Double.parseDouble(s));
-					} else {
-						try {
-							return returnValue(spos, Long.parseLong(s));
-						} catch (Exception exx) {
-							return returnValue(spos, new BigInteger(s));
-						}
-					}
-				}
-				//Illegal number simpleValue &{0}{ for XON type "}{"}:&{1}
-				error(JSON.JSON023, null, s);
-				return returnValue(spos, 0);
-			}
-			setIndex(pos); // error
-			//JSON simpleValue expected
-			return returnError(spos, null, JSON.JSON010, "[]{}");
 		}
+		setIndex(pos); // error
+		//JSON simpleValue expected
+		return returnError(spos, null, JSON.JSON010, "[]{}");
 	}
 
 	/** Read XON/JSON item.
@@ -642,23 +691,23 @@ public final class XonReader extends StringParser implements XonParsers {
 			readMap();
 		} else if (isChar('[')) {
 			readArray();
-		} else if (_jdef && isToken(XonNames.ANY_NAME)) {
-			SPosition spos = getPosition(); // xdef $ANY
-			spos.setIndex(getIndex() - XonNames.ANY_NAME.length());
-			SBuffer name = new SBuffer(XonNames.ANY_NAME, spos);
-			SBuffer val = new SBuffer(XonNames.ANY_NAME, spos);
-			skipSpacesOrComments();
-			if (isChar('=')) {
-				skipSpacesOrComments();
-				XonTools.JValue jv = readSimpleValue();
-				if (!(((XonTools.JValue) jv).getValue() instanceof String)) {
-					//After ":" in the command $any must follow simpleValue
-					error(JSON.JSON021);
-				} else {
-					val = jv.getSBuffer();
-				}
-			}
-			_jp.xdScript(name, val);
+//		} else if (_jdef && isToken(XonNames.ANY_NAME)) {
+//			SPosition spos = getPosition(); // xdef $ANY
+//			spos.setIndex(getIndex() - XonNames.ANY_NAME.length());
+//			SBuffer name = new SBuffer(XonNames.ANY_NAME, spos);
+//			SBuffer val = new SBuffer(XonNames.ANY_NAME, spos);
+//			skipSpacesOrComments();
+//			if (isChar('=')) {
+//				skipSpacesOrComments();
+//				XonTools.JValue jv = readSimpleValue();
+//				if (!(((XonTools.JValue) jv).getValue() instanceof String)) {
+//					//After ":" in the command $any must follow simpleValue
+//					error(JSON.JSON021);
+//				} else {
+//					val = jv.getSBuffer();
+//				}
+//			}
+//			_jp.xdScript(name, val);
 		} else {
 			XonTools.JValue jv = readSimpleValue();
 			if (_jdef && (jv == null || jv.getValue() == null
