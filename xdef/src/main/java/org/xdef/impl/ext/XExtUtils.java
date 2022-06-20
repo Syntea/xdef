@@ -23,6 +23,7 @@ import org.xdef.sys.SError;
 import org.xdef.sys.SPosition;
 import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
+import org.xdef.xon.XonTools;
 
 /** External utilities for key definition and key reference.
  * @author Vaclav Trojan
@@ -202,6 +203,10 @@ public final class XExtUtils {
 	public static byte[] getBytes(final InetAddress x){return x.getAddress();}
 	public static boolean isIPv6(final InetAddress x) {
 		return x == null ? false : x.getAddress().length > 4;
+	}
+	public static String getXonKey(final XXNode xnode) {
+		String s = xnode.getElement().getAttribute("key");
+		return s != null ? XonTools.xmlToJName(s) : null;
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
