@@ -912,6 +912,108 @@ public class TestXon extends XDTester {
 			assertTrue(((List)((Map)(x = xc.toXon())).get("cities")).isEmpty());
 			assertEq(((Map) x).get("date"), new SDatetime("2020-02-22"));
 		} catch (Exception ex) {fail(ex);}
+		try {// test $:any names in map
+			xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
+"  <xd:xon name='A'>\n"+
+"{ $:any: \"* int();\"\n"+
+"  x: \"int();\"\n"+
+"}\n"+
+"</xd:xon>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			xd = xp.createXDDocument();
+			json = "{ x: 999 }";
+			x = XonUtils.parseXON(json);
+			y = xd.jvalidate(json, reporter);
+			assertNoErrors(reporter);
+			if (!XonUtils.xonEqual(x,y)) {
+				fail("** 1 **\n"+XonUtils.toXonString(x)
+					+ "\n" +  XonUtils.toXonString(y));
+			}
+			o = xd.getXon();
+			if (!XonUtils.xonEqual(x, o)) {
+				fail("** 2 **\n"+json+"\n" + XonUtils.toXonString(xd.getXon()));
+			}
+			reporter.clear();
+			json = "{ a: 1, b: 2, x: 999 }";
+			x = XonUtils.parseXON(json);
+			y = xd.jvalidate(json, reporter);
+			assertNoErrors(reporter);
+			if (!XonUtils.xonEqual(x,y)) {
+				fail("** 1 **\n"+XonUtils.toXonString(x)
+					+ "\n" +  XonUtils.toXonString(y));
+			}
+			o = xd.getXon();
+			if (!XonUtils.xonEqual(x, o)) {
+				fail("** 2 **\n"+json+"\n" + XonUtils.toXonString(xd.getXon()));
+			}
+			reporter.clear();
+			json = "{ a: 1, x: 999, a: 2 }";
+			y = xd.jvalidate(json, reporter);
+			assertErrors(reporter);
+			reporter.clear();
+			xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
+"  <xd:xon name='A'>\n"+
+"    { \"cities\" : [\n" +
+"        \"date(); finally outln('Measurements taken on: ' + getText() + '\\n');\",\n"+
+"        { $:script = \"occurs 1..*;\",\n" +
+"          $:any: [$:script = \"occurs 1..*; init outln('Distance from ' + @key + ' to');\",\n" +
+"            { $:script = \"occurs 1..*; finally outln();\",\n" +
+"              \"to\" : \"jstring();finally out(' - ' + getText() + ' = ');\",\n" +
+"              \"distance\" : \"int(); finally out(getText() + '(km)');\"\n" +
+"            }\n" +
+"    	  ]\n" +
+"        }\n" +
+"      ]\n" +
+"    }\n"+
+"</xd:xon>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			xd = xp.createXDDocument();
+			json =
+"{ \"cities\" : [\n" +
+"    \"2020-02-22\",\n" +
+"    { \"Brussels\": [\n" +
+"        {\"to\": \"London\", \"distance\": 322},\n" +
+"        {\"to\": \"Paris\", \"distance\": 265}\n" +
+"      ]\n" +
+"    },\n" +
+"    { \"London\": [\n" +
+"        {\"to\": \"Brussels\", \"distance\": 322},\n" +
+"        {\"to\": \"Paris\", \"distance\": 344}\n" +
+"      ]\n" +
+"    }\n" +
+"  ]\n" +
+"}";
+			x = XonUtils.parseJSON(json);
+			strw = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			y = xd.jvalidate(json, reporter);
+			assertNoErrors(reporter);
+			reporter.clear();
+			strw.close();
+			assertEq(strw.toString(),
+"Measurements taken on: 2020-02-22\n" +
+"\n" +
+"Distance from Brussels to\n" +
+" - London = 322(km)\n" +
+" - Paris = 265(km)\n" +
+"Distance from London to\n" +
+" - Brussels = 322(km)\n" +
+" - Paris = 344(km)\n" +
+"");
+			if (!XonUtils.xonEqual(x,y =  XonUtils.xonToJson(y))) {
+				fail("** 1 **\n"+XonUtils.toXonString(x, true)
+					+ "\n" +  XonUtils.toXonString(y, true));
+			}
+			o = xd.getXon();
+			if (!XonUtils.xonEqual(x, XonUtils.xonToJson(o))) {
+				fail("** 2 **\n"+json+"\n" + XonUtils.toXonString(xd.getXon()));
+			}
+		} catch (Exception ex) {fail(ex);}
+		reporter.clear();
 
 		clearTempDir(); // clear temporary directory
 	}

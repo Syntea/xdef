@@ -21,7 +21,7 @@ import org.xdef.sys.SBuffer;
 import org.xdef.sys.SPosition;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.xon.IniReader;
-import static org.xdef.xon.XonNames.X_MAP;
+import static org.xdef.xon.XonNames.ANY_NAME;
 import org.xdef.xon.XonParser;
 import static org.xdef.xon.XonNames.ONEOF_NAME;
 import static org.xdef.xon.XonNames.SCRIPT_NAME;
@@ -356,9 +356,57 @@ public final class CompileXonXdef extends StringParser {
 	 * @param key value of key.
 	 */
 	private void updateKeyInfo(final PNode e, final String key) {
-		String s = XonTools.toXmlName(key);
-		addMatchExpression(e, '@' + X_KEYATTR + "=='"+ s +"'");
-		setAttr(e, X_KEYATTR, new SBuffer("fixed('"+s+"');",e._name));
+		if (ANY_NAME.equals(key)) {
+			setAttr(e,X_KEYATTR, new SBuffer("string(0,*);", e._name));
+		} else { // ANY name
+			addMatchExpression(e, '@' + X_KEYATTR + "=='"+ key +"'");
+			setAttr(e, X_KEYATTR, new SBuffer("fixed('" + key + "');",e._name));
+		}
+	}
+
+	private PNode genXonValue(final String name,
+		final JValue jo,
+		final PNode parent) {
+		SBuffer sbf, occ = null;
+		PNode e = genJElement(parent, X_ITEM, jo.getPosition());
+		if (jo.getValue() == null) {
+			sbf = new SBuffer("jnull()");
+		} else {
+			if (jo.toString().trim().isEmpty()) {
+				sbf = new SBuffer("jvalue()", jo.getPosition());
+				occ = new SBuffer("?", jo.getPosition());
+			} else {
+				SBuffer[] parsedScript = parseTypeDeclaration(jo.getSBuffer());
+				if (!parsedScript[0].getString().isEmpty()) { // occurrence
+					occ = parsedScript[0];
+					if (!ANY_NAME.equals(name)
+						&& !X_ARRAY.equals(parent.getLocalName())
+						&& !"1".equals(parsedScript[2].getString())) {
+						//Occurrence maximum of attribute or text value can't
+						// be higher then one
+						error(XDEF.XDEF262);
+					}
+				}
+				if (eos()) {
+					parsedScript[1] = new SBuffer("jvalue()", jo.getPosition());
+				}
+				sbf = parsedScript[1];
+			}
+			if (occ != null) { // occurrence
+				setXDAttr(e, "script", occ);
+			}
+			setAttr(e, X_VALATTR, sbf);
+		}
+		if (name != null) {
+			if (ANY_NAME.equals(name)) {
+				setAttr(e,X_KEYATTR, new SBuffer("string();", e._name));
+				setXDAttr(e, "script", occ);
+			} else {
+				addMatchExpression(e, '@' + X_KEYATTR + "=='"+ name +"'");
+				setAttr(e,X_KEYATTR,new SBuffer("fixed('"+name+ "');",e._name));
+			}
+		}
+		return e;
 	}
 
 	private PNode genXonMap(final JMap map, final PNode parent) {
@@ -408,22 +456,43 @@ public final class CompileXonXdef extends StringParser {
 			e = genJElement(parent, X_MAP, map.getPosition());
 			ee = e;
 		}
+		Object anyItem = null;
 		for (Map.Entry<Object, Object> entry: map.entrySet()) {
 			String key = (String) entry.getKey();
 			Object o = entry.getValue();
-			if (o != null && (o instanceof Map || o instanceof List)) {
-				PNode eee = genXonModel(o, ee);
+			if (key == null || ANY_NAME.equals(key)) {
+				anyItem = o;
+			} else {
+				String keyXmlName = XonTools.toXmlName(key);
+				if (o != null && (o instanceof Map || o instanceof List)) {
+					PNode eee = genXonModel(o, ee);
+					if (_xdNamespace.equals(eee._nsURI)
+						&& "choice".equals(eee._localName)) {
+						for (PNode n : eee.getChildNodes()) {
+							updateKeyInfo(n, keyXmlName);
+						}
+					} else {
+						updateKeyInfo(eee, keyXmlName);
+					}
+				} else {
+					ee.addChildNode(genXonValue(keyXmlName, (JValue) o, ee));
+				}
+			}
+		}
+		if (anyItem != null) {
+			if (anyItem != null && (anyItem instanceof Map
+				|| anyItem instanceof List)) {
+				PNode eee = genXonModel(anyItem, ee);
 				if (_xdNamespace.equals(eee._nsURI)
 					&& "choice".equals(eee._localName)) {
 					for (PNode n : eee.getChildNodes()) {
-						updateKeyInfo(n, key);
+						updateKeyInfo(n, ANY_NAME);
 					}
 				} else {
-					updateKeyInfo(eee, key);
+					updateKeyInfo(eee, ANY_NAME);
 				}
 			} else {
-				ee.addChildNode(genXonValue(XonTools.toXmlName(key),
-					(JValue) o, ee));
+				ee.addChildNode(genXonValue(ANY_NAME, (JValue) anyItem,ee));
 			}
 		}
 		return e;
@@ -512,44 +581,6 @@ public final class CompileXonXdef extends StringParser {
 					}
 				}
 			}
-		}
-		return e;
-	}
-
-	private PNode genXonValue(final String name,
-		final JValue jo,
-		final PNode parent) {
-		SBuffer sbf, occ = null;
-		PNode e = genJElement(parent, X_ITEM, jo.getPosition());
-		if (jo.getValue() == null) {
-			sbf = new SBuffer("jnull()");
-		} else {
-			if (jo.toString().trim().isEmpty()) {
-				sbf = new SBuffer("jvalue()", jo.getPosition()); // => any value
-				occ = new SBuffer("?", jo.getPosition());
-			} else {
-				SBuffer[] parsedScript = parseTypeDeclaration(jo.getSBuffer());
-				if (!parsedScript[0].getString().isEmpty()) { // occurrence
-					occ = parsedScript[0];
-					if (!X_ARRAY.equals(parent.getLocalName())
-						&& !"1".equals(parsedScript[2].getString())) {
-						error(XDEF.XDEF262); //("====== " + occ.getString());
-					}
-				}
-				if (eos()) {
-					parsedScript[1] = new SBuffer("jvalue()", jo.getPosition());
-				}
-				sbf = parsedScript[1];
-			}
-			if (occ != null) { // occurrence
-				setXDAttr(e, "script", occ);
-			}
-			setAttr(e, X_VALATTR, sbf);
-		}
-		if (name != null) {
-			addMatchExpression(e, '@' + X_KEYATTR + "=='"+ name +"'");
-			setAttr(e, X_KEYATTR,
-				new SBuffer("fixed('" + name + "');",e._name));
 		}
 		return e;
 	}
@@ -761,14 +792,23 @@ public final class CompileXonXdef extends StringParser {
 		 * @param value value of item.
 		 */
 		public void xdScript(SBuffer name, SBuffer value) {
-			String s = ONEOF_NAME.equals(name.getString()) ? ONEOF_NAME : "";
-			s += value == null ? "" : value.getString();
 			SPosition spos = value == null ? name : value;
-			JValue jv = new JValue(name, new JValue(spos, s));
-			if (_kind == 1) { // array
-				_arrays.peek().add(jv);
-			} else if (_kind == 2) { // map
-				_maps.peek().put(SCRIPT_NAME, jv);
+			String s;
+			if (ANY_NAME.equals(name.getString())) {
+				if (_kind == 2) { // map
+					_names.add(new SBuffer(null, name));
+				} else {
+					throw new RuntimeException(ANY_NAME+ ":"+value);
+				}
+			} else {
+				s = ONEOF_NAME.equals(name.getString()) ? ONEOF_NAME : "";
+				s += value == null ? "" : value.getString();
+				JValue jv = new JValue(name, new JValue(spos, s));
+				if (_kind == 1) { // array
+					_arrays.peek().add(jv);
+				} else if (_kind == 2) { // map
+					_maps.peek().put(SCRIPT_NAME, jv);
+				}
 			}
 		}
 		@Override

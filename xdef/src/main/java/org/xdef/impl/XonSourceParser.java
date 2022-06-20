@@ -15,6 +15,7 @@ import javax.xml.namespace.QName;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xdef.XDConstants;
+import org.xdef.msg.JSON;
 import org.xdef.msg.SYS;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.ReportWriter;
@@ -106,6 +107,14 @@ public final class XonSourceParser implements XonParser, XParser {
 
 	// validate object
 	XonSourceParser(final Object x) {_p = new XonObjectParser(x, this);}
+
+	/** Set reporter to the parser.
+	 * @param reporter where to write reports.
+	 */
+	public final void setReporter(ReportWriter reporter) {
+		_p.setReportWriter(reporter);
+	}
+
 
 	/** This method is called after all attributes of the current element
 	 * attribute list was reached. The implementation may check the list of
@@ -202,12 +211,15 @@ public final class XonSourceParser implements XonParser, XParser {
 		boolean result = false;
 		for (SBuffer x : _names) {
 			if (s.equals(x.getString())) {
+//				//Value pair &{0} already exists
+//				error(JSON.JSON022, name);
 				result = true;
 				break;
 			}
 		}
 		_names.push(_name = name);
-		return false;
+//		return false;
+		return result;
 	}
 	@Override
 	/** Array started.
