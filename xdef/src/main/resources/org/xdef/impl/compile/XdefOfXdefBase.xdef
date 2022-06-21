@@ -765,7 +765,7 @@ XONArray ::= "[" XONXscript? XONSP? XONList? XONSP? "]"
 
 XONList ::= XONValue (XONSP? "," XONSP? XONValue )*
 
-XONValue ::= XONSP? ( XONPair | "null" | "true" | "false" | XONNumber
+XONValue ::= XONSP? ( XONPair | "null" | "true" | "false" | XONNumber | "$:any"
   | XONString | XONArray | XONObject) XONSP?
 
 xon ::= XONSP? (XONArray | XONObject | XONString)

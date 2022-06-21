@@ -20,6 +20,7 @@ import org.xdef.sys.ReportWriter;
 import org.xdef.sys.SBuffer;
 import org.xdef.sys.SPosition;
 import org.xdef.sys.SRuntimeException;
+import org.xdef.xml.KXmlUtils;
 import org.xdef.xon.IniReader;
 import static org.xdef.xon.XonNames.ANY_NAME;
 import org.xdef.xon.XonParser;
@@ -31,6 +32,7 @@ import static org.xdef.xon.XonNames.X_KEYATTR;
 import static org.xdef.xon.XonNames.X_MAP;
 import org.xdef.xon.XonParsers;
 import static org.xdef.xon.XonNames.X_VALATTR;
+import org.xdef.xon.XonTools.JAny;
 
 /** Create X-definition model from xd:xon element.
  * @author Vaclav Trojan
@@ -368,47 +370,65 @@ public final class CompileXonXdef extends StringParser {
 		final JValue jo,
 		final PNode parent) {
 		SBuffer sbf, occ = null;
-		PNode e = genJElement(parent, X_ITEM, jo.getPosition());
-		if (jo.getValue() == null) {
-			sbf = new SBuffer("jnull()");
+		PNode e;
+		if (jo instanceof JAny) {
+			e = genXonAny((JAny) jo, parent);
 		} else {
-			if (jo.toString().trim().isEmpty()) {
-				sbf = new SBuffer("jvalue()", jo.getPosition());
-				occ = new SBuffer("?", jo.getPosition());
+			e = genJElement(parent, X_ITEM, jo.getPosition());
+			if (jo.getValue() == null) {
+				sbf = new SBuffer("jnull()");
 			} else {
-				SBuffer[] parsedScript = parseTypeDeclaration(jo.getSBuffer());
-				if (!parsedScript[0].getString().isEmpty()) { // occurrence
-					occ = parsedScript[0];
-					if (!ANY_NAME.equals(name)
-						&& !X_ARRAY.equals(parent.getLocalName())
-						&& !"1".equals(parsedScript[2].getString())) {
-						//Occurrence maximum of attribute or text value can't
-						// be higher then one
-						error(XDEF.XDEF262);
+				if (jo.toString().trim().isEmpty()) {
+					sbf = new SBuffer("jvalue()", jo.getPosition());
+					occ = new SBuffer("?", jo.getPosition());
+				} else {
+					SBuffer[] parsedScript = parseTypeDeclaration(jo.getSBuffer());
+					if (!parsedScript[0].getString().isEmpty()) { // occurrence
+						occ = parsedScript[0];
+						if (!ANY_NAME.equals(name)
+							&& !X_ARRAY.equals(parent.getLocalName())
+							&& !"1".equals(parsedScript[2].getString())) {
+							//Occurrence maximum of attribute or text value can't
+							// be higher then one
+							error(XDEF.XDEF262);
+						}
 					}
+					if (eos()) {
+						parsedScript[1] = new SBuffer("jvalue()", jo.getPosition());
+					}
+					sbf = parsedScript[1];
 				}
-				if (eos()) {
-					parsedScript[1] = new SBuffer("jvalue()", jo.getPosition());
+				if (occ != null) { // occurrence
+					setXDAttr(e, "script", occ);
 				}
-				sbf = parsedScript[1];
+				setAttr(e, X_VALATTR, sbf);
 			}
-			if (occ != null) { // occurrence
-				setXDAttr(e, "script", occ);
-			}
-			setAttr(e, X_VALATTR, sbf);
 		}
 		if (name != null) {
-			if (ANY_NAME.equals(name)) {
-				setAttr(e,X_KEYATTR, new SBuffer("string();", e._name));
-				setXDAttr(e, "script", occ);
+			if (e._nsPrefixes.containsKey(_xdPrefix)
+				&& "choice".equals(e.getLocalName())) {
+				for (PNode p: e.getChildNodes()) {
+					setName(p, name, occ);
+				}
 			} else {
-				addMatchExpression(e, '@' + X_KEYATTR + "=='"+ name +"'");
-				setAttr(e,X_KEYATTR,new SBuffer("fixed('"+name+ "');",e._name));
+				setName(e, name, occ);
 			}
 		}
 		return e;
 	}
 
+	private void setName(PNode e, String name, SBuffer occ) {
+		if (ANY_NAME.equals(name)) {
+			setAttr(e,X_KEYATTR, new SBuffer("string();", e._name));
+			if (occ != null) {
+				setXDAttr(e, "script", occ);
+			}
+		} else {
+			addMatchExpression(e, '@' + X_KEYATTR + "=='"+ name +"'");
+			setAttr(e,X_KEYATTR,new SBuffer("fixed('"+name+ "');",e._name));
+		}
+	}
+	
 	private PNode genXonMap(final JMap map, final PNode parent) {
 		PNode e, ee;
 		Object val = map.get(SCRIPT_NAME);
@@ -585,6 +605,37 @@ public final class CompileXonXdef extends StringParser {
 		return e;
 	}
 
+	/** Create PNode for $:any.
+	 * @param xon XON/JSON parsed data.
+	 * @param parent parent PNode,
+	 * @return created PNode.
+	 */
+	private PNode genXonAny(final JAny jo, final PNode parent) {
+/**
+		PNode ee = genJElement(parent, X_ITEM, jo.getPosition());
+		SBuffer script = new SBuffer("jvalue();", jo.getPosition());
+		setAttr(ee, X_VALATTR, script);
+		return ee;
+/**/
+		PNode e = genXDElement(parent, "choice", jo.getPosition());
+		PNode ee = genJElement(e, X_ITEM, jo.getPosition());
+		SBuffer script = new SBuffer("jvalue();", jo.getPosition());
+		setAttr(ee, X_VALATTR, script);
+		e.addChildNode(ee);
+		ee = genJElement(e, X_ARRAY, jo.getPosition());
+		script = new SBuffer("options moreAttributes, moreElements, moreText",
+			jo.getPosition());
+		setXDAttr(ee, "script", script);
+		e.addChildNode(ee);
+		ee = genJElement(e, X_MAP, jo.getPosition());
+		script = new SBuffer("options moreAttributes, moreElements, moreText",
+			jo.getPosition());
+		setXDAttr(ee, "script", script);
+		e.addChildNode(ee);	
+		return e;
+/**/
+	}
+
 	/** Create PNode with XON/JSON model from XON/JSON parsed data.
 	 * @param xon XON/JSON parsed data.
 	 * @param parent parent PNode,
@@ -724,7 +775,8 @@ public final class CompileXonXdef extends StringParser {
 			String s = name.getString();
 			boolean result = false;
 			for (SBuffer x: _names) {
-				if (s.equals(x.getString())) {
+				if (s != null && s.equals(x.getString())
+					|| s == null && x.getString() == null) {
 					result = true;
 					break;
 				}
@@ -795,11 +847,8 @@ public final class CompileXonXdef extends StringParser {
 			SPosition spos = value == null ? name : value;
 			String s;
 			if (ANY_NAME.equals(name.getString())) {
-				if (_kind == 2) { // map
-					_names.add(new SBuffer(null, name));
-				} else {
-					throw new RuntimeException(ANY_NAME+ ":"+value);
-				}
+//				putValue(new JValue((SPosition)name, "emailAddr();"));
+				putValue(new JAny((SPosition)name, value));
 			} else {
 				s = ONEOF_NAME.equals(name.getString()) ? ONEOF_NAME : "";
 				s += value == null ? "" : value.getString();
