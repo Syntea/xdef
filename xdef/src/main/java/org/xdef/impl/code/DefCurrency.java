@@ -21,6 +21,11 @@ public class DefCurrency extends XDValueAbstract implements XDCurrency {
 	/** Create new instance null DefCurrency. */
 	public DefCurrency() {_value = null;}
 
+	/** Create new instance of DefCurrency from java.util.Currency.
+	 * @param c currency object.
+	 */
+	public DefCurrency(final Currency c) {_value = c;}
+
 	/** Create new instance of DefCurrency from string with ISO 4217 code.
 	 * @param code string with ISO 4217 code.
 	 */
