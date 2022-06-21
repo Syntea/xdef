@@ -159,7 +159,7 @@ public final class XonReader extends StringParser implements XonParsers {
 						//Value pair &{0} already exists
 						error(JSON.JSON022, spos);
 					}
-					_jp.xdScript(new SBuffer(XonNames.ANY_NAME, spos),null);
+					name = new SBuffer(null, spos);
 				} else {
 					if (isChar('"')) {
 						name = new SBuffer(XonTools.readJString(this), spos);
@@ -171,15 +171,15 @@ public final class XonReader extends StringParser implements XonParsers {
 						setEos();
 						return;
 					}
-					if (_jp.namedValue(name)) {
-						//Value pair &{0} already exists
-						error(JSON.JSON022, name);
-					}
 				}
 				skipSpacesOrComments();
 				if (!isChar(':')) {
 					//"&{0}"&{1}{ or "}{"} expected
 					error(JSON.JSON002, ":");
+				}
+				if (_jp.namedValue(name)) {
+					//Value pair &{0} already exists
+					error(JSON.JSON022, name);
 				}
 				readItem();
 			}
@@ -691,23 +691,23 @@ public final class XonReader extends StringParser implements XonParsers {
 			readMap();
 		} else if (isChar('[')) {
 			readArray();
-//		} else if (_jdef && isToken(XonNames.ANY_NAME)) {
-//			SPosition spos = getPosition(); // xdef $ANY
-//			spos.setIndex(getIndex() - XonNames.ANY_NAME.length());
-//			SBuffer name = new SBuffer(XonNames.ANY_NAME, spos);
-//			SBuffer val = new SBuffer(XonNames.ANY_NAME, spos);
-//			skipSpacesOrComments();
-//			if (isChar('=')) {
-//				skipSpacesOrComments();
-//				XonTools.JValue jv = readSimpleValue();
-//				if (!(((XonTools.JValue) jv).getValue() instanceof String)) {
-//					//After ":" in the command $any must follow simpleValue
-//					error(JSON.JSON021);
-//				} else {
-//					val = jv.getSBuffer();
-//				}
-//			}
-//			_jp.xdScript(name, val);
+		} else if (_jdef && isToken(XonNames.ANY_NAME)) {
+			SPosition spos = getPosition(); // xdef $ANY
+			spos.setIndex(getIndex() - XonNames.ANY_NAME.length());
+			SBuffer name = new SBuffer(XonNames.ANY_NAME, spos);
+			SBuffer val = new SBuffer(XonNames.ANY_NAME, spos);
+			skipSpacesOrComments();
+			if (isChar('=')) {
+				skipSpacesOrComments();
+				XonTools.JValue jv = readSimpleValue();
+				if (!(((XonTools.JValue) jv).getValue() instanceof String)) {
+					//After ":" in the command $any must follow simpleValue
+					error(JSON.JSON021);
+				} else {
+					val = jv.getSBuffer();
+				}
+			}
+			_jp.xdScript(name, val);
 		} else {
 			XonTools.JValue jv = readSimpleValue();
 			if (_jdef && (jv == null || jv.getValue() == null
