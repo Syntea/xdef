@@ -1,8 +1,12 @@
 package org.xdef.impl.ext;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.math.MathContext;
 import java.net.InetAddress;
+import java.util.Currency;
+import java.util.List;
+import java.util.Map;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xdef.XDConstants;
@@ -11,14 +15,30 @@ import org.xdef.XDEmailAddr;
 import org.xdef.XDValue;
 import org.xdef.XDValueID;
 import org.xdef.impl.ChkNode;
+import org.xdef.impl.code.DefBigInteger;
+import org.xdef.impl.code.DefBoolean;
+import org.xdef.impl.code.DefChar;
 import org.xdef.impl.code.DefContainer;
+import org.xdef.impl.code.DefCurrency;
 import org.xdef.impl.code.DefDate;
+import org.xdef.impl.code.DefDecimal;
+import org.xdef.impl.code.DefDouble;
+import org.xdef.impl.code.DefDuration;
+import org.xdef.impl.code.DefGPSPosition;
+import org.xdef.impl.code.DefIPAddr;
+import org.xdef.impl.code.DefLong;
+import org.xdef.impl.code.DefNull;
+import org.xdef.impl.code.DefPrice;
+import org.xdef.impl.code.DefString;
 import org.xdef.impl.code.DefXPathExpr;
 import org.xdef.msg.XDEF;
 import org.xdef.proc.XXElement;
 import org.xdef.proc.XXNode;
+import org.xdef.sys.GPSPosition;
+import org.xdef.sys.Price;
 import org.xdef.sys.Report;
 import org.xdef.sys.SDatetime;
+import org.xdef.sys.SDuration;
 import org.xdef.sys.SError;
 import org.xdef.sys.SPosition;
 import org.xdef.sys.SUtils;
@@ -207,6 +227,58 @@ public final class XExtUtils {
 	public static String getXonKey(final XXNode xnode) {
 		String s = xnode.getElement().getAttribute("key");
 		return s != null ? XonTools.xmlToJName(s) : null;
+	}
+	public final static XDValue getXDValueOfObject(final Object o) {
+		if (o instanceof Map) {
+			DefContainer c = new DefContainer();
+			Map x = (Map) o;
+			for (Object y : x.entrySet()) {
+				Map.Entry en = (Map.Entry) y;
+				c.setXDNamedItem((String)en.getKey(),
+					getXDValueOfObject(en.getValue()));
+			}
+			return c;
+		} else if (o instanceof List) {
+			DefContainer c = new DefContainer();
+			List x = (List) o;
+			for (Object y : x) {
+				c.addXDItem(getXDValueOfObject(x));
+			}
+		} else if (o instanceof XDValue) {
+			return (XDValue) o;
+		} else if (o instanceof String) {
+			return new DefString((String) o);
+		} else if (o instanceof Boolean) {
+			return new DefBoolean((Boolean) o);
+		} else if (o instanceof Character) {
+			return new DefChar((Character) o);
+		} else if (o instanceof Float || o instanceof Long) {
+			return new DefDouble(((Number) o).doubleValue());
+		} else if (o instanceof Byte || o instanceof Short
+			|| o instanceof Integer	|| o instanceof Long) {
+			return new DefLong(((Number) o).longValue());
+		} else if (o instanceof BigInteger) {
+			return new DefBigInteger(((BigInteger) o));
+		} else if (o instanceof BigDecimal) {
+			return new DefDecimal(((BigDecimal) o));
+		} else if (o instanceof SDatetime) {
+			return new DefDate((SDatetime) o);
+		} else if (o instanceof SDuration) {
+			return new DefDuration((SDuration) o);
+		} else if (o instanceof InetAddress) {
+			return new DefIPAddr((InetAddress) o);
+		} else if (o instanceof GPSPosition) {
+			return new DefGPSPosition((GPSPosition) o);
+		} else if (o instanceof Price) {
+			return new DefPrice((Price) o);
+		} else if (o instanceof Currency) {
+			return new DefCurrency((Currency) o);
+		}
+		
+		return DefNull.NULL_VALUE;
+	}
+	public final static XDValue getXDValueOfXon(final XXElement xnode) {
+		return getXDValueOfObject(xnode.getXon());
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
