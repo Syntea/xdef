@@ -39,6 +39,7 @@ import org.xdef.sys.ReportWriter;
 import org.xdef.sys.SDatetime;
 import org.xdef.sys.SDuration;
 import org.xdef.sys.SRuntimeException;
+import org.xdef.sys.STester;
 import org.xdef.sys.SThrowable;
 
 /** Builder of XPool.
@@ -238,9 +239,10 @@ public final class XBuilder implements XDBuilder {
 		try {
 			p.compileXPool(result);
 		} catch (RuntimeException ex) {
+			String s = STester.printThrowable(ex);
 			//Program exception&{0}{: }
 			reporter.putReport(display
-				? Report.error(SYS.SYS036, ex) : Report.fatal(SYS.SYS036, ex));
+				? Report.error(SYS.SYS036, s) : Report.fatal(SYS.SYS036, s));
 		}
 		for (Object x: p.getPrecompiler().getIncluded()) { // add imported items
 			if (x instanceof URL) {
