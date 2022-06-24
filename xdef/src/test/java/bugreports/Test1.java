@@ -5,6 +5,7 @@ import org.xdef.XDDocument;
 import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.xdef.sys.ArrayReporter;
+import static org.xdef.sys.STester.runTest;
 import test.XDTester;
 
 public class Test1 extends XDTester {
