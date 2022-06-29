@@ -68,7 +68,7 @@
         <maven.deploy.skip>true</maven.deploy.skip>
         
         <saxon-he.version>9.7.0-18</saxon-he.version>
-        <derby.version>10.12.1.1</derby.version>
+        <derby.version>10.14.2.0</derby.version>
         <slf4j.version>1.7.25</slf4j.version>
         <logback.version>1.2.3</logback.version>
         <logback-testng.version>1.0.0</logback-testng.version>
