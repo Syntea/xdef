@@ -444,25 +444,14 @@ final class XCGenerator extends XCGeneratorXON {
 					genChildElementCreator(iname,  listNodes, max > 1);
 					if (xe1._xon == XConstants.XON_MODE_W) {
 						if (XDConstants.XON_NS_URI_W.equals(xe1.getNSUri())) {
-							XData keyAttr =
-								(XData)xe1.getAttr(XonNames.X_KEYATTR);
-							String jname;
-							if (keyAttr != null) {
-								jname = keyAttr.getFixedValue().toString();
-							} else {
-								ndx = name.indexOf('$');
-								jname = ndx >= 0 ? name.substring(ndx + 1):name;
-							}
-							jname = '"' + jname + '"';
 							if (XonNames.X_ITEM.equals(xe1.getLocalName())) {
 								if (groupKind != XMNode.XMCHOICE) {
 									genXonItemGetterAndSetter(xe1,
-										typeName, iname, max, setters, getters,
-										sbi, classNames, varNames);
+										typeName, iname, max, setters,
+										getters, sbi, classNames, varNames);
 								}
 							}
 						} else { // XON map items
-							String jname = xe1.getLocalName();
 							if (groupKind != XMNode.XMCHOICE) {
 								genXonItemGetterAndSetter(xe1,
 									typeName, iname, max, setters, getters, sbi,
