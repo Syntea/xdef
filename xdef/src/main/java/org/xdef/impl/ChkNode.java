@@ -1091,7 +1091,10 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	private static String getItemName(final XMNode xnode) {
 		XMData key = ((XMElement)xnode).getAttr("key");
 		if (key != null) {
-			return ".['"+key.getFixedValue().toString() + "']";
+			XDValue keyVal = key.getFixedValue();
+			if (keyVal != null) {
+				return ".['"+keyVal.toString() + "']";
+			}
 		}
 		return "";
 	}
