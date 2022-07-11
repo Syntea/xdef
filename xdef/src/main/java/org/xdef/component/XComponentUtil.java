@@ -387,7 +387,7 @@ public class XComponentUtil {
 	 */
 	private static void toXonMap(final XComponent xc,
 		final Method[] methods,
-		final Map<String, Object> result) {
+		final Map<String, Object> result) {		
 		for (Method x: methods) {
 			String methodName = x.getName();
 			Object o;
@@ -410,6 +410,23 @@ public class XComponentUtil {
 						result.put(key, xc1.toXon());
 					} else {
 						result.put(key, o);
+					}
+				} catch (Exception ex) {
+					continue;
+				}
+			} else if (methodName.startsWith("entriesOf$")) {
+				o = null;
+				try {
+					x.setAccessible(true);
+					o = x.invoke(xc);
+					if (o == null) {
+						continue;
+					}
+					if (o instanceof Map) {
+						for (Object y: ((Map) o).entrySet()) {
+							Map.Entry z = (Map.Entry) y;
+							result.put((String) z.getKey(), z.getValue());
+						}
 					}
 				} catch (Exception ex) {
 					continue;

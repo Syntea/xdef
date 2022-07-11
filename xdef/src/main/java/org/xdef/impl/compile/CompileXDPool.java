@@ -52,6 +52,7 @@ import static org.xdef.XDValueID.XD_ANY;
 import static org.xdef.XDValueID.XD_BOOLEAN;
 import static org.xdef.XDValueID.XD_VOID;
 import org.xdef.impl.XConstants;
+import org.xdef.xml.KXmlUtils;
 
 /** Compile X-definitions from source data.
  * @author Vaclav Trojan
@@ -1519,12 +1520,29 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					//Attribute '&{0}' not allowed here
 					error(pattr._value, XDEF.XDEF254, pattr._name);
 				}
-				CompileXonXdef.genXdef(pnode,
+				PNode p = CompileXonXdef.genXdef(pnode,
 					jsonMode,
 					name.equals("json") ? "xon" : name,
 					sval,
 					_precomp.getReportWriter());
 				compileXChild(xdef, null, pnode, xdef, 1, jsonMode);
+				if (/*p != null*/false) {
+System.out.println(KXmlUtils.nodeToString(p.toXML(), true));
+					pa = p.getAttrNS("name", XPreCompiler.NS_XDEF_INDEX);
+					p.removeAttr(pa);
+					SBuffer gname = pa == null ? null : pa._value;
+					String dname = gname.getString() + '$' + "choice";
+					XElement dummy = new XElement(dname, null, xdef);
+					dummy.setSPosition(copySPosition(pnode._name));
+					dummy.setXDPosition(xdef.getXDPosition() + dname);
+					addNode(xdef, dummy, 1, p._name);
+					if (!xdef.addModel(dummy)) {
+						//Repeated specification of element '&{0}'
+						error(gname, XDEF.XDEF236, gname.getString());
+					} else {
+						compileXChild(dummy, dummy, p, xdef, 2, jsonMode);
+					}
+				}
 				return;
 			} else {
 				if (level > 1 || !"macro".equals(pnode._localName)) {

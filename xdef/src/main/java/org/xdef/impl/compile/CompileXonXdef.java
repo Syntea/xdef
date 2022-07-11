@@ -6,38 +6,43 @@ import java.util.Stack;
 import org.xdef.XDConstants;
 import org.xdef.impl.XConstants;
 import org.xdef.impl.XOccurrence;
-import org.xdef.xon.XonTools;
-import org.xdef.xon.XonReader;
-import org.xdef.xon.XonTools.JArray;
-import org.xdef.xon.XonTools.JObject;
-import org.xdef.xon.XonTools.JMap;
-import org.xdef.xon.XonTools.JValue;
 import org.xdef.msg.JSON;
 import org.xdef.msg.SYS;
-import org.xdef.sys.StringParser;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.ReportWriter;
 import org.xdef.sys.SBuffer;
 import org.xdef.sys.SPosition;
 import org.xdef.sys.SRuntimeException;
-import org.xdef.xml.KXmlUtils;
+import org.xdef.sys.StringParser;
 import org.xdef.xon.IniReader;
 import static org.xdef.xon.XonNames.ANY_NAME;
-import org.xdef.xon.XonParser;
 import static org.xdef.xon.XonNames.ONEOF_NAME;
 import static org.xdef.xon.XonNames.SCRIPT_NAME;
 import static org.xdef.xon.XonNames.X_ARRAY;
 import static org.xdef.xon.XonNames.X_ITEM;
 import static org.xdef.xon.XonNames.X_KEYATTR;
 import static org.xdef.xon.XonNames.X_MAP;
-import org.xdef.xon.XonParsers;
 import static org.xdef.xon.XonNames.X_VALATTR;
+import org.xdef.xon.XonParser;
+import org.xdef.xon.XonParsers;
+import org.xdef.xon.XonReader;
+import org.xdef.xon.XonTools;
 import org.xdef.xon.XonTools.JAny;
+import org.xdef.xon.XonTools.JArray;
+import org.xdef.xon.XonTools.JMap;
+import org.xdef.xon.XonTools.JObject;
+import org.xdef.xon.XonTools.JValue;
+
 
 /** Create X-definition model from xd:xon element.
  * @author Vaclav Trojan
  */
 public final class CompileXonXdef extends StringParser {
+	/** name extension for model of $:any witk key attribute. */
+	private static final String ANY_WITH_KEY = "KEY_";
+
+	/** XPosition of $:any model (no key).*/
+	private final byte _xonMode;
 	/** Prefix of X-definition namespace. */
 	private String _xdPrefix;
 	/** Index of X-definition namespace. */
@@ -46,9 +51,30 @@ public final class CompileXonXdef extends StringParser {
 	private String _xdNamespace;
 	/** XPath position of XON/JSON description.*/
 	private String _basePos;
+	/** PNode with generated model.*/
+	private final PNode _xonModel;
+	private final String _anyName;
+	/** X-position of generated $:any model (no key).*/
+	private String _anyXPos;
 
 	/** Prepare instance of CompileXonXdef. */
-	private CompileXonXdef() {super();}
+	/** Prepare instance of CompileXonXdef. */
+	private CompileXonXdef(PNode p,
+		final byte xonMode,
+		final SBuffer name,
+		final ReportWriter reporter) {
+		super();
+		_xonMode = xonMode;
+		_xdNamespace = p._nsURI;
+		_xdPrefix = p.getPrefix();
+		_xdIndex = p._nsPrefixes.get(_xdPrefix);
+		_basePos = p._xpathPos + "/text()";
+		setReportWriter(reporter);
+		_xonModel = p;
+		_anyName = name.getString() + "_ANY_";
+//		_anyXPos = _xonModel._parent._xdef.getName() + "#" + _anyName;
+		_anyXPos = null;
+	}
 
 	/** Set attribute to PNode.
 	 * @param e PNode where to set an attribute.
@@ -428,7 +454,7 @@ public final class CompileXonXdef extends StringParser {
 			setAttr(e,X_KEYATTR,new SBuffer("fixed('"+name+ "');",e._name));
 		}
 	}
-	
+
 	private PNode genXonMap(final JMap map, final PNode parent) {
 		PNode e, ee;
 		Object val = map.get(SCRIPT_NAME);
@@ -611,29 +637,13 @@ public final class CompileXonXdef extends StringParser {
 	 * @return created PNode.
 	 */
 	private PNode genXonAny(final JAny jo, final PNode parent) {
-/**
-		PNode ee = genJElement(parent, X_ITEM, jo.getPosition());
-		SBuffer script = new SBuffer("jvalue();", jo.getPosition());
-		setAttr(ee, X_VALATTR, script);
-		return ee;
-/**/
+		if (_anyXPos == null) {
+			_anyXPos = _xonModel._parent._xdef.getName() + "#" + _anyName;
+		}
 		PNode e = genXDElement(parent, "choice", jo.getPosition());
-		PNode ee = genJElement(e, X_ITEM, jo.getPosition());
-		SBuffer script = new SBuffer("jvalue();", jo.getPosition());
-		setAttr(ee, X_VALATTR, script);
-		e.addChildNode(ee);
-		ee = genJElement(e, X_ARRAY, jo.getPosition());
-		script = new SBuffer("options moreAttributes, moreElements, moreText",
-			jo.getPosition());
-		setXDAttr(ee, "script", script);
-		e.addChildNode(ee);
-		ee = genJElement(e, X_MAP, jo.getPosition());
-		script = new SBuffer("options moreAttributes, moreElements, moreText",
-			jo.getPosition());
-		setXDAttr(ee, "script", script);
-		e.addChildNode(ee);	
+		setXDAttr(e, "ref", new SBuffer(_anyXPos, jo.getPosition()));
+		parent.addChildNode(e);
 		return e;
-/**/
 	}
 
 	/** Create PNode with XON/JSON model from XON/JSON parsed data.
@@ -670,6 +680,38 @@ public final class CompileXonXdef extends StringParser {
 		parent.addChildNode(e);
 		return e;
 	}
+	private PNode genXonAnyModels() {
+		PNode e, ee, eee;
+		SPosition spos = _xonModel._name;
+//"<xd:choice xd:name=\"XON_ANY_\">\n" +
+		e = genXDElement(_xonModel, "choice", spos);
+		setXDAttr(e, "name", new SBuffer(_anyName, spos));
+//"  <jx:item key=\"? string();\" val=\"jvalue();\"/>\n" +
+		ee = genJElement(e, X_ITEM, spos);
+		setAttr(ee, X_KEYATTR, new SBuffer("? string();", spos));
+		setAttr(ee, X_VALATTR, new SBuffer("jvalue();", spos));
+		e.addChildNode(ee);
+//"  <jx:array key=\"? string();\">\n" +
+		ee = genJElement(e, X_ARRAY, spos);
+		setAttr(ee, X_KEYATTR, new SBuffer("? string();", spos));
+//"    <xd:choice xd:script=\"occurs *; ref #XON_ANY_\"/>\n" +
+		eee = genXDElement(ee, "choice", spos);
+		setXDAttr(eee, "script", new SBuffer("occurs *; ref "+_anyXPos, spos));
+		ee.addChildNode(eee);
+//"  </jx:array>\n" +
+		e.addChildNode(ee);
+//"  <jx:map key=\"? string();\">\n" +
+		ee = genJElement(e, X_MAP, spos);
+		setAttr(ee, X_KEYATTR, new SBuffer("? string();", spos));
+//"    <xd:choice xd:script=\"occurs *; ref #XON_ANY_\"/>\n" +
+		eee = genXDElement(ee, "choice", spos);
+		setXDAttr(eee, "script", new SBuffer("occurs *; ref "+_anyXPos, spos));
+		ee.addChildNode(eee);
+//"  </jx:map>\n" +
+		e.addChildNode(ee);
+//		_xonModel._parent.addChildNode(e);
+		return e;
+	}
 
 	/** Create X-definition model from PNode with XON/JSON description.
 	 * @param p PNode with XON/JSON script.
@@ -678,7 +720,7 @@ public final class CompileXonXdef extends StringParser {
 	 * @param name name of XON/JSON model in X-definition.
 	 * @param reporter report writer
 	 */
-	static final void genXdef(final PNode p,
+	static final PNode genXdef(final PNode p,
 		final byte xonMode,
 		final String format,
 		final SBuffer name,
@@ -687,7 +729,8 @@ public final class CompileXonXdef extends StringParser {
 			//Internal error&{0}{: }
 			throw new SRuntimeException(SYS.SYS066, "Namespace W3C expected");
 		}
-		CompileXonXdef jx = new CompileXonXdef();
+		CompileXonXdef jx = new CompileXonXdef(p, xonMode, name, reporter);
+
 		jx._xdNamespace = p._nsURI;
 		jx._xdPrefix = p.getPrefix();
 		jx._xdIndex = p._nsPrefixes.get(jx._xdPrefix);
@@ -716,6 +759,10 @@ public final class CompileXonXdef extends StringParser {
 			System.out.flush();
 		}
 /*#end*/
+		if (jx._anyXPos == null) {
+			return null;
+		}
+		return jx.genXonAnyModels();
 	}
 
 	/** This class provides parsing of XON/JSON source and creates the XON
