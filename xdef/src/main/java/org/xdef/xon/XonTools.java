@@ -640,7 +640,10 @@ public class XonTools {
 					return getReader(SUtils.getExtendedURL(s), charset);
 				} catch (Exception ex) {
 					try {
-						return getReader(new File(s), charset);
+						File f = new File(s);
+						if (f.isFile()) {
+							return getReader(f, charset);
+						}
 					} catch (Exception exx) {}
 				}
 			}

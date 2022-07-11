@@ -720,10 +720,11 @@ INICommand ::= INISeparator (INIComment | INIProp | INISection) INISeparator
 
 INIComment ::= "#" INIChar*
 
-INIProp ::= (INIChar - "=")+ "=" AttributeScript?
+INIProp ::= INISP? (INIChar - "=")+ INISP? "="
+  INISP? AttributeScript (INISP? ";")* INISP?
 
-INISection::= "[" (INIChar - ";")+ INISP?
-   ( ";" INISP? ( "$:script" INISP? "=" INISP? ElementScript? )? INISP? )? "]"
+INISection::= INISP? "[" INISP? (INIChar - "]")+ INISP? "]" INISP?
+   ("$:script" INISP? "=" INISP? ElementScript (INISP? ";")* )? 
 
 INIProps ::= INICommand*
 
@@ -755,15 +756,15 @@ XONString ::= ('"' ([^\"] | XONControlchar )* '"' |
 XONXscript ::= XONSP? ( ("$:script" XONSP? "=" XONSP? XONString)
   | ( "$:oneOf" (XONSP? "=" XONSP? XONString)? ) ) (XONSP? ",")?
 
-XONObject ::= "{" XONXscript? (XONMembers)* XONSP? "}"
-
 XONPair ::= ("$:any" | $ncName | XONString) XONSP? ":" XONSP? XONValue
 
-XONMembers ::= XONSP? XONPair (XONSP? "," XONSP? XONPair)*
+XONMembers ::= XONSP? XONPair (XONSP? "," XONSP? XONPair)* (XONSP? ",")?
+
+XONObject ::= "{" XONXscript? XONMembers? XONSP? "}"
+
+XONList ::= XONValue (XONSP? "," XONSP? XONValue )* (XONSP? ",")?
 
 XONArray ::= "[" XONXscript? XONSP? XONList? XONSP? "]"
-
-XONList ::= XONValue (XONSP? "," XONSP? XONValue )*
 
 XONValue ::= XONSP? ( XONPair | "null" | "true" | "false" | XONNumber | "$:any"
   | XONString | XONArray | XONObject) XONSP?
