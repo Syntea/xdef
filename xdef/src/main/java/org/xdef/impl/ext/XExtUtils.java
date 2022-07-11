@@ -274,7 +274,7 @@ public final class XExtUtils {
 		} else if (o instanceof Currency) {
 			return new DefCurrency((Currency) o);
 		}
-		
+
 		return DefNull.NULL_VALUE;
 	}
 	public final static XDValue getXDValueOfXon(final XXElement xnode) {

@@ -128,6 +128,9 @@ public class TestXon extends XDTester {
 
 	@Override
 	public void test() {
+		if (!_xdNS.startsWith("http://www.xdef.org/xdef/4.")) {
+			return;
+		}
 		assertNull(testx("byte", "[null, 1b, -3b ]"));
 		assertNull(testx("short", "[null, 1s ]"));
 		assertNull(testx("int", "[null, 1i ]"));
@@ -479,8 +482,7 @@ public class TestXon extends XDTester {
 "    }"+
 "  </xd:xon>\n" +
 "</xd:def>";
-			xp = compile(xdef);
-			xd = xp.createXDDocument("A");
+			xd = compile(xdef).createXDDocument("A");
 			String yaml =
 "cities:\n" +
 "- '2020-02-22'\n" +
@@ -539,7 +541,7 @@ public class TestXon extends XDTester {
 "servertool.up=string()\n"+
 "  </xd:ini>\n"  +
 "</xd:def>";
-			xd = compile(xdef).createXDDocument("A");
+			xd = XDFactory.compileXD(null,xdef).createXDDocument("A");
 			ini =
 "#this is INI file comment\n" +
 "address=dhcp\1\n" +
@@ -1139,7 +1141,7 @@ public class TestXon extends XDTester {
 "Distance from London\n" +
 "to:\n" +
 " - Brussels = 322(km)\n" +
-" - Paris = 344(km)\n";			
+" - Paris = 344(km)\n";
 			assertEq(strw.toString(), s);
 			if (!XonUtils.xonEqual(x,y =  XonUtils.xonToJson(y))) {
 				fail("** 1 **\n"+XonUtils.toXonString(x, true)
@@ -1155,7 +1157,7 @@ public class TestXon extends XDTester {
 			xc = xd.jparseXComponent(json, null, reporter);
 			assertNoErrors(reporter);
 			reporter.clear();
-			assertEq(strw.toString(), s);			
+			assertEq(strw.toString(), s);
 		} catch (Exception ex) {fail(ex);}
 		reporter.clear();
 

@@ -703,7 +703,7 @@ Lexicon ::= (S? $rule XPosition S? "=" S? XMLName)* S?
 
 INISP ::= [#9 ]+
 
-ININewLine ::=  (#13 #10 | #10)+
+ININewLine ::= (#13 #10 | #10)+
 
 INIOctalDigit ::= [0-7]
 
@@ -720,11 +720,10 @@ INICommand ::= INISeparator (INIComment | INIProp | INISection) INISeparator
 
 INIComment ::= "#" INIChar*
 
-INIProp ::= INISP? (INIChar - "=")+ INISP? "="
-  INISP? AttributeScript (INISP? ";")* INISP?
+INIProp ::= INISP? (INIChar  - "=")+ INISP? "=" (INIChar - ININewLine)*
 
-INISection::= INISP? "[" INISP? (INIChar - "]")+ INISP? "]" INISP?
-   ("$:script" INISP? "=" INISP? ElementScript (INISP? ";")* )? 
+INISection::= INISP? "[" INISP? (INIChar - "]")+ INISP? "]"
+   INISP? ("$:script" INISP? "=" INISP? (INIChar - ININewLine)* )?
 
 INIProps ::= INICommand*
 

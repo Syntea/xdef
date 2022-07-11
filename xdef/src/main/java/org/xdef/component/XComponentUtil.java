@@ -387,7 +387,7 @@ public class XComponentUtil {
 	 */
 	private static void toXonMap(final XComponent xc,
 		final Method[] methods,
-		final Map<String, Object> result) {		
+		final Map<String, Object> result) {
 		for (Method x: methods) {
 			String methodName = x.getName();
 			Object o;
