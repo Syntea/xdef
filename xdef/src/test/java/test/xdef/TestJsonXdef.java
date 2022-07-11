@@ -365,6 +365,9 @@ public class TestJsonXdef extends XDTester {
 	/** Run test and print error information. */
 	@SuppressWarnings("unchecked")
 	public void test() {
+		if (!_xdNS.startsWith("http://www.xdef.org/xdef/4.")) {
+			return;
+		}
 		String test, ini, json, xdef, xml;
 		Object j;
 		Element el;

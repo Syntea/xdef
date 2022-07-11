@@ -277,6 +277,17 @@ public class TestXdScript extends XDTester {
 			assertEq(s, parse(g, "XPosition", s));
 			s = "X#Y/$mixed[1]/A[22]/$text[1]";
 			assertEq(s, parse(g, "XPosition", s));
+//
+//			s =
+//"proxy type= int(0,9)\n" +
+//"hostaddr= ? ipAddr(); options acceptEmptyAttributes\n" + //
+//"port= int(0, 9999)\n" +
+//"[system]$:script = optional;\n" +
+//"autolaunch=int();\n" +
+//"[ x.y ]\n" +
+//"[selfupdate]\n" +
+//"version=ipAddr()";
+//			assertEq(s, parse(g, "INIProps", s));
 
 			s =
 "external method String test.xdef.TestExtenalMethods_2.m35(XXElement, int);\n"+

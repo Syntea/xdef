@@ -92,7 +92,7 @@
           </XD4.1:xon>
           <XD4.1:ini xd:script = "occurs *;"
               name = "required QName; options acceptQualifiedAttr" >
-              required iniprops;
+              required string; /*iniprops;*/
           </XD4.1:ini>
           <XD4.1:any xd:script = "occurs *;
                             match @XD4.1:name; ref XD4.1:anyDef;
