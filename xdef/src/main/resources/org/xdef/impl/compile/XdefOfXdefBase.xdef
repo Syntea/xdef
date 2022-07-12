@@ -755,7 +755,7 @@ XONString ::= ('"' ([^\"] | XONControlchar )* '"' |
 XONXscript ::= XONSP? ( ("$:script" XONSP? "=" XONSP? XONString)
   | ( "$:oneOf" (XONSP? "=" XONSP? XONString)? ) ) (XONSP? ",")?
 
-XONPair ::= ("$:any" | $ncName | XONString) XONSP? ":" XONSP? XONValue
+XONPair ::= ("$:anyName" | $ncName | XONString) XONSP? ":" XONSP? XONValue
 
 XONMembers ::= XONSP? XONPair (XONSP? "," XONSP? XONPair)* (XONSP? ",")?
 
