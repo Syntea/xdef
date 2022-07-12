@@ -1093,7 +1093,6 @@ public class TestXon extends XDTester {
 "</xd:xon>\n"+
 "<xd:component>%class test.xdef.MyTestAny_6 %link A</xd:component>\n"+
 "</xd:def>";
-			System.out.println(xdef);
 			xp = compile(xdef);
 			genXComponent(xp, clearTempDir());
 			xd = xp.createXDDocument();
@@ -1112,7 +1111,6 @@ public class TestXon extends XDTester {
 "    }\n" +
 "  ]\n" +
 "}";
-			System.out.println(json);
 			x = XonUtils.parseJSON(json);
 			strw = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(strw, false));
