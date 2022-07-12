@@ -917,7 +917,7 @@ public class TestXon extends XDTester {
 			assertEq(((Map) x).get("date"), new SDatetime("2020-02-22"));
 		} catch (Exception ex) {fail(ex);}
 		reporter.clear();
-		try {// test $:any names in map
+		try {// test $:anyName in map
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
 "  <xd:xon name='A'>\n"+
