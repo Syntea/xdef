@@ -1,6 +1,6 @@
 package org.xdef.xon;
 
-/** Names used in conversions of XON/JSON to XML and from XML.
+/** Names used in XON/JSON tools.
  * @author Vaclav Trojan
  */
 public interface XonNames {
@@ -26,8 +26,8 @@ public interface XonNames {
 	public static final String SCRIPT_NAME = "$:script";
 	/** This keyword used for the specification of oneOf in XON model. */
 	public static final String ONEOF_NAME = "$:oneOf";
-	/** This keyword used for the specification of any name in XON model. */
-	public static final String ANY_NAME = "$:anyName";
 	/** This keyword used for the specification of any object in XON model. */
-	public static final String ANY_OBJECT = "$:any";
+	public static final String ANY_OBJECT = "$:anyObj";
+	/** This keyword used for the specification of any name in XON map. */
+	public static final String ANY_NAME = "$:anyName";
 }

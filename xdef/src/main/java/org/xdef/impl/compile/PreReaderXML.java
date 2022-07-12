@@ -450,11 +450,38 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 				|| "json".equals(_actPNode._localName) //json
 				|| "ini".equals(_actPNode._localName)) { // ini
 				if (_level != 1) {
-					//Text with &{0} model&{1}{ of "}{" }
-					// is missing in X-definition
+					//JSON model can be declared only as a child of X-definition
 					error(_actPNode._value, XDEF.XDEF310, _actPNode._localName);
 					_actPNode._value = null;
+					return;
 				}
+//				SBuffer name = null;
+//				PAttr pa = _actPNode.getAttrNS("name", -1);
+//				if (pa != null) {
+//					name = pa.getValue();
+//					_actPNode.removeAttr(pa);
+//				} else if ((pa = _actPNode.getAttrNS("name",
+//					XPreCompiler.NS_XDEF_INDEX)) != null) {
+//					name = pa.getValue();
+//					_actPNode.removeAttr(pa);
+//				} else {
+//					//The name of XON/JSON model is required
+//					error(_actPNode._name, XDEF.XDEF317, name);
+//					_actPNode._value = null;
+//					return;
+//				}
+//				byte jsonMode =  XConstants.XON_MODE_W; //W3C mode is default
+//				_actPNode._xonMode = (byte) (jsonMode | XConstants.XON_ROOT);
+//				for (PAttr pattr:  _actPNode.getAttrs()) {
+//					//Attribute '&{0}' not allowed here
+//					error(pattr._value, XDEF.XDEF254, pattr._name);
+//				}
+//				PNode p = CompileXonXdef.genXdef(_actPNode,
+//					jsonMode, _actPNode._localName, name, getReportWriter());
+//				if (p != null) {
+//					_actPNode._parent.addChildNode(p);
+//System.out.println(KXmlUtils.nodeToString(p.toXML(), true));
+//				}
 				return;
 			} else if ("text".equals(_actPNode._localName)
 				|| "BNFGrammar".equals(_actPNode._localName)
