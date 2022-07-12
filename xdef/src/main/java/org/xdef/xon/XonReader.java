@@ -24,15 +24,15 @@ import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
 import static org.xdef.xon.XonNames.ANY_NAME;
 import static org.xdef.xon.XonNames.ANY_OBJECT;
-import static org.xdef.xon.XonNames.ONEOF_NAME;
-import static org.xdef.xon.XonNames.SCRIPT_NAME;
+import static org.xdef.xon.XonNames.ONEOF_CMD;
+import static org.xdef.xon.XonNames.SCRIPT_CMD;
 
 /** Methods for JSON/XON data.
  * @author Vaclav Trojan
  */
 public final class XonReader extends StringParser implements XonParsers {
 	private static final String[] XDEF_NAMES =
-		new String[]{SCRIPT_NAME, ONEOF_NAME, ANY_OBJECT};
+		new String[]{SCRIPT_CMD, ONEOF_CMD, ANY_OBJECT};
 	/** Flag to accept comments (default false; true=accept comments). */
 	private boolean _acceptComments;
 	/** Flag if parse JSON or XON (default false; false=JSON, true=XON). */
@@ -248,7 +248,7 @@ public final class XonReader extends StringParser implements XonParsers {
 						error(JSON.JSON018);//Value must be string with X-script
 					}
 				} else {
-					if (i == 0) { //JsonNames.SCRIPT_NAME
+					if (i == 0) { //JsonNames.SCRIPT_XMD
 					   error(JSON.JSON002, "=");//"&{0}"&{1}{ or "}{"} expected
 					}
 				}

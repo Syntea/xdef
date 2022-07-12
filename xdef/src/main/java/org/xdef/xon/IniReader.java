@@ -16,7 +16,7 @@ import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
 import org.xdef.xml.KXmlUtils;
-import static org.xdef.xon.XonNames.SCRIPT_NAME;
+import static org.xdef.xon.XonNames.SCRIPT_CMD;
 
 /** Methods for INI/Properties data.
  * @author Vaclav Trojan
@@ -247,15 +247,15 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 				p.isSpaces();
 				if (p.isChar(';')) {
 					p.isSpaces();
-					SPosition sp = p.getPosition();
-					if(p.isToken(SCRIPT_NAME)) {
+					SPosition spos1 = p.getPosition();
+					if (p.isToken(SCRIPT_CMD)) {
 						p.isSpaces();
 						if (p.isChar('=')) {
 							p.isSpaces();
 							String s = p.getUnparsedBufferPart();
 							int ndx = s.lastIndexOf(']');
 							if (ndx > 0 ) {
-								p1 = new SBuffer(SCRIPT_NAME,	sp);
+								p1 = new SBuffer(SCRIPT_CMD, spos1);
 								p2 = new SBuffer(s.substring(0, s.length()-1),
 									p.getPosition());
 							}
@@ -270,8 +270,7 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 			} else {
 				p.setPosition(spos);
 				if (!p.findChar(']')) {
-					//"&{0}"&{1}{ or "}{"} expected&
-					error(JSON.JSON002, "]");
+					error(JSON.JSON002, "]");//"&{0}"&{1}{ or "}{"} expected&
 				}
 				name = p.getBufferPart(spos.getIndex(), p.getIndex());
 				_jp.namedValue(new SBuffer(name.trim(), spos));
@@ -279,11 +278,11 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 				p.nextChar(); //skip ']'
 				p.isSpaces();
 				SPosition spos1 = p.getPosition();
-				if (p.isToken(SCRIPT_NAME)) {
+				if (p.isToken(SCRIPT_CMD)) {
 					p.isSpaces();
 					if (p.isChar('=')) {
 						p.isSpaces();
-						_jp.xdScript(new SBuffer(SCRIPT_NAME, spos1),
+						_jp.xdScript(new SBuffer(SCRIPT_CMD, spos1),
 							new SBuffer(p.getUnparsedBufferPart().trim(),
 								p.getPosition()));
 						p.setEos();
@@ -292,8 +291,7 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 				if (!p.eos()) {
 					SPosition sps = getPosition();
 					setPosition(p.getPosition());
-					//Not allowed character&{0}{ "}{"}
-					error(JSON.JSON017);
+					error(JSON.JSON017); //Not allowed character&{0}{ "}{"}
 					setPosition(sps);
 				}
 			}

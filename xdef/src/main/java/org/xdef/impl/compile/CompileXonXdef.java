@@ -16,8 +16,8 @@ import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.StringParser;
 import org.xdef.xon.IniReader;
 import static org.xdef.xon.XonNames.ANY_NAME;
-import static org.xdef.xon.XonNames.ONEOF_NAME;
-import static org.xdef.xon.XonNames.SCRIPT_NAME;
+import static org.xdef.xon.XonNames.ONEOF_CMD;
+import static org.xdef.xon.XonNames.SCRIPT_CMD;
 import static org.xdef.xon.XonNames.X_ARRAY;
 import static org.xdef.xon.XonNames.X_ITEM;
 import static org.xdef.xon.XonNames.X_KEYATTR;
@@ -454,13 +454,13 @@ public final class CompileXonXdef extends StringParser {
 
 	private PNode genXonMap(final JMap map, final PNode parent) {
 		PNode e, ee;
-		Object val = map.get(SCRIPT_NAME);
+		Object val = map.get(SCRIPT_CMD);
 		if (val != null && val instanceof JValue) {
-			map.remove(SCRIPT_NAME);
+			map.remove(SCRIPT_CMD);
 			JValue jv = (JValue) val;
 			setSourceBuffer(jv.getSBuffer());
 			isSpacesOrComments();
-			if (isToken(ONEOF_NAME)) {
+			if (isToken(ONEOF_CMD)) {
 				e = genJElement(parent, X_MAP, map.getPosition());
 				ee = genXDElement(e, "choice", getPosition());
 				e.addChildNode(ee);
@@ -472,7 +472,7 @@ public final class CompileXonXdef extends StringParser {
 					if (x != null && x.maxOccurs() > 1) {
 						//Specification of occurence of &{0} group
 						// can not be higher then 1
-						error(XDEF.XDEF252, ONEOF_NAME);
+						error(XDEF.XDEF252, ONEOF_CMD);
 					}
 				}
 			} else if (map.size() > 1) {
@@ -552,7 +552,7 @@ public final class CompileXonXdef extends StringParser {
 			if (o != null && o instanceof JValue) {
 				setSourceBuffer(((JValue) o).getSBuffer());
 				isSpacesOrComments();
-				if (isToken(ONEOF_NAME)) {
+				if (isToken(ONEOF_CMD)) {
 					e = genXDElement(
 						parent, "choice", ((JValue) jo).getPosition());
 					skipSemiconsBlanksAndComments();
@@ -894,13 +894,13 @@ public final class CompileXonXdef extends StringParser {
 //				putValue(new JValue((SPosition)name, "emailAddr();"));
 				putValue(new JAny((SPosition)name, value));
 			} else {
-				s = ONEOF_NAME.equals(name.getString()) ? ONEOF_NAME : "";
+				s = ONEOF_CMD.equals(name.getString()) ? ONEOF_CMD : "";
 				s += value == null ? "" : value.getString();
 				JValue jv = new JValue(name, new JValue(spos, s));
 				if (_kind == 1) { // array
 					_arrays.peek().add(jv);
 				} else if (_kind == 2) { // map
-					_maps.peek().put(SCRIPT_NAME, jv);
+					_maps.peek().put(SCRIPT_CMD, jv);
 				}
 			}
 		}
