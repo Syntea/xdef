@@ -38,10 +38,8 @@ import org.xdef.xon.XonTools.JValue;
  * @author Vaclav Trojan
  */
 public final class CompileXonXdef extends StringParser {
-	/** name extension for model of $:any witk key attribute. */
-	private static final String ANY_WITH_KEY = "KEY_";
 
-	/** XPosition of $:any model (no key).*/
+	/** XPosition of $:any model.*/
 	private final byte _xonMode;
 	/** Prefix of X-definition namespace. */
 	private String _xdPrefix;
@@ -54,7 +52,7 @@ public final class CompileXonXdef extends StringParser {
 	/** PNode with generated model.*/
 	private final PNode _xonModel;
 	private final String _anyName;
-	/** X-position of generated $:any model (no key).*/
+	/** X-position of generated $:any model.*/
 	private String _anyXPos;
 
 	/** Prepare instance of CompileXonXdef. */

@@ -22,6 +22,10 @@ import org.xdef.sys.SPosition;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
+import static org.xdef.xon.XonNames.ANY_NAME;
+import static org.xdef.xon.XonNames.ANY_OBJECT;
+import static org.xdef.xon.XonNames.ONEOF_NAME;
+import static org.xdef.xon.XonNames.SCRIPT_NAME;
 
 /** Methods for JSON/XON data.
  * @author Vaclav Trojan
@@ -115,11 +119,8 @@ public final class XonReader extends StringParser implements XonParsers {
 		int i;
 		while(!eos()) {
 			if (_jdef && !wasScript
-				&& (i = isOneOfTokens(XonNames.SCRIPT_NAME,
-					XonNames.ONEOF_NAME)) >= 0) {
-				SBuffer name = new SBuffer(
-					i==0 ? XonNames.SCRIPT_NAME : XonNames.ONEOF_NAME,
-					spos);
+				&& (i = isOneOfTokens(SCRIPT_NAME, ONEOF_NAME)) >= 0) {
+				SBuffer name = new SBuffer(i==0? SCRIPT_NAME : ONEOF_NAME,spos);
 				wasScript = true;
 				skipSpacesOrComments();
 				SBuffer value = null;
@@ -154,10 +155,10 @@ public final class XonReader extends StringParser implements XonParsers {
 			} else {
 				SBuffer name;
 				spos = getPosition();
-				if (_jdef && isToken(XonNames.ANY_NAME)) {
+				if (_jdef && isToken(ANY_NAME)) {
 					if (wasAnyName) {
 						//Value pair &{0} already exists
-						error(JSON.JSON022, spos);
+						error(JSON.JSON022, new SBuffer(ANY_NAME, spos));
 					}
 					name = new SBuffer(null, spos);
 				} else {
@@ -237,11 +238,8 @@ public final class XonReader extends StringParser implements XonParsers {
 			int i;
 			SPosition spos = getPosition();
 			if (!wasScript &&_jdef
-				&& (i = isOneOfTokens(XonNames.SCRIPT_NAME,
-					XonNames.ONEOF_NAME))>=0) {
-				SBuffer name = new SBuffer(
-					i==0 ? XonNames.SCRIPT_NAME : XonNames.ONEOF_NAME,
-					spos);
+				&& (i = isOneOfTokens(SCRIPT_NAME, ONEOF_NAME))>=0) {
+				SBuffer name = new SBuffer(i==0? SCRIPT_NAME : ONEOF_NAME,spos);
 				wasScript = true;
 				SBuffer value = null;
 				skipSpacesOrComments();
@@ -691,11 +689,11 @@ public final class XonReader extends StringParser implements XonParsers {
 			readMap();
 		} else if (isChar('[')) {
 			readArray();
-		} else if (_jdef && isToken(XonNames.ANY_NAME)) {
-			SPosition spos = getPosition(); // xdef $ANY
-			spos.setIndex(getIndex() - XonNames.ANY_NAME.length());
-			SBuffer name = new SBuffer(XonNames.ANY_NAME, spos);
-			SBuffer val = new SBuffer(XonNames.ANY_NAME, spos);
+		} else if (_jdef && isToken(ANY_OBJECT)) {
+			SPosition spos = getPosition(); // xdef $:any
+			spos.setIndex(getIndex() - ANY_OBJECT.length());
+			SBuffer name = new SBuffer(ANY_OBJECT, spos);
+			SBuffer val = new SBuffer(ANY_OBJECT, spos);
 			skipSpacesOrComments();
 			if (isChar('=')) {
 				skipSpacesOrComments();

@@ -921,7 +921,7 @@ public class TestXon extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
 "  <xd:xon name='A'>\n"+
-"{ $:any: \"? int();\", x: \"? int();\" }\n"+
+"{ $:anyName: \"? int();\", x: \"? int();\" }\n"+
 "</xd:xon>\n"+
 "<xd:component>%class test.xdef.MyTestAny_1 %link A</xd:component>\n"+
 "</xd:def>";
@@ -931,7 +931,7 @@ public class TestXon extends XDTester {
 			json = "{}";
 			x = XonUtils.parseXON(json);
 			y = xd.jvalidate(json, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorsAndClear(reporter);
 			if (!XonUtils.xonEqual(x,y)) {
 				fail("** 1 **\n"+XonUtils.toXonString(x)
 					+ "\n" +  XonUtils.toXonString(y));
@@ -940,10 +940,8 @@ public class TestXon extends XDTester {
 			if (!XonUtils.xonEqual(x, o)) {
 				fail("** 2 **\n"+json+"\n" + XonUtils.toXonString(xd.getXon()));
 			}
-			reporter.clear();
 			xc = xd.jparseXComponent(json, null, reporter);
-			assertNoErrors(reporter);
-			reporter.clear();
+			assertNoErrorsAndClear(reporter);
 			y = xc.toXon();
 			if (!XonUtils.xonEqual(x, y = XonUtils.xonToJson(y))) {
 				fail("** 3 **\n"+XonUtils.toXonString(x)
@@ -952,7 +950,7 @@ public class TestXon extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
 "  <xd:xon name='A'>\n"+
-"{ $:any: \"* int();\", x: \"? int();\" }\n"+
+"{ $:anyName: \"* int();\", x: \"? int();\" }\n"+
 "</xd:xon>\n"+
 "<xd:component>%class test.xdef.MyTestAny_2 %link A</xd:component>\n"+
 "</xd:def>";
@@ -962,7 +960,7 @@ public class TestXon extends XDTester {
 			json = "{}";
 			x = XonUtils.parseXON(json);
 			y = xd.jvalidate(json, reporter);
-			assertNoErrors(reporter);
+			assertNoErrorsAndClear(reporter);
 			if (!XonUtils.xonEqual(x,y)) {
 				fail("** 1 **\n"+XonUtils.toXonString(x)
 					+ "\n" +  XonUtils.toXonString(y));
@@ -971,10 +969,8 @@ public class TestXon extends XDTester {
 			if (!XonUtils.xonEqual(x, o)) {
 				fail("** 2 **\n"+json+"\n" + XonUtils.toXonString(xd.getXon()));
 			}
-			reporter.clear();
 			xc = xd.jparseXComponent(json, null, reporter);
-			assertNoErrors(reporter);
-			reporter.clear();
+			assertNoErrorsAndClear(reporter);
 			y = xc.toXon();
 			if (!XonUtils.xonEqual(x, y = XonUtils.xonToJson(y))) {
 				fail("** 3 **\n"+XonUtils.toXonString(x)
@@ -983,8 +979,7 @@ public class TestXon extends XDTester {
 			json = "{ a: 1, b: 2, x: 999 }";
 			x = XonUtils.parseXON(json);
 			y = xd.jvalidate(json, reporter);
-			assertNoErrors(reporter);
-			reporter.clear();
+			assertNoErrorsAndClear(reporter);
 			if (!XonUtils.xonEqual(x,y)) {
 				fail("** 1 **\n"+XonUtils.toXonString(x)
 					+ "\n" +  XonUtils.toXonString(y));
@@ -994,8 +989,7 @@ public class TestXon extends XDTester {
 				fail("** 2 **\n"+json+"\n" + XonUtils.toXonString(xd.getXon()));
 			}
 			xc = xd.jparseXComponent(json, null, reporter);
-			assertNoErrors(reporter);
-			reporter.clear();
+			assertNoErrorsAndClear(reporter);
 			y = xc.toXon();
 			if (!XonUtils.xonEqual(x, y = XonUtils.xonToJson(y))) {
 				fail("** 3 **\n"+XonUtils.toXonString(x)
@@ -1004,7 +998,7 @@ public class TestXon extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
 "<xd:xon name='A'>\n"+
-"{ $:any: [\"* int();\"]}\n"+
+"{ $:anyName: [\"* int();\"]}\n"+
 "</xd:xon>\n"+
 "<xd:component>%class test.xdef.MyTestAny_3 %link A</xd:component>\n"+
 "</xd:def>";
@@ -1013,8 +1007,7 @@ public class TestXon extends XDTester {
 			json = "{ \"x\": [1,2] }";
 			x = XonUtils.parseJSON(json);
 			y = xd.jvalidate(json, reporter);
-			assertNoErrors(reporter);
-			reporter.clear();
+			assertNoErrorsAndClear(reporter);
 			if (!XonUtils.xonEqual(x,y)) {
 				fail("** 1 **\n"+XonUtils.toXonString(x)
 					+ "\n" +  XonUtils.toXonString(y));
@@ -1026,8 +1019,7 @@ public class TestXon extends XDTester {
 			reporter.clear();
 			genXComponent(xp, clearTempDir());
 			xc = xd.jparseXComponent(json, null, reporter);
-			assertNoErrors(reporter);
-			reporter.clear();
+			assertNoErrorsAndClear(reporter);
 			y = xc.toXon();
 			if (!XonUtils.xonEqual(x, y = XonUtils.xonToJson(y))) {
 				fail("** 3 **\n"+XonUtils.toXonString(x)
@@ -1036,7 +1028,7 @@ public class TestXon extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
 "<xd:xon name='A'>\n"+
-"{ $:any: [$:script=\"*\", \"* int();\"]}\n"+
+"{ $:anyName: [$:script=\"*\", \"* int();\"]}\n"+
 "</xd:xon>\n"+
 "<xd:component>%class test.xdef.MyTestAny_4 %link A</xd:component>\n"+
 "</xd:def>";
@@ -1045,8 +1037,7 @@ public class TestXon extends XDTester {
 			json = "{ \"x\": [1,2] }";
 			x = XonUtils.parseJSON(json);
 			y = xd.jvalidate(json, reporter);
-			assertNoErrors(reporter);
-			reporter.clear();
+			assertNoErrorsAndClear(reporter);
 			if (!XonUtils.xonEqual(x,y)) {
 				fail("** 1 **\n"+XonUtils.toXonString(x)
 					+ "\n" +  XonUtils.toXonString(y));
@@ -1055,11 +1046,9 @@ public class TestXon extends XDTester {
 			if (!XonUtils.xonEqual(x, o)) {
 				fail("** 2 **\n"+json+"\n" + XonUtils.toXonString(xd.getXon()));
 			}
-			reporter.clear();
 			genXComponent(xp, clearTempDir());
 			xc = xd.jparseXComponent(json, null, reporter);
-			assertNoErrors(reporter);
-			reporter.clear();
+			assertNoErrorsAndClear(reporter);
 			y = xc.toXon();
 			if (!XonUtils.xonEqual(x, y = XonUtils.xonToJson(y))) {
 				fail("** 3 **\n"+XonUtils.toXonString(x)
@@ -1068,8 +1057,7 @@ public class TestXon extends XDTester {
 			json = "{ \"p\": [8,9], \"q\": [] }";
 			x = XonUtils.parseJSON(json);
 			y = xd.jvalidate(json, reporter);
-			assertNoErrors(reporter);
-			reporter.clear();
+			assertNoErrorsAndClear(reporter);
 			if (!XonUtils.xonEqual(x,y)) {
 				fail("** 1 **\n"+XonUtils.toXonString(x)
 					+ "\n" +  XonUtils.toXonString(y));
@@ -1080,8 +1068,7 @@ public class TestXon extends XDTester {
 			}
 			reporter.clear();
 			xc = xd.jparseXComponent(json, null, reporter);
-			assertNoErrors(reporter);
-			reporter.clear();
+			assertNoErrorsAndClear(reporter);
 			y = xc.toXon();
 			if (!XonUtils.xonEqual(x, y = XonUtils.xonToJson(y))) {
 				fail("** 3 **\n"+XonUtils.toXonString(x)
@@ -1093,7 +1080,7 @@ public class TestXon extends XDTester {
 "{ \"cities\" : [\n" +
 "    \"date(); finally outln('Measurements taken on: '+getText()+'\\n');\",\n"+
 "    { $:script = \"occurs 1..*;\",\n" +
-"      $:any: [$:script = \"occurs 1..*;\n"+
+"      $:anyName: [$:script = \"occurs 1..*;\n"+
 "                init outln('Distance from ' + getXonKey() + '\nto:');\",\n" +
 "        { $:script = \"occurs 1..*; finally outln();\",\n" +
 "          \"to\" : \"jstring();finally out(' - ' + getText() + ' = ');\",\n" +
@@ -1106,6 +1093,7 @@ public class TestXon extends XDTester {
 "</xd:xon>\n"+
 "<xd:component>%class test.xdef.MyTestAny_6 %link A</xd:component>\n"+
 "</xd:def>";
+			System.out.println(xdef);
 			xp = compile(xdef);
 			genXComponent(xp, clearTempDir());
 			xd = xp.createXDDocument();
@@ -1124,12 +1112,12 @@ public class TestXon extends XDTester {
 "    }\n" +
 "  ]\n" +
 "}";
+			System.out.println(json);
 			x = XonUtils.parseJSON(json);
 			strw = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(strw, false));
 			y = xd.jvalidate(json, reporter);
-			assertNoErrors(reporter);
-			reporter.clear();
+			assertNoErrorsAndClear(reporter);
 			strw.close();
 			s =
 "Measurements taken on: 2020-02-22\n" +
@@ -1155,8 +1143,7 @@ public class TestXon extends XDTester {
 			strw = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(strw, false));
 			xc = xd.jparseXComponent(json, null, reporter);
-			assertNoErrors(reporter);
-			reporter.clear();
+			assertNoErrorsAndClear(reporter);
 			assertEq(strw.toString(), s);
 		} catch (Exception ex) {fail(ex);}
 		reporter.clear();
