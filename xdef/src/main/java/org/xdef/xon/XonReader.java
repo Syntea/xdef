@@ -31,6 +31,8 @@ import static org.xdef.xon.XonNames.SCRIPT_NAME;
  * @author Vaclav Trojan
  */
 public final class XonReader extends StringParser implements XonParsers {
+	private static final String[] XDEF_NAMES =
+		new String[]{SCRIPT_NAME, ONEOF_NAME, ANY_OBJECT};
 	/** Flag to accept comments (default false; true=accept comments). */
 	private boolean _acceptComments;
 	/** Flag if parse JSON or XON (default false; false=JSON, true=XON). */
@@ -118,13 +120,12 @@ public final class XonReader extends StringParser implements XonParsers {
 		boolean wasAnyName = false;
 		int i;
 		while(!eos()) {
-			if (_jdef && !wasScript
-				&& (i = isOneOfTokens(SCRIPT_NAME, ONEOF_NAME)) >= 0) {
-				SBuffer name = new SBuffer(i==0? SCRIPT_NAME : ONEOF_NAME,spos);
+			if (_jdef && !wasScript && (i = isOneOfTokens(XDEF_NAMES)) >= 0) {
+				SBuffer name = new SBuffer(XDEF_NAMES[i], spos);
 				wasScript = true;
 				skipSpacesOrComments();
 				SBuffer value = null;
-				if (i == 1) { // oneOf
+				if (i >= 1) { // $:oneOf or $:anyObj
 					if (isChar('=')) {
 						skipSpacesOrComments();
 						spos = getPosition();
@@ -132,15 +133,14 @@ public final class XonReader extends StringParser implements XonParsers {
 						if (jv.getValue() instanceof String) {
 							value = jv.getSBuffer();
 						} else {
-							//Value of x:script must be string with X-script
+							//Value must be string with X-script
 							error(JSON.JSON018);
 						}
 					}
 					_jp.xdScript(name, value);
-				} else {  // xscript
+				} else {  // $:script
 					if (!isChar('=')) {
-						//"&{0}"&{1}{ or "}{"} expected
-						error(JSON.JSON002, "=");
+						error(JSON.JSON002, "=");//"&{0}"&{1}{ or "}{"} expected
 					}
 					skipSpacesOrComments();
 					spos = getPosition();
@@ -148,8 +148,7 @@ public final class XonReader extends StringParser implements XonParsers {
 					if (o != null && o instanceof XonTools.JValue) {
 						_jp.xdScript(name, ((XonTools.JValue)o).getSBuffer());
 					} else {
-						//Value of x:script must be string with X-script
-						error(JSON.JSON018);
+						error(JSON.JSON018);//Value must be string with X-script
 					}
 				}
 			} else {
@@ -175,8 +174,7 @@ public final class XonReader extends StringParser implements XonParsers {
 				}
 				skipSpacesOrComments();
 				if (!isChar(':')) {
-					//"&{0}"&{1}{ or "}{"} expected
-					error(JSON.JSON002, ":");
+					error(JSON.JSON002, ":"); //"&{0}"&{1}{ or "}{"} expected
 				}
 				if (_jp.namedValue(name)) {
 					//Value pair &{0} already exists
@@ -207,15 +205,13 @@ public final class XonReader extends StringParser implements XonParsers {
 				if (eos()) {
 					break;
 				}
-				//"&{0}"&{1}{ or "}{"} expected
-				error(JSON.JSON002, ",", "}");
+				error(JSON.JSON002, ",", "}");//"&{0}"&{1}{ or "}{"} expected
 				if (getCurrentChar() != '"') {
 					break;
 				}
 			}
 		}
-		//"&{0}"&{1}{ or "}{"} expected&{#SYS000}
-		fatal(JSON.JSON002, "}");
+		fatal(JSON.JSON002, "}");//"&{0}"&{1}{ or "}{"} expected&{#SYS000}
 		if (findOneOfChars("[]{}") == NOCHAR) {// skip to next item
 			setEos();
 		}
@@ -237,9 +233,8 @@ public final class XonReader extends StringParser implements XonParsers {
 		while(!eos()) {
 			int i;
 			SPosition spos = getPosition();
-			if (!wasScript &&_jdef
-				&& (i = isOneOfTokens(SCRIPT_NAME, ONEOF_NAME))>=0) {
-				SBuffer name = new SBuffer(i==0? SCRIPT_NAME : ONEOF_NAME,spos);
+			if (!wasScript &&_jdef && (i = isOneOfTokens(XDEF_NAMES))>=0) {
+				SBuffer name = new SBuffer(XDEF_NAMES[i], spos);
 				wasScript = true;
 				SBuffer value = null;
 				skipSpacesOrComments();
@@ -250,13 +245,11 @@ public final class XonReader extends StringParser implements XonParsers {
 						value = new SBuffer((String) jv.getValue(),
 								jv.getPosition());
 					} else {
-						//Value of :script must be string with X-script
-						error(JSON.JSON018);
+						error(JSON.JSON018);//Value must be string with X-script
 					}
 				} else {
 					if (i == 0) { //JsonNames.SCRIPT_NAME
-						//"&{0}"&{1}{ or "}{"} expected
-					   error(JSON.JSON002, "=");
+					   error(JSON.JSON002, "=");//"&{0}"&{1}{ or "}{"} expected
 					}
 				}
 				_jp.xdScript(name, value);

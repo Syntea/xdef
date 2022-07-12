@@ -56,7 +56,6 @@ public final class CompileXonXdef extends StringParser {
 	private String _anyXPos;
 
 	/** Prepare instance of CompileXonXdef. */
-	/** Prepare instance of CompileXonXdef. */
 	private CompileXonXdef(PNode p,
 		final byte xonMode,
 		final SBuffer name,

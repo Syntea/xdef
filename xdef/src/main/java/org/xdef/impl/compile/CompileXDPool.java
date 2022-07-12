@@ -1599,8 +1599,8 @@ System.out.println(KXmlUtils.nodeToString(p.toXML(), true));
 			_scriptCompiler.setSourceBuffer(pnode._value);
 			_scriptCompiler.isSpaces();
 			if (!_scriptCompiler.eos()) {
-				//Text value not allowed here
-				_scriptCompiler.lightError(XDEF.XDEF260, "&{xpath}" + pnode._xpathPos);
+				_scriptCompiler.lightError( //Text value not allowed here
+					XDEF.XDEF260, "&{xpath}" + pnode._xpathPos);
 			}
 			pnode._value = null; //prevent repeated message
 		}
