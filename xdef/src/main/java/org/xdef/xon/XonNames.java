@@ -22,10 +22,10 @@ public interface XonNames {
 ////////////////////////////////////////////////////////////////////////////////
 // names used in X-definition moldels
 ////////////////////////////////////////////////////////////////////////////////
-	/** This keyword used for the specification of script in XON model. */
-	public static final String SCRIPT_NAME = "$:script";
-	/** This keyword used for the specification of oneOf in XON model. */
-	public static final String ONEOF_NAME = "$:oneOf";
+	/** This keyword used for the specification of script command in XON model. */
+	public static final String SCRIPT_CMD = "$:script";
+	/** This keyword used for the specification of oneOf commanf in XON model. */
+	public static final String ONEOF_CMD = "$:oneOf";
 	/** This keyword used for the specification of any object in XON model. */
 	public static final String ANY_OBJECT = "$:anyObj";
 	/** This keyword used for the specification of any name in XON map. */
