@@ -947,6 +947,25 @@ public class TestXon extends XDTester {
 				fail("** 3 **\n"+XonUtils.toXonString(x)
 					+ "\n" +  XonUtils.toXonString(y));
 			}
+			json = "{\"x\" : 1, \"xxx\" : 2}";
+			x = XonUtils.parseXON(json);
+			y = xd.jvalidate(json, reporter);
+			assertNoErrorsAndClear(reporter);
+			if (!XonUtils.xonEqual(x,y)) {
+				fail("** 1 **\n"+XonUtils.toXonString(x)
+					+ "\n" +  XonUtils.toXonString(y));
+			}
+			o = xd.getXon();
+			if (!XonUtils.xonEqual(x, o)) {
+				fail("** 2 **\n"+json+"\n" + XonUtils.toXonString(xd.getXon()));
+			}
+			xc = xd.jparseXComponent(json, null, reporter);
+			assertNoErrorsAndClear(reporter);
+			y = xc.toXon();
+			if (!XonUtils.xonEqual(x, y = XonUtils.xonToJson(y))) {
+				fail("** 3 **\n"+XonUtils.toXonString(x)
+					+ "\n" +  XonUtils.toXonString(y));
+			}
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
 "  <xd:xon name='A'>\n"+
