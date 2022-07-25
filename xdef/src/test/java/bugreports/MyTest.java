@@ -45,12 +45,44 @@ public class MyTest extends XDTester {
 	final public static void setResult(XXNode xnode, XDParseResult result) {
 		setResult(xnode, !result.errors());
 	}
+	private static String testAny(XDPool xp, String s) {
+		String result = "";
+		try {
+			XDDocument xd = xp.createXDDocument("A");
+			ArrayReporter reporter = new ArrayReporter();
+			Object o = XonUtils.parseXON(s);
+			Object x = xd.jparse(s, reporter);
+			if (reporter.errorWarnings()) {
+				result += "** 1\n" + reporter.printToString() + "\n";
+				reporter.clear();
+			}
+			if (!XonUtils.xonEqual(o, x)) {
+				result += "** 2\n" +  o + "\n" + x + "\n";
+			}
+/**
+			xd = xp.createXDDocument("A");
+			XComponent xc = xd.jparseXComponent(s, null, reporter);
+			if (reporter.errorWarnings()) {
+				result += "** 3\n" + reporter.printToString() + "\n";
+				reporter.clear();
+			}
+			x = xc.toXon();
+			if (!XonUtils.xonEqual(o, x)) {
+				result += "** 4\n" +  o + "\n" + x + "\n";
+			}
+/**/
+		} catch (Exception ex) {
+			result += ex + "\n";
+		}
+		return result;
+	}
 
 	@Override
 	/** Run test and display error information. */
 	public void test() {
 		System.out.println("X-definition version: " + XDFactory.getXDVersion());
 ////////////////////////////////////////////////////////////////////////////////
+		System.setProperty("xdef-xon_debug", "showModel");
 		setProperty(XDConstants.XDPROPERTY_DISPLAY, // xdef_display
 			XDConstants.XDPROPERTYVALUE_DISPLAY_FALSE); // true | errors | false
 //			XDConstants.XDPROPERTYVALUE_DISPLAY_TRUE); // true | errors | false
@@ -68,6 +100,69 @@ public class MyTest extends XDTester {
 		XDPool xp;
 		XComponent xc;
 		ArrayReporter reporter = new ArrayReporter();
+/**/
+		try {// test $:anyName in map
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' name=\"A\" root=\"test\">\n" +
+"<xd:xon name=\"test\">\n" +
+"  [$:oneOf=\"ref A\"]\n"  +
+"</xd:xon>\n"  +
+"<xd:xon name=\"A\">\n" +
+" [$:oneOf,\n"+
+"    \"jvalue();\",\n" +
+"    [\"* jvalue();\" ],\n" +
+"    {$:anyName:\n" +
+"       [$:oneOf,\n" +
+"         \"jvalue();\",\n" +
+"         [\"* jvalue();\" ],\n" +
+"         {$:anyName: [$:oneOf=\" ref test\"]}\n" +
+"       ]\n" +
+"    }\n" +
+"  ]\n" +
+"</xd:xon>\n"  +
+//"<xd:xon name=\"B\">\n" +
+//" [$:oneOf,\n"+
+//"    \"jvalue();\",\n" +
+//"    [\"* jvalue();\" ],\n" +
+//"    {$:anyName:\n" +
+//"       [$:oneOf,\n" +
+//"         \"jvalue();\",\n" +
+//"         [\"* jvalue();\" ],\n" +
+//"         {$:anyName: [$:oneOf=\" ref A\"]}\n" +
+//"       ]\n" +
+//"    }\n" +
+//"  ]\n" +
+//"</xd:xon>\n"  +
+//"<xd:choice xd:name=\"test_ANY_\" xmlns:xd=\"http://www.xdef.org/xdef/4.0\">\n"+
+//"  <jx:item key=\"? string();\" val=\"jvalue();\"\n" +
+//"    xmlns:jx=\"http://www.xdef.org/xon/4.0/w\"/>\n" +
+//"  <jx:array key=\"? string();\" xmlns:jx=\"http://www.xdef.org/xon/4.0/w\">\n"+
+//"    <xd:choice xd:script=\"*; ref test_ANY_\"/>\n" +
+//"  </jx:array>\n" +
+//"  <jx:map key=\"? string();\" xmlns:jx=\"http://www.xdef.org/xon/4.0/w\">\n"+
+//"    <xd:choice xd:script=\"*; ref test_ANY_\"/>\n" +
+//"  </jx:map>\n" +
+//"</xd:choice>\n"+
+"<xd:component>\n"+
+"  %class mytests.MyTestX_AnyX %link A#test;\n"+
+//"  %class mytests.MyTestX_AnyX_A %link A#A\n"+
+"</xd:component>\n"+
+"</xd:def>";
+			xp = XDFactory.compileXD(null, xdef);
+//			xp = compile(xdef);
+			genXComponent(xp, clearTempDir());
+			
+			assertEq("", testAny(xp, "\"abc\""));
+//			assertEq("", testAny(xp, "[]"));
+//			assertEq("", testAny(xp, "[\"a\"]"));
+//			assertEq("", testAny(xp, "{ }"));
+//			assertEq("", testAny(xp, "{ \"a\":1 }"));
+//			assertEq("", testAny(xp, "{ \"b\":[2,3] }"));
+//			assertEq("", testAny(xp, "{ \"a\":1, \"b\":[2,3] }"));
+		} catch (Exception ex) {fail(ex);}
+		reporter.clear();
+if(true)return;
+/**/
 /*xx*/
 		try {
 			xdef =

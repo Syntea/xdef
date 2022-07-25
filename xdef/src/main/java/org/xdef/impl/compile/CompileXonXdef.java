@@ -15,6 +15,7 @@ import org.xdef.sys.SPosition;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.StringParser;
 import org.xdef.xon.IniReader;
+import org.xdef.xon.XonNames;
 import static org.xdef.xon.XonNames.ANY_NAME;
 import static org.xdef.xon.XonNames.ONEOF_CMD;
 import static org.xdef.xon.XonNames.SCRIPT_CMD;
@@ -56,7 +57,7 @@ public final class CompileXonXdef extends StringParser {
 	private String _anyXPos;
 
 	/** Prepare instance of CompileXonXdef. */
-	private CompileXonXdef(PNode p,
+	CompileXonXdef(PNode p,
 		final byte xonMode,
 		final SBuffer name,
 		final ReportWriter reporter) {
@@ -443,9 +444,6 @@ public final class CompileXonXdef extends StringParser {
 	private void setName(PNode e, String name, SBuffer occ) {
 		if (ANY_NAME.equals(name)) {
 			setAttr(e,X_KEYATTR, new SBuffer("string();", e._name));
-			if (occ != null) {
-				setXDAttr(e, "script", occ);
-			}
 		} else {
 			addMatchExpression(e, '@' + X_KEYATTR + "=='"+ name +"'");
 			setAttr(e,X_KEYATTR,new SBuffer("fixed('"+name+ "');",e._name));
@@ -523,8 +521,7 @@ public final class CompileXonXdef extends StringParser {
 			}
 		}
 		if (anyItem != null) {
-			if (anyItem != null && (anyItem instanceof Map
-				|| anyItem instanceof List)) {
+			if (anyItem instanceof Map || anyItem instanceof List) {
 				PNode eee = genXonModel(anyItem, ee);
 				if (_xdNamespace.equals(eee._nsURI)
 					&& "choice".equals(eee._localName)) {
@@ -534,11 +531,27 @@ public final class CompileXonXdef extends StringParser {
 				} else {
 					updateKeyInfo(eee, ANY_NAME);
 				}
+				setAnyOccurrence(eee);
 			} else {
-				ee.addChildNode(genXonValue(ANY_NAME, (JValue) anyItem,ee));
+				PNode eee = genXonValue(ANY_NAME, (JValue) anyItem,ee);
+				ee.addChildNode(eee);
+//				setAnyOccurrence(eee);
 			}
 		}
 		return e;
+	}
+
+	private void setAnyOccurrence(final PNode e) {
+		PAttr patt = getXDAttr(e, "script");
+		SBuffer val;
+		if (patt != null) {
+			SBuffer[] sbx = parseTypeDeclaration(patt.getValue());
+			String s = sbx[1] == null ? "" : "+;" + sbx[1].getString();
+			val = new SBuffer(s, patt._value);
+		} else {
+			val = new SBuffer("*");
+		}
+		setXDAttr(e, "script", val);
 	}
 
 	private PNode genXonArray(final JArray array, final PNode parent) {
@@ -566,9 +579,8 @@ public final class CompileXonXdef extends StringParser {
 						XOccurrence x = readOccurrence(new SBuffer(s));
 						if (x != null && x.minOccurs() == 0
 							&& X_MAP.equals(parent.getLocalName())) {
-							// set optional occurrence to choice model
-							setXDAttr(
-								e, "script", new SBuffer("?", getPosition()));
+							setXDAttr(e, "script",
+								new SBuffer("?", getPosition()));
 						}
 					}
 				} else {
@@ -670,6 +682,8 @@ public final class CompileXonXdef extends StringParser {
 		} else if (xon instanceof JValue
 			&& ((JValue) xon).getValue() instanceof String) {
 			e = genXonValue(null, (JValue) xon, parent);
+		} else if (xon instanceof JAny) {
+			e = genXonAny((JAny) xon, parent);
 		} else {
 			error(JSON.JSON011); //Not XON/JSON object&{0}
 			return parent;
@@ -677,11 +691,12 @@ public final class CompileXonXdef extends StringParser {
 		parent.addChildNode(e);
 		return e;
 	}
-	private PNode genXonAnyModels() {
+
+	PNode genXonAnyModels() {
 		PNode e, ee, eee;
 		SPosition spos = _xonModel._name;
 //"<xd:choice xd:name=\"XON_ANY_\">\n" +
-		e = genXDElement(_xonModel, "choice", spos);
+		e = genXDElement(_xonModel._parent, "choice", spos);
 		setXDAttr(e, "name", new SBuffer(_anyName, spos));
 //"  <jx:item key=\"? string();\" val=\"jvalue();\"/>\n" +
 		ee = genJElement(e, X_ITEM, spos);
@@ -693,7 +708,7 @@ public final class CompileXonXdef extends StringParser {
 		setAttr(ee, X_KEYATTR, new SBuffer("? string();", spos));
 //"    <xd:choice xd:script=\"occurs *; ref #XON_ANY_\"/>\n" +
 		eee = genXDElement(ee, "choice", spos);
-		setXDAttr(eee, "script", new SBuffer("occurs *; ref "+_anyXPos, spos));
+		setXDAttr(eee, "script", new SBuffer("*; ref "+_anyName, spos));
 		ee.addChildNode(eee);
 //"  </jx:array>\n" +
 		e.addChildNode(ee);
@@ -702,7 +717,7 @@ public final class CompileXonXdef extends StringParser {
 		setAttr(ee, X_KEYATTR, new SBuffer("? string();", spos));
 //"    <xd:choice xd:script=\"occurs *; ref #XON_ANY_\"/>\n" +
 		eee = genXDElement(ee, "choice", spos);
-		setXDAttr(eee, "script", new SBuffer("occurs *; ref "+_anyXPos, spos));
+		setXDAttr(eee, "script", new SBuffer("*; ref "+_anyName, spos));
 		ee.addChildNode(eee);
 //"  </jx:map>\n" +
 		e.addChildNode(ee);
@@ -806,7 +821,7 @@ public final class CompileXonXdef extends StringParser {
 			} else if (_kind == MAP) {
 				SBuffer name = _names.pop();
 				_maps.peek().put(name.getString(), value);
-			} else { // musr be VALUE
+			} else { // must be now ITEM
 				_value = value;
 			}
 		}
@@ -891,7 +906,8 @@ public final class CompileXonXdef extends StringParser {
 			SPosition spos = value == null ? name : value;
 			String s;
 			if (ANY_NAME.equals(name.getString())) {
-//				putValue(new JValue((SPosition)name, "emailAddr();"));
+				namedValue(new SBuffer(null, name));
+			} else if (XonNames.ANY_OBJECT.equals(name.getString())) {
 				putValue(new JAny((SPosition)name, value));
 			} else {
 				s = ONEOF_CMD.equals(name.getString()) ? ONEOF_CMD : "";

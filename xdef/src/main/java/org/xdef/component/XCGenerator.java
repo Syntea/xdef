@@ -228,9 +228,13 @@ final class XCGenerator extends XCGeneratorXON {
 								keys, classNames, varNames, getters);
 						}
 					}
-					groupMax = groupStack.pop(); // groupMax
-					groupKind = groupStack.pop(); // kind
-					groupFirst = groupStack.pop(); // index of first item
+					if (!groupStack.isEmpty()) {
+						groupMax = groupStack.pop(); // groupMax
+						groupKind = groupStack.pop(); // kind
+						groupFirst = groupStack.pop(); // index of first item
+					} else {
+System.out.println("");
+					}
 					continue;
 				}
 				case XMNode.XMTEXT: {

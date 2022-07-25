@@ -50,14 +50,16 @@ public interface JSON {
 	public static final long JSON022 = 13834649621L;
 	/** Illegal number value&amp;{0}{ for the XON type "}{"}: &amp;{1}&amp;{#SYS000} */
 	public static final long JSON023 = 13834649622L;
+	/** String with $:script expected&amp;{#SYS000} */
+	public static final long JSON024 = 13834649623L;
 	/** YAML - the package org.yaml.snakeyaml is not available. Please add it to classPath&amp;{#SYS000} */
-	public static final long JSON101 = 13834649623L;
+	public static final long JSON101 = 13834649624L;
 	/** Error when creating YAML string from object&amp;{#SYS000} */
-	public static final long JSON102 = 13834649624L;
+	public static final long JSON102 = 13834649625L;
 	/** Error when parsing YAML source&amp;{#SYS000} */
-	public static final long JSON103 = 13834649625L;
+	public static final long JSON103 = 13834649626L;
 	/** Messages for JSON and XON */
-	public static final long JSON_DESCRIPTION = 13834649626L;
+	public static final long JSON_DESCRIPTION = 13834649627L;
 	/** English */
-	public static final long JSON_LANGUAGE = 13834649627L;
+	public static final long JSON_LANGUAGE = 13834649628L;
 }

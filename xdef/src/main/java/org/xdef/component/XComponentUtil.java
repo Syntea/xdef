@@ -721,7 +721,7 @@ public class XComponentUtil {
 			} else if (XonNames.X_ARRAY.equals(localName)) {
 				return toXonArray(xc);
 			} else if (XonNames.X_ITEM.equals(localName)) {
-				return xc.toXon();
+				return toXonItem(xc);
 			}
 		}
 		return toXonXD(xc, new KNamespace());
