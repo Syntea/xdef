@@ -144,9 +144,9 @@ public final class XonReader extends StringParser implements XonParsers {
 					}
 					skipSpacesOrComments();
 					spos = getPosition();
-					Object o = readSimpleValue();
-					if (o != null && o instanceof XonTools.JValue) {
-						_jp.xdScript(name, ((XonTools.JValue)o).getSBuffer());
+					XonTools.JValue jv = readSimpleValue();
+					if (jv != null && jv.getValue() instanceof String) {
+						_jp.xdScript(name, jv.getSBuffer());
 					} else {
 						error(JSON.JSON018);//Value must be string with X-script
 					}
@@ -159,7 +159,10 @@ public final class XonReader extends StringParser implements XonParsers {
 						//Value pair &{0} already exists
 						error(JSON.JSON022, new SBuffer(ANY_NAME, spos));
 					}
-					name = new SBuffer(null, spos);
+					wasAnyName = true;
+					skipSpacesOrComments();
+					_jp.xdScript(new SBuffer(ANY_NAME, spos), null);
+					name = null;
 				} else {
 					if (isChar('"')) {
 						name = new SBuffer(XonTools.readJString(this), spos);
@@ -176,9 +179,11 @@ public final class XonReader extends StringParser implements XonParsers {
 				if (!isChar(':')) {
 					error(JSON.JSON002, ":"); //"&{0}"&{1}{ or "}{"} expected
 				}
-				if (_jp.namedValue(name)) {
-					//Value pair &{0} already exists
-					error(JSON.JSON022, name);
+				if (name != null) {
+					if (_jp.namedValue(name)) {
+						//Value pair &{0} already exists
+						error(JSON.JSON022, name);
+					}
 				}
 				readItem();
 			}
@@ -242,13 +247,13 @@ public final class XonReader extends StringParser implements XonParsers {
 					skipSpacesOrComments();
 					XonTools.JValue jv = readSimpleValue();
 					if (jv.getValue() instanceof String) {
-						value = new SBuffer((String) jv.getValue(),
-								jv.getPosition());
+						value = new SBuffer(
+							(String) jv.getValue(), jv.getPosition());
 					} else {
 						error(JSON.JSON018);//Value must be string with X-script
 					}
 				} else {
-					if (i == 0) { //JsonNames.SCRIPT_XMD
+					if (i == 0) { //JsonNames.SCRIPT_CMD
 					   error(JSON.JSON002, "=");//"&{0}"&{1}{ or "}{"} expected
 					}
 				}

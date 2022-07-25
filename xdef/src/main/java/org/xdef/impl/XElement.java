@@ -645,8 +645,7 @@ public final class XElement extends XCodeDescriptor
 	private static void genDigestInfo(final XElement xe) {
 		if (xe.isReference()) {
 			XMNode xn = xe.getXDPool().findModel(xe.getReferencePos());
-			XElement xxe = (XElement) xn;
-			xe._digest = xxe.getDigest();
+			xe._digest = ((XElement) xn).getDigest();
 			return;
 		}
 		try {
