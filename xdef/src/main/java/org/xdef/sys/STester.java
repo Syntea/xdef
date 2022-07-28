@@ -96,6 +96,7 @@ public abstract class STester {
 		flushOut();
 	}
 	private void flushOut() {
+		_err.flush();
 		_out.flush();
 		if (_outStream != null) {
 			_outStream.flush();
@@ -118,6 +119,7 @@ public abstract class STester {
 		flushErr();
 	}
 	private void flushErr() {
+		flushOut();
 		_err.flush();
 		if (_outStream != null) {
 			_outStream.flush();
