@@ -312,7 +312,6 @@ public final class CompileXonXdef extends StringParser {
 		result._nsindex = nsindex;
 		result._nsURI = nsURI;
 		result._localName = localName;
-		result._level = parent._level + 1;
 		result._xpathPos = _basePos;
 		return result;
 	}
