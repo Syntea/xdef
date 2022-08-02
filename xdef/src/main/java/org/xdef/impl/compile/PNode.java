@@ -27,7 +27,6 @@ public final class PNode {
 	XDefinition _xdef;  //XDefinition associated with this node
 	SBuffer _value; //value of this node
 	PNode _parent; //parent PNode
-	int _level; //nesting level of this node
 	int _nsindex; //namespace index of this node
 	boolean _template;  //template switch
 	byte _xonMode = 0; // XON/JSON to XML transformation mode
