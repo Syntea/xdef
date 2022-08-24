@@ -69,8 +69,7 @@ public final class CompileXonXdef extends StringParser {
 		_basePos = p._xpathPos + "/text()";
 		setReportWriter(reporter);
 		_xonModel = p;
-		_anyName = name.getString() + "_ANY_";
-//		_anyXPos = _xonModel._parent._xdef.getName() + "#" + _anyName;
+		_anyName = name.getString() + "_ANY";
 		_anyXPos = null;
 	}
 
@@ -90,36 +89,13 @@ public final class CompileXonXdef extends StringParser {
 		return patt;
 	}
 
-	/** Get attribute without namespace.
-	 * @param e PNode where to set attribute.
-	 * @param name local name of attribute.
-	 * @return PAttr or null.
-	 */
-	private PAttr getAttr(final PNode e, final String name) {
-		for (PAttr patt: e.getAttrs()) {
-			if (patt._nsindex == -1 && name.equals(patt._localName)) {
-				return patt;
-			}
-		}
-		return null;
-	}
-
 	/** Get X-def attribute.
 	 * @param e PNode where to set attribute.
 	 * @param name local name of attribute.
 	 * @return PAttr or null.
 	 */
 	private PAttr getXDAttr(final PNode e, final String name) {
-		int nsindex;
-		if (e._nsPrefixes.containsKey(_xdPrefix)) {
-			nsindex = e._nsPrefixes.get(_xdPrefix);
-			for (PAttr att: e.getAttrs()) {
-				if (att._nsindex == nsindex && name.equals(att._localName)) {
-					return att;
-				}
-			}
-		}
-		return null;
+		return e.getAttrNS(name, e._nsPrefixes.get(_xdPrefix));
 	}
 
 	/** Set X-def attribute.
@@ -139,13 +115,8 @@ public final class CompileXonXdef extends StringParser {
 			e._nsPrefixes.put(_xdPrefix, nsindex);
 		}
 		PAttr a = new PAttr(_xdPrefix+":"+name, val, _xdNamespace, nsindex);
-		for (PAttr patt: e.getAttrs()) {
-			if (patt._nsindex == nsindex && name.equals(patt._localName)) {
-				e.removeAttr(patt);
-				break; // attribute will be replaced
-			}
-		}
 		a._localName = name;
+		e.removeAttr(a._name);
 		e.setAttr(a);
 		a._xpathPos = _basePos;
 		return a;
@@ -182,17 +153,6 @@ public final class CompileXonXdef extends StringParser {
 			result = true;
 		}
 		return result;
-	}
-
-	/** Read occurrence.
-	 * Occurrence ::= ("required" | "optional" | "ignore" | "illegal" | "*"
-	 *   | "+" | "?" | (("occurs" S)? ("*" | "+" | "?"
-	 *   | (IntegerLiteral (S? ".." (S? ("*" | IntegerLiteral))? )? ))))
-	 * @return Occurrence object or null.
-	 */
-	private XOccurrence readOccurrence(final SBuffer sbuf) {
-		setSourceBuffer(sbuf);
-		return readOccurrence();
 	}
 
 	/** Read occurrence.
@@ -573,9 +533,9 @@ public final class CompileXonXdef extends StringParser {
 						if (!s.endsWith(";")) {
 							s += ";";
 						}
-						setXDAttr(
-							parent, "script", new SBuffer(s,getPosition()));
-						XOccurrence x = readOccurrence(new SBuffer(s));
+						setXDAttr(parent,"script",new SBuffer(s,getPosition()));
+						setSourceBuffer(new SBuffer(s));
+						XOccurrence x = readOccurrence();
 						if (x != null && x.minOccurs() == 0
 							&& X_MAP.equals(parent.getLocalName())) {
 							setXDAttr(e, "script",
@@ -599,12 +559,13 @@ public final class CompileXonXdef extends StringParser {
 				// and it has the attribute with a value description
 				if (X_ITEM.equals(ee._localName)
 					&& XDConstants.XON_NS_URI_W.equals(ee._nsURI)
-					&& (val = getAttr(ee, X_VALATTR)) != null) {
+					&& (val = ee.getAttrNS(X_VALATTR, -1)) != null) {
 					PAttr script = getXDAttr(ee, "script");
 					XOccurrence occ = null;
 					if (script != null) {
 						SBuffer[] sbs = parseTypeDeclaration(script.getValue());
-						occ = readOccurrence(sbs[0]);
+						setSourceBuffer(sbs[0]);
+						occ = readOccurrence();
 					}
 					if (index < len-1 && e.getNSIndex() == _xdIndex //xdef
 						&& ("mixed".equals(e.getLocalName()) // mixed or choice
@@ -741,12 +702,6 @@ public final class CompileXonXdef extends StringParser {
 			throw new SRuntimeException(SYS.SYS066, "Namespace W3C expected");
 		}
 		CompileXonXdef jx = new CompileXonXdef(p, xonMode, name, reporter);
-
-		jx._xdNamespace = p._nsURI;
-		jx._xdPrefix = p.getPrefix();
-		jx._xdIndex = p._nsPrefixes.get(jx._xdPrefix);
-		jx._basePos = p._xpathPos + "/text()";
-		jx.setReportWriter(reporter);
 		p._name = name;
 		p._nsURI = null; // set no namespace
 		p._nsindex = -1;
