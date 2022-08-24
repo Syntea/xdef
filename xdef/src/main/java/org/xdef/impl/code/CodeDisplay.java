@@ -7,6 +7,9 @@ import java.util.Set;
 import org.xdef.XDPool;
 import org.xdef.XDValue;
 import org.xdef.XDValueID;
+import static org.xdef.XDValueID.XD_REGEX;
+import static org.xdef.XDValueID.XD_STRING;
+import static org.xdef.XDValueID.XD_XPATH;
 import org.xdef.impl.XCodeDescriptor;
 import org.xdef.impl.XData;
 import org.xdef.impl.XDebugInfo;
@@ -14,6 +17,33 @@ import org.xdef.impl.XDefinition;
 import org.xdef.impl.XElement;
 import org.xdef.impl.XNode;
 import org.xdef.impl.XSelector;
+import static org.xdef.impl.code.CodeTable.ATTR_EXIST;
+import static org.xdef.impl.code.CodeTable.ATTR_REF;
+import static org.xdef.impl.code.CodeTable.COMPILE_BNF;
+import static org.xdef.impl.code.CodeTable.COMPILE_XPATH;
+import static org.xdef.impl.code.CodeTable.EXTMETHOD;
+import static org.xdef.impl.code.CodeTable.EXTMETHOD_ARRAY;
+import static org.xdef.impl.code.CodeTable.EXTMETHOD_CHECK;
+import static org.xdef.impl.code.CodeTable.EXTMETHOD_CHKEL;
+import static org.xdef.impl.code.CodeTable.EXTMETHOD_CHKEL_ARRAY;
+import static org.xdef.impl.code.CodeTable.EXTMETHOD_CHKEL_XDARRAY;
+import static org.xdef.impl.code.CodeTable.EXTMETHOD_SET_ELEMENT;
+import static org.xdef.impl.code.CodeTable.EXTMETHOD_TEXT;
+import static org.xdef.impl.code.CodeTable.EXTMETHOD_VOID_ELEMENT;
+import static org.xdef.impl.code.CodeTable.EXTMETHOD_VOID_TEXT;
+import static org.xdef.impl.code.CodeTable.EXTMETHOD_XDARRAY;
+import static org.xdef.impl.code.CodeTable.EXTMETHOD_XXNODE;
+import static org.xdef.impl.code.CodeTable.EXTMETHOD_XXNODE_XDARRAY;
+import static org.xdef.impl.code.CodeTable.INIT_PARAMS_OP;
+import static org.xdef.impl.code.CodeTable.LD_CODE;
+import static org.xdef.impl.code.CodeTable.LD_CONST;
+import static org.xdef.impl.code.CodeTable.LD_GLOBAL;
+import static org.xdef.impl.code.CodeTable.LD_LOCAL;
+import static org.xdef.impl.code.CodeTable.LD_XMODEL;
+import static org.xdef.impl.code.CodeTable.SRCINFO_CODE;
+import static org.xdef.impl.code.CodeTable.ST_GLOBAL;
+import static org.xdef.impl.code.CodeTable.ST_LOCAL;
+import static org.xdef.impl.code.CodeTable.ST_XMODEL;
 import org.xdef.impl.compile.CompileBase;
 import org.xdef.model.XMData;
 import org.xdef.model.XMElement;
@@ -169,6 +199,9 @@ public class CodeDisplay implements CodeTable, XDValueID {
 		} else if (sc.getKind() == XNode.XMATTRIBUTE ||
 			sc.getKind() == XNode.XMTEXT) {
 			out.print(" (" + ((XMData) sc).getValueTypeName() + ")");
+		}
+		if (sc._xon > 0) {
+			out.print(",xon=" + sc._xon);
 		}
 		if (sc._check >= 0) {
 			out.print(",check=" + sc._check);
