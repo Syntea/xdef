@@ -2194,7 +2194,14 @@ System.out.println(KXmlUtils.nodeToString(p.toXML(), true));
 				return false;
 			} else {
 				if (y.getName().indexOf('$') > 0) { //dummy element?
-					y = (XElement) y.getChildNodeModels()[0];
+					XMNode xmn = y.getChildNodeModels()[0];
+					if (xmn instanceof XElement) {
+						y = (XElement) xmn;
+					} else {
+						//Reference to element model expected&
+						error(xref.getSPosition(),
+							XDEF.XDEF213, xref.getXDPosition());
+					}
 				}
 			}
 			xel.setSqId(y.getSqId());

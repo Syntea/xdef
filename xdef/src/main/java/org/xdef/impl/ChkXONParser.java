@@ -89,19 +89,14 @@ final class ChkXONParser implements XParser, XonParser {
 			_sysId = u.toExternalForm();
 			_in = u.openStream();
 		} catch (Exception ex) {
-			File f = new File(source);
-			try {
+			try { // try if it is a file name
+				File f = new File(s);
 				_sysId = f.getCanonicalPath();
-				_in = new FileInputStream(s);
-			} catch (Exception exx) {
-				if (s.length() > 1) {
-					_sysId = "STRING";
-					_in = new ByteArrayInputStream(
-						source.getBytes(Charset.forName("UTF-8")));
-				} else {
-					//File doesn't exist: &{0}
-					throw new SRuntimeException(SYS.SYS024, s);
-				}
+				_in = new FileInputStream(f);
+			} catch (Exception exx) { //not file name, try to parse as JSON/XON
+				_sysId = "STRING";
+				_in = new ByteArrayInputStream(
+					source.getBytes(Charset.forName("UTF-8")));
 			}
 		}
 	}
