@@ -125,6 +125,36 @@ public class TestXon extends XDTester {
 			return null;
 		} catch (Exception ex) {return printThrowable(ex);}
 	}
+	private static String testZ(XDPool xp, String xdName, String json) {
+		String result = "";
+		try {
+			XDDocument xd = xp.createXDDocument(xdName);
+			ArrayReporter reporter = new ArrayReporter();
+			Object o = XonUtils.parseXON(json);
+			Object x = xd.jparse(json, reporter);
+			if (reporter.errorWarnings()) {
+				result += "** 1\n" + reporter.printToString() + "\n";
+				reporter.clear();
+			}
+			if (!XonUtils.xonEqual(o, x)) {
+				result += "** 2\n" +  o + "\n" + x + "\n";
+			}
+			xd = xp.createXDDocument("A");
+			XComponent xc = xd.jparseXComponent(json, null, reporter);
+			if (reporter.errorWarnings()) {
+				result += "** 3\n" + reporter.printToString() + "\n";
+				reporter.clear();
+			}
+			x = xc.toXon();
+			if (!XonUtils.xonEqual(o, x)) {
+				result += "** 4\n" +  o + "\n" + x + "\n";
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			result += ex + "\n";
+		}
+		return result;
+	}
 
 	@Override
 	public void test() {
