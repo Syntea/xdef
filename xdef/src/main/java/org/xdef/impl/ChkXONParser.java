@@ -1,11 +1,12 @@
 package org.xdef.impl;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StringReader;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Properties;
@@ -52,74 +53,70 @@ final class ChkXONParser implements XParser, XonParser {
 	private Element _element;
 	/** Stack of active node path. */
 	private ChkElement[] _chkElemStack;
-	/** Input stream with XML data.*/
-	private InputStream _in;
+	/** Input stream with source data.*/
+	private Reader _in;
 	/** Reporter for error messages. */
 	private SReporter _sReporter;
-	/** XML source position. */
+	/** source position. */
 	public SPosition _elemLocator;
 	/** System id. */
 	public String _sysId;
 
+	/** Stack with kind types of item. */
 	private final Stack<Integer> _kinds = new Stack<Integer>();
-	private int _kind; // 0..value, 1..array, 2..map
+	/** Type of item: 0..value, 1..array, 2..map */
+	private int _kind;
+	/** Stack with names of items of map. */
 	private Stack<SBuffer> _names;
+	/** Stack with stack with names of items of map. */
 	private final Stack<Stack<SBuffer>> _mapNames = new Stack<Stack<SBuffer>>();
+	/** flag if namespace was generated. */
 	private boolean _nsGenerated;
 
+	/** Create ChkXONParser only with reporter (no data).
+	 * @param reporter The reporter.
+	 */
 	private ChkXONParser(final ReportWriter reporter) {
 		super();
-		_sReporter = new SReporter(
-			reporter == null ?  new ArrayReporter() : reporter);
-		_names = null;
+		_sReporter =
+			new SReporter(reporter == null ?  new ArrayReporter() : reporter);
 	}
-
 	/** Creates a new instance of ChkParser and parses given string.
 	 * @param reporter The reporter.
 	 * @param source The string with source XML data.
 	 */
 	ChkXONParser(final ReportWriter reporter, final String source) {
 		this(reporter);
-		if (source == null || source.trim().isEmpty()) {
-			throw new SRuntimeException(SYS.SYS024, "null");
-		}
 		String s = source.trim();
-		try {
+		try { // try if it is URL
 			URL u = SUtils.getExtendedURL(s);
+			_in = getReader(u.openStream());
 			_sysId = u.toExternalForm();
-			_in = u.openStream();
 		} catch (Exception ex) {
 			try { // try if it is a file name
 				File f = new File(s);
+				_in = getReader(new FileInputStream(f));
 				_sysId = f.getCanonicalPath();
-				_in = new FileInputStream(f);
-			} catch (Exception exx) { //not file name, try to parse as JSON/XON
-				_sysId = "STRING";
-				_in = new ByteArrayInputStream(
-					source.getBytes(Charset.forName("UTF-8")));
+			} catch (Exception exx) { //not file, try to parse it as string
+				_sysId = "STRING_DATA";
+				_in = new StringReader(source);
 			}
 		}
 	}
-
 	/** Creates a new instance of ChkParser and parses given string.
 	 * @param reporter The reporter.
 	 * @param source The file with source XML data.
 	 */
 	ChkXONParser(final ReportWriter reporter, final File source) {
 		this(reporter);
-		if (source == null) {
-			//File doesn't exist: &{0}
-			throw new SRuntimeException(SYS.SYS024, "null");
-		}
 		try {
+			_in = getReader(new FileInputStream(source));
 			_sysId = source.getCanonicalPath();
-			_in = new FileInputStream(source);
 		} catch (Exception ex) {
 			throw new SRuntimeException(SYS.SYS024,//File doesn't exist: &{0}
 				source != null ? source.getAbsoluteFile() : "null");
 		}
 	}
-
 	/** Creates a new instance of ChkParser
 	 * @param reporter The reporter
 	 * @param in The source input stream.
@@ -128,100 +125,45 @@ final class ChkXONParser implements XParser, XonParser {
 	ChkXONParser(final ReportWriter reporter,
 		final InputStream in,
 		final String sourceName) {
-		this(reporter);
-		if (in == null) {
-			throw new SRuntimeException(SYS.SYS024, "null");
-		}
-		_sysId = sourceName;
-		_in = in;
+		this(reporter, getReader(in), sourceName);
 	}
-
 	/** Creates a new instance of ChkParser and parses given string.
 	 * @param reporter The reporter.
 	 * @param source URL with source XML data.
 	 */
 	ChkXONParser(final ReportWriter reporter, final URL source) {
 		this(reporter);
-		if (source == null) {
-			throw new SRuntimeException(SYS.SYS024, "null");
-		}
-		_sysId = source.toExternalForm();
 		try {
-			_in = source.openStream();
+			_in = getReader(source.openStream());
+			_sysId = source.toExternalForm();
 		} catch (Exception ex) {
 			throw new SRuntimeException(SYS.SYS024, _sysId);
 		}
 	}
+	/** Creates a new instance of ChkParser and parses given string.
+	 * @param reporter The reporter.
+	 * @param in Reader with source data.
+	 * @param source URL with source XML data.
+	 */
+	ChkXONParser(final ReportWriter reporter,
+		final Reader in,
+		final String sourceName) {
+		this(reporter);
+		_sysId = sourceName;
+		_in = in;
+	}
 
 ////////////////////////////////////////////////////////////////////////////////
-// Implementation of XParser
+// private methods
 ////////////////////////////////////////////////////////////////////////////////
 
-	@Override
-	/** Close reader of parsed data. */
-	public final void closeReader() {
-		if (_in != null) {
-			try {_in.close();} catch (IOException ex) {} // ignore mexception
-		}
-	}
-	@Override
-	/** Get connected reporter.
-	 * @return connected SReporter.
+	/** Get reader from input stream.
+	 * @param in input stream.
+	 * @return reader.
 	 */
-	public final SReporter getReporter() {return _sReporter;}
-	@Override
-	/** Parse XML generated from XON source.
-	 * @param chkDoc The ChkDocument object.
-	 */
-	public final void xparse(final ChkDocument chkDoc) {
-		try {
-			_level = -1;
-			_chkElemStack = new ChkElement[NODELIST_ALLOC_UNIT];
-			_chkEl = null;
-			_chkDoc = chkDoc;
-			_chkDoc._node = null;
-			_chkDoc._element = null;
-			XCodeProcessor scp = _chkDoc._scp;
-			Properties props = scp.getProperties();
-			_chkDoc._scp = null;
-			_chkDoc.init(chkDoc._xdef,
-				(Document) _chkDoc.getDocument().cloneNode(false),
-				chkDoc._reporter,
-				scp.getProperties(),
-				chkDoc._userObject);
-			_chkDoc._scp = scp;
-			_chkDoc._doc = _chkDoc._rootChkDocument._doc = null;
-			XPool xdp = (XPool) chkDoc._xdef.getXDPool();
-			if (_chkDoc.isDebug() && _chkDoc.getDebugger() != null) {
-				 // open debugger
-				_chkDoc.getDebugger().openDebugger(props, xdp);
-			}
-			_chkDoc._scp.initscript();//Initialize variables and methods
-			try {
-				doParse();
-			} catch (SRuntimeException ex) {
-				String x = ex.getMsgID();
-				if (x != null && x.startsWith("XML")) {
-					Report r = ex.getReport();
-					_sReporter.error(x, r.getText(), r.getModification());
-				} else {
-					throw ex;
-				}
-			} catch (RuntimeException ex) {
-				throw ex;
-			} catch (Exception ex) {
-				throw new RuntimeException(ex);
-			}
-			_chkEl = null;
-			_chkElemStack = null;
-		} catch (SError e) {
-			if ("XDEF906".equals(e.getMsgID())) {
-				throw e; //X-definition canceled
-			}
-			throw new SRuntimeException(e.getReport(), e.getCause());
-		}
+	private static Reader getReader(final InputStream in) {
+		return new InputStreamReader(in, Charset.forName("UTF-8"));
 	}
-////////////////////////////////////////////////////////////////////////////////
 
 	/** Add attributes from parsedElem object to thew created element.
 	 * @param parsedElem object with parsed attributes.
@@ -230,12 +172,11 @@ final class ChkXONParser implements XParser, XonParser {
 		for (int i = 0, max = parsedElem.getLength(); i < max; i++) {
 			KParsedAttr ka = parsedElem.getAttr(i);
 			if (ka.getValue() != null) {
-				_element.setAttributeNS(
-					ka.getNamespaceURI(), ka.getName(), ka.getValue());
+				_element.setAttributeNS(ka.getNamespaceURI(),
+					ka.getName(), ka.getValue());
 			}
 		}
 	}
-
 	/** This method is called after all attributes of the current element
 	 * attribute list was reached. The implementation may check the list of
 	 * attributes and to invoke appropriate actions. The method is invoked
@@ -289,7 +230,6 @@ final class ChkXONParser implements XParser, XonParser {
 		_sReporter.setPosition(parsedElem.getParsedNameSourcePosition());
 		_chkEl.checkElement();
 	}
-
 	/** This method is invoked when parser reached the end of element. */
 	private void elementEnd() {
 		_chkElemStack[_level--] = null; //let's gc do the job
@@ -302,7 +242,6 @@ final class ChkXONParser implements XParser, XonParser {
 			}
 		}
 	}
-
 	private KParsedElement genKElem(final String qname,
 		final String nsuri,
 		final SPosition spos) {
@@ -315,7 +254,6 @@ final class ChkXONParser implements XParser, XonParser {
 		}
 		return kelem;
 	}
-
 	private void genItem(final XonTools.JValue value, final SBuffer name) {
 		KParsedElement kelem = genKElem(XonNames.X_ITEM,
 			XDConstants.XON_NS_URI_W,
@@ -329,16 +267,88 @@ final class ChkXONParser implements XParser, XonParser {
 		elementStart(kelem);
 		elementEnd();
 	}
-
 	private void doParse() {
 		_kinds.push(_kind = 0);
-		XonReader xr = new XonReader(
-			new InputStreamReader(_in, Charset.forName("UTF-8")), this);
+		XonReader xr = new XonReader(_in, this);
 		xr.setSysId(_sysId);
 		xr.setReportWriter(_sReporter.getReportWriter());
 		xr.setXonMode();
 		xr.parse();
 	}
+
+////////////////////////////////////////////////////////////////////////////////
+// Implementation of XParser
+////////////////////////////////////////////////////////////////////////////////
+
+	@Override
+	/** Parse XML generated from XON source.
+	 * @param chkDoc The ChkDocument object.
+	 */
+	public final void xparse(final ChkDocument chkDoc) {
+		try {
+			_level = -1;
+			_chkElemStack = new ChkElement[NODELIST_ALLOC_UNIT];
+			_chkEl = null;
+			_chkDoc = chkDoc;
+			_chkDoc._node = null;
+			_chkDoc._element = null;
+			XCodeProcessor scp = _chkDoc._scp;
+			Properties props = scp.getProperties();
+			_chkDoc._scp = null;
+			_chkDoc.init(chkDoc._xdef,
+				(Document) _chkDoc.getDocument().cloneNode(false),
+				chkDoc._reporter,
+				scp.getProperties(),
+				chkDoc._userObject);
+			_chkDoc._scp = scp;
+			_chkDoc._doc = _chkDoc._rootChkDocument._doc = null;
+			XPool xdp = (XPool) chkDoc._xdef.getXDPool();
+			if (_chkDoc.isDebug() && _chkDoc.getDebugger() != null) {
+				 // open debugger
+				_chkDoc.getDebugger().openDebugger(props, xdp);
+			}
+			_chkDoc._scp.initscript();//Initialize variables and methods
+			try {
+				doParse();
+			} catch (SRuntimeException ex) {
+				String x = ex.getMsgID();
+				if (x != null && x.startsWith("XML")) {
+					Report r = ex.getReport();
+					_sReporter.error(x, r.getText(), r.getModification());
+				} else {
+					throw ex;
+				}
+			} catch (RuntimeException ex) {
+				throw ex;
+			} catch (Exception ex) {
+				throw new RuntimeException(ex);
+			}
+			_chkEl = null;
+			_chkElemStack = null;
+		} catch (SError e) {
+			if ("XDEF906".equals(e.getMsgID())) {
+				throw e; //X-definition canceled
+			}
+			throw new SRuntimeException(e.getReport(), e.getCause());
+		}
+	}
+	@Override
+	/** Get connected reporter.
+	 * @return connected SReporter.
+	 */
+	public final SReporter getReporter() {return _sReporter;}
+	@Override
+	/** Close reader of parsed data. */
+	public final void closeReader() {
+		if (_in != null) {
+			try {_in.close();} catch (IOException ex) {} // ignore mexception
+		}
+	}
+
+////////////////////////////////////////////////////////////////////////////////
+// Implementation of XonParser
+////////////////////////////////////////////////////////////////////////////////
+
 	@Override
 	/** Put value to result.
 	 * @param value JValue to be added to result object.
