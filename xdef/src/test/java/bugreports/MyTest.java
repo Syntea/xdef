@@ -151,7 +151,7 @@ public class MyTest extends XDTester {
 			xp = XDFactory.compileXD(null, xdef);
 //			xp = compile(xdef);
 			genXComponent(xp, clearTempDir());
-			
+
 			assertEq("", testAny(xp, "\"abc\""));
 //			assertEq("", testAny(xp, "[]"));
 //			assertEq("", testAny(xp, "[\"a\"]"));
