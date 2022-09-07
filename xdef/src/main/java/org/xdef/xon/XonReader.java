@@ -742,7 +742,7 @@ public final class XonReader extends StringParser implements XonParsers {
 	 * @throws SRuntimeException if an error occurs,
 	 */
 	public final void parse() throws SRuntimeException {
-		if (isToken("%charset:")) { // skip chraset command
+		if (isToken(XonNames.CHARSET_DIRECTIVE)) { // skip chraset command
 			skipToNextLine();
 		}
 		readItem();

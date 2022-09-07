@@ -30,4 +30,6 @@ public interface XonNames {
 	public static final String ANY_OBJECT = "$:anyObj";
 	/** This keyword used for the specification of any name in XON map. */
 	public static final String ANY_NAME = "$:anyName";
+	/** Charset directive. */
+	public static final String CHARSET_DIRECTIVE = "%charset:";
 }
