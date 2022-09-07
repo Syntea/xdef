@@ -891,39 +891,31 @@ public class XonTools {
 				&& !"X-ISO-10646-UCS-4-3412".equals(encoding)) {
 				s = bytesToString(buf, 0, len, encoding);
 				int i = -1;
-				while (s.length() < 8
+				while (s.length() < 9
 					&& (i = nextChar(in, encoding, buf, count, baos)) != -1) {
 					s += (char) i;
 				}
-				if ("%charset".equals(s)) {
+				if (XonNames.CHARSET_DIRECTIVE.equals(s)) {
 					String enc = "";
-					while((i = nextChar(in, encoding, buf, count, baos)) == ' '
+					while((i = nextChar(in,encoding,buf,count,baos)) == ' '
 						|| i == '\t') {}
-					if (i == ':') {
-						while((i = nextChar(in,encoding,buf,count,baos)) == ' '
-							|| i == '\t') {}
-						while(i > ' ') {
-							enc += (char) i;
-							i = nextChar(in, encoding, buf, count, baos);
-						}
-						while (i == ' ' || i == '\t') {
-							i = nextChar(in, encoding, buf, count, baos);
-						}
-						if (enc.isEmpty()) {
-							//Charset name is missing
-							throw new SRuntimeException(JSON.JSON083);
-						}
-						if (i != '\n' && i != '\r') {
-							//The %charset command must be terminated by the end
-							// of the line
-							throw new SRuntimeException(JSON.JSON082);
-						}
-						encoding = enc;
-					} else {
-						//Incorrect specification of the  %charset command: &{0}
-						throw new SRuntimeException(JSON.JSON081,
-							baos.toString());
+					while(i > ' ') {
+						enc += (char) i;
+						i = nextChar(in, encoding, buf, count, baos);
 					}
+					while (i == ' ' || i == '\t') {
+						i = nextChar(in, encoding, buf, count, baos);
+					}
+					if (enc.isEmpty()) {
+						//Charset name is missing
+						throw new SRuntimeException(JSON.JSON083);
+					}
+					if (i != '\n' && i != '\r') {
+						//The %charset command must be terminated by the end
+						// of the line
+						throw new SRuntimeException(JSON.JSON082);
+					}
+					encoding = enc;
 				}
 			}
 			_encoding = encoding;
