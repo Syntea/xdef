@@ -93,36 +93,10 @@ abstract class Reader_UCS_4_xxxx extends XAbstractReader {
 			return result;
 		}
 	}
-
 	@Override
 	public int read(final char[] cbuf) throws IOException {
-		int i = 0;
-		int len = cbuf.length;
-		while (i < len) {
-			int numBytes = _numChars - _charBufIndex;
-			if (numBytes <= 0) {
-				readChars();
-				if (_numChars <= 0) {
-					break;
-				}
-				numBytes = _numChars - _charBufIndex;
-			}
-			if (i + numBytes > len) {
-				numBytes = len - i;
-			}
-			System.arraycopy(_charBuf, _charBufIndex, cbuf, i, numBytes);
-			i+= numBytes;
-			_charBufIndex += numBytes;
-		}
-		if (i == 0) {
-			return -1;
-		}
-		if (!_notScanning) {
-			addBuf(cbuf, 0, i);
-		}
-		return i;
+		return read(cbuf, 0, cbuf.length);
 	}
-
 	@Override
 	public int read(final char[] cbuf,
 		final int off, final int len) throws IOException {
@@ -151,7 +125,6 @@ abstract class Reader_UCS_4_xxxx extends XAbstractReader {
 		}
 		return i;
 	}
-
 	@Override
 	public void close() throws IOException {
 		if (!isClosed()) {

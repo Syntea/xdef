@@ -1,10 +1,10 @@
 [
     true,
    { "jmeno": "first",
-      "plat": "12345",
+      "plat": 123.45,
       "nar": "1.1.1960" },
    { "jmeno": "second",
-      "plat": "67890",
+      "plat": 678.90,
       "nar": "12.10.1950" }
 ]
 

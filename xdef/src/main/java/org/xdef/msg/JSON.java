@@ -52,16 +52,22 @@ public interface JSON {
 	public static final long JSON023 = 13834649622L;
 	/** String with $:script expected&amp;{#SYS000} */
 	public static final long JSON024 = 13834649623L;
-	/** Incorrect charset specification: &amp;{0} */
-	public static final long JSON080 = 13834649624L;
+	/** Incorrect specification of the  %charset command: &amp;{0} */
+	public static final long JSON081 = 13834649624L;
+	/** The %charset command must be terminated by the end of the line */
+	public static final long JSON082 = 13834649625L;
+	/** Charset name is missing */
+	public static final long JSON083 = 13834649626L;
+	/** The %charset command must be on the first the line */
+	public static final long JSON084 = 13834649627L;
 	/** YAML - the package org.yaml.snakeyaml is not available. Please add it to classPath&amp;{#SYS000} */
-	public static final long JSON101 = 13834649625L;
+	public static final long JSON101 = 13834649628L;
 	/** Error when creating YAML string from object&amp;{#SYS000} */
-	public static final long JSON102 = 13834649626L;
+	public static final long JSON102 = 13834649629L;
 	/** Error when parsing YAML source&amp;{#SYS000} */
-	public static final long JSON103 = 13834649627L;
+	public static final long JSON103 = 13834649630L;
 	/** Messages for JSON and XON */
-	public static final long JSON_DESCRIPTION = 13834649628L;
+	public static final long JSON_DESCRIPTION = 13834649631L;
 	/** English */
-	public static final long JSON_LANGUAGE = 13834649629L;
+	public static final long JSON_LANGUAGE = 13834649632L;
 }

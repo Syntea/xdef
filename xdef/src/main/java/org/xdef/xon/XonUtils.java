@@ -71,7 +71,7 @@ public class XonUtils {
 	 */
 	public final static Map<String, Object> parseINI(final String s)
 		throws SRuntimeException {
-		Object[] x = XonTools.getReader(s, Charset.forName("ISO-8859-1"));
+		Object[] x = XonTools.prepareReader(s, Charset.forName("ISO-8859-1"));
 		return parseINI((Reader) x[0], (String) x[1]);
 	}
 
@@ -82,7 +82,7 @@ public class XonUtils {
 	 */
 	public final static Map<String, Object> parseINI(final File f)
 		throws SRuntimeException{
-		Object[] x = XonTools.getReader(f, Charset.forName("ISO-8859-1"));
+		Object[] x = XonTools.prepareReader(f, Charset.forName("ISO-8859-1"));
 		return parseINI((Reader) x[0], (String) x[1]);
 	}
 
@@ -93,7 +93,7 @@ public class XonUtils {
 	 */
 	public final static Map<String, Object> parseINI(final URL url)
 		throws SRuntimeException{
-		Object[] x = XonTools.getReader(url, Charset.forName("ISO-8859-1"));
+		Object[] x = XonTools.prepareReader(url, Charset.forName("ISO-8859-1"));
 		return parseINI((Reader) x[0], (String) x[1]);
 	}
 
@@ -137,7 +137,7 @@ public class XonUtils {
 	 */
 	public final static Object parseJSON(final String s)
 		throws SRuntimeException {
-		Object[] x = XonTools.getReader(s, null);
+		Object[] x = XonTools.prepareReader(s, null);
 		return XonUtils.parseJSON((Reader) x[0], (String) x[1]);
 	}
 
@@ -147,7 +147,7 @@ public class XonUtils {
 	 * @throws SRuntimeException if an error occurs.
 	 */
 	public final static Object parseJSON(final File f) throws SRuntimeException{
-		Object[] x = XonTools.getReader(f, null);
+		Object[] x = XonTools.prepareReader(f, null);
 		return XonUtils.parseJSON((Reader) x[0], (String) x[1]);
 	}
 
@@ -157,7 +157,7 @@ public class XonUtils {
 	 * @throws SRuntimeException if an error occurs,
 	 */
 	public final static Object parseJSON(final URL url)throws SRuntimeException{
-		Object[] x = XonTools.getReader(url, null);
+		Object[] x = XonTools.prepareReader(url, null);
 		return XonUtils.parseJSON((Reader) x[0], (String) x[1]);
 	}
 
@@ -201,7 +201,7 @@ public class XonUtils {
 	 * @throws SRuntimeException if an error occurs.
 	 */
 	public final static Object parseXON(final String s)throws SRuntimeException{
-		Object[] x = XonTools.getReader(s, null);
+		Object[] x = XonTools.prepareReader(s, null);
 		return parseXON((Reader) x[0], (String) x[1]);
 	}
 
@@ -211,7 +211,7 @@ public class XonUtils {
 	 * @throws SRuntimeException if an error occurs.
 	 */
 	public final static Object parseXON(final File f) throws SRuntimeException{
-		Object[] x = XonTools.getReader(f, null);
+		Object[] x = XonTools.prepareReader(f, null);
 		return parseXON((Reader) x[0], (String) x[1]);
 	}
 
@@ -221,7 +221,7 @@ public class XonUtils {
 	 * @throws SRuntimeException if an error occurs,
 	 */
 	public final static Object parseXON(final URL url) throws SRuntimeException{
-		Object[] x = XonTools.getReader(url, null);
+		Object[] x = XonTools.prepareReader(url, null);
 		return parseXON((Reader) x[0], (String) x[1]);
 	}
 
@@ -274,7 +274,7 @@ public class XonUtils {
 	 * @throws SRuntimeException if an error occurs.
 	 */
 	public final static Object parseYAML(final File f) throws SRuntimeException{
-		Object[] x = XonTools.getReader(f, null);
+		Object[] x = XonTools.prepareReader(f, null);
 		return parseYAML((Reader) x[0], (String) x[1]);
 	}
 
@@ -284,7 +284,7 @@ public class XonUtils {
 	 * @throws SRuntimeException if an error occurs,
 	 */
 	public final static Object parseYAML(final URL url)throws SRuntimeException{
-		Object[] x = XonTools.getReader(url, null);
+		Object[] x = XonTools.prepareReader(url, null);
 		return parseYAML((Reader) x[0], (String) x[1]);
 	}
 

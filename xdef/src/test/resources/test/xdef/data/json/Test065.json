@@ -1,0 +1,5 @@
+[ { "A": [ "classic"] },
+  { "B": [ "Rock", "pop" ] },
+  { "C": "Country" },
+  { "D": [] }
+]
