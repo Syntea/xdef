@@ -5,15 +5,14 @@ import java.io.InputStream;
 /** Reader of X-ISO-10646-UCS-4-2143 or X-ISO-10646-UCS-4-3412 charset.
  * @author Vaclav Trojan
  */
-class Reader_UCS_4_3412 extends Reader_UCS_4_xxxx {
+public class Reader_UCS_4_3412 extends Reader_UCS_4_xxxx {
 
 	/** four bytes. */
 	private final byte[] _b4 = new byte[4];
 
-	Reader_UCS_4_3412(final InputStream in) {
+	public Reader_UCS_4_3412(final InputStream in) {
 		super(in);
 		setEncoding("X-ISO-10646-UCS-4-3412");
-//		setEncoding("UTF-32");
 	}
 
 	@Override

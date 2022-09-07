@@ -1,7 +1,9 @@
 package org.xdef.xon;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -24,6 +26,12 @@ import org.xdef.impl.code.DefTelephone;
 import org.xdef.impl.code.DefURI;
 import org.xdef.impl.parsers.XDParseChar;
 import org.xdef.impl.parsers.XDParseCurrency;
+import org.xdef.impl.xml.Reader_UCS_4_2143;
+import org.xdef.impl.xml.Reader_UCS_4_3412;
+import org.xdef.impl.xml.XAbstractInputStream;
+import static org.xdef.impl.xml.XAbstractInputStream.bytesToString;
+import static org.xdef.impl.xml.XAbstractInputStream.detectBOM;
+import static org.xdef.impl.xml.XAbstractInputStream.nextChar;
 import org.xdef.msg.JSON;
 import org.xdef.msg.SYS;
 import org.xdef.sys.SBuffer;
@@ -631,18 +639,18 @@ public class XonTools {
 	 * @param x the object containing XON/JSON data.
 	 * @return array with two items: Reader and System ID.
 	 */
-	static final Object[] getReader(final Object x, final Charset charset) {
+	static final Object[] prepareReader(final Object x, final Charset charset) {
 		Object[] result = new Object[2];
 		if (x instanceof String) {
 			String s = (String) x;
 			if (s.indexOf('\n') < 0) {
 				try {
-					return getReader(SUtils.getExtendedURL(s), charset);
+					return prepareReader(SUtils.getExtendedURL(s), charset);
 				} catch (Exception ex) {
 					try {
 						File f = new File(s);
 						if (f.isFile()) {
-							return getReader(f, charset);
+							return prepareReader(f, charset);
 						}
 					} catch (Exception exx) {}
 				}
@@ -652,9 +660,9 @@ public class XonTools {
 		} else if (x instanceof File) {
 			File f = (File) x;
 			try {
-				result[0] = new InputStreamReader(
-					new FileInputStream(f),
-					charset == null ? Charset.forName("UTF-8") : charset);
+				InputStream in = new FileInputStream(f);
+				result[0] = charset == null
+					? getReader(in) : new InputStreamReader(in, charset);
 				result[1] = f.getCanonicalPath();
 			} catch (Exception ex) {
 				//Program exception &{0}
@@ -663,16 +671,23 @@ public class XonTools {
 		} else if (x instanceof URL) {
 			URL u = (URL) x;
 			try {
-				result[0] = new InputStreamReader(u.openStream(),
-					charset == null ? Charset.forName("UTF-8") : charset);
+				InputStream in = u.openStream();
+				result[0] = charset == null
+					? getReader(in) : new InputStreamReader(in, charset);
 				result[1] = u.toExternalForm();
 			} catch (Exception ex) {
 				//Program exception &{0}
 				throw new SRuntimeException(SYS.SYS036, ex);
 			}
 		} else if (x instanceof InputStream) {
-			result[0] = new InputStreamReader((InputStream) x,
-				charset == null ? Charset.forName("UTF-8") : charset);
+			InputStream in = (InputStream) x;
+			try {
+				result[0] = charset == null
+					? getReader(in) : new InputStreamReader(in, charset);
+			} catch (Exception ex) {
+				//Program exception &{0}
+				throw new SRuntimeException(SYS.SYS036, ex);
+			}
 			result[1] = "INPUT_STREAM";
 		} else if (x instanceof Reader) {
 			result[0] = (Reader) x;
@@ -837,6 +852,82 @@ public class XonTools {
 			return val.toString().substring(1);
 		} else {// Number or Boolean or othr objects
 			return val.toString();
+		}
+	}
+
+	/** Get reader from XON input stream.
+	 * @param in the input stream.
+	 * @return Reader created from input stream.
+	 * @throws IOException if an error occurs.
+	 */
+	public static final Reader getReader(final InputStream in)
+		throws Exception {
+		ReaderFromInputStream x = new ReaderFromInputStream(in);
+		if ("X-ISO-10646-UCS-4-2143".equals(x._encoding)) {
+			return new Reader_UCS_4_2143(x.getInputStream());
+		} else if ("X-ISO-10646-UCS-4-3412".equals(x._encoding)) {
+			return new Reader_UCS_4_3412(x.getInputStream());
+		}
+		return new java.io.InputStreamReader(x.getInputStream(),
+			java.nio.charset.Charset.forName(x._encoding));
+	}
+
+	/** This class is used to create Reader from InputStream. */
+	private static class ReaderFromInputStream extends XAbstractInputStream {
+		private final String _encoding;
+		private ReaderFromInputStream(final InputStream in) throws IOException {
+			super(in);
+			byte[] buf = new byte[4];
+			String encoding = detectBOM(in, buf);
+			int len = encoding.charAt(0) - '0'; // number of bytes read
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			if (len > 0) {
+				baos.write(buf, 0, len);
+			}
+			int count = encoding.charAt(1) - '0'; // bytes nead to read next
+			encoding = encoding.substring(2);
+			String s = "";
+			if (count > 0 && !"X-ISO-10646-UCS-4-2143".equals(encoding)
+				&& !"X-ISO-10646-UCS-4-3412".equals(encoding)) {
+				s = bytesToString(buf, 0, len, encoding);
+				int i = -1;
+				while (s.length() < 8
+					&& (i = nextChar(in, encoding, buf, count, baos)) != -1) {
+					s += (char) i;
+				}
+				if ("%charset".equals(s)) {
+					String enc = "";
+					while((i = nextChar(in, encoding, buf, count, baos)) == ' '
+						|| i == '\t') {}
+					if (i == ':') {
+						while((i = nextChar(in,encoding,buf,count,baos)) == ' '
+							|| i == '\t') {}
+						while(i > ' ') {
+							enc += (char) i;
+							i = nextChar(in, encoding, buf, count, baos);
+						}
+						while (i == ' ' || i == '\t') {
+							i = nextChar(in, encoding, buf, count, baos);
+						}
+						if (enc.isEmpty()) {
+							//Charset name is missing
+							throw new SRuntimeException(JSON.JSON083);
+						}
+						if (i != '\n' && i != '\r') {
+							//The %charset command must be terminated by the end
+							// of the line
+							throw new SRuntimeException(JSON.JSON082);
+						}
+						encoding = enc;
+					} else {
+						//Incorrect specification of the  %charset command: &{0}
+						throw new SRuntimeException(JSON.JSON081,
+							baos.toString());
+					}
+				}
+			}
+			_encoding = encoding;
+			setBuffer(baos.toByteArray());
 		}
 	}
 }

@@ -1,0 +1,12 @@
+<xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Test065" root="a" >
+  <xd:xon name="a" >
+    [ {$:script="occurs *; ref B"} ]
+  </xd:xon>
+  <xd:xon name="B">
+    { $:anyName: [$:oneOf,
+        "string()",
+         ["occurs *; string()"]
+      ]
+    }
+  </xd:xon>
+</xd:def>

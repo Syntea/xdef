@@ -56,7 +56,7 @@ public final class XonYaml {
 	}
 
 	public static final Object parseYAML(final String source) {
-		return parseYAML((Reader) XonTools.getReader(source, null)[0]);
+		return parseYAML((Reader) XonTools.prepareReader(source, null)[0]);
 	}
 
 	public static final Object parseYAML(final Reader source) {

@@ -148,7 +148,8 @@ public class TestXonUtil extends STester {
 
 		File directory = new File(getDataDir() + "../../../xdef/data/json/");
 		for (File x: directory.listFiles()) {
-			if (x.isFile() && x.getName().endsWith("json")) {
+			if (x.isFile()
+				&& (x.getName().endsWith("json")||x.getName().endsWith("xon"))){
 				assertEq("", testJParse(x), x.getAbsolutePath());
 //				assertEq("", testX(x), x.getAbsolutePath());
 			}

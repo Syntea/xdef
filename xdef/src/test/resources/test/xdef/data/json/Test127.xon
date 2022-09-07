@@ -1,0 +1,7 @@
+%charset:windows-1250
+{ "man": {
+    "name": "Bøetislav Jírù",
+    "year": 1990,
+    "auto": [ "BMW", "Škoda", { "dog": "Rex" } ]
+  }
+}
