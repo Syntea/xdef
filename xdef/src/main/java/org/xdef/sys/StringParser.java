@@ -1600,6 +1600,17 @@ public class StringParser extends SReporter implements SParser {
 	 * otherwise return false.
 	 */
 	public final boolean isNewLine() {
+//		if (_ch != '\r' && _ch != '\n')  {
+//			return false;
+//		}
+//		if (_ch == '\r') { //Windows...
+//			nextChar();
+//		}
+//		setNewLine();
+//		if (_ch == '\n') {
+//			nextChar();
+//		}
+//		return true;
 		if (_ch != '\n')  {
 			return false;
 		}

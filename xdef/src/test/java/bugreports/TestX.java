@@ -59,9 +59,9 @@ public class TestX extends XDTester {
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n"+
 " <xd:xon name='a'>\n"+
 "[\n" +
-"  { $:script= \"occurs 1..*\",\n" +
+"  { %script= \"occurs 1..*\",\n" +
 "    \"Name\": \"string()\",\n" +
-"    \"Genre\": [ $:oneOf,\n" +
+"    \"Genre\": [ %oneOf,\n" +
 "      \"string()\",\n" +
 "       [\"occurs 1..* string()\"]\n" +
 "    ]\n" +
@@ -91,7 +91,7 @@ public class TestX extends XDTester {
 			xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n"+
 " <xd:xon name='a'>\n"+
-"{ $:oneOf= \"optional;\",\n" +
+"{ %oneOf= \"optional;\",\n" +
 "  \"manager\": \"string()\",\n" +
 "  \"subordinates\":[ \"* string();\" ]\n" +
 "}\n" +
@@ -120,7 +120,7 @@ public class TestX extends XDTester {
 " <xd:xon name='a'>\n"+
 "[\n" +
 "  {\n" +
-"    \"A\": [$:oneOf= \"occurs *\", \"string()\", [\"occurs 1..* string()\"]]\n"+
+"    \"A\": [%oneOf= \"occurs *\", \"string()\", [\"occurs 1..* string()\"]]\n"+
 "  }\n" +
 "]\n" +
 " </xd:xon>\n"+
@@ -145,10 +145,10 @@ public class TestX extends XDTester {
 " <xd:xon name='a'>\n"+
 "   { \"date\" : \"date()\",\n" +
 "     \"cities\"  : [\n" +
-"       { $:script= \"occurs 1..*\",\n" +
+"       { %script= \"occurs 1..*\",\n" +
 "         \"from\": [\n" +
 "           \"string()\",\n" +
-"           {$:script= \"*\", \"to\":\"jstring()\", \"dist\":\"int()\"}\n" +
+"           {%script= \"*\", \"to\":\"jstring()\", \"dist\":\"int()\"}\n" +
 "    	  ]\n" +
 "        }\n" +
 "      ]\n" +

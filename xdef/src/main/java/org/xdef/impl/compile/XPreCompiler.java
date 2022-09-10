@@ -66,7 +66,7 @@ public class XPreCompiler implements PreCompiler {
 	private final ArrayList<PNode> _listComponent = new ArrayList<PNode>();
 	/** Code generator. */
 	private final CompileCode _g;
-	/** X-position to XON $:any models. */
+	/** X-position to XON %any models. */
 	private String _xonAnyXPos = null;
 
 	/** Display mode */

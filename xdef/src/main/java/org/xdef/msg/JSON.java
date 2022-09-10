@@ -50,15 +50,15 @@ public interface JSON {
 	public static final long JSON022 = 13834649621L;
 	/** Illegal number value&amp;{0}{ for the XON type "}{"}: &amp;{1}&amp;{#SYS000} */
 	public static final long JSON023 = 13834649622L;
-	/** String with $:script expected&amp;{#SYS000} */
+	/** String with %script expected&amp;{#SYS000} */
 	public static final long JSON024 = 13834649623L;
-	/** Incorrect specification of the  %charset command: &amp;{0} */
+	/** Incorrect specification of the %charset directive: "&amp;{0}"&amp;{#SYS000} */
 	public static final long JSON081 = 13834649624L;
-	/** The %charset command must be terminated by the end of the line */
+	/** The %charset directive must be terminated by the end of the line&amp;{#SYS000} */
 	public static final long JSON082 = 13834649625L;
-	/** Charset name is missing */
+	/** The %charset directive is missing the name of the character set&amp;{#SYS000} */
 	public static final long JSON083 = 13834649626L;
-	/** The %charset command must be on the first the line */
+	/** The %charset directive must be on the first line of the source text&amp;{#SYS000} */
 	public static final long JSON084 = 13834649627L;
 	/** YAML - the package org.yaml.snakeyaml is not available. Please add it to classPath&amp;{#SYS000} */
 	public static final long JSON101 = 13834649628L;

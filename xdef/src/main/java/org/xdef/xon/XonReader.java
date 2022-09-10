@@ -23,7 +23,7 @@ import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
 import static org.xdef.xon.XonNames.ANY_NAME;
-import static org.xdef.xon.XonNames.ANY_OBJECT;
+import static org.xdef.xon.XonNames.ANY_OBJ;
 import static org.xdef.xon.XonNames.ONEOF_CMD;
 import static org.xdef.xon.XonNames.SCRIPT_CMD;
 
@@ -32,7 +32,7 @@ import static org.xdef.xon.XonNames.SCRIPT_CMD;
  */
 public final class XonReader extends StringParser implements XonParsers {
 	private static final String[] XDEF_NAMES =
-		new String[]{SCRIPT_CMD, ONEOF_CMD, ANY_OBJECT};
+		new String[]{SCRIPT_CMD, ONEOF_CMD, ANY_OBJ};
 	/** Flag to accept comments (default false; true=accept comments). */
 	private boolean _acceptComments;
 	/** Flag if parse JSON or XON (default false; false=JSON, true=XON). */
@@ -125,7 +125,7 @@ public final class XonReader extends StringParser implements XonParsers {
 				wasScript = true;
 				skipSpacesOrComments();
 				SBuffer value = null;
-				if (i >= 1) { // $:oneOf or $:anyObj
+				if (i >= 1) { // %oneOf or %anyObj
 					if (isChar('=')) {
 						skipSpacesOrComments();
 						spos = getPosition();
@@ -138,7 +138,7 @@ public final class XonReader extends StringParser implements XonParsers {
 						}
 					}
 					_jp.xdScript(name, value);
-				} else {  // $:script
+				} else {  // %script
 					if (!isChar('=')) {
 						error(JSON.JSON002, "=");//"&{0}"&{1}{ or "}{"} expected
 					}
@@ -687,11 +687,11 @@ public final class XonReader extends StringParser implements XonParsers {
 			readMap();
 		} else if (isChar('[')) {
 			readArray();
-		} else if (_jdef && isToken(ANY_OBJECT)) {
-			SPosition spos = getPosition(); // xdef $:any
-			spos.setIndex(getIndex() - ANY_OBJECT.length());
-			SBuffer name = new SBuffer(ANY_OBJECT, spos);
-			SBuffer val = new SBuffer(ANY_OBJECT, spos);
+		} else if (_jdef && isToken(ANY_OBJ)) {
+			SPosition spos = getPosition(); // xdef %any
+			spos.setIndex(getIndex() - ANY_OBJ.length());
+			SBuffer name = new SBuffer(ANY_OBJ, spos);
+			SBuffer val = new SBuffer(ANY_OBJ, spos);
 			skipSpacesOrComments();
 			if (isChar('=')) {
 				skipSpacesOrComments();
@@ -742,8 +742,30 @@ public final class XonReader extends StringParser implements XonParsers {
 	 * @throws SRuntimeException if an error occurs,
 	 */
 	public final void parse() throws SRuntimeException {
-		if (isToken(XonNames.CHARSET_DIRECTIVE)) { // skip chraset command
-			skipToNextLine();
+		if (!_jdef && isToken(XonNames.CHARSET_DIRECTIVE)) {
+			int pos1 = getIndex() - XonNames.CHARSET_DIRECTIVE.length();
+			while(isOneOfChars(" \t") > 0){}
+			boolean wasColon = isChar(':');
+			while(isOneOfChars(" \t") > 0){}
+			int pos2 = getIndex();
+			boolean wasName = isLetterOrDigit() > 0 || isChar('-');
+			if (wasName) { // read charset name
+				while(isLetterOrDigit() > 0 || isChar('-')){}
+			}
+//			String charsetName = getBufferPart(pos2, getIndex());
+			if (!wasColon || !wasName) { // write error message
+				if ((pos2 = getIndex()) - pos1 > 40) {
+					pos2 = pos1 + 40; // message would be too long
+				}
+				//Incorrect specification of the %chars0et directive: "&{0}"
+				error(JSON.JSON081, getBufferPart(pos1, pos2));
+			}
+			while(isOneOfChars(" \t") > 0){}
+			isChar('\r'); // windows...
+			if (!isNewLine()) { // write error message
+				//The %charset command must be terminated by the end of the line
+				error(JSON.JSON082);
+			}
 		}
 		readItem();
 		skipSpacesOrComments();
