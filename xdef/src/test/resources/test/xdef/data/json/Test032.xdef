@@ -2,15 +2,15 @@
 <xd:xon name='a'>
 {
     "personnel": {
-        "person": [ $:script="occurs 1..*",
-            {$:script="occurs 1..*",
+        "person": [ %script="occurs 1..*",
+            {%script="occurs 1..*",
                 "id": "string()",
                 "name": {
                     "family": "string()",
                     "given": "optional string()"
                 },
                 "email": "emailAddr();",
-                "link": { $:oneOf="optional",
+                "link": { %oneOf="optional",
                     "manager": "string();",
                     "subordinates": [
                          "occurs 0..* string() /* finally outln('xxx'); */"

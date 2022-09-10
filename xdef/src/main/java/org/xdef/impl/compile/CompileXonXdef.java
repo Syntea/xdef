@@ -40,7 +40,7 @@ import org.xdef.xon.XonTools.JValue;
  */
 public final class CompileXonXdef extends StringParser {
 
-	/** XPosition of $:any model.*/
+	/** XPosition of %any model.*/
 	private final byte _xonMode;
 	/** Prefix of X-definition namespace. */
 	private String _xdPrefix;
@@ -53,7 +53,7 @@ public final class CompileXonXdef extends StringParser {
 	/** PNode with generated model.*/
 	private final PNode _xonModel;
 	private final String _anyName;
-	/** X-position of generated $:any model.*/
+	/** X-position of generated %any model.*/
 	private String _anyXPos;
 
 	/** Prepare instance of CompileXonXdef. */
@@ -600,7 +600,7 @@ public final class CompileXonXdef extends StringParser {
 		return e;
 	}
 
-	/** Create PNode for $:any.
+	/** Create PNode for %any.
 	 * @param xon XON/JSON parsed data.
 	 * @param parent parent PNode,
 	 * @return created PNode.
@@ -861,7 +861,7 @@ public final class CompileXonXdef extends StringParser {
 			String s;
 			if (ANY_NAME.equals(name.getString())) {
 				namedValue(new SBuffer(null, name));
-			} else if (XonNames.ANY_OBJECT.equals(name.getString())) {
+			} else if (XonNames.ANY_OBJ.equals(name.getString())) {
 				putValue(new JAny((SPosition)name, value));
 			} else {
 				s = ONEOF_CMD.equals(name.getString()) ? ONEOF_CMD : "";

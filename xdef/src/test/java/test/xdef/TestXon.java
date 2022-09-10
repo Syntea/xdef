@@ -235,7 +235,7 @@ public class TestXon extends XDTester {
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n"+
 "<xd:component>%class test.xdef.Csvxx %link a</xd:component>\n"+
 " <xd:xon name='a'>\n"+
-"    [ [ $:script =\"+\", \"int\", \"int\", \"string()\", \"boolean()\"] ]\n"+
+"    [ [ %script =\"+\", \"int\", \"int\", \"string()\", \"boolean()\"] ]\n"+
 " </xd:xon>\n"+
 "</xd:def>";
 			xp = compile(xdef); // no property
@@ -424,7 +424,7 @@ public class TestXon extends XDTester {
 "<xd:component>%class test.xdef.Xona %link a</xd:component>\n"+
 " <xd:xon name='a'>\n"+
 "[\n" +
-"  [ $:script= \"optional\", \"boolean();\", \"optional int();\" ]\n" +
+"  [ %script= \"optional\", \"boolean();\", \"optional int();\" ]\n" +
 "]\n" +
 " </xd:xon>\n"+
 "</xd:def>";
@@ -455,7 +455,7 @@ public class TestXon extends XDTester {
 "<xd:xon name=\"X\">\n"+
 "[\n" +
 "  [\"fixed 'Name'\",\"fixed 'Email'\",\"fixed 'Mobile Number'\"],\n"+
-"  [$:script=\"+\",\n"+
+"  [%script=\"+\",\n"+
 "    \"string()\",\n"+
 "    \"union(%item=[emailAddr(), jnull])\",\n"+
 "    \"union(%item=[telephone(), jnull])\"\n"+
@@ -499,10 +499,10 @@ public class TestXon extends XDTester {
 "  <xd:xon name=\"test\">\n" +
 "    { \"cities\": [\n" +
 "        \"date();\",\n" +
-"        { $:script = \"occurs 1..*;\",\n" +
+"        { %script = \"occurs 1..*;\",\n" +
 "          \"from\": [\n" +
 "            \"string();\",\n" +
-"            { $:script = \"occurs 1..*; \",\n" +
+"            { %script = \"occurs 1..*; \",\n" +
 "              \"to\": \"jstring();\",\n" +
 "              \"distance\": \"int();\"\n" +
 "            }\n" +
@@ -591,7 +591,7 @@ public class TestXon extends XDTester {
 "proxy type=int(0,9)\n" +
 "hostaddr= ? ipAddr(); options acceptEmptyAttributes\n" + //
 "port= ? int(0, 9999);\n" +
-"[system] $:script = optional\n" +
+"[system] %script = optional\n" +
 "autolaunch=int()\n" +
 "[ x.y ]\n" +
 "[selfupdate]\n" +
@@ -645,7 +645,7 @@ public class TestXon extends XDTester {
 "      Authority = enum(\"SECURITY\", \"SOFTWARE\", \"CLIENT\", \"UNREGISTRED\")\n" +
 "      ItemSize = int(10000, 15000000)\n" +
 "      ReceiverSleep = int(1, 3600)\n" +
-"    [Server] $:script = optional\n" +
+"    [Server] %script = optional\n" +
 "      RemoteServerURL = url()\n" +
 "      SeverIP = ipAddr()\n" +
 "      SendMailHost = domainAddr()\n" +
@@ -690,7 +690,7 @@ public class TestXon extends XDTester {
 "<xd:xon name=\"CSV\">\n"+
 "[\n"+
 "  [\"3..3 string();\"],\n"+ // head
-"  [$:script=\"+\", \"? string()\", \"? emailAddr\", \"? telephone()\"]\n"+
+"  [%script=\"+\", \"? string()\", \"? emailAddr\", \"? telephone()\"]\n"+
 "]\n"+
 "</xd:xon>\n"+
 "</xd:def>";
@@ -756,7 +756,7 @@ public class TestXon extends XDTester {
 "<xd:component>%class test.xdef.CsvTest1 %link CSV</xd:component>\n"+
 "<xd:xon name=\"CSV\">\n"+
 "[\n"+
-"  [$:script=\"+\", \"? string()\", \"? emailAddr\", \"? telephone()\"]\n"+
+"  [%script=\"+\", \"? string()\", \"? emailAddr\", \"? telephone()\"]\n"+
 "]\n"+
 "</xd:xon>\n"+
 "</xd:def>";
@@ -818,10 +818,10 @@ public class TestXon extends XDTester {
 "<xd:def xmlns:xd='" + _xdNS + "' root=\"test\">\n" +
 "<xd:component>%class test.xdef.MyTestX_OneOf %link test</xd:component>\n"+
 "<xd:xon name=\"test\">\n" +
-"{ a:[ $:oneOf,\n" +
+"{ a:[ %oneOf,\n" +
 "       \"date(); finally outln('date')\", \n" +
 "       \"ipAddr(); finally outln('ipAddr')\", \n" +
-"       [$:script=\"finally outln('[...]')\",\"*int()\"], \n" +
+"       [%script=\"finally outln('[...]')\",\"*int()\"], \n" +
 "       \"string(); finally outln('string')\" \n" +
 "  ]\n" +
 "}\n" +
@@ -893,10 +893,10 @@ public class TestXon extends XDTester {
 "  <xd:xon name=\"test\">\n" +
 "    {date: \"date()\",\n" +
 "      cities: [\n" +
-"        { $:script = \"occurs 1..*; finally outln(); forget\",\n" +
+"        { %script = \"occurs 1..*; finally outln(); forget\",\n" +
 "          \"from\": [\n" +
 "            \"string(); finally out('From ' + getText());\",\n" +
-"            { $:script = \"occurs 1..*;\",\n" +
+"            { %script = \"occurs 1..*;\",\n" +
 "              \"to\": \"jstring();finally out(' to '+getText()+' is ');\",\n"+
 "              \"distance\": \"int(); finally out(getText() + ' km');\"\n" +
 "            }\n" +
@@ -947,11 +947,11 @@ public class TestXon extends XDTester {
 			assertEq(((Map) x).get("date"), new SDatetime("2020-02-22"));
 		} catch (Exception ex) {fail(ex);}
 		reporter.clear();
-		try {// test $:anyName in map
+		try {// test %anyName in map
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
 "  <xd:xon name='A'>\n"+
-"{ $:anyName: \"? int();\", x: \"? int();\" }\n"+
+"{ %anyName: \"? int();\", x: \"? int();\" }\n"+
 "</xd:xon>\n"+
 "<xd:component>%class test.xdef.MyTestAny_1 %link A</xd:component>\n"+
 "</xd:def>";
@@ -999,7 +999,7 @@ public class TestXon extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
 "  <xd:xon name='A'>\n"+
-"{ $:anyName: \"* int();\", x: \"? int();\" }\n"+
+"{ %anyName: \"* int();\", x: \"? int();\" }\n"+
 "</xd:xon>\n"+
 "<xd:component>%class test.xdef.MyTestAny_2 %link A</xd:component>\n"+
 "</xd:def>";
@@ -1047,7 +1047,7 @@ public class TestXon extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
 "<xd:xon name='A'>\n"+
-"{ $:anyName: [\"* int();\"]}\n"+
+"{ %anyName: [\"* int();\"]}\n"+
 "</xd:xon>\n"+
 "<xd:component>%class test.xdef.MyTestAny_3 %link A</xd:component>\n"+
 "</xd:def>";
@@ -1077,7 +1077,7 @@ public class TestXon extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
 "<xd:xon name='A'>\n"+
-"{ $:anyName: [$:script=\"*\", \"* int();\"]}\n"+
+"{ %anyName: [%script=\"*\", \"* int();\"]}\n"+
 "</xd:xon>\n"+
 "<xd:component>%class test.xdef.MyTestAny_4 %link A</xd:component>\n"+
 "</xd:def>";
@@ -1128,10 +1128,10 @@ public class TestXon extends XDTester {
 "<xd:xon name='A'>\n"+
 "{ \"cities\" : [\n" +
 "    \"date(); finally outln('Measurements taken on: '+getText()+'\\n');\",\n"+
-"    { $:script = \"occurs 1..*;\",\n" +
-"      $:anyName: [$:script = \"occurs 1..*;\n"+
+"    { %script = \"occurs 1..*;\",\n" +
+"      %anyName: [%script = \"occurs 1..*;\n"+
 "                init outln('Distance from ' + getXonKey() + '\nto:');\",\n" +
-"        { $:script = \"occurs 1..*; finally outln();\",\n" +
+"        { %script = \"occurs 1..*; finally outln();\",\n" +
 "          \"to\" : \"jstring();finally out(' - ' + getText() + ' = ');\",\n" +
 "          \"distance\" : \"int(); finally out(getText() + '(km)');\"\n" +
 "        }\n" +

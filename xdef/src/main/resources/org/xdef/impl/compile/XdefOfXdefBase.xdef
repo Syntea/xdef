@@ -723,7 +723,7 @@ INIComment ::= "#" INIChar*
 INIProp ::= INISP? (INIChar  - "=")+ INISP? "=" (INIChar - ININewLine)*
 
 INISection::= INISP? "[" INISP? (INIChar - "]")+ INISP? "]"
-   INISP? ("$:script" INISP? "=" INISP? (INIChar - ININewLine)* )?
+   INISP? ("%script" INISP? "=" INISP? (INIChar - ININewLine)* )?
 
 INIProps ::= INICommand*
 
@@ -752,10 +752,10 @@ XONControlchar ::= '\"' | '\\' | '\/' | '\b' | '\f' | '\n' | '\r' | '\t' |
 XONString ::= ('"' ([^\"] | XONControlchar )* '"' |
   "'" ([^\'] | XONControlchar )* "'")
 
-XONXscript ::= XONSP? ( ("$:script" XONSP? "=" XONSP? XONString)
-  | ( "$:oneOf" (XONSP? "=" XONSP? XONString)? ) ) (XONSP? ",")?
+XONXscript ::= XONSP? ( ("%script" XONSP? "=" XONSP? XONString)
+  | ( "%oneOf" (XONSP? "=" XONSP? XONString)? ) ) (XONSP? ",")?
 
-XONPair ::= ("$:anyName" (XONSP? "=" XONSP? XONString)?
+XONPair ::= ("%anyName" (XONSP? "=" XONSP? XONString)?
   | $ncName | XONString) XONSP? ":" XONSP? XONValue
 
 XONMembers ::= XONSP? XONPair (XONSP? "," XONSP? XONPair)* (XONSP? ",")?
@@ -766,7 +766,7 @@ XONList ::= XONValue (XONSP? "," XONSP? XONValue )* (XONSP? ",")?
 
 XONArray ::= "[" XONXscript? XONSP? XONList? XONSP? "]"
 
-XONValue ::= XONSP? ( XONPair | "null" | "true" | "false" | XONNumber | "$:any"
+XONValue ::= XONSP? ( XONPair | "null" | "true" | "false" | XONNumber | "%any"
   | XONString | XONArray | XONObject) XONSP?
 
 xon ::= XONSP? (XONArray | XONObject | XONString)

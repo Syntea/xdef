@@ -101,34 +101,34 @@ public class MyTest extends XDTester {
 		XComponent xc;
 		ArrayReporter reporter = new ArrayReporter();
 /**/
-		try {// test $:anyName in map
+		try {// test %anyName in map
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' name=\"A\" root=\"test\">\n" +
 "<xd:xon name=\"test\">\n" +
-"  [$:oneOf=\"ref A\"]\n"  +
+"  [%oneOf=\"ref A\"]\n"  +
 "</xd:xon>\n"  +
 "<xd:xon name=\"A\">\n" +
-" [$:oneOf,\n"+
+" [%oneOf,\n"+
 "    \"jvalue();\",\n" +
 "    [\"* jvalue();\" ],\n" +
-"    {$:anyName:\n" +
-"       [$:oneOf,\n" +
+"    {%anyName:\n" +
+"       [%oneOf,\n" +
 "         \"jvalue();\",\n" +
 "         [\"* jvalue();\" ],\n" +
-"         {$:anyName: [$:oneOf=\" ref test\"]}\n" +
+"         {%anyName: [%oneOf=\" ref test\"]}\n" +
 "       ]\n" +
 "    }\n" +
 "  ]\n" +
 "</xd:xon>\n"  +
 //"<xd:xon name=\"B\">\n" +
-//" [$:oneOf,\n"+
+//" [%oneOf,\n"+
 //"    \"jvalue();\",\n" +
 //"    [\"* jvalue();\" ],\n" +
-//"    {$:anyName:\n" +
-//"       [$:oneOf,\n" +
+//"    {%anyName:\n" +
+//"       [%oneOf,\n" +
 //"         \"jvalue();\",\n" +
 //"         [\"* jvalue();\" ],\n" +
-//"         {$:anyName: [$:oneOf=\" ref A\"]}\n" +
+//"         {%anyName: [%oneOf=\" ref A\"]}\n" +
 //"       ]\n" +
 //"    }\n" +
 //"  ]\n" +
@@ -170,8 +170,8 @@ if(true)return;
 "<xd:xon name='network'>\n" +
 "{\n" +
 "  a: \"optionalstring();\"\n" +
-"  b: {$:script=\"optional\", a: \"optional string();\"}\n" +
-"  c: [$:script=\"optional\", \"int();\", { a: \"int();\"}]\n" +
+"  b: {%script=\"optional\", a: \"optional string();\"}\n" +
+"  c: [%script=\"optional\", \"int();\", { a: \"int();\"}]\n" +
 "}\n" +
 "</xd:xon>\n" +
 "</xd:def>";
@@ -234,7 +234,7 @@ if(true)return;
 "  external method String bugreports.MyTest.xxx(XXNode);\n"+
 "</xd:declaration>\n"+
 "<xd:xon name='a'>\n"+
-"  [ $:script=\"finally outln(xxx());\", \"gps();\", \"gps();\"]\n"+
+"  [ %script=\"finally outln(xxx());\", \"gps();\", \"gps();\"]\n"+
 "</xd:xon>\n"+
 "<xd:component>\n"+
 "  %class bugreports.MyTesta %link a;\n"+

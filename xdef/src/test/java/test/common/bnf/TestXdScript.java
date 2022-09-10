@@ -282,7 +282,7 @@ public class TestXdScript extends XDTester {
 //"proxy type= int(0,9)\n" +
 //"hostaddr= ? ipAddr(); options acceptEmptyAttributes\n" + //
 //"port= int(0, 9999)\n" +
-//"[system]$:script = optional;\n" +
+//"[system]%script = optional;\n" +
 //"autolaunch=int();\n" +
 //"[ x.y ]\n" +
 //"[selfupdate]\n" +
