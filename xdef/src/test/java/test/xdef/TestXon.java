@@ -256,7 +256,6 @@ public class TestXon extends XDTester {
 					+ "\n*****\n" + XonUtils.toXonString(x, true));
 			}
 		} catch (Exception ex) {fail(ex);}
-		reporter.clear();
 		try {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
@@ -537,7 +536,6 @@ public class TestXon extends XDTester {
 				fail(ex);
 			}
 		} catch (Exception ex) {fail(ex);}
-		reporter.clear();
 		try { // test Windows INI
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='test' name='A'>\n"+
@@ -681,7 +679,6 @@ public class TestXon extends XDTester {
 				xd.iparse(XonUtils.toIniString(xini), reporter)));
 			assertNoErrorwarningsAndClear(reporter);
 		} catch (Exception ex) {fail(ex);}
-		reporter.clear();
 		try { //test CSV data
 			// with head
 			xdef =
@@ -812,7 +809,6 @@ public class TestXon extends XDTester {
 					+ "\n*** B *\n" + XonUtils.toXonString(o));
 			}
 		} catch (Exception ex) {fail(ex);}
-		reporter.clear();
 		try { // test $oneOf
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root=\"test\">\n" +
@@ -946,7 +942,6 @@ public class TestXon extends XDTester {
 			assertTrue(((List)((Map)(x = xc.toXon())).get("cities")).isEmpty());
 			assertEq(((Map) x).get("date"), new SDatetime("2020-02-22"));
 		} catch (Exception ex) {fail(ex);}
-		reporter.clear();
 		try {// test %anyName in map
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
@@ -1065,7 +1060,6 @@ public class TestXon extends XDTester {
 			if (!XonUtils.xonEqual(x, o)) {
 				fail("** 2 **\n"+json+"\n" + XonUtils.toXonString(xd.getXon()));
 			}
-			reporter.clear();
 			genXComponent(xp, clearTempDir());
 			xc = xd.jparseXComponent(json, null, reporter);
 			assertNoErrorsAndClear(reporter);
@@ -1115,7 +1109,6 @@ public class TestXon extends XDTester {
 			if (!XonUtils.xonEqual(x, o)) {
 				fail("** 2 **\n"+json+"\n" + XonUtils.toXonString(xd.getXon()));
 			}
-			reporter.clear();
 			xc = xd.jparseXComponent(json, null, reporter);
 			assertNoErrorsAndClear(reporter);
 			y = xc.toXon();
@@ -1193,7 +1186,6 @@ public class TestXon extends XDTester {
 			assertNoErrorsAndClear(reporter);
 			assertEq(strw.toString(), s);
 		} catch (Exception ex) {fail(ex);}
-		reporter.clear();
 
 		clearTempDir(); // clear temporary directory
 	}
