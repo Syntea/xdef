@@ -489,7 +489,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			s = xe.getXDPosition();
 			ndx = s.indexOf('$');
 			if (ndx > 0) {
-				s = s.substring(0, ndx);
+				s = s.substring(0, ndx - 1);
 			}
 			String className = _xclass == null ?
 				getXDPool().getXComponents().get(s)
@@ -516,6 +516,14 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 				}
 				xe = (XElement) getXDPool().findModel(s);
 				className = getXDPool().getXComponents().get(s);
+			}
+			if (className == null) {
+				for (Map.Entry<String, String> en: getXDPool().getXComponents().entrySet()) {
+					if (en.getKey().startsWith(_xdef.getName() + '#')) {
+						className = en.getValue();
+						break;
+					}
+				}
 			}
 			if (className != null) {
 				if (className.startsWith("%ref ")) {
