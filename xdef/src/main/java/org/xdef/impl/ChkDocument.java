@@ -489,7 +489,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			s = xe.getXDPosition();
 			ndx = s.indexOf('$');
 			if (ndx > 0) {
-				s = s.substring(0, ndx - 1);
+				s = s.substring(0, ndx);
 			}
 			String className = _xclass == null ?
 				getXDPool().getXComponents().get(s)
@@ -516,14 +516,6 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 				}
 				xe = (XElement) getXDPool().findModel(s);
 				className = getXDPool().getXComponents().get(s);
-			}
-			if (className == null) {
-				for (Map.Entry<String, String> en: getXDPool().getXComponents().entrySet()) {
-					if (en.getKey().startsWith(_xdef.getName() + '#')) {
-						className = en.getValue();
-						break;
-					}
-				}
 			}
 			if (className != null) {
 				if (className.startsWith("%ref ")) {
@@ -1569,6 +1561,41 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		final Class<?> xClass,
 		final String sourceId,
 		final ReportWriter reporter) throws SRuntimeException {
+/**	
+		_genXComponent = true;
+		_xclass = xClass;
+		if (xon instanceof String) {
+			xparse(new ChkXONParser(reporter, (String) xon), reporter);
+		} else if (xon instanceof URL) {
+			xparse(new ChkXONParser(reporter, (URL) xon), reporter);
+		} else if (xon instanceof File) {
+			xparse(new ChkXONParser(reporter, (File) xon), reporter);
+		} else if (xon instanceof InputStream) {
+			xparse(new ChkXONParser(reporter,
+				(InputStream) xon, sourceId), reporter);
+		} else if (xon instanceof Reader) {
+			xparse(new ChkXONParser(reporter,
+				(Reader) xon, sourceId),
+				reporter);
+		} else if (xon instanceof Element) {
+			xparse((Element) xon, reporter);
+		} else if (xon instanceof Document) {
+			xparse(((Document) xon).getDocumentElement(), reporter);
+		} else {
+			Element e;
+			try {
+				byte jsonVer = // version of XON/JSON to XML transormation
+					(Byte) xClass.getDeclaredField("XON").get(null);
+				e = jsonVer == XConstants.XON_MODE_W ?
+					XonUtils.xonToXmlW(xon) : XonUtils.xonToXml(xon);
+			} catch (Exception ex) {
+				e = XonUtils.xonToXmlW(xon); // X-definition transormation
+			}
+			xparse(e, reporter);
+			return xparseXComponent(e, xClass, reporter);
+		}
+		return getParsedComponent();
+/**/		
 		Class<?> yClass  = xClass;
 		if (xon == null || xon instanceof Map
 			|| xon instanceof List || xon instanceof Number

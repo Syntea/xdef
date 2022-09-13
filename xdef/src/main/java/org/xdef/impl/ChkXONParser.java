@@ -73,84 +73,68 @@ final class ChkXONParser implements XParser, XonParser {
 	/** flag if namespace was generated. */
 	private boolean _nsGenerated;
 
-	/** Create ChkXONParser only with reporter (no data).
-	 * @param reporter The reporter.
-	 */
-	private ChkXONParser(final ReportWriter reporter) {
-		super();
-		_sReporter =
-			new SReporter(reporter == null ?  new ArrayReporter() : reporter);
-	}
 	/** Creates a new instance of ChkParser and parses given string.
 	 * @param reporter The reporter.
 	 * @param source The string with source XML data.
 	 */
-	ChkXONParser(final ReportWriter reporter, final String source) {
-		this(reporter);
-		String s = source.trim();
-		try { // try if it is URL
-			URL u = SUtils.getExtendedURL(s);
-			_in = getReader(u.openStream());
-			_sysId = u.toExternalForm();
-		} catch (Exception ex) {
-			try { // try if it is a file name
-				File f = new File(s);
-				_in = getReader(new FileInputStream(f));
-				_sysId = f.getCanonicalPath();
-			} catch (Exception exx) { //not file, try to parse it as string
-				_sysId = "STRING_DATA";
-				_in = new StringReader(source);
-			}
-		}
+	ChkXONParser(final ReportWriter reporter, final Object source) {
+		this(reporter, source, null);
 	}
-	/** Creates a new instance of ChkParser and parses given string.
+
+	/** Creates a new instance of ChkParser and parses given data.
 	 * @param reporter The reporter.
-	 * @param source The file with source XML data.
-	 */
-	ChkXONParser(final ReportWriter reporter, final File source) {
-		this(reporter);
-		try {
-			_in = getReader(new FileInputStream(source));
-			_sysId = source.getCanonicalPath();
-		} catch (Exception ex) {
-			throw new SRuntimeException(SYS.SYS024,//File doesn't exist: &{0}
-				source != null ? source.getAbsoluteFile() : "null");
-		}
-	}
-	/** Creates a new instance of ChkParser
-	 * @param reporter The reporter
-	 * @param in The source input stream.
+	 * @param source Object with source data (may be File, URL, string,
+	 * InputStream, or Reader).
 	 * @param sourceName the name of source data
 	 */
 	ChkXONParser(final ReportWriter reporter,
-		final InputStream in,
+		final Object source,
 		final String sourceName) {
-		this(reporter, getReader(in), sourceName);
-	}
-	/** Creates a new instance of ChkParser and parses given string.
-	 * @param reporter The reporter.
-	 * @param source URL with source XML data.
-	 */
-	ChkXONParser(final ReportWriter reporter, final URL source) {
-		this(reporter);
-		try {
-			_in = getReader(source.openStream());
-			_sysId = source.toExternalForm();
-		} catch (Exception ex) {
-			throw new SRuntimeException(SYS.SYS024, _sysId);
+		_sReporter =
+			new SReporter(reporter == null ?  new ArrayReporter() : reporter);
+		if (source instanceof String) {
+			String s = (String) source;
+			try { // try if it is URL
+				URL u = SUtils.getExtendedURL(s);
+				_in = getReader(u.openStream());
+				_sysId = sourceName == null ? u.toExternalForm() : sourceName;
+			} catch (Exception ex) {
+				try { // try if it is a file name
+					File f = new File(s);
+					_in = getReader(new FileInputStream(f));
+					_sysId = f.getCanonicalPath();
+				} catch (Exception exx) { //not file, try to parse it as string
+					_sysId = sourceName == null ? "STRING_DATA" : sourceName;
+					_in = new StringReader(s);
+				}
+			}
+		} else if (source instanceof File) {
+			File f = (File) source;
+			try {
+				_in = getReader(new FileInputStream(f));
+				_sysId = sourceName == null ? f.getCanonicalPath(): sourceName;
+			} catch (Exception ex) {
+				throw new SRuntimeException(SYS.SYS024,//File doesn't exist:&{0}
+					f != null ? f.getAbsoluteFile() : "null");
+			}
+		} else if (source instanceof URL) {
+			URL u = (URL) source;
+			try {
+				_in = getReader(u.openStream());
+				_sysId = sourceName == null ? u.toExternalForm() : sourceName;
+			} catch (Exception ex) {
+				throw new SRuntimeException(SYS.SYS024, u.toString());
+			}
+		} else if (source instanceof InputStream) {
+			_in = getReader((InputStream) source);
+			_sysId = sourceName == null ? "READER" : sourceName;
+		} else if (source instanceof Reader) {
+			_in = (Reader) source;
+			_sysId = sourceName == null ? "INPUTSTREAM" : sourceName;
+		} else {
+			//SYS037=Unsupported type of argument &{0}: &{1}
+			throw new SRuntimeException(SYS.SYS037,"source",source.getClass());
 		}
-	}
-	/** Creates a new instance of ChkParser and parses given string.
-	 * @param reporter The reporter.
-	 * @param in Reader with source data.
-	 * @param source URL with source XML data.
-	 */
-	ChkXONParser(final ReportWriter reporter,
-		final Reader in,
-		final String sourceName) {
-		this(reporter);
-		_sysId = sourceName;
-		_in = in;
 	}
 
 ////////////////////////////////////////////////////////////////////////////////

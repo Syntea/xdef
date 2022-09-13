@@ -54,136 +54,138 @@ public interface SYS {
 	public static final long SYS035 = 953221143L;
 	/** Program exception &amp;{0} */
 	public static final long SYS036 = 953221144L;
+	/** Unsupported type of argument &amp;{0}: &amp;{1} */
+	public static final long SYS037 = 953221145L;
 	/** File is too big: &amp;{0} */
-	public static final long SYS038 = 953221145L;
+	public static final long SYS038 = 953221146L;
 	/** SObject reader: incorrect format of data&amp;{0}{: } */
-	public static final long SYS039 = 953221146L;
+	public static final long SYS039 = 953221147L;
 	/** Datetime error&amp;{0}{: } */
-	public static final long SYS040 = 953221147L;
+	public static final long SYS040 = 953221148L;
 	/** Incorrect format of report. */
-	public static final long SYS042 = 953221148L;
+	public static final long SYS042 = 953221149L;
 	/** Can't read file from "zip" file */
-	public static final long SYS043 = 953221149L;
+	public static final long SYS043 = 953221150L;
 	/** Can't read entry from "zip" file */
-	public static final long SYS044 = 953221150L;
+	public static final long SYS044 = 953221151L;
 	/** Can't get report reader from this report writer */
-	public static final long SYS045 = 953221151L;
+	public static final long SYS045 = 953221152L;
 	/** Report writer: report file can't be cleared */
-	public static final long SYS046 = 953221152L;
+	public static final long SYS046 = 953221153L;
 	/** Hexadecimal format error */
-	public static final long SYS047 = 953221153L;
+	public static final long SYS047 = 953221154L;
 	/** Base64 format error */
-	public static final long SYS048 = 953221154L;
+	public static final long SYS048 = 953221155L;
 	/** Error in datetime mask format: unclosed quoted literal or option&amp;{0}{, position: } */
-	public static final long SYS049 = 953221155L;
+	public static final long SYS049 = 953221156L;
 	/** Error in datetime mask format: incorrect zone format&amp;{0}{, position: } */
-	public static final long SYS050 = 953221156L;
+	public static final long SYS050 = 953221157L;
 	/** Actual path isn't accessible */
-	public static final long SYS051 = 953221157L;
+	public static final long SYS051 = 953221158L;
 	/** Invalid value of timezone offset */
-	public static final long SYS055 = 953221158L;
+	public static final long SYS055 = 953221159L;
 	/** Incorrect format of time period&amp;{#SYS000} */
-	public static final long SYS056 = 953221159L;
+	public static final long SYS056 = 953221160L;
 	/** Datetime mask error: incorrect year specification&amp;{0}{, position: } */
-	public static final long SYS059 = 953221160L;
+	public static final long SYS059 = 953221161L;
 	/** Datetime mask error: unsupported language code&amp;{0}{: "}{"}&amp;{1}{, position: } */
-	public static final long SYS060 = 953221161L;
+	public static final long SYS060 = 953221162L;
 	/** Datetime mask error: unsupported time zone name&amp;{0}{: "}{"}&amp;{1}{, position: } */
-	public static final long SYS061 = 953221162L;
+	public static final long SYS061 = 953221163L;
 	/** Datetime mask error: incorrect initial value&amp;{0}{: "}{"}&amp;{1}{, position: } */
-	public static final long SYS062 = 953221163L;
+	public static final long SYS062 = 953221164L;
 	/** Datetime mask error: incorrect control character&amp;{0}{: "}{"}&amp;{1}{, position: } */
-	public static final long SYS063 = 953221164L;
+	public static final long SYS063 = 953221165L;
 	/** Datetime mask error: missing closing character&amp;{0}{: "}{"}&amp;{1}{, position: } */
-	public static final long SYS064 = 953221165L;
+	public static final long SYS064 = 953221166L;
 	/** Invalid file name: "&amp;{0}" */
-	public static final long SYS065 = 953221166L;
+	public static final long SYS065 = 953221167L;
 	/** Internal error&amp;{0}{: } */
-	public static final long SYS066 = 953221167L;
+	public static final long SYS066 = 953221168L;
 	/** Datetime mask error: unsupported country code&amp;{0}{: "}{"}&amp;{1}{, position: } */
-	public static final long SYS067 = 953221168L;
+	public static final long SYS067 = 953221169L;
 	/** Fatal errors: &amp;{0}, errors: &amp;{1}, warnings: &amp;{2} */
-	public static final long SYS068 = 953221169L;
+	public static final long SYS068 = 953221170L;
 	/** Data error&amp;{0}{: } */
-	public static final long SYS072 = 953221170L;
+	public static final long SYS072 = 953221171L;
 	/** Zip file list is empty */
-	public static final long SYS073 = 953221171L;
+	public static final long SYS073 = 953221172L;
 	/** URL &amp;{0} error: &amp;{1}{; } */
-	public static final long SYS076 = 953221172L;
+	public static final long SYS076 = 953221173L;
 	/** Security violation &amp;{0} */
-	public static final long SYS077 = 953221173L;
+	public static final long SYS077 = 953221174L;
 	/** Datetime mask error: section can't start with "|" (variant)&amp;{0}{, position: } */
-	public static final long SYS078 = 953221174L;
+	public static final long SYS078 = 953221175L;
 	/** Datetime mask error: expected character&amp;{0}{: "}{"}&amp;{1}{, position: } */
-	public static final long SYS079 = 953221175L;
+	public static final long SYS079 = 953221176L;
 	/** Index out of array */
-	public static final long SYS080 = 953221176L;
+	public static final long SYS080 = 953221177L;
 	/** Can't set this buffer position for this parser&amp;{0}{: } */
-	public static final long SYS081 = 953221177L;
+	public static final long SYS081 = 953221178L;
 	/** Incorrect property value: &amp;{0} */
-	public static final long SYS082 = 953221178L;
+	public static final long SYS082 = 953221179L;
 	/** Illegal use of method: &amp;{0} */
-	public static final long SYS083 = 953221179L;
+	public static final long SYS083 = 953221180L;
 	/** Illegal argument in method: &amp;{0} */
-	public static final long SYS084 = 953221180L;
+	public static final long SYS084 = 953221181L;
 	/** Incomparable arguments */
-	public static final long SYS085 = 953221181L;
+	public static final long SYS085 = 953221182L;
 	/** Time zone must be in interval -13:59 .. 13:59 &amp;{#SYS000} */
-	public static final long SYS086 = 953221182L;
+	public static final long SYS086 = 953221183L;
 	/** Minutes must be in interval 0 .. 59&amp;{#SYS000} */
-	public static final long SYS087 = 953221183L;
+	public static final long SYS087 = 953221184L;
 	/** Unsupported operation &amp;{0}&amp;{1}{; }&amp;{#SYS000} */
-	public static final long SYS090 = 953221184L;
+	public static final long SYS090 = 953221185L;
 	/** Read after EOF */
-	public static final long SYS091 = 953221185L;
+	public static final long SYS091 = 953221186L;
 	/** Year is undefined */
-	public static final long SYS092 = 953221186L;
+	public static final long SYS092 = 953221187L;
 	/** Can't write this node */
-	public static final long SYS093 = 953221187L;
+	public static final long SYS093 = 953221188L;
 	/** Constructor in the class &amp;{0} not found */
-	public static final long SYS101 = 953221188L;
+	public static final long SYS101 = 953221189L;
 	/** Class &amp;{0} not found */
-	public static final long SYS102 = 953221189L;
+	public static final long SYS102 = 953221190L;
 	/** Field &amp;{0} not found in class &amp;{1} */
-	public static final long SYS103 = 953221190L;
+	public static final long SYS103 = 953221191L;
 	/** Getter &amp;{0} not found in class &amp;{1} */
-	public static final long SYS104 = 953221191L;
+	public static final long SYS104 = 953221192L;
 	/** Setter &amp;{0} not found in class &amp;{1} */
-	public static final long SYS105 = 953221192L;
+	public static final long SYS105 = 953221193L;
 	/** Can't read report source&amp;{0}{: } */
-	public static final long SYS201 = 953221193L;
+	public static final long SYS201 = 953221194L;
 	/** In the report table &amp;{0} are no reports */
-	public static final long SYS203 = 953221194L;
+	public static final long SYS203 = 953221195L;
 	/** Incorrect class of registered report table &amp;{0} */
-	public static final long SYS210 = 953221195L;
+	public static final long SYS210 = 953221196L;
 	/** Unclosed parameter in the text of report &amp;{0}, table &amp;{1} */
-	public static final long SYS212 = 953221196L;
+	public static final long SYS212 = 953221197L;
 	/** Ambiguous default language of reports" &amp;{0} in the table &amp;{1}, set &amp;{2} */
-	public static final long SYS213 = 953221197L;
+	public static final long SYS213 = 953221198L;
 	/** Message prefix is incorrect or not specified: &amp;{0} */
-	public static final long SYS214 = 953221198L;
+	public static final long SYS214 = 953221199L;
 	/** Message language is incorrect or not specified: &amp;{0} */
-	public static final long SYS215 = 953221199L;
+	public static final long SYS215 = 953221200L;
 	/** Incorrect message key: &amp;{0} */
-	public static final long SYS216 = 953221200L;
+	public static final long SYS216 = 953221201L;
 	/** Parameters in tables &amp;{0} and &amp;{1} differs, report: &amp;{2} */
-	public static final long SYS217 = 953221201L;
+	public static final long SYS217 = 953221202L;
 	/** Unclosed parameter in the modification of report &amp;{0} */
-	public static final long SYS218 = 953221202L;
+	public static final long SYS218 = 953221203L;
 	/** Incorrect parameter reference on position: &amp;{0} (report ID: &amp;{1}); */
-	public static final long SYS219 = 953221203L;
+	public static final long SYS219 = 953221204L;
 	/** Default report table is incorrect or missing&amp;{0}(, localized table: ) */
-	public static final long SYS220 = 953221204L;
+	public static final long SYS220 = 953221205L;
 	/** Report &amp;{0} from table &amp;{1} is missing in the default table */
-	public static final long SYS221 = 953221205L;
+	public static final long SYS221 = 953221206L;
 	/** No report tables generated */
-	public static final long SYS223 = 953221206L;
+	public static final long SYS223 = 953221207L;
 	/** Report &amp;{0} which is in the default table is missing in table &amp;{1} */
-	public static final long SYS225 = 953221207L;
+	public static final long SYS225 = 953221208L;
 	/** Can't read properties with reports: &amp;{0} */
-	public static final long SYS226 = 953221208L;
+	public static final long SYS226 = 953221209L;
 	/** System messages of X-definitions */
-	public static final long SYS_DESCRIPTION = 953221209L;
+	public static final long SYS_DESCRIPTION = 953221210L;
 	/** English */
-	public static final long SYS_LANGUAGE = 953221210L;
+	public static final long SYS_LANGUAGE = 953221211L;
 }
