@@ -494,7 +494,7 @@ public class TestJsonXdef extends XDTester {
 
 		// Other tests
 		try {
-			xdef =
+			xdef = // test jcreate, jcreateXComponent
 "<xd:def xmlns:xd='" + _xdNS + "' name='Person' root='Person'>\n"+
 "<xd:xon name=\"Person\">\n"+
 "{ \"Person\": { \"Name\": \"jstring(1, 50);\",\n" +
@@ -503,8 +503,12 @@ public class TestJsonXdef extends XDTester {
 "  }\n" +
 "}\n" +
 "</xd:xon>\n"+
+"<xd:component>\n"+
+"  %class test.xdef.XonPerson1 %link Person#Person;\n"+
+"</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
+			genXComponent(xp, clearTempDir());
 			json =
 "{ \"Person\": {\n" +
 "    \"Name\":\"Václav Novák\",\n" +
@@ -519,7 +523,18 @@ public class TestJsonXdef extends XDTester {
 			xd.setXONContext(XonUtils.xonToJson(j));
 			assertTrue(XonUtils.xonEqual(j, jcreate(xd, "Person", reporter)));
 			assertNoErrorwarningsAndClear(reporter);
-			xdef =
+			xd = xp.createXDDocument("Person");
+			xd.setXONContext(XonUtils.xonToJson(j));
+			xc = xd.jcreateXComponent("Person", null, reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			assertTrue(XonUtils.xonEqual(j, xc.toXon()));
+			xd = xp.createXDDocument("Person");
+			xd.setXONContext(XonUtils.xonToJson(j));
+			xc = xd.jcreateXComponent("Person",
+				Class.forName("test.xdef.XonPerson1"), reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			assertTrue(XonUtils.xonEqual(j, xc.toXon()));
+			xdef = // test jcreate, jcreateXComponent
 "<xd:def xmlns:xd='" + _xdNS + "' root='Person_list'>\n"+
 "<xd:xon name=\"Person_list\">\n"+
 "{ \"Seznam\": \n"+
@@ -533,8 +548,12 @@ public class TestJsonXdef extends XDTester {
 "  ]\n"+
 "}\n"+
 "</xd:xon>\n"+
+"<xd:component>\n"+
+"  %class test.xdef.XonPerson_list %link #Person_list;\n"+
+"</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
+			genXComponent(xp, clearTempDir());
 			xd = xp.createXDDocument("");
 			json =
 "{\"Seznam\":\n"+
@@ -566,10 +585,21 @@ public class TestJsonXdef extends XDTester {
 			assertTrue(XonUtils.xonEqual(j,
 				jcreate(xd, "Person_list", reporter)));
 			assertNoErrorwarningsAndClear(reporter);
-			xdef =
+			xd = xp.createXDDocument("");
+			xd.setXONContext(XonUtils.xonToJson(j));
+			xc = xd.jcreateXComponent("Person_list", null, reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			assertTrue(XonUtils.xonEqual(j, xc.toXon()));
+			xd = xp.createXDDocument("");
+			xd.setXONContext(XonUtils.xonToJson(j));
+			xc = xd.jcreateXComponent("Person_list",
+				Class.forName("test.xdef.XonPerson_list"), reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			assertTrue(XonUtils.xonEqual(j, xc.toXon()));
+			xdef = // test jcreate, jcreateXComponent
 "<xd:def xmlns:xd='" + _xdNS + "' root='Person_list'>\n"+
 "<xd:xon name=\"Person_list\">\n"+
-"{ \"Seznam\": \n"+
+"{ \"List\": \n"+
 "  [\n"+
 "    { %script = \"occurs 1..*; ref Person\" }\n"+
 "  ]\n"+
@@ -582,11 +612,15 @@ public class TestJsonXdef extends XDTester {
 "  }\n" +
 "}\n" +
 "</xd:xon>\n"+
+"<xd:component>\n"+
+"  %class test.xdef.XonPerson_list1 %link #Person_list;\n"+
+"</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
+			genXComponent(xp, clearTempDir());
 			xd = xp.createXDDocument("");
 			json =
-"{\"Seznam\":\n"+
+"{\"List\":\n"+
 " [\n" +
 "    { \"Person\":{\n" +
 "        \"Name\":\"Václav Novák\",\n" +
@@ -615,7 +649,18 @@ public class TestJsonXdef extends XDTester {
 			assertTrue(XonUtils.xonEqual(j,
 				jcreate(xd, "Person_list", reporter)));
 			assertNoErrorwarningsAndClear(reporter);
-			xdef =
+			xd = xp.createXDDocument("");
+			xd.setXONContext(XonUtils.xonToJson(j));
+			xc = xd.jcreateXComponent("Person_list", null, reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			assertTrue(XonUtils.xonEqual(j, xc.toXon()));
+			xd = xp.createXDDocument("");
+			xd.setXONContext(XonUtils.xonToJson(j));
+			xc = xd.jcreateXComponent("Person_list",
+				Class.forName("test.xdef.XonPerson_list1"), reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			assertTrue(XonUtils.xonEqual(j, xc.toXon()));
+			xdef = // test jcreate, jcreateXComponent
 "<xd:def xmlns:xd='" + _xdNS + "' root='Matrix'>\n"+
 "<xd:xon name=\"Matrix\">\n"+
 "  [\n" +
@@ -624,8 +669,12 @@ public class TestJsonXdef extends XDTester {
 "    ]\n" +
 "  ]\n"+
 "</xd:xon>\n"+
+"<xd:component>\n"+
+"  %class test.xdef.XonMatrix %link #Matrix;\n"+
+"</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
+			genXComponent(xp, clearTempDir());
 			xd = xp.createXDDocument("");
 			json =
 "[\n" +
@@ -639,10 +688,21 @@ public class TestJsonXdef extends XDTester {
 			xd.setXONContext(j);
 			assertTrue(XonUtils.xonEqual(j, jcreate(xd, "Matrix", reporter)));
 			assertNoErrorwarningsAndClear(reporter);
+			xd = xp.createXDDocument("");
+			xd.setXONContext(XonUtils.xonToJson(j));
+			xc = xd.jcreateXComponent("Matrix", null, reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			assertTrue(XonUtils.xonEqual(j, xc.toXon()));
+			xd = xp.createXDDocument("");
+			xd.setXONContext(XonUtils.xonToJson(j));
+			xc = xd.jcreateXComponent("Matrix",
+				Class.forName("test.xdef.XonMatrix"), reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			assertTrue(XonUtils.xonEqual(j, xc.toXon()));
 ////////////////////////////////////////////////////////////////////////////////
-			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='Skladby'>\n"+
-"<xd:xon name=\"Skladby\">\n"+
+			xdef = // test jcreate, jcreateXComponent
+"<xd:def xmlns:xd='" + _xdNS + "' root='Music'>\n"+
+"<xd:xon name=\"Music\">\n"+
 "  [\n" +
 "    { %script= \"occurs 1..*;\",\n" +
 "       \"Name\": \"string()\",\n" +
@@ -653,12 +713,16 @@ public class TestJsonXdef extends XDTester {
 "    }\n" +
 "  ]\n" +
 "</xd:xon>\n"+
+"<xd:component>\n"+
+"  %class test.xdef.XonMusic %link #Music;\n"+
+"</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
+			genXComponent(xp, clearTempDir());
 			xd = xp.createXDDocument();
 			json =
 "[\n" +
-"  { \"Name\": \"Beethoven, Symfonie No 5\",\n" +
+"  { \"Name\": \"Beethoven, Symphony No 5\",\n" +
 "    \"Style\": \"Classic\"\n" +
 "  },\n" +
 "  { \"Name\": \"A Day at the Races\",\n" +
@@ -669,8 +733,19 @@ public class TestJsonXdef extends XDTester {
 			assertNoErrorwarningsAndClear(reporter);
 			xd = xp.createXDDocument("");
 			xd.setXONContext(j);
-			assertTrue(XonUtils.xonEqual(j, jcreate(xd, "Skladby", reporter)));
+			assertTrue(XonUtils.xonEqual(j, jcreate(xd, "Music", reporter)));
 			assertNoErrorwarningsAndClear(reporter);
+			xd = xp.createXDDocument("");
+			xd.setXONContext(XonUtils.xonToJson(j));
+			xc = xd.jcreateXComponent("Music", null, reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			assertTrue(XonUtils.xonEqual(j, xc.toXon()));
+			xd = xp.createXDDocument("");
+			xd.setXONContext(XonUtils.xonToJson(j));
+			xc = xd.jcreateXComponent("Music",
+				Class.forName("test.xdef.XonMusic"), reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			assertTrue(XonUtils.xonEqual(j, xc.toXon()));
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xdef =
