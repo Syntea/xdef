@@ -1,18 +1,14 @@
 package org.xdef.xon;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.URL;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.LinkedHashMap;
@@ -26,12 +22,6 @@ import org.xdef.impl.code.DefTelephone;
 import org.xdef.impl.code.DefURI;
 import org.xdef.impl.parsers.XDParseChar;
 import org.xdef.impl.parsers.XDParseCurrency;
-import org.xdef.impl.xml.Reader_UCS_4_2143;
-import org.xdef.impl.xml.Reader_UCS_4_3412;
-import org.xdef.impl.xml.XAbstractInputStream;
-import static org.xdef.impl.xml.XAbstractInputStream.bytesToString;
-import static org.xdef.impl.xml.XAbstractInputStream.detectBOM;
-import static org.xdef.impl.xml.XAbstractInputStream.nextChar;
 import org.xdef.msg.JSON;
 import org.xdef.msg.SYS;
 import org.xdef.sys.SBuffer;
@@ -635,71 +625,6 @@ public class XonTools {
 		}
 	}
 
-	/** Get reader data from argument.
-	 * @param x the object containing XON/JSON data.
-	 * @return array with two items: Reader and System ID.
-	 */
-	static final Object[] prepareReader(final Object x, final Charset charset) {
-		Object[] result = new Object[2];
-		if (x instanceof String) {
-			String s = (String) x;
-			if (s.indexOf('\n') < 0) {
-				try {
-					return prepareReader(SUtils.getExtendedURL(s), charset);
-				} catch (Exception ex) {
-					try {
-						File f = new File(s);
-						if (f.isFile()) {
-							return prepareReader(f, charset);
-						}
-					} catch (Exception exx) {}
-				}
-			}
-			result[0] = new StringReader(s);
-			result[1] = "STRING";
-		} else if (x instanceof File) {
-			File f = (File) x;
-			try {
-				InputStream in = new FileInputStream(f);
-				result[0] = charset == null
-					? getXonReader(in) : new InputStreamReader(in, charset);
-				result[1] = f.getCanonicalPath();
-			} catch (Exception ex) {
-				//Program exception &{0}
-				throw new SRuntimeException(SYS.SYS036, ex);
-			}
-		} else if (x instanceof URL) {
-			URL u = (URL) x;
-			try {
-				InputStream in = u.openStream();
-				result[0] = charset == null
-					? getXonReader(in) : new InputStreamReader(in, charset);
-				result[1] = u.toExternalForm();
-			} catch (Exception ex) {
-				//Program exception &{0}
-				throw new SRuntimeException(SYS.SYS036, ex);
-			}
-		} else if (x instanceof InputStream) {
-			InputStream in = (InputStream) x;
-			try {
-				result[0] = charset == null
-					? getXonReader(in) : new InputStreamReader(in, charset);
-			} catch (Exception ex) {
-				//Program exception &{0}
-				throw new SRuntimeException(SYS.SYS036, ex);
-			}
-			result[1] = "INPUT_STREAM";
-		} else if (x instanceof Reader) {
-			result[0] = (Reader) x;
-			result[1] = "READER";
-		} else {
-			//Program exception &{0}
-			throw new SRuntimeException(SYS.SYS036,
-				"Incorrect parameter of getReader");
-		}
-		return result;
-	}
-
 	/** Check if the argument is a simple value. Simple value is null,
 	 * Number, Boolean, String or X_Value with object which is simple value.
 	 * @param val Object to be tested.
@@ -855,88 +780,76 @@ public class XonTools {
 		}
 	}
 
-	/** Get reader from XON input stream (parse %charset directive).
-	 * @param in the input stream.
-	 * @return Reader created from input stream.
-	 * @throws IOException if an error occurs.
+	/** Get InputStream or Reader from object.
+	 * @param source if it is string check file name, URL or input data
+	 * otherwise it can be a File, InputStream or Reader.
+1	 * @param sysId System ID or null.
+	 * @param charset name or null.
+	 * @return InputData object.
 	 */
-	public static final Reader getXonReader(final InputStream in)
-		throws IOException {
-		return new ReaderFromInputStream(in).getReader();
+	final static InputData getInputFromObject(final Object source,
+		final String sysId) {
+		if (source instanceof String) {
+			File f = new File((String) source);
+			if (f.exists() && f.isFile()) {
+				return getInputFromObject(f, sysId);
+			}
+			try { // try if it is URL
+				return getInputFromObject(
+					SUtils.getExtendedURL((String)source), sysId);
+			} catch (Exception ex) {
+				//not URL, file name, so create from string a reader 
+				return new InputData(new StringReader((String) source),
+					sysId==null ? "STRING" : sysId);
+			}
+		} else if (source instanceof URL) {
+			try {
+				return new InputData(((URL) source).openStream(),
+					sysId==null ? ((URL) source).toString() : sysId);
+			} catch (Exception ex) {
+				//Can't read input stream&{0}{; }
+				throw new SRuntimeException(SYS.SYS029, source.toString());
+			}
+		} else if (source instanceof File) {
+			try {
+				return new InputData(new FileInputStream((File) source),
+					sysId==null ? ((File) source).getAbsolutePath() : sysId);
+			} catch (Exception ex) {
+				//Can't read file: &{0}
+				throw new SRuntimeException(SYS.SYS028);
+			}
+		} else if (source instanceof InputStream) {
+			try {
+				return new InputData((InputStream) source,
+					sysId==null ? "INPUTSTREAM" : sysId);
+			} catch (Exception ex) {
+				//Can't read input stream&{0}{; }
+				throw new SRuntimeException(SYS.SYS029);
+			}
+		} else if (source instanceof Reader) {
+			return new InputData((Reader) source,sysId==null? "READER" : sysId);
+		}
+		//Unsupported type of argument &{0}: &{1}
+		throw new SRuntimeException(SYS.SYS037,"source",
+			source == null ? "null" : source.getClass().getName());
 	}
 
-	/** This class is used to read charset directive and to create
-	 * the Reader from InputStream.
-	 */
-	private static class ReaderFromInputStream extends XAbstractInputStream {
-		private final String _encoding; // encoding name.
-		private ReaderFromInputStream(final InputStream in) throws IOException {
-			super(in);
-			byte[] buf = new byte[4];
-			String encoding = detectBOM(in, buf);
-			int len = encoding.charAt(0) - '0'; // number of bytes read
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			if (len > 0) {
-				baos.write(buf, 0, len);
-			}
-			int count = encoding.charAt(1) - '0'; // bytes nead to read next
-			encoding = encoding.substring(2);
-			if (count > 0 && !"X-ISO-10646-UCS-4-2143".equals(encoding)
-				&& !"X-ISO-10646-UCS-4-3412".equals(encoding)) {
-				String s = bytesToString(buf, 0, len, encoding);
-				int i = -1;
-				while (s.length() < XonNames.CHARSET_DIRECTIVE.length()
-					&& XonNames.CHARSET_DIRECTIVE.startsWith(s)
-					&& (i = nextChar(in, encoding, buf, count, baos)) != -1) {
-					s += (char) i;
-				}
-				if (XonNames.CHARSET_DIRECTIVE.equals(s)) {
-					while((i = nextChar(in,encoding,buf,count,baos)) == ' '
-						|| i == '\t') {}
-					if (i == ':') {
-						while((i=nextChar(in,encoding,buf,count,baos))==' '
-							|| i == '\t') {}
-					} else { // missing colon
-						while ((i=nextChar(in, encoding, buf, count, baos))
-							!= '\n' && i != '\r' && s.length() < 40) {}
-						//Incorrect %charset directive: "&{0}"
-						throw new SRuntimeException(JSON.JSON081,
-							baos.toByteArray());
-					}
-					String enc = "";
-					while(i > ' ') {
-						enc += (char) i;
-						i = nextChar(in, encoding, buf, count, baos);
-					}
-					while (i == ' ' || i == '\t') {
-						i = nextChar(in, encoding, buf, count, baos);
-					}
-					if (enc.isEmpty()) {
-						//Charset name is missing
-						throw new SRuntimeException(JSON.JSON083);
-					}
-					if (i == '\r') {
-						i = nextChar(in, encoding, buf, count, baos);//windows
-					}
-					if (i != '\n') {
-						//The %charset command must be terminated by the end
-						// of the line
-						throw new SRuntimeException(JSON.JSON082);
-					}
-					encoding = enc;
-				}
-			}
-			_encoding = encoding;
-			setBuffer(baos.toByteArray());
+	static final class InputData {
+		final Reader _reader;
+		final InputStream _in;
+		final String _sysId;
+
+		InputData(final Reader reader, final String sysId) {
+			_reader = reader;
+			_in = null;
+			_sysId=sysId;
 		}
-		private Reader getReader() {
-			if ("X-ISO-10646-UCS-4-2143".equals(_encoding)) {
-				return new Reader_UCS_4_2143(getInputStream());
-			} else if ("X-ISO-10646-UCS-4-3412".equals(_encoding)) {
-				return new Reader_UCS_4_3412(getInputStream());
-			}
-			return new java.io.InputStreamReader(getInputStream(),
-				java.nio.charset.Charset.forName(_encoding));
+
+		InputData(final InputStream in, final String sysId)
+			throws Exception{
+			_sysId = sysId;
+			_reader = null;
+			_in = in;
 		}
 	}
 }

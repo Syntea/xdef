@@ -123,7 +123,8 @@ final class ChkXONParser implements XParser, XonParser {
 				_in = getReader(u.openStream());
 				_sysId = sourceName == null ? u.toExternalForm() : sourceName;
 			} catch (Exception ex) {
-				throw new SRuntimeException(SYS.SYS024, u.toString());
+				//Can't read file: &{0}
+				throw new SRuntimeException(SYS.SYS028, u.toString());
 			}
 		} else if (source instanceof InputStream) {
 			_in = getReader((InputStream) source);
@@ -132,7 +133,7 @@ final class ChkXONParser implements XParser, XonParser {
 			_in = (Reader) source;
 			_sysId = sourceName == null ? "INPUTSTREAM" : sourceName;
 		} else {
-			//SYS037=Unsupported type of argument &{0}: &{1}
+			//Unsupported type of argument &{0}: &{1}
 			throw new SRuntimeException(SYS.SYS037,"source",source.getClass());
 		}
 	}

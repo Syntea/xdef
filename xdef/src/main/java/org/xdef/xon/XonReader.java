@@ -1,14 +1,25 @@
 package org.xdef.xon;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.Reader;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.URI;
+import java.nio.charset.Charset;
 import java.util.Currency;
 import org.xdef.impl.code.DefEmailAddr;
 import org.xdef.impl.code.DefTelephone;
+import org.xdef.impl.xml.Reader_UCS_4_2143;
+import org.xdef.impl.xml.Reader_UCS_4_3412;
+import org.xdef.impl.xml.XAbstractInputStream;
+import static org.xdef.impl.xml.XAbstractInputStream.bytesToString;
+import static org.xdef.impl.xml.XAbstractInputStream.detectBOM;
+import static org.xdef.impl.xml.XAbstractInputStream.nextChar;
 import org.xdef.msg.JSON;
+import org.xdef.msg.SYS;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.GPSPosition;
@@ -31,8 +42,8 @@ import static org.xdef.xon.XonNames.SCRIPT_CMD;
  * @author Vaclav Trojan
  */
 public final class XonReader extends StringParser implements XonParsers {
-	private static final String[] XDEF_NAMES =
-		new String[]{SCRIPT_CMD, ONEOF_CMD, ANY_OBJ};
+	private static final String[] XDEF_NAMES=new String[]{
+		SCRIPT_CMD, ONEOF_CMD, ANY_OBJ};
 	/** Flag to accept comments (default false; true=accept comments). */
 	private boolean _acceptComments;
 	/** Flag if parse JSON or XON (default false; false=JSON, true=XON). */
@@ -125,7 +136,7 @@ public final class XonReader extends StringParser implements XonParsers {
 				wasScript = true;
 				skipSpacesOrComments();
 				SBuffer value = null;
-				if (i >= 1) { // %oneOf or %anyObj
+				if (i >= 1) { // %oneOf, %anyObj
 					if (isChar('=')) {
 						skipSpacesOrComments();
 						spos = getPosition();
@@ -137,7 +148,20 @@ public final class XonReader extends StringParser implements XonParsers {
 							error(JSON.JSON018);
 						}
 					}
-					_jp.xdScript(name, value);
+					if (i == 2) { //%anyObj
+						_jp.xdScript(new SBuffer(ANY_NAME, spos), null);
+						_jp.xdScript(name, value);
+						skipSpacesOrComments();
+						if (!isChar('}')) {
+							//"&{0}"&{1}{ or "}{"} expected
+							error(JSON.JSON002, "}");
+
+						}
+						_jp.mapEnd(this);
+						return;
+					} else {
+						_jp.xdScript(name, value);
+					}
 				} else {  // %script
 					if (!isChar('=')) {
 						error(JSON.JSON002, "=");//"&{0}"&{1}{ or "}{"} expected
@@ -425,12 +449,30 @@ public final class XonReader extends StringParser implements XonParsers {
 		} else if ((i=isOneOfTokens(new String[]{"null","false","true"}))>=0) {
 			return returnValue(spos, i > 0 ? (i==2) : null);
 		} else if (_xonMode
-			&& (i=isOneOfTokens(new String[]{"NaN","INF","-INF"})) >= 0) {
+			&& (i=isOneOfTokens(new String[]{"NaN","INF","-INF", ANY_OBJ})) >= 0) {
 			if (isChar('f')) {
 				switch(i) {
 					case 0: return returnValue(spos, Float.NaN);
 					case 1: return returnValue(spos, Float.POSITIVE_INFINITY);
-					default: return returnValue(spos, Float.NEGATIVE_INFINITY);
+					case 2: return returnValue(spos, Float.NEGATIVE_INFINITY);
+					default: {// anyObject
+						spos = getPosition();
+						spos.setIndex(getIndex() - ANY_OBJ.length());
+						SBuffer name = new SBuffer(ANY_OBJ, spos);
+						SBuffer val = new SBuffer(ANY_OBJ, spos);
+						skipSpacesOrComments();
+						if (isChar('=')) {
+							skipSpacesOrComments();
+							XonTools.JValue jv = readSimpleValue();
+							if (!(((XonTools.JValue) jv).getValue() instanceof String)) {
+								//After ":" in the command $any must follow simpleValue
+								error(JSON.JSON021);
+							} else {
+								val = jv.getSBuffer();
+							}
+						}
+						_jp.xdScript(name, val);
+					}
 				}
 			} else {
 				switch(i) {
@@ -742,7 +784,7 @@ public final class XonReader extends StringParser implements XonParsers {
 	 * @throws SRuntimeException if an error occurs,
 	 */
 	public final void parse() throws SRuntimeException {
-		if (!_jdef && isToken(XonNames.CHARSET_DIRECTIVE)) {
+		if (!_jdef && isToken(XonNames.CHARSET_DIRECTIVE)) { // parse directive
 			int pos1 = getIndex() - XonNames.CHARSET_DIRECTIVE.length();
 			while(isOneOfChars(" \t") > 0){}
 			boolean wasColon = isChar(':');
@@ -750,17 +792,23 @@ public final class XonReader extends StringParser implements XonParsers {
 			int pos2 = getIndex();
 			boolean wasName = isLetterOrDigit() > 0 || isChar('-');
 			if (wasName) { // read charset name
-				while(isLetterOrDigit() > 0 || isChar('-')){}
+				while(isLetterOrDigit() > 0 || isChar('-')) {}
 			}
-//			String charsetName = getBufferPart(pos2, getIndex());
 			if (!wasColon || !wasName) { // write error message
 				if ((pos2 = getIndex()) - pos1 > 40) {
 					pos2 = pos1 + 40; // message would be too long
 				}
 				//Incorrect specification of the %chars0et directive: "&{0}"
 				error(JSON.JSON081, getBufferPart(pos1, pos2));
+			} else {
+				try {//check charset
+					Charset.forName(getBufferPart(pos2, getIndex()));
+				} catch (Exception ex) {
+					//Incorrect specification of the %chars0et directive: "&{0}"
+					error(JSON.JSON081, getBufferPart(pos2, getIndex()));
+				}
 			}
-			while(isOneOfChars(" \t") > 0){}
+			while(isOneOfChars(" \t") > 0) {}
 			isChar('\r'); // windows...
 			if (!isNewLine()) { // write error message
 				//The %charset command must be terminated by the end of the line
@@ -817,5 +865,114 @@ public final class XonReader extends StringParser implements XonParsers {
 	 */
 	public final static Object parseJSON(Reader in, String sysId) {
 		return parseXonJson(in, sysId, false);
+	}
+
+	/** Parse XON source data.
+	 * @param in input stream with XON source data.
+	 * @param sysId System ID of source position or null.
+	 * @return parsed XON object.
+	 */
+	public final static Object parseXON(final InputStream in,
+		final String sysId) {
+		return parseXonJson(getXonReader(in),sysId,true);
+	}
+
+	/** Parse JSON source data.
+	 * @param in Reader with JSON source data.
+	 * @param sysId System ID of source position or null.
+	 * @return parsed JSON object.
+	 */
+	public final static Object parseJSON(InputStream in, String sysId) {
+		return parseXonJson(getXonReader(in),sysId,false);
+	}
+
+	/** This class reads charset directive and creates Reader if the data
+	 * starts with a directive.
+	 */
+	private static final class XonInputStream extends XAbstractInputStream {
+		private final String _encoding; // encoding name.
+		private XonInputStream(final InputStream in) throws IOException {
+			super(in);
+			byte[] buf = new byte[4];
+			String encoding = detectBOM(in, buf);
+			int len = encoding.charAt(0) - '0'; // number of bytes read
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			if (len > 0) {
+				baos.write(buf, 0, len);
+			}
+			int count = encoding.charAt(1) - '0'; // bytes nead to read next
+			encoding = encoding.substring(2);
+			if (count > 0 && !"X-ISO-10646-UCS-4-2143".equals(encoding)
+				&& !"X-ISO-10646-UCS-4-3412".equals(encoding)) {
+				if ("41CP037".equals(encoding)) {
+					encoding = "UTF-8"; // never should happen...
+				}
+				String s = bytesToString(buf, 0, len, encoding);
+				int i = -1;
+				while (s.length() < XonNames.CHARSET_DIRECTIVE.length()
+					&& XonNames.CHARSET_DIRECTIVE.startsWith(s)
+					&& (i = nextChar(in, encoding, buf, count, baos)) != -1) {
+					s += (char) i;
+				}
+				if (XonNames.CHARSET_DIRECTIVE.equals(s)) {
+					while((i = nextChar(in,encoding,buf,count,baos)) == ' '
+						|| i == '\t') {}
+					if (i == ':') {
+						while((i=nextChar(in,encoding,buf,count,baos))==' '
+							|| i == '\t') {}
+					} else { // missing colon
+						while ((i=nextChar(in, encoding, buf, count, baos))
+							!= '\n' && i != '\r' && s.length() < 40) {}
+						//Incorrect %charset directive: "&{0}"
+						throw new SRuntimeException(JSON.JSON081,
+							baos.toByteArray());
+					}
+					String enc = "";
+					while(i > ' ') {
+						enc += (char) i;
+						i = nextChar(in, encoding, buf, count, baos);
+					}
+					while (i == ' ' || i == '\t') {
+						i = nextChar(in, encoding, buf, count, baos);
+					}
+					if (enc.isEmpty()) {
+						//Charset name is missing
+						throw new SRuntimeException(JSON.JSON083);
+					}
+					if (i == '\r') {
+						i = nextChar(in, encoding, buf, count, baos);//windows
+					}
+					if (i != '\n') {
+						//The %charset command must be terminated by the end
+						// of the line
+						throw new SRuntimeException(JSON.JSON082);
+					}
+					encoding = enc;
+				}
+			}
+			_encoding = encoding;
+			setBuffer(baos.toByteArray());
+		}
+	}
+
+	/** Creates Reader from input stream. If data starts with %charset directive
+	 * the reader is created with the specified encoding. Otherwise, the UTF-8
+	 * encoding is used.
+	 * @param in input stream wit XON/JSON data.
+	 * @return reader with detected encoding.
+	 */
+	private static Reader getXonReader(final InputStream in) {
+		try {
+			XonInputStream x = new XonInputStream(in);
+			if ("X-ISO-10646-UCS-4-2143".equals(x._encoding)) {
+				return new Reader_UCS_4_2143(x.getInputStream());
+			} else if ("X-ISO-10646-UCS-4-3412".equals(x._encoding)) {
+				return new Reader_UCS_4_3412(x.getInputStream());
+			}
+			return new java.io.InputStreamReader(x.getInputStream(),
+				java.nio.charset.Charset.forName(x._encoding));
+		} catch (Exception ex) {
+			throw new SRuntimeException(SYS.SYS029, ex);
+		}
 	}
 }
