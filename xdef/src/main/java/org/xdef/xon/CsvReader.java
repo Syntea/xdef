@@ -1,8 +1,9 @@
 package org.xdef.xon;
 
+import java.io.InputStreamReader;
 import java.io.Reader;
-import java.io.StringReader;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.List;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -20,8 +21,6 @@ import org.xdef.xml.KXmlUtils;
  * @author Vaclav Trojan
  */
 public class CsvReader extends StringParser implements XonParsers {
-	/** Flag if the parsed data are in X-definition (default false). */
-	private boolean _jdef;
 	/** Value separator character. */
 	private char _separator = ',';
 	/** if true the header line is skipped.*/
@@ -68,72 +67,47 @@ public class CsvReader extends StringParser implements XonParsers {
 ////////////////////////////////////////////////////////////////////////////////
 
 	/** Parse CSV from reader
-	 * @param in string with CSV data.
+	 * @param source string with CSV data, filename, URL, File
 	 * @param separator value separator character.
 	 * @param skipHeader if true the header line is skipped.
 	 * @return list with parsed CSV data.
 	 */
-	public final static List<Object> parseCSV(final String in,
+	public final static List<Object> parseCSV(final Object source,
 		final char separator,
 		final boolean skipHeader) {
-		return parseCSV(new StringReader(in), separator, skipHeader, "STRING");
+		return parseCSV(source, separator, skipHeader, null);
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	/** Parse CSV from reader
-	 * @param in reader with CSV source data.
+	 * @param source if it is string check file name, URL or input data
+	 * otherwise it can be a File, InputStream or Reader.
 	 * @param separator value separator character.
 	 * @param skipHeader if true the header line is skipped.
-	 * @param sysId system ID
+	 * @param sysId System ID (or null).
 	 * @return list with parsed CSV data.
 	 */
-	public final static List<Object> parseCSV(final Reader in,
+	public final static List<Object> parseCSV(final Object source,
 		final char separator,
 		final boolean skipHeader,
 		final String sysId) {
+		XonTools.InputData indata = 
+			XonTools.getInputFromObject(source, sysId);
 		XonParser jp = new XonObjParser();
-		CsvReader xr = new CsvReader(in, jp);
+		Reader in = indata._reader != null ? indata._reader
+			: new InputStreamReader(indata._in, Charset.forName("UTF-8"));
+		CsvReader xr = new CsvReader(indata._reader, jp);
 		xr._separator = separator;
 		xr._skipHeader = skipHeader;
-		if (sysId != null) {
-			xr.setSysId(sysId);
-		}
+		xr.setSysId(indata._sysId);
 		xr.parse();
 		xr.isSpaces();
 		if (!xr.eos()) {
-			xr.error(JSON.JSON008);//Text after JSON not allowed
+			xr.error(JSON.JSON008); //Text after JSON not allowed
 		}
 		xr.getReportWriter().checkAndThrowErrorWarnings();
 		return (List<Object>) jp.getResult();
 	}
-//
-//	/** Convert index of column to column name.
-//	 * @param index index of column.
-//	 * @return column name.
-//	 */
-//	private static String genColumnName(final int index) {
-//		String result = "";
-//		int i = index;
-//		for (;;) {
-//			result = (char) ('A' + (i % ('Z' - 'A' + 1))) + result;
-//			if ((i = i / ('Z' - 'A' + 1)) == 0) {
-//				return result;
-//			}
-//			i--;
-//		}
-//	}
-//
-//	/** Get index of column from column name.
-//	 * @param name column name.
-//	 * @return  index of column.
-//	 */
-//	private static int getColumnIndex(final String name) {
-//		int result = 0;
-//		for (int i = 0; i < name.length(); i++) {
-//			result = result*24 + name.charAt(i) - 'A';
-//		}
-//		return result;
-//	}
 
 	/** Put parsed value to XON parser.
 	 * @param sb string with value.
@@ -181,13 +155,15 @@ public class CsvReader extends StringParser implements XonParsers {
 					if (c == _separator || c == '"') {
 						sb.append(c);
 					} else {
-						throw new RuntimeException("Escape character error");
+						throw new RuntimeException(
+							"CSV Escape character error");
 					}
 					c = getCurrentChar();
 				} else if (c == '\"') {
 					peekChar();
 					if (eos()) {
-						throw new RuntimeException("Quote character missing");
+						throw new RuntimeException(
+							"CSV Quote character missing");
 					}
 					for(;;) {
 						if (isChar('\"')) {
@@ -218,7 +194,7 @@ public class CsvReader extends StringParser implements XonParsers {
 			}
 			isSpaces();
 			if (!isChar(_separator)) {
-				throw new RuntimeException("incorrect line");
+				throw new RuntimeException("incorrect CSV line");
 			}
 		}
 	}
@@ -356,9 +332,9 @@ public class CsvReader extends StringParser implements XonParsers {
 	}
 	@Override
 	/** Set mode that INI file is parsed in X-definition compiler. */
-	public final void setXdefMode() { _jdef = true;}
+	public final void setXdefMode() {}
 	@Override
-	public final void setXonMode() {} // not used
+	public final void setXonMode() {}
 	@Override
 	public void setJsonMode() {} // not used
 }
