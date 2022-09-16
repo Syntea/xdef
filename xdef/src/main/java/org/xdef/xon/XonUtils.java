@@ -149,7 +149,7 @@ public class XonUtils {
 	public final static Map<String, Object> parseINI(final String source)
 		throws SRuntimeException {
 		XonTools.InputData indata = XonTools.getInputFromObject(source, null);
-		return indata._reader != null 
+		return indata._reader != null
 			? parseINI(indata._reader, indata._sysId)
 			: parseINI(indata._in, indata._sysId);
 	}

@@ -492,9 +492,8 @@ public final class XonReader extends StringParser implements XonParsers {
 				s = '-' + s;
 			}
 			if (_xonMode) {
-				char ch;
 				if (floatNumber) {
-					switch(ch = isOneOfChars("fDd")) {
+					switch(isOneOfChars("fDd")) {
 						case 'f':
 							return returnValue(spos, Float.parseFloat(s));
 						case 'd':
@@ -505,7 +504,7 @@ public final class XonReader extends StringParser implements XonParsers {
 							return returnValue(spos, Double.parseDouble(s));
 					}
 				} else {
-					switch(ch = isOneOfChars("lisbNfDd")) {
+					switch(isOneOfChars("lisbNfDd")) {
 						case 'l':
 							return returnValue(spos, Long.parseLong(s));
 						case 'i':

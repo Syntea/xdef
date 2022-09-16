@@ -77,7 +77,7 @@ public class CsvReader extends StringParser implements XonParsers {
 		final boolean skipHeader) {
 		return parseCSV(source, separator, skipHeader, null);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	/** Parse CSV from reader
 	 * @param source if it is string check file name, URL or input data
@@ -91,7 +91,7 @@ public class CsvReader extends StringParser implements XonParsers {
 		final char separator,
 		final boolean skipHeader,
 		final String sysId) {
-		XonTools.InputData indata = 
+		XonTools.InputData indata =
 			XonTools.getInputFromObject(source, sysId);
 		XonParser jp = new XonObjParser();
 		Reader in = indata._reader != null ? indata._reader

@@ -52,7 +52,6 @@ import static org.xdef.XDValueID.XD_ANY;
 import static org.xdef.XDValueID.XD_BOOLEAN;
 import static org.xdef.XDValueID.XD_VOID;
 import org.xdef.impl.XConstants;
-import org.xdef.xml.KXmlUtils;
 
 /** Compile X-definitions from source data.
  * @author Vaclav Trojan
@@ -1407,11 +1406,16 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				_scriptCompiler.genTemplateElement(xel, parentNode);
 				newNode = xel;
 			}
+		} else if ((pnode._xonMode & XConstants.XON_ROOT) != 0) {// xon, ini
+			pnode._xonMode = XConstants.XON_MODE_W;
+			compileXChild(xdef, null, pnode, xdef, 1,XConstants.XON_MODE_W);
+			pnode._xonMode = (XConstants.XON_MODE_W | XConstants.XON_ROOT);
+			return;
 		} else if (pnode._nsindex == XPreCompiler.NS_XDEF_INDEX) {
-			String name = pnode._localName;
-			if ("data".equals(name) || "text".equals(name)) {
+			String dxname = pnode._localName; //name of Xdef node
+			if ("data".equals(dxname) || "text".equals(dxname)) {
 				_precomp.chkNestedElements(pnode);
-				if ("data".equals(name)) {
+				if ("data".equals(dxname)) {
 					reportDeprecated(pnode._name, "\"data\"", "\"text\"");
 				}
 				XData xtext =
@@ -1442,8 +1446,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					_scriptCompiler.compileDataScript(xtext);
 				}
 				_precomp.reportNotAllowedAttrs(pnode);
-			} else if ("list".equals(name) || "includeChildNodes".equals(name)){
-				if ("includeChildNodes".equals(name)) {
+			} else if ("list".equals(dxname) || "includeChildNodes".equals(dxname)){
+				if ("includeChildNodes".equals(dxname)) {
 					reportDeprecated(pnode._name,
 						"\"includeChildNodes\"", "\"list\"");
 				}
@@ -1451,15 +1455,15 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				if (level == 1) {
 					//Node '&{0}' from the name space of X-definition
 					// is not allowed here
-					error(pnode._name, XDEF.XDEF265, name);
+					error(pnode._name, XDEF.XDEF265, dxname);
 					return;
 				}
-				newNode = createReference(pnode, name, xdef);
-			} else if ("mixed".equals(name)
-				|| "choice".equals(name) || "sequence".equals(name)) {
-				newNode = createReference(pnode, name, xdef);
+				newNode = createReference(pnode, dxname, xdef);
+			} else if ("mixed".equals(dxname)
+				|| "choice".equals(dxname) || "sequence".equals(dxname)) {
+				newNode = createReference(pnode, dxname, xdef);
 				newNode.setSPosition(copySPosition(pnode._name));
-			} else if ("any".equals(name)) {
+			} else if ("any".equals(dxname)) {
 				newNode = new XElement("$any", null, xdef);
 				_scriptCompiler._g._varBlock =
 					new XVariableTable(_scriptCompiler._g._varBlock,
@@ -1468,7 +1472,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				if (level == 1) {
 					//Node '&{0}' from the name space of X-definition
 					// is not allowed here
-					error(pnode._name, XDEF.XDEF265, name);
+					error(pnode._name, XDEF.XDEF265, dxname);
 					return;
 				}
 //			} else if ("PI".equals(_actPNode._localName)) { //TODO
@@ -1483,67 +1487,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 //					null, xdef.getDefPool(), XNode.XMTEXT);
 //			} else if ("attlist".equals(_actPNode._localName)) { //TODO
 //				newNode = createReference(pnode, pnode._localName, xdef);
-			} else if ("xon".equals(name) || "json".equals(name)
-				|| "ini".equals(name)) { //xon
-				if (pnode._value == null || pnode._value.getString().isEmpty()){
-					//XON/JSON model is missing in JSON definition
-					error(pnode._name, XDEF.XDEF315,"&{xpath}"+pnode._xpathPos);
-					return;
-				}
-				PAttr pa =  _precomp.getXdefAttr(pnode, "name", false, true);
-				sval = pa == null ? null : pa._value;
-				if (sval == null) {
-					sval = new SBuffer(name, pnode._name);
-					//The name of XON/JSON model is required
-					error(pnode._name, XDEF.XDEF317, name);
-				} else {
-					String s = sval.getString().trim();
-					if (!StringParser.chkNCName(s, StringParser.XMLVER1_0)) {
-						//The name of {0} model "&{0}" can't contain ":"
-						error(sval, XDEF.XDEF316, name, s);
-					}
-				}
-				byte jsonMode =  XConstants.XON_MODE_W; //W3C mode is default
-				pa =  _precomp.getXdefAttr(pnode, "mode", false, true);
-				if (pa != null) {
-					if ("xdef".equalsIgnoreCase(pa._value.getString())) {
-						jsonMode =  XConstants.XON_MODE_XD; //X-definition mode
-					} else if (!"w3c".equalsIgnoreCase(pa._value.getString())) {
-						//Incorrect attribute "mode" in XON/JSON model: &{0}
-						// (must be "xd" or "w3c")&{#SYS000}
-						error(pa._value, XDEF.XDEF215,
-							sval == null ? "" : sval.getString());
-					}
-				}
-				pnode._xonMode = (byte) (jsonMode | XConstants.XON_ROOT);
-				for (PAttr pattr:  pnode.getAttrs()) {
-					//Attribute '&{0}' not allowed here
-					error(pattr._value, XDEF.XDEF254, pattr._name);
-				}
-				PNode p = CompileXonXdef.genXdef(pnode,
-					jsonMode,
-					name.equals("json") ? "xon" : name,
-					sval,
-					_precomp.getReportWriter());
-				compileXChild(xdef, null, pnode, xdef, 1, jsonMode);
-				if (/*p != null*/false) {
-System.out.println(KXmlUtils.nodeToString(p.toXML(), true));
-					pa = p.getAttrNS("name", XPreCompiler.NS_XDEF_INDEX);
-					p.removeAttr(pa);
-					SBuffer gname = pa == null ? null : pa._value;
-					String dname = gname.getString() + '$' + "choice";
-					XElement dummy = new XElement(dname, null, xdef);
-					dummy.setSPosition(copySPosition(pnode._name));
-					dummy.setXDPosition(xdef.getXDPosition() + dname);
-					addNode(xdef, dummy, 1, p._name);
-					if (!xdef.addModel(dummy)) {
-						//Repeated specification of element '&{0}'
-						error(gname, XDEF.XDEF236, gname.getString());
-					} else {
-						compileXChild(dummy, dummy, p, xdef, 2, jsonMode);
-					}
-				}
-				return;
+//			} else if ((pnode._xonMode & XConstants.XON_ROOT) != 0) {
 			} else {
 				if (level > 1 || !"macro".equals(pnode._localName)) {
 					//Node '&{0}' from the name space of X-definition

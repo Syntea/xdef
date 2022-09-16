@@ -407,6 +407,26 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 		}
 	}
 
+	private PNode genXDPNode(final String name,
+		final SPosition spos, final PNode parent) {
+		PNode p = new PNode(name,
+			spos, parent, parent._xdVersion, parent._xmlVersion);
+		p._nsURI = _pcomp.getNSURI(XPreCompiler.NS_XDEF_INDEX);
+		p._nsindex = XPreCompiler.NS_XDEF_INDEX;
+		parent.addChildNode(p);
+		return p;
+	}
+
+	private PNode genJXPNode(final String name,
+		final SPosition spos, final PNode parent) {
+		PNode p = new PNode(name,
+			spos, parent, parent._xdVersion, parent._xmlVersion);
+		p._nsURI = _pcomp.getNSURI(XPreCompiler.NS_XDEF_INDEX);
+		p._nsindex = XPreCompiler.NS_XDEF_INDEX;
+		parent.addChildNode(p);
+		return p;
+	}
+
 	/** Generate text node */
 	private void genTextNode() {
 		String name = "";
@@ -455,51 +475,67 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 					_actPNode._value = null;
 					return;
 				}
-//				SBuffer name = null;
-//				PAttr pa = _actPNode.getAttrNS("name", -1);
-//				if (pa != null) {
-//					name = pa.getValue();
-//				} else if ((pa = _actPNode.getAttrNS("name",
-//					XPreCompiler.NS_XDEF_INDEX)) != null) {
-//					name = pa.getValue();
-//				}
-//				if (name == null) {
-//					name = new SBuffer("UNDEF");
-//				}
-//				CompileXonXdef jx = new CompileXonXdef(_actPNode,
-//					XConstants.XON_MODE_W, name, getReportWriter());
-//				PNode p = jx.genXonAnyModels();
-//				_actPNode._parent.addChildNode(p);
-//				_level--;
-//System.out.println(KXmlUtils.nodeToString(p.toXML(), true));
-//				_level++;
-////				SBuffer name = null;
-////				PAttr pa = _actPNode.getAttrNS("name", -1);
-////				if (pa != null) {
-////					name = pa.getValue();
-////					_actPNode.removeAttr(pa);
-////				} else if ((pa = _actPNode.getAttrNS("name",
-////					XPreCompiler.NS_XDEF_INDEX)) != null) {
-////					name = pa.getValue();
-////					_actPNode.removeAttr(pa);
-////				} else {
-////					//The name of XON/JSON model is required
-////					error(_actPNode._name, XDEF.XDEF317, name);
-////					_actPNode._value = null;
-////					return;
-////				}
-////				byte jsonMode =  XConstants.XON_MODE_W; //W3C mode is default
-////				_actPNode._xonMode = (byte) (jsonMode | XConstants.XON_ROOT);
-////				for (PAttr pattr:  _actPNode.getAttrs()) {
-////					//Attribute '&{0}' not allowed here
-////					error(pattr._value, XDEF.XDEF254, pattr._name);
-////				}
-////				PNode p = CompileXonXdef.genXdef(_actPNode,
-////					jsonMode, _actPNode._localName, name, getReportWriter());
-////				if (p != null) {
-////					_actPNode._parent.addChildNode(p);
-////System.out.println(KXmlUtils.nodeToString(p.toXML(), true));
-////				}
+				PNode pnode = _actPNode;
+				PAttr paName =  _pcomp.getXdefAttr(pnode, "name", false,true);
+				String xdname = _actPNode._localName;
+				SBuffer sval = paName == null ? null : paName._value;
+				if (sval == null) {
+					sval = new SBuffer(xdname, pnode._name);
+					//The name of XON/JSON model is required
+					error(pnode._name, XDEF.XDEF317, xdname);
+				} else {
+					String s = sval.getString().trim();
+					if (!StringParser.chkNCName(s, StringParser.XMLVER1_0)) {
+						//The name of {0} model "&{0}" can't contain ":"
+						error(sval, XDEF.XDEF316, xdname, s);
+					}
+				}
+				CompileXonXdef compileXon = new CompileXonXdef(_pcomp,
+					_actPNode, XConstants.XON_MODE_W, sval, getReportWriter());
+				pnode._xonMode = XConstants.XON_ROOT;
+				if (pnode._value == null || pnode._value.getString().isEmpty()){
+					//XON/JSON model is missing in JSON definition
+					error(pnode._name, XDEF.XDEF315,"&{xpath}"+pnode._xpathPos);
+					return;
+				}
+				for (PAttr pattr:  pnode.getAttrs()) {
+					//Attribute '&{0}' not allowed here
+					error(pattr._value, XDEF.XDEF254, pattr._name);
+				}
+				String anyXpos = compileXon.genXdef(pnode,
+					XConstants.XON_MODE_W,
+					xdname.equals("json") ? "xon" : xdname,
+					sval,
+					_pcomp.getReportWriter());
+				pnode._name = paName._value;
+				pnode._localName = paName._value.getString();
+				pnode._nsURI = null; // set no namespace
+				pnode._nsindex = -1;
+				pnode._xonMode = XConstants.XON_ROOT;
+				SBuffer sname = null;
+				if (paName != null) {
+					sname = paName.getValue();
+				} else if ((paName = _actPNode.getAttrNS("name",
+					XPreCompiler.NS_XDEF_INDEX)) != null) {
+					sname = paName.getValue();
+				}
+				if (sname == null) {
+					return; // missing model name (error will be reported later.)
+				}
+				if (anyXpos == null) {
+					return; // do not generate models for %anyObj
+				}
+				if ("xon".equals(xdname) || ("json".equals(xdname))) {
+					int ndx = anyXpos.indexOf('#');
+					anyXpos = anyXpos.substring(ndx + 1);
+					for (PNode  p:_actPNode._parent.getChildNodes()) {
+						if (anyXpos.equals(p._localName)) {
+							return; // already generated
+						}
+					}
+					/** Prepare instance of CompileXonXdef. */
+					compileXon.genXonAnyModels(_actPNode, anyXpos);
+				}
 				return;
 			} else if ("text".equals(_actPNode._localName)
 				|| "BNFGrammar".equals(_actPNode._localName)

@@ -1197,7 +1197,6 @@ public final class TestXComponents extends XDTester {
 			assertEq(xc.toXml(), parse(xp.createXDDocument("P"), xml,reporter));
 			assertNoErrorwarningsAndClear(reporter);
 		} catch (Exception ex) {fail(ex);}
-		reporter.clear();
 		try {
 			xml =
 "<X><A><B><E>1</E></B><C/></A><A><B/><B><E>2</E></B><C/><C/></A><A/></X>";

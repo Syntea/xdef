@@ -798,7 +798,7 @@ public class XonTools {
 				return getInputFromObject(
 					SUtils.getExtendedURL((String)source), sysId);
 			} catch (Exception ex) {
-				//not URL, file name, so create from string a reader 
+				//not URL, file name, so create from string a reader
 				return new InputData(new StringReader((String) source),
 					sysId==null ? "STRING" : sysId);
 			}

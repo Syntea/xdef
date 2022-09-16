@@ -15,7 +15,6 @@ import javax.xml.namespace.QName;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xdef.XDConstants;
-import org.xdef.msg.JSON;
 import org.xdef.msg.SYS;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.ReportWriter;
@@ -211,14 +210,12 @@ public final class XonSourceParser implements XonParser, XParser {
 		boolean result = false;
 		for (SBuffer x : _names) {
 			if (s.equals(x.getString())) {
-//				//Value pair &{0} already exists
-//				error(JSON.JSON022, name);
+//				//Value pair &{0} already exists (error(JSON.JSON022, name)
 				result = true;
 				break;
 			}
 		}
 		_names.push(_name = name);
-//		return false;
 		return result;
 	}
 	@Override

@@ -275,6 +275,65 @@ public class FUtils {
 		return false;
 	}
 
+	/** Compare directories.
+	 * @param deep if true compare also subrirectories.
+	 * @param f1 first directory.
+	 * @param f2 second directory.
+	 * @return list of differences.
+	 */
+	public static final List<Object> dirsEqual(boolean deep,
+		final File f1, final File f2) {
+		List<Object> result = new ArrayList<Object>();
+		if (f1.exists() && f2.exists() && f1.isDirectory() && f2.isDirectory()){
+			File[] files1 = f1.listFiles();
+			for (File f: files1) {
+				String fname = f.getName();
+				if (f.isFile()) {
+					File g = new File(f2, fname);
+					if (!g.exists() || !g.isFile()) {
+						result.add(g);
+					} else {
+						if (!filesEqual(f, g)) {
+							List<File> dif = new ArrayList<File>();
+							dif.add(f);
+							dif.add(g);
+							result.add(dif);
+						}
+					}
+				} else { // directory
+					File g = new File(f2, fname);
+					if (!g.exists() || !g.isDirectory()) {
+						result.add(g);
+					}
+					if (deep) {
+						result.addAll(dirsEqual(true, f, g));
+					}
+				}
+			}
+			File[] files2 = f2.listFiles();
+			for (File f: files2) {
+				String fname = f.getName();
+				File g = new File(f1, fname);
+				boolean found = false;
+				for (File x: files1) {
+					if (x.getName().equals(g.getName())) {
+						found = true;
+						break;
+					}
+				}
+				if (!found) {
+					result.add(f);
+				}
+			}
+		} else {
+			List<File> dif = new ArrayList<File>();
+			dif.add(f1);
+			dif.add(f2);
+			result.add(dif);
+		}
+		return result;
+	}
+
 	/** Compare streams. Returns -1 if contents are equal,
 	 * otherwise returns the index of the first difference.
 	 * @param f1 first file.

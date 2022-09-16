@@ -508,7 +508,7 @@ public abstract class XAbstractReader extends Reader {
 	 * Eq ::= S? '=' S?
 	 * VersionNum  ::= '1.' [0-9]+
 	 * EncodingDecl ::= S 'encoding' Eq ('"' EncName '"' | "'" EncName "'" )
-	 * EncName ::= [A-Za-z] ([A-Za-z0-9._] | '-').
+	 * EncName ::= [A-Za-z] ([A-Za-z0-9._] | '-')
 	 * Misc ::= Comment | PI | S
 	 * doctypedecl ::= '<!DOCTYPE' S Name
 	 *             (S ExternalID)? S? ('[' intSubset ']' S?)? '>'
@@ -760,7 +760,8 @@ public abstract class XAbstractReader extends Reader {
 				releaseScanned();
 			}
 		}
-		if (!"*".equals(qName)) { // never should happen!
+		// never should happen!
+		if (!"*".equals(qName)) {
 			releaseScanned();
 		}
 		return result;
