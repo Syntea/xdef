@@ -478,7 +478,7 @@ public class TestXon extends XDTester {
 " [\"Jivá\", null, null]\n" +
 "]";
 			o = xd.jparse(s, reporter);
-			assertNoErrorwarningsAndClear(reporter);;
+			assertNoErrorwarningsAndClear(reporter);
 			genXComponent(xd.getXDPool(), clearTempDir());
 			xc = xd.jparseXComponent(s, null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
