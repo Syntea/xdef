@@ -33,4 +33,6 @@ public interface XonNames {
 	public static final String ANY_OBJ = "%anyObj";
 	/** This keyword used for the specification of any name in XON map. */
 	public static final String ANY_NAME = "%anyName";
+	/** This string is used as a name of model of %anyObj. */
+	public static final String JSON_ANYOBJECT = "JSON.ANYOBJECT";
 }

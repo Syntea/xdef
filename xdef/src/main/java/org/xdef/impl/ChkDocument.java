@@ -61,6 +61,7 @@ import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SThrowable;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
+import static org.xdef.xon.XonNames.JSON_ANYOBJECT;
 import org.xdef.xon.XonUtils;
 
 /** Provides root check object for generation of check tree and processing
@@ -228,12 +229,10 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 				if (xe._xon > 0) {
 					if (qn.equals(xe.getQName())) {
 						return xe;
-					} else if ((xe._xon) != 0) {
-						if (xe._childNodes.length > 0) {
-							for (XNode x: xe._childNodes) {
-								if (qn.equals(x.getQName())) {
-									return (XElement) x;
-								}
+					} else {
+						for (XNode x: xe._childNodes) { // find in childNodes
+							if (qn.equals(x.getQName())) {
+								return (XElement) x;
 							}
 						}
 					}
@@ -489,19 +488,28 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			if (ndx > 0) {
 				s = s.substring(0, ndx);
 			}
-			String className = _xclass == null ?
-				getXDPool().getXComponents().get(s)
-				: _xclass.getName();
+			Map<String, String> components = getXDPool().getXComponents();
+			String className =
+				_xclass == null ? components.get(s) : _xclass.getName();
 			while (className == null) {
 				ndx = s.indexOf('/');
 				if (ndx > 0) { // separate root model name
 					String t = s.substring(0, ndx);
-					className = getXDPool().getXComponents().get(t);
+					className = components.get(t);
 					if (className == null) { // extract namespace prefix
 						ndx = s.indexOf('#') + 1;
 						int ndx1 = t.indexOf(':');
-						t = t.substring(0, ndx) + s.substring(ndx1 + 1);
-						className = getXDPool().getXComponents().get(t);
+						t = t.substring(0, ndx)
+							+ (ndx1 > 0 ? s.substring(ndx1 + 1) : "");
+						className = components.get(t);
+						if (className == null) {
+							for (String key : components.keySet()) {
+								if (key.startsWith(t)) {
+									className = components.get(key);
+									break;
+								}
+							}
+						}
 					}
 					if (className != null) {
 						break;
@@ -531,6 +539,29 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 					if (_xclass == null) {
 						_xclass = Class.forName(className, false,
 							Thread.currentThread().getContextClassLoader());
+					}
+					if (xe.getXDPosition().indexOf(
+						"#" + JSON_ANYOBJECT + "/$choice") >= 0) {
+						String y = xe.getName();
+						y = y.substring(y.indexOf(':') + 1);
+						for (Class<?> x: _xclass.getDeclaredClasses()) {
+							// jx$item jx$array jx$map
+							String z = x.getName();
+							if (y.equals(
+								z.substring(x.getName().lastIndexOf('$') + 1))){
+								_xclass = x;
+								break;
+							} else {
+								for (Class<?> xx: x.getDeclaredClasses()) {
+									z = xx.getName();
+									if (y.equals(z.substring(
+										xx.getName().lastIndexOf('$') + 1))) {
+										_xclass = xx;
+										break;
+									}
+								}
+							}
+						}
 					}
 					Constructor<?> c = _xclass.getDeclaredConstructor(
 						XComponent.class, XXNode.class);

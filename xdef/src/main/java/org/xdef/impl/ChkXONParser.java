@@ -112,7 +112,7 @@ final class ChkXONParser implements XParser, XonParser {
 			File f = (File) source;
 			try {
 				_in = getReader(new FileInputStream(f));
-				_sysId = sourceName == null ? f.getCanonicalPath(): sourceName;
+				_sysId = sourceName == null ? f.getCanonicalPath() : sourceName;
 			} catch (Exception ex) {
 				throw new SRuntimeException(SYS.SYS024,//File doesn't exist:&{0}
 					f != null ? f.getAbsoluteFile() : "null");
