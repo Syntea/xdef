@@ -493,18 +493,21 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 				getXDPool().getXComponents().get(s)
 				: _xclass.getName();
 			while (className == null) {
-				if (!xe.isReference()) {
-					ndx = s.indexOf('/');
-					if (ndx > 0) { // separate root model name
-						s = s.substring(0, ndx);
-						className = getXDPool().getXComponents().get(s);
-						if (className == null) { // extract namespace prefix
-							ndx = s.indexOf('#') + 1;
-							int ndx1 = s.indexOf(':');
-							s = s.substring(0, ndx) + s.substring(ndx1 + 1);
-							className = getXDPool().getXComponents().get(s);
-						}
+				ndx = s.indexOf('/');
+				if (ndx > 0) { // separate root model name
+					String t = s.substring(0, ndx);
+					className = getXDPool().getXComponents().get(t);
+					if (className == null) { // extract namespace prefix
+						ndx = s.indexOf('#') + 1;
+						int ndx1 = t.indexOf(':');
+						t = t.substring(0, ndx) + s.substring(ndx1 + 1);
+						className = getXDPool().getXComponents().get(t);
 					}
+					if (className != null) {
+						break;
+					}
+				}
+				if (!xe.isReference()) {
 					break;
 				}
 				s = xe.getReferencePos();
@@ -514,6 +517,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 				}
 				xe = (XElement) getXDPool().findModel(s);
 				className = getXDPool().getXComponents().get(s);
+				xe = (XElement) getXDPool().findModel(s);
 			}
 			if (className != null) {
 				if (className.startsWith("%ref ")) {
@@ -1587,7 +1591,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		}
 		if (source instanceof Element) {
 			return xparseXComponent((Element) source, xClass, reporter);
-		} 
+		}
 		//Unsupported type of argument &{0}: &{1}
 		throw new SRuntimeException(SYS.SYS037,"source",source.getClass());
 	}

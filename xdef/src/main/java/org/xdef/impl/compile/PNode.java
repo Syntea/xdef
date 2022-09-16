@@ -56,7 +56,7 @@ public final class PNode {
 		}
 		_parent = parent;
 		_nsindex = -1;
-//       java makes it: _level = 0; _value = null; _def = null;
+//       java makes it: _value = null; _def = null;
 	}
 
 	/** Get node name (as SBufer).
@@ -127,6 +127,7 @@ public final class PNode {
 	 * @param p PNode to add.
 	 */
 	public final void addChildNode(final PNode p) {
+		p._parent = this;
 		_childNodes.add(p);
 		p._xpathPos = p.getXPath();
 	}

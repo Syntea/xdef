@@ -28,6 +28,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xdef.impl.xml.KParsedAttr;
+import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
@@ -237,12 +238,11 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 //			}
 			xr.parse(is);
 			getReader().close();
-		} catch (Error ex) {
-			thwn = new RuntimeException(ex);
 		} catch (RuntimeException ex) {
 			thwn = ex;
-		} catch (Exception ex) {
-			thwn = new RuntimeException(ex);
+		} catch (Error | Exception ex) {
+			//XML parser was canceled by error&amp;{0}{: }
+			thwn = new SRuntimeException(XML.XML080, ex);
 		}
 		try {
 			getReader().close();

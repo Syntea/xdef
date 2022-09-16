@@ -21,5 +21,5 @@ public interface XConstants {
 	public static byte XON_MODE_XD = 2;
 
 	/** XON/JSON root element. */
-	public static byte XON_ROOT = 4;
+	public static byte XON_ROOT = 64;
 }

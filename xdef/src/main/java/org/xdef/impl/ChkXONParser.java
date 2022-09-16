@@ -149,7 +149,6 @@ final class ChkXONParser implements XParser, XonParser {
 	private static Reader getReader(final InputStream in) {
 		return new InputStreamReader(in, Charset.forName("UTF-8"));
 	}
-
 	/** Add attributes from parsedElem object to thew created element.
 	 * @param parsedElem object with parsed attributes.
 	 */

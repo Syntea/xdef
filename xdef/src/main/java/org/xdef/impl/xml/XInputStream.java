@@ -3,7 +3,6 @@ package org.xdef.impl.xml;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Reader;
 import static org.xdef.impl.xml.XAbstractInputStream.bytesToString;
 import static org.xdef.impl.xml.XAbstractInputStream.detectBOM;
 import static org.xdef.impl.xml.XAbstractInputStream.nextChar;

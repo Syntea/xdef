@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -405,7 +404,6 @@ class XonFromXml extends XonUtils {
 	final static Object toXon(final Node node) {
 		Element elem = node.getNodeType() == Node.DOCUMENT_NODE
 			? ((Document) node).getDocumentElement() : (Element) node;
-		String name = elem.getTagName();
 		String uri = elem.getNamespaceURI();
 		XonFromXml x = new XonFromXml();
 		return (XDConstants.XON_NS_URI_W.equals(uri))

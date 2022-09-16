@@ -44,8 +44,11 @@ import org.xdef.sys.Report;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
-import org.xdef.xon.XonNames;
+import static org.xdef.xon.XonNames.X_ARRAY;
 import static org.xdef.xon.XonNames.X_ITEM;
+import static org.xdef.xon.XonNames.X_KEYATTR;
+import static org.xdef.xon.XonNames.X_MAP;
+import static org.xdef.xon.XonNames.X_VALATTR;
 
 /** Provides validation of input data or it can be used as base for construction
  * of XML objects according to a X-definition.
@@ -100,8 +103,6 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	 /** mode: 'C' - comment, 'E' - element, 'A' - attribute, 'T' - text,
 	 * 'D' - document, 'P' - processing instruction,'U' undefined. */
 	private byte _mode;
-	/** XComponent if exists or null. */
-	private XComponent _xComponent;
 	/** Array of bound keys.*/
 	XDUniqueSetKey[] _boundKeys;
 	/** Model of the processed data object.*/
@@ -114,6 +115,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	String _xonKey;
 	/** XON item value. */
 	Object _xonValue;
+	/** XComponent if exists or null. */
+	private XComponent _xComponent;
 
 	/** The set containing marked unique sets. */
 	final Set<CodeUniqueset> _markedUniqueSets = new HashSet<CodeUniqueset>();
@@ -173,9 +176,13 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		if (!_ignoreAll && getElement() != null) {
 			if (_xElement._xon > 0) { //XON
 				if (XDConstants.XON_NS_URI_W.equals(_xElement.getNSUri())) {
-					if (XonNames.X_MAP.equals(_xElement.getLocalName())) {
+					if (_element.hasAttribute(X_KEYATTR)) { /*xx*/
+						_xonKey = XonTools.xmlToJName(
+							_element.getAttribute(X_KEYATTR));
+					}
+					if (X_MAP.equals(_xElement.getLocalName())) {
 						_xonMap = new LinkedHashMap<String, Object>();
-					} else if (XonNames.X_ARRAY.equals(
+					} else if (X_ARRAY.equals(
 						_xElement.getLocalName())) {
 						_xonArray = new ArrayList<Object>();
 					}
@@ -1704,11 +1711,14 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			if (value==null) {
 				value = _parseResult.getSourceBuffer();
 			}
-			if (XonNames.X_KEYATTR.equals(xdata.getName())) {
+			if (X_KEYATTR.equals(xdata.getName())) {
 				_xonKey = XonTools.xmlToJName(value.toString());
-			} else if (XonNames.X_VALATTR.equals(xdata.getName())) {
+			} else if (X_VALATTR.equals(xdata.getName())) {
 				if (_xElement.getNSUri() == null ) {
 					_xonKey = XonTools.xmlToJName(_xElement.getName());
+				} else if (_xonKey == null && _element.hasAttribute(X_KEYATTR)){
+					_xonKey =
+						XonTools.xmlToJName(_element.getAttribute(X_KEYATTR));
 				}
 				if (value instanceof XDValue) {
 					XDValue x = (XDValue) value;
@@ -2702,17 +2712,15 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		if (_parent._parent != null && _xElement._xon > 0) {//not root; gen XON
 			if (!_forget && _xElement._forget != 'T') {
 				ChkElement chkEl = (ChkElement) _parent;
-				Object value = XonNames.X_MAP.equals(_xElement.getLocalName())
-					?_xonMap : XonNames.X_ARRAY.equals(_xElement.getLocalName())
+				Object value = X_MAP.equals(_xElement.getLocalName())
+					?_xonMap : X_ARRAY.equals(_xElement.getLocalName())
 					?_xonArray : _xonValue;
 				if (chkEl._xonMap != null) {
 					chkEl._xonMap.put(_xonKey, value);
 				} else if (chkEl._xonArray != null) {
 					chkEl._xonArray.add(value);
 				} else {
-					//Internal error&{0}{: }
-					throw new SRuntimeException(SYS.SYS066,
-						"neither Map nor List");
+					chkEl._xonValue = value;
 				}
 			}
 		}

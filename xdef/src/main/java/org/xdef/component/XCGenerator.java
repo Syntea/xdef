@@ -71,7 +71,7 @@ final class XCGenerator extends XCGeneratorXON {
 		if (isRoot && xelem.getXonMode() > 0 //XON/JSON
 			&& xelem._childNodes.length == 1
 			&& xelem._childNodes[0].getKind() == XMNode.XMELEMENT) {
-			xe = (XElement) xelem._childNodes[0];
+			xe = (XElement) xelem._childNodes[0]; /**/
 			xelName = xelem.getLocalName();
 		} else {
 			xe = xelem;
@@ -232,8 +232,6 @@ final class XCGenerator extends XCGeneratorXON {
 						groupMax = groupStack.pop(); // groupMax
 						groupKind = groupStack.pop(); // kind
 						groupFirst = groupStack.pop(); // index of first item
-					} else {
-System.out.println("");
 					}
 					continue;
 				}
@@ -523,7 +521,7 @@ System.out.println("");
 		_interfaces = sbi;
 		// generate Java source
 		return genSource(xe, xelName, model, index, xdname,
-			isRoot,clazz, extClazz, interfcName,
+			isRoot, clazz, extClazz, interfcName,
 			vars, creators, getters, setters, xpathes, listNodes, innerClasses,
 			atttab, txttab, xctab);
 	}
