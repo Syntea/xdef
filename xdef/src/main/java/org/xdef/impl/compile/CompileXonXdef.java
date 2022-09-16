@@ -17,6 +17,7 @@ import org.xdef.sys.StringParser;
 import org.xdef.xon.IniReader;
 import org.xdef.xon.XonNames;
 import static org.xdef.xon.XonNames.ANY_NAME;
+import static org.xdef.xon.XonNames.JSON_ANYOBJECT;
 import static org.xdef.xon.XonNames.ONEOF_CMD;
 import static org.xdef.xon.XonNames.SCRIPT_CMD;
 import static org.xdef.xon.XonNames.X_ARRAY;
@@ -780,7 +781,7 @@ public final class CompileXonXdef extends XScriptParser {
 	 */
 	private void genXonAny(final JAny jo, final PNode parent) {
 		if (_anyXPos == null) {
-			_anyXPos = _xonModel._parent._xdef.getName() + "#JSON.ANYOBJECT";
+			_anyXPos = _xonModel._parent._xdef.getName() + "#" + JSON_ANYOBJECT;
 		}
 		String refName = _anyXPos;
 		SBuffer val;

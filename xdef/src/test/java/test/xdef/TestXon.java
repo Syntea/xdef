@@ -147,6 +147,11 @@ public class TestXon extends XDTester {
 					result += "** 5\n" + reporter.printToString() + "\n";
 					reporter.clear();
 				}
+				x = xc.toXon();
+				if (!XonUtils.xonEqual(o, x)) {
+					result += "** 4\n" +  data + "\n" +
+						XonUtils.toXonString(x, true) + "\n";
+				}
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -1929,11 +1934,9 @@ public class TestXon extends XDTester {
 			s = "test.xdef.MyTestX_AnyXX2";
 			assertNull(testX(xp,"B", s, "{}"));
 			assertNull(testX(xp,"B", s, "{a:1}"));
-			assertNull(testX(xp,"B", s, "{a:1,b:[],c:{},d:{e:5,f:[2]},g:null}"));
 			assertNull(testX(xp,"B", s, "{a:[1, true], b:null}"));
+			assertNull(testX(xp,"B", s,"{a:1,b:[],c:{},d:{e:5,f:[2]},g:null}"));
 		} catch (Exception ex) {fail(ex);}
-/*xx*
-//TODO %anyObj can't be root yet
 		try {
 			xdef = // test %anyObj
 "<xd:def xmlns:xd='" + _xdNS + "' name=\"A\" root=\"testX\">\n" +
@@ -1943,6 +1946,13 @@ public class TestXon extends XDTester {
 			xp = compile(xdef);
 			s = "test.xdef.MyTestX_AnyObj";
 			genXComponent(xp, clearTempDir());
+			// %anyObj
+			assertNull(testX(xp,"A", s, "true"));
+			assertNull(testX(xp,"A", s, "1"));
+			assertNull(testX(xp,"A", s, "null"));
+//TODO string ???
+//			assertNull(testX(xp,"A", s, "\"\""));
+//			assertNull(testX(xp,"A", s, "\"abc\""));
 			// (array)
 			assertNull(testX(xp,"A", s, "[]"));
 			assertNull(testX(xp,"A", s, "[1]"));
@@ -1963,16 +1973,9 @@ public class TestXon extends XDTester {
 			// (map)
 			assertNull(testX(xp,"A", s, "{}"));
 			assertNull(testX(xp,"A", s, "{a:1}"));
-			assertNull(testX(xp,"A", s, "{a:1,b:[],c:{},d:{e:5,f:[2]},g:null}"));
+			assertNull(testX(xp,"A", s,"{a:1,b:[],c:{},d:{e:5,f:[2]},g:null}"));
 			assertNull(testX(xp,"A", s, "{a:[1, true], b:null}"));
-			// %anyObj
-			assertNull(testX(xp,"C", s, "true"));
-			assertNull(testX(xp,"C", s, "1"));
-			assertNull(testX(xp,"C", s, "null"));
-			assertNull(testX(xp,"C", s, "\"\""));
-			assertNull(testX(xp,"C", s, "\"abc\""));
 		} catch (Exception ex) {fail(ex);}
-/**/
 		clearTempDir(); // clear temporary directory
 	}
 
