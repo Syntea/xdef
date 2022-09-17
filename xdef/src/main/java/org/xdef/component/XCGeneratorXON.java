@@ -777,6 +777,10 @@ LN+"\t\tObject o = get"+X_VALATTR+"();"+LN+
 				if ("String".equals(typ)) {
 					x +=
 "\t\treturn (String) org.xdef.xon.XonTools.xmlToJValue((String)o);"+LN+"\t";
+				} else if ("Object".equals(typ)) {
+					x +=
+"\t\treturn o instanceof String"
+						+ "?org.xdef.xon.XonTools.xmlToJValue((String)o):o;"+LN;
 				} else {
 					x +=
 "\t\treturn ("+typ+")o;"+LN+"\t";

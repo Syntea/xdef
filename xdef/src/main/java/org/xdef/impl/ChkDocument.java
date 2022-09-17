@@ -1602,13 +1602,16 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		final Class<?> xClass,
 		final String sourceId,
 		final ReportWriter reporter) throws SRuntimeException {
-		if (source instanceof String || source instanceof File
-			|| source instanceof InputStream || source instanceof Reader
-			|| source instanceof URL) {
+		if (source instanceof File || source instanceof InputStream
+			|| source instanceof Reader || source instanceof URL) {
 			_genXComponent = true;
 			_xclass = xClass;
 			xparse(new ChkXONParser(reporter, source, sourceId), reporter);
 			return getParsedComponent();
+		}
+		if (source instanceof String) {
+			return jparseXComponent(new StringReader((String) source),
+				xClass, sourceId, reporter);
 		}
 		if (source == null || source instanceof Map
 			|| source instanceof List || source instanceof Number
