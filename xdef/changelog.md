@@ -1,27 +1,15 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.0.1, release-date 2022-09-16
-* Implemented %charset directive in XON data.
+# Version 42.0.0, release-date 2022-09-17
+* Corrected bug in `uses` and `implements` in X-script when it refers 
+* to a node with specified namespace URI.
+* New things:
+* This version of X-definition supports JSON, YAML, Propreties, Windows INI,
+* CSV and XON data processing. See the documentation for this release.
 * Implemented XON command %anyName.
 * Implemented XON command %anyObj.
 * Names of XON commands $:script and $:oneOf, changed to %script and %oneOf.
-
-# Version 42.0.0, release-date 2022-07-12
-* This version ensures full backward compatibility with previous versions
-* of X-definition (i.e. from version 3.1 to 4.1).
-* This version of X-definition supports JSON, YAML, Propreties, Windows INI,
-* CSV and XON data processing. See the documentation for this release.
-*
-* corrected bug in `uses` and `implements` in X-script when it refers 
-* to a node with specified namespace URI.
-* New things:
-*
-* Implementation of JSON, YAML, Propreties, Windows INI, CSV and XON
-*
-********************************************************************************
-* Corrected bugs from previous versions: 
-********************************************************************************
-*
+* Implemented %charset directive in XON data.
 
 # Version 41.0.9, release-date 2022-06-09
 * This build is a pre-release of version 4.2 of X-definition.
