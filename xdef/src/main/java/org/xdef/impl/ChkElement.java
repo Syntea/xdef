@@ -182,8 +182,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 					}
 					if (X_MAP.equals(_xElement.getLocalName())) {
 						_xonMap = new LinkedHashMap<String, Object>();
-					} else if (X_ARRAY.equals(
-						_xElement.getLocalName())) {
+					} else if (X_ARRAY.equals(_xElement.getLocalName())) {
 						_xonArray = new ArrayList<Object>();
 					}
 				}

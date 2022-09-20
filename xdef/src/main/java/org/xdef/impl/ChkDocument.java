@@ -235,6 +235,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 								return (XElement) x;
 							}
 						}
+						continue;
 					}
 				}
 				i = xName.indexOf(':');
@@ -484,11 +485,27 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			_genXComponent = false;
 			XElement xe = _xElement;
 			String s = xe.getXDPosition();
+			Map<String, String> components = getXDPool().getXComponents();
+//System.out.println(s);
+//for (String k: components.keySet()) {
+//	try {
+//		Class<?> cls = Class.forName(components.get(k));
+//		System.out.println(k+", "+cls.getName());
+//		Constructor<?> c =
+//			cls.getDeclaredConstructor(XComponent.class, XXNode.class);
+//		c.setAccessible(true);
+//		XComponent cx = (XComponent) c.newInstance((XComponent)null, _chkRoot);
+//		System.out.println(k+", "+cls.getName()+": "+cx.xGetModelPosition());
+//		_xclass = cls;
+//		_chkRoot.setXComponent(_xComponent = cx);
+//		_chkRoot.initElem();
+//		return _chkRoot;
+//	} catch (Exception ex) {}
+//}
 			int ndx = s.indexOf('$');
 			if (ndx > 0) {
 				s = s.substring(0, ndx);
 			}
-			Map<String, String> components = getXDPool().getXComponents();
 			String className =
 				_xclass == null ? components.get(s) : _xclass.getName();
 			while (className == null) {
