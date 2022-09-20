@@ -49,6 +49,8 @@ final class CompileReference extends XNode {
 	final int _finallyMethod;
 	/** Model initialization. */
 	final int _varinit;
+	/** XON mode. */
+	final byte _xon;
 
 	/** Creates a new instance of XReference.
 	 * @param kind XMREFERENCE or XMINCLUDE.
@@ -106,10 +108,12 @@ final class CompileReference extends XNode {
 			case XNode.XMELEMENT:
 				_definition = ((XElement) parent)._definition;
 				_varinit = ((XElement) parent)._varinit;
+				_xon = ((XElement) parent)._xon;
 				break;
 			case XNode.XMDEFINITION:
 				_definition = (XDefinition) parent;
 				_varinit = -1;
+				_xon = 0;
 				break;
 			default:
 				throw new SRuntimeException(XDEF.XDEF202,//Internal error:&{0}

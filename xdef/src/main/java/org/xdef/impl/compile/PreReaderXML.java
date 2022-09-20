@@ -512,30 +512,26 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 				pnode._nsURI = null; // set no namespace
 				pnode._nsindex = -1;
 				pnode._xonMode = XConstants.XON_ROOT;
-				SBuffer sname = null;
-				if (paName != null) {
-					sname = paName.getValue();
-				} else if ((paName = _actPNode.getAttrNS("name",
-					XPreCompiler.NS_XDEF_INDEX)) != null) {
-					sname = paName.getValue();
-				}
-				if (sname == null) {
-					return; // missing model name (error will be reported later.)
-				}
 				if (anyXpos == null) {
 					return; // do not generate models for %anyObj
 				}
-				if ("xon".equals(xdname) || ("json".equals(xdname))) {
-					int ndx = anyXpos.indexOf('#');
-					anyXpos = anyXpos.substring(ndx + 1);
-					for (PNode  p:_actPNode._parent.getChildNodes()) {
-						if (anyXpos.equals(p._localName)) {
-							return; // already generated
+				int ndx = anyXpos.indexOf('#');
+				anyXpos = anyXpos.substring(ndx + 1);
+				for (PNode  p:_actPNode._parent.getChildNodes()) {
+					if (anyXpos.equals(p._localName)) {
+						return; // already generated
+					}
+					if (p._xonMode > 0 && "choice".equals(p._localName)) {
+						for (PAttr pa: p.getAttrs()) {
+							if ("name".equals(pa._localName)
+								&& anyXpos.equals(pa._value.getString())) {
+								return; // already generated
+							}
 						}
 					}
-					/** Prepare instance of CompileXonXdef. */
-					compileXon.genXonAnyModels(_actPNode, anyXpos);
 				}
+				/** Prepare instance of CompileXonXdef. */
+				compileXon.genXonAnyModels(_actPNode, anyXpos);
 				return;
 			} else if ("text".equals(_actPNode._localName)
 				|| "BNFGrammar".equals(_actPNode._localName)

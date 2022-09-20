@@ -1273,10 +1273,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 							} else {
 								name = pfx + name.substring(ndx);
 							}
-						} else {
-							if (!pfx.isEmpty()) {
-								name = pfx + ':' + name;
-							}
+						} else if (!pfx.isEmpty()) {
+							name = pfx + ':' + name;
 						}
 						break;
 					}
@@ -1408,7 +1406,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			}
 		} else if ((pnode._xonMode & XConstants.XON_ROOT) != 0) {// xon, ini
 			pnode._xonMode = XConstants.XON_MODE_W;
-			compileXChild(xdef, null, pnode, xdef, 1,XConstants.XON_MODE_W);
+			compileXChild(xdef, null, pnode, xdef, 1, XConstants.XON_MODE_W);
 			pnode._xonMode = (XConstants.XON_MODE_W | XConstants.XON_ROOT);
 			return;
 		} else if (pnode._nsindex == XPreCompiler.NS_XDEF_INDEX) {
@@ -1636,7 +1634,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						} else if (name.startsWith("att")) {
 							compileAttrs(nodei, defName, dummy, true);
 						} else {
-							compileXChild(dummy, dummy, nodei, def, 2, NOXON);
+							compileXChild(dummy,dummy,nodei,def,2,dummy._xon);
 						}
 					}
 				}
@@ -2152,6 +2150,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			xel._vartable = y._vartable;
 			xel._varsize = y._varsize;
 			xel._varinit = y._varinit;
+			xel._xon = y._xon;
 			//copy specified options from target to unspecified options
 			if (xel._trimAttr == 0) {// _trimAttr not set
 				if (y._trimAttr != 0) {
