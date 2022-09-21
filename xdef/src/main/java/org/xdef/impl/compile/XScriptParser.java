@@ -1831,6 +1831,10 @@ public class XScriptParser extends StringParser
 			s += "&{xpath}" + _xpath;
 			report.setModification(s);
 		}
-		pos.putReport(report, getReportWriter());
+		if (pos == null) { // if pos is null !!
+			getReportWriter().putReport(report);
+		} else {
+			pos.putReport(report, getReportWriter());
+		}
 	}
 }
