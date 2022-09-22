@@ -88,37 +88,24 @@ public abstract class STester {
 	public STester() {}
 
 	public final void printlnOut(final String s) {
-		flushErr();
+		flushAll();
 		_out.println(s);
 		if (_outStream != null) {
 			_outStream.println(s);
 		}
-		flushOut();
-	}
-	private void flushOut() {
-		System.out.flush();
-		if (_outStream != null) {
-			_outStream.flush();
-		}
-	}
-	private void printErr(final String s) {
-		flushOut();
-		_err.print(s);
-		if (_outStream != null) {
-			_outStream.print(s);
-		}
-		flushErr();
+		flushAll();
 	}
 	public final void printlnErr(final String s) {
-		flushOut();
+		flushAll();
 		_err.println(s);
 		if (_outStream != null) {
 			_outStream.println(s);
 		}
-		flushErr();
+		flushAll();
 	}
-	private void flushErr() {
-		System.err.flush();
+	public final void flushAll() {
+		_err.flush();
+		_out.flush();
 		if (_outStream != null) {
 			_outStream.flush();
 		}
@@ -287,23 +274,58 @@ public abstract class STester {
 			}
 		}
 	}
+	/** Write the information message to out stream.
+	 * The class from which the error was reported is taken from
+	 * <code>_className</code> field.
+	 * @param ex Exception to be printed.
+	 */
+	public final void putInfo(final Throwable ex) {
+		putInfo(ex.toString());
+		String s = "[INFO] " + printThrowable(ex);
+		int i = s.indexOf("\n\tat ");
+		printlnOut(s.substring(i+1));
+	}
+	/** Write the information message to the out stream.
+	 * The class from which an error was reported is taken from the field
+	 * <code>_className</code>.
+	 * @param msg Text of information message.
+	 */
+	public final void putInfo(final String msg) {
+		String text = "[INFO] " + _name +
+			(msg != null && !msg.trim().isEmpty() ? '\n' + msg.trim() : "");
+		_errors++;
+		// in Java 1.6 is not avalable the method Throwable.getStackTrace()
+		// so we grab the information from printStackTrace and we create
+		// the info string from it.
+		String s = printThrowable(new Throwable(""));
+		int i = s.indexOf(_className + ".");
+		i = s.indexOf('\n', i);
+		if (i >= 0) {
+			s = s.substring(0, i);
+		}
+		i = s.lastIndexOf('\n');
+		if (i >= 0) {
+			s = s.substring(i +1);
+		}
+		printlnOut(text + "\n" + s);
+	}
 	/** Increase error counter and write the information to the error stream.
 	 * The class from which the error was reported is taken from
 	 * <code>_className</code> field.
 	 * @param ex Exception to be printed.
 	 */
-	public final void putErrInfo(final Throwable ex) {
-		putErrInfo(ex.toString());
+	public final void putErrMsg(final Throwable ex) {
+		putErrMsg(ex.toString());
 		String s = "[ERROR] " + printThrowable(ex);
 		int i = s.indexOf("\n\tat ");
-		printErr(s.substring(i+1));
+		printlnErr(s.substring(i+1));
 	}
 	/** Increase error counter and write the information to the error stream.
 	 * The class from which an error was reported is taken from the field
 	 * <code>_className</code>.
 	 * @param msg Text of error message.
 	 */
-	public final void putErrInfo(final String msg) {
+	public final void putErrMsg(final String msg) {
 		String text = "[ERROR] " + _name +
 			(msg != null && !msg.trim().isEmpty() ? '\n' + msg.trim() : "");
 		_errors++;
@@ -320,12 +342,12 @@ public abstract class STester {
 		if (i >= 0) {
 			s = s.substring(i +1);
 		}
-		printErr(text + "\n" + s + '\n');
+		printlnErr(text + "\n" + s);
 	}
 	/** Increase error counter and write the default information to the print
 	 * stream. If the print stream is null the message is ignored.
 	 */
-	public final void fail() {putErrInfo("*");}
+	public final void fail() {putErrMsg("*");}
 	/** Increase error counter and write information of given object.
 	 * If the print stream is null the message is ignored.
 	 * @param obj the report to be displayed as a fail information.
@@ -335,15 +357,15 @@ public abstract class STester {
 			fail();
 		} else {
 			if (obj instanceof String) {
-				putErrInfo((String) obj);
+				putErrMsg((String) obj);
 			} else if (obj instanceof ReportReader) {
-				putErrInfo(((ReportReader) obj).printToString());
+				putErrMsg(((ReportReader) obj).printToString());
 			} else if (obj instanceof Report) {
-				putErrInfo(((Report) obj).toString());
+				putErrMsg(((Report) obj).toString());
 			} else if (obj instanceof Throwable) {
-				putErrInfo((Throwable) obj);
+				STester.this.putErrMsg((Throwable) obj);
 			} else {
-				putErrInfo(obj.getClass().getName() + ": " + obj.toString());
+				putErrMsg(obj.getClass().getName() + ": " + obj.toString());
 			}
 		}
 	}
@@ -1150,7 +1172,8 @@ public abstract class STester {
 	 * @param files files with Java sources (may be a file or a directory).
 	 * @return string with path to compiled classes.
 	 */
-	public static String compileSources(final String classpath,
+	public static String compileSources(
+		final String classpath,
 		final String classDir,
 		final File... files) {
 		String sources[] = new String[files.length];
@@ -1192,8 +1215,8 @@ public abstract class STester {
 		// prepare parameters
 		ArrayList<String> ar = new ArrayList<String>();
 		ar.add("-classpath");
-		ar.add((classpath.isEmpty()? "" : classpath + File.pathSeparatorChar)
-			+ classDir); // classpath
+		ar.add((classpath.isEmpty()
+			? "" : classpath+File.pathSeparatorChar)+classDir); // classpath
 		ar.add("-d");
 		ar.add(classDir); // where to write compiled classes
 		// source files
@@ -1215,7 +1238,7 @@ public abstract class STester {
 					err.write((s + '\n').getBytes());
 				}
 				err.write("End params\n".getBytes());
-			} catch (Exception ex) {} // never sould happen
+			} catch (Exception ex) {} // never should happen
 			throw new RuntimeException(
 				"Java compilation failed:\n" + err.toString());
 		}
