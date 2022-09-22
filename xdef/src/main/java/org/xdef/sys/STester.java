@@ -96,8 +96,7 @@ public abstract class STester {
 		flushOut();
 	}
 	private void flushOut() {
-		_err.flush();
-		_out.flush();
+		System.out.flush();
 		if (_outStream != null) {
 			_outStream.flush();
 		}
@@ -119,8 +118,7 @@ public abstract class STester {
 		flushErr();
 	}
 	private void flushErr() {
-		flushOut();
-		_err.flush();
+		System.err.flush();
 		if (_outStream != null) {
 			_outStream.flush();
 		}
@@ -941,6 +939,7 @@ public abstract class STester {
 			}
 			s += _name + (_resultInfo.isEmpty() ? "" : ", " + _resultInfo)
 				+ ", time=" + new DecimalFormat("0.00").format(duration) + "s";
+			System.err.flush();
 			if (log != null) {
 				log.println(s);
 				log.flush();
@@ -984,6 +983,7 @@ public abstract class STester {
 " [-e error file] the file where error messages are recorded.\n"+
 " [-a] arguments for tested class follows - this must be the last item.\n"+
 " [-h] help");
+		System.err.flush();
 		System.exit(msg == null ? 0 : 1);
 	}
 	/** Run test and print result information on System.out (both, OK and error
@@ -1109,6 +1109,7 @@ public abstract class STester {
 			(errors > 0 ? errors + " error" + (errors > 1 ? "s,": ",") : "OK")
 			+ " " + (info != null ? info + ", ": "") +
 			"total time: " + df.format(duration) + "s";
+		System.err.flush();		
 		if (log != null) {
 			log.println(s);
 			log.flush();
