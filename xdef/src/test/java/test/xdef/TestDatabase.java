@@ -15,6 +15,8 @@ import java.sql.Statement;
 import org.apache.derby.jdbc.EmbeddedDataSource;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+import static org.xdef.sys.STester.runTest;
+import static test.XDTester._xdNS;
 
 /** Test of X-Definition relational database processing.
  * @author Vaclav Trojan
@@ -23,14 +25,14 @@ public final class TestDatabase extends XDTester {
 
 	public TestDatabase() {super();}
 
-	private static final String TABLE_A = "ta";
-	private static final String TABLE_B = "tb";
-	private static final String ATTR_A = "a";
-	private static final String ATTR_B = "b";
-	private static final String ATTR_C = "c";
-	private static final String ATTR_A_INT = ATTR_A + " int";
-	private static final String ATTR_B_VARCHAR = ATTR_B + " varchar(256)";
-	private static final String ATTR_C_VARCHAR = ATTR_C + " varchar(256)";
+	private static final String TABLE_A = "TA";
+	private static final String TABLE_B = "TB";
+	private static final String ATTR_A = "A";
+	private static final String ATTR_B = "B";
+	private static final String ATTR_C = "C";
+	private static final String ATTR_A_INT = ATTR_A + " INT";
+	private static final String ATTR_B_VARCHAR = ATTR_B + " VARCHAR(256)";
+	private static final String ATTR_C_VARCHAR = ATTR_C + " VARCHAR(256)";
 	/** Number of rows in the table A. */
 	private static final int ROWS_A = 10;
 	/** Number of rows in the table B. */
@@ -46,7 +48,7 @@ public final class TestDatabase extends XDTester {
 	/** User DB password for test purpose. */
 	private static final String TEST_PWD = "--*..-*";
 	/** Test DB schema. */
-	private static final String SCHEMA = "create";
+	private static final String SCHEMA = "CREATE";
 
 	/** The database engine. */
 	private EmbeddedDataSource _ds = null;
@@ -101,37 +103,6 @@ public final class TestDatabase extends XDTester {
 		return null;
 	}
 
-	/** Clean the environment (connections and data stores) created and used for
-	 * database testing.
-	 * @param tempDir temp directory used by test mechanism of X-Definition.
-	 */
-	private void cleanDBEnv(final String tempDir) {
-		// close resources and shutdown the DB
-		closeDB();
-		// remove directory used for database data
-		deleteStore(new File(tempDir + File.separatorChar + DERBY_STORE));
-	}
-
-	/** Closes database resources and makes database shutdown. */
-	private void closeDB() {
-		// close shared connection
-		if(_con != null) {
-			try {
-				if(!_con.isClosed()) {
-					_con.close();
-				}
-			} catch (SQLException ex) {
-				fail(ex);
-			}
-		}
-		try {
-			DriverManager.getConnection("jdbc:derby:;shutdown=true", null,null);
-			fail("Derby database cannot be halted.");
-		} catch (SQLException ex) {
-			// accept exception: database Derby is shutdown
-		}
-	}
-
 	/** Recursively delete all files and directories created in the database
 	 * store during the database testing.
 	 * @param f file or directory has to be deleted.
@@ -154,22 +125,22 @@ public final class TestDatabase extends XDTester {
 		try {
 			st = _con.createStatement();
 			// table A
-			String sql = "create table " + TABLE_A + "(" + ATTR_A_INT +
+			String sql = "CREATE TABLE " + TABLE_A + "(" + ATTR_A_INT +
 					"," + ATTR_B_VARCHAR + "," + ATTR_C_VARCHAR + ")";
 			st.executeUpdate(sql);
 			for(int i=1; i <= ROWS_A; i++) {
-				sql = "insert into " + TABLE_A + " (" + ATTR_A + ","
-						+ ATTR_B + "," + ATTR_C + ") values(" +
+				sql = "INSERT INTO " + TABLE_A + " (" + ATTR_A + ","
+						+ ATTR_B + "," + ATTR_C + ") VALUES (" +
 						i + ",'" + (ATTR_B+i) + "','" + (ATTR_C+i) + "')";
 				st.executeUpdate(sql);
 			}
 			// table B (big table)
-			sql = "create table " + TABLE_B + "(" + ATTR_A_INT +
+			sql = "CREATE TABLE " + TABLE_B + "(" + ATTR_A_INT +
 					"," + ATTR_B_VARCHAR + ")";
 			st.executeUpdate(sql);
 			for(int i=1; i <= ROWS_B; i++) {
-				sql = "insert into " + TABLE_B + " (" + ATTR_A + ","
-						+ ATTR_B + ") values(" + i + ",'" + (ATTR_B+i)  + "')";
+				sql = "INSERT INTO " + TABLE_B + " (" + ATTR_A + ","
+						+ ATTR_B + ") VALUES (" + i + ",'" + (ATTR_B+i)  + "')";
 				st.executeUpdate(sql);
 			}
 		} catch (SQLException ex) {
@@ -194,6 +165,8 @@ public final class TestDatabase extends XDTester {
 		NodeList nl;
 		String s;
 		String tempDir;
+
+		// prepare temporary diredtory for data
 		try {
 			tempDir = clearTempDir().getCanonicalPath().replace('\'', '/');
 			if (!tempDir.endsWith("/")) {
@@ -203,6 +176,7 @@ public final class TestDatabase extends XDTester {
 			fail(ex);
 			return;
 		}
+
 		////////////////////////////////////////////////////////////////////////
 		// Primary tests: test DB environment
 		////////////////////////////////////////////////////////////////////////
@@ -212,10 +186,10 @@ public final class TestDatabase extends XDTester {
 			// creates DB environment
 			createDBEnv(tempDir);
 			st = _con.createStatement();
-			st.executeUpdate("create table abc(id int)");
-			st.executeUpdate("insert into abc (id) values(1)");
-			st.executeUpdate("insert into abc (id) values(2)");
-			rs = st.executeQuery("select * from abc");
+			st.executeUpdate("CREATE TABLE ABC(ID INT)");
+			st.executeUpdate("INSERT INTO ABC(ID) VALUES(1)");
+			st.executeUpdate("INSERT INTO ABC(ID) VALUES(2)");
+			rs = st.executeQuery("SELECT * FROM ABC");
 			rs.next();
 			assertEq(1, rs.getInt(1));
 			rs.next();
@@ -229,7 +203,7 @@ public final class TestDatabase extends XDTester {
 		} finally {
 			try {
 				rs.close();
-				st.executeUpdate("drop table abc");
+				st.executeUpdate("DROP TABLE ABC");
 				st.close();
 				_con.close();
 			} catch (SQLException ex) {
@@ -853,18 +827,40 @@ public final class TestDatabase extends XDTester {
 						+ "script method.");
 			}
 		} catch (Exception ex) {fail(ex);}
-		/* TODO:
-		 * - pro ResultSet, Statement a Service jsou implementovany metody
-		 *   void close() a boolean isClosed().
-		 * - pokud neni Statement, Service nebo ResultSet deklarovan jako
-		 *   "external", pak se provede automaticky close techto objektu
-		 *   na konci zpracovani XDefinice.
-		 *   Pro externi data ovsem musi uzivatel provest close
-		 *   ve volajicim programu!
+
+		////////////////////////////////////////////////////////////////////////
+		// Close database and clear data
+		////////////////////////////////////////////////////////////////////////
+		/* NOTE:
+		 * - For ResultSet, Statement a Service are implemented the methods
+		 *   void close() and boolean isClosed().
+		 * - If the Statement, Service, or ResultSet is not declared as
+		 *   "external", the close method is authomatically invoked
+		 *   For all such objects at the end of processing of XDefinition.
+		 *   However, for the external data the user must invoke closr
+		 *   in the programm!
 		 */
-		// clear environment created and used for testing database
-		cleanDBEnv(tempDir);
+		// close shared connection
+		if(_con != null) {
+			try {
+				if(!_con.isClosed()) {
+					_con.close();
+				}
+			} catch (SQLException ex) {
+				fail(ex);
+			}
+		}
+	    // database shutdown. */
+		try {
+			DriverManager.getConnection("jdbc:derby:;shutdown=true", null,null);
+			fail("Derby database cannot be halted.");
+		} catch (SQLException ex) {
+			// accept exception: database Derby is shutdown
+		}
+		// remove directory used for database data
+		deleteStore(new File(tempDir + File.separatorChar + DERBY_STORE));
 		clearTempDir(); // delete temporary files.
+		
 		resetTester();
 	}
 
