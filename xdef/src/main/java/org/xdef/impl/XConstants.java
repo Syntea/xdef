@@ -22,4 +22,7 @@ public interface XConstants {
 
 	/** XON/JSON root element. */
 	public static byte XON_ROOT = 64;
+
+	/** Name of model of any XON object. */
+	public static final String JSON_ANYOBJECT = "JSON.ANYOBJECT";
 }

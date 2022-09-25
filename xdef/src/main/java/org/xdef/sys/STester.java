@@ -85,7 +85,7 @@ public abstract class STester {
 
 	/** Create empty instance. */
 	public STester() {}
-	
+
 	/** Create empty instance.
 	 * @param out where to print messages.
 	 * @param err where to print errors.
@@ -1089,7 +1089,7 @@ public abstract class STester {
 		DecimalFormat df = new DecimalFormat("0.00");
 		df.setDecimalSeparatorAlwaysShown(true);
 		float duration = ((float)((System.currentTimeMillis() - t) / 1000.0));
-		System.err.flush();		
+		System.err.flush();
 		out.flush();
 		String s = "[INFO] " +
 			(errors > 0 ? errors + " error" + (errors > 1 ? "s,": ",") : "OK")

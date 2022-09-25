@@ -850,7 +850,7 @@ public final class TestDatabase extends XDTester {
 				fail(ex);
 			}
 		}
-	    // database shutdown. */
+		// database shutdown. */
 		try {
 			DriverManager.getConnection("jdbc:derby:;shutdown=true", null,null);
 			fail("Derby database cannot be halted.");
@@ -860,7 +860,7 @@ public final class TestDatabase extends XDTester {
 		// remove directory used for database data
 		deleteStore(new File(tempDir + File.separatorChar + DERBY_STORE));
 		clearTempDir(); // delete temporary files.
-		
+
 		resetTester();
 	}
 

@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.0.0, release-date 2022-09-17
+# Version 42.0.0, release-date 2022-09-25
 * Corrected bug in `uses` and `implements` in X-script when it refers 
 * to a node with specified namespace URI.
 * New things:

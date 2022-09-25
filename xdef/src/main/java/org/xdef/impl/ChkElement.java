@@ -176,7 +176,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		if (!_ignoreAll && getElement() != null) {
 			if (_xElement._xon > 0) { //XON
 				if (XDConstants.XON_NS_URI_W.equals(_xElement.getNSUri())) {
-					if (_element.hasAttribute(X_KEYATTR)) { /*xx*/
+					if (_element.hasAttribute(X_KEYATTR)) {
 						_xonKey = XonTools.xmlToJName(
 							_element.getAttribute(X_KEYATTR));
 					}
