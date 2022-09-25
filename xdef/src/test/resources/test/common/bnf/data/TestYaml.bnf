@@ -9,7 +9,7 @@
 /*019*/ c_double_quote ::= '"' /* “"” (#x22, double quote) */
 /*020*/ c_directive ::= "%"
 /*021* c_reserved ::= "@" | "`"
-   /* The “@” (#x40, at) and "`" (#x60, grave accent) are reserved for future */ 
+   /* The "@" (#x40, at) and "`" (#x60, grave accent) are reserved for future */ 
 /*022* c_indicator ::= "-" | "?" | ":" | "," | "[" | "]" | "{" | "}"
           | "#" | "&" | "*" | "!" | "|" | ">" | "'" | '"' | "%" | "@" | "`" 
 /*023*/ c_flow_indicator ::= "," | "[" | "]" | "{" | "}"
@@ -27,8 +27,8 @@
 /*033*/ s_white ::= #x20 | #x9
 /*034*/ ns_char ::= nb_char - s_white
 /*035*/ ns_dec_digit ::= [0-9]
-/*036*/ ns_hex_digit ::= ns_dec_digit | [A-F] | [a-f]
-/*037*/ ns_ascii_letter ::= [A-Z] | [a-z] 
+/*036*/ ns_hex_digit ::= ns_dec_digit | [A-Fa-f]
+/*037*/ ns_ascii_letter ::= [A-Za-z] 
 /*038*/ ns_word_char ::= ns_dec_digit | ns_ascii_letter | "-"
 /*039*/ ns_uri_char ::= "%" ns_hex_digit ns_hex_digit | ns_word_char | "#"
           | ";" | "/" | "?" | ":" | "@" | "&" | "=" | "+" | "$" | ","

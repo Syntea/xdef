@@ -102,7 +102,7 @@ public final class TestXdef extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			parse(xp,"", "<tns:note><tns:to/></tns:note>", reporter);
-			System.out.println("Error not recognized");
+			fail("Error not recognized");
 		} catch (Exception ex) {
 			if (!reporter.printToString().contains("XML080")) {fail(ex);}
 		}

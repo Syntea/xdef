@@ -6,7 +6,6 @@ import java.text.DecimalFormat;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.Constructor;
 import java.math.BigDecimal;
@@ -86,30 +85,7 @@ public abstract class STester {
 
 	/** Create empty instance. */
 	public STester() {}
-
-	public final void printlnOut(final String s) {
-		flushAll();
-		_out.println(s);
-		if (_outStream != null) {
-			_outStream.println(s);
-		}
-		flushAll();
-	}
-	public final void printlnErr(final String s) {
-		flushAll();
-		_err.println(s);
-		if (_outStream != null) {
-			_outStream.println(s);
-		}
-		flushAll();
-	}
-	public final void flushAll() {
-		_err.flush();
-		_out.flush();
-		if (_outStream != null) {
-			_outStream.flush();
-		}
-	}
+	
 	/** Create empty instance.
 	 * @param out where to print messages.
 	 * @param err where to print errors.
@@ -274,16 +250,28 @@ public abstract class STester {
 			}
 		}
 	}
-	/** Write the information message to out stream.
-	 * The class from which the error was reported is taken from
-	 * <code>_className</code> field.
-	 * @param ex Exception to be printed.
-	 */
-	public final void putInfo(final Throwable ex) {
-		putInfo(ex.toString());
-		String s = "[INFO] " + printThrowable(ex);
-		int i = s.indexOf("\n\tat ");
-		printlnOut(s.substring(i+1));
+	private void printlnOut(final String s) {
+		flushAll();
+		_out.println(s);
+		if (_outStream != null) {
+			_outStream.println(s);
+		}
+		flushAll();
+	}
+	private void flushAll() {
+		_out.flush();
+		_err.flush();
+		if (_outStream != null) {
+			_outStream.flush();
+		}
+	}
+	private void printErr(final String s) {
+		flushAll();
+		_err.print(s);
+		if (_outStream != null) {
+			_outStream.print(s);
+		}
+		flushAll();
 	}
 	/** Write the information message to the out stream.
 	 * The class from which an error was reported is taken from the field
@@ -291,23 +279,8 @@ public abstract class STester {
 	 * @param msg Text of information message.
 	 */
 	public final void putInfo(final String msg) {
-		String text = "[INFO] " + _name +
-			(msg != null && !msg.trim().isEmpty() ? '\n' + msg.trim() : "");
-		_errors++;
-		// in Java 1.6 is not avalable the method Throwable.getStackTrace()
-		// so we grab the information from printStackTrace and we create
-		// the info string from it.
-		String s = printThrowable(new Throwable(""));
-		int i = s.indexOf(_className + ".");
-		i = s.indexOf('\n', i);
-		if (i >= 0) {
-			s = s.substring(0, i);
-		}
-		i = s.lastIndexOf('\n');
-		if (i >= 0) {
-			s = s.substring(i +1);
-		}
-		printlnOut(text + "\n" + s);
+		printlnOut("[INFO] " + _name +
+			(msg != null && !msg.trim().isEmpty() ? ": " + msg : ""));
 	}
 	/** Increase error counter and write the information to the error stream.
 	 * The class from which the error was reported is taken from
@@ -315,10 +288,10 @@ public abstract class STester {
 	 * @param ex Exception to be printed.
 	 */
 	public final void putErrMsg(final Throwable ex) {
+		String s = printThrowable(ex);
 		putErrMsg(ex.toString());
-		String s = "[ERROR] " + printThrowable(ex);
 		int i = s.indexOf("\n\tat ");
-		printlnErr(s.substring(i+1));
+		printErr(s.substring(i+1));
 	}
 	/** Increase error counter and write the information to the error stream.
 	 * The class from which an error was reported is taken from the field
@@ -342,7 +315,7 @@ public abstract class STester {
 		if (i >= 0) {
 			s = s.substring(i +1);
 		}
-		printlnErr(text + "\n" + s);
+		printErr(text + "\n" + s + '\n');
 	}
 	/** Increase error counter and write the default information to the print
 	 * stream. If the print stream is null the message is ignored.
@@ -631,7 +604,7 @@ public abstract class STester {
 	 * <code>fail</code>.
 	 * @param x argument to be checked for true.
 	 */
-	public final void assertNull(final Object x) {assertNull(x, ""+x);}
+	public final void assertNull(final Object x) {assertNull(x, "" + x);}
 	/** Check if the argument is null. If not then invoke the method
 	 * <code>fail</code>.
 	 * @param x argument to be checked for true.
@@ -945,22 +918,14 @@ public abstract class STester {
 		if (_resultInfo == null) {
 			_resultInfo = "";
 		}
-		if (log != null) {
-			log.flush();
-		}
-		err.flush();
-		out.flush();
 		if (printOK && out != null) {
-			String s = "[INFO] ";
 			float duration =
 				((float) ((System.currentTimeMillis() - _timeStamp) / 1000.0));
-			if (_errors == 0) {
-				s += "OK ";
-			} else {
-				s += _errors + " error"+(_errors>1?"s":"") + " in ";
-			}
+			String s = "[INFO] " + (_errors == 0
+				? "OK" : _errors + " error"+(_errors>1?"s":"") + " in ");
 			s += _name + (_resultInfo.isEmpty() ? "" : ", " + _resultInfo)
 				+ ", time=" + new DecimalFormat("0.00").format(duration) + "s";
+			out.flush();
 			System.err.flush();
 			if (log != null) {
 				log.println(s);
@@ -990,7 +955,7 @@ public abstract class STester {
 			c.setAccessible(true);
 			return (STester) c.newInstance(new Object[0]);
 		} catch (Exception ex) {
-			throw new RuntimeException("Can't invoke: new "+className+"()",ex);
+			throw new RuntimeException("Can't invoke: new " + className + "()");
 		}
 	}
 	private static void cancel(final String msg) {
@@ -1124,14 +1089,12 @@ public abstract class STester {
 		DecimalFormat df = new DecimalFormat("0.00");
 		df.setDecimalSeparatorAlwaysShown(true);
 		float duration = ((float)((System.currentTimeMillis() - t) / 1000.0));
+		System.err.flush();		
 		out.flush();
-		err.flush();
-		log.flush();
 		String s = "[INFO] " +
 			(errors > 0 ? errors + " error" + (errors > 1 ? "s,": ",") : "OK")
 			+ " " + (info != null ? info + ", ": "") +
 			"total time: " + df.format(duration) + "s";
-		System.err.flush();		
 		if (log != null) {
 			log.println(s);
 			log.flush();
@@ -1146,9 +1109,11 @@ public abstract class STester {
 	 * @return string with printable representation of Throwable.
 	 */
 	public final static String printThrowable(final Throwable exception) {
-		StringWriter swr = new StringWriter();
-		exception.printStackTrace(new PrintWriter(swr));
-		return swr.toString();
+		java.io.CharArrayWriter chw = new java.io.CharArrayWriter();
+		java.io.PrintWriter pw = new java.io.PrintWriter(chw);
+		exception.printStackTrace(pw);
+		pw.close();
+		return chw.toString();
 	}
 
 	/** Add Java sources to parameter list of the Java compiler.
@@ -1172,8 +1137,7 @@ public abstract class STester {
 	 * @param files files with Java sources (may be a file or a directory).
 	 * @return string with path to compiled classes.
 	 */
-	public static String compileSources(
-		final String classpath,
+	public static String compileSources(final String classpath,
 		final String classDir,
 		final File... files) {
 		String sources[] = new String[files.length];
@@ -1215,8 +1179,8 @@ public abstract class STester {
 		// prepare parameters
 		ArrayList<String> ar = new ArrayList<String>();
 		ar.add("-classpath");
-		ar.add((classpath.isEmpty()
-			? "" : classpath+File.pathSeparatorChar)+classDir); // classpath
+		ar.add((classpath.isEmpty() ? "" : classpath + File.pathSeparatorChar)
+			+ classDir); // classpath
 		ar.add("-d");
 		ar.add(classDir); // where to write compiled classes
 		// source files
@@ -1238,7 +1202,7 @@ public abstract class STester {
 					err.write((s + '\n').getBytes());
 				}
 				err.write("End params\n".getBytes());
-			} catch (Exception ex) {} // never should happen
+			} catch (Exception ex) {} // never sould happen
 			throw new RuntimeException(
 				"Java compilation failed:\n" + err.toString());
 		}
