@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Stack;
 import org.xdef.XDConstants;
 import org.xdef.impl.XConstants;
+import static org.xdef.impl.XConstants.JSON_ANYOBJECT;
 import org.xdef.impl.XOccurrence;
 import org.xdef.msg.JSON;
 import org.xdef.msg.SYS;
@@ -17,7 +18,6 @@ import org.xdef.sys.StringParser;
 import org.xdef.xon.IniReader;
 import org.xdef.xon.XonNames;
 import static org.xdef.xon.XonNames.ANY_NAME;
-import static org.xdef.xon.XonNames.JSON_ANYOBJECT;
 import static org.xdef.xon.XonNames.ONEOF_CMD;
 import static org.xdef.xon.XonNames.SCRIPT_CMD;
 import static org.xdef.xon.XonNames.X_ARRAY;
@@ -65,7 +65,6 @@ public final class CompileXonXdef extends XScriptParser {
 		final byte xonMode,
 		final SBuffer name,
 		final ReportWriter reporter) {
-//		super();
 		super(StringParser.XMLVER1_0);
 		_pcomp = pcomp;
 		_xonMode = xonMode;
@@ -668,7 +667,6 @@ public final class CompileXonXdef extends XScriptParser {
 					PNode eee = genXonValue(ANY_NAME, (JValue) anyItem,ee);
 					setAttr(eee, X_KEYATTR, new SBuffer("string()", getPosition()));
 					ee.addChildNode(eee);
-//					setAnyOccurrence(eee);
 				}
 			}
 		}
@@ -774,31 +772,6 @@ public final class CompileXonXdef extends XScriptParser {
 		return e;
 	}
 
-	/** Create PNode for %any.
-	 * @param xon XON/JSON parsed data.
-	 * @param parent parent PNode,
-	 * @return created PNode.
-	 */
-	private void genXonAny(final JAny jo, final PNode parent) {
-		if (_anyXPos == null) {
-			_anyXPos = _xonModel._parent._xdef.getName() + "#" + JSON_ANYOBJECT;
-		}
-		String refName = _anyXPos;
-		SBuffer val;
-		PAttr xscr = _pcomp.getXdefAttr(parent, "script" , false, false);
-		if (xscr != null) {
-			val = xscr.getValue();
-			String s = val.getString().trim();
-			if (!s.endsWith(";") && !s.isEmpty()) {
-				s += "; ";
-			}
-			val = new SBuffer(s + "ref " + refName, val);
-		} else {
-			val = new SBuffer("ref " + refName, parent.getName());
-		}
-		setXDAttr(parent, "script", val);
-	}
-
 	/** Create PNode with XON/JSON model from XON/JSON parsed data.
 	 * @param xon XON/JSON parsed data.
 	 * @param parent parent PNode,
@@ -837,59 +810,112 @@ public final class CompileXonXdef extends XScriptParser {
 		return e;
 	}
 
+	/** Create PNode for %any.
+	 * @param xon XON/JSON parsed data.
+	 * @param e parent PNode,
+	 * @return created PNode.
+	 */
+	private void genXonAny(final JAny jo, final PNode e) {
+		if (_anyXPos == null) {
+			_anyXPos = _xonModel._parent._xdef.getName() + "#" + JSON_ANYOBJECT;
+		}
+		String refName = _anyXPos;
+		SBuffer val = jo != null && jo.getSBuffer() != null
+			? jo.getSBuffer() : new SBuffer("", e._name);
+		String s = val.getString().trim();
+		if (!s.isEmpty() && !s.endsWith(";")) {
+			s += "; ";
+		}
+		String c = "map".equals(e._localName) ? "M"
+			: "array".equals(e._localName) ? "A" : "";
+		val = new SBuffer(s + "ref " + refName + c, e.getName());
+		setXDAttr(e, "script", val);
+	}
+
 	void genXonAnyModels(PNode pn, String anyName) {
-		PNode px = new PNode(anyName, new SPosition(1,1,anyName, null),
+		PNode e = new PNode(anyName, new SPosition(1,1,anyName, null),
 			pn._parent, pn._xdVersion, pn._xmlVersion);
+		e._xonMode = XConstants.XON_ROOT;
 		pn._localName = anyName;
-		pn._parent.addChildNode(px);
+		pn._parent.addChildNode(e);
 		pn._parent._nsPrefixes.put(
 			XDConstants.XON_NS_PREFIX, XPreCompiler.NS_XON_INDEX);
-		px._xonMode = XConstants.XON_ROOT;
 		for (String key : pn._nsPrefixes.keySet()) {
-			px._nsPrefixes.put(key, pn._nsPrefixes.get(key));
+			e._nsPrefixes.put(key, pn._nsPrefixes.get(key));
 		}
-		PNode e, ee;
-		e = genXDElement(px, "choice", new SPosition(2,1,anyName, null));
-		e._xonMode = XConstants.XON_MODE_W;
-		setXDAttr(e,"script",new SBuffer("*;",new SPosition(3,1,anyName,null)));
-		px.addChildNode(e);
-		e._parent._nsPrefixes.put(
+		PNode f, g;
+		f = genXDElement(e, "choice", new SPosition(2,1,anyName, null));
+		f._xonMode = XConstants.XON_MODE_W;
+		setXDAttr(f,"script",new SBuffer("*;",new SPosition(3,1,anyName,null)));
+		f._parent._nsPrefixes.put(
 			XDConstants.XON_NS_PREFIX, XPreCompiler.NS_XON_INDEX);
-		ee = genJElement(e, X_ITEM, new SPosition(4,1,anyName, null));
-		ee._xonMode = XConstants.XON_MODE_W;
-		e.addChildNode(ee);
-		ee._parent._nsPrefixes.put(
+		e.addChildNode(f);
+		g = genJElement(f, X_ITEM, new SPosition(4,1,anyName, null));
+		g._xonMode = XConstants.XON_MODE_W;
+		g._parent._nsPrefixes.put(
 			XDConstants.XON_NS_PREFIX, XPreCompiler.NS_XON_INDEX);
-		setAttr(ee, X_KEYATTR,
+		setAttr(g, X_KEYATTR,
 			new SBuffer("? string();", new SPosition(5,1,anyName, null)));
-		setAttr(ee, X_VALATTR,
+		setAttr(g, X_VALATTR,
 			new SBuffer("jvalue();", new SPosition(6,1,anyName, null)));
-		ee = genJElement(e, X_ARRAY, new SPosition(7,1,anyName, null));
-		ee._xonMode = XConstants.XON_MODE_W;
-		e.addChildNode(ee);
-		setXDAttr(ee, "script",
+		f.addChildNode(g);
+		g = genJElement(f, X_ARRAY, new SPosition(7,1,anyName, null));
+		g._xonMode = XConstants.XON_MODE_W;
+		setXDAttr(g, "script",
 			new SBuffer("*; ref " + anyName, new SPosition(8,1,anyName, null)));
-		ee._parent._nsPrefixes.put(
+		g._parent._nsPrefixes.put(
 			XDConstants.XON_NS_PREFIX, XPreCompiler.NS_XON_INDEX);
-		setAttr(ee, X_KEYATTR,
+		setAttr(g, X_KEYATTR,
 			new SBuffer("? string();", new SPosition(9,1,anyName, null)));
-		ee = genJElement(e, X_MAP, new SPosition(10,1,anyName,null));
-		ee._xonMode = XConstants.XON_MODE_W;
-		e.addChildNode(ee);
-		ee._parent._nsPrefixes.put(
+		f.addChildNode(g);
+		g = genJElement(f, X_MAP, new SPosition(10,1,anyName,null));
+		g._xonMode = XConstants.XON_MODE_W;
+		g._parent._nsPrefixes.put(
 			XDConstants.XON_NS_PREFIX, XPreCompiler.NS_XON_INDEX);
-		setXDAttr(ee, "script", new SBuffer("*; ref " + anyName,
+		setXDAttr(g, "script", new SBuffer("*; ref " + anyName,
 			new SPosition(11,1,anyName,null)));
-		setAttr(ee, X_KEYATTR, new SBuffer("? string();",
+		setAttr(g, X_KEYATTR, new SBuffer("? string();",
 			new SPosition(12,1,anyName, null)));
+		f.addChildNode(g);
+		e = new PNode(anyName+"A", new SPosition(1,1,anyName, null),
+			pn._parent, pn._xdVersion, pn._xmlVersion);
+		pn._parent.addChildNode(e);
+		for (String key : pn._nsPrefixes.keySet()) {
+			e._nsPrefixes.put(key, pn._nsPrefixes.get(key));
+		}
+		e._xonMode = XConstants.XON_ROOT;
+		f = genJElement(e, "array", new SPosition(2,1,anyName, null));
+		e.addChildNode(f);
+		f._xonMode = XConstants.XON_MODE_W;
+		f._parent._nsPrefixes.put(
+			XDConstants.XON_NS_PREFIX, XPreCompiler.NS_XON_INDEX);
+		setXDAttr(f, "script",
+			new SBuffer("*; ref " + anyName, new SPosition(8,1,anyName, null)));
+
+		e = new PNode(anyName+"M", new SPosition(1,1,anyName, null),
+			pn._parent, pn._xdVersion, pn._xmlVersion);
+		pn._parent.addChildNode(e);
+		for (String key : pn._nsPrefixes.keySet()) {
+			e._nsPrefixes.put(key, pn._nsPrefixes.get(key));
+		}
+		e._xonMode = XConstants.XON_ROOT;
+		f = genJElement(e, "map", new SPosition(2,1,anyName, null));
+		e.addChildNode(f);
+		f._xonMode = XConstants.XON_MODE_W;
+		f._parent._nsPrefixes.put(
+			XDConstants.XON_NS_PREFIX, XPreCompiler.NS_XON_INDEX);
+		setXDAttr(f, "script",
+			new SBuffer("*; ref " + anyName, new SPosition(8,1,anyName, null)));
 /*#if DEBUG*#/
 		String dbgSwitches = System.getProperty("xdef-xon_debug");
 		if (dbgSwitches != null && dbgSwitches.contains("showModel")) {
-			// display created model
+			// display the created model
 			System.out.flush();
 			System.err.flush();
+			System.out.println("*** xdef: \"" + (f._parent._xdef != null
+				? e._parent._xdef.getName() : "???") +'"');
 			System.out.println(
-				"* "+org.xdef.xml.KXmlUtils.nodeToString(px.toXML(),true)+" *");
+				"* "+org.xdef.xml.KXmlUtils.nodeToString(e.toXML(),true)+" *");
 			System.out.flush();
 		}
 /*#end*/
@@ -924,11 +950,13 @@ public final class CompileXonXdef extends XScriptParser {
 /*#if DEBUG*#/
 		String dbgSwitches = System.getProperty("xdef-xon_debug");
 		if (dbgSwitches != null && dbgSwitches.contains("showModel")) {
-			// display created model
+			// display the created model
 			System.out.flush();
 			System.err.flush();
+			System.out.println("*** xdef: \"" + (p._parent._xdef != null
+				? p._parent._xdef.getName() : "???") +'"');
 			System.out.println(
-				"* "+org.xdef.xml.KXmlUtils.nodeToString(p.toXML(),true)+" *");
+				org.xdef.xml.KXmlUtils.nodeToString(p.toXML(),true)+"\n***");
 			System.out.flush();
 		}
 /*#end*/
@@ -966,7 +994,7 @@ public final class CompileXonXdef extends XScriptParser {
 		XonModelParser(CompileXonXdef jx) {_kinds.push(_kind = UNDEFINED);}
 
 ////////////////////////////////////////////////////////////////////////////////
-// JParser interface
+// Implementation of JParser interface
 ////////////////////////////////////////////////////////////////////////////////
 
 		@Override
