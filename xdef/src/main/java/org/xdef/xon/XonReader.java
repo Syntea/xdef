@@ -731,7 +731,7 @@ public final class XonReader extends StringParser implements XonParsers {
 		} else if (isChar('[')) {
 			readArray();
 		} else if (_jdef && isToken(ANY_OBJ)) {
-			SPosition spos = getPosition(); // xdef %any
+			SPosition spos = getPosition(); // xdef %anyObj
 			spos.setIndex(getIndex() - ANY_OBJ.length());
 			SBuffer name = new SBuffer(ANY_OBJ, spos);
 			SBuffer val = new SBuffer("", spos);
@@ -740,7 +740,7 @@ public final class XonReader extends StringParser implements XonParsers {
 				skipSpacesOrComments();
 				XonTools.JValue jv = readSimpleValue();
 				if (!(((XonTools.JValue) jv).getValue() instanceof String)) {
-					//After ":" in the command $any must follow simpleValue
+					//After ":" in the command %anyObj must follow simpleValue
 					error(JSON.JSON021);
 				} else {
 					val = jv.getSBuffer();

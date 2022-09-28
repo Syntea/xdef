@@ -1920,6 +1920,44 @@ public class TestXon extends XDTester {
 			assertNull(testX(xp,"x", s, "\"\\\"\""));
 			assertNull(testX(xp,"x", s, "\"\\\"\\\"\""));
 		} catch (Exception ex) {fail(ex);}
+		try {
+			xdef = // test XON reference to %any in %oneOf
+"<xd:def xmlns:xd='" + _xdNS + "' name='X' root='Any'>\n" +
+"<xd:xon name=\"Any\">\n" +
+" [ %oneOf, \"jvalue();\",\n" +
+"   [ %script=\"*; ref anyA;\" ],\n" +
+"   { %script=\"*; ref anyM;\" }\n" +
+" ]\n" +
+"</xd:xon>\n" +
+"<xd:xon name=\"anyA\">\n" +
+" [ %anyObj ]\n" +
+"</xd:xon>\n" +
+"<xd:xon name=\"anyM\">\n" +
+" { %anyName: %anyObj }\n"+
+"</xd:xon>\n" +
+"<xd:component>\n"+
+"  %class test.xdef.MyTest_xxx %link X#Any;\n"+
+"</xd:component>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			genXComponent(xp, clearTempDir());
+			s = "test.xdef.MyTest_xxx";
+			// value
+			assertNull(testX(xp,"X", s, "true"));
+			assertNull(testX(xp,"X", s, "1"));
+			assertNull(testX(xp,"X", s, "\"\""));
+			// array
+			assertNull(testX(xp,"X", s, "[]"));
+			assertNull(testX(xp,"X", s, "[1]"));
+			assertNull(testX(xp,"X", s, "[1, true]"));
+			assertNull(testX(xp,"X", s, "[[]]"));
+			assertNull(testX(xp,"X", s, "[{}]"));
+			// map
+			assertNull(testX(xp,"X", s, "{}"));
+			assertNull(testX(xp,"X", s, "{a:1}"));
+			assertNull(testX(xp,"X", s, "{a:1, b:[],c:null,d:[], e:{}}"));
+			assertNull(testX(xp,"X", s, "{a:1, b:[],c:null,d:[], e:{}}"));
+		} catch (Exception ex) {fail(ex);}
 		clearTempDir(); // clear temporary directory
 	}
 

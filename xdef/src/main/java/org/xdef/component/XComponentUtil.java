@@ -739,4 +739,13 @@ public class XComponentUtil {
 		}
 		return toXonXD(xc, new KNamespace());
 	}
+
+	/** Convert XML name to Java name.	 * @param xmlName XML name.
+	 * @return Java name created from XML name,
+	 */
+	public static final String xmlToJavaName(final String xmlName) {
+		return "_".equals(xmlName) ? "$_" // Java 9 not allows indentifiers "_"
+			: xmlName.replace(':','$').replace('-','_').replace('.','_');
+	}
+
 }

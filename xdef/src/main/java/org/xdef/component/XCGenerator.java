@@ -16,7 +16,7 @@ import static org.xdef.component.XCGeneratorBase.checkUnique;
 import static org.xdef.component.XCGeneratorBase.genCreatorOfAttribute;
 import static org.xdef.component.XCGeneratorBase.getParsedResultGetter;
 import static org.xdef.component.XCGeneratorBase.getUniqueName;
-import static org.xdef.component.XCGeneratorBase.javaName;
+import static org.xdef.component.XComponentUtil.xmlToJavaName;
 import org.xdef.impl.XConstants;
 import org.xdef.impl.XData;
 import org.xdef.impl.XElement;
@@ -139,7 +139,7 @@ final class XCGenerator extends XCGeneratorXON {
 					}
 				}
 			} else {
-				name = javaName(xdata.getName());
+				name = xmlToJavaName(xdata.getName());
 			}
 			name = addVarName(varNames, name, xdata.getXDPosition(), ext);
 			genAttrNameVariable(name, xdata, vars);
@@ -298,7 +298,7 @@ final class XCGenerator extends XCGeneratorXON {
 					if (isRoot && nodes.length==1 && xe.getAttrs().length==0) {
 						 // no attrs,only text; direct getters/setters
 						 // for text child
-						genDirectSetterAndGetter(xe, javaName(xe.getName()),
+						genDirectSetterAndGetter(xe,xmlToJavaName(xe.getName()),
 							null, true, setters, getters, sbi);
 					}
 					continue;
@@ -316,8 +316,8 @@ final class XCGenerator extends XCGeneratorXON {
 					if (name != null) {
 						newClassName = name;
 						if ((ndx = name.indexOf(';')) > 0) {
-							newClassName = javaName(name.substring(0, ndx));
-							name = javaName(name.substring(ndx+1));
+							newClassName = xmlToJavaName(name.substring(0,ndx));
+							name = xmlToJavaName(name.substring(ndx+1));
 						} else if ((ndx = name.indexOf(" %with ")) > 0) {
 							if (extClazz.startsWith(" extends")) {
 								ext = true;
@@ -347,7 +347,7 @@ final class XCGenerator extends XCGeneratorXON {
 							newClassName = name;
 						}
 					} else {
-						newClassName = name = javaName(xe1.getName());
+						newClassName = name = xmlToJavaName(xe1.getName());
 					}
 					//if the element is not processed by user XComponent and
 					//if it is unique and if the only child node of this node

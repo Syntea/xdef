@@ -8,8 +8,8 @@ import org.xdef.XDValue;
 import static org.xdef.component.XCGeneratorBase.LN;
 import static org.xdef.component.XCGeneratorBase.RESERVED_NAMES;
 import static org.xdef.component.XCGeneratorBase.getUniqueName;
-import static org.xdef.component.XCGeneratorBase.javaName;
 import static org.xdef.component.XCGeneratorBase.modify;
+import static org.xdef.component.XComponentUtil.xmlToJavaName;
 import org.xdef.impl.XConstants;
 import org.xdef.impl.XData;
 import org.xdef.impl.XElement;
@@ -344,7 +344,7 @@ class XCGeneratorXON extends XCGeneratorBase1 implements XonNames {
 		final Set<String> varNames,
 		final StringBuilder getters) {
 		String key = keys.get(0);
-		String name = javaName(
+		String name = xmlToJavaName(
 			"get$" + XonTools.toXmlName(XonTools.toXmlName(key)));
 		name = getUniqueName(getUniqueName(
 			getUniqueName(name,RESERVED_NAMES), classNames),
@@ -394,7 +394,7 @@ class XCGeneratorXON extends XCGeneratorBase1 implements XonNames {
 					continue;
 				}
 				if (item.getCode() == CodeTable.LD_CONST) {
-					name = javaName(
+					name = xmlToJavaName(
 						namePrefix + XonTools.toXmlName(code[i].stringValue()));
 					name = getUniqueName(getUniqueName(getUniqueName(name,
 						RESERVED_NAMES), classNames), varNames);
