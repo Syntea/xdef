@@ -34,6 +34,7 @@ import static org.xdef.XDValueID.X_UNIQUESET_M;
 import org.xdef.XDValueType;
 import org.xdef.XDXmlOutStream;
 import org.xdef.component.XComponent;
+import org.xdef.component.XComponentUtil;
 import static org.xdef.impl.XConstants.JSON_ANYOBJECT;
 import org.xdef.impl.code.CodeUniqueset;
 import org.xdef.impl.code.DefOutStream;
@@ -404,6 +405,41 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 */
 	final void setCreateMode(boolean createMode) {_createMode = createMode;}
 
+	/** Create instance of XComponent object from the class given by name.
+	 * @param className name of class which to create the XComponent object.
+	 * @return true if XComponent object was created.
+	 */
+	private boolean createXComponent(final String className) {
+		try {
+			return createXComponent(Class.forName(className,
+				false, Thread.currentThread().getContextClassLoader()));
+		} catch (Exception ex) {
+			return false;
+		}
+	}
+
+	/** Create instance of XComponent object from the class.
+	 * @param y the class from which to create the XComponent object.
+	 * @return true if XComponent object was created.
+	 */
+	private boolean createXComponent(final Class<?> y) {
+		try {
+			Constructor<?> c = y.getDeclaredConstructor(
+				XComponent.class, XXNode.class);
+			c.setAccessible(true);
+			XComponent xc  = (XComponent)
+				y.getDeclaredConstructor().newInstance();
+			xc = (XComponent) c.newInstance(
+				(XComponent)null, _chkRoot);
+			_xclass = y;
+			_chkRoot.setXComponent(_xComponent=xc);
+			return true;
+		} catch (Exception ex) {
+			_xComponent = null;
+			return false;
+		}
+	}
+
 	/** Create root check element for given name.
 	 * @param element The element
 	 * @param checkRoot if true then the root check element is checked against
@@ -439,6 +475,9 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 				//Element &{0} is not defined as root&{1}{ in X-definition }
 				error(XDEF.XDEF502, element.getNodeName() + s, _xdef.getName());
 				_chkRoot.setElemValue(null);
+				return _chkRoot;
+			}
+			if (_reporter.errors()) {
 				return _chkRoot;
 			}
 		} else {
@@ -570,31 +609,16 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 							}
 						}
 					}
-					Constructor<?> c;
-					try {
-						c = _xclass.getDeclaredConstructor(
-							XComponent.class, XXNode.class);
-						c.setAccessible(true);
-						_xComponent = (XComponent) c.newInstance(
-							(XComponent)null, _chkRoot);
-						_chkRoot.setXComponent(_xComponent);
-					} catch (Exception ex) {
-						Class<?>[] classes = _xclass.getDeclaredClasses();
-						for (Class<?> cls : classes) {
-							c = cls.getDeclaredConstructor();
-							try {
-								c = cls.getDeclaredConstructor(
-									XComponent.class, XXNode.class);
-								c.setAccessible(true);
-								XComponent xc  = (XComponent)
-									cls.getDeclaredConstructor().newInstance();
-								xc = (XComponent) c.newInstance(
-									(XComponent)null, _chkRoot);
-								_xclass = cls;
-								_chkRoot.setXComponent(_xComponent=xc);
-								break;
-							} catch (Exception exx) {}
-							_xComponent = null;
+					if (!createXComponent(_xclass)) {
+						String x = XComponentUtil.xmlToJavaName(_chkRoot
+							.getChkElement().getXMElement().getName());
+						if (!createXComponent(className + '$' + x)) {
+							Class<?>[] classes = _xclass.getDeclaredClasses();
+							for (Class<?> y : classes) {
+								if (createXComponent(y)) {
+									break;
+								}
+							}
 						}
 					}
 					if (_xComponent == null) {

@@ -158,14 +158,6 @@ class XCGeneratorBase {
 		_genJavadoc = genJavadoc;
 	}
 
-	/** Convert XML name to Java name.	 * @param xmlName XML name.
-	 * @return Java name created from XML name,
-	 */
-	static final String javaName(final String xmlName) {
-		return "_".equals(xmlName) ? "$_" // Java 9 not allows indentifiers "_"
-			: xmlName.replace(':','$').replace('-','_').replace('.','_');
-	}
-
 	/** Replace all occurrences of the key in the source by the value.
 	 * @param source string source.
 	 * @param replacements array of tuples of key an replacement.
@@ -408,7 +400,7 @@ class XCGeneratorBase {
 	final void genAttrNameVariable(final String name,
 		final XData xdata,
 		final StringBuilder sb) {
-		String modelName = javaName(xdata.getName());
+		String modelName = XComponentUtil.xmlToJavaName(xdata.getName());
 		sb.append(modify(
 (_genJavadoc ? "\t/** Name of attribute &{name} in data\".*/"+LN : "") +
 "\tprivate String XD_Name_&{name}=\"&{name1}\";"+LN,
