@@ -104,8 +104,7 @@ public class TestXon extends XDTester {
 				reporter.clear();
 			}
 			if (!XonUtils.xonEqual(o, x)) {
-				result += "** 2\n" +  data + "\n" +
-					XonUtils.toXonString(x, true) + "\n";
+				result += "** 2\n" + XonUtils.toXonString(x, true) + "\n";
 			}
 			xd = xp.createXDDocument(xdName);
 			XComponent xc = xd.jparseXComponent(data, null, reporter);
@@ -118,8 +117,7 @@ public class TestXon extends XDTester {
 			} else {
 				x = xc.toXon();
 				if (!XonUtils.xonEqual(o, x)) {
-					result += "** 5\n" +  data + "\n" +
-						XonUtils.toXonString(x, true) + "\n";
+					result += "** 5\n" + XonUtils.toXonString(x, true) + "\n";
 				}
 				xd = xp.createXDDocument(xdName);
 				x = x instanceof String ? XonUtils.toJsonString(x) : x;
@@ -130,8 +128,7 @@ public class TestXon extends XDTester {
 				}
 				x = xc.toXon();
 				if (!XonUtils.xonEqual(o, x)) {
-					result += "** 7\n" +  data + "\n" +
-						XonUtils.toXonString(x, true) + "\n";
+					result += "** 7\n" + XonUtils.toXonString(x, true) + "\n";
 				}
 				if (cls != null) {
 					Class<?> clazz = Class.forName(cls);
@@ -142,8 +139,7 @@ public class TestXon extends XDTester {
 					}
 					x = xc.toXon();
 					if (!XonUtils.xonEqual(o, x)) {
-						result += "** 9\n" +  data + "\n" +
-							XonUtils.toXonString(x, true) + "\n";
+						result += "** 9\n" + XonUtils.toXonString(x, true)+"\n";
 					}
 					xd = xp.createXDDocument(xdName);
 					x = x instanceof String ? XonUtils.toJsonString(x) : x;
@@ -154,16 +150,14 @@ public class TestXon extends XDTester {
 					}
 					x = xc.toXon();
 					if (!XonUtils.xonEqual(o, x)) {
-						result += "** 11\n" +  data + "\n" +
-							XonUtils.toXonString(x, true) + "\n";
+						result += "** 11\n" + XonUtils.toXonString(x,true)+"\n";
 					}
 				}
 			}
 		} catch (Exception ex) {
-//			ex.printStackTrace();
-			result += ex + "\n";
+			result += printThrowable(ex) + "\n";
 		}
-		return result.isEmpty() ? null : result;
+		return result.isEmpty() ? null : data + "\n" + result;
 	}
 
 	/** Run all tests. */
@@ -1874,7 +1868,7 @@ public class TestXon extends XDTester {
 			assertNotNull(testX(xp,"a", s, "true")); // must be error
 			assertNotNull(testX(xp,"a", s, "{}")); // must be error!
 
-			// xdef M; root is map with any items
+			// xdef m; root is map with any items
 			s = "test.xdef.MyTestX_AnyXXm";
 			assertNull(testX(xp,"m", s, "{}"));
 			assertNull(testX(xp,"m", s, "{a:1}"));
@@ -1883,7 +1877,7 @@ public class TestXon extends XDTester {
 			assertNotNull(testX(xp,"m", s, "true")); // must be error!
 			assertNotNull(testX(xp,"m", s, "[]")); // must be error!
 
-			// xdef X; root is $anyObj
+			// xdef x; root is $anyObj
 			// 1. array
 			s = "test.xdef.MyTestX_AnyXXx";
 			assertNull(testX(xp,"x", s, "[]"));
@@ -1919,6 +1913,50 @@ public class TestXon extends XDTester {
 			assertNull(testX(xp,"x", s, "\" \t\n \""));
 			assertNull(testX(xp,"x", s, "\"\\\"\""));
 			assertNull(testX(xp,"x", s, "\"\\\"\\\"\""));
+		} catch (Exception ex) {fail(ex);}
+		try {
+			xdef = // anyObj
+"<xd:collection xmlns:xd='" + _xdNS + "'>\n" +
+"<xd:def name=\"X\" root=\"x\">\n" +
+"<xd:xon name=\"x\">\n"  +
+"  %anyObj\n"  +
+"</xd:xon>\n"  +
+"<xd:component>\n"+
+"  %class test.xdef.MyTestX_AnyObj %link X#x;\n"+
+"</xd:component>\n"+
+"</xd:def>\n"+
+"</xd:collection>";
+			xp = compile(xdef);
+			genXComponent(xp, clearTempDir());
+
+			s = "test.xdef.MyTestX_AnyObj";
+			assertNull(testX(xp,"X", s, "[]"));
+			assertNull(testX(xp,"X", s, "[1]"));
+			assertNull(testX(xp,"X", s, "[ [] ]"));
+			assertNull(testX(xp,"X", s, "[ [1, true] ]"));
+			assertNull(testX(xp,"X", s, "[ [\"a\"] ]"));
+			assertNull(testX(xp,"X", s, "[ [\"a\"] ]"));
+			assertNull(testX(xp,"X", s, "[ [1] ]"));
+			assertNull(testX(xp,"X", s, "[ [1, 2] ]"));
+			assertNull(testX(xp,"X", s, "[ [1], [true], [\"x\"] ]"));
+			assertNull(testX(xp,"X", s, "[ [ { a:1 } ] ]"));
+			assertNull(testX(xp,"X", s, "[ [ { a:1, b:[] } ] ]"));
+			assertNull(testX(xp,"X", s, "[ [{}], [ { a:1, b:[1,2,3] } ] ]"));
+			assertNull(testX(xp,"X", s, "[ [{}] ]"));
+			assertNull(testX(xp,"X", s, "[ [ { a:[1, 2]} ] ]"));//
+			assertNull(testX(xp,"X", s, "[0,{a:[1,true],b:null},false,null]"));
+			assertNull(testX(xp,"X", s,"[{a:1,b:[3,4],c:{d:5,e:[6,7]},f:{}}]"));
+
+			assertNull(testX(xp,"X", s, "{}"));
+			assertNull(testX(xp,"X", s, "{a:1}"));
+			assertNull(testX(xp,"X", s,"{a:1,b:[],c:{},d:{e:5,f:[2]},g:null}"));
+			assertNull(testX(xp,"X", s, "{a:[1, true], b:null}"));
+
+			assertNull(testX(xp,"X", s, "true"));
+			assertNull(testX(xp,"X", s, "1"));
+			assertNull(testX(xp,"X", s, "null"));
+			assertNull(testX(xp,"X", s, "\"\""));
+			assertNull(testX(xp,"X", s, "\"abc\""));
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xdef = // test XON reference to %any in %oneOf

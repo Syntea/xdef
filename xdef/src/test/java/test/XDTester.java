@@ -46,10 +46,11 @@ import org.xdef.xml.KXmlUtils;
  * @author Vaclav Trojan
  */
 public abstract class XDTester extends STester {
-//	public static String _xdNS = XDConstants.XDEF20_NS_URI;
 //	public static String _xdNS = XDConstants.XDEF31_NS_URI;
 //	public static String _xdNS = XDConstants.XDEF32_NS_URI;
-	public static String _xdNS = XDConstants.XDEF40_NS_URI;
+//	public static String _xdNS = XDConstants.XDEF40_NS_URI;
+//	public static String _xdNS = XDConstants.XDEF41_NS_URI;
+	public static String _xdNS = XDConstants.XDEF42_NS_URI;
 	public static XDPool _xdOfxd = null;
 	public static boolean _fulltestMode = false;
 
