@@ -42,8 +42,7 @@ import static org.xdef.xon.XonNames.SCRIPT_CMD;
  * @author Vaclav Trojan
  */
 public final class XonReader extends StringParser implements XonParsers {
-	private static final String[] XDEF_NAMES=new String[]{
-		SCRIPT_CMD, ONEOF_CMD, ANY_OBJ};
+	private static final String[] XDEF_NAMES=new String[]{SCRIPT_CMD,ONEOF_CMD};
 	/** Flag to accept comments (default false; true=accept comments). */
 	private boolean _acceptComments;
 	/** Flag if parse JSON or XON (default false; false=JSON, true=XON). */
