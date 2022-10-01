@@ -32,7 +32,8 @@ public class TestXonUtil extends STester {
 		Element el;
 		try {
 			// test toJsonString and parseJSON JSON
-			o1 = XonUtils.parseJSON(f);
+			o1 = f.getName().endsWith(".xon")
+				? XonUtils.parseXON(f) : XonUtils.parseJSON(f);
 			o2 = XonUtils.parseJSON(XonUtils.toJsonString(o1, true));
 			if (!XonUtils.xonEqual(o1, o2)) {
 				return "JSON toString error " + f.getName();
@@ -133,25 +134,23 @@ public class TestXonUtil extends STester {
 	public void test() {
 		init("Test*"); //init directories and test files
 //		init("Test105");
-		for (File json: _files) { // test JSON parser
-			assertEq("", testJParse(json), json.getAbsolutePath());
+		for (File f: _files) { // test JSON parser
+			assertEq("", testJParse(f), f.getAbsolutePath());
 //			assertEq("", testX(json), json.getAbsolutePath());
 		}
 		_files = SUtils.getFileGroup((new File(getDataDir()).getAbsolutePath()
 			+ File.separator).replace('\\', '/') + "TestErr*.json");
-		for (File json: _files) { // test JSON erros
+		for (File f: _files) { // test JSON/XON erros
 			try {
-				XonUtils.parseJSON(json);
-				fail(json.getName());
+				XonUtils.parseXON(f);
+				fail(f.getName());
 			} catch (Exception ex) {}
 		}
-
 		File directory = new File(getDataDir() + "../../../xdef/data/json/");
 		for (File x: directory.listFiles()) {
 			if (x.isFile()
 				&& (x.getName().endsWith("json")||x.getName().endsWith("xon"))){
 				assertEq("", testJParse(x), x.getAbsolutePath());
-//				assertEq("", testX(x), x.getAbsolutePath());
 			}
 		}
 		for (File x: directory.listFiles()) {
@@ -219,6 +218,15 @@ public class TestXonUtil extends STester {
 			}) {
 			assertEq("", testXD(s), s);
 			assertEq("", testX(s), s); //Internal version
+		}
+
+		// test XON (%charset etc)
+		String s = (new File(getDataDir()).getAbsolutePath()
+			+ File.separator).replace('\\', '/');
+		for (File f: SUtils.getFileGroup(s + "Test*.xon")) {
+			assertEq("", testJParse(f));
+			assertEq("", testX(f));
+			assertEq("", testXD(f));
 		}
 	}
 

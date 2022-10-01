@@ -922,7 +922,7 @@ public abstract class STester {
 			float duration =
 				((float) ((System.currentTimeMillis() - _timeStamp) / 1000.0));
 			String s = "[INFO] " + (_errors == 0
-				? "OK" : _errors + " error"+(_errors>1?"s":"") + " in ");
+				? "OK " : _errors + " error"+(_errors>1?"s":"") + " in ");
 			s += _name + (_resultInfo.isEmpty() ? "" : ", " + _resultInfo)
 				+ ", time=" + new DecimalFormat("0.00").format(duration) + "s";
 			out.flush();
