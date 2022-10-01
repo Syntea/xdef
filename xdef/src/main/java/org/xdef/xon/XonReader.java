@@ -918,14 +918,14 @@ public final class XonReader extends StringParser implements XonParsers {
 					while((i = nextChar(in,encoding,buf,count,baos)) == ' '
 						|| i == '\t') {}
 					if (i == ':') {
-						while((i=nextChar(in,encoding,buf,count,baos))==' '
+						while((i=nextChar(in,encoding,buf,count,baos)) == ' '
 							|| i == '\t') {}
 					} else { // missing colon
 						while ((i=nextChar(in, encoding, buf, count, baos))
 							!= '\n' && i != '\r' && s.length() < 40) {}
 						//Incorrect %charset directive: "&{0}"
-						throw new SRuntimeException(JSON.JSON081,
-							baos.toByteArray());
+						throw new SRuntimeException(
+							JSON.JSON081, baos.toByteArray());
 					}
 					String enc = "";
 					while(i > ' ') {
@@ -961,7 +961,7 @@ public final class XonReader extends StringParser implements XonParsers {
 	 * @param in input stream wit XON/JSON data.
 	 * @return reader with detected encoding.
 	 */
-	private static Reader getXonReader(final InputStream in) {
+	public final static Reader getXonReader(final InputStream in) {
 		try {
 			XonInputStream x = new XonInputStream(in);
 			if ("X-ISO-10646-UCS-4-2143".equals(x._encoding)) {

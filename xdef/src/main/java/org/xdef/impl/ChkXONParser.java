@@ -4,11 +4,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.net.URL;
-import java.nio.charset.Charset;
 import java.util.Properties;
 import java.util.Stack;
 import javax.xml.XMLConstants;
@@ -96,12 +94,12 @@ final class ChkXONParser implements XParser, XonParser {
 			String s = (String) source;
 			try { // try if it is URL
 				URL u = SUtils.getExtendedURL(s);
-				_in = getReader(u.openStream());
+				_in = XonReader.getXonReader(u.openStream());
 				_sysId = sourceName == null ? u.toExternalForm() : sourceName;
 			} catch (Exception ex) {
 				try { // try if it is a file name
 					File f = new File(s);
-					_in = getReader(new FileInputStream(f));
+					_in = XonReader.getXonReader(new FileInputStream(f));
 					_sysId = f.getCanonicalPath();
 				} catch (Exception exx) { //not file, try to parse it as string
 					_sysId = sourceName == null ? "STRING_DATA" : sourceName;
@@ -111,7 +109,7 @@ final class ChkXONParser implements XParser, XonParser {
 		} else if (source instanceof File) {
 			File f = (File) source;
 			try {
-				_in = getReader(new FileInputStream(f));
+				_in = XonReader.getXonReader(new FileInputStream(f));
 				_sysId = sourceName == null ? f.getCanonicalPath() : sourceName;
 			} catch (Exception ex) {
 				throw new SRuntimeException(SYS.SYS024,//File doesn't exist:&{0}
@@ -120,14 +118,14 @@ final class ChkXONParser implements XParser, XonParser {
 		} else if (source instanceof URL) {
 			URL u = (URL) source;
 			try {
-				_in = getReader(u.openStream());
+				_in = XonReader.getXonReader(u.openStream());
 				_sysId = sourceName == null ? u.toExternalForm() : sourceName;
 			} catch (Exception ex) {
 				//Can't read file: &{0}
 				throw new SRuntimeException(SYS.SYS028, u.toString());
 			}
 		} else if (source instanceof InputStream) {
-			_in = getReader((InputStream) source);
+			_in = XonReader.getXonReader((InputStream) source);
 			_sysId = sourceName == null ? "READER" : sourceName;
 		} else if (source instanceof Reader) {
 			_in = (Reader) source;
@@ -141,14 +139,6 @@ final class ChkXONParser implements XParser, XonParser {
 ////////////////////////////////////////////////////////////////////////////////
 // private methods
 ////////////////////////////////////////////////////////////////////////////////
-
-	/** Get reader from input stream.
-	 * @param in input stream.
-	 * @return reader.
-	 */
-	private static Reader getReader(final InputStream in) {
-		return new InputStreamReader(in, Charset.forName("UTF-8"));
-	}
 	/** Add attributes from parsedElem object to thew created element.
 	 * @param parsedElem object with parsed attributes.
 	 */

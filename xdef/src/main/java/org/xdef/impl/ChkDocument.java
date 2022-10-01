@@ -144,18 +144,18 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		_scp = new XCodeProcessor(xd, reporter, null, null);
 	}
 
-	/** Creates a new instance of ChkDocument with ArrayReporter.
-	 * Note this constructor is designed to parse source data containing
-	 * reference to X-definition by attribute xdi:location.
+	/** Creates a new instance of ChkDocument with ArrayReporter {this
+	 * constructor is designed to parse source data containing
+	 * reference to X-definition by attribute xdi:location).
 	 * @param extObjects array of objects used to create DefPool.
 	 * @param props Properties used to create DefPool.
 	 */
 	ChkDocument(final Properties props) {
 		super("$root", null);
-		XPool xp = (XPool) new XBuilder(props)//.setExternals(extObjects)
-			.setSource(
-				"<xd:collection xmlns:xd='" + XDConstants.XDEF42_NS_URI+"'/>")
-			.compileXD();
+		XBuilder xb = new XBuilder(props);
+		xb.setSource(
+			"<xd:collection xmlns:xd='" + XDConstants.XDEF42_NS_URI+"'/>");
+		XPool xp = (XPool) xb.compileXD();
 		XDefinition xd = new XDefinition("#",
 			xp, XDConstants.XDEF42_NS_URI, null, XConstants.XD41);
 		xp._xdefs.put("#", xd);
@@ -165,8 +165,8 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		_scp = new XCodeProcessor(xd, new SReporter(), null, null);
 	}
 
-	/** Creates a new instance of ChkDocument. This constructor is called
-	 * only internally from ChkComposer.
+	/** Creates a new instance of ChkDocument (this constructor is called
+	 * only internally from ChkComposer).
 	 * @param xd XDefinition.
 	 * @param chkel ChkElement from which the object is created.
 	 */

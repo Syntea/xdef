@@ -1,12 +1,10 @@
 package org.xdef.impl;
 
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
-import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
@@ -61,8 +59,8 @@ public final class XonSourceParser implements XonParser, XParser {
 
 	XonSourceParser(final File f) {
 		try {
-			FileReader in = new FileReader(f);
-			XonReader p = new XonReader(in, this);
+			XonReader p = new XonReader(
+				XonReader.getXonReader(new FileInputStream(f)), this);
 			p.setXonMode();
 			p.setSysId(f.getCanonicalPath());
 			_p = p;
@@ -74,9 +72,8 @@ public final class XonSourceParser implements XonParser, XParser {
 	XonSourceParser(final URL url) {
 		String id = url.toExternalForm();
 		try {
-			Reader in = new InputStreamReader(
-				url.openStream(), Charset.forName("UTF-8"));
-			XonReader p = new XonReader(in, this);
+			XonReader p =
+				new XonReader(XonReader.getXonReader(url.openStream()), this);
 			p.setXonMode();
 			p.setSysId(id);
 			_p = p;
@@ -95,8 +92,7 @@ public final class XonSourceParser implements XonParser, XParser {
 	}
 
 	XonSourceParser(final InputStream is, final String sysId) {
-		Reader in = new InputStreamReader(is, Charset.forName("UTF-8"));
-		XonReader p = new XonReader(in, this);
+		XonReader p = new XonReader(XonReader.getXonReader(is), this);
 		p.setXonMode();
 		if (sysId != null) {
 			p.setSysId(sysId);
