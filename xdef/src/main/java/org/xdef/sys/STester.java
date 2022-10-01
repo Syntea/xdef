@@ -64,6 +64,8 @@ public abstract class STester {
 	private long _timeStamp;
 	/** Error counter. */
 	private int _errors;
+	/* Output printer (default is UTF-8). */
+	private String _encoding = "UTF-8";
 	/** Name of test. */
 	private String _name;
 	/** Source file name. */
@@ -108,6 +110,10 @@ public abstract class STester {
 	 * @return The string with the path to data directory or null.
 	 */
 	public final String getHomeDir() {return _homeDir;}
+	/** Get character encoding of tests.
+	 * @return character encoding of tests.
+	 */
+	public final String getEncoding() {return _encoding;}
 	/** Get path to Java source directory of this class source. If the directory
 	 * doesn't exist put an error message and return null.
 	 * @return The string with the path to source directory or null.
@@ -184,6 +190,10 @@ public abstract class STester {
 	 * @return print stream or null if the output is not defined.
 	 */
 	public final PrintStream getOutStream() {return _out;}
+	/** Set charset encoding of test data.
+	 * @param encoding encoding of test data.
+	 */
+	public final void setEncoding(final String encoding) {_encoding = encoding;}
 	/** Set output stream.
 	 * @param out print stream or null.
 	 */
@@ -1137,7 +1147,7 @@ public abstract class STester {
 	 * @param files files with Java sources (may be a file or a directory).
 	 * @return string with path to compiled classes.
 	 */
-	public static String compileSources(final String classpath,
+	public String compileSources(final String classpath,
 		final String classDir,
 		final File... files) {
 		String sources[] = new String[files.length];
@@ -1172,12 +1182,14 @@ public abstract class STester {
 	 * @param sources paths of Java sources (may be a file or a directory).
 	 * @return string with path to compiled classes.
 	 */
-	public static String compileSources(final String classpath,
+	public String compileSources(final String classpath,
 		final String classDir,
 		final String... sources) {
 		// where are compiled classes of X-definitions
 		// prepare parameters
 		ArrayList<String> ar = new ArrayList<String>();
+		ar.add("-encoding");
+		ar.add(getEncoding());
 		ar.add("-classpath");
 		ar.add((classpath.isEmpty() ? "" : classpath + File.pathSeparatorChar)
 			+ classDir); // classpath

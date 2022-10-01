@@ -263,8 +263,8 @@ public final class Test003 extends XDTester {
 "<xd:def  xmlns:xd='" + _xdNS + "' root='A' name='A' ><A/></xd:def>",
 "<xd:def xmlns:xd='" + _xdNS + "' root='B' name='B' ><B/></xd:def>",
 			new ByteArrayInputStream((
-"<xd:def xmlns:xd='" + _xdNS + "' root='C' name='C' ><C/></xd:def>").getBytes(
-				"UTF-8"))};
+"<xd:def xmlns:xd='" + _xdNS + "' root='C' name='C' ><C/></xd:def>")
+				.getBytes("UTF-8"))};
 			String[] p2 = new String[] {"AA", "AB", "AC"}; // source names
 			xp = XDFactory.compileXD(null, p1, p2);
 			assertEq(xml = "<A/>", parse(xp, "A", xml, reporter));

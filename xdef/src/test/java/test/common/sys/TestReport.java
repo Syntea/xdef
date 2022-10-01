@@ -242,7 +242,7 @@ public class TestReport extends STester {
 		try {
 			File f = File.createTempFile("report", "tmp");
 			f.deleteOnExit();
-			FileReportWriter fw = new FileReportWriter(f, "UTF-8", true);
+			FileReportWriter fw = new FileReportWriter(f, getEncoding(), true);
 			fw.writeString("");
 			fw.writeString("ABC");
 			fw.writeString("\na\nb\n");

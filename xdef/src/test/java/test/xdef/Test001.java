@@ -1131,7 +1131,7 @@ public final class Test001  extends XDTester {
 "<xd:def xmlns:xd='" + _xdNS + "' root='B' name='B'><B/></xd:def>",
 			new ByteArrayInputStream((
 "<xd:def xmlns:xd='" + _xdNS + "' root='C' name='C'><C/></xd:def>")
-				.getBytes("UTF-8"))
+				.getBytes(getEncoding()))
 			};
 			String[] p2 = new String[] {"AA", "AB", "AC"};
 			xp = XDFactory.compileXD(null, p1, p2);
@@ -1208,7 +1208,7 @@ public final class Test001  extends XDTester {
 "<xd:def xmlns:xd='" + _xdNS + "' root='B' name='B'><B a='x'/></xd:def>",
 			new ByteArrayInputStream((
 "<xd:def xmlns:xd='" + _xdNS + "' root='C' name='C'><C a='x'/></xd:def>")
-				.getBytes("UTF-8"))
+				.getBytes(getEncoding()))
 			};
 			String[] p2 = new String[] {"AA", "AB", "AC"};
 			XDFactory.compileXD(null, p1, p2);

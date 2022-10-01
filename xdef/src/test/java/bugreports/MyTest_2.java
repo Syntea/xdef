@@ -16,7 +16,6 @@ import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.xon.XonTools;
 import static test.XDTester._xdNS;
-import static test.XDTester.genXComponent;
 
 /** Various tests JSON, X-component.
  * @author Vaclav Trojan

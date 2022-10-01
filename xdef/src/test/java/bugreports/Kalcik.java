@@ -5,7 +5,6 @@ import org.xdef.component.XComponent;
 import org.xdef.sys.ArrayReporter;
 import static org.xdef.sys.STester.runTest;
 import test.XDTester;
-import static test.XDTester.genXComponent;
 
 public class Kalcik extends XDTester {
 

@@ -17,7 +17,6 @@ import org.xdef.sys.ArrayReporter;
 import static org.xdef.sys.STester.runTest;
 import test.XDTester;
 import static test.XDTester._xdNS;
-import static test.XDTester.genXComponent;
 
 /** Tests.
  * @author Vaclav Trojan

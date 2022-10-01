@@ -30,7 +30,6 @@ import org.xdef.xml.KXmlUtils;
 import org.xdef.xon.XonNames;
 import test.XDTester;
 import static test.XDTester._xdNS;
-import static test.XDTester.genXComponent;
 import static test.XDTester.parseXC;
 
 /** Test XComponents.

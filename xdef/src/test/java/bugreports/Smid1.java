@@ -29,7 +29,6 @@ public class Smid1 extends XDTester {
 			XDPool xdPool = xb.compileXD();
 			XDDocument xdDocument = xdPool.createXDDocument("SouborP1A");
 			String xml = "" +
-					"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n" +
 					"<SouborP1A xmlns=\"http://ws.ckp.cz/pis/ds/L1/2013/09\" xmlns:vr=\"http://ws.ckp.cz/gam/vr/common/2018/04\">\n" +
 					"  <NovaPS CisloDokladuPojisteni=\"+\" CisloSmlouvy=\"'y\\\" DatumUzavreni=\"2020-05-21\" IdentZaznamu=\"G\" NositelPSP=\"S\" PoradiVozidla=\"1\">\n" +
 					"    <Pojistnik/>\n" +

@@ -376,7 +376,6 @@ public final class TestExtenalMethods extends XDTester {
 		try { // using of user defined ClassLoader (fail state)
 			XDBuilder xdb = XDFactory.getXDBuilder(null);
 			xdb.setSource(
-"<?xml version='1.0' encoding='UTF-8'?>\n"+
 "<xd:def xmlns:xd='" + _xdNS + "' name='Test' root='Test'>\n"+
 "<xd:declaration>\n"+
 "  external method void test.xdef.TestExtenalMethods.g1(String);\n"+
@@ -399,7 +398,6 @@ public final class TestExtenalMethods extends XDTester {
 		try { // using of user defined ClassLoader (correct state)
 			XDBuilder xdb = XDFactory.getXDBuilder(null);
 			xdb.setSource(
-"<?xml version='1.0' encoding='UTF-8'?>\n"+
 "<xd:def xmlns:xd='" + _xdNS + "' name='Test' root='Test'>\n"+
 "<xd:declaration>\n"+
 "  external method void test.xdef.TestExtenalMethods.g1(String);\n"+

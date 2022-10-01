@@ -20,7 +20,6 @@ import org.xdef.msg.SYS;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.SDatetime;
 import org.xdef.sys.SRuntimeException;
-import static org.xdef.sys.STester.compileSources;
 import static org.xdef.sys.STester.printThrowable;
 import static org.xdef.sys.STester.runTest;
 import org.xdef.sys.SUtils;
@@ -29,7 +28,6 @@ import org.xdef.xon.XonNames;
 import org.xdef.xon.XonUtils;
 import test.XDTester;
 import static test.XDTester._xdNS;
-import static test.XDTester.genXComponent;
 
 /** Test processing JSON objects with X-definitions and X-components.
  * @author Vaclav Trojan
@@ -102,7 +100,7 @@ public class TestJsonXdef extends XDTester {
 					// write JSON as XML (W3C modc)
 					el = XonUtils.xonToXmlW(json);
 					SUtils.writeString(new File(_tempDir + name + "a.xml"),
-						KXmlUtils.nodeToString(el,true),"UTF-8");
+						KXmlUtils.nodeToString(el,true), "UTF-8");
 					if (!XonUtils.xonEqual(XonUtils.xmlToXon(el),
 						XonUtils.xmlToXon(XonUtils.xonToXml(json)))) {
 						throw new RuntimeException(rName +
