@@ -9,7 +9,7 @@
 * Implemented XON command %anyName.
 * Implemented XON command %anyObj.
 * Names of XON commands $:script and $:oneOf, changed to %script and %oneOf.
-* Implemented %charset directive in XON data.
+* Implemented %encoding directive in XON data.
 
 # Version 41.0.9, release-date 2022-06-09
 * This build is a pre-release of version 4.2 of X-definition.

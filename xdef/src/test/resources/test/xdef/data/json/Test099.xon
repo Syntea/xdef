@@ -1,8 +1,0 @@
-%charset:windows-1250
-# test of charset directive
-{ "Obèan <@#$>": {
-    "Jméno": "Bøetislav Jírù",
-    "Rok": 1990,
-    "Vozidlo": [ "BMW", "Škoda", { "pes": "Rex" } ]
-  }
-}

@@ -34,8 +34,8 @@ public interface XonNames {
 ////////////////////////////////////////////////////////////////////////////////
 // Names of XON directives
 ////////////////////////////////////////////////////////////////////////////////
-	/** Charset directive name {used only in XON source data}. */
-	public static final String CHARSET_DIRECTIVE = "%charset";
+	/** Encoding specification {used only in first line of XON source data}. */
+	public static final String ENCODING_SPECIFICATION = "%encoding";
 	/** Specification of script command in XON model. */
 	public static final String SCRIPT_CMD = "%script";
 	/** Specification of oneOf command in XON model. */
