@@ -784,17 +784,21 @@ public final class XonReader extends StringParser implements XonParsers {
 	 * @throws SRuntimeException if an error occurs,
 	 */
 	public final void parse() throws SRuntimeException {
-		if (!_jdef && isToken(XonNames.CHARSET_DIRECTIVE)) { // parse directive
-			int pos1 = getIndex() - XonNames.CHARSET_DIRECTIVE.length();
+		if (!_jdef && isToken(XonNames.ENCODING_SPECIFICATION)) { //encoding
+			int pos1 = getIndex() - XonNames.ENCODING_SPECIFICATION.length();
 			while(isOneOfChars(" \t") > 0){}
-			boolean wasColon = isChar(':');
+			boolean wasEq = isChar('=');
 			while(isOneOfChars(" \t") > 0){}
 			int pos2 = getIndex();
-			boolean wasName = isLetterOrDigit() > 0 || isChar('-');
-			if (wasName) { // read charset name
-				while(isLetterOrDigit() > 0 || isChar('-')) {}
+			boolean wasName;
+			String enc = "";
+			if ((wasName = isChar('"')) && wasEq) {
+				while (!(wasName = isChar('"')) && !eos()) {
+					enc += getCurrentChar(); // read charset name
+					nextChar();
+				}
 			}
-			if (!wasColon || !wasName) { // write error message
+			if (!wasEq || !wasName) { // write error message
 				if ((pos2 = getIndex()) - pos1 > 40) {
 					pos2 = pos1 + 40; // message would be too long
 				}
@@ -802,17 +806,11 @@ public final class XonReader extends StringParser implements XonParsers {
 				error(JSON.JSON081, getBufferPart(pos1, pos2));
 			} else {
 				try {//check charset
-					Charset.forName(getBufferPart(pos2, getIndex()));
+					Charset.forName(enc);
 				} catch (Exception ex) {
 					//Incorrect specification of the %chars0et directive: "&{0}"
 					error(JSON.JSON081, getBufferPart(pos2, getIndex()));
 				}
-			}
-			while(isOneOfChars(" \t") > 0) {}
-			isChar('\r'); // windows...
-			if (!isNewLine()) { // write error message
-				//The %charset command must be terminated by the end of the line
-				error(JSON.JSON082);
 			}
 		}
 		readItem();
@@ -909,43 +907,40 @@ public final class XonReader extends StringParser implements XonParsers {
 				}
 				String s = bytesToString(buf, 0, len, encoding);
 				int i = -1;
-				while (s.length() < XonNames.CHARSET_DIRECTIVE.length()
-					&& XonNames.CHARSET_DIRECTIVE.startsWith(s)
+				while (s.length() < XonNames.ENCODING_SPECIFICATION.length()
+					&& XonNames.ENCODING_SPECIFICATION.startsWith(s)
 					&& (i = nextChar(in, encoding, buf, count, baos)) != -1) {
 					s += (char) i;
 				}
-				if (XonNames.CHARSET_DIRECTIVE.equals(s)) {
+				if (XonNames.ENCODING_SPECIFICATION.equals(s)) {
 					while((i = nextChar(in,encoding,buf,count,baos)) == ' '
 						|| i == '\t') {}
-					if (i == ':') {
+					if (i == '=') {
 						while((i=nextChar(in,encoding,buf,count,baos)) == ' '
 							|| i == '\t') {}
-					} else { // missing colon
+					} else { // missing eq sign
 						while ((i=nextChar(in, encoding, buf, count, baos))
 							!= '\n' && i != '\r' && s.length() < 40) {}
-						//Incorrect %charset directive: "&{0}"
+						//Incorrect %encoding directive: "&{0}"
 						throw new SRuntimeException(
 							JSON.JSON081, baos.toByteArray());
 					}
 					String enc = "";
-					while(i > ' ') {
-						enc += (char) i;
+					if (i == '"') {
 						i = nextChar(in, encoding, buf, count, baos);
+						while(i > ' ' && i != '"') {
+							enc += (char) i;
+							i = nextChar(in, encoding, buf, count, baos);
+						}
 					}
-					while (i == ' ' || i == '\t') {
-						i = nextChar(in, encoding, buf, count, baos);
+					if (enc.isEmpty() || i != '"') {
+					//Incorrect %encoding directive: "&{0}"
+						throw new SRuntimeException(
+							JSON.JSON081, baos.toByteArray());
 					}
 					if (enc.isEmpty()) {
 						//Charset name is missing
 						throw new SRuntimeException(JSON.JSON083);
-					}
-					if (i == '\r') {
-						i = nextChar(in, encoding, buf, count, baos);//windows
-					}
-					if (i != '\n') {
-						//The %charset command must be terminated by the end
-						// of the line
-						throw new SRuntimeException(JSON.JSON082);
 					}
 					encoding = enc;
 				}
@@ -955,9 +950,9 @@ public final class XonReader extends StringParser implements XonParsers {
 		}
 	}
 
-	/** Creates Reader from input stream. If data starts with %charset directive
-	 * the reader is created with the specified encoding. Otherwise, the UTF-8
-	 * encoding is used.
+	/** Creates Reader from input stream. If data starts with %encoding
+	 * directive the reader is created with the specified encoding. Otherwise,
+	 * the UTF-8 encoding is used.
 	 * @param in input stream wit XON/JSON data.
 	 * @return reader with detected encoding.
 	 */

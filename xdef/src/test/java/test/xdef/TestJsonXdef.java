@@ -1004,7 +1004,7 @@ public class TestJsonXdef extends XDTester {
 					xc,"getjx$map"), "getjx$array_1"), "toXon")).size());
 		} catch (Exception ex) {fail(ex);}
 		try {
-			xdef = // test data with %charset
+			xdef = // test data with %encoding
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" root=\"a\" >\n" +
 "<xd:xon name=\"a\" >\n" +
 "    # test %charset directive\n" +
@@ -1016,7 +1016,7 @@ public class TestJsonXdef extends XDTester {
 "}\n" +
 "</xd:xon>\n" +
 "<xd:component>\n"+
-"  %class test.xdef.TestXonCharset %link #a;\n"+
+"  %class test.xdef.TestXonEncoding %link #a;\n"+
 "</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);

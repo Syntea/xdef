@@ -220,7 +220,7 @@ public class TestXonUtil extends STester {
 			assertEq("", testX(s), s); //Internal version
 		}
 
-		// test XON (%charset etc)
+		// test XON (%encoding etc)
 		String s = (new File(getDataDir()).getAbsolutePath()
 			+ File.separator).replace('\\', '/');
 		for (File f: SUtils.getFileGroup(s + "Test*.xon")) {
