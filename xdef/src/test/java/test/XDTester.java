@@ -561,7 +561,7 @@ public abstract class XDTester extends STester {
 					}
 				}
 			}
-			String s = bos.toString("UTF-8");
+			String s = bos.toString(getEncoding());
 			if (!s.equals(stdout)) {
 				error = true;
 				System.err.println("========== Standard output ===========\n");
@@ -1306,7 +1306,7 @@ public abstract class XDTester extends STester {
 	 * @param dir path to directory where to generate Java sources.
 	 * @throws RuntimeException if an error occurs.
 	 */
-	public static void genXComponent(final XDPool xp,
+	public void genXComponent(final XDPool xp,
 		final String dir) {
 		genXComponent(xp, new File(dir));
 	}
@@ -1316,14 +1316,15 @@ public abstract class XDTester extends STester {
 	 * @param dir directory where to generate Java sources.
 	 * @throws RuntimeException if an error occurs.
 	 */
-	public static final void genXComponent(final XDPool xp,
+	public final void genXComponent(final XDPool xp,
 		final File dir) {
 		if (!dir.exists() && !dir.isDirectory()) {
 			//Directory doesn't exist or isn't accessible: &{0}
 			throw new SRuntimeException(SYS.SYS025, dir.getAbsolutePath());
 		}
 		try {
-			ArrayReporter result = xp.genXComponent(dir, "UTF-8", false, true);
+			ArrayReporter result = xp.genXComponent(
+				dir, getEncoding(), false, true);
 			result.checkAndThrowErrors(); // throw exception if error reported
 			// create classpath item with org.xdef directory
 			String classpath = getClassSource(XDConstants.class);

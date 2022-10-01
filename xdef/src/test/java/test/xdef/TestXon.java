@@ -22,7 +22,6 @@ import org.xdef.xml.KXmlUtils;
 import org.xdef.xon.CsvReader;
 import test.XDTester;
 import static test.XDTester._xdNS;
-import static test.XDTester.genXComponent;
 
 /** Test XON/JSON/INI/Properties/CSV data. */
 public class TestXon extends XDTester {

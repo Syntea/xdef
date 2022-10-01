@@ -308,12 +308,12 @@ public class TestXdScript extends XDTester {
 			assertEq(s, parse(g, "ExternalMethod", s));
 ////////////////////////////////////////////////////////////////////////////////
 			java.io.ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			PrintStream ps = new PrintStream(baos, true, "UTF-8");
+			PrintStream ps = new PrintStream(baos, true, getEncoding());
 			g.trace(ps);
 			parse(g, "DeclarationScript", "external element x ?;");
 			ps.close();
 			BufferedReader in = new BufferedReader(
-				new StringReader(new String(baos.toByteArray(), "UTF-8")));
+				new StringReader(new String(baos.toByteArray(),getEncoding())));
 			String line;
 			int max = Integer.MIN_VALUE;
 			ArrayList<String> lines = new ArrayList<String>();
