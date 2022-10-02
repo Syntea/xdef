@@ -1010,7 +1010,7 @@ public class TestJsonXdef extends XDTester {
 "    # test %charset directive\n" +
 "{ \"Občan &lt;@#$>\": {\n" +
 "    \"Jméno\": \"string()\",\n" +
-"    \"Rok\": \"int()\",\n" +
+"    \"Rok\": \"gYear()\",\n" +
 "    \"Vozidlo\": [ \"*; string()\", { \"pes\": \"string()\" } ]\n" +
 "  }\n" +
 "}\n" +
