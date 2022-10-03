@@ -381,7 +381,7 @@ public class TestJsonXdef extends XDTester {
 		if (!_xdNS.startsWith("http://www.xdef.org/xdef/4.")) {
 			return;
 		}
-		String test, ini, json, xdef, xml;
+		String fname, ini, json, xdef, xml;
 		File file;
 		int i;
 		Object o, x;
@@ -411,8 +411,8 @@ public class TestJsonXdef extends XDTester {
 		// Test X-components
 		String xon = XDConstants.XON_NS_PREFIX + "$";
 		try {
-			test = "Test008";
-			xc = getXComponent(xp, test, 0);
+			fname = "Test008";
+			xc = getXComponent(xp, fname, 0);
 			x = SUtils.getValueFromGetter(xc,"get"+xon+"item");
 			assertEq(1, SUtils.getValueFromGetter(x,"get"+XonNames.X_VALATTR));
 			SUtils.setValueToSetter(x,"set" + XonNames.X_VALATTR, 3);
@@ -420,27 +420,27 @@ public class TestJsonXdef extends XDTester {
 			SUtils.setValueToSetter(x,"set" + XonNames.X_VALATTR, null);
 			assertNull(SUtils.getValueFromGetter(x,"get" + XonNames.X_VALATTR));
 
-			test = "Test020";
-			xc = getXComponent(xp, test, 0);
+			fname = "Test020";
+			xc = getXComponent(xp, fname, 0);
 			assertEq("abc", SUtils.getValueFromGetter(xc,"get$a"));
 			SUtils.setValueToSetter(xc,"set$a", null);
 			assertTrue(SUtils.getValueFromGetter(xc,"get$a")==null);
 
-			xc = getXComponent(xp, test, 1);
+			xc = getXComponent(xp, fname, 1);
 			assertEq(123, SUtils.getValueFromGetter(xc,"get$a"));
 			SUtils.setValueToSetter(xc,"set$a", "");
 			assertEq("", SUtils.getValueFromGetter(xc,"get$a"));
-			xc = getXComponent(xp, test, 2);
+			xc = getXComponent(xp, fname, 2);
 			assertEq(false, SUtils.getValueFromGetter(xc,"get$a"));
-			xc = getXComponent(xp, test, 3);
+			xc = getXComponent(xp, fname, 3);
 			assertTrue(SUtils.getValueFromGetter(xc,"get$a")!=null);
 
-			test = "Test021";
-			xc = getXComponent(xp, test, 0);
+			fname = "Test021";
+			xc = getXComponent(xp, fname, 0);
 			x = SUtils.getValueFromGetter(xc,"get"+xon+"item");
 			assertEq("abc",
 				SUtils.getValueFromGetter(x,"get" +XonNames.X_VALATTR));
-			xc = getXComponent(xp, test, 1);
+			xc = getXComponent(xp, fname, 1);
 			x = SUtils.getValueFromGetter(xc,"get"+xon+"item");
 			assertEq(123,
 				SUtils.getValueFromGetter(x,"get" +XonNames.X_VALATTR));
@@ -451,19 +451,19 @@ public class TestJsonXdef extends XDTester {
 				"set"+XonNames.X_VALATTR, " a    b \n ");
 			assertEq(" a    b \n ",
 				SUtils.getValueFromGetter(x, "get" + XonNames.X_VALATTR));
-			xc = getXComponent(xp, test, 2);
+			xc = getXComponent(xp, fname, 2);
 			x = SUtils.getValueFromGetter(xc,"get"+xon+"item");
 			assertEq(false,
 				SUtils.getValueFromGetter(x,"get" +XonNames.X_VALATTR));
-			xc = getXComponent(xp, test, 3);
+			xc = getXComponent(xp, fname, 3);
 			x = SUtils.getValueFromGetter(xc,"get"+xon+"item");
 			assertTrue(SUtils.getValueFromGetter(
 				x, "get"+XonNames.X_VALATTR)!=null);
-			xc = getXComponent(xp, test, 4);
+			xc = getXComponent(xp, fname, 4);
 			assertNull(SUtils.getValueFromGetter(xc,"get"+xon+"item"));
 
-			test = "Test025";
-			xc = getXComponent(xp, test, 0);
+			fname = "Test025";
+			xc = getXComponent(xp, fname, 0);
 			x = SUtils.getValueFromGetter(xc,"get"+xon+"item");
 			assertEq("null", SUtils.getValueFromGetter(x,
 				"get" + XonNames.X_VALATTR).toString());
@@ -473,15 +473,15 @@ public class TestJsonXdef extends XDTester {
 			x = SUtils.getValueFromGetter(xc,"get"+xon+"item_2");
 			assertEq("\" a b \"",
 				SUtils.getValueFromGetter(x,"get" + XonNames.X_VALATTR));
-			xc = getXComponent(xp, test, 1);
+			xc = getXComponent(xp, fname, 1);
 			x = SUtils.getValueFromGetter(xc,"get"+xon+"item");
 			assertEq("null", SUtils.getValueFromGetter(x,
 				"get" + XonNames.X_VALATTR).toString());
 			assertNull(SUtils.getValueFromGetter(xc,"get"+xon+"item_1"));
 			assertNull(SUtils.getValueFromGetter(xc,"get"+xon+"item_2"));
 
-			test = "Test026";
-			xc = getXComponent(xp, test, 0);
+			fname = "Test026";
+			xc = getXComponent(xp, fname, 0);
 			x = SUtils.getValueFromGetter(xc,"listOf"+xon+"item");
 			assertEq(2, ((List) x).size());
 			x = ((List) x).get(0);
@@ -491,7 +491,7 @@ public class TestJsonXdef extends XDTester {
 			x = ((List) x).get(1);
 			assertEq("null", SUtils.getValueFromGetter(x,
 				"get" + XonNames.X_VALATTR).toString());
-			xc = getXComponent(xp, test, 0);
+			xc = getXComponent(xp, fname, 0);
 			x = SUtils.getValueFromGetter(xc,"listOf"+xon+"item_1");
 			assertEq(2, ((List) x).size());
 			x = ((List) x).get(0);
@@ -965,7 +965,7 @@ public class TestJsonXdef extends XDTester {
 "  %class test.xdef.X_on %link #a;\n"+
 "</xd:component>\n"+
 "</xd:def>";
-			test =
+			fname =
 "# Start of XON example\n" +
 "[ #***** Array *****/\n" +
 "  { #***** Map *****/\n" +
@@ -986,8 +986,8 @@ public class TestJsonXdef extends XDTester {
 "# End of XON example";
 			xp = compile(xdef);
 			genXComponent(xp, clearTempDir());
-			xc = xp.createXDDocument().jparseXComponent(test, null, reporter);
-			assertTrue(XonUtils.xonEqual(XonUtils.parseXON(test),
+			xc = xp.createXDDocument().jparseXComponent(fname, null, reporter);
+			assertTrue(XonUtils.xonEqual(XonUtils.parseXON(fname),
 				SUtils.getValueFromGetter(xc,"toXon")));
 			list = (List) SUtils.getValueFromGetter(xc,"listOf$item_3");
 			list.add(InetAddress.getByName("111.22.33.1"));
@@ -1004,7 +1004,7 @@ public class TestJsonXdef extends XDTester {
 					xc,"getjx$map"), "getjx$array_1"), "toXon")).size());
 		} catch (Exception ex) {fail(ex);}
 		try {
-			xdef = // test data with %encoding
+			xdef = // test data with different %encoding
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" root=\"a\" >\n" +
 "<xd:xon name=\"a\" >\n" +
 "    # test %charset directive\n" +
@@ -1022,9 +1022,59 @@ public class TestJsonXdef extends XDTester {
 			xp = compile(xdef);
 			genXComponent(xp, clearTempDir());
 			xd = xp.createXDDocument();
-			file = new File(
-				_dataDir.replaceAll("/xdef/data/json/", "/common/xon/data/"),
-				"Test201.xon");
+			// diresctory test/common/xon/data/
+			fname = _dataDir.replaceAll("/xdef/data/json/","/common/xon/data/");
+			file = new File(fname, "Test201_windows1200.xon"); // windows-1200
+			x = XonUtils.parseXON(file);
+			assertEq("Břetislav Jírů",
+				((Map) ((Map) x).get("Občan <@#$>")).get("Jméno"));
+			o = xd.jparse(file, reporter);
+			assertNoErrorsAndClear(reporter);
+			assertTrue(XonUtils.xonEqual(x,o));
+			xc = xd.jparseXComponent(file, null, reporter);
+			assertNoErrorsAndClear(reporter);
+			assertTrue(XonUtils.xonEqual(x, xc.toXon()));
+			file = new File(fname, "Test201_utf8.xon"); // UTF-8
+			x = XonUtils.parseXON(file);
+			assertEq("Břetislav Jírů",
+				((Map) ((Map) x).get("Občan <@#$>")).get("Jméno"));
+			o = xd.jparse(file, reporter);
+			assertNoErrorsAndClear(reporter);
+			assertTrue(XonUtils.xonEqual(x,o));
+			xc = xd.jparseXComponent(file, null, reporter);
+			assertNoErrorsAndClear(reporter);
+			assertTrue(XonUtils.xonEqual(x, xc.toXon()));
+			file = new File(fname, "Test201_utf16BE.xon"); // UTF16BE
+			x = XonUtils.parseXON(file);
+			assertEq("Břetislav Jírů",
+				((Map) ((Map) x).get("Občan <@#$>")).get("Jméno"));
+			o = xd.jparse(file, reporter);
+			assertNoErrorsAndClear(reporter);
+			assertTrue(XonUtils.xonEqual(x,o));
+			xc = xd.jparseXComponent(file, null, reporter);
+			assertNoErrorsAndClear(reporter);
+			assertTrue(XonUtils.xonEqual(x, xc.toXon()));
+			file = new File(fname, "Test201_utf16LE.xon"); // UTF-16Be
+			x = XonUtils.parseXON(file);
+			assertEq("Břetislav Jírů",
+				((Map) ((Map) x).get("Občan <@#$>")).get("Jméno"));
+			o = xd.jparse(file, reporter);
+			assertNoErrorsAndClear(reporter);
+			assertTrue(XonUtils.xonEqual(x,o));
+			xc = xd.jparseXComponent(file, null, reporter);
+			assertNoErrorsAndClear(reporter);
+			assertTrue(XonUtils.xonEqual(x, xc.toXon()));
+			file = new File(fname, "Test201_utf32BE.xon"); // UTF-32BE
+			x = XonUtils.parseXON(file);
+			assertEq("Břetislav Jírů",
+				((Map) ((Map) x).get("Občan <@#$>")).get("Jméno"));
+			o = xd.jparse(file, reporter);
+			assertNoErrorsAndClear(reporter);
+			assertTrue(XonUtils.xonEqual(x,o));
+			xc = xd.jparseXComponent(file, null, reporter);
+			assertNoErrorsAndClear(reporter);
+			assertTrue(XonUtils.xonEqual(x, xc.toXon()));
+			file = new File(fname, "Test201_utf32LE.xon"); // UTF-32LE
 			x = XonUtils.parseXON(file);
 			assertEq("Břetislav Jírů",
 				((Map) ((Map) x).get("Občan <@#$>")).get("Jméno"));
