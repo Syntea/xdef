@@ -1,0 +1,5 @@
+{ "Občan <@#$>" : { Jméno : "Břetislav Jírů",
+    Rok : d1990,
+    Vozidlo : ["BMW", "Škoda", {pes : "Rex"}]
+  }
+}
