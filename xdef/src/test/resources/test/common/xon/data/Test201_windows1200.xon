@@ -1,7 +1,0 @@
-%encoding="windows-1250" # test of encoding directive
-{ "Obèan <@#$>": {
-    "Jméno": "Bøetislav Jírù",
-    "Rok": d1990,
-    "Vozidlo": [ "BMW", "Škoda", { "pes": "Rex" } ]
-  }
-}
