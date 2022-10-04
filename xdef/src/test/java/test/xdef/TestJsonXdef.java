@@ -377,16 +377,27 @@ public class TestJsonXdef extends XDTester {
 		}
 	}
 
-	private String testCharset(final XDPool xp,
-		final String json,
-		final String encoding) {
+	/** Test JSON data with given encoding.
+	 * @param xp compiled XDPool
+	 * @param xon string with XON data.
+	 * @param encoding encoding name
+	 * @param genEncoding if true the %encoding directive is generated.
+	 * @return empty string or errors description.
+	 */
+	private String testEncoding(final XDPool xp,
+		final String xon,
+		final String encoding,
+		final boolean genEncoding) {
 		String result = "";
 		try {
 			XDDocument xd = xp.createXDDocument();
 			File f = new File(clearTempDir(), "Test201" + encoding + ".xon");
 			Writer wr =
 				new OutputStreamWriter(	new FileOutputStream(f), encoding);
-			wr.write(json);
+			if (genEncoding) {
+				wr.write("%encoding = \"" + encoding + "\"\n");
+			}
+			wr.write(xon);
 			wr.close();
 			Object x = XonUtils.parseXON(f);
 			assertEq("ĚŠČŘŽÝÁÍÉÚŮĹ",
@@ -425,7 +436,7 @@ public class TestJsonXdef extends XDTester {
 		}
 		String fname, ini, json, xdef, xml;
 		File file;
-		Object o, x;
+		Object x;
 		List list;
 		Element el;
 		ArrayReporter reporter = new ArrayReporter();
@@ -580,16 +591,16 @@ public class TestJsonXdef extends XDTester {
 			assertTrue(XonUtils.xonEqual(x, jcreate(xd, "Person", reporter)));
 			assertNoErrorwarningsAndClear(reporter);
 //			xd = xp.createXDDocument("Person");
-//			xd.setXONContext(XonUtils.xonToJson(j));
+//			xd.setXONContext(XonUtils.xonToJson(x));
 //			xc = xd.jcreateXComponent("Person", null, reporter);
 //			assertNoErrorwarningsAndClear(reporter);
-//			assertTrue(XonUtils.xonEqual(j, xc.toXon()));
+//			assertTrue(XonUtils.xonEqual(x, xc.toXon()));
 //			xd = xp.createXDDocument("Person");
-//			xd.setXONContext(XonUtils.xonToJson(j));
+//			xd.setXONContext(XonUtils.xonToJson(x));
 //			xc = xd.jcreateXComponent("Person",
 //				Class.forName("test.xdef.XonPerson"), reporter);
 //			assertNoErrorwarningsAndClear(reporter);
-//			assertTrue(XonUtils.xonEqual(j, xc.toXon()));
+//			assertTrue(XonUtils.xonEqual(x, xc.toXon()));
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='Person_list'>\n"+
 "<xd:xon name=\"Person_list\">\n"+
@@ -821,8 +832,7 @@ public class TestJsonXdef extends XDTester {
 "  <xd:xon xd:name='root'>\n"+
 "     \"jvalue();\"\n"+
 "  </xd:xon>\n"+
-"</xd:def>" +
-"";
+"</xd:def>";
 			xp = compile(xdef);
 			x = 123;
 			assertTrue(XonUtils.xonEqual(x,
@@ -1045,16 +1055,16 @@ public class TestJsonXdef extends XDTester {
 					xc,"getjx$map"), "getjx$array_1"), "toXon")).size());
 		} catch (Exception ex) {fail(ex);}
 		try {
-			xdef = // test data with different %encoding
+			xdef = // test data with different encodings
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" root=\"a\" >\n" +
-"<xd:xon name=\"a\" >\n" +
-"    # test %charset directive\n" +
-"{ \"ěščřžýáíéúůĺ %u@#$\": {\n" +
-"    \"é\": \"string()\",\n" +
-"    \"§&amp;&lt;&gt;\": \"date()\",\n" +
-"    \"%\": [ \"*; string()\", { \"čřé\": \"string()\" } ]\n" +
+"<xd:xon name=\"a\">\n" +
+"  # test encodings\n" +
+"  { \"ěščřžýáíéúůĺ %u@#$\": {\n" +
+"      é: \"string()\",\n" +
+"      \"§&amp;&lt;&gt;\": \"date()\",\n" +
+"      \"%\": [ \"*; string()\", { \"čřé\": \"string()\" } ]\n" +
+"    }\n" +
 "  }\n" +
-"}\n" +
 "</xd:xon>\n" +
 "<xd:component>\n"+
 "  %class test.xdef.TestXonEncoding %link #a;\n"+
@@ -1071,26 +1081,21 @@ public class TestJsonXdef extends XDTester {
 "    \"%\" : [\"Ščř\", \"ŠŮÚ\", {čřé : \"%§\"}]\n" +
 "  }\n" +
 "}";
-			assertEq("", testCharset(xp, "%encoding=\"UTF-8\"\n"+json, "UTF-8"));
-			assertEq("", testCharset(xp,
-				"%encoding=\"windows-1250\"\n"+json, "windows-1250"));
-			assertEq("", testCharset(xp, "%encoding=\"UTF-8\"\n"+json,"UTF-8"));
-			assertEq("", testCharset(xp, json, "UTF-8")); // authomaic
-			assertEq("", testCharset(xp,"%encoding=\"UTF-16\"\n"+json,"UTF-16"));
-			assertEq("", testCharset(xp, json,"UTF-16")); // authomaic
-			assertEq("", testCharset(xp,
-				"%encoding=\"UTF-16LE\"\n" + json, "UTF-16LE"));
-			assertEq("", testCharset(xp,
-				"%encoding=\"UTF-16BE\"\n" + json, "UTF-16BE"));
-			assertEq("", testCharset(xp, json,"UTF-16BE")); // authomaic
-			assertEq("", testCharset(xp,"%encoding=\"UTF-32\"\n"+json,"UTF-32"));
-			assertEq("", testCharset(xp, json,"UTF-32")); // authomaic
-			assertEq("", testCharset(xp,
-				"%encoding=\"UTF-32LE\"\n" + json, "UTF-32LE"));
-			assertEq("", testCharset(xp, json, "UTF-32LE")); // authomaic
-			assertEq("", testCharset(xp,
-				"%encoding=\"UTF-32BE\"\n" + json, "UTF-32BE"));
-			assertEq("", testCharset(xp, json,"UTF-32BE")); // authomaic
+			assertEq("", testEncoding(xp, json, "windows-1250", true));
+			assertEq("", testEncoding(xp, json, "UTF-8", true));
+			assertEq("", testEncoding(xp, json, "UTF-8", false)); // authomatic
+			assertEq("", testEncoding(xp, json, "UTF-16", true));
+			assertEq("", testEncoding(xp, json,"UTF-16", false)); // authomatic
+			assertEq("", testEncoding(xp, json, "UTF-16LE", true));
+			assertEq("", testEncoding(xp, json, "UTF-16LE",false)); //authomatic
+			assertEq("", testEncoding(xp, json, "UTF-16BE", true));
+			assertEq("", testEncoding(xp, json,"UTF-16BE", false));// authomatic
+			assertEq("", testEncoding(xp, json, "UTF-32", true));
+			assertEq("", testEncoding(xp, json,"UTF-32", false)); // authomatic
+			assertEq("", testEncoding(xp, json, "UTF-32LE", true));
+			assertEq("", testEncoding(xp, json, "UTF-32LE", false));//authomatic
+			assertEq("", testEncoding(xp, json, "UTF-32BE", true));
+			assertEq("", testEncoding(xp, json,"UTF-32BE", false));// authomatic
 		} catch (Exception ex) {fail(ex);}
 
 		clearTempDir(); // delete temporary files.
