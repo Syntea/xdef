@@ -1,6 +1,5 @@
 package bugreports;
 
-import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.xdef.component.XComponent;
 import org.xdef.sys.ArrayReporter;
