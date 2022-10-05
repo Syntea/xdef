@@ -717,8 +717,9 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			}
 			return createRootChkElement(root, checkRoot);
 		} catch (Exception ex) {
-			 //Can'create root element
-			throw new SRuntimeException(XDEF.XDEF103, ex);
+			//XDEF103 = Can'create root element
+			throw ex instanceof SRuntimeException ? (SRuntimeException) ex
+				: new SRuntimeException(XDEF.XDEF103, ex);
 		}
 	}
 	@Override

@@ -576,6 +576,7 @@ public class TestJsonXdef extends XDTester {
 "</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
+			genXComponent(xp, clearTempDir());
 			json =
 "{ \"Person\": {\n" +
 "    \"Name\":\"Václav Novák\",\n" +
@@ -590,17 +591,17 @@ public class TestJsonXdef extends XDTester {
 			xd.setXONContext(XonUtils.xonToJson(x));
 			assertTrue(XonUtils.xonEqual(x, jcreate(xd, "Person", reporter)));
 			assertNoErrorwarningsAndClear(reporter);
-//			xd = xp.createXDDocument("Person");
-//			xd.setXONContext(XonUtils.xonToJson(x));
-//			xc = xd.jcreateXComponent("Person", null, reporter);
-//			assertNoErrorwarningsAndClear(reporter);
-//			assertTrue(XonUtils.xonEqual(x, xc.toXon()));
-//			xd = xp.createXDDocument("Person");
-//			xd.setXONContext(XonUtils.xonToJson(x));
-//			xc = xd.jcreateXComponent("Person",
-//				Class.forName("test.xdef.XonPerson"), reporter);
-//			assertNoErrorwarningsAndClear(reporter);
-//			assertTrue(XonUtils.xonEqual(x, xc.toXon()));
+			xd = xp.createXDDocument("Person");
+			xd.setXONContext(XonUtils.xonToJson(x));
+			xc = xd.jcreateXComponent("Person", null, reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			assertTrue(XonUtils.xonEqual(x, xc.toXon()));
+			xd = xp.createXDDocument("Person");
+			xd.setXONContext(XonUtils.xonToJson(x));
+			xc = xd.jcreateXComponent("Person",
+				Class.forName("test.xdef.XonPerson"), reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			assertTrue(XonUtils.xonEqual(x, xc.toXon()));
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='Person_list'>\n"+
 "<xd:xon name=\"Person_list\">\n"+
@@ -697,6 +698,8 @@ public class TestJsonXdef extends XDTester {
 			assertTrue(XonUtils.xonEqual(x,
 				jcreate(xd, "Person_list", reporter)));
 			assertNoErrorwarningsAndClear(reporter);
+		} catch (Exception ex) {fail(ex);}
+		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='Matrix'>\n"+
 "<xd:xon name=\"Matrix\">\n"+
@@ -721,7 +724,6 @@ public class TestJsonXdef extends XDTester {
 			xd.setXONContext(x);
 			assertTrue(XonUtils.xonEqual(x, jcreate(xd, "Matrix", reporter)));
 			assertNoErrorwarningsAndClear(reporter);
-////////////////////////////////////////////////////////////////////////////////
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='Skladby'>\n"+
 "<xd:xon name=\"Skladby\">\n"+
