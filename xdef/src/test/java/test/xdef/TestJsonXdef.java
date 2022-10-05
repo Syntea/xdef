@@ -202,7 +202,7 @@ public class TestJsonXdef extends XDTester {
 				String classDir =
 					new File(u.getFile()).getAbsolutePath().replace('\\', '/');
 				classDir = classDir.substring(0, classDir.indexOf(className));
-				compileSources(classDir, classpath, sources);
+				compileSources(classpath, classDir, sources);
 			}
 			return xp; // return XDPool with compiled X-definitions
 		} catch (Exception ex) {
