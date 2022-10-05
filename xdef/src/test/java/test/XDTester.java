@@ -1329,7 +1329,7 @@ public abstract class XDTester extends STester {
 			// create classpath item with org.xdef directory
 			String classpath = getClassSource(XDConstants.class);
 			String classDir = getClassSource(XDTester.class);
-			compileSources(classDir, classpath, dir);
+			compileSources(classpath, classDir, dir);
 		} catch (Exception ex) {
 			throw new SRuntimeException(ex.toString(), ex);
 		}
