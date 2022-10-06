@@ -1995,6 +1995,31 @@ public class TestXon extends XDTester {
 			assertNull(testX(xp,"X", s, "{a:1, b:[],c:null,d:[], e:{}}"));
 			assertNull(testX(xp,"X", s, "{a:1, b:[],c:null,d:[], e:{}}"));
 		} catch (Exception ex) {fail(ex);}
+		try {
+			xdef = // test reference to %oneOf
+"<xd:def xmlns:xd='" + _xdNS + "' root=\"A\">\n" +
+"<xd:xon name=\"A\">\n" +
+"[ \"?; jvalue()\",\n" +
+"  [ %oneOf=\"?; ref X\" ]\n" +
+"]\n" +
+"</xd:xon>\n" +
+"<xd:xon name=\"X\">\n" +
+"[%oneOf,\n" +
+" [\"* jvalue();\"],\n" +
+" { \"a\": \"? date()\", \"b\": \"? jvalue()\" }\n" +
+"]\n" +
+"</xd:xon>\n" +
+"<xd:component> %class test.xdef.TestRef %link #A; </xd:component>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			genXComponent(xp, clearTempDir());
+			assertNull(testX(xp,"","test.xdef.TestRef", "[true,[0, 1]]"));
+			assertNull(testX(xp,"","test.xdef.TestRef","[{a:d1991-01-01}]"));
+			assertNull(testX(xp,"","test.xdef.TestRef", "[{b:1}]"));
+			assertNull(testX(xp,"","test.xdef.TestRef","[{}]"));
+			assertNull(testX(xp,"","test.xdef.TestRef","[null]"));
+			assertNull(testX(xp,"","test.xdef.TestRef","[]"));
+		} catch (Exception ex) {fail(ex);}
 		clearTempDir(); // clear temporary directory
 	}
 

@@ -703,6 +703,13 @@ public final class CompileXonXdef extends XScriptParser {
 						parent, "choice", ((JValue) jo).getPosition());
 					skipSemiconsBlanksAndComments();
 					if (!s.isEmpty()) {
+						int ndx = s.indexOf("ref ");
+						if (ndx >= 0) {
+							setXDAttr(e, "script",new SBuffer(s,getPosition()));
+							s = s.substring(0, ndx).trim();
+						}
+					}
+					if (!s.isEmpty()) {
 						if (!s.endsWith(";")) {
 							s += ";";
 						}
@@ -710,10 +717,13 @@ public final class CompileXonXdef extends XScriptParser {
 						XOccurrence x = readOccurrence();
 						if (x != null && x.minOccurs() == 0
 							&& X_MAP.equals(parent.getLocalName())) {
-							setXDAttr(e, "script",
-								new SBuffer("?", getPosition()));
+							setXDAttr(e,
+								"script",new SBuffer("?", getPosition()));
 						}
-						setXDAttr(parent, "script", new SBuffer(s,getPosition()));
+						if (!s.isEmpty()) {
+							setXDAttr(parent,
+								"script", new SBuffer(s,getPosition()));
+						}
 					}
 				} else {
 					String s = getUnparsedBufferPart().trim();
@@ -1098,7 +1108,7 @@ public final class CompileXonXdef extends XScriptParser {
 				JValue jv;
 				if (ONEOF_DIRECTIVE.equals(name.getString())) {
 					jv =  new JValue(name, new JValue(spos,
-						ONEOF_DIRECTIVE + (value == null ? "" : value.getString())));
+						ONEOF_DIRECTIVE+(value==null? "" : value.getString())));
 				} else {
 					jv = new JValue(name, new JValue(spos,
 						value == null ? "" : value.getString()));

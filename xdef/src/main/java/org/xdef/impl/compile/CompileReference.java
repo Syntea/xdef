@@ -211,7 +211,12 @@ final class CompileReference extends XNode {
 					}
 				}
 			}
-
+		}
+		if (xe == null) {
+			if (mName.endsWith("$choice")) { // mName  may be e.g. name$choice
+				xe = (XElement) xdef.getModel(
+					uri,mName.substring(0,mName.length() - "$choice".length()));
+			}
 		}
 		if (xe != null) {
 			if(ndx > 0) {
