@@ -34,14 +34,14 @@ public interface XonNames {
 ////////////////////////////////////////////////////////////////////////////////
 // Names of XON directives
 ////////////////////////////////////////////////////////////////////////////////
-	/** Encoding specification {used only in first line of XON source data}. */
-	public static final String ENCODING_SPECIFICATION = "%encoding";
-	/** Specification of script command in XON model. */
-	public static final String SCRIPT_CMD = "%script";
-	/** Specification of oneOf command in XON model. */
-	public static final String ONEOF_CMD = "%oneOf";
-	/** Specification of any object in XON model. */
-	public static final String ANY_OBJ = "%anyObj";
-	/** Specification of any name in XON map. */
+	/** Encoding directive {used only in first line of XON source data}. */
+	public static final String ENCODING_DIRECTIVE = "%encoding";
+	/** Directive with script in XON model. */
+	public static final String SCRIPT_DIRECTIVE = "%script";
+	/** Directive oneOf in XON model. */
+	public static final String ONEOF_DIRECTIVE = "%oneOf";
+	/** Directive any name in XON map model. */
 	public static final String ANY_NAME = "%anyName";
+	/** Directive any object in XON model. */
+	public static final String ANY_OBJ = "%anyObj";
 }

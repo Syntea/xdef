@@ -35,14 +35,13 @@ import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
 import static org.xdef.xon.XonNames.ANY_NAME;
 import static org.xdef.xon.XonNames.ANY_OBJ;
-import static org.xdef.xon.XonNames.ONEOF_CMD;
-import static org.xdef.xon.XonNames.SCRIPT_CMD;
+import static org.xdef.xon.XonNames.SCRIPT_DIRECTIVE;
+import static org.xdef.xon.XonNames.ONEOF_DIRECTIVE;
 
 /** Methods for JSON/XON data.
  * @author Vaclav Trojan
  */
 public final class XonReader extends StringParser implements XonParsers {
-	private static final String[] XDEF_NAMES=new String[]{SCRIPT_CMD,ONEOF_CMD};
 	/** Flag to accept comments (default false; true=accept comments). */
 	private boolean _acceptComments;
 	/** Flag if parse JSON or XON (default false; false=JSON, true=XON). */
@@ -115,6 +114,39 @@ public final class XonReader extends StringParser implements XonParsers {
 		}
 	}
 
+	/** Read a directive.
+	 * @return
+	 */
+	private boolean readDirective() {
+		if (!_jdef) { // no X-definition model
+			return false;
+		}
+		SPosition spos = getPosition();
+		final String[] directives =
+			new String[]{SCRIPT_DIRECTIVE, ONEOF_DIRECTIVE};
+		int i = isOneOfTokens(directives);
+		if (i < 0) {
+			return false;
+		}
+		SBuffer name = new SBuffer(directives[i], spos);
+		skipSpacesOrComments();
+		SBuffer value = null;
+		if (isChar('=')) {
+			skipSpacesOrComments();
+			XonTools.JValue jv = readSimpleValue();
+			value = jv.getSBuffer();
+			if (!(jv.getValue() instanceof String)) {
+				//Value must be string with X-script
+				error(JSON.JSON018);
+			}
+		} else if (i == 0) { // $script
+			error(JSON.JSON002, "=");//"&{0}"&{1}{ or "}{"} expected
+			value = new SBuffer("", getPosition());
+		}
+		_jp.xdScript(name, value);
+		return true;
+	}
+
 	/** Read XON/JSON map.
 	 * @throws SRuntimeException is an error occurs.
 	 */
@@ -126,55 +158,11 @@ public final class XonReader extends StringParser implements XonParsers {
 			_jp.mapEnd(spos);
 			return;
 		}
-		boolean wasScript = false;
+		boolean wasItem = false;
 		boolean wasAnyName = false;
-		int i;
 		while(!eos()) {
-			if (_jdef && !wasScript && (i = isOneOfTokens(XDEF_NAMES)) >= 0) {
-				SBuffer name = new SBuffer(XDEF_NAMES[i], spos);
-				wasScript = true;
-				skipSpacesOrComments();
-				SBuffer value = null;
-				if (i >= 1) { // %oneOf, %anyObj
-					if (isChar('=')) {
-						skipSpacesOrComments();
-						spos = getPosition();
-						XonTools.JValue jv = readSimpleValue();
-						if (jv.getValue() instanceof String) {
-							value = jv.getSBuffer();
-						} else {
-							//Value must be string with X-script
-							error(JSON.JSON018);
-						}
-					}
-					if (i == 2) { //%anyObj
-						_jp.xdScript(new SBuffer(ANY_NAME, spos), null);
-						_jp.xdScript(name, value);
-						skipSpacesOrComments();
-						if (!isChar('}')) {
-							//"&{0}"&{1}{ or "}{"} expected
-							error(JSON.JSON002, "}");
-
-						}
-						_jp.mapEnd(this);
-						return;
-					} else {
-						_jp.xdScript(name, value);
-					}
-				} else {  // %script
-					if (!isChar('=')) {
-						error(JSON.JSON002, "=");//"&{0}"&{1}{ or "}{"} expected
-					}
-					skipSpacesOrComments();
-					spos = getPosition();
-					XonTools.JValue jv = readSimpleValue();
-					if (jv != null && jv.getValue() instanceof String) {
-						_jp.xdScript(name, jv.getSBuffer());
-					} else {
-						error(JSON.JSON018);//Value must be string with X-script
-					}
-				}
-			} else {
+			if (wasItem || !readDirective()) {
+				wasItem = true;
 				SBuffer name;
 				spos = getPosition();
 				if (_jdef && isToken(ANY_NAME)) {
@@ -256,33 +244,12 @@ public final class XonReader extends StringParser implements XonParsers {
 			_jp.arrayEnd(getPosition());
 			return;
 		}
-		boolean wasScript = false;
+		boolean wasItem = false;
 		boolean wasErrorReported = false;
 		while(!eos()) {
-			int i;
-			SPosition spos = getPosition();
-			if (!wasScript &&_jdef && (i = isOneOfTokens(XDEF_NAMES))>=0) {
-				SBuffer name = new SBuffer(XDEF_NAMES[i], spos);
-				wasScript = true;
-				SBuffer value = null;
-				skipSpacesOrComments();
-				if (isChar('=')) {
-					skipSpacesOrComments();
-					XonTools.JValue jv = readSimpleValue();
-					if (jv.getValue() instanceof String) {
-						value = new SBuffer(
-							(String) jv.getValue(), jv.getPosition());
-					} else {
-						error(JSON.JSON018);//Value must be string with X-script
-					}
-				} else {
-					if (i == 0) { //JsonNames.SCRIPT_CMD
-					   error(JSON.JSON002, "=");//"&{0}"&{1}{ or "}{"} expected
-					}
-				}
-				_jp.xdScript(name, value);
-			} else {
+			if (wasItem || !readDirective()) {
 				readItem();
+				wasItem = true;
 			}
 			skipSpacesOrComments();
 			if (isChar(']')) {
@@ -290,7 +257,7 @@ public final class XonReader extends StringParser implements XonParsers {
 				return;
 			}
 			if (isChar(',')) {
-				spos = getPosition();
+				SPosition spos = getPosition();
 				skipSpacesOrComments();
 				if (isChar(']')) {
 					if (!_xonMode) {
@@ -784,8 +751,8 @@ public final class XonReader extends StringParser implements XonParsers {
 	 * @throws SRuntimeException if an error occurs,
 	 */
 	public final void parse() throws SRuntimeException {
-		if (!_jdef && isToken(XonNames.ENCODING_SPECIFICATION)) { //encoding
-			int pos1 = getIndex() - XonNames.ENCODING_SPECIFICATION.length();
+		if (!_jdef && isToken(XonNames.ENCODING_DIRECTIVE)) { //encoding
+			int pos1 = getIndex() - XonNames.ENCODING_DIRECTIVE.length();
 			while(isOneOfChars(" \t") > 0){}
 			boolean wasEq = isChar('=');
 			while(isOneOfChars(" \t") > 0){}
@@ -907,12 +874,12 @@ public final class XonReader extends StringParser implements XonParsers {
 				}
 				String s = bytesToString(buf, 0, len, encoding);
 				int i = -1;
-				while (s.length() < XonNames.ENCODING_SPECIFICATION.length()
-					&& XonNames.ENCODING_SPECIFICATION.startsWith(s)
+				while (s.length() < XonNames.ENCODING_DIRECTIVE.length()
+					&& XonNames.ENCODING_DIRECTIVE.startsWith(s)
 					&& (i = nextChar(in, encoding, buf, count, baos)) != -1) {
 					s += (char) i;
 				}
-				if (XonNames.ENCODING_SPECIFICATION.equals(s)) {
+				if (XonNames.ENCODING_DIRECTIVE.equals(s)) {
 					while((i = nextChar(in,encoding,buf,count,baos)) == ' '
 						|| i == '\t') {}
 					if (i == '=') {

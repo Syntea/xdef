@@ -18,8 +18,6 @@ import org.xdef.sys.StringParser;
 import org.xdef.xon.IniReader;
 import org.xdef.xon.XonNames;
 import static org.xdef.xon.XonNames.ANY_NAME;
-import static org.xdef.xon.XonNames.ONEOF_CMD;
-import static org.xdef.xon.XonNames.SCRIPT_CMD;
 import static org.xdef.xon.XonNames.X_ARRAY;
 import static org.xdef.xon.XonNames.X_ITEM;
 import static org.xdef.xon.XonNames.X_KEYATTR;
@@ -34,6 +32,8 @@ import org.xdef.xon.XonTools.JArray;
 import org.xdef.xon.XonTools.JMap;
 import org.xdef.xon.XonTools.JObject;
 import org.xdef.xon.XonTools.JValue;
+import static org.xdef.xon.XonNames.SCRIPT_DIRECTIVE;
+import static org.xdef.xon.XonNames.ONEOF_DIRECTIVE;
 
 /** Create X-definition model from xd:xon element.
  * @author Vaclav Trojan
@@ -580,13 +580,13 @@ public final class CompileXonXdef extends XScriptParser {
 
 	private PNode genXonMap(final JMap map, final PNode parent) {
 		PNode e, ee;
-		Object val = map.get(SCRIPT_CMD);
+		Object val = map.get(SCRIPT_DIRECTIVE);
 		if (val != null && val instanceof JValue) {
-			map.remove(SCRIPT_CMD);
+			map.remove(SCRIPT_DIRECTIVE);
 			JValue jv = (JValue) val;
 			setSourceBuffer(jv.getSBuffer());
 			isSpacesOrComments();
-			if (isToken(ONEOF_CMD)) {
+			if (isToken(ONEOF_DIRECTIVE)) {
 				e = genJElement(parent, X_MAP, map.getPosition());
 				ee = genXDElement(e, "choice", getPosition());
 				e.addChildNode(ee);
@@ -598,7 +598,7 @@ public final class CompileXonXdef extends XScriptParser {
 					if (x != null && x.maxOccurs() > 1) {
 						//Specification of occurence of &{0} group
 						// can not be higher then 1
-						error(XDEF.XDEF252, ONEOF_CMD);
+						error(XDEF.XDEF252, ONEOF_DIRECTIVE);
 					}
 				}
 			} else if (map.size() > 1) {
@@ -697,7 +697,7 @@ public final class CompileXonXdef extends XScriptParser {
 			if (o != null && o instanceof JValue) {
 				setSourceBuffer(((JValue) o).getSBuffer());
 				isSpacesOrComments();
-				if (isToken(ONEOF_CMD)) {
+				if (isToken(ONEOF_DIRECTIVE)) {
 					String s = getUnparsedBufferPart().trim();
 					e = genXDElement(
 						parent, "choice", ((JValue) jo).getPosition());
@@ -1096,9 +1096,9 @@ public final class CompileXonXdef extends XScriptParser {
 				putValue(new JAny((SPosition)name, value));
 			} else {
 				JValue jv;
-				if (ONEOF_CMD.equals(name.getString())) {
+				if (ONEOF_DIRECTIVE.equals(name.getString())) {
 					jv =  new JValue(name, new JValue(spos,
-						ONEOF_CMD + (value == null ? "" : value.getString())));
+						ONEOF_DIRECTIVE + (value == null ? "" : value.getString())));
 				} else {
 					jv = new JValue(name, new JValue(spos,
 						value == null ? "" : value.getString()));
@@ -1106,7 +1106,7 @@ public final class CompileXonXdef extends XScriptParser {
 				if (_kind == 1) { // array
 					_arrays.peek().add(jv);
 				} else if (_kind == 2) { // map
-					_maps.peek().put(SCRIPT_CMD, jv);
+					_maps.peek().put(SCRIPT_DIRECTIVE, jv);
 				}
 			}
 		}

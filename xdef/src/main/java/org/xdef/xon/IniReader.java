@@ -16,7 +16,7 @@ import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
 import org.xdef.xml.KXmlUtils;
-import static org.xdef.xon.XonNames.SCRIPT_CMD;
+import static org.xdef.xon.XonNames.SCRIPT_DIRECTIVE;
 
 /** Methods for INI/Properties data.
  * @author Vaclav Trojan
@@ -248,14 +248,14 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 				if (p.isChar(';')) {
 					p.isSpaces();
 					SPosition spos1 = p.getPosition();
-					if (p.isToken(SCRIPT_CMD)) {
+					if (p.isToken(SCRIPT_DIRECTIVE)) {
 						p.isSpaces();
 						if (p.isChar('=')) {
 							p.isSpaces();
 							String s = p.getUnparsedBufferPart();
 							int ndx = s.lastIndexOf(']');
 							if (ndx > 0 ) {
-								p1 = new SBuffer(SCRIPT_CMD, spos1);
+								p1 = new SBuffer(SCRIPT_DIRECTIVE, spos1);
 								p2 = new SBuffer(s.substring(0, s.length()-1),
 									p.getPosition());
 							}
@@ -278,11 +278,11 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 				p.nextChar(); //skip ']'
 				p.isSpaces();
 				SPosition spos1 = p.getPosition();
-				if (p.isToken(SCRIPT_CMD)) {
+				if (p.isToken(SCRIPT_DIRECTIVE)) {
 					p.isSpaces();
 					if (p.isChar('=')) {
 						p.isSpaces();
-						_jp.xdScript(new SBuffer(SCRIPT_CMD, spos1),
+						_jp.xdScript(new SBuffer(SCRIPT_DIRECTIVE, spos1),
 							new SBuffer(p.getUnparsedBufferPart().trim(),
 								p.getPosition()));
 						p.setEos();
