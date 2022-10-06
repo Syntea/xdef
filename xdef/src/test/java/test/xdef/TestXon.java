@@ -2019,6 +2019,9 @@ public class TestXon extends XDTester {
 			assertNull(testX(xp,"","test.xdef.TestRef","[{}]"));
 			assertNull(testX(xp,"","test.xdef.TestRef","[null]"));
 			assertNull(testX(xp,"","test.xdef.TestRef","[]"));
+			assertNotNull(testX(xp,"","test.xdef.TestRef0","[1,2]"));
+			assertNotNull(testX(xp,"","test.xdef.TestRef0","[[],[]]"));
+			assertNotNull(testX(xp,"","test.xdef.TestRef0","[{},{}]"));
 		} catch (Exception ex) {fail(ex);}
 		clearTempDir(); // clear temporary directory
 	}
