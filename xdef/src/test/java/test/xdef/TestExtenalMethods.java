@@ -145,7 +145,7 @@ public final class TestExtenalMethods extends XDTester {
 		XDDocument xd;
 		String xdef, xml;
 		ArrayReporter reporter = new ArrayReporter();
-		StringWriter strw;
+		StringWriter swr;
 		String s;
 		Properties props = new Properties();
 		props.setProperty(XDConstants.XDPROPERTY_WARNINGS, // xdef_warnings
@@ -462,14 +462,14 @@ public final class TestExtenalMethods extends XDTester {
 "</xd:def>\n";
 			xml ="<a/>";
 			xp = compile(xdef);
-			strw = new StringWriter();
-			assertEq(xml, parse(xp, null, xml, reporter, strw, null, null));
+			swr = new StringWriter();
+			assertEq(xml, parse(xp, null, xml, reporter, swr, null, null));
 			assertNoErrorwarnings(reporter);
-			assertEq("p12103450433604", strw.toString());
-			strw = new StringWriter();
-			assertEq(xml, create(xp, null, "a", reporter, xml, strw, null));
+			assertEq("p12103450433604", swr.toString());
+			swr = new StringWriter();
+			assertEq(xml, create(xp, null, "a", reporter, xml, swr, null));
 			assertNoErrorwarnings(reporter);
-			assertEq("p12103450433604", strw.toString());
+			assertEq("p12103450433604", swr.toString());
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xdef =
@@ -589,16 +589,15 @@ public final class TestExtenalMethods extends XDTester {
 			xd = xp.createXDDocument("A");
 			xd.setVariable("e1", 3);
 			xd.setVariable("e2", 4);
-			strw = new StringWriter();
-			xd.setStdOut(strw);
+			swr = new StringWriter();
+			xd.setStdOut(swr);
 			parse(xd, "<a m00='a' m01='b'/>", reporter);
-			assertEq("e(99); e1=3, e2=2\ne(2); e1=3, e2=2\n", strw.toString());
+			assertEq("e(99); e1=3, e2=2\ne(2); e1=3, e2=2\n", swr.toString());
 			xd = xp.createXDDocument("B");
-			strw = new StringWriter();
-			xd.setStdOut(strw);
+			swr = new StringWriter();
+			xd.setStdOut(swr);
 			parse(xd, "<b b='a'/>", reporter);
-//			assertEq("e(0); e1=0, e2=2\ne(2); e1=0, e2=2\n", strw.toString());
-			assertEq("e(); e1=, e2=2\ne(2); e1=, e2=2\n", strw.toString());
+			assertEq("e(); e1=, e2=2\ne(2); e1=, e2=2\n", swr.toString());
 		} catch (Exception ex) {fail(ex);}
 	}
 

@@ -42,7 +42,7 @@ final public class TestCompose extends XDTester {
 		Report rep;
 		XDPool xp;
 		XDDocument xd;
-		StringWriter strw;
+		StringWriter swr;
 		PrintStream ps;
 		Element el;
 		String xml;
@@ -479,11 +479,11 @@ final public class TestCompose extends XDTester {
 "      onAbsence {clearReports(); out('Attribute is missing!');}\">\n"+
 "</A>\n"+
 "</xd:def>";
-			strw = new StringWriter();
+			swr = new StringWriter();
 			assertEq("<A a='68829'/>",
-				create(xdef, null, "A", reporter, null, strw, null));
+				create(xdef, null, "A", reporter, null, swr, null));
 			assertNoErrorwarnings(reporter);
-			assertEq(strw.toString(), "OK");
+			assertEq(swr.toString(), "OK");
 			xdef = //this should be error, value is not numeric
 "<xd:def xmlns:xd='" + _xdNS + "'>\n"+
 "<A a=\"required num(1,6);\n"+
@@ -493,11 +493,11 @@ final public class TestCompose extends XDTester {
 "      onAbsence {clearReports(); out('Attribute is missing!');}\">\n"+
 "</A>\n"+
 "</xd:def>";
-			strw = new StringWriter();
+			swr = new StringWriter();
 			assertEq("<A a='6x8829'/>",
-				create(xdef, null, "A", reporter, null, strw, null));
+				create(xdef, null, "A", reporter, null, swr, null));
 			assertNoErrorwarnings(reporter);
-			assertEq(strw.toString(), "err: 6x8829");
+			assertEq(swr.toString(), "err: 6x8829");
 			xdef = //this should be error, value is missing
 "<xd:def xmlns:xd='" + _xdNS + "'>\n"+
 "<A a=\"required num(1,6);\n"+
@@ -507,10 +507,10 @@ final public class TestCompose extends XDTester {
 "      onAbsence {clearReports(); out('Attribute is missing!');}\">\n"+
 "</A>\n"+
 "</xd:def>";
-			strw = new StringWriter();
-			assertEq(create(xdef, null, "A", reporter,null,strw,null), "<A/>");
+			swr = new StringWriter();
+			assertEq(create(xdef, null, "A", reporter,null,swr,null), "<A/>");
 			assertNoErrorwarnings(reporter);
-			assertEq(strw.toString(), "Attribute is missing!");
+			assertEq(swr.toString(), "Attribute is missing!");
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "'>\n"+
 "<a a=\"xdatetime('d-M-y');"+
@@ -857,10 +857,10 @@ final public class TestCompose extends XDTester {
 + "  </ZaznamA>\n"
 + "</DavkaA>";
 			//spustime parser, ktery na kazdy ZaznamA vytvori ZaznamB
-			strw = new StringWriter();
+			swr = new StringWriter();
 			assertEq("<DavkaA/>",
-				parse(xdef, null, xml, reporter, strw, null, null));
-			s = strw.toString().trim().replace('\'', '"');
+				parse(xdef, null, xml, reporter, swr, null, null));
+			s = swr.toString().trim().replace('\'', '"');
 			assertEq("<ZaznamB attrB=\"aaa1\">" +
 "<ChildB1 ChildB1Attr=\"1 ChildA1 1\"/>" +
 "<ChildB1 ChildB1Attr=\"1 ChildA1 2\"/>" +
@@ -984,9 +984,9 @@ final public class TestCompose extends XDTester {
 + "    </ChildA1>\n"
 + "  </ZaznamA>\n"
 + "</DavkaA>";
-			strw = new StringWriter();
+			swr = new StringWriter();
 			assertEq("<DavkaA/>",
-				parse(compile(xdef), null, xml, reporter, strw, null, null));
+				parse(compile(xdef), null, xml, reporter, swr, null, null));
 			assertNoErrorwarnings(reporter);
 			assertEq("<ZaznamB attrB=\"aaa1\">"
 				+ "<ChildB1 ChildB1Attr=\"1 ChildA1 1\"/>"
@@ -996,7 +996,7 @@ final public class TestCompose extends XDTester {
 				+ "<ZaznamB attrB=\"aaa2\">"
 				+ "<ChildB1 ChildB1Attr=\"2 1\"/>"
 				+ "</ZaznamB>",
-				strw.toString());
+				swr.toString());
 			xdef = // input data parsed from element
 "<xd:def xmlns:xd='" + _xdNS + "' root='Weather'>\n"
 + "<xd:declaration> float $sum = 0; int $n = 0; </xd:declaration>\n"
@@ -1668,10 +1668,10 @@ final public class TestCompose extends XDTester {
 "  </a>\n"+
 "</xd:def>\n";
 			xp = compile(xdef);
-			strw = new StringWriter();
-			el = create(xp, "a", "a", reporter, null, strw, null);
+			swr = new StringWriter();
+			el = create(xp, "a", "a", reporter, null, swr, null);
 			assertNoErrorwarnings(reporter);
-			assertEq("start\nend\n", strw.toString());
+			assertEq("start\nend\n", swr.toString());
 			assertEq("<a><b/><b/><b/><c/></a>", el);
 //test default create in mixed
 			xdef =
@@ -2292,10 +2292,10 @@ final public class TestCompose extends XDTester {
 "    </a>\n"+
 "</xd:def>";
 			xml = "<a><b x='1'/><b x='2'/></a>";
-			strw = new StringWriter();
+			swr = new StringWriter();
 			assertEq("<a><b/><b/></a>",
-				create(xdef, null, "a", reporter, xml, strw, null));
-			assertEq("I=1S=1F=1I=2S=2F=2", strw.toString());
+				create(xdef, null, "a", reporter, xml, swr, null));
+			assertEq("I=1S=1F=1I=2S=2F=2", swr.toString());
 			xdef = // test moreAttributes and recursive reference
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <a xd:script='create from(\"/a\"); options moreAttributes, moreText'>\n"+
@@ -2594,10 +2594,10 @@ final public class TestCompose extends XDTester {
 "  </a>\n"+
 "</xd:def>\n";
 			xml = "<a><b a = '1'><c/></b><b a = '2'><c/></b><x a = 's'/></a>";
-			strw = new StringWriter();
-			assertEq(create(xdef, null, "a", reporter, xml, strw, null), xml);
+			swr = new StringWriter();
+			assertEq(create(xdef, null, "a", reporter, xml, swr, null), xml);
 			assertNoErrorwarnings(reporter);
-			assertEq("fafafa", strw.toString());
+			assertEq("fafafa", swr.toString());
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <a>\n"+
@@ -2605,11 +2605,11 @@ final public class TestCompose extends XDTester {
 "  </a>\n"+
 "</xd:def>\n";
 			xml = "<a><b a = '1'><c/></b><b a = '2'><c/></b><x a = 's'/></a>";
-			strw = new StringWriter();
+			swr = new StringWriter();
 			assertEq("<a><b a = '1'><c/></b></a>",
-				create(xdef, null, "a", reporter, xml, strw, null));
+				create(xdef, null, "a", reporter, xml, swr, null));
 			assertNoErrorwarnings(reporter);
-			assertEq("fa", strw.toString());
+			assertEq("fa", swr.toString());
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <a>\n"+
@@ -2617,10 +2617,10 @@ final public class TestCompose extends XDTester {
 "  </a>\n"+
 "</xd:def>\n";
 			xml = "<a><b a = '1'><c/></b><b a = '2'><c/></b><x a = 's'/></a>";
-			strw = new StringWriter();
+			swr = new StringWriter();
 			assertEq("<a><x a = 's'/></a>",
-				create(xdef, null, "a", reporter, xml, strw, null));
-			assertEq("fa", strw.toString());
+				create(xdef, null, "a", reporter, xml, swr, null));
+			assertEq("fa", swr.toString());
 			xdef = //test of from()
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <a xd:script=''><b xd:script='occurs +; create from()'/></a>\n"+

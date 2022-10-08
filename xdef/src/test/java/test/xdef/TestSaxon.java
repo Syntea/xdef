@@ -37,7 +37,7 @@ public class TestSaxon extends XDTester {
 		String xdef, xml;
 		Element el;
 		XDPool xp;
-		StringWriter strw;
+		StringWriter swr;
 		XDDocument xd;
 		ArrayReporter reporter = new ArrayReporter();
 		try {//xquery in declaration part (without XML context)
@@ -54,11 +54,11 @@ public class TestSaxon extends XDTester {
 			xp = compile(xdef);
 			xml = "<a/>";
 			xd = xp.createXDDocument();
-			strw = new StringWriter();
-			xd.setStdOut(strw);
+			swr = new StringWriter();
+			xd.setStdOut(swr);
 			assertEq(xml, parse(xd, xml , reporter));
 			assertNoErrorwarnings(reporter);
-			assertEq("abcd.abc.ab.a..", strw.toString());
+			assertEq("abcd.abc.ab.a..", swr.toString());
 			xdef =
 "<xd:def  xmlns:xd='http://www.xdef.org/xdef/4.1' root='a'>\n"+
 "<xd:declaration>\n" +
@@ -71,11 +71,11 @@ public class TestSaxon extends XDTester {
 			xp = compile(xdef);
 			xml = "<a/>";
 			xd = xp.createXDDocument();
-			strw = new StringWriter();
-			xd.setStdOut(strw);
+			swr = new StringWriter();
+			xd.setStdOut(swr);
 			assertEq(xml, parse(xd, xml, reporter));
 			assertNoErrorwarnings(reporter);
-			assertEq("\nabcd \nabc \nab \na \n", strw.toString());
+			assertEq("\nabcd \nabc \nab \na \n", swr.toString());
 		} catch (Exception ex) {fail(ex);}
 		try {//fromXQ (xquery)
 			xdef =

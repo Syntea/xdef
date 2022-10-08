@@ -50,7 +50,7 @@ public final class TestKeyAndRef extends XDTester {
 		XDPool xp;
 		final String dataDir = getDataDir() + "test/";
 		final ArrayReporter reporter = new ArrayReporter();
-		StringWriter strw;
+		StringWriter swr;
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
@@ -1006,11 +1006,11 @@ public final class TestKeyAndRef extends XDTester {
 "    <Param Value=\"14.8a\" Name=\"Vyska\"/>\n" +
 "  </Params>\n" +
 "</a>";
-			strw = new StringWriter();
-			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			swr = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(swr, false));
 			parse(xd, xml, reporter);
 			assertEq("true,x,false,x,false,x,string,decimal,xdatetime,",
-				strw.toString());
+				swr.toString());
 			assertTrue(reporter.getErrorCount() == 2
 				&& (s = reporter.printToString()).contains("XDEF804")
 				&& s.contains("XDEF524")
@@ -1160,11 +1160,11 @@ public final class TestKeyAndRef extends XDTester {
 "    <Street Name=\"Short\"/><Street Name=\"Long\"/><Street Name=\"Empty\"/>\n"+
 "  </Streets>\n" +
 "</Town>";
-			strw = new StringWriter();
-			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			swr = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(swr, false));
 			assertEq(xml, parse(xd, xml, reporter));
 			assertNoErrorwarnings(reporter);
-			assertEq("1,2,3,4,5,2,5,1,4,3,", strw.toString());
+			assertEq("1,2,3,4,5,2,5,1,4,3,", swr.toString());
 		} catch (Exception ex) {fail(ex);}
 		try { // test of uniqueSetKey and bindSet
 			xdef = // uniqueSetKey

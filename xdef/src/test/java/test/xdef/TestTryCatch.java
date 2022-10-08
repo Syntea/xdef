@@ -20,7 +20,7 @@ public final class TestTryCatch extends XDTester {
 		String xdef;
 		String xml;
 		ArrayReporter reporter = new ArrayReporter();
-		StringWriter strw;
+		StringWriter swr;
 		String s;
 
 		try {
@@ -49,10 +49,10 @@ public final class TestTryCatch extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			xml = "<a att='xx'/>";
-			strw = new StringWriter();
-			parse(xp, "test", xml, reporter, strw, null, null);
+			swr = new StringWriter();
+			parse(xp, "test", xml, reporter, swr, null, null);
 			assertNoErrorwarnings(reporter);
-			assertTrue((s = strw.toString()).indexOf("E: Hi") >= 0, s);
+			assertTrue((s = swr.toString()).indexOf("E: Hi") >= 0, s);
 		} catch (Exception ex) {fail(ex);}
 
 		resetTester();

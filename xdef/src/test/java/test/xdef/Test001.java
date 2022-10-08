@@ -26,7 +26,7 @@ public final class Test001  extends XDTester {
 		XDPool xp;
 		XDDocument xd;
 		ArrayReporter reporter = new ArrayReporter();
-		StringWriter strw;
+		StringWriter swr;
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n"+
@@ -69,10 +69,10 @@ public final class Test001  extends XDTester {
 " <Author>John Brown</Author>\n"+
 " <Author>Peter Smith</Author>\n"+
 "</Book>";
-			strw = new StringWriter();
-			assertEq(xml, parse(xp, "", xml, reporter, strw, null, null));
+			swr = new StringWriter();
+			assertEq(xml, parse(xp, "", xml, reporter, swr, null, null));
 			assertNoErrorwarnings(reporter);
-			assertEq("isbn: 123456789; The Crash\n", strw.toString());
+			assertEq("isbn: 123456789; The Crash\n", swr.toString());
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n"+
 "<a>\n"+
@@ -1061,8 +1061,8 @@ public final class Test001  extends XDTester {
 			xml = "<Misto name='A'/>";
 			xd = xp.createXDDocument();
 			xd.setVariable("base", base);
-			strw = new StringWriter();
-			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			swr = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(swr, false));
 			assertEq(xml, parse(xd, xml, reporter));
 			assertNoErrorwarnings(reporter);
 			xml = "<Misto name='B'/>";
@@ -1122,7 +1122,7 @@ public final class Test001  extends XDTester {
 "</Base>");
 			assertNoErrorwarnings(reporter);
 			assertEq("A already defined!\n"+
-				"A/2012-10-02T09:30:00 already exists!\n", strw.toString());
+				"A/2012-10-02T09:30:00 already exists!\n", swr.toString());
 		} catch (Exception ex) {fail(ex);}
 		try {
 			// check compiling if source items have assignment of sourceId

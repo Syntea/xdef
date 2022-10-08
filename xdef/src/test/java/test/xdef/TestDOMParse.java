@@ -39,7 +39,7 @@ public final class TestDOMParse extends XDTester {
 		Element el;
 		XDDocument xd;
 		XDOutput out;
-		StringWriter strw;
+		StringWriter swr;
 		String s;
 		KDOMBuilder builder;
 		try {
@@ -53,12 +53,12 @@ public final class TestDOMParse extends XDTester {
 			xml = "<root attr='attr'><a/><a/></root>";
 			xp = compile(xdef);
 			xd = xp.createXDDocument("root");
-			strw = new StringWriter();
-			out = XDFactory.createXDOutput(strw, false);
+			swr = new StringWriter();
+			out = XDFactory.createXDOutput(swr, false);
 			xd.setStdOut(out);
 			parse(xd, xml, reporter);
-			strw.close();
-			String result = strw.toString();
+			swr.close();
+			String result = swr.toString();
 			if (!result.equals("xyz")) {
 				fail("Unexpected result: " + result);
 			}
@@ -77,12 +77,12 @@ public final class TestDOMParse extends XDTester {
 			xp = compile(xdef);
 			xml = "<root bttr='attr'><a/><a/></root>";
 			xd = xp.createXDDocument("root");
-			strw = new StringWriter();
-			out = XDFactory.createXDOutput(strw, false);
+			swr = new StringWriter();
+			out = XDFactory.createXDOutput(swr, false);
 			xd.setStdOut(out);
 			parse(xd, xml, reporter);
-			strw.close();
-			s = strw.toString();
+			swr.close();
+			s = swr.toString();
 			if (!s.equals("xyz")) {
 				fail("Unexpected result: " + s);
 			}
@@ -116,12 +116,12 @@ public final class TestDOMParse extends XDTester {
 			xml = "<root bttr='attr'><a/><b/></root>";
 			xp = compile(xdef);
 			xd = xp.createXDDocument("root");
-			strw = new StringWriter();
-			out = XDFactory.createXDOutput(strw, false);
+			swr = new StringWriter();
+			out = XDFactory.createXDOutput(swr, false);
 			xd.setStdOut(out);
 			parse(xd, xml, reporter);
-			strw.close();
-			s = strw.toString();
+			swr.close();
+			s = swr.toString();
 			if (!s.equals("xyz")) {
 				fail("Unexpected result: " + s);
 			}
@@ -232,10 +232,10 @@ public final class TestDOMParse extends XDTester {
 "</e:Envelope>";
 
 			xp = compile(xdef);
-			strw = new StringWriter();
-			parse(xp, "XDefSOAPEnvelope", xml, reporter, strw, null, null);
+			swr = new StringWriter();
+			parse(xp, "XDefSOAPEnvelope", xml, reporter, swr, null, null);
 			assertNoErrorwarnings(reporter);
-			assertEq("", strw.toString());
+			assertEq("", swr.toString());
 			//2) ChkDomParser
 			builder = new KDOMBuilder();
 			builder.setNamespaceAware(true);

@@ -24,8 +24,7 @@ public final class TestInclude extends XDTester {
 		String xml;
 		ArrayReporter reporter = new ArrayReporter();
 		XDPool xp;
-		StringWriter strw;
-		StringWriter sw;
+		StringWriter swr, swr1;
 		String s;
 		Report report;
 		String dataDir = new File(getDataDir(), "test").getAbsolutePath()
@@ -44,45 +43,45 @@ public final class TestInclude extends XDTester {
 "  </foo>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			strw = new StringWriter();
+			swr = new StringWriter();
 			xml = "<foo/>";
-			parse(xp, "a", xml, reporter, strw, null, null);
+			parse(xp, "a", xml, reporter, swr, null, null);
 			if (reporter.errors()) {
-				sw = new StringWriter();
-				ReportPrinter.printListing(sw, xml, reporter, true);
-				fail(sw.toString());
+				swr1 = new StringWriter();
+				ReportPrinter.printListing(swr1, xml, reporter, true);
+				fail(swr1.toString());
 			}
-			assertEq("f", strw.toString());
+			assertEq("f", swr.toString());
 			xml = "<foo><bar><foo/></bar></foo>";
-			strw = new StringWriter();
-			parse(xp,"a", xml, reporter, strw, null, null);
+			swr = new StringWriter();
+			parse(xp,"a", xml, reporter, swr, null, null);
 			if (reporter.errors()) {
-				sw = new StringWriter();
-				ReportPrinter.printListing(sw, xml, reporter, true);
-				fail(sw.toString());
+				swr1 = new StringWriter();
+				ReportPrinter.printListing(swr1, xml, reporter, true);
+				fail(swr1.toString());
 			}
-			assertEq("bf", strw.toString());
+			assertEq("bf", swr.toString());
 			// the same from file
 			xdef = dataDir + "TestInclude.xdef";
 			xp = compile(xdef);
-			strw = new StringWriter();
+			swr = new StringWriter();
 			xml = "<foo/>";
-			parse(xp, "a", xml, reporter, strw, null, null);
+			parse(xp, "a", xml, reporter, swr, null, null);
 			if (reporter.errors()) {
-				sw = new StringWriter();
-				ReportPrinter.printListing(sw, xml, reporter, true);
-				fail(sw.toString());
+				swr1 = new StringWriter();
+				ReportPrinter.printListing(swr1, xml, reporter, true);
+				fail(swr1.toString());
 			}
-			assertEq("f", strw.toString());
+			assertEq("f", swr.toString());
 			xml = "<foo><bar><foo/></bar></foo>";
-			strw = new StringWriter();
-			parse(xp,"a", xml, reporter, strw, null, null);
+			swr = new StringWriter();
+			parse(xp,"a", xml, reporter, swr, null, null);
 			if (reporter.errors()) {
-				sw = new StringWriter();
-				ReportPrinter.printListing(sw, xml, reporter, true);
-				fail(sw.toString());
+				swr1 = new StringWriter();
+				ReportPrinter.printListing(swr1, xml, reporter, true);
+				fail(swr1.toString());
 			}
-			assertEq("bf", strw.toString());
+			assertEq("bf", swr.toString());
 		} catch (Exception ex) {fail(ex);}
 		try {
 			//xi:include in collection
@@ -97,24 +96,24 @@ public final class TestInclude extends XDTester {
 "   href = '" + dataDir + "TestInclude_1.xdef" + "' />\n" +
 "</xd:collection>";
 			xp = compile(xdef);
-			strw = new StringWriter();
+			swr = new StringWriter();
 			xml = "<foo/>";
-			parse(xp, "a", xml, reporter, strw, null, null);
+			parse(xp, "a", xml, reporter, swr, null, null);
 			if (reporter.errors()) {
-				sw = new StringWriter();
-				ReportPrinter.printListing(sw, xml, reporter, true);
-				fail(sw.toString());
+				swr1 = new StringWriter();
+				ReportPrinter.printListing(swr1, xml, reporter, true);
+				fail(swr1.toString());
 			}
-			assertEq("f", strw.toString());
+			assertEq("f", swr.toString());
 			xml = "<foo><bar><foo/></bar></foo>";
-			strw = new StringWriter();
-			parse(xp,"a", xml, reporter, strw, null, null);
+			swr = new StringWriter();
+			parse(xp,"a", xml, reporter, swr, null, null);
 			if (reporter.errors()) {
-				sw = new StringWriter();
-				ReportPrinter.printListing(sw, xml, reporter, true);
-				fail(sw.toString());
+				swr1 = new StringWriter();
+				ReportPrinter.printListing(swr1, xml, reporter, true);
+				fail(swr1.toString());
 			}
-			assertEq("bf", strw.toString());
+			assertEq("bf", swr.toString());
 		} catch (Exception ex) {fail(ex);}
 		try {
 			//include attribute in collection
@@ -122,15 +121,15 @@ public final class TestInclude extends XDTester {
 "<xd:collection xmlns:xd='" + _xdNS + "'\n"+
 	"include='" + dataDir + "TestInclude.xdef'/>";
 			xp = compile(xdef);
-			strw = new StringWriter();
+			swr = new StringWriter();
 			xml = "<foo><bar><foo/></bar></foo>";
-			parse(xp,"a", xml, reporter, strw, null, null);
+			parse(xp,"a", xml, reporter, swr, null, null);
 			if (reporter.errors()) {
-				sw = new StringWriter();
-				ReportPrinter.printListing(sw, xml, reporter, true);
-				fail(sw.toString());
+				swr1 = new StringWriter();
+				ReportPrinter.printListing(swr1, xml, reporter, true);
+				fail(swr1.toString());
 			}
-			assertEq("bf", strw.toString());
+			assertEq("bf", swr.toString());
 		} catch (Exception ex) {fail(ex);}
 		try {//xinclude
 			xdef =
@@ -313,15 +312,15 @@ public final class TestInclude extends XDTester {
 			xml = "<B b='123'/>";
 			assertEq(xml, parse(xp, "B", xml, reporter));
 			assertNoErrorwarnings(reporter);
-			strw = new StringWriter();
+			swr = new StringWriter();
 			xml = "<foo/>";
-			parse(xp, "a", xml, reporter, strw, null, null);
+			parse(xp, "a", xml, reporter, swr, null, null);
 			if (reporter.errors()) {
-				sw = new StringWriter();
-				ReportPrinter.printListing(sw, xml, reporter, true);
-				fail(sw.toString());
+				swr1 = new StringWriter();
+				ReportPrinter.printListing(swr1, xml, reporter, true);
+				fail(swr1.toString());
 			}
-			assertEq("f", strw.toString());
+			assertEq("f", swr.toString());
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' name='A' root='foo'\n"+
 "xd:include='classpath://test.xdef.data.test.TestInclude_10.xdef'>\n"+
