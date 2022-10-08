@@ -26,7 +26,7 @@ public final class TestOptions extends XDTester {
 		String xml;
 		ArrayReporter reporter = new ArrayReporter();
 		Element el;
-		StringWriter strw;
+		StringWriter swr;
 		try {
 			// trimAttr, trimText
 			xdef =
@@ -160,13 +160,13 @@ public final class TestOptions extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			xml = "<a>t1<b/>t2<c/>t3</a>";
-			strw = new StringWriter();
-			assertEq(xml, parse(xp, "", xml, reporter, strw, null, null));
+			swr = new StringWriter();
+			assertEq(xml, parse(xp, "", xml, reporter, swr, null, null));
 			assertNoErrorwarnings(reporter);
-			assertEq("T:t1f:t1T:t2f:t2T:t3f:t3", strw.toString());
-			strw = new StringWriter();
-			assertEq(xml, create(xp,"", "a", reporter, xml, strw, null));
-			assertEq("T:t1f:t1T:t2f:t2T:t3f:t3", strw.toString());
+			assertEq("T:t1f:t1T:t2f:t2T:t3f:t3", swr.toString());
+			swr = new StringWriter();
+			assertEq(xml, create(xp,"", "a", reporter, xml, swr, null));
+			assertEq("T:t1f:t1T:t2f:t2T:t3f:t3", swr.toString());
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <a xd:textcontent=\"string();\n"+
@@ -177,14 +177,14 @@ public final class TestOptions extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			xml = "<a>t1<b/>t2<c/>t3</a>";
-			strw = new StringWriter();
-			assertEq(xml, parse(xp, "", xml, reporter, strw, null, null));
+			swr = new StringWriter();
+			assertEq(xml, parse(xp, "", xml, reporter, swr, null, null));
 			assertNoErrorwarnings(reporter);
-			assertEq("T:t1t2t3f:t1t2t3", strw.toString());
-			strw = new StringWriter();
+			assertEq("T:t1t2t3f:t1t2t3", swr.toString());
+			swr = new StringWriter();
 			assertEq("<a><b/><c/>t1t2t3</a>",
-				create(xp,"", "a", reporter, xml, strw, null));
-			assertEq("T:t1t2t3f:t1t2t3", strw.toString());
+				create(xp,"", "a", reporter, xml, swr, null));
+			assertEq("T:t1t2t3f:t1t2t3", swr.toString());
 			xdef = //test xd:textcontent attribute
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<a xd:textcontent='required float; finally out(getText())'>\n"+
@@ -193,14 +193,14 @@ public final class TestOptions extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			xml = "<a>1.2<b/>345E-23</a>";
-			strw = new StringWriter();
-			assertEq(xml, parse(xp, "", xml, reporter, strw, null, null));
-			assertEq("1.2345E-23", strw.toString());
+			swr = new StringWriter();
+			assertEq(xml, parse(xp, "", xml, reporter, swr, null, null));
+			assertEq("1.2345E-23", swr.toString());
 			assertNoErrorwarnings(reporter);
 			xml = "<a>1.23<b/>34.56</a>";
-			strw = new StringWriter();
-			assertEq(xml, parse(xp, "", xml, reporter, strw, null, null));
-			assertEq("1.2334.56", strw.toString());
+			swr = new StringWriter();
+			assertEq(xml, parse(xp, "", xml, reporter, swr, null, null));
+			assertEq("1.2334.56", swr.toString());
 			assertTrue(reporter.errorWarnings());
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
@@ -210,29 +210,29 @@ public final class TestOptions extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			xml = "<a>aaa<b/></a>";
-			strw = new StringWriter();
-			assertEq(xml, parse(xp, "", xml, reporter, strw, null, null));
-			assertEq("aaa", strw.toString());
+			swr = new StringWriter();
+			assertEq(xml, parse(xp, "", xml, reporter, swr, null, null));
+			assertEq("aaa", swr.toString());
 			assertNoErrorwarnings(reporter);
 			xml = "<a><b/>bbb</a>";
-			strw = new StringWriter();
-			assertEq(xml, parse(xp, "", xml, reporter, strw, null, null));
-			assertEq("bbb", strw.toString());
+			swr = new StringWriter();
+			assertEq(xml, parse(xp, "", xml, reporter, swr, null, null));
+			assertEq("bbb", swr.toString());
 			assertNoErrorwarnings(reporter);
 			xml = "<a>aaa<b/>bbb</a>";
-			strw = new StringWriter();
-			assertEq(xml, parse(xp, "", xml, reporter, strw, null, null));
-			assertEq("aaabbb", strw.toString());
+			swr = new StringWriter();
+			assertEq(xml, parse(xp, "", xml, reporter, swr, null, null));
+			assertEq("aaabbb", swr.toString());
 			assertNoErrorwarnings(reporter);
 			xml = "<a><b/></a>";
-			strw = new StringWriter();
-			assertEq(xml, parse(xp, "", xml, reporter, strw, null, null));
-			assertEq("", strw.toString());
+			swr = new StringWriter();
+			assertEq(xml, parse(xp, "", xml, reporter, swr, null, null));
+			assertEq("", swr.toString());
 			assertTrue(reporter.errorWarnings());
-			strw = new StringWriter();
+			swr = new StringWriter();
 			assertEq("<a><b/>xyz</a>",
-				create(xp, "", "a", reporter, null, strw, null)); //???
-			assertEq("xyz", strw.toString()); //???
+				create(xp, "", "a", reporter, null, swr, null)); //???
+			assertEq("xyz", swr.toString()); //???
 			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root=\"a\">\n"+
@@ -242,29 +242,29 @@ public final class TestOptions extends XDTester {
 "</xd:def>";
 			xml = "<a>aaa<b/></a>";
 			xp = compile(xdef);
-			strw = new StringWriter();
-			assertEq(xml, parse(xp, "", xml, reporter, strw, null, null));
-			assertEq("aaa", strw.toString());
+			swr = new StringWriter();
+			assertEq(xml, parse(xp, "", xml, reporter, swr, null, null));
+			assertEq("aaa", swr.toString());
 			assertNoErrorwarnings(reporter);
 			xml = "<a><b/>bbb</a>";
-			strw = new StringWriter();
-			assertEq(xml, parse(xp, "", xml, reporter, strw, null, null));
-			assertEq("bbb", strw.toString());
+			swr = new StringWriter();
+			assertEq(xml, parse(xp, "", xml, reporter, swr, null, null));
+			assertEq("bbb", swr.toString());
 			assertNoErrorwarnings(reporter);
 			xml = "<a>aaa<b/>bbb</a>";
-			strw = new StringWriter();
-			assertEq(xml, parse(xp, "", xml, reporter, strw, null, null));
-			assertEq("aaabbb", strw.toString());
+			swr = new StringWriter();
+			assertEq(xml, parse(xp, "", xml, reporter, swr, null, null));
+			assertEq("aaabbb", swr.toString());
 			assertNoErrorwarnings(reporter);
 			xml = "<a><b/></a>";
-			strw = new StringWriter();
-			assertEq(xml, parse(xp, "", xml, reporter, strw, null, null));
-			assertEq("", strw.toString());
+			swr = new StringWriter();
+			assertEq(xml, parse(xp, "", xml, reporter, swr, null, null));
+			assertEq("", swr.toString());
 			assertTrue(reporter.errorWarnings());
-			strw = new StringWriter();
+			swr = new StringWriter();
 			assertEq("<a>xyz<b/>xyz</a>",
-				create(xp, "", "a", reporter, null, strw, null));
-			assertEq("xyzxyz", strw.toString());
+				create(xp, "", "a", reporter, null, swr, null));
+			assertEq("xyzxyz", swr.toString());
 			assertNoErrorwarnings(reporter);
 			xdef = //test xd:text attribute
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
@@ -308,13 +308,13 @@ public final class TestOptions extends XDTester {
 "    <dcterms:abstract>Abstract</dcterms:abstract>\n" +
 "  </rdf:Description>\n" +
 "</rdf:RDF>";
-			strw = new StringWriter();
-			el = parse(xp, "rdf", xml, reporter, strw, null, null);
+			swr = new StringWriter();
+			el = parse(xp, "rdf", xml, reporter, swr, null, null);
 			assertNoErrorwarnings(reporter);
 			assertEq("rdf:RDF", el.getTagName());
 			assertEq(2, el.getAttributes().getLength());//just xmlns attributes
 			assertEq(0, el.getChildNodes().getLength());//all children forgotten
-			assertEq("b c d: Abstract\n", strw.toString());
+			assertEq("b c d: Abstract\n", swr.toString());
 			xdef = //option acceptQualifiedAttr
 "<xd:def xmlns:xd='" + _xdNS + "' xmlns:a='a' root='a:a'>\n"+
 "  <a:a xmlns:a='a'\n"+
@@ -1529,28 +1529,28 @@ public final class TestOptions extends XDTester {
 			assertTrue(el.getChildNodes().item(0).getNodeType()
 				== Node.CDATA_SECTION_NODE);
 			assertEq("text", el.getChildNodes().item(0).getNodeValue());
-			strw = new StringWriter();
-			KXmlUtils.writeXml(strw,
+			swr = new StringWriter();
+			KXmlUtils.writeXml(swr,
 				null, //encoding
 				el,
 				null, //indentStep
 				false, //canonical
 				false, //removeIgnorableWhiteSpaces
 				true); //comments
-			assertEq(xml, strw.toString());
+			assertEq(xml, swr.toString());
 			el = create(xd, "A", reporter);
 			assertTrue(el.getChildNodes().item(0).getNodeType()
 				== Node.CDATA_SECTION_NODE);
 			assertEq("text", el.getChildNodes().item(0).getNodeValue());
-			strw = new StringWriter();
-			KXmlUtils.writeXml(strw,
+			swr = new StringWriter();
+			KXmlUtils.writeXml(swr,
 				null, //encoding
 				el,
 				null, //indentStep
 				false, //canonical
 				false, //removeIgnorableWhiteSpaces
 				true); //comments
-			assertEq(xml, strw.toString());
+			assertEq(xml, swr.toString());
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <a xd:textcontent='string(); option cdata;'>\n"+
@@ -1563,29 +1563,29 @@ public final class TestOptions extends XDTester {
 			xml = "<a>t1<b/>t2</a>";
 			el = parse(xd, xml, reporter);
 			assertNoErrorwarnings(reporter);
-			strw = new StringWriter();
-			KXmlUtils.writeXml(strw,
+			swr = new StringWriter();
+			KXmlUtils.writeXml(swr,
 				null, //encoding
 				el,
 				null, //indentStep
 				false, //canonical
 				false, //removeIgnorableWhiteSpaces
 				true); //comments
-			assertEq(xml, strw.toString());
+			assertEq(xml, swr.toString());
 			assertNoErrorwarnings(reporter);
 			xd = compile(xdef).createXDDocument();
 			el = create(xd, "a", reporter);
 			xml = "<a>x1<b/>x2</a>";
 			assertEq(xml, el);
-			strw = new StringWriter();
-			KXmlUtils.writeXml(strw,
+			swr = new StringWriter();
+			KXmlUtils.writeXml(swr,
 				null, //encoding
 				el,
 				null, //indentStep
 				false, //canonical
 				false, //removeIgnorableWhiteSpaces
 				true); //comments
-			assertEq(xml, strw.toString());
+			assertEq(xml, swr.toString());
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <a xd:script='var int i;'\n"+
@@ -1598,26 +1598,26 @@ public final class TestOptions extends XDTester {
 			xml = "<a>t1<b/>t2</a>";
 			el = parse(xd, xml, reporter);
 			assertNoErrorwarnings(reporter);
-			strw = new StringWriter();
-			KXmlUtils.writeXml(strw,
+			swr = new StringWriter();
+			KXmlUtils.writeXml(swr,
 				null, //encoding
 				el,
 				null, //indentStep
 				false, //canonical
 				false, //removeIgnorableWhiteSpaces
 				true); //comments
-			assertEq("<a><![CDATA[t1]]><b/><![CDATA[t2]]></a>",strw.toString());
+			assertEq("<a><![CDATA[t1]]><b/><![CDATA[t2]]></a>",swr.toString());
 			el = create(xd, "a", reporter);
 			assertNoErrorwarnings(reporter);
-			strw = new StringWriter();
-			KXmlUtils.writeXml(strw,
+			swr = new StringWriter();
+			KXmlUtils.writeXml(swr,
 				null, //encoding
 				el,
 				null, //indentStep
 				false, //canonical
 				false, //removeIgnorableWhiteSpaces
 				true); //comments
-			assertEq("<a><![CDATA[1]]><b/><![CDATA[2]]></a>",strw.toString());
+			assertEq("<a><![CDATA[1]]><b/><![CDATA[2]]></a>",swr.toString());
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <a xd:script='var int i;'\n"+
@@ -1628,15 +1628,15 @@ public final class TestOptions extends XDTester {
 			xd = compile(xdef).createXDDocument();
 			el = create(xd, "a", reporter);
 			assertNoErrorwarnings(reporter);
-			strw = new StringWriter();
-			KXmlUtils.writeXml(strw,
+			swr = new StringWriter();
+			KXmlUtils.writeXml(swr,
 				null, //encoding
 				el,
 				null, //indentStep
 				false, //canonical
 				false, //removeIgnorableWhiteSpaces
 				true); //comments
-			assertEq("<a><b/></a>",strw.toString());
+			assertEq("<a><b/></a>",swr.toString());
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <a xd:script='var int i;'\n"+
@@ -1649,26 +1649,26 @@ public final class TestOptions extends XDTester {
 			xml = "<a>t1<b/></a>";
 			el = parse(xd, xml, reporter);
 			assertNoErrorwarnings(reporter);
-			strw = new StringWriter();
-			KXmlUtils.writeXml(strw,
+			swr = new StringWriter();
+			KXmlUtils.writeXml(swr,
 				null, //encoding
 				el,
 				null, //indentStep
 				false, //canonical
 				false, //removeIgnorableWhiteSpaces
 				true); //comments
-			assertEq("<a><![CDATA[t1]]><b/></a>",strw.toString());
+			assertEq("<a><![CDATA[t1]]><b/></a>",swr.toString());
 			el = create(xd, "a", reporter);
 			assertNoErrorwarnings(reporter);
-			strw = new StringWriter();
-			KXmlUtils.writeXml(strw,
+			swr = new StringWriter();
+			KXmlUtils.writeXml(swr,
 				null, //encoding
 				el,
 				null, //indentStep
 				false, //canonical
 				false, //removeIgnorableWhiteSpaces
 				true); //comments
-			assertEq("<a><![CDATA[t1]]><b/><![CDATA[1]]></a>",strw.toString());
+			assertEq("<a><![CDATA[t1]]><b/><![CDATA[1]]></a>",swr.toString());
 		} catch (Exception ex) {fail(ex);}
 
 		resetTester();

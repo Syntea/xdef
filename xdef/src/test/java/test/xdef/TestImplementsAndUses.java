@@ -25,7 +25,7 @@ public final class TestImplementsAndUses extends XDTester {
 		String s;
 		XDPool xp;
 		XDDocument xd;
-		StringWriter strw;
+		StringWriter swr;
 		ArrayReporter reporter = new ArrayReporter();
 		boolean	chkSyntax = getChkSyntax();
 		setChkSyntax(false);
@@ -372,18 +372,18 @@ public final class TestImplementsAndUses extends XDTester {
 			xp = compile(xdef);
 			xd = xp.createXDDocument("Y");
 			xml = "<A a='1'><B/>A<C/></A>";
-			strw = new StringWriter();
-			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			swr = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(swr, false));
 			assertEq(xml, parse(xd, xml, reporter));
 			assertNoErrorwarnings(reporter);
-			assertEq("a", strw.toString());
+			assertEq("a", swr.toString());
 			xd = xp.createXDDocument("Y");
 			xml = "<Z><A a='2'><B/>A<C/></A></Z>";
-			strw = new StringWriter();
-			xd.setStdOut(XDFactory.createXDOutput(strw, false));
+			swr = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(swr, false));
 			assertEq(xml, parse(xd, xml, reporter));
 			assertNoErrorwarnings(reporter);
-			assertEq("xz", strw.toString());
+			assertEq("xz", swr.toString());
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='P'>\n"+
 "<P xd:script='uses A' a='required '> <B/> required <C xd:script='+'/> </P>\n"+

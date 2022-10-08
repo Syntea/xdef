@@ -20,7 +20,7 @@ public final class TestExternalVariables extends XDTester {
 		String xdef;
 		XDPool xp;
 		XDDocument xd;
-		StringWriter strw;
+		StringWriter swr;
 		ArrayReporter reporter = new ArrayReporter();
 		String s;
 		try {//dynamic errors
@@ -35,15 +35,15 @@ public final class TestExternalVariables extends XDTester {
 			xp = compile(xdef);
 			xd = xp.createXDDocument();
 			xml = "<a/>";
-			xd.setStdOut(strw = new StringWriter());
+			xd.setStdOut(swr = new StringWriter());
 			xd.xparse(xml, reporter);
 			xd.setVariable("i", "1");
 			xd.xparse(xml, reporter);
 			xd.setVariable("i","2"); //now variable is 2
 			xd.xparse(xml, reporter);
 			assertNoErrorwarnings(reporter);
-			strw.close();
-			assertEq("truetrue\n1falsetrue\n2falsetrue\n", strw.toString());
+			swr.close();
+			assertEq("truetrue\n1falsetrue\n2falsetrue\n", swr.toString());
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <xd:declaration scope='global'>\n"+
@@ -55,13 +55,13 @@ public final class TestExternalVariables extends XDTester {
 			xp = compile(xdef);
 			xml = "<a/>";
 			xd = xp.createXDDocument();
-			xd.setStdOut(strw = new StringWriter());
+			xd.setStdOut(swr = new StringWriter());
 			parse(xd, xml, reporter);
 			assertNoErrorwarnings(reporter);
-			strw.close();
-			assertEq(strw.toString(),"truetrue");
+			swr.close();
+			assertEq(swr.toString(),"truetrue");
 			xd = xp.createXDDocument();
-			xd.setStdOut(strw = new StringWriter());
+			xd.setStdOut(swr = new StringWriter());
 			xd.setVariable("i", "1");
 			parse(xd, xml, reporter);
 			assertNoErrorwarnings(reporter);
@@ -76,9 +76,9 @@ public final class TestExternalVariables extends XDTester {
 			}
 			parse(xd, xml, reporter);
 			assertNoErrorwarnings(reporter);
-			strw.close();
+			swr.close();
 			//variable i remains unchaged
-			assertEq(strw.toString(),"1false1false1false1false");
+			assertEq(swr.toString(),"1false1false1false1false");
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <xd:declaration scope='local'>\n"+
@@ -90,17 +90,17 @@ public final class TestExternalVariables extends XDTester {
 			xp = compile(xdef);
 			xml = "<a/>";
 			xd = xp.createXDDocument();
-			xd.setStdOut(strw = new StringWriter());
+			xd.setStdOut(swr = new StringWriter());
 			parse(xd, xml, reporter);
 			assertNoErrorwarnings(reporter);
-			assertEq(strw.toString(),"truetrue");
+			assertEq(swr.toString(),"truetrue");
 			xd = xp.createXDDocument();
-			xd.setStdOut(strw = new StringWriter());
+			xd.setStdOut(swr = new StringWriter());
 			xd.setVariable("#i", "1");
 			parse(xd, xml, reporter);
 			assertNoErrorwarnings(reporter);
 			assertEq(0, xd.getVariable("#i").intValue());
-			assertEq(strw.toString(),"1false1false");
+			assertEq(swr.toString(),"1false1false");
 		} catch (Exception ex) {fail(ex);}
 
 		resetTester();

@@ -119,7 +119,7 @@ public final class TestErrors extends XDTester {
 		ArrayReporter reporter = new ArrayReporter();
 		Report rep;
 		Report report;
-		StringWriter strw;
+		StringWriter swr;
 		CharArrayWriter caw;
 		try {// check of error reporting - script in value is not valid
 			xdef =
@@ -742,11 +742,11 @@ public final class TestErrors extends XDTester {
 "   </a>\n"+													//15
 "</xd:def>\n";													//16
 			reporter = test(props, new String[] {xdef});
-			strw = new StringWriter();
+			swr = new StringWriter();
 			ReportPrinter.printListing(
-				strw, new java.io.StringReader(xdef), reporter, true);
+				swr, new java.io.StringReader(xdef), reporter, true);
 			pos = 0;
-			s = strw.toString();
+			s = swr.toString();
 			if ((pos = s.indexOf("\n ***** ", pos)) > 0) {
 				if (!s.startsWith("\n *****      |", pos)) {
 					fail(s);
@@ -781,11 +781,11 @@ public final class TestErrors extends XDTester {
 "   </a>\n"+													//15
 "</xd:def>\n";													//16
 			reporter = test(props, new String[] {xdef});
-			strw = new StringWriter();
+			swr = new StringWriter();
 			ReportPrinter.printListing(
-				strw, new java.io.StringReader(xdef), reporter, true);
+				swr, new java.io.StringReader(xdef), reporter, true);
 			pos = 0;
-			s = strw.toString();
+			s = swr.toString();
 			if ((pos = s.indexOf("\n ***** ", pos)) > 0) {
 				if (!s.startsWith("\n *****  |", pos)) {
 					fail(s);

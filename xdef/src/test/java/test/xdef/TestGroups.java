@@ -26,7 +26,7 @@ public final class TestGroups extends XDTester {
 		Report rep;
 		XDPool xp;
 		XDDocument xd;
-		StringWriter strw;
+		StringWriter swr;
 		String dataDir = getDataDir() + "test/";
 ////////////////////////////////////////////////////////////////////////////////
 // sequence
@@ -298,17 +298,17 @@ public final class TestGroups extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			xml = "<A><B/>Text<C/></A>";
-			strw = new StringWriter();
-			el = parse(xp, null, xml, reporter, strw, null, null);
+			swr = new StringWriter();
+			el = parse(xp, null, xml, reporter, swr, null, null);
 			assertTrue(reporter.errors(),"Error not reported");
 			assertEq("<A><B/>Text<C/></A>", el);
-			assertEq(strw.toString(), "0");
+			assertEq(swr.toString(), "0");
 			xml = null;
-			strw = new StringWriter();
-			el = create(xp, null, "A", reporter, xml, strw, null);
+			swr = new StringWriter();
+			el = create(xp, null, "A", reporter, xml, swr, null);
 			assertTrue(reporter.errors(),"Error not reported");
 			assertEq("<A><B/>Text<C/></A>", el);
-			assertEq(strw.toString(), "15");
+			assertEq(swr.toString(), "15");
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
 "<xd:declaration> int i = 0; </xd:declaration>\n"+
@@ -702,17 +702,17 @@ public final class TestGroups extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			xml = "<A><B/>Text<C/></A>";
-			strw = new StringWriter();
+			swr = new StringWriter();
 			assertEq("<A><B/>Text<C/></A>",
-				parse(xp, null, xml, reporter, strw, null, null));
+				parse(xp, null, xml, reporter, swr, null, null));
 			assertNoErrorwarnings(reporter);
-			assertEq(strw.toString(), "0");
+			assertEq(swr.toString(), "0");
 			xml = null;
-			strw = new StringWriter();
+			swr = new StringWriter();
 			assertEq("<A><B/>Text<C/></A>",
-				create(xp, null, "A", reporter, xml, strw, null));
+				create(xp, null, "A", reporter, xml, swr, null));
 			assertNoErrorwarnings(reporter);
-			assertEq(strw.toString(), "3");
+			assertEq(swr.toString(), "3");
 			xp = compile(
 "<xd:def xmlns:xd='" + _xdNS + "'>\n" +
 "<A xd:script= \"create 1\">\n" +
@@ -1093,15 +1093,15 @@ public final class TestGroups extends XDTester {
 "  </A>\n"+
 "</xd:def>";
 			xml = "<A><B/>Text<C/></A>";
-			strw = new StringWriter();
-			assertEq(xml, parse(xdef, null, xml, reporter, strw, null, null));
+			swr = new StringWriter();
+			assertEq(xml, parse(xdef, null, xml, reporter, swr, null, null));
 			assertTrue(reporter.errors(),"Error not reported");
-			assertEq(strw.toString(), "0");
-			strw = new StringWriter();
+			assertEq(swr.toString(), "0");
+			swr = new StringWriter();
 			// null input XML!!!
-			assertEq(xml, create(xdef, null, "A", reporter, null, strw, null));
+			assertEq(xml, create(xdef, null, "A", reporter, null, swr, null));
 			assertTrue(reporter.errors(),"Error not reported");
-			assertEq(strw.toString(), "12");
+			assertEq(swr.toString(), "12");
 			xdef = //reference to other XDefinition
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name='A'>\n"+
@@ -2300,41 +2300,41 @@ public final class TestGroups extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			xml = "<a><c/></a>";
-			strw = new StringWriter();
-			assertEq(xml, parse(xp, null, xml, reporter, strw, null, null));
+			swr = new StringWriter();
+			assertEq(xml, parse(xp, null, xml, reporter, swr, null, null));
 			assertNoErrorwarnings(reporter);
-			assertEq("ia ic1 fc1 fa ", strw.toString());
+			assertEq("ia ic1 fc1 fa ", swr.toString());
 			xml = "<a><d/></a>";
-			strw = new StringWriter();
-			assertEq(xml, parse(xp, null, xml, reporter, strw, null ,null));
+			swr = new StringWriter();
+			assertEq(xml, parse(xp, null, xml, reporter, swr, null ,null));
 			assertNoErrorwarnings(reporter);
-			assertEq("ia fa ", strw.toString());
+			assertEq("ia fa ", swr.toString());
 			xml = "<a><d/><c/></a>";
-			strw = new StringWriter();
-			assertEq(xml, parse(xp, null, xml, reporter, strw, null, null));
+			swr = new StringWriter();
+			assertEq(xml, parse(xp, null, xml, reporter, swr, null, null));
 			assertNoErrorwarnings(reporter);
-			assertEq("ia ic2 fc2 fa ", strw.toString());
+			assertEq("ia ic2 fc2 fa ", swr.toString());
 			xml = "<a><d/><e/></a>";
-			strw = new StringWriter();
-			assertEq(xml, parse(xp, null, xml, reporter, strw, null, null));
+			swr = new StringWriter();
+			assertEq(xml, parse(xp, null, xml, reporter, swr, null, null));
 			assertNoErrorwarnings(reporter);
-			assertEq("ia ie2 fe2 fa ", strw.toString());
+			assertEq("ia ie2 fe2 fa ", swr.toString());
 			xml = "<a><c/><d/><d/><e/><e/></a>";
-			strw = new StringWriter();
-			assertEq(xml, parse(xp, null, xml, reporter, strw, null, null));
+			swr = new StringWriter();
+			assertEq(xml, parse(xp, null, xml, reporter, swr, null, null));
 			assertNoErrorwarnings(reporter);
-			assertEq("ia ic1 fc1 id1 fd1 ie2 fe2 ie2 fe2 fa ", strw.toString());
+			assertEq("ia ic1 fc1 id1 fd1 ie2 fe2 ie2 fe2 fa ", swr.toString());
 			xml = "<a/>"; /*error*/
-			strw = new StringWriter();
-			assertEq(xml, parse(xp, null, xml, reporter, strw, null, null));
+			swr = new StringWriter();
+			assertEq(xml, parse(xp, null, xml, reporter, swr, null, null));
 			assertTrue(reporter.getErrorCount() == 1, reporter);
-			assertEq("ia fa ", strw.toString());
+			assertEq("ia fa ", swr.toString());
 			xml = "<a><c/><d/><e/><e/></a>"; /*error:  e*/
-			strw = new StringWriter();
+			swr = new StringWriter();
 			assertEq("<a><c/><d/><e/></a>",
-				parse(xp, null, xml, reporter, strw, null, null));
+				parse(xp, null, xml, reporter, swr, null, null));
 			assertTrue(reporter.getErrorCount() == 1, reporter);
-			assertEq("ia ic1 fc1 id1 fd1 ie1 fe1 fa ", strw.toString());
+			assertEq("ia ic1 fc1 id1 fd1 ie1 fe1 fa ", swr.toString());
 
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
@@ -2355,12 +2355,12 @@ public final class TestGroups extends XDTester {
 "</a>\n"+
 "</xd:def>\n";
 			xml = "<a><b>0</b>1<c/>2<c/><b>3</b>4<c/>5<c/></a>";
-			strw = new StringWriter();
-			assertEq(parse(xdef, null, xml, reporter, strw, null, null), xml);
+			swr = new StringWriter();
+			assertEq(parse(xdef, null, xml, reporter, swr, null, null), xml);
 			assertNoErrorwarnings(reporter);
 			assertEq("ia ib1 iT1 fT1 fb1 iSQ1 iT2 fT2 ic1 fc1 fSQ1 iT2 fT2 ic1"
 				+ " fc1 fSQ1 fSQ1 fSQ1 ib2 iT3 fT3 fb2 iSQ2 iT4 fT4 ic2 fc2"
-				+ " fSQ2 iT4 fT4 ic2 fc2 fSQ2 fa ", strw.toString());
+				+ " fSQ2 iT4 fT4 ic2 fc2 fSQ2 fa ", swr.toString());
 			// test reference to choice from root selection
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n" +

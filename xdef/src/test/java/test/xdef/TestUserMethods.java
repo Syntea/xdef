@@ -18,7 +18,7 @@ public final class TestUserMethods extends XDTester {
 		XDPool xp;
 		String xdef, xml;
 		ArrayReporter reporter = new ArrayReporter();
-		StringWriter strw;
+		StringWriter swr;
 		try { //test methods
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
@@ -29,15 +29,15 @@ public final class TestUserMethods extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			xml = "<a><A a='x'/></a>";
-			strw = new StringWriter();
-			assertEq(xml, parse(xp, "", xml, reporter, strw, null, null));
+			swr = new StringWriter();
+			assertEq(xml, parse(xp, "", xml, reporter, swr, null, null));
 			assertNoErrorwarnings(reporter);
-			assertEq(strw.toString(), "AB");
-			strw = new StringWriter();
+			assertEq(swr.toString(), "AB");
+			swr = new StringWriter();
 			assertEq(xml,
-				create(xp,null,"a",reporter,"<X><A a='x'/></X>",strw,null));
+				create(xp,null,"a",reporter,"<X><A a='x'/></X>",swr,null));
 			assertNoErrorwarnings(reporter);
-			assertEq(strw.toString(), "AB");
+			assertEq(swr.toString(), "AB");
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<xd:macro name='m' p='?'>\n"+
@@ -57,16 +57,16 @@ public final class TestUserMethods extends XDTester {
 "</xd:def>";
 			xml = "<a><b/><c/></a>";
 			xp = compile(xdef);
-			strw = new StringWriter();
-			assertEq(xml, parse(xp, "", xml, reporter, strw, null,null));
+			swr = new StringWriter();
+			assertEq(xml, parse(xp, "", xml, reporter, swr, null,null));
 			assertNoErrorwarnings(reporter);
-			assertEq(strw.toString(),
+			assertEq(swr.toString(),
 				"ma ia sa mCH iCH mb ib sb fb fCH mc ic sc fc fa ");
-			strw = new StringWriter();
+			swr = new StringWriter();
 			assertEq("<a><b/><c/></a>",
-				create(xp, null, "a", reporter, xml, strw, null));
+				create(xp, null, "a", reporter, xml, swr, null));
 			assertNoErrorwarnings(reporter);
-			assertEq(strw.toString(),
+			assertEq(swr.toString(),
 				"ia sa iCH mb ib sb fb fCH mc ic sc fc fa ");
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
@@ -87,27 +87,27 @@ public final class TestUserMethods extends XDTester {
 "</xd:def>";
 			xml = "<a><b/><c/></a>";
 			xp = compile(xdef);
-			strw = new StringWriter();
-			assertEq(xml, parse(xp, "", xml, reporter, strw, null, null));
+			swr = new StringWriter();
+			assertEq(xml, parse(xp, "", xml, reporter, swr, null, null));
 			assertNoErrorwarnings(reporter);
-			assertEq(strw.toString(),
+			assertEq(swr.toString(),
 				"ma ia sa mMX iMX mb ib sb fb fMX mc ic sc fc fa ");
-			strw = new StringWriter();
+			swr = new StringWriter();
 			assertEq("<a><b/><c/></a>",
-				create(xp, null, "a", reporter, xml, strw, null));
+				create(xp, null, "a", reporter, xml, swr, null));
 			assertNoErrorwarnings(reporter);
-			assertEq(strw.toString(),
+			assertEq(swr.toString(),
 				"ia sa iMX mb ib sb fb fMX mc ic sc fc fa ");
 			xml = "<a><b/><x/><c/></a>";
-			strw = new StringWriter();
-			assertEq(xml, parse(xp, "", xml, reporter, strw, null, null));
+			swr = new StringWriter();
+			assertEq(xml, parse(xp, "", xml, reporter, swr, null, null));
 			assertNoErrorwarnings(reporter);
-			assertEq(strw.toString(),
+			assertEq(swr.toString(),
 				"ma ia sa mMX iMX mb ib sb fb mx ix sx fx fMX mc ic sc fc fa ");
-			strw = new StringWriter();
-			assertEq(xml, create(xp, null, "a", reporter, xml, strw, null));
+			swr = new StringWriter();
+			assertEq(xml, create(xp, null, "a", reporter, xml, swr, null));
 			assertNoErrorwarnings(reporter);
-			assertEq(strw.toString(),
+			assertEq(swr.toString(),
 				"ia sa iMX mb ib sb fb ix sx fx fMX mc ic sc fc fa ");
 
 			xdef =
@@ -130,28 +130,28 @@ public final class TestUserMethods extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			xml = "<a><x/><c/></a>";
-			strw = new StringWriter();
-			assertEq(xml, parse(xp, "", xml, reporter, strw,null, null));
+			swr = new StringWriter();
+			assertEq(xml, parse(xp, "", xml, reporter, swr,null, null));
 			assertNoErrorwarnings(reporter);
-			assertEq(strw.toString(),
+			assertEq(swr.toString(),
 				"ma ia sa mCH iCH mx ix sx fx fCH mc ic sc fc fa ");
-			strw = new StringWriter();
+			swr = new StringWriter();
 			assertEq("<a><x/><c/></a>",
-				create(xp, null, "a", reporter, xml, strw, null));
+				create(xp, null, "a", reporter, xml, swr, null));
 			assertNoErrorwarnings(reporter);
-			assertEq(strw.toString(),
+			assertEq(swr.toString(),
 				"ia sa iCH ix sx fx fCH mc ic sc fc fa ");
 			xml = "<a><p/><x/><c/></a>";
-			strw = new StringWriter();
-			assertEq(xml, parse(xp, "", xml, reporter, strw,null, null));
+			swr = new StringWriter();
+			assertEq(xml, parse(xp, "", xml, reporter, swr,null, null));
 			assertNoErrorwarnings(reporter);
-			assertEq(strw.toString(),
+			assertEq(swr.toString(),
 				"ma ia sa mp ip sp fp mCH iCH mx ix sx fx fCH mc ic sc fc fa ");
-			strw = new StringWriter();
+			swr = new StringWriter();
 			assertEq("<a><p/><x/><c/></a>",
-				create(xp, null, "a", reporter, xml, strw, null));
+				create(xp, null, "a", reporter, xml, swr, null));
 			assertNoErrorwarnings(reporter);
-			assertEq(strw.toString(),
+			assertEq(swr.toString(),
 				"ia sa mp ip sp fp iCH ix sx fx fCH mc ic sc fc fa ");
 
 			xdef =
@@ -173,15 +173,15 @@ public final class TestUserMethods extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			xml = "<a><b/><c/><d/></a>";
-			strw = new StringWriter();
-			assertEq(xml, parse(xp, "", xml, reporter, strw,null, null));
+			swr = new StringWriter();
+			assertEq(xml, parse(xp, "", xml, reporter, swr,null, null));
 			assertNoErrorwarnings(reporter);
-			assertEq(strw.toString(),
+			assertEq(swr.toString(),
 				"ma ia sa mSQ iSQ mb ib sb fb mx ix sx fx fSQ md id sd fd fa ");
-			strw = new StringWriter();
-			assertEq(xml, create(xp, null, "a", reporter, xml, strw, null));
+			swr = new StringWriter();
+			assertEq(xml, create(xp, null, "a", reporter, xml, swr, null));
 			assertNoErrorwarnings(reporter);
-			assertEq(strw.toString(),
+			assertEq(swr.toString(),
 				"ia sa iSQ ib sb fb ix sx fx fSQ id sd fd fa ");
 		} catch (Exception ex) {fail(ex);}
 
