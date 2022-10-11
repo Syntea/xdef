@@ -111,7 +111,7 @@ public class TestXon extends XDTester {
 		final String cls,
 		final String xon,
 		final String outResult){
-//putInfo(data);
+//putInfo(xon);
 		String result = "";
 		try {
 			ArrayReporter reporter = new ArrayReporter();
@@ -262,10 +262,10 @@ public class TestXon extends XDTester {
 		assertNull(testA("emailAddr",
 			"[null, e\"tro@volny.cz\",e\"a b<x@y.zz>\" ]"));
 		assertNull(testA("file", "[null, \"temp/a.txt\" ]"));
-		assertNull(testA("ipAddr", "[null, /::FFFF:129.144.52.38,/0.0.0]\n"));
-		assertNull(testA("currency", "[null, C(USD), C(CZK)]\n"));
+		assertNull(testA("ipAddr", "[null, /::FFFF:129.144.52.38,/0.0.0]"));
+		assertNull(testA("currency", "[null, C(USD), C(CZK)]"));
 		assertNull(testA("telephone",
-			"[null, t\"123456\",t\"+420 234 567 890\"]\n"));
+			"[null, t\"123456\",t\"+420 234 567 890\"]"));
 		assertNull(testA("jnull", "[ null, null ]"));
 		assertNull(testA("jboolean", "[ null, true ]"));
 		assertNull(testA("jnumber", "[ null, 1 ]"));
