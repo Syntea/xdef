@@ -25,4 +25,12 @@ public interface XConstants {
 
 	/** Name of model of any XON object. */
 	public static final String JSON_ANYOBJECT = "JSON.ANYOBJECT";
+
+////////////////////////////////////////////////////////////////////////////////
+// X-definition gebugging
+////////////////////////////////////////////////////////////////////////////////
+	/** X-definition debugger property. */
+	public static final String XDPROPERTY_XDEF_DBGSWITCHES = "JSON.ANYOBJECT";
+	/** X-definition debugger property value - show generated XON models. */
+	public static final String XDPROPERTYVALUE_DBG_SHOWXON = "showXon";
 }

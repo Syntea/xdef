@@ -57,6 +57,8 @@ public final class CompileXonXdef extends XScriptParser {
 	private String _anyXPos;
 	/** Precompiler. */
 	private final XPreCompiler _pcomp;
+	/** Internal debugging switches. */
+	private final String _dbgSwitches;
 
 	/** Prepare instance of CompileXonXdef. */
 	CompileXonXdef(XPreCompiler pcomp,
@@ -75,6 +77,8 @@ public final class CompileXonXdef extends XScriptParser {
 		_xonModel = p;
 		_xonName = name.getString();
 		_anyXPos = null;
+		String s = System.getProperty(XConstants.XDPROPERTY_XDEF_DBGSWITCHES);
+		_dbgSwitches = s == null ? "" : s.trim();
 	}
 
 	/** Set attribute to PNode.
@@ -843,13 +847,11 @@ public final class CompileXonXdef extends XScriptParser {
 		return e;
 	}
 
-	/** Display created model in debug mode.
+	/** Display created model in debug mode (remove this method in future).
 	 * @param p model to be displayed
 	 */
 	void displayModel(final PNode p) {
-/*#if DEBUG*#/
-		String dbgSwitches = System.getProperty("xdef-xon_debug");
-		if (dbgSwitches != null && dbgSwitches.contains("showModel")) {
+		if (_dbgSwitches.contains(XConstants.XDPROPERTYVALUE_DBG_SHOWXON)){
 			// display the created models
 			System.out.flush();
 			System.err.flush();
@@ -859,7 +861,6 @@ public final class CompileXonXdef extends XScriptParser {
 				"* "+org.xdef.xml.KXmlUtils.nodeToString(p.toXML(),true)+" *");
 			System.out.flush();
 		}
-/*#end*/
 	}
 
 	/** Generate models for %anyObj.
