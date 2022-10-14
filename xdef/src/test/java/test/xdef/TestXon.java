@@ -28,9 +28,9 @@ public class TestXon extends XDTester {
 
 	public TestXon() {super();}
 
-	/** Test simple type in Array
-	 * @param type type
-	 * @param xon xon to be tested.
+	/** Simple type test in the Array
+	 * @param type type method.
+	 * @param xon xon data to be tested.
 	 * @return string with errors or null.
 	 */
 	private String testA(final String type, final String xon) {
@@ -45,9 +45,9 @@ public class TestXon extends XDTester {
 "</xd:def>", "", xon);
 	}
 
-	/** Test simple type in Map.
-	 * @param type type
-	 * @param xon xon to be tested.
+	/** Simple type test in the Map.
+	 * @param type type method.
+	 * @param xon xon data to be tested.
 	 * @return string with errors or null.
 	 */
 	private String testM(final String type, final String xon) {
@@ -60,35 +60,35 @@ public class TestXon extends XDTester {
 "</xd:def>", "", xon);
 	}
 
-	/** Test given data with Xdefinition.
-	 * @param xdef Xdefinition source.
-	 * @param xdName name of XDefinition.
-	 * @param data data.
+	/** Testing the entered data using X-definition.
+	 * @param xdef X-definition source.
+	 * @param xdName name of X-definition.
+	 * @param xon data to be tested.
 	 * @return null or string with error.
 	 */
-	private String testX(String xdef, String xdName, String data) {
+	private String testX(String xdef, String xdName, String xon) {
 		try {
 			XDPool xp = compile(xdef);
 			genXComponent(xp, clearTempDir());
-			return testX(xp, xdName, data);
+			return testX(xp, xdName, xon);
 		} catch (Exception ex) {return printThrowable(ex);}
 	}
 
-	/** Test given data with XDPool
-	 * @param xdef Xdefinition source.
-	 * @param xdName name of XDefinition.
-	 * @param xon XON data.
+	/** Testing the entered data using XDPool.
+	 * @param xdef X-definition source.
+	 * @param xdName name of X-definition.
+	 * @param xon XON to be tested.
 	 * @return empty string or error.
 	 */
 	private String testX(final XDPool xp,final String xdName,final String xon) {
 		return testX(xp, xdName, null, xon, null);
 	}
 
-	/** Test given data with XDPool
-	 * @param xdef Xdefinition source.
-	 * @param xdName name of XDefinition.
-	 * @param cls XDefinition class name or null.
-	 * @param xon XON data.
+	/** Testing the entered data using XDPool.
+	 * @param xdef X-definition source.
+	 * @param xdName name of X-definition.
+	 * @param cls XComponent class name or null.
+	 * @param xon XON to be tested.
 	 * @return empty string or error.
 	 */
 	private String testX(final XDPool xp,
@@ -98,11 +98,11 @@ public class TestXon extends XDTester {
 		return testX(xp, xdName, cls, xon, null);
 	}
 
-	/** Test given data with XDPool
-	 * @param xdef Xdefinition source.
-	 * @param xdName name of XDefinition.
-	 * @param cls XDefinition class name or null.
-	 * @param xon XON data.
+	/** Testing the entered data using XDPool.
+	 * @param xdef X-definition source.
+	 * @param xdName name of X-definition.
+	 * @param cls XComponent class name or null.
+	 * @param xon XON to be tested.
 	 * @param outResult expected result of out stream or null.
 	 * @return empty string or error.
 	 */
