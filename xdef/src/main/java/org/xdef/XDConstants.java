@@ -21,8 +21,6 @@ public interface XDConstants {
 	public static final String XDPROPERTYVALUE_DEBUG_TRUE = "true";
 	/** Value "false" of property "xdef_debug" */
 	public static final String XDPROPERTYVALUE_DEBUG_FALSE = "false";
-	/** Value "showResult" of property "xdef_debug" */
-	public static final String XDPROPERTYVALUE_DEBUG_SHOWRESULT = "showResult";
 	/** Property defines stream used for debug output (default is stdOut). */
 	public static final String XDPROPERTY_DEBUG_OUT = "xdef_debug_out";
 	/** Property defines stream used for debug input (default is stdIn). */

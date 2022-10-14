@@ -151,8 +151,7 @@ public final class XPool implements XDPool, Serializable {
 		//debug mode
 		_debugMode = (byte) readProperty(_props, XDConstants.XDPROPERTY_DEBUG,
 			new String[] {XDConstants.XDPROPERTYVALUE_DEBUG_FALSE,
-				XDConstants.XDPROPERTYVALUE_DEBUG_TRUE,
-				XDConstants.XDPROPERTYVALUE_DEBUG_SHOWRESULT},
+				XDConstants.XDPROPERTYVALUE_DEBUG_TRUE},
 				XDConstants.XDPROPERTYVALUE_DEBUG_FALSE);
 		//showErrors display mode
 		_displayMode = (byte) readProperty(_props,
@@ -925,12 +924,6 @@ public final class XPool implements XDPool, Serializable {
 	 * @return value of debug mode.
 	 */
 	public final boolean isDebugMode() {return _debugMode > 0;}
-
-	@Override
-	/** Check if show result mode is set for debug mode.
-	 * @return true if show result mode is set.
-	 */
-	public final boolean isDebugShowResult() {return _debugMode > 1;}
 
 	@Override
 	/** Get display mode.
