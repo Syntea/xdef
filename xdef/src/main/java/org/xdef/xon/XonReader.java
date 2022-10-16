@@ -881,29 +881,27 @@ public final class XonReader extends StringParser implements XonParsers {
 				}
 				if (XonNames.ENCODING_DIRECTIVE.equals(s)) {
 					while((i = nextChar(in,encoding,buf,count,baos)) == ' '
-						|| i == '\t') {}
+						|| i == '\t') {} // skip spaces
 					if (i == '=') {
 						while((i=nextChar(in,encoding,buf,count,baos)) == ' '
 							|| i == '\t') {}
 					} else { // missing eq sign
-						while ((i=nextChar(in, encoding, buf, count, baos))
-							!= '\n' && i != '\r' && s.length() < 40) {}
 						//Incorrect %encoding directive: "&{0}"
 						throw new SRuntimeException(
 							JSON.JSON081, baos.toByteArray());
 					}
 					String enc = "";
-					if (i == '"') {
+					if (i == '"') { // is quote
 						i = nextChar(in, encoding, buf, count, baos);
-						while(i > ' ' && i != '"') {
+						while(i > ' ' && i != '"') { //read encoding name
 							enc += (char) i;
 							i = nextChar(in, encoding, buf, count, baos);
 						}
-					}
-					if (enc.isEmpty() || i != '"') {
-					//Incorrect %encoding directive: "&{0}"
-						throw new SRuntimeException(
-							JSON.JSON081, baos.toByteArray());
+						if (i != '"') { // missing ending quote
+							//Incorrect %encoding directive: "&{0}"
+							throw new SRuntimeException(
+								JSON.JSON081, baos.toByteArray());
+						}
 					}
 					if (enc.isEmpty()) {
 						//Charset name is missing
@@ -934,7 +932,8 @@ public final class XonReader extends StringParser implements XonParsers {
 			return new java.io.InputStreamReader(x.getInputStream(),
 				java.nio.charset.Charset.forName(x._encoding));
 		} catch (Exception ex) {
-			throw new SRuntimeException(SYS.SYS029, ex);
+			//Unsupported encoding name&{0}{: "}{"}
+			throw new SRuntimeException(SYS.SYS052, ex);
 		}
 	}
 }

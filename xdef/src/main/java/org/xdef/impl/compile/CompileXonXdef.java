@@ -878,46 +878,45 @@ public final class CompileXonXdef extends XScriptParser {
 		for (String key : pn._nsPrefixes.keySet()) {
 			e._nsPrefixes.put(key, pn._nsPrefixes.get(key));
 		}
-		PNode f, g, h;
-		f = genXDElement(e, "choice", new SPosition(2,1,anyName, null));
-		f._xonMode = XConstants.XON_MODE_W;
-//		setXDAttr(f,"script",new SBuffer("*;",new SPosition(3,1,anyName,null)));
-		f._parent._nsPrefixes.put(
+		PNode e1, e2, e3;
+		e1 = genXDElement(e, "choice", new SPosition(2,1,anyName, null));
+		e1._xonMode = XConstants.XON_MODE_W;
+		e1._parent._nsPrefixes.put(
 			XDConstants.XON_NS_PREFIX, XPreCompiler.NS_XON_INDEX);
-		e.addChildNode(f);
-		g = genJElement(f, X_ITEM, new SPosition(4,1,anyName, null));
-		g._xonMode = XConstants.XON_MODE_W;
-		g._parent._nsPrefixes.put(
+		e.addChildNode(e1);
+		e2 = genJElement(e1, X_ITEM, new SPosition(4,1,anyName, null));
+		e2._xonMode = XConstants.XON_MODE_W;
+		e2._parent._nsPrefixes.put(
 			XDConstants.XON_NS_PREFIX, XPreCompiler.NS_XON_INDEX);
-		setAttr(g, X_KEYATTR,
+		setAttr(e2, X_KEYATTR,
 			new SBuffer("? string();", new SPosition(5,1,anyName, null)));
-		setAttr(g, X_VALATTR,
+		setAttr(e2, X_VALATTR,
 			new SBuffer("jvalue();", new SPosition(6,1,anyName, null)));
-		f.addChildNode(g);
-		g = genJElement(f, X_ARRAY, new SPosition(7,1,anyName, null));
-		g._xonMode = XConstants.XON_MODE_W;
-		g._parent._nsPrefixes.put(
+		e1.addChildNode(e2);
+		e2 = genJElement(e1, X_ARRAY, new SPosition(7,1,anyName, null));
+		e2._xonMode = XConstants.XON_MODE_W;
+		e2._parent._nsPrefixes.put(
 			XDConstants.XON_NS_PREFIX, XPreCompiler.NS_XON_INDEX);
-		setAttr(g, X_KEYATTR,
+		setAttr(e2, X_KEYATTR,
 			new SBuffer("? string();", new SPosition(9,1,anyName, null)));
-		h = genXDElement(g, "choice", new SPosition(2,1,anyName, null));
-		h._xonMode = XConstants.XON_MODE_W;
-		setXDAttr(h, "script", new SBuffer("*; ref " + anyName,
+		e3 = genXDElement(e2, "choice", new SPosition(2,1,anyName, null));
+		e3._xonMode = XConstants.XON_MODE_W;
+		setXDAttr(e3, "script", new SBuffer("ref " + anyName,
 			new SPosition(11,1,anyName,null)));
-		g.addChildNode(h);
-		f.addChildNode(g);
-		g = genJElement(f, X_MAP, new SPosition(10,1,anyName,null));
-		g._xonMode = XConstants.XON_MODE_W;
-		g._parent._nsPrefixes.put(
+		e2.addChildNode(e3);
+		e1.addChildNode(e2);
+		e2 = genJElement(e1, X_MAP, new SPosition(10,1,anyName,null));
+		e2._xonMode = XConstants.XON_MODE_W;
+		e2._parent._nsPrefixes.put(
 			XDConstants.XON_NS_PREFIX, XPreCompiler.NS_XON_INDEX);
-		setAttr(g, X_KEYATTR, new SBuffer("? string();",
+		setAttr(e2, X_KEYATTR, new SBuffer("? string();",
 			new SPosition(12,1,anyName, null)));
-		h = genXDElement(g, "choice", new SPosition(2,1,anyName, null));
-		h._xonMode = XConstants.XON_MODE_W;
-		setXDAttr(h, "script", new SBuffer("*; ref " + anyName,
+		e3 = genXDElement(e2, "choice", new SPosition(2,1,anyName, null));
+		e3._xonMode = XConstants.XON_MODE_W;
+		setXDAttr(e3, "script", new SBuffer("ref " + anyName,
 			new SPosition(11,1,anyName,null)));
-		g.addChildNode(h);
-		f.addChildNode(g);
+		e2.addChildNode(e3);
+		e1.addChildNode(e2);
 		displayModel(e);
 	}
 
