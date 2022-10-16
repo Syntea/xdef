@@ -1880,10 +1880,10 @@ public class TestXon extends XDTester {
 			assertNotNull(testX(xp,"",s,"[{},{}]"));
 		} catch (Exception ex) {fail(ex);}
 		try {
-			xdef = // test occurrence for  %anyName directive
+			xdef = // test occurrence for %anyName and %anyObj directives
 "<xd:def xmlns:xd='" + _xdNS + "' root=\"A\">\n" +
 "<xd:xon name=\"A\">\n" +
-"{ %anyName: \"2; int()\" }\n" +
+"{ %anyName: %anyObj=\"occurs 2;\" }\n" +
 "</xd:xon>\n" +
 "<xd:component> %class test.xdef.TestArrayAnyName %link #A; </xd:component>\n" +
 "</xd:def>";
@@ -1891,9 +1891,8 @@ public class TestXon extends XDTester {
 			genXComponent(xp, clearTempDir());
 			s = "test.xdef.TestArrayAnyName";
 			assertNull(testX(xp,"",s, "{x:1, y:2}"));
-			assertNotNull(testX(xp,"",s, "{}")); // less then 2
-			assertNotNull(testX(xp,"",s, "{x:1}")); // less then 2
-			assertNotNull(testX(xp,"",s, "{x:1,y:2,z:3}")); // more then 2!
+			assertNotNull(testX(xp,"",s, "{}")); // error empty
+			assertNotNull(testX(xp,"",s, "{x:1}")); // error only one item
 		} catch (Exception ex) {fail(ex);}
 if(true)return;
 		try {
