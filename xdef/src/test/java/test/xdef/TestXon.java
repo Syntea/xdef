@@ -1887,14 +1887,17 @@ public class TestXon extends XDTester {
 "</xd:xon>\n" +
 "<xd:component> %class test.xdef.TestArrayAnyName %link #A; </xd:component>\n" +
 "</xd:def>";
-			xp = XDFactory.compileXD(null, xdef);
-//			xp = compile(xdef);
+			xp = compile(xdef);
 			genXComponent(xp, clearTempDir());
 			s = "test.xdef.TestArrayAnyName";
-			assertNull(testX(xp,"",s, "[1]")); // OK, only one item
-			assertNull(testX(xp,"",s, "[null]")); // OK, only one item
-			assertNotNull(testX(xp,"",s, "[]")); // error: empty
-			assertNotNull(testX(xp,"",s, "[1,2,3]")); // error: more then one
+			assertNull(testX(xp,"",s, "[true]")); // OK
+			assertNull(testX(xp,"",s, "[1]")); // OK
+			assertNull(testX(xp,"",s, "[[1]]")); // OK
+			assertNull(testX(xp,"",s, "[{a:1}]")); // OK
+			assertNotNull(testX(xp,"",s, "[]")); // error empty
+			assertNotNull(testX(xp,"",s, "[[]]")); // error empty
+			assertNotNull(testX(xp,"",s, "[1,2]")); // error more then one
+			assertNotNull(testX(xp,"",s, "[{a:1,b:2}]")); // error more then one
 		} catch (Exception ex) {fail(ex);}
 if(true)return;
 		try {
