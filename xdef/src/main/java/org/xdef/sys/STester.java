@@ -684,15 +684,22 @@ public abstract class STester {
 			fail("Error not reported");
 		}
 	}
-	/** Check if the reporter does not contain an error and clear reporter
-	 * after message is reported.
+	/** Check if the reporter contains an error and clear reporter.
+	 * @param reporter reporter to be checked for no errors.
+	 */
+	public final void assertErrorsAndClear(final ReportWriter reporter) {
+		if (!reporter.errors()) {
+			fail("Error not reported");
+		}
+	}
+	/** Check if the reporter does not contain an error and clear reporter.
 	 * @param reporter the reporter to be checked for no errors.
 	 */
 	public final void assertNoErrorsAndClear(final ArrayReporter reporter) {
 		if (reporter.errors()) {
 			fail(reporter.toString());
-			reporter.clear();
 		}
+		reporter.clear();
 	}
 	/** Check if the reporter does not contain an error or warning. If yes then
 	 * invoke the method <code>fail</code> with the argument msg. Clear reporter
@@ -703,8 +710,8 @@ public abstract class STester {
 		final ArrayReporter reporter) {
 		if (reporter.errorWarnings()) {
 			fail(reporter.toString());
-			reporter.clear();
 		}
+		reporter.clear();
 	}
 	private static String getListing(final ReportWriter reporetr,
 		final Object msg) {

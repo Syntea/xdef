@@ -620,7 +620,7 @@ public class XonUtils {
 		return XonToXml.toXmlW(parseXON(xon));
 	}
 
-	/** Create XML from XON/JSON object in X-Definition mode.
+	/** Create XML from XON/JSON object in W-format.
 	 * @param xon XON/JSON object.
 	 * @return XML element created from XON/JSON data.
 	 */
@@ -666,37 +666,6 @@ public class XonUtils {
 	 */
 	public final static Element xonToXml(final Object xon) {
 		return XonToXml.toXmlXD(xon);
-	}
-	/** Create XML in "W" format from string with YAML source.
-	 * @param yaml path to YAML source data or string with YAML.
-	 * @return XML element created from YAML data.
-	 */
-	public final static Element yamlToXml(final String yaml) {
-		return IniReader.iniToXml(parseYAML(yaml));
-	}
-
-	/** Create XML in "W" format from file with YAML source.
-	 * @param ini file with YAML source data.
-	 * @return XML element created from YAML data.
-	 */
-	public final static Element yamlToXml(final File ini) {
-		return IniReader.iniToXml(parseYAML(ini));
-	}
-
-	/** Create XML in "W" format from URL with YAML source.
-	 * @param yaml URL with YAML source data.
-	 * @return XML element created from YAML data.
-	 */
-	public final static Element yamlToXml(final URL yaml) {
-		return IniReader.iniToXml(parseYAML(yaml));
-	}
-
-	/** Create XML in "W" format from InputStream with YAML source.
-	 * @param yaml InputStream with YAML source data.
-	 * @return XML element created from YAML data.
-	 */
-	public final static Element yamlToXml(final InputStream yaml) {
-		return IniReader.iniToXml(parseYAML(yaml));
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
