@@ -1622,6 +1622,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					XElement dummy = new XElement(dname, null, def);
 					dummy.setSPosition(copySPosition(pnode._name));
 					dummy.setXDPosition(def.getXDPosition() + dname);
+					dummy._xon = nodei._xonMode; /*xx*/
 					addNode(def, dummy, 1, nodei._name);
 					if (!def.addModel(dummy)) {
 						//Repeated specification of element '&{0}'
@@ -1634,7 +1635,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						} else if (name.startsWith("att")) {
 							compileAttrs(nodei, defName, dummy, true);
 						} else {
-							compileXChild(dummy,dummy,nodei,def,2,dummy._xon);
+							compileXChild(dummy,dummy,nodei,def,2, dummy._xon);
 						}
 					}
 				}
