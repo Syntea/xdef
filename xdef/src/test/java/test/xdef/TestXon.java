@@ -1894,10 +1894,12 @@ public class TestXon extends XDTester {
 			assertNull(testX(xp,"",s, "[1]")); // OK
 			assertNull(testX(xp,"",s, "[[1]]")); // OK
 			assertNull(testX(xp,"",s, "[{a:1}]")); // OK
+			assertNull(testX(xp,"",s, "[[1,2]]")); // OK
+			assertNull(testX(xp,"",s, "[{a:1,b:2}]")); // OK
 			assertNotNull(testX(xp,"",s, "[]")); // error empty
-			assertNotNull(testX(xp,"",s, "[[]]")); // error empty
 			assertNotNull(testX(xp,"",s, "[1,2]")); // error more then one
-			assertNotNull(testX(xp,"",s, "[{a:1,b:2}]")); // error more then one
+			assertNotNull(testX(xp,"",s, "[[],{}]")); // error more then one
+			assertNotNull(testX(xp,"",s, "{a:1,b:2}")); // error more then one
 		} catch (Exception ex) {fail(ex);}
 if(true)return;
 		try {
