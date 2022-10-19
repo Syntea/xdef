@@ -857,12 +857,9 @@ public final class CompileXonXdef extends XScriptParser {
 		e2._parent._nsPrefixes.put(
 			XDConstants.XON_NS_PREFIX, XPreCompiler.NS_XON_INDEX);
 		setAttr(e2, X_KEYATTR, new SBuffer("? string();",spos));
-		if (val != null) {
-			setXDAttr(e2, "script", val);
-		}
 		PNode e3 = genXDElement(e2, "choice", spos);
 		e3._xonMode = XConstants.XON_MODE_W;
-		setXDAttr(e3, "script", new SBuffer("ref " + _anyXPos, spos));
+		setXDAttr(e3, "script", new SBuffer("*; ref " +_anyXPos, spos));
 		e2.addChildNode(e3);
 		e1.addChildNode(e2);
 		e2 = genJElement(e1, X_MAP, spos);
@@ -870,12 +867,9 @@ public final class CompileXonXdef extends XScriptParser {
 		e2._parent._nsPrefixes.put(
 			XDConstants.XON_NS_PREFIX, XPreCompiler.NS_XON_INDEX);
 		setAttr(e2, X_KEYATTR, new SBuffer("? string();", spos));
-		if (val != null) {
-			setXDAttr(e2, "script", val);
-		}
 		e3 = genXDElement(e2, "choice", spos);
 		e3._xonMode = XConstants.XON_MODE_W;
-		setXDAttr(e3, "script", new SBuffer("ref " + _anyXPos, spos));
+		setXDAttr(e3, "script", new SBuffer("*; ref " +_anyXPos, spos));
 		e2.addChildNode(e3);
 		e1.addChildNode(e2);
 	}
