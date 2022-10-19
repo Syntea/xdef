@@ -493,7 +493,7 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 				CompileXonXdef compileXon = new CompileXonXdef(_pcomp,
 					_actPNode, XConstants.XON_MODE_W, sval, getReportWriter());
 				pnode._xonMode = XConstants.XON_ROOT;
-				if (pnode._value == null || pnode._value.getString().isEmpty()){
+				if (pnode._value==null || pnode._value.getString().isEmpty()) {
 					//XON/JSON model is missing in JSON definition
 					error(pnode._name, XDEF.XDEF315,"&{xpath}"+pnode._xpathPos);
 					return;
@@ -503,35 +503,33 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 					error(pattr._value, XDEF.XDEF254, pattr._name);
 				}
 				String anyXpos = compileXon.genXdef(pnode,
-					XConstants.XON_MODE_W,
 					xdname.equals("json") ? "xon" : xdname,
-					sval,
+					sval, // model source code
 					_pcomp.getReportWriter());
 				pnode._name = paName._value;
 				pnode._localName = paName._value.getString();
 				pnode._nsURI = null; // set no namespace
 				pnode._nsindex = -1;
 				pnode._xonMode = XConstants.XON_ROOT;
-				if (anyXpos == null) {
-					return; // do not generate models for %anyObj
-				}
-				int ndx = anyXpos.indexOf('#');
-				anyXpos = anyXpos.substring(ndx + 1);
-				for (PNode  p:_actPNode._parent.getChildNodes()) {
-					if (anyXpos.equals(p._localName)) {
-						return; // already generated
-					}
-					if (p._xonMode > 0 && "choice".equals(p._localName)) {
-						for (PAttr pa: p.getAttrs()) {
-							if ("name".equals(pa._localName)
-								&& anyXpos.equals(pa._value.getString())) {
-								return; // already generated
+				if (anyXpos != null) { // generate models for %anyObj
+					int ndx = anyXpos.indexOf('#');
+					anyXpos = anyXpos.substring(ndx + 1);
+					for (PNode  p:_actPNode._parent.getChildNodes()) {
+						if (anyXpos.equals(p._localName)) {
+							return; // already generated
+						}
+						if (p._xonMode > 0 && "choice".equals(p._localName)) {
+							for (PAttr pa: p.getAttrs()) {
+								if ("name".equals(pa._localName)
+									&& anyXpos.equals(pa._value.getString())) {
+									return; // already generated
+								}
 							}
 						}
 					}
+					/** Prepare instance of CompileXonXdef. */
+					compileXon.genXonAnyModels(_actPNode, anyXpos);
 				}
-				/** Prepare instance of CompileXonXdef. */
-				compileXon.genXonAnyModels(_actPNode, anyXpos);
 				return;
 			} else if ("text".equals(_actPNode._localName)
 				|| "BNFGrammar".equals(_actPNode._localName)
