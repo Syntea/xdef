@@ -1883,7 +1883,7 @@ public class TestXon extends XDTester {
 			xdef = // test occurrence for %anyName and %anyObj directives
 "<xd:def xmlns:xd='" + _xdNS + "' root=\"A\">\n" +
 "<xd:xon name=\"A\">\n" +
-"[ %anyObj ]\n" +
+"[ %anyObj=\"occurs 1;\" ]\n" +
 "</xd:xon>\n" +
 "<xd:component> %class test.xdef.TestArrayAnyName %link #A; </xd:component>\n" +
 "</xd:def>";
