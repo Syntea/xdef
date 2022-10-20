@@ -428,7 +428,7 @@ public class KXmlOutStream {
 							writeNodeList(nl);
 							writeElementEnd(elem);
 						}
-					} catch (IOException ex) {						
+					} catch (IOException ex) {
 						throw new SRuntimeException(//Program exception&{0}{: }
 							SYS.SYS036, STester.printThrowable(ex));
 					}
