@@ -841,6 +841,9 @@ public final class CompileXonXdef extends XScriptParser {
 			? jo.getSBuffer() : new SBuffer("", parent._name);
 		String s = val.getString().trim();
 		val = s.isEmpty() ? null : new SBuffer(s, parent.getName());
+		if (val != null) {
+			setXDAttr(e1, "script", val);
+		}
 		SPosition spos = parent._name;
 		PNode e2 = genJElement(e1, X_ITEM, spos);
 		e2._xonMode = XConstants.XON_MODE_W;
@@ -848,9 +851,6 @@ public final class CompileXonXdef extends XScriptParser {
 			XDConstants.XON_NS_PREFIX, XPreCompiler.NS_XON_INDEX);
 		setAttr(e2, X_KEYATTR, new SBuffer("? string();", spos));
 		setAttr(e2, X_VALATTR, new SBuffer("jvalue();", spos));
-		if (val != null) {
-			setXDAttr(e2, "script", val);
-		}
 		e1.addChildNode(e2);
 		e2 = genJElement(e1, X_ARRAY, spos);
 		e2._xonMode = XConstants.XON_MODE_W;
@@ -901,7 +901,7 @@ public final class CompileXonXdef extends XScriptParser {
 		setAttr(pnode1, X_KEYATTR, new SBuffer("? string();",spos));
 		pnode2 = genXDElement(pnode1, "choice", spos);
 		pnode2._xonMode = XConstants.XON_MODE_W;
-		setXDAttr(pnode2, "script", new SBuffer("ref " + anyName, spos));
+		setXDAttr(pnode2, "script", new SBuffer("*; ref " + anyName, spos));
 		pnode1.addChildNode(pnode2);
 		pnode.addChildNode(pnode1);
 		pnode1 = genJElement(pnode, X_MAP, spos);
@@ -911,7 +911,7 @@ public final class CompileXonXdef extends XScriptParser {
 		setAttr(pnode1, X_KEYATTR, new SBuffer("? string();", spos));
 		pnode2 = genXDElement(pnode1, "choice", spos);
 		pnode2._xonMode = XConstants.XON_MODE_W;
-		setXDAttr(pnode2, "script", new SBuffer("ref " + anyName, spos));
+		setXDAttr(pnode2, "script", new SBuffer("*; ref " + anyName, spos));
 		pnode1.addChildNode(pnode2);
 		pnode.addChildNode(pnode1);
 /*#if DEBUG*#/
