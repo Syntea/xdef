@@ -210,20 +210,20 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 			int urindx;
 			if (((urindx = nsuriIndex) == XPreCompiler.NS_XINCLUDE_INDEX)) {
 				String nsuri = _pcomp.getNSURI(urindx);
-				Element el;
+				Element elem;
 				if (_includeElement == null) {
-					el = _includeElement = KXmlUtils.newDocument(nsuri,
+					elem = _includeElement = KXmlUtils.newDocument(nsuri,
 						_actPNode._name.getString(), null).getDocumentElement();
 				} else {
-					el = _includeElement.getOwnerDocument().createElementNS(
+					elem = _includeElement.getOwnerDocument().createElementNS(
 						nsuri, _actPNode._name.getString());
-					_includeElement.appendChild(el);
+					_includeElement.appendChild(elem);
 				}
 				for (PAttr aval: _actPNode.getAttrs()) {
 					if (aval._nsindex < 0) {
-						el.setAttribute(aval._name, aval._value.getString());
+						elem.setAttribute(aval._name, aval._value.getString());
 					} else {
-						el.setAttributeNS(_pcomp.getNSURI(aval._nsindex),
+						elem.setAttributeNS(_pcomp.getNSURI(aval._nsindex),
 							aval._name,
 							aval._value.getString());
 					}
@@ -264,8 +264,8 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 				_pcomp.processIncludeList(_actPNode);
 				if (defName != null) {
 					// check duplicate of X-definition
-					for (PNode p: _pcomp.getPXDefs()) {
-						if (defName.equals(p._xdef.getName())) {
+					for (PNode pn: _pcomp.getPXDefs()) {
+						if (defName.equals(pn._xdef.getName())) {
 							XScriptParser xp =
 								new XScriptParser(_actPNode._xmlVersion);
 							xp.setSource(_actPNode._name,
@@ -436,18 +436,18 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 				break;
 			}
 		}
-		PNode p = new PNode(name,
+		PNode pn = new PNode(name,
 			new SPosition(_actPNode._value),
 			_actPNode,
 			_actPNode._xdVersion,
 			_actPNode._xmlVersion);
-		p._nsURI = _pcomp.getNSURI(XPreCompiler.NS_XDEF_INDEX);
-		p._nsindex = XPreCompiler.NS_XDEF_INDEX;
-		p._localName = "text";
-		p._value = _actPNode._value;
+		pn._nsURI = _pcomp.getNSURI(XPreCompiler.NS_XDEF_INDEX);
+		pn._nsindex = XPreCompiler.NS_XDEF_INDEX;
+		pn._localName = "text";
+		pn._value = _actPNode._value;
 		_actPNode._value = null;
 		_level++;
-		_actPNode.addChildNode(p);
+		_actPNode.addChildNode(pn);
 		_level--;
 	}
 
@@ -491,7 +491,7 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 					}
 				}
 				CompileXonXdef compileXon = new CompileXonXdef(_pcomp,
-					_actPNode, XConstants.XON_MODE_W, sval, getReportWriter());
+					_actPNode, sval, getReportWriter());
 				pnode._xonMode = XConstants.XON_ROOT;
 				if (pnode._value==null || pnode._value.getString().isEmpty()) {
 					//XON/JSON model is missing in JSON definition
