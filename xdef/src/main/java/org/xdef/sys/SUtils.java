@@ -233,7 +233,8 @@ public class SUtils extends FUtils {
 				out.write(obuf, 0, len);
 			}
 		} catch (IOException ex) {
-			throw new SException(SYS.SYS036, ex); //Program exception &{0}
+			//Program exception&{0}{: }
+			throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex));
 		}
 	}
 
@@ -266,7 +267,8 @@ public class SUtils extends FUtils {
 				}
 			}
 		} catch (IOException ex) {
-			throw new SException(SYS.SYS036, ex); //Program exception &{0}
+			//Program exception&{0}{: }
+			throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex));
 		}
 	}
 
@@ -302,7 +304,8 @@ public class SUtils extends FUtils {
 				}
 			}
 		} catch (IOException ex) {
-			throw new SException(SYS.SYS036, ex); //Program exception &{0}
+			//Program exception&{0}{: }
+			throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex));
 		}
 	}
 
@@ -511,7 +514,8 @@ public class SUtils extends FUtils {
 				out.write(obuf, 0, len);
 			}
 		} catch (IOException ex) {
-			throw new SException(SYS.SYS036, ex); //Program exception &{0}
+			//Program exception&{0}{: }
+			throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex));
 		}
 	}
 
@@ -554,7 +558,8 @@ public class SUtils extends FUtils {
 				out.write(obuf, 0, len);
 			}
 		} catch (IOException ex) {
-			throw new SException(SYS.SYS036, ex); //Program exception &{0}
+			//Program exception&{0}{: }
+			throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex));
 		}
 	}
 
@@ -572,8 +577,8 @@ public class SUtils extends FUtils {
 				encodeBase64(new ByteArrayInputStream(bytes), out, lines);
 				return out.toByteArray();
 			} catch (Exception ex) {// never should happen
-				//Program exception &{0}
-				throw new SRuntimeException(SYS.SYS036, ex);
+				throw new SRuntimeException(//Program exception&{0}{: }
+					SYS.SYS036, STester.printThrowable(ex));
 			}
 		} else {
 			return encodeBase64(bytes);
@@ -599,7 +604,8 @@ public class SUtils extends FUtils {
 					new ByteArrayInputStream(bytes, offset, len), out, lines);
 				return out.toByteArray();
 			} catch (Exception ex) {// never should happen
-				throw new SRuntimeException(SYS.SYS036, ex);//Program exception &{0}
+				throw new SRuntimeException(//Program exception&{0}{: }
+					SYS.SYS036, STester.printThrowable(ex));
 			}
 		} else {
 			return encodeBase64(bytes, offset, len);
@@ -735,7 +741,8 @@ public class SUtils extends FUtils {
 				}
 			}
 		} catch (IOException ex) {
-			throw new SException(SYS.SYS036, ex); //Program exception &{0}
+			//Program exception&{0}{: }
+			throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex));
 		}
 	}
 

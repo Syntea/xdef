@@ -1063,8 +1063,8 @@ public class StringParser extends SReporter implements SParser {
 			try {
 				_reader.skip(pos);
 			} catch (IOException ex) {
-				//Program exception &{0}
-				throw new SRuntimeException(SYS.SYS036, ex);
+				throw new SRuntimeException(//Program exception&{0}{: }
+					SYS.SYS036, STester.printThrowable(ex));
 			}
 		}
 		setIndex(0);
@@ -1174,8 +1174,8 @@ public class StringParser extends SReporter implements SParser {
 		} catch (Exception ex) {
 			//this should never happen
 			closeReader();
-			//Program exception &{0}
-			throw new SRuntimeException(SYS.SYS036, getSystemId() + "; " + ex);
+			//Program exception&{0}{: }
+			throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex));
 		}
 	}
 	private void sleepwile() throws InterruptedException {
@@ -1239,8 +1239,8 @@ public class StringParser extends SReporter implements SParser {
 				setBuffer(sb.toString());
 				//this should never happen
 				closeReader();
-				//Program exception &{0}
-				throw new SRuntimeException(SYS.SYS036, getSystemId()+"; "+ex);
+				throw new SRuntimeException(//Program exception&{0}{: }
+					SYS.SYS036, STester.printThrowable(ex));
 			}
 		} while (n > _endPos);
 		setBuffer(sb.toString());

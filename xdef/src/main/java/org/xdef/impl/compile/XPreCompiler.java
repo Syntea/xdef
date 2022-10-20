@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.LinkedHashMap;
 import javax.xml.XMLConstants;
+import org.xdef.sys.STester;
 
 /** Reads source X-definitions and prepares the list of PNodes created
  * from source data.
@@ -457,10 +458,8 @@ public class XPreCompiler implements PreCompiler {
 			if (ex instanceof RuntimeException) {
 				throw (RuntimeException) ex;
 			}
-			if (ex instanceof SThrowable) {
-				throw new SRuntimeException(((SThrowable) ex).getReport());
-			}
-			throw new SRuntimeException(SYS.SYS036, ex);//Program exception &{0}
+			//Program exception &{0}
+			throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex));
 		}
 	}
 
@@ -489,7 +488,8 @@ public class XPreCompiler implements PreCompiler {
 			if (ex instanceof SThrowable) {
 				throw new SRuntimeException(((SThrowable) ex).getReport());
 			}
-			throw new SRuntimeException(SYS.SYS036, ex);//Program exception &{0}
+			//Program exception &{0}
+			throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex));
 		}
 	}
 
@@ -513,7 +513,8 @@ public class XPreCompiler implements PreCompiler {
 			if (ex instanceof SThrowable) {
 				throw new SRuntimeException(((SThrowable) ex).getReport());
 			}
-			throw new SRuntimeException(SYS.SYS036, ex);//Program exception &{0}
+			//Program exception &{0}
+			throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex));
 		}
 	}
 

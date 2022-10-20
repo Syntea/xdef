@@ -20,6 +20,7 @@ import org.xdef.msg.XDEF;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.Report;
 import org.xdef.sys.SRuntimeException;
+import org.xdef.sys.STester;
 import org.xdef.sys.SUtils;
 
 /** Generation of Java source code of XDComponents.
@@ -122,7 +123,8 @@ public final class GenXComponent {
 						fos.close();
 					} catch (Exception exx) {}
 				}
-				reporter.error(SYS.SYS036, ex); //Program exception &{0}
+				 //Program exception &{0}
+				reporter.error(SYS.SYS036, STester.printThrowable(ex));
 			}
 		}
 	}

@@ -37,6 +37,7 @@ import org.xdef.sys.ReportWriter;
 import org.xdef.sys.SDatetime;
 import org.xdef.sys.SManager;
 import org.xdef.sys.SRuntimeException;
+import org.xdef.sys.STester;
 import org.xdef.sys.SThrowable;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
@@ -362,7 +363,8 @@ public final class XPool implements XDPool, Serializable {
 					.putReport(((SThrowable) ex).getReport());
 			} else {
 				//Program exception&{0}{: }
-				_compiler.getReportWriter().error(SYS.SYS036, ex);
+				_compiler.getReportWriter().error(SYS.SYS036,
+					STester.printThrowable(ex));
 			}
 		}
 	}
@@ -412,7 +414,8 @@ public final class XPool implements XDPool, Serializable {
 					((SThrowable) ex).getReport());
 			} else {
 				//Program exception&{0}{: }
-				_compiler.getReportWriter().error(SYS.SYS036, ex);
+				_compiler.getReportWriter().error(SYS.SYS036,
+					STester.printThrowable(ex));
 			}
 		}
 	}
@@ -450,7 +453,8 @@ public final class XPool implements XDPool, Serializable {
 					((SThrowable) ex).getReport());
 			} else {
 				//Program exception&{0}{: }
-				_compiler.getReportWriter().error(SYS.SYS036, ex);
+				_compiler.getReportWriter().error(SYS.SYS036,
+					STester.printThrowable(ex));
 			}
 		}
 	}
@@ -493,13 +497,8 @@ public final class XPool implements XDPool, Serializable {
 				_compiler.parseStream(source, s);
 			}
 		} catch (Exception ex) {
-			if (ex instanceof SThrowable) {
-				_compiler.getReportWriter().putReport(
-					((SThrowable) ex).getReport());
-			} else {
-				//Program exception&{0}{: }
-				_compiler.getReportWriter().error(SYS.SYS036, ex);
-			}
+			_compiler.getReportWriter().error(SYS.SYS036,
+				STester.printThrowable(ex));
 		}
 	}
 

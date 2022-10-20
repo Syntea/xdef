@@ -60,6 +60,7 @@ import org.xdef.sys.SError;
 import org.xdef.sys.SManager;
 import org.xdef.sys.SReporter;
 import org.xdef.sys.SRuntimeException;
+import org.xdef.sys.STester;
 import org.xdef.sys.SThrowable;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
@@ -1862,7 +1863,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 				throw (RuntimeException) ex;
 			}
 			//Program exception&{0}{: }
-			throw new SRuntimeException(SYS.SYS036, ex);
+			throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex));
 		} catch (SError e) {
 			Report rep = e.getReport();
 			 //X-definition canceled
