@@ -6,7 +6,6 @@ import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.FileReportWriter;
 import org.xdef.sys.NullReportWriter;
 import org.xdef.sys.ReportWriter;
-import org.xdef.sys.SThrowable;
 import org.xdef.sys.SUtils;
 import org.xdef.XDDocument;
 import org.xdef.XDFactory;
@@ -17,6 +16,7 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.StringTokenizer;
+import org.xdef.sys.STester;
 
 /** Validation of XML document with X-definition.
  * <p>Also provides main method for calling the program from command line.
@@ -163,22 +163,16 @@ public class XValidate {
 			try {
 				xp = XDFactory.compileXD(props, xdefFiles);
 			} catch (Exception ex) {
-				if (ex instanceof SThrowable) {
-					repw.putReport(((SThrowable)ex).getReport());
-				} else {
-					repw.fatal(SYS.SYS036, ex); //Program exception &{0}
-				}
+				 //Program exception &{0}
+				repw.fatal(SYS.SYS036, STester.printThrowable(ex));
 				return null;
 			}
 		} else if (poolFile != null) {
 			try {
 				xp = XDFactory.readXDPool(poolFile);
 			} catch (Exception ex) {
-				if (ex instanceof SThrowable) {
-					repw.putReport(((SThrowable)ex).getReport());
-				} else {
-					repw.fatal(SYS.SYS036, ex); //Program exception &{0}
-				}
+				 //Program exception &{0}
+				repw.fatal(SYS.SYS036, STester.printThrowable(ex));
 				return null;
 			}
 		}
@@ -195,22 +189,16 @@ public class XValidate {
 					return xd;
 				}
 			} catch (Exception ex) {
-				if (ex instanceof SThrowable) {
-					repw.putReport(((SThrowable)ex).getReport());
-				} else {
-					repw.fatal(SYS.SYS036, ex); //Program exception &{0}
-				}
+				 //Program exception &{0}
+				repw.fatal(SYS.SYS036, STester.printThrowable(ex));
 				return null;
 			}
 		}
 		try {
 			return XDFactory.xparse(xmlFile.getCanonicalPath(), repw);
 		} catch (Exception ex) {
-			if (ex instanceof SThrowable) {
-				repw.putReport(((SThrowable)ex).getReport());
-			} else {
-				repw.fatal(SYS.SYS036, ex); //Program exception &{0}
-			}
+			 //Program exception &{0}
+			repw.fatal(SYS.SYS036, STester.printThrowable(ex));
 			return null;
 		}
 	}

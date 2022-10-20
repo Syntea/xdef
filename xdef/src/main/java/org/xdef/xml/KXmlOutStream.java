@@ -18,6 +18,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xdef.sys.STester;
 
 /** Provides incremental writer of XML to data stream.
  * @author Vaclav Trojan
@@ -265,7 +266,7 @@ public class KXmlOutStream {
 			_rootWritten = true;
 		} catch (IOException ex) {
 			//Program exception&{0}{: }
-			throw new SRuntimeException(SYS.SYS036, ex);
+			throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex));
 		}
 	}
 
@@ -279,7 +280,7 @@ public class KXmlOutStream {
 			_writer.flush();
 		} catch (IOException ex) {
 			//Program exception&{0}{: }
-			throw new SRuntimeException(SYS.SYS036, ex);
+			throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex));
 		}
 	}
 
@@ -299,7 +300,7 @@ public class KXmlOutStream {
 			_writer.flush();
 		} catch (IOException ex) {
 			//Program exception&{0}{: }
-			throw new SRuntimeException(SYS.SYS036, ex);
+			throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex));
 		}
 	}
 
@@ -392,7 +393,7 @@ public class KXmlOutStream {
 			_writer.flush();
 		} catch (IOException ex) {
 			//Program exception&{0}{: }
-			throw new SRuntimeException(SYS.SYS036, ex);
+			throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex));
 		}
 	}
 
@@ -427,9 +428,9 @@ public class KXmlOutStream {
 							writeNodeList(nl);
 							writeElementEnd(elem);
 						}
-					} catch (IOException ex) {
-						//Program exception&{0}{: }
-						throw new SRuntimeException(SYS.SYS036, ex);
+					} catch (IOException ex) {						
+						throw new SRuntimeException(//Program exception&{0}{: }
+							SYS.SYS036, STester.printThrowable(ex));
 					}
 					return;
 				}
@@ -472,7 +473,7 @@ public class KXmlOutStream {
 			}
 		} catch (IOException ex) {
 			//Program exception&{0}{: }
-			throw new SRuntimeException(SYS.SYS036, ex);
+			throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex));
 		}
 	}
 
@@ -493,8 +494,8 @@ public class KXmlOutStream {
 				try {
 					_writer.flush();
 				} catch (IOException ex) {
-					//Program exception&{0}{: }
-					throw new SRuntimeException(SYS.SYS036, ex);
+					throw new SRuntimeException(//Program exception&{0}{: }
+						SYS.SYS036, STester.printThrowable(ex));
 				}
 			}
 		}
@@ -508,8 +509,8 @@ public class KXmlOutStream {
 				_writer.close();
 				_writer = null;
 			} catch (IOException ex) {
-				//Program exception&{0}{: }
-				throw new SRuntimeException(SYS.SYS036, ex);
+				throw new SRuntimeException(//Program exception&{0}{: }
+					SYS.SYS036, STester.printThrowable(ex));
 			}
 		}
 		_names.clear();

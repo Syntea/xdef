@@ -214,8 +214,8 @@ public class FileReportReader implements ReportReader {
 				}
 				throw new SIOException(SYS.SYS042);//Incorrect format of report
 			} catch (Exception ex) {
-				//Program exception&{0}{: }
-				throw new SRuntimeException(SYS.SYS036, ex);
+				throw new SRuntimeException(//Program exception&{0}{: }
+					SYS.SYS036, STester.printThrowable(ex));
 			}
 		} else if (_reader == null) {
 			return null;

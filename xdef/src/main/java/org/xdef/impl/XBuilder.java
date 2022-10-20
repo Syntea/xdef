@@ -313,7 +313,8 @@ public final class XBuilder implements XDBuilder {
 			} catch (Exception ex) {
 				if (!(ex instanceof SThrowable)) {
 					//Program exception&{0}{: }
-					reporter.putReport(Report.error(SYS.SYS036, ex));
+					reporter.putReport(Report.error(
+						SYS.SYS036, STester.printThrowable(ex)));
 				}
 			}
 			result._compiler = null;
