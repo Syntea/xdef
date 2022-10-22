@@ -490,8 +490,8 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 						error(sval, XDEF.XDEF316, xdname, s);
 					}
 				}
-				CompileXonXdef compileXon = new CompileXonXdef(_pcomp,
-					_actPNode, sval, getReportWriter());
+				CompileXonXdef compileXon =
+					new CompileXonXdef(_actPNode, sval, getReportWriter());
 				pnode._xonMode = XConstants.XON_ROOT;
 				if (pnode._value==null || pnode._value.getString().isEmpty()) {
 					//XON/JSON model is missing in JSON definition

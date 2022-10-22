@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.0.1, release-date 2022-10-20
+# Version 42.0.1, release-date 2022-10-22
 * corrected occurrence specification in %anyObj.
 
 # Version 42.0.0, release-date 2022-10-14
