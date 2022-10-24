@@ -23,7 +23,12 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.net.URL;
 import java.text.DecimalFormat;
+import static org.xdef.sys.STester.runTest;
+import static test.XDTester._xdNS;
+import static test.XDTester.getFulltestMode;
 
 /** Class for testing (miscellaneous).
  * @author Vaclav Trojan
@@ -273,6 +278,36 @@ public final class Test003 extends XDTester {
 			assertNoErrorwarnings(reporter);
 			assertEq(xml = "<C/>", parse(xp, "C", xml, reporter));
 			assertNoErrorwarnings(reporter);
+		} catch (Exception ex) {fail(ex);}
+		try {// test URL with encoded chracters.
+			File f = new File(clearTempDir(), "/aa bb");
+			f.mkdirs();
+			f = new File(f, "čé řž.xdef");
+			Writer wr = new OutputStreamWriter(new FileOutputStream(f),"UTF-8");
+			wr.write(
+"<xd:def xmlns:xd='" + _xdNS + "' name=\"A\" root=\"test\">\n" +
+"<test a='int()'/>\n" +
+"</xd:def>");
+			wr.close();
+			URL u = f.toURI().toURL();
+			XDFactory.compileXD(null, u);
+			xdef =
+"<xd:collection xmlns:xd='" + _xdNS + "' include='"+u.toExternalForm()+"' />";
+			xp = compile(xdef);
+
+			xml = "<test a='123'/>";
+			f = new File(clearTempDir(), "/aa bb");
+			f.mkdirs();
+			f = new File(f, "čé řž.xml");
+			wr = new OutputStreamWriter(new FileOutputStream(f),"UTF-8");
+			wr.write(xml);
+			wr.close();
+			xd = xp.createXDDocument("A");
+			assertEq(xml, parse(xp,"A",xml, reporter));
+			assertNoErrorsAndClear(reporter);
+			xd = xp.createXDDocument("A");
+			assertEq(xml, xd.xparse(f.toURI().toURL(), reporter));
+			assertNoErrorsAndClear(reporter);
 		} catch (Exception ex) {fail(ex);}
 
 		resetTester();
