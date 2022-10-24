@@ -1,7 +1,9 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.0.1, release-date 2022-10-22
-* corrected occurrence specification in %anyObj.
+# Version 42.0.1, release-date 2022-10-24
+* corrected bug in reading X-definition from URL where in the file name are
+  spaces or URL encoded characters.
+* corrected bug in occurrence specification in %anyObj.
 
 # Version 42.0.0, release-date 2022-10-14
 * Corrected bug in `uses` and `implements` in X-script when it refers 

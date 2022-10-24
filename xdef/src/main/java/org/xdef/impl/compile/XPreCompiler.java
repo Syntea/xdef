@@ -486,7 +486,7 @@ public class XPreCompiler implements PreCompiler {
 				throw (RuntimeException) ex;
 			}
 			if (ex instanceof SThrowable) {
-				throw new SRuntimeException(((SThrowable) ex).getReport());
+				throw new SRuntimeException(((SThrowable) ex).getReport(), ex);
 			}
 			//Program exception &{0}
 			throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex));
@@ -501,17 +501,13 @@ public class XPreCompiler implements PreCompiler {
 	 */
 	public final void parseURL(final URL url) {
 		try {
-			if ("file".equals(url.getProtocol())) {
-				parseFile(url.getFile());
-			} else {
-				parseStream(url.openStream(), url.toExternalForm());
-			}
+			parseStream(url.openStream(), url.toExternalForm());
 		} catch (Exception ex) {
 			if (ex instanceof RuntimeException) {
 				throw (RuntimeException) ex;
 			}
 			if (ex instanceof SThrowable) {
-				throw new SRuntimeException(((SThrowable) ex).getReport());
+				throw new SRuntimeException(((SThrowable) ex).getReport(), ex);
 			}
 			//Program exception &{0}
 			throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex));
