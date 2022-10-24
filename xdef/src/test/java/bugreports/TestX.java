@@ -7,6 +7,7 @@ import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.xdef.proc.XXData;
 import java.util.Properties;
+import org.xdef.impl.XConstants;
 import org.xdef.sys.ArrayReporter;
 import static org.xdef.sys.STester.runTest;
 import test.XDTester;
@@ -54,7 +55,8 @@ public class TestX extends XDTester {
 		Properties props = new Properties();
 		ArrayReporter reporter = new ArrayReporter();
 		try {
-			props.setProperty("xdef-xon_debug", "showModel");
+			System.setProperty(XConstants.XDPROPERTY_XDEF_DBGSWITCHES,
+				XConstants.XDPROPERTYVALUE_DBG_SHOWXON);
 			xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n"+
 " <xd:xon name='a'>\n"+
