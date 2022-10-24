@@ -9,6 +9,7 @@ import org.xdef.XDParser;
 import org.xdef.XDPool;
 import org.xdef.XDValue;
 import org.xdef.component.XComponent;
+import org.xdef.impl.XConstants;
 import org.xdef.model.XMData;
 import org.xdef.proc.XXData;
 import org.xdef.proc.XXNode;
@@ -81,7 +82,8 @@ public class MyTest extends XDTester {
 	public void test() {
 		System.out.println("X-definition version: " + XDFactory.getXDVersion());
 ////////////////////////////////////////////////////////////////////////////////
-		System.setProperty("xdef-xon_debug", "showModel");
+		System.setProperty(XConstants.XDPROPERTY_XDEF_DBGSWITCHES,
+			XConstants.XDPROPERTYVALUE_DBG_SHOWXON);
 		setProperty(XDConstants.XDPROPERTY_DISPLAY, // xdef_display
 			XDConstants.XDPROPERTYVALUE_DISPLAY_FALSE); // true | errors | false
 //			XDConstants.XDPROPERTYVALUE_DISPLAY_TRUE); // true | errors | false
@@ -174,7 +176,8 @@ if(true)return;
 "}\n" +
 "</xd:xon>\n" +
 "</xd:def>";
-			System.setProperty("xdef-xon_debug", "showModel");
+			System.setProperty(XConstants.XDPROPERTY_XDEF_DBGSWITCHES,
+				XConstants.XDPROPERTYVALUE_DBG_SHOWXON);
 			xp = XDFactory.compileXD(null, xdef);
 //			xp.display();
 			xd = xp.createXDDocument();
@@ -189,7 +192,7 @@ if(true)return;
 				XonUtils.toXonString(o, true));
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
-		System.setProperty("xdef-xon_debug", "");
+		System.setProperty(XConstants.XDPROPERTY_XDEF_DBGSWITCHES, "");
 //if(T)return;
 /*xx*/
 		try {
