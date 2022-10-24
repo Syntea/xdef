@@ -53,8 +53,8 @@ public final class CompileXonXdef extends XScriptParser {
 	/** X-position of generated %any model.*/
 	private String _anyXPos;
 /*#if DEBUG*#/
-	/** Internal debugging switches. *#/
-	private final String _dbgSwitches; //remove this in future
+	/** debugging switches; from properties. *#/
+	private final String _dbgSwitches; // remove this code in future
 /*#end*/
 
 	/** Prepare instance of CompileXonXdef. */
@@ -69,9 +69,10 @@ public final class CompileXonXdef extends XScriptParser {
 		setReportWriter(reporter);
 		_xonModel = pn;
 		_anyXPos = null;
-		String s = System.getProperty(XConstants.XDPROPERTY_XDEF_DBGSWITCHES);
 /*#if DEBUG*#/
-		_dbgSwitches = s == null ? "" : s.trim(); //remove this in future
+		// read swithes from properties. Remove this code in future.
+		String s = System.getProperty(XConstants.XDPROPERTY_XDEF_DBGSWITCHES);
+		_dbgSwitches = s == null ? "" : s.trim();
 /*#end*/
 	}
 
@@ -890,15 +891,16 @@ public final class CompileXonXdef extends XScriptParser {
 		pn1.addChildNode(pn2);
 		pn.addChildNode(pn1);
 /*#if DEBUG*#/
-		displayModel(pn); //remove this in future
+		displayModel(pn); // remove this code in future
 /*#end*/
 	}
 
 /*#if DEBUG*#/
-	/** Display created model in debug mode (remove this method in future).
+	/** Display the compiled model in debug mode. Remove this code method
+	 * in the future.
 	 * @param pn model to be displayed
 	 *#/
-	void displayModel(final PNode pn) {
+	private void displayModel(final PNode pn) {
 		if (_dbgSwitches.contains(XConstants.XDPROPERTYVALUE_DBG_SHOWXON)){
 			System.out.flush();
 			System.err.flush();
@@ -932,7 +934,7 @@ public final class CompileXonXdef extends XScriptParser {
 		jp = null;
 		pn._value = null;
 /*#if DEBUG*#/
-		displayModel(pn); //remove this in future
+		displayModel(pn); // remove this code in future
 /*#end*/
 		return _anyXPos;
 	}
