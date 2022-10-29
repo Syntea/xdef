@@ -546,16 +546,16 @@ public final class CompileXonXdef extends XScriptParser {
 			if (pn._nsPrefixes.containsKey(_xdPrefix)
 				&& "choice".equals(pn.getLocalName())) {
 				for (PNode p: pn.getChildNodes()) {
-					setName(p, name, occ);
+					setName(p, name);
 				}
 			} else {
-				setName(pn, name, occ);
+				setName(pn, name);
 			}
 		}
 		return pn;
 	}
 
-	private void setName(PNode pn, String name, SBuffer occ) {
+	private void setName(final PNode pn, final String name) {
 		if (ANY_NAME.equals(name)) {
 			setAttr(pn,X_KEYATTR, new SBuffer("string();", pn._name));
 		} else {
@@ -828,10 +828,10 @@ public final class CompileXonXdef extends XScriptParser {
 			setXDAttr(pn, "script", val);
 		}
 		SPosition spos = parent._name;
-		boolean isMap = X_MAP.equals(parent._localName)
-			&& XDConstants.XON_NS_URI_W.equals(parent._nsURI);
 		pn1 = genJElement(pn, X_ITEM, spos);
 		pn1._xonMode = XConstants.XON_MODE_W;
+		boolean isMap = X_MAP.equals(parent._localName)
+			&& XDConstants.XON_NS_URI_W.equals(parent._nsURI);
 		if (isMap) {
 			setAttr(pn1, X_KEYATTR, new SBuffer("string();", spos));
 		}
@@ -960,12 +960,12 @@ public final class CompileXonXdef extends XScriptParser {
 		/** stack of names in map. */
 		private final Stack<SBuffer> _names = new Stack<SBuffer>();
 		/** actual kind (VALUE, ARRAY or MAP). */
-		private int _kind; // ARRAY, MAP, VALUE or UNDEFINED
+		private int _kind; // ARRAY, MAP, or VALUE
 		/** parsed value. */
 		private JObject _value;
 
 		/** Create new instance of XonModelParser. */
-		XonModelParser(CompileXonXdef jx) {_kinds.push(_kind = -1);}
+		XonModelParser(CompileXonXdef jx) {_kinds.push(_kind = VALUE);}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of JParser interface
@@ -981,7 +981,7 @@ public final class CompileXonXdef extends XScriptParser {
 			} else if (_kind == MAP) {
 				SBuffer name = _names.pop();
 				_maps.peek().put(name.getString(), value);
-			} else { // must be now ITEM
+			} else { // must be now VALUE
 				_value = value;
 			}
 		}
