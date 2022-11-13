@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.0.1, release-date 2022-10-29
+# Version 42.0.1, release-date 2022-11-13
 * corrected bug in reading X-definition from URL where in the file name are
   spaces or URL encoded characters.
 * corrected bug in occurrence specification in %anyObj.

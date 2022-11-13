@@ -1,20 +1,54 @@
 package org.xdef.impl.compile;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 import org.xdef.XDConstants;
 import org.xdef.impl.XConstants;
 import org.xdef.impl.XOccurrence;
+import static org.xdef.impl.compile.XScriptParser.ASK_SYM;
+import static org.xdef.impl.compile.XScriptParser.BEG_SYM;
+import static org.xdef.impl.compile.XScriptParser.CONSTANT_SYM;
+import static org.xdef.impl.compile.XScriptParser.CREATE_SYM;
+import static org.xdef.impl.compile.XScriptParser.DDOT_SYM;
+import static org.xdef.impl.compile.XScriptParser.DEFAULT_SYM;
+import static org.xdef.impl.compile.XScriptParser.END_SYM;
+import static org.xdef.impl.compile.XScriptParser.FINALLY_SYM;
+import static org.xdef.impl.compile.XScriptParser.FIXED_SYM;
+import static org.xdef.impl.compile.XScriptParser.FORGET_SYM;
+import static org.xdef.impl.compile.XScriptParser.IGNORE_SYM;
+import static org.xdef.impl.compile.XScriptParser.ILLEGAL_SYM;
+import static org.xdef.impl.compile.XScriptParser.INIT_SYM;
+import static org.xdef.impl.compile.XScriptParser.MATCH_SYM;
+import static org.xdef.impl.compile.XScriptParser.MUL_SYM;
+import static org.xdef.impl.compile.XScriptParser.OCCURS_SYM;
+import static org.xdef.impl.compile.XScriptParser.ON_ABSENCE_SYM;
+import static org.xdef.impl.compile.XScriptParser.ON_EXCESS_SYM;
+import static org.xdef.impl.compile.XScriptParser.ON_FALSE_SYM;
+import static org.xdef.impl.compile.XScriptParser.ON_ILLEGAL_ATTR_SYM;
+import static org.xdef.impl.compile.XScriptParser.ON_START_ELEMENT_SYM;
+import static org.xdef.impl.compile.XScriptParser.ON_TRUE_SYM;
+import static org.xdef.impl.compile.XScriptParser.OPTIONAL_SYM;
+import static org.xdef.impl.compile.XScriptParser.OPTIONS_SYM;
+import static org.xdef.impl.compile.XScriptParser.OPTION_SYM;
+import static org.xdef.impl.compile.XScriptParser.PLUS_SYM;
+import static org.xdef.impl.compile.XScriptParser.REF_SYM;
+import static org.xdef.impl.compile.XScriptParser.REQUIRED_SYM;
+import static org.xdef.impl.compile.XScriptParser.SEMICOLON_SYM;
+import static org.xdef.impl.compile.XScriptParser.VAR_SYM;
 import org.xdef.msg.JSON;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.ReportWriter;
 import org.xdef.sys.SBuffer;
+import static org.xdef.sys.SParser.NOCHAR;
 import org.xdef.sys.SPosition;
 import org.xdef.sys.StringParser;
 import org.xdef.xon.IniReader;
 import static org.xdef.xon.XonNames.ANY_NAME;
 import static org.xdef.xon.XonNames.ANY_OBJ;
+import static org.xdef.xon.XonNames.ONEOF_DIRECTIVE;
+import static org.xdef.xon.XonNames.SCRIPT_DIRECTIVE;
 import static org.xdef.xon.XonNames.X_ARRAY;
 import static org.xdef.xon.XonNames.X_ITEM;
 import static org.xdef.xon.XonNames.X_KEYATTR;
@@ -29,8 +63,6 @@ import org.xdef.xon.XonTools.JArray;
 import org.xdef.xon.XonTools.JMap;
 import org.xdef.xon.XonTools.JObject;
 import org.xdef.xon.XonTools.JValue;
-import static org.xdef.xon.XonNames.SCRIPT_DIRECTIVE;
-import static org.xdef.xon.XonNames.ONEOF_DIRECTIVE;
 
 /** Create X-definition model from xd:xon element.
  * @author Vaclav Trojan
@@ -38,8 +70,6 @@ import static org.xdef.xon.XonNames.ONEOF_DIRECTIVE;
 //public final class CompileXonXdef extends StringParser {
 public final class CompileXonXdef extends XScriptParser {
 
-//	/** XPosition of %any model.*/
-//	private final byte _xonMode;
 	/** Prefix of X-definition namespace. */
 	private final String _xdPrefix;
 	/** Index of X-definition namespace. */
@@ -127,276 +157,47 @@ public final class CompileXonXdef extends XScriptParser {
 
 	/** Skip white space separators and comments. Note: line comments are not
 	 * allowed in X-script.
-	 * @return true if a space or comment was found.
 	 */
-	public final boolean isSpacesOrComments() {
-		boolean result = isSpaces();
+	private void skipSpacesAndComments() {
+		isSpaces();
 		while(isToken("/*") ) {
-			result = true;
 			if (!findTokenAndSkip("*/")) {
 				error(JSON.JSON015); //Unclosed comment
 				setEos();
-				return result;
+				return;
 			}
 			isSpaces();
 		}
-		return result;
 	}
 
-	/** Skip all blanks, comments and semicolons.
-	 * @return true if a semicolon was found.
-	 */
-	private boolean skipSemiconsBlanksAndComments() {
-		boolean result = false;
+	/** Skip all blanks, comments and semicolons. */
+	private void skipSemiconsBlanksAndComments() {
 		for(;;) {
-			isSpacesOrComments();
-			if (eos() || !isChar(';')) {
-				break;
+			skipSpacesAndComments();
+			if (!isChar(';')) {
+				return;
 			}
-			result = true;
-		}
-		return result;
-	}
-
-	/** Read occurrence.
-	 * Occurrence ::= ("required" | "optional" | "ignore" | "illegal" | "*"
-	 *   | "+" | "?" | (("occurs" S)? ("*" | "+" | "?"
-	 *   | (IntegerLiteral (S? ".." (S? ("*" | IntegerLiteral))? )? ))))
-	 * @return Occurrence object or null.
-	 */
-	private XOccurrence readOccurrence() {
-		boolean wasOccurs;
-		if (wasOccurs = isToken("occurs")) {
-			if (!isSpacesOrComments()) {}
-		}
-		final String[] tokens =
-			{"optional", "?", "*", "+", "required", "ignore", "illegal"};
-		switch (isOneOfTokens(tokens)) {
-			case  0:
-			case  1:
-				return new XOccurrence(0, 1); // optional
-			case  2:
-				return new XOccurrence(0, Integer.MAX_VALUE); // unbounded
-			case  3:
-				return new XOccurrence(1, Integer.MAX_VALUE); // one or more
-			case  4:
-				return new XOccurrence(1, 1); // required
-			case  5:
-				return new XOccurrence(
-					XOccurrence.IGNORE, Integer.MAX_VALUE); // ignore
-			case  6:
-				return new XOccurrence(XOccurrence.ILLEGAL, 0); // illegal
-		}
-		if (isInteger()) {
-			int min = getParsedInt(), max = Integer.MAX_VALUE;
-			isSpacesOrComments();
-			if (isToken("..")) {
-				isSpacesOrComments();
-				if (isInteger()) {
-					max = getParsedInt();
-				} else {
-					isChar('*');
-				}
-			}
-			return new XOccurrence(min, max);
-		} else {
-			if (wasOccurs) {
-				error(XDEF.XDEF429);//After 'occurs' is expected the interval
-			}
-			return null;
 		}
 	}
 
 	/** Parse X-script and return occurrence and executive part
 	 * (type declaration) in separate fields.
-	 * @param sbuf JValue from which is used the value
-	 * @return array with SBuffer items from both parts.
+	 * @param sbuf source text with X-script
+	 * @return array with SBuffer items (item 0 is occurrence specification)
+	 * and item 1 is composed form remaining X-script parts).
 	 */
 	private SBuffer[] parseTypeDeclaration(final SBuffer sbuf) {
-		SBuffer[] result = new SBuffer[] {
-			new SBuffer("",getPosition()),new SBuffer("",getPosition()),null};
+		SBuffer[] result = new SBuffer[] {null, new SBuffer("")};
 		if (sbuf == null) {
 			return result;
 		}
-		setSourceBuffer(sbuf);
-//		nextSymbol();
-//		XOccurrence occ = new XOccurrence(); // undefined occurrence
-//		while (_sym != NOCHAR) {
-//			if (_sym == SEMICOLON_SYM) {
-//				nextSymbol();
-//				continue;
-//			}
-//			if (isOccurrence(occ)) {
-//				compileTypeCheck(sc);
-//				continue;
-//			} else if (_sym == IDENTIFIER_SYM || _sym == LPAR_SYM
-//				|| _sym == NOT_SYM || (_sym == CONSTANT_SYM
-//				&& (_parsedValue.getItemId() == XD_STRING
-//				|| _parsedValue.getItemId() == XD_BOOLEAN))) {
-//				if (!occ.isSpecified()) {
-//					occ.setRequired();
-//				}
-//				compileTypeCheck(sc);
-//				continue;
-//			}
-//			char sym = _sym;
-//			nextSymbol();
-//			switch (sym) {
-//				case OPTION_SYM:
-//				case OPTIONS_SYM:
-//					readOptions(sc);
-//					continue;
-//				case FIXED_SYM: {
-//					if (sc._check < 0 && occ.isSpecified()) {
-//						error(XDEF.XDEF422); //Duplicated script section
-//					}
-//					occ.setFixed();
-//					int addr = compileFixedMethod(SCRIPT_SEPARATORS);
-//					_g._sp  = -1;
-//					if (addr >= 0) {
-//						int check = sc._check;
-//						if (check >= 0
-//							&&_g._code.get(_g._lastCodeIndex).getCode()==STOP_OP
-//							&&_g._code.get(check).getCode() == 0
-//							&& _g._code.get(check).getItemId() == XD_PARSER) {
-//							if (addr + 3 == _g._lastCodeIndex
-//								&&_g._code.get(addr).getCode()==INIT_NOPARAMS_OP
-//								&&_g._code.get(addr).getParam() == 0
-//								&&_g._code.get(addr + 1).getCode() == 0
-//								&&_g._code.get(addr+1).getItemId() == XD_STRING
-//								&& _g._code.get(addr + 2).getCode() == RETV_OP
-//								&& _g._code.get(addr + 3).getCode() == STOP_OP){
-//								XDValue value = _g._code.get(addr + 1);
-//								XDParser p = (XDParser) _g._code.get(check);
-//								XDParseResult r =
-//									p.check(null,value.toString());
-//								if (r.errors()) {
-//									error(XDEF.XDEF481); //Incorrect fixed value
-//								}
-//							} else {
-//								sc.setValueType(XD_STRING, "string");
-//							}
-//						}
-//						sc._check = _g._lastCodeIndex + 1;
-//						_g.addCode(new CodeI1(XD_STRING, CALL_OP, addr), 1);
-//						_g.internalMethod("eq",1);
-//						_g.addCode(new CodeI1(XD_PARSERESULT,PARSE_OP,1),0);
-//						_g.genStop();
-//						_g._sp  = -1;
-//						sc._onFalse = _g._lastCodeIndex + 1;
-//						_g.genLDC(new DefString("XDEF515")); //Value error
-//						_g.genLDC(new DefString("Value error"));
-//						_g.internalMethod("error", 2);
-//						// let's continue with setting od _g.genStop();
-//						//continues with setText, which is also onAbsence
-//						_g._sp  = -1;
-//						sc._onAbsence = _g._lastCodeIndex + 1;
-//						_g.addCode(new CodeI1(XD_STRING, CALL_OP, addr), 1);
-//						_g.internalMethod("setText",1);
-//						_g.genStop();
-//						_g._sp  = -1;
-//					}
-//					continue;
-//				}
-//				case ON_TRUE_SYM:
-//					if (sc._onTrue != -1) {
-//						error(XDEF.XDEF422); //Duplicated script section
-//					}
-//					sc._onTrue =
-//						compileSection(CompileBase.TEXT_MODE, XD_VOID, sym);
-//					continue;
-//				case ON_FALSE_SYM:
-//					if (sc._onFalse != -1) {
-//						error(XDEF.XDEF422); //Duplicated script section
-//					}
-//					sc._onFalse =
-//						compileSection(CompileBase.TEXT_MODE, XD_VOID, sym);
-//					continue;
-//				case ON_ABSENCE_SYM:
-//					if (sc._onAbsence != -1) {
-//						error(XDEF.XDEF422); //Duplicated script section
-//					}
-//					sc._onAbsence =
-//						compileSection(CompileBase.TEXT_MODE, XD_VOID, sym);
-//					continue;
-//				case ON_ILLEGAL_ATTR_SYM:
-//					if (sc._onIllegalAttr != -1) {
-//						error(XDEF.XDEF422); //Duplicated script section
-//					}
-//					sc._onIllegalAttr =
-//						compileSection(CompileBase.ELEMENT_MODE,XD_VOID, sym);
-//					continue;
-//				case CREATE_SYM:
-//					if (sc._compose != -1) {
-//						error(XDEF.XDEF422); //Duplicated script section
-//					}
-//					sc._compose =
-//						compileSection(CompileBase.TEXT_MODE, XD_STRING, sym);
-//					continue;
-//				case ON_START_ELEMENT_SYM:
-//					if (sc._onStartElement != -1) {
-//						error(XDEF.XDEF422); //Duplicated script section
-//					}
-//					sc._onStartElement =
-//						compileSection(CompileBase.TEXT_MODE, XD_VOID, sym);
-//					continue;
-//				case INIT_SYM:
-//					if (sc._init != -1) {
-//						error(XDEF.XDEF422); //Duplicated script section
-//					}
-//					sc._init =
-//						compileSection(CompileBase.TEXT_MODE, XD_VOID, sym);
-//					continue;
-//				case DEFAULT_SYM:
-//					if (sc._deflt != -1) {
-//						error(XDEF.XDEF422); //Duplicated script section
-//					}
-//					occ.setOptional();
-//					sc._deflt =
-//						compileSection(CompileBase.TEXT_MODE, XD_STRING, sym);
-//					continue;
-//				case FINALLY_SYM:
-//					if (sc._finaly != -1) {
-//						error(XDEF.XDEF422); //Duplicated script section
-//					}
-//					sc._finaly =
-//						compileSection(CompileBase.TEXT_MODE, XD_VOID, sym);
-//					continue;
-//				case MATCH_SYM:
-//					if (sc._match != -1) {
-//						error(XDEF.XDEF422); //Duplicated script section
-//					}
-//					sc._match =
-//						compileSection(CompileBase.TEXT_MODE,XD_BOOLEAN, sym);
-//					continue;
-//				case ON_EXCESS_SYM: //only for xd:attrs or text
-//					if (sc.getName().startsWith("$")) {
-//						if (sc._onExcess != -1) {
-//							error(XDEF.XDEF422); //Duplicated script section
-//						}
-//						sc._onExcess = compileSection(CompileBase.TEXT_MODE,
-//							XD_VOID, sym);
-//						continue;
-//					}
-//					errToken(sym);
-//					break;
-//				default:
-//			}
-//			if (sym == NOCHAR) {
-//				break;
-//			}
-		skipSemiconsBlanksAndComments();
-		int pos = getIndex();
-		SPosition spos = getPosition();
-		XOccurrence occ = readOccurrence();
+		List<Object> sectionList = parseXscript(sbuf);
+		SBuffer occ = removeSection("occurs", sectionList);
 		if (occ != null) {
-			result[0] = new SBuffer(getParsedBufferPartFrom(pos), spos);
-			result[2] = new SBuffer(String.valueOf(occ.maxOccurs()));
+			result[0] = occ;
 		}
-		skipSemiconsBlanksAndComments();
-		if (!eos()) {
-			result[1] = new SBuffer(getUnparsedBufferPart(), getPosition());
-		}
+		result[1] = xsToString(sectionList);
+		setPosition((SBuffer) result[1]);
 		return result;
 	}
 
@@ -478,18 +279,20 @@ public final class CompileXonXdef extends XScriptParser {
 		SBuffer val;
 		if (attr != null) {
 			val = attr._value;
-			String s = val.getString().trim();
-			int ndx;
-			if ((ndx = s.indexOf("match ")) < 0) {
-				if (!s.isEmpty() && !s.endsWith(";")) {
-					s += ';';
-				}
-				s += "match " + matchexpr + ';';
+			List<Object> sectionList = parseXscript(val);
+			SBuffer matchItem = findSection("match", sectionList);
+			if (matchItem == null) {
+				matchItem = new SBuffer(matchexpr, sectionList.isEmpty()
+					? pn._name : (SBuffer) sectionList.get(1));
+				sectionList.add("match");
+				sectionList.add(matchItem);
 			} else {
-				s = s.substring(0, ndx + 6) + matchexpr
-					+ " AAND " + s.substring(ndx + 6);
+				String s = matchItem.getString();
+				matchItem.setString(s.startsWith("{")
+					? "{if (!(" +matchexpr+ ")) return false;" + s.substring(1)
+					: matchexpr + " AAND " + s);
 			}
-			val = new SBuffer(s, val);
+			val = xsToString(sectionList);
 		} else {
 			val = new SBuffer("match " + matchexpr + ';', pn._name);
 		}
@@ -512,33 +315,37 @@ public final class CompileXonXdef extends XScriptParser {
 	private PNode genXonValue(final String name,
 		final JValue jo,
 		final PNode parent) {
-		SBuffer sbf, occ = null;
+		SBuffer sbf, sbocc = null;
 		PNode pn = genJElement(parent, X_ITEM, jo.getPosition());
 		if (jo.getValue() == null) {
 			sbf = new SBuffer("jnull()");
 		} else {
 			if (jo.toString().trim().isEmpty()) {
 				sbf = new SBuffer("jvalue()", jo.getPosition());
-				occ = new SBuffer("?", jo.getPosition());
+				sbocc = new SBuffer("?", jo.getPosition());
 			} else {
 				SBuffer[] parsedScript = parseTypeDeclaration(jo.getSBuffer());
-				if (!parsedScript[0].getString().isEmpty()) { // occurrence
-					occ = parsedScript[0];
+				if ((sbocc = parsedScript[0]) != null) { // occurrence
 					if (!ANY_NAME.equals(name)
-						&& !X_ARRAY.equals(parent.getLocalName())
-						&& !"1".equals(parsedScript[2].getString())) {
-						//Occurrence maximum of attribute or text value can't
-						// be higher then one
-						error(XDEF.XDEF262);
+						&& !X_ARRAY.equals(parent.getLocalName())) {
+						setSourceBuffer(sbocc); // read occurrence
+						nextSymbol();
+						XOccurrence xocc = new XOccurrence();
+						isOccurrence(xocc);
+						if (xocc.maxOccurs() != 1) {
+							//Occurrence maximum of attribute or text value
+							// can't be higher then one
+							error(XDEF.XDEF262);
+						}
 					}
 				}
-				if (eos()) {
+				if (parsedScript[1].getString().isEmpty()) {//no validation etc
 					parsedScript[1] = new SBuffer("jvalue()", jo.getPosition());
 				}
 				sbf = parsedScript[1];
 			}
-			if (occ != null) { // occurrence
-				setXDAttr(pn, "script", occ);
+			if (sbocc != null) { // occurrence
+				setXDAttr(pn, "script", sbocc);
 			}
 			setAttr(pn, X_VALATTR, sbf);
 		}
@@ -571,7 +378,7 @@ public final class CompileXonXdef extends XScriptParser {
 			map.remove(SCRIPT_DIRECTIVE);
 			JValue jv = (JValue) val;
 			setSourceBuffer(jv.getSBuffer());
-			isSpacesOrComments();
+			skipSpacesAndComments();
 			if (isToken(ONEOF_DIRECTIVE)) {
 				pn1 = genJElement(parent, X_MAP, map.getPosition());
 				pn2 = genXDElement(pn1, "choice", getPosition());
@@ -580,11 +387,19 @@ public final class CompileXonXdef extends XScriptParser {
 				if (!eos()) {
 					setXDAttr(pn2, "script",
 						new SBuffer(getUnparsedBufferPart(), getPosition()));
-					XOccurrence x = readOccurrence();
-					if (x != null && x.maxOccurs() > 1) {
-						//Specification of occurence of &{0} group
-						// can not be higher then 1
-						error(XDEF.XDEF252, ONEOF_DIRECTIVE);
+					List<Object> sectionList = parseXscript();
+					SBuffer item = removeSection("occurs", sectionList);
+					if (item != null) {
+						XOccurrence occ = new XOccurrence();
+						setSourceBuffer(item);
+						setSourceBuffer(item);
+						nextSymbol();
+						isOccurrence(occ);
+						if (occ.maxOccurs() > 1) {
+							//Specification of occurence of &{0} group
+							// can not be higher then 1
+							error(XDEF.XDEF252, ONEOF_DIRECTIVE);
+						}
 					}
 				}
 			} else if (map.size() > 1) {
@@ -683,7 +498,7 @@ public final class CompileXonXdef extends XScriptParser {
 				? null : jo instanceof JValue ? ((JValue) jo).getValue() : jo;
 			if (o != null && o instanceof JValue) {
 				setSourceBuffer(((JValue) o).getSBuffer());
-				isSpacesOrComments();
+				skipSpacesAndComments();
 				if (isToken(ONEOF_DIRECTIVE)) {
 					String s = getUnparsedBufferPart().trim();
 					pn = genXDElement(
@@ -700,16 +515,24 @@ public final class CompileXonXdef extends XScriptParser {
 						if (!s.endsWith(";")) {
 							s += ";";
 						}
-						setSourceBuffer(new SBuffer(s));
-						XOccurrence x = readOccurrence();
-						if (x != null && x.minOccurs() == 0
-							&& X_MAP.equals(parent.getLocalName())) {
-							setXDAttr(pn,
-								"script",new SBuffer("?", getPosition()));
+						SPosition spos = getPosition();
+						List<Object> sectionList = parseXscript(new SBuffer(s));
+						SBuffer item = removeSection("occurs", sectionList);
+						XOccurrence occ = null;
+						if (item != null) {
+							occ = new XOccurrence();
+							setSourceBuffer(item);
+							nextSymbol();
+							isOccurrence(occ);
+							if (occ.minOccurs() == 0
+								&& X_MAP.equals(parent.getLocalName())) {
+								setXDAttr(pn,
+									"script",new SBuffer("?", spos));
+							}
 						}
 						if (!s.isEmpty()) {
 							setXDAttr(parent,
-								"script", new SBuffer(s,getPosition()));
+								"script", new SBuffer(s, spos));
 						}
 					}
 				} else {
@@ -734,8 +557,11 @@ public final class CompileXonXdef extends XScriptParser {
 					XOccurrence occ = null;
 					if (script != null) {
 						SBuffer[] sbs = parseTypeDeclaration(script.getValue());
-						setSourceBuffer(sbs[0]);
-						occ = readOccurrence();
+						if (sbs[0] != null) {
+							occ = new XOccurrence();
+							setSourceBuffer(sbs[0]);
+							isOccurrence(occ);
+						}
 					}
 					if (index < len-1 && pn.getNSIndex() == _xdIndex //xdef
 						&& ("mixed".equals(pn.getLocalName()) // mixed or choice
@@ -939,6 +765,240 @@ public final class CompileXonXdef extends XScriptParser {
 		return _anyXPos;
 	}
 
+////////////////////////////////////////////////////////////////////////////////
+// S-script parser
+////////////////////////////////////////////////////////////////////////////////
+	/** Check if id of parsed section name is a section name.
+	 * @param sym ID of parsed section name.
+	 * @return true if it is a section name.
+	 */
+	private static boolean isSectionCommand(final char sym) {
+		return sym==VAR_SYM||sym==FINALLY_SYM||sym==CREATE_SYM
+			|| sym==ON_TRUE_SYM||sym==ON_FALSE_SYM||sym==ON_ABSENCE_SYM
+			|| sym==ON_ILLEGAL_ATTR_SYM||sym==CREATE_SYM||sym==MATCH_SYM
+			|| sym==ON_START_ELEMENT_SYM||sym==FINALLY_SYM||sym==FORGET_SYM
+			|| sym==INIT_SYM||sym==DEFAULT_SYM||sym==FIXED_SYM||sym==REF_SYM
+			|| sym==ON_EXCESS_SYM||sym==OPTION_SYM||sym==OPTIONS_SYM;
+	}
+
+	/** Parse command which follows section.
+	 * @return true if section command was parsed.
+	 */
+	private boolean readSectionCommand() {
+		int pos = getIndex();
+		if (_sym == BEG_SYM) {
+			int n = 1;
+			do {
+				if (nextSymbol() == END_SYM) {
+					if (--n == 0) {
+						return true;
+					}
+				} else if (_sym == BEG_SYM) {
+					n++;
+				}
+			} while(!eos());
+		} else if (_sym != SEMICOLON_SYM && _sym!= NOCHAR) {
+			while(nextSymbol() != SEMICOLON_SYM && _sym!= NOCHAR){}
+			return true;
+		}
+		return false;
+	}
+
+	/** Check if it is an occurrence specification.
+	 * @return SPosition of parsed occurrence specification or null
+	 */
+	private SPosition isOccurrence() {
+		SPosition spos = getLastPosition();
+		if ((_sym == OCCURS_SYM)) {
+			nextSymbol();
+		}
+		switch (_sym) {
+			case MUL_SYM:
+			case PLUS_SYM:
+			case REQUIRED_SYM:
+			case ASK_SYM:
+			case OPTIONAL_SYM:
+			case IGNORE_SYM:
+			case ILLEGAL_SYM:
+				return spos;
+			case CONSTANT_SYM:
+				int pos = getIndex();
+				char sym = _sym;
+				if (nextSymbol() != DDOT_SYM) {
+					setIndex(pos); // reset position
+					_sym = sym;
+				} else {
+					sym = _sym;
+					pos = getIndex();
+					if (nextSymbol() != CONSTANT_SYM && _sym != MUL_SYM) {
+						setIndex(pos);  // reset position
+						_sym = sym;
+					}
+				}
+				return spos;
+			default:
+				return null;
+		}
+	}
+
+	/** Add section item to the list.
+	 * @param sectionName section name,
+	 * @param sectionList where to add.
+	 * @param spos SPosition of the section.
+	 */
+	private void addSection(final String sectionName,
+		final List<Object> sectionList,
+		final SPosition spos) {
+		sectionList.add(sectionName);
+		String s = getParsedBufferPartFrom(spos.getIndex()).trim();
+		while (s.endsWith(";")) {
+			s = s.substring(0, s.length() - 1).trim();
+		}
+		sectionList.add(new SBuffer(s, spos));
+	}
+
+	/** Parse X-script and return the section list.
+	 * @param source Source text with X-script.
+	 * @return section list. Each section is composed of two items: the first
+	 * item is id of section (a character) and the following item is a SBuffer
+	 * with the source of the section command.
+	 */
+	private List<Object> parseXscript(SBuffer source) {
+		setSourceBuffer(source);
+		return parseXscript();
+	}
+
+	/** Parse X-script and return the section list.
+	 * @return section list. Each section is composed of two items: the first
+	 * item is id of section (a character) and the following item is a SBuffer
+	 * with the source of the section command.
+	 */
+	private List<Object> parseXscript() {
+		List<Object> sectionList = new ArrayList<Object>();
+		SPosition spos = getPosition();
+		nextSymbol();
+		char sym;
+		for (;;) {
+			while (_sym == SEMICOLON_SYM || _sym == END_SYM) {
+				nextSymbol();
+				spos = getPosition();
+			}
+			if (_sym == NOCHAR) {
+				break;
+			}
+			if ((spos = isOccurrence()) != null) {
+				addSection("occurs", sectionList, spos);
+				if (_sym != SEMICOLON_SYM && !isSectionCommand(sym = _sym)) {
+					spos = getPosition();
+					if (readSectionCommand()) {
+						String s = getParsedBufferPartFrom(spos.getIndex());
+						if (!(s = s.trim()).equals(";")) { //it is not only ";"!
+							addSection("", sectionList, spos);
+						}
+					}
+				}
+			} else if (!isSectionCommand(sym = _sym)) {
+				spos = getLastPosition();
+				if (!readSectionCommand()) {// this never should not happeh
+					error(XDEF.XDEF425); //Script error&{#SYS000}
+				}
+				addSection("", sectionList, spos);
+			} else {
+				spos = getPosition();
+				String sectionName = getParsedString();
+				nextSymbol();
+				if (sym != FORGET_SYM && readSectionCommand()) {
+					addSection(sectionName, sectionList, spos);
+				} else {  // here should be only "forget"
+					addSection(sectionName, sectionList, getPosition());
+				}
+			}
+			spos = getPosition();
+		}
+		return sectionList;
+	}
+
+	/** Create X-script string from the list of sections.
+	 * @param sectionList list of sections.
+	 * @return string with X-script source.
+	 */
+	private static SBuffer xsToString(final List<Object> sectionList) {
+		String result = "";
+		boolean wasOccurs = false;
+		for (int i = 0; i < sectionList.size(); i++) {
+			Object o = sectionList.get(i);
+			if (o instanceof String) {
+				String sectionName = (String) o;
+				if (++i >= sectionList.size()) {
+					result += sectionName;
+					break;
+				}
+				o = sectionList.get(i);
+				if ("occurs".equals(sectionName)) {
+					result += ((SBuffer) o).getString();
+					wasOccurs = true;
+				} else if (sectionName.isEmpty()) { // type validation
+					if (wasOccurs) {
+						result += ' ' + ((SBuffer) o).getString();
+					} else {
+						result += ((SBuffer) o).getString();
+					}
+					if (!result.endsWith(";")) {
+						result += ';';
+					}
+					wasOccurs = false;
+				} else {
+					if (!result.isEmpty() && !result.endsWith(";")
+						&& !result.endsWith("}")) {
+						result += ';';
+					}
+					result += sectionName + ' ';
+					result += ((SBuffer) o).getString();
+					wasOccurs = false;
+				}
+			}
+		}
+		return result.isEmpty() ? new SBuffer(result)
+			: new SBuffer(result, (SBuffer) sectionList.get(1));
+	}
+
+	/** Find given section in section list.
+	 * @param name name of section or emptyString if it is velidation method.
+	 * @param list list of section.
+	 * @return SBuffer with the section or null.
+	 */
+	private static SBuffer findSection(final String name,
+		final List<Object> list) {
+		for (int i = 0; i < list.size(); i+=2) {
+			if (name.equals(list.get(i))) {
+				return (SBuffer) list.get(i + 1);
+			}
+		}
+		return null;
+	}
+
+	/** Remove given section from section list.
+	 * @param name name of section (or emptyString for a validation method).
+	 * @param list list of section.
+	 * @return removed section.
+	 */
+	private static SBuffer removeSection(final String name,
+		final List<Object> list) {
+		for (int i = 0; i < list.size(); i+=2) {
+			if (name.equals(list.get(i))) {
+				list.remove(i);
+				SBuffer result = (SBuffer) list.get(i);
+				list.remove(i);
+				return result;
+			}
+		}
+		return null;
+	}
+
+////////////////////////////////////////////////////////////////////////////////
+// XonModelParser - implementation of XonParser
+////////////////////////////////////////////////////////////////////////////////
+
 	/** This class provides parsing of XON/JSON source and creates the XON
 	 * structure composed from JObjets used for compilation of XON/JSON model
 	 * in X-definition.
@@ -967,9 +1027,9 @@ public final class CompileXonXdef extends XScriptParser {
 		/** Create new instance of XonModelParser. */
 		XonModelParser(CompileXonXdef jx) {_kinds.push(_kind = VALUE);}
 
-////////////////////////////////////////////////////////////////////////////////
-// Implementation of JParser interface
-////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////
+		// Implementation of JParser interface
+		////////////////////////////////////////////////////////////////////////
 
 		@Override
 		/** Put value to result.
@@ -1089,5 +1149,5 @@ public final class CompileXonXdef extends XScriptParser {
 		 * @return parsed object.
 		 */
 		public final Object getResult() {return _value;}
-	}
+	} //class XonModelParser
 }
