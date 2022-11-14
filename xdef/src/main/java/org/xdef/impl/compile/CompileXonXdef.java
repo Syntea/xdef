@@ -888,7 +888,10 @@ public final class CompileXonXdef extends XScriptParser {
 			}
 			if ((spos = isOccurrence()) != null) {
 				addSection("occurs", sectionList, spos);
-				if (_sym != SEMICOLON_SYM && !isSectionCommand(sym = _sym)) {
+				if (_sym == SEMICOLON_SYM) {
+					continue;
+				}
+				if (!isSectionCommand(sym = _sym)) {
 					spos = getPosition();
 					if (readSectionCommand()) {
 						String s = getParsedBufferPartFrom(spos.getIndex());
