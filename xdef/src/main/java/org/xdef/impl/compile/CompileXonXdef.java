@@ -938,6 +938,10 @@ public final class CompileXonXdef extends XScriptParser {
 				}
 				o = sectionList.get(i);
 				if ("occurs".equals(sectionName)) {
+					if (!result.isEmpty() && !result.endsWith(";")
+						&& !result.endsWith("}")) {
+						result += ';';
+					}
 					result += ((SBuffer) o).getString();
 					wasOccurs = true;
 				} else if (sectionName.isEmpty()) { // type validation
@@ -947,24 +951,35 @@ public final class CompileXonXdef extends XScriptParser {
 						}
 						result += ((SBuffer) o).getString();
 					} else {
-						if (!result.isEmpty() && !result.endsWith(";")) {
+						if (!result.isEmpty() && !result.endsWith(";")
+							&& !result.endsWith("}")) {
 							result += ';';
 						}
 						result += ((SBuffer) o).getString();
 					}
 					wasOccurs = false;
 				} else {
-					if (!result.isEmpty() && !result.endsWith(";")) {
+					if (!result.isEmpty() && !result.endsWith(";")
+						&& !result.endsWith("}")) {
 						result += ';';
 					}
-					result += sectionName + ' ';
-					result += ((SBuffer) o).getString();
+					String s = ((SBuffer) o).getString();
+					if (s.isEmpty()) {
+						result += sectionName;
+					} else {
+						result += sectionName + ' ' + s;
+					}
 					wasOccurs = false;
 				}
 			}
 		}
-		return result.isEmpty() ? new SBuffer(result)
-			: new SBuffer(result, (SBuffer) sectionList.get(1));
+		if (result.isEmpty()) {
+			return new SBuffer("");
+		}
+		if (!result.endsWith(";")) {
+			result += ';';
+		}
+		return new SBuffer(result, (SBuffer) sectionList.get(1));
 	}
 
 	/** Find given section in section list.
