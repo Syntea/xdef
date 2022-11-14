@@ -942,17 +942,19 @@ public final class CompileXonXdef extends XScriptParser {
 					wasOccurs = true;
 				} else if (sectionName.isEmpty()) { // type validation
 					if (wasOccurs) {
-						result += ' ' + ((SBuffer) o).getString();
-					} else {
+						if (!result.isEmpty()) {
+							result += ' ';
+						}
 						result += ((SBuffer) o).getString();
-					}
-					if (!result.endsWith(";")) {
-						result += ';';
+					} else {
+						if (!result.isEmpty() && !result.endsWith(";")) {
+							result += ';';
+						}
+						result += ((SBuffer) o).getString();
 					}
 					wasOccurs = false;
 				} else {
-					if (!result.isEmpty() && !result.endsWith(";")
-						&& !result.endsWith("}")) {
+					if (!result.isEmpty() && !result.endsWith(";")) {
 						result += ';';
 					}
 					result += sectionName + ' ';
