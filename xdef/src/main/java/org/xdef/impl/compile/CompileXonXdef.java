@@ -67,7 +67,6 @@ import org.xdef.xon.XonTools.JValue;
 /** Create X-definition model from xd:xon element.
  * @author Vaclav Trojan
  */
-//public final class CompileXonXdef extends StringParser {
 public final class CompileXonXdef extends XScriptParser {
 
 	/** Prefix of X-definition namespace. */
