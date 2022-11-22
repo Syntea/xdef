@@ -275,7 +275,7 @@ public class TestXon extends XDTester {
 		assertNull(testM("? int", "{a:1}"));
 		assertNull(testM("? int", "{ }"));
 
-		String s, json, xon, xdef, xml;
+		String s, ini, json, xon, xdef, xml;
 		List list;
 		Object o, x, y;
 		XDPool xp;
@@ -284,6 +284,7 @@ public class TestXon extends XDTester {
 		Element el;
 		XComponent xc;
 		StringWriter swr;
+		Map<String, Object> xini;
 		try {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' name='M' root='y:X'\n" +
@@ -629,13 +630,13 @@ public class TestXon extends XDTester {
 "</xd:ini>\n" +
 "</xd:def>";
 			xd = compile(xdef).createXDDocument("A");
-			String ini =
+			ini =
 "date = 2021-02-03\n" +
 "name = Jan Novak\n" +
 "email = a@b.c\n" +
 "[Server]\n" +
 " IPAddr = 255.0.0.0\n";
-			Map<String, Object> xini = xd.iparse(ini, reporter);
+			xini = xd.iparse(ini, reporter);
 			assertNoErrorwarningsAndClear(reporter);
 			assertTrue(XonUtils.xonEqual(XonUtils.parseINI(ini),
 				XonUtils.parseINI(XonUtils.toIniString(xini))));
@@ -1282,13 +1283,13 @@ public class TestXon extends XDTester {
 "</xd:ini>\n" +
 "</xd:def>";
 			xd = compile(xdef).createXDDocument("A");
-			String ini =
+			ini =
 "date = 2021-02-03\n"+
 "name = Jan Novak\n"+
 "email = a@b.c\n"+
 "[Server]\n"+
 " IPAddr = 255.0.0.0\n";
-			Map<String, Object> xini = xd.iparse(ini, reporter);
+			xini = xd.iparse(ini, reporter);
 			assertNoErrorwarningsAndClear(reporter);
 			assertTrue(XonUtils.xonEqual(XonUtils.parseINI(ini),
 				XonUtils.parseINI(XonUtils.toIniString(xini))));
