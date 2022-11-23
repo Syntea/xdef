@@ -13,7 +13,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
-import org.xdef.XDConstants;
 import org.xdef.XDDebug;
 import org.xdef.XDParseResult;
 import org.xdef.XDUniqueSetKey;
@@ -173,18 +172,16 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 				_nil = true;
 			}
 		}
-		if (!_ignoreAll && getElement() != null) {
+		if (!_ignoreAll && _element != null) {
 			if (_xElement._xon > 0) { //XON
-				if (XDConstants.XON_NS_URI_W.equals(_xElement.getNSUri())) {
-					if (_element.hasAttribute(X_KEYATTR)) {
-						_xonKey = XonTools.xmlToJName(
-							_element.getAttribute(X_KEYATTR));
-					}
-					if (X_MAP.equals(_xElement.getLocalName())) {
-						_xonMap = new LinkedHashMap<String, Object>();
-					} else if (X_ARRAY.equals(_xElement.getLocalName())) {
-						_xonArray = new ArrayList<Object>();
-					}
+				if (_element.hasAttribute(X_KEYATTR)) {
+					_xonKey = XonTools.xmlToJName(
+						_element.getAttribute(X_KEYATTR));
+				}
+				if (X_MAP.equals(_element.getLocalName())) {
+					_xonMap = new LinkedHashMap<String, Object>();
+				} else if (X_ARRAY.equals(_element.getLocalName())) {
+					_xonArray = new ArrayList<Object>();
 				}
 			}
 			if ((_xComponent = _parent.getXComponent()) != null) {// X-component
@@ -291,17 +288,13 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	/** Increase reference counter by one.
 	 * @return The increased reference number.
 	 */
-	final int incRefNum() {
-		return _actDefIndex < 0 ? 0 : ++_counters[_actDefIndex];
-	}
+	final int incRefNum() {return _actDefIndex < 0?0:++_counters[_actDefIndex];}
 
 	@Override
 	/** Decrease reference counter by one.
 	 * @return The increased reference number.
 	 */
-	final int decRefNum() {
-		return _actDefIndex < 0 ? 0 : --_counters[_actDefIndex];
-	}
+	final int decRefNum() {return _actDefIndex < 0?0:--_counters[_actDefIndex];}
 
 	@Override
 	/** Get reference counter of actual node
@@ -422,8 +415,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 					copyTemporaryReports();
 				} else if (textcontent == null) {
 					if (_xElement._xon > 0) {
+						Node n = element.getAttributeNode(X_KEYATTR);
 						//Not allowed item&{1}{ "}{"} in &{0}
-						Node n = element.getAttributeNode("key");
 						error(XDEF.XDEF507, _xElement.getLocalName(),
 							n==null ? null : n.getNodeValue());
 					} else {
@@ -1714,7 +1707,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 				_xonKey = XonTools.xmlToJName(value.toString());
 			} else if (X_VALATTR.equals(xdata.getName())) {
 				if (_xElement.getNSUri() == null ) {
-					_xonKey = XonTools.xmlToJName(_xElement.getName());
+					_xonKey = XonTools.xmlToJName(_element.getTagName());
 				} else if (_xonKey == null && _element.hasAttribute(X_KEYATTR)){
 					_xonKey =
 						XonTools.xmlToJName(_element.getAttribute(X_KEYATTR));
@@ -2709,10 +2702,10 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			}
 		}
 		if (_parent._parent != null && _xElement._xon > 0) {//not root; gen XON
-			if (!_forget && _xElement._forget != 'T') {
+			if (!_forget && _xElement._forget != 'T' && _element != null) {
 				ChkElement chkEl = (ChkElement) _parent;
-				Object value = X_MAP.equals(_xElement.getLocalName())
-					?_xonMap : X_ARRAY.equals(_xElement.getLocalName())
+				Object value = X_MAP.equals(_element.getLocalName())
+					?_xonMap : X_ARRAY.equals(_element.getLocalName())
 					?_xonArray : _xonValue;
 				if (chkEl._xonMap != null) {
 					chkEl._xonMap.put(_xonKey, value);
@@ -3707,7 +3700,6 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	 * @return result of XON parsing.
 	 */
 	public Object getXon() {
-		return _xonArray != null
-			? _xonArray : _xonMap != null ? _xonMap : _xonValue;
+		return _xonArray!=null ? _xonArray : _xonMap!=null ?_xonMap : _xonValue;
 	}
 }
