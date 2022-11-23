@@ -43,6 +43,7 @@ import org.xdef.sys.SError;
 import org.xdef.sys.SPosition;
 import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
+import org.xdef.xon.XonNames;
 import org.xdef.xon.XonTools;
 
 /** External utilities for key definition and key reference.
@@ -214,7 +215,7 @@ public final class XExtUtils {
 	public static String getEmailDomain(final XDEmailAddr x) {
 		return x.getDomain();
 	}
-		public static String getEmailAddr(final XDEmailAddr x){
+	public static String getEmailAddr(final XDEmailAddr x){
 		return x.getEmailAddr();
 	}
 	public static String getHostAddress(final InetAddress x){
@@ -225,7 +226,7 @@ public final class XExtUtils {
 		return x == null ? false : x.getAddress().length > 4;
 	}
 	public static String getXonKey(final XXNode xnode) {
-		String s = xnode.getElement().getAttribute("key");
+		String s = xnode.getElement().getAttribute(XonNames.X_KEYATTR);
 		return s != null ? XonTools.xmlToJName(s) : null;
 	}
 	public final static XDValue getXDValueOfObject(final Object o) {

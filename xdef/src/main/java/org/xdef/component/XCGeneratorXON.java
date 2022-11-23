@@ -459,7 +459,7 @@ class XCGeneratorXON extends XCGeneratorBase1 implements XonNames {
 "\t\tjava.util.Map<String, &{typ}> x="+LN+
 "\t\t\tnew java.util.LinkedHashMap<String, &{typ}>();"+LN+
 "\t\tfor(&{typeName} y: _&{iname}) {"+LN+
-"\t\t\tx.put(y.getkey(), y.getval());"+LN+
+"\t\t\tx.put(y.get"+X_KEYATTR+"(), y.get"+X_VALATTR+"());"+LN+
 "\t\t}"+LN+
 "\t\treturn x;"+LN+
 "\t}"+LN,
@@ -713,12 +713,12 @@ class XCGeneratorXON extends XCGeneratorBase1 implements XonNames {
 			if (max == 1) {
 				template +=
 "\t\tif (_&{iname} != null) {"+LN+
-"\t\t\tx.put(_&{iname}.getkey(), _&{iname}.toXon());"+LN+
+"\t\t\tx.put(_&{iname}.get"+X_KEYATTR+"(), _&{iname}.toXon());"+LN+
 "\t\t}"+LN;
 			} else { // max > 1
 				template +=
 "\t\tfor(&{typeName} y: _&{iname}) {"+LN+
-"\t\t\tx.put(y.getkey(), y.toXon());"+LN+
+"\t\t\tx.put(y.get"+X_KEYATTR+"(), y.toXon());"+LN+
 "\t\t}"+LN;
 			}
 		} else if (X_MAP.equals(xe.getLocalName())) { //X_MAP
@@ -730,12 +730,12 @@ class XCGeneratorXON extends XCGeneratorBase1 implements XonNames {
 			if (max == 1) {
 				template +=
 "\t\tif (_&{iname} != null) {"+LN+
-"\t\t\tx.put(_&{iname}.getkey(), _&{iname}.toXon());"+LN+
+"\t\t\tx.put(_&{iname}.get"+X_KEYATTR+"(), _&{iname}.toXon());"+LN+
 "\t\t}"+LN;
 			} else { // max > 1
 				template +=
 "\t\tfor(&{typeName} y: _&{iname}) {"+LN+
-"\t\t\tx.put(y.getkey(), y.toXon());"+LN+
+"\t\t\tx.put(y.get"+X_KEYATTR+"(), y.toXon());"+LN+
 "\t\t}"+LN;
 			}
 		} else {

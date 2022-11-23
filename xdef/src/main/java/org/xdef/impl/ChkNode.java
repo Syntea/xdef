@@ -77,6 +77,7 @@ import org.xdef.sys.SPosition;
 import org.xdef.sys.SReporter;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.xml.KXmlUtils;
+import org.xdef.xon.XonNames;
 import static org.xdef.xon.XonNames.X_ARRAY;
 import static org.xdef.xon.XonNames.X_ITEM;
 import static org.xdef.xon.XonNames.X_MAP;
@@ -1089,7 +1090,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	 * @return name of element or empty string.
 	 */
 	private static String getItemName(final XMNode xnode) {
-		XMData key = ((XMElement)xnode).getAttr("key");
+		XMData key = ((XMElement)xnode).getAttr(XonNames.X_KEYATTR);
 		if (key != null) {
 			XDValue keyVal = key.getFixedValue();
 			if (keyVal != null) {
