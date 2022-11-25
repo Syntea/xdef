@@ -446,9 +446,7 @@ public class XComponentUtil {
 					String key = methodName.substring(7);
 					result.put(key, o);
 					break;
-				} catch (Exception ex) {
-					continue;
-				}
+				} catch (Exception ex) {}
 			} else if (x.getParameterTypes().length == 0
 				&& methodName.startsWith("listOf"+XON_NS_PREFIX+"$")) {
 				o = null;
@@ -480,9 +478,7 @@ public class XComponentUtil {
 							}
 						}
 					}
-				} catch (Exception ex) {
-					continue;
-				}
+				} catch (Exception ex) {}
 			}
 		}
 	}
@@ -744,7 +740,8 @@ public class XComponentUtil {
 		return toXonXD(xc, new KNamespace());
 	}
 
-	/** Convert XML name to Java name.	 * @param xmlName XML name.
+	/** Convert XML name to Java name.
+	 * @param xmlName XML name to be converted.
 	 * @return Java name created from XML name,
 	 */
 	public static final String xmlToJavaName(final String xmlName) {

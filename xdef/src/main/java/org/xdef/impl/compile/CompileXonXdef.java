@@ -784,7 +784,6 @@ public final class CompileXonXdef extends XScriptParser {
 	 * @return true if section command was parsed.
 	 */
 	private boolean readSectionCommand() {
-		int pos = getIndex();
 		if (_sym == BEG_SYM) {
 			int n = 1;
 			do {
