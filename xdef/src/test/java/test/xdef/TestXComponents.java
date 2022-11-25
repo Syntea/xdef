@@ -580,7 +580,7 @@ public final class TestXComponents extends XDTester {
 			xd.setStdOut(XDFactory.createXDOutput(swr, false));
 			xc = xd.jparseXComponent(s, null, reporter);
 			assertEq("date\n", swr.toString());
-			o = SUtils.getValueFromGetter(xc, "getjx$"+XonNames.X_ITEM+"_1");
+			o = SUtils.getValueFromGetter(xc, "getjx$"+XonNames.X_VALUE+"_1");
 			SUtils.setValueToSetter(o,
 				"set"+XonNames.X_VALATTR, new SDatetime("2022-04-15"));
 			assertEq(new SDatetime("2022-04-15"), ((Map)xc.toXon()).get("a"));

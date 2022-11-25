@@ -465,7 +465,7 @@ public class TestJsonXdef extends XDTester {
 		try {
 			fname = "Test008";
 			xc = getXComponent(xp, fname, 0);
-			x = SUtils.getValueFromGetter(xc,"get"+xon+XonNames.X_ITEM);
+			x = SUtils.getValueFromGetter(xc,"get"+xon+XonNames.X_VALUE);
 			assertEq(1, SUtils.getValueFromGetter(x,"get"+XonNames.X_VALATTR));
 			SUtils.setValueToSetter(x,"set" + XonNames.X_VALATTR, 3);
 			assertEq(3, SUtils.getValueFromGetter(x,"get" + XonNames.X_VALATTR));
@@ -489,11 +489,11 @@ public class TestJsonXdef extends XDTester {
 
 			fname = "Test021";
 			xc = getXComponent(xp, fname, 0);
-			x = SUtils.getValueFromGetter(xc,"get"+xon+XonNames.X_ITEM);
+			x = SUtils.getValueFromGetter(xc,"get"+xon+XonNames.X_VALUE);
 			assertEq("abc",
 				SUtils.getValueFromGetter(x,"get" +XonNames.X_VALATTR));
 			xc = getXComponent(xp, fname, 1);
-			x = SUtils.getValueFromGetter(xc,"get"+xon+XonNames.X_ITEM);
+			x = SUtils.getValueFromGetter(xc,"get"+xon+XonNames.X_VALUE);
 			assertEq(123,
 				SUtils.getValueFromGetter(x,"get" +XonNames.X_VALATTR));
 			SUtils.setValueToSetter(x,"set" + XonNames.X_VALATTR, "");
@@ -504,54 +504,54 @@ public class TestJsonXdef extends XDTester {
 			assertEq(" a    b \n ",
 				SUtils.getValueFromGetter(x, "get" + XonNames.X_VALATTR));
 			xc = getXComponent(xp, fname, 2);
-			x = SUtils.getValueFromGetter(xc,"get"+xon+XonNames.X_ITEM);
+			x = SUtils.getValueFromGetter(xc,"get"+xon+XonNames.X_VALUE);
 			assertEq(false,
 				SUtils.getValueFromGetter(x,"get" +XonNames.X_VALATTR));
 			xc = getXComponent(xp, fname, 3);
-			x = SUtils.getValueFromGetter(xc,"get"+xon+XonNames.X_ITEM);
+			x = SUtils.getValueFromGetter(xc,"get"+xon+XonNames.X_VALUE);
 			assertTrue(SUtils.getValueFromGetter(
 				x, "get"+XonNames.X_VALATTR)!=null);
 			xc = getXComponent(xp, fname, 4);
-			assertNull(SUtils.getValueFromGetter(xc,"get"+xon+XonNames.X_ITEM));
+			assertNull(SUtils.getValueFromGetter(xc,"get"+xon+XonNames.X_VALUE));
 
 			fname = "Test025";
 			xc = getXComponent(xp, fname, 0);
-			x = SUtils.getValueFromGetter(xc,"get"+xon+XonNames.X_ITEM);
+			x = SUtils.getValueFromGetter(xc,"get"+xon+XonNames.X_VALUE);
 			assertEq("null", SUtils.getValueFromGetter(x,
 				"get" + XonNames.X_VALATTR).toString());
-			x = SUtils.getValueFromGetter(xc,"get"+xon+XonNames.X_ITEM+"_1");
+			x = SUtils.getValueFromGetter(xc,"get"+xon+XonNames.X_VALUE+"_1");
 			assertEq(12,
 				SUtils.getValueFromGetter(x,"get" + XonNames.X_VALATTR));
-			x = SUtils.getValueFromGetter(xc,"get"+xon+XonNames.X_ITEM+"_2");
+			x = SUtils.getValueFromGetter(xc,"get"+xon+XonNames.X_VALUE+"_2");
 			assertEq("\" a b \"",
 				SUtils.getValueFromGetter(x,"get" + XonNames.X_VALATTR));
 			xc = getXComponent(xp, fname, 1);
-			x = SUtils.getValueFromGetter(xc,"get"+xon+XonNames.X_ITEM);
+			x = SUtils.getValueFromGetter(xc,"get"+xon+XonNames.X_VALUE);
 			assertEq("null", SUtils.getValueFromGetter(x,
 				"get" + XonNames.X_VALATTR).toString());
 			assertNull(
-				SUtils.getValueFromGetter(xc,"get"+xon+XonNames.X_ITEM+"_1"));
+				SUtils.getValueFromGetter(xc,"get"+xon+XonNames.X_VALUE+"_1"));
 			assertNull(
-				SUtils.getValueFromGetter(xc,"get"+xon+XonNames.X_ITEM+"_2"));
+				SUtils.getValueFromGetter(xc,"get"+xon+XonNames.X_VALUE+"_2"));
 
 			fname = "Test026";
 			xc = getXComponent(xp, fname, 0);
-			x = SUtils.getValueFromGetter(xc,"listOf"+xon+XonNames.X_ITEM);
+			x = SUtils.getValueFromGetter(xc,"listOf"+xon+XonNames.X_VALUE);
 			assertEq(2, ((List) x).size());
 			x = ((List) x).get(0);
 			assertEq("null", SUtils.getValueFromGetter(x,
 				"get" + XonNames.X_VALATTR).toString());
-			x = SUtils.getValueFromGetter(xc,"listOf"+xon+XonNames.X_ITEM);
+			x = SUtils.getValueFromGetter(xc,"listOf"+xon+XonNames.X_VALUE);
 			x = ((List) x).get(1);
 			assertEq("null", SUtils.getValueFromGetter(x,
 				"get" + XonNames.X_VALATTR).toString());
 			xc = getXComponent(xp, fname, 0);
-			x = SUtils.getValueFromGetter(xc,"listOf"+xon+XonNames.X_ITEM+"_1");
+			x = SUtils.getValueFromGetter(xc,"listOf"+xon+XonNames.X_VALUE+"_1");
 			assertEq(2, ((List) x).size());
 			x = ((List) x).get(0);
 			assertEq(12,
 				SUtils.getValueFromGetter(x,"get" + XonNames.X_VALATTR));
-			x = SUtils.getValueFromGetter(xc,"listOf"+xon+XonNames.X_ITEM+"_1");
+			x = SUtils.getValueFromGetter(xc,"listOf"+xon+XonNames.X_VALUE+"_1");
 			x = ((List) x).get(1);
 			assertEq(13,
 				SUtils.getValueFromGetter(x,"get" + XonNames.X_VALATTR));
@@ -1045,11 +1045,11 @@ public class TestJsonXdef extends XDTester {
 			assertTrue(XonUtils.xonEqual(XonUtils.parseXON(fname),
 				SUtils.getValueFromGetter(xc,"toXon")));
 			list = (List) SUtils.getValueFromGetter(
-				xc,"listOf$"+XonNames.X_ITEM+"_3");
+				xc,"listOf$"+XonNames.X_VALUE+"_3");
 			list.add(InetAddress.getByName("111.22.33.1"));
-			SUtils.setValueToSetter(xc, "set"+XonNames.X_ITEM+"_3", list);
+			SUtils.setValueToSetter(xc, "set"+XonNames.X_VALUE+"_3", list);
 			assertEq(2, ((List) SUtils.getValueFromGetter(
-				xc,"listOf$"+XonNames.X_ITEM+"_3")).size());
+				xc,"listOf$"+XonNames.X_VALUE+"_3")).size());
 			assertTrue(SUtils.getValueFromGetter(SUtils.getValueFromGetter(
 				xc,"getjx$"+XonNames.X_MAP), "toXon") instanceof Map);
 			assertTrue(((List)SUtils.getValueFromGetter(

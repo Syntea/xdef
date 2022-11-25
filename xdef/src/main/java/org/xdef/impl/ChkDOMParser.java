@@ -11,9 +11,10 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.ProcessingInstruction;
-import org.xdef.XDConstants;
+import static org.xdef.XDConstants.XDEF_INSTANCE_NS_URI;
 import org.xdef.XDOutput;
 import org.xdef.XDPool;
+import static org.xdef.impl.ChkParser.XDEF31_INSTANCE_NS_URI;
 import org.xdef.impl.code.DefOutStream;
 import org.xdef.model.XMData;
 import org.xdef.model.XMDefinition;
@@ -88,8 +89,8 @@ class ChkDOMParser extends SReporter {
 					String name = atrs.item(i).getNodeName();
 					String val = atrs.item(i).getNodeValue();
 					if (name.startsWith("xmlns:")) {
-						if (XDConstants.XDEF_INSTANCE_NS_URI.equals(val)
-							|| ChkParser.XDEF31_INSTANCE_NS_URI.equals(val)) {
+						if (XDEF_INSTANCE_NS_URI.equals(val)
+							|| XDEF31_INSTANCE_NS_URI.equals(val)) {
 							xdefInstancePrefix = name.substring(6);
 							break;
 						}

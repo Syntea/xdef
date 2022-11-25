@@ -13,7 +13,6 @@ import org.xdef.msg.JSON;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.xml.KXmlUtils;
 import static org.xdef.xon.XonNames.X_ARRAY;
-import static org.xdef.xon.XonNames.X_ITEM;
 import static org.xdef.xon.XonNames.X_KEYATTR;
 import static org.xdef.xon.XonNames.X_MAP;
 import static org.xdef.xon.XonTools.genXMLValue;
@@ -22,6 +21,7 @@ import static org.xdef.xon.XonTools.jstringToXML;
 import static org.xdef.xon.XonTools.replaceColonInXMLName;
 import static org.xdef.xon.XonTools.toXmlName;
 import static org.xdef.xon.XonNames.X_VALATTR;
+import static org.xdef.xon.XonNames.X_VALUE;
 
 /** Conversion of XON/JSON to XML
  * @author Vaclav Trojan
@@ -618,7 +618,7 @@ class XonToXml extends XonTools {
 			x.addArrayItems(elem, (List) xon, 0);
 			x._ns.popContext();
 		} else if (isSimpleValue(xon)) {
-			Element e = x.addXonElem(x._doc, X_ITEM);
+			Element e = x.addXonElem(x._doc, X_VALUE);
 			x.addValueAsText(e, xon);
 			x._ns.popContext();
 		} else {
@@ -644,7 +644,7 @@ class XonToXml extends XonTools {
 		} else if (val instanceof List) {
 			e = genArrayW((List) val);
 		} else {
-			e = genJElement(X_ITEM);
+			e = genJElement(X_VALUE);
 			e.setAttribute(X_VALATTR, genXMLValue(val));
 		}
 		parent.appendChild(e);

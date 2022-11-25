@@ -13,7 +13,6 @@ import org.xdef.XDNamedValue;
 import org.xdef.XDParseResult;
 import org.xdef.XDResultSet;
 import org.xdef.XDValue;
-import org.xdef.XDValueID;
 import static org.xdef.XDValueID.XD_BOOLEAN;
 import static org.xdef.XDValueID.XD_BYTES;
 import static org.xdef.XDValueID.XD_CONTAINER;
@@ -35,7 +34,6 @@ import org.xdef.msg.XDEF;
 import org.xdef.proc.XDLexicon;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.Report;
-import static org.xdef.sys.Report.error;
 import org.xdef.sys.ReportWriter;
 import org.xdef.sys.SError;
 import org.xdef.sys.SReporter;
@@ -46,7 +44,7 @@ import org.xdef.xml.KXmlUtils;
  * according to Lexicon.
  * @author Vaclav Trojan
  */
-final class ChkTranslate extends SReporter implements XDValueID {
+final class ChkTranslate extends SReporter {
 
 	/** Root check element. */
 	private ChkElement _rootChkElement;

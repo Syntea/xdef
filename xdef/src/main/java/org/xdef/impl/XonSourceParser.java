@@ -22,7 +22,6 @@ import org.xdef.sys.SReporter;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUnsupportedOperationException;
 import static org.xdef.xon.XonNames.X_ARRAY;
-import static org.xdef.xon.XonNames.X_ITEM;
 import static org.xdef.xon.XonNames.X_KEYATTR;
 import static org.xdef.xon.XonNames.X_MAP;
 import org.xdef.xon.XonParser;
@@ -30,6 +29,7 @@ import org.xdef.xon.XonParsers;
 import org.xdef.xon.XonReader;
 import org.xdef.xon.XonTools;
 import static org.xdef.xon.XonNames.X_VALATTR;
+import static org.xdef.xon.XonNames.X_VALUE;
 
 /** Parse  XON/JSON object from XON/JSON source and generate XML (W3C format).
  * Reads source with XON/JSON and generates W3C XML methods invoked in
@@ -193,7 +193,7 @@ public final class XonSourceParser implements XonParser, XParser {
 	 */
 	public void putValue(final XonTools.JValue value) {
 		_value = value;
-		elementStart(new SBuffer(X_ITEM, value.getPosition()));
+		elementStart(new SBuffer(X_VALUE, value.getPosition()));
 		elementEnd();
 	}
 	@Override

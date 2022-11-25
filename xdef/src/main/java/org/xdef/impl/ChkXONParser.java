@@ -229,7 +229,7 @@ final class ChkXONParser implements XParser, XonParser {
 		return kelem;
 	}
 	private void genItem(final XonTools.JValue value, final SBuffer name) {
-		KParsedElement kelem = genKElem(XonNames.X_ITEM,
+		KParsedElement kelem = genKElem(XonNames.X_VALUE,
 			XDConstants.XON_NS_URI_W,
 			name == null ? value.getPosition() : name);
 		if (name != null) {

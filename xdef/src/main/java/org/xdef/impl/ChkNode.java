@@ -79,9 +79,9 @@ import org.xdef.sys.SRuntimeException;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.xon.XonNames;
 import static org.xdef.xon.XonNames.X_ARRAY;
-import static org.xdef.xon.XonNames.X_ITEM;
 import static org.xdef.xon.XonNames.X_MAP;
 import org.xdef.xon.XonUtils;
+import static org.xdef.xon.XonNames.X_VALUE;
 
 /** The abstract class for checking objects.
  * @author Vaclav Trojan
@@ -1227,12 +1227,12 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 				if (xnodes==null) {
 					return result;
 				}
-			} else if (s.startsWith(X_ITEM)) {
+			} else if (s.startsWith(X_VALUE)) {
 				XMNode[] ynodes = xnodes;
 				xnodes = null;
 				for (int i=0, j=0; i < ynodes.length; i++) {
 					XMNode xn = ynodes[i];
-					if (X_ITEM.equals(xn.getLocalName())) {
+					if (X_VALUE.equals(xn.getLocalName())) {
 						if (j == m) { // model found
 							xdpath += getItemName(xn) + arrayInfo1;
 							jpath += !t.isEmpty()

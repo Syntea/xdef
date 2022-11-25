@@ -15,7 +15,6 @@ import org.w3c.dom.Node;
 import org.xdef.XDConstants;
 import org.xdef.xml.KXmlUtils;
 import static org.xdef.xon.XonNames.X_ARRAY;
-import static org.xdef.xon.XonNames.X_ITEM;
 import static org.xdef.xon.XonNames.X_MAP;
 import static org.xdef.xon.XonNames.X_VALATTR;
 import org.xdef.xon.XonTools;
@@ -23,6 +22,7 @@ import static org.xdef.xon.XonTools.genXMLValue;
 import static org.xdef.xon.XonTools.toXmlName;
 import org.xdef.xon.XonUtils;
 import static org.xdef.xon.XonUtils.parseXON;
+import static org.xdef.xon.XonNames.X_VALUE;
 
 /** XON and XML conversions (internal format)
  * @author Vaclav Trojan
@@ -49,7 +49,7 @@ public class XonXml_X {
 		} else if (val instanceof List) {
 			e = genArrayX((List) val, doc);
 		} else {
-			e = doc.createElementNS(XON_NS_URI_X, X_ITEM);
+			e = doc.createElementNS(XON_NS_URI_X, X_VALUE);
 			e.setAttribute(X_VALATTR, genXMLValue(val));
 		}
 		parent.appendChild(e);
@@ -210,7 +210,7 @@ public class XonXml_X {
 			return createArrayX(elem);
 		} else if (X_MAP.equals(name)) { // map
 			return createMapX(elem);
-		} else if (X_ITEM.equals(name)) { // item
+		} else if (X_VALUE.equals(name)) { // item
 			Attr attr = elem.getAttributeNode(X_VALATTR);
 			if (attr != null) {
 				return XonTools.xmlToJValue(attr.getNodeValue());

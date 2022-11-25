@@ -12,7 +12,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xdef.XDConstants;
 import static org.xdef.XDConstants.XDEF31_NS_URI;
 import static org.xdef.XDConstants.XDEF32_NS_URI;
 import static org.xdef.XDConstants.XDEF40_NS_URI;
@@ -53,7 +52,7 @@ import org.xdef.xml.KXmlUtils;
 /** Generate X-definition from XML.
  * @author Vaclav Trojan
  */
-public final class GenXDef implements XDConstants {
+public final class GenXDef {
 
 	/** Model of attribute. */
 	private final static class XAttr {

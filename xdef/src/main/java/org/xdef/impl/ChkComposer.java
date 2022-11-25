@@ -7,14 +7,14 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.xdef.XDBytes;
-import org.xdef.XDConstants;
+import static org.xdef.XDConstants.XON_NS_URI_W;
+import static org.xdef.XDConstants.XON_NS_URI_XD;
 import org.xdef.XDContainer;
 import org.xdef.XDDebug;
 import org.xdef.XDNamedValue;
 import org.xdef.XDParseResult;
 import org.xdef.XDResultSet;
 import org.xdef.XDValue;
-import org.xdef.XDValueID;
 import static org.xdef.XDValueID.XD_BOOLEAN;
 import static org.xdef.XDValueID.XD_BYTES;
 import static org.xdef.XDValueID.XD_CONTAINER;
@@ -46,15 +46,14 @@ import org.xdef.sys.SReporter;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.xon.XonNames;
+import static org.xdef.xon.XonNames.X_VALUE;
 
 /** Constructs XML object according to X-definition.
  * @author Vaclav Trojan
  */
-final class ChkComposer extends SReporter implements XDValueID {
-	private final static QName XONITEMW = new QName(XDConstants.XON_NS_URI_W,
-		XonNames.X_ITEM);
-	private final static QName XONITEM = new QName(XDConstants.XON_NS_URI_XD,
-		XonNames.X_ITEM);
+final class ChkComposer extends SReporter {
+	private final static QName XONITEMW = new QName(XON_NS_URI_W, X_VALUE);
+	private final static QName XONITEM = new QName(XON_NS_URI_XD, X_VALUE);
 	/** Root check element. */
 	private ChkElement _rootChkElement;
 	/** Lexicon of tag names in different languages.*/

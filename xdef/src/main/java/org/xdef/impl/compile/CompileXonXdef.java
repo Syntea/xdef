@@ -50,10 +50,10 @@ import static org.xdef.xon.XonNames.ANY_OBJ;
 import static org.xdef.xon.XonNames.ONEOF_DIRECTIVE;
 import static org.xdef.xon.XonNames.SCRIPT_DIRECTIVE;
 import static org.xdef.xon.XonNames.X_ARRAY;
-import static org.xdef.xon.XonNames.X_ITEM;
 import static org.xdef.xon.XonNames.X_KEYATTR;
 import static org.xdef.xon.XonNames.X_MAP;
 import static org.xdef.xon.XonNames.X_VALATTR;
+import static org.xdef.xon.XonNames.X_VALUE;
 import org.xdef.xon.XonParser;
 import org.xdef.xon.XonParsers;
 import org.xdef.xon.XonReader;
@@ -315,7 +315,7 @@ public final class CompileXonXdef extends XScriptParser {
 		final JValue jo,
 		final PNode parent) {
 		SBuffer sbf, sbocc = null;
-		PNode pn = genJElement(parent, X_ITEM, jo.getPosition());
+		PNode pn = genJElement(parent, X_VALUE, jo.getPosition());
 		if (jo.getValue() == null) {
 			sbf = new SBuffer("jnull()");
 		} else {
@@ -549,7 +549,7 @@ public final class CompileXonXdef extends XScriptParser {
 				// if it is not the last and it has xd:script attribute where
 				// the min occurrence differs from max occurrence
 				// and it has the attribute with a value description
-				if (X_ITEM.equals(pn1._localName)
+				if (X_VALUE.equals(pn1._localName)
 					&& XDConstants.XON_NS_URI_W.equals(pn1._nsURI)
 					&& (val = pn1.getAttrNS(X_VALATTR, -1)) != null) {
 					PAttr script = getXDAttr(pn1, "script");
@@ -653,7 +653,7 @@ public final class CompileXonXdef extends XScriptParser {
 			setXDAttr(pn, "script", val);
 		}
 		SPosition spos = parent._name;
-		pn1 = genJElement(pn, X_ITEM, spos);
+		pn1 = genJElement(pn, X_VALUE, spos);
 		pn1._xonMode = XConstants.XON_MODE_W;
 		boolean isMap = X_MAP.equals(parent._localName)
 			&& XDConstants.XON_NS_URI_W.equals(parent._nsURI);
@@ -696,7 +696,7 @@ public final class CompileXonXdef extends XScriptParser {
 		pn._xonMode = XConstants.XON_MODE_W;
 		setXDAttr(pn, "name", new SBuffer(anyName, spos));
 		actNode._parent.addChildNode(pn);
-		pn1 = genJElement(pn, X_ITEM, spos);
+		pn1 = genJElement(pn, X_VALUE, spos);
 		pn1._xonMode = XConstants.XON_MODE_W;
 		setAttr(pn1, X_KEYATTR, new SBuffer("? string();", spos));
 		setAttr(pn1, X_VALATTR, new SBuffer("jvalue();", spos));

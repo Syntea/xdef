@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-import org.xdef.XDConstants;
+import static org.xdef.XDConstants.LINE_SEPARATOR;
 import org.xdef.XDParser;
 import org.xdef.XDPool;
 import org.xdef.XDValue;
@@ -27,7 +27,7 @@ import org.xdef.sys.SUtils;
 class XCGeneratorBase {
 
 	/** Platform-dependent newline. */
-	static final String LN = XDConstants.LINE_SEPARATOR;
+	static final String LN = LINE_SEPARATOR;
 	/** Names that can't be used in generated code.*/
 	static final Set<String> RESERVED_NAMES = new HashSet<String>();
 	/** Switch to generate JavaDoc. */

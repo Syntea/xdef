@@ -21,17 +21,16 @@ import org.xdef.model.XMData;
 import org.xdef.msg.SYS;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.SRuntimeException;
-import org.xdef.xon.XonNames;
 import static org.xdef.xon.XonNames.X_ARRAY;
-import static org.xdef.xon.XonNames.X_ITEM;
 import static org.xdef.xon.XonNames.X_KEYATTR;
 import static org.xdef.xon.XonNames.X_MAP;
 import static org.xdef.xon.XonNames.X_VALATTR;
+import static org.xdef.xon.XonNames.X_VALUE;
 
 /** Generation of Java source code methods for XON/JSON getters/setters.
  * @author Vaclav Trojan
  */
-class XCGeneratorXON extends XCGeneratorBase1 implements XonNames {
+class XCGeneratorXON extends XCGeneratorBase1 {
 
 	/** Create instance of the class XCGeneratorXON.
 	 * @param xp XDPool from which to generate X-components.
@@ -769,7 +768,7 @@ class XCGeneratorXON extends XCGeneratorBase1 implements XonNames {
 		String x;
 		String typ;
 		if (xe.getXonMode()>0&&XDConstants.XON_NS_URI_W.equals(xe.getNSUri())) {
-			if (X_ITEM.equals(xe.getLocalName())) {
+			if (X_VALUE.equals(xe.getLocalName())) {
 				typ = getJavaObjectTypeName(xe.getAttr(X_VALATTR));
 				x =
 LN+"\t\tObject o = get"+X_VALATTR+"();"+LN+
