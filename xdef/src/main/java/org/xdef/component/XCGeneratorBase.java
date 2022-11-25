@@ -211,38 +211,20 @@ class XCGeneratorBase {
 	 * @return Java Object name corresponding to XD type
 	 */
 	final String getJavaObjectTypeName(final XMData xdata) {
-		String parserName = xdata.getParserName();
-		if ("byte".equals(parserName)) {
-			return "Byte";
-		} else if ("short".equals(parserName)
-			|| "unsignedByte".equals(parserName)) {
-			return "Short";
-		} else if ("int".equals(parserName)
-			|| "unsignedShort".equals(parserName)) {
-			return "Integer";
-		} else if ("long".equals(parserName)||"unsignedInt".equals(parserName)){
-			return "Long";
-		} else if ("integer".equals(parserName)
-			|| "negativeInteger".equals(parserName)
-			|| "nonNegativeInteger".equals(parserName)
-			|| "PositiveInteger".equals(parserName)
-			|| "nonPositiveiveInteger".equals(parserName)
-			|| "unsignedLong".equals(parserName)) {
-			return "java.math.BigInteger";
-		} else if ("float".equals(parserName)) {
-			return "Float";
-		} else if ("double".equals(parserName)) {
-			return "Double";
-		} else if ("decimal".equals(parserName) || "dec".equals(parserName)) {
-			return "java.math.BigDecimal";
-		} else if ("jnumber".equals(parserName)) {
-			return "Number";
-		} else if ("jboolean".equals(parserName)) {
-			return "Boolean";
-//		} else if ("jnull".equals(parserName)) {
-//			return "org.xdef.xon.XonToos.JNull";
-		} else if ("jvalue".equals(parserName)) {
-			return "Object";
+		switch (xdata.getParserName()) {
+			case "byte": return "Byte";
+			case "unsignedByte": case "short": return "Short";
+			case "unsignedShort": case "int": return "Integer";
+			case "unsignedInt": case "long": return "Long";
+			case "negativeInteger": case "PositiveInteger":
+			case "nonPositiveInteger": case "unsignedLong":
+			case "integer": return "java.math.BigInteger";
+			case "float": return "Float";
+			case "double": return "Double";
+			case "decimal": case "dec":  return "java.math.BigDecimal";
+			case "jnumber": return "Number";
+			case "jboolean": return "Boolean";
+			case "jvalue": return "Object";
 		}
 		switch (xdata.getParserType()) {
 			case XDValueID.XD_BOOLEAN:
@@ -310,38 +292,22 @@ class XCGeneratorBase {
 		}
 		String result = "value.getParsedValue().isNull()?null:"
 			+ "value.getParsedValue().";
-		if ("byte".equals(parserName)) {
-			return result + "byteValue()";
-		} else if ("short".equals(parserName)) {
-			return result + "shortValue()";
-		} else if ("int".equals(parserName)
-			|| "unsignedByte".equals(parserName)
-			|| "unsignedShort".equals(parserName)) {
-			return result + "intValue()";
-		} else if ("long".equals(parserName)||"unsignedInt".equals(parserName)){
-			return result + "longValue()";
-		} else if ("integer".equals(parserName)
-			|| "negativeInteger".equals(parserName)
-			|| "nonNegativeInteger".equals(parserName)
-			|| "PositiveInteger".equals(parserName)
-			|| "nonPositiveiveInteger".equals(parserName)) {
-			return result + "integerValue()";
-		} else if ("float".equals(parserName)) {
-			return result + "floatValue()";
-		} else if ("double".equals(parserName)) {
-			return result + "doubleValue()";
-		} else if ("decimal".equals(parserName)) {
-			return "value.getParsedValue().decimalValue()";
-		} else if ("jnull".equals(parserName)) {
-			return "value.getParsedValue().getObject()";
-		} else if ("jvalue".equals(parserName)) {
-			return "value.getParsedValue().getObject()";
-		} else if ("jnumber".equals(parserName)) {
-			return "(Number)(" + result + "getObject())";
-		} else if ("jstring".equals(parserName)) {
-			return "(String) (" + result + "getObject())";
-		} else if ("jvalue".equals(parserName)) {
-			return result + "getObject()";
+		switch (parserName) {
+			case "byte": return result + "byteValue()";
+			case "short": return result + "shortValue()";
+			case "unsignedByte": case "unsignedShort": case "int":
+				return result + "intValue()";
+			case "unsignedInt": case "long": return result + "longValue()";
+			case "negativeInteger": case "nonNegativeInteger":
+			case "nonPositiveiveInteger": case"integer":
+				return result + "integerValue()";
+			case "float": return result + "floatValue()";
+			case "double": return result + "doubleValue()";
+			case "decimal": return "value.getParsedValue().decimalValue()";
+			case "jnumber": return "(Number)(" + result + "getObject())";
+			case "jstring": return "(String) (" + result + "getObject())";
+			case "jvalue": case "jnull":
+				return "value.getParsedValue().getObject()";
 		}
 		switch (xdata.getParserType()) {
 			case XDValueID.XD_BOOLEAN:
