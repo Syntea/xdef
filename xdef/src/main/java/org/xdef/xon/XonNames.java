@@ -17,8 +17,8 @@ public interface XonNames {
 	/** XML element name of XON/JSON array. */
 	public final static String X_ARRAY = "array";
 	/** XML element name XON/JSON value (value is in attribute. */
-	public final static String X_ITEM = "item";
-	/** XML attribute name of XON/JSON value (in the X_ITEM element). */
+	public final static String X_VALUE = "item";
+	/** XML attribute name of XON/JSON value (in the X_VALUE element). */
 	public final static String X_VALATTR = "val";
 
 	/** QName of of XON/JSON map. */
@@ -27,9 +27,9 @@ public interface XonNames {
 	/** QName of of XON/JSON array. */
 	public final static QName Q_ARRAY =
 		new QName(XDConstants.XON_NS_URI_W, X_ARRAY);
-	/** QName of of XON/JSON item. */
-	public final static QName Q_ITEM =
-		new QName(XDConstants.XON_NS_URI_W, X_ITEM);
+	/** QName of of XON/JSON value. */
+	public final static QName Q_VALUE =
+		new QName(XDConstants.XON_NS_URI_W, X_VALUE);
 
 ////////////////////////////////////////////////////////////////////////////////
 // Names of XON directives

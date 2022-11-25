@@ -11,7 +11,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.StringTokenizer;
-import org.xdef.XDConstants;
+import static org.xdef.XDConstants.LINE_SEPARATOR;
 import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.xdef.model.XMNode;
@@ -62,7 +62,7 @@ public final class GenXComponent {
 			File f = new File(fparent, enumName + ".java");
 			FileOutputStream fos = null;
 			try {
-				final String LN = XDConstants.LINE_SEPARATOR;
+				final String LN = LINE_SEPARATOR;
 				fos = new FileOutputStream(f);
 				Writer out = charset == null || charset.isEmpty() ?
 					new OutputStreamWriter(fos) :

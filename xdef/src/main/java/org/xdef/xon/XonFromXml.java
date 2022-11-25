@@ -11,10 +11,10 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.xdef.XDConstants;
 import static org.xdef.xon.XonNames.X_ARRAY;
-import static org.xdef.xon.XonNames.X_ITEM;
 import static org.xdef.xon.XonNames.X_KEYATTR;
 import static org.xdef.xon.XonNames.X_MAP;
 import static org.xdef.xon.XonNames.X_VALATTR;
+import static org.xdef.xon.XonNames.X_VALUE;
 
 /** Converter XML -> XON/JSON.
  * @author Vaclav Trojan
@@ -106,7 +106,7 @@ class XonFromXml extends XonUtils {
 			return createArrayW3C(elem);
 		} else if (X_MAP.equals(localName)) {
 			return createMapW3C(elem);
-		} else if (X_ITEM.equals(elem.getLocalName())) {
+		} else if (X_VALUE.equals(elem.getLocalName())) {
 			if (elem.hasAttribute(X_VALATTR)) {
 				return XonTools.xmlToJValue(elem.getAttribute(X_VALATTR));
 			}
@@ -156,7 +156,7 @@ class XonFromXml extends XonUtils {
 				String key = e.getNodeName();
 				if (XDConstants.XON_NS_URI_W.equals(e.getNamespaceURI())
 					&& (key.endsWith(X_ARRAY) || key.endsWith(X_MAP)
-						|| key.endsWith(X_ITEM) || key.endsWith(J_NULL))) {
+						|| key.endsWith(X_VALUE) || key.endsWith(J_NULL))) {
 					key = XonTools.xmlToJName(e.getAttribute(X_KEYATTR));
 					result.put(key, fromXmlW3C(e));
 				} else {
@@ -211,7 +211,7 @@ class XonFromXml extends XonUtils {
 		String nsURI = elem.getNamespaceURI(); // nasmespace URI of element
 		String localName = nsURI==null ? elem.getNodeName():elem.getLocalName();
 		if (XDConstants.XON_NS_URI_XD.equals(nsURI)) {
-			if (X_ITEM.equals(localName)) {
+			if (X_VALUE.equals(localName)) {
 				String s;
 				if (elem.hasAttribute(X_VALATTR)) {
 					s = elem.getAttribute(X_VALATTR);

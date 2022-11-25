@@ -19,7 +19,10 @@ import org.w3c.dom.Comment;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.xdef.XDConstants;
+import static org.xdef.XDConstants.XDEF_INSTANCE_NS_URI;
+import static org.xdef.XDConstants.XDPROPERTY_DOCTYPE;
+import static org.xdef.XDConstants.XDPROPERTY_LOCATIONDETAILS;
+import static org.xdef.XDConstants.XDPROPERTY_XINCLUDE;
 import org.xdef.XDOutput;
 import org.xdef.impl.code.DefOutStream;
 import org.xdef.impl.xml.DomBaseHandler;
@@ -728,11 +731,11 @@ final class ChkParser extends DomBaseHandler implements XParser {
 			XPool xdp = (XPool) chkDoc._xdef.getXDPool();
 			setIgnoringComments(true); // ????
 			_illegalDoctype = !getBooleanProperty(xdp.isIllegalDoctype(),
-				XDConstants.XDPROPERTY_DOCTYPE, props);
+				XDPROPERTY_DOCTYPE, props);
 			_resolveIncludes = getBooleanProperty(xdp.isResolveIncludes(),
-				XDConstants.XDPROPERTY_XINCLUDE, props);
+				XDPROPERTY_XINCLUDE, props);
 			_locationDetails = getBooleanProperty(xdp.isLocationsdetails(),
-				XDConstants.XDPROPERTY_LOCATIONDETAILS, props);
+				XDPROPERTY_LOCATIONDETAILS, props);
 			if (_chkDoc.isDebug() && _chkDoc.getDebugger() != null) {
 				 // open debugger
 				_chkDoc.getDebugger().openDebugger(props, xdp);
@@ -807,11 +810,9 @@ final class ChkParser extends DomBaseHandler implements XParser {
 	private void elementStart(final KParsedElement parsedElem) {
 		_level++;
 		if (_level == 0) {
-			int ndx = parsedElem.indexOfNS(XDConstants.XDEF_INSTANCE_NS_URI,
-				"location");
+			int ndx = parsedElem.indexOfNS(XDEF_INSTANCE_NS_URI, "location");
 			if (ndx < 0) { // deprecated instance specification
-				ndx = parsedElem.indexOfNS(XDEF31_INSTANCE_NS_URI,
-					"location");
+				ndx = parsedElem.indexOfNS(XDEF31_INSTANCE_NS_URI, "location");
 			}
 			KParsedAttr ka;
 			String s;

@@ -44,10 +44,10 @@ import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
 import static org.xdef.xon.XonNames.X_ARRAY;
-import static org.xdef.xon.XonNames.X_ITEM;
 import static org.xdef.xon.XonNames.X_KEYATTR;
 import static org.xdef.xon.XonNames.X_MAP;
 import static org.xdef.xon.XonNames.X_VALATTR;
+import static org.xdef.xon.XonNames.X_VALUE;
 
 /** Provides validation of input data or it can be used as base for construction
  * of XML objects according to a X-definition.
@@ -486,7 +486,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			_actDefIndex = -1;
 		} else {
 			String name = xelem.getName();
-			if (xelem._xon > 0 && X_ITEM.equals(name = xelem.getLocalName())) {
+			if (xelem._xon > 0 && X_VALUE.equals(name = xelem.getLocalName())) {
 				String[] x = getPosInfo(xelem.getXDPosition(), null);
 				int ndx = (x[0].lastIndexOf("['"));
 				if (ndx >= 0) {

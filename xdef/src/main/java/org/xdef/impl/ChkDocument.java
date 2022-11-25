@@ -65,9 +65,9 @@ import org.xdef.sys.SThrowable;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
 import static org.xdef.xon.XonNames.Q_ARRAY;
-import static org.xdef.xon.XonNames.Q_ITEM;
 import static org.xdef.xon.XonNames.Q_MAP;
 import org.xdef.xon.XonUtils;
+import static org.xdef.xon.XonNames.Q_VALUE;
 
 /** Provides root check object for generation of check tree and processing
  * of the X-definition.
@@ -237,7 +237,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 						return xe;
 					}
 					if (!Q_ARRAY.equals(qxe) && !Q_MAP.equals(qxe)
-						&& !Q_ITEM.equals(qxe)) {
+						&& !Q_VALUE.equals(qxe)) {
 						for (XNode x: xe._childNodes) { // find in childNodes
 							if (qn.equals(x.getQName())) {
 								return (XElement) x;

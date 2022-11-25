@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.Map;
 import javax.xml.namespace.QName;
 import org.w3c.dom.Element;
-import org.xdef.XDConstants;
+import static org.xdef.XDConstants.XON_NS_PREFIX;
+import static org.xdef.XDConstants.XON_NS_URI_W;
+import static org.xdef.XDConstants.XON_NS_URI_XD;
 import org.xdef.XDContainer;
 import org.xdef.XDDocument;
 import org.xdef.XDParseResult;
@@ -19,7 +21,11 @@ import org.xdef.model.XMNode;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.SDatetime;
 import org.xdef.sys.SRuntimeException;
-import org.xdef.xon.XonNames;
+import static org.xdef.xon.XonNames.X_ARRAY;
+import static org.xdef.xon.XonNames.X_KEYATTR;
+import static org.xdef.xon.XonNames.X_MAP;
+import static org.xdef.xon.XonNames.X_VALATTR;
+import static org.xdef.xon.XonNames.X_VALUE;
 import org.xdef.xon.XonTools;
 
 /** Utilities used with XComponents.
@@ -336,7 +342,7 @@ public class XComponentUtil {
 	private static Object toXonItem(final XComponent xc) {
 		Class<?> cls = xc.getClass();
 		try {
-			Method m = cls.getDeclaredMethod("get" + XonNames.X_VALATTR);
+			Method m = cls.getDeclaredMethod("get" + X_VALATTR);
 			m.setAccessible(true);
 			return toXonObject(m.invoke(xc));
 		} catch (Exception ex) {
@@ -391,7 +397,7 @@ public class XComponentUtil {
 		for (Method x: methods) {
 			String methodName = x.getName();
 			Object o;
-			if (methodName.startsWith("get" + XDConstants.XON_NS_PREFIX + "$")
+			if (methodName.startsWith("get" + XON_NS_PREFIX + "$")
 				&& x.getParameterTypes().length == 0) {
 				o = null;
 				String key = null;
@@ -401,8 +407,7 @@ public class XComponentUtil {
 					if (o == null) {
 						continue;
 					}
-					Method m = o.getClass().getDeclaredMethod(
-						"get" + XonNames.X_KEYATTR);
+					Method m = o.getClass().getDeclaredMethod("get"+X_KEYATTR);
 					m.setAccessible(true);
 //					key = XonTools.xmlToJName((String) m.invoke(o));
 					key = XonTools.xmlToJName((String) m.invoke(o));
@@ -445,8 +450,7 @@ public class XComponentUtil {
 					continue;
 				}
 			} else if (x.getParameterTypes().length == 0
-				&& methodName.startsWith(
-					"listOf"+XDConstants.XON_NS_PREFIX+"$")) {
+				&& methodName.startsWith("listOf"+XON_NS_PREFIX+"$")) {
 				o = null;
 				String key = null;
 				try {
@@ -457,7 +461,7 @@ public class XComponentUtil {
 					}
 					if (o instanceof XComponent) {
 						Method m = o.getClass().getDeclaredMethod(
-							"get" + XonNames.X_KEYATTR);
+							"get" + X_KEYATTR);
 						m.setAccessible(true);
 						key = XonTools.xmlToJName((String) m.invoke(o));
 						XComponent xc1 = (XComponent) o;
@@ -468,7 +472,7 @@ public class XComponentUtil {
 								if (oo instanceof XComponent) {
 									XComponent xx = (XComponent) oo;
 									Method m = xx.getClass().getDeclaredMethod(
-										"get" + XonNames.X_KEYATTR);
+										"get" + X_KEYATTR);
 									m.setAccessible(true);
 									key = XonTools.xmlToJName((String) m.invoke(oo));
 									result.put(key, xx.toXon());
@@ -517,11 +521,11 @@ public class XComponentUtil {
 				if (o instanceof XComponent) {
 					XComponent y = (XComponent) o;
 					String key = null;
-					if (XDConstants.XON_NS_URI_XD.equals(y.xGetNamespaceURI())){
+					if (XON_NS_URI_XD.equals(y.xGetNamespaceURI())){
 						try {
 							Class<?> cls1 = o.getClass();
 							Method m = cls1.getDeclaredMethod(
-								"get" + XonNames.X_KEYATTR);
+								"get" + X_KEYATTR);
 							m.setAccessible(true);
 							key = XonTools.xmlToJName((String) m.invoke(o));
 						} catch (Exception ex) {
@@ -685,13 +689,13 @@ public class XComponentUtil {
 		String ns = xc.xGetNamespaceURI();
 		String name = xc.xGetNodeName();
 		int ndx = name.indexOf(':');
-		if (XDConstants.XON_NS_URI_XD.equals(ns)) {
+		if (XON_NS_URI_XD.equals(ns)) {
 			String localName = ndx >= 0 ? name.substring(ndx + 1) : name;
-			if (XonNames.X_MAP.equals(localName)) {
+			if (X_MAP.equals(localName)) {
 				return toXonMapXD(xc, nsStack);
-			} else if (XonNames.X_ARRAY.equals(localName)) {
+			} else if (X_ARRAY.equals(localName)) {
 				return toXonArrayXD(xc, nsStack);
-			} else if (XonNames.X_ITEM.equals(localName)) {
+			} else if (X_VALUE.equals(localName)) {
 				return toXonItem(xc);
 			}
 		}
@@ -723,17 +727,17 @@ public class XComponentUtil {
 	 */
 	public final static Object toXon(final XComponent xc) {
 		String ns = xc.xGetNamespaceURI();
-		if (XDConstants.XON_NS_URI_W.equals(ns)) {
+		if (XON_NS_URI_W.equals(ns)) {
 			String localName = xc.xGetNodeName();
 			int ndx = localName.indexOf(':');
 			if (ndx >= 0) {
 				localName = localName.substring(ndx + 1);
 			}
-			if (XonNames.X_MAP.equals(localName)) {
+			if (X_MAP.equals(localName)) {
 				return toXonMap(xc);
-			} else if (XonNames.X_ARRAY.equals(localName)) {
+			} else if (X_ARRAY.equals(localName)) {
 				return toXonArray(xc);
-			} else if (XonNames.X_ITEM.equals(localName)) {
+			} else if (X_VALUE.equals(localName)) {
 				return toXonItem(xc);
 			}
 		}
@@ -747,5 +751,4 @@ public class XComponentUtil {
 		return "_".equals(xmlName) ? "$_" // Java 9 not allows indentifiers "_"
 			: xmlName.replace(':','$').replace('-','_').replace('.','_');
 	}
-
 }

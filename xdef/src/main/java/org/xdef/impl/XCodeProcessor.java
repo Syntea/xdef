@@ -20,7 +20,11 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xdef.XDCallItem;
-import org.xdef.XDConstants;
+import static org.xdef.XDConstants.XDPROPERTYVALUE_DEBUG_FALSE;
+import static org.xdef.XDConstants.XDPROPERTYVALUE_DEBUG_TRUE;
+import static org.xdef.XDConstants.XDPROPERTY_DEBUG;
+import static org.xdef.XDConstants.XDPROPERTY_MESSAGES;
+import static org.xdef.XDConstants.XDPROPERTY_MSGLANGUAGE;
 import org.xdef.XDContainer;
 import org.xdef.XDDebug;
 import org.xdef.XDElement;
@@ -40,7 +44,6 @@ import org.xdef.XDUniqueSet;
 import org.xdef.XDUniqueSetKey;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
-import org.xdef.XDValueID;
 import static org.xdef.XDValueID.XD_ANY;
 import static org.xdef.XDValueID.XD_BOOLEAN;
 import static org.xdef.XDValueID.XD_CONTAINER;
@@ -63,6 +66,7 @@ import static org.xdef.XDValueID.XD_XQUERY;
 import static org.xdef.XDValueID.XX_ATTR;
 import static org.xdef.XDValueID.XX_ELEMENT;
 import static org.xdef.XDValueID.XX_TEXT;
+import static org.xdef.XDValueID.X_PARSEITEM;
 import static org.xdef.XDValueID.X_UNIQUESET_KEY;
 import org.xdef.XDValueType;
 import org.xdef.XDXmlOutStream;
@@ -70,7 +74,6 @@ import org.xdef.impl.code.CodeParser;
 import org.xdef.impl.code.CodeS1;
 import org.xdef.impl.code.CodeSWTableInt;
 import org.xdef.impl.code.CodeSWTableStr;
-import org.xdef.impl.code.CodeTable;
 import static org.xdef.impl.code.CodeTable.ADD_DAY;
 import static org.xdef.impl.code.CodeTable.ADD_HOUR;
 import static org.xdef.impl.code.CodeTable.ADD_I;
@@ -493,7 +496,7 @@ import org.xdef.xml.KXmlUtils;
 /** Provides processor engine of script code.
  * @author Vaclav Trojan
  */
-public final class XCodeProcessor implements XDValueID, CodeTable {
+public final class XCodeProcessor {
 
 	/** This identifier is created if it is undefined. */
 	private static final String UNDEF_ID = "__UNDEF_ID__";
@@ -597,8 +600,8 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 			_props = new Properties();
 		} else {
 			_props = props;
-			_debug = XDConstants.XDPROPERTYVALUE_DEBUG_TRUE.equals(
-				SManager.getProperty(_props, XDConstants.XDPROPERTY_DEBUG));
+			_debug = XDPROPERTYVALUE_DEBUG_TRUE.equals(
+				SManager.getProperty(_props, XDPROPERTY_DEBUG));
 			SManager.setProperties(props);
 		}
 	}
@@ -611,8 +614,8 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 	 */
 	public final void setProperty(final String key, final String value) {
 		String newKey = key.startsWith("xdef.") ? key.replace('.', '_') : key;
-		if (XDConstants.XDPROPERTY_DEBUG.equals(newKey)) {
-			_debug = XDConstants.XDPROPERTYVALUE_DEBUG_TRUE.equals(value);
+		if (XDPROPERTY_DEBUG.equals(newKey)) {
+			_debug = XDPROPERTYVALUE_DEBUG_TRUE.equals(value);
 		}
 		if (_props == null) {
 			if (value == null) {
@@ -626,8 +629,8 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 		} else {
 			_props.remove(newKey);
 		}
-		if (newKey.startsWith(XDConstants.XDPROPERTY_MESSAGES)
-			|| newKey.startsWith(XDConstants.XDPROPERTY_MSGLANGUAGE)) {
+		if (newKey.startsWith(XDPROPERTY_MESSAGES)
+			|| newKey.startsWith(XDPROPERTY_MSGLANGUAGE)) {
 			SManager.setProperty(newKey, value);
 		}
 	}
@@ -715,8 +718,8 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 			_props = props;
 		}
 		_debug = xp.isDebugMode() || _props != null &&
-			XDConstants.XDPROPERTYVALUE_DEBUG_FALSE.equals(
-				SManager.getProperty(_props, XDConstants.XDPROPERTY_DEBUG));
+			XDPROPERTYVALUE_DEBUG_FALSE.equals(
+				SManager.getProperty(_props, XDPROPERTY_DEBUG));
 		if (_debug) {
 			if (_debugger == null) {
 				String debugEditor = xp.getDebugEditor();
@@ -995,7 +998,7 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 					continue;
 				}
 				if (_globalVariables[i] == null) {
-					_globalVariables[i] = xv.getType() == XDValueID.X_PARSEITEM
+					_globalVariables[i] = xv.getType() == X_PARSEITEM
 						|| xv.getType() == X_UNIQUESET_KEY
 						? new ParseItem(xv.getName(),
 							xv.getKeyRefName(),
@@ -4079,7 +4082,7 @@ public final class XCodeProcessor implements XDValueID, CodeTable {
 		// XDValue methods
 		////////////////////////////////////////////////////////////////////////
 		@Override
-		public final short getItemId() {return XDValueID.XD_ANY;}
+		public final short getItemId() {return XD_ANY;}
 		@Override
 		public final XDValueType getItemType() {return XDValueType.OBJECT;}
 

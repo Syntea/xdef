@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.Stack;
-import org.xdef.XDConstants;
+import static org.xdef.XDConstants.XON_NS_URI_W;
 import org.xdef.XDPool;
 import static org.xdef.component.XCGeneratorBase.LN;
 import static org.xdef.component.XCGeneratorBase.RESERVED_NAMES;
@@ -446,9 +446,9 @@ final class XCGenerator extends XCGeneratorXON {
 					}
 					genChildElementCreator(iname,  listNodes, max > 1);
 					if (xe1._xon == XConstants.XON_MODE_W) {
-						if (XDConstants.XON_NS_URI_W.equals(xe1.getNSUri())) {
+						if (XON_NS_URI_W.equals(xe1.getNSUri())) {
 							if (groupKind != XMNode.XMCHOICE) {
-								if (XonNames.X_ITEM.equals(xe1.getLocalName())){
+								if (XonNames.X_VALUE.equals(xe1.getLocalName())){
 									genXonItemGetterAndSetter(xe1,
 										typeName, iname, max, setters,
 										getters, sbi, classNames, varNames);

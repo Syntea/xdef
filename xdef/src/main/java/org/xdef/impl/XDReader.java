@@ -18,7 +18,9 @@ import org.xdef.impl.code.CodeS1;
 import org.xdef.impl.code.CodeSWTableInt;
 import org.xdef.impl.code.CodeSWTableStr;
 import org.xdef.impl.code.CodeStringList;
-import org.xdef.impl.code.CodeTable;
+import static org.xdef.impl.code.CodeTable.COMPILE_BNF;
+import static org.xdef.impl.code.CodeTable.COMPILE_XPATH;
+import static org.xdef.impl.code.CodeTable.LD_CONST;
 import org.xdef.impl.code.CodeUniqueset;
 import org.xdef.impl.code.CodeXD;
 import org.xdef.impl.code.DefBNFGrammar;
@@ -145,11 +147,11 @@ public final class XDReader extends SObjectReader {
 		}
 		short type = readShort();
 		switch (code) {
-			case CodeTable.COMPILE_BNF:
+			case COMPILE_BNF:
 				return readBNF();
-			case CodeTable.COMPILE_XPATH:
+			case COMPILE_XPATH:
 				return readXPath();
-			case CodeTable.LD_CONST: {
+			case LD_CONST: {
 				switch (type) {
 					case XDValueID.XD_BNFGRAMMAR:
 						return readBNF();
