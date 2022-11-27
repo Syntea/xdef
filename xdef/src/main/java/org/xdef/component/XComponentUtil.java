@@ -409,11 +409,9 @@ public class XComponentUtil {
 					}
 					Method m = o.getClass().getDeclaredMethod("get"+X_KEYATTR);
 					m.setAccessible(true);
-//					key = XonTools.xmlToJName((String) m.invoke(o));
 					key = XonTools.xmlToJName((String) m.invoke(o));
 					if (o instanceof XComponent) {
-						XComponent xc1 = (XComponent) o;
-						result.put(key, xc1.toXon()); /*xx*/
+						result.put(key, ((XComponent) o).toXon());
 					} else {
 						result.put(key, o);
 					}
@@ -429,9 +427,8 @@ public class XComponentUtil {
 					if (o instanceof Map) {
 						for (Object y: ((Map) o).entrySet()) {
 							Map.Entry z = (Map.Entry) y;
-							String key = /*xx*/
-								XonTools.xmlToJName((String) z.getKey());
-							result.put(key, z.getValue());
+							result.put(XonTools.xmlToJName((String)z.getKey()),
+								z.getValue());
 						}
 					}
 				} catch (Exception ex) {}
@@ -462,18 +459,17 @@ public class XComponentUtil {
 							"get" + X_KEYATTR);
 						m.setAccessible(true);
 						key = XonTools.xmlToJName((String) m.invoke(o));
-						XComponent xc1 = (XComponent) o;
-						result.put(key, xc1.toXon());
-					} else {/*xx*/
+						result.put(key, ((XComponent) o).toXon());
+					} else {
 						if (o instanceof ArrayList) {
 							for(Object oo : (ArrayList)o) {
 								if (oo instanceof XComponent) {
-									XComponent xx = (XComponent) oo;
-									Method m = xx.getClass().getDeclaredMethod(
+									Method m = oo.getClass().getDeclaredMethod(
 										"get" + X_KEYATTR);
 									m.setAccessible(true);
-									key = XonTools.xmlToJName((String) m.invoke(oo));
-									result.put(key, xx.toXon());
+									key = XonTools.xmlToJName(
+										(String) m.invoke(oo));
+									result.put(key, ((XComponent) oo).toXon());
 								}
 							}
 						}

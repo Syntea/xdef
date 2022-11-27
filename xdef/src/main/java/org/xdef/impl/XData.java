@@ -325,40 +325,30 @@ public class XData extends XCodeDescriptor
 		if (p != null && p.getItemId()==XDValueID.XD_PARSER
 			&& p instanceof XDParser) {
 			XDParser y = (XDParser) p;
-			if ("xdatetime".equals(y.parserName())) {
-				XDContainer c = y.getNamedParams();
-				for (XDNamedValue item: c.getXDNamedItems()) {
-					if ("format".equals(item.getName())) {
-						return '"' + item.getValue().toString() + '"';
+			switch (y.parserName()) {
+				case "xdatetime": {
+					XDContainer c = y.getNamedParams();
+					for (XDNamedValue item: c.getXDNamedItems()) {
+						if ("format".equals(item.getName())) {
+							return '"' + item.getValue().toString() + '"';
+						}
 					}
+					return null;
 				}
-				return null;
-			} else if ("dateTime".equals(y.parserName())) {
-				return null;
-			} else if ("date".equals(y.parserName())) {
-				return "\"yyyy-MM-dd[Z]\"";
-			} else if ("gDay".equals(y.parserName())) {
-				return "\"---dd[Z]\"";
-			} else if ("gMonth".equals(y.parserName())) {
-				return "\"--MM[Z]\"";
-			} else if ("gMonthDay".equals(y.parserName())) {
-				return "\"--MM-dd[Z]\"";
-			} else if ("\"gYear".equals(y.parserName())) {
-				return "\"yyyy[Z]\"";
-			} else if ("ISOyear".equals(y.parserName())) {
-				return "\"yyyy[Z]\"";
-			} else if ("gYearMonth".equals(y.parserName())) {
-				return "\"yyyy-MM[Z]\"";
-			} else if ("ISOyearMonth".equals(y.parserName())) {
-				return "\"yyyy-MM[Z]\"";
-			} else if ("dateYMDhms".equals(y.parserName())) {
-				return "\"yyyyMMddHHmmss\"";
-			} else if ("ISOdate".equals(y.parserName())) {
-				return "\"yyyy-MM-dd[Z]\"";
-			} else if ("time".equals(y.parserName())) {
-				return "\"HH:mm:ss[.S][Z]\"";
-			} else if ("emailDate".equals(y.parserName())) {
-				return "\"EEE, d MMM yyyy HH:mm:ss[ ZZZZZ][ (z)]\"";
+				case "dateTime": return null;
+				case "date": return "\"yyyy-MM-dd[Z]\"";
+				case "gDay": return "\"---dd[Z]\"";
+				case "gMonth": return "\"--MM[Z]\"";
+				case "gMonthDay": return "\"--MM-dd[Z]\"";
+				case "gYear": return "\"yyyy[Z]\"";
+				case "ISOyear": return "\"yyyy[Z]\"";
+				case "gYearMonth": return "\"yyyy-MM[Z]\"";
+				case "ISOyearMonth": return "\"yyyy-MM[Z]\"";
+				case "dateYMDhms": return "\"yyyyMMddHHmmss\"";
+				case "ISOdate": return "\"yyyy-MM-dd[Z]\"";
+				case "time": return "\"HH:mm:ss[.S][Z]\"";
+				case "emailDate":
+					return "\"EEE, d MMM yyyy HH:mm:ss[ ZZZZZ][ (z)]\"";
 			}
 		}
 		return null;
