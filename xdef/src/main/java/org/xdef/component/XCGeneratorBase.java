@@ -25,21 +25,21 @@ import org.xdef.sys.SUtils;
  * @author Vaclav Trojan
  */
 class XCGeneratorBase {
-
 	/** Platform-dependent newline. */
 	static final String LN = LINE_SEPARATOR;
 	/** Names that can't be used in generated code.*/
 	static final Set<String> RESERVED_NAMES = new HashSet<String>();
 	/** Switch to generate JavaDoc. */
 	final boolean _genJavadoc;
-	/** Switch if byte array is encoded as base64 (1) or hexadecimal (2).*/
-	byte _byteArrayEncoding;
 	/** Internal reporter where to write messages. */
 	final ArrayReporter _reporter;
 	/** Map with binds information. */
 	final Map<String, String> _binds;
 	/** XDPool from which components are generated. */
 	final XDPool _xp;
+
+	/** Switch if byte array is encoded as base64 (1) or hexadecimal (2).*/
+	byte _byteArrayEncoding;
 	/** Map with components information. */
 	Map<String, String> _components;
 	/** Builder to generate interface or null. */
@@ -164,7 +164,7 @@ class XCGeneratorBase {
 	 * in the source.
 	 * @return modified string.
 	 */
-	static final String modify(final String origin, final String... replace) {
+	final static String modify(final String origin, final String... replace) {
 		if (replace.length % 2 != 0) {
 			//Internal error&{0}{: }
 			throw new SIllegalArgumentException(SYS.SYS066,
@@ -181,7 +181,7 @@ class XCGeneratorBase {
 	 * @param xdata Model of data.
 	 * @return fully qualified name of enumeration or null.
 	 */
-	static final String checkEnumType(final XMData xdata) {
+	private static String checkEnumType(final XMData xdata) {
 		XDValue x = xdata.getParseMethod();
 		if (x != null && x instanceof XDParser) {
 			String typeName = ((XDParser) x).getDeclaredName();
@@ -227,45 +227,27 @@ class XCGeneratorBase {
 			case "jvalue": return "Object";
 		}
 		switch (xdata.getParserType()) {
-			case XDValueID.XD_BOOLEAN:
-				return "Boolean";
-			case XDValueID.XD_CHAR:
-				return "Character";
-			case XDValueID.XD_BYTE:
-				return "Byte";
-			case XDValueID.XD_SHORT:
-				return "Short";
-			case XDValueID.XD_INT:
-				return "Integer";
-			case XDValueID.XD_LONG:
-				return "Long";
-			case XDValueID.XD_FLOAT:
-				return "Float";
-			case XDValueID.XD_DOUBLE:
-				return "Double";
-			case XDValueID.XD_DECIMAL:
-				return "java.math.BigDecimal";
-			case XDValueID.XD_DURATION:
-				return "org.xdef.sys.SDuration";
-			case XDValueID.XD_DATETIME:
-				return "org.xdef.sys.SDatetime";
-			case XDValueID.XD_GPSPOSITION:
-				return "org.xdef.sys.GPSPosition";
-			case XDValueID.XD_PRICE:
-				return "org.xdef.sys.Price";
-			case XDValueID.XD_ANYURI:
-				return "java.net.URI";
-			case XDValueID.XD_EMAIL:
-				return "org.xdef.XDEmailAddr";
-			case XDValueID.XD_CURRENCY:
-				return "java.util.Currency";
-			case XDValueID.XD_IPADDR:
-				return "java.net.InetAddress";
-			case XDValueID.XD_BYTES:
+			case XDValueID.XD_BOOLEAN: return "Boolean";
+			case XDValueID.XD_CHAR: return "Character";
+			case XDValueID.XD_BYTE: return "Byte";
+			case XDValueID.XD_SHORT: return "Short";
+			case XDValueID.XD_INT: return "Integer";
+			case XDValueID.XD_LONG: return "Long";
+			case XDValueID.XD_FLOAT: return "Float";
+			case XDValueID.XD_DOUBLE: return "Double";
+			case XDValueID.XD_DECIMAL: return "java.math.BigDecimal";
+			case XDValueID.XD_DURATION: return "org.xdef.sys.SDuration";
+			case XDValueID.XD_DATETIME: return "org.xdef.sys.SDatetime";
+			case XDValueID.XD_GPSPOSITION: return "org.xdef.sys.GPSPosition";
+			case XDValueID.XD_PRICE: return "org.xdef.sys.Price";
+			case XDValueID.XD_ANYURI: return "java.net.URI";
+			case XDValueID.XD_EMAIL: return "org.xdef.XDEmailAddr";
+			case XDValueID.XD_CURRENCY: return "java.util.Currency";
+			case XDValueID.XD_IPADDR: return "java.net.InetAddress";
+			case XDValueID.XD_BYTES: 
 				_byteArrayEncoding |= getBytesType(xdata);
 				return "byte[]";
-			case XDValueID.XD_TELEPHONE:
-				return "org.xdef.XDTelephone";
+			case XDValueID.XD_TELEPHONE: return "org.xdef.XDTelephone";
 			case XDValueID.XD_NULL: //jnull
 			case XDValueID.XD_ANY: //union etc.
 				return "Object";
@@ -274,11 +256,13 @@ class XCGeneratorBase {
 		return (result != null) ? result : "String";  // default
 	}
 
-	/** Get encoding parser (i.e. hex or base64) of type bytes. */
-	final static byte getBytesType(final XMData xdata) {
-		final String s = xdata.getParserName();
-		return "hexBinary".equals(s)||"hex".equals(s)||"SHA1".equals(s)?(byte) 2
-			: "base64Binary".equals(s) ? (byte) 1 : (byte) 0;
+	/** Get type of encoding parser (i.e. hex or base64) of type bytes. */
+	private static byte getBytesType(final XMData xdata) {
+		switch(xdata.getParserName()) {
+			case "hexBinary": case "hex": case "SHA1": return 2;
+			case "base64Binary": return 1;
+			default: return 0;
+		}
 	}
 
 	/** Create ParsedResultGetter.
@@ -287,12 +271,13 @@ class XCGeneratorBase {
 	 */
 	final static String getParsedResultGetter(final XMData xdata) {
 		String parserName = xdata.getParserName();
-		if ("jlist".equals(parserName)) {
-			return "org.xdef.component.XComponentUtil.jlistToString(value)";
-		}
 		String result = "value.getParsedValue().isNull()?null:"
 			+ "value.getParsedValue().";
 		switch (parserName) {
+			case "jlist": 
+				return "org.xdef.component.XComponentUtil.jlistToString(value)";
+			case "jvalue": case "jnull":
+				return "value.getParsedValue().getObject()";
 			case "byte": return result + "byteValue()";
 			case "short": return result + "shortValue()";
 			case "unsignedByte": case "unsignedShort": case "int":
@@ -306,32 +291,19 @@ class XCGeneratorBase {
 			case "decimal": return "value.getParsedValue().decimalValue()";
 			case "jnumber": return "(Number)(" + result + "getObject())";
 			case "jstring": return "(String) (" + result + "getObject())";
-			case "jvalue": case "jnull":
-				return "value.getParsedValue().getObject()";
 		}
 		switch (xdata.getParserType()) {
-			case XDValueID.XD_BOOLEAN:
-				return result + "booleanValue()";
-			case XDValueID.XD_CHAR:
-				return result + "charValue()";
-			case XDValueID.XD_BYTE:
-				return result + "byteValue()";
-			case XDValueID.XD_SHORT:
-				return result + "shortValue()";
-			case XDValueID.XD_INT:
-				return result + "intValue()";
-			case XDValueID.XD_LONG:
-				return result + "longValue()";
-			case XDValueID.XD_FLOAT:
-				return result + "floatValue()";
-			case XDValueID.XD_DOUBLE:
-				return result + "doubleValue()";
-			case XDValueID.XD_DECIMAL:
-				return result + "decimalValue()";
-			case XDValueID.XD_DURATION:
-				return result + "durationValue()";
-			case XDValueID.XD_DATETIME:
-				return result + "datetimeValue()";
+			case XDValueID.XD_BOOLEAN: return result + "booleanValue()";
+			case XDValueID.XD_CHAR: return result + "charValue()";
+			case XDValueID.XD_BYTE: return result + "byteValue()";
+			case XDValueID.XD_SHORT: return result + "shortValue()";
+			case XDValueID.XD_INT: return result + "intValue()";
+			case XDValueID.XD_LONG: return result + "longValue()";
+			case XDValueID.XD_FLOAT: return result + "floatValue()";
+			case XDValueID.XD_DOUBLE: return result + "doubleValue()";
+			case XDValueID.XD_DECIMAL: return result + "decimalValue()";
+			case XDValueID.XD_DURATION: return result + "durationValue()";
+			case XDValueID.XD_DATETIME: return result + "datetimeValue()";
 			case XDValueID.XD_GPSPOSITION:
 				return "(org.xdef.sys.GPSPosition)(" + result + "getObject())";
 			case XDValueID.XD_PRICE:
@@ -344,14 +316,11 @@ class XCGeneratorBase {
 				return "(java.net.InetAddress)(" + result + "getObject())";
 			case XDValueID.XD_CURRENCY:
 				return "(java.util.Currency)(" + result + "getObject())";
-			case XDValueID.XD_BYTES:
-				return result + "getBytes()";
+			case XDValueID.XD_BYTES: return result + "getBytes()";
 			case XDValueID.XD_TELEPHONE:
 				return "(org.xdef.XDTelephone)(" + result + "getObject())";
-			case XDValueID.XD_PARSER:
-				return "value.getParsedString()";
-			case XDValueID.XD_ANY:
-				return "value.getParsedValue().getObject()";
+			case XDValueID.XD_PARSER: return "value.getParsedString()";
+			case XDValueID.XD_ANY: return "value.getParsedValue().getObject()";
 		}
 		result += "toString()";
 		String enumType = checkEnumType(xdata);
@@ -389,14 +358,15 @@ class XCGeneratorBase {
 		final StringBuilder sb) {
 		String d = descr;
 		String x;
-		String typ = typeName;
+		String typ;
 		if (max > 1) {
 			d += 's';
-			String s = "new java.util.ArrayList<" + typ + ">()";
+			String s = "new java.util.ArrayList<" + typeName + ">()";
 			x = " =" + (s.length() > 40 ? LN + "\t\t" : " ") + s;
-			typ = "java.util.List<"+typ+">";
+			typ = "java.util.List<" + typeName + ">";
 		} else {
 			x = "";
+			typ = typeName;
 		}
 		sb.append(modify(
 (_genJavadoc ? "\t/** Value of &{d} \"&{xmlName}\".*/"+LN : "")+
@@ -458,7 +428,7 @@ class XCGeneratorBase {
 	 * @param sbi String builder where the code is generated for interface.
 	 * @return generated code.
 	 */
-	final void genChildElementGetterSetter(XElement xel,
+	final void genChildElementGetterSetter(final XElement xel,
 		final String className,
 		final String name,
 		final int max,
@@ -491,7 +461,7 @@ class XCGeneratorBase {
 	 * @param sbi String builder where the code is generated for interface.
 	 * @return generated code.
 	 */
-	private void genGetterMethodFromChildElement(XNode xn,
+	private void genGetterMethodFromChildElement(final XNode xn,
 		final String typeName,
 		final String name,
 		final int max,

@@ -3582,56 +3582,23 @@ class CompileStatement extends XScriptParser implements CodeTable {
 				return Class.forName(clsName, false, cl);
 			} catch (ClassNotFoundException ex) {}
 		}
-//		switch (clsName) { // must be Java 1.6, so we must use if
-//			case "Long": return Long.class;
-//			case "int": return Integer.TYPE;
-//			case "Integer": return Integer.class;
-//			case "short": return Short.TYPE;
-//			case "Short": return Short.class;
-//			case "byte": return Byte.TYPE;
-//			case "Byte": return Byte.class;
-//			case "Double": return Double.class;
-//			case "float": return Float.TYPE;
-//			case "Float": return Float.class;
-//			case "boolean": return Boolean.TYPE;
-//			case "Boolean": return Boolean.class;
-//			case "BigDecimal": return BigDecimal.class;
-//			case "char": return Character.TYPE;
-//			case "Character": return Character.class;
-//			case "String": return String.class;
-//		}
-		if ("Long".equals(clsName)) {
-			return Long.class;
-		} else if ("int".equals(clsName)) {
-			return Integer.TYPE;
-		} else if ("Integer".equals(clsName)) {
-			return Integer.class;
-		} else if ("short".equals(clsName)) {
-			return Short.TYPE;
-		} else if ("Short".equals(clsName)) {
-			return Short.class;
-		} else if ("byte".equals(clsName)) {
-			return Byte.TYPE;
-		} else if ("Byte".equals(clsName)) {
-			return Byte.class;
-		} else if ("Double".equals(clsName)) {
-			return Double.class;
-		} else if ("float".equals(clsName)) {
-			return Float.TYPE;
-		} else if ("Float".equals(clsName)) {
-			return Float.class;
-		} else if ("boolean".equals(clsName)) {
-			return Boolean.TYPE;
-		} else if ("Boolean".equals(clsName)) {
-			return Boolean.class;
-		} else if ("BigDecimal".equals(clsName)) {
-			return BigDecimal.class;
-		} else if ("char".equals(clsName)) {
-			return Character.TYPE;
-		} else if ("Character".equals(clsName)) {
-			return Character.class;
-		} else if ("String".equals(clsName)) {
-			return String.class;
+		switch (clsName) { // must be Java 1.6, so we must use if
+			case "Long": return Long.class;
+			case "int": return Integer.TYPE;
+			case "Integer": return Integer.class;
+			case "short": return Short.TYPE;
+			case "Short": return Short.class;
+			case "byte": return Byte.TYPE;
+			case "Byte": return Byte.class;
+			case "Double": return Double.class;
+			case "float": return Float.TYPE;
+			case "Float": return Float.class;
+			case "boolean": return Boolean.TYPE;
+			case "Boolean": return Boolean.class;
+			case "BigDecimal": return BigDecimal.class;
+			case "char": return Character.TYPE;
+			case "Character": return Character.class;
+			case "String": return String.class;
 		}
 		return CompileBase.getTypeClass(CompileBase.getClassTypeID(clsName,cl));
 	}

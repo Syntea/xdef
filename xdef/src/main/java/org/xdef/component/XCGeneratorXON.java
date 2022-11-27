@@ -404,10 +404,8 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 			}
 		}
 		if (name == null) {
-			name = getUniqueName(getUniqueName(
-				getUniqueName("get$" + xe.getLocalName(),
-					RESERVED_NAMES), classNames), varNames);
-					varNames.add(name);
+			name = getUniqueName("get$" + xe.getLocalName(), RESERVED_NAMES);
+			name = getUniqueName(getUniqueName(name, classNames), varNames);
 			varNames.add(name);
 			name = name.substring(4);
 		}

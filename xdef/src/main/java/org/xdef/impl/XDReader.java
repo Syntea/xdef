@@ -77,23 +77,15 @@ public final class XDReader extends SObjectReader {
 
 	private static Class<?> getClassForName(final String name)
 		throws IOException {
-		//first check primitive type names
-		if ("boolean".equals(name)) {
-			return java.lang.Boolean.TYPE;
-		} else if ("byte".equals(name)) {
-			return java.lang.Byte.TYPE;
-		} else if ("short".equals(name)) {
-			return java.lang.Short.TYPE;
-		} else if ("int".equals(name)) {
-			return java.lang.Integer.TYPE;
-		} else if ("long".equals(name)) {
-			return java.lang.Long.TYPE;
-		} else if ("char".equals(name)) {
-			return java.lang.Character.TYPE;
-		} else if ("float".equals(name)) {
-			return java.lang.Float.TYPE;
-		} else if ("double".equals(name)) {
-			return java.lang.Double.TYPE;
+		switch(name) { //first check primitive type names
+			case "boolean": return java.lang.Boolean.TYPE;
+			case "byte": return java.lang.Byte.TYPE;
+			case "short": return java.lang.Short.TYPE;
+			case "int": return java.lang.Integer.TYPE;
+			case "long": return java.lang.Long.TYPE;
+			case "char": return java.lang.Character.TYPE;
+			case "float": return java.lang.Float.TYPE;
+			case "double": return java.lang.Double.TYPE;
 		}
 		try { //return class
 			return Class.forName(name, false,
