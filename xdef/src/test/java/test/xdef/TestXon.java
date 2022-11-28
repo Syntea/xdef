@@ -1031,7 +1031,12 @@ public class TestXon extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n" +
 "  <xd:xon name='A'>\n" +
-"{ %anyName: \"? int();\", x: \"? int();\" }\n" +
+"{ x: \"? int();\",\n" +
+//"  y: [%script=\"?\", \"* boolean()\"],\n" +
+//"  z: {%script=\"?\", a:\"? boolean()\", b:\"? string()\"}\n" +
+"  %anyName: \"? int();\"\n" +
+"}\n" +
+//"{ %anyName: \"? int();\", x: \"? int();\" }\n" +
 "</xd:xon>\n" +
 "<xd:component>%class test.xdef.MyTestAny_1 %link A</xd:component>\n" +
 "</xd:def>";

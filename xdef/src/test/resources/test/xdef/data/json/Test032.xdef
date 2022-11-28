@@ -2,7 +2,7 @@
 <xd:xon name='a'>
 {
     "personnel": {
-        "person": [ %script="occurs 1..*",
+        "person": [
             {%script="occurs 1..*",
                 "id": "string()",
                 "name": {
