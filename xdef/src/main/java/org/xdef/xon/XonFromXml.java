@@ -100,12 +100,12 @@ class XonFromXml extends XonUtils {
 	 * XON/JSON array, map, or primitive value.
 	 * @return XON/JSON array, map, or primitive value.
 	 */
-	private Object fromXmlW3C(final Element elem) {
+	private Object fromXmlW(final Element elem) {
 		String localName = elem.getLocalName();
 		if (X_ARRAY.equals(localName)) {
-			return createArrayW3C(elem);
+			return createArrayW(elem);
 		} else if (X_MAP.equals(localName)) {
-			return createMapW3C(elem);
+			return createMapW(elem);
 		} else if (X_VALUE.equals(elem.getLocalName())) {
 			if (elem.hasAttribute(X_VALATTR)) {
 				return XonTools.xmlToJValue(elem.getAttribute(X_VALATTR));
@@ -122,56 +122,7 @@ class XonFromXml extends XonUtils {
 			return XonTools.xmlToJValue(elem.getTextContent());
 		}
 		throw new RuntimeException(
-			"Unsupported XON/JSON W3C element: " + elem.getLocalName());
-	}
-
-////////////////////////////////////////////////////////////////////////////////
-
-	/** Create XON/JSON array from array element.
-	 * @param elem array element from XDConstants.XON_NS_URI_XD name space.
-	 * @return created XON/JSON array.
-	 */
-	private List<Object> createArrayW3C(final Element elem) {
-		List<Object> result = new ArrayList<Object>();
-		Node n = elem.getFirstChild();
-		while(n != null) {
-			if (n.getNodeType() == Node.ELEMENT_NODE) {
-				result.add(fromXmlW3C((Element) n));
-			}
-			n = n.getNextSibling();
-		}
-		return result;
-	}
-
-	/** Create XON/JSON object (map) from map element.
-	 * @param elem map element from XDConstants.XON_NS_URI_XD name space.
-	 * @return created XON/JSON object (map).
-	 */
-	private Map<String, Object> createMapW3C(final Element elem) {
-		Map<String,Object> result = new LinkedHashMap<String,Object>();
-		Node n = elem.getFirstChild();
-		while(n != null) {
-			if (n.getNodeType() == Node.ELEMENT_NODE) {
-				Element e = (Element) n;
-				String key = e.getNodeName();
-				if (XDConstants.XON_NS_URI_W.equals(e.getNamespaceURI())
-					&& (key.endsWith(X_ARRAY) || key.endsWith(X_MAP)
-						|| key.endsWith(X_VALUE) || key.endsWith(J_NULL))) {
-					key = XonTools.xmlToJName(e.getAttribute(X_KEYATTR));
-					result.put(key, fromXmlW3C(e));
-				} else {
-					Object val;
-					if (!e.hasAttribute(X_VALATTR)) {
-						val = null;
-					} else {
-						val = XonTools.xmlToJValue(e.getAttribute(X_VALATTR));
-					}
-					result.put(XonTools.xmlToJName(key),val);
-				}
-			}
-			n = n.getNextSibling();
-		}
-		return result;
+			"Unsupported XON/JSON W element: " + elem.getLocalName());
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -396,6 +347,53 @@ class XonFromXml extends XonUtils {
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
+// internal format
+////////////////////////////////////////////////////////////////////////////////
+
+	/** Create XON/JSON array from array element.
+	 * @param elem array element from XDConstants.XON_NS_URI_XD name space.
+	 * @return created XON/JSON array.
+	 */
+	private List<Object> createArrayW(final Element elem) {
+		List<Object> result = new ArrayList<Object>();
+		Node n = elem.getFirstChild();
+		while(n != null) {
+			if (n.getNodeType() == Node.ELEMENT_NODE) {
+				result.add(fromXmlW((Element) n));
+			}
+			n = n.getNextSibling();
+		}
+		return result;
+	}
+
+	/** Create XON/JSON object (map) from map element.
+	 * @param elem map element from XDConstants.XON_NS_URI_XD name space.
+	 * @return created XON/JSON object (map).
+	 */
+	private Map<String, Object> createMapW(final Element elem) {
+		Map<String,Object> result = new LinkedHashMap<String,Object>();
+		Node n = elem.getFirstChild();
+		while(n != null) {
+			if (n.getNodeType() == Node.ELEMENT_NODE) {
+				Element e = (Element) n;
+				String key = e.getNodeName();
+				if (XDConstants.XON_NS_URI_W.equals(e.getNamespaceURI())
+					&& (key.endsWith(X_ARRAY) || key.endsWith(X_MAP)
+						|| key.endsWith(X_VALUE) || key.endsWith(J_NULL))) {
+					key = XonTools.xmlToJName(e.getAttribute(X_KEYATTR));
+					result.put(key, fromXmlW(e));
+				} else {
+					Object val = e.hasAttribute(X_VALATTR)
+						? XonTools.xmlToJValue(e.getAttribute(X_VALATTR)): null;
+					result.put(XonTools.xmlToJName(key),val);
+				}
+			}
+			n = n.getNextSibling();
+		}
+		return result;
+	}
+
+////////////////////////////////////////////////////////////////////////////////
 
 	/** Create XON/JSON object (map, array or primitive value) from an element.
 	 * @param node XML node with XON/JSON data.
@@ -404,10 +402,9 @@ class XonFromXml extends XonUtils {
 	final static Object toXon(final Node node) {
 		Element elem = node.getNodeType() == Node.DOCUMENT_NODE
 			? ((Document) node).getDocumentElement() : (Element) node;
-		String uri = elem.getNamespaceURI();
 		XonFromXml x = new XonFromXml();
-		return (XDConstants.XON_NS_URI_W.equals(uri))
-			? x.fromXmlW3C(elem)// W3C format
+		return (XDConstants.XON_NS_URI_W.equals(elem.getNamespaceURI()))
+			? x.fromXmlW(elem)// W format
 			: x.fromXmlXD(elem); // XD format
 	}
 }
