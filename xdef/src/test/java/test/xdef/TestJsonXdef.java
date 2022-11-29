@@ -1020,7 +1020,9 @@ public class TestJsonXdef extends XDTester {
 "  %class test.xdef.X_on %link #a;\n"+
 "</xd:component>\n"+
 "</xd:def>";
-			fname =
+			xp = compile(xdef);
+			genXComponent(xp, clearTempDir());
+			json =
 "# Start of XON example\n" +
 "[ #***** Array *****/\n" +
 "  { #***** Map *****/\n" +
@@ -1039,10 +1041,9 @@ public class TestJsonXdef extends XDTester {
 "  /1080:0:0:0:8:800:200C:417A        /* inetAddr (IPv6)  */\n" +
 "] /**** end of array ****/\n" +
 "# End of XON example";
-			xp = compile(xdef);
-			genXComponent(xp, clearTempDir());
-			xc = xp.createXDDocument().jparseXComponent(fname, null, reporter);
-			assertTrue(XonUtils.xonEqual(XonUtils.parseXON(fname),
+			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			assertTrue(XonUtils.xonEqual(XonUtils.parseXON(json),
 				SUtils.getValueFromGetter(xc,"toXon")));
 			list = (List) SUtils.getValueFromGetter(
 				xc,"listOf$"+XonNames.X_VALUE+"_3");

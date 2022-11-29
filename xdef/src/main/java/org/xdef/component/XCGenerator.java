@@ -453,7 +453,7 @@ final class XCGenerator extends XCGeneratorXON {
 										typeName, iname, max, setters,
 										getters, sbi, classNames, varNames);
 								} else if (xe1.getAttr(X_KEYATTR) != null) {
-									genXonEntriesMethod(xe1, typeName, iname,
+									genXonEntryMethod(xe1, typeName, iname,
 										max, getters, sbi, classNames,varNames);
 								}
 
