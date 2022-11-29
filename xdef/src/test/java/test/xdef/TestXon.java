@@ -242,6 +242,17 @@ public class TestXon extends XDTester {
 		if (!_xdNS.startsWith("http://www.xdef.org/xdef/4.")) {
 			return;
 		}
+		String s, ini, json, xon, xdef, xml;
+		List list;
+		Object o, x, y;
+		XDPool xp;
+		XDDocument xd;
+		ArrayReporter reporter = new ArrayReporter();
+		Element el;
+		XComponent xc;
+		StringWriter swr;
+		Map<String, Object> xini;
+
 		assertNull(testA("byte", "[null, 1b, -3b ]"));
 		assertNull(testA("short", "[null, 1s ]"));
 		assertNull(testA("int", "[null, 1i ]"));
@@ -275,16 +286,6 @@ public class TestXon extends XDTester {
 		assertNull(testM("? int", "{a:1}"));
 		assertNull(testM("? int", "{ }"));
 
-		String s, ini, json, xon, xdef, xml;
-		List list;
-		Object o, x, y;
-		XDPool xp;
-		XDDocument xd;
-		ArrayReporter reporter = new ArrayReporter();
-		Element el;
-		XComponent xc;
-		StringWriter swr;
-		Map<String, Object> xini;
 		try {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' name='M' root='y:X'\n" +
@@ -1031,12 +1032,7 @@ public class TestXon extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n" +
 "  <xd:xon name='A'>\n" +
-"{ x: \"? int();\",\n" +
-//"  y: [%script=\"?\", \"* boolean()\"],\n" +
-//"  z: {%script=\"?\", a:\"? boolean()\", b:\"? string()\"}\n" +
-"  %anyName: \"? int();\"\n" +
-"}\n" +
-//"{ %anyName: \"? int();\", x: \"? int();\" }\n" +
+"{ %anyName: \"? int();\", x: \"? int();\" }\n" +
 "</xd:xon>\n" +
 "<xd:component>%class test.xdef.MyTestAny_1 %link A</xd:component>\n" +
 "</xd:def>";
@@ -1131,9 +1127,7 @@ public class TestXon extends XDTester {
 			}
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n" +
-"<xd:xon name='A'>\n" +
-"{ %anyName: [\"* int();\"]}\n" +
-"</xd:xon>\n" +
+"<xd:xon name='A'> { %anyName: [\"* int();\"]} </xd:xon>\n" +
 "<xd:component>%class test.xdef.MyTestAny_3 %link A</xd:component>\n" +
 "</xd:def>";
 			xp = compile(xdef);

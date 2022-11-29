@@ -244,7 +244,7 @@ class XCGeneratorBase {
 			case XDValueID.XD_EMAIL: return "org.xdef.XDEmailAddr";
 			case XDValueID.XD_CURRENCY: return "java.util.Currency";
 			case XDValueID.XD_IPADDR: return "java.net.InetAddress";
-			case XDValueID.XD_BYTES: 
+			case XDValueID.XD_BYTES:
 				_byteArrayEncoding |= getBytesType(xdata);
 				return "byte[]";
 			case XDValueID.XD_TELEPHONE: return "org.xdef.XDTelephone";
@@ -274,7 +274,7 @@ class XCGeneratorBase {
 		String result = "value.getParsedValue().isNull()?null:"
 			+ "value.getParsedValue().";
 		switch (parserName) {
-			case "jlist": 
+			case "jlist":
 				return "org.xdef.component.XComponentUtil.jlistToString(value)";
 			case "jvalue": case "jnull":
 				return "value.getParsedValue().getObject()";
@@ -396,8 +396,8 @@ class XCGeneratorBase {
 		final String typ = getJavaObjectTypeName(xdata);
 		genVariableFromModel(xdata,typ,name,max,descr,vars);
 		genGetterMethodFromChildElement(xdata,typ,name,max,descr,getters,sbi);
-		genSetterMethodOfChildElement(typ,
-			name, max, null, null, null, descr, setters, sbi, "");
+		genSetterMethodOfChildElement(xdata,
+			typ, name, max, null, null, null, descr, setters, sbi, "");
 		// gen "xposOf" method
 		if (sbi != null) {
 			xpathes.append("\t@Override").append(LN);
@@ -447,7 +447,7 @@ class XCGeneratorBase {
 			mURI = xel.getNSUri();
 			mXDPos = xel.getXDPosition();
 		}
-		genSetterMethodOfChildElement(className, name, max,
+		genSetterMethodOfChildElement(xel, className, name, max,
 			mname, mURI, mXDPos, descr, setters, sbi, nullChoice);
 	}
 
@@ -468,6 +468,9 @@ class XCGeneratorBase {
 		final String descr,
 		final StringBuilder sb,
 		final StringBuilder sbi) {
+		byte xon = xn instanceof XElement ? ((XElement) xn)._xon
+			: ((XData) xn)._xon;
+		String publ = xon == 0 ? "public" : "private";
 		final int ndx = typeName.lastIndexOf('.');
 		if (ndx == 0) {
 			throw new SRuntimeException(SYS.SYS066,// Internal error&{0}{: }
@@ -487,7 +490,7 @@ class XCGeneratorBase {
 (_genJavadoc ? "\t/** Get list of &{d} \"&{xmlName}\"."+LN+
 "\t * @return value of &{d}"+LN+
 "\t */"+LN : "")+
-"\tpublic &{typ} listOf&{name}();"+LN,
+"\t"+publ+" &{typ} listOf&{name}();"+LN,
 				"&{xmlName}", xmlName,
 				"&{d}" , d,
 				"&{name}", name,
@@ -497,7 +500,7 @@ class XCGeneratorBase {
 (_genJavadoc ? "\t/** Get value of &{d} \"&{xmlName}\"."+LN+
 "\t * @return value of &{d}"+LN+
 "\t */"+LN : "")+
-"\tpublic &{typ} get&{name}();"+LN,
+"\t"+publ+" &{typ} get&{name}();"+LN,
 				"&{xmlName}", xmlName,
 				"&{d}" , d,
 				"&{name}", name,
@@ -508,15 +511,15 @@ class XCGeneratorBase {
 (_genJavadoc ? "\t/** Get value of &{d} \"&{xmlName}\" as java.util.Date."+LN+
 "\t * @return value of &{d} as java.util.Date or null."+LN+
 "\t */"+LN : "")+
-"\tpublic java.util.Date dateOf&{name}();"+LN+
+"\t"+publ+" java.util.Date dateOf&{name}();"+LN+
 (_genJavadoc ? "\t/** Get &{d} \"&{xmlName}\" as java.sql.Timestamp."+LN+
 "\t * @return value of &{d} as java.sql.Timestamp or null."+LN+
 "\t */"+LN : "")+
-"\tpublic java.sql.Timestamp timestampOf&{name}();"+LN+
+"\t"+publ+" java.sql.Timestamp timestampOf&{name}();"+LN+
 (_genJavadoc ? "\t/** Get  &{d} \"&{xmlName}\" as java.util.Calendar."+LN+
 "\t * @return value of &{d} as java.util.Calendar or null."+LN+
 "\t */"+LN : "")+
-"\tpublic java.util.Calendar calendarOf&{name}();"+LN,
+"\t"+publ+" java.util.Calendar calendarOf&{name}();"+LN,
 						"&{xmlName}", xmlName,
 						"&{d}" , d,
 						"&{name}", name));
@@ -531,7 +534,7 @@ class XCGeneratorBase {
 (_genJavadoc ? "\t/** Get list of &{d} \"&{xmlName}\"."+LN+
 "\t * @return value of &{d}"+LN+
 "\t */"+LN : "")+
-"\tpublic &{typ} listOf&{name}() {"+LN+"\t\treturn _&{name};"+LN+"\t}"+LN,
+"\t"+publ+" &{typ} listOf&{name}() {"+LN+"\t\treturn _&{name};"+LN+"\t}"+LN,
 				"&{xmlName}", xmlName,
 				"&{d}" , d,
 				"&{name}", name,
@@ -541,7 +544,7 @@ class XCGeneratorBase {
 (_genJavadoc ? "\t/** Get value of &{d} \"&{xmlName}\"."+LN+
 "\t * @return value of &{d}"+LN+
 "\t */"+LN : "")+
-"\tpublic &{typ} get&{name}() {return _&{name};}"+LN,
+"\t"+publ+" &{typ} get&{name}() {return _&{name};}"+LN,
 				"&{xmlName}", xmlName,
 				"&{d}" , d,
 				"&{name}", name,
@@ -552,17 +555,17 @@ class XCGeneratorBase {
 (_genJavadoc ? "\t/** Get value of &{d} \"&{xmlName}\" as java.util.Date."+LN+
 "\t * @return value of &{d} as java.util.Date or null."+LN+
 "\t */"+LN : "")+
-"\tpublic java.util.Date dateOf&{name}(){"+
+"\t"+publ+" java.util.Date dateOf&{name}(){"+
 "return org.xdef.sys.SDatetime.getDate(_&{name});}"+LN+
 (_genJavadoc ? "\t/** Get &{d} \"&{xmlName}\" as java.sql.Timestamp."+LN+
 "\t * @return value of &{d} as java.sql.Timestamp or null."+LN+
 "\t */"+LN : "")+
-"\tpublic java.sql.Timestamp timestampOf&{name}(){"+
+"\t"+publ+" java.sql.Timestamp timestampOf&{name}(){"+
 "return org.xdef.sys.SDatetime.getTimestamp(_&{name});}"+LN+
 (_genJavadoc ? "\t/** Get  &{d} \"&{xmlName}\" as java.util.Calendar."+LN+
 "\t * @return value of &{d} as java.util.Calendar or null."+LN+
 "\t */"+LN : "")+
-"\tpublic java.util.Calendar calendarOf&{name}(){"+
+"\t"+publ+" java.util.Calendar calendarOf&{name}(){"+
 "return org.xdef.sys.SDatetime.getCalendar(_&{name});}"+LN,
 					"&{xmlName}", xmlName,
 					"&{d}" , d,
@@ -583,7 +586,8 @@ class XCGeneratorBase {
 	 * @param nullchoice the command to set all variables of choice to null or
 	 * the empty string.
 	 */
-	private void genSetterMethodOfChildElement(final String className,
+	private void genSetterMethodOfChildElement(final XNode xn,
+		final String className,
 		final String name,
 		final int max,
 		final String modelName,
@@ -593,6 +597,9 @@ class XCGeneratorBase {
 		final StringBuilder sb,
 		final StringBuilder sbi,
 		final String nullChoice) {
+		String publ = xn instanceof XElement ?
+			((XElement) xn)._xon == 0 ? "public" : "private"
+			: ((XData) xn)._xon == 0 ? "public" : "private";
 		String x;
 		String d = descr;
 		String clearChoice = "";
@@ -639,7 +646,7 @@ class XCGeneratorBase {
 (_genJavadoc ? ("\t/** Add value to list of \"&{xmlName}\"."+LN+
 "\t * @param x value to added."+LN+
 "\t */"+LN) : "")+
-"\tpublic void add&{name}(&{typ} x);"+LN;
+"\t"+publ+" void add&{name}(&{typ} x);"+LN;
 				sbi.append(modify(template,
 					"&{name}", name,
 					"&{xmlName}", name.replace('$', ':'),
@@ -663,7 +670,7 @@ class XCGeneratorBase {
 (_genJavadoc ? ("\t/** Set value of &{d} \"&{xmlName}\"."+LN+
 "\t * @param x value to be set."+LN+
 "\t */"+LN) : "")+
-"\tpublic void set&{name}(&{typ} x);"+LN;
+"\t"+publ+" void set&{name}(&{typ} x);"+LN;
 				sbi.append(modify(template,
 					"&{name}", name,
 					"&{d}" , d,
@@ -693,7 +700,7 @@ class XCGeneratorBase {
 (_genJavadoc ? ("\t/** Add value to list of \"&{xmlName}\"."+LN+
 "\t * @param x value to be added."+LN+
 "\t */"+LN) : "")+
-"\tpublic void add&{name}(&{typ} x) {&{x}}"+LN;
+"\t"+publ+" void add&{name}(&{typ} x) {&{x}}"+LN;
 			if (!clearChoice.isEmpty()) {
 				x = LN + clearChoice + x;
 			}
@@ -736,7 +743,7 @@ class XCGeneratorBase {
 (_genJavadoc ? ("\t/** Set value of &{d} \"&{xmlName}\"."+LN+
 "\t * @param x value to be set."+LN+
 "\t */"+LN) : "")+
-"\tpublic void set&{name}(&{typ} x) {&{x}}"+LN;
+"\t"+publ+" void set&{name}(&{typ} x) {&{x}}"+LN;
 			sb.append(modify(template,
 				"&{x}", x,
 				"&{name}", name,
