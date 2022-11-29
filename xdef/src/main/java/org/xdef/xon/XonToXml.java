@@ -43,11 +43,9 @@ class XonToXml extends XonTools {
 	 * @return element with given name and XON/JSON namespace and prefix..
 	 */
 	private Element genJElement(final String name) {
-		if (_xPrefix.isEmpty()) {
-			return _doc.createElementNS(_xNamespace, name);
-		} else {
-			return _doc.createElementNS(_xNamespace, _xPrefix + ':' + name);
-		}
+		return _xPrefix == null || _xPrefix.isEmpty()
+			? _doc.createElementNS(_xNamespace, name)
+			: _doc.createElementNS(_xNamespace, _xPrefix + ':' + name);
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -691,7 +689,7 @@ class XonToXml extends XonTools {
 	final static Element toXmlW(final Object xon) {
 		XonToXml x = new XonToXml();
 		x._xNamespace = XDConstants.XON_NS_URI_W;
-		x._xPrefix = "jx";
+		x._xPrefix = "";
 		return x.genValueW(xon, x._doc = KXmlUtils.newDocument());
 	}
 }
