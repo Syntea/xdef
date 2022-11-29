@@ -5,6 +5,9 @@
   spaces or URL encoded characters.
 * corrected bug in occurrence specification in %anyObj.
 * improved X-script analysis of XON/JSON models.
+* improved generation of X-components of XON/JSON models.
+* %anyName named items of XON/JSON are now available in X-components as a map 
+  created by the method `entriesOf()`.
 
 # Version 42.0.0, release-date 2022-10-14
 * Corrected bug in `uses` and `implements` in X-script when it refers 
