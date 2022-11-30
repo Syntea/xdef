@@ -1006,7 +1006,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						xel._moreText = 'T';
 						if ("textcontent".equals(localName)
 							&& xdata.maxOccurs() > 1) {
-							//Maximum occurrence in "&{0}" can not be
+							//Maximum occurrence of item "&{0}" can not be
 							// higher then 1
 							error(sval, XDEF.XDEF535, "textcontent");
 						}
