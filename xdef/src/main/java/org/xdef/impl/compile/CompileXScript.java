@@ -1312,9 +1312,9 @@ final class CompileXScript extends CompileStatement {
 					if ("textcontent".equals(result.getName())
 						&& result.maxOccurs() > 1) {
 						if (_g._chkWarnings) {
-							//Maximum occurrence in "xd:textcontent" attribute
-							// can not be higher then 1
-							warning(XDEF.XDEF535);
+							//Maximum occurrence in "&{0}" can not be
+							// higher then 1
+							error(XDEF.XDEF535, "textcontent");
 						}
 						result.setOccurrence(result.minOccurs(), 1);
 					}

@@ -497,7 +497,7 @@ public interface XDEF {
 	public static final long XDEF533 = 31159025907L;
 	/** Text value not declared&amp;{#SYS000} */
 	public static final long XDEF534 = 31159025908L;
-	/** Maximum occurrence in "xd:textcontent" attribute can not be higher then 1&amp;{#SYS000} */
+	/** Maximum occurrence in "&amp;{0}" can not be higher then 1&amp;{#SYS000} */
 	public static final long XDEF535 = 31159025909L;
 	/** Incorrect type conversion from AnyValue&amp;{#SYS000} */
 	public static final long XDEF536 = 31159025910L;
