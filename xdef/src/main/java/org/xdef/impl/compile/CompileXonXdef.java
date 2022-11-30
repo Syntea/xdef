@@ -435,6 +435,22 @@ public final class CompileXonXdef extends XScriptParser {
 				String keyXmlName = XonTools.toXmlName(key);
 				if (o != null && (o instanceof Map || o instanceof List)) {
 					PNode pn3 = genXonModel(o, pn2);
+					PAttr xscr = getXDAttr(pn3, "script");
+					if (xscr != null) {
+						SBuffer sbf =
+							removeSection("occurs", parseXscript(xscr._value));
+						if (sbf != null) {
+							XOccurrence occ = new XOccurrence();
+							setSourceBuffer(sbf);
+							nextSymbol();
+							isOccurrence(occ);
+							if (occ.maxOccurs() > 1) {
+								//Maximum occurrence in "&{0}" can not be higher
+								// then 1
+								error(XDEF.XDEF535, key);
+							}
+						}
+					}
 					if (_xdNamespace.equals(pn3._nsURI)
 						&& "choice".equals(pn3._localName)) {
 						for (PNode pn : pn3.getChildNodes()) {
