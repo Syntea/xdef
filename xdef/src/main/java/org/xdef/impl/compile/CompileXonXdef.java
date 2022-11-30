@@ -332,9 +332,9 @@ public final class CompileXonXdef extends XScriptParser {
 						XOccurrence xocc = new XOccurrence();
 						isOccurrence(xocc);
 						if (xocc.maxOccurs() != 1) {
-							//Occurrence maximum of attribute or text value
-							// can't be higher then one
-							error(XDEF.XDEF262);
+							//Maximum occurrence of item "&{0}" can not be
+							// higher then 1
+							error(XDEF.XDEF535, XonTools.xmlToJName(name));
 						}
 					}
 				}
@@ -445,8 +445,8 @@ public final class CompileXonXdef extends XScriptParser {
 							nextSymbol();
 							isOccurrence(occ);
 							if (occ.maxOccurs() > 1) {
-								//Maximum occurrence in "&{0}" can not be higher
-								// then 1
+								//Maximum occurrence of item "&{0}" can not be
+								// higher then 1
 								error(XDEF.XDEF535, key);
 							}
 						}

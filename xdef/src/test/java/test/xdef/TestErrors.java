@@ -441,6 +441,26 @@ public final class TestErrors extends XDTester {
 			assertEq("", chkReport(reporter, "XDEF444", "6", "30", null));
 			assertNull(reporter.getReport(), reporter.printToString());
 		} catch (Exception ex) {fail(ex);}
+		try {
+			xdef =
+//        1         2         3         4        5          6         7
+//234567890123456789012345678901234567890123456789012345678901234567890123456789
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n" +
+"<xd:xon name='A'>{\"\": \"5 int()\"}</xd:xon>\n" +
+"</xd:def>";
+			reporter = test(props, xdef);
+			assertEq("", chkReport(reporter, "XDEF535", "2", "23", null));
+			assertNull(reporter.getReport(), reporter.printToString());
+			xdef =
+//        1         2         3         4        5          6         7
+//234567890123456789012345678901234567890123456789012345678901234567890123456789
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n" +
+"<xd:xon name='A'>{\"\": [%script=\"5\", \"int()\"] }</xd:xon>\n" +
+"</xd:def>";
+			reporter = test(props, xdef);
+			assertEq("", chkReport(reporter, "XDEF535", "2", "24", null));
+			assertNull(reporter.getReport(), reporter.printToString());
+		} catch (Exception ex) {fail(ex);}
 		try { //test file names etc
 			String fName1 = "TestErrors1.xdef";
 			String fName2 = "TestErrors2.xdef";
