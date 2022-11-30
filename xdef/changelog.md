@@ -1,5 +1,9 @@
 # Version ${version}, release-date ${release.date}
 
+# Version 42.0.2, release-date 2022-11-30
+* corrected bug in generation of names of getters of named values in map if the
+  name if the name of named value is not acceptable as a Java identifier.
+
 # Version 42.0.1, release-date 2022-11-30
 * corrected bug in reading X-definition from URL where in the file name are
   spaces or URL encoded characters.

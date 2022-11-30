@@ -393,22 +393,18 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 					continue;
 				}
 				if (item.getCode() == CodeTable.LD_CONST) {
-					name = xmlToJavaName(
-						namePrefix + XonTools.toXmlName(code[i].stringValue()));
-					name = getUniqueName(getUniqueName(getUniqueName(name,
-						RESERVED_NAMES), classNames), varNames);
-					varNames.add(name);
-					name = name.substring(4);
+					name = namePrefix + code[i].stringValue();
 					break;
 				}
 			}
 		}
 		if (name == null) {
-			name = getUniqueName("get$" + xe.getLocalName(), RESERVED_NAMES);
-			name = getUniqueName(getUniqueName(name, classNames), varNames);
-			varNames.add(name);
-			name = name.substring(4);
+			name = namePrefix + xe.getLocalName();
 		}
+		name = getUniqueName(getUniqueName(getUniqueName(
+			xmlToJavaName(name), RESERVED_NAMES), classNames), varNames);
+		varNames.add(name);
+		name = name.substring(4);
 		return name;
 	}
 
