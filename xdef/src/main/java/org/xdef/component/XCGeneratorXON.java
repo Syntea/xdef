@@ -343,8 +343,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 		final Set<String> varNames,
 		final StringBuilder getters) {
 		String key = keys.get(0);
-		String name = xmlToJavaName(
-			"get$" + XonTools.toXmlName(XonTools.toXmlName(key)));
+		String name = xmlToJavaName("get$" + XonTools.toXmlName(key));
 		name = getUniqueName(getUniqueName(
 			getUniqueName(name,RESERVED_NAMES), classNames),
 			varNames);
@@ -441,18 +440,19 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 			jGet = xe.getXonMode() != 0 && "String".equals(typ)
 				?"org.xdef.xon.XonTools.jstringFromSource(y.get"+X_VALATTR+"())"
 				: "y.get"+X_VALATTR+"()";
-			if (keyAttr != null && keyAttr.getFixedValue() == null) {
+			if (keyAttr != null && keyAttr.getFixedValue() == null) {//%anyName
 				template =
 (_genJavadoc ? "\t/** Get map with %anyName entries of the map &{d}."+LN+
 "\t * @return map with entries to be set to map &{d}"+LN+
 "\t */"+LN : "")+
-"\tpublic java.util.Map<String, &{typ}> entriesOf$&{name}() ";
+"\tpublic java.util.Map<String, &{typ}> entriesOf$$any() ";
 				getters.append(modify(template +
 "{"+LN+
 "\t\tjava.util.Map<String, &{typ}> x="+LN+
 "\t\t\tnew java.util.HashMap<String, &{typ}>();"+LN+
 "\t\tfor(&{typeName} y: _&{iname}) {"+LN+
-"\t\t\tx.put(y.get"+X_KEYATTR+"(), y.get"+X_VALATTR+"());"+LN+
+"\t\t\tx.put(org.xdef.xon.XonTools.xmlToJName(y.get"+X_KEYATTR+"()),"
+	+ " y.get"+X_VALATTR+"());"+LN+
 "\t\t}"+LN+
 "\t\treturn x;"+LN+
 "\t}"+LN,
@@ -472,7 +472,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 (_genJavadoc ? "\t/** Get map with %anyName entries of the map &{d}."+LN+
 "\t * @return map with entries to be set to map &{d}"+LN+
 "\t */"+LN : "")+
-"\tpublic java.util.Map<String, &{typ}> entriesOf$&{name}() ";
+"\tpublic java.util.Map<String, &{typ}> entriesOf$$any() ";
 					getters.append(modify(template +
 "{"+LN+
 "\t\tjava.util.Map<String, &{typ}> x="+LN+
@@ -574,6 +574,31 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 					"&{typ1}", typ1));
 			}
 		} else { // single value
+			if (keyAttr != null && keyAttr.getFixedValue() == null) {//%anyName
+				template =
+(_genJavadoc ? "\t/** Get map with %anyName entries of the map &{d}."+LN+
+"\t * @return map with entries to be set to map &{d}"+LN+
+"\t */"+LN : "")+
+"\tpublic java.util.Map<String, &{typ}> entriesOf$$any() ";
+				getters.append(modify(template +
+"{"+LN+
+"\t\tjava.util.Map<String,&{typ}>x=new java.util.HashMap<String,&{typ}>();"+LN+
+"\t\tif (_&{iname} != null) {"+LN+
+"\t\t\tx.put(org.xdef.xon.XonTools.xmlToJName(_&{iname}.getkey()), _&{iname}.getval());\n" +
+"\t\t}\n" +
+"\t\treturn x;"+LN+
+"\t}"+LN,
+					"&{name}", name,
+					"&{iname}", iname,
+					"&{d}", xe.getName(),
+					"&{typ}", typ,
+					"&{typeName}", typeName));
+				if (sbi != null) { // generate interface
+					sbi.append(modify(template +";"+LN,
+						"&{name}", name,
+						"&{d}", xe.getName()));
+				}
+			}
 			// getter
 			template =
 (_genJavadoc ? "\t/** Get XON value of textnode of &{d}."+LN+
@@ -719,11 +744,12 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 		String typ = typeName;
 		XData keyAttr = (XData) xe.getAttr(X_KEYATTR);
 		String name;
-		if (keyAttr != null && keyAttr.getFixedValue() == null) {
-			name = getUniqueName("entriesOf$$", RESERVED_NAMES);
+		if (keyAttr != null && keyAttr.getFixedValue() == null) { // %anyName
+			String prefix = "entriesOf$";
+			name = getUniqueName(prefix + "$any", RESERVED_NAMES);
 			name = getUniqueName(getUniqueName(name, classNames), varNames);
 			varNames.add(name);
-			name = name.substring(10);
+			name = name.substring(prefix.length());
 			template =
 (_genJavadoc ? "\t/** Get map with %anyName entries from map &{d}."+LN+
 "\t * @return map with entries to be set to map &{d}"+LN+
