@@ -1,10 +1,10 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.0.2, release-date 2022-12-01
+# Version 42.0.2, release-date 2022-12-02
 * corrected bug in generation of names of getters of named values in map if the
   name if the name of named value is not acceptable as a Java identifier.
 * %anyName named items of XON/JSON are now available in X-components as a map 
-  created by the method `entriesOf$$any()`.
+  created by the method `anyItems()` (instead of `entriesOf()`).
 
 # Version 42.0.1, release-date 2022-11-30
 * corrected bug in reading X-definition from URL where in the file name are
@@ -12,6 +12,8 @@
 * corrected bug in occurrence specification in %anyObj.
 * improved X-script analysis of XON/JSON models.
 * improved generation of X-components of XON/JSON models.
+* %anyName named items of XON/JSON are now available in X-components as a map
+  created by the method `entriesOf()`.
 
 # Version 42.0.0, release-date 2022-10-14
 * Corrected bug in `uses` and `implements` in X-script when it refers 

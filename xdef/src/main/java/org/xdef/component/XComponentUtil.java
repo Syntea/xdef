@@ -416,22 +416,6 @@ public class XComponentUtil {
 						result.put(key, o);
 					}
 				} catch (Exception ex) {}
-			} else if (methodName.startsWith("entriesOf$")) {
-				o = null;
-				try {
-					x.setAccessible(true);
-					o = x.invoke(xc);
-					if (o == null) {
-						continue;
-					}
-					if (o instanceof Map) {
-						for (Object y: ((Map) o).entrySet()) {
-							Map.Entry z = (Map.Entry) y;
-							result.put(XonTools.xmlToJName((String)z.getKey()),
-								z.getValue());
-						}
-					}
-				} catch (Exception ex) {}
 			} else if (methodName.startsWith("listOf$")) {
 				o = null;
 				try {
