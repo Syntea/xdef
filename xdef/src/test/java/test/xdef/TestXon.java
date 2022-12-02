@@ -18,6 +18,7 @@ import org.xdef.sys.SDatetime;
 import org.xdef.sys.SRuntimeException;
 import static org.xdef.sys.STester.printThrowable;
 import static org.xdef.sys.STester.runTest;
+import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.xon.CsvReader;
 import test.XDTester;
@@ -2103,6 +2104,117 @@ public class TestXon extends XDTester {
 			assertNull(testX(xp,"X", s, "{a:1}"));
 			assertNull(testX(xp,"X", s, "{a:1, b:[],c:null,d:[], e:{}}"));
 			assertNull(testX(xp,"X", s, "{a:1, b:[],c:null,d:[], e:{}}"));
+		} catch (Exception ex) {fail(ex);}
+		try {// %anyName, name of item is an empty string
+			xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n" +
+"<xd:xon name='A'> {%anyName: \"? int()\"} </xd:xon>\n" +
+"<xd:component>%class test.xdef.MyTestAny_x1 %link A</xd:component>\n" +
+"</xd:def>";
+			xp = XDFactory.compileXD(null, xdef);
+			genXComponent(xp, clearTempDir());
+			xd = xp.createXDDocument();
+			json = "{ \"\": 1}";
+			x = XonUtils.parseXON(json);
+			y = xd.jvalidate(json, reporter);
+			assertNoErrorsAndClear(reporter);
+			if (!XonUtils.xonEqual(x,y)) {
+				fail("** 1 **\n"+XonUtils.toXonString(x)
+					+ "\n" +  XonUtils.toXonString(y));
+			}
+			o = xd.getXon();
+			if (!XonUtils.xonEqual(x, o)) {
+				fail("** 2 **\n"+json+"\n" + XonUtils.toXonString(xd.getXon()));
+			}
+			xc = xd.jparseXComponent(json, null, reporter);
+			assertNoErrorsAndClear(reporter);
+			y = xc.toXon();
+			if (!XonUtils.xonEqual(x, y = XonUtils.xonToJson(y))) {
+				fail("** 3 **\n"+XonUtils.toXonString(x)
+					+ "\n" +  XonUtils.toXonString(y));
+			}
+			if (!XonUtils.xonEqual(x,SUtils.getValueFromGetter(xc,"anyItems"))){
+				fail("** 4 **\n"+XonUtils.toXonString(x)
+					+ "\n" +  XonUtils.toXonString(
+						SUtils.getValueFromGetter(xc, "anyItems")));
+			}
+			xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n" +
+"<xd:xon name='A'> {%anyName: \"* int()\", a:\"? boolean()\"} </xd:xon>\n" +
+"<xd:component>%class test.xdef.MyTestAny_x2 %link A</xd:component>\n" +
+"</xd:def>";
+			xp = XDFactory.compileXD(null, xdef);
+			genXComponent(xp, clearTempDir());
+			xd = xp.createXDDocument();
+			json = "{ \"\": 1, x: -99}";
+			x = XonUtils.parseXON(json);
+			y = xd.jvalidate(json, reporter);
+			assertNoErrorsAndClear(reporter);
+			if (!XonUtils.xonEqual(x,y)) {
+				fail("** 1 **\n"+XonUtils.toXonString(x)
+					+ "\n" +  XonUtils.toXonString(y));
+			}
+			o = xd.getXon();
+			if (!XonUtils.xonEqual(x, o)) {
+				fail("** 2 **\n"+json+"\n" + XonUtils.toXonString(xd.getXon()));
+			}
+			xc = xd.jparseXComponent(json, null, reporter);
+			assertNoErrorsAndClear(reporter);
+			y = xc.toXon();
+			if (!XonUtils.xonEqual(x, y = XonUtils.xonToJson(y))) {
+				fail("** 3 **\n"+XonUtils.toXonString(x)
+					+ "\n" +  XonUtils.toXonString(y));
+			}
+			if (!XonUtils.xonEqual(x,SUtils.getValueFromGetter(xc,"anyItems"))){
+				fail("** 4 **\n"+XonUtils.toXonString(x)
+					+ "\n" +  XonUtils.toXonString(
+						SUtils.getValueFromGetter(xc, "anyItems")));
+			}
+			json = "{ \"\": 1, x: -99, a: true}";
+			y = xd.jvalidate(json, reporter);
+			assertNoErrorsAndClear(reporter);
+			if (!XonUtils.xonEqual(XonUtils.parseXON(json),y)) {
+				fail("** 1 **\n"+XonUtils.toXonString(x)
+					+ "\n" +  XonUtils.toXonString(y));
+			}
+			xc = xd.jparseXComponent(json, null, reporter);
+			assertNoErrorsAndClear(reporter);
+			y = xc.toXon();
+			if (!XonUtils.xonEqual(XonUtils.parseXON(json),
+				y = XonUtils.xonToJson(y))) {
+				fail("** 3 **\n"+XonUtils.toXonString(x)
+					+ "\n" +  XonUtils.toXonString(y));
+			}
+
+
+			xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n" +
+"<xd:xon name='A'> {\"\": \"? int()\"} </xd:xon>\n" +
+"<xd:component>%class test.xdef.MyTestAny_x3 %link A</xd:component>\n" +
+"</xd:def>";
+			xp = XDFactory.compileXD(null, xdef);
+			genXComponent(xp, clearTempDir());
+			xd = xp.createXDDocument();
+			json = "{ \"\": -99}";
+			x = XonUtils.parseXON(json);
+			y = xd.jvalidate(json, reporter);
+			assertNoErrorsAndClear(reporter);
+			if (!XonUtils.xonEqual(x,y)) {
+				fail("** 1 **\n"+XonUtils.toXonString(x)
+					+ "\n" +  XonUtils.toXonString(y));
+			}
+			o = xd.getXon();
+			if (!XonUtils.xonEqual(x, o)) {
+				fail("** 2 **\n"+json+"\n" + XonUtils.toXonString(xd.getXon()));
+			}
+			xc = xd.jparseXComponent(json, null, reporter);
+			assertNoErrorsAndClear(reporter);
+			y = xc.toXon();
+			if (!XonUtils.xonEqual(x, y = XonUtils.xonToJson(y))) {
+				fail("** 3 **\n"+XonUtils.toXonString(x)
+					+ "\n" +  XonUtils.toXonString(y));
+			}
+			assertEq(-99, SUtils.getValueFromGetter(xc, "get$_x_"));
 		} catch (Exception ex) {fail(ex);}
 		clearTempDir(); // clear temporary directory
 	}
