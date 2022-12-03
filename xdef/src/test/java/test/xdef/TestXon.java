@@ -1873,8 +1873,6 @@ public class TestXon extends XDTester {
 			assertNotNull(testX(xp,"",s,"[1,2]"));
 			assertNotNull(testX(xp,"",s,"[[],[]]"));
 			assertNotNull(testX(xp,"",s,"[{},{}]"));
-		} catch (Exception ex) {fail(ex);}
-		try {
 			xdef = // test %anyObj
 "<xd:def xmlns:xd='" + _xdNS + "' name=\"a\" root=\"testX\">\n" +
 "<xd:xon name=\"testX\">%anyObj</xd:xon>\n" +
@@ -1902,8 +1900,6 @@ public class TestXon extends XDTester {
 			assertNull(testX(xp,"a", s, "{a:1}"));
 			assertNull(testX(xp,"a", s,"{a:1,b:[],c:{},d:{e:5,f:[2]},g:null}"));
 			assertNull(testX(xp,"a", s, "{a:[1, true], b:null}"));
-		} catch (Exception ex) {fail(ex);}
-		try {
 			xdef = // test occurrence 1 for %anyObj directives
 "<xd:def xmlns:xd='" + _xdNS + "' root=\"A\">\n" +
 "<xd:xon name=\"A\"> [ %anyObj=\"occurs 1;\" ] </xd:xon>\n" +
@@ -1943,13 +1939,13 @@ public class TestXon extends XDTester {
 			assertNotNull(testX(xp,"",s, "[[1,2]]"));// error only one
 			assertNotNull(testX(xp,"",s, "[{}]"));// error only one
 			assertNotNull(testX(xp,"",s, "[{a:1,b:2}]"));// error only one
-			assertNotNull(testX(xp,"",s, "{a:1,b:2,c:3}"));//error more then two
+			assertNotNull(testX(xp,"",s, "{a:1,b:2,c:3}"));//error not array
+			assertNotNull(testX(xp,"",s, "true"));//error not array
 //TODO error not reported if occurrence exceeds in array!
 //			assertNotNull(testX(xp,"",s, "[1,2,3]")); // error more then two
 //			assertNotNull(testX(xp,"",s, "[[],[],[]]"));//error more then two
 //			assertNotNull(testX(xp,"",s, "[{},{},{}]"));//error more then two
-		} catch (Exception ex) {fail(ex);}
-		try {
+//			assertNotNull(testX(xp,"",s, "[1,[],{}]"));//error more then two
 			xdef =  // test %anyObj in different X-definitions
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n" +
 "<xd:def name=\"a\" root=\"testX\">\n" +
@@ -1984,8 +1980,6 @@ public class TestXon extends XDTester {
 			assertNotNull(testX(xp,"b", s, "[]")); // must be error!
 			assertNotNull(testX(xp,"b", s, "true")); // must be error!
 			assertNotNull(testX(xp,"b", s, "{a:1, b:null}")); // must be error!
-		} catch (Exception ex) {fail(ex);}
-		try {
 			xdef = // test XON models in different X-definitions
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n" +
 "<xd:def name=\"a\" root=\"testX\">\n" +
@@ -2014,7 +2008,6 @@ public class TestXon extends XDTester {
 			assertNull(testX(xp,"a", s,"[{a:1,b:[3,4],c:{d:5,e:[6,7]},f:{}}]"));
 			assertNotNull(testX(xp,"a", s, "true")); // must be error
 			assertNotNull(testX(xp,"a", s, "{}")); // must be error!
-
 			// xdef m; root is map with any items
 			s = "test.xdef.MyTestX_AnyXXm";
 			assertNull(testX(xp,"m", s, "{}"));
@@ -2023,7 +2016,6 @@ public class TestXon extends XDTester {
 			assertNull(testX(xp,"m", s, "{a:[1, true], b:null}"));
 			assertNotNull(testX(xp,"m", s, "true")); // must be error!
 			assertNotNull(testX(xp,"m", s, "[]")); // must be error!
-
 			// xdef x; root is $anyObj
 			// 1. array
 			s = "test.xdef.MyTestX_AnyXXx";
@@ -2060,8 +2052,6 @@ public class TestXon extends XDTester {
 			assertNull(testX(xp,"x", s, "\" \t\n \""));
 			assertNull(testX(xp,"x", s, "\"\\\"\""));
 			assertNull(testX(xp,"x", s, "\"\\\"\\\"\""));
-		} catch (Exception ex) {fail(ex);}
-		try {
 			xdef = // test XON reference to %any in %oneOf
 "<xd:def xmlns:xd='" + _xdNS + "' name='X' root='Any'>\n" +
 "<xd:xon name=\"Any\">\n" +
@@ -2098,8 +2088,6 @@ public class TestXon extends XDTester {
 			assertNull(testX(xp,"X", s, "{a:1}"));
 			assertNull(testX(xp,"X", s, "{a:1, b:[],c:null,d:[], e:{}}"));
 			assertNull(testX(xp,"X", s, "{a:1, b:[],c:null,d:[], e:{}}"));
-		} catch (Exception ex) {fail(ex);}
-		try {
 			xdef = //jvalue
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' xd:root='a'>\n" +
 "<xd:xon name='a'> \"jvalue()\" </xd:xon>\n" +
@@ -2173,8 +2161,8 @@ public class TestXon extends XDTester {
 			assertEq("", testX(xp, "", s, "{\"a\": 1234}"));
 			assertEq("", testX(xp, "", s, "{\"a\": null}"));
 		} catch (Exception ex) {fail(ex);}
-		try {// %anyName, name of item is an empty string
-			xdef =
+		try {
+			xdef = // %anyName, name of item is an empty string
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n" +
 "<xd:xon name='A'> {%anyName: \"? int()\"} </xd:xon>\n" +
 "<xd:component>%class test.xdef.MyTestAny_x1 %link A</xd:component>\n" +
@@ -2186,26 +2174,13 @@ public class TestXon extends XDTester {
 			x = XonUtils.parseXON(json);
 			y = xd.jvalidate(json, reporter);
 			assertNoErrorsAndClear(reporter);
-			if (!XonUtils.xonEqual(x,y)) {
-				fail("** 1 **\n"+XonUtils.toXonString(x)
-					+ "\n" +  XonUtils.toXonString(y));
-			}
-			o = xd.getXon();
-			if (!XonUtils.xonEqual(x, o)) {
-				fail("** 2 **\n"+json+"\n" + XonUtils.toXonString(xd.getXon()));
-			}
+			assertTrue(XonUtils.xonEqual(x,y));
+			assertTrue(XonUtils.xonEqual(x, xd.getXon()));
 			xc = xd.jparseXComponent(json, null, reporter);
 			assertNoErrorsAndClear(reporter);
-			y = xc.toXon();
-			if (!XonUtils.xonEqual(x, y = XonUtils.xonToJson(y))) {
-				fail("** 3 **\n"+XonUtils.toXonString(x)
-					+ "\n" +  XonUtils.toXonString(y));
-			}
-			if (!XonUtils.xonEqual(x,SUtils.getValueFromGetter(xc,"anyItems"))){
-				fail("** 4 **\n"+XonUtils.toXonString(x)
-					+ "\n" +  XonUtils.toXonString(
-						SUtils.getValueFromGetter(xc, "anyItems")));
-			}
+			assertTrue(XonUtils.xonEqual(x, XonUtils.xonToJson(xc.toXon())));
+			assertTrue(XonUtils.xonEqual(x,
+				SUtils.getValueFromGetter(xc,"anyItems")));
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n" +
 "<xd:xon name='A'> {%anyName: \"* int()\", a:\"? boolean()\"} </xd:xon>\n" +
@@ -2218,41 +2193,20 @@ public class TestXon extends XDTester {
 			x = XonUtils.parseXON(json);
 			y = xd.jvalidate(json, reporter);
 			assertNoErrorsAndClear(reporter);
-			if (!XonUtils.xonEqual(x,y)) {
-				fail("** 1 **\n"+XonUtils.toXonString(x)
-					+ "\n" +  XonUtils.toXonString(y));
-			}
-			o = xd.getXon();
-			if (!XonUtils.xonEqual(x, o)) {
-				fail("** 2 **\n"+json+"\n" + XonUtils.toXonString(xd.getXon()));
-			}
+			assertTrue(XonUtils.xonEqual(x,y));
+			assertTrue(XonUtils.xonEqual(x, xd.getXon()));
 			xc = xd.jparseXComponent(json, null, reporter);
 			assertNoErrorsAndClear(reporter);
-			y = xc.toXon();
-			if (!XonUtils.xonEqual(x, y = XonUtils.xonToJson(y))) {
-				fail("** 3 **\n"+XonUtils.toXonString(x)
-					+ "\n" +  XonUtils.toXonString(y));
-			}
-			if (!XonUtils.xonEqual(x,SUtils.getValueFromGetter(xc,"anyItems"))){
-				fail("** 4 **\n"+XonUtils.toXonString(x)
-					+ "\n" +  XonUtils.toXonString(
-						SUtils.getValueFromGetter(xc, "anyItems")));
-			}
+			assertTrue(XonUtils.xonEqual(x, XonUtils.xonToJson(xc.toXon())));
+			assertTrue(XonUtils.xonEqual(x,
+				SUtils.getValueFromGetter(xc,"anyItems")));
 			json = "{ \"\": 1, x: -99, a: true}";
 			y = xd.jvalidate(json, reporter);
 			assertNoErrorsAndClear(reporter);
-			if (!XonUtils.xonEqual(XonUtils.parseXON(json),y)) {
-				fail("** 1 **\n"+XonUtils.toXonString(x)
-					+ "\n" +  XonUtils.toXonString(y));
-			}
+			assertTrue(XonUtils.xonEqual(XonUtils.parseXON(json),y));
 			xc = xd.jparseXComponent(json, null, reporter);
 			assertNoErrorsAndClear(reporter);
-			y = xc.toXon();
-			if (!XonUtils.xonEqual(XonUtils.parseXON(json),
-				y = XonUtils.xonToJson(y))) {
-				fail("** 3 **\n"+XonUtils.toXonString(x)
-					+ "\n" +  XonUtils.toXonString(y));
-			}
+			assertTrue(XonUtils.xonEqual(XonUtils.parseXON(json), xc.toXon()));
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n" +
 "<xd:xon name='A'> {\"\": \"? int()\"} </xd:xon>\n" +
@@ -2265,21 +2219,11 @@ public class TestXon extends XDTester {
 			x = XonUtils.parseXON(json);
 			y = xd.jvalidate(json, reporter);
 			assertNoErrorsAndClear(reporter);
-			if (!XonUtils.xonEqual(x,y)) {
-				fail("** 1 **\n"+XonUtils.toXonString(x)
-					+ "\n" +  XonUtils.toXonString(y));
-			}
-			o = xd.getXon();
-			if (!XonUtils.xonEqual(x, o)) {
-				fail("** 2 **\n"+json+"\n" + XonUtils.toXonString(xd.getXon()));
-			}
+			assertTrue(XonUtils.xonEqual(x,y));
+			assertTrue(XonUtils.xonEqual(x, xd.getXon()));
 			xc = xd.jparseXComponent(json, null, reporter);
 			assertNoErrorsAndClear(reporter);
-			y = xc.toXon();
-			if (!XonUtils.xonEqual(x, y = XonUtils.xonToJson(y))) {
-				fail("** 3 **\n"+XonUtils.toXonString(x)
-					+ "\n" +  XonUtils.toXonString(y));
-			}
+			assertTrue(XonUtils.xonEqual(x, xc.toXon()));
 			assertEq(-99, SUtils.getValueFromGetter(xc, "get$_x_"));
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n" +
@@ -2294,44 +2238,24 @@ public class TestXon extends XDTester {
 			x = XonUtils.parseXON(json);
 			y = xd.jvalidate(json, reporter);
 			assertNoErrorsAndClear(reporter);
-			if (!XonUtils.xonEqual(x,y)) {
-				fail("** 1 **\n"+XonUtils.toXonString(x)
-					+ "\n" + XonUtils.toXonString(y));
-			}
-			o = xd.getXon();
-			if (!XonUtils.xonEqual(x, o)) {
-				fail("** 2 **\n"+json+"\n" + XonUtils.toXonString(xd.getXon()));
-			}
+			assertTrue(XonUtils.xonEqual(x,y));
+			assertTrue(XonUtils.xonEqual(x, xd.getXon()));
 			genXComponent(xp, clearTempDir());
 			xc = xd.jparseXComponent(json, null, reporter);
 			assertNoErrorsAndClear(reporter);
-			y = xc.toXon();
-			if (!XonUtils.xonEqual(x, y = XonUtils.xonToJson(y))) {
-				fail("** 3 **\n"+XonUtils.toXonString(x)
-					+ "\n" + XonUtils.toXonString(y));
-			}
+			assertTrue(XonUtils.xonEqual(x, xc.toXon()));
 			assertEq(1, ((Map)SUtils.getValueFromGetter(xc,"anyItems")).size());
 			assertNull(SUtils.getValueFromGetter(xc, "get$a"));
 			json = "{ a:0, x: [1,2], y: [] }";
 			x = XonUtils.parseXON(json);
 			y = xd.jvalidate(json, reporter);
 			assertNoErrorsAndClear(reporter);
-			if (!XonUtils.xonEqual(x,y)) {
-				fail("** 1 **\n"+XonUtils.toXonString(x)
-					+ "\n" + XonUtils.toXonString(y));
-			}
-			o = xd.getXon();
-			if (!XonUtils.xonEqual(x, o)) {
-				fail("** 2 **\n"+json+"\n" + XonUtils.toXonString(xd.getXon()));
-			}
+			assertTrue(XonUtils.xonEqual(x,y));
+			assertTrue(XonUtils.xonEqual(x, xd.getXon()));
 			xc = xd.jparseXComponent(json, null, reporter);
 			assertNoErrorsAndClear(reporter);
-			y = xc.toXon();
-			if (!XonUtils.xonEqual(x, y = XonUtils.xonToJson(y))) {
-				fail("** 3 **\n"+XonUtils.toXonString(x)
-					+ "\n" + XonUtils.toXonString(y));
-			}
-			assertEq(2, ((Map)SUtils.getValueFromGetter(xc, "anyItems")).size());
+			assertTrue(XonUtils.xonEqual(x, xc.toXon()));
+			assertEq(2, ((Map)SUtils.getValueFromGetter(xc,"anyItems")).size());
 			assertEq(0, SUtils.getValueFromGetter(xc, "get$a"));
 		} catch (Exception ex) {fail(ex);}
 		clearTempDir(); // clear temporary directory

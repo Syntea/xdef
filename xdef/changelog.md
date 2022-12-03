@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.0.2, release-date 2022-12-02
+# Version 42.0.2, release-date 2022-12-03
 * corrected bug in generation of names of getters of named values in map if the
   name if the name of named value is not acceptable as a Java identifier.
 * %anyName named items of XON/JSON are now available in X-components as a map 
