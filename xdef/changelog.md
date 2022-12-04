@@ -1,10 +1,15 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.0.2, release-date 2022-12-03
-* corrected bug in generation of names of getters of named values in map if the
-  name if the name of named value is not acceptable as a Java identifier.
-* %anyName named items of XON/JSON are now available in X-components as a map 
+# Version 42.0.2, release-date 2022-12-04
+* `%anyName` named items of XON/JSON are now available in X-components as a map 
   created by the method `anyItems()` (instead of `entriesOf()`).
+* corrected bug in X-component in generation of names of getters of named values
+  in map if the name if the name of named value is not acceptable
+  as a Java identifier.
+* corrected bug not generated error if maximum occurrence of `choice` group
+  exceeded the specified limit.
+* corrected bug not generated error if maximum occurrence of `%anyObj` exceeded
+  the specified limit.
 
 # Version 42.0.1, release-date 2022-11-30
 * corrected bug in reading X-definition from URL where in the file name are

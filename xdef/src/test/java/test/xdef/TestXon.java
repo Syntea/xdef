@@ -1941,11 +1941,10 @@ public class TestXon extends XDTester {
 			assertNotNull(testX(xp,"",s, "[{a:1,b:2}]"));// error only one
 			assertNotNull(testX(xp,"",s, "{a:1,b:2,c:3}"));//error not array
 			assertNotNull(testX(xp,"",s, "true"));//error not array
-//TODO error not reported if occurrence exceeds in array!
-//			assertNotNull(testX(xp,"",s, "[1,2,3]")); // error more then two
-//			assertNotNull(testX(xp,"",s, "[[],[],[]]"));//error more then two
-//			assertNotNull(testX(xp,"",s, "[{},{},{}]"));//error more then two
-//			assertNotNull(testX(xp,"",s, "[1,[],{}]"));//error more then two
+			assertNotNull(testX(xp,"",s, "[1,2,3]")); // error more then two
+			assertNotNull(testX(xp,"",s, "[[],[],[]]"));//error more then two
+			assertNotNull(testX(xp,"",s, "[{},{},{}]"));//error more then two
+			assertNotNull(testX(xp,"",s, "[1,[],{}]"));//error more then two
 			xdef =  // test %anyObj in different X-definitions
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n" +
 "<xd:def name=\"a\" root=\"testX\">\n" +
