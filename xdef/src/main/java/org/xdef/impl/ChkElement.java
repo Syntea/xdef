@@ -988,10 +988,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		return checkSequenceAbsence(selector, c, skipSelectors);
 	}
 
-	/** Finish processing of a group.
-	 * @return true if all models are processed.
-	 */
-	final boolean finishGroup() {
+	/** Finish processing of a group. */
+	final void finishGroup() {
 		_actDefIndex = -1;
 		int finaly = _selector._finallyCode;
 		debugXPos(XDDebug.SELECTORCREATE);
@@ -1015,7 +1013,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 				if (finaly >= 0) {
 					exec(finaly, (byte)'U');
 				}
-				return false;
+				return;
 			}
 			if (_selector._occur) {
 				_selector._occur = false;
@@ -1028,7 +1026,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 				_selector = _selector._prev;
 				_nextDefIndex++;
 			}
-			return false;
+			return;
 		}
 		if (_selector._kind == XNode.XMCHOICE) {
 			if (_selector._occur) {
@@ -1059,7 +1057,6 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 				if (finaly >= 0) {
 					exec(finaly, (byte)'U');
 				}
-				return false;
 			} else {
 				checkAbsence(_selector,
 					new Counter(_selector._firstChild), true);
@@ -1068,7 +1065,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 						exec(finaly, (byte) 'U');
 					}
 					_nextDefIndex++;
-					return false;
+					return;
 				}
 				// Choice was not finished, will continue
 				if (_selector.saveAndClearCounters()) {
@@ -1076,12 +1073,10 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 					_selector._occur = false;
 				}
 				_nextDefIndex = _selector._begIndex + 1;
-				return false;
 			}
 		} else {// _selector._kind == XNode.X_SEQUENCE
 			if (_selector._occur) {
-				checkAbsence(_selector,
-					new Counter(_selector._firstChild), true);
+				checkAbsence(_selector,new Counter(_selector._firstChild),true);
 				if (_selector._count >= _selector.maxOccurs() -1) {
 					_selector._count++;
 					_selector.updateCounters(); //maximum reached
@@ -1093,7 +1088,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 					if (finaly >= 0) {
 						exec(finaly, (byte)'U');
 					}
-					return false;
+					return;
 				}
 			}
 			if (_selector.maxOccurs() <= 1 || !_selector._occur) {
@@ -1130,7 +1125,6 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 				if (finaly >= 0) {
 					exec(finaly, (byte)'U');
 				}
-				return false;
 			} else {
 				checkAbsence(_selector,new Counter(_selector._firstChild),true);
 				if (_selector.saveAndClearCounters()) {
@@ -1141,7 +1135,6 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 				if (finaly >= 0) {
 					exec(finaly, (byte)'U');
 				}
-				return false;
 			}
 		}
 	}
