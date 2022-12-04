@@ -127,11 +127,30 @@ public final class TestGroups extends XDTester {
 			assertEq(s, el);
 			el = parse(xp, "a", s, reporter);
 			assertNoErrorwarnings(reporter);
+			xdef = // test text in repeated sequence
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"  <a>\n"+
+"    <xd:sequence script='2'>\n"+
+"      <b />\n"+
+"      <c />\n"+
+"    </xd:sequence>\n"+
+"  </a>\n"+
+"</xd:def>\n";
+			xp = compile(xdef);
+			xml = "<a><b/><c/><b/><c/></a>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrorsAndClear(reporter);
+			xml = "<a><b/><c/></a>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertErrorsAndClear(reporter); // minimum not reached
+			xml = "<a><b/><c/><b/><c/><b/><c/><b/><c/><b/><c/><b/><c/></a>";
+			parse(xp, "", xml, reporter);
+			assertErrorsAndClear(reporter);//exeeded max. occurrence of sequence
 			assertEq(s, el);
 			xdef = // test text in repeated sequence
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <a>\n"+
-"    <xd:sequence script='8'>\n"+
+"    <xd:sequence script='3'>\n"+
 "    <xd:choice>\n"+
 "      <b />\n"+
 "      <c />\n"+
@@ -141,10 +160,16 @@ public final class TestGroups extends XDTester {
 "  </a>\n"+
 "</xd:def>\n";
 			xp = compile(xdef);
-			xml = "<a><b/><c/>1<b/><c/>2</a>";
-			el = parse(xp, "", xml, reporter);
-			assertNoErrorwarnings(reporter);
-			assertEq(el, xml);
+			xml = "<a><b/>1<c/></a>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrorsAndClear(reporter);
+//TODO 
+//			xml = "<a><b/></a>";
+//			assertEq(xml, parse(xp, "", xml, reporter));
+//			assertErrorsAndClear(reporter);
+//			xml = "<a><b/><c/><b/><c/></a>";
+//			assertEq(xml, parse(xp, "", xml, reporter));
+//			assertErrorsAndClear(reporter);
 			xdef = // Test mixed in sequence
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <a>\n"+
