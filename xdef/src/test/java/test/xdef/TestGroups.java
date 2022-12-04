@@ -163,7 +163,7 @@ public final class TestGroups extends XDTester {
 			xml = "<a><b/>1<c/></a>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrorsAndClear(reporter);
-//TODO 
+//TODO
 //			xml = "<a><b/></a>";
 //			assertEq(xml, parse(xp, "", xml, reporter));
 //			assertErrorsAndClear(reporter);
