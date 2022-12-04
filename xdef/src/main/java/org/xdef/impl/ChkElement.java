@@ -1304,6 +1304,11 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 							if (_selector != null) {
 								if (_selector._kind == XNode.XMCHOICE) {
 									_nextDefIndex = _selector._endIndex;
+									if (_selector._count>_selector.maxOccurs()){
+										//Maximum occurrence limit
+										// of &amp;{0} exceeded
+										error(XDEF.XDEF558, "choice");
+									}
 								} else if (_selector._prev != null
 									&& _defList[_selector._prev._begIndex]
 										.maxOccurs() > 0
