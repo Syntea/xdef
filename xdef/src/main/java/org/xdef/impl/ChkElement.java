@@ -1185,33 +1185,33 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		if (_selector._prev != null
 			&& _defList[_selector._prev._begIndex].maxOccurs() > 0
 			&& _selector._kind == XNode.XMMIXED) {
-			// test if full
-			boolean all = true;
 			for (int i = _selector._begIndex + 1;
 				i < _selector._endIndex; i++) {
 				if (_counters[i] < _defList[i].maxOccurs()) {
-					all = false;
-					break;
+					return;
 				}
 			}
-			if (all) {
-				_selector._occur = true;
-				_selector._count = 1;
+			// all items of "mixed" sequence were processed; finish the group.
+			_selector._occur = true;
+			_selector._count++;
+			_nextDefIndex = _selector._endIndex + 1;
+			if (_selector._prev._kind != XNode.XMSEQUENCE
+				|| _defList[_nextDefIndex].getKind()!=XNode.XMSELECTOR_END) {
 				finishGroup();
-				_nextDefIndex = _selector._endIndex + 1;
-				if (_selector._prev._kind == XNode.XMSEQUENCE
-					&& _defList[_nextDefIndex].getKind()==XNode.XMSELECTOR_END){
-					if (_selector._prev._count <= _selector._prev.maxOccurs()) {
-						_nextDefIndex = _selector._prev._begIndex + 1;
-						_selector._prev._count++;
-						_selector._prev._occur = true;
-					} else if(_selector._prev._count >
-						_selector._prev.maxOccurs()) {
-						_nextDefIndex = _selector._prev._endIndex;
-						 //Maximum occurrence limit of &{0} exceeded
-						error(XDEF.XDEF558, "sequence");
-					}
-				}
+				return;
+			}
+			if (_selector._prev.maxOccurs() == 1) {
+				return;
+			}
+			if (_selector._prev._count <= _selector._prev.maxOccurs()) {
+				_nextDefIndex = _selector._prev._begIndex + 1;
+				_selector._prev._count++;
+				_selector._prev._occur = true;
+				finishGroup();
+			} else if(_selector._prev._count > _selector._prev.maxOccurs()) {
+				_nextDefIndex = _selector._prev._endIndex;
+				 //Maximum occurrence limit of &{0} exceeded
+				error(XDEF.XDEF558, "sequence");
 			}
 		}
 	}
