@@ -759,8 +759,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 						continue;
 					}
 					case XNode.XMELEMENT: {
-						required &= ((XElement) xnode).minOccurs() > 0;
 						chkElementAbsence(i, (XElement) xnode, c);
+						required &= ((XElement) xnode).minOccurs() > 0;
 						if (c != null) {
 							c._itemIdex += _counters[i];
 						}
@@ -775,6 +775,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 							k += _counters[n];
 						}
 						if (k < xch.minOccurs()) {
+							//Minimum occurrence not reached for &amp;{0}
 							error(XDEF.XDEF555, "choice");
 							if (xch._onAbsence >= 0) {
 								exec(xch._onAbsence, (byte)'U');
@@ -1017,7 +1018,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			}
 			if (_selector._occur) {
 				_selector._occur = false;
-				_counters[_nextDefIndex] = _selector._count = 1;
+				_counters[_nextDefIndex] = ++_selector._count;
 				_nextDefIndex = _selector._begIndex + 1;
 			} else {
 				if (_selector._prev != null) {
@@ -1079,6 +1080,10 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 				checkAbsence(_selector,new Counter(_selector._firstChild),true);
 				if (_selector._count >= _selector.maxOccurs() -1) {
 					_selector._count++;
+					if (_selector.minOccurs() >  _selector._count) {
+						 //Maximum occurrence limit of &{0} exceeded
+						error(XDEF.XDEF558, "sequence");
+					}
 					_selector.updateCounters(); //maximum reached
 					_nextDefIndex++;
 					if (_selector._prev != null) {
@@ -1111,8 +1116,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 					if (_selector._prev._kind != XNode.XMSEQUENCE
 						&& _selector._count > 0) {
 						_selector._prev._occur = true;
-						_nextDefIndex =
-							_selector._prev._begIndex + 1;
+						_nextDefIndex = _selector._prev._begIndex + 1;
 					} else {
 						if (finaly >= 0) {
 							exec(finaly, (byte) 'U');
@@ -1170,6 +1174,46 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			}
 		}
 		return true;
+	}
+
+	/** Checks if all items of a mixed group are filled. If yes, call the method
+	 * finishGroup() and _nextDefIndex is set after the mixed group.
+	 * If the mixed group is the last one in a sequence group, then then the
+	 * counter of occurrences of the sequence is increased.
+	 */
+	private void checkMixedAll() {
+		if (_selector._prev != null
+			&& _defList[_selector._prev._begIndex].maxOccurs() > 0
+			&& _selector._kind == XNode.XMMIXED) {
+			// test if full
+			boolean all = true;
+			for (int i = _selector._begIndex + 1;
+				i < _selector._endIndex; i++) {
+				if (_counters[i] < _defList[i].maxOccurs()) {
+					all = false;
+					break;
+				}
+			}
+			if (all) {
+				_selector._occur = true;
+				_selector._count = 1;
+				finishGroup();
+				_nextDefIndex = _selector._endIndex + 1;
+				if (_selector._prev._kind == XNode.XMSEQUENCE
+					&& _defList[_nextDefIndex].getKind()==XNode.XMSELECTOR_END){
+					if (_selector._prev._count <= _selector._prev.maxOccurs()) {
+						_nextDefIndex = _selector._prev._begIndex + 1;
+						_selector._prev._count++;
+						_selector._prev._occur = true;
+					} else if(_selector._prev._count >
+						_selector._prev.maxOccurs()) {
+						_nextDefIndex = _selector._prev._endIndex;
+						 //Maximum occurrence limit of &{0} exceeded
+						error(XDEF.XDEF558, "sequence");
+					}
+				}
+			}
+		}
 	}
 
 	/** Search XNode in the list of nodes.<p/>
@@ -1238,7 +1282,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			switch (kind = (xn = _defList[_nextDefIndex]).getKind()) {
 				case XNode.XMTEXT: {
 					if (el == null) {// is text node
-						int oldAefIndex = _actDefIndex;
+						int oldDefIndex = _actDefIndex;
 						_actDefIndex = _nextDefIndex++;
 						XData xd = (XData) xn;
 						if (xd._match >= 0 && !getXDDocument().isCreateMode()) {
@@ -1246,7 +1290,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 							XDValue item = exec(xd._match, (byte) 'T');
 							copyTemporaryReports();
 							if (item == null || !item.booleanValue()) {
-								_actDefIndex = oldAefIndex;
+								_actDefIndex = oldDefIndex;
 								continue;
 							}
 						}
@@ -1254,23 +1298,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 							_selector._occur = true; //found
 							if (_selector._kind == XNode.XMCHOICE) {
 								_nextDefIndex = _selector._endIndex;
-							} else if (_selector._prev != null
-								&& _defList[_selector._prev._begIndex]
-									.maxOccurs() > 0
-								&& _selector._kind == XNode.XMMIXED) {
-								// test if full
-								boolean all = true;
-								for (int i = _selector._begIndex + 1;
-									i < _selector._endIndex; i++) {
-									if (_counters[i]<_defList[i].maxOccurs()) {
-										all = false;
-										break;
-									}
-								}
-								if (all) {
-									finishGroup();
-									_nextDefIndex = _selector._endIndex + 1;
-								}
+							} else {
+								checkMixedAll();
 							}
 						}
 						return xd;
@@ -1287,14 +1316,12 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 					XElement xel = (XElement) xn;
 					result = null;
 					if (el != null) { // not text node (element)
-						int oldAefIndex = _actDefIndex;
+						int oldDefIndex = _actDefIndex;
 						_actDefIndex = _nextDefIndex; // save actual index
 						if ((result = chkElem(xel, el)) != null) {
 							_nextDefIndex++;
 							if (_selector != null) {
 								_selector._occur = true;
-							}
-							if (_selector != null) {
 								if (_selector._kind == XNode.XMCHOICE) {
 									_nextDefIndex = _selector._endIndex;
 									if (_selector._count>_selector.maxOccurs()){
@@ -1302,29 +1329,13 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 										// of &amp;{0} exceeded
 										error(XDEF.XDEF558, "choice");
 									}
-								} else if (_selector._prev != null
-									&& _defList[_selector._prev._begIndex]
-										.maxOccurs() > 0
-									&& _selector._kind == XNode.XMMIXED) {
-									// test if full
-									boolean all = true;
-									for (int i = _selector._begIndex + 1;
-										i < _selector._endIndex; i++) {
-										if (_counters[i] <
-											_defList[i].maxOccurs()) {
-											all = false;
-											break;
-										}
-									}
-									if (all) {
-										finishGroup();
-										_nextDefIndex = _selector._endIndex + 1;
-									}
+								} else {
+									checkMixedAll();
 								}
 							}
 							return result;
 						}
-						_actDefIndex = oldAefIndex; // reset actual index
+						_actDefIndex = oldDefIndex; // reset actual index
 					} else if (xel.minOccurs() <= 0) {
 						// el == null => text node and this element not required
 						_nextDefIndex++; // next item
@@ -2362,6 +2373,11 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 				_nextDefIndex < _defList.length
 					&& _defList[_nextDefIndex].getKind() == XNode.XMSELECTOR_END
 					&& nested);
+			if (_selector._kind == XNode.XMSEQUENCE
+				&& _selector._count <_selector.minOccurs()) {
+				//Minimum occurrence not reached for &{0}
+				error(XDEF.XDEF555, "sequence");
+			}
 			nested = true;
 			_actDefIndex = -1;
 			_nextDefIndex = _selector._endIndex + 1;
@@ -2679,7 +2695,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 				if (_element != null) {
 					_parent.incRefNum();
 					//Maximum occurrence limit of &amp;{0} exceeded
-					error(XDEF.XDEF558, "element");
+					error(XDEF.XDEF558, "element " + _element.getTagName());
 					error = true;
 				}
 			} else {

@@ -1,13 +1,16 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.0.2, release-date 2022-12-04
+# Version 42.0.2, release-date 2022-12-20
 * `%anyName` named items of XON/JSON are now available in X-components as a map 
   created by the method `anyItems()` (instead of `entriesOf()`).
 * corrected bug in X-component in generation of names of getters of named values
   in map if the name if the name of named value is not acceptable
   as a Java identifier.
-* corrected bug not generated error if maximum occurrence of `choice` group
-  exceeded the specified limit.
+* corrected bug not generated error if occurrence of `choice` group exceeds
+  the specified occurrence limit.
+* corrected bug not generated error if occurrence of `sequence` group do not fit
+  the specified occurrence limit and a `choice` group is the last one of
+  the `sequence` group.
 * corrected bug not generated error if maximum occurrence of `%anyObj` exceeded
   the specified limit.
 

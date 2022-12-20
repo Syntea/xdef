@@ -12,6 +12,8 @@ import java.io.CharArrayWriter;
 import java.io.StringWriter;
 import java.util.Properties;
 import org.xdef.sys.ReportReader;
+import static org.xdef.sys.STester.runTest;
+import static test.XDTester._xdNS;
 
 /** Test of reporting of script errors.
  * @author Vaclav Trojan
@@ -1048,5 +1050,4 @@ public final class TestErrors extends XDTester {
 		XDTester.setFulltestMode(true);
 		if (runTest(args) > 0) {System.exit(1);}
 	}
-
 }
