@@ -688,17 +688,14 @@ public abstract class STester {
 	 * @param reporter reporter to be checked for no errors.
 	 */
 	public final void assertErrorsAndClear(final ReportWriter reporter) {
-		if (!reporter.errors()) {
-			fail("Error not reported");
-		}
+		assertErrors(reporter);
+		reporter.clear();
 	}
 	/** Check if the reporter does not contain an error and clear reporter.
 	 * @param reporter the reporter to be checked for no errors.
 	 */
 	public final void assertNoErrorsAndClear(final ArrayReporter reporter) {
-		if (reporter.errors()) {
-			fail(reporter.toString());
-		}
+		assertNoErrors(reporter);
 		reporter.clear();
 	}
 	/** Check if the reporter does not contain an error or warning. If yes then
@@ -708,9 +705,7 @@ public abstract class STester {
 	 */
 	public final void assertNoErrorwarningsAndClear(
 		final ArrayReporter reporter) {
-		if (reporter.errorWarnings()) {
-			fail(reporter.toString());
-		}
+		assertNoErrorwarnings(reporter);
 		reporter.clear();
 	}
 	private static String getListing(final ReportWriter reporetr,
