@@ -1,5 +1,8 @@
 # Version ${version}, release-date ${release.date}
 
+# Version 42.0.3, release-date 2022-12-21
+*
+
 # Version 42.0.2, release-date 2022-12-21
 * `%anyName` named items of XON/JSON are now available in X-components as a map 
   created by the method `anyItems()` (instead of `entriesOf()`).
