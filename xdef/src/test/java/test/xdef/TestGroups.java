@@ -266,6 +266,82 @@ public final class TestGroups extends XDTester {
 			assertErrors(reporter);
 			parse(xp, null, "<a><b/><q/><p/><c/></a>", reporter);
 			assertErrors(reporter);
+			xdef = // ref to choice
+"<xd:def xmlns:xd='" + _xdNS + "' root=\"array|map\">\n" +
+"<array>\n" +
+"  <xd:choice xd:script=\"occurs 2;\">\n" +
+"    <item v=\"jvalue();\"/>\n" +
+"    <array>\n" +
+"      <xd:choice xd:script=\"*; ref OBJECT\"></xd:choice>\n" +
+"    </array>\n" +
+"    <map>\n" +
+"      <xd:choice xd:script=\"*; ref OBJECT\"></xd:choice>\n" +
+"    </map>\n" +
+"  </xd:choice>\n" +
+"</array>\n" +
+"<map>\n" +
+"  <xd:choice xd:script=\"occurs 2;\" >\n" +
+"  <item k=\"string();\" v=\"jvalue();\"/>\n" +
+"  <array k=\"string();\">\n" +
+"    <xd:choice xd:script=\"*; ref OBJECT\"></xd:choice>\n" +
+"  </array>\n" +
+"  <map k=\"string();\">\n" +
+"    <xd:choice xd:script=\"*; ref OBJECT\"></xd:choice>\n" +
+"  </map>\n" +
+"  </xd:choice>\n" +
+"</map>\n" +
+"<xd:choice xd:name=\"OBJECT\">\n" +
+"  <item k=\"? string();\" v=\"jvalue();\"/>\n" +
+"  <array k=\"? string();\">\n" +
+"    <xd:choice xd:script=\"ref OBJECT\"></xd:choice>\n" +
+"  </array>\n" +
+"  <map k=\"? string();\">\n" +
+"    <xd:choice xd:script=\"ref OBJECT\"></xd:choice>\n" +
+"  </map>\n" +
+"</xd:choice>\n" +
+"</xd:def>";
+			xp = compile(xdef);
+			xml = "<array/>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertErrorsAndClear(reporter);
+			xml = "<array><item v='1'/></array>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertErrorsAndClear(reporter);
+			xml = "<array><item v='1'/><item v='2'/></array>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrorsAndClear(reporter);
+			xml = "<map/>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertErrorsAndClear(reporter);
+			xml = "<map><item k='a' v='1'/></map>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertErrorsAndClear(reporter);
+			xml = "<map><item k='a' v='1'/><array k='b'/></map>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrorsAndClear(reporter);
+			xml = "<map><item k='a' v='3'/><array k='b'/></map>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrorsAndClear(reporter); //???
+			xml =
+"<map>\n" +
+"  <array k='a'><item v='3'/></array>\n" +
+"  <array k='b'><item v='1'/><item v='2'/><item v='3'/></array>\n" +
+"</map>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrorsAndClear(reporter); //???
+			xml="<map><map k='a'/><map k='b'><item k='a' v=\"1\"/></map></map>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrorsAndClear(reporter);
+			xml =
+"<array><item v='1'/><item v='1'/><item v='1'/><item v='1'/></array>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertErrorsAndClear(reporter);  //not reported!!!
+			xml ="<array><map/><map/><map/><map/><map/></array>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertErrorsAndClear(reporter); //???
+			xml = "<array><map/><array/><item v='1'/><map/></array>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertErrorsAndClear(reporter); //???
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <a>\n"+

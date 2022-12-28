@@ -81,6 +81,8 @@ public final class CompileXonXdef extends XScriptParser {
 	private final PNode _xonModel;
 	/** X-position of generated %any model.*/
 	private String _anyXPos;
+	/** X-position of generated %any model in map.*/
+	private String _anyXPosM;
 /*#if DEBUG*#/
 	/** debugging switches; from properties. *#/
 	private final String _dbgSwitches; // remove this code in future
@@ -656,7 +658,11 @@ public final class CompileXonXdef extends XScriptParser {
 		if (_anyXPos == null) {
 			_anyXPos = _xonModel._parent._xdef.getName()
 				+ "#" + XConstants.JSON_ANYOBJECT;
+			_anyXPosM = _xonModel._parent._xdef.getName() + 'M'
+				+ "#" + XConstants.JSON_ANYOBJECT;
 		}
+		String anyXPos = "X_MAP".equals(parent.getLocalName())
+			? _anyXPosM : _anyXPos;
 		PNode pn, pn1, pn2;
 		pn = genXDElement(parent, "choice", parent.getName());
 		pn._xonMode = XConstants.XON_MODE_W;
@@ -685,7 +691,7 @@ public final class CompileXonXdef extends XScriptParser {
 		}
 		pn2 = genXDElement(pn1, "choice", spos);
 		pn2._xonMode = XConstants.XON_MODE_W;
-		setXDAttr(pn2, "script", new SBuffer("*; ref " +_anyXPos, spos));
+		setXDAttr(pn2, "script", new SBuffer("*; ref " + anyXPos, spos));
 		pn1.addChildNode(pn2);
 		pn.addChildNode(pn1);
 		pn1 = genJElement(pn, X_MAP, spos);
@@ -695,7 +701,7 @@ public final class CompileXonXdef extends XScriptParser {
 		}
 		pn2 = genXDElement(pn1, "choice", spos);
 		pn2._xonMode = XConstants.XON_MODE_W;
-		setXDAttr(pn2, "script", new SBuffer("*; ref " +_anyXPos, spos));
+		setXDAttr(pn2, "script", new SBuffer("*; ref " + anyXPos, spos));
 		pn1.addChildNode(pn2);
 		pn.addChildNode(pn1);
 	}
@@ -728,7 +734,32 @@ public final class CompileXonXdef extends XScriptParser {
 		pn1._xonMode = XConstants.XON_MODE_W;
 		setAttr(pn1, X_KEYATTR, new SBuffer("? string();", spos));
 		pn2 = genXDElement(pn1, "choice", spos);
+		setXDAttr(pn2, "script", new SBuffer("*; ref " + anyName+'M', spos));
+		pn1.addChildNode(pn2);
+		pn.addChildNode(pn1);
+		// any Map (anyName + 'M')
+		pn = genXDElement(actNode._parent, "choice", spos);
+		pn._nsPrefixes.put(XDConstants.XON_NS_PREFIX,XPreCompiler.NS_XON_INDEX);
+		pn._xonMode = XConstants.XON_MODE_W;
+		setXDAttr(pn, "name", new SBuffer(anyName+'M', spos));
+		actNode._parent.addChildNode(pn);
+		pn1 = genJElement(pn, X_VALUE, spos);
+		pn1._xonMode = XConstants.XON_MODE_W;
+		setAttr(pn1, X_KEYATTR, new SBuffer("string();", spos));
+		setAttr(pn1, X_VALATTR, new SBuffer("jvalue();", spos));
+		pn.addChildNode(pn1);
+		pn1 = genJElement(pn, X_ARRAY, spos);
+		pn1._xonMode = XConstants.XON_MODE_W;
+		setAttr(pn1, X_KEYATTR, new SBuffer("string();",spos));
+		pn2 = genXDElement(pn1, "choice", spos);
 		setXDAttr(pn2, "script", new SBuffer("*; ref " + anyName, spos));
+		pn1.addChildNode(pn2);
+		pn.addChildNode(pn1);
+		pn1 = genJElement(pn, X_MAP, spos);
+		pn1._xonMode = XConstants.XON_MODE_W;
+		setAttr(pn1, X_KEYATTR, new SBuffer("string();", spos));
+		pn2 = genXDElement(pn1, "choice", spos);
+		setXDAttr(pn2, "script", new SBuffer("*; ref " + anyName+'M', spos));
 		pn1.addChildNode(pn2);
 		pn.addChildNode(pn1);
 /*#if DEBUG*#/
