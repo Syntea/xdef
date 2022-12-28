@@ -876,9 +876,19 @@ LN+"\t\tObject o = get"+X_VALATTR+"();"+LN+
 				if (X_ARRAY.equals(xe.getLocalName())) {
 					typ = "java.util.List<Object>";
 					x = ".toXonArray(this);";
+					s =
+(_genJavadoc ? "\t/** Get XON array of this item."+LN+
+"\t * @return XON array of this item."+LN+
+"\t */"+LN : "")+
+"\tpublic "+typ+" getArray$() {return toXon();}"+LN+ s;
 				} else {
 					typ = "java.util.Map<String, Object>";
 					x = ".toXonMap(this);";
+					s =
+(_genJavadoc ? "\t/** Get XON map of this item."+LN+
+"\t * @return XON map of this item."+LN+
+"\t */"+LN : "")+
+"\tpublic "+typ+" getMap$() {return toXon();}"+LN+ s;
 				}
 				x = LN+"\t\treturn org.xdef.component.XComponentUtil"+x+LN+"\t";
 			}

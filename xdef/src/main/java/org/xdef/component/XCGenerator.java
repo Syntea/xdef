@@ -489,7 +489,13 @@ final class XCGenerator extends XCGeneratorXON {
 				}
 			}
 		}
-		vars.append(genToXonMethod(xe));
+		String s = genToXonMethod(xe);
+		if ((ndx = s.indexOf("$() {return toXon();}"+LN)) > 0) {
+			ndx += ("$() {return toXon();}"+LN).length();
+			getters.append(s.substring(0, ndx));
+			s = s.substring(ndx+1);
+		}
+		vars.append(s);
 		// attributes and child nodes processed
 		if (isRoot) {
 			_interfaces = sbi;
