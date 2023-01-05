@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.0.3, release-date 2023-01-03
+# Version 42.0.3, release-date 2023-01-05
 * Value of JSON/XON arrays a maps can be now obtained from X-component
   by methods `getArray$()` and `getMap${}`.
 

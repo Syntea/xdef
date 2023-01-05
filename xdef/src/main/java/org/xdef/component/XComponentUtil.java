@@ -324,6 +324,15 @@ public class XComponentUtil {
 		}
 	}
 
+	/** Convert XML name to Java name.
+	 * @param xmlName XML name to be converted.
+	 * @return Java name created from XML name,
+	 */
+	public static final String xmlToJavaName(final String xmlName) {
+		return "_".equals(xmlName) ? "$_" // Java 9 not allows indentifiers "_"
+			: xmlName.replace(':','$').replace('-','_').replace('.','_');
+	}
+
 ////////////////////////////////////////////////////////////////////////////////
 // Create XON object from X-component.
 ////////////////////////////////////////////////////////////////////////////////
@@ -485,7 +494,7 @@ public class XComponentUtil {
 		Map<String, Object> result = getXonAttrs(xc);
 		for (Method x: methods) {
 			String name = x.getName();
-			if (!name.startsWith("get$") && name.startsWith("get")
+			if (name.startsWith("get") && !name.startsWith("get$")
 				&& x.getParameterTypes().length == 0) {
 				Object o = null;
 				try {
@@ -500,8 +509,7 @@ public class XComponentUtil {
 					if (XON_NS_URI_XD.equals(y.xGetNamespaceURI())){
 						try {
 							Class<?> cls1 = o.getClass();
-							Method m = cls1.getDeclaredMethod(
-								"get" + X_KEYATTR);
+							Method m = cls1.getDeclaredMethod("get"+X_KEYATTR);
 							m.setAccessible(true);
 							key = XonTools.xmlToJName((String) m.invoke(o));
 						} catch (Exception ex) {
@@ -590,8 +598,7 @@ public class XComponentUtil {
 		Method[] methods = cls.getDeclaredMethods();
 		for (Method m: methods) {
 			String name = m.getName();
-			if (name.startsWith("get")
-				&& m.getParameterTypes().length == 0) {
+			if (name.startsWith("get") && m.getParameterTypes().length == 0) {
 				if (name.startsWith("get$")) {
 					continue;
 				}
@@ -718,14 +725,5 @@ public class XComponentUtil {
 			}
 		}
 		return toXonXD(xc, new KNamespace());
-	}
-
-	/** Convert XML name to Java name.
-	 * @param xmlName XML name to be converted.
-	 * @return Java name created from XML name,
-	 */
-	public static final String xmlToJavaName(final String xmlName) {
-		return "_".equals(xmlName) ? "$_" // Java 9 not allows indentifiers "_"
-			: xmlName.replace(':','$').replace('-','_').replace('.','_');
 	}
 }
