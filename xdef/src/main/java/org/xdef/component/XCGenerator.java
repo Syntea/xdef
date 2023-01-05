@@ -28,7 +28,10 @@ import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.Report;
 import org.xdef.sys.SUtils;
 import org.xdef.xon.XonNames;
+import static org.xdef.xon.XonNames.X_ARRAY;
 import static org.xdef.xon.XonNames.X_KEYATTR;
+import static org.xdef.xon.XonNames.X_MAP;
+import static org.xdef.xon.XonNames.X_VALUE;
 
 /** Generation of Java source code of XDComponents.
  * @author Vaclav Trojan
@@ -167,6 +170,21 @@ final class XCGenerator extends XCGeneratorXON {
 		final Map<String, String> txttab = new LinkedHashMap<String, String>();
 		final Stack<Integer> groupStack = new Stack<Integer>();
 		final Stack<Object> choiceStack = new Stack<Object>();
+		if (xe._xon != 0 && nodes.length == 5 //anyObj?
+			&& nodes[0].getKind() == XMNode.XMCHOICE
+			&& nodes[1].getKind() == XMNode.XMELEMENT
+			&& X_VALUE.equals(nodes[1].getLocalName())
+			&& nodes[2].getKind() == XMNode.XMELEMENT
+			&& X_ARRAY.equals(nodes[2].getLocalName())
+			&& nodes[3].getKind() == XMNode.XMELEMENT
+			&& X_MAP.equals(nodes[3].getLocalName())) {
+			getters.append(// getter for %anyObj
+_genJavadoc ?
+"\t/** Get XON value of this %anyObj item."+LN+
+"\t * @return value of this %anyObj item."+LN+
+"\t */"+LN : "")
+.append("\tpublic Object getAnyObj$(){return toXon();}").append(LN);
+		}
 		for (int i=0, txtcount=0, groupMax=1, groupFirst=-1, groupKind=-1;
 			i < nodes.length; i++) {
 			final XNode node = nodes[i];
