@@ -511,7 +511,7 @@ _genJavadoc ?
 		if ((ndx = s.indexOf("$() {return toXon();}"+LN)) > 0) {
 			ndx += ("$() {return toXon();}"+LN).length();
 			getters.append(s.substring(0, ndx));
-			s = s.substring(ndx+1);
+			s = s.substring(ndx);
 		}
 		vars.append(s);
 		// attributes and child nodes processed
