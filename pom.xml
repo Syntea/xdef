@@ -72,7 +72,7 @@
         <slf4j.version>1.7.25</slf4j.version>
         <logback.version>1.2.3</logback.version>
         <logback-testng.version>1.0.0</logback-testng.version>
-        <testng.version>6.8.21</testng.version> <!-- last version supports java-1.6 -->
+        <testng.version>7.7.0</testng.version> <!-- last version supports java-1.6 -->
 
         <maven.build.timestamp.format>yyyy-MM-dd'T'HH:mm:ss'Z'</maven.build.timestamp.format>
     </properties>
