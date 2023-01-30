@@ -2,7 +2,7 @@
 
 # Version 42.0.3, release-date 2023-01-30
 * Value of JSON/XON arrays, maps and %anyObj can be now obtained from
- X-component by methods `getArray$()`, `getMap${} and `getAnyObj$()`.
+ X-component by methods `getArray$()`, `getMap${}` and `getAnyObj$()`.
 
 # Version 42.0.2, release-date 2022-12-21
 * `%anyName` named items of XON/JSON are now available in X-components as a map 
