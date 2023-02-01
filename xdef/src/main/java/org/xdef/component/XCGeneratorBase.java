@@ -470,7 +470,8 @@ class XCGeneratorBase {
 		final StringBuilder sbi) {
 		byte xon = xn instanceof XElement ? ((XElement) xn)._xon
 			: ((XData) xn)._xon;
-		String publ = xon == 0 ? "public" : "private";
+//		String publ = xon == 0 ? "public" : "private";
+		String publ = "public";
 		final int ndx = typeName.lastIndexOf('.');
 		if (ndx == 0) {
 			throw new SRuntimeException(SYS.SYS066,// Internal error&{0}{: }
@@ -597,9 +598,10 @@ class XCGeneratorBase {
 		final StringBuilder sb,
 		final StringBuilder sbi,
 		final String nullChoice) {
-		String publ = xn instanceof XElement ?
-			((XElement) xn)._xon == 0 ? "public" : "private"
-			: ((XData) xn)._xon == 0 ? "public" : "private";
+//		String publ = xn instanceof XElement ?
+//			((XElement) xn)._xon == 0 ? "public" : "private"
+//			: ((XData) xn)._xon == 0 ? "public" : "private";
+		String publ = "public";
 		String x;
 		String d = descr;
 		String clearChoice = "";
