@@ -853,7 +853,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 	final void genToXonMethod(final XElement xe,
 		final StringBuilder getters,
 		final StringBuilder vars) {
-		int any = 0;
+		boolean any = false;
 		XMNode[] nodes = xe.getChildNodeModels();
 		if (xe._xon != 0 && nodes.length == 5 //anyObj?
 			&& nodes[0].getKind() == XMNode.XMCHOICE
@@ -865,16 +865,16 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 			&& nodes[3].getKind() == XMNode.XMELEMENT
 			&& X_MAP.equals(nodes[3].getLocalName())
 			&& ((XElement) nodes[3]).getChildNodeModels().length == 5) {
-			getters.append(// getter for %anyObj
+			getters.append(// %anyObj getter
 _genJavadoc ?
 "\t/** Get XON value of this %anyObj item."+LN+
 "\t * @return value of this %anyObj item."+LN+
 "\t */"+LN : "")
 				.append("\tpublic Object getAnyObj$(){return toXon();}")
 				.append(LN);
-			any = nodes[2].maxOccurs() == 1 ? 1 : 2;
+			any = true;
 		}
-		String s =
+		String s = // toXon() method
 (_genJavadoc ? "\t/** Get XON value of this item."+LN+
 "\t * @return value of this item."+LN+
 "\t */"+LN : "")+
@@ -908,7 +908,7 @@ _genJavadoc ?
 					typ = "java.util.List<Object>";
 					s += "\tpublic " + typ + " toXon(){"+LN+
 "\t\treturn org.xdef.component.XComponentUtil.toXonArray(this);"+LN+"\t}"+LN;
-					x =
+					x = // getMap$ method
 (_genJavadoc ? "\t/** Get XON array of this item."+LN+
 "\t * @return XON array of this item."+LN+
 "\t */"+LN : "")+
@@ -917,35 +917,36 @@ _genJavadoc ?
 					typ = "java.util.Map<String, Object>";
 					s += "\tpublic " + typ + " toXon(){"+LN+
 "\t\treturn org.xdef.component.XComponentUtil.toXonMap(this);"+LN+"\t}"+LN;
-					x =
+					x = // getMap$ method
 (_genJavadoc ? "\t/** Get XON map of this item."+LN+
 "\t * @return XON map of this item."+LN+
 "\t */"+LN : "")+
 "\tpublic "+typ+" getMap$() {return toXon();}"+LN;
 				}
-				getters.append(x);
+				getters.append(x); // getMap$ method
 			}
 		} else {
-			typ = "Object";
-			if (any == 2) {
-				x = LN+
-"\t\tif (!_jx$array.isEmpty()) return _jx$array.toArray();"+LN+
-"\t\tif (!_jx$map.isEmpty()) return _jx$map.toArray();"+LN+
+			s += "\tpublic Object toXon() {";
+			if (any) { // %anyObj
+				s += LN;
+				s += nodes[2].maxOccurs() > 1
+?("\t\tif (!_jx$array.isEmpty()) {"+LN+
+"\t\t\tjava.util.List result = new java.util.ArrayList<Object>();"+LN+
+"\t\t\tfor (jx$array x: _jx$array) result.add(x.toXon());"+LN+
+"\t\t\treturn result;"+LN+
+"\t\t}"+LN)
+:("\t\tif (_jx$array != null) return _jx$array.toXon();"+LN);
+				s += nodes[3].maxOccurs() > 1
+?("\t\tif (!_jx$map.isEmpty()) return _jx$map.get(0).toXon();"+LN)
+:("\t\tif (_jx$map != null) return _jx$map.toXon();"+LN);
+				s +=
 "\t\tif (_jx$item != null) return _jx$item.toXon();"+LN+
-"\t\treturn null;"+LN+
-"\t";
-			} else if (any == 1) {
-				x = LN+
-"\t\tif (_jx$array != null) return _jx$array.toXon();"+LN+
-"\t\tif (_jx$map != null) return _jx$map.toXon();"+LN+
-"\t\tif (_jx$item != null) return _jx$item.toXon();"+LN+
-"\t\treturn null;"+LN+
-"\t";
+"\t\treturn null;"+LN+"\t";
 			} else {
-				x = "return org.xdef.component.XComponentUtil.toXon(this);";
+				s += "return org.xdef.component.XComponentUtil.toXon(this);";
 			}
-			s += "\tpublic " + typ + " toXon() {"+ x + "}"+LN;
+			s += "}"+LN;
 		}
-		vars.append(s);
+		vars.append(s); //toXon method
 	}
 }
