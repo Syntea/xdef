@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.0.4, release-date 2023-02-01
+# Version 42.0.4, release-date 2023-02-02
 * .
 
 # Version 42.0.3, release-date 2023-01-30
@@ -13,12 +13,12 @@
 * corrected bug in X-component in generation of names of getters of named values
   in map if the name if the name of named value is not acceptable
   as a Java identifier.
-* corrected bug not generated error if occurrence of `choice` group exceeds
+* corrected bug not recognized error if occurrence of `choice` group exceeds
   the specified occurrence limit.
-* corrected bug not generated error if occurrence of `sequence` group do not fit
-  the specified occurrence limit and a `choice` group is the last one of
+* corrected bug not recognized error if occurrence of `sequence` group do not
+  fit the specified occurrence limit and a `choice` group is the last one of
   the `sequence` group.
-* corrected bug not generated error if maximum occurrence of `%anyObj` exceeded
+* corrected bug not recognized error if maximum occurrence of `%anyObj` exceeded
   the specified limit.
 
 # Version 42.0.1, release-date 2022-11-30

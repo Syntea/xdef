@@ -271,7 +271,7 @@ class XCGeneratorBase {
 	 */
 	final static String getParsedResultGetter(final XMData xdata) {
 		String parserName = xdata.getParserName();
-		String result = "value.getParsedValue().isNull()?null:"
+		String result = "value.getParsedValue().isNull()? null: "
 			+ "value.getParsedValue().";
 		switch (parserName) {
 			case "jlist":
