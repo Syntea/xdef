@@ -43,7 +43,7 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 "\t}"+LN;
 		} else if (creators.length() == 0 && genNodeList.length() == 0) {
 			toXml +=
-"\t\treturn doc!=null ? doc.createElementNS(XD_NamespaceURI, XD_NodeName)"+LN+
+"\t\treturn doc!=null? doc.createElementNS(XD_NamespaceURI, XD_NodeName)"+LN+
 "\t\t\t: org.xdef.xml.KXmlUtils.newDocument("+LN+
 "\t\t\t\tXD_NamespaceURI, XD_NodeName, null).getDocumentElement();"+LN+
 "\t}"+LN;
@@ -279,7 +279,7 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 "\t\tXD_NodeName=name; XD_NamespaceURI=ns;"+LN+
 "\t\tXD_XPos=xPos;"+LN+
 "\t\tXD_Model=XDPos;"+LN+
-"\t\tXD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;"+LN+
+"\t\tXD_Object = (XD_Parent=p)!=null? p.xGetObject(): null;"+LN+
 "\t}"+LN+
 (_genJavadoc ? "\t/** Create XComponent from XXNode."+LN+
 "\t * @param p parent component."+LN+
@@ -291,7 +291,7 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 "\t\tXD_NodeName=el.getNodeName(); XD_NamespaceURI=el.getNamespaceURI();"+LN+
 "\t\tXD_XPos=x.getXPos();"+LN+
 "\t\tXD_Model=x.getXMElement().getXDPosition();"+LN+
-"\t\tXD_Object = (XD_Parent=p)!=null ? p.xGetObject() : null;"+LN+
+"\t\tXD_Object = (XD_Parent=p)!=null? p.xGetObject(): null;"+LN+
 "\t\tif (!\"" + xe.getDigest() + "\".equals("+LN+ // check digest
 "\t\t\tx.getXMElement().getDigest())) { //incompatible element model"+LN+
 "\t\t\tthrow new org.xdef.sys.SRuntimeException("+LN+
