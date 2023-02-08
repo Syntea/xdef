@@ -807,7 +807,6 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 					"&{name}", name,
 					"&{d}", xe.getName()));
 			}
-			return;
 		} else {
 			name = getXonItemName(xe, "get$", classNames, varNames);
 			if (X_ARRAY.equals(xe.getLocalName())) {
@@ -931,7 +930,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 				s += LN;
 				s += nodes[2].maxOccurs() > 1
 ?("\t\tif (!_jx$array.isEmpty()) {"+LN+
-"\t\t\tjava.util.List result = new java.util.ArrayList<Object>();"+LN+
+"\t\t\tjava.util.List<Object> result = new java.util.ArrayList<Object>();"+LN+
 "\t\t\tfor (jx$array x: _jx$array) result.add(x.toXon());"+LN+
 "\t\t\treturn result;"+LN+
 "\t\t}"+LN)
