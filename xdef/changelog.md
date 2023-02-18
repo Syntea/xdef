@@ -3,6 +3,7 @@
 # Version 42.0.4, release-date 2023-02-18
 * corrected bug in `toXon()` method in the X-component class generated from
   an JSON/XON model with `%anyObj` spoecification.
+* corrected conversion of JSON objects with values as byte array to JSON source.
 
 # Version 42.0.3, release-date 2023-01-30
 * Value of JSON/XON arrays, maps and %anyObj can be now obtained from
