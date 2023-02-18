@@ -38,9 +38,9 @@ class XonToString extends XonTools {
 			return x.toString();
 		} else if (x instanceof String) {
 			return '"' + jstringToSource((String) x) + '"';
-		}
-		if (x instanceof byte[]) {// byte array
-			return "b(" + new String(SUtils.encodeBase64((byte[]) x)) + ")";
+		} else if (x instanceof byte[]) {// byte array
+			String s = "b(" + new String(SUtils.encodeBase64((byte[]) x)) + ")";
+			return !xon ? '"' + s + '"' : s;
 		}
 		if (xon) {
 			if (x instanceof Number) {
