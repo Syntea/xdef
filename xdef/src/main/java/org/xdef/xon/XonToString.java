@@ -223,8 +223,7 @@ class XonToString extends XonTools {
 		if (!xon || !StringParser.chkNCName(key, StringParser.XMLVER1_0)) {
 			key = '"' + jstringToSource(key) + '"';
 		}
-		StringBuilder sb = new StringBuilder(
-			ind != null ? key + " : " : (key + ':'));
+		StringBuilder sb = new StringBuilder(ind!=null ? key+": " : (key+':'));
 		objectToString(en.getValue(), ind, sb, xon);
 		return sb;
 	}
