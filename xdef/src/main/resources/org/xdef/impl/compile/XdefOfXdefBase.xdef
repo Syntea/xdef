@@ -28,7 +28,7 @@
                      | Ver4.2#XD4.2:lexicon">
 
 <xd:declaration>
-  /* Variable NS used as namespace of checked source.*/
+  /* Variable NS is used as the namespace of the checked source.*/
   String NS;
 
 /******************************************************************************/
@@ -156,8 +156,8 @@ UnicodeCharSpecification ::= "\u" HexaDigit{4}
 StringLiteral ::= ("'" ("''" | [^'\] | SpecChar)* "'" |
   '"' ('""' | [^"\] | SpecChar)* '"') $rule
   /* The opening and closing delimiter must be either """ or "'". The occurrence
-     of this delimiter inside of literal can be recorded as double delimiter or
-     in the form of SpecChar. */
+     of this delimiter inside of literal can be recorded as a double delimiter
+     or in the form of SpecChar. */
 
 Literal ::= BooleanLiteral | NumberLiteral | StringLiteral
 
@@ -198,7 +198,7 @@ ExternalMethod ::= ExternalMethodType S? QualifiedIdentifier S?
   "(" S? ExternalMethodParamList? S? ")" S? ("as" S? Identifier)?
 
 ExternalMethodParam ::= ExternalMethodType (S JavaIdentifier)?
-  /* the parameter name (JavaIdentifier) is optional and ignoreed */
+  /* the parameter name (JavaIdentifier) is optional and ignored */
 
 ExternalMethodParamList ::= ExternalMethodParam (S? "," S? ExternalMethodParam)*
 
@@ -397,7 +397,8 @@ Occurrence ::= ("occurs" S)? ("required" | "optional" | "ignore" | "illegal"
      equal to the first one. */
 
 ExplicitCode ::= Block
-  /* If result value is required it must be returned by the command "return" */
+  /* If the result value is required it must be returned by the command
+   "return" */
 
 /******************************************************************************/
 /* Script of X-definition header                                              */
@@ -485,12 +486,12 @@ ValueCreateExpression ::= Expression
   /* ValueCreateExpression must return a value of String type. */
 
 ValueDefaultSection ::= "default" S? (ExplicitCode | Expression)
-  /* Expression nebo ExplicitCode must return the value of the String. */
+  /* Expression or ExplicitCode must return the value of the String. */
 
 ValueFinallySection ::= "finally" S? Statement
 
 ValueMatchSection ::= "match" S? (Expression | ExplicitCode)
-  /* Expression nebo ExplicitCode must here return a value of boolean type. */
+  /* Expression or ExplicitCode must here return a value of boolean type. */
 
 AttributeOptions ::= ValueOptions
 
@@ -584,9 +585,9 @@ TypeDeclarationBody ::= TypeExplicitCode | Expression
   /* Expression or TypeExplicitCode must return either
      a boolean or a ParseResult value.*/
 
-TypeExplicitCode ::= /* only X-defintion version 2.0 */
+TypeExplicitCode ::= /* only X-definition version 2.0 */
   ("{" S? "parse" S? ":" S? (ExplicitCode | Statement ";"?) S? "}")
-  | /* X-defintion version 3.1 and higher */ ExplicitCode
+  | /* X-definition version 3.1 and higher */ ExplicitCode
 
 ExternalMethodDeclaration ::= "external" S "method"
   ( S? "{" S? (ExternalMethod S? ";" S? )* ExternalMethod? S? ";"? S? "}"
