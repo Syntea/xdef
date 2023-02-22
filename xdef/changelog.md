@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.0.4, release-date 2023-02-20
+# Version 42.0.4, release-date 2023-02-22
 * corrected bug in `toXon()` method in the X-component class generated from
   an JSON/XON model with `%anyObj` spoecification.
 * corrected conversion of JSON objects with values as byte array to JSON source.
