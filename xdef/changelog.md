@@ -3,7 +3,7 @@
 # Version 42.0.5, release-date 2023-03-06
 * The method `getDigest` of the `XMElement` now skips the version and build data.
 * Therefore the X-components generated with different versions of X-definition
-* are accpted as compatible (if the structure of the model of element was not
+* are accepted as compatible (if the structure of the model of element was not
 * changed),
 
 # Version 42.0.4, release-date 2023-02-27
