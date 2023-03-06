@@ -651,7 +651,7 @@ public final class XElement extends XCodeDescriptor
 		try {
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			SObjectWriter xw = new SObjectWriter(baos);
-			xw.writeString(XDConstants.BUILD_VERSION); //check build version
+//			xw.writeString(XDConstants.BUILD_VERSION); //check build version
 			xw.writeShort(XNode.XMELEMENT);
 			xw.writeString(xe.getName());
 			xw.writeString(xe.getNSUri());
