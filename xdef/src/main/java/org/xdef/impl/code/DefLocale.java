@@ -18,9 +18,7 @@ public final class DefLocale extends XDValueAbstract {
 	/** Creates a new instance of DeLocale.
 	 * @param lang lowercase two-letter ISO-639 code.
 	 */
-	public DefLocale(final String lang) {
-		_value = new Locale(lang.toLowerCase(_value));
-	}
+	public DefLocale(final String lang) {_value = new Locale(lang);}
 
 	/** Creates a new instance of DeLocale.
 	 * @param lang lowercase two-letter ISO-639 code.
