@@ -2179,7 +2179,7 @@ public class TestXon extends XDTester {
 			assertNoErrorsAndClear(reporter);
 			assertTrue(XonUtils.xonEqual(x, XonUtils.xonToJson(xc.toXon())));
 			assertTrue(XonUtils.xonEqual(x,
-				SUtils.getValueFromGetter(xc,"anyItems")));
+				SUtils.getValueFromGetter(xc,"anyItem$")));
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n" +
 "<xd:xon name='A'> {%anyName: \"* int()\", a:\"? boolean()\"} </xd:xon>\n" +
@@ -2198,7 +2198,7 @@ public class TestXon extends XDTester {
 			assertNoErrorsAndClear(reporter);
 			assertTrue(XonUtils.xonEqual(x, XonUtils.xonToJson(xc.toXon())));
 			assertTrue(XonUtils.xonEqual(x,
-				SUtils.getValueFromGetter(xc,"anyItems")));
+				SUtils.getValueFromGetter(xc,"anyItem$")));
 			json = "{ \"\": 1, x: -99, a: true}";
 			y = xd.jvalidate(json, reporter);
 			assertNoErrorsAndClear(reporter);
@@ -2243,7 +2243,7 @@ public class TestXon extends XDTester {
 			xc = xd.jparseXComponent(json, null, reporter);
 			assertNoErrorsAndClear(reporter);
 			assertTrue(XonUtils.xonEqual(x, xc.toXon()));
-			assertEq(1, ((Map)SUtils.getValueFromGetter(xc,"anyItems")).size());
+			assertEq(1,((Map)SUtils.getValueFromGetter(xc,"anyItem$")).size());
 			assertNull(SUtils.getValueFromGetter(xc, "get$a"));
 			json = "{ a:0, x: [1,2], y: [] }";
 			x = XonUtils.parseXON(json);
@@ -2254,7 +2254,7 @@ public class TestXon extends XDTester {
 			xc = xd.jparseXComponent(json, null, reporter);
 			assertNoErrorsAndClear(reporter);
 			assertTrue(XonUtils.xonEqual(x, xc.toXon()));
-			assertEq(2, ((Map)SUtils.getValueFromGetter(xc,"anyItems")).size());
+			assertEq(2, ((Map)SUtils.getValueFromGetter(xc,"anyItem$")).size());
 			assertEq(0, SUtils.getValueFromGetter(xc, "get$a"));
 		} catch (Exception ex) {fail(ex);}
 		clearTempDir(); // clear temporary directory
