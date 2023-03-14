@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.0.6, release-date 2023-03-13
+# Version 42.0.6, release-date 2023-03-14
 * ...
 
 # Version 42.0.5, release-date 2023-03-06
@@ -20,7 +20,7 @@
 
 # Version 42.0.2, release-date 2022-12-21
 * `%anyName` named items of XON/JSON are now available in X-components as a map 
-  created by the method `anyItems()` (instead of `entriesOf()`).
+  created by the method `anyItem$()` (instead of `entriesOf()`).
 * corrected bug in X-component in generation of names of getters of named values
   in map if the name if the name of named value is not acceptable
   as a Java identifier.

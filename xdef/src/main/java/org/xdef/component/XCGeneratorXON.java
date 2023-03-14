@@ -446,7 +446,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 (_genJavadoc ? "\t/** Get map with %anyName entries of the map &{d}."+LN+
 "\t * @return map with entries to be set to map &{d}"+LN+
 "\t */"+LN : "")+
-"\tpublic java.util.Map<String, &{typ}> anyItems() ";
+"\tpublic java.util.Map<String, &{typ}> anyItem$() ";
 				getters.append(modify(template +
 "{"+LN+
 "\t\tjava.util.Map<String, &{typ}> x="+LN+
@@ -473,7 +473,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 (_genJavadoc ? "\t/** Get map with %anyName entries of the map &{d}."+LN+
 "\t * @return map with entries to be set to map &{d}"+LN+
 "\t */"+LN : "")+
-"\tpublic java.util.Map<String, &{typ}> anyItems() ";
+"\tpublic java.util.Map<String, &{typ}> anyItem$() ";
 					getters.append(modify(template +
 "{"+LN+
 "\t\tjava.util.Map<String, &{typ}> x="+LN+
@@ -580,7 +580,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 (_genJavadoc ? "\t/** Get map with %anyName entries of the map &{d}."+LN+
 "\t * @return map with entries to be set to map &{d}"+LN+
 "\t */"+LN : "")+
-"\tpublic java.util.Map<String, &{typ}> anyItems() ";
+"\tpublic java.util.Map<String, &{typ}> anyItem$() ";
 				getters.append(modify(template +
 "{"+LN+
 "\t\tjava.util.Map<String,&{typ}>x=new java.util.HashMap<String,&{typ}>();"+LN+
@@ -746,7 +746,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 		XData keyAttr = (XData) xe.getAttr(X_KEYATTR);
 		String name;
 		if (keyAttr != null && keyAttr.getFixedValue() == null) { // %anyName
-			String prefix = "anyItems";
+			String prefix = "anyItem$";
 			name = getUniqueName(prefix, RESERVED_NAMES);
 			name = getUniqueName(getUniqueName(name, classNames), varNames);
 			varNames.add(name);
@@ -759,7 +759,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 			if (X_ARRAY.equals(xe.getLocalName())) {
 				typ = "java.util.List<?>";
 				template +=
-"\tpublic java.util.Map<String, &{typ}> anyItems&{name}() {"+LN+
+"\tpublic java.util.Map<String, &{typ}> anyItem$&{name}() {"+LN+
 "\t\tjava.util.Map<String, &{typ}> x="+LN+
 "\t\t\tnew java.util.LinkedHashMap<String, &{typ}>();"+LN;
 				if (max == 1) {
