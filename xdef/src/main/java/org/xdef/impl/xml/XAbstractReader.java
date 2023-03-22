@@ -374,20 +374,21 @@ public abstract class XAbstractReader extends Reader {
 		return -1;
 	}
 
-	/** GEDecl ::= '<!ENTITY' S Name S EntityDef S? '>'
-	 * PEDecl ::= '<!ENTITY' S '%' S Name S PEDef S? '>'
-	 * PEDef ::= EntityValue | ExternalID
-	 * EntityValue ::= '"' ([^%&"] | PEReference | Reference)* '"'
-	 *             |  "'" ([^%&'] | PEReference | Reference)* "'"
-	 * PEReference ::= '%' Name ';'
-	 * ExternalID ::= 'SYSTEM' S SystemLiteral
-	 *            | 'PUBLIC' S PubidLiteral S SystemLiteral
-	 * SystemLiteral ::= '"' [^"]* '"') | ("'" [^']* "'")
-	 * PubidLiteral ::= '"' PubidChar* '"' | "'" (PubidChar - "'")* "'"
-	 * PubidChar ::= #x20 | #xD | #xA | [a-zA-Z0-9] | [-'()+,./:=?;!*#@$_%]
-	 * EntityDef ::= EntityValue | (ExternalID NDataDecl?)
-	 * NDataDecl ::= S 'NDATA' S Name
-	 */
+/*
+ GEDecl ::= '<!ENTITY' S Name S EntityDef S? '>'
+ PEDecl ::= '<!ENTITY' S '%' S Name S PEDef S? '>'
+ PEDef ::= EntityValue | ExternalID
+ EntityValue ::= '"' ([^%&"] | PEReference | Reference)* '"'
+             |  "'" ([^%&'] | PEReference | Reference)* "'"
+ PEReference ::= '%' Name ';'
+ ExternalID ::= 'SYSTEM' S SystemLiteral
+            | 'PUBLIC' S PubidLiteral S SystemLiteral
+ SystemLiteral ::= '"' [^"]* '"') | ("'" [^']* "'")
+ PubidLiteral ::= '"' PubidChar* '"' | "'" (PubidChar - "'")* "'"
+ PubidChar ::= #x20 | #xD | #xA | [a-zA-Z0-9] | [-'()+,./:=?;!*#@$_%]
+ EntityDef ::= EntityValue | (ExternalID NDataDecl?)
+ NDataDecl ::= S 'NDATA' S Name
+*/
 	private int scanEntityDecl() {
 		if (!isToken("<!ENTITY")) {
 			return -1;
@@ -425,7 +426,7 @@ public abstract class XAbstractReader extends Reader {
 		return -1;
 	}
 
-	/** NotationDecl ::= '<!NOTATION' S Name S (ExternalID | PublicID) S? '>'.*/
+/* NotationDecl ::= '<!NOTATION' S Name S (ExternalID | PublicID) S? '>'.*/
 	private int scanNotationDecl() {
 		if (!isToken("<!NOTATION")) {
 			return -1;
@@ -459,9 +460,10 @@ public abstract class XAbstractReader extends Reader {
 		_sysId = p.getSysId();
 	}
 
-	/** markupdecl ::= elementdecl | AttlistDecl | EntityDecl
-	 *                | NotationDecl | PI | Comment
-	 */
+/*
+ markupdecl ::= elementdecl | AttlistDecl | EntityDecl
+                 | NotationDecl | PI | Comment
+*/
 	private int scanMarkupDecl() {
 		int result;
 		if ((result = scanPEReference()) >= 0
@@ -491,84 +493,85 @@ public abstract class XAbstractReader extends Reader {
 		return -1;
 	}
 
-	/** document ::= prolog element Misc*
-	 * EntityValue ::= '"' ([^%&"] | PEReference | Reference)* '"'
-	 *             |  "'" ([^%&'] | PEReference | Reference)* "'"
-	 * AttValue ::= '"' ([^<&"] | Reference)* '"'
-	 *          |  "'" ([^<&'] | Reference)* "'"
-	 * SystemLiteral ::= '"' [^"]* '"') | ("'" [^']* "'")
-	 * PubidLiteral ::= '"' PubidChar* '"' | "'" (PubidChar - "'")* "'"
-	 * PubidChar ::= #x20 | #xD | #xA | [a-zA-Z0-9] | [-'()+,./:=?;!*#@$_%]
-	 * Comment ::= '<!--' ((Char - '-') | ('-' (Char - '-')))* '-->'
-	 * PI ::= '<?' PITarget (S (Char* - (Char* '?>' Char*)))? '?>'
-	 * PITarget ::= Name - (('X' | 'x') ('M' | 'm') ('L' | 'l'))
-	 * prolog ::= XMLDecl? Misc* (doctypedecl Misc*)?
-	 * XMLDecl ::= '<?xml' VersionInfo EncodingDecl? SDDecl? S? '?>'
-	 * VersionInfo ::= S 'version' Eq ("'" VersionNum "'" | '"' VersionNum '"')
-	 * Eq ::= S? '=' S?
-	 * VersionNum  ::= '1.' [0-9]+
-	 * EncodingDecl ::= S 'encoding' Eq ('"' EncName '"' | "'" EncName "'" )
-	 * EncName ::= [A-Za-z] ([A-Za-z0-9._] | '-')
-	 * Misc ::= Comment | PI | S
-	 * doctypedecl ::= '<!DOCTYPE' S Name
-	 *             (S ExternalID)? S? ('[' intSubset ']' S?)? '>'
-	 * DeclSep ::= PEReference | S
-	 * PEReference ::= '%' Name ';'
-	 * intSubset ::= (markupdecl | DeclSep)*
-	 * markupdecl ::= elementdecl | AttlistDecl | EntityDecl
-	 *            | NotationDecl | PI | Comment
-	 * extSubset ::= TextDecl? extSubsetDecl
-	 * extSubsetDecl ::= ( markupdecl | conditionalSect | DeclSep)*
-	 * SDDecl ::= S 'standalone' Eq (("'" ('yes' | 'no') "'")
-	 *        | ('"' ('yes' | 'no') '"'))
-	 * STag ::= '<' Name (S Attribute)* S? '>'
-	 * Attribute ::= Name Eq AttValue
-	 * ETag ::= '</' Name S? '>'
-	 * content ::= CharData? ((element | Reference | CDSect
-	 *         | PI | Comment) CharData?)*
-	 * EmptyElemTag ::= '<' Name (S Attribute)* S? '/>'
-	 * elementdecl ::= '<!ELEMENT' S Name S contentspec S? '>
-	 * contentspec ::= 'EMPTY' | 'ANY' | Mixed | children
-	 * children ::= (choice | seq) ('?' | '*' | '+')?
-	 * cp ::= (Name | choice | seq) ('?' | '*' | '+')?
-	 * choice ::= '(' S? cp ( S? '|' S? cp )+ S? ')'
-	 * seq ::= '(' S? cp ( S? ',' S? cp )* S? ')'
-	 * Mixed ::= '(' S? '#PCDATA' (S? '|' S? Name)* S? ')*'
-	 *       | | '(' S? '#PCDATA' S? ')'
-	 * AttlistDecl ::= '<!ATTLIST' S Name AttDef* S? '>'
-	 * AttDef ::= S Name S AttType S DefaultDecl
-	 * AttType ::= StringType | TokenizedType | EnumeratedType
-	 * StringType ::= 'CDATA'
-	 * TokenizedType ::= 'ID' | 'IDREF' | 'IDREFS' | 'ENTITY' | 'ENTITIES'
-	 *               | 'NMTOKEN' | 'NMTOKENS'
-	 * EnumeratedType ::= NotationType | Enumeration
-	 * NotationType ::= 'NOTATION' S '(' S? Name (S? '|' S? Name)* S? ')'
-	 * Enumeration ::= '(' S? Nmtoken (S? '|' S? Nmtoken)* S? ')'
-	 * DefaultDecl ::= '#REQUIRED' | '#IMPLIED' | (('#FIXED' S)? AttValue)
-	 * conditionalSect ::= includeSect | ignoreSect
-	 * includeSect ::= '<![' S? 'INCLUDE' S? '[' extSubsetDecl ']]>'
-	 * ignoreSect ::= '<![' S? 'IGNORE' S? '[' ignoreSectContents* ']]>'
-	 * ignoreSectContents ::= Ignore ('<![' ignoreSectContents ']]>' Ignore)*
-	 * Ignore ::= Char* - (Char* ('<![' | ']]>') Char*)
-	 * CharRef ::= '&#' [0-9]+ ';' | '&#x' [0-9a-fA-F]+ ';'
-	 * Reference ::= EntityRef | CharRef
-	 * EntityRef ::= '&' Name ';'
-	 * PEReference ::= '%' Name ';'
-	 * EntityDecl ::= GEDecl | PEDecl
-	 * GEDecl ::= '<!ENTITY' S Name S EntityDef S? '>'
-	 * PEDecl ::= '<!ENTITY' S '%' S Name S PEDef S? '>'
-	 * EntityDef ::= EntityValue | (ExternalID NDataDecl?)
-	 * PEDef ::= EntityValue | ExternalID
-	 * ExternalID ::= 'SYSTEM' S SystemLiteral
-	 *            | 'PUBLIC' S PubidLiteral S SystemLiteral
-	 * NDataDecl ::= S 'NDATA' S Name
-	 * TextDecl ::= '<?xml' VersionInfo? EncodingDecl S? '?>'
-	 * extParsedEnt ::= TextDecl? content
-	 * EncodingDecl ::= S 'encoding' Eq ('"' EncName '"' | "'" EncName "'" )
-	 * EncName ::= [A-Za-z] ([A-Za-z0-9._] | '-')*
-	 * NotationDecl ::= '<!NOTATION' S Name S (ExternalID | PublicID) S? '>'
-	 * PublicID ::= 'PUBLIC' S PubidLiteral
-	 */
+/*
+   document ::= prolog element Misc*
+   EntityValue ::= '"' ([^%&"] | PEReference | Reference)* '"'
+               |  "'" ([^%&'] | PEReference | Reference)* "'"
+   AttValue ::= '"' ([^<&"] | Reference)* '"'
+            |  "'" ([^<&'] | Reference)* "'"
+   SystemLiteral ::= '"' [^"]* '"') | ("'" [^']* "'")
+   PubidLiteral ::= '"' PubidChar* '"' | "'" (PubidChar - "'")* "'"
+   PubidChar ::= #x20 | #xD | #xA | [a-zA-Z0-9] | [-'()+,./:=?;!*#@$_%]
+   Comment ::= '<!--' ((Char - '-') | ('-' (Char - '-')))* '-->'
+   PI ::= '<?' PITarget (S (Char* - (Char* '?>' Char*)))? '?>'
+   PITarget ::= Name - (('X' | 'x') ('M' | 'm') ('L' | 'l'))
+   prolog ::= XMLDecl? Misc* (doctypedecl Misc*)?
+   XMLDecl ::= '<?xml' VersionInfo EncodingDecl? SDDecl? S? '?>'
+   VersionInfo ::= S 'version' Eq ("'" VersionNum "'" | '"' VersionNum '"')
+   Eq ::= S? '=' S?
+   VersionNum  ::= '1.' [0-9]+
+   EncodingDecl ::= S 'encoding' Eq ('"' EncName '"' | "'" EncName "'" )
+   EncName ::= [A-Za-z] ([A-Za-z0-9._] | '-')
+   Misc ::= Comment | PI | S
+   doctypedecl ::= '<!DOCTYPE' S Name
+               (S ExternalID)? S? ('[' intSubset ']' S?)? '>'
+   DeclSep ::= PEReference | S
+   PEReference ::= '%' Name ';'
+   intSubset ::= (markupdecl | DeclSep)*
+   markupdecl ::= elementdecl | AttlistDecl | EntityDecl
+              | NotationDecl | PI | Comment
+   extSubset ::= TextDecl? extSubsetDecl
+   extSubsetDecl ::= ( markupdecl | conditionalSect | DeclSep)*
+   SDDecl ::= S 'standalone' Eq (("'" ('yes' | 'no') "'")
+          | ('"' ('yes' | 'no') '"'))
+   STag ::= '<' Name (S Attribute)* S? '>'
+   Attribute ::= Name Eq AttValue
+   ETag ::= '</' Name S? '>'
+   content ::= CharData? ((element | Reference | CDSect
+           | PI | Comment) CharData?)*
+   EmptyElemTag ::= '<' Name (S Attribute)* S? '/>'
+   elementdecl ::= '<!ELEMENT' S Name S contentspec S? '>
+   contentspec ::= 'EMPTY' | 'ANY' | Mixed | children
+   children ::= (choice | seq) ('?' | '*' | '+')?
+   cp ::= (Name | choice | seq) ('?' | '*' | '+')?
+   choice ::= '(' S? cp ( S? '|' S? cp )+ S? ')'
+   seq ::= '(' S? cp ( S? ',' S? cp )* S? ')'
+   Mixed ::= '(' S? '#PCDATA' (S? '|' S? Name)* S? ')*'
+         | | '(' S? '#PCDATA' S? ')'
+   AttlistDecl ::= '<!ATTLIST' S Name AttDef* S? '>'
+   AttDef ::= S Name S AttType S DefaultDecl
+   AttType ::= StringType | TokenizedType | EnumeratedType
+   StringType ::= 'CDATA'
+   TokenizedType ::= 'ID' | 'IDREF' | 'IDREFS' | 'ENTITY' | 'ENTITIES'
+                 | 'NMTOKEN' | 'NMTOKENS'
+   EnumeratedType ::= NotationType | Enumeration
+   NotationType ::= 'NOTATION' S '(' S? Name (S? '|' S? Name)* S? ')'
+   Enumeration ::= '(' S? Nmtoken (S? '|' S? Nmtoken)* S? ')'
+   DefaultDecl ::= '#REQUIRED' | '#IMPLIED' | (('#FIXED' S)? AttValue)
+   conditionalSect ::= includeSect | ignoreSect
+   includeSect ::= '<![' S? 'INCLUDE' S? '[' extSubsetDecl ']]>'
+   ignoreSect ::= '<![' S? 'IGNORE' S? '[' ignoreSectContents* ']]>'
+   ignoreSectContents ::= Ignore ('<![' ignoreSectContents ']]>' Ignore)*
+   Ignore ::= Char* - (Char* ('<![' | ']]>') Char*)
+   CharRef ::= '&#' [0-9]+ ';' | '&#x' [0-9a-fA-F]+ ';'
+   Reference ::= EntityRef | CharRef
+   EntityRef ::= '&' Name ';'
+   PEReference ::= '%' Name ';'
+   EntityDecl ::= GEDecl | PEDecl
+   GEDecl ::= '<!ENTITY' S Name S EntityDef S? '>'
+   PEDecl ::= '<!ENTITY' S '%' S Name S PEDef S? '>'
+   EntityDef ::= EntityValue | (ExternalID NDataDecl?)
+   PEDef ::= EntityValue | ExternalID
+   ExternalID ::= 'SYSTEM' S SystemLiteral
+              | 'PUBLIC' S PubidLiteral S SystemLiteral
+   NDataDecl ::= S 'NDATA' S Name
+   TextDecl ::= '<?xml' VersionInfo? EncodingDecl S? '?>'
+   extParsedEnt ::= TextDecl? content
+   EncodingDecl ::= S 'encoding' Eq ('"' EncName '"' | "'" EncName "'" )
+   EncName ::= [A-Za-z] ([A-Za-z0-9._] | '-')*
+   NotationDecl ::= '<!NOTATION' S Name S (ExternalID | PublicID) S? '>'
+   PublicID ::= 'PUBLIC' S PubidLiteral
+ */
 	public int scanDoctype() {
 		scanSpaces();
 		if (!isToken("<!DOCTYPE")) {
