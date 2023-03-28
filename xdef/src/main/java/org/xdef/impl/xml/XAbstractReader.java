@@ -379,10 +379,10 @@ public abstract class XAbstractReader extends Reader {
  PEDecl ::= '<!ENTITY' S '%' S Name S PEDef S? '>'
  PEDef ::= EntityValue | ExternalID
  EntityValue ::= '"' ([^%&"] | PEReference | Reference)* '"'
-             |  "'" ([^%&'] | PEReference | Reference)* "'"
+			 |  "'" ([^%&'] | PEReference | Reference)* "'"
  PEReference ::= '%' Name ';'
  ExternalID ::= 'SYSTEM' S SystemLiteral
-            | 'PUBLIC' S PubidLiteral S SystemLiteral
+			| 'PUBLIC' S PubidLiteral S SystemLiteral
  SystemLiteral ::= '"' [^"]* '"') | ("'" [^']* "'")
  PubidLiteral ::= '"' PubidChar* '"' | "'" (PubidChar - "'")* "'"
  PubidChar ::= #x20 | #xD | #xA | [a-zA-Z0-9] | [-'()+,./:=?;!*#@$_%]
@@ -462,7 +462,7 @@ public abstract class XAbstractReader extends Reader {
 
 /*
  markupdecl ::= elementdecl | AttlistDecl | EntityDecl
-                 | NotationDecl | PI | Comment
+				 | NotationDecl | PI | Comment
 */
 	private int scanMarkupDecl() {
 		int result;
@@ -496,9 +496,9 @@ public abstract class XAbstractReader extends Reader {
 /*
    document ::= prolog element Misc*
    EntityValue ::= '"' ([^%&"] | PEReference | Reference)* '"'
-               |  "'" ([^%&'] | PEReference | Reference)* "'"
+			   |  "'" ([^%&'] | PEReference | Reference)* "'"
    AttValue ::= '"' ([^<&"] | Reference)* '"'
-            |  "'" ([^<&'] | Reference)* "'"
+			|  "'" ([^<&'] | Reference)* "'"
    SystemLiteral ::= '"' [^"]* '"') | ("'" [^']* "'")
    PubidLiteral ::= '"' PubidChar* '"' | "'" (PubidChar - "'")* "'"
    PubidChar ::= #x20 | #xD | #xA | [a-zA-Z0-9] | [-'()+,./:=?;!*#@$_%]
@@ -514,21 +514,21 @@ public abstract class XAbstractReader extends Reader {
    EncName ::= [A-Za-z] ([A-Za-z0-9._] | '-')
    Misc ::= Comment | PI | S
    doctypedecl ::= '<!DOCTYPE' S Name
-               (S ExternalID)? S? ('[' intSubset ']' S?)? '>'
+			   (S ExternalID)? S? ('[' intSubset ']' S?)? '>'
    DeclSep ::= PEReference | S
    PEReference ::= '%' Name ';'
    intSubset ::= (markupdecl | DeclSep)*
    markupdecl ::= elementdecl | AttlistDecl | EntityDecl
-              | NotationDecl | PI | Comment
+			  | NotationDecl | PI | Comment
    extSubset ::= TextDecl? extSubsetDecl
    extSubsetDecl ::= ( markupdecl | conditionalSect | DeclSep)*
    SDDecl ::= S 'standalone' Eq (("'" ('yes' | 'no') "'")
-          | ('"' ('yes' | 'no') '"'))
+		  | ('"' ('yes' | 'no') '"'))
    STag ::= '<' Name (S Attribute)* S? '>'
    Attribute ::= Name Eq AttValue
    ETag ::= '</' Name S? '>'
    content ::= CharData? ((element | Reference | CDSect
-           | PI | Comment) CharData?)*
+		   | PI | Comment) CharData?)*
    EmptyElemTag ::= '<' Name (S Attribute)* S? '/>'
    elementdecl ::= '<!ELEMENT' S Name S contentspec S? '>
    contentspec ::= 'EMPTY' | 'ANY' | Mixed | children
@@ -537,13 +537,13 @@ public abstract class XAbstractReader extends Reader {
    choice ::= '(' S? cp ( S? '|' S? cp )+ S? ')'
    seq ::= '(' S? cp ( S? ',' S? cp )* S? ')'
    Mixed ::= '(' S? '#PCDATA' (S? '|' S? Name)* S? ')*'
-         | | '(' S? '#PCDATA' S? ')'
+		 | | '(' S? '#PCDATA' S? ')'
    AttlistDecl ::= '<!ATTLIST' S Name AttDef* S? '>'
    AttDef ::= S Name S AttType S DefaultDecl
    AttType ::= StringType | TokenizedType | EnumeratedType
    StringType ::= 'CDATA'
    TokenizedType ::= 'ID' | 'IDREF' | 'IDREFS' | 'ENTITY' | 'ENTITIES'
-                 | 'NMTOKEN' | 'NMTOKENS'
+				 | 'NMTOKEN' | 'NMTOKENS'
    EnumeratedType ::= NotationType | Enumeration
    NotationType ::= 'NOTATION' S '(' S? Name (S? '|' S? Name)* S? ')'
    Enumeration ::= '(' S? Nmtoken (S? '|' S? Nmtoken)* S? ')'
@@ -563,7 +563,7 @@ public abstract class XAbstractReader extends Reader {
    EntityDef ::= EntityValue | (ExternalID NDataDecl?)
    PEDef ::= EntityValue | ExternalID
    ExternalID ::= 'SYSTEM' S SystemLiteral
-              | 'PUBLIC' S PubidLiteral S SystemLiteral
+			  | 'PUBLIC' S PubidLiteral S SystemLiteral
    NDataDecl ::= S 'NDATA' S Name
    TextDecl ::= '<?xml' VersionInfo? EncodingDecl S? '?>'
    extParsedEnt ::= TextDecl? content
