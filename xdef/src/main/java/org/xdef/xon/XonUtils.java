@@ -118,7 +118,7 @@ public class XonUtils {
 		final char separator,
 		final boolean skipHeader)
 		throws SRuntimeException {
-		return parseCSV(source, separator, skipHeader);
+		return CsvReader.parseCSV(source, separator, skipHeader);
 	}
 
 	/** Parse INI/Properties document from input reader.
