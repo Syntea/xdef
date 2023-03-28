@@ -105,7 +105,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
 	/** XML source position. */
 	public SPosition _elemLocator;
 
-	private final Stack<HandlerInfo> _stackReader = new Stack<HandlerInfo>();
+	private final Stack<HandlerInfo> _stackReader;
 	private Map<String, String> _entities;
 	private boolean _genPositionsX;
 	private boolean _illegalDoctype;
@@ -164,6 +164,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
 
 	private ChkParser(final ReportWriter reporter) {
 		super();
+		_stackReader = new Stack<>();
 		_sReporter = new SReporter(
 			reporter == null ?  new ArrayReporter() : reporter);
 		_entities = new LinkedHashMap<String, String>();

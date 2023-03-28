@@ -11,16 +11,15 @@ import java.util.Map.Entry;
  */
 public final class XDSourceInfo {
 	/** X position of screen left corner. */
-	public int _xpos = -1;
+	public int _xpos;
 	/** Y position of screen left corner. */
-	public int _ypos = -1;
+	public int _ypos;
 	/** Screen width. */
-	public int _width = -1;
+	public int _width;
 	/** Screen height. */
-	public int _height = -1;
+	public int _height;
 	/** Map with X-definition source items. */
-	private final Map<String, XDSourceItem> _sourcesMap =
-		new LinkedHashMap<String, XDSourceItem>();
+	private final Map<String, XDSourceItem> _sourcesMap;
 
 	/** Get map with the description of X-definition sources.
 	 * @return map with the description of X-definition sources.
@@ -28,7 +27,13 @@ public final class XDSourceInfo {
 	public final Map<String, XDSourceItem> getMap() {return _sourcesMap;}
 
 	/** Create the new empty instance. */
-	public XDSourceInfo() {}
+	public XDSourceInfo() {
+		_xpos = -1;
+		_ypos = -1;
+		_width = -1;
+		_height = -1;
+		_sourcesMap = new LinkedHashMap<>();
+	}
 
 	/** Copy values from the other XDSourceInfo object.
 	 * @param x other XDSourceInfo object to be copied to this object.

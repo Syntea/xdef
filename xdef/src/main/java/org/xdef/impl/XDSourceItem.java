@@ -25,16 +25,17 @@ public final class XDSourceItem {
 	/** True if this source item is active. */
 	public boolean _active;
 	/** Actual position to text of this item when the window is closed. */
-	public int _pos = -1;
+	public int _pos;
 
 	/** Create new empty instance. */
-	private XDSourceItem() {}
+	private XDSourceItem() {_pos = -1;}
 
 	/** Create new instance of this object from argument.
 	 * @param o may be file, URL or string with the text.
 	 * @throws Exception if an error occurs.
 	 */
 	public XDSourceItem(Object o) throws Exception {
+		this();
 		if (o instanceof File) {
 			_url = SUtils.getExtendedURL(((File) o).getCanonicalFile()
 				.toURI().toURL().toExternalForm());

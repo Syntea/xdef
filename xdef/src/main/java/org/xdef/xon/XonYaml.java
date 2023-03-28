@@ -13,11 +13,11 @@ import org.xdef.sys.SRuntimeException;
  * @author Vaclav Trojan
  */
 public final class XonYaml {
-	private static Object _yaml = null;
-	private static Constructor<?> _yamlConstructor = null;
-	private static Method _yamlDump = null;
-	private static Method _yamlLoadReader = null;
-	private static Method _yamlLoadInputStream = null;
+	private static Object _yaml;
+	private static Constructor<?> _yamlConstructor;
+	private static Method _yamlDump;
+	private static Method _yamlLoadReader;
+	private static Method _yamlLoadInputStream;
 
 	/** Prepare YAML object, load  methods and dump method.
 	 * @return instance of org.yaml.snakeyaml.Yaml object.

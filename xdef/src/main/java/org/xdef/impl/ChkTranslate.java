@@ -49,14 +49,18 @@ final class ChkTranslate extends SReporter {
 	/** Root check element. */
 	private ChkElement _rootChkElement;
 	/** Lexicon of tag names in different languages.*/
-	private XDLexicon _lexicon = null;
+	private XDLexicon _lexicon;
 	/** XDLexicon source language ID.*/
-	private int _sourceLanguageID = -1;
+	private int _sourceLanguageID;
 	/** XDLexicon destination language ID.*/
-	private int _destLanguageID = -1;
+	private int _destLanguageID;
 
 	/** Creates a new instance of ChkTranslate. */
-	ChkTranslate(final ReportWriter reporter) {super(reporter);}
+	ChkTranslate(final ReportWriter reporter) {
+		super(reporter);
+		_sourceLanguageID = -1;
+		_destLanguageID = -1;
+	}
 
 	/** Create an element from string. */
 	private Element stringToElement(final ChkElement chkEl,

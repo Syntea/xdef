@@ -12,15 +12,20 @@ import org.xdef.sys.SPosition;
  * @author Vaclav Trojan
  */
 public class XonObjParser implements XonParser {
-	private final Stack<Integer> _kinds = new Stack<Integer>();
-	private final Stack<List<Object>> _arrays = new Stack<List<Object>>();
-	private final Stack<Map<String, Object>> _maps =
-		new Stack<Map<String, Object>>();
+	private final Stack<Integer> _kinds;
+	private final Stack<List<Object>> _arrays;
+	private final Stack<Map<String, Object>> _maps;
 	private int _kind; // 0..value, 1..array, 2..map
-	private final Stack<String> _names = new Stack<String>();
+	private final Stack<String> _names;
 	private Object _value;
 
-	public XonObjParser() { _kinds.push(_kind = 0); }
+	public XonObjParser() {
+		_kinds = new Stack<>();
+		_arrays = new Stack<>();
+		_maps = new Stack<>();
+		_names = new Stack<>();
+		_kinds.push(_kind = 0);
+	}
 
 ////////////////////////////////////////////////////////////////////////////////
 // XonParser interface

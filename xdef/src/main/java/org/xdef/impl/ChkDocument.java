@@ -122,7 +122,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	/** XON object, result of XON/JSON parsing */
 	Object _xon;
 	/** The list of child check elements. */
-	final ArrayList<ChkElement> _chkChildNodes = new ArrayList<ChkElement>();
+	final ArrayList<ChkElement> _chkChildNodes;
 
 	// valid date parameters
 	/** Maximal accepted value of the year. */
@@ -137,8 +137,16 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	/** Creates a new instance of ChkDocument with ArrayReporter.
 	 * @param xd XDefinition.
 	 */
-	public ChkDocument(final XDefinition xd) {
+	private ChkDocument() {
 		super("$root", null);
+		_chkChildNodes = new ArrayList<>();
+	}
+	
+	/** Creates a new instance of ChkDocument with ArrayReporter.
+	 * @param xd XDefinition.
+	 */
+	public ChkDocument(final XDefinition xd) {
+		this();
 		SReporter reporter = new SReporter();
 		setDateRestrictions(xd.getXDPool());
 		init(xd, null, reporter, null, null);
@@ -152,7 +160,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 * @param props Properties used to create DefPool.
 	 */
 	ChkDocument(final Properties props) {
-		super("$root", null);
+		this();
 		XBuilder xb = new XBuilder(props);
 		xb.setSource(
 			"<xd:collection xmlns:xd='" + XDConstants.XDEF42_NS_URI+"'/>");
@@ -172,7 +180,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 * @param chkel ChkElement from which the object is created.
 	 */
 	ChkDocument(final XDefinition xd, final ChkElement chkel) {
-		super("#root", null);
+		this();
 		setDateRestrictions(xd.getXDPool());
 		init(xd, chkel._rootChkDocument._doc,
 			chkel._rootChkDocument._reporter,

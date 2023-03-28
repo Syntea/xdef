@@ -18,7 +18,7 @@ public class XDebugInfo implements XMDebugInfo {
 
 	public XDebugInfo() {
 		_varTables = null;
-		_statementList = new ArrayList<XStatementInfo>();
+		_statementList = new ArrayList<>();
 	}
 
 	/** Add debug info item and return index.

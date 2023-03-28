@@ -18,7 +18,7 @@ public final class XLexicon implements XDLexicon {
 	 */
 	public XLexicon(final String... languageNames) {
 		_languages = languageNames;
-		_dictionaries = new LinkedHashMap<String, String[]>();
+		_dictionaries = new LinkedHashMap<>();
 	}
 
 	@Override

@@ -12,7 +12,6 @@ import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.xdef.XDConstants;
 import org.xdef.xml.KXmlUtils;
 import static org.xdef.xon.XonNames.X_ARRAY;
 import static org.xdef.xon.XonNames.X_MAP;

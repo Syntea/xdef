@@ -61,13 +61,13 @@ final class ChkXONParser implements XParser, XonParser {
 	public String _sysId;
 
 	/** Stack with kind types of item. */
-	private final Stack<Integer> _kinds = new Stack<Integer>();
+	private final Stack<Integer> _kinds;
 	/** Type of item: 0..value, 1..array, 2..map */
 	private int _kind;
 	/** Stack with names of items of map. */
 	private Stack<SBuffer> _names;
 	/** Stack with stack with names of items of map. */
-	private final Stack<Stack<SBuffer>> _mapNames = new Stack<Stack<SBuffer>>();
+	private final Stack<Stack<SBuffer>> _mapNames;
 	/** flag if namespace was generated. */
 	private boolean _nsGenerated;
 
@@ -88,6 +88,8 @@ final class ChkXONParser implements XParser, XonParser {
 	ChkXONParser(final ReportWriter reporter,
 		final Object source,
 		final String sourceName) {
+		_kinds = new Stack<>();
+		_mapNames = new Stack<>();
 		_sReporter =
 			new SReporter(reporter == null ?  new ArrayReporter() : reporter);
 		if (source instanceof String) {
