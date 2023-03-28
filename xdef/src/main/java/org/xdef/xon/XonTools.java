@@ -8,7 +8,6 @@ import java.io.StringReader;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.InetAddress;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Currency;
@@ -156,7 +155,7 @@ public class XonTools {
 		for (;;) {
 			p.isSpaces();
 			if (p.isChar('[')) {
-				List<Object> ar1 = new ArrayList<>();
+				List<Object> ar1 = new ArrayList<Object>();
 				parseJArray(ar1, p);
 				ar.add(ar1);
 				p.isSpaces();
@@ -184,7 +183,7 @@ public class XonTools {
 					try {
 						ar.add(Long.parseLong(
 							p.getBufferPart(pos, p.getIndex())));
-					} catch (NumberFormatException ex) {
+					} catch (Exception ex) {
 						ar.add(new BigDecimal(
 							p.getBufferPart(pos, p.getIndex())));
 					}
@@ -201,7 +200,7 @@ public class XonTools {
 						} else {
 							try {
 								ar.add(Long.parseLong(s));
-							} catch (NumberFormatException ex) {
+							} catch (Exception ex) {
 								ar.add(new BigInteger(
 									p.getBufferPart(pos, p.getIndex())));
 							}
@@ -261,7 +260,7 @@ public class XonTools {
 		if (s.isEmpty()) {
 			return "";
 		} else if (s.charAt(0) == '[') {
-			ArrayList<Object> ar = new ArrayList<>();
+			ArrayList<Object> ar = new ArrayList<Object>();
 			StringParser p = new StringParser(s);
 			p.setIndex(1);
 			parseJArray(ar, p);
@@ -296,7 +295,7 @@ public class XonTools {
 		if (ch >= '0' && ch <= '9') { // not redundant leading zero
 			try {
 				return Long.parseLong(s);
-			} catch (NumberFormatException ex) {}
+			} catch (Exception ex) {}
 			try {
 				return new BigDecimal(s);
 			} catch (Exception ex) {}
@@ -798,7 +797,7 @@ public class XonTools {
 			try { // try if it is URL
 				return getInputFromObject(
 					SUtils.getExtendedURL((String)source), sysId);
-			} catch (MalformedURLException ex) {
+			} catch (Exception ex) {
 				//not URL, file name, so create from string a reader
 				return new InputData(new StringReader((String) source),
 					sysId==null ? "STRING" : sysId);

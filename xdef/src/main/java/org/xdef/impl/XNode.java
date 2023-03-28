@@ -28,7 +28,7 @@ public abstract class XNode implements XMNode {
 	////////////////////////////////////////////////////////////////////////////
 	// occurrence
 	////////////////////////////////////////////////////////////////////////////
-	private final XOccurrence _occ = new XOccurrence();
+	private final XOccurrence _occ;
 //	/** occurrence minimum. */
 //	private int _min;
 //	/** occurrence maximum. */
@@ -52,6 +52,7 @@ public abstract class XNode implements XMNode {
 		final String name,
 		final XDPool xp,
 		final short kind) {
+		_occ = new XOccurrence();
 		_name = name == null ? "" : name.intern();
 		_nsURI = nsURI == null ? null : nsURI.intern();
 		_xp = (XPool) xp;

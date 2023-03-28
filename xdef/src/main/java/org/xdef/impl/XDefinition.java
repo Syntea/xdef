@@ -20,14 +20,13 @@ import org.xdef.sys.SRuntimeException;
  */
 public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 	/** table of xElements. */
-	private final ArrayList<XElement> _xElements = new ArrayList<XElement>();
+	private final ArrayList<XElement> _xElements;
 	/** Implementation properties. */
-	public final Properties _properties = new Properties();
+	public final Properties _properties;
 	/** root namespaces. */
-	public final Map<String, String> _namespaces =
-		new LinkedHashMap<String,String>();
+	public final Map<String, String> _namespaces;
 	/** root selection. */
-	public Map<String,XNode> _rootSelection = new LinkedHashMap<String,XNode>();
+	public Map<String,XNode> _rootSelection;
 	/** Array of X-definitions names from where to accept local declarations. */
 	public String[] _importLocal;
 
@@ -62,6 +61,10 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 		final SPosition sourcePosition,
 		final byte xmlVersion) {
 		super(name, nsURI, (XPool) xdp, XNode.XMDEFINITION);
+		_xElements = new ArrayList<>();
+		_properties = new Properties();
+		_namespaces = new LinkedHashMap<>();
+		_rootSelection = new LinkedHashMap<>();
 		_xdVersion = XDConstants.XDEF31_NS_URI.equals(nsURI) ? XConstants.XD31
 			: XDConstants.XDEF32_NS_URI.equals(nsURI) ? XConstants.XD32
 			: XDConstants.XDEF40_NS_URI.equals(nsURI) ? XConstants.XD40

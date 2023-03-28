@@ -118,7 +118,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	private XComponent _xComponent;
 
 	/** The set containing marked unique sets. */
-	final Set<CodeUniqueset> _markedUniqueSets = new HashSet<CodeUniqueset>();
+	final Set<CodeUniqueset> _markedUniqueSets;
 
 	/** Creates a new empty instance of ChkElement - just for internal use.
 	 * @param xelement X-definition of element.
@@ -131,6 +131,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		final XElement xelement,
 		boolean ignoreAll) {
 		super(element==null ? xelement.getName(): element.getNodeName(),parent);
+		_markedUniqueSets = new HashSet<>();
 //		_sourceElem=_elemValue=null; _selector=null; _nil=false;//Java makes it!
 //		Arrays.fill(_counters, 0); _nextDefIndex=_numText=0; //Java makes it!
 //		_boundKeys = null; _nextDefIndex=_numText=0; //Java makes it!

@@ -65,7 +65,7 @@ public final class XElement extends XCodeDescriptor
 		super(name, nsURI, xdef.getXDPool(), XNode.XMELEMENT);
 		_sqId = ((XPool)xdef.getXDPool()).getSqId();
 		_definition = xdef;
-		_attrs = new LinkedHashMap<String, XData>();
+		_attrs = new LinkedHashMap<>();
 		_childNodes = new XNode[0];
 		//copy global options from the definition
 		copyOptions(xdef);
