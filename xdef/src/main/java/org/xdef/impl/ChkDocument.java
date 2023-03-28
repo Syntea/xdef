@@ -141,7 +141,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		super("$root", null);
 		_chkChildNodes = new ArrayList<>();
 	}
-	
+
 	/** Creates a new instance of ChkDocument with ArrayReporter.
 	 * @param xd XDefinition.
 	 */

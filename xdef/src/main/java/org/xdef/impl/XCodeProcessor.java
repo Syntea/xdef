@@ -559,7 +559,7 @@ public final class XCodeProcessor {
 		_functionResolver = new XDFunctionResolver();
 		_variableResolver = new XDVariableResolver();
 	}
-	
+
 	/** Creates a new instance of ScriptCodeProcessor
 	 * @param xd XDefinition.
 	 * @param reporter container for error messages.
