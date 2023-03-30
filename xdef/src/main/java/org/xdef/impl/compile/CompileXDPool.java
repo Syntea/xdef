@@ -1,57 +1,58 @@
 package org.xdef.impl.compile;
 
+import java.io.File;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.StringTokenizer;
+import org.xdef.XDContainer;
+import org.xdef.XDParser;
+import org.xdef.XDPool;
+import org.xdef.XDValue;
+import org.xdef.XDValueID;
+import static org.xdef.XDValueID.XD_ANY;
+import static org.xdef.XDValueID.XD_BOOLEAN;
+import static org.xdef.XDValueID.XD_VOID;
+import org.xdef.impl.XChoice;
+import org.xdef.impl.XComment;
+import org.xdef.impl.XConstants;
+import org.xdef.impl.XData;
+import org.xdef.impl.XDebugInfo;
+import org.xdef.impl.XDefinition;
+import org.xdef.impl.XElement;
+import org.xdef.impl.XLexicon;
+import org.xdef.impl.XMixed;
+import org.xdef.impl.XNode;
+import org.xdef.impl.XOccurrence;
+import org.xdef.impl.XPool;
+import org.xdef.impl.XSelector;
+import org.xdef.impl.XSelectorEnd;
+import org.xdef.impl.XSequence;
+import org.xdef.impl.XVariableTable;
 import org.xdef.impl.code.CodeTable;
+import org.xdef.impl.parsers.XDParseEnum;
+import org.xdef.model.XMData;
+import org.xdef.model.XMElement;
+import org.xdef.model.XMNode;
+import org.xdef.model.XMVariable;
 import org.xdef.msg.SYS;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.Report;
+import org.xdef.sys.ReportWriter;
 import org.xdef.sys.SBuffer;
 import org.xdef.sys.SError;
 import org.xdef.sys.SPosition;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
-import org.xdef.XDParser;
-import org.xdef.XDPool;
-import org.xdef.XDValue;
-import org.xdef.impl.XChoice;
-import org.xdef.impl.XComment;
-import org.xdef.impl.XData;
-import org.xdef.impl.XDebugInfo;
-import org.xdef.impl.XDefinition;
-import org.xdef.impl.XElement;
-import org.xdef.impl.XMixed;
-import org.xdef.impl.XNode;
-import org.xdef.impl.XOccurrence;
-import org.xdef.impl.XSelector;
-import org.xdef.impl.XSelectorEnd;
-import org.xdef.impl.XSequence;
-import org.xdef.impl.XLexicon;
-import org.xdef.impl.XVariableTable;
-import org.xdef.impl.parsers.XDParseEnum;
-import org.xdef.model.XMElement;
-import org.xdef.model.XMNode;
-import org.xdef.model.XMVariable;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.StringTokenizer;
-import org.xdef.sys.ReportWriter;
-import org.xdef.XDContainer;
-import org.xdef.impl.XPool;
-import org.xdef.XDValueID;
-import java.io.File;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Set;
-import static org.xdef.XDValueID.XD_ANY;
-import static org.xdef.XDValueID.XD_BOOLEAN;
-import static org.xdef.XDValueID.XD_VOID;
-import org.xdef.impl.XConstants;
 
 /** Compile X-definitions from source data.
  * @author Vaclav Trojan
@@ -86,7 +87,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 	/** Code generator. */
 	private final CompileCode _codeGenerator;
 	/** Set of XON/JSON names. */
-	Set<String> _xonNames = new HashSet<String>();
+	Set<String> _xonNames = new HashSet<>();
 
 	/** Creates a new instance of XDefCompiler
 	 * @param xp The XDefPool object.
@@ -105,7 +106,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			xp.isDebugMode(),
 			xp.isIgnoreUnresolvedExternals());
 		_xdefs = xdefs;
-		_nodeList = new ArrayList<XNode>();
+		_nodeList = new ArrayList<>();
 		_codeGenerator = _precomp.getCodeGenerator();
 		_xdefPNodes = _precomp.getPXDefs();
 		_lexicon = _precomp.getPLexiconList();
@@ -487,8 +488,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				"Class parameter of compileXD method",
 				"<xd:declaration> external method { ... } ...");
 		}
-		for (int i = 0; i < _xdefPNodes.size(); i++) {
-			PNode pnode = _xdefPNodes.get(i);
+		for (PNode pnode : _xdefPNodes) {
 			PAttr pa = _precomp.getXdefAttr(pnode, "methods", false, true);
 			if (pa!= null) {
 				if (pnode._xdVersion > XConstants.XD31) {
@@ -514,8 +514,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				}
 				if (!_codeGenerator._ignoreUnresolvedExternals) {
 					String value = pa._value.getString();
-					Map<String, Class<?>> ht =
-						new LinkedHashMap<String,Class<?>>();
+					Map<String, Class<?>> ht = new LinkedHashMap<>();
 					for (Class<?> clazz : _codeGenerator._extClasses) {
 						ht.put(clazz.getName(), clazz);
 					}
@@ -527,7 +526,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 							try {
 								clazz = Class.forName(clsname,
 									false, _scriptCompiler.getClassLoader());
-							} catch (Exception ex) {
+							} catch (ClassNotFoundException ex) {
 								clazz = null;
 							}
 							if (clazz != null) {
@@ -546,7 +545,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				}
 			}
 			pa = _precomp.getXdefAttr(pnode, "importLocal", false, true);
-			ArrayList<String> locals = new ArrayList<String>();
+			ArrayList<String> locals = new ArrayList<>();
 			locals.add(pnode._xdef.getName() + '#');
 			if (pa != null) {
 				_scriptCompiler.setSource(pa._value,
@@ -693,9 +692,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		final XDPool xp) {
 		if (!lexicon.isEmpty()) { //Compile lexicon section
 			/** Array of properties for lexicon languages. */
-			List<Map<String,String>> languages =
-				new ArrayList<Map<String,String>>();
-			for (PNode nodei: lexicon) {
+			List<Map<String,String>> languages = new ArrayList<>();
+			for (PNode nodei : lexicon) {
 				PAttr pa = _precomp.getXdefAttr(nodei, "language", true, true);
 				SBuffer lang = pa == null ? null : pa._value;
 				pa = _precomp.getXdefAttr(nodei, "default", false, true);
@@ -756,7 +754,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						}
 					}
 					Map<String,String> p = languages .get(okIndex);
-					for (String s: p.keySet()) {
+					for (String s : p.keySet()) {
 						String v = s;
 						int ndx = v.indexOf('#');
 						if (ndx >= 0) {
@@ -817,7 +815,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				}
 			}
 		}
-		for (PNode nodei: listComponent) {
+		for (PNode nodei : listComponent) {
 			String defName = nodei._xdef == null ? "" : nodei._xdef.getName();
 			_scriptCompiler.setSource(nodei._value, defName, nodei._xdef,
 				nodei._xdVersion, nodei._nsPrefixes, nodei._xpathPos);
@@ -835,8 +833,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		// Move all declarations of BNF grammars and variables from the
 		// list of X-definitions to the separated lists of variable declarations
 		// and of BNF grammar declarations.
-		for (int i = 0; i < _xdefPNodes.size(); i++) {
-			PNode def = _xdefPNodes.get(i);
+		for (PNode def : _xdefPNodes) {
 			// since we are removing childnodes from X-definition we must
 			// process the childnodes list downwards!
 			// However, we insert the item to the first position of the created
@@ -960,7 +957,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		} else {
 			return;
 		}
-		for (PAttr pattr: pnode.getAttrs()) {
+		for (PAttr pattr : pnode.getAttrs()) {
 			String key = pattr._name;
 			SBuffer sval = pattr._value;
 			_scriptCompiler.setSource(sval,
@@ -1289,8 +1286,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		}
 		xdPos += (xn.getKind() == XNode.XMTEXT) ? "$text" : name;
 		int n = 1;
-		for (int i = 0; i < parentElement._childNodes.length; i++) {
-			XNode x = parentElement._childNodes[i];
+		for (XNode x : parentElement._childNodes) {
 			String xpos = x.getXDPosition();
 			if (xpos != null) { // not #selector_end
 				if (xpos.endsWith("]")) {
@@ -1305,6 +1301,46 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			xdPos += "[" + n + "]";
 		}
 		xn.setXDPosition(xdPos);
+	}
+
+	/** Change namespace ns1 to ns in all attribudes and elements witn ns1.
+	 * @param xe Element to be changed.
+	 * @param ns1 original namespace.
+	 * @param ns2 nes namespace.
+	 * @param hs HashSet with processed nodes (revent unlimited recursive call).
+	 */
+	private void changeNSAll(final XElement xe,
+		final String ns1,
+		final String ns2,
+		final HashSet<XNode> hs) {
+		if (!hs.add(xe)) {
+			return; //already processed
+		}
+		// change attributes
+		for (XMData x: xe.getAttrs()) {
+			String ns = x.getNSUri();
+			if (ns != null && ns.equals(ns1)) {
+				XData y = (XData) xe.getAttrNS(ns1, x.getName());
+				if (ns2 != null) {
+					XData z = new XData(y);
+					z.setNS(ns2);
+					xe.setDefAttr(z);
+				}
+			}
+		}
+		// change child nodes
+		XNode[] nodes = (XNode[]) xe.getChildNodeModels();
+		for (int i = 0; i < nodes.length; i++) {
+			XNode x = nodes[i];
+			if (x.getKind() == XMNode.XMELEMENT) {
+				String ns = x.getNSUri();
+				if (ns != null && ns.equals(ns1)) {
+					nodes[i] = x = new XElement((XElement) x);
+					x.setNS(ns2);
+				}
+				changeNSAll((XElement) x, ns1, ns2, hs);
+			}
+		}
 	}
 
 	private void compileXChild(final XNode parentNode,
@@ -1515,7 +1551,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		compileAttrs(pnode, _scriptCompiler._actDefName, newNode, false);
 		addNode(parentNode, newNode, level, pnode._name);
 		//compile child nodes
-		for (PNode nodei: pnode.getChildNodes()) {
+		for (PNode nodei : pnode.getChildNodes()) {
 			XElement x = newNode.getKind() == XMNode.XMELEMENT
 				? (XElement) newNode : lastElement;
 			if (nodei._xdef == null) {
@@ -1568,7 +1604,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		_scriptCompiler._importLocals =
 			def._importLocal = pnode._xdef._importLocal;
 		pnode._xdef = def;
-		for (Entry<String, Integer> e: pnode._nsPrefixes.entrySet()) {
+		for (Entry<String, Integer> e : pnode._nsPrefixes.entrySet()) {
 			def._namespaces.put(e.getKey(),
 				_codeGenerator._namespaceURIs.get(e.getValue()));
 		}
@@ -1835,9 +1871,9 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					((XPool) xdp).setDebugInfo(_codeGenerator._debugInfo);
 				}
 				// set X-components to xdp
-				HashSet<String> classNames = new HashSet<String>();
+				HashSet<String> classNames = new HashSet<>();
 				// create map of components
-				Map<String, String> x = new LinkedHashMap<String, String>();
+				Map<String, String> x = new LinkedHashMap<>();
 				for (Map.Entry<String, SBuffer> en:
 					_codeGenerator._components.entrySet()) {
 					XMNode xn = (XMElement) xdp.findModel(en.getKey());
@@ -1912,7 +1948,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				}
 				((XPool) xdp).setXComponentBinds(x);
 				// enumerations
-				x = new LinkedHashMap<String, String>();
+				x = new LinkedHashMap<>();
 				for (String name: _codeGenerator._enums.keySet()) {
 					int ndx;
 					if ((ndx = name.indexOf(' ')) >= 0) {
@@ -1942,8 +1978,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						if (xv.getItemId() == XDValueID.XD_PARSER) {
 							XDParser p = (XDParser) xv;
 							String declName = p.getDeclaredName();
-							ndx = declName.indexOf('#');
-							s = ndx >= 0 ? declName.substring(ndx+1) : declName;
+//							ndx = declName.indexOf('#');
+//							s = ndx >= 0 ? declName.substring(ndx+1) : declName;
 							XDContainer xc = p.getNamedParams();
 							if (xc != null && (p instanceof XDParseEnum
 								&& (xv = xc.getXDNamedItemValue("argument"))
@@ -2114,7 +2150,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				xel._childNodes = new XNode[0];
 				return false;
 			}
-			XElement y = (XElement) x;
+			XElement y;
 			if ((y = (XElement) x) == xel  //self reference
 				&& xel._childNodes.length==1 && xel.getAttrs().length==0) {
 				//Self reference is not allowed: &{0}
@@ -2282,10 +2318,15 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				xel.setOccurrence(y);
 			}
 			int leny = y._childNodes.length;
+			String ns1 = y.getNSUri(), ns2 = xel.getNSUri();
 			xel.setReferencePos(y.getXDPosition());
 			if (xel._childNodes.length == 1 && xel.getAttrs().length == 0) {
 				xel._attrs.putAll(y._attrs);
 				xel._childNodes = y._childNodes;
+				if (ns1 != null ? !ns1.equals(ns2) : ns2 != null) {
+					// namespace of root element changed
+					changeNSAll(xel, ns1, ns2, new HashSet<>());
+				}
 				xel.setReference(true);
 				return true;
 			} else {
@@ -2309,6 +2350,10 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				copyChildNodes(xel._childNodes, 1, childNodes, leny, lenx);
 				lenx += leny;
 				xel._childNodes = childNodes;
+				if (ns1 != null ? !ns1.equals(ns2) : ns2 != null) {
+					// namespace of root element changed
+					changeNSAll(xel, ns1, ns2, new HashSet<>());
+				}
 			}
 		}
 		if (!xel.isSpecified()) {
@@ -2461,7 +2506,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		final boolean selectiveFlag,
 		final HashSet<XNode> hs) {
 		hs.add(xel);
-		HashMap<String, Integer> groupItems = new HashMap<String, Integer>();
+		HashMap<String, Integer> groupItems = new HashMap<>();
 		boolean ignorable = ignorableFlag;
 		boolean selective = selectiveFlag;
 		boolean notReported = true;
