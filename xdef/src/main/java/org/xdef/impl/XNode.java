@@ -5,6 +5,16 @@ import java.util.ArrayList;
 import javax.xml.namespace.QName;
 import org.xdef.XDPool;
 import org.xdef.model.XMNode;
+import static org.xdef.model.XMNode.XMATTRIBUTE;
+import static org.xdef.model.XMNode.XMCHOICE;
+import static org.xdef.model.XMNode.XMCOMMENT;
+import static org.xdef.model.XMNode.XMDEFINITION;
+import static org.xdef.model.XMNode.XMELEMENT;
+import static org.xdef.model.XMNode.XMMIXED;
+import static org.xdef.model.XMNode.XMPI;
+import static org.xdef.model.XMNode.XMSELECTOR_END;
+import static org.xdef.model.XMNode.XMSEQUENCE;
+import static org.xdef.model.XMNode.XMTEXT;
 import org.xdef.model.XMOccurrence;
 import org.xdef.msg.SYS;
 import org.xdef.msg.XDEF;
@@ -18,21 +28,14 @@ import org.xdef.sys.SPosition;
 public abstract class XNode implements XMNode {
 	/** The "kind" of object. */
 	private final short _kind;
+	/** Pool of definitions. */
+	private final XPool _xp;
+	/** Occurrence. */
+	private final XOccurrence _occ;
 	/** The name of item. */
 	private String _name;
 	/** NameSpace URI */
-	private final String _nsURI;
-	/** Pool of definitions. */
-	private final XPool _xp;
-
-	////////////////////////////////////////////////////////////////////////////
-	// occurrence
-	////////////////////////////////////////////////////////////////////////////
-	private final XOccurrence _occ;
-//	/** occurrence minimum. */
-//	private int _min;
-//	/** occurrence maximum. */
-//	private int _max;
+	private String _nsURI;
 
 	////////////////////////////////////////////////////////////////////////////
 	// position (used in error reporting and debugging).
@@ -63,6 +66,11 @@ public abstract class XNode implements XMNode {
 	 * @param name the new name of node.
 	 */
 	public final void setName(String name) {_name = name;}
+
+	/** Set namespace of node.
+	 * @param ns the new name of node.
+	 */
+	public final void setNS(String ns) {_nsURI = ns;}
 
 ////////////////////////////////////////////////////////////////////////////////
 // XMNode interface
@@ -149,13 +157,13 @@ public abstract class XNode implements XMNode {
 	public String toString() {
 		switch (_kind) {
 			case XMDEFINITION:
-				return "XMDEFINITION: "+(_name.isEmpty() ? "(nameless)":_name);
+				return "XMDEFINITION: " + (_name.isEmpty()?"(nameless)":_name);
+			case XMATTRIBUTE:
+				return "XMATTRIBUTE: " + _name + (_nsURI!=null?" : "+_nsURI:"");
 			case XMELEMENT:
-				return "XMELEMENT: " + _name;
+				return "XMELEMENT: " + _name + (_nsURI!=null?" : "+_nsURI:"");
 			case XMTEXT:
 				return "XMTEXT: text()";
-			case XMATTRIBUTE:
-				return "XMATTRIBUTE: " + _name;
 			case XMSEQUENCE:
 				return "XMSEQUENCE: " + _name;
 			case XMCHOICE:
