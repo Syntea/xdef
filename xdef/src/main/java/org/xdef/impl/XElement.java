@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import org.xdef.XDConstants;
 import org.xdef.XDDocument;
 import org.xdef.impl.code.CodeTable;
 import org.xdef.impl.xml.KNamespace;
@@ -16,6 +15,7 @@ import org.xdef.model.XMData;
 import org.xdef.model.XMDefinition;
 import org.xdef.model.XMElement;
 import org.xdef.model.XMNode;
+import static org.xdef.model.XMNode.XMELEMENT;
 import org.xdef.msg.SYS;
 import org.xdef.msg.XDEF;
 import org.xdef.proc.XDLexicon;
@@ -76,11 +76,11 @@ public final class XElement extends XCodeDescriptor
 	 */
 	public XElement(final XElement x) {
 		super(x);
-		_attrs = x._attrs;
-		_childNodes = new XNode[x._childNodes.length];
 		_sqId = ((XPool)x.getXDPool()).getSqId();
-		System.arraycopy(x._childNodes, 0, _childNodes, 0, _childNodes.length);
 		_definition = x._definition;
+		_attrs = new LinkedHashMap<>(x._attrs);
+		_childNodes = new XNode[x._childNodes.length];
+		System.arraycopy(x._childNodes, 0, _childNodes, 0, _childNodes.length);
 		_forget = x._forget;
 		_clearAdoptedForgets = x._clearAdoptedForgets;
 		_template = x._template;
@@ -222,8 +222,15 @@ public final class XElement extends XCodeDescriptor
 	 * @param xAttr XData model of the attribute.
 	 */
 	public final void setDefAttr(final XData xAttr) {
-		String key = xAttr.getName();
-		_attrs.put(key, xAttr);
+		_attrs.put(xAttr.getName(), xAttr);
+	}
+
+	/** Remove definition of attribute.
+	 * @param xAttr XData model of the attribute to be removed.
+	 * @return original value of attribute;
+	 */
+	public final XData removeDefAttr(final XData xAttr) {
+		return _attrs.remove(xAttr.getName());
 	}
 
 	/** Get names of attributes of this XElement.

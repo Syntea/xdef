@@ -1317,13 +1317,15 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			return; //already processed
 		}
 		// change attributes
-		for (XMData x: xe.getAttrs()) {
+		XMData[] attrs = xe.getAttrs();
+		for (XMData x: attrs) {
 			String ns = x.getNSUri();
-			if (ns != null && ns.equals(ns1)) {
+			if (ns1 != null && ns1.equals(ns)) {
 				XData y = (XData) xe.getAttrNS(ns1, x.getName());
+				xe.removeDefAttr(y);
 				if (ns2 != null) {
 					XData z = new XData(y);
-					z.setNS(ns2);
+					z.changeNS(ns2);
 					xe.setDefAttr(z);
 				}
 			}
@@ -1336,7 +1338,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				String ns = x.getNSUri();
 				if (ns != null && ns.equals(ns1)) {
 					nodes[i] = x = new XElement((XElement) x);
-					x.setNS(ns2);
+					x.changeNS(ns2);
 				}
 				changeNSAll((XElement) x, ns1, ns2, hs);
 			}
@@ -2326,8 +2328,9 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				if (ns1 != null ? !ns1.equals(ns2) : ns2 != null) {
 					// namespace of root element changed
 					changeNSAll(xel, ns1, ns2, new HashSet<>());
+				} else {
+					xel.setReference(true);
 				}
-				xel.setReference(true);
 				return true;
 			} else {
 				xel.setReference(false);
