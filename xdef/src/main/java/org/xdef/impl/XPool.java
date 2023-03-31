@@ -1232,7 +1232,6 @@ public final class XPool implements XDPool, Serializable {
 			}
 		}
 		xw.writeString(null);
-
 		len = _xdefs.size();
 		xw.writeLength(len);
 		ArrayList<XNode> list = new ArrayList<XNode>();

@@ -67,11 +67,15 @@ public abstract class XNode implements XMNode {
 	 */
 	public final void setName(String name) {_name = name;}
 
-	/** Set namespace of node.
+	/** Change namespace of node. Both the new namespace and tho old one
+	 * must not be empty. Otherwise the command is ignored.
 	 * @param ns the new name of node.
 	 */
-	public final void setNS(String ns) {_nsURI = ns;}
-
+	public final void changeNS(String ns) {
+		if (ns != null && !ns.isEmpty() && _nsURI != null) {
+			_nsURI = ns;
+		}
+	}
 ////////////////////////////////////////////////////////////////////////////////
 // XMNode interface
 ////////////////////////////////////////////////////////////////////////////////
