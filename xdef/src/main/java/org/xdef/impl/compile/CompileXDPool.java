@@ -1303,19 +1303,22 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		xn.setXDPosition(xdPos);
 	}
 
-	/** Change namespace ns1 to ns in all attribudes and elements witn ns1.
+	/** Change namespace ns1 to ns of model in attribudes and elements witn ns1.
+	 * If the new namespace is null, then attributes and child nodes with the
+	 * namespace are removed.
 	 * @param xe Element to be changed.
 	 * @param ns1 original namespace.
-	 * @param ns2 nes namespace.
+	 * @param ns2 new namespace.
 	 * @param hs HashSet with processed nodes (revent unlimited recursive call).
 	 */
-	private void changeNSAll(final XElement xe,
+	private void changeModelNS(final XElement xe,
 		final String ns1,
 		final String ns2,
 		final HashSet<XNode> hs) {
 		if (!hs.add(xe)) {
 			return; //already processed
 		}
+		xe.setReference(false);
 		// change attributes
 		XMData[] attrs = xe.getAttrs();
 		for (XMData x: attrs) {
@@ -1331,16 +1334,32 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			}
 		}
 		// change child nodes
-		XNode[] nodes = (XNode[]) xe.getChildNodeModels();
+		XNode[] nodes = new XNode[xe._childNodes.length];
+		System.arraycopy(xe._childNodes, 0, nodes, 0, nodes.length);
+		xe._childNodes = nodes;
 		for (int i = 0; i < nodes.length; i++) {
 			XNode x = nodes[i];
 			if (x.getKind() == XMNode.XMELEMENT) {
 				String ns = x.getNSUri();
 				if (ns != null && ns.equals(ns1)) {
-					nodes[i] = x = new XElement((XElement) x);
-					x.changeNS(ns2);
+					if (ns2 == null) {
+						nodes = new XNode[xe._childNodes.length - 1];
+						for (int j = 0; j < i; j++) {
+							nodes[j] = xe._childNodes[j];
+						}
+						for (int j = i+1; j < xe._childNodes.length ; j++) {
+							nodes[j-1] = xe._childNodes[j];
+						}
+						xe._childNodes = nodes;
+						i--;
+						continue;
+					} else {
+						XElement z = new XElement((XElement) x);
+						z.changeNS(ns2);
+						nodes[i] = z;
+						changeModelNS((XElement) nodes[i], ns1, ns2, hs);
+					}
 				}
-				changeNSAll((XElement) x, ns1, ns2, hs);
 			}
 		}
 	}
@@ -2153,8 +2172,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				return false;
 			}
 			XElement y;
-			if ((y = (XElement) x) == xel  //self reference
-				&& xel._childNodes.length==1 && xel.getAttrs().length==0) {
+			if ((y = (XElement) x)==xel && lenx==1 && xel.getAttrs().length==0){
 				//Self reference is not allowed: &{0}
 				error(xref.getSPosition(), XDEF.XDEF321, xref.getXDPosition());
 				XNode[] childNodes = xel._childNodes;
@@ -2327,7 +2345,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				xel._childNodes = y._childNodes;
 				if (ns1 != null ? !ns1.equals(ns2) : ns2 != null) {
 					// namespace of root element changed
-					changeNSAll(xel, ns1, ns2, new HashSet<>());
+					changeModelNS(xel, ns1, ns2, new HashSet<>());
 				} else {
 					xel.setReference(true);
 				}
@@ -2355,7 +2373,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				xel._childNodes = childNodes;
 				if (ns1 != null ? !ns1.equals(ns2) : ns2 != null) {
 					// namespace of root element changed
-					changeNSAll(xel, ns1, ns2, new HashSet<>());
+					changeModelNS(xel, ns1, ns2, new HashSet<>());
 				}
 			}
 		}
@@ -2363,6 +2381,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			xel.setRequired(); //interval not set, let's set defaults
 		}
 		int i = 0;
+		lenx = xel._childNodes.length;
 		while(i < lenx) {//resolve include references
 			if (xel._childNodes[i].getKind() != CompileReference.XMINCLUDE) {
 				i++;
@@ -2477,12 +2496,12 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		}
 		boolean result = resolveReference(xel, level+1, xel.isSpecified(), hs);
 		if (result) {
-			for (XNode dn: xel._childNodes) {
-				if (dn.getKind() == XNode.XMELEMENT && !hs.contains(dn)) {
-					result &= checkIntegrity((XElement) dn, level+1, hs);
-				} else if (dn.getKind() == XNode.XMTEXT) {
-					if (!dn.isSpecified()) {
-						dn.setOptional();
+			for (XNode xn: xel._childNodes) {
+				if (xn.getKind() == XNode.XMELEMENT && !hs.contains(xn)) {
+					result &= checkIntegrity((XElement) xn, level+1, hs);
+				} else if (xn.getKind() == XNode.XMTEXT) {
+					if (!xn.isSpecified()) {
+						xn.setOptional();
 					}
 				}
 			}
