@@ -101,74 +101,6 @@ public class MyTest extends XDTester {
 		XDPool xp;
 		XComponent xc;
 		ArrayReporter reporter = new ArrayReporter();
-		try {// test %anyName in map
-		xdef = // Test reference to model with different namespace
-"<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
-"<xd:def name='A' root='a' xmlns='a.b' xmlns:a='a.b'>\n"+
-"<a a='int()' a:b='int()' >\n"+
-"  <b a='int()' a:b='int()' />\n"+
-"</a>\n"+
-"</xd:def>\n" +
-"<xd:def name='B' root='a' xmlns='c.d' xmlns:a='a.b'>\n"+
-"<a xd:script='ref A#a:a'/>\n"+
-"</xd:def>\n" +
-"</xd:collection>";
-		xp = XDFactory.compileXD(null, xdef);
-//		xp = compile(xdef);
-		xml = "<b:a xmlns:b='a.b' a='1' b:b='2'><b:b  a='3' b:b='4'/></b:a>";
-//		assertEq(xml, parse(xp, "A", xml, reporter));
-//		assertNoErrorwarnings(reporter);
-		xml = "<b:a xmlns:b='c.d' a='1' b:b='2'><b:b  a='3' b:b='4'/></b:a>";
-		assertEq(xml, parse(xp, "B", xml, reporter));
-		assertNoErrorwarnings(reporter);
-		xdef = // Test reference to model with new emtty namespace,
-"<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
-"<xd:def name='A' root='a:a' xmlns:a='a.b'>\n"+
-"<a:a a='int()' a:b='int()'>\n"+
-"  <b a='int()' a:b='int()'/>\n"+
-"</a:a>\n"+
-"</xd:def>\n" +
-"<xd:def name='B' root='a' xmlns:a='a.b'>\n"+
-"<a xd:script='ref A#a:a'/>\n"+
-"</xd:def>\n" +
-"</xd:collection>";
-		xp = compile(xdef);
-		xml = "<a a='1'><b a='2'/></a>";
-		assertEq(xml, parse(xp, "B", xml, reporter));
-		assertNoErrorwarnings(reporter);
-		xdef = // Test reference to model to empty namespace+ new is not empty,
-"<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
-"<xd:def name='A' root='a'>\n"+ // no namespace
-"<a a='int()'>\n"+
-"  <b a='int()'/>\n"+
-"</a>\n"+
-"</xd:def>\n" +
-"<xd:def name='B' root='a:a' xmlns:a='a.b'>\n"+ // namespace a.b
-"<a:a xd:script='ref A#a'/>\n"+
-"</xd:def>\n" +
-"</xd:collection>";
-		xp = compile(xdef);
-		xml = "<a xmlns='a.b' a='1'><b xmlns='' a='2' /></a>";
-		assertEq(xml, parse(xp, "B", xml, reporter));
-		assertNoErrorwarnings(reporter);
-//		xdef = // Test reference to model to empty namespace+ new is not empty,
-//"<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
-//"<xd:def name='A' root='a'>\n"+ // no namespace
-//"<a a='int()'>\n"+
-//"  <b a='int()'/>\n"+
-//"</a>\n"+
-//"</xd:def>\n" +
-//"<xd:def name='B' root='a' xmlns='a.b'>\n"+ // namespace a.b
-//"<a xd:script='ref A#a'/>\n"+
-//"</xd:def>\n" +
-//"</xd:collection>";
-//		xp = compile(xdef);
-//		xml = "<a xmlns='a.b' a='1'><b xmlns='' a='2' /></a>";
-//		assertEq(xml, parse(xp, "B", xml, reporter));
-//		assertNoErrorwarnings(reporter);
-		} catch (Exception ex) {fail(ex);}
-		reporter.clear();
-if(true)return;
 /**/
 		try {// test %anyName in map
 			xdef =
@@ -238,7 +170,7 @@ if(true)return;
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='network'>\n" +
 "<xd:xon name='network'>\n" +
 "{\n" +
-"  a: \"optionalstring();\"\n" +
+"  a: \"optional string();\"\n" +
 "  b: {%script=\"optional\", a: \"optional string();\"}\n" +
 "  c: [%script=\"optional\", \"int();\", { a: \"int();\"}]\n" +
 "}\n" +

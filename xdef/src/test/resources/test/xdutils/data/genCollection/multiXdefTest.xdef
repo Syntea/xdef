@@ -6,7 +6,7 @@
             xmlns:ext = "http://example.com/HumanResources">
     <![CDATA[/** comment */]]>
         <FirmWorkers>
-            <Worker xd:script="ref ext_1#ext:Person; occurs +"
+            <ext:Worker xd:script="ref ext_1#ext:Person; occurs +"
                     workerId="required int" />
         </FirmWorkers>
     </xd:def>

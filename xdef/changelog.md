@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.0.6, release-date 2023-03-31
+# Version 42.0.6, release-date 2023-04-01
 * The refernce to the model with different namespace now modifies the namespace
 * of all child nodes and attributes with the original namespace to the new one.
 

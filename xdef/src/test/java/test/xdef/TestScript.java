@@ -10,6 +10,7 @@ import org.xdef.proc.XXNode;
 import org.xdef.XDPool;
 import org.w3c.dom.Element;
 import org.xdef.XDValue;
+import org.xdef.component.XComponent;
 import org.xdef.proc.XXData;
 import static org.xdef.sys.STester.runTest;
 import static test.XDTester._xdNS;
@@ -266,6 +267,7 @@ public final class TestScript extends XDTester {
 		String xdef, xml;
 		ArrayReporter reporter = new ArrayReporter();
 		Element el;
+		XComponent xc;
 		XDPool xp;
 		xdef = // test rounding seconds acordint to milliseconds
 "<xd:def xmlns:xd='" + _xdNS + "' root='T'>\n" +
@@ -1195,7 +1197,35 @@ public final class TestScript extends XDTester {
 		xp = compile(xdef);
 		xp.createXDDocument().xparse("<a/>", reporter);
 		assertNoErrorwarnings(reporter);
-		xdef = // Test reference to model with different namespace
+
+		// Test reference to model with different namespace
+		xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' name='A' xmlns:a='a.b' xmlns:b='c.d'\n"+
+" root='a:a | b:a'>\n"+
+"<a:a a='int()' a:b='int()' >\n"+
+"  <a:b a='int()' a:b='int()' />\n"+
+"</a:a>\n"+
+"<b:a xd:script='ref A#a:a'/>\n"+
+"<xd:component>\n"+
+" %class mytests.MyTest10 %link A#a:a;\n" +
+" %class mytests.MyTest12 %link A#b:a;\n" +
+"</xd:component>\n" +
+"</xd:def>";
+		xp = compile(xdef);
+		genXComponent(xp, clearTempDir());
+		xml = "<a:a xmlns:a='a.b' a='1' a:b='2'><a:b a='3' a:b='4'/></a:a>";
+		assertEq(xml, parse(xp, "A", xml, reporter));
+		assertNoErrorwarnings(reporter);
+//		xc = xp.createXDDocument().xparseXComponent(xml, null, reporter);
+//		assertNoErrors(reporter);
+//		assertEq(xml, xc.toXml());
+		xml = "<b:a xmlns:b='c.d' a='1' b:b='2'><b:b a='3' b:b='4'/></b:a>";
+		assertEq(xml, parse(xp, "A", xml, reporter));
+		assertNoErrorwarnings(reporter);
+		xc = xp.createXDDocument().xparseXComponent(xml, null, reporter);
+		assertNoErrors(reporter);
+		assertEq(xml, xc.toXml());
+		xdef =
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name='A' root='a' xmlns='a.b' xmlns:a='a.b'>\n"+
 "<a a='int()' a:b='int()' >\n"+
@@ -1205,42 +1235,64 @@ public final class TestScript extends XDTester {
 "<xd:def name='B' root='a' xmlns='c.d' xmlns:a='a.b'>\n"+
 "<a xd:script='ref A#a:a'/>\n"+
 "</xd:def>\n" +
+"<xd:component>\n"+
+" %class mytests.MyTest20 %link A#a;\n" +
+" %class mytests.MyTest22 %link B#a;\n" +
+"</xd:component>\n" +
 "</xd:collection>";
 		xp = compile(xdef);
+		genXComponent(xp, clearTempDir());
 		xml = "<b:a xmlns:b='a.b' a='1' b:b='2'><b:b  a='3' b:b='4'/></b:a>";
-//		assertEq(xml, parse(xp, "A", xml, reporter));
-//		assertNoErrorwarnings(reporter);
+		assertEq(xml, parse(xp, "A", xml, reporter));
+		assertNoErrorwarnings(reporter);
 		xml = "<b:a xmlns:b='c.d' a='1' b:b='2'><b:b  a='3' b:b='4'/></b:a>";
+		assertEq(xml, parse(xp, "B", xml, reporter));
+		assertNoErrorwarnings(reporter);
+		xdef = // Test reference to model with different namespace
+"<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
+"<xd:def name='A' root='a' xmlns='a.b' xmlns:a='a.b'>\n"+
+"<a a='int()' a:b='int()' >\n"+
+"  <b a='int()' a:b='int()' />\n"+
+"</a>\n"+
+"</xd:def>\n" +
+"<xd:def name='B' root='a' xmlns:a='a.b'>\n"+
+"<a xd:script='ref A#a:a'/>\n"+
+"</xd:def>\n" +
+"<xd:component>\n"+
+" %class mytests.MyTest30 %link A#a;\n" +
+" %class mytests.MyTest32 %link B#a;\n" +
+"</xd:component>\n" +
+"</xd:collection>";
+		xp = compile(xdef);
+		genXComponent(xp, clearTempDir());
+		xml = "<b:a xmlns:b='a.b' a='1' b:b='2'><b:b  a='3' b:b='4'/></b:a>";
+		assertEq(xml, parse(xp, "A", xml, reporter));
+		assertNoErrorwarnings(reporter);
+		xml = "<a a='1'></a>";
 		assertEq(xml, parse(xp, "B", xml, reporter));
 		assertNoErrorwarnings(reporter);
 		xdef = // Test reference to model with new emtty namespace,
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name='A' root='a:a' xmlns:a='a.b'>\n"+
 "<a:a a='int()' a:b='int()'>\n"+
-"  <b a='int()' a:b='int()'/>\n"+
+"  <a:b a='int()' a:b='int()'/>\n"+
 "</a:a>\n"+
 "</xd:def>\n" +
 "<xd:def name='B' root='a' xmlns:a='a.b'>\n"+
 "<a xd:script='ref A#a:a'/>\n"+
 "</xd:def>\n" +
+"<xd:component>\n"+
+" %class mytests.MyTest30 %link A#a:a;\n" +
+" %class mytests.MyTest32 %link B#a;\n" +
+"</xd:component>\n" +
 "</xd:collection>";
 		xp = compile(xdef);
-		xml = "<a a='1'><b a='2'/></a>";
-		assertEq(xml, parse(xp, "B", xml, reporter));
+		genXComponent(xp, clearTempDir());
+		xp = compile(xdef);
+		xml="<a:a xmlns:a='a.b' a='1' a:b='2'><a:b a='4' a:b='4'/></a:a>";
+		assertEq(xml, parse(xp, "A", xml, reporter));
 		assertNoErrorwarnings(reporter);
-		xdef = // Test reference to model to empty namespace+ new is not empty,
-"<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
-"<xd:def name='A' root='a'>\n"+ // no namespace
-"<a a='int()'>\n"+
-"  <b a='int()'/>\n"+
-"</a>\n"+
-"</xd:def>\n" +
-"<xd:def name='B' root='a:a' xmlns:a='a.b'>\n"+ // namespace a.b
-"<a:a xd:script='ref A#a'/>\n"+
-"</xd:def>\n" +
-"</xd:collection>";
-		xp = compile(xdef);
-		xml = "<a xmlns='a.b' a='1'><b xmlns='' a='2' /></a>";
+		xml = "<a a='1'></a>";
 		assertEq(xml, parse(xp, "B", xml, reporter));
 		assertNoErrorwarnings(reporter);
 
