@@ -1307,13 +1307,13 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 	 * If the new namespace is null, then attributes and child nodes with the
 	 * namespace are removed.
 	 * @param xe Element to be changed.
-	 * @param ns1 original namespace.
-	 * @param ns2 new namespace.
+	 * @param nsOrig original namespace.
+	 * @param nsNew new namespace.
 	 * @param hs HashSet with processed nodes (revent unlimited recursive call).
 	 */
 	private void changeModelNS(final XElement xe,
-		final String ns1,
-		final String ns2,
+		final String nsOrig,
+		final String nsNew,
 		final HashSet<XNode> hs) {
 		if (!hs.add(xe)) {
 			return; //already processed
@@ -1323,12 +1323,12 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		XMData[] attrs = xe.getAttrs();
 		for (XMData x: attrs) {
 			String ns = x.getNSUri();
-			if (ns1 != null && ns1.equals(ns)) {
-				XData y = (XData) xe.getAttrNS(ns1, x.getName());
+			if (nsOrig != null && nsOrig.equals(ns)) {
+				XData y = (XData) xe.getAttrNS(nsOrig, x.getName());
 				xe.removeDefAttr(y);
-				if (ns2 != null) {
+				if (nsNew != null) {
 					XData z = new XData(y);
-					z.changeNS(ns2);
+					z.changeNS(nsNew);
 					xe.setDefAttr(z);
 				}
 			}
@@ -1341,8 +1341,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			XNode x = nodes[i];
 			if (x.getKind() == XMNode.XMELEMENT) {
 				String ns = x.getNSUri();
-				if (ns != null && ns.equals(ns1)) {
-					if (ns2 == null) {
+				if (ns != null && ns.equals(nsOrig)) {
+					if (nsNew == null) {
 						nodes = new XNode[xe._childNodes.length - 1];
 						for (int j = 0; j < i; j++) {
 							nodes[j] = xe._childNodes[j];
@@ -1355,9 +1355,9 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						continue;
 					} else {
 						XElement z = new XElement((XElement) x);
-						z.changeNS(ns2);
+						z.changeNS(nsNew);
 						nodes[i] = z;
-						changeModelNS((XElement) nodes[i], ns1, ns2, hs);
+						changeModelNS((XElement) nodes[i], nsOrig, nsNew, hs);
 					}
 				}
 			}
@@ -2338,14 +2338,21 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				xel.setOccurrence(y);
 			}
 			int leny = y._childNodes.length;
-			String ns1 = y.getNSUri(), ns2 = xel.getNSUri();
+			String nsOrig = y.getNSUri(), nsNew = xel.getNSUri();
 			xel.setReferencePos(y.getXDPosition());
 			if (xel._childNodes.length == 1 && xel.getAttrs().length == 0) {
 				xel._attrs.putAll(y._attrs);
 				xel._childNodes = y._childNodes;
-				if (ns1 != null ? !ns1.equals(ns2) : ns2 != null) {
-					// namespace of root element changed
-					changeModelNS(xel, ns1, ns2, new HashSet<>());
+				if (nsOrig != null ? !nsOrig.equals(nsNew) : nsNew != null) {
+					if (nsNew == null) {
+						//Reference from a model without namespace is not
+						// allowed to a model with namespace
+						error(xref.getSPosition(),
+							XDEF.XDEF123,  xref.getXDPosition());
+					} else {
+						// namespace of root element changed
+						changeModelNS(xel, nsOrig, nsNew, new HashSet<>());
+					}
 				} else {
 					xel.setReference(true);
 				}
@@ -2371,9 +2378,9 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				copyChildNodes(xel._childNodes, 1, childNodes, leny, lenx);
 				lenx += leny;
 				xel._childNodes = childNodes;
-				if (ns1 != null ? !ns1.equals(ns2) : ns2 != null) {
+				if (nsOrig != null ? !nsOrig.equals(nsNew) : nsNew != null) {
 					// namespace of root element changed
-					changeModelNS(xel, ns1, ns2, new HashSet<>());
+					changeModelNS(xel, nsOrig, nsNew, new HashSet<>());
 				}
 			}
 		}
