@@ -1,10 +1,12 @@
 # Version ${version}, release-date ${release.date}
 
 # Version 42.0.6, release-date 2023-04-02
-* Corrected bug in the reference to a model with different namespace:
-  the namespace of all child nodes and attributes with the original namespace
-  is changed to the new one. The reference from a model with the empty namespace
-  to a model with nonempty namespace now is not allowed and reports an error.
+* Fixed bug in reference from model to model with a different namespace.
+  The namespace of all child nodes and attributes with the original namespace
+  is changed to the new namespace. However, if a reference from a model with
+  an empty namespace to a model with a non-empty namespace, then the namespace
+  of attributes and child nodes with the namespace in the referenced model
+  is not changed.
 
 # Version 42.0.5, release-date 2023-03-06
 * The method `getDigest` of the `XMElement` now skips the version and build data.

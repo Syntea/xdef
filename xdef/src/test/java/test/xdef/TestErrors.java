@@ -997,31 +997,31 @@ public final class TestErrors extends XDTester {
 			assertEq("", chkReport(reporter, "XDEF486", "2", "37", null));
 			assertEq("", chkReport(reporter, "XDEF426", "2", "30", null));
 			assertEq("", chkReport(reporter, "XDEF433", "2", "47", null));
-			xdef = // Test reference to model with different namespace
-"<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
-"<xd:def name='A' root='a' xmlns='a.b' xmlns:a='a.b'>\n"+
-"<a a='int()' a:b='int()' >\n"+
-"  <b a='int()' a:b='int()' />\n"+
-"</a>\n"+
-"</xd:def>\n" +
-"<xd:def name='B' root='a' xmlns:a='a.b'>\n"+
-"<a xd:script='ref A#a:a'/>\n"+
-"</xd:def>\n" +
-"<xd:component>\n"+
-" %class mytests.MyTest30 %link A#a;\n" +
-" %class mytests.MyTest32 %link B#a;\n" +
-"</xd:component>\n" +
-"</xd:collection>";
-			reporter.clear();
-			xb = XDFactory.getXDBuilder(reporter, props);
-			xb.setSource(xdef);
-			xb.compileXD();
-			if (reporter.getErrorCount() == 0) {
-				fail("Error not reported");
-			} else {
-				s = reporter.getReport().toString();
-				assertTrue(s.contains("E XDEF123"), s);
-			}
+//			xdef = // Test reference to model with different namespace
+//"<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
+//"<xd:def name='A' root='a' xmlns='a.b' xmlns:a='a.b'>\n"+
+//"<a a='int()' a:b='int()' >\n"+
+//"  <b a='int()' a:b='int()' />\n"+
+//"</a>\n"+
+//"</xd:def>\n" +
+//"<xd:def name='B' root='a' xmlns:a='a.b'>\n"+
+//"<a xd:script='ref A#a:a'/>\n"+
+//"</xd:def>\n" +
+//"<xd:component>\n"+
+//" %class mytests.MyTest30 %link A#a;\n" +
+//" %class mytests.MyTest32 %link B#a;\n" +
+//"</xd:component>\n" +
+//"</xd:collection>";
+//			reporter.clear();
+//			xb = XDFactory.getXDBuilder(reporter, props);
+//			xb.setSource(xdef);
+//			xb.compileXD();
+//			if (reporter.getErrorCount() == 0) {
+//				fail("Error not reported");
+//			} else {
+//				s = reporter.getReport().toString();
+//				assertTrue(s.contains("E XDEF123"), s);
+//			}
 			if (XDConstants.XDEF31_NS_URI.equals(XDTester._xdNS)) {
 //        1         2         3         4        5          6         7
 //234567890123456789012345678901234567890123456789012345678901234567890123456789
