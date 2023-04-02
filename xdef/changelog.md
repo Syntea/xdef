@@ -1,8 +1,10 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.0.6, release-date 2023-04-01
-* The refernce to the model with different namespace now modifies the namespace
-* of all child nodes and attributes with the original namespace to the new one.
+# Version 42.0.6, release-date 2023-04-02
+* Corrected bug in the reference to a model with different namespace:
+  the namespace of all child nodes and attributes with the original namespace
+  is changed to the new one. The reference from a model with the empty namespace
+  to a model with nonempty namespace now is not allowed and reports an error.
 
 # Version 42.0.5, release-date 2023-03-06
 * The method `getDigest` of the `XMElement` now skips the version and build data.
