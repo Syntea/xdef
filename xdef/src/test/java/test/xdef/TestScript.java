@@ -1248,6 +1248,53 @@ public final class TestScript extends XDTester {
 		xml = "<b:a xmlns:b='c.d' a='1' b:b='2'><b:b  a='3' b:b='4'/></b:a>";
 		assertEq(xml, parse(xp, "B", xml, reporter));
 		assertNoErrorwarnings(reporter);
+		xdef = // Test reference to model with different namespace
+"<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
+"<xd:def name='A' root='a' xmlns='a.b' xmlns:a='a.b'>\n"+
+"<a a='int()' a:b='int()' >\n"+
+"  <b a='int()' a:b='int()' />\n"+
+"</a>\n"+
+"</xd:def>\n" +
+"<xd:def name='B' root='a' xmlns:a='a.b'>\n"+
+"<a xd:script='ref A#a:a' />\n"+
+"</xd:def>\n" +
+"<xd:component>\n"+
+" %class mytests.MyTest30 %link A#a;\n" +
+" %class mytests.MyTest32 %link B#a;\n" +
+"</xd:component>\n" +
+"</xd:collection>";
+		xp = compile(xdef);
+		genXComponent(xp, clearTempDir());
+		xml = "<b:a xmlns:b='a.b' a='1' b:b='2'><b:b  a='3' b:b='4'/></b:a>";
+		assertEq(xml, parse(xp, "A", xml, reporter));
+		assertNoErrorwarnings(reporter);
+		xml = "<a a='1' xmlns:a='a.b' a:b='2'><a:b  a='3' a:b='4'/></a>";
+		assertEq(xml, parse(xp, "B", xml, reporter));
+		assertNoErrorwarnings(reporter);
+		xdef = // Test reference to model with new emtty namespace,
+"<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
+"<xd:def name='A' root='a:a' xmlns:a='a.b'>\n"+
+"<a:a a='int()' a:b='int()'>\n"+
+"  <a:b a='int()' a:b='int()'/>\n"+
+"</a:a>\n"+
+"</xd:def>\n" +
+"<xd:def name='B' root='a' xmlns:a='a.b'>\n"+
+"<a xd:script='ref A#a:a'/>\n"+
+"</xd:def>\n" +
+"<xd:component>\n"+
+" %class mytests.MyTest30 %link A#a:a;\n" +
+" %class mytests.MyTest32 %link B#a;\n" +
+"</xd:component>\n" +
+"</xd:collection>";
+		xp = compile(xdef);
+		genXComponent(xp, clearTempDir());
+		xp = compile(xdef);
+		xml="<a:a xmlns:a='a.b' a='1' a:b='2'><a:b a='4' a:b='4'/></a:a>";
+		assertEq(xml, parse(xp, "A", xml, reporter));
+		assertNoErrorwarnings(reporter);
+		xml = "<a xmlns:a='a.b' a='1' a:b='2'><a:b a='4' a:b='4'/></a>";
+		assertEq(xml, parse(xp, "B", xml, reporter));
+		assertNoErrorwarnings(reporter);
 
 		resetTester();
 	}
