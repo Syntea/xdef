@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import javax.xml.namespace.QName;
 import static org.xdef.XDConstants.LINE_SEPARATOR;
 import org.xdef.XDParser;
 import org.xdef.XDPool;
@@ -14,6 +15,7 @@ import org.xdef.impl.XData;
 import org.xdef.impl.XElement;
 import org.xdef.impl.XNode;
 import org.xdef.model.XMData;
+import org.xdef.model.XMNode;
 import org.xdef.msg.SYS;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.ArrayReporter;
@@ -41,7 +43,7 @@ class XCGeneratorBase {
 	/** Switch if byte array is encoded as base64 (1) or hexadecimal (2).*/
 	byte _byteArrayEncoding;
 	/** Map with components information. */
-	Map<String, String> _components;
+	Map<String, XComponentInfo> _components;
 	/** Builder to generate interface or null. */
 	StringBuilder _interfaces; // where to create interface.
 
@@ -396,7 +398,7 @@ class XCGeneratorBase {
 		final String typ = getJavaObjectTypeName(xdata);
 		genVariableFromModel(xdata,typ,name,max,descr,vars);
 		genGetterMethodFromChildElement(xdata,typ,name,max,descr,getters,sbi);
-		genSetterMethodOfChildElement(xdata,
+		genSetterMethodOfChildElement(
 			typ, name, max, null, null, null, descr, setters, sbi, "");
 		// gen "xposOf" method
 		if (sbi != null) {
@@ -447,7 +449,7 @@ class XCGeneratorBase {
 			mURI = xel.getNSUri();
 			mXDPos = xel.getXDPosition();
 		}
-		genSetterMethodOfChildElement(xel, className, name, max,
+		genSetterMethodOfChildElement(className, name, max,
 			mname, mURI, mXDPos, descr, setters, sbi, nullChoice);
 	}
 
@@ -468,8 +470,8 @@ class XCGeneratorBase {
 		final String descr,
 		final StringBuilder sb,
 		final StringBuilder sbi) {
-		byte xon = xn instanceof XElement ? ((XElement) xn)._xon
-			: ((XData) xn)._xon;
+//		byte xon = xn instanceof XElement ? ((XElement) xn)._xon
+//			: ((XData) xn)._xon;
 //		String publ = xon == 0 ? "public" : "private";
 		String publ = "public";
 		final int ndx = typeName.lastIndexOf('.');
@@ -587,7 +589,7 @@ class XCGeneratorBase {
 	 * @param nullchoice the command to set all variables of choice to null or
 	 * the empty string.
 	 */
-	private void genSetterMethodOfChildElement(final XNode xn,
+	private void genSetterMethodOfChildElement(
 		final String className,
 		final String name,
 		final int max,
@@ -953,28 +955,46 @@ class XCGeneratorBase {
 	final String getXDPosition(final XElement xe,
 		final boolean genInterface) {
 		if (genInterface) {
-			return (xe.isReference()) ?	_components.get(xe.getReferencePos())
-				: _components.get(xe.getXDPosition());
+			return ((xe.isReference()) ?	_components.get(xe.getReferencePos())
+				: _components.get(xe.getXDPosition())).getName();
 		} else {
 			final String s = xe.getXDPosition();
-			if (s == null) {// model still may be reference
+			if (s == null) {// model still may be a reference
 				//if null model is a reference
-				return _components.get(
-					xe.isReference() ? xe.getReferencePos() : null);
+				return (_components.get(
+					xe.isReference() ? xe.getReferencePos() : null)).getName();
 			} else {
-				final String t = xe.isReference() ? xe.getReferencePos() : null;
+				String t = xe.isReference() ? xe.getReferencePos() : null;
 				if (t == null) { // if no reference exists
-					return _components.get(s); // we return model class
+					QName u1 = xe.getQName();
+					XNode n = (XNode) xe.getXDPool().findModel(s);
+					if (n != null && n.getKind() == XMNode.XMELEMENT) {
+						XComponentInfo x = _components.get(s);
+						QName u2 = x == null ? ((XElement) n).getQName()
+							: new QName(x.getNS(),((XElement)n).getLocalName());
+						if (u1 == null ? u2 == null : u1.equals(u2)) {
+							t = x != null ? x.getName() : null;
+							return t;
+						} else {
+							return null;
+						}
+					} else { // we return model class
+							return _components.get(s).getName();
+					}
 				}
 				// we have both, reference and model
-				String u, v;
+				XComponentInfo u, v;
 				if ((u = _components.get(s)) == null) {
 					// if the class for model is not declared
-					return _components.get(t); // so return reference
+					XComponentInfo x = _components.get(t);
+					if (x == null) {
+						return null;
+					}
+					return x.getName(); // so return reference
 				}
 				if ((v = _components.get(t)) == null) {
 					// if the reference class is not declarted
-					return u; // we return class of model
+					return u.getName(); // we return class of model
 				}
 				// Now we know there are declarations both of model and of ref.
 				// We check if the model inplements a class and if the reference
@@ -983,9 +1003,12 @@ class XCGeneratorBase {
 				// the refernced model then we return the model declaration
 				// otherwise we return the reference declaration
 				final int ndxu, ndxv;
-				return ((ndxu = u.indexOf(" implements ")) > 0
-					&& (ndxv = v.indexOf(" interface ")) > 0 &&
-					u.substring(ndxu+12).equals(v.substring(ndxv+11))) ? v : u;
+				String uu = u.getName();
+				String vv = v.getName();
+				return ((ndxu = uu.indexOf(" implements ")) > 0
+					&& (ndxv = vv.indexOf(" interface ")) > 0 &&
+					uu.substring(ndxu+12).equals(vv.substring(ndxv+11)))
+					? vv : uu;
 			}
 		}
 	}

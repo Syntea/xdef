@@ -14,6 +14,7 @@ import java.util.StringTokenizer;
 import static org.xdef.XDConstants.LINE_SEPARATOR;
 import org.xdef.XDFactory;
 import org.xdef.XDPool;
+import org.xdef.impl.XElement;
 import org.xdef.model.XMNode;
 import org.xdef.msg.SYS;
 import org.xdef.msg.XDEF;
@@ -170,11 +171,18 @@ public final class GenXComponent {
 			//Argument &{0} must be a directory
 			throw new SRuntimeException(XDEF.XDEF368, fdir.getAbsolutePath());
 		}
-		final Map<String, String> components =
-			new LinkedHashMap<String, String>(xdpool.getXComponents());
+		// create new map of components with XComponentInfo.
+		final Map<String, XComponentInfo> components = new LinkedHashMap<>();
+		for (Entry<String, String> e: xdpool.getXComponents().entrySet()) {
+			String key = e.getKey();
+			XMNode xn = xdpool.findModel(key);
+			String ns = (xn != null && xn.getKind() == XMNode.XMELEMENT)
+				? ((XElement) xn).getNSUri() : null;
+			components.put(e.getKey(), new XComponentInfo(e.getValue(), ns));
+		}
 		for (int runCount = 0; runCount < 2; runCount++) {
 			// create HashSet with class names of X.components
-			HashSet<String> classNames = new HashSet<String>();
+			HashSet<String> classNames = new HashSet<>();
 			for (Entry<String, String> e: xdpool.getXComponents().entrySet()) {
 				String s = e.getValue();
 				int ndx = s.indexOf(" ");
@@ -184,8 +192,7 @@ public final class GenXComponent {
 			// which are extensions of an other X-component and then follows
 			// those not extendsd. This ensures that X-components which extends
 			// other X-component are compiled first.
-			ArrayList<Entry<String, String>> xcarray =
-				new ArrayList<Entry<String, String>>();
+			ArrayList<Entry<String, String>> xcarray = new ArrayList<>();
 			for (Entry<String, String> e: xdpool.getXComponents().entrySet()) {
 				int ndx;
 				String s = e.getValue();
@@ -244,7 +251,7 @@ public final class GenXComponent {
 				} else if (className.startsWith("%ref ")) {
 					if (runCount == 0) {
 						className = className.substring(5).trim();
-						components.put(model, className);
+						components.put(model, new XComponentInfo(className));
 					}
 					continue;
 				} else if (runCount == 1) {
@@ -379,7 +386,7 @@ public final class GenXComponent {
 				throw new RuntimeException("Incorrect parameters\b" + info);
 			}
 		}
-		ArrayList<String> sources = new ArrayList<String>();
+		ArrayList<String> sources = new ArrayList<>();
 		File xcDir = null; // base directory where XComponents will be generated
 		FileOutputStream xpFile = null; // the file where save compiled XDPool
 		String encoding = null;

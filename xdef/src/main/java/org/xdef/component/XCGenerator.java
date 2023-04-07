@@ -48,7 +48,7 @@ final class XCGenerator extends XCGeneratorXON {
 	 * @param interfaceName name of interface.
 	 * @param classNameBase prefix for inner class names.
 	 * @param packageName name of package.
-	 * @param components Map with components.
+	 * @param  Map with components.
 	 * @param clsNames Set with class names or null.
 	 * @param isRoot if true then this is root element.
 	 * @return string wit Java code.
@@ -60,7 +60,7 @@ final class XCGenerator extends XCGeneratorXON {
 		final String interfaceName,
 		final String classNameBase,
 		final String packageName,
-		final Map<String, String> components,
+		final Map<String, XComponentInfo> components,
 		final Set<String> clsNames,
 		final boolean isRoot) {
 		String extClazz = extClass;
@@ -77,7 +77,7 @@ final class XCGenerator extends XCGeneratorXON {
 			xe = xelem;
 		}
 		final String model = xe.getName();
-		final Set<String> classNames = new HashSet<String>(RESERVED_NAMES);
+		final Set<String> classNames = new HashSet<>(RESERVED_NAMES);
 		if (clsNames != null) {
 			classNames.addAll(clsNames);
 		}
@@ -88,7 +88,7 @@ final class XCGenerator extends XCGeneratorXON {
 		final String localName = xe.getLocalName();
 		final String clazz = className == null ? localName : className;
 		final StringBuilder vars = new StringBuilder();
-		final Set<String> varNames = new HashSet<String>();
+		final Set<String> varNames = new HashSet<>();
 		final StringBuilder getters = new StringBuilder();
 		final StringBuilder xpathes = new StringBuilder();
 		final StringBuilder setters = new StringBuilder();
@@ -99,7 +99,7 @@ final class XCGenerator extends XCGeneratorXON {
 			interfcName.isEmpty() ? null : new StringBuilder();
 		final Properties nsmap = new Properties();
 		addNSUri(nsmap, xe);
-		final Map<String, String> atttab = new LinkedHashMap<String, String>();
+		final Map<String, String> atttab = new LinkedHashMap<>();
 		int ndx;
 		// attributes
 		for (XMData xmdata : xe.getAttrs()) {
@@ -163,10 +163,10 @@ final class XCGenerator extends XCGeneratorXON {
 			creators.append(s);
 		}
 		final XNode[] nodes = (XNode[]) xe.getChildNodeModels();
-		final Map<String, String> xctab = new LinkedHashMap<String, String>();
-		final Map<String, String> txttab = new LinkedHashMap<String, String>();
-		final Stack<Integer> groupStack = new Stack<Integer>();
-		final Stack<Object> choiceStack = new Stack<Object>();
+		final Map<String, String> xctab = new LinkedHashMap<>();
+		final Map<String, String> txttab = new LinkedHashMap<>();
+		final Stack<Integer> groupStack = new Stack<>();
+		final Stack<Object> choiceStack = new Stack<>();
 		for (int i=0, txtcount=0, groupMax=1, groupFirst=-1, groupKind=-1;
 			i < nodes.length; i++) {
 			final XNode node = nodes[i];
@@ -199,7 +199,7 @@ final class XCGenerator extends XCGeneratorXON {
 								break; // index == first, finish;
 							}
 						}
-						ArrayList<String> keys = new ArrayList<String>();
+						ArrayList<String> keys = new ArrayList<>();
 						for (;choiceStack.size() >= 5;) {
 							int max = (Integer) choiceStack.pop();
 							String iname = (String) choiceStack.pop();
@@ -412,8 +412,9 @@ final class XCGenerator extends XCGeneratorXON {
 					} else {
 						typeName = classNameBase + '#' + newClassName;
 						_components.put(xe1.getXDPosition(),
-						packageName.length() > 0
-							? packageName+'.'+typeName : typeName);
+							new XComponentInfo(packageName.length() > 0
+								? packageName+'.'+typeName
+								: typeName, xe1.getNSUri()));
 					}
 					ndx = typeName.lastIndexOf('.');
 					if (ndx > 0
@@ -479,7 +480,7 @@ final class XCGenerator extends XCGeneratorXON {
 							(packageName.length() > 0 ? packageName +"." : "")
 								+ classNameBase + '#' + newClassName,//interface
 							"", //classNameBase
-							components, //Map with components
+							_components, //Map with components
 							classNames, //Set with class names or null
 							false)); //not root element.
 						innerClasses.append('}').append(LN);
@@ -502,7 +503,8 @@ final class XCGenerator extends XCGeneratorXON {
 			return null;
 		}
 		if (xe.isReference()) {
-			String xpos = _components.get(xe.getReferencePos());
+			XComponentInfo x = _components.get(xe.getReferencePos());
+			String xpos = x != null ? x.getName() : null;
 			if (xpos != null && xpos.startsWith("interface ")) {
 				xpos = xpos.substring(10);
 				if (!xpos.equals(interfcName)) {
@@ -541,7 +543,7 @@ final class XCGenerator extends XCGeneratorXON {
 		final String extClass,
 		final String interfaceName,
 		final String packageName,
-		final Map<String, String> components) {
+		final Map<String, XComponentInfo> components) {
 		final XMNode xn = _xp.findModel(model);
 		if (xn == null || xn.getKind() != XMNode.XMELEMENT) {
 			//Model "&{0}" not exsists.

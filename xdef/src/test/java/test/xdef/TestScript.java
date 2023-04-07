@@ -1216,9 +1216,9 @@ public final class TestScript extends XDTester {
 		xml = "<a:a xmlns:a='a.b' a='1' a:b='2'><a:b a='3' a:b='4'/></a:a>";
 		assertEq(xml, parse(xp, "A", xml, reporter));
 		assertNoErrorwarnings(reporter);
-//		xc = xp.createXDDocument().xparseXComponent(xml, null, reporter);
-//		assertNoErrors(reporter);
-//		assertEq(xml, xc.toXml());
+		xc = xp.createXDDocument().xparseXComponent(xml, null, reporter);
+		assertNoErrors(reporter);
+		assertEq(xml, xc.toXml());
 		xml = "<b:a xmlns:b='c.d' a='1' b:b='2'><b:b a='3' b:b='4'/></b:a>";
 		assertEq(xml, parse(xp, "A", xml, reporter));
 		assertNoErrorwarnings(reporter);
