@@ -1207,8 +1207,8 @@ public final class TestScript extends XDTester {
 "  </a:a>\n"+
 "  <b:a xd:script='ref A#a:a'/>\n"+
 "<xd:component>\n"+
-" %class mytests.MyTest10 %link A#a:a;\n" +
-" %class mytests.MyTest12 %link A#b:a;\n" +
+" %class test.xdef.MyTest10 %link A#a:a;\n" +
+" %class test.xdef.MyTest12 %link A#b:a;\n" +
 "</xd:component>\n" +
 "</xd:def>";
 		xp = compile(xdef);
@@ -1236,8 +1236,8 @@ public final class TestScript extends XDTester {
 "  <a xd:script='ref A#a:a'/>\n"+
 "</xd:def>\n" +
 "<xd:component>\n"+
-" %class mytests.MyTest20 %link A#a;\n" +
-" %class mytests.MyTest22 %link B#a;\n" +
+" %class test.xdef.MyTest20 %link A#a;\n" +
+" %class test.xdef.MyTest22 %link B#a;\n" +
 "</xd:component>\n" +
 "</xd:collection>";
 		xp = compile(xdef);
@@ -1259,8 +1259,8 @@ public final class TestScript extends XDTester {
 "<a xd:script='ref A#a:a' />\n"+
 "</xd:def>\n" +
 "<xd:component>\n"+
-" %class mytests.MyTest30 %link A#a;\n" +
-" %class mytests.MyTest32 %link B#a;\n" +
+" %class test.xdef.MyTest30 %link A#a;\n" +
+" %class test.xdef.MyTest32 %link B#a;\n" +
 "</xd:component>\n" +
 "</xd:collection>";
 		xp = compile(xdef);
@@ -1282,8 +1282,8 @@ public final class TestScript extends XDTester {
 "<a xd:script='ref A#a:a'/>\n"+
 "</xd:def>\n" +
 "<xd:component>\n"+
-" %class mytests.MyTest30 %link A#a:a;\n" +
-" %class mytests.MyTest32 %link B#a;\n" +
+" %class test.xdef.MyTest30 %link A#a:a;\n" +
+" %class test.xdef.MyTest32 %link B#a;\n" +
 "</xd:component>\n" +
 "</xd:collection>";
 		xp = compile(xdef);
