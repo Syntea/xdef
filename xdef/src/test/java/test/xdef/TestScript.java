@@ -1202,13 +1202,13 @@ public final class TestScript extends XDTester {
 		xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' name='A' xmlns:a='a.b' xmlns:b='c.d'\n"+
 " root='a:a | b:a'>\n"+
-"  <a:a a='int()' a:b='int()' >\n"+
-"    <a:b a='int()' a:b='int()' />\n"+
-"  </a:a>\n"+
-"  <b:a xd:script='ref A#a:a'/>\n"+
+"<a:a a='int()' a:b='int()' >\n"+
+"  <a:b a='int()' a:b='int()' />\n"+
+"</a:a>\n"+
+"<b:a xd:script='ref A#a:a' b:c='int()'> int(); </b:a>\n"+
 "<xd:component>\n"+
 " %class test.xdef.MyTest10 %link A#a:a;\n" +
-" %class test.xdef.MyTest12 %link A#b:a;\n" +
+" %class test.xdef.MyTest11 %link A#b:a;\n" +
 "</xd:component>\n" +
 "</xd:def>";
 		xp = compile(xdef);
@@ -1219,7 +1219,8 @@ public final class TestScript extends XDTester {
 		xc = xp.createXDDocument().xparseXComponent(xml, null, reporter);
 		assertNoErrors(reporter);
 		assertEq(xml, xc.toXml());
-		xml = "<b:a xmlns:b='c.d' a='1' b:b='2'><b:b a='3' b:b='4'/></b:a>";
+		xml =
+"<b:a xmlns:b='c.d' a='1' b:b='2' b:c='3'><b:b a='4' b:b='5'/>6</b:a>";
 		assertEq(xml, parse(xp, "A", xml, reporter));
 		assertNoErrorwarnings(reporter);
 		xc = xp.createXDDocument().xparseXComponent(xml, null, reporter);
