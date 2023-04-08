@@ -59,7 +59,7 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
 				"http://apache.org/xml/features/xinclude/fixup-base-uris",
 				false); // do not create xml:base attributes
 			SPF.setSchema(null);
-		} catch (Exception ex) {
+		} catch (Throwable ex) {
 			throw new RuntimeException(ex);
 		}
 	}
@@ -84,10 +84,9 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
 	private XReader _xReader;
 	private byte[] _sourceBytes;
 	/** Map with element declarations. */
-	private final Map<String, ElemDecl> _elemDeclMap =
-		new LinkedHashMap<String, ElemDecl>();
+	private final Map<String, ElemDecl> _elemDeclMap = new LinkedHashMap<>();
 	/** Array with attribute declarations. */
-	private List<AttrDecl> _attrDeclList = new ArrayList<AttrDecl>();
+	private List<AttrDecl> _attrDeclList = new ArrayList<>();
 	/** true if xml parsing failed. */
 	private boolean _xmlFailed;
 	/** Creates new instance of XDGenerator. */
@@ -201,7 +200,7 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
 					throw new RuntimeException(ex);
 				}
 			}
-		} catch (Exception e) {
+		} catch (Exception                                                                                                                                                            e) {
 			if (e instanceof SRuntimeException) {
 				throw (SRuntimeException) e;
 			}
@@ -509,7 +508,7 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
 		boolean _any;
 		int _numText;
 		int _references;
-		List<AttrDecl> _attList = new ArrayList<AttrDecl>();
+		List<AttrDecl> _attList = new ArrayList<>();
 		SeqItemList _childList;
 
 		ElemDecl(final String name, final String model) {
