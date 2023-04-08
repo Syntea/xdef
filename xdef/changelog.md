@@ -1,12 +1,14 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.0.6, release-date 2023-04-02
+# Version 42.0.6, release-date 2023-04-08
 * Fixed bug in reference from model to model with a different namespace.
   The namespace of all child nodes and attributes with the original namespace
   is changed to the new namespace. However, if a reference from a model with
   an empty namespace to a model with a non-empty namespace, then the namespace
   of attributes and child nodes with the namespace in the referenced model
   is not changed.
+* Fixed bug in X-component in the referenve to the model without namespace to
+  the model with nonempty namespace.
 
 # Version 42.0.5, release-date 2023-03-06
 * The method `getDigest` of the `XMElement` now skips the version and build data.
