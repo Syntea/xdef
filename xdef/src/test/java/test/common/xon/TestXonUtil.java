@@ -180,6 +180,10 @@ public class TestXonUtil extends STester {
 			"TestInclude_4_4.xml",	// xml include error
 			"TestInclude_6.xdef",	// xml include error
 			"TestInclude_7.xdef",	// xml include error
+			"Test000_rus_2.xdef",	// xml error code ISO8859-5 error
+			"Test000_rus_2.xml",	// xml error code ISO8859-5 error
+			"Test000_rus_3.xdef",	// xml error code KOI8-R error
+			"Test000_rus_3.xml",	// xml error code KOI8-R error
 		};
 		directory = new File(getDataDir() + "../../../xdef/data/test/");
 		for (File x: directory.listFiles()) {
