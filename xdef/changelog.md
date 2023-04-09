@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.0.6, release-date 2023-04-08
+# Version 42.0.6, release-date 2023-04-09
 * Fixed bug in reference from model to model with a different namespace.
   The namespace of all child nodes and attributes with the original namespace
   is changed to the new namespace. However, if a reference from a model with
