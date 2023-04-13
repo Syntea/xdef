@@ -1,6 +1,7 @@
 package test.xdutils;
 
 import java.io.File;
+import static org.xdef.sys.STester.runTest;
 import org.xdef.util.DTDToXdef;
 import test.XDTester;
 
@@ -11,16 +12,11 @@ public class TestDTDToXdef extends XDTester {
 
 	public TestDTDToXdef() {super();}
 
-	/** display 0 => no display,
-	 * 1 .. display DTD,
-	 * 2 .. display xdef.
-	 * 4 .. display xml data.
-	 */
+/*#if DEBUG*#/
 	private void test(String dtdData,
 		String root,
 		String data,
-		int display) {
-/* Disable this test *
+		int display) {//1 display DTD, 2 display xdef 4 display xml data
 		try {
 			org.xdef.util.GenDTD2XDEF parser =
 				new org.xdef.util.GenDTD2XDEF(dtdData);
@@ -66,15 +62,15 @@ public class TestDTDToXdef extends XDTester {
 			e.printStackTrace();
 			fail(e);
 		}
-/* Disable this test */
 	}
+/*#end*/
 
 	@Override
 	public void test() {
-		clearTempDir();
-		String tempDir = getTempDir();
+		String tempDir = clearTempDir().toString();
 		String dataDir = getDataDir();
 ////////////////////////////////////////////////////////////////////////////////
+/*#if DEBUG*#/
 		String xmlData;
 		String dtdData;
 //		//0..no display, 1 .. display DTD, 2 .. display XDEF, 4 .. display XML
@@ -614,7 +610,24 @@ if (org.xdef.sys.SUtils.JAVA_RUNTIME_VERSION_ID < 109) {
 "</CATALOG>\n" +
 "";
 		test(dtdData, "CATALOG", xmlData, display);
-/**/
+//=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*
+		dtdData =
+"<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'\n" +
+"   'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>\n" +
+"<html/>";
+		xmlData =
+"<html>\n" +
+"  <head>\n" +
+"    <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>\n" +
+"    <title>Kapitola 1. X-definice step-by-step: model XML elementu</title>\n" +
+"  </head>\n" +
+"  <body>\n" +
+"   <b>Obsah</b>\n" +
+"  </body>\n" +
+"</html>";
+//		test(dtdData, "html", xmlData, 2);
+		test(dtdData, "html", xmlData, display);
+/*#end*/
 ////////////////////////////////////////////////////////////////////////////////
 		DTDToXdef.main(new String[]{"-in",
 			dataDir + "dtds/a.xml",
@@ -628,24 +641,7 @@ if (org.xdef.sys.SUtils.JAVA_RUNTIME_VERSION_ID < 109) {
 			tempDir + "generated_TV.xdef",
 			"-r",
 			"TVSCHEDULE"});
-//=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*
-//		dtdData =
-//"<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'\n" +
-//"   'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>\n" +
-//"<html/>";
-//		xmlData =
-//"<html>\n" +
-//"  <head>\n" +
-//"    <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>\n" +
-//"    <title>Kapitola 1. X-definice step-by-step: model XML elementu</title>\n" +
-//"  </head>\n" +
-//"  <body>\n" +
-//"   <b>Obsah</b>\n" +
-//"  </body>\n" +
-//"</html>";
-//		test(dtdData, "html", xmlData, 2);
-////		test(dtdData, "html", xmlData, display);
-//=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*
+
 		new File(tempDir + "generated_a.xdef").delete();
 		new File(tempDir + "generated_TV.xdef").delete();
 		clearTempDir(); // delete temporary files.

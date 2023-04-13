@@ -5,6 +5,7 @@ import org.xdef.sys.ArrayReporter;
 import org.xdef.xml.KXmlUtils;
 import org.w3c.dom.Element;
 import org.xdef.sys.ReportWriter;
+import static org.xdef.sys.STester.runTest;
 import org.xdef.util.GenXDefinition;
 
 /** Generation of XDefinition from XML
@@ -132,10 +133,12 @@ public class TestXDGen extends XDTester {
 			assertNoErrorwarnings(genXDef(dataDir + "Test000_07_2.xml"));
 			assertNoErrorwarnings(genXDef(dataDir + "Test000_rus.xml"));
 			assertNoErrorwarnings(genXDef(dataDir + "Test000_rus_1.xml"));
-//			code page ISO8859-5
-//			assertNoErrorwarnings(genXDef(dataDir + "Test000_rus_2.xml"));
-//			code page KOI8-R
-//			assertNoErrorwarnings(genXDef(dataDir + "Test000_rus_3.xml"));
+/*#if DEBUG*#/
+			// code page ISO8859-5
+			assertNoErrorwarnings(genXDef(dataDir + "Test000_rus_2.xml"));
+			//code page KOI8-R
+			assertNoErrorwarnings(genXDef(dataDir + "Test000_rus_3.xml"));
+/*#end*/
 			assertNoErrorwarnings(genXDef(dataDir + "Test000_rus_4.xml"));
 			assertNoErrorwarnings(genXDef(dataDir + "Test000_rus_5.xml"));
 			assertNoErrorwarnings(genXDef(dataDir + "Test002_3.xml"));
