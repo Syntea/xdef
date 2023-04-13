@@ -32,6 +32,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.xdef.XDContainer;
 import org.xdef.proc.XXElement;
+import static org.xdef.sys.STester.runTest;
 import static test.XDTester._xdNS;
 
 /** Class for testing (miscellaneous).
@@ -509,12 +510,14 @@ public final class Test000 extends XDTester {
 			parse(dataDir + "Test000_rus_1.xdef",
 				"test", dataDir + "Test000_rus_1.xml", reporter);
 			assertNoErrorwarnings(reporter);
-//			parse(dataDir + "Test000_rus_2.xdef", //code page ISO8859-5
-//				"test", dataDir + "Test000_rus_2.xml", reporter);
-//			assertNoErrorwarnings(reporter);
-//			parse(dataDir + "Test000_rus_3.xdef", //code page KOI8-R
-//				"test", dataDir + "Test000_rus_3.xml", reporter);
-//			assertNoErrorwarnings(reporter);
+/*#if DEBUG*#/
+			parse(dataDir + "Test000_rus_2.xdef", //code page ISO8859-5
+				"test", dataDir + "Test000_rus_2.xml", reporter);
+			assertNoErrorwarnings(reporter);
+			parse(dataDir + "Test000_rus_3.xdef", //code page KOI8-R
+				"test", dataDir + "Test000_rus_3.xml", reporter);
+			assertNoErrorwarnings(reporter);
+/*#end*/
 			parse(dataDir + "Test000_rus_4.xdef",
 				"test", dataDir + "Test000_rus_4.xml", reporter);
 			assertNoErrorwarnings(reporter);
