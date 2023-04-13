@@ -1,11 +1,17 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package buildtools;
 
 import java.io.File;
 
-/** Call preprocessor and reset all switches.
+/**
+ *
  * @author Vaclav Trojan
  */
-public class ResetPreprocessorSwitches {
+public class SetDebugPreprocessorSwitches {
 
 	/** Reset all switches in source code.
 	 * @param args the command line arguments
@@ -27,12 +33,14 @@ public class ResetPreprocessorSwitches {
 			"-r", // recursive process of directories
 			"-l", // generate CR and LF as the end of line
 			"-v", // verbose output
-			"-t"); // remove trailibg white sapces
+			"-t", // remove trailibg white sapces
+			"-s", "DEBUG"); //set DEBUG switch
 		JavaPreprocessor.main(
 			"-i", new File(projectBase, "src/test/java").getAbsolutePath(),
 			"-r", // recursive process of directories
 			"-l", // generate CR and LF as the end of line
 			"-v", // verbose output
-			"-t"); // remove trailibg white sapces
+			"-t", // remove trailibg white sapces
+			"-s", "DEBUG"); //set DEBUG switch
 	}
 }
