@@ -17,6 +17,7 @@ import java.io.Writer;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.nio.file.attribute.FileTime;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -2145,12 +2146,15 @@ public class FUtils {
 				throw new SException(SYS.SYS024, f); //File doesn't exist: &{0}
 			}
 			File[] files;
+			String relPath;
 			if (f.isDirectory()) {
+				relPath = f.getName()+ File.separatorChar;
 				files = f.listFiles();
 			} else {
+				relPath = "";
 				files = new File[]{f};
 			}
-			flen += filesToZip(zout, zFileName, "", files, skipExtensions);
+			flen += filesToZip(zout, zFileName, relPath, files, skipExtensions);
 		}
 		try {
 			zout.finish();
@@ -2160,7 +2164,6 @@ public class FUtils {
 			//Can't write to file: &{0}
 			throw new SException(SYS.SYS023, zFileName);
 		}
-
 	}
 
 	/** Add files to archive.
@@ -2204,8 +2207,8 @@ public class FUtils {
 						}
 					}
 				}
-				ZipEntry z;
-				z = new ZipEntry(relPath + fname);
+				ZipEntry z = new ZipEntry(relPath + fname);
+				z.setLastModifiedTime(FileTime.fromMillis(f.lastModified()));
 				try {
 					zout.putNextEntry(z);
 				} catch (IOException ex) {
@@ -2242,6 +2245,8 @@ public class FUtils {
 				try {
 					src.close();
 				} catch (Exception ex) {
+					//IO error detected on &{0}&{1}{, reason: }
+					throw new SException(SYS.SYS034, f, " close");
 				}
 				flen += f.length();
 			}
