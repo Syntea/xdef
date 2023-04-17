@@ -1,32 +1,26 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package buildtools;
 
 import java.io.File;
 
-/**
- *
+/** Modify sources with the "DEBUG" switch of prepocessor.
  * @author Vaclav Trojan
  */
 public class SetDebugPreprocessorSwitches {
 
-	/** Reset all switches in source code.
-	 * @param args the command line arguments
+	/** Set "DEBUG" switch of the preprocessor of source code.
+	 * @param args path to base directory or null.
 	 */
 	public static void main(String... args) {
+		File baseDir = args == null || args.length == 0
+			? new File("../xdef") : new File(args[0]);
+		if (!baseDir.exists() || !baseDir.isDirectory()) {
+			throw new RuntimeException("Incorect project base directory");
+		}
 		String projectBase;
 		try {
-			File baseDir = args == null || args.length == 0
-				? new File("../xdef") : new File(args[0]);
-			if (!baseDir.exists() || !baseDir.isDirectory()) {
-				throw new RuntimeException("Base is not directory.");
-			}
 			projectBase = baseDir.getCanonicalPath().replace('\\', '/');
 		} catch (Exception ex) {
-			throw new RuntimeException("Can't find project base directory");
+			throw new RuntimeException("Incorect project base directory");
 		}
 		JavaPreprocessor.main(
 			"-i", new File(projectBase, "src/main/java").getAbsolutePath(),
