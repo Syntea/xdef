@@ -2010,7 +2010,7 @@ public class FUtils {
 
 	/** Store files given by list to zip archive file. Entries of list are
 	 * separated by ";". If the entry is directory there are archived all
-	 * files from the subtree from this directory. The files with extensions
+	 * files from the sub-tree from this directory. The files with extensions
 	 * given by argument <code>ignore</code> are ignored. Wild characters in
 	 * file names (i.e. "*" or '?') are accepted.
 	 * @param fileList list of files separated by ";".
@@ -2080,7 +2080,7 @@ public class FUtils {
 
 	/** Store files given by list to zip archive file. Entries of list are
 	 * separated by ";". If the entry is directory there are archived all
-	 * files from the subtree from this directory.
+	 * files from the sub-tree from this directory.
 	 * @param list list of files.
 	 * @param skipExtensions array of extensions to be ignored.
 	 * @param file archive file.
@@ -2115,7 +2115,7 @@ public class FUtils {
 
 	/** Store files given by list to zip archive file. Entries of list are
 	 * separated by ";". If the entry is directory there are archived all
-	 * files from the subtree from this directory.
+	 * files from the sub-tree from this directory.
 	 * @param list The list of files.
 	 * @param skipExtensions array of extensions to be ignored.
 	 * @param out archive file stream.
