@@ -1391,10 +1391,10 @@ public class SUtils extends FUtils {
 	 * line, and an array of strings envVars, representing "environment"
 	 * variable settings, this method creates a new process in which to execute
 	 * the specified command.
-	 * If envVars is null, the subprocess inherits the environment settings of
+	 * If envVars is null, the sub-process inherits the environment settings of
 	 * the current process.
-	 * The working directory of the new subprocess is specified by actDir. If
-	 * actDir is null, the subprocess inherits the current working directory
+	 * The working directory of the new sub-process is specified by actDir. If
+	 * actDir is null, the sub-process inherits the current working directory
 	 * of the current process.
 	 * If out is null the output stream is printed to System.out, otherwise it
 	 * is written to given stream out.
@@ -1407,14 +1407,14 @@ public class SUtils extends FUtils {
 	 * @param command array containing a command and its arguments.
 	 * @param envVars array of strings, each element of which has environment
 	 * variable settings in format name=value.
-	 * @param actDir the working directory of the subprocess, or null if the
-	 * subprocess should inherit the working directory of the current process.
+	 * @param actDir the working directory of the sub-process, or null if the
+	 * sub-process should inherit the working directory of the current process.
 	 * @param stdOut output stream for standard output stream or null.
 	 * @param stdErr output stream for standard error stream or null.
 	 * @param stdIn input stream with standard input data or null.
 	 * @param waitFlag if true the current thread waits until
 	 * the executed process has been terminated.
-	 * @return Process object for managing the executed subprocess.
+	 * @return Process object for managing the executed sub-process.
 	 * @throws Exception if an error occurs.
 	 */
 	public static final Process execute(final String [] command,
@@ -1445,7 +1445,7 @@ public class SUtils extends FUtils {
 
 	/** Executes a separate process with arguments.
 	 * @param command array containing a command and its arguments.
-	 * @return Process object for managing the executed subprocess.
+	 * @return Process object for managing the executed sub-process.
 	 * @throws Exception if an error occurs.
 	 */
 	public static final Process execute(final String... command)
