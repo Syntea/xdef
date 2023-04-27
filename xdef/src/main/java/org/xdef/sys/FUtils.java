@@ -40,13 +40,10 @@ public class FUtils {
 	/** Don't allow user to instantiate this class. */
 	FUtils() {}
 
-	/** Get usable space of file system of the file. Note this method returns
-	 * the reasonable value starting from java version 1.6. Otherwise it
-	 * returns Long.MAX_VALUE.
+	/** Get usable space of file system of the file.
 	 * @param file the file to be checked.
-	 * @return number of bytes available in the filesystem of the file or return
-	 * Long.MAX_VALUE if filesystem not exists or if it is not allowed to write
-	 * to the file.
+	 * @return number of bytes available in the file system of the file
+	 *  or return Long.MAX_VALUE if the file system not exists.
 	 */
 	public static final long getUsableSpace(final File file) {
 		File f = file;
@@ -54,12 +51,9 @@ public class FUtils {
 			if (f.isDirectory()) {
 				 return f.exists() ? f.getUsableSpace() : Long.MAX_VALUE;
 			}
-			String s = file.getAbsolutePath().replace('\\', '/');
-			int ndx = s.lastIndexOf('/');
-			if (ndx <= 0) {
+			if ((f = f.getParentFile()) == null) {
 				return Long.MAX_VALUE; // we do not know, so we return max. size
 			}
-			f = new File(s.substring(0, ndx));
 		}
 	}
 
@@ -351,7 +345,7 @@ public class FUtils {
 			while (true) {
 				int len1 = f1.read(buf1);
 				if (len1 == 0) {// may happen!
-					sleep1();
+					sleep5(); // wait 5 millisec
 				} else {
 					if (len1 < 0) {
 						if (f2.read() < 0) {
@@ -364,7 +358,7 @@ public class FUtils {
 					int off = 0;
 					while (len >= 0 && len2 < len1) {
 						if (len == 0) {
-							sleep1();
+							sleep5(); // wait 5 millisec
 							len = f2.read(buf2, off, len1 - len2);
 						} else {
 							off += len;
@@ -391,9 +385,10 @@ public class FUtils {
 		return diff;
 	}
 
-	private static void sleep1() {
+	/** Sleep 5 milliseconds. */
+	private static void sleep5() {
 		try {
-			Thread.sleep(1);
+			Thread.sleep(5);
 		} catch (InterruptedException ex) {}
 	}
 
@@ -508,7 +503,7 @@ public class FUtils {
 		int i;
 		while ((i = is.read(data, off, len)) > 0) {
 			if (i == 0) {
-				sleep1();
+				sleep5();
 			} else {
 				if ((len -= i) == 0) {
 					return data;
@@ -614,10 +609,10 @@ public class FUtils {
 	public static final void copyToFile(final File inFile,
 		final File outFile,
 		final boolean append) throws SException {
-		InputStream in = null;
 		if (!inFile.exists()) {
 			throw new SException(SYS.SYS024, inFile); //File doesn't exist: &{0}
 		}
+		InputStream in;
 		try {
 			in = new FileInputStream(inFile);
 		} catch (Exception ex) {
@@ -641,6 +636,12 @@ public class FUtils {
 		}
 		try {in.close();} catch (Exception ex) {}
 		try {out.close();} catch (Exception ex) {}
+		if (!append) {
+			outFile.setLastModified(inFile.lastModified());
+			if (!inFile.canWrite()) {
+				outFile.setReadOnly();
+			}
+		}
 	}
 
 	/** Copy input file to the output file given by the name.
@@ -701,7 +702,7 @@ public class FUtils {
 		if (!append && file.exists()) {
 			throw new SException(SYS.SYS030, file); //File already exists: &{0}
 		}
-		OutputStream fos = null;
+		OutputStream fos;
 		try {
 			fos = new FileOutputStream(file, append);
 		} catch (IOException ex) {
@@ -729,7 +730,7 @@ public class FUtils {
 	 */
 	public static final void copyToFile(final File inFile,
 		final OutputStream os) throws SException {
-		FileInputStream is = null;
+		FileInputStream is;
 		try {
 			is = new FileInputStream(inFile);
 		} catch (Exception ex) {
@@ -777,7 +778,7 @@ public class FUtils {
 		}
 		while (len >= 0) {
 			if (len == 0) {
-				sleep1();
+				sleep5();
 			} else {
 				try {
 					os.write(buf,0, len);
@@ -901,7 +902,7 @@ public class FUtils {
 			char[] buf = new char[4096];
 			while ((len = is.read(buf)) >= 0) {
 				if (len == 0) {
-					sleep1();
+					sleep5();
 				} else {
 					mysb.append(buf, 0 , len);
 				}
@@ -934,7 +935,7 @@ public class FUtils {
 			char[] buf = new char[4096];
 			while ((len = is.read(buf)) >= 0) {
 				if (len == 0) {
-					sleep1();
+					sleep5();
 				} else {
 					mysb.append(buf, 0 , len);
 				}
@@ -1080,7 +1081,7 @@ public class FUtils {
 			char[] buf = new char[4096];
 			while ((len = is.read(buf)) >= 0) {
 				if (len == 0) {
-					sleep1();
+					sleep5();
 				} else {
 					mysb.append(buf, 0 , len);
 				}
@@ -1105,7 +1106,7 @@ public class FUtils {
 			int len;
 			while ((len = in.read(buf)) >= 0) {
 				if (len == 0) {
-					sleep1();
+					sleep5();
 				} else {
 					bos.write(buf, 0, len);
 				}
