@@ -2327,51 +2327,57 @@ public class FUtils {
 				new File(path + fname.substring(0,pathIndex)).mkdirs();
 			}
 			File f = new File(path + fname);
-			if (f.exists() &&
-				backupExtension != null && backupExtension.length() > 0) {
-				File f1 = new File(path + fname + backupExtension);
-				if (f1.exists()) {
-					f1.delete();
+			if (f.isDirectory()) {
+				f.mkdir();
+			} else {
+				if (f.exists() &&
+					backupExtension != null && backupExtension.length() > 0) {
+					File f1 = new File(path + fname + backupExtension);
+					if (f1.exists()) {
+						f1.delete();
+					}
+					f.renameTo(f1);
 				}
-				f.renameTo(f1);
-			}
-			if (z.getSize() + 10 > getUsableSpace(f)) {
-				throw new SException(SYS.SYS038, f); //File is too big: &{0}
-			}
-			FileOutputStream fos;
-			try {
-				fos = new FileOutputStream(f);
-			} catch (IOException ex) {
-				//Can't create file: &{0}
-				throw new SException(SYS.SYS026, path + fname);
-			}
-			int len;
-			try {
-				len = zin.read(buf);
-			} catch (IOException ex) {
-				//Can't read file from 'zip' file
-				throw new SException(SYS.SYS043);
-			}
-			while (len > 0) {
+				if (z.getSize() + 10 > getUsableSpace(f)) {
+					throw new SException(SYS.SYS038, f); //File is too big: &{0}
+				}
+				FileOutputStream fos;
 				try {
-					fos.write(buf,0,len);
-				} catch (Exception ex) {
-					//Can't write to file: &{0}
-					throw new SException(SYS.SYS023, f);
+					fos = new FileOutputStream(f);
+				} catch (IOException ex) {
+					//Can't create file: &{0}
+					throw new SException(SYS.SYS026, path + fname);
 				}
+				int len;
 				try {
 					len = zin.read(buf);
 				} catch (IOException ex) {
 					//Can't read file from 'zip' file
 					throw new SException(SYS.SYS043);
 				}
+				while (len > 0) {
+					try {
+						fos.write(buf,0,len);
+					} catch (Exception ex) {
+						//Can't write to file: &{0}
+						throw new SException(SYS.SYS023, f);
+					}
+					try {
+						len = zin.read(buf);
+					} catch (IOException ex) {
+						//Can't read file from 'zip' file
+						throw new SException(SYS.SYS043);
+					}
+				}
+				try {
+					fos.close();
+				} catch (Exception ex) {
+					 //Can't write to file: &{0}
+					throw new SException(SYS.SYS023, f);
+				}
+				flen += f.length();
 			}
-			try {
-				fos.close();
-			} catch (Exception ex) {
-				throw new SException(SYS.SYS023, f); //Can't write to file: &{0}
-			}
-			flen += f.length();
+			f.setLastModified(z.getTime());
 			try {
 				z = zin.getNextEntry();
 			} catch (IOException ex) {

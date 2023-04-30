@@ -2,7 +2,6 @@ package test.xdef;
 
 import java.io.StringWriter;
 import test.XDTester;
-import static test.XDTester._xdNS;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.XDDocument;
@@ -10,6 +9,8 @@ import org.xdef.XDPool;
 import org.xdef.impl.code.DefXQueryExpr;
 import javax.xml.namespace.QName;
 import org.w3c.dom.Element;
+import static org.xdef.sys.STester.runTest;
+import static test.XDTester._xdNS;
 
 /** Test versions with Saxon and without Saxon implementation.
  * @author Vaclav Trojan
@@ -297,10 +298,12 @@ public class TestSaxon extends XDTester {
 		try {
 			xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\">\n" +
-"<xd:declaration scope = \"local\"> external Element source; </xd:declaration>\n" +
-"<Persons xd:script=\"create xquery(source, '.')\" firma=\"create xquery('@name')\">\n" +
+"<xd:declaration scope=\"local\"> external Element source; </xd:declaration>\n"+
+"<Persons xd:script=\"create xquery(source, '.')\"\n" +
+"         firma=\"create xquery('@name')\">\n" +
 "  <Office>\n" +
-"    <Kontakt xd:script=\"*; create xquery('Person[Telefon/@typ=\\'office\\']')\">\n" +
+"    <Kontakt xd:script=\n" +
+"         \"*; create xquery('Person[Telefon/@typ=\\'office\\']')\">\n" +
 "      <Name xd:script=\"create xquery('Name')\">\n" +
 "        string; create xquery('text()')\n" +
 "      </Name>\n" +
@@ -310,7 +313,8 @@ public class TestSaxon extends XDTester {
 "    </Kontakt>\n" +
 "  </Office>\n" +
 "  <Home>\n" +
-"    <Kontakt xd:script=\"*; create xquery('Person[Telefon/@typ=\\'personal\\']')\">\n" +
+"    <Kontakt xd:script=\n" +
+"          \"*; create xquery('Person[Telefon/@typ=\\'personal\\']')\">\n" +
 "      <Name xd:script=\"create xquery('Name')\" >\n" +
 "        create xquery('text()');\n" +
 "      </Name>\n" +
@@ -358,10 +362,10 @@ public class TestSaxon extends XDTester {
 
 	@Override
 	public void test() {
-		if (!DefXQueryExpr.isXQueryImplementation()) {
-			testNoSaxon();
-		} else {
+		if (DefXQueryExpr.isXQueryImplementation()) {
 			testSaxon();
+		} else {
+			testNoSaxon();
 		}
 		resetTester();
 	}
