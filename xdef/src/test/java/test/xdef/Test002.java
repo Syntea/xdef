@@ -22,6 +22,8 @@ import java.io.StringWriter;
 import org.w3c.dom.Element;
 import org.xdef.XDContainer;
 import org.xdef.proc.XXData;
+import static org.xdef.sys.STester.runTest;
+import static test.XDTester._xdNS;
 
 /** Class for testing (miscellaneous).
  * @author Vaclav Trojan
@@ -891,7 +893,7 @@ public final class Test002 extends XDTester {
 			assertEq("<a a='abc'/>", parse(xp, "", "<a a='123'/>", reporter));
 			s = reporter.printToString();
 			assertTrue(s.indexOf("XDEF515") > 0, s);
-			// test expression in validation section
+			// test union in validation section
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<a a='union(%item=[float, int, boolean]);'></a>"+
@@ -905,6 +907,29 @@ public final class Test002 extends XDTester {
 			assertNoErrorwarnings(reporter);
 			parse(xp, "", "<a a='X'/>", reporter);
 			assertTrue(reporter.errorWarnings()); //E XDEF515: Chybná hodnota
+			xdef = // test occurrence for %anyName and %anyObj directives
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root=\"A\">\n" +
+"<xd:declaration>\n"+
+"  type t union(%item=[decimal,boolean]);\n"+
+"  type u union(%item=[t,price]);\n"+
+"  type v union(%item=[u,string]);\n"+
+"</xd:declaration>\n"+
+"<A a='v()'/>\n"+
+"</xd:def>";
+			xml = "<A a='1.5'/>";
+			assertEq(xml, parse(xdef, "", xml, reporter));
+			xml = "<A a='false'/>";
+			assertEq(xml, parse(xdef, "", xml, reporter));
+			assertNoErrorsAndClear(reporter);
+			xml = "<A a='1.3'/>";
+			assertEq(xml, parse(xdef, "", xml, reporter));
+			assertNoErrorsAndClear(reporter);
+			xml = "<A a='p(123.45 CZK)'/>";
+			assertEq(xml, parse(xdef, "", xml, reporter));
+			assertNoErrorsAndClear(reporter);
+			xml = "<A a='xyz'/>";
+			assertEq(xml, parse(xdef, "", xml, reporter));
+			assertNoErrorsAndClear(reporter);
 			// test getXPos
 			xdef =
 "<x:def xmlns:x='" + _xdNS + "' root='a'>\n"+
