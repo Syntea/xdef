@@ -62,6 +62,7 @@ public final class Test000 extends XDTester {
 			xdef = "<xd:def xmlns:xd='"+_xdNS+"' root='root'><root/></xd:def>";
 			xml = "<?A A?><root><?B B?></root><?C C?>";//processing instructions
 			assertFalse(test(xdef,xml,"",'P',"<root><?B B?></root>",""));
+			assertErrors(reporter);
 			assertNoErrorwarnings(reporter);
 			xdef = //toString(obj) method
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
