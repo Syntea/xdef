@@ -1,4 +1,7 @@
 # Version 42.0.7, release-date 2023-05-07
+
+# Version 42.0.8, release-date 2023-05-07
+.
 * fixed bug in the method `org.xdef.sys.FileUtils.filesToZip(...)`.
 
 # Version 42.0.6, release-date 2023-04-12
