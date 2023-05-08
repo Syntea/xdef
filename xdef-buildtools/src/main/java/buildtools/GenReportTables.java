@@ -56,8 +56,8 @@ public class GenReportTables {
 				"-o", temp.getAbsolutePath().replace('\\', '/')});
 			String msg =
 				FUtils.updateDirectories(temp, srcDir, "java", true, false);
-			System.out.println("[INFO] "
-				+ (msg.isEmpty() ? "Nothing changed in report files" : msg));
+			System.out.println(
+				(msg.isEmpty() ? "Nothing changed in report files" : msg));
 			FUtils.deleteAll(temp, true); // delete temp directory
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
