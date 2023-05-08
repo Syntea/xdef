@@ -230,7 +230,7 @@ public class JavaPreprocessor {
 			return false;
 		}
 		if (_errors > 0) {
-			_err.println(_errors +  " error(s) detected in " + fname);
+			_err.println("[ERROR] "+_errors +  " error(s) detected in " + fname);
 			_sb = null;
 			return false;
 		}
@@ -354,7 +354,7 @@ public class JavaPreprocessor {
 		}
 		if (_errors > 0) {
 			_out.flush();
-			_err.println(_errors +
+			_err.println("{ERROR] " +_errors +
 				" error(s) detected in " + fi.getAbsolutePath());
 			_err.flush();
 			_sb = null;
@@ -421,15 +421,16 @@ public class JavaPreprocessor {
 			_err.flush();
 			if (_verbose) {
 				if (fi.getAbsolutePath().equals(fo.getAbsolutePath())) {
-					_out.println("Modified file: " + fi.getAbsolutePath());
+					_out.println("[INFO] Modified file: "+fi.getAbsolutePath());
 				} else {
-					_out.println("Input file:  " + fi.getAbsolutePath());
-					_out.println("Output file: " + fo.getAbsolutePath());
+					_out.println("[INFO] Input file:  " + fi.getAbsolutePath());
+					_out.println("[INFO] Output file: " + fo.getAbsolutePath());
 				}
 				_out.flush();
 			}
 		} catch (Exception ex) {
-			error("Can't write to output file: " + fo.getAbsolutePath(), false);
+			error("[ERROR] Can't write to output file: "
+				+ fo.getAbsolutePath(), false);
 			_sb = null;
 		}
 		return lines;
@@ -1059,10 +1060,10 @@ public class JavaPreprocessor {
 		_out.flush();
 		_err.flush();
 		if (position) {
-			_err.print(msg);
-			_err.println("; line: " + _lineNumber + ", column: " + _pos);
+			_err.println("[ERROR] " + msg
+				+ "; line: " + _lineNumber + ", column: " + _pos);
 		} else {
-			_err.println(msg);
+			_err.println("[ERROR] " + msg);
 		}
 		_err.flush();
 		_errors++;
@@ -1334,18 +1335,19 @@ public class JavaPreprocessor {
 				}
 			}
 		}
-		System.out.println("Processed " + lines + " lines.");
+		System.out.println("[INFO] Processed " + lines + " lines.");
 		jp._err.flush();
 		jp._out.flush();
 		if (jp._verbose) {
-			jp._out.println("Inspected " + jp._count +
+			jp._out.println("[INFO] Inspected " + jp._count +
 				" file(s), preprocessor commands detected in " +
 				jp._processedCount + ", changed " +
 				jp._modifyCount + ".");
 			jp._out.flush();
 		}
 		return jp._errors > 0 ?
-			"Error " + (jp._errors > 1 ? "s" : "") + " detected." : null;
+			"[ERROR] detected " + jp._errors + " error" 
+			+ (jp._errors > 0 ? "s" : "") + ".": null;
 	}
 
 	/** Call JavaPreprocessor from program.
@@ -1375,54 +1377,55 @@ public class JavaPreprocessor {
 		for (int i = 0; i < args.length; i++) {
 			if ("-r".equals(args[i])) {
 				if (dirTree) {
-					return "'-r' redefined.";
+					return "[ERROR] '-r' redefined.";
 				}
 				dirTree = true;
 			} else if ("-l".equals(args[i])) {
 				if (crlf) {
-					return "'-l' redefined.";
+					return "[ERROR] '-l' redefined.";
 				}
 				crlf = true;
 				
 			} else if (args[i].equals("-t")) {
 				if (cutTrailingSpaces) {
-					return "'-t' redefined.";
+					return "[ERROR] '-t' redefined.";
 				}
 				cutTrailingSpaces = true;
 			} else if (args[i].equals("-v")) {
 				if (verbose) {
-					return "'-v' redefined.";
+					return "[ERROR] '-v' redefined.";
 				}
 				verbose = true;
 			} else if (args[i].equals("-x")) {
 				if (extract) {
-					return "'-v' redefined.";
+					return "[ERROR] '-v' redefined.";
 				}
 				extract = true;
 			} else if (args[i].equals("-encoding")) {
 				if (charset != null) {
-					return "'-encoding' redefined.";
+					return "[ERROR] '-encoding' redefined.";
 				}
 				String s;
 				if (i + 1 >= args.length || args[i + 1].startsWith("-")) {
-					return "\"-encoding\" parameter is missing.";
+					return "[ERROR] \"-encoding\" parameter is missing.";
 				} else {
 					s = args[++i];
 				}
 				if (!Charset.isSupported(s)) {
-					return "\"-encoding\" parameter \""+s+"\" is incorrect.";
+					return "[ERROR] \"-encoding\" parameter \""
+						+ s + "\" is incorrect.";
 				}
 				charset = s;
 			} else if (args[i].startsWith("-o")) {
 				if (outDir != null) {
-					return "Output directrory redefined.";
+					return "[ERROR] Output directrory redefined.";
 				}
 				String s;
 				if (args[i].length() > 2) {
 					s = args[i].substring(2);
 				} else {
 					if (i + 1 >= args.length || args[i + 1].startsWith("-")) {
-						return "Output directrory parameter is missing.";
+						return"[ERROR] Output directrory parameter is missing.";
 					} else {
 						s = args[++i];
 					}
@@ -1454,7 +1457,7 @@ public class JavaPreprocessor {
 					}
 					String s = p.readKey();
 					if (s == null) {
-						return "Incorrect switch";
+						return "[ERROR] Incorrect switch";
 					} else {
 						if (switches.length() > 0) {
 							switches += ", ";
@@ -1462,14 +1465,16 @@ public class JavaPreprocessor {
 						if (not) {
 							switches += "!";
 							if (keys.contains(s)) {
-								return "Confusion of the switch '" + s + "'";
+								return "[ERROR] Confusion of the switch '" 
+									+ s + "'";
 							}
 							if (!notKeys.contains(s)) {
 								notKeys.add(s);
 							}
 						} else {
 							if (notKeys.contains(s)) {
-								return "Confusion of the switch '" + s + "'";
+								return "[ERROR] Confusion of the switch '"
+									+ s + "'";
 							}
 							if (!keys.contains(s)) {
 								keys.add(s);
@@ -1484,40 +1489,41 @@ public class JavaPreprocessor {
 				}
 			} else if (args[i].startsWith("-i")) {
 				if (input != null) {
-					return "Input redefined.";
+					return "[ERROR] Input redefined.";
 				}
 				if (args[i].length() > 2) {
 					input = args[i].substring(2);
 				} else {
 					if (i + 1 > args.length || args[i + 1].startsWith("-")) {
-						return "Incorrect input file parameter.";
+						return "[ERROR] Incorrect input file parameter.";
 					}
 					input = args[++i];
 				}
 			} else {
-				return "Incorrect parameter: " + args[i];
+				return "[ERROR] Incorrect parameter: " + args[i];
 			}
 		}
 		if (input == null || input.length() == 0) {
-			return "Input not specified";
+			return "[ERROR] Input not specified";
 		}
 		File f = new File(input);
 		if (!f.exists() || !f.isDirectory()) {
 			if (dirTree) {
-				return "Recurse parameter \"-r\" allowed only for directories.";
+				return "[ERROR] "
+					+ "Recurse parameter \"-r\" allowed only for directories.";
 			}
 		}
 		if (charset != null && !Charset.isSupported(charset)) {
-			return "Unsupported encoding: \"" + charset + "\".";
+			return "[ERROR] Unsupported encoding: \"" + charset + "\".";
 		}
 		if (switches.length() == 0) {
 			if (verbose) {
-				out.println("Java preprocessor switches list is empty");
+				out.println("[INFO] Java preprocessor switches list is empty");
 				out.flush();
 			}
 		} else {
 			if (verbose) {
-				out.println("Java preprocessor switches: " + switches);
+				out.println("[INFO] Java preprocessor switches: " + switches);
 				out.flush();
 			}
 		}

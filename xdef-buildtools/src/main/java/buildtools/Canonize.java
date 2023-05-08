@@ -58,7 +58,7 @@ public class Canonize {
 		try {
 			File f = new File(projectBase, filename).getCanonicalFile();
 			if (!f.exists() || !f.isDirectory()) {
-				System.err.println(f.getAbsolutePath()
+				System.err.println("[ERROR] " + f.getAbsolutePath()
 					+ " not exists or it is not directory");
 				return;
 			}
@@ -72,7 +72,7 @@ public class Canonize {
 
 			String hdrTemplate = null;
 			String tailTemplate = null;
-			System.out.println("Directory: " + home);
+			System.out.println("[INFO] Directory: " + home);
 			CanonizeSource.canonize(home + "*.java",
 				dirTree,
 				true,
@@ -137,9 +137,9 @@ public class Canonize {
 					Charset.forName("UTF-8"));
 				wr.write(sb.toString());
 				wr.close();
-				System.out.println("Updated date in changelog.md");
+				System.out.println("[INFO] Updated date in changelog.md");
 			} else {
-				System.out.println("Date in changelog.md not changed");
+				System.out.println("[INFO] Date in changelog.md not changed");
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();

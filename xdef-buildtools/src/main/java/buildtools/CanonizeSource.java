@@ -382,7 +382,7 @@ public class CanonizeSource {
 		}
 		if (_errors > 0) {
 			_out.flush();
-			_err.println(
+			_err.println("[ERROR] " +
 				_errors +  " error(s) detected in " + fi.getAbsolutePath());
 			return;
 		}
@@ -438,10 +438,13 @@ public class CanonizeSource {
 				_err.flush();
 				if (_verbose) {
 					if (fi.getAbsolutePath().equals(fo.getAbsolutePath())) {
-						_out.println("Modified file: " + fi.getAbsolutePath());
+						_out.println(
+							"[INFO] Modified file: " + fi.getAbsolutePath());
 					} else {
-						_out.println("Input file:  " + fi.getAbsolutePath());
-						_out.println("Output file: " + fo.getAbsolutePath());
+						_out.println(
+							"[INFO] Input file:  " + fi.getAbsolutePath());
+						_out.println(
+							"[INFO] Output file: " + fo.getAbsolutePath());
 					}
 					_out.flush();
 				}
@@ -457,7 +460,7 @@ public class CanonizeSource {
 	 */
 	private void error(final String msg) {
 		_out.flush();
-		_err.println(msg);
+		_err.println("[ERROR] " + msg);
 		_err.flush();
 		_errors++;
 	}
@@ -725,11 +728,11 @@ public class CanonizeSource {
 			err.flush();
 		}
 		if (verbose && out != null && cs._processedCount > 0) {
-			out.println("Inspected " + cs._processedCount
+			out.println("[INFO] Inspected " + cs._processedCount
 				+ " file(s), changed " + cs._modifyCount + ".");
 			out.flush();
 		}
-		System.out.println("Processed " + cs._lines + " lines.");
+		System.out.println("[INFO] Processed " + cs._lines + " lines.");
 		return null;
 	}
 
@@ -1035,7 +1038,7 @@ public class CanonizeSource {
 			}
 			String errMsg = canonize(myArgs, System.out, System.err);
 			if (errMsg != null) {
-				System.err.println(errMsg);
+				System.err.println("[ERROR] " + errMsg);
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace(System.err);
@@ -1050,7 +1053,7 @@ public class CanonizeSource {
 		System.out.flush();
 		System.err.flush();
 		System.err.println((msg == null ?
-		"CanonizeSource.\n"
+		"[ERROR] CanonizeSource.\n"
 +"All lines of the source data are checked for leading and trailing white spaces.\n"
 +"Trailing spaces and tabs are removed and leading spaces are replaced by\n"
 +"tabs or by spaces according to the value of switches -t or -s.If the\n"

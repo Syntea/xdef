@@ -45,6 +45,7 @@ public class CheckReportTables {
 	private static void chkUnusedMesssges(final String msgdir,
 		final String prefix,
 		final String[] dirs) throws Exception {
+		System.out.println("[INFO] Checking " + prefix);
 		String fname = msgdir + prefix + ".java";
 		BufferedReader br = new BufferedReader(new FileReader(fname));
 		String line;
@@ -77,7 +78,7 @@ public class CheckReportTables {
 		}
 		if (!unused.isEmpty()) {
 			for (String name: unused) {
-				System.out.println("	unused: " + name);
+				System.out.println("[INFO] 	unused: " + name);
 			}
 		}
 	}
@@ -142,18 +143,14 @@ public class CheckReportTables {
 		}
 		
 		dir += "src/main/java/";
-		System.out.println(dir);
+		System.out.println("[INFO] Directory: " + dir);
 		String[] dirs = getJavaDirectiories(
 			new String[] {dir + "org"},	new String[] {"org/xdef/msg"});
 		String msgdir = dir+"org/xdef/msg/";
 		chkUnusedMesssges(msgdir, "BNF", dirs);
-		System.out.println("Checking " + "JSON");
 		chkUnusedMesssges(msgdir,"JSON", dirs);
-		System.out.println("Checking " + "SYS");
 		chkUnusedMesssges(msgdir,"SYS", dirs);
-		System.out.println("Checking " + "XDEF");
 		chkUnusedMesssges(msgdir,"XDEF", dirs);
-		System.out.println("Checking " + "XML");
 		chkUnusedMesssges(msgdir,"XML", dirs);
 	}
 
