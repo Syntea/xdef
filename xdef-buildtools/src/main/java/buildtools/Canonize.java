@@ -72,7 +72,7 @@ public class Canonize {
 
 			String hdrTemplate = null;
 			String tailTemplate = null;
-			System.out.println("[INFO] Directory: " + home);
+			System.out.println("Directory: " + home);
 			CanonizeSource.canonize(home + "*.java",
 				dirTree,
 				true,
@@ -137,9 +137,9 @@ public class Canonize {
 					Charset.forName("UTF-8"));
 				wr.write(sb.toString());
 				wr.close();
-				System.out.println("[INFO] Updated date in changelog.md");
+				System.out.println("Updated date in changelog.md");
 			} else {
-				System.out.println("[INFO] Date in changelog.md not changed");
+				System.out.println("Date in changelog.md not changed");
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();

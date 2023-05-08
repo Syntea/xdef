@@ -438,13 +438,10 @@ public class CanonizeSource {
 				_err.flush();
 				if (_verbose) {
 					if (fi.getAbsolutePath().equals(fo.getAbsolutePath())) {
-						_out.println(
-							"[INFO] Modified file: " + fi.getAbsolutePath());
+						_out.println("Modified file: " + fi.getAbsolutePath());
 					} else {
-						_out.println(
-							"[INFO] Input file:  " + fi.getAbsolutePath());
-						_out.println(
-							"[INFO] Output file: " + fo.getAbsolutePath());
+						_out.println("Input file:  " + fi.getAbsolutePath());
+						_out.println("Output file: " + fo.getAbsolutePath());
 					}
 					_out.flush();
 				}
@@ -728,11 +725,11 @@ public class CanonizeSource {
 			err.flush();
 		}
 		if (verbose && out != null && cs._processedCount > 0) {
-			out.println("[INFO] Inspected " + cs._processedCount
+			out.println("Inspected " + cs._processedCount
 				+ " file(s), changed " + cs._modifyCount + ".");
 			out.flush();
 		}
-		System.out.println("[INFO] Processed " + cs._lines + " lines.");
+		System.out.println("Processed " + cs._lines + " lines.");
 		return null;
 	}
 
@@ -1053,7 +1050,7 @@ public class CanonizeSource {
 		System.out.flush();
 		System.err.flush();
 		System.err.println((msg == null ?
-		"[ERROR] CanonizeSource.\n"
+		"CanonizeSource.\n"
 +"All lines of the source data are checked for leading and trailing white spaces.\n"
 +"Trailing spaces and tabs are removed and leading spaces are replaced by\n"
 +"tabs or by spaces according to the value of switches -t or -s.If the\n"
@@ -1062,7 +1059,7 @@ public class CanonizeSource {
 +"inserted (or the old one is replaced) as a comment on the top of source data.\n"
 +"If -e switch is set on then the final information is added to the end of source\n"
 +"data. If the switch is -cc or -ee the existing information is not replaced.\n"
-		: "Error: " + msg + "\n"
+		: "[ERROR] " + msg + "\n"
 		)
 +"usage: -i input [-r] [-o outDir] [(-t|-s) [n]] [-n n] [-h] [-c hdr] [-e tail]\n"
 +"where\n"

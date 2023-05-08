@@ -421,10 +421,10 @@ public class JavaPreprocessor {
 			_err.flush();
 			if (_verbose) {
 				if (fi.getAbsolutePath().equals(fo.getAbsolutePath())) {
-					_out.println("[INFO] Modified file: "+fi.getAbsolutePath());
+					_out.println("Modified file: "+fi.getAbsolutePath());
 				} else {
-					_out.println("[INFO] Input file:  " + fi.getAbsolutePath());
-					_out.println("[INFO] Output file: " + fo.getAbsolutePath());
+					_out.println("Input file:  " + fi.getAbsolutePath());
+					_out.println("Output file: " + fo.getAbsolutePath());
 				}
 				_out.flush();
 			}
@@ -1059,12 +1059,8 @@ public class JavaPreprocessor {
 	private void error(final String msg, final boolean position) {
 		_out.flush();
 		_err.flush();
-		if (position) {
-			_err.println("[ERROR] " + msg
-				+ "; line: " + _lineNumber + ", column: " + _pos);
-		} else {
-			_err.println("[ERROR] " + msg);
-		}
+		_err.println("[ERROR] " + msg
+			+ (position ? "; line: " + _lineNumber + ", column: " + _pos : ""));
 		_err.flush();
 		_errors++;
 	}
@@ -1335,11 +1331,11 @@ public class JavaPreprocessor {
 				}
 			}
 		}
-		System.out.println("[INFO] Processed " + lines + " lines.");
+		System.out.println("Processed " + lines + " lines.");
 		jp._err.flush();
 		jp._out.flush();
 		if (jp._verbose) {
-			jp._out.println("[INFO] Inspected " + jp._count +
+			jp._out.println("Inspected " + jp._count +
 				" file(s), preprocessor commands detected in " +
 				jp._processedCount + ", changed " +
 				jp._modifyCount + ".");
@@ -1518,12 +1514,12 @@ public class JavaPreprocessor {
 		}
 		if (switches.length() == 0) {
 			if (verbose) {
-				out.println("[INFO] Java preprocessor switches list is empty");
+				out.println("Java preprocessor switches list is empty");
 				out.flush();
 			}
 		} else {
 			if (verbose) {
-				out.println("[INFO] Java preprocessor switches: " + switches);
+				out.println("Java preprocessor switches: " + switches);
 				out.flush();
 			}
 		}
