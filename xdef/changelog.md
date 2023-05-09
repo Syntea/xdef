@@ -1,7 +1,8 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.0.7, release-date 2023-05-08
-* fixed bug in the method `org.xdef.sys.FileUtils.filesToZip(...)`.
+# Version 42.0.7, release-date 2023-05-09
+* fixed bugs in methods `org.xdef.sys.FileUtils.filesToZip(...)`
+  and `org.xdef.sys.FileUtils.filesFromZip(...)`.
 
 # Version 42.0.6, release-date 2023-04-12
 * Fixed bug in reference from model to model with a different namespace.
