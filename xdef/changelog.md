@@ -1,22 +1,4 @@
-# Version 42.0.7, release-date 2023-05-08
-
-# Version 42.0.8, release-date 2023-05-08
-.
-
-# Version 42.0.8, release-date 2023-05-08
-.
-
-# Version 42.0.8, release-date 2023-05-08
-.
-
-# Version 42.0.8, release-date 2023-05-07
-.
-
-# Version 42.0.8, release-date 2023-05-07
-.
-
-# Version 42.0.8, release-date 2023-05-07
-.
+# Version 42.0.7, release-date 2023-05-09
 * fixed bug in the method `org.xdef.sys.FileUtils.filesToZip(...)`.
 
 # Version 42.0.6, release-date 2023-04-12
@@ -33,7 +15,7 @@
 * The method `getDigest` of the `XMElement` now skips the version and build data.
 * Therefore the X-components generated with different versions of X-definition
 * are accepted as compatible (if the structure of the model of element was not
-* changed),
+* changed).
 
 # Version 42.0.4, release-date 2023-02-27
 * corrected bug in `toXon()` method in the X-component class generated from
