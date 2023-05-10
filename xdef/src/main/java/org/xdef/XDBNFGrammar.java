@@ -8,7 +8,7 @@ import org.xdef.sys.BNFGrammar;
 public interface XDBNFGrammar extends XDValue {
 
 	/** Get object with BNF rule from BNF grammar.
-	 * @param name name of rule.
+	 * @param name name of BNF rule.
 	 * @return object with BNF rule with given name.
 	 */
 	public XDBNFRule getRule(final String name);
