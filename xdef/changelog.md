@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.0.7, release-date 2023-05-09
+# Version 42.0.7, release-date 2023-05-10
 * fixed bugs in methods `org.xdef.sys.FileUtils.filesToZip(...)`
   and `org.xdef.sys.FileUtils.filesFromZip(...)`.
 
