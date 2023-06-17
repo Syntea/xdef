@@ -1,18 +1,79 @@
 package test.xdutils;
 
+import java.io.File;
 import org.w3c.dom.Element;
 import org.xdef.XDConstants;
+import org.xdef.XDDocument;
+import org.xdef.XDFactory;
 import org.xdef.XDPool;
+import org.xdef.impl.GenXDef;
 import org.xdef.sys.ArrayReporter;
+import static org.xdef.sys.STester.runTest;
+import org.xdef.sys.SUtils;
 import org.xdef.util.GenXDefinition;
 import org.xdef.xml.KXmlUtils;
+import org.xdef.xon.XonUtils;
 import test.XDTester;
 
-/** Test of generation of XDefinition from XML.
+/** Test of generation of XDefinition from XML and JSON/XON data.
  * @author Vaclav Trojan
  */
 public class TestGenXdef extends XDTester {
 	public TestGenXdef() {super();}
+
+	private void test(File[] files, String id) {
+		ArrayReporter reporter = new ArrayReporter();
+		String fname;
+		String xname;
+		XDPool xp;
+		XDDocument xd;
+		Object o,x;
+		String tempDir = getTempDir();
+		File f = null;
+		try {
+			for (int i = 0; i < files.length; i++) {
+				fname = tempDir + id + i + ".xdef";
+				xname = "Example";
+				f = files[i];
+				GenXDefinition.genXdef(f, fname, "UTF-8", xname);
+				xp = XDFactory.compileXD(null, new File(fname));
+				xd = xp.createXDDocument(xname);
+				o = XonUtils.parseXON(files[i]);
+				x = xd.jparse(f, reporter);
+				if (reporter.errorWarnings()) {
+					fail(id + ", " + f + ":\n" +reporter.printToString());
+					reporter.clear();
+				}
+				assertTrue(XonUtils.xonEqual(o, x), id + ": \n" + f);
+			}
+		} catch (Exception ex) {
+			System.err.println(f);
+			ex.printStackTrace();
+		}
+	}
+	private void test(String data, String id) {
+		ArrayReporter reporter = new ArrayReporter();
+		String fname;
+		String xname;
+		XDPool xp;
+		XDDocument xd;
+		Object o,x;
+		String tempDir = getTempDir();
+		try {
+			data = "<A a='1f' b='b'><B>true</B><B/></A>";
+			fname = tempDir + "A.xdef";
+			xname = "Example";
+			GenXDefinition.genXdef(data, fname, "UTF-8", xname);
+			xp = XDFactory.compileXD(null, new File(fname));
+			assertEq(data, parse(xp, xname, data, reporter), id);
+			if (reporter.errorWarnings()) {
+				fail(id + ":\n" +reporter.printToString());
+			}
+		} catch (Exception ex) {
+			System.err.println(id + ":");
+			ex.printStackTrace();
+		}
+	}
 
 	@Override
 	/** Run test and print error information. */
@@ -164,6 +225,29 @@ dataDir + "TestValidate2.xml",
 				fail(ex);
 			}
 		}
+		try {
+			test("<A a='1f' b='b'><B>true</B><B/></A>", "A");
+			test("{a:1,b:true,c:[1,true,null,\"null\",\"\",null],d:{x:-9}}", "B");
+			test("t\"+420 234 567 890\"", "C");
+			test(
+"{ \"desc\" : \"Distances\", \"updated\" : \"02014\",\n" +
+"  \"cities\" : { \"Brussels\": [\n" +
+"      {\"to\": \"London\", \"distance\": 322},\n" +
+"      {\"to\": \"Amsterdam\", \"distance\": 173}\n" +
+"    ],\n" +
+"    \"Amsterdam\": [\n" +
+"      {\"to\": \"Brussels\", \"distance\": 173},\n" +
+"      {\"to\": \"Paris\", \"distance\": 431}\n" +
+"    ]\n" +
+"  }\n" +
+"}", "D");
+			test(SUtils.getFileGroup(
+				"src/test/resources/test/common/xon/data/*.json"), "F");
+			test(SUtils.getFileGroup(
+				"src/test/resources/test/xdef/data/json/*.json"), "G");
+		} catch (Exception ex) {fail(ex);}
+
+		clearTempDir(); // delete temporary files.
 	}
 
 	/** Run test

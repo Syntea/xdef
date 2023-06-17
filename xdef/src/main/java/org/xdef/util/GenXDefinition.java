@@ -4,14 +4,9 @@ import org.xdef.impl.GenXDef;
 import org.xdef.xml.KXmlUtils;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.xdef.msg.XDEF;
-import org.xdef.sys.SRuntimeException;
 
-/** Generate X-definition from XML.
+/** Generate X-definition from XML or JSON/XON data.
  * @author Vaclav Trojan
  */
 public class GenXDefinition {
@@ -20,59 +15,48 @@ public class GenXDefinition {
 	private GenXDefinition() {}
 
 	/** Generate X-definition from XML data to X-definition.
-	 * @param obj object with XML data (File, InputStream, URL, pathname,
-	 * or string with XML document).
+	 * @param obj object source data.
 	 * @return org.w3c.dom.Element object with X-definition.
 	 */
 	public static final Element genXdef(final Object obj) {
-		Element el = null;
-		if (obj instanceof Element) {
-			el = (Element) obj;
-		} else if (obj instanceof Document) {
-			el = ((Document) obj).getDocumentElement();
-		} else if (obj instanceof String) {
-			el = KXmlUtils.parseXml(((String) obj).trim()).getDocumentElement();
-		} else if (obj instanceof URL) {
-			el = KXmlUtils.parseXml((URL) obj).getDocumentElement();
-		} else if (obj instanceof File) {
-			el = KXmlUtils.parseXml((File) obj).getDocumentElement();
-		} else if (obj instanceof InputStream) {
-			el = KXmlUtils.parseXml((InputStream) obj).getDocumentElement();
-		}
-		if (el != null) {
-			return GenXDef.genXdef(el);
-		}
-		//XDEF883=Incorrect type of input data
-		throw new SRuntimeException(XDEF.XDEF883);
+		return genXdef(obj, null);
+	}
+
+	/** Generate X-definition from XML data to X-definition.
+	 * @param obj object source data.
+	 * @param xdName name of XDefinition or null.
+	 * @return org.w3c.dom.Element object with X-definition.
+	 */
+	public static final Element genXdef(final Object obj, final String xdName) {
+		return GenXDef.genXdef(obj, xdName);
 	}
 
 	/** Generate X-definition from a document to given output stream writer.
-	 * @param source name of input file or string with source XML.
+	 * @param obj input file or source object.
 	 * @param outFile name of output file.
 	 * @param encoding name of character encoding.
 	 * @throws IOException if an error occurs.
 	 */
-	public static final void genXdef(final String source,
+	public static final void genXdef(final Object obj,
 		final String outFile,
 		final String encoding) throws IOException {
-		KXmlUtils.writeXml(outFile,
-			encoding,
-			GenXDef.genXdef(KXmlUtils.parseXml(source).getDocumentElement()),
-			true,
-			true);
+		genXdef(obj, outFile, encoding, null);
 	}
 
 	/** Generate X-definition from a document to given output stream writer.
-	 * @param source input file with source XML.
-	 * @param outFile output file.
+	 * @param obj input file or source object.
+	 * @param outFile name of output file.
 	 * @param encoding name of character encoding.
+	 * @param xdName name of XDefinition or null.
 	 * @throws IOException if an error occurs.
 	 */
-	public static final void genXdef(final File source,
-		final File outFile, final String encoding) throws IOException {
+	public static final void genXdef(final Object obj,
+		final String outFile,
+		final String encoding,
+		final String xdName) throws IOException {
 		KXmlUtils.writeXml(outFile,
 			encoding,
-			GenXDef.genXdef(KXmlUtils.parseXml(source).getDocumentElement()),
+			GenXDef.genXdef(obj, xdName),
 			true,
 			true);
 	}
@@ -94,7 +78,8 @@ public class GenXDefinition {
 "Where:\n"+
 "  -i input    file intput file\n" +
 "  -o output   file\n" +
-"  -e encoding name of character set encoding";
+"  -e encoding name of character set encoding\n" +
+"  -x name of X-definition";
 		if (args.length < 2) {
 			if (args.length == 1
 				&& ("-h".equals(args[0]) || "/h".equals(args[0]))) {
@@ -105,6 +90,7 @@ public class GenXDefinition {
 		}
 		File inFile = null,	outFile = null;
 		String encoding = null;
+		String xdName = null;
 		int i = 0;
 		while (i < args.length) {
 			String arg = args[i];
@@ -161,6 +147,21 @@ public class GenXDefinition {
 						+ "After parameter '-e' is expected an encoding name");
 				}
 			}
+			if ("-x".equals(arg)) {
+				if (xdName != null) {
+					throw new RuntimeException(info
+						+ "Redefinition X-definition name '-x'");
+				}
+				if (++i < args.length && (arg = args[i]) != null &&
+					!arg.startsWith("-")) {
+					xdName = arg;
+					i++;
+					continue;
+				} else {
+					throw new RuntimeException(info
+						+ "After parameter '-e' is expected an encoding name");
+				}
+			}
 			throw new RuntimeException(info + "Incorrect parameter: " + arg);
 		}
 		if (inFile == null) {
@@ -173,8 +174,8 @@ public class GenXDefinition {
 			encoding = "UTF-8";
 		}
 		try {
-			 genXdef(inFile, outFile, encoding);
-		} catch (Exception ex) {
+			 genXdef(inFile, outFile.getCanonicalPath(), encoding, xdName);
+		} catch (IOException ex) {
 			throw new RuntimeException(ex);
 		}
 	}

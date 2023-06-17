@@ -1,7 +1,8 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.0.8, release-date 2023-05-20
-* .
+# Version 42.0.8, release-date 2023-06-17
+* X-definition is now generated from either XML data or JSON/XON data
+  (see `org.xdef.util.GenXDefinition` and `org.xdef.impl.GenXDef`).
 
 # Version 42.0.7, release-date 2023-05-10
 * fixed bugs in methods `org.xdef.sys.FileUtils.filesToZip(...)`
