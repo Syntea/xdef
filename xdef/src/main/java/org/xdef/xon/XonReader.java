@@ -365,7 +365,7 @@ public final class XonReader extends StringParser implements XonParsers {
 				return returnValue(spos, s);
 			} else {
 				char ch;
-				if ((ch=isOneOfChars("cuebdpgiCtP"))== NOCHAR) {
+				if ((ch=isOneOfChars("cuebxdpgiCtP"))== NOCHAR) {
 					return returnValue(spos, s);
 				}
 				switch(ch) {
@@ -385,6 +385,11 @@ public final class XonReader extends StringParser implements XonParsers {
 					case 'b':
 						try {
 							return returnValue(spos, SUtils.decodeBase64(s));
+						} catch (SException ex) {}
+						break;
+					case 'x':
+						try {
+							return returnValue(spos, SUtils.decodeHex(s));
 						} catch (SException ex) {}
 						break;
 					case 'd':
