@@ -45,7 +45,63 @@ public class TestSUtils extends STester {
 			(offhour < 10 ? "0" : "") + offhour +
 			(offmin < 10 ? ":0" : ":") + offmin;
 	}
+	
+	/** Test base64 encoding.
+	 * @param en1 encoded bytes.
+	 * @return empty string or error message.
+	 */
+	private String testBase64(final String en1) {
+		try {
+			byte[] b1 = SUtils.decodeBase64(en1);
+			String en2 = new String(SUtils.encodeBase64(b1, true));
+			byte[] b2 = SUtils.decodeBase64(en2);
+			if (!Arrays.equals(b1, b2)) {
+				return "Decoded data not equal to original.";
+			}
+			if (!en1.equals(en2)) {
+				return "en1: " + en1 + ", en2: " + en2;
+			}
+			return testBinary(b1);
+		} catch (Exception ex) {
+			return STester.printThrowable(ex);
+		}		
+	}
 
+	/** Test base64 and hexadecimal encoding.
+	 * @param bytes byte array to be checked.
+	 * @return empty string or error message.
+	 */
+	private String testBinary(final byte[] bytes) {
+		String en1 = new String(SUtils.encodeBase64(bytes, true));
+		try {
+			byte[] b1 = SUtils.decodeBase64(en1);
+			String en2 = new String(SUtils.encodeBase64(b1, true));
+			byte[] b2 = SUtils.decodeBase64(en2);
+			if (!en1.equals(en2)) {
+				return "Base64: en1: " + en1 + ", en2: " + en2;
+			}
+			if (!Arrays.equals(b1, b2)) {
+				return "Base64: decoded data not equal to original.";
+			}
+			en2 = new String(SUtils.encodeBase64(b1, false));
+			b2 = SUtils.decodeBase64(en2);
+			if (!Arrays.equals(b1, b2)) {
+				return "Base64_1: decoded data not equal to original.";
+			}			
+			en1 = new String(SUtils.encodeHex(bytes));
+			b1 = SUtils.decodeHex(en1);
+			en2 = new String(SUtils.encodeHex(b1));
+			if (!en1.equals(en2)) {
+				return "Hex: en1: " + en1 + ", en2: " + en2;
+			}
+			if (!Arrays.equals(b1, b2)) {
+				return "Hex: decoded data not equal to original.";
+			}
+			return "";
+		} catch (Exception ex) {
+			return STester.printThrowable(ex);
+		}		
+	}
 	@Override
 	/** Run test and print error information. */
 	public void test() {
@@ -449,149 +505,41 @@ public class TestSUtils extends STester {
 		} catch (Exception ex) {fail(ex);}
 		//encodeBase64, decodeBase64
 		try {
-			byte[] b1 = new byte[100];
-			for (int i = 0; i < b1.length; i++) {
-				b1[i] = (byte)i;
+			assertEq("", testBinary(new byte[0]));
+			byte[] b1 = new byte[1];
+			for (int i = 0; i < 256; i++) {
+				b1[0] = (byte) i;
+				assertEq("", testBinary(b1));
 			}
-			try {
-				SUtils.decodeBase64(b1);
-				fail("decodeBase64 - exception SYS48 not thrown");
-			} catch (SException ex) {
-				assertEq("SYS048", ex.getMsgID(),
-					"decodeBase64 - exception SYS48 not thrown");
-			}
-			byte[] b2;
-			b2 = SUtils.encodeBase64(b1, false);
-			assertEq(b2.length % 4, 0, "Not dividable by 4:" +
-				b2.length + "\n'" + new String(b2) + "'");
-			b2 = SUtils.decodeBase64(b2);
-			assertTrue(Arrays.equals(b1, b2), "Base64 encoding/decoding error");
-			b1 = new byte[0];
-			b2 = SUtils.encodeBase64(b1, false);
-			assertEq(b2.length % 4, 0, "Not dividable by 4:" +
-				b2.length + "\n'" + new String(b2) + "'");
-			b2 = SUtils.decodeBase64(b2);
-			assertTrue(Arrays.equals(b1, b2), "Base64 encoding/decoding error");
-			b1 = new byte[1];
-			b1[0] = 0;
-			b2 = SUtils.encodeBase64(b1, false);
-			assertEq(b2.length % 4, 0, "Not dividable by 4:" +
-				b2.length + "\n'" + new String(b2) + "'");
-			b2 = SUtils.decodeBase64(b2);
-			assertTrue(Arrays.equals(b1, b2), "Base64 encoding/decoding error");
 			b1 = new byte[2];
 			for (int i = 0; i < b1.length; i++) {
 				b1[i] = (byte)i;
 			}
-			b2 = SUtils.encodeBase64(b1, false);
-			assertEq(b2.length % 4, 0, "Not dividable by 4:" +
-				b2.length + "\n'" + new String(b2) + "'");
-			b2 = SUtils.decodeBase64(b2);
-			assertTrue(Arrays.equals(b1, b2), "Base64 encoding/decoding error");
+			assertEq("", testBinary(b1));
 			b1 = new byte[3];
 			for (int i = 0; i < b1.length; i++) {
 				b1[i] = (byte)i;
 			}
-			b2 = SUtils.encodeBase64(b1, false);
-			assertEq(b2.length % 4, 0, "Not dividable by 4:" +
-				b2.length + "\n'" + new String(b2) + "'");
-			b2 = SUtils.decodeBase64(b2);
-			assertTrue(Arrays.equals(b1, b2), "Base64 encoding/decoding error");
+			assertEq("", testBinary(b1));
 			b1 = new byte[4];
 			for (int i = 0; i < b1.length; i++) {
 				b1[i] = (byte)i;
 			}
-			b2 = SUtils.encodeBase64(b1, false);
-			assertEq(b2.length % 4, 0, "Not dividable by 4:" +
-				b2.length + "\n'" + new String(b2) + "'");
-			b2 = SUtils.decodeBase64(b2);
-			assertTrue(Arrays.equals(b1, b2), "Base64 encoding/decoding error");
-			String s = "";
-			b1 = SUtils.encodeBase64(s.getBytes(), false);
-			assertEq(b1.length % 4, 0, "Not dividable by 4:" +
-				b1.length + "\n'" + new String(b1) + "'");
-			b2 = SUtils.decodeBase64(b1);
-
-			assertEq(s, new String(b2));
-			s = "A";
-			b1 = SUtils.encodeBase64(s.getBytes(), false);
-			assertEq(b1.length % 4, 0, "Not dividable by 4:" +
-				b1.length + "\n'" + new String(b1) + "'");
-			b2 = SUtils.decodeBase64(b1);
-			assertEq(s, new String(b2));
-
-			s = "AB";
-			b1 = SUtils.encodeBase64(s.getBytes(), false);
-			assertEq(b1.length % 4, 0, "Not dividable by 4:" +
-				b1.length + "\n'" + new String(b1) + "'");
-			b2 = SUtils.decodeBase64(b1);
-			assertEq(s, new String(b2));
-
-			s = "ABC";
-			b1 = SUtils.encodeBase64(s.getBytes(), false);
-			assertEq(b1.length % 4, 0, "Not dividable by 4:" +
-				b1.length + "\n'" + new String(b1) + "'");
-			b2 = SUtils.decodeBase64(b1);
-			assertEq(s, new String(b2));
-
-			s = "ABCD";
-			b1 = SUtils.encodeBase64(s.getBytes(), false);
-			assertEq(b1.length % 4, 0, "Not dividable by 4:" +
-				b1.length + "\n'" + new String(b1) + "'");
-			b2 = SUtils.decodeBase64(b1);
-			assertEq(s, new String(b2));
-
-			s = "ABCDE";
-			b1 = SUtils.encodeBase64(s.getBytes(), false);
-			assertEq(b1.length % 4, 0, "Not dividable by 4:" +
-				b1.length + "\n'" + new String(b1) + "'");
-			b2 = SUtils.decodeBase64(b1);
-			assertEq(s, new String(b2));
-
-			s = "ABCDEF";
-			b1 = SUtils.encodeBase64(s.getBytes(), false);
-			assertEq(b1.length % 4, 0, "Not dividable by 4:" +
-				b1.length + "\n'" + new String(b1) + "'");
-			b2 = SUtils.decodeBase64(b1);
-			assertEq(s, new String(b2));
-
-			s = "Ahoj Nazdar Dobry den Hi Good day Hello"
-				+ " Gutten Tag Bon Jour Jo napot Shalom";
-			b1 = SUtils.encodeBase64(s.getBytes(), false);
-			assertEq(b1.length % 4, 0, "Not dividable by 4:" +
-				b1.length + "\n'" + new String(b1) + "'");
-			b2 = SUtils.decodeBase64(b1);
-			assertEq(s, new String(b2));
-			s = "Ahoj Nazdar Dobry den Hi Good day Hello" +
-				" Gutten Tag Bon Jour Jo napot Shalom.";
-			b1 = SUtils.encodeBase64(s.getBytes(), true);
-			b2 = SUtils.decodeBase64(b1);
-			assertEq(s, new String(b2));
-			s += '.';
-			b1 = SUtils.encodeBase64(s.getBytes(), true);
-			b2 = SUtils.decodeBase64(b1);
-			assertEq(s, new String(b2));
-			s += 'A';
-			b1 = SUtils.encodeBase64(s.getBytes(), true);
-			b2 = SUtils.decodeBase64(b1);
-			assertEq(s, new String(b2));
-			s += 'h';
-			b1 = SUtils.encodeBase64(s.getBytes(), true);
-			b2 = SUtils.decodeBase64(b1);
-			assertEq(s, new String(b2));
-			s += 'o';
-			b1 = SUtils.encodeBase64(s.getBytes(), true);
-			b2 = SUtils.decodeBase64(b1);
-			assertEq(s, new String(b2));
-			assertEq(s, new String(b2));
-			s += 'j';
-			b1 = SUtils.encodeBase64(s.getBytes(), true);
-			b2 = SUtils.decodeBase64(b1);
-			assertEq(s, new String(b2));
-			s += '!';
-			b1 = SUtils.encodeBase64(s.getBytes(), true);
-			b2 = SUtils.decodeBase64(b1);
-			assertEq(s, new String(b2));
+			b1 = new byte[100];
+			for (int i = 0; i < b1.length; i++) {
+				b1[i] = (byte)i;
+			}
+			assertEq("", testBinary(b1));
+			
+			assertEq("", testBase64(""));
+			assertEq("", testBase64("AA=="));
+			assertEq("", testBase64("AAA="));
+			assertEq("", testBase64("ABCD"));
+			assertEq("", testBase64("D66Z"));
+			assertEq("", testBase64("YQB1AAAA"));
+			assertEq("", testBase64("NwA1ADkAAAA="));
+			assertEq("", testBase64("VABSAFUARQAAAA=="));
+			assertEq("", testBase64("VABSAFUARQAAAAA="));
 		} catch (Exception ex) {fail(ex);}
 		try {//random test of encoding/decoding both base64 and hex
 			Random rnd = new Random(System.currentTimeMillis());
@@ -668,30 +616,8 @@ public class TestSUtils extends STester {
 				///////////////////////////////////////////////////////////////
 				//base64
 				///////////////////////////////////////////////////////////////
-				en1 = "YQB1AAAA";
-				b1 = SUtils.decodeBase64(en1);
-				en2 = new String(SUtils.encodeBase64(b1, true));
-				b2 = SUtils.decodeBase64(en2);
-				assertEq(en1, en2);
-				assertTrue(Arrays.equals(b1, b2), "Decoded data not equal.");
-				en1 = "NwA1ADkAAAA=";
-				b1 = SUtils.decodeBase64(en1);
-				en2 = new String(SUtils.encodeBase64(b1, true));
-				b2 = SUtils.decodeBase64(en2);
-				assertEq(en1, en2);
-				assertTrue(Arrays.equals(b1, b2), "Decoded data not equal.");
-				en1 = "VABSAFUARQAAAA==";
-				b1 = SUtils.decodeBase64(en1);
-				en2 = new String(SUtils.encodeBase64(b1, true));
-				b2 = SUtils.decodeBase64(en2);
-				assertEq(en1, en2);
-				assertTrue(Arrays.equals(b1, b2), "Decoded data not equal.");
 				en1 = new String(SUtils.encodeBase64(b1, false));
-				b2 = SUtils.decodeBase64(en1);
-				assertTrue(Arrays.equals(b1, b2), "Decoded data not equal.");
-				en2 = new String(SUtils.encodeBase64(b1, true));
-				b2 = SUtils.decodeBase64(en2);
-				assertTrue(Arrays.equals(b1, b2), "Decoded data not equal.");
+				b1 = SUtils.decodeBase64(en1);
 				bis = new ByteArrayInputStream(b1);
 				bos = new ByteArrayOutputStream();
 				SUtils.encodeBase64(bis, bos, false);
@@ -720,9 +646,10 @@ public class TestSUtils extends STester {
 				assertTrue(Arrays.equals(b1, b2), "Decoded data not equal.");
 				bis = new ByteArrayInputStream(b1);
 				bos = new ByteArrayOutputStream();
-				SUtils.encodeBase64(bis, bos, true);
+				SUtils.encodeBase64(bis, bos, false);
 				bos.close();
 				en3 = bos.toString();
+				en2 = new String(SUtils.encodeBase64(b2, false));
 				assertEq(en2, en3, "Error differs:\n" + "s1 = '" + en2
 					+ "'\n" + "s2 = '" + en3 + "'");
 				bis = new ByteArrayInputStream(en3.getBytes());
@@ -734,6 +661,7 @@ public class TestSUtils extends STester {
 				caw = new CharArrayWriter();
 				bis = new ByteArrayInputStream(b1);
 				SUtils.encodeBase64(bis, caw, true);
+				en2 = new String(SUtils.encodeBase64(b2, true));
 				caw.close();
 				en3 = caw.toString();
 				assertEq(en2, en3, "Error differs:\n"+
@@ -751,8 +679,7 @@ public class TestSUtils extends STester {
 			File f1 = new File(SUtils.getActualPath());
 			File f2 = new File(".");
 			assertEq(f1.getCanonicalPath(), f2.getCanonicalPath(),
-				"getActualPath error:\n"
-					+ f1.getCanonicalPath() + "\n" + f2.getCanonicalPath());
+				"getActualPath error: "+ f1 + ", " + f2);
 		} catch (Exception ex) {fail(ex);}
 		//getFileGroup
 		try {

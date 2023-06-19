@@ -493,6 +493,9 @@ public class XonTools {
 			return ((Currency) x).getCurrencyCode();
 		} else if (x instanceof byte[]) {
 			s = new String(SUtils.encodeBase64((byte[]) x));
+			if (s.isEmpty()) {
+				s = " ";
+			}
 		} else if (x instanceof XDTelephone) {
 			return "t\"" + x + '"';
 		} else {
@@ -506,6 +509,9 @@ public class XonTools {
 				addQuot = true;
 				break;
 			}
+		}
+		if (s.isEmpty()) {
+			return "";
 		}
 		char ch = s.charAt(0);
 		if (addQuot) {

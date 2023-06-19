@@ -521,10 +521,11 @@ public final class XonReader extends StringParser implements XonParsers {
 		} else {
 			Object result;
 			char ch;
-			if (_xonMode&&(i=isOneOfTokens(new String[]{"c\"","u\"","e\"","b(",
-				"d","p(","g(","/","C(","t\"","P","-P","NaN","INF","-INF"}))>=0){
-				switch(i) {
-					case 0: // character
+			final String[] tokens = {"c\"","u\"","e\"","b(","x(","d","p(",
+				"g(","/","C(","t\"","P","-P","NaN","INF","-INF"};
+			if (_xonMode&&(i=isOneOfTokens(tokens))>=0){
+				switch(tokens[i]) {
+					case "c\"": // character
 						i = XonTools.readJChar(this);
 						if (i != -1) {
 							ch = (char) i;
@@ -533,7 +534,7 @@ public final class XonReader extends StringParser implements XonParsers {
 							}
 						}
 						break;
-					case 1: // URI
+					case "u\"": // URI
 						try {
 							return returnValue(spos,
 								new URI(XonTools.readJString(this)));
@@ -541,21 +542,42 @@ public final class XonReader extends StringParser implements XonParsers {
 						setIndex(pos);
 						//XON/JSON value expected
 						return returnError(spos, null, JSON.JSON010, "[]{}");
-					case 2:  // Email address
+					case "e\"": // Email address
 						try {
 							return returnValue(spos, new DefEmailAddr(
 								XonTools.readJString(this)));
 						} catch (Exception ex) {}
 						break;
-					case 3: // base64 (byte array)
+					case "b(": // base64 byte array
 						try {
-							result = SUtils.decodeBase64(this);
-							if (isChar(')')) {
+							StringBuilder sb = new StringBuilder();
+							while ((ch = peekChar()) != ')' && ch != NOCHAR) {
+								if (ch > ' ') {
+									sb.append(ch);
+								}
+							}
+							result = SUtils.decodeBase64(sb.toString());
+							if (ch == ')') {
 								return returnValue(spos, result);
 							}
 						} catch (SException ex) {}
 						break;
-					case 4:  // 'd' datetime
+					case "x(": // hexadecimal byte array
+						try {
+							StringBuilder sb = new StringBuilder();
+							while ((ch=isOneOfChars(
+								" \n\r0123456789ABCDEFabcdef")) != NOCHAR) {
+								if (ch > ' ') {
+									sb.append(ch);
+								}
+							}
+							result = SUtils.decodeHex(sb.toString());
+							if (isChar(')')) {
+								return returnValue(spos, result);
+							}
+						} catch (Exception ex) {}
+						break;
+					case "d": // datetime
 						if (isDatetime("yyyy-MM-dd['T'HH:mm:ss[.S]][Z]" +
 							"|HH:mm:ss[.S][Z]"+ //time
 							"|--MM[-dd][Z]" + //month day
@@ -565,7 +587,7 @@ public final class XonReader extends StringParser implements XonParsers {
 								return returnValue(spos, getParsedSDatetime());
 						}
 						break;
-					case 5: //"p(" - currency ammount
+					case "p(": // price (currency ammount)
 						if (isFloat() || isInteger()) {
 							BigDecimal d = new BigDecimal(getParsedString());
 							isChar(' ');
@@ -590,7 +612,7 @@ public final class XonReader extends StringParser implements XonParsers {
 							}
 						}
 						break;
-					case 6: // "g(" - GPS position
+					case "g(": // GPS position
 						result = null;
 						if (isSignedFloat() || isSignedInteger()) {
 							double latitude = getParsedDouble();
@@ -621,10 +643,10 @@ public final class XonReader extends StringParser implements XonParsers {
 							}
 						}
 						break;
-					case 7: {// "/" ipAddr
+					case "/": { // ipAddr
 						String s = "";
-						while ("0123456789abcdefABCDEF:."
-							.indexOf(getCurrentChar()) >= 0) {
+						while ("0123456789abcdefABCDEF:.".indexOf(
+							getCurrentChar()) >= 0) {
 							s += peekChar();
 						}
 						try {
@@ -635,7 +657,7 @@ public final class XonReader extends StringParser implements XonParsers {
 							return returnValue(spos, null);
 						}
 					}
-					case 8: {// "c(" currency
+					case "C(": { // currency
 						int pos1 = getIndex();
 						while ((ch = peekChar()) > ' ' && ch != ')') {}
 						int pos2 = getIndex() -1;
@@ -651,7 +673,7 @@ public final class XonReader extends StringParser implements XonParsers {
 						}
 						break;
 					}
-					case 9: {// "t telephone
+					case "t\"": { // telephone
 						int pos1 = getIndex();
 						while ((ch = peekChar()) >= ' ' && ch != '"') {}
 						int pos2 = getIndex() -1;
@@ -663,25 +685,27 @@ public final class XonReader extends StringParser implements XonParsers {
 						error(XDEF.XDEF809,	"telephone", s);
 						return returnValue(spos, null);
 					}
-					case 10:  // 'P' duration
-					case 11:  // '-P' duration
+					case "P":  // 'P' duration
+					case "-P":  // '-P' duration
 						setIndex(pos);
 						if (isXMLDuration()) {
 							return returnValue(spos, getParsedSDuration());
 						}
 						break;
-					case 12:  // "NaN"
-					case 13:  // "INF"
-					case 14:  // "-INF"
-					if (isChar('F')) {
-						return returnValue(spos, i == 9 ? Float.NaN
-							: i == 10 ? Float.POSITIVE_INFINITY
+					case "NaN":  // "NaN"
+					case "INF":  // "INF"
+					case "-INF": { // "-INF"
+						String s = tokens[i];
+						if (isChar('F')) {
+							return returnValue(spos, "NaN".equals(s) ? Float.NaN
+								: "INF".equals(s) ? Float.POSITIVE_INFINITY
 								: Float.NEGATIVE_INFINITY);
+						}
+						isChar('D');
+						return returnValue(spos, "NaN".equals(s) ? Double.NaN
+							: "INF".equals(s) ? Double.POSITIVE_INFINITY
+								: Double.NEGATIVE_INFINITY);
 					}
-					isChar('D');
-					return returnValue(spos, i == 0 ? Double.NaN
-						: i == 1 ? Double.POSITIVE_INFINITY
-							: Double.NEGATIVE_INFINITY);
 				}
 			}
 		}

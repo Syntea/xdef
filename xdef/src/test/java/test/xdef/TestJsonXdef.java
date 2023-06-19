@@ -1011,6 +1011,8 @@ public class TestJsonXdef extends XDTester {
 "    j : \"? char()\"\n" +
 "  },\n" +
 "  \"base64Binary()\",\n" +
+"  \"base64Binary()\",\n" +
+"  \"base64Binary()\",\n" +
 "  \"price()\",\n" +
 "  \"currency()\",\n" +
 "  \"* ipAddr()\"\n" +
@@ -1035,7 +1037,9 @@ public class TestJsonXdef extends XDTester {
 "    ],\n" +
 "    j : c\"a\",                        # Character\n" +
 "  }, /**** end of map ****/\n" +
-"  b(HbRBHbRBHQw=),                   /* byte array (base64) */\n" +
+"  b(),                               /* byte array (base64) */\n"+
+"  b(AA==),                           /* byte array (base64) */\n"+
+"  b(ABCD),                           /* byte array (base64) */\n" +
 "  p(123.45 CZK),                     /* price */ \n" +
 "  C(USD),                            /* currency */\n" +
 "  /1080:0:0:0:8:800:200C:417A        /* inetAddr (IPv6)  */\n" +
@@ -1046,11 +1050,11 @@ public class TestJsonXdef extends XDTester {
 			assertTrue(XonUtils.xonEqual(XonUtils.parseXON(json),
 				SUtils.getValueFromGetter(xc,"toXon")));
 			list = (List) SUtils.getValueFromGetter(
-				xc,"listOf$"+XonNames.X_VALUE+"_3");
+				xc, "listOf$"+XonNames.X_VALUE+"_5");
 			list.add(InetAddress.getByName("111.22.33.1"));
-			SUtils.setValueToSetter(xc, "set"+XonNames.X_VALUE+"_3", list);
+			SUtils.setValueToSetter(xc, "set"+XonNames.X_VALUE+"_5", list);
 			assertEq(2, ((List) SUtils.getValueFromGetter(
-				xc,"listOf$"+XonNames.X_VALUE+"_3")).size());
+				xc,"listOf$"+XonNames.X_VALUE+"_5")).size());
 			assertTrue(SUtils.getValueFromGetter(SUtils.getValueFromGetter(
 				xc,"getjx$"+XonNames.X_MAP), "toXon") instanceof Map);
 			assertTrue(((List)SUtils.getValueFromGetter(

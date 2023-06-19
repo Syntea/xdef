@@ -92,9 +92,13 @@ public class XSParseBase64Binary extends XSAbstractParser {
 		p.isSpaces();
 		try {
 			XSParseReader r = new XSParseReader(p);
-			ByteArrayOutputStream bw = new ByteArrayOutputStream();
-			SUtils.decodeBase64(r, bw);
-			p.setParsedValue(new DefBytes(bw.toByteArray(), false));
+			if (p.isToken("\" \"")) { // empty byte array
+				p.setParsedValue(new DefBytes(new byte[0], false));
+			} else {
+				ByteArrayOutputStream bw = new ByteArrayOutputStream();
+				SUtils.decodeBase64(r, bw);
+				p.setParsedValue(new DefBytes(bw.toByteArray(), false));
+			}
 			String s = r.getParsedString();
 			p.isSpaces();
 			p.replaceParsedBufferFrom(pos0, s);

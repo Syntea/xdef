@@ -277,7 +277,7 @@ public class TestXon extends XDTester {
 		assertNull(testA("jnumber", "[ null, 1 ]"));
 		assertNull(testA("jstring", "[ null, \"abc\" ]"));
 		assertNull(testA("jvalue", "[ null, true, 1, \"abc\" ]"));
-
+		
 		assertNull(testM("? int", "{a:1}"));
 		assertNull(testM("? int", "{ }"));
 
@@ -386,6 +386,8 @@ public class TestXon extends XDTester {
 "  \"dateTime()\",\n" +
 "  \"gps()\",\n" +
 "  \"base64Binary()\",\n" +
+"  \"base64Binary()\",\n" +
+"  \"base64Binary(0,0)\",\n" +
 "  \"price()\",\n" +
 "  \"price()\",\n" +
 "  \"currency()\",\n" +
@@ -451,6 +453,8 @@ public class TestXon extends XDTester {
 "  d2021-01-12T01:10:11.54012-00:01,  # date and time (nanos, zone)\n" +
 "  g(-0, +1),                         # GPS\n" +
 "  b(HbRBHbRBHQw=),                   # byte array (base64)\n" +
+"  x(0FAE99),                         # byte array (input is hexadecimal)\n" +
+"  x(),                               # byte array (input is hexadecimal)\n" +
 "  p(123.45 CZK),                     # price\n" +
 "  p(12 USD),                         # price\n" +
 "  C(USD),                            # currency\n" +
