@@ -14,7 +14,7 @@
  * <H2><b>GenCollection</b></H2>
  * Create XML document composed from set of X-definitions and/or collections.
  * (see {@link org.xdef.util.GenCollection#main(String[])}).
- * <H2><b>GenXdef</b></H2>
+ * <H2><b>GenXDefinition</b></H2>
  * Create X-definition from XML document.
  * (see {@link org.xdef.util.GenXDefinition#main(String[])}).
  * <H2><b>PrettyXdef</b></H2>

@@ -6,7 +6,6 @@ import org.xdef.XDConstants;
 import org.xdef.XDDocument;
 import org.xdef.XDFactory;
 import org.xdef.XDPool;
-import org.xdef.impl.GenXDef;
 import org.xdef.sys.ArrayReporter;
 import static org.xdef.sys.STester.runTest;
 import org.xdef.sys.SUtils;
@@ -47,8 +46,8 @@ public class TestGenXdef extends XDTester {
 				assertTrue(XonUtils.xonEqual(o, x), id + ": \n" + f);
 			}
 		} catch (Exception ex) {
-			System.err.println(f);
-			ex.printStackTrace();
+			fail(f.getAbsolutePath());
+			fail(ex);
 		}
 	}
 	private void test(String data, String id) {
@@ -70,8 +69,8 @@ public class TestGenXdef extends XDTester {
 				fail(id + ":\n" +reporter.printToString());
 			}
 		} catch (Exception ex) {
-			System.err.println(id + ":");
-			ex.printStackTrace();
+			fail(id + ":");
+			fail(ex);
 		}
 	}
 
