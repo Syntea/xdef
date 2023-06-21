@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.Currency;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import org.xdef.XDValue;
 import org.xdef.msg.JSON;
 import org.xdef.sys.GPSPosition;
@@ -20,7 +21,111 @@ import org.xdef.sys.SRuntimeException;
 /** Provides comparing of XON objects
  * @author Vaclav Trojan
  */
-class XonCompare {
+final class XonCompare {
+
+	private static String objDiff(final Object a, final Object b) {
+		if (XonUtils.xonEqual(a, b)) {
+			return "";
+		}
+		if (a == null) {
+			return "A:null, B:" + b.getClass() + "\n";
+		} else if (b == null) {
+			return "A:" + a.getClass() +", B:null\n";
+		} else {
+			if (!a.getClass().equals(b.getClass())) {
+				return "A:"+a.getClass()+", B:"+b.getClass()+"\n";
+			} else if (a instanceof List) {
+				return listDiff((List) a, (List) b);
+			} else if (a instanceof Map) {
+				return mapDiff((Map) a, (Map) b);
+			} else {
+				return "A:"+a+", B:"+b+"\n";
+			}
+		}
+	}
+
+	private static String mapDiff(final Map a, final Map b) {
+		if (XonUtils.xonEqual(a, b)) {
+			return "";
+		}
+		String s = "{\n";
+		int sizea = a.size();
+		int sizeb = b.size();
+		if (sizea != sizeb) {
+			s += "A size=" + sizea + ", B size=" + sizeb;
+		} else {
+			Set ae = a.keySet();
+			Set be = b.keySet();
+			boolean keydiff = false;
+			for (Object akey: ae) {
+				if (!b.containsKey(akey)) {
+					s += "A:" + akey + ", B missing\n";
+					keydiff = true;
+				}
+			}
+			for (Object bkey: be) {
+				if (!a.containsKey(bkey)) {
+					s += "B:" + bkey + ", A missing\n";
+					keydiff = true;
+				}
+			}
+			if (!keydiff) {
+				for (Object key: ae) {
+					Object ao = a.get(key);
+					Object bo = b.get(key);
+					try {
+					if (!XonUtils.xonEqual(ao, bo)) {
+						s += "key "+ key + "; " + objDiff(ao, bo);
+					}
+					} catch (Exception ex) {
+						ex.printStackTrace();
+						s += "key "+ key + "; " + ex;
+					}
+				}
+			}
+		}
+		return s + "}\n";
+	}
+
+	private static String listDiff(final List a, final List b) {
+		if (XonUtils.xonEqual(a, b)) {
+			return "";
+		}
+		String s = "[\n";
+		int sizea = a.size();
+		int sizeb = b.size();
+		if (sizea != sizeb) {
+			s += "A size=" + sizea + ", B size=" + sizeb;
+		} else {
+			for (int i = 0; i < sizea; i++) {
+				Object oa = a.get(i), ob = b.get(i);
+				if (!XonUtils.xonEqual(oa, ob)) {
+					s += "[" + i + "]: " + objDiff(oa, ob);
+				}
+			}
+		}
+		return s + "]\n";
+	}
+
+	/** Compare two XON/JSON objects. Return an empty string if both objects
+	 * are equal, otherwise, return string with different items.
+	 * @param a first object with XON/JSON data.
+	 * @param b second object with XON/JSON data.
+	 * @return true if and only if both objects contains equal data.
+	 */
+	static final String xonDiff(final Object a, final Object b) {
+		if (XonUtils.xonEqual(a, b)) {
+			return "";
+		}
+		if (a != null && b != null) {
+			if (a instanceof List && b instanceof List) {
+				return listDiff((List) a, (List) b);
+			} else if (a instanceof Map && b instanceof Map) {
+				return mapDiff((Map) a, (Map) b);
+			}
+		}
+		return objDiff(a,b);
+	}
 
 	/** Check if XON/JSON arrays from arguments are equal.
 	 * @param a1 first array.
@@ -118,7 +223,7 @@ class XonCompare {
 	 * @throws SRuntimeException if objects are incomparable
 	 */
 	final static boolean equalValue(final Object o1, final Object o2) {
-		if (o1 == null) {
+		if (o1 == null || o1 instanceof XonTools.JNull) {
 			return o2 == null || o2 instanceof XonTools.JNull;
 		} else if (o1 instanceof XonTools.JNull) {
 			return o2 == null || o2 instanceof XonTools.JNull;
@@ -140,7 +245,9 @@ class XonCompare {
 		} else if (o1 instanceof SDuration) {
 			return ((SDuration) o1).equals(o2);
 		} else if (o1 instanceof GPSPosition) {
-			return ((GPSPosition) o1).equals(o2);
+			return (o2 == null || !(o2 instanceof GPSPosition))
+				? false : o1.equals(o2);
+//			return ((GPSPosition) o1).equals(o2);
 		} else if (o1 instanceof Price) {
 			return ((Price) o1).equals(o2);
 		} else if (o1 instanceof File) {
@@ -160,8 +267,6 @@ class XonCompare {
 			byte[] b2 = (byte[]) o2;
 			return Arrays.equals(b2, b1);
 		} catch (Exception ex) {}
-		// Incomparable objects &{0} and &{1}
-		throw new SRuntimeException(JSON.JSON012,
-			o1.getClass().getName(), o2.getClass().getName());
+		return o1.equals(o2);
 	}
 }

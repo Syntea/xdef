@@ -19,6 +19,7 @@ import org.xdef.sys.SDuration;
 import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
 import static org.xdef.xon.XonTools.charToJSource;
+import static org.xdef.xon.XonTools.genXMLString;
 import static org.xdef.xon.XonTools.jstringToSource;
 
 /** Conversion of XON/JSON to string.
@@ -327,7 +328,7 @@ class XonToString extends XonTools {
 		} else if (x instanceof List) {
 			return xonArrayToJson((List) x);
 		} else if (x instanceof byte[]) {
-			return new String(SUtils.encodeBase64((byte[]) x));
+			return genXMLString(new String(SUtils.encodeBase64((byte[]) x)));
 		} else if (x instanceof File) {
 			return ((File) x).getAbsolutePath();
 		} else if (x instanceof InetAddress) {

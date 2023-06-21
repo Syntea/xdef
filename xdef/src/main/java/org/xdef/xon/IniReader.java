@@ -17,6 +17,7 @@ import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
 import org.xdef.xml.KXmlUtils;
 import static org.xdef.xon.XonNames.SCRIPT_DIRECTIVE;
+import static org.xdef.xon.XonTools.genXMLString;
 
 /** Methods for INI/Properties data.
  * @author Vaclav Trojan
@@ -434,8 +435,8 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 					s = "null";
 				} else if (o instanceof byte[]) {
 					byte[] b = (byte[]) o;
-					s = new String(b.length <= 32
-						? SUtils.encodeHex(b) : SUtils.encodeBase64(b));
+					s = genXMLString(new String(b.length <= 32
+						? SUtils.encodeHex(b) : SUtils.encodeBase64(b)));
 				} else {
 					s = o.toString();
 				}

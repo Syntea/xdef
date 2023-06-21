@@ -18,6 +18,7 @@ public class XSParseHexBinary extends XSParseBase64Binary {
 		int pos0 = p.getIndex();
 		p.isSpaces();
 		int pos = p.getIndex();
+		boolean wasQuote = p.isChar('"');
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		int i;
 		while ((i="0123456789ABCDEFabcdef".indexOf(p.getCurrentChar()))>=0){
@@ -32,6 +33,11 @@ public class XSParseHexBinary extends XSParseBase64Binary {
 			}
 			baos.write(j >= 16 ? i + j - 6 : i + j);
 			p.nextChar();
+		}
+		if (wasQuote && !p.isChar('"')) {
+			//Incorrect value of '&{0}'&{1}{: }
+			p.errorWithString(XDEF.XDEF809, parserName());
+			return;
 		}
 		String s = p.getParsedBufferPartFrom(pos);
 		if (s == null) {

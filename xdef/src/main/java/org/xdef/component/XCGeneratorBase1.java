@@ -224,7 +224,9 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 "\t */"+LN : "")+
 "\tprivate static byte[] decodeBase64(String s) {"+LN+
 "\t\ttry {"+LN+
-"\t\t\treturn org.xdef.sys.SUtils.decodeBase64(s);"+LN+
+"\t\t\treturn org.xdef.sys.SUtils.decodeBase64("+LN+
+"\t\t\t\ns.startsWith(\"\\\"\")&&s.endsWith(\"\\\"\")?"+
+	"s.substring(1, s.length() -1):s);\n" +
 "\t\t} catch (org.xdef.sys.SException ex) {"+LN+
 "\t\t\tthrow new org.xdef.sys.SRuntimeException(ex.getReport());"+LN+
 "\t\t}"+LN+
@@ -234,8 +236,9 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 "\t * @return string with encoded byte array."+LN+
 "\t */"+LN : "")+
 "\tprivate static String encodeBase64(byte[] b) {"+LN+
-"\t\t\treturn new String(org.xdef.sys.SUtils.encodeBase64(b),"+LN+
-"\t\t\tjava.nio.charset.Charset.forName(\"UTF-8\"));"+LN+
+"\t\treturn org.xdef.xon.XonTools.genXMLString("+LN+
+"\t\t\tnew String(org.xdef.sys.SUtils.encodeBase64(b),"+LN+
+"\t\t\tjava.nio.charset.Charset.forName(\"UTF-8\")));"+LN+
 "\t}"+LN;
 			}
 			if ((_byteArrayEncoding & 2) != 0) { //hex

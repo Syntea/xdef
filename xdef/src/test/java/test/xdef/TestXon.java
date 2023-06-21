@@ -277,7 +277,7 @@ public class TestXon extends XDTester {
 		assertNull(testA("jnumber", "[ null, 1 ]"));
 		assertNull(testA("jstring", "[ null, \"abc\" ]"));
 		assertNull(testA("jvalue", "[ null, true, 1, \"abc\" ]"));
-		
+
 		assertNull(testM("? int", "{a:1}"));
 		assertNull(testM("? int", "{ }"));
 
@@ -452,7 +452,7 @@ public class TestXon extends XDTester {
 "  d2000-10,                          # year month; no zone\n" +
 "  d2021-01-12T01:10:11.54012-00:01,  # date and time (nanos, zone)\n" +
 "  g(-0, +1),                         # GPS\n" +
-"  b(HbRBHbRBHQw=),                   # byte array (base64)\n" +
+"  b(true),                   # byte array (base64)\n" +
 "  x(0FAE99),                         # byte array (input is hexadecimal)\n" +
 "  x(),                               # byte array (input is hexadecimal)\n" +
 "  p(123.45 CZK),                     # price\n" +
@@ -487,19 +487,22 @@ public class TestXon extends XDTester {
 			genXComponent(xp, clearTempDir());
 			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
-			o = xc.toXon();
-			assertTrue(XonUtils.xonEqual(x,y));
-			x = XonUtils.xonToJson(XonUtils.xmlToXon(el = xc.toXml()));
-			if (!XonUtils.xonEqual(x, y = XonUtils.xonToJson(y))) {
+			assertTrue(XonUtils.xonEqual(xc.toXon(),y));
+			el = xc.toXml();
+			s = XonUtils.toJsonString(XonUtils.xmlToXon(el), true);
+			o = XonUtils.xonToJson(jparse(xp, "", s, reporter));
+			assertNoErrorwarningsAndClear(reporter);
+			if (!XonUtils.xonEqual(o, XonUtils.xonToJson(y))) {
+				fail(XonUtils.xonDiff(o, XonUtils.xonToJson(y)));
 				fail(KXmlUtils.nodeToString(el, true)
 					+ "\n***\n" + XonUtils.toXonString(y, true)
-					+ "\n***\n" + XonUtils.toXonString(x, true));
+					+ "\n***\n" + XonUtils.toXonString(o, true));
 			}
 			xd = xp.createXDDocument();
 			xd.setXONContext(xon);
 			xc = xd.jcreateXComponent("A", null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
-			assertTrue(XonUtils.xonEqual(o, y = xc.toXon()));
+			assertTrue(XonUtils.xonEqual(x, xc.toXon()));
 			xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n" +
 "<xd:component>%class test.xdef.Xona %link a</xd:component>\n" +

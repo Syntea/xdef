@@ -673,12 +673,23 @@ public class XonUtils {
 ////////////////////////////////////////////////////////////////////////////////
 
 	/** Compare two XON/JSON objects.
-	 * @param j1 first object with XON/JSON data.
-	 * @param j2 second object with XON/JSON data.
+	 * @param a first object with XON/JSON data.
+	 * @param b second object with XON/JSON data.
 	 * @return true if and only if both objects contains equal data.
 	 */
-	public final static boolean xonEqual(final Object j1, final Object j2) {
-		return (j1 == null && j2 == null) ||
-			(j1 != null && j2 != null && XonCompare.equalValue(j1,j2));
+	public final static boolean xonEqual(final Object a, final Object b) {
+		return (a == null && b == null) ||
+			(a != null && b != null && XonCompare.equalValue(a,b));
 	}
+
+	/** Compare two XON/JSON objects. Return an empty string if both objects
+	 * are equal, otherwise, return string with different items.
+	 * @param a first object with XON/JSON data.
+	 * @param b second object with XON/JSON data.
+	 * @return true if and only if both objects contains equal data.
+	 */
+	public final static String xonDiff(final Object a, final Object b) {
+		return XonCompare.xonDiff(a, b);
+	}
+
 }

@@ -470,36 +470,14 @@ public class XonTools {
 		return p.isFloat() && p.eos();
 	}
 
-	/** Convert simple value to the form XML attribute.
-	 * @param x the object to be converted.
-	 * @return XML form of the of attribute value created from argument.
+	/** Chreate string from value.
+	 * @param s original string value.
+	 * @return quoted string if necessary.
 	 */
-	public final static String genXMLValue(final Object x) {
-		if (x == null) {
-			return "null";
-		}
-		String s;
-		if (x instanceof String) {
-			s = (String) x;
-			if (s.isEmpty() || "null".equals(s) || "true".equals(s)
-				|| "false".equals(s) || "-".equals(s) || isNumber(s)) {
-				return '"' + s + '"';
-			}
-		} else if (x instanceof Character) {
-			s = String.valueOf((Character) x);
-		} else if (x instanceof InetAddress) {
-			return x.toString().substring(1);
-		} else if (x instanceof Currency) {
-			return ((Currency) x).getCurrencyCode();
-		} else if (x instanceof byte[]) {
-			s = new String(SUtils.encodeBase64((byte[]) x));
-			if (s.isEmpty()) {
-				s = " ";
-			}
-		} else if (x instanceof XDTelephone) {
-			return "t\"" + x + '"';
-		} else {
-			return x.toString();
+	public final static String genXMLString(final String s) {
+		if (s.isEmpty() || "null".equals(s) || "true".equals(s)
+			|| "false".equals(s) || "-".equals(s) || isNumber(s)) {
+			return '"' + s + '"';
 		}
 		boolean addQuot = false;
 		for (int i = 0; i < s.length(); i++) {
@@ -509,9 +487,6 @@ public class XonTools {
 				addQuot = true;
 				break;
 			}
-		}
-		if (s.isEmpty()) {
-			return "";
 		}
 		char ch = s.charAt(0);
 		if (addQuot) {
@@ -531,6 +506,30 @@ public class XonTools {
 				}
 			}
 			return s;
+		}
+	}
+
+	/** Convert simple value to the form XML attribute.
+	 * @param x the object to be converted.
+	 * @return XML form of the of attribute value created from argument.
+	 */
+	public final static String genXMLValue(final Object x) {
+		if (x == null) {
+			return "null";
+		} else if (x instanceof String) {
+			return genXMLString((String) x);
+		} else if (x instanceof Character) {
+			return genXMLString(String.valueOf((Character) x));
+		} else if (x instanceof byte[]) {
+			return genXMLString(new String(SUtils.encodeBase64((byte[]) x)));
+		} else if (x instanceof InetAddress) {
+			return genXMLString(x.toString().substring(1));
+		} else if (x instanceof Currency) {
+			return genXMLString(((Currency) x).getCurrencyCode());
+		} else if (x instanceof XDTelephone) {
+			return "t\"" + x + '"';
+		} else { // Boolena, Number, etc...
+			return x.toString();
 		}
 	}
 

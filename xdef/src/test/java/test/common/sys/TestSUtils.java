@@ -45,7 +45,7 @@ public class TestSUtils extends STester {
 			(offhour < 10 ? "0" : "") + offhour +
 			(offmin < 10 ? ":0" : ":") + offmin;
 	}
-	
+
 	/** Test base64 encoding.
 	 * @param en1 encoded bytes.
 	 * @return empty string or error message.
@@ -64,7 +64,7 @@ public class TestSUtils extends STester {
 			return testBinary(b1);
 		} catch (Exception ex) {
 			return STester.printThrowable(ex);
-		}		
+		}
 	}
 
 	/** Test base64 and hexadecimal encoding.
@@ -87,7 +87,7 @@ public class TestSUtils extends STester {
 			b2 = SUtils.decodeBase64(en2);
 			if (!Arrays.equals(b1, b2)) {
 				return "Base64_1: decoded data not equal to original.";
-			}			
+			}
 			en1 = new String(SUtils.encodeHex(bytes));
 			b1 = SUtils.decodeHex(en1);
 			en2 = new String(SUtils.encodeHex(b1));
@@ -100,7 +100,7 @@ public class TestSUtils extends STester {
 			return "";
 		} catch (Exception ex) {
 			return STester.printThrowable(ex);
-		}		
+		}
 	}
 	@Override
 	/** Run test and print error information. */
@@ -530,7 +530,7 @@ public class TestSUtils extends STester {
 				b1[i] = (byte)i;
 			}
 			assertEq("", testBinary(b1));
-			
+
 			assertEq("", testBase64(""));
 			assertEq("", testBase64("AA=="));
 			assertEq("", testBase64("AAA="));

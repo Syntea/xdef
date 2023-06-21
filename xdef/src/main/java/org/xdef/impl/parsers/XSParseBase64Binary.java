@@ -92,14 +92,11 @@ public class XSParseBase64Binary extends XSAbstractParser {
 		p.isSpaces();
 		try {
 			XSParseReader r = new XSParseReader(p);
-			if (p.isToken("\" \"")) { // empty byte array
-				p.setParsedValue(new DefBytes(new byte[0], false));
-			} else {
-				ByteArrayOutputStream bw = new ByteArrayOutputStream();
-				SUtils.decodeBase64(r, bw);
-				p.setParsedValue(new DefBytes(bw.toByteArray(), false));
-			}
+			ByteArrayOutputStream bw = new ByteArrayOutputStream();
+			SUtils.decodeBase64(r, bw);
+			p.setParsedValue(new DefBytes(bw.toByteArray(), false));
 			String s = r.getParsedString();
+			r = null;
 			p.isSpaces();
 			p.replaceParsedBufferFrom(pos0, s);
 			checkPatterns(p);
@@ -133,11 +130,12 @@ public class XSParseBase64Binary extends XSAbstractParser {
 	public short parsedType() {return XD_BYTES;}
 
 	/** This class is used as reader of parsed string in XSParseBase94Binary. */
-	private static final class XSParseReader implements SReader {
-		SParser _p;
-		StringBuilder _sb;
+	static final class XSParseReader implements SReader {
+		private final boolean _quoted;
+		private final SParser _p;
+		private final StringBuilder _sb;
 		XSParseReader(final SParser p) {
-			_p = p;
+			_quoted = (_p = p).isChar('"');
 			_sb = new StringBuilder();
 		}
 		@Override
@@ -149,7 +147,8 @@ public class XSParseBase64Binary extends XSAbstractParser {
 				_sb.append(' ');
 			}
 			char ch;
-			if ((ch = _p.peekChar()) != SParser.NOCHAR) {
+			if ((ch = _p.peekChar()) != SParser.NOCHAR
+				&& !(_quoted && ch == '"')) {
 				_sb.append(ch);
 				return ch;
 			}
@@ -157,10 +156,7 @@ public class XSParseBase64Binary extends XSAbstractParser {
 		}
 
 		private String getParsedString() {
-			String s = _sb.toString().trim();
-			_sb = null;
-			_p = null;
-			return s;
+			return _sb.toString().trim();
 		}
 	}
 }
