@@ -30,8 +30,8 @@ public final class GenXDefXON {
 
 	/** The class contains model and occurrence.*/
 	private final static class XItem {
-		private XOccurrence _occ;
-		private Object _item;
+		private final XOccurrence _occ;
+		private final Object _item;
 
 		/** Create new XItem from XON object.
 		 * @param XON onject.
@@ -211,7 +211,9 @@ public final class GenXDefXON {
 						sb.append(key);
 					}
 					sb.append(": ");
-					sb.append(((XItem) map.get(key)).toXonModel(nIndent));
+					XItem xi = (XItem) map.get(key);
+					sb.append(xi.toXonModel(xi._item instanceof String
+						? "" : nIndent + "  "));
 				}
 				if (map.size() > 1) {
 					if (indent.isEmpty()) {
