@@ -72,7 +72,7 @@ public final class XDFactory extends XDTools {
 		}
 		if (param instanceof Object[][]) {
 			Object[][] x = (Object[][]) param;
-			for (Object[] y : x) {
+			for (Object[] y: x) {
 				setParam(b, y);
 			}
 			return;
@@ -130,28 +130,28 @@ public final class XDFactory extends XDTools {
 			}
 		} else if (param instanceof String[]) {
 			String[] x = (String[]) param;
-			for (String s : x) {
+			for (String s: x) {
 				b.setSource(s);
 			}
 		} else if (param instanceof String) {
 			b.setSource((String) param);
 		} else if (param instanceof File[]) {
 			File[] x = (File[]) param;
-			for (File f : x) {
+			for (File f: x) {
 				b.setSource(f);
 			}
 		} else if (param instanceof File) {
 			b.setSource((File) param);
 		} else if (param instanceof URL[]) {
 			URL[] x = (URL[]) param;
-			for (URL u : x) {
+			for (URL u: x) {
 				b.setSource(u);
 			}
 		} else if (param instanceof URL) {
 			b.setSource((URL) param);
 		} else if ((param instanceof InputStream[])) {
 			InputStream[] x = (InputStream[]) param;
-			for (InputStream i : x) {
+			for (InputStream i: x) {
 				b.setSource(i, null);
 			}
 		} else if ((param instanceof InputStream)) {
@@ -178,7 +178,7 @@ public final class XDFactory extends XDTools {
 	 * @throws SRuntimeException if an error occurs.
 	 */
 	public final static XDPool compileXD(final Properties props,
-		final String[] params) throws SRuntimeException {
+		final String... params) throws SRuntimeException {
 		XDBuilder builder = getXDBuilder(props);
 		setParam(builder, params);
 		return builder.compileXD();
@@ -191,7 +191,7 @@ public final class XDFactory extends XDTools {
 	 * @throws SRuntimeException if an error occurs.
 	 */
 	public final static XDPool compileXD(final Properties props,
-		final URL[] params) throws SRuntimeException {
+		final URL... params) throws SRuntimeException {
 		XDBuilder builder = getXDBuilder(props);
 		setParam(builder, params);
 		return builder.compileXD();
@@ -204,7 +204,7 @@ public final class XDFactory extends XDTools {
 	 * @throws SRuntimeException if an error occurs.
 	 */
 	public final static XDPool compileXD(final Properties props,
-		final File[] params) throws SRuntimeException {
+		final File... params) throws SRuntimeException {
 		XDBuilder builder = getXDBuilder(props);
 		setParam(builder, params);
 		return builder.compileXD();
@@ -217,7 +217,7 @@ public final class XDFactory extends XDTools {
 	 * @throws SRuntimeException if an error occurs.
 	 */
 	public final static XDPool compileXD(final Properties props,
-		final InputStream[] params) throws SRuntimeException {
+		final InputStream... params) throws SRuntimeException {
 		XDBuilder builder = getXDBuilder(props);
 		setParam(builder, params);
 		return builder.compileXD();
