@@ -273,21 +273,7 @@ public final class GenXDefXON {
 		} else if (x instanceof String) {
 			return "jstring";
 		} else if (x instanceof Number) {
-			if (x instanceof Float) {
-				return "float";
-			} else if (x instanceof Integer) {
-				return "int";
-			} else if (x instanceof Short) {
-				return "short";
-			} else if (x instanceof Byte) {
-				return "byte";
-			} else if (x instanceof BigInteger) {
-				return "integer";
-			} else if (x instanceof BigDecimal) {
-				return "decimal";
-			} else {
-				return "jnumber";
-			}
+			return "jnumber";
 		} else if (x instanceof Character) {
 			return "char";
 		} else if (x instanceof URI) {
