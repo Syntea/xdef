@@ -1,7 +1,9 @@
 # Version ${version}, release-date ${release.date}
 
 # Version 42.0.8, release-date 2023-07-03
-* X-definition is now generated from either XML data or JSON/XON data
+* Corrected bug in generation of XComponent java source when was generated
+  a new name of getter/setter even if it was not necessary.
+* X-definition is now generated from either XML data or also from JSON/XON data
   (see `org.xdef.util.GenXDefinition` and `org.xdef.impl.GenXDef`).
 
 # Version 42.0.7, release-date 2023-05-10
