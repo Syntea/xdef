@@ -322,7 +322,7 @@ StatementSequence ::= (S? VariableDeclaration S? ";" S? | Statement)*
 
 Block ::= "{" StatementSequence S? "}"
 
-SimpleStatement ::= S? (Statement1 | (Statement2? S? ";" S?)) | EmptyStatement
+SimpleStatement ::= S? (Statement1 | (Statement2 S? (";" S?)?)) | EmptyStatement
 
 IfStatement ::= "if" ParentalExpression SimpleStatement
   (S? "else" S? SimpleStatement)?

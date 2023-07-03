@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.0.8, release-date 2023-06-27
+# Version 42.0.8, release-date 2023-07-03
 * X-definition is now generated from either XML data or JSON/XON data
   (see `org.xdef.util.GenXDefinition` and `org.xdef.impl.GenXDef`).
 

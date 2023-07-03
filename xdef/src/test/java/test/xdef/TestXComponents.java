@@ -1373,11 +1373,11 @@ public final class TestXComponents extends XDTester {
 			assertEq(1, SUtils.getValueFromGetter(
 				SUtils.getValueFromGetter(SUtils.getValueFromGetter(
 				SUtils.getValueFromGetter(SUtils.getValueFromGetter(xc, "getB"),
-					"getB_1"), "getC"), "getB_2"), "getb"));
+					"getB_1"), "getC"), "getB"), "getb"));
 			s = (String) SUtils.getValueFromGetter(SUtils.getValueFromGetter(
 				SUtils.getValueFromGetter(SUtils.getValueFromGetter(
 				SUtils.getValueFromGetter(SUtils.getValueFromGetter(xc, "getB"),
-					"getB_1"), "getC"), "getB_2"), "getClass"), "getName");
+					"getB_1"), "getC"), "getB"), "getClass"), "getName");
 			assertTrue(s.endsWith("B_2"), s);
 		} catch (Exception ex) {fail(ex);}
 		try { // construction of XComponent
@@ -1446,13 +1446,13 @@ public final class TestXComponents extends XDTester {
 			assertEq("1", SUtils.getValueFromGetter(
 				SUtils.getValueFromGetter(xc, "getX"), "getb"));
 			list = (List) SUtils.getValueFromGetter(
-				SUtils.getValueFromGetter(xc, "getX"), "listOfX_1");
+				SUtils.getValueFromGetter(xc, "getX"), "listOfX");
 			assertEq(2, list.size());
 			assertEq("2", SUtils.getValueFromGetter(list.get(0), "getb"));
-			list1 = (List) SUtils.getValueFromGetter(list.get(0), "listOfX_2");
+			list1 = (List) SUtils.getValueFromGetter(list.get(0), "listOfX");
 			assertEq(1, list1.size());
 			assertEq("3", SUtils.getValueFromGetter(list1.get(0), "getb"));
-			list1 = (List) SUtils.getValueFromGetter(list.get(1), "listOfX_2");
+			list1 = (List) SUtils.getValueFromGetter(list.get(1), "listOfX");
 			assertEq(0, list1.size());
 			assertEq("4", SUtils.getValueFromGetter(list.get(1), "getb"));
 			xml = "<B><X b='1'><X b='2'><X b='3'/></X><X b='4'/></X></B>";
@@ -1462,13 +1462,13 @@ public final class TestXComponents extends XDTester {
 			assertEq("1", SUtils.getValueFromGetter(
 				SUtils.getValueFromGetter(xc, "getX"), "getb"));
 			list = (List) SUtils.getValueFromGetter(
-				SUtils.getValueFromGetter(xc, "getX"), "listOfX_1");
+				SUtils.getValueFromGetter(xc, "getX"), "listOfX");
 			assertEq(2, list.size());
 			assertEq("2", SUtils.getValueFromGetter(list.get(0), "getb"));
-			list1 = (List) SUtils.getValueFromGetter(list.get(0), "listOfX_1");
+			list1 = (List) SUtils.getValueFromGetter(list.get(0), "listOfX");
 			assertEq(1, list1.size());
 			assertEq("3", SUtils.getValueFromGetter(list1.get(0), "getb"));
-			list1 = (List) SUtils.getValueFromGetter(list.get(1), "listOfX_1");
+			list1 = (List) SUtils.getValueFromGetter(list.get(1), "listOfX");
 			assertEq(0, list1.size());
 			assertEq("4", SUtils.getValueFromGetter(list.get(1), "getb"));
 		} catch (Exception ex) {fail(ex);}
@@ -1484,10 +1484,10 @@ public final class TestXComponents extends XDTester {
 				SUtils.getValueFromGetter(xc, "getB"), "listOfY");
 			assertEq(2, list.size());
 			assertEq("2", SUtils.getValueFromGetter(list.get(0), "getb"));
-			list1 = (List) SUtils.getValueFromGetter(list.get(0), "listOfY_1");
+			list1 = (List) SUtils.getValueFromGetter(list.get(0), "listOfY");
 			assertEq(1, list1.size());
 			assertEq("3", SUtils.getValueFromGetter(list1.get(0), "getb"));
-			list1 = (List) SUtils.getValueFromGetter(list.get(1), "listOfY_1");
+			list1 = (List) SUtils.getValueFromGetter(list.get(1), "listOfY");
 			assertEq(0, list1.size());
 			assertEq("4", SUtils.getValueFromGetter(list.get(1), "getb"));
 			xml =
@@ -1498,11 +1498,11 @@ public final class TestXComponents extends XDTester {
 			assertEq("1", SUtils.getValueFromGetter(
 				SUtils.getValueFromGetter(xc, "getZ"), "getb"));
 			list = (List) SUtils.getValueFromGetter(SUtils.getValueFromGetter(
-				SUtils.getValueFromGetter(xc, "getZ"), "getC"), "listOfZ_1");
+				SUtils.getValueFromGetter(xc, "getZ"), "getC"), "listOfZ");
 			assertEq(1, list.size());
 			assertEq("2", SUtils.getValueFromGetter(list.get(0), "getb"));
 			list1 = (List) SUtils.getValueFromGetter(
-				SUtils.getValueFromGetter(list.get(0), "getC_1"), "listOfZ_1");
+				SUtils.getValueFromGetter(list.get(0), "getC"), "listOfZ");
 			assertEq(1, list1.size());
 			assertEq("3", SUtils.getValueFromGetter(list1.get(0), "getb"));
 		} catch (Exception ex) {fail(ex);}
@@ -1728,7 +1728,6 @@ public final class TestXComponents extends XDTester {
 		} catch (Exception ex) {fail(ex);}
 		reporter.clear();
 		try {
-			//just force compilation
 			xc = parseXC(xp, "SouborD1A",
 				getDataDir() + "test/TestXComponent_Z.xml", null, null);
 			list = (List) SUtils.getValueFromGetter(xc, "listOfZaznamPDN");
@@ -1744,6 +1743,67 @@ public final class TestXComponents extends XDTester {
 			assertEq(xc.toXml(), el);
 			assertEq("", checkXPos(xc));
 		} catch (Exception ex) {fail(ex);}
+		reporter.clear();
+		try {
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root='A0'>\n" +
+"<A0>\n" +
+"  <B>\n" +
+"    <D xd:script=\"ref D\" />\n" +
+"    <C c=\"string(1)\"/>\n" +
+"  </B>\n" +
+"</A0>\n"+
+"<D><C c=\"string(3)\"/></D>\n"+
+"<xd:component> %class test.xdef.A0 %link #A0; </xd:component>\n"+
+"</xd:def>";
+			xp = XDFactory.compileXD(null, xdef);
+			genXComponent(xp, clearTempDir());
+			assertNoErrorwarningsAndClear(reporter);
+			xml = "<A0><B><D><C c=\"d/c\"/></D><C c=\"c\"/></B></A0>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrorwarningsAndClear(reporter);
+			xd = xp.createXDDocument();
+			xc = xd.xparseXComponent(xml, null, reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			assertEq(xml, xc.toXml());
+			assertEq("c",
+				SUtils.getValueFromGetter(SUtils.getValueFromGetter(
+				SUtils.getValueFromGetter(xc, "getB"), "getC"), "getc"));
+			assertEq("d/c", SUtils.getValueFromGetter(
+				SUtils.getValueFromGetter(SUtils.getValueFromGetter(
+				SUtils.getValueFromGetter(xc, "getB"),"getD"),"getC"),"getc"));
+		} catch (Exception ex) {fail(ex);}
+		reporter.clear();
+		try {
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root='A1'>\n" +
+"<A1>\n" +
+"  <B>\n" +
+"    <C c=\"string(1)\"/>\n" +
+"    <D xd:script=\"ref D\" />\n" +
+"  </B>\n" +
+"</A1>\n"+
+"<D><C c=\"string(3)\"/></D>\n"+
+"<xd:component> %class test.xdef.A1 %link #A1; </xd:component>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			genXComponent(xp, clearTempDir());
+			assertNoErrorwarningsAndClear(reporter);
+			xml = "<A1><B><C c=\"c\"/><D><C c=\"d/c\"/></D></B></A1>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrorwarningsAndClear(reporter);
+			xd = xp.createXDDocument();
+			xc = xd.xparseXComponent(xml, null, reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			assertEq(xml, xc.toXml());
+			assertEq("c",
+				SUtils.getValueFromGetter(SUtils.getValueFromGetter(
+				SUtils.getValueFromGetter(xc, "getB"), "getC"), "getc"));
+			assertEq("d/c", SUtils.getValueFromGetter(
+				SUtils.getValueFromGetter(SUtils.getValueFromGetter(
+				SUtils.getValueFromGetter(xc, "getB"),"getD"),"getC"),"getc"));
+		} catch (Exception ex) {fail(ex);}
+		reporter.clear();
 
 		clearTempDir(); // delete temporary files.
 		resetTester();

@@ -379,16 +379,10 @@ final class XCGenerator extends XCGeneratorXON {
 							xcClass = xcClass.replace('#','.');
 						}
 					}
+					newClassName = getUniqueName(newClassName, classNames);
 					String iname = getUniqueName(name, RESERVED_NAMES);
-					boolean nameChanged = !iname.equals(name);
-					String chgName = newClassName;
-					newClassName = getUniqueName(chgName, classNames);
-					nameChanged |= !chgName.equals(newClassName);
-					chgName = iname;
-					iname = getUniqueName(
-						getUniqueName(iname,classNames),varNames);
-					nameChanged |= !chgName.equals(iname);
-					if (nameChanged) {
+					iname = getUniqueName(iname, varNames);
+					if (!name.equals(iname)) {
 						if (ext) {
 							//Getter/setter name &{0} in &{1} can't be used.
 							//Please change name by command %bind
