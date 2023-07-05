@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.0.8, release-date 2023-07-03
+# Version 42.0.8, release-date 2023-07-05
 * Corrected bug in generation of XComponent java source when was generated
   a new name of getter/setter even if it was not necessary.
 * X-definition is now generated from either XML data or also from JSON/XON data

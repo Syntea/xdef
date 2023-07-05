@@ -1287,6 +1287,10 @@ public final class TestXComponents extends XDTester {
 			assertEq("<a b='x'><b/></a>",
 				((XComponent) SUtils.getValueFromGetter(
 					xc, "get$any")).toXml());
+			assertEq("<a b='x'><b/></a>",
+				((XComponent) SUtils.getValueFromGetter(
+					xc, "get$any")).toXml()
+					.getOwnerDocument().getDocumentElement());
 			assertEq("/A", SUtils.getValueFromGetter(xc, "xGetXPos"));
 			assertEq("/A/a[1]", SUtils.getValueFromGetter(
 				SUtils.getValueFromGetter(xc, "get$any"), "xGetXPos"));

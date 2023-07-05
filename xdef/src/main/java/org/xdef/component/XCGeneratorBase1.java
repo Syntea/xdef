@@ -35,11 +35,8 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 "\tpublic org.w3c.dom.Node toXml(org.w3c.dom.Document doc) {"+LN;
 		if (xe.getName().endsWith("$any") || "*".equals(xe.getName())) {
 			toXml +=
-"\t\tif (doc==null) {"+LN+
-"\t\t\treturn XD_Any;"+LN+
-"\t\t} else {"+LN+
-"\t\t\treturn (org.w3c.dom.Element) doc.importNode(XD_Any,true);"+LN+
-"\t\t}"+LN+
+"\t\treturn doc==null? XD_Any"+LN+
+"\t\t\t: (org.w3c.dom.Element) doc.importNode(XD_Any,true);"+LN+
 "\t}"+LN;
 		} else if (creators.length() == 0 && genNodeList.length() == 0) {
 			toXml +=
@@ -524,8 +521,8 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 "\tpublic void xSetAny(org.w3c.dom.Element el) {";
 		if ("$any".equals(xe.getName()) || "*".equals(xe.getName())) {
 			result += LN+
-"\t\tXD_Any = (org.w3c.dom.Element)"+LN+
-"\t\t\torg.xdef.xml.KXmlUtils.newDocument().importNode(el,true);"+LN+
+"\t\torg.w3c.dom.Document doc = org.xdef.xml.KXmlUtils.newDocument();"+LN+
+"\t\tdoc.appendChild(XD_Any=(org.w3c.dom.Element)doc.importNode(el,true));"+LN+
 "\t}"+LN;
 		} else {
 			result += "}"+LN;

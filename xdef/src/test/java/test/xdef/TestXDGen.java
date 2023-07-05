@@ -163,9 +163,9 @@ public class TestXDGen extends XDTester {
 			assertNoErrorwarnings(genXDefXml(dataDir + "Test000_rus_1.xml"));
 /*#if DEBUG*#/
 			// code page ISO8859-5
-			assertNoErrorwarnings(genXDef(dataDir + "Test000_rus_2.xml"));
+			assertNoErrorwarnings(genXDefXml(dataDir + "Test000_rus_2.xml"));
 			//code page KOI8-R
-			assertNoErrorwarnings(genXDef(dataDir + "Test000_rus_3.xml"));
+			assertNoErrorwarnings(genXDefXml(dataDir + "Test000_rus_3.xml"));
 /*#end*/
 			assertNoErrorwarnings(genXDefXml(dataDir + "Test000_rus_4.xml"));
 			assertNoErrorwarnings(genXDefXml(dataDir + "Test000_rus_5.xml"));
