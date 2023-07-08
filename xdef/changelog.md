@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.0.8, release-date 2023-07-05
+# Version 42.0.8, release-date 2023-07-08
 * Corrected bug in generation of XComponent java source when was generated
   a new name of getter/setter even if it was not necessary.
 * Corrected bug in the method `toXom` from `xd:any` of generated XComponent.
