@@ -144,7 +144,13 @@ final class ChkComposer extends SReporter {
 			case XD_CONTAINER: {
 				Element el;
 				if (xdc.getXDNamedItemsNumber() == 0
-					&& xdc.getXDItemsNumber() > 1) {
+					&& (xdc.getXDItemsNumber() > 1
+					|| (xdc.getXDItemsNumber() == 1
+						&& xdc.getXDItem(0).getItemId() == XD_CONTAINER)
+						&& (((XDContainer) xdc.getXDItem(0))
+							.getItemId() == XD_CONTAINER
+						&& ((XDContainer) ((XDContainer) xdc.getXDItem(0)))
+							.getXDNamedItemsNumber() == 0))) {
 					el = xdc.toElement(chkel.getXXNSURI(), chkel.getXXName());
 				} else {
 					el = ((XDContainer) item).toElement(

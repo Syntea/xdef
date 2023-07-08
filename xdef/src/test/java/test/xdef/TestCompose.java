@@ -2215,9 +2215,9 @@ final public class TestCompose extends XDTester {
 "<xd:def xmlns:xd='" + _xdNS + "' root = 'a'>\n"+
 "<xd:declaration>\n"+
 " int i = 0;\n"+
-" Container c = [[[%a = 'a', %b = 'b'], [%a = 'c', %b = 'd']]];\n"+
+" Container c = [[%a = 'a', %b = 'b'], [%a = 'c', %b = 'd']];\n"+
 "</xd:declaration>\n"+
-"<a xd:script='create c;'>\n"+
+"<a xd:script='create c'>\n"+
 "  <b xd:script='occurs +;' a='string' b='string'/>\n"+
 "</a>\n"+
 "</xd:def>";
@@ -2266,14 +2266,9 @@ final public class TestCompose extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "'>\n" +
-"<xd:declaration>  \n" +
-"   Container source = [[%a='A', [%b='B', 'C'], 'D']];\n" +
-"</xd:declaration>  \n" +
-"<A xd:script= \"create source;\"\n" +
-"   a = \"string\">\n" +
-"  <B b = \"string\"> \n" +
-"     string\n" +
-"  </B>\n" +
+"<xd:declaration>Container c=[[%a='A',[%b='B','C'],'D']];</xd:declaration>\n" +
+"<A xd:script= \"create c\" a= \"string\">\n" +
+"  <B b = \"string\">string</B>\n" +
 "  string\n" +
 "</A>\n" +
 "</xd:def>";
@@ -2284,12 +2279,11 @@ final public class TestCompose extends XDTester {
 ////////////////////////////////////////////////////////////////////////////////
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"    <a>\n"+
-"        <b xd:script = \"occurs 0..; create from('b');\n"+
-"            init out('I=' + from('@x'));\n"+
-"            onStartElement out('S=' + from('@x'));\n"+
-"            finally out('F=' + from('@x'));\"/>\n"+
-"    </a>\n"+
+"  <a>\n"+
+"    <b xd:script = \"occurs 0..; create from('b');\n"+
+"       onStartElement out('S=' + from('@x'));\n"+
+"       init out('I=' + from('@x')); finally out('F=' + from('@x'));\"/>\n"+
+"  </a>\n"+
 "</xd:def>";
 			xml = "<a><b x='1'/><b x='2'/></a>";
 			swr = new StringWriter();
@@ -2299,9 +2293,7 @@ final public class TestCompose extends XDTester {
 			xdef = // test moreAttributes and recursive reference
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <a xd:script='create from(\"/a\"); options moreAttributes, moreText'>\n"+
-"    <a xd:script='*; ref a; create from(\"a\")'>\n"+
-"    ? string\n"+
-"    </a>\n"+
+"    <a xd:script='*; ref a; create from(\"a\")'> ? string </a>\n"+
 "  </a>\n"+
 "</xd:def>";
 			xml =
@@ -2310,17 +2302,17 @@ final public class TestCompose extends XDTester {
 "    <a a='1'>\n"+
 "      <a/>\n"+
 "      <a/>\n"+
-"      jedna\n"+
+"      one\n"+
 "    </a>\n"+
 "    <a a='2'>\n"+
 "      <a/>\n"+
 "      <a/>\n"+
-"      dve\n"+
+"      two\n"+
 "    </a>\n"+
 "  </a>\n"+
 "  <a>\n"+
 "    <a a='3'>\n"+
-"     tri\n"+
+"     three\n"+
 "    </a>\n"+
 "    <a a='4'/>\n"+
 "  </a>\n"+
@@ -2330,9 +2322,8 @@ final public class TestCompose extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xd = xp.createXDDocument();
 			xd.setXDContext(el);
-			assertEq("<a><a><a a='1'><a/><a/>jedna</a>"+
-				"<a a='2'><a/><a/>dve</a></a><a><a a='3'>tri</a><a a='4'/></a>"+
-				"</a>",
+			assertEq("<a><a><a a='1'><a/><a/>one</a><a a='2'>"+
+				"<a/><a/>two</a></a><a><a a='3'>three</a><a a='4'/></a></a>",
 				create(xd, "a",reporter, null));
 			assertNoErrorwarnings(reporter);
 			//external method with context
@@ -2475,10 +2466,7 @@ final public class TestCompose extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 " <a>\n"+
-"   <xd:choice>\n"+
-"      <b />\n"+
-"      <xx xd:script='?'/>\n"+
-"   </xd:choice>\n"+
+"   <xd:choice> <b /> <xx xd:script='?'/> </xd:choice>\n"+
 "   <c/>\n"+
 "   <d/>\n"+
 " </a>\n"+
@@ -2505,10 +2493,7 @@ final public class TestCompose extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 " <a>\n"+
-"   <xd:mixed>\n"+
-"      <b />\n"+
-"      <x xd:script='?'/>\n"+
-"   </xd:mixed>\n"+
+"   <xd:mixed> <b /> <x xd:script='?'/> </xd:mixed>\n"+
 "   <c/>\n"+
 "   <d/>\n"+
 " </a>\n"+
@@ -2590,7 +2575,7 @@ final public class TestCompose extends XDTester {
 			xdef = //Test any in create mode
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <a>\n"+
-"   <xd:any xd:script=\"occurs *; finally out('fa'); create from('./*')\" />\n"+
+"   <xd:any xd:script=\"occurs *; finally out('fa'); create from('./*')\"/>\n" +
 "  </a>\n"+
 "</xd:def>\n";
 			xml = "<a><b a = '1'><c/></b><b a = '2'><c/></b><x a = 's'/></a>";

@@ -4,6 +4,8 @@
 * Corrected bug in generation of XComponent java source when was generated
   a new name of getter/setter even if it was not necessary.
 * Corrected bug in the method `toXom` from `xd:any` of generated XComponent.
+* Corrected bug in the constructin`mode from the container which is an array
+  with only one item, which is again an array.
   The returned `org.w3c.Element was not inserted to owner `org.w3c.Document`.
 * X-definition is now generated from either XML data or also from JSON/XON data
   (see `org.xdef.util.GenXDefinition` and `org.xdef.impl.GenXDef`).
