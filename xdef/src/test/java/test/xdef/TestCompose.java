@@ -2326,6 +2326,41 @@ final public class TestCompose extends XDTester {
 				"<a/><a/>two</a></a><a><a a='3'>three</a><a a='4'/></a></a>",
 				create(xd, "a",reporter, null));
 			assertNoErrorwarnings(reporter);
+			xdef = // array with one item array
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' xd:root='A'>\n" +
+"  <xd:declaration scope='local'>\n" +
+"    Container c = [ [ ['2007-01-01'], ['2007-01-02'], ['abc'] ] ];\n" +
+"  </xd:declaration>\n" +
+"  <A>\n" +
+"    <B xd:script='create c'>\n" +
+"      <C xd:script='occurs 1..*;'> <D>optional date();</D> </C>\n" +
+"    </B>\n" +
+"  </A>\n" +
+"</xd:def>";
+			xp = compile(xdef);
+			xd = xp.createXDDocument();
+			assertEq("<A><B><C><D>2007-01-01</D></C></B></A>",
+				xd.xcreate("A", reporter));
+			assertNoErrorsAndClear(reporter);
+			xdef =  // array with two items array
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' xd:root='A'>\n" +
+"  <xd:declaration scope='local'>\n" +
+"    Container c = [\n" +
+"      [ ['2007-01-01'], ['2007-01-02'], ['abc'] ],\n" +
+"      [ ['2007-01-03'], ['2007-01-04'], ['def'] ]\n" +
+"    ];\n" +
+"  </xd:declaration>\n" +
+"  <A>\n" +
+"    <B xd:script='create c'>\n" +
+"      <C xd:script='occurs 1..*;'> <D>optional date();</D> </C>\n" +
+"    </B>\n" +
+"  </A>\n" +
+"</xd:def>";
+			xp = compile(xdef);
+			xd = xp.createXDDocument();
+			assertEq(xd.xcreate("A", reporter),
+			"<A><B><C><D>2007-01-01</D></C><C><D>2007-01-03</D></C></B></A>");
+
 			//external method with context
 			xdef = //1 method with context - default, see <b>
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
