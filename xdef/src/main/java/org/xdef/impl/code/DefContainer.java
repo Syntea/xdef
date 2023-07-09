@@ -454,10 +454,10 @@ public final class DefContainer extends XDValueAbstract
 	private Element toElement(Map<String, String> nsMap,
 		final String nsUri,
 		final String xmlName) {
-		String n = xmlName;
-		String u = nsUri;
+		String name = xmlName;
+		String uri = nsUri;
 		DefContainer c = this;
-		if (n == null || n.length() == 0) {
+		if (name == null || name.length() == 0) {
 			XDValue v;
 			if (getXDNamedItemsNumber() == 1 &&	getXDItemsNumber() <= 1
 				&& StringParser.chkXMLName(_map[0].getName(), (byte) 10)
@@ -465,30 +465,30 @@ public final class DefContainer extends XDValueAbstract
 				|| v.getItemId() == XD_CONTAINER)) {
 				c = v == null || v.isNull() ? new DefContainer()
 					: (DefContainer) _map[0].getValue();
-				n = _map[0].getName();
+				name = _map[0].getName();
 				if (getXDItemsNumber() == 0) {
-					int ndx = n.indexOf(':');
-					String prefix = ndx > 0 ? ":" + n.substring(0, ndx) : "";
-					u = c. hasXDNamedItem("xmlns"+prefix) ?
+					int ndx = name.indexOf(':');
+					String prefix = ndx > 0 ? ":" + name.substring(0, ndx) : "";
+					uri = c. hasXDNamedItem("xmlns"+prefix) ?
 						c.getXDNamedItem("xmlns"+prefix).getValue().toString()
 						: null;
-					if (u != null) {
-						nsMap.put(ndx > 0 ? n.substring(0, ndx) : "", u);
+					if (uri != null) {
+						nsMap.put(ndx > 0 ? name.substring(0, ndx) : "", uri);
 					} else {
-						u = nsMap.get(ndx > 0 ? n.substring(0, ndx) : "");
+						uri = nsMap.get(ndx > 0 ? name.substring(0, ndx) : "");
 					}
 				} else {
 					return KXmlUtils.newDocument(
-						null, n, null).getDocumentElement();
+						null, name, null).getDocumentElement();
 				}
 			} else if (getXDItemsNumber() == 1 &&
 				getXDItem(0).getItemId() == XD_ELEMENT) {
 				return getXDItem(0).getElement();
 			} else {
-				n = "_";
+				name = "_";
 			}
 		}
-		Element el = KXmlUtils.newDocument(u, n, null).getDocumentElement();
+		Element el = KXmlUtils.newDocument(uri,name,null).getDocumentElement();
 		nsMap = new LinkedHashMap<String, String>(nsMap);
 		c.setAttrs(nsMap, el);
 		c.setChildNodes(nsMap, el);

@@ -126,8 +126,7 @@ final class ChkComposer extends SReporter {
 		final XDContainer xdc,
 		final int ndx) {
 		XDValue item = xdc.getXDItem(ndx);
-		if (item != null && !item.isNull()
-			&& item.getItemId() == XD_PARSERESULT) {
+		if (item!=null && !item.isNull() && item.getItemId()==XD_PARSERESULT) {
 			XDParseResult xdp = (XDParseResult) item;
 			item = xdp.matches() ? xdp.getParsedValue() : null;
 		}
@@ -142,20 +141,13 @@ final class ChkComposer extends SReporter {
 			case XD_ELEMENT:
 				return item;
 			case XD_CONTAINER: {
-				Element el;
-				if (xdc.getXDNamedItemsNumber() == 0
-					&& (xdc.getXDItemsNumber() > 1
-					|| (xdc.getXDItemsNumber() == 1
-						&& xdc.getXDItem(0).getItemId() == XD_CONTAINER)
-						&& (((XDContainer) xdc.getXDItem(0))
-							.getItemId() == XD_CONTAINER
-						&& ((XDContainer) ((XDContainer) xdc.getXDItem(0)))
-							.getXDNamedItemsNumber() == 0))) {
-					el = xdc.toElement(chkel.getXXNSURI(), chkel.getXXName());
-				} else {
-					el = ((XDContainer) item).toElement(
-						chkel.getXXNSURI(), chkel.getXXName());
+				XDContainer xdc1 = (XDContainer) item;
+				if (ndx != 0 || xdc == xdc1 || xdc.getXDItemsNumber() != 1
+					|| xdc1.getXDNamedItemsNumber() == 0) {
+					xdc1 = xdc; // this is nasty! see toElement in Container???.
 				}
+				Element el = xdc1.toElement(
+					chkel.getXXNSURI(), chkel.getXXName());
 				return new DefElement(attrsToElement(el, (XDContainer) item));
 			}
 			case XD_NAMEDVALUE: {

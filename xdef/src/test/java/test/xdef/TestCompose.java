@@ -22,11 +22,13 @@ import java.io.StringWriter;
 import org.xdef.proc.XXElement;
 import org.xdef.proc.XXNode;
 import javax.xml.namespace.QName;
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.xdef.XDValueID;
 import org.xdef.proc.XXData;
 import org.xdef.sys.SDatetime;
 import org.xdef.sys.SDuration;
+import org.xdef.sys.SRuntimeException;
 import static org.xdef.sys.STester.runTest;
 import static test.XDTester._xdNS;
 
@@ -65,9 +67,9 @@ final public class TestCompose extends XDTester {
 			el = KXmlUtils.newDocument(null, "a", null).getDocumentElement();
 			assertEq("<a/>", create(xp, null, el, "a"));
 			assertNoErrorwarnings(reporter);
-			xdef =
 //Create mode with recursive children and of usage of occurrence ('+','?','*').
 // create expression specified
+			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <a N = 'required string()' xd:script='create from(\"/a\")' >\n"+
 "    <S xd:script='occurs ?; create from(\"S\")'>\n"+
@@ -138,9 +140,7 @@ final public class TestCompose extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xdef = //in root children
 "<xd:def xmlns:xd='" + _xdNS + "'>\n"+
-"<a>\n"+
-" <b xd:script=\"occurs 1..*; create from('b')\"/>\n"+
-"</a>\n"+
+"<a> <b xd:script=\"occurs 1..*; create from('b')\"/> </a>\n"+
 "</xd:def>";
 			create(xdef, null, "a", reporter, "<a/>");
 			//test if error "missing required element is reported"
@@ -148,11 +148,7 @@ final public class TestCompose extends XDTester {
 				"XDEF539".equals(reporter.getReport().getMsgID()));
 			xdef = // in nested nodes
 "<xd:def xmlns:xd='" + _xdNS + "'>\n"+
-"<a>\n"+
-"  <b>\n"+
-"    <c xd:script=\"occurs 1..*; create from('d')\"/>\n"+
-"  </b>\n"+
-"</a>\n"+
+"<a><b><c xd:script=\"occurs 1..*; create from('d')\"/></b></a>\n"+
 "</xd:def>";
 			create(xdef, null, "a", reporter, "<a/>");
 			assertTrue(reporter.errorWarnings() &&
@@ -169,18 +165,14 @@ final public class TestCompose extends XDTester {
 			create(xdef, null, "a", reporter, "<a/>");
 			s = reporter.printToString();
 			assertTrue(s.indexOf("XDEF539") > 0 &&
-				s.indexOf("'c'") > 0  && s.indexOf("'e'") > 0 &&
-				s.indexOf("'b'") < 0  && s.indexOf("'b'") < 0, s);
+				s.contains("'c'") && s.contains("'e'")
+				&& !s.contains("'b'") && !s.contains("'b'"), s);
 			xdef =
-"<xd:def xmlns:xd = '" + _xdNS + "'>\n"+
-"<a xd:script=\"create true\"/>\n"+
-"</xd:def>";
+"<xd:def xmlns:xd = '" + _xdNS + "'><a xd:script=\"create true\"/></xd:def>";
 			assertEq("<a/>", create(xdef, null, "a", reporter, null));
 			assertNoErrorwarnings(reporter);
 			xdef = // root not created
-"<xd:def xmlns:xd = '" + _xdNS + "'>\n"+
-"  <a xd:script=\"create false\"/>\n"+
-"</xd:def>";
+"<xd:def xmlns:xd = '" + _xdNS + "'><a xd:script=\"create false\"/></xd:def>";
 			assertNull(create(xdef, null, "a", reporter, null));
 			assertTrue(reporter.getErrorCount() == 1 &&
 				"XDEF556".equals(reporter.getReport().getMsgID()));
@@ -215,7 +207,8 @@ final public class TestCompose extends XDTester {
 "<xd:def xmlns:xd = '" + _xdNS + "'>\n"+
 "  <a xd:script=\"create [true]\">\n"+
 "    <B xd:script=\"occurs *; create [true,false,true]\"/>\n"+
-"  </a>\n"+ "</xd:def>";
+"  </a>\n"+
+"</xd:def>";
 			el = create(xdef, null, "a", reporter, null);
 			assertNoErrorwarnings(reporter);
 			assertEq(3, el.getElementsByTagName("B").getLength());
@@ -223,14 +216,13 @@ final public class TestCompose extends XDTester {
 "<xd:def xmlns:xd = '" + _xdNS + "'>\n"+
 "  <a xd:script=\"create [true]\">\n"+
 "    <B xd:script=\"occurs *; create [true,null,true]\"/>\n"+
-"  </a>\n"+ "</xd:def>";
+"  </a>\n"+
+"</xd:def>";
 			el = create(xdef, null, "a", reporter, null);
 			assertNoErrorwarnings(reporter);
 			assertEq(2, el.getElementsByTagName("B").getLength());
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "'>\n"+
-" <a> string(); create [1,2]; </a>\n"+
-"</xd:def>";
+"<xd:def xmlns:xd='" + _xdNS + "'><a> string(); create [1,2]; </a></xd:def>";
 			assertEq("<a>1\n2</a>", create(xdef, "", "a", reporter, null));
 			assertNoErrorwarnings(reporter);
 			xdef =
@@ -242,9 +234,7 @@ final public class TestCompose extends XDTester {
 			assertNoErrorwarnings(reporter);
 			assertEq(4, el.getElementsByTagName("B").getLength());
 			xdef = // root not created
-"<xd:def xmlns:xd='" + _xdNS + "'>\n"+
-"  <a xd:script=\"create null;\"/>\n"+
-"</xd:def>";
+"<xd:def xmlns:xd='" + _xdNS + "'><a xd:script=\"create null;\"/></xd:def>";
 			assertNull(create(xdef, null, "a", reporter, null));
 			assertTrue(reporter.getErrorCount()==1
 				&& "XDEF556".equals(reporter.getReport().getMsgID()), reporter);
@@ -275,31 +265,23 @@ final public class TestCompose extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xdef = // root not created
 "<xd:def xmlns:xd='" + _xdNS + "'>\n"+
-"  <a xd:script=\"create (Element) null;\">\n"+
-"    <b xd:script=\"create true;\"/>\n"+
-"  </a>\n"+
+"  <a xd:script='create (Element) null;'><b xd:script='create true;'/></a>\n" +
 "</xd:def>";
 			assertNull(create(xdef, null, "a", reporter, null));
 			assertTrue(reporter.getErrorCount()==1
 				&& "XDEF556".equals(reporter.getReport().getMsgID()), reporter);
 			xdef = // root not created
-"<xd:def xmlns:xd='" + _xdNS + "'>\n"+
-"  <a xd:script=\"create (Container) null;\"/>\n"+
-"</xd:def>";
+"<xd:def xmlns:xd='"+_xdNS+"'><a xd:script='create(Container)null;'/></xd:def>";
 			assertNull(create(xdef, null, "a", reporter, null));
 			assertTrue(reporter.getErrorCount()==1
 				&& "XDEF556".equals(reporter.getReport().getMsgID()), reporter);
 			xdef = // root not created
-"<xd:def xmlns:xd='" + _xdNS + "'>\n"+
-"  <a xd:script=\"create (String)null;\"/>\n"+
-"</xd:def>";
+"<xd:def xmlns:xd='"+_xdNS+"'><a xd:script=\"create (String)null;\"/></xd:def>";
 			assertNull(create(xdef, null, "a", reporter, null));
 			assertTrue(reporter.getErrorCount()==1
 				&& "XDEF556".equals(reporter.getReport().getMsgID()), reporter);
-			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "'>\n"+
-"  <a xd:script=\"create '';\"/>\n"+
-"</xd:def>";
+			xdef = // context is an empty string, root created.
+"<xd:def xmlns:xd='" + _xdNS + "'><a xd:script=\"create '';\"/></xd:def>";
 			assertEq("<a/>", create(xdef, "", "a", reporter, null));
 			assertNoErrorwarnings(reporter);
 			xdef =
@@ -307,14 +289,12 @@ final public class TestCompose extends XDTester {
 "<a>\n"+
 "  <xd:choice script = \"*; create from('//a/*')\">\n"+
 "    <A xd:script = \"*; create {\n"+
-"                          Element c = from('.').getElement();\n"+
-"                          if (c.getTagName() != 'A') return false;\n"+
-"                          return c;\n"+
-"                        }\"/>\n"+
+"         Element c = from('.').getElement();\n"+
+"         if (c.getTagName() != 'A') return false;\n"+
+"         return c;}\"/>\n"+
 "    <B xd:script = \"*; create {\n"+
-"                          Element c = from('.').getElement();\n"+
-"                          return (c.getTagName() == 'B') ? c : null;\n"+
-"                        }\"/>\n"+
+"         Element c = from('.').getElement();\n"+
+"         return (c.getTagName() == 'B') ? c : null;}\"/>\n"+
 "  </xd:choice>\n"+
 "</a>\n"+
 "</xd:def>";
@@ -336,13 +316,9 @@ final public class TestCompose extends XDTester {
 			assertEq("<a><b/><b/><c/></a>",
 				create(xdef, null, "a", reporter, null));
 			assertNoErrorwarnings(reporter);
-			//check all generated elements from number
-			xdef =
+			xdef = //check all generated elements from number
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"    <a>\n"+
-"        <B xd:script=\"*; create [3]\"\n"+
-"           a=\"string(); create 'x'\"/>\n"+
-"    </a>\n"+
+"    <a> <B xd:script=\"*; create [3]\" a=\"string(); create 'x'\"/> </a>\n"+
 "</xd:def>";
 			NodeList nl = create(xdef, "", "a", reporter,null).getChildNodes();
 			assertNoErrorwarnings(reporter);
@@ -362,7 +338,7 @@ final public class TestCompose extends XDTester {
 "  </B>\n"+
 "</a>\n"+
 "</xd:def>";
-			assertEq(create(compile(xdef), null,"a",reporter,null),
+			assertEq(create(compile(xdef), null, "a", reporter, null),
 				"<a pi='3.141592653589793'><B a='123457' b='c'>d</B></a>");
 			assertNoErrorwarnings(reporter);
 			xdef =
@@ -379,7 +355,7 @@ final public class TestCompose extends XDTester {
 "</a>\n"+
 "</xd:def>";
 			xml = "<a><A/><B/><A/><B/></a>";
-			assertEq(create(xdef, null,  "a", reporter, xml), xml);
+			assertEq(create(xdef, null, "a", reporter, xml), xml);
 			assertNoErrorwarnings(reporter);
 			xdef = // root not created
 "<xd:def xmlns:xd = '" + _xdNS + "'>\n"+
@@ -416,9 +392,7 @@ final public class TestCompose extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd = '" + _xdNS + "'>\n"+
-"<a>\n"+
-"  <b xd:script=\"2; create from('c')\">string</b>\n"+
-"</a>\n"+
+"<a> <b xd:script=\"2; create from('c')\">string</b> </a>\n"+
 "</xd:def>";
 			xml = "<x><c>1</c><c>2</c></x>";
 			assertEq(create(xdef, null,  "a", reporter, xml),
@@ -438,7 +412,7 @@ final public class TestCompose extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd = '" + _xdNS + "'>\n"+
-"  <a><b xd:script=\"+; create ['1', 'abc']\">string</b></a>\n"+
+"  <a> <b xd:script=\"+; create ['1', 'abc']\">string</b> </a>\n"+
 "</xd:def>";
 			assertEq("<a><b>1</b><b>abc</b></a>",
 				create(xdef, null, "a", reporter, null));
@@ -457,19 +431,17 @@ final public class TestCompose extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "'>\n"+
-"  <xd:declaration>\n"+
-"    <![CDATA[Element source = xparse('<X><A/><Y/><Z/><A/><Z/></X>');]]>\n"+
+"<xd:declaration>\n"+
+"    <![CDATA[Element e = xparse('<X><A/><Y/><Z/><A/><Z/></X>');]]>\n"+
 "  </xd:declaration>\n"+
-"  <a xd:script=\"create source\">\n"+
-"    <b  xd:script=\"occurs 1..*; create xpath('//X/A', source)\"/>\n"+
-"    <c  xd:script=\"occurs 1; create xpath('//X/Z[2]', source)\"/>\n"+
+"  <a xd:script=\"create e\">\n"+
+"    <b  xd:script=\"occurs 1..*; create xpath('//X/A', e)\"/>\n"+
+"    <c  xd:script=\"occurs 1; create xpath('//X/Z[2]', e)\"/>\n"+
 "  </a>\n"+
 "</xd:def>";
 			assertEq("<a><b/><b/><c/></a>",
 				create(xdef, null,  "a", reporter, xml));
 			assertNoErrorwarnings(reporter);
-		} catch (Exception ex) {fail(ex);}
-		try {//test errors of created value
 			xdef = //this should be OK, value is trimmed
 "<xd:def xmlns:xd='" + _xdNS + "'>\n"+
 "<A a=\"required num(1,6);\n"+
@@ -1270,8 +1242,6 @@ final public class TestCompose extends XDTester {
 			xdef = // create only elements "b" with child nodes
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n" +
 "  <a>\n" +
-//"    <b xd:script=\"*; create from('b/*/parent::*');\" x=\"string()\">\n" +
-//"    <b xd:script=\"*; create from('b/*/parent::b');\" x=\"string()\">\n" +
 "    <b xd:script=\"*; create from('b/*/..');\" x=\"string()\">\n" +
 "      <c xd:script=\"*\" y=\"string()\"/>\n" +
 "    </b>\n" +
@@ -1286,7 +1256,7 @@ final public class TestCompose extends XDTester {
 			assertEq("<a><b x='1'><c y='1'/></b><b x='3'><c y='2'/></b></a>",
 				create(xd, "a", reporter, xml));
 			assertNoErrorwarnings(reporter);
-		} catch (Exception ex) {fail(ex);}
+		} catch (DOMException | SRuntimeException ex) {fail(ex);}
 		setProperty("xdef.debug", "false");
 		try {
 			xdef =
@@ -1328,8 +1298,7 @@ final public class TestCompose extends XDTester {
 				"<k:in xmlns:k=\"http://ws.koop.cz/B1A/2008/01\"/>" +
 				"</s:Body>" +
 				"</s:Envelope>", el);
-			//with data == null
-			xd = xp.createXDDocument();
+			xd = xp.createXDDocument(); //with data == null
 			el = xd.xcreate(new QName(
 				"http://www.w3c.org/2003/05/soap-envelope",
 				"s:Envelope"), null);
@@ -1439,20 +1408,19 @@ final public class TestCompose extends XDTester {
 				create(compile(xdef), null, reporter,xml)); //SoapFaultAnswerB1A
 			assertNoErrorwarnings(reporter);
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' xmlns:s='http://soap'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' xmlns:s='soap'>\n"+
 "<root xd:script ='create newElement()'\n"+
 "s:a =\"fixed 'sa'\"\n"+
 "b =\"fixed 'b'\" >\n"+
 "  <s:child xd:script='create newElement()'\n"+
-"    s:a =\"fixed 'saa'\"\n"+
-"    b =\"fixed 'bb'\" />\n"+
+"    s:a =\"fixed 'aa'\" b =\"fixed 'bb'\" />\n"+
 "</root>\n"+
 "</xd:def>";
 			el = null;
 			el = create(compile(xdef), null, el, "root");
 			assertEq("<root s:a=\"sa\" b=\"b\" " +
-				"xmlns:s =\"http://soap\">"+
-				"<s:child b=\"bb\" s:a=\"saa\"/>"+
+				"xmlns:s =\"soap\">"+
+				"<s:child b=\"bb\" s:a=\"aa\"/>"+
 				"</root>", el);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' xmlns:s='http://soap'>\n"+
@@ -1464,7 +1432,6 @@ final public class TestCompose extends XDTester {
 "    return c;}'/>\n"+
 "</root>\n"+
 "</xd:def>";
-			//with data == null
 			el = null;
 			el = create(compile(xdef), null, el, "root");
 			assertEq("<root b=\"b\" " +
@@ -1479,7 +1446,6 @@ final public class TestCompose extends XDTester {
 			assertEq(parse(xp, "", KXmlUtils.nodeToString(el), reporter),
 				dataDir + "compose/panovnici-seznamy-output.xml");
 			assertNoErrorwarnings(reporter);
-
 			xp = compile(dataDir + "compose/panovnici-tabulka.xdef");
 			el = create(xp, "", "HTML", reporter,
 				dataDir + "compose/panovnici-tabulka.xml");
@@ -1488,7 +1454,6 @@ final public class TestCompose extends XDTester {
 			assertEq(parse(xp, "", KXmlUtils.nodeToString(el), reporter),
 				dataDir + "compose/panovnici-tabulka-output.xml");
 			assertNoErrorwarnings(reporter);
-
 			xp = compile(dataDir + "compose/panovnici-sort.xdef");
 			el = create(xp, "", "HTML", reporter,
 				dataDir + "compose/panovnici-sort.xml");
@@ -1497,7 +1462,6 @@ final public class TestCompose extends XDTester {
 			assertEq(parse(xp, "", KXmlUtils.nodeToString(el), reporter),
 				dataDir + "compose/panovnici-sort-output.xml");
 			assertNoErrorwarnings(reporter);
-
 			xp = compile(dataDir + "compose/panovnici-historie.xdef");
 			el = create(xp, "", "HTML", reporter,
 				dataDir + "compose/panovnici-historie.xml");
@@ -1506,7 +1470,6 @@ final public class TestCompose extends XDTester {
 			assertEq(parse(xp, "", KXmlUtils.nodeToString(el), reporter),
 				dataDir + "compose/panovnici-historie-output.xml");
 			assertNoErrorwarnings(reporter);
-
 			xp = compile(dataDir + "compose/panovnici-atributy.xdef");
 			el = create(xp, "", "panovnici-ceskeho-statu", reporter,
 				dataDir + "compose/panovnici-atributy.xml");
@@ -1517,8 +1480,8 @@ final public class TestCompose extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='s:Envelope'\n"+
-"   xmlns:s='http://schemas.xmlsoap.org/soap/envelope/'\n"+
-"   xmlns:k='http://ws.koop.cz/B1A/2008/01'>\n"+
+"   xmlns:s='schemas.xmlsoap.org/soap/envelope/'\n"+
+"   xmlns:k='ws.koop.cz/B1A/2008/01'>\n"+
 "<xd:declaration>int i = 0;</xd:declaration>\n"+
 "   <s:Envelope>\n"+
 "      <s:Header>\n"+
@@ -1535,17 +1498,16 @@ final public class TestCompose extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			xd = xp.createXDDocument();
-			el = xd.xcreate(new QName(
-				"http://schemas.xmlsoap.org/soap/envelope/",
+			el = xd.xcreate(new QName("schemas.xmlsoap.org/soap/envelope/",
 				"s:Envelope"), null);
 			assertEq(
-"<s:Envelope xmlns:s='http://schemas.xmlsoap.org/soap/envelope/'>"+
+"<s:Envelope xmlns:s='schemas.xmlsoap.org/soap/envelope/'>"+
 "<s:Header>"+
-"<k:Request s:mustUnderstand='true' xmlns:k='http://ws.koop.cz/B1A/2008/01'/>"+
-"<k:User s:mustUnderstand='true' xmlns:k='http://ws.koop.cz/B1A/2008/01'/>"+
+"<k:Request s:mustUnderstand='true' xmlns:k='ws.koop.cz/B1A/2008/01'/>"+
+"<k:User s:mustUnderstand='true' xmlns:k='ws.koop.cz/B1A/2008/01'/>"+
 "</s:Header>"+
 "<s:Body>"+
-"<k:Set_PrenosPSP KodPojistitele='0' xmlns:k='http://ws.koop.cz/B1A/2008/01'>"+
+"<k:Set_PrenosPSP KodPojistitele='0' xmlns:k='ws.koop.cz/B1A/2008/01'>"+
 "<k:ZdrojovyPSP KodPojistitele='0'/>"+
 "<k:ZdrojovyPSP KodPojistitele='1'/>"+
 "</k:Set_PrenosPSP>"+
@@ -1553,14 +1515,12 @@ final public class TestCompose extends XDTester {
 "</s:Envelope>", el);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='s:Envelope'\n"+
-"   xmlns:s='http://schemas.xmlsoap.org/soap/envelope/'\n"+
-"   xmlns:k='http://ws.koop.cz/B1A/2008/01'>\n"+
+"   xmlns:s='schemas.xmlsoap.org/soap/envelope/'\n"+
+"   xmlns:k='koop.cz/B1A/2008/01'>\n"+
 "<xd:declaration>\n"+
 "  Container genContainer(Element el, int n) {\n"+
 "    Container c = new Container();\n"+
-"    for (int i = n; i > 0; i--) {\n"+
-"       c.addItem(el);\n"+
-"    }\n"+
+"    for (int i = n; i > 0; i--) { c.addItem(el); }\n"+
 "    return c;\n"+
 "  }\n"+
 "  int i = 0;\n"+
@@ -1581,17 +1541,16 @@ final public class TestCompose extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			xd = xp.createXDDocument();
-			el = xd.xcreate(new QName(
-				"http://schemas.xmlsoap.org/soap/envelope/",
+			el = xd.xcreate(new QName("schemas.xmlsoap.org/soap/envelope/",
 				"s:Envelope"), null);
 			assertEq(
-"<s:Envelope xmlns:s='http://schemas.xmlsoap.org/soap/envelope/'>"+
+"<s:Envelope xmlns:s='schemas.xmlsoap.org/soap/envelope/'>"+
 "<s:Header>"+
-"<k:Request s:mustUnderstand='true' xmlns:k='http://ws.koop.cz/B1A/2008/01'/>"+
-"<k:User s:mustUnderstand='true' xmlns:k='http://ws.koop.cz/B1A/2008/01'/>"+
+"<k:Request s:mustUnderstand='true' xmlns:k='koop.cz/B1A/2008/01'/>"+
+"<k:User s:mustUnderstand='true' xmlns:k='koop.cz/B1A/2008/01'/>"+
 "</s:Header>"+
 "<s:Body>"+
-"<k:Set_PrenosPSP KodPojistitele='0' xmlns:k='http://ws.koop.cz/B1A/2008/01'>"+
+"<k:Set_PrenosPSP KodPojistitele='0' xmlns:k='koop.cz/B1A/2008/01'>"+
 "<k:ZdrojovyPSP KodPojistitele='0'/>"+
 "<k:ZdrojovyPSP KodPojistitele='1'/>"+
 "<k:ZdrojovyPSP KodPojistitele='2'/>"+
@@ -1635,8 +1594,7 @@ final public class TestCompose extends XDTester {
 			assertEq("<a><b/><b/></a>",
 				create(xdef, "", "a", reporter, "<a><b/><b/></a>", null, null));
 			assertNoErrorwarnings(reporter);
-//test default create
-			xdef =
+			xdef = //test default create
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <a xd:script=\"\">\n"+
 "   <b xd:script=\"occurs +\" />\n"+
@@ -1653,8 +1611,7 @@ final public class TestCompose extends XDTester {
 				create(xdef, "", "a", reporter, "<a><c/><b/><b/></a>"));
 			assertEq("<a><b/></a>",
 				create(xdef, "", "a", reporter, "<a><c/><d/><e/></a>"));
-// test sequence methods and external create methods
-			xdef =
+			xdef = // test sequence methods and external create methods
 "<xd:def xmlns:xd='" + _xdNS + "' name='a' root='a'>\n"+
 "<xd:declaration>\n"+
 "  external method XDContainer test.xdef.TestCompose.ctx();\n"+
@@ -1673,16 +1630,9 @@ final public class TestCompose extends XDTester {
 			assertNoErrorwarnings(reporter);
 			assertEq("start\nend\n", swr.toString());
 			assertEq("<a><b/><b/><b/><c/></a>", el);
-//test default create in mixed
-			xdef =
+			xdef = //test default create in mixed
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"  <a>\n"+
-"    <xd:mixed>\n"+
-"      <b/>\n"+
-"      <c/>\n"+
-"      <d/>\n"+
-"    </xd:mixed>\n"+
-"  </a>\n"+
+"  <a> <xd:mixed> <b/> <c/> <d/> </xd:mixed> </a>\n"+
 "</xd:def>\n";
 			xp = compile(xdef);
 			assertEq("<a><b/><c/><d/></a>", create(xp,
@@ -1695,13 +1645,7 @@ final public class TestCompose extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"  <a>\n"+
-"    <xd:mixed script = '?'>\n"+
-"      <b/>\n"+
-"      <c/>\n"+
-"      <d/>\n"+
-"    </xd:mixed>\n"+
-"  </a>\n"+
+"  <a> <xd:mixed script = '?'> <b/> <c/> <d/> </xd:mixed> </a>\n"+
 "</xd:def>\n";
 			xp = compile(xdef);
 			assertEq("<a><b/><c/><d/></a>",
@@ -1789,8 +1733,7 @@ final public class TestCompose extends XDTester {
 				create(xp, "","a",reporter, "<a><b/><c/><d/></a>"));
 			assertEq("<a><b/><c/><d/></a>",
 				create(xp, "","a",reporter, "<a><c/><d/><b/></a>"));
-//test default create in multiple choice
-			xdef =
+			xdef = //test default create in multiple choice
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <a>\n"+
 "    <xd:choice occurs = '0..2'>\n"+
@@ -1933,8 +1876,7 @@ final public class TestCompose extends XDTester {
 				parse(xp, null, "<a><c/><d/><b/></a>"));
 			assertEq("<a><c/><d/><b/></a>",
 				create(xp, null, "a",reporter, "<a><c/><d/><b/></a>"));
-//test default create in mixed
-			xdef =
+			xdef = //test default create in mixed
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <a>\n"+
 "    <b xd:script = \"occurs ?; create from('/a/@b').toString().length()\">\n"+
@@ -1958,8 +1900,7 @@ final public class TestCompose extends XDTester {
 			assertEq("<a><b>bbb</b></a>",
 				create(xp, "","a",reporter, "<a b='bbb'/>"));
 			assertEq("<a/>", create(xp, "","a",reporter, "<a/>"));
-//test fromSource
-			xdef =
+			xdef = //test fromSource
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <a xd:script = \"create newElement()\">\n"+
 "    <b xd:script = \"create fromRoot('/a')\">\n"+
@@ -1983,8 +1924,7 @@ final public class TestCompose extends XDTester {
 			assertEq("<a><b>bbb</b></a>",
 				create(xp, null,"a",reporter, "<a b = 'bbb'/>"));
 			assertEq("<a><b/></a>", create(xp, null,"a",reporter, "<a/>"));
-//sequence
-			xdef =
+			xdef = //sequence
 "<xd:def xmlns:xd='" + _xdNS + "' name='a' root='root'>\n"+
 "<root>\n"+
 " <xd:sequence xd:script=\"occurs *; create from('//a')\">\n"+
@@ -2006,8 +1946,7 @@ final public class TestCompose extends XDTester {
 				"<a a=\"A\"><b x=\"c\" y=\"d\"/><b x=\"C\" y=\"D\"/></a>" +
 				"<a a=\"B\"><b x=\"e\" y=\"f\"/></a>" +
 				"</root>", el);
-//test create from parsedXml
-			xdef =
+			xdef = //test create from parsedXml
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name = 'a' root = 'a'>\n"+
 "  <xd:declaration scope='global'>\n"+
@@ -2039,10 +1978,9 @@ final public class TestCompose extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:declaration scope='global'>\n"+
-"  /** This variable must be set from calling program! */\n"+
-"   external String $source;\n"+
-"   /** Check ID values. */\n"+
-"   boolean checkId(){\n"+
+"   external String $source; /*This must be set from calling program!*/\n"+
+"   \n"+
+"   boolean checkId(){ /** Check ID values. */\n"+
 "      String s = getText(); /*get value to be checked*/\n"+
 "      if (!string(10,11)) /*length must be 10 or 11 characters*/\n"+
 "         return error('Incorrect length of PID');\n"+
@@ -2060,7 +1998,6 @@ final public class TestCompose extends XDTester {
 "  <Owner Title      =\"required string(1,30);create from('@title')\"\n"+
 "         IC         =\"required num(8); create from('@ic')\"\n"+
 "         xd:script=\"occurs 1; create from('Client[@role=\\'1\\']')\"/>\n"+
-"\n"+
 "  <Holder Name       =\"required string(1,30); create from('@name')\"\n"+
 "          FamilyName =\"required string(1,30); create from('@familyname')\"\n"+
 "          PersonalId =\"required checkId(); create from('@pid')\"\n"+
@@ -2070,11 +2007,9 @@ final public class TestCompose extends XDTester {
 "          IC    = \"required num(8); create from('@ic')\"\n"+
 "          xd:script = \"occurs 1; create from('Client[@role=\\'3\\']')\"/>\n"+
 "</Contract>\n"+
-"\n"+
 "</xd:def>";
 			xml =
-"<Contract\n"+
-"  cId = \"0123456789\">\n"+
+"<Contract cId = \"0123456789\">\n"+
 "  <Client role = \"1\"\n"+
 "          typ = \"P\"\n"+
 "          title = \"Firma XYZ Ltd\"\n"+
@@ -2106,7 +2041,6 @@ final public class TestCompose extends XDTester {
 "</xd:def>";
 			assertEq("<A a='a'>b</A>", create(xdef, "", "A", reporter, null));
 			assertNoErrorwarnings(reporter);
-
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "'>\n"+
 "<A xd:script=\"create [%a='a','b']\" a='string'> string </A>\n"+
@@ -2131,8 +2065,7 @@ final public class TestCompose extends XDTester {
 "  <xd:declaration> int $typ = 3; </xd:declaration>\n"+
 "  <a>\n"+
 "    <xd:choice>\n"+
-"      <b xd:script=\"match $typ EQ 1\"/>\n"+
-"      <c xd:script=\"match $typ EQ 2\"/>\n"+
+"      <b xd:script='match $typ EQ 1'/> <c xd:script='match $typ EQ 2'/>\n"+
 "    </xd:choice>\n"+
 "  </a>\n"+
 "</xd:def>";
@@ -2187,30 +2120,6 @@ final public class TestCompose extends XDTester {
 "</xd:def>";
 			assertEq("<a><b/><c/><c/></a>", create(xdef,"","a",reporter,null));
 			assertNoErrorwarnings(reporter);
-		} catch (Exception ex) {fail(ex);}
-		try { //test of exception in external method.
-			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"  <xd:declaration>" +
-"    external method void test.xdef.TestCompose.throwExc();" +
-"  </xd:declaration>" +
-"  <a xd:script='finally throwExc()' />\n" +
-"</xd:def>";
-			create(compile(xdef), "", "a", reporter, null);
-			fail("Exception not thrown");
-		} catch (Exception ex) {
-			if(!reporter.errorWarnings()) {
-				fail("error not reported");
-			} else {
-				rep = reporter.getReport();
-				if (rep == null) {
-					fail("report missing");
-				} else {
-					assertEq("XDEF569", rep.getMsgID());
-				}
-			}
-		}
-		try { //check context in repeated model
 			xdef = // conainer to root, named values with maps
 "<xd:def xmlns:xd='" + _xdNS + "' root = 'a'>\n"+
 "<xd:declaration>\n"+
@@ -2359,10 +2268,8 @@ final public class TestCompose extends XDTester {
 			xp = compile(xdef);
 			xd = xp.createXDDocument();
 			assertEq(xd.xcreate("A", reporter),
-			"<A><B><C><D>2007-01-01</D></C><C><D>2007-01-03</D></C></B></A>");
-
-			//external method with context
-			xdef = //1 method with context - default, see <b>
+"<A><B><C><D>2007-01-01</D></C><C><D>2007-01-03</D></C></B></A>");
+			xdef = //external method with context - default, see <b>
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<xd:declaration>\n"+
 "  external method XDContainer test.xdef.TestCompose.getDataDoc(\n"+
@@ -2371,7 +2278,7 @@ final public class TestCompose extends XDTester {
 "  <a>\n"+
 "   <b xd:script='occurs *'>\n"+
 "    <xd:choice xd:script=\"occurs 0..1;"+
-"                 create getDataDoc(from('x | y'), getAttr('a'))\">\n"+
+"        create getDataDoc(from('x | y'), getAttr('a'))\">\n"+
 "      <c xd:script=\"create from('self::x'); ref z\"/>\n"+
 "      <d xd:script=\"create from('self::y'); ref z\"/>\n"+
 "    </xd:choice>\n"+
@@ -2391,7 +2298,7 @@ final public class TestCompose extends XDTester {
 				+ "<b><d k=\"99\"/></b></a>",
 				create(compile(xdef), "", "a",reporter, xml));
 			assertNoErrorwarnings(reporter);
-			xdef = //2 method with context - specified, see <b>
+			xdef = //2 external method with context - specified, see <b>
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<xd:declaration>\n"+
 "  external method XDContainer test.xdef.TestCompose.getDataDoc(\n"+
@@ -2494,11 +2401,7 @@ final public class TestCompose extends XDTester {
 				"</b><b><c k=\"88\"/>"+
 				"</b><b><d k=\"99\"/></b></a>", create(xd, "a", reporter));
 			assertNoErrorwarnings(reporter);
-		} catch (Exception ex) {fail(ex);}
-//check blocks models followed by an element.
-		try {
-//choice default variant
-			xdef =
+			xdef = //choice default variant
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 " <a>\n"+
 "   <xd:choice> <b /> <xx xd:script='?'/> </xd:choice>\n"+
@@ -2509,8 +2412,7 @@ final public class TestCompose extends XDTester {
 			xml = "<a><b/><c/><d/></a>";
 			assertEq(xml, create(xdef, null, "a", reporter, xml));
 			assertNoErrorwarnings(reporter);
-//choice explicite variant
-			xdef =
+			xdef = //choice explicite variant
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 " <a>\n"+
 "   <xd:choice xd:script=\"create from('/a/b')\">\n"+
@@ -2524,8 +2426,7 @@ final public class TestCompose extends XDTester {
 			xml = "<a><b/><c/><d/></a>";
 			assertEq(xml, create(xdef, null, "a", reporter, xml));
 			assertNoErrorwarnings(reporter);
-//mixed, default variant
-			xdef =
+			xdef = //mixed, default variant
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 " <a>\n"+
 "   <xd:mixed> <b /> <x xd:script='?'/> </xd:mixed>\n"+
@@ -2536,13 +2437,11 @@ final public class TestCompose extends XDTester {
 			xml = "<a><b/><x/><c/><d/></a>";
 			assertEq(xml, create(xdef, null, "a", reporter, xml));
 			assertNoErrorwarnings(reporter);
-//mixed, explicite variant
-			xdef =
+			xdef = //mixed, explicite variant
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 " <a>\n"+
 "   <xd:mixed xd:script=\"create from('/a')\">\n"+
-"      <b />\n"+
-"      <x xd:script='?'/>\n"+
+"      <b /> <x xd:script='?'/>\n"+
 "   </xd:mixed>\n"+
 "   <c/>\n"+
 "   <d/>\n"+
@@ -2551,8 +2450,7 @@ final public class TestCompose extends XDTester {
 			xml = "<a><b/><x/><c/><d/></a>";
 			assertEq(xml, create(xdef, null, "a", reporter, xml));
 			assertNoErrorwarnings(reporter);
-//sequence default create
-			xdef =
+			xdef = //sequence default create
 "<xd:def xmlns:xd='" + _xdNS + "'>\n"+
 " <a>\n"+
 "   <xd:sequence>\n"+
@@ -2569,8 +2467,7 @@ final public class TestCompose extends XDTester {
 			xml = "<a><c/><d/></a>";
 			assertEq(xml, create(xdef, null, "a", reporter, xml));
 			assertTrue(reporter.errors(), "Error not reported");
-//sequence explicite create
-			xdef =
+			xdef = //sequence explicit create
 "<xd:def xmlns:xd='" + _xdNS + "'>\n"+
 " <a>\n"+
 "   <xd:sequence xd:script=\"create from('/a')\">\n"+
@@ -2620,9 +2517,7 @@ final public class TestCompose extends XDTester {
 			assertEq("fafafa", swr.toString());
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"  <a>\n"+
-"   <xd:any xd:script=\"occurs 1; finally out('fa');\" />\n"+
-"  </a>\n"+
+"  <a> <xd:any xd:script=\"occurs 1; finally out('fa');\" /> </a>\n"+
 "</xd:def>\n";
 			xml = "<a><b a = '1'><c/></b><b a = '2'><c/></b><x a = 's'/></a>";
 			swr = new StringWriter();
@@ -2632,15 +2527,13 @@ final public class TestCompose extends XDTester {
 			assertEq("fa", swr.toString());
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"  <a>\n"+
-"   <xd:any xd:script=\"occurs +; finally out('fa'); create from('x')\" />\n"+
-"  </a>\n"+
+"  <a><xd:any xd:script=\"occurs +;finally out(9);create from('x')\" /></a>\n" +
 "</xd:def>\n";
 			xml = "<a><b a = '1'><c/></b><b a = '2'><c/></b><x a = 's'/></a>";
 			swr = new StringWriter();
 			assertEq("<a><x a = 's'/></a>",
 				create(xdef, null, "a", reporter, xml, swr, null));
-			assertEq("fa", swr.toString());
+			assertEq("9", swr.toString());
 			xdef = //test of from()
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <a xd:script=''><b xd:script='occurs +; create from()'/></a>\n"+
@@ -2660,19 +2553,15 @@ final public class TestCompose extends XDTester {
 			el = create(xdef, null, "a", reporter, "<a><c/><d/><e/></a>");
 			assertNoErrorwarnings(reporter);
 			assertEq(el, "<a><b/></a>");
-
 			xdef = //forget in create mode
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<xd:declaration>\n"+
-"  Container c = ['x','y'];\n"+
-"  Container d = [1,2,3];\n"+
-"  int i=0, j=0;\n"+
+"  Container c = ['x','y'], d = [1,2,3]; int i = 0, j = 0;\n"+
 "</xd:declaration>\n"+
 "<a>\n"+
 "  <a xd:script='*; create i != c.getLength();\n"+
 "   finally {if (j == d.getLength()) {j = 0; i++;}} forget;'\n"+
-"   c='? string; create c.item(i)'\n"+
-"   d='? int;  create d.item(j++)'/>\n"+
+"   c = '? string; create c.item(i)' d = '? int;  create d.item(j++)'/>\n"+
 "</a>\n"+
 "</xd:def>";
 			el = create(xdef, "#a",  "a", reporter, null);
@@ -2683,9 +2572,8 @@ final public class TestCompose extends XDTester {
 "</a>";
 			assertEq(xml, el);
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'\n"+
-"    script='options ignoreAttrWhiteSpaces, ignoreTextWhiteSpaces'\n"+
-"    xmlns='N' xmlns:sod='N'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' xmlns='N' xmlns:sod='N' root='a'\n"+
+"    script='options ignoreAttrWhiteSpaces, ignoreTextWhiteSpaces' >\n"+
 "<a>\n"+
 "    <e f=\"optional string; create xpath('\\'\\'')\"/>\n"+
 "    <e f=\"string; create xpath('\\'2\\'')\"/>\n"+
@@ -2699,20 +2587,18 @@ final public class TestCompose extends XDTester {
 			el = xp.createXDDocument().xcreate(new QName("N", "a"), reporter);
 			assertEq("<a xmlns=\"N\"><e/><e f=\"2\"/><x/><x/><j/><j/></a>", el);
 			assertNoErrorwarnings(reporter);
-
 			xdef = // child node is xd:any
 "<xd:def xmlns:xd = '" + _xdNS + "'>\n"+
 " <a xd:script='finally\n"+
 "    {returnElement((Element) getElement().getChidNodes().item(0));}'>\n" +
-" <xd:any xd:script='options moreAttributes, moreElements, moreText;\n" +
-"           create from(\"/a_/a/*\");' />\n" +
+"   <xd:any xd:script='options moreAttributes, moreElements, moreText;\n" +
+"             create from(\"/a_/a/*\");' />\n" +
 " </a>\n" +
 "</xd:def>";
 			xd = compile(xdef).createXDDocument();
 			xd.setXDContext("<a_><a><b d='abc'><c/></b></a></a_>");
 			assertEq("<b d='abc'><c/></b>", xd.xcreate("a", reporter));
 			assertNoErrorwarnings(reporter);
-
 			xdef = // create from element
 "<xd:def xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:declaration>\n"+
@@ -2720,15 +2606,13 @@ final public class TestCompose extends XDTester {
 "</xd:declaration>\n"+
 "  <a xd:script=\"create getChybyElement();\" >\n"+
 "    <b xd:script = \"occurs 1..\"\n"+
-"        Kod   = \"required num(3)\"\n"+
-"        Typ   = \"required string(1)\" />\n"+
+"        Kod = \"required num(3)\" Typ = \"required string(1)\" />\n"+
 "  </a>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			el = create(xp, "", "a", reporter, null);
 			assertNoErrorwarnings(reporter);
 			assertEq(el,"<a><b Kod='123' Typ='T'/><b Kod='456' Typ='T'/></a>");
-
 			xdef = // check external method xx in create section
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<xd:declaration>\n"+
@@ -2747,11 +2631,9 @@ final public class TestCompose extends XDTester {
 			xd.setXDContext(xml);
 			assertEq(xml, create(xd, "a", reporter));
 			assertNoErrorwarnings(reporter);
-
 			xdef = // test initialization of var section
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n" +
-"  <a xd:script=\"var int i; init i = 2;\"\n" +
-"     b=\"optional int(); create '' + i;\" />\n" +
+"  <a xd:script='var int i; init i=2;' b=\"optional int(); create ''+i;\"/>\n" +
 "</xd:def>";
 			xp = compile(xdef);
 			xml = "<a b='2'/>";
@@ -2759,13 +2641,11 @@ final public class TestCompose extends XDTester {
 			assertNoErrorwarnings(reporter);
 			assertEq(xml, create(xp, "", "a", reporter, null));
 			assertNoErrorwarnings(reporter);
-
 			xdef = // create from variable
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n" +
-"  <a>\n" +
-"    <a xd:script=\"var int i; init i = 2;\"\n" +
-"       b=\"optional int(); create  '' + i;\" />\n" +
-"  </a>\n" +
+"<a>\n" +
+"  <a xd:script='var int i; init i=2;' b=\"optional int(); create ''+i;\"/>\n" +
+"</a>\n" +
 "</xd:def>";
 			xp = compile(xdef);
 			xml = "<a><a b='2'/></a>";
@@ -2773,7 +2653,6 @@ final public class TestCompose extends XDTester {
 			assertNoErrorwarnings(reporter);
 			assertEq(xml, create(xp, "", "a", reporter, null));
 			assertNoErrorwarnings(reporter);
-
 			xdef = // test create objects from null
 "<xd:def xmlns:xd='" + _xdNS + "'>\n" +
 "<xd:declaration>\n"+
@@ -2806,7 +2685,29 @@ final public class TestCompose extends XDTester {
 			el = create(xp, "", "A", reporter, null);
 			assertNoErrorwarnings(reporter);
 			assertEq(el,"<A><B/><C/><D/><E/><F/><G/></A>");
-		} catch (Exception ex) {fail(ex);}
+		} catch (SRuntimeException ex) {fail(ex);}
+		try {
+			xdef = //test of exception in external method.
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"  <xd:declaration>" +
+"    external method void test.xdef.TestCompose.throwExc();" +
+"  </xd:declaration>" +
+"  <a xd:script='finally throwExc()' />\n" +
+"</xd:def>";
+			create(compile(xdef), "", "a", reporter, null);
+			fail("Exception not thrown");
+		} catch (Exception ex) {
+			if(!reporter.errorWarnings()) {
+				fail("error not reported");
+			} else {
+				rep = reporter.getReport();
+				if (rep == null) {
+					fail("report missing");
+				} else {
+					assertEq("XDEF569", rep.getMsgID());
+				}
+			}
+		}
 
 		clearTempDir(); // delete temporary files.
 		resetTester();
@@ -2825,21 +2726,13 @@ final public class TestCompose extends XDTester {
 				return "null";
 			} else {
 				Object o = ar.get(0);
-				if (o instanceof Node) {
-					return ((Node) o).getNodeValue();
-				} else {
-					return o.toString();
-				}
-			}
-		} else if (obj instanceof NodeList) {
-			NodeList nl = (NodeList) obj;
-			if (nl.getLength() == 0) {
-				return "null";
-			} else {
-				return nl.item(0).getNodeValue();
+				return o instanceof Node?((Node) o).getNodeValue():o.toString();
 			}
 		} else if (obj instanceof Node) {
 			return ((Node) obj).getNodeValue();
+		} else if (obj instanceof NodeList) {
+			NodeList nl = (NodeList) obj;
+			return nl.getLength() == 0 ? "null" : nl.item(0).getNodeValue();
 		} else {
 			return obj.toString();
 		}
@@ -2850,9 +2743,8 @@ final public class TestCompose extends XDTester {
 		XDValue val = chkElem.getXDContext();
 		if (val != null && val.getItemId() == XDValueID.XD_ELEMENT) {
 			Element el = val.getElement();
-			for (int i = 0; i < params.length; i++) {
-				s += objToString(KXpathExpr.evaluate(
-				el, params[i].stringValue())) + ' ';
+			for (XDValue param : params) {
+				s+=objToString(KXpathExpr.evaluate(el,param.stringValue()))+' ';
 			}
 		}
 		return s;
@@ -2862,9 +2754,8 @@ final public class TestCompose extends XDTester {
 		XDValue val = chkElem.getXDContext();
 		if (val != null && val.getItemId() == XDValueID.XD_ELEMENT) {
 			Element el = val.getElement();
-			for (int i = 0; i < params.length; i++) {
-				s += objToString(KXpathExpr.evaluate(el,
-					params[i].stringValue())) + ' ';
+			for (XDValue param : params) {
+				s+=objToString(KXpathExpr.evaluate(el,param.stringValue()))+' ';
 			}
 		}
 		return s;
@@ -2880,11 +2771,8 @@ final public class TestCompose extends XDTester {
 				if (i > 0) {
 					s += ", ";
 				}
-				if (params[i].getItemId() == XDValueID.XD_STRING) {
-					s += params[i].stringValue();
-				} else {
-					s += "?" + params[i].getItemId();
-				}
+				s += (params[i].getItemId() == XDValueID.XD_STRING)
+					? params[i].stringValue() : "?" + params[i].getItemId();
 			}
 		}
 		chkElem.getElement().setAttribute("myOutput", s);
@@ -2976,7 +2864,7 @@ final public class TestCompose extends XDTester {
 		return y.getXDText();
 	}
 
-	// testing null in create data values
+	// testing different null in create data values
 	public static String nulString(XXData xx) {return null;}
 	public static Long nulLong(XXData xx) {return null;}
 	public static Float nulFloat(XXData xx) {return null;}
