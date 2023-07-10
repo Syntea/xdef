@@ -1,14 +1,14 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.0.8, release-date 2023-07-09
-* Corrected bug in generation of XComponent java source when was generated
-  a new name of getter/setter even if it was not necessary.
-* Corrected bug in the method `toXom` from `xd:any` of generated XComponent.
-* Corrected bug in the constructin`mode from the container which is an array
-  with only one item, which is again an array.
-  The returned `org.w3c.Element was not inserted to owner `org.w3c.Document`.
-* X-definition is now generated from either XML data or also from JSON/XON data
-  (see `org.xdef.util.GenXDefinition` and `org.xdef.impl.GenXDef`).
+# Version 42.0.8, release-date 2023-07-10
+* Corrected bug in generation of `XComponent` java source when was generated
+  the modified name of getter/setter even if it was not necessary.
+* Corrected bug in the method `toXml` from `xd:any` of generated XComponent.
+  The returned `org.w3c.Element` was not inserted to the `org.w3c.Document`.
+* Corrected bug in the construction`mode from a container which is an array
+  with only one item, which is an array.
+* X-definition is now generated from either XML and from JSON/XON data.
+  (See `org.xdef.util.GenXDefinition` and `org.xdef.impl.GenXDef`.)
 
 # Version 42.0.7, release-date 2023-05-10
 * fixed bugs in methods `org.xdef.sys.FileUtils.filesToZip(...)`
