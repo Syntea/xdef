@@ -1,5 +1,8 @@
 # Version ${version}, release-date ${release.date}
 
+# Version 42.0.9, release-date 2023-07-10
+* .
+
 # Version 42.0.8, release-date 2023-07-10
 * Corrected bug in generation of `XComponent` java source when was generated
   the modified name of getter/setter even if it was not necessary.
