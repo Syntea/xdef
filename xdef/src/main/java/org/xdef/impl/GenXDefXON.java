@@ -165,6 +165,7 @@ public final class GenXDefXON {
 			boolean first = true;
 			if (_item instanceof List) {
 				List list = (List) _item;
+				int size = list.size();
 				sb.append(indent).append("[ ");
 				if (_occ.isRequired() && list.isEmpty()) {
 					sb.append("]");
@@ -172,6 +173,7 @@ public final class GenXDefXON {
 					if (!_occ.isRequired()) {
 						sb.append("%script = \"");
 						sb.append(occToString(false)).append("\"");
+						size++;
 						first = false;
 					}
 					for (Object o: list) {
@@ -182,24 +184,16 @@ public final class GenXDefXON {
 						}
 						sb.append(((XItem) o).toXonModel(nIndent));
 					}
-					if (list.size() > 1) {
-						sb.append(indent);
-					} else {
-						if (!indent.isEmpty()) {
-							sb.append(' ');
-						}
-					}
-					if (indent.isEmpty()) {
-						sb.append('\n');
-					}
-					sb.append(']');
+					sb.append(indent.isEmpty() ? "\n" : indent).append(']');
 				}
 			} else { // map
 				Map map = (Map) _item;
 				sb.append(indent).append("{ ");
+				int size = map.size();
 				if (!_occ.isRequired()) {
 					sb.append("%script=\"");
 					sb.append(occToString(false)).append("\"");
+					size++;
 					first = false;
 				}
 				String[] keys = getKeys(map);
@@ -207,21 +201,20 @@ public final class GenXDefXON {
 					if (first) {
 						first = false;
 					} else {
-						sb.append(",").append(nIndent);
+						sb.append(",");
 					}
+					sb.append(nIndent);
 					if (StringParser.chkNCName(key, StringParser.XMLVER1_0)) {
 						sb.append(key);
 					} else {
 						sb.append('"').append(jstringToSource(key)).append('"');
 					}
 					XItem xi = (XItem) map.get(key);
-					sb.append(": ").append(xi.toXonModel(
+					sb.append(": ");
+					sb.append(xi.toXonModel(
 						xi._item instanceof String ? "" : nIndent + "  "));
 				}
-				if (map.size() > 1) {
-					sb.append(indent.isEmpty() ? "\n" : indent);
-				}
-				sb.append(indent.isEmpty() ? " " : indent).append('}');
+				sb.append(indent.isEmpty() ? "\n" : indent).append('}');
 			}
 			return sb.toString();
 		}
@@ -242,11 +235,11 @@ public final class GenXDefXON {
 		return new XItem(m);
 	}
 
-	@SuppressWarnings("unchecked")
 	/** Create XDItem from XON array.
 	 * @param list List with XON array.
 	 * @return created XDItem object.
 	 */
+	@SuppressWarnings("unchecked")
 	private static XItem genList(final List list) {
 		List<Object> l = new ArrayList();
 		for (Object o: list) {
@@ -337,7 +330,7 @@ public final class GenXDefXON {
 		xmodel.setAttributeNS(XDEF42_NS_URI, "xd:name", modelName);
 		XItem xi = genModel(xon);
 		xi.optimize();
-		String s = xi.toXonModel("");
+		String s = '\n' + xi.toXonModel("") + '\n';
 		xmodel.appendChild(xmodel.getOwnerDocument().createTextNode(s));
 		xdef.appendChild(xmodel);
 		return xdef;
