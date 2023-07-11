@@ -104,17 +104,12 @@ public final class GenXDefXON {
 		 * @return string with occurrence information or an empty string,
 		 */
 		private String occToString(final boolean isAtt) {
-			if (_occ.isRequired()) {
-				return "";
-			}
-			if (isAtt) {
-				return _occ.toString(isAtt) + " ";
-			}
-			return _occ.toString(isAtt) + ";";
+			return _occ.isRequired() ? ""
+				: isAtt ? _occ.toString(isAtt)+" " : _occ.toString(isAtt)+";";
 		}
 
-		@SuppressWarnings("unchecked")
 		/** Optimize model. */
+		@SuppressWarnings("unchecked")
 		private void optimize() {
 			if (_item instanceof List) {
 				boolean allSame = true;
@@ -140,6 +135,15 @@ public final class GenXDefXON {
 							xi1._occ.setMaxOccur(occ+1);
 							((List) _item).clear();
 							((List) _item).add(xi1);
+							xi1.optimize();
+						}
+					} else {
+						xi0 = (XItem) list.get(0);
+						xi0.optimize();
+						occ = 0;
+						for (int i = 1; i < len; i++) {
+							XItem xi = (XItem) list.get(i);
+							xi.optimize();
 						}
 					}
 				}
@@ -220,11 +224,11 @@ public final class GenXDefXON {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	/** Create XDItem from XON object with named values.
 	 * @param map Map with XON object with named values.
 	 * @return created XDItem object.
 	 */
+	@SuppressWarnings("unchecked")
 	private static XItem genMap(final Map map) {
 		Map<String, Object> m = new HashMap();
 		String[] keys = getKeys(map);
