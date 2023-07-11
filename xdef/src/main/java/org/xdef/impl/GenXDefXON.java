@@ -198,7 +198,7 @@ public final class GenXDefXON {
 				Map map = (Map) _item;
 				sb.append(indent).append("{ ");
 				if (!_occ.isRequired()) {
-					sb.append("%script = \"" );
+					sb.append("%script=\"");
 					sb.append(occToString(false)).append("\"");
 					first = false;
 				}
@@ -209,29 +209,19 @@ public final class GenXDefXON {
 					} else {
 						sb.append(",").append(nIndent);
 					}
-					if (!StringParser.chkNCName(key, StringParser.XMLVER1_0)) {
-						sb.append('"').append(jstringToSource(key)).append('"');
-					} else {
+					if (StringParser.chkNCName(key, StringParser.XMLVER1_0)) {
 						sb.append(key);
+					} else {
+						sb.append('"').append(jstringToSource(key)).append('"');
 					}
-					sb.append(": ");
 					XItem xi = (XItem) map.get(key);
-					sb.append(xi.toXonModel(xi._item instanceof String
-						? "" : nIndent + "  "));
+					sb.append(": ").append(xi.toXonModel(
+						xi._item instanceof String ? "" : nIndent + "  "));
 				}
 				if (map.size() > 1) {
-					if (indent.isEmpty()) {
-						sb.append("\n");
-					} else {
-						sb.append(indent);
-					}
+					sb.append(indent.isEmpty() ? "\n" : indent);
 				}
-				if (indent.isEmpty()) {
-					sb.append(' ');
-				} else {
-					sb.append(indent);
-				}
-				sb.append('}');
+				sb.append(indent.isEmpty() ? " " : indent).append('}');
 			}
 			return sb.toString();
 		}
