@@ -1,7 +1,5 @@
 package org.xdef.impl;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.URI;
 import java.util.ArrayList;
@@ -144,6 +142,12 @@ public final class GenXDefXON {
 							((List) _item).add(xi1);
 						}
 					}
+				}
+			} else if (_item instanceof Map) {
+				Map m = (Map) _item;
+				String[] keys = getKeys(m);
+				for (String key: keys) {
+					((XItem) m.get(key)).optimize();
 				}
 			}
 		}
