@@ -61,6 +61,9 @@ public final class GenXDefXON {
 			if (!isSameType(x)) {
 				return false;
 			}
+			if (!_occ.equals(x._occ)) {
+				return false;
+			}
 			if (_item instanceof String) {
 				return _item.equals(x._item);
 			}
@@ -129,24 +132,16 @@ public final class GenXDefXON {
 						}
 					}
 					if (allSame) {
+						XItem xi = (XItem) ((List) _item).get(0);
 						if (occ > 0) {
-							XItem xi1 = (XItem) ((List) _item).get(0);
-							xi1._occ.setMinOccur(occ+1);
-							xi1._occ.setMaxOccur(occ+1);
+							xi._occ.setMinOccur(occ+1);
+							xi._occ.setMaxOccur(occ+1);
 							((List) _item).clear();
-							((List) _item).add(xi1);
-							xi1.optimize();
-						}
-					} else {
-						xi0 = (XItem) list.get(0);
-						xi0.optimize();
-						occ = 0;
-						for (int i = 1; i < len; i++) {
-							XItem xi = (XItem) list.get(i);
-							xi.optimize();
+							((List) _item).add(xi);
 						}
 					}
 				}
+				((List) _item).forEach(x -> {((XItem)x).optimize();});
 			} else if (_item instanceof Map) {
 				Map m = (Map) _item;
 				String[] keys = getKeys(m);
@@ -246,9 +241,7 @@ public final class GenXDefXON {
 	@SuppressWarnings("unchecked")
 	private static XItem genList(final List list) {
 		List<Object> l = new ArrayList();
-		for (Object o: list) {
-			l.add(genModel(o));
-		}
+		list.forEach(o -> {l.add(genModel(o));});
 		return new XItem(l);
 	}
 
@@ -320,22 +313,21 @@ public final class GenXDefXON {
 	 * @param xdName name XDefinition or null.
 	 * @return org.w3c.dom.Document object with X-definition.
 	 */
-	public static final Element genXdef(final Object xon,
-		final String xdName) {
+	public static final Element genXdef(final Object xon, final String xdName) {
 		Document doc = KXmlUtils.newDocument(XDEF42_NS_URI, "xd:def", null);
 		Element xdef = doc.getDocumentElement();
 		xdef.setAttribute("xmlns:" + XDEF_NS_PREFIX, XDEF42_NS_URI);
 		if (xdName != null && !xdName.isEmpty()) {
-			xdef.setAttributeNS(XDEF42_NS_URI, "xd:name", xdName);
+			xdef.setAttribute("name", xdName);
 		}
 		Element xmodel = doc.createElementNS(XDEF42_NS_URI, "xd:xon");
 		String modelName = "model";
-		xdef.setAttributeNS(XDEF42_NS_URI, "xd:root", modelName);
+		xdef.setAttribute("root", modelName);
 		xmodel.setAttributeNS(XDEF42_NS_URI, "xd:name", modelName);
 		XItem xi = genModel(xon);
 		xi.optimize();
-		String s = '\n' + xi.toXonModel("") + '\n';
-		xmodel.appendChild(xmodel.getOwnerDocument().createTextNode(s));
+		xmodel.appendChild(xmodel.getOwnerDocument().createTextNode(
+			'\n' + xi.toXonModel("") + '\n'));
 		xdef.appendChild(xmodel);
 		return xdef;
 	}
