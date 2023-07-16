@@ -261,7 +261,7 @@ public final class GenXDefXON {
 		} else if (x instanceof XDEmailAddr) {
 			return "emailAddr";
 		} else if (x instanceof SDatetime) {
-			return "dateTime";
+			return (x.toString().contains("T")) ? "dateTime" : "date";
 		} else if (x instanceof GPSPosition) {
 			return "gps";
 		} else if (x instanceof Price) {
