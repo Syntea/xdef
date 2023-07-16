@@ -303,9 +303,11 @@ public class TestKXmlUtils extends STester {
 			assertEq(KXmlUtils.nodeToString(el, true, false, true),
 "<x a=\"A B\">\n" +
 "  <y/>\n" +
-"  text\n" +
+"text\n" +
 "  <z/>\n" +
 "</x>");
+			assertEq(KXmlUtils.nodeToString(el, true, false, false),
+				"<x a=\"A B\"><y/>text<z/></x>");
 		} catch (Exception ex) {fail(ex);}
 		try {
 			s = "<a a='xxx'/>";

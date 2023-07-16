@@ -28,8 +28,8 @@ public final class GenXDefXON {
 
 	/** The class contains model and occurrence.*/
 	private final static class XItem {
-		private final XOccurrence _occ;
-		private final Object _item;
+		private final XOccurrence _occ; // occurrence of this item
+		private final Object _item; // value of this item
 
 		/** Create new XItem from XON object.
 		 * @param XON onject.
@@ -58,10 +58,7 @@ public final class GenXDefXON {
 		 * @return true if object is compatible.
 		 */
 		boolean isSame(XItem x) {
-			if (!isSameType(x)) {
-				return false;
-			}
-			if (!_occ.equals(x._occ)) {
+			if (!isSameType(x) || !_occ.equals(x._occ)) {
 				return false;
 			}
 			if (_item instanceof String) {
@@ -228,8 +225,7 @@ public final class GenXDefXON {
 		Map<String, Object> m = new HashMap();
 		String[] keys = getKeys(map);
 		for (String key: keys) {
-			Object value = map.get(key);
-			m.put(key, genModel(value));
+			m.put(key, genModel(map.get(key)));
 		}
 		return new XItem(m);
 	}
@@ -290,13 +286,9 @@ public final class GenXDefXON {
 	 * @return created XDItem object.
 	 */
 	private static XItem genModel(final Object data) {
-		if (data instanceof Map) {
-			return genMap((Map) data);
-		} else if (data instanceof List) {
-			return genList((List) data);
-		} else {
-			return new XItem(genItem(data));
-		}
+		return data instanceof Map ? genMap((Map) data)
+			: data instanceof List ? genList((List) data)
+			: new XItem(genItem(data));
 	}
 
 	private static String[] getKeys(Map m) {
@@ -326,8 +318,8 @@ public final class GenXDefXON {
 		xmodel.setAttributeNS(XDEF42_NS_URI, "xd:name", modelName);
 		XItem xi = genModel(xon);
 		xi.optimize();
-		xmodel.appendChild(xmodel.getOwnerDocument().createTextNode(
-			'\n' + xi.toXonModel("") + '\n'));
+		xmodel.appendChild(
+			xmodel.getOwnerDocument().createTextNode(xi.toXonModel("")));
 		xdef.appendChild(xmodel);
 		return xdef;
 	}

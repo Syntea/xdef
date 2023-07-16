@@ -328,7 +328,13 @@ public final class KXmlUtils extends KDOMUtils {
 			if (startLine == null) {
 				startLine = "\n";
 			} else {
-				if (type != Node.ENTITY_REFERENCE_NODE) {
+				if (type == Node.TEXT_NODE || type == Node.CDATA_SECTION_NODE) {
+					if (removeIgnorableWhiteSpaces) {
+						out.write(startLine);
+					} else {
+						out.write("\n");
+					}
+				} else if (type != Node.ENTITY_REFERENCE_NODE) {
 					out.write(startLine);
 				}
 			}
@@ -508,8 +514,8 @@ public final class KXmlUtils extends KDOMUtils {
 							int len;
 							String s = item.getNodeValue();
 							if (s == null ||
-								(len = (s = removeIgnorableWhiteSpaces  ||
-									indent != null ?
+								(len = (s = removeIgnorableWhiteSpaces
+									|| indent != null ?
 									s.trim() : s).length()) == 0) {
 								continue;
 							}
@@ -600,7 +606,7 @@ public final class KXmlUtils extends KDOMUtils {
 				if (s == null || s.isEmpty()) {
 					break;
 				}
-				if (removeIgnorableWhiteSpaces || startLine != null) {
+				if (removeIgnorableWhiteSpaces && startLine != null) {
 					if ((s = s.trim()).isEmpty()) {
 						break;
 					}
