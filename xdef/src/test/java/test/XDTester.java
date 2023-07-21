@@ -1304,32 +1304,33 @@ public abstract class XDTester extends STester {
 	/** Create X-components from the XDPool object to given directory.
 	 * @param xp XDPool from which the X-components created.
 	 * @param dir path to directory where to generate Java sources.
+	 * @return ArrayReporter with reports from ganerator of XComponents.
 	 * @throws RuntimeException if an error occurs.
 	 */
-	public void genXComponent(final XDPool xp,
-		final String dir) {
-		genXComponent(xp, new File(dir));
+	public ArrayReporter genXComponent(final XDPool xp, final String dir) {
+		return genXComponent(xp, new File(dir));
 	}
 
 	/** Create X-components from the XDPool object to given directory.
 	 * @param xp XDPool from which the X-components created.
 	 * @param dir directory where to generate Java sources.
+	 * @return ArrayReporter with reports from ganerator of XComponents.
 	 * @throws RuntimeException if an error occurs.
 	 */
-	public final void genXComponent(final XDPool xp,
-		final File dir) {
+	public final ArrayReporter genXComponent(final XDPool xp, final File dir) {
 		if (!dir.exists() && !dir.isDirectory()) {
 			//Directory doesn't exist or isn't accessible: &{0}
 			throw new SRuntimeException(SYS.SYS025, dir.getAbsolutePath());
 		}
 		try {
-			ArrayReporter result = xp.genXComponent(
-				dir, getEncoding(), false, true);
+			ArrayReporter result =
+				xp.genXComponent(dir, getEncoding(), false, true);
 			result.checkAndThrowErrors(); // throw exception if error reported
 			// create classpath item with org.xdef directory
 			String classpath = getClassSource(XDConstants.class);
 			String classDir = getClassSource(XDTester.class);
 			compileSources(classpath, classDir, dir);
+			return result;
 		} catch (Exception ex) {
 			throw new SRuntimeException(ex.toString(), ex);
 		}

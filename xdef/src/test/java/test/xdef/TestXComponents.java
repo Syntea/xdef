@@ -64,7 +64,7 @@ public final class TestXComponents extends XDTester {
 	 * @param xdsources array with path names of sources of X-definitions.
 	 */
 	private XDPool genComponents(final String... xdsources) {
-		// ensure that following classes are compiled!
+		// force following classes are compiled!
 		TestXComponents_C.class.getClass();
 		TestXComponents_G.class.getClass();
 		TestXComponents_Y04.class.getClass();
@@ -81,7 +81,15 @@ public final class TestXComponents extends XDTester {
 		// generate XCDPool from sources
 		XDPool xp = compile(xdsources);
 		// generate and compile XComponents from xp
+/*xx*/
 		genXComponent(xp, clearTempDir());
+/*xx*
+		// print warnings
+		ArrayReporter x = genXComponent(xp, clearTempDir());
+		if (x.errorWarnings()) {
+			System.out.println(x.printToString());
+		}
+/*xx*/
 		return xp;
 	}
 
@@ -662,6 +670,24 @@ public final class TestXComponents extends XDTester {
 			assertFalse(((Map) xc.toXon()).containsKey("a"));
 		} catch (Exception ex) {fail(ex);}
 		reporter.clear();
+		try { //Names of getters of A/B and A/C/B must be same
+			xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='A'>\n" +
+"  <A> <B b='string'/> <C> <B b='string'/> </C> </A>\n" +
+" <xd:component> %class test.xdef.TestB %link #A; </xd:component>\n" +
+"</xd:def>";
+			xp = XDFactory.compileXD(null, xdef);
+			assertNoErrorwarnings(genXComponent(xp, clearTempDir()));
+			xml = "<A><B b=\"1\"/><C><B b=\"2\"/></C></A>";
+			xc = xp.createXDDocument().xparseXComponent(xml, null, reporter);
+			assertNoErrorsAndClear(reporter);
+			assertEq(xml, xc.toXml());
+			assertEq("1", SUtils.getValueFromGetter(
+				SUtils.getValueFromGetter(xc,"getB"), "getb"));
+			assertEq("2", SUtils.getValueFromGetter(
+				SUtils.getValueFromGetter(
+					SUtils.getValueFromGetter(xc,"getC"), "getB"), "getb"));
+		} catch (Exception ex) {fail(ex);}
 		clearTempDir();
 ////////////////////////////////////////////////////////////////////////////////
 		xp = genComponents(getDataDir() + "test/TestXComponents.xdef",

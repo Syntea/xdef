@@ -685,7 +685,7 @@
   <a xd:script="occurs 1..*;">
    <xd:mixed>
      <s xd:script="match @k=='p'" k="">string();</s>
-	  <s xd:script="match @k=='q'" k="">string();</s>
+     <s xd:script="match @k=='q'" k="">string();</s>
    </xd:mixed>
   </a>
   <b><c>string()</c></b>
