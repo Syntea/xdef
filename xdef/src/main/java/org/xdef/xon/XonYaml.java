@@ -8,8 +8,8 @@ import org.xdef.msg.JSON;
 import org.xdef.sys.SRuntimeException;
 
 /** Tools for YAML.
- * Note that it requires the the package org.yaml.snakeyaml be available
- * in classpath.
+ * Processing YAML objects requires the availability of the org.yaml.snakeyaml
+ * package in the classpath.
  * @author Vaclav Trojan
  */
 public final class XonYaml {

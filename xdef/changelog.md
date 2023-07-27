@@ -1,7 +1,9 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.0.9, release-date 2023-07-21
-* .
+# Version 42.0.9, release-date 2023-07-27
+* X-definition is now generated from also from YAML source data (if the package
+ * `org.yaml.snakeyaml` is available in the classpath).
+  (See `org.xdef.util.GenXDefinition` and `org.xdef.impl.GenXDef`.)
 
 # Version 42.0.8, release-date 2023-07-10
 * Corrected bug in generation of `XComponent` java source when was generated

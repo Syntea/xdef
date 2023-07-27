@@ -19,9 +19,9 @@ import org.xdef.xon.XonUtils;
 public final class GenXDef {
 
 	/** Get object from data.
-	 * @param o input date
+	 * @param o XML, JSON/XON, YAML input data (or path to source data)
 	 * @return XML Element or XON object.
-	 * @throws RuntimeException if input chan't be read.
+	 * @throws RuntimeException if input can't be read.
 	 */
 	public static final Object readData(final Object o) throws RuntimeException{
 		Object x = o == null ? null
@@ -41,6 +41,9 @@ public final class GenXDef {
 		} catch (Exception ex) {}
 		try {
 			return XonUtils.parseXON(s);
+		} catch (Exception ex) {}
+		try {
+			return XonUtils.parseYAML(s);
 		} catch (Exception ex) {
 			throw new RuntimeException(
 				"Incorrect data form: neither XML nor XON");
@@ -92,7 +95,7 @@ public final class GenXDef {
 	}
 
 	/** Generate X-definition from a document to given output stream writer.
-	 * @param obj input data.
+	 * @param obj XML, JSON/XON, YAML input data (or path to source data).
 	 * @return Element with created XDefinition.
 	 */
 	public static final Element genXdef(final Object obj) {
@@ -100,7 +103,7 @@ public final class GenXDef {
 	}
 
 	/** Generate X-definition from a document to given output stream writer.
-	 * @param obj input data.
+	 * @param obj XML, JSON/XON, YAML input data (or path to source data).
 	 * @param xdName name XDefinition or null.
 	 * @return Element with created XDefinition.
 	 */

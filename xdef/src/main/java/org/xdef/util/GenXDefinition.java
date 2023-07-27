@@ -6,7 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import org.w3c.dom.Element;
 
-/** Generate X-definition from XML or JSON/XON data.
+/** Generate X-definition from XML, JSON/XON, or YAML data.
  * @author Vaclav Trojan
  */
 public class GenXDefinition {
@@ -15,7 +15,7 @@ public class GenXDefinition {
 	private GenXDefinition() {}
 
 	/** Generate X-definition from XML data to X-definition.
-	 * @param obj object source data.
+	 * @param obj XML, JSON/XON, YAML input data (or path to source data)
 	 * @return org.w3c.dom.Element object with X-definition.
 	 */
 	public static final Element genXdef(final Object obj) {
@@ -23,7 +23,7 @@ public class GenXDefinition {
 	}
 
 	/** Generate X-definition from XML data to X-definition.
-	 * @param obj object source data.
+	 * @param obj XML, JSON/XON, YAML input data (or path to source data)
 	 * @param xdName name of XDefinition or null.
 	 * @return org.w3c.dom.Element object with X-definition.
 	 */
@@ -32,7 +32,7 @@ public class GenXDefinition {
 	}
 
 	/** Generate X-definition from a document to given output stream writer.
-	 * @param obj input file or source object.
+	 * @param obj XML, JSON/XON, YAML input data (or path to source datae)
 	 * @param outFile name of output file.
 	 * @param encoding name of character encoding.
 	 * @throws IOException if an error occurs.
@@ -44,7 +44,7 @@ public class GenXDefinition {
 	}
 
 	/** Generate X-definition from a document to given output stream writer.
-	 * @param obj input file or source object.
+	 * @param obj XML, JSON/XON, YAML input data (or path to source datae)
 	 * @param outFile name of output file.
 	 * @param encoding name of character encoding.
 	 * @param xdName name of XDefinition or null.
@@ -64,9 +64,9 @@ public class GenXDefinition {
 	/** Generate X-definition from XML (command line parameters).
 	 * @param args array with command line arguments:
 	 * <ul>
-	 * <li><i><b>-i file</b> ....... </i>XML input file pathname
-	 * <li><i><b>-o file</b> ....... </i>X-definition output file pathname
-	 * <li><i><b>-e encoding</b> ... </i>character set name of output
+	 * <li><i><b>-i file</b> ....... </i>XML, JSON/XON, or YAML file  pathname.
+	 * <li><i><b>-o file</b> ....... </i>X-definition output file pathname.
+	 * <li><i><b>-e encoding</b> ... </i>character set name of output.
 	 * </ul>
 	 */
 	public static final void main(String... args) {
@@ -76,7 +76,7 @@ public class GenXDefinition {
 "Command line arguments:\n"+
 "   -i input_file -o output file [-e encoding]\n"+
 "Where:\n"+
-"  -i input    file intput file\n" +
+"  -i input    file intput file (XML, JSON/XON, YAML)\n" +
 "  -o output   file\n" +
 "  -e encoding name of character set encoding\n" +
 "  -x name of X-definition";
