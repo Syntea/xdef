@@ -4,6 +4,7 @@ import org.xdef.msg.XML;
 import org.xdef.sys.SRuntimeException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import javax.xml.XMLConstants;
 import javax.xml.namespace.NamespaceContext;
 
@@ -77,7 +78,7 @@ public class KNamespace implements NamespaceContext {
 	 * @return iterator with list of prefixes.
 	 */
 	public final Iterator<String> getPrefixes(final String uri) {
-		ArrayList<String> a = new ArrayList<String>();
+		List<String> a = new ArrayList<>();
 		if (uri != null && _size > 0) {
 			for (int i = _size - 1; i >= 0; i--) {
 				String p;
@@ -212,7 +213,7 @@ public class KNamespace implements NamespaceContext {
 	 * @return array of strings with all URIs.
 	 */
 	public final String[] getAllNamespaceURIs() {
-		ArrayList<String> a = new ArrayList<String>();
+		List<String> a = new ArrayList<>();
 		if (_size > 0) {
 			String[] prefixes = getAllPrefixes();
 			for (int i = prefixes.length - 1; i >= 2; i--) {
@@ -229,7 +230,7 @@ public class KNamespace implements NamespaceContext {
 	 * @return array of strings with all prefixes.
 	 */
 	public final String[] getAllPrefixes() {
-		ArrayList<String> a = new ArrayList<String>();
+		List<String> a = new ArrayList<>();
 		for (int i = _size - 1; i >= 2; i--) {
 			if (!a.contains(_prefixes[i])) {
 				a.add(0, _prefixes[i]);

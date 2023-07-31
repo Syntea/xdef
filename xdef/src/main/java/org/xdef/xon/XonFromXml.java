@@ -40,7 +40,7 @@ class XonFromXml extends XonUtils {
 	 * @return list elements and texts created from child nodes of element.
 	 */
 	private static List<Object> getElementChildList(final Element el) {
-		List<Object> result = new ArrayList<Object>();
+		List<Object> result = new ArrayList<>();
 		Node n = el.getFirstChild();
 		while (n != null) {
 			if (n.getNodeType() == Node.ELEMENT_NODE) {
@@ -80,11 +80,10 @@ class XonFromXml extends XonUtils {
 		int ndx = name.indexOf(':');
 		String prefix = ndx > 0 ? ':' + name.substring(0, ndx) : "";
 		String xmlnsName = "xmlns" + prefix;
-		Map<String, Object> result = new LinkedHashMap<String, Object>();
+		Map<String, Object> result = new LinkedHashMap<>();
 		NamedNodeMap nnm = el.getAttributes();
 		for (int i = 0; i < nnm.getLength(); i++) {
 			Node n = nnm.item(i);
-			name = n.getNodeName();
 			if (!(xmlnsName.equals(name = n.getNodeName())
 				&& XDConstants.XON_NS_URI_XD.equals(el.getNamespaceURI()))) {
 				String attName = XonTools.xmlToJName(name);
@@ -157,82 +156,89 @@ class XonFromXml extends XonUtils {
 		Map<String, Object> attrs = getElementAttributes(elem);
 		List<Object> childNodes = getElementChildList(elem);
 		// result object
-		Map<String, Object> map = new LinkedHashMap<String, Object>();
-		List<Object> array = new ArrayList<Object>();
+		Map<String, Object> map = new LinkedHashMap<>();
+		List<Object> array = new ArrayList<>();
 		String nsURI = elem.getNamespaceURI(); // nasmespace URI of element
 		String localName = nsURI==null ? elem.getNodeName():elem.getLocalName();
 		if (XDConstants.XON_NS_URI_XD.equals(nsURI)) {
-			if (X_VALUE.equals(localName)) {
-				String s;
-				if (elem.hasAttribute(X_VALATTR)) {
-					s = elem.getAttribute(X_VALATTR);
-				} else {
-					s = elem.getTextContent();
-					if (s != null) {
-						s = s.trim();
+			if (null != localName) switch (localName) {
+				case X_VALUE:
+				{
+					String s;
+					if (elem.hasAttribute(X_VALATTR)) {
+						s = elem.getAttribute(X_VALATTR);
+					} else {
+						s = elem.getTextContent();
+						if (s != null) {
+							s = s.trim();
+						}
 					}
+					return XonTools.xmlToJValue(s);
 				}
-				return XonTools.xmlToJValue(s);
-			} else if (X_MAP.equals(localName)) {
-				map.putAll(attrs);
-				for (Object o: childNodes) {
-					if (o instanceof Element) {
-						Element el = (Element) o;
-						name = XonTools.xmlToJName(el.getNodeName());
-						o = fromXmlXD(el);
-						if (o instanceof Map) {
-							Map m = (Map) o;
-							if (m.size() == 1) {
-								Map.Entry e = (Map.Entry)
-									m.entrySet().iterator().next();
-								Object val = e.getValue();
-								if (val instanceof List || val instanceof Map) {
-									map.put(name, val);
+				case X_MAP:
+					map.putAll(attrs);
+					for (Object o: childNodes) {
+						if (o instanceof Element) {
+							Element el = (Element) o;
+							name = XonTools.xmlToJName(el.getNodeName());
+							o = fromXmlXD(el);
+							if (o instanceof Map) {
+								Map m = (Map) o;
+								if (m.size() == 1) {
+									Map.Entry e = (Map.Entry)
+										m.entrySet().iterator().next();
+									Object val = e.getValue();
+									if (val instanceof List || val instanceof Map) {
+										map.put(name, val);
+									} else {
+										map.put((String) e.getKey(), val);
+									}
 								} else {
-									map.put((String) e.getKey(), val);
+									map.put(name, o);
 								}
+							} else if (o instanceof List) {
+								map.put(name, o);
 							} else {
 								map.put(name, o);
 							}
-						} else if (o instanceof List) {
-							map.put(name, o);
-						} else {
-							map.put(name, o);
-						}
-					} else {
-						String s = (String) o;
-						if (!s.isEmpty() // if not comment
-							|| !s.startsWith("/*") || !s.endsWith("*/")) {
-							map.put(name, XonTools.xmlToJValue(s));
-							throw new RuntimeException(
+						} else if (o != null) {
+							String s = (String) o;
+							if (!s.isEmpty() // if not comment
+								|| !s.startsWith("/*") || !s.endsWith("*/")) {
+								map.put(name, XonTools.xmlToJValue(s));
+								throw new RuntimeException(
 								"Text is not allowed in XON/JSON map element: "
-								+ s);
+									+ s);
+							}
 						}
 					}
-				}
-				return map;
-			} else if (X_ARRAY.equals(localName)) {
-				if (!attrs.isEmpty()) {
-					array.add(attrs);
-				}
-				for (Object o: childNodes) {
-					if (o instanceof Element) {
-						array.add(fromXmlXD((Element) o));
-					} else {
-						addSimpleValue(array, (String) o);
+					return map;
+				case X_ARRAY:
+					if (!attrs.isEmpty()) {
+						array.add(attrs);
 					}
+					for (Object o: childNodes) {
+						if (o instanceof Element) {
+							array.add(fromXmlXD((Element) o));
+						} else {
+							addSimpleValue(array, (String) o);
+						}
+					}
+					return array;
+				case J_NULL:
+					return null;
+				case J_STRING:
+				case J_NUMBER:
+				case J_BOOLEAN:
+				{
+					if (elem.hasAttribute(X_VALATTR)) {
+						return XonTools.xmlToJValue(elem.getAttribute(X_VALATTR));
+					}
+					String s = elem.getTextContent();
+					return XonTools.xmlToJValue(s);
 				}
-				return array;
-			} else if (J_NULL.equals(localName)) {
-				return null;
-			} else if (J_STRING.equals(localName)
-				|| J_NUMBER.equals(localName)
-				|| J_BOOLEAN.equals(localName)) {
-				if (elem.hasAttribute(X_VALATTR)) {
-					return XonTools.xmlToJValue(elem.getAttribute(X_VALATTR));
-				}
-				String s = elem.getTextContent();
-				return XonTools.xmlToJValue(s);
+				default:
+					break;
 			}
 			throw new RuntimeException(
 				"Unknown element from XON/JSON namespace: " + name);
@@ -297,9 +303,9 @@ class XonFromXml extends XonUtils {
 							&& ((List) val).size() == 1
 							&& ((List) val).get(0) instanceof Map
 							&& ((Map)((List)val).get(0)).isEmpty()){
-							mm = new LinkedHashMap<String, Object>();
-							List<Object> empty = new ArrayList<Object>();
-							empty.add(new LinkedHashMap<String, Object>());
+							mm = new LinkedHashMap<>();
+							List<Object> empty = new ArrayList<>();
+							empty.add(new LinkedHashMap<>());
 							mm.put(key, empty);
 							array.add(attrs);
 							array.add(mm);
@@ -308,7 +314,7 @@ class XonFromXml extends XonUtils {
 						} else {
 							if (attrs.containsKey(key)) {
 								if (mm == null) {
-									mm = new LinkedHashMap<String, Object>();
+									mm = new LinkedHashMap<>();
 								}
 								mm.put(key, val);
 							} else {
@@ -355,7 +361,7 @@ class XonFromXml extends XonUtils {
 	 * @return created XON/JSON array.
 	 */
 	private List<Object> createArrayW(final Element elem) {
-		List<Object> result = new ArrayList<Object>();
+		List<Object> result = new ArrayList<>();
 		Node n = elem.getFirstChild();
 		while(n != null) {
 			if (n.getNodeType() == Node.ELEMENT_NODE) {
@@ -371,7 +377,7 @@ class XonFromXml extends XonUtils {
 	 * @return created XON/JSON object (map).
 	 */
 	private Map<String, Object> createMapW(final Element elem) {
-		Map<String,Object> result = new LinkedHashMap<String,Object>();
+		Map<String,Object> result = new LinkedHashMap<>();
 		Node n = elem.getFirstChild();
 		while(n != null) {
 			if (n.getNodeType() == Node.ELEMENT_NODE) {

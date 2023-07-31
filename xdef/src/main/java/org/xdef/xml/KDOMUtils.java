@@ -1,6 +1,6 @@
 package org.xdef.xml;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import org.xdef.impl.xml.KNodeList;
 import org.xdef.impl.xml.KNamespace;
@@ -93,9 +93,12 @@ public class KDOMUtils {
 	 * @return NodeList with Elements found.
 	 */
 	public static final NodeList getChildElements(final Node node) {
+		if (node == null) {
+			return EMPTYNODELIST;
+		}
 		final NodeList nl = node.getChildNodes();
 		final int len = nl.getLength();
-		if (node == null || len == 0) {
+		if (len == 0) {
 			return EMPTYNODELIST;
 		}
 		final KNodeList result = new KNodeList();
@@ -210,9 +213,12 @@ public class KDOMUtils {
 	 */
 	public static final NodeList getChildElements(final Node node,
 		final String tagName) {
+		if (node == null) {
+			return EMPTYNODELIST;
+		}
 		final NodeList nl = node.getChildNodes();
 		final int len = nl.getLength();
-		if (node == null || len == 0) {
+		if (len == 0) {
 			return EMPTYNODELIST;
 		}
 		final KNodeList result = new KNodeList();
@@ -234,9 +240,12 @@ public class KDOMUtils {
 	 */
 	public static final NodeList getChildElementsNS(final Node node,
 		final String ns) {
+		if (node == null) {
+			return EMPTYNODELIST;
+		}
 		final NodeList nl = node.getChildNodes();
 		final int len = nl.getLength();
-		if (node == null || len == 0) {
+		if (len == 0) {
 			return EMPTYNODELIST;
 		}
 		final String uri = ns == null ? "" : ns;
@@ -265,9 +274,12 @@ public class KDOMUtils {
 	public static final NodeList getChildElementsNS(final Node node,
 		final String ns,
 		final String localName) {
+		if (node == null) {
+			return EMPTYNODELIST;
+		}
 		final NodeList nl = node.getChildNodes();
 		final int len = nl.getLength();
-		if (node == null || len == 0) {
+		if (len == 0) {
 			return EMPTYNODELIST;
 		}
 		final KNodeList result = new KNodeList();
@@ -296,9 +308,12 @@ public class KDOMUtils {
 	 */
 	public static final NodeList getChildElements(final Node node,
 		final String[] tagnameList) {
+		if (node == null) {
+			return EMPTYNODELIST;
+		}
 		final NodeList nl = node.getChildNodes();
 		final int len = nl.getLength();
-		if (node == null || len == 0) {
+		if (len == 0) {
 			return EMPTYNODELIST;
 		}
 		final KNodeList result = new KNodeList();
@@ -329,9 +344,12 @@ public class KDOMUtils {
 	public static final NodeList getChildElementsNS(final Node node,
 		String ns,
 		final String[] localnameList) {
+		if (node == null) {
+			return EMPTYNODELIST;
+		}
 		final NodeList nl = node.getChildNodes();
 		final int len = nl.getLength();
-		if (node == null || len == 0) {
+		if (len == 0) {
 			return EMPTYNODELIST;
 		}
 		final String uri = ns == null ? "" : ns;
@@ -362,9 +380,12 @@ public class KDOMUtils {
 	 * @return Element found or null.
 	 */
 	public static final Element firstElementChild(final Node node) {
+		if (node == null) {
+			return null;
+		}
 		final NodeList nl = node.getChildNodes();
 		final int len = nl.getLength();
-		if (node == null || len == 0) {
+		if (len == 0) {
 			return null;
 		}
 		for (int i = 0; i < len; i++) {
@@ -385,9 +406,12 @@ public class KDOMUtils {
 	 */
 	public static final Element firstElementChild(final Node node,
 		final String tagName) {
+		if (node == null) {
+			return null;
+		}
 		final NodeList nl = node.getChildNodes();
 		final int len = nl.getLength();
-		if (node == null || len == 0) {
+		if (len == 0) {
 			return null;
 		}
 		for (int i = 0; i < len; i++) {
@@ -408,9 +432,12 @@ public class KDOMUtils {
 	 */
 	public static final Element firstElementChild(final Node node,
 		final String[] tagnameList) {
+		if (node == null) {
+			return null;
+		}
 		final NodeList nl = node.getChildNodes();
 		final int len = nl.getLength();
-		if (node == null || len == 0) {
+		if (len == 0) {
 			return null;
 		}
 		for (int i = 0; i < len; i++) {
@@ -437,9 +464,12 @@ public class KDOMUtils {
 	 */
 	public static final Element firstElementChildNS(final Node node,
 		final String ns){
+		if (node == null) {
+			return null;
+		}
 		final NodeList nl = node.getChildNodes();
 		final int len = nl.getLength();
-		if (node == null || len == 0) {
+		if (len == 0) {
 			return null;
 		}
 		final String uri = ns == null ? "" : ns;
@@ -467,9 +497,12 @@ public class KDOMUtils {
 	public static final Element firstElementChildNS(final Node node,
 		final String ns,
 		final String localName) {
+		if (node == null) {
+			return null;
+		}
 		final NodeList nl = node.getChildNodes();
 		final int len = nl.getLength();
-		if (node == null || len == 0) {
+		if (len == 0) {
 			return null;
 		}
 		final String uri = ns == null ? "" : ns;
@@ -631,8 +664,8 @@ public class KDOMUtils {
 		Node item = node;
 		while ((item = item.getNextSibling()) != null) {
 			if (item.getNodeType() == Node.ELEMENT_NODE) {
-				for (int i = 0; i < tagnameList.length; i++) {
-					if (item.getNodeName().equals(tagnameList[i])) {
+				for (String tagnameList1 : tagnameList) {
+					if (item.getNodeName().equals(tagnameList1)) {
 						return (Element) item;
 					}
 				}
@@ -660,12 +693,12 @@ public class KDOMUtils {
 		while ((item = item.getNextSibling()) != null) {
 			final String u = item.getNamespaceURI();
 			if (uri.equals(u == null ? "" : u)) {
-				for (int i = 0; i < nameList.length; i++) {
+				for (String nameList1 : nameList) {
 					String localName = item.getLocalName();
 					if (localName == null) {
 						localName = item.getNodeName();
 					}
-					if (removePrefix(nameList[i]).equals(localName)) {
+					if (removePrefix(nameList1).equals(localName)) {
 						return (Element) item;
 					}
 				}
@@ -679,9 +712,12 @@ public class KDOMUtils {
 	 * @return Element found or null.
 	 */
 	public static final Element lastElementChild(final Node node) {
+		if (node == null) {
+			return null;
+		}
 		final NodeList nl = node.getChildNodes();
 		int i = nl.getLength();
-		if (node == null || i == 0) {
+		if (i == 0) {
 			return null;
 		}
 		for (i--; i >= 0; i--) {
@@ -701,9 +737,12 @@ public class KDOMUtils {
 	 */
 	public static final Element lastElementChild(final Node node,
 		final String tagName) {
+		if (node == null) {
+			return null;
+		}
 		final NodeList nl = node.getChildNodes();
 		int i = nl.getLength();
-		if (node == null || i == 0) {
+		if (i == 0) {
 			return null;
 		}
 		for (i--; i >= 0; i--) {
@@ -724,9 +763,12 @@ public class KDOMUtils {
 	 */
 	public static Element lastElementChildNS(final Node node,
 		final String ns) {
+		if (node == null) {
+			return null;
+		}
 		final NodeList nl = node.getChildNodes();
 		int i = nl.getLength();
-		if (node == null || i == 0) {
+		if (i == 0) {
 			return null;
 		}
 		final String uri = ns == null ? "" : ns;
@@ -752,9 +794,12 @@ public class KDOMUtils {
 	public static Element lastElementChildNS(final Node node,
 		final String ns,
 		final String lname) {
+		if (node == null) {
+			return null;
+		}
 		final NodeList nl = node.getChildNodes();
 		int i = nl.getLength();
-		if (node == null || i == 0) {
+		if (i == 0) {
 			return null;
 		}
 		final String uri = ns == null ? "" : ns;
@@ -782,9 +827,12 @@ public class KDOMUtils {
 	 */
 	public static Element lastElementChild(final Node node,
 		final String[] tagnameList) {
+		if (node == null) {
+			return null;
+		}
 		final NodeList nl = node.getChildNodes();
 		int i = nl.getLength();
-		if (node == null || i == 0) {
+		if (i == 0) {
 			return null;
 		}
 		for (i--; i >= 0; i--) {
@@ -813,9 +861,12 @@ public class KDOMUtils {
 	public static final Element lastElementChildNS(final Node node,
 		final String ns,
 		final String[] nameList) {
+		if (node == null) {
+			return null;
+		}
 		final NodeList nl = node.getChildNodes();
 		int i = nl.getLength();
-		if (node == null || i == 0) {
+		if (i == 0) {
 			return null;
 		}
 		final String uri = ns == null ? "" : ns;
@@ -934,8 +985,8 @@ public class KDOMUtils {
 		Node item = node;
 		while ((item = item.getPreviousSibling()) != null) {
 			if (item.getNodeType() == Node.ELEMENT_NODE) {
-				for (int i = 0; i < tagnameList.length; i++) {
-					if (item.getNodeName().equals(tagnameList[i])) {
+				for (String tagnameList1 : tagnameList) {
+					if (item.getNodeName().equals(tagnameList1)) {
 						return (Element) item;
 					}
 				}
@@ -962,12 +1013,12 @@ public class KDOMUtils {
 		while ((item = item.getNextSibling()) != null) {
 			final String u = item.getNamespaceURI();
 			if (uri.equals(u == null ? "" : u)) {
-				for (int i = 0; i < nameList.length; i++) {
+				for (String nameList1 : nameList) {
 					String localName = item.getLocalName();
 					if (localName == null) {
 						localName = item.getNodeName();
 					}
-					if (localName.equals(removePrefix(nameList[i]))) {
+					if (localName.equals(removePrefix(nameList1))) {
 						return (Element) item;
 					}
 				}
@@ -995,7 +1046,7 @@ public class KDOMUtils {
 		if (el == null) {
 			return;
 		}
-		Map<String, NsItem> namespaces = new HashMap<String, NsItem>();
+		Map<String, NsItem> namespaces = new LinkedHashMap<>();
 		createXmlnsMap(el, namespaces);
 		// put all unambiguous xmlns attributes to root element
 		for (Map.Entry<String, NsItem> e: namespaces.entrySet()) {
@@ -1329,9 +1380,12 @@ public class KDOMUtils {
 	 */
 	public static final NodeList getTextNodes(final Node node,
 		final boolean coalesce) {
+		if (node == null) {
+			return EMPTYNODELIST;
+		}
 		final NodeList nl = node.getChildNodes();
 		final int len = nl.getLength();
-		if (node == null || len == 0) {
+		if (len == 0) {
 			return EMPTYNODELIST;
 		}
 		final KNodeList result = new KNodeList();
@@ -1376,9 +1430,12 @@ public class KDOMUtils {
 	 * @return NodeList with text nodes.
 	 */
 	public static final NodeList getTextNodesCoalesced(final Node node) {
+		if (node == null) {
+			return EMPTYNODELIST;
+		}
 		final NodeList nl = node.getChildNodes();
 		final int len = nl.getLength();
-		if (node == null || len == 0) {
+		if (len == 0) {
 			return EMPTYNODELIST;
 		}
 		final KNodeList result = new KNodeList();
@@ -1861,42 +1918,45 @@ public class KDOMUtils {
 	public static final String getXPosition(final Node n) {
 		final StringBuilder sb = new StringBuilder();
 		final short type = n.getNodeType();
-		if (type == Node.ATTRIBUTE_NODE) {
-			final Element el = ((Attr) n).getOwnerElement();
-			if (el == null) {
-				return null;
-			}
-			getXPosition(el, sb);
-			sb.append("/@");
-			sb.append(n.getNodeName());
-		} else if (type == Node.TEXT_NODE || type == Node.CDATA_SECTION_NODE) {
-			final Node m = n.getParentNode();
-			if (m == null || m.getNodeType() != Node.ELEMENT_NODE) {
-				return null;
-			}
-			getXPosition(m, sb);
-			sb.append("/text()");
-			final NodeList nl = m.getChildNodes();
-			final int len = nl.getLength();
-			for (int i = 0, ndx = 0; i < len; i++) {
-				final Node o = nl.item(i);
-				if (o.getNodeType() == Node.TEXT_NODE ||
-					o.getNodeType() == Node.CDATA_SECTION_NODE) {
-					ndx++;
-					if (o == n) {
-						if (len > 1) {
-							sb.append('[').append(ndx).append(']');
+		switch (type) {
+			case Node.ATTRIBUTE_NODE:
+				final Element el = ((Attr) n).getOwnerElement();
+				if (el == null) {
+					return null;
+				}	getXPosition(el, sb);
+				sb.append("/@");
+				sb.append(n.getNodeName());
+				break;
+			case Node.TEXT_NODE:
+			case Node.CDATA_SECTION_NODE:
+				final Node m = n.getParentNode();
+				if (m == null || m.getNodeType() != Node.ELEMENT_NODE) {
+					return null;
+				}	getXPosition(m, sb);
+				sb.append("/text()");
+				final NodeList nl = m.getChildNodes();
+				final int len = nl.getLength();
+				for (int i = 0, ndx = 0; i < len; i++) {
+					final Node o = nl.item(i);
+					if (o.getNodeType() == Node.TEXT_NODE ||
+						o.getNodeType() == Node.CDATA_SECTION_NODE) {
+						ndx++;
+						if (o == n) {
+							if (len > 1) {
+								sb.append('[').append(ndx).append(']');
+							}
+							break;
 						}
-						break;
 					}
-				}
-			}
-		} else if (type == Node.ELEMENT_NODE) {
-			getXPosition(n, sb);
-		} else if (type == Node.DOCUMENT_NODE) {
-			getXPosition(((Document) n).getDocumentElement(), sb);
-		} else {
-			return null;
+				}	break;
+			case Node.ELEMENT_NODE:
+				getXPosition(n, sb);
+				break;
+			case Node.DOCUMENT_NODE:
+				getXPosition(((Document) n).getDocumentElement(), sb);
+				break;
+			default:
+				return null;
 		}
 		return sb.toString();
 	}

@@ -20,6 +20,7 @@ import java.text.DecimalFormat;
 import java.text.ParsePosition;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /** Static methods for printing listings of parsed source.
  * @author Vaclav Trojan
@@ -292,8 +293,7 @@ public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 			String s = "Can't read the source: " + ex;
 			try {
 				out.write(s);
-			} catch (Exception ex1) {
-			}
+			} catch (Exception ex1) {}
 			return;
 		}
 		printListing(out, in, reports, lineNumbers);
@@ -365,7 +365,7 @@ public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 		final String language) {
 		LineNumberReader ln = null;
 		try {
-			ArrayList<ReportPrinter> arr = new ArrayList<ReportPrinter>();
+			List<ReportPrinter> arr = new ArrayList<>();
 			ReportPrinter sp;
 			Report rep;
 			while ((rep = reports.getReport()) != null) {
@@ -481,7 +481,7 @@ public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 			//Program exception&{0}{: }
 			throw new SRuntimeException(SYS.SYS036, ex);
 		}
-		try {ln.close();}catch (Exception ex) {}
+		try {ln.close();} catch (Exception ex) {}
 	}
 
 	/** print message and help information and finish program.

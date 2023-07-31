@@ -713,7 +713,7 @@ public abstract class XAbstractReader extends Reader {
 		// skip to the start of element
 		while (scanComment() > 0 || scanPI() > 0 || scanCDATA() >= 0
 			|| scanEndElement() >= 0 || scanText() > 0 || scanEntity() > 0) {}
-		List<Object[]> result = new ArrayList<Object[]>();
+		List<Object[]> result = new ArrayList<>();
 		String name;
 		SPosition spos = getBufferPosition1();
 		if ("*".equals(qName)) {

@@ -15,10 +15,10 @@ import org.xdef.xml.KXmlUtils;
  * @author Trojan
  */
 public final class PNode {
-	private final List<PAttr> _attrs = new ArrayList<PAttr>(); //attributes
-	private final List<PNode> _childNodes = new ArrayList<PNode>();//child nodes
+	private final List<PAttr> _attrs = new ArrayList<>(); //attributes
+	private final List<PNode> _childNodes = new ArrayList<>();//child nodes
 	// namespace prefixes
-	final Map<String,Integer> _nsPrefixes = new LinkedHashMap<String,Integer>();
+	final Map<String,Integer> _nsPrefixes = new LinkedHashMap<>();
 	SBuffer _name; //qualified name of node
 	String _localName;  //local name of node
 	String _nsURI;  //namespace URI

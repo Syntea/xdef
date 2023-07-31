@@ -8,8 +8,10 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.StringTokenizer;
 import static org.xdef.XDConstants.LINE_SEPARATOR;
 import org.xdef.XDFactory;
@@ -182,7 +184,7 @@ public final class GenXComponent {
 		}
 		for (int runCount = 0; runCount < 2; runCount++) {
 			// create HashSet with class names of X.components
-			HashSet<String> classNames = new HashSet<>();
+			Set<String> classNames = new HashSet<>();
 			for (Entry<String, String> e: xdpool.getXComponents().entrySet()) {
 				String s = e.getValue();
 				int ndx = s.indexOf(" ");
@@ -192,7 +194,7 @@ public final class GenXComponent {
 			// which are extensions of an other X-component and then follows
 			// those not extendsd. This ensures that X-components which extends
 			// other X-component are compiled first.
-			ArrayList<Entry<String, String>> xcarray = new ArrayList<>();
+			List<Entry<String, String>> xcarray = new ArrayList<>();
 			for (Entry<String, String> e: xdpool.getXComponents().entrySet()) {
 				int ndx;
 				String s = e.getValue();
@@ -386,7 +388,7 @@ public final class GenXComponent {
 				throw new RuntimeException("Incorrect parameters\b" + info);
 			}
 		}
-		ArrayList<String> sources = new ArrayList<>();
+		List<String> sources = new ArrayList<>();
 		File xcDir = null; // base directory where XComponents will be generated
 		FileOutputStream xpFile = null; // the file where save compiled XDPool
 		String encoding = null;

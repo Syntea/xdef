@@ -23,6 +23,7 @@ import static org.xdef.XDConstants.XDEF_INSTANCE_NS_URI;
 import static org.xdef.XDConstants.XDPROPERTY_DOCTYPE;
 import static org.xdef.XDConstants.XDPROPERTY_LOCATIONDETAILS;
 import static org.xdef.XDConstants.XDPROPERTY_XINCLUDE;
+import org.xdef.XDDocument;
 import org.xdef.XDOutput;
 import org.xdef.impl.code.DefOutStream;
 import org.xdef.impl.xml.DomBaseHandler;
@@ -167,7 +168,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
 		_stackReader = new Stack<>();
 		_sReporter = new SReporter(
 			reporter == null ?  new ArrayReporter() : reporter);
-		_entities = new LinkedHashMap<String, String>();
+		_entities = new LinkedHashMap<>();
 		_entities.put("gt", ">");
 		_entities.put("lt", "<");
 		_entities.put("amp", "&");
@@ -711,25 +712,25 @@ final class ChkParser extends DomBaseHandler implements XParser {
 	/** Parse XML source and process check and processing instructions.
 	 * @param chkDoc The ChkDocument object.
 	 */
-	public final void xparse(final ChkDocument chkDoc) {
+	public final void xparse(final XDDocument chkDoc) {
 		try {
 			_level = -1;
 			_chkElemStack = new ChkElement[NODELIST_ALLOC_UNIT];
 			_chkEl = null;
-			_chkDoc = chkDoc;
+			_chkDoc = (ChkDocument) chkDoc;
 			_chkDoc._node = null;
 			_chkDoc._element = null;
 			XCodeProcessor scp = _chkDoc._scp;
 			Properties props = scp.getProperties();
 			_chkDoc._scp = null;
-			_chkDoc.init(chkDoc._xdef,
+			_chkDoc.init(((ChkDocument)chkDoc)._xdef,
 				(Document) _chkDoc.getDocument().cloneNode(false),
-				chkDoc._reporter,
+				((ChkDocument)chkDoc)._reporter,
 				scp.getProperties(),
-				chkDoc._userObject);
+				((ChkDocument)chkDoc)._userObject);
 			_chkDoc._scp = scp;
 			_doc = _chkDoc._doc = _chkDoc._rootChkDocument._doc = null;
-			XPool xdp = (XPool) chkDoc._xdef.getXDPool();
+			XPool xdp = (XPool) ((ChkDocument)chkDoc)._xdef.getXDPool();
 			setIgnoringComments(true); // ????
 			_illegalDoctype = !getBooleanProperty(xdp.isIllegalDoctype(),
 				XDPROPERTY_DOCTYPE, props);

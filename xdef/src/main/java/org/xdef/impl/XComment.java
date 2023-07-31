@@ -1,7 +1,7 @@
 package org.xdef.impl;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 import org.xdef.XDPool;
 import org.xdef.model.XMNode;
 
@@ -33,7 +33,7 @@ public final class XComment extends XData implements XMNode {
 //
 	@Override
 	public final void writeXNode(final XDWriter xw,
-		final ArrayList<XNode> list) throws IOException {
+		final List<XNode> list) throws IOException {
 		 //TODO!
 		writeXCodeDescriptor(xw);
 	}
@@ -47,5 +47,4 @@ public final class XComment extends XData implements XMNode {
 		x.readXCodeDescriptor(xr);
 		return x;
 	}
-
 }

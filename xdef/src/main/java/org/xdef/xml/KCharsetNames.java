@@ -10,10 +10,8 @@ import java.util.LinkedHashMap;
  */
 public final class KCharsetNames {
 
-	private static final Map<String, String> IANA_TO_JAVA =
-		new LinkedHashMap<String, String>();
-	private static final Map<String, String> JAVA_TO_IANA =
-		new LinkedHashMap<String, String>();
+	private static final Map<String, String> IANA_TO_JAVA=new LinkedHashMap<>();
+	private static final Map<String, String> JAVA_TO_IANA=new LinkedHashMap<>();
 	static {
 		IANA_TO_JAVA.put("IBM852", "IBM-852");
 		IANA_TO_JAVA.put("CSGB2312","GB2312");
@@ -102,5 +100,4 @@ public final class KCharsetNames {
 		String result = IANA_TO_JAVA.get(name.toUpperCase(Locale.ENGLISH));
 		return result!=null ? result : Charset.isSupported(name) ? name : null;
 	}
-
 }

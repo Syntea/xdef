@@ -1531,7 +1531,7 @@ public class SDatetime extends XMLGregorianCalendar
 			}
 		}
 		fpos = 0;
-		Stack<Integer> optionals = new Stack<Integer>();
+		Stack<Integer> optionals = new Stack<>();
 		boolean valid = true;
 		while (fpos < flen) {
 			pat = format.charAt(fpos++);

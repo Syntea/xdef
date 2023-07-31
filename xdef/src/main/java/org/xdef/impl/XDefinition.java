@@ -3,6 +3,7 @@ package org.xdef.impl;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import org.xdef.XDConstants;
@@ -20,7 +21,7 @@ import org.xdef.sys.SRuntimeException;
  */
 public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 	/** table of xElements. */
-	private final ArrayList<XElement> _xElements;
+	private final List<XElement> _xElements;
 	/** Implementation properties. */
 	public final Properties _properties;
 	/** root namespaces. */
@@ -215,7 +216,7 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 	@Override
 	/** Write X-definition to XDWriter. */
 	public final void writeXNode(final XDWriter xw,
-		final ArrayList<XNode> list) throws IOException {
+		final List<XNode> list) throws IOException {
 		xw.writeSPosition(_sourcePosition);
 		writeXCodeDescriptor(xw);
 		xw.writeByte(_xdVersion);
@@ -307,7 +308,7 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 	/** Read XDefinition from XDReader. */
 	final static XDefinition readXDefinition(final XDReader xr,
 		final XPool xp,
-		final ArrayList<XNode> list) throws IOException {
+		final List<XNode> list) throws IOException {
 		SPosition sourcePos = xr.readSPosition();
 		if (xr.readShort() != XNode.XMDEFINITION) {//must be X-definition
 			//SObject reader: incorrect format of data&{0}{: }

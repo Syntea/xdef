@@ -15,7 +15,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
@@ -46,7 +45,7 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 	private int _level; // nesting level of a node
 	private static final SAXParserFactory SPF = SAXParserFactory.newInstance();
 	private ReportWriter _reporter;
-	private final Stack<HandlerInfo> _stackReader = new Stack<HandlerInfo>();
+	private final Stack<HandlerInfo> _stackReader = new Stack<>();
 	private Map<String, String> _entities;
 	private SBuffer _text;
 	public final StringBuilder _sb = new StringBuilder();
@@ -133,7 +132,7 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 			h.setSysId(mr.getSysId());
 
 			h._isDTD = false;
-			h._entities = new LinkedHashMap<String, String>(_entities);
+			h._entities = new LinkedHashMap<>(_entities);
 		}
 
 		private void resetHandler(XmlDefReader h) {
@@ -160,7 +159,7 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 		super();
 		_reporter = reporter;
 		prepareEnities();
-		_entities = new LinkedHashMap<String, String>();
+		_entities = new LinkedHashMap<>();
 		XMLReader xr;
 		try {
 			SAXParser sp = SPF.newSAXParser();
@@ -178,7 +177,7 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 
 	/** Prepare entities with predefined items. */
 	private void prepareEnities() {
-		_entities = new LinkedHashMap<String, String>();
+		_entities = new LinkedHashMap<>();
 		// Set predefined entities
 		_entities.put("gt", ">");
 		_entities.put("lt", "<");
@@ -364,8 +363,7 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 							return null;
 						}
 						String encoding;
-						Map<String, String> atrs =
-							new HashMap<String, String>();
+						Map<String, String> atrs = new LinkedHashMap<>();
 						for (int i = 1; i < list.size(); i++) {
 							Object[] x = list.get(i);
 							atrs.put((String) x[0], (String) x[2]);

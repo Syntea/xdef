@@ -1,7 +1,7 @@
 package org.xdef.impl;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 import org.xdef.model.XMDefinition;
 import static org.xdef.model.XMNode.XMCHOICE;
 import static org.xdef.model.XMNode.XMMIXED;
@@ -254,7 +254,7 @@ public class XSelector extends XNode implements XMSelector {
 	public final int getEndIndex() {return _endIndex;}
 	@Override
 	public final void writeXNode(final XDWriter xw,
-		final ArrayList<XNode> list) throws IOException {
+		final List<XNode> list) throws IOException {
 		xw.writeShort(getKind());
 		xw.writeInt(minOccurs());
 		xw.writeInt(maxOccurs());

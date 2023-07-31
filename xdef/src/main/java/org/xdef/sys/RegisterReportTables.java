@@ -13,6 +13,7 @@ import java.io.StringWriter;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.Set;
@@ -405,7 +406,7 @@ public class RegisterReportTables {
 			if (text == null || (pos = text.indexOf("&{")) < 0) {
 				return new String[0]; //no params
 			}
-			Set<String> hs = new TreeSet<String>();
+			Set<String> hs = new TreeSet<>();
 			while (pos >= 0) {
 				int pos1;
 				if ((pos1 = text.indexOf('}',(pos +=2))) <= 0) {
@@ -553,7 +554,7 @@ public class RegisterReportTables {
 		String LN = crlf ? "\r\n" : "\n";
 		String prefix = table.getPrefix();
 		int prefixLen = prefix.length();
-		ArrayList<String> ar = new ArrayList<String>();
+		List<String> ar = new ArrayList<>();
 		for (Object o: table._msgs.keySet()) {
 			String key = (String) o;
 			if (!"_prefix".equals(key) && !"_language".equals(key)
@@ -810,8 +811,8 @@ public class RegisterReportTables {
 						ReportTable t = tables[k];
 						if (table.getPrefix().equals(t.getPrefix())) {
 							String[] languages = table.getLanguages();
-							for (int m = 0; m < languages.length; m++) {
-								t.addLanguage(languages[m]);
+							for (String language : languages) {
+								t.addLanguage(language);
 							}
 						}
 					}
@@ -826,8 +827,7 @@ public class RegisterReportTables {
 			}
 			ReportTableImpl table1 = null;
 			//find default table
-			for (int k = 0; k < tables.length; k++) {
-				ReportTableImpl t = tables[k];
+			for (ReportTableImpl t : tables) {
 				if (table.getPrefix().equals(t.getPrefix())
 					&& table.getDefaultLanguage().equals(t.getLanguage())) {
 					table1 = t;
@@ -858,8 +858,8 @@ public class RegisterReportTables {
 	public final static ReportTable[] readReporTables(final String[] files,
 		ReportWriter reporter) {
 		ReportTableImpl[] msgTables = null;
-		for (int i = 0; i < files.length; i++) {
-			String s = files[i].replace('\\', '/');
+		for (String file : files) {
+			String s = file.replace('\\', '/');
 			try {
 				ReportTableImpl x = (ReportTableImpl) readReporTable(s);
 				if (msgTables == null) {
@@ -1038,13 +1038,13 @@ public class RegisterReportTables {
 							crlf = true;
 							continue;
 						case 'i':
-							ArrayList<String> ar = new ArrayList<String>();
+							List<String> ar = new ArrayList<>();
 							while (i + 1 <= len && !args[i+1].startsWith("-")) {
 								File[] ff = getFileGroup(args[++i], false);
 								if (ff.length == 1
 									&& ff[0].exists() && ff[0].isDirectory()) {
 									ff = ff[0].listFiles();
-									ArrayList<File> af = new ArrayList<File>();
+									List<File> af = new ArrayList<>();
 									for (File fi: ff){
 										if (fi.exists() && fi.isFile()
 											&& fi.getName().endsWith(

@@ -278,7 +278,7 @@ public class FUtils {
 	 */
 	public static final List<Object> dirsEqual(boolean deep,
 		final File f1, final File f2) {
-		List<Object> result = new ArrayList<Object>();
+		List<Object> result = new ArrayList<>();
 		if (f1.exists() && f2.exists() && f1.isDirectory() && f2.isDirectory()){
 			File[] files1 = f1.listFiles();
 			for (File f: files1) {
@@ -289,7 +289,7 @@ public class FUtils {
 						result.add(g);
 					} else {
 						if (!filesEqual(f, g)) {
-							List<File> dif = new ArrayList<File>();
+							List<File> dif = new ArrayList<>();
 							dif.add(f);
 							dif.add(g);
 							result.add(dif);
@@ -321,7 +321,7 @@ public class FUtils {
 				}
 			}
 		} else {
-			List<File> dif = new ArrayList<File>();
+			List<File> dif = new ArrayList<>();
 			dif.add(f1);
 			dif.add(f2);
 			result.add(dif);
@@ -1685,7 +1685,7 @@ public class FUtils {
 	 */
 	public static final File[] getFileGroup(final String[] wildNames,
 		final boolean caseInsensitive) {
-		ArrayList<File> arr = new ArrayList<File>();
+		List<File> arr = new ArrayList<>();
 		for (String x: wildNames) {
 			File[] files = getFileGroup(x, caseInsensitive);
 			for (int j = 0; j < files.length; j++) {
@@ -1730,7 +1730,7 @@ public class FUtils {
 	 */
 	public static final String[] getSourceGroup(final String src)
 		throws Exception {
-		List<String> urls = new ArrayList<String>();
+		List<String> urls = new ArrayList<>();
 		if (src.startsWith("classpath://")) {
 			String t = src.substring(12);
 			int ndx = t.lastIndexOf('.');
@@ -1738,7 +1738,6 @@ public class FUtils {
 			ndx = t.lastIndexOf('/');
 			String wc = t.substring(ndx+1); // wildcard of file name
 			String dir = t.substring(0,ndx).replace('.', '/');
-			ndx = dir.lastIndexOf('.');
 			Enumeration<URL> eu = ClassLoader.getSystemResources(dir);
 			while (eu.hasMoreElements()) {
 				URL u = eu.nextElement();
@@ -2039,7 +2038,7 @@ public class FUtils {
 				fnames[i++] = st.nextToken();
 			}
 		}
-		ArrayList<String> skipExtensions = new ArrayList<String>();
+		List<String> skipExtensions = new ArrayList<>();
 		if (ignoreList != null) {
 			StringTokenizer st = new StringTokenizer(ignoreList,";");
 			while (st.hasMoreTokens()) {
@@ -2054,7 +2053,7 @@ public class FUtils {
 				}
 			}
 		}
-		ArrayList<File> ar = new ArrayList<File>();
+		List<File> ar = new ArrayList<>();
 		for (String s: fnames) {
 			File[] list = getFileGroup(s);
 			for (File x: list) {
@@ -2201,8 +2200,8 @@ public class FUtils {
 				if (skipExtensions != null) {
 					int k = fname.lastIndexOf('.');
 					if (k > 0) {
-						for (int x = 0; x < skipExtensions.length; x++) {
-							if (fname.substring(k).equals(skipExtensions[x])) {
+						for (String skipExtension : skipExtensions) {
+							if (fname.substring(k).equals(skipExtension)) {
 								return 0L;
 							}
 						}

@@ -2,6 +2,7 @@ package org.xdef.sys;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 /** Source position.
  * @author  Vaclav Trojan
@@ -19,7 +20,7 @@ public class SPosition {
 	 appended to sysId as "$pubid[" ... "]".*/
 	private String _sysId;
 	/** list of replacements in the source buffer. */
-	private ArrayList<Replacement> _modificationInfo;
+	private List<Replacement> _modificationInfo;
 
 	/** Creates a new empty instance of SPosition. */
 	public SPosition() {}
@@ -116,13 +117,13 @@ public class SPosition {
 	/** Clone ModificationInfo.
 	 * @return a clone of ModificationInfo.
 	 */
-	private ArrayList<Replacement> cloneModificationInfo() {
+	private List<Replacement> cloneModificationInfo() {
 		int n;
 		if (_modificationInfo == null || (n = _modificationInfo.size()) == 0) {
 			return null;
 		}
 		// Note can't just copy!
-		ArrayList<Replacement> result = new ArrayList<Replacement>(n);
+		List<Replacement> result = new ArrayList<>(n);
 		for (int i = 0; i < n; i++) {
 			result.add(new Replacement(_modificationInfo.get(i)));
 		}
@@ -502,7 +503,7 @@ public class SPosition {
 		final boolean fixed) {
 		if (_modificationInfo == null) {
 			//first replacement
-			_modificationInfo = new ArrayList<Replacement>();
+			_modificationInfo = new ArrayList<>();
 		}
 		_modificationInfo.add(
 			new Replacement(pos, diff, line, startLine, fixed, _sysId));
@@ -519,7 +520,7 @@ public class SPosition {
 	final long startLine) {
 		if (_modificationInfo == null) {
 			//first replacement
-			_modificationInfo = new ArrayList<Replacement>();
+			_modificationInfo = new ArrayList<>();
 		}
 		_modificationInfo.add(
 			new Replacement(pos, 0, line, startLine, false, _sysId));
@@ -537,7 +538,7 @@ public class SPosition {
 		final int len,
 		final boolean fixed) {
 		if (_modificationInfo == null) {
-			_modificationInfo = new ArrayList<Replacement>();
+			_modificationInfo = new ArrayList<>();
 		}
 		int diff = (int) (spos._startLine + spos._bufIndex - spos._filePos);
 		_modificationInfo.add(new Replacement(pos,
@@ -592,7 +593,7 @@ public class SPosition {
 		int n; //number of items in replacements
 		if (_modificationInfo == null) {
 			//first replacement
-			_modificationInfo = new ArrayList<Replacement>();
+			_modificationInfo = new ArrayList<>();
 			n = 0; // empty list
 		} else {
 			n = _modificationInfo.size(); // number of items in the list
@@ -754,7 +755,7 @@ public class SPosition {
 		x._sysId = r.readString();
 		int len = r.readLength();
 		if (len > 0) {
-			x._modificationInfo = new ArrayList<Replacement>(len);
+			x._modificationInfo = new ArrayList<>(len);
 			for (int i = 0; i < len; i++) {
 				int pos = r.readInt();
 				int diff = r.readInt();

@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Properties;
 import java.util.LinkedHashMap;
+import java.util.List;
 import org.w3c.dom.Attr;
 import org.w3c.dom.CharacterData;
 import org.w3c.dom.Document;
@@ -402,7 +403,7 @@ public final class DefContainer extends XDValueAbstract
 	}
 
 	private void setNodeListValue(final NodeList nodeList) {
-		ArrayList<XDValue> ar = new ArrayList<XDValue>();
+		List<XDValue> ar = new ArrayList<>();
 		for (int i = 0; i < nodeList.getLength(); i++) {
 			Node node = nodeList.item(i);
 			switch (node.getNodeType()) {
@@ -419,9 +420,9 @@ public final class DefContainer extends XDValueAbstract
 	}
 
 	private void setArrayListValue(final Object obj) {
-		ArrayList<XDValue> ar = new ArrayList<XDValue>();
-		for (int i = 0, size = ((ArrayList)obj).size(); i < size; i++) {
-			Object item = ((ArrayList)obj).get(i);
+		List<XDValue> ar = new ArrayList<>();
+		for (int i = 0, size = ((List) obj).size(); i < size; i++) {
+			Object item = ((List) obj).get(i);
 			if (item instanceof Node) {
 				Node n = (Node) item;
 				if (n.getNodeType() == Node.ELEMENT_NODE) {
@@ -489,7 +490,7 @@ public final class DefContainer extends XDValueAbstract
 			}
 		}
 		Element el = KXmlUtils.newDocument(uri,name,null).getDocumentElement();
-		nsMap = new LinkedHashMap<String, String>(nsMap);
+		nsMap = new LinkedHashMap<>(nsMap);
 		c.setAttrs(nsMap, el);
 		c.setChildNodes(nsMap, el);
 		return el;
@@ -535,26 +536,33 @@ public final class DefContainer extends XDValueAbstract
 	private void setChildNodes(final Map<String,String> ns, final Element e) {
 		if (_array != null && _array.length > 0) {
 			Document doc = e.getOwnerDocument();
-			for (int i = 0; i < _array.length; i++) {
-				XDValue item = _array[i];
+			for (XDValue item: _array) {
 				if (item != null) {
-					if (item.getItemId() == XD_ELEMENT) {
-						Element ee = item.getElement();
-						if (ee != null) {
-							e.appendChild(doc.importNode(ee, true));
-						}
-					} else if (item.getItemId() == XD_CONTAINER) {
-						DefContainer x = ((DefContainer) item);
-						e.appendChild(
-							doc.importNode(x.toElement(ns, null, null), true));
-					} else if (item.getItemId() == XD_NAMEDVALUE) {
-						DefNamedValue x = (DefNamedValue) item;
-						e.setAttribute(x.getName(), x.getValue().toString());
-					} else {
-						String s = item.stringValue();
-						if (s != null && s.length() > 0) {
-							e.appendChild(doc.createTextNode(s));
-						}
+					switch (item.getItemId()) {
+						case XD_ELEMENT:
+							Element ee = item.getElement();
+							if (ee != null) {
+								e.appendChild(doc.importNode(ee, true));
+							}
+							break;
+						case XD_CONTAINER:
+							{
+								DefContainer x = ((DefContainer) item);
+								e.appendChild(doc.importNode(
+									x.toElement(ns, null, null), true));
+							}
+							break;
+						case XD_NAMEDVALUE:
+							{
+								DefNamedValue x = (DefNamedValue) item;
+								e.setAttribute(x.getName(), x.getValue().toString());
+							}
+							break;
+						default:
+							String s = item.stringValue();
+							if (s != null && s.length() > 0) {
+								e.appendChild(doc.createTextNode(s));
+							}
 					}
 				}
 			}
@@ -924,13 +932,13 @@ public final class DefContainer extends XDValueAbstract
 		if (_array == null) {
 			return new DefContainer();
 		}
-		ArrayList<XDValue> ar = new ArrayList<XDValue>();
-		for (int i = 0; i < _array.length; i++) {
-			if (_array[i].getItemId() == XD_ELEMENT) {
-				ar.add(_array[i]);
-			} else if (_array[i].getItemId() == XD_CONTAINER) {
+		List<XDValue> ar = new ArrayList<>();
+		for (XDValue x: _array) {
+			if (x.getItemId() == XD_ELEMENT) {
+				ar.add(x);
+			} else if (x.getItemId() == XD_CONTAINER) {
 				ar.add(new DefElement(
-					((XDContainer)_array[i]).toElement(null, "")));
+					((XDContainer) x).toElement(null, "")));
 			}
 		}
 		DefContainer result = new DefContainer();
@@ -957,7 +965,7 @@ public final class DefContainer extends XDValueAbstract
 			}
 			Document doc = KXmlUtils.newDocument(null, "_", null);
 			Element el = doc.getDocumentElement();
-			setAttrs(new LinkedHashMap<String, String>(), el);
+			setAttrs(new LinkedHashMap<>(), el);
 			XDValue val = _array[n];
 			String s = val == null || val.isNull() ? null :
 				val.getItemId() == XD_STRING ?
@@ -990,7 +998,7 @@ public final class DefContainer extends XDValueAbstract
 		if (_array == null) {
 			return new DefContainer();
 		}
-		ArrayList<XDValue> ar = new ArrayList<XDValue>();
+		List<XDValue> ar = new ArrayList<>();
 		for (int i = 0; i < _array.length; i++) {
 			if (_array[i].getItemId() == XD_ELEMENT) {
 				Element el = _array[i].getElement();
@@ -1027,20 +1035,18 @@ public final class DefContainer extends XDValueAbstract
 			return null;
 		}
 		boolean wasItem = false;
-		for (int i = 0; i < _array.length; i++) {
-			if (_array[i].getItemId() == XD_STRING ||
-				_array[i].getItemId() == XD_ATTR ||
-//				_value[i].getItemId() == XD_BOOLEAN ||
-//				_value[i].getItemId() == XD_LONG ||
-//				_value[i].getItemId() == XD_DOUBLE ||
-//				_value[i].getItemId() == XD_DATETIME ||
-				_array[i].getItemId() == XD_TEXT) {
-				String s = (_array[i]).stringValue();
+		for (XDValue x: _array) {
+			if (x.getItemId() == XD_STRING || x.getItemId() == XD_ATTR
+//				|| x.getItemId() == XD_BOOLEAN || x.getItemId() == XD_LONG ||
+//				|| x.getItemId() == XD_DOUBLE || x.getItemId() == XD_DATETIME ||
+				|| x.getItemId() == XD_TEXT) {
+				String s = x.stringValue();
 				wasItem = true;
 				if (s != null && s.length() > 0) {
 					sb.append(s);
 				}
 			}
+
 		}
 		return wasItem ? sb.toString() : null;
 	}
@@ -1105,11 +1111,11 @@ public final class DefContainer extends XDValueAbstract
 			}
 		}
 		if (_array != null) {
-			for (int i = 0; i < _array.length; i++) {
+			for (XDValue _array1 : _array) {
 				if (sb.length() > 0) {
 					sb.append('\n');
 				}
-				sb.append(_array[i].toString());
+				sb.append(_array1.toString());
 			}
 		}
 		return sb.toString();
@@ -1189,7 +1195,7 @@ public final class DefContainer extends XDValueAbstract
 	 * @return element created from this Container.
 	 */
 	public final Element toElement(final String nsUri, final String xmlName) {
-		return toElement(new LinkedHashMap<String, String>(), nsUri, xmlName);
+		return toElement(new LinkedHashMap<>(), nsUri, xmlName);
 	}
 
 	@Override

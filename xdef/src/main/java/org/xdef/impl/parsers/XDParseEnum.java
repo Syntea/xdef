@@ -11,6 +11,7 @@ import org.xdef.impl.code.DefContainer;
 import org.xdef.impl.code.DefString;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import org.xdef.XDContainer;
 import static org.xdef.XDValueID.XD_CONTAINER;
 import static org.xdef.XDValueID.XD_STRING;
@@ -96,7 +97,7 @@ public class XDParseEnum extends XDParserAbstract {
 			throw new SException(XDEF.XDEF809, parserName() + " (argument)",
 				container);
 		}
-		ArrayList<String> list = new ArrayList<String>();
+		List<String> list = new ArrayList<>();
 		for(int j = num-1; j >= 0; j--) {
 			String s = container.getXDItem(j).toString();
 			for (int k=0; k < list.size(); k++) {
@@ -148,8 +149,8 @@ public class XDParseEnum extends XDParserAbstract {
 		XDContainer map = new DefContainer();
 		if (_list != null) {
 			DefContainer c = new DefContainer();
-			for (int i = 0; i < _list.length; i++) {
-				c.addXDItem(new DefString(_list[i]));
+			for (String list1 : _list) {
+				c.addXDItem(new DefString(list1));
 			}
 			map.setXDNamedItem("argument", c);
 		}

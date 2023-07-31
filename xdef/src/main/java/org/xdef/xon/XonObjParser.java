@@ -35,13 +35,16 @@ public class XonObjParser implements XonParser {
 	 * @param value X_Value to be added to result object.
 	 */
 	public void putValue(XonTools.JValue value) {
-		if (_kind == 1) {
-			_arrays.peek().add(value.getValue());
-		} else if (_kind == 2) {
-			String name = _names.pop();
-			_maps.peek().put(name, value.getValue());
-		} else {
-			_value = value.getValue();
+		switch (_kind) {
+			case 1:
+				_arrays.peek().add(value.getValue());
+				break;
+			case 2:
+				String name = _names.pop();
+				_maps.peek().put(name, value.getValue());
+				break;
+			default:
+				_value = value.getValue();
 		}
 	}
 	@Override
@@ -59,7 +62,7 @@ public class XonObjParser implements XonParser {
 	 */
 	public void arrayStart(SPosition pos) {
 		_kinds.push(_kind = 1);
-		_arrays.push(new ArrayList<Object>());
+		_arrays.push(new ArrayList<>());
 	}
 	@Override
 	/** Array ended.
@@ -82,7 +85,7 @@ public class XonObjParser implements XonParser {
 	 */
 	public void mapStart(SPosition pos) {
 		_kinds.push(_kind = 2);
-		_maps.push(new LinkedHashMap<String, Object>());
+		_maps.push(new LinkedHashMap<>());
 	}
 	@Override
 	/** Map ended.

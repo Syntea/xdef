@@ -14,6 +14,7 @@ import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xdef.XDConstants;
+import org.xdef.XDDocument;
 import org.xdef.impl.xml.KParsedAttr;
 import org.xdef.impl.xml.KParsedElement;
 import org.xdef.model.XMData;
@@ -134,7 +135,8 @@ final class ChkXONParser implements XParser, XonParser {
 			_sysId = sourceName == null ? "INPUTSTREAM" : sourceName;
 		} else {
 			//Unsupported type of argument &{0}: &{1}
-			throw new SRuntimeException(SYS.SYS037,"source",source.getClass());
+			throw new SRuntimeException(SYS.SYS037,"source",
+				source != null ? source.getClass() : null);
 		}
 	}
 
@@ -260,25 +262,25 @@ final class ChkXONParser implements XParser, XonParser {
 	/** Parse XML generated from XON source.
 	 * @param chkDoc The ChkDocument object.
 	 */
-	public final void xparse(final ChkDocument chkDoc) {
+	public final void xparse(final XDDocument chkDoc) {
 		try {
 			_level = -1;
 			_chkElemStack = new ChkElement[NODELIST_ALLOC_UNIT];
 			_chkEl = null;
-			_chkDoc = chkDoc;
+			_chkDoc = (ChkDocument) chkDoc;
 			_chkDoc._node = null;
 			_chkDoc._element = null;
 			XCodeProcessor scp = _chkDoc._scp;
 			Properties props = scp.getProperties();
 			_chkDoc._scp = null;
-			_chkDoc.init(chkDoc._xdef,
+			_chkDoc.init(((ChkDocument)chkDoc)._xdef,
 				(Document) _chkDoc.getDocument().cloneNode(false),
-				chkDoc._reporter,
+				((ChkDocument)chkDoc)._reporter,
 				scp.getProperties(),
-				chkDoc._userObject);
+				((ChkDocument)chkDoc)._userObject);
 			_chkDoc._scp = scp;
 			_chkDoc._doc = _chkDoc._rootChkDocument._doc = null;
-			XPool xdp = (XPool) chkDoc._xdef.getXDPool();
+			XPool xdp = (XPool) ((ChkDocument)chkDoc)._xdef.getXDPool();
 			if (_chkDoc.isDebug() && _chkDoc.getDebugger() != null) {
 				 // open debugger
 				_chkDoc.getDebugger().openDebugger(props, xdp);
@@ -392,7 +394,7 @@ final class ChkXONParser implements XParser, XonParser {
 				XonTools.toXmlName(name.getString()), name));
 		}
 		elementStart(kelem);
-		_mapNames.push(_names = new Stack<SBuffer>());
+		_mapNames.push(_names = new Stack<>());
 		_kinds.push(_kind = 2);
 	}
 	@Override

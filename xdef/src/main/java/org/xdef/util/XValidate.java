@@ -15,6 +15,7 @@ import org.xdef.impl.code.DefOutStream;
 import java.io.File;
 import java.util.HashSet;
 import java.util.Properties;
+import java.util.Set;
 import java.util.StringTokenizer;
 import org.xdef.sys.STester;
 
@@ -298,7 +299,7 @@ public class XValidate {
 				}
 				case 'd':
 					if (xdefFiles == null) {
-						HashSet<File> fileTab = new HashSet<File>();
+						Set<File> fileTab = new HashSet<>();
 						StringTokenizer st = new StringTokenizer(s, ";");
 						while (st.hasMoreTokens()) {
 							try {

@@ -9,6 +9,7 @@ import java.lang.reflect.Field;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.TreeSet;
 import java.util.Properties;
 import java.util.Set;
@@ -121,9 +122,7 @@ public final class SManager implements XDConstants {
 			sm._properties = (Properties) properties.clone();
 			String s = getProperty(sm._properties,XDPROPERTY_MSGLANGUAGE);
 			if (s != null) {
-				s = (s == null)
-					? sm._language.getLanguage() : SUtils.getISO3Language(s);
-				sm._language = new SLanguage(s, "eng");
+				sm._language = new SLanguage(SUtils.getISO3Language(s), "eng");
 			}
 		}
 	}
@@ -318,7 +317,7 @@ public final class SManager implements XDConstants {
 	 * @return array of langue identifiers of available languages.
 	 */
 	public static final String[] getAvailableLanguages(final String reportID) {
-		Set<String> x = new TreeSet<String>();
+		Set<String> x = new TreeSet<>();
 		String prefix = ReportTable.getPrefixFromID(reportID) + '_';
 		SManager sm = getInstance();
 		synchronized (sm) {
@@ -859,9 +858,9 @@ public final class SManager implements XDConstants {
 				Class<?> c = Class.forName(packageName + '.' + prefix);
 				// get fields of this class.
 				Field[] fields = c.getDeclaredFields();
-				ArrayList<String> ar = new ArrayList<String>(fields.length-1);
-				for (int i = 0; i < fields.length; i++) {
-					String name = fields[i].getName();
+				List<String> ar = new ArrayList<>(fields.length-1);
+				for (Field field : fields) {
+					String name = field.getName();
 					if (name.startsWith(prefix) && !prefix.equals(name)) {
 						// only fields of message identifiers
 						ar.add(name.substring(prefix.length()));

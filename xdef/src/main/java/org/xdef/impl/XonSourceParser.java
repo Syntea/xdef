@@ -13,6 +13,7 @@ import javax.xml.namespace.QName;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xdef.XDConstants;
+import org.xdef.XDDocument;
 import org.xdef.msg.SYS;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.ReportWriter;
@@ -55,7 +56,7 @@ public final class XonSourceParser implements XonParser, XParser {
 	/** simpleValue of item. */
 	private XonTools.JValue _value;
 	private Stack<SBuffer> _names;
-	private final Stack<Stack<SBuffer>> _mapNames = new Stack<Stack<SBuffer>>();
+	private final Stack<Stack<SBuffer>> _mapNames = new Stack<>();
 
 	XonSourceParser(final File f) {
 		try {
@@ -232,7 +233,7 @@ public final class XonSourceParser implements XonParser, XParser {
 	 */
 	public void mapStart(final SPosition pos) {
 		elementStart(new SBuffer(X_MAP, pos));
-		_mapNames.push(_names = new Stack<SBuffer>());
+		_mapNames.push(_names = new Stack<>());
 	}
 	@Override
 	/** Map ended.
@@ -266,8 +267,8 @@ public final class XonSourceParser implements XonParser, XParser {
 	/** Parse source.
 	 * @param chkDoc The ChkDocument object.
 	 */
-	public void xparse(final ChkDocument chkDoc) {
-		_chkDoc = chkDoc;
+	public void xparse(final XDDocument chkDoc) {
+		_chkDoc = (ChkDocument) chkDoc;
 		_doc = _chkDoc._doc;
 		chkDoc.getReporter();
 		_p.parse();

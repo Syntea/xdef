@@ -117,7 +117,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	/** Result of type parser. */
 	XDParseResult _parseResult;
 	/** List of objects to be managed before dispose. */
-	private ArrayList<XDValue> _finalList;
+	private List<XDValue> _finalList;
 	/** Actual number of errors.*/
 	int _errCount;
 
@@ -147,13 +147,13 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	 */
 	final void addToFinalList(final XDValue x) {
 		if (_finalList == null) {
-			_finalList = new ArrayList<XDValue>();
+			_finalList = new ArrayList<>();
 		}
 		_finalList.add(x);
 	}
 
 	/** Get list of object to be managed before dispose.*/
-	final ArrayList<XDValue> getFinalList() {return _finalList;}
+	final List<XDValue> getFinalList() {return _finalList;}
 
 	@Override
 	/** Get name of the X-model.
@@ -1031,7 +1031,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	abstract public XXNode[] getChildXXNodes();
 
 	// can't be final this method is overriden!
-	abstract ArrayList<ChkElement> getChkChildNodes();
+	abstract List<ChkElement> getChkChildNodes();
 
 	@Override
 	/** Get parsed result of an attribute or text node.

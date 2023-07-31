@@ -403,7 +403,7 @@ public class XScriptParser extends StringParser
 
 	/** Table to convert base symbols to the source form. */
 	private static final Map<Character, String> BASESYMBOLTABLE =
-		new LinkedHashMap<Character, String>();
+		new LinkedHashMap<>();
 
 	static {
 		BASESYMBOLTABLE.put(CONSTANT_SYM, "constant");
@@ -917,7 +917,7 @@ public class XScriptParser extends StringParser
 				return;
 			} else if (c == 'i' || c == 'I') { // big integer
 				if ((c = getCurrentChar()) >= '0' && c <= '9') {
-					while ((DEC_DIGITS.indexOf(c = getCurrentChar())) >= 0) {
+					while ((DEC_DIGITS.indexOf(getCurrentChar())) >= 0) {
 						incBufIndex();
 					}
 					String s =  getParsedBufferPartFrom(startNumber + 1);

@@ -9,6 +9,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -664,7 +665,7 @@ public final class XPool implements XDPool, Serializable {
 	 * @param xdVersion version ID of X-definition.
 	 * @param lexicon XDLexicon or null.
 	 */
-	public final void setCode(final ArrayList<XDValue> code,
+	public final void setCode(final List<XDValue> code,
 		final int globalVariablesSize,
 		final int localVariablesMaxSize,
 		final int stackMaxSize,
@@ -694,7 +695,7 @@ public final class XPool implements XDPool, Serializable {
 		return _variables!=null ? (XVariable) _variables.getVariable(name):null;
 	}
 
-	private static void checkModel(ArrayList<XElement> reflist,
+	private static void checkModel(List<XElement> reflist,
 		Set<XElement> refset,
 		XElement xe) {
 		if (refset.add(xe)) {
@@ -1236,7 +1237,7 @@ public final class XPool implements XDPool, Serializable {
 		xw.writeString(null);
 		len = _xdefs.size();
 		xw.writeLength(len);
-		ArrayList<XNode> list = new ArrayList<>();
+		List<XNode> list = new ArrayList<>();
 		for(String name: _xdefs.keySet()) {
 			xw.writeString(name);
 			((XDefinition) getXMDefinition(name)).writeXNode(xw, list);
@@ -1339,18 +1340,18 @@ public final class XPool implements XDPool, Serializable {
 			_components.put(s, xr.readString());
 		}
 		len = xr.readLength();
-		_binds = new LinkedHashMap<String, String>();
+		_binds = new LinkedHashMap<>();
 		for (int i = 0; i < len; i++) {
 			String s = xr.readString();
 			_binds.put(s, xr.readString());
 		}
 		len = xr.readLength();
-		_enums = new LinkedHashMap<String, String>();
+		_enums = new LinkedHashMap<>();
 		for (int i = 0; i < len; i++) {
 			String s = xr.readString();
 			_enums.put(s, xr.readString());
 		}
-		ArrayList<XNode> list = new ArrayList<XNode>();
+		List<XNode> list = new ArrayList<>();
 		len = xr.readLength();
 		_code = new XDValue[len];
 		for (int i = 0; i < len; i++) {
@@ -1419,7 +1420,7 @@ public final class XPool implements XDPool, Serializable {
 		if ("DebugInfo".equals(xr.readString())) {
 			_debugInfo = XDebugInfo.readXDebugInfo(xr);
 		}
-		ArrayList<XElement> reflist = new ArrayList<>();
+		List<XElement> reflist = new ArrayList<>();
 		Set<XElement> refset = new HashSet<>();
 		for(XDefinition xd: _xdefs.values()) {
 			for (XMElement xe: xd.getModels()) {

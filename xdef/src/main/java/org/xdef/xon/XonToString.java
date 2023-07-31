@@ -145,7 +145,7 @@ class XonToString extends XonTools {
 		int pos = sb.length();
 		String ind = (indent != null) ? indent + "  " : null;
 		int lineLen = sb.length() - sb.lastIndexOf("\n"), itemsLen = 0;
-		List<StringBuilder> items = new ArrayList<StringBuilder>();
+		List<StringBuilder> items = new ArrayList<>();
 		boolean notFirst = false;
 		for (Object o: array) {
 			StringBuilder sb1 = new StringBuilder();
@@ -248,7 +248,7 @@ class XonToString extends XonTools {
 		String ind = (indent != null) ? indent + "  " : null;
 		boolean notFirst = false;
 		int lineLen = sb.length() - sb.lastIndexOf("\n"), itemsLen = 0;
-		List<StringBuilder> items = new ArrayList<StringBuilder>();
+		List<StringBuilder> items = new ArrayList<>();
 		for (Object o: map.entrySet()) {
 			StringBuilder sb1 = createNamedItem((Map.Entry) o, ind, xon);
 			if (items != null && ind != null &&
@@ -291,7 +291,7 @@ class XonToString extends XonTools {
 	 * @return XON array converted to JSON.
 	 */
 	private static List xonArrayToJson(final List xlist) {
-		List<Object> result = new ArrayList<Object>();
+		List<Object> result = new ArrayList<>();
 		for (Object x: xlist) {
 			result.add(xonToJson(x));
 		}
@@ -304,7 +304,7 @@ class XonToString extends XonTools {
 	 * @return XON map converted to JSON.
 	 */
 	private static Map xonMapToJson(final Map xmap) {
-		Map<String, Object> result = new LinkedHashMap<String, Object>();
+		Map<String, Object> result = new LinkedHashMap<>();
 		for (Object x: xmap.entrySet()) {
 			Map.Entry en = (Map.Entry) x;
 			Object o = en.getKey();

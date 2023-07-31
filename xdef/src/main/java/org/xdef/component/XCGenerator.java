@@ -3,6 +3,7 @@ package org.xdef.component;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -199,7 +200,7 @@ final class XCGenerator extends XCGeneratorXON {
 								break; // index == first, finish;
 							}
 						}
-						ArrayList<String> keys = new ArrayList<>();
+						List<String> keys = new ArrayList<>();
 						for (;choiceStack.size() >= 5;) {
 							int max = (Integer) choiceStack.pop();
 							String iname = (String) choiceStack.pop();
@@ -237,8 +238,7 @@ final class XCGenerator extends XCGeneratorXON {
 				}
 				case XMNode.XMTEXT: {
 					final XData xdata = (XData) node;
-					String name, newClassName;
-					newClassName = name = checkBind(xe, xdata);
+					String name = checkBind(xe, xdata);
 					boolean ext = false;
 					if (name != null) {
 						if ((ndx = name.indexOf(" %with ")) > 0) {
@@ -267,7 +267,6 @@ final class XCGenerator extends XCGeneratorXON {
 										name.substring(0, ndx));
 								}
 							}
-							newClassName = name;
 						}
 					} else {
 						final boolean xunique = checkUnique(nodes, i);
@@ -278,10 +277,8 @@ final class XCGenerator extends XCGeneratorXON {
 							}
 							txtcount++;
 						}
-						newClassName = name;
 					}
-					name = addVarName(varNames, name, xdata.getXDPosition(), ext);
-					classNames.add(newClassName);
+					name = addVarName(varNames, name,xdata.getXDPosition(),ext);
 					if (!ext) {
 						genBaseVarsGettersSetters(xdata, name, groupMax,
 							"text node", vars, getters, setters, xpathes, sbi);

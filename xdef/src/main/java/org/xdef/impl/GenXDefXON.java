@@ -4,7 +4,7 @@ import java.net.InetAddress;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Currency;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import org.w3c.dom.Document;
@@ -222,7 +222,7 @@ public final class GenXDefXON {
 	 */
 	@SuppressWarnings("unchecked")
 	private static XItem genMap(final Map map) {
-		Map<String, Object> m = new HashMap();
+		Map<String, Object> m = new LinkedHashMap();
 		String[] keys = getKeys(map);
 		for (String key: keys) {
 			m.put(key, genModel(map.get(key)));

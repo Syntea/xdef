@@ -2,6 +2,7 @@ package org.xdef.impl;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import org.xdef.impl.code.CodeDisplay;
 import org.xdef.model.XMDebugInfo;
 import org.xdef.model.XMStatementInfo;
@@ -14,7 +15,7 @@ import org.xdef.sys.SPosition;
 public class XDebugInfo implements XMDebugInfo {
 	XVariable[][] _varTables;
 	/** List of statement info. */
-	ArrayList<XStatementInfo> _statementList;
+	List<XStatementInfo> _statementList;
 
 	public XDebugInfo() {
 		_varTables = null;

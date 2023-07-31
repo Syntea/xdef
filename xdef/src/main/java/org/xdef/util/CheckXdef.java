@@ -1,10 +1,12 @@
 package org.xdef.util;
 
+import java.io.File;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.ReportWriter;
 import org.xdef.sys.SUtils;
 import org.xdef.XDFactory;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 /** Check the source with the X-definition for errors.
@@ -32,26 +34,12 @@ public class CheckXdef {
 			}
 			return true;
 		} catch (Exception ex) {
-			if (reporter != null && reporter.errorWarnings()) {
+			if (reporter.errorWarnings()) {
 				reporter.getReportReader().printReports(System.err);
 			}
 			System.err.println(ex);
 			return false;
 		}
-	}
-
-	/** Add an error message to the list of messages.
-	 * @param err StringBuffer with error messages.
-	 * @param args list of arguments.
-	 * @param index index of argument item.
-	 * @param msg message text.
-	 */
-	private static void errMsg(StringBuilder err,
-		String[] args,
-		int index,
-		String msg) {
-		err.append("Parameter [").append(String.valueOf(index)).append("]: \"");
-		err.append(args[index - 1]).append("\": ").append(msg).append('\n');
 	}
 
 	/** Check file with X-definition.
@@ -74,17 +62,17 @@ public class CheckXdef {
 			throw new RuntimeException("Parameters missing\n" + info);
 		}
 		final StringBuilder err = new StringBuilder();
-		ArrayList<String> ar = new ArrayList<String>();
-		for (int i = 0; i < args.length; i++) {
-			java.io.File[] files = SUtils.getFileGroup(args[i]);
+		List<String> ar = new ArrayList<>();
+		for (String arg : args) {
+			java.io.File[] files = SUtils.getFileGroup(arg);
 			if (files == null || files.length == 0) {
-				throw new RuntimeException(
-					"\"No available file: "+args[i] + "\n" + info);
+				throw new RuntimeException("\"No available file: "
+					+ arg + "\n" + info);
 			} else {
-				for (int j = 0; j < files.length; j++) {
-					if (files[j].exists() && files[j].canRead()) {
+				for (File file : files) {
+					if (file.exists() && file.canRead()) {
 						try {
-							String s = files[j].getCanonicalPath().intern();
+							String s = file.getCanonicalPath().intern();
 							if (!ar.contains(s)) {
 								ar.add(s);
 							}

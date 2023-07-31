@@ -5,6 +5,7 @@ import org.xdef.impl.util.gencollection.XDGenCollection;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import org.w3c.dom.Element;
 
 /** Generates a xml document with collection of all given X-definitions.
@@ -103,7 +104,7 @@ public class GenCollection {
 				throw new RuntimeException("Incorrect parameters\n" + info);
 			}
 		}
-		ArrayList<String> sources = new ArrayList<String>();
+		List<String> sources = new ArrayList<>();
 		File outFile = null;
 		boolean resolveMacros = false;
 		boolean removeActions = false;
@@ -206,5 +207,4 @@ public class GenCollection {
 			throw new RuntimeException("Unexpected exception", ex);
 		}
 	}
-
 }

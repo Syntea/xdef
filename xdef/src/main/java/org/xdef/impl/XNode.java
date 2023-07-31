@@ -1,7 +1,7 @@
 package org.xdef.impl;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 import javax.xml.namespace.QName;
 import org.xdef.XDPool;
 import org.xdef.model.XMNode;
@@ -187,12 +187,12 @@ public abstract class XNode implements XMNode {
 	}
 
 	//to be overriden!
-	public abstract void writeXNode(XDWriter xw, ArrayList<XNode> list)
+	public abstract void writeXNode(XDWriter xw, List<XNode> list)
 		throws IOException;
 
 	final static XNode readXNode(final XDReader xr,
 		final XDefinition xd,
-		final ArrayList<XNode> list)
+		final List<XNode> list)
 		throws IOException {
 		short kind = xr.readShort();
 		switch (kind) {

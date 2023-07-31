@@ -618,7 +618,7 @@ implements Element, XDElement, XDValue, NamedNodeMap {
 	}
 
 	private void createAttrs() {
-		_attrs = new LinkedHashMap<String, Attr>();
+		_attrs = new LinkedHashMap<>();
 		for (int i = 0; i < getXDNamedItemsNumber(); i++) {
 			String name = getXDNamedItemName(i);
 			if (name != null && hasAttribute(name)) {

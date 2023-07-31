@@ -122,7 +122,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	/** XON object, result of XON/JSON parsing */
 	Object _xon;
 	/** The list of child check elements. */
-	final ArrayList<ChkElement> _chkChildNodes;
+	final List<ChkElement> _chkChildNodes;
 
 	// valid date parameters
 	/** Maximal accepted value of the year. */
@@ -973,7 +973,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		return result;
 	}
 	@Override
-	final ArrayList<ChkElement> getChkChildNodes() {return _chkChildNodes;}
+	final List<ChkElement> getChkChildNodes() {return _chkChildNodes;}
 	@Override
 	/** Set debugging mode.
 	 * @param debug debugging mode.

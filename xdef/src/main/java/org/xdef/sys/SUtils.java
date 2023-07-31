@@ -18,7 +18,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 
@@ -46,11 +46,9 @@ public class SUtils extends FUtils {
 		'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
 
 	/** Cache to accelerate 2 letters/3 letter language methods.*/
-	private static final Map<String, Locale> LANGUAGES =
-		 new HashMap<String, Locale>();
+	private static final Map<String, Locale> LANGUAGES = new LinkedHashMap<>();
 	/** Cache to accelerate 2 letters/3 letter country methods.*/
-	private static final Map<String, Locale> COUNTRIES =
-		 new HashMap<String, Locale>();
+	private static final Map<String, Locale> COUNTRIES = new LinkedHashMap<>();
 
 ////////////////////////////////////////////////////////////////////////////////
 // initialize static variables

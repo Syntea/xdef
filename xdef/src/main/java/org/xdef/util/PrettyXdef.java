@@ -12,7 +12,9 @@ import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import org.xdef.impl.xml.XInputStream;
 import org.xdef.impl.xml.XReader;
 
@@ -114,7 +116,8 @@ public class PrettyXdef extends XReader {
 	}
 
 	private Attr parseAttr() {
-		int i = scanSpaces();
+		scanSpaces();
+		int i;
 		if ((i = scanName()) != -1) {
 			String s = getBufPart(i, getPos());
 			scanSpaces();
@@ -159,7 +162,7 @@ public class PrettyXdef extends XReader {
 		if (isChar('<') && (i = scanName()) != -1) {
 			String name = getBufPart(i, getPos());
 			addToResult("<" + name);
-			ArrayList<Attr> attrs = new ArrayList<Attr>();
+			List<Attr> attrs = new ArrayList<>();
 			Attr att;
 			while ((att = parseAttr()) != null) {
 				attrs.add(att);
@@ -300,8 +303,8 @@ public class PrettyXdef extends XReader {
 		File outDir,
 		int indentStep,
 		String encoding) throws IOException {
-		for (int i = 0; i < files.length; i++) {
-			prettyWriteToDir(files[i], outDir, indentStep, encoding);
+		for (File file : files) {
+			prettyWriteToDir(file, outDir, indentStep, encoding);
 		}
 	}
 
@@ -340,7 +343,7 @@ public class PrettyXdef extends XReader {
 "-e encoding Name of character set. If this parameter is not specified\n"+
 "            it will be used the original character set.\n"+
 "file        The file with source X-definition.";
-		HashMap<String, File> xdefs = new HashMap<String, File>();
+		Map<String, File> xdefs = new LinkedHashMap<>();
 		File outDir = null;
 		String fileName = null;
 		String encoding = null;
@@ -410,8 +413,7 @@ public class PrettyXdef extends XReader {
 								}
 								continue;
 							}
-						} catch (Exception ex) {
-						}
+						} catch (Exception ex) {}
 						msg += "Incorrect indentation parameter;" +
 							" indentation must be >= 0\n";
 					}
@@ -456,17 +458,15 @@ public class PrettyXdef extends XReader {
 		}
 		if (i < args.length) {
 			File[] files = SUtils.getFileGroup(args[i]);
-			for (int j = 0; j < files.length; j++) {
-				if (files[j].exists() && files[j].isFile()
-					&& files[j].canRead()) {
+			for (File file : files) {
+				if (file.exists() && file.isFile() && file.canRead()) {
 					try {
-						xdefs.put(files[j].getCanonicalPath(),files[j]);
+						xdefs.put(file.getCanonicalPath(), file);
 					} catch (Exception ex) {
-						msg += "Error on file "
-							+ files[j].getAbsoluteFile() + "\n";
+						msg += "Error on file " + file.getAbsoluteFile() + "\n";
 					}
 				} else {
-					msg += "Error on file " + files[j].getAbsoluteFile() + "\n";
+					msg += "Error on file " + file.getAbsoluteFile() + "\n";
 				}
 			}
 		}

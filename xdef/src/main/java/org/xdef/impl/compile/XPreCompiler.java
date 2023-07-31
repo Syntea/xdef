@@ -46,25 +46,22 @@ public class XPreCompiler implements PreCompiler {
 	static final int NS_XMLSCHEMA_INDEX = NS_XINCLUDE_INDEX + 1;	//5
 	/** index of NameSpace of XON/JSON (W3C). */
 	static final int NS_XON_INDEX = NS_XMLSCHEMA_INDEX + 1;		//6
-
 	/** Table of NameSpace prefixes. */
-	static final Map<String, Integer> DEFINED_PREFIXES =
-		new LinkedHashMap<String, Integer>();
-
+	static final Map<String, Integer> DEFINED_PREFIXES = new LinkedHashMap<>();
 	/** PNodes with parsed source items. */
-	private final ArrayList<PNode> _xdefPNodes = new ArrayList<PNode>();
+	private final List<PNode> _xdefPNodes = new ArrayList<>();
 	/** Source files table - to prevent to doParse the source twice. */
-	private final ArrayList<Object> _sources = new ArrayList<Object>();
+	private final List<Object> _sources = new ArrayList<>();
 	/** Array of lexicon sources item. */
-	private final ArrayList<PNode> _lexicons = new ArrayList<PNode>();
+	private final List<PNode> _lexicons = new ArrayList<>();
 	/** Array of BNF sources. */
-	private final ArrayList<PNode> _listBNF = new ArrayList<PNode>();
+	private final List<PNode> _listBNF = new ArrayList<>();
 	/** Array of declaration source items. */
-	private final ArrayList<PNode> _listDecl = new ArrayList<PNode>();
+	private final List<PNode> _listDecl = new ArrayList<>();
 	/** Array of collection source items. */
-	private final ArrayList<PNode> _listCollection = new ArrayList<PNode>();
+	private final List<PNode> _listCollection = new ArrayList<>();
 	/** Array of component sources. */
-	private final ArrayList<PNode> _listComponent = new ArrayList<PNode>();
+	private final List<PNode> _listComponent = new ArrayList<>();
 	/** Code generator. */
 	private final CompileCode _g;
 
@@ -73,10 +70,9 @@ public class XPreCompiler implements PreCompiler {
 	/** The nesting level of XML node. */
 	private boolean _macrosProcessed;
 	/** List of included sources. */
-	private final ArrayList<Object> _includeList = new ArrayList<Object>();
+	private final List<Object> _includeList = new ArrayList<>();
 	/** List of macro definitions. */
-	private final Map<String, XScriptMacro> _macros =
-		new LinkedHashMap<String, XScriptMacro>();
+	private final Map<String, XScriptMacro> _macros = new LinkedHashMap<>();
 	/** Reader of X-definitions in the form of XML. */
 	private final PreReaderXML _xmlReader;
 	/** Reporter used for error messages. */
@@ -272,7 +268,7 @@ public class XPreCompiler implements PreCompiler {
 	private void setMacros(final List<PNode> macros) {
 		for (PNode macro : macros) {
 			chkNestedElements(macro);
-			Map<String, String> params = new LinkedHashMap<String, String>();
+			Map<String, String> params = new LinkedHashMap<>();
 			String def = null;
 			for (PAttr patt : macro.getAttrs()) {
 				if ("#def".equals(patt._name)) {
@@ -543,7 +539,7 @@ public class XPreCompiler implements PreCompiler {
 				parseFile((File) o);
 			}
 		}
-		List<PNode> macros = new ArrayList<PNode>();
+		List<PNode> macros = new ArrayList<>();
 		for (PNode xd: _listDecl) {
 			for (PNode pnode : xd.getChildNodes()) {
 				if (pnode._localName.equals("macro")) {

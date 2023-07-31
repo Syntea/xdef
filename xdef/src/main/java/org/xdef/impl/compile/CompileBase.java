@@ -384,10 +384,10 @@ public class CompileBase implements CodeTable, XDValueID {
 	private final static Class<?>[] TYPECLASSES = new Class<?>[X_NOTYPE_VALUE];
 	/** Table of internal methods.*/
 	private static final List<Map<String, InternalMethod>> METHODS =
-		new ArrayList<Map<String, InternalMethod>>(X_NOTYPE_VALUE + 1);
+		new ArrayList<>(X_NOTYPE_VALUE + 1);
 	/** List of predefined parsers*/
 	private static final Map<String, Constructor<?>> PARSERS =
-		new LinkedHashMap<String, Constructor<?>>();
+		new LinkedHashMap<>();
 
 ////////////////////////////////////////////////////////////////////////////////
 // Initialization.
@@ -1834,8 +1834,7 @@ public class CompileBase implements CodeTable, XDValueID {
 			Constructor<?> c = ((Class<?>) clazz).getConstructor();
 			Map<String, InternalMethod> hm;
 			if ((hm = getTypeMethods(X_NOTYPE_VALUE)) == null) {
-				METHODS.set(X_NOTYPE_VALUE,
-					hm = new LinkedHashMap<String, InternalMethod>());
+				METHODS.set(X_NOTYPE_VALUE, hm = new LinkedHashMap<>());
 			}
 			for (int i = 0; i < names.length; i++) {
 				InternalMethod im1 = im;
@@ -1870,7 +1869,7 @@ public class CompileBase implements CodeTable, XDValueID {
 		final String... names) {
 		Map<String, InternalMethod> hm;
 		if ((hm = getTypeMethods(typeId)) == null) {
-			METHODS.set(typeId, hm=new LinkedHashMap<String, InternalMethod>());
+			METHODS.set(typeId, hm = new LinkedHashMap<>());
 		}
 		for (int i = 0; i < names.length; i++) {
 			InternalMethod im1 = im;
@@ -2149,17 +2148,17 @@ public class CompileBase implements CodeTable, XDValueID {
 				_sqKeynames = null;
 			} else {
 				int maxpar = -1;
-				for (int i = 0; i < _keyparams.length; i++) {
-					int j = _keyparams[i].getSeqIndex();
+				for (KeyParam keyparam : _keyparams) {
+					int j = keyparam.getSeqIndex();
 					if (j > maxpar) {
 						maxpar = j;
 					}
 				}
 				_sqKeynames = new String[maxpar+1];
-				for (int i = 0; i < _keyparams.length; i++) {
-					int j = _keyparams[i].getSeqIndex();
+				for (KeyParam keyparam : _keyparams) {
+					int j = keyparam.getSeqIndex();
 					if (j >= 0) {
-						_sqKeynames[j] = _keyparams[i].getName();
+						_sqKeynames[j] = keyparam.getName();
 					}
 				}
 			}

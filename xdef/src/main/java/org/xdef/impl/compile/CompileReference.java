@@ -15,7 +15,7 @@ import org.xdef.model.XMNode;
 import org.xdef.msg.SYS;
 import org.xdef.sys.ReportWriter;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 
 /** Provides an object for resolving references in X-definition source. This
  * object is pseudo XNode and will be replaced by referred object.
@@ -280,7 +280,7 @@ final class CompileReference extends XNode {
 	public int getVarinitCode() {return -1;} //not supported here
 
 	@Override
-	public final void writeXNode(final XDWriter xw, final ArrayList<XNode> list)
+	public final void writeXNode(final XDWriter xw, final List<XNode> list)
 		throws IOException {
 		throw new SRuntimeException(SYS.SYS066, //Internal error&{0}{: }
 			"this method can't be called here");

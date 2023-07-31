@@ -450,7 +450,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 				getters.append(modify(template +
 "{"+LN+
 "\t\tjava.util.Map<String, &{typ}> x="+LN+
-"\t\t\tnew java.util.HashMap<String, &{typ}>();"+LN+
+"\t\t\tnew java.util.LinkedHashMap<>();"+LN+
 "\t\tfor(&{typeName} y: _&{iname}) {"+LN+
 "\t\t\tx.put(org.xdef.xon.XonTools.xmlToJName(y.get"+X_KEYATTR+"()),"
 	+ " y.get"+X_VALATTR+"());"+LN+
@@ -477,7 +477,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 					getters.append(modify(template +
 "{"+LN+
 "\t\tjava.util.Map<String, &{typ}> x="+LN+
-"\t\t\tnew java.util.HashMap<String, &{typ}>();"+LN+
+"\t\t\tnew java.util.LinkedHashMap<>();"+LN+
 "\t\t\tx.put(y.get"+X_KEYATTR+"(), _&{iname}.get"+X_VALATTR+"());"+LN+
 "\t\treturn x;"+LN+
 "\t}"+LN,
@@ -493,7 +493,6 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 					}
 				}
 				// getter
-				s = jGet;
 				template =
 (_genJavadoc ? "\t/** Get values of text nodes of &{d}."+LN+
 "\t * @return value of text nodes of &{d}"+LN+
@@ -502,7 +501,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 				s = jGet;
 				getters.append(modify(template +
 "{"+LN+
-"\t\t&{typ1} x=new java.util.ArrayList<&{typ}>();"+LN+
+"\t\t&{typ1} x=new java.util.ArrayList<>();"+LN+
 "\t\tfor(&{typeName} y: _&{iname}) x.add(" + s + ");"+LN+
 "\t\treturn x;"+LN+
 "\t}"+LN,
@@ -583,7 +582,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 "\tpublic java.util.Map<String, &{typ}> anyItem$() ";
 				getters.append(modify(template +
 "{"+LN+
-"\t\tjava.util.Map<String,&{typ}>x=new java.util.HashMap<String,&{typ}>();"+LN+
+"\t\tjava.util.Map<String,&{typ}>x=new java.util.LinkedHashMap<>();"+LN+
 "\t\tif (_&{iname} != null) {"+LN+
 "\t\t\tx.put(org.xdef.xon.XonTools.xmlToJName(_&{iname}.getkey()), _&{iname}.getval());\n" +
 "\t\t}\n" +
@@ -659,8 +658,6 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 						"&{name}", name));
 				}
 			}
-			jSet = "String".equals(typ) && xe.getXonMode() != 0
-				? "org.xdef.xon.XonUtils.toJsonString(x,false)":"x";
 			// setter
 			template =
 (_genJavadoc ? "\t/** Set value of textnode of &{d}.*/"+LN : "")+
@@ -742,7 +739,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 			return;
 		}
 		String template;
-		String typ = typeName;
+		String typ;
 		XData keyAttr = (XData) xe.getAttr(X_KEYATTR);
 		String name;
 		if (keyAttr != null && keyAttr.getFixedValue() == null) { // %anyName
@@ -755,13 +752,12 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 (_genJavadoc ? "\t/** Get map with %anyName entries from map &{d}."+LN+
 "\t * @return map with entries to be set to map &{d}"+LN+
 "\t */"+LN : "");
-			typ = typeName;
 			if (X_ARRAY.equals(xe.getLocalName())) {
 				typ = "java.util.List<?>";
 				template +=
 "\tpublic java.util.Map<String, &{typ}> anyItem$&{name}() {"+LN+
 "\t\tjava.util.Map<String, &{typ}> x="+LN+
-"\t\t\tnew java.util.LinkedHashMap<String, &{typ}>();"+LN;
+"\t\t\tnew java.util.LinkedHashMap<>();"+LN;
 				if (max == 1) {
 					template +=
 "\t\tif (_&{iname} != null) {"+LN+
@@ -778,7 +774,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 				template +=
 "\tpublic java.util.Map<String, &{typ}> get$&{name}() {"+LN+
 "\t\tjava.util.Map<String, &{typ}> x="+LN+
-"\t\t\tnew java.util.LinkedHashMap<String, &{typ}>();"+LN;
+"\t\t\tnew java.util.LinkedHashMap<>();"+LN;
 				if (max == 1) {
 					template +=
 "\t\tif (_&{iname} != null) {"+LN+
@@ -892,14 +888,17 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 "\t\tObject o = get"+X_VALATTR+"();"+LN+
 "\t\treturn (o instanceof org.xdef.xon.XonTools.JNull)? null"+LN+
 "\t\t\t: ";
-				if ("String".equals(typ)) {
-					s +=
-"(String) org.xdef.xon.XonTools.xmlToJValue((String)o);";
-				} else if ("Object".equals(typ)) {
-					s +=
-"o instanceof String? org.xdef.xon.XonTools.xmlToJValue((String) o): o;";
-				} else {
-					s += "("+typ+")o;";
+				switch (typ) {
+					case "String":
+						s +=
+							"(String) org.xdef.xon.XonTools.xmlToJValue((String)o);";
+						break;
+					case "Object":
+						s +=
+							"o instanceof String? org.xdef.xon.XonTools.xmlToJValue((String) o): o;";
+						break;
+					default:
+						s += "("+typ+")o;";
 				}
 				s += LN+"\t}"+LN;
 			} else {
@@ -930,7 +929,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 				s += LN;
 				s += nodes[2].maxOccurs() > 1
 ?("\t\tif (!_jx$array.isEmpty()) {"+LN+
-"\t\t\tjava.util.List<Object> result = new java.util.ArrayList<Object>();"+LN+
+"\t\t\tjava.util.List<Object> result = new java.util.ArrayList<>();"+LN+
 "\t\t\tfor (jx$array x: _jx$array) result.add(x.toXon());"+LN+
 "\t\t\treturn result;"+LN+
 "\t\t}"+LN)

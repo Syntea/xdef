@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -81,7 +80,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 	/** Array of component sources. */
 	private final List<PNode> _listComponent;
 	/** Actual node stack. */
-	private final ArrayList<XNode> _nodeList;
+	private final List<XNode> _nodeList;
 	/** The script compiler. */
 	private final CompileXScript _scriptCompiler;
 	/** Code generator. */
@@ -545,7 +544,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				}
 			}
 			pa = _precomp.getXdefAttr(pnode, "importLocal", false, true);
-			ArrayList<String> locals = new ArrayList<>();
+			List<String> locals = new ArrayList<>();
 			locals.add(pnode._xdef.getName() + '#');
 			if (pa != null) {
 				_scriptCompiler.setSource(pa._value,
@@ -572,19 +571,25 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			return local;
 		}
 		String s = scope._value.getString();
-		if ("global".equals(s)) {
-			return false;
-		} else if ("local".equals(s)) {
-			if (nodei._xdef == null) {
-				//Attribute '&{0}' not allowed here&{#SYS000}
-				error(scope._value, XDEF.XDEF254, "scope");
-			} else {
-				return true;
-			}
-		} else {
+		if (null == s) {
 			//Attribute "scope" in selfstanding declaration section
 			//can be only "global"
 			error(scope._value, XDEF.XDEF221);
+		} else switch (s) {
+			case "global":
+				return false;
+			case "local":
+				if (nodei._xdef == null) {
+					//Attribute '&{0}' not allowed here&{#SYS000}
+					error(scope._value, XDEF.XDEF254, "scope");
+				} else {
+					return true;
+				}
+				break;
+			default:
+				//Attribute "scope" in selfstanding declaration section
+				//can be only "global"
+				error(scope._value, XDEF.XDEF221);
 		}
 		return local;
 	}
@@ -1062,16 +1067,23 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		final XDefinition xdef) {
 		XSelector newNode;
 		XOccurrence defaultOcc = new XOccurrence(1,1); //required as default
-		if ("mixed".equals(refName)) {
-			newNode = new XMixed();
-			defaultOcc.setUnspecified();
-		} else if ("choice".equals(refName)) {
-			newNode = new XChoice(); //min=1; max=1
-		} else if ("sequence".equals(refName)) {
-			newNode = new XSequence(); //min=1;max=1
-		} else {//include
+		if (null == refName) {//include
 			newNode = new XSequence();
 			defaultOcc.setUnspecified();
+		} else switch (refName) {
+			case "mixed":
+				newNode = new XMixed();
+				defaultOcc.setUnspecified();
+				break;
+			case "choice":
+				newNode = new XChoice(); //min=1; max=1
+				break;
+			case "sequence":
+				newNode = new XSequence(); //min=1;max=1
+				break;
+			default: //include
+				newNode = new XSequence();
+				defaultOcc.setUnspecified();
 		}
 		newNode.setUnspecified();
 		newNode.setSPosition(copySPosition(pnode._name));
@@ -1190,29 +1202,32 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						error(sval, XDEF.XDEF264);
 					}
 				}
-				if ("true".equals(s)) {
-					if (kind != XNode.XMMIXED) {
-						//Attribute 'empty' is allowed only in the group
-						//'xd:mixed'
-						_precomp.lightError(pnode._name, XDEF.XDEF263);
-						newNode.setOccurrence(0, 1);
-					} else {
-						newNode.setEmptyDeclared(true);
-						newNode.setMinOccur(0);
-					}
-				} else if ("false".equals(s)) {
-					if (kind != XNode.XMMIXED) {
-						//Attribute 'empty' is allowed only in the group
-						//'xd:mixed'
-						_precomp.lightError(pnode._name, XDEF.XDEF263);
-						newNode.setOccurrence(1, 1);
-					} else {
-						newNode.setEmptyDeclared(false);
-						newNode.setMinOccur(1);
-					}
-				} else {
-					//Value of type '&{0}' expected
-					error(sval, XDEF.XDEF423, "boolean");
+				switch (s) {
+					case "true":
+						if (kind != XNode.XMMIXED) {
+							//Attribute 'empty' is allowed only in the group
+							//'xd:mixed'
+							_precomp.lightError(pnode._name, XDEF.XDEF263);
+							newNode.setOccurrence(0, 1);
+						} else {
+							newNode.setEmptyDeclared(true);
+							newNode.setMinOccur(0);
+						}
+						break;
+					case "false":
+						if (kind != XNode.XMMIXED) {
+							//Attribute 'empty' is allowed only in the group
+							//'xd:mixed'
+							_precomp.lightError(pnode._name, XDEF.XDEF263);
+							newNode.setOccurrence(1, 1);
+						} else {
+							newNode.setEmptyDeclared(false);
+							newNode.setMinOccur(1);
+						}
+						break;
+					default:
+						//Value of type '&{0}' expected
+						error(sval, XDEF.XDEF423, "boolean");
 				}
 			}
 		}
@@ -1314,7 +1329,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 	private void changeModelNS(final XElement xe,
 		final String nsOrig,
 		final String nsNew,
-		final HashSet<XNode> hs) {
+		final Set<XNode> hs) {
 		if (!hs.add(xe)) {
 			return; //already processed
 		}
@@ -1343,15 +1358,12 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				if (ns != null && ns.equals(nsOrig)) {
 					if (nsNew == null) {
 						nodes = new XNode[xe._childNodes.length - 1];
-						for (int j = 0; j < i; j++) {
-							nodes[j] = xe._childNodes[j];
-						}
+						System.arraycopy(xe._childNodes, 0, nodes, 0, i);
 						for (int j = i+1; j < xe._childNodes.length ; j++) {
 							nodes[j-1] = xe._childNodes[j];
 						}
 						xe._childNodes = nodes;
 						i--;
-						continue;
 					} else {
 						XElement z = new XElement((XElement) x);
 						z.changeNS(nsNew);
@@ -1826,7 +1838,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		boolean result = true;
 		//just let GC do the job;
 		//check integrity of all XDefinitions
-		HashSet<XNode> hs = new HashSet<XNode>();
+		Set<XNode> hs = new HashSet<>();
 		for (XDefinition x : _xdefs.values()) {
 			for (XMElement xel: x.getModels()) {
 				result &= checkIntegrity((XElement) xel, 0, hs);
@@ -1892,7 +1904,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					((XPool) xdp).setDebugInfo(_codeGenerator._debugInfo);
 				}
 				// set X-components to xdp
-				HashSet<String> classNames = new HashSet<>();
+				Set<String> classNames = new HashSet<>();
 				// create map of components
 				Map<String, String> x = new LinkedHashMap<>();
 				for (Map.Entry<String, SBuffer> en:
@@ -1922,7 +1934,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				}
 				((XPool) xdp).setXComponents(x);
 				// binds
-				x = new LinkedHashMap<String, String>();
+				x = new LinkedHashMap<>();
 				for (Map.Entry<String, SBuffer> en:
 					_codeGenerator._binds.entrySet()) {
 					XMNode xn = xdp.findModel(en.getKey());
@@ -1999,8 +2011,6 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						if (xv.getItemId() == XDValueID.XD_PARSER) {
 							XDParser p = (XDParser) xv;
 							String declName = p.getDeclaredName();
-//							ndx = declName.indexOf('#');
-//							s = ndx >= 0 ? declName.substring(ndx+1) : declName;
 							XDContainer xc = p.getNamedParams();
 							if (xc != null && (p instanceof XDParseEnum
 								&& (xv = xc.getXDNamedItemValue("argument"))
@@ -2159,7 +2169,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 	private boolean resolveReference(final XElement xel,
 		final int level,
 		final boolean ignoreOccurrence,
-		final HashSet<XNode> hs) {
+		final Set<XNode> hs) {
 		boolean result = true;
 		int lenx;
 		if ((lenx = xel._childNodes.length) > 0
@@ -2506,7 +2516,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 	 */
 	private boolean checkIntegrity(final XElement xel,
 		final int level,
-		final HashSet<XNode> hs) {
+		final Set<XNode> hs) {
 		if (!hs.add(xel)) {
 			return true; //already done
 		}
@@ -2542,9 +2552,9 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		final XSelector selector,
 		final boolean ignorableFlag,
 		final boolean selectiveFlag,
-		final HashSet<XNode> hs) {
+		final Set<XNode> hs) {
 		hs.add(xel);
-		HashMap<String, Integer> groupItems = new HashMap<>();
+		Map<String, Integer> groupItems = new LinkedHashMap<>();
 		boolean ignorable = ignorableFlag;
 		boolean selective = selectiveFlag;
 		boolean notReported = true;

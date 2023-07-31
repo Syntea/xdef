@@ -17,11 +17,11 @@ import java.io.File;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.LinkedHashMap;
+import java.util.List;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -52,15 +52,15 @@ public class XDGenCollection {
 	/** XML parser. */
 	private XdParser _xdParser;
 	/** List of names of X-definitions. */
-	private final ArrayList<String> _defNames;
+	private final List<String> _defNames;
 	/** List of sources. */
-	private final ArrayList<String> _includeList;
+	private final List<String> _includeList;
 	/** List of parsed sources */
-	private final ArrayList<String> _parsedList;
+	private final List<String> _parsedList;
 	/** List of lexicons. */
-	private final ArrayList<Element> _lexiconList;
+	private final List<Element> _lexiconList;
 	/** List of macro definitions. */
-	private final HashMap<String, XScriptMacro> _macros;
+	private final Map<String, XScriptMacro> _macros;
 
 	private static final SAXParserFactory SPF = SAXParserFactory.newInstance();
 	private static final Properties PROPS_NOEXT = new Properties();
@@ -96,11 +96,9 @@ public class XDGenCollection {
 		private Element _element;
 		private Element _root;
 		Document _doc;
-
 		private final String _pathname;
 		private final StringBuilder _text = new StringBuilder();
-		public final Map<String, String> _prefixes =
-			new LinkedHashMap<String, String>();
+		public final Map<String, String> _prefixes = new LinkedHashMap<>();
 
 		XdParser(Document doc, String pathname) throws Exception {
 			_pathname = pathname;
@@ -198,11 +196,11 @@ public class XDGenCollection {
 	}
 
 	private XDGenCollection() {
-		_defNames = new ArrayList<String>();
-		_includeList = new ArrayList<String>();
-		_parsedList = new ArrayList<String>();
-		_lexiconList = new ArrayList<Element>();
-		_macros = new HashMap<String, XScriptMacro>();
+		_defNames = new ArrayList<>();
+		_includeList = new ArrayList<>();
+		_parsedList = new ArrayList<>();
+		_lexiconList = new ArrayList<>();
+		_macros = new LinkedHashMap<>();
 		_xdParser = null;
 		_doc = KXmlUtils.newDocument();
 	}
@@ -223,32 +221,35 @@ public class XDGenCollection {
 			return null;
 		}
 		Element el = (Element) node.cloneNode(true);
-		if ("thesaurus".equals(el.getLocalName())
-			|| "lexicon".equals(el.getLocalName())) {
-			_lexiconList.add(el);
-			_collection.appendChild(el);
-		} else if ("declaration".equals(el.getLocalName())) {
-			_collection.appendChild(el);
-			return null;
-		} else if ("def".equals(el.getLocalName())) {
-			String root = getXdefAttr(el, uri, "root", true);
-			if (root.length() > 0) {
-				el.setAttribute("root", root); //canonize root attribute.
-			}
-			String name = getXdefAttr(el, uri, "name", true);
-			if (name.length() > 0) {
-				el.setAttribute("name", name); //canonize name attribute.
-			}
-			String s = getXdefAttr(el, uri, "messages", true);
-			if (s.length() > 0) {
-				el.setAttribute("messages", s); //canonize name attribute.
-			}
-			if (_defNames.indexOf(name) >= 0) {
-				return null; //X-definition exists
-			}
-			_defNames.add(name);
-			_collection.appendChild(el);
-			return el;
+		switch (el.getLocalName()) {
+			case "thesaurus":
+			case "lexicon":
+				_lexiconList.add(el);
+				_collection.appendChild(el);
+				break;
+			case "declaration":
+				_collection.appendChild(el);
+				return null;
+			case "def":
+				String root = getXdefAttr(el, uri, "root", true);
+				if (root.length() > 0) {
+					el.setAttribute("root", root); //canonize root attribute.
+				}
+				String name = getXdefAttr(el, uri, "name", true);
+				if (name.length() > 0) {
+					el.setAttribute("name", name); //canonize name attribute.
+				}
+				String s = getXdefAttr(el, uri, "messages", true);
+				if (s.length() > 0) {
+					el.setAttribute("messages", s); //canonize name attribute.
+				}
+				if (_defNames.indexOf(name) >= 0) {
+					return null; //X-definition exists
+				}
+				_defNames.add(name);
+				_collection.appendChild(el);
+				return el;
+			default:
 		}
 		return null;
 	}
@@ -257,8 +258,8 @@ public class XDGenCollection {
 		if (files == null) {
 			return;
 		}
-		for (int i = 0; i < files.length; i++) {
-			parse(files[i]);
+		for (File file : files) {
+			parse(file);
 		}
 	}
 
@@ -267,8 +268,8 @@ public class XDGenCollection {
 	private void parse(URL u) throws Exception {parse(u.toExternalForm());}
 
 	private void parse(URL[] urls) throws Exception {
-		for (int i = 0; i < urls.length; i++) {
-			parse(urls[i].toExternalForm());
+		for (URL url : urls) {
+			parse(url.toExternalForm());
 		}
 	}
 
@@ -276,8 +277,8 @@ public class XDGenCollection {
 		if (sources == null) {
 			return;
 		}
-		for (int i = 0; i < sources.length; i++) {
-			parse(sources[i]);
+		for (String source : sources) {
+			parse(source);
 		}
 	}
 
@@ -451,7 +452,7 @@ public class XDGenCollection {
 	private static void addMacro(final Element macro,
 		final String xdUri,
 		final String defName,
-		final HashMap<String, XScriptMacro> macros,
+		final Map<String, XScriptMacro> macros,
 		final boolean resolve) {
 		if (resolve) {
 			macro.getParentNode().removeChild(macro);
@@ -461,7 +462,7 @@ public class XDGenCollection {
 			macNameNode = macro.getAttributeNode("name");
 		}
 		String macName = macNameNode == null ? "?" : macNameNode.getNodeValue();
-		HashMap<String, String> params = new HashMap<String, String>();
+		Map<String, String> params = new LinkedHashMap<>();
 		NamedNodeMap nm = macro.getAttributes();
 		for (int k = 0; k < nm.getLength(); k++) {
 			Node n = nm.item(k);
@@ -486,7 +487,7 @@ public class XDGenCollection {
 	 * @param resolve switch if macros will be expanded and removed.
 	 */
 	private static void processMacros(final Element collection,
-		final HashMap<String, XScriptMacro> macros,
+		final Map<String, XScriptMacro> macros,
 		final boolean resolve) {
 		NodeList nl = KXmlUtils.getChildElements(collection);
 		// Set macros from xd:declaration elements (version 3.2)
@@ -557,7 +558,7 @@ public class XDGenCollection {
 	 */
 	private static void expandMacros(final Element el,
 		final String defName,
-		final HashMap<String, XScriptMacro> macros) {
+		final Map<String, XScriptMacro> macros) {
 		XScriptMacroResolver mr = new XScriptMacroResolver(defName,
 			"1.1".equals(el.getOwnerDocument().getXmlVersion())
 				? StringParser.XMLVER1_1 : StringParser.XMLVER1_0,
@@ -1347,8 +1348,7 @@ public class XDGenCollection {
 		if (sources.length < 1) {
 			return false;
 		}
-		for (int i = 0; i < sources.length; i++) {
-			String string = sources[i];
+		for (String string : sources) {
 			if (!isXML(string)) {
 				return false;
 			}

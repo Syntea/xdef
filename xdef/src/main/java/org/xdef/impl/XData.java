@@ -1,7 +1,7 @@
 package org.xdef.impl;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 import org.xdef.XDContainer;
 import org.xdef.XDNamedValue;
 import org.xdef.XDParser;
@@ -83,7 +83,7 @@ public class XData extends XCodeDescriptor
 	@Override
 	// can't be final, can be overwritten!
 	public void writeXNode(final XDWriter xw,
-		final ArrayList<XNode> list) throws IOException {
+		final List<XNode> list) throws IOException {
 		writeXCodeDescriptor(xw);
 		xw.writeShort(_valueType);
 		xw.writeString(_valueTypeName);

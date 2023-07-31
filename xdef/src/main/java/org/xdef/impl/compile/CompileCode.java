@@ -240,7 +240,7 @@ public final class CompileCode extends CompileBase {
 	/** Array of external classes. */
 	Class<?>[] _extClasses;
 	/** Compiled code. */
-	final ArrayList<XDValue> _code;
+	final List<XDValue> _code;
 	/** Table of local variables. */
 	Map<String, CompileVariable> _localVariables;
 	/** External methods. */
@@ -262,11 +262,11 @@ public final class CompileCode extends CompileBase {
 	/** Debug information. */
 	XDebugInfo _debugInfo = null;
 	/** Components. */
-	final Map<String,SBuffer> _components = new LinkedHashMap<String,SBuffer>();
+	final Map<String,SBuffer> _components = new LinkedHashMap<>();
 	/** Binds. */
-	final Map<String, SBuffer> _binds = new LinkedHashMap<String, SBuffer>();
+	final Map<String, SBuffer> _binds = new LinkedHashMap<>();
 	/** Enumerations. */
-	final Map<String, SBuffer> _enums = new LinkedHashMap<String, SBuffer>();
+	final Map<String, SBuffer> _enums = new LinkedHashMap<>();
 	/** XDLexicon object (null if not specified). */
 	XDLexicon _lexicon = null;
 	/** Flag if external method should be searched. */
@@ -297,12 +297,12 @@ public final class CompileCode extends CompileBase {
 		_cstack = new int[STACK_SIZE];
 		_sp = -1;
 		_lastCodeIndex = -1;
-		_code = new ArrayList<XDValue>();
-		_localVariables = new LinkedHashMap<String, CompileVariable>();
-		_extMethods = new LinkedHashMap<String, CodeExtMethod>();
-		_declaredMethods = new ArrayList<ExternalMethod>();
-		_scriptMethods = new LinkedHashMap<String, ScriptMethod>();
-		_namespaceURIs = new ArrayList<String>();
+		_code = new ArrayList<>();
+		_localVariables = new LinkedHashMap<>();
+		_extMethods = new LinkedHashMap<>();
+		_declaredMethods = new ArrayList<>();
+		_scriptMethods = new LinkedHashMap<>();
+		_namespaceURIs = new ArrayList<>();
 		_globalVariables = _varBlock = new XVariableTable(null, 0);
 		_localVariablesLastIndex = -1;
 		_localVariablesMaxIndex = -1;
@@ -530,8 +530,8 @@ public final class CompileCode extends CompileBase {
 			_extClasses = _extClasses = new Class<?>[0];
 		}
 		if (extObjects != null && extObjects.length > 0) {
-			ArrayList<Class<?>> ar =
-				new ArrayList<Class<?>>(Arrays.asList(_extClasses));
+			List<Class<?>> ar =
+				new ArrayList<>(Arrays.asList(_extClasses));
 			for (Class<?> x: extObjects) {
 				if (x != null && !ar.contains(x)) {
 					ar.add(x);
@@ -1382,16 +1382,17 @@ public final class CompileCode extends CompileBase {
 					}
 					break;
 				case XD_LONG:
-					if (xType == XD_DATETIME) {
-						topToMillis();
-						return;
-					} else if (xType == XD_DECIMAL) {
-						addCode(new CodeI1(XD_DECIMAL, TO_DECIMAL_X, 0));
-						_cstack[_sp] = -1;
-						return;
-					} else if (xType == XD_CHAR) {
-						topXToInt(0);
-						return;
+					switch (xType) {
+						case XD_DATETIME:
+							topToMillis();
+							return;
+						case XD_DECIMAL:
+							addCode(new CodeI1(XD_DECIMAL, TO_DECIMAL_X, 0));
+							_cstack[_sp] = -1;
+							return;
+						case XD_CHAR:
+							topXToInt(0);
+							return;
 					}
 					break;
 				case XD_CHAR:
@@ -1843,11 +1844,9 @@ public final class CompileCode extends CompileBase {
 					method = findExternalMethod(name, numPar, null, null);
 					if (method == null && _extClasses != null) {
 						// not found, try to find it in extternal classes
-						for (int i = 0; i < _extClasses.length; i++) {
-							method = findExternalMethod(name,
-								numPar,
-								_extClasses[i],
-								null);
+						for (Class<?> extClass : _extClasses) {
+							method =
+								findExternalMethod(name, numPar, extClass,null);
 							if (method != null) {
 								_extMethods.put(extName, method);
 								break;
@@ -2181,9 +2180,9 @@ public final class CompileCode extends CompileBase {
 					for (int i = len - 1; i >= 0; i--) {
 						String s = h.getXDNamedItemName(i);
 						boolean found = false;
-						for (int j = 0; j < pars.length; j++) {
-							if (pars[j].getName().equals(s)) {
-								XDValue[] legal = pars[j].getLegalValues();
+						for (KeyParam par : pars) {
+							if (par.getName().equals(s)) {
+								XDValue[] legal = par.getLegalValues();
 								if (legal != null && legal.length > 0) {
 									XDValue v = h.getXDNamedItemValue(s);
 									boolean found1 = false;

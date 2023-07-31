@@ -1,7 +1,7 @@
 package org.xdef.impl;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 import org.xdef.XDPool;
 import org.xdef.model.XMNode;
 
@@ -22,7 +22,7 @@ public final class XPI extends XData {
 
 	@Override
 	public final void writeXNode(final XDWriter xw,
-		final ArrayList<XNode> list) throws IOException {
+		final List<XNode> list) throws IOException {
 		xw.writeString(getName());
 		xw.writeString(getNSUri());
 		writeXCodeDescriptor(xw);

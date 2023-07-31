@@ -170,7 +170,7 @@ public final class BNFGrammar {
 	/** Current processed rule. */
 	private BNFRuleObj _actRule;
 	/** Table of function aliases. */
-	Map<String, String> _aliases = new LinkedHashMap<String, String>();
+	Map<String, String> _aliases = new LinkedHashMap<>();
 	/** Array of rules.*/
 	private final List<BNFRuleObj> _rules;
 	/** Starting position of current rule. */
@@ -182,7 +182,7 @@ public final class BNFGrammar {
 
 	/** Create new empty instance of grammar. */
 	BNFGrammar() {
-		_rules = new ArrayList<BNFRuleObj>();
+		_rules = new ArrayList<>();
 		_traceOut = null;
 	}
 
@@ -548,12 +548,12 @@ public final class BNFGrammar {
 	private BNFSet newItemNotSet() {return new BNFNotSet();}
 	private BNFExtMethodObj newItemExtMethod(final String name,
 		final String fullName,
-		final ArrayList<Object> params ) {
+		final List<Object> params ) {
 		return new BNFExtMethodObj(name, fullName, params);
 	}
 	private BNFPredefined newInlineMethod(final String methodName,
 		final String name,
-		final ArrayList<Object> params) {
+		final List<Object> params) {
 		for(int i = 0; i < INLINE_METHOD_NAMES.length; i++) {
 			if (methodName.equals(INLINE_METHOD_NAMES[i])) {
 				return new BNFInline(i, name, params);
@@ -791,8 +791,8 @@ public final class BNFGrammar {
 			if (getItem() instanceof BNFSequence) {
 				BNFSequence sq = (BNFSequence) getItem();
 				if (sq._min == 1 && sq._max == 1) {
-					for (int i = 0; i < sq._items.length; i++) {
-						sq._items[i].display(sb);
+					for (BNFItem x : sq._items) {
+						x.display(sb);
 					}
 				} else {
 					sq.display(sb);
@@ -1474,7 +1474,7 @@ public final class BNFGrammar {
 
 		BNFExtMethodObj(final String name,
 			 final String fullName,
-			final ArrayList<Object> params) {
+			final List<Object> params) {
 			super();
 			_name = name;
 			_method = null;
@@ -1718,7 +1718,7 @@ public final class BNFGrammar {
 		 */
 		private BNFInline(final int code,
 			final String name,
-			final ArrayList<Object> params) {
+			final List<Object> params) {
 			_code = code;
 			_name = name.intern();
 			if (params != null && params.size() > 0) {
@@ -2036,7 +2036,7 @@ public final class BNFGrammar {
 		 * @return the adopted BNFItem.
 		 */
 		final BNFItem adoptTo(final BNFGrammar grammar) {
-			final ArrayList<Object> params = new ArrayList<Object>();
+			final List<Object> params = new ArrayList<>();
 			if (_param != null) {
 				params.add(_param);
 			}
@@ -2076,8 +2076,8 @@ public final class BNFGrammar {
 		/** buffer with actually parsed item.*/
 		private final StringBuilder _parsedChars = new StringBuilder();
 		/** array with unresolved references. */
-		private final ArrayList<UnresolvedReference> _unresolvedRefs =
-			new ArrayList<UnresolvedReference>();
+		private final List<UnresolvedReference> _unresolvedRefs =
+			new ArrayList<>();
 		/** This object holds unresolved reference to a rule. */
 		private final class UnresolvedReference {
 			String _name;
@@ -2350,7 +2350,7 @@ public final class BNFGrammar {
 			skipSeparators();
 		}
 
-		private	void readAliasParams(final ArrayList<Object> params) {
+		private	void readAliasParams(final List<Object> params) {
 			if (!isChar('(')) {
 				return;
 			}
@@ -2530,7 +2530,7 @@ public final class BNFGrammar {
 
 		private void externalMethod(final String name) {
 			_parsedChars.setLength(0);
-			ArrayList<Object> params = new ArrayList<Object>();
+			List<Object> params = new ArrayList<>();
 			String fullName = name;
 			if (Character.isDigit(name.charAt(0))) { // $digits
 				params.add(name);
@@ -2631,7 +2631,7 @@ public final class BNFGrammar {
 			if (isIdentifier()) {
 				String method = _parsedChars.toString();
 				skipSeparators();
-				ArrayList<Object> params = new ArrayList<Object>();
+				List<Object> params = new ArrayList<>();
 				readAliasParams(params);
 				if (params.size() > 0) {
 					method += '(';

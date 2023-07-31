@@ -296,12 +296,15 @@ public class XComponentUtil {
 			if (y == null || y.isNull()) {
 				sb.append("null");
 			} else {
-				if (y.getItemId() == XDValue.XD_STRING) {
-					sb.append(y.toString());
-				} else if (y.getItemId() == XDValue.XD_CONTAINER) {
-					sb.append(containerJlist((XDContainer) y));
-				} else {
-					sb.append(y.toString());
+				switch (y.getItemId()) {
+					case XDValue.XD_STRING:
+						sb.append(y.toString());
+						break;
+					case XDValue.XD_CONTAINER:
+						sb.append(containerJlist((XDContainer) y));
+						break;
+					default:
+						sb.append(y.toString());
 				}
 			}
 		}
@@ -365,7 +368,7 @@ public class XComponentUtil {
 	 * @return object with XON array.
 	 */
 	public final static List<Object> toXonArray(final XComponent xc) {
-		List<Object> result = new ArrayList<Object>();
+		List<Object> result = new ArrayList<>();
 		List list = (List) xc.xGetNodeList();
 		for (Object x : list) {
 			Object o = toXon((XComponent) x);
@@ -408,7 +411,6 @@ public class XComponentUtil {
 			Object o;
 			if (methodName.startsWith("get" + XON_NS_PREFIX + "$")
 				&& x.getParameterTypes().length == 0) {
-				o = null;
 				String key = null;
 				try {
 					x.setAccessible(true);
@@ -426,7 +428,6 @@ public class XComponentUtil {
 					}
 				} catch (Exception ex) {}
 			} else if (methodName.startsWith("listOf$")) {
-				o = null;
 				try {
 					x.setAccessible(true);
 					o = x.invoke(xc);
@@ -439,8 +440,7 @@ public class XComponentUtil {
 				} catch (Exception ex) {}
 			} else if (x.getParameterTypes().length == 0
 				&& methodName.startsWith("listOf"+XON_NS_PREFIX+"$")) {
-				o = null;
-				String key = null;
+				String key;
 				try {
 					x.setAccessible(true);
 					o = x.invoke(xc);
@@ -477,7 +477,7 @@ public class XComponentUtil {
 	 * @return object with XON map.
 	 */
 	public static Map<String, Object> toXonMap(final XComponent xc) {
-		Map<String, Object> result = new LinkedHashMap<String, Object>();
+		Map<String, Object> result = new LinkedHashMap<>();
 		Class<?> cls = xc.getClass();
 		toXonMap(xc, cls.getDeclaredMethods(), result);
 		return result;
@@ -547,7 +547,7 @@ public class XComponentUtil {
 	 */
 	private static List<Object> toXonArrayXD(final XComponent xc,
 		final KNamespace nsStack) {
-		List<Object> result = new ArrayList<Object>();
+		List<Object> result = new ArrayList<>();
 		Map<String, Object> attrs = getXonAttrs(xc);
 		if (!attrs.isEmpty()) {
 			result.add(attrs);
@@ -593,7 +593,7 @@ public class XComponentUtil {
 	 * @return object with XON.
 	 */
 	private static Map<String, Object> getXonAttrs(final XComponent xc) {
-		Map<String, Object> result = new LinkedHashMap<String, Object>();
+		Map<String, Object> result = new LinkedHashMap<>();
 		Class<?> cls = xc.getClass();
 		Method[] methods = cls.getDeclaredMethods();
 		for (Method m: methods) {
@@ -682,10 +682,10 @@ public class XComponentUtil {
 				return toXonItem(xc);
 			}
 		}
-		Map<String, Object> result = new LinkedHashMap<String, Object>();
-		List<Object> body = new ArrayList<Object>();
+		Map<String, Object> result = new LinkedHashMap<>();
+		List<Object> body = new ArrayList<>();
 		Map<String, Object> namedValues = getXonAttrs(xc);
-		String prefix = null;
+		String prefix;
 		nsStack.pushContext();
 		if (ns != null) {
 			prefix = ndx>0 ? name.substring(0,ndx) : "";
@@ -716,12 +716,13 @@ public class XComponentUtil {
 			if (ndx >= 0) {
 				localName = localName.substring(ndx + 1);
 			}
-			if (X_MAP.equals(localName)) {
-				return toXonMap(xc);
-			} else if (X_ARRAY.equals(localName)) {
-				return toXonArray(xc);
-			} else if (X_VALUE.equals(localName)) {
-				return toXonItem(xc);
+			switch (localName) {
+				case X_MAP:
+					return toXonMap(xc);
+				case X_ARRAY:
+					return toXonArray(xc);
+				case X_VALUE:
+					return toXonItem(xc);
 			}
 		}
 		return toXonXD(xc, new KNamespace());

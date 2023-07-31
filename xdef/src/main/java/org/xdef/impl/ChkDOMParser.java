@@ -105,39 +105,42 @@ class ChkDOMParser extends SReporter {
 						p.isSpaces();
 						String systemLiteral;
 						int i = p.isOneOfTokens("SYSTEM", "PUBLIC");
-						if (i == 1) { //PUBLIC
-							if (!p.isSpaces()) {
-								//Whitespace expected after '&{0}'
-								error(XML.XML014, "PUBLIC");
-							}
-							if (p.readString() != null) {
+						switch (i) {
+							case 0:
+								//SYSTEM
 								if (!p.isSpaces()) {
 									//Whitespace expected after '&{0}'
 									error(XML.XML014, "PUBLIC");
-									return;
-								}
-								if ((systemLiteral = p.readString()) == null) {
+								}	if ((systemLiteral = p.readString())==null){
 									//Quoted string declaration expected"
 									error(XDEF.XDEF504);
 									return;
 								}
-							} else {
-								//Quoted string declaration expected"
-								error(XDEF.XDEF504);
-								return;
-							}
-						} else if (i == 0) { //SYSTEM
-							if (!p.isSpaces()) {
-								//Whitespace expected after '&{0}'
-								error(XML.XML014, "PUBLIC");
-							}
-							if ((systemLiteral = p.readString()) == null) {
-								//Quoted string declaration expected"
-								error(XDEF.XDEF504);
-								return;
-							}
-						} else {
-							systemLiteral = p.getSourceBuffer().trim();
+								break;
+							case 1:
+								//PUBLIC
+								if (!p.isSpaces()) {
+									//Whitespace expected after '&{0}'
+									error(XML.XML014, "PUBLIC");
+								}	if (p.readString() != null) {
+									if (!p.isSpaces()) {
+										//Whitespace expected after '&{0}'
+										error(XML.XML014, "PUBLIC");
+										return;
+									}
+									if ((systemLiteral = p.readString())==null){
+										//Quoted string declaration expected"
+										error(XDEF.XDEF504);
+										return;
+									}
+								} else {
+									//Quoted string declaration expected"
+									error(XDEF.XDEF504);
+									return;
+								}
+								break;
+							default:
+								systemLiteral = p.getSourceBuffer().trim();
 						}
 						URL u;
 						try {
@@ -234,7 +237,7 @@ class ChkDOMParser extends SReporter {
 				}
 				chkEl = parentNode.createChkElement(el);
 			}
-			List<Attr> atrs1 = new ArrayList<Attr>(); // list of processed atrs
+			List<Attr> atrs1 = new ArrayList<>(); // list of processed atrs
 			// Process atrributes which have model
 			for (XMData x: chkEl.getXMElement().getAttrs()) {
 				String uri = x.getNSUri();

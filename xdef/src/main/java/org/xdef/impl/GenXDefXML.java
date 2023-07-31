@@ -170,7 +170,7 @@ public final class GenXDefXML {
 						}
 						y._options.addAll(x._options);
 					}
-					final Set<QName> names = new HashSet<QName>();
+					final Set<QName> names = new HashSet<>();
 					for (int i = 0; i < _models.size(); i++) {
 						final QName name;
 						if (!names.add(name = _models.get(i)._qname)) {

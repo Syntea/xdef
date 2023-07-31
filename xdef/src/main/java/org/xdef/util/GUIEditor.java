@@ -24,6 +24,7 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import javax.swing.AbstractAction;
@@ -492,7 +493,7 @@ public class GUIEditor extends GUIScreen {
 	 */
 	private static Element canonizeProject(final Element project) {
 		NodeList nl = project.getElementsByTagName("XDefinition");
-		ArrayList<String> sources = new ArrayList<String>();
+		List<String> sources = new ArrayList<>();
 		for (int i = 0; i < nl.getLength(); i++) {
 			Element e = (Element) nl.item(i);
 			String s = e.getTextContent();
@@ -524,7 +525,7 @@ public class GUIEditor extends GUIScreen {
 			project.appendChild(e);
 		}
 		// remove sources with the equal text content.
-		ArrayList<Element> ar = new ArrayList<Element>();
+		List<Element> ar = new ArrayList<>();
 		for (int i = 0; i < nl.getLength(); i++) {
 			Element e = (Element) nl.item(i);
 			String s = e.getTextContent();
@@ -538,7 +539,7 @@ public class GUIEditor extends GUIScreen {
 			project.removeChild(e);
 		}
 		nl = project.getElementsByTagName("XDefinition");
-		ar = new ArrayList<Element>();
+		ar = new ArrayList<>();
 		for (int i = 0; i < nl.getLength(); i++) {
 			Element e = (Element) nl.item(i);
 			ar.add(e);
@@ -716,7 +717,7 @@ public class GUIEditor extends GUIScreen {
 		// get X-definition sources
 		NodeList nl = project.getElementsByTagName("XDefinition");
 		try {
-			ArrayList<String> xdefs = new ArrayList<String>();
+			List<String> xdefs = new ArrayList<>();
 			for (int i = 0; i < nl.getLength(); i++) {
 				Element e = (Element) nl.item(i);
 				String t = e.getTextContent().trim();
@@ -1050,16 +1051,20 @@ public class GUIEditor extends GUIScreen {
 			return;
 		}
 		if ("-p".equals(arg)) {
-			if (args.length == 1) {
-				System.err.println("Missing parameter with project\n" + info);
-			} else if (args.length == 2) {
-				runEditor('p', (char) 0, args[1]);
-			} else {
-				System.err.println("More parameters not allowed here\n" + info);
+			switch (args.length) {
+				case 1:
+					System.err.println("Missing parameter with project\n"+info);
+					break;
+				case 2:
+					runEditor('p', (char) 0, args[1]);
+					break;
+				default:
+					System.err.println("More parameters not allowed here\n"
+						+ info);
 			}
 			return;
 		}
-		ArrayList<String> xdefs = new ArrayList<String>();
+		List<String> xdefs = new ArrayList<>();
 		String dataPath = null;
 		boolean wasDataPath = false;
 		boolean wasXDefinition = false;
@@ -1067,26 +1072,33 @@ public class GUIEditor extends GUIScreen {
 		String editInput = null;
 		String displayResult = null;
 		File workDir = null;
-		ArrayList<String> external = new ArrayList<String>();
+		List<String> external = new ArrayList<>();
 		int i = 1;
 		char param;
 		char format = (char) 0;
-		if ("-c".equals(arg)) {
-			param = 'c';
-		} else if ("-v".equals(arg)) {
-			param = 'v';
-		} else if ("-g".equals(arg)) { // generate X-definition
-			param = 'g';
-			if (args.length >= 2) {
-				String x = args[1].trim();
-				if (!x.isEmpty() && x.charAt(0)!= '-') {
-					i++;
-					dataPath = x;
-				}
-			}
-		} else {
+		if (null == arg) {
 			System.err.println("Incorrect parameter: " + arg + "\n" + info);
 			return;
+		} else switch (arg) {
+			case "-c":
+				param = 'c';
+				break;
+			case "-v":
+				param = 'v';
+				break;
+			case "-g":
+				// generate X-definition
+				param = 'g';
+				if (args.length >= 2) {
+					String x = args[1].trim();
+					if (!x.isEmpty() && x.charAt(0)!= '-') {
+						i++;
+						dataPath = x;
+					}
+				}	break;
+			default:
+				System.err.println("Incorrect parameter: " + arg + "\n" + info);
+				return;
 		}
 		while (i < args.length) {
 			arg = args[i++];

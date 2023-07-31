@@ -1,7 +1,7 @@
 package org.xdef.impl;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 import org.xdef.model.XMDefinition;
 import org.xdef.sys.SUnsupportedOperationException;
 
@@ -63,7 +63,7 @@ public final class XSelectorEnd extends XNode {
 
 	@Override
 	public final void writeXNode(final XDWriter xw,
-		final ArrayList<XNode> list) throws IOException {
+		final List<XNode> list) throws IOException {
 		xw.writeShort(getKind());
 	}
 

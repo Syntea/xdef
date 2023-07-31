@@ -1,7 +1,7 @@
 package org.xdef.impl.code;
 
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 import org.xdef.XDContainer;
@@ -30,7 +30,7 @@ public final class CodeUniqueset extends XDValueAbstract implements XDUniqueSet{
 	/** Map of unique items ("table"). */
 	private final Map<UniquesetKey, UniquesetValue> _map;
 	/** Set of markers. */
-	private final Set<Object> _markers = new HashSet<Object>();
+	private final Set<Object> _markers = new HashSet<>();
 	/** Array with parse items. */
 	private final ParseItem[] _parseItems;
 	/** Array with names of assigned values. */
@@ -48,7 +48,7 @@ public final class CodeUniqueset extends XDValueAbstract implements XDUniqueSet{
 		final String[] valueNames,
 		final String name) {
 		_name = name;
-		_map = new HashMap<UniquesetKey, UniquesetValue>();
+		_map = new LinkedHashMap<>();
 		_parseItems = new ParseItem[parseItems.length];
 		for(int i = 0; i < parseItems.length; i++) {
 			_parseItems[i] = (ParseItem) parseItems[i].cloneItem();
@@ -165,8 +165,8 @@ public final class CodeUniqueset extends XDValueAbstract implements XDUniqueSet{
 			usv._references.clear();
 		}
 		_map.clear();
-		for (int i = 0; i < _parseItems.length; i++) {
-			_parseItems[i]._itemValue = null;
+		for (ParseItem _parseItem : _parseItems) {
+			_parseItem._itemValue = null;
 		}
 		return result;
 	}
@@ -303,7 +303,7 @@ public final class CodeUniqueset extends XDValueAbstract implements XDUniqueSet{
 			UniquesetValue val = _map.get(usi._key);
 			if (val._assignedValues != null) {
 				DefContainer values = new DefContainer();
-				for (Map.Entry<String,XDValue>y :
+				for (Map.Entry<String,XDValue> y :
 					val._assignedValues.entrySet()){
 					values.setXDNamedItem(y.getKey(), y.getValue());
 				}
@@ -436,9 +436,9 @@ public final class CodeUniqueset extends XDValueAbstract implements XDUniqueSet{
 		@Override
 		public int hashCode() {
 			int result = _items.length;
-			for (int i = 0; i < _items.length; i++) {
-				if (_items[i] != null) {
-					result = result*3 + _items[i].hashCode();
+			for (XDValue _item : _items) {
+				if (_item != null) {
+					result = result*3 + _item.hashCode();
 				}
 			}
 			return result;
@@ -473,7 +473,7 @@ public final class CodeUniqueset extends XDValueAbstract implements XDUniqueSet{
 		private void mark(final Set<Object> markers) {
 			if (!markers.isEmpty()) {
 				if (_referenced == null) {
-					_referenced = new HashSet<Object>();
+					_referenced = new HashSet<>();
 				}
 				for (Object m : markers) {
 					_referenced.add(m);
@@ -495,7 +495,7 @@ public final class CodeUniqueset extends XDValueAbstract implements XDUniqueSet{
 		 */
 		private void setValue(final String name, final XDValue val) {
 			if (_assignedValues == null) {
-				_assignedValues = new HashMap<String, XDValue>();
+				_assignedValues = new LinkedHashMap<>();
 			}
 			_assignedValues.put(name, val);
 		}
@@ -582,11 +582,10 @@ public final class CodeUniqueset extends XDValueAbstract implements XDUniqueSet{
 		 * @return value of key part.
 		 */
 		public final XDValue getKeyPart(final String name) {
-			for (int i=0; i < _uSet._parseItems.length; i++) {
-				ParseItem x = _uSet._parseItems[i];
-					if (name.equals(x._name)) {
-						return x._itemValue;
-					}
+			for (ParseItem x : _uSet._parseItems) {
+				if (name.equals(x._name)) {
+					return x._itemValue;
+				}
 			}
 			throw new RuntimeException("Kye part " + name + " not exists");
 		}

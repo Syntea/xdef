@@ -314,11 +314,9 @@ public final class CompileXonXdef extends XScriptParser {
 	private PNode genXonValue(final String name,
 		final JValue jo,
 		final PNode parent) {
-		SBuffer sbf, sbocc = null;
+		SBuffer sbf, sbocc;
 		PNode pn = genJElement(parent, X_VALUE, jo.getPosition());
-		if (jo.getValue() == null) {
-			sbf = new SBuffer("jnull()");
-		} else {
+		if (jo.getValue() != null) {
 			if (jo.toString().trim().isEmpty()) {
 				sbf = new SBuffer("jvalue()", jo.getPosition());
 				sbocc = new SBuffer("?", jo.getPosition());
@@ -533,9 +531,8 @@ public final class CompileXonXdef extends XScriptParser {
 						SPosition spos = getPosition();
 						List<Object> sectionList = parseXscript(new SBuffer(s));
 						SBuffer item = removeSection("occurs", sectionList);
-						XOccurrence occ = null;
 						if (item != null) {
-							occ = new XOccurrence();
+							XOccurrence occ = new XOccurrence();
 							setSourceBuffer(item);
 							nextSymbol();
 							isOccurrence(occ);
@@ -771,8 +768,6 @@ public final class CompileXonXdef extends XScriptParser {
 		xp.setXdefMode();
 		xp.parse();
 		genXonModel(jp.getResult(), pn);
-		xp = null;
-		jp = null;
 		pn._value = null;
 /*#if DEBUG*#/
 		displayModel(pn); // remove this code in future
@@ -888,14 +883,13 @@ public final class CompileXonXdef extends XScriptParser {
 	 * with the source of the section command.
 	 */
 	private List<Object> parseXscript() {
-		List<Object> sectionList = new ArrayList<Object>();
+		List<Object> sectionList = new ArrayList<>();
 		SPosition spos = getPosition();
 		nextSymbol();
 		char sym;
 		for (;;) {
 			while (_sym == SEMICOLON_SYM || _sym == END_SYM) {
 				nextSymbol();
-				spos = getPosition();
 			}
 			if (_sym == NOCHAR) {
 				break;
@@ -930,7 +924,6 @@ public final class CompileXonXdef extends XScriptParser {
 					addSection(sectionName, sectionList, getPosition());
 				}
 			}
-			spos = getPosition();
 		}
 		return sectionList;
 	}
@@ -1046,13 +1039,13 @@ public final class CompileXonXdef extends XScriptParser {
 		private final int MAP = 2;
 
 		/** stack with kinds of nested items. */
-		private final Stack<Integer> _kinds = new Stack<Integer>();
+		private final Stack<Integer> _kinds = new Stack<>();
 		/** stack with kinds of arrays. */
-		private final Stack<JArray> _arrays = new Stack<JArray>();
+		private final Stack<JArray> _arrays = new Stack<>();
 		/** stack with kinds of maps. */
-		private final Stack<JMap> _maps = new Stack<JMap>();
+		private final Stack<JMap> _maps = new Stack<>();
 		/** stack of names in map. */
-		private final Stack<SBuffer> _names = new Stack<SBuffer>();
+		private final Stack<SBuffer> _names = new Stack<>();
 		/** actual kind (VALUE, ARRAY or MAP). */
 		private int _kind; // ARRAY, MAP, or VALUE
 		/** parsed value. */
@@ -1070,15 +1063,19 @@ public final class CompileXonXdef extends XScriptParser {
 		 * @param value JValue to be added to result object.
 		 */
 		public void putValue(JValue value) {
-			if (_kind == ARRAY) {
-				_arrays.peek().add(value);
-			} else if (_kind == MAP) {
-				SBuffer name = _names.pop();
-				_maps.peek().put(name.getString(), value);
-			} else { // must be now VALUE
-				_value = value;
+			switch (_kind) {
+				case ARRAY:
+					_arrays.peek().add(value);
+					break;
+				case MAP:
+					SBuffer name = _names.pop();
+					_maps.peek().put(name.getString(), value);
+					break;
+				default: // must be VALUE
+					_value = value;
 			}
 		}
+
 		@Override
 		/** Set name of value pair.
 		 * @param name value name.

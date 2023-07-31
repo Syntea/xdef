@@ -316,8 +316,8 @@ public final class KXmlUtils extends KDOMUtils {
 		final boolean removeIgnorableWhiteSpaces,
 		final boolean comments,
 		final Map<String, String> namespaceMap) throws IOException {
-		Map<String, String> newPrefixMap = // map valid for child nodes
-			new LinkedHashMap<String, String>(namespaceMap);
+		// map valid for child nodes
+		Map<String, String> newPrefixMap = new LinkedHashMap<>(namespaceMap);
 		short type;
 		String startLine = lineStart;
 		String indent = indentStep;
@@ -422,8 +422,7 @@ public final class KXmlUtils extends KDOMUtils {
 				break;
 			}
 			case Node.ELEMENT_NODE: {
-				Map<String, String> unresolved =
-					new LinkedHashMap<String, String>();
+				Map<String, String> unresolved = new LinkedHashMap<>();
 				if (encoding != null) {
 					writeXmlHdr(out, node.getOwnerDocument().getXmlVersion(),
 						encoding, indentStep);

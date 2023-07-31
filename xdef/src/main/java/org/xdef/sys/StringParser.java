@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Locale;
 import java.util.Stack;
 import java.util.TimeZone;
@@ -1276,7 +1277,7 @@ public class StringParser extends SReporter implements SParser {
 	 */
 	public final void pushParser(final SParserSavedObject savedObject) {
 		if (_parserStack == null) {
-			_parserStack = new Stack<StringParser>();
+			_parserStack = new Stack<>();
 		} else if (_parserStack.size() > 64) {//too many nested includes
 			fatal(SYS.SYS033);//Parser can't continue; too many nested includes
 			return;
@@ -2587,7 +2588,7 @@ public class StringParser extends SReporter implements SParser {
 		char hourKind = ' ';
 		int ampm = -1;
 		int era = 0;
-		ArrayList<MyDate> _variants = null;
+		List<MyDate> _variants = null;
 	loop:
 		while (fpos < flen || failVariant) {
 			char pat;
@@ -2659,7 +2660,7 @@ public class StringParser extends SReporter implements SParser {
 			switch (pat) {
 				case '|': //variant part
 					if (_variants == null) {
-						_variants = new ArrayList<MyDate>();
+						_variants = new ArrayList<>();
 					}
 					MyDate md = new MyDate(myDate);
 					md._endPos = getIndex();

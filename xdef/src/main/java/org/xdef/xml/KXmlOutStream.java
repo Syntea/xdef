@@ -33,7 +33,7 @@ public class KXmlOutStream {
 	private boolean _rootWritten = false;
 	private String _indent = null;
 	private final KNamespace _ns = new KNamespace();
-	private final Stack<String> _names = new Stack<String>();
+	private final Stack<String> _names = new Stack<>();
 
 	/** Creates new instance of DefXmlOutStream with java.io.OutputStream.
 	 * @param out where to write XML.

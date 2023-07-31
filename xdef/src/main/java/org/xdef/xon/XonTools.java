@@ -155,7 +155,7 @@ public class XonTools {
 		for (;;) {
 			p.isSpaces();
 			if (p.isChar('[')) {
-				List<Object> ar1 = new ArrayList<Object>();
+				List<Object> ar1 = new ArrayList<>();
 				parseJArray(ar1, p);
 				ar.add(ar1);
 				p.isSpaces();
@@ -260,7 +260,7 @@ public class XonTools {
 		if (s.isEmpty()) {
 			return "";
 		} else if (s.charAt(0) == '[') {
-			ArrayList<Object> ar = new ArrayList<Object>();
+			List<Object> ar = new ArrayList<>();
 			StringParser p = new StringParser(s);
 			p.setIndex(1);
 			parseJArray(ar, p);

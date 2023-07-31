@@ -15,9 +15,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import org.xdef.XDContainer;
 import org.xdef.XDNamedValue;
 import org.xdef.XDParser;
@@ -35,10 +38,7 @@ public class GenDTD {
 	/** The output stream for DTD */
 	private final OutputStreamWriter _out;
 	/** HashMap which prevents repeated declaration of elements */
-	private HashSet<String> _defElems;
-
-	/** Prevent user to instantiate this class. */
-	private GenDTD() {_out = null;};
+	private Set<String> _defElems;
 
 	/** Creates a new instance of TestGenDTD */
 	private GenDTD(final OutputStreamWriter out) {_out = out;}
@@ -108,8 +108,7 @@ public class GenDTD {
 			lockey = key.substring(ndx + 1);
 		}
 		XMElement[] elems = def.getModels();
-		for (int i = 0; i < elems.length; i++) {
-			XMElement xel  = elems[i];
+		for (XMElement xel : elems) {
 			if (lockey.equals(xel.getName())) {
 				return xel;
 			}
@@ -148,7 +147,7 @@ public class GenDTD {
 			return;
 		}
 		GenDTD gd = new GenDTD(out);
-		gd._defElems = new HashSet<String>();
+		gd._defElems = new HashSet<>();
 		gd.genDTD(defElem);
 	}
 
@@ -313,12 +312,12 @@ public class GenDTD {
 		String separator = seqSeparator;
 		XMNode[] childNodes = def.getChildNodeModels();
 		boolean isMixed = false;
-		ArrayList<String> elements = new ArrayList<String>();
+		List<String> elements = new ArrayList<>();
 		String name;
 		XMNode dn;
 		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < childNodes.length; i++) {
-			dn = childNodes[i];
+		for (XMNode childNode : childNodes) {
+			dn = childNode;
 			name = dn.getName();
 			short kind;
 			if ((kind = dn.getKind()) == XMNode.XMTEXT) {
@@ -472,8 +471,8 @@ public class GenDTD {
 		}
 		_out.write(">\n");
 		genAttlist(def);
-		for (int i = 0; i < childNodes.length; i++) {
-			if ((dn = childNodes[i]).getKind() == XMNode.XMELEMENT) {
+		for (XMNode childNode : childNodes) {
+			if ((dn = childNode).getKind() == XMNode.XMELEMENT) {
 				if (dn.getName().startsWith("xd:any")) {
 					continue;
 				}
@@ -508,8 +507,7 @@ public class GenDTD {
 		if (args.length < 3) {
 			throw new RuntimeException("Missing parameters\n" + info);
 		}
-		HashMap<File, FileInputStream> fileTab =
-			new HashMap<File, FileInputStream>();
+		Map<File, FileInputStream> fileTab = new LinkedHashMap<>();
 		String encoding = "UTF-8";
 		for (int i = 2; i < args.length; i++) {
 			if (args[i].startsWith("-e")) {
@@ -530,9 +528,9 @@ public class GenDTD {
 			} else {
 				try {
 					File[] files = SUtils.getFileGroup(args[i]);
-					for (int j = 0; j < files.length; j++) {
-						fileTab.put(files[j].getCanonicalFile(),
-							new FileInputStream(files[j]));
+					for (File file : files) {
+						fileTab.put(file.getCanonicalFile(),
+							new FileInputStream(file));
 					}
 				} catch (Exception ex) {
 					throw new RuntimeException(

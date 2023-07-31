@@ -4,9 +4,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import org.xdef.XDDocument;
 import org.xdef.impl.code.CodeTable;
@@ -292,7 +292,7 @@ public final class XElement extends XCodeDescriptor
 ////////////////////////////////////////////////////////////////////////////////
 	@Override
 	public final void writeXNode(final XDWriter xw,
-		final ArrayList<XNode> list) throws IOException{
+		final List<XNode> list) throws IOException{
 		if (list.indexOf(this) < 1) {
 			list.add(this);
 		}
@@ -344,7 +344,7 @@ public final class XElement extends XCodeDescriptor
 
 	final static XElement readXElement(final XDReader xr,
 		final XDefinition xd,
-		final ArrayList<XNode> list)
+		final List<XNode> list)
 		throws IOException {
 		String name = xr.readString();
 		String namespaceURI = xr.readString();

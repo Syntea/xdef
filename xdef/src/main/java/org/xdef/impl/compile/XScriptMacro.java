@@ -11,6 +11,7 @@ import org.xdef.sys.SPosition;
 import org.xdef.sys.StringParser;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /** Provides model of macro definition used in X-definitions script.
@@ -18,7 +19,7 @@ import java.util.Map;
  */
 public final class XScriptMacro {
 	private final String _name;
-	private ArrayList<String> _paramNames;
+	private List<String> _paramNames;
 	private String[] _paramValues;
 	private String _value;
 	private int[] _references;
@@ -45,7 +46,7 @@ public final class XScriptMacro {
 			reporter == null ? new ArrayReporter() : reporter;
 		_name = (defName != null ? defName + '#' + name : name).intern();
 		int numParams = params.size();
-		_paramNames = new ArrayList<String>(params.keySet());
+		_paramNames = new ArrayList<>(params.keySet());
 		_paramValues = new String[numParams];
 		for (int i = 0, j = _paramNames.size(); i < j; i++) {
 			_paramValues[i] = params.get(_paramNames.get(i));
@@ -166,7 +167,7 @@ public final class XScriptMacro {
 	/** Get list of names of macro parameters.
 	 * @return list of names of macro parameters.
 	 */
-	public final ArrayList<String> getParamNames() {return _paramNames;}
+	public final List<String> getParamNames() {return _paramNames;}
 
 	/** Get array with values of parameters,
 	 * @return array with values of parameters,
@@ -203,7 +204,7 @@ public final class XScriptMacro {
 		XScriptMacro result = new XScriptMacro(xr.readString());
 		result._value = xr.readString();
 		int len = xr.readInt();
-		result._paramNames = new ArrayList<String>(len);
+		result._paramNames = new ArrayList<>(len);
 		for (int i = 0; i < len; i++) {
 			result._paramNames.add(xr.readString());
 		}
@@ -220,5 +221,4 @@ public final class XScriptMacro {
 		result._sourcePosition = xr.readSPosition();
 		return result;
 	}
-
 }

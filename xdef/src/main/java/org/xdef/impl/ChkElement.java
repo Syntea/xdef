@@ -74,7 +74,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	 *  the X-Script interpreter. */
 	private String _attURI;
 	/** List of names of attributes. */
-	private HashSet<String> _attNames;
+	private Set<String> _attNames;
 	/** The Map with child XPath occurrences. */
 	private final Map<String, XPosInfo> _xPosOccur;
 	/** Array of X-definitions. */
@@ -96,7 +96,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	/** If true the element was set to nil. */
 	private boolean _nil;
 	/** The list of child check elements. */
-	ArrayList<ChkElement> _chkChildNodes;
+	List<ChkElement> _chkChildNodes;
 	/** If true the element attributes had been checked. */
 	private boolean _attsChecked;
 	 /** mode: 'C' - comment, 'E' - element, 'A' - attribute, 'T' - text,
@@ -141,7 +141,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			_forget = true;
 		}
 		_xElement = xelement;
-		_xPosOccur = new LinkedHashMap<String, XPosInfo>();
+		_xPosOccur = new LinkedHashMap<>();
 		_xPos = _parent.getXPos() + '/' + _name;
 		if (_parent.getParent() != null) {
 			int xPosCnt = getElemXPos(((ChkElement)_parent)._xPosOccur, _xPos);
@@ -151,8 +151,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		_defList = _xElement._childNodes;
 		_actDefIndex = -1; //index of actual X-definition
 		_counters = new int[_defList.length + 1]; //one more for '*'
-		_chkChildNodes = new ArrayList<ChkElement>();
-		_attNames = new HashSet<String>();
+		_chkChildNodes = new ArrayList<>();
+		_attNames = new HashSet<>();
 		if (ignoreAll) {
 			_element = null;
 		} else if (_element != null) {
@@ -180,9 +180,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 						_element.getAttribute(X_KEYATTR));
 				}
 				if (X_MAP.equals(_element.getLocalName())) {
-					_xonMap = new LinkedHashMap<String, Object>();
+					_xonMap = new LinkedHashMap<>();
 				} else if (X_ARRAY.equals(_element.getLocalName())) {
-					_xonArray = new ArrayList<Object>();
+					_xonArray = new ArrayList<>();
 				}
 			}
 			if ((_xComponent = _parent.getXComponent()) != null) {// X-component
@@ -1315,7 +1315,6 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 				}
 				case XNode.XMELEMENT: {
 					XElement xel = (XElement) xn;
-					result = null;
 					if (el != null) { // not text node (element)
 						int oldDefIndex = _actDefIndex;
 						_actDefIndex = _nextDefIndex; // save actual index
@@ -2719,13 +2718,11 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			}
 		}
 		if (_element != null) {
-			XData xatt;
 			String name;
 			String xPos	= _xPos;
 			XData[] xattrs = (XData[]) _xElement.getAttrs();
 			int anyAttrs = 0;
-			for (int i = 0; i < xattrs.length; i++) {
-				xatt = xattrs[i];
+			for (XData xatt : xattrs) {
 				_xdata = xatt;
 				name = xatt.getName();
 				if ("$attr".equals(name)) {// any attribute
@@ -2813,6 +2810,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 					}
 				}
 			}
+			XData xatt;
 			if ((xatt = _xElement.getDefAttr("$text", -1)) != null) {
 				_xPos = xPos + "/text()";
 				if (_numText < xatt.minOccurs()) {
@@ -3250,15 +3248,14 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 					debugXPos(XDDebug.FINALLY);
 					if (xtxt1._finaly >= 0) {
 						_elemValue = _element;
-						Node txt = appendTextNode(
-							(_data = value) == null ? "" : value, xtxt1);
+						Node txt = appendTextNode(_data = value, xtxt1);
 						exec(xtxt1._finaly, (byte) 'T');
 						if ((value = _data) == null || value.isEmpty()) {
 							_element.removeChild(txt);
 						} else {
 							txt.setNodeValue(value);
 						}
-					} else if (value != null && !value.isEmpty()) {
+					} else if (!value.isEmpty()) {
 						appendTextNode(value, xtxt1);
 					}
 					if (value != null && !value.isEmpty()) {
@@ -3573,7 +3570,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	}
 
 	@Override
-	final ArrayList<ChkElement> getChkChildNodes() {return _chkChildNodes;}
+	final List<ChkElement> getChkChildNodes() {return _chkChildNodes;}
 
 	@Override
 	/** Get model of the processed data object.
@@ -3701,7 +3698,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	/** Get XON result of processed Element model.
 	 * @return result of XON parsing.
 	 */
-	public Object getXon() {
+		public Object getXon() {
 		return _xonArray!=null ? _xonArray : _xonMap!=null ?_xonMap : _xonValue;
 	}
 }

@@ -555,12 +555,12 @@ public abstract class STester {
 	public final void assertEq(final Object a1,
 		final Object a2,
 		final Object msg) {
-		if (a1 != null && a1 != null) {
+		if (a1 != null) {
 			if (!equals(a1, a2)) {
 				fail((msg != null ? msg.toString().trim() + '\n' : "")
 					+ "a1=" + a1 + "; a2=" + a2);
 			}
-		} else if (a1 != null || a2 != null) {
+		} else if (a2 != null) {
 			fail((msg != null ? msg.toString().trim() + '\n' : "")
 				+ "a1=" + a1 + "; a2=" + a2);
 		}
@@ -1189,7 +1189,7 @@ public abstract class STester {
 		final String... sources) {
 		// where are compiled classes of X-definitions
 		// prepare parameters
-		ArrayList<String> ar = new ArrayList<String>();
+		List<String> ar = new ArrayList<>();
 		ar.add("-encoding");
 		ar.add(getEncoding());
 		ar.add("-classpath");

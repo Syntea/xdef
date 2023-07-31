@@ -74,7 +74,7 @@ public class XonXml_X {
 	 * @return element with map (internal form).
 	 */
 	private static Element genMapX(final Map map, final Document doc) {
-		Element e = e = doc.createElementNS(XON_NS_URI_X, X_MAP);
+		Element e = doc.createElementNS(XON_NS_URI_X, X_MAP);
 		Iterator it = map.entrySet().iterator();
 		while (it.hasNext()) {
 			Map.Entry en = (Map.Entry) it.next();
@@ -153,7 +153,7 @@ public class XonXml_X {
 	 * @return created XON array.
 	 */
 	private static List<Object> createArrayX(final Element elem) {
-		List<Object> result = new ArrayList<Object>();
+		List<Object> result = new ArrayList<>();
 		Node n = elem.getFirstChild();
 		while(n != null) {
 			if (n.getNodeType() == Node.ELEMENT_NODE) {
@@ -169,7 +169,7 @@ public class XonXml_X {
 	 * @return created XON object (map).
 	 */
 	private static Map<String, Object> createMapX(final Element elem) {
-		Map<String,Object> result = new LinkedHashMap<String,Object>();
+		Map<String,Object> result = new LinkedHashMap<>();
 		Node n = elem.getFirstChild();
 		while(n != null) {
 			if (n.getNodeType() == Node.ELEMENT_NODE) {
@@ -205,15 +205,19 @@ public class XonXml_X {
 	 */
 	private static Object fromXmlX(final Element elem) {
 		String name = elem.getNodeName();
-		if (X_ARRAY.equals(name)) { // array
-			return createArrayX(elem);
-		} else if (X_MAP.equals(name)) { // map
-			return createMapX(elem);
-		} else if (X_VALUE.equals(name)) { // item
-			Attr attr = elem.getAttributeNode(X_VALATTR);
-			if (attr != null) {
-				return XonTools.xmlToJValue(attr.getNodeValue());
-			}
+		if (null != name) switch (name) {
+			case X_ARRAY:
+				// array
+				return createArrayX(elem);
+			case X_MAP:
+				// map
+				return createMapX(elem);
+			case X_VALUE:
+				// item
+				Attr attr = elem.getAttributeNode(X_VALATTR);
+				if (attr != null) {
+					return XonTools.xmlToJValue(attr.getNodeValue());
+				}
 		}
 		throw new RuntimeException(
 			"Unsupported XON internal form element: " + elem.getTagName());
@@ -226,7 +230,6 @@ public class XonXml_X {
 	public final static Object toXon(final Node node) {
 		Element elem = node.getNodeType() == Node.DOCUMENT_NODE
 			? ((Document) node).getDocumentElement() : (Element) node;
-		String name = elem.getTagName();
 		String uri = elem.getNamespaceURI();
 		return XON_NS_URI_X.equals(uri)
 			? fromXmlX(elem) // X format

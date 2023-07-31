@@ -205,7 +205,7 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 			+LN;
 		if (listNodes.length() == 0) {
 			result +=
-"\t\treturn new java.util.ArrayList<org.xdef.component.XComponent>();"+LN+
+"\t\treturn new java.util.ArrayList<>();"+LN+
 "\t}"+LN;
 		} else {
 			result += listNodes + "\t\treturn a;"+LN+"\t}"+LN;

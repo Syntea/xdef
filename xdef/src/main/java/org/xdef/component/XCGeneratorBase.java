@@ -30,7 +30,7 @@ class XCGeneratorBase {
 	/** Platform-dependent newline. */
 	static final String LN = LINE_SEPARATOR;
 	/** Names that can't be used in generated code.*/
-	static final Set<String> RESERVED_NAMES = new HashSet<String>();
+	static final Set<String> RESERVED_NAMES = new HashSet<>();
 	/** Switch to generate JavaDoc. */
 	final boolean _genJavadoc;
 	/** Internal reporter where to write messages. */
@@ -363,7 +363,7 @@ class XCGeneratorBase {
 		String typ;
 		if (max > 1) {
 			d += 's';
-			String s = "new java.util.ArrayList<" + typeName + ">()";
+			String s = "new java.util.ArrayList<>()";
 			x = " =" + (s.length() > 40 ? LN + "\t\t" : " ") + s;
 			typ = "java.util.List<" + typeName + ">";
 		} else {
@@ -848,7 +848,7 @@ class XCGeneratorBase {
 			sb.append(
 "\t\tjava.util.List<org.xdef.component.XComponent> a=")
 			.append(LN).append(
-"\t\t\tnew java.util.ArrayList<org.xdef.component.XComponent>();")
+"\t\t\tnew java.util.ArrayList<>();")
 			.append(LN);
 		}
 		sb.append("\t\torg.xdef.component.XComponentUtil.addXC(a, ")
@@ -870,7 +870,7 @@ class XCGeneratorBase {
 			sb.append(
 "\t\tjava.util.ArrayList<org.xdef.component.XComponent> a=").append(LN)
 				.append(
-"\t\t\tnew java.util.ArrayList<org.xdef.component.XComponent>();")
+"\t\t\tnew java.util.ArrayList<>();")
 				.append(LN);
 		}
 		String x;
@@ -958,11 +958,11 @@ class XCGeneratorBase {
 			return ((xe.isReference()) ?	_components.get(xe.getReferencePos())
 				: _components.get(xe.getXDPosition())).getName();
 		} else {
-			final String s = xe.getXDPosition();
+			String s = xe.getXDPosition();
 			if (s == null) {// model still may be a reference
 				//if null model is a reference
-				return (_components.get(
-					xe.isReference() ? xe.getReferencePos() : null)).getName();
+				s = xe.isReference() ? xe.getReferencePos() : null;
+				return (_components.get(s)).getName();
 			} else {
 				String t = xe.isReference() ? xe.getReferencePos() : null;
 				if (t == null) { // if no reference exists
@@ -1049,19 +1049,19 @@ class XCGeneratorBase {
 		return s;
 	}
 
-	/** Add name of variable name to the set.
-	 * @param set the set where to add.
+	/** Add name of variable name to the set of varialble names.
+	 * @param varNames set of variable names.
 	 * @param name name to add.
 	 * @param xdPosition XDPosition of actual model.
 	 * @param ext it it is external name.
 	 * @return the unique name.
 	 */
-	final String addVarName(final Set<String> set,
+	final String addVarName(final Set<String> varNames,
 		final String name,
 		final String xdPosition,
 		final boolean ext) {
-		String iname = getUniqueName(name, set);
-		set.add(iname);
+		String iname = getUniqueName(name, varNames); //get unique variable name
+		varNames.add(iname);
 		if (iname.equals(name)) {
 			return name;
 		}

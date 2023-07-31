@@ -5,8 +5,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
@@ -546,7 +546,7 @@ public final class XCodeProcessor {
 	/** debug information. */
 	private XMDebugInfo _debugInfo;
 	/** List of items to be managed at the end of process. */
-	private ArrayList<XDValue> _finalList;
+	private List<XDValue> _finalList;
 	/** Map of named user objects. */
 	private final Map<String, Object> _userObjects;
 	/** XPath function resolver. */
@@ -555,7 +555,7 @@ public final class XCodeProcessor {
 	final XPathVariableResolver _variableResolver;
 
 	private XCodeProcessor() {
-		_userObjects = new HashMap<>();
+		_userObjects = new LinkedHashMap<>();
 		_functionResolver = new XDFunctionResolver();
 		_variableResolver = new XDVariableResolver();
 	}
@@ -791,7 +791,7 @@ public final class XCodeProcessor {
 			chkNode._parent.addToFinalList(x);
 		} else  {
 			if (_finalList == null) {
-				_finalList = new ArrayList<XDValue>();
+				_finalList = new ArrayList<>();
 			}
 			_finalList.add(x);
 		}
@@ -823,7 +823,7 @@ public final class XCodeProcessor {
 	/** Close items in final list (if present).
 	 * @param finalList array of items in final list or null.
 	 */
-	final void closeFinalList(final ArrayList<XDValue> finalList) {
+	final void closeFinalList(final List<XDValue> finalList) {
 		// if final list not exists, do nothing
 		if (finalList == null) {
 			return;
@@ -880,12 +880,16 @@ public final class XCodeProcessor {
 						case CompileBase.XD_RESULTSET:
 							// close all not external database objects
 							if (xvar != null && !xvar.isExternal()) {
-								if (itemId == XD_SERVICE) {
-									((XDService) val).close();
-								} else if (itemId == XD_STATEMENT) {
-									((XDStatement) val).close();
-								} else {
-									((XDResultSet) val).close();
+								switch (itemId) {
+									case XD_SERVICE:
+										((XDService) val).close();
+										break;
+									case XD_STATEMENT:
+										((XDStatement) val).close();
+										break;
+									default:
+										((XDResultSet) val).close();
+										break;
 								}
 							}
 							break;
@@ -3018,7 +3022,7 @@ public final class XCodeProcessor {
 						xdef = _xd;
 					}
 					Map<Integer, CodeUniqueset> idrefTables =
-						new LinkedHashMap<Integer, CodeUniqueset>();
+						new LinkedHashMap<>();
 					// save and clear all unique
 					for (int j = 3; j < _globalVariables.length; j++) {
 						XDValue xv;
@@ -3815,54 +3819,64 @@ public final class XCodeProcessor {
 	private void execUniqueOperation(final CodeUniqueset dt,
 		final ChkNode chkNode,
 		final int code) {
-		if (code==UNIQUESET_ID || code==UNIQUESET_SET
-			|| code==UNIQUESET_KEY_ID || code==UNIQUESET_KEY_SET
-			|| code==UNIQUESET_M_ID || code==UNIQUESET_M_SET) {
-			Report rep = updateReport(dt.setId(), chkNode);
-			if (rep != null && code!=UNIQUESET_SET && code != UNIQUESET_KEY_SET
-				&& code != UNIQUESET_M_SET) {
-				if (chkNode._parseResult == null) {
-					putReport(chkNode, rep);
-				} else {
-					chkNode._parseResult.putReport(rep);
+		switch (code) {
+			case UNIQUESET_ID:
+			case UNIQUESET_SET:
+			case UNIQUESET_KEY_ID:
+			case UNIQUESET_KEY_SET:
+			case UNIQUESET_M_ID:
+			case UNIQUESET_M_SET: {
+				Report rep = updateReport(dt.setId(), chkNode);
+				if (rep != null && code!=UNIQUESET_SET
+					&& code != UNIQUESET_KEY_SET
+					&& code != UNIQUESET_M_SET) {
+					if (chkNode._parseResult == null) {
+						putReport(chkNode, rep);
+					} else {
+						chkNode._parseResult.putReport(rep);
+					}
 				}
+				break;
 			}
-		} else if (code == UNIQUESET_CHKID || code == UNIQUESET_M_CHKID
-			|| code == UNIQUESET_KEY_CHKID) {
-			if (!dt.hasId()) {
-				String modif = (dt.getName() != null ? dt.getName()+" " : "")
-					+ dt.printActualKey();
-				//Unique value "&{0}" was not set
-				Report rep = Report.error(XDEF.XDEF522, modif);
-				updateReport(rep, chkNode);
-				if (chkNode._parseResult == null) {
-					_reporter.putReport(rep);
-				} else {
-					chkNode._parseResult.putReport(rep);
+			case UNIQUESET_CHKID:
+			case UNIQUESET_M_CHKID:
+			case UNIQUESET_KEY_CHKID: {
+				if (!dt.hasId()) {
+					String modif = (dt.getName()!=null ? dt.getName()+" " : "")
+						+ dt.printActualKey();
+					//Unique value "&{0}" was not set
+					Report rep = Report.error(XDEF.XDEF522, modif);
+					updateReport(rep, chkNode);
+					if (chkNode._parseResult == null) {
+						_reporter.putReport(rep);
+					} else {
+						chkNode._parseResult.putReport(rep);
+					}
 				}
+				break;
 			}
-		} else {
-			ArrayReporter list = dt.chkId();
-			if (list != null) {
-				String modif = (dt.getName()!=null ? dt.getName()+" " : "")
-					+ dt.printActualKey();
-				//Unique value "&{0}" was not set
-				Report rep = Report.error(XDEF.XDEF522, modif);
-				updateReport(rep, chkNode);
-				switch (code) {
-					case UNIQUESET_KEY_IDREF:
-					case UNIQUESET_M_IDREF:
-					case UNIQUESET_IDREF:
-						list.putReport(rep);
-						break;
-					default :
-						if (chkNode._parseResult == null) {
-							_reporter.putReport(rep);
-						} else {
-							chkNode._parseResult.putReport(rep);
-						}
+			default:
+				ArrayReporter list = dt.chkId();
+				if (list != null) {
+					String modif = (dt.getName()!=null ? dt.getName()+" " : "")
+						+ dt.printActualKey();
+					//Unique value "&{0}" was not set
+					Report rep = Report.error(XDEF.XDEF522, modif);
+					updateReport(rep, chkNode);
+					switch (code) {
+						case UNIQUESET_KEY_IDREF:
+						case UNIQUESET_M_IDREF:
+						case UNIQUESET_IDREF:
+							list.putReport(rep);
+							break;
+						default :
+							if (chkNode._parseResult == null) {
+								_reporter.putReport(rep);
+							} else {
+								chkNode._parseResult.putReport(rep);
+							}
+					}
 				}
-			}
 		}
 	}
 

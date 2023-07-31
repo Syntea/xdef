@@ -405,7 +405,7 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
 	}
 
 	private static class SeqItemList extends SeqItem {
-		final List<SeqItem> _list = new ArrayList<SeqItem>();
+		final List<SeqItem> _list = new ArrayList<>();
 		final int size() {return _list.size();}
 		final void add(final SeqItem item) {
 			_list.add(item);
