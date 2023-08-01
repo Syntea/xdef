@@ -335,19 +335,15 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 
 	/** Create named values getters.
 	 * @param keys array with tripples: key, getter value, result type value.
-	 * @param classNames set with class names.
 	 * @param varNames set with variable names.
 	 * @param getters where to generate getters.
 	 */
 	final void genNamedValueGetters(final List<String> keys,
-		final Set<String> classNames,
 		final Set<String> varNames,
 		final StringBuilder getters) {
 		String key = keys.get(0);
 		String name = xmlToJavaName("get$" + XonTools.toXmlName(key));
-		name = getUniqueName(getUniqueName(
-			getUniqueName(name,RESERVED_NAMES), classNames),
-			varNames);
+		name = getUniqueName(getUniqueName(name, RESERVED_NAMES), varNames);
 		varNames.add(name);
 		String s =
 (_genJavadoc ? "\t/** Getter of named value "+key+".*/"+LN : "")+
@@ -373,13 +369,11 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 	/** Create unique model name.
 	 * @param xe Element model from which setter/getter is generated.
 	 * @param namePrefix prefix of the name (eg. "get$")
-	 * @param classNames set with class names.
 	 * @param varNames set with variable names.
 	 * @return unique model name.
 	 */
 	private static String getXonItemName(final XElement xe,
 		final String namePrefix,
-		final Set<String> classNames,
 		final Set<String> varNames) {
 		XData keyAttr = (XData) xe.getAttr(X_KEYATTR);
 		String name = null;
@@ -401,8 +395,8 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 		if (name == null) {
 			name = namePrefix + xe.getLocalName();
 		}
-		name = getUniqueName(getUniqueName(getUniqueName(
-			xmlToJavaName(name), RESERVED_NAMES), classNames), varNames);
+		name = getUniqueName(
+			getUniqueName(xmlToJavaName(name), RESERVED_NAMES), varNames);
 		varNames.add(name);
 		name = name.substring(4);
 		return name;
@@ -416,7 +410,6 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 	 * @param setters where to generate setter.
 	 * @param getters where to generate getter.
 	 * @param sbi where to generate interface.
-	 * @param classNames set with class names.
 	 * @param varNames set with variable names.
 	 */
 	final void genXonItemGetterAndSetter(final XElement xe,
@@ -426,9 +419,8 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 		final StringBuilder setters,
 		final StringBuilder getters,
 		final StringBuilder sbi,
-		final Set<String> classNames,
 		final Set<String> varNames) {
-		String name = getXonItemName(xe, "get$", classNames, varNames);
+		String name = getXonItemName(xe, "get$", varNames);
 		String typ =
 			getJavaObjectTypeName((XData) xe.getAttr(X_VALATTR));
 		String template;
@@ -724,7 +716,6 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 	 * @param max maximal occurrence.
 	 * @param getters where to generate getter.
 	 * @param sbi where to generate interface.
-	 * @param classNames set with class names.
 	 * @param varNames set with variable names.
 	 */
 	final void genXonEntryMethod(final XElement xe,
@@ -733,7 +724,6 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 		final int max,
 		final StringBuilder getters,
 		final StringBuilder sbi,
-		final Set<String> classNames,
 		final Set<String> varNames) {
 		if (xe._xon == 0) {
 			return;
@@ -745,7 +735,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 		if (keyAttr != null && keyAttr.getFixedValue() == null) { // %anyName
 			String prefix = "anyItem$";
 			name = getUniqueName(prefix, RESERVED_NAMES);
-			name = getUniqueName(getUniqueName(name, classNames), varNames);
+			name = getUniqueName(name, varNames);
 			varNames.add(name);
 			name = name.substring(prefix.length());
 			template =
@@ -804,7 +794,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 					"&{d}", xe.getName()));
 			}
 		} else {
-			name = getXonItemName(xe, "get$", classNames, varNames);
+			name = getXonItemName(xe, "get$", varNames);
 			if (X_ARRAY.equals(xe.getLocalName())) {
 				typ = "java.util.List<Object>";
 				template =

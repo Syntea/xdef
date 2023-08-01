@@ -1049,6 +1049,35 @@ class XCGeneratorBase {
 		return s;
 	}
 
+	/** Return correct name of inner class in the X-component.
+	 * @param className the name to be corrected.
+	 * @param classNameBase base to chich tne new inner class is added.
+	 * @param classNames set with class names.
+	 * @return correct class name.
+	 */
+	final static String correctClassName(final String className,
+		final String classNameBase,
+		final Set<String> classNames) {
+		int ndx = classNameBase.lastIndexOf('.');
+		String s = ndx >= 0 ? classNameBase.substring(ndx + 1) : classNameBase;
+		ndx=0;
+		String[] ss = s.split("#");
+		String t = className;
+		for (int j = 0; j < ss.length; j++) {
+			if (t.equals(ss[j])) {
+				t = className + "_" + (++ndx);
+				j = 0;
+			}
+		}
+		String s1 = s + '#' + t;
+		for (; classNames.contains(s1);) {
+			s1 = s + '#' + className + "_" + (++ndx);
+		}
+		classNames.add(s1);
+		ndx = s1.lastIndexOf('#');
+		return s1.substring(ndx+1);
+	}
+
 	/** Add name of variable name to the set of varialble names.
 	 * @param varNames set of variable names.
 	 * @param name name to add.

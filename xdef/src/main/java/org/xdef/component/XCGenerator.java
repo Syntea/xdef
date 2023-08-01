@@ -14,6 +14,7 @@ import static org.xdef.component.XCGeneratorBase.LN;
 import static org.xdef.component.XCGeneratorBase.RESERVED_NAMES;
 import static org.xdef.component.XCGeneratorBase.addNSUri;
 import static org.xdef.component.XCGeneratorBase.checkUnique;
+import static org.xdef.component.XCGeneratorBase.correctClassName;
 import static org.xdef.component.XCGeneratorBase.genCreatorOfAttribute;
 import static org.xdef.component.XCGeneratorBase.getParsedResultGetter;
 import static org.xdef.component.XCGeneratorBase.getUniqueName;
@@ -209,7 +210,7 @@ final class XCGenerator extends XCGeneratorXON {
 							XElement xe1 = (XElement) nodes[k];
 							boolean ext = (Boolean) choiceStack.pop();
 							if (!ext) {
-								genChildElementGetterSetter(xe1, typeName,iname,
+								genChildElementGetterSetter(xe1,typeName,iname,
 									max,"element",getters,setters,sbi,xclear);
 							}
 							XMData keyAttr;
@@ -225,8 +226,7 @@ final class XCGenerator extends XCGeneratorXON {
 							}
 						}
 						if (!keys.isEmpty()) {// generate named value getters
-							genNamedValueGetters(
-								keys, classNames, varNames, getters);
+							genNamedValueGetters(keys, varNames, getters);
 						}
 					}
 					if (!groupStack.isEmpty()) {
@@ -346,9 +346,9 @@ final class XCGenerator extends XCGeneratorXON {
 					} else {
 						newClassName = name = xmlToJavaName(xe1.getName());
 					}
-					//if the element is not processed by user XComponent and
+					//if this element is not processed by user XComponent and
 					//if it is unique and if the only child node of this node
-					//is this text node and if it has no attributes then process
+					//is text node and if it has no attributes then process
 					//it is processed same way as an attribute of parent class.
 					final String xcClass0 = isRecurseRef
 						? name : getXDPosition(xe1, interfcName.length() > 0);
@@ -376,8 +376,16 @@ final class XCGenerator extends XCGeneratorXON {
 							xcClass = xcClass.replace('#','.');
 						}
 					}
-					newClassName = getUniqueName(newClassName, classNames);
-					String iname = getUniqueName(name, RESERVED_NAMES);
+					String iname = correctClassName(newClassName,
+						classNameBase, classNames);
+					if (!newClassName.equals(iname)) {
+						//The name of the inner class of the X-component &{0}
+						//has been changed to &{1}
+						_reporter.info(XDEF.XDEF377,
+							node.getXDPosition(), iname);
+						newClassName = iname;
+					}
+					iname = getUniqueName(name, RESERVED_NAMES);
 					iname = getUniqueName(iname, varNames);
 					if (!name.equals(iname)) {
 						if (ext) {
@@ -443,18 +451,16 @@ final class XCGenerator extends XCGeneratorXON {
 								if (XonNames.X_VALUE.equals(xe1.getLocalName())){
 									genXonItemGetterAndSetter(xe1,
 										typeName, iname, max, setters,
-										getters, sbi, classNames, varNames);
+										getters, sbi, varNames);
 								} else if (xe1.getAttr(X_KEYATTR) != null) {
 									genXonEntryMethod(xe1, typeName, iname,
-										max, getters, sbi, classNames,varNames);
+										max, getters, sbi, varNames);
 								}
-
 							}
 						} else { // XON map items
 							if (groupKind != XMNode.XMCHOICE) {
-								genXonItemGetterAndSetter(xe1,
-									typeName, iname, max, setters, getters, sbi,
-									classNames, varNames);
+								genXonItemGetterAndSetter(xe1, typeName, iname,
+									max, setters, getters, sbi,	varNames);
 							}
 						}
 					}
@@ -462,7 +468,7 @@ final class XCGenerator extends XCGeneratorXON {
 					String xval = (max == 1 ? "1" : "2") + "," + iname + ";";
 					if (xcClass0 == null || xcClass0.startsWith("interface ")) {
 						xctab.put(node.getXDPosition(), xval + newClassName);
-						classNames.add(newClassName);
+//						classNames.add(newClassName);
 						innerClasses.append(genComponent(xe1, //Elememnt model
 							i, // index
 							newClassName, //class name
