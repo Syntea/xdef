@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.0.9, release-date 2023-08-02
+# Version 42.0.9, release-date 2023-08-05
 * X-definition is now generated from also from YAML source data (if the package
  * `org.yaml.snakeyaml` is available in the classpath).
   (See `org.xdef.util.GenXDefinition` and `org.xdef.impl.GenXDef`.)
