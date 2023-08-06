@@ -1043,36 +1043,30 @@ public class SDatetime extends XMLGregorianCalendar
 	 * with the argument <i>other</i>.
 	 */
 	public final int compareTo(SDatetime arg) throws SIllegalArgumentException {
-		TimeZone tz1 = _tz;
-		TimeZone tz2 = arg._tz;
-		Calendar c1o = _calendar;
-		Calendar c2o = arg._calendar;
-		_calendar = null;
-		arg._calendar = null;
-		double f1 = _fraction == Double.MIN_NORMAL ? 0.0D : _fraction;
-		_fraction = 0.0D;
+		SDatetime a1 = new SDatetime(this);
+		SDatetime a2 = new SDatetime(arg);
+		TimeZone tz1 = a1._tz;
+		TimeZone tz2 = a2._tz;
+		a1._calendar =  a2._calendar = null;
+		double f1 = a1._fraction == Double.MIN_NORMAL ? 0.0D : a1._fraction;
+		a1._fraction = f1;
 		double f2 = arg._fraction == Double.MIN_NORMAL ? 0.0D : arg._fraction;
-		arg._fraction = 0.0D;
-		Calendar c1 = getCalendar();
-		if (tz1 == null) {
+		a2._fraction = f2;
+		a1._fraction = a2._fraction = 0.0D;
+		Calendar c1 = a1.getCalendar();
+		if (tz1 == null || "_null_".equals(tz1.getID())) {
 			c1.setTimeZone(NULL_ZONE);
-		} else if ("_null_".equals(tz1.getID())) {
-			tz1 = null;
+			tz1 = a1._tz = null;
 		}
-		Calendar c2 = arg.getCalendar();
-		if (tz2 == null) {
+		Calendar c2 = a2.getCalendar();
+		if (tz2 == null || "_null_".equals(tz2.getID())) {
 			c2.setTimeZone(NULL_ZONE);
-		} else if ("_null_".equals(tz2.getID())) {
-			tz2 = null;
+			tz2 = a2._tz = null;
 		}
 		BigDecimal t1 = new BigDecimal(c1.getTimeInMillis());
 		t1 = t1.add(new BigDecimal(f1));
-		_fraction = f1;
 		BigDecimal t2 = new BigDecimal(c2.getTimeInMillis());
 		t2 = t2.add(new BigDecimal(f2));
-		arg._fraction = f2;
-		_calendar = c1o;
-		arg._calendar = c2o;
 		if (tz1 == null) {
 			if (tz2 != null) {
 				BigDecimal diff = new BigDecimal(50400000);
@@ -1090,11 +1084,11 @@ public class SDatetime extends XMLGregorianCalendar
 				throw new SIllegalArgumentException(SYS.SYS085);
 			}
 		}
-		if (_eon != 0) {
-			t1.add(BigDecimal.valueOf(_eon).multiply(BILLION_D));
+		if (a1._eon != 0) {
+			t1.add(BigDecimal.valueOf(a1._eon).multiply(BILLION_D));
 		}
-		if (arg._eon != 0) {
-			t2.add(BigDecimal.valueOf(arg._eon).multiply(BILLION_D));
+		if (a2._eon != 0) {
+			t2.add(BigDecimal.valueOf(a2._eon).multiply(BILLION_D));
 		}
 		return t1.compareTo(t2);
 	}
@@ -1106,35 +1100,27 @@ public class SDatetime extends XMLGregorianCalendar
 	 * and date from argument; false otherwise
 	 */
 	public final boolean equals(final SDatetime arg) {
+		if (_eon != 0 || arg._eon != 0) {
+			return compareTo(arg) == 0;
+		}
+		if (_tz != arg._tz && (_tz == null || arg._tz == null)) {
+			return false; // one of zones is specified and the other not
+		}
 		SDatetime a1 = new SDatetime(this);
 		SDatetime a2 = new SDatetime(arg);
-		if (a1._tz != a2._tz && (a1._tz == null || a2._tz == null)) {
-			return false; //one of zones not specified
-		}
+		double f1 = _fraction == Double.MIN_NORMAL ? 0.0D : _fraction;
+		double f2 = arg._fraction == Double.MIN_NORMAL ? 0.0D : arg._fraction;
+		a1._fraction = a2._fraction = 0.0D;
 		a1._calendar = 	a2._calendar = null;
-		double f1 = a1._fraction;
-		double f2 = a2._fraction;
-		a1._fraction = 	a2._fraction = 0.0D;
 		Calendar c1 = a1.getCalendar();
-		if (a1._tz == null) {
+		if (a1._tz == null || "_null_".equals(a1._tz.getID())) {
 			c1.setTimeZone(NULL_ZONE);
-		} else {
-			if ("_null_".equals(a1._tz.getID())) {
-				a1._tz = null;
-			}
 		}
-		long t1 = c1.getTimeInMillis();
 		Calendar c2 = a2.getCalendar();
-		if (a2._tz == null) {
+		if (a2._tz == null || "_null_".equals(a2._tz.getID())) {
 			c2.setTimeZone(NULL_ZONE);
-		} else {
-			if ("_null_".equals(a2._tz.getID())) {
-				a2._tz = null;
-			}
 		}
-		long t2 = c2.getTimeInMillis();
-		return t1 == t2 && (f1 == Double.MIN_NORMAL ? 0.0D : f1)
-			== (f2 == Double.MIN_NORMAL ? 0.0D : f2);
+		return c1.getTimeInMillis() == c2.getTimeInMillis() && f1 == f2;
 	}
 
 	/** Compare current object with given argument (both values are converted
