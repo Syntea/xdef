@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.0.9, release-date 2023-08-05
+# Version 42.0.9, release-date 2023-08-06
 * Fixed bug in `equals()` method in `SDatetime` class. Some internal variables
   were changed when it was called, which could cause an error when called
   in multitask.

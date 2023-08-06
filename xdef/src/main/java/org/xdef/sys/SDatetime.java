@@ -1110,7 +1110,7 @@ public class SDatetime extends XMLGregorianCalendar
 		SDatetime a2 = new SDatetime(arg);
 		if (a1._tz != a2._tz && (a1._tz == null || a2._tz == null)) {
 			return false; //one of zones not specified
-		}		
+		}
 		a1._calendar = 	a2._calendar = null;
 		double f1 = a1._fraction;
 		double f2 = a2._fraction;
