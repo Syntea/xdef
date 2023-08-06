@@ -1,8 +1,11 @@
 # Version ${version}, release-date ${release.date}
 
 # Version 42.0.9, release-date 2023-08-05
+* Fixed bug in `equals()` method in `SDatetime` class. Some internal variables
+  were changed when it was called, which could cause an error when called
+  in multitask.
 * X-definition is now generated from also from YAML source data (if the package
- * `org.yaml.snakeyaml` is available in the classpath).
+  `org.yaml.snakeyaml` is available in the classpath).
   (See `org.xdef.util.GenXDefinition` and `org.xdef.impl.GenXDef`.)
 
 # Version 42.0.8, release-date 2023-07-10

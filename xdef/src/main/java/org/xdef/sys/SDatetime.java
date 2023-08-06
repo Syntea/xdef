@@ -295,7 +295,6 @@ public class SDatetime extends XMLGregorianCalendar
 					|| _hour == 24 && _minute == 0 && _second == 0);
 			}
 		}
-
 	}
 
 	private void chkAndThrow() {
@@ -1107,43 +1106,35 @@ public class SDatetime extends XMLGregorianCalendar
 	 * and date from argument; false otherwise
 	 */
 	public final boolean equals(final SDatetime arg) {
-		TimeZone tz1 = _tz;
-		TimeZone tz2 = arg._tz;
-		Calendar c1old = _calendar;
-		Calendar c2old = arg._calendar;
-		_calendar = null;
-		arg._calendar = null;
-		double f1old = _fraction;
-		_fraction = 0.0D;
-		double f2old = arg._fraction;
-		arg._fraction = 0.0D;
-		Calendar c1 = getCalendar();
-		if (tz1 != null) {
-			if ("_null_".equals(tz1.getID())) {
-				tz1 = null;
-			}
-		} else {
+		SDatetime a1 = new SDatetime(this);
+		SDatetime a2 = new SDatetime(arg);
+		if (a1._tz != a2._tz && (a1._tz == null || a2._tz == null)) {
+			return false; //one of zones not specified
+		}		
+		a1._calendar = 	a2._calendar = null;
+		double f1 = a1._fraction;
+		double f2 = a2._fraction;
+		a1._fraction = 	a2._fraction = 0.0D;
+		Calendar c1 = a1.getCalendar();
+		if (a1._tz == null) {
 			c1.setTimeZone(NULL_ZONE);
+		} else {
+			if ("_null_".equals(a1._tz.getID())) {
+				a1._tz = null;
+			}
 		}
 		long t1 = c1.getTimeInMillis();
-		Calendar c2 = arg.getCalendar();
-		if (tz2 != null) {
-			if ("_null_".equals(tz2.getID())) {
-				tz2 = null;
-			}
-		} else {
+		Calendar c2 = a2.getCalendar();
+		if (a2._tz == null) {
 			c2.setTimeZone(NULL_ZONE);
+		} else {
+			if ("_null_".equals(a2._tz.getID())) {
+				a2._tz = null;
+			}
 		}
 		long t2 = c2.getTimeInMillis();
-		_fraction = f1old;
-		_calendar = c1old;
-		arg._fraction = f2old;
-		arg._calendar = c2old;
-		if (tz1 != tz2 && (tz1 == null || tz2 == null)) {
-			return false; //one of zones not specified
-		}
-		return t1 == t2 && (f1old == Double.MIN_NORMAL ? 0.0D : f1old)
-			== (f2old == Double.MIN_NORMAL ? 0.0D : f2old);
+		return t1 == t2 && (f1 == Double.MIN_NORMAL ? 0.0D : f1)
+			== (f2 == Double.MIN_NORMAL ? 0.0D : f2);
 	}
 
 	/** Compare current object with given argument (both values are converted
