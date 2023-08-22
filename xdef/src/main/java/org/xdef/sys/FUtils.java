@@ -1401,16 +1401,22 @@ public class FUtils {
 	/** Very dangerous: if the file is directory it deletes all subdirectories!
 	 * @param files array of files to be deleted.
 	 * @param subdir if <code>true</code> then also subdirectories are deleted.
+	 * @throws SRuntimeException if it is a directory root/
 	 */
 	public static void deleteAll(final File[] files,
 		final boolean subdir) {
 		for (File x: files) {
-			if (x.isDirectory()) {
-				if (subdir) {
-					deleteAll(x.listFiles(), true);
+			if (x.getParent() == null) {
+				//Directory doesn't exist or isn't accessible: &{0}
+				throw new SRuntimeException(SYS.SYS025, x);
+			} else {
+				if (x.isDirectory()) {
+					if (subdir) {
+						deleteAll(x.listFiles(), true);
+					}
 				}
+				x.delete();
 			}
-			x.delete();
 		}
 	}
 
