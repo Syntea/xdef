@@ -1,15 +1,14 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.0.10, release-date 2023-08-07
-* .
-
-# Version 42.0.9, release-date 2023-08-07
+# Version 42.0.10, release-date 2023-08-23
 * Fixed bug in `equals(arg)` and `compareTo(arg)` methods in `SDatetime` class.
   Some internal variables were changed when it was called, which could cause
   an error when called in multitask.
-* X-definition is now generated from also from YAML source data (if the package
-  `org.yaml.snakeyaml` is available in the classpath).
-  (See `org.xdef.util.GenXDefinition` and `org.xdef.impl.GenXDef`.)
+* Generator of X-definition from source data supports now also YAML source data
+  format (the package `org.yaml.snakeyaml` is available in classpath).
+
+# Version 42.0.9, release-date 2023-08-07
+. skipped
 
 # Version 42.0.8, release-date 2023-07-10
 * Corrected bug in generation of `XComponent` java source when was generated
