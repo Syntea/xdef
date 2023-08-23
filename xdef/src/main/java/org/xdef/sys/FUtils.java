@@ -1406,17 +1406,12 @@ public class FUtils {
 	public static void deleteAll(final File[] files,
 		final boolean subdir) {
 		for (File x: files) {
-			if (x.getParent() == null) {
-				//Directory doesn't exist or isn't accessible: &{0}
-				throw new SRuntimeException(SYS.SYS025, x);
-			} else {
-				if (x.isDirectory()) {
-					if (subdir) {
-						deleteAll(x.listFiles(), true);
-					}
+			if (x.isDirectory()) {
+				if (subdir) {
+					deleteAll(x.listFiles(), true);
 				}
-				x.delete();
 			}
+			x.delete();
 		}
 	}
 
@@ -1427,7 +1422,8 @@ public class FUtils {
 	 */
 	public static final void deleteAll(final File file, final boolean subdir)
 		throws SException {
-		if (!file.exists() || !file.isDirectory()) {
+		if (!file.exists() || !file.isDirectory()
+			|| file.getParent() == null) {
 			//Directory doesn't exist or isn't accessible: &{0}
 			throw new SException(SYS.SYS025, file);
 		}
@@ -1443,7 +1439,6 @@ public class FUtils {
 		throws SException {
 		deleteAll(new File(fname), subdir);
 	}
-
 
 	/** Secure copy InputStream to the file. First the input is saved to the
 	 * temporary file and after the copy was finished the file is renamed to the
@@ -1610,7 +1605,7 @@ public class FUtils {
 				throw new SException(SYS.SYS076, sid, ex);
 			}
 		}
-		// sid is file
+		// sid is a file
 		File f = sid.indexOf(":/") > 0 || sid.startsWith("/")
 			? new java.io.File(sid) : actPath == null
 			? new java.io.File(sid) : new java.io.File(actPath, sid);
