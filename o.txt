@@ -1,0 +1,156 @@
+[INFO] Scanning for projects...
+[INFO] Inspecting build with total of 5 modules...
+[INFO] Installing Nexus Staging features:
+[INFO]   ... total of 1 executions of maven-deploy-plugin replaced with nexus-staging-maven-plugin
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO] 
+[INFO] xdef-parent                                                        [pom]
+[INFO] xdef                                                               [jar]
+[INFO] xdef-example                                                       [jar]
+[INFO] xdef-buildtools                                                    [jar]
+[INFO] xdef-test11                                                        [jar]
+[INFO] 
+[INFO] ------------------------< org.xdef:xdef-parent >------------------------
+[INFO] Building xdef-parent 42.0.10-SNAPSHOT                              [1/5]
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] --- maven-clean-plugin:3.1.0:clean (default-clean) @ xdef-parent ---
+[INFO] 
+[INFO] --- flatten-maven-plugin:1.1.0:clean (flatten.clean) @ xdef-parent ---
+[INFO] Deleting D:\cvs\DEV\java\masterSNAPSHOT\xdef\.flattened-pom.xml
+[INFO] 
+[INFO] --- maven-toolchains-plugin:1.1:toolchain (default) @ xdef-parent ---
+[INFO] Required toolchain: jdk [ vendor='sun' version='1.8' ]
+[INFO] Found matching toolchain for type jdk: JDK[D:\bin\java\jdk1.8]
+[INFO] 
+[INFO] --- flatten-maven-plugin:1.1.0:flatten (flatten) @ xdef-parent ---
+[INFO] Generating flattened POM of project org.xdef:xdef-parent:pom:42.0.10-SNAPSHOT...
+[INFO] 
+[INFO] --- maven-javadoc-plugin:3.0.1:jar (attach-javadocs) @ xdef-parent ---
+[INFO] Not executing Javadoc as the project is not a Java classpath-capable package
+[INFO] 
+[INFO] >>> maven-source-plugin:3.0.1:jar (attach-sources) > generate-sources @ xdef-parent >>>
+[INFO] 
+[INFO] --- maven-toolchains-plugin:1.1:toolchain (default) @ xdef-parent ---
+[INFO] Required toolchain: jdk [ vendor='sun' version='1.8' ]
+[INFO] Found matching toolchain for type jdk: JDK[D:\bin\java\jdk1.8]
+[INFO] 
+[INFO] <<< maven-source-plugin:3.0.1:jar (attach-sources) < generate-sources @ xdef-parent <<<
+[INFO] 
+[INFO] 
+[INFO] --- maven-source-plugin:3.0.1:jar (attach-sources) @ xdef-parent ---
+[INFO] 
+[INFO] --- maven-install-plugin:2.4:install (default-install) @ xdef-parent ---
+[INFO] Skipping artifact installation
+[INFO] 
+[INFO] --- maven-deploy-plugin:3.0.0-M1:deploy (default-deploy) @ xdef-parent ---
+[INFO] Skipping artifact deployment
+[INFO] 
+[INFO] ---------------------------< org.xdef:xdef >----------------------------
+[INFO] Building xdef 42.0.10-SNAPSHOT                                     [2/5]
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- maven-clean-plugin:3.1.0:clean (default-clean) @ xdef ---
+[INFO] Deleting D:\cvs\DEV\java\masterSNAPSHOT\xdef\xdef\target
+[INFO] 
+[INFO] --- flatten-maven-plugin:1.1.0:clean (flatten.clean) @ xdef ---
+[INFO] Deleting D:\cvs\DEV\java\masterSNAPSHOT\xdef\xdef\.flattened-pom.xml
+[INFO] 
+[INFO] --- maven-toolchains-plugin:1.1:toolchain (default) @ xdef ---
+[INFO] Required toolchain: jdk [ vendor='sun' version='1.8' ]
+[INFO] Found matching toolchain for type jdk: JDK[D:\bin\java\jdk1.8]
+[INFO] 
+[INFO] --- maven-resources-plugin:3.1.0:resources (default-resources) @ xdef ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 21 resources
+[INFO] Copying 1 resource
+[INFO] 
+[INFO] --- flatten-maven-plugin:1.1.0:flatten (flatten) @ xdef ---
+[INFO] Generating flattened POM of project org.xdef:xdef:jar:42.0.10-SNAPSHOT...
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.8.0:compile (default-compile) @ xdef ---
+[INFO] Toolchain in maven-compiler-plugin: JDK[D:\bin\java\jdk1.8]
+[INFO] Compiling 434 source files to D:\cvs\DEV\java\masterSNAPSHOT\xdef\xdef\target\classes
+[INFO] 
+[INFO] --- maven-resources-plugin:3.1.0:testResources (default-testResources) @ xdef ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 678 resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.8.0:testCompile (default-testCompile) @ xdef ---
+[INFO] Toolchain in maven-compiler-plugin: JDK[D:\bin\java\jdk1.8]
+[INFO] Compiling 117 source files to D:\cvs\DEV\java\masterSNAPSHOT\xdef\xdef\target\test-classes
+[INFO] 
+[INFO] --- maven-surefire-plugin:3.0.0-M3:test (default-test) @ xdef ---
+[INFO] Toolchain in maven-surefire-plugin: JDK[D:\bin\java\jdk1.8]
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running TestSuite
+[INFO] Java version: 1.8.0_241 (with Saxon library) ...
+[INFO] X-definition version: 42.0.10-SNAPSHOT (2023-08-23T11:34:58Z)
+[INFO] OK package common, total time: 5,07s
+[INFO] Testing X-definition utilities version 4.2
+[INFO] OK package xdutils, total time: 2,10s
+[INFO] Testing X-definition version 4.2
+[INFO] OK package xdef, total time: 33,38s
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 41.843 s - in TestSuite
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- maven-jar-plugin:3.1.0:jar (default-jar) @ xdef ---
+[INFO] Building jar: D:\cvs\DEV\java\masterSNAPSHOT\xdef\xdef\target\xdef-42.0.10-SNAPSHOT.jar
+[INFO] 
+[INFO] --- maven-javadoc-plugin:3.0.1:jar (attach-javadocs) @ xdef ---
+[INFO] Toolchain in maven-javadoc-plugin: JDK[D:\bin\java\jdk1.8]
+[INFO] Building jar: D:\cvs\DEV\java\masterSNAPSHOT\xdef\xdef\target\xdef-42.0.10-SNAPSHOT-javadoc.jar
+[INFO] 
+[INFO] >>> maven-source-plugin:3.0.1:jar (attach-sources) > generate-sources @ xdef >>>
+[INFO] 
+[INFO] --- maven-toolchains-plugin:1.1:toolchain (default) @ xdef ---
+[INFO] Required toolchain: jdk [ vendor='sun' version='1.8' ]
+[INFO] Found matching toolchain for type jdk: JDK[D:\bin\java\jdk1.8]
+[INFO] 
+[INFO] <<< maven-source-plugin:3.0.1:jar (attach-sources) < generate-sources @ xdef <<<
+[INFO] 
+[INFO] 
+[INFO] --- maven-source-plugin:3.0.1:jar (attach-sources) @ xdef ---
+[INFO] Building jar: D:\cvs\DEV\java\masterSNAPSHOT\xdef\xdef\target\xdef-42.0.10-SNAPSHOT-sources.jar
+[INFO] 
+[INFO] --- maven-assembly-plugin:3.1.1:single (make-assembly) @ xdef ---
+[INFO] Reading assembly descriptor: maven/assembly/src.xml
+[INFO] Reading assembly descriptor: maven/assembly/userdoc.xml
+[INFO] Building zip: D:\cvs\DEV\java\masterSNAPSHOT\xdef\xdef\target\xdef-42.0.10-SNAPSHOT-src.zip
+[INFO] Building zip: D:\cvs\DEV\java\masterSNAPSHOT\xdef\xdef\target\xdef-42.0.10-SNAPSHOT-userdoc.zip
+[INFO] 
+[INFO] --- maven-gpg-plugin:1.6:sign (sign-artifacts) @ xdef ---
+gpg: podepsání selhalo: Čas vypršel
+gpg: signing failed: Čas vypršel
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary for xdef-parent 42.0.10-SNAPSHOT:
+[INFO] 
+[INFO] xdef-parent ........................................ SUCCESS [  1.774 s]
+[INFO] xdef ............................................... FAILURE [02:04 min]
+[INFO] xdef-example ....................................... SKIPPED
+[INFO] xdef-buildtools .................................... SKIPPED
+[INFO] xdef-test11 ........................................ SKIPPED
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  02:07 min
+[INFO] Finished at: 2023-08-23T13:37:01+02:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-gpg-plugin:1.6:sign (sign-artifacts) on project xdef: Exit code: 2 -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoExecutionException
+[ERROR] 
+[ERROR] After correcting the problems, you can resume the build with the command
+[ERROR]   mvn <args> -rf :xdef
