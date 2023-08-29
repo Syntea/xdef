@@ -111,7 +111,11 @@ public class SDuration extends Duration implements Comparable<SDuration> {
 	/** Set negative switch.
 	 * @param negative value of switch.
 	 */
-	public void setNegative(final boolean negative) {_negative = negative?-1:1;}
+	public void setNegative(final boolean negative) {
+		synchronized(this) {
+			_negative = negative?-1:1;
+		}
+	}
 
 	/** Check if value is negative.
 	 * @return true if value is negative.
@@ -121,7 +125,11 @@ public class SDuration extends Duration implements Comparable<SDuration> {
 	/** Set number of recurrences.
 	 * @param recurrence number of recurrences.
 	 */
-	public void setRecurrence(final int recurrence) {_recurrence = recurrence;}
+	public void setRecurrence(final int recurrence) {
+		synchronized(this) {
+			_recurrence = recurrence;
+		}
+	}
 
 	/** Get number of recurrences.
 	 * @return number of recurrences or 0.
@@ -131,7 +139,11 @@ public class SDuration extends Duration implements Comparable<SDuration> {
 	/** Set start of period.
 	 * @param start datetime specifying start of period.
 	 */
-	public void setStart(final SDatetime start) {_start = start;}
+	public void setStart(final SDatetime start) {
+		synchronized(this) {
+			_start = start;
+		}
+	}
 
 	/** Get start of period.
 	 * @return start datetime.
@@ -141,7 +153,11 @@ public class SDuration extends Duration implements Comparable<SDuration> {
 	/** Set end of period.
 	 * @param end datetime specifying end of period.
 	 */
-	public void setEnd(final SDatetime end) {_end = end;}
+	public void setEnd(final SDatetime end) {
+		synchronized(this) {
+			_end = end;
+		}
+	}
 
 	/** Get end of period.
 	 * @return end datetime.
@@ -151,7 +167,11 @@ public class SDuration extends Duration implements Comparable<SDuration> {
 	/** Set number of years of period. Weeks parameter is cleared if specified.
 	 * @param years number of years.
 	 */
-	public void setYears(final int years) {_years = years;}
+	public void setYears(final int years) {
+		synchronized(this) {
+			_years = years;
+		}
+	}
 
 	@Override
 	/** Get number of years of period.
@@ -162,7 +182,11 @@ public class SDuration extends Duration implements Comparable<SDuration> {
 	/** Set number of months of period. Weeks parameter is cleared if specified.
 	 * @param months number of months.
 	 */
-	public void setMonths(final int months) {_months = months;}
+	public void setMonths(final int months) {
+		synchronized(this) {
+			_months = months;
+		}
+	}
 
 	@Override
 	/** Get number of months of period.
@@ -173,7 +197,11 @@ public class SDuration extends Duration implements Comparable<SDuration> {
 	/** Set number of days of period. Weeks parameter is cleared if specified.
 	 * @param days number of days.
 	 */
-	public void setDays(final int days) {_days = days;}
+	public void setDays(final int days) {
+		synchronized(this) {
+			_days = days;
+		}
+	}
 
 	@Override
 	/** Get number of days of period.
@@ -184,7 +212,11 @@ public class SDuration extends Duration implements Comparable<SDuration> {
 	/** Set number of hours of period.
 	 * @param hours number of hours.
 	 */
-	public void setHours(final int hours) {_hours = hours;}
+	public void setHours(final int hours) {
+		synchronized(this) {
+			_hours = hours;
+		}
+	}
 
 	@Override
 	/** Get number of hours of period.
@@ -195,7 +227,11 @@ public class SDuration extends Duration implements Comparable<SDuration> {
 	/** Set number of minutes of period.
 	 * @param minutes number of minutes.
 	 */
-	public void setMinutes(final int minutes) {_minutes = minutes;}
+	public void setMinutes(final int minutes) {
+		synchronized(this) {
+			_minutes = minutes;
+		}
+	}
 
 	@Override
 	/** Get number of minutes of period.
@@ -206,7 +242,11 @@ public class SDuration extends Duration implements Comparable<SDuration> {
 	/** Set number of seconds of period.
 	 * @param seconds number of seconds.
 	 */
-	public void setSeconds(final int seconds) {_seconds = seconds;}
+	public void setSeconds(final int seconds) {
+		synchronized(this) {
+			_seconds = seconds;
+		}
+	}
 
 	@Override
 	/** Get number of seconds of period.
@@ -218,7 +258,9 @@ public class SDuration extends Duration implements Comparable<SDuration> {
 	 * @param milliseconds number of milliseconds.
 	 */
 	public void setMilliseconds(final int milliseconds) {
-		_fraction = milliseconds * 0.001D;
+		synchronized(this) {
+			_fraction = milliseconds * 0.001D;
+		}
 	}
 
 	/** Get number of milliseconds of period.
@@ -232,7 +274,9 @@ public class SDuration extends Duration implements Comparable<SDuration> {
 	 * @param nanoseconds number of nanoseconds.
 	 */
 	public void setNanoseconds(final int nanoseconds) {
-		_fraction = nanoseconds * 0.000000001D;
+		synchronized(this) {
+			_fraction = nanoseconds * 0.000000001D;
+		}
 	}
 
 	/** Get number of nanoseconds of period.
@@ -252,7 +296,9 @@ public class SDuration extends Duration implements Comparable<SDuration> {
 			throw new SRuntimeException(SYS.SYS072, //Data error&{0}{: }
 				"fraction of second out of interval 0..1");
 		} else {
-			_fraction = fraction;
+			synchronized(this) {
+				_fraction = fraction;
+			}
 		}
 	}
 
@@ -453,11 +499,13 @@ public class SDuration extends Duration implements Comparable<SDuration> {
 
 	@Override
 	public int hashCode() {
-		int result = _start == null ? 0 : _start.hashCode();
-		result += _end == null ? 0 : 3*_end.hashCode();
-		return 5*(result + 7*(_years + 13*(_months + 17*(_days +
-			19*(_hours + 23*(_minutes + 29*(_seconds + 31*(_recurrence +
-			(_fraction == 0.0D ? 0 : 37) + (_negative == -1 ? 1 : 0)))))))));
+		synchronized(this) {
+			int result = _start == null ? 0 : _start.hashCode();
+			result += _end == null ? 0 : 3*_end.hashCode();
+			return 5*(result + 7*(_years + 13*(_months + 17*(_days +
+				19*(_hours + 23*(_minutes + 29*(_seconds + 31*(_recurrence +
+				(_fraction == 0.0D ? 0 : 37) + (_negative == -1?1:0)))))))));
+		}
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
