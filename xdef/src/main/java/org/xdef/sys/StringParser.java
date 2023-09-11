@@ -1597,21 +1597,9 @@ public class StringParser extends SReporter implements SParser {
 
 	/** Check if actual position points to new line. If check is successful
 	 * set the actual position to the next character.
-	 * @return true if new line is at actual position,
-	 * otherwise return false.
+	 * @return true if new line is at actual position, otherwise return false.
 	 */
 	public final boolean isNewLine() {
-//		if (_ch != '\r' && _ch != '\n')  {
-//			return false;
-//		}
-//		if (_ch == '\r') { //Windows...
-//			nextChar();
-//		}
-//		setNewLine();
-//		if (_ch == '\n') {
-//			nextChar();
-//		}
-//		return true;
 		if (_ch != '\n')  {
 			return false;
 		}

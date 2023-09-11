@@ -177,11 +177,8 @@ public class CsvReader extends StringParser implements XonParsers {
 						}
 					}
 					c = getCurrentChar();
-				} else if (c == '\n' || c == NOCHAR) {
-					putValue(sb, pos);
-					_jp.arrayEnd(this);
-					isNewLine();
-					return;
+				} else if (c == '\n' || eos()) {
+					break;
 				} else {
 					sb.append(c);
 					c = nextChar();

@@ -781,7 +781,7 @@ public class TestXon extends XDTester {
 			genXComponent(xp, clearTempDir());
 			s =
 "Name, Email, Mobile Number\n" +
-"abc, a@b.c, +420 601 349 889\n" +
+"abc, a@b.c, +1 2345 67 89 01\n" +
 "\n" +
 "xyz, d@e.f,\n" +
 "xyz,,\n" +
@@ -791,7 +791,7 @@ public class TestXon extends XDTester {
 			assertNoErrorwarningsAndClear(reporter);
 			s =
 "Name | Email | Mobile Number\n" +
-"abc | a@b.c | +420 601 349 889\n" +
+"abc | a@b.c | +1 2345 67 89 01\n" +
 "\n" +
 "xyz | d@e.f |\n" +
 "xyz | |\n" +
@@ -812,7 +812,7 @@ public class TestXon extends XDTester {
 			s =
 "[\n" +
 " [\"Name\",\"Email\",\"Mobile Number\"],\n" +
-" [\"abc\", e\"a@b.c\", \"+420 601 349 889\"],\n" +
+" [\"abc\", e\"a@b.c\", \"+1 2345 67 89 01\"],\n" +
 " [],\n" +
 " [\"xyz\", e\"d@e.f\",null],\n" +
 " [\"xyz\", null, null],\n" +
@@ -847,7 +847,7 @@ public class TestXon extends XDTester {
 			genXComponent(xp, clearTempDir());
 			s =
 "Name, Email, Mobile Number\n" +
-"abc, a@b.c, +420 601 349 889\n" +
+"abc, a@b.c, +1 2345 67 89 01\n" +
 "xyz, d@e.f,\n" +
 "xyz,,\n" +
 ",,\n" +
@@ -855,7 +855,7 @@ public class TestXon extends XDTester {
 			o = xd.cparse(new StringReader(s), ',', true, null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
 			s =
-"abc | a@b.c | +420 601 349 889\n" +
+"abc | a@b.c | +1 2345 67 89 01\n" +
 "xyz | d@e.f |\n" +
 "xyz | |\n" +
 " | |\n" +
@@ -874,7 +874,7 @@ public class TestXon extends XDTester {
 			}
 			s =
 "[\n"+
-" [\"abc\", e\"a@b.c\", \"+420 601 349 889\"],\n" +
+" [\"abc\", e\"a@b.c\", \"+1 2345 67 89 01\"],\n" +
 " [\"xyz\", e\"d@e.f\",null],\n" +
 " [\"xyz\", null, null],\n" +
 " [null, null, null],\n" +
@@ -1432,7 +1432,7 @@ public class TestXon extends XDTester {
 			genXComponent(xp, clearTempDir());
 			s =
 "Name, Email, Mobile Number\n" +
-"abc, a@b.c, +420 601 349 889\n" +
+"abc, a@b.c, +1 2345 67 89 01\n" +
 "\n" +
 "xyz, d@e.f,\n" +
 "xyz,,\n" +
@@ -1442,7 +1442,7 @@ public class TestXon extends XDTester {
 			assertNoErrorwarningsAndClear(reporter);
 			s =
 "Name | Email | Mobile Number\n" +
-"abc | a@b.c | +420 601 349 889\n" +
+"abc | a@b.c | +1 2345 67 89 01\n" +
 "\n" +
 "xyz | d@e.f |\n" +
 "xyz | |\n" +
@@ -1463,7 +1463,7 @@ public class TestXon extends XDTester {
 			s =
 "[\n" +
 " [\"Name\",\"Email\",\"Mobile Number\"],\n" +
-" [\"abc\", e\"a@b.c\", \"+420 601 349 889\"],\n" +
+" [\"abc\", e\"a@b.c\", \"+1 2345 67 89 01\"],\n" +
 " [],\n" +
 " [\"xyz\", e\"d@e.f\",null],\n" +
 " [\"xyz\", null, null],\n" +
@@ -1498,7 +1498,7 @@ public class TestXon extends XDTester {
 			genXComponent(xp, clearTempDir());
 			s =
 "Name, Email, Mobile Number\n" +
-"abc, a@b.c, +420 601 349 889\n" +
+"abc, a@b.c, +1 2345 67 89 01\n" +
 "xyz, d@e.f,\n" +
 "xyz,,\n" +
 ",,\n" +
@@ -1506,7 +1506,7 @@ public class TestXon extends XDTester {
 			o = xd.cparse(new StringReader(s), ',', true, null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
 			s =
-"abc | a@b.c | +420 601 349 889\n" +
+"abc | a@b.c | +1 2345 67 89 01\n" +
 "xyz | d@e.f |\n" +
 "xyz | |\n" +
 " | |\n" +
@@ -1525,7 +1525,7 @@ public class TestXon extends XDTester {
 			}
 			s =
 "[\n" +
-" [\"abc\", e\"a@b.c\", \"+420 601 349 889\"],\n" +
+" [\"abc\", e\"a@b.c\", \"+1 2345 67 89 01\"],\n" +
 " [\"xyz\", e\"d@e.f\",null],\n" +
 " [\"xyz\", null, null],\n" +
 " [null, null, null],\n" +
