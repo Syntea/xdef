@@ -2,6 +2,7 @@ package test.xdef;
 
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.w3c.dom.Element;
@@ -832,6 +833,33 @@ public class TestXon extends XDTester {
 					+ "*** A *\n" + XonUtils.toXonString(x)
 					+ "\n*** B *\n" + XonUtils.toXonString(o));
 			}
+			xdef =
+"<xd:def xmlns:xd = \"http://www.xdef.org/xdef/4.2\" root = \"test\">\n" +
+"  <xd:xon name = \"test\">\n" +
+"[\n" +
+"  [\"occurs 2..* string();\"], # header line\n" +
+"  # CSV lines:\n" +
+"  [ %script=\"+\", \"? string()\", \"? emailAddr\", \"? telephone()\"]\n" +
+"]\n" +
+"  </xd:xon>\n" +
+"</xd:def>";
+			xp = compile(xdef);
+			xd = xp.createXDDocument();
+			s =
+"Name, Email, Mobile Number\n" +
+"John Smith, john.smith@smith.com, +1 2345 67 89 01\n" +
+", nobody@somewhere.org, +000 987 654 321\n" +
+"aaa, ,\n" +
+", , +090 98 76 54 12\n" +
+"";
+			o = xd.cparse(new StringReader(s), ',', true, null, reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			list = (List) ((List) o).get(2);
+			assertEq(4, ((List) o).size());
+			assertEq("aaa", ((List) ((List) o).get(2)).get(0));
+			assertEq(null, ((List) ((List) o).get(2)).get(1));
+			assertEq(null, ((List) ((List) o).get(2)).get(2));
+			assertEq(3, ((List) ((List) o).get(2)).size());
 			// no CSV head line with bames;
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='CSV'>\n" +

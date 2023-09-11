@@ -10,7 +10,6 @@ import org.w3c.dom.Element;
 import org.xdef.msg.JSON;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.SBuffer;
-import static org.xdef.sys.SParser.NOCHAR;
 import org.xdef.sys.SPosition;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
@@ -26,7 +25,7 @@ public class CsvReader extends StringParser implements XonParsers {
 	/** if true the header line is skipped.*/
 	private boolean _skipHeader;
 	/** Parser of XON source. */
-	private final XonParser _jp;
+	private final XonParser _xp;
 
 	/** Create instance of parser.
 	 * @param jp parser of INI/Properties source.
@@ -34,7 +33,7 @@ public class CsvReader extends StringParser implements XonParsers {
 	 */
 	public CsvReader(final SBuffer source, final XonParser jp) {
 		super(source);
-		_jp = jp;
+		_xp = jp;
 	}
 
 	/** Create instance of parser.
@@ -43,7 +42,7 @@ public class CsvReader extends StringParser implements XonParsers {
 	 */
 	public CsvReader(final String source, final XonParser jp) {
 		super(source);
-		_jp = jp;
+		_xp = jp;
 	}
 
 	/** Create instance of parser.
@@ -52,7 +51,7 @@ public class CsvReader extends StringParser implements XonParsers {
 	 */
 	public CsvReader(final Reader source, final XonParser jp) {
 		super(source, new ArrayReporter());
-		_jp = jp;
+		_xp = jp;
 	}
 
 	/** Create instance of parser.
@@ -61,7 +60,7 @@ public class CsvReader extends StringParser implements XonParsers {
 	 */
 	public CsvReader(final URL source, final XonParser jp) {
 		super(source, new ArrayReporter(), 0);
-		_jp = jp;
+		_xp = jp;
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -115,9 +114,9 @@ public class CsvReader extends StringParser implements XonParsers {
 	 */
 	private void putValue(final StringBuilder sb, final SPosition pos) {
 		if (sb.length() == 0) {
-			_jp.putValue(new XonTools.JValue(pos, XonTools.JNULL));
+			_xp.putValue(new XonTools.JValue(pos, XonTools.JNULL));
 		} else {
-			_jp.putValue(new XonTools.JValue(pos, sb.toString().trim()));
+			_xp.putValue(new XonTools.JValue(pos, sb.toString().trim()));
 			sb.setLength(0);
 		}
 	}
@@ -134,16 +133,16 @@ public class CsvReader extends StringParser implements XonParsers {
 		for (;;) {
 			skipLeadingSpaces();
 			if (isNewLine()) { // new line or end of source
+				_xp.arrayStart(this);
+				_xp.arrayEnd(this);
 				if (eos()) {
 					return;
 				}
-				_jp.arrayStart(this);
-				_jp.arrayEnd(this);
 			} else {
 				break;
 			}
 		}
-		_jp.arrayStart(this);
+		_xp.arrayStart(this);
 		for (;;) {
 			skipLeadingSpaces();
 			char c = getCurrentChar();
@@ -186,7 +185,7 @@ public class CsvReader extends StringParser implements XonParsers {
 			}
 			putValue(sb, pos);
 			if(eos() || isNewLine()) {
-				_jp.arrayEnd(this);
+				_xp.arrayEnd(this);
 				return;
 			}
 			isSpaces();
@@ -202,11 +201,11 @@ public class CsvReader extends StringParser implements XonParsers {
 			skipToNextLine();
 			isNewLine();
 		}
-		_jp.arrayStart(this);
+		_xp.arrayStart(this);
 		while (!eos()) {
 			readCSVLine();
 		}
-		_jp.arrayEnd(this);
+		_xp.arrayEnd(this);
 
 	}
 
