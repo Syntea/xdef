@@ -2,7 +2,6 @@ package test.xdef;
 
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.w3c.dom.Element;
@@ -772,7 +771,7 @@ public class TestXon extends XDTester {
 "<xd:component>%class test.xdef.CsvTest %link CSV</xd:component>\n" +
 "<xd:xon name=\"CSV\">\n" +
 "[\n" +
-"  [\"3..3 string();\"],\n" + // head
+"  [\"3 string();\"],\n" + // head
 "  [%script=\"+\", \"? string()\", \"? emailAddr\", \"? telephone()\"]\n" +
 "]\n" +
 "</xd:xon>\n" +
@@ -837,7 +836,7 @@ public class TestXon extends XDTester {
 "<xd:def xmlns:xd = \"http://www.xdef.org/xdef/4.2\" root = \"test\">\n" +
 "  <xd:xon name = \"test\">\n" +
 "[\n" +
-"  [\"occurs 2..* string();\"], # header line\n" +
+"  [\"occurs 2.. string();\"], # header line\n" +
 "  # CSV lines:\n" +
 "  [ %script=\"+\", \"? string()\", \"? emailAddr\", \"? telephone()\"]\n" +
 "]\n" +
