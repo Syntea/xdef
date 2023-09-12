@@ -123,7 +123,7 @@ public class CsvReader extends StringParser implements XonParsers {
 
 	/** Skip spaces and tabs. */
 	private void skipLeadingSpaces() {
-		while (isChar(' ') || isChar('\t') || isChar('\r')){}
+		while (isChar(' ') || isChar('\t') || isChar('\r') || isChar('\f')) {}
 	}
 
 	/** Read line from CSV source. */
