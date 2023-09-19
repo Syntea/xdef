@@ -265,7 +265,6 @@ public final class TestDatabase extends XDTester {
 "  external Service service;\n"+
 "  ResultSet data = service.query('SELECT * FROM " + TABLE_A + "');\n"+
 "</xd:declaration>\n"+
-"\n"+
 "<A xd:script= \"create 1\">\n"+
 "    <" + TABLE_A + " xd:script= \"occurs *; create data\"\n"+
 "         a = \"int; create data.getItem('" + ATTR_A + "')\"\n"+
@@ -275,7 +274,6 @@ public final class TestDatabase extends XDTester {
 "      </P> \n"+
 "    </" + TABLE_A + ">\n"+
 "  </A>\n"+
-"\n"+
 "</xd:def>";
 			_con = getConnection();
 			el = create(xdef, null, null, "A", "#service",
@@ -679,11 +677,6 @@ public final class TestDatabase extends XDTester {
 "external String usr;\n"+
 "external String passw;	  \n"+
 "Service service = new Service(\"jdbc\", url, usr, passw);\n"+
-"String qry = \"SELECT AUTHOR\n"+
-"  FROM MYTEST.AUTHOR, MYTEST.TITLE_AUTHOR, MYTEST.TITLE\n"+
-"  WHERE MYTEST.AUTHOR.IDAUTHOR = MYTEST.TITLE_AUTHOR.IDAUTHOR AND\n"+
-"  MYTEST.TITLE.IDTITLE = MYTEST.TITLE_AUTHOR.IDTITLE AND\n"+
-"  MYTEST.TITLE.IDTITLE = ? ORDER BY AUTHOR ASC\";\n"+
 "</xd:declaration>\n"+
 "  <Books xd:script=\"\">\n"+
 "    <Book xd:script=\"occurs *;create service.query(\n"+

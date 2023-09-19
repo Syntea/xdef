@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.0.11, release-date 2023-09-12
+# Version 42.0.11, release-date 2023-09-19
 * Corrected bug in CSV parser when after missing value at end of line follows
   next line with value.
 
