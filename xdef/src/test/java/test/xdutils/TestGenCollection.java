@@ -5,7 +5,10 @@ import org.xdef.util.GenCollection;
 import org.xdef.impl.util.gencollection.XDGenCollection;
 import java.io.File;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import static org.xdef.sys.STester.runTest;
 import test.XDTester;
+import static test.XDTester._xdNS;
 
 /** Test for the XdCollection.
  * @author Vaclav Trojan
@@ -148,6 +151,44 @@ public class TestGenCollection extends XDTester {
 			el1 = GenCollection.genCollection(
 				new String[]{KXmlUtils.nodeToString(el)}, true,true,true);
 			assertEq(el, el1);
+		} catch (Exception ex) {fail(ex);}
+		try {
+			String outFile =
+				new File(clearTempDir(), "collection.xml").getCanonicalPath();
+			GenCollection.main(new String[] {
+				"-m",
+				"-o", outFile,
+				"-e", "windows-1250",
+				"-i",getDataDir() + "test/xdef_xdef.xml"});
+			Element collection =
+				KXmlUtils.parseXml(outFile).getDocumentElement();
+			NodeList nl = KXmlUtils.getChildElements(collection);
+			if (nl.getLength() != 1) {
+				fail("Num of definitions: " + nl.getLength());
+			} else {
+				for (int i = 0; i < nl.getLength(); i++) {
+					if (!"def".equals(nl.item(i).getLocalName())) {
+						fail("item[" + i + "]: " + nl.item(i).getNodeName());
+					}
+				}
+			}
+			GenCollection.main(new String[] {
+				"-m",
+				"-o", outFile,
+				"-e", "windows-1250",
+				"-i", getDataDir() + "test/Matej3*.def"});
+			collection = KXmlUtils.parseXml(outFile).getDocumentElement();
+			nl = KXmlUtils.getChildElements(collection);
+			if (nl.getLength() != 2) {
+				fail("Num of definitions: " + nl.getLength());
+			} else {
+				for (int i = 0; i < nl.getLength(); i++) {
+					if (!"def".equals(nl.item(i).getLocalName())) {
+						fail("item[" + i + "]: " + nl.item(i).getNodeName());
+					}
+				}
+			}
+			new File(outFile).delete();
 		} catch (Exception ex) {fail(ex);}
 	}
 

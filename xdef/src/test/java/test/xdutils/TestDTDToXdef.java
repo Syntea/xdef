@@ -12,7 +12,6 @@ public class TestDTDToXdef extends XDTester {
 
 	public TestDTDToXdef() {super();}
 
-/*#if DEBUG*#/
 	private void test(String dtdData,
 		String root,
 		String data,
@@ -52,30 +51,20 @@ public class TestDTDToXdef extends XDTester {
 						org.xdef.xml.KXmlUtils.parseXml(data)));
 				}
 			} catch (Exception ex) {
-				fail(ex);
-				System.out.println(
-					org.xdef.xml.KXmlUtils.nodeToString(elxd, true));
-				System.out.println(org.xdef.xml.KXmlUtils.nodeToString(
+				fail(ex + "\n"
+					+ org.xdef.xml.KXmlUtils.nodeToString(elxd, true) + "\n"
+					+ org.xdef.xml.KXmlUtils.nodeToString(
 					org.xdef.xml.KXmlUtils.parseXml(data), true));
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail(e);
+		} catch (Exception ex) {
+			fail(ex);
 		}
 	}
-/*#end*/
 
-	@Override
-	public void test() {
-		String tempDir = clearTempDir().toString();
-		String dataDir = getDataDir();
-////////////////////////////////////////////////////////////////////////////////
-/*#if DEBUG*#/
+	/** Extended tests; don't run in in textAll. */
+	private void test(int display) {
 		String xmlData;
 		String dtdData;
-//		//0..no display, 1 .. display DTD, 2 .. display XDEF, 4 .. display XML
-		int display = 0;
-//=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*
 		dtdData =
 "<!ELEMENT payment (note)*>\n"+
 "<!ATTLIST payment type CDATA \"check\">\n"+
@@ -102,7 +91,6 @@ public class TestDTDToXdef extends XDTester {
 "  </note>\n" +
 "</payment>";
 		test(dtdData, "payment", xmlData, display);
-//=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*
 		dtdData =
 "<!ENTITY tutorial '\"tutorial\"'>\n" +
 "<!ELEMENT tutorial (#PCDATA)>";
@@ -114,30 +102,28 @@ public class TestDTDToXdef extends XDTester {
 		xmlData = "<tutorial>text</tutorial>";
 		test(dtdData, "tutorial", xmlData, display);
 
-// START fails in Java 1.9 and higher //////////////////////////////////////////
-if (org.xdef.sys.SUtils.JAVA_RUNTIME_VERSION_ID < 109) {
-//=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*
+		if (org.xdef.sys.SUtils.JAVA_RUNTIME_VERSION_ID < 109) {
+////////////////////////////////////////////////////////////////////////////////
+// START: fails in Java 1.9 and higher /////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 		dtdData =
 "<!ELEMENT XXX (AAA , BBB)>\n" +
 "<!ELEMENT AAA EMPTY>\n" +
 "<!ELEMENT BBB EMPTY>";
 		xmlData = "<XXX><AAA/><BBB/></XXX>";
 		test(dtdData, "XXX", xmlData, display);
-//=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*
 		dtdData =
 "<!ELEMENT XXX (AAA*, BBB)>\n" +
 "<!ELEMENT AAA EMPTY>\n" +
 "<!ELEMENT BBB EMPTY>";
 		xmlData = "<XXX><AAA/><AAA/><BBB/></XXX>";
 		test(dtdData, "XXX", xmlData, display);
-//=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*
 		dtdData =
 "<!ELEMENT XXX (AAA, BBB)*>\n" +
 "<!ELEMENT AAA EMPTY>\n" +
 "<!ELEMENT BBB EMPTY>";
 		xmlData = "<XXX><AAA/><BBB/><AAA/><BBB/></XXX>";
 		test(dtdData, "XXX", xmlData, display);
-//=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*
 		dtdData =
 "<!ELEMENT root (A, B?, (C | D)* )>\n" +
 "<!ELEMENT A EMPTY>\n" +
@@ -152,15 +138,10 @@ if (org.xdef.sys.SUtils.JAVA_RUNTIME_VERSION_ID < 109) {
 "<C/>\n" +
 "</root>";
 		test(dtdData, "root", xmlData, display);
-//=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*
 		dtdData =
-//"<!DOCTYPE XXX [\n"+
 "<!ELEMENT XXX (AAA+ , BBB)>\n" +
 "<!ELEMENT AAA EMPTY>\n" +
-"<!ELEMENT BBB EMPTY>\n" +
-//"]>\n"+
-//"<XXX/>\n" +
-"";
+"<!ELEMENT BBB EMPTY>\n";
 		xmlData =
 "<XXX>\n" +
 "<AAA/>\n" +
@@ -168,7 +149,6 @@ if (org.xdef.sys.SUtils.JAVA_RUNTIME_VERSION_ID < 109) {
 "<BBB/>\n" +
 "</XXX>";
 		test(dtdData, "XXX", xmlData, display);
-//=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*
 		dtdData =
 "<!ELEMENT XXX (AAA? , BBB)>\n" +
 "<!ELEMENT AAA EMPTY>\n" +
@@ -178,7 +158,6 @@ if (org.xdef.sys.SUtils.JAVA_RUNTIME_VERSION_ID < 109) {
 "<BBB/>\n" +
 "</XXX>";
 		test(dtdData, "XXX", xmlData, display);
-//=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*
 		dtdData =
 "<!ELEMENT XXX (AAA? , BBB+)>\n" +
 "<!ELEMENT AAA (CCC? , DDD*)>\n" +
@@ -194,7 +173,6 @@ if (org.xdef.sys.SUtils.JAVA_RUNTIME_VERSION_ID < 109) {
 "  </BBB>\n" +
 "</XXX>";
 		test(dtdData, "XXX", xmlData, display);
-//=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*
 		xmlData =
 "<XXX>\n" +
 "  <BBB>\n" +
@@ -203,7 +181,6 @@ if (org.xdef.sys.SUtils.JAVA_RUNTIME_VERSION_ID < 109) {
 "  </BBB>\n" +
 "</XXX>";
 		test(dtdData, "XXX", xmlData, display);
-//=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*
 		dtdData =
 "<!ELEMENT XXX (AAA , BBB)>\n" +
 "<!ELEMENT AAA (CCC , DDD)>\n" +
@@ -221,7 +198,6 @@ if (org.xdef.sys.SUtils.JAVA_RUNTIME_VERSION_ID < 109) {
 "  </BBB>\n" +
 "</XXX>";
 		test(dtdData, "XXX", xmlData, display);
-//=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*
 		dtdData =
 "<!ELEMENT XXX (AAA+ , BBB+)>\n" +
 "<!ELEMENT AAA (BBB | CCC)>\n" +
@@ -252,7 +228,6 @@ if (org.xdef.sys.SUtils.JAVA_RUNTIME_VERSION_ID < 109) {
 "  <BBB/>\n" +
 "</XXX>";
 		test(dtdData, "XXX", xmlData, display);
-//=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*
 		dtdData =
 "<!ELEMENT XXX (AAA+ , BBB+)>\n" +
 "<!ELEMENT AAA (BBB | CCC)>\n" +
@@ -270,7 +245,6 @@ if (org.xdef.sys.SUtils.JAVA_RUNTIME_VERSION_ID < 109) {
 "  <BBB>text5<CCC>text6</CCC>text7</BBB>\n" +
 "</XXX>";
 		test(dtdData, "XXX", xmlData, display);
-//=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*
 		dtdData =
 "<!ELEMENT XXX (AAA+ , BBB+ , CCC+)>\n"+
 "<!ELEMENT AAA EMPTY>\n"+
@@ -293,7 +267,6 @@ if (org.xdef.sys.SUtils.JAVA_RUNTIME_VERSION_ID < 109) {
 "  <CCC X = 'c' Y = '123'/>\n" +
 "</XXX>";
 		test(dtdData, "XXX", xmlData, display);
-//=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*
 		dtdData =
 "<!ELEMENT XXX (AAA+ , BBB+, CCC+, DDD+)>\n"+
 "<!ELEMENT AAA EMPTY>\n"+
@@ -319,7 +292,6 @@ if (org.xdef.sys.SUtils.JAVA_RUNTIME_VERSION_ID < 109) {
 "  <DDD ref = 'b2 b1 a2 a1'/>\n" +
 "</XXX>";
 		test(dtdData, "XXX", xmlData, display);
-//=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*
 		dtdData =
 "<!ELEMENT XXX (AAA+, BBB+)>\n"+
 "<!ELEMENT AAA EMPTY>\n"+
@@ -336,7 +308,6 @@ if (org.xdef.sys.SUtils.JAVA_RUNTIME_VERSION_ID < 109) {
 "  <BBB month = '12'/>\n" +
 "</XXX>";
 		test(dtdData, "XXX", xmlData, display);
-//=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*
 		dtdData =
 "<!ELEMENT root (child*)>\n"+
 "<!ELEMENT child EMPTY>\n"+
@@ -361,7 +332,6 @@ if (org.xdef.sys.SUtils.JAVA_RUNTIME_VERSION_ID < 109) {
 "         ref=' c1 c2 '/>\n" +
 "</root>";
 		test(dtdData, "root", xmlData, display);
-//=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*
 		//parameter entities
 		dtdData =
 "<!ELEMENT XXX (AAA,BBB,CCC?)>\n" +
@@ -377,7 +347,6 @@ if (org.xdef.sys.SUtils.JAVA_RUNTIME_VERSION_ID < 109) {
 "<BBB/>\n" +
 "</XXX>";
 		test(dtdData, "XXX", xmlData, display);
-//=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*
 		dtdData =
 "<!ELEMENT attributes (#PCDATA)*>\n"+
 "<!ATTLIST attributes\n"+
@@ -389,7 +358,6 @@ if (org.xdef.sys.SUtils.JAVA_RUNTIME_VERSION_ID < 109) {
 "  text\n" +
 "</attributes>";
 		test(dtdData, "attributes", xmlData, display);
-//=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*
 		dtdData =
 "<!ELEMENT attributes EMPTY>\n"+
 "<!ATTLIST attributes\n"+
@@ -401,7 +369,6 @@ if (org.xdef.sys.SUtils.JAVA_RUNTIME_VERSION_ID < 109) {
 "  bbb = '123a'\n" +
 "  ccc = 'aaa b:c'/>";
 		test(dtdData, "attributes", xmlData, display);
-//=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*
 		dtdData =
 "<!ELEMENT XXX (AAA+, BBB+)>\n"+
 "<!ELEMENT AAA EMPTY>\n"+
@@ -418,7 +385,6 @@ if (org.xdef.sys.SUtils.JAVA_RUNTIME_VERSION_ID < 109) {
 "  <BBB month = '12'/>\n" +
 "</XXX>";
 		test(dtdData, "XXX", xmlData, display);
-//=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*
 		dtdData =
 "<!ELEMENT XXX (AAA*,BBB)>\n" +
 "<!ELEMENT AAA (#PCDATA)>\n" +
@@ -431,7 +397,6 @@ if (org.xdef.sys.SUtils.JAVA_RUNTIME_VERSION_ID < 109) {
 "  <BBB>text2</BBB>\n" +
 "</XXX>";
 		test(dtdData, "XXX", xmlData, display);
-//=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*
 		dtdData =
 "<!ELEMENT XXX (AAA) >\n" +
 "<!ELEMENT AAA (BBB|CCC) >\n" +
@@ -447,7 +412,6 @@ if (org.xdef.sys.SUtils.JAVA_RUNTIME_VERSION_ID < 109) {
 "  </AAA>\n" +
 "</XXX>";
 		test(dtdData, "XXX", xmlData, display);
-//=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*
 		dtdData =
 "<!ELEMENT XXX (AAA*|(BBB*,(CCC|(DDD,EEE+)*|FFF?), AAA*))? >\n" +
 "<!ELEMENT AAA EMPTY>\n" +
@@ -463,9 +427,10 @@ if (org.xdef.sys.SUtils.JAVA_RUNTIME_VERSION_ID < 109) {
 "  <EEE/>\n" +
 "</XXX>";
 		test(dtdData, "XXX", xmlData, display);
-}
+////////////////////////////////////////////////////////////////////////////////
 // END - fails in Java 1.9 /////////////////////////////////////////////////////
-//=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*
+////////////////////////////////////////////////////////////////////////////////
+		}
 		dtdData =
 "<!ELEMENT TVSCHEDULE (CHANNEL+)>\n"+
 "<!ELEMENT CHANNEL (BANNER,DAY+)>\n"+
@@ -522,7 +487,6 @@ if (org.xdef.sys.SUtils.JAVA_RUNTIME_VERSION_ID < 109) {
 "  </CHANNEL>\n" +
 "</TVSCHEDULE>";
 		test(dtdData, "TVSCHEDULE", xmlData, display);
-//=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*
 		dtdData =
 "<!-- comment -->\n"+
 "<!ELEMENT NEWSPAPER (ARTICLE+)>\n"+
@@ -558,7 +522,6 @@ if (org.xdef.sys.SUtils.JAVA_RUNTIME_VERSION_ID < 109) {
 "  </ARTICLE>\n" +
 "</NEWSPAPER>";
 		test(dtdData, "NEWSPAPER", xmlData, display);
-//=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*
 		dtdData =
 "<!ENTITY AUTHOR \"John Doe\">\n"+
 "<!ENTITY COMPANY \"JD Power Tools, Inc.\">\n"+
@@ -607,10 +570,20 @@ if (org.xdef.sys.SUtils.JAVA_RUNTIME_VERSION_ID < 109) {
 "    <OPTIONS CASE='Soft'>   o   </OPTIONS>\n" +
 "    <PRICE>  2  </PRICE>\n" +
 "  </PRODUCT>\n" +
-"</CATALOG>\n" +
-"";
+"</CATALOG>\n";
 		test(dtdData, "CATALOG", xmlData, display);
-//=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*
+	}
+
+	@Override
+	public void test() {
+		//0..no display, 1 .. display DTD, 2 .. display XDEF, 4 .. display XML
+		int display = 0;
+		String tempDir = clearTempDir().toString();
+		String dataDir = getDataDir();
+		String xmlData;
+		String dtdData;
+
+//		test(display); //enable this line only when debugging
 		dtdData =
 "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'\n" +
 "   'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>\n" +
@@ -625,10 +598,8 @@ if (org.xdef.sys.SUtils.JAVA_RUNTIME_VERSION_ID < 109) {
 "   <b>Obsah</b>\n" +
 "  </body>\n" +
 "</html>";
-//		test(dtdData, "html", xmlData, 2);
 		test(dtdData, "html", xmlData, display);
-/*#end*/
-////////////////////////////////////////////////////////////////////////////////
+
 		DTDToXdef.main(new String[]{"-in",
 			dataDir + "dtds/a.xml",
 			"-out",
@@ -646,6 +617,7 @@ if (org.xdef.sys.SUtils.JAVA_RUNTIME_VERSION_ID < 109) {
 		new File(tempDir + "generated_TV.xdef").delete();
 		clearTempDir(); // delete temporary files.
 	}
+
 	/** Run test
 	 * @param args the command line arguments
 	 */

@@ -19,7 +19,6 @@ public class TestAll {
 			new TestParseType(),
 			new TestPrettyXdef(),
 			new TestValidate(),
-			new TestXDefUtils(),
 		};
 	}
 
