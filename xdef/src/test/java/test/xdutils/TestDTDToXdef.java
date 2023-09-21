@@ -583,7 +583,7 @@ public class TestDTDToXdef extends XDTester {
 		String xmlData;
 		String dtdData;
 
-//		test(display); //enable this line only when debugging
+//		test(display); //enable this line only when debugging without maven
 		dtdData =
 "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'\n" +
 "   'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>\n" +
