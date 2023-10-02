@@ -19,6 +19,8 @@ import java.io.OutputStreamWriter;
 import java.io.PrintStream;
 import org.w3c.dom.Element;
 import org.xdef.XDValueID;
+import static org.xdef.sys.STester.runTest;
+import static test.XDTester._xdNS;
 
 /** TestDebug provides testing of debug mode.
  * @author Trojan
@@ -80,8 +82,8 @@ public final class TestDebug extends XDTester {
 			XMStatementInfo[] si = xm.getStatementInfo(4, "a");
 			// create mode
 			xd = xp.createXDDocument("a");
-			for (int i = 0; i < si.length; i++) {
-				xd.getDebugger().setStopAddr(si[i].getAddr());
+			for (XMStatementInfo si1 : si) {
+				xd.getDebugger().setStopAddr(si1.getAddr());
 			}
 			xd.getDebugger().setInDebug(
 				new ByteArrayInputStream("context\ngo".getBytes()));
@@ -94,22 +96,21 @@ public final class TestDebug extends XDTester {
 			ps.close();
 			assertNoErrorwarnings(reporter);
 			s = baos.toString();
-			assertTrue(s.indexOf("a/a/@a") >= 0 &&
-				s.indexOf("<a a=\"a\"/>") >= 0, s);
+			assertTrue(s.contains("a/a/@a") && s.contains("<a a=\"a\"/>"), s);
 			// processing mode
 			xd = xp.createXDDocument("a");
 			xm = xp.getDebugInfo();
 			si = xm.getStatementInfo(3, "a");
-			for (int i = 0; i < si.length; i++) {
-				xd.getDebugger().setStopAddr(si[i].getAddr());
+			for (XMStatementInfo si1 : si) {
+				xd.getDebugger().setStopAddr(si1.getAddr());
 			}
 			si = xm.getStatementInfo(16, "");
-			for (int i = 0; i < si.length; i++) {
-				xd.getDebugger().setStopAddr(si[i].getAddr());
+			for (XMStatementInfo si1 : si) {
+				xd.getDebugger().setStopAddr(si1.getAddr());
 			}
 			si = xm.getStatementInfo(18, "");
-			for (int i = 0; i < si.length; i++) {
-				xd.getDebugger().setStopAddr(si[i].getAddr());
+			for (XMStatementInfo si1 : si) {
+				xd.getDebugger().setStopAddr(si1.getAddr());
 			}
 			xd.getDebugger().setInDebug(new ByteArrayInputStream(
 				"pl\ngo\npl\ngo\npl\ngo\npl\ngo".getBytes()));
@@ -149,9 +150,8 @@ public final class TestDebug extends XDTester {
 			ps.close();
 			assertNoErrorwarnings(reporter);
 			s = baos.toString();
-			assertTrue(s.indexOf("PAUSE /a") >= 0 &&
-				s.indexOf("PAUSE /a/@a") >= 0 &&
-				s.indexOf("PAUSE /a/b[2]") >= 0, s);
+			assertTrue(s.contains("PAUSE /a") && s.contains("PAUSE /a/@a")
+				&& s.contains("PAUSE /a/b[2]"), s);
 			xd.getDebugger().setInDebug(new ByteArrayInputStream(dbgInput));
 			baos = new ByteArrayOutputStream();
 			ps = new PrintStream(baos);
@@ -161,9 +161,8 @@ public final class TestDebug extends XDTester {
 			ps.close();
 			assertNoErrorwarnings(reporter);
 			s = baos.toString();
-			assertTrue(s.indexOf("PAUSE /a") >= 0 &&
-				s.indexOf("PAUSE /a/@a") >= 0 &&
-				s.indexOf("PAUSE /a/b[2]") >= 0, s);
+			assertTrue(s.contains("PAUSE /a") && s.contains("PAUSE /a/@a")
+				&& s.contains("PAUSE /a/b[2]"), s);
 //			// processing mode
 			xd.getDebugger().setInDebug(new ByteArrayInputStream(dbgInput));
 			baos = new ByteArrayOutputStream();
@@ -173,10 +172,9 @@ public final class TestDebug extends XDTester {
 			ps.close();
 			s = SUtils.modifyString(baos.toString(), "\r\n", "\n");
 			assertNoErrorwarnings(reporter);
-			assertTrue(s.indexOf(" /a/b[2]\n") >= 0, s);
-			assertFalse(s.indexOf(" /a\n") >= 0 ||
-				s.indexOf(" /a/@a\n") >= 0, s);
-		} catch (Exception ex) {fail(ex);}
+			assertTrue(s.contains(" /a/b[2]\n"), s);
+			assertFalse(s.contains(" /a\n") || s.contains(" /a/@a\n"), s);
+		} catch (RuntimeException ex) {fail(ex);}
 		try {
 			xdef =
 "<xd:def xmlns:xd = '" + _xdNS + "' root = 'a'>\n"+
@@ -387,7 +385,7 @@ public final class TestDebug extends XDTester {
 						xd.getDocument().getDocumentElement()));
 				}
 			}
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 		resetTester();
 	}
 
@@ -398,5 +396,4 @@ public final class TestDebug extends XDTester {
 		XDTester.setFulltestMode(true);
 		if (runTest(args) > 0) {System.exit(1);}
 	}
-
 }

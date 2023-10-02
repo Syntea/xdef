@@ -20,6 +20,7 @@ import org.xdef.sys.ReportWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -32,6 +33,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.xdef.XDContainer;
 import org.xdef.proc.XXElement;
+import org.xdef.sys.SException;
 import static org.xdef.sys.STester.runTest;
 import static test.XDTester._xdNS;
 
@@ -252,7 +254,7 @@ public final class Test000 extends XDTester {
 			xp = XDFactory.compileXD(null, xdef);
 			xml = "<a a='123'/>";
 			swr = new StringWriter();
-			assertEq(xml, el = parse(xp, "", xml, reporter, swr, null, null));
+			assertEq(xml, parse(xp, "", xml, reporter, swr, null, null));
 			assertNoErrorwarnings(reporter);
 			assertEq("true", swr.toString());
 			xdef = //test of recursion in X-definition
@@ -357,7 +359,7 @@ public final class Test000 extends XDTester {
 			assertEq("<Complex ver='1.0'><inside Kanal='22'"
 				+ " IdProces='123' Verze='2.0'/><x>test</x></Complex>", el);
 			assertNoErrorwarnings(reporter);
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 		try {
 			//test ignoring of DTD - test switch illegal DOCTYPE.
 			xdef = dataDir + "Test000_01.xdef";
@@ -371,7 +373,7 @@ public final class Test000 extends XDTester {
 				XDConstants.XDPROPERTYVALUE_DOCTYPE_FALSE);
 			parse(xp, "root", xml, reporter);
 			fail("Exception not thrown");
-		} catch (Exception ex) {
+		} catch (RuntimeException ex) {
 			//XML099 = DOCTYPE is set as not allowed&
 			assertTrue(ex.getMessage().indexOf("XML099")>0, ex.getMessage());
 		}
@@ -444,49 +446,49 @@ public final class Test000 extends XDTester {
 				"()\n");
 			if (reporter.errors()) {
 				if ((rep = reporter.getReport()) != null) {
-					if (!"XDEF523".equals(rep.getMsgID()) &&
-						!"XDEF515".equals(rep.getMsgID()) ||
-						rep.getModification() == null ||
-						rep.getModification().indexOf("/a/c[1]/d[3]/@a1") < 0) {
+					if (!rep.getModification().contains("/a/c[1]/d[3]/@a1")
+						|| !"XDEF523".equals(rep.getMsgID())
+						&& !"XDEF515".equals(rep.getMsgID())
+						|| rep.getModification() == null) {
 						fail(rep.toString());
 					}
 				} else {
 					fail();
 				}
 				if ((rep = reporter.getReport()) != null) {
-					if (!"XDEF523".equals(rep.getMsgID()) &&
-						!"XDEF515".equals(rep.getMsgID()) ||
-						rep.getModification() == null ||
-						rep.getModification().indexOf("/a/c[2]/d[3]/@a2") < 0) {
+					if (!rep.getModification().contains("/a/c[2]/d[3]/@a2")
+						|| !"XDEF523".equals(rep.getMsgID())
+						&& !"XDEF515".equals(rep.getMsgID())
+						|| rep.getModification() == null) {
 						fail(rep.toString());
 					}
 				} else {
 					fail();
 				}
 				if ((rep = reporter.getReport()) != null) {
-					if (!"XDEF522".equals(rep.getMsgID()) ||
-						rep.getModification() == null ||
-						rep.getModification().indexOf("/a/c[2]/e[1]/@a3") < 0) {
+					if (!rep.getModification().contains("/a/c[2]/e[1]/@a3") 
+						|| !"XDEF522".equals(rep.getMsgID())
+						|| rep.getModification() == null) {
 						fail(rep.toString());
 					}
 				} else {
 					fail();
 				}
 				if ((rep = reporter.getReport()) != null) {
-					if (!"XDEF522".equals(rep.getMsgID()) ||
-						rep.getModification() == null ||
-						(rep.getModification().indexOf("/a/f[1]/@a4") < 0 &&
-						rep.getModification().indexOf("/a/b[1]/@a") < 0)) {
+					if (!"XDEF522".equals(rep.getMsgID())
+						|| rep.getModification() == null
+						|| (!rep.getModification().contains("/a/b[1]/@a") 
+						&& !rep.getModification().contains("/a/f[1]/@a4"))) {
 						fail(rep.toString());
 					}
 				} else {
 					fail();
 				}
 				if ((rep = reporter.getReport()) != null) {
-					if (!"XDEF522".equals(rep.getMsgID()) ||
-						rep.getModification() == null ||
-						(rep.getModification().indexOf("/a/f[1]/@a4") < 0 &&
-						rep.getModification().indexOf("/a/b[1]/@a") < 0)) {
+					if (!"XDEF522".equals(rep.getMsgID())
+						|| null == rep.getModification() ||
+						(!rep.getModification().contains("/a/b[1]/@a")
+						&& !rep.getModification().contains("/a/f[1]/@a4"))) {
 						fail(rep.toString());
 					}
 				} else {
@@ -547,7 +549,7 @@ public final class Test000 extends XDTester {
 				"CisloTP='SB746826'/>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrorwarnings(reporter, xml);
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 		try {
 			String defName = "RegistraceSU";
 			File errFile = new File(xtempDir, "Test000_05.err");
@@ -584,7 +586,7 @@ public final class Test000 extends XDTester {
 			setResultInfo(durationInfo);
 			errFile.delete();
 			lstFile.delete();
-		} catch (Exception ex) {fail(ex);}
+		} catch (IOException | SException | RuntimeException ex) {fail(ex);}
 		if (getFailCount() == 0) {
 			try {
 				clearTempDir();
@@ -626,7 +628,7 @@ public final class Test000 extends XDTester {
 					assertNoErrorwarnings(reporter, xml);
 				}
 			}
-		} catch (Exception ex) {
+		} catch (RuntimeException ex) {
 			if (!ex.getMessage().contains("XML080")) {fail(ex);}
 		}
 		try {
@@ -993,9 +995,9 @@ public final class Test000 extends XDTester {
 "</xd:def>\n";
 			XDFactory.compileXD(null, xdef);
 			fail("error not reported");
-		} catch (Exception ex) {
+		} catch (RuntimeException ex) {
 			s = ex.getMessage();
-			if (s == null || s.indexOf("XDEF410") < 0) {
+			if (s == null || !s.contains("XDEF410")) {
 				fail(ex);
 			}
 		}
@@ -1166,7 +1168,7 @@ public final class Test000 extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			xml = "<A><X x='0'/></A>";
-			el = parse(xp, "", xml, reporter);
+			parse(xp, "", xml, reporter);
 			assertNoErrorwarnings(reporter);
 			xd = xp.createXDDocument();
 			xd.setXDContext(xml);
@@ -1182,7 +1184,7 @@ public final class Test000 extends XDTester {
 			xd.setXDContext(xml);
 			assertEq(xd.xcreate("B", reporter), "<B><C y='N'/></B>");
 			assertNoErrorwarnings(reporter);
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 
 		resetTester();
 	}

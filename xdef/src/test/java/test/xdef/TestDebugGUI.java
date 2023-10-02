@@ -81,13 +81,13 @@ public final class TestDebugGUI extends XDTester {
 			// create mode
 			xd = xp.createXDDocument("a");
 			XMStatementInfo[] si = xm.getStatementInfo(4, "a");
-			for (int i = 0; i < si.length; i++) {
-				xd.getDebugger().setStopAddr(si[i].getAddr());
+			for (XMStatementInfo si1 : si) {
+				xd.getDebugger().setStopAddr(si1.getAddr());
 			}
 			si = xm.getStatementInfo(6, "a");
-			for (int i = 0; i < si.length; i++) {
-				System.out.println(si[i]);
-				xd.getDebugger().setStopAddr(si[i].getAddr());
+			for (XMStatementInfo si1 : si) {
+				System.out.println(si1);
+				xd.getDebugger().setStopAddr(si1.getAddr());
 			}
 			xml = "<a a='a'/>";
 			xd.setXDContext(xml);
@@ -96,16 +96,16 @@ public final class TestDebugGUI extends XDTester {
 			xd = xp.createXDDocument("a");
 			xm = xp.getDebugInfo();
 			si = xm.getStatementInfo(3, "a");
-			for (int i = 0; i < si.length; i++) {
-				xd.getDebugger().setStopAddr(si[i].getAddr());
+			for (XMStatementInfo si1 : si) {
+				xd.getDebugger().setStopAddr(si1.getAddr());
 			}
 			si = xm.getStatementInfo(16, "");
-			for (int i = 0; i < si.length; i++) {
-				xd.getDebugger().setStopAddr(si[i].getAddr());
+			for (XMStatementInfo si1 : si) {
+				xd.getDebugger().setStopAddr(si1.getAddr());
 			}
 			si = xm.getStatementInfo(18, "");
-			for (int i = 0; i < si.length; i++) {
-				xd.getDebugger().setStopAddr(si[i].getAddr());
+			for (XMStatementInfo si1 : si) {
+				xd.getDebugger().setStopAddr(si1.getAddr());
 			}
 			parse(xd, xml, reporter);
 		} catch (Exception ex) {fail(ex);}
@@ -156,7 +156,7 @@ public final class TestDebugGUI extends XDTester {
 			xd.xparse(xml, null);
 			out.close();
 			assertEq("", baos.toString());
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='SouborY1A'>\n"+
@@ -189,7 +189,7 @@ public final class TestDebugGUI extends XDTester {
 			xd.setStdOut(out);
 			xd.xparse(xml, null);
 			out.close();
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 		try {
 			xdef =
 "<x:collection xmlns:x='" + _xdNS + "'>\n"+
@@ -290,7 +290,7 @@ public final class TestDebugGUI extends XDTester {
 						xd.getDocument().getDocumentElement()));
 				}
 			}
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 		try {// JSON
 			xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"JSON\" root=\"a\">\n"+
@@ -351,7 +351,7 @@ public final class TestDebugGUI extends XDTester {
 			if (reporter.errors()) {
 				System.out.println(reporter);
 			}
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 
 		resetTester();
 	}

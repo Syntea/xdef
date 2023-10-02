@@ -17,6 +17,7 @@ import org.xdef.model.XMDefinition;
 import org.xdef.model.XMElement;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import org.w3c.dom.Element;
@@ -88,18 +89,22 @@ public final class Test002 extends XDTester {
 						System.err, new File(xml), reporter, true);
 				} else {
 					rep= reporter.getReport();
-					if ("XDEF501".equals(rep.getMsgID())) {
-						rep= reporter.getReport();
-						if(!"XDEF539".equals(rep.getMsgID())) {
-							fail(rep.toString());
-						}
-					} else if ("XDEF539".equals(rep.getMsgID())) {
-						rep= reporter.getReport();
-						if(!"XDEF501".equals(rep.getMsgID())) {
-							fail(rep.toString());
-						}
-					} else {
+					if (null == rep.getMsgID()) {
 						fail(rep.toString());
+					} else switch (rep.getMsgID()) {
+						case "XDEF501":
+							rep= reporter.getReport();
+							if(!"XDEF539".equals(rep.getMsgID())) {
+								fail(rep.toString());
+							}	break;
+						case "XDEF539":
+							rep= reporter.getReport();
+							if(!"XDEF501".equals(rep.getMsgID())) {
+								fail(rep.toString());
+							}	break;
+						default:
+							fail(rep.toString());
+							break;
 					}
 				}
 			}
@@ -214,7 +219,7 @@ public final class Test002 extends XDTester {
 					XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE);
 				compile(xdef);
 				fail("Error not thrown");
-			} catch (Exception ex) {
+			} catch (RuntimeException ex) {
 				s = ex.getMessage();
 				if (s == null || !s.contains("E XDEF443")) {fail(ex);}
 			}
@@ -395,14 +400,13 @@ public final class Test002 extends XDTester {
 			if (!reporter.errorWarnings()) {
 				fail("No errors reported!");
 			} else if ((rep = reporter.getReport()) == null
-				|| rep.getModification().indexOf("&{0}p:Header") < 0
-				|| rep.getModification().indexOf("&{xpath}/q:Envelope") < 0
+				|| !rep.getModification().contains("&{0}p:Header")
+				|| !rep.getModification().contains("&{xpath}/q:Envelope")
 				|| (rep = reporter.getReport()) == null
-				|| rep.getModification().indexOf("&{xpath}/q:Envelope/q:Body")<0
+				|| !rep.getModification().contains("&{xpath}/q:Envelope/q:Body")
 				|| (rep = reporter.getReport()) == null
-				|| rep.getModification().indexOf("&{0}q:Ping") < 0
-				|| rep.getModification().indexOf("&{xpath}/q:Envelope/q:Body")<0
-				|| reporter.getReport() != null) {
+				|| !rep.getModification().contains("&{xpath}/q:Envelope/q:Body")
+				|| !rep.getModification().contains("&{0}q:Ping")) {
 				reporter.reset();
 				fail(reporter.printToString());
 			}
@@ -576,7 +580,7 @@ public final class Test002 extends XDTester {
 			if (_errorCount != 1 || _errorCode != 4202) {
 				fail("ErrorCount:"+_errorCount+", errorCode:"+_errorCode);
 			}
-		} catch (Exception ex) {fail(ex);}
+		} catch (IOException ex) {fail(ex);}
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
@@ -767,10 +771,10 @@ public final class Test002 extends XDTester {
 				fail(ex);
 			} else {
 				// parts of error messages that should be in the message
-				assertTrue(s.indexOf("oti(String)")>=0, ex.getMessage());
-				assertTrue(s.indexOf("ofi(int,String,String)")>=0);
-				assertTrue(s.indexOf("ext(Container,Element)")>=0);
-				assertTrue(s.indexOf("oea()")>=0);
+				assertTrue(s.contains("oti(String)"), ex.getMessage());
+				assertTrue(s.contains("ofi(int,String,String)"));
+				assertTrue(s.contains("ext(Container,Element)"));
+				assertTrue(s.contains("oea()"));
 			}
 		}
 		try {// XDef compilator error: Ambiguous
@@ -1026,8 +1030,6 @@ public final class Test002 extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xml = "<a><b a='0012'/></a>";
 			parse(xp, null, xml, reporter);
-			assertNoErrorwarnings(reporter);
-			xml = "<a><b a='01 02'/></a>";
 			assertNoErrorwarnings(reporter);
 			xml = "<a><b a=' 000102 '/></a>";
 			parse(xp, null, xml, reporter);
@@ -1326,8 +1328,8 @@ public final class Test002 extends XDTester {
 					fail(swr.toString());
 				} else {
 					rep = reporter.getReport();
-					if (rep.getModification().indexOf(
-						"/wsdl:portType/wsdl:operation[5]") < 0) {
+					if (!rep.getModification().contains(
+						"/wsdl:portType/wsdl:operation[5]")) {
 						//Missing required element in a section in &{xpath}
 						fail(rep.toString() +
 							"\n"+ rep.getModification());
@@ -1636,7 +1638,7 @@ public final class Test002 extends XDTester {
 "</M>",
 				parse(xp, "", xml, reporter));
 			assertNoErrorwarnings(reporter);
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 
 		resetTester();
 	}

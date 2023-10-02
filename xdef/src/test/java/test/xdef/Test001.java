@@ -9,6 +9,7 @@ import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import java.io.ByteArrayInputStream;
 import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
 import org.w3c.dom.Element;
 import static org.xdef.sys.STester.runTest;
 import static test.XDTester._xdNS;
@@ -1050,7 +1051,7 @@ public final class Test001  extends XDTester {
 			assertNoErrorwarnings(reporter);
 			assertEq("A already defined!\n"+
 				"A/2012-10-02T09:30:00 already exists!\n", swr.toString());
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 		try {
 			// check compiling if source items have assignment of sourceId
 			Object[] p1 = new Object[] {
@@ -1071,7 +1072,7 @@ public final class Test001  extends XDTester {
 			xml = "<C/>";
 			assertEq(xml, parse(xp, "C", xml, reporter));
 			assertNoErrorwarnings(reporter);
-		} catch (Exception ex) {fail(ex);}
+		} catch (UnsupportedEncodingException | RuntimeException ex) {fail(ex);}
 		try {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' name='Example' root='root'>\n"+
@@ -1127,7 +1128,7 @@ public final class Test001  extends XDTester {
 			xp = XDFactory.compileXD(null, xdef);
 			assertEq(xml, parse(xp, "Example", xml, reporter));
 			assertEq(2, reporter.getErrorCount());
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 		try {
 			// check compiling if source items have assignment of sourceId
 			Object[] p1 = new Object[] {
@@ -1139,7 +1140,7 @@ public final class Test001  extends XDTester {
 			};
 			String[] p2 = new String[] {"AA", "AB", "AC"};
 			XDFactory.compileXD(null, p1, p2);
-		} catch (Exception ex) {
+		} catch (UnsupportedEncodingException | RuntimeException ex) {
 			String s = ex.getMessage();
 			if (!s.contains("AA") || !s.contains("AB") || !s.contains("AC")) {
 				fail(ex); // not present "AA" or "AB" or "AC"

@@ -21,8 +21,10 @@ import java.io.FileInputStream;
 import org.w3c.dom.Element;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.net.URL;
 import java.text.DecimalFormat;
@@ -102,7 +104,7 @@ public final class Test003 extends XDTester {
 				}
 			}
 			return true;
-		} catch (Exception ex) {
+		} catch (RuntimeException ex) {
 			xdata.error("XDEF532",
 				"Error detected by external check method: &{msg}",
 				"&{msg}RC - format:" + xdata.getTextValue());
@@ -162,12 +164,12 @@ public final class Test003 extends XDTester {
 			xd = xp.createXDDocument("CKP");
 			xd.xparse(new File(dataDir + "TestChkParser1_1.xml"), reporter);
 			assertNoErrorwarnings(reporter);
-		} catch(Exception ex) {fail(ex);}
+		} catch(RuntimeException ex) {fail(ex);}
 		try {// X-definition referred from XML
 			reporter.clear();
 			XDFactory.xparse(dataDir + "TestChkParser1.xml", reporter);
 			assertNoErrorwarnings(reporter);
-		} catch(Exception ex) {fail(ex);}
+		} catch(RuntimeException ex) {fail(ex);}
 		try {
 			String defFile = dataDir + "SouborD1A_.xdef";
 			setProperty(XDConstants.XDPROPERTY_XINCLUDE,
@@ -186,7 +188,7 @@ public final class Test003 extends XDTester {
 			}
 			xd.setUserObject(this);
 			el = xd.xparse(dataDir + "SouborD1D.xml", rw);
-			if (xd.getDocument().getXmlEncoding() != null
+			if (null != xd.getDocument().getXmlEncoding()
 				&& !"UTF-8".equalsIgnoreCase(
 				el.getOwnerDocument().getXmlEncoding())) {
 				fail("encoding: " + xd.getDocument().getXmlEncoding());
@@ -208,7 +210,7 @@ public final class Test003 extends XDTester {
 			fr.close();
 			isr.close();
 			lst.close();
-		} catch (Exception ex) {fail(ex);}
+		} catch (IOException | RuntimeException ex) {fail(ex);}
 		if (getFulltestMode()) {
 			try { // test big XML
 				xdef =
@@ -243,14 +245,14 @@ public final class Test003 extends XDTester {
 				File tempfile = File.createTempFile("bigxml", "xml");
 				tempfile.deleteOnExit();
 				xml = tempfile.getAbsolutePath();
-				FileOutputStream longfile = new FileOutputStream(xml);
-				longfile.write("<koně>\r\n".getBytes("UTF-8"));
-				long num = 60000; // 15 Mbytes
-				for (int i = 0; i < num; i++) {
-					longfile.write(child);
+				try (FileOutputStream longfile = new FileOutputStream(xml)) {
+					longfile.write("<koně>\r\n".getBytes("UTF-8"));
+					long num = 60000; // 15 Mbytes
+					for (int i = 0; i < num; i++) {
+						longfile.write(child);
+					}
+					longfile.write("</koně>\r\n".getBytes("UTF-8"));
 				}
-				longfile.write("</koně>\r\n".getBytes("UTF-8"));
-				longfile.close();
 				long datalen = tempfile.length();
 				long t = System.currentTimeMillis();
 				xd.xparse(xml, null);
@@ -261,7 +263,7 @@ public final class Test003 extends XDTester {
 					+ df.format(((float) datalen / 1000.0))
 					+ "KB/" + df.format(duration)
 					+ "s (" + df.format((datalen / 1000.0)/duration)+"KB/s);");
-			} catch (Exception ex) {fail(ex);}
+			} catch (IOException | RuntimeException ex) {fail(ex);}
 		}
 		try {// check compiling if source items have assignment of sourceId
 			Object[] p1 = new Object[] { // sources
@@ -278,7 +280,7 @@ public final class Test003 extends XDTester {
 			assertNoErrorwarnings(reporter);
 			assertEq(xml = "<C/>", parse(xp, "C", xml, reporter));
 			assertNoErrorwarnings(reporter);
-		} catch (Exception ex) {fail(ex);}
+		} catch (UnsupportedEncodingException | RuntimeException ex) {fail(ex);}
 		try {// test URL with encoded chracters.
 			File f = new File(clearTempDir(), "/aa bb");
 			f.mkdirs();
@@ -302,13 +304,13 @@ public final class Test003 extends XDTester {
 			wr = new OutputStreamWriter(new FileOutputStream(f),"UTF-8");
 			wr.write(xml);
 			wr.close();
-			xd = xp.createXDDocument("A");
+			xp.createXDDocument("A");
 			assertEq(xml, parse(xp,"A",xml, reporter));
 			assertNoErrorsAndClear(reporter);
 			xd = xp.createXDDocument("A");
 			assertEq(xml, xd.xparse(f.toURI().toURL(), reporter));
 			assertNoErrorsAndClear(reporter);
-		} catch (Exception ex) {fail(ex);}
+		} catch (IOException | RuntimeException ex) {fail(ex);}
 
 		resetTester();
 	}
