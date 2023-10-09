@@ -466,7 +466,7 @@ public final class Test000 extends XDTester {
 					fail();
 				}
 				if ((rep = reporter.getReport()) != null) {
-					if (!rep.getModification().contains("/a/c[2]/e[1]/@a3") 
+					if (!rep.getModification().contains("/a/c[2]/e[1]/@a3")
 						|| !"XDEF522".equals(rep.getMsgID())
 						|| rep.getModification() == null) {
 						fail(rep.toString());
@@ -477,7 +477,7 @@ public final class Test000 extends XDTester {
 				if ((rep = reporter.getReport()) != null) {
 					if (!"XDEF522".equals(rep.getMsgID())
 						|| rep.getModification() == null
-						|| (!rep.getModification().contains("/a/b[1]/@a") 
+						|| (!rep.getModification().contains("/a/b[1]/@a")
 						&& !rep.getModification().contains("/a/f[1]/@a4"))) {
 						fail(rep.toString());
 					}
