@@ -6,7 +6,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -202,7 +202,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
 		if (s.length() > 0 && s.charAt(0) == '<') {
 			_sysId = "STRING";
 			_in = new ByteArrayInputStream(
-				source.getBytes(Charset.forName("UTF-8")));
+				source.getBytes(StandardCharsets.UTF_8));
 		} else {
 			try {
 				URL u = SUtils.getExtendedURL(s);

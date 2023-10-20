@@ -4,7 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
 
@@ -45,9 +45,9 @@ public class PomInfo {
 
 	private void loadProps(InputStream ppIs) throws IOException {
 		Properties properties = new Properties();
-		properties.load(new InputStreamReader(ppIs, charsetUTF8));
+		properties.load(new InputStreamReader(ppIs, StandardCharsets.UTF_8));
 		try {
-			properties.load(new InputStreamReader(ppIs, charsetUTF8));
+			properties.load(new InputStreamReader(ppIs,StandardCharsets.UTF_8));
 		} finally {
 			ppIs.close();
 		}
@@ -110,8 +110,6 @@ public class PomInfo {
 	private String buildTimestamp = null;
 
 	private static final String     pomInfoPropsName = "pominfo.properties";
-	/** default charset */
-	private static final Charset    charsetUTF8      = Charset.forName("UTF-8");
 	/** singleton instance */
 	public static final PomInfo     pomInfo          = new PomInfo();
 }

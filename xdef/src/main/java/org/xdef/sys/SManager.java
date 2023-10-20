@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Field;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -874,7 +874,7 @@ public final class SManager implements XDConstants {
 				InputStream input =
 					c.getResourceAsStream(tableName + ".properties");
 				InputStreamReader in =
-					new InputStreamReader(input, Charset.forName("UTF-8"));
+					new InputStreamReader(input, StandardCharsets.UTF_8);
 				Properties props = new Properties();
 				props.load(in);
 				in.close();

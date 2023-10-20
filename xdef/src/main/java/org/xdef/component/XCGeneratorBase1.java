@@ -235,7 +235,7 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 "\tprivate static String encodeBase64(byte[] b) {"+LN+
 "\t\treturn org.xdef.xon.XonTools.genXMLString("+LN+
 "\t\t\tnew String(org.xdef.sys.SUtils.encodeBase64(b),"+LN+
-"\t\t\tjava.nio.charset.Charset.forName(\"UTF-8\")));"+LN+
+"\t\t\tjava.nio.charset.StandardCharsets.UTF_8));"+LN+
 "\t}"+LN;
 			}
 			if ((_byteArrayEncoding & 2) != 0) { //hex
@@ -257,7 +257,7 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 "\t */"+LN : "")+
 "\tprivate static String encodeHex(byte[] b) {"+LN+
 "\t\treturn new String(org.xdef.sys.SUtils.encodeHex(b),"+LN+
-"\t\t\tjava.nio.charset.Charset.forName(\"UTF-8\"));"+LN+
+"\t\t\tjava.nio.charset.StandardCharsets.UTF_8);"+LN+
 "\t}"+LN;
 			}
 		}

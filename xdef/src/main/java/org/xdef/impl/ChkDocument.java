@@ -11,7 +11,7 @@ import java.io.StringReader;
 import java.io.Writer;
 import java.lang.reflect.Constructor;
 import java.net.URL;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -2021,7 +2021,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			: (o instanceof URL) ? yparse(((URL) o), reporter)
 			: (o instanceof File) ? yparse(((File) o), reporter)
 			: jvalidate(XonUtils.parseYAML(new ByteArrayInputStream(
-				source.getBytes(Charset.forName("UTF-16")))), reporter);
+				source.getBytes(StandardCharsets.UTF_8))), reporter);
 	}
 	@Override
 	/** Parse and process YAML data and return processed XON object.

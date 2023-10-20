@@ -10,7 +10,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -497,7 +497,7 @@ public class RegisterReportTables {
 			final InputStream inStream) {
 			try {
 				InputStreamReader in = new InputStreamReader(inStream,
-					Charset.forName("UTF-8"));
+					StandardCharsets.UTF_8);
 				try {
 					Properties props = new Properties();
 					props.load(in);

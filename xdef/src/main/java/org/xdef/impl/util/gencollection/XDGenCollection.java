@@ -15,7 +15,7 @@ import org.xdef.sys.ArrayReporter;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.net.URL;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Properties;
@@ -182,7 +182,7 @@ public class XDGenCollection {
 				InputSource is;
 				if (_pathname.charAt(0) == '<') {
 					is = new InputSource(new ByteArrayInputStream(
-						_pathname.getBytes(Charset.forName("UTF-8"))));
+						_pathname.getBytes(StandardCharsets.UTF_8)));
 					is.setSystemId("STRING");
 				} else {
 					is = new InputSource(_pathname);

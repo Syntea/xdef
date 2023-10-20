@@ -3,7 +3,7 @@ package org.xdef.xon;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -94,7 +94,7 @@ public class CsvReader extends StringParser implements XonParsers {
 			XonTools.getInputFromObject(source, sysId);
 		XonParser jp = new XonObjParser();
 		Reader in = indata._reader != null ? indata._reader
-			: new InputStreamReader(indata._in, Charset.forName("UTF-8"));
+			: new InputStreamReader(indata._in, StandardCharsets.UTF_8);
 		CsvReader xr = new CsvReader(indata._reader, jp);
 		xr._separator = separator;
 		xr._skipHeader = skipHeader;

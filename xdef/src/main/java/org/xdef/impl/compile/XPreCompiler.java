@@ -18,7 +18,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URL;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -416,7 +416,7 @@ public class XPreCompiler implements PreCompiler {
 		if (source.trim().length() >= 3 && source.trim().charAt(0) == '<'
 			&& source.charAt(source.trim().length()-1) == '>' && !f.exists()) {
 			ByteArrayInputStream baos = new ByteArrayInputStream(
-				source.trim().getBytes(Charset.forName("UTF-8")));
+				source.trim().getBytes(StandardCharsets.UTF_8));
 			_xmlReader.parseStream(baos, srcName);
 		} else {
 			parseFile(f);

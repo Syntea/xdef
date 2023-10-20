@@ -21,6 +21,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -116,7 +117,7 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
 		if (s.charAt(0) == '<') {
 			try {
 				_sysId = null;
-				_sourceBytes = s.getBytes(Charset.forName("UTF-8"));
+				_sourceBytes = s.getBytes(StandardCharsets.UTF_8);
 				prepareXReader();
 			} catch (Exception ex) {
 				throw new SRuntimeException();
@@ -191,7 +192,7 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
 						String s = "<!DOCTYPE root SYSTEM 'x'>\n"+
 							"<" + rootName + "/>";
 						ByteArrayInputStream in = new ByteArrayInputStream(
-							s.getBytes(Charset.forName("UTF-8")));
+							s.getBytes(StandardCharsets.UTF_8));
 						doParse(in, "x.xxx");
 					} catch (Exception exx) {
 						throw new RuntimeException(ex);

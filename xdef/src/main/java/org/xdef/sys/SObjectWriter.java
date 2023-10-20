@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 /** Provides writing of SObjects to output stream.
  * @author Vaclav Trojan
@@ -96,7 +96,7 @@ public class SObjectWriter {
 
 	synchronized public final void writeString(final String x)
 		throws IOException {
-		writeBytes((x == null) ? null : x.getBytes(Charset.forName("UTF-8")));
+		writeBytes((x == null) ? null : x.getBytes(StandardCharsets.UTF_8));
 	}
 
 	synchronized public final void writeSPosition(final SPosition x)

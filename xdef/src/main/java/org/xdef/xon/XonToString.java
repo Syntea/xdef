@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.LinkedHashMap;
@@ -216,7 +217,7 @@ class XonToString extends XonTools {
 			key = (String) y;
 		} else {
 			try {
-				key = new String((byte[]) y, "UTF-8");
+				key = new String((byte[]) y, StandardCharsets.UTF_8);
 			} catch (Exception ex) {
 				throw new RuntimeException("Invalid key: " + y, ex);
 			}

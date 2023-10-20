@@ -2,7 +2,7 @@ package org.xdef.impl;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -699,7 +699,7 @@ public final class XElement extends XCodeDescriptor
 			MessageDigest md = MessageDigest.getInstance("SHA-256"); //was MD5
 			md.update(baos.toByteArray());
 			xe._digest = new String(
-				SUtils.encodeHex(md.digest()), Charset.forName("UTF-8"));
+				SUtils.encodeHex(md.digest()), StandardCharsets.UTF_8);
 		} catch (Exception ex) {
 			//Internal error&{0}{: }
 			throw new SRuntimeException(SYS.SYS066, ex.getMessage());

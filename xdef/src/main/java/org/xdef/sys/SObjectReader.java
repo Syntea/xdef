@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 /** Provides reading of SObjects to output stream.
  * @author Vaclav Trojan
@@ -118,7 +118,7 @@ public class SObjectReader {
 	public final String readString() throws IOException {
 		byte[] bytes = readBytes();
 		return bytes == null
-			? null : new String(bytes, Charset.forName("UTF-8"));
+			? null : new String(bytes, StandardCharsets.UTF_8);
 	}
 
 	public final SPosition readSPosition() throws IOException {

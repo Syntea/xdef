@@ -440,18 +440,12 @@ if(T)return;
 "   outln('xx ' + p + ', ' + q);\n"+
 " }\n"+
 " </xd:declaration>\n"+
-//"  <A id=\"? union(%item=[u.x.ID, p]); finally x(int, ID)\" />\n"+
-//"  <A id=\"? union(%item=[eq('ab'), int]); finally x(int, u.x)\" />\n"+
 "  <A id=\"? union(%item=[u.x]);\" />\n"+ // must be check if it is parser
 "</xd:def>";
-//			xp = XDFactory.compileXD(null, xdef);
 			xp = compile(null, xdef);
 //			xp.displayCode();
 			xml =
-"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n" +
-"\n" +
-"\n" +
-"<A id='123'/>";
+"<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n\n\n<A id='123'/>\n";
 			xd = xp.createXDDocument();
 			xd.xparse(xml, reporter);
 			assertNoErrorwarnings(reporter);

@@ -10,7 +10,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.URL;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -224,7 +224,7 @@ public class PrettyXdef extends XReader {
 		InputStream in;
 		if (source.startsWith("<")) {
 			in = new ByteArrayInputStream(
-				source.getBytes(Charset.forName("UTF-8")));
+				source.getBytes(StandardCharsets.UTF_8));
 		} else {
 			URL u = SUtils.getExtendedURL(source);
 			in = u.openStream();
