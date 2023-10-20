@@ -276,8 +276,8 @@ public final class Test000 extends XDTester {
 "  + ' ' + @LastName + ' earns ' + @Salary + ' (' + getTextContent() + ')');\n"+
 " sum+=int.parse(@Salary.toString()).intValue();}\n"+
 "</xd:macro>\n"+
-"<xd:macro name=\"tisk:Total\">finally outln('Number of people = ' + n + \n"+
-" ', average salary = ' + (sum/n));</xd:macro>\n"+
+"<xd:macro name=\"tisk:Total\">finally printf('Number of people = ' + n + \n"+
+" ', average salary = %2.1f\n', (sum/n));</xd:macro>\n"+
 "<People xd:script=\"${tisk:Total}\" >\n"+
 "  <Person xd:script=\"occurs 0..; ${tiskPerson}\" \n"+
 "        FirstName=\"required string(1, 50)\"\n"+

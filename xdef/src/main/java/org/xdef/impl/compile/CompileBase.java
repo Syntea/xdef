@@ -1081,7 +1081,7 @@ public class CompileBase implements CodeTable, XDValueID {
 			ANY_MODE, 1, 1, XD_STRING), "out");
 		method(ti, genInternalMethod(OUTLN_STREAM, XD_VOID,//outln(...)
 			ANY_MODE, 0, 1, XD_STRING), "outln");
-		method(ti, genInternalMethod(PRINTF_STREAM, XD_VOID,//outln(...)
+		method(ti, genInternalMethod(PRINTF_STREAM, XD_VOID,//printf(...)
 			ANY_MODE, 1, Integer.MAX_VALUE, XD_ANY), "printf");
 		method(ti, genInternalMethod(PARSE_DATE, XD_DATETIME,
 			ANY_MODE, 1, 2, XD_STRING, XD_STRING),"parseDate");
