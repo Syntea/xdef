@@ -330,8 +330,7 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 		int ndx;
 		if (txttab.isEmpty()) {
 			result +=
-"\tpublic void xSetText(org.xdef.proc.XXNode x,"+LN+
-"\t\torg.xdef.XDParseResult value){}"+LN;
+"\tpublic void xSetText(org.xdef.proc.XXNode x, org.xdef.XDParseResult value){}"+LN;
 		} else if (txttab.size() == 1) {
 			Map.Entry<String, String> e = txttab.entrySet().iterator().next();
 			String val = e.getValue();
@@ -342,15 +341,13 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 				"\t\tset" + name +"("+getter+")"
 				: "\t\tlistOf" + name + "().add("+getter+")";
 			result +=
-"\tpublic void xSetText(org.xdef.proc.XXNode x,"+LN+
-"\t\torg.xdef.XDParseResult value){"+LN+
+"\tpublic void xSetText(org.xdef.proc.XXNode x, org.xdef.XDParseResult value){"+LN+
 (val.startsWith("1") ?
 "\t\t_$" + name + "=(char) XD_ndx++;"+LN+ s + ";"+LN+"\t}"+LN
 :"\t\t_$" + name + ".append((char) XD_ndx++);"+LN+ s + ";"+LN+"\t}"+LN);
 		} else {
 			result +=
-"\tpublic void xSetText(org.xdef.proc.XXNode x,"+LN+
-"\t\torg.xdef.XDParseResult value){"+LN;
+"\tpublic void xSetText(org.xdef.proc.XXNode x, org.xdef.XDParseResult value){"+LN;
 			String s = "";
 			for(Map.Entry<String, String> e: txttab.entrySet()) {
 				s += (s.isEmpty() ? "\t\t" : "\t\t} else ")
@@ -375,21 +372,18 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 "\t */"+LN : "");
 		if (atttab.isEmpty()) {
 			result +=
-"\tpublic void xSetAttr(org.xdef.proc.XXNode x,"+LN+
-"\t\torg.xdef.XDParseResult value){}"+LN;
+"\tpublic void xSetAttr(org.xdef.proc.XXNode x, org.xdef.XDParseResult value){}"+LN;
 		} else if (atttab.size() == 1) {
 			String val = atttab.entrySet().iterator().next().getValue();
 			ndx = val.indexOf(';');
 			String getter = val.substring(0, ndx);
 			result +=
-"\tpublic void xSetAttr(org.xdef.proc.XXNode x,"+LN+
-"\t\torg.xdef.XDParseResult value){"+LN+
+"\tpublic void xSetAttr(org.xdef.proc.XXNode x, org.xdef.XDParseResult value){"+LN+
 "\t\tXD_Name_" + val.substring(ndx + 1) + " = x.getNodeName();"+LN+
 "\t\tset" + val.substring(ndx + 1) + "(" + getter + ");"+LN+"\t}"+LN;
 		} else {
 			result +=
-"\tpublic void xSetAttr(org.xdef.proc.XXNode x,"+LN+
-"\t\torg.xdef.XDParseResult value) {"+LN;
+"\tpublic void xSetAttr(org.xdef.proc.XXNode x, org.xdef.XDParseResult value) {"+LN;
 			String s = "";
 			for (Iterator<Map.Entry<String, String>> it =
 				atttab.entrySet().iterator(); it.hasNext();) {
