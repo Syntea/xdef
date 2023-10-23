@@ -418,23 +418,20 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 "\t */"+LN : "");
 		if (xctab.isEmpty()) {
 			result +=
-"\tpublic org.xdef.component.XComponent xCreateXChild("+LN+
-"\t\torg.xdef.proc.XXNode x)"+LN+
-"\t\t{return null;}"+LN;
+"\tpublic org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)"+
+	"{return null;}"+LN;
 		} else if (xctab.size() == 1) {
 			Map.Entry<String, String> e = xctab.entrySet().iterator().next();
 			String s = e.getValue().replace('#', '.');
 			s = s.length() != 0
 				? "new "+s.substring(s.indexOf(";") + 1)+"(this, x)" : "this";
 			result +=
-"\tpublic org.xdef.component.XComponent xCreateXChild("+LN+
-"\t\torg.xdef.proc.XXNode x)"+LN+
-"\t\t{return " + s + ";}"+LN;
+"\tpublic org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x)"+
+	"{return " + s + ";}"+LN;
 		} else {
 			boolean dflt = false;
 			result +=
-"\tpublic org.xdef.component.XComponent xCreateXChild("+LN+
-"\t\torg.xdef.proc.XXNode x) {"+LN;
+"\tpublic org.xdef.component.XComponent xCreateXChild(org.xdef.proc.XXNode x){"+LN;
 			result +=
 "\t\tString s = x.getXMElement().getXDPosition();"+LN;
 			for (Iterator<Map.Entry<String, String>> it =
