@@ -340,13 +340,10 @@ public class XComponentUtil {
 // Create XON object from X-component.
 ////////////////////////////////////////////////////////////////////////////////
 	private static Object toXonObject(final Object o) {
-		if (o instanceof String) {
-			return XonTools.xmlToJValue((String) o);
-		} else if (o instanceof XonTools.JNull) {
-			return null;
-		}
-		return o;
+		return o instanceof String ? XonTools.xmlToJValue((String) o)
+			: o instanceof XonTools.JNull ? null : o;
 	}
+
 	/** Create XON simple value from XComponent.
 	 * @param xc XComponent
 	 * @return object with XON simple value.

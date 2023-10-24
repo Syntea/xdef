@@ -1115,7 +1115,6 @@ public abstract class STester {
 		out.flush();
 		return errors;
 	}
-
 	/** Return a string with printable representation of Throwable object.
 	 * @param exception the Exception object to be printed.
 	 * @return string with printable representation of Throwable.
@@ -1127,7 +1126,6 @@ public abstract class STester {
 		pw.close();
 		return chw.toString();
 	}
-
 	/** Add Java sources to parameter list of the Java compiler.
 	 * @param f the file or directory.
 	 * @param params parameter list of Java compiler.
@@ -1141,7 +1139,6 @@ public abstract class STester {
 			params.add(f.getAbsolutePath());
 		}
 	}
-
 	/** Compile sources from parameter and save files to the classes directory
 	 *  of tester.
 	 * @param classpath the string with classpath.
@@ -1158,7 +1155,6 @@ public abstract class STester {
 		}
 		return compileSources(classpath, classDir, sources);
 	}
-
 	/** Get string with the path where the class is in the current classpath.
 	 * @param clazz the class to be checked.
 	 * @return Get string with path where the class is in the current classpath.
@@ -1176,7 +1172,6 @@ public abstract class STester {
 			return classpath.substring(0, classpath.indexOf(className));
 		}
 	}
-
 	/** Compile sources from parameter and save files to the classes directory
 	 *  of tester.
 	 * @param classpath the string with classpath.

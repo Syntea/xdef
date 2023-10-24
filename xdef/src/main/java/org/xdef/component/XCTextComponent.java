@@ -16,7 +16,10 @@ public class XCTextComponent implements XComponent {
 	private String _model;
 	private int _index;
 
-	public XCTextComponent(String value, String xdPos, String xpos, int index) {
+	public XCTextComponent(final String value,
+		final String xdPos,
+		final String xpos,
+		final int index) {
 		_value = value;
 		_model = xdPos;
 		_xpos = xpos;
@@ -43,7 +46,7 @@ public class XCTextComponent implements XComponent {
 	 * created document element.
 	 * @return XML node belonging to given document from default model.
 	 */
-	public Node toXml(Document doc) {return doc.createTextNode(_value);}
+	public Node toXml(final Document doc) {return doc.createTextNode(_value);}
 	@Override
 	/** Get name of element model used for construction of this object.
 	 * @return name of element model used for construction of this object.
@@ -93,7 +96,7 @@ public class XCTextComponent implements XComponent {
 	/** Set index of node.
 	 * @param index index of node.
 	 */
-	public void xSetNodeIndex(int index) {_index = index;}
+	public void xSetNodeIndex(final int index) {_index = index;}
 	@Override
 	/** Get user object.
 	 * @return user object.
@@ -103,19 +106,19 @@ public class XCTextComponent implements XComponent {
 	/** Set user object.
 	 * @param obj user object.
 	 */
-	public void xSetObject(Object obj) {}
+	public void xSetObject(final Object obj) {}
 	@Override
 	/** Create instance of child XComponent.
 	 * @param xn actual XXNode.
 	 * @return new empty child XCopmponent object.
 	 */
-	public XCTextComponent xCreateXChild(XXNode xn) {return null;}
+	public XCTextComponent xCreateXChild(final XXNode xn) {return null;}
 	@Override
 	/** Set value of text node.
 	 * @param xnode Actual XXNode (from text node).
 	 * @param value parsed value.
 	 */
-	public void xSetText(XXNode xnode, XDParseResult value) {
+	public void xSetText(final XXNode xnode, final XDParseResult value) {
 		if (xnode != null) {
 			_model = xnode.getXMNode().getXDPosition();
 			_xpos = xnode.getXPos();
@@ -127,16 +130,19 @@ public class XCTextComponent implements XComponent {
 	 * @param xnode Actual XXNode (from attribute model).
 	 * @param value parsed value.
 	 */
-	public void xSetAttr(XXNode xnode, XDParseResult value) {}
+	public void xSetAttr(final XXNode xnode, final XDParseResult value) {}
 	@Override
-	public void xAddXChild(XComponent xc) {}
+	public void xAddXChild(final XComponent xc) {}
 	@Override
-	public void xSetAny(Element el) {}
+	public void xSetAny(final Element el) {}
 	@Override
 	/** Set name of element used for construction of this object.
 	 * @param name name of element.
 	 */
-	public void xInit(XComponent p, String name, String ns, String xPos){}
+	public void xInit(final XComponent p,
+		final String name,
+		final String ns,
+		final String xPos){}
 	@Override
 	/** Get XON object from this X-component.
 	 * @return XON object if this X-component.

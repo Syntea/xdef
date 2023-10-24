@@ -40,22 +40,18 @@ import org.xdef.XDDocument;
 import org.xdef.XDFactory;
 import org.xdef.XDOutput;
 import org.xdef.XDPool;
+import static org.xdef.sys.STester.getClassSource;
 import org.xdef.xml.KXmlUtils;
 
 /** Support of tests.
  * @author Vaclav Trojan
  */
 public abstract class XDTester extends STester {
-//	public static String _xdNS = XDConstants.XDEF31_NS_URI;
-//	public static String _xdNS = XDConstants.XDEF32_NS_URI;
-//	public static String _xdNS = XDConstants.XDEF40_NS_URI;
-//	public static String _xdNS = XDConstants.XDEF41_NS_URI;
 	public static String _xdNS = XDConstants.XDEF42_NS_URI;
-	public static XDPool _xdOfxd = null;
-	public static boolean _fulltestMode = false;
-
-	private boolean _genObj = false;
+	public static XDPool _xdOfxd;
+	public static boolean _fulltestMode;
 	private final Properties _props = new Properties();
+	private boolean _genObj;
 	private boolean _chkSyntax;
 
 	/** Creates a new instance of TestAbstract */
@@ -92,7 +88,6 @@ public abstract class XDTester extends STester {
 		setProperty(XDConstants.XDPROPERTY_IGNORE_UNDEF_EXT,
 			XDConstants.XDPROPERTYVALUE_IGNORE_UNDEF_EXT_FALSE);
 	}
-
 	public final void resetTester() {
 		_props.clear();
 		_chkSyntax = _fulltestMode;
@@ -100,27 +95,19 @@ public abstract class XDTester extends STester {
 		setChkSyntax(false);
 		resetProperties();
 	}
-
 	public final Properties getProperties() {return _props;}
-
 	public final void setChkSyntax(final boolean x) {_chkSyntax = x;}
-
 	public final boolean getChkSyntax() {return _chkSyntax;}
-
 	public final static boolean getFulltestMode() {return _fulltestMode;}
-
 	public final static void setFulltestMode(boolean fulltest) {
 		_fulltestMode = fulltest;
 	}
-
 	private ArrayReporter chkSyntax(final String[] xdefs) {
 		return chkSyntax((Object[]) xdefs);
 	}
-
 	private ArrayReporter chkSyntax(final File[] xdefs) {
 		return chkSyntax((Object[]) xdefs);
 	}
-
 	private static void removeMacros(final Element el) {
 		NodeList nl = el.getElementsByTagNameNS(el.getNamespaceURI(), "macro");
 		for (int i = nl.getLength() - 1; i >= 0; i--) {
@@ -128,7 +115,6 @@ public abstract class XDTester extends STester {
 			n.getParentNode().removeChild(n); // remove macros
 		}
 	}
-
 	private void genXdOfXd() {
 		if (_xdOfxd == null) {// _xdOfxd not created, create it
 			try {
@@ -140,7 +126,6 @@ public abstract class XDTester extends STester {
 			}
 		}
 	}
-
 	public final ArrayReporter chkSyntax(final Object... xdefs) {
 		ArrayReporter reporter = new ArrayReporter();
 		if (!_chkSyntax) {
@@ -226,7 +211,6 @@ public abstract class XDTester extends STester {
 		}
 		return reporter;
 	}
-
 	public final void setProperty(final String key, final String value) {
 		String newKey = key.replace('.', '_');
 		_props.remove(key);
@@ -236,16 +220,11 @@ public abstract class XDTester extends STester {
 			_props.setProperty(newKey, value);
 		}
 	}
-
 	public final String getProperty(final String key) {
 		return	_props.getProperty(key.replace('.', '_'));
 	}
-
 	public final void setGenObjFile(final boolean genObj) {_genObj = genObj;}
-
 	public final boolean getGenObjFile() {return _genObj;}
-
-
 	/** Returns the available element model represented by given name or
 	 * <i>null</i> if definition item is not available.
 	 * @param xdef XDefinition.
@@ -276,7 +255,6 @@ public abstract class XDTester extends STester {
 		}
 		return null;
 	}
-
 	private Element createElement(final XDPool xp,
 		final String xdname,
 		final ReportWriter reporter,
@@ -304,7 +282,6 @@ public abstract class XDTester extends STester {
 		xd.xcreate(new QName(nsURI, qname), reporter);
 		return xd.getElement();
 	}
-
 	public final XDPool checkExtObjects(final XDPool xp) {
 		if (!_genObj) {return xp;}
 		try {
@@ -326,14 +303,12 @@ public abstract class XDTester extends STester {
 			throw new RuntimeException(e);
 		}
 	}
-
 	final public void checkResult(final Element el, final String expected) {
 		if (expected == null) {
 			return;
 		}
 		checkResult(el, KXmlUtils.parseXml(expected).getDocumentElement());
 	}
-
 	final public void checkResult(final Element el, final Element expected) {
 		ReportWriter rw = KXmlUtils.compareElements(el, expected);
 		if (!rw.errorWarnings()) {
@@ -349,7 +324,6 @@ public abstract class XDTester extends STester {
 		}
 		fail(swr.toString());
 	}
-
 	final public Element test(final String[] xdefs,
 		final String data,
 		final String name,
@@ -364,7 +338,6 @@ public abstract class XDTester extends STester {
 			}
 			chkSyntax(xdefs).checkAndThrowErrors();
 			XDBuilder xb = XDFactory.getXDBuilder(_props);
-//			xb.setExternals(exts);
 			xb.setSource(xdefs, null);
 			XDPool xp = xb.compileXD();
 			xp = checkExtObjects(xp);
@@ -401,7 +374,6 @@ public abstract class XDTester extends STester {
 		System.out.flush();
 		return null;
 	}
-
 	final public Element test(final String xdef,
 		final String data,
 		final String name,
@@ -410,7 +382,6 @@ public abstract class XDTester extends STester {
 		final char mode) {
 		return test(new String[] {xdef}, data, name, out, reporter, mode);
 	}
-
 	@SuppressWarnings("deprecation")
 	public final Element test(final File[] xdefs,
 		final InputStream data,
@@ -424,7 +395,6 @@ public abstract class XDTester extends STester {
 				reporter.clear();
 			}
 			XDBuilder xb = XDFactory.getXDBuilder(_props);
-//			xb.setExternals(exts);
 			xb.setSource(xdefs);
 			XDPool xp = xb.compileXD();
 			xp = checkExtObjects(xp);
@@ -459,9 +429,7 @@ public abstract class XDTester extends STester {
 		}
 		return null;
 	}
-
-	/* if reporter is not null checking of result of data proecessin is
-	 * skipped! */
+	/* if reporter is not null skipp checking of result of data processing*/
 	final public Element test(final File xn,
 		final InputStream data,
 		final String name,
@@ -469,9 +437,7 @@ public abstract class XDTester extends STester {
 		final ReportWriter reporter) {
 		return test(new File[]{xn}, data, name, os, reporter);
 	}
-
-	// if reporter is not null checking of result of data proecessin is
-	// skipped!
+	// if reporter is not null skipp checking of result of data proecessing
 	final public Element test(final File[] xdefs,
 		final InputStream data,
 		final String name,
@@ -502,14 +468,12 @@ public abstract class XDTester extends STester {
 		}
 		return null;
 	}
-
 	final public boolean test(final String xdef,
 		final String data,
 		final String name,
 		final char mode) {  // 'P' => parse, 'C' => create
 		return test(xdef, data, name, mode, data, "");
 	}
-
 	final public boolean test(final String xdef,
 		final String data,
 		final String name,
@@ -518,7 +482,6 @@ public abstract class XDTester extends STester {
 		final String stdout) {
 		return test(new String[]{xdef}, data, name, mode, result, stdout);
 	}
-
 	final public boolean test(final String[] xdefs,
 		final String data,
 		final String name,
@@ -578,7 +541,6 @@ public abstract class XDTester extends STester {
 		System.out.flush();
 		return error;
 	}
-
 	final public XDPool compile(final InputStream source,
 		final String path,
 		final Class<?>... obj) {
@@ -611,7 +573,6 @@ public abstract class XDTester extends STester {
 		chkSyntax(xdefs).checkAndThrowErrors();
 		return checkExtObjects(XDFactory.compileXD(_props, xdefs, obj));
 	}
-
 	final public Element create(final XDPool xp,
 		final String defName,
 		final ReportWriter reporter,
@@ -855,7 +816,6 @@ public abstract class XDTester extends STester {
 		final String xml) {
 		return create(xd, qname, reporter, xml, null, null);
 	}
-
 	final public Object jcreate(final XDDocument xd,
 		final String modelName,
 		final ArrayReporter reporter,
@@ -926,7 +886,6 @@ public abstract class XDTester extends STester {
 		final Object json) {
 		return jcreate(xdef, xdName, modelName, reporter, json, null, null);
 	}
-
 	final public Element parse(final XDPool xp,
 		final String defName,
 		final String xml,
@@ -1083,7 +1042,6 @@ public abstract class XDTester extends STester {
 		final Object obj) {
 		return parse(compile(xdef), defName, xml, reporter, swr, input, obj);
 	}
-
 	final public Object jparse(final XDPool xp,
 		final String defName,
 		final String json,
@@ -1217,7 +1175,6 @@ public abstract class XDTester extends STester {
 		final Object obj) {
 		return jparse(compile(xdef), defName, json, reporter, swr, input, obj);
 	}
-
 	final public String getListing(final ReportReader r,
 		final String xdef) {
 		if (xdef.charAt(0) == '<') {
@@ -1269,7 +1226,6 @@ public abstract class XDTester extends STester {
 		final ArrayReporter reporter) {
 		return parseXC(xp.createXDDocument(name), xml, clazz, reporter);
 	}
-
 	public final XComponent parseXC(final XDPool xp,
 		final String name,
 		final Element el,
@@ -1277,7 +1233,6 @@ public abstract class XDTester extends STester {
 		final ArrayReporter reporter) {
 		return parseXC(xp.createXDDocument(name), el, clazz, reporter);
 	}
-
 	public final XComponent parseXC(final XDDocument xd,
 		final String xml,
 		final Class clazz,
@@ -1288,7 +1243,6 @@ public abstract class XDTester extends STester {
 		xd.setProperties(_props);
 		return xd.xparseXComponent(xml, clazz, reporter);
 	}
-
 	public final static XComponent parseXC(final XDDocument xd,
 		final Element el,
 		final Class clazz,
@@ -1310,7 +1264,6 @@ public abstract class XDTester extends STester {
 	public ArrayReporter genXComponent(final XDPool xp, final String dir) {
 		return genXComponent(xp, new File(dir));
 	}
-
 	/** Create X-components from the XDPool object to given directory.
 	 * @param xp XDPool from which the X-components created.
 	 * @param dir directory where to generate Java sources.
