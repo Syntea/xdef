@@ -33,32 +33,43 @@ public class GenXDefinition {
 
 	/** Generate X-definition from a document to given output stream writer.
 	 * @param obj XML, JSON/XON, YAML input data (or path to source datae)
-	 * @param outFile name of output file.
+	 * @param outFile output file or pathname.
 	 * @param encoding name of character encoding.
 	 * @throws IOException if an error occurs.
 	 */
 	public static final void genXdef(final Object obj,
-		final String outFile,
+		final Object outFile,
 		final String encoding) throws IOException {
 		genXdef(obj, outFile, encoding, null);
 	}
 
 	/** Generate X-definition from a document to given output stream writer.
 	 * @param obj XML, JSON/XON, YAML input data (or path to source datae)
-	 * @param outFile name of output file.
+	 * @param outFile output file or pathname.
 	 * @param encoding name of character encoding.
 	 * @param xdName name of XDefinition or null.
 	 * @throws IOException if an error occurs.
 	 */
 	public static final void genXdef(final Object obj,
-		final String outFile,
+		final Object outFile,
 		final String encoding,
 		final String xdName) throws IOException {
-		KXmlUtils.writeXml(outFile,
-			encoding,
-			GenXDef.genXdef(obj, xdName),
-			true,
-			true);
+		if (outFile instanceof String) {
+			KXmlUtils.writeXml((String) outFile,
+				encoding,
+				GenXDef.genXdef(obj, xdName),
+				true,
+				true);
+		} else if (outFile instanceof File) {
+			KXmlUtils.writeXml((File) outFile,
+				encoding,
+				GenXDef.genXdef(obj, xdName),
+				true,
+				true);
+		} else {
+			throw new IOException("Incorrect type of output file: " +
+				(null==outFile? "null" : outFile.getClass().getName()));
+		}
 	}
 
 	/** Generate X-definition from XML (command line parameters).
