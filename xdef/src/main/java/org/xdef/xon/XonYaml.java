@@ -3,6 +3,7 @@ package org.xdef.xon;
 import java.io.InputStream;
 import java.io.Reader;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import org.xdef.msg.JSON;
 import org.xdef.sys.SRuntimeException;
@@ -35,10 +36,14 @@ public final class XonYaml {
 					_yamlClass.getDeclaredMethod("load", Reader.class);
 				_yamlLoadInputStream =
 					_yamlClass.getDeclaredMethod("load", InputStream.class);
-			} catch (Exception ex) {
+			} catch (ClassNotFoundException ex) {
 				//The package org.yaml.snakeyaml is not available.
 				//Please add it to classPath
 				throw new SRuntimeException(JSON.JSON101);
+			} catch (IllegalAccessException | IllegalArgumentException
+				| InstantiationException | NoSuchMethodException
+				| SecurityException | InvocationTargetException ex) {
+				throw new RuntimeException(ex);
 			}
 		}
 	}
