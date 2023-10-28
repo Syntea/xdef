@@ -16,7 +16,6 @@ import org.xdef.sys.Report;
 import org.xdef.xml.KXmlUtils;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -40,6 +39,7 @@ import org.w3c.dom.NodeList;
 import org.xdef.XDBuilder;
 import org.xdef.impl.GenXDef;
 import org.xdef.sys.FUtils;
+import org.xdef.sys.SRuntimeException;
 import org.xdef.xon.XonUtils;
 import org.xdef.sys.SThrowable;
 import org.xdef.sys.SUtils;
@@ -135,55 +135,6 @@ public class GUIEditor extends GUIScreen {
 	 */
 	private GUIEditor(final XDSourceInfo si) {super(si);}
 
-	/** Prepare menu items connected with more sources. */
-	private void prepareSourceMenuItems() {
-		if (_sources != null && _sources.size() > 1) {
-			// Select source item
-			_selectSource.setMnemonic((int) 'S');
-			ActionListener alistener = new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					JMenuItem jc = (JMenuItem) e.getSource();
-					setSource(jc.getText());
-				}
-			};
-			for (String key: _sources.keySet()) {
-				JMenuItem ji = new JMenuItem(key);
-				ji.addActionListener(alistener);
-				_selectSource.add(ji);
-			}
-			_selectSource.setEnabled(true);
-			_removeSource.setMnemonic((int) 'R');
-			alistener = new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					JMenuItem jc = (JMenuItem) e.getSource();
-					XDSourceItem item = _sources.remove(jc.getText());
-					updateSourceItem();
-					prepareSourceMenuItems();
-					if (item == _sourceItem) {
-						_sourceItem = null;
-						_sourceID = null;
-						setInitialSource();
-					}
-					_actionFinished = false;
-					notifyFrame();
-				}
-			};
-			for (String key: _sources.keySet()) {
-				JMenuItem ji = new JMenuItem(key);
-				ji.addActionListener(alistener);
-				_removeSource.add(ji);
-			}
-			_removeSource.setEnabled(true);
-		} else {
-			_selectSource.setEnabled(false);
-			_selectSource.removeAll();
-			_removeSource.setEnabled(false);
-			_removeSource.removeAll();
-		}
-	}
-
 	/** Initialize menu bar
 	 * @param text the text of the <code>JMenuItem</code>
 	 */
@@ -195,28 +146,22 @@ public class GUIEditor extends GUIScreen {
 		// Save as... menu item
 		ji = new JMenuItem("Save as...");
 		ji.setAccelerator(KeyStroke.getKeyStroke("control S"));
-		ji.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (updateSourceItem()) {
-					_sourceItem._saved = true;
-				}
-				saveSource(_sourceItem);
+		ji.addActionListener((ActionEvent e) -> {
+			if (updateSourceItem()) {
+				_sourceItem._saved = true;
 			}
+			saveSource(_sourceItem);
 		});
 		fileMenu.add(ji);
 		if (text != null) {
 			fileMenu.addSeparator();
 			ji = new JMenuItem(text);
 			ji.setAccelerator(KeyStroke.getKeyStroke("F9"));
-			ji.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					if (((JMenuItem)e.getSource()).isEnabled()) {
-						updateSourceItem();
-						_actionFinished = false;
-						notifyFrame();
-					}
+			ji.addActionListener((ActionEvent e) -> {
+				if (((JMenuItem)e.getSource()).isEnabled()) {
+					updateSourceItem();
+					_actionFinished = false;
+					notifyFrame();
 				}
 			});
 		}
@@ -225,20 +170,17 @@ public class GUIEditor extends GUIScreen {
 		// Exit menu item
 		ji = new JMenuItem("Exit");
 		ji.setMnemonic((int) 'X');
-		ji.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				_actionFinished = true;
-				if (_sourceItem != null && _sourceItem._changed) {
-					String s;
-					if (_sourceArea == null
-						|| (s = _sourceArea.getText()) == null
-						|| s.equals(_sourceItem._source)){
-						_sourceItem._changed = false;
-					}
+		ji.addActionListener((ActionEvent e) -> {
+			_actionFinished = true;
+			if (_sourceItem != null && _sourceItem._changed) {
+				String s;
+				if (_sourceArea == null
+					|| (s = _sourceArea.getText()) == null
+					|| s.equals(_sourceItem._source)){
+					_sourceItem._changed = false;
 				}
-				notifyFrame();
 			}
+			notifyFrame();
 		});
 		fileMenu.add(ji);
 		// Source position info
@@ -283,6 +225,9 @@ public class GUIEditor extends GUIScreen {
 		_sources = _si.getMap();
 		_sources.clear();
 		String sourceId;
+		if (obj == null) {
+			throw new SRuntimeException(SYS.SYS036, "Object is null");
+		}
 		if (obj instanceof File) {
 			sourceId = ((File) obj).getCanonicalPath();
 		} else if (obj instanceof String) {
@@ -743,9 +688,12 @@ public class GUIEditor extends GUIScreen {
 				}
 				if (reporter.errors()) {
 					XDSourceItem xsi = null;
+					String missingDefs = "";
 					for (XDSourceItem x: si.getMap().values()) {
 						for (Report r: reporter) {
-							if (r.getModification().contains(
+							if (x._url == null) {
+								missingDefs += x._source + "\n";
+							} else if (r.getModification().contains(
 								x._url.toString())) {
 								xsi = x;
 								break;
@@ -755,6 +703,11 @@ public class GUIEditor extends GUIScreen {
 							break;
 						}
 					}
+					if (!missingDefs.isEmpty()) {
+						throw new RuntimeException(
+							"UNAVAILABLE X-DEFINITION DATA: \n\n"+
+								missingDefs + "\nCORRECT PROJECT DATA");
+					}
 					if (xsi == null) {
 						xsi = si.getMap().values().iterator().next();
 					}
@@ -763,6 +716,9 @@ public class GUIEditor extends GUIScreen {
 						"Error in X-definition", xsi._url, si, true, null);
 					ge.closeEdit();
 					reporter.clear();
+					if (!changed) {
+						return xp;
+					}
 				} else {
 					return xp;
 				}
@@ -1283,8 +1239,8 @@ public class GUIEditor extends GUIScreen {
 			case 'v': { // validate
 				if (xdefs.isEmpty()) {
 					xdefs.add(genTemporaryFile(
-"&lt;xd:def xmlns:xd=\""
-	+ XDConstants.XDEF42_NS_URI + "\" name=\"test\" root=\"root\">\n" +
+"&lt;xd:def xmlns:xd=\"" + XDConstants.XDEF42_NS_URI +
+	"\" name=\"test\" root=\"root\">\n" +
 (format == 'x'
 ? "  &lt;root a=\"int();\" >\n" +
 "    &lt;b xd:script=\"*\" >\n" +
@@ -1297,7 +1253,7 @@ public class GUIEditor extends GUIScreen {
 "&lt;/xd:json>\n"
 : "&lt;xd:ini name=\"root\">\n"+
 "[\n"+
-" [\"occurs + string();\"]\n"+
+"  [\"occurs + string();\"]\n"+
 "]\n"+
 "&lt;/xd:ini>\n") +
 "&lt;/xd:def>", workDir, "xdef.xml", deleteOnExit, "UTF-8"));
@@ -1306,20 +1262,26 @@ public class GUIEditor extends GUIScreen {
 					}
 				}
 				if (dataPath == null) {
-					if (format == 'i') {
-						dataPath = genTemporaryFile("a=1\nb=2",
-							workDir, "data.ini", deleteOnExit, "ascii");
-					} else if (format == 'x') {
-						dataPath = genTemporaryFile(
-"<root a=\"123\" >\n" +
+					switch (format) {
+						case 'i':
+							dataPath = genTemporaryFile("a=1\nb=2",
+								workDir, "data.ini", deleteOnExit, "ascii");
+							break;
+						case 'x':
+							dataPath = genTemporaryFile("<root a=\"123\" >\n" +
 "  <b>text</b>\n" +
 "  <b/>\n" +
-"</root>", workDir, "data.xml", deleteOnExit, "UTF-8");
-					} else if (format == 'j') {
-						dataPath = genTemporaryFile("{\"a\": [1, 2, 3]}",
-							workDir, "data.json", deleteOnExit, "UTF-8");
+"</root>",
+								workDir, "data.xml", deleteOnExit, "UTF-8");
+							break;
+						case 'j':
+							dataPath = genTemporaryFile("{\"a\": [1, 2, 3]}",
+								workDir, "data.json", deleteOnExit, "UTF-8");
+							break;
+						default:
+							break;
 					}
-					debug = editInput = displayResult = "true";
+					editInput = displayResult = "true";
 				}
 				src += "  <Execute Mode=\"validate\"";
 				if (format == 'i') {
@@ -1383,14 +1345,6 @@ public class GUIEditor extends GUIScreen {
 				try {
 					File dir = jf.getSelectedFile();
 					int ndx1, ndx2;
-					ndx1 = src.indexOf("<Input");
-					if (!wasDataPath && ndx1 >= 0) {
-						ndx1 = src.indexOf('>', ndx1 + 6);
-						ndx2 = src.indexOf("</Input");
-						String s = src.substring(0, ndx1 + 1)
-							+ new File(dir, "data.xml").getAbsolutePath()
-							+ src.substring(ndx2);
-					}
 					ndx1 = src.indexOf("<XDefinition");
 					if (!wasXDefinition && ndx1 >= 0) {
 						ndx1 = src.indexOf('>', ndx1 + 6);

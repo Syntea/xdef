@@ -21,9 +21,9 @@ import static test.XDTester._xdNS;
 /** Provides testing of XDef debug mode and editing in display mode.
  * @author Trojan
  */
-public final class TestDebugGUI extends XDTester {
+public final class TestGUIDebuger extends XDTester {
 
-	public TestDebugGUI() {super(); setChkSyntax(false);}
+	public TestGUIDebuger() {super(); setChkSyntax(false);}
 
 	@Override
 	public void test() {
@@ -53,6 +53,7 @@ public final class TestDebugGUI extends XDTester {
 		try {
 			// XScript breakpoints
 			xdef =
+//"<x:collection xmlns:x='http://www.syntea.cz/xdef/4.2'>\n"+    	//01
 "<x:collection xmlns:x='" + _xdNS + "'>\n"+                 	//01
 "<x:def name = 'a' root = 'a'>\n"+								//02
 "  <a a = \"required eq('a');\n"+								//03

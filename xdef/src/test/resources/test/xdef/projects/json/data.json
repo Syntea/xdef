@@ -1,0 +1,13 @@
+{ "cities" : [ "2020-02-22",
+    { "from": [ "Brussels",
+        {"to": "London", "distance": 322},
+        {"to": "Paris", "distance": 265}
+      ]
+    },
+    { "from": [ "London",
+        {"to": "Brussels", "distance": 322},
+        {"to": "Paris", "distance": 344}
+      ]
+    }
+  ]
+}
