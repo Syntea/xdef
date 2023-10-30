@@ -43,7 +43,7 @@ public class TestGUIEditor  extends XDTester {
 //			test("-p", getDataDir()+"GUI/json/project.xml");
 //			test("-p", getDataDir()+"GUI/construct/project.xml");
 		} catch (Exception ex) {fail(ex);}
-//		clearTempDir(); // clear temporary directory
+		clearTempDir(); // clear temporary directory
 	}
 
 	/** Run test

@@ -17,6 +17,7 @@ import org.xdef.xml.KXmlUtils;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.Method;
@@ -40,6 +41,7 @@ import org.w3c.dom.NodeList;
 import org.xdef.XDBuilder;
 import org.xdef.impl.GenXDef;
 import org.xdef.sys.FUtils;
+import org.xdef.sys.SException;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.xon.XonUtils;
 import org.xdef.sys.SThrowable;
@@ -284,8 +286,7 @@ public class GUIEditor extends GUIScreen {
 		final boolean editable) throws Exception {
 		Object o = s;
 		if (editable && workDir != null) {
-			o = new File(genTemporaryFile(s,
-				workDir, "result.tmp", deleteOnExit, "UTF-8"));
+			o = new File(genTemporaryFile(s,workDir,"result.tmp",deleteOnExit));
 		}
 		XDSourceItem xsi =
 			new GUIEditor(si).display(null, msg, o, si, editable, null);
@@ -970,8 +971,7 @@ public class GUIEditor extends GUIScreen {
 	private static String genTemporaryFile(final String data,
 		final File dir,
 		final String name,
-		final boolean deleteOnExit,
-		final String charset) {
+		final boolean deleteOnExit) {
 		if (dir != null && dir.exists() && dir.isDirectory()) {
 			try {
 				File f = new File(dir, name);
@@ -993,7 +993,7 @@ public class GUIEditor extends GUIScreen {
 					return dir;
 				}
 			} else {
-				File tempDir =tempDir = File.createTempFile("GUI", ".tmp");
+				File tempDir = File.createTempFile("GUI", ".tmp");
 				tempDir.delete();
 				tempDir.mkdirs();
 				tempDir.deleteOnExit();
@@ -1002,7 +1002,7 @@ public class GUIEditor extends GUIScreen {
 				tempDir.deleteOnExit();
 				return tempDir;
 			}
-		} catch (Exception ex) {}
+		} catch (IOException ex) {}
 		throw new RuntimeException("Incorrect temp directory");
 	}
 
@@ -1189,7 +1189,6 @@ public class GUIEditor extends GUIScreen {
 						return;
 					}
 					workDir = new File(args[i++]);
-					continue;
 			}
 		}
 		String msg = "";
@@ -1235,28 +1234,17 @@ public class GUIEditor extends GUIScreen {
 "    </i>\n" +
 "  </BODY>\n" +
 "</HTML>\n" +
-"</xd:def>", workDir, "xdef.xml", deleteOnExit, "UTF-8"));
-					if (displayResult == null) {
-						displayResult = "true";
-					}
+"</xd:def>", workDir, "xdef.xml", deleteOnExit));
 				}
-				debug = editInput = displayResult = "true";
 				if (!wasDataPath) {
-					debug = editInput = displayResult = "true";
 					dataPath = genTemporaryFile(
 "<x>\n  <i x=\"Hello\"/>\n  <i x=\"World!\"/>\n</x>",
-						workDir, "data.xml", deleteOnExit, "UTF-8");
+						workDir, "data.xml", deleteOnExit);
 				}
-				src += "  <Execute Mode = \"construct\"";
-				if (displayResult != null) {
-					src += " DisplayResult = \"true\"";
-				}
-				src += ">\n";
-				src += "    <Context";
-				if (editInput!= null) {
-					src += " Edit='true'";
-				}
-				src += ">\n" + dataPath.trim() + "\n</Context>\n";
+				src +=
+"  <Execute Mode = \"construct\" DisplayResult = \"true\">\n" +
+"    <Context Edit='true'>\n";
+				src += dataPath.trim() + "\n</Context>\n";
 				src += "  </Execute>\n";
 				break;
 			}
@@ -1268,7 +1256,7 @@ public class GUIEditor extends GUIScreen {
 "<root attr = \"123\">\n" +
 "  <a>text</a>\n" +
 "  <a/>\n" +
-"</root>", workDir, "data.xml", deleteOnExit, "UTF-8");
+"</root>", workDir, "data.xml", deleteOnExit);
 					}
 					dataPath = editData("Input data", dataPath);
 					Document d = KXmlUtils.parseXml(dataPath);
@@ -1281,9 +1269,9 @@ public class GUIEditor extends GUIScreen {
 					Element xd = GenXDef.genXdef(e);
 					xd.setAttribute("name", "test");
 					s = KXmlUtils.nodeToString(xd, true);
-					xdefs.add(genTemporaryFile(s,
-						workDir, "xdef.xml", deleteOnExit, "UTF-8"));
-					debug = editInput = displayResult = "true";
+					xdefs.add(genTemporaryFile(
+						s, workDir, "xdef.xml", deleteOnExit));
+					editInput = displayResult = "true";
 				} catch (Exception ex) {
 					throw new RuntimeException(ex);
 				}
@@ -1307,7 +1295,7 @@ public class GUIEditor extends GUIScreen {
 "  [\"occurs + string();\"]\n"+
 "]\n"+
 "</xd:ini>\n") +
-"</xd:def>", workDir, "xdef.xml", deleteOnExit, "UTF-8"));
+"</xd:def>", workDir, "xdef.xml", deleteOnExit));
 					if (displayResult == null) {
 						displayResult = "true";
 					}
@@ -1316,18 +1304,17 @@ public class GUIEditor extends GUIScreen {
 					switch (format) {
 						case 'i':
 							dataPath = genTemporaryFile("a=1\nb=2",
-								workDir, "data.ini", deleteOnExit, "ascii");
+								workDir, "data.ini", deleteOnExit);
 							break;
 						case 'x':
 							dataPath = genTemporaryFile("<root a=\"123\" >\n" +
 "  <b>text</b>\n" +
 "  <b/>\n" +
-"</root>",
-								workDir, "data.xml", deleteOnExit, "UTF-8");
+"</root>", workDir, "data.xml", deleteOnExit);
 							break;
 						case 'j':
 							dataPath = genTemporaryFile("{\"a\": [1, 2, 3]}",
-								workDir, "data.json", deleteOnExit, "UTF-8");
+								workDir, "data.json", deleteOnExit);
 							break;
 						default:
 							break;
@@ -1362,20 +1349,20 @@ public class GUIEditor extends GUIScreen {
 			src += "  <XDefinition>" + x + "</XDefinition>\n";
 		}
 		// External items added to classPath
-//		for (String x: xdefs) {
-//			f = new File(x);
-//			if (f.exists()) {
-//				src += "  <External>" + x + "</External>\n";
-//				continue;
-//			} else {
-//				try {
-//					URL u = new URL(x);
-//					src += "  <External>" + x + "</External>\n";
-//					continue;
-//				} catch (Exception ex) {}
-//			}
-//			throw new RuntimeException("Incorrect classpath: " + x);
-//		}
+		for (String x: external) {
+			f = new File(x);
+			if (f.exists()) {
+				src += "  <External>" + x + "</External>\n";
+				continue;
+			} else {
+				try {
+					URL u = new URL(x);
+					src += "  <External>" + x + "</External>\n";
+					continue;
+				} catch (Exception ex) {}
+			}
+			throw new RuntimeException("Incorrect classpath: " + x);
+		}
 		if (!deleteOnExit) { // work directory was specified
 			String s = SUtils.modifyString(workDir.getPath(), "&", "&amp;");
 			src += "  <WorkDir>" + s + "</WorkDir>\n";
@@ -1383,7 +1370,7 @@ public class GUIEditor extends GUIScreen {
 		src += "</Project>";
 		// run generated project
 		runEditor(param, format,
-			genTemporaryFile(src, workDir, "project.xml",deleteOnExit,"UTF-8"));
+			genTemporaryFile(src, workDir, "project.xml", deleteOnExit));
 		if (deleteOnExit) {
 			JFileChooser jf = new JFileChooser(new File("."));
 			jf.setDialogTitle("Do you want to save the created project?");
@@ -1407,7 +1394,7 @@ public class GUIEditor extends GUIScreen {
 					SUtils.writeString(new File(dir, "project.xml"),
 						src, "UTF-8");
 					workDir = dir;
-				} catch (Exception ex) {
+				} catch (SException ex) {
 					JOptionPane.showMessageDialog(null,//Can't write
 						Report.error(SYS.SYS036,"Can't write data to file: "
 							+ jf.getSelectedFile() + "\n" + ex));
