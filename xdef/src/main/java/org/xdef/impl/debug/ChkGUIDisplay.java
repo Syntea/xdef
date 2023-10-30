@@ -13,6 +13,7 @@ import javax.swing.KeyStroke;
 import org.xdef.XDPool;
 import org.xdef.impl.XDSourceInfo;
 import org.xdef.impl.XDSourceItem;
+import static org.xdef.impl.debug.GUIScreen.UNDO_LIMIT;
 import org.xdef.sys.ArrayReporter;
 
 /** Provides GUI for editing of sources of X-definitions.
@@ -68,6 +69,9 @@ public class ChkGUIDisplay extends GUIScreen implements XEditor {
 	@Override
 	/** Close XEditor. */
 	public void closeXEditor(String msg) {
+		if (_kill) {
+			throw new Error("Process killed by user");
+		}
 		closeEdit();
 		if (msg != null && !msg.isEmpty()) {
 			JOptionPane.showMessageDialog(null, msg);
@@ -75,7 +79,6 @@ public class ChkGUIDisplay extends GUIScreen implements XEditor {
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
-
 
 	private void initMenuBar() {
 		JMenu fileMenu = _menuBar.add(new JMenu("File (F10)"));
@@ -193,6 +196,19 @@ public class ChkGUIDisplay extends GUIScreen implements XEditor {
 				}
 				_actionFinished = true;
 				notifyFrame();
+			}
+		});
+		fileMenu.add(ji);
+		// Kill project
+		ji = new JMenuItem("Kill process");
+		ji.setMnemonic((int) 'K');
+		ji.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				_sourceItem._changed = false;
+				_actionFinished = true;
+				_kill = true;
+				_frame.dispose();
 			}
 		});
 		fileMenu.add(ji);

@@ -16,6 +16,7 @@ import org.xdef.sys.Report;
 import org.xdef.xml.KXmlUtils;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -186,6 +187,18 @@ public class GUIEditor extends GUIScreen {
 			notifyFrame();
 		});
 		fileMenu.add(ji);
+		// Kill project
+		ji = new JMenuItem("Kill process");
+		ji.setMnemonic((int) 'K');
+		ji.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				_sourceItem._changed = false;
+				_frame.dispose();
+				_kill = true;
+			}
+		});
+		fileMenu.add(ji);
 		// Source position info
 		_menuBar.add(_sourcePositionInfo, BorderLayout.EAST);
 		_frame.setJMenuBar(_menuBar);
@@ -265,6 +278,9 @@ public class GUIEditor extends GUIScreen {
 		si._width = _frame.getWidth();
 		si._height = _frame.getHeight();
 		closeEdit();
+		if (_kill) {
+			throw new Error("Process killed by user");
+		}
 		return xsi;
 	}
 

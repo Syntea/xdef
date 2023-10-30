@@ -65,33 +65,34 @@ public class GUIBase {
 	public JMenuBar _menuBar;
 	/** Source info (source map and window rectangle parameters). */
 	public XDSourceInfo _si;
-	/** Source pane. */
-	JPanel _sourcePane;
 	/** Source window. */
 	public JTextPane _sourceArea;
-	/** Line numbers. */
-	JTextPane _lineNumberArea;
+	/** Kill project. */
+	public boolean _kill;
 
 	// Position information
 	/** Information about caret position in source area. */
 	public JLabel _sourcePositionInfo;
-
 	// Informaton text window
 	/** Information window. */
 	public JTextArea _infoArea;
-
 	/** Actual source item. */
 	public XDSourceItem _sourceItem;
 	/** Window name. */
 	public String _windowName;
 	/** Name of actual source item. */
 	public String _sourceID;
+	/** Map with source items.*/
+	public Map<String, XDSourceItem> _sources;
+
+	/** Line numbers. */
+	JTextPane _lineNumberArea;
+	/** Source pane. */
+	JPanel _sourcePane;
 	/** Array of position information.*/
 	SourcePos[] _positions;
 	/** XDPool object.*/
 	XDPool _xdpool;
-	/** Map with source items.*/
-	public Map<String, XDSourceItem> _sources;
 	/** Object used for wait/notify.*/
 	private final Object _waitobj = new Object();
 
@@ -171,47 +172,7 @@ public class GUIBase {
 		jsp = new JScrollPane();
 		jsp.getViewport().add(_infoArea);
 		_frame.add(jsp, BorderLayout.AFTER_LAST_LINE);
-//		_frame.addComponentListener(new java.awt.event.ComponentAdapter() {
-//			@Override
-//			public void componentMoved(java.awt.event.ComponentEvent evt){
-//				Rectangle r = _frame.getBounds();
-//				_si._xpos = r.x;
-//				_si._ypos = r.y;
-//				_si._width = r.width;
-//				_si._height = r.height;
-//			}
-//			@Override
-//			public void componentResized(java.awt.event.ComponentEvent evt){
-//				Rectangle r = _frame.getBounds();
-//				_si._xpos = r.x;
-//				_si._ypos = r.y;
-//				_si._width = r.width;
-//				_si._height = r.height;
-//			}
-//		});
 		_frame.setBounds(_si._xpos, _si._ypos, _si._width, _si._height);
-/* *
-		_frame.addComponentListener(new java.awt.event.ComponentAdapter() {
-			@Override
-			public void componentResized(java.awt.event.ComponentEvent evt) {
-				Rectangle r = _frame.getBounds();
-				System.out.println(r + "\nevt=" + evt.getSource());
-				_frame.setSize(_width, _height);
-//				int height = evt.getComponent().getHeight();
-//				int width = evt.getComponent().getWidth();
-//				if (width < 300 || height < 200) {
-//					if (width < 300) {
-//						width = 300;
-//					}
-//					if (height < 200) {
-//						height = 200;
-//					}
-//				}
-//				_width = width;
-//				_height = height;
-			}
-		});
-/* */
 	}
 
 	/** Initialize map with source items. */

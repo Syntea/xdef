@@ -29,6 +29,10 @@ import javax.swing.text.StyledDocument;
 import org.xdef.XDCallItem;
 import org.xdef.XDConstants;
 import org.xdef.XDDebug;
+import static org.xdef.XDDebug.KILL;
+import static org.xdef.XDDebug.NOSTEP;
+import static org.xdef.XDDebug.STEPINTO;
+import static org.xdef.XDDebug.STEPOVER;
 import org.xdef.XDPool;
 import org.xdef.XDValue;
 import org.xdef.impl.ChkElement;
@@ -76,7 +80,8 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 	private static final int DBG_SHOWCONTEXT = DBG_SHOWELEMENT + 1;		//12
 	private static final int DBG_SHOWERRORS = DBG_SHOWCONTEXT + 1;		//13
 	private static final int DBG_EXIT = DBG_SHOWERRORS + 1;				//14
-//	private static final int DBG_HELP = DBG_EXIT + 1;					//15
+	private static final int DBG_KILL = DBG_EXIT + 1;					//15
+//	private static final int DBG_HELP = DBG_KILL + 1;					//16
 
 	private static final String[] DBG_COMMANDS = {
 		"go/Continue/F5",						// DBG_CONTINUE
@@ -93,7 +98,8 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 		"elem/Show actual element",				// DBG_SHOWELEMENT
 		"context/Show context",					// DBG_SHOWCONTEXT
 		"err/Show errors",						// DBG_SHOWERRORS
-		"exit/Exit debugger",					// DBG_SHOWERRORS
+		"exit/Exit debugger",					// DBG_EXIT
+		"exit/Kill project",					// DBG_KILL
 		"help/Help/F1",							// DBG_HELP
 	};
 
@@ -291,7 +297,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 		_frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 	}
 
-	private StopAddr createStopAddr(SourcePos spos) {
+	private StopAddr createStopAddr(GUIBase.SourcePos spos) {
 		XMDebugInfo di = _xdpool.getDebugInfo();
 		XMStatementInfo si = di.getStatementInfo(spos._line,
 			spos._column, spos._sysId, null);
@@ -312,12 +318,12 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 		if (xi == null || (txt = xi._source) == null || si.getAddr() < 0) {
 			return null;
 		}
-		SourcePos spos = new SourcePos(txt,
+		GUIBase.SourcePos spos = new GUIBase.SourcePos(txt,
 			(int) si.getLine(),	(int) si.getColumn());
 		spos._sysId = si.getSysId();
 		int pos = spos._pos;
 		if (si.getEndLine() >= 0) {
-			SourcePos spos1 = new SourcePos(txt,
+			GUIBase.SourcePos spos1 = new GUIBase.SourcePos(txt,
 				(int) si.getEndLine(), (int) si.getEndColumn());
 			if (spos1._pos >= pos) {
 				return new StopAddr(si.getAddr(),
@@ -330,7 +336,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 			&& nextsi.getLine() == spos._line) {
 			long col = nextsi.getColumn() < 0 ? // macro ?
 				(spos._column -  nextsi.getColumn()) : nextsi.getColumn();
-			SourcePos sp = new SourcePos(txt,
+			GUIBase.SourcePos sp = new GUIBase.SourcePos(txt,
 				(int) nextsi.getLine(), (int) col);
 			endPos = sp._pos > pos ? sp._pos : pos + 1;
 		} else {
@@ -392,14 +398,14 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 						return;
 					}
 					String txt = _sourceArea.getText();
-					SourcePos spos = new SourcePos(txt, pos, _sourceID);
+					GUIBase.SourcePos spos = new GUIBase.SourcePos(txt, pos, _sourceID);
 					StopAddr sa = createStopAddr(spos);
 					if (sa != null) {
 						XDSourceItem xi = _sources.get(sa._sourceID);
 						if (xi == null || !_sourceID.equals(_sourceID)) {
 							return;
 						}
-						spos = new SourcePos(txt, sa._startPos);
+						spos = new GUIBase.SourcePos(txt, sa._startPos);
 						int len = _stopAddresses.length;
 						setStopAddr(sa);
 						markStopAddresses();
@@ -456,7 +462,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 		_infoArea.setEditable(false);
 		_infoArea.setFocusable(false);
 		_infoArea.setBackground(new Color(245, 245, 245));
-		_positions = new SourcePos[0];
+		_positions = new GUIBase.SourcePos[0];
 		_infoArea.setRows(8);
 	}
 
@@ -521,6 +527,20 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				_debugMode = false;
+				_frame.dispose();
+			}
+		});
+		fileMenu.add(ji);
+
+		// Kill project
+		ji = new JMenuItem("Kill process");
+		ji.setMnemonic((int) 'K');
+		ji.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				_debugMode = false;
+				_sourceItem._changed = false;
+				_kill = true;
 				_frame.dispose();
 			}
 		});
@@ -751,6 +771,9 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 		final XMDebugInfo debugInfo,
 		final XDCallItem callList,
 		final int stepMode) throws Error {
+		if (_kill) {
+			throw new Error("Process killed by user");
+		}
 		if (!_debugMode) {
 			return NOSTEP;
 		}
@@ -783,15 +806,15 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 				+ ((trace || pause) && codeItem.getParam() > 0 ?
 				"; \"" + stack[stackPointer].toString() + "\"; " : "");
 		}
-		SourcePos spos;
+		GUIBase.SourcePos spos;
 		String stmtInfo;
 		if (si != null) {
-			spos = new SourcePos(si.getLine(),si.getColumn(),si.getSysId());
+			spos = new GUIBase.SourcePos(si.getLine(),si.getColumn(),si.getSysId());
 			stmtInfo = spos.toString() + ", xdef: " + si.getXDName() +
 				", pc: " + si.getAddr();
 		} else {
 			SPosition x = xnode.getXMNode().getSPosition();
-			spos = new SourcePos(x.getLineNumber(),
+			spos = new GUIBase.SourcePos(x.getLineNumber(),
 				x.getColumnNumber(), x.getSystemId());
 			stmtInfo = spos.toString();
 		}
@@ -800,7 +823,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 			sa = getStopAddr(pc);
 			if (sa != null) {
 				setSource(sa._sourceID);
-				spos = new SourcePos(_sourceItem._source, sa._startPos);
+				spos = new GUIBase.SourcePos(_sourceItem._source, sa._startPos);
 				sa._active = true;
 				markStopAddresses();
 			} else {
@@ -831,6 +854,9 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 				command = getCommand();
 			}
 			switch (command) {
+				case DBG_KILL: {
+					throw new Error("Process killed by user");
+				}
 				case DBG_CANCEL:
 					if (_out == null && sa != null) {
 						sa._active = false;
@@ -1048,6 +1074,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 "  stepInto - stop at next command and step also into methods\n" +
 "  pos      - source position\n"+
 "  exit     - exit from debugging mode\n"+
+"  kill     - kill the process\n"+
 "  can      - cancel\n");
 					} else {
 						JOptionPane.showMessageDialog(_frame,
@@ -1059,14 +1086,14 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 	}
 
 	@Override
-	/** Clear XScript breakpoint area. */
+	/** Clear XScript break point area. */
 	public void clearStopAddrs() {
 		_stopAddresses = new StopAddr[0];
 	}
 
 	@Override
-	/** Check if breakpoint area contains the stop address.
-	 * @return true if breakpoint area contains the stop address.
+	/** Check if break point area contains the stop address.
+	 * @return true if break point area contains the stop address.
 	 */
 	public boolean hasStopAddr(int addr) {
 		if (_debugMode) {
@@ -1115,7 +1142,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 		}
 	}
 
-	/** Set stop address to the breakpoint area.
+	/** Set stop address to the break point area.
 	 * @param addr stop address.
 	 */
 	private void setStopAddr(StopAddr newAddr) {
@@ -1173,12 +1200,12 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 	}
 
 	@Override
-	/** Clear XPos breakpoint area. */
+	/** Clear XPos break point area. */
 	public void clearXPosArea() {_xposItems = null;}
 
 	@Override
-	/** Check if breakpoint area contains the XPos item.
-	 * @return true if breakpoint area contains the XPos item.
+	/** Check if break point area contains the XPos item.
+	 * @return true if break point area contains the XPos item.
 	 */
 	public boolean hasXPos(String xpos) {
 		return !_debugMode || _xposItems == null ? false :
@@ -1210,7 +1237,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 	}
 
 	@Override
-	/** Remove all XPos items with given stop address from the breakpoint area.
+	/** Remove all XPos items with given stop address from the break point area.
 	 * @param xpos the string with XPos item.
 	 */
 	public void removeXpos(String xpos) {
