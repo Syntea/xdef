@@ -27,9 +27,9 @@ public class TestGUIEditor  extends XDTester {
 		try {
 ////////////////////////////////////////////////////////////////////////////////
 			File f = new File(clearTempDir(),  "newProject");
-////////////////////////////////////////////////////////////////////////////////
 			f.mkdirs(); // work directory for created project
 			String wdir = f.getCanonicalPath();
+////////////////////////////////////////////////////////////////////////////////
 //			test("-v", "-workDir", wdir);
 //			test("-v", "-format", "JSON");
 //			test("-c", "-workDir", wdir);
@@ -37,7 +37,6 @@ public class TestGUIEditor  extends XDTester {
 //			test("-c", getDataDir()+"GUI/test/project.xml", "-workDir", wdir);
 //			test("-g", getDataDir()+"GUI/validate/data.xml", "-workDir", wdir);
 ////////////////////////////////////////////////////////////////////////////////
-
 			test("-p", getDataDir()+"GUI/test/project.xml");
 //			test("-p", getDataDir()+"GUI/validate/project.xml");
 //			test("-p", getDataDir()+"GUI/json/project.xml");
