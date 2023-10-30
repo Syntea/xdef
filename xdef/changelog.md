@@ -1,8 +1,9 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.0.11, release-date 2023-10-25
-* Corrected bug in CSV parser when after missing value at end of line follows
-  next line with value.
+# Version 42.0.11, release-date 2023-10-30
+* Corrected bug in org.xdef.xon.CsvReader parser when after missing value at
+  the end of line follows next line with a value.
+* corrected and improved org.xdef.util.GUIEditor.
 
 # Version 42.0.10, release-date 2023-08-23
 * Fixed bug in `equals(arg)` and `compareTo(arg)` methods in `SDatetime` class.

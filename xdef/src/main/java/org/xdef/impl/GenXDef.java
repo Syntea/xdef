@@ -8,8 +8,8 @@ import java.io.InputStream;
 import java.net.URL;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.xdef.msg.XDEF;
 import org.xdef.sys.SRuntimeException;
+import org.xdef.sys.SThrowable;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.xon.XonUtils;
 
@@ -35,21 +35,41 @@ public final class GenXDef {
 		return x;
 	}
 
+	/** Get RuntimeException from throwable object.
+	 * @param ex throwable object
+	 * @return RuntimeException created from throwable object.
+	 */
+	private static RuntimeException getRuntimeExeception(final Throwable ex) {
+		if (ex instanceof SThrowable &&
+			"JSON101".equals(((SThrowable) ex).getMsgID())) {
+			return new RuntimeException("Neither XML nor JSON");
+		}
+		throw new RuntimeException("Neither XML nor JSON or YAML", ex);
+	}
+
+	/** Parse string and return parsed object.
+	 * @param s The string to be parsed.
+	 * @return parsed object.
+	 * @throws RuntimeException if an error occurs.
+	 */
 	private static Object objectFromString(final String s) {
 		try {
 			return KXmlUtils.parseXml(s.trim()).getDocumentElement();
 		} catch (Exception ex) {}
 		try {
 			return XonUtils.parseXON(s);
-		} catch (Exception ex) {}
+		} catch (SRuntimeException ex) {}
 		try {
 			return XonUtils.parseYAML(s);
-		} catch (Exception ex) {
-			throw new RuntimeException(
-				"Incorrect data form: neither XML nor XON");
+		} catch (SRuntimeException ex) {
+			throw getRuntimeExeception(ex);
 		}
 	}
 
+	/** Parse object from URL.
+	 * @param u location with source data..
+	 * @return parsed object.
+	 */
 	private static Object objectFromURL(URL u) {
 		InputStream is;
 		try {
@@ -60,16 +80,28 @@ public final class GenXDef {
 		return objectFromStream(is);
 	}
 
+	/** Parse object from file.
+	 * @param f file with source data..
+	 * @return parsed object.
+	 */
 	private static Object objectFromFile(final File f) {
 		try {
 			return KXmlUtils.parseXml(f).getDocumentElement();
 		} catch (Exception ex) {}
 		try {
 			return XonUtils.parseXON(f);
-		} catch (Exception ex) {}
-		throw new RuntimeException("Unexpected data form: neither XML nor XON");
+		} catch (SRuntimeException ex) {}
+		try {
+			return XonUtils.parseYAML(f);
+		} catch (SRuntimeException ex) {
+			throw getRuntimeExeception(ex);
+		}
 	}
 
+	/** Parse object from input stream.
+	 * @param f input stream with source data..
+	 * @return parsed object.
+	 */
 	private static Object objectFromStream(final InputStream in) {
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		try {
@@ -78,7 +110,7 @@ public final class GenXDef {
 				os.write(i);
 			}
 			os.close();
-		} catch (Exception ex) {
+		} catch (IOException ex) {
 			throw new RuntimeException("Can't read data", ex);
 		}
 		ByteArrayInputStream is = new ByteArrayInputStream(os.toByteArray());
@@ -88,9 +120,12 @@ public final class GenXDef {
 		is.reset();
 		try {
 			return XonUtils.parseXON(is);
-		} catch (Exception ex) {
-			throw new RuntimeException(
-				"Unexpected data form (neither XML nor XON)", ex);
+		} catch (SRuntimeException ex) {}
+		is.reset();
+		try {
+			return XonUtils.parseYAML(is);
+		} catch (SRuntimeException ex) {
+			throw getRuntimeExeception(ex);
 		}
 	}
 
@@ -108,18 +143,10 @@ public final class GenXDef {
 	 * @return Element with created XDefinition.
 	 */
 	public static final Element genXdef(final Object obj, final String xdName) {
-		try {
-			Object o = readData(obj);
-			if (o != null && o instanceof Element) {
-				return GenXDefXML.genXdef((Element) o, xdName);
-			}
-			return GenXDefXON.genXdef(o, xdName);
-		} catch (Exception ex) {
-			if (ex instanceof RuntimeException) {
-				throw ((RuntimeException) ex);
-			}
-			//XDEF883=Incorrect type of input data
-			throw new SRuntimeException(XDEF.XDEF883, ex);
+		Object o = readData(obj);
+		if (o != null && o instanceof Element) {
+			return GenXDefXML.genXdef((Element) o, xdName);
 		}
+		return GenXDefXON.genXdef(o, xdName);
 	}
 }

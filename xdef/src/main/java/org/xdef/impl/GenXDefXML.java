@@ -68,7 +68,7 @@ public final class GenXDefXML {
 	/** Model of element or text node. */
 	private final static class XModel {
 		final private QName _qname;
-		private final Map<QName,XAttr> _atts = new LinkedHashMap<>();
+		private final Map<QName, XAttr> _atts = new LinkedHashMap<>();
 		private final List<XModel> _models = new ArrayList<>();
 		private final Set<String> _options = new HashSet<>();
 		private String _value;
@@ -646,11 +646,12 @@ public final class GenXDefXML {
 		if (!s.isEmpty()) {
 			model.setAttributeNS(XDEF42_NS_URI, XDEF_NS_PREFIX + ":script", s);
 		}
-		XAttr att = x._atts.get(new QName(XDEF42_NS_URI, "script"));
+		QName scriptQName = new QName(XDEF42_NS_URI, "script");
+		XAttr att = x._atts.get(scriptQName);
 		if (att != null) { // to be the first attribute
 			model.setAttributeNS(XDEF42_NS_URI,
 				XDEF_NS_PREFIX + ":script", att._type);
-			x._atts.remove(att);
+			x._atts.remove(scriptQName);
 		}
 		for (Map.Entry<QName, XAttr> entry : x._atts.entrySet()) {
 			att = x._atts.get(entry.getKey());
