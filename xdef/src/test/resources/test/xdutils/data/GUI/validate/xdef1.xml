@@ -1,9 +1,9 @@
-<xd:def xmlns:xd="http://www.xdef.org/xdef/4.1" name = "test1" root="root">
+<xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name = "test1" root="root">
   <xd:declaration>
     external String xyz;
   </xd:declaration>
 
-  <root a="int(); finally {outln('xyz=' + xyz);}" >
+  <root a="int(); finally {outln('xyz=' + xyz + '; val=' + getText());}" >
     <b xd:script="*; ref test2#x" />
   </root>
 </xd:def>

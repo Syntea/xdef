@@ -1,4 +1,4 @@
-package test.xdef;
+package test.xdutils;
 
 import test.XDTester;
 import org.xdef.XDConstants;
@@ -50,10 +50,8 @@ public final class TestGUIDebuger extends XDTester {
 		setProperty(XDConstants.XDPROPERTY_WARNINGS, //xdef_warnings
 			XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE); //true
 //			XDConstants.XDPROPERTYVALUE_WARNINGS_FALSE); //false
-		try {
-			// XScript breakpoints
+		try { // XScript breakpoints
 			xdef =
-//"<x:collection xmlns:x='http://www.syntea.cz/xdef/4.2'>\n"+    	//01
 "<x:collection xmlns:x='" + _xdNS + "'>\n"+                 	//01
 "<x:def name = 'a' root = 'a'>\n"+								//02
 "  <a a = \"required eq('a');\n"+								//03
@@ -110,8 +108,7 @@ public final class TestGUIDebuger extends XDTester {
 			}
 			parse(xd, xml, reporter);
 		} catch (Exception ex) {fail(ex);}
-		try {
-			// XPos breakpoints
+		try { // XPos breakpoints
 			xdef =
 "<x:def xmlns:x='" + _xdNS + "' root='a'>\n"+
 "  <a a = \"required;\">\n"+
@@ -353,7 +350,7 @@ public final class TestGUIDebuger extends XDTester {
 				System.out.println(reporter);
 			}
 		} catch (RuntimeException ex) {fail(ex);}
-
+		clearTempDir(); // clear temporary directory
 		resetTester();
 	}
 

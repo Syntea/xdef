@@ -23,6 +23,7 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -662,13 +663,43 @@ public class GUIEditor extends GUIScreen {
 		// get X-definition sources
 		NodeList nl = project.getElementsByTagName("XDefinition");
 		try {
-			List<String> xdefs = new ArrayList<>();
+			String missingDefs = "";
+				List<String> xdefs = new ArrayList<>();
 			for (int i = 0; i < nl.getLength(); i++) {
 				Element e = (Element) nl.item(i);
 				String t = e.getTextContent().trim();
 				if (t != null && !t.isEmpty()) {
-					xdefs.add(t);
+					if (t.charAt(0) == '<') {
+						xdefs.add(t);
+					} else { // file or grou of files
+						String[] sources = SUtils.getSourceGroup(t);
+						if (sources == null || sources.length == 0) {
+							if (!missingDefs.isEmpty()) {
+								missingDefs += '\n';
+							}
+							missingDefs += t;
+						} else {
+							for (String s: sources) {
+								URL u = new URL(s);
+								String pathname = u.getPath();
+								File f = new File(pathname);
+								if (f.exists() && f.isFile()) {
+									xdefs.add(pathname);
+								} else {
+									if (!missingDefs.isEmpty()) {
+										missingDefs += '\n';
+									}
+									missingDefs += pathname;
+								}
+							}
+						}
+					}
 				}
+			}
+			if (!missingDefs.isEmpty()) {
+				throw new RuntimeException(
+					"UNAVAILABLE X-DEFINITION:\n\n"+
+						missingDefs + "\nPLEASE CORRECT PROJECT DATA");
 			}
 			boolean changed = false;
 			XDSourceInfo si;
@@ -688,11 +719,13 @@ public class GUIEditor extends GUIScreen {
 				}
 				if (reporter.errors()) {
 					XDSourceItem xsi = null;
-					String missingDefs = "";
 					for (XDSourceItem x: si.getMap().values()) {
 						for (Report r: reporter) {
 							if (x._url == null) {
-								missingDefs += x._source + "\n";
+								if (!missingDefs.isEmpty()) {
+									missingDefs += '\n';
+								}
+								missingDefs += x._source;
 							} else if (r.getModification().contains(
 								x._url.toString())) {
 								xsi = x;
@@ -705,11 +738,18 @@ public class GUIEditor extends GUIScreen {
 					}
 					if (!missingDefs.isEmpty()) {
 						throw new RuntimeException(
-							"UNAVAILABLE X-DEFINITION DATA: \n\n"+
-								missingDefs + "\nCORRECT PROJECT DATA");
+							"UNAVAILABLE X-DEFINITION:\n\n"+
+								missingDefs + "\nPLEASE CORRECT PROJECT DATA");
 					}
 					if (xsi == null) {
-						xsi = si.getMap().values().iterator().next();
+						Iterator<XDSourceItem> it=
+							si.getMap().values().iterator();
+						if (it.hasNext()) {
+							xsi = it.next();
+						} else {
+							throw new RuntimeException(
+								reporter.printToString());
+						}
 					}
 					GUIEditor ge = new GUIEditor(si);
 					ge.display(reporter,
@@ -724,6 +764,7 @@ public class GUIEditor extends GUIScreen {
 				}
 			}
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			throw new RuntimeException(ex);
 		}
 	}
@@ -810,20 +851,30 @@ public class GUIEditor extends GUIScreen {
 						name = n;
 					}
 				}
-				if (type == 'i') {
-					result = xd.jcreate(name, reporter);
-				} else if (type == 'j') {
-					result = xd.jcreate(name, reporter);
-				} else { // type = x
-					result = xd.xcreate(new QName(uri, name), reporter);
+				switch (type) {
+					case 'i':
+						result = xd.jcreate(name, reporter);
+						break;
+					case 'j':
+						result = xd.jcreate(name, reporter);
+						break;
+					default:
+						// type = x
+						result = xd.xcreate(new QName(uri, name), reporter);
+						break;
 				}
 			} else {  // run validation mode
-				if (type == 'i') {
-					result = xd.iparse(data, reporter);
-				} else if (type == 'j') {
-					result = xd.jparse(data, reporter);
-				} else { // type = x
-					result = xd.xparse(data, reporter);
+				switch (type) {
+					case 'i':
+						result = xd.iparse(data, reporter);
+						break;
+					case 'j':
+						result = xd.jparse(data, reporter);
+						break;
+					default:
+						// type = x
+						result = xd.xparse(data, reporter);
+						break;
 				}
 			}
 			// set bounds of the window from previous steps
@@ -949,7 +1000,6 @@ public class GUIEditor extends GUIScreen {
 				tempDir = new File(tempDir, "GUITemp");
 				tempDir.mkdirs();
 				tempDir.deleteOnExit();
-//				genTemporaryFile(".", tempDir, "~.~", true, "UTF-8");
 				return tempDir;
 			}
 		} catch (Exception ex) {}
@@ -978,7 +1028,7 @@ public class GUIEditor extends GUIScreen {
 "Edit and run X-definition in graphical user interface.\n\n"+
 "Command line arguments:\n"+
 " -p project_file | -v [switches] |\n"+
-" -c [switches] | -g [xml source] [-workDir]\n"+
+" -c [switches] | -g [xml source] [-workDir dird]\n"+
 "\n"+
 " -p run a project file\n"+
 " -v compile X-definition and runs validation mode\n"+
@@ -1166,26 +1216,26 @@ public class GUIEditor extends GUIScreen {
 			case 'c': { // create
 				if (xdefs.isEmpty()) {
 					xdefs.add(genTemporaryFile(
-"&lt;xd:def xmlns:xd=\"" + XDConstants.XDEF42_NS_URI
+"<xd:def xmlns:xd=\"" + XDConstants.XDEF42_NS_URI
 	+ "\" name=\"test\" root=\"HTML\">\n" +
-"&lt;HTML>\n" +
-"  &lt;HEAD>&lt;TITLE>"
-		+ " create \"Generated today message\"; &lt;/TITLE>&lt;/HEAD>\n" +
-"  &lt;BODY>\n" +
-"    &lt;h1>\n" +
+"<HTML>\n" +
+"  <HEAD><TITLE>"
+		+ " create \"Generated today message\"; </TITLE></HEAD>\n" +
+"  <BODY>\n" +
+"    <h1>\n" +
 "      create \"Hello! Today is"
 	+ " \"+now().toString(\"EEEE,d. MMMM GG yyyy, hh:mm a.\");\n" +
-"    &lt;/h1>\n" +
-"    &lt;h2>\n" +
+"    </h1>\n" +
+"    <h2>\n" +
 "      create \"This is an example of compose mode.\";\n" +
-"    &lt;/h2>\n" +
-"    &lt;i xd:script=\"*; create from('//i');\">\n" +
+"    </h2>\n" +
+"    <i xd:script=\"*; create from('//i');\">\n" +
 "      create from(\"@x\");\n" +
-"      &lt;br/>\n" +
-"    &lt;/i>\n" +
-"  &lt;/BODY>\n" +
-"&lt;/HTML>\n" +
-"&lt;/xd:def>", workDir, "xdef", deleteOnExit, "UTF-8"));
+"      <br/>\n" +
+"    </i>\n" +
+"  </BODY>\n" +
+"</HTML>\n" +
+"</xd:def>", workDir, "xdef.xml", deleteOnExit, "UTF-8"));
 					if (displayResult == null) {
 						displayResult = "true";
 					}
@@ -1193,8 +1243,9 @@ public class GUIEditor extends GUIScreen {
 				debug = editInput = displayResult = "true";
 				if (!wasDataPath) {
 					debug = editInput = displayResult = "true";
-					dataPath =
-"&lt;x>\n  &lt;i x=\"Hello\"/>\n  &lt;i x=\"World!\"/>\n&lt;/x>";
+					dataPath = genTemporaryFile(
+"<x>\n  <i x=\"Hello\"/>\n  <i x=\"World!\"/>\n</x>",
+						workDir, "data.xml", deleteOnExit, "UTF-8");
 				}
 				src += "  <Execute Mode = \"construct\"";
 				if (displayResult != null) {
@@ -1205,7 +1256,7 @@ public class GUIEditor extends GUIScreen {
 				if (editInput!= null) {
 					src += " Edit='true'";
 				}
-				src += ">" + dataPath + "</Context>\n";
+				src += ">\n" + dataPath.trim() + "\n</Context>\n";
 				src += "  </Execute>\n";
 				break;
 			}
@@ -1239,24 +1290,24 @@ public class GUIEditor extends GUIScreen {
 			case 'v': { // validate
 				if (xdefs.isEmpty()) {
 					xdefs.add(genTemporaryFile(
-"&lt;xd:def xmlns:xd=\"" + XDConstants.XDEF42_NS_URI +
+"<xd:def xmlns:xd=\"" + XDConstants.XDEF42_NS_URI +
 	"\" name=\"test\" root=\"root\">\n" +
 (format == 'x'
-? "  &lt;root a=\"int();\" >\n" +
-"    &lt;b xd:script=\"*\" >\n" +
+? "  <root a=\"int();\" >\n" +
+"    <b xd:script=\"*\" >\n" +
 "      ? string();\n" +
-"    &lt;/b>\n" +
-"  &lt;/root>\n"
+"    </b>\n" +
+"  </root>\n"
 : format == 'j'
-? "&lt;xd:json name=\"root\">\n"+
-"{\"a\": [\"occurs 3 int(;)\"]}\n"+
-"&lt;/xd:json>\n"
-: "&lt;xd:ini name=\"root\">\n"+
+? "<xd:json name=\"root\">\n"+
+"{\"a\": [\"occurs 3 int();\"]}\n"+
+"</xd:json>\n"
+: "<xd:ini name=\"root\">\n"+
 "[\n"+
 "  [\"occurs + string();\"]\n"+
 "]\n"+
-"&lt;/xd:ini>\n") +
-"&lt;/xd:def>", workDir, "xdef.xml", deleteOnExit, "UTF-8"));
+"</xd:ini>\n") +
+"</xd:def>", workDir, "xdef.xml", deleteOnExit, "UTF-8"));
 					if (displayResult == null) {
 						displayResult = "true";
 					}
@@ -1311,23 +1362,22 @@ public class GUIEditor extends GUIScreen {
 			src += "  <XDefinition>" + x + "</XDefinition>\n";
 		}
 		// External items added to classPath
-		for (String x: xdefs) {
-			f = new File(x);
-			if (f.exists()) {
-				src += "  <External>" + x + "</External>\n";
-				continue;
-			} else {
-				try {
-					URL u = new URL(x);
-					src += "  <External>" + x + "</External>\n";
-					continue;
-				} catch (Exception ex) {}
-			}
-			throw new RuntimeException("Incorrect classpath: " + x);
-		}
+//		for (String x: xdefs) {
+//			f = new File(x);
+//			if (f.exists()) {
+//				src += "  <External>" + x + "</External>\n";
+//				continue;
+//			} else {
+//				try {
+//					URL u = new URL(x);
+//					src += "  <External>" + x + "</External>\n";
+//					continue;
+//				} catch (Exception ex) {}
+//			}
+//			throw new RuntimeException("Incorrect classpath: " + x);
+//		}
 		if (!deleteOnExit) { // work directory was specified
 			String s = SUtils.modifyString(workDir.getPath(), "&", "&amp;");
-			s = SUtils.modifyString(s, "<", "&lt;");
 			src += "  <WorkDir>" + s + "</WorkDir>\n";
 		}
 		src += "</Project>";
