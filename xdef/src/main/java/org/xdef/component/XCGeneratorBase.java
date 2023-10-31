@@ -6,11 +6,13 @@ import java.util.Properties;
 import java.util.Set;
 import javax.xml.namespace.QName;
 import static org.xdef.XDConstants.LINE_SEPARATOR;
+import org.xdef.XDContainer;
 import org.xdef.XDParser;
 import org.xdef.XDPool;
 import org.xdef.XDValue;
 import org.xdef.XDValueID;
 import static org.xdef.XDValueID.XD_STRING;
+import org.xdef.XDValueType;
 import org.xdef.impl.XData;
 import org.xdef.impl.XElement;
 import org.xdef.impl.XNode;
@@ -208,12 +210,41 @@ class XCGeneratorBase {
 		return null;
 	}
 
+	/** Get type parser name from XMData. If parser is union and all items
+	 * has the same parser then this parser name is returned.
+	 * @param xdata object where parsers ars investigated.
+	 * @return parser name.
+	 */
+	private static String getParserName(final XMData xdata) {
+		String parserName = xdata.getParserName();
+		if (!"union".equals(parserName)) {
+			return parserName;
+		}
+		XDContainer x = xdata.getParseParams();
+		String name = null;
+		XDValue y = x.getXDNamedItemValue("item");
+		if (y != null && XDValueType.CONTAINER.equals(y.getItemType())){
+			XDContainer z = (XDContainer) y;
+			for (int i = 0; i < z.getXDItemsNumber(); i++) {
+				XDValue v = z.getXDItem(i);
+				if (XDValueType.PARSER.equals(v.getItemType())) {
+					XDParser p = (XDParser) v;
+					if (name == null) {
+						name = p.parserName();
+					} else if (!name.equals(p.parserName())) {
+						name = "";
+					}
+				}
+			}
+		}
+		return name == null || name.isEmpty() ? parserName : name;
+	}
 	/** Get Java Object name corresponding to XD type.
 	 * @param xdata XMData object.
 	 * @return Java Object name corresponding to XD type
 	 */
 	final String getJavaObjectTypeName(final XMData xdata) {
-		switch (xdata.getParserName()) {
+		switch (getParserName(xdata)) {
 			case "byte": return "Byte";
 			case "unsignedByte": case "short": return "Short";
 			case "unsignedShort": case "int": return "Integer";
@@ -272,10 +303,9 @@ class XCGeneratorBase {
 	 * @return getter of ParsedResult.
 	 */
 	final static String getParsedResultGetter(final XMData xdata) {
-		String parserName = xdata.getParserName();
 		String result = "value.getParsedValue().isNull()? null: "
 			+ "value.getParsedValue().";
-		switch (parserName) {
+		switch (getParserName(xdata)) {
 			case "jlist":
 				return "org.xdef.component.XComponentUtil.jlistToString(value)";
 			case "jvalue": case "jnull":

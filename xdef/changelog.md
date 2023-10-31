@@ -1,6 +1,9 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.0.11, release-date 2023-10-30
+# Version 42.0.11, release-date 2023-10-31
+* If the type of a value in X-component is `union` and types of all items are
+  same, then the type of getter/settter is set accordig to that type (formally
+  it was `Object`).
 * Corrected bug in org.xdef.xon.CsvReader parser when after missing value at
   the end of line follows next line with a value.
 * corrected and improved org.xdef.util.GUIEditor.

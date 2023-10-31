@@ -176,7 +176,6 @@ public class XData extends XCodeDescriptor
 			if (y.getCode() == CodeTable.JMP_OP
 				|| (xs + 1 < xv.length && y.getCode() == CodeTable.CALL_OP
 					&& xv[xs+1].getCode() == CodeTable.STOP_OP)) {
-				y = xv[xs = y.getParam()];
 			} else if (xs + 2 < xv.length
 				&& (y.getCode() == CodeTable.LD_GLOBAL
 					|| y.getCode() == CodeTable.LD_XMODEL)) {
@@ -237,11 +236,10 @@ public class XData extends XCodeDescriptor
 		}
 		final XDValue[] xv = ((XPool) getXDPool()).getCode();
 		XDValue y = xv[xi];
-		XDValue z = y;
 		if (y.getCode() == CodeTable.JMP_OP
 			|| (xi + 1 < xv.length && y.getCode() == CodeTable.CALL_OP
 				&& xv[xi+1].getCode() == CodeTable.STOP_OP)) {
-			y = z = xv[xi = y.getParam()];
+			y = xv[xi = y.getParam()];
 		} else if (xi + 2 < xv.length
 			&& (y.getCode() == CodeTable.LD_GLOBAL
 				|| y.getCode() == CodeTable.LD_XMODEL)
@@ -260,36 +258,38 @@ public class XData extends XCodeDescriptor
 			y = xv[xi = xv[xi+1].intValue()]; // this should be parser
 		}
 		for (;;) {
-			if (y.getCode() == CodeTable.JMP_OP) {
-				y = z = xv[xi = xv[xi].getParam()];
-			} else if (y.getCode() == CodeTable.LD_CODE) {
-				y = xv[y.getParam()];
-			} else if (y.getCode() == CodeTable.CALL_OP) {
-				if (y.getParam() >= 0 && xi + 3 < xv.length
-					&& xv[xi+1].getCode() == CodeTable.NEW_PARSER
-					&& "eq".equals(xv[xi+1].stringValue())
-					&& xv[xi+2].getCode() == CodeTable.PARSE_OP
-					&& xv[xi+3].getCode() == CodeTable.STOP_OP) {
-					return ((CodeParser) xv[xi+1]).getParser(); // fixed
-				} else {
-					z = y;
-					y = xv[xi = y.getParam()];
-					if (y.getCode() == CodeTable.LD_CONST
+			switch (y.getCode()) {
+				case CodeTable.JMP_OP:
+					y = xv[xi = xv[xi].getParam()];
+					break;
+				case CodeTable.LD_CODE:
+					y = xv[y.getParam()];
+					break;
+				case CodeTable.CALL_OP:
+					if (y.getParam() >= 0 && xi + 3 < xv.length
+						&& xv[xi+1].getCode() == CodeTable.NEW_PARSER
+						&& "eq".equals(xv[xi+1].stringValue())
+						&& xv[xi+2].getCode() == CodeTable.PARSE_OP
+						&& xv[xi+3].getCode() == CodeTable.STOP_OP) {
+						return ((CodeParser) xv[xi+1]).getParser(); // fixed
+					} else {
+						y = xv[xi = y.getParam()];
+						if (y.getCode() == CodeTable.LD_CONST
+							&& y.getItemId() == XDValueID.XD_PARSER
+							&& xv[xi+1].getCode() == CodeTable.PARSE_OP
+							&& xv[xi+2].getCode() == CodeTable.STOP_OP) {
+							return y;
+						}
+					}	break;
+				default:
+					if (xi + 2 < xv.length
+						&& y.getCode() == CodeTable.LD_CONST
 						&& y.getItemId() == XDValueID.XD_PARSER
 						&& xv[xi+1].getCode() == CodeTable.PARSE_OP
 						&& xv[xi+2].getCode() == CodeTable.STOP_OP) {
 						return y;
 					}
-				}
-			} else {
-				if (xi + 2 < xv.length
-					&& y.getCode() == CodeTable.LD_CONST
-					&& y.getItemId() == XDValueID.XD_PARSER
-					&& xv[xi+1].getCode() == CodeTable.PARSE_OP
-					&& xv[xi+2].getCode() == CodeTable.STOP_OP) {
-					return y;
-				}
-				return z;
+					return DEFAULT_PARSER;
 			}
 		}
 	}

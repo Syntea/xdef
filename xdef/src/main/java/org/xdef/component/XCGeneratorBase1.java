@@ -377,10 +377,11 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 			String val = atttab.entrySet().iterator().next().getValue();
 			ndx = val.indexOf(';');
 			String getter = val.substring(0, ndx);
+			String varName = val.substring(ndx + 1);
 			result +=
 "\tpublic void xSetAttr(org.xdef.proc.XXNode x, org.xdef.XDParseResult value){"+LN+
-"\t\tXD_Name_" + val.substring(ndx + 1) + " = x.getNodeName();"+LN+
-"\t\tset" + val.substring(ndx + 1) + "(" + getter + ");"+LN+"\t}"+LN;
+"\t\tXD_Name_" + varName + " = x.getNodeName();"+LN+
+"\t\tset" + varName + "(" + getter + ");"+LN+"\t}"+LN;
 		} else {
 			result +=
 "\tpublic void xSetAttr(org.xdef.proc.XXNode x, org.xdef.XDParseResult value) {"+LN;
