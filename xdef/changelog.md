@@ -6,7 +6,7 @@
   it was `Object`).
 * Corrected bug in org.xdef.xon.CsvReader parser when after missing value at
   the end of line follows next line with a value.
-* Corrected bug in X-component when validation type is described as
+* Corrected bug in X-component when the validation type is described as
   an expression.
 * corrected and improved org.xdef.util.GUIEditor.
 
