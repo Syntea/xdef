@@ -91,7 +91,7 @@ public final class TestXComponents extends XDTester {
 		XDPool xp;
 		try {
 			xdef = // test datetime with milliseconds = 0
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='X'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='X'>\n"+
 "<xd:declaration>type gam xdatetime('yyyyMMddHHmmssSSS');</xd:declaration>\n"+
 "  <X a='gam()'>int()<Y xd:script='*' a='int()'/>? date()</X>\n"+
 "<xd:component>%class test.xdef.Mgam %link X</xd:component>\n"+
@@ -111,7 +111,7 @@ public final class TestXComponents extends XDTester {
 		} catch (Exception ex) {fail(ex); reporter.clear();}
 		try { // test if X-compomemt getter/setter name is not changed
 			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='A'>\n" +
+"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
 "  <A> <B b='string'/> <C> <B b='string'/> </C> </A>\n" +
 " <xd:component> %class test.xdef.MichalTest %link #A; </xd:component>\n" +
 "</xd:def>";
@@ -129,7 +129,7 @@ public final class TestXComponents extends XDTester {
 		} catch (Exception ex) {fail(ex); reporter.clear();}
 		try {
 			xdef = // GPSPosition, Price
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n" +
+"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
 "<xd:declaration\n>\n"+
 "  Price a;\n"+
 "  GPSPosition p = new GPSPosition(50.08, 14.42, 399, 'Prague'), q;\n"+
@@ -163,13 +163,13 @@ public final class TestXComponents extends XDTester {
 			assertEq("51.52, -0.09, 0.0, London",
 				xd.getVariable("q").toString());
 			xp = compile(new String[] { // nested declaration of type
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' name='D7_xc'>\n" +
+"<xd:def xmlns:xd='" + _xdNS + "' name='D7_xc'>\n" +
 "  <xd:component>\n" +
 "    %class test.xdef.IdentDN %link D7_#A;\n" +
 "    %class test.xdef.VymazDN extends test.xdef.IdentDN %link D7_#B;\n" +
 "  </xd:component>\n" +
 "</xd:def>",
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' name='D7_' root='A | B'>\n" +
+"<xd:def xmlns:xd='" + _xdNS + "' name='D7_' root='A | B'>\n" +
 "    <xd:declaration scope=\"global\">\n" +
 "        type  cisloDN num(5);\n" +
 "        type  cj      string(1,50);\n" +
@@ -179,7 +179,7 @@ public final class TestXComponents extends XDTester {
 "    <A RokDN=\"rokDN()\" CisloDN=\"cisloDN()\"/>\n" +
 "    <B xd:script=\"ref A\" C=\"cj()\" P=\"? plan()\"/>\n" +
 "</xd:def>",
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' name='D7_decl'>\n" +
+"<xd:def xmlns:xd='" + _xdNS + "' name='D7_decl'>\n" +
 "    <xd:declaration scope=\"global\">\n" +
 "        type  gamYear  long(1800, 2200);\n" +
 "        type  gamDate  xdatetime('yyyyMMdd');\n" +
@@ -225,7 +225,7 @@ public final class TestXComponents extends XDTester {
 		} catch (Exception ex) {fail(ex); reporter.clear();}
 		try { // Construction of document from X-component
 			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' name='Person' root='Person'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' name='Person' root='Person'>\n"+
 "    <Person Name  = \"string()\"\n" +
 "            Birth = \"xdatetime('dd.MM.yyyy')\"\n" +
 "            Sex   = \"enum('M','W', 'X')\"/>\n" +
@@ -257,7 +257,7 @@ public final class TestXComponents extends XDTester {
 		} catch (Exception ex) {fail(ex); reporter.clear();}
 		try { // model with occurrnece > 1
 			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' name='X' root='XdPoolCfg'>\n" +
+"<xd:def xmlns:xd='" + _xdNS + "' name='X' root='XdPoolCfg'>\n" +
 "  <Resource xd:script=\"occurs 0..;\">string();</Resource>\n" +
 "  <IncludeXDPoolCfg>\n" +
 "    <PoolCfg xd:script=\"occurs 0..; ref Resource\"/>\n" +
@@ -302,7 +302,7 @@ public final class TestXComponents extends XDTester {
 		} catch (Exception ex) {fail(ex); reporter.clear();}
 		try {
 			xdef =
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name = \"X\" root = \"a\">\n" +
+"<xd:def xmlns:xd=\"" + _xdNS + "\" name = \"X\" root = \"a\">\n" +
 "  <a>\n" +
 "    <b xd:script = \"occurs 0..\" Name = \"string(1,20)\">\n" +
 "      <Param xd:script = \"occurs 0..\" Name = \"string(1,20)\">\n" +
@@ -352,7 +352,7 @@ public final class TestXComponents extends XDTester {
 		} catch (Exception ex) {fail(ex); reporter.clear();}
 		try { // test jcreateXComponent
 			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='X'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='X'>\n"+
 "<xd:xon name = 'X'>{a:\"int();\", b:[\"boolean();\"]}</xd:xon>\n"+
 "<xd:component> %class bugreports.data.JCreateX1 %link X </xd:component>\n"+
 "</xd:def>";
@@ -375,7 +375,7 @@ public final class TestXComponents extends XDTester {
 			assertTrue(XonUtils.xonEqual(xon,
 				SUtils.getValueFromGetter(xc,"toXon")));
 			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='X'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='X'>\n"+
 "<xd:component> %class bugreports.data.JCreateX2 %link X </xd:component>\n"+
 "<xd:xon name = 'X'>[\"2 boolean()\", \"boolean()\"]</xd:xon>\n"+
 "</xd:def>";
@@ -393,7 +393,7 @@ public final class TestXComponents extends XDTester {
 			assertTrue(XonUtils.xonEqual(xon,
 				SUtils.getValueFromGetter(xc,"toXon")));
 			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='X'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='X'>\n"+
 "<xd:component>%class test.xdef.JCreateX3 %link X</xd:component>\n"+
 "<xd:xon name = 'X'>[\"2 boolean()\", \"boolean()\"]</xd:xon>\n"+
 "</xd:def>";
@@ -411,7 +411,7 @@ public final class TestXComponents extends XDTester {
 			assertTrue(XonUtils.xonEqual(xon,
 				SUtils.getValueFromGetter(xc,"toXon")));
 			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='X'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='X'>\n"+
 "<xd:xon name=\"X\"> {b:[ \"int();\",[\"int();\"],\"string();\"]}</xd:xon>\n" +
 "<xd:component> %class test.xdef.JCreateX4 %link X </xd:component>\n"+
 "</xd:def>";
@@ -431,7 +431,7 @@ public final class TestXComponents extends XDTester {
 			assertTrue(XonUtils.xonEqual(xon,
 				SUtils.getValueFromGetter(xc,"toXon")));
 			xdef = // jcreate with create section
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='X'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='X'>\n"+
 "<xd:xon name = 'X'>\n"+
 " [ \"boolean(); create 'true'\", \"int(); create '2'\" ]\n"+
 "</xd:xon>\n"+
@@ -449,7 +449,7 @@ public final class TestXComponents extends XDTester {
 			assertTrue(XonUtils.xonEqual(xon,
 				SUtils.getValueFromGetter(xc,"toXon")));
 			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='X'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='X'>\n"+
 "<xd:xon name = 'X'>\n"+
 "{ a:\"int(); create '1'\",\n"+
 "  b:[ \"boolean(); create 'true'\", \"int(); create '2'\" ]\n"+
@@ -471,7 +471,7 @@ public final class TestXComponents extends XDTester {
 		} catch (Exception ex) {fail(ex); reporter.clear();}
 		try {
 			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' xd:root='a'>\n" +
+"<xd:def xmlns:xd='" + _xdNS + "' xd:root='a'>\n" +
 "<xd:component>%class test.xdef.TestX_OneOfa %link a</xd:component>\n"+
 "<xd:xon name='a'>\n" +
 "{\n" +
@@ -660,7 +660,7 @@ public final class TestXComponents extends XDTester {
 		} catch (Exception ex) {fail(ex); reporter.clear();}
 		try { //Names of getters of A/B and A/C/B must be same
 			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' root='A'>\n" +
+"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
 "  <A> <B b='string'/> <C> <B b='string'/> </C> </A>\n" +
 " <xd:component> %class test.xdef.TestB %link #A; </xd:component>\n" +
 "</xd:def>";
@@ -675,8 +675,6 @@ public final class TestXComponents extends XDTester {
 			assertEq("2", SUtils.getValueFromGetter(
 				SUtils.getValueFromGetter(
 					SUtils.getValueFromGetter(xc,"getC"), "getB"), "getb"));
-		} catch (Exception ex) {fail(ex); reporter.clear();}
-		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A0'>\n" +
 "<A0>\n" +
@@ -701,8 +699,6 @@ public final class TestXComponents extends XDTester {
 			assertEq("d/c", SUtils.getValueFromGetter(
 				SUtils.getValueFromGetter(SUtils.getValueFromGetter(
 				SUtils.getValueFromGetter(xc, "getB"),"getD"),"getC"),"getc"));
-		} catch (Exception ex) {fail(ex); reporter.clear();}
-		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A1'>\n" +
 "<A1>\n" +
@@ -727,14 +723,12 @@ public final class TestXComponents extends XDTester {
 			assertEq("d/c", SUtils.getValueFromGetter(
 				SUtils.getValueFromGetter(SUtils.getValueFromGetter(
 				SUtils.getValueFromGetter(xc, "getB"),"getD"),"getC"),"getc"));
-		} catch (Exception ex) {fail(ex); reporter.clear();}
-		try {
 			xp = compile(new String[]{
-"<xd:def  xmlns:xd='http://www.xdef.org/xdef/4.0' name='A' root='A'>\n" +
+"<xd:def  xmlns:xd='" + _xdNS + "' name='A' root='A'>\n" +
 " <A><xd:any xd:script='options moreElements,moreText,moreAttributes'/></A>\n" +
 " <xd:component> %class test.xdef.Kalcik %link A#A; </xd:component>\n" +
 "</xd:def>",
-"<xd:def  xmlns:xd='http://www.xdef.org/xdef/4.0' name='B' root='X'>\n" +
+"<xd:def  xmlns:xd='" + _xdNS + "' name='B' root='X'>\n" +
 "  <X xd:script='create from(\"/*\")' a=\"string()\" b=\"date()\" />\n" +
 "</xd:def>"});
 			genXComponent(xp, clearTempDir());
@@ -748,6 +742,34 @@ public final class TestXComponents extends XDTester {
 			el = xd.xcreate("X", reporter);
 			assertNoErrorsAndClear(reporter);
 			assertEq("<X b='2000-01-21' a='x' />", el);
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root=\"A\">\n" +
+"<A a='int(-1) || int(0, 100);'/>\n" +
+"<xd:component> %class test.xdef.MyTestXKoci1 %link #A; </xd:component>\n" +
+"</xd:def>";
+			xp = XDFactory.compileXD(null,xdef);
+			genXComponent(xp, clearTempDir());
+			xml = "<A a='20'/>";
+			parse(xp,"", xml, reporter);
+			assertNoErrors(reporter);
+			xc = xp.createXDDocument().xparseXComponent(xml, null, reporter);
+			assertNoErrors(reporter);
+			assertEq("20", SUtils.getValueFromGetter(xc,"geta"));
+			assertEq(xml, xc.toXml());
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root=\"A\">\n" +
+"<A> union(%item=[int(-1), int(1, 100)]);</A>\n"+
+"<xd:component> %class test.xdef.MyTestXKoci2 %link #A; </xd:component>\n" +
+"</xd:def>";
+			xp = compile(xdef);
+			genXComponent(xp, clearTempDir());
+			xml = "<A>20</A>";
+			parse(xp,"", xml, reporter);
+			assertNoErrors(reporter);
+			xc = xp.createXDDocument().xparseXComponent(xml, null, reporter);
+			assertNoErrors(reporter);
+			assertEq(20, SUtils.getValueFromGetter(xc,"get$value"));
+			assertEq(xml, xc.toXml());
 		} catch (Exception ex) {fail(ex);}
 ////////////////////////////////////////////////////////////////////////////////
 		try {// generate XCDPool from sources used in next tests
