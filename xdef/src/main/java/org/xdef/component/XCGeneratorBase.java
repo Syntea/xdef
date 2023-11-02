@@ -210,12 +210,12 @@ class XCGeneratorBase {
 		return null;
 	}
 
-	/** Get type parser name from XMData. If parser is union and all items
-	 * has the same parser then this parser name is returned.
+	/** Get type parser name from XMData. If parser name is "union" and all
+	 * items has the same parser then this parser name is returned.
 	 * @param xdata object where parsers ars investigated.
-	 * @return parser name.
+	 * @return parser method name.
 	 */
-	private static String getParserName(final XMData xdata) {
+	private static String getParserMehodName(final XMData xdata) {
 		String parserName = xdata.getParserName();
 		if (!"union".equals(parserName)) {
 			return parserName;
@@ -231,8 +231,10 @@ class XCGeneratorBase {
 					XDParser p = (XDParser) v;
 					if (name == null) {
 						name = p.parserName();
-					} else if (!name.equals(p.parserName())) {
-						name = "";
+					} else {
+						if (!name.equals(p.parserName())) {
+							name = "";
+						}
 					}
 				}
 			}
@@ -244,17 +246,23 @@ class XCGeneratorBase {
 	 * @return Java Object name corresponding to XD type
 	 */
 	final String getJavaObjectTypeName(final XMData xdata) {
-		switch (getParserName(xdata)) {
+		switch (getParserMehodName(xdata)) {
 			case "byte": return "Byte";
-			case "unsignedByte": case "short": return "Short";
-			case "unsignedShort": case "int": return "Integer";
-			case "unsignedInt": case "long": return "Long";
-			case "negativeInteger": case "PositiveInteger":
-			case "nonPositiveInteger": case "unsignedLong":
+			case "unsignedByte":
+			case "short": return "Short";
+			case "unsignedShort":
+			case "int": return "Integer";
+			case "unsignedInt":
+			case "long": return "Long";
+			case "negativeInteger":
+			case "PositiveInteger":
+			case "nonPositiveInteger":
+			case "unsignedLong":
 			case "integer": return "java.math.BigInteger";
 			case "float": return "Float";
 			case "double": return "Double";
-			case "decimal": case "dec":  return "java.math.BigDecimal";
+			case "decimal":
+			case "dec":  return "java.math.BigDecimal";
 			case "jnumber": return "Number";
 			case "jboolean": return "Boolean";
 			case "jvalue": return "Object";
@@ -292,7 +300,9 @@ class XCGeneratorBase {
 	/** Get type of encoding parser (i.e. hex or base64) of type bytes. */
 	private static byte getBytesType(final XMData xdata) {
 		switch(xdata.getParserName()) {
-			case "hexBinary": case "hex": case "SHA1": return 2;
+			case "hexBinary":
+			case "hex":
+			case "SHA1": return 2;
 			case "base64Binary": return 1;
 			default: return 0;
 		}
@@ -305,22 +315,25 @@ class XCGeneratorBase {
 	final static String getParsedResultGetter(final XMData xdata) {
 		String result = "value.getParsedValue().isNull()? null: "
 			+ "value.getParsedValue().";
-		switch (getParserName(xdata)) {
+		switch (getParserMehodName(xdata)) {
 			case "jlist":
 				return "org.xdef.component.XComponentUtil.jlistToString(value)";
-			case "jvalue": case "jnull":
-				return "value.getParsedValue().getObject()";
+			case "jvalue":
+			case "jnull": return "value.getParsedValue().getObject()";
 			case "byte": return result + "byteValue()";
 			case "short": return result + "shortValue()";
-			case "unsignedByte": case "unsignedShort": case "int":
-				return result + "intValue()";
-			case "unsignedInt": case "long": return result + "longValue()";
-			case "negativeInteger": case "nonNegativeInteger":
-			case "nonPositiveiveInteger": case"integer":
-				return result + "integerValue()";
+			case "unsignedByte":
+			case "unsignedShort":
+			case "int": return result + "intValue()";
+			case "unsignedInt":
+			case "long": return result + "longValue()";
+			case "negativeInteger":
+			case "nonNegativeInteger":
+			case "nonPositiveiveInteger":
+			case"integer": return result + "integerValue()";
 			case "float": return result + "floatValue()";
 			case "double": return result + "doubleValue()";
-			case "decimal": return "value.getParsedValue().decimalValue()";
+			case "decimal": return result + "decimalValue()";
 			case "jnumber": return "(Number)(" + result + "getObject())";
 			case "jstring": return "(String) (" + result + "getObject())";
 		}

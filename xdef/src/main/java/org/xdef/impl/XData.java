@@ -70,15 +70,9 @@ public class XData extends XCodeDescriptor
 		_refTypeName = x._refTypeName;
 	}
 
-	@Override
-	/** Get XMDefinition assigned to this node.
-	 * @return XMDefintion node.
-	 */
-	public final XMDefinition getXMDefinition() {
-		String s = getXDPosition();
-		int ndx = s == null ? -1 : s.indexOf("#");
-		return getXDPool().getXMDefinition(ndx >= 0 ? s.substring(0, ndx) : s);
-	}
+////////////////////////////////////////////////////////////////////////////////
+// impemetation of method from interfaces.
+////////////////////////////////////////////////////////////////////////////////
 
 	@Override
 	// can't be final, can be overwritten!
@@ -88,21 +82,6 @@ public class XData extends XCodeDescriptor
 		xw.writeShort(_valueType);
 		xw.writeString(_valueTypeName);
 		xw.writeString(_refTypeName);
-	}
-
-	// can't be final, can be overwritten!
-	static XData readXData(final XDReader xr,
-		final short kind,
-		final XDefinition xd)
-		throws IOException {
-		String name = xr.readString();
-		String uri = xr.readString();
-		XData x = new XData(name, uri, xd.getXDPool(), kind);
-		x.readXCodeDescriptor(xr);
-		x._valueType = xr.readShort();
-		x._valueTypeName = xr.readString();
-		x._refTypeName = xr.readString();
-		return x;
 	}
 
 	@Override
@@ -116,8 +95,7 @@ public class XData extends XCodeDescriptor
 		}
 		XDValue[] code = ((XPool) getXDPool()).getCode();
 		XDValue x = code[_deflt];
-		if (x.getCode() != CodeTable.LD_CONST
-			|| _deflt + 1 >= code.length
+		if (x.getCode() != CodeTable.LD_CONST || _deflt + 1 >= code.length
 			|| code[_deflt + 1].getCode() != CodeTable.STOP_OP) {
 			return null;
 		}
@@ -136,8 +114,7 @@ public class XData extends XCodeDescriptor
 		// find code of value parser
 		XDValue[] code = ((XPool) getXDPool()).getCode();
 		XDValue x = code[_onAbsence];
-		if (x.getCode() != CodeTable.CALL_OP
-			|| _onAbsence + 2 >= code.length) {
+		if (x.getCode() != CodeTable.CALL_OP || _onAbsence + 2 >= code.length) {
 			return null;
 		}
 		int j = x.getParam();
@@ -159,11 +136,9 @@ public class XData extends XCodeDescriptor
 	 * @return type name of data value.
 	 */
 	public final String getValueTypeName() {
-//		return _valueTypeName;
 		int xs = _check; //start of code of parse method.
 		if (xs >= 0) {
-			if (_valueTypeName.indexOf('.') < 0
-				|| _valueTypeName.endsWith("ID")
+			if (_valueTypeName.indexOf('.') < 0 || _valueTypeName.endsWith("ID")
 				|| _valueTypeName.endsWith("IDREF")
 				|| _valueTypeName.endsWith("IDREFS")
 				|| _valueTypeName.endsWith("CHKID")
@@ -230,10 +205,10 @@ public class XData extends XCodeDescriptor
 	 * @return XDParser or XDValue of executed code.
 	 */
 	public final XDValue getParseMethod() {
-		int xi = _check; //start of code of parse method.
-		if (xi < 0) {
+		if (_check < 0) {
 			return DEFAULT_PARSER;
 		}
+		int xi = _check; //start of code of parse method.
 		final XDValue[] xv = ((XPool) getXDPool()).getCode();
 		XDValue y = xv[xi];
 		if (y.getCode() == CodeTable.JMP_OP
@@ -284,10 +259,15 @@ public class XData extends XCodeDescriptor
 				default:
 					if (xi + 2 < xv.length
 						&& y.getCode() == CodeTable.LD_CONST
-						&& y.getItemId() == XDValueID.XD_PARSER
-						&& xv[xi+1].getCode() == CodeTable.PARSE_OP
-						&& xv[xi+2].getCode() == CodeTable.STOP_OP) {
-						return y;
+						&& y.getItemId() == XDValueID.XD_PARSER) {
+						if (xv[xi+1].getCode() == CodeTable.PARSE_OP
+							&& xv[xi+2].getCode() == CodeTable.STOP_OP) {
+							return y;
+						} else {// ??? try to parse an espression.
+							// if all parsers are same return parser
+							//  without parameters
+							// ???
+						}
 					}
 					return DEFAULT_PARSER;
 			}
@@ -365,20 +345,6 @@ public class XData extends XCodeDescriptor
 			? ((XDParser) p).parserName() : "string";
 	}
 
-	/** Set type of value.
-	 * @param valType ID of data value type.
-	 * @param valName Name of data value type.
-	 */
-	public final void setValueType(final short valType, final String valName) {
-		_valueType = valType;
-		_valueTypeName = valName;
-	}
-
-	/** Set reference name to declared type.
-	 * @param x reference name to declared type or null if not reference.
-	 */
-	public final void setRefTypeName(final String x) {_refTypeName = x;}
-
 	@Override
 	/** Add node as child.
 	 * @param xnode The node to be added.
@@ -430,6 +396,45 @@ public class XData extends XCodeDescriptor
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
+
+	/** Set type of value.
+	 * @param valType ID of data value type.
+	 * @param valName Name of data value type.
+	 */
+	public final void setValueType(final short valType, final String valName) {
+		_valueType = valType;
+		_valueTypeName = valName;
+	}
+
+	/** Set reference name to declared type.
+	 * @param x reference name to declared type or null if not reference.
+	 */
+	public final void setRefTypeName(final String x) {_refTypeName = x;}
+
+	@Override
+	/** Get XMDefinition assigned to this node.
+	 * @return XMDefintion node.
+	 */
+	public final XMDefinition getXMDefinition() {
+		String s = getXDPosition();
+		int ndx = s == null ? -1 : s.indexOf("#");
+		return getXDPool().getXMDefinition(ndx >= 0 ? s.substring(0, ndx) : s);
+	}
+
+	// can't be final, can be overwritten!
+	static XData readXData(final XDReader xr,
+		final short kind,
+		final XDefinition xd)
+		throws IOException {
+		String name = xr.readString();
+		String uri = xr.readString();
+		XData x = new XData(name, uri, xd.getXDPool(), kind);
+		x.readXCodeDescriptor(xr);
+		x._valueType = xr.readShort();
+		x._valueTypeName = xr.readString();
+		x._refTypeName = xr.readString();
+		return x;
+	}
 
 	/** Check compatibility of this object and XDData.
 	 * @param y XDData object to be compared.
