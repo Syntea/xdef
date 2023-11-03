@@ -485,7 +485,6 @@ public final class TestXComponents extends XDTester {
 			genXComponent(xp, clearTempDir());
 			xd = xp.createXDDocument();
 			s = "{\"manager\": \"BigBoss\"}";
-			xd = xp.createXDDocument();
 			o = xd.jparse(s, reporter);
 			assertNoErrorwarningsAndClear(reporter);
 			xc = xd.jparseXComponent(s, null, reporter);
@@ -549,10 +548,12 @@ public final class TestXComponents extends XDTester {
 			xp = compile(xdef);
 			genXComponent(xp, clearTempDir());
 			s = "{a:\"2022-04-10\"}";
+			o = XonUtils.parseXON(s);
 			xd = xp.createXDDocument();
 			swr = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(swr, false));
-			o = xd.jparse(s, reporter);
+			xon = xd.jparse(s, reporter);
+			assertTrue(XonUtils.xonEqual(XonUtils.xonToJson(xon), o));
 			assertEq("date\n", swr.toString());
 			xd = xp.createXDDocument();
 			swr = new StringWriter();
@@ -773,7 +774,7 @@ public final class TestXComponents extends XDTester {
 		} catch (Exception ex) {fail(ex);}
 ////////////////////////////////////////////////////////////////////////////////
 		try {// generate XCDPool from sources used in next tests
-			xp = compile(new String[] {getDataDir() + "test/TestXComponents.xdef",
+			xp = compile(new String[] {getDataDir()+"test/TestXComponents.xdef",
 				getDataDir() + "test/TestXComponent_Z.xdef"});
 			// generate and compile XComponents from xp
 			assertNoErrors(genXComponent(xp, clearTempDir()));
@@ -801,7 +802,7 @@ public final class TestXComponents extends XDTester {
 "</A>";
 			xc = parseXC(xp, "A", xml, null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
-			el = xc.toXml();
+			assertEq(xml, xc.toXml());
 			assertEq("/A/@a", SUtils.getValueFromGetter(xc, "xposOfa"));
 			assertEq("/A/d[1]/$text",
 				SUtils.getValueFromGetter(SUtils.getValueFromGetter(
@@ -1422,7 +1423,7 @@ public final class TestXComponents extends XDTester {
 				Class.forName("test.xdef.component.Y13$A$B");
 				fail("Error Y13: "
 					+ "class test.xdef.component.Y13.A.B was generated.");
-			} catch (Exception ex) {}
+			} catch (ClassNotFoundException ex) {}
 			xml = "<A><B a='1'/></A>";
 			xc = parseXC(xp, "Y13", xml,null,null);
 			assertEq(xml, xc.toXml());
@@ -1775,7 +1776,7 @@ public final class TestXComponents extends XDTester {
 		try { // test lexicon
 			xd = xp.createXDDocument("LEX");
 			xml = "<X x=\"x\"><Y y=\"1\"/><Y y=\"2\"/><Y y=\"3\"/></X>";
-			el = xd.xtranslate(xml, "eng", "eng", reporter);
+			assertEq(xml, xd.xtranslate(xml, "eng", "eng", reporter));
 			assertNoErrorwarningsAndClear(reporter);
 			xd = xp.createXDDocument("LEX");
 			assertEq("<P p=\"x\"><Q q=\"1\"/><Q q=\"2\"/><Q q=\"3\"/></P>",

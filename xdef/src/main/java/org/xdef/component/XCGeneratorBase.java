@@ -29,6 +29,58 @@ import org.xdef.sys.SUtils;
  * @author Vaclav Trojan
  */
 class XCGeneratorBase {
+	private static final String[] INTTYPES =
+		{"byte", "short", "int", "long"};
+	private static final String[] CONVERTTYPES = {
+		/*string*/
+		"string", "an", "BNF", "CDATA", "contains", "containsi", "country",
+		"empty", "ends", "endsi", "eq", "eqi",
+		"file", "jstring", "letters", "num", "pic", "QNameURI", "regex",
+		"starts", "startsi", "url", "ENTITY", "ID", "IDREF", "language",
+		"list", "NCName", "NMTOKEN", "NOTATION", "Name", "QName", "token",
+		/*numbers*/
+		"unsignedByte", "unsignedShort", "unsignedInt", "unsignedLong",
+		/*datetime*/
+		"date",	"time", "dateTime", "day", "month", "mothDay", "gDay",
+		"gMonth", "gYearMonth", "emailDate", "xdatetime", "dateYMDhms",
+		"printableDate",
+		/*decimal*/
+		"decimal", "dec",
+		/*bytes*/
+		"base64Binary", "hexBinary", "hex", "MD5",
+		"SHA1",
+		/*emailaddr*/
+		"emailAddr", "domainAddr",
+		/*boolean*/
+		"boolean", "jboolean",
+		/*URI*/
+		 "uri", "anyURI"};
+	private static final String[] TOTYPES = {
+		/*string*/
+		"string","string", "string", "string", "string", "string", "string",
+		"string", "string", "string", "string", "string",
+		"string", "string", "string", "string", "string", "string", "string",
+		"string", "string", "string", "string", "string", "string", "string",
+		"string", "string", "string", "string", "string", "string", "string",
+		/*numbers*/
+		"short", "int", "long", "integer",
+		/*datetime*/
+		"dateTime", "dateTime", "dateTime",
+		"dateTime", "dateTime", "dateTime", "dateTime",	"dateTime", "dateTime",
+		"dateTime",	"dateTime", "dateTime", "dateTime",
+		/*decimal*/
+		"decimal", "decimal",
+		/*bytes*/
+		"base64Binary", "base64Binary", "base64Binary", "base64Binary",
+		"base64Binary",
+		/*emailaddr*/
+		"emailAddr", "emailAddr",
+		/*boolean*/
+		"boolean", "boolean",
+		/*URI*/
+		 "anyURI", "anyURI"};
+	private static final String[] FLTTYPES = {"float", "double"};
+
 	/** Platform-dependent newline. */
 	static final String LN = LINE_SEPARATOR;
 	/** Names that can't be used in generated code.*/
@@ -210,12 +262,47 @@ class XCGeneratorBase {
 		return null;
 	}
 
-	/** Get type parser name from XMData. If parser name is "union" and all
-	 * items has the same parser then this parser name is returned.
-	 * @param xdata object where parsers ars investigated.
-	 * @return parser method name.
+	/** Find index of name in the adday of names.
+	 * @param name find index of this name in array of names,
+	 * @param names in array of names,
+	 * @return index of this name in array of names or return -1 if not found.
 	 */
-	private static String getParserMehodName(final XMData xdata) {
+	private static int isOneOf(String name, final String[] names) {
+		for (int i = 0; i < names.length; i++) {
+			if (name.equals(names[i])) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	/** Find first indes of name int the array of names and if it was found
+	 * then find index of newName in the array.
+	 * @param name name to be found.
+	 * @param newName newName to be found.
+	 * @param names array of names.
+	 * @return index or -1.
+	 */
+	private static int getTypeNameIndex(final String name,
+		final String newName,
+		final String[] names) {
+		int j = isOneOf(name, names);
+		if (j >= 0) {
+			int k = isOneOf(newName, names);
+			if (k >= 0) {
+				return k >= j ? k : j;
+			}
+		}
+		return -1;
+	}
+
+	/** Get union items type name.If parser name is "union" and all
+	 * items has parser with compatile result type then this parser name
+	 * is returned.
+	 * @param xdata object where parsers ars investigated.
+	 * @return parser method name or union items compatible type.
+	 */
+	private static String getUnionItemsYypeName(final XMData xdata) {
 		String parserName = xdata.getParserName();
 		if (!"union".equals(parserName)) {
 			return parserName;
@@ -227,26 +314,44 @@ class XCGeneratorBase {
 			XDContainer z = (XDContainer) y;
 			for (int i = 0; i < z.getXDItemsNumber(); i++) {
 				XDValue v = z.getXDItem(i);
-				if (XDValueType.PARSER.equals(v.getItemType())) {
+				XDValueType t = v.getItemType();
+				if (XDValueType.PARSER.equals(t)) {
 					XDParser p = (XDParser) v;
+					String s = p.parserName();
+					if ("enum".equals(s) || "enumi".equals(s)) {
+						return "union";
+					}
+					int j;
+					if ((j = isOneOf(s, CONVERTTYPES)) >= 0) {
+						s = TOTYPES[j];
+					}
 					if (name == null) {
-						name = p.parserName();
-					} else {
-						if (!name.equals(p.parserName())) {
-							name = "";
+						name = s;
+					} else if (!name.equals(s)) {
+						if ((j=getTypeNameIndex(name, s , INTTYPES)) >=0) {
+							name = INTTYPES[j];
+						} else if ((j=getTypeNameIndex(name,s,FLTTYPES))>=0){
+							name = FLTTYPES[j];
+						} else {
+							return "union";
 						}
 					}
 				}
 			}
 		}
-		return name == null || name.isEmpty() ? parserName : name;
+		return name;
 	}
+
 	/** Get Java Object name corresponding to XD type.
 	 * @param xdata XMData object.
 	 * @return Java Object name corresponding to XD type
 	 */
 	final String getJavaObjectTypeName(final XMData xdata) {
-		switch (getParserMehodName(xdata)) {
+		String result = checkEnumType(xdata);
+		if (result != null) {
+			return result;
+		}
+		switch (getUnionItemsYypeName(xdata)) {
 			case "byte": return "Byte";
 			case "unsignedByte":
 			case "short": return "Short";
@@ -266,6 +371,7 @@ class XCGeneratorBase {
 			case "jnumber": return "Number";
 			case "jboolean": return "Boolean";
 			case "jvalue": return "Object";
+			case "string": return "String";
 		}
 		switch (xdata.getParserType()) {
 			case XDValueID.XD_BOOLEAN: return "Boolean";
@@ -290,11 +396,9 @@ class XCGeneratorBase {
 				return "byte[]";
 			case XDValueID.XD_TELEPHONE: return "org.xdef.XDTelephone";
 			case XDValueID.XD_NULL: //jnull
-			case XDValueID.XD_ANY: //union etc.
-				return "Object";
+			case XDValueID.XD_ANY: return "Object";
 		}
-		String result = checkEnumType(xdata);
-		return (result != null) ? result : "String";  // default
+		return  "String";  // default
 	}
 
 	/** Get type of encoding parser (i.e. hex or base64) of type bytes. */
@@ -315,7 +419,11 @@ class XCGeneratorBase {
 	final static String getParsedResultGetter(final XMData xdata) {
 		String result = "value.getParsedValue().isNull()? null: "
 			+ "value.getParsedValue().";
-		switch (getParserMehodName(xdata)) {
+		String enumType = checkEnumType(xdata);
+		if (enumType != null) {
+			return enumType+".toEnum("+ result+"toString())";
+		}
+		switch (getUnionItemsYypeName(xdata)) {
 			case "jlist":
 				return "org.xdef.component.XComponentUtil.jlistToString(value)";
 			case "jvalue":
@@ -336,6 +444,7 @@ class XCGeneratorBase {
 			case "decimal": return result + "decimalValue()";
 			case "jnumber": return "(Number)(" + result + "getObject())";
 			case "jstring": return "(String) (" + result + "getObject())";
+			case "string": return result + "toString()";
 		}
 		switch (xdata.getParserType()) {
 			case XDValueID.XD_BOOLEAN: return result + "booleanValue()";
@@ -367,9 +476,7 @@ class XCGeneratorBase {
 			case XDValueID.XD_PARSER: return "value.getParsedString()";
 			case XDValueID.XD_ANY: return "value.getParsedValue().getObject()";
 		}
-		result += "toString()";
-		String enumType = checkEnumType(xdata);
-		return enumType != null ? enumType+".toEnum("+ result+")" : result;
+		return result + "toString()";
 	}
 
 	/** Generate declaration of variable of attribute name.
@@ -643,9 +750,6 @@ class XCGeneratorBase {
 		final StringBuilder sb,
 		final StringBuilder sbi,
 		final String nullChoice) {
-//		String publ = xn instanceof XElement ?
-//			((XElement) xn)._xon == 0 ? "public" : "private"
-//			: ((XData) xn)._xon == 0 ? "public" : "private";
 		String publ = "public";
 		String x;
 		String d = descr;
@@ -842,33 +946,37 @@ class XCGeneratorBase {
 			? "AttributeNS(\"" + uri + "\", " : "Attribute(";
 		String x;
 		short typ =  xdata.getParserType();
-		switch (typ) {
-			case XDValueID.XD_CHAR: {
-				x = "org.xdef.xon.XonTools.genXMLValue(get&{name}()))";
-				break;
+		if ((checkEnumType(xdata)) != null) {
+			x = "get&{name}().name())";
+		} else {
+			switch (typ) {
+				case XDValueID.XD_CHAR:
+					x = "org.xdef.xon.XonTools.genXMLValue(get&{name}()))";
+					break;
+				case XDValueID.XD_DATETIME: {
+					String s = xdata.getDateMask();
+					x = s == null
+						? "org.xdef.component.XComponentUtil"
+						+ ".dateToJstring(get&{name}()))"
+						: "get&{name}().formatDate("+s+"))";
+					break;
+				}
+				case XDValueID.XD_BYTES:
+					x = (getBytesType(xdata) == 2
+						? "encodeHex" : "encodeBase64") + "(get&{name}()))";
+					break;
+				case XDValueID.XD_IPADDR:
+					x = "get&{name}().toString().substring(1))";
+					break;
+				case XDValueID.XD_NULL: //jnull
+					x = "\"null\")";
+					break;
+				case XDValueID.XD_STRING:
+					x = "get&{name}())";
+					break;
+				default:
+					x = "get&{name}().toString())";
 			}
-			case XDValueID.XD_DATETIME: {
-				String s = xdata.getDateMask();
-				x = s == null
-					? "org.xdef.component.XComponentUtil"
-					+ ".dateToJstring(get&{name}()))"
-					: "get&{name}().formatDate("+s+"))";
-				break;
-			}
-			case XDValueID.XD_BYTES:
-				x = (getBytesType(xdata) == 2
-					? "encodeHex" : "encodeBase64") + "(get&{name}()))";
-				break;
-			case XDValueID.XD_IPADDR:
-				x = "get&{name}().toString().substring(1))";
-				break;
-			case XDValueID.XD_NULL: //jnull
-				x = "\"null\")";
-				break;
-			default:
-				x = checkEnumType(xdata) != null ? "get&{name}().name())"
-					: typ == XDValueID.XD_STRING
-						? "get&{name}())" : "get&{name}().toString())";
 		}
 		sb.append(modify(
 "\t\tif (get&{name}() != null)"+LN+
@@ -1022,7 +1130,7 @@ class XCGeneratorBase {
 							return null;
 						}
 					} else { // we return model class
-							return _components.get(s).getName();
+						return _components.get(s).getName();
 					}
 				}
 				// we have both, reference and model

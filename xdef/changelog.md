@@ -1,9 +1,11 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.0.11, release-date 2023-11-02
+# Version 42.0.11, release-date 2023-11-03
 * If the type of a value in X-component is `union` and types of all items are
-  same, then the type of getter/settter is set accordig to that type (formally
-  it was `Object`).
+  compatible type, then the type of getter/settter is set accordig to that
+  type (formally it was only `Object`).
+* If in X-component tge type is compatible with String`then type of
+  getters/setters is now always String.
 * Corrected bug in org.xdef.xon.CsvReader parser when after missing value at
   the end of line follows next line with a value.
 * Corrected bug in X-component when the validation type is described as
