@@ -269,6 +269,15 @@ public final class TestScript extends XDTester {
 		Element el;
 		XComponent xc;
 		XDPool xp;
+		
+		setDebug(true);
+		_printCode = true;
+		_printCode = false;
+////////////////////////////////////////////////////////////////////////////////
+//		test("de,ef","setResult(NCNameList(','));");
+//if(true)return;
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 		xdef = // test rounding seconds acordint to milliseconds
 "<xd:def xmlns:xd='" + _xdNS + "' root='T'>\n" +
 "<xd:declaration>\n" +
@@ -282,10 +291,6 @@ public final class TestScript extends XDTester {
 "<T D1='2022-01-01 12:34:56.1'" +
 " D2='2022-01-01 12:34:56.5' D3='2022-01-01 12:34:56.6'/>", reporter));
 		assertNoErrorwarnings(reporter);
-
-		setDebug(true);
-		_printCode = true;
-		_printCode = false;
 ////////////////////////////////////////////////////////////////////////////////
 		testAttr1("(String)@a", "abc");
 		testAttr1(" (String) @a", "abc");

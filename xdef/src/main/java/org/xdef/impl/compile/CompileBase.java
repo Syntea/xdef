@@ -852,6 +852,7 @@ public class CompileBase implements CodeTable, XDValueID {
 			keyParam("maxLength", XD_LONG, false,  1, false),
 			keyParam("minLength", XD_LONG, false,  0, false),
 			keyParam("pattern", XD_STRING, true,  -1, false),
+			keyParam("separator", XD_STRING, true, 0,false),
 			keyParam("whiteSpace", XD_STRING, false, -1, true,
 				new DefString("collapse")));
 		parser(im, org.xdef.impl.parsers.XDParseSequence.class,
@@ -1908,7 +1909,7 @@ public class CompileBase implements CodeTable, XDValueID {
 
 	/** Create internal method descriptor of parser with keyword parameters.
 	 * Note the parameter code is fixed value LD_CONST,
- parameter restrictions is ANY_MODE and resultType is XD_PARSER.
+	 * parameter restrictions is ANY_MODE and resultType is XD_PARSER.
 	 * @param minPars Minimal number of parameters.
 	 * @param maxPars Maximal number of parameters.
 	 * @param paramTypes List of type id's of parameters.
