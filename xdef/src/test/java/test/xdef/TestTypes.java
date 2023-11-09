@@ -244,6 +244,7 @@ public final class TestTypes extends XDTester {
 "      <Test4>required union(%item=[Test_enum, Test_int]);</Test4>\n" +
 "      <Test5>required union(%item=[Test_enum]);</Test5>\n" +
 "      <Test6>required union(%item=[Test_int]);</Test6>\n" +
+"      <Test7>required list(%item=boolean);</Test7>\n" +
 "    </xd:choice>\n" +
 "  </A>\n" +
 "</xd:def>";
@@ -259,6 +260,7 @@ public final class TestTypes extends XDTester {
 "    <Test4>C</Test4>\n" +
 "    <Test5>C</Test5>\n" +
 "    <Test6>3</Test6>\n" +
+"    <Test7>1false221truefalse</Test7>\n" +
 "</A>";
 			assertEq(xml, parse(xd, xml, reporter));
 			assertNoErrorwarnings(reporter);
