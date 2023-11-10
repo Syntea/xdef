@@ -8,43 +8,41 @@ import org.xdef.sys.SException;
  */
 public interface XDParser extends XDValue {
 	/** Keyword "pattern" id.*/
-	public final static int PATTERN = 1;
+	public final static int PATTERN =			0x00000000000001;
 	/** Keyword "enumeration" id.*/
-	public final static int ENUMERATION = 2;
+	public final static int ENUMERATION =		0x00000000000002;
 	/** Keyword "whiteSpace" id.*/
-	public final static int WHITESPACE = 4;
+	public final static int WHITESPACE =		0x00000000000004;
 	/** Keyword "maxInclusive" id.*/
-	public final static int MAXINCLUSIVE = 8;
+	public final static int MAXINCLUSIVE =		0x00000000000008;
 	/** Keyword "maxExclusive" id.*/
-	public final static int MAXEXCLUSIVE = 16;
+	public final static int MAXEXCLUSIVE =		0x00000000000010;
 	/** Keyword "minInclusive" id.*/
-	public final static int MININCLUSIVE = 32;
+	public final static int MININCLUSIVE =		0x00000000000020;
 	/** Keyword "minExclusive" id.*/
-	public final static int MINEXCLUSIVE = 64;
+	public final static int MINEXCLUSIVE =		0x00000000000040;
 	/** Keyword "totalDigits" id.*/
-	public final static int TOTALDIGITS = 128;
+	public final static int TOTALDIGITS =		0x00000000000080;
 	/** Keyword "fractionDigits" id.*/
-	public final static int FRACTIONDIGITS = 256;
+	public final static int FRACTIONDIGITS =	0x00000000000100;
 	/** Keyword "length" id.*/
-	public final static int LENGTH = 512;
+	public final static int LENGTH =			0x00000000000200;
 	/** Keyword "maxLength" id.*/
-	public final static int MAXLENGTH = 1024;
+	public final static int MAXLENGTH =			0x00000000000400;
 	/** Keyword "minLength" id.*/
-	public final static int MINLENGTH = 2048;
-	/** Keyword "format" id.*/
-	public final static int NORMALIZE = 4096;
+	public final static int MINLENGTH =			0x00000000000800;
 	/** Keyword "item" id.*/
-	public final static int ITEM = 8192;
+	public final static int ITEM =				0x00000000001000;
 	/** Keyword "base" id.*/
-	public final static int BASE = 16384;
+	public final static int BASE =				0x00000000002000;
 	/** Keyword "separator" id.*/
-	public final static int SEPARATOR = 32768;
+	public final static int SEPARATOR =			0x00000000004000;
 	/** Keyword "format" id.*/
-	public final static int FORMAT = 65536;
+	public final static int FORMAT =			0x00000000008000;
 	/** Keyword "outFormat" id.*/
-	public final static int OUTFORMAT = 131072;
+	public final static int OUTFORMAT =			0x00000000010000;
 	/** Keyword "argument" id.*/
-	public final static int ARGUMENT = 262144;
+	public final static int ARGUMENT =			0x00000000020000;
 
 	/** Table of keyword parameters.*/
 	public final static String[] PARAM_NAMES = new String[] {
@@ -60,7 +58,6 @@ public interface XDParser extends XDValue {
 		"length",
 		"maxLength",
 		"minLength",
-		"normalize",
 		"item",
 		"base",
 		"separator",

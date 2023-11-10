@@ -33,6 +33,7 @@ import static org.xdef.XDValueID.XD_IPADDR;
 import static org.xdef.XDValueID.XD_LOCALE;
 import static org.xdef.XDValueID.XD_LONG;
 import static org.xdef.XDValueID.XD_NAMEDVALUE;
+import static org.xdef.XDValueID.XD_NULL;
 import static org.xdef.XDValueID.XD_OBJECT;
 import static org.xdef.XDValueID.XD_OUTPUT;
 import static org.xdef.XDValueID.XD_PARSER;
@@ -392,6 +393,20 @@ public class CompileBase implements CodeTable, XDValueID {
 ////////////////////////////////////////////////////////////////////////////////
 // Initialization.
 ////////////////////////////////////////////////////////////////////////////////
+
+	/** Set type parameters.
+	 * @param type type ID (see org.xdef.XDValueID).
+	 * @param name the name of type used in script.
+	 * @param clazz the class rep[resenting the type.
+	 * @param typeCodeAbbr the abbreviation used in code display.
+	 */
+	private static void setType(final short type,
+		final String name,
+		final Class<?> clazz) {
+		TYPECLASSES[type] = clazz;
+		TYPENAMES[type] = name;
+	}
+
 	static {
 		for (int i = 0; i < X_NOTYPE_VALUE + 1; i++) METHODS.add(null);
 		// Set type tables.
@@ -509,56 +524,31 @@ public class CompileBase implements CodeTable, XDValueID {
 ///////////////////////////////////////////////////////////////////////////////
 //  parsers
 ///////////////////////////////////////////////////////////////////////////////
-		InternalMethod im = genParserMetnod(0, 0, null,
-			XD_BOOLEAN,
+		KeyParam[] keyPars = new KeyParam[] {
 			keyParam("pattern", XD_STRING, false, -1, false),
 			keyParam("whiteSpace", XD_STRING, false,
-					-1, true, new DefString("collapse")));
-		parser(im, org.xdef.impl.parsers.XDParseFalse.class,
-			"false_parser");
-		parser(im, org.xdef.impl.parsers.XDParseTrue.class,
-			"true_parser");
+					-1, true, new DefString("collapse"))
+		};
+		InternalMethod im = genParserMetnod(0, 0, null, XD_BOOLEAN, keyPars);
+		parser(im, org.xdef.impl.parsers.XDParseFalse.class, "false_parser");
+		parser(im, org.xdef.impl.parsers.XDParseTrue.class, "true_parser");
 		parser(im, org.xdef.impl.parsers.XSParseBoolean.class,
 			"boolean", "?xs:boolean", "?bool");
 		parser(im, org.xdef.impl.parsers.XDParseJBoolean.class,"jboolean");
-
+		im = genParserMetnod(0, 0, null, XD_NULL, keyPars);
 		parser(im, org.xdef.impl.parsers.XDParseJNull.class, "jnull");
-		im = genParserMetnod(0, 0, null, XD_GPSPOSITION,
-			keyParam("pattern", XD_STRING, false, -1, false),
-			keyParam("whiteSpace", XD_STRING, false,
-				-1, true, new DefString("collapse")));
+		im = genParserMetnod(0, 0, null, XD_GPSPOSITION, keyPars);
 		parser(im, org.xdef.impl.parsers.XDParseGPS.class, "gps");
-
-		im = genParserMetnod(0, 0, null, XD_PRICE,
-			keyParam("pattern", XD_STRING, false, -1, false),
-			keyParam("whiteSpace", XD_STRING, false,
-				-1, true, new DefString("collapse")));
+		im = genParserMetnod(0, 0, null, XD_PRICE, keyPars);
 		parser(im, org.xdef.impl.parsers.XDParsePrice.class, "price");
-
-		im = genParserMetnod(0, 0, null, XD_IPADDR,
-			keyParam("pattern", XD_STRING, false, -1, false),
-			keyParam("whiteSpace", XD_STRING, false,
-				-1, true, new DefString("collapse")));
+		im = genParserMetnod(0, 0, null, XD_IPADDR, keyPars);
 		parser(im, org.xdef.impl.parsers.XDParseIPAddr.class, "ipAddr");
-
-		im = genParserMetnod(0, 0, null, XD_TELEPHONE,
-			keyParam("pattern", XD_STRING, false, -1, false),
-			keyParam("whiteSpace", XD_STRING, false,
-				-1, true, new DefString("collapse")));
+		im = genParserMetnod(0, 0, null, XD_TELEPHONE, keyPars);
 		parser(im, org.xdef.impl.parsers.XDParseTelephone.class, "telephone");
-
-		im = genParserMetnod(0, 0, null, XD_CURRENCY,
-			keyParam("pattern", XD_STRING, false, -1, false),
-			keyParam("whiteSpace", XD_STRING, false,
-				-1, true, new DefString("collapse")));
+		im = genParserMetnod(0, 0, null, XD_CURRENCY, keyPars);
 		parser(im, org.xdef.impl.parsers.XDParseCurrency.class, "currency");
-
-		im = genParserMetnod(0, 0, null, XD_CHAR,
-			keyParam("pattern", XD_STRING, false, -1, false),
-			keyParam("whiteSpace", XD_STRING, false,
-				-1, true, new DefString("preserve")));
+		im = genParserMetnod(0, 0, null, XD_CHAR, keyPars);
 		parser(im, org.xdef.impl.parsers.XDParseChar.class, "char");
-
 		im = genParserMetnod(0, 2, new short[] {XD_DECIMAL, XD_DECIMAL},
 			XD_DECIMAL,
 			keyParam("base", XD_STRING, true,-1,false),
@@ -574,7 +564,6 @@ public class CompileBase implements CodeTable, XDValueID {
 				new DefString("collapse")));
 		parser(im, org.xdef.impl.parsers.XSParseDecimal.class,
 			"decimal", "?xs:decimal");
-
 		im = genParserMetnod(0, 2, new short[] {XD_DOUBLE, XD_DOUBLE},
 			XD_DOUBLE,
 			keyParam("base", XD_STRING, true, -1, false),
@@ -590,9 +579,7 @@ public class CompileBase implements CodeTable, XDValueID {
 				new DefString("collapse")));
 		parser(im, org.xdef.impl.parsers.XSParseDouble.class,
 			"double", "?xs:double");
-		parser(im, org.xdef.impl.parsers.XSParseFloat.class,
-			"float", "?xs:float");
-
+		parser(im,org.xdef.impl.parsers.XSParseFloat.class,"float","?xs:float");
 		im = genParserMetnod(0, 2, new short[] {XD_DATETIME, XD_DATETIME},
 			XD_DATETIME,
 			keyParam("base", XD_STRING, true, -1,false),
@@ -623,7 +610,6 @@ public class CompileBase implements CodeTable, XDValueID {
 		parser(im, org.xdef.impl.parsers.XDParseEmailDate.class, "emailDate");
 		parser(im, org.xdef.impl.parsers.XDParsePrintableDate.class,
 			"printableDate");
-
 		im = genParserMetnod(0, 2, new short[] {XD_LONG, XD_LONG},
 			XD_LONG,
 			keyParam("base", XD_STRING, true, -1,false),
@@ -637,18 +623,8 @@ public class CompileBase implements CodeTable, XDValueID {
 			keyParam("whiteSpace", XD_STRING, false, -1, true,
 				new DefString("collapse")));
 		parser(im, org.xdef.impl.parsers.XSParseByte.class, "byte", "?xs:byte");
-		parser(im, org.xdef.impl.parsers.XSParseInteger.class,
-			"integer", "?xs:integer");
 		parser(im, org.xdef.impl.parsers.XSParseInt.class, "int", "?xs:int");
 		parser(im, org.xdef.impl.parsers.XSParseLong.class, "long", "?xs:long");
-		parser(im, org.xdef.impl.parsers.XSParseNegativeInteger.class,
-			"negativeInteger", "?xs:negativeInteger");
-		parser(im, org.xdef.impl.parsers.XSParseNonNegativeInteger.class,
-			"nonNegativeInteger", "?xs:nonNegativeInteger");
-		parser(im, org.xdef.impl.parsers.XSParseNonPositiveInteger.class,
-			"nonPositiveInteger", "?xs:nonPositiveInteger");
-		parser(im, org.xdef.impl.parsers.XSParsePositiveInteger.class,
-			"positiveInteger", "?xs:positiveInteger");
 		parser(im, org.xdef.impl.parsers.XSParseShort.class,
 			"short", "?xs:short");
 		parser(im, org.xdef.impl.parsers.XSParseUnsignedByte.class,
@@ -657,25 +633,31 @@ public class CompileBase implements CodeTable, XDValueID {
 			"unsignedInt", "?xs:unsignedInt");
 		parser(im, org.xdef.impl.parsers.XSParseUnsignedShort.class,
 			"unsignedShort", "?xs:unsignedShort");
-
-		im = genParserMetnod(0, 2, new short[] {XD_DECIMAL, XD_DECIMAL},
-			XD_DECIMAL,
+		im = genParserMetnod(0, 2, new short[] {XD_BIGINTEGER, XD_BIGINTEGER},
+			XD_BIGINTEGER,
 			keyParam("base", XD_STRING, true, -1,false),
-			keyParam("enumeration", XD_DECIMAL, true, -1,false),
-			keyParam("maxExclusive", XD_DECIMAL,false,-1,false),
-			keyParam("maxInclusive", XD_DECIMAL,false,1,false),
-			keyParam("minExclusive", XD_DECIMAL,false,-1,false),
-			keyParam("minInclusive", XD_DECIMAL,false,0,false),
+			keyParam("enumeration", XD_BIGINTEGER, true, -1,false),
+			keyParam("maxExclusive", XD_BIGINTEGER,false,-1,false),
+			keyParam("maxInclusive", XD_BIGINTEGER,false,1,false),
+			keyParam("minExclusive", XD_BIGINTEGER,false,-1,false),
+			keyParam("minInclusive", XD_BIGINTEGER,false,0,false),
 			keyParam("pattern",XD_STRING,true,-1,false),
 			keyParam("totalDigits", XD_LONG,false,-1,false),
 			keyParam("whiteSpace", XD_STRING, false, -1, true,
 				new DefString("collapse")));
-		//unsigned long must be decimal!
+		parser(im, org.xdef.impl.parsers.XSParseInteger.class,
+			"integer", "?xs:integer");
 		parser(im, org.xdef.impl.parsers.XSParseUnsignedLong.class,
 			"unsignedLong", "?xs:unsignedLong");
-
-		im = genParserMetnod(0, 2, new short[] {XD_LONG,XD_LONG},
-			XD_ANYURI,
+		parser(im, org.xdef.impl.parsers.XSParseNegativeInteger.class,
+			"negativeInteger", "?xs:negativeInteger");
+		parser(im, org.xdef.impl.parsers.XSParseNonNegativeInteger.class,
+			"nonNegativeInteger", "?xs:nonNegativeInteger");
+		parser(im, org.xdef.impl.parsers.XSParseNonPositiveInteger.class,
+			"nonPositiveInteger", "?xs:nonPositiveInteger");
+		parser(im, org.xdef.impl.parsers.XSParsePositiveInteger.class,
+			"positiveInteger", "?xs:positiveInteger");
+		keyPars = new KeyParam[] {
 			keyParam("base", XD_STRING, true, -1,false),
 			keyParam("enumeration", XD_STRING, true, -1, false),
 			keyParam("length", XD_LONG, false,  -1, false),
@@ -683,86 +665,14 @@ public class CompileBase implements CodeTable, XDValueID {
 			keyParam("minLength", XD_LONG, false,  0, false),
 			keyParam("pattern",XD_STRING,true,-1,false),
 			keyParam("whiteSpace", XD_STRING, false, -1, true,
-				new DefString("collapse")));
+				new DefString("collapse"))};
+		im = genParserMetnod(0, 2, new short[] {XD_LONG,XD_LONG},
+			XD_ANYURI, keyPars);
 		parser(im, org.xdef.impl.parsers.XSParseAnyURI.class,
 			"anyURI", "?xs:anyURI");
 		parser(im, org.xdef.impl.parsers.XSParseName.class, "Name", "?xs:Name");
-
-		im = genParserMetnod(0, 2, new short[] {XD_LONG,XD_LONG},
-			XD_STRING,
-			keyParam("base", XD_STRING, true, -1,false),
-			keyParam("enumeration", XD_STRING, true, -1,false),
-			keyParam("length", XD_LONG, false, -1,false),
-			keyParam("maxLength", XD_LONG, false, 1,false),
-			keyParam("minLength", XD_LONG, false, 0,false),
-			keyParam("pattern",XD_STRING,true,-1,false),
-			keyParam("whiteSpace", XD_STRING, false, -1, false,
-				new DefString("preserve"), new DefString("collapse"),
-				new DefString("replace")));
-		parser(im, org.xdef.impl.parsers.XSParseString.class,
-			"string", "?xs:string");
-
-		im = genParserMetnod(0, 2, new short[] {XD_LONG,XD_LONG},
-			XD_STRING,
-			keyParam("base", XD_STRING, true, -1,false),
-			keyParam("enumeration", XD_STRING, true, -1, false),
-			keyParam("length", XD_LONG, false,  -1, false),
-			keyParam("maxLength", XD_LONG, false,  1, false),
-			keyParam("minLength", XD_LONG, false,  0, false),
-			keyParam("pattern",XD_STRING,true,-1,false),
-			keyParam("whiteSpace", XD_STRING, false,  -1, false,
-				new DefString("replace"), new DefString("collapse")));
-		parser(im, org.xdef.impl.parsers.XSParseNormalizedString.class,
-			"normalizedString", "?xs:normalizedString"); //"?normString"
-
-		im = genParserMetnod(0, 2, new short[] {XD_LONG, XD_LONG}, XD_STRING,
-			keyParam("base", XD_STRING, true, -1,false),
-			keyParam("enumeration", XD_STRING, true, -1,false),
-			keyParam("length", XD_LONG, false, -1,false),
-			keyParam("maxLength", XD_LONG, false, 1,false),
-			keyParam("minLength", XD_LONG, false, 0,false),
-			keyParam("pattern",XD_STRING,true,-1,false),
-			keyParam("whiteSpace", XD_STRING, false,  -1, false,
-				new DefString("preserve"), new DefString("collapse"),
-				new DefString("replace")));
-		parser(im, org.xdef.impl.parsers.XDParseLetters.class, "letters");
-		parser(im, org.xdef.impl.parsers.XDParseAn.class, "an");
-		parser(im, org.xdef.impl.parsers.XDParseNum.class, "num");
-		parser(im, org.xdef.impl.parsers.XDParseCDATA.class, "CDATA");
-		parser(im, org.xdef.impl.parsers.XDParseJNumber.class, "jnumber");
-		parser(im, org.xdef.impl.parsers.XDParseJString.class, "jstring");
-
-		im = genParserMetnod(0, 0, null, XD_ANY,
-			keyParam("enumeration", XD_ANY, true, -1,false),
-			keyParam("pattern", XD_STRING, true, -1,false));
-		parser(im, org.xdef.impl.parsers.XDParseJValue.class, "jvalue");
-
-		im = genParserMetnod(0, 0, null, XD_ANY,
-			keyParam("enumeration", XD_ANY, true, -1,false),
-			keyParam("item", XD_PARSER, true, -1,false),
-			keyParam("pattern", XD_STRING, true, -1,false));
-		parser(im, org.xdef.impl.parsers.XSParseUnion.class,
-			"union", "?xs:union");
-
-		im = genParserMetnod(0, 2,
-			new short[] {XD_ANY, XD_ANY, XD_PARSER}, XD_CONTAINER,
-			keyParam("item", XD_PARSER, false, 2,false),
-			keyParam("length", XD_LONG, false, -1,false),
-			keyParam("maxLength", XD_LONG, false, 1,false),
-			keyParam("minLength", XD_LONG, false, 0,false),
-			keyParam("enumeration", XD_ANY, true, -1,false),
-			keyParam("pattern", XD_STRING, true, -1,false));
-		parser(im, org.xdef.impl.parsers.XDParseJList.class, "jlist");
-
-		im = genParserMetnod(0, 2, new short[] {XD_LONG, XD_LONG}, XD_STRING,
-			keyParam("base", XD_STRING, true, -1,false),
-			keyParam("enumeration", XD_STRING, true, -1, false),
-			keyParam("length", XD_LONG, false,  -1, false),
-			keyParam("maxLength", XD_LONG, false,  1, false),
-			keyParam("minLength", XD_LONG, false,  0, false),
-			keyParam("pattern",XD_STRING,true,-1,false),
-			keyParam("whiteSpace", XD_STRING, false, -1, true,
-				new DefString("collapse")));
+		im = genParserMetnod(0, 2, new short[] {XD_LONG, XD_LONG},
+			XD_STRING, keyPars);
 		parser(im, org.xdef.impl.parsers.XSParseID.class, "ID", "?xs:ID");
 		parser(im, org.xdef.impl.parsers.XSParseIDREF.class,
 			"IDREF", "?xs:IDREF");
@@ -783,8 +693,79 @@ public class CompileBase implements CodeTable, XDValueID {
 			"QName", "?xs:QName", "?Qname");
 		parser(im, org.xdef.impl.parsers.XSParseLanguage.class,
 			"language", "?xs:language");
-		parser(im, org.xdef.impl.parsers.XDParseCountry.class, "country");
-
+		parser(im, org.xdef.impl.parsers.XDParseCountry.class, "country");		
+		im = genParserMetnod(0, 2, new short[] {XD_LONG,XD_LONG},
+			XD_STRING,
+			keyParam("base", XD_STRING, true, -1,false),
+			keyParam("enumeration", XD_STRING, true, -1,false),
+			keyParam("length", XD_LONG, false, -1,false),
+			keyParam("maxLength", XD_LONG, false, 1,false),
+			keyParam("minLength", XD_LONG, false, 0,false),
+			keyParam("pattern",XD_STRING,true,-1,false),
+			keyParam("whiteSpace", XD_STRING, false, -1, false,
+				new DefString("preserve"), new DefString("collapse"),
+				new DefString("replace")));
+		parser(im, org.xdef.impl.parsers.XSParseString.class,
+			"string", "?xs:string");
+		im = genParserMetnod(0, 2, new short[] {XD_LONG,XD_LONG},
+			XD_STRING,
+			keyParam("base", XD_STRING, true, -1,false),
+			keyParam("enumeration", XD_STRING, true, -1, false),
+			keyParam("length", XD_LONG, false,  -1, false),
+			keyParam("maxLength", XD_LONG, false,  1, false),
+			keyParam("minLength", XD_LONG, false,  0, false),
+			keyParam("pattern",XD_STRING,true,-1,false),
+			keyParam("whiteSpace", XD_STRING, false,  -1, false,
+				new DefString("replace"), new DefString("collapse")));
+		parser(im, org.xdef.impl.parsers.XSParseNormalizedString.class,
+			"normalizedString", "?xs:normalizedString"); //"?normString"
+		im = genParserMetnod(0, 2, new short[] {XD_LONG, XD_LONG}, XD_STRING,
+			keyParam("base", XD_STRING, true, -1,false),
+			keyParam("enumeration", XD_STRING, true, -1,false),
+			keyParam("length", XD_LONG, false, -1,false),
+			keyParam("maxLength", XD_LONG, false, 1,false),
+			keyParam("minLength", XD_LONG, false, 0,false),
+			keyParam("pattern",XD_STRING,true,-1,false),
+			keyParam("whiteSpace", XD_STRING, false,  -1, false,
+				new DefString("preserve"), new DefString("collapse"),
+				new DefString("replace")));
+		parser(im, org.xdef.impl.parsers.XDParseLetters.class, "letters");
+		parser(im, org.xdef.impl.parsers.XDParseAn.class, "an");
+		parser(im, org.xdef.impl.parsers.XDParseNum.class, "num");
+		parser(im, org.xdef.impl.parsers.XDParseCDATA.class, "CDATA");
+		parser(im, org.xdef.impl.parsers.XDParseJNumber.class, "jnumber");
+		parser(im, org.xdef.impl.parsers.XDParseJString.class, "jstring");
+		im = genParserMetnod(0, 0, null, XD_ANY,
+			keyParam("enumeration", XD_ANY, true, -1,false),
+			keyParam("pattern", XD_STRING, true, -1,false));
+		parser(im, org.xdef.impl.parsers.XDParseJValue.class, "jvalue");
+		im = genParserMetnod(0, 0, null, XD_ANY,
+			keyParam("enumeration", XD_ANY, true, -1,false),
+			keyParam("item", XD_PARSER, true, -1,false),
+			keyParam("pattern", XD_STRING, true, -1,false));
+		parser(im, org.xdef.impl.parsers.XSParseUnion.class,
+			"union", "?xs:union");
+		im = genParserMetnod(0, 1, new short[] {XD_PARSER}, XD_CONTAINER,
+			keyParam("base", XD_STRING, true, -1,false),
+			keyParam("enumeration", XD_STRING, true, -1,false),
+			keyParam("item", XD_PARSER, false, 0,false),
+			keyParam("length", XD_LONG, false, -1,false),
+			keyParam("maxLength", XD_LONG, false, -1,false),
+			keyParam("minLength", XD_LONG, false, -1,false),
+			keyParam("pattern", XD_STRING, true, -1,false),
+			keyParam("whiteSpace", XD_STRING, false, -1, true,
+				new DefString("collapse")));
+		parser(im, org.xdef.impl.parsers.XSParseList.class,
+			"list", "?xs:list");		
+		im = genParserMetnod(0, 2,
+			new short[] {XD_ANY, XD_ANY, XD_PARSER}, XD_CONTAINER,
+			keyParam("item", XD_PARSER, false, 2,false),
+			keyParam("length", XD_LONG, false, -1,false),
+			keyParam("maxLength", XD_LONG, false, 1,false),
+			keyParam("minLength", XD_LONG, false, 0,false),
+			keyParam("enumeration", XD_ANY, true, -1,false),
+			keyParam("pattern", XD_STRING, true, -1,false));
+		parser(im, org.xdef.impl.parsers.XDParseJList.class, "jlist");
 		im = genParserMetnod(0, 2, new short[] {XD_LONG, XD_LONG}, XD_CONTAINER,
 			keyParam("enumeration", XD_STRING, true, -1, false),
 			keyParam("length", XD_LONG, false,  -1, false),
@@ -800,87 +781,6 @@ public class CompileBase implements CodeTable, XDValueID {
 		parser(im, org.xdef.impl.parsers.XSParseNMTOKENS.class,
 			"NMTOKENS", "?xs:NMTOKENS");//"?normTokens", "?nmTokens"
 		parser(im, org.xdef.impl.parsers.XDParseCHKIDS.class, "CHKIDS");
-
-		im = genParserMetnod(0, 2, new short[] {XD_DURATION,XD_DURATION},
-			XD_DURATION,
-			keyParam("base", XD_STRING, true, -1,false),
-			keyParam("enumeration", XD_DURATION, true,-1,false),
-			keyParam("maxExclusive",XD_DURATION,false,-1,false),
-			keyParam("maxInclusive",XD_DURATION,false,1,false),
-			keyParam("minExclusive",XD_DURATION,false,-1,false),
-			keyParam("minInclusive",XD_DURATION,false,0,false),
-			keyParam("pattern",XD_STRING,true,-1,false),
-			keyParam("whiteSpace", XD_STRING, false, -1, true,
-				new DefString("collapse")));
-		parser(im, org.xdef.impl.parsers.XSParseDuration.class,
-			"duration", "?xs:duration");
-
-		im = genParserMetnod(0, 2, new short[] {XD_LONG, XD_LONG}, XD_BYTES,
-			keyParam("base", XD_STRING, true, -1,false),
-			keyParam("enumeration", XD_BYTES, true,  -1, false),
-			keyParam("length", XD_LONG, false,  -1, false),
-			keyParam("maxLength", XD_LONG, false,  1, false),
-			keyParam("minLength", XD_LONG, false,  0, false),
-			keyParam("pattern",XD_STRING,true,-1,false),
-			keyParam("whiteSpace", XD_STRING, false, -1, true,
-				new DefString("collapse")));
-		parser(im, org.xdef.impl.parsers.XSParseBase64Binary.class,
-			"base64Binary", "?xs:base64Binary", "?base64");
-		parser(im, org.xdef.impl.parsers.XSParseHexBinary.class,
-			"hexBinary", "?xs:hexBinary");
-		parser(im, org.xdef.impl.parsers.XDParseHex.class, "hex");
-
-		im = genParserMetnod(0, 1, new short[] {XD_PARSER}, XD_CONTAINER,
-			keyParam("base", XD_STRING, true, -1,false),
-			keyParam("enumeration", XD_STRING, true, -1,false),
-			keyParam("item", XD_PARSER, false, 0,false),
-			keyParam("length", XD_LONG, false, -1,false),
-			keyParam("maxLength", XD_LONG, false, -1,false),
-			keyParam("minLength", XD_LONG, false, -1,false),
-			keyParam("pattern", XD_STRING, true, -1,false),
-			keyParam("whiteSpace", XD_STRING, false, -1, true,
-				new DefString("collapse")));
-		parser(im, org.xdef.impl.parsers.XSParseList.class,
-			"list", "?xs:list");
-////////////////////////////////////////////////////////////////////////////////
-// X-Script parsers
-////////////////////////////////////////////////////////////////////////////////
-		im = genParserMetnod(0, 2, new short[] {XD_LONG, XD_LONG}, XD_STRING,
-			keyParam("enumeration", XD_ANY, true,  -1, false),
-			keyParam("item", XD_PARSER, true,  -1,false),
-			keyParam("length", XD_LONG, false,  -1, false),
-			keyParam("maxLength", XD_LONG, false,  1, false),
-			keyParam("minLength", XD_LONG, false,  0, false),
-			keyParam("pattern", XD_STRING, true,  -1, false),
-			keyParam("separator", XD_STRING, true, 0,false),
-			keyParam("whiteSpace", XD_STRING, false, -1, true,
-				new DefString("collapse")));
-		parser(im, org.xdef.impl.parsers.XDParseSequence.class,
-			"sequence"); //"?parseSequence"
-
-		im = genParserMetnod(0, 2, new short[]{XD_LONG, XD_LONG}, XD_DECIMAL,
-			keyParam("enumeration", XD_DECIMAL, true, -1,false),
-			keyParam("fractionDigits", XD_LONG,false,1,false),
-			keyParam("maxExclusive", XD_DECIMAL,false,-1,false),
-			keyParam("maxInclusive", XD_DECIMAL,false,-1,false),
-			keyParam("minExclusive", XD_DECIMAL,false,-1,false),
-			keyParam("minInclusive", XD_DECIMAL,false,-1,false),
-			keyParam("pattern",XD_STRING,true,-1,false),
-			keyParam("totalDigits", XD_LONG,false,0,false));
-		parser(im, org.xdef.impl.parsers.XDParseDec.class, "dec");
-
-		im = genParserMetnod(0, 0, null, XD_STRING,
-			keyParam("enumeration", XD_BYTES, true, -1,false),
-			keyParam("length", XD_LONG, false, -1, true,/*fixed*/
-				new DefLong(16)));
-		parser(im, org.xdef.impl.parsers.XDParseMD5.class, "MD5");
-
-		im = genParserMetnod(0, 0, null, XD_STRING,
-			keyParam("enumeration", XD_BYTES, true, -1,false),
-			keyParam("length", XD_LONG, false, -1, true,/*fixed*/
-				new DefLong(20)));
-		parser(im, org.xdef.impl.parsers.XDParseSHA1.class, "SHA1");
-
 		im = genParserMetnod(0, 1, new short[]{XD_ELEMENT}, XD_CONTAINER,
 			keyParam("enumeration", XD_STRING, true, -1,false),
 			keyParam("length", XD_LONG, false, -1,false),
@@ -897,19 +797,6 @@ public class CompileBase implements CodeTable, XDValueID {
 		parser(im, org.xdef.impl.parsers.XDParseLanguages.class,
 			"languages", "?ISOlanguages");
 		parser(im, org.xdef.impl.parsers.XDParseCountries.class, "countries");
-
-		im = genParserMetnod(0, 1, null, XD_STRING,
-			keyParam("argument", XD_ANY, true, 0,false),
-			keyParam("enumeration", XD_STRING, true, -1,false),
-			keyParam("length", XD_LONG, false, -1,false),
-			keyParam("maxLength", XD_LONG, false, -1,false),
-			keyParam("minLength", XD_LONG, false, -1,false),
-			keyParam("pattern",XD_STRING,true,-1,false),
-			keyParam("whiteSpace", XD_STRING, false, -1, true,
-				new DefString("collapse")));
-		parser(im, org.xdef.impl.parsers.XDParseQNameURI.class,
-			"QNameURI", "?QnameURI");
-
 		im = genParserMetnod(0, 1, new short[] {XD_STRING}, XD_CONTAINER,
 			keyParam("argument", XD_ANY, true, 1,false),
 				keyParam("enumeration", XD_STRING, true, -1,false),
@@ -921,25 +808,96 @@ public class CompileBase implements CodeTable, XDValueID {
 				keyParam("whiteSpace", XD_STRING, false, -1, true,
 					new DefString("collapse")));
 		parser(im, org.xdef.impl.parsers.XDParseQNameURIList.class,
-			"QNameURIList", "?QnameListURI"); //"?QnameURIList"
-
-		im = genParserMetnod(1, 2, new short[] {XD_STRING, XD_STRING},
-			XD_DATETIME,
-			keyParam("enumeration", XD_STRING, true, -1,false),
-			keyParam("format", XD_STRING, true, 0,false),
-			keyParam("length", XD_LONG, false, -1,false),
-			keyParam("maxLength", XD_LONG, false, -1,false),
-			keyParam("minLength", XD_LONG, false, -1,false),
-			keyParam("outFormat", XD_STRING, true, 1,false),
+			"QNameURIList", "?QnameListURI"); //"?QnameURIList"		
+		im = genParserMetnod(0, 2, new short[] {XD_DURATION,XD_DURATION},
+			XD_DURATION,
+			keyParam("base", XD_STRING, true, -1,false),
+			keyParam("enumeration", XD_DURATION, true,-1,false),
+			keyParam("maxExclusive",XD_DURATION,false,-1,false),
+			keyParam("maxInclusive",XD_DURATION,false,1,false),
+			keyParam("minExclusive",XD_DURATION,false,-1,false),
+			keyParam("minInclusive",XD_DURATION,false,0,false),
 			keyParam("pattern",XD_STRING,true,-1,false),
 			keyParam("whiteSpace", XD_STRING, false, -1, true,
 				new DefString("collapse")));
+		parser(im, org.xdef.impl.parsers.XSParseDuration.class,
+			"duration", "?xs:duration");
+		im = genParserMetnod(0, 2, new short[] {XD_LONG, XD_LONG}, XD_BYTES,
+			keyParam("base", XD_STRING, true, -1,false),
+			keyParam("enumeration", XD_BYTES, true,  -1, false),
+			keyParam("length", XD_LONG, false,  -1, false),
+			keyParam("maxLength", XD_LONG, false,  1, false),
+			keyParam("minLength", XD_LONG, false,  0, false),
+			keyParam("pattern",XD_STRING,true,-1,false),
+			keyParam("whiteSpace", XD_STRING, false, -1, true,
+				new DefString("collapse")));
+		parser(im, org.xdef.impl.parsers.XSParseBase64Binary.class,
+			"base64Binary", "?xs:base64Binary", "?base64");
+		parser(im, org.xdef.impl.parsers.XSParseHexBinary.class,
+			"hexBinary", "?xs:hexBinary");
+		parser(im, org.xdef.impl.parsers.XDParseHex.class, "hex");
+////////////////////////////////////////////////////////////////////////////////
+// X-Script parsers
+////////////////////////////////////////////////////////////////////////////////
+		im = genParserMetnod(0, 2, new short[] {XD_LONG, XD_LONG}, XD_STRING,
+			keyParam("pattern", XD_ANY, true,  -1, false),
+			keyParam("enumeration", XD_ANY, true,  -1, false),
+			keyParam("whiteSpace", XD_STRING, false, -1, true,
+				new DefString("collapse")),
+			keyParam("item", XD_PARSER, true,  -1,false),
+			keyParam("length", XD_LONG, false,  -1, false),
+			keyParam("maxLength", XD_LONG, false,  1, false),
+			keyParam("minLength", XD_LONG, false,  0, false),
+			keyParam("pattern", XD_STRING, true,  -1, false),
+			keyParam("separator", XD_STRING, true, 0,false));
+		parser(im, org.xdef.impl.parsers.XDParseSequence.class,
+			"sequence"); //"?parseSequence"
+		im = genParserMetnod(0, 2, new short[]{XD_LONG, XD_LONG}, XD_DECIMAL,
+			keyParam("enumeration", XD_DECIMAL, true, -1,false),
+			keyParam("fractionDigits", XD_LONG,false,1,false),
+			keyParam("maxExclusive", XD_DECIMAL,false,-1,false),
+			keyParam("maxInclusive", XD_DECIMAL,false,-1,false),
+			keyParam("minExclusive", XD_DECIMAL,false,-1,false),
+			keyParam("minInclusive", XD_DECIMAL,false,-1,false),
+			keyParam("pattern",XD_STRING,true,-1,false),
+			keyParam("totalDigits", XD_LONG,false,0,false));
+		parser(im, org.xdef.impl.parsers.XDParseDec.class, "dec");
+		im = genParserMetnod(0, 0, null, XD_STRING,
+			keyParam("enumeration", XD_BYTES, true, -1,false),
+			keyParam("length", XD_LONG, false, -1, true,/*fixed*/
+				new DefLong(16)));
+		parser(im, org.xdef.impl.parsers.XDParseMD5.class, "MD5");
+		im = genParserMetnod(0, 0, null, XD_STRING,
+			keyParam("enumeration", XD_BYTES, true, -1,false),
+			keyParam("length", XD_LONG, false, -1, true,/*fixed*/
+				new DefLong(20)));
+		parser(im, org.xdef.impl.parsers.XDParseSHA1.class, "SHA1");
+		im = genParserMetnod(0, 1, null, XD_STRING,
+			keyParam("argument", XD_ANY, true, 0,false),
+			keyParam("enumeration", XD_STRING, true, -1,false),
+			keyParam("length", XD_LONG, false, -1,false),
+			keyParam("maxLength", XD_LONG, false, -1,false),
+			keyParam("minLength", XD_LONG, false, -1,false),
+			keyParam("pattern",XD_STRING,true,-1,false),
+			keyParam("whiteSpace", XD_STRING, false, -1, true,
+				new DefString("collapse")));
+		parser(im, org.xdef.impl.parsers.XDParseQNameURI.class,
+			"QNameURI", "?QnameURI");
+		im = genParserMetnod(1, 2, new short[] {XD_STRING, XD_STRING},
+			XD_DATETIME,
+			keyParam("enumeration", XD_STRING, true, -1,false),
+			keyParam("length", XD_LONG, false, -1,false),
+			keyParam("maxLength", XD_LONG, false, -1,false),
+			keyParam("minLength", XD_LONG, false, -1,false),
+			keyParam("pattern",XD_STRING,true,-1,false),
+			keyParam("whiteSpace", XD_STRING, false, -1, true,
+				new DefString("collapse")),
+			keyParam("format", XD_STRING, true, 0,false),
+			keyParam("outFormat", XD_STRING, true, 1,false));
 		parser(im, org.xdef.impl.parsers.XDParseXDatetime.class,
 			"xdatetime", "?datetime");
-
 		im = genParserMetnod(0, 0, null, XD_STRING);
 		parser(im, org.xdef.impl.parsers.XDParseEmpty.class, "empty");
-
 		im = genParserMetnod(1, 1, new short[] {XD_STRING}, XD_STRING,
 			keyParam("argument", XD_STRING, false,  0, false));
 		parser(im, org.xdef.impl.parsers.XDParseEq.class, "eq");
@@ -952,17 +910,14 @@ public class CompileBase implements CodeTable, XDValueID {
 		parser(im, org.xdef.impl.parsers.XDParseContainsi.class, "containsi");
 		parser(im, org.xdef.impl.parsers.XDParsePic.class, "pic");
 		parser(im, org.xdef.impl.parsers.XDParseRegex.class, "regex");
-
 		im = genParserMetnod(1, Integer.MAX_VALUE, new short[] {XD_STRING},
 			XD_STRING, keyParam("argument", XD_CONTAINER, true,  0, false));
 		parser(im, org.xdef.impl.parsers.XDParseEnum.class, "enum");
 		parser(im, org.xdef.impl.parsers.XDParseEnumi.class, "enumi");
-
 		im = genParserMetnod(1, 2, new short[] {XD_ANY, XD_STRING},
 			XD_STRING, keyParam("a2", XD_ANY, true, 1, false),
 			keyParam("a1", XD_ANY, true, 0, false));
 		parser(im, org.xdef.impl.parsers.XDParseBNF.class, "BNF");
-
 		im = genParserMetnod(0, 0, new short[] {XD_PARSER}, XD_STRING);
 		parser(im,org.xdef.impl.parsers.XDParseEmailAddr.class,
 			"emailAddr", "?email");
@@ -976,6 +931,7 @@ public class CompileBase implements CodeTable, XDValueID {
 		parser(im,org.xdef.impl.parsers.XDParseUrl.class, "url");
 		parser(im,org.xdef.impl.parsers.XDParseUrlList.class, "urlList");
 		parser(im,org.xdef.impl.parsers.XDParseDomainAddr.class, "domainAddr");
+
 ////////////////////////////////////////////////////////////////////////////////
 // implemented methods
 ////////////////////////////////////////////////////////////////////////////////
@@ -1807,19 +1763,6 @@ public class CompileBase implements CodeTable, XDValueID {
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
-
-	/** Set type parameters.
-	 * @param type type ID (see org.xdef.XDValueID).
-	 * @param name the name of type used in script.
-	 * @param clazz the class rep[resenting the type.
-	 * @param typeCodeAbbr the abbreviation used in code display.
-	 */
-	private static void setType(final short type,
-		final String name,
-		final Class<?> clazz) {
-		TYPECLASSES[type] = clazz;
-		TYPENAMES[type] = name;
-	}
 
 	/** Register parser.
 	 * @param im Internal method object.
