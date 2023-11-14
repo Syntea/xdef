@@ -12,8 +12,10 @@ import org.w3c.dom.Node;
 import org.xdef.XDConstants;
 import org.xdef.XDContainer;
 import org.xdef.XDEmailAddr;
+import org.xdef.XDParseResult;
 import org.xdef.XDValue;
-import org.xdef.XDValueID;
+import static org.xdef.XDValueID.XD_ELEMENT;
+import static org.xdef.XDValueID.XX_ELEMENT;
 import org.xdef.impl.ChkNode;
 import org.xdef.impl.code.DefBigInteger;
 import org.xdef.impl.code.DefBoolean;
@@ -410,7 +412,9 @@ public final class XExtUtils {
 	public final static void cancel() {
 		throw new SError(Report.error(XDEF.XDEF906)); //X-definition canceled
 	}
-	/** Cancel running X-definition process and throw message. */
+	/** Cancel running X-definition process and throw message.
+	 * @param msg reason of cancelling.
+	 */
 	public final static void cancel(final String msg) {
 		 //X-definition canceled&{0}{; }
 		throw new SError(Report.error(XDEF.XDEF906, msg));
@@ -444,7 +448,7 @@ public final class XExtUtils {
 	}
 	public final static Element getParentContextElement(final XXElement xElem) {
 		XDValue val = ((XXElement) xElem.getParent()).getXDContext();
-		if (val == null || val.getItemId() != XDValueID.XD_ELEMENT) {
+		if (val == null || val.getItemId() != XD_ELEMENT) {
 			return null;
 		}
 		return val.getElement();
@@ -457,15 +461,14 @@ public final class XExtUtils {
 		XXNode xel = xElem;
 		for (int i = 0; i < level; i++) {
 			xel = xel.getParent();
-			if (xel == null ||
-				xel.getItemId() != XDValueID.XX_ELEMENT) {
+			if (xel == null || xel.getItemId() != XX_ELEMENT) {
 				xel = null;
 				break;
 			}
 		}
 		if (xel != null) {
 			XDValue val = ((XXElement) xel).getXDContext();
-			if (val != null && val.getItemId() == XDValueID.XD_ELEMENT){
+			if (val != null && val.getItemId() == XD_ELEMENT){
 				return val.getElement();
 			}
 		}
@@ -474,7 +477,7 @@ public final class XExtUtils {
 	public final static XDContainer fromParent(final XXElement xElem,
 		final String expr){
 		XDValue val = xElem.getParent().getXDContext();
-		if (val == null || val.getItemId() != XDValueID.XD_ELEMENT) {
+		if (val == null || val.getItemId() != XD_ELEMENT) {
 			return new DefContainer();
 		}
 		Element el = val.getElement();
@@ -491,7 +494,7 @@ public final class XExtUtils {
 	public final static XDContainer fromRoot(final XXNode xElem,
 		final String expr) {
 		XDValue val = xElem.getXDDocument().getXDContext();
-		if (val == null || val.getItemId() != XDValueID.XD_ELEMENT) {
+		if (val == null || val.getItemId() != XD_ELEMENT) {
 			return new DefContainer();
 		}
 		Element elem = val.getElement();
@@ -519,9 +522,23 @@ public final class XExtUtils {
 		final Element elem) {
 		return fromRoot(xElem, expr, elem);
 	}
-
 ////////////////////////////////////////////////////////////////////////////////
-// datetime
+// PARSERESULT
+////////////////////////////////////////////////////////////////////////////////
+	public final static void clearReports(final XDParseResult x) {
+		x.clearReports();
+	}
+	public final static String getSource(final XDParseResult x) {
+		return x.getSourceBuffer();
+	}
+	public final static boolean isSpaces(final XDParseResult x) {
+		return x.isSpaces();
+	}
+	public final static boolean isToken(final XDParseResult x, final XDValue y){
+		return x.isToken(y.stringValue());
+	}
+////////////////////////////////////////////////////////////////////////////////
+// dateTime
 ////////////////////////////////////////////////////////////////////////////////
 	public final static int getMaxYear(XXNode xnode) {
 		return xnode.getXDPool().getMaxYear();

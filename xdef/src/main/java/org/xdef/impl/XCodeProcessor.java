@@ -332,7 +332,6 @@ import static org.xdef.impl.code.CodeTable.PARSERESULT_MATCH;
 import static org.xdef.impl.code.CodeTable.PARSE_DATE;
 import static org.xdef.impl.code.CodeTable.PARSE_DURATION;
 import static org.xdef.impl.code.CodeTable.PARSE_OP;
-import static org.xdef.impl.code.CodeTable.PARSE_STRING;
 import static org.xdef.impl.code.CodeTable.PARSE_XML;
 import static org.xdef.impl.code.CodeTable.POP_OP;
 import static org.xdef.impl.code.CodeTable.PRICE_AMOUNT;
@@ -1090,7 +1089,8 @@ public final class XCodeProcessor {
 					continue;
 				}
 				case LD_XMODEL: { // load xmodel variable
-					XDValue v = chkNode.loadModelVariable(item.stringValue());
+					XDValue v = chkNode == null
+						? null  : chkNode.loadModelVariable(item.stringValue());
 					_stack[++sp] = v != null ? v : new DefNull();
 					continue;
 				}
@@ -1936,10 +1936,11 @@ public final class XCodeProcessor {
 						Double.parseDouble(_stack[sp].toString());
 						_stack[sp] = new DefBoolean(true);
 						continue;
-					} catch (Exception ex) {
+					} catch (NumberFormatException ex) {
 						_stack[sp] = new DefBoolean(false);
 						continue;
 					}
+
 				case IS_DATETIME:
 					if (item.getParam() == 1) {
 						_textParser.setSourceBuffer(_stack[sp].stringValue());
@@ -3061,20 +3062,24 @@ public final class XCodeProcessor {
 					continue;
 				}
 				case GET_ITEM: {
-					Object obj = chkNode.getCreateContext();
-					Element e = (obj != null && (obj instanceof Element)) ?
-						(Element) obj : chkNode.getElemValue();
 					String t;
-					if (e == null) {
+					if (chkNode == null) {
 						t = null;
 					} else {
-						String s = _stack[sp].toString();
-						if (s.startsWith("@")) {
-							s = s.substring(1);
-						}
-						t = e.getAttribute(s);
-						if (t.length() == 0 && !e.hasAttribute(s)) {
+						Object obj = chkNode.getCreateContext();
+						Element e = (obj != null && (obj instanceof Element)) ?
+							(Element) obj : chkNode.getElemValue();
+						if (e == null) {
 							t = null;
+						} else {
+							String s = _stack[sp].toString();
+							if (s.startsWith("@")) {
+								s = s.substring(1);
+							}
+							t = e.getAttribute(s);
+							if (t.length() == 0 && !e.hasAttribute(s)) {
+								t = null;
+							}
 						}
 					}
 					_stack[sp] = new DefString(t);
@@ -3334,15 +3339,7 @@ public final class XCodeProcessor {
 						((XDParser) _stack[sp]).check(chkNode, s).matches());
 					continue;
 				}
-				case PARSE_STRING: {
-					String s = _stack[sp--].toString();
-					XDParseResult result =
-						((XDParser) _stack[sp]).check(chkNode, s);
-					_stack[sp] = result.matches()
-						? result.getParsedValue()
-						: DefNull.genNullValue(XD_ANY);
-					continue;
-				}
+//				case UNUSEDCODE: 
 				case PARSERESULT_MATCH:
 					_stack[sp] =
 						new DefBoolean(((XDParseResult)_stack[sp]).matches());
@@ -3950,9 +3947,9 @@ public final class XCodeProcessor {
 			}
 		}
 		java.io.ByteArrayOutputStream bs = new java.io.ByteArrayOutputStream();
-		java.io.PrintStream ps = new java.io.PrintStream(bs);
-		org.xdef.impl.code.CodeDisplay.displayCode(_code, ps, pc - 4, pc + 1);
-		ps.close();
+		try (java.io.PrintStream ps = new java.io.PrintStream(bs)) {
+			org.xdef.impl.code.CodeDisplay.displayCode(_code, ps, pc-4, pc+1);
+		}
 		if (!bs.toString().isEmpty()) {
 			s += "\nCODE:\n" + (pc-4 < 0 ? "...\n" : "") + bs.toString();
 			s += (pc + 1 < _code.length ? "..." : "") + '\n';
