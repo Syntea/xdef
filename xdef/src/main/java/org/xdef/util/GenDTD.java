@@ -40,7 +40,7 @@ public class GenDTD {
 	/** HashMap which prevents repeated declaration of elements */
 	private Set<String> _defElems;
 
-	/** Creates a new instance of TestGenDTD */
+	/** Creates a new instance of DTD */
 	private GenDTD(final OutputStreamWriter out) {_out = out;}
 
 	/** Generate DTD from list of input definitions
