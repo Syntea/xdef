@@ -202,10 +202,10 @@ public final class CompileCode extends CompileBase {
 	private final static int STACK_SIZE = 512; //20 for tests is enough!
 	/** The parser (just for error reporting). */
 	XScriptParser _parser;
-	/** Mode of compilation:<br/>
+	/** *  Mode of compilation:<br/>
 	 * NO_MODE ... no mode<br/>
 	 * TEXT_MODE ... text events<br/>
-	 * ELEMENT_MODE ... element events<br/>
+ ELEM_MODE ... element events<br/>
 	 * GLOBAL_MODE ... global definitions<br/>
 	 * ANY_MODE ... all modes
 	 */

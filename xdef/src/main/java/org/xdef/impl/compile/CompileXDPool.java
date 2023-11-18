@@ -1120,8 +1120,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						pnode._xdVersion,
 						pnode._nsPrefixes, pnode._xpathPos);
 					_scriptCompiler.nextSymbol();
-					newNode.setInitCode(_scriptCompiler.compileSection(
-						CompileBase.ELEMENT_MODE,
+					newNode.setInitCode(_scriptCompiler.compileSection(CompileBase.ELEM_MODE,
 						XD_VOID,
 						XScriptParser.INIT_SYM));
 				}
@@ -1157,8 +1156,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						pnode._xdVersion,
 						pnode._nsPrefixes, pnode._xpathPos);
 					_scriptCompiler.nextSymbol();
-					newNode.setFinallyCode(_scriptCompiler.compileSection(
-						CompileBase.ELEMENT_MODE,
+					newNode.setFinallyCode(_scriptCompiler.compileSection(CompileBase.ELEM_MODE,
 						XD_VOID,
 						XScriptParser.FINALLY_SYM));
 				}
@@ -1172,7 +1170,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						pnode._nsPrefixes, pnode._xpathPos);
 					_scriptCompiler.nextSymbol();
 					newNode.setComposeCode(
-						_scriptCompiler.compileSection(CompileBase.ELEMENT_MODE,
+						_scriptCompiler.compileSection(CompileBase.ELEM_MODE,
 						XD_ANY,
 						XScriptParser.CREATE_SYM));
 				}
@@ -1185,8 +1183,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						pnode._xdVersion,
 						pnode._nsPrefixes, pnode._xpathPos);
 					_scriptCompiler.nextSymbol();
-					newNode.setMatchCode(_scriptCompiler.compileSection(
-						CompileBase.ELEMENT_MODE,
+					newNode.setMatchCode(_scriptCompiler.compileSection(CompileBase.ELEM_MODE,
 						XD_BOOLEAN,
 						XScriptParser.MATCH_SYM));
 				}

@@ -1126,7 +1126,9 @@ public final class Test001  extends XDTester {
 "  <C c='wsdl:125'/>\n" +
 "</root>";
 			xp = XDFactory.compileXD(null, xdef);
-			assertEq(xml, parse(xp, "Example", xml, reporter));
+			assertEq("<root><B b='123'/><B b='125'/><C c='123'/><C c='124'/>"+
+				"<C c='wsdx:125'/><C c='125'/></root>",
+				parse(xp, "Example", xml, reporter));
 			assertEq(2, reporter.getErrorCount());
 		} catch (RuntimeException ex) {fail(ex);}
 		try {

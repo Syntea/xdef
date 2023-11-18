@@ -408,7 +408,7 @@ final class CompileXScript extends CompileStatement {
 						error(XDEF.XDEF422); //Duplicated script section
 					}
 					sc._onIllegalAttr =
-						compileSection(CompileBase.ELEMENT_MODE,XD_VOID, sym);
+						compileSection(CompileBase.ELEM_MODE,XD_VOID, sym);
 					continue;
 				case CREATE_SYM:
 					if (sc._compose != -1) {
@@ -757,14 +757,14 @@ final class CompileXScript extends CompileStatement {
 						error(XDEF.XDEF422); //Duplicated script section
 					}
 					xel._onAbsence =
-						compileSection(CompileBase.ELEMENT_MODE, XD_VOID, sym);
+						compileSection(CompileBase.ELEM_MODE, XD_VOID, sym);
 					continue;
 				case CREATE_SYM:
 					if (xel._compose != -1) {
 						error(XDEF.XDEF422); //Duplicated script section
 					}
 					xel._compose =
-						compileSection(CompileBase.ELEMENT_MODE, XD_ANY, sym);
+						compileSection(CompileBase.ELEM_MODE, XD_ANY, sym);
 					continue;
 				case INIT_SYM:
 					if (xel._init != -1) {
@@ -772,7 +772,7 @@ final class CompileXScript extends CompileStatement {
 					}
 					_g._allowBindSet = true; // allow bindSet method
 					xel._init =
-						compileSection(CompileBase.ELEMENT_MODE, XD_VOID, sym);
+						compileSection(CompileBase.ELEM_MODE, XD_VOID, sym);
 					_g._allowBindSet = false;
 					continue;
 				case ON_EXCESS_SYM:
@@ -780,20 +780,20 @@ final class CompileXScript extends CompileStatement {
 						error(XDEF.XDEF422); //Duplicated script section
 					}
 					xel._onExcess =
-						compileSection(CompileBase.ELEMENT_MODE, XD_VOID, sym);
+						compileSection(CompileBase.ELEM_MODE, XD_VOID, sym);
 					continue;
 				case ON_START_ELEMENT_SYM:
 					if (xel._onStartElement != -1) {
 						error(XDEF.XDEF422); //Duplicated script section
 					}
 					xel._onStartElement =
-						compileSection(CompileBase.ELEMENT_MODE, XD_VOID, sym);
+						compileSection(CompileBase.ELEM_MODE, XD_VOID, sym);
 					continue;
 				case MATCH_SYM:
 					if (xel._match != -1) {
 						error(XDEF.XDEF422); //Duplicated script section
 					}
-					xel._match = compileSection(CompileBase.ELEMENT_MODE,
+					xel._match = compileSection(CompileBase.ELEM_MODE,
 						XD_BOOLEAN, sym);
 					continue;
 				case ON_ILLEGAL_ATTR_SYM:
@@ -801,21 +801,21 @@ final class CompileXScript extends CompileStatement {
 						error(XDEF.XDEF422); //Duplicated script section
 					}
 					xel._onIllegalAttr =
-						compileSection(CompileBase.ELEMENT_MODE, XD_VOID, sym);
+						compileSection(CompileBase.ELEM_MODE, XD_VOID, sym);
 					continue;
 				case ON_ILLEGAL_TEXT_SYM:
 					if (xel._onIllegalText != -1) {
 						error(XDEF.XDEF422); //Duplicated script section
 					}
 					xel._onIllegalText =
-						compileSection(CompileBase.ELEMENT_MODE, XD_VOID, sym);
+						compileSection(CompileBase.ELEM_MODE, XD_VOID, sym);
 					continue;
 				case ON_ILLEGAL_ELEMENT_SYM:
 					if (xel._onIllegalElement != -1) {
 						error(XDEF.XDEF422); //Duplicated script section
 					}
 					xel._onIllegalElement =
-						compileSection(CompileBase.ELEMENT_MODE, XD_VOID, sym);
+						compileSection(CompileBase.ELEM_MODE, XD_VOID, sym);
 					continue;
 				case REF_SYM:
 					if (wasRef) {
@@ -856,7 +856,7 @@ final class CompileXScript extends CompileStatement {
 						error(XDEF.XDEF422); //Duplicated script section
 					}
 					xel._finaly =
-						compileSection(CompileBase.ELEMENT_MODE, XD_VOID, sym);
+						compileSection(CompileBase.ELEM_MODE, XD_VOID, sym);
 					continue;
 				case FORGET_SYM:
 					if (xel._forget != 0) {
@@ -887,7 +887,7 @@ final class CompileXScript extends CompileStatement {
 	}
 
 	/** Compile script Section or action.
-	 * @param mode mode (ELEMENT_MODE, TEXT_MODE, ...)
+	 * @param mode mode (ELEM_MODE, TEXT_MODE, ...)
 	 * @param returnType expected type of result.
 	 * @param section the symbol ID of the section.
 	 * @return address of generated code or -2 if an error occurred.
@@ -1018,35 +1018,35 @@ final class CompileXScript extends CompileStatement {
 					if (sc.getMatchCode() != -1) {
 						error(XDEF.XDEF422); //Duplicated script section
 					}
-					sc.setMatchCode(compileSection(CompileBase.ELEMENT_MODE,
+					sc.setMatchCode(compileSection(CompileBase.ELEM_MODE,
 						XD_BOOLEAN, sym));
 				continue;
 				case INIT_SYM:
 					if (sc.getInitCode() != -1) {
 						error(XDEF.XDEF422); //Duplicated script section
 					}
-					sc.setInitCode(compileSection(CompileBase.ELEMENT_MODE,
+					sc.setInitCode(compileSection(CompileBase.ELEM_MODE,
 						XD_VOID, sym));
 					continue;
 				case ON_ABSENCE_SYM:
 					if (sc.getOnAbsenceCode() != -1) {
 						error(XDEF.XDEF422); //Duplicated script section
 					}
-					sc.setOnAbsenceCode(compileSection(CompileBase.ELEMENT_MODE,
+					sc.setOnAbsenceCode(compileSection(CompileBase.ELEM_MODE,
 						XD_VOID, sym));
 					continue;
 				case ON_EXCESS_SYM:
 					if (sc.getOnExcessCode() != -1) {
 						error(XDEF.XDEF422); //Duplicated script section
 					}
-					sc.setOnExcessCode(compileSection(CompileBase.ELEMENT_MODE,
+					sc.setOnExcessCode(compileSection(CompileBase.ELEM_MODE,
 						XD_VOID, sym));
 					continue;
 				case CREATE_SYM:
 					if (sc.getComposeCode() != -1) {
 						error(XDEF.XDEF422); //Duplicated script section
 					}
-					sc.setComposeCode(compileSection(CompileBase.ELEMENT_MODE,
+					sc.setComposeCode(compileSection(CompileBase.ELEM_MODE,
 						XD_ANY, sym));
 					continue;
 				case REF_SYM:
@@ -1059,7 +1059,7 @@ final class CompileXScript extends CompileStatement {
 					if (sc.getFinallyCode() != -1) {
 						error(XDEF.XDEF422); //Duplicated script section
 					}
-					sc.setFinallyCode(compileSection(CompileBase.ELEMENT_MODE,
+					sc.setFinallyCode(compileSection(CompileBase.ELEM_MODE,
 						XD_VOID, sym));
 					continue;
 				default:

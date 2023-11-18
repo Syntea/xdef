@@ -3339,7 +3339,7 @@ public final class XCodeProcessor {
 						((XDParser) _stack[sp]).check(chkNode, s).matches());
 					continue;
 				}
-//				case UNUSEDCODE: 
+//				case UNUSEDCODE:
 				case PARSERESULT_MATCH:
 					_stack[sp] =
 						new DefBoolean(((XDParseResult)_stack[sp]).matches());

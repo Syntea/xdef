@@ -269,7 +269,7 @@ public final class TestScript extends XDTester {
 		Element el;
 		XComponent xc;
 		XDPool xp;
-		
+
 		setDebug(true);
 		_printCode = true;
 		_printCode = false;
