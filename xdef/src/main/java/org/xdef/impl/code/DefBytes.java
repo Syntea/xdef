@@ -15,6 +15,7 @@ import java.io.StringWriter;
 import java.util.Arrays;
 import static org.xdef.XDValueID.XD_BYTES;
 import org.xdef.XDValueType;
+import static org.xdef.XDValueType.BYTES;
 
 /** The class DefBytes implements the internal object with byte array.
  * @author Vaclav Trojan
@@ -218,7 +219,7 @@ public final class DefBytes extends XDValueAbstract implements XDBytes {
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
-	public XDValueType getItemType() {return XDValueType.BYTES;}
+	public XDValueType getItemType() {return BYTES;}
 	@Override
 	/** Get object representing value */
 	public byte[] getBytes() {return _value;}
