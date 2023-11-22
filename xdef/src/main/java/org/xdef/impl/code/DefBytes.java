@@ -13,7 +13,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Arrays;
-import org.xdef.XDValueID;
 import static org.xdef.XDValueID.XD_BYTES;
 import org.xdef.XDValueType;
 
@@ -214,7 +213,7 @@ public final class DefBytes extends XDValueAbstract implements XDBytes {
 	/** Get type of value.
 	 * @return The id of item type.
 	 */
-	public short getItemId() {return XDValueID.XD_BYTES;}
+	public short getItemId() {return XD_BYTES;}
 	@Override
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
@@ -228,7 +227,7 @@ public final class DefBytes extends XDValueAbstract implements XDBytes {
 	 * @return string with hexadecimal created from value.
 	 */
 	public String toString() {
-		return _value == null ? "" : _format ? getBase64() :getHex();
+		return _value == null ? "" : _format ? getBase64() : getHex();
 	}
 	@Override
 	/** Get string in Base64 format of value of this object.
@@ -257,6 +256,9 @@ public final class DefBytes extends XDValueAbstract implements XDBytes {
 	public boolean equals(final Object arg) {
 		if (arg instanceof XDValue) {
 			return equals((XDValue) arg);
+		}
+		if (arg instanceof byte[]) {
+			return Arrays.equals(_value, (byte[]) arg);
 		}
 		return false;
 	}
