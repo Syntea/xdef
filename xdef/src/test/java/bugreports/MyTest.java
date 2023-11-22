@@ -1,5 +1,6 @@
 package bugreports;
 
+import java.util.List;
 import org.w3c.dom.Element;
 import org.xdef.XDConstants;
 import org.xdef.XDDocument;
@@ -95,12 +96,51 @@ public class MyTest extends XDTester {
 ////////////////////////////////////////////////////////////////////////////////
 
 		Element el;
-		Object j;
-		String json, s, xdef, xml;
+		Object x,y,j;
+		String json, xon, s, xdef, xml;
 		XDDocument xd;
 		XDPool xp;
 		XComponent xc;
 		ArrayReporter reporter = new ArrayReporter();
+		List list;
+/**
+		try {
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root = \"A\">\n" +
+"  <xd:component>%class bugreports.Hex %link #A;</xd:component>\n" +
+"<xd:xon name=\"A\">\n" +
+"  [ \"base64Binary()\", \"hexBinary()\" ]\n" +
+"</xd:xon>\n" +
+"</xd:def>";
+			xp = XDFactory.compileXD(null, xdef);
+//			xp = compile(xdef);
+			// generate and compile XComponents from xp
+			assertNoErrors(genXComponent(xp, clearTempDir()));
+
+			xon = "[ b(FF00), x(FF00) ]";
+			x = XonUtils.parseXON(xon);
+list = (List) x;
+System.out.println(list.get(0).getClass() + "," + list.get(1).getClass());
+System.out.println(XonUtils.toXonString(x, true));
+			xd = xp.createXDDocument();
+			xd.jparse(xon, reporter);
+			y = xd.getXon();
+list = (List) y;
+System.out.println(list.get(0) + "," + list.get(1));
+System.out.println(XonUtils.toXonString(y, true));
+			assertTrue(XonUtils.xonEqual(x,y));
+			assertNoErrorsAndClear(reporter);
+			xd = xp.createXDDocument();
+			xc = xd.jparseXComponent(xon, null, reporter);
+			assertNoErrorsAndClear(reporter);
+			y = xc.toXon();
+list = (List) y;
+System.out.println(list.get(0) + "," + list.get(1));
+System.out.println(XonUtils.toXonString(y, true));
+			assertTrue(XonUtils.xonEqual(x,y));
+		} catch (Exception ex) {fail(ex); reporter.clear();}
+		clearTempDir();
+if(true) return;
 /**/
 		try {// test %anyName in map
 			xdef =
@@ -192,8 +232,9 @@ public class MyTest extends XDTester {
 				XonUtils.toXonString(o, true));
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
-		System.setProperty(XConstants.XDPROPERTY_XDEF_DBGSWITCHES, "");
+//if(true)return;
 //if(T)return;
+		System.setProperty(XConstants.XDPROPERTY_XDEF_DBGSWITCHES, "");
 /*xx*/
 		try {
 			xdef =
@@ -218,17 +259,18 @@ public class MyTest extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
 "<xd:declaration>\n"+
-"    type x list(xdatetime('y-M-d'));\n" +
-"    type y list(xdatetime('y-M-d', 'yyyyMMdd'));\n" +
+"    type y list(%length=3, %item=xdatetime('y-M-d', 'yyyyMMdd'));\n" +
 "</xd:declaration>\n"+
 "  <A a='? y();'></A>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xd = xp.createXDDocument();
-			xml = "<A a=' 2022-5-8   2022-5-11 '></A>";
-			assertEq("<A a='20220508 20220511'></A>", parse(xd, xml, reporter));
+			xml = "<A a=' 2022-5-8   2022-5-11 2020-1-2 '></A>";
+			assertEq("<A a='20220508 20220511 20200102'></A>",
+				parse(xd, xml, reporter));
 			assertNoErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
+//if(true)return;
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
@@ -266,7 +308,6 @@ public class MyTest extends XDTester {
 "</xd:xon>\n"+
 "<x>\n"+
 "  <a xd:script='*'>\n"+
-//"    jlist(%item=union(%item=[jnull,boolean(), int, string]))\n"+
 "    jlist(%item=jvalue())\n"+
 "  </a>\n"+
 "  <b xd:script='*'>\n"+
@@ -405,7 +446,7 @@ public class MyTest extends XDTester {
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrorwarnings(reporter);
 		} catch (Exception ex) {fail(ex);}
-if(true)return;
+//if(true)return;
 		try {
 			// \p{Lu} capital letters
 			// \p{Ll} small letters

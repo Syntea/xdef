@@ -1,21 +1,12 @@
 package org.xdef.xon;
 
-import java.io.File;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.net.InetAddress;
-import java.net.URI;
 import java.util.Arrays;
-import java.util.Currency;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.xdef.XDValue;
-import org.xdef.msg.JSON;
-import org.xdef.sys.GPSPosition;
-import org.xdef.sys.Price;
-import org.xdef.sys.SDatetime;
-import org.xdef.sys.SDuration;
 import org.xdef.sys.SRuntimeException;
 
 /** Provides comparing of XON objects
@@ -230,43 +221,20 @@ final class XonCompare {
 		} else if (o1 instanceof Map) {
 			return o2 instanceof Map ? equalMap((Map)o1, (Map)o2) : false;
 		} else if (o1 instanceof List) {
-			return o2 instanceof List ? equalArray((List) o1, (List) o2) :false;
-		} else if (o1 instanceof String) {
-			return ((String) o1).equals(o2);
+			return o2 instanceof List ? equalArray((List) o1,(List) o2) : false;
 		} else if (o1 instanceof Number) {
-			return (o2 instanceof Number)
+			return o2 instanceof Number
 				? equalNumber((Number) o1, (Number) o2) : false;
-		} else if (o1 instanceof Boolean) {
-			return ((Boolean) o1).equals(o2);
-		} else if (o1 instanceof Character) {
-			return ((Character) o1).equals(o2);
-		} else if (o1 instanceof SDatetime) {
-			return ((SDatetime) o1).equals(o2);
-		} else if (o1 instanceof SDuration) {
-			return ((SDuration) o1).equals(o2);
-		} else if (o1 instanceof GPSPosition) {
-			return (o2 == null || !(o2 instanceof GPSPosition))
-				? false : o1.equals(o2);
-//			return ((GPSPosition) o1).equals(o2);
-		} else if (o1 instanceof Price) {
-			return ((Price) o1).equals(o2);
-		} else if (o1 instanceof File) {
-			return ((File) o1).equals(o2);
-		} else if (o1 instanceof Currency) {
-			return ((Currency) o1).equals(o2);
-		} else if (o1 instanceof InetAddress) {
-			return ((InetAddress) o1).equals(o2);
-		} else if (o1 instanceof URI) {
-			return ((URI) o1).equals(o2);
-		} else if (o1 instanceof XDValue) {
-			return o2 != null && o2 instanceof XDValue
-				? ((XDValue) o1).equals((XDValue) o2) : false;
+		} else if (o1 instanceof byte[]) {
+			if (o2 instanceof byte[]) {
+				return Arrays.equals((byte[]) o1, (byte[]) o2);
+			} else if (o2 instanceof XDValue) {
+				return o2.equals(o1);
+			} else {
+				return false;
+			}
+		} else {
+			return o1.equals(o2);
 		}
-		try {
-			byte[] b1 = (byte[]) o1;
-			byte[] b2 = (byte[]) o2;
-			return Arrays.equals(b2, b1);
-		} catch (Exception ex) {}
-		return o1.equals(o2);
 	}
 }
