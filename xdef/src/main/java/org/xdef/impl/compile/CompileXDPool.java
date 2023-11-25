@@ -849,25 +849,27 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					continue;
 				}
 				String nodeName = nodei._localName;
-				if ("lexicon".equals(nodeName)) {
-					_lexicon.add(nodei);
-				} else if ("thesaurus".equals(nodeName)) {
-					reportDeprecated(nodei._name,"\"thesaurus\"","\"lexicon\"");
-					_lexicon.add(nodei);
-				} else if ("BNFGrammar".equals(nodeName)) {
-					_listBNF.add(0, nodei);
-				} else if ("component".equals(nodeName)) {
-					if (nodei._value != null
-						&& nodei._value.getString().trim().length() > 0) {
-						_listComponent.add(0, nodei); // not empty
-					}
-				} else if ("declaration".equals(nodeName)) { // declaration
-					if (nodei._value != null
-						&& nodei._value.getString().length() > 0) {
-						_listDecl.add(0, nodei); // not empty
-					}
-				} else  {
-					continue; // other elements (e.g. macro,eny,choice,json...)
+				switch (nodeName) {
+					case "lexicon": _lexicon.add(nodei); break;
+					case "thesaurus":
+						reportDeprecated(nodei._name,
+							"\"thesaurus\"","\"lexicon\"");
+						_lexicon.add(nodei);
+						break;
+					case "BNFGrammar": _listBNF.add(0, nodei); break;
+					case "component":
+						if (nodei._value != null
+							&& nodei._value.getString().trim().length() > 0) {
+							_listComponent.add(0, nodei); // not empty
+						}
+						break;
+					case "declaration":
+						if (nodei._value != null
+							&& nodei._value.getString().length() > 0) {
+							_listDecl.add(0, nodei); // not empty
+						}
+						break;
+					default: continue;
 				}
 				nodei._xdef = def._xdef;
 				// remove this node from the X-definition PNode
@@ -1120,7 +1122,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						pnode._xdVersion,
 						pnode._nsPrefixes, pnode._xpathPos);
 					_scriptCompiler.nextSymbol();
-					newNode.setInitCode(_scriptCompiler.compileSection(CompileBase.ELEM_MODE,
+					newNode.setInitCode(
+						_scriptCompiler.compileSection(CompileBase.ELEM_MODE,
 						XD_VOID,
 						XScriptParser.INIT_SYM));
 				}
@@ -1156,7 +1159,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						pnode._xdVersion,
 						pnode._nsPrefixes, pnode._xpathPos);
 					_scriptCompiler.nextSymbol();
-					newNode.setFinallyCode(_scriptCompiler.compileSection(CompileBase.ELEM_MODE,
+					newNode.setFinallyCode(
+						_scriptCompiler.compileSection(CompileBase.ELEM_MODE,
 						XD_VOID,
 						XScriptParser.FINALLY_SYM));
 				}
@@ -1183,7 +1187,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						pnode._xdVersion,
 						pnode._nsPrefixes, pnode._xpathPos);
 					_scriptCompiler.nextSymbol();
-					newNode.setMatchCode(_scriptCompiler.compileSection(CompileBase.ELEM_MODE,
+					newNode.setMatchCode(
+						_scriptCompiler.compileSection(CompileBase.ELEM_MODE,
 						XD_BOOLEAN,
 						XScriptParser.MATCH_SYM));
 				}
@@ -1387,33 +1392,56 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		if (parentKind == XNode.XMELEMENT
 			&& (xel = (XElement) parentNode)._template) {
 			if (pnode._nsindex == XPreCompiler.NS_XDEF_INDEX) {
-				if ("text".equals(pnode._localName)) {
-					_precomp.chkNestedElements(pnode);
-					sval = pnode._value;
-					if (xel._trimText == 'T' || xel._textWhiteSpaces == 'T') {
-						if (sval.getString().trim().length() == 0) {
-							return;
+				switch (pnode._localName) {
+					case "text": {
+						_precomp.chkNestedElements(pnode);
+						sval = pnode._value;
+						if (xel._trimText == 'T' || xel._textWhiteSpaces == 'T') {
+							if (sval.getString().trim().length() == 0) {
+								return;
+							}
 						}
-					}
-					XData xtxt = new XData("$text",
+						XData xtxt = new XData("$text",
 						null, xdef.getXDPool(), XNode.XMTEXT);
-					xtxt.setXDPosition(parentNode.getXDPosition()+"/$text");
-					_scriptCompiler.setSource(sval,
-						_scriptCompiler._actDefName,
-						pnode._xdef,
-						pnode._xdVersion,
-						pnode._nsPrefixes, pnode._xpathPos+"/text()");
-					_scriptCompiler.isSpaces();
-					if (_scriptCompiler.isToken("$$$script:")) {
+						xtxt.setXDPosition(parentNode.getXDPosition()+"/$text");
+						_scriptCompiler.setSource(sval,
+							_scriptCompiler._actDefName,
+							pnode._xdef,
+							pnode._xdVersion,
+							pnode._nsPrefixes, pnode._xpathPos+"/text()");
 						_scriptCompiler.isSpaces();
-						_scriptCompiler.isChar(';');
-						_scriptCompiler.compileDataScript(xtxt);
-					} else {
-						_scriptCompiler.genTemplateData(xtxt, xel);
+						if (_scriptCompiler.isToken("$$$script:")) {
+							_scriptCompiler.isSpaces();
+							_scriptCompiler.isChar(';');
+							_scriptCompiler.compileDataScript(xtxt);
+						} else {
+							_scriptCompiler.genTemplateData(xtxt, xel);
+						}
+						pnode._value = null;
+						newNode = xtxt;
 					}
-					pnode._value = null;
-					newNode = xtxt;
-//				} else if ("PI".equals(_actPNode._localName)) { //TODO
+					break;
+					case "comment": {//TODO
+						sval = pnode._value;
+						XComment xcomment = new XComment(xdef.getXDPool());
+						xcomment.setSPosition(copySPosition(sval));
+						_scriptCompiler.setSource(sval,
+							_scriptCompiler._actDefName,
+							pnode._xdef,
+							pnode._xdVersion,
+							pnode._nsPrefixes, pnode._xpathPos);
+						_scriptCompiler.isSpaces();
+						if (_scriptCompiler.isToken("$$$script:")) {
+							_scriptCompiler.isSpaces();
+							_scriptCompiler.isChar(';');
+							_scriptCompiler.compileDataScript(xcomment);
+						} else {
+							_scriptCompiler.genTemplateData(xcomment, xel);
+						}
+						newNode = xcomment;
+					}
+					break;
+//				case "PI":.equals(_actPNode._localName)) { //TODO
 //					sval = pnode._value;
 //					XPI newPI = new XPI(xchildName, xdef.getDefPool());
 //					newPI.setSPosition(new SPosition(sval, false));
@@ -1428,36 +1456,20 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 //						_scriptCompiler.genTemplateData(newPI, xel);
 //					}
 //					newNode = newPI;
-				} else if ("comment".equals(pnode._localName)) { //TODO
-					sval = pnode._value;
-					XComment xcomment = new XComment(xdef.getXDPool());
-					xcomment.setSPosition(copySPosition(sval));
-//					xcomment.setXDPosition(parentNode.getXDPosition() +
-//						"/#comment");
-					_scriptCompiler.setSource(sval,
-						_scriptCompiler._actDefName,
-						pnode._xdef,
-						pnode._xdVersion,
-						pnode._nsPrefixes, pnode._xpathPos);
-					_scriptCompiler.isSpaces();
-					if (_scriptCompiler.isToken("$$$script:")) {
-						_scriptCompiler.isSpaces();
-						_scriptCompiler.isChar(';');
-						_scriptCompiler.compileDataScript(xcomment);
-					} else {
-						_scriptCompiler.genTemplateData(xcomment, xel);
-					}
-					newNode = xcomment;
-//				} else if ("document".equals(_actPNode._localName)) { //TODO
+//					break;
+//					case "document".equals(_actPNode._localName))  //TODO
 //					newNode = new XDocument("$document", null, xdef);
 //					newNode = createReference(pnode, pnode._localName, xdef);
-//				} else if ("value".equals(_actPNode._localName)) { //TODO
+//					break;
+//					case "value".equals(_actPNode._localName))  //TODO
 //					newNode = new XData("$text",
 //						null, xdef.getDefPool(), XNode.XMTEXT);
-//				} else if ("attlist".equals(_actPNode._localName)) { //TODO
+//					break;
+//					case "attlist".equals(_actPNode._localName)) { //TODO
 //					newNode = createReference(pnode, pnode._localName, xdef);
-				} else {
-					//Element from namespace of XDefinitions is not allowed here
+//					break;
+					default:
+						//Element from namespace of XDefinitions is not allowed here
 					error(pnode._name, XDEF.XDEF322);
 					return;
 				}
@@ -1630,6 +1642,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		_scriptCompiler._actDefName = defName;
 		XDefinition def = new XDefinition(defName,
 			xdp, pnode._nsURI, pnode._name, pnode._xmlVersion);
+		def.setSPosition(new SPosition(pnode._name));
 		//copy _importLocal!
 		_scriptCompiler._importLocals =
 			def._importLocal = pnode._xdef._importLocal;
@@ -1981,9 +1994,6 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				x = new LinkedHashMap<>();
 				for (String name: _codeGenerator._enums.keySet()) {
 					int ndx;
-					if ((ndx = name.indexOf(' ')) >= 0) {
-						name.substring(0, ndx);
-					}
 					SBuffer sbf = _codeGenerator._enums.get(name);
 					String s = sbf.getString();
 					ndx = s.indexOf('#');
@@ -2007,7 +2017,6 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 							var.getParseMethodAddr());
 						if (xv.getItemId() == XDValueID.XD_PARSER) {
 							XDParser p = (XDParser) xv;
-							String declName = p.getDeclaredName();
 							XDContainer xc = p.getNamedParams();
 							if (xc != null && (p instanceof XDParseEnum
 								&& (xv = xc.getXDNamedItemValue("argument"))

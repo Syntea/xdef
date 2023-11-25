@@ -64,7 +64,7 @@ public final class DefJNull extends XDValueAbstract {
 	@Override
 	public boolean equals(final Object arg) {
 		return arg==null ||
-			arg instanceof XDValue ? equals((XDValue) arg) : false;
+			arg instanceof XDValue ? ((XDValue) arg).isNull() : false;
 	}
 	@Override
 	/** Check whether some other XDValue object is "equal to" this one.

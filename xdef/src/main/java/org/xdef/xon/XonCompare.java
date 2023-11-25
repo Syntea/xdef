@@ -214,11 +214,7 @@ final class XonCompare {
 	 * @throws SRuntimeException if objects are incomparable
 	 */
 	final static boolean equalValue(final Object o1, final Object o2) {
-		if (o1 == null || o1 instanceof XonTools.JNull) {
-			return o2 == null || o2 instanceof XonTools.JNull;
-		} else if (o1 instanceof XonTools.JNull) {
-			return o2 == null || o2 instanceof XonTools.JNull;
-		} else if (o1 instanceof Map) {
+		if (o1 instanceof Map) {
 			return o2 instanceof Map ? equalMap((Map)o1, (Map)o2) : false;
 		} else if (o1 instanceof List) {
 			return o2 instanceof List ? equalArray((List) o1,(List) o2) : false;
@@ -233,8 +229,9 @@ final class XonCompare {
 			} else {
 				return false;
 			}
-		} else {
-			return o1.equals(o2);
+		} else if (o1==null||o1 instanceof XDValue&&((XDValue) o1).isNull()) {
+			return o2==null||o2 instanceof XDValue&&((XDValue) o2).isNull();
 		}
+		return o1.equals(o2);
 	}
 }
