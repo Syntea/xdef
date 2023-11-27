@@ -200,34 +200,22 @@ public final class GenXDefXML {
 			if (x.equals(y)) {
 				return x;
 			}
-			if (x.startsWith("string(")
-				&& y.startsWith("string(")) {
-				return !"string()".equals(x) ? x : y;
-			} else if (x.equals("dateYMDhms()") && y.equals("long()")) {
+			if (x.startsWith("string(") || y.startsWith("string(")) {
+				return "string()";
+			} else if (x.equals("int()") && y.equals("long()")
+				||x.equals("long()") && y.equals("int()")) {
 				return "long()";
-			} else if (x.equals("int()")
-				&& (y.equals("long()") || y.equals("dateYMDhms()"))) {
-				return "long()";
-			} else if (x.equals("int()") && y.equals("integer()")) {
+			} else if (x.equals("int()") && y.equals("integer()")
+				|| x.equals("integer()") && y.equals("int()")) {
 				return "integer()";
-			} else if (x.equals("long()")
-				&& (y.equals("int()") || y.equals("dateYMDhms()"))) {
-				return "long()";
-			} else if (x.equals("long()")
-				&& (y.equals("int()") || y.equals("dateYMDhms()"))) {
-				return "long()";
 			} else if (x.equals("long()") && y.equals("integer()")) {
 				return "integer()";
 			} else if (x.equals("integer()") && (y.equals("int()")
-				|| y.equals("long()") || y.equals("dateYMDhms()"))) {
+				|| y.equals("long()") || y.equals("int()"))) {
 				return "integer()";
-			} else if (x.equals("MD5()")
-				&& (y.equals("SHA1()") || y.equals("hexBinary()"))) {
-				return "hexBinary()";
-			} else if (x.equals("SHA1()")
-				&& (y.equals("MD5()") || y.equals("hexBinary()"))) {
-				return "hexBinary()";
-			} else if (x.equals("hexBinary()")
+			} else if ((x.equals("MD5()") || x.equals("SHA1()"))
+				&& y.equals("hexBinary()")
+				|| x.equals("hexBinary()")
 				&& (y.equals("MD5()") || y.equals("SHA1()"))) {
 				return "hexBinary()";
 			}

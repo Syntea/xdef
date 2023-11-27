@@ -154,7 +154,7 @@ public final class GenXDefXON {
 		 */
 		String toXonModel(String indent) {
 			if (_item instanceof String) {
-				return indent + "\"" + occToString(true) + _item + "();\"";
+				return indent + "\"" + occToString(true) + _item + ";\"";
 			}
 			StringBuilder sb = new StringBuilder();
 			String nIndent = indent.isEmpty() ? "\n  " : indent + "  ";
@@ -247,40 +247,40 @@ public final class GenXDefXON {
 	 */
 	private static String genItem(final Object x) {
 		if (x == null) {
-			return "jnull";
+			return "jnull()";
 		} else if (x instanceof Boolean) {
-			return "jboolean";
-		} else if (x instanceof String) {
-			return "jstring";
+			return "jboolean()";
 		} else if (x instanceof Number) {
-			return "jnumber";
+			return "jnumber()";
 		} else if (x instanceof Character) {
-			return "char";
+			return "char()";
+		} else if (x instanceof String) {
+			return "jstring()";
 		} else if (x instanceof URI) {
-			return "uri";
+			return "uri()";
 		} else if (x instanceof XDEmailAddr) {
-			return "emailAddr";
+			return "emailAddr()";
 		} else if (x instanceof SDatetime) {
-			return (x.toString().contains("T")) ? "dateTime" : "date";
+			return (x.toString().contains("T")) ? "dateTime()" : "date()";
 		} else if (x instanceof GPSPosition) {
-			return "gps";
+			return "gps()";
 		} else if (x instanceof Price) {
-			return "price";
+			return "price()";
 		} else if (x instanceof Currency) {
-			return "currency";
+			return "currency()";
 		} else if (x instanceof XDTelephone) {
-			return "telephone";
+			return "telephone()";
 		} else if (x instanceof SDuration) {
-			return "duration";
+			return "duration()";
 		} else if (x instanceof InetAddress) {
-			return "ipAddr";
+			return "ipAddr()";
 		} else if (x instanceof byte[]) {// byte array
-			return "base64Binary";
+			return "base64Binary()";
 		} else {
-			return "jvalue";
+			return "jvalue()";
 		}
 	}
-
+	
 	/** Create XDItem from XON data.
 	 * @param data XON data.
 	 * @return created XDItem object.
