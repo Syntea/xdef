@@ -1,5 +1,8 @@
 # Version ${version}, release-date ${release.date}
 
+# Version 42.1.0, release-date 2023-11-27
+* .
+
 # Version 42.0.11, release-date 2023-11-27
 * If the type of a value in X-component is `union` and types of all items are
   compatible type, then the type of getter/settter is set accordig to that
