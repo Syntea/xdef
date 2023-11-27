@@ -280,7 +280,7 @@ public final class GenXDefXON {
 			return "jvalue()";
 		}
 	}
-	
+
 	/** Create XDItem from XON data.
 	 * @param data XON data.
 	 * @return created XDItem object.
