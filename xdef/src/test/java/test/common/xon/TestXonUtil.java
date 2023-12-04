@@ -2,7 +2,6 @@ package test.common.xon;
 
 import java.io.File;
 import org.w3c.dom.Element;
-import org.xdef.impl.XonXml_X;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.xon.XonUtils;
@@ -35,37 +34,49 @@ public class TestXonUtil extends STester {
 			if (f.getName().endsWith(".xon")) {
 				o1 = XonUtils.parseXON(f);
 				o2 = XonUtils.parseXON(XonUtils.toXonString(o1, true));
-			} else {
+			} else if (f.getName().endsWith(".json")) {
 				o1 = XonUtils.parseJSON(f);
 				o2 = XonUtils.parseJSON(XonUtils.toJsonString(o1, true));
+			} else {
+				return "";
 			}
 			if (!XonUtils.xonEqual(o1, o2)) {
-				return "JSON toString error " + f.getName();
+				return "JSON toString -error- " + f.getName();
 			}
 		} catch (Exception ex) {
-			return "JSON error " + f.getName() + "\n" + ex;
+			return "JSON -error- " + f.getName() + "\n" + ex;
 		}
 		try {
-			// test JSON to XML and XML to JSON (W3C format) JSON
+			// test JSON to XML and XML to JSON (XDEF) JSON
 			el = XonUtils.xonToXml(o1);
 			o2 = XonUtils.xmlToXon(el);
 			if (f.getName().endsWith(".json")) { // in XON it may differ
 				if (!XonUtils.xonEqual(o1, o2)) {
-					return "JSON xmlToJson (W3C) error " + f.getName()
-						+ "\n" + KXmlUtils.nodeToString(el);
+					return "XML conversion (XDEF)  -error- " + f.getName()
+						+ '\n' + KXmlUtils.nodeToString(el)
+						+ "\n" + XonUtils.toXonString(o1, true)
+						+ '\n' + XonUtils.toXonString(o2, true);
 				}
 			}
 		} catch (Exception ex) {
-			return "Error jsonToXml (XD): " + f.getName() + "\n"
+			return "Error jsonToXml (XDEF): " + f.getName() + "\n"
 				+ ex + "\n" + XonUtils.toJsonString(o1, true);
 		}
 		try {
 			// test JSON to XML and XML to JSON (W3C format) JSON
 			el = XonUtils.xonToXmlW(o1);
-			o2 = XonUtils.xmlToXon(el);
+			o2 = XonUtils.xmlToXon(el);		
+			Element e2 = XonUtils.xonToXmlW(o2);
+			Object o2x = XonUtils.xmlToXon(e2);
+			if (KXmlUtils.compareElements(el, e2, true).errors()) {
+				return "XML conversion (W3C)-error- " + f.getName() + ": "
+					+ KXmlUtils.compareElements(el, e2, true)
+					+ '\n' + KXmlUtils.nodeToString(el, true)
+					+ '\n' + KXmlUtils.nodeToString(e2, true);
+			}
 			if (f.getName().endsWith(".json")) { // in XON it may differ
 				if (!XonUtils.xonEqual(o1, o2)) {
-					return "JSON xmlToJson (W3C) error " + f.getName()
+					return "JSON xmlToJson(W3C)-error- " + f.getName()
 						+ "\n" + KXmlUtils.nodeToString(el);
 				}
 			}
@@ -114,8 +125,8 @@ public class TestXonUtil extends STester {
 	private static String testX(File f) {return testX1(XonUtils.parseXON(f));}
 
 	private static String testX1(Object o) {
-		Element el = XonXml_X.xonToXmlX(o);
-		Object o1 = XonXml_X.toXon(el);
+		Element el = XonUtils.xonToXml(o);
+		Object o1 = XonUtils.xmlToXon(el);
 		return XonUtils.xonEqual(o, o1) ? ""
 			: ("/n*** 12\n" + KXmlUtils.nodeToString(el, true) +
 			"/n*** 12\n" + XonUtils.toXonString(o1, true));
@@ -144,7 +155,6 @@ public class TestXonUtil extends STester {
 //		init("Test105");
 		for (File f: _files) { // test JSON parser
 			assertEq("", testJParse(f), f.getAbsolutePath());
-//			assertEq("", testX(json), json.getAbsolutePath());
 		}
 		_files = SUtils.getFileGroup((new File(getDataDir()).getAbsolutePath()
 			+ File.separator).replace('\\', '/') + "TestErr*.json");
@@ -165,7 +175,7 @@ public class TestXonUtil extends STester {
 			String name = x.getName();
 			if (x.isFile() && name.endsWith("xdef")) {
 				String s = testXConvert(x);
-				if (s.indexOf("-error-:  ") >= 0) {
+				if (s.indexOf("-error-") >= 0) {
 					fail("XX XML " + x + " *\n" + s);
 				}
 			}
@@ -209,6 +219,7 @@ public class TestXonUtil extends STester {
 			"-1.25e-3f",
 			"{}",
 			"{\"\":\"\"}",
+			"{\"A B\":{\"a b\":\"\"}}",
 			"[]",
 			"[[]]",
 			"[[{}]]",
@@ -223,6 +234,7 @@ public class TestXonUtil extends STester {
 			"[{a:[{}]}]",
 			"[{a:[{a:1}]}]",
 			"[1, -1.25e-3, true, \"abc\", null]",
+			"[[3,null,false],[3.14,\"\",false],[\"aa\",true,false]]",
 			"[1, { _x69_:1, _x5f_map:null, \"a_x\tb\":[null], item:{}}]",
 			"[1, { a : 1, b : \"a\", \"\":false, array : [], map:{}}, \"abc\"]",
 			"[{a:[{},[1,2],{},[3,4]]}]",

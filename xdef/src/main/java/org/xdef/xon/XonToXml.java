@@ -77,7 +77,9 @@ class XonToXml extends XonTools {
 	private Element addXonElem(final Node n, final String name) {
 		Element e = genJElement(name);
 		_ns.pushContext();
-		_ns.setPrefix(_xPrefix, _xNamespace);
+		if (_xPrefix.equals(getNamePrefix(name))) {
+			_ns.setPrefix(_xPrefix, _xNamespace);
+		}
 		n.appendChild(e);
 		return e;
 	}
@@ -250,7 +252,7 @@ class XonToXml extends XonTools {
 				_ns.popContext();
 				return;
 			}
-			Map mm = null;
+			Map mm;
 			if (len > 1 && array.get(1) instanceof Map) {
 				if ((mm = (Map) array.get(1)).size() != 1) {
 					addArrayItems(elem, array, 0);
@@ -347,7 +349,7 @@ class XonToXml extends XonTools {
 						String name = toXmlName((String) entry.getKey());
 						String namespace =
 							_ns.getNamespaceURI(getNamePrefix(name));
-						e = addElem(elem, namespace, name);
+						addElem(elem, namespace, name);
 						_ns.popContext();
 						return;
 					} else {
@@ -621,7 +623,8 @@ class XonToXml extends XonTools {
 			x._ns.popContext();
 		} else {
 			 //Not XON/JSON object&{0}
-			throw new SRuntimeException(JSON.JSON011, xon.getClass());
+			throw new SRuntimeException(JSON.JSON011, 
+				xon == null ? null : xon.getClass());
 		}
 		return x._doc.getDocumentElement();
 	}

@@ -218,12 +218,10 @@ public class TestJsonXdef extends XDTester {
 	 */
 	private String testJdef(final XDPool xp, final String id) {
 		Element e;
-		XDDocument xd;
 		XComponent xc;
 		String result = "";
 		ArrayReporter reporter = new ArrayReporter();
 		// get all json files for this test
-		xd = xp.createXDDocument("Test" + id);
 		for (File f : SUtils.getFileGroup(_tempDir+"Test"+id+"*a.xml")) {
 			Object json;
 			Object o;
@@ -241,7 +239,7 @@ public class TestJsonXdef extends XDTester {
 			try {
 				reporter.clear(); // clear reporter
 				// parseJSON data with X-definition
-				e = xd.xparse(f, reporter);
+				e = xp.createXDDocument("Test"+id).xparse(f, reporter);
 				if (reporter.errorWarnings()) { // check errors
 					result += (result.isEmpty() ? "" : "\n")
 						+ "ERRORS in " + name
@@ -251,8 +249,10 @@ public class TestJsonXdef extends XDTester {
 					KXmlUtils.compareElements(e,
 						f.getAbsolutePath(), true, reporter);
 					if (reporter.errorWarnings()) {
-						result += (result.isEmpty() ? "" : "\n")
-							+ "ERROR: result differs " + name;
+						result += (result.isEmpty() ? "" : "\n") +
+							"ERROR: result differs " + name + '\n' +
+							KXmlUtils.nodeToString(e, true) + '\n' +
+							KXmlUtils.nodeToString(KXmlUtils.parseXml(f), true);
 					} else {
 						o = XonUtils.xmlToXon(KXmlUtils.nodeToString(e, true));
 						if (!XonUtils.xonEqual(json, o)) {
@@ -270,7 +270,7 @@ public class TestJsonXdef extends XDTester {
 			}
 			// parseJSON with jparse
 			try {
-				o = xd.jvalidate(json, null);
+				o = xp.createXDDocument("Test"+id).jvalidate(json, null);
 				if (!XonUtils.xonEqual(json, XonUtils.xonToJson(o))) {
 					result += (result.isEmpty() ? "" : "\n")
 						+ "Error jparse Test" + id + "\n"
@@ -278,15 +278,15 @@ public class TestJsonXdef extends XDTester {
 						+ XonUtils.toJsonString(XonUtils.xonToJson(o)) + "\n";
 				}
 			} catch (Exception ex) {
-				fail(ex);
 				result += (result.isEmpty() ? "" : "\n")
 					+ "Incorrect jparse Test"+id+".json";
+				fail(ex);
 				continue;
 			}
 			// parseJSON with X-component
 			try {
-				xc = xd.xparseXComponent(f, Class.forName(
-					"test.common.json.component.Test" + id), null);
+				xc = xp.createXDDocument("Test"+id).xparseXComponent(f,
+					Class.forName("test.common.json.component.Test"+id), null);
 				reporter.clear();
 				o = XonUtils.xonToJson(xc.toXon());
 				if (!XonUtils.xonEqual(json, o)) {
@@ -308,9 +308,8 @@ public class TestJsonXdef extends XDTester {
 			}
 			// Test X-component.
 			try {
-				xd = xp.createXDDocument("Test" + id);
-				xc = xd.xparseXComponent(f, Class.forName(
-					"test.common.json.component.Test"+id), null);
+				xc = xp.createXDDocument("Test"+id).xparseXComponent(f,
+					Class.forName("test.common.json.component.Test"+id), null);
 				reporter.clear();
 				e = xc.toXml();
 				KXmlUtils.compareElements(e, f.getAbsolutePath(),true,reporter);
@@ -327,10 +326,9 @@ public class TestJsonXdef extends XDTester {
 						+ XonUtils.toJsonString(json) + "\n"
 						+ XonUtils.toJsonString(o) + "\n";
 				}
-				xd = xp.createXDDocument("Test" + id);
 				// test to parse cXON from X-component
-				xc = xd.jparseXComponent(xc.toXon(), Class.forName(
-					"test.common.json.component.Test"+id), null);
+				xc = xp.createXDDocument("Test"+id).jparseXComponent(xc.toXon(),
+					Class.forName("test.common.json.component.Test"+id), null);
 				if (!XonUtils.xonEqual(json, XonUtils.xonToJson(xc.toXon()))) {
 					result += (result.isEmpty() ? "" : "\n")
 						+ "Error X-component toJsjon " + id + "\n"
@@ -346,7 +344,7 @@ public class TestJsonXdef extends XDTester {
 		for (File f: SUtils.getFileGroup(_dataDir+"Test"+id+"*.jerr")) {
 			try {
 				reporter.clear();
-				xd.jparse(f, reporter);
+				xp.createXDDocument("Test"+id).jparse(f, reporter);
 				if (!reporter.errorWarnings()) {
 					result += (result.isEmpty() ? "" : "\n")
 						+ "Error not reported: "+f.getName();
@@ -456,7 +454,7 @@ public class TestJsonXdef extends XDTester {
 		try {
 			for (File f: _jfiles) {
 				String s = testJdef(xp, getId(f));
-				assertTrue(s.isEmpty(), s);
+				assertTrue(s.isEmpty(), s );
 			}
 		} catch (Exception ex) {fail(ex);} // should not happen!!!
 //		if(true)return;
@@ -512,8 +510,8 @@ public class TestJsonXdef extends XDTester {
 			assertTrue(SUtils.getValueFromGetter(
 				x, "get"+XonNames.X_VALATTR)!=null);
 			xc = getXComponent(xp, fname, 4);
-			assertNull(SUtils.getValueFromGetter(xc,"get"+xon+XonNames.X_VALUE));
-
+			assertNull(
+				SUtils.getValueFromGetter(xc,"get"+xon+XonNames.X_VALUE));
 			fname = "Test025";
 			xc = getXComponent(xp, fname, 0);
 			x = SUtils.getValueFromGetter(xc,"get"+xon+XonNames.X_VALUE);
