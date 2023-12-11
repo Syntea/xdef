@@ -274,6 +274,12 @@ public class XonTools {
 		}
 		int len = s.length();
 		char ch = s.charAt(0);
+		if (len == 1) {
+			if (ch>='0' && ch<='9') { // one digit: -> byte
+				return ch - '0';
+			}
+			return s; // one char
+		}
 		char endChar = s.charAt(len-1);
 		if (ch == '"' && endChar == '"') {
 			StringParser p = new StringParser(s);
