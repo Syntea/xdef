@@ -380,7 +380,7 @@ clearSources();
 				fail("Error2 xc.toXon(): \n" + o + "\n" + x + "\n");
 			}
 		} catch (Exception ex) {fail(ex); reporter.clear();}
-if(true)return;
+//if(true)return;
 if(T)return;
 clearSources();
 /**/

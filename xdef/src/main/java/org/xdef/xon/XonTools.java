@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Currency;
 import java.util.LinkedHashMap;
 import java.util.List;
+import org.xdef.XDBytes;
 import org.xdef.XDParseResult;
 import org.xdef.XDParser;
 import org.xdef.XDTelephone;
@@ -534,9 +535,8 @@ public class XonTools {
 			return genXMLString(((Currency) x).getCurrencyCode());
 		} else if (x instanceof XDTelephone) {
 			return "t\"" + x + '"';
-		} else { // Boolena, Number, etc...
-			return x.toString();
 		}
+		return x.toString();// Boolean, Number, etc...
 	}
 
 	/** Read value of XON/JSON string.

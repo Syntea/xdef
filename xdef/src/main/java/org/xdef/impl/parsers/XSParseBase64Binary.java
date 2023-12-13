@@ -131,11 +131,11 @@ public class XSParseBase64Binary extends XSAbstractParser {
 
 	/** This class is used as reader of parsed string in XSParseBase94Binary. */
 	static final class XSParseReader implements SReader {
-		private final boolean _quoted;
+		private final int _quoted;
 		private final SParser _p;
 		private final StringBuilder _sb;
 		XSParseReader(final SParser p) {
-			_quoted = (_p = p).isChar('"');
+			_quoted = (_p = p).isOneOfTokens("b(","\"");
 			_sb = new StringBuilder();
 		}
 		@Override
@@ -147,16 +147,15 @@ public class XSParseBase64Binary extends XSAbstractParser {
 				_sb.append(' ');
 			}
 			char ch;
-			if ((ch = _p.peekChar()) != SParser.NOCHAR
-				&& !(_quoted && ch == '"')) {
+			if ((ch = _p.peekChar()) == SParser.NOCHAR
+				|| (_quoted == 0 && ch == ')' || _quoted == 1 && ch == '"')) {
+				return -1;
+			} else {
 				_sb.append(ch);
 				return ch;
 			}
-			return -1;
 		}
 
-		private String getParsedString() {
-			return _sb.toString().trim();
-		}
+		private String getParsedString() {return _sb.toString().trim();}
 	}
 }

@@ -16,7 +16,7 @@ public class XDParseHex extends XSParseBase64Binary {
 	public void parseObject(final XXNode xnode, final XDParseResult p){
 		int pos0 = p.getIndex();
 		p.isSpaces();
-		boolean wasQuote = p.isChar('"');
+		int quoted = p.isOneOfTokens("x(","\"");
 		int pos1 = p.getIndex();
 		int pos2 = pos1;
 		int len = 0;
@@ -25,7 +25,7 @@ public class XDParseHex extends XSParseBase64Binary {
 			pos2 = p.getIndex();
 			p.isSpaces();
 		}
-		if (wasQuote && !p.isChar('"')) {
+		if (quoted == 0 && !p.isChar(')') || quoted == 1 && !p.isChar('"')) {
 			//Incorrect value of '&{0}'&{1}{: }
 			p.errorWithString(XDEF.XDEF809, parserName());
 			return;
