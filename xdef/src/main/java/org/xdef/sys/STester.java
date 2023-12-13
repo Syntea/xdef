@@ -9,6 +9,7 @@ import java.io.FileReader;
 import java.io.StringWriter;
 import java.lang.reflect.Constructor;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -578,14 +579,18 @@ public abstract class STester {
 			} else if (a2 instanceof BigDecimal) {
 				return (a1 instanceof BigDecimal)
 					? a2.equals(a1) : a2.equals(new BigDecimal(a1.toString()));
-			}
-			if ((a1 instanceof Byte || a1 instanceof Short ||
+			} else if (a1 instanceof BigInteger) {
+				return (a2 instanceof BigInteger)
+					? a1.equals(a2) : a1.equals(new BigInteger(a2.toString()));
+			} else if (a2 instanceof BigInteger) {
+				return (a1 instanceof BigInteger)
+					? a2.equals(a1) : a2.equals(new BigInteger(a1.toString()));
+			} else if ((a1 instanceof Byte || a1 instanceof Short ||
 				a1 instanceof Integer || a1 instanceof Long)
 				&& (a2 instanceof Byte || a2 instanceof Short ||
 				a2 instanceof Integer || a2 instanceof Long)) {
 				return ((Number) a1).longValue() == ((Number) a2).longValue();
-			}
-			if ((a1 instanceof Float || a1 instanceof Double)
+			} else if ((a1 instanceof Float || a1 instanceof Double)
 				&& (a2 instanceof Float || a2 instanceof Double)) {
 				return ((Number) a1).doubleValue()==((Number) a2).doubleValue();
 			}

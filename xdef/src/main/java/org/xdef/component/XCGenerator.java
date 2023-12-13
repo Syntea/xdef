@@ -156,6 +156,9 @@ final class XCGenerator extends XCGeneratorXON {
 		// Generate namespace attributes
 		for (Map.Entry<Object, Object> item : nsmap.entrySet()) {
 			final String value = (String) item.getValue();
+			if (xe._xon == XConstants.XON_MODE_W && XON_NS_URI_W.equals(value)){
+				continue;
+			}
 			final String name = ((String) item.getKey());
 			int i = name.indexOf('$'); // The ":" in name is replaced with "$"!
 			String nsname = "xmlns" + (i>0 ? ':' + name.substring(i + 1) : "");

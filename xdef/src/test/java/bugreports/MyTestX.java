@@ -214,7 +214,10 @@ public class MyTestX extends XDTester {
 		return result.isEmpty() ? null : '~' + source + "~\n" + result;
 	}
 	private void genAndCopyXComponents(final XDPool xp) {
-		File file = clearTempDir();
+//		File file = clearTempDir();
+		File file = new File("C:/tempx/components");
+		file.mkdirs();
+		FUtils.deleteAll(file.listFiles(), true);
 		genXComponent(xp, file).checkAndThrowErrors();
 		String source = getSourceDir();
 		File[] files = new File(file, _package).listFiles();
@@ -312,6 +315,75 @@ if(true)return;
 if(T)return;
 clearSources();
 /**/
+		try {
+			xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' xd:root='a'>\n" +
+"<xd:xon name='a'>\n" +
+"[ \"hexBinary()\", \"base64Binary()\" ]\n" +
+"</xd:xon>\n" +
+" <xd:component>%class "+_package+".MyTestX_Hexb64 %link #a;</xd:component>\n" +
+"</xd:def>";
+			xp = XDFactory.compileXD(null, xdef);
+			s = "[ x(0FAE99), b(D66Z) ]";
+			genAndCopyXComponents(xp);
+			o = XonUtils.parseXON(s);
+			y = jparse(xp, "", s, reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			assertTrue(XonUtils.xonEqual(o, y));
+			xc = xp.createXDDocument().jparseXComponent(s, null, reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			assertTrue(XonUtils.xonEqual(xc.toXon(),y));
+			el = xc.toXml();
+			s = XonUtils.toJsonString(XonUtils.xmlToXon(el), true);
+			o = XonUtils.xonToJson(jparse(xp, "", s, reporter));
+			assertNoErrorwarningsAndClear(reporter);
+			if (!XonUtils.xonEqual(o, XonUtils.xonToJson(y))) {
+				fail(XonUtils.xonDiff(o, XonUtils.xonToJson(y)));
+				fail(KXmlUtils.nodeToString(el, true)
+					+ "\n***\n" + XonUtils.toXonString(y, true)
+					+ "\n***\n" + XonUtils.toXonString(o, true));
+			}
+		} catch (Exception ex) {fail(ex); reporter.clear();}
+if(true)return;
+if(T)return;
+clearSources();
+/**/
+		try {
+			xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' xd:root='a'>\n" +
+"<xd:xon name='a'>\n" +
+"{ \"\": \"jstring()\" }\n" +
+"</xd:xon>\n" +
+" <xd:component>%class "+_package+".MyTestX_004 %link #a;</xd:component>\n" +
+"</xd:def>";
+			xp = XDFactory.compileXD(null, xdef);
+			s = "{ \"\": \"\" }";
+			genAndCopyXComponents(xp);
+			o = XonUtils.parseJSON(s);
+			el = XonUtils.xonToXmlW(o);
+			xd = xp.createXDDocument();
+			xc = xd.xparseXComponent(el, null, null);
+			x = XonUtils.xonToJson(xc.toXon());
+			if (!XonUtils.xonEqual(o, x)) {
+				fail("Error xc.toXon(): \n" + o + "\n" + x + "\n");
+			}
+			Element e = xc.toXml();
+			KXmlUtils.compareElements(e, el, true, reporter);
+			if (reporter.errorWarnings()) {
+				fail("Error1 xc.toXml(): \n"
+					+ KXmlUtils.nodeToString(el, true)
+					+ "\n"+ KXmlUtils.nodeToString(e, true));
+			}
+			xc = xd.xparseXComponent(e, null, null);
+			x = XonUtils.xonToJson(xc.toXon());
+			if (!XonUtils.xonEqual(o, x)) {
+				fail("Error2 xc.toXon(): \n" + o + "\n" + x + "\n");
+			}
+		} catch (Exception ex) {fail(ex); reporter.clear();}
+if(true)return;
+if(T)return;
+clearSources();
+/**/
 		try { // test if X-compomemt getter/setter name is not changed
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
@@ -330,7 +402,7 @@ clearSources();
 				SUtils.getValueFromGetter(SUtils.getValueFromGetter(
 					xc,"getC"), "getB"), "getb"));
 		} catch (Exception ex) {fail(ex); reporter.clear();}
-if(true)return;
+//if(true)return;
 if(T)return;
 clearSources();
 /**/
@@ -343,7 +415,7 @@ clearSources();
 			xp = XDFactory.compileXD(null,xdef);
 			genAndCopyXComponents(xp);
 			s = _package+".MyTestX_str";
-			assertEq("", testX(xp, "", s, "\\\"x\\\""));
+			assertEq("", testX(xp, "", s, "\\\"1\\\""));
 			assertEq("", testX(xp, "", s, "\\\"\" \\\""));
 			assertEq("", testX(xp, "", s, "\\\"\\\""));
 			assertEq("", testX(xp, "", s, "\\\" \\\""));
@@ -384,19 +456,25 @@ clearSources();
 				" ab\tcd ", "\" ab\\tcd \"", "\" ab\\u0020tcd \"",
 				"\"\\\"\"", "\" \\t\\n \"", "\"\\\" \"", "\"\\\"\\\"\"",
 				"\"true\""};
-			for (String src : sources) {
-				assertNull(testX(xp,"x", _package+".MyTestX_AnyXXx", src));
+			for (int i = 0; i < sources.length; i++) {
+				String src = sources[i];
+				assertNull(testX(xp,"x", _package+".MyTestX_AnyXXx", 
+					'[' + i + "]: " +src));
 			}
-			for (String src : sources) {
-				assertNull(testX(xp,"y", _package+".MyTestX_AnyXXy", src));
+			for (int i = 0; i < sources.length; i++) {
+				String src = sources[i];
+				assertNull(testX(xp,"y", _package+".MyTestX_AnyXXy", 
+					'[' + i + "]: " +src));
 			}
 			sources = new String[] {"\\\"x\\\"", "\\\" ab cd \\\"",
 				"\\\" ab\tcd \\\"", "\\\" ab\\tcd \\\"",
 				"\\\" ab\\u0020\tcd \\\"", "\\\" ab\\u0020tcd \\\"",
 				"\\\"\\\"\\\"", "\\\" \\t\\n \\\"", "\\\"\\\" \\\"",
 				"\\\"\\\"\\\"\\\"", "\\\"\\\""};
-			for (String src : sources) {
-				assertNull(testX(xp,"z", _package+".MyTestX_AnyXXz", src));
+			for (int i = 0; i < sources.length; i++) {
+				String src = sources[i];
+				assertNull(testX(xp,"z", _package+".MyTestX_AnyXXz", 
+					'[' + i + "]: " +src));
 			}
 		} catch (Exception ex) {fail(ex); reporter.clear();}
 //if(true)return;

@@ -18,6 +18,7 @@ import static org.xdef.sys.SParser.NOCHAR;
  */
 public final class DefParseResult extends XDValueAbstract
 	implements XDParseResult {
+	/** Actual index to source buffer. */
 	private int _srcIndex;
 	/** Parsed source string (null if parsed result failed). */
 	private String _source;

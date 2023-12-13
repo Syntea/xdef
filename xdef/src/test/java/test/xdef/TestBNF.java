@@ -67,6 +67,9 @@ public final class TestBNF extends XDTester {
 			xml = "<root>123, 456, 789</root>";
 			assertEq(xml, parse(xp, "Example", xml, reporter));
 			assertNoErrorwarnings(reporter);
+			xml = "<root>1a</root>";
+			assertEq(xml, parse(xp, "Example", xml, reporter));
+			assertErrors(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <xd:declaration scope='global'>\n"+
