@@ -210,11 +210,15 @@ public class MyTestX extends XDTester {
 		} catch (Exception ex) {
 			result += printThrowable(ex) + "\n";
 		}
-		return result.isEmpty() ? null : '~' + source + "~\n" + result;
+		return result.isEmpty() ? null : "~" + source + "~\n" + result;
 	}
 	private void genAndCopyXComponents(final XDPool xp) {
 		File file = clearTempDir();
+//		File file = new File("C:/tempx/components");
+//		file.mkdirs();
+//		FUtils.deleteAll(file.listFiles(), true);
 		genXComponent(xp, file).checkAndThrowErrors();
+/**/
 		String source = getSourceDir();
 		File[] files = new File(file, _package).listFiles();
 		for (int i=0; i < files.length; i++) {
@@ -233,6 +237,7 @@ public class MyTestX extends XDTester {
 			}
 		}
 		_geneatedSources = files;
+/**/
 	}
 
 	private void clearSources() {
@@ -397,7 +402,7 @@ clearSources();
 			assertEq("2", SUtils.getValueFromGetter(SUtils.getValueFromGetter(
 				SUtils.getValueFromGetter(xc,"getC"), "getB"), "getb"));
 		} catch (Exception ex) {fail(ex); reporter.clear();}
-if(true)return;
+//if(true)return;
 if(T)return;
 clearSources();
 /**/
@@ -453,13 +458,13 @@ clearSources();
 				"\"true\""};
 			for (int i = 0; i < sources.length; i++) {
 				String src = sources[i];
-				assertNull(testX(xp,"x", _package+".MyTestX_AnyXXx", 
-					'[' + i + "]: " +src));
+				assertNull(testX(xp,"x", _package+".MyTestX_AnyXXx", src),
+					"[" + i + "]");
 			}
 			for (int i = 0; i < sources.length; i++) {
 				String src = sources[i];
-				assertNull(testX(xp,"y", _package+".MyTestX_AnyXXy", 
-					'[' + i + "]: " +src));
+				assertNull(testX(xp,"y", _package+".MyTestX_AnyXXy", src),
+					"[" + i + "]");
 			}
 			sources = new String[] {"\\\"x\\\"", "\\\" ab cd \\\"",
 				"\\\" ab\tcd \\\"", "\\\" ab\\tcd \\\"",
@@ -468,8 +473,8 @@ clearSources();
 				"\\\"\\\"\\\"\\\"", "\\\"\\\""};
 			for (int i = 0; i < sources.length; i++) {
 				String src = sources[i];
-				assertNull(testX(xp,"z", _package+".MyTestX_AnyXXz", 
-					'[' + i + "]: " +src));
+				assertNull(testX(xp,"z", _package+".MyTestX_AnyXXz", src),
+					"[" + i + "]");
 			}
 		} catch (Exception ex) {fail(ex); reporter.clear();}
 //if(true)return;
@@ -616,7 +621,7 @@ if(T)return;
 			assertNull(((Map) xc.toXon()).get("a"));
 			assertFalse(((Map) xc.toXon()).containsKey("a"));
 	} catch (Exception ex) {fail(ex); reporter.clear();}
-if(true)return;
+//if(true)return;
 if(T)return;
 	clearSources();
 /**/
@@ -736,20 +741,15 @@ if(T)return;
 "  <xd:component>%class "+_package+".MytestX_Str %link #A;</xd:component>\n" +
 "<xd:declaration>boolean x(){outln(getText());return true;}</xd:declaration>\n"+
 "<xd:xon name='A'>\n" +
-//"{\"\": \"jstring()\", \"a\": \"jstring()\", \"b\":\"jstring()\"}\n"+
 "[ \"eq('2021')\", \"num()\", \"gYear()\", \"jstring()\", \"jstring()\" ]\n" +
 "</xd:xon>\n" +
 "</xd:def>";
 			xp = XDFactory.compileXD(null,xdef);
 			genAndCopyXComponents(xp);
-			xon = "{\"\":\"nul\", \"a\": \"a1\", \"b\": \"a-1\"}";
-			xon = "{\"\":\"null\", \"a\": \"1\", \"b\": \"-1\"}";
-			xon = "[\"2021\", \"2021\", \"2021\", \"null\", \"-1\"]";
-//			xon = "[\"-1\"]";
+			xon = "[ \"2021\", \"2021\", \"2021\", \"null\", \"-1\" ]";
 			x = XonUtils.parseXON(xon);
 			s = XonUtils.toXonString(x, true);
 System.out.println(s);
-			XonUtils.parseXON(s);
 			y = XonUtils.parseXON(XonUtils.toXonString(x, true));
 			assertTrue(XonUtils.xonEqual(x,y));
 			json = XonUtils.toXonString(x, true);
