@@ -344,7 +344,7 @@ clearSources();
 					+ "\n***\n" + XonUtils.toXonString(o, true));
 			}
 		} catch (Exception ex) {fail(ex); reporter.clear();}
-if(true)return;
+//if(true)return;
 if(T)return;
 clearSources();
 /**/
@@ -396,13 +396,12 @@ clearSources();
 			xc = xp.createXDDocument().xparseXComponent(xml, null, reporter);
 			assertNoErrorsAndClear(reporter);
 			assertEq(xml, xc.toXml());
-			assertEq("1", SUtils.getValueFromGetter(
-				SUtils.getValueFromGetter(xc,"getB"), "getb"));
-			assertEq("2", SUtils.getValueFromGetter(
-				SUtils.getValueFromGetter(SUtils.getValueFromGetter(
-					xc,"getC"), "getB"), "getb"));
+			assertEq("1", SUtils.getValueFromGetter(SUtils.getValueFromGetter(
+				xc,"getB"), "getb"));			
+			assertEq("2", SUtils.getValueFromGetter(SUtils.getValueFromGetter(
+				SUtils.getValueFromGetter(xc,"getC"), "getB"), "getb"));
 		} catch (Exception ex) {fail(ex); reporter.clear();}
-//if(true)return;
+if(true)return;
 if(T)return;
 clearSources();
 /**/
