@@ -109,7 +109,6 @@ public class MyTestX extends XDTester {
 					result += "** 3 '"+outResult+"', '"+swr.toString()+"'\n";
 				}
 			}
-			String xon_a = XonUtils.toXonString(x);
 			xd = xp.createXDDocument(xdName);
 			if (outResult != null) {
 				xd.setStdOut(
@@ -214,10 +213,7 @@ public class MyTestX extends XDTester {
 		return result.isEmpty() ? null : '~' + source + "~\n" + result;
 	}
 	private void genAndCopyXComponents(final XDPool xp) {
-//		File file = clearTempDir();
-		File file = new File("C:/tempx/components");
-		file.mkdirs();
-		FUtils.deleteAll(file.listFiles(), true);
+		File file = clearTempDir();
 		genXComponent(xp, file).checkAndThrowErrors();
 		String source = getSourceDir();
 		File[] files = new File(file, _package).listFiles();
