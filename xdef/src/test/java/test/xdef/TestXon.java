@@ -481,10 +481,10 @@ public class TestXon extends XDTester {
 			assertNoErrorwarningsAndClear(reporter);
 			assertTrue(XonUtils.xonEqual(xc.toXon(),y));
 			el = xc.toXml();
-			s = XonUtils.toJsonString(XonUtils.xmlToXon(el), true);
-			o = XonUtils.xonToJson(jparse(xp, "", s, reporter));
+			s = XonUtils.toXonString(XonUtils.xmlToXon(el), true);
+			o = jparse(xp, "", s, reporter);
 			assertNoErrorwarningsAndClear(reporter);
-			if (!XonUtils.xonEqual(o, XonUtils.xonToJson(y))) {
+			if (!XonUtils.xonEqual(o, y)) {
 				fail(XonUtils.xonDiff(o, XonUtils.xonToJson(y)));
 				fail(KXmlUtils.nodeToString(el, true)
 					+ "\n***\n" + XonUtils.toXonString(y, true)

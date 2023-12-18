@@ -88,16 +88,22 @@ public class XSParseBase64Binary extends XSAbstractParser {
 	}
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){
-		int pos0 = p.getIndex();
-		p.isSpaces();
 		try {
+			int pos0 = p.getIndex();
 			XSParseReader r = new XSParseReader(p);
 			ByteArrayOutputStream bw = new ByteArrayOutputStream();
 			SUtils.decodeBase64(r, bw);
 			p.setParsedValue(new DefBytes(bw.toByteArray(), false));
+			int i;
+			while ((i=r.read()) != -1) {
+				if (i != ' ') {
+					//Incorrect value of '&{0}'&{1}{: }
+					p.errorWithString(XDEF.XDEF809, parserName());
+					return;
+				}
+			}
 			String s = r.getParsedString();
 			r = null;
-			p.isSpaces();
 			p.replaceParsedBufferFrom(pos0, s);
 			checkPatterns(p);
 			check(p);
@@ -135,7 +141,7 @@ public class XSParseBase64Binary extends XSAbstractParser {
 		private final SParser _p;
 		private final StringBuilder _sb;
 		XSParseReader(final SParser p) {
-			_quoted = (_p = p).isOneOfTokens("b(","\"");
+			_quoted = (_p = p).isOneOfTokens("b(", "\"");
 			_sb = new StringBuilder();
 		}
 		@Override
@@ -147,15 +153,14 @@ public class XSParseBase64Binary extends XSAbstractParser {
 				_sb.append(' ');
 			}
 			char ch;
-			if ((ch = _p.peekChar()) == SParser.NOCHAR
-				|| (_quoted == 0 && ch == ')' || _quoted == 1 && ch == '"')) {
-				return -1;
-			} else {
+			if ((ch = _p.peekChar()) != SParser.NOCHAR
+				&& !(_quoted == 0 && ch == ')' || _quoted == 1  && ch == '"')) {
 				_sb.append(ch);
 				return ch;
 			}
+			return -1;
 		}
 
-		private String getParsedString() {return _sb.toString().trim();}
+		private String getParsedString() {return _sb.toString();}
 	}
 }

@@ -82,9 +82,6 @@ public abstract class XSAbstractParser extends XDParserAbstract
 		}
 		XDParseResult p = new DefParseResult(x.toString());
 		parseObject(xnode, p);
-		if (_whiteSpace == 'c') {
-			p.isSpaces();
-		}
 		if (!p.eos()) {
 			//After the item '&{0}' follows an illegal character&{1}{: }
 			p.errorWithString(XDEF.XDEF804, parserName());

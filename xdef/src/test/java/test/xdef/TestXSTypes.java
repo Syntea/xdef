@@ -3471,7 +3471,7 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(parse("abcd"), _msg);
 		assertTrue(parse("abcd efgh"), _msg);
 		assertTrue(parse("abcd\tefgh"), _msg);
-		assertTrue(parse("abcd\nefgh"), _msg);
+		assertTrue(parse("abcd\r\nefgh"), _msg);
 		assertTrue(parse("abcd\refgh"), _msg);
 		assertTrue(parse("ab cd\nef\tg\rh"), _msg);
 		assertTrue(parse("HbRBHbRBHQw="), _msg);
@@ -3479,6 +3479,7 @@ public final class TestXSTypes extends XDTester {
 		assertTrue(parse("HbRBHw=="), _msg);
 		assertTrue(parse("H\nb\nR\nB\nH\nw\n=\n="), _msg);
 		assertTrue(parse("HQ=="), _msg);
+//		assertTrue(parse(" abcd "), _msg);//schema makes replace
 //		assertTrue(parse("  abcd\n\t\refgh  "), _msg);//schema makes replace
 
 		// testing errors

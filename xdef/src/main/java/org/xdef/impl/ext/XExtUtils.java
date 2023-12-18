@@ -284,10 +284,18 @@ public final class XExtUtils {
 		SPosition spos = x.getSPosition();
 		return spos != null ? spos.getSysId() : "";
 	}
+	/** Get source position of given node.
+	 * @param x node with source position.
+	 * @return source position of node or null if it is not available.
+	 */
 	public static String getSourcePosition(final XXNode x) {
 		SPosition spos = x.getSPosition();
 		return spos != null ? spos.toString() : "";
 	}
+	/** Get current time in millisoconds.
+	 * @return current time in millisoconds.
+	 */
+	public static long currentTimeMillis() {return System.currentTimeMillis();}
 	/** Get value of environmental variable.
 	 * @param name of environmental variable.
 	 * @return value of environmental variable.

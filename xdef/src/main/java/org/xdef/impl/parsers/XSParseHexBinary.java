@@ -21,7 +21,7 @@ public class XSParseHexBinary extends XSParseBase64Binary {
 		int quoted = p.isOneOfTokens("x(", "\"");
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		int i;
-		while ((i="0123456789ABCDEFabcdef".indexOf(p.getCurrentChar()))>=0){
+		while ((i="0123456789ABCDEFabcdef".indexOf(p.getCurrentChar()))>=0) {
 			i = i >= 16 ? (i - 6) << 4 : i << 4;
 			int j;
 			p.nextChar();

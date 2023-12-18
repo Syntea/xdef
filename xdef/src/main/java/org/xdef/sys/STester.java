@@ -67,10 +67,12 @@ public abstract class STester {
 	private int _errors;
 	/* Output printer (default is UTF-8). */
 	private String _encoding = "UTF-8";
+	/** Package name. */
+	public String _package;
 	/** Name of test. */
-	private String _name;
+	public String _name;
 	/** Source file name. */
-	private String _sourceName;
+	public String _sourceName;
 	/** Home directory of test. */
 	private String _homeDir;
 	/** Source directory. */
@@ -107,7 +109,6 @@ public abstract class STester {
 	public final void setArguments(final String... args) {_arguments = args;}
 	/** Get path to project home directory. If the directory doesn't exist put
 	 *  an error message and return null.
-	 *
 	 * @return The string with the path to data directory or null.
 	 */
 	public final String getHomeDir() {return _homeDir;}
@@ -178,15 +179,6 @@ public abstract class STester {
 		}
 		return _tempDir;
 	}
-	/** Get name of test (the name of class without package prefix).
-	 * @return The name of test class.
-	 */
-	public final String getName() {return _name;}
-	/** Get path and name of Java source file. If the file is unknown
-	 * return null.
-	 * @return The string with the path to source directory or null.
-	 */
-	public final String getSourceName() {return _sourceName;}
 	/** Get output stream.
 	 * @return print stream or null if the output is not defined.
 	 */
@@ -815,6 +807,7 @@ public abstract class STester {
 		_errors = 0;
 
 		_className = clazz.getName();
+		_package = clazz.getPackage().getName();
 		_name = clazz.getName();
 		int ndx = _name.lastIndexOf('.');
 		if (ndx >= 0) {
