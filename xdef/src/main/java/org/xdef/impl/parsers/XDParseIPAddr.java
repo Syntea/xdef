@@ -2,6 +2,7 @@ package org.xdef.impl.parsers;
 
 import org.xdef.XDParseResult;
 import org.xdef.XDParserAbstract;
+import static org.xdef.XDValueID.XD_IPADDR;
 import org.xdef.impl.code.DefIPAddr;
 import org.xdef.msg.XDEF;
 import org.xdef.proc.XXNode;
@@ -16,10 +17,9 @@ public class XDParseIPAddr extends XDParserAbstract {
 	public XDParseIPAddr() {super();}
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p) {
-		int pos = p.getIndex();
 		p.isSpaces();
-		p.isChar('/');
-		int pos1 = p.getIndex();
+		int pos = p.getIndex();
+		p.isChar('/'); // xon format may start with '/'
 		int parts = 0;
 		while ("0123456789abcdefABCDEF".indexOf(p.getCurrentChar()) >= 0) {
 			p.nextChar();
@@ -31,17 +31,14 @@ public class XDParseIPAddr extends XDParserAbstract {
 				}
 			}
 		}
-		int pos2 = p.getIndex();
-		String s = "";
+		String s = p.getBufferPart(pos, p.getIndex());
+		p.isSpaces();
 		if (parts > 1) {
-			s = p.getBufferPart(pos1, pos2);
 			try {
 				p.setParsedValue(new DefIPAddr(s));
 				return;
-			} catch (Exception ex) {} //inet addr error
+			} catch (RuntimeException ex) {}
 		}
-		p.setIndex(pos);
-		p.setParsedValue(new DefIPAddr()); //null IPAddr
 		//Incorrect value of '&{0}'&{1}{: }
 		p.errorWithString(XDEF.XDEF809,parserName(), s);
 	}
