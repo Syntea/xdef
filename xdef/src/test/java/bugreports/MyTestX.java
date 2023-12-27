@@ -321,8 +321,6 @@ clearSources();
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' xd:root='a'>\n" +
 "<xd:xon name='a'>\n" +
 "[ \"hexBinary()\", \"base64Binary()\" ]\n" +
-//"[ \"hexBinary()\" ]\n" +
-//"[\"base64Binary()\" ]\n" +
 "</xd:xon>\n" +
 " <xd:component>%class "+_package+".MyTestX_Hexb64 %link #a;</xd:component>\n" +
 "</xd:def>";
@@ -349,7 +347,7 @@ clearSources();
 					+ "\n***\n" + XonUtils.toXonString(o, true));
 			}
 		} catch (Exception ex) {fail(ex); reporter.clear();}
-if(true)return;
+//if(true)return;
 if(T)return;
 clearSources();
 /**/

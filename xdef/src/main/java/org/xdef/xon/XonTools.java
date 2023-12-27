@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Currency;
 import java.util.LinkedHashMap;
 import java.util.List;
-import org.xdef.XDBytes;
 import org.xdef.XDParseResult;
 import org.xdef.XDParser;
 import org.xdef.XDTelephone;
@@ -148,7 +147,7 @@ public class XonTools {
 		return sb.toString();
 	}
 
-	/** Parse XON/JSON array (the string which begins with '[').
+	/** Parse XON/JSON array of simple values (string which begins with '[').
 	 * @param ar the array where results are stored.
 	 * @param p String parser with the string.
 	 */
@@ -177,59 +176,56 @@ public class XonTools {
 				&& (p.eos() || (ch=p.getCurrentChar())<=' '||ch==']'||ch==',')){
 					ar.add(i == 0 ? null : i==1);
 			} else {
-				p.setIndex(pos);
-				if (p.isSignedInteger()
+				char typCh; // character with type specification after a number
+				if (p.isSignedInteger() && (typCh=p.isOneOfChars("bsilND"))>=0
 					&& (p.eos() || (ch = p.getCurrentChar()) <= ' '
 					|| ch == ']' || ch == ',')) {
-					try {
-						ar.add(Long.parseLong(
-							p.getBufferPart(pos, p.getIndex())));
-					} catch (Exception ex) {
-						ar.add(new BigDecimal(
-							p.getBufferPart(pos, p.getIndex())));
+					String s = p.getBufferPart(pos, p.getIndex());
+					switch(typCh) {
+						case 'b': ar.add(Byte.valueOf(s)); break;
+						case 's': ar.add(Short.valueOf(s)); break;
+						case 'i': ar.add(Integer.valueOf(s)); break;
+						case 'N': ar.add(new BigInteger(s)); break;
+						case 'D': ar.add(new BigDecimal(s)); break;
+						default:
+							try {
+								ar.add(Long.valueOf(s));
+							} catch (NumberFormatException ex) {
+								ar.add(new BigInteger(s));
+							}
+					}
+				} else if (p.isSignedFloat() && (typCh=p.isOneOfChars("fdD"))>=0
+					&& (p.eos() || (ch = p.getCurrentChar()) <= ' '
+					|| ch == ']' || ch == ',')) {
+					String s = p.getBufferPart(pos, p.getIndex());
+					switch(typCh) {
+						case 'f': ar.add(Float.valueOf(s)); break;
+						case 'D': ar.add(new BigDecimal(s)); break;
+						default: ar.add(Double.valueOf(s));
 					}
 				} else {
 					p.setIndex(pos);
-					if (p.isSignedFloat()
-						&& (p.eos() || (ch = p.getCurrentChar()) <= ' '
-						|| ch == ']' || ch == ',')) {
-						String s = p.getBufferPart(pos, p.getIndex());
-						if (s.indexOf('.') > 0 || s.indexOf('e') > 0
-							|| s.indexOf('E') > 0) {
-							ar.add(new BigDecimal(
-								p.getBufferPart(pos, p.getIndex())));
-						} else {
-							try {
-								ar.add(Long.parseLong(s));
-							} catch (Exception ex) {
-								ar.add(new BigInteger(
-									p.getBufferPart(pos, p.getIndex())));
-							}
-						}
+					if (p.isChar('"')) {
+						ar.add(XonTools.readJString(p));
 					} else {
-						p.setIndex(pos);
-						if (p.isChar('"')) {
-							ar.add(XonTools.readJString(p));
-						} else {
-							for(;;) {
-								if (p.isChar('\\')) {
-									if (p.eos()) {
-										throw new RuntimeException(
-											"JList error");
-									}
-									p.nextChar();
-								} else if ((ch = p.getCurrentChar()) == ' '
-									|| ch == ',' || ch == ']' || ch == '[') {
-									String s =
-										p.getBufferPart(pos, p.getIndex());
-									ar.add(xmlToJValue(s));
-									break;
-								}
+						for(;;) {
+							if (p.isChar('\\')) {
 								if (p.eos()) {
-									throw new RuntimeException("JList error");
+									throw new RuntimeException(
+										"JList error");
 								}
 								p.nextChar();
+							} else if ((ch = p.getCurrentChar()) == ' '
+								|| ch == ',' || ch == ']' || ch == '[') {
+								String s =
+									p.getBufferPart(pos, p.getIndex());
+								ar.add(xmlToJValue(s));
+								break;
 							}
+							if (p.eos()) {
+								throw new RuntimeException("JList error");
+							}
+							p.nextChar();
 						}
 					}
 				}
@@ -258,20 +254,18 @@ public class XonTools {
 		if (s == null) {
 			return null;
 		}
-		if (s.isEmpty()) {
-			return "";
-		} else if (s.charAt(0) == '[') {
+		switch(s) {
+			case "": return "";
+			case "null": return null;
+			case "true": return Boolean.TRUE;
+			case "false": return Boolean.FALSE;
+		}
+		if (s.charAt(0) == '[') {
 			List<Object> ar = new ArrayList<>();
 			StringParser p = new StringParser(s);
 			p.setIndex(1);
 			parseJArray(ar, p);
 			return ar;
-		} else if ("null".equals(s)) {
-			return null;
-		} else if ("true".equals(s)) {
-			return Boolean.TRUE;
-		} else if ("false".equals(s)) {
-			return Boolean.FALSE;
 		}
 		int len = s.length();
 		char ch = s.charAt(0);

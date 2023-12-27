@@ -1786,7 +1786,7 @@ public class FUtils {
 				urls.add(x.getCanonicalFile().toURI().toURL().toExternalForm());
 			}
 		}
-		return urls.toArray(new String[urls.size()]);
+		return urls.toArray(new String[0]);
 	}
 
 	/** Get URL from string (accept also protocol "classpath://").

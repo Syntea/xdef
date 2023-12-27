@@ -53,11 +53,6 @@ public final class XonReader extends StringParser implements XonParsers {
 
 	/** Create instance of parser.
 	 * @param jp parser of XON source.
-	 */
-	XonReader(XonParser jp) {_jp = jp;}
-
-	/** Create instance of parser.
-	 * @param jp parser of XON source.
 	 * @param source String with source data.
 	 */
 	public XonReader(final SBuffer source, XonParser jp) {
@@ -420,32 +415,12 @@ public final class XonReader extends StringParser implements XonParsers {
 		} else if ((i=isOneOfTokens(new String[]{"null","false","true"}))>=0) {
 			return returnValue(spos, i > 0 ? (i==2) : null);
 		} else if (_xonMode
-			&& (i=isOneOfTokens(new String[]{"NaN","INF","-INF", ANY_OBJ})) >= 0) {
+			&& (i=isOneOfTokens(new String[]{"NaN","INF","-INF"})) >= 0) {
 			if (isChar('f')) {
 				switch(i) {
 					case 0: return returnValue(spos, Float.NaN);
 					case 1: return returnValue(spos, Float.POSITIVE_INFINITY);
 					case 2: return returnValue(spos, Float.NEGATIVE_INFINITY);
-					default: {// anyObject
-						spos = getPosition();
-						spos.setIndex(getIndex() - ANY_OBJ.length());
-						SBuffer name = new SBuffer(ANY_OBJ, spos);
-						SBuffer val = new SBuffer("", spos);
-						skipSpacesOrComments();
-						if (isChar('=')) {
-							skipSpacesOrComments();
-							XonTools.JValue jv = readSimpleValue();
-							if (!(((XonTools.JValue) jv).getValue()
-								instanceof String)) {
-								//After ":" in the command $any must
-								// follow simpleValue
-								error(JSON.JSON021);
-							} else {
-								val = jv.getSBuffer();
-							}
-						}
-						_jp.xdScript(name, val);
-					}
 				}
 			} else {
 				switch(i) {
@@ -468,35 +443,35 @@ public final class XonReader extends StringParser implements XonParsers {
 				if (floatNumber) {
 					switch(isOneOfChars("fDd")) {
 						case 'f':
-							return returnValue(spos, Float.parseFloat(s));
+							return returnValue(spos, Float.valueOf(s));
 						case 'd':
-							return returnValue(spos, Double.parseDouble(s));
+							return returnValue(spos, Double.valueOf(s));
 						case 'D':
 							return returnValue(spos, new BigDecimal(s));
 						default:
-							return returnValue(spos, Double.parseDouble(s));
+							return returnValue(spos, Double.valueOf(s));
 					}
 				} else {
 					switch(isOneOfChars("lisbNfDd")) {
 						case 'l':
-							return returnValue(spos, Long.parseLong(s));
+							return returnValue(spos, Long.valueOf(s));
 						case 'i':
-							return returnValue(spos, Integer.parseInt(s));
+							return returnValue(spos, Integer.valueOf(s));
 						case 's':
-							return returnValue(spos, Short.parseShort(s));
+							return returnValue(spos, Short.valueOf(s));
 						case 'b':
-							return returnValue(spos, Byte.parseByte(s));
+							return returnValue(spos, Byte.valueOf(s));
 						case 'N':
 							return returnValue(spos, new BigInteger(s));
 						case 'f':
-							return returnValue(spos, Float.parseFloat(s));
+							return returnValue(spos, Float.valueOf(s));
 						case 'D':
 							return returnValue(spos, new BigDecimal(s));
 						case 'd':
-							return returnValue(spos, Double.parseDouble(s));
+							return returnValue(spos, Double.valueOf(s));
 						default:
 						try {
-							return returnValue(spos, Long.parseLong(s));
+							return returnValue(spos, Long.valueOf(s));
 						} catch (Exception ex) {
 							try {
 								return returnValue(spos, new BigInteger(s));
@@ -506,10 +481,10 @@ public final class XonReader extends StringParser implements XonParsers {
 				}
 			} else {
 				if (floatNumber) {
-					return returnValue(spos, Float.parseFloat(s));
+					return returnValue(spos, Double.valueOf(s));
 				} else {
 					try {
-						return returnValue(spos, Long.parseLong(s));
+						return returnValue(spos, Long.valueOf(s));
 					} catch (Exception exx) {
 						return returnValue(spos, new BigInteger(s));
 					}
@@ -696,12 +671,12 @@ public final class XonReader extends StringParser implements XonParsers {
 					case "INF":  // "INF"
 					case "-INF": { // "-INF"
 						String s = tokens[i];
-						if (isChar('F')) {
+						if (isChar('f')) {
 							return returnValue(spos, "NaN".equals(s) ? Float.NaN
 								: "INF".equals(s) ? Float.POSITIVE_INFINITY
 								: Float.NEGATIVE_INFINITY);
 						}
-						isChar('D');
+						isChar('d');
 						return returnValue(spos, "NaN".equals(s) ? Double.NaN
 							: "INF".equals(s) ? Double.POSITIVE_INFINITY
 								: Double.NEGATIVE_INFINITY);
