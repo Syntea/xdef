@@ -6,13 +6,10 @@ import java.util.Properties;
 import java.util.Set;
 import javax.xml.namespace.QName;
 import static org.xdef.XDConstants.LINE_SEPARATOR;
-import org.xdef.XDContainer;
 import org.xdef.XDParser;
 import org.xdef.XDPool;
 import org.xdef.XDValue;
 import org.xdef.XDValueID;
-import static org.xdef.XDValueID.XD_STRING;
-import org.xdef.XDValueType;
 import org.xdef.impl.XData;
 import org.xdef.impl.XElement;
 import org.xdef.impl.XNode;
@@ -29,58 +26,6 @@ import org.xdef.sys.SUtils;
  * @author Vaclav Trojan
  */
 class XCGeneratorBase {
-	private static final String[] INTTYPES =
-		{"byte", "short", "int", "long"};
-	private static final String[] CONVERTTYPES = {
-		/*string*/
-		"string", "an", "BNF", "CDATA", "contains", "containsi", "country",
-		"empty", "ends", "endsi", "eq", "eqi",
-		"file", "jstring", "letters", "num", "pic", "QNameURI", "regex",
-		"starts", "startsi", "url", "ENTITY", "ID", "IDREF", "language",
-		"list", "NCName", "NMTOKEN", "NOTATION", "Name", "QName", "token",
-		/*numbers*/
-		"unsignedByte", "unsignedShort", "unsignedInt", "unsignedLong",
-		/*datetime*/
-		"date",	"time", "dateTime", "day", "month", "mothDay", "gDay",
-		"gMonth", "gYearMonth", "emailDate", "xdatetime", "dateYMDhms",
-		"printableDate",
-		/*decimal*/
-		"decimal", "dec",
-		/*bytes*/
-		"base64Binary", "hexBinary", "hex", "MD5",
-		"SHA1",
-		/*emailaddr*/
-		"emailAddr", "domainAddr",
-		/*boolean*/
-		"boolean", "jboolean",
-		/*URI*/
-		 "uri", "anyURI"};
-	private static final String[] TOTYPES = {
-		/*string*/
-		"string","string", "string", "string", "string", "string", "string",
-		"string", "string", "string", "string", "string",
-		"string", "string", "string", "string", "string", "string", "string",
-		"string", "string", "string", "string", "string", "string", "string",
-		"string", "string", "string", "string", "string", "string", "string",
-		/*numbers*/
-		"short", "int", "long", "integer",
-		/*datetime*/
-		"dateTime", "dateTime", "dateTime",
-		"dateTime", "dateTime", "dateTime", "dateTime",	"dateTime", "dateTime",
-		"dateTime",	"dateTime", "dateTime", "dateTime",
-		/*decimal*/
-		"decimal", "decimal",
-		/*bytes*/
-		"base64Binary", "base64Binary", "base64Binary", "base64Binary",
-		"base64Binary",
-		/*emailaddr*/
-		"emailAddr", "emailAddr",
-		/*boolean*/
-		"boolean", "boolean",
-		/*URI*/
-		 "anyURI", "anyURI"};
-	private static final String[] FLTTYPES = {"float", "double"};
-
 	/** Platform-dependent newline. */
 	static final String LN = LINE_SEPARATOR;
 	/** Names that can't be used in generated code.*/
@@ -262,86 +207,6 @@ class XCGeneratorBase {
 		return null;
 	}
 
-	/** Find index of name in the adday of names.
-	 * @param name find index of this name in array of names,
-	 * @param names in array of names,
-	 * @return index of this name in array of names or return -1 if not found.
-	 */
-	private static int isOneOf(String name, final String[] names) {
-		for (int i = 0; i < names.length; i++) {
-			if (name.equals(names[i])) {
-				return i;
-			}
-		}
-		return -1;
-	}
-
-	/** Find first indes of name int the array of names and if it was found
-	 * then find index of newName in the array.
-	 * @param name name to be found.
-	 * @param newName newName to be found.
-	 * @param names array of names.
-	 * @return index or -1.
-	 */
-	private static int getTypeNameIndex(final String name,
-		final String newName,
-		final String[] names) {
-		int j = isOneOf(name, names);
-		if (j >= 0) {
-			int k = isOneOf(newName, names);
-			if (k >= 0) {
-				return k >= j ? k : j;
-			}
-		}
-		return -1;
-	}
-
-	/** Get union items type name.If parser name is "union" and all
-	 * items has parser with compatile result type then this parser name
-	 * is returned.
-	 * @param xdata object where parsers ars investigated.
-	 * @return parser method name or union items compatible type.
-	 */
-	private static String getUnionItemsYypeName(final XMData xdata) {
-		String parserName = xdata.getParserName();
-		if (!"union".equals(parserName)) {
-			return parserName;
-		}
-		XDContainer x = xdata.getParseParams();
-		String name = null;
-		XDValue y = x.getXDNamedItemValue("item");
-		if (y != null && XDValueType.CONTAINER.equals(y.getItemType())){
-			XDContainer z = (XDContainer) y;
-			for (int i = 0; i < z.getXDItemsNumber(); i++) {
-				XDValue v = z.getXDItem(i);
-				XDValueType t = v.getItemType();
-				if (XDValueType.PARSER.equals(t)) {
-					XDParser p = (XDParser) v;
-					String s = p.parserName();
-					if ("enum".equals(s) || "enumi".equals(s)) {
-						return "union";
-					}
-					int j;
-					if ((j = isOneOf(s, CONVERTTYPES)) >= 0) {
-						s = TOTYPES[j];
-					}
-					if (name == null) {
-						name = s;
-					} else if (!name.equals(s)) {
-						if ((j=getTypeNameIndex(name, s , INTTYPES)) >=0) {
-							name = INTTYPES[j];
-						} else if ((j=getTypeNameIndex(name,s,FLTTYPES))>=0){
-							name = FLTTYPES[j];
-						} else {
-							return "union";
-						}
-					}
-				}
-			}
-		}
-		return name;
-	}
-
 	/** Get Java Object name corresponding to XD type.
 	 * @param xdata XMData object.
 	 * @return Java Object name corresponding to XD type
@@ -351,35 +216,18 @@ class XCGeneratorBase {
 		if (result != null) {
 			return result;
 		}
-		switch (getUnionItemsYypeName(xdata)) {
-			case "byte": return "Byte";
-			case "unsignedByte":
-			case "short": return "Short";
-			case "unsignedShort":
-			case "int": return "Integer";
-			case "unsignedInt":
-			case "long": return "Long";
-			case "negativeInteger":
-			case "PositiveInteger":
-			case "nonPositiveInteger":
-			case "unsignedLong":
-			case "integer": return "java.math.BigInteger";
-			case "float": return "Float";
-			case "double": return "Double";
-			case "decimal":
-			case "dec":  return "java.math.BigDecimal";
-			case "jnumber": return "Number";
-			case "jboolean": return "Boolean";
-			case "jvalue": return "Object";
-			case "string": return "String";
+		String parserName;
+		if ("jnumber".equals(parserName = xdata.getParserName())) {
+			return "Number";
 		}
-		switch (xdata.getParserType()) {
+		switch (xdata.getAlltemsType()) {
 			case XDValueID.XD_BOOLEAN: return "Boolean";
 			case XDValueID.XD_CHAR: return "Character";
 			case XDValueID.XD_BYTE: return "Byte";
 			case XDValueID.XD_SHORT: return "Short";
 			case XDValueID.XD_INT: return "Integer";
 			case XDValueID.XD_LONG: return "Long";
+			case XDValueID.XD_BIGINTEGER: return "java.math.BigInteger";
 			case XDValueID.XD_FLOAT: return "Float";
 			case XDValueID.XD_DOUBLE: return "Double";
 			case XDValueID.XD_DECIMAL: return "java.math.BigDecimal";
@@ -392,24 +240,14 @@ class XCGeneratorBase {
 			case XDValueID.XD_CURRENCY: return "java.util.Currency";
 			case XDValueID.XD_IPADDR: return "java.net.InetAddress";
 			case XDValueID.XD_BYTES:
-				_byteArrayEncoding |= getBytesType(xdata);
+				_byteArrayEncoding |= "base64Binary".equals(parserName)
+					? 1 : 2;
 				return "byte[]";
 			case XDValueID.XD_TELEPHONE: return "org.xdef.XDTelephone";
 			case XDValueID.XD_NULL: //jnull
 			case XDValueID.XD_ANY: return "Object";
 		}
 		return  "String";  // default
-	}
-
-	/** Get type of encoding parser (i.e. hex or base64) of type bytes. */
-	private static byte getBytesType(final XMData xdata) {
-		switch(xdata.getParserName()) {
-			case "hexBinary":
-			case "hex":
-			case "SHA1": return 2;
-			case "base64Binary": return 1;
-			default: return 0;
-		}
 	}
 
 	/** Create ParsedResultGetter.
@@ -423,36 +261,20 @@ class XCGeneratorBase {
 		if (enumType != null) {
 			return enumType+".toEnum("+ result+"toString())";
 		}
-		switch (getUnionItemsYypeName(xdata)) {
-			case "jlist":
-				return "org.xdef.component.XComponentUtil.jlistToString(value)";
-			case "jvalue":
-			case "jnull": return "value.getParsedValue().getObject()";
-			case "byte": return result + "byteValue()";
-			case "short": return result + "shortValue()";
-			case "unsignedByte":
-			case "unsignedShort":
-			case "int": return result + "intValue()";
-			case "unsignedInt":
-			case "long": return result + "longValue()";
-			case "negativeInteger":
-			case "nonNegativeInteger":
-			case "nonPositiveiveInteger":
-			case"integer": return result + "integerValue()";
-			case "float": return result + "floatValue()";
-			case "double": return result + "doubleValue()";
-			case "decimal": return result + "decimalValue()";
-			case "jnumber": return "(Number)(" + result + "getObject())";
-			case "jstring": return "(String) (" + result + "getObject())";
-			case "string": return result + "toString()";
+		if ("jnumber".equals(xdata.getParserName())) {
+			return "(Number)(" + result + "getObject())";
 		}
-		switch (xdata.getParserType()) {
+		if ("jlist".equals(xdata.getParserName())) {
+			return "org.xdef.component.XComponentUtil.jlistToString(value)";
+		}
+		switch (xdata.getAlltemsType()) {
 			case XDValueID.XD_BOOLEAN: return result + "booleanValue()";
 			case XDValueID.XD_CHAR: return result + "charValue()";
 			case XDValueID.XD_BYTE: return result + "byteValue()";
 			case XDValueID.XD_SHORT: return result + "shortValue()";
 			case XDValueID.XD_INT: return result + "intValue()";
 			case XDValueID.XD_LONG: return result + "longValue()";
+			case XDValueID.XD_BIGINTEGER: return result + "integerValue()";
 			case XDValueID.XD_FLOAT: return result + "floatValue()";
 			case XDValueID.XD_DOUBLE: return result + "doubleValue()";
 			case XDValueID.XD_DECIMAL: return result + "decimalValue()";
@@ -466,14 +288,15 @@ class XCGeneratorBase {
 				return "(java.net.URI)(" + result + "getObject())";
 			case XDValueID.XD_EMAIL:
 				return "(org.xdef.XDEmailAddr)(" + result + "getObject())";
-			case XDValueID.XD_IPADDR:
-				return "(java.net.InetAddress)(" + result + "getObject())";
 			case XDValueID.XD_CURRENCY:
 				return "(java.util.Currency)(" + result + "getObject())";
+			case XDValueID.XD_IPADDR:
+				return "(java.net.InetAddress)(" + result + "getObject())";
 			case XDValueID.XD_BYTES: return result + "getBytes()";
 			case XDValueID.XD_TELEPHONE:
 				return "(org.xdef.XDTelephone)(" + result + "getObject())";
 			case XDValueID.XD_PARSER: return "value.getParsedString()";
+			case XDValueID.XD_NULL: //jnull
 			case XDValueID.XD_ANY: return "value.getParsedValue().getObject()";
 		}
 		return result + "toString()";
@@ -530,7 +353,7 @@ class XCGeneratorBase {
 			"&{x}", x,
 			"&{name}", name));
 		XDValue xfixed = xdata != null ? xdata.getFixedValue() : null;
-		if (xfixed != null && xfixed.getItemId() == XD_STRING) {
+		if (xfixed != null && xfixed.getItemId() == XDValueID.XD_STRING) {
 			sb.append("=\"").append(xfixed.toString()).append('"');
 		}
 		sb.append(';').append(LN);
@@ -924,7 +747,7 @@ class XCGeneratorBase {
 				sb.append(modify(template,
 					"&{x}", modify(x,
 						"_&{name}=x;",
-"_&{name}=org.xdef.sys.SDatetime.createFrom(x);"),
+						"_&{name}=org.xdef.sys.SDatetime.createFrom(x);"),
 					"&{name}", name,
 					"&{d}" , d,
 					"&{xmlName}", name.replace('$', ':'),
@@ -962,8 +785,8 @@ class XCGeneratorBase {
 					break;
 				}
 				case XDValueID.XD_BYTES:
-					x = (getBytesType(xdata) == 2
-						? "encodeHex" : "encodeBase64") + "(get&{name}()))";
+					x = ("base64Binary".equals(xdata.getParserName())
+						? "encodeBase64" : "encodeHex") + "(get&{name}()))";
 					break;
 				case XDValueID.XD_IPADDR:
 					x = "get&{name}().toString().substring(1))";
@@ -1021,8 +844,7 @@ class XCGeneratorBase {
 			sb.append(
 "\t\tjava.util.ArrayList<org.xdef.component.XComponent> a=").append(LN)
 				.append(
-"\t\t\tnew java.util.ArrayList<>();")
-				.append(LN);
+"\t\t\tnew java.util.ArrayList<>();").append(LN);
 		}
 		String x;
 		final String y = max > 1? ".get(i)" : "";
@@ -1048,7 +870,8 @@ class XCGeneratorBase {
 				break;
 			}
 			case XDValueID.XD_BYTES:
-				x = (getBytesType(xdata) == 2 ? "encodeHex(" : "encodeBase64(")
+				x = ("base64Binary".equals(xdata.getParserName()) 
+					? "encodeBase64(" : "encodeHex(")
 					+ (max > 1 ? "listOf" : "get") + "&{name}()"+y+")";
 				break;
 			case XDValueID.XD_NULL: //jnull
@@ -1056,8 +879,8 @@ class XCGeneratorBase {
 				break;
 			case XDValueID.XD_ANY: //jvalue
 				if ("jvalue".equals(xdata.getParserName())) {
-					x = (max > 1 ? "listOf" : "get") + "&{name}()" +y
-						+ (max <= 1 ? ".toString()" : "");
+					x = (max > 1 ? "listOf" : "get") + "&{name}()"
+						+ y + (max <= 1 ? ".toString()" : "");
 					break;
 				}
 			default:

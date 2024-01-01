@@ -100,6 +100,12 @@ public enum XDValueType {
 	OBJECT,
 	/** Null value. */
 	NULL,
+	/** Any number (integer, double, decimal). */
+	NUMBER,
+
+////////////////////////////////////////////////////////////////////////////////
+// XX Types (implemented XM types)
+////////////////////////////////////////////////////////////////////////////////
 	/** XXElement value. */
 	XXELEMENT,
 	/** XXText value. */

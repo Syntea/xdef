@@ -211,4 +211,6 @@ public class XSParseList extends XSAbstractParser {
 			return _itemType.equals(x._itemType);
 		}
 	}
+	@Override
+	public short getAlltemsType() {return _itemType.parsedType();}
 }

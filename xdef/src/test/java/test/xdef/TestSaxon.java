@@ -43,7 +43,7 @@ public class TestSaxon extends XDTester {
 		ArrayReporter reporter = new ArrayReporter();
 		try {//xquery in declaration part (without XML context)
 			xdef =
-"<xd:def  xmlns:xd='http://www.xdef.org/xdef/4.1' root='a'>\n"+
+"<xd:def  xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "  <xd:declaration>\n" +
 "    Container c = xquery(\"let $b := 'abcd'\n"+
 "      return (0 to string-length($b))\n" +
@@ -61,7 +61,7 @@ public class TestSaxon extends XDTester {
 			assertNoErrorwarnings(reporter);
 			assertEq("abcd.abc.ab.a..", swr.toString());
 			xdef =
-"<xd:def  xmlns:xd='http://www.xdef.org/xdef/4.1' root='a'>\n"+
+"<xd:def  xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "<xd:declaration>\n" +
 "Container x=xpath(\"serialize(let $b := 'abcd'\n"+
 "            return (0 to string-length($b))\n"+
@@ -297,8 +297,8 @@ public class TestSaxon extends XDTester {
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xdef =
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\">\n" +
-"<xd:declaration scope=\"local\"> external Element source; </xd:declaration>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"'>\n" +
+"<xd:declaration scope='local'> external Element source; </xd:declaration>\n"+
 "<Persons xd:script=\"create xquery(source, '.')\"\n" +
 "         firma=\"create xquery('@name')\">\n" +
 "  <Office>\n" +

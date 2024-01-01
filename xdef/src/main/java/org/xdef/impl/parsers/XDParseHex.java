@@ -16,7 +16,7 @@ public class XDParseHex extends XSParseBase64Binary {
 	public void parseObject(final XXNode xnode, final XDParseResult p){
 		int pos0 = p.getIndex();
 		p.isSpaces();
-		int quoted = p.isOneOfTokens("x(","\"");
+		int quoted = p.isOneOfTokens("x(", "\"");
 		int pos1 = p.getIndex();
 		int pos2 = pos1;
 		int len = 0;

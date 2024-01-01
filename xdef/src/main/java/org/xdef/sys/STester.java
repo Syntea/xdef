@@ -692,8 +692,10 @@ public abstract class STester {
 	 * @param reporter the reporter to be checked for no errors.
 	 */
 	public final void assertNoErrorsAndClear(final ArrayReporter reporter) {
-		assertNoErrors(reporter);
-		reporter.clear();
+		if (reporter.errorWarnings()) {
+			assertNoErrors(reporter);
+			reporter.clear();
+		}
 	}
 	/** Check if the reporter does not contain an error or warning. If yes then
 	 * invoke the method <code>fail</code> with the argument msg. Clear reporter
@@ -702,8 +704,10 @@ public abstract class STester {
 	 */
 	public final void assertNoErrorwarningsAndClear(
 		final ArrayReporter reporter) {
-		assertNoErrorwarnings(reporter);
-		reporter.clear();
+		if (reporter.errorWarnings()) {
+			assertNoErrorwarnings(reporter);
+			reporter.clear();
+		}
 	}
 	private static String getListing(final ReportWriter reporetr,
 		final Object msg) {

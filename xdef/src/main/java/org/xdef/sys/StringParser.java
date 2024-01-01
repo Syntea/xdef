@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.DateFormatSymbols;
@@ -1094,7 +1096,7 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	/** Pop freeBuffer. */
-	final void freeBuffer() {
+	public final void freeBuffer() {
 		if (_reader != null) {
 			_keepBufferCounter--;
 		}
@@ -1187,7 +1189,7 @@ public class StringParser extends SReporter implements SParser {
 	 * if available and).
 	 * @return true if character was added to buffer.
 	 */
-	final boolean increaseBuffer() {
+	public final boolean increaseBuffer() {
 		if (getIndex() + 1 < _endPos) {
 			return true;
 		}
@@ -2096,11 +2098,8 @@ public class StringParser extends SReporter implements SParser {
 	 */
 	public final int getParsedInt() {
 		try {
-			if (_parsedString.charAt(0) == '+') {
-				return Integer.parseInt(_parsedString.substring(1));
-			} else {
-				return Integer.parseInt(_parsedString);
-			}
+			return Integer.parseInt(_parsedString.charAt(0) == '+'
+				? _parsedString.substring(1):_parsedString);
 		} catch(Exception ex) {
 			throw new SRuntimeException(SYS.SYS072, ex); //Data error&{0}{: }
 		}
@@ -2112,14 +2111,10 @@ public class StringParser extends SReporter implements SParser {
 	 */
 	public final long getParsedLong() {
 		try {
-			if (_parsedString.charAt(0) == '+') {
-				return Long.parseLong(_parsedString.substring(1));
-			} else {
-				return Long.parseLong(_parsedString);
-			}
+			return Long.parseLong(_parsedString.charAt(0) == '+'
+				? _parsedString.substring(1):_parsedString);
 		} catch(Exception ex) {
 			throw new SRuntimeException(SYS.SYS072, ex);//Data error&{0}{: }
-
 		}
 	}
 
@@ -2129,11 +2124,8 @@ public class StringParser extends SReporter implements SParser {
 	 */
 	public final float getParsedFloat() throws SRuntimeException {
 		try {
-			if (_parsedString.charAt(0) == '+') {
-				return Float.parseFloat(_parsedString.substring(1));
-			} else {
-				return Float.parseFloat(_parsedString);
-			}
+			return Float.parseFloat(_parsedString.charAt(0) == '+'
+				? _parsedString.substring(1) : _parsedString);
 		} catch(Exception ex) {
 			throw new SRuntimeException(SYS.SYS072, ex); //Data error&{0}{: }
 
@@ -2146,11 +2138,34 @@ public class StringParser extends SReporter implements SParser {
 	 */
 	public final double getParsedDouble() throws SRuntimeException {
 		try {
-			if (_parsedString.charAt(0) == '+') {
-				return Double.parseDouble(_parsedString.substring(1));
-			} else {
-				return Double.parseDouble(_parsedString);
-			}
+			return Double.parseDouble(_parsedString.charAt(0) == '+'
+				? _parsedString.substring(1) : _parsedString);
+		} catch(Exception ex) {
+			throw new SRuntimeException(SYS.SYS072, ex); //Data error&{0}{: }
+		}
+	}
+
+	/** Get value of parsed float number as BigInteger.
+	 * @return Parsed BigInteger.
+	 * @throws SRuntimeException SYS072 Data error
+	 */
+	public final BigInteger getParsedBigIteger() throws SRuntimeException {
+		try {
+			return new BigInteger(_parsedString.charAt(0) == '+'
+				? _parsedString.substring(1) : _parsedString);
+		} catch(Exception ex) {
+			throw new SRuntimeException(SYS.SYS072, ex); //Data error&{0}{: }
+		}
+	}
+
+	/** Get value of parsed float number as BigDecimal.
+	 * @return Parsed BigDecimal.
+	 * @throws SRuntimeException SYS072 Data error
+	 */
+	public final BigDecimal getParsedDecimal() throws SRuntimeException {
+		try {
+			return new BigDecimal(_parsedString.charAt(0) == '+'
+				? _parsedString.substring(1) : _parsedString);
 		} catch(Exception ex) {
 			throw new SRuntimeException(SYS.SYS072, ex); //Data error&{0}{: }
 		}
@@ -2903,7 +2918,8 @@ public class StringParser extends SReporter implements SParser {
 					continue;
 				case 'R': {//year - two digits (database)
 /*
-  Two digits year (see Oracle). Century is generated accroding following rules:
+  Two digits year (see Oracle format). Century is generated according
+  to following rules:
   If RR is from the interval  00 .. 49 then
   a) if last two digits of the actual year are 00..49 then the century is taken
 	 from the actual year.
@@ -2989,8 +3005,8 @@ public class StringParser extends SReporter implements SParser {
 				}
 				case '?': {//one of chars
 					char delim;
-					if (fpos < flen &&
-						((delim =mask.charAt(fpos))=='\'' || delim == '"')) {
+					if (fpos < flen
+						&& ((delim=mask.charAt(fpos))=='\'' || delim == '"')) {
 						//follows string specification
 						int beg = fpos++;
 						boolean foundChar = false;
@@ -3568,7 +3584,8 @@ public class StringParser extends SReporter implements SParser {
 								continue;
 							}
 							if (i++ <= 1) {
-								String s = _source.substring(start, getIndex()-1);
+								String s =
+									_source.substring(start, getIndex() - 1);
 								if (i == 1) {
 									p1 = s;
 								} else {
@@ -3577,19 +3594,19 @@ public class StringParser extends SReporter implements SParser {
 							} else {
 								//Datetime mask: incorrect control
 								//character&{0}{: '}{'}&{1}{, position: }
-								return Report.error(SYS.SYS063, null, getIndex());
+								return Report.error(SYS.SYS063,null,getIndex());
 							}
 							start = getIndex();
 						} else if (isChar(')')) {
 							switch (i) {
 								case 2:
-									p3 = _source.substring(start, getIndex() - 1);
+									p3 = _source.substring(start, getIndex()-1);
 									break;
 								case 1:
-									p2 = _source.substring(start, getIndex() - 1);
+									p2 = _source.substring(start, getIndex()-1);
 									break;
 								case 0:
-									p1 = _source.substring(start, getIndex() - 1);
+									p1 = _source.substring(start, getIndex()-1);
 									break;
 								default:
 									break;
@@ -3625,7 +3642,8 @@ public class StringParser extends SReporter implements SParser {
 										(i==2 ? start-p2.length() : start));
 								}
 								_parsedDatetime.setLocaleFormatSymbols(
-									new DateFormatSymbols(new Locale(p1,p2,p3)));
+									new DateFormatSymbols(
+										new Locale(p1,p2,p3)));
 							}
 							break;
 						} else {

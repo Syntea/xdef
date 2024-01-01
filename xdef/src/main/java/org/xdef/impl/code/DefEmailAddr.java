@@ -1,6 +1,7 @@
 package org.xdef.impl.code;
 
 import java.io.ByteArrayOutputStream;
+import java.io.UnsupportedEncodingException;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
 import org.xdef.XDValueID;
@@ -13,6 +14,7 @@ import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
 import org.xdef.XDEmailAddr;
+import org.xdef.sys.SException;
 
 /** Implements the internal object with Email value.
  * @author Vaclav Trojan
@@ -48,7 +50,7 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 	private static String readBtext(final String s, final String charsetName) {
 		try {
 			return new String(SUtils.decodeBase64(s), charsetName);
-		} catch (Exception ex) {
+		} catch (UnsupportedEncodingException | SException ex) {
 			return "?";
 		}
 	}
@@ -66,7 +68,7 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 		}
 		try {
 			return new String(b.toByteArray(), charsetName);
-		} catch (Exception ex) {
+		} catch (UnsupportedEncodingException ex) {
 			return "?";
 		}
 	}
@@ -141,8 +143,8 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 			Object[] code = g.getParsedObjects();
 			String s = p.getParsedBufferPart();
 			if (code != null) {
-				for (int i = 0; i < code.length; i++) {
-					StringParser q = new StringParser((String) code[i]);
+				for (Object code1 : code) {
+					StringParser q = new StringParser((String) code1);
 					String t;
 					if ((t = readStackItem(q, "emailAddr", s)) != null) {
 						int ndx = t.indexOf('@');
@@ -188,47 +190,39 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 	 * @return the associated object or null.
 	 */
 	public Object getObject() {return this;}
-
 	@Override
 	/** Get type of value.
 	 * @return The id of item type.
 	 */
 	public short getItemId() {return XDValueID.XD_EMAIL;}
-
 	@Override
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
 	public XDValueType getItemType() {return XDValueType.EMAIL;}
-
 	@Override
 	/** Get value as String.
 	 * @return The string from value.
 	 */
 	public String toString() {return stringValue();}
-
 	@Override
 	/** Get string value of this object.
 	 * @return string value of this object.
 	 */
 	public String stringValue() {return isNull() ? "" : _value;}
-
 	@Override
 	/** Clone the item.
 	 * @return the object with the copy of this one.
 	 */
 	public XDValue cloneItem() {return new DefEmailAddr(_value);}
-
 	@Override
 	public int hashCode() {
 		return isNull() ? 1 : _localPart.hashCode() + _domain.hashCode()*3;
 	}
-
 	@Override
 	public boolean equals(final Object arg) {
 		return arg instanceof XDValue ?  equals((XDValue) arg) : false;
 	}
-
 	@Override
 	/** Check whether some other XDValue object is "equal to" this one.
 	 * @param arg other XDValue object to which is to be compared.
@@ -258,7 +252,6 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 		}
 		throw new SIllegalArgumentException(SYS.SYS085);//Incomparable arguments
 	}
-
 	@Override
 	/** Check if the object is <i>null</i>.
 	 * @return <i>true</i> if the object is <i>null</i> otherwise returns

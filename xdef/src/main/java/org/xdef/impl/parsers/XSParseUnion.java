@@ -13,6 +13,7 @@ import static org.xdef.XDParser.ITEM;
 import static org.xdef.XDParser.PATTERN;
 import static org.xdef.XDParser.WS_COLLAPSE;
 import static org.xdef.XDParser.WS_PRESERVE;
+import static org.xdef.XDParserAbstract.getItemsType;
 import static org.xdef.XDValueID.XD_ANY;
 import static org.xdef.XDValueID.XD_CONTAINER;
 
@@ -123,11 +124,11 @@ public class XSParseUnion extends XSAbstractParser {
 		int pos = p.getIndex();
 		String source = p.getSourceBuffer();
 		_whiteSpace = WS_PRESERVE;
-		for (int i = 0; i < _itemTypes.length; i++) {
+		for (XDParser xp : _itemTypes) {
 			if (isFinal) {
-				_itemTypes[i].check(xnode, p);
+				xp.check(xnode, p);
 			} else {
-				_itemTypes[i].parseObject(xnode, p);
+				xp.parseObject(xnode, p);
 			}
 			if (p.errors()) {
 				p.setSourceBuffer(source);
@@ -141,8 +142,8 @@ public class XSParseUnion extends XSAbstractParser {
 			XDValue val = p.getParsedValue();
 			if (_enumeration != null) {
 				boolean found = false;
-				for (int j = 0; j < _enumeration.length; j++) {
-					if (_enumeration[j].equals(val)) {
+				for (XDValue xv : _enumeration) {
+					if (xv.equals(val)) {
 						found = true;
 						break;
 					}
@@ -154,7 +155,7 @@ public class XSParseUnion extends XSAbstractParser {
 				}
 			}
 			if (isFinal) {
-				_whiteSpace = _itemTypes[i].getWhiteSpaceParam();
+				_whiteSpace = xp.getWhiteSpaceParam();
 				if (_whiteSpace == WS_COLLAPSE) {
 					p.isSpaces();
 				}
@@ -203,4 +204,6 @@ public class XSParseUnion extends XSAbstractParser {
 		}
 		return true;
 	}
+	@Override
+	public short getAlltemsType() {return getItemsType(_itemTypes);}
 }

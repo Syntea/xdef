@@ -7,6 +7,8 @@ import org.xdef.impl.code.DefContainer;
 import org.xdef.proc.XXNode;
 import org.xdef.msg.XDEF;
 import java.util.StringTokenizer;
+import static org.xdef.XDValueID.XD_CONTAINER;
+import static org.xdef.XDValueID.XD_STRING;
 
 /** Parse list of filenames (separators are white space, ';' or ':')..
  * @author Vaclav Trojan
@@ -45,4 +47,6 @@ public class XDParseFileList extends XDParserAbstract {
 	public String parserName() {return ROOTBASENAME;}
 	@Override
 	public short parsedType() {return XD_CONTAINER;}
+	@Override
+	public short getAlltemsType() {return XD_STRING;}
 }

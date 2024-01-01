@@ -88,8 +88,8 @@ public class XSParseBase64Binary extends XSAbstractParser {
 	}
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){
+		int pos0 = p.getIndex();
 		try {
-			int pos0 = p.getIndex();
 			XSParseReader r = new XSParseReader(p);
 			ByteArrayOutputStream bw = new ByteArrayOutputStream();
 			SUtils.decodeBase64(r, bw);
@@ -98,7 +98,8 @@ public class XSParseBase64Binary extends XSAbstractParser {
 			while ((i=r.read()) != -1) {
 				if (i != ' ') {
 					//Incorrect value of '&{0}'&{1}{: }
-					p.errorWithString(XDEF.XDEF809, parserName());
+					p.errorWithString(XDEF.XDEF809,
+						parserName(), p.getSourceBuffer());
 					return;
 				}
 			}
@@ -109,7 +110,8 @@ public class XSParseBase64Binary extends XSAbstractParser {
 			check(p);
 		} catch (Exception ex) {
 			//Incorrect value of '&{0}'&{1}{: }
-			p.errorWithString(XDEF.XDEF809, parserName());
+			p.errorWithString(XDEF.XDEF809, parserName(),
+				p.getSourceBuffer());
 		}
 	}
 	/** Check XDParseResult on pattern, enumeration, length.

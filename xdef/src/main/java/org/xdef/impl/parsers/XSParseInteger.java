@@ -94,5 +94,5 @@ public class XSParseInteger extends XSAbstractParseComparable {
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 	@Override
-	public short parsedType() {return XD_DECIMAL;}
+	public short parsedType() {return XD_BIGINTEGER;}
 }

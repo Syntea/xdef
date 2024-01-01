@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Currency;
 import java.util.LinkedHashMap;
 import java.util.List;
+import org.xdef.XDBytes;
 import org.xdef.XDParseResult;
 import org.xdef.XDParser;
 import org.xdef.XDTelephone;
@@ -175,6 +176,14 @@ public class XonTools {
 			if ((i=p.isOneOfTokens(new String[]{"null","true","false"}))>=0
 				&& (p.eos() || (ch=p.getCurrentChar())<=' '||ch==']'||ch==',')){
 					ar.add(i == 0 ? null : i==1);
+//			} else if((i=p.isOneOfTokens(new String[]{"NaN","INF","-INF"}))>=0){
+//				if (p.isChar('f')) {
+//					ar.add(i == 0 ? Float.NaN : i==1 
+//						? Float.POSITIVE_INFINITY :Float.NEGATIVE_INFINITY);
+//				} else {
+//					ar.add(i == 0 ? Double.NaN : i==1 
+//						?Double.POSITIVE_INFINITY:Double.NEGATIVE_INFINITY);
+//				}
 			} else {
 				char typCh; // character with type specification after a number
 				if (p.isSignedInteger() && (typCh=p.isOneOfChars("bsilND"))>=0
@@ -259,6 +268,12 @@ public class XonTools {
 			case "null": return null;
 			case "true": return Boolean.TRUE;
 			case "false": return Boolean.FALSE;
+//			case "NaN": return Double.NaN;
+//			case "INF": return Double.POSITIVE_INFINITY;
+//			case "-INF": return Double.NEGATIVE_INFINITY;
+//			case "NaNf": return Float.NaN;
+//			case "INFf": return Float.POSITIVE_INFINITY;
+//			case "-INFf": return Float.NEGATIVE_INFINITY;
 		}
 		if (s.charAt(0) == '[') {
 			List<Object> ar = new ArrayList<>();
@@ -462,6 +477,15 @@ public class XonTools {
 	 * @return true if argument is a (signed) float number.
 	 */
 	public static final boolean isNumber(final String s) {
+//		switch (s) {
+//			case "NaN":
+//			case "INF":
+//			case "-INF":
+//			case "NaNf":
+//			case "INFf":
+//			case "-INFf":
+//				return true;
+//		}
 		StringParser p = new StringParser(s);
 		boolean minus = p.isChar('-');
 		if (p.isInteger() && p.eos()) {
@@ -476,8 +500,15 @@ public class XonTools {
 	 * @return quoted string if necessary.
 	 */
 	public final static String genXMLString(final String s) {
-		if (s.isEmpty() || "null".equals(s) || "true".equals(s)
-			|| "false".equals(s) || "-".equals(s) || isNumber(s)) {
+		switch (s) {
+			case "":
+			case "-":
+			case "null":
+			case "true":
+			case "false":
+			return '"' + s + '"';
+		}
+		if (isNumber(s)) {
 			return '"' + s + '"';
 		}
 		boolean addQuot = false;
@@ -499,13 +530,6 @@ public class XonTools {
 				return '"' + jstringToSource(s) + '"';
 			}
 		} else {
-			if (ch == '-' || ch >= '0' && ch <= '9'
-				&& (ch = s.charAt(s.length() - 1)) >= '0' && ch <= '9') {
-				StringParser p = new StringParser(s);
-				if ((p.isSignedFloat() || p.isSignedInteger()) && p.eos()) {
-					return '"' + s + '"'; // value is number, must be quoted
-				}
-			}
 			return s;
 		}
 	}
@@ -521,6 +545,11 @@ public class XonTools {
 			return genXMLString((String) x);
 		} else if (x instanceof Character) {
 			return genXMLString(String.valueOf((Character) x));
+		} else if (x instanceof XDBytes) {
+			XDBytes y = (XDBytes) x;
+			return (y.isBase64() ? "b("+y.getBase64() : "x("+y.getHex()) + ")";
+//			String s = y.isBase64() ? y.getBase64() : y.getHex();
+//			return s.isEmpty() ? " " : s;
 		} else if (x instanceof byte[]) {
 			return genXMLString(new String(SUtils.encodeBase64((byte[]) x)));
 		} else if (x instanceof InetAddress) {
@@ -529,6 +558,24 @@ public class XonTools {
 			return genXMLString(((Currency) x).getCurrencyCode());
 		} else if (x instanceof XDTelephone) {
 			return "t\"" + x + '"';
+//		} else if (x instanceof Double) {
+//			Double y = (Double) x;
+//			if (y.isNaN()) {
+//				return "NaN";
+//			} else if (y.equals(Double.POSITIVE_INFINITY)) {
+//				return "INF";
+//			} else if (y.equals(Double.NEGATIVE_INFINITY)) {
+//				return "-INF";
+//			}
+//		} else if (x instanceof Float) {
+//			Float y = (Float) x;
+//			if (y.isNaN()) {
+//				return "NaNf";
+//			} else if (y.equals(Float.POSITIVE_INFINITY)) {
+//				return "INFf";
+//			} else if (y.equals(Float.NEGATIVE_INFINITY)) {
+//				return "-INFf";
+//			}
 		}
 		return x.toString();// Boolean, Number, etc...
 	}
@@ -780,6 +827,9 @@ public class XonTools {
 			return '"' + sb.toString() + '"';
 		} else if (val instanceof InetAddress) {
 			return val.toString().substring(1);
+		} else if (val instanceof XDBytes) {
+			XDBytes y = (XDBytes) val;
+			return (y.isBase64() ? "b(" : "x(") + y + ')';
 		} else {// Number or Boolean or othr objects
 			return val.toString();
 		}

@@ -11,7 +11,9 @@ import org.xdef.XDValueAbstract;
 import java.math.BigDecimal;
 import static org.xdef.XDValueID.XD_PARSERESULT;
 import org.xdef.XDValueType;
+import org.xdef.msg.SYS;
 import static org.xdef.sys.SParser.NOCHAR;
+import org.xdef.sys.SRuntimeException;
 
 /** DefParseResult contains the source and results of parsing.
  * @author Vaclav Trojan
@@ -76,6 +78,18 @@ public final class DefParseResult extends XDValueAbstract
 	}
 	@Override
 	public String getParsedString() {return _source.substring(0, _srcIndex);}
+	/** Get value of parsed integer.
+	 * @return the parsed integer.
+	 * @throws SRuntimeException SYS072 Data error
+	 */
+	public final int getParsedInt() {
+		try {
+			return Integer.parseInt(_source.charAt(0) == '+'
+				?_source.substring(1,_srcIndex):_source.substring(0,_srcIndex));
+		} catch(Exception ex) {
+			throw new SRuntimeException(SYS.SYS072, ex); //Data error&{0}{: }
+		}
+	}
 	@Override
 	public final String getUnparsedBufferPart() {
 		if (_source != null && _srcIndex < _source.length()) {

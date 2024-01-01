@@ -291,7 +291,7 @@ public final class TestGUIDebuger extends XDTester {
 		} catch (RuntimeException ex) {fail(ex);}
 		try {// JSON
 			xdef =
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"JSON\" root=\"a\">\n"+
+"<xd:def xmlns:xd=\""+_xdNS+"\" name=\"JSON\" root=\"a\">\n"+
 "<xd:xon name=\"a\" >\n" +
 "{ \"personnel\": { \"person\": \n" +
 "      [\n" +

@@ -222,7 +222,7 @@ public final class TestDebug extends XDTester {
 "		trace(xpath('..'));\n"+
 "		outln('len=' + c.getLength()\n"+
 "		+', typ=' + c.getItemType(0)\n"+
-"		+', value=' + getText(c,0));\n"+
+"		+', value=' + c.getText(0));\n"+
 "      }\" /> \n"+
 " required\n"+
 " </SouborY1A>\n"+

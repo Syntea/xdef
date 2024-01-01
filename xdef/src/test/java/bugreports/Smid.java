@@ -14,7 +14,7 @@ public class Smid extends XDTester {
 		String xdef;
 		try {
 			xdef =
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\"\n" +
+"<xd:def xmlns:xd=\""+_xdNS+"\"\n" +
 "  xmlns:tns=\"http://www.w3schools.com\">\n" +
 "  <tns:note>\n" +
 "    <xd:sequence xd:script=\"occurs 1\">\n" +

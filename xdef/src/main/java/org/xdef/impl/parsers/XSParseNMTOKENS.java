@@ -3,6 +3,9 @@ package org.xdef.impl.parsers;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.StringParser;
 import org.xdef.XDParseResult;
+import org.xdef.XDValue;
+import static org.xdef.XDValueID.XD_CONTAINER;
+import static org.xdef.XDValueID.XD_STRING;
 import org.xdef.proc.XXNode;
 import org.xdef.impl.code.DefContainer;
 import org.xdef.impl.code.DefString;
@@ -44,8 +47,8 @@ public class XSParseNMTOKENS extends XSAbstractParseToken {
 		p.setParsedValue(val);
 		if (_enumeration != null) {
 			boolean found = false;
-			for (int i = 0; i < _enumeration.length; i++) {
-				if (_enumeration[i].equals(val)){
+			for (XDValue xv : _enumeration) {
+				if (xv.equals(val)) {
 					found = true;
 					break;
 				}
@@ -62,8 +65,8 @@ public class XSParseNMTOKENS extends XSAbstractParseToken {
 		}
 		if (_enumeration != null) {
 			boolean found = false;
-			for (int i = 0; i < _enumeration.length; i++) {
-				if (_enumeration[i].equals(val)){
+			for (XDValue xv : _enumeration) {
+				if (xv.equals(val)) {
 					found = true;
 					break;
 				}
@@ -86,4 +89,6 @@ public class XSParseNMTOKENS extends XSAbstractParseToken {
 	public String parserName() {return ROOTBASENAME;}
 	@Override
 	public short parsedType() {return XD_CONTAINER;}
+	@Override
+	public short getAlltemsType() {return XD_STRING;}
 }

@@ -212,7 +212,7 @@ public class MyTest_0 extends XDTester {
 ////////////////////////////////////////////////////////////////////////////////
 		try {
 			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "<xd:xon name='a'>\n" +
 " [\"price()\"]\n"+
 "</xd:xon>\n"+
@@ -237,7 +237,7 @@ public class MyTest_0 extends XDTester {
 if(T)return;
 		try {
 			xdef =
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n"+
+"<xd:def xmlns:xd=\""+_xdNS+"\" name=\"X\" root=\"a\">\n"+
 "<xd:component>%class bugreports.Csvxx %link a</xd:component>\n"+
 " <xd:xon name='a'>\n"+
 "    [ [%script=\"+\", \"int\", \"int\", \"string()\", \"boolean()\"] ]\n"+
@@ -264,7 +264,7 @@ if(T)return;
 if(T)return;
 		try {
 //			xdef =
-//"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' name='Example' root='root'\n>"+
+//"<xd:def xmlns:xd='"+_xdNS+"' name='Example' root='root'\n>"+
 //"  <xd:declaration scope='local'>\n" +
 //"    type t1 int();\n" +
 //"    boolean b = false;\n" +
@@ -296,7 +296,7 @@ if(T)return;
 
 
 			xdef =
-"<X:def xmlns:X='http://www.xdef.org/xdef/4.1' name='Example' root='root'\n>"+
+"<X:def xmlns:X='"+_xdNS+"' name='Example' root='root'\n>"+
 "  <X:declaration scope='local'>\n" +
 "    type t1 int();\n" +
 "    type t2 starts(%argument='wsdl:');\n" +
@@ -333,7 +333,7 @@ if(T)return;
 if(T)return;
 		try {
 			xdef =
-"<xd:collection xmlns:xd='http://www.xdef.org/xdef/4.1'>\n"+
+"<xd:collection xmlns:xd='"+_xdNS+"'>\n"+
 "<xd:def name='A'>\n"+
 " <xd:declaration scope='global'>Parser p;uniqueSet u{x:p}</xd:declaration>\n"+
 "</xd:def>\n"+
@@ -403,7 +403,7 @@ if(T)return;
 if(T){return;}
 		try {
 			xdef =
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"Example\" root=\"root\" >\n" +
+"<xd:def xmlns:xd=\""+_xdNS+"\" name=\"Example\" root=\"root\" >\n" +
 " <xd:declaration>\n"+
 "   ParseResult xx() {\n"+
 "     ParseResult result = xdatetime('dd.MM.yyyy');\n"+
@@ -432,7 +432,7 @@ if(T){return;}
 if(T)return;
 		try {
 			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
 " <xd:declaration scope='global'>\n"+
 " type p int;\n"+
 " uniqueSet u{x:int};\n"+
@@ -455,7 +455,7 @@ if(T)return;
 if(T)return;
 //		try {
 //			xdef =
-//"<xd:def xmlns:xd    =\"http://www.xdef.org/xdef/4.1\"\n" +
+//"<xd:def xmlns:xd    =\""+_xdNS+"\"\n" +
 //"        impl-version=\"3.0.x_dr\" impl-date=\"2020-05-25\"\n" +
 //"        xd:name     =\"CodeBook\"\n" +
 //"        xd:root     =\"CodeBook\">\n" +
@@ -735,7 +735,7 @@ if(T){return;}
 if(T){return;}
 		try {
 			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' xd:root='T'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' xd:root='T'>\n" +
 "  <xd:declaration>\n" +
 "    uniqueSet r {a: string(); b: int()};\n" +
 "  </xd:declaration>\n" +
@@ -756,7 +756,7 @@ if(T){return;}
 if(T){return;}
 		try {
 			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' xd:root='a'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' xd:root='a'>\n" +
 "  <xd:declaration>\n" +
 "    uniqueSet u {var Parser x; var int y; a: string(); var String z}\n" +
 "  </xd:declaration>\n" +
@@ -914,7 +914,7 @@ if(T){return;}
 if(T){return;}
 		try {
 			xdef =
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" xd:root=\"A\">\n" +
+"<xd:def xmlns:xd=\""+_xdNS+"\" xd:root=\"A\">\n" +
 "    <A xd:script=\"create from('/*/*[last()]');\"\n" +
 "       a=\"required string()\" >\n" +
 "        <B xd:script=\"occurs 1..\"\n" +

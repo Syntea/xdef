@@ -1,10 +1,18 @@
 package org.xdef;
 
 import static org.xdef.XDValueID.XD_ANY;
+import static org.xdef.XDValueID.XD_BIGINTEGER;
 import static org.xdef.XDValueID.XD_BOOLEAN;
+import static org.xdef.XDValueID.XD_BYTE;
 import static org.xdef.XDValueID.XD_CONTAINER;
+import static org.xdef.XDValueID.XD_DECIMAL;
+import static org.xdef.XDValueID.XD_DOUBLE;
+import static org.xdef.XDValueID.XD_FLOAT;
+import static org.xdef.XDValueID.XD_INT;
+import static org.xdef.XDValueID.XD_LONG;
 import static org.xdef.XDValueID.XD_PARSER;
 import static org.xdef.XDValueID.XD_PARSERESULT;
+import static org.xdef.XDValueID.XD_SHORT;
 import static org.xdef.XDValueID.XD_STRING;
 import org.xdef.impl.code.CodeTable;
 import org.xdef.impl.code.DefContainer;
@@ -14,6 +22,8 @@ import org.xdef.impl.code.DefString;
 import org.xdef.proc.XXNode;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.SException;
+import org.xdef.sys.SParser;
+import static org.xdef.sys.SParser.NOCHAR;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.xon.XonTools;
 
@@ -47,13 +57,7 @@ public abstract class XDParserAbstract extends XDValueAbstract
 	 */
 	public XDParseResult check(XXNode xnode, String source) {
 		XDParseResult p = new DefParseResult(source);
-		if (xnode != null && xnode.getXMElement().getXonMode() != 0
-			&& "null".equals(source)) { // XON mode
-			p.setParsedValue(new DefJNull(XonTools.JNULL)); // XON mode set null
-			p.setEos();
-		} else {
-			check(xnode, p);
-		}
+		check(xnode, p);
 		return p;
 	}
 
@@ -65,19 +69,19 @@ public abstract class XDParserAbstract extends XDValueAbstract
 	public void check(final XXNode xnode, final XDParseResult p) {
 		if (xnode != null && xnode.getXMElement().getXonMode() != 0
 			&& "null".equals(p.getSourceBuffer())) {
-			p.setParsedValue(new DefJNull(XonTools.JNULL)); // XON mode set null
+			p.setParsedValue(new DefJNull(XonTools.JNULL)); // set null
 			p.setEos();
-		} else {
-			parseObject(xnode, p);
-			if (p.matches()) {
-				if (!p.eos()) {
-					//After the item '&{0}' follows an illegal character&{1}{: }
-					p.errorWithString(XDEF.XDEF804, parserName());
-				} else {
-					finalCheck(xnode, p);
-				}
-			}
+			return;
 		}
+		parseObject(xnode, p);
+		if (p.matches()) {
+			if (!p.eos()) {
+				//After the item '&{0}' follows an illegal character&{1}{: }
+				p.errorWithString(XDEF.XDEF804, parserName());
+			} else {
+				finalCheck(xnode, p);
+			}
+		}		
 	}
 
 	@Override
@@ -230,5 +234,84 @@ public abstract class XDParserAbstract extends XDValueAbstract
 		//The value type in the named parameter '&{0}' of the parser&{1}{ '}{'}
 		// must be Parser
 		throw new SRuntimeException(XDEF.XDEF474, "%item", parserName());
+	}
+	@Override
+	public short getAlltemsType() {return parsedType();} // default parsedType
+	@Override
+	public String getSeparator() {return null;} // default null (not set)
+	public void setSeparator(final String x) {} // default do nothing
+	/** Check if separator follows.
+	 * @param p parser used for parsing.
+	 * @param separator string with separator characters.
+	 * @return true if separator was found, otherwise return false.
+	 */
+	public final boolean isSeparator(final SParser p, final String separator) {
+		p.isSpaces();
+		boolean result; 
+		if (separator == null || separator.isEmpty()) {
+			result = p.isSpaces();
+		} else {
+			if (!(result = (p.isOneOfChars(separator) != NOCHAR))) {
+				p.isSpaces();//if space charaters not in separator try it againn
+				result = (p.isOneOfChars(separator) != NOCHAR);
+			}
+		}
+		return !p.eos() && result;
+	}
+
+	/** Find index of type in the array of types.
+	 * @param type find index of this type in array of types,
+	 * @param types in array of names,
+	 * @return index of this type in array of types or return -1 if not found.
+	 */
+	private static int isTypeOf(short type, final short[] types) {
+		for (int i = 0; i < types.length; i++) {
+			if (type == types[i]) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	/** Find first indes of type int the array of types and if it was found
+	 * then find index of newType in the array and return corrected type.
+	 * @param name name to be found.
+	 * @param newType newName to be found.
+	 * @param types array of names.
+	 * @return index or -1.
+	 */
+	private static short getTypeIndex(final short type,
+		final short newType,
+		final short[] types) {
+		int j = isTypeOf(type, types);
+		if (j >= 0) {
+			int k = isTypeOf(newType, types);
+			if (k >= 0) {
+				return types[k >= j ? k : j];
+			}
+		}
+		return -1;
+	}
+
+	private static final short[] INTTYPES =
+		{XD_BYTE, XD_SHORT, XD_INT, XD_LONG, XD_BIGINTEGER};
+	private static final short[] FLOATTYPES = {XD_FLOAT, XD_DOUBLE, XD_DECIMAL};
+
+	public static final short getItemsType(final XDParser[] x) {
+		short result = x[0].parsedType();
+		for (int i = 1; i < x.length; i++) {
+			short type = x[i].parsedType();
+			short j = getTypeIndex(result, type, INTTYPES);
+			if (result != type) {
+				if (j != -1) {
+					result = j;
+				} else if ((j = getTypeIndex(result, type, FLOATTYPES)) != -1) {
+					result = j;
+				} else {
+					return XD_ANY;
+				}
+			}
+		}
+		return result;
 	}
 }

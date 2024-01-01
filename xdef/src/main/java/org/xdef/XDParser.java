@@ -8,7 +8,7 @@ import org.xdef.sys.SException;
  */
 public interface XDParser extends XDValue {
 	/** Keyword "pattern" id.*/
-	public final static int PATTERN =			0x00000000000001;
+	public final static int PATTERN =		0x00000000000001;
 	/** Keyword "enumeration" id.*/
 	public final static int ENUMERATION =		0x00000000000002;
 	/** Keyword "whiteSpace" id.*/
@@ -139,6 +139,18 @@ public interface XDParser extends XDValue {
 	 * @return The id of parsed value type.
 	 */
 	public short parsedType();
+
+	/** *  In union, list, sequence and other complex types if arsed result type
+	 * of all items is equal, the result is the type of items, if not, it is
+	 * XD_ANY (Object).For other parse methods it is result of parsedType().
+	 * @return result type of parsed item.
+	 */
+	public short getAlltemsType();
+
+	/** Get string with separator characters or null.
+	 * @return string with separator characters or null.
+	 */
+	public String getSeparator();
 
 	/** Get name of parser.
 	 * @return The name parser.

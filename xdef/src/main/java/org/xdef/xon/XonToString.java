@@ -11,6 +11,7 @@ import java.util.Currency;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import org.xdef.XDBytes;
 import org.xdef.XDEmailAddr;
 import org.xdef.XDTelephone;
 import org.xdef.sys.GPSPosition;
@@ -40,9 +41,13 @@ class XonToString extends XonTools {
 			return x.toString();
 		} else if (x instanceof String) {
 			return '"' + jstringToSource((String) x) + '"';
+		} else if (x instanceof XDBytes) {// byte array
+			XDBytes y = (XDBytes) x;
+			String s = y.isBase64() ? y.getBase64() : y.getHex();
+			return xon ? (y.isBase64()? "b(" : "x(") + s + ")" : '"' + s + '"';
 		} else if (x instanceof byte[]) {// byte array
-			String s = "b(" + new String(SUtils.encodeBase64((byte[]) x)) + ")";
-			return !xon ? '"' + s + '"' : s;
+			String s = new String(SUtils.encodeBase64((byte[]) x));
+			return xon ? "b(" + s + ")" : '"' + s + '"';
 		}
 		if (xon) {
 			if (x instanceof Number) {
@@ -50,14 +55,17 @@ class XonToString extends XonTools {
 				if (x instanceof Long) {
 					return num;
 				} else if (x instanceof Double) {
-					return ((Double) x).isInfinite()
-						? num.charAt(0) == '-' ? "-INF" : "INF" :
-						num.indexOf('.') < 0 && num.indexOf('e') < 0
+					return num.indexOf('.') < 0 && num.indexOf('e') < 0
 							&& num.indexOf('E') < 0 ?  num + 'd' : num;
+//					return ((Double) x).isInfinite()
+//						? num.charAt(0) == '-' ? "-INF" : "INF" :
+//						num.indexOf('.') < 0 && num.indexOf('e') < 0
+//							&& num.indexOf('E') < 0 ?  num + 'd' : num;
 				} else if (x instanceof Float) {
-					return ((Float) x).isInfinite()
-						? num.charAt(0) == '-' ? "-INFf" : "INFf" :
-						((Float) x).isNaN() ? "NaNf" : num + 'f';
+					return num + 'f';
+//					return ((Float) x).isInfinite()
+//						? num.charAt(0) == '-' ? "-INFf" : "INFf" :
+//						((Float) x).isNaN() ? "NaNf" : num + 'f';
 				} else if (x instanceof Byte) {
 					return num + 'b';
 				} else if (x instanceof Short) {

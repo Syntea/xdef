@@ -1212,12 +1212,11 @@ public final class TestScript extends XDTester {
 "</a:a>\n"+
 "<b:a xd:script='ref A#a:a' b:c='int()'> int(); </b:a>\n"+
 "<xd:component>\n"+
-" %class test.xdef.MyTest10 %link A#a:a;\n" +
-" %class test.xdef.MyTest11 %link A#b:a;\n" +
+" %class "+_package+".MyTest10 %link A#a:a;\n" +
+" %class "+_package+".MyTest11 %link A#b:a;\n" +
 "</xd:component>\n" +
 "</xd:def>";
-		xp = compile(xdef);
-		genXComponent(xp, clearTempDir());
+		genXComponent(xp = compile(xdef));
 		xml = "<a:a xmlns:a='a.b' a='1' a:b='2'><a:b a='3' a:b='4'/></a:a>";
 		assertEq(xml, parse(xp, "A", xml, reporter));
 		assertNoErrorwarnings(reporter);
@@ -1242,12 +1241,11 @@ public final class TestScript extends XDTester {
 "  <a xd:script='ref A#a:a'/>\n"+
 "</xd:def>\n" +
 "<xd:component>\n"+
-" %class test.xdef.MyTest20 %link A#a;\n" +
-" %class test.xdef.MyTest22 %link B#a;\n" +
+" %class "+_package+".MyTest20 %link A#a;\n" +
+" %class "+_package+".MyTest22 %link B#a;\n" +
 "</xd:component>\n" +
 "</xd:collection>";
-		xp = compile(xdef);
-		genXComponent(xp, clearTempDir());
+		genXComponent(xp = compile(xdef));
 		xml = "<b:a xmlns:b='a.b' a='1' b:b='2'><b:b  a='3' b:b='4'/></b:a>";
 		assertEq(xml, parse(xp, "A", xml, reporter));
 		assertNoErrorwarnings(reporter);
@@ -1265,12 +1263,11 @@ public final class TestScript extends XDTester {
 "<a xd:script='ref A#a:a' />\n"+
 "</xd:def>\n" +
 "<xd:component>\n"+
-" %class test.xdef.MyTest30 %link A#a;\n" +
-" %class test.xdef.MyTest32 %link B#a;\n" +
+" %class "+_package+".MyTest30 %link A#a;\n" +
+" %class "+_package+".MyTest32 %link B#a;\n" +
 "</xd:component>\n" +
 "</xd:collection>";
-		xp = compile(xdef);
-		genXComponent(xp, clearTempDir());
+		genXComponent(xp = compile(xdef));
 		xml = "<b:a xmlns:b='a.b' a='1' b:b='2'><b:b  a='3' b:b='4'/></b:a>";
 		assertEq(xml, parse(xp, "A", xml, reporter));
 		assertNoErrorwarnings(reporter);
@@ -1288,12 +1285,11 @@ public final class TestScript extends XDTester {
 "<a xd:script='ref A#a:a'/>\n"+
 "</xd:def>\n" +
 "<xd:component>\n"+
-" %class test.xdef.MyTest30 %link A#a:a;\n" +
-" %class test.xdef.MyTest32 %link B#a;\n" +
+" %class "+_package+".MyTest30 %link A#a:a;\n" +
+" %class "+_package+".MyTest32 %link B#a;\n" +
 "</xd:component>\n" +
 "</xd:collection>";
-		xp = compile(xdef);
-		genXComponent(xp, clearTempDir());
+		genXComponent(xp = compile(xdef));
 		xp = compile(xdef);
 		xml="<a:a xmlns:a='a.b' a='1' a:b='2'><a:b a='4' a:b='4'/></a:a>";
 		assertEq(xml, parse(xp, "A", xml, reporter));

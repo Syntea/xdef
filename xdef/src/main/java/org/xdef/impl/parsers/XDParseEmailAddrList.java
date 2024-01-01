@@ -3,6 +3,8 @@ package org.xdef.impl.parsers;
 import org.xdef.XDContainer;
 import org.xdef.XDParseResult;
 import org.xdef.XDParserAbstract;
+import static org.xdef.XDValueID.XD_CONTAINER;
+import static org.xdef.XDValueID.XD_EMAIL;
 import org.xdef.impl.code.DefContainer;
 import org.xdef.impl.code.DefEmailAddr;
 import org.xdef.impl.code.DefNull;
@@ -44,4 +46,6 @@ public class XDParseEmailAddrList extends XDParserAbstract {
 	public String parserName() {return ROOTBASENAME;}
 	@Override
 	public short parsedType() {return XD_CONTAINER;}
+	@Override
+	public short getAlltemsType() {return XD_EMAIL;}
 }

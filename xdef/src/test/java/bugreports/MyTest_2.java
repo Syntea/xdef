@@ -59,7 +59,7 @@ public class MyTest_2 extends XDTester {
 ////////////////////////////////////////////////////////////////////////////////
 		try {// XON
 			xdef =
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" root=\"A\">\n"+
+"<xd:def xmlns:xd=\""+_xdNS+"\" root=\"A\">\n"+
 "<xd:xon name='A'>\n"+
 "[\"int()\", \"int\", \"jstring()\"]\n"+
 "</xd:xon>\n"+
@@ -84,7 +84,7 @@ public class MyTest_2 extends XDTester {
 if (T)return;
 		try {
 			xdef =
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" root=\"array\">\n" +
+"<xd:def xmlns:xd=\""+_xdNS+"\" root=\"array\">\n" +
 "  <array>\n" +
 "    <map xd:script=\"1..*;\">\n" +
 "      <xd:mixed>\n" +
@@ -178,7 +178,7 @@ if(T)return;
 if(T)return;
 		try {
 			xdef =
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"Example\" root=\"test\">\n" +
+"<xd:def xmlns:xd=\""+_xdNS+"\" name=\"Example\" root=\"test\">\n" +
 "  <xd:xon name=\"test\">\n" +
 "    { \"cities\"  : [\n" +
 "        {%script=\"occurs 1..*\",\n" +
@@ -232,7 +232,7 @@ if(T)return;
 if(T)return;
 		try {
 			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
 "<xd:xon name='A'>\n"+
 "[\"int()\", \"int\", \"jstring()\"]\n"+
 "</xd:xon>\n"+
@@ -254,7 +254,7 @@ if(T)return;
 if(T)return;
 		try {
 			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
 "<xd:xon name='A'>\n"+
 "[\n" +
 " { %script=\"+\",\n" +
@@ -315,7 +315,7 @@ if(T)return;
 if(T)return;
 		try {
 			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
 "<xd:xon name='A'>\n"+
 "{ \"store\": {\n" +
 "    \"book\": [\n" +
@@ -391,7 +391,7 @@ $.store.book[0].title			$['store']['book'][0]['title']
 if(T)return;
 		try {
 			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='Y'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='Y'>\n"+
 "<xd:xon name='Y'>\n"+
 "[{\"a\":\"jboolean\"},\"jstring()\",\"jnumber()\",\"? jboolean()\"]\n" +
 "</xd:xon>\n"+
@@ -431,7 +431,7 @@ if(T)return;
 if(T)return;
 		try {
 			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='Y'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='Y'>\n"+
 "<xd:xon name='Y'>\n"+
 "[{\"a\":\"jboolean\"},\"jstring()\",\"jnumber()\",\"? jboolean()\"]\n" +
 "</xd:xon>\n"+
@@ -469,7 +469,7 @@ if(T)return;
 if(T )return;
 		try {
 			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='a'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n" +
 "<xd:declaration>\n" +
 "  type genre enum(\"Classic\", \"Country\", \"Folk\", \"Jazz\", \"Pop\", \"Pop_punk\",\n" +
 "             \"Punk\", \"Punk_rock\", \"Rap\", \"Rock\", \"R&amp;B\", \"Other\");\n" +
@@ -504,7 +504,7 @@ if(T )return;
 if(T )return;
 		try {
 			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
 "<xd:xon name='A'>\n"+
 "{\"a\": \"? jvalue()\"}\n" +
 "</xd:xon>\n"+
@@ -628,7 +628,7 @@ if(T )return;
 			assertNull(SUtils.getValueFromGetter(xc, "get$a"));
 
 			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A | B'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='A | B'>\n"+
 "<xd:xon name='A'>\n"+
 "{\"a\": \"? jvalue()\"}\n" +
 "</xd:xon>\n"+
@@ -746,7 +746,7 @@ if(T )return;
 			assertNull(SUtils.getValueFromGetter(xc, "get$item"));
 
 			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='json'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='json'>\n"+
 "<xd:xon name='json'>\n"+
 "{\"a\": \"? jvalue()\"}\n" +
 "</xd:xon>\n"+
@@ -812,7 +812,7 @@ if(T )return;
 			assertNull(SUtils.getValueFromGetter(xc, "get$a"));
 
 			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='json'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='json'>\n"+
 "<xd:xon name='json'>\n"+
 "[\n"+
 "    \"? jnull\",\n"+
@@ -883,7 +883,7 @@ if(T )return;
 if(T ){return;}
 		try {
 			xdef =
-"<xd:collection xmlns:xd='http://www.xdef.org/xdef/4.1'>\n"+
+"<xd:collection xmlns:xd='"+_xdNS+"'>\n"+
 "<xd:def name='X' root='X'>\n"+
 "<xd:xon xd:name='X'>\n"+
 "[\"int()\"]\n"+
@@ -973,7 +973,7 @@ if(T ){return;}
 			assertEq("2020-01-01", SUtils.getValueFromGetter(xc, "get$a"));
 
 			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A|B|json'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='A|B|json'>\n"+
 "<xd:xon name='json'>\n"+
 "[\n"+
 "  {\"a\":\"boolean\"},\n"+
@@ -1010,7 +1010,7 @@ if(T ){return;}
 if(T ){return;}
 		try {
 			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' xd:root='T' >\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' xd:root='T' >\n" +
 "  <xd:declaration>\n" +
 "    uniqueSet r {a: string(1,2); b: string(1,2)};\n" +
 "  </xd:declaration>\n" +

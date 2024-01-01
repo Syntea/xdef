@@ -2,7 +2,6 @@ package test.xdutils;
 
 import java.io.File;
 import static org.xdef.sys.STester.runTest;
-import org.xdef.util.DTDToXdef;
 import test.XDTester;
 
 /** Test of conversion of DTD to X-definition.
@@ -19,25 +18,25 @@ public class TestDTDToXdef extends XDTester {
 		try {
 			org.xdef.util.GenDTD2XDEF parser =
 				new org.xdef.util.GenDTD2XDEF(dtdData);
-			org.w3c.dom.Element elxd =
-				parser.genRootXd(root).getDocumentElement();
-			if (elxd == null) {
-				fail("Error - XDefinition is null");
+			org.w3c.dom.Element el = parser.genRootXd(root).getDocumentElement();
+			if (el == null) {
+				putInfo("Can't read data (internet connection problem?)");
 				return;
 			} else {
 				if ((display & 2) == 2) {
 					System.out.println("====================================");
 					System.out.println(
-						org.xdef.xml.KXmlUtils.nodeToString(elxd, true));
+						org.xdef.xml.KXmlUtils.nodeToString(el, true));
 				}
 			}
 			org.xdef.XDPool xdp;
 			try {
-				String src = org.xdef.xml.KXmlUtils.nodeToString(elxd, true);
+				String src = org.xdef.xml.KXmlUtils.nodeToString(el, true);
+//				xdp = org.xdef.XDFactory.compileXD(null, src);
 				xdp = compile(src);
 			} catch (Exception e) {
 				fail(e);
-				fail(org.xdef.xml.KXmlUtils.nodeToString(elxd, true));
+				fail(org.xdef.xml.KXmlUtils.nodeToString(el, true));
 				return;
 			}
 			try {
@@ -52,13 +51,11 @@ public class TestDTDToXdef extends XDTester {
 				}
 			} catch (Exception ex) {
 				fail(ex + "\n"
-					+ org.xdef.xml.KXmlUtils.nodeToString(elxd, true) + "\n"
+					+ org.xdef.xml.KXmlUtils.nodeToString(el, true) + "\n"
 					+ org.xdef.xml.KXmlUtils.nodeToString(
 					org.xdef.xml.KXmlUtils.parseXml(data), true));
 			}
-		} catch (Exception ex) {
-			fail(ex);
-		}
+		} catch (Exception ex) {fail(ex);}
 	}
 
 	/** Extended tests; don't run in in textAll. */
@@ -103,68 +100,68 @@ public class TestDTDToXdef extends XDTester {
 		test(dtdData, "tutorial", xmlData, display);
 
 		if (org.xdef.sys.SUtils.JAVA_RUNTIME_VERSION_ID < 109) {
-////////////////////////////////////////////////////////////////////////////////
-// START: fails in Java 1.9 and higher /////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-		dtdData =
+			////////////////////////////////////////////////////////////////////
+			// START: fails in Java 1.9 and higher /////////////////////////////
+			////////////////////////////////////////////////////////////////////
+			dtdData =
 "<!ELEMENT XXX (AAA , BBB)>\n" +
 "<!ELEMENT AAA EMPTY>\n" +
 "<!ELEMENT BBB EMPTY>";
-		xmlData = "<XXX><AAA/><BBB/></XXX>";
-		test(dtdData, "XXX", xmlData, display);
-		dtdData =
+			xmlData = "<XXX><AAA/><BBB/></XXX>";
+			test(dtdData, "XXX", xmlData, display);
+			dtdData =
 "<!ELEMENT XXX (AAA*, BBB)>\n" +
 "<!ELEMENT AAA EMPTY>\n" +
 "<!ELEMENT BBB EMPTY>";
-		xmlData = "<XXX><AAA/><AAA/><BBB/></XXX>";
-		test(dtdData, "XXX", xmlData, display);
-		dtdData =
+			xmlData = "<XXX><AAA/><AAA/><BBB/></XXX>";
+			test(dtdData, "XXX", xmlData, display);
+			dtdData =
 "<!ELEMENT XXX (AAA, BBB)*>\n" +
 "<!ELEMENT AAA EMPTY>\n" +
 "<!ELEMENT BBB EMPTY>";
-		xmlData = "<XXX><AAA/><BBB/><AAA/><BBB/></XXX>";
-		test(dtdData, "XXX", xmlData, display);
-		dtdData =
+			xmlData = "<XXX><AAA/><BBB/><AAA/><BBB/></XXX>";
+			test(dtdData, "XXX", xmlData, display);
+			dtdData =
 "<!ELEMENT root (A, B?, (C | D)* )>\n" +
 "<!ELEMENT A EMPTY>\n" +
 "<!ELEMENT B EMPTY>\n" +
 "<!ELEMENT C EMPTY>\n" +
 "<!ELEMENT D EMPTY>";
-		xmlData =
+			xmlData =
 "<root>\n" +
 "<A/>\n" +
 "<C/>\n" +
 "<D/>\n" +
 "<C/>\n" +
 "</root>";
-		test(dtdData, "root", xmlData, display);
-		dtdData =
+			test(dtdData, "root", xmlData, display);
+			dtdData =
 "<!ELEMENT XXX (AAA+ , BBB)>\n" +
 "<!ELEMENT AAA EMPTY>\n" +
 "<!ELEMENT BBB EMPTY>\n";
-		xmlData =
+			xmlData =
 "<XXX>\n" +
 "<AAA/>\n" +
 "<AAA/>\n" +
 "<BBB/>\n" +
 "</XXX>";
-		test(dtdData, "XXX", xmlData, display);
-		dtdData =
+			test(dtdData, "XXX", xmlData, display);
+			dtdData =
 "<!ELEMENT XXX (AAA? , BBB)>\n" +
 "<!ELEMENT AAA EMPTY>\n" +
 "<!ELEMENT BBB EMPTY>";
-		xmlData =
+			xmlData =
 "<XXX>\n" +
 "<BBB/>\n" +
 "</XXX>";
-		test(dtdData, "XXX", xmlData, display);
-		dtdData =
+			test(dtdData, "XXX", xmlData, display);
+			dtdData =
 "<!ELEMENT XXX (AAA? , BBB+)>\n" +
 "<!ELEMENT AAA (CCC? , DDD*)>\n" +
 "<!ELEMENT BBB (CCC , DDD)>\n" +
 "<!ELEMENT CCC EMPTY>\n" +
 "<!ELEMENT DDD EMPTY>";
-		xmlData =
+			xmlData =
 "<XXX>\n" +
 "  <AAA/>\n" +
 "  <BBB>\n" +
@@ -172,22 +169,22 @@ public class TestDTDToXdef extends XDTester {
 "    <DDD/>\n" +
 "  </BBB>\n" +
 "</XXX>";
-		test(dtdData, "XXX", xmlData, display);
-		xmlData =
+			test(dtdData, "XXX", xmlData, display);
+			xmlData =
 "<XXX>\n" +
 "  <BBB>\n" +
 "    <CCC/>\n" +
 "    <DDD/>\n" +
 "  </BBB>\n" +
 "</XXX>";
-		test(dtdData, "XXX", xmlData, display);
-		dtdData =
+			test(dtdData, "XXX", xmlData, display);
+			dtdData =
 "<!ELEMENT XXX (AAA , BBB)>\n" +
 "<!ELEMENT AAA (CCC , DDD)>\n" +
 "<!ELEMENT BBB (CCC | DDD)>\n" +
 "<!ELEMENT CCC EMPTY>\n" +
 "<!ELEMENT DDD EMPTY>";
-		xmlData =
+			xmlData =
 "<XXX>\n" +
 "  <AAA>\n" +
 "    <CCC/>\n" +
@@ -197,13 +194,13 @@ public class TestDTDToXdef extends XDTester {
 "    <CCC/>\n" +
 "  </BBB>\n" +
 "</XXX>";
-		test(dtdData, "XXX", xmlData, display);
-		dtdData =
+			test(dtdData, "XXX", xmlData, display);
+			dtdData =
 "<!ELEMENT XXX (AAA+ , BBB+)>\n" +
 "<!ELEMENT AAA (BBB | CCC)>\n" +
 "<!ELEMENT BBB (#PCDATA | CCC)*>\n" +
 "<!ELEMENT CCC (#PCDATA)*>";
-		xmlData =
+			xmlData =
 "<XXX>\n" +
 "  <AAA>\n" +
 "    <CCC>text1</CCC>\n" +
@@ -227,13 +224,13 @@ public class TestDTDToXdef extends XDTester {
 "  </BBB>\n" +
 "  <BBB/>\n" +
 "</XXX>";
-		test(dtdData, "XXX", xmlData, display);
-		dtdData =
+			test(dtdData, "XXX", xmlData, display);
+			dtdData =
 "<!ELEMENT XXX (AAA+ , BBB+)>\n" +
 "<!ELEMENT AAA (BBB | CCC)>\n" +
 "<!ELEMENT BBB (#PCDATA | CCC)*>\n" +
 "<!ELEMENT CCC (#PCDATA)*>";
-		xmlData =
+			xmlData =
 "<XXX>\n" +
 "  <AAA>\n" +
 "    <BBB>text1<CCC>text2</CCC>text3</BBB>\n" +
@@ -244,8 +241,8 @@ public class TestDTDToXdef extends XDTester {
 "  <BBB/>\n" +
 "  <BBB>text5<CCC>text6</CCC>text7</BBB>\n" +
 "</XXX>";
-		test(dtdData, "XXX", xmlData, display);
-		dtdData =
+			test(dtdData, "XXX", xmlData, display);
+			dtdData =
 "<!ELEMENT XXX (AAA+ , BBB+ , CCC+)>\n"+
 "<!ELEMENT AAA EMPTY>\n"+
 "<!ELEMENT BBB EMPTY>\n"+
@@ -258,7 +255,7 @@ public class TestDTDToXdef extends XDTester {
 "<!ATTLIST CCC \n"+
 "     X ID #REQUIRED\n"+
 "     Y NMTOKEN #IMPLIED>";
-		xmlData =
+			xmlData =
 "<XXX>\n" +
 "  <AAA id = 'a1'/>\n" +
 "  <AAA id = 'a2'/>\n" +
@@ -266,8 +263,8 @@ public class TestDTDToXdef extends XDTester {
 "  <BBB list = 'a1 c'/>\n" +
 "  <CCC X = 'c' Y = '123'/>\n" +
 "</XXX>";
-		test(dtdData, "XXX", xmlData, display);
-		dtdData =
+			test(dtdData, "XXX", xmlData, display);
+			dtdData =
 "<!ELEMENT XXX (AAA+ , BBB+, CCC+, DDD+)>\n"+
 "<!ELEMENT AAA EMPTY>\n"+
 "<!ELEMENT BBB EMPTY>\n"+
@@ -281,7 +278,7 @@ public class TestDTDToXdef extends XDTester {
 "     ref IDREF #REQUIRED>\n"+
 "<!ATTLIST DDD \n"+
 "     ref IDREFS #REQUIRED>";
-		xmlData =
+			xmlData =
 "<XXX>\n" +
 "  <AAA mark = 'a1'/>\n" +
 "  <AAA mark = 'a2'/>\n" +
@@ -291,8 +288,8 @@ public class TestDTDToXdef extends XDTester {
 "  <CCC ref = 'b2'/>\n" +
 "  <DDD ref = 'b2 b1 a2 a1'/>\n" +
 "</XXX>";
-		test(dtdData, "XXX", xmlData, display);
-		dtdData =
+			test(dtdData, "XXX", xmlData, display);
+			dtdData =
 "<!ELEMENT XXX (AAA+, BBB+)>\n"+
 "<!ELEMENT AAA EMPTY>\n"+
 "<!ELEMENT BBB EMPTY>\n"+
@@ -300,15 +297,15 @@ public class TestDTDToXdef extends XDTester {
 "     true ( yes | no ) #REQUIRED>\n"+
 "<!ATTLIST BBB \n"+
 "     month (1|2|3|4|5|6|7|8|9|10|11|12) #IMPLIED>";
-		xmlData =
+			xmlData =
 "<XXX>\n" +
 "  <AAA true = 'no'/>\n" +
 "  <AAA true = 'yes'/>\n" +
 "  <BBB month = '1'/>\n" +
 "  <BBB month = '12'/>\n" +
 "</XXX>";
-		test(dtdData, "XXX", xmlData, display);
-		dtdData =
+			test(dtdData, "XXX", xmlData, display);
+			dtdData =
 "<!ELEMENT root (child*)>\n"+
 "<!ELEMENT child EMPTY>\n"+
 "<!ATTLIST child\n" +
@@ -318,7 +315,7 @@ public class TestDTDToXdef extends XDTester {
 "     ref IDREFS #IMPLIED\n"+
 "     name NMTOKEN #IMPLIED\n"+
 "     names NMTOKENS #IMPLIED>";
-		xmlData =
+			xmlData =
 "<root>\n" +
 "  <child fix='fixed'\n" +
 "         default='Y'\n" +
@@ -331,9 +328,9 @@ public class TestDTDToXdef extends XDTester {
 "         default='X'\n" +
 "         ref=' c1 c2 '/>\n" +
 "</root>";
-		test(dtdData, "root", xmlData, display);
-		//parameter entities
-		dtdData =
+			test(dtdData, "root", xmlData, display);
+			//parameter entities
+			dtdData =
 "<!ELEMENT XXX (AAA,BBB,CCC?)>\n" +
 "<!ATTLIST XXX \n" +
 "     type CDATA #FIXED ''>\n" +
@@ -341,35 +338,35 @@ public class TestDTDToXdef extends XDTester {
 "<!ELEMENT AAA EMPTY>\n" +
 "<!ELEMENT BBB EMPTY>\n" +
 "<!ELEMENT CCC EMPTY>";
-		xmlData =
+			xmlData =
 "<XXX type='' ns = 'XCBL30.sox'>\n" +
 "<AAA/>\n" +
 "<BBB/>\n" +
 "</XXX>";
-		test(dtdData, "XXX", xmlData, display);
-		dtdData =
+			test(dtdData, "XXX", xmlData, display);
+			dtdData =
 "<!ELEMENT attributes (#PCDATA)*>\n"+
 "<!ATTLIST attributes\n"+
 "     aaa CDATA #REQUIRED\n"+
 "     bbb CDATA #IMPLIED>";
-		xmlData =
+			xmlData =
 "<attributes\n" +
 "  aaa = 'aaa'>\n" +
 "  text\n" +
 "</attributes>";
-		test(dtdData, "attributes", xmlData, display);
-		dtdData =
+			test(dtdData, "attributes", xmlData, display);
+			dtdData =
 "<!ELEMENT attributes EMPTY>\n"+
 "<!ATTLIST attributes\n"+
 "     aaa CDATA #IMPLIED\n"+
 "     bbb NMTOKEN #REQUIRED\n"+
 "     ccc NMTOKENS #REQUIRED>";
-		xmlData =
+			xmlData =
 "<attributes\n" +
 "  bbb = '123a'\n" +
 "  ccc = 'aaa b:c'/>";
-		test(dtdData, "attributes", xmlData, display);
-		dtdData =
+			test(dtdData, "attributes", xmlData, display);
+			dtdData =
 "<!ELEMENT XXX (AAA+, BBB+)>\n"+
 "<!ELEMENT AAA EMPTY>\n"+
 "<!ELEMENT BBB EMPTY>\n"+
@@ -377,15 +374,15 @@ public class TestDTDToXdef extends XDTester {
 "     true ( yes | no ) \"yes\">\n"+
 "<!ATTLIST BBB \n"+
 "     month NMTOKEN \"1\">";
-		xmlData =
+			xmlData =
 "<XXX>\n" +
 "  <AAA/>\n" +
 "  <AAA true = 'yes'/>\n" +
 "  <BBB/>\n" +
 "  <BBB month = '12'/>\n" +
 "</XXX>";
-		test(dtdData, "XXX", xmlData, display);
-		dtdData =
+			test(dtdData, "XXX", xmlData, display);
+			dtdData =
 "<!ELEMENT XXX (AAA*,BBB)>\n" +
 "<!ELEMENT AAA (#PCDATA)>\n" +
 "<!ELEMENT BBB (#PCDATA)>";
@@ -396,8 +393,8 @@ public class TestDTDToXdef extends XDTester {
 "  <AAA/>\n" +
 "  <BBB>text2</BBB>\n" +
 "</XXX>";
-		test(dtdData, "XXX", xmlData, display);
-		dtdData =
+			test(dtdData, "XXX", xmlData, display);
+			dtdData =
 "<!ELEMENT XXX (AAA) >\n" +
 "<!ELEMENT AAA (BBB|CCC) >\n" +
 "<!ELEMENT BBB EMPTY >\n" +
@@ -405,14 +402,14 @@ public class TestDTDToXdef extends XDTester {
 "     a1 CDATA #FIXED 'a1'\n"+
 "     a2 CDATA 'a2'>\n"+
 "<!ELEMENT CCC EMPTY >";
-		xmlData =
+			xmlData =
 "<XXX>\n" +
 "  <AAA>\n" +
 "    <BBB a1 = 'a1' a2 = 'x'/>\n" +
 "  </AAA>\n" +
 "</XXX>";
-		test(dtdData, "XXX", xmlData, display);
-		dtdData =
+			test(dtdData, "XXX", xmlData, display);
+			dtdData =
 "<!ELEMENT XXX (AAA*|(BBB*,(CCC|(DDD,EEE+)*|FFF?), AAA*))? >\n" +
 "<!ELEMENT AAA EMPTY>\n" +
 "<!ELEMENT BBB EMPTY>\n" +
@@ -420,16 +417,16 @@ public class TestDTDToXdef extends XDTester {
 "<!ELEMENT DDD EMPTY>\n" +
 "<!ELEMENT EEE EMPTY>\n" +
 "<!ELEMENT FFF EMPTY>";
-		xmlData =
+			xmlData =
 "<XXX>\n" +
 "  <BBB/>\n" +
 "  <DDD/>\n" +
 "  <EEE/>\n" +
 "</XXX>";
-		test(dtdData, "XXX", xmlData, display);
-////////////////////////////////////////////////////////////////////////////////
-// END - fails in Java 1.9 /////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+			test(dtdData, "XXX", xmlData, display);
+			////////////////////////////////////////////////////////////////////
+			// END - fails in Java 1.9 /////////////////////////////////////////
+			////////////////////////////////////////////////////////////////////
 		}
 		dtdData =
 "<!ELEMENT TVSCHEDULE (CHANNEL+)>\n"+
@@ -578,12 +575,14 @@ public class TestDTDToXdef extends XDTester {
 	public void test() {
 		//0..no display, 1 .. display DTD, 2 .. display XDEF, 4 .. display XML
 		int display = 0;
-		String tempDir = clearTempDir().toString();
+		String tempDir = getTempDir();
+		clearTempDir();
 		String dataDir = getDataDir();
 		String xmlData;
 		String dtdData;
 
 //		test(display); //enable this line only when debugging without maven
+
 		dtdData =
 "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'\n" +
 "   'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>\n" +
@@ -600,13 +599,13 @@ public class TestDTDToXdef extends XDTester {
 "</html>";
 		test(dtdData, "html", xmlData, display);
 
-		DTDToXdef.main(new String[]{"-in",
+		org.xdef.util.DTDToXdef.main(new String[]{"-in",
 			dataDir + "dtds/a.xml",
 			"-out",
 			tempDir + "generated_a.xdef",
 			"-r",
 			"root"});
-		DTDToXdef.main(new String[]{"-in",
+		org.xdef.util.DTDToXdef.main(new String[]{"-in",
 			dataDir + "dtds/TV.xml",
 			"-out",
 			tempDir + "generated_TV.xdef",

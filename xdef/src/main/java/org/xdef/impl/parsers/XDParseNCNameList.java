@@ -9,6 +9,15 @@ import org.xdef.proc.XXNode;
 import org.xdef.impl.code.DefContainer;
 import org.xdef.impl.code.DefString;
 import org.xdef.XDContainer;
+import static org.xdef.XDParser.ENUMERATION;
+import static org.xdef.XDParser.LENGTH;
+import static org.xdef.XDParser.MAXLENGTH;
+import static org.xdef.XDParser.MINLENGTH;
+import static org.xdef.XDParser.PATTERN;
+import static org.xdef.XDParser.SEPARATOR;
+import static org.xdef.XDParser.WHITESPACE;
+import static org.xdef.XDValueID.XD_CONTAINER;
+import static org.xdef.XDValueID.XD_STRING;
 
 /** Parser of X-Script "NCNameList" type.
  * @author Vaclav Trojan
@@ -42,9 +51,6 @@ public class XDParseNCNameList extends XSAbstractParseToken {
 	public void parseObject(final XXNode xnode, final XDParseResult p){
 		int pos0 = p.getIndex();
 		p.isSpaces();
-//		if (_separator != null) {
-//			while(p.isOneOfChars(_separator) != 0){} //???
-//		}
 		int pos = p.getIndex();
 		XDContainer results = new DefContainer();
 		StringParser parser = new StringParser(p.getSourceBuffer(), pos);
@@ -114,7 +120,7 @@ public class XDParseNCNameList extends XSAbstractParseToken {
 	@Override
 	public short parsedType() {return XD_CONTAINER;}
 	@Override
-	public String parserName() {
-		return ROOTBASENAME;
-	}
+	public String parserName() {return ROOTBASENAME;}
+	@Override
+	public short getAlltemsType() {return XD_STRING;}
 }

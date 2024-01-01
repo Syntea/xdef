@@ -881,11 +881,11 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 				switch (typ) {
 					case "String":
 						s +=
-							"(String) org.xdef.xon.XonTools.xmlToJValue((String)o);";
+"(String) org.xdef.xon.XonTools.xmlToJValue((String)o);";
 						break;
 					case "Object":
 						s +=
-							"o instanceof String? org.xdef.xon.XonTools.xmlToJValue((String) o): o;";
+"o instanceof String? org.xdef.xon.XonTools.xmlToJValue((String) o): o;";
 						break;
 					default:
 						s += "("+typ+")o;";

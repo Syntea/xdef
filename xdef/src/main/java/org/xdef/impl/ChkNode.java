@@ -346,7 +346,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	 */
 	public final void setXONContext(final String data)
 		throws SRuntimeException {
-		setXONContext(XonUtils.parseXON(data));
+		setXDContext(XonUtils.xonToXmlW(data));
 	}
 
 	@Override
@@ -356,19 +356,15 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	 * or XML data to be converted to XON/JSON.
 	 * @throws SRuntimeException if data is incorrect or if model is not found.
 	 */
-	public final void setXONContext(final Object data)
-		throws SRuntimeException {
+	public final void setXONContext(final Object data) throws SRuntimeException{
 		Element e = null;
 		if (data == null || data instanceof Map || data instanceof List
 			|| data instanceof String || data instanceof Number
 			|| data instanceof Boolean) {
 			e = XonUtils.xonToXmlW(data);
-		} else if (data instanceof File) {
-			e = XonUtils.xonToXmlW(XonUtils.parseXON((File) data));
-		} else if (data instanceof URL) {
-			e = XonUtils.xonToXmlW(XonUtils.parseXON((URL) data));
-		} else if (data instanceof InputStream) {
-			e = XonUtils.xonToXmlW(XonUtils.parseXON((InputStream) data));
+		} else if (data instanceof File || data instanceof URL
+			|| data instanceof InputStream || data instanceof String) {
+			e = XonUtils.xonToXmlW( data);
 		} else if (data instanceof Document) {
 			e = ((Document) data).getDocumentElement();
 		} else if (data instanceof Element){

@@ -447,7 +447,7 @@ public final class TestErrors extends XDTester {
 			xdef =
 //        1         2         3         4        5          6         7
 //234567890123456789012345678901234567890123456789012345678901234567890123456789
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
 "<xd:xon name='A'>{\"\": \"5 int()\"}</xd:xon>\n" +
 "</xd:def>";
 			reporter = test(props, xdef);
@@ -456,7 +456,7 @@ public final class TestErrors extends XDTester {
 			xdef =
 //        1         2         3         4        5          6         7
 //234567890123456789012345678901234567890123456789012345678901234567890123456789
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
 "<xd:xon name='A'>{\"\": [%script=\"5\", \"int()\"] }</xd:xon>\n" +
 "</xd:def>";
 			reporter = test(props, xdef);

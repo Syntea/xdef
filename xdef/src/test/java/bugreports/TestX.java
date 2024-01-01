@@ -21,29 +21,6 @@ public class TestX extends XDTester {
 
 	public static boolean x(XXData x) {return true;}
 
-	/** Display object. */
-	private static String printObject(final Object o) {
-		if (o == null) {
-			return "null\n";
-		} else if (o instanceof List) {
-			List x = (List) o;
-			String s = "[\n";
-			for (int i = 0; i < x.size(); i++) {
-				s += "  index " + i + ": " + printObject(x.get(i));
-			}
-			return s + "]\n";
-		} else if (o instanceof Map) {
-			String s = "{\n";
-			for (Object x: ((Map) o).entrySet()) {
-				s += "\n  " + ((Map.Entry) x).getKey() + ": "
-				  + printObject(((Map.Entry) x).getValue());
-			}
-			return s + "}\n";
-		} else {
-			return o + "; " + o.getClass() + "\n";
-		}
-	}
-
 	@Override
 	/** Run test and display error information. */
 	public void test() {
@@ -58,7 +35,7 @@ public class TestX extends XDTester {
 			System.setProperty(XConstants.XDPROPERTY_XDEF_DBGSWITCHES,
 				XConstants.XDPROPERTYVALUE_DBG_SHOWXON);
 			xdef =
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n"+
+"<xd:def xmlns:xd=\""+_xdNS+"\" name=\"X\" root=\"a\">\n"+
 " <xd:xon name='a'>\n"+
 "[\n" +
 "  { %script= \"occurs 1..*\",\n" +
@@ -82,16 +59,16 @@ public class TestX extends XDTester {
 "    \"Name\": \"B\",\n" +
 "    \"Genre\": [\"B1\", \"B2\"]\n" +
 "  },\n" +
-//"  {\n" +
-//"    \"Name\": \" cc dd \",\n" +
-//"    \"Genre\": \"C1\"\n" +
-//"  }\n" +
+"  {\n" +
+"    \"Name\": \" cc dd \",\n" +
+"    \"Genre\": \"C1\"\n" +
+"  }\n" +
 "]";
 			reporter.clear();
 			xd.jparse(json, reporter);
 			assertNoErrorwarnings(reporter);
 			xdef =
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n"+
+"<xd:def xmlns:xd=\""+_xdNS+"\" name=\"X\" root=\"a\">\n"+
 " <xd:xon name='a'>\n"+
 "{ %oneOf= \"optional;\",\n" +
 "  \"manager\": \"string()\",\n" +
@@ -118,7 +95,7 @@ public class TestX extends XDTester {
 			xd.jparse(json, reporter);
 			assertNoErrorwarnings(reporter);
 			xdef =
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n"+
+"<xd:def xmlns:xd=\""+_xdNS+"\" name=\"X\" root=\"a\">\n"+
 " <xd:xon name='a'>\n"+
 "[\n" +
 "  {\n" +
@@ -132,7 +109,7 @@ public class TestX extends XDTester {
 			json = "[\n" +
 "  {\"A\": [\"A1\"]},\n" +
 "  {\"A\": [\"B1\", \"B2\"]},\n" +
-//"  {\"A\": \"C1\"}\n" +
+"  {\"A\": \"C1\"}\n" +
 "]";
 			reporter.clear();
 			xd.jparse(json, reporter);
@@ -141,9 +118,8 @@ public class TestX extends XDTester {
 			reporter.clear();
 			xd.jparse(json, reporter);
 			assertNoErrorwarnings(reporter);
-// Required element 'js:item' is missing; path=$; X-position=Example#test/$.['date']
 			xdef =
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n"+
+"<xd:def xmlns:xd=\""+_xdNS+"\" name=\"X\" root=\"a\">\n"+
 " <xd:xon name='a'>\n"+
 "   { \"date\" : \"date()\",\n" +
 "     \"cities\"  : [\n" +
@@ -177,7 +153,7 @@ public class TestX extends XDTester {
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xdef =
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n"+
+"<xd:def xmlns:xd=\""+_xdNS+"\" name=\"X\" root=\"a\">\n"+
 " <xd:xon name='a'>\n"+
 "  {\n" +
 "    \"A\":  \"string()\",\n" +

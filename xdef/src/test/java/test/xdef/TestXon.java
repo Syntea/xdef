@@ -31,7 +31,7 @@ public class TestXon extends XDTester {
 
 	/** Simple type test in the Array
 	 * @param type type method.
-	 * @param xon xon data to be tested.
+	 * @param source data to be tested.
 	 * @return string with errors or null.
 	 */
 	private String testA(final String type, final String xon) {
@@ -50,82 +50,85 @@ public class TestXon extends XDTester {
 	private String testM(final String type, final String xon) {
 		return testX(
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
-"<xd:xon name='A'> {a: \"" + type + "();\"} </xd:xon>\n" +
-"<xd:component>%class test.xdef.TestEmptyMap %link A</xd:component>\n"+
+"<xd:xon name='A'> {a: \"? " + type + "();\"} </xd:xon>\n" +
+"<xd:component>%class test.xdef.GM"+type+" %link A</xd:component>\n"+
 "</xd:def>", "", xon);
 	}
 
 	/** Testing the entered data using X-definition.
 	 * @param xdef X-definition source.
 	 * @param xdName name of X-definition.
-	 * @param xon data to be tested.
+	 * @param source data to be tested.
 	 * @return null or string with error.
 	 */
-	private String testX(String xdef, String xdName, String xon) {
+	private String testX(String xdef, String xdName, String source) {
 		try {
-			XDPool xp = compile(xdef);
-			genXComponent(xp, clearTempDir());
-			return testX(xp, xdName, xon);
+			XDPool xp = XDFactory.compileXD(null, xdef);
+			genXComponent(xp);
+			return testX(xp, xdName, source);
 		} catch (Exception ex) {return printThrowable(ex);}
 	}
 
 	/** Testing the entered data using XDPool.
 	 * @param xdef X-definition source.
 	 * @param xdName name of X-definition.
-	 * @param xon XON to be tested.
+	 * @param source data to be tested.
 	 * @return empty string or error.
 	 */
-	private String testX(final XDPool xp,final String xdName,final String xon) {
-		return testX(xp, xdName, null, xon, null);
+	private String testX(final XDPool xp,
+		final String xdName,
+		final String source) {
+		return testX(xp, xdName, null, source, null);
 	}
 
 	/** Testing the entered data using XDPool.
 	 * @param xdef X-definition source.
 	 * @param xdName name of X-definition.
 	 * @param cls XComponent class name or null.
-	 * @param xon XON to be tested.
+	 * @param source data to be tested.
 	 * @return empty string or error.
 	 */
 	private String testX(final XDPool xp,
 		final String xdName,
 		final String cls,
-		final String xon) {
-		return testX(xp, xdName, cls, xon, null);
+		final String source) {
+		return testX(xp, xdName, cls, source, null);
 	}
 
 	/** Testing the entered data using XDPool.
 	 * @param xdef X-definition source.
 	 * @param xdName name of X-definition.
 	 * @param cls XComponent class name or null.
-	 * @param xon XON to be tested.
+	 * @param source data to be tested.
 	 * @param outResult expected result of out stream or null.
 	 * @return empty string or error.
 	 */
 	private String testX(final XDPool xp,
 		final String xdName,
 		final String cls,
-		final String xon,
+		final String source,
 		final String outResult){
-//putInfo(xon);
 		String result = "";
 		try {
 			ArrayReporter reporter = new ArrayReporter();
-			Object o = XonUtils.parseXON(xon);
+			Object o = XonUtils.parseXON(source);
 			XDDocument xd = xp.createXDDocument(xdName);
 			StringWriter swr;
 			if (outResult != null) {
-				xd.setStdOut(XDFactory.createXDOutput(
-					swr = new StringWriter(), false));
+				xd.setStdOut(
+					XDFactory.createXDOutput(swr = new StringWriter(), false));
 			} else {
 				swr = null;
 			}
-			Object x = xd.jparse(xon, reporter);
+			Object x = xd.jparse(source, reporter);
 			if (reporter.errorWarnings()) {
 				result += "** 1\n" + reporter.printToString() + "\n";
 				reporter.clear();
 			}
 			if (!XonUtils.xonEqual(o, x)) {
-				result += "** 2\n" + XonUtils.toXonString(x, true) + "\n";
+				result += "** 2\n"
+					+ XonUtils.toXonString(o, true) + "\n"
+					+ XonUtils.toXonString(x, true) + "\n";
 			}
 			if (outResult != null && swr != null) {
 				if (!outResult.equals(swr.toString())) {
@@ -134,103 +137,102 @@ public class TestXon extends XDTester {
 			}
 			xd = xp.createXDDocument(xdName);
 			if (outResult != null) {
-				xd.setStdOut(XDFactory.createXDOutput(
-					swr = new StringWriter(), false));
+				xd.setStdOut(
+					XDFactory.createXDOutput(swr = new StringWriter(), false));
 			}
-			XComponent xc = xd.jparseXComponent(xon, null, reporter);
+			XComponent xc = xd.jparseXComponent(source, null, reporter);
 			if (reporter.errorWarnings()) {
 				result += "** 4\n" + reporter.printToString() + "\n";
 				reporter.clear();
 			}
 			if (xc == null) {
-				result += "** 5\n X-component is null\n";
-			} else {
-				if (outResult != null && swr != null) {
-					if (!outResult.equals(swr.toString())) {
-						result +="** 6 '"+outResult+"', '"+swr.toString()+"'\n";
-					}
+				return result + "** 5\n X-component is null\n";
+			}
+			if (outResult != null && swr != null) {
+				if (!outResult.equals(swr.toString())) {
+					result +="** 6 '"+outResult+"', '"+swr.toString()+"'\n";
 				}
-				x = xc.toXon();
-				if (!XonUtils.xonEqual(o, x)) {
-					result += "** 7\n" + XonUtils.toXonString(x, true) + "\n";
+			}
+			x = xc.toXon();
+			if (!XonUtils.xonEqual(o, x)) {
+				result += "** 7\n" + XonUtils.toXonString(x, true) + "\n";
+			}
+			xd = xp.createXDDocument(xdName);
+			if (outResult != null) {
+				xd.setStdOut(
+					XDFactory.createXDOutput(swr = new StringWriter(), false));
+			}
+			x = XonUtils.toXonString(x);
+			xc = xd.jparseXComponent(x, null, reporter);
+			if (reporter.errorWarnings()) {
+				result += "** 8\n" + x + "\n"  + reporter.printToString() + "\n";
+				reporter.clear();
+			}
+			x = xc.toXon();
+			if (!XonUtils.xonEqual(o, x)) {
+				result += "** 9\n" + XonUtils.toXonString(x, true) + "\n";
+			}
+			if (outResult != null && swr != null) {
+				if (!outResult.equals(swr.toString())) {
+					result += "** 10 '"+outResult+"', '"
+						+ swr.toString()+"'\n";
 				}
+			}
+			if (cls != null) {
+				Class<?> clazz = Class.forName(cls);
 				xd = xp.createXDDocument(xdName);
 				if (outResult != null) {
-					xd.setStdOut(XDFactory.createXDOutput(
-						swr = new StringWriter(), false));
+					xd.setStdOut(
+						XDFactory.createXDOutput(swr=new StringWriter(),false));
 				}
-				x = x instanceof String ? XonUtils.toJsonString(x) : x;
-				xc = xd.jparseXComponent(x, null, reporter);
+				xc = xd.jparseXComponent(source, clazz, reporter);
 				if (reporter.errorWarnings()) {
-					result += "** 8\n" + reporter.printToString() + "\n";
+					result += "** 11\n" + reporter.printToString() + "\n";
 					reporter.clear();
 				}
 				x = xc.toXon();
 				if (!XonUtils.xonEqual(o, x)) {
-					result += "** 9\n" + XonUtils.toXonString(x, true) + "\n";
+					result += "** 12\n"+XonUtils.toXonString(x, true)+"\n";
 				}
 				if (outResult != null && swr != null) {
 					if (!outResult.equals(swr.toString())) {
-						result += "** 10 '"+outResult+"', '"
+						result +="** 13 '"+outResult+"', '"
 							+ swr.toString()+"'\n";
 					}
 				}
-				if (cls != null) {
-					Class<?> clazz = Class.forName(cls);
-					xd = xp.createXDDocument(xdName);
-					if (outResult != null) {
-						xd.setStdOut(XDFactory.createXDOutput(
-							swr = new StringWriter(), false));
-					}
-					xc = xd.jparseXComponent(xon, clazz, reporter);
-					if (reporter.errorWarnings()) {
-						result += "** 11\n" + reporter.printToString() + "\n";
-						reporter.clear();
-					}
-					x = xc.toXon();
-					if (!XonUtils.xonEqual(o, x)) {
-						result += "** 12\n"+XonUtils.toXonString(x, true)+"\n";
-					}
-					if (outResult != null && swr != null) {
-						if (!outResult.equals(swr.toString())) {
-							result +="** 13 '"+outResult+"', '"
-								+ swr.toString()+"'\n";
-						}
-					}
-					xd = xp.createXDDocument(xdName);
-					if (outResult != null && swr != null) {
-						xd.setStdOut(XDFactory.createXDOutput(
-							swr = new StringWriter(), false));
-					}
-					x = x instanceof String ? XonUtils.toJsonString(x) : x;
-					xc = xd.jparseXComponent(x, clazz, reporter);
-					if (reporter.errorWarnings()) {
-						result += "** 14\n" + reporter.printToString() + "\n";
-						reporter.clear();
-					}
-					x = xc.toXon();
-					if (!XonUtils.xonEqual(o, x)) {
-						result += "** 15\n" + XonUtils.toXonString(x,true)+"\n";
-					}
-					if (outResult != null && swr != null) {
-						if (!outResult.equals(swr.toString())) {
-							result +="** 16 '"+outResult+"', '"
-								+ swr.toString()+"'\n";
-						}
+				xd = xp.createXDDocument(xdName);
+				if (outResult != null && swr != null) {
+					xd.setStdOut(
+						XDFactory.createXDOutput(swr=new StringWriter(),false));
+				}
+				x = XonUtils.toXonString(x);
+				xc = xd.jparseXComponent(x, clazz, reporter);
+				if (reporter.errorWarnings()) {
+					result += "** 14\n" + reporter.printToString() + "\n";
+					reporter.clear();
+				}
+				x = xc.toXon();
+				if (!XonUtils.xonEqual(o, x)) {
+					result += "** 15\n" + XonUtils.toXonString(x,true)+"\n";
+				}
+				if (outResult != null && swr != null) {
+					if (!outResult.equals(swr.toString())) {
+						result +="** 16 '"+outResult+"', '"
+							+ swr.toString()+"'\n";
 					}
 				}
 			}
 		} catch (Exception ex) {
 			result += printThrowable(ex) + "\n";
 		}
-		return result.isEmpty() ? null : xon + "\n" + result;
+		return result.isEmpty() ? null : '~' + source + "~\n" + result;
 	}
 
 	/** Run all tests. */
 	@Override
 	public void test() {
 		if (!_xdNS.startsWith("http://www.xdef.org/xdef/4.")) {
-			return;
+			return; // do not test versions 2.0, 2.1, and 3.1
 		}
 		String s, ini, json, xon, xdef, xml;
 		List list;
@@ -242,50 +244,49 @@ public class TestXon extends XDTester {
 		XComponent xc;
 		StringWriter swr;
 		Map<String, Object> xini;
-
-		assertNull(testA("byte", "[null, 1b, -3b ]"));
-		assertNull(testA("short", "[null, 1s ]"));
-		assertNull(testA("int", "[null, 1i ]"));
-		assertNull(testA("long", "[null, 1 ]"));
-		assertNull(testA("integer", "[null, 0N, -3N ]"));
-		assertNull(testA("float", "[null, 1.0f ]"));
-		assertNull(testA("double", "[null, 1.0 ]"));
-		assertNull(testA("decimal", "[null, 0D, 1D, -1D, 1.5D, 3.33e-5D ]"));
-		assertNull(testA("date",
-			"[null, d2021-01-12, d1999-01-05+01:01, d1998-12-21Z ]"));
-		assertNull(testA("gYear", "[null,  d2021+01:00, d1999, d-0012Z ]"));
-		assertNull(testA("gps",
-			"[null, g(20.21,19.99),g(20.21, 19.99,0.1),g(51.52,-0.09,0,xxx)]"));
-		assertNull(testA("price", "[null, p(20.21 CZK), p(19.99 USD) ]"));
-		assertNull(testA("char",
-			"[null, c\"a\", c\"'\", c\"\\\"\", c\"\\u0007\", c\"\\\\\" ]"));
-		assertNull(testA("anyURI", "[null, u\"http://a.b\" ]"));
-		assertNull(testA("emailAddr",
-			"[null, e\"tro@volny.cz\",e\"a b<x@y.zz>\" ]"));
-		assertNull(testA("file", "[null, \"temp/a.txt\" ]"));
-		assertNull(testA("ipAddr", "[null, /::FFFF:129.144.52.38,/0.0.0]"));
-		assertNull(testA("currency", "[null, C(USD), C(CZK)]"));
-		assertNull(testA("telephone",
-			"[null, t\"123456\",t\"+420 234 567 890\"]"));
-		assertNull(testA("jnull", "[ null, null ]"));
-		assertNull(testA("jboolean", "[ null, true ]"));
-		assertNull(testA("jnumber", "[ null, 1 ]"));
-		assertNull(testA("jstring", "[ null, \"abc\" ]"));
-		assertNull(testA("jvalue", "[ null, true, 1, \"abc\" ]"));
-
-		assertNull(testM("? int", "{a:1}"));
-		assertNull(testM("? int", "{ }"));
-
 		try {
+			assertNull(testA("short", "[null, 1s ]"));
+			assertNull(testA("int", "[null, 1i ]"));
+			assertNull(testA("long", "[null, 1 ]"));
+			assertNull(testA("integer", "[null, 0N, -3N ]"));
+			assertNull(testA("float", "[null, 1.0f ]"));
+			assertNull(testA("double", "[null, 1.0 ]"));
+			assertNull(testA("decimal", "[null, 0D, 1D, -1D, 1.5D,3.33e-5D ]"));
+			assertNull(testA("date",
+				"[null, d2021-01-12, d1999-01-05+01:01, d1998-12-21Z ]"));
+			assertNull(testA("gYear", "[null,  d2021+01:00, d1999, d-0012Z ]"));
+			assertNull(testA("gps",
+				"[null,g(20.21,19.99),g(20.2,19.9,0),g(51.52,-0.09,0.0,xxx)]"));
+			assertNull(testA("price", "[null, p(20.21 CZK), p(19.99 USD) ]"));
+			assertNull(testA("char",
+				"[null, c\"a\", c\"'\", c\"\\\"\", c\"\\u0007\", c\"\\\\\" ]"));
+			assertNull(testA("anyURI", "[null, u\"http://a.b\" ]"));
+			assertNull(testA("emailAddr",
+				"[null, e\"tro@volny.cz\",e\"a b<x@y.zz>\" ]"));
+			assertNull(testA("file", "[null, \"temp/a.txt\" ]"));
+			assertNull(testA("ipAddr", "[null, /::FFFF:129.144.52.38,/0.0.0]"));
+			assertNull(testA("currency", "[null, C(USD), C(CZK)]"));
+			assertNull(testA("telephone",
+				"[null, t\"123456\",t\"+420 234 567 890\"]"));
+			assertNull(testA("jnull", "[ null, null ]"));
+			assertNull(testA("jboolean", "[ null, true ]"));
+			assertNull(testA("jnumber", "[ null, 1 ]"));
+			assertNull(testA("jstring", "[ null, \"abc\" ]"));
+			assertNull(testA("jvalue", "[ null, true, 1, \"abc\" ]"));
+			
+			assertNull(testM("int", "{a:1}"));
+			assertNull(testM("int", "{}"));
+			assertNull(testM("jvalue", "{a:true}"));
+			assertNull(testM("jvalue", "{a:null}"));
+			assertNull(testM("jvalue", "{}"));
+			
 			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' name='M' root='y:X'\n" +
-"        xmlns:y='a.b'>\n" +
+"<xd:def xmlns:xd='" + _xdNS + "' name='M' root='y:X' xmlns:y='a.b'>\n" +
 "<xd:declaration>type gam xdatetime('yyyyMMddHHmmssSS');</xd:declaration>\n" +
 "  <y:X a = '?date()' t='gam();' >? int() <y:Y xd:script='*'/>dec()</y:X>\n" +
-"<xd:component>%class test.xdef.MGam %link y:X</xd:component>\n" +
+"<xd:component>%class " + _package + ".MGam %link y:X</xd:component>\n" +
 "</xd:def>";
-			xp = compile(xdef);
-			genXComponent(xp, clearTempDir());
+			genXComponent(xp = compile(xdef));
 			xml =
 "<n:X xmlns:n='a.b' a='2021-12-30' t='2020121101010101'>1<n:Y/><n:Y/>2.0</n:X>";
 			xc = parseXC(xp,"M", xml , null, reporter);
@@ -305,14 +306,13 @@ public class TestXon extends XDTester {
 "}");
 			assertTrue(XonUtils.xonEqual(o, xc.toXon()));
 			xdef =
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n" +
-"<xd:component>%class test.xdef.Csvxx %link a</xd:component>\n" +
+"<xd:def xmlns:xd='" + _xdNS + "' name=\"X\" root=\"a\">\n" +
+"<xd:component>%class " + _package + ".Csvxx %link a</xd:component>\n" +
 " <xd:xon name='a'>\n" +
 "    [ [ %script =\"+\", \"int\", \"int\", \"string()\", \"boolean()\"] ]\n" +
 " </xd:xon>\n" +
 "</xd:def>";
-			xp = compile(xdef); // no property
-			genXComponent(xp, clearTempDir());
+			genXComponent(xp = compile(xdef));
 			xd = xp.createXDDocument();
 			json =
 "[\n" +
@@ -329,7 +329,50 @@ public class TestXon extends XDTester {
 					+ "\n*****\n" + XonUtils.toXonString(x, true));
 			}
 			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' xd:root='A'>\n" +
+"<xd:xon name='A'>\n" +
+"[ \"hexBinary()\",\"base64Binary()\",\"hexBinary()\",\"base64Binary()\" ]\n" +
+"</xd:xon>\n" +
+" <xd:component>%class "+_package+".MyTestX_Hexb64 %link #A;</xd:component>\n" +
+"</xd:def>";
+			genXComponent(xp = compile(xdef));
+			xon = "[ x(0FAE99), b(D66Z), x(), b() ]";
+			o = XonUtils.parseXON(xon);
+			y = jparse(xp, "", xon, reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			if (!XonUtils.xonEqual(o, y)) {
+				fail(XonUtils.xonDiff(o, y)
+					+ "\n***\n" + XonUtils.toXonString(y, true)
+					+ "\n***\n" + XonUtils.toXonString(o, true));
+			}
+			xc = xp.createXDDocument().jparseXComponent(xon, null, reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			if (!XonUtils.xonEqual(o, y=xc.toXon())) {
+				fail(XonUtils.xonDiff(o, y)
+					+ "\n***\n" + XonUtils.toXonString(y, true)
+					+ "\n***\n" + XonUtils.toXonString(o, true));
+			}
+			el = xc.toXml();
+			s = XonUtils.toXonString(XonUtils.xmlToXon(el), true);
+			y = jparse(xp, "", s, reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			if (!XonUtils.xonEqual(o, y)) {
+				fail(XonUtils.xonDiff(o, y)
+					+ "\n***\n" + KXmlUtils.nodeToString(el, true)
+					+ "\n***\n" + XonUtils.toXonString(y, true)
+					+ "\n***\n" + XonUtils.toXonString(o, true));
+			}
+			xd = xp.createXDDocument();
+			xd.setXONContext(xon);
+			xc = xd.jcreateXComponent("A", null, reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			if (!XonUtils.xonEqual(o, y =xc.toXon())) {
+				fail(XonUtils.xonDiff(o, y)
+					+ "\n***\n" + XonUtils.toXonString(y, true)
+					+ "\n***\n" + XonUtils.toXonString(o, true));
+			}
+			xdef =
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
 "<xd:xon name='A'>\n" +
 "[\n" +
 "  {\n" +
@@ -380,7 +423,6 @@ public class TestXon extends XDTester {
 "  \"gps()\",\n" +
 "  \"base64Binary()\",\n" +
 "  \"base64Binary()\",\n" +
-"  \"base64Binary(0,0)\",\n" +
 "  \"price()\",\n" +
 "  \"price()\",\n" +
 "  \"currency()\",\n" +
@@ -389,16 +431,16 @@ public class TestXon extends XDTester {
 "]\n" +
 "</xd:xon>\n" +
 "<xd:component>\n" +
-"  %class test.xdef.Xon %link #A;\n" +
+"  %class "+_package+".Xon %link #A;\n" +
 "</xd:component>\n" +
 "</xd:def>";
-			xp = compile(xdef);
+			genXComponent(xp = compile(xdef));
 			xon =
-"/**** Start of XON example ****/\n" +
+"#**** Start of XON example ****\n" +
 "[                                    # Array\n" +
 "  {                                  # Map\n" +
 "    a : 1s,                          # Short\n" +
-"    b : \"ab cd\",                     # String\n" +
+"    b : \"ab cd\",                   # String\n" +
 "    c : -123d,                       # Double\n" +
 "    f:true,                          # Boolean\n" +
 "    g : P1Y1M1DT1H1M1.12S,           # Duration\n" +
@@ -424,7 +466,7 @@ public class TestXon extends XDTester {
 "    v : d123456789Z,                 # year zone\n" +
 "    w : d-0001-01:00,                # year zone\n" +
 "    \" name with space \": \"x\\ty\" # name with space is quoted!\n" +
-"  },  /**** end of map ****/\n" +
+"  },  #**** end of map ****\n" +
 "  null,                              # null\n" +
 "  3f,                                # Float\n" +
 "  null,                              # null\n" +
@@ -445,23 +487,20 @@ public class TestXon extends XDTester {
 "  d2000-10,                          # year month; no zone\n" +
 "  d2021-01-12T01:10:11.54012-00:01,  # date and time (nanos, zone)\n" +
 "  g(-0, +1),                         # GPS\n" +
-"  b(true),                   # byte array (base64)\n" +
-"  x(0FAE99),                         # byte array (input is hexadecimal)\n" +
-"  x(),                               # byte array (input is hexadecimal)\n" +
+"  b(D66Z),                           # byte array (base64)\n" +
+"  b(),                               # byte array (base64), length = 0\n" +
 "  p(123.45 CZK),                     # price\n" +
 "  p(12 USD),                         # price\n" +
 "  C(USD),                            # currency\n" +
 "  /129.144.52.38,                    # inetAddr (IPv4)\n" +
 "  /1080:0:0:0:8:800:200C:417A,       # inetAddr (IPv6)\n" +
-"] /**** end of array ****/\n" +
-"/**** End of XON example ****/";
+"] #*** end of array ****\n" +
+"#**** End of XON example ****";
 			x = XonUtils.parseXON(xon);
-			s = XonUtils.toJsonString(x, true);
-			XonUtils.parseXON(s);
 			s = XonUtils.toXonString(x, true);
 			y = XonUtils.parseXON(s);
 			assertTrue(XonUtils.xonEqual(x,y));
-			list = (List) ((Map) ((List) x).get(0)).get("Towns");
+			list = (List) ((Map) ((List) y).get(0)).get("Towns");
 			assertEq("Wien",((GPSPosition) list.get(0)).name());
 			assertEq("London",((GPSPosition) list.get(1)).name());
 			assertEq("Prague old town",((GPSPosition) list.get(3)).name());
@@ -476,7 +515,6 @@ public class TestXon extends XDTester {
 			XonUtils.parseXON(json);
 			y = jparse(xp, "", json, reporter);
 			assertNoErrorwarningsAndClear(reporter);
-			genXComponent(xp, clearTempDir());
 			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
 			assertTrue(XonUtils.xonEqual(xc.toXon(),y));
@@ -496,16 +534,15 @@ public class TestXon extends XDTester {
 			assertNoErrorwarningsAndClear(reporter);
 			assertTrue(XonUtils.xonEqual(x, xc.toXon()));
 			xdef =
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n" +
-"<xd:component>%class test.xdef.Xona %link a</xd:component>\n" +
+"<xd:def xmlns:xd='" + _xdNS + "' name=\"X\" root=\"a\">\n" +
+"<xd:component>%class " + _package + ".Xona %link a</xd:component>\n" +
 " <xd:xon name='a'>\n" +
 "[\n" +
 "  [ %script= \"optional\", \"boolean();\", \"optional int();\" ]\n" +
 "]\n" +
 " </xd:xon>\n" +
 "</xd:def>";
-			xp = compile(xdef);
-			genXComponent(xp, clearTempDir());
+			genXComponent(xp = compile(xdef));
 			xd = xp.createXDDocument();
 			json = "[ [ true, 123 ] ]";
 			o = xd.jparse(json, reporter);
@@ -526,8 +563,8 @@ public class TestXon extends XDTester {
 					+ "\n***\n" + XonUtils.toXonString(x));
 			}
 			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='X'>\n" +
-"<xd:component>%class test.xdef.Xonb %link X</xd:component>\n" +
+"<xd:def xmlns:xd='" + _xdNS + "' root='X'>\n" +
+"<xd:component>%class " + _package + ".Xonb %link X</xd:component>\n" +
 "<xd:xon name=\"X\">\n" +
 "[\n" +
 "  [\"fixed 'Name'\",\"fixed 'Email'\",\"fixed 'Mobile Number'\"],\n" +
@@ -539,8 +576,7 @@ public class TestXon extends XDTester {
 "]\n" +
 "</xd:xon>\n" +
 "</xd:def>";
-			xp = compile(xdef);
-			genXComponent(xp, clearTempDir());
+			genXComponent(xp = compile(xdef));
 			xd = xp.createXDDocument();
 			s =
 "[\n" +
@@ -551,7 +587,7 @@ public class TestXon extends XDTester {
 "]";
 			o = xd.jparse(s, reporter);
 			assertNoErrorwarningsAndClear(reporter);
-			genXComponent(xd.getXDPool(), clearTempDir());
+			genXComponent(xd.getXDPool());
 			xc = xd.jparseXComponent(s, null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
 			assertTrue(XonUtils.xonEqual(o, x = xc.toXon()));
@@ -568,48 +604,6 @@ public class TestXon extends XDTester {
 			list = (List) ((List) x).get(3);
 			assertNull(list.get(1));
 			assertNull(list.get(2));
-			xdef = // test YAML
-"<xd:def xmlns:xd='" + _xdNS + "' root='test' name='A'>\n"+
-"  <xd:xon name=\"test\">\n" +
-"    { \"cities\": [\n" +
-"        \"date();\",\n" +
-"        { %script = \"occurs 1..*;\",\n" +
-"          \"from\": [\n" +
-"            \"string();\",\n" +
-"            { %script = \"occurs 1..*; \",\n" +
-"              \"to\": \"jstring();\",\n" +
-"              \"distance\": \"int();\"\n" +
-"            }\n" +
-"    	  ]\n" +
-"        }\n" +
-"      ]\n" +
-"    }"+
-"  </xd:xon>\n" +
-"</xd:def>";
-			xd = compile(xdef).createXDDocument("A");
-			String yaml =
-"cities:\n" +
-"- '2020-02-22'\n" +
-"- from:\n" +
-"  - Brussels\n" +
-"  - {to: London, distance: 322}\n" +
-"  - {to: Paris, distance: 265}\n" +
-"- from:\n" +
-"  - London\n" +
-"  - {to: Brussels, distance: 322}\n" +
-"  - {to: Paris, distance: 344}\n";
-			x = xd.yparse(yaml, reporter);
-			assertNoErrorwarningsAndClear(reporter);
-			assertTrue(XonUtils.xonEqual(x,
-				xd.yparse(XonUtils.toYamlString(x), reporter)));
-			assertNoErrorwarningsAndClear(reporter);
-		} catch (SRuntimeException ex) {
-			if ("JSON101".equals(ex.getMsgID())) {
-				setResultInfo("YAML tests skipped: the package "
-					+ "org.yaml.snakeyaml is not available");
-			} else {
-				fail(ex);
-			}
 			xdef = // test Windows INI
 "<xd:def xmlns:xd='" + _xdNS + "' root='test' name='A'>\n" +
 "<xd:ini xd:name = \"test\">\n" +
@@ -707,7 +701,7 @@ public class TestXon extends XDTester {
 			assertTrue(XonUtils.xonEqual(XonUtils.parseINI(ini),
 				XonUtils.parseINI(XonUtils.toIniString(xini))));
 			xdef =
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" root=\"TRSconfig\">\n" +
+"<xd:def xmlns:xd='" + _xdNS + "' root=\"TRSconfig\">\n" +
 "  <xd:ini xd:name=\"TRSconfig\">\n" +
 "    TRSUser = string()\n" +
 "    [User]\n" +
@@ -751,8 +745,8 @@ public class TestXon extends XDTester {
 				xd.iparse(XonUtils.toIniString(xini), reporter)));
 			assertNoErrorwarningsAndClear(reporter);
 			xdef = //test CSV data with head line (column names)
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='CSV'>\n" +
-"<xd:component>%class test.xdef.CsvTest %link CSV</xd:component>\n" +
+"<xd:def xmlns:xd='" + _xdNS + "' root='CSV'>\n" +
+"<xd:component>%class " + _package + ".CsvTest %link CSV</xd:component>\n" +
 "<xd:xon name=\"CSV\">\n" +
 "[\n" +
 "  [\"3 string();\"],\n" + // head
@@ -760,9 +754,8 @@ public class TestXon extends XDTester {
 "]\n" +
 "</xd:xon>\n" +
 "</xd:def>";
-			xp = compile(xdef);
+			genXComponent(xp = compile(xdef));
 			xd = xp.createXDDocument();
-			genXComponent(xp, clearTempDir());
 			s =
 "Name, Email, Mobile Number\n" +
 "abc, a@b.c, +1 2345 67 89 01\n" +
@@ -817,7 +810,7 @@ public class TestXon extends XDTester {
 					+ "\n*** B *\n" + XonUtils.toXonString(o));
 			}
 			xdef =
-"<xd:def xmlns:xd = \"http://www.xdef.org/xdef/4.2\" root = \"test\">\n" +
+"<xd:def xmlns:xd='" + _xdNS + "' root = \"test\">\n" +
 "  <xd:xon name = \"test\">\n" +
 "[\n" +
 "  [\"occurs 2.. string();\"], # header line\n" +
@@ -843,17 +836,16 @@ public class TestXon extends XDTester {
 			assertEq(null, ((List) ((List) o).get(2)).get(2));
 			assertEq(3, ((List) ((List) o).get(2)).size());
 			xdef = // no CSV head line with bames;
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='CSV'>\n" +
-"<xd:component>%class test.xdef.CsvTest1 %link CSV</xd:component>\n" +
+"<xd:def xmlns:xd='" + _xdNS + "' root='CSV'>\n" +
+"<xd:component>%class " + _package + ".CsvTest1 %link CSV</xd:component>\n" +
 "<xd:xon name=\"CSV\">\n" +
 "[\n"+
 "  [%script=\"+\", \"? string()\", \"? emailAddr\", \"? telephone()\"]\n" +
 "]\n" +
 "</xd:xon>\n" +
 "</xd:def>";
-			xp = compile(xdef);
+			genXComponent(xp = compile(xdef));
 			xd = xp.createXDDocument();
-			genXComponent(xp, clearTempDir());
 			s =
 "Name, Email, Mobile Number\n" +
 "abc, a@b.c, +1 2345 67 89 01\n" +
@@ -904,7 +896,7 @@ public class TestXon extends XDTester {
 			}
 			xdef = // test %oneOf
 "<xd:def xmlns:xd='" + _xdNS + "' root=\"test\">\n" +
-"<xd:component>%class test.xdef.MyTestX_OneOf %link test</xd:component>\n" +
+"<xd:component>%class " + _package + ".MyTestX_OneOf %link test</xd:component>\n" +
 "<xd:xon name=\"test\">\n" +
 "{ a:[ %oneOf,\n" +
 "       \"date(); finally outln('date')\", \n" +
@@ -915,8 +907,7 @@ public class TestXon extends XDTester {
 "}\n" +
 "</xd:xon>\n" +
 "</xd:def>";
-			xp = XDFactory.compileXD(null, xdef);
-			genXComponent(xp, clearTempDir());
+			genXComponent(xp = compile(xdef));
 			s = "{a:\"2022-04-10\"}";
 			xd = xp.createXDDocument();
 			swr = new StringWriter();
@@ -973,12 +964,10 @@ public class TestXon extends XDTester {
 			assertNoErrorwarningsAndClear(reporter);
 			assertEq("string\n", swr.toString());
 			assertEq(o, xc.toXon());
-		} catch (Exception ex) {fail(ex);}
-		try {
 			xdef = // test forget in XON
 "<xd:def xmlns:xd='" + _xdNS + "' root=\"test\">\n" +
 "<xd:component>\n" +
-"  %class test.xdef.data.TestXonForget %link test\n" +
+"  %class "+_package+".data.TestXonForget %link test\n"+
 "</xd:component>\n" +
 "  <xd:xon name=\"test\">\n" +
 "    {date: \"date()\",\n" +
@@ -1011,8 +1000,7 @@ public class TestXon extends XDTester {
 "    }\n" +
 "  ]\n" +
 "}";
-			xp = XDFactory.compileXD(null, xdef);
-			genXComponent(xp, clearTempDir());
+			genXComponent(xp = compile(xdef));
 			xd = xp.createXDDocument();
 			swr = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(swr, false));
@@ -1033,179 +1021,8 @@ public class TestXon extends XDTester {
 "From London to Brussels is 322 km to Paris is 344 km\n");
 			assertTrue(((List)((Map)(x = xc.toXon())).get("cities")).isEmpty());
 			assertEq(((Map) x).get("date"), new SDatetime("2020-02-22"));
-			xdef = // test %anyName in map
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n" +
-"  <xd:xon name='A'>\n" +
-"{ %anyName: \"? int();\", x: \"? int();\" }\n" +
-"</xd:xon>\n" +
-"<xd:component>%class test.xdef.MyTestAny_1 %link A</xd:component>\n" +
-"</xd:def>";
-			xp = compile(xdef);
-			genXComponent(xp, clearTempDir());
-			xd = xp.createXDDocument();
-			json = "{}";
-			x = XonUtils.parseXON(json);
-			y = xd.jvalidate(json, reporter);
-			assertNoErrorsAndClear(reporter);
-			if (!XonUtils.xonEqual(x,y)) {
-				fail("** 1 **\n"+XonUtils.toXonString(x)
-					+ "\n" +  XonUtils.toXonString(y));
-			}
-			o = xd.getXon();
-			if (!XonUtils.xonEqual(x, o)) {
-				fail("** 2 **\n"+json+"\n" + XonUtils.toXonString(xd.getXon()));
-			}
-			xc = xd.jparseXComponent(json, null, reporter);
-			assertNoErrorsAndClear(reporter);
-			y = xc.toXon();
-			if (!XonUtils.xonEqual(x, y = XonUtils.xonToJson(y))) {
-				fail("** 3 **\n"+XonUtils.toXonString(x)
-					+ "\n" +  XonUtils.toXonString(y));
-			}
-			json = "{\"x\" : 1, \"xxx\" : 2}";
-			x = XonUtils.parseXON(json);
-			y = xd.jvalidate(json, reporter);
-			assertNoErrorsAndClear(reporter);
-			if (!XonUtils.xonEqual(x,y)) {
-				fail("** 1 **\n"+XonUtils.toXonString(x)
-					+ "\n" +  XonUtils.toXonString(y));
-			}
-			o = xd.getXon();
-			if (!XonUtils.xonEqual(x, o)) {
-				fail("** 2 **\n"+json+"\n" + XonUtils.toXonString(xd.getXon()));
-			}
-			xc = xd.jparseXComponent(json, null, reporter);
-			assertNoErrorsAndClear(reporter);
-			y = xc.toXon();
-			if (!XonUtils.xonEqual(x, y = XonUtils.xonToJson(y))) {
-				fail("** 3 **\n"+XonUtils.toXonString(x)
-					+ "\n" +  XonUtils.toXonString(y));
-			}
 			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n" +
-"  <xd:xon name='A'>\n" +
-"{ %anyName: \"* int();\", x: \"? int();\" }\n" +
-"</xd:xon>\n" +
-"<xd:component>%class test.xdef.MyTestAny_2 %link A</xd:component>\n" +
-"</xd:def>";
-			xp = compile(xdef);
-			genXComponent(xp, clearTempDir());
-			xd = xp.createXDDocument();
-			json = "{}";
-			x = XonUtils.parseXON(json);
-			y = xd.jvalidate(json, reporter);
-			assertNoErrorsAndClear(reporter);
-			if (!XonUtils.xonEqual(x,y)) {
-				fail("** 1 **\n"+XonUtils.toXonString(x)
-					+ "\n" +  XonUtils.toXonString(y));
-			}
-			o = xd.getXon();
-			if (!XonUtils.xonEqual(x, o)) {
-				fail("** 2 **\n"+json+"\n" + XonUtils.toXonString(xd.getXon()));
-			}
-			xc = xd.jparseXComponent(json, null, reporter);
-			assertNoErrorsAndClear(reporter);
-			y = xc.toXon();
-			if (!XonUtils.xonEqual(x, y = XonUtils.xonToJson(y))) {
-				fail("** 3 **\n"+XonUtils.toXonString(x)
-					+ "\n" +  XonUtils.toXonString(y));
-			}
-			json = "{ a: 1, b: 2, x: 999 }";
-			x = XonUtils.parseXON(json);
-			y = xd.jvalidate(json, reporter);
-			assertNoErrorsAndClear(reporter);
-			if (!XonUtils.xonEqual(x,y)) {
-				fail("** 1 **\n"+XonUtils.toXonString(x)
-					+ "\n" +  XonUtils.toXonString(y));
-			}
-			o = xd.getXon();
-			if (!XonUtils.xonEqual(x, o)) {
-				fail("** 2 **\n"+json+"\n" + XonUtils.toXonString(xd.getXon()));
-			}
-			xc = xd.jparseXComponent(json, null, reporter);
-			assertNoErrorsAndClear(reporter);
-			y = xc.toXon();
-			if (!XonUtils.xonEqual(x, y = XonUtils.xonToJson(y))) {
-				fail("** 3 **\n"+XonUtils.toXonString(x)
-					+ "\n" +  XonUtils.toXonString(y));
-			}
-			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n" +
-"<xd:xon name='A'> { %anyName: [\"* int();\"]} </xd:xon>\n" +
-"<xd:component>%class test.xdef.MyTestAny_3 %link A</xd:component>\n" +
-"</xd:def>";
-			xp = compile(xdef);
-			xd = xp.createXDDocument();
-			json = "{ \"x\": [1,2] }";
-			x = XonUtils.parseJSON(json);
-			y = xd.jvalidate(json, reporter);
-			assertNoErrorsAndClear(reporter);
-			if (!XonUtils.xonEqual(x,y)) {
-				fail("** 1 **\n"+XonUtils.toXonString(x)
-					+ "\n" +  XonUtils.toXonString(y));
-			}
-			o = xd.getXon();
-			if (!XonUtils.xonEqual(x, o)) {
-				fail("** 2 **\n"+json+"\n" + XonUtils.toXonString(xd.getXon()));
-			}
-			genXComponent(xp, clearTempDir());
-			xc = xd.jparseXComponent(json, null, reporter);
-			assertNoErrorsAndClear(reporter);
-			y = xc.toXon();
-			if (!XonUtils.xonEqual(x, y = XonUtils.xonToJson(y))) {
-				fail("** 3 **\n"+XonUtils.toXonString(x)
-					+ "\n" +  XonUtils.toXonString(y));
-			}
-			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n" +
-"<xd:xon name='A'>\n" +
-"{ %anyName: [%script=\"*\", \"* int();\"]}\n" +
-"</xd:xon>\n" +
-"<xd:component>%class test.xdef.MyTestAny_4 %link A</xd:component>\n" +
-"</xd:def>";
-			xp = compile(xdef);
-			xd = xp.createXDDocument();
-			json = "{ \"x\": [1,2] }";
-			x = XonUtils.parseJSON(json);
-			y = xd.jvalidate(json, reporter);
-			assertNoErrorsAndClear(reporter);
-			if (!XonUtils.xonEqual(x,y)) {
-				fail("** 1 **\n"+XonUtils.toXonString(x)
-					+ "\n" +  XonUtils.toXonString(y));
-			}
-			o = xd.getXon();
-			if (!XonUtils.xonEqual(x, o)) {
-				fail("** 2 **\n"+json+"\n" + XonUtils.toXonString(xd.getXon()));
-			}
-			genXComponent(xp, clearTempDir());
-			xc = xd.jparseXComponent(json, null, reporter);
-			assertNoErrorsAndClear(reporter);
-			y = xc.toXon();
-			if (!XonUtils.xonEqual(x, y = XonUtils.xonToJson(y))) {
-				fail("** 3 **\n"+XonUtils.toXonString(x)
-					+ "\n" +  XonUtils.toXonString(y));
-			}
-			json = "{ \"p\": [8,9], \"q\": [] }";
-			x = XonUtils.parseJSON(json);
-			y = xd.jvalidate(json, reporter);
-			assertNoErrorsAndClear(reporter);
-			if (!XonUtils.xonEqual(x,y)) {
-				fail("** 1 **\n"+XonUtils.toXonString(x)
-					+ "\n" +  XonUtils.toXonString(y));
-			}
-			o = xd.getXon();
-			if (!XonUtils.xonEqual(x, o)) {
-				fail("** 2 **\n"+json+"\n" + XonUtils.toXonString(xd.getXon()));
-			}
-			xc = xd.jparseXComponent(json, null, reporter);
-			assertNoErrorsAndClear(reporter);
-			y = xc.toXon();
-			if (!XonUtils.xonEqual(x, y = XonUtils.xonToJson(y))) {
-				fail("** 3 **\n"+XonUtils.toXonString(x)
-					+ "\n" +  XonUtils.toXonString(y));
-			}
-			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n" +
+"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
 "<xd:xon name='A'>\n" +
 "{ \"cities\" : [\n" +
 "    \"date(); finally outln('Measurements taken on: '+getText()+'\\n');\",\n" +
@@ -1221,10 +1038,9 @@ public class TestXon extends XDTester {
 "  ]\n" +
 "}\n" +
 "</xd:xon>\n" +
-"<xd:component>%class test.xdef.MyTestAny_6 %link A</xd:component>\n" +
+"<xd:component>%class "+_package+".MyTestAny_6 %link A</xd:component>\n" +
 "</xd:def>";
-			xp = compile(xdef);
-			genXComponent(xp, clearTempDir());
+			genXComponent(xp = compile(xdef));
 			xd = xp.createXDDocument();
 			json =
 "{ \"cities\" : [\n" +
@@ -1368,7 +1184,7 @@ public class TestXon extends XDTester {
 			assertTrue(XonUtils.xonEqual(XonUtils.parseINI(ini),
 				XonUtils.parseINI(XonUtils.toIniString(xini))));
 			xdef =
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" root=\"TRSconfig\">\n" +
+"<xd:def xmlns:xd='" + _xdNS + "' root=\"TRSconfig\">\n" +
 "<xd:ini xd:name=\"TRSconfig\">\n" +
 "TRSUser = string()\n" +
 "[User]\n" +
@@ -1411,10 +1227,9 @@ public class TestXon extends XDTester {
 			assertTrue(XonUtils.xonEqual(xini,
 				xd.iparse(XonUtils.toIniString(xini), reporter)));
 			assertNoErrorwarningsAndClear(reporter);
-		 //test CSV data
 			xdef = // with head
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='CSV'>\n" +
-"<xd:component>%class test.xdef.CsvTest %link CSV</xd:component>\n" +
+"<xd:def xmlns:xd='" + _xdNS + "' root='CSV'>\n" +
+"<xd:component>%class "+_package+".CsvTest %link CSV</xd:component>\n" +
 "<xd:xon name=\"CSV\">\n" +
 "[\n" +
 "  [\"3..3 string();\"],\n" + // head
@@ -1422,9 +1237,7 @@ public class TestXon extends XDTester {
 "]\n" +
 "</xd:xon>\n" +
 "</xd:def>";
-			xp = compile(xdef);
-			xd = xp.createXDDocument();
-			genXComponent(xp, clearTempDir());
+			genXComponent(xp = compile(xdef));
 			s =
 "Name, Email, Mobile Number\n" +
 "abc, a@b.c, +1 2345 67 89 01\n" +
@@ -1433,6 +1246,7 @@ public class TestXon extends XDTester {
 "xyz,,\n" +
 ",,\n" +
 "xyz, , 123 456 789";
+			xd = xp.createXDDocument();
 			x = xd.cparse(new StringReader(s), null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
 			s =
@@ -1479,17 +1293,15 @@ public class TestXon extends XDTester {
 					+ "\n*** B *\n" + XonUtils.toXonString(o));
 			}
 			xdef = // no head;
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='CSV'>\n" +
-"<xd:component>%class test.xdef.CsvTest1 %link CSV</xd:component>\n" +
+"<xd:def xmlns:xd='" + _xdNS + "' root='CSV'>\n" +
+"<xd:component>%class "+_package+".CsvTest1 %link CSV</xd:component>\n" +
 "<xd:xon name=\"CSV\">\n" +
 "[\n" +
 "  [%script=\"+\", \"? string()\", \"? emailAddr\", \"? telephone()\"]\n" +
 "]\n" +
 "</xd:xon>\n" +
 "</xd:def>";
-			xp = compile(xdef);
-			xd = xp.createXDDocument();
-			genXComponent(xp, clearTempDir());
+			genXComponent(xp = compile(xdef));
 			s =
 "Name, Email, Mobile Number\n" +
 "abc, a@b.c, +1 2345 67 89 01\n" +
@@ -1497,6 +1309,7 @@ public class TestXon extends XDTester {
 "xyz,,\n" +
 ",,\n" +
 "xyz, , 123 456 789\n";
+			xd = xp.createXDDocument();
 			o = xd.cparse(new StringReader(s), ',', true, null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
 			s =
@@ -1540,7 +1353,9 @@ public class TestXon extends XDTester {
 			}
 			xdef = // test forget
 "<xd:def xmlns:xd='" + _xdNS + "' root=\"test\">\n" +
-"<xd:component>%class test.xdef.data.TestXonForget %link test</xd:component>\n"+
+"<xd:component>\n" +
+"  %class "+_package+".data.TestXonForget %link test\n" +
+"</xd:component>\n"+
 "  <xd:xon name=\"test\">\n" +
 "    {date: \"date()\",\n" +
 "      cities: [\n" +
@@ -1572,8 +1387,7 @@ public class TestXon extends XDTester {
 "    }\n" +
 "  ]\n" +
 "}";
-			xp = XDFactory.compileXD(null, xdef);
-			genXComponent(xp, clearTempDir());
+			genXComponent(xp = compile(xdef));
 			xd = xp.createXDDocument();
 			swr = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(swr, false));
@@ -1595,52 +1409,52 @@ public class TestXon extends XDTester {
 			assertTrue(((List)((Map)(x = xc.toXon())).get("cities")).isEmpty());
 			assertEq(((Map) x).get("date"), new SDatetime("2020-02-22"));
 			xdef = // test %anyName in map
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n" +
+"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
 "  <xd:xon name='A'>\n" +
 "{ %anyName: \"? int();\", x: \"? int();\" }\n" +
 "</xd:xon>\n" +
-"<xd:component>%class test.xdef.MyTestAny_1 %link A</xd:component>\n" +
+"<xd:component>%class "+_package+".MyTestAny_1 %link A</xd:component>\n" +
 "</xd:def>";
-			xp = compile(xdef);
-			genXComponent(xp, clearTempDir());
-			s = "test.xdef.MyTestAny_1"; // c2lass name
+			genXComponent(xp = compile(xdef));
+			s = _package+".MyTestAny_1"; // c2lass name
 			assertNull(testX(xp, "", s, "{}"));
 			assertNull(testX(xp, "", s, "{\"x\" : 1, \"xxx\" : 2}"));
-			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n" +
+			xdef = // %anyName items and one named item
+"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
 "  <xd:xon name='A'>\n" +
-"{ %anyName: \"* int();\", x: \"? int();\" }\n" +
+"{ %anyName: \"* int(); finally out('X'+getText())\", x: \"? int();\" }\n" +
 "</xd:xon>\n" +
-"<xd:component>%class test.xdef.MyTestAny_2 %link A</xd:component>\n" +
+"<xd:component>%class "+_package+".MyTestAny_2 %link A</xd:component>\n" +
 "</xd:def>";
-			xp = compile(xdef);
-			genXComponent(xp, clearTempDir());
-			s = "test.xdef.MyTestAny_2"; // c2lass name
-			assertNull(testX(xp, "", s, "{}"));
-			assertNull(testX(xp, "", s, "{ a: 1, b: 2, x: 999 }"));
+			genXComponent(xp = compile(xdef));
+			s = _package+".MyTestAny_2"; // c2lass name
+			assertNull(testX(xp, "", s, "{}", ""));
+			assertNull(testX(xp, "", s, "{ a: 1, b: 2, x: 999 }", "X1X2"));
 			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n" +
+"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
 "<xd:xon name='A'> { %anyName: [\"* int();\"] } </xd:xon>\n" +
-"<xd:component>%class test.xdef.MyTestAny_3 %link A</xd:component>\n" +
+"<xd:component>%class "+_package+".MyTestAny_3 %link A</xd:component>\n" +
 "</xd:def>";
-			xp = compile(xdef);
-			genXComponent(xp, clearTempDir());
-			s = "test.xdef.MyTestAny_3"; // class name
-			assertNull(testX(xp, "", s, "{ \"x\": [1,2] }"));
-			xdef = // %anyName in map
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
+			genXComponent(xp = compile(xdef));
+			s = _package+".MyTestAny_3"; // class name
+			assertNull(testX(xp, "", s, "{ \"x\": [] }"));
+			assertNull(testX(xp, "", s, "{ \"x\": [1,2i] }"));
+			xdef = // %anyName in map with %anyObj items
+"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
 "<xd:xon name='A'>\n"+
-"{ %anyName: [%script=\"*\", \"* int();\"]}\n"+
+"{ %anyName: %anyObj=\"*;\"}\n"+
 "</xd:xon>\n"+
-"<xd:component>%class test.xdef.MyTestAny_4 %link A</xd:component>\n"+
+"<xd:component>%class "+_package+".MyTestAny_4 %link A</xd:component>\n"+
 "</xd:def>";
-			xp = compile(xdef);
-			genXComponent(xp, clearTempDir());
-			s = "test.xdef.MyTestAny_4"; // class name
-			assertNull(testX(xp, "", s, "{ \"x\": [1,2] }"));
-			assertNull(testX(xp, "", s, "{ \"p\": [8,9], \"q\": [] }"));
+			genXComponent(xp = compile(xdef));
+			s = _package+".MyTestAny_4"; // class name
+			assertNull(testX(xp, "", s, "{}"));
+			assertNull(testX(xp, "", s, "{\"\": {} }"));
+			assertNull(testX(xp, "", s, "{ a: [] }"));
+			assertNull(testX(xp, "", s, "{ \" \": [\"\",null, false] }"));
+			assertNull(testX(xp, "", s, "{ p:[8d,9D],q:[],r:{},s:\"\" }"));
 			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n" +
+"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
 "<xd:xon name='A'>\n" +
 "{ \"cities\" : [\n" +
 "    \"date(); finally outln('Measurements taken on: '+getText()+'\\n');\",\n"+
@@ -1656,10 +1470,9 @@ public class TestXon extends XDTester {
 "  ]\n" +
 "}\n" +
 "</xd:xon>\n" +
-"<xd:component>%class test.xdef.MyTestAny_6 %link A</xd:component>\n" +
+"<xd:component>%class "+_package+".MyTestAny_6 %link A</xd:component>\n" +
 "</xd:def>";
-			xp = compile(xdef);
-			genXComponent(xp, clearTempDir());
+			genXComponent(xp = compile(xdef));
 			xd = xp.createXDDocument();
 			json =
 "{ \"cities\" : [\n" +
@@ -1716,17 +1529,16 @@ public class TestXon extends XDTester {
 "    ]\n" +
 "  }\n" +
 "</xd:xon>\n" +
-"<xd:component>%class test.xdef.TestAnyRef %link #a</xd:component>\n" +
+"<xd:component>%class "+_package+".TestAnyRef %link #a</xd:component>\n" +
 "</xd:def>";
-			xp = compile(xdef);
-			genXComponent(xp, clearTempDir());
+			genXComponent(xp = compile(xdef));
 			json =
 "[ { \"A\": [\"classic\"] },\n" +
 "  { \"B\": [ \"Rock\", \"pop\" ] },\n" +
 "  { \"C\": \"Country\" },\n" +
 "  { \"D\": [] }\n" +
 "]";
-			assertNull(testX(xp, "", "test.xdef.TestAnyRef", json));
+			assertNull(testX(xp, "", _package+".TestAnyRef", json));
 			xdef = //test anyName, oneOf
 "<xd:def xmlns:xd='" + _xdNS + "' name=\"a\" root=\"test\">\n" +
 "<xd:xon name=\"test\">[ %script=\"ref A\" ]</xd:xon>\n" +
@@ -1749,12 +1561,11 @@ public class TestXon extends XDTester {
 "  ]\n" +
 "</xd:xon>\n"  +
 "<xd:component>\n" +
-"  %class test.xdef.TestAnyRef1 %link a#test;\n" +
+"  %class "+_package+".TestAnyRef1 %link a#test;\n" +
 "</xd:component>\n" +
 "</xd:def>";
-			xp = compile(xdef);
-			genXComponent(xp, clearTempDir());
-			s = "test.xdef.TestAnyRef1"; // class name
+			genXComponent(xp = compile(xdef));
+			s = _package+".TestAnyRef1"; // class name
 			assertNull(testX(xp, "a", s, "[ [] ]"));
 			assertNull(testX(xp, "a", s, "[ {} ]"));
 			assertNull(testX(xp, "a", s, "[ { a:1 } ]"));
@@ -1775,11 +1586,10 @@ public class TestXon extends XDTester {
 " { \"a\": \"? date()\", \"b\": \"? jvalue()\" }\n" +
 "]\n" +
 "</xd:xon>\n" +
-"<xd:component> %class test.xdef.TestRef0 %link #A; </xd:component>\n" +
+"<xd:component> %class "+_package+".TestRef0 %link #A; </xd:component>\n" +
 "</xd:def>";
-			xp = compile(xdef);
-			s = "test.xdef.TestRef0";
-			genXComponent(xp, clearTempDir());
+			genXComponent(xp = compile(xdef));
+			s = _package+".TestRef0";
 			assertNull(testX(xp,"",s, "[true,[0, 1]]"));
 			assertNull(testX(xp,"",s,"[{a:d1991-01-01}]"));
 			assertNull(testX(xp,"",s, "[{b:1}]"));
@@ -1792,21 +1602,19 @@ public class TestXon extends XDTester {
 			xdef = // test %anyObj
 "<xd:def xmlns:xd='" + _xdNS + "' name=\"a\" root=\"testX\">\n" +
 "<xd:xon name=\"testX\">%anyObj</xd:xon>\n" +
-"<xd:component>%class test.xdef.MyTestX_any %link a#testX;</xd:component>\n"+
+"<xd:component>%class "+_package+".MyTestX_any %link a#testX;</xd:component>\n"+
 "</xd:def>";
-			xp = compile(xdef);
-			s = "test.xdef.MyTestX_any";
-			genXComponent(xp, clearTempDir());
+			genXComponent(xp = compile(xdef));
+			s = _package+".MyTestX_any";
 			// (simple value)
 			assertNull(testX(xp,"a", s, "true"));
 			assertNull(testX(xp,"a", s, "1"));
 			assertNull(testX(xp,"a", s, "null"));
-			assertNull(testX(xp,"a", s, "\"abc\""));
 			// (array)
 			assertNull(testX(xp,"a", s, "[]"));
 			assertNull(testX(xp,"a", s, "[1]"));
 			assertNull(testX(xp,"a", s, "[ [] ]"));
-			assertNull(testX(xp,"a", s, "[ [1,[]] ]"));
+			assertNull(testX(xp,"a", s, "[ [\"1\",[]] ]"));
 			assertNull(testX(xp,"a", s, "[ [{}] ]"));
 			assertNull(testX(xp,"a", s, "[ [ { a:[1, 2]} ] ]"));//
 			assertNull(testX(xp,"a", s, "[0,{a:[1,true],b:null},false,null]"));
@@ -1819,11 +1627,10 @@ public class TestXon extends XDTester {
 			xdef = // test occurrence 1 for %anyObj directives
 "<xd:def xmlns:xd='" + _xdNS + "' root=\"A\">\n" +
 "<xd:xon name=\"A\"> [ %anyObj=\"occurs 1;\" ] </xd:xon>\n" +
-"<xd:component> %class test.xdef.TestArrayAnyObj1 %link #A; </xd:component>\n" +
+"<xd:component> %class "+_package+".TestArrayAnyObj1 %link #A; </xd:component>\n" +
 "</xd:def>";
-			xp = compile(xdef);
-			genXComponent(xp, clearTempDir());
-			s = "test.xdef.TestArrayAnyObj1";
+			genXComponent(xp = compile(xdef));
+			s = _package+".TestArrayAnyObj1";
 			assertNull(testX(xp,"",s, "[true]")); // OK
 			assertNull(testX(xp,"",s, "[1]")); // OK
 			assertNull(testX(xp,"",s, "[[1]]")); // OK
@@ -1838,11 +1645,10 @@ public class TestXon extends XDTester {
 			xdef = // test occurrence 2 for %anyObj directives
 "<xd:def xmlns:xd='" + _xdNS + "' root=\"A\">\n" +
 "<xd:xon name=\"A\"> [ %anyObj=\"occurs 2;\" ] </xd:xon>\n" +
-"<xd:component> %class test.xdef.TestArrayAnyObj2 %link #A; </xd:component>\n" +
+"<xd:component> %class "+_package+".TestArrayAnyObj2 %link #A; </xd:component>\n" +
 "</xd:def>";
-			xp = compile(xdef);
-			genXComponent(xp, clearTempDir());
-			s = "test.xdef.TestArrayAnyObj2";
+			genXComponent(xp = compile(xdef));
+			s = _package+".TestArrayAnyObj2";
 			assertNull(testX(xp,"",s, "[true,null]")); // OK
 			assertNull(testX(xp,"",s, "[1,3.14]")); // OK
 			assertNull(testX(xp,"",s, "[[1],[]]")); // OK
@@ -1869,15 +1675,14 @@ public class TestXon extends XDTester {
 "<xd:def name=\"b\" root=\"testX\">\n" + // map
 "  <xd:xon name=\"testX\"> { %anyName: %anyObj=\"?;\" } </xd:xon>\n" +
 "  <xd:component>\n" +
-"    %class test.xdef.MyTestX_AnyXX1 %link a#testX;\n" +
-"    %class test.xdef.MyTestX_AnyXX2 %link b#testX;\n" +
+"    %class "+_package+".MyTestX_AnyXX1 %link a#testX;\n" +
+"    %class "+_package+".MyTestX_AnyXX2 %link b#testX;\n" +
 "  </xd:component>\n" +
 "</xd:def>\n" +
 "</xd:collection>";
-			xp = compile(xdef);
-			genXComponent(xp, clearTempDir());
+			genXComponent(xp = compile(xdef));
 			// xdef A; (array)
-			s = "test.xdef.MyTestX_AnyXX1";
+			s = _package+".MyTestX_AnyXX1";
 			assertNull(testX(xp,"a", s, "[]"));
 			assertNull(testX(xp,"a", s, "[1]"));
 			assertNull(testX(xp,"a", s, "[ [] ]"));
@@ -1889,7 +1694,7 @@ public class TestXon extends XDTester {
 			assertNotNull(testX(xp,"a", s, "true")); // must be error!
 			assertNotNull(testX(xp,"a", s, "[ 1, true ]")); // must be error!
 			// xdef B; (map)
-			s = "test.xdef.MyTestX_AnyXX2";
+			s = _package+".MyTestX_AnyXX2";
 			assertNull(testX(xp,"b", s, "{}"));
 			assertNull(testX(xp,"b", s, "{a:1}"));
 			assertNotNull(testX(xp,"b", s, "[]")); // must be error!
@@ -1906,41 +1711,44 @@ public class TestXon extends XDTester {
 "<xd:def name=\"x\" root=\"testX\">\n" + // any object
 "<xd:xon name=\"testX\"> %anyObj </xd:xon>\n" +
 "<xd:component>\n" +
-"  %class test.xdef.MyTestX_AnyXXa %link a#testX;\n" +
-"  %class test.xdef.MyTestX_AnyXXm %link m#testX;\n" +
-"  %class test.xdef.MyTestX_AnyXXx %link x#testX;\n" +
+"  %class "+_package+".MyTestX_AnyXXa %link a#testX;\n" +
+"  %class "+_package+".MyTestX_AnyXXm %link m#testX;\n" +
+"  %class "+_package+".MyTestX_AnyXXx %link x#testX;\n" +
 "</xd:component>\n" +
 "</xd:def>\n" +
 "</xd:collection>";
-			xp = compile(xdef);
-			genXComponent(xp, clearTempDir());
-			// xdef a; root is array with any items
-			s = "test.xdef.MyTestX_AnyXXa";
+			genXComponent(xp = compile(xdef));
+			// xdef a; root is array with %anyObj items
+			s = _package+".MyTestX_AnyXXa";
 			assertNull(testX(xp,"a", s, "[]"));
 			assertNull(testX(xp,"a", s, "[1]"));
-			assertNull(testX(xp,"a", s, "[ [ { a:[1, \"\"]} ] ]"));//
+			assertNull(testX(xp,"a", s, "[ \"\\\"\"]"));
+			assertNull(testX(xp,"a", s, "[ [ { a:[1, \"\", \"\\\"\"]} ] ]"));//
 			assertNull(testX(xp,"a", s, "[0,{a:[1,true],b:null},false,null]"));
 			assertNull(testX(xp,"a", s,"[{a:1,b:[3,4],c:{d:5,e:[6,7]},f:{}}]"));
 			assertNotNull(testX(xp,"a", s, "true")); // must be error
+			assertNotNull(testX(xp,"a", s, "1")); // must be error
 			assertNotNull(testX(xp,"a", s, "{}")); // must be error!
-			// xdef m; root is map with any items
-			s = "test.xdef.MyTestX_AnyXXm";
+			// xdef m; root is map with %anyObj items
+			s = _package+".MyTestX_AnyXXm";
 			assertNull(testX(xp,"m", s, "{}"));
 			assertNull(testX(xp,"m", s, "{a:1}"));
+			assertNull(testX(xp,"m", s, "{a:\"\"}"));
+			assertNull(testX(xp,"m", s, "{a:\"a b\"}"));
+			assertNull(testX(xp,"m", s, "{a:\" a \"}"));
 			assertNull(testX(xp,"m", s,"{a:1,b:[],c:{},d:{e:5,f:[2]},g:null}"));
 			assertNull(testX(xp,"m", s, "{a:[1, true], b:null}"));
 			assertNotNull(testX(xp,"m", s, "true")); // must be error!
 			assertNotNull(testX(xp,"m", s, "[]")); // must be error!
-			// xdef x; root is $anyObj
-			// 1. array
-			s = "test.xdef.MyTestX_AnyXXx";
+			// 1. array as direct %anyObj
+			s = _package+".MyTestX_AnyXXx";
 			assertNull(testX(xp,"x", s, "[]"));
 			assertNull(testX(xp,"x", s, "[]"));
 			assertNull(testX(xp,"x", s, "[1]"));
 			assertNull(testX(xp,"x", s, "[ [] ]"));
 			assertNull(testX(xp,"x", s, "[ [1, true, [], {}] ]"));
 			assertNull(testX(xp,"x", s, "[ [\"a\"] ]"));
-			assertNull(testX(xp,"x", s, "[ [\"a\"] ]"));
+			assertNull(testX(xp,"x", s, "[ [\"a\", \"\\\"\"] ]"));
 			assertNull(testX(xp,"x", s, "[ [1] ]"));
 			assertNull(testX(xp,"x", s, "[ [1, 2] ]"));
 			assertNull(testX(xp,"x", s, "[ [1], [true], [\"x\"] ]"));
@@ -1951,20 +1759,26 @@ public class TestXon extends XDTester {
 			assertNull(testX(xp,"x", s, "[ [ { a:[1, 2]} ] ]"));//
 			assertNull(testX(xp,"x", s, "[0,{a:[1,true],b:null},false,null]"));
 			assertNull(testX(xp,"x", s,"[{a:1,b:[3,4],c:{d:5,e:[6,7]},f:{}}]"));
-			// 2. map
+			// 2. map as direct %anyObj
 			assertNull(testX(xp,"x", s, "{}"));
 			assertNull(testX(xp,"x", s, "{a:1}"));
+			assertNull(testX(xp,"x", s, "{\"\\\"\":\"1\"}"));
 			assertNull(testX(xp,"x", s,"{a:1,b:[],c:{},d:{e:5,f:[2]},g:null}"));
-			assertNull(testX(xp,"x", s, "{a:[1, true], b:null}"));
-			// 3. siple value
+			assertNull(testX(xp,"x", s, "{a:[1,true],b:null,c:1,d:false}"));
+			// 3. siple value as direct %anyObj
 			assertNull(testX(xp,"x", s, "null"));
 			assertNull(testX(xp,"x", s, "true"));
 			assertNull(testX(xp,"x", s, "1"));
 			assertNull(testX(xp,"x", s, "-0.5e+2"));
 			assertNull(testX(xp,"x", s, "null"));
-			assertNull(testX(xp,"x", s, "\"abc\""));
 			assertNull(testX(xp,"x", s, "\"\""));
+			assertNull(testX(xp,"x", s, "\"x\""));
+			assertNull(testX(xp,"x", s, "\"ab\tcd\""));
+			assertNull(testX(xp,"x", s, "\" ab\tcd \""));
+			assertNull(testX(xp,"x", s, "\" ab\\tcd \""));
+			assertNull(testX(xp,"x", s, "\" ab\\u0020tcd \""));
 			assertNull(testX(xp,"x", s, "\" \t\n \""));
+			assertNull(testX(xp,"x", s, "\" \\t\\n \""));
 			assertNull(testX(xp,"x", s, "\"\\\"\""));
 			assertNull(testX(xp,"x", s, "\"\\\"\\\"\""));
 			xdef = // test XON reference to %any in %oneOf
@@ -1982,92 +1796,94 @@ public class TestXon extends XDTester {
 " { %anyName: %anyObj=\"*;\" }\n" +
 "</xd:xon>\n" +
 "<xd:component>\n" +
-"  %class test.xdef.MyTest_xxx %link X#Any;\n" +
+"  %class "+_package+".MyTest_xxx %link X#Any;\n" +
 "</xd:component>\n" +
 "</xd:def>";
-			xp = compile(xdef);
-			genXComponent(xp, clearTempDir());
-			s = "test.xdef.MyTest_xxx";
+			genXComponent(xp = compile(xdef));
+			s = _package+".MyTest_xxx";
 			// value
 			assertNull(testX(xp,"X", s, "true"));
 			assertNull(testX(xp,"X", s, "1"));
-			assertNull(testX(xp,"X", s, "\"\""));
+			assertNull(testX(xp,"X", s, "null"));
+			assertNull(testX(xp,"X", s, "\"a b\""));
+			assertNull(testX(xp,"X", s, "\" \""));
+			assertNull(testX(xp,"X", s, "\" a b \""));
+			assertNull(testX(xp,"X", s, "\"1\""));
 			// array
 			assertNull(testX(xp,"X", s, "[]"));
+			assertNull(testX(xp,"X", s, "[null]"));
 			assertNull(testX(xp,"X", s, "[1]"));
+			assertNull(testX(xp,"X", s, "[true]"));
+			assertNull(testX(xp,"X", s, "[\"1\"]"));
+			assertNull(testX(xp,"X", s, "[\"true\"]"));
+			assertNull(testX(xp,"X", s, "[\" ab cd \"]"));
 			assertNull(testX(xp,"X", s, "[1, true]"));
 			assertNull(testX(xp,"X", s, "[[]]"));
 			assertNull(testX(xp,"X", s, "[{}]"));
 			// map
 			assertNull(testX(xp,"X", s, "{}"));
 			assertNull(testX(xp,"X", s, "{a:1}"));
+			assertNull(testX(xp,"X", s, "{a:\"1\"}"));
 			assertNull(testX(xp,"X", s, "{a:1, b:[],c:null,d:[], e:{}}"));
 			assertNull(testX(xp,"X", s, "{a:1, b:[],c:null,d:[], e:{}}"));
 			xdef = //jvalue
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' xd:root='a'>\n" +
+"<xd:def xmlns:xd='" + _xdNS + "' xd:root='a'>\n" +
 "<xd:xon name='a'> \"jvalue()\" </xd:xon>\n" +
-"<xd:component> %class test.xdef.MyTestX_jval %link #a; </xd:component>\n" +
+"<xd:component> %class "+_package+".MyTestX_jval %link #a; </xd:component>\n" +
 "</xd:def>";
-			xp = compile(xdef);
-			genXComponent(xp, clearTempDir());
-			s = "test.xdef.MyTestX_jval";
+			genXComponent(xp = compile(xdef));
+			s = _package+".MyTestX_jval";
 			assertEq("", testX(xp, "", s, "null"));
-			assertEq("", testX(xp, "", s, "-1"));
+			assertEq("", testX(xp, "", s, "-1f"));
 			assertEq("", testX(xp, "", s, "3.14e+3"));
 			assertEq("", testX(xp, "", s, "true"));
-			assertEq("", testX(xp, "", s, "\"a\""));
-			assertEq("", testX(xp, "", s, "\"\\\" \""));
-			xdef = //string
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' xd:root='a'>\n" +
-"<xd:xon name='a'> \"string()\" </xd:xon>\n" +
-"<xd:component> %class test.xdef.MyTestX_str %link #a; </xd:component>\n" +
+			assertEq("", testX(xp, "", s, "\"a b\""));
+			xdef = //jstring
+"<xd:def xmlns:xd='" + _xdNS + "' xd:root='a'>\n" +
+"<xd:xon name='a'> \"jstring()\" </xd:xon>\n" +
+"<xd:component> %class "+_package+".MyTestX_str %link #a; </xd:component>\n" +
 "</xd:def>";
-			xp = compile(xdef);
-			genXComponent(xp, clearTempDir());
-			s = "test.xdef.MyTestX_str";
-			assertEq("", testX(xp, "", s, "\"x\""));
-			assertEq("", testX(xp, "", s, "\"\\\" \""));
+			genXComponent(xp = compile(xdef));
+			s = _package+".MyTestX_str";
 			assertEq("", testX(xp, "", s, "\"\""));
+			assertEq("", testX(xp, "", s, "\"x\""));
 			assertEq("", testX(xp, "", s, "\" \""));
+			assertEq("", testX(xp, "", s, "\" \\\" \""));
 			xdef = //int
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' xd:root='a'>\n" +
+"<xd:def xmlns:xd='" + _xdNS + "' xd:root='a'>\n" +
 "<xd:xon name='a'> \"int()\" </xd:xon>\n" +
-"<xd:component> %class test.xdef.MyTestX_int %link #a; </xd:component>\n" +
+"<xd:component> %class "+_package+".MyTestX_int %link #a; </xd:component>\n" +
 "</xd:def>";
-			xp = compile(xdef);
-			genXComponent(xp, clearTempDir());
-			s = "test.xdef.MyTestX_int";
+			genXComponent(xp = compile(xdef));
+			s = _package+".MyTestX_int";
 			assertEq("", testX(xp, "", s, "0"));
 			assertEq("", testX(xp, "", s, "-3"));
 			assertEq("", testX(xp, "", s, "123456"));
 			xdef = //boolean
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' xd:root='a'>\n" +
+"<xd:def xmlns:xd='" + _xdNS + "' xd:root='a'>\n" +
 "<xd:xon name='a'> \"boolean()\" </xd:xon>\n" +
-"<xd:component> %class test.xdef.MyTestX_bool %link #a; </xd:component>\n" +
+"<xd:component> %class "+_package+".MyTestX_bool %link #a; </xd:component>\n" +
 "</xd:def>";
-			xp = compile(xdef);
-			genXComponent(xp, clearTempDir());
-			s = "test.xdef.MyTestX_bool";
+			genXComponent(xp = compile(xdef));
+			s = _package+".MyTestX_bool";
 			assertEq("", testX(xp, "", s, "true"));
 			assertEq("", testX(xp, "", s, "false"));
 			xdef = //double
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' xd:root='a'>\n" +
+"<xd:def xmlns:xd='" + _xdNS + "' xd:root='a'>\n" +
 "<xd:xon name='a'> \"double()\" </xd:xon>\n" +
-"<xd:component> %class test.xdef.MyTestX_dbl %link #a; </xd:component>\n" +
+"<xd:component> %class "+_package+".MyTestX_dbl %link #a; </xd:component>\n" +
 "</xd:def>";
-			xp = compile(xdef);
-			genXComponent(xp, clearTempDir());
-			s = "test.xdef.MyTestX_dbl";
+			genXComponent(xp = compile(xdef));
+			s = _package+".MyTestX_dbl";
 			assertEq("", testX(xp, "", s, "-12.34"));
 			assertEq("", testX(xp, "", s, "1234"));
 			xdef = //jvalue in map
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' xd:root='a'>\n" +
+"<xd:def xmlns:xd='" + _xdNS + "' xd:root='a'>\n" +
 "<xd:xon name='a'> { a:\"jvalue()\" } </xd:xon>\n" +
-"<xd:component> %class test.xdef.MyTestX_jvalM %link #a; </xd:component>\n" +
+"<xd:component> %class "+_package+".MyTestX_jvalM %link #a; </xd:component>\n" +
 "</xd:def>";
-			s = "test.xdef.MyTestX_jvalM";
-			xp = compile(xdef);
-			genXComponent(xp, clearTempDir());
+			s = _package+".MyTestX_jvalM";
+			genXComponent(xp = compile(xdef));
 			assertEq("", testX(xp, "", s, "{\"a\":true}"));
 			assertEq("", testX(xp, "", s, "{\"a\":false}"));
 			assertEq("", testX(xp, "", s, "{\"a\":0}"));
@@ -2075,15 +1891,12 @@ public class TestXon extends XDTester {
 			assertEq("", testX(xp, "", s, "{\"a\": -12.34}"));
 			assertEq("", testX(xp, "", s, "{\"a\": 1234}"));
 			assertEq("", testX(xp, "", s, "{\"a\": null}"));
-		} catch (Exception ex) {fail(ex);}
-		try {
 			xdef = // %anyName, name of item is an empty string
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n" +
+"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
 "<xd:xon name='A'> {%anyName: \"? int()\"} </xd:xon>\n" +
-"<xd:component>%class test.xdef.MyTestAny_x1 %link A</xd:component>\n" +
+"<xd:component>%class "+_package+".MyTestAny_x1 %link A</xd:component>\n" +
 "</xd:def>";
-			xp = XDFactory.compileXD(null, xdef);
-			genXComponent(xp, clearTempDir());
+			genXComponent(xp = compile(xdef));
 			xd = xp.createXDDocument();
 			json = "{ \"\": 1}";
 			x = XonUtils.parseXON(json);
@@ -2097,12 +1910,11 @@ public class TestXon extends XDTester {
 			assertTrue(XonUtils.xonEqual(x,
 				SUtils.getValueFromGetter(xc,"anyItem$")));
 			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n" +
+"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
 "<xd:xon name='A'> {%anyName: \"* int()\", a:\"? boolean()\"} </xd:xon>\n" +
-"<xd:component>%class test.xdef.MyTestAny_x2 %link A</xd:component>\n" +
+"<xd:component>%class "+_package+".MyTestAny_x2 %link A</xd:component>\n" +
 "</xd:def>";
-			xp = XDFactory.compileXD(null, xdef);
-			genXComponent(xp, clearTempDir());
+			genXComponent(xp = compile(xdef));
 			xd = xp.createXDDocument();
 			json = "{ \"\": 1, x: -99}";
 			x = XonUtils.parseXON(json);
@@ -2123,31 +1935,13 @@ public class TestXon extends XDTester {
 			assertNoErrorsAndClear(reporter);
 			assertTrue(XonUtils.xonEqual(XonUtils.parseXON(json), xc.toXon()));
 			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n" +
-"<xd:xon name='A'> {\"\": \"? int()\"} </xd:xon>\n" +
-"<xd:component>%class test.xdef.MyTestAny_x3 %link A</xd:component>\n" +
-"</xd:def>";
-			xp = XDFactory.compileXD(null, xdef);
-			genXComponent(xp, clearTempDir());
-			xd = xp.createXDDocument();
-			json = "{ \"\": -99}";
-			x = XonUtils.parseXON(json);
-			y = xd.jvalidate(json, reporter);
-			assertNoErrorsAndClear(reporter);
-			assertTrue(XonUtils.xonEqual(x,y));
-			assertTrue(XonUtils.xonEqual(x, xd.getXon()));
-			xc = xd.jparseXComponent(json, null, reporter);
-			assertNoErrorsAndClear(reporter);
-			assertTrue(XonUtils.xonEqual(x, xc.toXon()));
-			assertEq(-99, SUtils.getValueFromGetter(xc, "get$_x_"));
-			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n" +
+"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
 "<xd:xon name='A'>\n" +
 "{ %anyName: [%script=\"?\", %anyObj=\"*\"], a: %anyObj=\"?\" }\n" +
 "</xd:xon>\n" +
-"<xd:component>%class test.xdef.MyTestAny_x4 %link A</xd:component>\n" +
+"<xd:component>%class "+_package+".MyTestAny_x4 %link A</xd:component>\n" +
 "</xd:def>";
-			xp = XDFactory.compileXD(null, xdef);
+			genXComponent(xp = compile(xdef));
 			xd = xp.createXDDocument();
 			json = "{ x: [0]}";
 			x = XonUtils.parseXON(json);
@@ -2155,7 +1949,6 @@ public class TestXon extends XDTester {
 			assertNoErrorsAndClear(reporter);
 			assertTrue(XonUtils.xonEqual(x,y));
 			assertTrue(XonUtils.xonEqual(x, xd.getXon()));
-			genXComponent(xp, clearTempDir());
 			xc = xd.jparseXComponent(json, null, reporter);
 			assertNoErrorsAndClear(reporter);
 			assertTrue(XonUtils.xonEqual(x, xc.toXon()));
@@ -2173,6 +1966,51 @@ public class TestXon extends XDTester {
 			assertEq(2, ((Map)SUtils.getValueFromGetter(xc,"anyItem$")).size());
 			assertEq(0, SUtils.getValueFromGetter(xc, "get$a"));
 		} catch (Exception ex) {fail(ex);}
+		try { // test YAML
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root='test' name='A'>\n"+
+"  <xd:xon name=\"test\">\n" +
+"    { \"cities\": [\n" +
+"        \"date();\",\n" +
+"        { %script = \"occurs 1..*;\",\n" +
+"          \"from\": [\n" +
+"            \"string();\",\n" +
+"            { %script = \"occurs 1..*; \",\n" +
+"              \"to\": \"jstring();\",\n" +
+"              \"distance\": \"int();\"\n" +
+"            }\n" +
+"    	  ]\n" +
+"        }\n" +
+"      ]\n" +
+"    }"+
+"  </xd:xon>\n" +
+"</xd:def>";
+			xd = compile(xdef).createXDDocument("A");
+			s =
+"cities:\n" +
+"- '2020-02-22'\n" +
+"- from:\n" +
+"  - Brussels\n" +
+"  - {to: London, distance: 322}\n" +
+"  - {to: Paris, distance: 265}\n" +
+"- from:\n" +
+"  - London\n" +
+"  - {to: Brussels, distance: 322}\n" +
+"  - {to: Paris, distance: 344}\n";
+			x = xd.yparse(s, reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			assertTrue(XonUtils.xonEqual(x,
+				xd.yparse(XonUtils.toYamlString(x), reporter)));
+			assertNoErrorwarningsAndClear(reporter);
+		} catch (SRuntimeException ex) {
+			if ("JSON101".equals(ex.getMsgID())) {
+				setResultInfo(
+					"YAML tests skipped; org.yaml.snakeyaml is not available");
+			} else {
+				fail(ex);
+			}
+		}
+
 		clearTempDir(); // clear temporary directory
 	}
 

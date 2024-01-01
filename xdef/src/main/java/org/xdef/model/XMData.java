@@ -51,6 +51,11 @@ public interface XMData extends XMNode {
 	 */
 	public short getParserType();
 
+	/** Get type of parsed value or items of parsed list or union.
+	 * @return value from org.xdef.XDValueTypes.
+	 */
+	public short getAlltemsType();
+
 	/** Get datetime mask from the model parser.
 	 * @return mask of datetime type or <i>null</i>.
 	 */

@@ -682,7 +682,7 @@ public final class BNFGrammar {
 
 		final void setPosition() {_pos = _p.getPosition();}
 
-		final SPosition getPosition() {return _pos;}
+//		final SPosition getPosition() {return _pos;}
 
 		final void resetPosition() {_p.resetPosition(_pos);}
 
@@ -814,7 +814,7 @@ public final class BNFGrammar {
 	private abstract class BNFItem {
 		SPosition _pos;
 		SPosition setPosition() {return _pos = _p.getPosition();}
-		SPosition getPosition() {return _pos;}
+//		SPosition getPosition() {return _pos;}
 		void resetPosition() {_p.resetPosition(_pos);}
 		void resetPosition(SPosition pos) {_p.resetPosition(_pos = pos);}
 		int _min; //minimum occurrence
@@ -823,7 +823,7 @@ public final class BNFGrammar {
 		void setMin(int min) {_min = min;}
 		void setMax(int max) {_max = max;}
 		int getMin() {return _min;}
-		int getMax() {return _max;}
+//		int getMax() {return _max;}
 		abstract boolean perform();
 		abstract BNFItem adoptTo(BNFGrammar grammar);
 		abstract void display(final StringBuilder sb);
@@ -851,19 +851,19 @@ public final class BNFGrammar {
 			int len = _parsedObjects == null ? 0 : _parsedObjects.length;
 			return len > 0 ? _parsedObjects[len - 1] : null;
 		}
-		Object popStack() {
-			int len = _parsedObjects == null ? 0 : _parsedObjects.length;
-			if (len == 0) {
-				return null;
-			}
-			Object result =  _parsedObjects[len - 1];
-			Object[] old = _parsedObjects;
-			_parsedObjects = new Object[len - 1];
-			if (len > 1) {
-				System.arraycopy(old, 0, _parsedObjects, 0, len - 1);
-			}
-			return result;
-		}
+//		Object popStack() {
+//			int len = _parsedObjects == null ? 0 : _parsedObjects.length;
+//			if (len == 0) {
+//				return null;
+//			}
+//			Object result =  _parsedObjects[len - 1];
+//			Object[] old = _parsedObjects;
+//			_parsedObjects = new Object[len - 1];
+//			if (len > 1) {
+//				System.arraycopy(old, 0, _parsedObjects, 0, len - 1);
+//			}
+//			return result;
+//		}
 		void pushStack(final Object o) {
 			int len = _parsedObjects == null ? 0 : _parsedObjects.length;
 			if (len == 0) {
@@ -1461,7 +1461,7 @@ public final class BNFGrammar {
 		try {
 			// set dummy method
 			method = BNFGrammar.class.getMethod("dummy",BNFExtMethod.class);
-		} catch (Exception ex) {
+		} catch (NoSuchMethodException | SecurityException ex) {
 			method = null; // shouldn't happen
 		}
 		DUMMY_METHOD = method;
@@ -1721,7 +1721,7 @@ public final class BNFGrammar {
 			final List<Object> params) {
 			_code = code;
 			_name = name.intern();
-			if (params != null && params.size() > 0) {
+			if (params != null && !params.isEmpty()) {
 				if (code == INL_PUSH && params.size() == 1) {
 					_param = params.get(0).toString();
 				} else if (code == INL_ERROR) {
@@ -1820,26 +1820,28 @@ public final class BNFGrammar {
 
 		private boolean isBase64() {
 			try {
-				Reader r = new MyReader();
-				ByteArrayOutputStream bw = new ByteArrayOutputStream();
-				SUtils.decodeBase64(r, bw);
-				r.close();
+				ByteArrayOutputStream bw;
+				try (Reader r = new MyReader()) {
+					bw = new ByteArrayOutputStream();
+					SUtils.decodeBase64(r, bw);
+				}
 				pushObject(bw.toByteArray());
 				return true;
-			} catch (Exception ex) {
+			} catch (IOException | SException ex) {
 				return false;
 			}
 		}
 
 		private boolean isHexdata() {
 			try {
-				Reader r = new MyReader();
-				ByteArrayOutputStream bw = new ByteArrayOutputStream();
-				SUtils.decodeHex(r, bw);
-				r.close();
+				ByteArrayOutputStream bw;
+				try (Reader r = new MyReader()) {
+					bw = new ByteArrayOutputStream();
+					SUtils.decodeHex(r, bw);
+				}
 				pushObject(bw.toByteArray());
 				return true;
-			} catch (Exception ex) {
+			} catch (IOException | SException ex) {
 				return false;
 			}
 		}
@@ -2224,7 +2226,7 @@ public final class BNFGrammar {
 							i = getParsedInt();
 							if (i < item.getMin()) {
 								// Maximal occurrence must be greater
-								// or equal to theminimum
+								// or equal to the minimum
 								error(BNF028);
 							}
 						}
@@ -2372,7 +2374,7 @@ public final class BNFGrammar {
 				} else if (isSignedFloat()) {
 					try {
 						params.add(getParsedDouble());
-					} catch (Exception ex) {
+					} catch (RuntimeException ex) {
 						int pos = getIndex();
 						setIndex(0);
 						error(BNF013); //Incorrect number
@@ -2633,7 +2635,7 @@ public final class BNFGrammar {
 				skipSeparators();
 				List<Object> params = new ArrayList<>();
 				readAliasParams(params);
-				if (params.size() > 0) {
+				if (!params.isEmpty()) {
 					method += '(';
 					for (int i = 0; i < params.size(); i++) {
 						if (i > 0) {
@@ -2642,7 +2644,7 @@ public final class BNFGrammar {
 						Object obj = params.get(i);
 						method += obj instanceof String
 							? genBNFString((String) obj, false)//MUST generate
-							: obj.toString();
+							: obj == null ? "null" : obj.toString();
 					}
 					method += ')';
 				}
@@ -2923,7 +2925,7 @@ public final class BNFGrammar {
 		private static void display(final StringBuilder out,
 			final BNFGrammar grammar,
 			final boolean numLines) {
-			if (grammar._aliases != null && grammar._aliases.size() > 0) {
+			if (grammar._aliases != null && !grammar._aliases.isEmpty()) {
 				for (String key: grammar._aliases.keySet()) {
 					out.append("%define $");
 					if (!"$".equals(key)) {

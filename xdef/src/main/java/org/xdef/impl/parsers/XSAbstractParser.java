@@ -36,6 +36,8 @@ import static org.xdef.XDParser.SEPARATOR;
 import static org.xdef.XDParser.TOTALDIGITS;
 import static org.xdef.XDParser.WHITESPACE;
 import static org.xdef.XDValueID.XD_CONTAINER;
+import org.xdef.impl.code.DefJNull;
+import org.xdef.xon.XonTools;
 
 /** Abstract class as the base for all test value parsers.
  * @author Vaclav Trojan
@@ -82,6 +84,9 @@ public abstract class XSAbstractParser extends XDParserAbstract
 		}
 		XDParseResult p = new DefParseResult(x.toString());
 		parseObject(xnode, p);
+		if (_whiteSpace == 'c') {
+			p.isSpaces();
+		}
 		if (!p.eos()) {
 			//After the item '&{0}' follows an illegal character&{1}{: }
 			p.errorWithString(XDEF.XDEF804, parserName());
@@ -99,6 +104,12 @@ public abstract class XSAbstractParser extends XDParserAbstract
 	 * @param xnode actual XXNode object.
 	 */
 	public void check(final XXNode xnode, final XDParseResult p) {
+		if (xnode != null && xnode.getXMElement().getXonMode() != 0
+			&& "null".equals(p.getSourceBuffer())) {
+			p.setParsedValue(new DefJNull(XonTools.JNULL)); // set null
+			p.setEos();
+			return;
+		}
 		if (p.getSourceBuffer() == null) {
 			p.error(XDEF.XDEF805, parserName()); //Parsed value in &{0} is null
 			return;
@@ -147,16 +158,14 @@ public abstract class XSAbstractParser extends XDParserAbstract
 
 	public void setWhiteSpace(final String s) {
 		byte old = _whiteSpace;
-		if ("collapse".equals(s)) {
-			_whiteSpace = 'c';
-		} else if ("replace".equals(s)) {
-			_whiteSpace = 'r';
-		} else if ("preserve".equals(s)) {
-			_whiteSpace = 0;
-		} else {
-			//Parameter '&{0}' can be only '&{1}' for '&{2}'
-			throw new SRuntimeException(XDEF.XDEF812,
-				"whiteSpace","collapse, replace, preserve", parserName());
+		switch (s) {
+			case "collapse": _whiteSpace = 'c'; break;
+			case "replace": _whiteSpace = 'r'; break;
+			case "preserve": _whiteSpace = 0; break;
+			default:
+				//Parameter '&{0}' can be only '&{1}' for '&{2}'
+				throw new SRuntimeException(XDEF.XDEF812,
+					"whiteSpace","collapse, replace, preserve", parserName());
 		}
 		if (old == 'c' && _whiteSpace != 'c' ||
 			old == 'p' && _whiteSpace == 0) {
@@ -316,6 +325,9 @@ public abstract class XSAbstractParser extends XDParserAbstract
 				setPatterns(new XDValue[]{item});
 			}
 		}
+		if ((item = getParam(params, ITEM)) != null) {
+			setItem(item);
+		}
 		if ((item = getParam(params, ENUMERATION)) != null && !item.isNull()) {
 			if (item.getItemId() == XD_CONTAINER) {
 				setEnumeration(((DefContainer) item).getXDItems());
@@ -333,8 +345,8 @@ public abstract class XSAbstractParser extends XDParserAbstract
 	@Override
 	public void setNamedParams(final XXNode xnode,
 		final XDContainer params) throws SException {
-		int len = params == null ? 0 : params.getXDNamedItemsNumber();
-		if (len == 0) {
+		int len;
+		if (params == null || (len = params.getXDNamedItemsNumber()) == 0) {
 			return;
 		}
 		XDValue[] x = new XDValue[len*2];
@@ -456,8 +468,8 @@ public abstract class XSAbstractParser extends XDParserAbstract
 			XDValue[] enumeration = getEnumeration();
 			if (enumeration != null) {
 				XDValue val = p.getParsedValue();
-				for (int i = 0; i < enumeration.length; i++) {
-					if (enumeration[i].equals(val)) {
+				for (XDValue enumeration1 : enumeration) {
+					if (enumeration1.equals(val)) {
 						return;
 					}
 				}
@@ -475,8 +487,6 @@ public abstract class XSAbstractParser extends XDParserAbstract
 	public abstract short parsedType();
 
 	public boolean addTypeParser(final XDValue x){return false;}//must be Parser
-	public void setSeparator(final String x) {}
-	public String getSeparator() { return null; }
 	public void setFormat(final String x) {}
 	public String getFormat() { return null; }
 	public void setOutFormat(final String x) {}

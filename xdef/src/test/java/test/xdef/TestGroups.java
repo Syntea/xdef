@@ -2283,7 +2283,7 @@ public final class TestGroups extends XDTester {
 				+ " fSQ2 iT4 fT4 ic2 fc2 fSQ2 fa ", swr.toString());
 			// test reference to choice from root selection
 			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
 "<xd:choice name = 'A'>\n" +
 "  <X xd:script='match @a' a='int'/>\n" +
 "  <X xd:script='match @b' b='string'/>\n" +

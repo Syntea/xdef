@@ -959,7 +959,7 @@ public final class TestTypes extends XDTester {
 			assertEq("false", swr.toString());
 			assertErrors(reporter);
 			xdef = // test enum
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
 "<xd:declaration>\n"+
 "    type x enum('123', '456', '678');\n" +
 "    type y enum('123');\n" +
@@ -971,7 +971,7 @@ public final class TestTypes extends XDTester {
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
 			xdef = // test output format of xdatetime
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
 "  <A a=\"xdatetime('y-M-d','yyyyMMdd');\">xdatetime('y-M-d','yyyyMMdd')</A>\n"+
 "</xd:def>";
 			xp = compile(xdef);
@@ -979,7 +979,7 @@ public final class TestTypes extends XDTester {
 			assertEq("<A a='20220508'>20220508</A>", parse(xp,"",xml,reporter));
 			assertNoErrors(reporter);
 			xdef = // test output format of xdatetime in list
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
 "<xd:declaration>\n"+
 "    type x list(xdatetime('y-M-d', 'yyyyMMdd'));\n" +
 "</xd:declaration>\n"+
@@ -990,7 +990,7 @@ public final class TestTypes extends XDTester {
 			assertEq("<A a='20220508'>20220508</A>", parse(xp,"",xml,reporter));
 			assertNoErrors(reporter);
 			xdef = // test output format of xdatetime in union
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
 "<xd:declaration>\n"+
 "    type x union(%item=[xdatetime('y-M-d', 'yyyyMMdd'), boolean()]);\n" +
 "</xd:declaration>\n"+
@@ -1004,7 +1004,7 @@ public final class TestTypes extends XDTester {
 			assertEq(xml, parse(xp,"",xml,reporter));
 			assertNoErrors(reporter);
 			xdef = // test asterisk as minimum and maximum
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
 "  <A a='string(*,3);'>string(1,*);</A>\n"+
 "</xd:def>";
 			xp = XDFactory.compileXD(null, xdef);
@@ -1013,7 +1013,7 @@ public final class TestTypes extends XDTester {
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
 			xdef = // test asterisk as minimum and maximum
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
 "  <A a='string(*,3);'>string(1,*);</A>\n"+
 "</xd:def>";
 			xp = XDFactory.compileXD(null, xdef);
@@ -1022,7 +1022,7 @@ public final class TestTypes extends XDTester {
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
 			xdef = // test asterisk as minimum and maximum
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
 "  <A a='int(*,123);'>int(123,*);</A>\n"+
 "</xd:def>";
 			xp = XDFactory.compileXD(null, xdef);
@@ -1293,7 +1293,7 @@ public final class TestTypes extends XDTester {
 			assertEq(xml, el = parse(xp, "", xml, reporter));
 			assertNoErrorwarnings(reporter);
 			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
 "<A a=\"string(%base=true);\"/>\n" +
 "</xd:def>";
 			xp = compile(xdef);
@@ -1302,7 +1302,7 @@ public final class TestTypes extends XDTester {
 			assertEq(xml, parse(xd, xml, reporter));
 			assertNoErrorwarnings(reporter);
 			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
 "<A a=\"string(%base=false);\"/>\n" +
 "</xd:def>";
 			xp = compile(xdef);
@@ -1313,7 +1313,7 @@ public final class TestTypes extends XDTester {
 				fail("Error expected");
 			}
 			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A|B|C|D'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='A|B|C|D'>\n"+
 "<xd:declaration>\n"+
 " external method boolean test.xdef.TestTypes.tab0(XXNode, String, String);\n" +
 " boolean tab1(String a, String b){return true;}\n" +

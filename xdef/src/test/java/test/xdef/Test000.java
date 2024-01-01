@@ -980,9 +980,8 @@ public final class Test000 extends XDTester {
 			if (el == null) {
 				fail("Root element is not available");
 			}
+			Test002.class.getClass(); //force compilation of test.xdef.Test002;
 			// external methods - error in declaration
-			//force compilation of test.xdef.Test002;
-			test.xdef.Test002.class.getClass();
 			xdef = //missing close bracket in method declaration
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<xd:declaration>\n"+

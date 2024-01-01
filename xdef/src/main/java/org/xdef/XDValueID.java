@@ -100,46 +100,52 @@ public interface XDValueID {
 	public static final short XD_OBJECT = XD_ANY + 1; // 46
 	/** Null value ID. */
 	static final short XD_NULL = XD_OBJECT + 1; // 47
+	/** Any number table ID. */
+	public static final short XD_NUMBER = XD_NULL + 1; // 48
+
+////////////////////////////////////////////////////////////////////////////////
+// XX Types (implemented XM types)
+////////////////////////////////////////////////////////////////////////////////
 	/** XXElement value ID. */
-	public static final short XX_ELEMENT = XD_NULL + 1; // 48
+	public static final short XX_ELEMENT = XD_NUMBER + 1; // 49
 	/** XXText value ID. */
-	public static final short XX_TEXT = XX_ELEMENT + 1; // 49
+	public static final short XX_TEXT = XX_ELEMENT + 1; // 50
 	/** XXAttr value ID. */
-	public static final short XX_ATTR = XX_TEXT + 1; // 50
+	public static final short XX_ATTR = XX_TEXT + 1; // 51
 	/** XXData value ID (super type for both XXATTR and XXTEXT). */
-	public static final short XX_DATA = XX_ATTR + 1; // 51
+	public static final short XX_DATA = XX_ATTR + 1; // 52
 	/** XXDocument value ID. */
-	public static final short XX_DOCUMENT = XX_DATA + 1; // 52
+	public static final short XX_DOCUMENT = XX_DATA + 1; // 53
 	/** XXPI (Processing instruction) value ID. */
-	public static final short XX_PI = XX_DOCUMENT + 1; // 53
+	public static final short XX_PI = XX_DOCUMENT + 1; // 54
 	/** XXComment (comment) value ID. */
-	public static final short XX_COMMENT = XX_PI + 1; // 54
+	public static final short XX_COMMENT = XX_PI + 1; // 55
 	/** XXChoice value ID. */
-	public static final short XX_CHOICE = XX_COMMENT + 1; // 55
+	public static final short XX_CHOICE = XX_COMMENT + 1; // 56
 	/** XXMixed value ID. */
-	public static final short XX_MIXED = XX_CHOICE + 1; // 56
+	public static final short XX_MIXED = XX_CHOICE + 1; // 57
 	/** XXsequence value ID. */
-	public static final short XX_SEQUENCE = XX_MIXED + 1; // 57
+	public static final short XX_SEQUENCE = XX_MIXED + 1; // 58
 	/** XModel value ID. */
-	public static final short XM_MODEL = XX_SEQUENCE + 1; // 58
+	public static final short XM_MODEL = XX_SEQUENCE + 1; // 59
 	/** Undefined value ID. */
-	public static final short XD_UNDEF = XM_MODEL + 1; // 59
+	public static final short XD_UNDEF = XM_MODEL + 1; // 60
 
 ////////////////////////////////////////////////////////////////////////////////
 // Internally used types
 ////////////////////////////////////////////////////////////////////////////////
 	/** Attribute reference ID. */
-	static final short X_ATTR_REF = XD_UNDEF + 1; // 60
+	static final short X_ATTR_REF = XD_UNDEF + 1; // 61
 	/** Parser item ID. */
-	static final short X_PARSEITEM = X_ATTR_REF + 1; // 61
+	static final short X_PARSEITEM = X_ATTR_REF + 1; // 62
 	/** Value of UNIQUESET ID. */
-	static final short X_UNIQUESET_M = X_PARSEITEM + 1; // 62
+	static final short X_UNIQUESET_M = X_PARSEITEM + 1; // 63
 	/** Reference to attribute ID; used by compiler. */
-	static final short X_UNIQUESET_KEY = X_UNIQUESET_M + 1; // 63
+	static final short X_UNIQUESET_KEY = X_UNIQUESET_M + 1; // 64
 	/** Named value of UNIQUESET ID. */
-	static final short X_UNIQUESET_NAMED = X_UNIQUESET_KEY+1; // 64
+	static final short X_UNIQUESET_NAMED = X_UNIQUESET_KEY+1; // 65
 	/** Value of UNIQUESET ID. */
-	static final short X_UNIQUESET = X_UNIQUESET_NAMED  + 1; // 65
+	static final short X_UNIQUESET = X_UNIQUESET_NAMED  + 1; // 66
 	/** No type ID: ref, undefined and methods which are not of any above. */
-	static final short X_NOTYPE_VALUE = X_UNIQUESET + 1; // 66
+	static final short X_NOTYPE_VALUE = X_UNIQUESET + 1; // 67
 }

@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
+import org.xdef.XDBytes;
 import org.xdef.sys.SBuffer;
 import org.xdef.sys.SPosition;
 
@@ -18,13 +19,18 @@ public class XonObjParser implements XonParser {
 	private int _kind; // 0..value, 1..array, 2..map
 	private final Stack<String> _names;
 	private Object _value;
+	private final boolean _convertXDBytes; // if XDBytes are conterted to byte[]
 
-	public XonObjParser() {
+	/** Create new instance of XonObjParser.
+	 * @param convertXDBytes flag if XDBytes objects are conterted to byte[].
+	 */
+	public XonObjParser(final boolean convertXDBytes) {
 		_kinds = new Stack<>();
 		_arrays = new Stack<>();
 		_maps = new Stack<>();
 		_names = new Stack<>();
 		_kinds.push(_kind = 0);
+		_convertXDBytes = convertXDBytes;
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -35,16 +41,20 @@ public class XonObjParser implements XonParser {
 	 * @param value X_Value to be added to result object.
 	 */
 	public void putValue(XonTools.JValue value) {
+		Object o = value.getValue();
+		if (_convertXDBytes && o instanceof XDBytes) {
+			o = ((XDBytes) o).getBytes();
+		}
 		switch (_kind) {
 			case 1:
-				_arrays.peek().add(value.getValue());
+				_arrays.peek().add(o);
 				break;
 			case 2:
 				String name = _names.pop();
-				_maps.peek().put(name, value.getValue());
+				_maps.peek().put(name, o);
 				break;
 			default:
-				_value = value.getValue();
+				_value = o;
 		}
 	}
 	@Override

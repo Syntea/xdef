@@ -99,12 +99,12 @@ final class ChkXONParser implements XParser, XonParser {
 				URL u = SUtils.getExtendedURL(s);
 				_in = XonReader.getXonReader(u.openStream());
 				_sysId = sourceName == null ? u.toExternalForm() : sourceName;
-			} catch (Exception ex) {
+			} catch (IOException ex) {
 				try { // try if it is a file name
 					File f = new File(s);
 					_in = XonReader.getXonReader(new FileInputStream(f));
 					_sysId = f.getCanonicalPath();
-				} catch (Exception exx) { //not file, try to parse it as string
+				} catch (IOException exx) {//not file, try to parse it as string
 					_sysId = sourceName == null ? "STRING_DATA" : sourceName;
 					_in = new StringReader(s);
 				}
@@ -114,16 +114,16 @@ final class ChkXONParser implements XParser, XonParser {
 			try {
 				_in = XonReader.getXonReader(new FileInputStream(f));
 				_sysId = sourceName == null ? f.getCanonicalPath() : sourceName;
-			} catch (Exception ex) {
-				throw new SRuntimeException(SYS.SYS024,//File doesn't exist:&{0}
-					f != null ? f.getAbsoluteFile() : "null");
+			} catch (IOException ex) {
+				//File doesn't exist:&{0}
+				throw new SRuntimeException(SYS.SYS024,f.getAbsoluteFile());
 			}
 		} else if (source instanceof URL) {
 			URL u = (URL) source;
 			try {
 				_in = XonReader.getXonReader(u.openStream());
 				_sysId = sourceName == null ? u.toExternalForm() : sourceName;
-			} catch (Exception ex) {
+			} catch (IOException ex) {
 				//Can't read file: &{0}
 				throw new SRuntimeException(SYS.SYS028, u.toString());
 			}

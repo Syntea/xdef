@@ -23,15 +23,15 @@ public class DefIPAddr extends XDValueAbstract implements XDIPAddr {
 	public DefIPAddr() {_value = null;}
 
 	/** Create new instance of DefIPAddr from source string.
-	 * @param ipAdr String representation of InternetAddress.
+	 * @param ipAddr String representation of InternetAddress.
 	 */
-	public DefIPAddr(final String ipAdr) {
+	public DefIPAddr(final String ipAddr) {
 		try {
-			boolean slash = ipAdr.charAt(0) == '/';
-			_value = InetAddress.getByName(slash ? ipAdr.substring(1) : ipAdr);
+			boolean ndx = ipAddr.charAt(0) == '/'; // may start with slash
+			_value = InetAddress.getByName(ndx ? ipAddr.substring(1) : ipAddr);
 		} catch (UnknownHostException ex) {
 			//Incorrect value&{0}{ of '}{'}&{1}{: '}{'}
-			throw new SRuntimeException(XDEF.XDEF809, ex, "ipAddr", ipAdr);
+			throw new SRuntimeException(XDEF.XDEF809, ex, "ipAddr", ipAddr);
 		}
 	}
 

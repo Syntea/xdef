@@ -207,7 +207,7 @@ if(true) return;
 /*xx*/
 		try {
 			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='network'>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root='network'>\n" +
 "<xd:xon name='network'>\n" +
 "{\n" +
 "  a: \"optional string();\"\n" +
@@ -257,7 +257,7 @@ if(true) return;
 			assertNoErrors(reporter);
 			assertTrue(_xxx);
 			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
 "<xd:declaration>\n"+
 "    type y list(%length=3, %item=xdatetime('y-M-d', 'yyyyMMdd'));\n" +
 "</xd:declaration>\n"+

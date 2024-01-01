@@ -297,6 +297,17 @@ public class XData extends XCodeDescriptor
 	}
 
 	@Override
+	/** Get type of parsed value or items of parsed list or union.
+	 * @return value from org.xdef.XDValueTypes.
+	 */
+	public short getAlltemsType() {
+		XDValue p = getParseMethod();
+		return p != null && p.getItemId() == XD_PARSER
+			&& p instanceof XDParser
+			? ((XDParser) p).getAlltemsType(): XD_STRING;		
+	}
+
+	@Override
 	/** Get datetime mask from the model parser.
 	 * @return mask of datetime type or <i>null</i>.
 	 */

@@ -1582,7 +1582,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	final boolean newAttribute(final Attr att) {
 		_node = att;
 		boolean result =
-			addAttributeNS(att.getNamespaceURI(), att.getName(), att.getValue());
+			addAttributeNS(att.getNamespaceURI(), att.getName(),att.getValue());
 		_node = null;
 		return result;
 	}
@@ -1655,12 +1655,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	 */
 	private void checkDatatype(final XData xdata, final boolean putTempErrors) {
 		if (xdata._check >= 0) {
-			XDValue item;
-//			if (_parseResult == null) {
-				item = exec(xdata._check, (byte) 'A');
-//			} else {
-//				item = _parseResult;
-//			}
+			XDValue item = exec(xdata._check, (byte) 'A');
 			if (item.getItemId() == XD_PARSERESULT) {
 				_parseResult = (XDParseResult) item;
 				_data = _parseResult.getSourceBuffer();
@@ -1739,8 +1734,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 								case "unsignedShort":
 								case "int": _xonValue = x.intValue(); break;
 								case "float": _xonValue = x.floatValue(); break;
-//case "decimal": case "dec": _xonValue = x.decimalValue(); break;
-								default: _xonValue = obj;
+								default: _xonValue = obj; // "decimal", "dec"
 							}
 						} else if (obj instanceof String) {
 							_xonValue = XonTools.xmlToJValue((String) obj);
@@ -1834,7 +1828,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		_attName = qname;
 		_attURI = nsURI;
 		_xdata = xatt;
-		if (xatt!=null && xatt._match >=0 && !getXDDocument().isCreateMode()){
+		if (xatt!=null && xatt._match >=0 && !getXDDocument().isCreateMode()) {
 			_elemValue = _element;
 			_data = adata;
 			XDValue item = exec(xatt._match, (byte) 'A');
@@ -2235,8 +2229,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 				}
 			} else if (_element.hasAttribute(xname)) {
 				processed = true;
-			}
-			if (_attNames.contains(xname)) {
+			} else if (_attNames.contains(xname)) {
 				processed = true;
 			}
 			if (!processed) {
@@ -3239,6 +3232,18 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 								exec(xtxt1._onTrue, (byte) 'T');
 								if (s != _data) {
 									item = exec(xtxt1._check, (byte) 'T');
+/*XX*/
+									if (item.getItemId() == XD_PARSERESULT) {
+										_parseResult = (XDParseResult) item;
+									} else {
+										_parseResult =
+											new DefParseResult(_data);
+										if (!item.booleanValue()) {
+											//XDEF515=Value error&{0}{ :}
+											_parseResult.putDefaultParseError();
+										}
+									}
+/*XX*/
 								}
 								copyTemporaryReports();
 							}

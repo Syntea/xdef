@@ -1264,6 +1264,16 @@ public abstract class XDTester extends STester {
 	public ArrayReporter genXComponent(final XDPool xp, final String dir) {
 		return genXComponent(xp, new File(dir));
 	}
+
+	/** Create X-components from the XDPool object to temporary directory.
+	 * @param xp XDPool from which the X-components created.
+	 * @return ArrayReporter with reports from ganerator of XComponents.
+	 * @throws RuntimeException if an error occurs.
+	 */
+	public final ArrayReporter genXComponent(final XDPool xp) {
+		return genXComponent(xp, clearTempDir());
+	}
+	
 	/** Create X-components from the XDPool object to given directory.
 	 * @param xp XDPool from which the X-components created.
 	 * @param dir directory where to generate Java sources.

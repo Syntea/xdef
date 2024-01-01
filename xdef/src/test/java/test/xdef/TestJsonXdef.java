@@ -572,11 +572,10 @@ public class TestJsonXdef extends XDTester {
 "}\n" +
 "</xd:xon>\n"+
 "<xd:component>\n"+
-"  %class test.xdef.XonPerson %link Person#Person;\n"+
+"  %class "+_package+".XonPerson %link Person#Person;\n"+
 "</xd:component>\n"+
 "</xd:def>";
-			xp = compile(xdef);
-			genXComponent(xp, clearTempDir());
+			genXComponent(xp = compile(xdef));
 			json =
 "{ \"Person\": {\n" +
 "    \"Name\":\"Václav Novák\",\n" +
@@ -758,7 +757,7 @@ public class TestJsonXdef extends XDTester {
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='json'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='json'>\n"+
 "<xd:xon name='json'>\n"+
 "{\"\": \"optional jstring()\"}\n" +
 "</xd:xon>\n"+
@@ -771,7 +770,7 @@ public class TestJsonXdef extends XDTester {
 			x = jparse(xp, "", json, reporter);
 			assertNoErrorwarningsAndClear(reporter);
 			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='json'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='json'>\n"+
 "<xd:xon name='json'>\n"+
 "{\"\": \"optional jstring()\"}\n" +
 "</xd:xon>\n"+
@@ -784,7 +783,7 @@ public class TestJsonXdef extends XDTester {
 			x = jparse(xp, "", json, reporter);
 			assertNoErrorwarningsAndClear(reporter);
 			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A|B|json'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='A|B|json'>\n"+
 "<xd:xon name='json'>\n"+
 "[{\"a\":\"boolean\"},\"string()\",\"int()\"]\n" +
 "</xd:xon>\n"+
@@ -830,7 +829,7 @@ public class TestJsonXdef extends XDTester {
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xdef =
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" root=\"root\" >\n" +
+"<xd:def xmlns:xd=\""+_xdNS+"\" root=\"root\" >\n" +
 "  <xd:xon xd:name='root'>\n"+
 "     \"jvalue();\"\n"+
 "  </xd:xon>\n"+
@@ -888,7 +887,7 @@ public class TestJsonXdef extends XDTester {
 		try {
 			InputStream in;
 			xdef =
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.1\" name=\"X\" root=\"a\">\n"+
+"<xd:def xmlns:xd=\""+_xdNS+"\" name=\"X\" root=\"a\">\n"+
 " <xd:ini name='a'>\n"+
 "   A=?string(); finally out(\"A\");\n" +
 "   B=int(); finally out(\"B\");\n" +
@@ -904,60 +903,59 @@ public class TestJsonXdef extends XDTester {
 			swr = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(swr, false));
 			ini = "#a\nA=a\n\n B= 1\n C=2121-10-19\nD =2.1\n[E]\nx=3\n[F]\n#b";
-			x = xd.iparse(ini, reporter);
+			xd.iparse(ini, reporter);
 			assertNoErrorwarningsAndClear(reporter);
 			assertEq("ABCDx[E][F]", swr.toString());
 			swr = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(swr, false));
 			in = new ByteArrayInputStream(ini.getBytes());
-			x = xd.iparse(in, reporter);
+			xd.iparse(in, reporter);
 			assertNoErrorwarningsAndClear(reporter);
 			assertEq("ABCDx[E][F]", swr.toString());
 			swr = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(swr, false));
 			ini = "#\n B = 1 \n C=2121-10-19\n D=2.121\n [E] \n[F]\n#";
-			x = xd.iparse(ini, reporter);
+			xd.iparse(ini, reporter);
 			assertNoErrorwarningsAndClear(reporter);
 			assertEq("BCD[E][F]", swr.toString());
 			swr = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(swr, false));
 			in = new ByteArrayInputStream(ini.getBytes());
-			x = xd.iparse(in, reporter);
+			xd.iparse(in, reporter);
 			assertNoErrorwarningsAndClear(reporter);
 			assertEq("BCD[E][F]", swr.toString());
 			swr = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(swr, false));
-			x = xd.iparse(ini, reporter);
+			xd.iparse(ini, reporter);
 			assertNoErrorwarningsAndClear(reporter);
 			assertEq("BCD[E][F]", swr.toString());
 			swr = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(swr, false));
 			in = new ByteArrayInputStream(ini.getBytes());
-			x = xd.iparse(in, reporter);
+			xd.iparse(in, reporter);
 			assertNoErrorwarningsAndClear(reporter);
 			assertEq("BCD[E][F]", swr.toString());
 			ini = "\n B = 1 \n C=2121-10-19\n D=2.121\n[F]";
 			swr = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(swr, false));
-			x = xd.iparse(ini, reporter);
+			xd.iparse(ini, reporter);
 			assertNoErrorwarningsAndClear(reporter);
 			assertEq("BCD[F]", swr.toString());
 			in = new ByteArrayInputStream(ini.getBytes());
 			swr = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(swr, false));
-			x = xd.iparse(in, reporter);
+			xd.iparse(in, reporter);
 			assertNoErrorwarningsAndClear(reporter);
 			assertEq("BCD[F]", swr.toString());
-			in = new ByteArrayInputStream(ini.getBytes());
 			swr = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(swr, false));
-			x = xd.iparse(ini, reporter);
+			xd.iparse(ini, reporter);
 			assertNoErrorwarningsAndClear(reporter);
 			assertEq("BCD[F]", swr.toString());
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' name='TestINI' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' name='TestINI' root='a'>\n"+
 " <xd:ini name='a'>\n"+
 "   A=?string()\n" +
 "   B=int()\n" +
@@ -971,10 +969,9 @@ public class TestJsonXdef extends XDTester {
 "  %class test.common.json.component.TestINI %link TestINI#a" + ";\n" +
 " </xd:component>\n"+
 "</xd:def>";
-			xp = compile(xdef);
 			ini = "A=a\n B=1\n C=2121-10-19\n D=2.34\n[ E-F.G ]\nx=123\n[F]";
+			genXComponent(xp = compile(xdef));
 			xd = xp.createXDDocument("TestINI");
-			genXComponent(xp, clearTempDir());
 			xc = xd.iparseXComponent(ini, null, reporter);
 			assertEq("a", SUtils.getValueFromGetter(xc,"get$A"));
 			assertEq(1,SUtils.getValueFromGetter(xc,"get$B"));
@@ -997,7 +994,7 @@ public class TestJsonXdef extends XDTester {
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xdef =
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='a'>\n"+
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "<xd:xon name='a'>\n" +
 "[\n" +
 "  {\n" +
@@ -1017,15 +1014,14 @@ public class TestJsonXdef extends XDTester {
 "]\n" +
 "</xd:xon>\n" +
 "<xd:component>\n"+
-"  %class test.xdef.X_on %link #a;\n"+
+"  %class "+_package+".X_on %link #a;\n"+
 "</xd:component>\n"+
 "</xd:def>";
-			xp = compile(xdef);
-			genXComponent(xp, clearTempDir());
+			genXComponent(xp = compile(xdef));
 			json =
 "# Start of XON example\n" +
-"[ #***** Array *****/\n" +
-"  { #***** Map *****/\n" +
+"[ #***** Array *****\n" +
+"  { #***** Map *****\n" +
 "    a : 1s,                          # Short\n" +
 "    i:[],                            # empty array\n" +
 "    Towns : [ # array with GPS locations of towns\n" +
@@ -1077,13 +1073,10 @@ public class TestJsonXdef extends XDTester {
 "  }\n" +
 "</xd:xon>\n" +
 "<xd:component>\n"+
-"  %class test.xdef.TestXonEncoding %link #a;\n"+
+"  %class "+_package+".TestXonEncoding %link #a;\n"+
 "</xd:component>\n"+
 "</xd:def>";
-			xp = compile(xdef);
-			file = clearTempDir();
-			genXComponent(xp, file);
-			xd = xp.createXDDocument();
+			genXComponent(xp = compile(xdef));
 			json =
 "{ \"ěščřžýáíéúůĺ %u@#$\" : {\n" +
 "     \"é\" : \"ĚŠČŘŽÝÁÍÉÚŮĹ\",\n" +

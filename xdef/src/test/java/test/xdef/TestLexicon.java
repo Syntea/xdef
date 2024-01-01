@@ -59,7 +59,7 @@ public final class TestLexicon extends XDTester {
 "              create from('@GivenName') + ' ' + from('@LastName');\"/>\n"+
 "</Agreement>\n"+
 "<xd:component>\n"+
-"  %class test.xdef.component.L_Contract %link contract#Contract;\n"+
+"  %class "+_package+".component.L_Contract %link contract#Contract;\n"+
 "</xd:component>\n"+
 "</xd:def>";
 			String lexicon1 =
@@ -247,7 +247,7 @@ public final class TestLexicon extends XDTester {
 			assertNoErrorwarnings(reporter);
 			assertEq(xml, el);
 			// try X-component
-			genXComponent(xp, clearTempDir()); // create and compile X-components
+			genXComponent(xp); // create and compile X-components
 			Class<?> clazz = Class.forName("test.xdef.component.L_Contract");
 			XComponent xc = parseXC(xd, xml, clazz, reporter);
 			assertNoErrorwarnings(reporter);
@@ -296,11 +296,10 @@ public final class TestLexicon extends XDTester {
 "    town#_person/@LastName =    Příjmení\n" +
 "  </xd:lexicon>\n" +
 "  <xd:component>\n"+
-"    %class test.xdef.component.Town %link town#Town;\n"+
+"    %class "+_package+".component.Town %link town#Town;\n"+
 "  </xd:component>\n"+
 "</xd:def>";
-			xp = compile(xdef);
-			genXComponent(xp, clearTempDir());
+			genXComponent(xp = compile(xdef));
 			xd = xp.createXDDocument("town");
 			String xml_eng =
 "<Town Name='Nonehill'>\n" +

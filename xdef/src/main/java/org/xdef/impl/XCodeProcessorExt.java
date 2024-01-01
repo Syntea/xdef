@@ -49,6 +49,7 @@ import static org.xdef.XDValueID.XD_RESULTSET;
 import static org.xdef.XDValueID.XD_SERVICE;
 import static org.xdef.XDValueID.XD_STATEMENT;
 import static org.xdef.XDValueID.XD_STRING;
+import static org.xdef.XDValueID.XD_TELEPHONE;
 import static org.xdef.XDValueID.XD_VOID;
 import static org.xdef.XDValueID.XD_XPATH;
 import static org.xdef.XDValueID.XX_ATTR;

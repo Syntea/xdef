@@ -92,7 +92,7 @@ public class CsvReader extends StringParser implements XonParsers {
 		final String sysId) {
 		XonTools.InputData indata =
 			XonTools.getInputFromObject(source, sysId);
-		XonParser jp = new XonObjParser();
+		XonParser jp = new XonObjParser(true);
 		Reader in = indata._reader != null ? indata._reader
 			: new InputStreamReader(indata._in, StandardCharsets.UTF_8);
 		CsvReader xr = new CsvReader(indata._reader, jp);

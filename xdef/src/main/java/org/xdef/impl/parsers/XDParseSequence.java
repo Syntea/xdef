@@ -1,30 +1,33 @@
 package org.xdef.impl.parsers;
 
-import org.xdef.msg.XDEF;
 import org.xdef.XDParseResult;
-import org.xdef.XDParser;
 import org.xdef.XDValue;
 import org.xdef.proc.XXNode;
 import org.xdef.impl.code.DefContainer;
 import org.xdef.XDContainer;
+import org.xdef.XDParser;
 import static org.xdef.XDParser.BASE;
 import static org.xdef.XDParser.ENUMERATION;
 import static org.xdef.XDParser.ITEM;
+import static org.xdef.XDParser.LENGTH;
+import static org.xdef.XDParser.MAXLENGTH;
+import static org.xdef.XDParser.MINLENGTH;
 import static org.xdef.XDParser.PATTERN;
 import static org.xdef.XDParser.SEPARATOR;
 import static org.xdef.XDParser.WHITESPACE;
 import static org.xdef.XDParser.WS_PRESERVE;
-import org.xdef.XDValueID;
+import static org.xdef.XDParserAbstract.getItemsType;
 import static org.xdef.XDValueID.XD_CONTAINER;
+import org.xdef.impl.code.DefString;
+import org.xdef.msg.XDEF;
 
 /** Parser of X-Script "sequence" type.
  * @author Vaclav Trojan
  */
 public class XDParseSequence extends XSAbstractParser {
 	private static final String ROOTBASENAME = "sequence";
-
 	XDParser[] _itemTypes;
-	String _separator;
+	String _separatorChars;
 	XDValue[] _enumeration;
 	long _minLength;
 	long _maxLength;
@@ -38,7 +41,7 @@ public class XDParseSequence extends XSAbstractParser {
 		_patterns = null;
 		_enumeration = null;
 		_minLength = _maxLength = -1;
-		_separator = null;
+		_separatorChars = null;
 		_itemTypes = null;
 	}
 	@Override
@@ -52,9 +55,9 @@ public class XDParseSequence extends XSAbstractParser {
 //			MINEXCLUSIVE +
 //			TOTALDIGITS +
 //			FRACTIONDIGITS +
-//			LENGTH +
-//			MAXLENGTH +
-//			MINLENGTH +
+			LENGTH +
+			MAXLENGTH +
+			MINLENGTH +
 //			NORMALIZE +
 			SEPARATOR +
 			ITEM +
@@ -103,7 +106,7 @@ public class XDParseSequence extends XSAbstractParser {
 	}
 	@Override
 	public void setItem(final XDValue item) {
-		if (item.getItemId() != XDValueID.XD_CONTAINER) {
+		if (item.getItemId() != XD_CONTAINER) {
 			addTypeParser(item);
 			return;
 		}
@@ -137,7 +140,13 @@ public class XDParseSequence extends XSAbstractParser {
 		}
 		val.addXDItem(p.getParsedValue());
 		for (int i = 1; i < _itemTypes.length; i++) {
-			p.isSpaces();
+			if (_separatorChars != null && !_separatorChars.isEmpty()
+				&& !isSeparator(p, _separatorChars)) {
+				break;
+			}
+			if (p.eos()) {
+				break;
+			}
 			pos1 = p.getIndex();
 			_itemTypes[i].parseObject(xnode, p);
 			if (isFinal) {
@@ -145,11 +154,15 @@ public class XDParseSequence extends XSAbstractParser {
 			}
 			if (p.matches()) {
 				val.addXDItem(p.getParsedValue());
-				s += ' ' + p.getParsedBufferPartFrom(pos1);
+				s += (_separatorChars == null ? ' ' : _separatorChars.charAt(0))
+					+ p.getParsedBufferPartFrom(pos1);
 			} else {
 				 //'&{0}' expected
 				p.error(XDEF.XDEF570, _itemTypes[i].parserName());
 				return;
+			}
+			if (!isSeparator(p, _separatorChars) || p.eos()) {
+				break;
 			}
 		}
 		if (isFinal) {
@@ -158,8 +171,8 @@ public class XDParseSequence extends XSAbstractParser {
 		p.setParsedValue(val);
 		if (_enumeration != null) {
 			boolean found = false;
-			for (int i = 0; i < _enumeration.length; i++) {
-				if (_enumeration[i].equals(p.getParsedValue())) {
+			for (XDValue xv : _enumeration) {
+				if (xv.equals(val)) {
 					found = true;
 					break;
 				}
@@ -190,11 +203,12 @@ public class XDParseSequence extends XSAbstractParser {
 	@Override
 	public void addNamedParams(final XDContainer map) {
 		map.setXDNamedItem("item", new DefContainer(_itemTypes));
+		if (_separatorChars != null) {
+			map.setXDNamedItem("separator", new DefString(_separatorChars));
+		}
 	}
 	@Override
 	public String parserName() {return ROOTBASENAME;}
-	@Override
-	public short parsedType() {return XD_CONTAINER;}
 	@Override
 	public boolean equals(final XDValue o) {
 		if (!super.equals(o) || !(o instanceof XDParseSequence)) {
@@ -233,4 +247,12 @@ public class XDParseSequence extends XSAbstractParser {
 			return true;
 		}
 	}
+	@Override
+	public void setSeparator(final String x) {_separatorChars = x;}
+	@Override
+	public String getSeparator() {return _separatorChars;}
+	@Override
+	public short parsedType() {return XD_CONTAINER;}
+	@Override
+	public short getAlltemsType() {return getItemsType(_itemTypes);}
 }

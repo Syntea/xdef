@@ -10,6 +10,7 @@ import java.net.InetAddress;
 import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.Currency;
+import org.xdef.impl.code.DefBytes;
 import org.xdef.impl.code.DefEmailAddr;
 import org.xdef.impl.code.DefTelephone;
 import org.xdef.impl.xml.Reader_UCS_4_2143;
@@ -414,21 +415,21 @@ public final class XonReader extends StringParser implements XonParsers {
 			}
 		} else if ((i=isOneOfTokens(new String[]{"null","false","true"}))>=0) {
 			return returnValue(spos, i > 0 ? (i==2) : null);
-		} else if (_xonMode
-			&& (i=isOneOfTokens(new String[]{"NaN","INF","-INF"})) >= 0) {
-			if (isChar('f')) {
-				switch(i) {
-					case 0: return returnValue(spos, Float.NaN);
-					case 1: return returnValue(spos, Float.POSITIVE_INFINITY);
-					case 2: return returnValue(spos, Float.NEGATIVE_INFINITY);
-				}
-			} else {
-				switch(i) {
-					case 0: return returnValue(spos, Double.NaN);
-					case 1: return returnValue(spos, Double.POSITIVE_INFINITY);
-					default: return returnValue(spos, Double.NEGATIVE_INFINITY);
-				}
-			}
+//		} else if (_xonMode
+//			&& (i=isOneOfTokens(new String[]{"NaN","INF","-INF"})) >= 0) {
+//			if (isChar('f')) {
+//				switch(i) {
+//					case 0: return returnValue(spos, Float.NaN);
+//					case 1: return returnValue(spos, Float.POSITIVE_INFINITY);
+//					case 2: return returnValue(spos, Float.NEGATIVE_INFINITY);
+//				}
+//			} else {
+//				switch(i) {
+//					case 0: return returnValue(spos, Double.NaN);
+//					case 1: return returnValue(spos, Double.POSITIVE_INFINITY);
+//					default: return returnValue(spos, Double.NEGATIVE_INFINITY);
+//				}
+//			}
 		} else if ((minus=isChar('-')) && ((floatNumber=isFloat())||isInteger())
 			|| ((floatNumber=isFloat()) || isInteger())) {
 			String s = getBufferPart(minus ? pos + 1 : pos, getIndex());
@@ -497,7 +498,8 @@ public final class XonReader extends StringParser implements XonParsers {
 			Object result;
 			char ch;
 			final String[] tokens = {"c\"","u\"","e\"","b(","x(","d","p(",
-				"g(","/","C(","t\"","P","-P","NaN","INF","-INF"};
+//				"g(","/","C(","t\"","P","-P","NaN","INF","-INF"};
+				"g(","/","C(","t\"","P","-P"};
 			if (_xonMode&&(i=isOneOfTokens(tokens))>=0){
 				switch(tokens[i]) {
 					case "c\"": // character
@@ -531,7 +533,8 @@ public final class XonReader extends StringParser implements XonParsers {
 									sb.append(ch);
 								}
 							}
-							result = SUtils.decodeBase64(sb.toString());
+							result = new DefBytes(
+								SUtils.decodeBase64(sb.toString()), true);
 							if (ch == ')') {
 								return returnValue(spos, result);
 							}
@@ -546,7 +549,8 @@ public final class XonReader extends StringParser implements XonParsers {
 									sb.append(ch);
 								}
 							}
-							result = SUtils.decodeHex(sb.toString());
+							result = new DefBytes(
+								SUtils.decodeHex(sb.toString()), false);
 							if (isChar(')')) {
 								return returnValue(spos, result);
 							}
@@ -667,20 +671,20 @@ public final class XonReader extends StringParser implements XonParsers {
 							return returnValue(spos, getParsedSDuration());
 						}
 						break;
-					case "NaN":  // "NaN"
-					case "INF":  // "INF"
-					case "-INF": { // "-INF"
-						String s = tokens[i];
-						if (isChar('f')) {
-							return returnValue(spos, "NaN".equals(s) ? Float.NaN
-								: "INF".equals(s) ? Float.POSITIVE_INFINITY
-								: Float.NEGATIVE_INFINITY);
-						}
-						isChar('d');
-						return returnValue(spos, "NaN".equals(s) ? Double.NaN
-							: "INF".equals(s) ? Double.POSITIVE_INFINITY
-								: Double.NEGATIVE_INFINITY);
-					}
+//					case "NaN":  // "NaN"
+//					case "INF":  // "INF"
+//					case "-INF": { // "-INF"
+//						String s = tokens[i];
+//						if (isChar('f')) {
+//							return returnValue(spos, "NaN".equals(s) ? Float.NaN
+//								: "INF".equals(s) ? Float.POSITIVE_INFINITY
+//								: Float.NEGATIVE_INFINITY);
+//						}
+//						isChar('d');
+//						return returnValue(spos, "NaN".equals(s) ? Double.NaN
+//							: "INF".equals(s) ? Double.POSITIVE_INFINITY
+//								: Double.NEGATIVE_INFINITY);
+//					}
 				}
 			}
 		}
@@ -793,16 +797,18 @@ public final class XonReader extends StringParser implements XonParsers {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-	/** Parse XON/JSON source data.
+	/** Parse XON/JSON source data.0
 	 * @param in Reader with XON/JSON source data.
 	 * @param sysId System ID of source position or null.
 	 * @param xonMode if true then XON, if false JSON.
+	 * @param convertXDBytes flag if XDBytes objects are conterted to byte[].
 	 * @return parsed XON or JSON object.
 	 */
 	private static Object parseXonJson(final Reader in,
 		final String sysId,
-		final boolean xonMode) {
-		XonObjParser jp = new XonObjParser();
+		final boolean xonMode,
+		final boolean convertXDBytes) {
+		XonObjParser jp = new XonObjParser(convertXDBytes);
 		XonReader xr = new XonReader(in, jp);
 		xr._acceptComments = xonMode;
 		xr._xonMode = xonMode; // XON/JSON mode
@@ -821,38 +827,49 @@ public final class XonReader extends StringParser implements XonParsers {
 	/** Parse XON source data.
 	 * @param in Reader with XON source data.
 	 * @param sysId System ID of source position or null.
+	 * @param convertXDBytes flag if XDBytes objects are conterted to byte[].
 	 * @return parsed XON object.
 	 */
-	public final static Object parseXON(final Reader in, final String sysId) {
-		return parseXonJson(in, sysId, true);
+	public final static Object parseXON(final Reader in,
+		final String sysId,
+		final boolean convertXDBytes) {
+		return parseXonJson(in, sysId, true, convertXDBytes);
 	}
 
 	/** Parse JSON source data.
 	 * @param in Reader with JSON source data.
 	 * @param sysId System ID of source position or null.
+	 * @param convertXDBytes flag if XDBytes objects are conterted to byte[].
 	 * @return parsed JSON object.
 	 */
-	public final static Object parseJSON(Reader in, String sysId) {
-		return parseXonJson(in, sysId, false);
+	public final static Object parseJSON(final Reader in,
+		final String sysId,
+		final boolean convertXDBytes) {
+		return parseXonJson(in, sysId, false, convertXDBytes);
 	}
 
 	/** Parse XON source data.
 	 * @param in input stream with XON source data.
 	 * @param sysId System ID of source position or null.
+	 * @param convertXDBytes flag if XDBytes objects are conterted to byte[].
 	 * @return parsed XON object.
 	 */
 	public final static Object parseXON(final InputStream in,
-		final String sysId) {
-		return parseXonJson(getXonReader(in),sysId,true);
+		final String sysId,
+		final boolean convertXDBytes) {
+		return parseXonJson(getXonReader(in),sysId,true, convertXDBytes);
 	}
 
 	/** Parse JSON source data.
 	 * @param in Reader with JSON source data.
 	 * @param sysId System ID of source position or null.
+	 * @param convertXDBytes flag if XDBytes objects are conterted to byte[].
 	 * @return parsed JSON object.
 	 */
-	public final static Object parseJSON(InputStream in, String sysId) {
-		return parseXonJson(getXonReader(in),sysId,false);
+	public final static Object parseJSON(final InputStream in,
+		final String sysId,
+		final boolean convertXDBytes) {
+		return parseXonJson(getXonReader(in),sysId,false, convertXDBytes);
 	}
 
 	/** This class reads charset directive and creates Reader if the data

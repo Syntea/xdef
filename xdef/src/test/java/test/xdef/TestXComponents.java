@@ -94,10 +94,9 @@ public final class TestXComponents extends XDTester {
 "<xd:def xmlns:xd='" + _xdNS + "' root='X'>\n"+
 "<xd:declaration>type gam xdatetime('yyyyMMddHHmmssSSS');</xd:declaration>\n"+
 "  <X a='gam()'>int()<Y xd:script='*' a='int()'/>? date()</X>\n"+
-"<xd:component>%class test.xdef.Mgam %link X</xd:component>\n"+
+"<xd:component>%class "+_package+".Mgam %link X</xd:component>\n"+
 "</xd:def>";
-			xp = compile(xdef);
-			genXComponent(xp, clearTempDir());
+			genXComponent(xp = compile(xdef));
 			xml =
 "<X a='20201211010101333'>3<Y a='1'/><Y a='2'/>2021-12-30</X>";//millis == 333
 			xc = parseXC(xp,"", xml , null, reporter);
@@ -113,10 +112,9 @@ public final class TestXComponents extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
 "  <A> <B b='string'/> <C> <B b='string'/> </C> </A>\n" +
-" <xd:component> %class test.xdef.MichalTest %link #A; </xd:component>\n" +
+" <xd:component> %class "+_package+".MichalTest %link #A; </xd:component>\n" +
 "</xd:def>";
-			xp = XDFactory.compileXD(null, xdef);
-			assertNoErrorwarnings(genXComponent(xp, clearTempDir())); //here
+			genXComponent(xp = compile(xdef));
 			xml = "<A><B b=\"1\"/><C><B b=\"2\"/></C></A>";
 			xc = xp.createXDDocument().xparseXComponent(xml, null, reporter);
 			assertNoErrorsAndClear(reporter);
@@ -139,11 +137,10 @@ public final class TestXComponents extends XDTester {
 "   a='? price(); onTrue a= getParsedValue();'\n"+
 "   q='gps(); onTrue q=getParsedValue();'/>\n"+
 "<xd:component>\n"+
-"  %class test.xdef.TY_GPS %link #A;\n"+
+"  %class "+_package+".TY_GPS %link #A;\n"+
 "</xd:component>\n"+
 "</xd:def>";
-			xp = compile(xdef);
-			genXComponent(xp, clearTempDir());
+			genXComponent(xp = compile(xdef));
 			xml = "<A a='1.25 CZK' q='48.2, 16.37, 151, Vienna'/>"; //
 			xd = xp.createXDDocument();
 			xc = xd.xparseXComponent(xml, null, reporter);
@@ -165,8 +162,8 @@ public final class TestXComponents extends XDTester {
 			xp = compile(new String[] { // nested declaration of type
 "<xd:def xmlns:xd='" + _xdNS + "' name='D7_xc'>\n" +
 "  <xd:component>\n" +
-"    %class test.xdef.IdentDN %link D7_#A;\n" +
-"    %class test.xdef.VymazDN extends test.xdef.IdentDN %link D7_#B;\n" +
+"    %class "+_package+".IdentDN %link D7_#A;\n" +
+"    %class "+_package+".VymazDN extends test.xdef.IdentDN %link D7_#B;\n" +
 "  </xd:component>\n" +
 "</xd:def>",
 "<xd:def xmlns:xd='" + _xdNS + "' name='D7_' root='A | B'>\n" +
@@ -185,7 +182,7 @@ public final class TestXComponents extends XDTester {
 "        type  gamDate  xdatetime('yyyyMMdd');\n" +
 "    </xd:declaration>\n" +
 "</xd:def>"});
-			genXComponent(xp, clearTempDir());
+			genXComponent(xp);
 			xml = "<A RokDN=\"2021\" CisloDN=\"12345\"/>";
 			assertEq(xml, parse(xp, "D7_", xml, reporter));
 			assertNoErrorwarningsAndClear(reporter);
@@ -208,10 +205,9 @@ public final class TestXComponents extends XDTester {
 			xdef = // test base64/hex
 "<xd:def xmlns:xd='" + _xdNS + "' root='X'>\n"+
 "<X a='hex()' b='base64Binary()' c='SHA1()'/>\n"+
-"<xd:component> %class test.xdef.TestXexBase64 %link X; </xd:component>\n"+
+"<xd:component> %class "+_package+".TestXexBase64 %link X; </xd:component>\n"+
 "</xd:def>";
-			xp = compile(xdef);
-			genXComponent(xp, clearTempDir());
+			genXComponent(xp = compile(xdef));
 			xml =
 "<X a='1FA0' b='ahgkjfd01Q==' c='12AFE0C1D246895A990AB2DD13CE684F012B339C'/>";
 			xd = xp.createXDDocument("");
@@ -230,7 +226,7 @@ public final class TestXComponents extends XDTester {
 "            Birth = \"xdatetime('dd.MM.yyyy')\"\n" +
 "            Sex   = \"enum('M','W', 'X')\"/>\n" +
 "   <xd:component>\n" +
-"      %class test.xdef.xcomp.XCPerson\n" +
+"      %class "+_package+".xcomp.XCPerson\n" +
 "          extends test.xdef.TestXComponents_bindAbstract\n" +
 "          implements test.xdef.TestXComponents_bindInterface\n" +
 "      %link Person#Person;\n" +
@@ -240,8 +236,7 @@ public final class TestXComponents extends XDTester {
 "      %bind SexString %with test.xdef.obj.Person %link Person#Person/@Sex;\n" +
 "   </xd:component>\n" +
 "</xd:def>";
-			xp = compile(xdef);
-			genXComponent(xp, clearTempDir());
+			genXComponent(xp = compile(xdef));
 			o = SUtils.getNewInstance("test.xdef.xcomp.XCPerson");
 			SUtils.setValueToSetter(o, "setName", "John Brown");
 			SUtils.setValueToSetter(o, "setBirth",
@@ -280,8 +275,7 @@ public final class TestXComponents extends XDTester {
 "    %class bugreports.data.XCResource %link X#Resource;\n" +
 "  </xd:component>\n" +
 "</xd:def>";
-			xp = compile(xdef);
-			genXComponent(xp, clearTempDir());
+			genXComponent(xp = compile(xdef));
 			xd = xp.createXDDocument("X");
 			xml =
 "<XdPoolCfg>\n"+
@@ -322,8 +316,7 @@ public final class TestXComponents extends XDTester {
 "    %class bugreports.data.UserDefCommand %link X#a/b;\n" +
 "  </xd:component>\n" +
 "</xd:def>";
-			xp = compile(xdef);
-			genXComponent(xp, clearTempDir());
+			genXComponent(xp = compile(xdef));
 			xml =
 "<a>\n"+
 "  <b Name='X1'>\n"+
@@ -356,9 +349,8 @@ public final class TestXComponents extends XDTester {
 "<xd:xon name = 'X'>{a:\"int();\", b:[\"boolean();\"]}</xd:xon>\n"+
 "<xd:component> %class bugreports.data.JCreateX1 %link X </xd:component>\n"+
 "</xd:def>";
-			xp = compile(xdef);
+			genXComponent(xp = compile(xdef));
 			xd = xp.createXDDocument();
-			genXComponent(xp, clearTempDir());
 			s = "{a:1, b:[true]}";
 			xon = xd.jparse(s, reporter);
 			assertNoErrorwarningsAndClear(reporter);
@@ -379,8 +371,7 @@ public final class TestXComponents extends XDTester {
 "<xd:component> %class bugreports.data.JCreateX2 %link X </xd:component>\n"+
 "<xd:xon name = 'X'>[\"2 boolean()\", \"boolean()\"]</xd:xon>\n"+
 "</xd:def>";
-			xp = compile(xdef);
-			genXComponent(xp, clearTempDir());
+			genXComponent(xp = compile(xdef));
 			xd = xp.createXDDocument();
 			s = "[true, false, true]";
 			xon = XonUtils.parseXON(s);
@@ -394,11 +385,10 @@ public final class TestXComponents extends XDTester {
 				SUtils.getValueFromGetter(xc,"toXon")));
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='X'>\n"+
-"<xd:component>%class test.xdef.JCreateX3 %link X</xd:component>\n"+
+"<xd:component>%class "+_package+".JCreateX3 %link X</xd:component>\n"+
 "<xd:xon name = 'X'>[\"2 boolean()\", \"boolean()\"]</xd:xon>\n"+
 "</xd:def>";
-			xp = compile(xdef);
-			genXComponent(xp, clearTempDir());
+			genXComponent(xp = compile(xdef));
 			xd = xp.createXDDocument();
 			s = "[true, false, true]";
 			xon = XonUtils.parseXON(s);
@@ -413,10 +403,9 @@ public final class TestXComponents extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='X'>\n"+
 "<xd:xon name=\"X\"> {b:[ \"int();\",[\"int();\"],\"string();\"]}</xd:xon>\n" +
-"<xd:component> %class test.xdef.JCreateX4 %link X </xd:component>\n"+
+"<xd:component> %class "+_package+".JCreateX4 %link X </xd:component>\n"+
 "</xd:def>";
-			xp = compile(xdef);
-			genXComponent(xp, clearTempDir());
+			genXComponent(xp = compile(xdef));
 			xd = xp.createXDDocument();
 			s = "{b:[1, [2], \"\"]}";
 			xon = XonUtils.parseXON(s);
@@ -435,10 +424,9 @@ public final class TestXComponents extends XDTester {
 "<xd:xon name = 'X'>\n"+
 " [ \"boolean(); create 'true'\", \"int(); create '2'\" ]\n"+
 "</xd:xon>\n"+
-"<xd:component>%class test.xdef.JCreateX5 %link X</xd:component>\n"+
+"<xd:component>%class "+_package+".JCreateX5 %link X</xd:component>\n"+
 "</xd:def>";
-			xp = compile(xdef);
-			genXComponent(xp, clearTempDir());
+			genXComponent(xp = compile(xdef));
 			xd = xp.createXDDocument();
 			xon = XonUtils.parseXON("[true, 2]");
 			assertTrue(XonUtils.xonEqual(xon, xd.jcreate("X", reporter)));
@@ -455,10 +443,9 @@ public final class TestXComponents extends XDTester {
 "  b:[ \"boolean(); create 'true'\", \"int(); create '2'\" ]\n"+
 "}\n"+
 "</xd:xon>\n"+
-"<xd:component>%class test.xdef.JCreateX6 %link X</xd:component>\n"+
+"<xd:component>%class "+_package+".JCreateX6 %link X</xd:component>\n"+
 "</xd:def>";
-			xp = compile(xdef);
-			genXComponent(xp, clearTempDir());
+			genXComponent(xp = compile(xdef));
 			xd = xp.createXDDocument();
 			xon = XonUtils.parseXON("{a:1, b:[true, 2]}");
 			assertTrue(XonUtils.xonEqual(xon, xd.jcreate("X", reporter)));
@@ -472,7 +459,7 @@ public final class TestXComponents extends XDTester {
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' xd:root='a'>\n" +
-"<xd:component>%class test.xdef.TestX_OneOfa %link a</xd:component>\n"+
+"<xd:component>%class "+_package+".TestX_OneOfa %link a</xd:component>\n"+
 "<xd:xon name='a'>\n" +
 "{\n" +
 "  %oneOf= \"optional;\",\n" +
@@ -481,8 +468,7 @@ public final class TestXComponents extends XDTester {
 "}\n" +
 "</xd:xon>\n" +
 "</xd:def>";
-			xp = compile(xdef);
-			genXComponent(xp, clearTempDir());
+			genXComponent(xp = compile(xdef));
 			xd = xp.createXDDocument();
 			s = "{\"manager\": \"BigBoss\"}";
 			o = xd.jparse(s, reporter);
@@ -532,7 +518,7 @@ public final class TestXComponents extends XDTester {
 			assertNull(SUtils.getValueFromGetter(xc, "get$subordinates"));
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root=\"test\">\n" +
-"<xd:component>%class test.xdef.MyTestX_OneOfb %link test</xd:component>\n"+
+"<xd:component>%class "+_package+".MyTestX_OneOfb %link test</xd:component>\n"+
 "<xd:xon name=\"test\">\n" +
 "{ a:[ %oneOf=\"?\",\n" +
 "       \"jnull(); finally outln('null')\", \n" + // must be first
@@ -545,8 +531,7 @@ public final class TestXComponents extends XDTester {
 "}\n" +
 "</xd:xon>\n" +
 "</xd:def>";
-			xp = compile(xdef);
-			genXComponent(xp, clearTempDir());
+			genXComponent(xp = compile(xdef));
 			s = "{a:\"2022-04-10\"}";
 			o = XonUtils.parseXON(s);
 			xd = xp.createXDDocument();
@@ -663,10 +648,9 @@ public final class TestXComponents extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
 "  <A> <B b='string'/> <C> <B b='string'/> </C> </A>\n" +
-" <xd:component> %class test.xdef.TestB %link #A; </xd:component>\n" +
+" <xd:component> %class "+_package+".TestB %link #A; </xd:component>\n" +
 "</xd:def>";
-			xp = XDFactory.compileXD(null, xdef);
-			assertNoErrorwarnings(genXComponent(xp, clearTempDir()));
+			genXComponent(xp = compile(xdef));
 			xml = "<A><B b=\"1\"/><C><B b=\"2\"/></C></A>";
 			xc = xp.createXDDocument().xparseXComponent(xml, null, reporter);
 			assertNoErrorsAndClear(reporter);
@@ -682,11 +666,9 @@ public final class TestXComponents extends XDTester {
 "  <B><D xd:script=\"ref D\" /><C c=\"string(1)\"/></B>\n" +
 "</A0>\n"+
 "<D><C c=\"string(3)\"/></D>\n"+
-"<xd:component> %class test.xdef.A0 %link #A0; </xd:component>\n"+
+"<xd:component> %class "+_package+".A0 %link #A0; </xd:component>\n"+
 "</xd:def>";
-			xp = XDFactory.compileXD(null, xdef);
-			genXComponent(xp, clearTempDir());
-			assertNoErrorwarningsAndClear(reporter);
+			genXComponent(xp = compile(xdef));
 			xml = "<A0><B><D><C c=\"d/c\"/></D><C c=\"c\"/></B></A0>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrorwarningsAndClear(reporter);
@@ -706,11 +688,9 @@ public final class TestXComponents extends XDTester {
 "  <B><C c=\"string(1)\"/><D xd:script=\"ref D\" /></B>\n" +
 "</A1>\n"+
 "<D><C c=\"string(3)\"/></D>\n"+
-"<xd:component> %class test.xdef.A1 %link #A1; </xd:component>\n"+
+"<xd:component> %class "+_package+".A1 %link #A1; </xd:component>\n"+
 "</xd:def>";
-			xp = compile(xdef);
-			genXComponent(xp, clearTempDir());
-			assertNoErrorwarningsAndClear(reporter);
+			genXComponent(xp = compile(xdef));
 			xml = "<A1><B><C c=\"c\"/><D><C c=\"d/c\"/></D></B></A1>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrorwarningsAndClear(reporter);
@@ -727,12 +707,12 @@ public final class TestXComponents extends XDTester {
 			xp = compile(new String[]{
 "<xd:def  xmlns:xd='" + _xdNS + "' name='A' root='A'>\n" +
 " <A><xd:any xd:script='options moreElements,moreText,moreAttributes'/></A>\n" +
-" <xd:component> %class test.xdef.Kalcik %link A#A; </xd:component>\n" +
+" <xd:component> %class "+_package+".Kalcik %link A#A; </xd:component>\n" +
 "</xd:def>",
 "<xd:def  xmlns:xd='" + _xdNS + "' name='B' root='X'>\n" +
 "  <X xd:script='create from(\"/*\")' a=\"string()\" b=\"date()\" />\n" +
 "</xd:def>"});
-			genXComponent(xp, clearTempDir());
+			genXComponent(xp);
 			xd = xp.getXMDefinition("A").createXDDocument();
 			xml = "<A><B a='x' b='2000-01-21'/></A>";
 			xc = xd.xparseXComponent(xml, null, reporter);
@@ -746,10 +726,9 @@ public final class TestXComponents extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root=\"A\">\n" +
 "<A a='int(-1) || int(0, 100);'/>\n" +
-"<xd:component> %class test.xdef.MyTestXKoci1 %link #A; </xd:component>\n" +
+"<xd:component> %class "+_package+".MyTestXKoci1 %link #A; </xd:component>\n" +
 "</xd:def>";
-			xp = XDFactory.compileXD(null,xdef);
-			genXComponent(xp, clearTempDir());
+			genXComponent(xp = compile(xdef));
 			xml = "<A a='20'/>";
 			parse(xp,"", xml, reporter);
 			assertNoErrors(reporter);
@@ -760,10 +739,9 @@ public final class TestXComponents extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root=\"A\">\n" +
 "<A> union(%item=[int(-1), int(1, 100)]);</A>\n"+
-"<xd:component> %class test.xdef.MyTestXKoci2 %link #A; </xd:component>\n" +
+"<xd:component> %class "+_package+".MyTestXKoci2 %link #A; </xd:component>\n" +
 "</xd:def>";
-			xp = compile(xdef);
-			genXComponent(xp, clearTempDir());
+			genXComponent(xp = compile(xdef));
 			xml = "<A>20</A>";
 			parse(xp,"", xml, reporter);
 			assertNoErrors(reporter);
@@ -777,7 +755,7 @@ public final class TestXComponents extends XDTester {
 			xp = compile(new String[] {getDataDir()+"test/TestXComponents.xdef",
 				getDataDir() + "test/TestXComponent_Z.xdef"});
 			// generate and compile XComponents from xp
-			assertNoErrors(genXComponent(xp, clearTempDir()));
+			assertNoErrors(genXComponent(xp));
 		} catch (Exception ex) {
 			fail(ex);
 			return;

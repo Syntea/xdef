@@ -214,7 +214,7 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 	 * @return map with parsed data.
 	 */
 	public final static Map<String, Object> parseINI(Reader in, String sysId) {
-		XonParser jp = new XonObjParser();
+		XonParser jp = new XonObjParser(true);
 		IniReader xr = new IniReader(in, jp);
 		if (sysId != null) {
 			xr.setSysId(sysId);
