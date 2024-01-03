@@ -5,6 +5,7 @@ import org.xdef.XDReport;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
 import org.xdef.XDValueType;
+import static org.xdef.XDValueType.REPORT;
 
 /** Implementation of XDReport
  *
@@ -133,7 +134,7 @@ public final class DefReport extends XDValueAbstract implements XDReport {
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
-	public XDValueType getItemType() {return XDValueType.REPORT;}
+	public XDValueType getItemType() {return REPORT;}
 	@Override
 	/** Check if the object is <i>null</i>.
 	 * @return <i>true</i> if the object is <i>null</i> otherwise returns

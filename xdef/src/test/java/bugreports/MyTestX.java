@@ -354,8 +354,8 @@ public class MyTestX extends XDTester {
 			s = _package+".MytestX_Strnum";
 			assertNull(testX(xp,"", s, xon));
 		} catch (Exception ex) {fail(ex); reporter.clear();}
-if(true)return;
 	clearSources();
+if(true)return;
 if(T) return;
 /**/
 		try {
@@ -375,69 +375,6 @@ if(T) return;
 if(T) return;
 	clearSources();
 //if(true)return;
-/**/
-		try {
-			xdef = // sequence witn separatoritem (compatible item types)
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"  <xd:component>%class "+_package+".MytestX_SQ %link #a;</xd:component>\n" +
-"<xd:declaration>\n"+
-"  type s sequence(%separator=',', %item=[int,long]);\n"+
-"</xd:declaration>\n"+
-" <a a='? s'>\n"+
-"  ? s;\n"+
-"  <b xd:script='?'> s; </b>\n"+
-" </a>\n"+
-"</xd:def>";
-			xp = compile(xdef);
-			genAndCopyXComponents(xp);
-			xml = "<a a=' 1,2 '>   3,4    </a>";
-			assertEq("<a a='1,2'>3,4</a>", el = parse(xp, "", xml, reporter));
-			assertNoErrorwarningsAndClear(reporter);
-			xc = parseXC(xp,"", xml , null, reporter);
-			assertNoErrorwarningsAndClear(reporter);
-			if ((o = SUtils.getValueFromGetter(xc, "geta")) instanceof List) {
-				x = ((List) o).get(0);
-				assertTrue(x instanceof Long);
-				assertEq(1, x);
-				x = ((List) o).get(1);
-				assertTrue(x instanceof Long);
-				assertEq(2, x);
-			} else {
-				fail("incorrect type: " + o.getClass() + "; " + o);
-			}
-			if ((o=SUtils.getValueFromGetter(xc,"get$value")) instanceof List) {
-				x = ((List) o).get(0);
-				assertTrue(x instanceof Long);
-				assertEq(3, x);
-				x = ((List) o).get(1);
-				assertTrue(x instanceof Long);
-				assertEq(4, x);
-			} else {
-				fail("incorrect type: " + o.getClass() + "; " + o);
-			}
-			assertNull(SUtils.getValueFromGetter(xc, "get$b"));
-			assertEq(xml, xc.toXml());
-			xml = "<a><b>5,6</b></a>";
-			assertNoErrorwarningsAndClear(reporter);
-			xc = parseXC(xp,"", xml , null, reporter);
-			assertNoErrorwarningsAndClear(reporter);
-			assertNull(SUtils.getValueFromGetter(xc, "geta"));
-			assertNull(SUtils.getValueFromGetter(xc, "get$value"));
-			if ((o = SUtils.getValueFromGetter(xc, "get$b")) instanceof List) {
-				x = ((List) o).get(0);
-				assertTrue(x instanceof Long);
-				assertEq(5, x);
-				x = ((List) o).get(1);
-				assertTrue(x instanceof Long);
-				assertEq(6, x);
-			} else {
-				fail("incorrect type: " + o.getClass() + "; " + o);
-			}
-			assertEq(xml, xc.toXml());
-		} catch (Exception ex) {fail(ex); reporter.clear();}
-//if(true)return;
-clearSources();
-if(T)return;
 /**/
 		try {
 			xdef =
@@ -613,7 +550,7 @@ if(T)return;
 			assertNull(testM("int", "{a:1}"));
 			assertNull(testM("int", "{ }"));
 			assertNull(testA("ipAddr", "[null, /::FFFF:129.144.52.38,/0.0.0]"));
-			
+
 		} catch (Exception ex) {fail(ex); reporter.clear();}
 if(T)return;
 //if(true)return;

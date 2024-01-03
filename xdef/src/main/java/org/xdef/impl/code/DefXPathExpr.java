@@ -23,7 +23,9 @@ import org.w3c.dom.NodeList;
 import org.xdef.XDContainer;
 import org.xdef.XDValueType;
 import java.math.BigInteger;
+import static org.xdef.XDValueType.XPATH;
 import org.xdef.impl.XCodeProcessor;
+import static org.xdef.impl.code.CodeTable.COMPILE_XPATH;
 
 /** Implementation of compiled XPath expression.
  * @author Vaclav Trojan
@@ -137,7 +139,7 @@ public final class DefXPathExpr extends KXpathExpr implements XDValue {
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
-	public XDValueType getItemType() {return XDValueType.XPATH;}
+	public XDValueType getItemType() {return XPATH;}
 
 	@Override
 	/** Get string value of this object.
@@ -227,7 +229,7 @@ public final class DefXPathExpr extends KXpathExpr implements XDValue {
 	@Override
 	public Element getElement() {return null;}
 	@Override
-	public short getCode() {return CodeTable.COMPILE_XPATH;}
+	public short getCode() {return COMPILE_XPATH;}
 	@Override
 	public void setCode(final short code) {}
 	@Override

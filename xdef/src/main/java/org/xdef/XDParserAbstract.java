@@ -14,7 +14,8 @@ import static org.xdef.XDValueID.XD_PARSER;
 import static org.xdef.XDValueID.XD_PARSERESULT;
 import static org.xdef.XDValueID.XD_SHORT;
 import static org.xdef.XDValueID.XD_STRING;
-import org.xdef.impl.code.CodeTable;
+import static org.xdef.XDValueType.PARSER;
+import static org.xdef.impl.code.CodeTable.LD_CONST;
 import org.xdef.impl.code.DefContainer;
 import org.xdef.impl.code.DefJNull;
 import org.xdef.impl.code.DefParseResult;
@@ -81,7 +82,7 @@ public abstract class XDParserAbstract extends XDValueAbstract
 			} else {
 				finalCheck(xnode, p);
 			}
-		}		
+		}
 	}
 
 	@Override
@@ -147,11 +148,11 @@ public abstract class XDParserAbstract extends XDValueAbstract
 	@Override
 	public final short getItemId() {return XD_PARSER;} // do not override
 	@Override
-	public XDValueType getItemType() {return XDValueType.PARSER;}
+	public XDValueType getItemType() {return PARSER;}
 	@Override
 	public short parsedType() {return XD_STRING;}  // may be overrided
 	@Override
-	public final short getCode() {return CodeTable.LD_CONST;}
+	public final short getCode() {return LD_CONST;}
 	@Override
 	public String toString() {return parserName();}
 	@Override
@@ -247,7 +248,7 @@ public abstract class XDParserAbstract extends XDValueAbstract
 	 */
 	public final boolean isSeparator(final SParser p, final String separator) {
 		p.isSpaces();
-		boolean result; 
+		boolean result;
 		if (separator == null || separator.isEmpty()) {
 			result = p.isSpaces();
 		} else {

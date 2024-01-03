@@ -3,7 +3,6 @@ package org.xdef.impl;
 import java.io.IOException;
 import java.util.List;
 import org.xdef.XDPool;
-import org.xdef.model.XMNode;
 
 /** Implementation of the model of processing instruction.
  * @author Vaclav Trojan
@@ -16,7 +15,7 @@ public final class XPI extends XData {
 	 */
 	public XPI(final String name,
 		final XDPool xp) {
-		super(name, null, xp, XMNode.XMPI);
+		super(name, null, xp, XMPI);
 		setOccurrence(1, Integer.MAX_VALUE); //???
 	}
 

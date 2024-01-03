@@ -4,9 +4,9 @@ import org.xdef.sys.SIllegalArgumentException;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
 import java.math.BigDecimal;
-import org.xdef.XDValueID;
 import org.xdef.XDValueType;
 import java.math.BigInteger;
+import static org.xdef.XDValueType.DOUBLE;
 
 /** Implements the internal object with float values.
  * @author Vaclav Trojan
@@ -50,13 +50,13 @@ public final class DefDouble extends XDValueAbstract {
 	/** Get type of value.
 	 * @return The id of item type.
 	 */
-	public short getItemId() {return XDValueID.XD_DOUBLE;}
+	public short getItemId() {return XD_DOUBLE;}
 
 	@Override
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
-	public XDValueType getItemType() {return XDValueType.DOUBLE;}
+	public XDValueType getItemType() {return DOUBLE;}
 
 	@Override
 	/** Get value as String.

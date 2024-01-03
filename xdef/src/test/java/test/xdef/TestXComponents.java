@@ -25,6 +25,7 @@ import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.Price;
 import org.xdef.sys.GPSPosition;
 import org.xdef.sys.SDatetime;
+import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.xon.XonNames;
@@ -107,8 +108,6 @@ public final class TestXComponents extends XDTester {
 			xc = parseXC(xp,"", xml , null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
 			assertEq(xml, xc.toXml());
-		} catch (Exception ex) {fail(ex); reporter.clear();}
-		try { // test if X-compomemt getter/setter name is not changed
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
 "  <A> <B b='string'/> <C> <B b='string'/> </C> </A>\n" +
@@ -124,8 +123,6 @@ public final class TestXComponents extends XDTester {
 			assertEq("2", SUtils.getValueFromGetter(
 				SUtils.getValueFromGetter(SUtils.getValueFromGetter(
 					xc,"getC"), "getB"), "getb"));
-		} catch (Exception ex) {fail(ex); reporter.clear();}
-		try {
 			xdef = // GPSPosition, Price
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
 "<xd:declaration\n>\n"+
@@ -218,8 +215,6 @@ public final class TestXComponents extends XDTester {
 			xc = xd.xparseXComponent(xml, null, reporter);
 			assertEq(el,parse(xd, KXmlUtils.nodeToString(xc.toXml()),reporter));
 			assertNoErrorwarningsAndClear(reporter);
-		} catch (Exception ex) {fail(ex); reporter.clear();}
-		try { // Construction of document from X-component
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' name='Person' root='Person'>\n"+
 "    <Person Name  = \"string()\"\n" +
@@ -249,8 +244,6 @@ public final class TestXComponents extends XDTester {
 			xc = xd.xcreateXComponent(null, "Person", null, reporter);
 			assertNoErrorsAndClear(reporter);
 			assertEq(xml, xc.toXml());
-		} catch (Exception ex) {fail(ex); reporter.clear();}
-		try { // model with occurrnece > 1
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' name='X' root='XdPoolCfg'>\n" +
 "  <Resource xd:script=\"occurs 0..;\">string();</Resource>\n" +
@@ -293,8 +286,6 @@ public final class TestXComponents extends XDTester {
 			xd.setXDContext(xml);
 			xc = xd.xcreateXComponent(null, "XdPoolCfg", null, null);
 			assertEq(xml, xc.toXml());
-		} catch (Exception ex) {fail(ex); reporter.clear();}
-		try {
 			xdef =
 "<xd:def xmlns:xd=\"" + _xdNS + "\" name = \"X\" root = \"a\">\n" +
 "  <a>\n" +
@@ -342,9 +333,7 @@ public final class TestXComponents extends XDTester {
 			xd.setXDContext(xml);
 			xc = xd.xcreateXComponent(null, "a", null, null);
 			assertEq(xml, xc.toXml());
-		} catch (Exception ex) {fail(ex); reporter.clear();}
-		try { // test jcreateXComponent
-			xdef =
+			xdef = // test jcreateXComponent
 "<xd:def xmlns:xd='" + _xdNS + "' root='X'>\n"+
 "<xd:xon name = 'X'>{a:\"int();\", b:[\"boolean();\"]}</xd:xon>\n"+
 "<xd:component> %class bugreports.data.JCreateX1 %link X </xd:component>\n"+
@@ -455,8 +444,6 @@ public final class TestXComponents extends XDTester {
 			assertNoErrorwarningsAndClear(reporter);
 			assertTrue(XonUtils.xonEqual(xon,
 				SUtils.getValueFromGetter(xc,"toXon")));
-		} catch (Exception ex) {fail(ex); reporter.clear();}
-		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' xd:root='a'>\n" +
 "<xd:component>%class "+_package+".TestX_OneOfa %link a</xd:component>\n"+
@@ -643,9 +630,55 @@ public final class TestXComponents extends XDTester {
 			assertNull(SUtils.getValueFromGetter(xc, "get$a"));
 			assertNull(((Map) xc.toXon()).get("a"));
 			assertFalse(((Map) xc.toXon()).containsKey("a"));
-		} catch (Exception ex) {fail(ex); reporter.clear();}
-		try { //Names of getters of A/B and A/C/B must be same
-			xdef =
+			xdef = // sequence with separator
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"  <xd:component>%class "+_package+".MytestX_SQ %link #a;</xd:component>\n" +
+"<xd:declaration>\n"+
+"  type s sequence(%separator=',', %item=[int,long, long]);\n"+
+"</xd:declaration>\n"+
+" <a a='? s'> ? s; <b xd:script='?'> s; </b> </a>\n"+
+"</xd:def>";
+			genXComponent(xp = compile(xdef));
+			xml = "<a/>";
+			assertEq(xml, el = parse(xp, "", xml, reporter));
+			assertNoErrorwarningsAndClear(reporter);
+			xc = parseXC(xp,"", xml , null, reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			assertNull(SUtils.getValueFromGetter(xc, "geta"));
+			xml = "<a a='1,2,3'>4,5,6</a>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrorwarningsAndClear(reporter);
+			assertEq(xml, (xc = parseXC(xp,"", xml , null, reporter)).toXml());
+			assertNoErrorwarningsAndClear(reporter);
+			if ((o = SUtils.getValueFromGetter(xc, "geta")) instanceof List) {
+				assertEq(1, ((List) o).get(0));
+				assertEq(2, ((List) o).get(1));
+				assertEq(3, ((List) o).get(2));
+			} else {
+				fail("incorrect type: " + o.getClass() + "; " + o);
+			}
+			if ((o=SUtils.getValueFromGetter(xc,"get$value")) instanceof List) {
+				assertEq(4, ((List) o).get(0));
+				assertEq(5, ((List) o).get(1));
+				assertEq(6, ((List) o).get(2));
+			} else {
+				fail("incorrect type: " + o.getClass() + "; " + o);
+			}
+			assertNull(SUtils.getValueFromGetter(xc, "get$b"));
+			xml = "<a><b>5,6,7</b></a>";
+			assertNoErrorwarningsAndClear(reporter);
+			assertEq(xml, (xc = parseXC(xp,"", xml , null, reporter)).toXml());
+			assertNoErrorwarningsAndClear(reporter);
+			assertNull(SUtils.getValueFromGetter(xc, "geta"));
+			assertNull(SUtils.getValueFromGetter(xc, "get$value"));
+			if ((o = SUtils.getValueFromGetter(xc, "get$b")) instanceof List) {
+				assertEq(5, ((List) o).get(0));
+				assertEq(6, ((List) o).get(1));
+				assertEq(7, ((List) o).get(2));
+			} else {
+				fail("incorrect type: " + o.getClass() + "; " + o);
+			}
+			xdef = //Names of getters of A/B and A/C/B must be same
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
 "  <A> <B b='string'/> <C> <B b='string'/> </C> </A>\n" +
 " <xd:component> %class "+_package+".TestB %link #A; </xd:component>\n" +
@@ -736,20 +769,28 @@ public final class TestXComponents extends XDTester {
 			assertNoErrors(reporter);
 			assertEq("20", SUtils.getValueFromGetter(xc,"geta"));
 			assertEq(xml, xc.toXml());
-			xdef =
+			xdef = // test union
 "<xd:def xmlns:xd='" + _xdNS + "' root=\"A\">\n" +
-"<A> union(%item=[int(-1), int(1, 100)]);</A>\n"+
-"<xd:component> %class "+_package+".MyTestXKoci2 %link #A; </xd:component>\n" +
+"<xd:declaration>\n"+
+"  type s union(%item=[byte(-1), int(1, 100)]);\n"+
+"</xd:declaration>\n"+
+"<A a='s'>s;</A>\n"+
+"<xd:component> %class "+_package+".TestXKoci2 %link #A; </xd:component>\n" +
 "</xd:def>";
 			genXComponent(xp = compile(xdef));
-			xml = "<A>20</A>";
+			xml = "<A a='-1'>20</A>";
 			parse(xp,"", xml, reporter);
 			assertNoErrors(reporter);
 			xc = xp.createXDDocument().xparseXComponent(xml, null, reporter);
 			assertNoErrors(reporter);
-			assertEq(20, SUtils.getValueFromGetter(xc,"get$value"));
+			o = SUtils.getValueFromGetter(xc,"geta");
+			assertTrue(o instanceof Integer);
+			assertEq(-1, o);
+			o = SUtils.getValueFromGetter(xc,"get$value");
+			assertTrue(o instanceof Integer);
+			assertEq(20, o);
 			assertEq(xml, xc.toXml());
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 ////////////////////////////////////////////////////////////////////////////////
 		try {// generate XCDPool from sources used in next tests
 			xp = compile(new String[] {getDataDir()+"test/TestXComponents.xdef",

@@ -5,8 +5,8 @@ import org.xdef.sys.SIllegalArgumentException;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
 import java.math.BigDecimal;
-import org.xdef.XDValueID;
 import org.xdef.XDValueType;
+import static org.xdef.XDValueType.CHAR;
 import org.xdef.xon.XonTools;
 import org.xdef.sys.SParser;
 import org.xdef.sys.StringParser;
@@ -55,13 +55,13 @@ public final class DefChar extends XDValueAbstract {
 	/** Get type of value.
 	 * @return The id of item type.
 	 */
-	public short getItemId() {return XDValueID.XD_CHAR;}
+	public short getItemId() {return XD_CHAR;}
 
 	@Override
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
-	public XDValueType getItemType() {return XDValueType.CHAR;}
+	public XDValueType getItemType() {return CHAR;}
 
 	@Override
 	/** Return DefBoolean object as char.

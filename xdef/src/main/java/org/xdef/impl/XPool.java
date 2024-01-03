@@ -28,6 +28,7 @@ import org.xdef.model.XMDebugInfo;
 import org.xdef.model.XMDefinition;
 import org.xdef.model.XMElement;
 import org.xdef.model.XMNode;
+import static org.xdef.model.XMNode.XMELEMENT;
 import org.xdef.model.XMSelector;
 import org.xdef.model.XMVariableTable;
 import org.xdef.msg.SYS;
@@ -713,7 +714,7 @@ public final class XPool implements XDPool, Serializable {
 				}
 			}
 			for (XNode xn: xe._childNodes) {
-				if (xn.getKind() == XMNode.XMELEMENT) {
+				if (xn.getKind() == XMELEMENT) {
 					checkModel(reflist, refset, (XElement) xn);
 				}
 			}
@@ -1034,7 +1035,7 @@ public final class XPool implements XDPool, Serializable {
 			return new ChkDocument((XDefinition) getXMDefinition(id));
 		} else {
 			XMNode xn = findModel(id);
-			if (xn != null  && xn.getKind() == XMNode.XMELEMENT) {
+			if (xn != null  && xn.getKind() == XMELEMENT) {
 				return ((XMElement) xn).createXDDocument();
 			}
 			//'&{0' doesn't point to model of element

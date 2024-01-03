@@ -117,35 +117,35 @@ public enum XDValueType {
 	/** XXDocument value. */
 	XXDOCUMENT,
 	/** XXPI (Processing instruction) value. */
-	XX_PI,
+	XXPI,
 	/** XXComment value. */
-	XX_COMMENT,
+	XXCOMMENT,
 	/** XXChoice value. */
-	XX_CHOICE,
+	XXCHOICE,
 	/** XXMixed value. */
-	XX_MIXED,
+	XXMIXED,
 	/** XXsequence value. */
-	XX_SEQUENCE,
+	XXSEQUENCE,
 	/** XModel value. */
-	XM_MODEL,
+	XMMODEL,
 	/** Undefined. */
-	XD_UNDEF,
+	XDUNDEF,
 
 ////////////////////////////////////////////////////////////////////////////////
 // Internally used types
 ////////////////////////////////////////////////////////////////////////////////
 	/** Attribute reference. */
-	X_ATTR_REF,
+	XATTR_REF,
 	/** Parse item. */
-	X_PARSEITEM,
+	XPARSEITEM,
 	/** Value of UNIQUESET. */
-	X_UNIQUESET_M,
+	XUNIQUESET_M,
 	/** Reference to attribute; used by compiler. */
-	X_UNIQUESET_KEY,
+	XUNIQUESET_KEY,
 	/** Named value of UNIQUESET. */
-	X_UNIQUESET_NAMED,
+	XUNIQUESET_NAMED,
 	/** Value of UNIQUESET. */
-	X_UNIQUESET,
+	XUNIQUESET,
 	/** No type: ref, undefined and methods which are not of any above. */
-	X_NOTYPE_VALUE;
+	XNOTYPE_VALUE;
 }

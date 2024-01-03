@@ -9,6 +9,7 @@ import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
 import java.math.BigDecimal;
 import org.xdef.XDValueType;
+import static org.xdef.XDValueType.NAMEDVALUE;
 
 /** Implementation of XDNamedValue (key, value)
  * @author Vaclav Trojan
@@ -33,7 +34,7 @@ public final class DefNamedValue extends XDValueAbstract
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
-	public XDValueType getItemType() {return XDValueType.NAMEDVALUE;}
+	public XDValueType getItemType() {return NAMEDVALUE;}
 
 	@Override
 	/** Get key name of pair.

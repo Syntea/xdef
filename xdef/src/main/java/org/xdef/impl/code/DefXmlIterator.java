@@ -17,6 +17,7 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFunctionResolver;
 import javax.xml.xpath.XPathVariableResolver;
 import org.xdef.XDValueType;
+import static org.xdef.XDValueType.RESULTSET;
 import org.xdef.sys.StringParser;
 
 /** Implementation of XDResultSet from XML source.
@@ -213,6 +214,6 @@ public class DefXmlIterator extends XDValueAbstract implements XDResultSet {
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
-	public XDValueType getItemType() {return XDValueType.RESULTSET;}
+	public XDValueType getItemType() {return RESULTSET;}
 
 }

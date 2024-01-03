@@ -1,5 +1,6 @@
 package org.xdef;
 
+import static org.xdef.XDValueType.RESULTSET;
 import org.xdef.proc.XXNode;
 import org.xdef.sys.SRuntimeException;
 
@@ -14,13 +15,13 @@ public abstract class XDResultSetAbstract extends XDValueAbstract
 	/** Get ID of the type of this object (i.e. XDValueTypes.RESULTSET_VALUE).
 	 * @return item type (RESULTSET_VALUE).
 	 */
-	public final short getItemId() {return XDValueID.XD_RESULTSET;}
+	public final short getItemId() {return XD_RESULTSET;}
 
 	@Override
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
-	public XDValueType getItemType() {return XDValueType.RESULTSET;}
+	public XDValueType getItemType() {return RESULTSET;}
 
 	@Override
 	/** Get next item of this iterator or null. If the object

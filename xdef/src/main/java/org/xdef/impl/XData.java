@@ -95,8 +95,8 @@ public class XData extends XCodeDescriptor
 		}
 		XDValue[] code = ((XPool) getXDPool()).getCode();
 		XDValue x = code[_deflt];
-		if (x.getCode() != CodeTable.LD_CONST || _deflt + 1 >= code.length
-			|| code[_deflt + 1].getCode() != CodeTable.STOP_OP) {
+		if (x.getCode() != LD_CONST || _deflt + 1 >= code.length
+			|| code[_deflt + 1].getCode() != STOP_OP) {
 			return null;
 		}
 		return x;
@@ -114,18 +114,18 @@ public class XData extends XCodeDescriptor
 		// find code of value parser
 		XDValue[] code = ((XPool) getXDPool()).getCode();
 		XDValue x = code[_onAbsence];
-		if (x.getCode() != CodeTable.CALL_OP || _onAbsence + 2 >= code.length) {
+		if (x.getCode() != CALL_OP || _onAbsence + 2 >= code.length) {
 			return null;
 		}
 		int j = x.getParam();
 		if (j < 0 || j + 2 >= code.length
-			|| code[j].getCode() != CodeTable.INIT_NOPARAMS_OP
-			|| code[j + 1].getCode() != CodeTable.LD_CONST
-			|| code[j + 2].getCode() != CodeTable.RETV_OP) {
+			|| code[j].getCode() != INIT_NOPARAMS_OP
+			|| code[j + 1].getCode() != LD_CONST
+			|| code[j + 2].getCode() != RETV_OP) {
 			return null;
 		}
-		if (code[_onAbsence + 1].getCode() != CodeTable.SET_TEXT
-			|| code[_onAbsence + 2].getCode() != CodeTable.STOP_OP) {
+		if (code[_onAbsence + 1].getCode() != SET_TEXT
+			|| code[_onAbsence + 2].getCode() != STOP_OP) {
 			return null;
 		}
 		return code[j + 1];
@@ -148,36 +148,23 @@ public class XData extends XCodeDescriptor
 			}
 			final XDValue[] xv = ((XPool) getXDPool()).getCode();
 			XDValue y = xv[xs];
-			if (y.getCode() == CodeTable.JMP_OP
-				|| (xs + 1 < xv.length && y.getCode() == CodeTable.CALL_OP
-					&& xv[xs+1].getCode() == CodeTable.STOP_OP)) {
+			if (y.getCode() == JMP_OP
+				|| (xs + 1 < xv.length && y.getCode() == CALL_OP
+					&& xv[xs+1].getCode() == STOP_OP)) {
 			} else if (xs + 2 < xv.length
-				&& (y.getCode() == CodeTable.LD_GLOBAL
-					|| y.getCode() == CodeTable.LD_XMODEL)) {
+				&& (y.getCode() == LD_GLOBAL || y.getCode() == LD_XMODEL)) {
 				String uniquesetName = "";
 				switch (xv[xs+1].getCode()) {
-					case CodeTable.UNIQUESET_KEY_SET:
-					case CodeTable.UNIQUESET_SET:
-						uniquesetName = ".SET";
-						break;
-					case CodeTable.UNIQUESET_KEY_ID:
-					case CodeTable.UNIQUESET_ID:
-						uniquesetName = ".ID";
-						break;
-					case CodeTable.UNIQUESET_KEY_IDREF:
-					case CodeTable.UNIQUESET_IDREF:
-						uniquesetName = ".IDREF";
-						break;
-					case CodeTable.UNIQUESET_IDREFS:
-						uniquesetName = ".IDREFS";
-						break;
-					case CodeTable.UNIQUESET_KEY_CHKID:
-					case CodeTable.UNIQUESET_CHKID:
-						uniquesetName = ".CHKID";
-						break;
-					case CodeTable.UNIQUESET_CHKIDS:
-						uniquesetName = ".CHKIDS";
-						break;
+					case UNIQUESET_KEY_SET:
+					case UNIQUESET_SET: uniquesetName = ".SET"; break;
+					case UNIQUESET_KEY_ID:
+					case UNIQUESET_ID: uniquesetName = ".ID"; break;
+					case UNIQUESET_KEY_IDREF:
+					case UNIQUESET_IDREF: uniquesetName = ".IDREF"; break;
+					case UNIQUESET_IDREFS: uniquesetName = ".IDREFS"; break;
+					case UNIQUESET_KEY_CHKID:
+					case UNIQUESET_CHKID: uniquesetName = ".CHKID"; break;
+					case UNIQUESET_CHKIDS: uniquesetName = ".CHKIDS"; break;
 				}
 				return _valueTypeName + uniquesetName;
 			}
@@ -211,57 +198,53 @@ public class XData extends XCodeDescriptor
 		int xi = _check; //start of code of parse method.
 		final XDValue[] xv = ((XPool) getXDPool()).getCode();
 		XDValue y = xv[xi];
-		if (y.getCode() == CodeTable.JMP_OP
-			|| (xi + 1 < xv.length && y.getCode() == CodeTable.CALL_OP
-				&& xv[xi+1].getCode() == CodeTable.STOP_OP)) {
+		if (y.getCode() == JMP_OP || (xi+1 < xv.length && y.getCode() == CALL_OP
+				&& xv[xi+1].getCode() == STOP_OP)) {
 			y = xv[xi = y.getParam()];
 		} else if (xi + 2 < xv.length
-			&& (y.getCode() == CodeTable.LD_GLOBAL
-				|| y.getCode() == CodeTable.LD_XMODEL)
-			&& (xv[xi+1].getCode() == CodeTable.UNIQUESET_KEY_SETKEY
-				|| xv[xi+1].getCode() == CodeTable.UNIQUESET_KEY_ID
-				|| xv[xi+1].getCode() == CodeTable.UNIQUESET_KEY_SET
-				|| xv[xi+1].getCode() == CodeTable.UNIQUESET_KEY_IDREF
-				|| xv[xi+1].getCode() == CodeTable.UNIQUESET_KEY_CHKID
-				|| xv[xi+1].getCode() == CodeTable.UNIQUESET_ID
-				|| xv[xi+1].getCode() == CodeTable.UNIQUESET_SET
-				|| xv[xi+1].getCode() == CodeTable.UNIQUESET_IDREF
-				|| xv[xi+1].getCode() == CodeTable.UNIQUESET_IDREFS
-				|| xv[xi+1].getCode() == CodeTable.UNIQUESET_CHKID
-				|| xv[xi+1].getCode() == CodeTable.UNIQUESET_CHKIDS)
-			&& xv[xi+2].getCode() == CodeTable.STOP_OP) {
+			&& (y.getCode() == LD_GLOBAL || y.getCode() == LD_XMODEL)
+			&& (xv[xi+1].getCode() == UNIQUESET_KEY_SETKEY
+				|| xv[xi+1].getCode() == UNIQUESET_KEY_ID
+				|| xv[xi+1].getCode() == UNIQUESET_KEY_SET
+				|| xv[xi+1].getCode() == UNIQUESET_KEY_IDREF
+				|| xv[xi+1].getCode() == UNIQUESET_KEY_CHKID
+				|| xv[xi+1].getCode() == UNIQUESET_ID
+				|| xv[xi+1].getCode() == UNIQUESET_SET
+				|| xv[xi+1].getCode() == UNIQUESET_IDREF
+				|| xv[xi+1].getCode() == UNIQUESET_IDREFS
+				|| xv[xi+1].getCode() == UNIQUESET_CHKID
+				|| xv[xi+1].getCode() == UNIQUESET_CHKIDS)
+			&& xv[xi+2].getCode() == STOP_OP) {
 			y = xv[xi = xv[xi+1].intValue()]; // this should be parser
 		}
 		for (;;) {
 			switch (y.getCode()) {
-				case CodeTable.JMP_OP:
+				case JMP_OP:
 					y = xv[xi = xv[xi].getParam()];
 					break;
-				case CodeTable.LD_CODE:
+				case LD_CODE:
 					y = xv[y.getParam()];
 					break;
-				case CodeTable.CALL_OP:
+				case CALL_OP:
 					if (y.getParam() >= 0 && xi + 3 < xv.length
-						&& xv[xi+1].getCode() == CodeTable.NEW_PARSER
+						&& xv[xi+1].getCode() == NEW_PARSER
 						&& "eq".equals(xv[xi+1].stringValue())
-						&& xv[xi+2].getCode() == CodeTable.PARSE_OP
-						&& xv[xi+3].getCode() == CodeTable.STOP_OP) {
+						&& xv[xi+2].getCode() == PARSE_OP
+						&& xv[xi+3].getCode() == STOP_OP) {
 						return ((CodeParser) xv[xi+1]).getParser(); // fixed
 					} else {
 						y = xv[xi = y.getParam()];
-						if (y.getCode() == CodeTable.LD_CONST
-							&& y.getItemId() == XDValueID.XD_PARSER
-							&& xv[xi+1].getCode() == CodeTable.PARSE_OP
-							&& xv[xi+2].getCode() == CodeTable.STOP_OP) {
+						if (y.getCode()==LD_CONST && y.getItemId()==XD_PARSER
+							&& xv[xi+1].getCode() == PARSE_OP
+							&& xv[xi+2].getCode() == STOP_OP) {
 							return y;
 						}
 					}	break;
 				default:
 					if (xi + 2 < xv.length
-						&& y.getCode() == CodeTable.LD_CONST
-						&& y.getItemId() == XDValueID.XD_PARSER) {
-						if (xv[xi+1].getCode() == CodeTable.PARSE_OP
-							&& xv[xi+2].getCode() == CodeTable.STOP_OP) {
+						&& y.getCode()==LD_CONST && y.getItemId()==XD_PARSER) {
+						if (xv[xi+1].getCode() == PARSE_OP
+							&& xv[xi+2].getCode() == STOP_OP) {
 							return y;
 						} else {// ??? try to parse an espression.
 							// if all parsers are same return parser
@@ -280,8 +263,7 @@ public class XData extends XCodeDescriptor
 	 */
 	public final XDContainer getParseParams() {
 		XDValue p = getParseMethod();
-		return p != null && p.getItemId() == XDValueID.XD_PARSER
-			&& p instanceof XDParser
+		return p != null && p.getItemId() == XD_PARSER && p instanceof XDParser
 			? ((XDParser) p).getNamedParams() : new DefContainer();
 	}
 
@@ -292,8 +274,7 @@ public class XData extends XCodeDescriptor
 	public final short getParserType() {
 		XDValue p = getParseMethod();
 		return p != null && p.getItemId() == XD_PARSER
-			&& p instanceof XDParser
-			? ((XDParser) p).parsedType() : XD_STRING;
+			&& p instanceof XDParser ? ((XDParser) p).parsedType() : XD_STRING;
 	}
 
 	@Override
@@ -304,7 +285,7 @@ public class XData extends XCodeDescriptor
 		XDValue p = getParseMethod();
 		return p != null && p.getItemId() == XD_PARSER
 			&& p instanceof XDParser
-			? ((XDParser) p).getAlltemsType(): XD_STRING;		
+			? ((XDParser) p).getAlltemsType(): XD_STRING;
 	}
 
 	@Override
@@ -313,8 +294,7 @@ public class XData extends XCodeDescriptor
 	 */
 	public final String getDateMask() {
 		XDValue p = getParseMethod();
-		if (p != null && p.getItemId()==XDValueID.XD_PARSER
-			&& p instanceof XDParser) {
+		if (p != null && p.getItemId()==XD_PARSER && p instanceof XDParser) {
 			XDParser y = (XDParser) p;
 			switch (y.parserName()) {
 				case "xdatetime": {
@@ -351,8 +331,7 @@ public class XData extends XCodeDescriptor
 	 */
 	public final String getParserName() {
 		XDValue p = getParseMethod();
-		return p != null && p.getItemId() == XDValueID.XD_PARSER
-			&& p instanceof XDParser
+		return p != null && p.getItemId() == XD_PARSER && p instanceof XDParser
 			? ((XDParser) p).parserName() : "string";
 	}
 

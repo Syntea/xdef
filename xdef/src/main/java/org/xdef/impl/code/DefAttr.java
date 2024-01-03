@@ -6,6 +6,7 @@ import org.xdef.XDValueAbstract;
 import org.xdef.XDValueType;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
+import static org.xdef.XDValueType.ATTR;
 
 /** Implementation of script value with org.w3c.dom.Attr.
  * @author  Vaclav Trojan
@@ -53,7 +54,7 @@ class DefAttr extends XDValueAbstract implements XDNamedValue {
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
-	public XDValueType getItemType() {return XDValueType.ATTR;}
+	public XDValueType getItemType() {return ATTR;}
 
 	@Override
 	/** Get value as String.

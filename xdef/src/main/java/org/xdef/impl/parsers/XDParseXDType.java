@@ -9,9 +9,9 @@ import org.xdef.XDParser;
 import org.xdef.XDParserAbstract;
 import org.xdef.XDPool;
 import org.xdef.XDValue;
-import org.xdef.XDValueID;
 import org.xdef.impl.XPool;
-import org.xdef.impl.code.CodeTable;
+import static org.xdef.impl.code.CodeTable.STOP_OP;
+import static org.xdef.impl.code.CodeTable.ST_GLOBAL;
 import org.xdef.msg.XDEF;
 import org.xdef.proc.XXNode;
 
@@ -40,9 +40,9 @@ public class XDParseXDType extends XDParserAbstract {
 			XDPool xp = XDFactory.compileXD(props, xdef);
 			XDValue[] code  =((XPool) xp).getCode();
 			if (code.length == 3 && code[0].getCode() == 0
-				&& code[0].getItemId() == XDValueID.XD_PARSER
-				&& code[1].getCode() == CodeTable.ST_GLOBAL
-				&& code[2].getCode() == CodeTable.STOP_OP) {
+				&& code[0].getItemId() == XD_PARSER
+				&& code[1].getCode() == ST_GLOBAL
+				&& code[2].getCode() == STOP_OP) {
 				p.setParsedValue(code[0]);
 			} else {
 				XDDocument xd = xp.createXDDocument();

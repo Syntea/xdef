@@ -4,6 +4,7 @@ import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
 import org.xdef.XDValueType;
 import java.util.Locale;
+import static org.xdef.XDValueType.LOCALE;
 
 /** The class DefLocale implements items with Locale values.
  * @author Vaclav Trojan
@@ -67,7 +68,7 @@ public final class DefLocale extends XDValueAbstract {
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
-	public XDValueType getItemType() {return XDValueType.LOCALE;}
+	public XDValueType getItemType() {return LOCALE;}
 	@Override
 	/** Get value as String.
 	 * @return The string from value.

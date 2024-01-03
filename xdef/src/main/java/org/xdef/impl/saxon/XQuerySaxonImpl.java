@@ -9,7 +9,12 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xdef.XDContainer;
 import org.xdef.XDValue;
-import org.xdef.XDValueID;
+import static org.xdef.XDValueID.XD_ATTR;
+import static org.xdef.XDValueID.XD_DATETIME;
+import static org.xdef.XDValueID.XD_DOUBLE;
+import static org.xdef.XDValueID.XD_ELEMENT;
+import static org.xdef.XDValueID.XD_LONG;
+import static org.xdef.XDValueID.XD_TEXT;
 import org.xdef.impl.code.DefBigInteger;
 import org.xdef.impl.code.DefBoolean;
 import org.xdef.impl.code.DefBytes;
@@ -74,22 +79,22 @@ public class XQuerySaxonImpl implements XQueryImpl {
 						continue;
 					}
 					switch (var.getItemId()) {
-						case XDValueID.XD_ATTR:
-						case XDValueID.XD_ELEMENT:
-						case XDValueID.XD_TEXT:
-//						case XDValueID.XMLNODE_VALUE:
+						case XD_ATTR:
+						case XD_ELEMENT:
+						case XD_TEXT:
+//						case XMLNODE_VALUE:
 							Node n = (Node) var.getXMLNode();
 							if (n != null) {
 								x.bindValue(qname, n);
 							}
 							break;
-						case XDValueID.XD_DATETIME:
+						case XD_DATETIME:
 							x.bindValue(qname, var.datetimeValue());
 							break;
-						case XDValueID.XD_LONG:
+						case XD_LONG:
 							x.bindValue(qname, var.longValue());
 							break;
-						case XDValueID.XD_DOUBLE:
+						case XD_DOUBLE:
 							x.bindValue(qname, var.doubleValue());
 							break;
 						default:

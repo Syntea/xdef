@@ -20,6 +20,7 @@ import org.w3c.dom.Text;
 import org.w3c.dom.TypeInfo;
 import org.w3c.dom.UserDataHandler;
 import org.w3c.dom.DOMConfiguration;
+import static org.xdef.XDValueType.ELEMENT;
 import org.xdef.sys.SUnsupportedOperationException;
 import org.xdef.xml.KXmlUtils;
 
@@ -135,7 +136,7 @@ implements Element, XDElement, XDValue, NamedNodeMap {
 		throw new SUnsupportedOperationException();
 	}
 	@Override
-	public short getNodeType() {return Node.ELEMENT_NODE;}
+	public short getNodeType() {return ELEMENT_NODE;}
 	@Override
 	public final Node getParentNode() {
 		return _doc == null ? _doc = new MyDocument(this) : _doc;
@@ -282,9 +283,9 @@ implements Element, XDElement, XDValue, NamedNodeMap {
 	// XDElement interface
 	////////////////////////////////////////////////////////////////////////////
 	@Override
-	public final short getItemId() {return XDValueID.XD_ELEMENT;}
+	public final short getItemId() {return XD_ELEMENT;}
 	@Override
-	public XDValueType getItemType() {return XDValueType.ELEMENT;}
+	public XDValueType getItemType() {return ELEMENT;}
 	@Override
 	public Element getElement() {return this;}
 	@Override
@@ -511,7 +512,7 @@ implements Element, XDElement, XDValue, NamedNodeMap {
 			throw new SUnsupportedOperationException();
 		}
 		@Override
-		public final short getNodeType() {return Node.DOCUMENT_NODE;}
+		public final short getNodeType() {return DOCUMENT_NODE;}
 		@Override
 		public final Node getParentNode() {return null;}
 		@Override
@@ -668,7 +669,7 @@ implements Element, XDElement, XDValue, NamedNodeMap {
 			throw new SUnsupportedOperationException();
 		}
 		@Override
-		public short getNodeType() {return Node.ATTRIBUTE_NODE;}
+		public short getNodeType() {return ATTRIBUTE_NODE;}
 		@Override
 		public Node getParentNode() {return _elem;}
 		@Override

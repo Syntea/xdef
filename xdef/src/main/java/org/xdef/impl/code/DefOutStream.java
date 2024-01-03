@@ -14,6 +14,7 @@ import java.io.PrintWriter;
 import java.io.Writer;
 import org.xdef.sys.ReportWriter;
 import org.xdef.XDValueType;
+import static org.xdef.XDValueType.OUTPUT;
 
 /** Implementation of output stream.
  * @author Vaclav Trojan
@@ -209,7 +210,7 @@ public final class DefOutStream extends XDValueAbstract implements XDOutput {
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
-	public XDValueType getItemType() {return XDValueType.OUTPUT;}
+	public XDValueType getItemType() {return OUTPUT;}
 	@Override
 	/** Get type of value.
 	 * @return The id of item type.

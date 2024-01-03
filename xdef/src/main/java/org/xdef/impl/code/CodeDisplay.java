@@ -48,6 +48,14 @@ import org.xdef.impl.compile.CompileBase;
 import org.xdef.model.XMData;
 import org.xdef.model.XMElement;
 import org.xdef.model.XMNode;
+import static org.xdef.model.XMNode.XMATTRIBUTE;
+import static org.xdef.model.XMNode.XMCHOICE;
+import static org.xdef.model.XMNode.XMDEFINITION;
+import static org.xdef.model.XMNode.XMELEMENT;
+import static org.xdef.model.XMNode.XMMIXED;
+import static org.xdef.model.XMNode.XMSELECTOR_END;
+import static org.xdef.model.XMNode.XMSEQUENCE;
+import static org.xdef.model.XMNode.XMTEXT;
 import org.xdef.model.XMStatementInfo;
 
 /** Display compiled objects.
@@ -192,12 +200,12 @@ public class CodeDisplay implements CodeTable, XDValueID {
 		out.println(sc.getXDPosition() + ": " + sc.getName() + " "
 			+ sc.minOccurs() + ".." + (sc.maxOccurs() == Integer.MAX_VALUE
 				? "*" : String.valueOf(sc.maxOccurs())));
-		if (sc.getKind() == XNode.XMELEMENT) {
+		if (sc.getKind() == XMELEMENT) {
 			if (((XElement)sc)._forget != 0) {
 				out.print("forget= " + (char) ((XElement)sc)._forget);
 			}
-		} else if (sc.getKind() == XNode.XMATTRIBUTE ||
-			sc.getKind() == XNode.XMTEXT) {
+		} else if (sc.getKind() == XMATTRIBUTE ||
+			sc.getKind() == XMTEXT) {
 			out.print(" (" + ((XMData) sc).getValueTypeName() + ")");
 		}
 		if (sc._xon > 0) {
@@ -270,13 +278,13 @@ public class CodeDisplay implements CodeTable, XDValueID {
 	private static void displaySelector(final XNode xn, final PrintStream out) {
 		XSelector xsel = (XSelector) xn;
 		switch (xsel.getKind()) {
-			case XNode.XMSEQUENCE:
+			case XMSEQUENCE:
 				out.print("-- Sequence: ");
 				break;
-			case XNode.XMMIXED:
+			case XMMIXED:
 				out.print("-- Mixed:");
 				break;
-			case XNode.XMCHOICE:
+			case XMCHOICE:
 				out.print("-- Choice:");
 				break;
 			default:
@@ -327,14 +335,14 @@ public class CodeDisplay implements CodeTable, XDValueID {
 			return;
 		}
 		switch (xn.getKind()) {
-			case XNode.XMATTRIBUTE:
-			case XNode.XMTEXT: {
+			case XMATTRIBUTE:
+			case XMTEXT: {
 				XData xd = (XData)xn;
 				out.print("-- XMAttr: ");
 				displayDesriptor(xd, out);
 				return;
 			}
-			case XNode.XMELEMENT: {
+			case XMELEMENT: {
 				XElement defEl = (XElement)xn;
 				out.print("-- Start XMElement: ");
 				displayDesriptor(defEl, out);
@@ -347,15 +355,15 @@ public class CodeDisplay implements CodeTable, XDValueID {
 				out.println("-- End XMElement: " + xn.getName());
 				return;
 			}
-			case XNode.XMSELECTOR_END:
+			case XMSELECTOR_END:
 				out.println("-- End of selector: ");
 				return;
-			case XNode.XMSEQUENCE:
-			case XNode.XMMIXED:
-			case XNode.XMCHOICE:
+			case XMSEQUENCE:
+			case XMMIXED:
+			case XMCHOICE:
 				displaySelector(xn, out);
 				return;
-			case XNode.XMDEFINITION: {
+			case XMDEFINITION: {
 				XDefinition def = (XDefinition)xn;
 				out.print("=== Start XMDefinition: ");
 				displayDesriptor(def, out);
@@ -435,7 +443,7 @@ public class CodeDisplay implements CodeTable, XDValueID {
 	 * @return name of code from code number.
 	 */
 	public final static String getCodeName(final short code) {
-		if (code < CodeTable.LAST_CODE) {
+		if (code < LAST_CODE) {
 			final Field[] codetable = CodeTable.class.getDeclaredFields();
 			for (int i = 0; i < codetable.length; i++) {
 				Field f = codetable[i];

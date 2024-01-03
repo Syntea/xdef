@@ -456,8 +456,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 				String[] sqnames;
 				if (_sym == MUL_SYM) {
 					if (_g._sp - sp < 2
-						&& (m = CompileCode.getTypeMethod(
-							CompileBase.X_NOTYPE_VALUE,name)) != null
+						&& (m = CompileCode.getTypeMethod(CompileBase.X_NOTYPE_VALUE,name)) != null
 						&& m.getResultType() == XD_PARSER
 						&& (sqnames = m.getSqParamNames()) != null
 						&& sqnames.length == 2
@@ -4250,6 +4249,8 @@ class CompileStatement extends XScriptParser implements CodeTable {
 						}
 					}
 					break;
+
+
 
 				case CompileBase.XD_UNDEF:
 					break;

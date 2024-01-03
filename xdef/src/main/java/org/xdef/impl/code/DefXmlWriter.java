@@ -21,6 +21,8 @@ import org.w3c.dom.Node;
 import org.xdef.XDContainer;
 import org.xdef.XDValueType;
 import java.math.BigInteger;
+import static org.xdef.XDValueType.XMLWRITER;
+import static org.xdef.impl.code.CodeTable.LD_CONST;
 
 /** Provides incremental writing of XML data to a data stream.
  * @author Vaclav Trojan
@@ -108,7 +110,7 @@ public class DefXmlWriter extends KXmlOutStream
 	@Override
 	public short getItemId() {return XD_XMLWRITER;}
 	@Override
-	public XDValueType getItemType() {return XDValueType.XMLWRITER;}
+	public XDValueType getItemType() {return XMLWRITER;}
 	@Override
 	public boolean equals(final XDValue arg) {return arg == this;}
 	@Override
@@ -169,7 +171,7 @@ public class DefXmlWriter extends KXmlOutStream
 // Methods used in XD processor for internal code - DO NOT IMPLEMENT!
 ////////////////////////////////////////////////////////////////////////////////
 	@Override
-	public short getCode() {return CodeTable.LD_CONST;}
+	public short getCode() {return LD_CONST;}
 	@Override
 	public int getParam() {return 0;}
 	@Override

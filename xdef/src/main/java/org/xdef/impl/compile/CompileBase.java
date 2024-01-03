@@ -57,9 +57,6 @@ import static org.xdef.XDValueID.XM_MODEL;
 import static org.xdef.XDValueID.XX_ATTR;
 import static org.xdef.XDValueID.XX_DATA;
 import static org.xdef.XDValueID.XX_ELEMENT;
-import static org.xdef.XDValueID.X_NOTYPE_VALUE;
-import static org.xdef.XDValueID.X_UNIQUESET_KEY;
-import static org.xdef.XDValueID.X_UNIQUESET_M;
 import org.xdef.impl.code.CodeOp;
 import org.xdef.impl.code.CodeTable;
 import static org.xdef.impl.code.CodeTable.ADD_DAY;
@@ -341,6 +338,9 @@ import org.xdef.impl.code.DefContainer;
 import org.xdef.impl.code.DefLong;
 import org.xdef.impl.code.DefString;
 import org.xdef.impl.code.DefXQueryExpr;
+import static org.xdef.XDValueID.X_UNIQUESET_M;
+import static org.xdef.XDValueID.X_UNIQUESET_KEY;
+import static org.xdef.XDValueID.X_NOTYPE_VALUE;
 
 /** Provides the implemented methods.
  * Declared literals and declared objects

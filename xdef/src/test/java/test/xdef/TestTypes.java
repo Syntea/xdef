@@ -688,10 +688,13 @@ public final class TestTypes extends XDTester {
 " <a a='sequence(%item=[decimal(%maxInclusive=5), int(%minInclusive=0)])'/>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			xml = "<a a=' 1 2 3' />";
+			xml = "<a a='' />";
 			parse(xp, "", xml, reporter);
-			assertTrue(reporter.errorWarnings(), "Error not reported");
-			xml = "<a a=' 1 2' />";
+			assertErrors(reporter); // no item
+			xml = "<a a='1' />";
+			parse(xp, "", xml, reporter);
+			assertNoErrorwarnings(reporter);
+			xml = "<a a=' 1 2 3 ' />";
 			parse(xp, "", xml, reporter);
 			assertNoErrorwarnings(reporter);
 			xdef = // sequence with enumeration

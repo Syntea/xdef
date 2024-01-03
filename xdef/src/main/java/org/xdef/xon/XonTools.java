@@ -178,10 +178,10 @@ public class XonTools {
 					ar.add(i == 0 ? null : i==1);
 //			} else if((i=p.isOneOfTokens(new String[]{"NaN","INF","-INF"}))>=0){
 //				if (p.isChar('f')) {
-//					ar.add(i == 0 ? Float.NaN : i==1 
+//					ar.add(i == 0 ? Float.NaN : i==1
 //						? Float.POSITIVE_INFINITY :Float.NEGATIVE_INFINITY);
 //				} else {
-//					ar.add(i == 0 ? Double.NaN : i==1 
+//					ar.add(i == 0 ? Double.NaN : i==1
 //						?Double.POSITIVE_INFINITY:Double.NEGATIVE_INFINITY);
 //				}
 			} else {

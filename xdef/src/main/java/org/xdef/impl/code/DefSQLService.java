@@ -10,6 +10,7 @@ import org.xdef.XDValueAbstract;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import org.xdef.XDValueType;
+import static org.xdef.XDValueType.SERVICE;
 
 /** The class DefSQLService implements the internal object with JDBC database
  * connection.
@@ -211,7 +212,7 @@ public class DefSQLService extends XDValueAbstract implements XDService {
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
-	public XDValueType getItemType() {return XDValueType.SERVICE;}
+	public XDValueType getItemType() {return SERVICE;}
 	@Override
 	/** Get value as String.
 	 * @return The string from value.

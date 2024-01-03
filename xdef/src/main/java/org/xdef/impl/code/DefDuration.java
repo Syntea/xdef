@@ -8,6 +8,7 @@ import org.xdef.XDDuration;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
 import org.xdef.XDValueType;
+import static org.xdef.XDValueType.DURATION;
 
 /** The class DefDate implements the internal object with duration value.
  * @author Vaclav Trojan
@@ -53,7 +54,7 @@ public final class DefDuration extends XDValueAbstract implements XDDuration {
 	@Override
 	public short getItemId() {return XD_DURATION;}
 	@Override
-	public XDValueType getItemType() {return XDValueType.DURATION;}
+	public XDValueType getItemType() {return DURATION;}
 	@Override
 	public boolean isNull() {return _value == null;}
 	@Override

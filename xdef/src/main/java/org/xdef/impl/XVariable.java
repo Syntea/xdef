@@ -1,7 +1,7 @@
 package org.xdef.impl;
 
 import java.io.IOException;
-import org.xdef.XDValueID;
+import static org.xdef.XDValueID.XD_VOID;
 import org.xdef.impl.code.CodeDisplay;
 import org.xdef.model.XMVariable;
 
@@ -56,7 +56,7 @@ public class XVariable implements XMVariable {
 		_isFinal = isFinal;
 		_isExternal = isExternal;
 		_initialized = initialized;
-		_parseResultType =  XDValueID.XD_VOID; // no parsed type
+		_parseResultType =  XD_VOID; // no parsed type
 		_parseMethodAddr = -1;
 //		_refTypeName = null; // java makes it
 		_keyIndex = -1;

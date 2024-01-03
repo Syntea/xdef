@@ -27,11 +27,9 @@ import org.xdef.XDDocument;
 import org.xdef.XDParseResult;
 import org.xdef.XDPool;
 import org.xdef.XDValue;
-import org.xdef.XDValueID;
 import static org.xdef.XDValueID.XX_DOCUMENT;
-import static org.xdef.XDValueID.X_PARSEITEM;
-import static org.xdef.XDValueID.X_UNIQUESET_M;
 import org.xdef.XDValueType;
+import static org.xdef.XDValueType.XXDOCUMENT;
 import org.xdef.XDXmlOutStream;
 import org.xdef.component.XComponent;
 import org.xdef.component.XComponentUtil;
@@ -68,6 +66,10 @@ import static org.xdef.xon.XonNames.Q_ARRAY;
 import static org.xdef.xon.XonNames.Q_MAP;
 import org.xdef.xon.XonUtils;
 import static org.xdef.xon.XonNames.Q_VALUE;
+import static org.xdef.XDValueID.X_PARSEITEM;
+import static org.xdef.XDValueID.X_UNIQUESET_M;
+import static org.xdef.model.XMNode.XMCHOICE;
+import static org.xdef.model.XMNode.XMELEMENT;
 
 /** Provides root check object for generation of check tree and processing
  * of the X-definition.
@@ -279,7 +281,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			}
 		} else {  // not NS URI, not lexicon
 			for (XNode xe: _xdef._rootSelection.values()) {
-				if (xe.getKind()  == XMNode.XMELEMENT && nm.equals(xe.getName())
+				if (xe.getKind()  == XMELEMENT && nm.equals(xe.getName())
 					&& xe.getNSUri() == null) {
 					return (XElement) xe;
 				}
@@ -289,7 +291,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		for (XNode x: _xdef._rootSelection.values()) {
 			if (x.getName().endsWith("$choice")) {
 				for (XNode xe: ((XElement)x)._childNodes) {
-					if (xe.getKind() == XMNode.XMELEMENT
+					if (xe.getKind() == XMELEMENT
 						&& nm.equals(xe.getName()) && xe.getNSUri() == null) {
 						XElement xel = (XElement) xe;
 						if (_element != null && xel._match >= 0) {
@@ -307,8 +309,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 				}
 				// try to find xd:any
 				for (XNode xe: ((XElement)x)._childNodes) {
-					if (xe.getKind() == XMNode.XMELEMENT
-						&& "$any".equals(xe.getName())) {
+					if (xe.getKind()==XMELEMENT && "$any".equals(xe.getName())){
 						XElement xel = (XElement) xe;
 						if (_element != null && xel._match >= 0) {
 							ChkElement chkEl =
@@ -745,7 +746,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	@Override
 	public final short getItemId() {return XX_DOCUMENT;}
 	@Override
-	public final XDValueType getItemType() {return XDValueType.XXDOCUMENT;}
+	public final XDValueType getItemType() {return XXDOCUMENT;}
 	@Override
 	/** Set properties.
 	 * @param props Properties.
@@ -835,20 +836,20 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 */
 	final XElement findXElement(final QName qname) {
 		for (XNode x: _xdef._rootSelection.values()) {
-			if (x.getKind() == XMNode.XMELEMENT) {
+			if (x.getKind() == XMELEMENT) {
 				XElement xe = (XElement) x;
 				if (xe.getXonMode() != 0) {
 					if (qname.equals(xe.getQName())) {
 						return xe;
 					}
 				} else if (xe._childNodes.length > 0
-					&& xe._childNodes[0].getKind() == XMNode.XMCHOICE) {
+					&& xe._childNodes[0].getKind() == XMCHOICE) {
 					// XMChoice is root of XON/JSON model of XML
 					XChoice xch = (XChoice) xe._childNodes[0];
 					for (int i = xch.getBegIndex()+1;
 						i<xch.getEndIndex(); i++){
 						XNode y = xe._childNodes[i];
-						if (y.getKind() == XMNode.XMELEMENT) {
+						if (y.getKind() == XMELEMENT) {
 							if (y.getQName().equals(qname)) {
 								return (XElement) y;
 							}
@@ -1245,7 +1246,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		chkel.setXXType((byte) 'T');
 		chkel.setTextValue(data);
 		XDValue x = _scp.exec(addr, chkel);
-		if (x.getItemId() == XDValueID.XD_PARSERESULT) {
+		if (x.getItemId() == XD_PARSERESULT) {
 			return (XDParseResult) x;
 		}
 		DefParseResult result = new DefParseResult(data);

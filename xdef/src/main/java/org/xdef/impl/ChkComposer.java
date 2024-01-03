@@ -36,6 +36,12 @@ import org.xdef.impl.code.DefSQLConstructor;
 import org.xdef.model.XMDefinition;
 import org.xdef.model.XMElement;
 import org.xdef.model.XMNode;
+import static org.xdef.model.XMNode.XMCHOICE;
+import static org.xdef.model.XMNode.XMELEMENT;
+import static org.xdef.model.XMNode.XMMIXED;
+import static org.xdef.model.XMNode.XMSELECTOR_END;
+import static org.xdef.model.XMNode.XMSEQUENCE;
+import static org.xdef.model.XMNode.XMTEXT;
 import org.xdef.msg.XDEF;
 import org.xdef.proc.XDLexicon;
 import org.xdef.sys.ArrayReporter;
@@ -817,8 +823,7 @@ final class ChkComposer extends SReporter {
 			if (chkEl._parent != null
 				&& chkEl._parent.getItemId() != XX_DOCUMENT
 				&& ((ChkElement) chkEl._parent)._selector != null
-				&& ((ChkElement) chkEl._parent)._selector._kind
-					!= XMNode.XMSEQUENCE) {
+				&& ((ChkElement) chkEl._parent)._selector._kind != XMSEQUENCE) {
 				return result; //if choice or mixed we do not create dummy items
 			}
 			//we create necessary number of items
@@ -982,13 +987,13 @@ final class ChkComposer extends SReporter {
 		//check all child nodes which are not in a group
 		for (int i = 0; i < chkElem.getDefinitionMaxIndex(); i++) {
 			XNode xn = chkElem.getDefElement(i);
-			if (xn.getKind() == XNode.XMELEMENT) {
+			if (xn.getKind() == XMELEMENT) {
 				chkElem.chkElementAbsence(i, (XElement) xn, null);
-			} else if (xn.getKind() == XNode.XMTEXT) {
+			} else if (xn.getKind() == XMTEXT) {
 				chkElem.chkTextAbsence(i, (XData) xn, false, null);
-			} else if (xn.getKind() == XNode.XMSEQUENCE
-				|| xn.getKind() == XNode.XMCHOICE
-				|| xn.getKind() == XNode.XMMIXED) {
+			} else if (xn.getKind() == XMSEQUENCE
+				|| xn.getKind() == XMCHOICE
+				|| xn.getKind() == XMMIXED) {
 				i = ((XSelector) xn)._endIndex;
 			}
 		}
@@ -1155,8 +1160,8 @@ final class ChkComposer extends SReporter {
 			} else {
 				xNode = chkEl.getDefElement(i);
 				if (i != 0 || xNode == null
-					|| xNode.getKind() == XNode.XMELEMENT
-					|| xNode.getKind() == XNode.XMTEXT
+					|| xNode.getKind() == XMELEMENT
+					|| xNode.getKind() == XMTEXT
 					&& ((XData) xNode)._compose < 0) {
 					lastText = createTextNode(
 						chkEl, sourceEl, savedSource, xtxt, lastText);
@@ -1165,7 +1170,7 @@ final class ChkComposer extends SReporter {
 		}
 		while((xNode = chkEl.getDefElement(i)) != null) {
 			switch (xNode.getKind()) {
-				case XNode.XMELEMENT: {
+				case XMELEMENT: {
 					XElement childDef = (XElement) xNode;
 					chkEl._sourceElem = savedSource;
 					count = chkEl.getRefNum(i);
@@ -1173,7 +1178,7 @@ final class ChkComposer extends SReporter {
 						prepareChkElement(chkEl, null, childDef, i);
 					//if selector is mixed set null to lastElem
 					Element lastEl = chkEl._selector != null
-							&& chkEl._selector._kind == XNode.XMMIXED
+							&& chkEl._selector._kind == XMMIXED
 						? null : lastElem;
 					XDValue result = execComposeElement(
 						childChkEl, sourceEl, lastEl);
@@ -1192,7 +1197,7 @@ final class ChkComposer extends SReporter {
 							&& result.getItemId() == XD_CONTAINER){
 							XDContainer c = (XDContainer) result;
 							if (chkEl._selector == null ||
-								chkEl._selector._kind == XNode.XMCHOICE) {
+								chkEl._selector._kind == XMCHOICE) {
 								if (!c.isEmpty()) {
 									c.addXDItem(new DefBoolean(true));
 								}
@@ -1341,7 +1346,7 @@ final class ChkComposer extends SReporter {
 						}
 					}
 					if (chkEl._selector != null
-						&& chkEl._selector._kind == XNode.XMCHOICE
+						&& chkEl._selector._kind == XMCHOICE
 						&& count < chkEl.getRefNum(i)
 						&& i < chkEl._selector._endIndex) {
 						//something created in xd:choice, so we skip the
@@ -1351,12 +1356,12 @@ final class ChkComposer extends SReporter {
 					}
 					break;
 				}
-				case XNode.XMTEXT: {
+				case XMTEXT: {
 					count = chkEl.getRefNum(index);
 					lastText = createTextNode(chkEl,
 						sourceEl, savedSource, (XData) xNode, lastText);
 					if (chkEl._selector != null
-						&& chkEl._selector._kind == XNode.XMCHOICE
+						&& chkEl._selector._kind == XMCHOICE
 						&& count < chkEl.getRefNum(i)
 						&& i < chkEl._selector._endIndex) {
 						//something created in xd:choice, so we skip the
@@ -1367,9 +1372,9 @@ final class ChkComposer extends SReporter {
 					i++;
 					continue;
 				}
-				case XNode.XMCHOICE:
-				case XNode.XMMIXED:
-				case XNode.XMSEQUENCE: {
+				case XMCHOICE:
+				case XMMIXED:
+				case XMSEQUENCE: {
 					XSelector xsel = (XSelector) xNode;
 					XDValue result;
 					int addr;
@@ -1400,7 +1405,7 @@ final class ChkComposer extends SReporter {
 							composeGroup(chkEl, sourceEl,
 								savedSource,i,lastText,lastElem, savedUserObj);
 							if (chkEl._selector != null
-								&& xsel.getKind() != XNode.XMMIXED
+								&& xsel.getKind() != XMMIXED
 								&& chkEl._selector._count > xsel.maxOccurs()) {
 								//Maximum occurrence of &{0} exceeded
 								chkEl.error(XDEF.XDEF558,
@@ -1435,7 +1440,7 @@ final class ChkComposer extends SReporter {
 								}
 								composeGroup(chkEl, el,
 									null, i, lastText, lastElem, savedUserObj);
-								if (xsel.getKind() != XNode.XMMIXED &&
+								if (xsel.getKind() != XMMIXED &&
 									j + 1 >= xsel.maxOccurs()) {
 									//Maximum occurrence of &{0} exceeded
 									chkEl.error(XDEF.XDEF558,
@@ -1459,7 +1464,7 @@ final class ChkComposer extends SReporter {
 							continue;
 						}
 						Element el = dc.getXDElement(0);
-						int max = xsel.getKind() == XNode.XMMIXED
+						int max = xsel.getKind() == XMMIXED
 							? len : xsel.maxOccurs();
 						for(int j = 0; j <= max && j < len; j++) {
 							composeGroup(chkEl,
@@ -1469,7 +1474,7 @@ final class ChkComposer extends SReporter {
 							}
 							el = dc.getXDElement(j + 1);
 							if (el != null) {
-								if (xsel.getKind() != XNode.XMMIXED
+								if (xsel.getKind() != XMMIXED
 									&& j + 1 >= xsel.maxOccurs()) {
 									//Maximum occurrence of &{0} exceeded
 									chkEl.error(XDEF.XDEF558,
@@ -1488,7 +1493,7 @@ final class ChkComposer extends SReporter {
 					chkEl._actDefIndex = -1;
 					continue;
 				}
-				case XNode.XMSELECTOR_END:
+				case XMSELECTOR_END:
 					chkEl._actDefIndex = -1;
 					chkEl._nextDefIndex = ++i;
 					if (chkEl._selector != null) {
@@ -1502,7 +1507,7 @@ final class ChkComposer extends SReporter {
 			chkEl._actDefIndex = -1;
 			i++;
 			if (chkEl._selector != null) {
-				if (chkEl._selector._kind == XNode.XMCHOICE) {
+				if (chkEl._selector._kind == XMCHOICE) {
 					if (count < chkEl.getRefNum(i)) { //node was created?
 						if (chkEl._selector._count >
 							chkEl._selector.maxOccurs()) {
@@ -1617,7 +1622,7 @@ final class ChkComposer extends SReporter {
 			parentChkElem._sourceElem : sourceElem;
 		parentChkElem._actDefIndex = defIndex;
 		if (parentChkElem._selector != null) {
-			if (parentChkElem._selector._kind == XNode.XMCHOICE) {
+			if (parentChkElem._selector._kind == XMCHOICE) {
 				parentChkElem._nextDefIndex = parentChkElem._selector._endIndex;
 			} else {
 				parentChkElem._nextDefIndex = defIndex + 1;

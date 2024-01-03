@@ -12,7 +12,7 @@ public final class XSelectorEnd extends XNode {
 
 	/* Create the new instance of XSelectorEnd object. */
 	public XSelectorEnd() {
-		super(null, "$selector_end", null, XNode.XMSELECTOR_END);
+		super(null, "$selector_end", null, XMSELECTOR_END);
 	}
 
 	@Override

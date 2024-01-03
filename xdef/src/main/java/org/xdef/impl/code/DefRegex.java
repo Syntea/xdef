@@ -8,6 +8,7 @@ import org.xdef.XDValueAbstract;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import org.xdef.XDValueType;
+import static org.xdef.XDValueType.REGEX;
 import org.xdef.msg.XDEF;
 
 /** Regular expression (compilation). */
@@ -82,7 +83,7 @@ public final class DefRegex extends XDValueAbstract implements XDRegex {
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
-	public XDValueType getItemType() {return XDValueType.REGEX;}
+	public XDValueType getItemType() {return REGEX;}
 	@Override
 	/** Get value as String.
 	 * @return The string from value.

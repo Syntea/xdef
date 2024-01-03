@@ -14,6 +14,7 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import org.xdef.sys.ReportReader;
 import org.xdef.XDValueType;
+import static org.xdef.XDValueType.INPUT;
 
 /** Implementation of input stream.
  * @author Vaclav Trojan
@@ -224,7 +225,7 @@ public final class DefInStream extends XDValueAbstract implements XDInput {
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
-	public XDValueType getItemType() {return XDValueType.INPUT;}
+	public XDValueType getItemType() {return INPUT;}
 
 	@Override
 	/** Get value as String.

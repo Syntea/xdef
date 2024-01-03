@@ -11,6 +11,7 @@ import org.xdef.XDValueAbstract;
 import java.math.BigDecimal;
 import static org.xdef.XDValueID.XD_PARSERESULT;
 import org.xdef.XDValueType;
+import static org.xdef.XDValueType.PARSERESULT;
 import org.xdef.msg.SYS;
 import static org.xdef.sys.SParser.NOCHAR;
 import org.xdef.sys.SRuntimeException;
@@ -536,7 +537,7 @@ public final class DefParseResult extends XDValueAbstract
 	@Override
 	public final short getItemId() {return XD_PARSERESULT;}
 	@Override
-	public XDValueType getItemType() {return XDValueType.PARSERESULT;}
+	public XDValueType getItemType() {return PARSERESULT;}
 	@Override
 	public final String toString() {return _value==null ? "" : _source;}
 	@Override

@@ -273,13 +273,13 @@ public class TestXon extends XDTester {
 			assertNull(testA("jnumber", "[ null, 1 ]"));
 			assertNull(testA("jstring", "[ null, \"abc\" ]"));
 			assertNull(testA("jvalue", "[ null, true, 1, \"abc\" ]"));
-			
+
 			assertNull(testM("int", "{a:1}"));
 			assertNull(testM("int", "{}"));
 			assertNull(testM("jvalue", "{a:true}"));
 			assertNull(testM("jvalue", "{a:null}"));
 			assertNull(testM("jvalue", "{}"));
-			
+
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' name='M' root='y:X' xmlns:y='a.b'>\n" +
 "<xd:declaration>type gam xdatetime('yyyyMMddHHmmssSS');</xd:declaration>\n" +

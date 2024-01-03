@@ -5,6 +5,7 @@ import org.xdef.XDValue;
 import org.xdef.XDValueType;
 import org.xdef.XDValueAbstract;
 import static org.xdef.XDValueID.XD_TELEPHONE;
+import static org.xdef.XDValueType.TELEPHONE;
 import org.xdef.msg.SYS;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.SIllegalArgumentException;
@@ -147,7 +148,7 @@ public class DefTelephone extends XDValueAbstract implements XDTelephone  {
 	@Override
 	public short getItemId() {return XD_TELEPHONE;}
 	@Override
-	public XDValueType getItemType() {return XDValueType.TELEPHONE;}
+	public XDValueType getItemType() {return TELEPHONE;}
 	@Override
 	public String stringValue() {return isNull() ? "" : _value;}
 	@Override

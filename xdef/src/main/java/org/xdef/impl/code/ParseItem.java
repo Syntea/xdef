@@ -2,8 +2,8 @@ package org.xdef.impl.code;
 
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
-import org.xdef.XDValueID;
 import org.xdef.XDValueType;
+import static org.xdef.XDValueType.XPARSEITEM;
 import org.xdef.impl.compile.CompileBase;
 
 /** Implements uniqueSet parse item.
@@ -27,7 +27,7 @@ public final class ParseItem extends XDValueAbstract {
 	private final int _keyIndex;
 
 	/** Creates a new null instance of UniquesetParseItem. */
-	ParseItem() {this(null, null, -1, -1, XDValueID.XD_OBJECT, false);}
+	ParseItem() {this(null, null, -1, -1, XD_OBJECT, false);}
 
 	/** Creates a new instance of UniquesetParseItem (must be public
 	 * because of XDReader).
@@ -93,13 +93,13 @@ public final class ParseItem extends XDValueAbstract {
 	////////////////////////////////////////////////////////////////////////
 
 	@Override
-	public final short getItemId() {return XDValueID.X_PARSEITEM;}
+	public final short getItemId() {return X_PARSEITEM;}
 
 	@Override
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
-	public XDValueType getItemType() {return XDValueType.X_PARSEITEM;}
+	public XDValueType getItemType() {return XPARSEITEM;}
 
 	@Override
 	public String toString() {

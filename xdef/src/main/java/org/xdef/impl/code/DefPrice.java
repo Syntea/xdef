@@ -8,6 +8,7 @@ import org.xdef.msg.SYS;
 import org.xdef.sys.Price;
 import org.xdef.sys.SIllegalArgumentException;
 import org.xdef.XDPrice;
+import static org.xdef.XDValueType.PRICE;
 
 /** Price with currency amount.
  * @author Vaclav Trojan
@@ -82,7 +83,7 @@ public class DefPrice extends XDValueAbstract
 	@Override
 	public short getItemId() {return XD_PRICE;}
 	@Override
-	public XDValueType getItemType() {return XDValueType.PRICE;}
+	public XDValueType getItemType() {return PRICE;}
 	@Override
 	public String stringValue() {return isNull() ? "null" : _amount.toString();}
 	@Override

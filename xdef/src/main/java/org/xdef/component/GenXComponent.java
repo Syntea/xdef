@@ -18,6 +18,7 @@ import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.xdef.impl.XElement;
 import org.xdef.model.XMNode;
+import static org.xdef.model.XMNode.XMELEMENT;
 import org.xdef.msg.SYS;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.ArrayReporter;
@@ -178,7 +179,7 @@ public final class GenXComponent {
 		for (Entry<String, String> e: xdpool.getXComponents().entrySet()) {
 			String key = e.getKey();
 			XMNode xn = xdpool.findModel(key);
-			String ns = (xn != null && xn.getKind() == XMNode.XMELEMENT)
+			String ns = (xn != null && xn.getKind() == XMELEMENT)
 				? ((XElement) xn).getNSUri() : null;
 			components.put(e.getKey(), new XComponentInfo(e.getValue(), ns));
 		}
@@ -289,7 +290,7 @@ public final class GenXComponent {
 					className = className.substring(0,ndx).trim();
 				}
 				XMNode xn = xdpool.findModel(model);
-				if (xn == null || xn.getKind() != XMNode.XMELEMENT) {
+				if (xn == null || xn.getKind() != XMELEMENT) {
 					//Model "&{0}" not exsists.
 					reporter.add(Report.fatal(XDEF.XDEF373, model));
 					continue;

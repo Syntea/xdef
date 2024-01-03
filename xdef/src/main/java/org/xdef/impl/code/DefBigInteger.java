@@ -5,6 +5,7 @@ import org.xdef.XDValueAbstract;
 import java.math.BigDecimal;
 import org.xdef.XDValueType;
 import java.math.BigInteger;
+import static org.xdef.XDValueType.BIGINTEGER;
 
 /** The class DefLong implements the internal object with integer values.
  * @author Vaclav Trojan
@@ -48,7 +49,7 @@ public final class DefBigInteger extends XDValueAbstract {
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
-	public XDValueType getItemType() {return XDValueType.BIGINTEGER;}
+	public XDValueType getItemType() {return BIGINTEGER;}
 	@Override
 	/** Check if the object is <i>null</i>.
 	 * @return <i>true</i> if the object is <i>null</i> otherwise returns

@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.xdef.impl.code.CodeTable;
+import static org.xdef.impl.code.CodeTable.LD_CONST;
 
 /** Abstract class for implementing of XDValues.
  * @author Vaclav Trojan
@@ -79,7 +79,7 @@ public abstract class XDValueAbstract implements XDValue {
 ////////////////////////////////////////////////////////////////////////////////
 
 	@Override
-	public short getCode() {return CodeTable.LD_CONST;}
+	public short getCode() {return LD_CONST;}
 	@Override
 	public int getParam() {return 0;}
 	@Override

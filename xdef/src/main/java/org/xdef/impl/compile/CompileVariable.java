@@ -3,7 +3,7 @@ package org.xdef.impl.compile;
 import org.xdef.impl.code.CodeI1;
 import org.xdef.XDValue;
 import org.xdef.impl.XVariable;
-import org.xdef.XDValueID;
+import static org.xdef.XDValueID.XD_BNFGRAMMAR;
 import org.xdef.sys.SPosition;
 
 /** Represents variable parameters used by compiler.
@@ -88,8 +88,7 @@ public final class CompileVariable extends XVariable {
 
 	/** Check if value of variable is a constant. */
 	final boolean isConstant() {
-		return getType() != XDValueID.XD_BNFGRAMMAR
-			&& isFinal() && _value != null;
+		return getType() != XD_BNFGRAMMAR && isFinal() && _value != null;
 	}
 
 	/** Get source position where the variable was declared.

@@ -41,11 +41,6 @@ import static org.xdef.XDValueID.XD_STRING;
 import static org.xdef.XDValueID.XD_UNDEF;
 import static org.xdef.XDValueID.XD_VOID;
 import static org.xdef.XDValueID.XD_XPATH;
-import static org.xdef.XDValueID.X_ATTR_REF;
-import static org.xdef.XDValueID.X_NOTYPE_VALUE;
-import static org.xdef.XDValueID.X_PARSEITEM;
-import static org.xdef.XDValueID.X_UNIQUESET;
-import static org.xdef.XDValueID.X_UNIQUESET_KEY;
 import org.xdef.impl.XDebugInfo;
 import org.xdef.impl.XVariableTable;
 import org.xdef.impl.code.CodeExtMethod;
@@ -193,6 +188,11 @@ import org.xdef.sys.SPosition;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SThrowable;
 import org.xdef.sys.StringParser;
+import static org.xdef.XDValueID.X_ATTR_REF;
+import static org.xdef.XDValueID.X_PARSEITEM;
+import static org.xdef.XDValueID.X_UNIQUESET_KEY;
+import static org.xdef.XDValueID.X_UNIQUESET;
+import static org.xdef.XDValueID.X_NOTYPE_VALUE;
 
 /** Generation of compiler objects - variables, methods etc.
  * @author Trojan

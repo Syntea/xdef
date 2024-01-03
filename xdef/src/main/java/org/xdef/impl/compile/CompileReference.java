@@ -24,7 +24,7 @@ import java.util.List;
 final class CompileReference extends XNode {
 
 	/** Kind of XNode XReference */
-	static final short XMREFERENCE = XNode.XMSELECTOR_END + 1;
+	static final short XMREFERENCE = XMSELECTOR_END + 1;
 	/** Kind of XNode  XINCLUDE */
 	static final short XMINCLUDE = XMREFERENCE + 1;
 
@@ -105,12 +105,12 @@ final class CompileReference extends XNode {
 		}
 		setSPosition(position);
 		switch (parent.getKind()) {
-			case XNode.XMELEMENT:
+			case XMELEMENT:
 				_definition = ((XElement) parent)._definition;
 				_varinit = ((XElement) parent)._varinit;
 				_xon = ((XElement) parent)._xon;
 				break;
-			case XNode.XMDEFINITION:
+			case XMDEFINITION:
 				_definition = (XDefinition) parent;
 				_varinit = -1;
 				_xon = 0;
@@ -227,7 +227,7 @@ final class CompileReference extends XNode {
 				return (XNode) xn;
 			} else if (xe._xon > 0) {
 				XMNode[] models = xe.getChildNodeModels();
-				if (models.length==1 && models[0].getKind()==XMNode.XMELEMENT) {
+				if (models.length==1 && models[0].getKind()==XMELEMENT) {
 					return (XElement) models[0];
 				}
 			}

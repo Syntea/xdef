@@ -65,7 +65,7 @@ public class TestXonUtil extends STester {
 		try {
 			// test JSON to XML and XML to JSON (W3C format) JSON
 			el = XonUtils.xonToXmlW(o1);
-			o2 = XonUtils.xmlToXon(el);		
+			o2 = XonUtils.xmlToXon(el);
 			Element e2 = XonUtils.xonToXmlW(o2);
 			Object o2x = XonUtils.xmlToXon(e2);
 			if (KXmlUtils.compareElements(el, e2, true).errors()) {

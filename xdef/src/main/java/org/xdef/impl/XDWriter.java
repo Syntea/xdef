@@ -10,7 +10,30 @@ import org.xdef.XDContainer;
 import org.xdef.XDNamedValue;
 import org.xdef.XDParser;
 import org.xdef.XDValue;
-import org.xdef.XDValueID;
+import static org.xdef.XDValueID.XD_ANYURI;
+import static org.xdef.XDValueID.XD_BIGINTEGER;
+import static org.xdef.XDValueID.XD_BNFGRAMMAR;
+import static org.xdef.XDValueID.XD_BNFRULE;
+import static org.xdef.XDValueID.XD_BOOLEAN;
+import static org.xdef.XDValueID.XD_BYTES;
+import static org.xdef.XDValueID.XD_CONTAINER;
+import static org.xdef.XDValueID.XD_DATETIME;
+import static org.xdef.XDValueID.XD_DECIMAL;
+import static org.xdef.XDValueID.XD_DOUBLE;
+import static org.xdef.XDValueID.XD_DURATION;
+import static org.xdef.XDValueID.XD_EMAIL;
+import static org.xdef.XDValueID.XD_EXCEPTION;
+import static org.xdef.XDValueID.XD_GPSPOSITION;
+import static org.xdef.XDValueID.XD_LOCALE;
+import static org.xdef.XDValueID.XD_LONG;
+import static org.xdef.XDValueID.XD_NAMEDVALUE;
+import static org.xdef.XDValueID.XD_PARSER;
+import static org.xdef.XDValueID.XD_PARSERESULT;
+import static org.xdef.XDValueID.XD_PRICE;
+import static org.xdef.XDValueID.XD_REGEX;
+import static org.xdef.XDValueID.XD_STRING;
+import static org.xdef.XDValueID.XD_XPATH;
+import static org.xdef.XDValueID.XD_XQUERY;
 import org.xdef.impl.code.CodeExtMethod;
 import org.xdef.impl.code.CodeI1;
 import org.xdef.impl.code.CodeI2;
@@ -21,7 +44,9 @@ import org.xdef.impl.code.CodeS1;
 import org.xdef.impl.code.CodeSWTableInt;
 import org.xdef.impl.code.CodeSWTableStr;
 import org.xdef.impl.code.CodeStringList;
-import org.xdef.impl.code.CodeTable;
+import static org.xdef.impl.code.CodeTable.COMPILE_BNF;
+import static org.xdef.impl.code.CodeTable.COMPILE_XPATH;
+import static org.xdef.impl.code.CodeTable.LD_CONST;
 import org.xdef.impl.code.CodeUniqueset;
 import org.xdef.impl.code.CodeXD;
 import org.xdef.impl.code.DefBNFGrammar;
@@ -95,59 +120,59 @@ public final class XDWriter extends SObjectWriter {
 		writeShort(code);
 		writeShort(type);
 		switch (code) {
-			case CodeTable.COMPILE_BNF:
+			case COMPILE_BNF:
 				writeBNF((DefBNFGrammar) x);
 				return;
-			case CodeTable.COMPILE_XPATH:
+			case COMPILE_XPATH:
 				writeXPath((DefXPathExpr) x);
 				return;
-			case CodeTable.LD_CONST:
+			case LD_CONST:
 				switch (type) {
-					case XDValueID.XD_BNFGRAMMAR:
+					case XD_BNFGRAMMAR:
 						writeBNF((DefBNFGrammar) x);
 						return;
-					case XDValueID.XD_BNFRULE: {
+					case XD_BNFRULE: {
 						DefBNFRule y = (DefBNFRule) x;
 						writeString(y.getName()); // ???
 						return;
 					}
-					case XDValueID.XD_BOOLEAN:
+					case XD_BOOLEAN:
 						writeBoolean(x.booleanValue());
 						return;
-					case XDValueID.XD_BYTES:
+					case XD_BYTES:
 						writeBytes(x.getBytes());
 						writeBoolean(((XDBytes) x).isBase64());
 						return;
-					case XDValueID.XD_DATETIME: {
+					case XD_DATETIME: {
 						writeSDatetime(x.datetimeValue());
 						return;
 					}
-					case XDValueID.XD_DECIMAL:
+					case XD_DECIMAL:
 						writeBigDecimal(x.decimalValue());
 						return;
-					case XDValueID.XD_BIGINTEGER:
+					case XD_BIGINTEGER:
 						writeBigInteger(x.integerValue());
 						return;
-					case XDValueID.XD_DURATION: {
+					case XD_DURATION: {
 						writeSDuration(x.durationValue());
 						return;
 					}
-					case XDValueID.XD_ANYURI: {
+					case XD_ANYURI: {
 						URI u = (URI) x.getObject();
 						writeString(u == null ? null : u.toASCIIString());
 						return;
 					}
-					case XDValueID.XD_EMAIL:
+					case XD_EMAIL:
 						writeString(x.stringValue());
 						return;
-					case XDValueID.XD_EXCEPTION: {
+					case XD_EXCEPTION: {
 						DefException y = (DefException) x;
 						writeReport(y.reportValue());
 						writeString(y.getXPos());
 						writeInt(y.getCodeAddr());
 						return;
 					}
-					case XDValueID.XD_LOCALE: {
+					case XD_LOCALE: {
 						DefLocale y = (DefLocale) x;
 						Locale z = y.getLocale();
 						writeString(z.getLanguage());
@@ -155,16 +180,16 @@ public final class XDWriter extends SObjectWriter {
 						writeString(z.getVariant());
 						return;
 					}
-					case XDValueID.XD_XPATH:
+					case XD_XPATH:
 						writeXPath((DefXPathExpr) x);
 						return;
-					case XDValueID.XD_DOUBLE:
+					case XD_DOUBLE:
 						writeDouble(x.doubleValue());
 						return;
-					case XDValueID.XD_LONG:
+					case XD_LONG:
 						writeLong(x.longValue());
 						return;
-					case XDValueID.XD_CONTAINER: {
+					case XD_CONTAINER: {
 						XDContainer y = (XDContainer) x;
 						int len = y.getXDItemsNumber();
 						writeInt(len);
@@ -181,31 +206,31 @@ public final class XDWriter extends SObjectWriter {
 						}
 						return;
 					}
-					case XDValueID.XD_GPSPOSITION: {
+					case XD_GPSPOSITION: {
 						DefGPSPosition y = (DefGPSPosition) x;
 						writeDouble(y.latitude());
 						writeDouble(y.longitude());
 						writeDouble(y.altitude());
 						writeString(y.name());
 					}
-					case XDValueID.XD_PRICE: {
+					case XD_PRICE: {
 						DefPrice y = (DefPrice) x;
 						writeBigDecimal(y.amount());
 						writeString(y.currencyCode());
 					}
-					case XDValueID.XD_NAMEDVALUE: {
+					case XD_NAMEDVALUE: {
 						XDNamedValue y = (XDNamedValue) x;
 						writeString(y.getName());
 						writeXD(y.getValue());
 						return;
 					}
-					case XDValueID.XD_PARSERESULT: {
+					case XD_PARSERESULT: {
 						DefParseResult y = ((DefParseResult) x);
 						writeString(y.getSourceBuffer());
 						writeXD(y.getParsedValue());
 						return;
 					}
-					case XDValueID.XD_PARSER: {
+					case XD_PARSER: {
 						if (x.isNull()) {
 							writeString(null);
 							writeString(null);
@@ -217,15 +242,15 @@ public final class XDWriter extends SObjectWriter {
 						}
 						return;
 					}
-					case XDValueID.XD_REGEX: {
+					case XD_REGEX: {
 						DefRegex y = (DefRegex) x;
 						writeString(y.sourceValue());
 						return;
 					}
-					case XDValueID.XD_STRING:
+					case XD_STRING:
 						writeString(x.stringValue());
 						return;
-					case XDValueID.XD_XQUERY:
+					case XD_XQUERY:
 						writeString(x.stringValue());
 						return;
 					case CompileBase.X_UNIQUESET:
@@ -269,8 +294,8 @@ public final class XDWriter extends SObjectWriter {
 						writeString(m.getDeclaringClass().getName());
 						Class<?>[] pars = m.getParameterTypes();
 						writeLength(pars.length);
-						for (int i = 0; i < pars.length; i++) {
-							writeString(pars[i].getName());
+						for (Class<?> par : pars) {
+							writeString(par.getName());
 						}
 						return;
 					}

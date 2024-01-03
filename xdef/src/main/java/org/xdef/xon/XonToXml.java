@@ -623,7 +623,7 @@ class XonToXml extends XonTools {
 			x._ns.popContext();
 		} else {
 			 //Not XON/JSON object&{0}
-			throw new SRuntimeException(JSON.JSON011, 
+			throw new SRuntimeException(JSON.JSON011,
 				xon == null ? null : xon.getClass());
 		}
 		return x._doc.getDocumentElement();

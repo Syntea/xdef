@@ -14,7 +14,7 @@ public final class XComment extends XData implements XMNode {
 	 * @param xp Refers to the XDefPool object.
 	 */
 	public XComment(final XDPool xp) {
-		super("#comment", null, xp, XMNode.XMCOMMENT);
+		super("#comment", null, xp, XMCOMMENT);
 		setOccurrence(REQUIRED, Integer.MAX_VALUE); //???unlimited
 	}
 //

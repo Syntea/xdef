@@ -3,6 +3,7 @@ package org.xdef.impl.code;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
 import org.xdef.XDValueType;
+import static org.xdef.XDValueType.NULL;
 import org.xdef.msg.SYS;
 import org.xdef.sys.SIllegalArgumentException;
 import org.xdef.xon.XonTools;
@@ -43,7 +44,7 @@ public final class DefJNull extends XDValueAbstract {
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
-	public XDValueType getItemType() {return XDValueType.NULL;}
+	public XDValueType getItemType() {return NULL;}
 	@Override
 	/** Get value as String.
 	 * @return The string from value.

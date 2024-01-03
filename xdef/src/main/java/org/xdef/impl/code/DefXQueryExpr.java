@@ -19,6 +19,8 @@ import java.lang.reflect.Constructor;
 import java.math.BigDecimal;
 import org.xdef.XDValueType;
 import java.math.BigInteger;
+import static org.xdef.XDValueType.XQUERY;
+import static org.xdef.impl.code.CodeTable.LD_CONST;
 
 /** Compiled XQuery expression.
  * @author Vaclav Trojan
@@ -85,7 +87,7 @@ public class DefXQueryExpr extends KXqueryExpr implements XDXQueryExpr {
 	@Override
 	public short getItemId() {return XD_XQUERY;}
 	@Override
-	public XDValueType getItemType() {return XDValueType.XQUERY;}
+	public XDValueType getItemType() {return XQUERY;}
 	@Override
 	public String toString() {return getSourceExpr();}
 	@Override
@@ -93,7 +95,7 @@ public class DefXQueryExpr extends KXqueryExpr implements XDXQueryExpr {
 	@Override
 	public XDValue cloneItem() {return this;}
 	@Override
-	public short getCode() {return CodeTable.LD_CONST;}
+	public short getCode() {return LD_CONST;}
 	@Override
 	public void setCode(final short code) {}
 	@Override

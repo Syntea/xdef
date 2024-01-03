@@ -161,10 +161,10 @@ public class XDParseSequence extends XSAbstractParser {
 				p.error(XDEF.XDEF570, _itemTypes[i].parserName());
 				return;
 			}
-			if (!isSeparator(p, _separatorChars) || p.eos()) {
-				break;
-			}
 		}
+//		if (_separatorChars != null && !_separatorChars.isEmpty()) {
+//			isSeparator(p, _separatorChars); // may end with separator???
+//		}
 		if (isFinal) {
 			p.isSpaces();
 		}

@@ -4,6 +4,7 @@ import org.xdef.XDRegexResult;
 import org.xdef.XDValueAbstract;
 import java.util.regex.Matcher;
 import org.xdef.XDValueType;
+import static org.xdef.XDValueType.REGEXRESULT;
 
 /** DefRegexResult.
  * @author Vaclav Trojan
@@ -76,7 +77,7 @@ public final class DefRegexResult extends XDValueAbstract
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
-	public XDValueType getItemType() {return XDValueType.REGEXRESULT;}
+	public XDValueType getItemType() {return REGEXRESULT;}
 	@Override
 	/** Get value as String.
 	 * @return The string from value.

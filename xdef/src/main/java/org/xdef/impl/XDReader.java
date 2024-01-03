@@ -7,7 +7,38 @@ import org.xdef.XDContainer;
 import org.xdef.XDNamedValue;
 import org.xdef.XDParser;
 import org.xdef.XDValue;
-import org.xdef.XDValueID;
+import static org.xdef.XDValueID.XD_ANYURI;
+import static org.xdef.XDValueID.XD_BIGINTEGER;
+import static org.xdef.XDValueID.XD_BNFGRAMMAR;
+import static org.xdef.XDValueID.XD_BNFRULE;
+import static org.xdef.XDValueID.XD_BOOLEAN;
+import static org.xdef.XDValueID.XD_BYTES;
+import static org.xdef.XDValueID.XD_CONTAINER;
+import static org.xdef.XDValueID.XD_DATETIME;
+import static org.xdef.XDValueID.XD_DECIMAL;
+import static org.xdef.XDValueID.XD_DOUBLE;
+import static org.xdef.XDValueID.XD_DURATION;
+import static org.xdef.XDValueID.XD_ELEMENT;
+import static org.xdef.XDValueID.XD_EMAIL;
+import static org.xdef.XDValueID.XD_EXCEPTION;
+import static org.xdef.XDValueID.XD_GPSPOSITION;
+import static org.xdef.XDValueID.XD_LOCALE;
+import static org.xdef.XDValueID.XD_LONG;
+import static org.xdef.XDValueID.XD_NAMEDVALUE;
+import static org.xdef.XDValueID.XD_NULL;
+import static org.xdef.XDValueID.XD_OBJECT;
+import static org.xdef.XDValueID.XD_OUTPUT;
+import static org.xdef.XDValueID.XD_PARSER;
+import static org.xdef.XDValueID.XD_PARSERESULT;
+import static org.xdef.XDValueID.XD_PRICE;
+import static org.xdef.XDValueID.XD_REGEX;
+import static org.xdef.XDValueID.XD_RESULTSET;
+import static org.xdef.XDValueID.XD_SERVICE;
+import static org.xdef.XDValueID.XD_STATEMENT;
+import static org.xdef.XDValueID.XD_STRING;
+import static org.xdef.XDValueID.XD_UNIQUESET_KEY;
+import static org.xdef.XDValueID.XD_XPATH;
+import static org.xdef.XDValueID.XD_XQUERY;
 import org.xdef.impl.code.CodeExtMethod;
 import org.xdef.impl.code.CodeI1;
 import org.xdef.impl.code.CodeI2;
@@ -145,41 +176,41 @@ public final class XDReader extends SObjectReader {
 				return readXPath();
 			case LD_CONST: {
 				switch (type) {
-					case XDValueID.XD_BNFGRAMMAR:
+					case XD_BNFGRAMMAR:
 						return readBNF();
-					case XDValueID.XD_BNFRULE:
+					case XD_BNFRULE:
 						readString(); // ???
 						return new DefBNFRule(null);
-					case XDValueID.XD_BOOLEAN:
+					case XD_BOOLEAN:
 						return new DefBoolean(readBoolean());
-					case XDValueID.XD_BYTES:
+					case XD_BYTES:
 						return new DefBytes(readBytes(), readBoolean());
-					case XDValueID.XD_DATETIME: {
+					case XD_DATETIME: {
 						SDatetime x = readSDatetime();
 						return x == null ? new DefDate() : new DefDate(x);
 					}
-					case XDValueID.XD_DECIMAL:
+					case XD_DECIMAL:
 						return new DefDecimal(readBigDecimal());
-					case XDValueID.XD_BIGINTEGER:
+					case XD_BIGINTEGER:
 						return new DefBigInteger(readBigInteger());
-					case XDValueID.XD_DURATION: {
+					case XD_DURATION: {
 						SDuration x = readSDuration();
 						return x==null ? new DefDuration() : new DefDuration(x);
 					}
-					case XDValueID.XD_ANYURI:
+					case XD_ANYURI:
 						return new DefURI(readString());
-					case XDValueID.XD_EMAIL:
+					case XD_EMAIL:
 						return new DefEmailAddr(readString());
-					case XDValueID.XD_ELEMENT:
+					case XD_ELEMENT:
 						return new DefElement();
-					case XDValueID.XD_EXCEPTION:
+					case XD_EXCEPTION:
 						return new DefException(readReport(),
 							readString(), readInt());
-					case XDValueID.XD_DOUBLE:
+					case XD_DOUBLE:
 						return new DefDouble(readDouble());
-					case XDValueID.XD_LONG:
+					case XD_LONG:
 						return new DefLong(readLong());
-					case XDValueID.XD_CONTAINER: {
+					case XD_CONTAINER: {
 						int len = readInt();
 						if (len == -1) {
 							return new DefContainer((Object) null);
@@ -194,23 +225,23 @@ public final class XDReader extends SObjectReader {
 						}
 						return y;
 					}
-					case XDValueID.XD_GPSPOSITION:
+					case XD_GPSPOSITION:
 						return new DefGPSPosition(new GPSPosition(readDouble(),
 							readDouble(), readDouble(), readString()));
-					case XDValueID.XD_PRICE:
+					case XD_PRICE:
 						return new DefPrice(
 							new Price(readBigDecimal(), readString()));
-					case XDValueID.XD_LOCALE: {
+					case XD_LOCALE: {
 						return new DefLocale(
 							readString(), readString(), readString());
 					}
-					case XDValueID.XD_NAMEDVALUE:
+					case XD_NAMEDVALUE:
 						return new DefNamedValue(readString(), readXD());
-					case XDValueID.XD_OBJECT:
+					case XD_OBJECT:
 						return new DefObject();
-					case XDValueID.XD_OUTPUT:
+					case XD_OUTPUT:
 						return new DefOutStream();
-					case XDValueID.XD_PARSERESULT: {
+					case XD_PARSERESULT: {
 						DefParseResult y = new DefParseResult();
 						String s = readString();
 						if (s != null) {
@@ -222,11 +253,11 @@ public final class XDReader extends SObjectReader {
 						}
 						return y;
 					}
-					case XDValueID.XD_PARSER: {//STRING_PARSER
+					case XD_PARSER: {//STRING_PARSER
 						String declaredName = readString();
 						String name = readString();
 						if (declaredName == null && name == null) {
-							return new DefNull(XDValueID.XD_PARSER);
+							return new DefNull(XD_PARSER);
 						}
 						XDContainer pars = (XDContainer) readXD();
 						XDParser y = CompileBase.getParser(name);
@@ -238,14 +269,14 @@ public final class XDReader extends SObjectReader {
 						y.setDeclaredName(declaredName);
 						return y;
 					}
-					case XDValueID.XD_REGEX:
+					case XD_REGEX:
 						return new DefRegex(readString());
-					case XDValueID.XD_STRING:
+					case XD_STRING:
 						return new DefString(readString());
-					case XDValueID.XD_XQUERY: {
+					case XD_XQUERY: {
 						return new DefXQueryExpr(readString());
 					}
-					case XDValueID.XD_XPATH:
+					case XD_XPATH:
 						return readXPath();
 					case CompileBase.X_UNIQUESET:
 					case CompileBase.X_UNIQUESET_M: {
@@ -270,15 +301,15 @@ public final class XDReader extends SObjectReader {
 						}
 						return new CodeUniqueset(keys, varNames, readString());
 					}
-					case XDValueID.XD_SERVICE:
+					case XD_SERVICE:
 						return new DefSQLService();
-					case XDValueID.XD_STATEMENT:
+					case XD_STATEMENT:
 						return new DefSQLStatement();
-					case XDValueID.XD_RESULTSET:
+					case XD_RESULTSET:
 						return new DefSQLResultSet();
-					case XDValueID.XD_UNIQUESET_KEY:
+					case XD_UNIQUESET_KEY:
 					case CompileBase.X_PARSEITEM: // TODO ???
-					case XDValueID.XD_NULL:
+					case XD_NULL:
 						return new DefNull(type);
 					default:
 						//Internal error&{0}{: }

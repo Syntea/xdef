@@ -3,8 +3,8 @@ package org.xdef.impl.code;
 import java.net.URI;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
-import org.xdef.XDValueID;
 import org.xdef.XDValueType;
+import static org.xdef.XDValueType.ANYURI;
 import org.xdef.msg.SYS;
 import org.xdef.sys.SIllegalArgumentException;
 
@@ -49,13 +49,13 @@ public final class DefURI extends XDValueAbstract {
 	/** Get type of value.
 	 * @return The id of item type.
 	 */
-	public short getItemId() {return XDValueID.XD_ANYURI;}
+	public short getItemId() {return XD_ANYURI;}
 
 	@Override
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
-	public XDValueType getItemType() {return XDValueType.ANYURI;}
+	public XDValueType getItemType() {return ANYURI;}
 
 	@Override
 	/** Get value as String.
@@ -106,7 +106,7 @@ public final class DefURI extends XDValueAbstract {
 	 * @throws SIllegalArgumentException if arguments are not comparable.
 	 */
 	public int compareTo(final XDValue arg) throws SIllegalArgumentException {
-		if (arg.getItemId() == XDValueID.XD_BOOLEAN) {
+		if (arg.getItemId() == XD_BOOLEAN) {
 			if (equals(arg)) return 0;
 		}
 		throw new SIllegalArgumentException(SYS.SYS085);//Incomparable arguments

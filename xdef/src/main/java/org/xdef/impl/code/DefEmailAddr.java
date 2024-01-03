@@ -4,7 +4,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
-import org.xdef.XDValueID;
 import org.xdef.XDValueType;
 import org.xdef.msg.SYS;
 import org.xdef.msg.XDEF;
@@ -14,6 +13,7 @@ import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
 import org.xdef.XDEmailAddr;
+import static org.xdef.XDValueType.EMAIL;
 import org.xdef.sys.SException;
 
 /** Implements the internal object with Email value.
@@ -194,12 +194,12 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 	/** Get type of value.
 	 * @return The id of item type.
 	 */
-	public short getItemId() {return XDValueID.XD_EMAIL;}
+	public short getItemId() {return XD_EMAIL;}
 	@Override
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
-	public XDValueType getItemType() {return XDValueType.EMAIL;}
+	public XDValueType getItemType() {return EMAIL;}
 	@Override
 	/** Get value as String.
 	 * @return The string from value.
@@ -247,7 +247,7 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 	 * @throws SIllegalArgumentException if arguments are not comparable.
 	 */
 	public int compareTo(final XDValue arg) throws SIllegalArgumentException {
-		if (arg.getItemId() == XDValueID.XD_BOOLEAN) {
+		if (arg.getItemId() == XD_BOOLEAN) {
 			if (equals(arg)) return 0;
 		}
 		throw new SIllegalArgumentException(SYS.SYS085);//Incomparable arguments

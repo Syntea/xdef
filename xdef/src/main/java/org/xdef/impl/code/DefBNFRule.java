@@ -6,6 +6,8 @@ import org.xdef.XDBNFRule;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
 import org.xdef.XDValueType;
+import static org.xdef.XDValueType.BNFRULE;
+import static org.xdef.impl.code.CodeTable.LD_CONST;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.BNFRule;
 import org.xdef.sys.SBuffer;
@@ -116,7 +118,7 @@ public final class DefBNFRule extends XDValueAbstract implements XDBNFRule {
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
-	public XDValueType getItemType() {return XDValueType.BNFRULE;}
+	public XDValueType getItemType() {return BNFRULE;}
 
 	@Override
 	/** Get value as String.
@@ -143,7 +145,7 @@ public final class DefBNFRule extends XDValueAbstract implements XDBNFRule {
 	/** Get code of operation.
 	 * @return code of operation.
 	 */
-	public short getCode() {return CodeTable.LD_CONST;}
+	public short getCode() {return LD_CONST;}
 
 	@Override
 	public int hashCode() {return _rule.hashCode();}

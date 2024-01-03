@@ -3,6 +3,7 @@ package org.xdef.impl.code;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
 import org.xdef.XDValueType;
+import static org.xdef.XDValueType.OBJECT;
 
 /** DefObject
  * @author  Vaclav Trojan
@@ -42,7 +43,7 @@ public final class DefObject extends XDValueAbstract {
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
-	public XDValueType getItemType() {return XDValueType.OBJECT;}
+	public XDValueType getItemType() {return OBJECT;}
 	@Override
 	/** Get value as String.
 	 * @return The string from value.

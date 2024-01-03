@@ -17,6 +17,7 @@ import org.w3c.dom.Element;
 import static org.xdef.XDValueID.XD_ELEMENT;
 import static org.xdef.XDValueID.XD_RESULTSET;
 import org.xdef.XDValueType;
+import static org.xdef.XDValueType.RESULTSET;
 
 /** The class DefDBIterator implements the internal object with database query.
  * @author Vaclav Trojan
@@ -298,7 +299,7 @@ public class DefSQLResultSet extends XDValueAbstract implements XDResultSet {
 	@Override
 	public short getItemId() {return XD_RESULTSET;}
 	@Override
-	public XDValueType getItemType() {return XDValueType.RESULTSET;}
+	public XDValueType getItemType() {return RESULTSET;}
 	@Override
 	public String toString() {
 		return _resultSet == null ? "null" : _resultSet.toString();

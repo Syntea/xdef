@@ -40,7 +40,10 @@ import org.xdef.impl.XDSourceInfo;
 import org.xdef.impl.XDSourceItem;
 import org.xdef.impl.XElement;
 import org.xdef.impl.XVariableTable;
-import org.xdef.impl.code.CodeTable;
+import static org.xdef.impl.code.CodeTable.DEBUG_PAUSE;
+import static org.xdef.impl.code.CodeTable.DEBUG_TRACE;
+import static org.xdef.impl.code.CodeTable.NO_OP;
+import static org.xdef.impl.code.CodeTable.POP_OP;
 import org.xdef.model.XMDebugInfo;
 import org.xdef.model.XMStatementInfo;
 import org.xdef.model.XMVariable;
@@ -796,8 +799,8 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 			txt = "PAUSE " + xpos;
 		} else {
 			codeItem = code[pcounter];
-			trace = codeItem.getCode() == CodeTable.DEBUG_TRACE;
-			pause = codeItem.getCode() == CodeTable.DEBUG_PAUSE;
+			trace = codeItem.getCode() == DEBUG_TRACE;
+			pause = codeItem.getCode() == DEBUG_PAUSE;
 			if (trace || pause && codeItem.getParam() > 0) {
 				si = debugInfo.prevStatementInfo(si);
 			}
@@ -888,10 +891,8 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 				case DBG_DISABLLE:
 					if (pause) {
 						if (codeItem != null) {
-							short codeId = codeItem.getParam() == 0 ?
-								CodeTable.NO_OP
-								: CodeTable.POP_OP;
-							codeItem.setCode(codeId);
+							codeItem.setCode(
+								codeItem.getParam() == 0 ? NO_OP : POP_OP);
 						}
 						display("Nothing to disable");
 						continue;

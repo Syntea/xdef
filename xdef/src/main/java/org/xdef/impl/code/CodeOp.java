@@ -3,6 +3,7 @@ package org.xdef.impl.code;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
 import org.xdef.XDValueType;
+import static org.xdef.XDValueType.OBJECT;
 import org.xdef.msg.SYS;
 import org.xdef.sys.SError;
 
@@ -89,5 +90,5 @@ public class CodeOp extends XDValueAbstract {
 	public String toString() {return CodeDisplay.codeToString(this);}
 
 	@Override
-	public XDValueType getItemType() {return XDValueType.OBJECT;}
+	public XDValueType getItemType() {return OBJECT;}
 }

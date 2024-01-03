@@ -25,6 +25,12 @@ import org.xdef.impl.XElement;
 import org.xdef.impl.XNode;
 import org.xdef.model.XMData;
 import org.xdef.model.XMNode;
+import static org.xdef.model.XMNode.XMCHOICE;
+import static org.xdef.model.XMNode.XMELEMENT;
+import static org.xdef.model.XMNode.XMMIXED;
+import static org.xdef.model.XMNode.XMSELECTOR_END;
+import static org.xdef.model.XMNode.XMSEQUENCE;
+import static org.xdef.model.XMNode.XMTEXT;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.Report;
@@ -72,7 +78,7 @@ final class XCGenerator extends XCGeneratorXON {
 		String xelName = xelem.getName();
 		if (isRoot && xelem.getXonMode() > 0 //XON/JSON
 			&& xelem._childNodes.length == 1
-			&& xelem._childNodes[0].getKind() == XMNode.XMELEMENT) {
+			&& xelem._childNodes[0].getKind() == XMELEMENT) {
 			xe = (XElement) xelem._childNodes[0]; /**/
 			xelName = xelem.getLocalName();
 		} else {
@@ -179,9 +185,9 @@ final class XCGenerator extends XCGeneratorXON {
 				continue;
 			}
 			switch (node.getKind()) {
-				case XMNode.XMCHOICE:
-				case XMNode.XMMIXED:
-				case XMNode.XMSEQUENCE: {
+				case XMCHOICE:
+				case XMMIXED:
+				case XMSEQUENCE: {
 					groupStack.push(groupFirst); // index of first item
 					groupStack.push(groupKind); // kind
 					groupStack.push(groupMax); // groupMax
@@ -192,8 +198,8 @@ final class XCGenerator extends XCGeneratorXON {
 					groupKind = node.getKind();
 					continue;
 				}
-				case XMNode.XMSELECTOR_END: {
-					if (groupKind == XMNode.XMCHOICE) {
+				case XMSELECTOR_END: {
+					if (groupKind == XMCHOICE) {
 						String xclear = "";
 						for (int j = choiceStack.size() - 1; j > 0; j -= 5) {
 							xclear += (String) choiceStack.get(j-1) //iname
@@ -239,7 +245,7 @@ final class XCGenerator extends XCGeneratorXON {
 					}
 					continue;
 				}
-				case XMNode.XMTEXT: {
+				case XMTEXT: {
 					final XData xdata = (XData) node;
 					String name = checkBind(xe, xdata);
 					boolean ext = false;
@@ -303,7 +309,7 @@ final class XCGenerator extends XCGeneratorXON {
 					}
 					continue;
 				}
-				case XMNode.XMELEMENT: {
+				case XMELEMENT: {
 					XElement xe1 = (XElement) node;
 					final int max = groupMax > 1 ? groupMax : xe1.maxOccurs();
 					String name = checkBind(xe, xe1);
@@ -424,7 +430,7 @@ final class XCGenerator extends XCGeneratorXON {
 						typeName = typeName.substring(ndx + 1);
 					}
 					typeName = typeName.replace('#', '.');
-					if (groupKind == XMNode.XMCHOICE) {
+					if (groupKind == XMCHOICE) {
 						choiceStack.push(ext);
 						choiceStack.push(i);
 						choiceStack.push(typeName);
@@ -435,14 +441,14 @@ final class XCGenerator extends XCGeneratorXON {
 					if (!ext) {
 						genVariableFromModel(null,
 							typeName, iname, max, "element", vars);
-						if (xnds.length==1 && xnds[0].getKind()==XMNode.XMTEXT
-							&& groupKind != XMNode.XMCHOICE
+						if (xnds.length==1 && xnds[0].getKind()==XMTEXT
+							&& groupKind != XMCHOICE
 							&& xe1.getAttrs().length == 0) {//no attrs,only text
 							// direct getters/setters for text child
 							genDirectSetterAndGetter(xe1,
 								iname, typeName, false, setters, getters, sbi);
 						}
-						if (groupKind != XMNode.XMCHOICE){
+						if (groupKind != XMCHOICE){
 							genChildElementGetterSetter(xe1, typeName, iname,
 								max, "element", getters, setters, sbi, "");
 						}
@@ -450,7 +456,7 @@ final class XCGenerator extends XCGeneratorXON {
 					genChildElementCreator(iname,  listNodes, max > 1);
 					if (xe1._xon == XConstants.XON_MODE_W) {
 						if (XON_NS_URI_W.equals(xe1.getNSUri())) {
-							if (groupKind != XMNode.XMCHOICE) {
+							if (groupKind != XMCHOICE) {
 								if (XonNames.X_VALUE.equals(xe1.getLocalName())){
 									genXonItemGetterAndSetter(xe1,
 										typeName, iname, max, setters,
@@ -461,7 +467,7 @@ final class XCGenerator extends XCGeneratorXON {
 								}
 							}
 						} else { // XON map items
-							if (groupKind != XMNode.XMCHOICE) {
+							if (groupKind != XMCHOICE) {
 								genXonItemGetterAndSetter(xe1, typeName, iname,
 									max, setters, getters, sbi,	varNames);
 							}
@@ -545,7 +551,7 @@ final class XCGenerator extends XCGeneratorXON {
 		final String packageName,
 		final Map<String, XComponentInfo> components) {
 		final XMNode xn = _xp.findModel(model);
-		if (xn == null || xn.getKind() != XMNode.XMELEMENT) {
+		if (xn == null || xn.getKind() != XMELEMENT) {
 			//Model "&{0}" not exsists.
 			_reporter.add(Report.fatal(XDEF.XDEF373, model));
 			return null;

@@ -40,6 +40,14 @@ import org.xdef.impl.parsers.XDParseEnum;
 import org.xdef.model.XMData;
 import org.xdef.model.XMElement;
 import org.xdef.model.XMNode;
+import static org.xdef.model.XMNode.XMATTRIBUTE;
+import static org.xdef.model.XMNode.XMCHOICE;
+import static org.xdef.model.XMNode.XMDEFINITION;
+import static org.xdef.model.XMNode.XMELEMENT;
+import static org.xdef.model.XMNode.XMMIXED;
+import static org.xdef.model.XMNode.XMSELECTOR_END;
+import static org.xdef.model.XMNode.XMSEQUENCE;
+import static org.xdef.model.XMNode.XMTEXT;
 import org.xdef.model.XMVariable;
 import org.xdef.msg.SYS;
 import org.xdef.msg.XDEF;
@@ -246,18 +254,18 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		final SPosition pos) {
 		short parentKind = parentNode.getKind();
 		short nodeKind = xNode.getKind();
-		if (parentKind == XNode.XMDEFINITION) { //"model" level
-			if (nodeKind == XNode.XMELEMENT) {
+		if (parentKind == XMDEFINITION) { //"model" level
+			if (nodeKind == XMELEMENT) {
 				((XElement) xNode)._definition = (XDefinition) parentNode;
 				((XElement) xNode).setXDNamespaceContext(
 					_scriptCompiler._g.getXDNamespaceContext());
-			} else if (nodeKind == XNode.XMTEXT) {
+			} else if (nodeKind == XMTEXT) {
 				 //Text value not allowed here
 				_precomp.lightError(pos, XDEF.XDEF260);
 			}
 		} else {
 			XElement parentXel;
-			if (parentKind == XNode.XMELEMENT) {
+			if (parentKind == XMELEMENT) {
 				parentXel = (XElement) parentNode;
 			} else {
 				// here it can be only group, we find the parent element model
@@ -265,7 +273,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				int lev = level - 1;
 				while (lev >= 0) {
 					XNode xnode = _nodeList.get(lev);
-					if (xnode.getKind()!= XNode.XMELEMENT) {
+					if (xnode.getKind()!= XMELEMENT) {
 						lev--;
 						continue;
 					}
@@ -277,7 +285,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					throw new SError(XDEF.XDEF202, "No XElement");
 				}
 			}
-			if (nodeKind == XNode.XMELEMENT) {
+			if (nodeKind == XMELEMENT) {
 				((XElement) xNode)._definition = parentXel._definition;
 				((XElement) xNode).setXDNamespaceContext(
 					_scriptCompiler._g.getXDNamespaceContext());
@@ -938,7 +946,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		XElement xel;
 		XData xtxt;
 		short newKind;
-		if ((newKind = xNode.getKind()) == XNode.XMELEMENT) {
+		if ((newKind = xNode.getKind()) == XMELEMENT) {
 			xel = (XElement) xNode;
 			xtxt = null;
 			//compile first script - we must recognize template!
@@ -958,7 +966,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				}
 				_scriptCompiler.compileElementScript(xel);
 			}
-		} else if (newKind == XNode.XMTEXT) {
+		} else if (newKind == XMTEXT) {
 			xel = null;
 			xtxt = (XData) xNode;
 		} else {
@@ -978,15 +986,15 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					if (isAttlist) {
 						//Attribute '&{0}' not allowed here
 						error(sval, XDEF.XDEF254, key);
-					} else if (newKind == XNode.XMTEXT) {
+					} else if (newKind == XMTEXT) {
 						_scriptCompiler.compileDataScript(xtxt);
 					}
 				} else if ("attr".equals(localName)) {
 					//any Attribute - script for "moreAtttributes"
-					if (newKind == XNode.XMELEMENT && xel != null/*must be!*/) {
+					if (newKind == XMELEMENT && xel != null/*must be!*/) {
 						//any attributes in Element
 						XData xattr = new XData("$attr",
-							null, xel.getXDPool(), XNode.XMATTRIBUTE);
+							null, xel.getXDPool(), XMATTRIBUTE);
 						xattr.setSPosition(copySPosition(sval));
 						xattr.setXDPosition(xel.getXDPosition()+"/$attr");
 						_scriptCompiler.compileDataScript(xattr);
@@ -997,11 +1005,11 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					}
 				} else if ("text".equals(localName)
 					|| "textcontent".equals(localName)) {
-					if (newKind == XNode.XMELEMENT && xel != null/*must be!*/
+					if (newKind ==XMELEMENT && xel != null/*must be!*/
 						&& !isAttlist) {
 						//here is "text" or "textcontent"
 						XData xdata = new XData('$' + localName,
-							null, xel.getXDPool(), XNode.XMTEXT);
+							null, xel.getXDPool(), XMTEXT);
 						xdata.setSPosition(copySPosition(sval));
 						xdata.setXDPosition(
 							xel.getXDPosition() + "/$" + localName);
@@ -1023,15 +1031,15 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 //				} else if ("document".equals(localName)) {//TODO
 //				} else if ("value".equals(localName)) {//TODO
 //				} else if ("attlist".equals(localName)) {//TODO
-				} else if (newKind == XNode.XMELEMENT) {
+				} else if (newKind == XMELEMENT) {
 					//Attribute '&{0}' not allowed here
 					error(sval, XDEF.XDEF254, key);
 				}
 			} else {
 				// attributes which are not from our namespace
-				if (newKind == XNode.XMELEMENT && xel != null /*must be!*/) {
+				if (newKind == XMELEMENT && xel != null /*must be!*/) {
 					XData xattr = new XData(key,
-						pattr._nsURI, xel.getXDPool(), XNode.XMATTRIBUTE);
+						pattr._nsURI, xel.getXDPool(), XMATTRIBUTE);
 					xattr.setSPosition(copySPosition(sval));
 					xattr.setXDPosition(xel.getXDPosition()+ "/@" + key);
 					boolean template;
@@ -1094,7 +1102,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		newNode.setXDPosition(xdef.getXDPosition()+'$'+pnode._name.getString()+
 			(ref != null ? "("+ref.getString()+")" : ""));
 		short kind = newNode.getKind();
-		if (kind==XNode.XMCHOICE||kind==XNode.XMMIXED||kind==XNode.XMSEQUENCE) {
+		if (kind == XMCHOICE || kind == XMMIXED || kind == XMSEQUENCE) {
 			pa = _precomp.getXdefAttr(pnode, "script", false, true);
 			if (pa != null) {
 				SBuffer sval = pa._value;
@@ -1130,7 +1138,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				pa = _precomp.getXdefAttr(pnode, "occurs", false, true);
 				if (pa != null) {
 					SBuffer sval = pa._value;
-					if (kind == XNode.XMMIXED) {
+					if (kind == XMMIXED) {
 						reportDeprecated(pnode._name, "attribute \"occurs\"",
 							"attribute \"script\"");
 					}
@@ -1206,7 +1214,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				}
 				switch (s) {
 					case "true":
-						if (kind != XNode.XMMIXED) {
+						if (kind != XMMIXED) {
 							//Attribute 'empty' is allowed only in the group
 							//'xd:mixed'
 							_precomp.lightError(pnode._name, XDEF.XDEF263);
@@ -1217,7 +1225,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						}
 						break;
 					case "false":
-						if (kind != XNode.XMMIXED) {
+						if (kind != XMMIXED) {
 							//Attribute 'empty' is allowed only in the group
 							//'xd:mixed'
 							_precomp.lightError(pnode._name, XDEF.XDEF263);
@@ -1273,7 +1281,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		final XElement parentElement,
 		final XNode xn) {
 		String name = xn.getName();
-		if (parent.getKind() == XNode.XMDEFINITION) {
+		if (parent.getKind() == XMDEFINITION) {
 			String nsUri = xn.getNSUri();
 			if (nsUri != null) {
 				XDefinition xd = (XDefinition) parent;
@@ -1301,7 +1309,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		if (!xdPos.endsWith("#")) {
 			xdPos += "/";
 		}
-		xdPos += (xn.getKind() == XNode.XMTEXT) ? "$text" : name;
+		xdPos += (xn.getKind() == XMTEXT) ? "$text" : name;
 		int n = 1;
 		for (XNode x : parentElement._childNodes) {
 			String xpos = x.getXDPosition();
@@ -1355,7 +1363,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		xe._childNodes = nodes;
 		for (int i = 0; i < nodes.length; i++) {
 			XNode x = nodes[i];
-			if (x.getKind() == XMNode.XMELEMENT) {
+			if (x.getKind() == XMELEMENT) {
 				String ns = x.getNSUri();
 				if (ns != null && ns.equals(nsOrig)) {
 					if (nsNew == null) {
@@ -1389,7 +1397,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		SBuffer sval;
 		short parentKind = parentNode.getKind();
 		XElement xel;
-		if (parentKind == XNode.XMELEMENT
+		if (parentKind == XMELEMENT
 			&& (xel = (XElement) parentNode)._template) {
 			if (pnode._nsindex == XPreCompiler.NS_XDEF_INDEX) {
 				switch (pnode._localName) {
@@ -1402,7 +1410,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 							}
 						}
 						XData xtxt = new XData("$text",
-						null, xdef.getXDPool(), XNode.XMTEXT);
+						null, xdef.getXDPool(), XMTEXT);
 						xtxt.setXDPosition(parentNode.getXDPosition()+"/$text");
 						_scriptCompiler.setSource(sval,
 							_scriptCompiler._actDefName,
@@ -1463,7 +1471,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 //					break;
 //					case "value".equals(_actPNode._localName))  //TODO
 //					newNode = new XData("$text",
-//						null, xdef.getDefPool(), XNode.XMTEXT);
+//						null, xdef.getDefPool(), XMTEXT);
 //					break;
 //					case "attlist".equals(_actPNode._localName)) { //TODO
 //					newNode = createReference(pnode, pnode._localName, xdef);
@@ -1495,7 +1503,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					reportDeprecated(pnode._name, "\"data\"", "\"text\"");
 				}
 				XData xtext =
-					new XData("$text", null, xdef.getXDPool(), XNode.XMTEXT);
+					new XData("$text", null, xdef.getXDPool(), XMTEXT);
 				xtext.setSPosition(copySPosition(pnode._name));
 				newNode = xtext;
 				PAttr pa = _precomp.getXdefAttr(pnode, "script", false, true);
@@ -1560,7 +1568,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 //				newNode = createReference(pnode, pnode._localName, xdef);
 //			} else if ("value".equals(_actPNode._localName)) { //TODO
 //				newNode = new XData("$text",
-//					null, xdef.getDefPool(), XNode.XMTEXT);
+//					null, xdef.getDefPool(), XMTEXT);
 //			} else if ("attlist".equals(_actPNode._localName)) { //TODO
 //				newNode = createReference(pnode, pnode._localName, xdef);
 //			} else if ((pnode._xonMode & XConstants.XON_ROOT) != 0) {
@@ -1579,7 +1587,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				new XVariableTable(_scriptCompiler._g._varBlock,
 					((XElement)newNode).getSqId());
 			x.setSPosition(copySPosition(pnode._name));
-			if (parentKind != XNode.XMDEFINITION) {
+			if (parentKind != XMDEFINITION) {
 				x.setRequired();
 			}
 		}
@@ -1594,7 +1602,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		addNode(parentNode, newNode, level, pnode._name);
 		//compile child nodes
 		for (PNode nodei : pnode.getChildNodes()) {
-			XElement x = newNode.getKind() == XMNode.XMELEMENT
+			XElement x = newNode.getKind() == XMELEMENT
 				? (XElement) newNode : lastElement;
 			if (nodei._xdef == null) {
 				nodei._xdef = xdef;
@@ -1603,7 +1611,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		}
 		short newKind = newNode.getKind();
 		if (level == 1) {
-			if (newKind == XNode.XMELEMENT) {
+			if (newKind == XMELEMENT) {
 				if (!xdef.addModel((XElement) newNode)) {
 					//Repeated specification of element '&{0}'
 					error(pnode._name,XDEF.XDEF236, newNode.getName(),
@@ -1611,8 +1619,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				}
 			}
 		}
-		if (newKind == XNode.XMCHOICE || newKind == XNode.XMSEQUENCE
-			|| newKind == XNode.XMMIXED) {
+		if (newKind == XMCHOICE || newKind == XMSEQUENCE || newKind == XMMIXED){
 			addNode(parentNode, new XSelectorEnd(), level, pnode._name);
 		}
 		if (pnode._value != null && pnode._value.getString() != null) {
@@ -1624,7 +1631,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			}
 			pnode._value = null; //prevent repeated message
 		}
-		if (newKind == XNode.XMELEMENT) {
+		if (newKind == XMELEMENT) {
 			if (_scriptCompiler._g._varBlock != null) {
 				_scriptCompiler._g._varBlock =
 					_scriptCompiler._g._varBlock.getParent();
@@ -1814,13 +1821,13 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 
 	/** Get identifier of type from a model.*/
 	private static short getTypeId(XMNode xn) {
-		if (xn.getKind() == XMNode.XMELEMENT) {
+		if (xn.getKind() == XMELEMENT) {
 			// all elements have same type (i.e XComponent or List<XComponent>)
 			return (short) (250 + (((XMElement) xn).maxOccurs() > 1 ? 0 : 1));
 		} else {
 			XDValue p = ((XData)xn).getParseMethod();
-			return p.getItemId() == XDValueID.XD_PARSER
-				? ((XDParser) p).parsedType() : XDValueID.XD_STRING;
+			return p.getItemId() == XD_PARSER
+				? ((XDParser) p).parsedType() : XD_STRING;
 		}
 	}
 
@@ -1920,7 +1927,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				for (Map.Entry<String, SBuffer> en:
 					_codeGenerator._components.entrySet()) {
 					XMNode xn = (XMElement) xdp.findModel(en.getKey());
-					if (xn == null || xn.getKind() != XMNode.XMELEMENT) {
+					if (xn == null || xn.getKind() != XMELEMENT) {
 						//Unresolved reference &{0}
 						error(en.getValue(), XDEF.XDEF353, en.getKey());
 					} else {
@@ -1948,9 +1955,9 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				for (Map.Entry<String, SBuffer> en:
 					_codeGenerator._binds.entrySet()) {
 					XMNode xn = xdp.findModel(en.getKey());
-					if (xn == null || xn.getKind() != XMNode.XMELEMENT
-						&& xn.getKind() != XMNode.XMATTRIBUTE
-						&& xn.getKind() != XMNode.XMTEXT) {
+					if (xn == null || xn.getKind() != XMELEMENT
+						&& xn.getKind() != XMATTRIBUTE
+						&& xn.getKind() != XMTEXT) {
 						SBuffer sbf = en.getValue();
 						//Unresolved reference &{0}
 						error(sbf, XDEF.XDEF353, en.getKey());
@@ -2015,7 +2022,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					} else {
 						XDValue xv = _codeGenerator._code.get(
 							var.getParseMethodAddr());
-						if (xv.getItemId() == XDValueID.XD_PARSER) {
+						if (xv.getItemId() == XD_PARSER) {
 							XDParser p = (XDParser) xv;
 							XDContainer xc = p.getNamedParams();
 							if (xc != null && (p instanceof XDParseEnum
@@ -2071,7 +2078,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			boolean errs = getReportWriter().errors();
 			for (CompileReference xref : _scriptCompiler._implList) {
 				XNode xn = xref.getTargetModel();
-				if (xn == null || xn.getKind() != XMNode.XMELEMENT) {
+				if (xn == null || xn.getKind() != XMELEMENT) {
 					//Unresolved reference
 					xref.putTargetError(getReportWriter());
 				} else {
@@ -2155,9 +2162,9 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			XNode xn;
 			if ((xn = toList[i]) != null) {
 				switch (xn.getKind()) {
-					case XNode.XMCHOICE:
-					case XNode.XMSEQUENCE:
-					case XNode.XMMIXED:
+					case XMCHOICE:
+					case XMSEQUENCE:
+					case XMMIXED:
 						toList[i] = new XSelector((XSelector) xn);
 				}
 			}
@@ -2182,7 +2189,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			&& (xel._childNodes[0].getKind() == CompileReference.XMREFERENCE)) {
 			CompileReference xref = (CompileReference) xel._childNodes[0];
 			XNode x = xref.getTargetModel();
-			if (x == null || x.getKind() != XMNode.XMELEMENT) {
+			if (x == null || x.getKind() != XMELEMENT) {
 				xref.putTargetError(getReportWriter()); //Unresolved reference
 				xel._childNodes = new XNode[0];
 				return false;
@@ -2448,7 +2455,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			for (int j = 0; j < childNodes.length; j++) {//modify min, max
 				XNode xn = y._childNodes[j];
 				switch (xn.getKind()) {
-					case XNode.XMELEMENT:
+					case XMELEMENT:
 						if (isList && xref.isSpecified()) {
 							XElement xe = (XElement) xn;
 							if (xe.minOccurs() != xref.minOccurs()
@@ -2459,7 +2466,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 							}
 						}
 						break;
-					case XNode.XMTEXT:
+					case XMTEXT:
 						if (isList && xref.isSpecified()) {
 							XData xa = (XData) xn;
 							if (xa.minOccurs() != xref.minOccurs()
@@ -2470,9 +2477,9 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 							}
 						}
 						break;
-					case XNode.XMCHOICE:
-					case XNode.XMMIXED:
-					case XNode.XMSEQUENCE: {
+					case XMCHOICE:
+					case XMMIXED:
+					case XMSEQUENCE: {
 						if (nestedSelectors == 0) {
 							XNode xs = modifyReferredSelector(
 								xref, (XSelector) xn);
@@ -2485,7 +2492,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						nestedSelectors++;
 						break;
 					}
-					case XNode.XMSELECTOR_END:
+					case XMSELECTOR_END:
 						nestedSelectors--;
 						break;
 					default:
@@ -2529,9 +2536,9 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		boolean result = resolveReference(xel, level+1, xel.isSpecified(), hs);
 		if (result) {
 			for (XNode xn: xel._childNodes) {
-				if (xn.getKind() == XNode.XMELEMENT && !hs.contains(xn)) {
+				if (xn.getKind() == XMELEMENT && !hs.contains(xn)) {
 					result &= checkIntegrity((XElement) xn, level+1, hs);
-				} else if (xn.getKind() == XNode.XMTEXT) {
+				} else if (xn.getKind() == XMTEXT) {
 					if (!xn.isSpecified()) {
 						xn.setOptional();
 					}
@@ -2565,25 +2572,23 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		boolean selective = selectiveFlag;
 		boolean notReported = true;
 		boolean empty = true;
-		short selectorKind = selector == null
-			? XNode.XMSEQUENCE : selector.getKind();
+		short selectorKind = selector == null ? XMSEQUENCE : selector.getKind();
 		for (int i = index; i < xel._childNodes.length; i++) {
 			XNode xn = xel._childNodes[i];
 			short kind;
 			switch (kind = xn.getKind()) {
-				case XNode.XMTEXT: {
+				case XMTEXT: {
 					XData x;
 					int min;
 					min = (x = (XData) xn).minOccurs();
-					if (selectorKind==XNode.XMCHOICE) {
+					if (selectorKind==XMCHOICE) {
 						ignorable |= min <= 0;
 					} else {
 						ignorable &= min <= 0;
 					}
 					empty &= min <= 0;
 					selective = false;
-					if ((selectorKind==XNode.XMCHOICE
-						|| selectorKind==XNode.XMMIXED)
+					if ((selectorKind==XMCHOICE || selectorKind==XMMIXED)
 						&& x._match < 0) { //we igore items with match
 						String s = "$text";
 						Integer j;
@@ -2593,15 +2598,14 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 								//Ambiguous group '&{0}' (equal items)
 								// in XDefinition '&{1}'
 								error(x.getSPosition(), XDEF.XDEF234,
-									(selectorKind == XNode.XMCHOICE
-										? "choice" : "mixed"),
+									selectorKind==XMCHOICE ? "choice" : "mixed",
 									xel._definition.getName());
 								notReported = false;
 							}
 						}
 						groupItems.put(s, i);
-					} else if (selectorKind==XNode.XMSEQUENCE && i > 0
-						&& xel._childNodes[i-1].getKind() == XNode.XMTEXT
+					} else if (selectorKind==XMSEQUENCE && i > 0
+						&& xel._childNodes[i-1].getKind() == XMTEXT
 						&& ((XData) xel._childNodes[i-1])._match < 0) {
 						//Ambiguous X-definition: text node can´t follow
 						// previous text node
@@ -2610,22 +2614,21 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					}
 					continue;
 				}
-				case XNode.XMELEMENT: {
+				case XMELEMENT: {
 					int min;
 					XElement x;
 					min = (x = (XElement) xn).minOccurs();
 					if (!hs.contains(x)) {
 						updateSelectors(x, 0, null, false, false, hs);
 					}
-					if (selectorKind== XNode.XMCHOICE) {
+					if (selectorKind == XMCHOICE) {
 						ignorable |= min == 0;
 					} else {
 						ignorable &= min <= 0;
 					}
 					empty &= min <= 0;
 					selective = false;
-					if (selectorKind==XNode.XMCHOICE
-						|| selectorKind==XNode.XMMIXED) {
+					if (selectorKind==XMCHOICE || selectorKind==XMMIXED) {
 						String s = x.getNSUri() == null
 							? x.getName() : ('{'+x.getNSUri()+'}'+x.getName());
 						Integer j;
@@ -2636,15 +2639,14 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 								// in XDefinition '&{1}'
 								error(x.getSPosition(),
 									XDEF.XDEF234,
-									selectorKind == XNode.XMCHOICE
-										? "choice" : "mixed",
+									selectorKind==XMCHOICE ? "choice" : "mixed",
 									xel._definition.getName());
 								notReported = false;
 							}
 						}
 						groupItems.put(s, i);
-					} else if (selectorKind==XNode.XMSEQUENCE && i > 0
-						&& xel._childNodes[i-1].getKind() == XNode.XMELEMENT
+					} else if (selectorKind==XMSEQUENCE && i > 0
+						&& xel._childNodes[i-1].getKind() == XMELEMENT
 						&& x.getName().equals(xel._childNodes[i-1].getName())) {
 						// get previous node (we know it is XElement)
 						XElement y = (XElement) xel._childNodes[i-1];
@@ -2665,19 +2667,18 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					}
 					continue;
 				}
-				case XNode.XMCHOICE:
-				case XNode.XMSEQUENCE:
-				case XNode.XMMIXED: {
+				case XMCHOICE:
+				case XMSEQUENCE:
+				case XMMIXED: {
 					XSelector xs = (XSelector) xn;
 					if (hs.add(xs)) { //not processed yet
 						xs.setBegIndex(i);
-						selective = kind == XNode.XMCHOICE
-							|| selective && kind == XNode.XMSEQUENCE;
+						selective = kind==XMCHOICE||selective&&kind==XMSEQUENCE;
 						xs.setSelective(selective);
 						i = updateSelectors(xel,
 							i + 1,
 							xs,
-							kind == XNode.XMCHOICE || ignorable,
+							kind == XMCHOICE || ignorable,
 							selective,
 							hs);
 						xs.setEndIndex(i);
@@ -2688,7 +2689,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 								xel._definition.getName());
 							xs.setIgnorable(ignorable = true);
 						}
-						if (xs.getKind() == XNode.XMCHOICE
+						if (xs.getKind() == XMCHOICE
 							&& xs.minOccurs() <= 0) {
 							xs.setIgnorable(ignorable);
 						} else {
@@ -2704,8 +2705,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						return xs.getEndIndex();
 					}
 				}
-				case XNode.XMSELECTOR_END:
-					if (selector != null && selectorKind == XNode.XMMIXED) {
+				case XMSELECTOR_END:
+					if (selector != null && selectorKind == XMMIXED) {
 						if (!selector.isSpecified()) {
 							selector.setOccurrence(empty ? 0 : 1, 1);
 						} else if (selector.minOccurs() > 1
@@ -2733,7 +2734,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		boolean newChildNodes = false;
 		for (int i = 0; i < xel._childNodes.length; i++) {
 			XNode dn = xel._childNodes[i];
-			if (dn.getKind() == XNode.XMELEMENT) {
+			if (dn.getKind() == XMELEMENT) {
 				XElement xe = (XElement) dn;
 				if (clr) {
 					if (xe._forget == 'T') {

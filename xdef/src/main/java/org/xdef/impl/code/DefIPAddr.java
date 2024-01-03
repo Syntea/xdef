@@ -10,6 +10,7 @@ import org.xdef.sys.SIllegalArgumentException;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.XDIPAddr;
 import static org.xdef.XDValueID.XD_IPADDR;
+import static org.xdef.XDValueType.IPADDR;
 import org.xdef.msg.XDEF;
 
 /** IP address.
@@ -97,7 +98,7 @@ public class DefIPAddr extends XDValueAbstract implements XDIPAddr {
 	@Override
 	public short getItemId() {return XD_IPADDR;}
 	@Override
-	public XDValueType getItemType() {return XDValueType.IPADDR;}
+	public XDValueType getItemType() {return IPADDR;}
 	@Override
 	public String stringValue() {
 		return isNull() ? "null" :_value.toString().substring(1);

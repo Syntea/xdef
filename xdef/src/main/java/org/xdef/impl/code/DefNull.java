@@ -46,6 +46,7 @@ import static org.xdef.XDValueID.XD_STATEMENT;
 import static org.xdef.XDValueID.XD_STRING;
 import static org.xdef.XDValueID.XD_TEXT;
 import org.xdef.XDValueType;
+import static org.xdef.XDValueType.NULL;
 
 /** The class DefNull implements the internal object with null value.
  * @author Vaclav Trojan
@@ -76,7 +77,7 @@ public final class DefNull extends XDValueAbstract {
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
-	public XDValueType getItemType() {return XDValueType.NULL;}
+	public XDValueType getItemType() {return NULL;}
 	@Override
 	/** Check if the object is <i>null</i>.
 	 * @return <i>true</i> if the object is <i>null</i> otherwise returns

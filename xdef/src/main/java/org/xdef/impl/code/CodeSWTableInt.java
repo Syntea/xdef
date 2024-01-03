@@ -1,7 +1,7 @@
 package org.xdef.impl.code;
 
 import org.xdef.XDValue;
-import org.xdef.XDValueID;
+import static org.xdef.impl.code.CodeTable.SWITCH_I;
 
 /** Implementation of CodeI1 used for switch operation table with integer
  * values.
@@ -16,7 +16,7 @@ public class CodeSWTableInt extends CodeI1 {
 
 	/** Creates a new instance of CodeSWTableInt. */
 	public CodeSWTableInt() {
-		super(XDValueID.XD_VOID, CodeTable.SWITCH_I);
+		super(XD_VOID, SWITCH_I);
 		_list = new long[0];
 		_adrs = new int[0];
 	}

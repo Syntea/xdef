@@ -3,8 +3,8 @@ package org.xdef.impl.code;
 import java.math.BigDecimal;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
-import org.xdef.XDValueID;
 import org.xdef.XDValueType;
+import static org.xdef.XDValueType.BOOLEAN;
 import org.xdef.msg.SYS;
 import org.xdef.sys.SIllegalArgumentException;
 
@@ -49,13 +49,13 @@ public final class DefBoolean extends XDValueAbstract {
 	/** Get type of value.
 	 * @return The id of item type.
 	 */
-	public short getItemId() {return XDValueID.XD_BOOLEAN;}
+	public short getItemId() {return XD_BOOLEAN;}
 
 	@Override
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
-	public XDValueType getItemType() {return XDValueType.BOOLEAN;}
+	public XDValueType getItemType() {return BOOLEAN;}
 
 	@Override
 	/** Return DefBoolean object as boolean.
@@ -127,7 +127,7 @@ public final class DefBoolean extends XDValueAbstract {
 	 * @throws SIllegalArgumentException if arguments are not comparable.
 	 */
 	public int compareTo(final XDValue arg) throws SIllegalArgumentException {
-		if (arg.getItemId() == XDValueID.XD_BOOLEAN) {
+		if (arg.getItemId() == XD_BOOLEAN) {
 			if (_value == arg.booleanValue()) {
 				return 0;
 			}

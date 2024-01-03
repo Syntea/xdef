@@ -3,8 +3,9 @@ package org.xdef.impl.code;
 import org.xdef.XDBNFGrammar;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
-import org.xdef.XDValueID;
 import org.xdef.XDValueType;
+import static org.xdef.XDValueType.BNFGRAMMAR;
+import static org.xdef.impl.code.CodeTable.COMPILE_BNF;
 import org.xdef.sys.BNFGrammar;
 import org.xdef.sys.ReportWriter;
 import org.xdef.sys.SBuffer;
@@ -126,13 +127,13 @@ public class DefBNFGrammar extends XDValueAbstract implements XDBNFGrammar {
 	/** Get type of value.
 	 * @return The id of item type.
 	 */
-	public short getItemId() {return XDValueID.XD_BNFGRAMMAR;}
+	public short getItemId() {return XD_BNFGRAMMAR;}
 
 	@Override
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
-	public XDValueType getItemType() {return XDValueType.BNFGRAMMAR;}
+	public XDValueType getItemType() {return BNFGRAMMAR;}
 
 	@Override
 	/** Get type of value.
@@ -170,7 +171,7 @@ public class DefBNFGrammar extends XDValueAbstract implements XDBNFGrammar {
 	public XDValue cloneItem() {return this;}
 
 	@Override
-	public short getCode() {return CodeTable.COMPILE_BNF;}
+	public short getCode() {return COMPILE_BNF;}
 
 	@Override
 	public void setCode(final short code) {}

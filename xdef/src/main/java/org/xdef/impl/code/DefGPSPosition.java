@@ -7,6 +7,7 @@ import org.xdef.msg.SYS;
 import org.xdef.sys.GPSPosition;
 import org.xdef.sys.SIllegalArgumentException;
 import org.xdef.XDGPSPosition;
+import static org.xdef.XDValueType.GPSPOSITION;
 
 /** The class implements the internal object with GpsPosition value.
  * @author Vaclav Trojan
@@ -89,7 +90,7 @@ public class DefGPSPosition extends XDValueAbstract implements XDGPSPosition {
 	@Override
 	public short getItemId() {return XD_GPSPOSITION;}
 	@Override
-	public XDValueType getItemType() {return XDValueType.GPSPOSITION;}
+	public XDValueType getItemType() {return GPSPOSITION;}
 	@Override
 	public String stringValue() {return isNull() ? "" : _position.toString();}
 	@Override

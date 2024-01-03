@@ -10,6 +10,7 @@ import org.xdef.XDValueAbstract;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import org.xdef.XDValueType;
+import static org.xdef.XDValueType.STATEMENT;
 
 /** The class DefDBIterator implements the internal object with database query.
  * @author Vaclav Trojan
@@ -172,7 +173,7 @@ public class DefSQLStatement extends XDValueAbstract implements XDStatement {
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
-	public XDValueType getItemType() {return XDValueType.STATEMENT;}
+	public XDValueType getItemType() {return STATEMENT;}
 	@Override
 	/** Get string value of this object.
 	 * @return string value of this object.

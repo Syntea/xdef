@@ -66,9 +66,8 @@ import static org.xdef.XDValueID.XD_XQUERY;
 import static org.xdef.XDValueID.XX_ATTR;
 import static org.xdef.XDValueID.XX_ELEMENT;
 import static org.xdef.XDValueID.XX_TEXT;
-import static org.xdef.XDValueID.X_PARSEITEM;
-import static org.xdef.XDValueID.X_UNIQUESET_KEY;
 import org.xdef.XDValueType;
+import static org.xdef.XDValueType.OBJECT;
 import org.xdef.XDXmlOutStream;
 import org.xdef.impl.code.CodeParser;
 import org.xdef.impl.code.CodeS1;
@@ -491,6 +490,8 @@ import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SThrowable;
 import org.xdef.sys.StringParser;
 import org.xdef.xml.KXmlUtils;
+import static org.xdef.XDValueID.X_PARSEITEM;
+import static org.xdef.XDValueID.X_UNIQUESET_KEY;
 
 /** Provides processor engine of script code.
  * @author Vaclav Trojan
@@ -4102,7 +4103,7 @@ public final class XCodeProcessor {
 		@Override
 		public final short getItemId() {return XD_ANY;}
 		@Override
-		public final XDValueType getItemType() {return XDValueType.OBJECT;}
+		public final XDValueType getItemType() {return OBJECT;}
 
 		////////////////////////////////////////////////////////////////////////
 		// XDCallItem methods

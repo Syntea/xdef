@@ -3,6 +3,7 @@ package org.xdef.impl.code;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
 import org.xdef.XDValueType;
+import static org.xdef.XDValueType.STRING;
 
 /** The class DefString implements items with string values.
  * @author Vaclav Trojan
@@ -76,7 +77,7 @@ public final class DefString extends XDValueAbstract {
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
-	public XDValueType getItemType() {return XDValueType.STRING;}
+	public XDValueType getItemType() {return STRING;}
 	@Override
 	/** Get value as String.
 	 * @return The string from value.

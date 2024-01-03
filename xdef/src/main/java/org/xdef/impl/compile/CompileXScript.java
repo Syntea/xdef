@@ -91,6 +91,9 @@ import static org.xdef.impl.compile.XScriptParser.UNIQUE_SET_SYM;
 import static org.xdef.impl.compile.XScriptParser.USES_SYM;
 import static org.xdef.impl.compile.XScriptParser.VAR_SYM;
 import static org.xdef.impl.compile.XScriptParser.symToName;
+import static org.xdef.model.XMNode.XMATTRIBUTE;
+import static org.xdef.model.XMNode.XMELEMENT;
+import static org.xdef.model.XMNode.XMTEXT;
 import static org.xdef.sys.SParser.NOCHAR;
 
 /** Compiler of XD script of headers, elements and attributes.
@@ -1117,7 +1120,7 @@ final class CompileXScript extends CompileStatement {
 		boolean cdata = false;
 		while (_sym == IDENTIFIER_SYM || _sym == FORGET_SYM) {
 			if (_sym == FORGET_SYM) {
-				if (kind != XNode.XMELEMENT) {
+				if (kind != XMELEMENT) {
 					//The token '&{0}' is not allowed here
 					error(XDEF.XDEF411, symToName(FORGET_SYM));
 				} else {
@@ -1131,7 +1134,7 @@ final class CompileXScript extends CompileStatement {
 				if (forget) {
 					error(XDEF.XDEF432); //Option redefinition
 				}
-				if (kind != XNode.XMELEMENT) {
+				if (kind != XMELEMENT) {
 					//The token '&{0}' is not allowed here
 					error(XDEF.XDEF411, "notForget");
 				} else {
@@ -1141,7 +1144,7 @@ final class CompileXScript extends CompileStatement {
 					}
 				}
 			} else if ("clearAdoptedForgets".equals(_idName)) {
-				if (kind != XNode.XMELEMENT) {
+				if (kind != XMELEMENT) {
 					//The token '&{0}' is not allowed here
 					error(XDEF.XDEF411, "clearAdoptedForgets");
 				} else {
@@ -1277,7 +1280,7 @@ final class CompileXScript extends CompileStatement {
 				|| "noNillable".equals(_idName)) {
 				if (nillable) {
 					error(XDEF.XDEF432); //Option redefinition
-				} else if (kind != XNode.XMELEMENT) {
+				} else if (kind != XMELEMENT) {
 					//The token '&{0}' is not allowed here
 					error(XDEF.XDEF411, _idName);
 				}
@@ -1305,7 +1308,7 @@ final class CompileXScript extends CompileStatement {
 					error(XDEF.XDEF432); // option redefinition
 				}
 				cdata = true;
-				if (kind == XNode.XMTEXT || kind == XNode.XMATTRIBUTE
+				if (kind == XMTEXT || kind == XMATTRIBUTE
 					&& (result.getName().equals("$text")
 					|| result.getName().equals("$textcontent"))) {
 					result._cdata = 'T';

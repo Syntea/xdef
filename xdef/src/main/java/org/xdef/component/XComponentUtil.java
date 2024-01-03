@@ -15,9 +15,11 @@ import org.xdef.XDDocument;
 import org.xdef.XDParseResult;
 import org.xdef.XDPool;
 import org.xdef.XDValue;
+import static org.xdef.XDValueID.XD_ANY;
 import org.xdef.impl.xml.KNamespace;
 import org.xdef.model.XMElement;
 import org.xdef.model.XMNode;
+import static org.xdef.model.XMNode.XMELEMENT;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.SDatetime;
 import org.xdef.sys.SRuntimeException;
@@ -83,7 +85,7 @@ public class XComponentUtil {
 		final XDPool xp,
 		final String xdPosition) {
 		final XMNode xm = xp.findModel(xdPosition);
-		if (xm.getKind() != XMNode.XMELEMENT) {
+		if (xm.getKind() != XMELEMENT) {
 			//Argument is not model of element: &{0}
 			throw new SRuntimeException(XDEF.XDEF372, xm.getXDPosition());
 		}
@@ -126,7 +128,7 @@ public class XComponentUtil {
 		final XDPool xp,
 		final String xdPosition) {
 		final XMNode xm = xp.findModel(xdPosition);
-		if (xm.getKind() != XMNode.XMELEMENT) {
+		if (xm.getKind() != XMELEMENT) {
 			//Argument is not model of element: &{0}
 			throw new SRuntimeException(XDEF.XDEF372, xm.getXDPosition());
 		}
@@ -275,6 +277,58 @@ public class XComponentUtil {
 	 */
 	public static final void updateXPos(final XComponent xc) {
 		updateXPos(xc, "", 0);
+	}
+
+	/** Convert parsed value witn XDConnpainer to the java.util.List.
+	 * @param value parsed valuest.
+	 * @param typeId separator of items.
+	 * @return converted list.
+	 */
+	public static final List valueToList(final XDParseResult value,
+		final int typeId) {
+		if (value == null) {
+			return null;
+		}
+		return valueToList((XDContainer) value.getParsedValue(), typeId);
+	}
+
+	/** Convert XDConnpainer to the java.util.List.
+	 * @param  c Connpainer value.
+	 * @param typeId type of items..
+	 * @return converted list.
+	 */
+	public static final List valueToList(final XDContainer c,
+		final int typeId) {
+		int len = c.getXDItemsNumber();
+		ArrayList<Object> result = new ArrayList<>();
+		for (int i = 0; i < len; i++) {
+			Object o = c.getXDItem(i).getObject();
+			if (o instanceof XDContainer) {
+				o = valueToList((XDContainer) o, XD_ANY);
+			}
+			result.add(o);
+		}
+		return result;
+	}
+
+	/** Create list of items with separatort (value of parsed list).
+	 * @param list pasrsed list
+	 * @param separator separator character.
+	 * @return list of items with separatort.
+	 */
+	public static String listToString(final ArrayList list,
+		final char separator) {
+		if (list == null) {
+			return "null";
+		}
+		if (list.isEmpty()) {
+			return "";
+		}
+		StringBuilder sb = new StringBuilder(list.get(0).toString());
+		for (int i = 1; i < list.size(); i++) {
+			sb.append(separator).append(list.get(i).toString());
+		}
+		return sb.toString();
 	}
 
 	/** Convert XDContainer to jlist string.

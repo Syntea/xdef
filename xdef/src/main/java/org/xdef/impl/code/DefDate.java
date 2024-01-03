@@ -8,6 +8,7 @@ import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
 import java.util.Calendar;
 import org.xdef.XDValueType;
+import static org.xdef.XDValueType.DATETIME;
 
 /** The class DefDate implements the internal object with date value.
  * @author Vaclav Trojan
@@ -72,7 +73,7 @@ public final class DefDate extends XDValueAbstract implements XDDatetime {
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
-	public XDValueType getItemType() {return XDValueType.DATETIME;}
+	public XDValueType getItemType() {return DATETIME;}
 	@Override
 	/** Check if the object is <i>null</i>.
 	 * @return <i>true</i> if the object is <i>null</i> otherwise returns

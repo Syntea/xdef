@@ -5,6 +5,7 @@ import org.xdef.XDException;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
 import org.xdef.XDValueType;
+import static org.xdef.XDValueType.EXCEPTION;
 
 /** CodeException
  * @author  Vaclav Trojan
@@ -80,7 +81,7 @@ public final class DefException extends XDValueAbstract implements XDException {
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
-	public XDValueType getItemType() {return XDValueType.EXCEPTION;}
+	public XDValueType getItemType() {return EXCEPTION;}
 
 	@Override
 	/** Get value as String.

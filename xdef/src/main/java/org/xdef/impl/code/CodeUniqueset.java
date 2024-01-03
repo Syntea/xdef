@@ -10,7 +10,8 @@ import org.xdef.XDUniqueSetKey;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
 import org.xdef.XDValueType;
-import org.xdef.impl.compile.CompileBase;
+import static org.xdef.XDValueType.UNIQUESET_KEY;
+import static org.xdef.XDValueType.XUNIQUESET_M;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.Report;
@@ -330,13 +331,13 @@ public final class CodeUniqueset extends XDValueAbstract implements XDUniqueSet{
 	/** Get type id of this object.
 	 * @return The type id of this object.
 	 */
-	public final short getItemId() {return CompileBase.X_UNIQUESET_M;}
+	public final short getItemId() {return X_UNIQUESET_M;}
 
 	@Override
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
-	public final XDValueType getItemType() {return  XDValueType.X_UNIQUESET_M;}
+	public final XDValueType getItemType() {return  XUNIQUESET_M;}
 
 	@Override
 	public XDValue cloneItem() {
@@ -551,7 +552,7 @@ public final class CodeUniqueset extends XDValueAbstract implements XDUniqueSet{
 		public short getItemId() {return XD_UNIQUESET_KEY;}
 
 		@Override
-		public XDValueType getItemType() {return XDValueType.UNIQUESET_KEY;}
+		public XDValueType getItemType() {return UNIQUESET_KEY;}
 
 		////////////////////////////////////////////////////////////////////////
 		// Implementation of XDUniqueSetItem

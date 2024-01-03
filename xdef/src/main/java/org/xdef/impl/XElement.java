@@ -62,7 +62,7 @@ public final class XElement extends XCodeDescriptor
 	public XElement(final String name,
 		final String nsURI,
 		final XDefinition xdef) {
-		super(name, nsURI, xdef.getXDPool(), XNode.XMELEMENT);
+		super(name, nsURI, xdef.getXDPool(), XMELEMENT);
 		_sqId = ((XPool)xdef.getXDPool()).getSqId();
 		_definition = xdef;
 		_attrs = new LinkedHashMap<>();
@@ -659,7 +659,7 @@ public final class XElement extends XCodeDescriptor
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			SObjectWriter xw = new SObjectWriter(baos);
 //			xw.writeString(XDConstants.BUILD_VERSION); //check build version
-			xw.writeShort(XNode.XMELEMENT);
+			xw.writeShort(XMELEMENT);
 			xw.writeString(xe.getName());
 			xw.writeString(xe.getNSUri());
 			xw.writeInt(xe.minOccurs());
@@ -675,17 +675,17 @@ public final class XElement extends XCodeDescriptor
 			for (XNode x: xe._childNodes) {
 				short kind = x.getKind();
 				switch (kind) {
-					case XNode.XMCHOICE:
-					case XNode.XMSEQUENCE:
-					case XNode.XMMIXED:
+					case XMCHOICE:
+					case XMSEQUENCE:
+					case XMMIXED:
 						xw.writeShort(kind);
 						xw.writeInt(x.minOccurs());
 						xw.writeInt(x.maxOccurs());
 						continue;
-					case XNode.XMTEXT:
+					case XMTEXT:
 						genDataDigestInfo(xw, (XData) x);
 						continue;
-					case XNode.XMELEMENT:
+					case XMELEMENT:
 						xw.writeShort(kind);
 						xw.writeInt(x.minOccurs());
 						xw.writeInt(x.maxOccurs());

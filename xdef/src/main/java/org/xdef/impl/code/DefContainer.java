@@ -23,6 +23,7 @@ import org.w3c.dom.NodeList;
 import org.xdef.XDContainer;
 import org.xdef.XDValueID;
 import org.xdef.XDValueType;
+import static org.xdef.XDValueType.CONTAINER;
 
 /** The class DefContainer implements item with org.w3c.dom.NodeList value.
  * @author Vaclav Trojan
@@ -1079,7 +1080,7 @@ public final class DefContainer extends XDValueAbstract
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
-	public XDValueType getItemType() {return XDValueType.CONTAINER;}
+	public XDValueType getItemType() {return CONTAINER;}
 
 	@Override
 	/** Check if the object is <i>null</i>.

@@ -25,8 +25,15 @@ import org.xdef.XDContainer;
 import org.xdef.XDNamedValue;
 import org.xdef.XDParser;
 import org.xdef.XDValue;
-import org.xdef.impl.code.CodeTable;
+import static org.xdef.XDValueID.XD_PARSER;
+import static org.xdef.impl.code.CodeTable.LD_CONST;
 import org.xdef.impl.parsers.XDParseEnum;
+import static org.xdef.model.XMNode.XMCHOICE;
+import static org.xdef.model.XMNode.XMELEMENT;
+import static org.xdef.model.XMNode.XMMIXED;
+import static org.xdef.model.XMNode.XMSELECTOR_END;
+import static org.xdef.model.XMNode.XMSEQUENCE;
+import static org.xdef.model.XMNode.XMTEXT;
 
 /** Generation of DTD from X-definitions.
  * Also provides main method for calling the program from command line.
@@ -159,8 +166,7 @@ public class GenDTD {
 		if (code == null) {
 			return null;
 		}
-		if (code.getCode() == CodeTable.LD_CONST
-			&& code.getItemId() == XDValue.XD_PARSER) {
+		if (code.getCode() == LD_CONST && code.getItemId() == XD_PARSER) {
 			XDParser p = (XDParser) code;
 			XDContainer pars = p.getNamedParams();
 			if (pars == null) {
@@ -320,12 +326,12 @@ public class GenDTD {
 			dn = childNode;
 			name = dn.getName();
 			short kind;
-			if ((kind = dn.getKind()) == XMNode.XMTEXT) {
+			if ((kind = dn.getKind()) == XMTEXT) {
 				isMixed = true;
 				separator = selSeparator;
 				sb.append("#PCDATA");
 				wasFirst = true;
-			} else if (kind == XMNode.XMELEMENT) {
+			} else if (kind == XMELEMENT) {
 				if (elements.contains(name)) {
 					System.out.println("WARNING: duplicate name $" +
 						def.getName() + "/" + name);
@@ -335,7 +341,7 @@ public class GenDTD {
 		for (int i = 0; i < childNodes.length; i++) {
 			dn = childNodes[i];
 			switch (dn.getKind()) {
-				case XMNode.XMELEMENT: {
+				case XMELEMENT: {
 					XMElement de = (XMElement)dn;
 					name = de.getName();
 					if (name.indexOf(":any") > 0) {
@@ -371,14 +377,14 @@ public class GenDTD {
 					wasFirst = true;
 					break;
 				}
-				case XMNode.XMMIXED: {
+				case XMMIXED: {
 					if (wasFirst) {
 						sb.append(separator);
 						sb.append("\n          ");
 					}
 					for (int j = 0; true; j++) {
 						short kind = childNodes[++i].getKind();
-						if (kind == XMNode.XMSELECTOR_END) {
+						if (kind == XMSELECTOR_END) {
 							break;
 						}
 						if (kind != XMNode.XMELEMENT) {
@@ -407,7 +413,7 @@ public class GenDTD {
 					wasFirst = true;
 					break;
 				}
-				case XMNode.XMSEQUENCE: {
+				case XMSEQUENCE: {
 					if (wasFirst) {
 						sb.append(separator);
 						sb.append("\n          ");
@@ -416,7 +422,7 @@ public class GenDTD {
 					sb.append('(');
 					for (int j = 0; true; j++) {
 						dn = childNodes[++i];
-						if (dn.getKind() == XMNode.XMSELECTOR_END) {
+						if (dn.getKind() == XMSELECTOR_END) {
 							i--;
 							break;
 						}
@@ -432,7 +438,7 @@ public class GenDTD {
 					wasFirst = true;
 					break;
 				}
-				case XMNode.XMCHOICE: {
+				case XMCHOICE: {
 					if (wasFirst) {
 						sb.append(separator);
 						sb.append("\n          ");
@@ -441,7 +447,7 @@ public class GenDTD {
 					sb.append('(');
 					for (int j = 0; true; j++) {
 						dn = childNodes[++i];
-						if (dn.getKind() == XMNode.XMSELECTOR_END) {
+						if (dn.getKind() == XMSELECTOR_END) {
 							i--;
 							break;
 						}
@@ -472,7 +478,7 @@ public class GenDTD {
 		_out.write(">\n");
 		genAttlist(def);
 		for (XMNode childNode : childNodes) {
-			if ((dn = childNode).getKind() == XMNode.XMELEMENT) {
+			if ((dn = childNode).getKind() == XMELEMENT) {
 				if (dn.getName().startsWith("xd:any")) {
 					continue;
 				}

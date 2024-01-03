@@ -15,6 +15,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xdef.XDContainer;
 import org.xdef.XDValueType;
+import static org.xdef.XDValueType.ELEMENT;
 
 /** Implementation of item with org.w3c.dom.Element.
  * @author Vaclav Trojan
@@ -387,7 +388,7 @@ public final class DefElement extends XDValueAbstract implements XDElement {
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
-	public XDValueType getItemType() {return XDValueType.ELEMENT;}
+	public XDValueType getItemType() {return ELEMENT;}
 
 	@Override
 	/** Get value as String.

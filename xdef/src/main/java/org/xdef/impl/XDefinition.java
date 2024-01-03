@@ -61,7 +61,7 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 		final String nsURI,
 		final SPosition sourcePosition,
 		final byte xmlVersion) {
-		super(name, nsURI, (XPool) xdp, XNode.XMDEFINITION);
+		super(name, nsURI, (XPool) xdp, XMDEFINITION);
 		_xElements = new ArrayList<>();
 		_properties = new Properties();
 		_namespaces = new LinkedHashMap<>();
@@ -310,7 +310,7 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 		final XPool xp,
 		final List<XNode> list) throws IOException {
 		SPosition sourcePos = xr.readSPosition();
-		if (xr.readShort() != XNode.XMDEFINITION) {//must be X-definition
+		if (xr.readShort() != XMDEFINITION) {//must be X-definition
 			//SObject reader: incorrect format of data&{0}{: }
 			throw new SIOException(SYS.SYS039, "XMDefinition expected");
 		}
@@ -333,7 +333,7 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 		len = xr.readLength();
 		for (int i = 0; i < len; i++) {
 			short kind = xr.readShort(); //always XElement
-			if (kind != XNode.XMELEMENT) {
+			if (kind != XMELEMENT) {
 				//SObject reader: incorrect format of data&{}{: }
 				throw new SIOException(SYS.SYS039, "XMElement expected");
 			}

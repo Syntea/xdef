@@ -15,10 +15,13 @@ import org.xdef.impl.XData;
 import org.xdef.impl.XElement;
 import org.xdef.impl.XNode;
 import org.xdef.impl.XPool;
-import org.xdef.impl.code.CodeTable;
+import static org.xdef.impl.code.CodeTable.CALL_OP;
+import static org.xdef.impl.code.CodeTable.LD_CONST;
 import org.xdef.xon.XonTools;
 import org.xdef.model.XMData;
 import org.xdef.model.XMNode;
+import static org.xdef.model.XMNode.XMCHOICE;
+import static org.xdef.model.XMNode.XMELEMENT;
 import org.xdef.msg.SYS;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.SRuntimeException;
@@ -382,11 +385,11 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 			XDValue[] code = ((XPool)xe.getXDPool()).getCode();
 			for (int i = keyAttr._check; i < code.length; i++) {
 				XDValue item = code[i];
-				if (item.getCode() == CodeTable.CALL_OP) {
+				if (item.getCode() == CALL_OP) {
 					i = item.getParam();
 					continue;
 				}
-				if (item.getCode() == CodeTable.LD_CONST) {
+				if (item.getCode() == LD_CONST) {
 					name = namePrefix + code[i].stringValue();
 					break;
 				}
@@ -842,13 +845,12 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 		XMNode[] nodes = xe.getChildNodeModels();
 		String s;
 		if (xe._xon != 0 && nodes.length == 5 //anyObj?
-			&& nodes[0].getKind() == XMNode.XMCHOICE
-			&& nodes[1].getKind() == XMNode.XMELEMENT
+			&& nodes[0].getKind() == XMCHOICE && nodes[1].getKind() == XMELEMENT
 			&& X_VALUE.equals(nodes[1].getLocalName())
-			&& nodes[2].getKind() == XMNode.XMELEMENT
+			&& nodes[2].getKind() == XMELEMENT
 			&& X_ARRAY.equals(nodes[2].getLocalName())
 			&& ((XElement) nodes[2]).getChildNodeModels().length == 5
-			&& nodes[3].getKind() == XMNode.XMELEMENT
+			&& nodes[3].getKind() == XMELEMENT
 			&& X_MAP.equals(nodes[3].getLocalName())
 			&& ((XElement) nodes[3]).getChildNodeModels().length == 5) {
 			s =
