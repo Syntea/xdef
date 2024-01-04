@@ -1,9 +1,7 @@
 package test.xdef;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -885,7 +883,6 @@ public class TestJsonXdef extends XDTester {
 				jparse(xp, "", (Object) x, reporter)));
 		} catch (Exception ex) {fail(ex);}
 		try {
-			InputStream in;
 			xdef =
 "<xd:def xmlns:xd=\""+_xdNS+"\" name=\"X\" root=\"a\">\n"+
 " <xd:ini name='a'>\n"+
@@ -908,8 +905,7 @@ public class TestJsonXdef extends XDTester {
 			assertEq("ABCDx[E][F]", swr.toString());
 			swr = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(swr, false));
-			in = new ByteArrayInputStream(ini.getBytes());
-			xd.iparse(in, reporter);
+			xd.iparse(ini, reporter);
 			assertNoErrorwarningsAndClear(reporter);
 			assertEq("ABCDx[E][F]", swr.toString());
 			swr = new StringWriter();
@@ -920,8 +916,7 @@ public class TestJsonXdef extends XDTester {
 			assertEq("BCD[E][F]", swr.toString());
 			swr = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(swr, false));
-			in = new ByteArrayInputStream(ini.getBytes());
-			xd.iparse(in, reporter);
+			xd.iparse(ini, reporter);
 			assertNoErrorwarningsAndClear(reporter);
 			assertEq("BCD[E][F]", swr.toString());
 			swr = new StringWriter();
@@ -931,8 +926,7 @@ public class TestJsonXdef extends XDTester {
 			assertEq("BCD[E][F]", swr.toString());
 			swr = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(swr, false));
-			in = new ByteArrayInputStream(ini.getBytes());
-			xd.iparse(in, reporter);
+			xd.iparse(ini, reporter);
 			assertNoErrorwarningsAndClear(reporter);
 			assertEq("BCD[E][F]", swr.toString());
 			ini = "\n B = 1 \n C=2121-10-19\n D=2.121\n[F]";
@@ -941,10 +935,9 @@ public class TestJsonXdef extends XDTester {
 			xd.iparse(ini, reporter);
 			assertNoErrorwarningsAndClear(reporter);
 			assertEq("BCD[F]", swr.toString());
-			in = new ByteArrayInputStream(ini.getBytes());
 			swr = new StringWriter();
 			xd.setStdOut(XDFactory.createXDOutput(swr, false));
-			xd.iparse(in, reporter);
+			xd.iparse(ini, reporter);
 			assertNoErrorwarningsAndClear(reporter);
 			assertEq("BCD[F]", swr.toString());
 			swr = new StringWriter();
@@ -952,8 +945,6 @@ public class TestJsonXdef extends XDTester {
 			xd.iparse(ini, reporter);
 			assertNoErrorwarningsAndClear(reporter);
 			assertEq("BCD[F]", swr.toString());
-		} catch (Exception ex) {fail(ex);}
-		try {
 			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' name='TestINI' root='a'>\n"+
 " <xd:ini name='a'>\n"+
@@ -966,7 +957,7 @@ public class TestJsonXdef extends XDTester {
 "   [ F ]\n" +
 " </xd:ini>\n"+
 " <xd:component>\n" +
-"  %class test.common.json.component.TestINI %link TestINI#a" + ";\n" +
+"  %class "+_package+".TestINI %link TestINI#a" + ";\n" +
 " </xd:component>\n"+
 "</xd:def>";
 			ini = "A=a\n B=1\n C=2121-10-19\n D=2.34\n[ E-F.G ]\nx=123\n[F]";

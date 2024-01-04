@@ -1,6 +1,8 @@
 package bugreports;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.List;
 import java.util.Map;
@@ -340,6 +342,76 @@ public class MyTestX extends XDTester {
 		System.out.print("; " + s + " ");
 		System.out.println(org.xdef.xon.XonTools.xmlToJName(s));
 /**/
+		try {
+			xdef =
+"<xd:def xmlns:xd='"+_xdNS+"' name='X' root='a'>\n"+
+" <xd:ini name='a'>\n"+
+"   A=?string(); finally out(\"A\");\n" +
+"   B=int(); finally out(\"B\");\n" +
+"   C=date(); finally out(\"C\");\n" +
+"   D=decimal(); finally out(\"D\");\n" +
+"   [E ; %script = optional; finally out(\"[E]\");]\n" +
+"     x = ?int(); finally out(\"x\");\n" +
+"   [F;%script=finally out(\"[F]\");]\n" +
+" </xd:ini>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			xd = xp.createXDDocument();
+			swr = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(swr, false));
+			ini = "#a\nA=a\n\n B= 1\n C=2121-10-19\nD =2.1\n[E]\nx=3\n[F]\n#b";
+			xd.iparse(ini, reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			assertEq("ABCDx[E][F]", swr.toString());
+			swr = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(swr, false));
+			InputStream in = new ByteArrayInputStream(ini.getBytes());
+			xd.iparse(in, reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			assertEq("ABCDx[E][F]", swr.toString());
+			swr = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(swr, false));
+			ini = "#\n B = 1 \n C=2121-10-19\n D=2.121\n [E] \n[F]\n#";
+			xd.iparse(ini, reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			assertEq("BCD[E][F]", swr.toString());
+			swr = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(swr, false));
+			in = new ByteArrayInputStream(ini.getBytes());
+			xd.iparse(in, reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			assertEq("BCD[E][F]", swr.toString());
+			swr = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(swr, false));
+			xd.iparse(ini, reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			assertEq("BCD[E][F]", swr.toString());
+			swr = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(swr, false));
+			in = new ByteArrayInputStream(ini.getBytes());
+			xd.iparse(in, reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			assertEq("BCD[E][F]", swr.toString());
+			ini = "\n B = 1 \n C=2121-10-19\n D=2.121\n[F]";
+			swr = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(swr, false));
+			xd.iparse(ini, reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			assertEq("BCD[F]", swr.toString());
+			swr = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(swr, false));
+			xd.iparse(in, reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			assertEq("BCD[F]", swr.toString());
+			swr = new StringWriter();
+			xd.setStdOut(XDFactory.createXDOutput(swr, false));
+			xd.iparse(ini, reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			assertEq("BCD[F]", swr.toString());
+		} catch (Exception ex) {fail(ex); reporter.clear();}
+	clearSources();
+if(true)return;
+if(T) return;
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+

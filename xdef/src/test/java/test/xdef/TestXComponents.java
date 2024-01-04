@@ -951,7 +951,7 @@ public final class TestXComponents extends XDTester {
 			}
 			assertEq("", checkXPos(xc));
 			el = XComponentUtil.toXml(xc, xp.createXDDocument("B"), "A");
-			xc =	parseXC(xp, "B", el, null, null);
+			xc = parseXC(xp, "B", el, null, null);
 			assertEq(xc.toXml(), xml);
 			xd = xp.createXDDocument("B");
 			assertEq(xd.xparse(el, null), xml);
@@ -960,8 +960,8 @@ public final class TestXComponents extends XDTester {
 			try {
 				XComponentUtil.getVariable(xc, "nazdar");
 				fail("Error not reported");
-			} catch (Exception ex) {
-				if (ex.getMessage().indexOf("nazdar") < 0) {
+			} catch (NoSuchMethodException ex) {
+				if (!ex.getMessage().contains("nazdar")) {
 					fail(ex);
 				}
 			}

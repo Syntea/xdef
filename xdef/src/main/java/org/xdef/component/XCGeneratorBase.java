@@ -731,8 +731,7 @@ class XCGeneratorBase {
 			if ("org.xdef.sys.SDatetime".equals(className)) {
 				String typeName1 = "java.util.Date";
 				sb.append(modify(template,
-					"&{x}", modify(x,
-						"_&{name}.add(x)",
+					"&{x}", modify(x, "_&{name}.add(x)",
 						"_&{name}.add(new org.xdef.sys.SDatetime(x))"),
 					"&{name}", name,
 					"&{d}" , d,
@@ -740,8 +739,7 @@ class XCGeneratorBase {
 					"&{typ}", typeName1));
 				typeName1 = "java.sql.Timestamp";
 				sb.append(modify(template,
-					"&{x}", modify(x,
-						"_&{name}.add(x)",
+					"&{x}", modify(x,"_&{name}.add(x)",
 						"_&{name}.add(new org.xdef.sys.SDatetime(x))"),
 					"&{name}", name,
 					"&{d}" , d,
@@ -771,26 +769,23 @@ class XCGeneratorBase {
 			if ("org.xdef.sys.SDatetime".equals(className)) {
 				String typeName1 = "java.util.Date";
 				sb.append(modify(template,
-					"&{x}", modify(x,
-						"_&{name}=x;",
-"_&{name}=org.xdef.sys.SDatetime.createFrom(x);"),
+					"&{x}", modify(x, "_&{name}=x;",
+						"_&{name}=org.xdef.sys.SDatetime.createFrom(x);"),
 					"&{name}", name,
 					"&{d}" , d,
 					"&{xmlName}", name.replace('$', ':'),
 					"&{typ}", typeName1));
 				typeName1 = "java.sql.Timestamp";
 				sb.append(modify(template,
-					"&{x}", modify(x,
-						"_&{name}=x;",
-"_&{name}=org.xdef.sys.SDatetime.createFrom(x);"),
+					"&{x}", modify(x, "_&{name}=x;",
+						"_&{name}=org.xdef.sys.SDatetime.createFrom(x);"),
 					"&{name}", name,
 					"&{d}" , d,
 					"&{xmlName}", name.replace('$', ':'),
 					"&{typ}", typeName1));
 				typeName1 = "java.util.Calendar";
 				sb.append(modify(template,
-					"&{x}", modify(x,
-						"_&{name}=x;",
+					"&{x}", modify(x, "_&{name}=x;",
 						"_&{name}=org.xdef.sys.SDatetime.createFrom(x);"),
 					"&{name}", name,
 					"&{d}" , d,
@@ -842,12 +837,13 @@ class XCGeneratorBase {
 				case XD_STRING:
 					x = "get&{name}())";
 					break;
-				case XD_CONTAINER:
-					String s= xp.getSeparator();
+				case XD_CONTAINER: {
+					String s = xp.getSeparator();
 					char c = s == null || s.isEmpty() ? ' ' : s.charAt(0);
 					x = "org.xdef.component.XComponentUtil.listToString("
 						+ "get&{name}(),'"+c+"'))";
 					break;
+				}
 				default:
 					x = "get&{name}().toString())";
 			}
@@ -941,12 +937,13 @@ class XCGeneratorBase {
 					x = z +y + (max <= 1 ? ".toString()" : "");
 					break;
 				}
-			case XD_CONTAINER:
+			case XD_CONTAINER: {
 				String s = xp.getSeparator();
 				char c = s == null || s.isEmpty() ? ' ' : s.charAt(0);
 				x = "org.xdef.component.XComponentUtil.listToString("
 					+ z + ",'"+c+"')";
 				break;
+			}
 			default:
 				x = z+y;
 				if (checkEnumType(xdata) != null) {

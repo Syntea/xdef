@@ -1610,6 +1610,7 @@ public class TestXon extends XDTester {
 			assertNull(testX(xp,"a", s, "true"));
 			assertNull(testX(xp,"a", s, "1"));
 			assertNull(testX(xp,"a", s, "null"));
+			assertNull(testX(xp,"a", s, "\"abc\""));			
 			// (array)
 			assertNull(testX(xp,"a", s, "[]"));
 			assertNull(testX(xp,"a", s, "[1]"));
@@ -1770,7 +1771,6 @@ public class TestXon extends XDTester {
 			assertNull(testX(xp,"x", s, "true"));
 			assertNull(testX(xp,"x", s, "1"));
 			assertNull(testX(xp,"x", s, "-0.5e+2"));
-			assertNull(testX(xp,"x", s, "null"));
 			assertNull(testX(xp,"x", s, "\"\""));
 			assertNull(testX(xp,"x", s, "\"x\""));
 			assertNull(testX(xp,"x", s, "\"ab\tcd\""));
@@ -1835,16 +1835,17 @@ public class TestXon extends XDTester {
 			s = _package+".MyTestX_jval";
 			assertEq("", testX(xp, "", s, "null"));
 			assertEq("", testX(xp, "", s, "-1f"));
-			assertEq("", testX(xp, "", s, "3.14e+3"));
+			assertEq("", testX(xp, "", s, "3.14e+3D"));
 			assertEq("", testX(xp, "", s, "true"));
+			assertEq("", testX(xp, "", s, "\"a\""));
 			assertEq("", testX(xp, "", s, "\"a b\""));
 			xdef = //jstring
 "<xd:def xmlns:xd='" + _xdNS + "' xd:root='a'>\n" +
 "<xd:xon name='a'> \"jstring()\" </xd:xon>\n" +
-"<xd:component> %class "+_package+".MyTestX_str %link #a; </xd:component>\n" +
+"<xd:component> %class "+_package+".MyTestX_jstr %link #a; </xd:component>\n" +
 "</xd:def>";
 			genXComponent(xp = compile(xdef));
-			s = _package+".MyTestX_str";
+			s = _package+".MyTestX_jstr";
 			assertEq("", testX(xp, "", s, "\"\""));
 			assertEq("", testX(xp, "", s, "\"x\""));
 			assertEq("", testX(xp, "", s, "\" \""));

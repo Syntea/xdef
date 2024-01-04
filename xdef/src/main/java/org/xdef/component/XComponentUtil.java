@@ -16,6 +16,8 @@ import org.xdef.XDParseResult;
 import org.xdef.XDPool;
 import org.xdef.XDValue;
 import static org.xdef.XDValueID.XD_ANY;
+import static org.xdef.XDValueID.XD_CONTAINER;
+import static org.xdef.XDValueID.XD_STRING;
 import org.xdef.impl.xml.KNamespace;
 import org.xdef.model.XMElement;
 import org.xdef.model.XMNode;
@@ -43,14 +45,10 @@ public class XComponentUtil {
 	 */
 	public static final Object getVariable(final XComponent xc,
 		final String name) throws Exception {
-		try {
-			Class<?> clazz = xc.getClass();
-			final Method method = clazz.getDeclaredMethod("get" + name);
-			method.setAccessible(true);
-			return method.invoke(xc);
-		} catch (Exception ex) {
-			throw ex;
-		}
+		Class<?> clazz = xc.getClass();
+		final Method method = clazz.getDeclaredMethod("get" + name);
+		method.setAccessible(true);
+		return method.invoke(xc);
 	}
 
 	/** Set value of variable of given name from XComponent.
@@ -62,17 +60,13 @@ public class XComponentUtil {
 	public static final void setVariable(final XComponent xc,
 		final String name,
 		final Object value) throws Exception {
-		try {
-			final Class<?> clazz = xc.getClass();
-			Method method = clazz.getDeclaredMethod("get" + name);
-			method.setAccessible(true);
-			final Class<?> result = method.getReturnType();
-			method = clazz.getDeclaredMethod("set" + name, result);
-			method.setAccessible(true);
-			method.invoke(xc, value);
-		} catch (Exception ex) {
-			throw ex;
-		}
+		final Class<?> clazz = xc.getClass();
+		Method method = clazz.getDeclaredMethod("get" + name);
+		method.setAccessible(true);
+		Class<?> result = method.getReturnType();
+		method = clazz.getDeclaredMethod("set" + name, result);
+		method.setAccessible(true);
+		method.invoke(xc, value);
 	}
 
 	/** Create XComponent from XComponent according to given model in XDPool.
@@ -84,13 +78,13 @@ public class XComponentUtil {
 	public static final XComponent toXComponent(final XComponent xc,
 		final XDPool xp,
 		final String xdPosition) {
-		final XMNode xm = xp.findModel(xdPosition);
+		XMNode xm = xp.findModel(xdPosition);
 		if (xm.getKind() != XMELEMENT) {
 			//Argument is not model of element: &{0}
 			throw new SRuntimeException(XDEF.XDEF372, xm.getXDPosition());
 		}
-		final Element el = toXml(xc, (XMElement) xm);
-		final XDDocument xd = xp.createXDDocument(xdPosition);
+		Element el = toXml(xc, (XMElement) xm);
+		XDDocument xd = xp.createXDDocument(xdPosition);
 		return xd.xparseXComponent(el, null, null);
 	}
 
@@ -100,7 +94,7 @@ public class XComponentUtil {
 	 * @return XML element created from this object according to given model.
 	 */
 	public static final Element toXml(final XComponent xc, final XMElement xm) {
-		final XDDocument xd = xm.createXDDocument();
+		XDDocument xd = xm.createXDDocument();
 		xd.setXDContext(xc.toXml());
 		return xd.xcreate(new QName(xm.getNSUri(), xm.getName()), null);
 	}
@@ -127,7 +121,7 @@ public class XComponentUtil {
 	public static final Element toXml(final XComponent xc,
 		final XDPool xp,
 		final String xdPosition) {
-		final XMNode xm = xp.findModel(xdPosition);
+		XMNode xm = xp.findModel(xdPosition);
 		if (xm.getKind() != XMELEMENT) {
 			//Argument is not model of element: &{0}
 			throw new SRuntimeException(XDEF.XDEF372, xm.getXDPosition());
@@ -142,10 +136,9 @@ public class XComponentUtil {
 	 */
 	public static XComponent toXComponent(final XComponent xc,
 		final XMElement xm) {
-		final XDDocument xd = xm.createXDDocument();
+		XDDocument xd = xm.createXDDocument();
 		xd.setXDContext(xc.toXml());
-		final Element el =
-			xd.xcreate(new QName(xm.getNSUri(), xm.getName()), null);
+		Element el = xd.xcreate(new QName(xm.getNSUri(), xm.getName()), null);
 		return xd.xparseXComponent(el, null,  null);
 	}
 
@@ -159,8 +152,8 @@ public class XComponentUtil {
 		final XDDocument xd,
 		final String modelName) {
 		xd.setXDContext(xc.toXml());
-		final Element el = xd.xcreate(modelName, null);
-		final XDDocument xd1 = xd.getXDPool().createXDDocument(modelName);
+		Element el = xd.xcreate(modelName, null);
+		XDDocument xd1 = xd.getXDPool().createXDDocument(modelName);
 		return xd1.xparseXComponent(el, null, null);
 	}
 
@@ -191,7 +184,7 @@ public class XComponentUtil {
 	 * @param xc XComponent list.
 	 */
 	public static final void addXC(final List<XComponent> childList,
-		final List<?>xc){
+		final List<?> xc) {
 		for (int i = 0; i < xc.size(); i++) {
 			XComponent y;
 			if ((y = (XComponent) xc.get(i)) != null) {
@@ -351,10 +344,10 @@ public class XComponentUtil {
 				sb.append("null");
 			} else {
 				switch (y.getItemId()) {
-					case XDValue.XD_STRING:
+					case XD_STRING:
 						sb.append(y.toString());
 						break;
-					case XDValue.XD_CONTAINER:
+					case XD_CONTAINER:
 						sb.append(containerJlist((XDContainer) y));
 						break;
 					default:
@@ -374,11 +367,8 @@ public class XComponentUtil {
 			return "null";
 		}
 		XDValue x = parsedValue.getParsedValue();
-		if (x.getItemId() == XDValue.XD_CONTAINER) {
-			return containerJlist((XDContainer) x);
-		} else {
-			return x.toString();
-		}
+		return x.getItemId() == XD_CONTAINER
+			 ? containerJlist((XDContainer) x) : x.toString();
 	}
 
 	/** Convert XML name to Java name.
@@ -409,9 +399,8 @@ public class XComponentUtil {
 			m.setAccessible(true);
 			return toXonObject(m.invoke(xc));
 		} catch (Exception ex) {
-			new RuntimeException("Can't access value", ex);
+			throw new RuntimeException("Can't access value", ex);
 		}
-		return null;
 	}
 
 	/** Create XON array from XComponent.
@@ -552,7 +541,8 @@ public class XComponentUtil {
 					x.setAccessible(true);
 					o = x.invoke(xc);
 				} catch (Exception ex) {
-					new RuntimeException("Can't access getter: " + x.getName());
+					throw new RuntimeException(
+						"Can't access getter: " + x.getName());
 				}
 				if (o instanceof XComponent) {
 					XComponent y = (XComponent) o;
@@ -564,7 +554,7 @@ public class XComponentUtil {
 							m.setAccessible(true);
 							key = XonTools.xmlToJName((String) m.invoke(o));
 						} catch (Exception ex) {
-							new RuntimeException("Not key", ex);
+							throw new RuntimeException("Not key", ex);
 						}
 						o = toXon((XComponent) o);
 						result.put(key, o);
@@ -584,7 +574,7 @@ public class XComponentUtil {
 						result.put(XonTools.xmlToJName(key), o);
 					}
 				} else {
-					new RuntimeException("Not XComponent: " + o);
+					throw new RuntimeException("Not XComponent: " + o);
 				}
 			}
 		}
@@ -629,7 +619,8 @@ public class XComponentUtil {
 						}
 						result.add(o);
 					} catch (Exception ex) {
-						new RuntimeException("Can't access getter: " + mName);
+						throw new RuntimeException(
+							"Can't access getter: " + mName);
 					}
 				} else {
 					result.add(toXonXD(x, nsStack));
@@ -658,7 +649,8 @@ public class XComponentUtil {
 					m.setAccessible(true);
 					o = m.invoke(xc);
 				} catch (Exception ex) {
-					new RuntimeException("Can't access getter: " + m.getName());
+					throw new RuntimeException(
+						"Can't access getter: " + m.getName());
 				}
 				if (!(o instanceof XComponent || o instanceof List
 					|| o instanceof Map)) {
@@ -704,7 +696,8 @@ public class XComponentUtil {
 						}
 						body.add(o);
 					} catch (Exception ex) {
-						new RuntimeException("Can't access getter: " + mName);
+						throw new RuntimeException(
+							"Can't access getter: " + mName);
 					}
 				} else {
 					body.add(toXonXD(x, nsStack));
@@ -725,12 +718,10 @@ public class XComponentUtil {
 		int ndx = name.indexOf(':');
 		if (XON_NS_URI_XD.equals(ns)) {
 			String localName = ndx >= 0 ? name.substring(ndx + 1) : name;
-			if (X_MAP.equals(localName)) {
-				return toXonMapXD(xc, nsStack);
-			} else if (X_ARRAY.equals(localName)) {
-				return toXonArrayXD(xc, nsStack);
-			} else if (X_VALUE.equals(localName)) {
-				return toXonItem(xc);
+			switch (localName) {
+				case X_MAP: return toXonMapXD(xc, nsStack);
+				case X_ARRAY: return toXonArrayXD(xc, nsStack);
+				case X_VALUE: return toXonItem(xc);
 			}
 		}
 		Map<String, Object> result = new LinkedHashMap<>();
@@ -768,12 +759,9 @@ public class XComponentUtil {
 				localName = localName.substring(ndx + 1);
 			}
 			switch (localName) {
-				case X_MAP:
-					return toXonMap(xc);
-				case X_ARRAY:
-					return toXonArray(xc);
-				case X_VALUE:
-					return toXonItem(xc);
+				case X_MAP: return toXonMap(xc);
+				case X_ARRAY: return toXonArray(xc);
+				case X_VALUE: return toXonItem(xc);
 			}
 		}
 		return toXonXD(xc, new KNamespace());
