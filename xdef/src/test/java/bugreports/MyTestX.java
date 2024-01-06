@@ -341,24 +341,6 @@ public class MyTestX extends XDTester {
 		s = "_x6d_ap"; //map
 		System.out.print("; " + s + " ");
 		System.out.println(org.xdef.xon.XonTools.xmlToJName(s));
-/**
-		try {
-			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
-"  <xd:component>%class "+_package+".MytestX_Strnum %link #A;</xd:component>\n" +
-"<xd:xon name='A'>\n" +
-" \"num()\" \n" +
-"</xd:xon>\n" +
-"</xd:def>";
-			xp = XDFactory.compileXD(null,xdef);
-			genAndCopyXComponents(xp);
-			xon = "\"2021\"";
-			s = _package+".MytestX_Strnum";
-			assertNull(testX(xp,"", s, xon));
-		} catch (Exception ex) {fail(ex); reporter.clear();}
-	clearSources();
-if(true)return;
-if(T) return;
 /**/
 		try {
 			xdef =
@@ -378,10 +360,44 @@ if(T) return;
 	clearSources();
 //if(true)return;
 /**/
+/**/
+		try {
+			xdef =
+"<xd:def xmlns:xd=\""+_xdNS+"\" name=\"X\" root=\"a\">\n" +
+"<xd:component>%class " + _package + ".Csvxx1 %link a</xd:component>\n" +
+" <xd:xon name='a'>\n" +
+"    [ [ %script =\"+\", \"string()\"] ]\n" +
+//"    [ [ %script =\"+\", \"int\", \"int\", \"string()\", \"boolean()\"] ]\n" +
+" </xd:xon>\n" +
+"</xd:def>";
+			xp = compile(xdef); // no property
+			genAndCopyXComponents(xp);
+			xd = xp.createXDDocument();
+			json =
+"[\n" +
+"  [\"a\t\n\\\"b\"],\n" +
+//"  [1, 2, \"a\", true],\n" +
+//"  [null, 1, \"a\t\n\\\"b\", false],\n" +
+//"  [6, null, null, true],\n" +
+//"  [null, null, null, null]\n" +
+"]";
+			o = xd.jparse(json, reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			xc = xd.jparseXComponent(json, null, reporter);
+			x = xc.toXon();
+			if (!XonUtils.xonEqual(o, x)) {
+				fail(XonUtils.toXonString(o, true)
+					+ "\n*****\n" + XonUtils.toXonString(x, true));
+			}
+		} catch (Exception ex) {fail(ex); reporter.clear();}
+if(T)return;
+//if(true)return;
+clearSources();
+//if(true)return;
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' name=\"X\" root=\"a\">\n" +
-"<xd:component>%class "+_package+".Csvxx %link a</xd:component>\n" +
+"<xd:component>%class "+_package+".Csvxx2 %link a</xd:component>\n" +
 " <xd:xon name='a'>\n" +
 "    [ [ %script =\"+\", \"int\", \"int\", \"string()\", \"boolean()\"] ]\n" +
 " </xd:xon>\n" +
@@ -629,40 +645,6 @@ clearSources();
 if(T)return;
 //if(true)return;
 clearSources();
-/**/
-		try {
-			xdef =
-"<xd:def xmlns:xd=\""+_xdNS+"\" name=\"X\" root=\"a\">\n" +
-"<xd:component>%class " + _package + ".Csvxx %link a</xd:component>\n" +
-" <xd:xon name='a'>\n" +
-"    [ [ %script =\"+\", \"string()\"] ]\n" +
-//"    [ [ %script =\"+\", \"int\", \"int\", \"string()\", \"boolean()\"] ]\n" +
-" </xd:xon>\n" +
-"</xd:def>";
-			xp = compile(xdef); // no property
-			genAndCopyXComponents(xp);
-			xd = xp.createXDDocument();
-			json =
-"[\n" +
-"  [\"a\t\n\\\"b\"],\n" +
-//"  [1, 2, \"a\", true],\n" +
-//"  [null, 1, \"a\t\n\\\"b\", false],\n" +
-//"  [6, null, null, true],\n" +
-//"  [null, null, null, null]\n" +
-"]";
-			o = xd.jparse(json, reporter);
-			assertNoErrorwarningsAndClear(reporter);
-			xc = xd.jparseXComponent(json, null, reporter);
-			x = xc.toXon();
-			if (!XonUtils.xonEqual(o, x)) {
-				fail(XonUtils.toXonString(o, true)
-					+ "\n*****\n" + XonUtils.toXonString(x, true));
-			}
-		} catch (Exception ex) {fail(ex); reporter.clear();}
-if(T)return;
-//if(true)return;
-clearSources();
-//if(true)return;
 /**/
 		try {
 			xdef = // test XON reference to %any in %oneOf

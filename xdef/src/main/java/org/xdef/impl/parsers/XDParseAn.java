@@ -12,11 +12,11 @@ public class XDParseAn extends XSAbstractParseToken {
 
 	public XDParseAn() {super();}
 	@Override
-	public void parseObject(final XXNode xnode, final XDParseResult p){
+	public void parseObject(final XXNode xn, final XDParseResult p){
 		int pos0 = p.getIndex();
 		p.isSpaces();
 		int pos = p.getIndex();
-		if (!parse(p)) {
+		if (!parse(xn, p)) {
 			if (p.matches()) {
 				//Incorrect value of '&{0}'&{1}{: }
 				p.errorWithString(XDEF.XDEF809, parserName());
@@ -30,7 +30,7 @@ public class XDParseAn extends XSAbstractParseToken {
 		checkItem(p);
 	}
 	//this method is overrided in  XDParseNum, XDParseLetters,
-	boolean parse(final XDParseResult p) {
+	boolean parse(final XXNode xn, final XDParseResult p) {
 		int pos = p.getIndex();
 		if (p.isLetterOrDigit() == 0) {
 			return false;

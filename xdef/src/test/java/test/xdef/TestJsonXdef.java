@@ -2,6 +2,7 @@ package test.xdef;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -9,6 +10,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Map;
 import org.w3c.dom.Element;
@@ -20,6 +22,7 @@ import org.xdef.component.XComponent;
 import org.xdef.msg.SYS;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.SDatetime;
+import org.xdef.sys.SException;
 import org.xdef.sys.SRuntimeException;
 import static org.xdef.sys.STester.printThrowable;
 import static org.xdef.sys.STester.runTest;
@@ -64,7 +67,7 @@ public class TestJsonXdef extends XDTester {
 			if (!_tempDir.endsWith("/")) {
 				_tempDir += "/";
 			}
-		} catch (Exception ex) {
+		} catch (IOException ex) {
 			fail(ex);
 			return null;
 		}
@@ -114,7 +117,7 @@ public class TestJsonXdef extends XDTester {
 				}
 				// create X-component items
 				String cls = "  %class test.common.json.component.Test" + id;
-				el = KXmlUtils.parseXml(
+				KXmlUtils.parseXml(
 					_dataDir + "Test" + id + ".xdef").getDocumentElement();
 				components += cls +" %link Test" + id + "#a" + ";\n";
 			}
@@ -150,7 +153,7 @@ public class TestJsonXdef extends XDTester {
 			}
 			try {
 				SUtils.deleteAll(xdir, true);// delete X-components java sources
-			} catch (Exception ex) {}
+			} catch (SException ex) {}
 			if (!rebuild) {
 				for (File fdef: _jfiles) {
 					String id = getId(fdef);
@@ -165,7 +168,7 @@ public class TestJsonXdef extends XDTester {
 						if (clazz == null) {
 							return null;  //force rebuild
 						}
-					} catch (Exception ex) {
+					} catch (ClassNotFoundException ex) {
 						rebuild = true;  //force rebuild
 						break;
 					}
@@ -203,7 +206,7 @@ public class TestJsonXdef extends XDTester {
 				compileSources(classpath, classDir, sources);
 			}
 			return xp; // return XDPool with compiled X-definitions
-		} catch (Exception ex) {
+		} catch (RuntimeException | SException ex) {
 			throw new RuntimeException(ex);
 		}
 	}
@@ -228,7 +231,7 @@ public class TestJsonXdef extends XDTester {
 			// read JSON data
 			try {
 				json = XonUtils.parseJSON(_dataDir + basename + ".json");
-			} catch (Exception ex) {
+			} catch (SRuntimeException ex) {
 				result += (result.isEmpty() ? "" : "\n")
 					+ "Incorrect JSON data Test"+id+".json";
 				continue;
@@ -262,7 +265,7 @@ public class TestJsonXdef extends XDTester {
 						}
 					}
 				}
-			} catch (Exception ex) {
+			} catch (SRuntimeException ex) {
 				result += (result.isEmpty() ? "" : "\n") +
 					"Error " + name + "\n" + printThrowable(ex);
 			}
@@ -275,7 +278,7 @@ public class TestJsonXdef extends XDTester {
 						+ XonUtils.toJsonString(json) + "\n"
 						+ XonUtils.toJsonString(XonUtils.xonToJson(o)) + "\n";
 				}
-			} catch (Exception ex) {
+			} catch (SRuntimeException ex) {
 				result += (result.isEmpty() ? "" : "\n")
 					+ "Incorrect jparse Test"+id+".json";
 				fail(ex);
@@ -295,12 +298,12 @@ public class TestJsonXdef extends XDTester {
 				KXmlUtils.compareElements(e, f.getAbsolutePath(),true,reporter);
 				if (reporter.errorWarnings()) {
 					result += (result.isEmpty() ? "" : "\n")
-						+ "Error xc.toXml(): " + name + "\n"
+						+ "Error 1 xc.toXml(): " + name + "\n"
 						+ KXmlUtils.nodeToString(
 							KXmlUtils.parseXml(f).getDocumentElement(), true)
 						+ "\n"+ KXmlUtils.nodeToString(e, true);
 				}
-			} catch (Exception ex) {
+			} catch (ClassNotFoundException | SRuntimeException ex) {
 				result += (result.isEmpty() ? "" : "\n")
 					+ "Error X-component " + name + "\n" + printThrowable(ex);
 			}
@@ -333,7 +336,7 @@ public class TestJsonXdef extends XDTester {
 						+ XonUtils.toJsonString(json) + "\n"
 						+ XonUtils.toJsonString(o) + "\n";
 				}
-			} catch (Exception ex) {
+			} catch (ClassNotFoundException | SRuntimeException ex) {
 				result += (result.isEmpty() ? "" : "\n")
 					+ "Error X-component " + id + "\n" + printThrowable(ex);
 			}
@@ -347,7 +350,7 @@ public class TestJsonXdef extends XDTester {
 					result += (result.isEmpty() ? "" : "\n")
 						+ "Error not reported: "+f.getName();
 				}
-			} catch (Exception ex) {
+			} catch (SRuntimeException ex) {
 				result += (result.isEmpty() ? "" : "\n")
 					+ "Error jerr: " + f.getName() + "\n" + printThrowable(ex);
 			}
@@ -368,7 +371,7 @@ public class TestJsonXdef extends XDTester {
 			File f = new File(_tempDir + test +	(x > 0 ? "_"+x : "") + "a.xml");
 			return xp.createXDDocument(test).xparseXComponent(f,
 				Class.forName("test.common.json.component." + test), null);
-		} catch (Exception ex) {
+		} catch (ClassNotFoundException | SRuntimeException ex) {
 			throw new RuntimeException("XComponent not found: " + test);
 		}
 	}
@@ -388,13 +391,13 @@ public class TestJsonXdef extends XDTester {
 		try {
 			XDDocument xd = xp.createXDDocument();
 			File f = new File(clearTempDir(), "Test201" + encoding + ".xon");
-			Writer wr =
-				new OutputStreamWriter(	new FileOutputStream(f), encoding);
-			if (genEncoding) {
-				wr.write("%encoding = \"" + encoding + "\"\n");
+			try (Writer wr = new OutputStreamWriter(
+				new FileOutputStream(f), encoding)) {
+				if (genEncoding) {
+					wr.write("%encoding = \"" + encoding + "\"\n");
+				}
+				wr.write(xon);
 			}
-			wr.write(xon);
-			wr.close();
 			Object x = XonUtils.parseXON(f);
 			assertEq("ĚŠČŘŽÝÁÍÉÚŮĹ",
 				((Map) ((Map) x).get("ěščřžýáíéúůĺ %u@#$")).get("é"));
@@ -418,7 +421,7 @@ public class TestJsonXdef extends XDTester {
 					+ "\n " + XonUtils.toXonString(xc.toXon(), true);
 			}
 			return result;
-		} catch (Exception ex) {
+		} catch (IOException | SRuntimeException ex) {
 			return printThrowable(ex);
 		}
 	}
@@ -431,7 +434,6 @@ public class TestJsonXdef extends XDTester {
 			return;
 		}
 		String fname, ini, json, xdef, xml;
-		File file;
 		Object x;
 		List list;
 		Element el;
@@ -440,22 +442,17 @@ public class TestJsonXdef extends XDTester {
 		XComponent xc;
 		XDDocument xd;
 		XDPool xp;
-		// Generate data (X-definitons, X-components, XML source files).
 		try {
-			xp = genAll("Test*");
+			xp = genAll("Test*");// Generate X-definitons, X-components, sources
 //			xp = genAll("Test064");
-		} catch (Exception ex) {
-			fail(new RuntimeException(ex));
-			return;
-		}
-		// run all tests
-		try {
-			for (File f: _jfiles) {
+			for (File f: _jfiles) { // run all tests
 				String s = testJdef(xp, getId(f));
 				assertTrue(s.isEmpty(), s );
 			}
-		} catch (Exception ex) {fail(ex);} // should not happen!!!
-//		if(true)return;
+		} catch (Exception ex) {
+			fail(ex); // should not happen!!!
+			return;
+		}
 		// Test X-components
 		String xon = XDConstants.XON_NS_PREFIX + "$";
 		try {
@@ -557,7 +554,6 @@ public class TestJsonXdef extends XDTester {
 		if (getFailCount() == 0) {
 			clearTempDir(); // delete temporary files.
 		}
-
 		// Other tests
 		try {
 			xdef =
@@ -595,8 +591,7 @@ public class TestJsonXdef extends XDTester {
 			assertTrue(XonUtils.xonEqual(x, xc.toXon()));
 			xd = xp.createXDDocument("Person");
 			xd.setXONContext(XonUtils.xonToJson(x));
-			xc = xd.jcreateXComponent("Person",
-				Class.forName("test.xdef.XonPerson"), reporter);
+			xc = xd.jcreateXComponent("Person", null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
 			assertTrue(XonUtils.xonEqual(x, xc.toXon()));
 			xdef =
@@ -609,7 +604,7 @@ public class TestJsonXdef extends XDTester {
 "         \"Pay\": \"int(1000, 99999)\",\n" +
 "         \"Birth date.\": \"date()\"\n" +
 "      }\n" +
- "   }\n"+
+"   }\n"+
 "  ]\n"+
 "}\n"+
 "</xd:xon>\n"+
@@ -695,8 +690,6 @@ public class TestJsonXdef extends XDTester {
 			assertTrue(XonUtils.xonEqual(x,
 				jcreate(xd, "Person_list", reporter)));
 			assertNoErrorwarningsAndClear(reporter);
-		} catch (Exception ex) {fail(ex);}
-		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='Matrix'>\n"+
 "<xd:xon name=\"Matrix\">\n"+
@@ -752,8 +745,6 @@ public class TestJsonXdef extends XDTester {
 			xd.setXONContext(x);
 			assertTrue(XonUtils.xonEqual(x, jcreate(xd, "Skladby", reporter)));
 			assertNoErrorwarningsAndClear(reporter);
-		} catch (Exception ex) {fail(ex);}
-		try {
 			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='json'>\n"+
 "<xd:xon name='json'>\n"+
@@ -762,10 +753,10 @@ public class TestJsonXdef extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			json = "{\"\":\"aaa\"}";
-			x = jparse(xp, "", json, reporter);
+			jparse(xp, "", json, reporter);
 			assertNoErrorwarningsAndClear(reporter);
 			json = "{}";
-			x = jparse(xp, "", json, reporter);
+			jparse(xp, "", json, reporter);
 			assertNoErrorwarningsAndClear(reporter);
 			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='json'>\n"+
@@ -775,10 +766,10 @@ public class TestJsonXdef extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			json = "{\"\":\"aaa\"}";
-			x = jparse(xp, "", json, reporter);
+			jparse(xp, "", json, reporter);
 			assertNoErrorwarningsAndClear(reporter);
 			json = "{}";
-			x = jparse(xp, "", json, reporter);
+			jparse(xp, "", json, reporter);
 			assertNoErrorwarningsAndClear(reporter);
 			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='A|B|json'>\n"+
@@ -824,8 +815,6 @@ public class TestJsonXdef extends XDTester {
 			assertNoErrorwarningsAndClear(reporter);
 			assertTrue(XonUtils.xonEqual(XonUtils.parseJSON(json), x));
 			assertEq("axb", swr.toString());
-		} catch (Exception ex) {fail(ex);}
-		try {
 			xdef =
 "<xd:def xmlns:xd=\""+_xdNS+"\" root=\"root\" >\n" +
 "  <xd:xon xd:name='root'>\n"+
@@ -881,8 +870,6 @@ public class TestJsonXdef extends XDTester {
 			x = "\"ab\\n\\tc\"";
 			assertTrue(XonUtils.xonEqual("ab\n\tc",
 				jparse(xp, "", (Object) x, reporter)));
-		} catch (Exception ex) {fail(ex);}
-		try {
 			xdef =
 "<xd:def xmlns:xd=\""+_xdNS+"\" name=\"X\" root=\"a\">\n"+
 " <xd:ini name='a'>\n"+
@@ -982,8 +969,6 @@ public class TestJsonXdef extends XDTester {
 				(BigDecimal) SUtils.getValueFromGetter(xc,"get$D")));
 			SUtils.setValueToSetter(xc,"set$A", "b");
 			assertEq("b", SUtils.getValueFromGetter(xc,"get$A"));
-		} catch (Exception ex) {fail(ex);}
-		try {
 			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
 "<xd:xon name='a'>\n" +
@@ -1036,7 +1021,9 @@ public class TestJsonXdef extends XDTester {
 				SUtils.getValueFromGetter(xc,"toXon")));
 			list = (List) SUtils.getValueFromGetter(
 				xc, "listOf$"+XonNames.X_VALUE+"_5");
-			list.add(InetAddress.getByName("111.22.33.1"));
+			try {
+				list.add(InetAddress.getByName("111.22.33.1"));
+			} catch (UnknownHostException ex) {}
 			SUtils.setValueToSetter(xc, "set"+XonNames.X_VALUE+"_5", list);
 			assertEq(2, ((List) SUtils.getValueFromGetter(
 				xc,"listOf$"+XonNames.X_VALUE+"_5")).size());
@@ -1050,8 +1037,6 @@ public class TestJsonXdef extends XDTester {
 				SUtils.getValueFromGetter(SUtils.getValueFromGetter(
 					xc,"getjx$"+XonNames.X_MAP),
 					"getjx$"+XonNames.X_ARRAY+"_1"), "toXon")).size());
-		} catch (Exception ex) {fail(ex);}
-		try {
 			xdef = // test data with different encodings
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" root=\"a\" >\n" +
 "<xd:xon name=\"a\">\n" +
@@ -1090,7 +1075,7 @@ public class TestJsonXdef extends XDTester {
 			assertEq("", testEncoding(xp, json, "UTF-32LE", false));//authomatic
 			assertEq("", testEncoding(xp, json, "UTF-32BE", true));
 			assertEq("", testEncoding(xp, json,"UTF-32BE", false));// authomatic
-		} catch (Exception ex) {fail(ex);}
+		} catch (SRuntimeException ex) {fail(ex);}
 
 		clearTempDir(); // delete temporary files.
 	}

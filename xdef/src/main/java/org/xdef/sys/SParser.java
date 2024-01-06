@@ -30,7 +30,7 @@ public interface SParser {
 	public String getParsedString();
 
 	/** Get part of the unparsed part of source and set EOS..
-	 * @return unparsed part of source or null if EOS reached.
+	 * @return unparsed part of source or empty string if EOS reached.
 	 */
 	public String getUnparsedBufferPart();
 

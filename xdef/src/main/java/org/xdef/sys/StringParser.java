@@ -2238,13 +2238,6 @@ public class StringParser extends SReporter implements SParser {
 		return true;
 	}
 
-	@Deprecated
-	/** Skip white spaces.
-	 * @Deprecated please use isSpaces instead.
-	 * @return true if a space was skipped.
-	 */
-	public final boolean skipSpaces() {return isSpaces();}
-
 	@Override
 	/** Check if actual position points to given character. Set the actual
 	 * position to the next character if given character was recognized.

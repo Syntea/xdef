@@ -1453,6 +1453,17 @@ public class TestXon extends XDTester {
 			assertNull(testX(xp, "", s, "{ a: [] }"));
 			assertNull(testX(xp, "", s, "{ \" \": [\"\",null, false] }"));
 			assertNull(testX(xp, "", s, "{ p:[8d,9D],q:[],r:{},s:\"\" }"));
+			xdef = //test num, eq, gYear, int in array
+"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
+"  <xd:component>%class "+_package+".MytestX_numeq %link #A;</xd:component>\n" +
+"<xd:xon name='A'>\n" +
+"[ \"num()\", \"eq('2021')\", \"gYear()\", \"int(2021,2021)\" ]\n" +
+"</xd:xon>\n" +
+"</xd:def>";
+			genXComponent(xp = compile(xdef));
+			xon = "[\"2021\", \"2021\", d2021, 2021]";
+			s = _package+".MytestX_numeq";
+			assertNull(testX(xp,"", s, xon));
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
 "<xd:xon name='A'>\n" +
@@ -1610,7 +1621,7 @@ public class TestXon extends XDTester {
 			assertNull(testX(xp,"a", s, "true"));
 			assertNull(testX(xp,"a", s, "1"));
 			assertNull(testX(xp,"a", s, "null"));
-			assertNull(testX(xp,"a", s, "\"abc\""));			
+			assertNull(testX(xp,"a", s, "\"abc\""));
 			// (array)
 			assertNull(testX(xp,"a", s, "[]"));
 			assertNull(testX(xp,"a", s, "[1]"));
@@ -1860,6 +1871,18 @@ public class TestXon extends XDTester {
 			assertEq("", testX(xp, "", s, "0"));
 			assertEq("", testX(xp, "", s, "-3"));
 			assertEq("", testX(xp, "", s, "123456"));
+			xdef = // num
+"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
+"  <xd:component>%class "+_package+".MytestX_num %link #A;</xd:component>\n" +
+"<xd:xon name='A'>\n" +
+" \"num()\" \n" +
+"</xd:xon>\n" +
+"</xd:def>";
+			genXComponent(xp = compile(xdef));
+			s = _package+".MytestX_num";
+			assertNull(testX(xp,"", s, "\"0\""));
+			assertNull(testX(xp,"", s, "\"00001\""));
+			assertNull(testX(xp,"", s, "\"2021\""));
 			xdef = //boolean
 "<xd:def xmlns:xd='" + _xdNS + "' xd:root='a'>\n" +
 "<xd:xon name='a'> \"boolean()\" </xd:xon>\n" +

@@ -98,7 +98,7 @@ public final class DefParseResult extends XDValueAbstract
 			_srcIndex = _source.length();
 			return result;
 		}
-		return null;
+		return "";
 	}
 	@Override
 	public final String getParsedBufferPartFrom(final int pos) {
@@ -109,7 +109,7 @@ public final class DefParseResult extends XDValueAbstract
 	@Override
 	public final String getBufferPart(final int from, final int to) {
 		return (_source != null && from < _srcIndex
-			&& _srcIndex<=_source.length()) ? _source.substring(from, to): null;
+			&& _srcIndex<=_source.length()) ? _source.substring(from, to): "";
 	}
 	@Override
 	public final ArrayReporter getReporter() {return _ar;}

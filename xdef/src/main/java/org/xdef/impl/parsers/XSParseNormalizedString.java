@@ -43,20 +43,6 @@ public class XSParseNormalizedString extends XSAbstractParseString {
 		_minLength = _maxLength = -1;
 		_whiteSpace = WS_REPLACE;
 	}
-/*
-The lexical space of xsd:normalizedString is unconstrained (any valid XML
-character may be used). Its value space is the set of strings after whitespace
-replacement—i.e., after any occurrence of #x9 (tab), #xA (linefeed), and #xD
-(carriage return) have been replaced by an occurrence of #x20 (space) without
-any whitespace collapsing.
-
-This is the only datatype that performs whitespace replacement without
-collapsing. When whitespace isn't significant, xsd:token is preferred.
-
-This datatype corresponds neither to the XPath function normalize-space() (which
-performs whitespace trimming and collapsing) nor to the DOM normalize method
-(which is a merge of adjacent text objects).
-*/
 	@Override
 	public void setEnumeration(final Object[] o) {
 		if (o == null || o.length == 0) {
@@ -71,18 +57,15 @@ performs whitespace trimming and collapsing) nor to the DOM normalize method
 			} else {
 				e[i] = new DefString(""); // to prevent exception
 			}
-
 		}
 		_enumeration = e;
 	}
-
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p) {
 		int pos0 = p.getIndex();
 		String oldsource = p.getSourceBuffer();
 		String s = p.getUnparsedBufferPart();
-		s = (s == null) ? ""
-			: SUtils.modifyString(SUtils.modifyString(SUtils.modifyString(
+		s = SUtils.modifyString(SUtils.modifyString(SUtils.modifyString(
 				s, "\n", " "), "\t", " "), "\r", " ");
 		p.setIndex(pos0);
 		s = p.getParsedBufferPartFrom(0) + s;

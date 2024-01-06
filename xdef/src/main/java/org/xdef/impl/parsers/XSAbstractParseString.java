@@ -163,9 +163,6 @@ public abstract class XSAbstractParseString extends XSAbstractParser {
 			}
 		} else {//preserve or replace
 			s = p.getUnparsedBufferPart();
-			if (s == null) {
-				s = "";
-			}
 			if (_whiteSpace == WS_REPLACE) { //replace
 				s = s.replace('\t', ' ').replace('\n', ' ').replace('\r', ' ');
 			}

@@ -1,6 +1,7 @@
 package org.xdef.impl.parsers;
 
 import org.xdef.XDParseResult;
+import org.xdef.proc.XXNode;
 
 /** Parser of X-Script "letters" type.
  * @author Vaclav Trojan
@@ -10,7 +11,7 @@ public class XDParseLetters extends XDParseAn {
 
 	public XDParseLetters() {super();}
 	@Override
-	boolean parse(final XDParseResult p) {
+	boolean parse(final XXNode xn, final XDParseResult p) {
 		int pos = p.getIndex();
 		if (p.isLetter() == 0) {
 			return false;

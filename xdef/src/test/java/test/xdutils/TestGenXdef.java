@@ -40,10 +40,15 @@ public class TestGenXdef extends XDTester {
 				o = XonUtils.parseXON(files[i]);
 				x = xd.jparse(f, reporter);
 				if (reporter.errorWarnings()) {
-					fail(id + ", " + f + ":\n" +reporter.printToString());
+					fail(id + ", " + f + ":\n" +reporter.printToString()+'\n'+
+						SUtils.readString(f) + '\n'
+						+ SUtils.readString(new File(fname)));
 					reporter.clear();
 				}
-				assertTrue(XonUtils.xonEqual(o, x), id + ": \n" + f);
+				assertTrue(XonUtils.xonEqual(o, x), id + ": \n" + f + '\n' +
+					XonUtils.toXonString(o, true) + '\n' +
+					XonUtils.toXonString(x, true) + '\n' +
+					SUtils.readString(new File(fname)));
 			}
 		} catch (Exception ex) {
 			fail(f.getAbsolutePath());

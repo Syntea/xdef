@@ -144,9 +144,8 @@ public final class GenXDef {
 	 */
 	public static final Element genXdef(final Object obj, final String xdName) {
 		Object o = readData(obj);
-		if (o != null && o instanceof Element) {
-			return GenXDefXML.genXdef((Element) o, xdName);
-		}
-		return GenXDefXON.genXdef(o, xdName);
+		return o != null && o instanceof Element
+			? GenXDefXML.genXdef((Element) o, xdName)
+			: GenXDefXON.genXdef(o, xdName);
 	}
 }

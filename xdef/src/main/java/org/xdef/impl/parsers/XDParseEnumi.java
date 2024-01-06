@@ -19,9 +19,9 @@ public class XDParseEnumi extends XDParseEnum {
 	public void parseObject(final XXNode xnode, final XDParseResult p) {
 		int pos = p.getIndex();
 		int len = -1;
-		for (int i = 0; i < _list.length; i++) {
-			if (p.isTokenIgnoreCase(_list[i])) {
-				int tlen = _list[i].length();
+		for (String s : _list) {
+			if (p.isTokenIgnoreCase(s)) {
+				int tlen = s.length();
 				if (tlen > len) {
 					len = tlen;
 				}

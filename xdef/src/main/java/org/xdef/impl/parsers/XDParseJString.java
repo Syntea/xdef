@@ -9,6 +9,7 @@ import static org.xdef.XDParser.MINLENGTH;
 import static org.xdef.XDParser.PATTERN;
 import static org.xdef.XDParser.WHITESPACE;
 import static org.xdef.XDParser.WS_PRESERVE;
+import org.xdef.proc.XXNode;
 import org.xdef.xon.XonTools;
 
 /** Parser of X-Script "jstring" (XON/JSON string) type.
@@ -49,9 +50,9 @@ public class XDParseJString extends XDParseAn {
 			0;
 	}
 	@Override
-	boolean parse(final XDParseResult p) {
+	boolean parse(final XXNode xn, final XDParseResult p) {
 		int pos = p.getIndex();
-		if (p.isChar('"')) { // quoted string
+		if (xn != null && xn.getXonMode() > 0 && p.isChar('"')) {
 			String s = XonTools.readJString(p);
 			if (s != null && !p.errors()) {
 				p.setParsedValue(s);

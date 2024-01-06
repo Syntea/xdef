@@ -12,6 +12,7 @@ import org.xdef.impl.code.DefParseResult;
 import org.xdef.impl.code.DefString;
 import org.xdef.XDContainer;
 import org.xdef.sys.SRuntimeException;
+import org.xdef.xon.XonTools;
 
 /** Parser of X-Script "eq" type.
  * @author Vaclav Trojan
@@ -22,21 +23,22 @@ public class XDParseEq extends XDParserAbstract {
 
 	public XDParseEq() {super();}
 	@Override
-	public XDParseResult check(final XXNode xnode, final String s) {
+	public XDParseResult check(final XXNode xn, final String s) {
 		XDParseResult p = new DefParseResult(s);
-		if (!_param.equals(s)) {
-			//Incorrect value of '&{0}'&{1}{: }
-			p.errorWithString(XDEF.XDEF809, parserName());
-		} else {
-			p.setEos();
-		}
+		parseObject(xn, p);
 		return p;
 	}
 	@Override
-	public void parseObject(final XXNode xnode, final XDParseResult p){
-		if (p.isToken(_param)) {
-			p.setParsedValue(_param);
-		} else {
+	public void parseObject(final XXNode xn, final XDParseResult p){
+		boolean quoted = xn != null && xn.getXonMode() > 0 && p.isChar('"');
+		if (quoted) {
+			if (!_param.equals(XonTools.readJString(p))) {
+				//Incorrect value of '&{0}'&{1}{: }
+				p.errorWithString(XDEF.XDEF809, parserName());
+			}
+			return;
+		}
+		if (!p.isToken(_param)) {
 			//Incorrect value of '&{0}'&{1}{: }
 			p.errorWithString(XDEF.XDEF809, parserName());
 		}

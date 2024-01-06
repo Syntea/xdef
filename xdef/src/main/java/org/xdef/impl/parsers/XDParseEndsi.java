@@ -13,6 +13,7 @@ public class XDParseEndsi extends XDParseEqi {
 	private static final String ROOTBASENAME = "endsi";
 
 	public XDParseEndsi() {super();}
+
 	@Override
 	public XDParseResult check(final XXNode xnode, final String s) {
 		XDParseResult p = new DefParseResult(s);
@@ -23,7 +24,7 @@ public class XDParseEndsi extends XDParseEqi {
 	public void parseObject(final XXNode xnode, final XDParseResult p) {
 		String s = p.getUnparsedBufferPart();
 		int i = s.length() - _param.length();
-		if (i < 0 || !_param.equalsIgnoreCase(s.substring(i).toLowerCase())) {
+		if (i < 0 || !_param.equalsIgnoreCase(s.substring(i))) {
 			//Incorrect value of &{0}&{1}{: }
 			p.errorWithString(XDEF.XDEF809, parserName());
 		} else {

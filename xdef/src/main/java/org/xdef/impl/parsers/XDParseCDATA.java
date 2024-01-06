@@ -23,25 +23,10 @@ public class XDParseCDATA extends XDParserAbstract {
 		_minLength = 1; _maxLength = -1;
 	}
 	@Override
-	public XDParseResult check(final XXNode xnode, final String s) {
-		XDParseResult p = new DefParseResult(s);
-		int len = s.length();
-		if (_maxLength >= 0 && len > _maxLength) {
-			//Length of value of '&{0}' is too long&{1}{: }
-			p.errorWithString(XDEF.XDEF815, "string");
-		} else if (_minLength == -1 && len == 0 ||
-			_minLength >= 0 && len < _minLength) {
-			//Length of value of '&{0}' is too short&{1}{: }
-			p.errorWithString(XDEF.XDEF814, "string");
-		} else {
-			p.setParsedValue(s);
-			p.setEos();
-		}
-		return p;
-	}
-	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){
-		int len = p.getUnparsedBufferPart().length();
+		String s = p.getUnparsedBufferPart();
+		int len = s.length();
+		p.setParsedValue(s);
 		if (_maxLength >= 0 && len > _maxLength) {
 			//Length of value of '&{0}' is too long&{0}'{: }
 			p.errorWithString(XDEF.XDEF815, "string");
