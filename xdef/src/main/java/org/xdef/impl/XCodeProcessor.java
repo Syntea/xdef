@@ -51,6 +51,7 @@ import static org.xdef.XDValueID.XD_DATETIME;
 import static org.xdef.XDValueID.XD_DECIMAL;
 import static org.xdef.XDValueID.XD_DOUBLE;
 import static org.xdef.XDValueID.XD_ELEMENT;
+import static org.xdef.XDValueID.XD_INPUT;
 import static org.xdef.XDValueID.XD_LOCALE;
 import static org.xdef.XDValueID.XD_LONG;
 import static org.xdef.XDValueID.XD_NAMEDVALUE;
@@ -66,13 +67,69 @@ import static org.xdef.XDValueID.XD_XQUERY;
 import static org.xdef.XDValueID.XX_ATTR;
 import static org.xdef.XDValueID.XX_ELEMENT;
 import static org.xdef.XDValueID.XX_TEXT;
+import static org.xdef.XDValueID.X_PARSEITEM;
+import static org.xdef.XDValueID.X_UNIQUESET;
+import static org.xdef.XDValueID.X_UNIQUESET_KEY;
 import org.xdef.XDValueType;
-import static org.xdef.XDValueType.OBJECT;
 import org.xdef.XDXmlOutStream;
 import org.xdef.impl.code.CodeParser;
 import org.xdef.impl.code.CodeS1;
 import org.xdef.impl.code.CodeSWTableInt;
 import org.xdef.impl.code.CodeSWTableStr;
+import org.xdef.impl.code.CodeUniqueset;
+import org.xdef.impl.code.CodeXD;
+import org.xdef.impl.code.DefBNFGrammar;
+import org.xdef.impl.code.DefBNFRule;
+import org.xdef.impl.code.DefBigInteger;
+import org.xdef.impl.code.DefBoolean;
+import org.xdef.impl.code.DefBytes;
+import org.xdef.impl.code.DefChar;
+import org.xdef.impl.code.DefContainer;
+import org.xdef.impl.code.DefCurrency;
+import org.xdef.impl.code.DefDate;
+import org.xdef.impl.code.DefDecimal;
+import org.xdef.impl.code.DefDouble;
+import org.xdef.impl.code.DefElement;
+import org.xdef.impl.code.DefEmailAddr;
+import org.xdef.impl.code.DefException;
+import org.xdef.impl.code.DefGPSPosition;
+import org.xdef.impl.code.DefIPAddr;
+import org.xdef.impl.code.DefInStream;
+import org.xdef.impl.code.DefLocale;
+import org.xdef.impl.code.DefLong;
+import org.xdef.impl.code.DefNamedValue;
+import org.xdef.impl.code.DefNull;
+import org.xdef.impl.code.DefObject;
+import org.xdef.impl.code.DefOutStream;
+import org.xdef.impl.code.DefParseResult;
+import org.xdef.impl.code.DefPrice;
+import org.xdef.impl.code.DefRegex;
+import org.xdef.impl.code.DefReport;
+import org.xdef.impl.code.DefString;
+import org.xdef.impl.code.DefURI;
+import org.xdef.impl.code.DefXPathExpr;
+import org.xdef.impl.code.DefXQueryExpr;
+import org.xdef.impl.code.ParseItem;
+import org.xdef.impl.debug.ChkGUIDebug;
+import org.xdef.model.XMDebugInfo;
+import org.xdef.model.XMDefinition;
+import org.xdef.msg.XDEF;
+import org.xdef.proc.XXException;
+import org.xdef.proc.XXNode;
+import org.xdef.sys.ArrayReporter;
+import org.xdef.sys.Report;
+import org.xdef.sys.ReportWriter;
+import org.xdef.sys.SBuffer;
+import org.xdef.sys.SDatetime;
+import org.xdef.sys.SError;
+import org.xdef.sys.SManager;
+import org.xdef.sys.SReporter;
+import org.xdef.sys.SRuntimeException;
+import org.xdef.sys.SThrowable;
+import org.xdef.sys.StringParser;
+import org.xdef.xml.KXmlUtils;
+import static org.xdef.XDValueID.X_UNIQUESET_M;
+import static org.xdef.XDValueType.OBJECT;
 import static org.xdef.impl.code.CodeTable.ADD_DAY;
 import static org.xdef.impl.code.CodeTable.ADD_HOUR;
 import static org.xdef.impl.code.CodeTable.ADD_I;
@@ -101,6 +158,7 @@ import static org.xdef.impl.code.CodeTable.BYTES_TO_BASE64;
 import static org.xdef.impl.code.CodeTable.BYTES_TO_HEX;
 import static org.xdef.impl.code.CodeTable.CALL_OP;
 import static org.xdef.impl.code.CodeTable.CHAR_AT;
+import static org.xdef.impl.code.CodeTable.CHECKPARSED_OP;
 import static org.xdef.impl.code.CodeTable.CHECK_TYPE;
 import static org.xdef.impl.code.CodeTable.CHK_GE;
 import static org.xdef.impl.code.CodeTable.CHK_GT;
@@ -437,61 +495,8 @@ import static org.xdef.impl.code.CodeTable.UPPERCASE;
 import static org.xdef.impl.code.CodeTable.WHITESPACES_S;
 import static org.xdef.impl.code.CodeTable.WRITE_TEXTNODE;
 import static org.xdef.impl.code.CodeTable.XOR_B;
-import org.xdef.impl.code.CodeUniqueset;
-import org.xdef.impl.code.CodeXD;
-import org.xdef.impl.code.DefBNFGrammar;
-import org.xdef.impl.code.DefBNFRule;
-import org.xdef.impl.code.DefBigInteger;
-import org.xdef.impl.code.DefBoolean;
-import org.xdef.impl.code.DefBytes;
-import org.xdef.impl.code.DefChar;
-import org.xdef.impl.code.DefContainer;
-import org.xdef.impl.code.DefCurrency;
-import org.xdef.impl.code.DefDate;
-import org.xdef.impl.code.DefDecimal;
-import org.xdef.impl.code.DefDouble;
-import org.xdef.impl.code.DefElement;
-import org.xdef.impl.code.DefEmailAddr;
-import org.xdef.impl.code.DefException;
-import org.xdef.impl.code.DefGPSPosition;
-import org.xdef.impl.code.DefIPAddr;
-import org.xdef.impl.code.DefInStream;
-import org.xdef.impl.code.DefLocale;
-import org.xdef.impl.code.DefLong;
-import org.xdef.impl.code.DefNamedValue;
-import org.xdef.impl.code.DefNull;
-import org.xdef.impl.code.DefObject;
-import org.xdef.impl.code.DefOutStream;
-import org.xdef.impl.code.DefParseResult;
-import org.xdef.impl.code.DefPrice;
-import org.xdef.impl.code.DefRegex;
-import org.xdef.impl.code.DefReport;
-import org.xdef.impl.code.DefString;
-import org.xdef.impl.code.DefURI;
-import org.xdef.impl.code.DefXPathExpr;
-import org.xdef.impl.code.DefXQueryExpr;
-import org.xdef.impl.code.ParseItem;
-import org.xdef.impl.compile.CompileBase;
-import org.xdef.impl.debug.ChkGUIDebug;
-import org.xdef.model.XMDebugInfo;
-import org.xdef.model.XMDefinition;
-import org.xdef.msg.XDEF;
-import org.xdef.proc.XXException;
-import org.xdef.proc.XXNode;
-import org.xdef.sys.ArrayReporter;
-import org.xdef.sys.Report;
-import org.xdef.sys.ReportWriter;
-import org.xdef.sys.SBuffer;
-import org.xdef.sys.SDatetime;
-import org.xdef.sys.SError;
-import org.xdef.sys.SManager;
-import org.xdef.sys.SReporter;
-import org.xdef.sys.SRuntimeException;
-import org.xdef.sys.SThrowable;
-import org.xdef.sys.StringParser;
-import org.xdef.xml.KXmlUtils;
-import static org.xdef.XDValueID.X_PARSEITEM;
-import static org.xdef.XDValueID.X_UNIQUESET_KEY;
+import static org.xdef.impl.compile.CompileBase.getParser;
+import static org.xdef.impl.compile.CompileBase.getTypeName;
 
 /** Provides processor engine of script code.
  * @author Vaclav Trojan
@@ -868,16 +873,16 @@ public final class XCodeProcessor {
 				if (val != null && !val.isNull()) {
 					short itemId = val.getItemId();
 					switch (itemId) {
-						case CompileBase.X_UNIQUESET:
-						case CompileBase.X_UNIQUESET_M: {
+						case X_UNIQUESET:
+						case X_UNIQUESET_M: {
 							// pending references
 							CodeUniqueset pt = (CodeUniqueset) val;
 							result &= pt.checkAndClear(_reporter);
 							break;
 						}
-						case CompileBase.XD_SERVICE:
-						case CompileBase.XD_STATEMENT:
-						case CompileBase.XD_RESULTSET:
+						case XD_SERVICE:
+						case XD_STATEMENT:
+						case XD_RESULTSET:
 							// close all not external database objects
 							if (xvar != null && !xvar.isExternal()) {
 								switch (itemId) {
@@ -893,14 +898,14 @@ public final class XCodeProcessor {
 								}
 							}
 							break;
-						case CompileBase.XD_INPUT: //close input streams
+						case XD_INPUT: //close input streams
 							if (xvar != null && !xvar.isExternal()
 								&& !xvar.getName().equals("$stdIn")) {
 								// close if not $stdIn and not external
 								((DefInStream) val).close();
 							}
 							break;
-						case CompileBase.XD_OUTPUT: //close out streams
+						case XD_OUTPUT: //close out streams
 							if (xvar != null) {
 								DefOutStream out = (DefOutStream) val;
 								if (xvar.isExternal()
@@ -988,7 +993,7 @@ public final class XCodeProcessor {
 						XD_STRING, // parsedType,
 						true) // required item
 				}; // optional
-			_globalVariables[3] = CompileBase.getParser("QName");
+			_globalVariables[3] = getParser("QName");
 			_globalVariables[4] =
 				new CodeUniqueset(parseItems, new String[0], "");
 		}
@@ -1103,8 +1108,7 @@ public final class XCodeProcessor {
 						if (xv != null && xv.isExternal()) {
 							//Null value of &{0}
 							putError(chkNode, XDEF.XDEF573, "external " +
-								CompileBase.getTypeName(xv.getType())
-								+ " " + xv.getName());
+								getTypeName(xv.getType()) + " " + xv.getName());
 						}
 						_stack[++sp] = DefNull.genNullValue(xv.getType());
 					} else {
@@ -1335,6 +1339,19 @@ public final class XCodeProcessor {
 					_stack[sp] = new DefLong(_stack[sp].longValue() >>>
 						_stack[sp + 1].intValue());
 					continue;
+				case CHECKPARSED_OP: { //Check ParsedResult
+					if (!_stack[sp--].booleanValue()) {
+						if (_stack[sp].getItemId() == XD_PARSERESULT) {
+							XDParseResult xdResult = (XDParseResult) _stack[sp];
+							if (xdResult.matches()) {
+								xdResult.error(XDEF.XDEF822);
+							}
+						} else {// XDParser //???
+System.out.println(" I do not know what to do now");
+						}
+					}
+					continue;
+				}
 ////////////////////////////////////////////////////////////////////////////////
 //comparings
 ////////////////////////////////////////////////////////////////////////////////
@@ -3029,7 +3046,7 @@ public final class XCodeProcessor {
 					for (int j = 3; j < _globalVariables.length; j++) {
 						XDValue xv;
 						if ((xv = _globalVariables[j]) != null &&
-							xv.getItemId() == CompileBase.X_UNIQUESET) {
+							xv.getItemId() == X_UNIQUESET) {
 							CodeUniqueset x = (CodeUniqueset)xv;
 							idrefTables.put(j, x);
 							_globalVariables[j] = new CodeUniqueset(
@@ -3340,7 +3357,7 @@ public final class XCodeProcessor {
 						((XDParser) _stack[sp]).check(chkNode, s).matches());
 					continue;
 				}
-//				case UNUSEDCODE:
+//				case CHECKPARSED_OP:
 				case PARSERESULT_MATCH:
 					_stack[sp] =
 						new DefBoolean(((XDParseResult)_stack[sp]).matches());
@@ -3514,7 +3531,7 @@ public final class XCodeProcessor {
 					_stack[sp] = new DefURI(_stack[sp].toString());
 					continue;
 				case NEW_PARSER: {
-					XDParser p = CompileBase.getParser(item.stringValue());
+					XDParser p = getParser(item.stringValue());
 					int np = item.getParam();
 					if (np > 0) { //number of parameters >= 1
 						XDContainer d;
@@ -3794,8 +3811,8 @@ public final class XCodeProcessor {
 			case XD_PARSERESULT:
 				y = (XDParseResult) x;
 				break;
-			case CompileBase.X_UNIQUESET:
-			case CompileBase.X_UNIQUESET_M:
+			case X_UNIQUESET:
+			case X_UNIQUESET_M:
 				result = (CodeUniqueset) x;
 			default:
 				y = chkElem._parseResult;

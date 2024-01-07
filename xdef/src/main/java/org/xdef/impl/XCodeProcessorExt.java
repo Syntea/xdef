@@ -222,7 +222,7 @@ import org.xdef.impl.code.DefSQLService;
 import org.xdef.impl.code.DefString;
 import org.xdef.impl.code.DefTelephone;
 import org.xdef.impl.code.DefXmlWriter;
-import org.xdef.impl.compile.CompileBase;
+import static org.xdef.impl.compile.CompileBase.getTypeName;
 import org.xdef.impl.ext.XExtUtils;
 import org.xdef.msg.XDEF;
 import org.xdef.proc.XXElement;
@@ -250,8 +250,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 			case GET_TYPEID: //get type of a value (as integer type id)
 				return new DefLong(p.getItemId());
 			case GET_TYPENAME: // get name of type of a value
-				return new DefString(
-					CompileBase.getTypeName(p.getItemId()));
+				return new DefString(getTypeName(p.getItemId()));
 			case CHECK_TYPE: // check type conversion
 				if (p != null && !p.isNull() &&
 					p.getItemId() != item.getParam()) {

@@ -18,6 +18,8 @@ import org.xdef.XDValue;
 import org.xdef.XDValueID;
 import static org.xdef.XDValueID.XD_ANY;
 import static org.xdef.XDValueID.XD_BOOLEAN;
+import static org.xdef.XDValueID.XD_PARSER;
+import static org.xdef.XDValueID.XD_STRING;
 import static org.xdef.XDValueID.XD_VOID;
 import org.xdef.impl.XChoice;
 import org.xdef.impl.XComment;
@@ -36,6 +38,12 @@ import org.xdef.impl.XSelectorEnd;
 import org.xdef.impl.XSequence;
 import org.xdef.impl.XVariableTable;
 import org.xdef.impl.code.CodeTable;
+import static org.xdef.impl.compile.CompileBase.ELEM_MODE;
+import static org.xdef.impl.compile.CompileBase.GLOBAL_MODE;
+import static org.xdef.impl.compile.XScriptParser.CREATE_SYM;
+import static org.xdef.impl.compile.XScriptParser.FINALLY_SYM;
+import static org.xdef.impl.compile.XScriptParser.INIT_SYM;
+import static org.xdef.impl.compile.XScriptParser.MATCH_SYM;
 import org.xdef.impl.parsers.XDParseEnum;
 import org.xdef.model.XMData;
 import org.xdef.model.XMElement;
@@ -682,8 +690,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					_codeGenerator._globalVariables.resetTo(
 						size, lastOffset);
 					_codeGenerator.reInit(); //clear the generated code
-					_scriptCompiler.initCompilation(
-						CompileBase.GLOBAL_MODE, XD_VOID);
+					_scriptCompiler.initCompilation(GLOBAL_MODE, XD_VOID);
 					//move the node with error to the end of list and try again
 					list.add(list.remove(errndx));
 				}
@@ -841,7 +848,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		ReportWriter reporter = getReportWriter();
 		// set reporter to the compiler of script
 		_scriptCompiler.setReportWriter(reporter);
-		_scriptCompiler.initCompilation(CompileBase.GLOBAL_MODE, XD_VOID);
+		_scriptCompiler.initCompilation(GLOBAL_MODE, XD_VOID);
 		compileMethodsAndClassesAttrs();
 		// Move all declarations of BNF grammars and variables from the
 		// list of X-definitions to the separated lists of variable declarations
@@ -902,7 +909,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		_codeGenerator._debugInfo = new XDebugInfo();
 		_scriptCompiler.setReportWriter(reporter); //reset original reporter
 		_codeGenerator.reInit(); //clear the generated code
-		_scriptCompiler.initCompilation(CompileBase.GLOBAL_MODE, XD_VOID);
+		_scriptCompiler.initCompilation(GLOBAL_MODE, XD_VOID);
 		// now compile all: BNF gramars, declarations, components, lexicon
 		compileDeclarations(_listBNF, _listDecl, _listComponent);
 		// clear all postdefines (should be already dleared, but who knows?)
@@ -1130,10 +1137,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						pnode._xdVersion,
 						pnode._nsPrefixes, pnode._xpathPos);
 					_scriptCompiler.nextSymbol();
-					newNode.setInitCode(
-						_scriptCompiler.compileSection(CompileBase.ELEM_MODE,
-						XD_VOID,
-						XScriptParser.INIT_SYM));
+					newNode.setInitCode(_scriptCompiler.compileSection(
+						ELEM_MODE, XD_VOID,	INIT_SYM));
 				}
 				pa = _precomp.getXdefAttr(pnode, "occurs", false, true);
 				if (pa != null) {
@@ -1167,10 +1172,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						pnode._xdVersion,
 						pnode._nsPrefixes, pnode._xpathPos);
 					_scriptCompiler.nextSymbol();
-					newNode.setFinallyCode(
-						_scriptCompiler.compileSection(CompileBase.ELEM_MODE,
-						XD_VOID,
-						XScriptParser.FINALLY_SYM));
+					newNode.setFinallyCode(_scriptCompiler.compileSection(
+						ELEM_MODE, XD_VOID, FINALLY_SYM));
 				}
 				pa = _precomp.getXdefAttr(pnode, "create", false, true);
 				if (pa != null) {
@@ -1181,10 +1184,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						pnode._xdVersion,
 						pnode._nsPrefixes, pnode._xpathPos);
 					_scriptCompiler.nextSymbol();
-					newNode.setComposeCode(
-						_scriptCompiler.compileSection(CompileBase.ELEM_MODE,
-						XD_ANY,
-						XScriptParser.CREATE_SYM));
+					newNode.setComposeCode(_scriptCompiler.compileSection(
+						ELEM_MODE, XD_ANY, CREATE_SYM));
 				}
 				pa = _precomp.getXdefAttr(pnode, "match", false, true);
 				if (pa != null) {
@@ -1195,10 +1196,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						pnode._xdVersion,
 						pnode._nsPrefixes, pnode._xpathPos);
 					_scriptCompiler.nextSymbol();
-					newNode.setMatchCode(
-						_scriptCompiler.compileSection(CompileBase.ELEM_MODE,
-						XD_BOOLEAN,
-						XScriptParser.MATCH_SYM));
+					newNode.setMatchCode(_scriptCompiler.compileSection(
+						ELEM_MODE, XD_BOOLEAN, MATCH_SYM));
 				}
 			}
 			pa = _precomp.getXdefAttr(pnode, "empty", false, true);

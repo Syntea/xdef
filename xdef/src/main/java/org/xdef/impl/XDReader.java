@@ -39,6 +39,20 @@ import static org.xdef.XDValueID.XD_STRING;
 import static org.xdef.XDValueID.XD_UNIQUESET_KEY;
 import static org.xdef.XDValueID.XD_XPATH;
 import static org.xdef.XDValueID.XD_XQUERY;
+import static org.xdef.XDValueID.X_PARSEITEM;
+import static org.xdef.XDValueID.X_UNIQUESET;
+import static org.xdef.XDValueID.X_UNIQUESET_M;
+import static org.xdef.impl.XDWriter.ID_CODEEXT;
+import static org.xdef.impl.XDWriter.ID_CODEI1;
+import static org.xdef.impl.XDWriter.ID_CODEI2;
+import static org.xdef.impl.XDWriter.ID_CODEL2;
+import static org.xdef.impl.XDWriter.ID_CODEOP;
+import static org.xdef.impl.XDWriter.ID_CODEPARSER;
+import static org.xdef.impl.XDWriter.ID_CODES1;
+import static org.xdef.impl.XDWriter.ID_CODESLIST;
+import static org.xdef.impl.XDWriter.ID_CODESWTABI;
+import static org.xdef.impl.XDWriter.ID_CODESWTABS;
+import static org.xdef.impl.XDWriter.ID_CODEXD;
 import org.xdef.impl.code.CodeExtMethod;
 import org.xdef.impl.code.CodeI1;
 import org.xdef.impl.code.CodeI2;
@@ -85,7 +99,7 @@ import org.xdef.impl.code.DefURI;
 import org.xdef.impl.code.DefXPathExpr;
 import org.xdef.impl.code.DefXQueryExpr;
 import org.xdef.impl.code.ParseItem;
-import org.xdef.impl.compile.CompileBase;
+import static org.xdef.impl.compile.CompileBase.getParser;
 import org.xdef.impl.xml.KNamespace;
 import org.xdef.msg.SYS;
 import org.xdef.sys.GPSPosition;
@@ -260,7 +274,7 @@ public final class XDReader extends SObjectReader {
 							return new DefNull(XD_PARSER);
 						}
 						XDContainer pars = (XDContainer) readXD();
-						XDParser y = CompileBase.getParser(name);
+						XDParser y = getParser(name);
 						try {
 							y.setNamedParams(null, pars);
 						} catch (SException ex) {
@@ -278,8 +292,8 @@ public final class XDReader extends SObjectReader {
 					}
 					case XD_XPATH:
 						return readXPath();
-					case CompileBase.X_UNIQUESET:
-					case CompileBase.X_UNIQUESET_M: {
+					case X_UNIQUESET:
+					case X_UNIQUESET_M: {
 						int len = readLength();
 						ParseItem[] keys = new ParseItem[len];
 						if (len > 0) {
@@ -301,16 +315,12 @@ public final class XDReader extends SObjectReader {
 						}
 						return new CodeUniqueset(keys, varNames, readString());
 					}
-					case XD_SERVICE:
-						return new DefSQLService();
-					case XD_STATEMENT:
-						return new DefSQLStatement();
-					case XD_RESULTSET:
-						return new DefSQLResultSet();
+					case XD_SERVICE: return new DefSQLService();
+					case XD_STATEMENT: return new DefSQLStatement();
+					case XD_RESULTSET: return new DefSQLResultSet();
 					case XD_UNIQUESET_KEY:
-					case CompileBase.X_PARSEITEM: // TODO ???
-					case XD_NULL:
-						return new DefNull(type);
+					case X_PARSEITEM: // TODO ???
+					case XD_NULL: return new DefNull(type);
 					default:
 						//Internal error&{0}{: }
 						throw new SIOException(SYS.SYS066,
@@ -321,19 +331,17 @@ public final class XDReader extends SObjectReader {
 				// 01ILSXMPVWT
 				byte c = readByte();
 				switch (c) {
-					case XDWriter.ID_CODEOP:
-						return new CodeOp(type, code);
-					case XDWriter.ID_CODEI1:
-						return new CodeI1(type, code, readInt());
-					case XDWriter.ID_CODEI2:
+					case ID_CODEOP: return new CodeOp(type, code);
+					case ID_CODEI1: return new CodeI1(type, code, readInt());
+					case ID_CODEI2:
 						return new CodeI2(type, code, readInt(), readInt());
-					case XDWriter.ID_CODEL2:
+					case ID_CODEL2:
 						return new CodeL2(type, code, readInt(), readLong());
-					case XDWriter.ID_CODES1:
+					case ID_CODES1:
 						return new CodeS1(type, code, readInt(), readString());
-					case XDWriter.ID_CODEXD:
+					case ID_CODEXD:
 						return new CodeXD(type, code, readInt(), readXD());
-					case XDWriter.ID_CODEEXT: {
+					case ID_CODEEXT: {
 						int p1 = readInt();
 						String name = readString();
 						String methodName = readString();
@@ -355,7 +363,7 @@ public final class XDReader extends SObjectReader {
 								"No such method: "+name+"/"+methodName);
 						}
 					}
-					case XDWriter.ID_CODEPARSER: {
+					case ID_CODEPARSER: {
 						int p1 = readInt();
 						String name = readString();
 						int len = readInt();
@@ -371,7 +379,7 @@ public final class XDReader extends SObjectReader {
 						return new CodeParser(type,//resultType,
 							code, p1, name, sqParamNames);
 					}
-					case XDWriter.ID_CODESLIST: {
+					case ID_CODESLIST: {
 						int p1 = readInt();
 						String[] pars = new String[p1];
 						for (int i = 0; i < p1; i++) {
@@ -379,7 +387,7 @@ public final class XDReader extends SObjectReader {
 						}
 						return new CodeStringList(type, code, pars);
 					}
-					case XDWriter.ID_CODESWTABI: {
+					case ID_CODESWTABI: {
 						CodeSWTableInt y = new CodeSWTableInt();
 						int p1 = readInt();
 						y.setParam(p1);
@@ -392,7 +400,7 @@ public final class XDReader extends SObjectReader {
 						}
 						return y;
 					}
-					case XDWriter.ID_CODESWTABS: {
+					case ID_CODESWTABS: {
 						CodeSWTableStr y = new CodeSWTableStr();
 						int p1 = readInt();
 						y.setParam(p1);

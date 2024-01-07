@@ -8,7 +8,6 @@ import org.xdef.XDService;
 import org.xdef.XDStatement;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
-import org.xdef.impl.compile.CompileBase;
 import java.math.BigDecimal;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -45,6 +44,9 @@ import static org.xdef.XDValueID.XD_SERVICE;
 import static org.xdef.XDValueID.XD_STATEMENT;
 import static org.xdef.XDValueID.XD_STRING;
 import static org.xdef.XDValueID.XD_TEXT;
+import static org.xdef.XDValueID.X_PARSEITEM;
+import static org.xdef.XDValueID.X_UNIQUESET;
+import static org.xdef.XDValueID.X_UNIQUESET_M;
 import org.xdef.XDValueType;
 import static org.xdef.XDValueType.NULL;
 
@@ -171,73 +173,41 @@ public final class DefNull extends XDValueAbstract {
 	public XDParseResult parseResultValue() {return null;}
 	public static XDValue genNullValue(final short type) {
 		switch (type) {
-			case XD_LONG: // integer (ie. long) value
-				return new DefLong();
-			case XD_DECIMAL: //BigDecimal value
-				return new DefDecimal();
-			case XD_BIGINTEGER: //BigInteger value
-				return new DefBigInteger();
-			case XD_BOOLEAN: //boolean value
-				return new DefBoolean();
-			case XD_CHAR: // char value
-				return new DefChar();
-			case XD_DOUBLE: // Float (ie double) value
-				return new DefDouble();
-			case XD_STRING: // String value
-				return new DefString();
-			case XD_DATETIME: // Datetime value
-				return new DefDate();
-			case XD_DURATION: // Duration value
-				return new DefDuration();
-			case XD_CONTAINER: // Container value
-				return new DefContainer();
-			case XD_GPSPOSITION: // GPSPosition
-				return new DefGPSPosition();
-			case XD_PRICE: // GPSPosition
-				return new DefPrice();
-			case XD_EMAIL: // EmailAddr
-				return new DefEmailAddr();
-			case XD_IPADDR: // IPAddr
-				return new DefIPAddr();
-			case XD_CURRENCY: // Currency
-				return new DefCurrency();
-			case XD_REGEX: // Regular expression value
-				return new DefRegex();
-			case XD_REGEXRESULT: //Regular expression result value
-				return new DefRegexResult();
-			case XD_BNFGRAMMAR: // BNF grammar
-				return new DefBNFGrammar();
-			case XD_BNFRULE: // BNF rule
-				return new DefBNFRule();
-			case XD_INPUT: // Input stream value
-				return new DefInStream();
-			case XD_OUTPUT: // Output stream value
-				return new DefOutStream();
-			case XD_BYTES: // Byte array value
-				return new DefBytes();
-			case XD_ELEMENT: // Element value
-				return new DefElement();
-			case XD_ATTR: // Attr value
-				return new DefAttr();
-			case XD_TEXT: // Text node value
-				return new DefText();
-			case XD_EXCEPTION: // Exception object
-				return new DefException();
-			case XD_REPORT: // Report value
-				return new DefReport();
-			case XD_PARSERESULT: //  Parse result value
-				return new DefParseResult();
-			case XD_SERVICE: // Database service value (DB Connection etc)
-				return new DefSQLService();
-			case XD_STATEMENT: // Service statement
-				return new DefSQLStatement();
-			case XD_RESULTSET: // XDResultSet value
-				return new DefSQLResultSet();
-			case CompileBase.X_UNIQUESET: // UNIQUESET value
-			case CompileBase.X_UNIQUESET_M: // UNIQUESET value
+			case XD_LONG: return new DefLong();
+			case XD_DECIMAL: return new DefDecimal();
+			case XD_BIGINTEGER: return new DefBigInteger();
+			case XD_BOOLEAN: return new DefBoolean();
+			case XD_CHAR: return new DefChar();
+			case XD_DOUBLE: return new DefDouble();
+			case XD_STRING: return new DefString();
+			case XD_DATETIME: return new DefDate();
+			case XD_DURATION: return new DefDuration();
+			case XD_CONTAINER: return new DefContainer();
+			case XD_GPSPOSITION: return new DefGPSPosition();
+			case XD_PRICE: return new DefPrice();
+			case XD_EMAIL: return new DefEmailAddr();
+			case XD_IPADDR: return new DefIPAddr();
+			case XD_CURRENCY: return new DefCurrency();
+			case XD_REGEX: return new DefRegex();
+			case XD_REGEXRESULT: return new DefRegexResult();
+			case XD_BNFGRAMMAR: return new DefBNFGrammar();
+			case XD_BNFRULE: return new DefBNFRule();
+			case XD_INPUT: return new DefInStream();
+			case XD_OUTPUT: return new DefOutStream();
+			case XD_BYTES: return new DefBytes();
+			case XD_ELEMENT: return new DefElement();
+			case XD_ATTR: return new DefAttr();
+			case XD_TEXT: return new DefText();
+			case XD_EXCEPTION: return new DefException();
+			case XD_REPORT: return new DefReport();
+			case XD_PARSERESULT: return new DefParseResult();
+			case XD_SERVICE: return new DefSQLService();
+			case XD_STATEMENT: return new DefSQLStatement();
+			case XD_RESULTSET: return new DefSQLResultSet();
+			case X_UNIQUESET: // UNIQUESET value
+			case X_UNIQUESET_M: // UNIQUESET value
 				return new CodeUniqueset(new ParseItem[0], null, "");
-			case CompileBase.X_PARSEITEM: // ParseItem value
-				return new ParseItem();
+			case X_PARSEITEM: return new ParseItem();
 		}
 		return new DefNull(type);
 	}

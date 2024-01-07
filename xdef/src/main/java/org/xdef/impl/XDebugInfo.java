@@ -405,7 +405,7 @@ public class XDebugInfo implements XMDebugInfo {
 					} else {
 						s += "\", ";
 					}
-					s += CodeDisplay.getTypeName(v.getType())+" "+v.getName();
+					s += CodeDisplay.getTypeAbbrev(v.getType())+" "+v.getName();
 				}
 			}
 			return s;

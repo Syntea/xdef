@@ -111,7 +111,8 @@ Keyword ::= "if" | "else" | "do" | "while" | "continue" | "break" | "switch"
   | "option" | "ref" | "match" | "final" | "forget" | "template" | "type" 
   | "uniqueSet" | "EQ" | "NE" | "LT" | "LE" | "GT" | "GE" | "LSH" | "RSH" 
   | "RRSH" | "AND" | "OR" | "XOR" | "MOD" | "NOT" | "NEG" | "OOR" | "AAND"
-  | "true" | "false" | "implements" | "extends" | "onFalse" | "$$$script"
+  | "CHECK" | "true" | "false" | "implements" | "extends" | "onFalse"
+  | "$$$script"
   /* Note "fixed" is not the keyword since it is used also as the name of
    validation method. */
 
@@ -220,9 +221,9 @@ OperatorLevel_2 ::= ("OR" | "OOR" | "XOR" | "||" | "|" | "^") $rule
 
 Expr2 ::= Expr3 (S?  OperatorLevel_2 S? Expr3)*
 
-OperatorLevel_3 ::= ("LT" | "<" | "GT" | ">" | "==" | "EQ" | "LE"
+OperatorLevel_3 ::= ( "LT" | "<" | "GT" | ">" | "==" | "EQ" | "LE"
   | "<=" | "GE" | ">=" | "!=" | "NE" | "<<" | "LSH" | ">>" | "RSH" | ">>>"
-  | "RRSH") $rule
+  | "RRSH" | "CHECK" ) $rule
 
 Expr3 ::= Expr4 (S? OperatorLevel_3 S? Expr4)*
 

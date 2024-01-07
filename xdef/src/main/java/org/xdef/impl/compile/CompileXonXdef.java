@@ -211,8 +211,8 @@ public final class CompileXonXdef extends XScriptParser {
 		final String nsURI,
 		final String name,
 		final SPosition spos) {
-		PNode result = new PNode(
-			name, spos, parent, parent._xdVersion, parent._xmlVersion);
+		PNode result = new PNode(name,
+			spos, parent, parent._xdVersion, parent._xmlVersion);
 		int nsindex;
 		String localName;
 		if (nsURI != null) {
@@ -514,8 +514,8 @@ public final class CompileXonXdef extends XScriptParser {
 				skipSpacesAndComments();
 				if (isToken(ONEOF_DIRECTIVE)) {
 					String s = getUnparsedBufferPart().trim();
-					pn = genXDElement(
-						parent, "choice", ((JValue) jo).getPosition());
+					pn = genXDElement(parent,
+						"choice", ((JValue) jo).getPosition());
 					skipSemiconsBlanksAndComments();
 					if (!s.isEmpty()) {
 						int ndx = s.indexOf("ref ");
@@ -884,7 +884,7 @@ public final class CompileXonXdef extends XScriptParser {
 	 */
 	private List<Object> parseXscript() {
 		List<Object> sectionList = new ArrayList<>();
-		SPosition spos = getPosition();
+		SPosition spos;
 		nextSymbol();
 		char sym;
 		for (;;) {
@@ -899,11 +899,11 @@ public final class CompileXonXdef extends XScriptParser {
 				if (_sym == SEMICOLON_SYM) {
 					continue;
 				}
-				if (!isSectionCommand(sym = _sym)) {
+				if (!isSectionCommand(_sym)) {
 					spos = getPosition();
 					if (readSectionCommand()) {
 						String s = getParsedBufferPartFrom(spos.getIndex());
-						if (!(s = s.trim()).equals(";")) { //it is not only ";"!
+						if (!s.trim().equals(";")) { //it is not only ";"!
 							addSection("", sectionList, spos);
 						}
 					}
@@ -1155,24 +1155,26 @@ public final class CompileXonXdef extends XScriptParser {
 		 */
 		public void xdScript(SBuffer name, SBuffer value) {
 			SPosition spos = value == null ? name : value;
-			if (ANY_NAME.equals(name.getString())) {
-				namedValue(new SBuffer(null, name));
-			} else if (ANY_OBJ.equals(name.getString())) {
-				putValue(new JAny((SPosition)name, value));
-			} else {
-				JValue jv;
-				if (ONEOF_DIRECTIVE.equals(name.getString())) {
+			JValue jv;
+			switch (name.getString()) {
+				case ANY_NAME:
+					namedValue(new SBuffer(null, name));
+					return;
+				case ANY_OBJ:
+					putValue(new JAny((SPosition)name, value));
+					return;
+				case ONEOF_DIRECTIVE:
 					jv =  new JValue(name, new JValue(spos,
 						ONEOF_DIRECTIVE+(value==null? "" : value.getString())));
-				} else {
+					break;
+				default:
 					jv = new JValue(name, new JValue(spos,
 						value == null ? "" : value.getString()));
-				}
-				if (_kind == 1) { // array
-					_arrays.peek().add(jv);
-				} else if (_kind == 2) { // map
-					_maps.peek().put(SCRIPT_DIRECTIVE, jv);
-				}
+			}
+			if (_kind == 1) { // array
+				_arrays.peek().add(jv);
+			} else if (_kind == 2) { // map
+				_maps.peek().put(SCRIPT_DIRECTIVE, jv);
 			}
 		}
 		@Override

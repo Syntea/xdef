@@ -104,7 +104,6 @@ public class XScriptParser extends StringParser
 	public static final char DDOT_SYM = 1021; // ".."
 	public static final char OOR_SYM = 1023; // "||"
 	public static final char AAND_SYM = 1024; // "&&"
-
 	public static final char ASK_SYM = '?';
 	public static final char NUMSIGN_SYM = '#';
 	public static final char ATCHAR_SYM = '@';
@@ -120,7 +119,6 @@ public class XScriptParser extends StringParser
 	public static final char SEMICOLON_SYM = ';';
 	public static final char BEG_SYM = '{';
 	public static final char END_SYM = '}';
-
 	// XScript statement keywords
 	public static final char IF_SYM = 1101;
 	public static final char ELSE_SYM = 1102;
@@ -140,14 +138,12 @@ public class XScriptParser extends StringParser
 	public static final char FINAL_SYM = 1116;
 	public static final char EXTERNAL_SYM = 1117;
 	public static final char NEW_SYM = 1118;
-
 	// XSctipt action names
 	public static final char FIXED_SYM = 1301;
 	public static final char REQUIRED_SYM = 1302;
 	public static final char OPTIONAL_SYM = 1303;
 	public static final char IGNORE_SYM = 1304;
 	public static final char ILLEGAL_SYM = 1305;
-
 	public static final char OCCURS_SYM = 1310;
 	public static final char ON_TRUE_SYM = 1311;
 	public static final char ON_FALSE_SYM = 1312;
@@ -174,8 +170,7 @@ public class XScriptParser extends StringParser
 	public static final char IMPLEMENTS_SYM = 1335;
 	public static final char USES_SYM = 1336;
 	public static final char COMPONENT_SYM = 1337;
-	public static final char CHECK_SYM = 1338; //never generated
-
+	public static final char CHECK_SYM = 1338;
 	// Constants identifiers
 	public static final char TRUE_SYM = 1401;
 	public static final char FALSE_SYM = 1402;
@@ -189,11 +184,9 @@ public class XScriptParser extends StringParser
 	public static final char POSITIVE_INFINITY_SYM = 1410;
 	public static final char NOT_A_NUMBER_SYM = 1411;
 	public static final char NULL_SYM = 1412;
-
 	public static final char CONSTANT_SYM = 1501;
 	public static final char IDENTIFIER_SYM = 1502;
 	public static final char REFERENCE_SYM = 1503;
-
 	// Type ids
 	private static final char BASE_ID = 1600;
 	public static final char LONG_ID_SYM = (char) (BASE_ID + XD_LONG);
@@ -230,7 +223,6 @@ public class XScriptParser extends StringParser
 	public static final char NAMED_ID_SYM = (char) (BASE_ID + XD_NAMEDVALUE);
 	public static final char XMLWRITER_ID_SYM = (char) (BASE_ID + XD_XMLWRITER);
 	public static final char OBJECT_ID_SYM = (char) (BASE_ID + XD_OBJECT);
-
 	/** Symbols which separates sections in the X-script. */
 	public static final String SCRIPT_SEPARATORS = new String(new char[] {
 		OPTIONS_SYM,
@@ -252,7 +244,6 @@ public class XScriptParser extends StringParser
 		INIT_SYM,
 		FINALLY_SYM,
 		FORGET_SYM});
-
 	/** Name of actual X-definition. */
 	public String _actDefName;
 	/** Array of X-definitions names from where to accept local declarations. */
@@ -273,7 +264,6 @@ public class XScriptParser extends StringParser
 	private SPosition _lastSPos;
 	/** Actual XPath position. */
 	private String _xpath;
-
 	private static final String KEYWORDS = ";" +
 		// script command names
 		IF_SYM + ";if;" +
@@ -326,7 +316,7 @@ public class XScriptParser extends StringParser
 		IMPLEMENTS_SYM + ";implements;" +
 		USES_SYM + ";uses;" +
 		COMPONENT_SYM + ";component;"+
-
+		CHECK_SYM + ";CHECK;"+
 		// Aliases for relational and logical operators
 		EQ_SYM + ";EQ;" +
 		NE_SYM + ";NE;" +
@@ -357,15 +347,14 @@ public class XScriptParser extends StringParser
 		FALSE_SYM + ";false;" +
 		PI_SYM + ";$PI;" + //Math.PI
 		E_SYM + ";$E;" + //Math.E
-		MININT_SYM + ";$MININT;" +
-		MAXINT_SYM + ";$MAXINT;" +
-		MINFLOAT_SYM + ";$MINFLOAT;" +
-		MAXFLOAT_SYM + ";$MAXFLOAT;" +
-		NEGATIVE_INFINITY_SYM + ";$NEGATIVEINFINITY;" +
-		POSITIVE_INFINITY_SYM + ";$POSITIVEINFINITY;" +
+		MININT_SYM + ";$MININT;" + //Long.MIN_VALUE
+		MAXINT_SYM + ";$MAXINT;" + //Long.MAX_VALUE
+		MINFLOAT_SYM + ";$MINFLOAT;" + //Double.MIN_VALUE
+		MAXFLOAT_SYM + ";$MAXFLOAT;" + //Double.MAX_VALUE
+		NEGATIVE_INFINITY_SYM + ";$NEGATIVEINFINITY;"+//Double.NEGATIVE_INFINITY
+		POSITIVE_INFINITY_SYM + ";$POSITIVEINFINITY;"+//Double.POSITIVE_INFINITY
 		NOT_A_NUMBER_SYM + ";$NaN;" +
 		NULL_SYM + ";null;" +
-
 		// Names of Value types
 		BNFGRAMMAR_ID_SYM + ";$BNFGRAMMAR;" +
 		BNFRULE_ID_SYM + ";$BNFRULE;" +
@@ -400,7 +389,6 @@ public class XScriptParser extends StringParser
 		XPATH_EXPR_ID_SYM + ";$XPATH;" +
 		XQUERY_EXPR_ID_SYM + ";$XQUERY;" +
 		XMLWRITER_ID_SYM + ";$XMLWRITER;";
-
 	/** Table to convert base symbols to the source form. */
 	private static final Map<Character, String> BASESYMBOLTABLE =
 		new LinkedHashMap<>();
@@ -720,20 +708,13 @@ public class XScriptParser extends StringParser
 						if (getCurrentChar() == '=') {
 							setIndex(getIndex() + 1); // ????????????????????
 							switch (keyindex) {
-								case LSH_SYM:
-									return _sym = LSH_EQ_SYM;  //<<=
-								case RSH_SYM:
-									return _sym = RSH_EQ_SYM; //>>=
-								case RRSH_SYM:
-									return _sym = RRSH_EQ_SYM; //>>>=
-								case AND_SYM:
-									return _sym = AND_EQ_SYM; //&=
-								case OR_SYM:
-									return _sym = OR_EQ_SYM; //!=
-								case XOR_SYM:
-									return _sym = XOR_EQ_SYM; //^=
-								case MOD_SYM:
-									return _sym = MOD_EQ_SYM; //%=
+								case LSH_SYM: return _sym = LSH_EQ_SYM;  //<<=
+								case RSH_SYM: return _sym = RSH_EQ_SYM; //>>=
+								case RRSH_SYM: return _sym = RRSH_EQ_SYM; //>>>=
+								case AND_SYM: return _sym = AND_EQ_SYM; //&=
+								case OR_SYM: return _sym = OR_EQ_SYM; //!=
+								case XOR_SYM: return _sym = XOR_EQ_SYM; //^=
+								case MOD_SYM: return _sym = MOD_EQ_SYM; //%=
 							}
 						}
 						return _sym = (char) keyindex;
@@ -1000,7 +981,7 @@ public class XScriptParser extends StringParser
 							s = SUtils.modifyString(s, "_", "");
 							setParsedString(s);
 							_parsedValue = new DefDouble(getParsedDouble());
-						} catch (Exception ex) {
+						} catch (RuntimeException ex) {
 							error(XDEF.XDEF408); //Float number error
 							_parsedValue = new DefDouble(0.0);
 						}
@@ -1014,7 +995,7 @@ public class XScriptParser extends StringParser
 							s = SUtils.modifyString(s, "_", "");
 							setParsedString(s);
 							_parsedValue = new DefDouble(getParsedDouble());
-						} catch (Exception ex) {
+						} catch (RuntimeException ex) {
 							error(XDEF.XDEF408); //Float number error
 							_parsedValue = new DefDouble(0.0);
 						}
@@ -1028,7 +1009,7 @@ public class XScriptParser extends StringParser
 					s = SUtils.modifyString(s, "_", "");
 					setParsedString(s);
 					_parsedValue = new DefDouble(getParsedDouble());
-				} catch (Exception ex) {
+				} catch (RuntimeException ex) {
 					error(XDEF.XDEF408); //Float number error
 					_parsedValue = new DefDouble(0.0);
 				}
@@ -1040,7 +1021,7 @@ public class XScriptParser extends StringParser
 					s = SUtils.modifyString(s, "_", "");
 					setParsedString(s);
 					_parsedValue = new DefDouble(getParsedDouble());
-				} catch (Exception ex) {
+				} catch (RuntimeException ex) {
 					error(XDEF.XDEF408); //Float number error
 					_parsedValue = new DefDouble(0.0);
 				}
@@ -1417,8 +1398,7 @@ public class XScriptParser extends StringParser
 				result = "%" + commands[command] + sep + getParsedString();
 				isBlanksAndComments();
 			} else {
-				//Specification of class expected
-				error(XDEF.XDEF361);
+				error(XDEF.XDEF361);//Specification of class expected
 				return null;
 			}
 		} else {
@@ -1512,8 +1492,7 @@ public class XScriptParser extends StringParser
 		setLastPosition();
 		if (isToken("extends")) {
 			if (!isClass) { // not %class
-				//{0} is not allowed here
-				error(XDEF.XDEF363, "extends");
+				error(XDEF.XDEF363, "extends");//{0} is not allowed here
 			} else {
 				if (isBlanksAndComments()) {
 					setLastPosition();
@@ -1522,13 +1501,11 @@ public class XScriptParser extends StringParser
 						result += " extends " + getParsedString();
 						isSpaces();
 					} else {
-						//Specification of class expected
-						error(XDEF.XDEF361);
+						error(XDEF.XDEF361);//Specification of class expected
 						return null;
 					}
 				} else {
-					//'&{0}' expected
-					error(XDEF.XDEF356, "class name");
+					error(XDEF.XDEF356, "class name");//'&{0}' expected
 					return null;
 				}
 			}
@@ -1537,8 +1514,7 @@ public class XScriptParser extends StringParser
 		int pos = getIndex();
 		if (isToken("implements")) {
 			if (!isClass) { // not %class
-				//{0} is not allowed here
-				error(XDEF.XDEF363, "implements");
+				error(XDEF.XDEF363, "implements");//{0} is not allowed here
 			}
 			if (!isBlanksAndComments()) {
 				return null;
@@ -1548,22 +1524,19 @@ public class XScriptParser extends StringParser
 		} else {
 			if (!isToken("%interface")) {
 				if (isBlanksAndComments()) {
-					//'&{0}' expected
-					error(XDEF.XDEF356, "interface name");
+					error(XDEF.XDEF356, "interface name");//'&{0}' expected
 					return null;
 				}
 			} else {
 				if (!isClass) { // not %class
-					//{0} is not allowed here
-					error(XDEF.XDEF363, "%interface");
+					error(XDEF.XDEF363, "%interface");//{0} is not allowed here
 				}
 				setLastPosition();
 			}
 		}
 		if (pos < getIndex()) {
 			if (result.startsWith("%interface ")) {
-				//'&{0}' not allowed here
-				error(XDEF.XDEF363, "%interface");
+				error(XDEF.XDEF363, "%interface");//'&{0}' not allowed here
 				return null;
 			}
 			if (isJavaTypedQName()) {
@@ -1579,30 +1552,26 @@ public class XScriptParser extends StringParser
 						result += "," + getParsedString();
 						skipBlanksAndComments();
 					} else {
-						//Specification of class expected
-						error(XDEF.XDEF361);
+						error(XDEF.XDEF361);//Specification of class expected
 						return null;
 					}
 				}
 				setLastPosition();
 				if (isImplements && isToken("%interface")) {
 					if (!isBlanksAndComments()) {
-						//'&{0}' expected
-						error(XDEF.XDEF356, "%interface");
+						error(XDEF.XDEF356, "%interface");//'&{0}' expected
 						return null;
 					}
 					if (isJavaTypedQName()) {
 						result += " %interface " + getParsedString();
 						isSpaces();
 					} else {
-						//Specification of class expected
-						error(XDEF.XDEF361);
+						error(XDEF.XDEF361);//Specification of class expected
 						return null;
 					}
 				}
 			} else {
-				//Specification of class expected
-				error(XDEF.XDEF361);
+				error(XDEF.XDEF361);//Specification of class expected
 				return null;
 			}
 		}
@@ -1614,8 +1583,7 @@ public class XScriptParser extends StringParser
 				if (isXModelPosition()) {
 					result += " %link " + getParsedString();
 				} else {
-					//Reference to model expected
-					error(XDEF.XDEF359);
+					error(XDEF.XDEF359);//Reference to model expected
 					return null;
 				}
 			} else {
@@ -1828,8 +1796,7 @@ public class XScriptParser extends StringParser
 			if (s == null || (s=s.trim()).isEmpty()) {
 				s = "";
 			}
-			s += "&{xpath}" + _xpath;
-			report.setModification(s);
+			report.setModification(s + "&{xpath}" + _xpath);
 		}
 		if (pos == null) { // if pos is null !!
 			getReportWriter().putReport(report);

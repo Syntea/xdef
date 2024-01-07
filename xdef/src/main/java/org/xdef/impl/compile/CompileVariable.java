@@ -4,6 +4,7 @@ import org.xdef.impl.code.CodeI1;
 import org.xdef.XDValue;
 import org.xdef.impl.XVariable;
 import static org.xdef.XDValueID.XD_BNFGRAMMAR;
+import static org.xdef.impl.compile.CompileBase.getTypeName;
 import org.xdef.sys.SPosition;
 
 /** Represents variable parameters used by compiler.
@@ -101,7 +102,7 @@ public final class CompileVariable extends XVariable {
 	public String toString() {return super.toString()
 		+ ", parseMethodAddr=" + getParseMethodAddr()
 		+ ", codeAddr=" + _codeAddr
-		+ ", parseResultType="  + CompileBase.getTypeName(getParseResultType())
+		+ ", parseResultType="  + getTypeName(getParseResultType())
 		+ ", val=" + _value;
 	}
 }

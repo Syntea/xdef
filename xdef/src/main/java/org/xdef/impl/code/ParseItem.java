@@ -2,9 +2,10 @@ package org.xdef.impl.code;
 
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
+import static org.xdef.XDValueID.XD_OBJECT;
+import static org.xdef.XDValueID.X_PARSEITEM;
 import org.xdef.XDValueType;
 import static org.xdef.XDValueType.XPARSEITEM;
-import org.xdef.impl.compile.CompileBase;
 
 /** Implements uniqueSet parse item.
  * @author Vaclav Trojan
@@ -132,7 +133,7 @@ public final class ParseItem extends XDValueAbstract {
 	@Override
 	public final boolean equals(final XDValue arg) {
 		return arg == null ? false
-			: arg.getItemId() != CompileBase.X_PARSEITEM ? false
+			: arg.getItemId() != X_PARSEITEM ? false
 			: _name != null ? _name.equals(((ParseItem)arg)._name)
 			: ((ParseItem) arg)._name == null;
 	}

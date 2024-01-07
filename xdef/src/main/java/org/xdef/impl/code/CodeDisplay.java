@@ -10,6 +10,11 @@ import org.xdef.XDValueID;
 import static org.xdef.XDValueID.XD_REGEX;
 import static org.xdef.XDValueID.XD_STRING;
 import static org.xdef.XDValueID.XD_XPATH;
+import static org.xdef.XDValueID.X_ATTR_REF;
+import static org.xdef.XDValueID.X_PARSEITEM;
+import static org.xdef.XDValueID.X_UNIQUESET;
+import static org.xdef.XDValueID.X_UNIQUESET_KEY;
+import static org.xdef.XDValueID.X_UNIQUESET_M;
 import org.xdef.impl.XCodeDescriptor;
 import org.xdef.impl.XData;
 import org.xdef.impl.XDebugInfo;
@@ -35,6 +40,7 @@ import static org.xdef.impl.code.CodeTable.EXTMETHOD_XDARRAY;
 import static org.xdef.impl.code.CodeTable.EXTMETHOD_XXNODE;
 import static org.xdef.impl.code.CodeTable.EXTMETHOD_XXNODE_XDARRAY;
 import static org.xdef.impl.code.CodeTable.INIT_PARAMS_OP;
+import static org.xdef.impl.code.CodeTable.LAST_CODE;
 import static org.xdef.impl.code.CodeTable.LD_CODE;
 import static org.xdef.impl.code.CodeTable.LD_CONST;
 import static org.xdef.impl.code.CodeTable.LD_GLOBAL;
@@ -44,7 +50,7 @@ import static org.xdef.impl.code.CodeTable.SRCINFO_CODE;
 import static org.xdef.impl.code.CodeTable.ST_GLOBAL;
 import static org.xdef.impl.code.CodeTable.ST_LOCAL;
 import static org.xdef.impl.code.CodeTable.ST_XMODEL;
-import org.xdef.impl.compile.CompileBase;
+import static org.xdef.impl.compile.CompileBase.getTypeName;
 import org.xdef.model.XMData;
 import org.xdef.model.XMElement;
 import org.xdef.model.XMNode;
@@ -67,10 +73,21 @@ public class CodeDisplay implements CodeTable, XDValueID {
 	 * @param type The type id.
 	 * @return The type name or null.
 	 */
-	private static String getTypeAbbrev(final short type) {
+	public final static String getTypeAbbrev(final short type) {
+		switch (type) {
+			case X_PARSEITEM: return "(#key item)";
+			case X_UNIQUESET:
+			case X_UNIQUESET_M: return "(uniqueSet)";
+			case X_UNIQUESET_KEY: return "(#uniqueSet key)";
+			case X_ATTR_REF: return "(#attribute reference)";
+		}
 		return "(" + getTypeName(type) + ")";
 	}
 
+	/** Create string with printable form of code item.
+	 * @param item code item
+	 * @return string with printable form of code item.
+	 */
 	public final static String codeToString(final XDValue item) {
 		if (item == null) {
 			return "null";
@@ -186,6 +203,12 @@ public class CodeDisplay implements CodeTable, XDValueID {
 		}
 	}
 
+	/** Get string with printable form of option.
+	 * @param s String where to add option.
+	 * @param name name of option.
+	 * @param value byte of option type.
+	 * @return string with printable form of option.
+	 */
 	private static String printOption(final String s,
 		final String name,
 		final byte value) {
@@ -195,6 +218,10 @@ public class CodeDisplay implements CodeTable, XDValueID {
 		return (s.length() > 0 ? s + "\n": "") + name + "=" + (char) value;
 	}
 
+	/** Print code descriptor.
+	 * @param sc code descriptor.
+	 * @param out where to print.
+	 */
 	private static void displayDesriptor(final XCodeDescriptor sc,
 		final PrintStream out) {
 		out.println(sc.getXDPosition() + ": " + sc.getName() + " "
@@ -275,6 +302,10 @@ public class CodeDisplay implements CodeTable, XDValueID {
 		}
 	}
 
+	/** Print model selector type.
+	 * @param xn model selector
+	 * @param out where to print.
+	 */
 	private static void displaySelector(final XNode xn, final PrintStream out) {
 		XSelector xsel = (XSelector) xn;
 		switch (xsel.getKind()) {
@@ -355,14 +386,10 @@ public class CodeDisplay implements CodeTable, XDValueID {
 				out.println("-- End XMElement: " + xn.getName());
 				return;
 			}
-			case XMSELECTOR_END:
-				out.println("-- End of selector: ");
-				return;
+			case XMSELECTOR_END: out.println("-- End of selector: "); return;
 			case XMSEQUENCE:
 			case XMMIXED:
-			case XMCHOICE:
-				displaySelector(xn, out);
-				return;
+			case XMCHOICE: displaySelector(xn, out); return;
 			case XMDEFINITION: {
 				XDefinition def = (XDefinition)xn;
 				out.print("=== Start XMDefinition: ");
@@ -445,13 +472,12 @@ public class CodeDisplay implements CodeTable, XDValueID {
 	public final static String getCodeName(final short code) {
 		if (code < LAST_CODE) {
 			final Field[] codetable = CodeTable.class.getDeclaredFields();
-			for (int i = 0; i < codetable.length; i++) {
-				Field f = codetable[i];
+			for (Field f : codetable) {
 				try {
 					if (f.getShort(null) == code) {
 						return f.getName();
 					}
-				} catch (Exception ex) {
+				} catch (IllegalAccessException | IllegalArgumentException ex) {
 					throw new RuntimeException(ex);
 				}
 			}
@@ -465,43 +491,15 @@ public class CodeDisplay implements CodeTable, XDValueID {
 	 */
 	public final static short getCodeNumber(final String codename) {
 		final Field[] codetable = CodeTable.class.getDeclaredFields();
-		for (int i = 0; i < codetable.length; i++) {
-			Field f = codetable[i];
+		for (Field f : codetable) {
 			if (codename.equals(f.getName())) {
 				try {
 					return f.getShort(null);
-				} catch (Exception ex) {
+				} catch (IllegalAccessException | IllegalArgumentException ex) {
 					throw new RuntimeException(ex);
 				}
 			}
 		}
 		return -1;
-	}
-
-	/** Get name of type from type number.
-	 * @param type type number.
-	 * @return name of type from type number.
-	 */
-	public final static String getTypeName(final short type) {
-		switch (type) {
-			case CompileBase.X_PARSEITEM:
-				return "#key item";
-			case CompileBase.X_UNIQUESET:
-			case CompileBase.X_UNIQUESET_M:
-				return "uniqueSet";
-			case CompileBase.X_UNIQUESET_KEY:
-				return "#uniqueSet key";
-			case CompileBase.X_ATTR_REF:
-				return "#attribute reference";
-		}
-		return CompileBase.getTypeName(type);
-	}
-
-	/** Get number of type from type name.
-	 * @param name type name.
-	 * @return number of type from type name.
-	 */
-	final static short getTypeId(final String name) {
-		return CompileBase.getTypeId(name);
 	}
 }

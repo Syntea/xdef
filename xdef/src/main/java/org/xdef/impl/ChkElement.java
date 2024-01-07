@@ -3003,8 +3003,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			for(int i = 0; i < _variables.length; i++) {
 				XDValue x = _variables[i];
 				if (x != null && !x.isNull()
-					&& (x.getItemId() == CompileBase.X_UNIQUESET
-					|| x.getItemId() == CompileBase.X_UNIQUESET_M)) {
+					&& (x.getItemId() == X_UNIQUESET
+					|| x.getItemId() == X_UNIQUESET_M)) {
 					CodeUniqueset y = (CodeUniqueset)x;
 					y.checkAndClear(_scp.getTemporaryReporter());
 				}

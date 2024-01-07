@@ -13,6 +13,7 @@ import static org.xdef.XDValueID.XD_STRING;
 import org.xdef.impl.code.CodeParser;
 import org.xdef.impl.code.CodeTable;
 import static org.xdef.impl.code.CodeTable.CALL_OP;
+import static org.xdef.impl.code.CodeTable.INIT_NOPARAMS_OP;
 import static org.xdef.impl.code.CodeTable.JMPEQ;
 import static org.xdef.impl.code.CodeTable.JMPF_OP;
 import static org.xdef.impl.code.CodeTable.JMPGE;
@@ -22,9 +23,28 @@ import static org.xdef.impl.code.CodeTable.JMPLT;
 import static org.xdef.impl.code.CodeTable.JMPNE;
 import static org.xdef.impl.code.CodeTable.JMPT_OP;
 import static org.xdef.impl.code.CodeTable.JMP_OP;
+import static org.xdef.impl.code.CodeTable.LD_CODE;
+import static org.xdef.impl.code.CodeTable.LD_CONST;
+import static org.xdef.impl.code.CodeTable.LD_GLOBAL;
+import static org.xdef.impl.code.CodeTable.LD_XMODEL;
+import static org.xdef.impl.code.CodeTable.NEW_PARSER;
+import static org.xdef.impl.code.CodeTable.PARSE_OP;
+import static org.xdef.impl.code.CodeTable.RETV_OP;
+import static org.xdef.impl.code.CodeTable.SET_TEXT;
 import static org.xdef.impl.code.CodeTable.STOP_OP;
+import static org.xdef.impl.code.CodeTable.UNIQUESET_CHKID;
+import static org.xdef.impl.code.CodeTable.UNIQUESET_CHKIDS;
+import static org.xdef.impl.code.CodeTable.UNIQUESET_ID;
+import static org.xdef.impl.code.CodeTable.UNIQUESET_IDREF;
+import static org.xdef.impl.code.CodeTable.UNIQUESET_IDREFS;
+import static org.xdef.impl.code.CodeTable.UNIQUESET_KEY_CHKID;
+import static org.xdef.impl.code.CodeTable.UNIQUESET_KEY_ID;
+import static org.xdef.impl.code.CodeTable.UNIQUESET_KEY_IDREF;
+import static org.xdef.impl.code.CodeTable.UNIQUESET_KEY_SET;
+import static org.xdef.impl.code.CodeTable.UNIQUESET_KEY_SETKEY;
+import static org.xdef.impl.code.CodeTable.UNIQUESET_SET;
 import org.xdef.impl.code.DefContainer;
-import org.xdef.impl.compile.CompileBase;
+import static org.xdef.impl.compile.CompileBase.getTypeName;
 import org.xdef.impl.parsers.XDParseCDATA;
 import org.xdef.model.XMData;
 import org.xdef.model.XMDefinition;
@@ -347,8 +367,7 @@ public class XData extends XCodeDescriptor
 
 	@Override
 	public String toString() {
-		String result = getName()
-			+ ": type="+CompileBase.getTypeName(getParserType());
+		String result = getName() + ": type=" + getTypeName(getParserType());
 		String s = getRefTypeName();
 		if (s != null) {
 			result += ", refType=" + s;

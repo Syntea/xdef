@@ -163,7 +163,7 @@ public class XVariable implements XMVariable {
 	@Override
 	public String toString() {
 		return (isExternal() ? "external " : "") + (isFinal() ? "final " : "")+
-			CodeDisplay.getTypeName(_type) + " " + getName() +
+			CodeDisplay.getTypeAbbrev(_type) + " " + getName() +
 			", offset:" + _offset + ", initialized:" + _initialized
 			+ "; kind:" + (char) _kind + "; parseMethodAddr:" + _parseMethodAddr
 			+ "; keyIndex:" + _keyIndex;

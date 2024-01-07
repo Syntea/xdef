@@ -34,6 +34,8 @@ import static org.xdef.XDValueID.XD_REGEX;
 import static org.xdef.XDValueID.XD_STRING;
 import static org.xdef.XDValueID.XD_XPATH;
 import static org.xdef.XDValueID.XD_XQUERY;
+import static org.xdef.XDValueID.X_UNIQUESET;
+import static org.xdef.XDValueID.X_UNIQUESET_M;
 import org.xdef.impl.code.CodeExtMethod;
 import org.xdef.impl.code.CodeI1;
 import org.xdef.impl.code.CodeI2;
@@ -59,7 +61,6 @@ import org.xdef.impl.code.DefPrice;
 import org.xdef.impl.code.DefRegex;
 import org.xdef.impl.code.DefXPathExpr;
 import org.xdef.impl.code.ParseItem;
-import org.xdef.impl.compile.CompileBase;
 import org.xdef.impl.xml.KNamespace;
 import org.xdef.msg.SYS;
 import org.xdef.sys.SError;
@@ -70,7 +71,6 @@ import org.xdef.sys.SObjectWriter;
  * @author Vaclav Trojan
  */
 public final class XDWriter extends SObjectWriter {
-
 	static final byte ID_CODEOP = 0;
 	static final byte ID_CODEI1 = 1;
 	static final byte ID_CODEI2 = 2;
@@ -253,8 +253,8 @@ public final class XDWriter extends SObjectWriter {
 					case XD_XQUERY:
 						writeString(x.stringValue());
 						return;
-					case CompileBase.X_UNIQUESET:
-					case CompileBase.X_UNIQUESET_M: {
+					case X_UNIQUESET:
+					case X_UNIQUESET_M: {
 						CodeUniqueset y = (CodeUniqueset) x;
 						ParseItem[] keys = y.getParsedItems();
 						writeLength(keys.length);
