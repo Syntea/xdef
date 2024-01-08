@@ -1,8 +1,6 @@
 package bugreports;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.List;
 import java.util.Map;
@@ -355,10 +353,10 @@ public class MyTestX extends XDTester {
 			xon = "[\"2021\"]";
 			s = _package+".MytestX_Str";
 			assertNull(testX(xp,"", s, xon));
-		} catch (Exception ex) {fail(ex); reporter.clear();}
+		} catch (RuntimeException ex) {fail(ex); reporter.clear();}
+//if(true)return;
 if(T) return;
 	clearSources();
-//if(true)return;
 /**/
 /**/
 		try {
