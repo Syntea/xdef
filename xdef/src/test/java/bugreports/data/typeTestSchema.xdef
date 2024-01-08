@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xd:def xd:name="typeTestSchema" xd:root="Types"
+  xmlns:xd="http://www.xdef.org/xdef/4.0">
+  <main_Types_cType>
+    <xd:sequence>
+      <xd:sequence>
+        <xd:choice xd:script="occurs *">
+          <base64 xd:script="occurs *">
+            required base64Binary(%whiteSpace='collapse');
+          </base64>
+          <base64_1 xd:script="occurs *">
+            required base64Binary(2);
+          </base64_1>
+          <base64_2 xd:script="occurs *">
+            required base64Binary(4, 6);
+          </base64_2>
+          <boolean xd:script="occurs *">
+            required boolean(%whiteSpace='collapse');
+          </boolean>
+          <dec xd:script="occurs *">
+            required dec(%pattern=['\\d+(,\\d+)?']);
+          </dec>
+          <dec_1 xd:script="occurs *">
+            required dec(%pattern=['\\d+(,\\d+)?'], %totalDigits='5');
+          </dec_1>
+          <dec_2 xd:script="occurs *">
+            required dec(%fractionDigits='3', %pattern=['\\d+(,\\d+)?'], %totalDigits='4');
+          </dec_2>
+          <ENTITY xd:script="occurs *">
+            required ENTITY();
+          </ENTITY>
+          <ENTITIES xd:script="occurs *">
+            required list();
+          </ENTITIES>
+          <ID xd:script="occurs *">
+            required ID();
+          </ID>
+          <IDREF xd:script="occurs *">
+            required IDREF();
+          </IDREF>
+          <IDREFS xd:script="occurs *">
+            required IDREFS();
+          </IDREFS>
+          <ISOdateTime xd:script="occurs *">
+            required dateTime(%whiteSpace='collapse');
+          </ISOdateTime>
+          <ISOdate xd:script="occurs *">
+            required date(%whiteSpace='collapse');
+          </ISOdate>
+          <ISOtime xd:script="occurs *">
+            required time(%whiteSpace='collapse');
+          </ISOtime>
+          <ISOday xd:script="occurs *">
+            required gDay(%whiteSpace='collapse');
+          </ISOday>
+          <ISOlanguage xd:script="occurs *">
+            required language();
+          </ISOlanguage>
+          <ISOlanguages xd:script="occurs *">
+            required string(0, *);
+          </ISOlanguages>
+          <ISOmonth xd:script="occurs *">
+            required gMonth(%whiteSpace='collapse');
+          </ISOmonth>
+          <ISOmonthDay xd:script="occurs *">
+            required gMonthDay(%whiteSpace='collapse');
+          </ISOmonthDay>
+          <ISOyear xd:script="occurs *">
+            required string(0, *, %whiteSpace='preserve');
+          </ISOyear>
+          <ISOyearMonth xd:script="occurs *">
+            required gYearMonth(%whiteSpace='collapse');
+          </ISOyearMonth>
+          <ISOduration xd:script="occurs *">
+            required duration(%whiteSpace='collapse');
+          </ISOduration>
+          <float xd:script="occurs *">
+            required double(%whiteSpace='collapse');
+          </float>
+          <float_1 xd:script="occurs *">
+            required enum("0.123");
+          </float_1>
+          <float_2 xd:script="occurs *">
+            required double(%maxInclusive='100', %minInclusive='0');
+          </float_2>
+          <hex xd:script="occurs *">
+            required hexBinary(%whiteSpace='collapse');
+          </hex>
+          <hex_1 xd:script="occurs *">
+            required hexBinary(3);
+          </hex_1>
+          <hex_2 xd:script="occurs *">
+            required hexBinary(2, 4);
+          </hex_2>
+          <int xd:script="occurs *">
+            required long();
+          </int>
+          <int_1 xd:script="occurs *">
+            required enum("10000");
+          </int_1>
+          <int_2 xd:script="occurs *">
+            required long(0, 100);
+          </int_2>
+          <list_n xd:script="occurs *">
+            required enum("abc", "def");
+          </list_n>
+          <NCname xd:script="occurs *">
+            required NCName();
+          </NCname>
+          <NMTOKEN xd:script="occurs *">
+            required NMTOKEN();
+          </NMTOKEN>
+          <NMTOKENS xd:script="occurs *">
+            required NMTOKENS();
+          </NMTOKENS>
+          <NOTATION xd:script="occurs *"/>
+          <normString xd:script="occurs *">
+            required normalizedString(%whiteSpace='replace');
+          </normString>
+          <Qname xd:script="occurs *">
+            required QName(%whiteSpace='collapse');
+          </Qname>
+          <string xd:script="occurs *">
+            required string(0, *, %whiteSpace='preserve');
+          </string>
+          <string_1 xd:script="occurs *">
+            required string(5);
+          </string_1>
+          <string_2 xd:script="occurs *">
+            required string(2, 4);
+          </string_2>
+          <uri xd:script="occurs *">
+            required anyURI();
+          </uri>
+        </xd:choice>
+      </xd:sequence>
+    </xd:sequence>
+  </main_Types_cType>
+  <Types xd:script="ref main_Types_cType"/>
+</xd:def>

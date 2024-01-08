@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="windows-1250"?>
+
+<!--
+    Document   : valid_01.xml
+    Created on : 20. prosinec 2010, 15:28
+    Author     : Alexandrov
+    Description:
+        Purpose of the document follows.
+-->
+
+<Types xmlns:ns="http://testNamespace.com"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../typeTestSchema.xsd" >
+    <base64>c3VyZQ==</base64>
+    <base64_1>c3U=</base64_1>
+    <base64_2>c3VyZQ==</base64_2>
+    <boolean>true</boolean>
+    <boolean>0</boolean>
+    <dec>123,123</dec>
+    <dec_1>123,45</dec_1>
+    <dec_2>1,234</dec_2>
+    <!--
+    <ENTITY>&entita;</ENTITY>
+    <ENTITIES>&entita; &entita2;</ENTITIES>
+    -->
+    <ID>id</ID>
+    <IDREF>id</IDREF>
+    <IDREFS>id id</IDREFS>
+    <ISOdateTime>2000-01-01T00:00:00</ISOdateTime>
+    <ISOdate>2000-01-01</ISOdate>
+    <ISOtime>00:00:00</ISOtime>
+    <ISOday>---15</ISOday>
+    <ISOlanguage>ces</ISOlanguage>
+    <ISOmonth>--01</ISOmonth>
+    <ISOmonthDay>--01-01</ISOmonthDay>
+    <ISOyear>2000</ISOyear>
+    <ISOyearMonth>2000-01</ISOyearMonth>
+    <ISOduration>P01Y20M12D</ISOduration>
+    <float>123E12</float>
+    <float_1>0.123</float_1>
+    <float_2>0</float_2>
+    <float_2>100</float_2>
+    <hex>1A3F</hex>
+    <!--
+    <hex_1>AFA</hex_1>
+    <hex_2>00</hex_2>
+    -->
+    <hex_2>ffff</hex_2>
+    <int>-123</int>
+    <int_1>10000</int_1>
+    <int_2>0</int_2>
+    <int_2>100</int_2>
+    <list_n>abc</list_n>
+    <list_n>def</list_n>
+    <NCname>ncname</NCname>
+    <NMTOKEN>nmtoken</NMTOKEN>
+    <NMTOKENS>nmtoken nmtoken</NMTOKENS>
+    <!--
+    <NOTATION></NOTATION>
+    -->
+    <normString>Normalized String</normString>
+    <Qname>ns:ncname</Qname>
+    <string>Ahoj!</string>
+    <string_1>abcde</string_1>
+    <string_2>ab</string_2>
+    <string_2>abcd</string_2>
+    <uri>../text/text.txt</uri>
+</Types>

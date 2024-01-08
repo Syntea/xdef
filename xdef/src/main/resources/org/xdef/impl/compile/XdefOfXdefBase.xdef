@@ -278,7 +278,7 @@ incBefore ::= VariableReference S? ("++" | "--") S? $rule
 Increment ::= incAfter | incBefore
   /* The type VariableReference must be an integer or a float */
 
-Parameter ::= Expression $rule
+Parameter ::= (Expression | "*") $rule
 
 ParameterList ::= "(" S? (Parameter
    (S? "," S? Parameter)* (S? "," S? "*")? S?)? ")" $rule
