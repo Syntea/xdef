@@ -1241,7 +1241,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 
 	/** Parse and compile relation part of expression.
 	 * operatorLevel3 ::=
-	 *   "<" | ">" | "<=" | ">=" | "==" | "!=" | "<<" | ">>" | ">>>"
+	 *   "<" | ">" | "<=" | ">=" | "==" | "!=" | "<<" | ">>" | ">>>" | "CHECK"
 	 * expression ::= simpleExpression ( operatorLevel3 simpleExpression )?
 	 * @return true if simple expression was parsed.
 	 */
@@ -1252,7 +1252,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		}
 		boolean firstError = _g._sp <= sp;
 		// relational and shift operators:
-		while (OP_L3.indexOf(_sym) >= 0) { // <, >, <=, >=, ==, !=, <<, >>, >>>
+		while (OP_L3.indexOf(_sym) >= 0) { //<,>,<=,>=,==,!=,<<,>>,>>>,CHECK
 			char operator = _sym;
 			if (firstError) {
 				_g.setUnDefItem();
@@ -1267,6 +1267,36 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			}
 			int xValue = _g._cstack[sp];
 			nextSymbol();
+			if (operator == CHECK_SYM) {
+				if (xType != XD_PARSER && xType != XD_PARSERESULT) {
+					error(XDEF.XDEF423, "ParseResult");
+					incomparable(xType);
+					continue;
+				}
+				CodeI1 cd = new CodeI1(XD_PARSERESULT, CHECKPARSED_OP, -1);
+				_g.addCode(cd, 0);
+				if (!simpleExpression()) {
+					error(XDEF.XDEF437); //Error in expression
+					break;
+				}
+				if (_g._sp < 0 || sp < 0 || sp == _g._sp) {
+					if (sp == _g._sp) {
+						error(XDEF.XDEF438); //Value expected
+					}
+					continue;
+				}
+				short yType = _g._tstack[_g._sp];
+				if (yType != XD_BOOLEAN) {
+					_g.topToBool();
+					yType = _g._tstack[_g._sp];
+					if (yType != XD_BOOLEAN) {
+						incomparable(yType);
+					}
+				}
+				_g.addCode(new CodeI1(XD_PARSERESULT,CHECKPARSED_OP,-1),-1);
+				cd.setParam(_g._lastCodeIndex);
+				continue;
+			}
 			if (!simpleExpression()) {
 				error(XDEF.XDEF437); //Error in expression
 				continue;
@@ -1405,12 +1435,6 @@ class CompileStatement extends XScriptParser implements CodeTable {
 							}
 						}
 						break;
-					}
-					case XD_PARSER: {
-System.out.println("XD_PARSER ");
-					}
-					case XD_PARSERESULT: {
-System.out.println("XD_PARSER");
 					}
 					case XD_UNDEF:
 						break;

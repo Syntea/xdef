@@ -1966,7 +1966,7 @@ public final class CompileCode extends CompileBase {
 	 * @param numPar Number of parameters (types of parameters are in stack).
 	 */
 	final boolean internalMethod(final String name, final int numPar) {
-		InternalMethod imethod = getTypeMethod(X_NOTYPE_VALUE, name);
+		CompileBase.InternalMethod imethod = getTypeMethod(X_NOTYPE_VALUE, name);
 		if (imethod == null) {
 			return false;
 		}
@@ -1984,7 +1984,7 @@ public final class CompileCode extends CompileBase {
 			}
 			return true; //do not report multiple errors!
 		}
-		InternalMethod imethod = getTypeMethod(type, "#");
+		CompileBase.InternalMethod imethod = getTypeMethod(type, "#");
 		if (imethod == null) {
 			return false;
 		}
@@ -2019,7 +2019,7 @@ public final class CompileCode extends CompileBase {
 			topToBool();
 			return true;
 		}
-		InternalMethod imethod = getTypeMethod(xType, name);
+		CompileBase.InternalMethod imethod = getTypeMethod(xType, name);
 		if (imethod == null && xType == XD_PARSER) {
 			addCode(new CodeI1(XD_PARSERESULT, PARSE_OP, 1), 0);
 			xType = _tstack[_sp - numPar];
@@ -2131,14 +2131,14 @@ public final class CompileCode extends CompileBase {
 	 */
 	private void genInternalMethod(final String name,
 		final int numPar,
-		final InternalMethod imethod) {
+		final CompileBase.InternalMethod imethod) {
 		short code = imethod.getCode();
 		int npar = numPar; //is modified, should be local
 		//first parameter type
 		short par1typ = npar > 0 ? _tstack[_sp - (npar - 1)] : -1;
 		//first parameter value constant pointer or -1
 		int par1const = npar > 0 ? _cstack[_sp - (npar - 1)] : -1;
-		InternalMethod method = imethod;
+		CompileBase.InternalMethod method = imethod;
 		short resultType = method.getResultType();
 		XDValue operator = null;
 		switch (code) {
@@ -2171,7 +2171,7 @@ public final class CompileCode extends CompileBase {
 					return;
 				}
 				XDParser p = getParser("CDATA".equals(name) ? "string" : name);
-				KeyParam[] pars = method.getKeyParams();
+				CompileBase.KeyParam[] pars = method.getKeyParams();
 				String[] sqParamNames = method.getSqParamNames();
 				if (npar == 1 && _tstack[_sp] == XD_CONTAINER &&
 					_cstack[_sp] == _lastCodeIndex) {// set named parameters
@@ -2181,7 +2181,7 @@ public final class CompileCode extends CompileBase {
 					for (int i = len - 1; i >= 0; i--) {
 						String s = h.getXDNamedItemName(i);
 						boolean found = false;
-						for (KeyParam par : pars) {
+						for (CompileBase.KeyParam par : pars) {
 							if (par.getName().equals(s)) {
 								XDValue[] legal = par.getLegalValues();
 								if (legal != null && legal.length > 0) {
@@ -2210,7 +2210,7 @@ public final class CompileCode extends CompileBase {
 							_parser.error(XDEF.XDEF801, s);
 						}
 					}
-					for (KeyParam par: pars) {
+					for (CompileBase.KeyParam par: pars) {
 						String parName = par.getName();
 						XDNamedValue val = h.getXDNamedItem(parName);
 						boolean err = false;

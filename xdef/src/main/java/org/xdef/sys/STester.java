@@ -357,7 +357,9 @@ public abstract class STester {
 	 * @param a2 second value.
 	 * @param msg message to be printed or null.
 	 */
-	public void assertEq(Boolean a1, Boolean a2, Object msg) {
+	public final  void assertEq(final Boolean a1,
+		final Boolean a2,
+		final Object msg) {
 		if ((a1 == null && a2 != null) || (a1 != null && a2 == null)
 			|| (a1 == null && a2 == null) || (!a1.equals(a2))) {
 			fail((msg != null ? msg.toString().trim() + '\n' : "")
@@ -507,7 +509,9 @@ public abstract class STester {
 	 * @param a1 first value.
 	 * @param a2 second value.
 	 */
-	public void assertEq(Element a1, Element a2) {assertEq(a1, a2, null);}
+	public void assertEq(final Element a1, final Element a2) {
+		assertEq(a1, a2, null);
+	}
 	/** Check elements are equal (text nodes are trimmed).
 	 * @param a1 first value.
 	 * @param a2 second value.
@@ -539,7 +543,9 @@ public abstract class STester {
 	 * @param a1 first value.
 	 * @param a2 second value.
 	 */
-	public void assertEq(Object a1, Object a2) {assertEq(a1, a2, null);}
+	public void assertEq(final Object a1, final Object a2) {
+		assertEq(a1, a2, null);
+	}
 	/** Check objects.
 	 * @param a1 first value.
 	 * @param a2 second value.
@@ -563,7 +569,7 @@ public abstract class STester {
 	 * @param a2 second object.
 	 * @return true if and only if both objects are equal.
 	 */
-	public static boolean equals(Object a1, final Object a2) {
+	public final static boolean equals(final Object a1, final Object a2) {
 		if (a1 instanceof Number && a2 instanceof Number) {
 			if (a1 instanceof BigDecimal) {
 				return (a2 instanceof BigDecimal)
@@ -780,9 +786,6 @@ public abstract class STester {
 			}
 		}
 	}
-	/** Run test and print result information. This method executes all tests
-	 * and must be implemented by user extension of this class. */
-	public abstract void test();
 	/** Initialize fields of this class. It is automatically called by the
 	 * method runTest, or it may be called by user. Note all fields are
 	 * reinitialized.
@@ -901,55 +904,6 @@ public abstract class STester {
 		getTempDir();
 		_timeStamp = System.currentTimeMillis();
 	}
-	/** Run test and print result information.
-	 * @param out The print stream for result information or null
-	 * @param err The print stream for error messages or null.
-	 * @param log The print stream all messages or null.
-	 * @param printOK if false then the result if printed only if
-	 * an error was reported.
-	 * @param arguments array with arguments or null.
-	 * @return the number of errors.
-	 */
-	public final int runTest(final PrintStream out,
-		final PrintStream err,
-		final PrintStream log,
-		final boolean printOK,
-		final String... arguments) {
-		try {
-			init(out, err, log, getClass(), arguments);
-			test();
-		} catch (Exception ex) {
-			boolean debug = _debug;
-			_debug = true;
-			fail(ex);
-			_debug = debug;
-		} catch (Error ex) {
-			boolean debug = _debug;
-			_debug |= true;
-			fail(ex);
-			_debug = debug;
-		}
-		if (_resultInfo == null) {
-			_resultInfo = "";
-		}
-		if (printOK && out != null) {
-			float duration =
-				((float) ((System.currentTimeMillis() - _timeStamp) / 1000.0));
-			String s = "[INFO] " + (_errors == 0
-				? "OK " : _errors + " error"+(_errors>1?"s":"") + " in ");
-			s += _name + (_resultInfo.isEmpty() ? "" : ", " + _resultInfo)
-				+ ", time=" + new DecimalFormat("0.00").format(duration) + "s";
-			out.flush();
-			System.err.flush();
-			if (log != null) {
-				log.println(s);
-				log.flush();
-			}
-			out.println(s);
-			out.flush();
-		}
-		return _errors;
-	}
 	/** Creates the instance of the class from which this method was called.
 	 * @return The new instance of the class (from which the method was called).
 	 */
@@ -987,6 +941,119 @@ public abstract class STester {
 		System.err.flush();
 		System.exit(msg == null ? 0 : 1);
 	}
+	/** Return a string with printable representation of Throwable object.
+	 * @param exception the Exception object to be printed.
+	 * @return string with printable representation of Throwable.
+	 */
+	public final static String printThrowable(final Throwable exception) {
+		java.io.CharArrayWriter chw = new java.io.CharArrayWriter();
+		java.io.PrintWriter pw = new java.io.PrintWriter(chw);
+		exception.printStackTrace(pw);
+		pw.close();
+		return chw.toString();
+	}
+	/** Add Java sources to parameter list of the Java compiler.
+	 * @param f the file or directory.
+	 * @param params parameter list of Java compiler.
+	 */
+	private static void addJavaSource(final File f, final List<String> params) {
+		if (f.isDirectory()) {
+			for (File x: f.listFiles()) {
+				addJavaSource(x, params);
+			}
+		} else if (f.getName().endsWith(".java")) {
+			params.add(f.getAbsolutePath());
+		}
+	}
+	/** Compile sources from parameter and save files to the classes directory
+	 *  of tester.
+	 * @param classpath the string with classpath.
+	 * @param classDir the string with directory where to create classes.
+	 * @param files files with Java sources (may be a file or a directory).
+	 * @return string with path to compiled classes.
+	 */
+	public final String compileSources(final String classpath,
+		final String classDir,
+		final File... files) {
+		String sources[] = new String[files.length];
+		for (int i = 0; i < files.length; i++) {
+			sources[i] = files[i].getAbsolutePath();
+		}
+		return compileSources(classpath, classDir, sources);
+	}
+	/** Get string with the path where the class is in the current classpath.
+	 * @param clazz the class to be checked.
+	 * @return Get string with path where the class is in the current classpath.
+	 */
+	public final static String getClassSource(final Class<?> clazz) {
+		String className = clazz.getName().replace('.', '/') + ".class";
+		URL u = clazz.getClassLoader().getResource(className);
+		String classpath = u.toExternalForm();
+		if (classpath.startsWith("jar:file:") && classpath.indexOf('!')>0) {
+			classpath = classpath.substring(9,classpath.lastIndexOf('!'));
+			return new File(classpath).getAbsolutePath().replace('\\','/');
+		} else {
+			classpath =
+				new File(u.getFile()).getAbsolutePath().replace('\\','/');
+			return classpath.substring(0, classpath.indexOf(className));
+		}
+	}
+	/** Compile sources from parameter and save files to the classes directory
+	 *  of tester.
+	 * @param classpath the string with classpath.
+	 * @param classDir the string with directory where to create classes.
+	 * @param sources paths of Java sources (may be a file or a directory).
+	 * @return string with path to compiled classes.
+	 */
+	public final String compileSources(final String classpath,
+		final String classDir,
+		final String... sources) {
+		// where are compiled classes of X-definitions
+		// prepare parameters
+		List<String> ar = new ArrayList<>();
+		ar.add("-encoding");
+		ar.add(getEncoding());
+		ar.add("-classpath");
+		ar.add((classpath.isEmpty() ? "" : classpath + File.pathSeparatorChar)
+			+ classDir); // classpath
+		ar.add("-d");
+		ar.add(classDir); // where to write compiled classes
+		// source files
+		for (String source: sources) {
+			addJavaSource(new File (source), ar);
+		}
+		// prepare compiler
+		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+		if (compiler == null) {
+			throw new RuntimeException("Java compiler is not available");
+		}
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		ByteArrayOutputStream err = new ByteArrayOutputStream();
+		// compile sources
+		if (compiler.run(null, out, err, ar.toArray(new String[0])) != 0) {
+			try {
+				err.write("Compiler params:\n".getBytes());
+				for (String s : ar.toArray(new String[0])) {
+					err.write((s + '\n').getBytes());
+				}
+				err.write("End params\n".getBytes());
+			} catch (Exception ex) {} // never sould happen
+			throw new RuntimeException(
+				"Java compilation failed:\n" + err.toString());
+		}
+		return classDir;
+	}
+
+////////////////////////////////////////////////////////////////////////////////
+//This method must be implemented in the class with test(extended from STester)
+////////////////////////////////////////////////////////////////////////////////
+	/** Run test and print result information. This method executes all tests
+	 * and must be implemented by user extension of this class. */
+	public abstract void test();
+
+////////////////////////////////////////////////////////////////////////////////
+//This methods executes tests
+////////////////////////////////////////////////////////////////////////////////
 	/** Run test and print result information on System.out (both, OK and error
 	 * information).
 	 * @param args the command line arguments (the first one is home directory).
@@ -1077,6 +1144,55 @@ public abstract class STester {
 		}
 		return at.runTest(out, err, log, printOK);
 	}
+	/** Run test and print result information.
+	 * @param out The print stream for result information or null
+	 * @param err The print stream for error messages or null.
+	 * @param log The print stream all messages or null.
+	 * @param printOK if false then the result if printed only if
+	 * an error was reported.
+	 * @param arguments array with arguments or null.
+	 * @return the number of errors.
+	 */
+	public final int runTest(final PrintStream out,
+		final PrintStream err,
+		final PrintStream log,
+		final boolean printOK,
+		final String... arguments) {
+		try {
+			init(out, err, log, getClass(), arguments);
+			test();
+		} catch (Exception ex) {
+			boolean debug = _debug;
+			_debug = true;
+			fail(ex);
+			_debug = debug;
+		} catch (Error ex) {
+			boolean debug = _debug;
+			_debug |= true;
+			fail(ex);
+			_debug = debug;
+		}
+		if (_resultInfo == null) {
+			_resultInfo = "";
+		}
+		if (printOK && out != null) {
+			float duration =
+				((float) ((System.currentTimeMillis() - _timeStamp) / 1000.0));
+			String s = "[INFO] " + (_errors == 0
+				? "OK " : _errors + " error"+(_errors>1?"s":"") + " in ");
+			s += _name + (_resultInfo.isEmpty() ? "" : ", " + _resultInfo)
+				+ ", time=" + new DecimalFormat("0.00").format(duration) + "s";
+			out.flush();
+			System.err.flush();
+			if (log != null) {
+				log.println(s);
+				log.flush();
+			}
+			out.println(s);
+			out.flush();
+		}
+		return _errors;
+	}
 	/** Run tests of the object given by argument and print result information.
 	 * @param out The print stream for result information or null
 	 * @param err The print stream for error messages or null.
@@ -1116,107 +1232,5 @@ public abstract class STester {
 		out.println(s);
 		out.flush();
 		return errors;
-	}
-	/** Return a string with printable representation of Throwable object.
-	 * @param exception the Exception object to be printed.
-	 * @return string with printable representation of Throwable.
-	 */
-	public final static String printThrowable(final Throwable exception) {
-		java.io.CharArrayWriter chw = new java.io.CharArrayWriter();
-		java.io.PrintWriter pw = new java.io.PrintWriter(chw);
-		exception.printStackTrace(pw);
-		pw.close();
-		return chw.toString();
-	}
-	/** Add Java sources to parameter list of the Java compiler.
-	 * @param f the file or directory.
-	 * @param params parameter list of Java compiler.
-	 */
-	private static void addJavaSource(final File f, final List<String> params) {
-		if (f.isDirectory()) {
-			for (File x: f.listFiles()) {
-				addJavaSource(x, params);
-			}
-		} else if (f.getName().endsWith(".java")) {
-			params.add(f.getAbsolutePath());
-		}
-	}
-	/** Compile sources from parameter and save files to the classes directory
-	 *  of tester.
-	 * @param classpath the string with classpath.
-	 * @param classDir the string with directory where to create classes.
-	 * @param files files with Java sources (may be a file or a directory).
-	 * @return string with path to compiled classes.
-	 */
-	public String compileSources(final String classpath,
-		final String classDir,
-		final File... files) {
-		String sources[] = new String[files.length];
-		for (int i = 0; i < files.length; i++) {
-			sources[i] = files[i].getAbsolutePath();
-		}
-		return compileSources(classpath, classDir, sources);
-	}
-	/** Get string with the path where the class is in the current classpath.
-	 * @param clazz the class to be checked.
-	 * @return Get string with path where the class is in the current classpath.
-	 */
-	public static String getClassSource(final Class<?> clazz) {
-		String className = clazz.getName().replace('.', '/') + ".class";
-		URL u = clazz.getClassLoader().getResource(className);
-		String classpath = u.toExternalForm();
-		if (classpath.startsWith("jar:file:") && classpath.indexOf('!')>0) {
-			classpath = classpath.substring(9,classpath.lastIndexOf('!'));
-			return new File(classpath).getAbsolutePath().replace('\\','/');
-		} else {
-			classpath =
-				new File(u.getFile()).getAbsolutePath().replace('\\','/');
-			return classpath.substring(0, classpath.indexOf(className));
-		}
-	}
-	/** Compile sources from parameter and save files to the classes directory
-	 *  of tester.
-	 * @param classpath the string with classpath.
-	 * @param classDir the string with directory where to create classes.
-	 * @param sources paths of Java sources (may be a file or a directory).
-	 * @return string with path to compiled classes.
-	 */
-	public String compileSources(final String classpath,
-		final String classDir,
-		final String... sources) {
-		// where are compiled classes of X-definitions
-		// prepare parameters
-		List<String> ar = new ArrayList<>();
-		ar.add("-encoding");
-		ar.add(getEncoding());
-		ar.add("-classpath");
-		ar.add((classpath.isEmpty() ? "" : classpath + File.pathSeparatorChar)
-			+ classDir); // classpath
-		ar.add("-d");
-		ar.add(classDir); // where to write compiled classes
-		// source files
-		for (String source: sources) {
-			addJavaSource(new File (source), ar);
-		}
-		// prepare compiler
-		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-		if (compiler == null) {
-			throw new RuntimeException("Java compiler is not available");
-		}
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		ByteArrayOutputStream err = new ByteArrayOutputStream();
-		// compile sources
-		if (compiler.run(null, out, err, ar.toArray(new String[0])) != 0) {
-			try {
-				err.write("Compiler params:\n".getBytes());
-				for (String s : ar.toArray(new String[0])) {
-					err.write((s + '\n').getBytes());
-				}
-				err.write("End params\n".getBytes());
-			} catch (Exception ex) {} // never sould happen
-			throw new RuntimeException(
-				"Java compilation failed:\n" + err.toString());
-		}
-		return classDir;
 	}
 }

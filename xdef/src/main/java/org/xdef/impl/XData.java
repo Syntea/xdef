@@ -263,8 +263,13 @@ public class XData extends XCodeDescriptor
 				default:
 					if (xi + 2 < xv.length
 						&& y.getCode()==LD_CONST && y.getItemId()==XD_PARSER) {
-						if (xv[xi+1].getCode() == PARSE_OP
-							&& xv[xi+2].getCode() == STOP_OP) {
+						if (xv[xi+1].getCode() == PARSE_OP) {
+							if (xv[xi+2].getCode() == STOP_OP) {
+								return y;
+							} else if (xv[xi+2].getCode() == CHECKPARSED_OP) {
+								return y;
+							}
+						} else if (xv[xi+1].getCode() == CHECKPARSED_OP) {
 							return y;
 						} else {// ??? try to parse an espression.
 							// if all parsers are same return parser

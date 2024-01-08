@@ -73,7 +73,7 @@
 <![CDATA[
 
 /******************************************************************************/
-/* x-Script BNF grammar rules                                                          */
+/* x-Script BNF grammar rules                                                 */
 /*                                                                            */
 /* Note the inline BNF method "$rule" is used to generate code for the        */
 /* compiler of X-definitions. To understand the syntax you can simply         */

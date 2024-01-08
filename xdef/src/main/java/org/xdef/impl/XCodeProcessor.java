@@ -56,6 +56,7 @@ import static org.xdef.XDValueID.XD_LOCALE;
 import static org.xdef.XDValueID.XD_LONG;
 import static org.xdef.XDValueID.XD_NAMEDVALUE;
 import static org.xdef.XDValueID.XD_OUTPUT;
+import static org.xdef.XDValueID.XD_PARSER;
 import static org.xdef.XDValueID.XD_PARSERESULT;
 import static org.xdef.XDValueID.XD_REPORT;
 import static org.xdef.XDValueID.XD_RESULTSET;
@@ -158,7 +159,6 @@ import static org.xdef.impl.code.CodeTable.BYTES_TO_BASE64;
 import static org.xdef.impl.code.CodeTable.BYTES_TO_HEX;
 import static org.xdef.impl.code.CodeTable.CALL_OP;
 import static org.xdef.impl.code.CodeTable.CHAR_AT;
-import static org.xdef.impl.code.CodeTable.CHECKPARSED_OP;
 import static org.xdef.impl.code.CodeTable.CHECK_TYPE;
 import static org.xdef.impl.code.CodeTable.CHK_GE;
 import static org.xdef.impl.code.CodeTable.CHK_GT;
@@ -497,6 +497,7 @@ import static org.xdef.impl.code.CodeTable.WRITE_TEXTNODE;
 import static org.xdef.impl.code.CodeTable.XOR_B;
 import static org.xdef.impl.compile.CompileBase.getParser;
 import static org.xdef.impl.compile.CompileBase.getTypeName;
+import static org.xdef.impl.code.CodeTable.CHECKPARSED_OP;
 
 /** Provides processor engine of script code.
  * @author Vaclav Trojan
@@ -1084,11 +1085,6 @@ public final class XCodeProcessor {
 					_stack[++sp] = new DefBoolean(true);
 					pc++;
 					continue;
-//				case LD_FALSE_AND_SKIP:
-//					// Push false on the top of stack and skip next item.
-//					_stack[++sp] = new DefBoolean(false);
-//					pc++;
-//					continue;
 				case LD_LOCAL:{ // load local variable
 					XDValue v = _localVariables[item.getParam()];
 					_stack[++sp] = v != null ? v : new DefNull();
@@ -1340,14 +1336,18 @@ public final class XCodeProcessor {
 						_stack[sp + 1].intValue());
 					continue;
 				case CHECKPARSED_OP: { //Check ParsedResult
-					if (!_stack[sp--].booleanValue()) {
-						if (_stack[sp].getItemId() == XD_PARSERESULT) {
-							XDParseResult xdResult = (XDParseResult) _stack[sp];
-							if (xdResult.matches()) {
-								xdResult.error(XDEF.XDEF822);
-							}
-						} else {// XDParser //???
-System.out.println(" I do not know what to do now");
+					int par = item.getParam();
+					if (par >= 0) {
+						if (_stack[sp].getItemId() == XD_PARSER) {
+							XDParser p = (XDParser) _stack[sp];
+							_stack[sp]=p.check(chkNode, chkNode.getTextValue());
+						}
+						if (!((XDParseResult)_stack[sp]).matches()) {
+							pc = item.getParam(); // error, skip CHECK code
+						}
+					} else { // now on the top of stack must be boolean
+						if (!_stack[sp--].booleanValue()) {
+							((XDParseResult) _stack[sp]).error(XDEF.XDEF822);
 						}
 					}
 					continue;

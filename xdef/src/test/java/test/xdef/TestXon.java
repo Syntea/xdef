@@ -16,7 +16,6 @@ import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.GPSPosition;
 import org.xdef.sys.SDatetime;
 import org.xdef.sys.SRuntimeException;
-import static org.xdef.sys.STester.printThrowable;
 import static org.xdef.sys.STester.runTest;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
@@ -28,205 +27,6 @@ import static test.XDTester._xdNS;
 public class TestXon extends XDTester {
 
 	public TestXon() {super();}
-
-	/** Simple type test in the Array
-	 * @param type type method.
-	 * @param source data to be tested.
-	 * @return string with errors or null.
-	 */
-	private String testA(final String type, final String xon) {
-		return testX(
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
-"  <xd:xon name='A'> [\"* " + type + "()\"] </xd:xon>\n"+
-"  <xd:component> %class test.xdef.GJ"+ type + " %link #A; </xd:component>\n"+
-"</xd:def>", "", xon);
-	}
-
-	/** Simple type test in the Map.
-	 * @param type type method.
-	 * @param xon xon data to be tested.
-	 * @return string with errors or null.
-	 */
-	private String testM(final String type, final String xon) {
-		return testX(
-"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
-"<xd:xon name='A'> {a: \"? " + type + "();\"} </xd:xon>\n" +
-"<xd:component>%class test.xdef.GM"+type+" %link A</xd:component>\n"+
-"</xd:def>", "", xon);
-	}
-
-	/** Testing the entered data using X-definition.
-	 * @param xdef X-definition source.
-	 * @param xdName name of X-definition.
-	 * @param source data to be tested.
-	 * @return null or string with error.
-	 */
-	private String testX(String xdef, String xdName, String source) {
-		try {
-			XDPool xp = XDFactory.compileXD(null, xdef);
-			genXComponent(xp);
-			return testX(xp, xdName, source);
-		} catch (Exception ex) {return printThrowable(ex);}
-	}
-
-	/** Testing the entered data using XDPool.
-	 * @param xdef X-definition source.
-	 * @param xdName name of X-definition.
-	 * @param source data to be tested.
-	 * @return empty string or error.
-	 */
-	private String testX(final XDPool xp,
-		final String xdName,
-		final String source) {
-		return testX(xp, xdName, null, source, null);
-	}
-
-	/** Testing the entered data using XDPool.
-	 * @param xdef X-definition source.
-	 * @param xdName name of X-definition.
-	 * @param cls XComponent class name or null.
-	 * @param source data to be tested.
-	 * @return empty string or error.
-	 */
-	private String testX(final XDPool xp,
-		final String xdName,
-		final String cls,
-		final String source) {
-		return testX(xp, xdName, cls, source, null);
-	}
-
-	/** Testing the entered data using XDPool.
-	 * @param xdef X-definition source.
-	 * @param xdName name of X-definition.
-	 * @param cls XComponent class name or null.
-	 * @param source data to be tested.
-	 * @param outResult expected result of out stream or null.
-	 * @return empty string or error.
-	 */
-	private String testX(final XDPool xp,
-		final String xdName,
-		final String cls,
-		final String source,
-		final String outResult){
-		String result = "";
-		try {
-			ArrayReporter reporter = new ArrayReporter();
-			Object o = XonUtils.parseXON(source);
-			XDDocument xd = xp.createXDDocument(xdName);
-			StringWriter swr;
-			if (outResult != null) {
-				xd.setStdOut(
-					XDFactory.createXDOutput(swr = new StringWriter(), false));
-			} else {
-				swr = null;
-			}
-			Object x = xd.jparse(source, reporter);
-			if (reporter.errorWarnings()) {
-				result += "** 1\n" + reporter.printToString() + "\n";
-				reporter.clear();
-			}
-			if (!XonUtils.xonEqual(o, x)) {
-				result += "** 2\n"
-					+ XonUtils.toXonString(o, true) + "\n"
-					+ XonUtils.toXonString(x, true) + "\n";
-			}
-			if (outResult != null && swr != null) {
-				if (!outResult.equals(swr.toString())) {
-					result += "** 3 '"+outResult+"', '"+swr.toString()+"'\n";
-				}
-			}
-			xd = xp.createXDDocument(xdName);
-			if (outResult != null) {
-				xd.setStdOut(
-					XDFactory.createXDOutput(swr = new StringWriter(), false));
-			}
-			XComponent xc = xd.jparseXComponent(source, null, reporter);
-			if (reporter.errorWarnings()) {
-				result += "** 4\n" + reporter.printToString() + "\n";
-				reporter.clear();
-			}
-			if (xc == null) {
-				return result + "** 5\n X-component is null\n";
-			}
-			if (outResult != null && swr != null) {
-				if (!outResult.equals(swr.toString())) {
-					result +="** 6 '"+outResult+"', '"+swr.toString()+"'\n";
-				}
-			}
-			x = xc.toXon();
-			if (!XonUtils.xonEqual(o, x)) {
-				result += "** 7\n" + XonUtils.toXonString(x, true) + "\n";
-			}
-			xd = xp.createXDDocument(xdName);
-			if (outResult != null) {
-				xd.setStdOut(
-					XDFactory.createXDOutput(swr = new StringWriter(), false));
-			}
-			x = XonUtils.toXonString(x);
-			xc = xd.jparseXComponent(x, null, reporter);
-			if (reporter.errorWarnings()) {
-				result += "** 8\n" + x + "\n"  + reporter.printToString() + "\n";
-				reporter.clear();
-			}
-			x = xc.toXon();
-			if (!XonUtils.xonEqual(o, x)) {
-				result += "** 9\n" + XonUtils.toXonString(x, true) + "\n";
-			}
-			if (outResult != null && swr != null) {
-				if (!outResult.equals(swr.toString())) {
-					result += "** 10 '"+outResult+"', '"
-						+ swr.toString()+"'\n";
-				}
-			}
-			if (cls != null) {
-				Class<?> clazz = Class.forName(cls);
-				xd = xp.createXDDocument(xdName);
-				if (outResult != null) {
-					xd.setStdOut(
-						XDFactory.createXDOutput(swr=new StringWriter(),false));
-				}
-				xc = xd.jparseXComponent(source, clazz, reporter);
-				if (reporter.errorWarnings()) {
-					result += "** 11\n" + reporter.printToString() + "\n";
-					reporter.clear();
-				}
-				x = xc.toXon();
-				if (!XonUtils.xonEqual(o, x)) {
-					result += "** 12\n"+XonUtils.toXonString(x, true)+"\n";
-				}
-				if (outResult != null && swr != null) {
-					if (!outResult.equals(swr.toString())) {
-						result +="** 13 '"+outResult+"', '"
-							+ swr.toString()+"'\n";
-					}
-				}
-				xd = xp.createXDDocument(xdName);
-				if (outResult != null && swr != null) {
-					xd.setStdOut(
-						XDFactory.createXDOutput(swr=new StringWriter(),false));
-				}
-				x = XonUtils.toXonString(x);
-				xc = xd.jparseXComponent(x, clazz, reporter);
-				if (reporter.errorWarnings()) {
-					result += "** 14\n" + reporter.printToString() + "\n";
-					reporter.clear();
-				}
-				x = xc.toXon();
-				if (!XonUtils.xonEqual(o, x)) {
-					result += "** 15\n" + XonUtils.toXonString(x,true)+"\n";
-				}
-				if (outResult != null && swr != null) {
-					if (!outResult.equals(swr.toString())) {
-						result +="** 16 '"+outResult+"', '"
-							+ swr.toString()+"'\n";
-					}
-				}
-			}
-		} catch (Exception ex) {
-			result += printThrowable(ex) + "\n";
-		}
-		return result.isEmpty() ? null : '~' + source + "~\n" + result;
-	}
 
 	/** Run all tests. */
 	@Override
@@ -245,6 +45,7 @@ public class TestXon extends XDTester {
 		StringWriter swr;
 		Map<String, Object> xini;
 		try {
+			// Array
 			assertNull(testA("short", "[null, 1s ]"));
 			assertNull(testA("int", "[null, 1i ]"));
 			assertNull(testA("long", "[null, 1 ]"));
@@ -273,13 +74,12 @@ public class TestXon extends XDTester {
 			assertNull(testA("jnumber", "[ null, 1 ]"));
 			assertNull(testA("jstring", "[ null, \"abc\" ]"));
 			assertNull(testA("jvalue", "[ null, true, 1, \"abc\" ]"));
-
-			assertNull(testM("int", "{a:1}"));
-			assertNull(testM("int", "{}"));
-			assertNull(testM("jvalue", "{a:true}"));
-			assertNull(testM("jvalue", "{a:null}"));
-			assertNull(testM("jvalue", "{}"));
-
+			// Map
+			assertNull(testM("string", "{}"));
+			assertNull(testM("int", "{a:null, b:1}"));
+			assertNull(testM("jvalue", "{a:true,b:null,c:\"a\\\"b\"}"));
+		} catch (Exception ex) {fail(ex);}
+		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' name='M' root='y:X' xmlns:y='a.b'>\n" +
 "<xd:declaration>type gam xdatetime('yyyyMMddHHmmssSS');</xd:declaration>\n" +

@@ -31,7 +31,6 @@ import org.xdef.component.XComponent;
 import org.xdef.impl.code.CodeUniqueset;
 import org.xdef.impl.code.DefBoolean;
 import org.xdef.impl.code.DefParseResult;
-import org.xdef.impl.compile.CompileBase;
 import org.xdef.impl.xml.KNamespace;
 import org.xdef.xon.XonTools;
 import org.xdef.model.XMData;
