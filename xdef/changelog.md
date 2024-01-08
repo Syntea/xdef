@@ -1,13 +1,21 @@
 # Version ${version}, release-date ${release.date}
 
 # Version 42.1.0, release-date 2024-01-08
-* .
+* Added the new operator CHECK. This is binary operator, the result of operation
+  is ParseResult value. The type of the first
+  operand must be Parser or ParseResult (if it is Parser then parsing method
+  is invoked so that it results a ParseResut value). The second operand is
+  a boolean expression (usually it is a method) and it is invoked only if the
+  ParseResult from the processed first operand does not contain error messages.
+  If the result of invoked expression of the second operand is false, the error
+  message `XDEF822: Parsed result does not fit to CHECK argument` is set to the
+  ParseResult value.
 
 # Version 42.0.11, release-date 2023-11-27
 * If the type of a value in X-component is `union` and types of all items are
   compatible type, then the type of getter/settter is set accordig to that
   type (formally it was only `Object`).
-* If in X-component tge type is compatible with String`then type of
+* If in X-component the type is compatible with String`then type of
   getters/setters is now always String.
 * Corrected bug in org.xdef.xon.CsvReader parser when after missing value at
   the end of line follows next line with a value.
