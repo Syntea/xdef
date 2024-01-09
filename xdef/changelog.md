@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.1.0, release-date 2024-01-08
+# Version 42.1.0, release-date 2024-01-09
 * Added the new operator CHECK. This is binary operator, the result of operation
   is ParseResult value. The type of the first
   operand must be Parser or ParseResult (if it is Parser then parsing method
@@ -10,6 +10,7 @@
   If the result of invoked expression of the second operand is false, the error
   message `XDEF822: Parsed result does not fit to CHECK argument` is set to the
   ParseResult value.
+* Fixed bug in nested sequence groups.
 
 # Version 42.0.11, release-date 2023-11-27
 * If the type of a value in X-component is `union` and types of all items are

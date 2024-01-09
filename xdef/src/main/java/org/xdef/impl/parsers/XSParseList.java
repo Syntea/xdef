@@ -20,6 +20,7 @@ import static org.xdef.XDParser.WHITESPACE;
 import static org.xdef.XDParser.WS_COLLAPSE;
 import static org.xdef.XDValueID.XD_CONTAINER;
 import static org.xdef.XDValueID.XD_PARSER;
+import static org.xdef.XDValueID.XD_STRING;
 
 /** Parser of Schema "list" type.
  * @author Vaclav Trojan
@@ -139,15 +140,21 @@ public class XSParseList extends XSAbstractParser {
 				return;
 			}
 			XDParseResult r = new DefParseResult(t);
-			_itemType.parseObject(xnode, r);
+			if (_itemType != null) {
+				_itemType.parseObject(xnode, r);
+			} else {
+				r.setParsedValue(t);
+			}
 			if (r.errors() || !r.eos()) {
 				p.addReports(r.getReporter());
 				return;
 			} else {
 				if (isFinal) {
-					_itemType.finalCheck(xnode, r);
-					if (r.errors()) {
-						p.addReports(r.getReporter());
+					if (_itemType != null) {
+						_itemType.finalCheck(xnode, r);
+						if (r.errors()) {
+							p.addReports(r.getReporter());
+						}
 					}
 				}
 				XDValue val = r.getParsedValue();
@@ -206,11 +213,13 @@ public class XSParseList extends XSAbstractParser {
 		}
 		XSParseList x = (XSParseList) o;
 		if (_itemType == null) {
-			return false;
+			return x._itemType == null;
 		} else {
 			return _itemType.equals(x._itemType);
 		}
 	}
 	@Override
-	public short getAlltemsType() {return _itemType.parsedType();}
+	public short getAlltemsType() {
+		return _itemType == null ? XD_STRING : _itemType.parsedType();
+	}
 }

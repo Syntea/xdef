@@ -2011,8 +2011,7 @@ public final class TestGroups extends XDTester {
 				"<b/>\n<d/>\n<e/>\n<f/>\n<z/>\n</a>";
 			parse(xdef, "a", xml, reporter);
 			assertNoErrorwarnings(reporter);
-		} catch (Exception ex) {fail(ex);}
-		try {// check mixed, include
+			// check mixed, include
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<a>\n"+
@@ -2087,8 +2086,31 @@ public final class TestGroups extends XDTester {
 			xml = "<a><b/><c/>1<b/><c/>2<b/><c/>3</a>";
 			assertEq(parse(xp, null, xml, reporter), xml);
 			assertErrors(reporter);
-		} catch (Exception ex) {fail(ex);}
-		try {//test choice
+			xdef = // nested sequences
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.0\" xd:root=\"A\">\n" +
+"  <A>\n" +
+"    <xd:sequence>\n" +
+"      <xd:sequence>\n" +
+"        <xd:choice>\n" +
+"          <B>list();</B>\n" +
+"          <C>string();</C>\n" +
+"          int();\n" +
+"        </xd:choice>\n" +
+"      </xd:sequence>\n" +
+"    </xd:sequence>\n" +
+"  </A>\n" +
+"</xd:def>";
+			xp = compile(xdef);
+			xml ="<A><B>abc def</B></A>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
+			xml ="<A><C>abc def</C></A>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
+			xml ="<A>123</A>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrors(reporter);
+			//test choice
 			xdef =
 "<x:def xmlns:x='" + _xdNS + "' root='a'>\n"+
 "<a> <x:choice> <b/> <c/> </x:choice> </a>\n"+

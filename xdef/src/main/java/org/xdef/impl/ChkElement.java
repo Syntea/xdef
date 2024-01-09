@@ -2397,7 +2397,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			if (_selector._finallyCode >= 0) {
 				exec(_selector._finallyCode, (byte) 'U');
 			}
-			if (_selector._prev != null && _selector._occur) {
+			if (_selector._prev != null) {
 				_selector._prev._count++;
 			}
 			_selector = _selector._prev;
