@@ -1,28 +1,28 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.1.0, release-date 2024-01-09
-* Added the new operator CHECK. This is binary operator, the result of operation
-  is ParseResult value. The type of the first
-  operand must be Parser or ParseResult (if it is Parser then parsing method
-  is invoked so that it results a ParseResut value). The second operand is
-  a boolean expression (usually it is a method) and it is invoked only if the
-  ParseResult from the processed first operand does not contain error messages.
-  If the result of invoked expression of the second operand is false, the error
-  message `XDEF822: Parsed result does not fit to CHECK argument` is set to the
-  ParseResult value.
+# Version 42.1.0, release-date 2024-01-10
+* Added the new binary operator `CHECK`. The result of operation is 
+  a `ParseResult` value. The type of the first operand must be `Parser` or
+  `ParseResult` (if it is Parser then parsing method is invoked so that it
+  results a `ParseResut` value). The second operand is a `boolean` expression
+  (usually it is a method) and it is invoked only if the `ParseResult` from
+  the first processed operand does not contain any error messages. If the result
+  of invoked expression of the second operand is false, the error message 
+  `XDEF822: Parsed result does not fit to CHECK argument` is set to the
+  `ParseResult` value.
 * Fixed bug in nested sequence groups.
-
-# Version 42.0.11, release-date 2023-11-27
 * If the type of a value in X-component is `union` and types of all items are
-  compatible type, then the type of getter/settter is set accordig to that
+  compatible type, then the type of getter/settter is set according to that
   type (formally it was only `Object`).
 * If in X-component the type is compatible with String`then type of
   getters/setters is now always String.
-* Corrected bug in org.xdef.xon.CsvReader parser when after missing value at
+* corrected and improved `org.xdef.util.GUIEditor`.
+
+# Version 42.0.11, release-date 2023-11-27
+* Corrected bug in `org.xdef.xon.CsvReader` parser when after missing value at
   the end of line follows next line with a value.
 * Corrected bug in X-component when the validation type is described as
   an expression.
-* corrected and improved org.xdef.util.GUIEditor.
 
 # Version 42.0.10, release-date 2023-08-23
 * Fixed bug in `equals(arg)` and `compareTo(arg)` methods in `SDatetime` class.
