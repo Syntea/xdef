@@ -7,6 +7,7 @@ import org.xdef.impl.code.DefIPAddr;
 import org.xdef.proc.XXNode;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.BNFGrammar;
+import org.xdef.xon.XonTools;
 
 /** Parse domain address.
  * @author Vaclav Trojan
@@ -15,11 +16,13 @@ public class XDParseDomainAddr extends XDParserAbstract {
 	private static final String ROOTBASENAME = "domainAddr";
 
 	@Override
-	public void parseObject(final XXNode xnode, final XDParseResult p) {
+	public void parseObject(final XXNode xn, final XDParseResult p) {
 		int pos = p.getIndex();
 		p.isSpaces();
 		int pos1 = p.getIndex();
-		String s = p.getUnparsedBufferPart().trim();
+		boolean quoted = xn != null && xn.getXonMode() > 0 && p.isChar('"');
+		String s = quoted ? XonTools.readJString(p) : p.getUnparsedBufferPart();
+		s = s.trim();
 		BNFGrammar g = BNFGrammar.compile(
 "atom ::= [-0-9a-zA-Z_]+\n"+
 "domain ::= atom ('.' atom)*");

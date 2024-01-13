@@ -14,7 +14,7 @@ public class XDParseLanguages extends XDParseNCNameList {
 
 	public XDParseLanguages() {super();}
 	@Override
-	XDValue parse(final XXNode xnode, final StringParser p) {
+	XDValue parse(final XXNode xn, final StringParser p) {
 		int pos = p.getIndex();
 		while(p.isLetter() != 0) {}
 		try {

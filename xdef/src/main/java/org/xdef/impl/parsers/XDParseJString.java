@@ -9,13 +9,14 @@ import static org.xdef.XDParser.MINLENGTH;
 import static org.xdef.XDParser.PATTERN;
 import static org.xdef.XDParser.WHITESPACE;
 import static org.xdef.XDParser.WS_PRESERVE;
+import org.xdef.msg.XDEF;
 import org.xdef.proc.XXNode;
 import org.xdef.xon.XonTools;
 
 /** Parser of X-Script "jstring" (XON/JSON string) type.
  * @author Vaclav Trojan
  */
-public class XDParseJString extends XDParseAn {
+public class XDParseJString extends XSAbstractParseToken {
 	private static final String ROOTBASENAME = "jstring";
 
 	public XDParseJString() {
@@ -50,27 +51,36 @@ public class XDParseJString extends XDParseAn {
 			0;
 	}
 	@Override
-	boolean parse(final XXNode xn, final XDParseResult p) {
+	public void parseObject(final XXNode xn, final XDParseResult p){
+		int pos0 = p.getIndex();
+		p.isSpaces();
 		int pos = p.getIndex();
 		if (xn != null && xn.getXonMode() > 0 && p.isChar('"')) {
 			String s = XonTools.readJString(p);
-			if (s != null && !p.errors()) {
-				p.setParsedValue(s);
-				return true;
+			if (s == null || p.errors()) {
+				//Incorrect value of '&{0}'&{1}{: }
+				p.errorWithString(XDEF.XDEF809, parserName());
+				return;
 			}
-			return false;
+			p.setParsedValue(s);
 		} else {//not quoted string -> check JSON simple values
 			if (((p.isOneOfTokens("false","true","null") >= 0
 				|| ((p.isChar('-') || true) && (p.isFloat() || p.isInteger())))
 				&& p.eos()) || p.eos()) {
-				return false;
+				//Incorrect value of '&{0}'&{1}{: }
+				p.errorWithString(XDEF.XDEF809, parserName());
+				return;
 			}
 			while (!p.eos()) {
 				p.nextChar();
 			}
 		}
 		p.setParsedValue(p.getBufferPart(pos, p.getIndex()));
-		return true;
+		String s = p.getBufferPart(pos, p.getIndex());
+		p.setParsedValue(s);
+		p.isSpaces();
+		p.replaceParsedBufferFrom(pos0, s);
+		checkItem(p);
 	}
 	@Override
 	public byte getDefaultWhiteSpace() {return WS_PRESERVE;}

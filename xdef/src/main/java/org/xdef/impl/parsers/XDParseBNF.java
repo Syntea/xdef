@@ -17,6 +17,7 @@ import org.xdef.XDContainer;
 import static org.xdef.XDValueID.XD_BNFGRAMMAR;
 import static org.xdef.XDValueID.XD_BNFRULE;
 import static org.xdef.XDValueID.XD_CONTAINER;
+import org.xdef.xon.XonTools;
 
 /** Parse BNF
  * @author Vaclav Trojan
@@ -30,9 +31,12 @@ public class XDParseBNF extends XDParserAbstract {
 	public XDParseBNF() {super(); _rule = null;} // dummy
 
 	@Override
-	public void parseObject(XXNode xnode, XDParseResult p) {
+	public void parseObject(final XXNode xn, final XDParseResult p) {
 		int pos0 = p.getIndex();
-		StringParser parser = new StringParser(p.getSourceBuffer(), pos0);
+		boolean quoted = xn != null && xn.getXonMode() > 0 && p.isChar('"');
+		StringParser parser = quoted
+			? new StringParser(XonTools.readJString(p), pos0)
+			: new StringParser(p.getSourceBuffer(), pos0);
 		XDParseResult r = _rule.perform(parser);
 		p.setParsedValue(r.getParsedValue());
 		p.addReports(p.getReporter());
