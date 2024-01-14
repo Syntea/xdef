@@ -78,12 +78,13 @@ public abstract class XSAbstractParseString extends XSAbstractParser {
 		if (params != null && params.length >= 1) {
 			Object par1 = params[0];
 			_minLength = Integer.parseInt(par1.toString());
-			if (params.length == 1) {
-				_maxLength = _minLength;
-			} else if (params.length == 2) {
-				_maxLength = Integer.parseInt(params[1].toString());
-			} else {
-				throw new SRuntimeException("Incorrect number of parameters");
+			switch(params.length) {
+				case 1: _maxLength = _minLength; break;
+				case 2: 
+					_maxLength = Integer.parseInt(params[1].toString());
+					break;
+				default: //Too many parameters for method &{0}
+					throw new SRuntimeException(XDEF.XDEF461, parserName());
 			}
 		}
 	}
@@ -101,10 +102,8 @@ public abstract class XSAbstractParseString extends XSAbstractParser {
 			if (e == null) {
 				e = new DefString[]{s};
 			} else {
-				for (int j = 0; j < e.length; j++) {
-					if (e[j].equals(s)) {//already is in enumeration
-						continue loop;
-					}
+				for(DefString d: e) {
+					if (d.equals(s)) continue loop; //already is in enumeration
 				}
 				//longer strings must preceed shorter ones.
 				DefString[] old = e;

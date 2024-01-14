@@ -5,7 +5,6 @@ import org.xdef.XDParseResult;
 import org.xdef.XDValue;
 import org.xdef.proc.XXNode;
 import org.xdef.impl.code.DefParseResult;
-import org.xdef.xon.XonTools;
 
 /** Parser of X-Script "ends" type.
  * @author Vaclav Trojan
@@ -26,16 +25,11 @@ public class XDParseEnds extends XDParseEq {
 		return p;
 	}
 	@Override
-	public void parseObject(final XXNode xn, final XDParseResult p){
-		boolean quoted = xn != null && xn.getXonMode() > 0 && p.isChar('"');
-		String s = quoted ? XonTools.readJString(p) : p.getUnparsedBufferPart();
-		s = s.trim();
-		if (!s.endsWith(_param)) {
+	public void parseObject(final XXNode xnode, final XDParseResult p){
+		if (!p.getUnparsedBufferPart().endsWith(_param)) {
 			//Incorrect value of &{0}&{1}{: }
 			p.errorWithString(XDEF.XDEF809, parserName());
-			return;
 		}
-		p.setParsedValue(s);
 		p.setEos();
 	}
 	@Override

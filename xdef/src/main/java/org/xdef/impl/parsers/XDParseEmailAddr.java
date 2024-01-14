@@ -5,7 +5,6 @@ import org.xdef.XDParserAbstract;
 import org.xdef.impl.code.DefEmailAddr;
 import org.xdef.proc.XXNode;
 import org.xdef.msg.XDEF;
-import org.xdef.xon.XonTools;
 
 /** Parse email address.
  * @author Vaclav Trojan
@@ -14,10 +13,9 @@ public class XDParseEmailAddr extends XDParserAbstract {
 	private static final String ROOTBASENAME = "emailAddr";
 
 	@Override
-	public void parseObject(final XXNode xn, final XDParseResult p) {
+	public void parseObject(final XXNode xnode, final XDParseResult p) {
 		p.isSpaces();
-		boolean quoted = xn != null && xn.getXonMode() > 0 && p.isChar('"');
-		String s = quoted ? XonTools.readJString(p) : p.getUnparsedBufferPart();
+		String s = p.getUnparsedBufferPart();
 		if (chkEmail(p, s, ROOTBASENAME)) {
 			p.setEos();
 		}

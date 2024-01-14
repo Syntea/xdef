@@ -7,7 +7,6 @@ import org.xdef.sys.StringParser;
 import org.xdef.XDParseResult;
 import org.xdef.proc.XXNode;
 import org.xdef.impl.code.DefDate;
-import org.xdef.xon.XonTools;
 
 /** Parser of Schema "date" type.
  * @author Vaclav Trojan
@@ -17,14 +16,11 @@ public class XDParseDateYMDhms extends XSParseDatetime {
 
 	public XDParseDateYMDhms() {super();}
 	@Override
-	public void parseObject(final XXNode xn, final XDParseResult p){
+	public void parseObject(final XXNode xnode, final XDParseResult p){
 		int pos0 = p.getIndex();
 		p.isSpaces();
 		int pos = p.getIndex();
-		boolean quoted = xn != null && xn.getXonMode() > 0 && p.isChar('"');
-		StringParser parser = quoted
-			? new StringParser(XonTools.readJString(p), pos0)
-			: new StringParser(p.getSourceBuffer(), pos0);
+		StringParser parser = new StringParser(p.getSourceBuffer(), pos);
 		if (!parse(parser)) {
 			//Incorrect value of '&{0}'&{1}{: }
 			p.errorWithString(XDEF.XDEF809, parserName());
@@ -37,7 +33,7 @@ public class XDParseDateYMDhms extends XSParseDatetime {
 		String s = p.getParsedBufferPartFrom(pos);
 		p.isSpaces();
 		p.replaceParsedBufferFrom(pos0, s);
-		checkDate(xn, p);
+		checkDate(xnode, p);
 	}
 	@Override
 	public String parserName() {return ROOTBASENAME;}

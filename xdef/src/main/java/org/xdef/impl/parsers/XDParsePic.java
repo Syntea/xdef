@@ -5,7 +5,6 @@ import org.xdef.XDParseResult;
 import org.xdef.XDValue;
 import org.xdef.proc.XXNode;
 import org.xdef.impl.code.DefParseResult;
-import org.xdef.xon.XonTools;
 
 /** Parser of X-Script "pic" type.
  * @author Vaclav Trojan
@@ -27,43 +26,41 @@ public class XDParsePic extends XDParseEq {
 		return p;
 	}
 	@Override
-	public void parseObject(final XXNode xn, final XDParseResult p){
-		boolean quoted = xn != null && xn.getXonMode() > 0 && p.isChar('"');
-		String s = quoted ? XonTools.readJString(p) : p.getUnparsedBufferPart();
-		s = s.trim();
-		if (s.length() == _param.length()) {
-			for (int i = 0; (i < _param.length()); i++) {
-				switch (_param.charAt(i)) {
-					case '9':
-						if (!Character.isDigit(s.charAt(i))) {
-							//Incorrect value of '&{0}'&{1}{: }
-							p.errorWithString(XDEF.XDEF809, parserName());
-							return;
-						}
-						continue;
-					case 'A':
-						if (!Character.isLetter(s.charAt(i))) {
-							//Incorrect value of '&{0}'&{1}{: }
-							p.errorWithString(XDEF.XDEF809, parserName());
-							return;
-						}
-						continue;
-					case 'X':
-						if (!Character.isLetterOrDigit(s.charAt(i))) {
-							//Incorrect value of '&{0}'&{1}{: }
-							p.errorWithString(XDEF.XDEF809, parserName());
-							return;
-						}
-						continue;
-					default:
-						if (s.charAt(i) != _param.charAt(i)) {
-							//Incorrect value of '&{0}'&{1}{: }
-							p.errorWithString(XDEF.XDEF809, parserName());
-							return;
-						}
-				}
-				p.setParsedValue(s);
-				p.setEos();
+	public void parseObject(final XXNode xnode, final XDParseResult p){
+		for (int i = 0; (i < _param.length()); i++) {
+			if (p.eos()) {
+				//Incorrect value of '&{0}'&{1}{: }
+				p.errorWithString(XDEF.XDEF809, parserName());
+				return;
+			}
+			switch (_param.charAt(i)) {
+				case '9':
+					if (p.isDigit() < 0) {
+						//Incorrect value of '&{0}'&{1}{: }
+						p.errorWithString(XDEF.XDEF809, parserName());
+						return;
+					}
+					continue;
+				case 'A':
+					if (p.isLetter() <= 0) {
+						//Incorrect value of '&{0}'&{1}{: }
+						p.errorWithString(XDEF.XDEF809, parserName());
+						return;
+					}
+					continue;
+				case 'X':
+					if (p.isLetterOrDigit() <= 0) {
+						//Incorrect value of '&{0}'&{1}{: }
+						p.errorWithString(XDEF.XDEF809, parserName());
+						return;
+					}
+					continue;
+				default:
+					if (!p.isChar(_param.charAt(i))) {
+						//Incorrect value of '&{0}'&{1}{: }
+						p.errorWithString(XDEF.XDEF809, parserName());
+						return;
+					}
 			}
 		}
 	}

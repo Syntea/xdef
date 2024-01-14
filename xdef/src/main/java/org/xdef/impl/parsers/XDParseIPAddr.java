@@ -15,7 +15,7 @@ public class XDParseIPAddr extends XDParserAbstract {
 
 	public XDParseIPAddr() {super();}
 	@Override
-	public void parseObject(final XXNode xn, final XDParseResult p) {
+	public void parseObject(final XXNode xnode, final XDParseResult p) {
 		int pos = p.getIndex();
 		p.isSpaces();
 		p.isChar('/');

@@ -34,7 +34,7 @@ public class XDParseBNF extends XDParserAbstract {
 	public void parseObject(final XXNode xn, final XDParseResult p) {
 		int pos0 = p.getIndex();
 		boolean quoted = xn != null && xn.getXonMode() > 0 && p.isChar('"');
-		StringParser parser = quoted
+		StringParser parser = quoted 
 			? new StringParser(XonTools.readJString(p), pos0)
 			: new StringParser(p.getSourceBuffer(), pos0);
 		XDParseResult r = _rule.perform(parser);

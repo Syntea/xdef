@@ -1,21 +1,49 @@
 package org.xdef.impl.parsers;
 
-import org.xdef.XDValue;
+import org.xdef.XDParseResult;
+import static org.xdef.XDParser.BASE;
+import static org.xdef.XDParser.WS_PRESERVE;
+import org.xdef.impl.code.DefParseResult;
+import org.xdef.msg.XDEF;
+import org.xdef.proc.XXNode;
+import org.xdef.xon.XonTools;
 
 /** Parser of X-Script "empty" type.
  * @author Vaclav Trojan
  */
-public class XDParseEmpty extends XDParseCDATA {
+public class XDParseEmpty extends XSAbstractParseString {
 	private static final String ROOTBASENAME = "empty";
 
 	public XDParseEmpty() {
 		super();
+		_whiteSpace = WS_PRESERVE;
 		_minLength = _maxLength = 0;
 	}
 	@Override
-	public int getLegalKeys() {return 0;}
+	public int getLegalKeys() {return BASE;}	
+	@Override
+	public void initParams() {
+		_whiteSpace = WS_PRESERVE;
+		_minLength = _maxLength = 0;
+	}
+	@Override
+	public byte getDefaultWhiteSpace() {return WS_PRESERVE;}
+	@Override
+	public XDParseResult check(final XXNode xn, final String s) {
+		XDParseResult p = new DefParseResult(s);
+		parseObject(xn, p);
+		return p;
+	}
+	@Override
+	public void parseObject(final XXNode xn, final XDParseResult p){
+		boolean quoted = xn != null && xn.getXonMode() > 0 && p.isChar('"');
+		String s = quoted ? XonTools.readJString(p) : p.getUnparsedBufferPart();
+		if (!s.isEmpty()) {
+			//Incorrect value of '&{0}'&{1}{: }
+			p.errorWithString(XDEF.XDEF809, parserName());
+		}
+		p.setParsedValue(s);
+	}	
 	@Override
 	public String parserName() {return ROOTBASENAME;}
-	@Override
-	public boolean equals(final XDValue o) {return o instanceof XDParseEmpty;}
 }

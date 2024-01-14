@@ -46,6 +46,7 @@ public class TestXon extends XDTester {
 		Map<String, Object> xini;
 		try {
 			// Array
+			assertNull(testA("byte", "[null, 1b ]"));
 			assertNull(testA("short", "[null, 1s ]"));
 			assertNull(testA("int", "[null, 1i ]"));
 			assertNull(testA("long", "[null, 1 ]"));
@@ -74,6 +75,10 @@ public class TestXon extends XDTester {
 			assertNull(testA("jnumber", "[ null, 1 ]"));
 			assertNull(testA("jstring", "[ null, \"abc\" ]"));
 			assertNull(testA("jvalue", "[ null, true, 1, \"abc\" ]"));
+			assertNull(testA("string",
+				"[null, \"1\",\"true\",\"null\",\"\",\"a b\",\" a \nb \"]"));
+			assertNull(testA("num", "[null, \"1\", \"0123456\"]"));
+			assertNull(testA("empty", "[\"\"]"));
 			// Map
 			assertNull(testM("string", "{}"));
 			assertNull(testM("int", "{a:null, b:1}"));
