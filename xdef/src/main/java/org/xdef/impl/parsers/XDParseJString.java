@@ -61,7 +61,7 @@ public class XDParseJString extends XSAbstractParseToken {
 				//Incorrect value of '&{0}'&{1}{: }
 				p.errorWithString(XDEF.XDEF809, parserName());
 				return;
-			}		
+			}
 			p.setParsedValue(s);
 		} else {//not quoted string -> check JSON simple values
 			if (((p.isOneOfTokens("false","true","null") >= 0
@@ -81,7 +81,7 @@ public class XDParseJString extends XSAbstractParseToken {
 		p.isSpaces();
 		p.replaceParsedBufferFrom(pos0, s);
 		checkItem(p);
-	}	
+	}
 	@Override
 	public byte getDefaultWhiteSpace() {return WS_PRESERVE;}
 	@Override

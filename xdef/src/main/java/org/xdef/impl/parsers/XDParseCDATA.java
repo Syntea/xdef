@@ -75,7 +75,7 @@ public class XDParseCDATA extends XDParserAbstract {
 		_minLength = Integer.parseInt(par1.toString());
 		switch(params.length) {
 			case 1: _maxLength = _minLength; break;
-			case 2: 
+			case 2:
 				_maxLength = Integer.parseInt(params[1].toString()); break;
 			default: //Too many parameters for method &{0}
 				throw new SRuntimeException(XDEF.XDEF461, parserName());

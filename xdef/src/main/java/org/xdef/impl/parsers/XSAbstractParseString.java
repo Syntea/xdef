@@ -80,7 +80,7 @@ public abstract class XSAbstractParseString extends XSAbstractParser {
 			_minLength = Integer.parseInt(par1.toString());
 			switch(params.length) {
 				case 1: _maxLength = _minLength; break;
-				case 2: 
+				case 2:
 					_maxLength = Integer.parseInt(params[1].toString());
 					break;
 				default: //Too many parameters for method &{0}

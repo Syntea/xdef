@@ -20,7 +20,7 @@ public class XDParseEmpty extends XSAbstractParseString {
 		_minLength = _maxLength = 0;
 	}
 	@Override
-	public int getLegalKeys() {return BASE;}	
+	public int getLegalKeys() {return BASE;}
 	@Override
 	public void initParams() {
 		_whiteSpace = WS_PRESERVE;
@@ -43,7 +43,7 @@ public class XDParseEmpty extends XSAbstractParseString {
 			p.errorWithString(XDEF.XDEF809, parserName());
 		}
 		p.setParsedValue(s);
-	}	
+	}
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 }
