@@ -75,13 +75,11 @@ public abstract class XSAbstractParseToken extends XSAbstractParser {
 		if (params != null && params.length >= 1) {
 			Object par1 = params[0];
 			_minLength = Integer.parseInt(par1.toString());
-			if (params.length == 1) {
-				_maxLength = _minLength;
-			} else if (params.length == 2) {
-				_maxLength = Integer.parseInt(params[1].toString());
-			} else {
-				throw new SRuntimeException("Incorrect number of parameters");
+			switch (params.length) {
+				case 1:_maxLength=_minLength;return;
+				case 2:_maxLength=Integer.parseInt(params[1].toString());return;
 			}
+			throw new SRuntimeException("Incorrect number of parameters");
 		}
 	}
 	@Override
