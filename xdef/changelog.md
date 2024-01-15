@@ -1,5 +1,8 @@
 # Version ${version}, release-date ${release.date}
 
+# Version 42.1.1, release-date 2024-01-15
+* .
+
 # Version 42.1.0, release-date 2024-01-15
 * Added the new binary operator `CHECK`. The result of operation is 
   a `ParseResult` value. The type of the first operand must be `Parser` or
