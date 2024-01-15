@@ -49,16 +49,14 @@ public class XDParseCDATA extends XDParserAbstract {
 		if (params == null || (pars = params.getXDNamedItems()) == null) {
 			return;
 		}
-		for (XDNamedValue nv: pars) {
-			switch (nv.getName()) {
-				case "length":
-					_minLength = _maxLength = nv.getValue().intValue();
-					break;
-				case "minLength":
-					_minLength = nv.getValue().intValue();
-					break;
-				case "maxLength":
-					_maxLength = nv.getValue().intValue();
+		for (int i = 0; i < pars.length; i++) {
+			String name = pars[i].getName();
+			if ("length".equals(name)) {
+				_minLength = _maxLength = pars[i].getValue().intValue();
+			} else if ("minLength".equals(name)) {
+				_minLength = pars[i].getValue().intValue();
+			} else if ("maxLength".equals(name)) {
+				_maxLength = pars[i].getValue().intValue();
 			}
 		}
 		if (_minLength >= 0 && _maxLength >= 0 && _minLength > _maxLength) {
@@ -68,17 +66,14 @@ public class XDParseCDATA extends XDParserAbstract {
 	}
 	@Override
 	public void setParseSQParams(final Object... params) {
-		if (params == null || params.length == 0) {
-			return;
-		}
-		Object par1 = params[0];
-		_minLength = Integer.parseInt(par1.toString());
-		switch(params.length) {
-			case 1: _maxLength = _minLength; break;
-			case 2:
-				_maxLength = Integer.parseInt(params[1].toString()); break;
-			default: //Too many parameters for method &{0}
-				throw new SRuntimeException(XDEF.XDEF461, parserName());
+		if (params != null && params.length >= 1) {
+			Object par1 = params[0];
+			_minLength = Integer.parseInt(par1.toString());
+			switch (params.length) {
+				case 1:_maxLength=_minLength;return;
+				case 2:_maxLength=Integer.parseInt(params[1].toString());return;
+			}
+			throw new SRuntimeException("Incorrect number of parameters");
 		}
 	}
 	@Override

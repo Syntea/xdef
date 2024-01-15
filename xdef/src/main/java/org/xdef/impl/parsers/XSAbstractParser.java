@@ -375,8 +375,8 @@ public abstract class XSAbstractParser extends XDParserAbstract
 		if (_patterns == null || !p.matches()) {
 			return;
 		}
-		for (int i = 0; i < _patterns.length; i++) {
-			if (_patterns[i].matches(p.getSourceBuffer())) {
+		for (DefRegex x: _patterns) {
+			if (x.matches(p.getSourceBuffer())) {
 				return; // found pattern; OK
 			}
 		}

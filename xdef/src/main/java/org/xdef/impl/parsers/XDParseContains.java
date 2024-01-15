@@ -5,6 +5,7 @@ import org.xdef.XDParseResult;
 import org.xdef.XDValue;
 import org.xdef.proc.XXNode;
 import org.xdef.impl.code.DefParseResult;
+import org.xdef.xon.XonTools;
 
 /** Parser of X-Script "contains" type.
  * @author Vaclav Trojan
@@ -16,22 +17,25 @@ public class XDParseContains extends XDParseEq {
 	@Override
 	public XDParseResult check(final XXNode xnode, final String s) {
 		XDParseResult p = new DefParseResult(s);
-		if (s.indexOf(_param, p.getIndex()) < 0) {
-			//Incorrect value of '&{0}'&{1}{: }
-			p.errorWithString(XDEF.XDEF809, parserName());
-		} else {
+		if (s.contains(_param)) {
 			p.setParsedValue(s);
 			p.setEos();
+		} else {
+			//Incorrect value of '&{0}'&{1}{: }
+			p.errorWithString(XDEF.XDEF809, parserName());
 		}
 		return p;
 	}
 	@Override
-	public void parseObject(final XXNode xnode, final XDParseResult p){
-		if (p.getSourceBuffer().indexOf(_param, p.getIndex()) < 0) {
+	public void parseObject(final XXNode xn, final XDParseResult p){
+		boolean quoted = xn != null && xn.getXonMode() > 0 && p.isChar('"');
+		String s = quoted ? XonTools.readJString(p) : p.getUnparsedBufferPart();
+		if (s.contains(_param)) {
+			p.setParsedValue(s);
+			p.setEos();
+		} else {
 			//Incorrect value of '&{0}'&{1}{: }
 			p.errorWithString(XDEF.XDEF809, parserName());
-		} else {
-			p.setEos();
 		}
 	}
 	@Override
