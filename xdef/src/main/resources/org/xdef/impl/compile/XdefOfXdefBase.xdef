@@ -579,12 +579,14 @@ DeclarationScript ::= (S? (TypeDeclaration | ExternalMethodDeclaration
   | VariableDeclaration | MethodDeclaration | ";"))* S?
 
 TypeDeclaration ::= ("type" S Identifier S?
-  ((Identifier (S? "," S? Identifier)* S? ";" S? )
-  | TypeDeclarationBody)) | UniqueSetDeclaration
+  ((Identifier (S? "CHECK" ? Expression)? S? ";" S? )
+  | TypeDeclarationBody)) 
+  | UniqueSetDeclaration
 
-TypeDeclarationBody ::= TypeExplicitCode | Expression
-  /* Expression or TypeExplicitCode must return either
-     a boolean or a ParseResult value.*/
+TypeDeclarationBody ::= TypeExplicitCode
+  | ( Expression (S? "CHECK" ? Expression)? )
+  /* The first xpression  must return either a boolean 
+    or a ParseResult value. The CHECK expression must return boolean value*/
 
 TypeExplicitCode ::= /* only X-definition version 2.0 */
   ("{" S? "parse" S? ":" S? (ExplicitCode | Statement ";"?) S? "}")

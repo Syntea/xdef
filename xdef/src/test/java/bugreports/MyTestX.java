@@ -138,6 +138,36 @@ public class MyTestX extends XDTester {
 ////////////////////////////////////////////////////////////////////////////////
 		boolean T = true; // if false, all tests are invoked
 ////////////////////////////////////////////////////////////////////////////////
+/**/
+		try {
+			xdef =
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" name=\"Example\" root=\"root\" >\n" +
+"  <xd:declaration>\n" +
+"    type pole string(1,2) CHECK regex('[0-9]{3}');\n" +
+//"    type pole string(1,2) CHECK regex('[0-9]{3}').parse().matches();\n" +
+//"    type pole string(1,2) CHECK chk();\n" +
+//"    type r regex('[0-9]{3}');\n" +
+//"    boolean chk() {\n"+
+//"      return regex('[0-9]{3}').parse().matches();\n" +
+//"   }\n" +
+"  </xd:declaration>\n" +
+"  <root a=\"pole(); onTrue outln('root a: ' + getText());\" >\n" +
+"    <b xd:script=\"occurs *\" >\n" +
+"      optional string(); finally outln(\"b: \" + getText());\n" +
+"    </b>\n" +
+"  </root>\n" +
+"</xd:def>";
+			xp = compile(xdef);
+//			xp = XDFactory.compileXD(null, xdef);
+			xp.displayCode();
+			xml = "<root a=\"12\" ><b>Lorem ipsum dolor amet.</b><b/></root>";
+			parse(xp, "Example", xml, reporter);
+			assertNoErrorsAndClear(reporter);
+			xml = "<root a=\"123\" ><b>Lorem ipsum dolor amet.</b><b/></root>";
+			parse(xp, "Example", xml, reporter);
+			assertNoErrorsAndClear(reporter);
+		} catch (Exception ex) {fail(ex); reporter.clear();}
+if(true)return;
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+

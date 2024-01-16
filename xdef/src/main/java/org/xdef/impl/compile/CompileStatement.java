@@ -1294,7 +1294,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 					}
 				}
 				_g.addCode(new CodeI1(XD_PARSERESULT,CHECKPARSED_OP,-1),-1);
-				cd.setParam(_g._lastCodeIndex);
+				cd.setParam(_g._lastCodeIndex + 1);
 				continue;
 			}
 			if (!simpleExpression()) {
