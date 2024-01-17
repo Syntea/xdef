@@ -264,7 +264,7 @@ public final class TestScript extends XDTester {
 
 	@Override
 	public void test() {
-		String xdef, xml;
+		String xdef, xml, s;
 		ArrayReporter reporter = new ArrayReporter();
 		Element el;
 		XComponent xc;
@@ -1059,20 +1059,21 @@ public final class TestScript extends XDTester {
 			+ "default: setResult(false); return false;}}",
 			"xxx(getText(),999);");
 ////////////////////////////////////////////////////////////////////////////////
-		xdef =
+		try {
+			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 " <a date=\"required xdatetime('d.M.yyyy','HH:mm:ss')\"/>\n"+
 "</xd:def>";
-		xml = "<a date= '1.1.2000'/>";
-		xp = compile(xdef);
-		XDDocument xd = xp.createXDDocument();
-		el = parse(xd, xml, reporter);
-		assertNoErrorwarnings(reporter);
-		assertEq("00:00:00", el.getAttribute("date"));
-		el = create(xp, "", reporter, xml);
-		assertNoErrorwarnings(reporter);
-		assertEq("00:00:00", el.getAttribute("date"));
-		xdef =
+			xml = "<a date= '1.1.2000'/>";
+			xp = compile(xdef);
+			XDDocument xd = xp.createXDDocument();
+			el = parse(xd, xml, reporter);
+			assertNoErrorwarnings(reporter);
+			assertEq("00:00:00", el.getAttribute("date"));
+			el = create(xp, "", reporter, xml);
+			assertNoErrorwarnings(reporter);
+			assertEq("00:00:00", el.getAttribute("date"));
+			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<xd:declaration>\n"+
 "<![CDATA[\n"+
@@ -1163,11 +1164,11 @@ public final class TestScript extends XDTester {
 "</xd:declaration>\n"+
 "<a xd:script=\"occurs 1..; finally test();\" />\n"+
 "</xd:def>\n";
-		xml ="<a/>";
-		assertFalse(test(xdef, xml, "", 'P', xml,
-			"OK 1 OK 2 OK 3 OK 4 OK 5 OK 6 OK 7 " +
-			"OK 21 OK 22 OK 23 OK 24 OK 25 OK 26 \n"));
-		xdef =
+			xml ="<a/>";
+			assertFalse(test(xdef, xml, "", 'P', xml,
+				"OK 1 OK 2 OK 3 OK 4 OK 5 OK 6 OK 7 " +
+				"OK 21 OK 22 OK 23 OK 24 OK 25 OK 26 \n"));
+			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<xd:declaration>\n"+
 "  void x() {\n"+
@@ -1183,10 +1184,10 @@ public final class TestScript extends XDTester {
 "</xd:declaration>\n"+
 "<a xd:script=\"onStartElement x()\"/>\n"+
 "</xd:def>\n";
-		xml = "<a/>";
-		assertFalse(test(xdef, xml, "", 'P', xml,
-		"3.141592653589793115997963468544185161590576171875; 312561.52461"));
-		xdef = // Test hasAttribute and hasNamedItem
+			xml = "<a/>";
+			assertFalse(test(xdef, xml, "", 'P', xml,
+"3.141592653589793115997963468544185161590576171875; 312561.52461"));
+			xdef = // Test hasAttribute and hasNamedItem
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "<xd:declaration><![CDATA[\n"+
 "  Container c = [%a='a'];"+
@@ -1199,12 +1200,11 @@ public final class TestScript extends XDTester {
 "  if (!c.hasNamedItem('a')) error('err4');\n"+
 "}\"/>\n"+
 "</xd:def>\n";
-		xp = compile(xdef);
-		xp.createXDDocument().xparse("<a/>", reporter);
-		assertNoErrorwarnings(reporter);
+			xp = compile(xdef);
+			xp.createXDDocument().xparse("<a/>", reporter);
+			assertNoErrorwarnings(reporter);
 
-		// Test reference to model with different namespace
-		xdef =
+			xdef = // Test reference to model with different namespace
 "<xd:def xmlns:xd='" + _xdNS + "' name='A' xmlns:a='a.b' xmlns:b='c.d'\n"+
 " root='a:a | b:a'>\n"+
 "<a:a a='int()' a:b='int()' >\n"+
@@ -1216,21 +1216,21 @@ public final class TestScript extends XDTester {
 " %class "+_package+".MyTest11 %link A#b:a;\n" +
 "</xd:component>\n" +
 "</xd:def>";
-		genXComponent(xp = compile(xdef));
-		xml = "<a:a xmlns:a='a.b' a='1' a:b='2'><a:b a='3' a:b='4'/></a:a>";
-		assertEq(xml, parse(xp, "A", xml, reporter));
-		assertNoErrorwarnings(reporter);
-		xc = xp.createXDDocument().xparseXComponent(xml, null, reporter);
-		assertNoErrors(reporter);
-		assertEq(xml, xc.toXml());
-		xml =
+			genXComponent(xp = compile(xdef));
+			xml = "<a:a xmlns:a='a.b' a='1' a:b='2'><a:b a='3' a:b='4'/></a:a>";
+			assertEq(xml, parse(xp, "A", xml, reporter));
+			assertNoErrorwarnings(reporter);
+			xc = xp.createXDDocument().xparseXComponent(xml, null, reporter);
+			assertNoErrors(reporter);
+			assertEq(xml, xc.toXml());
+			xml =
 "<b:a xmlns:b='c.d' a='1' b:b='2' b:c='3'><b:b a='4' b:b='5'/>6</b:a>";
-		assertEq(xml, parse(xp, "A", xml, reporter));
-		assertNoErrorwarnings(reporter);
-		xc = xp.createXDDocument().xparseXComponent(xml, null, reporter);
-		assertNoErrors(reporter);
-		assertEq(xml, xc.toXml());
-		xdef =
+			assertEq(xml, parse(xp, "A", xml, reporter));
+			assertNoErrorwarnings(reporter);
+			xc = xp.createXDDocument().xparseXComponent(xml, null, reporter);
+			assertNoErrors(reporter);
+			assertEq(xml, xc.toXml());
+			xdef =
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name='A' root='a' xmlns='a.b' xmlns:a='a.b'>\n"+
 "<a a='int()' a:b='int()' >\n"+
@@ -1245,14 +1245,14 @@ public final class TestScript extends XDTester {
 " %class "+_package+".MyTest22 %link B#a;\n" +
 "</xd:component>\n" +
 "</xd:collection>";
-		genXComponent(xp = compile(xdef));
-		xml = "<b:a xmlns:b='a.b' a='1' b:b='2'><b:b  a='3' b:b='4'/></b:a>";
-		assertEq(xml, parse(xp, "A", xml, reporter));
-		assertNoErrorwarnings(reporter);
-		xml = "<b:a xmlns:b='c.d' a='1' b:b='2'><b:b  a='3' b:b='4'/></b:a>";
-		assertEq(xml, parse(xp, "B", xml, reporter));
-		assertNoErrorwarnings(reporter);
-		xdef = // Test reference to model with different namespace
+			genXComponent(xp = compile(xdef));
+			xml = "<b:a xmlns:b='a.b' a='1' b:b='2'><b:b  a='3' b:b='4'/></b:a>";
+			assertEq(xml, parse(xp, "A", xml, reporter));
+			assertNoErrorwarnings(reporter);
+			xml = "<b:a xmlns:b='c.d' a='1' b:b='2'><b:b  a='3' b:b='4'/></b:a>";
+			assertEq(xml, parse(xp, "B", xml, reporter));
+			assertNoErrorwarnings(reporter);
+			xdef = // Test reference to model with different namespace
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name='A' root='a' xmlns='a.b' xmlns:a='a.b'>\n"+
 "<a a='int()' a:b='int()' >\n"+
@@ -1267,14 +1267,14 @@ public final class TestScript extends XDTester {
 " %class "+_package+".MyTest32 %link B#a;\n" +
 "</xd:component>\n" +
 "</xd:collection>";
-		genXComponent(xp = compile(xdef));
-		xml = "<b:a xmlns:b='a.b' a='1' b:b='2'><b:b  a='3' b:b='4'/></b:a>";
-		assertEq(xml, parse(xp, "A", xml, reporter));
-		assertNoErrorwarnings(reporter);
-		xml = "<a a='1' xmlns:a='a.b' a:b='2'><a:b  a='3' a:b='4'/></a>";
-		assertEq(xml, parse(xp, "B", xml, reporter));
-		assertNoErrorwarnings(reporter);
-		xdef = // Test reference to model with new emtty namespace,
+			genXComponent(xp = compile(xdef));
+			xml ="<b:a xmlns:b='a.b' a='1' b:b='2'><b:b  a='3' b:b='4'/></b:a>";
+			assertEq(xml, parse(xp, "A", xml, reporter));
+			assertNoErrorwarnings(reporter);
+			xml = "<a a='1' xmlns:a='a.b' a:b='2'><a:b  a='3' a:b='4'/></a>";
+			assertEq(xml, parse(xp, "B", xml, reporter));
+			assertNoErrorwarnings(reporter);
+			xdef = // Test reference to model with new emtty namespace,
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name='A' root='a:a' xmlns:a='a.b'>\n"+
 "<a:a a='int()' a:b='int()'>\n"+
@@ -1289,14 +1289,63 @@ public final class TestScript extends XDTester {
 " %class "+_package+".MyTest32 %link B#a;\n" +
 "</xd:component>\n" +
 "</xd:collection>";
-		genXComponent(xp = compile(xdef));
-		xp = compile(xdef);
-		xml="<a:a xmlns:a='a.b' a='1' a:b='2'><a:b a='4' a:b='4'/></a:a>";
-		assertEq(xml, parse(xp, "A", xml, reporter));
-		assertNoErrorwarnings(reporter);
-		xml = "<a xmlns:a='a.b' a='1' a:b='2'><a:b a='4' a:b='4'/></a>";
-		assertEq(xml, parse(xp, "B", xml, reporter));
-		assertNoErrorwarnings(reporter);
+			genXComponent(xp = compile(xdef));
+			xp = compile(xdef);
+			xml="<a:a xmlns:a='a.b' a='1' a:b='2'><a:b a='4' a:b='4'/></a:a>";
+			assertEq(xml, parse(xp, "A", xml, reporter));
+			assertNoErrorwarnings(reporter);
+			xml = "<a xmlns:a='a.b' a='1' a:b='2'><a:b a='4' a:b='4'/></a>";
+			assertEq(xml, parse(xp, "B", xml, reporter));
+			assertNoErrorwarnings(reporter);
+			xdef = // test CHECK operator
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" root=\"A\" >\n" +
+"  <xd:component>%class "+_package+".MytestX_CHECK %link #A;</xd:component>\n" +
+"  <xd:declaration>\n" +
+"    type p string(1,3) CHECK regex('[0-9]{3}');\n" +
+"    boolean chk() {\n"+
+"      return regex('[0-9]{3}').parse().matches();\n" +
+"   }\n" +
+"  </xd:declaration>\n" +
+"  <A a=\"? p();\" >\n" +
+"    <b xd:script=\"occurs *\" >\n" +
+"      optional string(1,3) CHECK chk();\n" +
+"    </b>\n" +
+"  </A>\n" +
+"</xd:def>";
+			xp = compile(xdef);
+			genXComponent(xp);
+			xml = "<A a=\"abc\"/>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			if (reporter.errorWarnings()) {
+				assertTrue(reporter.printToString().contains("XDEF822"));
+			}
+			reporter.clear();
+			xml = "<A a=\"123\"/>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrorsAndClear(reporter);
+			xc = parseXC(xp,"", xml , null, reporter);
+			assertNoErrorsAndClear(reporter);
+			assertEq(xml, xc.toXml());
+			xml = "<A a=\"1234\"/>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			if (reporter.errorWarnings()) {
+				assertTrue(reporter.printToString().contains("XDEF815"));
+			}
+			reporter.clear();
+			xml = "<A><b>abc</b><b>1234</b></A>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			if (reporter.errorWarnings()) {
+				s = reporter.printToString();
+				assertTrue(s.contains("XDEF822") && s.contains("XDEF815"));
+			}
+			reporter.clear();
+			xml = "<A><b>123</b></A>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrorsAndClear(reporter);
+			xc = parseXC(xp,"", xml , null, reporter);
+			assertNoErrorsAndClear(reporter);
+			assertEq(xml, xc.toXml());
+		} catch (Exception ex) {fail(ex); reporter.clear();}
 
 		resetTester();
 	}

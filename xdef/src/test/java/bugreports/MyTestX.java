@@ -141,57 +141,6 @@ public class MyTestX extends XDTester {
 /**/
 		try {
 			xdef =
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" root=\"A\" >\n" +
-"  <xd:component>%class "+_package+".MytestX_CHECK %link #A;</xd:component>\n" +
-"  <xd:declaration>\n" +
-"    type p string(1,3) CHECK regex('[0-9]{3}');\n" +
-"    boolean chk() {\n"+
-"      return regex('[0-9]{3}').parse().matches();\n" +
-"   }\n" +
-"  </xd:declaration>\n" +
-"  <A a=\"? p();\" >\n" +
-"    <b xd:script=\"occurs *\" >\n" +
-"      optional string(1,3) CHECK chk();\n" +
-"    </b>\n" +
-"  </A>\n" +
-"</xd:def>";
-			xp = compile(xdef);
-			genAndCopyXComponents(xp);
-			xml = "<A a=\"abc\"/>";
-			assertEq(xml, parse(xp, "", xml, reporter));
-			if (reporter.errorWarnings()) {
-				assertTrue(reporter.printToString().contains("XDEF822"));
-			}
-			reporter.clear();
-			xml = "<A a=\"123\"/>";
-			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrorsAndClear(reporter);
-			xc = parseXC(xp,"", xml , null, reporter);
-			assertNoErrorsAndClear(reporter);
-			assertEq(xml, xc.toXml());
-			xml = "<A a=\"1234\"/>";
-			assertEq(xml, parse(xp, "", xml, reporter));
-			if (reporter.errorWarnings()) {
-				assertTrue(reporter.printToString().contains("XDEF815"));
-			}
-			reporter.clear();
-			xml = "<A><b>abc</b><b>1234</b></A>";
-			assertEq(xml, parse(xp, "", xml, reporter));
-			if (reporter.errorWarnings()) {
-				s = reporter.printToString();
-				assertTrue(s.contains("XDEF822") && s.contains("XDEF815"));
-			}
-			reporter.clear();
-			xml = "<A><b>123</b></A>";
-			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrorsAndClear(reporter);
-			xc = parseXC(xp,"", xml , null, reporter);
-			assertNoErrorsAndClear(reporter);
-			assertEq(xml, xc.toXml());
-		} catch (Exception ex) {fail(ex); reporter.clear();}
-if(true)return;
-		try {
-			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
 "  <xd:declaration>\n" +
 "    ParseResult a(){return new ParseResult(getText());}\n" +
