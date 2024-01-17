@@ -632,10 +632,10 @@ public interface CodeTable {
 	static final short PARSE_OP = BNFRULE_VALIDATE + 1;
 	/** Parse string with parser, result is BOOLEAN_VALUE. */
 	static final short PARSEANDCHECK = PARSE_OP + 1;
-	/** Check ParsedResult. */
-	static final short CHECKPARSED_OP = PARSEANDCHECK + 1;
+/** This code is not used. */
+static final short UNUSED_CODE = PARSEANDCHECK + 1;
 	/** Set parsed error. */
-	static final short SET_PARSED_ERROR = CHECKPARSED_OP + 1;
+	static final short SET_PARSED_ERROR = UNUSED_CODE + 1;
 	/** Get parsed error. */
 	static final short GET_PARSED_ERROR = SET_PARSED_ERROR + 1;
 	/** Set parsed string. */

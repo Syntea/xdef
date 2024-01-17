@@ -141,31 +141,53 @@ public class MyTestX extends XDTester {
 /**/
 		try {
 			xdef =
-"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" name=\"Example\" root=\"root\" >\n" +
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" root=\"A\" >\n" +
+"  <xd:component>%class "+_package+".MytestX_CHECK %link #A;</xd:component>\n" +
 "  <xd:declaration>\n" +
-"    type pole string(1,2) CHECK regex('[0-9]{3}');\n" +
-//"    type pole string(1,2) CHECK regex('[0-9]{3}').parse().matches();\n" +
-//"    type pole string(1,2) CHECK chk();\n" +
-//"    type r regex('[0-9]{3}');\n" +
-//"    boolean chk() {\n"+
-//"      return regex('[0-9]{3}').parse().matches();\n" +
-//"   }\n" +
+"    type p string(1,3) CHECK regex('[0-9]{3}');\n" +
+"    boolean chk() {\n"+
+"      return regex('[0-9]{3}').parse().matches();\n" +
+"   }\n" +
 "  </xd:declaration>\n" +
-"  <root a=\"pole(); onTrue outln('root a: ' + getText());\" >\n" +
+"  <A a=\"? p();\" >\n" +
 "    <b xd:script=\"occurs *\" >\n" +
-"      optional string(); finally outln(\"b: \" + getText());\n" +
+"      optional string(1,3) CHECK chk();\n" +
 "    </b>\n" +
-"  </root>\n" +
+"  </A>\n" +
 "</xd:def>";
 			xp = compile(xdef);
-//			xp = XDFactory.compileXD(null, xdef);
-			xp.displayCode();
-			xml = "<root a=\"12\" ><b>Lorem ipsum dolor amet.</b><b/></root>";
-			parse(xp, "Example", xml, reporter);
+			genAndCopyXComponents(xp);
+			xml = "<A a=\"abc\"/>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			if (reporter.errorWarnings()) {
+				assertTrue(reporter.printToString().contains("XDEF822"));
+			}
+			reporter.clear();
+			xml = "<A a=\"123\"/>";
+			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrorsAndClear(reporter);
-			xml = "<root a=\"123\" ><b>Lorem ipsum dolor amet.</b><b/></root>";
-			parse(xp, "Example", xml, reporter);
+			xc = parseXC(xp,"", xml , null, reporter);
 			assertNoErrorsAndClear(reporter);
+			assertEq(xml, xc.toXml());
+			xml = "<A a=\"1234\"/>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			if (reporter.errorWarnings()) {
+				assertTrue(reporter.printToString().contains("XDEF815"));
+			}
+			reporter.clear();
+			xml = "<A><b>abc</b><b>1234</b></A>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			if (reporter.errorWarnings()) {
+				s = reporter.printToString();
+				assertTrue(s.contains("XDEF822") && s.contains("XDEF815"));
+			}
+			reporter.clear();
+			xml = "<A><b>123</b></A>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrorsAndClear(reporter);
+			xc = parseXC(xp,"", xml , null, reporter);
+			assertNoErrorsAndClear(reporter);
+			assertEq(xml, xc.toXml());
 		} catch (Exception ex) {fail(ex); reporter.clear();}
 if(true)return;
 		try {

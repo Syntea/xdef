@@ -266,11 +266,13 @@ public class XData extends XCodeDescriptor
 						if (xv[xi+1].getCode() == PARSE_OP) {
 							if (xv[xi+2].getCode() == STOP_OP) {
 								return y;
-							} else if (xv[xi+2].getCode() == CHECKPARSED_OP) {
-								return y;
+							} else if (xv[xi+2].getCode() == STACK_DUP
+								&& xi + 4 < xv.length
+								&& xv[xi+3].getCode() == PARSERESULT_MATCH
+								&& xv[xi+4].getCode() == JMPF_OP
+								&& xv[xv[xi+4].getParam()].getCode()==STOP_OP) {
+								return y; // CHECK parameter
 							}
-						} else if (xv[xi+1].getCode() == CHECKPARSED_OP) {
-							return y;
 						} else {// ??? try to parse an espression.
 							// if all parsers are same return parser
 							//  without parameters

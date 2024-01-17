@@ -497,7 +497,6 @@ import static org.xdef.impl.code.CodeTable.WRITE_TEXTNODE;
 import static org.xdef.impl.code.CodeTable.XOR_B;
 import static org.xdef.impl.compile.CompileBase.getParser;
 import static org.xdef.impl.compile.CompileBase.getTypeName;
-import static org.xdef.impl.code.CodeTable.CHECKPARSED_OP;
 
 /** Provides processor engine of script code.
  * @author Vaclav Trojan
@@ -1335,23 +1334,6 @@ public final class XCodeProcessor {
 					_stack[sp] = new DefLong(_stack[sp].longValue() >>>
 						_stack[sp + 1].intValue());
 					continue;
-				case CHECKPARSED_OP: { //Check ParsedResult
-					int par = item.getParam();
-					if (par >= 0) {
-						if (_stack[sp].getItemId() == XD_PARSER) {
-							XDParser p = (XDParser) _stack[sp];
-							_stack[sp]=p.check(chkNode, chkNode.getTextValue());
-						}
-						if (!((XDParseResult)_stack[sp]).matches()) {
-							pc = item.getParam(); // error, skip CHECK code
-						}
-					} else { // now on the top of stack must be boolean
-						if (!_stack[sp--].booleanValue()) {
-							((XDParseResult) _stack[sp]).error(XDEF.XDEF822);
-						}
-					}
-					continue;
-				}
 ////////////////////////////////////////////////////////////////////////////////
 //comparings
 ////////////////////////////////////////////////////////////////////////////////

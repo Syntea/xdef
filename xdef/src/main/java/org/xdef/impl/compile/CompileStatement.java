@@ -1268,14 +1268,18 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			int xValue = _g._cstack[sp];
 			nextSymbol();
 			if (operator == CHECK_SYM) {
-				if (xType != XD_PARSER && xType != XD_PARSERESULT) {
+				if (xType == XD_PARSER) {
+					_g.addCode(new CodeI1(XD_PARSERESULT,PARSE_OP, 1), 0);
+				} else if (xType != XD_PARSERESULT) {
 					error(XDEF.XDEF423, "ParseResult");
 					incomparable(xType);
 					continue;
 				}
-				CodeI1 cd = new CodeI1(XD_PARSERESULT, CHECKPARSED_OP, -1);
-				_g.addCode(cd, 0);
-				if (!simpleExpression()) {
+				_g.addCode(new CodeI1(XD_PARSERESULT,STACK_DUP, 1), 1);
+				_g.addCode(new CodeI1(XD_BOOLEAN, PARSERESULT_MATCH, -1), 0);
+				CodeI1 jmpf = new CodeI1(XD_PARSERESULT, JMPF_OP, -1);
+				_g.addCode(jmpf, 0); // skip CHECK code if an error occurs.
+				if (!simpleExpression()) { // compile the second argument
 					error(XDEF.XDEF437); //Error in expression
 					break;
 				}
@@ -1287,14 +1291,19 @@ class CompileStatement extends XScriptParser implements CodeTable {
 				}
 				short yType = _g._tstack[_g._sp];
 				if (yType != XD_BOOLEAN) {
-					_g.topToBool();
+					_g.topToBool(); // result must be boolean
 					yType = _g._tstack[_g._sp];
 					if (yType != XD_BOOLEAN) {
 						incomparable(yType);
 					}
 				}
-				_g.addCode(new CodeI1(XD_PARSERESULT,CHECKPARSED_OP,-1),-1);
-				cd.setParam(_g._lastCodeIndex + 1);
+				CodeI1 jmpt = new CodeI1(XD_PARSERESULT, JMPT_OP, -1);
+				_g.addCode(jmpt, -1); //skip if CHECK expression result is true
+				_g.addCode(new DefString("XDEF822"), 1); // set error
+				_g.addCode(new DefString(""), 1);
+				_g.addCode(new CodeI1(XD_PARSERESULT, SET_PARSED_ERROR, 3), -2);
+				jmpt.setParam(_g._lastCodeIndex + 1);// jump true addr is here
+				jmpf.setParam(_g._lastCodeIndex + 1);// jump false addr is here
 				continue;
 			}
 			if (!simpleExpression()) {
