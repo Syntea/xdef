@@ -3,28 +3,27 @@ package org.xdef.impl.parsers;
 import org.xdef.XDParseResult;
 import static org.xdef.XDParser.BASE;
 import static org.xdef.XDParser.WS_PRESERVE;
+import static org.xdef.XDValueID.XD_STRING;
 import org.xdef.impl.code.DefParseResult;
 import org.xdef.msg.XDEF;
 import org.xdef.proc.XXNode;
 import org.xdef.xon.XonTools;
 
-/** Parser of X-Script "empty" type.
+/** Parser of X-Script "empty" value type.
  * @author Vaclav Trojan
  */
-public class XDParseEmpty extends XSAbstractParseString {
+public class XDParseEmpty extends XSAbstractParser {
 	private static final String ROOTBASENAME = "empty";
 
 	public XDParseEmpty() {
 		super();
 		_whiteSpace = WS_PRESERVE;
-		_minLength = _maxLength = 0;
 	}
 	@Override
 	public int getLegalKeys() {return BASE;}
 	@Override
 	public void initParams() {
 		_whiteSpace = WS_PRESERVE;
-		_minLength = _maxLength = 0;
 	}
 	@Override
 	public byte getDefaultWhiteSpace() {return WS_PRESERVE;}
@@ -46,4 +45,6 @@ public class XDParseEmpty extends XSAbstractParseString {
 	}
 	@Override
 	public String parserName() {return ROOTBASENAME;}
+	@Override
+	public short parsedType() {return XD_STRING;}
 }
