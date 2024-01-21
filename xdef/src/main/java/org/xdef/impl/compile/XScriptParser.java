@@ -419,8 +419,8 @@ public class XScriptParser extends StringParser
 	}
 
 	/** Creates a new instance of ScriptParser.
-	 * @param xmlVersion 10 .. "1.0" (see XConstants.XML10),
-	 * 11 .. "1.1"(see XConstants.XML11).
+	 * @param xmlVersion XML version (1.0 or 1.1);
+	 * see StringParser.XMLVER1_0, StringParser.XMLVER1_1.
 	 */
 	public XScriptParser(final byte xmlVersion) {
 		super();

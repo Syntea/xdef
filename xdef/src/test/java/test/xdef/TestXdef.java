@@ -24,6 +24,7 @@ import java.io.StringWriter;
 import java.util.TimeZone;
 import org.w3c.dom.Element;
 import java.io.File;
+import java.io.IOException;
 import java.util.Properties;
 import org.xdef.XDParserAbstract;
 import org.xdef.proc.XXNode;
@@ -33,7 +34,6 @@ import org.xdef.impl.code.DefLong;
 import org.xdef.impl.code.DefParseResult;
 import org.xdef.XDValueID;
 import org.xdef.proc.XXData;
-import org.xdef.sys.FileReportWriter;
 import static org.xdef.sys.STester.runTest;
 import org.xdef.xml.KXmlUtils;
 import static test.XDTester._xdNS;
@@ -64,7 +64,7 @@ public final class TestXdef extends XDTester {
 			if (!tempDir.endsWith("/")) {
 				tempDir += "/";
 			}
-		} catch (Exception ex) {
+		} catch (IOException ex) {
 			fail(ex);
 			return;
 		}
@@ -347,7 +347,7 @@ public final class TestXdef extends XDTester {
 			assertEq("abc", swr.toString());
 		} catch (Exception ex) {fail(ex);}
 		try {
-			xdef = // check in the onIllegalRoot
+			xdef = // check onIllegalRoot
 "<x:def xmlns:x ='" + _xdNS + "' root ='a'"+
 "  x:script=\"onIllegalRoot {clearReports(); error('OK');}\">\n"+
 "<a a = \"required eq('a')\"/>\n"+
@@ -992,7 +992,7 @@ public final class TestXdef extends XDTester {
 			assertNoErrorwarnings(reporter);
 			assertEq("<a v='2.0'/>", parse(xdef, "", "<a v='20'/>", reporter));
 			assertErrors(reporter);
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 		try {//ignoreEmptyAttributes
 			xdef = //errors
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
@@ -1041,8 +1041,8 @@ public final class TestXdef extends XDTester {
 			parse(xdef, "", xml, reporter);
 			fail("Exception not thrown");
 		} catch (Exception ex) {
-			if (ex.getMessage().indexOf("OK") < 0 ||
-				ex.getMessage().indexOf("XDEF905") < 0) {
+			if (!ex.getMessage().contains("OK") ||
+				!ex.getMessage().contains("XDEF905")) {
 				fail(ex);
 			}
 		}
@@ -1382,20 +1382,20 @@ public final class TestXdef extends XDTester {
 				"myString xxx\n123\ntestparams a,1,1999-05-01T20:43:09+01:00\n",
 				swr.toString());
 			assertEq("2.0", el.getAttribute("Verze"));
-			FileReader fr = new FileReader(tempFile);
-			FileReportReader frep = new FileReportReader(fr, true);
-			Report r;
-			StringBuilder sb = new StringBuilder();
-			while ((r = frep.getReport()) != null) {
-				s = r.toString();
-				if (" ".equals(s)) {
-					sb.append('\n');
-				} else {
-					sb.append(s);
-				}
+			StringBuilder sb;
+			try (FileReader fr = new FileReader(tempFile)) {
+				FileReportReader frep = new FileReportReader(fr, true);
+				Report r;
+				sb = new StringBuilder();
+				while ((r = frep.getReport()) != null) {
+					s = r.toString();
+					if (" ".equals(s)) {
+						sb.append('\n');
+					} else {
+						sb.append(s);
+					}
+				}	frep.close();
 			}
-			frep.close();
-			fr.close();
 			new File(tempFile).delete();
 			assertEq("CHILD\nCHILD\n", sb.toString());
 			// test DOCTYPE and entity
@@ -1445,10 +1445,7 @@ public final class TestXdef extends XDTester {
 				//Maximum occurrence limit exceeded
 				assertEq("XDEF558", rep.getMsgID(), rep.toString());
 			}
-			if (xd == null) {
-				fail("DOC IS NULL");
-			} else if (
-				!("boss".equals(xd.getElement().getAttribute("funkce")))) {
+			if (!("boss".equals(xd.getElement().getAttribute("funkce")))) {
 				fail("incorrect boss=\""
 					+ xd.getElement().getAttribute("boss") + '"');
 			} else if (!("20".equals(xd.getElement().getAttribute("v")))) {
@@ -1688,7 +1685,7 @@ public final class TestXdef extends XDTester {
 					swr, null, null);
 				fail("Exception not thrown");
 			} catch (SRuntimeException ex) {
-				if (ex.getMessage().indexOf("XDEF501") < 0) {
+				if (!ex.getMessage().contains("XDEF501")) {
 					fail("Incorrect exception");
 					fail(ex);
 				}
@@ -2055,10 +2052,10 @@ public final class TestXdef extends XDTester {
 		} catch(Exception ex) {
 			s = ex.getMessage();
 			if (s == null) {
-				fail();
+				fail(ex);
 			} else {
-				assertTrue(s.indexOf("XML075") >= 0, ex);
-				assertTrue(s.indexOf(dataDir + "U.xdef") >= 0, ex);
+				assertTrue(s.contains("XML075"), ex);
+				assertTrue(s.contains(dataDir + "U.xdef"), ex);
 			}
 		}
 		try {
@@ -3022,6 +3019,7 @@ public final class TestXdef extends XDTester {
 			xml = "<a>1<b>2</b>3</a>";
 			assertEq(
 				KXmlUtils.nodeToString(parse(xdef, "", xml).getOwnerDocument()),
+"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"+
 "<!--a0--><?a 0?><a>"+
 "<!--10-->1<?_1 0?><!--11--><?_1 1?><!--b0--><?b 0?>"+
 "<b><!--20-->2<?_2 0?><!--21--><?_2 1?></b><!--b1--><?b 1?>"+
@@ -3139,14 +3137,11 @@ public final class TestXdef extends XDTester {
 		try { // test FileReportWriter as parameter of compilation.
 			xdef =
 "<xd:def xmlns:xd='" + XDConstants.XDEF40_NS_URI + "'><A a='xxxx()'/></xd:def>";
-			File f = new File(tempDir, "a.rep");
-			FileReportWriter frw = new FileReportWriter(f);
-			xp = XDFactory.compileXD(frw, null, xdef);
-			assertTrue(frw.getReportReader().printToString()
-				.contains("XDEF443"));
-			frw.close();
-			f.delete();
+			reporter.clear();
+			XDFactory.compileXD(reporter, null, xdef);
+			assertTrue(reporter.printToString().contains("XDEF443"));
 		} catch (Exception ex) {fail(ex);}
+		reporter.clear();
 		try { // test DOCTYPE not allowed
 			setProperty(XDConstants.XDPROPERTY_DOCTYPE, "false");
 			xdef =
@@ -3164,17 +3159,17 @@ public final class TestXdef extends XDTester {
 			if (!ex.getMessage().contains("XML099"))fail(ex);
 		}
 		try {// test "classpath" and "file" protocol in URL
-			xp = XDFactory.compileXD((Properties) null, //without wildcards
+			XDFactory.compileXD((Properties) null, //without wildcards
 				"classpath://org.xdef.impl.compile.XdefOfXdefBase.xdef",
 				"classpath://org.xdef.impl.compile.XdefOfXdef31.xdef",
 				"classpath://org.xdef.impl.compile.XdefOfXdef32.xdef",
 				"classpath://org.xdef.impl.compile.XdefOfXdef40.xdef",
 				"classpath://org.xdef.impl.compile.XdefOfXdef41.xdef",
 				"classpath://org.xdef.impl.compile.XdefOfXdef42.xdef");
-			xp = XDFactory.compileXD((Properties) null, //with wildcards
+			XDFactory.compileXD((Properties) null, //with wildcards
 				"classpath://org.xdef.impl.compile.XdefOfXdef*.xdef");
 			 //collection without wildcards
-			xp = XDFactory.compileXD((Properties) null,
+			XDFactory.compileXD((Properties) null,
 "<xd:collection xmlns:xd='" + _xdNS + "'\n"+
 "  xd:include='classpath://org.xdef.impl.compile.XdefOfXdef31.xdef;\n"+
 "    classpath://org.xdef.impl.compile.XdefOfXdef32.xdef;\n"+
@@ -3183,11 +3178,11 @@ public final class TestXdef extends XDTester {
 "    classpath://org.xdef.impl.compile.XdefOfXdef42.xdef;\n"+
 "    classpath://org.xdef.impl.compile.XdefOfXdefBase.xdef;'/>");
 			//collection with wildcards
-			xp = XDFactory.compileXD((Properties) null,
+			XDFactory.compileXD((Properties) null,
 "<xd:collection xmlns:xd='" + _xdNS + "'\n"+
 "  xd:include='classpath://org.xdef.impl.compile.XdefOfXdef*.xdef'/>");
 			//X-definition with imports with wildcards
-			xp = XDFactory.compileXD((Properties) null, //with wildcards
+			XDFactory.compileXD((Properties) null, //with wildcards
 "<xd:def xmlns:xd='" + _xdNS + "' name='xxx'\n"+
 "  xd:include='classpath://org.xdef.impl.compile.XdefOfXdef*.xdef'/>");
 		} catch (Exception ex) {fail(ex);}

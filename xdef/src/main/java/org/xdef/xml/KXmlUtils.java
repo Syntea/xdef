@@ -271,20 +271,14 @@ public final class KXmlUtils extends KDOMUtils {
 		final String xmlVersion,
 		final String xmlEncoding,
 		final String indentStep) throws IOException {
-		if (xmlVersion != null && !"1.0".equals(xmlVersion)
-			|| xmlEncoding != null && !"UTF-8".equalsIgnoreCase(xmlEncoding)) {
-			out.write("<?xml version=\"");
-			out.write(xmlVersion != null ? xmlVersion : "1.0");
-			out.write('"');
-			if (xmlEncoding != null) {
-				out.write(" encoding=\"");
-				out.write(xmlEncoding);
-				out.write('"');
-			}
-			out.write("?>\n");
-			if (indentStep != null) {
-				out.write('\n');
-			}
+		out.write("<?xml version=\"");
+		out.write(xmlVersion != null ? xmlVersion : "1.0");
+		out.write("\" encoding=\"");
+		out.write(xmlEncoding != null ? xmlEncoding : "UTF-8");
+		out.write('"');
+		out.write("?>");
+		if (indentStep != null) {
+			out.write('\n');
 		}
 	}
 

@@ -3871,7 +3871,9 @@ class CompileStatement extends XScriptParser implements CodeTable {
 							&& _g._code.get(addr+2).getCode() == STOP_OP) {
 							XDParser p = (XDParser) _g._code.get(addr);
 							type = p.parsedType();
-							p.setDeclaredName(name);
+							String s = p.getDeclaredName();
+							s = (s!=null && !s.isEmpty() ? s + ";" : "") + name;
+							p.setDeclaredName(s);
 						}
 					}
 				}
