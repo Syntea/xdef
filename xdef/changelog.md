@@ -1,7 +1,13 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.1.1, release-date 2024-01-17
+# Version 42.1.1, release-date 2024-01-25
 * Fixed bug in `CHECK` operation.
+* Imnlemented `org.xdec.util.Xdef2Xsd` - conversion of X-definition
+  to XML schema.
+* Imnlemented `org.xdec.util.Xdef2Xsd` - conversion of X-definition
+  to XML schema.
+* Imnlemented `org.xdec.util.Xsd2Xdef` - conversion of XXML schema
+  to X-definition.
 
 # Version 42.1.0, release-date 2024-01-15
 * Added the new binary operator `CHECK`. The result of operation is 

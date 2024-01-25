@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xd:def xmlns:xd = "http://www.syntea.cz/xdef/3.1"
+	xmlns:pk = "http://a"
+	xmlns:pq = "http://b"
+	xmlns:pr = "http://c"
+	xmlns:ps = "http://d"
+	xd:name = "Test"
+	xd:root = "pq:elem">
+    
+    <pq:elem>
+	  <pk:a1 atr1 ="optional string();"/>
+	  <pr:a2 atr1 ="optional string();"/>
+	  <a3 atr1 ="optional string();"/>
+	  <ps:a4 atr1 ="optional string();"/>
+    </pq:elem>
+    
+</xd:def>

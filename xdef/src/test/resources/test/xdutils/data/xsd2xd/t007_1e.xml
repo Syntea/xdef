@@ -1,0 +1,8 @@
+<x:note xmlns:x="http://bad.Name.Space"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.w3schools.com t007.xsd">
+  <x:to>Tove</x:to>
+  <x:from>Jani</x:from>
+  <x:heading>Reminder</x:heading>
+  <x:body>Don't forget me this weekend!</x:body>
+</x:note>

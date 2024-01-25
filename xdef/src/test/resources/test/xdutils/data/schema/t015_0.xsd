@@ -1,0 +1,11 @@
+<?xml version="1.0" standalone="yes"?>
+
+<xs:schema xmlns:xs = "http://www.w3.org/2001/XMLSchema"
+           xmlns:pb = "http://b"
+           targetNamespace = "http://b"
+           elementFormDefault = "qualified">
+  
+  <xs:attribute name = "atr2" type = "xs:string"/>
+
+</xs:schema>
+

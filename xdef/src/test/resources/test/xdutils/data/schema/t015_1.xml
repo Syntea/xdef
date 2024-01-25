@@ -1,0 +1,8 @@
+<pb:elem xmlns:pb  = "http://b"
+         xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://b t015.xsd">
+  <pa:a1 xmlns:pa = "http://a" atr1 ="atr1" pb:atr2 ="atr2" pa:atr3 = "atr3" />
+  <pc:a2 xmlns:pc = "http://c" atr1 ="atr1" pb:atr2 ="atr2" pc:atr3 = "atr3" />
+  <a3 atr1 = "atr1" pb:atr2 ="pb:atr2" atr3 = "attr3" />
+  <a4 xmlns = "http://d" xmlns:x = "http://d" atr1 ="atr1" pb:atr2 ="atr2" x:atr3 = "atr3" />
+</pb:elem>

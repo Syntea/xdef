@@ -1,0 +1,10 @@
+<xd:def xmlns:xd = "http://www.syntea.cz/xdef/3.1"
+   xd:name      = "a"
+   xd:root      = "a" >
+
+  <a a = "optional string(1,8)">
+    <b b = "optional string(1,8)" >
+      required int();
+    </b> 
+  </a>
+</xd:def>

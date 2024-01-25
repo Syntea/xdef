@@ -1,0 +1,1 @@
+ZacatekDavky|KonecDavky|AuthData|Answer|Fault|BlokujPSP|Get_NositelPSP|Get_VolnePSP|Get_SmlouvyPSP|NositelPSP|Ping|PingFlow|PingStatus|Request|Set_BlokujPSP|Set_PrenosPSP|Set_UvolniPSP|Set_ZrusPrenosPSP|SmlouvyPSP|UvolniPSP|VolnePSP|Get_PSP|PSP

@@ -1,0 +1,13 @@
+<xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" xd:name="main" xd:root="Types">
+    <Types>
+        <xd:mixed>
+            <xdatetime xd:script="occurs *">xdatetime('d.M.yyyy|yyyy-MM-dd', 'yyyy-MM-dd')</xdatetime>
+            <!--xdatetime xd:script="occurs *">xdatetime('yyyy-MM-dd')</xdatetime>
+            <dateTime xd:script="occurs *">dateTime</dateTime>
+            <an_2 xd:script="occurs *">an(3,4)</an_2>
+            <date xd:script="occurs *">date</date>
+            <time xd:script="occurs *">time</time>
+            <enum xd:script="occurs *">enum('ano', 'ne')</enum -->
+        </xd:mixed>
+    </Types>
+</xd:def>

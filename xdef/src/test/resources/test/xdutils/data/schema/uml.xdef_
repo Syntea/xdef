@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xd:def xmlns:xd="http://www.syntea.cz/xdef/3.1"
+  xmlns:_x0="http://kocour.ms.mff.cuni.cz/xcase/company/"
+	root = "_x0:purchase-request"
+  name="_NAME_">
+  <_x0:purchase-request>
+    <xd:choice>
+      <_x0:new-customer>
+        <_x0:name>string()</_x0:name>
+        <_x0:email>string()</_x0:email>
+      </_x0:new-customer>
+      <_x0:reg-customer customer-no="required string()"/>
+    </xd:choice>
+    <_x0:delivery-address>
+      <_x0:street>string()</_x0:street>
+      <_x0:postcode>string()</_x0:postcode>
+      <_x0:city>string()</_x0:city>
+    </_x0:delivery-address>
+    <_x0:bill-address>
+      <_x0:street>string()</_x0:street>
+      <_x0:postcode>string()</_x0:postcode>
+      <_x0:city>string()</_x0:city>
+    </_x0:bill-address>
+    <_x0:item-list>
+      <_x0:item xd:script="occurs 1..*" code="required string()">
+        <_x0:amount>int(-0x80000000,0x7fffffff)</_x0:amount>
+        <_x0:title>string()</_x0:title>
+      </_x0:item>
+    </_x0:item-list>
+  </_x0:purchase-request>
+</xd:def>

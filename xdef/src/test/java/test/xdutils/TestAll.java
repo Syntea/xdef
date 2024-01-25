@@ -19,6 +19,8 @@ public class TestAll {
 			new TestParseType(),
 			new TestPrettyXdef(),
 			new TestValidate(),
+			new TestXd2XsdConv(),
+			new TestXsd2XdConv(),
 		};
 	}
 

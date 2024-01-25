@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="windows-1250"?>
+<!--
+ http://www.syntea.cz/xdef/3.1
+ http://www.xdef.org/xdef/3.2
+ http://www.xdef.org/xdef/4.0
+ http://www.xdef.org/xdef/4.1
+ http://www.xdef.org/xdef/4.2
+-->
+<xd:def xmlns:xd      = "http://www.xdef.org/xdef/4.2"
+        xmlns:car     = "http://example.com/carInfo"
+        xmlns:shop    = "http://example.com/eshopInfo"
+         xd:name      =  "main"
+         xd:root      =  "Cars" >
+
+     <Cars>
+         <car:Car   xd:script="occurs +"
+                    shop:from="required datetime('dd.MM.yyyy')">
+            <car:VIN>required an()</car:VIN>
+            <car:Built>datetime("yyyy/MM")</car:Built>
+            <car:Mark>required enum("Škoda", "Audi", "Mercedes-Benz", "BMW")</car:Mark>
+            <shop:Info xd:script="occurs ?">required string(1, 500)</shop:Info>
+         </car:Car>
+     </Cars>
+
+</xd:def>

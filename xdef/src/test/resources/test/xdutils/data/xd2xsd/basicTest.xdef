@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="windows-1250"?>
+<!--
+ http://www.syntea.cz/xdef/3.1
+ http://www.xdef.org/xdef/3.2
+ http://www.xdef.org/xdef/4.0
+ http://www.xdef.org/xdef/4.1
+ http://www.xdef.org/xdef/4.2
+-->
+<xd:def xmlns:xd      =  "http://www.xdef.org/xdef/4.2"
+         xd:name      =  "main"
+         xd:root      =  "Root">
+         <Root  name="required enum('aa', 'bb')">
+             <Leaf  xd:script="ref Leaf; occurs +" />
+         </Root>
+         <Leaf name="optional string(1,*)" />
+</xd:def>

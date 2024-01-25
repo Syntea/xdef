@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="windows-1250"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="main_Types_cType">
+      <xs:sequence>
+          <xs:element name="A"
+            minOccurs="0"
+            maxOccurs="unbounded"
+            type="xs:base64Binary">
+          </xs:element>
+      </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Types"
+    type="main_Types_cType"/>
+</xs:schema>

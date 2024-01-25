@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:simpleType name="date10_XdDatetime_Type">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="(19|20)[0-9]{2}\.(0[1-9]|1[0-2])\.([0-2][0-9]|3[01])\s([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="date9_XdDatetime_Type">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="(19|20)[0-9]{2}\.(0[1-9]|1[0-2])\.([0-2][0-9]|3[01])\s([01][0-9]|2[0-3]):[0-5][0-9]"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="date8_XdDatetime_Type">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="(19|20)[0-9]{2}\.(0[1-9]|1[0-2])\.([0-2][0-9]|3[01])"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="date7_XdDatetime_Type">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="(19|20)[0-9]{2}(0[1-9]|1[0-2])([0-2][0-9]|3[01])([01][0-9]|2[0-3])[0-5][0-9][0-5][0-9]"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="date6_XdDatetime_Type">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="(19|20)[0-9]{2}(0[1-9]|1[0-2])([0-2][0-9]|3[01])([01][0-9]|2[0-3])[0-5][0-9]"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="date5_XdDatetime_Type">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="(19|20)[0-9]{2}(0[1-9]|1[0-2])([0-2][0-9]|3[01])"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="date3_XdDatetime_Type">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="(19|20)[0-9]{2}(0[1-9]|1[0-2])([0-2][0-9]|3[01])([01][0-9]|2[0-3])[0-5][0-9][0-5][0-9]|([0-2][0-9]|3[01])\.(0[1-9]|1[0-2])\.(19|20)[0-9]{2}\s([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="date2_XdDatetime_Type">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="(19|20)[0-9]{2}(0[1-9]|1[0-2])([0-2][0-9]|3[01])([01][0-9]|2[0-3])[0-5][0-9]|([0-2][0-9]|3[01])\.(0[1-9]|1[0-2])\.(19|20)[0-9]{2}\s([01][0-9]|2[0-3]):[0-5][0-9]"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="date1_XdDatetime_Type">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="(19|20)[0-9]{2}(0[1-9]|1[0-2])([0-2][0-9]|3[01])|([0-2][0-9]|3[01])\.(0[1-9]|1[0-2])\.(19|20)[0-9]{2}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="Person">
+    <xs:complexType>
+      <xs:attribute name="date1"
+        type="date1_XdDatetime_Type"
+        use="required"/>
+      <xs:attribute name="date2"
+        type="date2_XdDatetime_Type"
+        use="required"/>
+      <xs:attribute name="date3"
+        type="date3_XdDatetime_Type"
+        use="required"/>
+      <xs:attribute name="date4"
+        type="xs:gYear"
+        use="required"/>
+      <xs:attribute name="date5"
+        type="date5_XdDatetime_Type"
+        use="required"/>
+      <xs:attribute name="date6"
+        type="date6_XdDatetime_Type"
+        use="required"/>
+      <xs:attribute name="date7"
+        type="date7_XdDatetime_Type"
+        use="required"/>
+      <xs:attribute name="date8"
+        type="date8_XdDatetime_Type"
+        use="required"/>
+      <xs:attribute name="date9"
+        type="date9_XdDatetime_Type"
+        use="required"/>
+      <xs:attribute name="date10"
+        type="date10_XdDatetime_Type"
+        use="required"/>
+      <xs:attribute name="date11"
+        type="xs:date"
+        use="required"/>
+      <xs:attribute name="date12"
+        type="xs:time"
+        use="required"/>
+      <xs:attribute name="date13"
+        type="xs:dateTime"
+        use="required"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

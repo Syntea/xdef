@@ -60,7 +60,8 @@ public class TestKXmlUtils extends STester {
 			s = doc.getDocumentElement().getChildNodes().item(0).getNodeValue();
 			assertEq("]]>", s);
 			s = KXmlUtils.nodeToString(doc);
-			assertEq("<a>]]&gt;</a>", s);
+			assertEq("<?xml version=\"1.0\" encoding=\"UTF-8\"?><a>]]&gt;</a>",
+				s);
 			try {
 				KXmlUtils.parseXml("<a>]]></a>");
 				fail("error not reported");
@@ -265,12 +266,15 @@ public class TestKXmlUtils extends STester {
 			StringWriter sw = new StringWriter();
 			KXmlUtils.writeXml(sw, "UTF-8", el, null, false, false, true);
 			sw.close();
-			assertEq("<a>\nxxx\n  yy  y\n</a>", sw.toString());
+			assertEq(
+"<?xml version=\"1.0\" encoding=\"UTF-8\"?><a>\nxxx\n  yy  y\n</a>",
+				sw.toString());
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			OutputStreamWriter osw = new OutputStreamWriter(baos, "UTF-8");
 			KXmlUtils.writeXml(osw, el, false, false, true);
 			osw.close();
-			assertEq("<a>\nxxx\n  yy  y\n</a>", baos.toString());
+			assertEq(
+"<?xml version=\"1.0\" encoding=\"UTF-8\"?><a>\nxxx\n  yy  y\n</a>", baos.toString());
 		} catch (Exception ex) {fail(ex);}
 		try {
 			s = "<a><b a='a\"' b=\"b'\">\n\nxxx\n yy   y\n\n</b></a>";

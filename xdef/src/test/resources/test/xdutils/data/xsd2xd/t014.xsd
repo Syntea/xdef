@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  targetNamespace="http://b"
+  xmlns:pq="http://b"
+  elementFormDefault="qualified"
+  xmlns:pk="http://a"
+  xmlns:pr="http://c"
+  xmlns:ps="http://d">
+  <xs:import namespace="http://d"
+    schemaLocation="t014_3.xsd"/>
+  <xs:import namespace="http://c"
+    schemaLocation="t014_2.xsd"/>
+  <xs:import namespace="http://a"
+    schemaLocation="t014_1.xsd"/>
+  <xs:element name="elem">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="pk:a1"/>
+        <xs:element ref="pr:a2"/>
+        <xs:element name="a3"
+          form="unqualified">
+          <xs:complexType>
+            <xs:attribute name="atr1"
+              type="xs:string"
+              use="optional"/>
+          </xs:complexType>
+        </xs:element>
+        <xs:element ref="ps:a4"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

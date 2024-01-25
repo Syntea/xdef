@@ -1,0 +1,8 @@
+<pq:elem xsi:schemaLocation = "http://b t015.xsd"
+  xmlns:xsi ="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:pq  = "http://b">
+  <pk:a1 xmlns:pk  = "http://a"/>
+  <pr:a2 xmlns:pr  = "http://c"/>
+  <a3/>
+  <a4 xmlns = "http://d"/>
+</pq:elem>

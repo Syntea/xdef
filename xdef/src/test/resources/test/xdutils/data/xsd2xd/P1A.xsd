@@ -1,0 +1,1129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:simpleType name="Ulice_Type">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="36"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="CisloDomu_Type">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="10"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="Obec_Type">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="36"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="Okres_Type">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="36"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="Stat_user_Type">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="PSC_Type">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="16"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="Jmeno_Type">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="24"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="Prijmeni_Type">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="36"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="RC_Type">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="14"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="DatumNarozeni_XdDatetime_Type">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="(19|20)[0-9]{2}(0[1-9]|1[0-2])([0-2][0-9]|3[01])|([0-2][0-9]|3[01])\.(0[1-9]|1[0-2])\.(19|20)[0-9]{2}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="NazevFirmy_Type">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="100"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="IC_Type">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="12"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="StatPrislusnost_user_Type">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="CisloTP_Xdpic_Type">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[a-zA-Z][a-zA-Z]\d\d\d\d\d\d"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="VIN_Type">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="26"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="SPZ_Type">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="2"/>
+      <xs:maxLength value="12"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="DruhVozidla_user_Type">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="ZnackaText_Type">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="30"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ModelText_Type">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="40"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="KodModeluVozidla_user_Type">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="BarvaText_Type">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="20"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ZdvihovyObjem_Type">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="0"/>
+      <xs:maxInclusive value="99999"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="VykonMotoru_Type">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="0"/>
+      <xs:maxInclusive value="9999"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="CisloMotoru_Type">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="26"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="CelkovaHmotnost_Type">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="1"/>
+      <xs:maxInclusive value="999999"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="PocetMistCelkem_Type">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="0"/>
+      <xs:maxInclusive value="999"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="TarifniSkupina_user_Type">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="LimitPlneniMajetek_Type">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="1"/>
+      <xs:maxInclusive value="999999999"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="LimitPlneniZdravi_Type">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="1"/>
+      <xs:maxInclusive value="999999999"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="Leasing_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="A"/>
+      <xs:enumeration value="N"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="Pojistne_Type">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="1"/>
+      <xs:maxInclusive value="999999"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="PojistneBM_Type">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="1"/>
+      <xs:maxInclusive value="999999"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="PojisteniOd_XdDatetime_Type">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="(19|20)[0-9]{2}(0[1-9]|1[0-2])([0-2][0-9]|3[01])|([0-2][0-9]|3[01])\.(0[1-9]|1[0-2])\.(19|20)[0-9]{2}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="PojisteniDo_XdDatetime_Type">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="(19|20)[0-9]{2}(0[1-9]|1[0-2])([0-2][0-9]|3[01])|([0-2][0-9]|3[01])\.(0[1-9]|1[0-2])\.(19|20)[0-9]{2}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="CisloZK_Type">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="11"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="PlatnostZKOd_XdDatetime_Type">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="(19|20)[0-9]{2}(0[1-9]|1[0-2])([0-2][0-9]|3[01])|([0-2][0-9]|3[01])\.(0[1-9]|1[0-2])\.(19|20)[0-9]{2}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="PlatnostZKDo_XdDatetime_Type">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="(19|20)[0-9]{2}(0[1-9]|1[0-2])([0-2][0-9]|3[01])|([0-2][0-9]|3[01])\.(0[1-9]|1[0-2])\.(19|20)[0-9]{2}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="DatumZneplatneni_XdDatetime_Type">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="(19|20)[0-9]{2}(0[1-9]|1[0-2])([0-2][0-9]|3[01])|([0-2][0-9]|3[01])\.(0[1-9]|1[0-2])\.(19|20)[0-9]{2}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="KodPojistitele_user_Type">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="CisloSmlouvy_Type">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="35"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="PoradiVozidla_Xdnum_Type">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="\d{1,10}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="CisloDokladuPojisteni_Type">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="35"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="KontrolaNositele_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="A"/>
+      <xs:enumeration value="N"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="IdentZaznamu_Type">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="12"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="NositelPSP_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="S"/>
+      <xs:enumeration value="V"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="DatumUzavreni_XdDatetime_Type">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="(19|20)[0-9]{2}(0[1-9]|1[0-2])([0-2][0-9]|3[01])|([0-2][0-9]|3[01])\.(0[1-9]|1[0-2])\.(19|20)[0-9]{2}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="DatumUkonceni_XdDatetime_Type">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="(19|20)[0-9]{2}(0[1-9]|1[0-2])([0-2][0-9]|3[01])|([0-2][0-9]|3[01])\.(0[1-9]|1[0-2])\.(19|20)[0-9]{2}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="DuvodZanikuSmlouvy_user_Type">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="DatumReaktivace_XdDatetime_Type">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="(19|20)[0-9]{2}(0[1-9]|1[0-2])([0-2][0-9]|3[01])|([0-2][0-9]|3[01])\.(0[1-9]|1[0-2])\.(19|20)[0-9]{2}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="DatumZmeny_XdDatetime_Type">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="(19|20)[0-9]{2}(0[1-9]|1[0-2])([0-2][0-9]|3[01])|([0-2][0-9]|3[01])\.(0[1-9]|1[0-2])\.(19|20)[0-9]{2}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="DatumUcinnosti_XdDatetime_Type">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="(19|20)[0-9]{2}(0[1-9]|1[0-2])([0-2][0-9]|3[01])|([0-2][0-9]|3[01])\.(0[1-9]|1[0-2])\.(19|20)[0-9]{2}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="DuvodZanikuSmlouvy_user_Type1">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="DruhVozidla_user_Type1">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="KodModeluVozidla_user_Type1">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="TarifniSkupina_user_Type1">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:simpleType name="DatumZruseni_XdDatetime_Type">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="(19|20)[0-9]{2}(0[1-9]|1[0-2])([0-2][0-9]|3[01])|([0-2][0-9]|3[01])\.(0[1-9]|1[0-2])\.(19|20)[0-9]{2}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="KodChyby_Xdnum_Type">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="\d{4}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="Hodnota_Type">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="255"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="Xpath_Type">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="128"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="KodChyby_user_Type">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:complexType name="P1_common_Subjekt_type">
+    <xs:sequence>
+      <xs:element name="Adresa"
+        type="P1_common_Adresa_type"
+        minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="PlatnostOd"
+      type="xs:string"
+      use="optional"/>
+    <xs:attribute name="Jmeno"
+      type="Jmeno_Type"
+      use="optional"/>
+    <xs:attribute name="Prijmeni"
+      type="Prijmeni_Type"
+      use="optional"/>
+    <xs:attribute name="RC"
+      type="RC_Type"
+      use="optional"/>
+    <xs:attribute name="DatumNarozeni"
+      type="DatumNarozeni_XdDatetime_Type"
+      use="optional"/>
+    <xs:attribute name="NazevFirmy"
+      type="NazevFirmy_Type"
+      use="optional"/>
+    <xs:attribute name="IC"
+      type="IC_Type"
+      use="optional"/>
+    <xs:attribute name="StatPrislusnost"
+      type="StatPrislusnost_user_Type"
+      use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="P1_common_Adresa_type">
+    <xs:attribute name="Ulice"
+      type="Ulice_Type"
+      use="optional"/>
+    <xs:attribute name="CisloDomu"
+      type="CisloDomu_Type"
+      use="required"/>
+    <xs:attribute name="Obec"
+      type="Obec_Type"
+      use="required"/>
+    <xs:attribute name="Okres"
+      type="Okres_Type"
+      use="optional"/>
+    <xs:attribute name="Stat"
+      type="Stat_user_Type"
+      use="required"/>
+    <xs:attribute name="PSC"
+      type="PSC_Type"
+      use="required"/>
+  </xs:complexType>
+  <xs:complexType name="P1_common_Pojistnik_type">
+    <xs:complexContent>
+      <xs:extension base="P1_common_Subjekt_type"/>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="P1_common_Provozovatel_type">
+    <xs:complexContent>
+      <xs:extension base="P1_common_Subjekt_type"/>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="P1_common_Vlastnik_type">
+    <xs:complexContent>
+      <xs:extension base="P1_common_Subjekt_type"/>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="P1_common_VozidloSmlouvy_type">
+    <xs:sequence>
+      <xs:element name="Vozidlo"
+        type="P1_common_Vozidlo_type"/>
+    </xs:sequence>
+    <xs:attribute name="PlatnostOd"
+      type="xs:string"
+      use="optional"/>
+    <xs:attribute name="TarifniSkupina"
+      type="TarifniSkupina_user_Type"
+      use="required"/>
+    <xs:attribute name="LimitPlneniMajetek"
+      type="LimitPlneniMajetek_Type"
+      use="required"/>
+    <xs:attribute name="LimitPlneniZdravi"
+      type="LimitPlneniZdravi_Type"
+      use="required"/>
+    <xs:attribute name="Leasing"
+      type="Leasing_Type"
+      use="required"/>
+    <xs:attribute name="Pojistne"
+      type="Pojistne_Type"
+      use="required"/>
+    <xs:attribute name="PojistneBM"
+      type="PojistneBM_Type"
+      use="required"/>
+  </xs:complexType>
+  <xs:complexType name="P1_common_Vozidlo_type">
+    <xs:attribute name="CisloTP"
+      type="CisloTP_Xdpic_Type"
+      use="optional"/>
+    <xs:attribute name="VIN"
+      type="VIN_Type"
+      use="optional"/>
+    <xs:attribute name="SPZ"
+      type="SPZ_Type"
+      use="optional"/>
+    <xs:attribute name="DruhVozidla"
+      type="DruhVozidla_user_Type"
+      use="required"/>
+    <xs:attribute name="ZnackaText"
+      type="ZnackaText_Type"
+      use="optional"/>
+    <xs:attribute name="ModelText"
+      type="ModelText_Type"
+      use="optional"/>
+    <xs:attribute name="KodModeluVozidla"
+      type="KodModeluVozidla_user_Type"
+      use="required"/>
+    <xs:attribute name="RokDoProvozu"
+      type="xs:gYear"
+      use="optional"/>
+    <xs:attribute name="BarvaText"
+      type="BarvaText_Type"
+      use="optional"/>
+    <xs:attribute name="ZdvihovyObjem"
+      type="ZdvihovyObjem_Type"
+      use="optional"/>
+    <xs:attribute name="VykonMotoru"
+      type="VykonMotoru_Type"
+      use="optional"/>
+    <xs:attribute name="CisloMotoru"
+      type="CisloMotoru_Type"
+      use="optional"/>
+    <xs:attribute name="CelkovaHmotnost"
+      type="CelkovaHmotnost_Type"
+      use="optional"/>
+    <xs:attribute name="PocetMistCelkem"
+      type="PocetMistCelkem_Type"
+      use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="P1_common_DobaPojisteni_type">
+    <xs:attribute name="PojisteniOd"
+      type="PojisteniOd_XdDatetime_Type"
+      use="required"/>
+    <xs:attribute name="PojisteniDo"
+      type="PojisteniDo_XdDatetime_Type"
+      use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="P1_common_ZelenaKarta_1_type">
+    <xs:attribute name="CisloZK"
+      type="CisloZK_Type"
+      use="required"/>
+    <xs:attribute name="PlatnostZKOd"
+      type="PlatnostZKOd_XdDatetime_Type"
+      use="required"/>
+    <xs:attribute name="PlatnostZKDo"
+      type="PlatnostZKDo_XdDatetime_Type"
+      use="required"/>
+    <xs:attribute name="DatumZneplatneni"
+      type="DatumZneplatneni_XdDatetime_Type"
+      use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="NovaPS_NovaPS_type">
+    <xs:sequence>
+      <xs:element name="Pojistnik"
+        type="P1_common_Pojistnik_type"/>
+      <xs:element name="Provozovatel"
+        type="P1_common_Provozovatel_type"/>
+      <xs:element name="Vlastnik"
+        type="P1_common_Vlastnik_type"/>
+      <xs:element name="VozidloSmlouvy"
+        type="P1_common_VozidloSmlouvy_type"/>
+      <xs:element name="DobaPojisteni"
+        type="P1_common_DobaPojisteni_type"/>
+      <xs:element name="ZelenaKarta"
+        type="P1_common_ZelenaKarta_1_type"
+        minOccurs="0"/>
+      <xs:element name="ZdrojovaSmlouva"
+        type="P1_common_ZdrojovaSmlouva_type"
+        minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="IdentZaznamu"
+      type="IdentZaznamu_Type"
+      use="required"/>
+    <xs:attribute name="CisloSmlouvy"
+      type="CisloSmlouvy_Type"
+      use="required"/>
+    <xs:attribute name="PoradiVozidla"
+      type="PoradiVozidla_Xdnum_Type"
+      use="required"/>
+    <xs:attribute name="CisloDokladuPojisteni"
+      type="CisloDokladuPojisteni_Type"
+      use="required"/>
+    <xs:attribute name="NositelPSP"
+      type="NositelPSP_Type"
+      use="required"/>
+    <xs:attribute name="DatumUzavreni"
+      type="DatumUzavreni_XdDatetime_Type"
+      use="required"/>
+  </xs:complexType>
+  <xs:complexType name="P1_common_ZdrojovaSmlouva_type">
+    <xs:attribute name="KodPojistitele"
+      type="KodPojistitele_user_Type"
+      use="required"/>
+    <xs:attribute name="CisloSmlouvy"
+      type="CisloSmlouvy_Type"
+      use="optional"/>
+    <xs:attribute name="PoradiVozidla"
+      type="PoradiVozidla_Xdnum_Type"
+      use="optional"/>
+    <xs:attribute name="CisloDokladuPojisteni"
+      type="CisloDokladuPojisteni_Type"
+      use="optional"/>
+    <xs:attribute name="KontrolaNositele"
+      type="KontrolaNositele_Type"
+      use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="UkonceniPS_UkonceniPS_type">
+    <xs:sequence>
+      <xs:element name="ZelenaKarta"
+        type="P1_common_ZelenaKarta_type"
+        minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="IdentZaznamu"
+      type="IdentZaznamu_Type"
+      use="required"/>
+    <xs:attribute name="CisloSmlouvy"
+      type="CisloSmlouvy_Type"
+      use="required"/>
+    <xs:attribute name="PoradiVozidla"
+      type="PoradiVozidla_Xdnum_Type"
+      use="required"/>
+    <xs:attribute name="DatumUkonceni"
+      type="DatumUkonceni_XdDatetime_Type"
+      use="required"/>
+    <xs:attribute name="DuvodZanikuSmlouvy"
+      type="DuvodZanikuSmlouvy_user_Type"
+      use="required"/>
+    <xs:attribute name="SPZ"
+      type="xs:string"
+      use="optional"/>
+    <xs:attribute name="CisloTP"
+      type="xs:string"
+      use="optional"/>
+    <xs:attribute name="PojisteniDo"
+      type="PojisteniDo_XdDatetime_Type"
+      use="required"/>
+  </xs:complexType>
+  <xs:complexType name="P1_common_ZelenaKarta_type">
+    <xs:attribute name="CisloZK"
+      type="CisloZK_Type"
+      use="required"/>
+    <xs:attribute name="PlatnostZKOd"
+      type="PlatnostZKOd_XdDatetime_Type"
+      use="required"/>
+    <xs:attribute name="PlatnostZKDo"
+      type="PlatnostZKDo_XdDatetime_Type"
+      use="required"/>
+    <xs:attribute name="DatumZneplatneni"
+      type="DatumZneplatneni_XdDatetime_Type"
+      use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="ReaktivacePS_ReaktivacePS_type">
+    <xs:sequence>
+      <xs:element name="Pojistnik"
+        type="P1_common_Pojistnik_type"/>
+      <xs:element name="Provozovatel"
+        type="P1_common_Provozovatel_type"/>
+      <xs:element name="Vlastnik"
+        type="P1_common_Vlastnik_type"/>
+      <xs:element name="VozidloSmlouvy"
+        type="P1_common_VozidloSmlouvy_type"/>
+      <xs:element name="DobaPojisteni"
+        type="P1_common_DobaPojisteni_type"/>
+      <xs:element name="ZelenaKarta"
+        type="P1_common_ZelenaKarta_3_type"
+        minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="IdentZaznamu"
+      type="IdentZaznamu_Type"
+      use="required"/>
+    <xs:attribute name="CisloSmlouvy"
+      type="CisloSmlouvy_Type"
+      use="required"/>
+    <xs:attribute name="PoradiVozidla"
+      type="PoradiVozidla_Xdnum_Type"
+      use="required"/>
+    <xs:attribute name="CisloDokladuPojisteni"
+      type="CisloDokladuPojisteni_Type"
+      use="required"/>
+    <xs:attribute name="DatumReaktivace"
+      type="DatumReaktivace_XdDatetime_Type"
+      use="required"/>
+  </xs:complexType>
+  <xs:complexType name="P1_common_ZelenaKarta_3_type">
+    <xs:attribute name="CisloZK"
+      type="CisloZK_Type"
+      use="required"/>
+    <xs:attribute name="PlatnostZKOd"
+      type="PlatnostZKOd_XdDatetime_Type"
+      use="required"/>
+    <xs:attribute name="PlatnostZKDo"
+      type="PlatnostZKDo_XdDatetime_Type"
+      use="required"/>
+    <xs:attribute name="DatumZneplatneni"
+      type="DatumZneplatneni_XdDatetime_Type"
+      use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="P1_common_ZelenaKarta_5_type">
+    <xs:attribute name="CisloZK"
+      type="CisloZK_Type"
+      use="required"/>
+    <xs:attribute name="PlatnostZKOd"
+      type="PlatnostZKOd_XdDatetime_Type"
+      use="required"/>
+    <xs:attribute name="PlatnostZKDo"
+      type="PlatnostZKDo_XdDatetime_Type"
+      use="required"/>
+    <xs:attribute name="DatumZneplatneni"
+      type="DatumZneplatneni_XdDatetime_Type"
+      use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="ZmenaPS_ZmenaPS_type">
+    <xs:sequence>
+      <xs:element name="Pojistnik"
+        type="P1_common_Pojistnik_type"/>
+      <xs:element name="Provozovatel"
+        type="P1_common_Provozovatel_type"/>
+      <xs:element name="Vlastnik"
+        type="P1_common_Vlastnik_type"/>
+      <xs:element name="VozidloSmlouvy"
+        type="P1_common_VozidloSmlouvy_type"/>
+      <xs:element name="DobaPojisteni"
+        type="P1_common_DobaPojisteni_type"/>
+      <xs:element name="ZelenaKarta"
+        type="P1_common_ZelenaKarta_5_type"
+        minOccurs="0"/>
+      <xs:element name="ZdrojovaSmlouva"
+        type="P1_common_ZdrojovaSmlouva_type"
+        minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="IdentZaznamu"
+      type="IdentZaznamu_Type"
+      use="required"/>
+    <xs:attribute name="CisloSmlouvy"
+      type="CisloSmlouvy_Type"
+      use="required"/>
+    <xs:attribute name="PoradiVozidla"
+      type="PoradiVozidla_Xdnum_Type"
+      use="required"/>
+    <xs:attribute name="CisloDokladuPojisteni"
+      type="CisloDokladuPojisteni_Type"
+      use="required"/>
+    <xs:attribute name="DatumZmeny"
+      type="DatumZmeny_XdDatetime_Type"
+      use="required"/>
+  </xs:complexType>
+  <xs:complexType name="PrenosPSP_PrenosPSP_type">
+    <xs:sequence>
+      <xs:element name="ZdrojovaSmlouva"
+        type="P1_common_ZdrojovaSmlouva_type"/>
+    </xs:sequence>
+    <xs:attribute name="IdentZaznamu"
+      type="IdentZaznamu_Type"
+      use="required"/>
+    <xs:attribute name="CisloSmlouvy"
+      type="CisloSmlouvy_Type"
+      use="required"/>
+    <xs:attribute name="PoradiVozidla"
+      type="PoradiVozidla_Xdnum_Type"
+      use="required"/>
+  </xs:complexType>
+  <xs:complexType name="NovaIdentPS_NovaIdentPS_type">
+    <xs:sequence>
+      <xs:element name="PuvodniIdentPS">
+        <xs:complexType>
+          <xs:attribute name="KodPojistitele"
+            type="KodPojistitele_user_Type"
+            use="required"/>
+          <xs:attribute name="CisloSmlouvy"
+            type="CisloSmlouvy_Type"
+            use="required"/>
+          <xs:attribute name="PoradiVozidla"
+            type="PoradiVozidla_Xdnum_Type"
+            use="required"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="IdentZaznamu"
+      type="IdentZaznamu_Type"
+      use="required"/>
+    <xs:attribute name="CisloSmlouvy"
+      type="CisloSmlouvy_Type"
+      use="required"/>
+    <xs:attribute name="PoradiVozidla"
+      type="PoradiVozidla_Xdnum_Type"
+      use="required"/>
+    <xs:attribute name="DatumZmeny"
+      type="DatumZmeny_XdDatetime_Type"
+      use="required"/>
+  </xs:complexType>
+  <xs:complexType name="P1_common_ZelenaKarta_2_type">
+    <xs:attribute name="CisloZK"
+      type="CisloZK_Type"
+      use="required"/>
+    <xs:attribute name="PlatnostZKOd"
+      type="PlatnostZKOd_XdDatetime_Type"
+      use="required"/>
+    <xs:attribute name="PlatnostZKDo"
+      type="PlatnostZKDo_XdDatetime_Type"
+      use="required"/>
+    <xs:attribute name="DatumZneplatneni"
+      type="DatumZneplatneni_XdDatetime_Type"
+      use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="OpravaPS_OpravaPS_type">
+    <xs:sequence>
+      <xs:element name="Pojistnik"
+        type="P1_common_Pojistnik_type"/>
+      <xs:element name="Provozovatel"
+        type="P1_common_Provozovatel_type"/>
+      <xs:element name="Vlastnik"
+        type="P1_common_Vlastnik_type"/>
+      <xs:element name="VozidloSmlouvy"
+        type="P1_common_VozidloSmlouvy_type"/>
+      <xs:element name="DobaPojisteni"
+        type="P1_common_DobaPojisteni_type"/>
+      <xs:element name="ZelenaKarta"
+        type="P1_common_ZelenaKarta_2_type"
+        minOccurs="0"/>
+      <xs:element name="ZdrojovaSmlouva"
+        type="P1_common_ZdrojovaSmlouva_type"
+        minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="IdentZaznamu"
+      type="IdentZaznamu_Type"
+      use="required"/>
+    <xs:attribute name="CisloSmlouvy"
+      type="CisloSmlouvy_Type"
+      use="required"/>
+    <xs:attribute name="PoradiVozidla"
+      type="PoradiVozidla_Xdnum_Type"
+      use="required"/>
+    <xs:attribute name="CisloDokladuPojisteni"
+      type="CisloDokladuPojisteni_Type"
+      use="required"/>
+    <xs:attribute name="NositelPSP"
+      type="NositelPSP_Type"
+      use="required"/>
+    <xs:attribute name="DatumUzavreni"
+      type="DatumUzavreni_XdDatetime_Type"
+      use="required"/>
+  </xs:complexType>
+  <xs:complexType name="OpravaPolPS_OpravaPolPS_type">
+    <xs:sequence>
+      <xs:element name="Pojistnik"
+        type="P1_common_Pojistnik_type"/>
+      <xs:element name="Provozovatel"
+        type="P1_common_Provozovatel_type"/>
+      <xs:element name="Vlastnik"
+        type="P1_common_Vlastnik_type"/>
+      <xs:element name="VozidloSmlouvy"
+        type="P1_common_VozidloSmlouvy_type"/>
+      <xs:element name="DobaPojisteni"
+        type="P1_common_DobaPojisteni_type"/>
+      <xs:element name="ZdrojovaSmlouva"
+        type="P1_common_ZdrojovaSmlouva_type"
+        minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="IdentZaznamu"
+      type="IdentZaznamu_Type"
+      use="required"/>
+    <xs:attribute name="CisloSmlouvy"
+      type="CisloSmlouvy_Type"
+      use="required"/>
+    <xs:attribute name="PoradiVozidla"
+      type="PoradiVozidla_Xdnum_Type"
+      use="required"/>
+    <xs:attribute name="CisloDokladuPojisteni"
+      type="CisloDokladuPojisteni_Type"
+      use="required"/>
+    <xs:attribute name="NositelPSP"
+      type="NositelPSP_Type"
+      use="required"/>
+    <xs:attribute name="DatumUcinnosti"
+      type="DatumUcinnosti_XdDatetime_Type"
+      use="optional"/>
+    <xs:attribute name="DatumUzavreni"
+      type="DatumUzavreni_XdDatetime_Type"
+      use="optional"/>
+    <xs:attribute name="DatumUkonceni"
+      type="DatumUkonceni_XdDatetime_Type"
+      use="optional"/>
+    <xs:attribute name="DuvodZanikuSmlouvy"
+      type="DuvodZanikuSmlouvy_user_Type1"
+      use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="P1_common_DobaPojisteni_1_type">
+    <xs:attribute name="PojisteniOd"
+      type="PojisteniOd_XdDatetime_Type"
+      use="optional"/>
+    <xs:attribute name="PojisteniDo"
+      type="PojisteniDo_XdDatetime_Type"
+      use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="OpravaXPolPS_OpravaXPolPS_type">
+    <xs:sequence>
+      <xs:element name="Pojistnik"
+        type="P1_common_Subjekt_type"
+        minOccurs="0"/>
+      <xs:element name="Provozovatel"
+        type="P1_common_Subjekt_type"
+        minOccurs="0"/>
+      <xs:element name="Vlastnik"
+        type="P1_common_Subjekt_type"
+        minOccurs="0"/>
+      <xs:element name="VozidloSmlouvy"
+        minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="Vozidlo"
+              minOccurs="0">
+              <xs:complexType>
+                <xs:attribute name="CisloTP"
+                  type="CisloTP_Xdpic_Type"
+                  use="optional"/>
+                <xs:attribute name="VIN"
+                  type="VIN_Type"
+                  use="optional"/>
+                <xs:attribute name="SPZ"
+                  type="SPZ_Type"
+                  use="optional"/>
+                <xs:attribute name="DruhVozidla"
+                  type="DruhVozidla_user_Type1"
+                  use="optional"/>
+                <xs:attribute name="ZnackaText"
+                  type="ZnackaText_Type"
+                  use="optional"/>
+                <xs:attribute name="ModelText"
+                  type="ModelText_Type"
+                  use="optional"/>
+                <xs:attribute name="KodModeluVozidla"
+                  type="KodModeluVozidla_user_Type1"
+                  use="optional"/>
+                <xs:attribute name="RokDoProvozu"
+                  type="xs:gYear"
+                  use="optional"/>
+                <xs:attribute name="BarvaText"
+                  type="BarvaText_Type"
+                  use="optional"/>
+                <xs:attribute name="ZdvihovyObjem"
+                  type="ZdvihovyObjem_Type"
+                  use="optional"/>
+                <xs:attribute name="VykonMotoru"
+                  type="VykonMotoru_Type"
+                  use="optional"/>
+                <xs:attribute name="CisloMotoru"
+                  type="CisloMotoru_Type"
+                  use="optional"/>
+                <xs:attribute name="CelkovaHmotnost"
+                  type="CelkovaHmotnost_Type"
+                  use="optional"/>
+                <xs:attribute name="PocetMistCelkem"
+                  type="PocetMistCelkem_Type"
+                  use="optional"/>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+          <xs:attribute name="PlatnostOd"
+            type="xs:string"
+            use="optional"/>
+          <xs:attribute name="TarifniSkupina"
+            type="TarifniSkupina_user_Type1"
+            use="optional"/>
+          <xs:attribute name="LimitPlneniMajetek"
+            type="LimitPlneniMajetek_Type"
+            use="optional"/>
+          <xs:attribute name="LimitPlneniZdravi"
+            type="LimitPlneniZdravi_Type"
+            use="optional"/>
+          <xs:attribute name="Leasing"
+            type="Leasing_Type"
+            use="optional"/>
+          <xs:attribute name="Pojistne"
+            type="Pojistne_Type"
+            use="optional"/>
+          <xs:attribute name="PojistneBM"
+            type="PojistneBM_Type"
+            use="optional"/>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="DobaPojisteni"
+        type="P1_common_DobaPojisteni_1_type"
+        minOccurs="0"/>
+      <xs:element name="ZdrojovaSmlouva"
+        type="P1_common_ZdrojovaSmlouva_type"
+        minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="IdentZaznamu"
+      type="IdentZaznamu_Type"
+      use="required"/>
+    <xs:attribute name="CisloSmlouvy"
+      type="CisloSmlouvy_Type"
+      use="required"/>
+    <xs:attribute name="PoradiVozidla"
+      type="PoradiVozidla_Xdnum_Type"
+      use="required"/>
+    <xs:attribute name="CisloDokladuPojisteni"
+      type="CisloDokladuPojisteni_Type"
+      use="optional"/>
+    <xs:attribute name="NositelPSP"
+      type="NositelPSP_Type"
+      use="optional"/>
+    <xs:attribute name="DatumUcinnosti"
+      type="DatumUcinnosti_XdDatetime_Type"
+      use="optional"/>
+    <xs:attribute name="DatumUzavreni"
+      type="DatumUzavreni_XdDatetime_Type"
+      use="optional"/>
+    <xs:attribute name="DatumUkonceni"
+      type="DatumUkonceni_XdDatetime_Type"
+      use="optional"/>
+    <xs:attribute name="DuvodZanikuSmlouvy"
+      type="DuvodZanikuSmlouvy_user_Type1"
+      use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="ZruseniPS_ZruseniPS_type">
+    <xs:attribute name="IdentZaznamu"
+      type="IdentZaznamu_Type"
+      use="required"/>
+    <xs:attribute name="CisloSmlouvy"
+      type="CisloSmlouvy_Type"
+      use="required"/>
+    <xs:attribute name="PoradiVozidla"
+      type="PoradiVozidla_Xdnum_Type"
+      use="required"/>
+    <xs:attribute name="DatumZruseni"
+      type="DatumZruseni_XdDatetime_Type"
+      use="required"/>
+  </xs:complexType>
+  <xs:complexType name="VydaniZK_VydaniZK_type">
+    <xs:sequence>
+      <xs:element name="ZelenaKarta"
+        type="P1_common_ZelenaKarta_4_type"/>
+    </xs:sequence>
+    <xs:attribute name="IdentZaznamu"
+      type="IdentZaznamu_Type"
+      use="required"/>
+    <xs:attribute name="CisloSmlouvy"
+      type="CisloSmlouvy_Type"
+      use="required"/>
+    <xs:attribute name="PoradiVozidla"
+      type="PoradiVozidla_Xdnum_Type"
+      use="required"/>
+  </xs:complexType>
+  <xs:complexType name="P1_common_ZelenaKarta_4_type">
+    <xs:attribute name="CisloZK"
+      type="CisloZK_Type"
+      use="required"/>
+    <xs:attribute name="PlatnostZKOd"
+      type="PlatnostZKOd_XdDatetime_Type"
+      use="required"/>
+    <xs:attribute name="PlatnostZKDo"
+      type="PlatnostZKDo_XdDatetime_Type"
+      use="required"/>
+    <xs:attribute name="DatumZneplatneni"
+      type="DatumZneplatneni_XdDatetime_Type"
+      use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="ZneplatneniZK_ZneplatneniZK_type">
+    <xs:sequence>
+      <xs:element name="ZelenaKarta"
+        type="P1_common_ZelenaKarta_type"/>
+    </xs:sequence>
+    <xs:attribute name="IdentZaznamu"
+      type="IdentZaznamu_Type"
+      use="required"/>
+    <xs:attribute name="CisloSmlouvy"
+      type="CisloSmlouvy_Type"
+      use="required"/>
+    <xs:attribute name="PoradiVozidla"
+      type="PoradiVozidla_Xdnum_Type"
+      use="required"/>
+  </xs:complexType>
+  <xs:complexType name="ZruseniZK_ZruseniZK_type">
+    <xs:sequence>
+      <xs:element name="ZelenaKarta"
+        type="P1_common_ZelenaKarta_type"/>
+    </xs:sequence>
+    <xs:attribute name="IdentZaznamu"
+      type="IdentZaznamu_Type"
+      use="required"/>
+    <xs:attribute name="CisloSmlouvy"
+      type="CisloSmlouvy_Type"
+      use="required"/>
+    <xs:attribute name="PoradiVozidla"
+      type="PoradiVozidla_Xdnum_Type"
+      use="required"/>
+    <xs:attribute name="DatumZruseni"
+      type="DatumZruseni_XdDatetime_Type"
+      use="required"/>
+  </xs:complexType>
+  <xs:complexType name="DotazPS_DotazPS_type">
+    <xs:attribute name="IdentZaznamu"
+      type="IdentZaznamu_Type"
+      use="required"/>
+    <xs:attribute name="CisloSmlouvy"
+      type="CisloSmlouvy_Type"
+      use="required"/>
+    <xs:attribute name="PoradiVozidla"
+      type="PoradiVozidla_Xdnum_Type"
+      use="required"/>
+    <xs:attribute name="DatumUcinnosti"
+      type="DatumUcinnosti_XdDatetime_Type"
+      use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="ChybnyZaznam_ChybnyZaznam_type">
+    <xs:attribute name="KodChyby"
+      type="KodChyby_Xdnum_Type"
+      use="required"/>
+    <xs:attribute name="Hodnota"
+      type="Hodnota_Type"
+      use="optional"/>
+    <xs:attribute name="Xpath"
+      type="Xpath_Type"
+      use="optional"/>
+    <xs:attribute name="IdentZaznamu"
+      type="xs:string"
+      use="optional"/>
+    <xs:attribute name="CisloSmlouvy"
+      type="xs:string"
+      use="optional"/>
+    <xs:attribute name="PoradiVozidla"
+      type="xs:string"
+      use="optional"/>
+  </xs:complexType>
+  <xs:element name="SouborP1A">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:choice maxOccurs="unbounded">
+          <xs:element name="NovaPS"
+            type="NovaPS_NovaPS_type"
+            minOccurs="0"
+            maxOccurs="unbounded"/>
+          <xs:element name="UkonceniPS"
+            type="UkonceniPS_UkonceniPS_type"
+            minOccurs="0"
+            maxOccurs="unbounded"/>
+          <xs:element name="ReaktivacePS"
+            type="ReaktivacePS_ReaktivacePS_type"
+            minOccurs="0"
+            maxOccurs="unbounded"/>
+          <xs:element name="ZmenaPS"
+            type="ZmenaPS_ZmenaPS_type"
+            minOccurs="0"
+            maxOccurs="unbounded"/>
+          <xs:element name="PrenosPSP"
+            type="PrenosPSP_PrenosPSP_type"
+            minOccurs="0"
+            maxOccurs="unbounded"/>
+          <xs:element name="NovaIdentPS"
+            type="NovaIdentPS_NovaIdentPS_type"
+            minOccurs="0"
+            maxOccurs="unbounded"/>
+          <xs:element name="OpravaPS"
+            type="OpravaPS_OpravaPS_type"
+            minOccurs="0"
+            maxOccurs="unbounded"/>
+          <xs:element name="OpravaPolPS"
+            type="OpravaPolPS_OpravaPolPS_type"
+            minOccurs="0"
+            maxOccurs="unbounded"/>
+          <xs:element name="OpravaXPolPS"
+            type="OpravaXPolPS_OpravaXPolPS_type"
+            minOccurs="0"
+            maxOccurs="unbounded"/>
+          <xs:element name="ZruseniPS"
+            type="ZruseniPS_ZruseniPS_type"
+            minOccurs="0"
+            maxOccurs="unbounded"/>
+          <xs:element name="VydaniZK"
+            type="VydaniZK_VydaniZK_type"
+            minOccurs="0"
+            maxOccurs="unbounded"/>
+          <xs:element name="ZneplatneniZK"
+            type="ZneplatneniZK_ZneplatneniZK_type"
+            minOccurs="0"
+            maxOccurs="unbounded"/>
+          <xs:element name="ZruseniZK"
+            type="ZruseniZK_ZruseniZK_type"
+            minOccurs="0"
+            maxOccurs="unbounded"/>
+          <xs:element name="DotazPS"
+            type="DotazPS_DotazPS_type"
+            minOccurs="0"
+            maxOccurs="unbounded"/>
+          <xs:element name="ChybnyZaznam"
+            type="ChybnyZaznam_ChybnyZaznam_type"
+            minOccurs="0"
+            maxOccurs="unbounded"/>
+          <xs:element name="any"
+            minOccurs="0"
+            maxOccurs="unbounded">
+            <xs:complexType>
+              <xs:attribute name="KodChyby"
+                type="KodChyby_user_Type"
+                use="optional"
+                fixed="1012"/>
+            </xs:complexType>
+          </xs:element>
+        </xs:choice>
+      </xs:sequence>
+      <xs:attribute name="Davka"
+        type="xs:string"
+        use="required"/>
+      <xs:attribute name="ZeDne"
+        type="xs:string"
+        use="required"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

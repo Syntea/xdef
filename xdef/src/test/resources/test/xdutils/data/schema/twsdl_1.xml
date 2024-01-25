@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" xmlns:b="http://ws.koop.cz/B1A/2008/01" s:encodingStyle="http://www.syntea.cz/koop/encoding">
+  <s:Header>
+    <b:User s:mustUnderstand="1" IdentUser="jnovak"/>
+    <b:Request s:mustUnderstand="1" IdentZpravy="43" Mode="STD"/>
+  </s:Header>
+  <s:Body>
+    <b:Get_OptimalPSP>
+       <b:Nositel InfoDatum="20090101" DruhVozidla="03" Jmeno="ZDENĚK" RC="4803288941"/>
+    </b:Get_OptimalPSP>
+  </s:Body>
+</s:Envelope>

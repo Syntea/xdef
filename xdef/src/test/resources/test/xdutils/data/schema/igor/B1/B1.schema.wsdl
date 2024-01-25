@@ -1,0 +1,855 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--==================================================================-->
+<!--    B1_služby verze 2008/03 (WSDL 1.1)                            -->
+<!--    B1_služby verze 2009/01 (WSDL 1.1) – aditivní rozšíření       -->
+<!--==================================================================-->
+<!-- ze dne 2009-09-02 -->
+ <wsdl:definitions name="B1_sluzby"
+   targetNamespace="http://ws.ckp.cz/pis/B1/ws"
+   xmlns:wsb="http://ws.ckp.cz/pis/B1/ws"
+   xmlns:xd="http://www.syntea.cz/xdef/3.1"
+   xmlns:b="http://ws.ckp.cz/pis/B1/2008/03"
+   xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+   xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+
+  <wsdl:types  xmlns ="http://ws.ckp.cz/pis">
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+               xmlns="http://ws.ckp.cz/pis/B1/2008/03"
+               targetNamespace="http://ws.ckp.cz/pis/B1/2008/03">
+
+      <xs:simpleType name="RequestPendingType">
+        <xs:restriction base="xs:string">
+	  <xs:enumeration value="Y"/>
+	  <xs:enumeration value="N"/>
+        </xs:restriction>
+      </xs:simpleType>
+
+      <xs:simpleType name="ModeType">
+	<xs:restriction base="xs:string">
+	  <xs:enumeration value="STD"/>
+	  <xs:enumeration value="TST"/>
+	</xs:restriction>
+      </xs:simpleType>
+
+      <xs:simpleType name="RequestAcceptedType">
+	<xs:restriction base="xs:string">
+	  <xs:enumeration value="Y"/>
+	  <xs:enumeration value="N"/>
+	</xs:restriction>
+      </xs:simpleType>
+
+      <xs:simpleType name="CisloSmlouvyType">
+	<xs:restriction base="xs:string">
+	  <xs:minLength value="1"/>
+	  <xs:maxLength value="35"/>
+	</xs:restriction>
+      </xs:simpleType>
+
+      <xs:simpleType name="userDate">
+	<xs:restriction base="xs:string"/>
+      </xs:simpleType>
+
+      <xs:simpleType name="KlasifikovanaUdalostType">
+	<xs:restriction base="xs:string">
+	  <xs:enumeration value="A"/>
+	  <xs:enumeration value="N"/>
+	</xs:restriction>
+      </xs:simpleType>
+
+      <xs:simpleType name="StavSmlouvyType">
+	<xs:restriction base="xs:string">
+	  <xs:enumeration value="T"/>
+	  <xs:enumeration value="U"/>
+	</xs:restriction>
+      </xs:simpleType>
+
+      <xs:simpleType name="AltIdentPSPType">
+	<xs:restriction base="xs:string">
+	  <xs:enumeration value="A"/>
+	</xs:restriction>
+      </xs:simpleType>
+
+      <xs:simpleType name="AddInfoType">
+	<xs:restriction base="xs:string">
+	  <xs:enumeration value="0"/>
+	  <xs:enumeration value="1"/>
+	</xs:restriction>
+      </xs:simpleType>
+
+      <xs:simpleType name="HodnotaType">
+	<xs:restriction base="xs:string">
+	  <xs:minLength value="1"/>
+	  <xs:maxLength value="256"/>
+	</xs:restriction>
+      </xs:simpleType>
+
+      <xs:simpleType name="PopisType">
+	<xs:restriction base="xs:string">
+	  <xs:minLength value="1"/>
+	  <xs:maxLength value="256"/>
+	</xs:restriction>
+      </xs:simpleType>
+
+      <xs:simpleType name="TypType">
+	<xs:restriction base="xs:string">
+	  <xs:length value="1"/>
+	</xs:restriction>
+      </xs:simpleType>
+
+      <xs:simpleType name="XpathType">
+	<xs:restriction base="xs:string">
+	  <xs:minLength value="1"/>
+	  <xs:maxLength value="128"/>
+	</xs:restriction>
+      </xs:simpleType>
+
+      <xs:simpleType name="ICType">
+	<xs:restriction base="xs:long">
+	  <xs:minInclusive value="1"/>
+	  <xs:maxInclusive value="99999999"/>
+	</xs:restriction>
+      </xs:simpleType>
+
+      <xs:simpleType name="JmenoType">
+	<xs:restriction base="xs:string">
+	  <xs:minLength value="1"/>
+	  <xs:maxLength value="24"/>
+	</xs:restriction>
+      </xs:simpleType>
+
+      <xs:simpleType name="StatPrislusnostType">
+	<xs:restriction base="xs:string">
+	  <xs:minLength value="1"/>
+	  <xs:maxLength value="3"/>
+	</xs:restriction>
+      </xs:simpleType>
+
+      <xs:simpleType name="NazevFirmyType">
+	<xs:restriction base="xs:string">
+	  <xs:minLength value="1"/>
+	  <xs:maxLength value="100"/>
+	</xs:restriction>
+      </xs:simpleType>
+
+      <xs:simpleType name="PrijmeniType">
+	<xs:restriction base="xs:string">
+	  <xs:minLength value="1"/>
+	  <xs:maxLength value="36"/>
+	</xs:restriction>
+      </xs:simpleType>
+
+      <xs:simpleType name="SeqRecType">
+	<xs:restriction base="xs:long">
+	  <xs:minInclusive value="1"/>
+	  <xs:maxInclusive value="99999999"/>
+	</xs:restriction>
+      </xs:simpleType>
+
+      <xs:simpleType name="BatchIDType">
+	<xs:restriction base="xs:long">
+	  <xs:minInclusive value="1"/>
+	  <xs:maxInclusive value="99999999"/>
+	</xs:restriction>
+      </xs:simpleType>
+
+      <xs:element name="Answer" type="Answer" />
+      <xs:complexType name="Answer">
+	 <xs:attribute name="RequestPending"   type="RequestPendingType"    use="optional"/>
+	 <xs:attribute name="ReqMsgID"         type="xs:long"               use="optional"/>
+	 <xs:attribute name="Mode"             type="ModeType"              use="required"/>
+	 <xs:attribute name="RequestAccepted"  type="RequestAcceptedType"   use="required"/>
+      </xs:complexType>
+
+      <xs:element name="Ping" type="Ping" />
+      <xs:complexType name="Ping" />
+
+      <xs:element name="Id_Smlouva" type="Id_Smlouva" />
+      <xs:complexType name="Id_Smlouva">
+	  <xs:attribute name="PoradiVozidla"   type="xs:string"             use="required"/>
+	  <xs:attribute name="CisloSmlouvy"    type="CisloSmlouvyType"      use="required"/>
+	  <xs:attribute name="KodPojistitele"  type="xs:string"             use="required"/>
+      </xs:complexType>
+
+      <xs:element name="BlokujPSP"             type="BlokujPSP" />
+      <xs:complexType name="BlokujPSP">
+	  <xs:sequence>
+		<xs:element name="PSP"          type="PSP" />
+	  </xs:sequence>
+      </xs:complexType>
+
+      <xs:element name="Id_PSP" type="Id_PSP" />
+      <xs:complexType name="Id_PSP">
+	  <xs:attribute name="PoradiVozidla"   type="xs:string"             use="required"/>
+	  <xs:attribute name="CisloSmlouvy"    type="CisloSmlouvyType"      use="required"/>
+	  <xs:attribute name="KodPojistitele"  type="xs:string"             use="required"/>
+      </xs:complexType>
+
+      <xs:element name="NositelPSP" type="NositelPSP" />
+      <xs:complexType name="NositelPSP">
+	  <xs:sequence>
+		<xs:element name="PSP"	minOccurs="0" maxOccurs="unbounded" type="PSP" />
+	  </xs:sequence>
+	  <xs:attribute name="AddInfo"         type="AddInfoType"           use="optional"/>
+      </xs:complexType>
+
+      <xs:element name="Set_PrenosPSP">
+	<xs:complexType>
+	  <xs:choice>
+	    <xs:element name="ZdrojovaSmlouva" type="Id_Smlouva" />
+	    <xs:element name="ZdrojovyPSP"     type="Id_PSP" />
+	  </xs:choice>
+	  <xs:attribute name="PoradiVozidla"   type="xs:string"             use="required"/>
+	  <xs:attribute name="CisloSmlouvy"    type="CisloSmlouvyType"      use="required"/>
+	  <xs:attribute name="KodPojistitele"  type="xs:string"             use="required"/>
+	</xs:complexType>
+      </xs:element>
+
+      <xs:element name="Set_ZrusPrenosPSP" type="Set_ZrusPrenosPSP" />
+      <xs:complexType name="Set_ZrusPrenosPSP">
+	  <xs:attribute name="PoradiVozidla"   type="xs:string"             use="required"/>
+	  <xs:attribute name="CisloSmlouvy"    type="CisloSmlouvyType"      use="required"/>
+	  <xs:attribute name="KodPojistitele"  type="xs:string"             use="required"/>
+      </xs:complexType>
+
+      <xs:element name="Set_BlokujPSP"        type="Set_BlokujPSP" />
+      <xs:complexType name="Set_BlokujPSP">
+	  <xs:sequence>
+		<xs:element name="ZdrojovaSmlouva" type="Id_Smlouva" />
+	  </xs:sequence>
+	  <xs:attribute name="KodPojistitele" type="xs:string" use="required"/>
+      </xs:complexType>
+
+      <xs:element name="PingStatus"           type="PingStatus" />
+      <xs:complexType name="PingStatus">
+	  <xs:choice>
+		<xs:element name="Program" maxOccurs="unbounded" form="qualified">
+		  <xs:complexType>
+			<xs:attribute name="Name"             type="xs:string" use="optional"/>
+			<xs:attribute name="InstallationDate" type="userDate"  use="optional"/>
+			<xs:attribute name="Version"          type="xs:string" use="optional"/>
+		  </xs:complexType>
+		</xs:element>
+		<xs:element name="Db"	maxOccurs="unbounded" form="qualified">
+		  <xs:complexType>
+			<xs:attribute name="Part"             type="xs:string" use="optional"/>
+			<xs:attribute name="InstallationDate" type="userDate"  use="optional"/>
+			<xs:attribute name="Version"          type="xs:string" use="optional"/>
+		  </xs:complexType>
+		</xs:element>
+	  </xs:choice>
+      </xs:complexType>
+
+      <xs:element name="PingFlow" type="PingFlow" />
+      <xs:complexType name="PingFlow">
+	  <xs:attribute name="Flow"                          type="xs:string" use="required"/>
+      </xs:complexType>
+
+      <xs:element name="Fault" type="Fault" />
+      <xs:complexType name="Fault">
+	  <xs:sequence>
+		<xs:element name="Detail"  form="qualified">
+		  <xs:complexType>
+			<xs:sequence>
+			  <xs:element name="Chyba" maxOccurs="unbounded" form="qualified">
+				<xs:complexType>
+				  <xs:attribute name="Hodnota"  type="HodnotaType" use="optional"/>
+				  <xs:attribute name="KodChyby" type="xs:string"   use="required"/>
+				  <xs:attribute name="Popis"    type="PopisType"   use="optional"/>
+				  <xs:attribute name="Typ"      type="TypType"     use="required"/>
+				  <xs:attribute name="Xpath"    type="XpathType"   use="required"/>
+				</xs:complexType>
+			  </xs:element>
+			</xs:sequence>
+		  </xs:complexType>
+		</xs:element>
+	  </xs:sequence>
+      </xs:complexType>
+
+      <xs:element name="SmlouvyPSP" type="SmlouvyPSP" />
+      <xs:complexType name="SmlouvyPSP">
+	  <xs:sequence>
+		<xs:element name="PSP" minOccurs="0" maxOccurs="unbounded" type="Id_PSP" />
+	  </xs:sequence>
+      </xs:complexType>
+
+      <xs:element name="UvolniPSP"           type="UvolniPSP" />
+      <xs:complexType name="UvolniPSP">
+	  <xs:sequence>
+		<xs:element name="PSP"        type="PSP" />
+	  </xs:sequence>
+      </xs:complexType>
+
+      <xs:element name="Get_VolnePSP" type="Get_VolnePSP" />
+      <xs:complexType name="Get_VolnePSP">
+		<xs:choice>
+			<xs:element name="Nositel" form="qualified">
+				<xs:complexType>
+				  <xs:attribute name="InfoDatum"       type="userDate"            use="required"/>
+				  <xs:attribute name="IC"              type="ICType"              use="optional"/>
+				  <xs:attribute name="RC"              type="xs:string"           use="optional"/>
+				  <xs:attribute name="Jmeno"           type="JmenoType"           use="optional"/>
+				  <xs:attribute name="NazevFirmy"      type="NazevFirmyType"      use="optional"/>
+				  <xs:attribute name="StatPrislusnost" type="StatPrislusnostType" use="optional"/>
+				  <xs:attribute name="DatumNarozeni"   type="userDate"            use="optional"/>
+				  <xs:attribute name="Prijmeni"        type="PrijmeniType"        use="optional"/>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="CilovaSmlouva" type="Id_Smlouva" />
+			<xs:element name="CilovyPSP" type="Id_Smlouva" />
+		</xs:choice>
+      </xs:complexType>
+
+      <xs:element name="VolnePSP" type="VolnePSP" />
+      <xs:complexType name="VolnePSP">
+	  <xs:sequence>
+		<xs:element name="PSP" minOccurs="0" maxOccurs="unbounded" type="PSP" />
+	  </xs:sequence>
+	  <xs:attribute name="AddInfo"          type="AddInfoType"      use="optional"/>
+      </xs:complexType>
+
+      <xs:element name="Get_NositelPSP"         type="Get_NositelPSP" />
+      <xs:complexType name="Get_NositelPSP">
+	  <xs:choice>
+		<xs:element name="Nositel"       type="Id_Nositel" />
+		<xs:element name="CilovaSmlouva" type="Id_Smlouva" />
+	  </xs:choice>
+      </xs:complexType>
+
+      <xs:element name="Request" type="Request" />
+      <xs:complexType name="Request">
+	  <xs:attribute name="KodPartnera"     type="xs:string"           use="optional"/>
+	  <xs:attribute name="ReqMsgID"        type="xs:long"             use="optional"/>
+	  <xs:attribute name="IdentZpravy"     type="xs:long"             use="required"/>
+	  <xs:attribute name="Mode"            type="ModeType"            use="optional"/>
+	  <xs:attribute name="BatchID"         type="BatchIDType"         use="optional"/>
+	  <xs:attribute name="SeqRec"          type="SeqRecType"          use="optional"/>
+      </xs:complexType>
+
+      <xs:element name="Id_Nositel" type="Id_Nositel" />
+      <xs:complexType  name="Id_Nositel">
+	  <xs:attribute name="IC"              type="ICType"              use="optional"/>
+	  <xs:attribute name="RC"              type="xs:string"           use="optional"/>
+	  <xs:attribute name="Jmeno"           type="JmenoType"           use="optional"/>
+	  <xs:attribute name="NazevFirmy"      type="NazevFirmyType"      use="optional"/>
+	  <xs:attribute name="StatPrislusnost" type="StatPrislusnostType" use="optional"/>
+	  <xs:attribute name="DatumNarozeni"   type="userDate"            use="optional"/>
+	  <xs:attribute name="Prijmeni"        type="PrijmeniType"        use="optional"/>
+      </xs:complexType>
+
+      <xs:element name="PSP" type="PSP" />
+	<xs:complexType name="PSP">
+	  <xs:sequence>
+		<xs:element name="UsekPojisteni" maxOccurs="unbounded" form="qualified">
+		  <xs:complexType>
+			<xs:sequence>
+			  <xs:element name="RozhodnaUdalost" minOccurs="0" maxOccurs="unbounded"
+	  	               form="qualified">
+				<xs:complexType>
+				  <xs:attribute name="DatumCasSU"    type="userDate"  use="required"/>
+				  <xs:attribute name="Regres"	       type="xs:long"   use="required"/>
+				  <xs:attribute name="Rezerva"       type="xs:long"   use="required"/>
+				  <xs:attribute name="KlasifikovanaUdalost"
+                                                    type="KlasifikovanaUdalostType" use="required"/>
+				  <xs:attribute name="Vyplaceno" type="xs:long" use="required"/>
+				</xs:complexType>
+			  </xs:element>
+			</xs:sequence>
+			<xs:attribute name="DruhVozidla"     type="xs:string"        use="required"/>
+			<xs:attribute name="UsekPojisteniDo" type="userDate"         use="optional"/>
+			<xs:attribute name="UsekPojisteniOd" type="userDate"         use="required"/>
+			<xs:attribute name="PoradiVozidla"   type="xs:string"        use="required"/>
+			<xs:attribute name="CisloSmlouvy"    type="CisloSmlouvyType" use="required"/>
+			<xs:attribute name="KodPojistitele"  type="xs:string"        use="required"/>
+		  </xs:complexType>
+		</xs:element>
+	  </xs:sequence>
+	  <xs:attribute name="Blokace"        type="xs:string"        use="optional"/>
+	  <xs:attribute name="StavSmlouvy"    type="StavSmlouvyType"  use="optional"/>
+	  <xs:attribute name="AltIdentPSP"    type="AltIdentPSPType"  use="optional"/>
+	  <xs:attribute name="InfoDatum"      type="userDate"         use="required"/>
+	  <xs:attribute name="PoradiVozidla"  type="xs:string"        use="required"/>
+	  <xs:attribute name="CisloSmlouvy"   type="CisloSmlouvyType" use="required"/>
+	  <xs:attribute name="KodPojistitele" type="xs:string"        use="required"/>
+	  <xs:attribute name="ORD"            type="xs:long"          use="optional"/>
+      </xs:complexType>
+
+      <xs:element name="Get_PSP" type="Get_PSP" />
+      <xs:complexType name="Get_PSP">
+	  <xs:attribute name="PoradiVozidla"      type="xs:string"        use="required"/>
+	  <xs:attribute name="KodPojistitele"     type="xs:string"        use="required"/>
+	  <xs:attribute name="CisloSmlouvy"       type="CisloSmlouvyType" use="required"/>
+      </xs:complexType>
+
+      <xs:element name="Set_UvolniPSP" type="Set_UvolniPSP" />
+	<xs:complexType name="Set_UvolniPSP">
+	  <xs:sequence>
+		<xs:element name="ZdrojovaSmlouva" type="Id_Smlouva" />
+	  </xs:sequence>
+	  <xs:attribute name="KodPojistitele"     type="xs:string"         use="required"/>
+      </xs:complexType>
+
+      <xs:element name="Get_SmlouvyPSP" type="Get_SmlouvyPSP" />
+      <xs:complexType name="Get_SmlouvyPSP">
+	  <xs:attribute name="PoradiVozidla"      type="xs:string"         use="required"/>
+	  <xs:attribute name="CisloSmlouvy"       type="CisloSmlouvyType"  use="required"/>
+	  <xs:attribute name="KodPojistitele"     type="xs:string"         use="required"/>
+      </xs:complexType>
+
+      <xs:element name="ZacatekDavky" type="ZacatekDavky" />
+      <xs:complexType name="ZacatekDavky"/>
+
+      <xs:element name="KonecDavky" type="KonecDavky" />
+      <xs:complexType name="KonecDavky"/>
+    </xs:schema>
+  </wsdl:types>
+
+  <wsdl:message name="Dotaz_Test">
+     <wsdl:part name="header" element="b:Request"/>
+     <wsdl:part name="body" element="b:Ping"/>
+  </wsdl:message>
+  <wsdl:message name="Odpoved_Test">
+     <wsdl:part name="headerR" element="b:Request"/>
+     <wsdl:part name="headerA" element="b:Answer"/>
+     <wsdl:part name="body" element="b:PingStatus"/>
+  </wsdl:message>
+
+  <wsdl:message name="Dotaz_TestTok">
+     <wsdl:part name="header" element="b:Request"/>
+     <wsdl:part name="body" element="b:PingFlow"/>
+  </wsdl:message>
+  <wsdl:message name="Odpoved_TestTok">
+     <wsdl:part name="headerR" element="b:Request"/>
+     <wsdl:part name="headerA" element="b:Answer"/>
+     <wsdl:part name="body" element="b:PingStatus"/>
+  </wsdl:message>
+
+  <wsdl:message name="Dotaz_PSP">
+     <wsdl:part name="header" element="b:Request"/>
+     <wsdl:part name="body" element="b:Get_PSP"/>
+  </wsdl:message>
+  <wsdl:message name="Odpoved_PSP">
+     <wsdl:part name="headerR" element="b:Request"/>
+     <wsdl:part name="headerA" element="b:Answer"/>
+     <wsdl:part name="body" element="b:PSP"/>
+  </wsdl:message>
+
+  <wsdl:message name="Dotaz_VolnePSP">
+     <wsdl:part name="header" element="b:Request"/>
+     <wsdl:part name="body" element="b:Get_VolnePSP"/>
+  </wsdl:message>
+  <wsdl:message name="Odpoved_VolnePSP">
+     <wsdl:part name="headerR" element="b:Request"/>
+     <wsdl:part name="headerA" element="b:Answer"/>
+     <wsdl:part name="body" element="b:VolnePSP"/>
+  </wsdl:message>
+
+  <wsdl:message name="Dotaz_NositelPSP">
+     <wsdl:part name="header" element="b:Request"/>
+     <wsdl:part name="body" element="b:Get_NositelPSP"/>
+  </wsdl:message>
+  <wsdl:message name="Odpoved_NositelPSP">
+     <wsdl:part name="headerR" element="b:Request"/>
+     <wsdl:part name="headerA" element="b:Answer"/>
+     <wsdl:part name="body" element="b:NositelPSP"/>
+  </wsdl:message>
+
+  <wsdl:message name="Dotaz_SmlouvyPSP">
+     <wsdl:part name="header" element="b:Request"/>
+     <wsdl:part name="body" element="b:Get_SmlouvyPSP"/>
+  </wsdl:message>
+  <wsdl:message name="Odpoved_SmlouvyPSP">
+     <wsdl:part name="headerR" element="b:Request"/>
+     <wsdl:part name="headerA" element="b:Answer"/>
+     <wsdl:part name="body" element="b:SmlouvyPSP"/>
+  </wsdl:message>
+
+  <wsdl:message name="Zadost_BlokujPSP">
+     <wsdl:part name="header" element="b:Request"/>
+     <wsdl:part name="body" element="b:Set_BlokujPSP"/>
+  </wsdl:message>
+  <wsdl:message name="Odpoved_BlokujPSP">
+     <wsdl:part name="headerR" element="b:Request"/>
+     <wsdl:part name="headerA" element="b:Answer"/>
+     <wsdl:part name="body" element="b:BlokujPSP"/>
+  </wsdl:message>
+
+  <wsdl:message name="Zadost_UvolniPSP">
+     <wsdl:part name="header" element="b:Request"/>
+     <wsdl:part name="body" element="b:Set_UvolniPSP"/>
+  </wsdl:message>
+  <wsdl:message name="Odpoved_UvolniPSP">
+     <wsdl:part name="headerR" element="b:Request"/>
+     <wsdl:part name="headerA" element="b:Answer"/>
+     <wsdl:part name="body" element="b:UvolniPSP"/>
+  </wsdl:message>
+
+  <wsdl:message name="Zadost_PrenosPSP">
+     <wsdl:part name="header" element="b:Request"/>
+     <wsdl:part name="body" element="b:Set_PrenosPSP"/>
+  </wsdl:message>
+  <wsdl:message name="Odpoved_PrenosPSP">
+     <wsdl:part name="headerR" element="b:Request"/>
+     <wsdl:part name="headerA" element="b:Answer"/>
+     <wsdl:part name="body" element="b:PSP"/>
+  </wsdl:message>
+
+  <wsdl:message name="Zadost_ZrusPrenosPSP">
+     <wsdl:part name="header" element="b:Request"/>
+     <wsdl:part name="body" element="b:Set_ZrusPrenosPSP"/>
+  </wsdl:message>
+  <wsdl:message name="Odpoved_ZrusPrenosPSP">
+     <wsdl:part name="headerR" element="b:Request"/>
+     <wsdl:part name="headerA" element="b:Answer"/>
+     <wsdl:part name="body" element="b:PSP"/>
+  </wsdl:message>
+
+  <wsdl:message name="Zadost_ZacatekDavky">
+     <wsdl:part name="header" element="b:Request"/>
+     <wsdl:part name="body" element="b:ZacatekDavky"/>
+  </wsdl:message>
+  <wsdl:message name="Odpoved_ZacatekDavky">
+     <wsdl:part name="headerR" element="b:Request"/>
+     <wsdl:part name="headerA" element="b:Answer"/>
+     <wsdl:part name="body" element="b:ZacatekDavky"/>
+  </wsdl:message>
+
+  <wsdl:message name="Zadost_KonecDavky">
+     <wsdl:part name="header" element="b:Request"/>
+     <wsdl:part name="body" element="b:KonecDavky"/>
+  </wsdl:message>
+  <wsdl:message name="Odpoved_KonecDavky">
+     <wsdl:part name="headerR" element="b:Request"/>
+     <wsdl:part name="headerA" element="b:Answer"/>
+     <wsdl:part name="body" element="b:KonecDavky"/>
+  </wsdl:message>
+
+  <wsdl:message name="Odpoved_Chyba">
+     <wsdl:part name="fault" element="b:Fault"/>
+  </wsdl:message>
+
+  <wsdl:portType name="B1_rozhrani">
+     <wsdl:operation name="Test">
+       <wsdl:input  message="wsb:Dotaz_Test"/>
+       <wsdl:output message="wsb:Odpoved_Test"/>
+       <wsdl:fault  message="wsb:Odpoved_Chyba" name="Chyba_Test"/>
+     </wsdl:operation>
+
+     <wsdl:operation name="TestTok">
+       <wsdl:input  message="wsb:Dotaz_TestTok"/>
+       <wsdl:output message="wsb:Odpoved_TestTok"/>
+       <wsdl:fault  message="wsb:Odpoved_Chyba" name="Chyba_TestTok"/>
+     </wsdl:operation>
+
+     <wsdl:operation name="Vyhledani_PSP">
+       <wsdl:input  message="wsb:Dotaz_PSP"/>
+       <wsdl:output message="wsb:Odpoved_PSP"/>
+       <wsdl:fault  message="wsb:Odpoved_Chyba" name="Chyba_Vyhledani_PSP"/>
+     </wsdl:operation>
+
+     <wsdl:operation name="Vyhledani_VolnePSP">
+       <wsdl:input  message="wsb:Dotaz_VolnePSP"/>
+       <wsdl:output message="wsb:Odpoved_VolnePSP"/>
+       <wsdl:fault  message="wsb:Odpoved_Chyba" name="Chyba_Vyhledani_VolnePSP"/>
+     </wsdl:operation>
+
+     <wsdl:operation name="Vyhledani_NositelPSP">
+       <wsdl:input  message="wsb:Dotaz_NositelPSP"/>
+       <wsdl:output message="wsb:Odpoved_NositelPSP"/>
+       <wsdl:fault  message="wsb:Odpoved_Chyba" name="Chyba_Vyhledani_NositelPSP"/>
+     </wsdl:operation>
+
+     <wsdl:operation name="Vyhledani_SmlouvyPSP">
+       <wsdl:input  message="wsb:Dotaz_SmlouvyPSP"/>
+       <wsdl:output message="wsb:Odpoved_SmlouvyPSP"/>
+       <wsdl:fault  message="wsb:Odpoved_Chyba" name="Chyba_Vyhledani_SmlouvyPSP"/>
+     </wsdl:operation>
+
+     <wsdl:operation name="Nastaveni_BlokacePSP">
+       <wsdl:input  message="wsb:Zadost_BlokujPSP"/>
+       <wsdl:output message="wsb:Odpoved_BlokujPSP"/>
+       <wsdl:fault  message="wsb:Odpoved_Chyba" name="Chyba_Nastaveni_BlokacePSP"/>
+     </wsdl:operation>
+
+     <wsdl:operation name="Nastaveni_UvolneniPSP">
+       <wsdl:input  message="wsb:Zadost_UvolniPSP"/>
+       <wsdl:output message="wsb:Odpoved_UvolniPSP"/>
+       <wsdl:fault  message="wsb:Odpoved_Chyba" name="Chyba_Nastaveni_UvolneniPSP"/>
+     </wsdl:operation>
+
+     <wsdl:operation name="Nastaveni_PrenosuPSP">
+       <wsdl:input  message="wsb:Zadost_PrenosPSP"/>
+       <wsdl:output message="wsb:Odpoved_PrenosPSP"/>
+       <wsdl:fault  message="wsb:Odpoved_Chyba" name="Chyba_Nastaveni_PrenosuPSP"/>
+     </wsdl:operation>
+
+     <wsdl:operation name="Zruseni_PrenosuPSP">
+       <wsdl:input  message="wsb:Zadost_ZrusPrenosPSP"/>
+       <wsdl:output message="wsb:Odpoved_ZrusPrenosPSP"/>
+       <wsdl:fault  message="wsb:Odpoved_Chyba" name="Chyba_Zruseni_PrenosuPSP"/>
+     </wsdl:operation>
+
+     <wsdl:operation name="Zadost_ZacatekDavky">
+       <wsdl:input  message="wsb:Zadost_ZacatekDavky"/>
+       <wsdl:output message="wsb:Odpoved_ZacatekDavky"/>
+       <wsdl:fault  message="wsb:Odpoved_Chyba" name="Chyba_Zadost_ZacatekDavky"/>
+     </wsdl:operation>
+
+     <wsdl:operation name="Zadost_KonecDavky">
+       <wsdl:input  message="wsb:Zadost_KonecDavky"/>
+       <wsdl:output message="wsb:Odpoved_KonecDavky"/>
+       <wsdl:fault  message="wsb:Odpoved_Chyba" name="Chyba_Zadost_KonecDavky"/>
+     </wsdl:operation>
+  </wsdl:portType>
+
+  <wsdl:binding name="B1_soap_napojeni" type="wsb:B1_rozhrani">
+     <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+     <wsdl:operation name="Test">
+        <soap:operation soapAction=""/>
+        <wsdl:input>
+           <soap:header message="wsb:Dotaz_Test" part="header" use="literal"
+              encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+           <soap:body parts="body" use="literal" encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+        </wsdl:input>
+        <wsdl:output>
+           <soap:header message="wsb:Odpoved_Test" part="headerR" use="literal"
+              encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+           <soap:header message="wsb:Odpoved_Test" part="headerA" use="literal"
+              encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+           <soap:body parts="body" use="literal" encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+        </wsdl:output>
+        <wsdl:fault name="Chyba_Test">
+           <soap:fault name="Chyba_Test" use="literal"
+              encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+        </wsdl:fault>
+     </wsdl:operation>
+
+     <wsdl:operation name="TestTok">
+        <soap:operation soapAction=""/>
+        <wsdl:input>
+           <soap:header message="wsb:Dotaz_TestTok" part="header" use="literal"
+              encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+           <soap:body parts="body" use="literal" encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+        </wsdl:input>
+        <wsdl:output>
+           <soap:header message="wsb:Odpoved_TestTok" part="headerR" use="literal"
+              encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+           <soap:header message="wsb:Odpoved_TestTok" part="headerA" use="literal"
+              encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+           <soap:body parts="body" use="literal" encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+        </wsdl:output>
+        <wsdl:fault name="Chyba_TestTok">
+           <soap:fault name="Chyba_TestTok" use="literal"
+              encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+        </wsdl:fault>
+     </wsdl:operation>
+
+     <wsdl:operation name="Vyhledani_PSP">
+        <soap:operation soapAction=""/>
+        <wsdl:input>
+           <soap:header message="wsb:Dotaz_PSP" part="header" use="literal"
+              encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+           <soap:body parts="body" use="literal" encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+        </wsdl:input>
+        <wsdl:output>
+           <soap:header message="wsb:Odpoved_PSP" part="headerR" use="literal"
+              encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+           <soap:header message="wsb:Odpoved_PSP" part="headerA" use="literal"
+              encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+           <soap:body parts="body" use="literal" encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+        </wsdl:output>
+        <wsdl:fault name="Chyba_Vyhledani_PSP">
+           <soap:fault name="Chyba_Vyhledani_PSP" use="literal"
+              encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+        </wsdl:fault>
+     </wsdl:operation>
+
+     <wsdl:operation name="Vyhledani_VolnePSP">
+        <soap:operation soapAction=""/>
+        <wsdl:input>
+           <soap:header message="wsb:Dotaz_VolnePSP" part="header" use="literal"
+              encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+           <soap:body parts="body" use="literal" encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+        </wsdl:input>
+        <wsdl:output>
+           <soap:header message="wsb:Odpoved_VolnePSP" part="headerR" use="literal"
+              encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+           <soap:header message="wsb:Odpoved_VolnePSP" part="headerA" use="literal"
+              encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+           <soap:body parts="body" use="literal" encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+        </wsdl:output>
+        <wsdl:fault name="Chyba_Vyhledani_VolnePSP">
+           <soap:fault name="Chyba_Vyhledani_VolnePSP" use="literal"
+              encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+        </wsdl:fault>
+     </wsdl:operation>
+
+     <wsdl:operation name="Vyhledani_NositelPSP">
+        <soap:operation soapAction=""/>
+        <wsdl:input>
+           <soap:header message="wsb:Dotaz_NositelPSP" part="header" use="literal"
+              encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+           <soap:body parts="body" use="literal" encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+        </wsdl:input>
+        <wsdl:output>
+           <soap:header message="wsb:Odpoved_NositelPSP" part="headerR" use="literal"
+              encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+           <soap:header message="wsb:Odpoved_NositelPSP" part="headerA" use="literal"
+              encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+           <soap:body parts="body" use="literal" encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+        </wsdl:output>
+        <wsdl:fault name="Chyba_Vyhledani_NositelPSP">
+           <soap:fault name="Chyba_Vyhledani_NositelPSP" use="literal"
+              encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+        </wsdl:fault>
+     </wsdl:operation>
+
+     <wsdl:operation name="Vyhledani_SmlouvyPSP">
+        <soap:operation soapAction=""/>
+        <wsdl:input>
+           <soap:header message="wsb:Dotaz_SmlouvyPSP" part="header" use="literal"
+              encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+           <soap:body parts="body" use="literal" encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+        </wsdl:input>
+        <wsdl:output>
+           <soap:header message="wsb:Odpoved_SmlouvyPSP" part="headerR" use="literal"
+              encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+           <soap:header message="wsb:Odpoved_SmlouvyPSP" part="headerA" use="literal"
+              encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+           <soap:body parts="body" use="literal" encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+        </wsdl:output>
+        <wsdl:fault name="Chyba_Vyhledani_SmlouvyPSP">
+           <soap:fault name="Chyba_Vyhledani_SmlouvyPSP" use="literal"
+              encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+        </wsdl:fault>
+     </wsdl:operation>
+
+     <wsdl:operation name="Nastaveni_BlokacePSP">
+        <soap:operation soapAction=""/>
+        <wsdl:input>
+           <soap:header message="wsb:Zadost_BlokujPSP" part="header" use="literal"
+              encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+           <soap:body parts="body" use="literal" encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+        </wsdl:input>
+        <wsdl:output>
+           <soap:header message="wsb:Odpoved_BlokujPSP" part="headerR" use="literal"
+              encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+           <soap:header message="wsb:Odpoved_BlokujPSP" part="headerA" use="literal"
+              encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+           <soap:body parts="body" use="literal" encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+        </wsdl:output>
+        <wsdl:fault name="Chyba_Nastaveni_BlokacePSP">
+           <soap:fault name="Chyba_Nastaveni_BlokacePSP" use="literal"
+              encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+        </wsdl:fault>
+     </wsdl:operation>
+
+     <wsdl:operation name="Nastaveni_UvolneniPSP">
+        <soap:operation soapAction=""/>
+        <wsdl:input>
+           <soap:header message="wsb:Zadost_UvolniPSP" part="header" use="literal"
+              encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+           <soap:body parts="body" use="literal" encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+        </wsdl:input>
+        <wsdl:output>
+           <soap:header message="wsb:Odpoved_UvolniPSP" part="headerR" use="literal"
+              encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+           <soap:header message="wsb:Odpoved_UvolniPSP" part="headerA" use="literal"
+              encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+           <soap:body parts="body" use="literal" encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+        </wsdl:output>
+        <wsdl:fault name="Chyba_Nastaveni_UvolneniPSP">
+           <soap:fault name="Chyba_Nastaveni_UvolneniPSP" use="literal"
+              encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+        </wsdl:fault>
+     </wsdl:operation>
+
+     <wsdl:operation name="Nastaveni_PrenosuPSP">
+        <soap:operation soapAction=""/>
+        <wsdl:input>
+           <soap:header message="wsb:Zadost_PrenosPSP" part="header" use="literal"
+              encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+           <soap:body parts="body" use="literal" encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+        </wsdl:input>
+        <wsdl:output>
+           <soap:header message="wsb:Odpoved_PrenosPSP" part="headerR" use="literal"
+              encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+           <soap:header message="wsb:Odpoved_PrenosPSP" part="headerA" use="literal"
+              encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+           <soap:body parts="body" use="literal" encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+        </wsdl:output>
+        <wsdl:fault name="Chyba_Nastaveni_PrenosuPSP">
+           <soap:fault name="Chyba_Nastaveni_PrenosuPSP" use="literal"
+              encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+        </wsdl:fault>
+     </wsdl:operation>
+
+     <wsdl:operation name="Zruseni_PrenosuPSP">
+        <soap:operation soapAction=""/>
+        <wsdl:input>
+           <soap:header message="wsb:Zadost_ZrusPrenosPSP" part="header" use="literal"
+              encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+           <soap:body parts="body" use="literal" encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+        </wsdl:input>
+        <wsdl:output>
+           <soap:header message="wsb:Odpoved_ZrusPrenosPSP" part="headerR" use="literal"
+              encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+           <soap:header message="wsb:Odpoved_PrenosPSP" part="headerA" use="literal"
+              encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+           <soap:body parts="body" use="literal"
+              encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+        </wsdl:output>
+        <wsdl:fault name="Chyba_Zruseni_PrenosuPSP">
+           <soap:fault name="Chyba_Zruseni_PrenosuPSP" use="literal"
+              encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+        </wsdl:fault>
+     </wsdl:operation>
+
+     <wsdl:operation name="Zadost_ZacatekDavky">
+        <soap:operation soapAction=""/>
+        <wsdl:input>
+           <soap:header message="wsb:Zadost_ZacatekDavky" part="header" use="literal"
+              encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+           <soap:body parts="body" use="literal" encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+        </wsdl:input>
+        <wsdl:output>
+           <soap:header message="wsb:Odpoved_ZacatekDavky" part="headerR" use="literal"
+              encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+           <soap:header message="wsb:Odpoved_ZacatekDavky" part="headerA" use="literal"
+              encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+           <soap:body parts="body" use="literal"
+              encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+        </wsdl:output>
+        <wsdl:fault name="Chyba_Zadost_ZacatekDavky">
+           <soap:fault name="Chyba_Zadost_ZacatekDavky" use="literal"
+              encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+        </wsdl:fault>
+     </wsdl:operation>
+
+     <wsdl:operation name="Zadost_KonecDavky">
+        <soap:operation soapAction=""/>
+        <wsdl:input>
+           <soap:header message="wsb:Zadost_KonecDavky" part="header" use="literal"
+              encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+           <soap:body parts="body" use="literal" encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+        </wsdl:input>
+        <wsdl:output>
+           <soap:header message="wsb:Odpoved_KonecDavky" part="headerR" use="literal"
+              encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+           <soap:header message="wsb:Odpoved_KonecDavky" part="headerA" use="literal"
+              encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+           <soap:body parts="body" use="literal"
+              encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+        </wsdl:output>
+        <wsdl:fault name="Chyba_Zadost_KonecDavky">
+           <soap:fault name="Chyba_Zadost_KonecDavky" use="literal"
+              encodingStyle="http://www.syntea.cz/ckp/encoding"/>
+        </wsdl:fault>
+     </wsdl:operation>
+  </wsdl:binding>
+
+  <wsdl:service name="B1_soap_sluzba">
+     <wsdl:port name="B1_soap_brana" binding="wsb:B1_soap_napojeni">
+       <soap:address location="https://193.85.207.88:4444/norB1/ws"/>
+     </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

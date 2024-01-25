@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<x:purchase-request xmlns:x="http://kocour.ms.mff.cuni.cz/xcase/company/"
+  xsi:schemaLocation = "http://kocour.ms.mff.cuni.cz/xcase/company/ uml.xsd"
+  xmlns:xsi ="http://www.w3.org/2001/XMLSchema-instance">
+  <x:new-customer>
+    <x:name>Jan Novak</x:name>
+    <x:email>Jan.Novak@emmail.com</x:email>
+  </x:new-customer>
+  <x:delivery-address>
+    <x:street>Mala 1</x:street>
+    <x:postcode>11000</x:postcode>
+    <x:city>Praha</x:city>
+  </x:delivery-address>
+  <x:bill-address>
+    <x:street>Mala 1</x:street>
+    <x:postcode>11000</x:postcode>
+    <x:city>Praha</x:city>
+  </x:bill-address>
+  <x:item-list>
+    <x:item code = "1ab">
+     <x:amount>1</x:amount>
+     <x:title>xxx</x:title>
+    </x:item>
+    <x:item code = "2ab">
+     <x:amount>2</x:amount>
+     <x:title>yyy</x:title>
+    </x:item>
+  </x:item-list>
+</x:purchase-request>

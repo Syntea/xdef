@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  targetNamespace="http://b"
+  xmlns:pb="http://b"
+  attributeFormDefault="qualified"
+  elementFormDefault="qualified"
+  xmlns:pa="http://a">
+  <xs:import namespace="http://a"
+    schemaLocation="t018_1.xsd"/>
+  <xs:simpleType name="attr2_Type1">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="0"/>
+      <xs:maxInclusive value="20"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:attribute name="attr2"
+    type="pb:attr2_Type"/>
+  <xs:simpleType name="attr2_Type">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="2"/>
+      <xs:maxInclusive value="10"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="elem">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="pa:a1"/>
+        <xs:element ref="pa:a2"/>
+        <xs:element name="a3"
+          form="unqualified">
+          <xs:complexType>
+            <xs:attribute name="attr1"
+              type="xs:string"
+              use="optional"
+              form="unqualified"/>
+            <xs:attribute name="attr2"
+              type="pb:attr2_Type1"
+              use="optional"/>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

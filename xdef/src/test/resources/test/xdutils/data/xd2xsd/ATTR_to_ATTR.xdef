@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="windows-1250"?>
+<!--
+ http://www.syntea.cz/xdef/3.1
+ http://www.xdef.org/xdef/3.2
+ http://www.xdef.org/xdef/4.0
+ http://www.xdef.org/xdef/4.1
+ http://www.xdef.org/xdef/4.2
+-->
+<xd:def xmlns:xd      =  "http://www.xdef.org/xdef/4.2"
+         xd:name      =  "main"
+         xd:root      =  "Staff" >
+
+         <Subject id="int(1, 999_999_999)" />
+
+         <Person    xd:script="ref Subject"
+                    name="string(1,30)"
+                    surname="string(1,50)" />
+
+         <Staff>
+             <xd:mixed>
+                 <Worker xd:script="ref Person; occurs *" />
+                 <ExternalFirm xd:script="ref Subject; occurs *"
+                                name="string(1,50)"
+                                address="string(1,100)" />
+             </xd:mixed>
+         </Staff>
+
+</xd:def>

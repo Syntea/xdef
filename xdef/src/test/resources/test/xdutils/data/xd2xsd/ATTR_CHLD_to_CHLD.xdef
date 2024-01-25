@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="windows-1250"?>
+<!--
+ http://www.syntea.cz/xdef/3.1
+ http://www.xdef.org/xdef/3.2
+ http://www.xdef.org/xdef/4.0
+ http://www.xdef.org/xdef/4.1
+ http://www.xdef.org/xdef/4.2
+-->
+<xd:def xmlns:xd      =  "http://www.xdef.org/xdef/4.2"
+        xd:name      =  "main"
+        xd:root      =  "Staff"
+        xd:classes   =  "" >
+
+    <Person>
+        <Name>string(1,30)</Name>
+        <Surname>string(1,50)</Surname>
+    </Person>
+
+    <Manager    xd:script="ref Person"
+                sex="string(4,6)">
+        <Salary>int(8000, 100_000)</Salary>
+    </Manager>
+
+    <Staff>
+        <xd:mixed>
+            <Manager xd:script="ref Manager; occurs *" />
+            <Worker    xd:script="ref Person; occurs *"
+                       workerId="int" >
+                <Description>string(1,1000)</Description>
+            </Worker>
+        </xd:mixed>
+    </Staff>
+
+</xd:def>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+	<xs:complexType name="CType">
+      <xs:sequence>
+        <xs:element name="integer" minOccurs="1" maxOccurs="unbounded">
+          <xs:simpleType>
+            <xs:restriction base="xs:integer"/>
+          </xs:simpleType>
+        </xs:element>
+        <xs:element name="isbn" minOccurs="1" maxOccurs="unbounded">
+          <xs:simpleType>
+            <xs:union>
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:pattern value="[0-9]{10}"/>
+                </xs:restriction>
+              </xs:simpleType>
+              <xs:simpleType>
+                <xs:restriction base="xs:NMTOKEN">
+                  <xs:enumeration value="TBD"/>
+                  <xs:enumeration value="NA"/>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:union>
+          </xs:simpleType>
+        </xs:element>
+        <xs:element name="list" minOccurs="1" maxOccurs="unbounded">
+          <xs:simpleType>
+            <xs:restriction base="list"/>
+          </xs:simpleType>
+        </xs:element>
+      </xs:sequence>
+	</xs:complexType>
+
+	<xs:simpleType name="list" >
+      <xs:list>
+        <xs:simpleType>
+          <xs:restriction base = "xs:int">
+            <xs:minInclusive value="-10"/>
+            <xs:maxInclusive value="10"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:list>
+	</xs:simpleType>
+
+  <xs:element name="root">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="CType"/>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+
+</xs:schema>
