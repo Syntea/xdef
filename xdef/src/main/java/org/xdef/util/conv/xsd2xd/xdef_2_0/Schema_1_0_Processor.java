@@ -22,7 +22,7 @@ public class Schema_1_0_Processor extends Processor {
 	private final XdefDocument _xdef;
 	/** Error and warning reporter. */
 	private final Reporter _reporter;
-	/** Every <tt>def</tt> as file switch. */
+	/** Every def as file switch. */
 	private final boolean _separately;
 	/** Stack of referencing elements (Element). */
 	private final Stack<Element> _refElementsStack = new Stack<Element>();
@@ -45,9 +45,11 @@ public class Schema_1_0_Processor extends Processor {
 		_reporter = reporter;
 		_separately = separately;
 		_xdef = new XdefDocument(_schemaElements,
-//			xdefPrefix, XDConstants.XDEF32_NS_URI, _separately);
 /*XXVT*/
+			xdefPrefix, XDConstants.XDEF32_NS_URI, _separately);
+/*XXVT*
 			xdefPrefix, XDConstants.XDEF42_NS_URI, _separately);
+/*XXVT*/
 		processSchemaElements(_xdef.getXdefElements());
 	}
 	@Override

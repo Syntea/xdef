@@ -43,7 +43,7 @@ public class XdefDocument implements Convertor {
 	 * @param xdefPrefix prefix for X-definition nodes.
 	 * @param xdefNamespaceURI name space URI for X-definition nodes.
 	 * @param separately every X-definition as file.
-	 * @throws RuntimeException cant add <tt>def</tt> element to document
+	 * @throws RuntimeException cant add def element to document
 	 * or cant add X-definition name space declaration.
 	 */
 	public XdefDocument(Map<URL, Element> schemaElements, String xdefPrefix,
@@ -55,11 +55,11 @@ public class XdefDocument implements Convertor {
 	}
 
 	/** Initialize X-definition elements and names tables. Creates X-definition
-	 * <tt>def</tt> element and adds name. X-definition name space declaration
+	 * def element and adds name. X-definition name space declaration
 	 * is also added.
 	 * @param schemaElements all schema elements.
 	 * @param separately every X-definition as file.
-	 * @throws RuntimeException cant add <tt>def</tt> element to document
+	 * @throws RuntimeException cant add def element to document
 	 * or can't add
 	 * X-definiton name space declaration or can't add target name space
 	 * declaration.
@@ -101,10 +101,10 @@ public class XdefDocument implements Convertor {
 		}
 	}
 
-	/** Adds target name space to given X-definition <tt>def</tt> element
-	 * according to given XML schema <tt>schema</tt> element settings.
-	 * @param schemaElement XML schema <tt>schema</tt> element.
-	 * @param xdefElement X-definiton <tt>def</tt> element.
+	/** Adds target name space to given X-definition def element
+	 * according to given XML schema schema element settings.
+	 * @param schemaElement XML schema schema element.
+	 * @param xdefElement X-definiton def element.
 	 */
 	private void addTargetNamespaceDeclaration(Element schemaElement,
 			Element xdefElement) throws IllegalArgumentException {
@@ -161,19 +161,19 @@ public class XdefDocument implements Convertor {
 		}
 	}
 
-	/** Returns <tt>true</tt> if given node is valid <tt>def</tt> element.
+	/** Returns true if given node is valid def element.
 	 * @param node node to test.
-	 * @return  <tt>true</tt> if given node is valid <tt>def</tt> element.
+	 * @return  true if given node is valid def element.
 	 */
 	public boolean isXdefElement(Node node) {
 		return DOMUtils.isElement(node, _xdefNamespaceURI, XdNames.DEF);
 	}
 
-	/** Recursive method that gets ancestor <tt>def</tt> element of given
+	/** Recursive method that gets ancestor def element of given
 	 * node or throws exception.
 	 * @param node context node.
-	 * @return X-definition <tt>def</tt> element.
-	 * @throws IllegalArgumentException node is not <tt>def</tt> descendant.
+	 * @return X-definition def element.
+	 * @throws IllegalArgumentException node is not def descendant.
 	 */
 	public Element getXdefElement(Node node) throws IllegalArgumentException {
 		return DOMUtils.getElement(node, _xdefNamespaceURI, XdNames.DEF);
@@ -254,10 +254,10 @@ public class XdefDocument implements Convertor {
 		return addElement(parent, null, localName);
 	}
 
-	/** Adds <tt>def</tt> element to the given parent node and returns created
+	/** Adds def element to the given parent node and returns created
 	 * element.
-	 * @param parent parent node of <tt>def</tt> element.
-	 * @return created and added <tt>def</tt> element.
+	 * @param parent parent node of def element.
+	 * @return created and added def element.
 	 */
 	private Element addDefElement(Node parent) {
 		//parent node is document node
@@ -279,10 +279,10 @@ public class XdefDocument implements Convertor {
 		}
 	}
 
-	/** Creates <tt>collection</tt> element with X-definition name space
+	/** Creates collection element with X-definition name space
 	 * declaration and adds it to given document node.
 	 * @param doc owner document node.
-	 * @return created and added <tt>collection</tt> element.
+	 * @return created and added collection element.
 	 */
 	private Element addCollectionElement(Document doc) {
 		Element collection = doc.createElementNS(_xdefNamespaceURI,
@@ -383,7 +383,7 @@ public class XdefDocument implements Convertor {
 	}
 
 	/** Gets prefix of given name space URI in given node context. If prefix
-	 * does not exists, it will create one in <tt>def</tt> element and
+	 * does not exists, it will create one in def element and
 	 * return prefix.
 	 * @param node context node.
 	 * @param namespaceURI name space URI.
@@ -461,8 +461,8 @@ public class XdefDocument implements Convertor {
 	}
 
 	/** Adds type declaration with given name and given declaration to given
-	 * X-definition <tt>def</tt> element.
-	 * @param defElement <tt>def</tt> element.
+	 * X-definition def element.
+	 * @param defElement def element.
 	 * @param name name of type.
 	 * @param declaration declaration string.
 	 * @return added declaration element.
@@ -626,7 +626,7 @@ public class XdefDocument implements Convertor {
 		String occurs = "occurs ";
 		//setting fixed value
 		if (minOccurs.equals(maxOccurs)) {
-			return occurs += minOccurs;
+			return occurs + minOccurs;
 		}
 		//adding min count
 		occurs += minOccurs + "..";
@@ -758,8 +758,8 @@ public class XdefDocument implements Convertor {
 	}
 
 	/** Adds declaration of included X-definition with given name to given
-	 * X-definition <tt>def</tt> element.
-	 * @param xdefElement X-definition <tt>def</tt> element.
+	 * X-definition def element.
+	 * @param xdefElement X-definition def element.
 	 * @param schemaURL URL of schema that is X-definition element created from.
 	 */
 	public void addIncludeXdef(Element xdefElement, URL schemaURL) {
@@ -777,8 +777,8 @@ public class XdefDocument implements Convertor {
 		}
 	}
 
-	/** Adds root element declaration to given <tt>def</tt> element.
-	 * @param xdefElement X-definition <tt>def</tt> element.
+	/** Adds root element declaration to given def element.
+	 * @param xdefElement X-definition def element.
 	 * @param namespaceURI name space URI of root element.
 	 * @param localName local name of root element.
 	 */

@@ -104,9 +104,7 @@ public class GlobalDeclaration {
 		try {
 			Set<URL> importedSchemaURLs = Utils.getImportedSchemaURLs(
 				schemaURL, (Element) schemaElements.get(schemaURL), namespace);
-			Iterator i = importedSchemaURLs.iterator();
-			while (i.hasNext()) {
-				URL importedSchemaURL = (URL) i.next();
+			for (URL importedSchemaURL : importedSchemaURLs) {
 				GlobalDeclaration importedGlobalDeclaration =
 					getGlobalDeclarationInSchemaAndIncludes(localName,
 						importedSchemaURL, type, schemaElements);
@@ -175,9 +173,7 @@ public class GlobalDeclaration {
 				(Element) schemaElements.get(schemaURL));
 			includes.addAll(Utils.getRedefinedSchemaURLs(schemaURL,
 				(Element) schemaElements.get(schemaURL)));
-			Iterator i = includes.iterator();
-			while (i.hasNext()) {
-				URL includedSchemaURL = (URL) i.next();
+			for (URL includedSchemaURL : includes) {
 				if (!searchedURLs.contains(includedSchemaURL)) {
 					GlobalDeclaration includedGlobalDeclaration =
 						getGlobalDeclarationInSchemaAndIncludes(localName,
@@ -199,10 +195,10 @@ public class GlobalDeclaration {
 	 * at given URL.
 	 * @param localName local name part of searched global declaration.
 	 * @param schemaURL schema element URL containing searched global
-	 *                  declaration.
-	 * @param type      type of searched global declaration.
-	 * @return          searched global declaration object or <tt>null</tt>
-	 *  if declaration could not be found.
+	 * declaration.
+	 * @param type type of searched global declaration.
+	 * @return searched global declaration object or null if declaration
+	 * could not be found.
 	 */
 	private static GlobalDeclaration getGlobalDeclarationInSchema(
 		String localName,
@@ -276,7 +272,7 @@ public class GlobalDeclaration {
 					+ schemaURL.getPath() + "'");
 			}
 			return decl;
-		} catch (Exception ex) {
+		} catch (RuntimeException ex) {
 			throw new RuntimeException(
 				"Global declaration with given properties was not found", ex);
 		}

@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.1.1, release-date 2024-01-25
+# Version 42.1.1, release-date 2024-01-26
 * Fixed bug in `CHECK` operation.
 * Imnlemented `org.xdec.util.Xdef2Xsd` - conversion of X-definition
   to XML schema.

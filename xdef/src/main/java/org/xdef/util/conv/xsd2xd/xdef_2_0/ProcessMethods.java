@@ -80,21 +80,24 @@ public class ProcessMethods {
 	private static String getObjectGroupType(Element objectGroupElement)
 		throws IllegalArgumentException {
 		String type = objectGroupElement.getLocalName();
-		if ("all".equals(type)) {
-			return "mixed";
-		} else if ("choice".equals(type)) {
-			return "choice";
-		} else if ("sequence".equals(type)) {
-			return "sequence";
+		if (null != type) {
+			switch (type) {
+				case "all":
+					return "mixed";
+				case "choice":
+					return "choice";
+				case "sequence":
+					return "sequence";
+			}
 		}
 		throw new IllegalArgumentException("Given element '"
 			+ objectGroupElement.getLocalName() + "' is not a XML schema "
 			+ "object group item!");
 	}
 
-	/** Processes <tt>any</tt> schema element and adds declaration
+	/** Processes any schema element and adds declaration
 	 * to given parent XDefnition element.
-	 * @param anyElement schema <tt>any</tt> element to process.
+	 * @param anyElement schema any element to process.
 	 * @param xdefContextElement XDefnition context element.
 	 * @param xdef X-definition document representation.
 	 * @return added element.
@@ -109,9 +112,9 @@ public class ProcessMethods {
 		return any;
 	}
 
-	/** Processes schema <tt>anyAttribute</tt> element and adds declaration
+	/** Processes schema anyAttribute element and adds declaration
 	 * to given parent X-definition element.
-	 * @param anyAttributeElement schema <tt>anyAttribute</tt> element to
+	 * @param anyAttributeElement schema anyAttribute element to
 	 * process.
 	 * @param xdefContextElement XDefnition context element.
 	 * @param xdef the X-definition.
@@ -121,9 +124,9 @@ public class ProcessMethods {
 		xdef.addXdefAttr(xdefContextElement, "attr", "occurs 0..*");
 	}
 
-	/** Processes given <tt>complexType</tt> element and adds declaration
+	/** Processes given complexType element and adds declaration
 	 * to given XDefnition context element. Returns created element.
-	 * @param complexTypeElement <tt>complexType</tt> element to process.
+	 * @param complexTypeElement complexType element to process.
 	 * @param xdefContextElement X-definition context element.
 	 * @param xdef representation of X-definition document.
 	 * @return created element.
@@ -136,9 +139,9 @@ public class ProcessMethods {
 		return xdef.addElement(xdefContextElement, namespace, name + "_cType");
 	}
 
-	/** Processes given <tt>simpleType</tt> element and adds declaration
+	/** Processes given simpleType element and adds declaration
 	 * to the given X-definition document context element.
-	 * @param simpleTypeElement <tt>simpleType</tt> element.
+	 * @param simpleTypeElement simpleType element.
 	 * @param xdefContextElement X-definition document context element.
 	 * @param xdef X-definition document representation.
 	 * @param schemaURLStack stack of processing schema URLs.
@@ -393,13 +396,19 @@ public class ProcessMethods {
 				}
 				//getting occurrence string
 				String occurrence = refAttributeElement.getAttribute("use");
-				//resolving occurrence
-				if ("required".equals(occurrence)) {
-					attr.setUse("required");
-				} else if ("prohibited".equals(occurrence)) {
-					attr.setUse("illegal");
-				} else {
+				if (null == occurrence) {
 					attr.setUse("optional");
+				} else { //resolving occurrence
+					switch (occurrence) {
+						case "required":
+							attr.setUse("required");
+							break;
+						case "prohibited":
+							attr.setUse("illegal");
+							break;
+						default:
+							attr.setUse("optional");
+					}
 				}
 				//resolving type
 				String type = attributeElement.getAttribute("type");
@@ -499,12 +508,19 @@ public class ProcessMethods {
 				}
 				//resolving occurrence
 				String occurrence = attributeElement.getAttribute("use");
-				if ("required".equals(occurrence)) {
-					attr.setUse("required");
-				} else if ("prohibited".equals(occurrence)) {
-					attr.setUse("illegal");
-				} else {
+				if (null == occurrence) {
 					attr.setUse("optional");
+				} else {
+					switch (occurrence) {
+						case "required":
+							attr.setUse("required");
+							break;
+						case "prohibited":
+							attr.setUse("illegal");
+							break;
+						default:
+							attr.setUse("optional");
+					}
 				}
 				//resolving type
 				String type = attributeElement.getAttribute("type");
@@ -531,8 +547,7 @@ public class ProcessMethods {
 				return xdef.addAttr(xdefContextElement, attr);
 			}
 		}
-		//returning null because none attribute was added
-		return null;
+		return null; //return null because none attribute was added
 	}
 
 	/** Processes attribute group and adds proper declaration to given
@@ -750,7 +765,7 @@ public class ProcessMethods {
 			//url of external schema
 			URL url = Utils.getURL(schemaURL, location);
 			xdef.addIncludeXdef(xdefContextElement, url);
-		} catch (Exception ex) {
+		} catch (RuntimeException ex) {
 			throw new RuntimeException("Could not create URL!", ex);
 		}
 	}

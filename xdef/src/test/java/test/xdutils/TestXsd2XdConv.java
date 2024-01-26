@@ -15,6 +15,7 @@ import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 import org.xdef.XDBuilder;
 import org.xdef.sys.ArrayReporter;
+import static org.xdef.sys.STester.runTest;
 import org.xml.sax.SAXException;
 import test.XDTester;
 
@@ -37,14 +38,14 @@ public class TestXsd2XdConv extends XDTester {
 		File dataDir = new File(getDataDir());
 		if (!dataDir.exists() || !dataDir.isDirectory()) {
 			throw new RuntimeException(
-				"Data directory does not exists or is not a directory");
+				"Data directory does not exist or is not a directory");
 		}
 		_dataDir = new File(dataDir.getAbsolutePath(),"xsd2xd");
 		if (!_dataDir.exists() || !_dataDir.isDirectory()) {
 			throw new RuntimeException(
-				"Xsd2xd directory does not exists or is not a directory");
+				"Xsd2xd directory does not exist or is not a directory");
 		}
-		File tempDir = clearTempDir();;
+		File tempDir = clearTempDir();
 		if (!tempDir.exists()) {
 			tempDir.mkdir();
 		} else {
@@ -71,7 +72,7 @@ public class TestXsd2XdConv extends XDTester {
 		File schemaFile = new File(_dataDir.getAbsolutePath(),testName+".xsd");
 		if (!schemaFile.exists() || !schemaFile.isFile()) {
 			setMessage(
-				new ErrMessage("Schema file does not exists or is not a file",
+				new ErrMessage("Schema file does not exist or is not a file",
 				schemaFile, null));
 			return false;
 		}
@@ -98,7 +99,7 @@ public class TestXsd2XdConv extends XDTester {
 		File xdefFile = new File(xdefFileName);
 		if (!xdefFile.exists() || !xdefFile.isFile()) {
 			setMessage(new ErrMessage(
-				"Generated XDefinition file does not exists or is not a file",
+				"Generated XDefinition file does not exist or is not a file",
 				xdefFile, null));
 			return false;
 		}
@@ -133,17 +134,16 @@ public class TestXsd2XdConv extends XDTester {
 		File xmlFile = new File(_dataDir.getAbsolutePath(), xmlName + ".xml");
 		if (!xmlFile.exists() || !xmlFile.isFile()) {
 			setMessage(new ErrMessage(
-				"Given XML file does not exists or is not a file",
-				xmlFile, null));
+				"XML file does not exist or is not a file", xmlFile, null));
 			return false;
 		}
 		//validate by schema
 		Source source = new StreamSource(xmlFile);
 		try {
 			_validator.validate(source);
-		} catch (Exception ex) {
+		} catch (IOException | SAXException ex) {
 			setMessage(new ErrMessage(
-				"Given XML file IS NOT VALID against schema", xmlFile, ex));
+				"XML file IS NOT VALID against schema", xmlFile, ex));
 			return false;
 		}
 		//validate by XDefinition
@@ -151,8 +151,7 @@ public class TestXsd2XdConv extends XDTester {
 		_chkDoc.xparse(xmlFile, _repWriter);
 		if (_repWriter.errors()) {
 			setMessage(new ErrMessage(
-				"Given XML file IS NOT VALID against XDefinition",
-				xmlFile, null));
+				"XML file IS NOT VALID against XDefinition", xmlFile, null));
 			return false;
 		}
 		return true;
@@ -165,29 +164,27 @@ public class TestXsd2XdConv extends XDTester {
 		File xmlFile = new File(_dataDir.getAbsolutePath(), xmlName + ".xml");
 		if (!xmlFile.exists() || !xmlFile.isFile()) {
 			setMessage(new ErrMessage(
-				"Given XML file does not exists or is not a file",
-				xmlFile, null));
+				"XML file does not exist or is not a file", xmlFile, null));
 			return false;
 		}
 		//validate by schema
 		Source source = new StreamSource(xmlFile);
 		try {
-		_validator.validate(source);
-		setMessage(new ErrMessage(
-			"Given XML file IS VALID against schema", xmlFile, null));
-		return false;
-		} catch (Exception ex) {
-		}
-		//validate by XDefinition
-		_repWriter.clear();
-		_chkDoc.xparse(xmlFile, _repWriter);
-		if (!_repWriter.errors()) {
-			setMessage(
-				new ErrMessage("Given XML file IS VALID against XDefinition",
-					xmlFile, null));
+			_validator.validate(source);
+			setMessage(new ErrMessage(
+				"XML file IS VALID against schema", xmlFile, null));
 			return false;
+		} catch (IOException | SAXException ex) {
+			//validate by XDefinition
+			_repWriter.clear();
+			_chkDoc.xparse(xmlFile, _repWriter);
+			if (!_repWriter.errors()) {
+				setMessage(new ErrMessage(
+					"XML file IS VALID against XDefinition",xmlFile,null));
+				return false;
+			}
+			return true;
 		}
-		return true;
 	}
 
 	private ErrMessage popMessage() {
@@ -336,8 +333,8 @@ public class TestXsd2XdConv extends XDTester {
 		assertTrue(parse("t016"), popMessage());
 		assertTrue(parseFail("t016e"), popMessage());
 
-//		assertTrue(prepare("t018"), popMessage());
-//		assertTrue(parse("t018"), popMessage());
+		assertTrue(prepare("t018"), popMessage());
+		assertTrue(parse("t018"), popMessage());
 
 		assertTrue(prepare("t019"), popMessage());
 		assertTrue(parse("t019"), popMessage());

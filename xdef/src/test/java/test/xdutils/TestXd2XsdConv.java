@@ -18,6 +18,8 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 import org.w3c.dom.Element;
+import org.xdef.sys.SException;
+import static org.xdef.sys.STester.runTest;
 import org.xml.sax.SAXException;
 import test.XDTester;
 
@@ -81,7 +83,7 @@ public class TestXd2XsdConv extends XDTester {
 				System.err.println("=== File: " + file.getAbsolutePath());
 				System.err.println(FUtils.readString(file));
 				System.err.println("===");
-			} catch (Exception ex) {
+			} catch (SException ex) {
 				System.err.println(ex);
 			}
 		}
@@ -109,8 +111,7 @@ public class TestXd2XsdConv extends XDTester {
 				return false;
 			}
 			_chkDoc = xdPool.createXDDocument(MAIN_DEF_NAME);
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		} catch (RuntimeException ex) {
 			setMessage(new ErrMessage("Could not prepare XDefinition!",
 				_xdefFile, ex));
 			return false;
@@ -139,7 +140,6 @@ public class TestXd2XsdConv extends XDTester {
 					new String[]{_xdefFile.getAbsolutePath()}, true,true,true);
 				System.err.println(KXmlUtils.nodeToString(el, true));
 			} catch (Exception exx) {}
-			ex.printStackTrace();
 			setMessage(new ErrMessage(
 				"Could not convert given XDefinition file!", _xdefFile, ex));
 			return false;
@@ -156,8 +156,7 @@ public class TestXd2XsdConv extends XDTester {
 		try {
 			Schema schema = _xsdFactory.newSchema(mainSchema);
 			_validator = schema.newValidator();
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		} catch (SAXException ex) {
 			displayFiles(_xdefFile);
 			System.err.println("============");
 			displayFiles(_tempDir);
@@ -193,7 +192,6 @@ public class TestXd2XsdConv extends XDTester {
 		try {
 			_validator.validate(source);
 		} catch (IOException ioex) {
-			ioex.printStackTrace();
 			setMessage(new ErrMessage("Could not read from XML file stream!",
 				xmlFile, ioex));
 			return false;
@@ -206,7 +204,6 @@ public class TestXd2XsdConv extends XDTester {
 			} catch (Exception exx) {}
 			System.err.println("============");
 			displayFiles(_tempDir);
-			sex.printStackTrace();
 			setMessage(new ErrMessage(
 				"Error during validating XML file by schema!", xmlFile, sex));
 			return false;
