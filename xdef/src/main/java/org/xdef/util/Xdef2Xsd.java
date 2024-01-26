@@ -22,7 +22,6 @@ import org.xdef.msg.XD2XSD;
 
 /** Convertor of X-definition to XML Schema.
  * (see {@link org.xdef.util.Xdef2Xsd#main(String[])})
- * @author Ilia Alexandrov
  */
 public final class Xdef2Xsd {
 	private static final XsdVersion SCHEMA_VERSION = XsdVersion.SCHEMA_1_0;
@@ -179,11 +178,9 @@ public final class Xdef2Xsd {
 					name = a.getValue();
 				} else {
 					a = el.getAttributeNodeNS(
-//						KXmlConstants.NS_XDEF_2_0_INSTANCE, "name");
 						XDConstants.XDEF_INSTANCE_NS_URI, "name");
 					if (a == null) {
 						a = el.getAttributeNodeNS(
-//							KXmlConstants.NS_XDEF_INSTANCE, "name");
 							XDConstants.XDEF_INSTANCE_NS_URI, "name");
 
 					}
@@ -200,12 +197,10 @@ public final class Xdef2Xsd {
 				a = el.getAttributeNode("root");
 				if (a == null) {
 					a = el.getAttributeNodeNS(
-//						KXmlConstants.NS_XDEF_2_0_INSTANCE, "root");
 						XDConstants.XDEF_INSTANCE_NS_URI, "root");
 				}
 				if (a == null) {
 					el.setAttributeNS(
-//						KXmlConstants.NS_XDEF_INSTANCE, "root", model);
 						XDConstants.XDEF_INSTANCE_NS_URI, "root", model);
 				} else {
 					String value = a.getValue();

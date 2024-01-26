@@ -15,14 +15,9 @@ import javax.xml.validation.Validator;
 
 /** Represents XML Schema to X-definition convertor.
  * (see {@link org.xdef.util.Xsd2Xdef#main(String[])})
- * @author Ilia Alexandrov
  */
 public class Xsd2Xdef {
 
-//	/** Constant that represents X-definition version 2.0.*/
-//	private static final byte XDEF2_0 = 1;
-//	/** Constant that represents X-definition version 2.1. */
-//	private static final byte XDEF2_1 = 2;
 	/** Constant that represents XML Schema version 1.0. */
 	private static final byte SCHEMA1_0 = 1;
 	/** Prefix of X-definition nodes in output documents. */
