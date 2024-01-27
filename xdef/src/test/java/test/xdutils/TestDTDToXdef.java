@@ -49,7 +49,7 @@ public class TestDTDToXdef extends XDTester {
 					System.out.println(org.xdef.xml.KXmlUtils.nodeToString(
 						org.xdef.xml.KXmlUtils.parseXml(data)));
 				}
-			} catch (Exception ex) {
+			} catch (RuntimeException ex) {
 				fail(ex + "\n"
 					+ org.xdef.xml.KXmlUtils.nodeToString(el, true) + "\n"
 					+ org.xdef.xml.KXmlUtils.nodeToString(

@@ -18,6 +18,7 @@ import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import java.io.PrintStream;
+import java.util.List;
 import org.xdef.msg.XD2XSD;
 
 /** Convertor of X-definition to XML Schema.
@@ -233,7 +234,7 @@ public final class XdefToXsd {
 	 * </ul>
 	 */
 	public static void main(String... args) {
-		ArrayList<String> source = new ArrayList<String>();
+		List<String> source = new ArrayList();
 		String outputDir = null;
 		String xdName = null;
 		String model = null;

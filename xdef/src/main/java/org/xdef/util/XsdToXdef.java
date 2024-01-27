@@ -12,6 +12,7 @@ import java.net.URL;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
+import org.xml.sax.SAXException;
 
 /** Represents XML Schema to X-definition convertor.
  * (see {@link org.xdef.util.XsdToXdef#main(String[])})
@@ -21,14 +22,11 @@ public class XsdToXdef {
 	/** Constant that represents XML Schema version 1.0. */
 	private static final byte SCHEMA1_0 = 1;
 	/** Prefix of X-definition nodes in output documents. */
-	private String _xdefPrefix;
+	private final String _xdefPrefix;
 	/** Input XML Schema version. */
-	private byte _schemaVersion;
+	private final byte _schemaVersion;
 	/** Reporter for reporting warnings and errors. */
-	private Reporter _reporter;
-
-	/** Prevent user to instantiate this class. */
-	private XsdToXdef() { this(null, null); }
+	private final Reporter _reporter;
 
 	/** Creates instance of Convertor with default settings. X-definition nodes
 	 * prefix as "xd", input XML Schema version as XML Schema 1.0, output
@@ -219,7 +217,7 @@ public class XsdToXdef {
 				"http://www.w3.org/2001/XMLSchema");
 			Schema schema = factory.newSchema(schemaFile);
 			return schema.newValidator();
-		} catch (Exception ex) {
+		} catch (IllegalArgumentException | SAXException ex) {
 			throw new IllegalArgumentException("Not valid XML Schema file", ex);
 		}
 	}
@@ -245,8 +243,8 @@ public class XsdToXdef {
 	public static void main(String... args) {
 		String info =
 "Using XsdToXdef: \n"
-+ "-in, --input <PATH> input main schema location \n"
-+ "-out, --output <PATH> output file or directory name \n"
++ "-i, --input <PATH> input main schema location \n"
++ "-o, --output <PATH> output file or directory name \n"
 + "-s, --separated every schema to standalone xdefinition file \n"
 + "-p, --xdefPrefix <PREFIX> prefix for xdefinition nodes \n"
 + "-l, --logFile <PATH> log file name \n"
@@ -292,14 +290,14 @@ public class XsdToXdef {
 					|| "--help".equals(parameter)) {
 					System.out.println(info);
 					return;
-				} else if (parameter.equals("-in")
+				} else if (parameter.equals("-i")
 					|| parameter.equals("--input")) {
 					if (input != null) {
 						err.append("Input file is already set\n");
 					}
 					valueGetMode = true;
 					type = "--input";
-				} else if ("-out".equals(parameter)
+				} else if ("-o".equals(parameter)
 					|| "--output".equals(parameter)) {
 					if (output != null) {
 						err.append("Output file is already set\n");
@@ -345,7 +343,7 @@ public class XsdToXdef {
 			} else {
 				genCollection(input, output, prefix, System.out);
 			}
-		} catch (Exception ex) {
+		} catch (IOException | RuntimeException ex) {
 			throw new RuntimeException("Exception when converting schema", ex);
 		}
 	}
