@@ -24,21 +24,21 @@ public class Example4 {
 
 		// 3. parse source XML (and set values of variables).
 		xdoc.xparse(xmlData, null);
-
+		
 		// 4. Set context with parsed element in previous step to XDDocument.
 		// XDDocument contains parsed element and also there are
 		// assigned values to variables in XDDocument.
 		// We set the parsed result element as context to the XDDocument.
 		xdoc.setXDContext(xdoc.getElement());
 
-		// 5. Because the model used for cconstruction of result has
+		// 5. Because the model used for cconstruction of result has 
 		// the namespance we must create the QNname with
 		// the namespace URI and local name.
 		String modelNamespace = "http://www.w3.org/1999/xhtml";
 		String modelLocalname = "html";
 		QName modelName = new QName(modelNamespace, modelLocalname);
-
-		// 6. create result from model (context data were set
+		
+        // 6. create result from model (context data were set
 		// in the previons step).
 		QName model = new QName(modelNamespace, modelLocalname);
 		xdoc.xcreate(model, null);

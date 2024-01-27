@@ -1,0 +1,17 @@
+<xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="xonExample" root="distancies">
+  <xd:xon xd:name="distancies">
+    { date : "date()",
+      cities : [
+        {%script = "occurs +",
+          from : [
+            "string()",
+            {%script = "occurs +",
+               to :       "jstring()",
+               distance : "int(0, 9999)"
+            }
+    	  ]
+        }
+      ]
+    }
+  </xd:xon>
+</xd:def>

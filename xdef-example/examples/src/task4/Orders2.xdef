@@ -1,4 +1,4 @@
-<xd:def xmlns:xd="http://www.xdef.org/xdef/4.0" name="Orders" root="Orders">
+<xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Orders" root="Orders">
 
 <xd:declaration>
   external method {
@@ -14,7 +14,7 @@
 
 <Orders xd:script="finally closeAll()" id="num(9)">
   <Order xd:script="occurs +; finally writeObj(); forget"
-      Number="checkObjId.ID()"
+      Number="checkObjId.ID()" 
       CustomerCode="customer()">
     <Item xd:script="occurs 1..100;"
       ProductCode="item()"

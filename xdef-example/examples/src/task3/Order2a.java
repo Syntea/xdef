@@ -11,17 +11,17 @@ import java.io.PrintStream;
 
 public class Order2a {
 	public static void main(String[] args) throws Exception {
-		// Compile X-definitions to XDPool
+		// Compile the X-definition source to the XDPool object
 		XDPool xpool = XDFactory.compileXD(null, "src/task3/Order2a.xdef");
 
-		// Create the instance of XDDocument object (from XDPool)
+		// Create an instance of the XDDocument object (from XDPool)
 		XDDocument xdoc = xpool.createXDDocument("Order");
 
 		// Set files with reports
 		xdoc.setProperty(XDConstants.XDPROPERTY_MESSAGES + "POBJ",
 			"src/task3/POBJ*.properties");
 
-		// Set the actual language for reporter (you can also try to set "ces")
+		// Set the actual language for the reporter (you can also try to set "ces")
 		xdoc.setProperty(XDConstants.XDPROPERTY_MSGLANGUAGE, "eng"); // English
 
 		// Set external variables "products" and "customers"
@@ -36,19 +36,19 @@ public class Order2a {
 
 		// Check errors
 		if (reporter.errorWarnings()) {
-			// print errors to the file
+			// print errors to a file
 			PrintStream ps = new PrintStream("task3/errors/Order_err.txt");
-			reporter.printReports(ps); //vytisteni chyb
-			ps.close();
-			// print the message to the system consloe
+			reporter.printReports(ps); //print errors
+			ps.close(); 
+			// print the message to the system console
 			Report rep = Report.error("POBJ003", null);
 			System.err.println(rep.toString());
 		} else {
-			// Write processed document to the file
+			// Write the processed document to the file
 			KXmlUtils.writeXml("task3/output/Order.xml", xdoc.getElement());
-			// print the message to the system consloe
+			// print the message to the system console
 			Report rep = Report.info("POBJ004", null);
-			System.out.println(rep.toString());
+			System.out.println(rep.toString()); 
 		}
 	}
 }

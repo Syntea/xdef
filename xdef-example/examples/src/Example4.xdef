@@ -1,13 +1,13 @@
-<xd:def xmlns:xd = "http://www.xdef.org/xdef/3.2" xd:root = "Weather" >
+<xd:def xmlns:xd = "http://www.xdef.org/xdef/4.1" xd:root = "Weather" >
 
   <!-- declaration of variables -->
   <xd:declaration scope = "local"> float sum = 0; int n = 0; </xd:declaration>
 
   <!-- model of input data -->
-  <Weather date = "optional datetime('yyyy-M-d')">
+  <Weather date = "optional date()">
      <Measurement xd:script = "occurs 1..;"
         wind        = "required float()"
-        time        = "required datetime('HH:mm')"
+        time        = "required time()"
         temperature = "required float(-99, +99);
                        onTrue {n++; sum += parseFloat(getText());}" />
   </Weather>
@@ -24,7 +24,7 @@
       </li>
       <h3>
         create n == 0 ? "No data" /* n is equal to 0 */ :
-          "Average temperature= " + (sum/n);
+          format("Average temperature= %2.1f", sum/n);
       </h3>
     </body>
   </html>

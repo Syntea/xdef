@@ -1,46 +1,45 @@
 #!/bin/bash
 args=("$@")
 
-if [ x${args[0]} = x ]
-  then 
+if [ x${args[0]} = x ]; then 
     echo parameter with the name of example is missing
     exit
 fi  
-
-if  !  [ -e temp ]
-  then
+if  !  [ -e temp ]; then
     mkdir temp
 fi
-if  !  [ -e temp/classes ]
-  then
+if  !  [ -e temp/classes ]; then
     mkdir temp/classes 
 fi
-if  !  [ -e temp/test ]
-  then 
+if  !  [ -e temp/test ]; then 
    mkdir temp/test
 fi
 
-if  [ -e temp/components ] 
+if [ ${args[0]} = task6/Town1 -o ${args[0]} = task6/Town2 ]
   then
-    rm -rf temp/components
-fi
-
-if [ ${args[0]} = Example_XC1 -o ${args[0]} = Example_XC2 ]
-  then
-    echo Generate X-components to temp/components and run ${args[0]} ...
+    echo ${args[0]}: Generating X-components ...
     echo
-    javac -encoding UTF8 -classpath "temp/classes:../xdef-32.5.6 (2020-02-14) (2019-12-17) (2019-12-17).jar" -d temp/classes src/GenComponents.java src/data/MyClass.java
-    java -classpath "temp/classes:../xdef-32.5.6 (2020-02-14) (2019-12-17) (2019-12-17).jar"  GenComponents
-    javac -encoding UTF8 -classpath "temp/classes:../xdef-32.5.6 (2020-02-14) (2019-12-17) (2019-12-17).jar" -d temp/classes temp/components/*.java src/${args[0]}.java
-    java -classpath "temp/classes:../xdef-32.5.6 (2020-02-14) (2019-12-17) (2019-12-17).jar"  ${args[0]}
+    if [ ${args[0]} = task6/Town1 ]
+      then
+        javac -encoding UTF8 -classpath "temp/classes:../xdef.jar" -d temp/classes src/task6/GenComponents1.java
+        java -classpath "temp/classes:../xdef.jar" task6.GenComponents1
+        javac -encoding UTF8 -classpath "temp/classes:../xdef.jar" -d temp/classes src/task6/components1/*.java
+      else 
+        javac -encoding UTF8 -classpath "temp/classes:../xdef.jar" -d temp/classes src/task6/GenComponents2.java
+        java -classpath "temp/classes:../xdef.jar" task6.GenComponents2
+        javac -encoding UTF8 -classpath "temp/classes:../xdef.jar" -d temp/classes src/task6/components2/*.java
+    fi
+    echo ${args[0]}: Compile and run  ...
+    echo
+    javac -encoding UTF8 -classpath "temp/classes:../xdef.jar" -d temp/classes src/${args[0]}.java
+    java -classpath "temp/classes:../xdef.jar"  ${args[0]}
   else 
     echo ${args[0]}: Compile and run  ...
     echo
-   javac -encoding UTF8 -classpath "temp/classes:../xdef-32.5.6 (2020-02-14) (2019-12-17) (2019-12-17).jar:derby/derby.jar" -d temp/classes src/data/MyClass.java src/GenDerby.java src/${args[0]}.java
-   java -classpath "temp/classes:../xdef-32.5.6 (2020-02-14) (2019-12-17) (2019-12-17).jar:derby/derby.jar" ${args[0]} 
+    javac -encoding UTF8 -classpath "temp/classes:../xdef.jar:lib/derby.jar:lib/saxon9-xqj.jar:lib/saxon9he.jar:lib/snakeyaml-1.9.jar" -d temp/classes src/data/MyClass.java src/GenDerby.java src/${args[0]}*.java
+    java -classpath "temp/classes:../xdef.jar:lib/derby.jar:lib/saxon9-xqj.jar:lib/saxon9he.jar:lib/snakeyaml-1.9.jar" ${args[0]} 
 fi  
 
-if  [ -e derby.log ] 
-  then
+if  [ -e derby.log ]; then
     rm derby.log
 fi

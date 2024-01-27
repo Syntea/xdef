@@ -27,10 +27,11 @@ public class Example1_errors {
 		if (xdoc.errors()) {
 			System.out.println("Errors detected:");
 			// print error messages
-			xdoc.printReports(System.err);
+			xdoc.printReports(System.out);
 		} else { // no errors
 			System.err.println("Errors not detected!");
 		}
 	}
 
 }
+

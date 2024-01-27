@@ -5,7 +5,7 @@ import org.xdef.sys.ReportWriter;
 import org.xdef.XDDocument;
 import org.xdef.XDFactory;
 import org.xdef.XDPool;
-import org.xdef.util.Xsd2Xdef;
+import org.xdef.util.XsdToXdef;
 import java.io.File;
 import java.io.IOException;
 import javax.xml.transform.Source;
@@ -88,7 +88,7 @@ public class TestXsd2XdConv extends XDTester {
 		String xdefFileName =
 			new File(_tempDir, testName + ".xdef").getAbsolutePath();
 		try {
-			Xsd2Xdef.genCollection(schemaFile.getAbsolutePath(),
+			XsdToXdef.genCollection(schemaFile.getAbsolutePath(),
 				xdefFileName, null, null);
 		} catch (IOException | RuntimeException ex) {
 			setMessage(new ErrMessage(

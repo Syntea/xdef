@@ -1,0 +1,18 @@
+<xd:def xmlns:xd	= "http://www.xdef.org/xdef/4.1" xd:root = "Contract" xd:name = "contract">
+  <Contract Number = "int()"
+            Date   = "date()" >
+     <Owner Name    = "string ()"
+            Company = "string ()" />
+  </Contract>
+
+  <xd:lexicon xmlns:xd = "http://www.xdef.org/xdef/4.1" xd:language = "eng" xd:default = "yes" />
+
+  <xd:lexicon xmlns:xd = "http://www.xdef.org/xdef/4.1" xd:language = "deu" >
+    contract#Contract =		Vertrag
+    contract#Contract/@Number =		Numer
+    contract#Contract/@Date =		Datum
+    contract#Contract/Owner =		Inhaber
+    contract#Contract/Owner/@Company =		Firma
+  </xd:lexicon>
+
+</xd:def>

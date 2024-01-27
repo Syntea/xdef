@@ -1,5 +1,6 @@
 package task1;
 
+import java.io.PrintStream;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.XDContainer;
@@ -9,18 +10,18 @@ import org.xdef.XDPool;
 import org.w3c.dom.Element;
 
 public class Order2 {
-	public static void main(String[] args) throws Exception {
-		// Compile X-definitions to XDPool
+	public static void main(String... args) throws Exception {
+		// Compile the X-definition source to variable
 		XDPool xpool = XDFactory.compileXD(null, "src/task1/Order2.xdef");
 
-		// Create instance of XDDocument object (from XDPool)
+		// Create an instance of the XDDocument object (from XDPool)
 		XDDocument xdoc = xpool.createXDDocument("Order");
 
-		// Create reporter
+		// Prepare the error reporter
 		ArrayReporter reporter = new ArrayReporter();
 
 		// Run validation mode (you can also try task1/input/Order_err.xml)
-		Element result = xdoc.xparse("task1/input/Order.xml", reporter);
+		Element result = xdoc.xparse("task1/input/Order_err.xml", reporter);
 
 		// Get Container with errors from the variable "errors" in X-definition.
 		XDContainer errors = (XDContainer) xdoc.getVariable("errors");
@@ -31,12 +32,14 @@ public class Order2 {
 			// The context is in the variable "errors"
 			result = xdoc.xcreate("Errors", null);
 			// write errors to the file
-			KXmlUtils.writeXml("task1/errors/Order_err.xml", result);
-			System.err.println("Incorrect input data");
+			KXmlUtils.writeXml("task1/errors/Order_err.xml", result); 
+			String s = xdoc.getVariable("errors").toString();
+			PrintStream ps = new PrintStream("task1/errors/Order_err.txt ");
+			ps.print(s);
+			ps.close(); 
+			System.out.println(s);
 		} else {
-			// No errors, write the processed document to the file
-			KXmlUtils.writeXml("task1/output/Order.xml", result);
-			System.out.println("OK");
+			System.err.println("No errors found");
 		}
 	}
 }

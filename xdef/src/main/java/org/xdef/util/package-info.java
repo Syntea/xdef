@@ -23,13 +23,13 @@
  * <H2><b>XCompose</b></H2>
  *  Composes the new XML from given source according to given X-definition.
  *  (see {@link org.xdef.util.XCompose#main(String[])}).
- * <H2><b>Xdef2Xsd</b></H2>
+ * <H2><b>XdefToXsd</b></H2>
  *  Create a XML schema document created from a set of X-definitions
  *  and/or collections.
- *  (see {@link org.xdef.util.Xdef2Xsd#main(String[])}).
- * <H2><b>Xsd2Xdef</b></H2>
+ *  (see {@link org.xdef.util.XdefToXsd#main(String[])}).
+ * <H2><b>XsdToXdef</b></H2>
  *  Create a X-definition from a XML schema.
- * (see {@link org.xdef.util.Xsd2Xdef#main(String[])}).
+ * (see {@link org.xdef.util.XsdToXdef#main(String[])}).
 * <H2><b>XValidate</b></H2>
  * Validates and processes the XML data according to given X-definition
  * (see {@link org.xdef.util.XValidate#main(String[])}).

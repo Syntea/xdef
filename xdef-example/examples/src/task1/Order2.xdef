@@ -1,4 +1,4 @@
-<xd:def xmlns:xd="http://www.xdef.org/xdef/3.2" name="Order" root="Order">
+<xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Order" root="Order">
 
 <xd:declaration>
  Container errors = []; /* The Container with error items. */

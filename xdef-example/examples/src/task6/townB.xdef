@@ -1,0 +1,7 @@
+<xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="B">
+<xd:component>
+  /* X-Components generated from the X-definition A */
+  %class task6.components1.City %link A#Town;
+  %class task6.components1.House %link A#House;
+</xd:component>
+</xd:def>

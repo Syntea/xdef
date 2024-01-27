@@ -16,7 +16,7 @@ public class Example5 {
 		// 1. Create XDPool
 		Properties props = System.getProperties();
 		XDPool xpool = XDFactory.compileXD(props, xdef);
-
+		
 		// 2. Create XDDocument
 		XDDocument xdoc = xpool.createXDDocument();
 
@@ -28,6 +28,6 @@ public class Example5 {
 
 		// 5. print it!
 		System.out.println(KXmlUtils.nodeToString(result, true));
-	}
+    }
 
 }

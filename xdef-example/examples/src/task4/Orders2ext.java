@@ -42,11 +42,12 @@ public class Orders2ext {
 		String s = xdata.getTextValue(); /* get attribute value. */
 		try {
 			/* Find the customer. */
-			XPathExpression xExpr = u._xp.compile("Customer[@CustomerCode='" + s + "']");
+			XPathExpression xExpr =
+				u._xp.compile("Customer[@CustomerCode='" + s + "']");
 			NodeList nl =
 				(NodeList) xExpr.evaluate(u._customers, XPathConstants.NODESET);
 			if (nl == null || nl.getLength() == 0) {
-				/* customer not found, increase erro counter and report an error. */
+				// the customer not found, increase error counter and report error.
 				u._errors++;
 				xdata.error("Incorrect customer code: " + s, null);
 				return false; /* returns false -> incorrect. */
@@ -62,14 +63,14 @@ public class Orders2ext {
 	public static boolean item(XXData xdata) {
 		/* Get the instance of this class. */
 		Orders2ext u = (Orders2ext) xdata.getUserObject();
-		String s = xdata.getTextValue(); /* get attribute value. */
+		String s = xdata.getTextValue(); /* get attribute value. */ 
 		try {
-			/* Find description of the Item according to code. */
+			/* Find the description of the Item according to the code. */
 			XPathExpression xExpr = u._xp.compile("Product[@Code='" + s + "']");
-			NodeList nl = (NodeList) xExpr.evaluate(
-				u._items, XPathConstants.NODESET);
+			NodeList nl =
+				(NodeList) xExpr.evaluate(u._items, XPathConstants.NODESET);
 			if (nl == null || nl.getLength() == 0) {
-				/* Item not found, increase the error counter and report an error. */
+				// Item not found, increase the error counter and report an error.
 				u._errors++;
 				xdata.error("Incorrect item number: " + s, null);
 				return false;
@@ -85,18 +86,18 @@ public class Orders2ext {
 	public static void writeObj(XXNode xnode) {
 		/* Get the instance of this class. */
 		Orders2ext u = (Orders2ext) xnode.getUserObject();
-		if (u._errors != u._errorsOld) {
-			/* an new error occured, do not write recore*/
-			u._errorsOld = u._errors; /* save error counter to "errorsOld". */
+		if (u._errors != u._errorsOld) { 
+			/* a new error occurs, do not write record */
+			u._errorsOld = u._errors; /* save error counter to "errorsOld" */
 		} else {
-			/* Check if this the first record. */
+			/* Check if this is the first record. */
 			if (u._count++ == 0) {
 				/* first time, so write the root element. */
-				u._output.setIndenting(true); /* nastaveni indentace na vystupu. */
+				u._output.setIndenting(true); /* set output indentation */ 
 				u._output.writeElementStart(
-				xnode.getElement().getOwnerDocument().getDocumentElement());
+				xnode.getElement().getOwnerDocument().getDocumentElement()); 
 			}
-			/* Prepare XDDocument for the construction according model "Order". */
+			/* Prepare XDDocument for the construction according to model "Order". */
 			XDDocument xdoc = u._xpool.createXDDocument("Orders");
 			xdoc.setUserObject(u);
 			Element el = xnode.getElement();
@@ -125,7 +126,7 @@ public class Orders2ext {
 		if (u._count != 0) {
 			/* Yes, close the stream. */
 			u._output.writeElementEnd();
-			u._output.closeStream();
+			u._output.closeStream(); 
 		}
 	}
 
@@ -138,14 +139,15 @@ public class Orders2ext {
 			/* Find the item description. */
 			XPathExpression xExpr = u._xp.compile("Product[@Code='" + s + "']");
 			/* We already know that it exists. */
-			NodeList nl = (NodeList) xExpr.evaluate(u._items, XPathConstants.NODESET);
+			NodeList nl =
+				(NodeList) xExpr.evaluate(u._items, XPathConstants.NODESET);
 			Element el1 = (Element) nl.item(0);
-			/* get qouantity as a number */
-			int pocet = Integer.parseInt(el.getAttribute("Quantity"));
+			/* get quantity as a number */
+			int count = Integer.parseInt(el.getAttribute("Quantity"));
 			/* compute price */
-			float cena = Float.parseFloat(el1.getAttribute("Price")) * pocet;
+			float price = Float.parseFloat(el1.getAttribute("Price")) * count;
 			/* Return it as a string */
-			return String.valueOf(cena);
+			return String.valueOf(price);
 		} catch (Exception ex) {return "-1"; /* this never should happen! */}
 	}
 }

@@ -14,7 +14,7 @@ public class GenDerby {
 		String derby = f.getAbsolutePath().replace('\\', '/');
 		DB_URL = "jdbc:derby:" + derby;
 	}
-
+	
 	/** Delete all files and subdirectories.
 	 * @param files files and directories to be cleared.
 	 */
@@ -31,7 +31,7 @@ public class GenDerby {
 			}
 		}
 	}
-
+	
 	/** Prepare derby database */
 	public static void prepare() {
 		File f = new File("./temp");
@@ -58,5 +58,5 @@ public class GenDerby {
 			throw new RuntimeException("Can't create database connection", ex);
 		}
 	}
-
+	
 }

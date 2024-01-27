@@ -1,8 +1,8 @@
-<xd:def xmlns:xd="http://www.xdef.org/xdef/3.2" name="Orders" root="Orders">
+<xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Orders" root="Orders">
 
 <xd:declaration>
   external Element products, /* information about products. */
-    customers; /* information about customers. */
+	customers; /* information about customers. */
   external XmlOutStream output; /* Output stream (set by the external program). */
 
   Container c; /* information about customer created by the method "customer". */
@@ -27,7 +27,7 @@
       /* Find the description of the item. */
       Container c = xpath('Product[@Code="' + s + '"]', products);
       if (c.getLength()==0) { /* Item found? */
-        /* Item not found, increase the error counter and report error. */
+        /* Item not found, increase the error counter and report the error. */
         errors++;
         return error("Incorrect item number: " + s);
       }
@@ -37,7 +37,7 @@
   /* Write order. */
   void writeObj() {
     if (errors != errorsOld || errorsOld1 != errors()) {
-      /* An error occured */
+      /* An error occurred */
       errorsOld = errors; /* save the counter to "errorsOld"; write nothing. */
       errorsOld1 = errors();
     } else {
@@ -47,7 +47,7 @@
          output.setIndenting(true); /* set output indentation. */
          output.writeElementStart(getRootElement());
       }
-      /* Create object from the context with the actual order and write it. */
+      /* Create an object from the context with the actual order and write it. */
       output.writeElement(xcreate('Order', getElement()));
     }
   }
@@ -61,14 +61,14 @@
     }
   }
 
-  /* Calculate the total cost of the item of a order. */
+  /* Calculate the total cost of the item of an order. */
   float price() {
     /* Get quantity */
     int number = parseInt(xpath("@Quantity")); /* Get quantity from the input data. */
     String code = from("@ProductCode"); /* Get commodity code from the input data. */
-    /* Find the product (we already know that it exists - see customer()). */
+    /* Find the product (we already know it exists - see customer()). */
     Element el1 = xpath('Product[@Code="' + code + '"]', products).getElement(0);
-    float price = parseFloat(el1.getAttr("Price")); /* get price of one product. */
+    float price = parseFloat(el1.getAttribute("Price")); /* get price of one product. */
     return price * number; /* Compute total cost and return it. */
   }
   uniqueSet checkObjId int();
@@ -76,7 +76,7 @@
 
 <Orders xd:script="finally output.close();" id="string(9)">
   <Order xd:script="occurs +; finally writeObj(); forget"
-      Number="checkObjId.ID()"
+      Number="checkObjId.ID()" 
       CustomerCode="customer()">
     <Item xd:script="occurs 1..100;" ProductCode="item()" Quantity="int"/>
   </Order>

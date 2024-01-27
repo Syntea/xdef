@@ -1,6 +1,0 @@
-<dropSchema name = "BOOKS">
-  <table name = "TITLE_AUTHOR"/>
-  <table name = "TITLE"/>
-  <table name = "AUTHOR"/>
-  <!--table name = "OSOBA"/-->
-</dropSchema>

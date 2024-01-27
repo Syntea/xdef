@@ -1,11 +1,10 @@
-<xd:def xmlns:xd="http://www.xdef.org/xdef/3.2" name="Order" root="Order">
+<xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Order" root="Order">
 
 <xd:declaration>
-  external method void task1.Order3_ext.err(XXNode, XDValue[]);
+  external method void task1.Order3ext.err(XXNode, XDValue[]);
 </xd:declaration>
 
-<Order
-  Number="int; onFalse err(1); onAbsence err(2);"
+<Order Number="int; onFalse err(1); onAbsence err(2);"
   CustomerCode="string; onAbsence err(3);">
 
   <DeliveryPlace xd:script="onAbsence err(11);">
@@ -18,7 +17,6 @@
   <Item xd:script="occurs 1..10; onAbsence err(21); onExcess err(22)"
     ProductCode="num(4); onFalse err(23); onAbsence err(24)"
     Quantity="int(1,1000); onFalse err(25); onAbsence err(26)"/>
-
 </Order>
 
 </xd:def>

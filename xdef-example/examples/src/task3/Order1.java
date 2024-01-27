@@ -8,11 +8,11 @@ import org.xdef.XDPool;
 import java.io.PrintStream;
 
 public class Order1 {
-	public static void main(String[] args) throws Exception {
-		// Compile X-definitions to XDPool
+	public static void main(String... args) throws Exception {
+		// Compile the X-definition source to the XDPool object
 		XDPool xpool = XDFactory.compileXD(null, "src/task3/Order1.xdef");
 
-		// Create the instance of XDDocument object (from XDPool)
+		// Create an instance of the XDDocument object (from XDPool)
 		XDDocument xdoc = xpool.createXDDocument("Order");
 
 		// set variables "products" and "customers"
@@ -30,10 +30,10 @@ public class Order1 {
 			// Print errors to the file
 			PrintStream ps = new PrintStream("task3/errors/Order_err.txt");
 			reporter.printReports(ps);
-			ps.close();
+			ps.close(); 
 			System.err.println("Incorrect input data");
 		} else {
-			// write porocessed document
+			// write processed document
 			KXmlUtils.writeXml("task3/output/Order_123.xml", xdoc.getElement());
 			System.out.println("OK");
 		}

@@ -3,7 +3,7 @@ import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import java.util.Properties;
 
-/** Validate XML with X-definition (no errors, input data are correct) */
+/** Validate XML with X-definition (no errors, input data are correct). */
 public class Example1 {
 
 	public static void main(String[] args) {

@@ -9,16 +9,16 @@ import java.io.PrintStream;
 import org.w3c.dom.Element;
 
 public class Order1 {
-	// Compile X-definitions to XDPool
+	// Compile the X-definition source to the static variable with the XDPool object
 	static final XDPool xpool = XDFactory.compileXD(null, "src/task1/Order1.xdef");
 
-	public static void main(String[] args) throws Exception {
-		// Create the instance of XDDocument object (from XDPool)
+	public static void main(String... args) throws Exception {
+		// Create an instance of the XDDocument object (from XDPool)
 		XDDocument xdoc = xpool.createXDDocument("Order");
-
-		// Create reporter
+		
+		// Prepare the error reporter
 		ArrayReporter reporter = new ArrayReporter();
-
+		
 		// Run validation mode (you can also try task1/input/Order_err.xml)
 		Element result = xdoc.xparse("task1/input/Order.xml", reporter);
 
@@ -27,7 +27,7 @@ public class Order1 {
 			// Print errors to the file
 			PrintStream ps = new PrintStream("task1/errors/Order_err.txt ");
 			reporter.printReports(ps);
-			ps.close();
+			ps.close(); 
 			System.err.println("Incorrect input data");
 		} else {
 			// No errors, write the processed document to the file

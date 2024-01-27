@@ -1,9 +1,9 @@
-<xd:def xmlns:xd="http://www.xdef.org/xdef/3.2" name="Orders" root="Orders">
+<xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Orders" root="Orders">
 
 <Orders id="num(9)">
   <Order xd:script="occurs +; forget"
     Number="int"
-    CustomerCode="string(1,20)">
+    CustomerCode="string(1,20)">		
     <DeliveryPlace>
       <Address Street="string(2,100)"
         House="int(1,9999)"

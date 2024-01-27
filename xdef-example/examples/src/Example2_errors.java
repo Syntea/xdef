@@ -28,12 +28,9 @@ public class Example2_errors {
 		// 4. test if an error was reported
 		if (xdoc.errorWarnings()) {
 			// print errors
-			xdoc.printReports(System.err);
-		} else { // no errors
-			// print results from variables
-			System.out.println("Company name: " + el.getAttribute("name"));
-			System.out.println("Employees: " + xdoc.getVariable("count"));
-			System.out.println("Total salary: " + xdoc.getVariable("salary"));
+			xdoc.printReports(System.out);
+		} else { // no errors => error
+			System.err.println("Errors not detected");
 		}
 	}
 

@@ -9,32 +9,31 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 
 public class Orders1 {
-	public static void main(String[] args) throws Exception {
-		// Compile X-definitions to XDPool
+	public static void main(String... args) throws Exception {
+		// Compile the X-definition source to the XDPool object
 		XDPool xpool = XDFactory.compileXD(null, "src/task2/Orders1.xdef");
 
-		// Create the instance of XDDocument object (from XDPool)
+		// Create an instance of the XDDocument object (from XDPool)
 		XDDocument xdoc = xpool.createXDDocument("Orders");
-
-		// The file where to rite result
-		File vystup = new File("task2/output/Orders.xml");
-		OutputStream out = new FileOutputStream(vystup);
+		
+		// The file where to write the result
+		OutputStream out = new FileOutputStream("task2/output/Orders.xml");
 		xdoc.setStreamWriter(out, "UTF-8", true);
 
 		// The file with errors
-		File chyby = new File("task2/errors/Orders_err.txt");
+		File errors = new File("task2/errors/Orders_err.txt");
 
-		// Prepasre the error reporter (write error directly to the file)
-		FileReportWriter reporter = new FileReportWriter(chyby);
-
+		// Prepare the error reporter
+		FileReportWriter reporter = new FileReportWriter(errors);
+		
 		// Run validation mode (you can also try task2/input/Order_err.xml)
 		xdoc.xparse("task2/input/Orders.xml", reporter);
-
+		
 		// close the output stream.
 		out.close();
 		reporter.close();
-
-		// Check if errors reported
+		
+		// Check if an error was reported
 		if (reporter.errorWarnings()) {
 			System.err.println("Incorrect input data");
 		} else {

@@ -1,8 +1,8 @@
-<xd:def xmlns:xd="http://www.xdef.org/xdef/3.2" name="Orders" root="Orders">
+<xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Orders" root="Orders">
 
 <xd:declaration>
 <![CDATA[
-  /* File names of files with constomers and commodity oodes. */
+  /* File names of files with customers and commodity codes. */
   external String outFile, errFile;
   int errCount = 0, errCountOld = 0, count = 0;
   XmlOutStream outStream, errStream;
@@ -11,32 +11,32 @@
   void err(int code) {
     if (errCount++ == 0) {
       errStream = new XmlOutStream(errFile);
-      /* Document header and start of the root element */
-      errStream.writeElementStart(new Element("Errors"));
+	  /* Document header and start of the root element */
+      errStream.writeElementStart(new Element("Errors")); 
     }
-    Element e = new Element('Error'); /* Pripravime element. */
+    Element e = new Element('Error'); /* prepare element. */
     /* Set attributes. */
-    e.setAttr("Customer", xpath("/Orders/Order/@CustomerCode").toString());
-    e.setAttr("ErrorCode", toString(code));
-    e.setAttr("Line", toString(getSourceLine()));
-    e.setAttr("Column", toString(getSourceColumn()));
-    errStream.writeElement(e); /* Write the element with error information */
+    e.setAttribute("Customer", xpath("/Orders/Order/@CustomerCode").toString());
+    e.setAttribute("ErrorCode", toString(code));
+    e.setAttribute("Line", toString(getSourceLine()));
+    e.setAttribute("Column", toString(getSourceColumn()));
+    errStream.writeElement(e); /* write the element with error information */
   }
-
+  
   /* Write result */
   void writeResult() {
-    if (errCount != errCountOld) { /* V objednavce byla chyba */
-      errCountOld = errCount; /* Save number of errors, to know in new error occurred */
+    if (errCount != errCountOld) { /* error in order */
+      errCountOld = errCount; /* save the number of errors, to know if a new error occurred */
       return; /* write nothing */
     }
     if (count++ == 0) {
       /* this is the first item*/
-      outStream = new XmlOutStream(outFile, "windows-1250"); /* Prepare data stream */
-      outStream.writeElementStart(getRootElement()); /* Write document header and root element */
+      outStream = new XmlOutStream(outFile, "windows-1250"); /* prepare data stream */
+      outStream.writeElementStart(getRootElement()); /* write document header and root element */
     }
     outStream.writeElement(getElement()); /* write the processed order */
   }
-
+  
   /* Close the output stream and the file with errors */
   void closeAll() {
     if (errCount > 0) { /* check if errors were reported */
@@ -51,8 +51,8 @@
 ]]>
 </xd:declaration>
 
-<Orders xd:script="finally closeAll();"
-    id="num(9); onFalse err(98)">
+<Orders id="num(9); onFalse err(98)"
+    xd:script="finally closeAll();">
   <Order xd:script = "occurs +; onAbsence err(99); finally writeResult()"
     Number="int; onFalse err(1); onAbsence err(2);"
     CustomerCode="string; onAbsence err(3);">
@@ -64,7 +64,7 @@
     </DeliveryPlace>
     <Item xd:script="occurs 1..10; onAbsence err(21); onExcess err(22)"
       ProductCode="num(4); onFalse err(23); onAbsence err(24)"
-      Quantity="int(1,1000); onFalse err(25); onAbsence err(26)"/>
+      Quantity="int(1,1000); onFalse err(25); onAbsence err(26)"/>		
   </Order>
 </Orders>
 

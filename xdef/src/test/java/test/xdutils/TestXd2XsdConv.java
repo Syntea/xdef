@@ -8,7 +8,7 @@ import org.xdef.XDDocument;
 import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.xdef.impl.util.gencollection.XDGenCollection;
-import org.xdef.util.Xdef2Xsd;
+import org.xdef.util.XdefToXsd;
 import java.io.File;
 import java.util.Properties;
 import java.io.IOException;
@@ -131,7 +131,7 @@ public class TestXd2XsdConv extends XDTester {
 		}
 		//generate schema
 		try {
-			Xdef2Xsd.genSchema(_xdefFile.getAbsolutePath(),
+			XdefToXsd.genSchema(_xdefFile.getAbsolutePath(),
 				schemaDir.getAbsolutePath(), null, null, null);
 		} catch (Exception ex) {
 			displayFiles(_xdefFile);

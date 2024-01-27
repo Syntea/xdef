@@ -15,6 +15,9 @@ public class Example1_listing {
 
 		// 1. Create XDPool.
 		Properties props = System.getProperties();
+		// if you want to get correct positions of values of attributes
+		// set following property (see XDConstants.XDPROPERTY_LOCATIONDETAILS):
+		props.setProperty("xdef_locationsdetails", "true");
 		XDPool xpool = XDFactory.compileXD(props, xdef);
 
 		// 2. Create XDDocument.

@@ -1,4 +1,5 @@
-<xd:def  xmlns:xd="http://www.xdef.org/xdef/3.2" root="company">
+<?xml version='1.0' encoding='UTF-8' ?>
+<xd:def  xmlns:xd="http://www.xdef.org/xdef/4.1" root="company">
 <xd:declaration> external Element source;</xd:declaration>
 <company>
   <employee xd:script="*; create from(source,'//employee')">

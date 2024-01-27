@@ -1,4 +1,4 @@
-<xd:def xmlns:xd="http://www.xdef.org/xdef/3.2" name="Orders" root="Orders">
+<xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" name="Orders" root="Orders">
 
 <xd:declaration>
   external method void task2.Orders3ext.writeOrder(XXNode);

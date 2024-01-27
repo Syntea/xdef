@@ -4,8 +4,8 @@ import org.xdef.sys.SUtils;
 import org.xdef.XDDocument;
 import org.xdef.XDFactory;
 import org.xdef.XDPool;
-import org.xdef.util.Xdef2Xsd;
-import org.xdef.util.Xsd2Xdef;
+import org.xdef.util.XdefToXsd;
+import org.xdef.util.XsdToXdef;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -112,7 +112,7 @@ public class CheckSchemaAndXdef {
 			}
 		}
 		try {
-			Xdef2Xsd.genSchema(xdefs,
+			XdefToXsd.genSchema(xdefs,
 				schemaDir.getAbsolutePath(),
 				xdName,
 				model,
@@ -140,7 +140,7 @@ public class CheckSchemaAndXdef {
 		}
 		if (chkReverseOption()) {
 			try {
-				Xsd2Xdef.main(
+				XsdToXdef.main(
 					"-in", schemaDir.getAbsolutePath() + "/" + xdName + ".xsd",
 					"-out", schemaDir.getAbsolutePath() + "/" + xdName + ".xd");
 				XDPool xp = XDFactory.compileXD(null,
@@ -244,7 +244,7 @@ public class CheckSchemaAndXdef {
 			} catch (Exception ex) {}
 		}
 		try {
-			Xdef2Xsd.genSchema(xdefs,
+			XdefToXsd.genSchema(xdefs,
 				schemaDir.getAbsolutePath(),
 				xdName,
 				model,
@@ -271,7 +271,7 @@ public class CheckSchemaAndXdef {
 		} catch (Exception ex) {}
 		if (chkReverseOption()) {
 			try {
-				Xsd2Xdef.main(
+				XsdToXdef.main(
 					"-in", schemaDir.getAbsolutePath() + "/" + xdName + ".xsd",
 					"-out", schemaDir.getAbsolutePath() + "/" + xdName + ".xd");
 				XDPool xp = XDFactory.compileXD(null,

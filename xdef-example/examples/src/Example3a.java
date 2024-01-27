@@ -4,7 +4,7 @@ import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.w3c.dom.Element;
 
-/** Construct XML element from source XML data; set context to the external
+/** Construct XML element from source XML data; set context to the external 
  variable
  */
 public class Example3a {

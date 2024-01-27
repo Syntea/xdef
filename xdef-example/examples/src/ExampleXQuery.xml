@@ -1,0 +1,40 @@
+<forest>
+  <animals>
+    <insect family="anteatersí" anthill="nexToStrawberry">
+      <genus>ant</genus>
+      <caste>queen</caste>
+    </insect>
+    <insect family="anteatersí" anthill="nexToStrawberry">
+      <genus>ant</genus>
+      <caste>samec</caste>
+    </insect>
+    <insect family="anteatersí" anthill="nexToStrawberry">
+      <genus>ant</genus>
+      <caste>samec</caste>
+    </insect>
+    <insect family="anteatersí" anthill="nexToStrawberry">
+      <genus>ant</genus>
+      <caste>soldier</caste>
+    </insect>
+    <insect family="anteatersí" anthill="underSpruce">
+      <genus>ant</genus>
+      <caste>kralovna</caste>
+    </insect>
+    <insect family="anteatersí" anthill="underSpruce">
+      <genus>ant</genus>
+      <caste>soldier</caste>
+    </insect>
+    <insect family="anteatersí" anthill="underSpruce">
+      <genus>ant</genus>
+      <caste>soldier</caste>
+    </insect>
+    <insect family="anteatersí" anthill="underSpruce">
+      <genus>ant</genus>
+      <caste>soldier</caste>
+    </insect>
+  </animals>
+  <objects>
+    <anthill name="nexToStrawberry" />
+    <anthill name="underSpruce" />
+  </objects>
+</forest>
