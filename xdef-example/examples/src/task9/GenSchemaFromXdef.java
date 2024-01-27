@@ -7,18 +7,16 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import org.xdef.sys.FUtils;
-import org.xdef.util.Xdef2Xsd;
+import org.xdef.util.XdefToXsd;
 import org.xml.sax.SAXException;
 
-/** Generate XML schema from X-definition.
- * @author Trojan
- */
+/** Generate XML schema from X-definition.*/
 public class GenSchemaFromXdef {
 	
 	public static void main(final String... args) throws Exception {
 
 		// 1. create XML schema from X-defiontion
-		Xdef2Xsd.main(
+		XdefToXsd.main(
 			"-i", "task9/input/Town.xdef", // input file with X-definition
 			"-o", "task9/output", // directory where to create XML schema
 			"-m", "Town", // name of model in X-definition
@@ -57,9 +55,9 @@ public class GenSchemaFromXdef {
 				SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
 			Schema schema = xsdFactory.newSchema(new File(xsName));
 			schema.newValidator().validate(source);
-			return "";
+			return ""; // OK
 		} catch (IOException | SAXException ex) {
-			return ex.getMessage();
+			return ex.getMessage(); // not valid
 		}
 	}
 }

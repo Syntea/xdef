@@ -7,7 +7,7 @@ import org.xdef.xml.KXmlUtils;
 import org.xdef.XDDocument;
 import org.xdef.XDFactory;
 import org.xdef.XDPool;
-import org.xdef.impl.util.gencollection.XDGenCollection;
+//import org.xdef.impl.util.gencollection.XDGenCollection;
 import org.xdef.util.XdefToXsd;
 import java.io.File;
 import java.util.Properties;
@@ -18,8 +18,10 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 import org.w3c.dom.Element;
+import org.xdef.impl.util.gencollection.XDGenCollection;
 import org.xdef.sys.SException;
 import static org.xdef.sys.STester.runTest;
+import org.xdef.util.GenCollection;
 import org.xml.sax.SAXException;
 import test.XDTester;
 
@@ -136,7 +138,7 @@ public class TestXd2XsdConv extends XDTester {
 		} catch (Exception ex) {
 			displayFiles(_xdefFile);
 			try {
-				Element el = XDGenCollection.genCollection(
+				Element el = GenCollection.genCollection(
 					new String[]{_xdefFile.getAbsolutePath()}, true,true,true);
 				System.err.println(KXmlUtils.nodeToString(el, true));
 			} catch (Exception exx) {}

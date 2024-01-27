@@ -4,11 +4,9 @@ import java.io.File;
 import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.xdef.sys.FUtils;
-import org.xdef.util.Xsd2Xdef;
+import org.xdef.util.XsdToXdef;
 
-/** Generate XML schema from X-definition.
- * @author Trojan
- */
+/** Generate XML schema from X-definition.*/
 public class GenXdefFromSchema {
 	
 	public static void main(final String... args) throws Exception {
@@ -17,7 +15,7 @@ public class GenXdefFromSchema {
 			GenSchemaFromXdef.main(); // generate X-definition
 		}
 		// 2. create XML schema from X-defiontion
-		Xsd2Xdef.main(
+		XsdToXdef.main(
 			"-i", "task9/output/main.xs", // input XML schema file (fro previous step)
 			"-o", "task9/output/main.xdef"); // where to create XML schema
 
@@ -52,9 +50,9 @@ public class GenXdefFromSchema {
 		try { //check XML data with X-definition
 			XDPool xp = XDFactory.compileXD(null, xdName);
 			xp.createXDDocument().xparse(xmlName, null);
-			return "";
+			return ""; // OK
 		} catch (RuntimeException ex) {
-			return ex.getMessage();
+			return ex.getMessage(); // not valid
 		}
 	}
 }
