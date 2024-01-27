@@ -225,10 +225,10 @@ public class XsdToXdef {
 	/** Run class from command line.
 	 * @param args array of string with command line arguments:
 	 * <ul>
-	 * <li>-in, --input
+	 * <li>-i, --input
 	 * <p> &lt;PATH&gt; input main schema location.</p>
 	 * </li>
-	 * <li>-out, --output
+	 * <li>-o, --output
 	 * <p> &lt;PATH&gt; output file or directory.</p>
 	 * </li>
 	 * <li>-s, --output
