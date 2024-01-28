@@ -45,11 +45,7 @@ public class Schema_1_0_Processor extends Processor {
 		_reporter = reporter;
 		_separately = separately;
 		_xdef = new XdefDocument(_schemaElements,
-/*XXVT*/
-			xdefPrefix, XDConstants.XDEF32_NS_URI, _separately);
-/*XXVT*
 			xdefPrefix, XDConstants.XDEF42_NS_URI, _separately);
-/*XXVT*/
 		processSchemaElements(_xdef.getXdefElements());
 	}
 	@Override

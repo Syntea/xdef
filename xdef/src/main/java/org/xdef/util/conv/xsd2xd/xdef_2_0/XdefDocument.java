@@ -17,6 +17,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import org.w3c.dom.*;
+import org.xdef.XDConstants;
 
 /** Represents X-definition document and provides methods for manipulating with
  * X-definition document. Contains table with X-definition elements and table
@@ -471,11 +472,14 @@ public class XdefDocument implements Convertor {
 		String name,
 		String declaration) {
 		Element element = addXdefElement(defElement, XdNames.DECLARATION);
-/*VT2*/
-		if (declaration.isEmpty()) {
+		if (XDConstants.XDEF40_NS_URI.equals(_xdefNamespaceURI)
+			|| XDConstants.XDEF41_NS_URI.equals(_xdefNamespaceURI)
+			|| XDConstants.XDEF42_NS_URI.equals(_xdefNamespaceURI)) {
+			element.setAttribute("scope", "global");
+		}
+		if (declaration.isEmpty()) { //???
 			declaration = "string()";
 		}
-/*VT2*/
 		Text text = defElement.getOwnerDocument().createTextNode("type "
 			+ name + " " + declaration + ";");
 		element.appendChild(text);
