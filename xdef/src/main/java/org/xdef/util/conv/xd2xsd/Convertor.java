@@ -18,7 +18,7 @@ public abstract class Convertor {
 
 	/** Creates instance of convertor.
 	 * @param reporter reporter for reporting warnings and errors.
-	 * @throws NullPointerException if given reporter is <tt>null</tt>.
+	 * @throws NullPointerException if given reporter is null.
 	 */
 	public Convertor(SReporter reporter) {
 		if (reporter == null) {
@@ -40,6 +40,7 @@ public abstract class Convertor {
 	 * @param reporter reporter for reporting warnings and errors.
 	 * @param schemaFileExt extension for schema files.
 	 * @return proper implementation of convertor.
+	 * @param genDocumentation if true documentation is generated.
 	 * @throws IllegalStateException if given combination of X-definition and
 	 * schema version is not supported.
 	 */
@@ -47,9 +48,10 @@ public abstract class Convertor {
 		XsdVersion schemaVersion,
 		String schemaPrefix,
 		SReporter reporter,
-		String schemaFileExt) {
+		String schemaFileExt,
+		boolean genDocumentation) {
 		XdDoc_2_0 xdDoc_2_0 = (XdDoc_2_0) xdDoc;
 		return new Xd_2_0_to_Xsd_1_0(xdDoc_2_0,
-			reporter, schemaPrefix, schemaFileExt);
+			reporter, schemaPrefix, schemaFileExt, genDocumentation);
 	}
 }

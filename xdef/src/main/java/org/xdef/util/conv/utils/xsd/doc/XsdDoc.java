@@ -13,14 +13,18 @@ public abstract class XsdDoc {
 	protected final String _schemaFileExt;
 	/** Schema nodes namespace prefix. */
 	protected final String _schemaPrefix;
+	/** Swith to generate documentation. */
+	protected final boolean _genDocumentation;
 
 	/** Creates instance of XML Schema document representation.
 	 * @param reporter reporter for reporting warnings and errors.
 	 * @param schemaFileExt schema files extension.
 	 * @param schemaPrefix schema nodes namespace prefix.
+	 * @param genDocumentation if true documentation is generated.
 	 */
-	public XsdDoc(SReporter reporter,String schemaFileExt,
-			String schemaPrefix) {
+	public XsdDoc(SReporter reporter, String schemaFileExt,
+		String schemaPrefix,
+		boolean genDocumentation) {
 		if (reporter == null) {
 			throw new NullPointerException("Given reporter is null!");
 		}
@@ -39,6 +43,7 @@ public abstract class XsdDoc {
 		} else {
 			_schemaPrefix = schemaPrefix;
 		}
+		_genDocumentation = genDocumentation;
 	}
 
 	/** Creates schema node qualified name according to schema nodes prefix.

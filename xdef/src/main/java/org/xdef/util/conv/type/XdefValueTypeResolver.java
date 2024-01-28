@@ -26,7 +26,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 import org.w3c.dom.Element;
-import org.xdef.xml.KXmlUtils;
 
 /** Provides functionality for resolving value type declarations.
  * @author Ilia Alexandrov
@@ -95,7 +94,7 @@ public class XdefValueTypeResolver {
 	 * @param xsdDoc schema document representation.
 	 * @param xdModelXsdModelMap map of X-definition models mapped to schema models.
 	 * @throws NullPointerException if X-definition document, schema document
-	 * or models map is <tt>null</tt>.
+	 * or models map is null.
 	 */
 	public XdefValueTypeResolver(XdDoc_2_0 xdDoc,
 		XsdDoc_1_0 xsdDoc,
@@ -114,7 +113,7 @@ public class XdefValueTypeResolver {
 	/** Get qualified name of given type.
 	 * @param type type to get qualified name of.
 	 * @param contextElem context element (needed only for OtherType).
-	 * @return qualified name of given type or <tt>null</tt>.
+	 * @return qualified name of given type or null.
 	 */
 	private String getTypeQName(ValueType type, Element contextElem) {
 		switch (type.getKind()) {
@@ -149,7 +148,7 @@ public class XdefValueTypeResolver {
 	/** Returns qualified name of given X-definition type if type can be
 	 * declared as string reference.
 	 * @param xdefType X-definition type to get qualified name.
-	 * @return qualified name or <tt>null</tt>.
+	 * @return qualified name or null.
 	 */
 	private String getXdefTypeQName(XdefType xdefType) {
 		XdefBase base = xdefType.getBase();
@@ -174,7 +173,7 @@ public class XdefValueTypeResolver {
 
 	/** Returns qualified name of given schema type if it is possible.
 	 * @param xsdType schema type to get qualified name of.
-	 * @return type quailifed name or <tt>null</tt>.
+	 * @return type quailifed name or null.
 	 */
 	private String getXsdTypeQName(XsdRestricted xsdType) {
 		if (xsdType.getBase() == null && xsdType.getEnumerations().isEmpty()
@@ -213,7 +212,7 @@ public class XdefValueTypeResolver {
 	/** Returns X-definition declaration model if given type is reference to
 	 * declaration.
 	 * @param type type to test.
-	 * @return declaration model or <tt>null</tt>.
+	 * @return declaration model or null.
 	 */
 	public XdDecl getXdDecl(ValueType type) {
 		if (ValueType.OTHER == type.getKind()) {
@@ -225,8 +224,8 @@ public class XdefValueTypeResolver {
 		return null;
 	}
 
-	/** Creates schema <tt>simpleType</tt> model with given name according
-	 * to given type and adds declaration to ancestor schema <tt>schema</tt>
+	/** Creates schema simpleType model with given name according
+	 * to given type and adds declaration to ancestor schema schema
 	 * element of given context element.
 	 * @param type type to add.
 	 * @param sTypeName simple type name.
@@ -258,9 +257,9 @@ public class XdefValueTypeResolver {
 	}
 
 	/** Resolves attribute type and adds proper declaration to given schema
-	 * <tt>attribute</tt> element.
+	 * attribute element.
 	 * @param typeDecl attribute type declaration string.
-	 * @param attrElem schema <tt>attribute</tt> element to add declaration to.
+	 * @param attrElem schema attribute element to add declaration to.
 	 */
 	public void resolveAttrType(String typeDecl, Element attrElem) {
 		//type declaration is empty => anySimpleType
@@ -278,9 +277,9 @@ public class XdefValueTypeResolver {
 		}
 	}
 
-	/** Adds given type declaration to given schema <tt>element</tt> element.
+	/** Adds given type declaration to given schema element element.
 	 * @param type type string to parse and add.
-	 * @param elemElement schema <tt>element</tt> element to add type
+	 * @param elemElement schema element element to add type
 	 * declaration to.
 	 * @throws RuntimeException if could not parse type string.
 	 */
@@ -294,9 +293,9 @@ public class XdefValueTypeResolver {
 		resolveElemType(parsedType, elemElement);
 	}
 
-	/** Adds given type declaration to given schema <tt>element</tt> element.
+	/** Adds given type declaration to given schema element element.
 	 * @param type type to add.
-	 * @param elemElement schema <tt>element</tt> element to add type
+	 * @param elemElement schema element element to add type
 	 * declaration to.
 	 */
 	public void resolveElemType(ValueType type, Element elemElement) {
@@ -336,9 +335,9 @@ public class XdefValueTypeResolver {
 		}
 	}
 
-	/** Adds given type to given schema <tt>simpleType</tt> element.
+	/** Adds given type to given schema simpleType element.
 	 * @param type type to add.
-	 * @param sTypeElem schema <tt>simpleType</tt> element to add type to.
+	 * @param sTypeElem schema simpleType element to add type to.
 	 * @throws IllegalArgumentException if given type is unknown.
 	 */
 	private void addTypeToSType(ValueType type, Element sTypeElem) {
@@ -406,7 +405,7 @@ public class XdefValueTypeResolver {
 
 	/** Adds proper schema elements to add given X-definition type to given
 	 * schema context element. If it is possible, type will be added as
-	 * qualified name to <tt>type</tt> attribute to given schema context element.
+	 * qualified name to type attribute to given schema context element.
 	 * @param xdefType X-definition type to add.
 	 * @param contextElem schema context element to add declaration to.
 	 */
@@ -421,12 +420,12 @@ public class XdefValueTypeResolver {
 		addXdefTypeToSType(xdefType, sTypeElem);
 	}
 
-	/** Adds schema <tt>restriction</tt> element and facet elements to
-	 * given <tt>simpleType</tt> element if needed according to given
+	/** Adds schema restriction element and facet elements to
+	 * given simpleType element if needed according to given
 	 * X-definition type.
 	 * @param xdefType X-definition type to add.
-	 * @param simpleTypeElem schema <tt>simpleType</tt> element to add
-	 * <tt>restriction</tt> element to.
+	 * @param simpleTypeElem schema simpleType element to add
+	 * restriction element to.
 	 */
 	private void addXdefTypeToSType(XdefType xdefType, Element simpleTypeElem){
 		_xsdDoc.addDocumentation(simpleTypeElem, xdefType.getTypeString());
@@ -1194,8 +1193,8 @@ public class XdefValueTypeResolver {
 	}
 
 	/** Adds given schema type to given schema context element. If it is
-	 * possible adds type as <tt>type</tt> attribute, otherwise as child
-	 * <tt>simpleType</tt> element.
+	 * possible adds type as type attribute, otherwise as child
+	 * simpleType element.
 	 * @param xsdType schema type to add.
 	 * @param contextElem schema context element to add type declaration to.
 	 */
@@ -1210,9 +1209,9 @@ public class XdefValueTypeResolver {
 		addXsdTypeToSType(xsdType, sTypeElem);
 	}
 
-	/** Adds given schema type to given schema <tt>simpleType</tt> element.
+	/** Adds given schema type to given schema simpleType element.
 	 * @param xsdType schema type to add.
-	 * @param sTypeElem schema <tt>simpleType</tt> element to add type to.
+	 * @param sTypeElem schema simpleType element to add type to.
 	 */
 	private void addXsdTypeToSType(XsdRestricted xsdType, Element sTypeElem) {
 		_xsdDoc.addDocumentation(sTypeElem, xsdType.getTypeString());
@@ -1286,10 +1285,10 @@ public class XdefValueTypeResolver {
 		}
 	}
 
-	/** Adds schema <tt>simpleType</tt> element according to given schema list
+	/** Adds schema simpleType element according to given schema list
 	 * type to given schema context.
 	 * @param xsdList schema list type to add.
-	 * @param contextElem schema context element to add <tt>simpleType</tt>
+	 * @param contextElem schema context element to add simpleType
 	 * element to.
 	 */
 	private void addXsdList(XsdList xsdList, Element contextElem) {
@@ -1297,11 +1296,11 @@ public class XdefValueTypeResolver {
 		addXsdListToSType(xsdList, sTypeElem);
 	}
 
-	/** Adds schema <tt>list</tt> element to given schema <tt>simpleType</tt>
+	/** Adds schema list element to given schema simpleType
 	 * element according to given schema list type.
 	 *
 	 * @param xsdList schema list type to add.
-	 * @param sTypeElem schema <tt>simpleType</tt> to add list type to.
+	 * @param sTypeElem schema simpleType to add list type to.
 	 */
 	private void addXsdListToSType(XsdList xsdList, Element sTypeElem) {
 		_xsdDoc.addDocumentation(sTypeElem, xsdList.getTypeString());
@@ -1350,10 +1349,10 @@ public class XdefValueTypeResolver {
 		}
 	}
 
-	/** Adds schema <tt>list</tt> element to given schema <tt>simpleType</tt>
+	/** Adds schema list element to given schema simpleType
 	 * element according to given schema list type.
 	 * @param xsdList schema list type to add.
-	 * @param sTypeElem schema <tt>simpleType</tt> element to add <tt>list<tt>
+	 * @param sTypeElem schema simpleType element to add list
 	 * element to.
 	 */
 	private void addList(XsdList xsdList, Element sTypeElem) {
@@ -1367,10 +1366,10 @@ public class XdefValueTypeResolver {
 		addTypeToSType(xsdList.getValueType(), itemTypeSTypeElem);
 	}
 
-	/** Adds schema <tt>simpleType</tt> element to given schema context element
+	/** Adds schema simpleType element to given schema context element
 	 * according to given schema union type.
 	 * @param xsdUnion schema union type to add.
-	 * @param contextElem schema context element to add <tt>simpleType</tt>
+	 * @param contextElem schema context element to add simpleType
 	 * element.
 	 */
 	private void addXsdUnion(XsdUnion xsdUnion, Element contextElem) {
@@ -1378,10 +1377,10 @@ public class XdefValueTypeResolver {
 		addXsdUnionToSType(xsdUnion, sTypeElem);
 	}
 
-	/** Adds schema <tt>union</tt> element to given schema <tt>simpleType</tt>
+	/** Adds schema union element to given schema simpleType
 	 * element according to given union type.
 	 * @param xsdUnion schema union type to add.
-	 * @param sTypeElem schema <tt>simpleType</tt> element to add union type to.
+	 * @param sTypeElem schema simpleType element to add union type to.
 	 */
 	private void addXsdUnionToSType(XsdUnion xsdUnion, Element sTypeElem) {
 		_xsdDoc.addDocumentation(sTypeElem, xsdUnion.getTypeString());
@@ -1409,7 +1408,7 @@ public class XdefValueTypeResolver {
 		}
 	}
 
-	/** Sets schema <tt>type</tt> attribute to qualified name of given other
+	/** Sets schema type attribute to qualified name of given other
 	 * type.
 	 * @param otherType other type to add.
 	 * @param contextElem schema context element to add type to.
@@ -1420,7 +1419,6 @@ public class XdefValueTypeResolver {
 	}
 
 	private void addOtherTypeToSType(Other otherType, Element sTypeElem) {
-		//todo add documentation
 		_xsdDoc.addDocumentation(sTypeElem, otherType.getTypeString());
 		_xsdDoc.addRestrictionDecl(sTypeElem,
 			getOtherTypeQName(otherType, sTypeElem));
@@ -1449,10 +1447,10 @@ public class XdefValueTypeResolver {
 		return ret.toString();
 	}
 
-	/** Returns <tt>true</tt> if given character is character, that has to be
+	/** Returns true if given character is character, that has to be
 	 * escaped in schema patterns.
 	 * @param ch character to test.
-	 * @return <tt>true</tt> if given character is character, that has to be
+	 * @return true if given character is character, that has to be
 	 * escaped in schema patterns.
 	 */
 	private boolean isEscapeChar(char ch) {
@@ -1460,10 +1458,10 @@ public class XdefValueTypeResolver {
 	}
 
 	/** Returns escaped string of special characters for schema patterns or
-	 * <tt>null</tt> if character does not have to be escaped.
+	 * null if character does not have to be escaped.
 	 * @param ch character to get escaped string from.
 	 * @return escaped string of special characters for schema patterns or
-	 * <tt>null</tt> if character does not have to be escaped.
+	 * null if character does not have to be escaped.
 	 */
 	private String getEscapeString(char ch) {
 		if (isEscapeChar(ch)) {
@@ -1475,9 +1473,9 @@ public class XdefValueTypeResolver {
 	}
 
 	/** Returns XML Schema pattern for case insensitive character
-	 * or <tt>null</tt>.
+	 * or null.
 	 * @param ch character to get case insensitive string.
-	 * @return pattern for case insensitive character or <tt>null</tt>.
+	 * @return pattern for case insensitive character or null.
 	 */
 	private String getCaseInsensitive(char ch) {
 		String ret = "[";

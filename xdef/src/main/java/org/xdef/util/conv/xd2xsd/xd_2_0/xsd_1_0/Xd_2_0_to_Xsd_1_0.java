@@ -33,7 +33,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Document;
-import org.xdef.xml.KXmlUtils;
 
 /** Represents implementation of convertor that converts X-definition 2.0 to
  * XML Schema 1.0.
@@ -57,17 +56,20 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 	 * @param reporter reporter for reporting warnings and errors.
 	 * @param schemaPrefix prefix for schema nodes.
 	 * @param schemaFileExt file extension for schema files.
+	 * @param genDocumentation if true documentation is generated.
 	 */
 	public Xd_2_0_to_Xsd_1_0(XdDoc_2_0 xdDoc,
 		SReporter reporter,
 		String schemaPrefix,
-		String schemaFileExt) {
+		String schemaFileExt,
+		boolean genDocumentation) {
 		super(reporter);
 		if (xdDoc == null) {
 			throw new NullPointerException("X-definition document is null");
 		}
 		_xdDoc = xdDoc;
-		_xsdDoc = new XsdDoc_1_0(reporter, schemaFileExt, schemaPrefix);
+		_xsdDoc = new XsdDoc_1_0(
+			reporter, schemaFileExt, schemaPrefix, genDocumentation);
 		_models = _xsdDoc.init(xdDoc);
 		_typeResolver = new XdefValueTypeResolver(_xdDoc, _xsdDoc, _models);
 		process();
@@ -143,9 +145,9 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 		_procModel.pop();
 	}
 
-	/** Processes given X-definition <tt>any</tt> declaration element and adds
+	/** Processes given X-definition any declaration element and adds
 	 * declaration to given schema context element.
-	 * @param anyElem X-definition <tt>any</tt> declaration element.
+	 * @param anyElem X-definition any declaration element.
 	 * @param schemaContext schema context element to add declaration to.
 	 */
 	private void processAny(final Element anyElem, Element schemaContext) {
@@ -154,9 +156,9 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 			occurrence.getMinOccurs(), Occurrence.UNBOUNDED);
 	}
 
-	/** Processes given X-definition <tt>attr</tt> declaration attribute and adds
+	/** Processes given X-definition attr declaration attribute and adds
 	 * declaration to given schema context element.
-	 * @param attr X-definition <tt>attr</tt> declaration attribute to process.
+	 * @param attr X-definition attr declaration attribute to process.
 	 * @param schemaContext schema context element to add declaration to.
 	 */
 	private void processAttr(final Attr attr, Element schemaContext) {
@@ -372,9 +374,9 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 		}
 	}
 
-	/** Processes given X-definition <tt>choice</tt> declaration element and
+	/** Processes given X-definition choice declaration element and
 	 * adds declaration to given schema context element.
-	 * @param choice X-definition <tt>choice</tt> declaration element to process.
+	 * @param choice X-definition choice declaration element to process.
 	 * @param schemaContext schema context element to add declaration to.
 	 */
 	private void processChoice(final Element choice, Element schemaContext) {
@@ -1106,10 +1108,10 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 		}
 	}
 
-	/** Returns schema <tt>complexType</tt> element mapped to given X-definition
+	/** Returns schema complexType element mapped to given X-definition
 	 * model element.
 	 * @param xdModelElem X-definition model element.
-	 * @return schema <tt>complexType</tt> element.
+	 * @return schema complexType element.
 	 */
 	private Element getXdElemCType(Element xdModelElem) {
 		XdModel xdModel;
@@ -1131,9 +1133,9 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 		return _xsdDoc.getModels().get(xsdCType);
 	}
 
-	/** Sets <tt>type</tt> attribute to given XML Schema <tt>element</tt>
+	/** Sets type attribute to given XML Schema element
 	 * declaration according to given referred model.
-	 * @param xsdElemDecl Schema <tt>element</tt> declaration.
+	 * @param xsdElemDecl Schema element declaration.
 	 * @param referredXdModel referred X-definition model representation object.
 	 */
 	private void setElementCType(Element xsdElemDecl, XdModel referredXdModel) {
@@ -1223,9 +1225,9 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 		}
 	}
 
-	/** Processes given X-definition <tt>mixed</tt> declaration element and
+	/** Processes given X-definition mixed declaration element and
 	 * adds declaration to given schema context element.
-	 * @param mixed X-definition <tt>mixed</tt> declaration element to process.
+	 * @param mixed X-definition mixed declaration element to process.
 	 * @param schemaContext schema context element to process.
 	 */
 	private void processMixed(final Element mixed, Element schemaContext) {
@@ -1238,9 +1240,9 @@ public class Xd_2_0_to_Xsd_1_0 extends Convertor {
 		processChildren(mixed, choiceElem);
 	}
 
-	/** Processes given X-definition <tt>sequence</tt> declaration element and
+	/** Processes given X-definition sequence declaration element and
 	 * adds declaration to given schema context element.
-	 * @param sequence X-definition <tt>sequence</tt> declaration element to
+	 * @param sequence X-definition sequence declaration element to
 	 * process.
 	 * @param schemaContext schema context element to add declaration to.
 	 */

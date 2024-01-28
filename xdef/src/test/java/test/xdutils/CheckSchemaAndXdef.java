@@ -17,9 +17,7 @@ import javax.xml.validation.Validator;
 /** Generate XML schema from X-definition and check validation of given
  * XML document with generated Schema. If the property "xdef.testing"
  * is set to "genReverse", it is also generated X-definition from generated
- * schema and the XML document is checked also with it.
- * @author Vaclav Trojan
- */
+ * schema and the XML document is checked also with it. */
 public class CheckSchemaAndXdef {
 
 	/** Prevent create an instance of this class.*/
@@ -118,7 +116,8 @@ public class CheckSchemaAndXdef {
 				model,
 				null,
 				null,
-				null);
+				null,
+				false);
 		} catch (Exception ex) {
 			throw new RuntimeException("SCHEMA GENERATION ERROR" + result, ex);
 		}
@@ -250,7 +249,8 @@ public class CheckSchemaAndXdef {
 				model,
 				null,
 				null,
-				null);
+				null,
+				false);
 		} catch (Exception ex) {
 			throw new RuntimeException("SCHEMA GENERATION ERROR" + result, ex);
 		}
@@ -310,14 +310,14 @@ public class CheckSchemaAndXdef {
 	 * invoke from command line.
 	 * @param args Array of strings containing command line arguments.
 	 * <ul>
-	 * <li><tt>-i</tt> - test will be for invalidity (if not specified then for
+	 * <li>-i - test will be for invalidity (if not specified then for
 	 * validity). Optional.</li>
-	 * <li><tt>-v</tt> - test will be for validity. Optional.
+	 * <li>-v - test will be for validity. Optional.
 	 * NOTE both parameters "-i" and "-v" are not allowed!</li>
-	 * <li><tt>-x xDefName</tt> - X-definition name. Optional.</li>
-	 * <li><tt>-m modelName</tt> - Model Name. Optional.</li>
-	 * <li><tt>-o outDir</tt> - Output directory</li>
-	 * <li><tt>files</tt> - list of files with X-definitions (whitecards
+	 * <li>-x xDefName - X-definition name. Optional.</li>
+	 * <li>-m modelName - Model Name. Optional.</li>
+	 * <li>-o outDir - Output directory</li>
+	 * <li>files - list of files with X-definitions (whitecards
 	 * accepted)
 	 * </li>
 	 * </ul>

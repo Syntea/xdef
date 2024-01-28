@@ -31,7 +31,6 @@ import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Text;
-import org.xdef.xml.KXmlUtils;
 
 /** Represents implementation of XML Schema document version 1.0.
  * @author Ilia Alexandrov
@@ -60,11 +59,13 @@ public class XsdDoc_1_0 extends XsdDoc {
 	 * @param reporter reporter for reporting warnings and errors.
 	 * @param schemaFileExt file extension of schema files.
 	 * @param schemaPrefix prefix for schema nodes.
+	 * @param genDocumentation if true documentation is generated.
 	 */
 	public XsdDoc_1_0(SReporter reporter,
 		String schemaFileExt,
-		String schemaPrefix) {
-		super(reporter, schemaFileExt, schemaPrefix);
+		String schemaPrefix,
+		boolean genDocumentation) {
+		super(reporter, schemaFileExt, schemaPrefix, genDocumentation);
 		_extSchemaCounter = 1;
 		_extAttrGrpCounter = 1;
 		_extGroupCounter = 1;
@@ -334,10 +335,10 @@ public class XsdDoc_1_0 extends XsdDoc {
 		_schemas.put(schema, schemaElem);
 	}
 
-	/** Returns qualified name of given <tt>complexType</tt> reference
+	/** Returns qualified name of given complexType reference
 	 * representation in scope of one schema.
-	 * @param xsdCType schema <tt>complexType</tt> representation object.
-	 * @return <tt>complexType</tt> reference qualified name.
+	 * @param xsdCType schema complexType representation object.
+	 * @return complexType reference qualified name.
 	 */
 	public String getQName(XsdCType xsdCType) {
 		XsdSchema schema = xsdCType.getSchema();
@@ -348,7 +349,7 @@ public class XsdDoc_1_0 extends XsdDoc {
 	/** Returns qualified name of model from given external schema
 	 * representation object with given local name from given schema element.
 	 *
-	 * @param mainSchemaElem <tt>schema</tt> element to put reference.
+	 * @param mainSchemaElem schema element to put reference.
 	 * @param external external schema representation with referred model.
 	 * @param modelName local name of referred model.
 	 * @return model qualified name.
@@ -399,13 +400,13 @@ public class XsdDoc_1_0 extends XsdDoc {
 			"Could not get referenced model qualified name!");
 	}
 
-	/** Adds external schema declaration element (<tt>include</tt> or
-	 * <tt>import</tt> depending on target name space) to given <tt>schema</tt>
+	/** Adds external schema declaration element (include or
+	 * import depending on target name space) to given schema
 	 * element and returns created and added declaration element.
 	 * @param schema schema element to add external declaration to.
 	 * @param extSchemaFileName file name of external schema.
 	 * @param extSchemaTargetNS target name space URI of external schema or
-	 * <tt>null</tt>.
+	 * null.
 	 * @return created and added external schema declaration element.
 	 */
 	private Element addExtSchemaDecl(Element schema,
@@ -484,11 +485,11 @@ public class XsdDoc_1_0 extends XsdDoc {
 	//--------------------------------------------------------------------------
 	//                      WORKING WITH SCHEMA NODES
 	//--------------------------------------------------------------------------
-	/** Creates XML Schema <tt>schema</tt> element with XML Schema name space
+	/** Creates XML Schema schema element with XML Schema name space
 	 * declaration and adds schema target name space declaration if given
-	 * target name space is not <tt>null</tt>.
-	 * @param targetNamespace schema target name space or <tt>null</tt>.
-	 * @return created <tt>schema</tt> element.
+	 * target name space is not null.
+	 * @param targetNamespace schema target name space or null.
+	 * @return created schema element.
 	 */
 	public Element createSchemaElem(String targetNamespace) {
 		Document doc = Utils.getBuilder().newDocument(
@@ -503,7 +504,7 @@ public class XsdDoc_1_0 extends XsdDoc {
 		return schema;
 	}
 
-	/** Adds XML Schema <tt>element</tt> declaration element with given default
+	/** Adds XML Schema element declaration element with given default
 	 * value, given fixed value, maximal occurrence and minimal occurrence,
 	 * given name, nillable switch and given type name to given parent element.
 	 * @param parent parent element.
@@ -516,7 +517,7 @@ public class XsdDoc_1_0 extends XsdDoc {
 	 * @param nillable nillable switch.
 	 * @param type element type name.
 	 * @param qualified qualified element name switch.
-	 * @return created and added <tt>element</tt> declaration element.
+	 * @return created and added element declaration element.
 	 */
 	public Element addElementDecl(Element parent,
 		String defaultValue,
@@ -584,12 +585,12 @@ public class XsdDoc_1_0 extends XsdDoc {
 		return elemDecl;
 	}
 
-	/** Adds XML Schema <tt>complexType</tt> declaration element with given name
+	/** Adds XML Schema complexType declaration element with given name
 	 * and given mixed switch to given parent element.
 	 * @param parent parent element.
 	 * @param name complex type name.
 	 * @param mixed mixed type switch.
-	 * @return created and added <tt>complexType</tt> element.
+	 * @return created and added complexType element.
 	 */
 	public Element addComplexTypeDecl(Element parent,
 		String name,
@@ -609,13 +610,13 @@ public class XsdDoc_1_0 extends XsdDoc {
 		return cTypeDecl;
 	}
 
-	/** Adds XML Schema <tt>any</tt> declaration element with given minimal and
+	/** Adds XML Schema any declaration element with given minimal and
 	 * maximal occurrence to given parent element and returns created and added
 	 * element.
 	 * @param parent parent element.
 	 * @param minOccurs minimal occurrence.
 	 * @param maxOccurs maximal occurrence.
-	 * @return created and added <tt>any</tt> declaration element.
+	 * @return created and added any declaration element.
 	 */
 	public Element addAnyDecl(Element parent,
 		Integer minOccurs,
@@ -638,12 +639,12 @@ public class XsdDoc_1_0 extends XsdDoc {
 		return anyDecl;
 	}
 
-	/** Returns <tt>annotation</tt> child element of given schema context
-	 * element. If given parent element already has <tt>annotation</tt> child
+	/** Returns annotation child element of given schema context
+	 * element. If given parent element already has annotation child
 	 * element, returns that element, otherwise creates one and returns it.
-	 * @param parent parent element to add or get child <tt>annotation</tt>
+	 * @param parent parent element to add or get child annotation
 	 * element.
-	 * @return child <tt>annotation</tt> element.
+	 * @return child annotation element.
 	 */
 	private Element addAnnotationDecl(Element parent) {
 		Element annotationElem = XsdUtils.getAnnotationElem(parent);
@@ -656,11 +657,11 @@ public class XsdDoc_1_0 extends XsdDoc {
 		return annotationElem;
 	}
 
-	/** Adds <tt>documentation</tt> child element to given <tt>annotation</tt>
-	 * element and returns added <tt>documentation</tt> element.
-	 * @param annotationElem schema <tt>annotation</tt> element.
+	/** Adds documentation child element to given annotation
+	 * element and returns added documentation element.
+	 * @param annotationElem schema annotation element.
 	 * @param documentation documentation string to add.
-	 * @return created and added <tt>documentation</tt> element.
+	 * @return created and added documentation element.
 	 */
 	private Element addDocumentationDecl(Element annotationElem,
 		String documentation) {
@@ -675,20 +676,22 @@ public class XsdDoc_1_0 extends XsdDoc {
 		return documentationElem;
 	}
 
-	/** Adds <tt>documentation</tt> element to <tt>annotation</tt> child element
+	/** Adds documentation element to annotation child element
 	 * of given schema context element.
 	 * @param contextElem schema context element to add documentation to.
 	 * @param documentation documentation string to add.
 	 */
 	public void addDocumentation(Element contextElem, String documentation) {
-		Element annotElem = addAnnotationDecl(contextElem);
-		addDocumentationDecl(annotElem, documentation);
+		if (_genDocumentation) {
+			Element annotElem = addAnnotationDecl(contextElem);
+			addDocumentationDecl(annotElem, documentation);
+		}
 	}
 
-	/** Adds XML Schema <tt>anyAttribute</tt> declaration element to given
+	/** Adds XML Schema anyAttribute declaration element to given
 	 * parent element.
 	 * @param parent parent element.
-	 * @return created and added <tt>anyAttribute</tt> declaration element.
+	 * @return created and added anyAttribute declaration element.
 	 */
 	public Element addAnyAttrDecl(Element parent) {
 		Element anyAttrDecl = parent.getOwnerDocument().createElementNS(
@@ -702,7 +705,7 @@ public class XsdDoc_1_0 extends XsdDoc {
 		return anyAttrDecl;
 	}
 
-	/** Adds XML Schema <tt>attribute</tt> declaration element with given
+	/** Adds XML Schema attribute declaration element with given
 	 * default value, fixed value, local name, type name and use to given
 	 * parent element and returns created and added element.
 	 * @param parent parent element.
@@ -713,7 +716,7 @@ public class XsdDoc_1_0 extends XsdDoc {
 	 * @param type attribute value type.
 	 * @param use attribute use.
 	 * @param qualified qualified attribute name switch.
-	 * @return created and added <tt>attribute</tt> declaration element.
+	 * @return created and added attribute declaration element.
 	 */
 	public Element addAttributeDecl(Element parent, String defaultValue,
 		String fixedValue, String name, String ref, String type, String use,
@@ -768,12 +771,12 @@ public class XsdDoc_1_0 extends XsdDoc {
 		return attrDecl;
 	}
 
-	/** Adds XML Schema <tt>attributeGroup</tt> declaration element with given
+	/** Adds XML Schema attributeGroup declaration element with given
 	 * name or given reference name to given parent element.
 	 * @param parent parent element.
 	 * @param name attribute group local name.
 	 * @param ref attribute group reference name.
-	 * @return created and added <tt>attributeGroup</tt> declaration element.
+	 * @return created and added attributeGroup declaration element.
 	 */
 	public Element addAttrGroupDecl(Element parent, String name, String ref) {
 		Element attrGrpDecl = parent.getOwnerDocument().createElementNS(
@@ -789,11 +792,11 @@ public class XsdDoc_1_0 extends XsdDoc {
 		return attrGrpDecl;
 	}
 
-	/** Adds XML Schema <tt>complexContent</tt> declaration element with given
+	/** Adds XML Schema complexContent declaration element with given
 	 * mixed switch to given parent element and returns added element.
 	 * @param parent parent element.
 	 * @param mixed mixed content switch.
-	 * @return created and added <tt>complexContent</tt> declaration element.
+	 * @return created and added complexContent declaration element.
 	 */
 	public Element addComplexContentDecl(Element parent, Boolean mixed) {
 		Element complContDecl = parent.getOwnerDocument().createElementNS(
@@ -807,13 +810,13 @@ public class XsdDoc_1_0 extends XsdDoc {
 		return complContDecl;
 	}
 
-	/** Adds XML Schema <tt>choice</tt> declaration element with given minimal
+	/** Adds XML Schema choice declaration element with given minimal
 	 * and maximal occurrence to given parent element and returns created and
 	 * added element.
 	 * @param parent parent element.
 	 * @param minOccurs minimal occurrence.
 	 * @param maxOccurs maximal occurrence.
-	 * @return created and added <tt>choice</tt> declaration element.
+	 * @return created and added choice declaration element.
 	 */
 	public Element addChoiceDecl(Element parent,
 		Integer minOccurs,
@@ -833,11 +836,11 @@ public class XsdDoc_1_0 extends XsdDoc {
 		return choiceDecl;
 	}
 
-	/** Adds XML Schema <tt>extension</tt> declaration element with given
+	/** Adds XML Schema extension declaration element with given
 	 * base type to given parent element and returns created and added element.
 	 * @param parent parent element.
 	 * @param base extension base type name.
-	 * @return created and added <tt>extension</tt> declaration element.
+	 * @return created and added extension declaration element.
 	 */
 	public Element addExtensionDecl(Element parent, String base) {
 		Element extensionDecl = parent.getOwnerDocument().createElementNS(
@@ -851,7 +854,7 @@ public class XsdDoc_1_0 extends XsdDoc {
 		return extensionDecl;
 	}
 
-	/** Adds XML Schema <tt>group</tt> declaration element with given name,
+	/** Adds XML Schema group declaration element with given name,
 	 * given reference, given minimal and maximal occurrence and returns
 	 * created and added element.
 	 * @param parent parent element.
@@ -859,7 +862,7 @@ public class XsdDoc_1_0 extends XsdDoc {
 	 * @param ref reference name.
 	 * @param minOccurs minimal occurrence.
 	 * @param maxOccurs maximal occurrence.
-	 * @return created and added <tt>group</tt> declaration element.
+	 * @return created and added group declaration element.
 	 */
 	public Element addGroupDecl(Element parent,
 		String name,
@@ -892,13 +895,13 @@ public class XsdDoc_1_0 extends XsdDoc {
 		return groupDecl;
 	}
 
-	/** Adds XML Schema <tt>import</tt> declaration element with given
+	/** Adds XML Schema import declaration element with given
 	 * name space and schema location to given parent element and returns
 	 * created and added element.
 	 * @param parent parent element.
 	 * @param namespace imported name space.
 	 * @param schemaLocation imported schema location.
-	 * @return created and added <tt>import</tt> declaration element.
+	 * @return created and added import declaration element.
 	 */
 	public Element addImportDecl(Element parent,
 		String namespace,
@@ -918,11 +921,11 @@ public class XsdDoc_1_0 extends XsdDoc {
 		return importDecl;
 	}
 
-	/** Adds XML Schema <tt>includeImport</tt> declaration element with given schema
+	/** Adds XML Schema includeImport declaration element with given schema
 	 * location to given parent element and returns created and added element.
 	 * @param parent parent element.
 	 * @param schemaLocation included schema location.
-	 * @return created and added <tt>includeImport</tt> declaration element.
+	 * @return created and added includeImport declaration element.
 	 */
 	public Element addIncludeDecl(Element parent, String schemaLocation) {
 		Element includeDecl = parent.getOwnerDocument().createElementNS(
@@ -936,11 +939,11 @@ public class XsdDoc_1_0 extends XsdDoc {
 		return includeDecl;
 	}
 
-	/** Adds XML Schema <tt>restriction</tt> declaration element with given base
+	/** Adds XML Schema restriction declaration element with given base
 	 * type name to given parent element and returns created and added element.
 	 * @param parent parent element.
 	 * @param base restriction base type name.
-	 * @return created and added <tt>restriction</tt> element.
+	 * @return created and added restriction element.
 	 */
 	public Element addRestrictionDecl(Element parent, String base) {
 		Element restrictionDecl = parent.getOwnerDocument().createElementNS(
@@ -954,13 +957,13 @@ public class XsdDoc_1_0 extends XsdDoc {
 		return restrictionDecl;
 	}
 
-	/** Adds XML Schema <tt>sequence</tt> declaration element with given
+	/** Adds XML Schema sequence declaration element with given
 	 * minimal and maximal occurrence to given parent element and returns
 	 * created and added element.
 	 * @param parent parent element.
 	 * @param minOccurs sequence minimal occurrence.
 	 * @param maxOccurs sequence maximal occurrence.
-	 * @return created and added <tt>sequence</tt> declaration element.
+	 * @return created and added sequence declaration element.
 	 */
 	public Element addSequenceDecl(Element parent, Integer minOccurs,
 		Integer maxOccurs) {
@@ -979,10 +982,10 @@ public class XsdDoc_1_0 extends XsdDoc {
 		return sequenceDecl;
 	}
 
-	/** Adds XML Schema <tt>simpleContent</tt> declaration element to given
+	/** Adds XML Schema simpleContent declaration element to given
 	 * parent element and returns created and added element.
 	 * @param parent parent element.
-	 * @return created and added <tt>simpleContent</tt> element.
+	 * @return created and added simpleContent element.
 	 */
 	public Element addSimpleContentDecl(Element parent) {
 		Element simpleContDecl = parent.getOwnerDocument().createElementNS(
@@ -992,12 +995,12 @@ public class XsdDoc_1_0 extends XsdDoc {
 		return simpleContDecl;
 	}
 
-	/** Adds XML Schema <tt>simpleType</tt> declaration element with given
+	/** Adds XML Schema simpleType declaration element with given
 	 * simple type name to given parent element and returns created and added
 	 * element.
 	 * @param parent parent element.
 	 * @param name simple type name .
-	 * @return created and added <tt>simpleType</tt> declaration element.
+	 * @return created and added simpleType declaration element.
 	 */
 	public Element addSimpleTypeDecl(Element parent, String name) {
 		Element simpleTypeDecl = parent.getOwnerDocument().createElementNS(
@@ -1011,12 +1014,12 @@ public class XsdDoc_1_0 extends XsdDoc {
 		return simpleTypeDecl;
 	}
 
-	/** Adds XML Schema <tt>union</tt> declaration element with given member
+	/** Adds XML Schema union declaration element with given member
 	 * types string to given parent element and returns created and added
-	 * <tt>union</tt> declaration element.
-	 * @param parent parent element to add <tt>union</tt> declaration to.
+	 * union declaration element.
+	 * @param parent parent element to add union declaration to.
 	 * @param memberTypes member types string.
-	 * @return created and added <tt>union</tt> declaration element.
+	 * @return created and added union declaration element.
 	 */
 	public Element addUnionDecl(Element parent, String memberTypes) {
 		Element unionDecl = parent.getOwnerDocument().createElementNS(
@@ -1030,12 +1033,12 @@ public class XsdDoc_1_0 extends XsdDoc {
 		return unionDecl;
 	}
 
-	/** Adds XML Schema <tt>list</tt> declaration element with given item type
+	/** Adds XML Schema list declaration element with given item type
 	 * qualified name to given parent element and returns created and added
-	 * <tt>list</tt> declaration element.
-	 * @param parent parent element ot add <tt>list</tt> declaration to.
+	 * list declaration element.
+	 * @param parent parent element ot add list declaration to.
 	 * @param itemType item type qualified name.
-	 * @return created and added <tt>list</tt> declaration element.
+	 * @return created and added list declaration element.
 	 */
 	public Element addListDecl(Element parent, String itemType) {
 		Element listElem = parent.getOwnerDocument().createElementNS(
@@ -1064,16 +1067,16 @@ public class XsdDoc_1_0 extends XsdDoc {
 		return facetElem;
 	}
 
-	/** Adds <tt>mixed</tt> attribute to given schema <tt>complexType</tt>
+	/** Adds mixed attribute to given schema complexType
 	 * element with given value.
-	 * @param complexType schema <tt>complexType</tt> element.
-	 * @param mixed value for <tt>mixed</tt> attribute.
+	 * @param complexType schema complexType element.
+	 * @param mixed value for mixed attribute.
 	 */
 	public void setMixed(Element complexType, boolean mixed) {
 		Utils.setAttr(complexType, XsdNames.MIXED, String.valueOf(mixed));
 	}
 
-	/** Adds <tt>minOccurs</tt> attribute to given element with given value.
+	/** Adds minOccurs attribute to given element with given value.
 	 * @param element element ot add attribute.
 	 * @param minOccurs minimal occurrence.
 	 */
@@ -1081,7 +1084,7 @@ public class XsdDoc_1_0 extends XsdDoc {
 		Utils.setAttr(element, XsdNames.MIN_OCCURS, Integer.toString(minOccurs));
 	}
 
-	/** Adds <tt>maxOccurs</tt> attribute to given element with given value.
+	/** Adds maxOccurs attribute to given element with given value.
 	 * @param element element to add attribute.
 	 * @param maxOccurs maximal occurrence.
 	 */
@@ -1095,16 +1098,16 @@ public class XsdDoc_1_0 extends XsdDoc {
 		Utils.setAttr(element, XsdNames.MAX_OCCURS, maxOccursString);
 	}
 
-	/** Adds <tt>type</tt> attribute to given element with given type name.
-	 * @param element element to add <tt>type</tt> attribute.
+	/** Adds type attribute to given element with given type name.
+	 * @param element element to add type attribute.
 	 * @param type type name to add.
 	 */
 	public void setType(Element element, String type) {
 		Utils.setAttr(element, XsdNames.TYPE, type);
 	}
 
-	/** Adds or sets <tt>memberTypes</tt> attribute with given string.
-	 * @param unionElem schema <tt>union</tt> element to add member types.
+	/** Adds or sets memberTypes attribute with given string.
+	 * @param unionElem schema union element to add member types.
 	 * @param memberTypes member types string to add.
 	 */
 	public void setMemeberTypes(Element unionElem, String memberTypes) {
@@ -1114,7 +1117,7 @@ public class XsdDoc_1_0 extends XsdDoc {
 	/** Returns XML Schema qualified name according to given schema type local name.
 	 * @param typeLocalName local name of type.
 	 * @return type qualified name.
-	 * @throws NullPointerException if given type local name is <tt>null</tt>.
+	 * @throws NullPointerException if given type local name is null.
 	 * @throws IllegalArgumentException if given type local name is empty.
 	 */
 	public String getSchemaTypeQName(String typeLocalName) {
@@ -1128,9 +1131,9 @@ public class XsdDoc_1_0 extends XsdDoc {
 		return getSchemaNodeName(typeLocalName);
 	}
 
-	/** Adds <tt>type</tt> attribute to given element with given schema type
+	/** Adds type attribute to given element with given schema type
 	 * local name.
-	 * @param element element to add <tt>type</tt> attribute.
+	 * @param element element to add type attribute.
 	 * @param schemaType schema type local name.
 	 */
 	public void setSchemaType(Element element, String schemaType) {

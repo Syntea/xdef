@@ -38,12 +38,14 @@ public final class XdefToXsd {
 	 * @param schemaPrefix prefix of XML schema namespace.
 	 * @param schemaFileExt file extension of schema files.
 	 * @param out where print information messages (if null System.out).
+	 * @param genDocumentation if true documentation is generated.
 	 */
 	public static void genSchema(String xdef,
 		String outputDir,
 		String schemaPrefix,
 		String schemaFileExt,
-		PrintStream out) {
+		PrintStream out,
+		boolean genDocumentation) {
 		XdDoc xdDoc;
 		SReporter reporter = new SReporter(new FileReportWriter(
 			out == null ? System.out : out));
@@ -57,8 +59,8 @@ public final class XdefToXsd {
 		}
 		Convertor convertor;
 		try {
-			convertor = Convertor.getConvertor(
-				xdDoc, SCHEMA_VERSION, sPrefix, reporter, sFileExt);
+			convertor = Convertor.getConvertor(xdDoc,
+				 SCHEMA_VERSION, sPrefix, reporter, sFileExt, genDocumentation);
 		} catch (Exception ex) {
 			//Can not create convertor&{0}{ }
 			throw new SRuntimeException(XD2XSD.XD2XSD114, ex);
@@ -72,19 +74,21 @@ public final class XdefToXsd {
 	 * @param schemaPrefix prefix of XML schema namespace.
 	 * @param schemaFileExt file extension of schema files.
 	 * @param out where print information messages (if null System.out).
+	 * @param genDocumentation if true documentation is generated.
 	 * @return map of schema file names and DOM Documents.
 	 */
 	public static Map<?,?> genSchema(String xdef,
 		String schemaPrefix,
 		String schemaFileExt,
-		PrintStream out) {
+		PrintStream out,
+		boolean genDocumentation) {
 		SReporter reporter = new SReporter(new FileReportWriter(
 			out == null ? System.out : out));
 		String sPrefix = schemaPrefix == null ? "xs" : schemaPrefix;
 		String sFileExt = schemaFileExt == null ? "xsd" : schemaPrefix;
 		XdDoc xdDoc = XdDoc.getXdDoc(xdef, reporter, false);
-		Convertor convertor = Convertor.getConvertor(
-			xdDoc, SCHEMA_VERSION, sPrefix, reporter, sFileExt);
+		Convertor convertor = Convertor.getConvertor(xdDoc,
+			SCHEMA_VERSION, sPrefix, reporter, sFileExt, genDocumentation);
 		return convertor.getSchemaDocuments();
 	}
 
@@ -95,14 +99,16 @@ public final class XdefToXsd {
 	 * @param schemaPrefix prefix of XML schema namespace.
 	 * @param schemaFileExt file extension of schema files.
 	 * @param out where print information messages (if null System.out).
+	 * @param genDocumentation if true documentation is generated.
 	 */
 	public static void genSchema(File xdef,
 		String outputDir,
 		String schemaPrefix,
 		String schemaFileExt,
-		PrintStream out) {
+		PrintStream out,
+		boolean genDocumentation) {
 		genSchema(xdef.getAbsolutePath(),
-			outputDir, schemaPrefix, schemaFileExt,out);
+			outputDir, schemaPrefix, schemaFileExt, out, genDocumentation);
 	}
 
 	/** Generates XML Schema from given X-definition files and saves schema
@@ -116,6 +122,7 @@ public final class XdefToXsd {
 	 * @param schemaPrefix prefix of XML schema namespace.
 	 * @param schemaFileExt file extension of schema files.
 	 * @param out where print information messages (if null System.out).
+	 * @param genDocumentation if true documentation is generated.
 	 * @throws Exception if an error occurs.
 	 */
 	public static void genSchema(File[] xdefs,
@@ -124,14 +131,15 @@ public final class XdefToXsd {
 		String model,
 		String schemaPrefix,
 		String schemaFileExt,
-		PrintStream out) throws Exception {
+		PrintStream out,
+		boolean genDocumentation) throws Exception {
 		String[] srcs = new String[xdefs.length];
 		for (int i = 0; i < xdefs.length; i++) {
 			File f = xdefs[i];
 			srcs[i] = f.getAbsolutePath();
 		}
-		genSchema(srcs,
-			outputDir, xdName, model,schemaPrefix, schemaFileExt, out);
+		genSchema(srcs, outputDir,
+			xdName, model,schemaPrefix, schemaFileExt, out, genDocumentation);
 	}
 
 	@SuppressWarnings("deprecation") //NS_XDEF_2_0_INSTANCE
@@ -146,6 +154,7 @@ public final class XdefToXsd {
 	 * @param schemaPrefix prefix of XML schema namespace.
 	 * @param schemaFileExt file extension of schema files.
 	 * @param out where print information messages (if null System.out).
+	 * @param genDocumentation if true documentation is generated.
 	 * @throws Exception if an error occurs.
 	 */
 	public static void genSchema(String[] xdefs,
@@ -154,7 +163,8 @@ public final class XdefToXsd {
 		String model,
 		String schemaPrefix,
 		String schemaFileExt,
-		PrintStream out) throws Exception {
+		PrintStream out,
+		boolean genDocumentation) throws Exception {
 		Element collection;
 		if (xdefs.length == 1) {
 			collection = KXmlUtils.parseXml(xdefs[0]).getDocumentElement();
@@ -219,7 +229,7 @@ public final class XdefToXsd {
 			}
 		}
 		genSchema(KXmlUtils.nodeToString(collection, false),
-			outputDir, schemaPrefix, schemaFileExt, out);
+			outputDir, schemaPrefix, schemaFileExt, out, genDocumentation);
 	}
 
 	/** Run class from command line.
@@ -229,6 +239,7 @@ public final class XdefToXsd {
 	 * <li>-o output directory.</li>
 	 * <li>-m name of root model (optional).</li>
 	 * <li>-x name of X-definition (optional).</li>
+	 * <li>-v switch to generate documentation etc.</li>
 	 * <li>-?, -h, help</li>
 	 * </ul>
 	 */
@@ -240,12 +251,14 @@ public final class XdefToXsd {
 		String schemaPrefix = "xs";
 		String schemaFileExt = "xsd";
 		PrintStream out = System.out;
+		boolean genDocumentation = false;
 		String info =
 "Using XdefToXsd: \n"
 + "-i <PATH> list of input sources with X-definitions\n"
 + "-o <PATH> output directory \n"
 + "-m name of root model (optional)\n"
 + "-x name of X-definition (optional)\n"
++ "-v genarate documentation etc.\n"
 + "-?, -h,  help";
 		if (args == null || args.length == 0) {
 			throw new RuntimeException("Parameters missing!\n" + info);
@@ -300,6 +313,13 @@ public final class XdefToXsd {
 						xdName = args[++i];
 					}
 					break;
+				case "-v":
+					if (genDocumentation) {
+						throw new RuntimeException(
+							"Switch \"-v\" already set\n" + info);
+					}
+					genDocumentation = true;
+					return;
 				default:
 					throw new RuntimeException(
 						"Incorrect argument: " + args[i] + "\n" + info);
@@ -321,7 +341,8 @@ public final class XdefToXsd {
 				model,
 				schemaPrefix,
 				schemaFileExt,
-				out);
+				out,
+				genDocumentation);
 		} catch (Exception x) {
 			throw new RuntimeException(x);
 		}
