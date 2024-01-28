@@ -18,6 +18,7 @@ import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import java.io.PrintStream;
+import org.w3c.dom.Document;
 import org.xdef.msg.XD2XSD;
 
 /** Convertor of X-definition to XML Schema.
@@ -77,7 +78,7 @@ public final class XdefToXsd {
 	 * @param genDocumentation if true documentation is generated.
 	 * @return map of schema file names and DOM Documents.
 	 */
-	public static Map<?,?> genSchema(String xdef,
+	public static Map<String, Document> genSchema(String xdef,
 		String schemaPrefix,
 		String schemaFileExt,
 		PrintStream out,
