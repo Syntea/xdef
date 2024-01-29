@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="windows-1250"?>
 <FirmWorkers xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:namespaceSchemaLocation="multiXdefTest.xsd"
-    xmlns:fh = "b.b" >
+    xmlns:hr = "A.A" xmlns:fh = "b.b" >
     <Worker id="1">
         <hr:Name>John</hr:Name>
         <hr:Surname>Doe</hr:Surname>

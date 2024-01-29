@@ -1,19 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
- http://www.syntea.cz/xdef/3.1
- http://www.xdef.org/xdef/3.2
- http://www.xdef.org/xdef/4.0
- http://www.xdef.org/xdef/4.1
- http://www.xdef.org/xdef/4.2
--->
-<xd:def  xmlns:xd    ="http://www.xdef.org/xdef/4.2"
-         impl-version="2016/09.0" impl-date="11.09.2016"
-         xmlns       ="http://ws.ckp.cz/pis/B1/2016/09"
-		 xd:root     = "Get_NositelPSP | SmlouvyPSP"
-         xd:name     ="main">
+<xd:def  xmlns:xd     ="http://www.xdef.org/xdef/4.2"
+         impl-version ="2016/09.0" impl-date="11.09.2016"
+         xmlns        ="http://ws.ckp.cz/pis/B1/2016/09"
+         xd:root      = "Get_NositelPSP | SmlouvyPSP"
+         xd:name      ="main">
 
- <!-- Struktury element Body (pozadavky)                    -->
- <!-- ===================================================== -->
  <Get_NositelPSP>
    <xd:choice>
      <Nositel              xd:script="ref Id_Nositel" />
@@ -67,8 +57,6 @@
 
  <Set_ZrusVsePrenosPSP     xd:script="ref Id_Smlouva" />
 
- <!-- Struktury element Body (odpovedi)                     -->
- <!-- ===================================================== -->
  <BlokujPSP>
     <PSP                   xd:script="ref PSP" />
  </BlokujPSP>
@@ -93,7 +81,7 @@
          Rezerva             ="optional integer(0,9_999_999_999)"
          Plneni              ="optional integer(0,99_999_999_999)">
     <Agr                   xd:script="occurs 1.."
-         Rok                 ="required datetime('yyyy')"
+         Rok                 ="required xdatetime('yyyy')"
          PS                  ="required int(1,999_999)"
          SpravovanePS        ="optional int(1,999_999)"
          SU                  ="optional int(1,999_999)"
@@ -175,8 +163,6 @@
     <PSP                   xd:script="occurs 1..; ref PSP" />
  </VyslednePSP>
 
- <!-- Dilci vecne struktury (v abecednim poradi) -->
- <!-- ========================================== -->
  <Detail
          DruhVozidla         ="required /*tab('CC_DruhVozidla','KodDruhuVozidla')*/"
          PS                  ="required int(1,999_999)"

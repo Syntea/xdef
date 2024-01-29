@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <WorkerHierarchy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xsi:noNamespaceSchemaLocation="basicTestSchema.xsd">
     <Worker name="Joe" surname="Smith" birth="1979-01-25">

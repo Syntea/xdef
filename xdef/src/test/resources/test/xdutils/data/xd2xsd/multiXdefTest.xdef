@@ -1,17 +1,11 @@
-<?xml version="1.0" encoding="windows-1250"?>
 <xd:collection xmlns:xd = "http://www.xdef.org/xdef/3.2">
-    <xd:def xd:name   = "main"
-            xd:root   = "FirmWorkers"
-            xmlns:ext = "A.A" >
+    <xd:def xd:name="main" xd:root="FirmWorkers" xmlns:ext="A.A" >
         <FirmWorkers>
             <Worker xd:script="ref ext_1#ext:Person; occurs +"
                     workerId="required int" />
         </FirmWorkers>
     </xd:def>
-    <xd:def xd:name   = "ext_1"
-            xd:root   = "hr:Person"
-            xmlns:hr  = "A.A"
-            xmlns:ext = "b.b" >
+    <xd:def xd:name="ext_1" xd:root="hr:Person" xmlns:hr="A.A" xmlns:ext="b.b" >
         <hr:Person>
             <hr:Name>required string(1,30)</hr:Name>
             <hr:Surname>required string(1,50)</hr:Surname>
@@ -20,9 +14,7 @@
             <ext:Salary xd:script="ref ext_2#ext:Salary; occurs 1" />
         </hr:Person>
     </xd:def>
-    <xd:def xd:name  = "ext_2"
-            xd:root  = "fh:Position | fh:Salary"
-            xmlns:fh = "b.b" >
+    <xd:def xd:name="ext_2" xd:root="fh:Position | fh:Salary" xmlns:fh="b.b" >
         <fh:Position fh:place="optional string">
             <fh:Name>required string</fh:Name>
         </fh:Position>

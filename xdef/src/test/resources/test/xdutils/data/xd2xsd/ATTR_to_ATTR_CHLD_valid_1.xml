@@ -1,12 +1,9 @@
-<?xml version="1.0" encoding="windows-1250"?>
 <Staff>
-    <Worker sex="male"
-            workerId="1">
+    <Worker sex="male" workerId="1">
         <Name>John</Name>
         <Surname>Doe</Surname>
     </Worker>
-    <Manager sex="female"
-             department="production">
+    <Manager sex="female" department="production">
         <Name>Josephine</Name>
         <Surname>Doe</Surname>
     </Manager>

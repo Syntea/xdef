@@ -1,21 +1,9 @@
-<?xml version="1.0" encoding="windows-1250"?>
-<!--
- http://www.syntea.cz/xdef/3.1
- http://www.xdef.org/xdef/3.2
- http://www.xdef.org/xdef/4.0
- http://www.xdef.org/xdef/4.1
- http://www.xdef.org/xdef/4.2
--->
-<xd:def xmlns:xd      =  "http://www.xdef.org/xdef/4.2"
-         xd:name      =  "main"
-         xd:root      =  "Dates" >
-
+<xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" xd:name="main" xd:root="Dates" >
      <Dates>
-         <Date1 xd:script="occurs *">datetime('yy-M-d H:m:s[.S][ Z]')</Date1>
-         <Date2 xd:script="occurs *">datetime('yyyy-MMM-dd[ HH:mm:ss[ z]]')</Date2>
-         <Date3 xd:script="occurs *">datetime('h:m a DDD yyyy G')</Date3>
-         <Date4 xd:script="occurs *">datetime('EEEE, d of MMMM yyyy')</Date4>
-         <Date5 xd:script="occurs *">datetime('dd.mm.yyyy|yyyy-m-d')</Date5>
+         <Date1 xd:script="occurs *">xdatetime('yy-M-d H:m:s[.S][ Z]')</Date1>
+         <Date2 xd:script="occurs *">xdatetime('yyyy-MMM-dd[ HH:mm:ss[ z]]')</Date2>
+         <Date3 xd:script="occurs *">xdatetime('h:m a DDD yyyy G')</Date3>
+         <Date4 xd:script="occurs *">xdatetime('EEEE, d of MMMM yyyy')</Date4>
+         <Date5 xd:script="occurs *">xdatetime('dd.mm.yyyy|yyyy-m-d')</Date5>
      </Dates>
-
 </xd:def>

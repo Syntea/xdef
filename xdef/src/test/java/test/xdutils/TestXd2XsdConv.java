@@ -17,6 +17,7 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 import org.w3c.dom.Element;
+import org.xdef.XDConstants;
 import org.xdef.impl.util.gencollection.XDGenCollection;
 import org.xdef.sys.SException;
 import static org.xdef.sys.STester.runTest;
@@ -101,7 +102,8 @@ public class TestXd2XsdConv extends XDTester {
 		}
 		try {
 			Properties props = new Properties();
-//TODO			props.put("xdef.warnings", "true");
+			props.setProperty(XDConstants.XDPROPERTY_WARNINGS, // xdef_warnings
+				 XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE);
 			props.put("xdef.warnings", "false");
 			XDPool xdPool = XDFactory.compileXD(props, _xdefFile);
 			if (!xdPool.exists(MAIN_DEF_NAME)) {
@@ -148,9 +150,8 @@ public class TestXd2XsdConv extends XDTester {
 		//get main schema
 		File mainSchema = new File(schemaDir, MAIN_SCHEMA_FILE_NAME);
 		if (!mainSchema.exists() || !mainSchema.isFile()) {
-			setMessage(
-				new ErrMessage("Main schema file does not exists or not a file",
-					mainSchema,	null));
+			setMessage(new ErrMessage(
+				"Main schema file doesn't exist or isn't file",mainSchema,null));
 			return false;
 		}
 		//prepare schema validator
@@ -161,9 +162,8 @@ public class TestXd2XsdConv extends XDTester {
 			displayFiles(_xdefFile);
 			System.err.println("============");
 			displayFiles(_tempDir);
-			setMessage(new ErrMessage(
-				"Could not prepare schema validator!\n" + ex.getMessage(),
-				mainSchema, ex));
+			setMessage(new ErrMessage("Can't prepare schema validator!\n"
+				+ ex.getMessage(),mainSchema, ex));
 			return false;
 		}
 		_prepared = true;
@@ -177,7 +177,7 @@ public class TestXd2XsdConv extends XDTester {
 		File xmlFile = new File(_dataDir, xmlName + ".xml");
 		if (!xmlFile.exists() || !xmlFile.isFile()) {
 			setMessage(new ErrMessage(
-				"XML file does not exists or is not a file!", xmlFile, null));
+				"XML file doesn't exist or isn't file!", xmlFile, null));
 			return false;
 		}
 		//check by xdef
@@ -193,7 +193,7 @@ public class TestXd2XsdConv extends XDTester {
 		try {
 			_validator.validate(source);
 		} catch (IOException ioex) {
-			setMessage(new ErrMessage("Could not read from XML file stream!",
+			setMessage(new ErrMessage("Can't read from XML file stream!",
 				xmlFile, ioex));
 			return false;
 		} catch (SAXException sex) {
@@ -206,7 +206,7 @@ public class TestXd2XsdConv extends XDTester {
 			System.err.println("============");
 			displayFiles(_tempDir);
 			setMessage(new ErrMessage(
-				"Error during validating XML file by schema!", xmlFile, sex));
+				"Error when validating XML file by schema!", xmlFile, sex));
 			return false;
 		}
 		return true;
@@ -220,7 +220,7 @@ public class TestXd2XsdConv extends XDTester {
 				+ xmlName + ".xml");
 		if (!xmlFile.exists() || !xmlFile.isFile()) {
 			setMessage(new ErrMessage(
-				"XML file does not exists or is not a file!", xmlFile, null));
+				"XML file doesn't exist or is not file!", xmlFile, null));
 			return false;
 		}
 		//check by xdef
@@ -239,7 +239,7 @@ public class TestXd2XsdConv extends XDTester {
 				xmlFile, null));
 			return false;
 		} catch (IOException ioex) {
-			setMessage(new ErrMessage("Could not read from XML file stream!",
+			setMessage(new ErrMessage("Couldn't read from XML file!",
 				xmlFile, ioex));
 			return false;
 		} catch (SAXException saxex) {
@@ -261,7 +261,7 @@ public class TestXd2XsdConv extends XDTester {
 	private static class ErrMessage {
 
 		public static final ErrMessage NO_MESSAGE =
-				new ErrMessage("No message!", null, null);
+			new ErrMessage("No message!", null, null);
 		private final String _message;
 		private final File _file;
 		private final Exception _ex;

@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="windows-1250"?>
-<Cars   xmlns:car = "http://example.com/carInfo"
-        xmlns:shop = "http://example.com/eshopInfo" >
+<Cars xmlns:car = "http://example.com/carInfo"
+      xmlns:shop = "http://example.com/eshopInfo" >
     <car:Car shop:from = "12.05.2008">
         <car:VIN>156AM587L5H1DF598Q</car:VIN>
         <car:Built>2000/05</car:Built>
@@ -10,6 +9,6 @@
     <car:Car shop:from = "02.12.2010">
         <car:VIN>8GR5BD268P5E120BVZ</car:VIN>
         <car:Built>2009/01</car:Built>
-        <car:Mark>Škoda</car:Mark>
+        <car:Mark>Ĺ koda</car:Mark>
     </car:Car>
 </Cars>

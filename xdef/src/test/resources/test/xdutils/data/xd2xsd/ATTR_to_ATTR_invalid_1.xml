@@ -1,5 +1,3 @@
-<?xml version="1.0" encoding="windows-1250"?>
 <Staff>
-    <Worker name="John"
-            surname="Doe" />
+    <Worker name="John" surname="Doe" />
 </Staff>

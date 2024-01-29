@@ -71,17 +71,16 @@ public class TestXsd2XdConv extends XDTester {
 		//prepare schema
 		File schemaFile = new File(_dataDir.getAbsolutePath(),testName+".xsd");
 		if (!schemaFile.exists() || !schemaFile.isFile()) {
-			setMessage(
-				new ErrMessage("Schema file does not exist or is not a file",
-				schemaFile, null));
+			setMessage(new ErrMessage(
+				"Schema file does not exist or is not a file",schemaFile,null));
 			return false;
 		}
 		try {
 			Schema schema = _xsdFactory.newSchema(schemaFile);
 			_validator = schema.newValidator();
 		} catch (SAXException ex) {
-			setMessage(new ErrMessage("Could not prepare schema validator",
-				null, ex));
+			setMessage(new ErrMessage(
+				"Could not prepare schema validator", null, ex));
 			return false;
 		}
 		//generating XDefinition collection
@@ -358,7 +357,7 @@ public class TestXsd2XdConv extends XDTester {
 		clearTempDir();
    }
 
-		/** Run test
+	/** Run test
 	 * @param args ignored
 	 */
    public static void main(String... args) {

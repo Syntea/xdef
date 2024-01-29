@@ -1,14 +1,4 @@
-<?xml version="1.0" encoding="windows-1250"?>
-<!--
- http://www.syntea.cz/xdef/3.1
- http://www.xdef.org/xdef/3.2
- http://www.xdef.org/xdef/4.0
- http://www.xdef.org/xdef/4.1
- http://www.xdef.org/xdef/4.2
--->
-<xd:def xmlns:xd     =  "http://www.xdef.org/xdef/4.2"
-        xd:name      =  "main"
-        xd:root      =  "Types" >
+<xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" xd:name="main" xd:root="Types" >
     <Types>
         <xd:mixed>
             <an xd:script="occurs *">an</an>
@@ -46,8 +36,8 @@
             <ISOyear xd:script="occurs *">gYear</ISOyear>
             <ISOyearMonth xd:script="occurs *">gYearMonth</ISOyearMonth>
             <ISOduration xd:script="occurs *">duration</ISOduration>
-            <email xd:script="occurs *">email</email>
-            <emailList xd:script="occurs *">emailList</emailList>
+            <email xd:script="occurs *">emailAddr</email>
+            <emailList xd:script="occurs *">emailAddrList</emailList>
             <emailDate xd:script="occurs *">emailDate</emailDate>
             <ends_1 xd:script="occurs *">ends('ef')</ends_1>
             <endsi_1 xd:script="occurs *">endsi('eF')</endsi_1>

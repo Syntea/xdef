@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="windows-1250"?>
-<SouborM1RC  xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+<SouborM1RC xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
     xsi:noNamespaceSchemaLocation='M1RC.xsd'
     Davka="12345"
     ZeDne="19980719091939">

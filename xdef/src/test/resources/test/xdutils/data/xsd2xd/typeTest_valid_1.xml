@@ -1,13 +1,3 @@
-<?xml version="1.0" encoding="windows-1250"?>
-
-<!--
-    Document   : valid_01.xml
-    Created on : 20. prosinec 2010, 15:28
-    Author     : Alexandrov
-    Description:
-        Purpose of the document follows.
--->
-
 <Types xmlns:ns="http://testNamespace.com"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="typeTestSchema.xsd" >
