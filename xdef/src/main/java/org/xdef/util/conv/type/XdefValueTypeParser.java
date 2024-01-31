@@ -75,6 +75,7 @@ public final class XdefValueTypeParser {
 			null,
 			new String[0],
 			XConstants.XD42, "SOURCE");
+		_p.isBlanksAndComments();
 		_b = new StringBuffer();
 	}
 
@@ -961,37 +962,36 @@ public final class XdefValueTypeParser {
 	private void readSym() {
 		if (_symLock) {
 			_symLock = false;
-		} else {
-			_prevSym = _actSym;
-			_actSym = getSymbol(_p.nextSymbol());
-/*VT*/
-			if ((_prevSym == Symbol.LPAR || _prevSym ==  Symbol.COMMA)
-				&& (_actSym == Symbol.MINUS  || _actSym == Symbol.PLUS)) {
-				// read signed numbers
-				Symbol sym = getSymbol(_p.nextSymbol());
-				boolean isNumber = false;
-				if (sym._type == Symbol.CONST) {
-					StringParser p = new StringParser(sym._value);
-					isNumber = p.isFloat() && p.eos();
-					if (!isNumber) {
-						p.setIndex(0);
-						isNumber = p.isInteger() && p.eos();
-					}
-				}
-				if (isNumber) {
-					if (Symbol.MINUS == _actSym) {
-						sym._value = "-" + sym._value;
-					}
-				} else { // never should happen
-					// This is a nasty code! It probably should be an error!
-					buffer(_b);
-					sym._value = _actSym._value + sym._value;
-				}
-				_actSym = sym;
-			}
-/*VT*/
-			buffer(_b);
 		}
+		_prevSym = _actSym;
+		_actSym = getSymbol(_p.nextSymbol());
+/*VT*/
+		if ((_prevSym == Symbol.LPAR || _prevSym ==  Symbol.COMMA)
+			&& (_actSym == Symbol.MINUS  || _actSym == Symbol.PLUS)) {
+			// read signed numbers
+			Symbol sym = getSymbol(_p.nextSymbol());
+			boolean isNumber = false;
+			if (sym._type == Symbol.CONST) {
+				StringParser p = new StringParser(sym._value);
+				isNumber = p.isFloat() && p.eos();
+				if (!isNumber) {
+					p.setIndex(0);
+					isNumber = p.isInteger() && p.eos();
+				}
+			}
+			if (isNumber) {
+				if (Symbol.MINUS == _actSym) {
+					sym._value = "-" + sym._value;
+				}
+			} else { // never should happen
+				// This is a nasty code! It probably should be an error!
+				buffer(_b);
+				sym._value = _actSym._value + sym._value;
+			}
+			_actSym = sym;
+		}
+/*VT*/
+		buffer(_b);
 	}
 
 	private void throwEx(String message) {
