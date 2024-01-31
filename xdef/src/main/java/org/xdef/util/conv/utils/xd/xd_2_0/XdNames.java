@@ -1,45 +1,47 @@
 package org.xdef.util.conv.utils.xd.xd_2_0;
 
-/** Contains X-definition names as static constants. */
+/** Contains X-definition names as static constants.
+ * @author Ilia Alexandrov
+ */
 public interface XdNames {
 
 	//--------------------------------------------------------------------------
 	//                          NODE NAMES
 	//--------------------------------------------------------------------------
-	/** X-definition <code>def</code> element local name.*/
-	public static final String DEF = "def";
-	/** X-definition <code>script</code> attribute local name.*/
-	public static final String SCRIPT = "script";
-	/** X-definition <code>collection</code> element local name.*/
-	public static final String COLLECTION = "collection";
-	/** X-definition <code>include</code> attribute local name.*/
-	public static final String INCLUDE = "include";
-	/** X-definition <code>name</code> attribute local name.*/
-	public static final String NAME = "name";
-	/** X-definition <code>root</code> attribute local name.*/
-	public static final String ROOT = "root";
-	/** X-definition <code>attr</code> attribute local name.*/
-	public static final String ATTR = "attr";
-	/** X-definition <code>declaration</code> element local name.*/
-	public static final String DECLARATION = "declaration";
 	/** X-definition <code>any</code> element local name.*/
 	public static final String ANY = "any";
+	/** X-definition <code>attr</code> attribute local name.*/
+	public static final String ATTR = "attr";
 	/** X-definition <code>choice</code> element local name.*/
 	public static final String CHOICE = "choice";
+	/** X-definition <code>collection</code> element local name.*/
+	public static final String COLLECTION = "collection";
+	/** X-definition <code>declaration</code> element local name.*/
+	public static final String DECLARATION = "declaration";
+	/** X-definition <code>def</code> element local name.*/
+	public static final String DEF = "def";
+	/** X-definition <code>illegal</code> occurrence.*/
+	public static final String ILLEGAL = "illegal";
+	/** X-definition <code>include</code> attribute local name.*/
+	public static final String INCLUDE = "include";
 	/** X-definition <code>mixed</code> element local name.*/
 	public static final String MIXED = "mixed";
+	/** X-definition <code>name</code> attribute local name.*/
+	public static final String NAME = "name";
+	/** X-definition <code>optional</code> occurrence.*/
+	public static final String OPTIONAL = "optional";
+	/** X-definition <code>required</code> occurrence.*/
+	public static final String REQUIRED = "required";
+	/** X-definition <code>root</code> attribute local name.*/
+	public static final String ROOT = "root";
+	/** X-definition <code>script</code> attribute local name.*/
+	public static final String SCRIPT = "script";
 	/** X-definition <code>sequence</code> element local name.*/
 	public static final String SEQUENCE = "sequence";
 	/** X-definition <code>text</code> attribute local name.*/
 	public static final String TEXT = "text";
-	/** X-definition <code>required</code> occurrence.*/
-	public static final String REQUIRED = "required";
-	/** X-definition <code>optional</code> occurrence.*/
-	public static final String OPTIONAL = "optional";
-	/** X-definition <code>illegal</code> occurrence.*/
-	public static final String ILLEGAL = "illegal";
 	//--------------------------------------------------------------------------
-	//                          TYPE NAMES
+	//                          X-DEFINITION TYPE NAMES
 	//--------------------------------------------------------------------------
 	/** X-definition <code>an</code> type name.*/
 	public static final String ALFA_NUMERIC = "an";
@@ -55,8 +57,6 @@ public interface XdNames {
 	public static final String CONTAINS_I = "containsi";
 	/** X-definition <code>datetime</code> type name.*/
 	public static final String DATE = "date";
-	/** X-definition <code>xdatetime</code> type name.*/
-	public static final String XDATETIME = "xdatetime";
 	/** X-definition <code>dateYMDhms</code> type name.*/
 	public static final String DATE_YMDHMS = "dateYMDhms";
 	/** X-definition <code>dec</code> type name.*/
@@ -65,12 +65,38 @@ public interface XdNames {
 	public static final String ENTITY = "ENTITY";
 	/** X-definition <code>ENTITIES</code> type name.*/
 	public static final String ENTITIES = "ENTITIES";
+	/** X-definition <code>email</code> type name.*/
+	public static final String EMAIL = "emailAddr";
+	/** X-definition <code>emailList</code> type name.*/
+	public static final String EMAIL_LIST = "emaiAddrlList";
+	/** X-definition <code>emailDate</code> type name.*/
+	public static final String EMAIL_DATE = "emailDate";
+	/** X-definition <code>ends</code> type name.*/
+	public static final String ENDS = "ends";
+	/** X-definition <code>endsi</code> type name.*/
+	public static final String ENDS_I = "endsi";
+	/** X-definition <code>enum</code> type name.*/
+	public static final String ENUM = "enum";
+	/** X-definition <code>listi</code> type name.*/
+	public static final String ENUM_I = "enumi";
+	/** X-definition <code>equals</code> type name.*/
+	public static final String EQUALS = "equals";
+	/** X-definition <code>equalsi</code> type name.*/
+	public static final String EQUALS_I = "equalsi";
+	/** X-definition <code>file</code> type name.*/
+	public static final String FILE = "file";
+	/** X-definition <code>float</code> type name.*/
+	public static final String FLOAT = "float";
+	/** X-definition <code>hex</code> type name.*/
+	public static final String HEX = "hexBinary";
 	/** X-definition <code>ID</code> type name.*/
 	public static final String ID = "ID";
 	/** X-definition <code>IDREF</code> type name.*/
 	public static final String IDREF = "IDREF";
 	/** X-definition <code>IDREFS</code> type name.*/
 	public static final String IDREFS = "IDREFS";
+	/** X-definition <code>int</code> type name.*/
+	public static final String INT = "int";
 	/** X-definition <code>ISOdateTime</code> type name.*/
 	public static final String ISO_DATE_TIME = "ISOdateTime";
 	/** X-definition <code>ISOdate</code> type name.*/
@@ -93,36 +119,6 @@ public interface XdNames {
 	public static final String ISO_YEAR_MONTH = "ISOyearMonth";
 	/** X-definition <code>ISOduration</code> type name.*/
 	public static final String ISO_DURATION = "ISOduration";
-	/** X-definition <code>email</code> type name.*/
-	public static final String EMAIL = "email";
-	/** X-definition <code>emailList</code> type name.*/
-	public static final String EMAIL_LIST = "emailList";
-	/** X-definition <code>emailDate</code> type name.*/
-	public static final String EMAIL_DATE = "emailDate";
-	/** X-definition <code>ends</code> type name.*/
-	public static final String ENDS = "ends";
-	/** X-definition <code>endsi</code> type name.*/
-	public static final String ENDS_I = "endsi";
-	/** X-definition <code>equals</code> type name.*/
-	public static final String EQUALS = "equals";
-	/** X-definition <code>equalsi</code> type name.*/
-	public static final String EQUALS_I = "equalsi";
-	/** X-definition <code>file</code> type name.*/
-	public static final String FILE = "file";
-	/** X-definition <code>float</code> type name.*/
-	public static final String FLOAT = "float";
-	/** X-definition <code>hex</code> type name.*/
-	public static final String HEX = "hexBinary";
-	/** X-definition <code>int</code> type name.*/
-	public static final String INT = "int";
-	/** X-definition <code>list</code> type name.*/
-	public static final String ENUM = "enum";
-	/** X-definition <code>listi</code> type name.*/
-	public static final String ENUM_I = "enumi";
-	/** X-definition <code>tokens</code> type name.*/
-	public static final String TOKENS = "tokens";
-	/** X-definition <code>tokensi</code> type name.*/
-	public static final String TOKENS_I = "tokensi";
 	/** X-definition <code>MD5</code> type name.*/
 	public static final String MD5 = "MD5";
 	/** X-definition <code>NCName</code> type name.*/
@@ -133,26 +129,26 @@ public interface XdNames {
 	public static final String NM_TOKEN = "NMTOKEN";
 	/** X-definition <code>NMTOKENS</code> type name.*/
 	public static final String NM_TOKENS = "NMTOKENS";
-	/** X-definition <code>NOTATION</code> type name.*/
-	public static final String NOTATION = "NOTATION";
 	/** X-definition <code>normString</code> type name.*/
 	public static final String NORM_STRING = "normalizedString";
 	/** X-definition <code>normToken</code> type name.*/
 	public static final String NORM_TOKEN = "token";
 	/** X-definition <code>normTokens</code> type name.*/
 	public static final String NORM_TOKENS = "nmTokens";
+	/** X-definition <code>NOTATION</code> type name.*/
+	public static final String NOTATION = "NOTATION";
 	/** X-definition <code>num</code> type name.*/
 	public static final String NUMBER = "num";
 	/** X-definition <code>pic</code> type name.*/
 	public static final String PICTURE = "pic";
 	/** X-definition <code>QName</code> type name.*/
 	public static final String Q_NAME = "QName";
-	/** X-definition <code>QnameURI</code> type name.*/
-	public static final String Q_NAME_URI = "QnameURI";
 	/** X-definition <code>QnameList</code> type name.*/
 	public static final String Q_NAME_LIST = "QnameList";
 	/** X-definition <code>QnameListURI</code> type name.*/
 	public static final String Q_NAME_LIST_URI = "QNameURIList";
+	/** X-definition <code>QnameURI</code> type name.*/
+	public static final String Q_NAME_URI = "QnameURI";
 	/** X-definition <code>regex</code> type name.*/
 	public static final String REGEX = "regex";
 	/** X-definition <code>starts</code> type name.*/
@@ -161,6 +157,10 @@ public interface XdNames {
 	public static final String STARTS_I = "startsi";
 	/** X-definition <code>string</code> type name.*/
 	public static final String STRING = "string";
+	/** X-definition <code>tokens</code> type name.*/
+	public static final String TOKENS = "tokens";
+	/** X-definition <code>tokensi</code> type name.*/
+	public static final String TOKENS_I = "tokensi";
 	/** X-definition <code>uri</code> type name.*/
 	public static final String URI = "uri";
 	/** X-definition <code>uriList</code> type name.*/
@@ -169,8 +169,10 @@ public interface XdNames {
 	public static final String URL = "url";
 	/** X-definition <code>urlList</code> type name.*/
 	public static final String URL_LIST = "urlList";
+	/** X-definition <code>xdatetime</code> type name.*/
+	public static final String XDATETIME = "xdatetime";
 	//--------------------------------------------------------------------------
-	//                         SCHEMA TYPE NAMES
+	//                         XML SCHEMA TYPE NAMES
 	//--------------------------------------------------------------------------
 	/** Schema <code>anyURI</code> type name in X-definition.*/
 	public static final String XS_ANY_URI = "xs:anyURI";
@@ -249,10 +251,15 @@ public interface XdNames {
 	/** Schema <code>list</code> type name in X-definition.*/
 	public static final String XS_LIST = "xs:list";
 	//--------------------------------------------------------------------------
-	//                     SCHEMA TYPE PARAMETER NAMES
+	//                     ITEM PARAMETER NAME (union, list)
 	//--------------------------------------------------------------------------
-	/** Parameter <code>base</code> name in X-definition.*/
-	public static final String BASE = "base";
+	/** Parameter <code>item</code> name in X-definition schema union. */
+	public static final String ITEM_UNION = "item";
+	/** Parameter <code>item</code> name in X-definition schemalist. type.*/
+	public static final String ITEM_LIST = "item";
+	//--------------------------------------------------------------------------
+	//                     XML SCHEMA TYPE PARAMETER NAMES
+	//--------------------------------------------------------------------------
 	/** Parameter <code>enumeration</code> name in X-definition.*/
 	public static final String ENUMERATION = "enumeration";
 	/** Parameter <code>fractionDigits</code> name in X-definition.*/
@@ -277,13 +284,17 @@ public interface XdNames {
 	public static final String TOTAL_DIGITS = "totalDigits";
 	/** Parameter <code>whiteSpace</code> name in X-definition.*/
 	public static final String WHITE_SPACE = "whiteSpace";
-	/**
-	 * Parameter <code>item</code> name in X-definition schema
-	 * <code>union</code> type.
-	 */
-	public static final String ITEM_UNION = "item";
-	/**
-	 * Parameter <code>item</code> name in X-definition schema
-	 * <code>union</code> type.*/
-	public static final String ITEM_LIST = "item";
+	//--------------------------------------------------------------------------
+	//                     X-DEFINITION TYPE PARAMETER NAMES
+	//--------------------------------------------------------------------------
+	/** Parameter <code>base</code> name in X-definition.*/
+	public static final String BASE = "base";
+	/** Parameter <code>base</code> name in X-definition.*/
+	public static final String ARGUMENT = "argument";
+	/** Parameter <code>base</code> name in X-definition.*/
+	public static final String FORMAT = "format";
+	/** Parameter <code>base</code> name in X-definition.*/
+	public static final String OUTFORMAT = "outFormat";
+	//--------------------------------------------------------------------------
+
 }

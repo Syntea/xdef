@@ -1,8 +1,9 @@
 package org.xdef.util.conv.utils.xd.xd_2_0.domain;
 
-/** Represents X-definition declaration. */
+/** Represents X-definition declaration.
+ * @author Ilia Alexandrov
+ */
 public final class XdDecl extends XdModel {
-
 	/** Hashcode.*/
 	private int _hashCode = 0;
 
@@ -10,7 +11,7 @@ public final class XdDecl extends XdModel {
 	 * @param def declaration X-definition.
 	 * @param name name of delcaration.
 	 * @throws NullPointerException if given model X-definition or declaration
-	 * name is <tt>null</tt>.
+	 * name is null.
 	 * @throws IllegalArgumentException if given declaration name is empty.
 	 */
 	public XdDecl(XdDef def, String name) {

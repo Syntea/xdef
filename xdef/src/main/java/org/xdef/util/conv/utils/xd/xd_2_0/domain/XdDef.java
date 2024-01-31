@@ -1,19 +1,19 @@
 package org.xdef.util.conv.utils.xd.xd_2_0.domain;
 
-/** Represents X-definition. */
+/** Represents X-definition.
+ * @author Ilia Alexandrov
+ */
 public final class XdDef {
 
 	/** Hashcode. */
 	private int _hashCode = 0;
-	/**
-	 * X-definition name as is in X-definition<tt>name</tt> attribute.
-	 */
+	/** X-definition name as is in X-definitionname attribute.*/
 	private final String _name;
 
 	/** Creates instance of X-definition representation with given name.
 	 *
 	 * @param name name of X-definition.
-	 * @throws NullPointerException if given X-definition name is <tt>null</tt>.
+	 * @throws NullPointerException if given X-definition name is null.
 	 * @throws IllegalArgumentException ig given X-definition name is empty.
 	 */
 	public XdDef(String name) {

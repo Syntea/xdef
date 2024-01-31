@@ -1,6 +1,8 @@
 package org.xdef.util.conv.type.domain.restr;
 
-/** Represents white space restricted type. */
+/** Represents white space restricted type.
+ * @author Ilia Alexandrov
+ */
 public interface WhiteSpaceRestricted {
 
 	/**

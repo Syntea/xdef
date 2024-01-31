@@ -18,7 +18,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-/** Represents implementation of X-definition document version 2.0. */
+/** Represents implementation of X-definition document version 2.0.
+ * @author Ilia Alexandrov
+ */
 public final class XdDoc_2_0 extends XdDoc {
 
 	/** X-definition model (XdModel) representation to model element mapping. */

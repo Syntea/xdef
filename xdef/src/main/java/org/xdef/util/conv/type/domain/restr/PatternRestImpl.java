@@ -4,7 +4,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-/** Skeletal implementation of pattern restricted type. */
+/** Skeletal implementation of pattern restricted type.
+ * @author Ilia Alexandrov
+ */
 public class PatternRestImpl implements PatternRestricted {
 
 	/**

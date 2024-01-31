@@ -437,17 +437,21 @@ public class XdefValueTypeResolver {
 					_xsdDoc.getSchemaTypeQName(XsdBase.STRING.getName()));
 				String alfaNumeric = "[A-Za-z0-9]";
 				StringBuilder pattern = new StringBuilder();
-				if (paramCount == 0) {
-					pattern.append(alfaNumeric).append("+");
-				} else if (paramCount == 1) {
-					pattern.append(alfaNumeric).append("{")
-						.append(xdefType.getParams().get(0)).append("}");
-				} else if (paramCount == 2) {
-					pattern.append(alfaNumeric).append("{")
-						.append(xdefType.getParams().get(0)).append(",")
-						.append(xdefType.getParams().get(1)).append("}");
-				} else {
-					throwUnexpectedParams(base, paramCount);
+				switch (paramCount) {
+					case 0:
+						pattern.append(alfaNumeric).append("+");
+						break;
+					case 1:
+						pattern.append(alfaNumeric).append("{")
+							.append(xdefType.getParams().get(0)).append("}");
+						break;
+					case 2:
+						pattern.append(alfaNumeric).append("{")
+							.append(xdefType.getParams().get(0)).append(",")
+							.append(xdefType.getParams().get(1)).append("}");
+						break;
+					default:
+						throwUnexpectedParams(base, paramCount);
 				}
 				_xsdDoc.addFacet(restrElem,
 					XsdFacet.PATTERN.getXsdName(), pattern.toString());
@@ -457,20 +461,22 @@ public class XdefValueTypeResolver {
 				Element restrElem = _xsdDoc.addRestrictionDecl(simpleTypeElem,
 					_xsdDoc.getSchemaTypeQName(
 						XsdBase.BASE64_BINARY.getName()));
-				if (paramCount == 0) {
-					//do nothing
-				} else if (paramCount == 1) {
-					_xsdDoc.addFacet(restrElem, XsdFacet.LENGTH.getXsdName(),
-						(String) xdefType.getParams().get(0));
-				} else if (paramCount == 2) {
-					_xsdDoc.addFacet(
-						restrElem, XsdFacet.MIN_LENGTH.getXsdName(),
-						(String) xdefType.getParams().get(0));
-					_xsdDoc.addFacet(restrElem,
-						XsdFacet.MAX_LENGTH.getXsdName(),
-						(String) xdefType.getParams().get(1));
-				} else {
-					throwUnexpectedParams(base, paramCount);
+				switch (paramCount) {
+					case 0: break; //do nothing
+					case 1:
+						_xsdDoc.addFacet(restrElem,XsdFacet.LENGTH.getXsdName(),
+							(String) xdefType.getParams().get(0));
+						break;
+					case 2:
+						_xsdDoc.addFacet(
+							restrElem, XsdFacet.MIN_LENGTH.getXsdName(),
+							(String) xdefType.getParams().get(0));
+						_xsdDoc.addFacet(restrElem,
+							XsdFacet.MAX_LENGTH.getXsdName(),
+							(String) xdefType.getParams().get(1));
+						break;
+					default:
+						throwUnexpectedParams(base, paramCount);
 				}
 			}
 			break;
@@ -514,23 +520,6 @@ public class XdefValueTypeResolver {
 				}
 			}
 			break;
-			case XdefBase.Id.XDATETIME: {
-				Element restrElem = _xsdDoc.addRestrictionDecl(simpleTypeElem,
-					_xsdDoc.getSchemaTypeQName(XsdBase.STRING.getName()));
-				if (paramCount == 1 || paramCount == 2) {
-					String mask = (String) xdefType.getParams().get(paramCount-1);
-					Set regexes = DatetimeMaskAnalyzer.getRegexes(mask);
-					Iterator it = regexes.iterator();
-					while (it.hasNext()) {
-						String regex = (String) it.next();
-						_xsdDoc.addFacet(restrElem,
-							XsdFacet.PATTERN.getXsdName(), regex);
-					}
-				} else {
-					throwUnexpectedParams(base, paramCount);
-				}
-			}
-			break;
 			case XdefBase.Id.DATE_YMDHMS: {
 				Element restrElem = _xsdDoc.addRestrictionDecl(simpleTypeElem,
 					_xsdDoc.getSchemaTypeQName(XsdBase.STRING.getName()));
@@ -554,19 +543,22 @@ public class XdefValueTypeResolver {
 					Element restrElem = _xsdDoc.addRestrictionDecl(
 						decimalSTypeElem,
 						_xsdDoc.getSchemaTypeQName(XsdBase.DECIMAL.getName()));
-					if (paramCount == 1) {
-						_xsdDoc.addFacet(restrElem,
-							XsdFacet.TOTAL_DIGITS.getXsdName(),
-							(String) xdefType.getParams().get(0));
-					} else if (paramCount == 2) {
-						_xsdDoc.addFacet(restrElem,
-							XsdFacet.TOTAL_DIGITS.getXsdName(),
-							(String) xdefType.getParams().get(0));
-						_xsdDoc.addFacet(restrElem,
-							XsdFacet.FRACTION_DIGITS.getXsdName(),
-							(String) xdefType.getParams().get(1));
-					} else {
-						throwUnexpectedParams(base, paramCount);
+					switch (paramCount) {
+						case 1:
+							_xsdDoc.addFacet(restrElem,
+								XsdFacet.TOTAL_DIGITS.getXsdName(),
+								(String) xdefType.getParams().get(0));
+							break;
+						case 2:
+							_xsdDoc.addFacet(restrElem,
+								XsdFacet.TOTAL_DIGITS.getXsdName(),
+								(String) xdefType.getParams().get(0));
+							_xsdDoc.addFacet(restrElem,
+								XsdFacet.FRACTION_DIGITS.getXsdName(),
+								(String) xdefType.getParams().get(1));
+							break;
+						default:
+							throwUnexpectedParams(base, paramCount);
 					}
 				}
 				Element patternSTypeElem =
@@ -678,42 +670,47 @@ public class XdefValueTypeResolver {
 			case XdefBase.Id.FLOAT: {
 				Element restrElem = _xsdDoc.addRestrictionDecl(simpleTypeElem,
 					_xsdDoc.getSchemaTypeQName(XsdBase.DOUBLE.getName()));
-				if (paramCount == 0) {
-					//do nothing
-				} else if (paramCount == 1) {
-					_xsdDoc.addFacet(restrElem,
-						XsdFacet.ENUMERATION.getXsdName(),
-						(String) xdefType.getParams().get(0));
-				} else if (paramCount == 2) {
-					_xsdDoc.addFacet(restrElem,
-						XsdFacet.MIN_INCLUSIVE.getXsdName(),
-						(String) xdefType.getParams().get(0));
-					_xsdDoc.addFacet(restrElem,
-						XsdFacet.MAX_INCLUSIVE.getXsdName(),
-						(String) xdefType.getParams().get(1));
-				} else {
-					throwUnexpectedParams(base, paramCount);
+				switch (paramCount) {
+					case 0: break; //do nothing
+					case 1:
+						_xsdDoc.addFacet(restrElem,
+							XsdFacet.ENUMERATION.getXsdName(),
+							(String) xdefType.getParams().get(0));
+						break;
+					case 2:
+						_xsdDoc.addFacet(restrElem,
+							XsdFacet.MIN_INCLUSIVE.getXsdName(),
+							(String) xdefType.getParams().get(0));
+						_xsdDoc.addFacet(restrElem,
+							XsdFacet.MAX_INCLUSIVE.getXsdName(),
+							(String) xdefType.getParams().get(1));
+						break;
+					default:
+						throwUnexpectedParams(base, paramCount);
 				}
 			}
 			break;
 			case XdefBase.Id.HEX: {
 				Element restrElem = _xsdDoc.addRestrictionDecl(simpleTypeElem,
 					_xsdDoc.getSchemaTypeQName(XsdBase.HEX_BINARY.getName()));
-				if (paramCount == 0) {
-					//do nothing
-				} else if (paramCount == 1) {
-					_xsdDoc.addFacet(restrElem,
-						XsdFacet.LENGTH.getXsdName(),
-						(String) xdefType.getParams().get(0));
-				} else if (paramCount == 2) {
-					_xsdDoc.addFacet(restrElem,
-						XsdFacet.MIN_LENGTH.getXsdName(),
-						(String) xdefType.getParams().get(0));
-					_xsdDoc.addFacet(restrElem,
-						XsdFacet.MAX_LENGTH.getXsdName(),
-						(String) xdefType.getParams().get(1));
-				} else {
-					throwUnexpectedParams(base, paramCount);
+				switch (paramCount) {
+					case 0: break; //do nothing
+					case 1:
+						_xsdDoc.addFacet(restrElem,
+							XsdFacet.LENGTH.getXsdName(),
+							(String) xdefType.getParams().get(0));
+						break;
+					case 2:
+						_xsdDoc.addFacet(restrElem,
+							XsdFacet.MIN_LENGTH.getXsdName(),
+							(String) xdefType.getParams().get(0));
+						_xsdDoc.addFacet(restrElem,
+							XsdFacet.MAX_LENGTH.getXsdName(),
+							(String) xdefType.getParams().get(1));
+						break;
+					default:
+						throwUnexpectedParams(base, paramCount);
+						break;
 				}
 			}
 			break;
@@ -744,20 +741,24 @@ public class XdefValueTypeResolver {
 			case XdefBase.Id.INT: {
 				Element restrElem = _xsdDoc.addRestrictionDecl(simpleTypeElem,
 					_xsdDoc.getSchemaTypeQName(XsdBase.LONG.getName()));
-				if (paramCount == 0) {
-				} else if (paramCount == 1) {
-					_xsdDoc.addFacet(restrElem,
-						XsdFacet.ENUMERATION.getXsdName(),
-						(String) xdefType.getParams().get(0));
-				} else if (paramCount == 2) {
-					_xsdDoc.addFacet(restrElem,
-						XsdFacet.MIN_INCLUSIVE.getXsdName(),
-						(String) xdefType.getParams().get(0));
-					_xsdDoc.addFacet(restrElem,
-						XsdFacet.MAX_INCLUSIVE.getXsdName(),
-						(String) xdefType.getParams().get(1));
-				} else {
-					throwUnexpectedParams(base, paramCount);
+				switch (paramCount) {
+					case 0: break; // do notning
+					case 1:
+						_xsdDoc.addFacet(restrElem,
+							XsdFacet.ENUMERATION.getXsdName(),
+							(String) xdefType.getParams().get(0));
+						break;
+					case 2:
+						_xsdDoc.addFacet(restrElem,
+							XsdFacet.MIN_INCLUSIVE.getXsdName(),
+							(String) xdefType.getParams().get(0));
+						_xsdDoc.addFacet(restrElem,
+							XsdFacet.MAX_INCLUSIVE.getXsdName(),
+							(String) xdefType.getParams().get(1));
+						break;
+					default:
+						throwUnexpectedParams(base, paramCount);
+						break;
 				}
 			}
 			break;
@@ -954,20 +955,24 @@ public class XdefValueTypeResolver {
 			case XdefBase.Id.NUMBER: {
 				Element restrElem = _xsdDoc.addRestrictionDecl(simpleTypeElem,
 					_xsdDoc.getSchemaTypeQName(XsdBase.STRING.getName()));
-				if (paramCount == 0) {
-					_xsdDoc.addFacet(restrElem,
-						XsdFacet.PATTERN.getXsdName(), "\\d+");
-				} else if (paramCount == 1) {
-					_xsdDoc.addFacet(restrElem,
-						XsdFacet.PATTERN.getXsdName(),
-						"\\d{" + xdefType.getParams().get(0) + "}");
-				} else if (paramCount == 2) {
-					_xsdDoc.addFacet(restrElem,
-						XsdFacet.PATTERN.getXsdName(),
-						"\\d{" + xdefType.getParams().get(0)
-							+ "," + xdefType.getParams().get(1) + "}");
-				} else {
-					throwUnexpectedParams(base, paramCount);
+				switch (paramCount) {
+					case 0:
+						_xsdDoc.addFacet(restrElem,
+							XsdFacet.PATTERN.getXsdName(), "\\d+");
+						break;
+					case 1:
+						_xsdDoc.addFacet(restrElem,
+							XsdFacet.PATTERN.getXsdName(),
+							"\\d{" + xdefType.getParams().get(0) + "}");
+						break;
+					case 2:
+						_xsdDoc.addFacet(restrElem,
+							XsdFacet.PATTERN.getXsdName(),
+							"\\d{" + xdefType.getParams().get(0)
+								+ "," + xdefType.getParams().get(1) + "}");
+						break;
+					default:
+						throwUnexpectedParams(base, paramCount);
 				}
 			}
 			break;
@@ -1006,12 +1011,13 @@ public class XdefValueTypeResolver {
 			case XdefBase.Id.Q_NAME_URI: {
 				_xsdDoc.addRestrictionDecl(simpleTypeElem,
 					_xsdDoc.getSchemaTypeQName(XsdBase.STRING.getName()));
-				if (paramCount == 0) {
-					//do nothing
-				} else if (paramCount == 1) {
-					//
-				} else {
-					throwUnexpectedParams(base, paramCount);
+				switch (paramCount) {
+					case 0: break; //do nothing
+					case 1:
+						break;
+					default:
+						throwUnexpectedParams(base, paramCount);
+						break;
 				}
 			}
 			break;
@@ -1056,21 +1062,24 @@ public class XdefValueTypeResolver {
 			case XdefBase.Id.STRING: {
 				Element restrElem = _xsdDoc.addRestrictionDecl(simpleTypeElem,
 					_xsdDoc.getSchemaTypeQName(XsdBase.STRING.getName()));
-				if (paramCount == 0) {
-					//do nothing
-				} else if (paramCount == 1) {
-					_xsdDoc.addFacet(restrElem,
-						XsdFacet.LENGTH.getXsdName(),
-						(String) xdefType.getParams().get(0));
-				} else if (paramCount == 2) {
-					_xsdDoc.addFacet(restrElem,
-						XsdFacet.MIN_LENGTH.getXsdName(),
-						(String) xdefType.getParams().get(0));
-					_xsdDoc.addFacet(restrElem,
-						XsdFacet.MAX_LENGTH.getXsdName(),
-						(String) xdefType.getParams().get(1));
-				} else {
-					throwUnexpectedParams(base, paramCount);
+				switch (paramCount) {
+					case 0:
+						break; //do nothing
+					case 1:
+						_xsdDoc.addFacet(restrElem,
+							XsdFacet.LENGTH.getXsdName(),
+							(String) xdefType.getParams().get(0));
+						break;
+					case 2:
+						_xsdDoc.addFacet(restrElem,
+							XsdFacet.MIN_LENGTH.getXsdName(),
+							(String) xdefType.getParams().get(0));
+						_xsdDoc.addFacet(restrElem,
+							XsdFacet.MAX_LENGTH.getXsdName(),
+							(String) xdefType.getParams().get(1));
+						break;
+					default:
+						throwUnexpectedParams(base, paramCount);
 				}
 			}
 			break;
@@ -1141,6 +1150,38 @@ public class XdefValueTypeResolver {
 				}
 			}
 			break;
+			case XdefBase.Id.XDATETIME: {
+				if (paramCount == 1 || paramCount == 2) {
+					String mask = xdefType.getParams().get(paramCount-1);
+					if (mask.equals("yyyy-MM-dd")) {
+						_xsdDoc.addRestrictionDecl(simpleTypeElem,
+							_xsdDoc.getSchemaTypeQName(XsdBase.DATE.getName()));
+					} else if (mask.equals("HH:mm:ss")) {
+						_xsdDoc.addRestrictionDecl(simpleTypeElem,
+							_xsdDoc.getSchemaTypeQName(
+								XsdBase.TIME.getName()));
+					} else if (mask.equals("dd-MM-yyyyTHH:mm:ss")) {
+						_xsdDoc.addRestrictionDecl(simpleTypeElem,
+							_xsdDoc.getSchemaTypeQName(
+								XsdBase.DATE_TIME.getName()));
+					} else {
+						Element restrElem =
+							_xsdDoc.addRestrictionDecl(simpleTypeElem,
+								_xsdDoc.getSchemaTypeQName(
+									XsdBase.STRING.getName()));
+						Set regexes = DatetimeMaskAnalyzer.getRegexes(mask);
+						Iterator it = regexes.iterator();
+						while (it.hasNext()) {
+							String regex = (String) it.next();
+							_xsdDoc.addFacet(restrElem,
+								XsdFacet.PATTERN.getXsdName(), regex);
+						}
+					}
+				} else {
+						throwUnexpectedParams(base, paramCount);
+				}
+			}
+			break;
 			default: {
 				throw new RuntimeException(
 					"Unknown or not implemented type name!");
@@ -1153,7 +1194,7 @@ public class XdefValueTypeResolver {
 	 * @return set of tokens (String).
 	 */
 	private Set<String> getTokens(String tokensString) {
-		Set<String> ret = new HashSet<String>();
+		Set<String> ret = new HashSet<>();
 		StringTokenizer st = new StringTokenizer(tokensString, "|");
 		while (st.hasMoreTokens()) {
 			ret.add(st.nextToken().trim());

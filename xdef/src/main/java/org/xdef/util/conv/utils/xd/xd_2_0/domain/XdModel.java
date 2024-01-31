@@ -1,6 +1,8 @@
 package org.xdef.util.conv.utils.xd.xd_2_0.domain;
 
-/** Represents any X-definition model. */
+/** Represents any X-definition model.
+ * @author Ilia Alexandrov
+ */
 public abstract class XdModel {
 
 	/** Model X-definition. */
@@ -14,7 +16,7 @@ public abstract class XdModel {
 	 * @param def model X-definition.
 	 * @param name X-definition model name.
 	 * @throws NullPointerException if given model X-definition or name is
-	 * <tt>null</tt>.
+	 * null.
 	 * @throws IllegalArgumentException if given model name is empty.
 	 */
 	public XdModel(XdDef def, String name) {
@@ -41,12 +43,12 @@ public abstract class XdModel {
 	 */
 	public final String getName() {return _name;}
 
-	/** Returns <tt>true</tt> if given model is processed.
-	 * @return <tt>true</tt> if given model is processed.
+	/** Returns true if given model is processed.
+	 * @return true if given model is processed.
 	 */
 	public final boolean isProcessed() {return _processed;}
 
-	/** Sets processed model switch to <tt>true</tt>. */
+	/** Sets processed model switch to true. */
 	public final void setProcessed() {_processed = true;}
 
 	/** Returns type constant of current X-definition model implementation.
@@ -56,9 +58,9 @@ public abstract class XdModel {
 
 	/** Model type enumeration type. */
 	public static interface Type {
-		/** X-definition <tt>declaration</tt> model type. */
+		/** X-definition declaration model type. */
 		public static final int DECLARATION = 1;
-		/** X-definition <tt>group</tt> model type. */
+		/** X-definition group model type. */
 		public static final int GROUP = DECLARATION + 1;
 		/** X-definition element model type. */
 		public static final int ELEMENT = GROUP + 1;

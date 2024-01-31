@@ -1,6 +1,8 @@
 package org.xdef.util.conv.type.domain.restr;
 
-/** Skeletal implementation of item length restricted type. */
+/** Skeletal implementation of item length restricted type.
+ * @author Ilia Alexandrov
+ */
 public class LengthRestrImpl implements LengthRestricted {
 
 	/**

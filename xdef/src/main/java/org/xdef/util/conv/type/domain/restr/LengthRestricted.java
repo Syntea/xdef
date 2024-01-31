@@ -1,6 +1,8 @@
 package org.xdef.util.conv.type.domain.restr;
 
-/** Represents item length restricted type. */
+/** Represents item length restricted type.
+ * @author Ilia Alexandrov
+ */
 public interface LengthRestricted {
 
 	/** Gets length count restriction.

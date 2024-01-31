@@ -4,7 +4,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-/** Skeletal implementation of enumerations restricted type. */
+/** Skeletal implementation of enumerations restricted type.
+ * @author Ilia Alexandrov
+ */
 public class EnumerationRestrImpl implements EnumerationRestricted {
 
 	/**

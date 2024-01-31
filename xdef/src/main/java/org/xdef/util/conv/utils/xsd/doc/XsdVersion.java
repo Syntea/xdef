@@ -1,6 +1,8 @@
 package org.xdef.util.conv.utils.xsd.doc;
 
-/** Enumeration of XML Schema versions. */
+/** Enumeration of XML Schema versions.
+ * @author Ilia Alexandrov
+ */
 public class XsdVersion {
 
 	/**

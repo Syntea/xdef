@@ -19,10 +19,11 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import java.io.PrintStream;
 import org.w3c.dom.Document;
-import org.xdef.msg.XD2XSD;
+import org.xdef.msg.XDCONV;
 
 /** Convertor of X-definition to XML Schema.
  * (see {@link org.xdef.util.XdefToXsd#main(String[])})
+ * @author  Vaclav Trojan
  */
 public final class XdefToXsd {
 	private static final XsdVersion SCHEMA_VERSION = XsdVersion.SCHEMA_1_0;
@@ -56,7 +57,7 @@ public final class XdefToXsd {
 			xdDoc = XdDoc.getXdDoc(xdef, reporter, false);
 		} catch (Exception ex) {
 			//Can not create X-definition&{0}{ }
-			throw new SRuntimeException(XD2XSD.XD2XSD113, ex);
+			throw new SRuntimeException(XDCONV.XDCONV113, ex);
 		}
 		Convertor convertor;
 		try {
@@ -64,7 +65,7 @@ public final class XdefToXsd {
 				 SCHEMA_VERSION, sPrefix, reporter, sFileExt, genDocumentation);
 		} catch (Exception ex) {
 			//Can not create convertor&{0}{ }
-			throw new SRuntimeException(XD2XSD.XD2XSD114, ex);
+			throw new SRuntimeException(XDCONV.XDCONV114, ex);
 		}
 		Utils.printSchemas(convertor.getSchemaDocuments(), outputDir);
 	}
@@ -245,7 +246,7 @@ public final class XdefToXsd {
 	 * </ul>
 	 */
 	public static void main(String... args) {
-		ArrayList<String> source = new ArrayList<String>();
+		ArrayList<String> source = new ArrayList<>();
 		String outputDir = null;
 		String xdName = null;
 		String model = null;

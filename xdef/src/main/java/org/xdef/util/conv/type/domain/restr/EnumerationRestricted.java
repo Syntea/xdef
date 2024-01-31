@@ -2,7 +2,9 @@ package org.xdef.util.conv.type.domain.restr;
 
 import java.util.Set;
 
-/** Represents enumeration restricted type. */
+/** Represents enumeration restricted type.
+ * @author Ilia Alexandrov
+ */
 public interface EnumerationRestricted {
 
 	/** Adds enumeration.

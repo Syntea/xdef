@@ -2,7 +2,9 @@ package org.xdef.util.conv.type.domain.restr;
 
 import java.util.Set;
 
-/** Represents patterns restricted type. */
+/** Represents patterns restricted type.
+ * @author Ilia Alexandrov
+ */
 public interface PatternRestricted {
 
 	/** Adds pattern.

@@ -1,6 +1,8 @@
 package org.xdef.util.conv.utils.xd.doc;
 
-/** Enumeration of X-definition versions. */
+/** Enumeration of X-definition versions.
+ * @author Ilia Alexandrov
+ */
 public class XdVersion {
 	/** Version name space URI. */
 	private final String _nsURI;

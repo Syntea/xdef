@@ -3,7 +3,9 @@ package org.xdef.util.conv.type.domain.restr;
 import java.util.HashSet;
 import java.util.Set;
 
-/** Skeletal implementation of white space restricted type. */
+/** Skeletal implementation of white space restricted type.
+ * @author Ilia Alexandrov
+ */
 public class WhiteSpaceRestrImpl implements WhiteSpaceRestricted {
 
 	/** Set of white space values. */

@@ -16,7 +16,9 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
-/** Provides methods for working with XML documents.*/
+/** Provides methods for working with XML documents.
+ * @author Ilia Alexandrov
+ */
 public final class Utils extends KDOMUtils {
 
 	/** DOM Builder. */

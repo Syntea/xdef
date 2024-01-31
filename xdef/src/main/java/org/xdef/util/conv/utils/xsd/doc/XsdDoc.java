@@ -4,7 +4,9 @@ import org.xdef.sys.SReporter;
 import org.xdef.util.conv.utils.Utils;
 import java.util.Map;
 
-/** Represents any XML Schema document. */
+/** Represents any XML Schema document.
+ * @author Ilia Alexandrov
+ */
 public abstract class XsdDoc {
 
 	/** Reporter for reporting warnings and errors. */

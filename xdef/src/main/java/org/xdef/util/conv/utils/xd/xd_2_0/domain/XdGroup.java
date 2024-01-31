@@ -1,6 +1,8 @@
 package org.xdef.util.conv.utils.xd.xd_2_0.domain;
 
-/** Represents node group model. */
+/** Represents node group model.
+ * @author Ilia Alexandrov
+ */
 public final class XdGroup extends XdModel {
 
 	/**
@@ -18,7 +20,7 @@ public final class XdGroup extends XdModel {
 	 * @param name group name.
 	 * @param type group type.
 	 * @throws NullPointerException if given model X-definition or group name is
-	 * <tt>null</tt>.
+	 * null.
 	 * @throws IllegalArgumentException if given group name is empty or given
 	 * group type is unknown.
 	 */

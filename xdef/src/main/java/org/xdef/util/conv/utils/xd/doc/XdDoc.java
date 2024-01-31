@@ -10,9 +10,11 @@ import java.io.InputStream;
 import java.net.URL;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.xdef.msg.XD2XSD;
+import org.xdef.msg.XDCONV;
 
-/** Represents any X-definition document. */
+/** Represents any X-definition document.
+ * @author Ilia Alexandrov
+ */
 public abstract class XdDoc {
 
 	/** Returns proper implementation of X-definition document representation
@@ -29,7 +31,7 @@ public abstract class XdDoc {
 		final SReporter reporter,
 		boolean debugMode) {
 		if (reporter == null) {
-			throw new SRuntimeException(XD2XSD.XD2XSD107); //Reporter is null
+			throw new SRuntimeException(XDCONV.XDCONV107); //Reporter is null
 		}
 		String namespace = xdef.getDocumentElement().getNamespaceURI();
 		if (XDConstants.XDEF31_NS_URI.equals(namespace)
@@ -40,7 +42,7 @@ public abstract class XdDoc {
 			return new XdDoc_2_0(xdef, namespace);
 		} else {
 			//Not valid X-definition document
-			throw new SRuntimeException(XD2XSD.XD2XSD104);
+			throw new SRuntimeException(XDCONV.XDCONV104);
 		}
 	}
 
@@ -58,11 +60,11 @@ public abstract class XdDoc {
 	public static XdDoc getXdDoc(String xdef, final SReporter reporter,
 		boolean debugMode) {
 		if (xdef == null) {
-			throw new SRuntimeException(XD2XSD.XD2XSD105);//X-definition is null
+			throw new SRuntimeException(XDCONV.XDCONV105);//X-definition is null
 		}
 		if (xdef.length() == 0) {
 			//X-definition is empty string
-			throw new SRuntimeException(XD2XSD.XD2XSD106);
+			throw new SRuntimeException(XDCONV.XDCONV106);
 		}
 		try {
 			Element collection = GenCollection.genCollection(new String[]{xdef},
@@ -71,7 +73,7 @@ public abstract class XdDoc {
 			return getXdDoc(xdefDocument, reporter, debugMode);
 		} catch (Exception ex) {
 			//Error occurred when creating collection element: &{0}
-			throw new SRuntimeException(XD2XSD.XD2XSD108, ex);
+			throw new SRuntimeException(XDCONV.XDCONV108, ex);
 		}
 	}
 
@@ -88,7 +90,7 @@ public abstract class XdDoc {
 		final SReporter reporter,
 		boolean debugMode) {
 		if (xdef == null) {
-			throw new SRuntimeException(XD2XSD.XD2XSD105);//X-definition is null
+			throw new SRuntimeException(XDCONV.XDCONV105);//X-definition is null
 		}
 		try {
 			Element collection =
@@ -97,7 +99,7 @@ public abstract class XdDoc {
 			return getXdDoc(xdefDocument, reporter, debugMode);
 		} catch (Exception ex) {
 			//Error occurred when creating collection element: &{0}
-			throw new SRuntimeException(XD2XSD.XD2XSD108, ex);
+			throw new SRuntimeException(XDCONV.XDCONV108, ex);
 		}
 	}
 
@@ -114,7 +116,7 @@ public abstract class XdDoc {
 		final SReporter reporter,
 		boolean debugMode) {
 		if (xdef == null) {
-			throw new SRuntimeException(XD2XSD.XD2XSD105);//X-definition is null
+			throw new SRuntimeException(XDCONV.XDCONV105);//X-definition is null
 		}
 		try {
 			Element collection =
@@ -123,7 +125,7 @@ public abstract class XdDoc {
 			return getXdDoc(xdefDocument, reporter, debugMode);
 		} catch (Exception ex) {
 			//Error occurred when creating collection element: &{0}
-			throw new SRuntimeException(XD2XSD.XD2XSD108, ex);
+			throw new SRuntimeException(XDCONV.XDCONV108, ex);
 		}
 	}
 
@@ -141,7 +143,7 @@ public abstract class XdDoc {
 		SReporter reporter,
 		boolean debugMode) {
 		if (xdef == null) {
-			throw new SRuntimeException(XD2XSD.XD2XSD105);//X-definition is null
+			throw new SRuntimeException(XDCONV.XDCONV105);//X-definition is null
 		}
 		KDOMBuilder builder = new KDOMBuilder();
 		try {
@@ -149,7 +151,7 @@ public abstract class XdDoc {
 			return getXdDoc(xdefDocument, reporter, debugMode);
 		} catch (Exception ex) {
 			//Error occurred when creating collection element: &{0}
-			throw new SRuntimeException(XD2XSD.XD2XSD108, ex);
+			throw new SRuntimeException(XDCONV.XDCONV108, ex);
 		}
 	}
 }

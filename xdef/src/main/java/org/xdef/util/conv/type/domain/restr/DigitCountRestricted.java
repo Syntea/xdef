@@ -1,6 +1,8 @@
 package org.xdef.util.conv.type.domain.restr;
 
-/** Represents digit count restricted type. */
+/** Represents digit count restricted type.
+ * @author Ilia Alexandrov
+ */
 public interface DigitCountRestricted {
 
 	/** Sets fraction digits count restriction.

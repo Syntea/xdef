@@ -1,6 +1,8 @@
 package org.xdef.util.conv.type.domain.restr;
 
-/** Skeletal implementation of value restricted type. */
+/** Skeletal implementation of value restricted type.
+ * @author Ilia Alexandrov
+ */
 public class ValueRestrImpl implements ValueRestricted {
 
 	/**

@@ -18,7 +18,9 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-/** Provides static methods for working with X-definition documents.*/
+/** Provides static methods for working with X-definition documents.
+ * @author Ilia Alexandrov
+ */
 public final class XdUtils {
 
 	/** Private constructor. */
@@ -795,7 +797,7 @@ public final class XdUtils {
 					return text.trim();
 				}
 			}
-			throw new RuntimeException("Could not find type to parse");
+			throw new RuntimeException("Could not find type to parse: " + text);
 		}
 	}
 

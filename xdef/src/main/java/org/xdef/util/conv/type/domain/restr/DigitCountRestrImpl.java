@@ -1,6 +1,8 @@
 package org.xdef.util.conv.type.domain.restr;
 
-/** Skeletal implementation of digit count restriction. */
+/** Skeletal implementation of digit count restriction.
+ * @author Ilia Alexandrov
+ */
 public class DigitCountRestrImpl implements DigitCountRestricted {
 
 	/**

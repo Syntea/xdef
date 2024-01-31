@@ -1,6 +1,8 @@
 package org.xdef.util.conv.type.domain.restr;
 
-/** Represents value restricted type. */
+/** Represents value restricted type.
+ * @author Ilia Alexandrov
+ */
 public interface ValueRestricted {
 
 	/** Gets minimal exclusive value.

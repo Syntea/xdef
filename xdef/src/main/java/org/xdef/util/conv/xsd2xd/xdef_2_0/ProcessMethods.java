@@ -1,6 +1,6 @@
 package org.xdef.util.conv.xsd2xd.xdef_2_0;
 
-import org.xdef.msg.XD2XSD;
+import org.xdef.msg.XDCONV;
 import org.xdef.sys.SReporter;
 import org.xdef.util.conv.utils.xsd.xsd_1_0.XsdUtils;
 import org.xdef.util.conv.xsd2xd.schema_1_0.Processor;
@@ -8,10 +8,12 @@ import org.xdef.util.conv.xsd2xd.utils.DOMUtils;
 import org.xdef.util.conv.utils.xsd.xsd_1_0.type.domain.SimpleType;
 import org.xdef.util.conv.utils.xsd.xsd_1_0.type.domain.Type;
 import java.net.URL;
-import org.w3c.dom.*;
 import org.xdef.util.conv.xsd2xd.schema_1_0.Utils;
 import java.util.Map;
 import java.util.Stack;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 /** Provides static methods for processing schema items and adding declaration
  * to X-definition items.
@@ -167,7 +169,7 @@ public class ProcessMethods {
 			if (Utils.isRedefineSchemaChild(simpleTypeElement)) {
 				//Redefined simple types can not be declared because of names
 				//collision.
-				reporter.warning(XD2XSD.XD2XSD102);
+				reporter.warning(XDCONV.XDCONV102);
 			}
 		}
 	}
@@ -435,7 +437,7 @@ public class ProcessMethods {
 				//AttrProps declaration with name "&{0}" in schema at URL "&{1}"
 				// cannot be declared in X-definition 2.0. Refference will be
 				//replaced with attribute declaration.
-				reporter.warning(XD2XSD.XD2XSD101,
+				reporter.warning(XDCONV.XDCONV101,
 					attributeElement.getAttribute("name"),
 					schemaURLStack.peek().getPath());
 			}
@@ -606,7 +608,7 @@ public class ProcessMethods {
 			//at "&amp;{2}" cannot be converted to X-definition 2.0! reference
 			//to this attribute group will replaced with attribute declarations
 			//in group.
-			reporter.warning(XD2XSD.XD2XSD103,
+			reporter.warning(XDCONV.XDCONV103,
 				attributeGroupElement.getAttribute("name"),
 					schemaURLStack.peek().getPath());
 		}
