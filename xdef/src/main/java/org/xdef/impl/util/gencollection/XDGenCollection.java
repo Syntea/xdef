@@ -62,15 +62,19 @@ public class XDGenCollection {
 	/** List of macro definitions. */
 	private final Map<String, XScriptMacro> _macros;
 
-	private static final SAXParserFactory SPF = SAXParserFactory.newInstance();
-	private static final Properties PROPS_NOEXT = new Properties();
+	/** Prepared SAX parser instance. */
+	private static final SAXParserFactory SPF;
+	/** Properties with ignore unresolved externals, ignore warnings. */
+	private static final Properties PROPS_NOEXT;
 
 	static {
+		PROPS_NOEXT = new Properties();
 		PROPS_NOEXT.setProperty(XDConstants.XDPROPERTY_IGNORE_UNDEF_EXT,
 			XDConstants.XDPROPERTYVALUE_IGNORE_UNDEF_EXT_TRUE);
 		PROPS_NOEXT.setProperty(XDConstants.XDPROPERTY_WARNINGS,
 			XDConstants.XDPROPERTYVALUE_WARNINGS_FALSE);
 		try {
+			SPF = SAXParserFactory.newInstance();
 			SPF.setNamespaceAware(true);
 			SPF.setXIncludeAware(true);
 			SPF.setValidating(false);
