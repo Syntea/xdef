@@ -896,29 +896,37 @@ class CompileStatement extends XScriptParser implements CodeTable {
 				} else if (!assignment(name, true)) {
 					CompileVariable var = _g.getVariable(name);
 					XDValue x;
-					if (var != null
-						&& var.getType() == X_UNIQUESET_NAMED) {
-						_g.genLD(var);
-						_g.addCode(new CodeS1(var.getParseResultType(),
-							UNIQUESET_GETVALUEX, var.getValue().toString()), 0);
-					// this is very nasty code. If the variable refers to a
-					// declared type and the parser is constant we use the
-					// code with the parser as a value (and it is constant).
-					// TODO if it is not a constant.
-					} else if (var != null
-						&& var.getType()==X_PARSEITEM
-						&& var.getParseMethodAddr() >= 0 // parse method exists
-						&& (x=_g._code.get(var.getParseMethodAddr()))
-							.getCode() == 0 // constant
-						&& x.getItemId() == XD_PARSER
-						&& _g._code.get(var.getParseMethodAddr() + 1)
-							.getCode() == PARSE_OP
-						&& _g._code.get(var.getParseMethodAddr() + 2)
-							.getCode() == STOP_OP) { // declared type
-						_g.addCode(x, 1);
-						_g._tstack[_g._sp] = XD_PARSER; // it must be parser!
-						_g._cstack[_g._sp] = var.getParseMethodAddr();//constant
-					} else if (var == null || !_g.genLD(var)) {
+					if (var != null) {
+						if (var.getType() == X_UNIQUESET_NAMED) {
+							// this is very nasty code. If the variable refers
+							// to a declared type and the parser is constant we
+							// use the code with the parser as a value (and it
+							// is a constant).
+							// TODO if it is not a constant.
+							_g.genLD(var);
+							_g.addCode(new CodeS1(var.getParseResultType(),
+								UNIQUESET_GETVALUEX, var.getValue().toString()),
+								0);
+							break;
+						} else if (var.getParseMethodAddr() >= 0
+							&& var.getParseMethodAddr() > _g._lastCodeIndex) {
+							break; // ??? error, probably unknown type or method
+						} else if (var.getType()==X_PARSEITEM
+							&& var.getParseMethodAddr() >= 0//parse method exist
+							&& (x=_g._code.get(var.getParseMethodAddr()))
+								.getCode() == 0 // constant
+							&& x.getItemId() == XD_PARSER
+							&& _g._code.get(var.getParseMethodAddr() + 1)
+								.getCode() == PARSE_OP
+							&& _g._code.get(var.getParseMethodAddr() + 2)
+								.getCode() == STOP_OP) { // declared type
+							_g.addCode(x, 1);
+							_g._tstack[_g._sp] = XD_PARSER; //it is parser!
+							_g._cstack[_g._sp] = var.getParseMethodAddr();
+							break;
+						}
+					}
+					if (var == null || !_g.genLD(var)) {
 						int xsp = _g._sp;
 						if (_g.scriptMethod(name, 0)
 							|| _g.internalMethod(name, 0)
