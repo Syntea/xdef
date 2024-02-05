@@ -11,7 +11,6 @@ import org.xdef.util.conv.type.domain.XsdList;
 import org.xdef.util.conv.type.domain.XsdRestricted;
 import org.xdef.util.conv.type.domain.XsdUnion;
 import org.xdef.util.conv.utils.xd.doc.XdDoc_2_0;
-import org.xdef.util.conv.utils.xd.xd_2_0.XdUtils;
 import org.xdef.util.conv.utils.xd.xd_2_0.domain.XdDecl;
 import org.xdef.util.conv.utils.xsd.doc.XsdDoc_1_0;
 import org.xdef.util.conv.utils.xsd.xsd_1_0.XsdNames;
@@ -26,6 +25,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 import org.w3c.dom.Element;
+import org.xdef.impl.compile.XScriptParser;
+import org.xdef.sys.ArrayReporter;
+import org.xdef.sys.SParser;
+import org.xdef.sys.StringParser;
+import org.xdef.xml.KDOMUtils;
 
 /** Provides functionality for resolving value type declarations.
  * @author Ilia Alexandrov
@@ -243,6 +247,44 @@ public class XdefValueTypeResolver {
 	 * @param xdDecl X-definition declaration model to resolve.
 	 */
 	public void resolveXdDecl(XdDecl xdDecl) {
+/*VT*/		
+		Element declElem = (Element) _xdDoc.getXdModels().get(xdDecl);
+		XScriptParser xp = new XScriptParser(StringParser.XMLVER1_0);
+		xp.setLineInfoFlag(true);
+		xp.setReportWriter(new ArrayReporter());
+		String text = KDOMUtils.getTextValue(declElem).trim();
+		xp.setSourceBuffer(text);
+		xp.isBlanksAndComments();
+		while (!xp.eos()) {
+			if (xp.nextSymbol() == XScriptParser.TYPE_SYM) {
+				if (xp.nextSymbol() != XScriptParser.IDENTIFIER_SYM) {
+					continue;
+				}
+				xp.isBlanksAndComments();
+				int pos = xp.getIndex();
+				while (xp.nextSymbol() != XScriptParser.SEMICOLON_SYM
+					&& xp._sym != XScriptParser.AND_SYM 
+					&& xp._sym != XScriptParser.AAND_SYM 
+					&& xp._sym != XScriptParser.OR_SYM 
+					&& xp._sym != XScriptParser.OOR_SYM 
+					&& xp._sym != XScriptParser.CHECK_SYM) {}
+				String typeDecl = xp._sym == SParser.NOCHAR
+					? xp.getBufferPartFrom(pos)
+					: xp.getBufferPart(pos, xp.getLastPosition().getIndex());
+				typeDecl = typeDecl.trim();
+//System.out.println("typeDecl: \"" + typeDecl + '"');
+				try {
+					ValueType type = XdefValueTypeParser.parse(typeDecl);
+					XsdSType model = (XsdSType) _xdModelXsdModelMap.get(xdDecl);
+					Element sTypeElem =	(Element)_xsdDoc.getModels().get(model);
+					addTypeToSType(type, sTypeElem);
+				} catch (Exception ex) {
+					throw new RuntimeException(
+						"Could not parse type: " + typeDecl, ex);
+				}
+			}
+		}
+/*VT*
 		Element declElem = (Element) _xdDoc.getXdModels().get(xdDecl);
 		String typeDecl = XdUtils.getDeclTypeString(declElem);
 		ValueType type;
@@ -254,6 +296,7 @@ public class XdefValueTypeResolver {
 		XsdSType model = (XsdSType) _xdModelXsdModelMap.get(xdDecl);
 		Element sTypeElem = (Element) _xsdDoc.getModels().get(model);
 		addTypeToSType(type, sTypeElem);
+/*VT*/		
 	}
 
 	/** Resolves attribute type and adds proper declaration to given schema

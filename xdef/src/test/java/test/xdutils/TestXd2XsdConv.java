@@ -11,6 +11,7 @@ import org.xdef.util.XdefToXsd;
 import java.io.File;
 import java.util.Properties;
 import java.io.IOException;
+import javax.xml.XMLConstants;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
@@ -41,8 +42,8 @@ public class TestXd2XsdConv extends XDTester {
 	private ErrMessage _errMessage;
 
 	private void init() {
-		_xsdFactory =
-			SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
+		_xsdFactory = 
+			SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 		_repWriter = new ArrayReporter();
 		File dataDir = new File(getDataDir());
 		if (!dataDir.exists() || !dataDir.isDirectory()) {

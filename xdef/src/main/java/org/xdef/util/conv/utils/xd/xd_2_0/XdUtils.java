@@ -756,12 +756,13 @@ public final class XdUtils {
 				+ "descendant node");
 	}
 
+/*VT*
 	/** Gets type declaration string from given X-definition
 	 * declaration model.
 	 * @param declElem X-definition declaration model.
 	 * @return type declaration string.
 	 * @throws NullPointerException if given declaration element is null.
-	 */
+	 * /
 	public static String getDeclTypeString(Element declElem) {
 		if (declElem == null) {
 			throw new NullPointerException("Given declaration is null");
@@ -785,6 +786,7 @@ public final class XdUtils {
 		}
 		return text;
 	}
+/*VT*/		
 
 	/** Represents node occurrence. */
 	public static final class Occurrence {

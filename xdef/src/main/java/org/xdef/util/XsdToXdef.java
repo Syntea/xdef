@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import javax.xml.XMLConstants;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
@@ -215,7 +216,7 @@ public class XsdToXdef {
 					"Schema file does not exists");
 			}
 			SchemaFactory factory = SchemaFactory.newInstance(
-				"http://www.w3.org/2001/XMLSchema");
+				XMLConstants.W3C_XML_SCHEMA_NS_URI);
 			Schema schema = factory.newSchema(schemaFile);
 			return schema.newValidator();
 		} catch (IllegalArgumentException | SAXException ex) {

@@ -8,6 +8,7 @@ import org.xdef.XDPool;
 import org.xdef.util.XsdToXdef;
 import java.io.File;
 import java.io.IOException;
+import javax.xml.XMLConstants;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
@@ -33,7 +34,7 @@ public class TestXsd2XdConv extends XDTester {
 
 	private void init() {
 		_xsdFactory =
-			SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
+			SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 		_repWriter = new NullReportWriter(false);
 		File dataDir = new File(getDataDir());
 		if (!dataDir.exists() || !dataDir.isDirectory()) {
