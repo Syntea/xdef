@@ -12,7 +12,7 @@ import org.xdef.msg.XDEF;
 import org.xdef.sys.SIllegalArgumentException;
 import org.xdef.sys.SRuntimeException;
 
-/** Object with currency.
+/** Object with currency (see ISO 4217).
  * @author Vaclav Trojan
  */
 public class DefCurrency extends XDValueAbstract implements XDCurrency {

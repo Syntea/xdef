@@ -7,7 +7,7 @@ import org.xdef.impl.code.DefCurrency;
 import org.xdef.msg.XDEF;
 import org.xdef.proc.XXNode;
 
-/** Parse Internet IP address.
+/** Parse currency (see ISO 4217).
  * @author Vaclav Trojan
  */
 public class XDParseCurrency extends XDParserAbstract {
