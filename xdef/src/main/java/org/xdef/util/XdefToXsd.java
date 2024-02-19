@@ -1,352 +1,159 @@
 package org.xdef.util;
 
-import org.xdef.util.conv.utils.Utils;
-import org.xdef.sys.FileReportWriter;
-import org.xdef.sys.SReporter;
-import org.xdef.sys.SRuntimeException;
-import org.xdef.sys.SUtils;
-import org.xdef.XDConstants;
-import org.xdef.xml.KXmlUtils;
-import org.xdef.util.conv.xd2xsd.Convertor;
-import org.xdef.util.conv.utils.xd.doc.XdDoc;
-import org.xdef.util.conv.utils.xsd.doc.XsdVersion;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
-import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-import java.io.PrintStream;
-import org.w3c.dom.Document;
-import org.xdef.msg.XDCONV;
+import org.xdef.XDPool;
+import org.xdef.sys.SUtils;
+import org.xdef.util.xd2xsd.Xd2Xsd;
 
-/** Convertor of X-definition to XML Schema.
- * (see {@link org.xdef.util.XdefToXsd#main(String[])})
- * @author  Vaclav Trojan
+/** Convertor of X-definition to XML schema.
+ * @author Vaclav Trojan
  */
-public final class XdefToXsd {
-	private static final XsdVersion SCHEMA_VERSION = XsdVersion.SCHEMA_1_0;
-
-	/** Creates instance of X-definition to XML Schema convertor with default
-	 * values.
-	 */
-	private XdefToXsd() {}
-
-	/** Generates XML Schema from given X-definition file or as string and
-	 * saves files to given output directory.
-	 * @param xdef X-definition file or X-definition as string.
-	 * @param outputDir output schema files directory.
-	 * @param schemaPrefix prefix of XML schema namespace.
-	 * @param schemaFileExt file extension of schema files.
-	 * @param out where print information messages (if null System.out).
-	 * @param genDocumentation if true documentation is generated.
-	 */
-	public static void genSchema(String xdef,
-		String outputDir,
-		String schemaPrefix,
-		String schemaFileExt,
-		PrintStream out,
-		boolean genDocumentation) {
-		XdDoc xdDoc;
-		SReporter reporter = new SReporter(new FileReportWriter(
-			out == null ? System.out : out));
-		String sPrefix = schemaPrefix == null ? "xs" : schemaPrefix;
-		String sFileExt = schemaFileExt == null ? "xsd" : schemaPrefix;
-		try {
-			xdDoc = XdDoc.getXdDoc(xdef, reporter, false);
-		} catch (Exception ex) {
-			//Can not create X-definition&{0}{ }
-			throw new SRuntimeException(XDCONV.XDCONV113, ex);
-		}
-		Convertor convertor;
-		try {
-			convertor = Convertor.getConvertor(xdDoc,
-				 SCHEMA_VERSION, sPrefix, reporter, sFileExt, genDocumentation);
-		} catch (Exception ex) {
-			//Can not create convertor&{0}{ }
-			throw new SRuntimeException(XDCONV.XDCONV114, ex);
-		}
-		Utils.printSchemas(convertor.getSchemaDocuments(), outputDir);
-	}
-
-	/** Generates XML Schema from given X-definition and returns map of schema
-	 * file names and DOM Documents.
-	 * @param xdef X-definition file or X-definition as string.
-	 * @param schemaPrefix prefix of XML schema namespace.
-	 * @param schemaFileExt file extension of schema files.
-	 * @param out where print information messages (if null System.out).
-	 * @param genDocumentation if true documentation is generated.
-	 * @return map of schema file names and DOM Documents.
-	 */
-	public static Map<String, Document> genSchema(String xdef,
-		String schemaPrefix,
-		String schemaFileExt,
-		PrintStream out,
-		boolean genDocumentation) {
-		SReporter reporter = new SReporter(new FileReportWriter(
-			out == null ? System.out : out));
-		String sPrefix = schemaPrefix == null ? "xs" : schemaPrefix;
-		String sFileExt = schemaFileExt == null ? "xsd" : schemaPrefix;
-		XdDoc xdDoc = XdDoc.getXdDoc(xdef, reporter, false);
-		Convertor convertor = Convertor.getConvertor(xdDoc,
-			SCHEMA_VERSION, sPrefix, reporter, sFileExt, genDocumentation);
-		return convertor.getSchemaDocuments();
-	}
-
-	/** Generates XML Schema from given X-definition file and saves schema
-	 * files to given output directory.
-	 * @param xdef X-definition file.
-	 * @param outputDir output schema files directory.
-	 * @param schemaPrefix prefix of XML schema namespace.
-	 * @param schemaFileExt file extension of schema files.
-	 * @param out where print information messages (if null System.out).
-	 * @param genDocumentation if true documentation is generated.
-	 */
-	public static void genSchema(File xdef,
-		String outputDir,
-		String schemaPrefix,
-		String schemaFileExt,
-		PrintStream out,
-		boolean genDocumentation) {
-		genSchema(xdef.getAbsolutePath(),
-			outputDir, schemaPrefix, schemaFileExt, out, genDocumentation);
-	}
+public class XdefToXsd {
 
 	/** Generates XML Schema from given X-definition files and saves schema
 	 * files to given output directory.
 	 * @param xdefs X-definition file.
-	 * @param outputDir output schema files directory.
+	 * @param outDir output schema files directory.
 	 * @param xdName name of X-definition. May be null, then the nameless
 	 * X-definition or the first one X-definition is used.
-	 * @param model name of model of X-definition to used. May be null, then
-	 * the value from "xs:root" parameter is used to create models.
-	 * @param schemaPrefix prefix of XML schema namespace.
-	 * @param schemaFileExt file extension of schema files.
-	 * @param out where print information messages (if null System.out).
-	 * @param genDocumentation if true documentation is generated.
-	 * @throws Exception if an error occurs.
+	 * @param modelName name of model of X-definition to used. May be null,
+	 * then the value from "xs:root" parameter is used to create models.
+	 * @param outName name of base XML schema file. May be null, then
+	 * local name of X-definition model is used.
+	 * @param genAnnotation if true documentation information is generated.
 	 */
-	public static void genSchema(File[] xdefs,
-		String outputDir,
-		String xdName,
-		String model,
-		String schemaPrefix,
-		String schemaFileExt,
-		PrintStream out,
-		boolean genDocumentation) throws Exception {
-		String[] srcs = new String[xdefs.length];
-		for (int i = 0; i < xdefs.length; i++) {
-			File f = xdefs[i];
-			srcs[i] = f.getAbsolutePath();
-		}
-		genSchema(srcs, outputDir,
-			xdName, model,schemaPrefix, schemaFileExt, out, genDocumentation);
+	public static void genSchema(final File[] xdefs,
+		final File outDir,
+		final String xdName,
+		final String modelName,
+		final String outName,
+		final boolean genAnnotation) {
+		Xd2Xsd.genSchema(xdefs,
+			outDir, xdName, modelName, outName, genAnnotation);
 	}
 
-	@SuppressWarnings("deprecation") //NS_XDEF_2_0_INSTANCE
-	/** Generates XML Schema from given X-definition file names and saves schema
-	 * files to given output directory.
-	 * @param xdefs X-definition file.
-	 * @param outputDir output schema files directory.
-	 * @param xdName name of X-definition. May be null, then the nameless
-	 * X-definition or the first one X-definition is used.
-	 * @param model name of model of X-definition to used. May be null, then
-	 * the value from "xs:root" parameter is used to create models.
-	 * @param schemaPrefix prefix of XML schema namespace.
-	 * @param schemaFileExt file extension of schema files.
-	 * @param out where print information messages (if null System.out).
-	 * @param genDocumentation if true documentation is generated.
-	 * @throws Exception if an error occurs.
+	/** Run XML schema generator.
+	 * @param xp compiled XDPool.
+	 * @param xdName name of root X-definition.
+	 * @param modelName name of root model.
+	 * @param outName name of root XML schema file.
+	 * @param genAnnotation switch if generate annotation with documentation.
+	 * @return map with names of XML schema files and corresponding Elements.
 	 */
-	public static void genSchema(String[] xdefs,
-		String outputDir,
-		String xdName,
-		String model,
-		String schemaPrefix,
-		String schemaFileExt,
-		PrintStream out,
-		boolean genDocumentation) throws Exception {
-		Element collection;
-		if (xdefs.length == 1) {
-			collection = KXmlUtils.parseXml(xdefs[0]).getDocumentElement();
-		} else {
-			collection = GenCollection.genCollection(xdefs, true, true, true);
-		}
-		if (xdName != null) {
-			NodeList nl = KXmlUtils.getChildElementsNS(collection,
-//				KXmlConstants.NS_XDEF_2_0_INSTANCE, "xdef");
-				XDConstants.XDEF_INSTANCE_NS_URI, "xdef");
-			if (nl.getLength() == 0) {
-				nl = KXmlUtils.getChildElementsNS(collection,
-//					KXmlConstants.NS_XDEF_INSTANCE, "xdef");
-					XDConstants.XDEF_INSTANCE_NS_URI, "xdef");
-			}
-			for (int i = 0; i < nl.getLength(); i++) {
-				Element el = (Element) nl.item(i);
-				Attr a = el.getAttributeNode("name");
-				String name = "";
-				if (a != null) {
-					name = a.getValue();
-				} else {
-					a = el.getAttributeNodeNS(
-						XDConstants.XDEF_INSTANCE_NS_URI, "name");
-					if (a == null) {
-						a = el.getAttributeNodeNS(
-							XDConstants.XDEF_INSTANCE_NS_URI, "name");
-
-					}
-					if (a != null) {
-						name = a.getValue();
-					}
-				}
-				if (!name.equals(xdName)) {
-					continue;
-				}
-				if (model == null) {
-					model = xdName;
-				}
-				a = el.getAttributeNode("root");
-				if (a == null) {
-					a = el.getAttributeNodeNS(
-						XDConstants.XDEF_INSTANCE_NS_URI, "root");
-				}
-				if (a == null) {
-					el.setAttributeNS(
-						XDConstants.XDEF_INSTANCE_NS_URI, "root", model);
-				} else {
-					String value = a.getValue();
-					StringTokenizer st = new StringTokenizer(value, " |");
-					boolean found = false;
-					while (st.hasMoreTokens()) {
-						name = st.nextToken();
-						if (model.equals(name)) {
-							found = true;
-						}
-					}
-					if (!found) {
-						a.setValue(value + " | " + model);
-					}
-				}
-			}
-		}
-		genSchema(KXmlUtils.nodeToString(collection, false),
-			outputDir, schemaPrefix, schemaFileExt, out, genDocumentation);
+	public static Map<String, Element> genSchema(final XDPool xp,
+		final String xdName,
+		final String modelName,
+		final String outName,
+		final boolean genAnnotation) {
+		return Xd2Xsd.genSchema(xp, xdName, modelName, outName, genAnnotation);
 	}
 
-	/** Run class from command line.
+	private static final String INFO =
+"XdefToXsd - convertor of X-definition to XML Schema.\n" +
+"Parameters:\n"+
+" -i or --xdef:     list of input source pathnames with X-definitions\n" +
+" -o or --outDir:   pathname of output directory \n" +
+" -s or --outName:  name of main XML schema file\n" +
+" -m or --root:     name of root model (optional)\n" +
+" -x or --xdName:   name of X-definition (optional)\n" +
+" -v or --genInfo:  genarate documentation etc.\n" +
+" -h or /?:         help";
+
+	/** Run XML schema generator from command line.
 	 * @param args array of string with command line arguments:
 	 * <ul>
-	 * <li>-i list of input sources with X-definitions.</li>
-	 * <li>-o output directory.</li>
-	 * <li>-m name of root model (optional).</li>
-	 * <li>-x name of X-definition (optional).</li>
-	 * <li>-v switch to generate documentation etc.</li>
-	 * <li>-?, -h, help</li>
+	 * <li>-i or --xdef: list of input source path names with X-definitions
+	 * <li>-o or --outDir:  pathname of output directory
+	 * <li>-s or --outName: name of main XML schema file
+	 * <li>-m or --root: name of root model (optional)
+	 * <li>-x or --xdName: name of X-definition (optional)
+	 * <li>-v or --genInfo: generate documentation etc.
+	 * <li> -h or /?: help
 	 * </ul>
 	 */
 	public static void main(String... args) {
-		ArrayList<String> source = new ArrayList<>();
-		String outputDir = null;
 		String xdName = null;
-		String model = null;
-		String schemaPrefix = "xs";
-		String schemaFileExt = "xsd";
-		PrintStream out = System.out;
-		boolean genDocumentation = false;
-		String info =
-"Using XdefToXsd: \n"
-+ "-i <PATH> list of input sources with X-definitions\n"
-+ "-o <PATH> output directory \n"
-+ "-m name of root model (optional)\n"
-+ "-x name of X-definition (optional)\n"
-+ "-v genarate documentation etc.\n"
-+ "-?, -h,  help";
-		if (args == null || args.length == 0) {
-			throw new RuntimeException("Parameters missing!\n" + info);
+		String modelName = null;
+		File outDir = null;
+		String outName = null;
+		boolean genAnnotation = false;
+		List<String> source = new ArrayList<>();
+		if (args == null || args.length < 2) {
+			throw new RuntimeException("Error: parameters missing.\n" + INFO);
 		}
 		for (int i = 0; i < args.length; i++) {
-			switch (args[i]) {
-				case "-h":
-				case "-?":
-					System.out.println(info);
-					return;
-				case "-i": {
-					if (!source.isEmpty()) {
+			String arg = args[i];
+			switch (arg) {
+				case "-o":
+				case "--outDir":
+					if (outDir != null) {
 						throw new RuntimeException(
-							"Input files already set\n" + info);
+							"Redefinition of "+arg+".\n" + INFO);
 					}
-					while (i + 1 < args.length) {
-						if (args[i+1] == null || args[i+1].startsWith("-")) {
+					outDir =  new File(args[++i]);
+					if (!outDir.exists() || !outDir.isDirectory()) {
+						throw new RuntimeException(
+							"\"-outDir\" is not directory.\n" + INFO);
+					}
+					continue;
+				case "-s":
+				case "--outName":
+					if (outName != null) {
+						throw new RuntimeException(
+							"Redefinition of "+arg+".\n" + INFO);
+					}
+					outName = args[++i];
+					continue;
+				case "-i":
+				case "--xdef":
+					for (;;) {
+						String s = args[++i];
+						if (!source.contains(s)) {
+							source.add(s);
+						}
+						if (i+1 >= args.length || args[i+1].startsWith("-")){
 							break;
 						}
-						source.add(args[++i]);
 					}
-					if (source.isEmpty()) {
-						throw new RuntimeException(
-							"No input files specified\n" + info);
-					}
-					break;
-				}
-				case "-o":
-					if (outputDir != null) {
-						throw new RuntimeException(
-							"Output directory is already set\n" + info);
-					}
-					if (i + 1 < args.length) {
-						outputDir = args[++i];
-					}
-					break;
-				case "-m":
-					if (model != null) {
-						throw new RuntimeException(
-							"Model name is already set\n" + info);
-					}
-					if (i + 1 < args.length) {
-						model = args[++i];
-					}
-					break;
+					continue;
 				case "-x":
+				case "--xdName":
 					if (xdName != null) {
 						throw new RuntimeException(
-							"X-definition name is already set\n" + info);
+							"Redefinition of "+arg+".\n" + INFO);
 					}
-					if (i + 1 < args.length) {
-						xdName = args[++i];
-					}
-					break;
-				case "-v":
-					if (genDocumentation) {
+					xdName = args[++i];
+					continue;
+				case "-root":
+				case "--root":
+					if (modelName != null) {
 						throw new RuntimeException(
-							"Switch \"-v\" already set\n" + info);
+							"Redefinition of "+arg+".\n" + INFO);
 					}
-					genDocumentation = true;
-					return;
-				default:
-					throw new RuntimeException(
-						"Incorrect argument: " + args[i] + "\n" + info);
+					modelName = args[++i];
+					continue;
+				case "-v":
+				case "--genInfo":
+					if (genAnnotation) {
+						throw new RuntimeException(
+							"Redefinition of "+arg+".\n" + INFO);
+					}
+					genAnnotation = true;
 			}
 		}
-		// validating input file
 		if (source.isEmpty()) {
-			throw new RuntimeException("No input file specified\n" + info);
+			throw new RuntimeException("Missing idefinition sources.\n"+INFO);
 		}
-		//validating output file
-		if (outputDir == null) {
-			throw new RuntimeException("Output directory is missing\n" + info);
+		if (outDir == null) {
+			throw new RuntimeException("Missing output directory.\n" + INFO);
 		}
-		try {
-			XdefToXsd.genSchema(
-				SUtils.getFileGroup(source.toArray(new String[source.size()])),
-				outputDir,
-				xdName,
-				model,
-				schemaPrefix,
-				schemaFileExt,
-				out,
-				genDocumentation);
-		} catch (Exception x) {
-			throw new RuntimeException(x);
-		}
+		File[] xdefs =
+			SUtils.getFileGroup(source.toArray(new String[source.size()]));
+		genSchema(xdefs, outDir, xdName, modelName, outName, genAnnotation);
 	}
+
 }

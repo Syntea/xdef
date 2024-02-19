@@ -1,0 +1,796 @@
+package org.xdef.util.xd2xsd;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import javax.xml.XMLConstants;
+import javax.xml.namespace.QName;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xdef.XDConstants;
+import org.xdef.XDContainer;
+import org.xdef.XDFactory;
+import org.xdef.XDNamedValue;
+import org.xdef.XDPool;
+import org.xdef.XDValue;
+import org.xdef.impl.XOccurrence;
+import org.xdef.model.XMData;
+import org.xdef.model.XMDefinition;
+import org.xdef.model.XMElement;
+import org.xdef.model.XMNode;
+import org.xdef.model.XMOccurrence;
+import org.xdef.model.XMSelector;
+import org.xdef.sys.SUtils;
+import org.xdef.xml.KXmlUtils;
+
+/** Convertor of X-definition to XML Schema.
+ * (see {@link org.xdef.util.XdefToXsd#main(String[])})
+ * @author  Vaclav Trojan
+ */
+public class Xd2Xsd {
+
+	/** Default prefix used for XML schema namespace. */
+	static final String XSCHEMA_PFX = "xs:";
+	/** Default extension used for XML schema file name. */
+	static final String XSCHEMA_EXT = "xsd";
+
+	/** QName of schema element. */
+	private static final QName XSCHEMA_QNAME =
+		new QName(XMLConstants.W3C_XML_SCHEMA_NS_URI, "schema");
+
+	/** Name of root XML schema file. */
+	private final String _rootName;
+	/** Map of file names and XML schema elements.*/
+	private final Map<String, Element> _xsdSources;
+	/** Switch if generate annotation with documentation information. */
+	private final boolean _genInfo;
+	/** org.w3c.dom.Document used for creation of nodes. */
+	private final Document _doc;
+
+	/** Create new instance of XsdGenerator.
+	 * @param rootName name or XML schema root file
+	 * @param genInfo if true the annotations with documentation is generated.
+	 */
+	private Xd2Xsd(final String rootName, final boolean genInfo) {
+		if (rootName == null || rootName.isEmpty()) {
+			throw new RuntimeException("The name of xsd file is missing");
+		}
+		_rootName = rootName;
+		_genInfo = genInfo;
+		_xsdSources = new HashMap<>();
+		_doc = KXmlUtils.newDocument();
+	}
+
+	/** If _genInfo switch is on, then Generate annotations with documentation.
+	 * @param parent node where to add annotation.
+	 * @param parserInfo object containing documentation information.
+	 */
+	private void addAnnotation(final Element parent, ParserInfo parserInfo) {
+		if (_genInfo && parserInfo.getInfo() != null
+			&& !parserInfo.getInfo().isEmpty()) {
+			Element anotation = genSchemaElem(parent, "annotation");
+			Element documentation = genSchemaElem(anotation, "documentation");
+			documentation.appendChild(
+				_doc.createTextNode(parserInfo.getInfo()));
+		}
+	}
+
+	/** Gen element with restrictions,
+	 * @param parent node where to add restrictions
+	 * @param parserInfo object containing restriction information.
+	 * @return element with restrictions.
+	 */
+	private Element genRestrictions(final Element parent,
+		final ParserInfo parserInfo) {
+		XDNamedValue[] xdv =
+			parserInfo.getParser().getNamedParams().getXDNamedItems();
+		Element restr = genSchemaElem(parent,"restriction");
+		restr.setAttribute("base", parserInfo.getSchemaTypeName());
+		addAnnotation(restr, parserInfo);
+		for (XDNamedValue x: xdv) {
+			XDValue xval = x.getValue();
+			if (xval==null) {
+				continue;
+			}
+			String paramName = x.getName();
+			Element param;
+			switch(paramName) {
+				case "pattern":
+				case "enumeration":
+					if (xval instanceof XDContainer) {
+						XDContainer xdc = (XDContainer) xval;
+						for (int i = 0; i < xdc.getXDItemsNumber(); i++) {
+							param = genSchemaElem(restr, paramName);
+							param.setAttribute("value",
+								xdc.getXDItem(i).toString());
+						}
+					} else {
+						param = genSchemaElem(restr, paramName);
+						param.setAttribute("value", xval.toString());
+					}
+					continue;
+				case "minLength":
+				case "maxLength":
+				case "length":
+				case "minInclusive":
+				case "minExclusive":
+				case "maxInclusive":
+				case "maxExclusive":
+				case "totalDigits":
+				case "fractionDigits":
+					param = genSchemaElem(restr, paramName);
+					param.setAttribute("value", xval.toString());
+			}
+		}
+		return restr;
+	}
+
+	/** Get minimum and maximum of occurrences in a group.
+	 * @param children array with child nodes of element model.
+	 * @param index index of selector child node.
+	 * @return occurrence object with minimum and maximum.
+	 */
+	private XMOccurrence getGroupOccurrence(final XMNode[] children,
+		final int index) {
+		XMSelector xsel = (XMSelector) children[index];
+		int endIndex = xsel.getEndIndex();
+		int min = 1;
+		int max = 0;
+		for (int i = index + 1; i < endIndex; i++) {
+			XMNode x = children[i];
+			switch (x.getKind()) {
+				case XMNode.XMELEMENT:
+				case XMNode.XMMIXED:
+				case XMNode.XMCHOICE:
+				case XMNode.XMSEQUENCE:
+					XMOccurrence occ = x.getOccurence();
+					if (occ.minOccurs() < min) {
+						min = 0;
+					}
+					if (occ.maxOccurs() > max) {
+						max = occ.maxOccurs();
+					}
+			}
+		}
+		return new XOccurrence(min, max);
+	}
+
+	/** Generate sequence of models.
+	 * @param parent node where to add models.
+	 * @param children array with children.
+	 * @param index index of the first child.
+	 * @param endIndex index of the last child.
+	 * @return the index where to continue.
+	 */
+	private int genSelector(final Element complt,
+		final Element parent,
+		final XMSelector xsel,
+		final XMNode[] children,
+		final int index) {
+		int endIndex = xsel.getEndIndex();
+		switch (xsel.getKind()) {
+			case XMNode.XMSEQUENCE: {
+				Element sel = genSchemaElem(parent, "sequence");
+				setOccurrence(sel, xsel);
+				return genSequence(complt, sel, children, index, endIndex);
+			}
+			case XMNode.XMCHOICE: {
+				Element sel = genSchemaElem(parent, "choice");
+				setOccurrence(sel, xsel);
+				return genSequence(complt, sel, children, index, endIndex);
+			}
+			case XMNode.XMMIXED: {
+				XMOccurrence occ = getGroupOccurrence(children, index);
+				Element sel;
+				int min = xsel.getOccurence().minOccurs()==0?0:occ.minOccurs();
+				int max = occ.maxOccurs();
+				int ndx;
+				if (max == 1) {
+					sel = genSchemaElem(parent, "all");
+					if (min == 0) {
+						sel.setAttribute("minOccurs", "0");
+					}
+					ndx = genSequence(complt, sel, children, index, endIndex);
+				} else {
+					sel = genSchemaElem(parent, "choice");
+					sel.setAttribute("maxOccurs",
+						String.valueOf(endIndex - index));
+					sel.setAttribute("minOccurs", String.valueOf(0));
+					ndx = genSequence(complt, sel, children, index, endIndex);
+					NodeList nl = KXmlUtils.getChildElementsNS(sel,
+						XMLConstants.W3C_XML_SCHEMA_NS_URI,
+						new String[] {"element", "sequence", "all", "choice"});
+					for (int j = 0; j < nl.getLength(); j++) {
+						Element e = (Element) nl.item(j);
+						e.removeAttribute("maxOccurs");
+						e.setAttribute("minOccurs", "0");
+					}
+				}
+				return ndx;
+			}
+			default:
+				throw new RuntimeException(xsel + " not implemented yet");
+		}
+	}
+
+	/** Generate sequence of models.
+	 * @param parent node where to add models.
+	 * @param text information about text nodes.
+	 * @param children array with children.
+	 * @param index index of the first child.
+	 * @param endIndex index of the last child.
+	 * @return the index where to continue.
+	 */
+	private int genSequence(final Element complt,
+		final Element parent,
+		final XMNode[] children,
+		final int index,
+		final int endIndex) {
+		int i = index + 1;
+		for (; i < endIndex; i++) {
+			XMNode x = children[i];
+			switch (x.getKind()) {
+				case XMNode.XMELEMENT:
+					genElem(parent, (XMElement) x);
+					continue;
+				case XMNode.XMTEXT:
+					complt.setAttribute("mixed", "true");
+					continue;
+				case XMNode.XMMIXED:
+				case XMNode.XMCHOICE:
+				case XMNode.XMSEQUENCE: {
+					XMSelector xsel = (XMSelector) x;
+					i = genSelector(complt, parent, xsel, children, i);
+					continue;
+				}
+				case XMNode.XMSELECTOR_END:
+					return i + 1; // sholdn't happen!
+			}
+		}
+		return i;
+	}
+
+	/** Set occurrence restrictions to an element.
+	 * @param el Element where to set restrictions.
+	 * @param xel X-definition model of element.
+	 */
+	private static void setOccurrence(final Element el, final XMNode xel) {
+		XMOccurrence occ = xel.getOccurence();
+		int minOcc = occ.minOccurs();
+		int maxOcc = occ.maxOccurs();
+		if (minOcc != 1 || maxOcc != 1) {
+			el.setAttribute("minOccurs", String.valueOf(minOcc));
+			el.setAttribute("maxOccurs", Integer.MAX_VALUE==maxOcc
+				? "unbounded":String.valueOf(maxOcc));
+		}
+	}
+
+	/** Add attributes to schema element.
+	 * @param el schema element
+	 * @param attrs array with attribute models.
+	 */
+	private void addAttrs(final Element el, final XMData[] attrs) {
+		for (XMNode x: attrs) {
+			Element att = genSchemaElem(el, "attribute");
+			att.setAttribute("name", x.getLocalName());
+			XMOccurrence attOcc = x.getOccurence();
+			att.setAttribute("use",
+				attOcc.isRequired() ? "required" : "optional");
+			att.setAttribute("form",
+				x.getNSUri() != null && !x.getNSUri().isEmpty()
+				? "qualified" : "unqualified");
+			ParserInfo parserInfo = ParserInfo.genParser((XMData) x);
+			if (parserInfo.getParser().getNamedParams().isEmpty()) {
+				addAnnotation(att, parserInfo);
+				att.setAttribute("type",
+					XSCHEMA_PFX + parserInfo.getParser().parserName());
+			} else {
+				Element simpletp = genSchemaElem(att, "simpleType");
+				genRestrictions(simpletp, parserInfo);
+			}
+		}
+	}
+
+	/** Get declared type name.
+	 * @param parserInfo with information about value type/
+	 * @return declared type name ot null;
+	 */
+	private static String genDeclaredName(final ParserInfo parserInfo) {
+		String s = parserInfo.getDeclaredName();
+		if (s != null) {
+			String[] parts = s.split(";");
+			if (parts!=null&&parts.length>0&&!(s=parts[0].trim()).isEmpty()) {
+				int ndx = s.indexOf('#');
+				return ndx>=0 ? s.substring(0,ndx)+"_"+s.substring(ndx+1) : s;
+			}
+		}
+		return null;
+	}
+
+	/** Find simpleType element with given name.
+	 * @param el element where to find.
+	 * @param name name of simpleType.
+	 * @return simpleType element with given name or null.
+	 */
+	private Element findSchematype(final Element el, final String name) {
+		Element root = getSchemaElement(el);
+		NodeList nl = KXmlUtils.getChildElementsNS(
+			root, XMLConstants.W3C_XML_SCHEMA_NS_URI, "simpleType");
+		for (int i=0; i < nl.getLength(); i++) {
+			Element stype = (Element)nl.item(i);
+			if (stype.getAttribute("name").equals(name)) {
+				return stype;
+			}
+		}
+		return null;
+	}
+
+	/** Get unique type name in this schema element.
+	 * @param el element where to the name must be unique.
+	 * @param name the name to search.
+	 * @return unique type name.
+	 */
+	private String getUniqueTypeName(final Element el, final String name) {
+		String typeName = name;
+		if (findSchematype(el, name) == null) {
+			return typeName;
+		}
+		int i = 1;
+		String s;
+		while (findSchematype(el, s = typeName + "_" + i) != null) {
+			i++;
+		}
+		return s;
+	}
+
+	/** Get root schema element.
+	 * @param el actual element,
+	 * @return root schema element
+	 */
+	private Element getSchemaElement(final Element el) {
+		Element schema = el;
+		for (;;) {
+			if ((XSCHEMA_PFX+"schema").equals(schema.getNodeName())) {
+				return schema;
+			}
+			Node node = schema.getParentNode();
+			if (node.getNodeType() == Node.ELEMENT_NODE) {
+				schema = (Element) node;
+			} else {
+				throw new RuntimeException("Shema not found");
+			}
+		}
+	}
+
+	/** Create XML schema from X-definition model element.
+	 * @param parent where add the model.
+	 * @param xel X-definition model of element.
+	 * @return created XML schema.
+	 */
+	private Element genElem(final Element parent, final XMElement xel) {
+		Element schema = getSchemaElement(parent);
+		String rootNsUri = schema.getAttribute("targetNamespace");
+		if (rootNsUri == null) {
+			rootNsUri = "";
+		}
+		String nsUri = xel.getNSUri();
+		if (nsUri != null && !nsUri.isEmpty()) {
+			if (!nsUri.equals(rootNsUri)) {
+				String outName = findSchemaItem(nsUri);
+				Element schemaItem;
+				if (outName == null) {
+					outName = genNewName();
+					schemaItem = genNewSchema(outName);
+					schemaItem.setAttribute("targetNamespace", nsUri);
+					Element imprt = genSchemaElem(null, "import");
+					imprt.setAttribute("schemaLocation", outName + ".xsd");
+					imprt.setAttribute("namespace", nsUri);
+					schema.insertBefore(imprt, schema.getFirstChild());
+				} else {
+					schemaItem = _xsdSources.get(outName);
+				}
+				genElem(schemaItem, xel);
+				Element elem = genSchemaElem(parent, "element");
+				elem.setAttribute("xmlns", nsUri);
+				elem.setAttribute("ref", xel.getLocalName());
+				setOccurrence(elem, xel);
+				return elem;
+			}
+		} else if (!rootNsUri.isEmpty()) {
+			String outName = findSchemaItem("");
+			Element newSchema;
+			if (outName == null) {
+				outName = genNewName();
+				newSchema = genNewSchema(outName);
+				Element imprt = genSchemaElem(null, "import");
+				imprt.setAttribute("schemaLocation", outName + ".xsd");
+				schema.insertBefore(imprt, schema.getFirstChild());
+			} else {
+				newSchema = _xsdSources.get(outName);
+			}
+			genElem(newSchema, xel);
+			Element elem = genSchemaElem(parent,"element");
+			elem.setAttribute("ref", xel.getLocalName());
+			setOccurrence(elem, xel);
+			return elem;
+		}
+		Element el = genSchemaElem(parent, "element");
+		el.setAttribute("name", xel.getLocalName());
+		if (!XSCHEMA_QNAME.equals(new QName(parent.getNamespaceURI(),
+			parent.getLocalName()))) { // skip if root element modelo
+			setOccurrence(el, xel);
+		}
+		XMData[] attrs = xel.getAttrs();
+		XMNode[] children = xel.getChildNodeModels();
+		if (children.length == 1 && children[0].getKind() == XMNode.XMTEXT) {
+			XMData x = (XMData) children[0];
+			ParserInfo parserInfo = ParserInfo.genParser(x);
+			String typeName = genDeclaredName(parserInfo);
+			Element simpleType;
+			if (attrs.length == 0) {
+				if (typeName == null) {
+					if (parserInfo.getParser().getNamedParams().isEmpty()) {
+						addAnnotation(el, parserInfo);
+						el.setAttribute("type",
+							XSCHEMA_PFX + parserInfo.getParser().parserName());
+						simpleType = null;
+					} else {
+						simpleType = genSchemaElem(el, "simpleType");
+					}
+				} else {
+					el.setAttribute("type", typeName);
+					if (!rootNsUri.isEmpty()) {
+						el.setAttribute("xmlns", rootNsUri);
+					}
+					simpleType = genSchemaElem(schema, "simpleType");
+					simpleType.setAttribute("name", typeName);
+				}
+				if (simpleType != null) {
+					genRestrictions(simpleType, parserInfo);
+				}
+			} else {
+				Element complextp = genSchemaElem(el, "complexType");
+				Element simplect = genSchemaElem(complextp, "simpleContent");
+				Element extension = genSchemaElem(simplect, "extension");
+				if (typeName == null) {
+					if (parserInfo.getParser().getNamedParams().isEmpty()
+						&& (parserInfo.getInfo() == null
+						|| parserInfo.getInfo().isEmpty())) {
+						extension.setAttribute("base",
+							XSCHEMA_PFX + parserInfo.getParser().parserName());
+					} else {
+						typeName = getUniqueTypeName(el, xel.getLocalName());
+						if (!rootNsUri.isEmpty()) {
+							extension.setAttribute("xmlns", rootNsUri);
+						}
+					}
+				}
+				if (typeName != null) {
+					simpleType = genSchemaElem(schema,"simpleType");
+					simpleType.setAttribute("name", typeName);
+					genRestrictions(simpleType, parserInfo);
+					extension.setAttribute("base", typeName);
+					if (!rootNsUri.isEmpty()) {
+						extension.setAttribute("xmlns", rootNsUri);
+					}
+				}
+				addAttrs(extension, attrs);
+			}
+			return el;
+		}
+		Element complt = genSchemaElem(el, "complexType");
+		if (children.length > 0) {
+			XMNode x = children[0];
+			switch (x.getKind()) {
+				case XMNode.XMCHOICE:
+				case XMNode.XMMIXED:
+				case XMNode.XMSEQUENCE:
+					if (((XMSelector) x).getEndIndex() == children.length - 1) {
+						genSelector(complt,
+							complt, (XMSelector) children[0], children, 0);
+						return el;
+					}
+			}
+			Element seq = genSchemaElem(complt, "sequence");
+			genSequence(complt, seq, children, -1, children.length);
+		}
+		addAttrs(complt, attrs);
+		return el;
+	}
+
+	/** Generate a new unique xml schema file name.
+	 * @return new unique xml schema file name.
+	 */
+	private String genNewName() {
+		for (int i = 1;;i++) {
+			String s = _rootName + "_" + (i<10?"0":"") + i;
+			if (!_xsdSources.containsKey(s)) {
+				return s;
+			}
+		}
+	}
+
+	/** Add schema to the map of schema.
+	 * @param name name of item.
+	 * @param schema the XML element with schema.
+	 */
+	public void addSchema(final String name, final Element schema) {
+		if (_xsdSources.containsKey(name)) {
+			throw new RuntimeException("Schema " + name + " already exists");
+		}
+		_xsdSources.put(name, schema);
+	}
+
+	/** Create new element with XML schema namespace and given name and add
+	 * it to the parent node (if parent is not null).
+	 * @param parent parent node.
+	 * @param name local name of element to be created.
+	 * @return created element.
+	 */
+	private Element genSchemaElem(final Element parent, final String name) {
+		Element result = _doc.createElementNS(
+			XMLConstants.W3C_XML_SCHEMA_NS_URI, XSCHEMA_PFX + name);
+		if (parent != null) {
+			parent.appendChild(result);
+		}
+		return result;
+	}
+
+	/** Create new Schema element and put it to the map of schema.
+	 * @param outName name of item in the map.
+	 * @return created element.
+	 */
+	private Element genNewSchema(final String outName) {
+		Element schema = genSchemaElem(null, "schema");
+		schema.setAttribute("elementFormDefault", "qualified");
+		schema.setAttribute("attributeFormDefault", "unqualified");
+		addSchema(outName, schema);
+		return schema;
+	}
+
+	/** Find schema with given namespace in the map of schema.
+	 * @param nsUri namespace to be found.
+	 * @return found schema or null.
+	 */
+	private String findSchemaItem(final String nsUri) {
+		for (Map.Entry<String, Element> en: _xsdSources.entrySet()) {
+			Element schema = en.getValue();
+			String ns = schema.getAttribute("targetNamespace");
+			if ((ns.isEmpty() && nsUri == null || nsUri.isEmpty())
+				|| ns.equals(nsUri)) {
+				return en.getKey();
+			}
+		}
+		return null;
+	}
+
+	/** Generates XML Schema from given X-definition files and saves schema
+	 * files to given output directory.
+	 * @param xdefs X-definition file.
+	 * @param outDir output schema files directory.
+	 * @param xdName name of X-definition. May be null, then the nameless
+	 * X-definition or the first one X-definition is used.
+	 * @param modelName name of model of X-definition to used. May be null,
+	 * then the value from "xs:root" parameter is used to create models.
+	 * @param outName name of base XML schema file. May be null, then
+	 * local name of X-definition model is used.
+	 * @param genInfo if true documentation information is generated.
+	 */
+	public static void genSchema(final File[] xdefs,
+		final File outDir,
+		final String xdName,
+		final String modelName,
+		final String outName,
+		final boolean genInfo) {
+		Properties props = new Properties();
+		props.setProperty(XDConstants.XDPROPERTY_IGNORE_UNDEF_EXT,
+			XDConstants.XDPROPERTYVALUE_IGNORE_UNDEF_EXT_TRUE);
+		XDPool xp = XDFactory.compileXD(props, xdefs);
+		String xname = xdName == null
+			? xp.getXMDefinition("") != null ? ""
+			: xp.getXMDefinitions()[0].getName()
+			: xdName;
+		String mname = null;
+		if (modelName == null) {
+			XMElement[] roots = xp.getXMDefinition(xname).getRootModels();
+			if (roots != null && roots.length > 0) {
+				mname = roots[0].getLocalName();
+			}
+		} else {
+			XMElement[] xels = xp.getXMDefinition(xname).getModels();
+			for (XMElement xel : xels) {
+				if (modelName.equals(xel.getName())) {
+					mname = xel.getLocalName();
+					break;
+				}
+			}
+		}
+		if (mname == null) {
+			throw new RuntimeException("Can't find model " + modelName);
+		}
+		String oname = outName == null ? mname : outName;
+		Map<String, Element> schemas =
+			Xd2Xsd.genSchema(xp, xname, mname, oname, genInfo);
+		try { // write created XSD items to the output directory..
+			for (String key: schemas.keySet()) {
+				File f = new File(outDir, key + ".xsd");
+				KXmlUtils.writeXml(f, "UTF-8", schemas.get(key), true, genInfo);
+			}
+		} catch (Exception ex) {
+			throw new RuntimeException(ex);
+		}
+	}
+
+	/** Run XML schema generator.
+	 * @param xp compiled XDPool.
+	 * @param xdName name of root X-definition.
+	 * @param modelName name of root model.
+	 * @param outName name of root XML schema file.
+	 * @param genInfo switch if generate annotation with documentation.
+	 * @return map with names of XML schema files and corresponding Elements.
+	 */
+	public static Map<String, Element> genSchema(final XDPool xp,
+		final String xdName,
+		final String modelName,
+		final String outName,
+		final boolean genInfo) {
+		String xname = xdName == null ? xp.getXMDefinitionNames()[0] : xdName;
+		XMDefinition xdef = xp.getXMDefinition(xdName);
+		if (xdef == null) {
+			throw new RuntimeException("can't find X-definition " + xdName);
+		}
+		String mname = null, mURI = null;
+		if (modelName == null) {
+			XMElement[] roots = xp.getXMDefinition(xname).getRootModels();
+			if (roots != null && roots.length > 0) {
+				mname = roots[0].getLocalName();
+				mURI = roots[0].getNSUri();
+			}
+		} else {
+			XMElement[] xels = xp.getXMDefinition(xname).getModels();
+			for (XMElement xel : xels) {
+				if (modelName.equals(xel.getName())) {
+					mname = xel.getLocalName();
+					mURI = xel.getNSUri();
+					break;
+				}
+			}
+		}
+		if (mname == null) {
+			throw new RuntimeException("Can't find model " + modelName);
+		}
+		String oname = outName == null ? mname : outName;
+		XMDefinition xmdef = xp.getXMDefinition(xname);
+		XMElement xmel = xmdef.getModel(mURI, mname);
+		Xd2Xsd generator =  new Xd2Xsd(outName, genInfo);
+		Element schema = generator.genNewSchema(oname);
+		String nsUri = xmel.getNSUri();
+		if (nsUri != null && !nsUri.isEmpty()) {
+			schema.setAttribute("targetNamespace", nsUri);
+		}
+		generator.genElem(schema, xmel);
+		return generator._xsdSources;
+	}
+
+	private static final String INFO =
+"XdefToXsd - convertor of X-definition to XML Schema.\n" +
+"Parameters:\n"+
+" -i or --xdef:     list of input source pathnames with X-definitions\n" +
+" -o or --outDir:   pathname of output directory \n" +
+" -s or --outName:  name of main XML schema file\n" +
+" -m or --root:     name of root model (optional)\n" +
+" -x or --xdName:   name of X-definition (optional)\n" +
+" -v or --genInfo:  genarate documentation etc.\n" +
+" -h or /?:         help";
+
+	/** Run XML schema generator from command line.
+	 * @param args array of string with command line arguments:
+	 * <ul>
+	 * <li>-i or --xdef: list of input source path names with X-definitions
+	 * <li>-o or --outDir:  pathname of output directory
+	 * <li>-s or --outName: name of main XML schema file
+	 * <li>-m or --root: name of root model (optional)
+	 * <li>-x or --xdName: name of X-definition (optional)
+	 * <li>-v or --genInfo: generate documentation etc.
+	 * <li> -h or /?: help
+	 * </ul>
+	 */
+	public static void main(String... args) {
+		String xdName = null;
+		String modelName = null;
+		File outDir = null;
+		String outName = null;
+		boolean genInfo = false;
+		List<String> source = new ArrayList<>();
+		if (args == null || args.length < 2) {
+			throw new RuntimeException("Error: parameters missing.\n" + INFO);
+		}
+		for (int i = 0; i < args.length; i++) {
+			String arg = args[i];
+			switch (arg) {
+				case "-o":
+				case "--outDir":
+					if (outDir != null) {
+						throw new RuntimeException(
+							"Redefinition of "+arg+".\n" + INFO);
+					}
+					outDir =  new File(args[++i]);
+					if (!outDir.exists() || !outDir.isDirectory()) {
+						throw new RuntimeException(
+							"\"-outDir\" is not directory.\n" + INFO);
+					}
+					continue;
+				case "-s":
+				case "--outName":
+					if (outName != null) {
+						throw new RuntimeException(
+							"Redefinition of "+arg+".\n" + INFO);
+					}
+					outName = args[++i];
+					continue;
+				case "-i":
+				case "--xdef":
+					for (;;) {
+						String s = args[++i];
+						if (!source.contains(s)) {
+							source.add(s);
+						}
+						if (i+1 >= args.length || args[i+1].startsWith("-")){
+							break;
+						}
+					}
+					continue;
+				case "-x":
+				case "--xdName":
+					if (xdName != null) {
+						throw new RuntimeException(
+							"Redefinition of "+arg+".\n" + INFO);
+					}
+					xdName = args[++i];
+					continue;
+				case "-root":
+				case "--root":
+					if (modelName != null) {
+						throw new RuntimeException(
+							"Redefinition of "+arg+".\n" + INFO);
+					}
+					modelName = args[++i];
+					continue;
+				case "-v":
+				case "--genInfo":
+					if (genInfo) {
+						throw new RuntimeException(
+							"Redefinition of "+arg+".\n" + INFO);
+					}
+					genInfo = true;
+			}
+		}
+		if (source.isEmpty()) {
+			throw new RuntimeException("Missing idefinition sources.\n"+INFO);
+		}
+		if (outDir == null) {
+			throw new RuntimeException("Missing output directory.\n" + INFO);
+		}
+		Properties props = new Properties();
+		props.setProperty(XDConstants.XDPROPERTY_IGNORE_UNDEF_EXT,
+			XDConstants.XDPROPERTYVALUE_IGNORE_UNDEF_EXT_TRUE);
+		XDPool xp = XDFactory.compileXD(props,
+			SUtils.getFileGroup(source.toArray(new String[source.size()])));
+		Map<String, Element> schemas =
+			Xd2Xsd.genSchema(xp, xdName, modelName, outName, genInfo);
+		try { // write created XSD items to the output directory..
+			for (String key: schemas.keySet()) {
+				File f = new File(outDir, key + ".xsd");
+				KXmlUtils.writeXml(f,
+					"UTF-8", schemas.get(key), true, genInfo);
+			}
+		} catch (Exception ex) {
+			throw new RuntimeException(ex);
+		}
+	}
+}

@@ -1,9 +1,9 @@
 package org.xdef.util;
 
-import org.xdef.util.conv.xsd2xd.Convertor;
+import org.xdef.util.xsd2xd.Convertor;
 import org.xdef.sys.FileReportWriter;
-import org.xdef.util.conv.xsd2xd.utils.Reporter;
-import org.xdef.util.conv.xsd2xd.xdef_2_0.Schema_1_0_Processor;
+import org.xdef.util.xsd2xd.utils.Reporter;
+import org.xdef.util.xsd2xd.xdef_2_0.Schema_1_0_Processor;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -17,7 +17,7 @@ import org.xml.sax.SAXException;
 
 /** Represents XML Schema to X-definition convertor.
  * (see {@link org.xdef.util.XsdToXdef#main(String[])})
- * @author  Vaclav Trojan
+ * @author Ilia Alexandrov
  */
 public class XsdToXdef {
 
@@ -228,18 +228,14 @@ public class XsdToXdef {
 	 * @param args array of string with command line arguments:
 	 * <ul>
 	 * <li>-i, --input
-	 * <p> &lt;PATH&gt; input main schema location.</p>
-	 * </li>
+	 * <p> &lt;PATH&gt; input main schema location.
 	 * <li>-o, --output
-	 * <p> &lt;PATH&gt; output file or directory.</p>
-	 * </li>
+	 * <p> &lt;PATH&gt; output file or directory.
 	 * <li>-s, --output
-	 * <p> each schema generate to the separate X-definition file.</p>
-	 * </li>
+	 * <p> each schema generate to the separate X-definition file.
 	 * <li>-p
-	 * <p> namespace prefix of X-definitions</p>
-	 * </li>
-	 * <li>-?, -h, --help help</li>
+	 * <p> namespace prefix of X-definitions
+	 * <li>-?, -h, --help help
 	 * </ul>
 	 */
 	public static void main(String... args) {
