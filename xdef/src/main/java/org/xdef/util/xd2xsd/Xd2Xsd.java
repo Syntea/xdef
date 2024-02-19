@@ -640,9 +640,9 @@ public class Xd2Xsd {
 		final String outName,
 		final boolean genInfo) {
 		String xname = xdName == null ? xp.getXMDefinitionNames()[0] : xdName;
-		XMDefinition xdef = xp.getXMDefinition(xdName);
+		XMDefinition xdef = xp.getXMDefinition(xname);
 		if (xdef == null) {
-			throw new RuntimeException("can't find X-definition " + xdName);
+			throw new RuntimeException("can't find X-definition " + xname);
 		}
 		String mname = null, mURI = null;
 		if (modelName == null) {
@@ -667,7 +667,7 @@ public class Xd2Xsd {
 		String oname = outName == null ? mname : outName;
 		XMDefinition xmdef = xp.getXMDefinition(xname);
 		XMElement xmel = xmdef.getModel(mURI, mname);
-		Xd2Xsd generator =  new Xd2Xsd(outName, genInfo);
+		Xd2Xsd generator =  new Xd2Xsd(oname, genInfo);
 		Element schema = generator.genNewSchema(oname);
 		String nsUri = xmel.getNSUri();
 		if (nsUri != null && !nsUri.isEmpty()) {
