@@ -1,6 +1,7 @@
 package org.xdef.util.xd2xsd;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -70,7 +71,7 @@ public class Xd2Xsd {
 	 * @param parent node where to add annotation.
 	 * @param parserInfo object containing documentation information.
 	 */
-	private void addAnnotation(final Element parent, ParserInfo parserInfo) {
+	private void addAnnotation(final Element parent, GenParser parserInfo) {
 		if (_genInfo && parserInfo.getInfo() != null
 			&& !parserInfo.getInfo().isEmpty()) {
 			Element anotation = genSchemaElem(parent, "annotation");
@@ -86,7 +87,7 @@ public class Xd2Xsd {
 	 * @return element with restrictions.
 	 */
 	private Element genRestrictions(final Element parent,
-		final ParserInfo parserInfo) {
+		final GenParser parserInfo) {
 		XDNamedValue[] xdv =
 			parserInfo.getParser().getNamedParams().getXDNamedItems();
 		Element restr = genSchemaElem(parent,"restriction");
@@ -284,7 +285,7 @@ public class Xd2Xsd {
 			att.setAttribute("form",
 				x.getNSUri() != null && !x.getNSUri().isEmpty()
 				? "qualified" : "unqualified");
-			ParserInfo parserInfo = ParserInfo.genParser((XMData) x);
+			GenParser parserInfo = GenParser.genParser((XMData) x);
 			if (parserInfo.getParser().getNamedParams().isEmpty()) {
 				addAnnotation(att, parserInfo);
 				att.setAttribute("type",
@@ -300,7 +301,7 @@ public class Xd2Xsd {
 	 * @param parserInfo with information about value type/
 	 * @return declared type name ot null;
 	 */
-	private static String genDeclaredName(final ParserInfo parserInfo) {
+	private static String genDeclaredName(final GenParser parserInfo) {
 		String s = parserInfo.getDeclaredName();
 		if (s != null) {
 			String[] parts = s.split(";");
@@ -429,7 +430,7 @@ public class Xd2Xsd {
 		XMNode[] children = xel.getChildNodeModels();
 		if (children.length == 1 && children[0].getKind() == XMNode.XMTEXT) {
 			XMData x = (XMData) children[0];
-			ParserInfo parserInfo = ParserInfo.genParser(x);
+			GenParser parserInfo = GenParser.genParser(x);
 			String typeName = genDeclaredName(parserInfo);
 			Element simpleType;
 			if (attrs.length == 0) {
@@ -621,7 +622,7 @@ public class Xd2Xsd {
 				File f = new File(outDir, key + ".xsd");
 				KXmlUtils.writeXml(f, "UTF-8", schemas.get(key), true, genInfo);
 			}
-		} catch (Exception ex) {
+		} catch (IOException ex) {
 			throw new RuntimeException(ex);
 		}
 	}

@@ -291,8 +291,9 @@ public class TestXd2XsdConv extends XDTester {
 	@Override
 	public void test() {
 		init();
-//		assertTrue(prepare("multiXdefTest"), popMessage());
-//		assertTrue(parse("multiXdefTest_valid_1"), popMessage());
+//if(true)return;
+		assertTrue(prepare("multiXdefTest"), popMessage());
+		assertTrue(parse("multiXdefTest_valid_1"), popMessage());
 
 		assertTrue(prepare("basicTest"), popMessage());
 		assertTrue(parse("basicTest_valid_1"), popMessage());
@@ -307,7 +308,7 @@ public class TestXd2XsdConv extends XDTester {
 		assertTrue(parse("simpleRefTest_valid_1"), popMessage());
 
 		assertTrue(prepare("simpleModelTest"), popMessage());
-//		assertTrue(parse("simpleModelTest_valid_1"), popMessage());
+		assertTrue(parse("simpleModelTest_valid_1"), popMessage());
 //		assertTrue(parse("simpleModelTest_valid_2"), popMessage());
 //		assertTrue(parse("simpleModelTest_valid_3"), popMessage());
 //		assertTrue(parse("simpleModelTest_valid_4"), popMessage());
@@ -316,19 +317,19 @@ public class TestXd2XsdConv extends XDTester {
 //		assertTrue(parse("simpleModelTest_valid_7"), popMessage());
 //		assertTrue(parse("simpleModelTest_valid_8"), popMessage());
 
-//		assertTrue(prepare("typeTest"), popMessage());
-//		assertTrue(parse("typeTest_valid_1"), popMessage());
-//		assertTrue(parseFail("typeTest_invalid_1"), popMessage());
-//		assertTrue(parseFail("typeTest_invalid_2"), popMessage());
-//		assertTrue(parseFail("typeTest_invalid_3"), popMessage());
-//		assertTrue(parseFail("typeTest_invalid_4"), popMessage());
-//		assertTrue(parseFail("typeTest_invalid_5"), popMessage());
-//		assertTrue(parseFail("typeTest_invalid_6"), popMessage());
-//		assertTrue(parseFail("typeTest_invalid_7"), popMessage());
-//		assertTrue(parseFail("typeTest_invalid_8"), popMessage());
-//		assertTrue(parseFail("typeTest_invalid_9"), popMessage());
-//		assertTrue(parseFail("typeTest_invalid_10"), popMessage());
-//		assertTrue(parseFail("typeTest_invalid_11"), popMessage());
+		assertTrue(prepare("typeTest"), popMessage());
+		assertTrue(parse("typeTest_valid_1"), popMessage());
+		assertTrue(parseFail("typeTest_invalid_1"), popMessage());
+		assertTrue(parseFail("typeTest_invalid_2"), popMessage());
+		assertTrue(parseFail("typeTest_invalid_3"), popMessage());
+		assertTrue(parseFail("typeTest_invalid_4"), popMessage());
+		assertTrue(parseFail("typeTest_invalid_5"), popMessage());
+		assertTrue(parseFail("typeTest_invalid_6"), popMessage());
+		assertTrue(parseFail("typeTest_invalid_7"), popMessage());
+		assertTrue(parseFail("typeTest_invalid_8"), popMessage());
+		assertTrue(parseFail("typeTest_invalid_9"), popMessage());
+		assertTrue(parseFail("typeTest_invalid_10"), popMessage());
+		assertTrue(parseFail("typeTest_invalid_11"), popMessage());
 
 		assertTrue(prepare("ATTR_to_ATTR"), popMessage());
 		assertTrue(parse("ATTR_to_ATTR_valid_1"), popMessage());
@@ -361,7 +362,7 @@ public class TestXd2XsdConv extends XDTester {
 		assertTrue(parse("ATTR_CHLD_to_ATTR_CHLD_valid_1"), popMessage());
 
 		assertTrue(prepare("dateTimeTest"), popMessage());
-//		assertTrue(parse("dateTimeTest_valid_1"), popMessage());
+		assertTrue(parse("dateTimeTest_valid_1"), popMessage());
 
 		assertTrue(prepare("declarationTest"), popMessage());
 		assertTrue(parse("declarationTest_valid_1"), popMessage());

@@ -1,10 +1,9 @@
-<Dates>
-    
+<Dates>  
     <Date1>01-1-24 0:2:8</Date1>
     <Date1>45-1-24 0:2:8.15</Date1>
     <Date1>45-1-24 0:2:8 +01:00</Date1>
     <Date1>45-1-24 0:2:8.15 +01:00</Date1>
-
+    
     <Date2>1900-Mar-25</Date2>
     <Date2>2000-Jan-08 00:02:08</Date2>
     <Date2>2015-Feb-15 23:59:59 CEST</Date2>

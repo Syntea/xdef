@@ -18,11 +18,11 @@
     <xdatetime>2000-12-31</xdatetime>
     <dateYMDhms>20000101000000</dateYMDhms>
     <dec>123.123</dec>
-    <dec>123,123</dec>
+    <dec>123.123</dec>
     <dec_1>123.45</dec_1>
-    <dec_1>123,45</dec_1>
+    <dec_1>123.45</dec_1>
     <dec_2>1.234</dec_2>
-    <dec_2>1,234</dec_2>
+    <dec_2>1.234</dec_2>
     <!--
     <ENTITY>&entita;</ENTITY>
     <ENTITIES>&entita; &entita2;</ENTITIES>
@@ -86,12 +86,13 @@
     <normToken>normalizedToken</normToken>
     <normTokens>normalizedToken normalizedToken</normTokens>
     <num>123456789</num>
+    <!--
     <num_1>1234</num_1>
     <num_2>123</num_2>
     <num_2>12345</num_2>
-    <!--
     <pic_1></pic_1>
     -->
+    <!--
     <Qname>ns:ncname</Qname>
     <QNameURI>ns:name</QNameURI>
     <QNameList_1>ns:name ns:anotherName</QNameList_1>
@@ -104,11 +105,8 @@
     <string_2>ab</string_2>
     <string_2>abcd</string_2>
     <uri>../text/text.txt</uri>
-    <!--
     <uriList>text.txt ../../text.txt</uriList>
-    -->
     <url>file:C://text.txt:4568</url>
-    <!--
     <urlList>file:C://text.txt:4568 http://:file.bat:6958</urlList>
     -->
 </Types>

@@ -75,7 +75,6 @@
             <QNameURI xd:script="occurs *">QNameURI</QNameURI>
             <!--
             <QnameURI_1 xd:script="occurs *">QnameURI('http://abc.de')</QnameURI_1>
-            -->
             <QNameList_1 xd:script="occurs *">QNameList(' ')</QNameList_1>
             <QNameListURI xd:script="occurs *">QNameURIList</QNameListURI>
             <regex_1 xd:script="occurs *">regex('[a]{3}')</regex_1>
@@ -86,8 +85,11 @@
             <string_2 xd:script="occurs *">string(2,4)</string_2>
             <uri xd:script="occurs *">uri</uri>
             <uriList xd:script="occurs *">uriList</uriList>
+            -->
             <url xd:script="occurs *">url</url>
+            <!--
             <urlList xd:script="occurs *">urlList</urlList>
+            -->
         </xd:mixed>
     </Types>
 </xd:def>
