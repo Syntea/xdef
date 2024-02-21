@@ -26,6 +26,6 @@
         <fh:Position fh:place="optional string">
             <fh:Name>required string</fh:Name>
         </fh:Position>
-        <fh:Salary fh:currency="string">required int</fh:Salary>
+        <fh:Salary fh:currency="? string">required int</fh:Salary>
     </xd:def>
 </xd:collection>

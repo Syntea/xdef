@@ -58,13 +58,6 @@ class GenParser {
 	 */
 	public String getDeclaredName() {return _declaredName;}
 
-	/** Get name of parser type.
-	 * @return name of parser type.
-	 */
-	public String getSchemaTypeName() {
-		return Xd2Xsd.XSCHEMA_PFX + _xdp.parserName();
-	}
-
 	/** Set to the parser the declared name.
 	 * @param xdp the X-definition parser.
 	 * @param info information (i.e. original parser name).
@@ -97,7 +90,7 @@ class GenParser {
 			}
 			 result += '%' + x.getName() + '=' + x.getValue();
 		}
-		return result + ']';
+		return result + ')';
 	}
 
 	/** Create ParserInfo object with XML schema compatible parser from XMData.
@@ -112,9 +105,10 @@ class GenParser {
 		String info = "Created from X-definition " + name;
 		switch(name) {
 			case "an":
+				info += genPars(xdc);
 				xdc.setXDNamedItem("pattern", new DefString("[A-Za-z0-9]+"));
 				return createNewParserInfo(
-					new XSParseString(), info + genPars(xdc), declName, xdc);
+					new XSParseString(), info, declName, xdc);
 			case "contains": {
 				String s = xdc.getXDNamedItemAsString("argument");
 				xdc.setXDNamedItem("pattern",
@@ -126,15 +120,7 @@ class GenParser {
 			case "containsi": {
 				String s = xdc.getXDNamedItemAsString("argument");
 				xdc.removeXDNamedItem("argument");
-				String mask = "";
-				for (char c: s.toCharArray()) {
-					if (Character.isLetter(c)) {
-						mask += "[" + Character.toLowerCase(c)
-							+ Character.toUpperCase(c) + "]";
-					} else {
-						mask += GenRegex.genEscapedChar(c);
-					}
-				}
+				String mask = GenRegex.genCaseInsensitive(s);
 				xdc.setXDNamedItem("pattern", new DefString(".*"+mask+".*"));
 				return createNewParserInfo(
 					new XSParseString(), info + "(" + s + ")", declName, xdc);
@@ -157,15 +143,7 @@ class GenParser {
 			case "endsi": {
 				String s = xdc.getXDNamedItemAsString("argument");
 				xdc.removeXDNamedItem("argument");
-				String mask = "";
-				for (char c: s.toCharArray()) {
-					if (Character.isLetter(c)) {
-						mask += "[" + Character.toLowerCase(c)
-							+ Character.toUpperCase(c) + "]";
-					} else {
-						mask += GenRegex.genEscapedChar(c);
-					}
-				}
+				String mask = GenRegex.genCaseInsensitive(s);
 				xdc.setXDNamedItem("pattern", new DefString(".*" + mask));
 				return createNewParserInfo(
 					new XSParseString(), info + '(' + s + ')', declName, xdc);
@@ -197,15 +175,7 @@ class GenParser {
 			case "eqi": {
 				String s = xdc.getXDNamedItemAsString("argument");
 				xdc.removeXDNamedItem("argument");
-				String mask = "";
-				for (char c: s.toCharArray()) {
-					if (Character.isLetter(c)) {
-						mask += "[" + Character.toLowerCase(c)
-							+ Character.toUpperCase(c) + "]";
-					} else {
-						mask += GenRegex.genEscapedChar(c);
-					}
-				}
+				String mask = GenRegex.genCaseInsensitive(s);
 				xdc.setXDNamedItem("pattern", new DefString(mask));
 				return createNewParserInfo(
 					new XSParseString(), info + "(" + s + ")", declName, xdc);
@@ -260,15 +230,7 @@ class GenParser {
 			case "startsi": {
 				String s = xdc.getXDNamedItemAsString("argument");
 				xdc.removeXDNamedItem("argument");
-				String mask = "";
-				for (char c: s.toCharArray()) {
-					if (Character.isLetter(c)) {
-						mask += '[' + Character.toLowerCase(c)
-							+ Character.toUpperCase(c) + ']';
-					} else {
-						mask += GenRegex.genEscapedChar(c);
-					}
-				}
+				String mask = GenRegex.genCaseInsensitive(s);
 				xdc.setXDNamedItem("pattern", new DefString(mask + "*"));
 				return createNewParserInfo(
 					new XSParseString(), info + "(" + s + ")", declName, xdc);
@@ -287,7 +249,7 @@ class GenParser {
 				for (XDNamedValue x: xdc.getXDNamedItems()) {
 					info += ",%" + x.getName() + '=' + x.getValue();
 				}
-				info += ']';
+				info += ')';
 				switch (mask) {
 					case "yyyy-MM-dd":
 					case "yyyy-MM-ddZ":

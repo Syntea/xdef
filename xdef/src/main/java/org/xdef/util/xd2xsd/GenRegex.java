@@ -164,6 +164,17 @@ class GenRegex {
 		return ret.toString();
 	}
 
+	public static String genCaseInsensitive(final String s) {
+		String mask = "";
+		for (char c: s.toCharArray()) {
+			mask += Character.isLetter(c)
+				? "[" + Character.toLowerCase(c)
+					+ Character.toUpperCase(c) + "]"
+				: GenRegex.genEscapedChar(c);
+		}
+		return mask;
+	}
+
 	/** Get set with regex strings created form xdatetime mask.
 	 * @param mask xdatetime mask.
 	 * @return set with regex strings.

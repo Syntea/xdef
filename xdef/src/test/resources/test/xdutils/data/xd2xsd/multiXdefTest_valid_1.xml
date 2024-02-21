@@ -1,7 +1,4 @@
-<FirmWorkers xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="multiXdefTest2.xsd"
-    xmlns:hr = "A.A"
-    xmlns:fh = "b.b" >
+<FirmWorkers xmlns:hr = "A.A" xmlns:fh = "b.b" >
     <Worker workerId="1">
         <hr:Name>John</hr:Name>
         <hr:Surname>Doe</hr:Surname>
@@ -12,7 +9,7 @@
         <fh:Position>
             <fh:Name>Analyst</fh:Name>
         </fh:Position>
-        <fh:Salary fh:currency="EUR">35000</fh:Salary>
+        <fh:Salary>35000</fh:Salary>
     </Worker>
     <Worker workerId="2">
         <hr:Name>Joe</hr:Name>

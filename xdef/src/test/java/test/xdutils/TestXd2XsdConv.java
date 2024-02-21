@@ -35,6 +35,7 @@ public class TestXd2XsdConv extends XDTester {
 	private static final String MAIN_SCHEMA_FILE_NAME = "main.xsd";
 	private ReportWriter _repWriter;
 	private File _dataDir;
+	private XDPool _xp;
 	private File _tempDir;
 	private File _xdefFile;
 	private SchemaFactory _xsdFactory;
@@ -108,15 +109,15 @@ public class TestXd2XsdConv extends XDTester {
 			props.setProperty(XDConstants.XDPROPERTY_WARNINGS, // xdef_warnings
 				 XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE);
 			props.put("xdef.warnings", "false");
-			XDPool xdPool = XDFactory.compileXD(props, _xdefFile);
-			if (!xdPool.exists(MAIN_DEF_NAME)) {
+			_xp = XDFactory.compileXD(props, _xdefFile);
+			if (!_xp.exists(MAIN_DEF_NAME)) {
 				setMessage(new ErrMessage(
 					"Could not find main definition in XDefinition file!",
 					_xdefFile,
 					null));
 				return false;
 			}
-			_chkDoc = xdPool.createXDDocument(MAIN_DEF_NAME);
+			_chkDoc = _xp.createXDDocument(MAIN_DEF_NAME);
 		} catch (RuntimeException ex) {
 			setMessage(new ErrMessage("Could not prepare XDefinition!",
 				_xdefFile, ex));
@@ -292,9 +293,6 @@ public class TestXd2XsdConv extends XDTester {
 	public void test() {
 		init();
 //if(true)return;
-		assertTrue(prepare("multiXdefTest"), popMessage());
-		assertTrue(parse("multiXdefTest_valid_1"), popMessage());
-
 		assertTrue(prepare("basicTest"), popMessage());
 		assertTrue(parse("basicTest_valid_1"), popMessage());
 		assertTrue(parse("basicTest_valid_2"), popMessage());
@@ -303,6 +301,9 @@ public class TestXd2XsdConv extends XDTester {
 		assertTrue(parseFail("basicTest_invalid_2"), popMessage());
 		assertTrue(parseFail("basicTest_invalid_3"), popMessage());
 		assertTrue(parseFail("basicTest_invalid_4"), popMessage());
+
+		assertTrue(prepare("multiXdefTest"), popMessage());
+		assertTrue(parse("multiXdefTest_valid_1"), popMessage());
 
 		assertTrue(prepare("simpleRefTest"), popMessage());
 		assertTrue(parse("simpleRefTest_valid_1"), popMessage());
@@ -369,14 +370,14 @@ public class TestXd2XsdConv extends XDTester {
 		assertTrue(parseFail("declarationTest_invalid_1"), popMessage());
 		assertTrue(parseFail("declarationTest_invalid_2"), popMessage());
 
-		assertTrue(prepare("schemaTypeTest"), popMessage());
-//		assertTrue(parse("schemaTypeTest_valid_1"), popMessage());
-
-		assertTrue(prepare("namespaceTest"), popMessage());
-		assertTrue(parse("namespaceTest_valid"), popMessage());
-
 		assertTrue(prepare("namespaceTest1"), popMessage());
-//		assertTrue(parse("namespaceTest1_valid_1"), popMessage());
+		assertTrue(parse("namespaceTest1_valid_1"), popMessage());
+
+		assertTrue(prepare("schemaTypeTest"), popMessage());
+		assertTrue(parse("schemaTypeTest_valid_1"), popMessage());
+
+		assertTrue(prepare("typeFixedTest"), popMessage());
+		assertTrue(parse("typeFixedTest_valid"), popMessage());
 
 		assertTrue(prepare("B1_common"), popMessage());
 		assertTrue(parse("B1_Common_valid_1"), popMessage());
