@@ -7,7 +7,6 @@ import org.xdef.xml.KXmlUtils;
 import org.xdef.XDDocument;
 import org.xdef.XDFactory;
 import org.xdef.XDPool;
-import org.xdef.util.xd2xsd.Xd2Xsd;
 import java.io.File;
 import java.util.Properties;
 import java.io.IOException;
@@ -23,6 +22,7 @@ import org.xdef.impl.util.gencollection.XDGenCollection;
 import org.xdef.sys.SException;
 import static org.xdef.sys.STester.runTest;
 import org.xdef.util.GenCollection;
+import org.xdef.util.XdefToXsd;
 import org.xml.sax.SAXException;
 import test.XDTester;
 
@@ -138,7 +138,7 @@ public class TestXd2XsdConv extends XDTester {
 		}
 		//generate schema
 		try {
-			Xd2Xsd.genSchema(
+			XdefToXsd.genSchema(
 				new File[] {_xdefFile}, schemaDir, null, null, "main", true);
 		} catch (Exception ex) {
 			displayFiles(_xdefFile);
