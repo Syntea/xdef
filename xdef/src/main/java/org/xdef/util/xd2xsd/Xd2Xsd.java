@@ -79,6 +79,7 @@ public class Xd2Xsd {
 	 */
 	private Element genRestrictions(final Element parent,
 		final GenParser parserInfo) {
+		addAnnotation(parent, parserInfo.getInfo());
 		XDNamedValue[] xdv =
 			parserInfo.getParser().getNamedParams().getXDNamedItems();
 		Element restr = genSchemaElem(parent, "restriction");
@@ -270,8 +271,8 @@ public class Xd2Xsd {
 			}
 			att.setAttribute("name", x.getLocalName());
 			GenParser parserInfo = GenParser.genParser((XMData) x);
-			String typeName =
-				createSchemaTypeName(el, parserInfo.getDeclaredName());
+			String typeName = genDeclaredName(parserInfo);
+			typeName = createSchemaTypeName(el, typeName);
 			if (parserInfo.getParser().getNamedParams().isEmpty()) {
 				String parserName =
 					SCHEMA_PFX + parserInfo.getParser().parserName();
@@ -454,7 +455,6 @@ public class Xd2Xsd {
 						simpleType = null;
 					} else {
 						simpleType = genSchemaElem(el, "simpleType");
-						addAnnotation(simpleType, parserInfo.getInfo());
 					}
 				} else {
 					el.setAttribute("type", typeName);
