@@ -1,7 +1,7 @@
-package org.xdef.util.xsd2xd.xsd_1_0.type.domain;
+package org.xdef.util.xsd2xd.xsd_1_0.type;
 
 import org.xdef.xml.KDOMUtils;
-import org.xdef.util.xsd2xd.schema_1_0.Utils;
+import org.xdef.util.xsd2xd.Utils;
 import java.net.URL;
 import java.util.HashSet;
 import java.util.Map;

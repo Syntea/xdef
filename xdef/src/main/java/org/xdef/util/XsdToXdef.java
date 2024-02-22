@@ -2,8 +2,8 @@ package org.xdef.util;
 
 import org.xdef.util.xsd2xd.Convertor;
 import org.xdef.sys.FileReportWriter;
-import org.xdef.util.xsd2xd.utils.Reporter;
-import org.xdef.util.xsd2xd.xdef_2_0.Schema_1_0_Processor;
+import org.xdef.util.xsd2xd.Reporter;
+import org.xdef.util.xsd2xd.xd.Schema_1_0_Processor;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;

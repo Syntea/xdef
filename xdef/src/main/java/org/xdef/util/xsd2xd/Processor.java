@@ -1,10 +1,9 @@
-package org.xdef.util.xsd2xd.schema_1_0;
+package org.xdef.util.xsd2xd;
 
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import org.xdef.xml.KDOMBuilder;
 import org.xdef.util.xsd2xd.Convertor;
-import org.xdef.util.xsd2xd.utils.DOMUtils;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.HashMap;

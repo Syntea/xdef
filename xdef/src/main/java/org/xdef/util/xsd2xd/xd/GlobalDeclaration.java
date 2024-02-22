@@ -1,11 +1,10 @@
-package org.xdef.util.xsd2xd.xdef_2_0;
+package org.xdef.util.xsd2xd.xd;
 
-import org.xdef.util.xsd2xd.schema_1_0.Utils;
-import org.xdef.util.xsd2xd.utils.DOMUtils;
+import org.xdef.util.xsd2xd.Utils;
+import org.xdef.util.xsd2xd.DOMUtils;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import org.w3c.dom.Element;

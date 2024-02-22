@@ -1,4 +1,4 @@
-package org.xdef.util.xsd2xd.doc;
+package org.xdef.util.xsd2xd;
 
 import org.xdef.sys.SReporter;
 import org.xdef.util.xsd2xd.xd.Utils;
@@ -33,7 +33,15 @@ import org.w3c.dom.Text;
 /** Represents implementation of XML Schema document version 1.0.
  * @author Ilia Alexandrov
  */
-public class XsdDoc_1_0 extends XsdDoc {
+public class XsdDoc_1_0 {
+	/** Reporter for reporting warnings and errors. */
+	protected final SReporter _reporter;
+	/** Schema file extension. */
+	protected final String _schemaFileExt;
+	/** Schema nodes namespace prefix. */
+	protected final String _schemaPrefix;
+	/** Switch to generate documentation. */
+	protected final boolean _genDocumentation;
 
 	/** Schema models (XsdModel) to elements (Element) mapping. */
 	private final Map<XsdModel, Element> _models =
@@ -63,14 +71,32 @@ public class XsdDoc_1_0 extends XsdDoc {
 		String schemaFileExt,
 		String schemaPrefix,
 		boolean genDocumentation) {
-		super(reporter, schemaFileExt, schemaPrefix, genDocumentation);
+		if (reporter == null) {
+			throw new NullPointerException("Given reporter is null!");
+		}
+		if (schemaFileExt == null) {
+			throw new NullPointerException(
+				"Given schema file extenson is null");
+		}
+		if (schemaFileExt.length() == 0) {
+			throw new IllegalArgumentException(
+				"Given schema file extension is empty");
+		}
+		_reporter = reporter;
+		_schemaFileExt = schemaFileExt;
+		if (schemaPrefix != null && schemaPrefix.length() == 0) {
+			_schemaPrefix = null;
+		} else {
+			_schemaPrefix = schemaPrefix;
+		}
+		_genDocumentation = genDocumentation;
 		_extSchemaCounter = 1;
 		_extAttrGrpCounter = 1;
 		_extGroupCounter = 1;
 		_extSTypeCounter = 1;
 	}
 
-	/** Initiates all schemas and schema models according to given X-definition
+	/** Initiates all schema and schema models according to given X-definition
 	 * document and returns mapping of models.
 	 * @param xdDoc X-definition version 2.0 document representation.
 	 * @return map of X-definition models (XdModel) mapped to schema
@@ -1193,10 +1219,8 @@ public class XsdDoc_1_0 extends XsdDoc {
 	 */
 	public int getExtSTypeCounter() {return _extSTypeCounter++;}
 
-	@Override
 	public XsdVersion getVersion() {return XsdVersion.SCHEMA_1_0;}
 
-	@Override
 	public Map<String, Document> getSchemaDocuments() {
 		Map<String, Document> ret = new HashMap<String, Document>();
 		Iterator<Map.Entry<XsdSchema, Element>> it =
@@ -1208,5 +1232,21 @@ public class XsdDoc_1_0 extends XsdDoc {
 			ret.put(xsdSchema.getName(), element.getOwnerDocument());
 		}
 		return ret;
+	}
+
+	/** Creates schema node qualified name according to schema nodes prefix.
+	 * @param nodeLocalName schema node local name.
+	 * @return schema node qualified name.
+	 */
+	protected final String getSchemaNodeName(String nodeLocalName) {
+		return Utils.getNodeQName(_schemaPrefix, nodeLocalName);
+	}
+
+	/** Creates full schema file name according to schema files extension.
+	 * @param schemaName name of schema.
+	 * @return full schema fiel name with extension.
+	 */
+	protected final String getSchemaFileName(String schemaName) {
+		return schemaName + "." + _schemaFileExt;
 	}
 }

@@ -16,6 +16,7 @@ import org.xdef.util.xd2xsd.Xd2Xsd;
 import org.xdef.xml.KXmlUtils;
 
 /** Convertor of X-definition to XML schema.
+ * (see {@link org.xdef.util.XdefToXsd#main(String[])})
  * @author Vaclav Trojan
  */
 public class XdefToXsd {

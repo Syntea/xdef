@@ -1,12 +1,12 @@
-package org.xdef.util.xsd2xd.xdef_2_0;
+package org.xdef.util.xsd2xd.xd;
 
 import org.xdef.xml.KXmlUtils;
 import org.xdef.impl.util.gencollection.XDGenCollection;
 import org.xdef.util.xsd2xd.xd.XdNames;
-import org.xdef.util.xsd2xd.doc.XsdUtils;
+import org.xdef.util.xsd2xd.XsdUtils;
 import org.xdef.util.xsd2xd.Convertor;
-import org.xdef.util.xsd2xd.schema_1_0.Utils;
-import org.xdef.util.xsd2xd.utils.DOMUtils;
+import org.xdef.util.xsd2xd.Utils;
+import org.xdef.util.xsd2xd.DOMUtils;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -26,7 +26,7 @@ import org.xdef.XDConstants;
  */
 public class XdefDocument implements Convertor {
 
-	/** Prefix of X-defintion nodes. */
+	/** Prefix of X-definition nodes. */
 	private final String _xdefPrefix;
 	/** Every X-definition as file. */
 	private final boolean _separately;
@@ -105,7 +105,7 @@ public class XdefDocument implements Convertor {
 	/** Adds target name space to given X-definition def element
 	 * according to given XML schema schema element settings.
 	 * @param schemaElement XML schema schema element.
-	 * @param xdefElement X-definiton def element.
+	 * @param xdefElement X-definition def element.
 	 */
 	private void addTargetNamespaceDeclaration(Element schemaElement,
 			Element xdefElement) throws IllegalArgumentException {

@@ -1,4 +1,4 @@
-package org.xdef.util.xsd2xd.utils;
+package org.xdef.util.xsd2xd;
 
 import org.xdef.sys.ReportWriter;
 import org.xdef.sys.SReporter;

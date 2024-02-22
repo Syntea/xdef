@@ -1,10 +1,10 @@
-package org.xdef.util.xsd2xd.xdef_2_0;
+package org.xdef.util.xsd2xd.xd;
 
 import org.xdef.XDConstants;
-import org.xdef.util.xsd2xd.schema_1_0.Processor;
-import org.xdef.util.xsd2xd.schema_1_0.Utils;
-import org.xdef.util.xsd2xd.utils.DOMUtils;
-import org.xdef.util.xsd2xd.utils.Reporter;
+import org.xdef.util.xsd2xd.Processor;
+import org.xdef.util.xsd2xd.Utils;
+import org.xdef.util.xsd2xd.DOMUtils;
+import org.xdef.util.xsd2xd.Reporter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Calendar;
@@ -35,11 +35,13 @@ public class Schema_1_0_Processor extends Processor {
 	 *
 	 * @param xdefPrefix prefix of X-definition nodes.
 	 * @param reporter reporter to report warnings and errors.
-	 * @param rootSchemaURL URL ot root schema to convert.
+	 * @param rootSchemaURL URL of root schema to convert.
 	 * @param separately X-definitions as separate files.
 	 */
-	public Schema_1_0_Processor(String xdefPrefix, Reporter reporter,
-		URL rootSchemaURL, boolean separately) {
+	public Schema_1_0_Processor(String xdefPrefix,
+		Reporter reporter,
+		URL rootSchemaURL,
+		boolean separately) {
 		super(rootSchemaURL);
 		_xdefPrefix = xdefPrefix;
 		_reporter = reporter;

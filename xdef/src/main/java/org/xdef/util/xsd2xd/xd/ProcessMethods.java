@@ -1,14 +1,14 @@
-package org.xdef.util.xsd2xd.xdef_2_0;
+package org.xdef.util.xsd2xd.xd;
 
 import org.xdef.msg.XDCONV;
 import org.xdef.sys.SReporter;
-import org.xdef.util.xsd2xd.doc.XsdUtils;
-import org.xdef.util.xsd2xd.schema_1_0.Processor;
-import org.xdef.util.xsd2xd.utils.DOMUtils;
-import org.xdef.util.xsd2xd.xsd_1_0.type.domain.SimpleType;
-import org.xdef.util.xsd2xd.xsd_1_0.type.domain.Type;
+import org.xdef.util.xsd2xd.XsdUtils;
+import org.xdef.util.xsd2xd.Processor;
+import org.xdef.util.xsd2xd.DOMUtils;
+import org.xdef.util.xsd2xd.xsd_1_0.type.SimpleType;
+import org.xdef.util.xsd2xd.xsd_1_0.type.Type;
 import java.net.URL;
-import org.xdef.util.xsd2xd.schema_1_0.Utils;
+import org.xdef.util.xsd2xd.Utils;
 import java.util.Map;
 import java.util.Stack;
 import org.w3c.dom.Attr;

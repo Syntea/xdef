@@ -25,10 +25,10 @@ class GenParser {
 	private final String _info;
 	private final String _declaredName;
 
-	/** Create new instace of ParserInfo with X-definition parser,
+	/** Create new instance of ParserInfo with X-definition parser,
 	 * declared type name and information text.
 	 * @param xdp X-definition parser,
-	 * @param declaredName declared type name in X-defiontion.
+	 * @param declaredName declared type name in X-definition.
 	 * @param info information text.
 	 */
 	private GenParser(final XDParser xdp,
@@ -61,7 +61,7 @@ class GenParser {
 	/** Set to the parser the declared name.
 	 * @param xdp the X-definition parser.
 	 * @param info information (i.e. original parser name).
-	 * @param declaredName name of delared type (or null);.
+	 * @param declaredName name of declared type (or null);.
 	 * @param xdc X-container with parser parameters.
 	 * @return ParserInfo object.
 	 */
@@ -315,7 +315,7 @@ class GenParser {
 			case "unsignedInt":
 			case "unsignedLong":
 			case "unsignedShort":
-				GenParser result = new GenParser(xdp, null, declName);
+				GenParser result = new GenParser(xdp, declName, null);
 				return result;
 			case "list":
 				// TODO ????

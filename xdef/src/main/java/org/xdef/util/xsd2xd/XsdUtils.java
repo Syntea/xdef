@@ -1,8 +1,7 @@
-package org.xdef.util.xsd2xd.doc;
+package org.xdef.util.xsd2xd;
 
 import org.xdef.util.xsd2xd.xd.Utils;
 import org.xdef.util.xsd2xd.xd.Utils.MyQName;
-import org.xdef.util.xsd2xd.doc.XsdVersion;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;

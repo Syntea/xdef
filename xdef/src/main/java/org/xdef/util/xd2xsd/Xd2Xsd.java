@@ -21,18 +21,14 @@ import org.xdef.model.XMSelector;
 import org.xdef.xml.KXmlUtils;
 
 /** Convertor of X-definition to XML Schema.
- * (see {@link org.xdef.util.XdefToXsd#main(String[])})
  * @author  Vaclav Trojan
  */
 public class Xd2Xsd {
-
-	/** Default prefix used for XML schema namespace. */
+	/** Prefix used for the XML schema namespace. */
 	private static final String SCHEMA_PFX = "xs:";
-
 	/** QName of schema element. */
 	private static final QName SCHEMA_QNAME =
 		new QName(XMLConstants.W3C_XML_SCHEMA_NS_URI, "schema");
-
 	/** Name of root XML schema file. */
 	private final String _rootName;
 	/** Map of file names and XML schema elements.*/
@@ -56,21 +52,19 @@ public class Xd2Xsd {
 		_doc = KXmlUtils.newDocument();
 	}
 
-	/** If _genInfo switch is on, then Generate annotations with documentation.
+	/** If genInfo switch is on, then Generate annotations with documentation.
 	 * @param parent node where to add annotation.
-	 * @param parserInfo object containing documentation information.
+	 * @param text of documentation.
 	 */
-	private void addAnnotation(final Element parent, GenParser parserInfo) {
-		if (_genInfo && parserInfo.getInfo() != null
-			&& !parserInfo.getInfo().isEmpty()) {
+	private void addAnnotation(final Element parent, final String text) {
+		if (_genInfo && text != null && !text.trim().isEmpty()) {
 			Element anotation = genSchemaElem(parent, "annotation");
 			Element documentation = genSchemaElem(anotation, "documentation");
-			documentation.appendChild(
-				_doc.createTextNode(parserInfo.getInfo()));
+			documentation.appendChild(_doc.createTextNode(text.trim()));
 		}
 	}
 
-	/** Get schema type name.
+	/** Get name of XML schema type.
 	 * @param parserInfo parser information.
 	 * @return schema type name.
 	 */
@@ -78,8 +72,8 @@ public class Xd2Xsd {
 		return SCHEMA_PFX + parserInfo.getParser().parserName();
 	}
 
-	/** Gen element with restrictions,
-	 * @param parent node where to add restrictions
+	/** Create element with restrictions,
+	 * @param parent element where to add restrictions
 	 * @param parserInfo object containing restriction information.
 	 * @return element with restrictions.
 	 */
@@ -88,8 +82,8 @@ public class Xd2Xsd {
 		XDNamedValue[] xdv =
 			parserInfo.getParser().getNamedParams().getXDNamedItems();
 		Element restr = genSchemaElem(parent, "restriction");
-		restr.setAttribute("base", getSchemaTypeName(parserInfo));
-		addAnnotation(restr, parserInfo);
+		String typeName = getSchemaTypeName(parserInfo);
+		restr.setAttribute("base", typeName);
 		for (XDNamedValue x: xdv) {
 			XDValue xval = x.getValue();
 			if (xval==null) {
@@ -128,30 +122,30 @@ public class Xd2Xsd {
 		return restr;
 	}
 
-	/** Generate sequence of models.
-	 * @param parent node where to add models.
+	/** Generate group of models.
+	 * @param parent element where to add models.
+	 * @param xsel group selector.
 	 * @param children array with children.
-	 * @param index index of the first child.
 	 * @param endIndex index of the last child.
+	 * @param index index of the first child.
 	 * @return the index where to continue.
 	 */
-	private int genSelector(final Element complt,
+	private int genGroup(final Element complt,
 		final Element parent,
 		final XMSelector xsel,
 		final XMNode[] children,
 		final int index) {
 		int endIndex = xsel.getEndIndex();
+		Element sel;
 		switch (xsel.getKind()) {
-			case XMNode.XMSEQUENCE: {
-				Element sel = genSchemaElem(parent, "sequence");
+			case XMNode.XMSEQUENCE:
+				sel = genSchemaElem(parent, "sequence");
 				setOccurrence(sel, xsel);
 				return genSequence(complt, sel, children, index, endIndex);
-			}
-			case XMNode.XMCHOICE: {
-				Element sel = genSchemaElem(parent, "choice");
+			case XMNode.XMCHOICE:
+				sel = genSchemaElem(parent, "choice");
 				setOccurrence(sel, xsel);
 				return genSequence(complt, sel, children, index, endIndex);
-			}
 			case XMNode.XMMIXED: {
 				int min = 0;
 				int max = 0;
@@ -169,27 +163,21 @@ public class Xd2Xsd {
 							}
 							if (occ.maxOccurs() > 1) {
 								allOne = false;
-								if (occ.maxOccurs() == Integer.MAX_VALUE) {
-									max = Integer.MAX_VALUE;
-								} else if (max < Integer.MAX_VALUE) {
-									max += occ.maxOccurs();
-								}
+								max =  occ.maxOccurs() == Integer.MAX_VALUE
+									? Integer.MAX_VALUE : max + occ.maxOccurs();
 							}
 					}
 				}
-				Element sel;
-				int ndx;
 				if (allOne) {
 					sel = genSchemaElem(parent, "all");
-					return genSequence(complt, sel, children, index, endIndex);
 				} else {
 					sel = genSchemaElem(parent, "sequence");
 					sel = genSchemaElem(sel, "choice");
 					sel.setAttribute("maxOccurs", max == Integer.MAX_VALUE
 						? "unbounded" : String.valueOf(max));
 					sel.setAttribute("minOccurs", String.valueOf(min));
-					return genSequence(complt, sel, children, index, endIndex);
 				}
+				return genSequence(complt, sel, children, index, endIndex);
 			}
 			default:
 				throw new RuntimeException(xsel + " not implemented yet");
@@ -197,8 +185,8 @@ public class Xd2Xsd {
 	}
 
 	/** Generate sequence of models.
+	 * @param complt complexType element.
 	 * @param parent node where to add models.
-	 * @param text information about text nodes.
 	 * @param children array with children.
 	 * @param index index of the first child.
 	 * @param endIndex index of the last child.
@@ -223,7 +211,7 @@ public class Xd2Xsd {
 				case XMNode.XMCHOICE:
 				case XMNode.XMSEQUENCE: {
 					XMSelector xsel = (XMSelector) x;
-					i = genSelector(complt, parent, xsel, children, i);
+					i = genGroup(complt, parent, xsel, children, i);
 					continue;
 				}
 				case XMNode.XMSELECTOR_END:
@@ -282,20 +270,44 @@ public class Xd2Xsd {
 			}
 			att.setAttribute("name", x.getLocalName());
 			GenParser parserInfo = GenParser.genParser((XMData) x);
+			String typeName =
+				createSchemaTypeName(el, parserInfo.getDeclaredName());
 			if (parserInfo.getParser().getNamedParams().isEmpty()) {
-				addAnnotation(att, parserInfo);
-				att.setAttribute("type",
-					SCHEMA_PFX + parserInfo.getParser().parserName());
+				String parserName =
+					SCHEMA_PFX + parserInfo.getParser().parserName();
+				if (typeName == null) {
+					att.setAttribute("type",parserName);
+					addAnnotation(att, parserInfo.getInfo());
+				} else {
+					Element simpletp =
+						genSchemaElem(getSchemaElement(el), "simpleType");
+					addAnnotation(simpletp, parserInfo.getInfo());
+					simpletp.setAttribute("name", typeName);
+					Element restr = genSchemaElem(simpletp, "restriction");
+					restr.setAttribute("base", parserName);
+					att.setAttribute("type", typeName);
+					att.setAttribute("type", typeName);
+					addAnnotation(att, "See simpeType \"" + typeName + '"');
+				}
 			} else {
-				Element simpletp = genSchemaElem(att, "simpleType");
-				genRestrictions(simpletp, parserInfo);
+				if (typeName == null) {
+					Element simpletp = genSchemaElem(att, "simpleType");
+					genRestrictions(simpletp, parserInfo);
+				} else {
+					att.setAttribute("type", typeName);
+					addAnnotation(att, "See simpeType \"" + typeName + '"');
+					Element simpletp =
+						genSchemaElem(getSchemaElement(el), "simpleType");
+					genRestrictions(simpletp, parserInfo);
+					simpletp.setAttribute("name", typeName);
+				}
 			}
 		}
 	}
 
 	/** Get declared type name.
-	 * @param parserInfo with information about value type/
-	 * @return declared type name ot null;
+	 * @param parserInfo object with information about value type.
+	 * @return declared type name or null;
 	 */
 	private static String genDeclaredName(final GenParser parserInfo) {
 		String s = parserInfo.getDeclaredName();
@@ -327,13 +339,16 @@ public class Xd2Xsd {
 		return null;
 	}
 
-	/** Get unique type name in this schema element.
+	/** Get unique schemaType name in this schema element.
 	 * @param el element where to the name must be unique.
 	 * @param name the name to search.
 	 * @return unique type name.
 	 */
-	private String getUniqueTypeName(final Element el, final String name) {
-		String typeName = name;
+	private String createSchemaTypeName(final Element el, final String name) {
+		if (name == null) {
+			return null;
+		}
+		String typeName = name.split(";")[0];
 		if (findSchematype(el, name) == null) {
 			return typeName;
 		}
@@ -434,19 +449,21 @@ public class Xd2Xsd {
 			if (attrs.length == 0) {
 				if (typeName == null) {
 					if (parserInfo.getParser().getNamedParams().isEmpty()) {
-						addAnnotation(el, parserInfo);
 						el.setAttribute("type",
 							SCHEMA_PFX + parserInfo.getParser().parserName());
 						simpleType = null;
 					} else {
 						simpleType = genSchemaElem(el, "simpleType");
+						addAnnotation(simpleType, parserInfo.getInfo());
 					}
 				} else {
 					el.setAttribute("type", typeName);
 					if (!targetNs.isEmpty()) {
 						el.setAttribute("xmlns", targetNs);
 					}
+					addAnnotation(el, "See simpleType \"" + typeName + '"');
 					simpleType = genSchemaElem(schema, "simpleType");
+					addAnnotation(simpleType, parserInfo.getInfo());
 					simpleType.setAttribute("name", typeName);
 				}
 				if (simpleType != null) {
@@ -463,7 +480,7 @@ public class Xd2Xsd {
 						extension.setAttribute("base",
 							SCHEMA_PFX + parserInfo.getParser().parserName());
 					} else {
-						typeName = getUniqueTypeName(el, xel.getLocalName());
+						typeName = createSchemaTypeName(el, xel.getLocalName());
 						if (!targetNs.isEmpty()) {
 							extension.setAttribute("xmlns", targetNs);
 						}
@@ -490,7 +507,7 @@ public class Xd2Xsd {
 				case XMNode.XMMIXED:
 				case XMNode.XMSEQUENCE:
 					if (((XMSelector) x).getEndIndex() == children.length - 1) {
-						genSelector(complt,
+						genGroup(complt,
 							complt, (XMSelector) children[0], children, 0);
 						return el;
 					}
@@ -502,8 +519,8 @@ public class Xd2Xsd {
 		return el;
 	}
 
-	/** Generate a new unique xml schema file name.
-	 * @return new unique xml schema file name.
+	/** Generate a new unique XML schema file name.
+	 * @return new unique XML schema file name.
 	 */
 	private String genNewName() {
 		for (int i = 1;;i++) {

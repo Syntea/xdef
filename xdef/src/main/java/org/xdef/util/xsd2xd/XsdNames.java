@@ -1,4 +1,4 @@
-package org.xdef.util.xsd2xd.doc;
+package org.xdef.util.xsd2xd;
 
 /** Contains XML Schema node names and values as static constants.
  * @author Ilia Alexandrov

@@ -1,4 +1,4 @@
-package org.xdef.util.xsd2xd.xsd_1_0.type.domain;
+package org.xdef.util.xsd2xd.xsd_1_0.type;
 
 import org.xdef.sys.SUtils;
 import java.util.ArrayList;

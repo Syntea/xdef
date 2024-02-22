@@ -1,4 +1,4 @@
-package org.xdef.util.xsd2xd.xsd_1_0.type.domain;
+package org.xdef.util.xsd2xd.xsd_1_0.type;
 
 /** Represents specification of XML schema type.
  * @author Ilia Alexandrov

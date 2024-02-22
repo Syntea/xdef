@@ -1,6 +1,5 @@
-package org.xdef.util.xsd2xd.schema_1_0;
+package org.xdef.util.xsd2xd;
 
-import org.xdef.util.xsd2xd.utils.DOMUtils;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
