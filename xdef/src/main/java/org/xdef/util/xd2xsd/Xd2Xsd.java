@@ -266,8 +266,6 @@ public class Xd2Xsd {
 				} else {
 					att.setAttribute("form", "qualified");
 				}
-			} else {
-				att.setAttribute("form", "unqualified");
 			}
 			att.setAttribute("name", x.getLocalName());
 			GenParser parserInfo = GenParser.genParser((XMData) x);
