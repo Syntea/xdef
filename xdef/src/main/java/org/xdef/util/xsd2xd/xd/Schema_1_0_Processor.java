@@ -10,14 +10,16 @@ import java.net.URL;
 import java.util.Calendar;
 import java.util.Set;
 import java.util.Stack;
-import org.w3c.dom.*;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
 
 /** Represents XML Schema 1.0 to X-definition 2.0 convertor.
  * @author Ilia Alexandrov
  */
 public class Schema_1_0_Processor extends Processor {
-	/** Prefix for X-definition nodes. */
-	private final String _xdefPrefix;
+	/** X-derfinition namespace uri of actual version. */
+	public static final String XDEF_URI = XDConstants.XDEF42_NS_URI;
 	/** Representation of X-definition document. */
 	private final XdefDocument _xdef;
 	/** Error and warning reporter. */
@@ -25,9 +27,9 @@ public class Schema_1_0_Processor extends Processor {
 	/** Every def as file switch. */
 	private final boolean _separately;
 	/** Stack of referencing elements (Element). */
-	private final Stack<Element> _refElementsStack = new Stack<Element>();
+	private final Stack<Element> _refElementsStack = new Stack<>();
 	/** Stack of namespaces during importing and including declarations. */
-	private final Stack<String> _namespaceStack = new Stack<String>();
+	private final Stack<String> _namespaceStack = new Stack<>();
 
 	/** Creates instance of XML Schema 1.0 to X-definition 2.0 convertor.
 	 * X-definition elements will have given prefix. X-definition will be
@@ -43,11 +45,10 @@ public class Schema_1_0_Processor extends Processor {
 		URL rootSchemaURL,
 		boolean separately) {
 		super(rootSchemaURL);
-		_xdefPrefix = xdefPrefix;
 		_reporter = reporter;
 		_separately = separately;
 		_xdef = new XdefDocument(_schemaElements,
-			xdefPrefix, XDConstants.XDEF42_NS_URI, _separately);
+			xdefPrefix, XDEF_URI, _separately);
 		processSchemaElements(_xdef.getXdefElements());
 	}
 	@Override
