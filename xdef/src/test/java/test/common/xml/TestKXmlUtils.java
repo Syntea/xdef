@@ -60,8 +60,7 @@ public class TestKXmlUtils extends STester {
 			s = doc.getDocumentElement().getChildNodes().item(0).getNodeValue();
 			assertEq("]]>", s);
 			s = KXmlUtils.nodeToString(doc);
-			assertEq("<?xml version=\"1.0\" encoding=\"UTF-8\"?><a>]]&gt;</a>",
-				s);
+			assertEq("<a>]]&gt;</a>", s);
 			try {
 				KXmlUtils.parseXml("<a>]]></a>");
 				fail("error not reported");
@@ -266,32 +265,21 @@ public class TestKXmlUtils extends STester {
 			StringWriter sw = new StringWriter();
 			KXmlUtils.writeXml(sw, "UTF-8", el, null, false, false, true);
 			sw.close();
-			assertEq(
-"<?xml version=\"1.0\" encoding=\"UTF-8\"?><a>\nxxx\n  yy  y\n</a>",
-				sw.toString());
+			assertEq("<a>\nxxx\n  yy  y\n</a>", sw.toString());
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			OutputStreamWriter osw = new OutputStreamWriter(baos, "UTF-8");
 			KXmlUtils.writeXml(osw, el, false, false, true);
 			osw.close();
-			assertEq(
-"<?xml version=\"1.0\" encoding=\"UTF-8\"?><a>\nxxx\n  yy  y\n</a>", baos.toString());
+			assertEq("<a>\nxxx\n  yy  y\n</a>", baos.toString());
 		} catch (Exception ex) {fail(ex);}
 		try {
 			s = "<a><b a='a\"' b=\"b'\">\n\nxxx\n yy   y\n\n</b></a>";
 			el = KXmlUtils.parseXml(s).getDocumentElement();
 			assertEq(KXmlUtils.nodeToString(el, false), s);
 			assertEq(KXmlUtils.nodeToString(el, true),
-"<a>\n" +
-"  <b a='a\"' b=\"b'\">\n" +
-"    xxx yy y\n" +
-"  </b>\n" +
-"</a>");
+				"<a>\n  <b a='a\"' b=\"b'\">\n    xxx yy y\n  </b>\n</a>");
 			assertEq(KXmlUtils.nodeToString(el, true, false, true),
-"<a>\n" +
-"  <b a='a\"' b=\"b'\">xxx\n" +
-" yy   y</b>\n" +
-"</a>");
-
+				"<a>\n  <b a='a\"' b=\"b'\">xxx\n yy   y</b>\n</a>");
 			s = "<x a=\"A\nB\"><y/>text<z/></x>";
 			el = KXmlUtils.parseXml(s).getDocumentElement();
 			assertEq(KXmlUtils.nodeToString(el),
@@ -299,17 +287,9 @@ public class TestKXmlUtils extends STester {
 			assertEq(KXmlUtils.nodeToString(el, false),
 				"<x a=\"A B\"><y/>text<z/></x>");
 			assertEq(KXmlUtils.nodeToString(el, true),
-"<x a=\"A B\">\n" +
-"  <y/>\n" +
-"  text\n" +
-"  <z/>\n" +
-"</x>");
+				"<x a=\"A B\">\n  <y/>\n  text\n  <z/>\n</x>");
 			assertEq(KXmlUtils.nodeToString(el, true, false, true),
-"<x a=\"A B\">\n" +
-"  <y/>\n" +
-"text\n" +
-"  <z/>\n" +
-"</x>");
+				"<x a=\"A B\">\n  <y/>\ntext\n  <z/>\n</x>");
 			assertEq(KXmlUtils.nodeToString(el, true, false, false),
 				"<x a=\"A B\"><y/>text<z/></x>");
 		} catch (Exception ex) {fail(ex);}

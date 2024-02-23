@@ -34,10 +34,13 @@ import java.util.LinkedHashMap;
  */
 public final class KXmlUtils extends KDOMUtils {
 
-	private final static Map<String, String> PREFIXMAP =
-		new LinkedHashMap<String, String>();
-	static {
-		PREFIXMAP.put("xmlns", "");
+	/** Prepare map with prefixes.
+	 * @return new map with prefixes.
+	 */
+	private static Map<String, String> prefixMap() {
+		Map<String, String> result = new LinkedHashMap<>();
+		result.put("xmlns", "");
+		return result;
 	}
 
 	/** Creates an XML <code>Document</code> object with created document
@@ -267,10 +270,21 @@ public final class KXmlUtils extends KDOMUtils {
 		}
 	}
 
+	/** Write XML header.
+	 * @param out where to write.
+	 * @param xmlVersion xml version.
+	 * @param xmlEncoding file encoding.
+	 * @param indentStep indentation step.
+	 * @throws IOException if an error occurs.
+	 */
 	private static void writeXmlHdr(final Writer out,
 		final String xmlVersion,
 		final String xmlEncoding,
 		final String indentStep) throws IOException {
+		if ("1.0".equals(xmlVersion) &&
+			(xmlEncoding == null || xmlEncoding.equalsIgnoreCase("UTF-8"))) {
+			return;
+		}
 		out.write("<?xml version=\"");
 		out.write(xmlVersion != null ? xmlVersion : "1.0");
 		out.write("\" encoding=\"");
@@ -820,7 +834,7 @@ public final class KXmlUtils extends KDOMUtils {
 			canonical,
 			removeIgnorableWhiteSpaces,
 			comments,
-			PREFIXMAP);
+			prefixMap());
 		out.flush();
 	}
 
@@ -889,17 +903,16 @@ public final class KXmlUtils extends KDOMUtils {
 		final Node node,
 		final boolean indenting,
 		final boolean comments) throws IOException {
-		FileOutputStream fos = new FileOutputStream(fname);
-		OutputStreamWriter out = new OutputStreamWriter(fos,encoding);
-		writeXml(out,
-			encoding,
-			node,
-			(indenting ? "  " : null), //indentStep
-			true, //canonical
-			indenting, //removeIgnorableWhiteSpaces
-			comments);
-		out.close();
-		fos.close();
+		try (FileOutputStream fos = new FileOutputStream(fname);
+			OutputStreamWriter out = new OutputStreamWriter(fos,encoding)) {
+			writeXml(out,
+				encoding,
+				node,
+				(indenting ? "  " : null), //indentStep
+				true, //canonical
+				indenting, //removeIgnorableWhiteSpaces
+				comments);
+		}
 	}
 
 	/** Write element in XML format in UTF-8.
@@ -951,17 +964,17 @@ public final class KXmlUtils extends KDOMUtils {
 		final Node node,
 		final boolean indenting,
 		final boolean comments) throws IOException {
-		FileOutputStream fos = new FileOutputStream(file);
-		OutputStreamWriter out = new OutputStreamWriter(fos, encoding);
-		writeXml(out,
-			encoding,
-			node,
-			(indenting ? "  " : null),//indentStep
-			true, //canonical
-			indenting, //removeIgnorableWhiteSpaces
-			comments);
-		out.close();
-		fos.close();
+		try (FileOutputStream fos = new FileOutputStream(file)) {
+			OutputStreamWriter out = new OutputStreamWriter(fos, encoding);
+			writeXml(out,
+				encoding,
+				node,
+				(indenting ? "  " : null),//indentStep
+				true, //canonical
+				indenting, //removeIgnorableWhiteSpaces
+				comments);
+			out.close();
+		}
 	}
 
 	/** Write element in XML format in UTF-8 character set.
@@ -1011,9 +1024,9 @@ public final class KXmlUtils extends KDOMUtils {
 				true, //canonical
 				removeIgnorableWhiteSpaces,
 				comments,
-				PREFIXMAP);
+				prefixMap());
 			return wr.toString();
-		} catch (Exception ex) {return null;} //never happens
+		} catch (IOException ex) {return null;} //never happens
 	}
 
 	/** Create string in XML format from given argument.
@@ -1036,9 +1049,9 @@ public final class KXmlUtils extends KDOMUtils {
 				true, //canonical
 				indent, //removeIgnorableWhiteSpaces
 				true, //comments
-				PREFIXMAP);
+				prefixMap());
 			return caw.toString();
-		} catch (Exception ex) {return null;} //never happens
+		} catch (IOException ex) {return null;} //never happens
 	}
 
 	/** Create string in XML format from given node.
@@ -1057,9 +1070,9 @@ public final class KXmlUtils extends KDOMUtils {
 				true, //canonical
 				false, //removeIgnorableWhiteSpaces
 				true, //comments
-				PREFIXMAP);
+				prefixMap());
 			return caw.toString();
-		} catch (Exception ex) {return null;} //never happens
+		} catch (IOException ex) {return null;} //never happens
 	}
 
 	/** Parse source file or a string with XMLke format and create

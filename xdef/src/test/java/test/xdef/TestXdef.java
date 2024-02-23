@@ -3019,7 +3019,6 @@ public final class TestXdef extends XDTester {
 			xml = "<a>1<b>2</b>3</a>";
 			assertEq(
 				KXmlUtils.nodeToString(parse(xdef, "", xml).getOwnerDocument()),
-"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"+
 "<!--a0--><?a 0?><a>"+
 "<!--10-->1<?_1 0?><!--11--><?_1 1?><!--b0--><?b 0?>"+
 "<b><!--20-->2<?_2 0?><!--21--><?_2 1?></b><!--b1--><?b 1?>"+
