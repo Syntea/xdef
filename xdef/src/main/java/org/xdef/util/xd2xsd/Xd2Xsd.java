@@ -270,7 +270,6 @@ public class Xd2Xsd {
 			att.setAttribute("name", x.getLocalName());
 			GenParser parserInfo = GenParser.genParser((XMData) x);
 			String typeName = genDeclaredName(parserInfo);
-//			typeName = createSchemaTypeName(el, typeName);
 			if (parserInfo.getParser().getNamedParams().isEmpty()) {
 				String parserName =
 					SCHEMA_PFX + parserInfo.getParser().parserName();
@@ -352,7 +351,7 @@ public class Xd2Xsd {
 		if (name == null) {
 			return null;
 		}
-		String typeName = name.split(";")[0];
+		String typeName = name;
 		if (findSchematype(el, name) == null) {
 			return typeName;
 		}
@@ -455,7 +454,6 @@ public class Xd2Xsd {
 					if (parserInfo.getParser().getNamedParams().isEmpty()) {
 						el.setAttribute("type",
 							SCHEMA_PFX + parserInfo.getParser().parserName());
-						simpleType = null;
 					} else {
 						simpleType = genSchemaElem(el, "simpleType");
 						genRestrictions(simpleType, parserInfo);
@@ -491,7 +489,6 @@ public class Xd2Xsd {
 					}
 				}
 				if (typeName != null && findSchematype(el, typeName) == null) {
-					Element simpletp = findSchematype(el, typeName);
 					simpleType = genSchemaElem(schema,"simpleType");
 					simpleType.setAttribute("name", typeName);
 					genRestrictions(simpleType, parserInfo);
@@ -607,18 +604,18 @@ public class Xd2Xsd {
 		if (xdef == null) {
 			throw new RuntimeException("can't find X-definition " + xname);
 		}
-		String mname = null, mURI = null;
+		String mname = null;
 		XMElement[] roots;
 		if (modelName == null || modelName.isEmpty()) {
 			roots = xp.getXMDefinition(xname).getRootModels();
 			if (roots != null && roots.length > 0) {
 				mname = roots[0].getLocalName();
-				mURI = roots[0].getNSUri();
 			} else {
 				throw new RuntimeException("No XML model specified");
 			}
 		} else {
 			roots = xp.getXMDefinition(xname).getModels();
+			String mURI = null;
 			for (XMElement xel : roots) {
 				if (modelName.equals(xel.getName())) {
 					mname = xel.getLocalName();
@@ -633,7 +630,6 @@ public class Xd2Xsd {
 			roots = new XMElement[1];
 			roots[0] = xmdef.getModel(mURI, mname);
 		}
-
 		String oname = outName == null ? mname : outName;
 		Xd2Xsd generator =  new Xd2Xsd(oname, genInfo);
 		Element schema = generator.genNewSchema(oname);
