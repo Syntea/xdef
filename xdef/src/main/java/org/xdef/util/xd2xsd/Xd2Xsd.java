@@ -270,21 +270,23 @@ public class Xd2Xsd {
 			att.setAttribute("name", x.getLocalName());
 			GenParser parserInfo = GenParser.genParser((XMData) x);
 			String typeName = genDeclaredName(parserInfo);
-			typeName = createSchemaTypeName(el, typeName);
+//			typeName = createSchemaTypeName(el, typeName);
 			if (parserInfo.getParser().getNamedParams().isEmpty()) {
 				String parserName =
 					SCHEMA_PFX + parserInfo.getParser().parserName();
 				if (typeName == null) {
 					att.setAttribute("type",parserName);
-					addAnnotation(att, parserInfo.getInfo());
 				} else {
-					Element simpletp =
-						genSchemaElem(getSchemaElement(el), "simpleType");
-					addAnnotation(simpletp, parserInfo.getInfo());
-					simpletp.setAttribute("name", typeName);
+					Element simpletp = findSchematype(el, typeName);
+					if (simpletp == null) {
+						addAnnotation(att, parserInfo.getInfo());
+						simpletp =
+							genSchemaElem(getSchemaElement(el), "simpleType");
+						addAnnotation(simpletp, parserInfo.getInfo());
+						simpletp.setAttribute("name", typeName);
+					}
 					Element restr = genSchemaElem(simpletp, "restriction");
 					restr.setAttribute("base", parserName);
-					att.setAttribute("type", typeName);
 					att.setAttribute("type", typeName);
 					addAnnotation(att, "See simpeType \"" + typeName + '"');
 				}
@@ -295,10 +297,13 @@ public class Xd2Xsd {
 				} else {
 					att.setAttribute("type", typeName);
 					addAnnotation(att, "See simpeType \"" + typeName + '"');
-					Element simpletp =
-						genSchemaElem(getSchemaElement(el), "simpleType");
-					genRestrictions(simpletp, parserInfo);
-					simpletp.setAttribute("name", typeName);
+					Element simpletp = findSchematype(el, typeName);
+					if (simpletp == null) {
+						simpletp =
+							genSchemaElem(getSchemaElement(el), "simpleType");
+						genRestrictions(simpletp, parserInfo);
+						simpletp.setAttribute("name", typeName);
+					}
 				}
 			}
 		}
@@ -453,6 +458,7 @@ public class Xd2Xsd {
 						simpleType = null;
 					} else {
 						simpleType = genSchemaElem(el, "simpleType");
+						genRestrictions(simpleType, parserInfo);
 					}
 				} else {
 					el.setAttribute("type", typeName);
@@ -460,12 +466,12 @@ public class Xd2Xsd {
 						el.setAttribute("xmlns", targetNs);
 					}
 					addAnnotation(el, "See simpleType \"" + typeName + '"');
-					simpleType = genSchemaElem(schema, "simpleType");
-					addAnnotation(simpleType, parserInfo.getInfo());
-					simpleType.setAttribute("name", typeName);
-				}
-				if (simpleType != null) {
-					genRestrictions(simpleType, parserInfo);
+					if (findSchematype(el, typeName) == null) {
+						// named simpletype not exists, create it!
+						simpleType = genSchemaElem(schema,"simpleType");
+						simpleType.setAttribute("name", typeName);
+						genRestrictions(simpleType, parserInfo);
+					}
 				}
 			} else {
 				Element complextp = genSchemaElem(el, "complexType");
@@ -484,7 +490,8 @@ public class Xd2Xsd {
 						}
 					}
 				}
-				if (typeName != null) {
+				if (typeName != null && findSchematype(el, typeName) == null) {
+					Element simpletp = findSchematype(el, typeName);
 					simpleType = genSchemaElem(schema,"simpleType");
 					simpleType.setAttribute("name", typeName);
 					genRestrictions(simpleType, parserInfo);
@@ -601,35 +608,44 @@ public class Xd2Xsd {
 			throw new RuntimeException("can't find X-definition " + xname);
 		}
 		String mname = null, mURI = null;
-		if (modelName == null) {
-			XMElement[] roots = xp.getXMDefinition(xname).getRootModels();
+		XMElement[] roots;
+		if (modelName == null || modelName.isEmpty()) {
+			roots = xp.getXMDefinition(xname).getRootModels();
 			if (roots != null && roots.length > 0) {
 				mname = roots[0].getLocalName();
 				mURI = roots[0].getNSUri();
+			} else {
+				throw new RuntimeException("No XML model specified");
 			}
 		} else {
-			XMElement[] xels = xp.getXMDefinition(xname).getModels();
-			for (XMElement xel : xels) {
+			roots = xp.getXMDefinition(xname).getModels();
+			for (XMElement xel : roots) {
 				if (modelName.equals(xel.getName())) {
 					mname = xel.getLocalName();
 					mURI = xel.getNSUri();
 					break;
 				}
 			}
+			if (mname == null) {
+				throw new RuntimeException("Can't find model " + modelName);
+			}
+			XMDefinition xmdef = xp.getXMDefinition(xname);
+			roots = new XMElement[1];
+			roots[0] = xmdef.getModel(mURI, mname);
 		}
-		if (mname == null) {
-			throw new RuntimeException("Can't find model " + modelName);
-		}
+
 		String oname = outName == null ? mname : outName;
-		XMDefinition xmdef = xp.getXMDefinition(xname);
-		XMElement xmel = xmdef.getModel(mURI, mname);
 		Xd2Xsd generator =  new Xd2Xsd(oname, genInfo);
 		Element schema = generator.genNewSchema(oname);
+		XMElement xmel = roots[0];
 		String nsUri = xmel.getNSUri();
 		if (nsUri != null && !nsUri.isEmpty()) {
 			schema.setAttribute("targetNamespace", nsUri);
 		}
 		generator.genElem(schema, xmel);
+		for (int i = 1; i < roots.length; i++) {
+			generator.genElem(schema, roots[i]);
+		}
 		return generator._xsdSources;
 	}
 }

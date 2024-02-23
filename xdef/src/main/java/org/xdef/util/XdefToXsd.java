@@ -10,7 +10,6 @@ import org.w3c.dom.Element;
 import org.xdef.XDConstants;
 import org.xdef.XDFactory;
 import org.xdef.XDPool;
-import org.xdef.model.XMElement;
 import org.xdef.sys.SUtils;
 import org.xdef.util.xd2xsd.Xd2Xsd;
 import org.xdef.xml.KXmlUtils;
@@ -30,7 +29,7 @@ public class XdefToXsd {
 	 * @param xdName name of X-definition. May be null, then the nameless
 	 * X-definition or the first one X-definition is used.
 	 * @param modelName name of model of X-definition to used. May be null,
-	 * then the value from "xs:root" parameter is used to create models.
+	 * then the all values from "xs:root" parameter are used to create models.
 	 * @param outName name of base XML schema file. May be null, then
 	 * local name of X-definition model is used.
 	 * @param genInfo if true documentation information is generated.
@@ -41,6 +40,9 @@ public class XdefToXsd {
 		final String modelName,
 		final String outName,
 		final boolean genInfo) {
+		if (xdefs == null || xdefs.length == 0) {
+			throw new RuntimeException("Missing X-definition source files");
+		}
 		Properties props = new Properties();
 		props.setProperty(XDConstants.XDPROPERTY_IGNORE_UNDEF_EXT,
 			XDConstants.XDPROPERTYVALUE_IGNORE_UNDEF_EXT_TRUE);
@@ -49,27 +51,9 @@ public class XdefToXsd {
 			? xp.getXMDefinition("") != null ? ""
 			: xp.getXMDefinitions()[0].getName()
 			: xdName;
-		String mname = null;
-		if (modelName == null) {
-			XMElement[] roots = xp.getXMDefinition(xname).getRootModels();
-			if (roots != null && roots.length > 0) {
-				mname = roots[0].getLocalName();
-			}
-		} else {
-			XMElement[] xels = xp.getXMDefinition(xname).getModels();
-			for (XMElement xel : xels) {
-				if (modelName.equals(xel.getName())) {
-					mname = xel.getLocalName();
-					break;
-				}
-			}
-		}
-		if (mname == null) {
-			throw new RuntimeException("Can't find model " + modelName);
-		}
-		String oname = outName == null ? mname : outName;
+		String oname = outName == null ? xname : outName;
 		Map<String, Element> schemaMap =
-			Xd2Xsd.genSchema(xp, xname, mname, oname, genInfo);
+			Xd2Xsd.genSchema(xp, xname, modelName, oname, genInfo);
 		writeSchema(outDir, schemaMap);
 	}
 
@@ -131,12 +115,12 @@ public class XdefToXsd {
 " -x or --xdName:   name of X-definition (optional)\n" +
 " -v or --genInfo:  genarate documentation etc.\n" +
 " -h or /?:         help";
-		String xdName = null;
-		String modelName = null;
-		File outDir = null;
-		String outName = null;
-		boolean genInfo = false;
-		List<String> source = new ArrayList<>();
+		String xdName = null; // name of X-definition
+		String modelName = null; // name of model
+		File outDir = null; // output directory
+		String outName = null; //name of output file
+		boolean genDecInfo = false; // switch to generate documentation info
+		List<String> xdSources = new ArrayList<>(); // X-definition source
 		if (args == null || args.length < 2) {
 			throw new RuntimeException("Error: parameters missing.\n" + info);
 		}
@@ -167,8 +151,8 @@ public class XdefToXsd {
 				case "--xdef":
 					for (;;) {
 						String s = args[++i];
-						if (!source.contains(s)) {
-							source.add(s);
+						if (!xdSources.contains(s)) {
+							xdSources.add(s);
 						}
 						if (i+1 >= args.length || args[i+1].startsWith("-")){
 							break;
@@ -193,20 +177,21 @@ public class XdefToXsd {
 					continue;
 				case "-v":
 				case "--genInfo":
-					if (genInfo) {
+					if (genDecInfo) {
 						throw new RuntimeException(
 							"Redefinition of "+arg+".\n" + info);
 					}
-					genInfo = true;
+					genDecInfo = true;
 			}
 		}
-		if (source.isEmpty()) {
-			throw new RuntimeException("Missing idefinition sources.\n"+info);
+		if (xdSources.isEmpty()) {
+			throw new RuntimeException("Missing X-definition sources.\n"+info);
 		}
 		if (outDir == null) {
 			throw new RuntimeException("Missing output directory.\n" + info);
 		}
-		genSchema(SUtils.getFileGroup(source.toArray(new String[source.size()])),
-			outDir, xdName, modelName, outName, genInfo);
+		File[] xdefs = SUtils.getFileGroup(
+			xdSources.toArray(new String[xdSources.size()]));
+		genSchema(xdefs, outDir, xdName, modelName, outName, genDecInfo);
 	}
 }

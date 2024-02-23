@@ -142,7 +142,7 @@ class GenRegex {
 	 * @param c character.
 	 * @return string with character or with special character escaped.
 	 */
-	public static String genEscapedChar(final char c) {
+	protected static String genEscapedChar(final char c) {
 		if (ESCAPEDCHARS.indexOf(c) >= 0) {
 			return "\\"+ c;
 		} else if (' ' == c) {
@@ -156,7 +156,7 @@ class GenRegex {
 	 * @param string string to modify.
 	 * @return modified string with special characters escaped.
 	 */
-	public static String genEscapeChars(String string) {
+	protected static String genEscapeChars(String string) {
 		StringBuilder ret = new StringBuilder();
 		for (int i = 0; i < string.length(); i++) {
 			ret.append(genEscapedChar(string.charAt(i)));
@@ -179,7 +179,7 @@ class GenRegex {
 	 * @param mask xdatetime mask.
 	 * @return set with regex strings.
 	 */
-	public static String[] getRegexes(String mask) {
+	protected static String[] getRegexes(String mask) {
 		Set<String> ret = new HashSet<>();
 		StringTokenizer st = new StringTokenizer(mask, "|");
 		while (st.hasMoreTokens()) {

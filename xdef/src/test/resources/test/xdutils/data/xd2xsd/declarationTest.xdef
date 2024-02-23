@@ -1,11 +1,7 @@
 <xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" xd:name="main" xd:root="Root" >
-
   <xd:declaration>type myType int(1,10);</xd:declaration>
-
   <Root>
     <Elem xd:script="occurs *; ref Model" />
   </Root>
-
   <Model>myType</Model>
-
 </xd:def>

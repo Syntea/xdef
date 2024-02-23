@@ -46,17 +46,17 @@ class GenParser {
 	/** Get X-definition parser.
 	 * @return X-definition parser.
 	 */
-	public XDParser getParser() {return _xdp;}
+	protected XDParser getParser() {return _xdp;}
 
 	/** Get information text (used in xs:documentation).
 	 * @return information text.
 	 */
-	public String getInfo() {return _info;}
+	protected String getInfo() {return _info;}
 
 	/** Get name of declared type in X-definition.
 	 * @return name of declared type in X-definition or null.
 	 */
-	public String getDeclaredName() {return _declaredName;}
+	protected String getDeclaredName() {return _declaredName;}
 
 	/** Set to the parser the declared name.
 	 * @param xdp the X-definition parser.
@@ -97,7 +97,7 @@ class GenParser {
 	 * @param xmd XMData object.
 	 * @return ParserInfo object with XML schema compatible parser.
 	 */
-	public static GenParser genParser(final XMData xmd) {
+	protected static GenParser genParser(final XMData xmd) {
 		XDParser xdp = (XDParser) xmd.getParseMethod();
 		String name = xdp.parserName();
 		String declName = xdp.getDeclaredName();

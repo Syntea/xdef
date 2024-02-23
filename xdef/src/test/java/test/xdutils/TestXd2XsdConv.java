@@ -291,97 +291,104 @@ public class TestXd2XsdConv extends XDTester {
 
 	@Override
 	public void test() {
-		init();
-//if(true)return;
-		assertTrue(prepare("basicTest"), popMessage());
-		assertTrue(parse("basicTest_valid_1"), popMessage());
-		assertTrue(parse("basicTest_valid_2"), popMessage());
-		assertTrue(parse("basicTest_valid_3"), popMessage());
-		assertTrue(parseFail("basicTest_invalid_1"), popMessage());
-		assertTrue(parseFail("basicTest_invalid_2"), popMessage());
-		assertTrue(parseFail("basicTest_invalid_3"), popMessage());
-		assertTrue(parseFail("basicTest_invalid_4"), popMessage());
+		try {
+			init();
+			assertTrue(prepare("basicTest"), popMessage());
+			assertTrue(parse("basicTest_valid_1"), popMessage());
+			assertTrue(parse("basicTest_valid_2"), popMessage());
+			assertTrue(parse("basicTest_valid_3"), popMessage());
+			assertTrue(parseFail("basicTest_invalid_1"), popMessage());
+			assertTrue(parseFail("basicTest_invalid_2"), popMessage());
+			assertTrue(parseFail("basicTest_invalid_3"), popMessage());
+			assertTrue(parseFail("basicTest_invalid_4"), popMessage());
 
-		assertTrue(prepare("multiXdefTest"), popMessage());
-		assertTrue(parse("multiXdefTest_valid_1"), popMessage());
+			assertTrue(prepare("multiXdefTest"), popMessage());
+			assertTrue(parse("multiXdefTest_valid_1"), popMessage());
 
-		assertTrue(prepare("simpleRefTest"), popMessage());
-		assertTrue(parse("simpleRefTest_valid_1"), popMessage());
+			assertTrue(prepare("simpleRefTest"), popMessage());
+			assertTrue(parse("simpleRefTest_valid_1"), popMessage());
 
-		assertTrue(prepare("simpleModelTest"), popMessage());
-		assertTrue(parse("simpleModelTest_valid_1"), popMessage());
-//		assertTrue(parse("simpleModelTest_valid_2"), popMessage());
-//		assertTrue(parse("simpleModelTest_valid_3"), popMessage());
-//		assertTrue(parse("simpleModelTest_valid_4"), popMessage());
-//		assertTrue(parse("simpleModelTest_valid_5"), popMessage());
-//		assertTrue(parse("simpleModelTest_valid_6"), popMessage());
-//		assertTrue(parse("simpleModelTest_valid_7"), popMessage());
-//		assertTrue(parse("simpleModelTest_valid_8"), popMessage());
+			assertTrue(prepare("simpleModelTest"), popMessage());
+			assertTrue(parse("simpleModelTest_valid_1"), popMessage());
+			assertTrue(parse("simpleModelTest_valid_2"), popMessage());
+			assertTrue(parse("simpleModelTest_valid_3"), popMessage());
+			assertTrue(parse("simpleModelTest_valid_4"), popMessage());
+			assertTrue(parse("simpleModelTest_valid_5"), popMessage());
+			assertTrue(parse("simpleModelTest_valid_6"), popMessage());
+			assertTrue(parse("simpleModelTest_valid_7"), popMessage());
+			assertTrue(parse("simpleModelTest_valid_8"), popMessage());
 
-		assertTrue(prepare("typeTest"), popMessage());
-		assertTrue(parse("typeTest_valid_1"), popMessage());
-		assertTrue(parseFail("typeTest_invalid_1"), popMessage());
-		assertTrue(parseFail("typeTest_invalid_2"), popMessage());
-		assertTrue(parseFail("typeTest_invalid_3"), popMessage());
-		assertTrue(parseFail("typeTest_invalid_4"), popMessage());
-		assertTrue(parseFail("typeTest_invalid_5"), popMessage());
-		assertTrue(parseFail("typeTest_invalid_6"), popMessage());
-		assertTrue(parseFail("typeTest_invalid_7"), popMessage());
-		assertTrue(parseFail("typeTest_invalid_8"), popMessage());
-		assertTrue(parseFail("typeTest_invalid_9"), popMessage());
-		assertTrue(parseFail("typeTest_invalid_10"), popMessage());
-		assertTrue(parseFail("typeTest_invalid_11"), popMessage());
+			assertTrue(prepare("typeTest"), popMessage());
+			assertTrue(parse("typeTest_valid_1"), popMessage());
+			assertTrue(parseFail("typeTest_invalid_1"), popMessage());
+			assertTrue(parseFail("typeTest_invalid_2"), popMessage());
+			assertTrue(parseFail("typeTest_invalid_3"), popMessage());
+			assertTrue(parseFail("typeTest_invalid_4"), popMessage());
+			assertTrue(parseFail("typeTest_invalid_5"), popMessage());
+			assertTrue(parseFail("typeTest_invalid_6"), popMessage());
+			assertTrue(parseFail("typeTest_invalid_7"), popMessage());
+			assertTrue(parseFail("typeTest_invalid_8"), popMessage());
+			assertTrue(parseFail("typeTest_invalid_9"), popMessage());
+			assertTrue(parseFail("typeTest_invalid_10"), popMessage());
+			assertTrue(parseFail("typeTest_invalid_11"), popMessage());
 
-		assertTrue(prepare("ATTR_to_ATTR"), popMessage());
-		assertTrue(parse("ATTR_to_ATTR_valid_1"), popMessage());
-		assertTrue(parse("ATTR_to_ATTR_valid_2"), popMessage());
-		assertTrue(parseFail("ATTR_to_ATTR_invalid_1"), popMessage());
-		assertTrue(parseFail("ATTR_to_ATTR_invalid_2"), popMessage());
+			assertTrue(prepare("ATTR_to_ATTR"), popMessage());
+			assertTrue(parse("ATTR_to_ATTR_valid_1"), popMessage());
+			assertTrue(parse("ATTR_to_ATTR_valid_2"), popMessage());
+			assertTrue(parseFail("ATTR_to_ATTR_invalid_1"), popMessage());
+			assertTrue(parseFail("ATTR_to_ATTR_invalid_2"), popMessage());
 
-		assertTrue(prepare("ATTR_to_CHLD"), popMessage());
-		assertTrue(parse("ATTR_to_CHLD_valid_1"), popMessage());
+			assertTrue(prepare("ATTR_to_CHLD"), popMessage());
+			assertTrue(parse("ATTR_to_CHLD_valid_1"), popMessage());
 
-		assertTrue(prepare("ATTR_to_ATTR_CHLD"), popMessage());
-		assertTrue(parse("ATTR_to_ATTR_CHLD_valid_1"), popMessage());
+			assertTrue(prepare("ATTR_to_ATTR_CHLD"), popMessage());
+			assertTrue(parse("ATTR_to_ATTR_CHLD_valid_1"), popMessage());
 
-		assertTrue(prepare("CHLD_to_ATTR"), popMessage());
-		assertTrue(parse("CHLD_to_ATTR_valid_1"), popMessage());
+			assertTrue(prepare("CHLD_to_ATTR"), popMessage());
+			assertTrue(parse("CHLD_to_ATTR_valid_1"), popMessage());
 
-		assertTrue(prepare("CHLD_to_CHLD"), popMessage());
-		assertTrue(parse("CHLD_to_CHLD_valid_1"), popMessage());
+			assertTrue(prepare("CHLD_to_CHLD"), popMessage());
+			assertTrue(parse("CHLD_to_CHLD_valid_1"), popMessage());
 
-		assertTrue(prepare("CHLD_to_ATTR_CHLD"), popMessage());
-		assertTrue(parse("CHLD_to_ATTR_CHLD_valid_1"), popMessage());
+			assertTrue(prepare("CHLD_to_ATTR_CHLD"), popMessage());
+			assertTrue(parse("CHLD_to_ATTR_CHLD_valid_1"), popMessage());
 
-		assertTrue(prepare("ATTR_CHLD_to_ATTR"), popMessage());
-		assertTrue(parse("ATTR_CHLD_to_ATTR_valid_1"), popMessage());
+			assertTrue(prepare("ATTR_CHLD_to_ATTR"), popMessage());
+			assertTrue(parse("ATTR_CHLD_to_ATTR_valid_1"), popMessage());
 
-		assertTrue(prepare("ATTR_CHLD_to_CHLD"), popMessage());
-		assertTrue(parse("ATTR_CHLD_to_CHLD_valid_1"), popMessage());
+			assertTrue(prepare("ATTR_CHLD_to_CHLD"), popMessage());
+			assertTrue(parse("ATTR_CHLD_to_CHLD_valid_1"), popMessage());
 
-		assertTrue(prepare("ATTR_CHLD_to_ATTR_CHLD"), popMessage());
-		assertTrue(parse("ATTR_CHLD_to_ATTR_CHLD_valid_1"), popMessage());
+			assertTrue(prepare("ATTR_CHLD_to_ATTR_CHLD"), popMessage());
+			assertTrue(parse("ATTR_CHLD_to_ATTR_CHLD_valid_1"), popMessage());
 
-		assertTrue(prepare("dateTimeTest"), popMessage());
-		assertTrue(parse("dateTimeTest_valid_1"), popMessage());
+			assertTrue(prepare("collectionTest"), popMessage());
+			assertTrue(parse("collectionTest_valid1"), popMessage());
+			assertTrue(parse("collectionTest_valid2"), popMessage());
+			assertTrue(parse("collectionTest_valid3"), popMessage());
+			assertTrue(parse("collectionTest_valid4"), popMessage());
 
-		assertTrue(prepare("declarationTest"), popMessage());
-		assertTrue(parse("declarationTest_valid_1"), popMessage());
-		assertTrue(parseFail("declarationTest_invalid_1"), popMessage());
-		assertTrue(parseFail("declarationTest_invalid_2"), popMessage());
+			assertTrue(prepare("dateTimeTest"), popMessage());
+			assertTrue(parse("dateTimeTest_valid_1"), popMessage());
 
-		assertTrue(prepare("namespaceTest1"), popMessage());
-		assertTrue(parse("namespaceTest1_valid_1"), popMessage());
+			assertTrue(prepare("declarationTest"), popMessage());
+			assertTrue(parse("declarationTest_valid_1"), popMessage());
+			assertTrue(parseFail("declarationTest_invalid_1"), popMessage());
+			assertTrue(parseFail("declarationTest_invalid_2"), popMessage());
 
-		assertTrue(prepare("schemaTypeTest"), popMessage());
-		assertTrue(parse("schemaTypeTest_valid_1"), popMessage());
+			assertTrue(prepare("namespaceTest1"), popMessage());
+			assertTrue(parse("namespaceTest1_valid_1"), popMessage());
 
-		assertTrue(prepare("typeFixedTest"), popMessage());
-		assertTrue(parse("typeFixedTest_valid"), popMessage());
+			assertTrue(prepare("schemaTypeTest"), popMessage());
+			assertTrue(parse("schemaTypeTest_valid_1"), popMessage());
 
-		assertTrue(prepare("B1_common"), popMessage());
-		assertTrue(parse("B1_Common_valid_1"), popMessage());
-//		assertTrue(parse("B1_Common_valid_2"), popMessage());
+			assertTrue(prepare("typeFixedTest"), popMessage());
+			assertTrue(parse("typeFixedTest_valid"), popMessage());
+
+			assertTrue(prepare("B1_common"), popMessage());
+			assertTrue(parse("B1_Common_valid_1"), popMessage());
+			assertTrue(parse("B1_Common_valid_2"), popMessage());
+		} catch (Exception ex) {fail(ex);}
 		clearTempDir();
 	}
 
