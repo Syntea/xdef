@@ -22,7 +22,7 @@ import static org.xdef.XDValueID.XD_CONTAINER;
  */
 public class XSParseUnion extends XSAbstractParser {
 	private static final String ROOTBASENAME = "union";
-	XDParser[] _itemTypes = new XDParser[0];
+	XDParser[] _itemTypes = null;
 	XDValue[] _enumeration;
 
 	public XSParseUnion() {super();}
@@ -68,6 +68,7 @@ public class XSParseUnion extends XSAbstractParser {
 	}
 	@Override
 	public void setItem(final XDValue item) { //%item
+		_itemTypes = null;
 		if (item.getItemId() == XD_CONTAINER) { // array of parsers
 			DefContainer c = (DefContainer) item;
 			for (int i = 0; i < c.getXDItemsNumber(); i++) {
@@ -206,4 +207,14 @@ public class XSParseUnion extends XSAbstractParser {
 	}
 	@Override
 	public short getAlltemsType() {return getItemsType(_itemTypes);}
+
+	/** Get list of parsers of this union.
+	 * @return array of union parsers.
+	 */
+	public XDParser[] getParsers() {return _itemTypes;}
+
+	/** Set list of parsers to this union.
+	 * @para p array of parsers to set to this union.
+	 */
+	public void setParsers(final XDParser[] p) {_itemTypes = p;}
 }

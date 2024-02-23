@@ -10,8 +10,11 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xdef.XDContainer;
 import org.xdef.XDNamedValue;
+import org.xdef.XDParser;
 import org.xdef.XDPool;
 import org.xdef.XDValue;
+import org.xdef.impl.parsers.XSParseList;
+import org.xdef.impl.parsers.XSParseUnion;
 import org.xdef.model.XMData;
 import org.xdef.model.XMDefinition;
 import org.xdef.model.XMElement;
@@ -80,47 +83,79 @@ public class Xd2Xsd {
 	private Element genRestrictions(final Element parent,
 		final GenParser parserInfo) {
 		addAnnotation(parent, parserInfo.getInfo());
-		XDNamedValue[] xdv =
-			parserInfo.getParser().getNamedParams().getXDNamedItems();
-		Element restr = genSchemaElem(parent, "restriction");
 		String typeName = getSchemaTypeName(parserInfo);
-		restr.setAttribute("base", typeName);
-		for (XDNamedValue x: xdv) {
-			XDValue xval = x.getValue();
-			if (xval==null) {
-				continue;
+		if ("xs:union".equals(typeName)) {
+			XDParser[] parsers =
+				((XSParseUnion) parserInfo.getParser()).getParsers();
+			Element union = genSchemaElem(parent, "union");
+			for (XDValue xval: parsers) {
+				XDParser p = (XDParser) xval;
+				Element simpletp = genSchemaElem(union, "simpleType");
+				genRestrictions(simpletp,
+					SCHEMA_PFX+p.parserName(),
+					p.getNamedParams().getXDNamedItems());
 			}
-			String paramName = x.getName();
-			Element param;
-			switch(paramName) {
-				case "pattern":
-				case "enumeration":
-					if (xval instanceof XDContainer) {
-						XDContainer xdc = (XDContainer) xval;
-						for (int i = 0; i < xdc.getXDItemsNumber(); i++) {
+			return union;
+		} else if ("xs:list".equals(typeName)) {
+			Element list = genSchemaElem(parent, "list");
+			XDParser p = ((XSParseList) parserInfo.getParser()).getItemParser();
+			Element simpletp = genSchemaElem(list, "simpleType");
+			genRestrictions(simpletp,
+				SCHEMA_PFX+p.parserName(),p.getNamedParams().getXDNamedItems());
+			return list;
+		} else {
+			XDNamedValue[] xdv =
+				parserInfo.getParser().getNamedParams().getXDNamedItems();
+			return genRestrictions(parent, typeName, xdv);
+		}
+	}
+	/** Create element with restrictions,
+	 * @param parent element where to add restrictions
+	 * @param typeName name of type.
+	 * @param namedPaeams named params.
+	 * @return element with restrictions.
+	 */
+	private Element genRestrictions(final Element parent,
+		final String typeName,
+		final XDNamedValue[] namedPaeams) {
+			Element restr = genSchemaElem(parent, "restriction");
+			restr.setAttribute("base", typeName);
+			for (XDNamedValue x: namedPaeams) {
+				XDValue xval = x.getValue();
+				if (xval==null) {
+					continue;
+				}
+				String paramName = x.getName();
+				Element param;
+				switch(paramName) {
+					case "pattern":
+					case "enumeration":
+						if (xval instanceof XDContainer) {
+							XDContainer xdc = (XDContainer) xval;
+							for (int i = 0; i < xdc.getXDItemsNumber(); i++) {
+								param = genSchemaElem(restr, paramName);
+								param.setAttribute("value",
+									xdc.getXDItem(i).toString());
+							}
+						} else {
 							param = genSchemaElem(restr, paramName);
-							param.setAttribute("value",
-								xdc.getXDItem(i).toString());
+							param.setAttribute("value", xval.toString());
 						}
-					} else {
+						continue;
+					case "minLength":
+					case "maxLength":
+					case "length":
+					case "minInclusive":
+					case "minExclusive":
+					case "maxInclusive":
+					case "maxExclusive":
+					case "totalDigits":
+					case "fractionDigits":
 						param = genSchemaElem(restr, paramName);
 						param.setAttribute("value", xval.toString());
-					}
-					continue;
-				case "minLength":
-				case "maxLength":
-				case "length":
-				case "minInclusive":
-				case "minExclusive":
-				case "maxInclusive":
-				case "maxExclusive":
-				case "totalDigits":
-				case "fractionDigits":
-					param = genSchemaElem(restr, paramName);
-					param.setAttribute("value", xval.toString());
+				}
 			}
-		}
-		return restr;
+			return restr;
 	}
 
 	/** Generate group of models.

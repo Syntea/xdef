@@ -11,8 +11,10 @@ import org.xdef.impl.parsers.XSParseDate;
 import org.xdef.impl.parsers.XSParseDatetime;
 import org.xdef.impl.parsers.XSParseDecimal;
 import org.xdef.impl.parsers.XSParseHexBinary;
+import org.xdef.impl.parsers.XSParseList;
 import org.xdef.impl.parsers.XSParseString;
 import org.xdef.impl.parsers.XSParseTime;
+import org.xdef.impl.parsers.XSParseUnion;
 import org.xdef.model.XMData;
 import org.xdef.sys.SException;
 
@@ -98,7 +100,9 @@ class GenParser {
 	 * @return ParserInfo object with XML schema compatible parser.
 	 */
 	protected static GenParser genParser(final XMData xmd) {
-		XDParser xdp = (XDParser) xmd.getParseMethod();
+		return genParser((XDParser) xmd.getParseMethod());
+	}
+	private static GenParser genParser(final XDParser xdp) {
 		String name = xdp.parserName();
 		String declName = xdp.getDeclaredName();
 		XDContainer xdc = xdp.getNamedParams();
@@ -315,16 +319,20 @@ class GenParser {
 			case "unsignedInt":
 			case "unsignedLong":
 			case "unsignedShort":
-				GenParser result = new GenParser(xdp, declName, null);
-				return result;
-			case "list":
-				// TODO ????
-				return createNewParserInfo(new XSParseString(),
-					info + "()", declName, new DefContainer());
-			case "union":
-				// TODO ????
-				return createNewParserInfo(new XSParseString(),
-					info + "()", declName, new DefContainer());
+				return new GenParser(xdp, declName, null);
+			case "list": {
+				XSParseList xParseList = (XSParseList) xdp;
+				XDParser parser = xParseList.getItemParser();
+				xParseList.setItemParser(genParser(parser).getParser());
+				return new GenParser(xdp, declName, null);
+			}
+			case "union": {
+				XDParser[] parsers = ((XSParseUnion) xdp).getParsers();
+				for (int i = 0; i < parsers.length; i++) {
+					parsers[i] = genParser(parsers[i]).getParser();
+				}
+				return new GenParser(xdp, declName, null);
+			}
 			default: // other uncenvertible X-definition types
 				return createNewParserInfo(new XSParseString(),
 					info + "()", declName, new DefContainer());

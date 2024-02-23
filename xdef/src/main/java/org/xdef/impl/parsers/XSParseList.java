@@ -222,4 +222,14 @@ public class XSParseList extends XSAbstractParser {
 	public short getAlltemsType() {
 		return _itemType == null ? XD_STRING : _itemType.parsedType();
 	}
+
+	/** Get parser of items in this list.
+	 * @return parser of items in this list.
+	 */
+	public XDParser getItemParser() {return _itemType;}
+
+	/** Set parser of items to this list.
+	 * @param p new parser of items in this list.
+	 */
+	public void setItemParser(final XDParser p) {_itemType = p;}
 }
