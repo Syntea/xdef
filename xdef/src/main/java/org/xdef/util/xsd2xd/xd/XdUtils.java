@@ -2,7 +2,6 @@ package org.xdef.util.xsd2xd.xd;
 
 import org.xdef.XDConstants;
 import org.xdef.impl.util.gencollection.XDParsedScript;
-import org.xdef.util.xsd2xd.xd.Utils;
 import org.xdef.util.xsd2xd.xd.Utils.MyQName;
 import java.util.HashSet;
 import java.util.Set;
@@ -108,7 +107,6 @@ public final class XdUtils {
 	 * @return true if given node is a valid X-definition declaration element.
 	 */
 	public static boolean isDeclaration(final Node node) {
-		String uri = node.getParentNode().getNamespaceURI();
 		return Utils.isElement(node,
 				XDConstants.XDEF31_NS_URI, XdNames.DECLARATION)
 			|| Utils.isElement(node,
@@ -345,7 +343,7 @@ public final class XdUtils {
 	 * @return set of (String) models name space URIs.
 	 */
 	public static Set<String> getModelsNS(final Element def) {
-		Set<String> namespaces = new HashSet<String>();
+		Set<String> namespaces = new HashSet<>();
 		NodeList models = Utils.getChildElements(def);
 		String nsUri = def.getNamespaceURI();
 		for (int i = 0; i < models.getLength(); i++) {

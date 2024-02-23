@@ -44,14 +44,11 @@ public class XsdDoc_1_0 {
 	protected final boolean _genDocumentation;
 
 	/** Schema models (XsdModel) to elements (Element) mapping. */
-	private final Map<XsdModel, Element> _models =
-		new HashMap<XsdModel, Element>();
-	/** Schema representation (XsdSchema) to schema element (Element) mapping. */
-	private final Map<XsdSchema, Element> _schemas =
-		new HashMap<XsdSchema, Element>();
+	private final Map<XsdModel, Element> _models = new HashMap<>();
+	/** Schema representation (XsdSchema) to schema element (Element) mapping.*/
+	private final Map<XsdSchema, Element> _schemas = new HashMap<>();
 	/** Map of external namespace (String) to (XsdSchema) mapping. */
-	private final Map<String, XsdSchema> _extNSSchemas =
-		new HashMap<String, XsdSchema>();
+	private final Map<String, XsdSchema> _extNSSchemas = new HashMap<>();
 	/** Counter of external schema. */
 	private int _extSchemaCounter;
 	/** Counter of external attribute groups. */
@@ -116,7 +113,7 @@ public class XsdDoc_1_0 {
 	 * if schema container is unknown type.
 	 */
 	private Map<XdModel, XsdModel> initModels(Map xdModels, Map schemas) {
-		Map<XdModel, XsdModel> ret = new HashMap<XdModel, XsdModel>();
+		Map<XdModel, XsdModel> ret = new HashMap<>();
 		Iterator it = xdModels.keySet().iterator();
 		while (it.hasNext()) {
 			XdModel xdModel = (XdModel) it.next();
@@ -272,8 +269,7 @@ public class XsdDoc_1_0 {
 	 * (XsdSchemaContainer).
 	 */
 	private Map<XdDef, XsdSchemaContainer> initSchemas(Map xdDefs) {
-		Map<XdDef, XsdSchemaContainer> ret =
-			new HashMap<XdDef, XsdSchemaContainer>();
+		Map<XdDef, XsdSchemaContainer> ret = new HashMap<>();
 		Iterator it = xdDefs.entrySet().iterator();
 		while (it.hasNext()) {
 			Map.Entry entry = (Entry) it.next();
@@ -1222,7 +1218,7 @@ public class XsdDoc_1_0 {
 	public XsdVersion getVersion() {return XsdVersion.SCHEMA_1_0;}
 
 	public Map<String, Document> getSchemaDocuments() {
-		Map<String, Document> ret = new HashMap<String, Document>();
+		Map<String, Document> ret = new HashMap<>();
 		Iterator<Map.Entry<XsdSchema, Element>> it =
 			_schemas.entrySet().iterator();
 		while (it.hasNext()) {
