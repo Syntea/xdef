@@ -535,10 +535,11 @@ public final class KXmlUtils extends KDOMUtils {
 						} else if (s.length() + alen+tagName.length() + 2
 							< SOURCELINELENGTH && s.indexOf('<') < 0
 							&& s.indexOf('&') < 0 && s.indexOf('>') < 0
-							&& s.indexOf('\n') < 0) {
+							&& s.indexOf('\n') < 0 && s.indexOf('\t') < 0) {
 							//write text on the same line as element start
 							out.write('>');
-							out.write(s);
+							writeText(out, s, false,
+								null, removeIgnorableWhiteSpaces);
 							out.write("</");
 							out.write(tagName);
 							out.write('>');
@@ -558,8 +559,9 @@ public final class KXmlUtils extends KDOMUtils {
 								continue;
 							}
 							if (i == 0 && numItems == 1 && indent != null &&
-								(len+tagName.length()*2+startLine.length()) < 75
-								&& s.indexOf('<') < 0 && s.indexOf('&') < 0) {
+								(len+tagName.length()*2+startLine.length()) + 4
+								< SOURCELINELENGTH && s.indexOf('<') < 0
+								&& s.indexOf('&') < 0) {
 								if (removeIgnorableWhiteSpaces) {
 									out.write(newIndent);
 								}
