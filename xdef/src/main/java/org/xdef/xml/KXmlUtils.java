@@ -31,7 +31,7 @@ import java.util.LinkedHashMap;
  */
 public final class KXmlUtils extends KDOMUtils {
 
-	/** Root map of prefixes.*/
+	/** Recomended length of source line.*/
 	private final static int SOURCELINELENGTH = 80;
 
 	/** Root map of prefixes.*/
@@ -440,7 +440,7 @@ public final class KXmlUtils extends KDOMUtils {
 				int numItems = nl.getLength();
 				// if indented mode the alen is the first space after
 				// element tag name, otherwise, it is 0
-				int alen= startLine == null ? 0
+				int alen = startLine == null ? 0
 					: tagName.length() + startLine.length()
 					+ (numItems == 0 ? 3 : 1);
 				NamedNodeMap nm = node.getAttributes();
@@ -525,6 +525,26 @@ public final class KXmlUtils extends KDOMUtils {
 				if (numItems == 0) {
 					out.write("/>");
 				} else {
+					if (numItems == 1 && indent != null
+						&& nl.item(0).getNodeType() == Node.TEXT_NODE) {
+						String s = nl.item(0).getNodeValue();
+						s = removeIgnorableWhiteSpaces ? s.trim(): s;
+						if (s.isEmpty()) {
+							out.write("/>");
+							return;
+						} else if (s.length() + alen+tagName.length() + 2
+							< SOURCELINELENGTH && s.indexOf('<') < 0
+							&& s.indexOf('&') < 0 && s.indexOf('>') < 0
+							&& s.indexOf('\n') < 0) {
+							//write text on the same line as element start
+							out.write('>');
+							out.write(s);
+							out.write("</");
+							out.write(tagName);
+							out.write('>');
+							return;
+						}
+					}
 					out.write('>');
 					String newIndent = indent==null ? null : startLine + indent;
 					for (int i = 0; i < numItems; i++) {
