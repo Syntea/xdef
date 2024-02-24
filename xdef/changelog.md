@@ -1,7 +1,7 @@
 # Version ${version}, release-date ${release.date}
 
 # Version 42.1.2, release-date 2024-02-24
-* .
+* Corrected bugs in the `XdefToXsd` utility.
 
 # Version 42.1.1, release-date 2024-01-29
 * Fixed bug in `CHECK` operation.
