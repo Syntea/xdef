@@ -27,20 +27,15 @@ import java.util.Map.Entry;
 import java.util.LinkedHashMap;
 
 /** Collection of static methods designed for easy work with XML data.
- * KDOMBuilder is used for creation of XML objects and it is set in the class
- * initialization time.
- *
- * @author  Vaclav Trojan
+ * @author Vaclav Trojan
  */
 public final class KXmlUtils extends KDOMUtils {
 
-	/** Prepare map with prefixes.
-	 * @return new map with prefixes.
-	 */
-	private static Map<String, String> prefixMap() {
-		Map<String, String> result = new LinkedHashMap<>();
-		result.put("xmlns", "");
-		return result;
+	/** Root map of prefixes.*/
+	private final static Map<String, String> ROOT_NSPREFIXMAP =
+		new LinkedHashMap<String, String>();
+	static {
+		ROOT_NSPREFIXMAP.put("xmlns", "");
 	}
 
 	/** Creates an XML <code>Document</code> object with created document
@@ -529,14 +524,12 @@ public final class KXmlUtils extends KDOMUtils {
 							if (i == 0 && numItems == 1 && indent != null &&
 								(len+tagName.length()*2+startLine.length()) < 75
 								&& s.indexOf('<') < 0 && s.indexOf('&') < 0) {
-								if (startLine != null
-									&& removeIgnorableWhiteSpaces) {
+								if (removeIgnorableWhiteSpaces) {
 									out.write(newIndent);
 								}
 								writeText(out, s, false,
 									newIndent, removeIgnorableWhiteSpaces);
-								if (startLine != null
-									&& removeIgnorableWhiteSpaces) {
+								if (removeIgnorableWhiteSpaces) {
 									out.write(startLine);
 								}
 								out.write("</");
@@ -834,7 +827,7 @@ public final class KXmlUtils extends KDOMUtils {
 			canonical,
 			removeIgnorableWhiteSpaces,
 			comments,
-			prefixMap());
+			ROOT_NSPREFIXMAP);
 		out.flush();
 	}
 
@@ -964,8 +957,8 @@ public final class KXmlUtils extends KDOMUtils {
 		final Node node,
 		final boolean indenting,
 		final boolean comments) throws IOException {
-		try (FileOutputStream fos = new FileOutputStream(file)) {
-			OutputStreamWriter out = new OutputStreamWriter(fos, encoding);
+		try (FileOutputStream fos = new FileOutputStream(file);
+			OutputStreamWriter out = new OutputStreamWriter(fos, encoding)) {
 			writeXml(out,
 				encoding,
 				node,
@@ -973,7 +966,6 @@ public final class KXmlUtils extends KDOMUtils {
 				true, //canonical
 				indenting, //removeIgnorableWhiteSpaces
 				comments);
-			out.close();
 		}
 	}
 
@@ -1024,7 +1016,7 @@ public final class KXmlUtils extends KDOMUtils {
 				true, //canonical
 				removeIgnorableWhiteSpaces,
 				comments,
-				prefixMap());
+				ROOT_NSPREFIXMAP);
 			return wr.toString();
 		} catch (IOException ex) {return null;} //never happens
 	}
@@ -1049,7 +1041,7 @@ public final class KXmlUtils extends KDOMUtils {
 				true, //canonical
 				indent, //removeIgnorableWhiteSpaces
 				true, //comments
-				prefixMap());
+				ROOT_NSPREFIXMAP); // map of prefixes
 			return caw.toString();
 		} catch (IOException ex) {return null;} //never happens
 	}
@@ -1070,7 +1062,7 @@ public final class KXmlUtils extends KDOMUtils {
 				true, //canonical
 				false, //removeIgnorableWhiteSpaces
 				true, //comments
-				prefixMap());
+				ROOT_NSPREFIXMAP);
 			return caw.toString();
 		} catch (IOException ex) {return null;} //never happens
 	}

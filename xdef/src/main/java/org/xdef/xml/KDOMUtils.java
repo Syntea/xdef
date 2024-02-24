@@ -5,8 +5,6 @@ import java.util.Map;
 import org.xdef.impl.xml.KNodeList;
 import org.xdef.impl.xml.KNamespace;
 import org.xdef.impl.xml.KNamedNodeMap;
-import org.xdef.impl.xml.KEmptyNodeList;
-import org.xdef.impl.xml.KEmptyNamedNodeMap;
 import org.xdef.msg.XML;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.StringParser;
@@ -22,19 +20,18 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.ProcessingInstruction;
 import org.w3c.dom.Text;
 import javax.xml.namespace.NamespaceContext;
+import org.w3c.dom.DOMException;
 
 /** Collection of static methods extending methods from org.w3c.dom interfaces.
  * @author Vaclav Trojan
  */
 public class KDOMUtils {
 
-////////////////////////////////////////////////////////////////////////////////
-// Extension of org.w3c.dom interface *
-////////////////////////////////////////////////////////////////////////////////
+	/** Instance of final empty NodeList. */
+	public final static NodeList EMPTYNODELIST = new EmptyNodeList();
 
-	private final static NodeList EMPTYNODELIST = new KEmptyNodeList();
-
-	private final static NamedNodeMap EMPTYENTITIES = new KEmptyNamedNodeMap();
+	/** Instance of final empty NamedNodeMap. */
+	public final static NamedNodeMap EMPTYNODEMAP = new EmptyNamedNodeMap();
 
 	/** Don't allow user to instantiate this class. */
 	protected KDOMUtils() {}
@@ -45,22 +42,22 @@ public class KDOMUtils {
 	 */
 	public static final NamedNodeMap getEntities(final Node node) {
 		if (node == null) {
-			return EMPTYENTITIES;
+			return EMPTYNODEMAP;
 		}
 		Document doc;
 		if (node.getNodeType() == Node.DOCUMENT_NODE){
 			doc = (Document) node;
 		} else {
 			if ((doc = node.getOwnerDocument()) == null) {
-				return EMPTYENTITIES;
+				return EMPTYNODEMAP;
 			}
 		}
 		final DocumentType dt = doc.getDoctype();
 		if (dt == null) {
-			return EMPTYENTITIES;
+			return EMPTYNODEMAP;
 		}
 		NamedNodeMap result = dt.getEntities();
-		return result == null ? EMPTYENTITIES : result;
+		return result == null ? EMPTYNODEMAP : result;
 	}
 
 	/** Get notations associated with a node.
@@ -69,22 +66,22 @@ public class KDOMUtils {
 	 */
 	public static final NamedNodeMap getNotations(final Node node) {
 		if (node == null) {
-			return EMPTYENTITIES;
+			return EMPTYNODEMAP;
 		}
 		Document doc;
 		if (node.getNodeType() == Node.DOCUMENT_NODE){
 			doc = (Document) node;
 		} else {
 			if ((doc = node.getOwnerDocument()) == null) {
-				return EMPTYENTITIES;
+				return EMPTYNODEMAP;
 			}
 		}
 		final DocumentType dt = doc.getDoctype();
 		if (dt == null) {
-			return EMPTYENTITIES;
+			return EMPTYNODEMAP;
 		}
 		final NamedNodeMap result = dt.getNotations();
-		return result == null ? EMPTYENTITIES : result;
+		return result == null ? EMPTYNODEMAP : result;
 	}
 
 	/** Get all child Elements.
@@ -163,7 +160,7 @@ public class KDOMUtils {
 					}
 				}
 			} else {
-				if (deep && n!= null && n.getNodeType() == Node.ELEMENT_NODE) {
+				if (deep && n.getNodeType() == Node.ELEMENT_NODE) {
 					trimTextNodes(n, deep);
 				}
 				n = n.getPreviousSibling();
@@ -1157,10 +1154,9 @@ public class KDOMUtils {
 	 * @param el element to which xmlns attributes will be added.
 	 */
 	public static void setNecessaryXmlnsAttrs(final Element el) {
-		if (el == null) {
-			return;
+		if (el != null) {
+			setNecessaryXmlnsAttrs(el, new KNamespace());
 		}
-		setNecessaryXmlnsAttrs(el, new KNamespace());
 	}
 
 	/** Set necessary XMLns attributes to this element and all child elements.
@@ -1342,28 +1338,26 @@ public class KDOMUtils {
 		return sb.toString();
 	}
 
-	private static void getTextContent(final Node node,
+	private static void getTextContent(final Node item,
 		final StringBuilder sb) {
-		Node item;
-		if ((item = node) == null) {
-			return;
-		}
-		switch (item.getNodeType()) {
-			case Node.DOCUMENT_NODE:
-				getTextContent(((Document) item).getDocumentElement(), sb);
-				return;
-			case Node.ATTRIBUTE_NODE:
-			case Node.CDATA_SECTION_NODE:
-			case Node.TEXT_NODE:
-				sb.append(item.getNodeValue());
-				return;
-			case Node.ENTITY_REFERENCE_NODE:
-			case Node.ENTITY_NODE:
-			case Node.ELEMENT_NODE: {
-				final NodeList nl = item.getChildNodes();
-				final int len = nl.getLength();
-				for (int i = 0; i < len; i++) {
-					getTextContent(nl.item(i), sb);
+		if (item != null) {
+			switch (item.getNodeType()) {
+				case Node.DOCUMENT_NODE:
+					getTextContent(((Document) item).getDocumentElement(), sb);
+					return;
+				case Node.ATTRIBUTE_NODE:
+				case Node.CDATA_SECTION_NODE:
+				case Node.TEXT_NODE:
+					sb.append(item.getNodeValue());
+					return;
+				case Node.ENTITY_REFERENCE_NODE:
+				case Node.ENTITY_NODE:
+				case Node.ELEMENT_NODE: {
+					final NodeList nl = item.getChildNodes();
+					final int len = nl.getLength();
+					for (int i = 0; i < len; i++) {
+						getTextContent(nl.item(i), sb);
+					}
 				}
 			}
 		}
@@ -1547,17 +1541,12 @@ public class KDOMUtils {
 	 * @return String with text or empty string.
 	 */
 	public static final String getEntityReferenceValue(final Node node) {
-		if (node == null) {
+		final NamedNodeMap nm;
+		if (node == null || node.getOwnerDocument().getDoctype() == null
+			|| (nm = node.getOwnerDocument().getDoctype().getEntities())==null) {
 			return "";
 		}
-		final DocumentType dt = node.getOwnerDocument().getDoctype();
-		if (dt == null) {
-			return "";
-		}
-		final NamedNodeMap nm =
-			node.getOwnerDocument().getDoctype().getEntities();
-		return nm == null
-			? "" :getTextContent(nm.getNamedItem(node.getNodeName()));
+		return getTextContent(nm.getNamedItem(node.getNodeName()));
 	}
 
 	/** Return prefix of given QName.
@@ -1587,18 +1576,17 @@ public class KDOMUtils {
 	 * @return bound element or null.
 	 */
 	public static final Element getBoundElement(Node node) {
-		if (node == null) {
-			return null;
-		}
-		switch (node.getNodeType()) {
-			case Node.ELEMENT_NODE:
-				return (Element) node;
-			case Node.ATTRIBUTE_NODE:
-				return ((Attr) node).getOwnerElement();
-			default: {
-				final Node n = node.getParentNode();
-				if (n != null && n.getNodeType() == Node.ELEMENT_NODE) {
-					return (Element) n;
+		if (node != null) {
+			switch (node.getNodeType()) {
+				case Node.ELEMENT_NODE:
+					return (Element) node;
+				case Node.ATTRIBUTE_NODE:
+					return ((Attr) node).getOwnerElement();
+				default: {
+					final Node n = node.getParentNode();
+					if (n != null && n.getNodeType() == Node.ELEMENT_NODE) {
+						return (Element) n;
+					}
 				}
 			}
 		}
@@ -2014,5 +2002,51 @@ public class KDOMUtils {
 				sb.append(']');
 			}
 		}
+	}
+
+	/** Implemetation of empty object org.w3c.dom.Nodelist. */
+	private static class EmptyNodeList implements NodeList {
+		private EmptyNodeList() {}
+		@Override
+		public final int getLength() {return 0;}
+		@Override
+		public final Node item(int index) {return null;}
+	}
+
+	/** Implemetation of empty object org.w3c.dom.NamedNodeMap. */
+	private static class EmptyNamedNodeMap implements NamedNodeMap {
+		private EmptyNamedNodeMap() {}
+		@Override
+		public final int getLength() {return 0;}
+		@Override
+		public final Node item(int index) {return null;}
+		@Override
+		public final Node removeNamedItem(final String name) {
+			throw new DOMException(DOMException.NO_MODIFICATION_ALLOWED_ERR,
+				"Empty map");
+		}
+		@Override
+		public final Node removeNamedItemNS(final String namespaceURI,
+			final String localName)	{
+			throw new DOMException(DOMException.NO_MODIFICATION_ALLOWED_ERR,
+				"Empty map");
+		}
+		@Override
+		public final Node setNamedItem(Node arg) {
+			throw new DOMException(DOMException.NO_MODIFICATION_ALLOWED_ERR,
+				"Empty map");
+		}
+		@Override
+		public final Node setNamedItemNS(Node arg) {
+			throw new DOMException(DOMException.NO_MODIFICATION_ALLOWED_ERR,
+				"Empty map");
+		}
+		@Override
+		public final Node getNamedItemNS(final String namespaceURI,
+			final String localName) {
+			return null;
+		}
+		@Override
+		public final Node getNamedItem(final String name) {return null;}
 	}
 }

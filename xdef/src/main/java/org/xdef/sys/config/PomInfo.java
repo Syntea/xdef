@@ -7,7 +7,6 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
-
 /**
  * Class to read info from pom.xml (see maven). That's: <ul>
  * <li>project.groupId
@@ -34,14 +33,11 @@ public class PomInfo {
 				throw new FileNotFoundException("java-resource "
 					+ pomInfoPropsName + " not found");
 			}
-
 			loadProps(ppIs);
 		} catch (IOException ex) {
 			throw new RuntimeException(ex);
 		}
 	}
-
-
 
 	private void loadProps(InputStream ppIs) throws IOException {
 		Properties properties = new Properties();
@@ -51,7 +47,6 @@ public class PomInfo {
 		} finally {
 			ppIs.close();
 		}
-
 		loadProps(properties);
 	}
 
@@ -65,13 +60,9 @@ public class PomInfo {
 		buildTimestamp    = pp.getProperty("build.timestamp");
 	}
 
-
-
 	public boolean isVersionSnapshot() {
 		return version.endsWith("-SNAPSHOT");
 	}
-
-
 
 	/** Get identifier of product.
 	 * @return product-identifier
@@ -79,11 +70,10 @@ public class PomInfo {
 	public String getProductIdentifier() {
 		return
 			groupId + ":" + artifactId + ":" + version + " (" +
-			(isVersionSnapshot() ? "built " + buildTimestamp : "released " + releaseDate) + ")"
+			(isVersionSnapshot() ? "built " + buildTimestamp
+			: "released " + releaseDate) + ")"
 		;
 	}
-
-
 
 	public String getGroupId() {return groupId;}
 
@@ -98,8 +88,6 @@ public class PomInfo {
 	public String getReleaseDate() {return releaseDate;}
 
 	public String getBuildTimestamp() {return buildTimestamp;}
-
-
 
 	private String groupId        = null;
 	private String artifactId     = null;
