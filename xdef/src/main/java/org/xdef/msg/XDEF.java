@@ -475,13 +475,13 @@ public interface XDEF {
 	public static final long XDEF521 = 31159025896L;
 	/** Unique value "&amp;{0}" was not set&amp;{#SYS000} */
 	public static final long XDEF522 = 31159025897L;
-	/** Value must be unique&amp;{0}{: }&amp;{#SYS000} */
+	/** Value must be unique&amp;{0}{: '}{'}&amp;{#SYS000} */
 	public static final long XDEF523 = 31159025898L;
-	/** Not referred keys found in the uniqueSet &amp;{0}&amp;{1}{: }&amp;{#SYS000} */
+	/** Not referred keys found in the uniqueSet&amp;{0}{ '}{'}&amp;{1}{: '}{'}&amp;{#SYS000} */
 	public static final long XDEF524 = 31159025899L;
 	/** Attribute "&amp;{0}" not allowed&amp;{#SYS000} */
 	public static final long XDEF525 = 31159025900L;
-	/** Missing required attribute &amp;{0}&amp;{#SYS000} */
+	/** Missing required attribute&amp;{0}{ '}{'}&amp;{#SYS000} */
 	public static final long XDEF526 = 31159025901L;
 	/** Missing required text&amp;{#SYS000} */
 	public static final long XDEF527 = 31159025902L;
@@ -489,7 +489,7 @@ public interface XDEF {
 	public static final long XDEF528 = 31159025903L;
 	/** Required element is missing in setElement method&amp;{#SYS000} */
 	public static final long XDEF529 = 31159025904L;
-	/** Missing X-definition &amp;{0}{: }&amp;{#SYS000} */
+	/** Missing X-definition &amp;{0}{: '}{'}&amp;{#SYS000} */
 	public static final long XDEF530 = 31159025905L;
 	/** Minimum number of attributes declared as "xd:attr" was not reached&amp;{#SYS000} */
 	public static final long XDEF531 = 31159025906L;
@@ -511,31 +511,31 @@ public interface XDEF {
 	public static final long XDEF539 = 31159025914L;
 	/** Can't reset uniqueSetKey or it is null&amp;{#SYS000} */
 	public static final long XDEF540 = 31159025915L;
-	/** Missing required item(s) in &amp;{0}&amp;{#SYS000} */
+	/** Missing required item(s) in '&amp;{0}'&amp;{#SYS000} */
 	public static final long XDEF541 = 31159025916L;
 	/** Can't convert the object of type&amp;{0}{ '}{'} to XDValue&amp;{#SYS000} */
 	public static final long XDEF542 = 31159025917L;
 	/** In X-definition are errors&amp;{0}{: }&amp;{#SYS000} */
 	public static final long XDEF543 = 31159025918L;
-	/** Missing required parameter: &amp;{0}&amp;{#SYS000} */
+	/** Missing required parameter: '&amp;{0}'&amp;{#SYS000} */
 	public static final long XDEF545 = 31159025919L;
 	/** QName expected&amp;{#SYS000} */
 	public static final long XDEF546 = 31159025920L;
 	/** X-definition is not specified&amp;{#SYS000} */
 	public static final long XDEF550 = 31159025921L;
-	/** Too many of recursive call: &amp;{0}&amp;{#SYS000} */
+	/** Too many of recursive call: '&amp;{0}'&amp;{#SYS000} */
 	public static final long XDEF553 = 31159025922L;
 	/** Namespace is not defined&amp;{#SYS000} */
 	public static final long XDEF554 = 31159025923L;
-	/** Minimum occurrence not reached for &amp;{0}&amp;{#SYS000} */
+	/** Minimum occurrence not reached for '&amp;{0}'&amp;{#SYS000} */
 	public static final long XDEF555 = 31159025924L;
 	/** Root element was not created */
 	public static final long XDEF556 = 31159025925L;
 	/** Illegal element '&amp;{0}'&amp;{#SYS000} */
 	public static final long XDEF557 = 31159025926L;
-	/** Maximum occurrence limit of &amp;{0} exceeded&amp;{#SYS000} */
+	/** Maximum occurrence limit of '&amp;{0}' exceeded&amp;{#SYS000} */
 	public static final long XDEF558 = 31159025927L;
-	/** Both, qualified and unqualified attributes are not allowed with option 'acceptQualifiedAttr': &amp;{0}&amp;{#SYS000} */
+	/** Both, qualified and unqualified attributes are not allowed with option 'acceptQualifiedAttr': '&amp;{0}'&amp;{#SYS000} */
 	public static final long XDEF559 = 31159025928L;
 	/** XQuery expression error&amp;{0}{: }&amp;{#SYS000} */
 	public static final long XDEF561 = 31159025929L;
