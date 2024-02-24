@@ -31,8 +31,8 @@ import java.util.LinkedHashMap;
  */
 public final class KXmlUtils extends KDOMUtils {
 
-	/** Recomended length of source line.*/
-	private final static int SOURCELINELENGTH = 80;
+	/** Recommended length of source line.*/
+	private final static int LINELENGTH = 80;
 
 	/** Root map of prefixes.*/
 	private final static Map<String, String> ROOT_NSPREFIXMAP =
@@ -456,6 +456,7 @@ public final class KXmlUtils extends KDOMUtils {
 					out.write(' ');
 					String s = createAttr(nm.item(0),
 						removeIgnorableWhiteSpaces, newPrefixMap, unresolved);
+
 					if (numAttrs > 1) {
 						String aindent;
 						if (startLine!=null) {
@@ -467,22 +468,19 @@ public final class KXmlUtils extends KDOMUtils {
 							aindent = " "; // attribute separator
 						}
 						int i = 1;
+						String t = s;
 						for (; i < numAttrs; i++) {
-							String t = createAttr(nm.item(i),
+							t += ' ' + createAttr(nm.item(i),
 								removeIgnorableWhiteSpaces,
 								newPrefixMap,unresolved);
-							if (alen==0 || alen + s.length() + t.length() <
-								SOURCELINELENGTH){
-								s += ' ' + t; // attribute is on the same line
-							} else {
-								out.write(s);
-								out.write(aindent);
-								s = t; // attribute is on the next line
+							if (alen>0 && alen + t.length() >= LINELENGTH) {
+								i = 1;
+								t = s;
 								break;
 							}
 						}
-						out.write(s);
-						for (++i ;i < numAttrs; i++) {
+						out.write(t);
+						for (; i < numAttrs; i++) {
 							out.write(aindent);
 							out.write(
 								createAttr(nm.item(i),
@@ -511,8 +509,8 @@ public final class KXmlUtils extends KDOMUtils {
 					String value = e.getValue();
 					newPrefixMap.put(key, value);
 					String s = key + "=" + createAttrValue(value, false);
-					if (first && numAttrs <= 1 && alen + s.length() <
-						SOURCELINELENGTH) {
+					if (first && numAttrs <= 1
+						&& alen + s.length() < LINELENGTH) {
 						out.write(' ');
 						first = false;
 					} else if (startLine != null) {
@@ -533,7 +531,7 @@ public final class KXmlUtils extends KDOMUtils {
 							out.write("/>");
 							return;
 						} else if (s.length() + alen+tagName.length() + 2
-							< SOURCELINELENGTH && s.indexOf('<') < 0
+								< LINELENGTH && s.indexOf('<') < 0
 							&& s.indexOf('&') < 0 && s.indexOf('>') < 0
 							&& s.indexOf('\n') < 0 && s.indexOf('\t') < 0) {
 							//write text on the same line as element start
@@ -558,9 +556,10 @@ public final class KXmlUtils extends KDOMUtils {
 									|| indent!=null?s.trim():s).length()) == 0){
 								continue;
 							}
-							if (i == 0 && numItems == 1 && indent != null &&
+							if (numItems == 1 && indent != null &&
 								(len+tagName.length()*2+startLine.length()) + 4
-								< SOURCELINELENGTH && s.indexOf('<') < 0
+									< LINELENGTH
+								&& s.indexOf('<') < 0
 								&& s.indexOf('&') < 0) {
 								if (removeIgnorableWhiteSpaces) {
 									out.write(newIndent);
