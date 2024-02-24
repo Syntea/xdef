@@ -32,6 +32,9 @@ import java.util.LinkedHashMap;
 public final class KXmlUtils extends KDOMUtils {
 
 	/** Root map of prefixes.*/
+	private final static int SOURCELINELENGTH = 80;
+
+	/** Root map of prefixes.*/
 	private final static Map<String, String> ROOT_NSPREFIXMAP =
 		new LinkedHashMap<String, String>();
 	static {
@@ -435,10 +438,13 @@ public final class KXmlUtils extends KDOMUtils {
 				out.write(tagName);
 				NodeList nl = node.getChildNodes();
 				int numItems = nl.getLength();
+				// if indented mode the alen is the first space after
+				// element tag name, otherwise, it is 0
+				int alen= startLine == null ? 0
+					: tagName.length() + startLine.length()
+					+ (numItems == 0 ? 3 : 1);
 				NamedNodeMap nm = node.getAttributes();
 				int numAttrs = nm == null ? 0 : nm.getLength();
-				int alen = tagName.length() +
-					(startLine == null ? 0 : startLine.length());
 				if (numAttrs > 0) {
 					for (int i = 0; i < numAttrs; i++) {
 						Node n = nm.item(i);
@@ -450,32 +456,42 @@ public final class KXmlUtils extends KDOMUtils {
 					out.write(' ');
 					String s = createAttr(nm.item(0),
 						removeIgnorableWhiteSpaces, newPrefixMap, unresolved);
-					out.write(s);
-					int i = 1;
-					String aindent = " ";
-					alen += s.length() + (numItems == 0 ? 3 : 1);
 					if (numAttrs > 1) {
-						s = createAttr(nm.item(1),
-							removeIgnorableWhiteSpaces,newPrefixMap,unresolved);
+						String aindent;
 						if (startLine!=null) {
-							aindent = startLine + "  ";
-						}
-						if (numAttrs == 2 &&
-							(startLine == null || alen + s.length() < 79)) {
-							out.write(' ');
+							aindent = startLine;
+							for (int j = 0; j < tagName.length() + 2; j++) {
+								aindent += ' '; // indent to first attibute
+							}
 						} else {
-							out.write(aindent);
+							aindent = " "; // attribute separator
+						}
+						int i = 1;
+						for (; i < numAttrs; i++) {
+							String t = createAttr(nm.item(i),
+								removeIgnorableWhiteSpaces,
+								newPrefixMap,unresolved);
+							if (alen==0 || alen + s.length() + t.length() <
+								SOURCELINELENGTH){
+								s += ' ' + t; // attribute is on the same line
+							} else {
+								out.write(s);
+								out.write(aindent);
+								s = t; // attribute is on the next line
+								break;
+							}
 						}
 						out.write(s);
-						i = 2;
-					}
-					for (; i < numAttrs; i++) {
-						out.write(aindent);
-						out.write(
-							createAttr(nm.item(i),
-								removeIgnorableWhiteSpaces,
-								newPrefixMap,
-								unresolved));
+						for (++i ;i < numAttrs; i++) {
+							out.write(aindent);
+							out.write(
+								createAttr(nm.item(i),
+									removeIgnorableWhiteSpaces,
+									newPrefixMap,
+									unresolved));
+						}
+					} else {
+						out.write(s);
 					}
 				}
 				int ndx = tagName.indexOf(':');
@@ -495,7 +511,8 @@ public final class KXmlUtils extends KDOMUtils {
 					String value = e.getValue();
 					newPrefixMap.put(key, value);
 					String s = key + "=" + createAttrValue(value, false);
-					if (first && numAttrs <= 1 && alen + s.length() < 79) {
+					if (first && numAttrs <= 1 && alen + s.length() <
+						SOURCELINELENGTH) {
 						out.write(' ');
 						first = false;
 					} else if (startLine != null) {
@@ -517,8 +534,7 @@ public final class KXmlUtils extends KDOMUtils {
 							String s = item.getNodeValue();
 							if (s == null ||
 								(len = (s = removeIgnorableWhiteSpaces
-									|| indent != null ?
-									s.trim() : s).length()) == 0) {
+									|| indent!=null?s.trim():s).length()) == 0){
 								continue;
 							}
 							if (i == 0 && numItems == 1 && indent != null &&
