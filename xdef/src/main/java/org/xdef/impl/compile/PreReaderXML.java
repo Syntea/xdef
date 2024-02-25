@@ -2,6 +2,7 @@ package org.xdef.impl.compile;
 
 import java.io.InputStream;
 import java.net.URI;
+import java.net.URISyntaxException;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -105,10 +106,10 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 						? XConstants.XD40 : XConstants.XD41;
 					try {
 						if (projectNS.isEmpty()) {
-							throw new RuntimeException();
+							throw new RuntimeException(); // forse error
 						}
-						new URI(projectNS);
-					} catch (Exception ex) {
+						new URI(projectNS); // just to check projectNS  validity
+					} catch (RuntimeException | URISyntaxException ex) {
 						//Attribute 'metaNamespace' must contain a valid URI
 						error(ka.getPosition(), XDEF.XDEF253);
 					}
@@ -262,31 +263,29 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 				_actPNode._xdef = new XDefinition(defName,
 					null, _actPNode._nsURI, null, _actPNode._xmlVersion);
 				_pcomp.processIncludeList(_actPNode);
-				if (defName != null) {
-					// check duplicate of X-definition
-					for (PNode pn: _pcomp.getPXDefs()) {
-						if (defName.equals(pn._xdef.getName())) {
-							XScriptParser xp =
-								new XScriptParser(_actPNode._xmlVersion);
-							xp.setSource(_actPNode._name,
-								_actPNode._xdef == null ? null
-									: _actPNode._xdef.getName(),
-								null,_actPNode._xmlVersion,_actPNode._xpathPos);
-							if (defName.length() == 0) {
-								//Only one X-definition in the compiled XDPool
-								// may be without name
-								xp.error(_actPNode._name, XDEF.XDEF212);
-							} else {
-								//X-definition '&{0}' already exists
-								xp.error(_actPNode._name,XDEF.XDEF268, defName);
-							}
-							defName = null;
-							break;
+				// check duplicate of X-definition
+				for (PNode pn: _pcomp.getPXDefs()) {
+					if (defName.equals(pn._xdef.getName())) {
+						XScriptParser xp =
+							new XScriptParser(_actPNode._xmlVersion);
+						xp.setSource(_actPNode._name,
+							_actPNode._xdef == null ? null
+								: _actPNode._xdef.getName(),
+							null,_actPNode._xmlVersion,_actPNode._xpathPos);
+						if (defName.length() == 0) {
+							//Only one X-definition in the compiled XDPool
+							// may be without name
+							xp.error(_actPNode._name, XDEF.XDEF212);
+						} else {
+							//X-definition '&{0}' already exists
+							xp.error(_actPNode._name,XDEF.XDEF268, defName);
 						}
+						defName = null;
+						break;
 					}
-					if (defName != null) {
-						_pcomp.getPXDefs().add(_actPNode);
-					}
+				}
+				if (defName != null) {
+					_pcomp.getPXDefs().add(_actPNode);
 				}
 			}
 		}
@@ -407,26 +406,6 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 		}
 	}
 
-	private PNode genXDPNode(final String name,
-		final SPosition spos, final PNode parent) {
-		PNode p = new PNode(name,
-			spos, parent, parent._xdVersion, parent._xmlVersion);
-		p._nsURI = _pcomp.getNSURI(XPreCompiler.NS_XDEF_INDEX);
-		p._nsindex = XPreCompiler.NS_XDEF_INDEX;
-		parent.addChildNode(p);
-		return p;
-	}
-
-	private PNode genJXPNode(final String name,
-		final SPosition spos, final PNode parent) {
-		PNode p = new PNode(name,
-			spos, parent, parent._xdVersion, parent._xmlVersion);
-		p._nsURI = _pcomp.getNSURI(XPreCompiler.NS_XDEF_INDEX);
-		p._nsindex = XPreCompiler.NS_XDEF_INDEX;
-		parent.addChildNode(p);
-		return p;
-	}
-
 	/** Generate text node */
 	private void genTextNode() {
 		String name = "";
@@ -506,8 +485,8 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 					xdname.equals("json") ? "xon" : xdname,
 					sval, // model source code
 					_pcomp.getReportWriter());
-				pnode._name = paName._value;
-				pnode._localName = paName._value.getString();
+				pnode._name = paName!=null ? paName._value : new SBuffer("");
+				pnode._localName = paName!=null ? paName._value.getString(): "";
 				pnode._nsURI = null; // set no namespace
 				pnode._nsindex = -1;
 				pnode._xonMode = XConstants.XON_ROOT;
@@ -550,8 +529,8 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 //				&&!"attlist".equals(_actPNode._localName) //TODO
 				&& !"sequence".equals(_actPNode._localName)
 				&& !"any".equals(_actPNode._localName)) {
-				//Text value is not allowed here
-				lightError(_actPNode._value, XDEF.XDEF260);
+				//Unknown element from X-definotion namespace: '&{0}'
+				lightError(_actPNode._value, XDEF.XDEF259,_actPNode._localName);
 				_actPNode._value = null; //prevent repeated message
 				return;
 			}

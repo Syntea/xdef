@@ -101,8 +101,6 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 	private final CompileXScript _scriptCompiler;
 	/** Code generator. */
 	private final CompileCode _codeGenerator;
-	/** Set of XON/JSON names. */
-	Set<String> _xonNames = new HashSet<>();
 
 	/** Creates a new instance of XDefCompiler
 	 * @param xp The XDefPool object.
@@ -340,7 +338,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				}
 				break;
 			}
-			if (result.indexOf("[1]") >= 0) {
+			if (result.contains("[1]")) {
 				// remove all occurrences of "[1]"
 				result = SUtils.modifyString(result, "[1]", "");
 			}
@@ -583,29 +581,24 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		boolean local = nodei._xdef!=null
 			&& nodei._xdef.getXDVersion() >= XConstants.XD40;
 		PAttr scope = _precomp.getXdefAttr(nodei, "scope", false, removeAttr);
-		if (scope == null) {
-			return local;
-		}
-		String s = scope._value.getString();
-		if (null == s) {
-			//Attribute "scope" in selfstanding declaration section
-			//can be only "global"
-			error(scope._value, XDEF.XDEF221);
-		} else switch (s) {
-			case "global":
-				return false;
-			case "local":
-				if (nodei._xdef == null) {
-					//Attribute '&{0}' not allowed here&{#SYS000}
-					error(scope._value, XDEF.XDEF254, "scope");
-				} else {
+		if (scope != null) {
+			String s = scope._value.getString();
+			switch (s) {
+				case "global":
+					return false; // OK, it is global anyay
+				case "local":
+					if (nodei._xdef == null) {
+						//Attribute "scope" in declaration section
+						//is&{0}{ '}{'}. It can be only "global"&{1}{ or }.
+						error(scope._value, XDEF.XDEF221, s);
+						return false; // must be global
+					}
 					return true;
-				}
-				break;
-			default:
-				//Attribute "scope" in selfstanding declaration section
-				//can be only "global"
-				error(scope._value, XDEF.XDEF221);
+				default:
+					//Attribute "scope" in declaration section is&{0}{ '}{'}.
+					//It can be only "global"&{1}{ or }.
+					error(scope._value, XDEF.XDEF221, s, "'local'");
+			}
 		}
 		return local;
 	}
@@ -824,7 +817,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 		final List<PNode> listComponent) {
 		for (List<PNode> list = listBNF; list != null;
 			list = list == listBNF ? listDecl : null) {
-			if (list.size() > 0) {
+			if (!list.isEmpty()) {
 				for (PNode nodei: list) {
 					if (list == listBNF) { //BNFs
 						compileBNFGrammar(nodei, true);
@@ -1255,7 +1248,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 				error(pnode._name, XDEF.XDEF218);
 				return null;
 			}
-			if (pnode.getChildNodes().size() > 0) {
+			if (!pnode.getChildNodes().isEmpty()) {
 				//Child nodes of the element 'xd:includeChildNodes'
 				//are not allowed
 				error(pnode._name, XDEF.XDEF232);
@@ -2034,8 +2027,9 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 								continue;
 							}
 							XDValue[] names = xc.getXDItems();
-							boolean wasError = names==null || names.length==0;
-							if (!wasError) {
+							boolean wasError;
+							if (names!=null && names.length > 0) {
+								wasError = false;
 								for (XDValue item: names) {
 									s = item==null ? null : item.stringValue();
 									if (!StringParser.chkJavaName(s)) {
@@ -2043,10 +2037,12 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 										//Type &{0} can't be converted to
 										//enumeration &{1} because value
 										//"&{2}" is not Java identifier
-										error(sbf, XDEF.XDEF382,
-											name, clsname, s);
+										error(sbf,
+											XDEF.XDEF382, name, clsname, s);
 									}
 								}
+							} else {
+								wasError = true;
 							}
 							s = clsname; // get as string
 							if (!classNames.add(s)) {
