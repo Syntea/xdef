@@ -106,9 +106,9 @@ class PreReaderXML extends XmlDefReader implements PreReader {
 						? XConstants.XD40 : XConstants.XD41;
 					try {
 						if (projectNS.isEmpty()) {
-							throw new RuntimeException(); // forse error
+							throw new RuntimeException(); // just force error
 						}
-						new URI(projectNS); // just to check projectNS  validity
+						new URI(projectNS); // just to check projectNS validity
 					} catch (RuntimeException | URISyntaxException ex) {
 						//Attribute 'metaNamespace' must contain a valid URI
 						error(ka.getPosition(), XDEF.XDEF253);
