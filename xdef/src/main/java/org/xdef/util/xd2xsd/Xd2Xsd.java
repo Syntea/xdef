@@ -488,7 +488,7 @@ public class Xd2Xsd {
 		XMNode[] children = xel.getChildNodeModels();
 		if (children.length == 1 && children[0].getKind() == XMNode.XMTEXT) {
 			XMData x = (XMData) children[0];
-			GenParser parserInfo = GenParser.genParser(x);			
+			GenParser parserInfo = GenParser.genParser(x);
 			String typeName = genDeclaredName(parserInfo);
 			Element simpleType;
 			if (attrs.length == 0) {

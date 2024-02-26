@@ -30,7 +30,7 @@ public class TestXd2XsdConv extends XDTester {
 
 	private static final SchemaFactory XSDFACTORY =
 		SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-	
+
 	private static final String MAIN_DEF_NAME = "main";
 	private static final String MAIN_SCHEMA_FILE_NAME = "main.xsd";
 	private final ArrayReporter _reporter = new ArrayReporter();
@@ -156,7 +156,7 @@ public class TestXd2XsdConv extends XDTester {
 			Schema schema = XSDFACTORY.newSchema(mainSchema);
 			_validator = schema.newValidator();
 		} catch (SAXException ex) {
-			
+
 			displayFiles(_xdefFile);
 			System.err.println("============");
 			displayFiles(_tempDir);
