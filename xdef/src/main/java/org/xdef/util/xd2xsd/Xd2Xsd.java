@@ -190,9 +190,6 @@ public class Xd2Xsd {
 					XMNode x = children[i];
 					switch (x.getKind()) {
 						case XMNode.XMELEMENT:
-						case XMNode.XMMIXED:
-						case XMNode.XMCHOICE:
-						case XMNode.XMSEQUENCE:
 							XMOccurrence occ = x.getOccurence();
 							if (occ.minOccurs() > 0) {
 								min++;
@@ -202,6 +199,11 @@ public class Xd2Xsd {
 								max =  occ.maxOccurs() == Integer.MAX_VALUE
 									? Integer.MAX_VALUE : max + occ.maxOccurs();
 							}
+							break;
+						case XMNode.XMMIXED:
+						case XMNode.XMCHOICE:
+						case XMNode.XMSEQUENCE:
+							allOne = false;
 					}
 				}
 				if (allOne) {
