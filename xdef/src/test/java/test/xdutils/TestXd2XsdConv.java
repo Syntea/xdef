@@ -2,7 +2,6 @@ package test.xdutils;
 
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.FUtils;
-import org.xdef.sys.ReportWriter;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.XDDocument;
 import org.xdef.XDFactory;
@@ -26,28 +25,23 @@ import org.xdef.util.XdefToXsd;
 import org.xml.sax.SAXException;
 import test.XDTester;
 
-/** Test conversion of X-definition to XML schema.
- * @author Vaclav Trojan
- */
+/** Test conversion of X-definition to XML schema. */
 public class TestXd2XsdConv extends XDTester {
 
+	private static final SchemaFactory XSDFACTORY =
+		SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+	
 	private static final String MAIN_DEF_NAME = "main";
 	private static final String MAIN_SCHEMA_FILE_NAME = "main.xsd";
-	private ReportWriter _repWriter;
+	private final ArrayReporter _reporter = new ArrayReporter();
 	private File _dataDir;
-	private XDPool _xp;
 	private File _tempDir;
 	private File _xdefFile;
-	private SchemaFactory _xsdFactory;
 	private Validator _validator;
 	private XDDocument _chkDoc;
-	private boolean _prepared = false;
 	private ErrMessage _errMessage;
 
 	private void init() {
-		_xsdFactory =
-			SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-		_repWriter = new ArrayReporter();
 		File dataDir = new File(getDataDir());
 		if (!dataDir.exists() || !dataDir.isDirectory()) {
 			throw new RuntimeException(
@@ -70,11 +64,10 @@ public class TestXd2XsdConv extends XDTester {
 		_tempDir = new File(tempDir, "xd2xsd");
 		if (!_tempDir.exists()) {
 			_tempDir.mkdir();
-		} else {
-			if (!_tempDir.isDirectory()) {
-				throw new RuntimeException(
-					"Temporary 'xd2xsd' directory is not a directory!");
-			}
+		}
+		if (!_tempDir.isDirectory()) {
+			throw new RuntimeException(
+				"Temporary 'xd2xsd' directory is not a directory!");
 		}
 	}
 
@@ -96,7 +89,7 @@ public class TestXd2XsdConv extends XDTester {
 	}
 
 	private boolean prepare(String testName) {
-		_prepared = false;
+		_validator = null;
 		//prepare xdefinition
 		_xdefFile = new File(_dataDir.getAbsolutePath(), testName+".xdef");
 		if (!_xdefFile.exists() || !_xdefFile.isFile()) {
@@ -109,15 +102,15 @@ public class TestXd2XsdConv extends XDTester {
 			props.setProperty(XDConstants.XDPROPERTY_WARNINGS, // xdef_warnings
 				 XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE);
 			props.put("xdef.warnings", "false");
-			_xp = XDFactory.compileXD(props, _xdefFile);
-			if (!_xp.exists(MAIN_DEF_NAME)) {
+			XDPool xp = XDFactory.compileXD(props, _xdefFile);
+			if (!xp.exists(MAIN_DEF_NAME)) {
 				setMessage(new ErrMessage(
 					"Could not find main definition in XDefinition file!",
 					_xdefFile,
 					null));
 				return false;
 			}
-			_chkDoc = _xp.createXDDocument(MAIN_DEF_NAME);
+			_chkDoc = xp.createXDDocument(MAIN_DEF_NAME);
 		} catch (RuntimeException ex) {
 			setMessage(new ErrMessage("Could not prepare XDefinition!",
 				_xdefFile, ex));
@@ -160,9 +153,10 @@ public class TestXd2XsdConv extends XDTester {
 		}
 		//prepare schema validator
 		try {
-			Schema schema = _xsdFactory.newSchema(mainSchema);
+			Schema schema = XSDFACTORY.newSchema(mainSchema);
 			_validator = schema.newValidator();
 		} catch (SAXException ex) {
+			
 			displayFiles(_xdefFile);
 			System.err.println("============");
 			displayFiles(_tempDir);
@@ -170,13 +164,12 @@ public class TestXd2XsdConv extends XDTester {
 				+ ex.getMessage(),mainSchema, ex));
 			return false;
 		}
-		_prepared = true;
 		return true;
 	}
 
 	private boolean parse(String xmlName) {
-		if (!_prepared) {
-			return true;
+		if (_validator == null) {
+			return true; // skip this step
 		}
 		File xmlFile = new File(_dataDir, xmlName + ".xml");
 		if (!xmlFile.exists() || !xmlFile.isFile()) {
@@ -185,11 +178,11 @@ public class TestXd2XsdConv extends XDTester {
 			return false;
 		}
 		//check by xdef
-		_repWriter.clear();
-		_chkDoc.xparse(xmlFile, _repWriter);
-		if (_repWriter.errors()) {
+		_reporter.clear();
+		_chkDoc.xparse(xmlFile, _reporter);
+		if (_reporter.errors()) {
 			setMessage(new ErrMessage(
-				_repWriter.getReportReader().printToString(), xmlFile, null));
+				_reporter.getReportReader().printToString(), xmlFile, null));
 			return false;
 		}
 		//check by schema
@@ -217,8 +210,8 @@ public class TestXd2XsdConv extends XDTester {
 	}
 
 	private boolean parseFail(String xmlName) {
-		if (!_prepared) {
-			return true;
+		if (_validator == null) {
+			return true; // skip this step
 		}
 		File xmlFile = new File(_dataDir.getAbsolutePath() + File.separator
 				+ xmlName + ".xml");
@@ -228,9 +221,9 @@ public class TestXd2XsdConv extends XDTester {
 			return false;
 		}
 		//check by xdef
-		_repWriter.clear();
-		_chkDoc.xparse(xmlFile, _repWriter);
-		if (!_repWriter.errors()) {
+		_reporter.clear();
+		_chkDoc.xparse(xmlFile, _reporter);
+		if (!_reporter.errors()) {
 			setMessage(new ErrMessage("XML file is valid by XDefinition!",
 				xmlFile, null));
 			return false;
@@ -384,6 +377,7 @@ public class TestXd2XsdConv extends XDTester {
 
 			assertTrue(prepare("typeFixedTest"), popMessage());
 			assertTrue(parse("typeFixedTest_valid"), popMessage());
+			assertTrue(parse("typeFixedTest_valid_1"), popMessage());
 
 			assertTrue(prepare("B1_common"), popMessage());
 			assertTrue(parse("B1_Common_valid_1"), popMessage());

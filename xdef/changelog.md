@@ -1,5 +1,8 @@
 # Version ${version}, release-date ${release.date}
 
+# Version 42.1.3, release-date 2024-02-26
+* .
+
 # Version 42.1.2, release-date 2024-02-26
 * Corrected bugs in the `org.xdec.util.XdefToXsd` utility.
 

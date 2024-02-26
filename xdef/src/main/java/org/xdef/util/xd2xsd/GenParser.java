@@ -23,9 +23,11 @@ import org.xdef.sys.SException;
  */
 class GenParser {
 
-	private final XDParser _xdp;
-	private final String _info;
-	private final String _declaredName;
+	private final XDParser _xdp;// XDParser object with parameters (schema type)
+	private final String _declaredName;// name of X-definition parser
+	private final String _info; // text of information about type conversion
+	private String _defaultValue; // default value
+	private String _fixedValue; // fixed value
 
 	/** Create new instance of ParserInfo with X-definition parser,
 	 * declared type name and information text.
@@ -51,15 +53,25 @@ class GenParser {
 	protected XDParser getParser() {return _xdp;}
 
 	/** Get information text (used in xs:documentation).
-	 * @return information text.
+	 * @return information text (or null).
 	 */
 	protected String getInfo() {return _info;}
 
 	/** Get name of declared type in X-definition.
-	 * @return name of declared type in X-definition or null.
+	 * @return name of declared type in X-definition (or null).
 	 */
 	protected String getDeclaredName() {return _declaredName;}
 
+	/** Get default value from data model.
+	 * @return default value from data model (or null).
+	 */
+	protected String getDefault() {return _defaultValue;}
+
+	/** Get fixed value from data model.
+	 * @return fixed value from data model (or null).
+	 */
+	protected String getFixed() {return _fixedValue;}
+	
 	/** Set to the parser the declared name.
 	 * @param xdp the X-definition parser.
 	 * @param info information (i.e. original parser name).
@@ -100,189 +112,34 @@ class GenParser {
 	 * @return ParserInfo object with XML schema compatible parser.
 	 */
 	protected static GenParser genParser(final XMData xmd) {
-		return genParser((XDParser) xmd.getParseMethod());
+		GenParser result = genParser((XDParser) xmd.getParseMethod());
+		XDValue val = xmd.getFixedValue();
+		if (val != null) {
+			result._fixedValue = val.toString();
+		}
+		val = xmd.getDefaultValue();
+		if (val != null) {
+			result._defaultValue = val.toString();
+		}
+		return result;
 	}
+
+	/** Create ParserInfo object with XML schema compatible parser from
+	 * X-definition parser.
+	 * @param xdp X-definition parser.
+	 * @return ParserInfo object with XML schema compatible parser.
+	 */
 	private static GenParser genParser(final XDParser xdp) {
 		String name = xdp.parserName();
 		String declName = xdp.getDeclaredName();
 		XDContainer xdc = xdp.getNamedParams();
 		String info = "Created from X-definition " + name;
+		String s, mask;
+		XDValue x;
 		switch(name) {
-			case "an":
-				info += genPars(xdc);
-				xdc.setXDNamedItem("pattern", new DefString("[A-Za-z0-9]+"));
-				return createNewParserInfo(
-					new XSParseString(), info, declName, xdc);
-			case "contains": {
-				String s = xdc.getXDNamedItemAsString("argument");
-				xdc.setXDNamedItem("pattern",
-					new DefString(".*" + GenRegex.genEscapeChars(s) + ".*"));
-				xdc.removeXDNamedItem("argument");
-				return createNewParserInfo(
-					new XSParseString(), info + '(' + s + ')', declName, xdc);
-			}
-			case "containsi": {
-				String s = xdc.getXDNamedItemAsString("argument");
-				xdc.removeXDNamedItem("argument");
-				String mask = GenRegex.genCaseInsensitive(s);
-				xdc.setXDNamedItem("pattern", new DefString(".*"+mask+".*"));
-				return createNewParserInfo(
-					new XSParseString(), info + "(" + s + ")", declName, xdc);
-			}
-			case "country":
-				xdc.setXDNamedItem("pattern", new DefString("[a-ZA-Z]{2,3}"));
-				return createNewParserInfo(
-					new XSParseString(), info + "()", declName, xdc);
-			case "currency":
-				return createNewParserInfo(
-					new XSParseString(), "(); see ISO 4217", declName, xdc);
-			case "ends": {
-				String s = xdc.getXDNamedItemAsString("argument");
-				xdc.setXDNamedItem("pattern", new DefString(".*"
-					+ GenRegex.genEscapeChars(s)));
-				xdc.removeXDNamedItem("argument");
-				return createNewParserInfo(
-					new XSParseString(), info + "(" + s + ")", declName, xdc);
-			}
-			case "endsi": {
-				String s = xdc.getXDNamedItemAsString("argument");
-				xdc.removeXDNamedItem("argument");
-				String mask = GenRegex.genCaseInsensitive(s);
-				xdc.setXDNamedItem("pattern", new DefString(".*" + mask));
-				return createNewParserInfo(
-					new XSParseString(), info + '(' + s + ')', declName, xdc);
-			}
-			case "enum": {
-				XDValue x = xdc.getXDNamedItem("argument").getValue();
-				xdc.setXDNamedItem("enumeration", x);
-				xdc.removeXDNamedItem("argument");
-				String s = "";
-				if (x instanceof XDContainer) {
-					XDContainer y = (XDContainer) x;
-					for (int i=0; i < y.getXDItemsNumber(); i++) {
-						if (i > 0) s += ',';
-						s += "" + y.getXDItem(i);
-					}
-				} else {
-					s += "" + x;
-				}
-				return createNewParserInfo(
-					new XSParseString(), info + '(' + s + ')', declName, xdc);
-			}
-			case "eq": {
-				String s = xdc.getXDNamedItemAsString("argument");
-				xdc.setXDNamedItem("enumeration", new DefString(s));
-				xdc.removeXDNamedItem("argument");
-				return createNewParserInfo(
-					new XSParseString(), info + "(" + s + ")", declName, xdc);
-			}
-			case "eqi": {
-				String s = xdc.getXDNamedItemAsString("argument");
-				xdc.removeXDNamedItem("argument");
-				String mask = GenRegex.genCaseInsensitive(s);
-				xdc.setXDNamedItem("pattern", new DefString(mask));
-				return createNewParserInfo(
-					new XSParseString(), info + "(" + s + ")", declName, xdc);
-			}
-			case "MD5":
-				xdc.setXDNamedItem("length", new DefLong(16));
-				return createNewParserInfo(
-					new XSParseHexBinary(), info + genPars(xdc), declName, xdc);
-			case "num": {
-				info += genPars(xdc);
-				xdc.setXDNamedItem("pattern", new DefString("\\d+"));
-				return createNewParserInfo(
-					new XSParseString(), info, declName, xdc);
-			}
-			case "pic": {
-				String s = xdc.getXDNamedItemAsString("argument");
-				xdc.removeXDNamedItem("argument");
-				String mask = "";
-				for (char c: s.toCharArray()) {
-					switch (c) {
-						case '9':
-							mask += "[0-9]";
-							continue;
-						case 'A':
-							mask += "[a-zA-Z]";
-							continue;
-						case 'X':
-							mask += "[0-9a-zA-Z]";
-							continue;
-						default:
-							mask += GenRegex.genEscapedChar(c);
-					}
-				}
-				xdc.setXDNamedItem("pattern", new DefString(mask));
-				return createNewParserInfo(
-					new XSParseString(), info + "(" + s + ")", declName, xdc);
-			}
-			case "hex":
-				return createNewParserInfo(
-					new XSParseHexBinary(), info, declName, xdc);
-			case "dec":
-				return createNewParserInfo(
-					new XSParseDecimal(), info, declName, xdc);
-			case "starts": {
-				String s = xdc.getXDNamedItemAsString("argument");
-				xdc.removeXDNamedItem("argument");
-				xdc.setXDNamedItem("pattern", new DefString(
-					GenRegex.genEscapeChars(s)+"*"));
-				return createNewParserInfo(
-					new XSParseString(), info + "(" + s + ")", declName, xdc);
-			}
-			case "startsi": {
-				String s = xdc.getXDNamedItemAsString("argument");
-				xdc.removeXDNamedItem("argument");
-				String mask = GenRegex.genCaseInsensitive(s);
-				xdc.setXDNamedItem("pattern", new DefString(mask + "*"));
-				return createNewParserInfo(
-					new XSParseString(), info + "(" + s + ")", declName, xdc);
-			}
-			case "xdatetime": {
-				String mask = xdc.getXDNamedItemAsString("outFormat");
-				if (mask == null || mask.isEmpty()) {
-					mask = xdc.getXDNamedItemAsString("format");
-					if (mask == null || mask.isEmpty()) {
-						throw new RuntimeException("xdatetime params missing");
-					}
-				}
-				info += '(' + mask;
-				xdc.removeXDNamedItem("outFormat");
-				xdc.removeXDNamedItem("format");
-				for (XDNamedValue x: xdc.getXDNamedItems()) {
-					info += ",%" + x.getName() + '=' + x.getValue();
-				}
-				info += ')';
-				switch (mask) {
-					case "yyyy-MM-dd":
-					case "yyyy-MM-ddZ":
-						return createNewParserInfo(
-							new XSParseDate(), info, declName,xdc);
-					case "HH:mm":
-					case "HH:mm:ss":
-					case "HH:mm:ssZ":
-					case "HH:mm:ss.S":
-					case "HH:mm:ss.SZ":
-						return createNewParserInfo(
-							new XSParseTime(), info, declName,xdc);
-					case "dd-MM-yyyyTHH:mm:ss":
-					case "dd-MM-yyyyTHH:mm:ss.S":
-					case "dd-MM-yyyyTHH:mm:ssZ":
-					case "dd-MM-yyyyTHH:mm:ss.SZ":
-						return createNewParserInfo(
-							new XSParseDatetime(), info, declName, xdc);
-					default: // return string type with patterns
-						String[] patterns = GenRegex.getRegexes(mask);
-						XDContainer x = new DefContainer();
-						for (String y: patterns) {
-							x.addXDItem(y);
-						}
-						xdc.setXDNamedItem("pattern", x);
-						return createNewParserInfo(
-							new XSParseString(), info, declName, xdc);
-				}
-			}
+////////////////////////////////////////////////////////////////////////////////
+// XML schema types which are implemented in X-definition
+////////////////////////////////////////////////////////////////////////////////				
 			case "anyURI":
 			case "base64Binary":
 			case "boolean":
@@ -333,9 +190,184 @@ class GenParser {
 				}
 				return new GenParser(xdp, declName, null);
 			}
-			default: // other uncenvertible X-definition types
+////////////////////////////////////////////////////////////////////////////////
+// X-definition types converted to XML schema type
+////////////////////////////////////////////////////////////////////////////////				
+			case "an":
+				info += genPars(xdc);
+				xdc.setXDNamedItem("pattern", new DefString("[A-Za-z0-9]+"));
+				return createNewParserInfo(
+					new XSParseString(), info, declName, xdc);
+			case "contains":
+				s = xdc.getXDNamedItemAsString("argument");
+				xdc.setXDNamedItem("pattern",
+					new DefString(".*" + GenRegex.genEscapeChars(s) + ".*"));
+				xdc.removeXDNamedItem("argument");
+				return createNewParserInfo(
+					new XSParseString(), info + '(' + s + ')', declName, xdc);
+			case "containsi":
+				s = xdc.getXDNamedItemAsString("argument");
+				xdc.removeXDNamedItem("argument");
+				mask = GenRegex.genCaseInsensitive(s);
+				xdc.setXDNamedItem("pattern", new DefString(".*"+mask+".*"));
+				return createNewParserInfo(
+					new XSParseString(), info + "(" + s + ")", declName, xdc);
+			case "country":
+				xdc.setXDNamedItem("pattern", new DefString("[a-ZA-Z]{2,3}"));
+				return createNewParserInfo(
+					new XSParseString(), info + "()", declName, xdc);
+			case "currency":
+				return createNewParserInfo(
+					new XSParseString(), "(); see ISO 4217", declName, xdc);
+			case "dec":
+				if (xdc.getXDNamedItem("totalDigits") != null) {
+					info += "(" + xdc.getXDNamedItemAsString("totalDigits");
+					if (xdc.getXDNamedItem("fractionDigits") != null) {
+						info +=","+xdc.getXDNamedItemAsString("fractionDigits");
+					}
+					info += ")";
+				}
+				return createNewParserInfo(
+					new XSParseDecimal(), info, declName, xdc);
+			case "ends":
+				s = xdc.getXDNamedItemAsString("argument");
+				xdc.setXDNamedItem("pattern", new DefString(".*"
+					+ GenRegex.genEscapeChars(s)));
+				xdc.removeXDNamedItem("argument");
+				return createNewParserInfo(
+					new XSParseString(), info + "(" + s + ")", declName, xdc);
+			case "endsi":
+				s = xdc.getXDNamedItemAsString("argument");
+				xdc.removeXDNamedItem("argument");
+				mask = GenRegex.genCaseInsensitive(s);
+				xdc.setXDNamedItem("pattern", new DefString(".*" + mask));
+				return createNewParserInfo(
+					new XSParseString(), info + '(' + s + ')', declName, xdc);
+			case "enum":
+				x = xdc.getXDNamedItem("argument").getValue();
+				xdc.setXDNamedItem("enumeration", x);
+				xdc.removeXDNamedItem("argument");
+				s = "";
+				if (x instanceof XDContainer) {
+					XDContainer y = (XDContainer) x;
+					for (int i=0; i < y.getXDItemsNumber(); i++) {
+						if (i > 0) s += ',';
+						s += "" + y.getXDItem(i);
+					}
+				} else {
+					s += "" + x;
+				}
+				return createNewParserInfo(
+					new XSParseString(), info + '(' + s + ')', declName, xdc);
+			case "eq":
+				s = xdc.getXDNamedItemAsString("argument");
+				xdc.setXDNamedItem("enumeration", new DefString(s));
+				xdc.removeXDNamedItem("argument");
+				return createNewParserInfo(
+					new XSParseString(), info + "(" + s + ")", declName, xdc);
+			case "eqi":
+				s = xdc.getXDNamedItemAsString("argument");
+				xdc.removeXDNamedItem("argument");
+				mask = GenRegex.genCaseInsensitive(s);
+				xdc.setXDNamedItem("pattern", new DefString(mask));
+				return createNewParserInfo(
+					new XSParseString(), info + "(" + s + ")", declName, xdc);
+			case "hex":
+				return createNewParserInfo(
+					new XSParseHexBinary(), info, declName, xdc);
+			case "MD5":
+				xdc.setXDNamedItem("length", new DefLong(16));
+				return createNewParserInfo(
+					new XSParseHexBinary(), info + genPars(xdc), declName, xdc);
+			case "num":
+				info += genPars(xdc);
+				xdc.setXDNamedItem("pattern", new DefString("\\d+"));
+				return createNewParserInfo(
+					new XSParseString(), info, declName, xdc);
+			case "pic":
+				s = xdc.getXDNamedItemAsString("argument");
+				xdc.removeXDNamedItem("argument");
+				mask = "";
+				for (char c: s.toCharArray()) {
+					switch (c) {
+						case '9':
+							mask += "[0-9]";
+							continue;
+						case 'A':
+							mask += "[a-zA-Z]";
+							continue;
+						case 'X':
+							mask += "[0-9a-zA-Z]";
+							continue;
+						default:
+							mask += GenRegex.genEscapedChar(c);
+					}
+				}
+				xdc.setXDNamedItem("pattern", new DefString(mask));
+				return createNewParserInfo(
+					new XSParseString(), info + "(" + s + ")", declName, xdc);
+			case "starts":
+				s = xdc.getXDNamedItemAsString("argument");
+				xdc.removeXDNamedItem("argument");
+				xdc.setXDNamedItem("pattern", new DefString(
+					GenRegex.genEscapeChars(s)+"*"));
+				return createNewParserInfo(
+					new XSParseString(), info + "(" + s + ")", declName, xdc);
+			case "startsi":
+				s = xdc.getXDNamedItemAsString("argument");
+				xdc.removeXDNamedItem("argument");
+				mask = GenRegex.genCaseInsensitive(s);
+				xdc.setXDNamedItem("pattern", new DefString(mask + "*"));
+				return createNewParserInfo(
+					new XSParseString(), info + "(" + s + ")", declName, xdc);
+			case "SHA1":
+				xdc.setXDNamedItem("length", new DefLong(20));
+				return createNewParserInfo(
+					new XSParseHexBinary(), info + genPars(xdc), declName, xdc);
+			case "xdatetime":
+				mask = xdc.getXDNamedItemAsString("outFormat");
+				if (mask == null || mask.isEmpty()) {
+					mask = xdc.getXDNamedItemAsString("format");
+					if (mask == null || mask.isEmpty()) {
+						throw new RuntimeException("xdatetime params missing");
+					}
+				}
+				info += '(' + mask;
+				xdc.removeXDNamedItem("outFormat");
+				xdc.removeXDNamedItem("format");
+				for (XDNamedValue xv: xdc.getXDNamedItems()) {
+					info += ",%" + xv.getName() + '=' + xv.getValue();
+				}
+				info += ')';
+				switch (mask) {
+					case "yyyy-MM-dd":
+					case "yyyy-MM-ddZ":
+						return createNewParserInfo(
+							new XSParseDate(), info, declName,xdc);
+					case "HH:mm:ss":
+					case "HH:mm:ssZ":
+					case "HH:mm:ss.S":
+					case "HH:mm:ss.SZ":
+						return createNewParserInfo(
+							new XSParseTime(), info, declName,xdc);
+					case "dd-MM-yyyyTHH:mm:ss":
+					case "dd-MM-yyyyTHH:mm:ssZ":
+					case "dd-MM-yyyyTHH:mm:ss.S":
+					case "dd-MM-yyyyTHH:mm:ss.SZ":
+						return createNewParserInfo(
+							new XSParseDatetime(), info, declName, xdc);
+					default: // return string type with patterns
+						xdc.setXDNamedItem("pattern",
+							new DefContainer(GenRegex.getRegexes(mask)));
+						return createNewParserInfo(
+							new XSParseString(), info, declName, xdc);
+				} // switch mask
+////////////////////////////////////////////////////////////////////////////////
+// other X-definition types are converted to xs:string
+////////////////////////////////////////////////////////////////////////////////				
+			default: 
 				return createNewParserInfo(new XSParseString(),
-					info + "()", declName, new DefContainer());
+					info, declName, new DefContainer());
 		}
 	}
 }

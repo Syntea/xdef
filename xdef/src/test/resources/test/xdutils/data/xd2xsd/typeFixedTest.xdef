@@ -1,10 +1,10 @@
 <xd:def xmlns:xd="http://www.xdef.org/xdef/4.2"
    xmlns="a.b" xd:root="A" xd:name="main">
- <A a="string"
-    b="int(2014)"
-    b1="? long(2014)"
-    c="date('2014-01-01', '2017-01-01')"
-    d="dec(2, 1)"
+ <A c="date('2014-01-01', '2017-01-01')"
+    d="? dec(2, 1)"
     e="float; default '1.2'"
-    f="float; fixed '1.3'"/>
+    f="float; fixed '1.3'">
+  <e>float; default '1.4'</e>
+  <f>float; fixed '1.5'</f>
+</A>
 </xd:def>

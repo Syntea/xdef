@@ -306,6 +306,11 @@ public class Xd2Xsd {
 			}
 			att.setAttribute("name", x.getLocalName());
 			GenParser parserInfo = GenParser.genParser((XMData) x);
+			if (parserInfo.getFixed() != null) {
+				att.setAttribute("fixed", parserInfo.getFixed());
+			} else if (parserInfo.getDefault() != null) {
+				att.setAttribute("default", parserInfo.getDefault());
+			}
 			String typeName = genDeclaredName(parserInfo);
 			if (parserInfo.getParser().getNamedParams().isEmpty()) {
 				String parserName =
@@ -483,10 +488,15 @@ public class Xd2Xsd {
 		XMNode[] children = xel.getChildNodeModels();
 		if (children.length == 1 && children[0].getKind() == XMNode.XMTEXT) {
 			XMData x = (XMData) children[0];
-			GenParser parserInfo = GenParser.genParser(x);
+			GenParser parserInfo = GenParser.genParser(x);			
 			String typeName = genDeclaredName(parserInfo);
 			Element simpleType;
 			if (attrs.length == 0) {
+				if (parserInfo.getFixed() != null) {
+					el.setAttribute("fixed", parserInfo.getFixed());
+				} else if (parserInfo.getDefault() != null) {
+					el.setAttribute("default", parserInfo.getDefault());
+				}
 				if (typeName == null) {
 					if (parserInfo.getParser().getNamedParams().isEmpty()) {
 						el.setAttribute("type",

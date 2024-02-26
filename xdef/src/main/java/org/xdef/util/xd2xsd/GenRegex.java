@@ -9,7 +9,7 @@ import org.xdef.sys.StringParser;
  * @author Trojan
  */
 class GenRegex {
-
+	/** String with characters which must be escaped, */
 	private static final String ESCAPEDCHARS = "\\|.-?*+{}(){}^";
 
 	/** Get regex string created form a part of xdatetime mask.
@@ -164,6 +164,10 @@ class GenRegex {
 		return ret.toString();
 	}
 
+	/** Return regex pattern of the string to be case insensitive.
+	 * @param string string to be case insensitive.
+	 * @return regex pattern of the string value to be case insensitive.
+	 */
 	public static String genCaseInsensitive(final String s) {
 		String mask = "";
 		for (char c: s.toCharArray()) {
