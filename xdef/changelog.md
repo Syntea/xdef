@@ -1,27 +1,28 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.1.3, release-date 2024-02-26
-* .
+# Version 42.1.3, release-date 2024-02-27
+* The conversion of X-definition to XML schema (`org.xdef.util.XdefToXsd`)
+  now respects also the options "fixed" and "default" from X-script.
 
 # Version 42.1.2, release-date 2024-02-26
 * Corrected bugs in the `org.xdec.util.XdefToXsd` utility.
 
 # Version 42.1.1, release-date 2024-01-29
 * Fixed bug in `CHECK` operation.
-* Implemented utility `org.xdec.util.XdefToXsd` - conversion of X-definition
+* Implemented utility `org.xdef.util.XdefToXsd` - conversion of X-definition
   to XML schema.
-* Implemented utility `org.xdec.util.XsdToXdef` - conversion of XXML schema
+* Implemented utility `org.xdef.util.XsdToXdef` - conversion of XXML schema
   to X-definition.
 
 # Version 42.1.0, release-date 2024-01-15
-* Added the new binary operator `CHECK`. The result of operation is 
+* Added the new binary operator `CHECK`. The result of an operation is 
   a `ParseResult` value. The type of the first operand must be `Parser` or
-  `ParseResult` (if it is Parser then parsing method is invoked so that it
-  results a `ParseResut` value). The second operand is a `boolean` expression
-  (usually it is a method) and it is invoked only if the `ParseResult` from
-  the first processed operand does not contain any error messages. If the result
-  of invoked expression of the second operand is false, the error message 
-  `XDEF822: Parsed result does not fit to CHECK argument` is set to the
+  `ParseResult` (if it is Parser then the parsing method is invoked so that it
+  results from a `ParseResut` value). The second operand is a `boolean`
+  expression (usually it is method) and it is invoked only if the `ParseResult`
+  from the first processed operand does not contain any error messages. If the
+  result of the invoked expression of the second operand is false, the error
+  message `XDEF822: Parsed result does not fit to CHECK argument` is set to the
   `ParseResult` value.
 * Fixed bug in nested sequence groups.
 * If the type of a value in X-component is `union` and types of all items are
@@ -33,7 +34,7 @@
 
 # Version 42.0.11, release-date 2023-11-27
 * Corrected bug in `org.xdef.xon.CsvReader` parser when after missing value at
-  the end of line follows next line with a value.
+  the end of the line follows the next line with a value.
 * Corrected bug in X-component when the validation type is described as
   an expression.
 
