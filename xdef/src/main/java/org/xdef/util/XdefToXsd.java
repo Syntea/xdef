@@ -127,6 +127,10 @@ public class XdefToXsd {
 		for (int i = 0; i < args.length; i++) {
 			String arg = args[i];
 			switch (arg) {
+				case "-h":
+				case "/?":
+					System.out.println(info);
+					return;
 				case "-o":
 				case "--outDir":
 					if (outDir != null) {

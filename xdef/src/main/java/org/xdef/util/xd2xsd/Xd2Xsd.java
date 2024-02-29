@@ -42,14 +42,14 @@ public class Xd2Xsd {
 	private final Document _doc;
 
 	/** Create new instance of XsdGenerator.
-	 * @param rootName name or XML schema root file
+	 * @param xsdName name or XML schema root file
 	 * @param genInfo if true the annotations with documentation is generated.
 	 */
-	private Xd2Xsd(final String rootName, final boolean genInfo) {
-		if (rootName == null || rootName.isEmpty()) {
+	private Xd2Xsd(final String xsdName, final boolean genInfo) {
+		if (xsdName == null || xsdName.isEmpty()) {
 			throw new RuntimeException("The name of xsd file is missing");
 		}
-		_rootName = rootName;
+		_rootName = xsdName;
 		_genInfo = genInfo;
 		_xsdSources = new HashMap<>();
 		_doc = KXmlUtils.newDocument();
@@ -59,9 +59,13 @@ public class Xd2Xsd {
 	 * @param parent node where to add annotation.
 	 * @param text of documentation.
 	 */
-	private void addAnnotation(final Element parent, final String text) {
+	private void addDocumentation(final Element parent, final String text) {
 		if (_genInfo && text != null && !text.trim().isEmpty()) {
-			Element anotation = genSchemaElem(parent, "annotation");
+			NodeList nl = KXmlUtils.getChildElementsNS(parent,
+				XMLConstants.W3C_XML_SCHEMA_NS_URI, "annotation");
+			Element anotation =  (nl != null && nl.getLength() > 0)
+				? (Element) nl.item(0) : genSchemaElem(parent, "annotation");
+
 			Element documentation = genSchemaElem(anotation, "documentation");
 			documentation.appendChild(_doc.createTextNode(text.trim()));
 		}
@@ -82,7 +86,7 @@ public class Xd2Xsd {
 	 */
 	private Element genRestrictions(final Element parent,
 		final GenParser parserInfo) {
-		addAnnotation(parent, parserInfo.getInfo());
+		addDocumentation(parent, parserInfo.getInfo());
 		String typeName = getSchemaTypeName(parserInfo);
 		if ("xs:union".equals(typeName)) {
 			XDParser[] parsers =
@@ -112,15 +116,15 @@ public class Xd2Xsd {
 	/** Create element with restrictions,
 	 * @param parent element where to add restrictions
 	 * @param typeName name of type.
-	 * @param namedPaeams named params.
+	 * @param namedParams named parameters.
 	 * @return element with restrictions.
 	 */
 	private Element genRestrictions(final Element parent,
 		final String typeName,
-		final XDNamedValue[] namedPaeams) {
+		final XDNamedValue[] namedParams) {
 			Element restr = genSchemaElem(parent, "restriction");
 			restr.setAttribute("base", typeName);
-			for (XDNamedValue x: namedPaeams) {
+			for (XDNamedValue x: namedParams) {
 				XDValue xval = x.getValue();
 				if (xval==null) {
 					continue;
@@ -158,6 +162,18 @@ public class Xd2Xsd {
 			return restr;
 	}
 
+	private Element genSequenceElement(final Element el) {
+		return XMLConstants.W3C_XML_SCHEMA_NS_URI.equals(el.getNamespaceURI())
+		 && "sequence".equals(el.getLocalName())
+			? el : genSchemaElem(el, "sequence");
+//		return genSchemaElem(el, "sequence");
+	}
+	private Element genRestrictionElement(final Element el) {
+		return XMLConstants.W3C_XML_SCHEMA_NS_URI.equals(el.getNamespaceURI())
+		 && "restriction".equals(el.getLocalName())
+			? el : genSchemaElem(el, "restriction");
+	}
+
 	/** Generate group of models.
 	 * @param parent element where to add models.
 	 * @param xsel group selector.
@@ -175,7 +191,7 @@ public class Xd2Xsd {
 		Element sel;
 		switch (xsel.getKind()) {
 			case XMNode.XMSEQUENCE:
-				sel = genSchemaElem(parent, "sequence");
+				sel = genSequenceElement(parent);
 				setOccurrence(sel, xsel);
 				return genSequence(complt, sel, children, index, endIndex);
 			case XMNode.XMCHOICE:
@@ -185,36 +201,28 @@ public class Xd2Xsd {
 			case XMNode.XMMIXED: {
 				int min = 0;
 				int max = 0;
-				boolean allOne = true;
 				for (int i = index + 1; i < endIndex; i++) {
 					XMNode x = children[i];
 					switch (x.getKind()) {
+						case XMNode.XMMIXED:
+						case XMNode.XMCHOICE:
+						case XMNode.XMSEQUENCE:
 						case XMNode.XMELEMENT:
 							XMOccurrence occ = x.getOccurence();
 							if (occ.minOccurs() > 0) {
 								min++;
 							}
-							if (occ.maxOccurs() > 1) {
-								allOne = false;
+							if (occ.maxOccurs() >= 1) {
 								max =  occ.maxOccurs() == Integer.MAX_VALUE
 									? Integer.MAX_VALUE : max + occ.maxOccurs();
 							}
-							break;
-						case XMNode.XMMIXED:
-						case XMNode.XMCHOICE:
-						case XMNode.XMSEQUENCE:
-							allOne = false;
 					}
 				}
-				if (allOne) {
-					sel = genSchemaElem(parent, "all");
-				} else {
-					sel = genSchemaElem(parent, "sequence");
-					sel = genSchemaElem(sel, "choice");
-					sel.setAttribute("maxOccurs", max == Integer.MAX_VALUE
-						? "unbounded" : String.valueOf(max));
-					sel.setAttribute("minOccurs", String.valueOf(min));
-				}
+				sel = genSequenceElement(parent);
+				sel = genSchemaElem(sel, "choice");
+				sel.setAttribute("maxOccurs", max == Integer.MAX_VALUE
+					? "unbounded" : String.valueOf(max));
+				sel.setAttribute("minOccurs", String.valueOf(min));
 				return genSequence(complt, sel, children, index, endIndex);
 			}
 			default:
@@ -320,16 +328,16 @@ public class Xd2Xsd {
 				} else {
 					Element simpletp = findSchematype(el, typeName);
 					if (simpletp == null) {
-						addAnnotation(att, parserInfo.getInfo());
+						addDocumentation(att, parserInfo.getInfo());
 						simpletp =
 							genSchemaElem(getSchemaElement(el), "simpleType");
-						addAnnotation(simpletp, parserInfo.getInfo());
+						addDocumentation(simpletp, parserInfo.getInfo());
 						simpletp.setAttribute("name", typeName);
 					}
-					Element restr = genSchemaElem(simpletp, "restriction");
+					Element restr = genRestrictionElement(simpletp);
 					restr.setAttribute("base", parserName);
 					att.setAttribute("type", typeName);
-					addAnnotation(att, "See simpeType \"" + typeName + '"');
+					addDocumentation(att, "See simpeType \"" + typeName + '"');
 				}
 			} else {
 				if (typeName == null) {
@@ -337,7 +345,7 @@ public class Xd2Xsd {
 					genRestrictions(simpletp, parserInfo);
 				} else {
 					att.setAttribute("type", typeName);
-					addAnnotation(att, "See simpeType \"" + typeName + '"');
+					addDocumentation(att, "See simpeType \"" + typeName + '"');
 					Element simpletp = findSchematype(el, typeName);
 					if (simpletp == null) {
 						simpletp =
@@ -510,7 +518,7 @@ public class Xd2Xsd {
 					if (!targetNs.isEmpty()) {
 						el.setAttribute("xmlns", targetNs);
 					}
-					addAnnotation(el, "See simpleType \"" + typeName + '"');
+					addDocumentation(el, "See simpleType \"" + typeName + '"');
 					if (findSchematype(el, typeName) == null) {
 						// named simpletype not exists, create it!
 						simpleType = genSchemaElem(schema,"simpleType");
@@ -558,10 +566,11 @@ public class Xd2Xsd {
 					if (((XMSelector) x).getEndIndex() == children.length - 1) {
 						genGroup(complt,
 							complt, (XMSelector) children[0], children, 0);
+						addAttrs(complt, attrs);
 						return el;
 					}
 			}
-			Element seq = genSchemaElem(complt, "sequence");
+			Element seq = genSequenceElement(complt);
 			genSequence(complt, seq, children, -1, children.length);
 		}
 		addAttrs(complt, attrs);
