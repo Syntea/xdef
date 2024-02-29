@@ -1,0 +1,8 @@
+<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='A' name='main'>
+ <A b="long()" c="xdatetime('yyyyMMdd|yyyy-MM-dd', 'yyyy-MM-dd')" >
+   <xd:mixed>
+     <X xd:script="optional;" />
+     <Y xd:script="required;" />
+   </xd:mixed>
+</A>
+</xd:def>
