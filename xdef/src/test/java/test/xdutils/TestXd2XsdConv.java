@@ -359,6 +359,7 @@ public class TestXd2XsdConv extends XDTester {
 			assertTrue(parse("testAll_valid"), popMessage());
 			assertTrue(parse("testAll_valid_1"), popMessage());
 			assertTrue(parseFail("testAll_invalid"), popMessage());
+			assertTrue(parseFail("testAll_invalid_1"), popMessage());
 
 			assertTrue(prepare("collectionTest"), popMessage());
 			assertTrue(parse("collectionTest_valid1"), popMessage());

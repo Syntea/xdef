@@ -558,41 +558,36 @@ public class Xd2Xsd {
 		}
 		Element complt = genSchemaElem(el, "complexType");
 		if (children.length > 0) {
-			if (children[0].getKind()==XMNode.XMMIXED
-				&& ((XMSelector) children[0]).getEndIndex()==children.length-1){
+			XMNode x = children[0];
+			if (x.getKind()==XMNode.XMMIXED
+				&& ((XMSelector) x).getEndIndex()==children.length-1){
 				// try tu generate xs:all
 				boolean allPossible = true;
 				for (int i = 1; i < children.length; i++) {
-					XMNode x = children[i];
-					switch (x.getKind()) {
-						case XMNode.XMELEMENT:
-							XMOccurrence occ = x.getOccurence();
+					XMNode y = children[i];
+					if (y.getKind() == XMNode.XMELEMENT) {
+							XMOccurrence occ = y.getOccurence();
 							if (occ.minOccurs() > 1
 							 || occ.maxOccurs() > 1) {
 								allPossible = false;
+								break;
 							}
-							break;
-						case XMNode.XMTEXT:
-							complt.setAttribute("mixed", "true");
-						case XMNode.XMMIXED:
-						case XMNode.XMCHOICE:
-						case XMNode.XMSEQUENCE:
-							allPossible = false;
+					} else {
+						break;
 					}
 				}
 				if (allPossible) { // generate xs:all
 					Element all = genSchemaElem(complt, "all");
 					for (int i = 1; i < children.length; i++) {
-						XMNode x = children[i];
-						if (x.getKind() == XMNode.XMELEMENT) {
-							genElem(all, (XMElement) x);
+						XMNode y = children[i];
+						if (y.getKind() == XMNode.XMELEMENT) {
+							genElem(all, (XMElement) y);
 						}
 					}
 					addAttrs(complt, attrs);
 					return el;
 				}
 			}
-			XMNode x = children[0];
 			switch (x.getKind()) {
 				case XMNode.XMCHOICE:
 				case XMNode.XMMIXED:
