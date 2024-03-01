@@ -273,15 +273,16 @@ public final class KXmlUtils extends KDOMUtils {
 	 * @param xmlVersion xml version.
 	 * @param xmlEncoding file encoding.
 	 * @param indentStep indentation step.
+	 * @returnj true if header was written, otherwise return false.
 	 * @throws IOException if an error occurs.
 	 */
-	private static void writeXmlHdr(final Writer out,
+	private static boolean writeXmlHdr(final Writer out,
 		final String xmlVersion,
 		final String xmlEncoding,
 		final String indentStep) throws IOException {
 		if ("1.0".equals(xmlVersion) &&
 			(xmlEncoding == null || xmlEncoding.equalsIgnoreCase("UTF-8"))) {
-			return;
+			return false;
 		}
 		out.write("<?xml version=\"");
 		out.write(xmlVersion != null ? xmlVersion : "1.0");
@@ -292,6 +293,7 @@ public final class KXmlUtils extends KDOMUtils {
 		if (indentStep != null) {
 			out.write('\n');
 		}
+		return true;
 	}
 
 	/** Write node as XML to output stream. Format of result will be
@@ -363,7 +365,10 @@ public final class KXmlUtils extends KDOMUtils {
 				break;
 			case Node.DOCUMENT_NODE: {
 				Document document = (Document)node;
-				writeXmlHdr(out,document.getXmlVersion(), encoding, indentStep);
+				if (!writeXmlHdr(out,
+						document.getXmlVersion(), encoding, indentStep)) {
+					startLine = null; // header was not written.
+				}
 				Node docType = document.getDoctype();
 				if (docType != null) {
 					writeXml(out,

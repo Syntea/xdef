@@ -194,8 +194,7 @@ public class XdefToXsd {
 		if (outDir == null) {
 			throw new RuntimeException("Missing output directory.\n" + info);
 		}
-		File[] xdefs = SUtils.getFileGroup(
-			xdSources.toArray(new String[xdSources.size()]));
+		File[] xdefs = SUtils.getFileGroup(xdSources.toArray(new String[0]));
 		genSchema(xdefs, outDir, xdName, modelName, outName, genDecInfo);
 	}
 }
