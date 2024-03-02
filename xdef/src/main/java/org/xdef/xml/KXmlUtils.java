@@ -30,13 +30,12 @@ import java.util.LinkedHashMap;
  * @author Vaclav Trojan
  */
 public final class KXmlUtils extends KDOMUtils {
-
 	/** Recommended length of source line.*/
 	private final static int LINELENGTH = 80;
 
 	/** Root map of prefixes.*/
 	private final static Map<String, String> ROOT_NSPREFIXMAP =
-		new LinkedHashMap<String, String>();
+		new LinkedHashMap<>();
 	static {
 		ROOT_NSPREFIXMAP.put("xmlns", "");
 	}
@@ -313,6 +312,7 @@ public final class KXmlUtils extends KDOMUtils {
 	 * are replaced by one space.
 	 * @param comments if true comments are generated.
 	 * @param namespaceMap map of prefixes.
+	 * @param lineLen length of source line.
 	 * @throws IOException if an error occurs.
 	 */
 	private static void writeXml(final Writer out,
@@ -323,7 +323,8 @@ public final class KXmlUtils extends KDOMUtils {
 		final boolean canonical,
 		final boolean removeIgnorableWhiteSpaces,
 		final boolean comments,
-		final Map<String, String> namespaceMap) throws IOException {
+		final Map<String, String> namespaceMap,
+		final int lineLen) throws IOException {
 		// map valid for child nodes
 		Map<String, String> newPrefixMap = new LinkedHashMap<>(namespaceMap);
 		short type;
@@ -379,7 +380,8 @@ public final class KXmlUtils extends KDOMUtils {
 						false,
 						removeIgnorableWhiteSpaces,
 						comments,
-						newPrefixMap);
+						newPrefixMap,
+						lineLen);
 				}
 				NodeList nl = node.getChildNodes();
 				for (int i = 0, n = nl.getLength(); i < n; i++) {
@@ -392,7 +394,8 @@ public final class KXmlUtils extends KDOMUtils {
 							canonical,
 							removeIgnorableWhiteSpaces,
 							comments,
-							newPrefixMap);
+							newPrefixMap,
+							lineLen);
 					}
 				}
 				break;
@@ -461,7 +464,6 @@ public final class KXmlUtils extends KDOMUtils {
 					out.write(' ');
 					String s = createAttr(nm.item(0),
 						removeIgnorableWhiteSpaces, newPrefixMap, unresolved);
-
 					if (numAttrs > 1) {
 						String aindent;
 						if (startLine!=null) {
@@ -478,7 +480,7 @@ public final class KXmlUtils extends KDOMUtils {
 							t += ' ' + createAttr(nm.item(i),
 								removeIgnorableWhiteSpaces,
 								newPrefixMap,unresolved);
-							if (alen>0 && alen + t.length() >= LINELENGTH) {
+							if (alen>0 && alen + t.length() >= lineLen) {
 								i = 1;
 								t = s;
 								break;
@@ -515,7 +517,7 @@ public final class KXmlUtils extends KDOMUtils {
 					newPrefixMap.put(key, value);
 					String s = key + "=" + createAttrValue(value, false);
 					if (first && numAttrs <= 1
-						&& alen + s.length() < LINELENGTH) {
+						&& alen + s.length() < lineLen) {
 						out.write(' ');
 						first = false;
 					} else if (startLine != null) {
@@ -536,7 +538,7 @@ public final class KXmlUtils extends KDOMUtils {
 							out.write("/>");
 							return;
 						} else if (s.length() + alen+tagName.length() + 2
-								< LINELENGTH && s.indexOf('<') < 0
+								< lineLen && s.indexOf('<') < 0
 							&& s.indexOf('&') < 0 && s.indexOf('>') < 0
 							&& s.indexOf('\n') < 0 && s.indexOf('\t') < 0) {
 							//write text on the same line as element start
@@ -563,7 +565,7 @@ public final class KXmlUtils extends KDOMUtils {
 							}
 							if (numItems == 1 && indent != null &&
 								(len+tagName.length()*2+startLine.length()) + 4
-									< LINELENGTH
+									< lineLen
 								&& s.indexOf('<') < 0
 								&& s.indexOf('&') < 0) {
 								if (removeIgnorableWhiteSpaces) {
@@ -588,7 +590,8 @@ public final class KXmlUtils extends KDOMUtils {
 							canonical,
 							removeIgnorableWhiteSpaces,
 							comments,
-							newPrefixMap);
+							newPrefixMap,
+							lineLen);
 					}
 					if (indent != null) {
 						out.write(startLine);
@@ -615,7 +618,8 @@ public final class KXmlUtils extends KDOMUtils {
 							true,
 							false,
 							false,
-							newPrefixMap);
+							newPrefixMap,
+							lineLen);
 					}
 				}
 				break;
@@ -869,7 +873,8 @@ public final class KXmlUtils extends KDOMUtils {
 			canonical,
 			removeIgnorableWhiteSpaces,
 			comments,
-			ROOT_NSPREFIXMAP);
+			ROOT_NSPREFIXMAP,
+			LINELENGTH);
 		out.flush();
 	}
 
@@ -999,15 +1004,37 @@ public final class KXmlUtils extends KDOMUtils {
 		final Node node,
 		final boolean indenting,
 		final boolean comments) throws IOException {
+		writeXml(file, encoding, node, indenting, comments, LINELENGTH);
+	}
+
+	/** Write node in XML format.
+	 * @param file output file.
+	 * @param encoding character set name.
+	 * @param node <code>org.w3c.dom.Node</code> to be converted.
+	 * @param indenting if true the output will be indented.
+	 * @param comments if true comment nodes are written to output.
+	 * @param lineLen length of source line.
+	 * @throws IOException if an I/O error occurs
+	 */
+	public static final void writeXml(final File file,
+		final String encoding,
+		final Node node,
+		final boolean indenting,
+		final boolean comments,
+		final int lineLen) throws IOException {
 		try (FileOutputStream fos = new FileOutputStream(file);
 			OutputStreamWriter out = new OutputStreamWriter(fos, encoding)) {
 			writeXml(out,
 				encoding,
 				node,
+				null, //line indent
 				(indenting ? "  " : null),//indentStep
 				true, //canonical
 				indenting, //removeIgnorableWhiteSpaces
-				comments);
+				comments,
+				ROOT_NSPREFIXMAP,
+				lineLen);
+			out.flush();
 		}
 	}
 
@@ -1032,7 +1059,6 @@ public final class KXmlUtils extends KDOMUtils {
 		final Node node) throws IOException {
 		writeXml(file, "UTF-8", node, false, true);
 	}
-
 	/** Create string in XML format from given argument.
 	 * Output format may be either unindented (and without inserted
 	 * new lines) or in the intended form.
@@ -1048,6 +1074,27 @@ public final class KXmlUtils extends KDOMUtils {
 		final boolean comments,
 		final boolean removeIgnorableWhiteSpaces,
 		final boolean indent) {
+		return nodeToString(
+			node, comments, removeIgnorableWhiteSpaces, indent, LINELENGTH);
+	}
+
+	/** Create string in XML format from given argument.
+	 * Output format may be either unindented (and without inserted
+	 * new lines) or in the intended form.
+	 * @param node <code>org.w3c.dom.Node</code> to be converted.
+	 * @param indent If this parameter is set to true the output string is
+	 * in indented format, otherwise in no indentation is generated.
+	 * @param removeIgnorableWhiteSpaces if true all white space sequences
+	 * are replaced by one space.
+	 * @param comments if true comment nodes are written to output.
+	 * @param lineLen length of source line.
+	 * @return string with the XML representation of the parameter element.
+	 */
+	public static final String nodeToString(final Node node,
+		final boolean comments,
+		final boolean removeIgnorableWhiteSpaces,
+		final boolean indent,
+		final int lineLen) {
 		try {
 			StringWriter wr = new StringWriter();
 			writeXml(wr,
@@ -1058,7 +1105,8 @@ public final class KXmlUtils extends KDOMUtils {
 				true, //canonical
 				removeIgnorableWhiteSpaces,
 				comments,
-				ROOT_NSPREFIXMAP);
+				ROOT_NSPREFIXMAP,
+				lineLen);
 			return wr.toString();
 		} catch (IOException ex) {return null;} //never happens
 	}
@@ -1083,7 +1131,8 @@ public final class KXmlUtils extends KDOMUtils {
 				true, //canonical
 				indent, //removeIgnorableWhiteSpaces
 				true, //comments
-				ROOT_NSPREFIXMAP); // map of prefixes
+				ROOT_NSPREFIXMAP,
+				LINELENGTH); // map of prefixes
 			return caw.toString();
 		} catch (IOException ex) {return null;} //never happens
 	}
@@ -1104,7 +1153,8 @@ public final class KXmlUtils extends KDOMUtils {
 				true, //canonical
 				false, //removeIgnorableWhiteSpaces
 				true, //comments
-				ROOT_NSPREFIXMAP);
+				ROOT_NSPREFIXMAP, // root prefix map
+				LINELENGTH); // source line length
 			return caw.toString();
 		} catch (IOException ex) {return null;} //never happens
 	}

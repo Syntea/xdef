@@ -568,7 +568,7 @@ ElementOption ::= "moreAttributes" | "moreElements" | "moreText"
   | "acceptQualifiedAttr" | "notAcceptQualifiedAttr" | "trimAttr" | "noTrimAttr"
   | "trimText" | "noTrimText" | "resolveEntities" | "ignoreEntities"
   | "resolveIncludes" | "ignoreIncludes" | "preserveComments" | "ignoreComments"
-  | "preserveTextCase" | "acceptOther" | "ignoreOther"
+  | "preserveTextCase" | "preserveAttrCase" | "acceptOther" | "ignoreOther"
   | "nillable" | "noNillable"
 
 /******************************************************************************/
