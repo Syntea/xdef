@@ -6,7 +6,7 @@
 # Version 42.1.3, release-date 2024-03-04
 * The conversion of X-definition to XML schema (`org.xdef.util.XdefToXsd`)
   now respects also the options "fixed" and "default" from X-script.
-* In conversion of X-definition to XML schema (`org.xdef.util.XdefToXsd`)
+* In the conversion of X-definition to XML schema (`org.xdef.util.XdefToXsd`)
   is corrected bug with duplicated elements `restriction` and 'annotation'.
 
 # Version 42.1.2, release-date 2024-02-26
