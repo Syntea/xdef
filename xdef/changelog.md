@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.1.3, release-date 2024-03-03
+# Version 42.1.3, release-date 2024-03-04
 * The conversion of X-definition to XML schema (`org.xdef.util.XdefToXsd`)
   now respects also the options "fixed" and "default" from X-script.
 * In conversion of X-definition to XML schema (`org.xdef.util.XdefToXsd`)
