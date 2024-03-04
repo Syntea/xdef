@@ -299,22 +299,22 @@ public final class TestBNF extends XDTester {
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <xd:declaration>\n"+
 "  final BNFGrammar rr = new BNFGrammar('\n"+
-"    M      ::= [#9#10#13 ]*   /*skip white spaces*/\n"+
-"    OD     ::= M \",\" M        /*separator of values*/\n"+
-"    LnPrd  ::= [1-9] | [1-4] [0-9]\n"+
-"    Month  ::= [1-9] | [1] [0-2]\n"+
-"    Months ::= Month ( OD Month )*\n"+
+"    _WS_   ::= [#9#10#13 ]*    /*skip white spaces*/\n"+
+"    _SEP_  ::= _WS_ \",\" _WS_ /*separator of values*/\n"+
+"    LnPrd  ::= [1-9] | [1-4][0-9]\n"+
+"    Month  ::= [1-9] | [1][0-2]\n"+
+"    Months ::= Month ( _SEP_ Month )*\n"+
 "    YPrd   ::= LnPrd? \"Y\" \"(\" Months \")\"\n"+
-"    MDay   ::= [1-9] | [1-2] [0-9] | [3] [0-1] | \"-1\"\n"+
-"    MDays  ::= MDay (OD MDay)*\n"+
+"    MDay   ::= [1-9] | [1-2][0-9] | [3][0-1] | \"-1\"\n"+
+"    MDays  ::= MDay ( _SEP_ MDay)*\n"+
 "    MPrd   ::= LnPrd? \"M\" \"(\" MDays \")\"\n"+
 "    WDay   ::= [0-7] | \"-1\"\n"+
-"    WDays  ::= WDay (OD WDay)*\n"+
+"    WDays  ::= WDay ( _SEP_ WDay)*\n"+
 "    WPrd   ::= LnPrd? \"W\" \"(\" WDays \")\"\n"+
-"    TimeH  ::= [0-1] [0-9] | [2] [0-3]\n"+
+"    TimeH  ::= [0-1][0-9] | [2][0-3]\n"+
 "    TimeM  ::= [0-5] [0-9]\n"+
 "    Time   ::= TimeH \":\" TimeM\n"+
-"    Times  ::= Time (OD Time)*\n"+
+"    Times  ::= Time ( _SEP_ Time)*\n"+
 "    DPrd   ::= LnPrd? \"D\" \"(\" Times \")\"\n"+
 "    HPrd   ::= LnPrd \"H\"\n"+
 "    MinPrd ::= LnPrd \"Min\"\n"+

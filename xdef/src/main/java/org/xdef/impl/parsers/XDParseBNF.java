@@ -30,6 +30,11 @@ public class XDParseBNF extends XDParserAbstract {
 
 	public XDParseBNF() {super(); _rule = null;} // dummy
 
+	/** Get BNF rule of the BNF grammar.
+	 * @return BNF rule of the BNF grammar.
+	 */
+	public DefBNFRule getBNFRule() { return _rule; }
+
 	@Override
 	public void parseObject(final XXNode xn, final XDParseResult p) {
 		int pos0 = p.getIndex();

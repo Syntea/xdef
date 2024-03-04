@@ -382,6 +382,13 @@ class GenParser {
 // other X-definition types are converted to xs:string
 ////////////////////////////////////////////////////////////////////////////////
 			default:
+				// remove xdef parameters
+//				info += genPars(xdc);
+				xdc.removeXDNamedItem("a1");
+				xdc.removeXDNamedItem("a2");
+				xdc.removeXDNamedItem("argument");
+				xdc.removeXDNamedItem("outFormat");
+				xdc.removeXDNamedItem("format");
 				return genParserInfo(new XSParseString(),
 					info, declName, new DefContainer());
 		}
