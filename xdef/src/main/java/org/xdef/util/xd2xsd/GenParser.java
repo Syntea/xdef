@@ -383,12 +383,12 @@ class GenParser {
 ////////////////////////////////////////////////////////////////////////////////
 			default:
 				// remove xdef parameters
-//				info += genPars(xdc);
 				xdc.removeXDNamedItem("a1");
 				xdc.removeXDNamedItem("a2");
 				xdc.removeXDNamedItem("argument");
 				xdc.removeXDNamedItem("outFormat");
 				xdc.removeXDNamedItem("format");
+				info += genPars(xdc);
 				return genParserInfo(new XSParseString(),
 					info, declName, new DefContainer());
 		}

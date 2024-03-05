@@ -56,7 +56,6 @@ import static org.xdef.XDValueID.XD_LOCALE;
 import static org.xdef.XDValueID.XD_LONG;
 import static org.xdef.XDValueID.XD_NAMEDVALUE;
 import static org.xdef.XDValueID.XD_OUTPUT;
-import static org.xdef.XDValueID.XD_PARSER;
 import static org.xdef.XDValueID.XD_PARSERESULT;
 import static org.xdef.XDValueID.XD_REPORT;
 import static org.xdef.XDValueID.XD_RESULTSET;
@@ -71,7 +70,9 @@ import static org.xdef.XDValueID.XX_TEXT;
 import static org.xdef.XDValueID.X_PARSEITEM;
 import static org.xdef.XDValueID.X_UNIQUESET;
 import static org.xdef.XDValueID.X_UNIQUESET_KEY;
+import static org.xdef.XDValueID.X_UNIQUESET_M;
 import org.xdef.XDValueType;
+import static org.xdef.XDValueType.OBJECT;
 import org.xdef.XDXmlOutStream;
 import org.xdef.impl.code.CodeParser;
 import org.xdef.impl.code.CodeS1;
@@ -129,8 +130,6 @@ import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SThrowable;
 import org.xdef.sys.StringParser;
 import org.xdef.xml.KXmlUtils;
-import static org.xdef.XDValueID.X_UNIQUESET_M;
-import static org.xdef.XDValueType.OBJECT;
 import static org.xdef.impl.code.CodeTable.ADD_DAY;
 import static org.xdef.impl.code.CodeTable.ADD_HOUR;
 import static org.xdef.impl.code.CodeTable.ADD_I;
@@ -539,9 +538,6 @@ public final class XCodeProcessor {
 	/** XML writer for default output. */
 	private XDXmlOutStream _outWriter;
 	/** flag to generate XON. */
-/*xx*/ boolean _genXon; //TODO
-	/** Stream writer for output of XML result. */
-	boolean _flushed;
 	/** flag 'init1' processed. */
 	private boolean _initialized1;
 	/** flag global variables initialized. */
@@ -651,21 +647,6 @@ public final class XCodeProcessor {
 	 * @return assigned properties.
 	 */
 	final Properties getProperties() {return _props;}
-
-	/** Get array with global variables.
-	 * @return array with global variables.
-	 */
-	final XDValue[] getGlobalVariables() {return _globalVariables;}
-
-	/** Set XML version  "1.0" or "1.1".
-	 * @param version1 if true the version of XML document is set to "1.1".
-	 */
-	final void setXMLVersion1(final boolean version1) {_xmlVersion1 = version1;}
-
-	/** Check if version of XML document is "1.1".
-	 * @return true if and only if version of XML document is "1.1".
-	 */
-	final boolean isXMLVersion1() {return _xmlVersion1;}
 
 	/** Get assigned standard output stream.
 	 * @return assigned standard output stream.
@@ -1921,9 +1902,9 @@ public final class XCodeProcessor {
 					try {
 						String s = _stack[sp].toString();
 						if (s.startsWith("+")) {
-							Long.parseLong(s.substring(1));
+							Long.valueOf(s.substring(1));
 						} else {
-							Long.parseLong(s);
+							Long.valueOf(s);
 						}
 						_stack[sp] = new DefBoolean(true);
 						continue;
@@ -1933,7 +1914,7 @@ public final class XCodeProcessor {
 					}
 				case IS_FLOAT:
 					try {
-						Double.parseDouble(_stack[sp].toString());
+						Double.valueOf(_stack[sp].toString());
 						_stack[sp] = new DefBoolean(true);
 						continue;
 					} catch (NumberFormatException ex) {
@@ -2740,6 +2721,7 @@ public final class XCodeProcessor {
 					if (dv == null || dv.isNull()) {
 						//Null value of &{0}
 						throwInfo(chkNode, XDEF.XDEF573, "Service");
+						continue;
 					}
 					_stack[sp] = ((XDService) dv).prepareStatement(query);
 					addToFinalList(chkNode, _stack[sp]);
@@ -2752,6 +2734,7 @@ public final class XCodeProcessor {
 					if (dv == null || dv.isNull()) {
 						//Null value of &{0}
 						throwInfo(chkNode, XDEF.XDEF573, "Service");
+						continue;
 					}
 					short xtype = dv.getItemId();
 					int nx = npar - (xtype == XD_SERVICE ? 2 : 1);
@@ -2798,6 +2781,7 @@ public final class XCodeProcessor {
 						throwInfo(chkNode, XDEF.XDEF573,
 							dv == null || dv.getItemId() != XD_STATEMENT ?
 							"Service" : "Statement");
+						continue;
 					}
 					short xtype = dv.getItemId();
 					int nx = npar - (xtype == XD_SERVICE ? 3 : 2);
@@ -2841,6 +2825,7 @@ public final class XCodeProcessor {
 						throwInfo(chkNode, XDEF.XDEF573,
 							dv == null || dv.getItemId() != XD_STATEMENT ?
 							"Service" : "Statement");
+						continue;
 					}
 					short xtype = dv.getItemId();
 					int nx = npar - (xtype == XD_SERVICE ? 2 : 1);
@@ -2887,6 +2872,7 @@ public final class XCodeProcessor {
 						throwInfo(chkNode, XDEF.XDEF573,
 							dv == null || dv.getItemId()!=XD_STATEMENT ?
 							"Service" : "Statement");
+						continue;
 					}
 					short xtype = dv.getItemId();
 					int nx = npar - (xtype == XD_SERVICE ? 2 : 1);
@@ -2963,6 +2949,7 @@ public final class XCodeProcessor {
 					if (dv == null || dv.isNull()) {
 						//Null value of &{0}
 						throwInfo(chkNode, XDEF.XDEF573, "Service");
+						continue;
 					}
 					((XDService) dv).commit();
 					continue;
@@ -2972,6 +2959,7 @@ public final class XCodeProcessor {
 					if (dv == null || dv.isNull()) {
 						//Null value of &{0}
 						throwInfo(chkNode, XDEF.XDEF573, "Service");
+						continue;
 					}
 					((XDService) dv).rollback();
 					continue;
@@ -2983,6 +2971,7 @@ public final class XCodeProcessor {
 					if (dv == null || dv.isNull()) {
 						//Null value of &{0}
 						throwInfo(chkNode, XDEF.XDEF573, "Service");
+						continue;
 					}
 					try {
 						((XDService) dv).setProperty(name, value);
