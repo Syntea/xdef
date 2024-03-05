@@ -57,7 +57,9 @@ import static org.xdef.XDValueID.XM_MODEL;
 import static org.xdef.XDValueID.XX_ATTR;
 import static org.xdef.XDValueID.XX_DATA;
 import static org.xdef.XDValueID.XX_ELEMENT;
-import org.xdef.impl.code.CodeOp;
+import static org.xdef.XDValueID.X_NOTYPE_VALUE;
+import static org.xdef.XDValueID.X_UNIQUESET_KEY;
+import static org.xdef.XDValueID.X_UNIQUESET_M;
 import org.xdef.impl.code.CodeTable;
 import static org.xdef.impl.code.CodeTable.ADD_DAY;
 import static org.xdef.impl.code.CodeTable.ADD_HOUR;
@@ -69,6 +71,10 @@ import static org.xdef.impl.code.CodeTable.ADD_SECOND;
 import static org.xdef.impl.code.CodeTable.ADD_YEAR;
 import static org.xdef.impl.code.CodeTable.BNFRULE_PARSE;
 import static org.xdef.impl.code.CodeTable.BNFRULE_VALIDATE;
+import org.xdef.impl.code.DefContainer;
+import org.xdef.impl.code.DefLong;
+import org.xdef.impl.code.DefString;
+import org.xdef.impl.code.DefXQueryExpr;
 import static org.xdef.impl.code.CodeTable.BNF_PARSE;
 import static org.xdef.impl.code.CodeTable.BYTES_ADDBYTE;
 import static org.xdef.impl.code.CodeTable.BYTES_CLEAR;
@@ -334,13 +340,6 @@ import static org.xdef.impl.code.CodeTable.WRITE_ELEMENT;
 import static org.xdef.impl.code.CodeTable.WRITE_ELEMENT_END;
 import static org.xdef.impl.code.CodeTable.WRITE_ELEMENT_START;
 import static org.xdef.impl.code.CodeTable.WRITE_TEXTNODE;
-import org.xdef.impl.code.DefContainer;
-import org.xdef.impl.code.DefLong;
-import org.xdef.impl.code.DefString;
-import org.xdef.impl.code.DefXQueryExpr;
-import static org.xdef.XDValueID.X_UNIQUESET_M;
-import static org.xdef.XDValueID.X_UNIQUESET_KEY;
-import static org.xdef.XDValueID.X_NOTYPE_VALUE;
 
 /** Provides the implemented methods.
  * Declared literals and declared objects
@@ -359,8 +358,6 @@ public class CompileBase implements CodeTable, XDValueID {
 	static final byte ELEM_MODE = 2;
 	/** Compilation of actions in declaration section. */
 	static final byte GLOBAL_MODE = 4;
-	/** Compilation of actions in create section. */
-	static final byte CREATE_MODE = 8;
 	/** All modes. */
 	static final byte ANY_MODE = 127;
 
@@ -369,8 +366,6 @@ public class CompileBase implements CodeTable, XDValueID {
 	////////////////////////////////////////////////////////////////////////////
 	/** Undefined code - used by compiler. */
 	static final short UNDEF_CODE = LAST_CODE + 1;
-	/** This is used for undefined objects. */
-	static final CodeOp UNDEF_OPERATION = new CodeOp(XD_UNDEF, UNDEF_CODE);
 
 	////////////////////////////////////////////////////////////////////////////
 	//Value types
@@ -1791,7 +1786,7 @@ method(ti, genInternalMethod(SET_PARSED_VALUE, XD_VOID,
 				hm.put(name, im1);
 				PARSERS.put(name, c);
 			}
-		} catch (Exception ex) {
+		} catch (NoSuchMethodException | SecurityException ex) {
 			throw new Error("Internal error: " + ex);
 		}
 	}
@@ -1906,7 +1901,7 @@ method(ti, genInternalMethod(SET_PARSED_VALUE, XD_VOID,
 					return i;
 				}
 			}
-		} catch (Exception ex) {} // we ignore exception, returns XD_UNDEF.
+		} catch (ClassNotFoundException ex) {}//ignore exception return XD_UNDEF
 		return XD_UNDEF;
 	}
 
@@ -1982,21 +1977,6 @@ method(ti, genInternalMethod(SET_PARSED_VALUE, XD_VOID,
 		return hm == null ? null : hm.get(name);
 	}
 
-	/** Return name of method or null. */
-	static short methodType(final short code) {
-		for (Map<String, InternalMethod> item : METHODS) {
-			if (item == null) {
-				continue;
-			}
-			for (InternalMethod im: item.values()) {
-				if (im.getCode() == code) {
-					return im._resultType;
-				}
-			}
-		}
-		return XD_UNDEF;
-	}
-
 	/** Get class object corresponding to the type.
 	 * @param type type id.
 	 * @return the Class object corresponding to type argument.
@@ -2009,14 +1989,12 @@ method(ti, genInternalMethod(SET_PARSED_VALUE, XD_VOID,
 
 	/** Get instance of object parser with given name.
 	 * @param name of parser.
-	 * @return instance of object of parser with given name.
+	 * @return instance of object of parser with given name or null.
 	 */
 	public static final XDParser getParser(final String name) {
 		try {
 			return (XDParser) ((Constructor)PARSERS.get(name)).newInstance();
-		} catch (Exception ex) {
-			return null;
-		}
+		} catch (Exception ex) { return null; } // such parser not exists
 	}
 
 	/** Get type name from type id.

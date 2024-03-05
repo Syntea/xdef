@@ -1522,7 +1522,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					_scriptCompiler.compileDataScript(xtext);
 				}
 				_precomp.reportNotAllowedAttrs(pnode);
-			} else if ("list".equals(dxname) || "includeChildNodes".equals(dxname)){
+			} else if ("list".equals(dxname)
+				|| "includeChildNodes".equals(dxname)){
 				if ("includeChildNodes".equals(dxname)) {
 					reportDeprecated(pnode._name,
 						"\"includeChildNodes\"", "\"list\"");

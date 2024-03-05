@@ -1,5 +1,7 @@
 package org.xdef.impl.compile;
 
+import java.io.IOException;
+import java.util.List;
 import org.xdef.impl.XDWriter;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.Report;
@@ -14,8 +16,9 @@ import org.xdef.model.XMDefinition;
 import org.xdef.model.XMNode;
 import org.xdef.msg.SYS;
 import org.xdef.sys.ReportWriter;
-import java.io.IOException;
-import java.util.List;
+import static org.xdef.model.XMNode.XMDEFINITION;
+import static org.xdef.model.XMNode.XMELEMENT;
+import static org.xdef.model.XMNode.XMSELECTOR_END;
 
 /** Provides an object for resolving references in X-definition source. This
  * object is pseudo XNode and will be replaced by referred object.
@@ -47,10 +50,6 @@ final class CompileReference extends XNode {
 	final int _setSourceMethod;
 	/** finally method address . */
 	final int _finallyMethod;
-	/** Model initialization. */
-	final int _varinit;
-	/** XON mode. */
-	final byte _xon;
 
 	/** Creates a new instance of XReference.
 	 * @param kind XMREFERENCE or XMINCLUDE.
@@ -107,13 +106,9 @@ final class CompileReference extends XNode {
 		switch (parent.getKind()) {
 			case XMELEMENT:
 				_definition = ((XElement) parent)._definition;
-				_varinit = ((XElement) parent)._varinit;
-				_xon = ((XElement) parent)._xon;
 				break;
 			case XMDEFINITION:
 				_definition = (XDefinition) parent;
-				_varinit = -1;
-				_xon = 0;
 				break;
 			default:
 				throw new SRuntimeException(XDEF.XDEF202,//Internal error:&{0}

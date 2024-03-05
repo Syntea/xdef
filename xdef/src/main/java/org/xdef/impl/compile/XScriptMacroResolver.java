@@ -6,6 +6,7 @@ import org.xdef.sys.SBuffer;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.StringParser;
 import java.util.Map;
+import static org.xdef.sys.SParser.NOCHAR;
 
 /** Provides resolving of X-script macro calls.
  * @author Trojan
@@ -180,14 +181,12 @@ public class XScriptMacroResolver extends StringParser {
 				}
 			}
 			if (!p.isChar(')')) {
-				 //'&{0}' expected
-				macError(nestingLevel, XDEF.XDEF410, ")");
+				macError(nestingLevel, XDEF.XDEF410, ")");//'&{0}' expected
 				return null;
 			}
 		}
 		if (!p.isChar('}')) {
-			//'&{0}' expected
-			macError(nestingLevel, XDEF.XDEF410, "}");
+			macError(nestingLevel, XDEF.XDEF410, "}"); //'&{0}' expected
 			return null;
 		}
 		if (params == null) {
@@ -308,5 +307,4 @@ public class XScriptMacroResolver extends StringParser {
 			new XScriptMacroResolver(actDefName, xmlVersion, macros, reporter);
 		p.expandMacros(sb);
 	}
-
 }

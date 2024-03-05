@@ -216,7 +216,7 @@ public final class PNode {
 		XScriptMacroResolver p = new XScriptMacroResolver(
 			actDefName, _xmlVersion, macros, reporter);
 		for (PAttr x: _attrs) {
-			if (x._value.getString().indexOf("${") >= 0) {
+			if (x._value.getString().contains("${")) {
 				p.expandMacros(x._value);
 			}
 		}

@@ -183,7 +183,6 @@ import static org.xdef.impl.code.CodeTable.TO_FLOAT;
 import static org.xdef.impl.code.CodeTable.TO_FLOAT_X;
 import static org.xdef.impl.code.CodeTable.TO_INT_X;
 import static org.xdef.impl.code.CodeTable.TO_MILLIS;
-import static org.xdef.impl.code.CodeTable.TO_MILLIS_X;
 import static org.xdef.impl.code.CodeTable.TO_STRING;
 import static org.xdef.impl.code.CodeTable.UNIQUESET_BIND;
 import static org.xdef.impl.compile.CompileBase.NO_MODE;
@@ -371,11 +370,6 @@ public final class CompileCode extends CompileBase {
 		_localVariablesLastIndex = -1;
 	}
 
-	/** Get flag if external methods are ignored.
-	 * @return flag if external methods are ignored.
-	 */
-	final boolean getIgnoreExternalMethods() {return _ignoreExternalMethods;}
-
 	/** Get flag to ignore external methods.
 	 * @param b flag ti ignore external methods.
 	 */
@@ -518,11 +512,6 @@ public final class CompileCode extends CompileBase {
 		}
 		return sb.append(')').toString();
 	}
-
-	/** Get external classes.
-	 * @return array of external classes.
-	 */
-	final Class<?>[] getExternals() {return _extClasses;}
 
 	/** Set external classes. Adds externals to the list.
 	 * @param extObjects Array of external classes.
@@ -1587,9 +1576,6 @@ public final class CompileCode extends CompileBase {
 	/** Conversion of the stack item at top position to string. */
 	final void topToString() {topXToString(0);}
 
-	/** Conversion of stack item under top to string. */
-	final void topXToString() {topXToString(1);}
-
 	/** Conversion of the given stack item to float.
 	 * @param index relative stack position from top.
 	 */
@@ -1677,33 +1663,6 @@ public final class CompileCode extends CompileBase {
 		}
 	}
 
-	/** Conversion of stack item under top to millisecond type. */
-	final void topXToMillis() {topXToMillis(1);}
-
-	/** Conversion of the given stack item to millisecond type.
-	 * @param index relative stack position from top.
-	 */
-	private void topXToMillis(final int index) {
-		short xType;
-		int sp = _sp - index;
-		if (sp >= 0 && (xType=_tstack[sp])!=XD_LONG && xType!=XD_UNDEF) {
-			if (xType == XD_DATETIME) {
-				if (_cstack[sp] >= 0) { // constant
-					_code.set(_cstack[sp],
-						new DefLong(getCodeItem(_cstack[sp]).
-						datetimeValue().getTimeInMillis()));
-				} else { //value
-					addCode(new CodeI1(XD_STRING, TO_MILLIS_X, index));
-					_cstack[sp] = -1;
-				}
-			} else if (xType != XD_LONG) {
-				//Value of type 'Datetime' or 'int' expected
-				_parser.error(XDEF.XDEF441);
-				_tstack[sp] = -1;
-			}
-			_tstack[sp] = XD_LONG;
-		}
-	}
 	/** Conversion of the part stack to Container.
 	 * @param index relative stack position from top.
 	 */
@@ -1735,12 +1694,6 @@ public final class CompileCode extends CompileBase {
 	final void operandsToString() {
 		topXToString(1);
 		topToString();
-	}
-
-	/** Conversion of two top stack items from date to milliseconds. */
-	final void operandsToMillis() {
-		topXToMillis(1);
-		topToMillis();
 	}
 
 	/** Remove code from codeIndex to end and clear associated stack.
@@ -2055,7 +2008,7 @@ public final class CompileCode extends CompileBase {
 		int ix = s.charAt(0) == '@' ? 1 : s.startsWith("self::") ? 6 : 0;
 		String name = s.substring(ix);
 		ix = StringParser.chkXMLName(name, (byte) 10)
-			? name.indexOf("::") < 0 ? ix : -1 : -1;
+			? !name.contains("::") ? ix : -1 : -1;
 		if (ix < 0) {
 			return false;
 		}

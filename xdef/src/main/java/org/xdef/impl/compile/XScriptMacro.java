@@ -1,15 +1,11 @@
 package org.xdef.impl.compile;
 
 import org.xdef.msg.XDEF;
-import org.xdef.impl.XDReader;
-import org.xdef.impl.XDWriter;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.ReportWriter;
 import org.xdef.sys.SBuffer;
 import org.xdef.sys.SParser;
-import org.xdef.sys.SPosition;
 import org.xdef.sys.StringParser;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -19,13 +15,10 @@ import java.util.Map;
  */
 public final class XScriptMacro {
 	private final String _name;
-	private List<String> _paramNames;
-	private String[] _paramValues;
-	private String _value;
+	private final String _value;
+	private final List<String> _paramNames;
+	private final String[] _paramValues;
 	private int[] _references;
-	private SPosition _sourcePosition;
-
-	private XScriptMacro(final String name) {_name = name.intern();}
 
 	/** Create the new object ScriptMacro.
 	 * @param name name of macro.
@@ -178,47 +171,4 @@ public final class XScriptMacro {
 	 * @return string with value of macro.
 	 */
 	public final String getParamValue()  {return _value;}
-
-	void writeScriptMacro(XDWriter xw) throws IOException {
-		xw.writeString(_name);
-		xw.writeString(_value);
-		int len = _paramNames.size();
-		xw.writeInt(len);
-		for (int i = 0; i < len; i++) {
-			xw.writeString(_paramNames.get(i));
-		}
-		len = _paramValues.length;
-		xw.writeInt(len);
-		for (int i = 0; i < len; i++) {
-			xw.writeString(_paramValues[i]);
-		}
-		len = _references.length;
-		xw.writeInt(len);
-		for (int i = 0; i < len; i++) {
-			xw.writeInt(_references[i]);
-		}
-		xw.writeSPosition(_sourcePosition);
-	}
-
-	static XScriptMacro readScriptMacro(XDReader xr) throws IOException {
-		XScriptMacro result = new XScriptMacro(xr.readString());
-		result._value = xr.readString();
-		int len = xr.readInt();
-		result._paramNames = new ArrayList<>(len);
-		for (int i = 0; i < len; i++) {
-			result._paramNames.add(xr.readString());
-		}
-		len = xr.readInt();
-		result._paramValues = new String[len];
-		for (int i = 0; i < len; i++) {
-			result._paramValues[i] = xr.readString();
-		}
-		len = xr.readInt();
-		result._references = new int[len];
-		for (int i = 0; i < len; i++) {
-			result._references[i] = xr.readInt();
-		}
-		result._sourcePosition = xr.readSPosition();
-		return result;
-	}
 }

@@ -189,6 +189,7 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 	////////////////////////////////////////////////////////////////////////////
 	// XHandler
 	////////////////////////////////////////////////////////////////////////////
+
 	@Override
 	public InputSource pushReader(XAbstractReader mr) {
 		_stackReader.push(new HandlerInfo(this, mr));
@@ -202,7 +203,6 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 			_stackReader.pop().resetHandler(this);
 		}
 	}
-
 	@Override
 	/** Parse X-definition source.
 	 * @param is InputSource with XML data.
@@ -231,10 +231,6 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 			xr.setFeature( // continue after fatal error
 				"http://apache.org/xml/features/continue-after-fatal-error",
 				true);
-//			if (processComments()) { // process comments
-//				xr.setProperty(
-//					"http://xml.org/sax/properties/lexical-handler", this);
-//			}
 			xr.parse(is);
 			getReader().close();
 		} catch (RuntimeException ex) {
@@ -263,7 +259,6 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 	 * @param text SBuffer with value of text node.
 	 */
 	abstract void text(final SBuffer text);
-
 	/** This method is called after all attributes of the current element
 	 * attribute list was reached. The implementation may check the list of
 	 * attributes and to invoke appropriate actions. The method is invoked
@@ -272,7 +267,6 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 	 * the list of attributes.
 	 */
 	abstract void elementStart(final KParsedElement parsedElem);
-
 	/** This method is invoked when parser reaches the end of element. */
 	abstract void elementEnd();
 
@@ -293,12 +287,10 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 		}
 		warning(getPosition(x), XML.XML075, x.getMessage());
 	}
-
 	@Override
 	public final void error(final SAXParseException x) {
 		error(getPosition(x), XML.XML075, x.getMessage());
 	}
-
 	@Override
 	public final void fatalError(final SAXParseException x) {
 		String m = x.getMessage();
@@ -782,7 +774,6 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 					if (s.indexOf('\n') >= 0) {
 						int len = en.length() + 2;
 						int newLen = s.length();
-//						int p = _text.getString().length() - newLen + 1;
 						int p = _text.getString().length();
 						_text.updatePositions(p, len, newLen, true);
 					}
@@ -827,16 +818,6 @@ abstract class XmlDefReader extends DomBaseHandler implements DeclHandler {
 	 */
 	final void setReportWriter(final ReportWriter x) {_reporter = x;}
 
-	/** Put fatal error message.
-	 * @param pos SPosition
-	 * @param registeredID registered report id.
-	 * @param mod Message modification parameters.
-	 */
-	final void fatal(final SPosition pos,
-		final long registeredID,
-		final Object... mod) {
-		putReport(pos, Report.fatal(registeredID, mod));
-	}
 	/** Put error message.
 	 * @param pos SPosition
 	 * @param registeredID registered report id.
