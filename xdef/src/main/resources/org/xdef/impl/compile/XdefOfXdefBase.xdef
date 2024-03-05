@@ -99,7 +99,7 @@ HexaDigit ::= Digit | [a-fA-F]
 HexaDigits ::= (Digit | [a-fA-F])+
 
 SemicolonOrSourceEnd ::= S? (";" S? | $eos)
-/* At the end of the parsed source text the semicolon is not required. */
+  /* At the end of source text the semicolon is not required. */
 
 /* Keywords of the X-script */
 Keyword ::= "if" | "else" | "do" | "while" | "continue" | "break" | "switch"
