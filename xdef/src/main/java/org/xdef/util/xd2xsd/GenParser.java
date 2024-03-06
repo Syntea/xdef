@@ -365,10 +365,10 @@ class GenParser {
 					case "HH:mm:ss.SZ":
 						return genParserInfo(new XSParseTime(),
 							info, declName,xdc);
-					case "dd-MM-yyyyTHH:mm:ss":
-					case "dd-MM-yyyyTHH:mm:ssZ":
-					case "dd-MM-yyyyTHH:mm:ss.S":
-					case "dd-MM-yyyyTHH:mm:ss.SZ":
+					case "yyyy-MM-ddTHH:mm:ss":
+					case "yyyy-MM-ddTHH:mm:ssZ":
+					case "yyyy-MM-ddTHH:mm:ss.S":
+					case "yyyy-MM-ddTHH:mm:ss.SZ":
 						return genParserInfo(
 							new XSParseDatetime(), info, declName, xdc);
 					default: // return string type with patterns

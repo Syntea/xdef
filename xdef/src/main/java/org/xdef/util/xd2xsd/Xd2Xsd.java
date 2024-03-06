@@ -341,9 +341,9 @@ public class Xd2Xsd {
 							genSchemaElem(getSchemaElement(el), "simpleType");
 						addDocumentation(simpletp, parserInfo.getInfo());
 						simpletp.setAttribute("name", typeName);
+						Element restr = genRestrictionElement(simpletp);
+						restr.setAttribute("base", parserName);
 					}
-					Element restr = genRestrictionElement(simpletp);
-					restr.setAttribute("base", parserName);
 					att.setAttribute("type", typeName);
 					addDocumentation(att, "See simpeType \"" + typeName + '"');
 				}
@@ -536,17 +536,21 @@ public class Xd2Xsd {
 				}
 			} else {
 				Element complextp = genSchemaElem(el, "complexType");
-				Element simplect = genSchemaElem(complextp, "simpleContent");
-				Element extension = genSchemaElem(simplect, "extension");
+				Element simplect;
+				Element extension = null;
 				if (typeName == null) {
 					if (parserInfo.getParser().getNamedParams().isEmpty()
 						&& (parserInfo.getInfo() == null
 						|| parserInfo.getInfo().isEmpty())) {
+						simplect = genSchemaElem(complextp, "simpleContent");
+						extension = genSchemaElem(simplect, "extension");
 						extension.setAttribute("base",
 							SCHEMA_PFX + parserInfo.getParser().parserName());
 					} else {
 						typeName = createSchemaTypeName(el, xel.getLocalName());
 						if (!targetNs.isEmpty()) {
+							simplect = genSchemaElem(complextp,"simpleContent");
+							extension = genSchemaElem(simplect, "extension");
 							extension.setAttribute("xmlns", targetNs);
 						}
 					}
@@ -555,12 +559,18 @@ public class Xd2Xsd {
 					simpleType = genSchemaElem(schema,"simpleType");
 					simpleType.setAttribute("name", typeName);
 					genRestrictions(simpleType, parserInfo);
+					simplect = genSchemaElem(complextp, "simpleContent");
+					extension = genSchemaElem(simplect, "extension");
 					extension.setAttribute("base", typeName);
 					if (!targetNs.isEmpty()) {
 						extension.setAttribute("xmlns", targetNs);
 					}
 				}
-				addAttrs(extension, attrs);
+				if (extension != null) {
+					addAttrs(extension, attrs);
+				} else {
+					addAttrs(complextp, attrs);
+				}
 			}
 			return el;
 		}

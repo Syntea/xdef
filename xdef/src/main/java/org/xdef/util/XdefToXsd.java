@@ -98,10 +98,10 @@ public class XdefToXsd {
 	 * <ul>
 	 * <li>-i or --xdef: list of input source path names with X-definitions
 	 * <li>-o or --outDir:  pathname of output directory
-	 * <li>-s or --outName: name of main XML schema file
-	 * <li>-m or --root: name of root model (optional)
+	 * <li>-s or --outName: name of main XML schema file (optional)
+	 * <li>-r or --root: name of root model (optional)
 	 * <li>-x or --xdName: name of X-definition (optional)
-	 * <li>-v or --genInfo: generate documentation etc.
+	 * <li>-v or --genInfo: generate documentation information.
 	 * <li> -h or /?: help
 	 * </ul>
 	 */
@@ -111,10 +111,10 @@ public class XdefToXsd {
 "Parameters:\n"+
 " -i or --xdef:     list of input source pathnames with X-definitions\n" +
 " -o or --outDir:   pathname of output directory \n" +
-" -s or --outName:  name of main XML schema file\n" +
-" -m or --root:     name of root model (optional)\n" +
+" -s or --outName:  name of main XML schema file (optional)\n" +
+" -r or --root:     name of root model (optional)\n" +
 " -x or --xdName:   name of X-definition (optional)\n" +
-" -v or --genInfo:  genarate documentation etc.\n" +
+" -v or --genInfo:  generate documentation information.\n" +
 " -h or /?:         help";
 		String xdName = null; // name of X-definition
 		String modelName = null; // name of model
@@ -172,7 +172,7 @@ public class XdefToXsd {
 					}
 					xdName = args[++i];
 					continue;
-				case "-root":
+				case "-r":
 				case "--root":
 					if (modelName != null) {
 						throw new RuntimeException(
