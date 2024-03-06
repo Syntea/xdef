@@ -122,52 +122,60 @@ public class Xd2Xsd {
 	private Element genRestrictions(final Element parent,
 		final String typeName,
 		final XDNamedValue[] namedParams) {
-			Element restr = genSchemaElem(parent, "restriction");
-			restr.setAttribute("base", typeName);
-			for (XDNamedValue x: namedParams) {
-				XDValue xval = x.getValue();
-				if (xval==null) {
-					continue;
-				}
-				String paramName = x.getName();
-				Element param;
-				switch(paramName) {
-					case "pattern":
-					case "enumeration":
-						if (xval instanceof XDContainer) {
-							XDContainer xdc = (XDContainer) xval;
-							for (int i = 0; i < xdc.getXDItemsNumber(); i++) {
-								param = genSchemaElem(restr, paramName);
-								param.setAttribute("value",
-									xdc.getXDItem(i).toString());
-							}
-						} else {
+		Element restr = genSchemaElem(parent, "restriction");
+		restr.setAttribute("base", typeName);
+		for (XDNamedValue x: namedParams) {
+			XDValue xval = x.getValue();
+			if (xval==null) {
+				continue;
+			}
+			String paramName = x.getName();
+			Element param;
+			switch(paramName) {
+				case "pattern":
+				case "enumeration":
+					if (xval instanceof XDContainer) {
+						XDContainer xdc = (XDContainer) xval;
+						for (int i = 0; i < xdc.getXDItemsNumber(); i++) {
 							param = genSchemaElem(restr, paramName);
-							param.setAttribute("value", xval.toString());
+							param.setAttribute("value",
+								xdc.getXDItem(i).toString());
 						}
-						continue;
-					case "minLength":
-					case "maxLength":
-					case "length":
-					case "minInclusive":
-					case "minExclusive":
-					case "maxInclusive":
-					case "maxExclusive":
-					case "totalDigits":
-					case "fractionDigits":
+					} else {
 						param = genSchemaElem(restr, paramName);
 						param.setAttribute("value", xval.toString());
-				}
+					}
+					continue;
+				case "minLength":
+				case "maxLength":
+				case "length":
+				case "minInclusive":
+				case "minExclusive":
+				case "maxInclusive":
+				case "maxExclusive":
+				case "totalDigits":
+				case "fractionDigits":
+					param = genSchemaElem(restr, paramName);
+					param.setAttribute("value", xval.toString());
 			}
-			return restr;
+		}
+		return restr;
 	}
 
+	/** Create xd:sequence element as child of argument.
+	 * @param el parent of created element.
+	 * @return xd:sequence element as child of argument.
+	 */
 	private Element genSequenceElement(final Element el) {
 		return XMLConstants.W3C_XML_SCHEMA_NS_URI.equals(el.getNamespaceURI())
 		 && "sequence".equals(el.getLocalName())
 			? el : genSchemaElem(el, "sequence");
-//		return genSchemaElem(el, "sequence");
 	}
+
+	/** Create xd:restriction element as child of argument.
+	 * @param el parent of created element.
+	 * @return xd:restriction element as child of argument.
+	 */
 	private Element genRestrictionElement(final Element el) {
 		return XMLConstants.W3C_XML_SCHEMA_NS_URI.equals(el.getNamespaceURI())
 		 && "restriction".equals(el.getLocalName())
@@ -560,15 +568,14 @@ public class Xd2Xsd {
 		if (children.length > 0) {
 			XMNode x = children[0];
 			if (x.getKind()==XMNode.XMMIXED
-				&& ((XMSelector) x).getEndIndex()==children.length-1){
+				&& ((XMSelector) x).getEndIndex()==children.length-1) {
 				// try tu generate xs:all
 				boolean allPossible = true;
 				for (int i = 1; i < children.length; i++) {
 					XMNode y = children[i];
 					if (y.getKind() == XMNode.XMELEMENT) {
 							XMOccurrence occ = y.getOccurence();
-							if (occ.minOccurs() > 1
-							 || occ.maxOccurs() > 1) {
+							if (occ.minOccurs() > 1 || occ.maxOccurs() > 1) {
 								allPossible = false;
 								break;
 							}

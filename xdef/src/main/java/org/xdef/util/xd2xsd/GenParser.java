@@ -117,8 +117,7 @@ class GenParser {
 		if (val != null) {
 			result._fixedValue = val.toString();
 		}
-		val = xmd.getDefaultValue();
-		if (val != null) {
+		if ((val = xmd.getDefaultValue()) != null) {
 			result._defaultValue = val.toString();
 		}
 		return result;
