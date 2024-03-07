@@ -733,6 +733,7 @@ public class Xd2Xsd {
 			roots[0] = xmdef.getModel(mURI, mname);
 		}
 		String oname = outName == null ? mname : outName;
+		oname = oname.replace(':', '_');
 		Xd2Xsd generator =  new Xd2Xsd(oname, genInfo);
 		Element schema = generator.genNewSchema(oname);
 		XMElement xmel = roots[0];
