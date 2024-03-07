@@ -77,7 +77,7 @@ class GenRegex {
 						ret.append("(-)?(0*)?\\d{4}"); break;
 					case 2: // Year as 2 digits.
 						ret.append("\\d{2}"); break;
-					default: ret.append("\\d{4}\\d*"); // four and more digits.
+					default: ret.append("\\d{4}"); // four digits.
 				}
 			} else if (p.isChar('Y')) { //Year
 				int i = 1;
