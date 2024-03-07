@@ -74,17 +74,23 @@ class GenRegex {
 				while (p.isChar('y')) i++;
 				switch (i) {
 					case 1:// Year (as ISO standard)
-						ret.append("(-)?(0*)?\\d{4}"); break;
+						ret.append("(-)?\\d*"); break;
 					case 2: // Year as 2 digits.
-						ret.append("\\d{2}"); break;
-					default: ret.append("\\d{4}"); // four digits.
+					case 4: // Year as 4 digits.
+						ret.append("(-)?\\d{"+i+"}"); break;
+					default: ret.append("(-)?\\d\\d*");//any number of digits???
 				}
 			} else if (p.isChar('Y')) { //Year
 				int i = 1;
 				while (p.isChar('Y')) i++;
-				ret.append(i == 1
-					? "(-)?(0*)?\\d{4}" // 4digits
-					: "\\d{2}"); // two digits
+				switch (i) {
+					case 1: // Year 4digits
+					case 4: // Year 4digits
+						ret.append("\\d{4}"); break; // 4digits
+					case 2: // Year two digits or
+						ret.append("\\d{2}"); break; // 4digits
+					default: ret.append("\\d\\d*");//any number of digits???
+				}
 			} else if (p.isToken("RR")) { //Year from 0 to 99 with leading zero
 				ret.append("[0-9]{2}");
 			} else if (p.isChar('z')) { //zone name
