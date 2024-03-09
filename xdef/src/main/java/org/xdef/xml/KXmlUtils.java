@@ -30,7 +30,7 @@ import java.util.LinkedHashMap;
  * @author Vaclav Trojan
  */
 public final class KXmlUtils extends KDOMUtils {
-	/** Recommended length of source line.*/
+	/** Recommended default length of source line.*/
 	private final static int LINELENGTH = 80;
 
 	/** Root map of prefixes.*/
@@ -234,11 +234,9 @@ public final class KXmlUtils extends KDOMUtils {
 						}
 						break;
 					default:
-						if (c == ' ' ||	delimiter == '<' &&
-							(c == '\n' || c == '\t')) {
-							while (ndx < len &&
-								((c = value.charAt(ndx)) == ' ' ||
-								(c == '\n' || c == '\t'))) {
+						if (c==' ' || delimiter=='<' && (c=='\n' || c=='\t')) {
+							while (ndx < len && ((c = value.charAt(ndx)) == ' '
+								|| (c=='\n' || c=='\t'))) {
 								ndx++;
 							}
 							if (ndx < len) {
@@ -367,7 +365,7 @@ public final class KXmlUtils extends KDOMUtils {
 			case Node.DOCUMENT_NODE: {
 				Document document = (Document)node;
 				if (!writeXmlHdr(out,
-						document.getXmlVersion(), encoding, indentStep)) {
+					document.getXmlVersion(), encoding, indentStep)) {
 					startLine = null; // header was not written.
 				}
 				Node docType = document.getDoctype();
@@ -446,11 +444,10 @@ public final class KXmlUtils extends KDOMUtils {
 				out.write(tagName);
 				NodeList nl = node.getChildNodes();
 				int numItems = nl.getLength();
-				// if indented mode the alen is the first space after
-				// element tag name, otherwise, it is 0
-				int alen = startLine == null ? 0
-					: tagName.length() + startLine.length()
-					+ (numItems == 0 ? 3 : 2);
+				// if indented mode the alen is indenting of attributes
+				// otherwise, it is 0
+				int alen = startLine != null
+					? tagName.length()+startLine.length()+(numItems==0?3:2) : 0;
 				NamedNodeMap nm = node.getAttributes();
 				int numAttrs = nm == null ? 0 : nm.getLength();
 				if (numAttrs > 0) {
@@ -489,11 +486,10 @@ public final class KXmlUtils extends KDOMUtils {
 						out.write(t);
 						for (; i < numAttrs; i++) {
 							out.write(aindent);
-							out.write(
-								createAttr(nm.item(i),
-									removeIgnorableWhiteSpaces,
-									newPrefixMap,
-									unresolved));
+							out.write(createAttr(nm.item(i),
+								removeIgnorableWhiteSpaces,
+								newPrefixMap,
+								unresolved));
 						}
 					} else {
 						out.write(s);
@@ -516,8 +512,7 @@ public final class KXmlUtils extends KDOMUtils {
 					String value = e.getValue();
 					newPrefixMap.put(key, value);
 					String s = key + "=" + createAttrValue(value, false);
-					if (first && numAttrs <= 1
-						&& alen + s.length() < lineLen) {
+					if (first && numAttrs <= 1 && alen + s.length() < lineLen) {
 						out.write(' ');
 						first = false;
 					} else if (startLine != null) {
@@ -566,8 +561,7 @@ public final class KXmlUtils extends KDOMUtils {
 							if (numItems == 1 && indent != null &&
 								(len+tagName.length()*2+startLine.length()) + 4
 									< lineLen
-								&& s.indexOf('<') < 0
-								&& s.indexOf('&') < 0) {
+								&& s.indexOf('<') < 0 && s.indexOf('&') < 0) {
 								if (removeIgnorableWhiteSpaces) {
 									out.write(newIndent);
 								}
@@ -683,8 +677,8 @@ public final class KXmlUtils extends KDOMUtils {
 	private static String createAttrValue(String value,
 		final boolean removeIgnorableWhiteSpaces) {
 		String s = value;
-		char delimiter = s.indexOf('"') < 0 ? '"'
-			: s.indexOf('\'') < 0 ? '\'' : '"';
+		char delimiter = s.indexOf('"') < 0
+			? '"' : s.indexOf('\'') < 0 ? '\'' : '"';
 		if (removeIgnorableWhiteSpaces) {
 			s = s.trim();
 		}
@@ -715,11 +709,7 @@ public final class KXmlUtils extends KDOMUtils {
 				sb.append("&#").append(Integer.toString(c)).append(';');
 			} else {
 				if (c == delimiter) {
-					if (delimiter == '"') {
-						sb.append("&quot;");
-					} else {
-						sb.append("&apos;");
-					}
+					sb.append((delimiter == '"' ? "&quot;" : "&apos;"));
 				} else {
 					sb.append(c);
 				}
@@ -816,9 +806,8 @@ public final class KXmlUtils extends KDOMUtils {
 							out.write(' ');
 							pos ++;
 						}
-						while (j + 1 < len &&
-							((c = text.charAt(j + 1)) == ' ' ||
-							c == '\n' || c == '\t')) {
+						while (j + 1 < len && ((c=text.charAt(j + 1)) == ' '
+							|| c == '\n' || c == '\t')) {
 							j++;
 						}
 					} else {
@@ -891,13 +880,7 @@ public final class KXmlUtils extends KDOMUtils {
 			//Incorrect name of data encoding&{0}{: '}{'}
 			throw new SIOException(XML.XML090, out.getEncoding());
 		}
-		writeXml(out,
-			encoding,
-			node,
-			null,
-			true, //indenting
-			true, //removeIgnorableWhiteSpaces
-			true); //comments
+		writeXml(out, encoding, node, null, true, true, true);
 		out.flush();
 	}
 
@@ -1286,11 +1269,8 @@ public final class KXmlUtils extends KDOMUtils {
 	public static final void appendChild(final Element what,
 		final Element where) {
 		Document doc = where.getOwnerDocument();
-		if (what.getOwnerDocument() == doc) {
-			where.appendChild(what);
-		} else {
-			where.appendChild(doc.importNode(what, true));
-		}
+		where.appendChild(what.getOwnerDocument() == doc
+			? what : doc.importNode(what, true));
 	}
 
 	/** Write message about exception in parsing of source XML.
