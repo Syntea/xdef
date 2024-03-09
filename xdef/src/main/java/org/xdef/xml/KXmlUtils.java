@@ -450,7 +450,7 @@ public final class KXmlUtils extends KDOMUtils {
 				// element tag name, otherwise, it is 0
 				int alen = startLine == null ? 0
 					: tagName.length() + startLine.length()
-					+ (numItems == 0 ? 3 : 1);
+					+ (numItems == 0 ? 3 : 2);
 				NamedNodeMap nm = node.getAttributes();
 				int numAttrs = nm == null ? 0 : nm.getLength();
 				if (numAttrs > 0) {
