@@ -26,6 +26,7 @@ import org.w3c.dom.Element;
 import java.io.File;
 import java.io.IOException;
 import java.util.Properties;
+import javax.xml.XMLConstants;
 import org.xdef.XDParserAbstract;
 import org.xdef.proc.XXNode;
 import org.xdef.proc.XXElement;
@@ -81,7 +82,7 @@ public final class TestXdef extends XDTester {
 		try {//no source
 			XDFactory.compileXD(null, (Object[]) new File[0]);
 			fail("Error not reported");
-		} catch (Exception ex) {
+		} catch (RuntimeException ex) {
 			assertTrue(ex.getMessage().indexOf("XDEF903") > 0, ex);
 		}
 		try {//no source
@@ -517,18 +518,14 @@ public final class TestXdef extends XDTester {
 "</xd:def>";
 			assertEq("<a/>", parse(xdef, null, "<a a='c'>d</a>", reporter));
 			s = reporter.printToString();
-			assertTrue(s.indexOf("path=/a/text()") >= 0 // ???
-				&& s.indexOf("XDEF527") >= 0 // missing text ???
-				&& s.indexOf("X1") < 0
-				&& s.indexOf("X2") < 0, s);
+			assertTrue(s.contains("path=/a/text()")&& s.contains("XDEF527")
+				&& !s.contains("X1") && !s.contains("X2"), s);
 			assertEq("<a/>", parse(xdef, null, "<a/>", reporter));
 			s = reporter.printToString();
-			assertTrue(s.indexOf("XDEF526") >= 0  //missing attribute
-				&& s.indexOf("path=/a/text()") >= 0
-				&& s.indexOf("XDEF527") < 0 // missing text should not be!!!
-				&& s.indexOf("path=/a/@a") >= 0
-				&& s.indexOf("X1") >= 0
-				&& s.indexOf("X2") >= 0, s);
+			assertTrue(s.contains("XDEF526") && s.contains("path=/a/text()")
+				&& !s.contains("XDEF527") // missing text should not be!!!
+				&& s.contains("path=/a/@a") && s.contains("X1")
+				&& s.contains("X2"), s);
 			xml = "<a a='1'>1</a>";
 			assertEq(xml, parse(xdef, null, xml, reporter));
 			assertNoErrorwarnings(reporter);
@@ -2119,7 +2116,7 @@ public final class TestXdef extends XDTester {
 			xp = compile(xdef);
 			xd = xp.createXDDocument();
 			xml = "<tns:DM xmlns:tns='abc'"+
-				" xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'"+
+				" xmlns:xsi='"+XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI+"'"+
 				" xsi:nil='true'/>";
 			parse(xd, xml, reporter);
 			assertNoErrorwarnings(reporter);
@@ -2132,13 +2129,14 @@ public final class TestXdef extends XDTester {
 "  </DM>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			xml = "<DM xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'"+
-				" xsi:nil='true'/>\n";
+			xml = "<DM xmlns:xsi='"
+				+XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI
+				+"' xsi:nil='true'/>\n";
 			xd = xp.createXDDocument();
 			parse(xd, xml, reporter);
 			assertNoErrorwarnings(reporter);
-			xml = "<DM xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'"+
-				" xsi:nil='true'><a/>x<b/></DM>\n";
+			xml = "<DM xmlns:xsi='"+XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI
+				+"' xsi:nil='true'><a/>x<b/></DM>\n";
 			xd = xp.createXDDocument();
 			parse(xd, xml, reporter);
 			assertErrors(reporter);
@@ -2153,16 +2151,17 @@ public final class TestXdef extends XDTester {
 "  </a>\n"+
 "</xd:def>";
 			xp = compile(xdef);
-			xml = "<a xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>"+
-				"<b xsi:nil='true'/></a>\n";
+			xml = "<a xmlns:xsi='"
+				+XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI
+				+"'><b xsi:nil='true'/></a>\n";
 			parse(xp, "", xml, reporter);
 			assertNoErrorwarnings(reporter);
-			xml = "<a xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>"+
-				"<b xsi:nil='true' x='x'/></a>\n";
+			xml = "<a xmlns:xsi='"+XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI
+				+"'><b xsi:nil='true' x='x'/></a>\n";
 			parse(xp, "", xml, reporter);
 			assertErrors(reporter);
-			xml = "<a xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>"+
-				"<b xsi:nil='true'><c/>x<d/></b></a>\n";
+			xml = "<a xmlns:xsi='"+XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI
+				+"'><b xsi:nil='true'><c/>x<d/></b></a>\n";
 			parse(xp, "", xml, reporter);
 			assertErrors(reporter);
 			xdef = //getXPos, getSourcePosdition

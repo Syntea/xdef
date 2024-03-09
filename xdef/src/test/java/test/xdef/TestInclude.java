@@ -9,6 +9,8 @@ import org.xdef.XDConstants;
 import org.xdef.XDPool;
 import java.io.File;
 import java.io.StringWriter;
+import static org.xdef.sys.STester.runTest;
+import static test.XDTester._xdNS;
 
 /** Test of attribute "include" in header of XDefinition and of "xi:include"
  * in XML data.
@@ -91,8 +93,8 @@ public final class TestInclude extends XDTester {
 "  <foo xd:script = \"finally out('f')\">\n"+
 "    <bar xd:script = '*; ref b#bar'/>\n"+ // b is xdefinition from include
 "  </foo>\n"+
-"</xd:def>\n"+
-"<xi:include xmlns:xi = 'http://www.w3.org/2001/XInclude'\n" +
+"</xd:def>\n"+				
+"<xi:include xmlns:xi = '"+XDConstants.XINCLUDE_NS_URI+"'\n" +
 "   href = '" + dataDir + "TestInclude_1.xdef" + "' />\n" +
 "</xd:collection>";
 			xp = compile(xdef);
@@ -218,8 +220,7 @@ public final class TestInclude extends XDTester {
 				fail("Exception not thrown");
 			} catch (SRuntimeException ex) {
 				s = ex.getMessage();
-				if (s == null ||
-					s.indexOf("XML308") < 0 && s.indexOf("XML075") < 0) {
+				if (s==null || !s.contains("XML308") && !s.contains("XML075")) {
 					fail(ex);
 				}
 			}
@@ -233,8 +234,7 @@ public final class TestInclude extends XDTester {
 				fail("Exception not thrown");
 			} catch (SRuntimeException ex) {
 				s = ex.getReport().getModification();
-				if (s == null ||
-					s.indexOf("XML308") < 0 && s.indexOf("XML075") < 0) {
+				if (s==null || !s.contains("XML308") && !s.contains("XML075")) {
 					fail(ex);
 				}
 			}

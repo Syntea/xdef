@@ -10,6 +10,7 @@ import org.xdef.sys.SBuffer;
 import org.xdef.sys.SUtils;
 import java.io.IOException;
 import java.io.StringReader;
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -73,36 +74,34 @@ public final class TestXSTypes extends XDTester {
 		//error handler to be assigned to builder and validator
 		//we nead to set resolver for builder to assign the schema
 		try {
-			Document doc = null;
 			if (_xml != null) {
-				doc = _builder.parse(new InputSource(new StringReader(_xml)));
+				Document doc = 
+					_builder.parse(new InputSource(new StringReader(_xml)));
 				doc.getDocumentElement();
-			}
-			if (_xml != null) {
 				_validator.validate(new DOMSource(doc));
-			}
-			if (result != null) {
-				String s = doc.getDocumentElement().getAttribute("a");
-				if (_msg.length() == 0 && !result.equals(s)) {
-					if (_msg.length() > 0) {
-						_msg += "\n";
-					}
-					_msg += "SCHEMA: attr result differs: '" + s +
-						"'; expected: '" + result +  "'";
-				}
-				Node n = doc.getDocumentElement().getChildNodes().item(0);
-				s = (n == null) ? null : n.getNodeValue();
-				if (_msg.length() == 0 && !result.equals(s)) {
-					if (s != null || result.length() > 0) {
+				if (result != null) {
+					String s = doc.getDocumentElement().getAttribute("a");
+					if (_msg.length() == 0 && !result.equals(s)) {
 						if (_msg.length() > 0) {
 							_msg += "\n";
 						}
-						_msg += "SCHEMA: text result differs: '" + s +
+						_msg += "SCHEMA: attr result differs: '" + s +
 							"'; expected: '" + result +  "'";
 					}
-				}
-				if (_msg.length() != 0) {
-					_result = false;
+					Node n = doc.getDocumentElement().getChildNodes().item(0);
+					s = (n == null) ? null : n.getNodeValue();
+					if (_msg.length() == 0 && !result.equals(s)) {
+						if (s != null || result.length() > 0) {
+							if (_msg.length() > 0) {
+								_msg += "\n";
+							}
+							_msg += "SCHEMA: text result differs: '" + s +
+								"'; expected: '" + result +  "'";
+						}
+					}
+					if (_msg.length() != 0) {
+						_result = false;
+					}
 				}
 			} else {
 				if (_msg.length() == 0) {
@@ -127,7 +126,7 @@ public final class TestXSTypes extends XDTester {
 
 	private void setMesage(SAXParseException x) {
 		String s = "SCHEMA: " + x.getMessage() + "\n";
-		if (_msg.indexOf(s) < 0) {//if it was not yet reported
+		if (!_msg.contains(s)) {//if it was not yet reported
 			_msg += s;
 		}
 	}
@@ -137,7 +136,7 @@ public final class TestXSTypes extends XDTester {
 			_builderFactory = DocumentBuilderFactory.newInstance();
 			_builderFactory.setAttribute(
 				"http://java.sun.com/xml/jaxp/properties/schemaLanguage",
-				"http://www.w3.org/2001/XMLSchema");
+				XMLConstants.W3C_XML_SCHEMA_NS_URI);
 			_builderFactory.setCoalescing(true);
 			_builderFactory.setNamespaceAware(true);
 			_builderFactory.setExpandEntityReferences(true);
@@ -366,36 +365,37 @@ public final class TestXSTypes extends XDTester {
 			throw new RuntimeException("name of type expected");
 		}
 		boolean wasLpar = isSymbol(p, XScriptParser.LPAR_SYM);
-		if ("xs:union".equals(type)) {
-			if (!wasLpar) {
-				throw new RuntimeException("'(' expected");
-			}
-			sb.append(indent).append("<xs:restriction>\n");
-			genUnionItem(p, indent + "  ", sb);
-			while(isSymbol(p, XScriptParser.COMMA_SYM)) {
-				parseRestriction(p, "  ", sb);
-			}
-			sb.append(indent).append("</xs:restriction>\n");
-		} else if ("xs:list".equals(type)) {
-			if (!wasLpar) {
-				throw new RuntimeException("'(' expected");
-			}
-			genListItem(p, indent, sb);
-		} else {
-			sb.append(indent).append("<xs:restriction base=\"");
-			if (wasLpar) {
-				sb.append(type).append("\">\n");
-				if (parseRestriction(p, indent + "  ", sb)) {
-					while(isSymbol(p, XScriptParser.COMMA_SYM)) {
-						if (!parseRestriction(p, indent + "  ", sb)) {
-							throw new RuntimeException("Restriction expected");
+		switch (type) {
+			case "xs:union":
+				if (!wasLpar) {
+					throw new RuntimeException("'(' expected");
+				}	sb.append(indent).append("<xs:restriction>\n");
+				genUnionItem(p, indent + "  ", sb);
+				while(isSymbol(p, XScriptParser.COMMA_SYM)) {
+					parseRestriction(p, "  ", sb);
+				}	sb.append(indent).append("</xs:restriction>\n");
+				break;
+			case "xs:list":
+				if (!wasLpar) {
+					throw new RuntimeException("'(' expected");
+				}	genListItem(p, indent, sb);
+				break;
+			default:
+				sb.append(indent).append("<xs:restriction base=\"");
+				if (wasLpar) {
+					sb.append(type).append("\">\n");
+					if (parseRestriction(p, indent + "  ", sb)) {
+						while(isSymbol(p, XScriptParser.COMMA_SYM)) {
+							if (!parseRestriction(p, indent + "  ", sb)) {
+								throw new RuntimeException(
+									"Restriction expected");
+							}
 						}
 					}
+					sb.append(indent).append("</xs:restriction>\n");
+				} else {
+					sb.append(type).append("\"/>\n");
 				}
-				sb.append(indent).append("</xs:restriction>\n");
-			} else {
-				sb.append(type).append("\"/>\n");
-			}
 		}
 		if (wasLpar) {
 			if (!isSymbol(p, XScriptParser.RPAR_SYM)) {
@@ -406,7 +406,7 @@ public final class TestXSTypes extends XDTester {
 
 	private static String genSchema(final String params) {
 		StringBuffer sb = new StringBuffer(
-"<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema'>\n"+
+"<xs:schema xmlns:xs='"+XMLConstants.W3C_XML_SCHEMA_NS_URI+"'>\n"+
 "<xs:simpleType name='mytype'>\n");
 		XScriptParser p = new XScriptParser(StringParser.XMLVER1_0);
 		p.setSource(new SBuffer(params), null, null, XConstants.XD32, null);
@@ -510,16 +510,16 @@ public final class TestXSTypes extends XDTester {
 		}
 		boolean result = true;
 		if (XDTester.getFulltestMode()) {
-			if (_msg.indexOf("SCHEMA: ") < 0) {
+			if (!_msg.contains("SCHEMA: ")) {
 				_msg = "Not recognized by SCHEMA:\n"+ _msg;
 				result = false;
 			}
-			if (_msg.indexOf("XDEF: ") < 0) {
+			if (!_msg.contains("XDEF: ")) {
 				_msg = "Not recognized by XDEF:\n"+ _msg;
 				result = false;
 			}
 		} else {
-			if (_msg.indexOf("XDEF: ") < 0) {
+			if (!_msg.contains("XDEF: ")) {
 				_msg = "Not recognized by XDEF:\n"+ _msg;
 				result = false;
 			}
@@ -536,7 +536,7 @@ public final class TestXSTypes extends XDTester {
 			try {
 				_schema = genSchema(_params);
 				SchemaFactory factory = SchemaFactory.newInstance(
-					"http://www.w3.org/2001/XMLSchema");
+					XMLConstants.W3C_XML_SCHEMA_NS_URI);
 				Schema schema = factory.newSchema(
 					new StreamSource(new StringReader(_schema)));
 				factory.setErrorHandler(_errHandler);
@@ -572,7 +572,7 @@ public final class TestXSTypes extends XDTester {
 		_msg = "";
 		_result = true;
 		_xml = data == null ? null :
-("<a xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\""+
+("<a xmlns:xsi=\""+XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI+"\""+
 " xsi:noNamespaceSchemaLocation=\"dummy\" a=\""+data+"\"\n>"+data+"</a>");
 		return XDTester.getFulltestMode()
 			? chkSchema(result) & chkXDef(result) : chkXDef(result);
