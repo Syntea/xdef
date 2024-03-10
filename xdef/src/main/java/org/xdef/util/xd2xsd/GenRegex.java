@@ -29,20 +29,22 @@ class GenRegex {
 			} else if (p.isChar('d')) { // Day in month
 				ret.append(p.isChar('d')
 					? "(0[1-9]|[1-2][0-9]|3[0-1])" // with leading zero
-					: "([1-9]|[1-2][0-9]|3[0-1])"); // without leading zero
+					: "([1-9]|[0-2][0-9]|3[0-1])"); // without leading zero
 			} else if (p.isChar('H')) { // HOUR 0..24
-				 ret.append((p.isChar('H'))
-					 ? "(0[0-9]|1[0-9]|2[0-3])" //with leading zero
-					 : "([0-9]|1[0-9]|2[0-3])"); //without leading zero
+				 ret.append(p.isChar('H')
+					 ? "([0-1][0-9]|2[0-3])" //with leading zero
+					 : "([0-9]|[0-1][0-9]|2[0-3])"); //without leading zero
 			} else if (p.isChar('h')) { // HOUR 0..12
-				ret.append("([1-9]|1[0-2])");
+				 ret.append(p.isChar('h')
+					 ? "(0[0-9]|1[0-2])" //with leading zero
+					 :"([1-9]|0[1-9]|1[0-2])"); //without leading zero
 			} else if (p.isChar('K')) { // Hour from 0-11
 				ret.append(p.isChar('K')
 					? "(0[0-9]|1[0-1])" //with leading zero
-					: "([0-9]|1[0-1])"); //without leading zero
+					: "(1?[0-1])"); //without leading zero
 			} else if (p.isChar('M')) { // Month
 				if (!p.isChar('M')) { // Month without leading zero (M)
-					ret.append("([1-9]|1[0-2])");
+					ret.append("([1-9]|0[1-9]|1[0-2])");
 				} else if (!p.isChar('M')) { // Month with leading zeros. (MM)
 					ret.append("(0[1-9]|1[0-2])");
 				} else if (!p.isChar('M')) { //Short month name (MMM)
