@@ -38,22 +38,34 @@ public class Xd2Xsd {
 	private final Map<String, Element> _xsdSources;
 	/** Switch if generate annotation with documentation information. */
 	private final boolean _genInfo;
+	/**  Switch generate xdatatime outFormat. */
+	private final boolean _genXdateOutFormat;
 	/** org.w3c.dom.Document used for creation of nodes. */
 	private final Document _doc;
 
 	/** Create new instance of XsdGenerator.
 	 * @param xsdName name or XML schema root file
 	 * @param genInfo if true the annotations with documentation is generated.
+	 * @param genXdateOutFormat if true, from the xdatetime method the outFormat
+	 * parameter (the second sequential) is used as mask to validate datetime.
 	 */
-	private Xd2Xsd(final String xsdName, final boolean genInfo) {
+	private Xd2Xsd(final String xsdName,
+		final boolean genInfo,
+		final boolean genXdateOutFormat) {
 		if (xsdName == null || xsdName.isEmpty()) {
 			throw new RuntimeException("The name of xsd file is missing");
 		}
 		_rootName = xsdName;
 		_genInfo = genInfo;
+		_genXdateOutFormat = genXdateOutFormat;
 		_xsdSources = new HashMap<>();
 		_doc = KXmlUtils.newDocument();
 	}
+
+	/** Get genXdateOutFormat swithch.
+	 * @return genXdateOutFormat swithch.
+	 */
+	protected final boolean isGenXdateOutFormat() { return _genXdateOutFormat;}
 
 	/** If genInfo switch is on, then Generate annotations with documentation.
 	 * @param parent node where to add annotation.
@@ -113,6 +125,7 @@ public class Xd2Xsd {
 			return genRestrictions(parent, typeName, xdv);
 		}
 	}
+
 	/** Create element with restrictions,
 	 * @param parent element where to add restrictions
 	 * @param typeName name of type.
@@ -321,7 +334,8 @@ public class Xd2Xsd {
 				}
 			}
 			att.setAttribute("name", x.getLocalName());
-			GenParser parserInfo = GenParser.genParser((XMData) x);
+			GenParser parserInfo =
+				GenParser.genParser((XMData) x, _genXdateOutFormat);
 			if (parserInfo.getFixed() != null) {
 				att.setAttribute("fixed", parserInfo.getFixed());
 			} else if (parserInfo.getDefault() != null) {
@@ -504,7 +518,7 @@ public class Xd2Xsd {
 		XMNode[] children = xel.getChildNodeModels();
 		if (children.length == 1 && children[0].getKind() == XMNode.XMTEXT) {
 			XMData x = (XMData) children[0];
-			GenParser parserInfo = GenParser.genParser(x);
+			GenParser parserInfo = GenParser.genParser(x, _genXdateOutFormat);
 			String typeName = genDeclaredName(parserInfo);
 			Element simpleType;
 			if (attrs.length == 0) {
@@ -694,13 +708,16 @@ public class Xd2Xsd {
 	 * @param modelName name of root model.
 	 * @param outName name of root XML schema file.
 	 * @param genInfo switch if generate annotation with documentation.
+	 * @param genXdateOutFormat if true, from the xdatetime method the outFormat
+	 * parameter (the second sequential) is used as mask to validate datetime.
 	 * @return map with names of XML schema files and corresponding Elements.
 	 */
 	public static Map<String, Element> genSchema(final XDPool xp,
 		final String xdName,
 		final String modelName,
 		final String outName,
-		final boolean genInfo) {
+		final boolean genInfo,
+		final boolean genXdateOutFormat) {
 		String xname = xdName == null ? xp.getXMDefinitionNames()[0] : xdName;
 		XMDefinition xdef = xp.getXMDefinition(xname);
 		if (xdef == null) {
@@ -734,7 +751,7 @@ public class Xd2Xsd {
 		}
 		String oname = outName == null ? mname : outName;
 		oname = oname.replace(':', '_');
-		Xd2Xsd generator =  new Xd2Xsd(oname, genInfo);
+		Xd2Xsd generator =  new Xd2Xsd(oname, genInfo, genXdateOutFormat);
 		Element schema = generator.genNewSchema(oname);
 		XMElement xmel = roots[0];
 		String nsUri = xmel.getNSUri();

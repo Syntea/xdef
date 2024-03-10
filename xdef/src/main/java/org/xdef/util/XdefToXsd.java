@@ -33,13 +33,16 @@ public class XdefToXsd {
 	 * @param outName name of base XML schema file. May be null, then
 	 * local name of X-definition model is used.
 	 * @param genInfo if true documentation information is generated.
+	 * @param genXdateOutFormat if true, from the xdatetime method the outFormat
+	 * parameter (the second sequential) is used as mas to validate datetime.
 	 */
 	public static void genSchema(final File[] xdefs,
 		final File outDir,
 		final String xdName,
 		final String modelName,
 		final String outName,
-		final boolean genInfo) {
+		final boolean genInfo,
+		final boolean genXdateOutFormat) {
 		if (xdefs == null || xdefs.length == 0) {
 			throw new RuntimeException("Missing X-definition source files");
 		}
@@ -52,8 +55,8 @@ public class XdefToXsd {
 			: xp.getXMDefinitions()[0].getName()
 			: xdName;
 		String oname = outName == null ? xname : outName;
-		Map<String, Element> schemaMap =
-			Xd2Xsd.genSchema(xp, xname, modelName, oname, genInfo);
+		Map<String, Element> schemaMap = Xd2Xsd.genSchema(xp,
+			xname, modelName, oname, genInfo, genXdateOutFormat);
 		writeSchema(outDir, schemaMap);
 	}
 
@@ -83,14 +86,18 @@ public class XdefToXsd {
 	 * @param modelName name of root model.
 	 * @param outName name of root XML schema file.
 	 * @param genAnnotation switch if generate annotation with documentation.
+	 * @param genXdateOutFormat if true, from the xdatetime method the outFormat
+	 * parameter (the second sequential) is used as mas to validate datetime.
 	 * @return map with names of XML schema files and corresponding Elements.
 	 */
 	public static Map<String, Element> genSchema(final XDPool xp,
 		final String xdName,
 		final String modelName,
 		final String outName,
-		final boolean genAnnotation) {
-		return Xd2Xsd.genSchema(xp, xdName, modelName, outName, genAnnotation);
+		final boolean genAnnotation,
+		final boolean genXdateOutFormat) {
+		return Xd2Xsd.genSchema(xp,
+			xdName, modelName, outName, genAnnotation, genXdateOutFormat);
 	}
 
 	/** Run XML schema generator from command line.
@@ -102,6 +109,7 @@ public class XdefToXsd {
 	 * <li>-r or --root: name of root model (optional)
 	 * <li>-x or --xdName: name of X-definition (optional)
 	 * <li>-v or --genInfo: generate documentation information.
+	 * <li>-xx  output format of xdatetime method is used to validate data.
 	 * <li> -h or /?: help
 	 * </ul>
 	 */
@@ -115,12 +123,14 @@ public class XdefToXsd {
 " -r or --root:     name of root model (optional)\n" +
 " -x or --xdName:   name of X-definition (optional)\n" +
 " -v or --genInfo:  generate documentation information.\n" +
+" -xx               output format of xdatetime method is used to validate.\n"+
 " -h or /?:         help";
 		String xdName = null; // name of X-definition
 		String modelName = null; // name of model
 		File outDir = null; // output directory
 		String outName = null; //name of output file
 		boolean genDecInfo = false; // switch to generate documentation info
+		boolean genXdateOutFormat = false;// switch generate xdatatime outFormat
 		List<String> xdSources = new ArrayList<>(); // X-definition source
 		if (args == null || args.length < 2) {
 			throw new RuntimeException("Error: parameters missing.\n" + info);
@@ -187,6 +197,17 @@ public class XdefToXsd {
 							"Redefinition of "+arg+".\n" + info);
 					}
 					genDecInfo = true;
+					continue;
+				case "--xx":
+					if (genXdateOutFormat) {
+						throw new RuntimeException(
+							"Redefinition of "+arg+".\n" + info);
+					}
+					genXdateOutFormat = true;
+					continue;
+				default:
+					throw new RuntimeException(
+							"Unknown switch "+arg+".\n" + info);
 			}
 		}
 		if (xdSources.isEmpty()) {
@@ -196,6 +217,7 @@ public class XdefToXsd {
 			throw new RuntimeException("Missing output directory.\n" + info);
 		}
 		File[] xdefs = SUtils.getFileGroup(xdSources.toArray(new String[0]));
-		genSchema(xdefs, outDir, xdName, modelName, outName, genDecInfo);
+		genSchema(xdefs,
+			 outDir, xdName, modelName, outName, genDecInfo, genXdateOutFormat);
 	}
 }

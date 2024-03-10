@@ -93,7 +93,7 @@ public final class TestInclude extends XDTester {
 "  <foo xd:script = \"finally out('f')\">\n"+
 "    <bar xd:script = '*; ref b#bar'/>\n"+ // b is xdefinition from include
 "  </foo>\n"+
-"</xd:def>\n"+				
+"</xd:def>\n"+
 "<xi:include xmlns:xi = '"+XDConstants.XINCLUDE_NS_URI+"'\n" +
 "   href = '" + dataDir + "TestInclude_1.xdef" + "' />\n" +
 "</xd:collection>";

@@ -131,8 +131,8 @@ public class TestXd2XsdConv extends XDTester {
 		}
 		//generate schema
 		try {
-			XdefToXsd.genSchema(
-				new File[] {_xdefFile}, schemaDir, null, null, "main", true);
+			XdefToXsd.genSchema(new File[] {_xdefFile},
+				schemaDir, null, null, "main", true, false);
 		} catch (Exception ex) {
 			displayFiles(_xdefFile);
 			try {

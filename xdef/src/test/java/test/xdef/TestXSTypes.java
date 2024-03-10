@@ -75,7 +75,7 @@ public final class TestXSTypes extends XDTester {
 		//we nead to set resolver for builder to assign the schema
 		try {
 			if (_xml != null) {
-				Document doc = 
+				Document doc =
 					_builder.parse(new InputSource(new StringReader(_xml)));
 				doc.getDocumentElement();
 				_validator.validate(new DOMSource(doc));
