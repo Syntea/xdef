@@ -103,28 +103,28 @@ public class XdefToXsd {
 	/** Run XML schema generator from command line.
 	 * @param args array of string with command line arguments:
 	 * <ul>
-	 * <li>-i or --xdef: list of input source path names with X-definitions
-	 * <li>-o or --outDir:  pathname of output directory
-	 * <li>-s or --outName: name of main XML schema file (optional)
-	 * <li>-r or --root: name of root model (optional)
-	 * <li>-x or --xdName: name of X-definition (optional)
-	 * <li>-v or --genInfo: generate documentation information.
-	 * <li>-xx  output format of xdatetime method is used to validate data.
-	 * <li> -h or /?: help
+	 * <li>-h or --help: display help information.</li>
+	 * <li>-i or --xdef: list of input source path names with X-definitions.</li>
+	 * <li>-o or --outDir:  pathname of output directory.</li>
+	 * <li>-s or --outName: name of main XML schema file (optional).</li>
+	 * <li>-r or --root: name of root model (optional).</li>
+	 * <li>-x or --xdName: name of X-definition (optional).</li>
+	 * <li>-v or --genInfo: generate documentation information.</li>
+	 * <li>-xx:  use output format of xdatetime method to create data type.</li>
 	 * </ul>
 	 */
 	public static void main(String... args) {
 		String info =
 "XdefToXsd - convertor of X-definition to XML Schema.\n" +
 "Parameters:\n"+
+" -h or --help:     display help information\n" +
 " -i or --xdef:     list of input source pathnames with X-definitions\n" +
 " -o or --outDir:   pathname of output directory \n" +
 " -s or --outName:  name of main XML schema file (optional)\n" +
 " -r or --root:     name of root model (optional)\n" +
 " -x or --xdName:   name of X-definition (optional)\n" +
 " -v or --genInfo:  generate documentation information.\n" +
-" -xx               output format of xdatetime method is used to validate.\n"+
-" -h or /?:         help";
+" -xx:              use output format of xdatetime method to create data type";
 		String xdName = null; // name of X-definition
 		String modelName = null; // name of model
 		File outDir = null; // output directory
@@ -140,6 +140,7 @@ public class XdefToXsd {
 			switch (arg) {
 				case "-h":
 				case "/?":
+				case "--help":
 					System.out.println(info);
 					return;
 				case "-o":
