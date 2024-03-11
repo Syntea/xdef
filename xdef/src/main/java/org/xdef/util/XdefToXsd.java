@@ -19,8 +19,6 @@ import org.xdef.xml.KXmlUtils;
  * @author Vaclav Trojan
  */
 public class XdefToXsd {
-	/** Default extension used for XML schema file name. */
-	private static final String SCHEMA_EXTENSION = "xsd";
 
 	/** Generates XML Schema from given X-definition files and saves schema
 	 * files to given output directory.
@@ -71,9 +69,10 @@ public class XdefToXsd {
 		}
 		try { // write created XSD files to the output directory.
 			for (String key: schemaMap .keySet()) {
-				// source line length is 110
-				KXmlUtils.writeXml(new File(outDir, key + "."+SCHEMA_EXTENSION),
-					"UTF-8", schemaMap .get(key), true, true, 110);
+				String fileName = key + ".xsd";
+				// source line length is 120
+				KXmlUtils.writeXml(new File(outDir, fileName),
+					"UTF-8", schemaMap.get(key), true, true, 120);
 			}
 		} catch (IOException ex) {
 			throw new RuntimeException(ex);
