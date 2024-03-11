@@ -100,30 +100,34 @@ public class Xd2Xsd {
 		final GenParser parserInfo) {
 		addDocumentation(parent, parserInfo.getInfo());
 		String typeName = getSchemaTypeName(parserInfo);
-		if ("xs:union".equals(typeName)) {
-			XDParser[] parsers =
-				((XSParseUnion) parserInfo.getParser()).getParsers();
-			Element union = genSchemaElem(parent, "union");
-			for (XDValue xval: parsers) {
-				XDParser p = (XDParser) xval;
-				Element simpletp = genSchemaElem(union, "simpleType");
+		switch(typeName) {
+			case "xs:union": {
+				XDParser[] parsers =
+					((XSParseUnion) parserInfo.getParser()).getParsers();
+				Element union = genSchemaElem(parent, "union");
+				for (XDValue xval: parsers) {
+					XDParser p = (XDParser) xval;
+					Element simpletp = genSchemaElem(union, "simpleType");
+					genRestrictions(simpletp,
+						SCHEMA_PFX+p.parserName(),
+						p.getNamedParams().getXDNamedItems());
+				}
+				return union;
+			}
+			case "xs:list": {
+				Element list = genSchemaElem(parent, "list");
+				XDParser p = 
+					((XSParseList) parserInfo.getParser()).getItemParser();
+				Element simpletp = genSchemaElem(list, "simpleType");
 				genRestrictions(simpletp,
 					SCHEMA_PFX+p.parserName(),
 					p.getNamedParams().getXDNamedItems());
+				return list;
 			}
-			return union;
-		} else if ("xs:list".equals(typeName)) {
-			Element list = genSchemaElem(parent, "list");
-			XDParser p = ((XSParseList) parserInfo.getParser()).getItemParser();
-			Element simpletp = genSchemaElem(list, "simpleType");
-			genRestrictions(simpletp,
-				SCHEMA_PFX+p.parserName(),p.getNamedParams().getXDNamedItems());
-			return list;
-		} else {
-			XDNamedValue[] xdv =
-				parserInfo.getParser().getNamedParams().getXDNamedItems();
-			return genRestrictions(parent, typeName, xdv);
 		}
+		XDNamedValue[] xdv =
+			parserInfo.getParser().getNamedParams().getXDNamedItems();
+		return genRestrictions(parent, typeName, xdv);
 	}
 
 	/** Create element with restrictions,
@@ -311,7 +315,7 @@ public class Xd2Xsd {
 		for (XMNode x: attrs) {
 			Element att = genSchemaElem(el, "attribute");
 			String targetNs =
-				getSchemaElement(el).getAttribute("targetNamespace");
+				getSchemaRoot(el).getAttribute("targetNamespace");
 			XMOccurrence attOcc = x.getOccurence();
 			att.setAttribute("use",	attOcc.isRequired()?"required":"optional");
 			String nsUri = x.getNSUri();
@@ -352,7 +356,7 @@ public class Xd2Xsd {
 					if (simpletp == null) {
 						addDocumentation(att, parserInfo.getInfo());
 						simpletp =
-							genSchemaElem(getSchemaElement(el), "simpleType");
+							genSchemaElem(getSchemaRoot(el), "simpleType");
 						addDocumentation(simpletp, parserInfo.getInfo());
 						simpletp.setAttribute("name", typeName);
 						Element restr = genRestrictionElement(simpletp);
@@ -371,7 +375,7 @@ public class Xd2Xsd {
 					Element simpletp = findSchematype(el, typeName);
 					if (simpletp == null) {
 						simpletp =
-							genSchemaElem(getSchemaElement(el), "simpleType");
+							genSchemaElem(getSchemaRoot(el), "simpleType");
 						genRestrictions(simpletp, parserInfo);
 						simpletp.setAttribute("name", typeName);
 					}
@@ -402,7 +406,7 @@ public class Xd2Xsd {
 	 * @return simpleType element with given name or null.
 	 */
 	private Element findSchematype(final Element el, final String name) {
-		Element root = getSchemaElement(el);
+		Element root = getSchemaRoot(el);
 		NodeList nl = KXmlUtils.getChildElementsNS(
 			root, XMLConstants.W3C_XML_SCHEMA_NS_URI, "simpleType");
 		for (int i=0; i < nl.getLength(); i++) {
@@ -439,7 +443,7 @@ public class Xd2Xsd {
 	 * @param el actual element,
 	 * @return root schema element
 	 */
-	private Element getSchemaElement(final Element el) {
+	private Element getSchemaRoot(final Element el) {
 		Element schema = el;
 		for (;;) {
 			if ((SCHEMA_PFX+"schema").equals(schema.getNodeName())) {
@@ -460,7 +464,7 @@ public class Xd2Xsd {
 	 * @return created XML schema.
 	 */
 	private Element genElem(final Element parent, final XMElement xel) {
-		Element schema = getSchemaElement(parent);
+		Element schema = getSchemaRoot(parent);
 		String targetNs = schema.getAttribute("targetNamespace");
 		if (targetNs == null) {
 			targetNs = "";

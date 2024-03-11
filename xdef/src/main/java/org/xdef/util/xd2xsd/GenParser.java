@@ -209,8 +209,8 @@ class GenParser {
 					new XSParseString(), info, declName, xdc);
 			case "contains":
 				s = xdc.getXDNamedItemAsString("argument");
-				xdc.setXDNamedItem("pattern",
-					new DefString(".*" + GenRegex.genEscapeChars(s) + ".*"));
+				xdc.setXDNamedItem("pattern", new DefString(
+					".*" + GenRegex.escapeCharsInString(s) + ".*"));
 				xdc.removeXDNamedItem("argument");
 				return genParserInfo(
 					new XSParseString(), info + '(' + s + ')', declName, xdc);
@@ -240,7 +240,7 @@ class GenParser {
 			case "ends":
 				s = xdc.getXDNamedItemAsString("argument");
 				xdc.setXDNamedItem("pattern", new DefString(".*"
-					+ GenRegex.genEscapeChars(s)));
+					+ GenRegex.escapeCharsInString(s)));
 				xdc.removeXDNamedItem("argument");
 				return genParserInfo(
 					new XSParseString(), info + "(" + s + ")", declName, xdc);
@@ -317,7 +317,7 @@ class GenParser {
 				for (char c: s.toCharArray()) {
 					switch (c) {
 						case '9':
-							mask += "[0-9]";
+							mask += "\\d";
 							continue;
 						case 'A':
 							mask += "[a-zA-Z]";
@@ -326,7 +326,7 @@ class GenParser {
 							mask += "[0-9a-zA-Z]";
 							continue;
 						default:
-							mask += GenRegex.genEscapedChar(c);
+							mask += GenRegex.createEscapedChar(c);
 					}
 				}
 				xdc.setXDNamedItem("pattern", new DefString(mask));
@@ -336,7 +336,7 @@ class GenParser {
 				s = xdc.getXDNamedItemAsString("argument");
 				xdc.removeXDNamedItem("argument");
 				xdc.setXDNamedItem("pattern", new DefString(
-					GenRegex.genEscapeChars(s)+"*"));
+					GenRegex.escapeCharsInString(s)+"*"));
 				return genParserInfo(
 					new XSParseString(), info + "(" + s + ")", declName, xdc);
 			case "startsi":
