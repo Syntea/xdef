@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xd:def xmlns:xd     ="http://www.xdef.org/xdef/4.0"  
+        impl-version ="2023/09.0" impl-date="2023-08-14"    
+        xd:name      ="NovaPS" >
+
+ <NovaPS                   xd:script="ref P1_common#NovaPS" />
+</xd:def> 
