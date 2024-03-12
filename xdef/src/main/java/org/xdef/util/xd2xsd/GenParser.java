@@ -205,22 +205,21 @@ class GenParser {
 			case "an":
 				info += genPars(xdc);
 				xdc.setXDNamedItem("pattern", new DefString("[A-Za-z0-9]+"));
-				return genParserInfo(
-					new XSParseString(), info, declName, xdc);
+				return genParserInfo(new XSParseString(), info, declName, xdc);
 			case "contains":
 				s = xdc.getXDNamedItemAsString("argument");
 				xdc.setXDNamedItem("pattern", new DefString(
 					".*" + GenRegex.escapeCharsInString(s) + ".*"));
 				xdc.removeXDNamedItem("argument");
-				return genParserInfo(
-					new XSParseString(), info + '(' + s + ')', declName, xdc);
+				return genParserInfo(new XSParseString(),
+					info + '(' + s + ')', declName, xdc);
 			case "containsi":
 				s = xdc.getXDNamedItemAsString("argument");
 				xdc.removeXDNamedItem("argument");
 				mask = GenRegex.genCaseInsensitive(s);
 				xdc.setXDNamedItem("pattern", new DefString(".*"+mask+".*"));
-				return genParserInfo(
-					new XSParseString(), info + "(" + s + ")", declName, xdc);
+				return genParserInfo(new XSParseString(),
+					info + "(" + s + ")", declName, xdc);
 			case "country":
 				xdc.setXDNamedItem("pattern", new DefString("[a-ZA-Z]{2,3}"));
 				return genParserInfo(new XSParseString(),
@@ -228,6 +227,12 @@ class GenParser {
 			case "currency":
 				return genParserInfo(
 					new XSParseString(), "(); see ISO 4217", declName, xdc);
+			case "dateYMDhms":
+				xdc.setXDNamedItem("pattern", new DefString(
+					"\\d{4}(0[1-9]|1[0-2])(0[1-9]|[1-2]\\d|3[0-1])"
+					+"([0-1]\\d|2[0-3])([0-5]\\d)([0-5]\\d)"));
+				return genParserInfo(
+					new XSParseString(), info + "()", declName, xdc);
 			case "dec":
 				if (xdc.getXDNamedItem("totalDigits") != null) {
 					info += "(" + xdc.getXDNamedItemAsString("totalDigits");
@@ -237,20 +242,41 @@ class GenParser {
 					info += ")";
 				}
 				return genParserInfo(new XSParseDecimal(), info, declName, xdc);
+			case "domainAddr":
+				xdc.setXDNamedItem("pattern", new DefString(
+					"[-0-9a-zA-Z_](\\.[-0-9a-zA-Z_]){0,99}"));
+				return genParserInfo(new XSParseString(),
+					info + "()", declName, xdc);
+			case "emailAddr":
+				xdc.setXDNamedItem("pattern", new DefString(
+					"([ ]*\\([0-9a-zA-Z_ .-]*\\)[ ]*)*"
+					+"(([0-9a-zA-Z_ .-]*<([0-9a-zA-Z_-]*(\\.[0-9a-zA-Z_-]*)*)"
+					+ "@([0-9a-zA-Z_-]*(\\.[0-9a-zA-Z_-]*)*>))"
+					+ "|(([0-9a-zA-Z_-]*(\\.[0-9a-zA-Z_-]*)*)"
+					+ "@([0-9a-zA-Z_-]*(\\.[0-9a-zA-Z_-]*)*)))"
+					+ "([ ]*\\([0-9a-zA-Z_ .-]*\\))?"));
+				return genParserInfo(new XSParseString(),
+					info + "()", declName, xdc);
+			case "emailDate":
+				xdc.setXDNamedItem("pattern",
+					new DefContainer(GenRegex.getRegexes(
+						"[EEE, ]d MMM yyyy HH:mm[:ss][ ZZZZZ][ (z)]"
+						+ "|[EEE, ]d MMM YY HH:mm[:ss][ ZZZZZ][ (z)]")));
+				return genParserInfo(new XSParseString(), info, declName, xdc);
 			case "ends":
 				s = xdc.getXDNamedItemAsString("argument");
 				xdc.setXDNamedItem("pattern", new DefString(".*"
 					+ GenRegex.escapeCharsInString(s)));
 				xdc.removeXDNamedItem("argument");
-				return genParserInfo(
-					new XSParseString(), info + "(" + s + ")", declName, xdc);
+				return genParserInfo(new XSParseString(),
+					info + "(" + s + ")", declName, xdc);
 			case "endsi":
 				s = xdc.getXDNamedItemAsString("argument");
 				xdc.removeXDNamedItem("argument");
 				mask = GenRegex.genCaseInsensitive(s);
 				xdc.setXDNamedItem("pattern", new DefString(".*" + mask));
-				return genParserInfo(
-					new XSParseString(), info + '(' + s + ')', declName, xdc);
+				return genParserInfo(new XSParseString(),
+					info + '(' + s + ')', declName, xdc);
 			case "enum":
 				x = xdc.getXDNamedItem("argument").getValue();
 				xdc.setXDNamedItem("enumeration", x);
@@ -265,31 +291,37 @@ class GenParser {
 				} else {
 					s += "" + x;
 				}
-				return genParserInfo(
-					new XSParseString(), info + '(' + s + ')', declName, xdc);
+				return genParserInfo(new XSParseString(),
+					info + '(' + s + ')', declName, xdc);
 			case "eq":
 				s = xdc.getXDNamedItemAsString("argument");
 				xdc.setXDNamedItem("enumeration", new DefString(s));
 				xdc.removeXDNamedItem("argument");
-				return genParserInfo(
-					new XSParseString(), info + "(" + s + ")", declName, xdc);
+				return genParserInfo(new XSParseString(),
+					info + "(" + s + ")", declName, xdc);
 			case "eqi":
 				s = xdc.getXDNamedItemAsString("argument");
 				xdc.removeXDNamedItem("argument");
 				mask = GenRegex.genCaseInsensitive(s);
 				xdc.setXDNamedItem("pattern", new DefString(mask));
-				return genParserInfo(
-					new XSParseString(), info + "(" + s + ")", declName, xdc);
+				return genParserInfo(new XSParseString(),
+					info + "(" + s + ")", declName, xdc);
 			case "hex":
 				return genParserInfo(new XSParseHexBinary(),info,declName,xdc);
+			case "ipAddr":
+				s = "((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9][0-9])|([0-9]))";
+				mask = "([0-9a-fA-F]{1,4}(:[0-9a-fA-F]{1,4}){1,7})"
+					+"|(" + s + "(\\." + s + "){3})";
+				xdc.setXDNamedItem("pattern", new DefString(mask));
+				return genParserInfo(new XSParseString(), info, declName, xdc);
 			case "letters":
 				info += genPars(xdc);
 				xdc.setXDNamedItem("pattern", new DefString("[A-Za-z]+"));
 				return genParserInfo(new XSParseString(), info, declName, xdc);
 			case "MD5":
 				xdc.setXDNamedItem("length", new DefLong(16));
-				return genParserInfo(
-					new XSParseHexBinary(), info + genPars(xdc), declName, xdc);
+				return genParserInfo(new XSParseHexBinary(),
+					info + genPars(xdc), declName, xdc);
 			case "num":
 				info += '(';
 				if ((s = xdc.getXDNamedItemAsString("length")) != null) {
@@ -330,26 +362,36 @@ class GenParser {
 					}
 				}
 				xdc.setXDNamedItem("pattern", new DefString(mask));
-				return genParserInfo(
-					new XSParseString(), info + "(" + s + ")", declName, xdc);
+				return genParserInfo(new XSParseString(),
+					info + "(" + s + ")", declName, xdc);
+			case "regex":
+				s = xdc.getXDNamedItemAsString("argument");
+				xdc.removeXDNamedItem("argument");
+				xdc.setXDNamedItem("pattern", new DefString(s));
+				return genParserInfo(new XSParseString(),
+					info + "(" + s + ")", declName, xdc);
 			case "starts":
 				s = xdc.getXDNamedItemAsString("argument");
 				xdc.removeXDNamedItem("argument");
 				xdc.setXDNamedItem("pattern", new DefString(
 					GenRegex.escapeCharsInString(s)+"*"));
-				return genParserInfo(
-					new XSParseString(), info + "(" + s + ")", declName, xdc);
+				return genParserInfo(new XSParseString(),
+					info + "(" + s + ")", declName, xdc);
 			case "startsi":
 				s = xdc.getXDNamedItemAsString("argument");
 				xdc.removeXDNamedItem("argument");
 				mask = GenRegex.genCaseInsensitive(s);
 				xdc.setXDNamedItem("pattern", new DefString(mask + "*"));
-				return genParserInfo(
-					new XSParseString(), info + "(" + s + ")", declName, xdc);
+				return genParserInfo(new XSParseString(),
+					info + "(" + s + ")", declName, xdc);
 			case "SHA1":
 				xdc.setXDNamedItem("length", new DefLong(20));
-				return genParserInfo(
-					new XSParseHexBinary(), info + genPars(xdc), declName, xdc);
+				return genParserInfo(new XSParseHexBinary(),
+					info + genPars(xdc), declName, xdc);
+			case "telephone":
+				xdc.setXDNamedItem("pattern", new DefString(
+					"([+]\\d\\d*[ ])?(\\d\\d*([ ]\\d\\d*)*)"));
+				return genParserInfo(new XSParseString(), info, declName, xdc);
 			case "xdatetime":
 				mask = genXdOutFormat
 					? xdc.getXDNamedItemAsString("outFormat") : null;
@@ -369,20 +411,20 @@ class GenParser {
 				switch (mask) {
 					case "yyyy-MM-dd":
 					case "yyyy-MM-ddZ":
-						return genParserInfo(
-							new XSParseDate(), info, declName, xdc);
+						return genParserInfo(new XSParseDate(),
+							info, declName, xdc);
 					case "HH:mm:ss":
 					case "HH:mm:ssZ":
 					case "HH:mm:ss.S":
 					case "HH:mm:ss.SZ":
-						return genParserInfo(
-							new XSParseTime(), info, declName, xdc);
+						return genParserInfo(new XSParseTime(),
+							info, declName, xdc);
 					case "yyyy-MM-ddTHH:mm:ss":
 					case "yyyy-MM-ddTHH:mm:ssZ":
 					case "yyyy-MM-ddTHH:mm:ss.S":
 					case "yyyy-MM-ddTHH:mm:ss.SZ":
-						return genParserInfo(
-							new XSParseDatetime(), info, declName, xdc);
+						return genParserInfo(new XSParseDatetime(),
+							info, declName, xdc);
 					default: // return string type with patterns
 						xdc.setXDNamedItem("pattern",
 							new DefContainer(GenRegex.getRegexes(mask)));

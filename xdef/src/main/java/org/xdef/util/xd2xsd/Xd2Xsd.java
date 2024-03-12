@@ -116,7 +116,7 @@ public class Xd2Xsd {
 			}
 			case "xs:list": {
 				Element list = genSchemaElem(parent, "list");
-				XDParser p = 
+				XDParser p =
 					((XSParseList) parserInfo.getParser()).getItemParser();
 				Element simpletp = genSchemaElem(list, "simpleType");
 				genRestrictions(simpletp,
