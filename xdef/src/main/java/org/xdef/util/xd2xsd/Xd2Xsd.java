@@ -363,7 +363,7 @@ public class Xd2Xsd {
 						restr.setAttribute("base", parserName);
 					}
 					att.setAttribute("type", typeName);
-					addDocumentation(att, "See simpeType \"" + typeName + '"');
+//					addDocumentation(att, "See simpeType \"" + typeName + '"');
 				}
 			} else {
 				if (typeName == null) {
@@ -371,7 +371,7 @@ public class Xd2Xsd {
 					genRestrictions(simpletp, parserInfo);
 				} else {
 					att.setAttribute("type", typeName);
-					addDocumentation(att, "See simpeType \"" + typeName + '"');
+//					addDocumentation(att, "See simpeType \"" + typeName + '"');
 					Element simpletp = findSchematype(el, typeName);
 					if (simpletp == null) {
 						simpletp =
@@ -544,7 +544,7 @@ public class Xd2Xsd {
 					if (!targetNs.isEmpty()) {
 						el.setAttribute("xmlns", targetNs);
 					}
-					addDocumentation(el, "See simpleType \"" + typeName + '"');
+//					addDocumentation(el, "See simpleType \"" + typeName + '"');
 					if (findSchematype(el, typeName) == null) {
 						// named simpletype not exists, create it!
 						simpleType = genSchemaElem(schema,"simpleType");
