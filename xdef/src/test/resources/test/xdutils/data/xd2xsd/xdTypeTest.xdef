@@ -1,5 +1,12 @@
 <xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" xd:name="main" xd:root="A" >
-  <A a="regex('[A-Z]{3}[0-9]{6}');" b='dateYMDhms()'
-     c='emailAddr()' d='emailDate()' e='telephone()' f='ipAddr()'
-     g='price()' h='? printableDate()'/>
+  <A a="? regex('[A-Z]{3}[0-9]{6}');"
+     b='? dateYMDhms()'
+     c='? emailAddr()'
+     d='? emailDate()'
+     e='? telephone()'
+     f='? ipAddr()'
+     g='? price()'
+     h='? printableDate()'
+     i='? dec(9,5)'
+  />
 </xd:def>

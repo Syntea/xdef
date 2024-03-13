@@ -234,14 +234,27 @@ class GenParser {
 				return genParserInfo(
 					new XSParseString(), info + "()", declName, xdc);
 			case "dec":
+				info += "(";
+				mask = "([1-9]\\d*|0)[.,]\\d+";
 				if (xdc.getXDNamedItem("totalDigits") != null) {
-					info += "(" + xdc.getXDNamedItemAsString("totalDigits");
+					s = xdc.getXDNamedItemAsString("totalDigits");
+					xdc.removeXDNamedItem("totalDigits");
+					info += s;
+					int i = Integer.parseInt(s);
 					if (xdc.getXDNamedItem("fractionDigits") != null) {
-						info +=","+xdc.getXDNamedItemAsString("fractionDigits");
+						s = xdc.getXDNamedItemAsString("fractionDigits");
+						xdc.removeXDNamedItem("fractionDigits");
+						info +="," + s;
+						int j = Integer.parseInt(s);
+						mask = "([1-9]\\d{0,"+(i-j)+"}|0)[.,]\\d{1,"+j+"}";
+					} else {
+						xdc.setXDNamedItem("maxLength",
+							new DefString(String.valueOf(i + 1)));
 					}
-					info += ")";
-				}
-				return genParserInfo(new XSParseDecimal(), info, declName, xdc);
+				}				
+				info += ")";
+				xdc.setXDNamedItem("pattern", new DefString(mask));
+				return genParserInfo(new XSParseString(), info, declName, xdc);
 			case "domainAddr":
 				xdc.setXDNamedItem("pattern", new DefString(
 					"[-0-9a-zA-Z_](\\.[-0-9a-zA-Z_]){0,99}"));
