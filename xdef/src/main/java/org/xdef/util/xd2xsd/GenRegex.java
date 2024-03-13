@@ -73,12 +73,12 @@ class GenRegex {
 				int i = 1;
 				while (p.isChar('y')) i++;
 				switch (i) {
-					case 1:// Year (as ISO standard)
-						ret.append("(-)?\\d*"); break;
 					case 2: // Year as 2 digits.
+						ret.append("\\d{2}"); break;
 					case 4: // Year as 4 digits.
-						ret.append("(-)?\\d{"+i+"}"); break;
-					default: ret.append("(-)?\\d\\d*");//any number of digits???
+						ret.append("(-)?\\d{4}"); break;
+					case 1:// Year
+					default: ret.append("(-)?\\d+");//any number of digits???
 				}
 			} else if (p.isChar('Y')) { //Year
 				int i = 1;
@@ -104,15 +104,18 @@ class GenRegex {
 				while (p.isChar('Z')) i++;
 				switch (i) {
 					case 2: //+/-HHmm format
-					ret.append("(\\+|\\-)(0\\d|1\\d|2[0-3])[0-5]\\d");
-					break;
-					case 3:
-					case 4:
-					case 5: //+/-HHmm format
-						ret.append("(\\+|\\-)(0\\d|1\\d|2[0-3])[0-5]\\d");
+						ret.append("[+-](0\\d|1\\d|2[0-3])[0-5]\\d");
 						break;
-					default: //+/-HH:mm format
-					ret.append("(\\+|\\-)(0\\d|1\\d|2[0-3]):[0-5]\\d");
+					case 3:
+					case 4: //+/-HHmm format
+						ret.append("[+-](0\\d|1\\d|2[0-3])[0-5]\\d");
+						break;
+					case 5: // short zone name
+						ret.append("[a-zA-Z]{1,5}");
+						break;
+					case 6: //+/-HH:mm format
+					default: //???
+						ret.append("[+-](0\\d|1\\d|2[0-3]):[0-5]\\d");
 				}
 			} else if (p.isChar('a')) { //Information about day part (am, pm).
 				while (p.isChar('a')){}
@@ -123,7 +126,7 @@ class GenRegex {
 				int i = 1;
 				while (p.isChar('E')) i++;
 				ret.append(i < 4
-					? "[a-zA-z]+" // short name
+					? "[a-zA-z]{1,3}" // short name
 					: "[a-zA-z]+"); // full name
 			} else if (p.isChar('e')) { //Day in week as number
 				ret.append("[1-7]");

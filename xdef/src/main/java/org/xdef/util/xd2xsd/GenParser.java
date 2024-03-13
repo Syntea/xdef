@@ -250,10 +250,10 @@ class GenParser {
 			case "emailAddr":
 				xdc.setXDNamedItem("pattern", new DefString(
 					"([ ]*\\([0-9a-zA-Z_ .-]*\\)[ ]*)*"
-					+"(([0-9a-zA-Z_ .-]*<([0-9a-zA-Z_-]*(\\.[0-9a-zA-Z_-]*)*)"
-					+ "@([0-9a-zA-Z_-]*(\\.[0-9a-zA-Z_-]*)*>))"
-					+ "|(([0-9a-zA-Z_-]*(\\.[0-9a-zA-Z_-]*)*)"
-					+ "@([0-9a-zA-Z_-]*(\\.[0-9a-zA-Z_-]*)*)))"
+					+"(([0-9a-zA-Z_ .-]*<([0-9a-zA-Z_-]+(\\.[0-9a-zA-Z_-]*)*)"
+					+ "@([0-9a-zA-Z_-]+(\\.[0-9a-zA-Z_-]*)*>))"
+					+ "|(([0-9a-zA-Z_-]+(\\.[0-9a-zA-Z_-]*)*)"
+					+ "@([0-9a-zA-Z_-]+(\\.[0-9a-zA-Z_-]*)*)))"
 					+ "([ ]*\\([0-9a-zA-Z_ .-]*\\))?"));
 				return genParserInfo(new XSParseString(),
 					info + "()", declName, xdc);
@@ -364,6 +364,17 @@ class GenParser {
 				xdc.setXDNamedItem("pattern", new DefString(mask));
 				return genParserInfo(new XSParseString(),
 					info + "(" + s + ")", declName, xdc);
+			case "price":
+				xdc.setXDNamedItem("pattern",
+					new DefString("(0|[1-9]\\d*)\\.\\d+[ ][A-Z]{3}"));
+				return genParserInfo(new XSParseString(),
+					info + "()", declName, xdc);
+			case "printableDate":
+				xdc.setXDNamedItem("pattern",
+					new DefContainer(GenRegex.getRegexes(
+						"[EEE ]MMM d HH:mm[:ss[.S]][ z] y"
+						+ "|({L(*)}[EEE ]MMM d HH:mm[:ss[.S]][ z] y)")));
+				return genParserInfo(new XSParseString(), info, declName, xdc);
 			case "regex":
 				s = xdc.getXDNamedItemAsString("argument");
 				xdc.removeXDNamedItem("argument");
@@ -390,7 +401,7 @@ class GenParser {
 					info + genPars(xdc), declName, xdc);
 			case "telephone":
 				xdc.setXDNamedItem("pattern", new DefString(
-					"([+]\\d\\d*[ ])?(\\d\\d*([ ]\\d\\d*)*)"));
+					"([+]\\d+[ ])?(\\d+([ ]\\d+)*)"));
 				return genParserInfo(new XSParseString(), info, declName, xdc);
 			case "xdatetime":
 				mask = genXdOutFormat

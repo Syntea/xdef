@@ -389,6 +389,9 @@ public class TestXd2XsdConv extends XDTester {
 			assertTrue(parse("B1_Common_valid_1"), popMessage());
 			assertTrue(parse("B1_Common_valid_2"), popMessage());
 
+			assertTrue(prepare("xdTypeTest"), popMessage());
+			assertTrue(parse("xdTypeTest_valid"), popMessage());
+
 			_dataDir = new File(_dataDir, "P1A");
 			assertTrue(prepare("SouborP1A"), popMessage());
 			assertTrue(parse("P1A1"), popMessage());
