@@ -4,7 +4,9 @@
 * In the conversion of X-definition to XML schema (`org.xdef.util.XdefToXsd`)
   is added parameter `--xx`. If this parameter is used than from xdatetime
   X-definition validation method is used the mask from parameter `outFormat`
- (the second sequential parameter) for validation of XML data.
+  (the second sequential parameter) for validation of XML data.
+* most of X-definition methods is now more converted to XML schema string type
+  with `pattern` facets.
 
 # Version 42.1.3, release-date 2024-03-04
 * The conversion of X-definition to XML schema (`org.xdef.util.XdefToXsd`)
