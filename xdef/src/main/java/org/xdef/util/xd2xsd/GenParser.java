@@ -246,7 +246,9 @@ class GenParser {
 						xdc.removeXDNamedItem("fractionDigits");
 						info +="," + s;
 						int j = Integer.parseInt(s);
-						mask = "([1-9]\\d{0,"+(i-j)+"}|0)[.,]\\d{1,"+j+"}";
+						mask = (i-j-1 > 1
+							? "([1-9]\\d{0,"+(i-j-1)+"})" : (i-j-1 == 1)
+							? "\\d" : "\\d?") + "[.,]\\d{1,"+j+"}";
 					} else {
 						xdc.setXDNamedItem("maxLength",
 							new DefString(String.valueOf(i + 1)));
