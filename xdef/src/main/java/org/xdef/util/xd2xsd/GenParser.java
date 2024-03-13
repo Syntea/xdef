@@ -247,7 +247,7 @@ class GenParser {
 						info +="," + s;
 						int j = Integer.parseInt(s);
 						mask = (i-j-1 > 1
-							? "([1-9]\\d{0,"+(i-j-1)+"})" : (i-j-1 == 1)
+							? "(0|[1-9]\\d{0,"+(i-j-1)+"})" : (i-j-1 == 1)
 							? "\\d" : "\\d?") + "[.,]\\d{1,"+j+"}";
 					} else {
 						xdc.setXDNamedItem("maxLength",
