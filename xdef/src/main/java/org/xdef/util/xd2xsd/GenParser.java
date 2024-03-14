@@ -9,7 +9,6 @@ import org.xdef.impl.code.DefLong;
 import org.xdef.impl.code.DefString;
 import org.xdef.impl.parsers.XSParseDate;
 import org.xdef.impl.parsers.XSParseDatetime;
-import org.xdef.impl.parsers.XSParseDecimal;
 import org.xdef.impl.parsers.XSParseHexBinary;
 import org.xdef.impl.parsers.XSParseList;
 import org.xdef.impl.parsers.XSParseString;
@@ -247,7 +246,7 @@ class GenParser {
 						info +="," + s;
 						int j = Integer.parseInt(s);
 						mask = (i-j > 1 ? "(\\d{0,"+(i-j)+"})" : "\\d")
-							+ "[.,]\\d{1,"+j+"}";
+							+ "([.,]\\d{1,"+j+"})?";
 					} else {
 						xdc.setXDNamedItem("maxLength",
 							new DefString(String.valueOf(i + 1)));
