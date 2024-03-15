@@ -234,7 +234,7 @@ class GenParser {
 					new XSParseString(), info + "()", declName, xdc);
 			case "dec":
 				info += "(";
-				mask = "(\\d+)[.,]\\d+";
+				mask = "-?\\d+[.,]\\d+";
 				if (xdc.getXDNamedItem("totalDigits") != null) {
 					s = xdc.getXDNamedItemAsString("totalDigits");
 					xdc.removeXDNamedItem("totalDigits");
@@ -245,7 +245,7 @@ class GenParser {
 						xdc.removeXDNamedItem("fractionDigits");
 						info +="," + s;
 						int j = Integer.parseInt(s);
-						mask = (i-j > 1 ? "(\\d{0,"+(i-j)+"})" : "\\d")
+						mask = (i-j > 1 ? "-?(\\d{0,"+(i-j)+"})" : "\\d")
 							+ "([.,]\\d{1,"+j+"})?";
 					} else {
 						xdc.setXDNamedItem("maxLength",
@@ -379,7 +379,7 @@ class GenParser {
 					info + "(" + s + ")", declName, xdc);
 			case "price":
 				xdc.setXDNamedItem("pattern",
-					new DefString("(0|[1-9]\\d*)\\.\\d+[ ][A-Z]{3}"));
+					new DefString("(0|[1-9]\\d*)(\\.\\d+)?[ ][A-Z]{3}"));
 				return genParserInfo(new XSParseString(),
 					info + "()", declName, xdc);
 			case "printableDate":
