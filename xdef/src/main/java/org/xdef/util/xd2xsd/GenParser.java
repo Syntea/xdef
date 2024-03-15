@@ -251,7 +251,7 @@ class GenParser {
 						xdc.setXDNamedItem("maxLength",
 							new DefString(String.valueOf(i + 1)));
 					}
-				}				
+				}
 				info += ")";
 				xdc.setXDNamedItem("pattern", new DefString(mask));
 				return genParserInfo(new XSParseString(), info, declName, xdc);

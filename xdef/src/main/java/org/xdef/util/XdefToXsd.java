@@ -70,9 +70,9 @@ public class XdefToXsd {
 		try { // write created XSD files to the output directory.
 			for (String key: schemaMap .keySet()) {
 				String fileName = key + ".xsd";
-				// source line length is 120
+				// source line length is 130
 				KXmlUtils.writeXml(new File(outDir, fileName),
-					"UTF-8", schemaMap.get(key), true, true, 120);
+					"UTF-8", schemaMap.get(key), true, true, 130);
 			}
 		} catch (IOException ex) {
 			throw new RuntimeException(ex);
