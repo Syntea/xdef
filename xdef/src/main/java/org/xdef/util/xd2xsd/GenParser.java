@@ -91,11 +91,11 @@ class GenParser {
 		}
 	}
 
-	/** Generate parameters of validation method from XDContainer
+	/** Display parameters of validation method from XDContainer
 	 * @param xdc container with named parameters.
 	 * @return string with parameter list.
 	 */
-	private static String genPars(XDContainer xdc) {
+	protected final static String displayParams(final XDContainer xdc) {
 		String result = "(";
 		for (XDNamedValue x: xdc.getXDNamedItems()) {
 			if (result.length() > 1) {
@@ -202,7 +202,7 @@ class GenParser {
 // X-definition types converted to XML schema type
 ////////////////////////////////////////////////////////////////////////////////
 			case "an":
-				info += genPars(xdc);
+				info += displayParams(xdc);
 				xdc.setXDNamedItem("pattern", new DefString("[A-Za-z0-9]+"));
 				return genParserInfo(new XSParseString(), info, declName, xdc);
 			case "contains":
@@ -328,13 +328,13 @@ class GenParser {
 				xdc.setXDNamedItem("pattern", new DefString(mask));
 				return genParserInfo(new XSParseString(), info, declName, xdc);
 			case "letters":
-				info += genPars(xdc);
+				info += displayParams(xdc);
 				xdc.setXDNamedItem("pattern", new DefString("[A-Za-z]+"));
 				return genParserInfo(new XSParseString(), info, declName, xdc);
 			case "MD5":
 				xdc.setXDNamedItem("length", new DefLong(16));
 				return genParserInfo(new XSParseHexBinary(),
-					info + genPars(xdc), declName, xdc);
+					info + displayParams(xdc), declName, xdc);
 			case "num":
 				info += '(';
 				if ((s = xdc.getXDNamedItemAsString("length")) != null) {
@@ -411,7 +411,7 @@ class GenParser {
 			case "SHA1":
 				xdc.setXDNamedItem("length", new DefLong(20));
 				return genParserInfo(new XSParseHexBinary(),
-					info + genPars(xdc), declName, xdc);
+					info + displayParams(xdc), declName, xdc);
 			case "telephone":
 				xdc.setXDNamedItem("pattern", new DefString(
 					"([+]\\d+[ ])?(\\d+([ ]\\d+)*)"));
@@ -465,7 +465,7 @@ class GenParser {
 				xdc.removeXDNamedItem("argument");
 				xdc.removeXDNamedItem("outFormat");
 				xdc.removeXDNamedItem("format");
-				info += genPars(xdc);
+				info += displayParams(xdc);
 				return genParserInfo(new XSParseString(),
 					info, declName, new DefContainer());
 		}

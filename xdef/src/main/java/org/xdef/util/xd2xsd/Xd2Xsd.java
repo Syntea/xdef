@@ -307,6 +307,22 @@ public class Xd2Xsd {
 		}
 	}
 
+	/** Get declared type name.
+	 * @param parserInfo object with information about value type.
+	 * @return declared type name or null;
+	 */
+	private static String genDeclaredName(final GenParser parserInfo) {
+		String s = parserInfo.getDeclaredName();
+		if (s != null) {
+			String[] parts = s.split(";");
+			if (parts!=null&&parts.length>0&&!(s=parts[0].trim()).isEmpty()) {
+				int ndx = s.indexOf('#');
+				return ndx>=0 ? s.substring(0,ndx)+"_"+s.substring(ndx+1) : s;
+			}
+		}
+		return null;
+	}
+
 	/** Add attributes to schema element.
 	 * @param el schema element
 	 * @param attrs array with attribute models.
@@ -381,35 +397,21 @@ public class Xd2Xsd {
 		}
 	}
 
-	/** Get declared type name.
-	 * @param parserInfo object with information about value type.
-	 * @return declared type name or null;
-	 */
-	private static String genDeclaredName(final GenParser parserInfo) {
-		String s = parserInfo.getDeclaredName();
-		if (s != null) {
-			String[] parts = s.split(";");
-			if (parts!=null&&parts.length>0&&!(s=parts[0].trim()).isEmpty()) {
-				int ndx = s.indexOf('#');
-				return ndx>=0 ? s.substring(0,ndx)+"_"+s.substring(ndx+1) : s;
-			}
-		}
-		return null;
-	}
-
 	/** Find simpleType element with given name.
 	 * @param el element where to find.
-	 * @param name name of simpleType.
+	 * @param name name of simpleType (may be null).
 	 * @return simpleType element with given name or null.
 	 */
 	private Element findSchematype(final Element el, final String name) {
-		Element root = getSchemaRoot(el);
-		NodeList nl = KXmlUtils.getChildElementsNS(
-			root, XMLConstants.W3C_XML_SCHEMA_NS_URI, "simpleType");
-		for (int i=0; i < nl.getLength(); i++) {
-			Element stype = (Element)nl.item(i);
-			if (stype.getAttribute("name").equals(name)) {
-				return stype;
+		if (name != null) {
+			Element root = getSchemaRoot(el);
+			NodeList nl = KXmlUtils.getChildElementsNS(
+				root, XMLConstants.W3C_XML_SCHEMA_NS_URI, "simpleType");
+			for (int i=0; i < nl.getLength(); i++) {
+				Element stype = (Element)nl.item(i);
+				if (stype.getAttribute("name").equals(name)) {
+					return stype;
+				}
 			}
 		}
 		return null;
@@ -518,8 +520,9 @@ public class Xd2Xsd {
 		XMData[] attrs = xel.getAttrs();
 		XMNode[] children = xel.getChildNodeModels();
 		if (children.length == 1 && children[0].getKind() == XMNode.XMTEXT) {
-			XMData x = (XMData) children[0];
-			GenParser parserInfo = GenParser.genParser(x, _genXdateOutFormat);
+			XMData xData = (XMData) children[0];
+			GenParser parserInfo =
+				GenParser.genParser(xData, _genXdateOutFormat);
 			String typeName = genDeclaredName(parserInfo);
 			Element simpleType;
 			if (attrs.length == 0) {
@@ -541,8 +544,8 @@ public class Xd2Xsd {
 					if (!targetNs.isEmpty()) {
 						el.setAttribute("xmlns", targetNs);
 					}
-//					addDocumentation(el, "See simpleType \"" + typeName + '"');
-					if (findSchematype(el, typeName) == null) {
+					simpleType = findSchematype(el, typeName);
+					if (simpleType == null) {
 						// named simpletype not exists, create it!
 						simpleType = genSchemaElem(schema,"simpleType");
 						simpleType.setAttribute("name", typeName);
@@ -551,34 +554,48 @@ public class Xd2Xsd {
 				}
 			} else {
 				Element complextp = genSchemaElem(el, "complexType");
-				Element simplect;
 				Element extension = null;
-				if (typeName == null) {
-					if (parserInfo.getParser().getNamedParams().isEmpty()
-						&& (parserInfo.getInfo() == null
-						|| parserInfo.getInfo().isEmpty())) {
-						simplect = genSchemaElem(complextp, "simpleContent");
-						extension = genSchemaElem(simplect, "extension");
-						extension.setAttribute("base",
-							SCHEMA_PFX + parserInfo.getParser().parserName());
-					} else {
-						typeName = createSchemaTypeName(el, xel.getLocalName());
-						if (!targetNs.isEmpty()) {
-							simplect = genSchemaElem(complextp,"simpleContent");
+				if (xData.getOccurence().minOccurs() < 1) {
+					complextp.setAttribute("mixed", "true");
+					XDParser p = parserInfo.getParser();
+					String info = "In X-definition is declared optional value "
+						+ p.parserName()
+						+ GenParser.displayParams(p.getNamedParams());
+					addDocumentation(complextp, info);
+				} else {
+					Element simplect;
+					if (typeName == null) {
+						if (parserInfo.getParser().getNamedParams().isEmpty()
+							&& (parserInfo.getInfo() == null
+							|| parserInfo.getInfo().isEmpty())) {
+							simplect =
+								genSchemaElem(complextp, "simpleContent");
 							extension = genSchemaElem(simplect, "extension");
-							extension.setAttribute("xmlns", targetNs);
+							extension.setAttribute("base",
+								SCHEMA_PFX + parserInfo.getParser().parserName());
+						} else {
+							typeName =
+								createSchemaTypeName(el, xel.getLocalName());
+							if (!targetNs.isEmpty()) {
+								simplect =
+									genSchemaElem(complextp,"simpleContent");
+								extension = genSchemaElem(simplect,"extension");
+								extension.setAttribute("xmlns", targetNs);
+							}
 						}
 					}
-				}
-				if (typeName != null && findSchematype(el, typeName) == null) {
-					simpleType = genSchemaElem(schema,"simpleType");
-					simpleType.setAttribute("name", typeName);
-					genRestrictions(simpleType, parserInfo);
-					simplect = genSchemaElem(complextp, "simpleContent");
-					extension = genSchemaElem(simplect, "extension");
-					extension.setAttribute("base", typeName);
-					if (!targetNs.isEmpty()) {
-						extension.setAttribute("xmlns", targetNs);
+					if (typeName != null) {
+						if (findSchematype(el, typeName) == null) {
+							simpleType = genSchemaElem(schema,"simpleType");
+							simpleType.setAttribute("name", typeName);
+							genRestrictions(simpleType, parserInfo);
+						}
+						simplect = genSchemaElem(complextp, "simpleContent");
+						extension = genSchemaElem(simplect, "extension");
+						extension.setAttribute("base", typeName);
+						if (!targetNs.isEmpty()) {
+							extension.setAttribute("xmlns", targetNs);
+						}
 					}
 				}
 				if (extension != null) {
