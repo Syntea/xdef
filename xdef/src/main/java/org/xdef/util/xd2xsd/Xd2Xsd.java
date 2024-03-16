@@ -475,7 +475,7 @@ public class Xd2Xsd {
 			XDParser p = parserInfo.getParser();
 			String info = "In X-definition is declared optional value ";
 			if (p.getDeclaredName() != null) {
-				info += "(" + p.getDeclaredName() + "); ";
+				info += "(type " + p.getDeclaredName() + "); ";
 			}
 			info += p.parserName();
 			info += GenParser.displayParams(p.getNamedParams());
