@@ -1,4 +1,4 @@
-<xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" xd:name="main" xd:root="X|A|B" >
+<xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" xd:name="main" xd:root="A|B|X|Y" >
   <xd:declaration>
      type  skodaTextDN string(1,4000);
      type  castkaKcDN  long(0,999_999_999);
@@ -26,4 +26,5 @@
      h='? printableDate()'
      i='? dec(9,5)'
   />
+  <Y/>
 </xd:def>

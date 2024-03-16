@@ -553,8 +553,12 @@ public class Xd2Xsd {
 				GenParser.genParser(xData, _genXdateOutFormat);
 			Element simpleType;
 			Element extension = null;
-			Element complextp = genOptionalComplexType(el, xData, parserInfo);
-			if (attrs.length == 0 && complextp == null) {
+			Element complexTyp;
+			if (attrs.length == 0) {
+				complexTyp = genOptionalComplexType(el, xData, parserInfo);
+				if (complexTyp != null) {
+					return el;
+				}
 				if (parserInfo.getFixed() != null) {
 					el.setAttribute("fixed", parserInfo.getFixed());
 				} else if (parserInfo.getDefault() != null) {
@@ -582,45 +586,50 @@ public class Xd2Xsd {
 						genRestrictions(simpleType, parserInfo);
 					}
 				}
-			} else if (complextp == null) {
-				complextp = genSchemaElem(el, "complexType");
-				String typeName = genDeclaredName(parserInfo);
-				Element simplect;
-				if (typeName == null) {
-					if (parserInfo.getParser().getNamedParams().isEmpty()
-						&& (parserInfo.getInfo() == null
-						|| parserInfo.getInfo().isEmpty())) {
-						simplect = genSchemaElem(complextp, "simpleContent");
-						extension = genSchemaElem(simplect, "extension");
-						extension.setAttribute("base",
-							SCHEMA_PFX + parserInfo.getParser().parserName());
-					} else {
-						typeName =
-							createSchemaTypeName(el, xel.getLocalName());
-						if (!targetNs.isEmpty()) {
-							simplect = genSchemaElem(complextp,"simpleContent");
-							extension = genSchemaElem(simplect,"extension");
-							extension.setAttribute("xmlns", targetNs);
+			} else {
+				complexTyp = genOptionalComplexType(el, xData, parserInfo);
+				if (complexTyp == null) { // text value of element
+					complexTyp = genSchemaElem(el, "complexType");
+					String typeName = genDeclaredName(parserInfo);
+					Element simplect;
+					if (typeName == null) {
+						if (parserInfo.getParser().getNamedParams().isEmpty()
+							&& (parserInfo.getInfo() == null
+							|| parserInfo.getInfo().isEmpty())) {
+							simplect =
+								genSchemaElem(complexTyp, "simpleContent");
+							extension = genSchemaElem(simplect, "extension");
+							extension.setAttribute("base",
+								SCHEMA_PFX+parserInfo.getParser().parserName());
+						} else {
+							typeName =
+								createSchemaTypeName(el, xel.getLocalName());
+							if (!targetNs.isEmpty()) {
+								simplect =
+									genSchemaElem(complexTyp,"simpleContent");
+								extension = genSchemaElem(simplect,"extension");
+								extension.setAttribute("xmlns", targetNs);
+							}
 						}
 					}
-				}
-				if (typeName != null) {
-					if (findSchematype(el, typeName) == null) {
-						simpleType = genSchemaElem(schema,"simpleType");
-						simpleType.setAttribute("name", typeName);
-						genRestrictions(simpleType, parserInfo);
-					}
-					simplect = genSchemaElem(complextp, "simpleContent");
-					extension = genSchemaElem(simplect, "extension");
-					extension.setAttribute("base", typeName);
-					if (!targetNs.isEmpty()) {
-						extension.setAttribute("xmlns", targetNs);
+					if (typeName != null) {
+						if (findSchematype(el, typeName) == null) {
+							simpleType = genSchemaElem(schema,"simpleType");
+							simpleType.setAttribute("name", typeName);
+							genRestrictions(simpleType, parserInfo);
+						}
+						simplect = genSchemaElem(complexTyp, "simpleContent");
+						extension = genSchemaElem(simplect, "extension");
+						extension.setAttribute("base", typeName);
+						if (!targetNs.isEmpty()) {
+							extension.setAttribute("xmlns", targetNs);
+						}
 					}
 				}
 				if (extension != null) {
 					addAttrs(extension, attrs);
 				} else {
-					addAttrs(complextp, attrs);
+					addAttrs(complexTyp, attrs);
 				}
 			}
 			return el;
