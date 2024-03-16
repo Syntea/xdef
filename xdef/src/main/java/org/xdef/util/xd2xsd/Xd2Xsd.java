@@ -473,11 +473,11 @@ public class Xd2Xsd {
 			Element complextp = genSchemaElem(el, "complexType");
 			complextp.setAttribute("mixed", "true");
 			XDParser p = parserInfo.getParser();
-			String info = "In X-definition is declared optional value ";
+			String info ="In X-definition is declared optional text item value";
 			if (p.getDeclaredName() != null) {
-				info += "(type " + p.getDeclaredName() + "); ";
+				info += " (type name: " + p.getDeclaredName() + ")";
 			}
-			info += p.parserName();
+			info += " as " + p.parserName();
 			info += GenParser.displayParams(p.getNamedParams());
 			addDocumentation(complextp, info);
 			return complextp;
