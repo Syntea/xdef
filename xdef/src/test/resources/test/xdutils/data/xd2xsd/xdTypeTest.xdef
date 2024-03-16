@@ -1,5 +1,22 @@
-<xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" xd:name="main" xd:root="A" >
-  <A a="? regex('[A-Z]{3}[0-9]{6}');"
+<xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" xd:name="main" xd:root="X|A|B" >
+  <xd:declaration>
+     type  skodaTextDN string(1,4000);
+     type  castkaKcDN  long(0,999_999_999);
+  </xd:declaration>
+
+  <A>
+    <B xd:script="*"><C xd:script="0..1; ref C"/></B>
+    <D xd:script="*"><C xd:script="0..1; ref C"/></D>
+  </A>
+
+  <B>
+    <Q xd:script="*"><E xd:script="0..1; ref E"/></Q>
+    <R xd:script="*"><E xd:script="0..1; ref E"/></R>
+  </B>
+  <C a="? castkaKcDN()"> ? skodaTextDN() </C>
+  <E> ? skodaTextDN() </E>
+
+  <X a="? regex('[A-Z]{3}[0-9]{6}');"
      b='? dateYMDhms()'
      c='? emailAddr()'
      d='? emailDate()'
