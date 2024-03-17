@@ -293,6 +293,169 @@ public final class KXmlUtils extends KDOMUtils {
 		return true;
 	}
 
+	/** Write text value.
+	 * @param out output writer for result.
+	 * @param text text value.
+	 * @param isCdata true if CDATA section.
+	 * @param indent indentation prefix or null.
+	 * @param removeIgnorableWhiteSpaces if true all white space sequences
+	 * are replaced by one space and value is trimmed.
+	 * @param lineLen length of source line.
+	 * @throws IOException if an error occurs.
+	 */
+	private static void writeText(final Writer out,
+		final String text,
+		final boolean isCdata,
+		final String indent,
+		final boolean removeIgnorableWhiteSpaces,
+		final int lineLen) throws IOException {
+		int len = text.length();
+		int pos = (indent == null) ? 0 : indent.length();
+		for (int j = 0; j < len; j++) {
+			char c;
+			switch (c = text.charAt(j)) {
+				case '<':
+					if (isCdata) {
+						out.write('<');
+						pos++;
+					} else {
+						out.write("&lt;");
+						pos += 4;
+					}
+					break;
+				case '&':
+					if (isCdata) {
+						out.write('&');
+						pos++;
+					} else {
+						out.write("&amp;");
+						pos += 5;
+					}
+					break;
+				case '>':
+					if (j >= 2 &&
+						(text.charAt(j-1) == ']' || text.charAt(j-2) == ']' )) {
+						if (isCdata) { // we must create other CDataSection
+							out.write("><!CDATA[");
+							pos += 9;
+						} else {out.write("&gt;");
+							pos += 4;
+						}
+					} else { //in the text value can't be "]]>"
+						out.write('>');
+						pos++;
+					}
+					break;
+				case '\t':
+				case '\n':
+				case ' ':
+					if (removeIgnorableWhiteSpaces) {
+						if (indent != null && pos >= lineLen-1 && j + 1 < len) {
+							//wrap line
+							out.write(indent);
+							pos = indent.length();
+						} else {
+							out.write(' ');
+							pos ++;
+						}
+						while (j + 1 < len && ((c=text.charAt(j + 1)) == ' '
+							|| c == '\n' || c == '\t')) {
+							j++;
+						}
+					} else {
+						out.write(c); // default print char
+						pos++;
+					}
+					break;
+				default:
+					if (c < ' ') {
+						out.write("&#");
+						out.write(Integer.toString(c));
+						out.write(';');
+						pos += c < 10 ? 4 : 5;
+					} else {
+						out.write(c);
+						pos++;
+					}
+			}
+		}
+	}
+
+	/** Create value of an attribute.
+	 * @param value attribute value.
+	 * @param removeIgnorableWhiteSpaces if true the value is trimmed
+	 * and then all white space sequences are replaced by one space.
+	 * @return quoted string with the created attribute value.
+	 */
+	private static String createAttrValue(String value,
+		final boolean removeIgnorableWhiteSpaces) {
+		String s = value;
+		char delimiter = s.indexOf('"') < 0
+			? '"' : s.indexOf('\'') < 0 ? '\'' : '"';
+		if (removeIgnorableWhiteSpaces) {
+			s = s.trim();
+		}
+		StringBuilder sb = new StringBuilder(s.length() + 2);
+		sb.append(delimiter);
+		int len = s.length();
+		for (int j = 0; j < len; j++) {
+			char c;
+			switch (c = s.charAt(j)) {
+				case '<':
+					sb.append("&lt;");
+					continue;
+				case '&':
+					sb.append("&amp;");
+					continue;
+				case ' ':
+					if (removeIgnorableWhiteSpaces) {
+						sb.append(' ');
+						while (j + 1 < len && s.charAt(j + 1) == ' ') {
+							j++;
+						}
+					} else {
+						sb.append(c); //default print char
+					}
+					continue;
+			}
+			if (c < ' ') {
+				sb.append("&#").append(Integer.toString(c)).append(';');
+			} else {
+				if (c == delimiter) {
+					sb.append((delimiter == '"' ? "&quot;" : "&apos;"));
+				} else {
+					sb.append(c);
+				}
+			}
+		}
+		return sb.append(delimiter).toString();
+	}
+
+	/** Create string with the attribute.
+	 * @param attr The attribute.
+	 * @param removeIgnorableWhiteSpaces if true the value is trimmed
+	 * and then all white space sequences are replaced by one space.
+	 * @return string with source value of the attribute.
+	 */
+	private static String createAttr(final Node attr,
+		final boolean removeIgnorableWhiteSpaces,
+		final Map<String, String> namespaceMap,
+		final Map<String, String> unresolved) {
+		String name = attr.getNodeName();
+		String uri = attr.getNamespaceURI();
+		int ndx;
+		String prefix;
+		if (uri != null && (ndx = name.indexOf(':')) >= 0
+			&& !(prefix = name.substring(0, ndx)).startsWith("xml")) {
+			String xmlnsName = "xmlns:" + prefix;
+			if (!uri.equals(namespaceMap.get(xmlnsName))) {
+				unresolved.put(xmlnsName, uri);
+			}
+		}
+		return name + "="
+			+ createAttrValue(attr.getNodeValue(), removeIgnorableWhiteSpaces);
+	}
+
 	/** Write node as XML to output stream. Format of result will be
 	 * indented if the argument <code>indentStep</code> is string with
 	 * indenting spaces. If argument <code>indentStep</code> is null
@@ -539,7 +702,7 @@ public final class KXmlUtils extends KDOMUtils {
 							//write text on the same line as element start
 							out.write('>');
 							writeText(out, s, false,
-								null, removeIgnorableWhiteSpaces);
+								null, removeIgnorableWhiteSpaces, lineLen);
 							out.write("</");
 							out.write(tagName);
 							out.write('>');
@@ -565,8 +728,8 @@ public final class KXmlUtils extends KDOMUtils {
 								if (removeIgnorableWhiteSpaces) {
 									out.write(newIndent);
 								}
-								writeText(out, s, false,
-									newIndent, removeIgnorableWhiteSpaces);
+								writeText(out, s, false, newIndent,
+									removeIgnorableWhiteSpaces, lineLen);
 								if (removeIgnorableWhiteSpaces) {
 									out.write(startLine);
 								}
@@ -632,14 +795,14 @@ public final class KXmlUtils extends KDOMUtils {
 					// the value of a CDATA node a string containing with "]]>"
 					while ((ndx = s.indexOf("]]>", oldx)) >= 0) {
 						out.write("<![CDATA[");
-						writeText(out, s.substring(oldx, ndx + 2),
-							true, startLine, removeIgnorableWhiteSpaces);
+						writeText(out, s.substring(oldx, ndx + 2), true,
+							startLine, removeIgnorableWhiteSpaces, lineLen);
 						out.write("]]>");
 						oldx = ndx + 2;
 					}
 					out.write("<![CDATA[");
 					writeText(out, s.substring(oldx),
-						true, startLine, removeIgnorableWhiteSpaces);
+						true, startLine, removeIgnorableWhiteSpaces, lineLen);
 					out.write("]]>");
 					break;
 				}
@@ -651,7 +814,8 @@ public final class KXmlUtils extends KDOMUtils {
 						break;
 					}
 				}
-				writeText(out, s, false, startLine, removeIgnorableWhiteSpaces);
+				writeText(out,
+					s, false, startLine, removeIgnorableWhiteSpaces, lineLen);
 				break;
 			}
 			case Node.PROCESSING_INSTRUCTION_NODE:
@@ -665,167 +829,6 @@ public final class KXmlUtils extends KDOMUtils {
 				out.write("?>");
 				break;
 			default:
-		}
-	}
-
-	/** Create value of an attribute.
-	 * @param value attribute value.
-	 * @param removeIgnorableWhiteSpaces if true the value is trimmed
-	 * and then all white space sequences are replaced by one space.
-	 * @return quoted string with the created attribute value.
-	 */
-	private static String createAttrValue(String value,
-		final boolean removeIgnorableWhiteSpaces) {
-		String s = value;
-		char delimiter = s.indexOf('"') < 0
-			? '"' : s.indexOf('\'') < 0 ? '\'' : '"';
-		if (removeIgnorableWhiteSpaces) {
-			s = s.trim();
-		}
-		StringBuilder sb = new StringBuilder(s.length() + 2);
-		sb.append(delimiter);
-		int len = s.length();
-		for (int j = 0; j < len; j++) {
-			char c;
-			switch (c = s.charAt(j)) {
-				case '<':
-					sb.append("&lt;");
-					continue;
-				case '&':
-					sb.append("&amp;");
-					continue;
-				case ' ':
-					if (removeIgnorableWhiteSpaces) {
-						sb.append(' ');
-						while (j + 1 < len && s.charAt(j + 1) == ' ') {
-							j++;
-						}
-					} else {
-						sb.append(c); //default print char
-					}
-					continue;
-			}
-			if (c < ' ') {
-				sb.append("&#").append(Integer.toString(c)).append(';');
-			} else {
-				if (c == delimiter) {
-					sb.append((delimiter == '"' ? "&quot;" : "&apos;"));
-				} else {
-					sb.append(c);
-				}
-			}
-		}
-		return sb.append(delimiter).toString();
-	}
-
-	/** Create string with the attribute.
-	 * @param attr The attribute.
-	 * @param removeIgnorableWhiteSpaces if true the value is trimmed
-	 * and then all white space sequences are replaced by one space.
-	 * @return string with source value of the attribute.
-	 */
-	private static String createAttr(final Node attr,
-		final boolean removeIgnorableWhiteSpaces,
-		final Map<String, String> namespaceMap,
-		final Map<String, String> unresolved) {
-		String name = attr.getNodeName();
-		String uri = attr.getNamespaceURI();
-		int ndx;
-		String prefix;
-		if (uri != null && (ndx = name.indexOf(':')) >= 0
-			&& !(prefix = name.substring(0, ndx)).startsWith("xml")) {
-			String xmlnsName = "xmlns:" + prefix;
-			if (!uri.equals(namespaceMap.get(xmlnsName))) {
-				unresolved.put(xmlnsName, uri);
-			}
-		}
-		return name + "="
-			+ createAttrValue(attr.getNodeValue(), removeIgnorableWhiteSpaces);
-	}
-
-	/** Write text value.
-	 * @param out output writer for result.
-	 * @param text text value.
-	 * @param isCdata true if CDATA section.
-	 * @param indent indentation prefix or null.
-	 * @param removeIgnorableWhiteSpaces if true all white space sequences
-	 * are replaced by one space and value is trimmed.
-	 * @throws IOException if an error occurs.
-	 */
-	private static void writeText(final Writer out,
-		final String text,
-		final boolean isCdata,
-		final String indent,
-		final boolean removeIgnorableWhiteSpaces) throws IOException {
-		int len = text.length();
-		int pos = (indent == null) ? 0 : indent.length();
-		for (int j = 0; j < len; j++) {
-			char c;
-			switch (c = text.charAt(j)) {
-				case '<':
-					if (isCdata) {
-						out.write('<');
-						pos++;
-					} else {
-						out.write("&lt;");
-						pos += 4;
-					}
-					break;
-				case '&':
-					if (isCdata) {
-						out.write('&');
-						pos++;
-					} else {
-						out.write("&amp;");
-						pos += 5;
-					}
-					break;
-				case '>':
-					if (j >= 2 &&
-						(text.charAt(j-1) == ']' || text.charAt(j-2) == ']' )) {
-						if (isCdata) { // we must create other CDataSection
-							out.write("><!CDATA[");
-							pos += 9;
-						} else {out.write("&gt;");
-							pos += 4;
-						}
-					} else { //in the text value can't be "]]>"
-						out.write('>');
-						pos++;
-					}
-					break;
-				case '\t':
-				case '\n':
-				case ' ':
-					if (removeIgnorableWhiteSpaces) {
-						if (indent != null && pos >= 79 && j + 1 < len) {
-							//wrap line
-							out.write(indent);
-							pos = indent.length();
-						} else {
-							out.write(' ');
-							pos ++;
-						}
-						while (j + 1 < len && ((c=text.charAt(j + 1)) == ' '
-							|| c == '\n' || c == '\t')) {
-							j++;
-						}
-					} else {
-						out.write(c); // default print char
-						pos++;
-					}
-					break;
-				default:
-					if (c < ' ') {
-						out.write("&#");
-						out.write(Integer.toString(c));
-						out.write(';');
-						pos += c < 10 ? 4 : 5;
-					} else {
-						out.write(c);
-						pos++;
-					}
-			}
 		}
 	}
 
@@ -1701,24 +1704,24 @@ public final class KXmlUtils extends KDOMUtils {
 				return false;
 			}
 			switch (nodeA.getNodeType()) {
-				case Node.ELEMENT_NODE:
-					if (!cmpElements((Element)nodeA, (Element)nodeB, reporter)) {
+			case Node.ELEMENT_NODE:
+				if (!cmpElements((Element)nodeA, (Element)nodeB, reporter)) {
+					return false;
+				}
+				continue;
+			case Node.TEXT_NODE:
+				String sa = nodeA.getNodeValue();
+				String sb = nodeB.getNodeValue();
+				if (sa == null || sb == null) {
+					if (sa == null && sb != null && sb.length() > 0 ||
+						sb == null && sa != null && sa.length() > 0) {
 						return false;
 					}
-					continue;
-				case Node.TEXT_NODE:
-					String sa = nodeA.getNodeValue();
-					String sb = nodeB.getNodeValue();
-					if (sa == null || sb == null) {
-						if (sa == null && sb != null && sb.length() > 0 ||
-							sb == null && sa != null && sa.length() > 0) {
-							return false;
-						}
-					} else if (!(sa.trim()).equals(sb.trim())) {
-						reporter.error(null, "<" + elem_A.getNodeName()
-							+ "> A text: '" + sa + "', B: '" + sb + "'");
-						return false;
-					}
+				} else if (!(sa.trim()).equals(sb.trim())) {
+					reporter.error(null, "<" + elem_A.getNodeName()
+						+ "> A text: '" + sa + "', B: '" + sb + "'");
+					return false;
+				}
 			}
 		}
 		return true;
