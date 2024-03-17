@@ -462,25 +462,27 @@ public class Xd2Xsd {
 	 * @param el parent element.
 	 * @param xData data value model.
 	 * @param parserInfo created object.
-	 * @return If data value is optional, generate xd:complexType with attribute
-	 * mixed="true" and return the generated xs:complexType element. Otherwise,
-	 * return null;
+	 * @return If data value is optional, generate xs:complexType,
+	 * xs:simpleContent and xs:extension. Return  the element xs:extension
+	 * or return null;
 	 */
 	private Element genOptionalComplexType(final Element el,
 		final XMData xData,
 		final GenParser parserInfo) {
 		if (xData.getOccurence().minOccurs() < 1) {
-			Element complextp = genSchemaElem(el, "complexType");
-			complextp.setAttribute("mixed", "true");
+			Element complexType = genSchemaElem(el, "complexType");
+			Element simpleContent = genSchemaElem(complexType, "simpleContent");
 			XDParser p = parserInfo.getParser();
-			String info ="In the X-definition is declared optional text item";
+			String info = "In the X-definition is declared optional text item";
 			if (p.getDeclaredName() != null) {
-				info += " (X-definition type name: '"+p.getDeclaredName()+"')";
+				info += " (type: '" + p.getDeclaredName() + "')";
 			}
 			info += " as " + p.parserName();
 			info += GenParser.displayParams(p.getNamedParams());
-			addDocumentation(complextp, info);
-			return complextp;
+			addDocumentation(simpleContent, info);
+			Element extension = genSchemaElem(simpleContent, "extension");
+			extension.setAttribute("base", "xs:string");
+			return extension;
 		}
 		return null;
 	}
@@ -552,12 +554,10 @@ public class Xd2Xsd {
 			GenParser parserInfo =
 				GenParser.genParser(xData, _genXdateOutFormat);
 			Element simpleType;
-			Element extension = null;
-			Element complexTyp;
 			if (attrs.length == 0) {
-				complexTyp = genOptionalComplexType(el, xData, parserInfo);
-				if (complexTyp != null) {
-					return el;
+				Element extension = genOptionalComplexType(el, xData, parserInfo);
+				if (extension != null) {
+					return el; // optional text item (and no attributes)
 				}
 				if (parserInfo.getFixed() != null) {
 					el.setAttribute("fixed", parserInfo.getFixed());
@@ -586,28 +586,31 @@ public class Xd2Xsd {
 						genRestrictions(simpleType, parserInfo);
 					}
 				}
-			} else {
-				complexTyp = genOptionalComplexType(el, xData, parserInfo);
-				if (complexTyp == null) { // text value of element
-					complexTyp = genSchemaElem(el, "complexType");
+			} else { // attributes are there
+				Element extension =
+					genOptionalComplexType(el, xData, parserInfo);
+				if (extension == null) { // text item is NOT optional!
+					Element complexType = genSchemaElem(el, "complexType");
 					String typeName = genDeclaredName(parserInfo);
-					Element simplect;
+					Element simpleContent;
 					if (typeName == null) {
 						if (parserInfo.getParser().getNamedParams().isEmpty()
 							&& (parserInfo.getInfo() == null
 							|| parserInfo.getInfo().isEmpty())) {
-							simplect =
-								genSchemaElem(complexTyp, "simpleContent");
-							extension = genSchemaElem(simplect, "extension");
+							simpleContent =
+								genSchemaElem(complexType, "simpleContent");
+							extension = genSchemaElem(simpleContent,
+								"extension");
 							extension.setAttribute("base",
 								SCHEMA_PFX+parserInfo.getParser().parserName());
 						} else {
 							typeName =
 								createSchemaTypeName(el, xel.getLocalName());
 							if (!targetNs.isEmpty()) {
-								simplect =
-									genSchemaElem(complexTyp,"simpleContent");
-								extension = genSchemaElem(simplect,"extension");
+								simpleContent =
+									genSchemaElem(complexType,"simpleContent");
+								extension =
+									genSchemaElem(simpleContent,"extension");
 								extension.setAttribute("xmlns", targetNs);
 							}
 						}
@@ -618,19 +621,16 @@ public class Xd2Xsd {
 							simpleType.setAttribute("name", typeName);
 							genRestrictions(simpleType, parserInfo);
 						}
-						simplect = genSchemaElem(complexTyp, "simpleContent");
-						extension = genSchemaElem(simplect, "extension");
+						simpleContent =
+							genSchemaElem(complexType, "simpleContent");
+						extension = genSchemaElem(simpleContent, "extension");
 						extension.setAttribute("base", typeName);
 						if (!targetNs.isEmpty()) {
 							extension.setAttribute("xmlns", targetNs);
 						}
 					}
 				}
-				if (extension != null) {
-					addAttrs(extension, attrs);
-				} else {
-					addAttrs(complexTyp, attrs);
-				}
+				addAttrs(extension, attrs); // add declaration of attributes.
 			}
 			return el;
 		}
