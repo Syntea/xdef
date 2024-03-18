@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.1.4, release-date 2024-03-17
+# Version 42.1.4, release-date 2024-03-18
 * In the conversion of X-definition to XML schema (`org.xdef.util.XdefToXsd`)
   is added parameter `--xx`. If this parameter is used than from xdatetime
   X-definition validation method is used the mask from parameter `outFormat`
