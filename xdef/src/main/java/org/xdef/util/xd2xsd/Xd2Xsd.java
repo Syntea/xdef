@@ -475,8 +475,16 @@ public class Xd2Xsd {
 		}
 		Element el1 = genSchemaElem(elem, "complexType");
 		Element el2 = genSchemaElem(el1, "simpleContent");
+		XDParser p = parserInfo.getParser();
+		String info = "In the X-definition is declared optional text item";
+		if (p.getDeclaredName() != null) {
+			info += " (type: '" + p.getDeclaredName() + "')";
+		}
+		info += " as " + p.parserName();
+		info += GenParser.displayParams(p.getNamedParams());
+		addDocumentation(el2, info);
 		String typeName = genDeclaredName(parserInfo);
-		String typeName1 = "_" + elem.getTagName().replace(':', '_');
+		String typeName1 = "_" + elem.getAttribute("name").replace(':', '_');
 		Element schema = getSchemaRoot(elem);
 		Element simpleType;
 		if (typeName != null) {
@@ -503,16 +511,18 @@ public class Xd2Xsd {
 		restriction = genSchemaElem(simpleType2, "restriction");
 		restriction.setAttribute("base", "xs:string");
 		Element pattern = genSchemaElem(restriction, "pattern");
-		pattern.setAttribute("value", "\\s*");
-		
+		pattern.setAttribute("value", "\\s*");		
 		schema.removeChild(dummy);
 		int i = 0;
 		String s = typeName1;
 		Element e;
-		while ((e = findSchematype(schema, s)) != null
-			&& !KXmlUtils.compareElements(e, dummy).errors()) {
-			s = typeName1 + "_" + (++i);
-			dummy.setAttribute("name", s);
+		while ((e = findSchematype(schema, s)) != null) {
+			if (KXmlUtils.compareElements(e, dummy).errors()) {
+				s = typeName1 + "_" + (++i);
+				dummy.setAttribute("name", s);
+			} else {
+				break;
+			}
 		}
 		if (e == null) {
 			schema.appendChild(dummy);
