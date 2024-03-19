@@ -102,7 +102,7 @@
   <XD3.1:declaration>
      <xd:mixed>
        <XD3.1:macro xd:script = "occurs *; ref XD3.1:macro" />
-       * declarationScript;
+       ? declarationScript;
      </xd:mixed>
   </XD3.1:declaration>
 

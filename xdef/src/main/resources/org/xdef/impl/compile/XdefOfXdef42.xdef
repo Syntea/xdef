@@ -127,7 +127,7 @@
   <XD4.2:declaration>
      <xd:mixed>
        <XD4.2:macro xd:script = "occurs *; ref XD4.2:macro" />
-       * declarationScript;
+       ? declarationScript;
      </xd:mixed>
   </XD4.2:declaration>
 
