@@ -1517,6 +1517,12 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						pnode._nsPrefixes, pnode._xpathPos+"/text()");
 					pnode._value = null;
 					_scriptCompiler.compileDataScript(xtext);
+					if (!xtext.getOccurence().isIgnore()
+						&& xtext.getOccurence().maxOccurs() > 1) {
+						//Occurrence of attribute or text value can't
+						//be more then 1
+						error (XDEF.XDEF262);
+					}
 				} else { //default text script
 					_scriptCompiler.setSourceBuffer("optional string()");
 					_scriptCompiler.compileDataScript(xtext);

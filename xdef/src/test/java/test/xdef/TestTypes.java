@@ -986,7 +986,7 @@ public final class TestTypes extends XDTester {
 "<xd:declaration>\n"+
 "    type x list(xdatetime('y-M-d', 'yyyyMMdd'));\n" +
 "</xd:declaration>\n"+
-"  <A a='? x();'>* x()</A>\n"+
+"  <A a='? x();'>? x()</A>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xml = "<A a='2022-5-8'>2022-5-8</A>";
@@ -997,7 +997,7 @@ public final class TestTypes extends XDTester {
 "<xd:declaration>\n"+
 "    type x union(%item=[xdatetime('y-M-d', 'yyyyMMdd'), boolean()]);\n" +
 "</xd:declaration>\n"+
-"  <A a='? x();'>* x()</A>\n"+
+"  <A a='? x();'>? x()</A>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xml = "<A a='2022-5-8'>2022-5-8</A>";
