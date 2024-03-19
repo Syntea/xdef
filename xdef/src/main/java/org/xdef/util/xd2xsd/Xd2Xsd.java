@@ -511,7 +511,7 @@ public class Xd2Xsd {
 		restriction = genSchemaElem(simpleType2, "restriction");
 		restriction.setAttribute("base", "xs:string");
 		Element pattern = genSchemaElem(restriction, "pattern");
-		pattern.setAttribute("value", "\\s*");		
+		pattern.setAttribute("value", "\\s*");
 		schema.removeChild(dummy);
 		int i = 0;
 		String s = typeName1;
