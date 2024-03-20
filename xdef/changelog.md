@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.1.4, release-date 2024-03-19
+# Version 42.1.4, release-date 2024-03-20
 * In the conversion of X-definition to XML schema (`org.xdef.util.XdefToXsd`)
   is added parameter `--xx`. If this parameter is used than from xdatetime
   X-definition validation method is used the mask from parameter `outFormat`
@@ -8,6 +8,8 @@
 * most of X-definition methods is now more converted to XML schema string type
   with `pattern` facets.
 * corrected conversion of X-definition type `dec` to XML schema.
+* Added error message `XDEF262` if occurrence was set to greater than 1
+  in the text node model.
 
 # Version 42.1.3, release-date 2024-03-04
 * The conversion of X-definition to XML schema (`org.xdef.util.XdefToXsd`)
