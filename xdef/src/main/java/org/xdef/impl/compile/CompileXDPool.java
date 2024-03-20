@@ -1469,9 +1469,10 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 //					newNode = createReference(pnode, pnode._localName, xdef);
 //					break;
 					default:
-						//Element from namespace of XDefinitions is not allowed here
-					error(pnode._name, XDEF.XDEF322);
-					return;
+						//Element from namespace of XDefinitions is not
+						//allowed here
+						error(pnode._name, XDEF.XDEF322);
+						return;
 				}
 			} else {//XElement
 				xel = new XElement(xchildName, pnode._nsURI, xdef);
@@ -1521,7 +1522,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						&& xtext.getOccurence().maxOccurs() > 1) {
 						//Occurrence of attribute or text value can't
 						//be more then 1
-						error (XDEF.XDEF262);
+						_scriptCompiler.error(XDEF.XDEF262);
 					}
 				} else { //default text script
 					_scriptCompiler.setSourceBuffer("optional string()");
@@ -1957,9 +1958,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					if (xn == null || xn.getKind() != XMELEMENT
 						&& xn.getKind() != XMATTRIBUTE
 						&& xn.getKind() != XMTEXT) {
-						SBuffer sbf = en.getValue();
 						//Unresolved reference &{0}
-						error(sbf, XDEF.XDEF353, en.getKey());
+						error(en.getValue(), XDEF.XDEF353, en.getKey());
 						continue;
 					}
 					// if this bind item is connected to a class (and extends
@@ -2374,10 +2374,6 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 					changeModelNS(xel, nsOrig, nsNew, new HashSet<>());
 				} else {
 					if (nsOrig != null && nsNew == null) {
-//						//Reference from a model without namespace is not
-//						// allowed to a model with namespace
-//						error(xref.getSPosition(),
-//							XDEF.XDEF123,  xref.getXDPosition());
 						xel.setReference(false);
 					} else {
 						xel.setReference(true);
