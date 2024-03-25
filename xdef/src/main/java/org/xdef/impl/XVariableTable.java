@@ -174,8 +174,9 @@ public final class XVariableTable implements XMVariableTable {
 	 */
 	public final void setLastOffset(final int x) {_lastOffset = x;}
 
-	/** Set parent of the variable table. */
-	final void setParent(final XVariableTable p) {_parent = p;}
+	/** Set parent of the variable table.
+	 * @param p variable table to be set as parent.*/
+	public final void setParent(final XVariableTable p) {_parent = p;}
 
 	/** Write variable table to XDWriter.
 	 * @param xw the XDWriter.
@@ -185,8 +186,8 @@ public final class XVariableTable implements XMVariableTable {
 		XVariable[] variables = (XVariable[]) toArray();
 		xw.writeInt(_sqId);
 		xw.writeLength(variables.length);
-		for (int i = 0; i < variables.length; i++) {
-			variables[i].writeXD(xw);
+		for (XVariable variable : variables) {
+			variable.writeXD(xw);
 		}
 	}
 

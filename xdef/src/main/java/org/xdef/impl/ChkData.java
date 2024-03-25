@@ -38,7 +38,7 @@ abstract class ChkData extends XDValueAbstract implements XXData {
 	private Object _userObject;
 	private final Node _node;
 
-	ChkData(Node node, ChkElement parent, XData xDataModel) {
+	protected ChkData(Node node, ChkElement parent, XData xDataModel) {
 		_xDataModel = xDataModel;
 		_parent = parent;
 		_node = node;
@@ -91,21 +91,6 @@ abstract class ChkData extends XDValueAbstract implements XXData {
 	public final XXElement getXXElement()  {return _parent;}
 
 ////////////////////////////////////////////////////////////////////////////////
-
-	/** Get ChkElement assigned to this node.
-	 * @return ChkElement assigned to this node.
-	 */
-	final ChkElement getChkElement() {return _parent;}
-
-	/** Get Element value assigned to this node.
-	 * @return Element value assigned to this node.
-	 */
-	final Element getElemValue() {return _parent.getElemValue();}
-
-	/** Assign Element value to this node.
-	 * @param elem Element value to be assigned to this node.
-	 */
-	final void setElemValue(final Element elem) {_parent.setElemValue(elem);}
 
 	@Override
 	/** Get model of the processed data object.

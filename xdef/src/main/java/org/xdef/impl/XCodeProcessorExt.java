@@ -300,9 +300,10 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 			case PARSE_DURATION: //Duration
 				try {
 					return new DefDuration(p.toString());
-				} catch (Exception ex) {
+				} catch (SRuntimeException ex) {
 					return DefNull.genNullValue(XD_DURATION);
 				}
+
 			case DURATION_GETYEARS:
 				return p == null || p.isNull()
 					? new DefLong(-1)
@@ -995,22 +996,24 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 			}
 			case NEW_LOCALE: {
 				int numPar = item.getParam();
-				if (numPar == 1) {
-					stack[sp] =
-						new DefLocale(stack[sp].toString().toLowerCase());
-				} else if (numPar == 2) {
-					stack[sp - 1] =
-						new DefLocale(stack[sp-1].toString().toLowerCase(),
-						stack[sp].toString().toUpperCase());
-					sp--;
-				} else {
-					stack[sp - 2] =
-						new DefLocale(stack[sp-2].toString().toLowerCase(),
-						stack[sp-1].toString().toUpperCase(),
-						stack[sp].toString());
-					sp -= 2;
+				switch (numPar) {
+					case 1:
+						stack[sp] =
+							new DefLocale(stack[sp].toString().toLowerCase());
+						break;
+					case 2:
+						stack[sp - 1] =
+							new DefLocale(stack[sp-1].toString().toLowerCase(),
+								stack[sp].toString().toUpperCase());
+						sp--;
+						break;
+					default:
+						stack[sp - 2] =
+							new DefLocale(stack[sp-2].toString().toLowerCase(),
+								stack[sp-1].toString().toUpperCase(),
+								stack[sp].toString());
+						sp -= 2;
 				}
-				return sp;
 			}
 		}
 		return sp;
@@ -1175,27 +1178,32 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 				double longitude;
 				double altitude = Double.MIN_VALUE;
 				String name = null;
-				if (cmd.getParam() == 4) {
-					latitude = stack[sp-3].doubleValue();
-					longitude = stack[sp-2].doubleValue();
-					altitude = stack[sp-1].doubleValue();
-					name = stack[sp].isNull() ? null : stack[sp].stringValue();
-					sp -= 3;
-				} else if (cmd.getParam() == 3) {
-					if (!stack[sp].isNull() || stack[sp].getItemId()==XD_DOUBLE
-						|| stack[sp].getItemId()==XD_DECIMAL
-						|| stack[sp].getItemId()==XD_LONG){
-						altitude = stack[sp].doubleValue();
-					} else {
-						name = stack[sp].stringValue();
-					}
-					latitude = stack[sp-2].doubleValue();
-					longitude = stack[sp-1].doubleValue();
-					sp -= 2;
-				} else {
-					latitude = stack[sp-1].doubleValue();
-					longitude = stack[sp].doubleValue();
-					sp--;
+				switch (cmd.getParam()) {
+					case 4:
+						latitude = stack[sp-3].doubleValue();
+						longitude = stack[sp-2].doubleValue();
+						altitude = stack[sp-1].doubleValue();
+						name = stack[sp].isNull() 
+							? null : stack[sp].stringValue();
+						sp -= 3;
+						break;
+					case 3:
+						if (!stack[sp].isNull()
+							|| stack[sp].getItemId()==XD_DOUBLE
+							|| stack[sp].getItemId()==XD_DECIMAL
+							|| stack[sp].getItemId()==XD_LONG){
+							altitude = stack[sp].doubleValue();
+						} else {
+							name = stack[sp].stringValue();
+						}
+						latitude = stack[sp-2].doubleValue();
+						longitude = stack[sp-1].doubleValue();
+						sp -= 2;
+						break;
+					default:
+						latitude = stack[sp-1].doubleValue();
+						longitude = stack[sp].doubleValue();
+						sp--;
 				}
 				try {
 					stack[sp] = new DefGPSPosition(
@@ -1212,7 +1220,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 				try {
 					stack[sp-1] = new DefPrice(new Price(
 						stack[sp-1].decimalValue(), stack[sp].stringValue()));
-				} catch (Exception ex) {
+				} catch (SRuntimeException ex) {
 					//"Invalid currency code: "{0}"
 					cp.putError(chkNode, XDEF.XDEF575,
 						stack[sp-1].toString() + " " + stack[sp].stringValue());

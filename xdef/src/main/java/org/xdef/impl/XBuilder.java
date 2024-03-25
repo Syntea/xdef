@@ -3,6 +3,7 @@ package org.xdef.impl;
 import java.io.File;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URL;
@@ -273,7 +274,10 @@ public final class XBuilder implements XDBuilder {
 				c.setAccessible(true);
 				xeditor = (XEditor) c.newInstance();
 			}
-		} catch (Exception ex) {
+		} catch (ClassNotFoundException | IllegalAccessException
+			| IllegalArgumentException | InstantiationException
+			| NoSuchMethodException | SecurityException
+			| InvocationTargetException ex) {
 			xeditor = null;
 			// Class with the external debug editor &{0}{"}{"}
 			// is not available.

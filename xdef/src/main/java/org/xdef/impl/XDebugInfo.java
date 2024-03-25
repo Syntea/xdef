@@ -212,8 +212,7 @@ public class XDebugInfo implements XMDebugInfo {
 		for (int i = 0; i < size; i++) {
 			XVariable[] x = _varTables[i];
 			xw.writeInt(x.length);
-			for (int j = 0; j < x.length; j++) {
-				XVariable y = x[j];
+			for (XVariable y : x) {
 				y.writeXD(xw);
 			}
 		}
@@ -425,11 +424,11 @@ public class XDebugInfo implements XMDebugInfo {
 			return line <= _end_line;
 		}
 
-		final int comparePos(final XStatementInfo x) {
+		public final int comparePos(final XStatementInfo x) {
 			return comparePos(x._line, x._column);
 		}
 
-		final int comparePos(final long line, final long column) {
+		public final int comparePos(final long line, final long column) {
 			if (_line < line) {
 				return -1;
 			}

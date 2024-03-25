@@ -223,7 +223,7 @@ public final class XPool implements XDPool, Serializable {
 		} else {
 			try {
 				return Integer.parseInt(val);
-			} catch (Exception ex) {
+			} catch (NumberFormatException ex) {
 				//Error of property &{0} = &{1} (it must be &{2}
 				throw new SRuntimeException(XDEF.XDEF214, key, val,"integer");
 			}
@@ -248,7 +248,7 @@ public final class XPool implements XDPool, Serializable {
 			for (int i = 0; i < result.length; i++) {
 				try {
 					result[i] = new SDatetime(st.nextToken());
-				} catch (Exception ex) {
+				} catch (SRuntimeException ex) {
 					//Error of property &{0} = &{1} (it must be &{2}
 					throw new SRuntimeException(XDEF.XDEF214,
 						XDConstants.XDPROPERTY_SPECDATES,
@@ -603,8 +603,6 @@ public final class XPool implements XDPool, Serializable {
 	 */
 	final int getSqId() {return ++_sqId;}
 
-	final Class<?>[] getExtObjects() {return _extClasses;}
-
 	/** Set list of XComponent binds.
 	 * @param p list of XComponents binds.
 	 */
@@ -631,11 +629,6 @@ public final class XPool implements XDPool, Serializable {
 			}
 		}
 	}
-
-	/** Set code of interpreter.
-	 * @param code array with code.
-	 */
-	final void setCode(final XDValue[] code) {_code = code;}
 
 	/** Get address of initialization code.
 	 * @return address of initialization code.
@@ -725,18 +718,6 @@ public final class XPool implements XDPool, Serializable {
 	 * @param debugInfo debug information object.
 	 */
 	public void setDebugInfo(XDebugInfo debugInfo) { _debugInfo = debugInfo; }
-
-	/** Get names of global variables.
-	 * @return array of names of global variables.
-	 */
-	final String[] getVariableNames() {return _variables.getVariableNames();}
-
-	/** Set class loader.
-	 * @param loader class loader.
-	 */
-	final void setClassLoader(final ClassLoader loader) {
-		_compiler.setClassLoader(loader);
-	}
 
 	/** Set list of XComponents.
 	 * @param p list of XComponents.
@@ -904,73 +885,73 @@ public final class XPool implements XDPool, Serializable {
 			|| xe == null) ? xe : findXMNode(xe, path.substring(ndx+1), 0, -1);
 	}
 
-	@Override
 	/** Get nameless X-definition from this XDPool.
 	 * @return nameless X-definition from this XDPool.
 	 */
+	@Override
 	public final XMDefinition getXMDefinition() {
 		return _xdefs.size() == 1
 			? _xdefs.values().iterator().next() : _xdefs.get("");
 	}
 
-	@Override
 	/** Get X-definition from this XDPool.
 	 * @param name the name of X-definition.
 	 * @return specified X-definition from this XDPool.
 	 */
+	@Override
 	public final XMDefinition getXMDefinition(final String name) {
 		return _xdefs.get(name);
 	}
 
-	@Override
 	/** Check if debug mode is set on.
 	 * @return value of debug mode.
 	 */
+	@Override
 	public final boolean isDebugMode() {return _debugMode > 0;}
 
-	@Override
 	/** Get display mode.
 	 * @return display mode.
 	 */
+	@Override
 	public final byte getDisplayMode(){return _displayMode;}
 
-	@Override
 	/** Check if unresolved externals will be ignored.
 	 * @return true if unresolved externals will be ignored.
 	 */
+	@Override
 	public final boolean isIgnoreUnresolvedExternals() {
 		return _ignoreUnresolvedExternals;
 	}
 
-	@Override
 	/** Check if exists the X-definition of given name.
 	 * @param name the name of X-definition (or <i>null</i>) if
 	 * noname X-definition is checked.
 	 * @return true if and only if the X-definition of given name exists in
 	 * the XDPool.
 	 */
+	@Override
 	public final boolean exists(final String name) {
 		return _xdefs.containsKey(name == null ? "" : name);
 	}
 
-	@Override
 	/** Get table of global variables.
 	 * @return table of global variables.
 	 */
+	@Override
 	public final XMVariableTable getVariableTable() {return _variables;}
 
-	@Override
 	/** Print code to PrintStream.
 	 * @param out stream where code is printed.
 	 */
+	@Override
 	public final void displayCode(final PrintStream out) {
 		CodeDisplay.displayCode(_code, out);
 	}
 
-	@Override
 	/** Print code from XDPool.
 	 * @param out PrintStream where pool is printed.
 	 */
+	@Override
 	public final void display(final PrintStream out) {
 		out.println("ScriptCode init = " + getInitAddress());
 		CodeDisplay.displayCode(_code, out);
@@ -981,46 +962,46 @@ public final class XPool implements XDPool, Serializable {
 		}
 	}
 
-	@Override
 	/** Display XDPool on System.out. */
+	@Override
 	public final void display() {display(System.out);}
 
-	@Override
 	/** Display code of XDPool on System.out. */
+	@Override
 	public final void displayCode() {displayCode(System.out);}
 
-	@Override
 	/** Display debugging information of XDPool.
 	 * @param out PrintStream where pool is printed.
 	 */
+	@Override
 	public final void displayDebugInfo(final PrintStream out) {
 		CodeDisplay.displayDebugInfo(this, out);
 	}
 
-	@Override
 	/** Display debugging information of XDPool on System.out. */
+	@Override
 	public final void displayDebugInfo() {displayDebugInfo(System.out);}
 
-	@Override
 	/** Get properties from XDPool.
 	 * @return properties from XDPool.
 	 */
+	@Override
 	public final Properties getProperties() {return _props;}
 
-	@Override
 	/** Create new XDDocument with default X-definition.
 	 * @return the XDDocument object.
 	 */
+	@Override
 	public final XDDocument createXDDocument() {
 		return new ChkDocument((XDefinition) getXMDefinition());
 	}
 
-	@Override
 	/** Create new XDDocument.
 	 * @param id Identifier of X-definition (or <i>null</i>).
 	 * @return the XDDocument object.
 	 * @throws SRuntimeException if X-definition doesn't exist.
 	 */
+	@Override
 	public final XDDocument createXDDocument(final String id) {
 		if (id == null || id.length() == 0) {
 			return createXDDocument();
@@ -1043,41 +1024,41 @@ public final class XPool implements XDPool, Serializable {
 		}
 	}
 
-	@Override
 	/** Get debug information or null.
 	 * @return debug information object.
 	 */
+	@Override
 	public final XMDebugInfo getDebugInfo() {return _debugInfo;}
 
-	@Override
 	/** Get switch if the parser allows XML XInclude.
 	 * @return true if the parser allows XInclude.
 	 */
+	@Override
 	public final boolean isResolveIncludes() {return _resolveIncludes;}
 
-	@Override
 	/** Get the switch if XML parser will generate detailed location reports.
 	 * @return the location details switch.
 	 */
+	@Override
 	public final boolean isLocationsdetails() {return _locationdetails;}
 
-	@Override
 	/** Get switch if the parser do not allow DOCTYPE.
 	 * @return true if the parser do not allow DOCTYPE or return false
 	 * if DOCTYPE is processed.
 	 */
+	@Override
 	final public boolean isIllegalDoctype() {return _illegalDoctype;}
 
-	@Override
 	/** Get switch if the parser will check warnings as errors.
 	 * @return true if the parser checks warnings as errors.
 	 */
+	@Override
 	final public boolean isChkWarnings() {return _chkWarnings;}
 
-	@Override
 	/** Get list of XComponents.
 	 * @return list of XComponents.
 	 */
+	@Override
 	public final Map<String, String> getXComponents() {return _components;}
 
 	/** Set list of XComponents.
@@ -1085,56 +1066,56 @@ public final class XPool implements XDPool, Serializable {
 	 */
 	public final void setXComponents(Map<String, String> p) {_components=p;}
 
-	@Override
 	/** Get list of XComponent binds.
 	 * @return list of XComponent binds.
 	 */
+	@Override
 	public final Map<String, String> getXComponentBinds() {return _binds;}
 
-	@Override
 	/** Get list of XComponent enumerations.
 	 * @return list of XComponent enumerations.
 	 */
+	@Override
 	public Map<String, String> getXComponentEnums() {return _enums;}
 
-	@Override
 	/** Get minimum valid year of date.
 	 * @return minimum valid year (Integer.MIN if not set).
 	 */
+	@Override
 	public final int getMinYear() {return _minYear;}
 
-	@Override
 	/** Get maximum valid year of date (or Integer.MIN if not set).
 	 * @return maximum valid year (Integer.MIN if not set).
 	 */
+	@Override
 	public final int getMaxYear()  {return _maxYear;}
 
-	@Override
 	/** Get array of dates to be accepted out of interval minYear..maxYear.
 	 * @return array with special values of valid dates.
 	 */
+	@Override
 	public final SDatetime[] getSpecialDates() {return _specialDates;}
 
-	@Override
 	/** Get the object with the map of source items of compiled X-definitions
 	 * and with editing information.
 	 * @return object with the map of source items of compiled X-definitions
 	 * and with editing information.
 	 */
+	@Override
 	public XDSourceInfo getXDSourceInfo() {return _sourceInfo;}
 
-	@Override
 	/** Get debug editor class name.
 	 * @return debug editor class name (if null. the default debug editor
 	 * will be used).
 	 */
+	@Override
 	public final String getDebugEditor() {return _debugEditor;}
 
-	@Override
 	/** Get class name of the editor of X-definition.
 	 * @return class name of the editor of X-definition which
 	 * will be used).
 	 */
+	@Override
 	public final String getXdefEditor() {return _xdefEditor;}
 
 	/** Write this XDPool to stream.
@@ -1358,7 +1339,7 @@ public final class XPool implements XDPool, Serializable {
 		for (int i = 0; i < len; i++) {
 			try {
 				_code[i] = xr.readXD();
-			} catch (Exception ex) {
+			} catch (IOException ex) {
 				//SObject reader: incorrect format of data&{0}{: }
 				throw new SRuntimeException(SYS.SYS039,
 					ex, "code["+i+"]; " + _code[i]);
@@ -1387,7 +1368,7 @@ public final class XPool implements XDPool, Serializable {
 			try {
 				_xdefs.put(xr.readString(),
 					XDefinition.readXDefinition(xr, this, list));
-			} catch (Exception ex) {
+			} catch (IOException ex) {
 				//SObject reader: incorrect format of data&{0}{: }
 				throw new SRuntimeException(SYS.SYS039, ex);
 			}
@@ -1429,7 +1410,7 @@ public final class XPool implements XDPool, Serializable {
 			}
 		}
 		refset.clear();
-		while(reflist.size() > 0) {
+		while(!reflist.isEmpty()) {
 			for (int i = reflist.size() -1; i >= 0; i--) {
 				XElement xe = reflist.get(i);
 				XMNode xm;

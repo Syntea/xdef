@@ -78,8 +78,6 @@ public final class GenXDefXML {
 
 		XModel(final QName qname) {_qname = qname;}
 
-		XModel(final String name, final String uri) {this(getQName(name,uri));}
-
 		private XModel cloneModel() {
 			final XModel result = new XModel(_qname);
 			result._value = _value;
@@ -143,7 +141,7 @@ public final class GenXDefXML {
 		}
 
 		private void optimize() {
-			if (_models.size() > 0) {
+			if (!_models.isEmpty()) {
 				for (int i = _models.size() - 1; i >= 0; i--) {
 					_models.get(i).optimize();
 				}
@@ -265,7 +263,7 @@ public final class GenXDefXML {
 			if (y._models.isEmpty() && x._models.isEmpty()) {
 				return y;
 			}
-			if (y._models.size() > 0 && x._models.isEmpty()) {
+			if (!y._models.isEmpty() && x._models.isEmpty()) {
 				for (XModel m : y._models) {
 					m._min = 0;
 				}
@@ -345,17 +343,6 @@ public final class GenXDefXML {
 			throw new SRuntimeException(XDEF.XDEF881);
 		}
 		return qname;
-	}
-
-	private static QName getQName(final String name, final String uri) {
-		if (uri == null || uri.isEmpty()) {
-			return checkQName(new QName(name));
-		} else {
-			int ndx = name.indexOf(':');
-			String prefix = ndx > 0 ? name.substring(0, ndx) : "";
-			String localName = ndx > 0 ? name.substring(ndx + 1) : name;
-			return checkQName(new QName(uri, localName, prefix));
-		}
 	}
 
 	private static QName getQName(Node node) {

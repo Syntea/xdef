@@ -66,10 +66,4 @@ public final class XSelectorEnd extends XNode {
 		final List<XNode> list) throws IOException {
 		xw.writeShort(getKind());
 	}
-
-	final static XSelectorEnd readXSelectorEnd(final XDReader xr)
-		throws IOException {
-		xr.readShort();
-		return new XSelectorEnd();
-	}
 }

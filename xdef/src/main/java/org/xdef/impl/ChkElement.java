@@ -1791,13 +1791,13 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		}
 	}
 
-	@Override
 	/** Add the new attribute to the current XXElement.
 	 * @param qname The qualified name of attribute (including prefix).
 	 * @param data The value of attribute.
 	 * @param nsURI The value of namespace URI.
 	 * @return true if attribute was created according to X-definition.
 	 */
+	@Override
 	public final boolean addAttributeNS(final String nsURI,
 		final String qname,
 		final String data) {
@@ -3744,10 +3744,10 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		}
 	}
 
-	@Override
 	/** Get XON result of processed Element model.
 	 * @return result of XON parsing.
 	 */
+	@Override
 	public Object getXon() {
 		return _xonArray!=null ? _xonArray : _xonMap!=null ?_xonMap : _xonValue;
 	}

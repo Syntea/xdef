@@ -1,5 +1,6 @@
 package org.xdef.component;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -398,7 +399,9 @@ public class XComponentUtil {
 			Method m = cls.getDeclaredMethod("get" + X_VALATTR);
 			m.setAccessible(true);
 			return toXonObject(m.invoke(xc));
-		} catch (Exception ex) {
+		} catch (IllegalAccessException | IllegalArgumentException
+			| NoSuchMethodException | SecurityException 
+			| InvocationTargetException ex) {
 			throw new RuntimeException("Can't access value", ex);
 		}
 	}
@@ -451,7 +454,7 @@ public class XComponentUtil {
 			Object o;
 			if (methodName.startsWith("get" + XON_NS_PREFIX + "$")
 				&& x.getParameterTypes().length == 0) {
-				String key = null;
+				String key;
 				try {
 					x.setAccessible(true);
 					o = x.invoke(xc);
@@ -466,7 +469,9 @@ public class XComponentUtil {
 					} else {
 						result.put(key, o);
 					}
-				} catch (Exception ex) {}
+				} catch (IllegalAccessException | IllegalArgumentException
+					| NoSuchMethodException | SecurityException
+					| InvocationTargetException ex) {}
 			} else if (methodName.startsWith("listOf$")) {
 				try {
 					x.setAccessible(true);
@@ -477,7 +482,8 @@ public class XComponentUtil {
 					String key = methodName.substring(7);
 					result.put(key, o);
 					break;
-				} catch (Exception ex) {}
+				} catch (IllegalAccessException | IllegalArgumentException
+					| SecurityException | InvocationTargetException ex) {}
 			} else if (x.getParameterTypes().length == 0
 				&& methodName.startsWith("listOf"+XON_NS_PREFIX+"$")) {
 				String key;
@@ -507,7 +513,9 @@ public class XComponentUtil {
 							}
 						}
 					}
-				} catch (Exception ex) {}
+				} catch (IllegalAccessException | IllegalArgumentException
+					| NoSuchMethodException | SecurityException
+					| InvocationTargetException ex) {}
 			}
 		}
 	}
@@ -540,7 +548,8 @@ public class XComponentUtil {
 				try {
 					x.setAccessible(true);
 					o = x.invoke(xc);
-				} catch (Exception ex) {
+				} catch (IllegalAccessException | IllegalArgumentException
+					| SecurityException | InvocationTargetException ex) {
 					throw new RuntimeException(
 						"Can't access getter: " + x.getName());
 				}
@@ -553,7 +562,9 @@ public class XComponentUtil {
 							Method m = cls1.getDeclaredMethod("get"+X_KEYATTR);
 							m.setAccessible(true);
 							key = XonTools.xmlToJName((String) m.invoke(o));
-						} catch (Exception ex) {
+						} catch (IllegalAccessException
+							| IllegalArgumentException | NoSuchMethodException
+							| SecurityException | InvocationTargetException ex){
 							throw new RuntimeException("Not key", ex);
 						}
 						o = toXon((XComponent) o);
@@ -618,7 +629,9 @@ public class XComponentUtil {
 							}
 						}
 						result.add(o);
-					} catch (Exception ex) {
+					} catch (IllegalAccessException | IllegalArgumentException
+						| NoSuchMethodException | SecurityException
+						| InvocationTargetException ex) {
 						throw new RuntimeException(
 							"Can't access getter: " + mName);
 					}
@@ -648,7 +661,8 @@ public class XComponentUtil {
 				try {
 					m.setAccessible(true);
 					o = m.invoke(xc);
-				} catch (Exception ex) {
+				} catch (IllegalAccessException | IllegalArgumentException
+					| SecurityException | InvocationTargetException ex) {
 					throw new RuntimeException(
 						"Can't access getter: " + m.getName());
 				}
@@ -695,7 +709,9 @@ public class XComponentUtil {
 							}
 						}
 						body.add(o);
-					} catch (Exception ex) {
+					} catch (IllegalAccessException | IllegalArgumentException
+						| NoSuchMethodException | SecurityException
+						| InvocationTargetException ex) {
 						throw new RuntimeException(
 							"Can't access getter: " + mName);
 					}

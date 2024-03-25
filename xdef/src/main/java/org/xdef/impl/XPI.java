@@ -30,7 +30,6 @@ public final class XPI extends XData {
 	final static XPI readXPI(final XDReader xr, final XDefinition xd)
 		throws IOException {
 		String name = xr.readString();
-		String uri = xr.readString();
 		XPI x = new XPI(name, xd.getXDPool());
 		x.readXCodeDescriptor(xr);
 		return x;

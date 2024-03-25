@@ -300,9 +300,9 @@ public final class XDFactory extends XDTools {
 	 */
 	public final static void writeXDPool(final OutputStream out,
 		final XDPool xp) throws IOException {
-		ObjectOutputStream oout = new ObjectOutputStream(out);
-		oout.writeObject(xp);
-		oout.close();
+		try (ObjectOutputStream oout = new ObjectOutputStream(out)) {
+			oout.writeObject(xp);
+		}
 	}
 
 	/** Write the XDPool to output stream.
@@ -335,9 +335,10 @@ public final class XDFactory extends XDTools {
 	public final static XDPool readXDPool(final InputStream in)
 		throws IOException {
 		try {
-			ObjectInputStream oin = new ObjectInputStream(in);
-			XDPool result = (XDPool) oin.readObject();
-			oin.close();
+			XDPool result;
+			try (ObjectInputStream oin = new ObjectInputStream(in)) {
+				result = (XDPool) oin.readObject();
+			}
 			return result;
 		} catch (ClassNotFoundException ex) {
 			in.close();

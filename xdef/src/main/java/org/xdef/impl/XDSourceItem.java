@@ -3,6 +3,8 @@ package org.xdef.impl;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
 import org.xdef.impl.xml.XInputStream;
@@ -42,13 +44,10 @@ public final class XDSourceItem {
 		} else if (o instanceof URL) {
 			_url = (URL) o;
 		} else if ((o instanceof InputStream)) {
-			InputStream in = (InputStream) o;
-			try {
+			try (InputStream in = (InputStream) o) {
 				XInputStream myInputStream = new XInputStream(in);
 				_encoding = myInputStream.getXMLEncoding();
 				_source = SUtils.readString(myInputStream , _encoding);
-			} finally {
-				in.close();
 			}
 		} else { // should be String
 			_source = (String) o;
@@ -78,7 +77,7 @@ public final class XDSourceItem {
 			try {
 				result._url = new URL(URLDecoder.decode(s,
 					System.getProperties().getProperty("file.encoding")));
-			} catch (Exception ex) {
+			} catch (UnsupportedEncodingException | MalformedURLException ex) {
 				result._url = new URL(s);
 			}
 		}

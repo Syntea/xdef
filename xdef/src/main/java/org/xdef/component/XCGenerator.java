@@ -516,7 +516,7 @@ final class XCGenerator extends XCGeneratorXON {
 				if (!xpos.equals(interfcName)) {
 					ndx = extClazz.indexOf("implements ");
 					if (ndx >= 0) {
-						if (extClazz.indexOf(xpos) < 0) {
+						if (!extClazz.contains(xpos)) {
 							extClazz = extClazz.substring(0, ndx+11)
 								+ xpos + "," + extClazz.substring(ndx+11);
 						}

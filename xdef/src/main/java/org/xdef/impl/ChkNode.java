@@ -1051,14 +1051,14 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 			mod = getPosMod(getXDPosition(), getXPos());
 		} else {
 			String[] pos = getPosInfo(getXDPosition(), getXPos());
-			if (pos[0] != null && mod.indexOf("&{xdpos}") < 0) {
+			if (pos[0] != null && !mod.contains("&{xdpos}")) {
 				mod += "&{xdpos}" + pos[0];
 			}
-			if (pos[1] != null && mod.indexOf("&{xpath}") < 0) {
+			if (pos[1] != null && !mod.contains("&{xpath}")) {
 				mod += "&{xpath}" + pos[1];
 			}
 			SPosition sp;
-			if (mod.indexOf("&{line}") < 0 && (sp = getSPosition()) != null
+			if (!mod.contains("&{line}") && (sp = getSPosition()) != null
 				&& sp.getLineNumber() > 0) {
 				mod += "&{line}" + sp.getLineNumber();
 				int ndx = mod.indexOf("&{column}");
@@ -1109,10 +1109,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 			return result;
 		}
 		int ndx, ndx1, ndy, ndy1;
-		if ((ndx = xpos.indexOf('#')) < 0) {
-			return result;
-		}
-		if ((ndx1 = xpos.indexOf('/')) < 0) {
+		if ((ndx = xpos.indexOf('#')) < 0 || xpos.indexOf('/') < 0) {
 			return result;
 		}
 		XMDefinition xd = getXDPool().getXMDefinition(xpos.substring(0, ndx));
@@ -1225,7 +1222,6 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 				}
 			} else if (s.startsWith(X_VALUE)) {
 				XMNode[] ynodes = xnodes;
-				xnodes = null;
 				for (int i=0, j=0; i < ynodes.length; i++) {
 					XMNode xn = ynodes[i];
 					if (X_VALUE.equals(xn.getLocalName())) {
@@ -1233,8 +1229,6 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 							xdpath += getItemName(xn) + arrayInfo1;
 							jpath += !t.isEmpty()
 								? getItemName(xn) + arrayInfo2 : "";
-							arrayInfo1 = arrayInfo2 = "";
-							wasArray = false;
 							return new String[]{xdpath, xpath!=null?jpath:null};
 						}
 						j++;

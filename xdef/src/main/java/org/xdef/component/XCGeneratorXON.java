@@ -745,42 +745,46 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 (_genJavadoc ? "\t/** Get map with %anyName entries from map &{d}."+LN+
 "\t * @return map with entries to be set to map &{d}"+LN+
 "\t */"+LN : "");
-			if (X_ARRAY.equals(xe.getLocalName())) {
-				typ = "java.util.List<?>";
-				template +=
+			switch (xe.getLocalName()) {
+				case X_ARRAY:
+					typ = "java.util.List<?>";
+					template +=
 "\tpublic java.util.Map<String, &{typ}> anyItem$&{name}() {"+LN+
 "\t\tjava.util.Map<String, &{typ}> x="+LN+
 "\t\t\tnew java.util.LinkedHashMap<>();"+LN;
-				if (max == 1) {
-					template +=
+					if (max == 1) {
+						template +=
 "\t\tif (_&{iname} != null) {"+LN+
 "\t\t\tx.put(_&{iname}.get"+X_KEYATTR+"(), _&{iname}.toXon());"+LN+
 "\t\t}"+LN;
-				} else { // max > 1
-					template +=
+					} else { // max > 1
+						template +=
 "\t\tfor(&{typeName} y: _&{iname}) {"+LN+
 "\t\t\tx.put(y.get"+X_KEYATTR+"(), y.toXon());"+LN+
 "\t\t}"+LN;
-				}
-			} else if (X_MAP.equals(xe.getLocalName())) { //X_MAP
-				typ = "java.util.Map<String, Object>";
-				template +=
+					}
+					break;
+				case X_MAP:
+					//X_MAP
+					typ = "java.util.Map<String, Object>";
+					template +=
 "\tpublic java.util.Map<String, &{typ}> get$&{name}() {"+LN+
 "\t\tjava.util.Map<String, &{typ}> x="+LN+
 "\t\t\tnew java.util.LinkedHashMap<>();"+LN;
-				if (max == 1) {
-					template +=
+					if (max == 1) {
+						template +=
 "\t\tif (_&{iname} != null) {"+LN+
 "\t\t\tx.put(_&{iname}.get"+X_KEYATTR+"(), _&{iname}.toXon());"+LN+
 "\t\t}"+LN;
-				} else { // max > 1
-					template +=
+					} else { // max > 1
+						template +=
 "\t\tfor(&{typeName} y: _&{iname}) {"+LN+
 "\t\t\tx.put(y.get"+X_KEYATTR+"(), y.toXon());"+LN+
 "\t\t}"+LN;
-				}
-			} else {
-				return;
+					}
+					break;
+				default:
+					return;
 			}
 			template +=
 "\t\treturn x;"+LN+
@@ -798,26 +802,30 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 			}
 		} else {
 			name = getXonItemName(xe, "get$", varNames);
-			if (X_ARRAY.equals(xe.getLocalName())) {
-				typ = "java.util.List<Object>";
-				template =
+			switch (xe.getLocalName()) {
+				case X_ARRAY:
+					typ = "java.util.List<Object>";
+					template =
 (_genJavadoc ? "\t/** Get array from map entry &{name}."+LN+
 "\t * @return array from map entry &{name}"+LN+
 "\t */"+LN : "")+
 "\tpublic &{typ} get$&{name}() {"+LN+
 "\t\treturn _&{iname} == null? null: _&{iname}.toXon();"+LN+
 "\t}"+LN;
-			} else if (X_MAP.equals(xe.getLocalName())) { //X_MAP
-				typ = "java.util.Map<String, Object>";
-				template =
+					break;
+				case X_MAP:
+					//X_MAP
+					typ = "java.util.Map<String, Object>";
+					template =
 (_genJavadoc ? "\t/** Get array from map entry &{name}."+LN+
 "\t * @return array from map entry &{name}"+LN+
 "\t */"+LN : "")+
 "\tpublic &{typ} get$&{name}() {"+LN+
 "\t\treturn _&{iname} == null? null: _&{iname}.toXon();"+LN+
 "\t}"+LN;
-			} else {
-				return;
+					break;
+				default:
+					return;
 			}
 			getters.append(modify(template,
 				"&{name}", name,

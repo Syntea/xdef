@@ -2,6 +2,7 @@ package org.xdef.impl;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.net.URL;
@@ -66,7 +67,7 @@ public final class XonSourceParser implements XonParser, XParser {
 			p.setSysId(f.getCanonicalPath());
 			_p = p;
 			return;
-		} catch (Exception ex) {}
+		} catch (IOException ex) {}
 		throw new SRuntimeException(SYS.SYS028, f); //Can't read file: &{0}
 	}
 
@@ -78,7 +79,7 @@ public final class XonSourceParser implements XonParser, XParser {
 			p.setXonMode();
 			p.setSysId(id);
 			_p = p;
-		} catch (Exception ex) {
+		} catch (IOException ex) {
 			throw new SRuntimeException(SYS.SYS028, id); //Can't read file: &{0}
 		}
 	}

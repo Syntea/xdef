@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Stack;
 import javax.xml.XMLConstants;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import org.w3c.dom.Comment;
@@ -50,6 +51,8 @@ import org.xdef.sys.StringParser;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXNotRecognizedException;
+import org.xml.sax.SAXNotSupportedException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 
@@ -79,7 +82,8 @@ final class ChkParser extends DomBaseHandler implements XParser {
 				"http://apache.org/xml/features/xinclude/fixup-base-uris",
 				false);
 			SPF.setSchema(null);
-		} catch (Exception ex) {
+		} catch (ParserConfigurationException | SAXNotRecognizedException
+			| SAXNotSupportedException ex) {
 			throw new RuntimeException(ex);
 		}
 	}
@@ -180,7 +184,8 @@ final class ChkParser extends DomBaseHandler implements XParser {
 		try {
 			SAXParser sp = SPF.newSAXParser();
 			xr = sp.getXMLReader();
-		} catch (Exception ex) {//shouldn't happen
+		} catch (ParserConfigurationException | SAXException ex) {
+			//shouldn't happen
 			throw new RuntimeException("Parse configuration error", ex);
 		}
 		xr.setContentHandler(this);
@@ -208,12 +213,12 @@ final class ChkParser extends DomBaseHandler implements XParser {
 				URL u = SUtils.getExtendedURL(s);
 				_sysId = u.toExternalForm();
 				_in = u.openStream();
-			} catch (Exception ex) {
+			} catch (IOException ex) {
 				File f = new File(source);
 				try {
 					_sysId = f.getCanonicalPath();
 					_in = new FileInputStream(s);
-				} catch (Exception exx) {
+				} catch (IOException exx) {
 					//File doesn't exist: &{0}
 					throw new SRuntimeException(SYS.SYS024, s);
 				}
@@ -234,9 +239,9 @@ final class ChkParser extends DomBaseHandler implements XParser {
 		try {
 			_sysId = source.getCanonicalPath();
 			_in = new FileInputStream(source);
-		} catch (Exception ex) {
+		} catch (IOException ex) {
 			throw new SRuntimeException(SYS.SYS024,//File doesn't exist: &{0}
-				source != null ? source.getAbsoluteFile() : "null");
+				source.getAbsoluteFile());
 		}
 	}
 
@@ -268,7 +273,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
 		_sysId = source.toExternalForm();
 		try {
 			_in = source.openStream();
-		} catch (Exception ex) {
+		} catch (IOException ex) {
 			throw new SRuntimeException(SYS.SYS024, _sysId);
 		}
 	}
@@ -335,7 +340,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
 				try {
 					URL u = SUtils.getExtendedURL(sysID);
 					in = u.openStream();
-				} catch (Exception ex) {
+				} catch (IOException ex) {
 					//URL &{0} error: &{1}{; }
 					_sReporter.fatal(SYS.SYS076, sysID);
 				}
@@ -421,7 +426,7 @@ final class ChkParser extends DomBaseHandler implements XParser {
 				_isDTD = isDTD;
 				_chkDoc._doc = _chkDoc._rootChkDocument._doc = _doc;
 				_element = _doc.getDocumentElement();
-			} catch (Exception ex) { // never should happen!
+			} catch (IOException | SAXException ex) { // never should happen!
 				throw new RuntimeException(ex);
 			}
 			if (!_locationDetails) {

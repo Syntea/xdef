@@ -3,6 +3,7 @@ package org.xdef.impl;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -10,6 +11,8 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.io.Writer;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -18,6 +21,7 @@ import java.util.Map;
 import java.util.Properties;
 import javax.xml.XMLConstants;
 import javax.xml.namespace.QName;
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -79,12 +83,8 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	////////////////////////////////////////////////////////////////////////////
 	// Options
 	////////////////////////////////////////////////////////////////////////////
-	/** Flag "ignore comments". */
-	byte _ignoreComments; //0 not set, 'T' or 'F'
 	/** Flag for attributes "white spaces". */
 	byte _attrWhiteSpaces; //0 not set, 'T' or 'F'
-	/** Flag for text nodes "white spaces". */
-	byte _textWhiteSpaces; //0 not set, 'T' or 'F'
 	/** Flag "ignore empty strings". */
 	byte _ignoreEmptyAttributes; //0 not set, 'T', 'A', 'P', 'F'
 	/** Flag set case of attribute values to upper(T) or lower(F). */
@@ -95,10 +95,6 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	byte _trimAttr; //0 not set, 'T' or 'F'
 	/** Flag to trim/not trim text values. */
 	byte _trimText; //0 not set 'T' or 'F'
-	/** Flag to ignore entities resolving. */
-	byte _resolveEntities;
-	/** Flag to accept qualified attributes for elements with namespace URI. */
-	byte _acceptQualifiedAttr; //0 not set 'T' or 'F'
 	/** Root definition. */
 	XDefinition _xdef;
 	/** Report generator. */
@@ -266,8 +262,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 						xName = s;
 					}
 				}
-				if (nm.equals(xName) && xe != null
-					&& namespaceURI.equals(xe.getNSUri())) {
+				if (nm.equals(xName) && namespaceURI.equals(xe.getNSUri())) {
 					return (XElement) xe;
 				}
 			}
@@ -334,12 +329,13 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 				if (i >= 0) {
 					xName = xName.substring(i + 1); // XElement local name
 				}
-			}
-			String lockey = xe.getName();
-			if (lockey.endsWith("$any") && lockey.length() > 4) {
-				// reference of the named any
-				return ((XElement) xe)._childNodes.length == 0 ?
-					null : (XElement) ((XElement) xe)._childNodes[0];
+			} else {
+				String lockey = xe.getName();
+				if (lockey.endsWith("$any") && lockey.length() > 4) {
+					// reference of the named any
+					return ((XElement) xe)._childNodes.length == 0 ?
+						null : (XElement) ((XElement) xe)._childNodes[0];
+				}
 			}
 		}
 		// not found, try if there is "*"
@@ -423,7 +419,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		try {
 			return createXComponent(Class.forName(className,
 				false, Thread.currentThread().getContextClassLoader()));
-		} catch (Exception ex) {
+		} catch (ClassNotFoundException ex) {
 			return false;
 		}
 	}
@@ -437,14 +433,14 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			Constructor<?> c = y.getDeclaredConstructor(
 				XComponent.class, XXNode.class);
 			c.setAccessible(true);
-			XComponent xc  = (XComponent)
-				y.getDeclaredConstructor().newInstance();
-			xc = (XComponent) c.newInstance(
+			XComponent xc = (XComponent) c.newInstance(
 				(XComponent)null, _chkRoot);
 			_xclass = y;
 			_chkRoot.setXComponent(_xComponent=xc);
 			return true;
-		} catch (Exception ex) {
+		} catch (IllegalAccessException | IllegalArgumentException
+			| InstantiationException | NoSuchMethodException
+			| SecurityException | InvocationTargetException ex) {
 			_xComponent = null;
 			return false;
 		}
@@ -579,7 +575,6 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 				if (ndx > 0) {
 					s = s.substring(0, ndx);
 				}
-				xe = (XElement) getXDPool().findModel(s);
 				className = getXDPool().getXComponents().get(s);
 				xe = (XElement) getXDPool().findModel(s);
 			}
@@ -596,8 +591,8 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 						_xclass = Class.forName(className, false,
 							Thread.currentThread().getContextClassLoader());
 					}
-					if (xe.getXDPosition().indexOf(
-						"#" + JSON_ANYOBJECT + "/$choice") >= 0) {
+					if (xe.getXDPosition().contains(
+						"#" + JSON_ANYOBJECT + "/$choice")) {
 						String y = xe.getName();
 						y = y.substring(y.indexOf(':') + 1);
 						for (Class<?> x: _xclass.getDeclaredClasses()) {
@@ -636,7 +631,8 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 						throw new SRuntimeException(XDEF.XDEF506,
 							element.getNodeName(), className);
 					}
-				} catch (Exception ex) {
+				} catch (ClassNotFoundException | SecurityException
+					| SRuntimeException ex) {
 					Throwable cause = ex.getCause();
 					if (cause != null && cause instanceof SRuntimeException) {
 						throw (SRuntimeException) cause;
@@ -726,10 +722,9 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 					(s != null && !s.isEmpty()) ? "xmlns:"+s : "xmlns", nsURI);
 			}
 			return createRootChkElement(root, checkRoot);
-		} catch (Exception ex) {
+		} catch (DOMException ex) {
 			//XDEF103 = Can'create root element
-			throw ex instanceof SRuntimeException ? (SRuntimeException) ex
-				: new SRuntimeException(XDEF.XDEF103, ex);
+			throw new SRuntimeException(XDEF.XDEF103, ex);
 		}
 	}
 	@Override
@@ -788,7 +783,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	private Object getSource(final String s) {
 		try {
 			return SUtils.getExtendedURL(s);
-		} catch (Exception ex) {
+		} catch (MalformedURLException ex) {
 			File f = new File(s);
 			return (f.exists()) ? f : s;
 		}
@@ -1195,7 +1190,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	/** Get actual destination language used for lexicon.
 	 * @return string with actual language.
 	 */
-	final String getDestLexiconLanguage() {
+	public final String getDestLexiconLanguage() {
 		return (_destLanguageID < 0) ? null
 			: ((XPool) getXDPool())._lexicon.getLanguages()[_destLanguageID];
 	}
@@ -1206,7 +1201,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 * @throws SRuntimeException if lexicon is not specified or if
 	 * language is not specified.
 	 */
-	final void setDestLexiconLanguage(final String language) {
+	public final void setDestLexiconLanguage(final String language) {
 		XPool xp = (XPool) getXDPool();
 		if (xp._lexicon == null) {
 			//Can't set language of output &{0} because lexicon is not
@@ -1230,13 +1225,17 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			throw new SRuntimeException("Typ " + typeName + " not found");
 		}
 		int addr;
-		if (xv.getItemId() == X_PARSEITEM) {
-			addr = ((ParseItem) xv).getParseMethodAddr();
-		} else if (xv.getItemId() == X_UNIQUESET_M) {
-			ParseItem keyItem = ((CodeUniqueset) xv).getParseKeyItem(typeName);
-			addr = keyItem == null ? -1 : keyItem.getParseMethodAddr();
-		} else {
-			addr = -1;
+		switch (xv.getItemId()) {
+			case X_PARSEITEM:
+				addr = ((ParseItem) xv).getParseMethodAddr();
+				break;
+			case X_UNIQUESET_M:
+				ParseItem keyItem =
+					((CodeUniqueset) xv).getParseKeyItem(typeName);
+				addr = keyItem == null ? -1 : keyItem.getParseMethodAddr();
+				break;
+			default:
+				addr = -1;
 		}
 		if (addr < 0) {
 			throw new SRuntimeException("Name " + typeName + " is not parser");
@@ -1403,7 +1402,9 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 								break;
 							}
 						}
-					} catch (Exception ex) {}
+					} catch (ClassNotFoundException | IllegalAccessException
+						| IllegalArgumentException | NoSuchFieldException
+						| SecurityException ex) {}
 					yClass = null;
 				}
 			}
@@ -1461,7 +1462,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			e = ((Document)source).getDocumentElement();
 		} else {
 			//Unsupported type of argument &{0}: &{1}
-			throw new SRuntimeException(SYS.SYS037,"source",source.getClass());
+			throw new SRuntimeException(SYS.SYS037,"source", source.getClass());
 		}
 		QName qName = e.getNamespaceURI() == null ? new QName(e.getTagName())
 			: new QName(e.getNamespaceURI(), e.getLocalName());
@@ -1665,7 +1666,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 					URL u = new URL(s);
 					u.openConnection();
 					x = u;
-				} catch (Exception ex) {
+				} catch (IOException ex) {
 					x = new StringReader(s);
 				}
 			}
@@ -1847,7 +1848,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			parser.closeReader();
 			_xon = _chkRoot.getXon();//prepare XON
 			return result;
-		} catch (Exception ex) {
+		} catch (SRuntimeException ex) {
 			XDDebug debugger = getDebugger();
 			if (debugger != null) {
 				if (ex instanceof SThrowable) {
@@ -2037,7 +2038,9 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		try {
 			return jvalidate(XonUtils.parseYAML(new FileInputStream(data)),
 				reporter);
-		} catch (Exception ex) {throw new RuntimeException(ex);}
+		} catch (FileNotFoundException | SRuntimeException ex) {
+			throw new RuntimeException(ex);
+		}
 	}
 	@Override
 	/** Parse and process YAML data and return processed XON object.
@@ -2051,7 +2054,9 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		throws SRuntimeException {
 		try {
 			return jvalidate(XonUtils.parseYAML(source.openStream()), reporter);
-		} catch (Exception ex) {throw new RuntimeException(ex);}
+		} catch (IOException | SRuntimeException ex) {
+			throw new RuntimeException(ex);
+		}
 	}
 	@Override
 	/** Parse and process YAML data and return processed XON object.
@@ -2116,7 +2121,9 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 								break;
 							}
 						}
-					} catch (Exception ex) {}
+					} catch (ClassNotFoundException | IllegalAccessException
+						| IllegalArgumentException | NoSuchFieldException
+						| SecurityException ex) {}
 					yClass = null;
 				}
 			}
@@ -2126,7 +2133,8 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 					(Byte) yClass.getDeclaredField("XON").get(null);
 				e = xonVer == XConstants.XON_MODE_W ?
 					XonUtils.xonToXmlW(source) : XonUtils.xonToXml(source);
-			} catch (Exception ex) {
+			} catch (IllegalAccessException | IllegalArgumentException
+				| NoSuchFieldException | SecurityException ex) {
 				e = XonUtils.xonToXmlW(source); // X-definition transormation
 			}
 			return xparseXComponent(e, yClass, reporter);

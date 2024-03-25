@@ -306,8 +306,7 @@ public final class XElement extends XCodeDescriptor
 			XData[] xattrs = (XData[]) getAttrs();
 			len = xattrs.length;
 			xw.writeLength(len);
-			for (int i = 0; i < xattrs.length; i++) {
-				XData xattr = xattrs[i];
+			for (XData xattr : xattrs) {
 				xattr.writeXNode(xw, list);
 			}
 			len = _childNodes.length;
@@ -555,8 +554,7 @@ public final class XElement extends XCodeDescriptor
 				reporter.error(XDEF.XDEF284, getXDPosition(),y.getXDPosition());
 				result = false;
 			}
-			for (int i = 0; i < ax.length; i++) {
-				XData dx = ax[i];
+			for (XData dx : ax) {
 				XData dy = y.getDefAttrNS(dx.getNSUri(), dx.getName(), -1);
 				if (dy == null) {
 					//List of attributes differs: &{0} and &{1}
