@@ -4,6 +4,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import javax.swing.AbstractAction;
 import javax.swing.JFileChooser;
@@ -15,7 +17,6 @@ import javax.swing.event.CaretListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.UndoableEditEvent;
-import javax.swing.event.UndoableEditListener;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoManager;
 import org.xdef.impl.XDSourceInfo;
@@ -23,6 +24,7 @@ import org.xdef.impl.XDSourceItem;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.FUtils;
 import org.xdef.sys.Report;
+import org.xdef.sys.SException;
 import org.xdef.sys.SUtils;
 
 /** Provides screen (swing Frame) for editing of XML sources.
@@ -106,7 +108,7 @@ public class GUIScreen extends GUIBase {
 		for (CaretListener x: _infoArea.getCaretListeners()) {
 			_infoArea.removeCaretListener(x);
 		}
-		if (err != null && err.size() > 0) { //error reporter is not empty
+		if (err != null && !err.isEmpty()) { //error reporter is not empty
 			_positions = new SourcePos[err.size()];
 			err.reset();
 			int maxlen = 0;
@@ -178,24 +180,22 @@ public class GUIScreen extends GUIBase {
 				errRows = 2;
 			}
 			_infoArea.setText(errors.toString());
-			_infoArea.addCaretListener(new CaretListener(){
-				@Override
-				public void caretUpdate(CaretEvent e) {
-					int pos = e.getDot();
-					int index = -1;
-					for (int i = 1; i < _positions.length; i++) {
-						if (_positions[i]._pos > pos) {
-							index = i - 1;
-							break;
-						}
+			_infoArea.addCaretListener((CaretEvent e) -> {
+				int pos = e.getDot();
+				int index = -1;
+				for (int i = 1; i < _positions.length; i++) {
+					if (_positions[i]._pos > pos) {
+						index = i - 1;
+						break;
 					}
-					if (index == -1) {
-						index = _positions.length - 1;
-					}
-					setSource(index);
-					SourcePos sp = _positions[index];
-					setCaretPositionToSource(sp);
-				}});
+				}
+				if (index == -1) {
+					index = _positions.length - 1;
+				}
+				setSource(index);
+				SourcePos sp = _positions[index];
+				setCaretPositionToSource(sp);
+			});
 		} else {
 			_positions = new SourcePos[0];
 			_infoArea.setText("No errors");
@@ -227,12 +227,9 @@ public class GUIScreen extends GUIBase {
 			}
 		});
 		_sourceArea.getDocument().addUndoableEditListener(
-			new UndoableEditListener() {
-			@Override
-			public void undoableEditHappened(UndoableEditEvent evt) {
-				_undo.addEdit(evt.getEdit());
-				_undo.setLimit(_undo.getLimit() + 1);
-			}
+			(UndoableEditEvent evt) -> {
+			_undo.addEdit(evt.getEdit());
+			_undo.setLimit(_undo.getLimit() + 1);
 		});
 		// Create an undo action and add it to the text component
 		_sourceArea.getActionMap().put("Undo", new AbstractAction("Undo") {
@@ -337,7 +334,7 @@ public class GUIScreen extends GUIBase {
 							return;
 						}
 					}
-				} catch (Exception ex) {return;}
+				} catch (IOException ex) {return;}
 			}
 			if (_sourceItem != null) {
 				_sourceItem._pos = _sourceArea.getCaret().getDot();
@@ -372,7 +369,7 @@ public class GUIScreen extends GUIBase {
 				srcFile = File.createTempFile("GUI", ".tmp");
 				srcFile.deleteOnExit();
 				FUtils.writeString(srcFile, si._source);
-			} catch (Exception ex) {
+			} catch (IOException | SException ex) {
 				JOptionPane.showMessageDialog(null, "Can't write to file ");
 				return false;
 			}
@@ -403,7 +400,7 @@ public class GUIScreen extends GUIBase {
 							si._url = file.toURI().toURL();
 							si._saved = true;
 							return true;
-						} catch (Exception ex) {
+						} catch (MalformedURLException | SException ex) {
 							String s = ex.getMessage();
 							if (s == null || s.trim().isEmpty()) {
 								s = "" + ex;

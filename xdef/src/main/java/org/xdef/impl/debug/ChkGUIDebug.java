@@ -2,6 +2,7 @@ package org.xdef.impl.debug;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -10,6 +11,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,6 +25,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
+import javax.swing.text.BadLocationException;
 import javax.swing.text.Caret;
 import javax.swing.text.Style;
 import javax.swing.text.StyledDocument;
@@ -385,7 +388,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 			_sourceArea.setFocusable(true);
 			_sourceArea.setVisible(true);
 			_frame.repaint();
-		} catch (Exception ex) {}
+		} catch (BadLocationException ex) {}
 	}
 
 	/** Initialize window for source code of X-definitions. */
@@ -480,12 +483,9 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 		if (_sources.size() > 1) {
 			jp = new JMenu("Select Source...");
 			jp.setMnemonic((int) 'S');
-			ActionListener ssl = new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					JMenuItem jc = (JMenuItem) e.getSource();
-					setSource(jc.getText());
-				}
+			ActionListener ssl = (ActionEvent e) -> {
+				JMenuItem jc = (JMenuItem) e.getSource();
+				setSource(jc.getText());
 			};
 			for (String key: _sources.keySet()) {
 				ji = new JMenuItem(key);
@@ -498,13 +498,10 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 		// Debug commands
 		jp = new JMenu("Debug commands...");
 		jp.setMnemonic((int) 'D');
-		ActionListener cmdListener = new ActionListener() {
-			@Override
-			public synchronized void actionPerformed(ActionEvent e) {
-				JMenuItem jc = (JMenuItem) e.getSource();
-				_debugCommand = decodeCommand(jc.getText());
-				 notifyFrame();
-			}
+		ActionListener cmdListener = (ActionEvent e) -> {
+			JMenuItem jc = (JMenuItem) e.getSource();
+			_debugCommand = decodeCommand(jc.getText());
+			notifyFrame();
 		};
 		for (int i = 0; i < DBG_COMMANDS.length; i++) {
 			if (i == DBG_STEPINTO) continue;
@@ -526,26 +523,20 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 		// Exit
 		ji = new JMenuItem("Exit degugger");
 		ji.setMnemonic((int) 'X');
-		ji.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				_debugMode = false;
-				_frame.dispose();
-			}
+		ji.addActionListener((ActionEvent e) -> {
+			_debugMode = false;
+			_frame.dispose();
 		});
 		fileMenu.add(ji);
 
 		// Kill project
 		ji = new JMenuItem("Kill process");
 		ji.setMnemonic((int) 'K');
-		ji.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				_debugMode = false;
-				_sourceItem._changed = false;
-				_kill = true;
-				_frame.dispose();
-			}
+		ji.addActionListener((ActionEvent e) -> {
+			_debugMode = false;
+			_sourceItem._changed = false;
+			_kill = true;
+			_frame.dispose();
 		});
 		fileMenu.add(ji);
 
@@ -572,7 +563,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 						newSrc = _sources.get(
 							f.getCanonicalPath().replace('\\','/'));
 					}
-				} catch (Exception ex) {
+				} catch (IOException ex) {
 					return;
 				}
 			}
@@ -655,7 +646,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 		if (s != null && !(s = s.trim()).isEmpty()) {
 			try {
 				_out = new PrintStream(new FileOutputStream(s), true);
-			} catch (Exception ex) {
+			} catch (FileNotFoundException ex) {
 				_out = System.out;
 			}
 		}
@@ -666,7 +657,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 			}
 			try {
 				_in = new FileInputStream(s);
-			} catch (Exception ex) {
+			} catch (FileNotFoundException ex) {
 				_in = System.in;
 			}
 		}
@@ -801,7 +792,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 			codeItem = code[pcounter];
 			trace = codeItem.getCode() == DEBUG_TRACE;
 			pause = codeItem.getCode() == DEBUG_PAUSE;
-			if (trace || pause && codeItem.getParam() > 0) {
+			if (debugInfo!=null && (trace || pause && codeItem.getParam()>0)) {
 				si = debugInfo.prevStatementInfo(si);
 			}
 			txt = (trace ? "TRACE " : pause ?	"PAUSE " : codeItem.toString())
@@ -822,7 +813,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 			stmtInfo = spos.toString();
 		}
 		StopAddr sa = null;
-		if (_out == null && spos != null) {
+		if (_out == null) {
 			sa = getStopAddr(pc);
 			if (sa != null) {
 				setSource(sa._sourceID);
@@ -964,8 +955,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 						display("No local variables");
 					} else {
 						display("Local variables:");
-						for (int i = 0; i < vars.length; i++) {
-							XMVariable v = vars[i];
+						for (XMVariable v : vars) {
 							String val;
 							try {
 								val = localVariables[v.getOffset()].toString();
@@ -1040,7 +1030,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 							if (s != null) {
 								((XXData) xnode).setTextValue(s);
 							}
-						} catch (Exception ex) {
+						} catch (HeadlessException ex) {
 							display("Error: can't set text value here");
 						}
 					}
@@ -1214,7 +1204,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 	}
 
 	@Override
-	/** Set XPos item to the breakpoint area.
+	/** Set XPos item to the break point area.
 	 * @param xpos the string with XPos item.
 	 */
 	public void setXpos(String xpos) {

@@ -7,6 +7,8 @@ import java.awt.Font;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
 import java.net.URLDecoder;
 import java.util.Map;
 import javax.swing.JFrame;
@@ -17,7 +19,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.event.CaretEvent;
-import javax.swing.event.CaretListener;
+import javax.swing.text.BadLocationException;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
@@ -26,6 +28,7 @@ import org.xdef.XDPool;
 import org.xdef.impl.XDSourceInfo;
 import org.xdef.impl.XDSourceItem;
 import org.xdef.impl.xml.XInputStream;
+import org.xdef.sys.SException;
 import org.xdef.sys.SUtils;
 
 /** Base of Swing frame for GUI.
@@ -151,14 +154,11 @@ public class GUIBase {
 		_sourcePositionInfo.setForeground(COLOR_POSITION);
 		_sourcePositionInfo.setFont(FONT_POSITIONINFO);
 		_sourceArea.setFont(FONT_TEXT);
-		_sourceArea.addCaretListener(new CaretListener() {
-			@Override
-			public void caretUpdate(CaretEvent e) {
-				SourcePos spos =
-					new SourcePos(_sourceArea.getText(), e.getDot());
-				_sourcePositionInfo.setText("  (Line:" + spos._line
-					+ ", column:" + spos._column + ")");
-			}
+		_sourceArea.addCaretListener((CaretEvent e) -> {
+			SourcePos spos =
+				new SourcePos(_sourceArea.getText(), e.getDot());
+			_sourcePositionInfo.setText("  (Line:" + spos._line
+				+ ", column:" + spos._column + ")");
 		});
 
 		// Source window
@@ -194,19 +194,19 @@ public class GUIBase {
 		for (;;) {
 			try {
 				is = src._url != null ? src._url.openStream() : null;
-				XInputStream myInputStream = new XInputStream(is);
-				src._encoding = myInputStream.getXMLEncoding();
-				src._source = SUtils.readString(myInputStream, src._encoding);
-				myInputStream.close();
+				try (XInputStream myInputStream = new XInputStream(is)) {
+					src._encoding = myInputStream.getXMLEncoding();
+					src._source= SUtils.readString(myInputStream,src._encoding);
+				}
 				return;
-			} catch (Exception ex) {
+			} catch (IOException | SException ex) {
 				if (is != null) try {is.close();} catch (IOException x) {}
 				String s = (src._url != null
 					&& "file".equals(src._url.getProtocol())) ?
 					src._url.getFile() : key;
 				try {
 					s =URLDecoder.decode(s,System.getProperty("file.encoding"));
-				} catch (Exception exx) {};
+				} catch (UnsupportedEncodingException exx) {}
 				if(s != null) {//yes
 					if (s.length() > 0 && s.charAt(0) == '<') {
 						src._source = s;
@@ -217,7 +217,7 @@ public class GUIBase {
 							File f = new File(s);
 							src._url = f.toURI().toURL();
 							src._changed = true;
-						} catch (Exception exx) {
+						} catch (MalformedURLException exx) {
 							src._source = "SOURCE NOT AVAILABLE!";
 							src._url = null;
 							break;
@@ -319,8 +319,7 @@ public class GUIBase {
 			pos = t.indexOf('\n', pos+1), n++) {
 			Style style = STYLE_NORMAL;
 			// mark line (errors, breakpoints etc)
-			for (int j = 0; j < _positions.length; j++) {
-				SourcePos spos = _positions[j];
+			for (SourcePos spos : _positions) {
 				if (spos._sysId.equals(_sourceID) && spos._line == n) {
 					style = STYLE_ERROR;
 					break;
@@ -329,7 +328,7 @@ public class GUIBase {
 			String s = String.format("%3d\n", n);
 			try {
 				sdoc.insertString(offset, s, style);
-			} catch (Exception ex) {
+			} catch (BadLocationException ex) {
 				throw new RuntimeException(ex);
 			}
 			offset += s.length();
@@ -349,70 +348,12 @@ public class GUIBase {
 			_si._ypos = _frame.getY();
 			_si._width = _frame.getWidth();
 			_si._height = _frame.getHeight();
-		} catch (Exception ex) {}}
+		} catch (InterruptedException ex) {}}
 	}
 
 	/** Notify event action performed. */
 	public final void notifyFrame() {
 		synchronized(_waitobj) {_waitobj.notifyAll();}
-	}
-
-	/** Find position in the array of positions.
-	 * @param spos line position to be found.
-	 * @return index of position in the array of positions or return -1.
-	 */
-	int findLinePosition(SourcePos sp) {
-		for (int i = 0; i < _positions.length; i++) {
-			if (_positions[i] != null && _positions[i].equals(sp)) return i;
-		}
-		return -1;
-	}
-
-	/** Add new line position to array of positions (only if not exists there).
-	 * @param spos line position to be added.
-	 * @return true if new position was added and return false if position
-	 * already exists in the array of positions.
-	 */
-	boolean addLinePosition(long line, long column, String sourceID) {
-		return addLinePosition(new SourcePos(line, column, sourceID));
-	}
-
-	/** Add line position to array of positions (only if not exists there).
-	 * @param spos line position to be added.
-	 * @return true if new position was removed and return false if position
-	 * not exists in
-	 */
-	boolean addLinePosition(SourcePos spos) {
-		if (_positions.length == 0) {
-			_positions = new SourcePos[1];
-			_positions[0] = spos;
-		} else {
-			if (findLinePosition(spos) < 0) return false;
-			SourcePos[] x = _positions;
-			_positions = new SourcePos[x.length + 1];
-			System.arraycopy(x, 0, _positions, 0, x.length);
-			_positions[x.length] = spos;
-		}
-		return true;
-	}
-
-	/** Remove line position from array of positions.
-	 * @param spos line position to be removed.
-	 */
-	boolean removeLinePosition(SourcePos spos) {
-		int i = findLinePosition(spos);
-		if (i < 0) {
-			return false;
-		}
-		SourcePos[] x = _positions;
-		_positions = new SourcePos[x.length - 1];
-		if (i > 0) {
-			System.arraycopy(x, 0, _positions, 0, i);
-		}
-		if (i < _positions.length) {
-			System.arraycopy(x, i + 1, _positions, i, _positions.length - i);
-		}
-		return true;
 	}
 
 	/** Source position container. */

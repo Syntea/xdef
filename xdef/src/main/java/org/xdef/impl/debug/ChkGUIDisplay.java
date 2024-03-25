@@ -5,6 +5,7 @@ import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.net.MalformedURLException;
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -78,8 +79,7 @@ public class ChkGUIDisplay extends GUIScreen implements XEditor {
 		}
 	}
 
-////////////////////////////////////////////////////////////////////////////////
-
+	/** Initialize menu bar. */
 	private void initMenuBar() {
 		JMenu fileMenu = _menuBar.add(new JMenu("File (F10)"));
 		JMenuItem ji;
@@ -98,51 +98,48 @@ public class ChkGUIDisplay extends GUIScreen implements XEditor {
 		// Add source menu item
 		ji = new JMenuItem("Add Source...");
 		ji.setMnemonic((int) 'A');
-		ji.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				updateSourceItem();
-				JFileChooser jf = new JFileChooser();
-				jf.setDialogTitle("Add source...");
-				int retval = jf.showDialog(_frame, "Open");
-				jf.setEnabled(false);
-				if (retval == JFileChooser.APPROVE_OPTION) {
-					File f = jf.getSelectedFile();
-					if (f != null && f.exists()) {
-						for (XDSourceItem src: _sources.values()) {
-							try {
-								if (src._url != null
-									&& src._url.equals(f.toURI().toURL())) {
-									_actionFinished = false;
-									notifyFrame();
-									break;
-								}
-							} catch (Exception ex) {
-								throw new RuntimeException(ex);
-							}
-						}
+		ji.addActionListener((ActionEvent e) -> {
+			updateSourceItem();
+			JFileChooser jf = new JFileChooser();
+			jf.setDialogTitle("Add source...");
+			int retval = jf.showDialog(_frame, "Open");
+			jf.setEnabled(false);
+			if (retval == JFileChooser.APPROVE_OPTION) {
+				File f = jf.getSelectedFile();
+				if (f != null && f.exists()) {
+					for (XDSourceItem src: _sources.values()) {
 						try {
-							XDSourceItem src = new XDSourceItem(f);
-							String key = f.getCanonicalPath();
-							_sources.put(key, src);
-							initSourceItem(key, src);
-							if (_sourceItem != null) {
-								_sourceItem._pos =
-									_sourceArea.getCaret().getDot();
-								_sourceItem._active = false;
+							if (src._url != null
+								&& src._url.equals(f.toURI().toURL())) {
+								_actionFinished = false;
+								notifyFrame();
+								break;
 							}
-							src._pos = 0;
-							src._active = true;
-							prepareSourceMenuItems();
-							setSource(key);
-						} catch (Exception ex) {
+						} catch (MalformedURLException ex) {
 							throw new RuntimeException(ex);
 						}
 					}
+					try {
+						XDSourceItem src = new XDSourceItem(f);
+						String key = f.getCanonicalPath();
+						_sources.put(key, src);
+						initSourceItem(key, src);
+						if (_sourceItem != null) {
+							_sourceItem._pos =
+								_sourceArea.getCaret().getDot();
+							_sourceItem._active = false;
+						}
+						src._pos = 0;
+						src._active = true;
+						prepareSourceMenuItems();
+						setSource(key);
+					} catch (Exception ex) {
+						throw new RuntimeException(ex);
+					}
 				}
-				_actionFinished = false;
-				notifyFrame();
 			}
+			_actionFinished = false;
+			notifyFrame();
 		});
 		fileMenu.add(ji);
 		fileMenu.addSeparator();
@@ -150,17 +147,14 @@ public class ChkGUIDisplay extends GUIScreen implements XEditor {
 		// Save as menu item
 		ji = new JMenuItem("Save as...");
 		ji.setAccelerator(KeyStroke.getKeyStroke("control S"));
-		ji.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				updateSourceItem();
-				if (_sourceItem!=null
-					&& _sourceItem._changed&&_sourceItem._url == null) {
-					_sourceItem._source = _sourceArea.getText();
-					_sourceItem._saved = true;
-				}
-				saveSource(_sourceItem);
+		ji.addActionListener((ActionEvent e) -> {
+			updateSourceItem();
+			if (_sourceItem!=null
+				&& _sourceItem._changed&&_sourceItem._url == null) {
+				_sourceItem._source = _sourceArea.getText();
+				_sourceItem._saved = true;
 			}
+			saveSource(_sourceItem);
 		});
 		fileMenu.add(ji);
 		fileMenu.addSeparator();
@@ -168,14 +162,11 @@ public class ChkGUIDisplay extends GUIScreen implements XEditor {
 		// Compile menu item
 		ji = new JMenuItem("Compile");
 		ji.setAccelerator(KeyStroke.getKeyStroke("F9"));
-		ji.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (((JMenuItem)e.getSource()).isEnabled()) {
-					updateSourceItem();
-					_actionFinished = false;
-					notifyFrame();
-				}
+		ji.addActionListener((ActionEvent e) -> {
+			if (((JMenuItem)e.getSource()).isEnabled()) {
+				updateSourceItem();
+				_actionFinished = false;
+				notifyFrame();
 			}
 		});
 		fileMenu.add(ji);
@@ -184,32 +175,26 @@ public class ChkGUIDisplay extends GUIScreen implements XEditor {
 		// Exit menu item
 		ji = new JMenuItem("Exit");
 		ji.setMnemonic((int) 'X');
-		ji.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if ( _sourceItem != null && _sourceItem._changed) {
-					String s;
-					if (_sourceArea == null || (s=_sourceArea.getText()) == null
-						|| s.equals(_sourceItem._source)){
-						_sourceItem._changed = false;
-					}
+		ji.addActionListener((ActionEvent e) -> {
+			if ( _sourceItem != null && _sourceItem._changed) {
+				String s;
+				if (_sourceArea == null || (s=_sourceArea.getText()) == null
+					|| s.equals(_sourceItem._source)){
+					_sourceItem._changed = false;
 				}
-				_actionFinished = true;
-				notifyFrame();
 			}
+			_actionFinished = true;
+			notifyFrame();
 		});
 		fileMenu.add(ji);
 		// Kill project
 		ji = new JMenuItem("Kill process");
 		ji.setMnemonic((int) 'K');
-		ji.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				_sourceItem._changed = false;
-				_actionFinished = true;
-				_kill = true;
-				_frame.dispose();
-			}
+		ji.addActionListener((ActionEvent e) -> {
+			_sourceItem._changed = false;
+			_actionFinished = true;
+			_kill = true;
+			_frame.dispose();
 		});
 		fileMenu.add(ji);
 
@@ -224,12 +209,9 @@ public class ChkGUIDisplay extends GUIScreen implements XEditor {
 		if (_sources != null && _sources.size() > 1) {
 			// Select source item
 			_selectSource.setMnemonic((int) 'S');
-			ActionListener alistener = new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					JMenuItem jc = (JMenuItem) e.getSource();
-					setSource(jc.getText());
-				}
+			ActionListener alistener = (ActionEvent e) -> {
+				JMenuItem jc = (JMenuItem) e.getSource();
+				setSource(jc.getText());
 			};
 			for (String key: _sources.keySet()) {
 				JMenuItem ji = new JMenuItem(key);
@@ -238,21 +220,18 @@ public class ChkGUIDisplay extends GUIScreen implements XEditor {
 			}
 			_selectSource.setEnabled(true);
 			_removeSource.setMnemonic((int) 'R');
-			alistener = new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					JMenuItem jc = (JMenuItem) e.getSource();
-					XDSourceItem item = _sources.remove(jc.getText());
-					updateSourceItem();
-					prepareSourceMenuItems();
-					if (item == _sourceItem) {
-						_sourceItem = null;
-						_sourceID = null;
-						setInitialSource();
-					}
-					_actionFinished = false;
-					notifyFrame();
+			alistener = (ActionEvent e) -> {
+				JMenuItem jc = (JMenuItem) e.getSource();
+				XDSourceItem item = _sources.remove(jc.getText());
+				updateSourceItem();
+				prepareSourceMenuItems();
+				if (item == _sourceItem) {
+					_sourceItem = null;
+					_sourceID = null;
+					setInitialSource();
 				}
+				_actionFinished = false;
+				notifyFrame();
 			};
 			for (String key: _sources.keySet()) {
 				JMenuItem ji = new JMenuItem(key);
