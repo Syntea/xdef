@@ -1183,7 +1183,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 						latitude = stack[sp-3].doubleValue();
 						longitude = stack[sp-2].doubleValue();
 						altitude = stack[sp-1].doubleValue();
-						name = stack[sp].isNull() 
+						name = stack[sp].isNull()
 							? null : stack[sp].stringValue();
 						sp -= 3;
 						break;

@@ -400,7 +400,7 @@ public class XComponentUtil {
 			m.setAccessible(true);
 			return toXonObject(m.invoke(xc));
 		} catch (IllegalAccessException | IllegalArgumentException
-			| NoSuchMethodException | SecurityException 
+			| NoSuchMethodException | SecurityException
 			| InvocationTargetException ex) {
 			throw new RuntimeException("Can't access value", ex);
 		}

@@ -97,7 +97,7 @@ public class DefSQLResultSet extends XDValueAbstract implements XDResultSet {
 				query.bind(params);
 			}
 			_resultSet = ((PreparedStatement) query.getObject()).executeQuery();
-		} catch(Exception ex) {
+		} catch(SQLException | SRuntimeException ex) {
 			close();
 			String msg = ex.getMessage();
 			if (msg == null || msg.isEmpty()) {
@@ -168,7 +168,7 @@ public class DefSQLResultSet extends XDValueAbstract implements XDResultSet {
 			}
 			close();
 			return null;
-		} catch(Exception ex) {
+		} catch(SQLException ex) {
 			close();
 			String msg = ex.getMessage();
 			if (msg == null || msg.isEmpty()) {
@@ -205,7 +205,7 @@ public class DefSQLResultSet extends XDValueAbstract implements XDResultSet {
 	public String itemAsString(int index) {
 		try {
 			return _resultSet.getString(index);
-		} catch (Exception ex) {}
+		} catch (SQLException ex) {}
 		return null;
 	}
 	@Override
@@ -217,7 +217,7 @@ public class DefSQLResultSet extends XDValueAbstract implements XDResultSet {
 	public String itemAsString(String name) {
 		try {
 			return _resultSet.getString(name);
-		} catch (Exception ex) {}
+		} catch (SQLException ex) {}
 		return null;
 	}
 	@Override
@@ -235,7 +235,7 @@ public class DefSQLResultSet extends XDValueAbstract implements XDResultSet {
 	public int getSize()  {
 		try {
 			return _resultSet.getFetchSize();
-		} catch (Exception ex) {}
+		} catch (SQLException ex) {}
 		return -1;
 	}
 	@Override
@@ -276,7 +276,7 @@ public class DefSQLResultSet extends XDValueAbstract implements XDResultSet {
 				_resultSet.getMetaData().getColumnCount() > 0) {
 				return _resultSet.getString(1);
 			}
-		} catch (Exception ex) {}
+		} catch (SQLException ex) {}
 		return null;
 	}
 	@Override

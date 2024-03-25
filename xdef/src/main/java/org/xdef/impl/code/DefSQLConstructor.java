@@ -51,7 +51,7 @@ public class DefSQLConstructor implements XDConstructor {
 				//if value of a column is null then return the empty string!
 				String s;
 				return (s=_rs.getString(name)) == null ? "" : s;
-			} catch (Exception ex) {
+			} catch (SQLException ex) {
 				return "";
 			}
 		}
@@ -64,7 +64,7 @@ public class DefSQLConstructor implements XDConstructor {
 		public boolean hasAttribute(String name) {
 			try {
 				return _rs.getObject(name) != null;
-			} catch (Exception ex) {
+			} catch (SQLException ex) {
 				return false;
 			}
 		}
@@ -99,7 +99,7 @@ public class DefSQLConstructor implements XDConstructor {
 					result[i] = new DefNamedValue(s, new DefString(v));
 				}
 				return result;
-			} catch (Exception ex) {
+			} catch (SQLException ex) {
 				return null;
 			}
 		}
@@ -107,7 +107,7 @@ public class DefSQLConstructor implements XDConstructor {
 		public int getXDNamedItemsNumber() {
 			try {
 				return _rs.getMetaData().getColumnCount();
-			} catch (Exception ex) {
+			} catch (SQLException ex) {
 				return 0;
 			}
 		}
@@ -115,7 +115,7 @@ public class DefSQLConstructor implements XDConstructor {
 		public String getXDNamedItemName(int index) {
 			try {
 				return _rs.getMetaData().getColumnName(index + 1);
-			} catch (Exception ex) {
+			} catch (SQLException ex) {
 				return null;
 			}
 		}

@@ -35,11 +35,6 @@ public final class DefXPathExpr extends KXpathExpr implements XDValue {
 	public XPathFunctionResolver _fr;
 	public XPathVariableResolver _vr;
 	public NamespaceContext _nc;
-	/** Creates a new empty instance of DefXpathExpr. */
-	DefXPathExpr() {super("*");}
-
-	/** Creates a new empty instance of DefXpathExpr. */
-	DefXPathExpr(final String source) {this(source, null, null, null);}
 
 	/** Creates a new instance of DefXpathExpr
 	 * @param source the String with XPath expression.

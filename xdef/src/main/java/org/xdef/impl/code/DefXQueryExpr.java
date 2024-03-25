@@ -16,6 +16,7 @@ import org.xdef.XDStatement;
 import org.xdef.XDValue;
 import org.xdef.XDXQueryExpr;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import org.xdef.XDValueType;
 import java.math.BigInteger;
@@ -38,9 +39,10 @@ public class DefXQueryExpr extends KXqueryExpr implements XDXQueryExpr {
 					Class.forName("org.xdef.impl.saxon.XQuerySaxonImpl");
 				Constructor<?> c = cls.getConstructor();
 				x = (XQueryImpl) c.newInstance();
-			} catch (Error ex) {
-				x = null;
-			} catch (Exception ex) {
+			} catch (Error | ClassNotFoundException | IllegalAccessException
+				| IllegalArgumentException | InstantiationException
+				| NoSuchMethodException | SecurityException
+				| InvocationTargetException ex) {
 				x = null;
 			}
 		} else {

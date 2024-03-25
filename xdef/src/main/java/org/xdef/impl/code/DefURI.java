@@ -1,6 +1,7 @@
 package org.xdef.impl.code;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
 import org.xdef.XDValueType;
@@ -30,7 +31,7 @@ public final class DefURI extends XDValueAbstract {
 	public DefURI(final String value) {
 		try {
 			_value = new URI(value);
-		} catch (Exception ex) {
+		} catch (URISyntaxException ex) {
 			throw new RuntimeException(ex);
 		}
 	}

@@ -186,7 +186,7 @@ public final class DefBytes extends XDValueAbstract implements XDBytes {
 		StringWriter sw = new StringWriter();
 		try {
 			SUtils.encodeBase64(new ByteArrayInputStream(_value), sw, false);
-		} catch (Exception ex) {}
+		} catch (SException ex) {}
 		return sw.toString();
 	}
 
@@ -198,7 +198,7 @@ public final class DefBytes extends XDValueAbstract implements XDBytes {
 		StringWriter sw = new StringWriter();
 		try {
 			SUtils.encodeHex(new ByteArrayInputStream(_value), sw);
-		} catch (Exception ex) {}
+		} catch (SException ex) {}
 		return sw.toString();
 	}
 

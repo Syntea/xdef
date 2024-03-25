@@ -9,6 +9,7 @@ import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import org.xdef.XDValueType;
 import static org.xdef.XDValueType.STATEMENT;
 
@@ -34,7 +35,7 @@ public class DefSQLStatement extends XDValueAbstract implements XDStatement {
 		_source = query;
 		try {
 			_stmt = conn.prepareStatement(query);
-		} catch (Exception ex) {
+		} catch (SQLException ex) {
 			String msg = ex.getMessage();
 			//Database statement error&{0}{: }
 			if (msg == null || msg.isEmpty()) {
@@ -87,7 +88,7 @@ public class DefSQLStatement extends XDValueAbstract implements XDStatement {
 					return true;
 				}
 			}
-		} catch (Exception ex) {}
+		} catch (SQLException ex) {}
 		return false;
 	}
    @Override
@@ -96,7 +97,7 @@ public class DefSQLStatement extends XDValueAbstract implements XDStatement {
 		if (_stmt != null) {
 			try {
 				_stmt.close();
-			} catch(Exception e) {}
+			} catch(SQLException e) {}
 			_stmt = null;
 		}
 	}
@@ -124,7 +125,7 @@ public class DefSQLStatement extends XDValueAbstract implements XDStatement {
 			}
 			DefBoolean result = new DefBoolean(_stmt.execute());
 			return result;
-		} catch(Exception ex) {
+		} catch(SQLException | SRuntimeException ex) {
 			String msg = ex.getMessage();
 			//Database statement error&{0}{: }
 			if (msg == null || msg.isEmpty()) {

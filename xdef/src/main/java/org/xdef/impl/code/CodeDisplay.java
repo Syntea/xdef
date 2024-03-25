@@ -394,7 +394,7 @@ public class CodeDisplay implements CodeTable, XDValueID {
 				XDefinition def = (XDefinition)xn;
 				out.print("=== Start XMDefinition: ");
 				displayDesriptor(def, out);
-				if (def._rootSelection.size() > 0) {
+				if (!def._rootSelection.isEmpty()) {
 					Iterator<String> e=def._rootSelection.keySet().iterator();
 					out.println("Root: " + e.next());
 					while (e.hasNext()) {

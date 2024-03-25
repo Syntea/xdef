@@ -710,10 +710,13 @@ final class ChkTranslate extends SReporter {
 		chkElem.setTextValue(null);
 		Node n = lastNode == null ?
 			sourceElem.getFirstChild() : lastNode.getNextSibling();
-		if (n == null && sourceElem instanceof DefSQLConstructor.MyElement
-			&& "$text".equals(chkElem.getXMNode().getName())
-			&& chkElem.getParent().getChildXXNodes().length == 1) {
-		} else {
+		if (n != null || !(sourceElem instanceof DefSQLConstructor.MyElement)
+			|| !"$text".equals(chkElem.getXMNode().getName())
+			|| chkElem.getParent().getChildXXNodes().length != 1) {
+//		if (n == null && sourceElem instanceof DefSQLConstructor.MyElement
+//			&& "$text".equals(chkElem.getXMNode().getName())
+//			&& chkElem.getParent().getChildXXNodes().length == 1) {
+//		} else {
 			StringBuilder sb = new StringBuilder();
 			while (n != null) {
 				short type = n.getNodeType();
@@ -935,7 +938,7 @@ final class ChkTranslate extends SReporter {
 								//we create a dummy element with the text child
 								String text = result.stringValue();
 								if (text != null && !text.isEmpty()) {
-									Element el = 
+									Element el =
 										stringToElement(childChkEl, text);
 									childChkEl.setElemValue(el);
 									createElement(childChkEl, el);

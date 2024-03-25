@@ -335,12 +335,15 @@ wildcardEsc     ::=  '.'
 	private boolean normalChar() {
 		char ch;
 		if ((ch = notOneOfChars(".\\?*+{}()|[]")) != NOCHAR) {
-			if (ch == '^') {
-				_result.append("\\^");
-			} else if (ch == '$') {
-				_result.append("\\$");
-			} else {
-				_result.append(ch);
+			switch (ch) {
+				case '^':
+					_result.append("\\^");
+					break;
+				case '$':
+					_result.append("\\$");
+					break;
+				default:
+					_result.append(ch);
 			}
 			return true;
 		}
@@ -425,8 +428,8 @@ wildcardEsc     ::=  '.'
 			if (name.length() > 2 && name.startsWith("Is")) {
 				name = name.substring(2);
 				// isBlock
-				for (int i=0; i < BLOCKNAMESNOTDIFFERENT.length; i++) {
-					if (name.equals(BLOCKNAMESNOTDIFFERENT[i])) {
+				for (String blockNameParent : BLOCKNAMESNOTDIFFERENT) {
+					if (name.equals(blockNameParent)) {
 						_result.append("\\").append(escChar).append('{')
 							.append("In").append(name).append('}');
 						return true;
@@ -465,8 +468,8 @@ wildcardEsc     ::=  '.'
 				//near position &{1}
 				throw new SRuntimeException(XDEF651, name, getIndex());
 			} else {
-				for (int i=0; i < CATEGORIESNOTDIFFERENT.length; i++) {
-					if (name.equals(CATEGORIESNOTDIFFERENT[i])) {
+				for (String categoriesNotDifferent : CATEGORIESNOTDIFFERENT) {
+					if (name.equals(categoriesNotDifferent)) {
 						_result.append("\\").append(escChar).append('{')
 							.append(name).append('}');
 						return true;

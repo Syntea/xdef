@@ -28,7 +28,7 @@ public final class DefRegex extends XDValueAbstract implements XDRegex {
 		_source = source;
 		try {
 			_value = Pattern.compile(DefRegexTranslator.translate(source));
-		} catch (Exception ex) {
+		} catch (SRuntimeException ex) {
 			String s = ex.getMessage();
 			if (s == null) {
 				s = "" + ex;

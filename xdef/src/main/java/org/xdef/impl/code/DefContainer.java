@@ -503,19 +503,19 @@ public final class DefContainer extends XDValueAbstract
 	 */
 	private void setAttrs(final Map<String,String> nsMap, final Element e) {
 		if (_map != null) {
-			for (int i = 0; i < _map.length; i++) {
-				XDValue val = _map[i].getValue();
+			for (XDNamedValue _map1 : _map) {
+				XDValue val = _map1.getValue();
 				//we nead to get null from STRING_VALUE
 				if (val != null && !val.isNull()) {
-					String t = _map[i].getName();
+					String t = _map1.getName();
 					if (val.getItemId() == XD_CONTAINER) {
 						XDContainer x = (XDContainer) val;
 						e.appendChild(e.getOwnerDocument()
 							.importNode(x.toElement(null, t),
-							true));
+								true));
 					} else {
 						String s = val.getItemId() == XD_STRING ?
-						val.stringValue() : val.toString();
+							val.stringValue() : val.toString();
 						e.setAttribute(t, s);
 						if (t.startsWith("xmlns")) {
 							if (t.length() == 5) {
@@ -1000,9 +1000,9 @@ public final class DefContainer extends XDValueAbstract
 			return new DefContainer();
 		}
 		List<XDValue> ar = new ArrayList<>();
-		for (int i = 0; i < _array.length; i++) {
-			if (_array[i].getItemId() == XD_ELEMENT) {
-				Element el = _array[i].getElement();
+		for (XDValue _array1 : _array) {
+			if (_array1.getItemId() == XD_ELEMENT) {
+				Element el = _array1.getElement();
 				if (nsURI == null) {
 					if (el.getNamespaceURI() != null) {
 						continue;
@@ -1016,7 +1016,7 @@ public final class DefContainer extends XDValueAbstract
 					s = s.substring(n + 1);
 				}
 				if (localName.equals(s)) {
-					ar.add(_array[i]);
+					ar.add(_array1);
 				}
 			}
 		}

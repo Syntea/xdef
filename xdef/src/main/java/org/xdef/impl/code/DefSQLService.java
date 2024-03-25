@@ -9,6 +9,7 @@ import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 import org.xdef.XDValueType;
 import static org.xdef.XDValueType.SERVICE;
 
@@ -37,7 +38,7 @@ public class DefSQLService extends XDValueAbstract implements XDService {
 		_user = user;
 		try {
 			_conn = DriverManager.getConnection(url, user, pasw);
-		} catch (Exception ex) {
+		} catch (SQLException ex) {
 			String msg = ex.getMessage();
 			//Database statement error&{0}{: }
 			if (msg == null || msg.isEmpty()) {
@@ -109,7 +110,7 @@ public class DefSQLService extends XDValueAbstract implements XDService {
 		if (_conn != null) {
 			try {
 				_conn.close();
-			} catch(Exception e) {}
+			} catch(SQLException e) {}
 			_conn = null;
 		}
 	}
@@ -132,7 +133,7 @@ public class DefSQLService extends XDValueAbstract implements XDService {
 	public void commit() throws SRuntimeException {
 		try {
 			_conn.commit();
-		} catch (Exception ex) {
+		} catch (SQLException ex) {
 			String msg = ex.getMessage();
 			//Database statement error&{0}{: }
 			if (msg == null || msg.isEmpty()) {
@@ -150,7 +151,7 @@ public class DefSQLService extends XDValueAbstract implements XDService {
 			if (_conn != null) {
 				_conn.rollback();
 			}
-		} catch (Exception ex) {
+		} catch (SQLException ex) {
 			String msg = ex.getMessage();
 			//Database statement error&{0}{: }
 			if (msg == null || msg.isEmpty()) {
@@ -170,7 +171,7 @@ public class DefSQLService extends XDValueAbstract implements XDService {
 			if (_conn != null && "autocommit".equals(name)) {
 				_conn.setAutoCommit("yes".equals(value));
 			}
-		} catch (Exception ex) {
+		} catch (SQLException ex) {
 			String msg = ex.getMessage();
 			//Database statement error&{0}{: }
 			if (msg == null || msg.isEmpty()) {
@@ -189,7 +190,7 @@ public class DefSQLService extends XDValueAbstract implements XDService {
 			if (_conn != null && "autocommit".equals(name)) {
 				return _conn.getAutoCommit() ? "yes" : "no";
 			}
-		} catch (Exception ex) {}
+		} catch (SQLException ex) {}
 		return null;
 	}
 	@Override

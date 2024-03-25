@@ -87,7 +87,7 @@ public final class DefParseResult extends XDValueAbstract
 		try {
 			return Integer.parseInt(_source.charAt(0) == '+'
 				?_source.substring(1,_srcIndex):_source.substring(0,_srcIndex));
-		} catch(Exception ex) {
+		} catch(NumberFormatException ex) {
 			throw new SRuntimeException(SYS.SYS072, ex); //Data error&{0}{: }
 		}
 	}
