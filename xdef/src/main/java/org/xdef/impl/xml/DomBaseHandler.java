@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.LinkedHashMap;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.ErrorHandler;
@@ -36,7 +37,9 @@ public abstract class DomBaseHandler
 			DBF.setIgnoringComments(false);
 			DBF.setFeature( // no xml:base attributes
 			  "http://apache.org/xml/features/xinclude/fixup-base-uris", false);
-		} catch (Exception ex) {throw new RuntimeException(ex);}
+		} catch (ParserConfigurationException ex) {
+			throw new RuntimeException(ex);
+		}
 	}
 
 	public InputSource _is;
@@ -54,7 +57,9 @@ public abstract class DomBaseHandler
 	public DomBaseHandler() {
 		try {
 			_docBuilder = DBF.newDocumentBuilder();
-		} catch (Exception ex) {throw new RuntimeException(ex);}
+		} catch (ParserConfigurationException ex) {
+			throw new RuntimeException(ex);
+		}
 	}
 
 	/////////////////////////////////////////////////////////////
@@ -64,11 +69,11 @@ public abstract class DomBaseHandler
 	public final void doParse(final InputStream in, final String sysId)
 		throws Exception {
 		XInputStream myInputStream = new XInputStream(in);
-		XReader myReader = new XReader(myInputStream);
-		myReader.setHandler(this);
-		myReader.setSysId(sysId);
-		doParse(myReader);
-		myReader.close();
+		try (XReader myReader = new XReader(myInputStream)) {
+			myReader.setHandler(this);
+			myReader.setSysId(sysId);
+			doParse(myReader);
+		}
 	}
 
 	public final void doParse(final XReader myReader) throws Exception {

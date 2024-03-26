@@ -182,8 +182,8 @@ public class XSParseList extends XSAbstractParser {
 		}
 		if (_enumeration != null) {
 			boolean found = false;
-			for (int j = 0; j < _enumeration.length; j++) {
-				if (_enumeration[j].equals(results)) {
+			for (XDValue x : _enumeration) {
+				if (x.equals(results)) {
 					found = true;
 					break;
 				}

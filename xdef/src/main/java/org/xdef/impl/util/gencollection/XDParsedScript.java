@@ -374,61 +374,67 @@ public class XDParsedScript {
 	 */
 	private static String parseScriptSection(final XScriptParser sp) {
 		StringBuilder sb = new StringBuilder();
-		if (sp._sym == XScriptParser.TRY_SYM) {
-			sb.append("try ");
-			sp.nextSymbol();
-			sb.append(parseScriptSection(sp));
-			if (sp._sym == XScriptParser.END_SYM) {
-				sb.append("}");
-				sp.nextSymbol();
-			}
-			if (sp._sym == XScriptParser.CATCH_SYM) {
-				sb.append("catch");
+		switch (sp._sym) {
+			case XScriptParser.TRY_SYM:
+				sb.append("try ");
 				sp.nextSymbol();
 				sb.append(parseScriptSection(sp));
 				if (sp._sym == XScriptParser.END_SYM) {
 					sb.append("}");
 					sp.nextSymbol();
 				}
-				if (sp._sym == XScriptParser.BEG_SYM) {
+				if (sp._sym == XScriptParser.CATCH_SYM) {
+					sb.append("catch");
+					sp.nextSymbol();
 					sb.append(parseScriptSection(sp));
-				}
-			}
-			return sb.toString();
-		} else if (sp._sym == XScriptParser.SWITCH_SYM) {
-			sp.nextSymbol();
-			sb.append("switch").append(parseScriptSection(sp));
-			if (sp._sym == XScriptParser.BEG_SYM) {
-				sb.append("{");
-				sp.nextSymbol();
-				for (;;) {
-					if (sp._sym == XScriptParser.CASE_SYM) {
+					if (sp._sym == XScriptParser.END_SYM) {
+						sb.append("}");
 						sp.nextSymbol();
-						sb.append("case ").append(parseScriptSection(sp));
-					} else if (sp._sym == XScriptParser.DEFAULT_SYM) {
-						sp.nextSymbol();
-						if (sp._sym == XScriptParser.COLON_SYM) {
-							sp.nextSymbol();
-						}
-						sb.append("default: ").append(parseScriptSection(sp));
-					} else {
-						break;
+					}
+					if (sp._sym == XScriptParser.BEG_SYM) {
+						sb.append(parseScriptSection(sp));
 					}
 				}
-				if (sp._sym == XScriptParser.END_SYM) {
-					sp.nextSymbol();
-					sb.append("}");
-				}
-			}
-			return sb.toString();
-		} else if (sp._sym == XScriptParser.IF_SYM) {
-			sb.append("if");
-			sp.nextSymbol();
-			sb.append(parseScriptSection(sp));
-			if (sp._sym == XScriptParser.END_SYM) {
-				sb.append("}");
+				return sb.toString();
+			case XScriptParser.SWITCH_SYM:
 				sp.nextSymbol();
-			}
+				sb.append("switch").append(parseScriptSection(sp));
+				if (sp._sym == XScriptParser.BEG_SYM) {
+					sb.append("{");
+					sp.nextSymbol();
+			OUTER: for (;;) {
+						switch (sp._sym) {
+							case XScriptParser.CASE_SYM:
+								sp.nextSymbol();
+								sb.append("case ")
+									.append(parseScriptSection(sp));
+								break;
+							case XScriptParser.DEFAULT_SYM:
+								sp.nextSymbol();
+								if (sp._sym == XScriptParser.COLON_SYM) {
+									sp.nextSymbol();
+								}
+								sb.append("default: ")
+									.append(parseScriptSection(sp));
+								break;
+							default:
+								break OUTER;
+						}
+					}
+					if (sp._sym == XScriptParser.END_SYM) {
+						sp.nextSymbol();
+						sb.append("}");
+					}
+				}
+				return sb.toString();
+			case XScriptParser.IF_SYM:
+				sb.append("if");
+				sp.nextSymbol();
+				sb.append(parseScriptSection(sp));
+				if (sp._sym == XScriptParser.END_SYM) {
+					sb.append("}");
+					sp.nextSymbol();
+				}
 		}
 		if (sp._sym == XScriptParser.BEG_SYM) {
 			sp.nextSymbol();
@@ -438,12 +444,15 @@ public class XDParsedScript {
 				if (isSectionName(sp)) {
 					return sb.toString();
 				}
-				if (sp._sym == XScriptParser.TRY_SYM) {
-					sb.append(parseScriptSection(sp));
-				} else if (sp._sym == XScriptParser.IF_SYM) {
-					sb.append(parseScriptSection(sp));
-				} else if (sp._sym == XScriptParser.SWITCH_SYM) {
-					sb.append(parseScriptSection(sp));
+				switch (sp._sym) {
+					case XScriptParser.TRY_SYM:
+						sb.append(parseScriptSection(sp));
+						break;
+					case XScriptParser.IF_SYM:
+						sb.append(parseScriptSection(sp));
+						break;
+					case XScriptParser.SWITCH_SYM:
+						sb.append(parseScriptSection(sp));
 				}
 				if (sp._sym == XScriptParser.BEG_SYM) {
 					sb.append("{");

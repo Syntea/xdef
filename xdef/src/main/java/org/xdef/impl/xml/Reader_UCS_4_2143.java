@@ -8,8 +8,6 @@ import java.io.InputStream;
 public class Reader_UCS_4_2143 extends Reader_UCS_4_xxxx {
 	/** four bytes. */
 	private final byte[] _b4 = new byte[4];
-	/** Gen detailed position flag. */
-	private boolean _genPositions;
 
 	public Reader_UCS_4_2143(final InputStream in) {
 		super(in);

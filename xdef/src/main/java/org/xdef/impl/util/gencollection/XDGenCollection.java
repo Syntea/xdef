@@ -14,6 +14,7 @@ import org.xdef.impl.compile.XScriptParser;
 import org.xdef.sys.ArrayReporter;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ import java.util.StringTokenizer;
 import java.util.LinkedHashMap;
 import java.util.List;
 import javax.xml.XMLConstants;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import org.w3c.dom.Attr;
@@ -38,6 +40,8 @@ import org.xdef.sys.StringParser;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXNotRecognizedException;
+import org.xml.sax.SAXNotSupportedException;
 import org.xml.sax.helpers.DefaultHandler;
 
 /** Generate collection from X-definitions.
@@ -90,7 +94,8 @@ public class XDGenCollection {
 				"http://apache.org/xml/features/xinclude/fixup-base-uris",
 				false); // do not create xml:base attributes
 			SPF.setSchema(null);
-		} catch (Exception ex) {
+		} catch (ParserConfigurationException | SAXNotRecognizedException
+			| SAXNotSupportedException ex) {
 			throw new RuntimeException(ex);
 		}
 	}
@@ -193,7 +198,8 @@ public class XDGenCollection {
 				}
 				SAXParser parser = SPF.newSAXParser();
 				parser.parse(is, this);
-			} catch (Exception ex) {
+			} catch (IOException | ParserConfigurationException
+				| SAXException ex) {
 				throw new RuntimeException(ex);
 			}
 		}
@@ -294,9 +300,6 @@ public class XDGenCollection {
 	}
 
 	private void parse(String source) throws Exception {
-		if (source == null) {
-			return;
-		}
 		if (source == null || _parsedList.indexOf(source) >= 0) {
 			return;
 		}
@@ -1127,12 +1130,15 @@ public class XDGenCollection {
 	 */
 	public final static String getXDNodeNS(final Node n) {
 		Element e;
-		if (n.getNodeType() == Node.ATTRIBUTE_NODE) {
-			e = ((Attr) n).getOwnerElement();
-		} else if (n.getNodeType() == Node.ELEMENT_NODE) {
-			e = (Element) n;
-		} else {
-			return null;
+		switch (n.getNodeType()) {
+			case Node.ATTRIBUTE_NODE:
+				e = ((Attr) n).getOwnerElement();
+				break;
+			case Node.ELEMENT_NODE:
+				e = (Element) n;
+				break;
+			default:
+				return null;
 		}
 		String uri = e.getNamespaceURI();
 		if (uri == null || uri.isEmpty()) {

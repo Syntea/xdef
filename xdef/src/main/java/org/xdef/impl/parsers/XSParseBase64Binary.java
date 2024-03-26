@@ -15,6 +15,7 @@ import static org.xdef.XDParser.MINLENGTH;
 import static org.xdef.XDParser.PATTERN;
 import static org.xdef.XDParser.WHITESPACE;
 import static org.xdef.XDValueID.XD_BYTES;
+import org.xdef.sys.SException;
 import org.xdef.sys.SParser;
 import org.xdef.sys.SReader;
 
@@ -104,11 +105,10 @@ public class XSParseBase64Binary extends XSAbstractParser {
 				}
 			}
 			String s = r.getParsedString();
-			r = null;
 			p.replaceParsedBufferFrom(pos0, s);
 			checkPatterns(p);
 			check(p);
-		} catch (Exception ex) {
+		} catch (SException ex) {
 			//Incorrect value of '&{0}'&{1}{: }
 			p.errorWithString(XDEF.XDEF809, parserName(),
 				p.getSourceBuffer());

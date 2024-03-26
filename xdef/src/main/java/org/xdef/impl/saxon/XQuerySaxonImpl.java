@@ -1,9 +1,11 @@
 package org.xdef.impl.saxon;
 
 import javax.xml.namespace.QName;
+import javax.xml.xquery.XQException;
 import javax.xml.xquery.XQItem;
 import javax.xml.xquery.XQItemType;
 import javax.xml.xquery.XQResultSequence;
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -28,6 +30,7 @@ import org.xdef.impl.code.DefLong;
 import org.xdef.impl.code.DefString;
 import org.xdef.impl.code.XQueryImpl;
 import org.xdef.proc.XXNode;
+import org.xdef.sys.SException;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.xml.KXqueryExpr;
 
@@ -44,8 +47,8 @@ public class XQuerySaxonImpl implements XQueryImpl {
 	}
 
 	private static boolean findVariable(QName[] qnames, QName qname) {
-		for (int i = 0; i < qnames.length; i++) {
-			if (qname.equals(qnames[i])) {
+		for (QName qn : qnames) {
+			if (qname.equals(qn)) {
 				return true;
 			}
 		}
@@ -65,8 +68,7 @@ public class XQuerySaxonImpl implements XQueryImpl {
 			QName[] qnames = x.getAllExternalVariables();
 			if (xNode != null && qnames != null && qnames.length > 0) {
 				String[] names = xNode.getVariableNames();
-				for (int i = 0; i < names.length; i++) {
-					String s = names[i];
+				for (String s : names) {
 					XDValue var = xNode.getVariable(s);
 					if (var == null) {
 						continue;
@@ -214,7 +216,9 @@ public class XQuerySaxonImpl implements XQueryImpl {
 				}
 			}
 			return result;
-		} catch (Exception ex) {
+		} catch (SRuntimeException ex) {
+			throw ex;
+		} catch (XQException | DOMException | SException ex) {
 			throw new SRuntimeException(ex.toString());
 		}
 	}

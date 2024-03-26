@@ -214,7 +214,7 @@ public class XSParseUnion extends XSAbstractParser {
 	public XDParser[] getParsers() {return _itemTypes;}
 
 	/** Set list of parsers to this union.
-	 * @para p array of parsers to set to this union.
+	 * @param p array of parsers to set to this union.
 	 */
 	public void setParsers(final XDParser[] p) {_itemTypes = p;}
 }

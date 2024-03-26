@@ -97,8 +97,8 @@ public abstract class XSAbstractParseString extends XSAbstractParser {
 		DefString[] e = null;
 		//the list of strings must be sorted by length down
 	loop:
-		for (int i = 0; i < o.length; i++) {
-			DefString s = (DefString) iObject(null, o[i]);
+		for (Object o1 : o) {
+			DefString s = (DefString) iObject(null, o1);
 			if (e == null) {
 				e = new DefString[]{s};
 			} else {

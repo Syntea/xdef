@@ -223,7 +223,7 @@ public class KNamespace implements NamespaceContext {
 				}
 			}
 		}
-		return a.toArray(new String[a.size()]);
+		return a.toArray(new String[0]);
 	}
 
 	/** Get array with all available prefixes.
@@ -236,7 +236,7 @@ public class KNamespace implements NamespaceContext {
 				a.add(0, _prefixes[i]);
 			}
 		}
-		return a.toArray(new String[a.size()]);
+		return a.toArray(new String[0]);
 	}
 
 	/** Clear the context stack (except of predefined namespaces for prefixes

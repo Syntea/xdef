@@ -10,8 +10,10 @@ import javax.xml.namespace.QName;
 import javax.xml.xquery.XQConnection;
 import javax.xml.xquery.XQConstants;
 import javax.xml.xquery.XQDataSource;
+import javax.xml.xquery.XQException;
 import javax.xml.xquery.XQItemType;
 import javax.xml.xquery.XQPreparedExpression;
+import org.w3c.dom.DOMException;
 import org.xdef.xml.KXquery;
 
 /** XQuery expression container.
@@ -35,7 +37,7 @@ public class XQuerySaxonExpr implements KXquery {
 		try {
 			_conn = XDS.getConnection();
 			_value = _conn.prepareExpression(source);
-		} catch (Exception ex) {
+		} catch (XQException ex) {
 			//XQuery expression error&{0}{: }
 			throw new SRuntimeException(XML.XML506, ex);
 		}
@@ -60,7 +62,7 @@ public class XQuerySaxonExpr implements KXquery {
 	public void setImplicitTimeZone(final TimeZone tz) throws SRuntimeException{
 		try {
 			_value.setImplicitTimeZone(tz);
-		} catch (Exception ex) {
+		} catch (XQException ex) {
 			//XQuery expression error&{0}{: }
 			throw new SRuntimeException(XML.XML506, ex);
 		}
@@ -74,7 +76,7 @@ public class XQuerySaxonExpr implements KXquery {
 	public TimeZone getImplicitTimeZone() throws SRuntimeException {
 		try {
 			return _value.getImplicitTimeZone();
-		} catch (Exception ex) {
+		} catch (XQException ex) {
 			//XQuery expression error&{0}{: }
 			throw new SRuntimeException(XML.XML506, ex);
 		}
@@ -87,7 +89,7 @@ public class XQuerySaxonExpr implements KXquery {
 	public QName[] getAllExternalVariables() {
 		try {
 			return _value.getAllExternalVariables();
-		} catch (Exception ex) {
+		} catch (XQException ex) {
 			return null;
 		}
 	}
@@ -99,7 +101,7 @@ public class XQuerySaxonExpr implements KXquery {
 	public QName[] getAllUnboundExternalVariables() {
 		try {
 			return _value.getAllUnboundExternalVariables();
-		} catch (Exception ex) {
+		} catch (XQException ex) {
 			//XQuery expression error&{0}{: }
 			throw new SRuntimeException(XML.XML506, ex);
 		}
@@ -114,12 +116,12 @@ public class XQuerySaxonExpr implements KXquery {
 	public void bindValue(final QName qname, final Object value)
 		throws SRuntimeException {
 		QName[] qnames = getAllExternalVariables();
-		if (qnames == null || qnames.length == 0) {
+		if (qnames == null || qnames.length == 0 || value == null) {
 			return;
 		}
 		boolean found = false;
-		for (int i = 0; i < qnames.length; i++) {
-			if (qname.equals(qnames[i])) {
+		for (QName qn : qnames) {
+			if (qname.equals(qn)) {
 				found = true;
 			}
 		}
@@ -156,7 +158,7 @@ public class XQuerySaxonExpr implements KXquery {
 					_value.bindString(qname, value.toString(), null);
 				}
 			}
-		} catch (Exception ex) {
+		} catch (XQException ex) {
 			//XQuery expression error&amp;{0}{: }
 			throw new SRuntimeException(XML.XML506, ex);
 		}
@@ -171,7 +173,7 @@ public class XQuerySaxonExpr implements KXquery {
 	throws SRuntimeException {
 		try {
 			_value.bindLong(qname, value, null);
-		} catch (Exception ex) {
+		} catch (XQException ex) {
 			 //"XQuery expression error&{0}{: }
 			throw new SRuntimeException(XML.XML506, ex);
 		}
@@ -227,7 +229,7 @@ public class XQuerySaxonExpr implements KXquery {
 				//XQuery expression error&{0}{: }
 				throw new SRuntimeException(XML.XML506,"Unknown argument type");
 			}
-		} catch (Exception ex) {
+		} catch (XQException | DOMException | SRuntimeException ex) {
 			if (ex instanceof SRuntimeException) {
 				throw (SRuntimeException) ex;
 			}
@@ -248,7 +250,7 @@ public class XQuerySaxonExpr implements KXquery {
 	public Object evaluate() {
 		try {
 			return _value.executeQuery();
-		} catch (Exception ex) {
+		} catch (XQException ex) {
 			//XQuery expression error&{0}{: }
 			throw new SRuntimeException(XML.XML506, ex);
 		}
