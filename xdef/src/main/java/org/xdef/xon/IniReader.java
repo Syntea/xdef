@@ -110,13 +110,12 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 		if (p.getCurrentChar() == '[') {
 			return new SBuffer(p.getUnparsedBufferPart(), p.getPosition());
 		}
-		SPosition spos = p.getPosition();
 		while (!p.eos() && p.getCurrentChar() != '=') {
 			p.peekChar();
 		}
 		if (p.isChar('=')) {
 			p.isSpaces();
-			spos = p.getPosition();
+			SPosition spos = p.getPosition();
 			String s = p.getSourceBuffer();
 			if (endsWithBackslash(s)) { // the continue line
 				s = s.substring(0, s.length()-1);
@@ -159,9 +158,8 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 		StringParser p = new StringParser(s);
 		p.isSpaces();
 		SPosition spos = p.getPosition();
-		String key = null;
 		if (p.findChar('=')) {
-			key = p.getParsedBufferPartFrom(spos.getIndex());
+			String key = p.getParsedBufferPartFrom(spos.getIndex());
 			p.nextChar();
 			_jp.namedValue(
 				new SBuffer(key.substring(0, key.length()).trim(), spos));

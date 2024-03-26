@@ -73,7 +73,7 @@ public class SDuration extends Duration implements Comparable<SDuration> {
 				//Icorrect format of time period
 				throw new SRuntimeException(SYS.SYS056);
 			}
-		} catch (Exception ex) {
+		} catch (SRuntimeException ex) {
 			if (ex instanceof SThrowable) {
 				throw new SRuntimeException(((SThrowable) ex).getReport());
 			} else {
@@ -382,11 +382,12 @@ public class SDuration extends Duration implements Comparable<SDuration> {
 		return sb.toString();
 	}
 
-	@Override
 	/** Clone SDuration object.
 	 * @return new SDuration object as a clone this one.
 	 */
+	@Override
 	public Object clone() throws CloneNotSupportedException {
+		super.clone();
 		return new SDuration(this);
 	}
 
@@ -597,6 +598,6 @@ public class SDuration extends Duration implements Comparable<SDuration> {
 			return compareTo((SDuration) duration);
 		}
 		throw new SIllegalArgumentException(
-			"Not supported for " + duration.getClass());
+			"Compare not supported for " + duration);
 	}
 }

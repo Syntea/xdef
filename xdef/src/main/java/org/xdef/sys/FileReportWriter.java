@@ -594,7 +594,7 @@ public class FileReportWriter implements ReportWriter {
 		try {
 			return new FileReportReader(
 				new InputStreamReader(new FileInputStream(_file)), true);
-		} catch (Exception ex) {
+		} catch (FileNotFoundException ex) {
 			//Can't get report reader from this report writer
 			throw new SRuntimeException(SYS.SYS045);
 		}

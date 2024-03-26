@@ -1231,7 +1231,8 @@ public final class BNFGrammar {
 		final boolean perform() {
 			SPosition startPos = setPosition();
 			int[] processed = new int[_items.length];
-			for (int c = 0; c < _items.length; c++) {
+			int c = 0;
+			while (c < _items.length) {
 				for (int i = 0;  !_p.eos() && i < _items.length; i++) {
 					int pos = _p.getIndex();
 					if (_items[i].perform() && _p.getIndex() > pos) {
@@ -1242,6 +1243,7 @@ public final class BNFGrammar {
 						}
 					}
 				}
+				c++;
 			}
 			for (int i = 0;  i < _items.length; i++) {
 				if (processed[i] < _items[i]._min) {

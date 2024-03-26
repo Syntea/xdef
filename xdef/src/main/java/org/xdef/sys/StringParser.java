@@ -917,7 +917,7 @@ public class StringParser extends SReporter implements SParser {
 			setSourceReader(new InputStreamReader(con.getInputStream(),
 				con.getContentEncoding()), filePos);
 			setSysId(url.toExternalForm());
-		} catch (Exception ex) {
+		} catch (IOException ex) {
 			throw new SRuntimeException(SYS.SYS076,//URL &{0} error: &{1}{; }
 				url.toExternalForm(), ex.getMessage());
 		}
@@ -933,15 +933,6 @@ public class StringParser extends SReporter implements SParser {
 		final long filePos) {
 		super(reporter);
 		setSourceReader(reader, filePos);
-	}
-
-	/** Set source file.
-	 * @param fname the pathname of file with source data.
-	 * @param charset Name of character set.
-	 * @throws SRuntimeException if an IO error occurs
-	 */
-	final void setSourceReader(final String fname, final String charset){
-		setSourceReader(new File(fname), charset);
 	}
 
 	/** Set source file.
@@ -980,28 +971,6 @@ public class StringParser extends SReporter implements SParser {
 			URLConnection con = url.openConnection();
 			setSourceReader(new InputStreamReader(con.getInputStream(),
 				con.getContentEncoding()));
-			setSysId(s);
-		} catch (IOException ex) {
-			setSourceBuffer("");
-			//URL &{0} error: &{1}{; }
-			throw new SRuntimeException(SYS.SYS076, s,ex);
-		}
-	}
-
-	/** Set input from URL.
-	 * @param url The input url.
-	 * @param charset Name of character table.
-	 * @throws SRuntimeException if an error occurs.
-	 */
-	final void setSourceReader(final URL url, final String charset) {
-		String s = url.toExternalForm();
-		try {
-			if (s.startsWith("file:")) {
-				setSourceReader(s.substring(5).trim(),charset);
-			} else {
-				setSourceReader(
-					new InputStreamReader(url.openStream(), charset));
-			}
 			setSysId(s);
 		} catch (IOException ex) {
 			setSourceBuffer("");
@@ -1174,7 +1143,7 @@ public class StringParser extends SReporter implements SParser {
 			setFilePos(getFilePos() + getIndex());
 			setIndex(0);
 			return true;
-		} catch (Exception ex) {
+		} catch (IOException ex) {
 			//this should never happen
 			closeReader();
 			//Program exception&{0}{: }
@@ -1238,7 +1207,7 @@ public class StringParser extends SReporter implements SParser {
 					super.setIndex(pos); //restore bufffer position
 					break; // we have no more parsers.
 				}
-			} catch (Exception ex) {
+			} catch (IOException ex) {
 				setBuffer(sb.toString());
 				//this should never happen
 				closeReader();
@@ -1254,7 +1223,7 @@ public class StringParser extends SReporter implements SParser {
 	 * @return true if parser has something to be parsed.
 	 */
 	public final boolean popParser() {
-		while (_parserStack != null && _parserStack.size() > 0) {
+		while (_parserStack != null && !_parserStack.isEmpty()) {
 			StringParser parser  = _parserStack.pop();
 			_keepBufferCounter = parser._keepBufferCounter;
 			setReportWriter(parser.getReportWriter());
@@ -2100,7 +2069,7 @@ public class StringParser extends SReporter implements SParser {
 		try {
 			return Integer.parseInt(_parsedString.charAt(0) == '+'
 				? _parsedString.substring(1):_parsedString);
-		} catch(Exception ex) {
+		} catch(NumberFormatException ex) {
 			throw new SRuntimeException(SYS.SYS072, ex); //Data error&{0}{: }
 		}
 	}
@@ -2113,7 +2082,7 @@ public class StringParser extends SReporter implements SParser {
 		try {
 			return Long.parseLong(_parsedString.charAt(0) == '+'
 				? _parsedString.substring(1):_parsedString);
-		} catch(Exception ex) {
+		} catch(NumberFormatException ex) {
 			throw new SRuntimeException(SYS.SYS072, ex);//Data error&{0}{: }
 		}
 	}
@@ -2126,7 +2095,7 @@ public class StringParser extends SReporter implements SParser {
 		try {
 			return Float.parseFloat(_parsedString.charAt(0) == '+'
 				? _parsedString.substring(1) : _parsedString);
-		} catch(Exception ex) {
+		} catch(NumberFormatException ex) {
 			throw new SRuntimeException(SYS.SYS072, ex); //Data error&{0}{: }
 
 		}
@@ -2140,7 +2109,7 @@ public class StringParser extends SReporter implements SParser {
 		try {
 			return Double.parseDouble(_parsedString.charAt(0) == '+'
 				? _parsedString.substring(1) : _parsedString);
-		} catch(Exception ex) {
+		} catch(NumberFormatException ex) {
 			throw new SRuntimeException(SYS.SYS072, ex); //Data error&{0}{: }
 		}
 	}
@@ -3670,7 +3639,7 @@ public class StringParser extends SReporter implements SParser {
 							return Report.error(SYS.SYS062,
 								_source.substring(start, getIndex()), start);
 						}
-					} catch (Exception ex) {
+					} catch (SRuntimeException ex) {
 						//Datetime mask: incorrect initial value
 						//{0}{: '}{'}&{1}{, position: }
 						return Report.error(SYS.SYS062,

@@ -4,10 +4,13 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.text.DecimalFormat;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.StringWriter;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URL;
@@ -144,7 +147,7 @@ public abstract class STester {
 			try {
 				String s = _tempDir.getCanonicalPath().replace('\\', '/');
 				return s.endsWith("/") ? s : s + '/';
-			} catch (Exception ex) {
+			} catch (IOException ex) {
 				throw new SRuntimeException(ex); // never happens
 			}
 		} else {
@@ -171,7 +174,7 @@ public abstract class STester {
 					} else if (x.isFile()){
 						x.delete();
 					}
-				} catch (Exception ex) {}
+				} catch (SException ex) {}
 			}
 		} else {
 			//Can't create directory: &{0}
@@ -360,8 +363,8 @@ public abstract class STester {
 	public final  void assertEq(final Boolean a1,
 		final Boolean a2,
 		final Object msg) {
-		if ((a1 == null && a2 != null) || (a1 != null && a2 == null)
-			|| (a1 == null && a2 == null) || (!a1.equals(a2))) {
+		if (a1 != null && a2 != null && !a1.equals(a2)
+			|| a1 == null && a2 != null || a1 != null && a2 == null) {
 			fail((msg != null ? msg.toString().trim() + '\n' : "")
 				+ "a1=" + a1 + "; a2=" + a2);
 		}
@@ -381,8 +384,8 @@ public abstract class STester {
 	public final void assertEq(final Character a1,
 		final Character a2,
 		final Object msg) {
-		if ((a1 != null && a2 != null && !a1.equals(a2))
-			|| (a1 != null && a1 == null) || (a1 == null && a1 != null)) {
+		if (a1 != null && a2 != null && !a1.equals(a2)
+			|| a1 == null && a2 != null || a1 != null && a2 == null) {
 			fail((msg != null ? msg.toString().trim() + '\n' : "")
 				+"a1='" + a1 + "'(" + ((int) a1) + "); a2='" +
 				a2 + "'(" + ((int) a2) + ")");
@@ -401,8 +404,8 @@ public abstract class STester {
 	 * @param msg message to be printed or null.
 	 */
 	public final void assertEq(final Long a1, final Long a2, final Object msg) {
-		if ((a1 != null && a2 != null && a1.compareTo(a2) != 0)
-			|| (a1 != null && a1 == null) || (a1 == null && a1 != null)) {
+		if (a1 != null && a2 != null && a1.compareTo(a2) != 0
+			|| a1 == null && a2 != null || a1 != null && a2 == null) {
 			fail((msg != null ? msg.toString().trim() + '\n' : "")
 				+ "a1=" + a1 + "; a2=" + a2);
 		}
@@ -423,7 +426,7 @@ public abstract class STester {
 		final Double a2,
 		final Object msg) {
 		if ((a1 != null && a2 != null && a1.compareTo(a2) != 0)
-			|| (a1 != null && a1 == null) || (a1 == null && a1 != null)) {
+			|| a1 == null && a2 != null || a1 != null && a2 == null) {
 			fail((msg != null ? msg.toString().trim() + '\n' : "")
 				+ "a1=" + a1 + "; a2=" + a2);
 		}
@@ -444,7 +447,7 @@ public abstract class STester {
 		final BigDecimal a2,
 		final Object msg) {
 		if ((a1 != null && a2 != null && a1.compareTo(a2) != 0)
-			|| (a1 != null && a1 == null) || (a1 == null && a1 != null)) {
+			|| a1 == null && a2 != null || a1 != null && a2 == null) {
 			fail((msg != null ? msg.toString().trim() + '\n' : "")
 				+ "a1=" + a1 + "; a2=" + a2);
 		}
@@ -465,7 +468,7 @@ public abstract class STester {
 		final String a2,
 		final Object msg) {
 		if ((a1 != null && a2 != null && !a1.equals(a2))
-			|| (a1 != null && a1 == null) || (a1 == null && a1 != null)) {
+			|| a1 == null && a2 != null || a1 != null && a2 == null) {
 			fail((msg != null ? msg.toString().trim() + '\n' : "")
 				+ "a1=" + (a1 == null ? "null" : "'" + a1 + "'")
 				+ "; a2=" + (a2 == null ? "null" : "'" + a2 + "'"));
@@ -737,7 +740,7 @@ public abstract class STester {
 				try {
 					ReportPrinter.printListing(strw,
 						new FileReader(xml), (ArrayReporter) reporetr, true);
-				} catch (Exception ex) {
+				} catch (FileNotFoundException ex) {
 					return xml;
 				}
 			}
@@ -922,7 +925,10 @@ public abstract class STester {
 				new Class<?>[0]);
 			c.setAccessible(true);
 			return (STester) c.newInstance(new Object[0]);
-		} catch (Exception ex) {
+		} catch (ClassNotFoundException | IllegalAccessException
+			| IllegalArgumentException | InstantiationException
+			| NoSuchMethodException | SecurityException
+			| InvocationTargetException ex) {
 			throw new RuntimeException("Can't invoke: new " + className + "()");
 		}
 	}
@@ -947,9 +953,9 @@ public abstract class STester {
 	 */
 	public final static String printThrowable(final Throwable exception) {
 		java.io.CharArrayWriter chw = new java.io.CharArrayWriter();
-		java.io.PrintWriter pw = new java.io.PrintWriter(chw);
-		exception.printStackTrace(pw);
-		pw.close();
+		try (java.io.PrintWriter pw = new java.io.PrintWriter(chw)) {
+			exception.printStackTrace(pw);
+		}
 		return chw.toString();
 	}
 	/** Add Java sources to parameter list of the Java compiler.
@@ -1037,7 +1043,7 @@ public abstract class STester {
 					err.write((s + '\n').getBytes());
 				}
 				err.write("End params\n".getBytes());
-			} catch (Exception ex) {} // never sould happen
+			} catch (IOException ex) {} // never sould happen
 			throw new RuntimeException(
 				"Java compilation failed:\n" + err.toString());
 		}
@@ -1108,27 +1114,29 @@ public abstract class STester {
 							FileOutputStream fos =
 								new FileOutputStream(s, true);
 							out = new PrintStream(fos, true);
-						} catch (Exception ex) {
+						} catch (FileNotFoundException ex) {
 							cancel("Can't create output stream:" + s);
 						}
 						continue;
+
 					case 'e':
 						s = args[++i];
 						try {
 							FileOutputStream fos =
 								new FileOutputStream(s, true);
 							err = new PrintStream(fos, true);
-						} catch (Exception ex) {
+						} catch (FileNotFoundException ex) {
 							cancel("Can't create error stream:" + s);
 						}
 						continue;
+
 					case 'l':
 						s = args[++i];
 						try {
 							FileOutputStream fos =
 								new FileOutputStream(s, true);
 							log = new PrintStream(fos, true);
-						} catch (Exception ex) {
+						} catch (FileNotFoundException ex) {
 							cancel("Can't create log stream:" + s);
 						}
 						continue;

@@ -1,5 +1,6 @@
 package org.xdef.xml;
 
+import java.lang.reflect.InvocationTargetException;
 import org.xdef.sys.SRuntimeException;
 import java.util.TimeZone;
 import javax.xml.namespace.QName;
@@ -22,9 +23,10 @@ public class KXqueryExpr implements KXquery {
 		try {
 			Class<?> cls = Class.forName("org.xdef.impl.saxon.XQuerySaxonExpr");
 			x = (KXquery) cls.getConstructor().newInstance();
-		} catch (Exception ex) {
-			x = null;
-		} catch (Error ex) {
+		} catch (ClassNotFoundException | IllegalAccessException
+			| IllegalArgumentException | InstantiationException
+			| NoSuchMethodException | SecurityException
+			| InvocationTargetException | Error ex) {
 			x = null;
 		}
 		XDS = x;

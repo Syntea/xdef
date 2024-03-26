@@ -221,8 +221,7 @@ public final class SManager implements XDConstants {
 		synchronized (sm) {
 			String[] newPackages = new String[sm._packages.length - 1];
 			int j = 0;
-			for (int i = 0; i < sm._packages.length; i++) {
-				String s = sm._packages[i];
+			for (String s : sm._packages) {
 				if (j < sm._packages.length && !s.equals(packageName)) {
 					newPackages[j++] = s;
 				}
@@ -604,7 +603,7 @@ public final class SManager implements XDConstants {
 		} else {
 			text = resolveReportReferences(modelText, language);
 		}
-		if (text == null || text.indexOf("&{") < 0) {
+		if (text == null || !text.contains("&{")) {
 			return text;
 		}
 		if (mod != null) {
@@ -661,14 +660,6 @@ public final class SManager implements XDConstants {
 			+ getTextFromRegisteredForm(regID & ReportTable.IDMASK);
 	}
 
-	/** Add report tables.
-	 * @param reportTables array with report tables.
-	 */
-	static void addReportTables(final ReportTable[] reportTables) {
-		for (ReportTable t: reportTables) {
-			addReportTable(t);
-		}
-	}
 	/** Add report table.
 	 * @param reportTable report table.
 	 * @return report table
@@ -870,19 +861,20 @@ public final class SManager implements XDConstants {
 				ids = new String[ar.size()];
 				ar.toArray(ids);
 				Arrays.sort(ids);
-				// read properties with mmessages
 				InputStream input =
 					c.getResourceAsStream(tableName + ".properties");
-				InputStreamReader in =
-					new InputStreamReader(input, StandardCharsets.UTF_8);
-				Properties props = new Properties();
-				props.load(in);
-				in.close();
-				input.close();
-				ReportTable table = RegisterReportTables.genReportTable(props);
-				table._ids = ids;
-				return addReportTable(table);
-			} catch (Exception ex) {}
+				if (input != null) {
+					InputStreamReader in =
+						new InputStreamReader(input, StandardCharsets.UTF_8);
+					Properties props = new Properties();
+					props.load(in);
+					ReportTable table =
+						RegisterReportTables.genReportTable(props);
+					table._ids = ids;
+					return addReportTable(table);
+				}
+			} catch (IOException | ClassNotFoundException
+				| SecurityException ex) {}
 			// not found, so we try to read the external data
 			String s = getProperty(_properties, XDPROPERTY_MESSAGES+tableName);
 			if (s == null) {

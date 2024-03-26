@@ -39,7 +39,7 @@ public class DTDToXdef {
 			}
 			_reporter = new SReporter(new FileReportWriter(
 				new PrintWriter(new FileWriter(log, true)), false));
-		} catch (Exception ex) {
+		} catch (IOException ex) {
 			throw new IllegalArgumentException("Log file name is illegal", ex);
 		}
 	}
@@ -71,9 +71,9 @@ public class DTDToXdef {
 		Document doc = xdg.genRootXd(root);
 		try {
 			writeFile(doc, outXdef);
-		} catch (Exception ex) {
+		} catch (IOException ex) {
 			throw new RuntimeException(
-				"Error during writing X-definition file");
+				"Error when writing X-definition file");
 		}
 	}
 
@@ -122,8 +122,7 @@ public class DTDToXdef {
 		String log = null;
 		String root = null;
 
-		for (int i = 0; i < args.length; i++) {
-			String parameter = args[i];
+		for (String parameter : args) {
 			if (valueGetMode) {
 				if (parameter.startsWith("-")) {
 					err.append("Parameter value for '")

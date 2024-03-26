@@ -5,6 +5,7 @@ import java.io.CharArrayReader;
 import java.io.CharArrayWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
@@ -218,11 +219,11 @@ public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 		Reader in;
 		try {
 			in = new java.io.InputStreamReader(url.openStream());
-		} catch (Exception ex) {
+		} catch (IOException ex) {
 			throw new RuntimeException(ex);
 		}
 		printListing(new OutputStreamWriter(out), in, reports, lineNumbers);
-		try {in.close();} catch (Exception ex) {}
+		try {in.close();} catch (IOException ex) {}
 	}
 
 	/** Print listing from source string with message table to output stream.
@@ -238,11 +239,11 @@ public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 		Reader in;
 		try {
 			in = new FileReader(file);
-		} catch (Exception ex) {
+		} catch (FileNotFoundException ex) {
 			throw new RuntimeException(ex);
 		}
 		printListing(out, in, reports, null, lineNumbers);
-		try {in.close();} catch (Exception ex) {}
+		try {in.close();} catch (IOException ex) {}
 	}
 
 	/** Print listing of input source lines with error reports
@@ -286,14 +287,14 @@ public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 		final File file,
 		final ReportReader reports,
 		final boolean lineNumbers) {
-		Reader in = null;
+		Reader in;
 		try {
 			in = new java.io.FileReader(file);
-		} catch (Exception ex) {
+		} catch (FileNotFoundException ex) {
 			String s = "Can't read the source: " + ex;
 			try {
 				out.write(s);
-			} catch (Exception ex1) {}
+			} catch (IOException ex1) {}
 			return;
 		}
 		printListing(out, in, reports, lineNumbers);
@@ -481,7 +482,7 @@ public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 			//Program exception&{0}{: }
 			throw new SRuntimeException(SYS.SYS036, ex);
 		}
-		try {ln.close();} catch (Exception ex) {}
+		try {ln.close();} catch (IOException ex) {}
 	}
 
 	/** print message and help information and finish program.
@@ -569,13 +570,13 @@ public class ReportPrinter extends Report implements Comparable<ReportPrinter> {
 			while ((rep = frr.getReport()) != null) {
 				out.println(rep.toString());
 			}
-		} catch (Exception ex) {
+		} catch (FileNotFoundException ex) {
 			printUsage("Error: " + ex);
 		}
-		try {frr.close();} catch (Exception ex) {}
-		if (outputFname != null) {
-			try {out.close();} catch (Exception ex) {}
-		} else {
+		if (null!=frr) try {frr.close();} catch (Exception ex) {}
+		if (null!=outputFname) {
+			try {if (null != out) out.close();} catch (Exception ex) {}
+		} else if (null != out) {
 			out.flush();
 		}
 	}

@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
+import java.net.MalformedURLException;
 import java.net.URL;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
@@ -66,24 +67,26 @@ public class KDOMBuilder extends DocumentBuilder {
 			return;
 		}
 		String modification = "" + ex + "; ";
-		String s;
-		if ((s = ex.getMessage())!= null) {
-			modification += s;
-		}
-		int i;
-		if ((i = ex.getLineNumber()) > 0) {
-			modification += "&{line}" + i;
-		}
-		if ((i = ex.getColumnNumber()) > 0) {
-			modification += "&{column}" + i;
-		}
-		String source = ex.getSystemId();
-		if ((s = ex.getPublicId()) != null) {
-			s = "(pubid: " + s + ")";
-			source = source == null ? s : source + ' ' + s;
-		}
-		if (source != null) {
-			modification += "&{sysId}" + source;
+		if (ex != null) {
+			String s;
+			if ((s = ex.getMessage()) != null) {
+				modification += s;
+			}
+			int i;
+			if ((i = ex.getLineNumber()) > 0) {
+				modification += "&{line}" + i;
+			}
+			if ((i = ex.getColumnNumber()) > 0) {
+				modification += "&{column}" + i;
+			}
+			String source = ex.getSystemId();
+			if ((s = ex.getPublicId()) != null) {
+				s = "(pubid: " + s + ")";
+				source = source == null ? s : source + ' ' + s;
+			}
+			if (source != null) {
+				modification += "&{sysId}" + source;
+			}
 		}
 		//DomBuilder report&{0}{: }&{#SYS000}
 		putReport(new Report(type, XML.XML404,	modification));
@@ -169,25 +172,21 @@ public class KDOMBuilder extends DocumentBuilder {
 				}
 			});
 			if (_ignoreUnresolvedEntities) {
-				_xBuilder.setEntityResolver(new EntityResolver() {
-					@Override
-					public InputSource resolveEntity(String publicId,
-						String systemId) throws SAXException, IOException {
-						if (publicId == null && systemId != null) { //
-							InputStream in;
-							try {
-								in = SUtils.getExtendedURL(
-									systemId).openStream();
-							} catch (Exception ex) {
-								// if error occurs set the empty InputStream
-								in = new ByteArrayInputStream(new byte[0]);
-							}
-							InputSource is = new InputSource(in);
-							is.setSystemId(systemId);
-							return is;
+				_xBuilder.setEntityResolver((String publicId,String systemId)->{
+					if (publicId == null && systemId != null) { //
+						InputStream in;
+						try {
+							in = SUtils.getExtendedURL(
+								systemId).openStream();
+						} catch (IOException ex) {
+							// if error occurs set the empty InputStream
+							in = new ByteArrayInputStream(new byte[0]);
 						}
-						return null;
+						InputSource is = new InputSource(in);
+						is.setSystemId(systemId);
+						return is;
 					}
+					return null;
 				});
 			}
 		} catch (ParserConfigurationException ex) {
@@ -368,7 +367,7 @@ public class KDOMBuilder extends DocumentBuilder {
 		checkBuilder();
 		try {
 			doc = _xBuilder.parse(file);
-		} catch (Exception ex) {
+		} catch (IOException | SAXException ex) {
 			//Error while reading XML document: &{0}
 			putReport(Report.fatal(XML.XML403, ex));
 		}
@@ -392,7 +391,7 @@ public class KDOMBuilder extends DocumentBuilder {
 		checkBuilder();
 		try {
 			doc = _xBuilder.parse(url.openStream());
-		} catch (Exception ex) {
+		} catch (IOException | SAXException ex) {
 			//Error while reading XML document: &{0}
 			putReport(Report.fatal(XML.XML403, ex));
 		}
@@ -432,7 +431,7 @@ public class KDOMBuilder extends DocumentBuilder {
 			if (closeStream) {
 				stream.close();
 			}
-		} catch (Exception ex) {
+		} catch (IOException | SAXException ex) {
 			//Error while reading XML document: &{0}
 			putReport(Report.fatal(XML.XML403, ex));
 		}
@@ -462,7 +461,7 @@ public class KDOMBuilder extends DocumentBuilder {
 			checkBuilder();
 			try {
 				doc =_xBuilder.parse(new InputSource(new StringReader(source)));
-			} catch (Exception ex) {
+			} catch (IOException | SAXException ex) {
 				//Error while reading XML document: &{0}
 				putReport(Report.fatal(XML.XML403, ex));
 			}
@@ -471,7 +470,7 @@ public class KDOMBuilder extends DocumentBuilder {
 				(source.indexOf(":/") > 2 && source.indexOf(":/") < 11)) {
 				try { // try URL
 					return parse(SUtils.getExtendedURL(source));
-				} catch (Exception ex) {}
+				} catch (MalformedURLException ex) {}
 			}
 			doc = parse(new File(source));
 		}

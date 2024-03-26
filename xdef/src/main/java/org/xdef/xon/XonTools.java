@@ -8,6 +8,7 @@ import java.io.StringReader;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.InetAddress;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Currency;
@@ -310,8 +311,8 @@ public class XonTools {
 		}
 		if (ch >= '0' && ch <= '9') { // not redundant leading zero
 			try {
-				return Long.parseLong(s);
-			} catch (Exception ex) {}
+				return Long.valueOf(s);
+			} catch (NumberFormatException ex) {}
 			try {
 				return new BigDecimal(s);
 			} catch (Exception ex) {}
@@ -852,7 +853,7 @@ public class XonTools {
 			try { // try if it is URL
 				return getInputFromObject(
 					SUtils.getExtendedURL((String)source), sysId);
-			} catch (Exception ex) {
+			} catch (RuntimeException | MalformedURLException ex) {
 				//not URL, file name, so create from string a reader
 				return new InputData(new StringReader((String) source),
 					sysId==null ? "STRING" : sysId);

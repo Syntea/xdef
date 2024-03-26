@@ -153,8 +153,8 @@ public interface XDConstants {
 ////////////////////////////////////////////////////////////////////////////////
 
 	/** Build version of software build from pom.xml */
-	public static final String BUILD_VERSION = PomInfo.pomInfo.getVersion();
+	public static final String BUILD_VERSION = PomInfo.POMINFO.getVersion();
 	/** Datetime of build version from pom.xml */
 	public static final String BUILD_DATETIME =
-		PomInfo.pomInfo.getBuildTimestamp();
+		PomInfo.POMINFO.getBuildTimestamp();
 }

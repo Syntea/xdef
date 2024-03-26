@@ -9,13 +9,6 @@ public class SExternalError extends SError implements SThrowable {
 	/** This constant is used in the ObjectStream reader/writer. */
 	private static final long serialVersionUID = -2215124767325702209L;
 
-	/** Creates a new instance of SExternalError.
-	 * @param ex The object which caused the error.
-	 */
-	SExternalError(final Throwable ex) {
-		this(null, ex.getMessage() == null ? "" : ex.getMessage(), ex);
-	}
-
 	/** Creates a new instance of SExternalError with registered message.
 	 * @param registeredID registered message ID.
 	 * @param ex The object which caused the error.
@@ -71,10 +64,8 @@ public class SExternalError extends SError implements SThrowable {
 	 * @return The text of localized message.
 	 */
 	public String getLocalizedMessage() {
-		return super.getLocalizedMessage()
-			+ (getCause() != null
-				? "; Caused by " + getCause().getClass().getName()
-				: "");
+		return super.getLocalizedMessage() + (null!=getCause()
+				? "; Caused by " + getCause().getClass().getName() : "");
 	}
 
 	@Override
@@ -82,10 +73,8 @@ public class SExternalError extends SError implements SThrowable {
 	 * @return The text of message.
 	 */
 	public String getMessage() {
-		return super.getMessage()
-			+ (getCause() != null
-				? "; Caused by " + getCause().getClass().getName()
-				: "");
+		return super.getMessage() + (null!=getCause()
+			? "; Caused by " + getCause().getClass().getName() : "");
 	}
 
 }

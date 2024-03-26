@@ -249,14 +249,14 @@ public class PrettyXdef extends XReader {
 		String ver = mi.getXMLVersion();
 		PrettyXdef p = new PrettyXdef(mi, indentStep);
 		p.parse();
-		OutputStreamWriter wr = new OutputStreamWriter(out, enc);
-		if (!"1.0".equals(ver) || !"UTF-8".equals(enc)
-			|| mi.getXMLStandalone()) {
-			wr.write("<?xml version=\"" + ver + "\" encoding=\"" + enc + "\"" +
-				(mi.getXMLStandalone() ? " standalone=\"yes\"" : "") + "?>\n" );
+		try (OutputStreamWriter wr = new OutputStreamWriter(out, enc)) {
+			if (!"1.0".equals(ver) || !"UTF-8".equals(enc)
+				|| mi.getXMLStandalone()) {
+				wr.write("<?xml version=\""+ver+"\" encoding=\""+enc+"\"" +
+					(mi.getXMLStandalone()? " standalone=\"yes\"" : "")+"?>\n");
+			}
+			wr.write(p._result.toString());
 		}
-		wr.write(p._result.toString());
-		wr.close();
 		return enc;
 	}
 
@@ -413,7 +413,7 @@ public class PrettyXdef extends XReader {
 								}
 								continue;
 							}
-						} catch (Exception ex) {}
+						} catch (NumberFormatException ex) {}
 						msg += "Incorrect indentation parameter;" +
 							" indentation must be >= 0\n";
 					}
@@ -462,7 +462,7 @@ public class PrettyXdef extends XReader {
 				if (file.exists() && file.isFile() && file.canRead()) {
 					try {
 						xdefs.put(file.getCanonicalPath(), file);
-					} catch (Exception ex) {
+					} catch (IOException ex) {
 						msg += "Error on file " + file.getAbsoluteFile() + "\n";
 					}
 				} else {

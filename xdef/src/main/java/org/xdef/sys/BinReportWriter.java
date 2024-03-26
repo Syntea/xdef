@@ -1,5 +1,6 @@
 package org.xdef.sys;
 
+import java.io.IOException;
 import org.xdef.msg.SYS;
 import org.xdef.xml.KXmlUtils;
 import java.io.OutputStream;
@@ -44,7 +45,7 @@ public class BinReportWriter implements ReportWriter {
 				case Report.WARNING:
 					_warnings++;
 			}
-		} catch (Exception ex) {
+		} catch (IOException ex) {
 			throw new SRuntimeException(SYS.SYS066, ex); //Internal error&{}{: }
 		}
 	}
@@ -304,7 +305,7 @@ public class BinReportWriter implements ReportWriter {
 	public void close() {
 		try {
 			_out.getStream().close();
-		} catch (Exception ex) {}
+		} catch (IOException ex) {}
 	}
 
 	@Override
@@ -312,7 +313,7 @@ public class BinReportWriter implements ReportWriter {
 	public final void flush() {
 		try {
 			_out.getStream().flush();
-		} catch (Exception ex) {}
+		} catch (IOException ex) {}
 	}
 
 	@Override

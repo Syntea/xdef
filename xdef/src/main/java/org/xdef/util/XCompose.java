@@ -11,10 +11,12 @@ import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.xdef.xml.KDOMBuilder;
 import java.io.File;
+import java.io.IOException;
 import java.util.Properties;
 import javax.xml.namespace.QName;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.xdef.sys.SRuntimeException;
 
 /** Process the XML file with the X-definition in the construction mode.
  * Also provides main method for calling the program from command line.
@@ -111,7 +113,7 @@ public class XCompose {
 				KXmlUtils.writeXml(outFile.getAbsolutePath(),
 					encoding, result, true, true);
 			}
-		} catch (Exception ex) {
+		} catch (IOException | SRuntimeException ex) {
 			repw.error(null, "Unexpected error: " + ex);
 		}
 		return !repw.errors();
@@ -228,7 +230,7 @@ public class XCompose {
 								throw new RuntimeException(
 									"Can't write to file " + s + "\n" + info);
 							}
-						} catch (Exception ex) {
+						} catch (IOException | RuntimeException ex) {
 							throw new RuntimeException(
 								"Can't write to file " + s + "\n" + info);
 						}

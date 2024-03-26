@@ -8,9 +8,6 @@ public class SBuffer extends SPosition {
 	/** Source buffer. */
 	private String _source;
 
-	/** Creates a new empty instance of SBuffer. */
-	SBuffer() {}
-
 	/** Creates a new instance of SBuffer.
 	 * @param source the string with the value.
 	 */

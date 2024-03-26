@@ -65,11 +65,10 @@ final class XonCompare {
 					Object ao = a.get(key);
 					Object bo = b.get(key);
 					try {
-					if (!XonUtils.xonEqual(ao, bo)) {
-						s += "key "+ key + "; " + objDiff(ao, bo);
-					}
+						if (!XonUtils.xonEqual(ao, bo)) {
+							s += "key "+ key + "; " + objDiff(ao, bo);
+						}
 					} catch (Exception ex) {
-						ex.printStackTrace();
 						s += "key "+ key + "; " + ex;
 					}
 				}

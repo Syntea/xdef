@@ -27,10 +27,13 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.LinkedHashMap;
 import javax.xml.XMLConstants;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXNotRecognizedException;
+import org.xml.sax.SAXNotSupportedException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.ext.DeclHandler;
@@ -59,13 +62,14 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
 				"http://apache.org/xml/features/xinclude/fixup-base-uris",
 				false); // do not create xml:base attributes
 			SPF.setSchema(null);
-		} catch (Throwable ex) {
+		} catch (ParserConfigurationException | SAXNotRecognizedException
+			| SAXNotSupportedException ex) {
 			throw new RuntimeException(ex);
 		}
 	}
 	/** Maximum number of references to a model. */
 	private static final int MAFREF = 128;
-	/** Maximum number of recurse call of setRefNumbers method. */
+	/** Maximum number of recursive call of setRefNumbers method. */
 	private static final int MAXRECURSE = 15;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -183,7 +187,7 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
 			_isDTD = true;
 			try {
 				doParse(_xReader);
-			} catch (Throwable ex) {
+			} catch (Exception ex) {
 				if (!_xmlFailed) {
 					try {
 						_xmlFailed = true;
@@ -200,11 +204,8 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
 					throw new RuntimeException(ex);
 				}
 			}
-		} catch (Exception                                                                                                                                                            e) {
-			if (e instanceof SRuntimeException) {
-				throw (SRuntimeException) e;
-			}
-			throw new SRuntimeException(e);
+		} catch (RuntimeException e) {
+			throw e;
 		}
 		prepareGen();
 		genXDef(rootName);
@@ -236,7 +237,7 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
 		XMLReader xr;
 		try {
 			xr = SPF.newSAXParser().getXMLReader();
-		} catch (Exception ex) {
+		} catch (ParserConfigurationException | SAXException ex) {
 			throw new RuntimeException(ex);
 		}
 		setIgnoringComments(false);
@@ -413,16 +414,6 @@ public class GenDTD2XDEF extends DomBaseHandler implements DeclHandler {
 		final SeqItem get(final int index) {
 			return _list.get(index);
 		}
-		final int indexOf(final String name) {
-			for (int i = 0; i < _list.size(); i++) {
-				SeqItem item = _list.get(i);
-				if (item._type == SeqItem.REF &&
-					name.equals(((SeqItemRef) item)._name)) {
-					return i;
-				}
-			}
-			return -1;
-		}
 	}
 
 	private static class SeqItemRef extends SeqItem {
@@ -590,8 +581,6 @@ Enumeration ::= '(' S? Nmtoken (S? '|' S? Nmtoken)* S? ')'
 		static final short REQUIRED = 1;
 		static final short IMPLIED = 2;
 		static final short FIXED = 3;
-		static final short IGNORE = 4;
-		static final short ILLEGAL = 5;
 		final String _name;
 		String _type;
 		final short _requirement;

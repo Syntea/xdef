@@ -28,10 +28,10 @@ public class PomInfo {
 	public PomInfo() {
 		try {
 			InputStream ppIs =
-				PomInfo.class.getResourceAsStream(pomInfoPropsName);
+				PomInfo.class.getResourceAsStream(POMINFOPROPSNAME);
 			if (ppIs == null) {
 				throw new FileNotFoundException("java-resource "
-					+ pomInfoPropsName + " not found");
+					+ POMINFOPROPSNAME + " not found");
 			}
 			loadProps(ppIs);
 		} catch (IOException ex) {
@@ -97,7 +97,7 @@ public class PomInfo {
 	private String releaseDate    = null;
 	private String buildTimestamp = null;
 
-	private static final String     pomInfoPropsName = "pominfo.properties";
+	private static final String     POMINFOPROPSNAME = "pominfo.properties";
 	/** singleton instance */
-	public static final PomInfo     pomInfo          = new PomInfo();
+	public static final PomInfo     POMINFO          = new PomInfo();
 }

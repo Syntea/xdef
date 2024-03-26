@@ -8,6 +8,8 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.util.Currency;
 import org.xdef.impl.code.DefBytes;
@@ -370,7 +372,7 @@ public final class XonReader extends StringParser implements XonParsers {
 					case 'u': // URI
 						try {
 							return returnValue(spos, new URI(s));
-						} catch (Exception ex) {}
+						} catch (URISyntaxException ex) {}
 						setIndex(pos);
 						break;
 					case 'e':
@@ -402,8 +404,9 @@ public final class XonReader extends StringParser implements XonParsers {
 					case 'p':
 						try {
 							return returnValue(spos, new Price(s));
-						} catch (Exception ex) {}
+						} catch (SRuntimeException ex) {}
 						break;
+
 					case 'g':
 					case 'i':
 					case 'C':
@@ -473,11 +476,12 @@ public final class XonReader extends StringParser implements XonParsers {
 						default:
 						try {
 							return returnValue(spos, Long.valueOf(s));
-						} catch (Exception ex) {
+						} catch (NumberFormatException ex) {
 							try {
 								return returnValue(spos, new BigInteger(s));
 							} catch (Exception exx) {}
 						}
+
 					}
 				}
 			} else {
@@ -486,7 +490,7 @@ public final class XonReader extends StringParser implements XonParsers {
 				} else {
 					try {
 						return returnValue(spos, Long.valueOf(s));
-					} catch (Exception exx) {
+					} catch (NumberFormatException exx) {
 						return returnValue(spos, new BigInteger(s));
 					}
 				}
@@ -515,10 +519,11 @@ public final class XonReader extends StringParser implements XonParsers {
 						try {
 							return returnValue(spos,
 								new URI(XonTools.readJString(this)));
-						} catch (Exception ex) {}
+						} catch (URISyntaxException ex) {}
 						setIndex(pos);
 						//XON/JSON value expected
 						return returnError(spos, null, JSON.JSON010, "[]{}");
+
 					case "e\"": // Email address
 						try {
 							return returnValue(spos, new DefEmailAddr(
@@ -554,8 +559,9 @@ public final class XonReader extends StringParser implements XonParsers {
 							if (isChar(')')) {
 								return returnValue(spos, result);
 							}
-						} catch (Exception ex) {}
+						} catch (SException ex) {}
 						break;
+
 					case "d": // datetime
 						if (isDatetime("yyyy-MM-dd['T'HH:mm:ss[.S]][Z]" +
 							"|HH:mm:ss[.S][Z]"+ //time
@@ -592,7 +598,6 @@ public final class XonReader extends StringParser implements XonParsers {
 						}
 						break;
 					case "g(": // GPS position
-						result = null;
 						if (isSignedFloat() || isSignedInteger()) {
 							double latitude = getParsedDouble();
 							if (isChar(',') && (isChar(' ') || true)
@@ -630,7 +635,7 @@ public final class XonReader extends StringParser implements XonParsers {
 						}
 						try {
 							return returnValue(spos, InetAddress.getByName(s));
-						} catch(Exception ex) {
+						} catch(UnknownHostException ex) {
 							//invalid InetAddr
 							error(XDEF.XDEF809,	"ipAddr", s);
 							return returnValue(spos, null);
@@ -727,9 +732,11 @@ public final class XonReader extends StringParser implements XonParsers {
 				|| !(jv.getValue() instanceof String))) {
 				//Value in X-definition must be a string with X-script
 				error(JSON.JSON018);
-				Object val = jv.getValue();
-				jv = new XonTools.JValue(jv.getPosition(),
-					val == null ? "null" : val.toString());
+				if (jv != null) {
+					Object val = jv.getValue();
+					jv = new XonTools.JValue(jv.getPosition(),
+						val == null ? "null" : val.toString());
+				}
 			}
 			_jp.putValue(jv);
 		}
@@ -952,7 +959,7 @@ public final class XonReader extends StringParser implements XonParsers {
 			}
 			return new java.io.InputStreamReader(x.getInputStream(),
 				java.nio.charset.Charset.forName(x._encoding));
-		} catch (Exception ex) {
+		} catch (IOException ex) {
 			//Unsupported encoding name&{0}{: "}{"}
 			throw new SRuntimeException(SYS.SYS052, ex);
 		}

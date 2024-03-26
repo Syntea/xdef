@@ -1,6 +1,7 @@
 package org.xdef.util;
 
 import java.io.File;
+import java.io.IOException;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.ReportWriter;
 import org.xdef.sys.SUtils;
@@ -76,7 +77,7 @@ public class CheckXdef {
 							if (!ar.contains(s)) {
 								ar.add(s);
 							}
-						} catch (Exception ex) {}
+						} catch (IOException ex) {}
 					}
 				}
 			}
@@ -88,7 +89,7 @@ public class CheckXdef {
 			throw new RuntimeException(err + info);
 		}
 		try {
-			if (checkXdef(ar.toArray(new String[ar.size()]))) {
+			if (checkXdef(ar.toArray(new String[0]))) {
 				System.out.println("OK");
 			}
 		} catch (Exception ex) {

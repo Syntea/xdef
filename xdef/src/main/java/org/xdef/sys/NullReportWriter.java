@@ -376,7 +376,7 @@ public class NullReportWriter implements ReportWriter {
 	 */
 	public final void checkAndThrowErrors() throws SRuntimeException {
 		if (errors()) {
-			throwReports(false);
+			throwReports();
 		}
 	}
 
@@ -388,17 +388,15 @@ public class NullReportWriter implements ReportWriter {
 	 */
 	public final void checkAndThrowErrorWarnings() throws SRuntimeException {
 		if (errorWarnings()) {
-			throwReports(true);
+			throwReports();
 		}
 	}
 
-	/** Throw runtime exception if reports with errors and (or even warnings)
+	/** Throw an exception if reports with errors and (or even warnings)
 	 * are present in the report writer.
-	 * @param display all warnings messages if this argument is true,
-	 * otherwise display only errors.
 	 * @throws SRuntimeException with reports.
 	 */
-	private void throwReports(final boolean warnings) throws SRuntimeException {
+	private void throwReports() throws SRuntimeException {
 		ArrayReporter r = new ArrayReporter();
 		r.putReport(getLastErrorReport());
 		if (r.isEmpty()) {

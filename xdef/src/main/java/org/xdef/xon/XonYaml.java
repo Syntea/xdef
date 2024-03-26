@@ -54,7 +54,8 @@ public final class XonYaml {
 			return (String) _yamlDump.invoke(_yaml, XonUtils.xonToJson(o));
 		} catch (SRuntimeException ex) {
 			throw ex;
-		} catch (Exception ex) {
+		} catch (IllegalAccessException | IllegalArgumentException
+			| InvocationTargetException ex) {
 			throw new RuntimeException(
 				"Error when creating Yaml string from object", ex);
 		}
@@ -71,7 +72,8 @@ public final class XonYaml {
 			return _yamlLoadReader.invoke(_yaml, source);
 		} catch (SRuntimeException ex) {
 			throw ex;
-		} catch (Exception ex) {
+		} catch (IllegalAccessException | IllegalArgumentException
+			| InvocationTargetException ex) {
 			throw new RuntimeException(
 				"Error when parsing Yaml from Reader", ex);
 		}
@@ -83,7 +85,8 @@ public final class XonYaml {
 			return _yamlLoadInputStream.invoke(_yaml, source);
 		} catch (SRuntimeException ex) {
 			throw ex;
-		} catch (Exception ex) {
+		} catch (IllegalAccessException | IllegalArgumentException
+			| InvocationTargetException ex) {
 			throw new RuntimeException(
 				"Error when parsing Yaml from InputStream", ex);
 		}

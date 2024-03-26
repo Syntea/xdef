@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.MissingResourceException;
 import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
@@ -244,7 +245,8 @@ public class RegisterReportTables {
 			try {
 				s = (String) baseClass.getDeclaredField(
 					_prefix + "_DEFAULT_LANGUAGE").get(null);
-			} catch (Exception ex) {
+			} catch (IllegalAccessException | IllegalArgumentException
+				| NoSuchFieldException | SecurityException ex) {
 				s = "eng";
 			}
 			_defaultLanguage = s.intern();
@@ -252,7 +254,8 @@ public class RegisterReportTables {
 			try {
 				_languages = (String[]) baseClass.getDeclaredField(
 					_prefix + "_LANGUAGES").get(null);
-			} catch (Exception ex) {
+			} catch (IllegalAccessException | IllegalArgumentException
+				| NoSuchFieldException | SecurityException ex) {
 				if (_defaultLanguage.equals(_language)) {
 					_languages = new String[] {_language};
 				} else {
@@ -389,7 +392,7 @@ public class RegisterReportTables {
 					if (result != null && result.length() == 3) {
 						return result;
 					}
-				} catch (Exception ex) {}
+				} catch (MissingResourceException ex) {}
 			}
 			//Unsupported language code: &{0}
 			throw new SRuntimeException(SYS.SYS018, language);
@@ -485,7 +488,7 @@ public class RegisterReportTables {
 				//Can't read properties with reports: &{0}
 				throw new SRuntimeException(SYS.SYS226, fileName);
 			}
-			try {in.close();} catch (Exception ex) {}
+			try {in.close();} catch (IOException ex) {}
 			return props;
 		}
 
@@ -496,16 +499,13 @@ public class RegisterReportTables {
 		protected final static Properties readProperties(
 			final InputStream inStream) {
 			try {
-				InputStreamReader in = new InputStreamReader(inStream,
-					StandardCharsets.UTF_8);
-				try {
+				try (InputStreamReader in = new InputStreamReader(inStream,
+					StandardCharsets.UTF_8)) {
 					Properties props = new Properties();
 					props.load(in);
 					return props;
-				} finally {
-					in.close();
 				}
-			} catch (Exception ex) {
+			} catch (IOException ex) {
 				//Can't read properties with reports: &{0}
 				throw new SRuntimeException(SYS.SYS226, ex.getMessage());
 			}
@@ -572,37 +572,37 @@ public class RegisterReportTables {
 		fname += prefix + ".java";
 		File f = new File(fname);
 		try {
-			OutputStreamWriter out = new OutputStreamWriter(
-				new FileOutputStream(f), encoding == null ? "UTF-8" : encoding);
-			out.write(
-"// This file was generated automatically, DO NOT modify it!"+LN+
-"package " + (pckg == null ? "org.xdef.msg" : pckg) + ";"+LN+LN+
-"/** Registered identifiers of reports with the prefix " + prefix + "."+LN+
-" * Default language ISO639-2 id: "+table.getLanguage()+". */"+LN+
-"public interface " + prefix + " {"+LN);
-			for (int i = 0; i < table._ids.length; i++) {
-				String id = prefix + table._ids[i];
-				String s = table.getReportText(id);
-				// generate comment in the default language for this item
-				if (s != null && s.length() > 0) {
-					s = s.replace("&", "&amp;");
-					s = s.replace("<", "&lt;");
-					s = s.replace(">", "&gt;");
-					s = s.replace("*/", "*&#47;");
-					out.write("\t/** " + s + " */"+LN);
-				}
-				// generate the field with the value of the registered item
-				long regID = ReportTable.getRegisteredReportId(table, i);
+			try (OutputStreamWriter out = new OutputStreamWriter(
+				new FileOutputStream(f), encoding == null ? "UTF-8" : encoding)) {
 				out.write(
-"\tpublic static final long " + id + " = " + regID + "L;"+LN);
-			}
-			// identifier which is equal to the prefix contans default language
+"// This file was generated automatically, DO NOT modify it!"+LN+
+	"package " + (pckg == null ? "org.xdef.msg" : pckg) + ";"+LN+LN+
+	"/** Registered identifiers of reports with the prefix " + prefix + "."+LN+
+	" * Default language ISO639-2 id: "+table.getLanguage()+". */"+LN+
+	"public interface " + prefix + " {"+LN);
+				for (int i = 0; i < table._ids.length; i++) {
+					String id = prefix + table._ids[i];
+					String s = table.getReportText(id);
+					// generate comment in the default language for this item
+					if (s != null && s.length() > 0) {
+						s = s.replace("&", "&amp;");
+						s = s.replace("<", "&lt;");
+						s = s.replace(">", "&gt;");
+						s = s.replace("*/", "*&#47;");
+						out.write("\t/** " + s + " */"+LN);
+					}
+					// generate the field with the value of the registered item
+					long regID = ReportTable.getRegisteredReportId(table, i);
+					out.write(
+						"\tpublic static final long " + id + " = " + regID + "L;"+LN);
+				}
+				// identifier which is equal to the prefix contans default language
 //			out.write(
 //"\t/** Default ISO639-2 language id: \""+table.getLanguage()+"\". */"+LN+
 //"\tpublic static final String "+prefix+" = \""+table.getLanguage()+"\";"+LN);
-			out.write("}");
-			out.close();
-		} catch (Exception ex) {
+out.write("}");
+			}
+		} catch (IOException ex) {
 			reporter.fatal(SYS.SYS036, ex); //Program exception &{0}
 		}
 	}
@@ -635,7 +635,7 @@ public class RegisterReportTables {
 				registeredTable==null ? null : registeredTable.getTableName());
 			return;
 		}
-		if (table == registeredTable) {
+		if (registeredTable == table) {
 			//generate registration java source
 			genRegIDsInterface(table, dir, pckg, encoding, crlf, reporter);
 		}
@@ -754,7 +754,7 @@ public class RegisterReportTables {
 				String s = f.getCanonicalPath();
 				return (!s.endsWith(File.separator)) ? s + File.separator : s;
 			}
-		} catch (Exception ex) {}
+		} catch (IOException ex) {}
 		throw new SRuntimeException(SYS.SYS051); //Actual path isn't accessible
 	}
 
@@ -820,20 +820,19 @@ public class RegisterReportTables {
 			}
 		}
 		//gen tables for other localizations
-		for (int j = 0; j < tables.length; j++) {
-			ReportTableImpl table = tables[j];
-			if (table.getDefaultLanguage().equals(table.getLanguage())) {
+		for (ReportTableImpl x : tables) {
+			if (x.getDefaultLanguage().equals(x.getLanguage())) {
 				continue; //already generated
 			}
 			ReportTableImpl table1 = null;
 			//find default table
 			for (ReportTableImpl t : tables) {
-				if (table.getPrefix().equals(t.getPrefix())
-					&& table.getDefaultLanguage().equals(t.getLanguage())) {
+				if (x.getPrefix().equals(t.getPrefix())
+					&& x.getDefaultLanguage().equals(t.getLanguage())) {
 					table1 = t;
 				}
 			}
-			genJavaSource(table, outDir, pckg, encoding, crlf, table1,reporter);
+			genJavaSource(x, outDir, pckg, encoding, crlf, table1,reporter);
 		}
 		reporter.checkAndThrowErrors();
 		if (reporter.errorWarnings()) {
@@ -883,29 +882,30 @@ public class RegisterReportTables {
 				}
 			}
 		}
-		String defaultLanguage = null;
-		for (ReportTableImpl x: msgTables) {
-			String s = x.getDefaultLanguage();
-			if (s != null) {
-				if (defaultLanguage == null) {
-					defaultLanguage = s;
-				} else if (!defaultLanguage.equals(s)) {
-					//Ambiguous default language of reports" &{0}
-					//in the table &{1}, set &{2}
-					reporter.warning(SYS.SYS213,
-						x.getLanguage(), defaultLanguage);
+		if (msgTables != null) {
+			String defaultLanguage = null;
+			for (ReportTableImpl x: msgTables) {
+				String s = x.getDefaultLanguage();
+				if (s != null) {
+					if (defaultLanguage == null) {
+						defaultLanguage = s;
+					} else if (!defaultLanguage.equals(s)) {
+						//Ambiguous default language of reports" &{0}
+						//in the table &{1}, set &{2}
+						reporter.warning(SYS.SYS213,
+							x.getLanguage(), defaultLanguage);
 
+					}
 				}
 			}
-		}
-		if (defaultLanguage == null) {
-			defaultLanguage = "eng";
-		}
-
-		// get three letters language code
-		defaultLanguage = ReportTable.getISO639_2_ID(defaultLanguage);
-		for (ReportTableImpl x: msgTables) {
-			x.setDefaultLanguage(defaultLanguage);
+			if (defaultLanguage == null) {
+				defaultLanguage = "eng";
+			}
+			// get three letters language code
+			defaultLanguage = ReportTable.getISO639_2_ID(defaultLanguage);
+			for (ReportTableImpl x: msgTables) {
+				x.setDefaultLanguage(defaultLanguage);
+			}
 		}
 		return msgTables;
 	}
@@ -1023,121 +1023,123 @@ public class RegisterReportTables {
 		boolean crlf = false;
 		int len = args.length - 1;
 		StringWriter errWriter = new StringWriter();
-		PrintWriter errors = new PrintWriter(errWriter);
-		for (int i = 0; i <= len; i++) {
-			if (args[i].startsWith("-")) {
-				if (args[i].length() >= 2) {
-					switch (args[i].charAt(1)) {
-						case 'h':
-							System.out.println(HDRMSG);
-							return;
-						case 'l':
-							if (crlf) {
-								errors.println("Duplicated parameter -l");
-							}
-							crlf = true;
-							continue;
-						case 'i':
-							List<String> ar = new ArrayList<>();
-							while (i + 1 <= len && !args[i+1].startsWith("-")) {
-								File[] ff = getFileGroup(args[++i], false);
-								if (ff.length == 1
-									&& ff[0].exists() && ff[0].isDirectory()) {
-									ff = ff[0].listFiles();
-									List<File> af = new ArrayList<>();
-									for (File fi: ff){
-										if (fi.exists() && fi.isFile()
-											&& fi.getName().endsWith(
-												".properties")) {
-											af.add(fi);
+		try (PrintWriter errors = new PrintWriter(errWriter)) {
+			for (int i = 0; i <= len; i++) {
+				if (args[i].startsWith("-")) {
+					if (args[i].length() >= 2) {
+						switch (args[i].charAt(1)) {
+							case 'h':
+								System.out.println(HDRMSG);
+								return;
+							case 'l':
+								if (crlf) {
+									errors.println("Duplicated parameter -l");
+								}
+								crlf = true;
+								continue;
+							case 'i':
+								List<String> ar = new ArrayList<>();
+								while (i+1<= len && !args[i+1].startsWith("-")){
+									File[] ff = getFileGroup(args[++i], false);
+									if (ff.length == 1
+										&&ff[0].exists()&&ff[0].isDirectory()) {
+										ff = ff[0].listFiles();
+										List<File> af = new ArrayList<>();
+										for (File fi: ff){
+											if (fi.exists() && fi.isFile()
+												&& fi.getName().endsWith(
+													".properties")) {
+												af.add(fi);
+											}
 										}
+										ff = af.toArray(new File[ar.size()]);
 									}
-									ff = af.toArray(new File[ar.size()]);
-								}
-								if (ff == null || ff.length == 0) {
-									errors.println("No input file(s): "
-										+ args[i]);
-									continue;
-								}
-								for (File fi: ff) {
-									if (!fi.isFile()) {
-										errors.println(fi.getAbsolutePath()
-											+ " is not a file.");
+									if (ff == null || ff.length == 0) {
+										errors.println("No input file(s): "
+											+ args[i]);
 										continue;
 									}
-									try {
-										String s = fi.getCanonicalPath();
-										if (!ar.contains(s)) {
-											ar.add(s);
-										} else {
-											errors.println(s+" is duplicated.");
+									for (File fi: ff) {
+										if (!fi.isFile()) {
+											errors.println(fi.getAbsolutePath()
+												+ " is not a file.");
+											continue;
 										}
-									} catch (Exception ex) {
-										errors.println(fi.getAbsolutePath()
-											+ " is not correct file.");
+										try {
+											String s = fi.getCanonicalPath();
+											if (!ar.contains(s)) {
+												ar.add(s);
+											} else {
+												errors.println(
+													s+" is duplicated.");
+											}
+										} catch (IOException ex) {
+											errors.println(fi.getAbsolutePath()
+												+ " is not correct file.");
+										}
 									}
 								}
-							}
-							ar.toArray(files = new String[ar.size()]);
-							continue;
-						case 'o':
-							if (outDir != null) {
-								errors.println(
-									"Duplicated parameter -i: " + args[i]);
-							}
-							if (i + 1 <= len && !args[i + 1].startsWith("-")) {
-								outDir = new File(args[++i]);
-								if (!outDir.isDirectory()) {
-									errors.println("Incorrect output directory:"
-										+ args[i-1]);
+								ar.toArray(files = new String[ar.size()]);
+								continue;
+							case 'o':
+								if (outDir != null) {
+									errors.println(
+										"Duplicated parameter -i: " + args[i]);
 								}
-							}
-							continue;
-						case 'c':
-							if (encoding != null) {
-								errors.println("Duplicated parameter -c: "
-									+ args[i]);
-							}
-							if (args[i].length() > 2) {
-								encoding = args[i].substring(2);
-							} else {
-								if (++i <= len && !args[i].startsWith("-")) {
-									encoding = args[i];
+								if (i+1 <= len && !args[i + 1].startsWith("-")){
+									outDir = new File(args[++i]);
+									if (!outDir.isDirectory()) {
+										errors.println(
+											"Incorrect output directory:"
+											+ args[i-1]);
+									}
+								}
+								continue;
+							case 'c':
+								if (encoding != null) {
+									errors.println("Duplicated parameter -c: "
+										+ args[i]);
+								}
+								if (args[i].length() > 2) {
+									encoding = args[i].substring(2);
 								} else {
-									errors.println("Missing encoding");
+									if (++i <= len && !args[i].startsWith("-")) {
+										encoding = args[i];
+									} else {
+										errors.println("Missing encoding");
+									}
 								}
-							}
-							continue;
-						case 'p':
-							if (pckg != null) {
-								errors.println(
-									"Duplicated parameter -o: " + args[i]);
-							}
-							if (args[i].length() > 2) {
-								pckg = args[i].substring(2);
-							} else {
-								if (++i <= len && !args[i].startsWith("-")) {
-									pckg = args[i];
+								continue;
+							case 'p':
+								if (pckg != null) {
+									errors.println(
+										"Duplicated parameter -o: " + args[i]);
+								}
+								if (args[i].length() > 2) {
+									pckg = args[i].substring(2);
 								} else {
-									errors.println("Missing package name");
+									if (++i <= len && !args[i].startsWith("-")) {
+										pckg = args[i];
+									} else {
+										errors.println("Missing package name");
+									}
 								}
-							}
-							continue;
-						default:
-							errors.println("Unknown switch: " + args[i]);
+								continue;
+							default:
+								errors.println("Unknown switch: " + args[i]);
+						}
 					}
 				}
+				errors.println("Incorrect parameter: " + args[i]);
 			}
-			errors.println("Incorrect parameter: " + args[i]);
+			if (files == null || files.length == 0) {
+				errors.println("No input file available");
+			}
+			if (outDir == null || !outDir.isDirectory()) {
+				errors.println(
+					"Output directory: is not specified or incorrect: " +  outDir);
+			}
 		}
-		if (files == null || files.length == 0) {
-			errors.println("No input file available");
-		}
-		if (outDir == null || !outDir.isDirectory()) {
-			errors.println(
-				"Output directory: is not specified or incorrect: " +  outDir);
-		}
-		errors.close();
 		if (!errWriter.toString().isEmpty()) {
 			throw new RuntimeException(errWriter.toString() + '\n' + HDRMSG);
 		}

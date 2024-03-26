@@ -258,21 +258,15 @@ public class XsdToXdef {
 		boolean separated = false;
 		String prefix = null;
 		String type = null;
-		for (int i = 0; i < args.length; i++) {
-			String parameter = args[i];
+		OUTER:
+		for (String parameter : args) {
 			if (valueGetMode) {
 				if (parameter.startsWith("-")) {
 					err.append("Parameter value for '")
 						.append(type).append("' is missing\n");
 					break;
 				}
-				if ("--input".equals(type)) {
-					input = parameter;
-				} else if ("--output".equals(type)) {
-					output = parameter;
-				} else if ("--xdefPrefix".equals(type)) {
-					prefix = parameter;
-				} else {
+				if (null == type) {
 					if (parameter.startsWith("-")) {
 						err.append("Parameter value for '")
 							.append(type).append("' is missing\n");
@@ -281,46 +275,69 @@ public class XsdToXdef {
 							.append(type).append("'\n");
 					}
 					break;
+				} else {
+					switch (type) {
+						case "--input":
+							input = parameter;
+							break;
+						case "--output":
+							output = parameter;
+							break;
+						case "--xdefPrefix":
+							prefix = parameter;
+							break;
+						default:
+							if (parameter.startsWith("-")) {
+								err.append("Parameter value for '")
+									.append(type).append("' is missing\n");
+							} else {
+								err.append("Unknown parameter value type '")
+									.append(type).append("'\n");
+							}
+							break;
+					}
 				}
 				valueGetMode = false;
 			} else {
-				if (parameter.equals("-h") || parameter.equals("-?")
-					|| "--help".equals(parameter)) {
-					System.out.println(info);
-					return;
-				} else if (parameter.equals("-i")
-					|| parameter.equals("--input")) {
-					if (input != null) {
-						err.append("Input file is already set\n");
-					}
-					valueGetMode = true;
-					type = "--input";
-				} else if ("-o".equals(parameter)
-					|| "--output".equals(parameter)) {
-					if (output != null) {
-						err.append("Output file is already set\n");
-					}
-					valueGetMode = true;
-					type = "--output";
-				} else if ("-s".equals(parameter)
-					|| "--separated".equals(parameter)) {
-					if (separated) {
-						err.append("Separated mode already set\n");
-					}
-					separated = true;
-				} else if ("-p".equals(parameter)
-					|| "--xdefPrefix".equals(parameter)) {
-					if (prefix != null) {
-						err.append(
-							"Prefix for X-definition elements already set\n");
+				switch (parameter) {
+					case "-h":
+					case "-?":
+					case "--help":
+						System.out.println(info);
 						return;
-					}
-					valueGetMode = true;
-					type = "--xdefPrefix";
-				} else {
-					err.append("Unknown parameter: ").append(parameter)
-						.append("\n");
-					break;
+					case "-i":
+					case "--input":
+						if (input != null) {
+							err.append("Input file is already set\n");
+						}	valueGetMode = true;
+						type = "--input";
+						break;
+					case "-o":
+					case "--output":
+						if (output != null) {
+							err.append("Output file is already set\n");
+						}	valueGetMode = true;
+						type = "--output";
+						break;
+					case "-s":
+					case "--separated":
+						if (separated) {
+							err.append("Separated mode already set\n");
+						}	separated = true;
+						break;
+					case "-p":
+					case "--xdefPrefix":
+						if (prefix != null) {
+							err.append(
+								"Prefix for X-definition elements already set\n");
+							return;
+						}	valueGetMode = true;
+						type = "--xdefPrefix";
+						break;
+					default:
+						err.append("Unknown parameter: ").append(parameter)
+							.append("\n");
+						break OUTER;
 				}
 			}
 		}

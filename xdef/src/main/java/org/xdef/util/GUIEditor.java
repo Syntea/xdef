@@ -16,12 +16,13 @@ import org.xdef.sys.Report;
 import org.xdef.xml.KXmlUtils;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
@@ -190,13 +191,10 @@ public class GUIEditor extends GUIScreen {
 		// Kill project
 		ji = new JMenuItem("Kill process");
 		ji.setMnemonic((int) 'K');
-		ji.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				_sourceItem._changed = false;
-				_frame.dispose();
-				_kill = true;
-			}
+		ji.addActionListener((ActionEvent e) -> {
+			_sourceItem._changed = false;
+			_frame.dispose();
+			_kill = true;
 		});
 		fileMenu.add(ji);
 		// Source position info
@@ -445,7 +443,7 @@ public class GUIEditor extends GUIScreen {
 						f.toURI().toURL().toExternalForm()).toExternalForm();
 				}
 				return SUtils.getExtendedURL(t).toExternalForm();
-			} catch (Exception ex) {}
+			} catch (IOException ex) {}
 		}
 		return null;
 	}
@@ -621,7 +619,9 @@ public class GUIEditor extends GUIScreen {
 						"addURL", URLPARAMS);
 					method.setAccessible(true);
 					method.invoke(sysloader, new Object[]{u});
-				} catch (Exception ex) {
+				} catch (IllegalAccessException | IllegalArgumentException
+					| NoSuchMethodException | SecurityException
+					| InvocationTargetException | MalformedURLException ex) {
 					throw new RuntimeException("Incorrect ClassPath: " + s);
 				}
 			}
@@ -652,7 +652,7 @@ public class GUIEditor extends GUIScreen {
 					try {
 						File f = jf.getSelectedFile();
 						KXmlUtils.writeXml(f, "UTF-8", project, true, true);
-					} catch (Exception ex) {
+					} catch (IOException ex) {
 						JOptionPane.showMessageDialog(null,//Can't write
 							Report.error(SYS.SYS036,"Can't write data to file: "
 								+ jf.getSelectedFile() + "\n" + ex));
@@ -724,7 +724,7 @@ public class GUIEditor extends GUIScreen {
 			for(;;) {
 				ArrayReporter reporter = new ArrayReporter();
 				XDBuilder builder = XDFactory.getXDBuilder(reporter, props);
-				builder.setSource(xdefs.toArray(new String[xdefs.size()]));
+				builder.setSource(xdefs.toArray(new String[0]));
 				xp = builder.compileXD();
 				si = xp.getXDSourceInfo();
 				for (String x: si.getMap().keySet()) {
@@ -780,10 +780,7 @@ public class GUIEditor extends GUIScreen {
 					return xp;
 				}
 			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			throw new RuntimeException(ex);
-		}
+		} catch (Exception ex) {throw new RuntimeException(ex);}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -937,18 +934,24 @@ public class GUIEditor extends GUIScreen {
 					encoding = "UTF-8";
 				}
 				try {
-					if (type == 'i') {
-						String s =
-							XonUtils.toIniString((Map<String, Object>) result);
-						SUtils.writeString(new File(name), s, "ASCII");
-					} else if (type == 'j') {
-						String s = XonUtils.toJsonString(result, indent);
-						SUtils.writeString(new File(name), s, "UTF-8");
-					} else { // type = 'x'
-						KXmlUtils.writeXml(new File(name), encoding,
-							(Element) result, indent, true);
+					switch (type) {
+						case 'i': {
+							String s = XonUtils.toIniString(
+								(Map<String, Object>) result);
+							SUtils.writeString(new File(name), s, "ASCII");
+							break;
+						}
+						case 'j': {
+							String s = XonUtils.toJsonString(result, indent);
+							SUtils.writeString(new File(name), s, "UTF-8");
+							break;
+						}
+						default:
+							// type = 'x'
+							KXmlUtils.writeXml(new File(name), encoding,
+								(Element) result, indent, true);
 					}
-				} catch (Exception ex) {
+				} catch (IOException | SException ex) {
 //					//GUIEditor can't write XML data to file &{0}
 //					JOptionPane.showMessageDialog(null,
 //						Report.error(XDEF.XDEF851,name).toString());
@@ -960,17 +963,21 @@ public class GUIEditor extends GUIScreen {
 					s = "Result of process is null\n";
 				} else {
 					s = "=== Result of process ===\n";
-					if (type == 'i') { // display as INI
-						s += XonUtils.toIniString((Map<String, Object>) result);
-					} else if (type == 'j') { // display as JSON
-						s += XonUtils.toJsonString(result, true);
-					} else {// display result XML
-						s += KXmlUtils.nodeToString((Element) result, true);
+					switch (type) {
+						case 'i':
+							// display as INI
+							s += XonUtils.toIniString(
+								(Map<String, Object>) result);
+							break;
+						case 'j':
+							// display as JSON
+							s += XonUtils.toJsonString(result, true);
+							break;
+						default:
+							// display result XML
+							s += KXmlUtils.nodeToString((Element) result, true);
 					}
 				}
-//				if (reporter.errorWarnings()) {
-//					s += "\n=== Errors and warnings ===\n"+reporter.toString();
-//				}
 				if (!strw.toString().isEmpty()) {
 					s += s.isEmpty() ? "" : "\n";
 					s += "\n=== System output ===\n" + strw.toString();
@@ -996,7 +1003,7 @@ public class GUIEditor extends GUIScreen {
 				}
 				SUtils.writeString(f, data);
 				return deleteOnExit ? f.getAbsolutePath() : f.getPath();
-			} catch (Exception ex) {}
+			} catch (SException ex) {}
 		}
 		throw new RuntimeException("Can't create file " + name +
 			"to work direcory "+ dir);
@@ -1171,7 +1178,7 @@ public class GUIEditor extends GUIScreen {
 						return;
 					}
 					wasDataPath = true;
-					dataPath = args[i++];
+					dataPath = args[i++].trim();
 					continue;
 				case "-debug":
 					if (debug != null) {
@@ -1260,7 +1267,7 @@ public class GUIEditor extends GUIScreen {
 				src +=
 "  <Execute Mode = \"construct\" DisplayResult = \"true\">\n" +
 "    <Context Edit='true'>\n";
-				src += dataPath.trim() + "\n</Context>\n";
+				src += dataPath + "\n</Context>\n";
 				src += "  </Execute>\n";
 				break;
 			}
@@ -1372,10 +1379,11 @@ public class GUIEditor extends GUIScreen {
 				continue;
 			} else {
 				try {
-					URL u = new URL(x);
-					src += "  <External>" + x + "</External>\n";
+					src +=  "  <External>"
+						+ new URL(x).toExternalForm()
+						+ "</External>\n";
 					continue;
-				} catch (Exception ex) {}
+				} catch (MalformedURLException ex) {}
 			}
 			throw new RuntimeException("Incorrect classpath: " + x);
 		}

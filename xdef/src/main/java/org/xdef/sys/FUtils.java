@@ -231,10 +231,14 @@ public class FUtils {
 				fs1 = new FileInputStream(f1);
 				fs2 = new FileInputStream(f2);
 				result = compareFile(fs1, fs2);
-			} catch (Exception ex) {}
+			} catch (FileNotFoundException ex) {}
 		}
-		try {fs1.close();} catch (Exception ex) {}
-		try {fs2.close();} catch (Exception ex) {}
+		if (fs1!= null) {
+			try {fs1.close();} catch (IOException ex) {}
+		}
+		if (fs2!= null) {
+			try {fs2.close();} catch (IOException ex) {}			
+		}
 		return result;
 	}
 
@@ -257,14 +261,14 @@ public class FUtils {
 				f2is = new FileInputStream(f2);
 				boolean result = compareFile(f1is, f2is) == -1L;
 				return result;
-			} catch (Exception ex) {
+			} catch (FileNotFoundException ex) {
 			} finally {
-				try {
-					f1is.close();
-				} catch (Exception exx) {}
-				try {
-					f2is.close();
-				} catch (Exception exx) {}
+				if (f1is != null) {
+					try {f1is.close();} catch (IOException exx) {}
+				}
+				if (f2is != null) {
+					try {f2is.close();} catch (IOException exx) {}
+				}
 			}
 		}
 		return false;
@@ -373,15 +377,15 @@ public class FUtils {
 					for (int i = 0; i < len1; i++) {
 						if (buf1[i] != buf2[i]) {
 							diff = diff + i;
-							throw new Exception();
+							throw new RuntimeException();
 						}
 					}
 					diff += len1;
 				}
 			}
 		} catch (Exception ex) {}
-		try {f1.close();} catch (Exception ex) {}
-		try {f2.close();} catch (Exception ex) {}
+		try {f1.close();} catch (IOException ex) {}
+		try {f2.close();} catch (IOException ex) {}
 		return diff;
 	}
 
@@ -615,7 +619,7 @@ public class FUtils {
 		InputStream in;
 		try {
 			in = new FileInputStream(inFile);
-		} catch (Exception ex) {
+		} catch (IOException ex) {
 			throw new SException(SYS.SYS024, inFile); //File doesn't exist: &{0}
 		}
 		if (inFile.length() + 10 > getUsableSpace(outFile)) {
@@ -624,18 +628,18 @@ public class FUtils {
 		OutputStream out = null;
 		try {
 			out = new FileOutputStream(outFile, append);
-		} catch (Exception ex) {
+		} catch (IOException ex) {
 			//Can't write to file: &{0}
 			throw new SException(SYS.SYS023, outFile);
 		}
 		try {
 			copyToFile(in,
 				inFile.getCanonicalPath(), out, outFile.getCanonicalPath());
-		} catch (Exception ex) {
+		} catch (IOException ex) {
 			throw new SException(SYS.SYS036, ex); //Program exception &{0}
 		}
-		try {in.close();} catch (Exception ex) {}
-		try {out.close();} catch (Exception ex) {}
+		try {in.close();} catch (IOException ex) {}
+		try {out.close();} catch (IOException ex) {}
 		if (!append) {
 			outFile.setLastModified(inFile.lastModified());
 			if (!inFile.canWrite()) {
@@ -714,7 +718,7 @@ public class FUtils {
 			// Can't write to file: &{0}
 			throw new SException(SYS.SYS023, "java.io.OutputStream");
 		}
-		try {fos.close();} catch (Exception ex) {}
+		try {fos.close();} catch (IOException ex) {}
 	}
 
 	/** Copy InputStream to the file.
@@ -733,11 +737,11 @@ public class FUtils {
 		FileInputStream is;
 		try {
 			is = new FileInputStream(inFile);
-		} catch (Exception ex) {
+		} catch (IOException ex) {
 			throw new SException(SYS.SYS024, inFile); //File doesn't exist: &{0}
 		}
 		copyToFile(is, is.getClass().getName(), os, os.getClass().getName());
-		try {is.close();} catch (Exception ex) {}
+		try {is.close();} catch (IOException ex) {}
 	}
 
 	/** Copy InputStream to the file.
@@ -907,7 +911,7 @@ public class FUtils {
 					mysb.append(buf, 0 , len);
 				}
 			}
-			try {is.close();} catch (Exception ex) {}
+			try {is.close();} catch (IOException ex) {}
 		} catch(IOException ex) {
 			throw new SException(SYS.SYS029,ex);//Can't read input stream&{0}{;}
 		}
@@ -940,7 +944,7 @@ public class FUtils {
 					mysb.append(buf, 0 , len);
 				}
 			}
-			try {is.close();} catch (Exception ex) {}
+			try {is.close();} catch (IOException ex) {}
 		} catch(IOException ex) {
 			throw new SException(SYS.SYS029,ex);//Can't read input stream&{0}{;}
 		}
@@ -976,13 +980,13 @@ public class FUtils {
 			StringBuffer mysb = readToStringBuffer(is, sb, encoding);
 			try {
 				is.close();
-			} catch (Exception ex) {
+			} catch (IOException ex) {
 				throw new SException(SYS.SYS036, ex); //Program exception &{0}
 			}
-			try {is.close();} catch (Exception ex) {}
+			try {is.close();} catch (IOException ex) {}
 			return mysb;
 		} catch (SException ex) {
-			try {is.close();} catch(Exception exx) {}
+			try {is.close();} catch(IOException exx) {}
 			throw ex;
 		}
 	}
@@ -1086,7 +1090,7 @@ public class FUtils {
 					mysb.append(buf, 0 , len);
 				}
 			}
-			try {is.close();} catch (Exception ex) {}
+			try {is.close();} catch (IOException ex) {}
 		} catch(IOException ex) {
 			throw new SException(SYS.SYS029,ex);//Can't read input stream&{0}{;}
 		}
@@ -1111,7 +1115,7 @@ public class FUtils {
 					bos.write(buf, 0, len);
 				}
 			}
-			try {in.close();} catch (Exception ex) {}
+			try {in.close();} catch (IOException ex) {}
 		} catch(IOException ex) {
 			throw new SException(SYS.SYS029,ex);//Can't read input stream&{0}{;}
 		}
@@ -1142,11 +1146,8 @@ public class FUtils {
 			byte[] buf = readBlock(fis, (int) fileLen);
 			fis.close();
 			return buf;
-		} catch (Exception ex) {
-			try { fis.close(); } catch(Exception exx) {}
-			if (ex instanceof SException) {
-				throw (SException) ex;
-			}
+		} catch (IOException ex) {
+			if (fis != null) try {fis.close();} catch (IOException exx) {}
 			throw new SException(SYS.SYS028, file); //Can't read file: &{0}
 		}
 	}
@@ -1190,9 +1191,7 @@ public class FUtils {
 			//Can't write to file: &{0}
 			throw new SException(SYS.SYS023, file);
 		}
-		try {
-			os.close();
-		} catch(Exception ex) {
+		try { os.close();} catch (IOException ex) {
 			throw new SException(SYS.SYS036, ex); //Program exception &{0}
 		}
 	}
@@ -1272,9 +1271,7 @@ public class FUtils {
 			//Can't write to output stream&{0}{; }
 			throw new SException(SYS.SYS027, ex);
 		}
-		try {
-			os.close();
-		} catch(Exception ex) {
+		try { os.close(); } catch(IOException ex) {
 			throw new SException(SYS.SYS036, ex); //Program exception &{0}
 		}
 	}
@@ -1318,9 +1315,7 @@ public class FUtils {
 		} catch(IOException ex) {
 			throw new SException(SYS.SYS023, file); //Can't write to file: &{0}
 		}
-		try {
-			os.close();
-		} catch(Exception ex) {
+		try {os.close();} catch(IOException ex) {
 			throw new SException(SYS.SYS036, ex); //Program exception &{0}
 		}
 	}
@@ -1339,7 +1334,7 @@ public class FUtils {
 			//Can't write to output stream&{0}
 			throw new SException(SYS.SYS027, ex);
 		}
-		try {out.close();} catch (Exception ex) {}
+		try {out.close();} catch (IOException ex) {}
 	}
 
 	/** Write byte array to file item.
@@ -1589,7 +1584,7 @@ public class FUtils {
 		if (sid.indexOf(":/") > 2 && sid.indexOf(":/") < 12) { //URL
 			try {
 				return getExtendedURL(sid);
-			} catch (Exception ex) {
+			} catch (MalformedURLException ex) {
 				//URL &{0} error: &{1}{; }
 				throw new SException(SYS.SYS076, sid, ex);
 			}
@@ -1600,7 +1595,7 @@ public class FUtils {
 				int ndx = actPath.lastIndexOf('/');
 				String s = ndx<0 ? actPath + '/' : actPath.substring(0, ndx+1);
 				return getExtendedURL(s + sid);
-			} catch (Exception ex) {
+			} catch (MalformedURLException ex) {
 				//URL &{0} error: &{1}{; }
 				throw new SException(SYS.SYS076, sid, ex);
 			}
@@ -1612,7 +1607,7 @@ public class FUtils {
 		if (f.exists() && f.canRead()) {
 			try {
 				return f.toURI().toURL();
-			} catch (Exception ex) {
+			} catch (MalformedURLException ex) {
 				//URL &{0} error: &{1}{; }
 				throw new SException(SYS.SYS076, f.toURI(), ex);
 			}
@@ -1641,13 +1636,9 @@ public class FUtils {
 			File f = new File(".");
 			if (f.isDirectory()) {
 				String s = f.getCanonicalPath();
-				if (!s.endsWith(File.separator)) {
-					return s + File.separator;
-				} else {
-					return s;
-				}
+				return !s.endsWith(File.separator) ? s + File.separator : s;
 			}
-		} catch (Exception ex) {}
+		} catch (IOException ex) {}
 		throw new SRuntimeException(SYS.SYS051); //Actual path isn't accessable
 	}
 
@@ -1689,9 +1680,9 @@ public class FUtils {
 		List<File> arr = new ArrayList<>();
 		for (String x: wildNames) {
 			File[] files = getFileGroup(x, caseInsensitive);
-			for (int j = 0; j < files.length; j++) {
-				if (!arr.contains(files[j])) {
-					arr.add(files[j]);
+			for (File f : files) {
+				if (!arr.contains(f)) {
+					arr.add(f);
 				}
 			}
 		}
@@ -1742,30 +1733,36 @@ public class FUtils {
 			Enumeration<URL> eu = ClassLoader.getSystemResources(dir);
 			while (eu.hasMoreElements()) {
 				URL u = eu.nextElement();
-				if ("file".equals(u.getProtocol())) {
-					getSourceFileGroup(urls, u.getFile(), wc);
-				} else if ("jar".equals(u.getProtocol())) {
-					String s = u.toExternalForm();
-					ndx = s.indexOf('!');
-					if (ndx >= 0) {
-						URL ux = new URL(s.substring(4, ndx));
-						JarFile jf = new JarFile(ux.getFile());
-						Enumeration<JarEntry> je = jf.entries();
-						while (je.hasMoreElements()) {
-							s = je.nextElement().getName();
-							if (s.startsWith(dir + "/")
-								&& s.length() > dir.length() + 1) {
-								s = s.substring(dir.length() + 1);
-								if (NameWildCardFilter.chkWildcard(wc, s)) {
-									urls.add("classpath://"
-										+ dir.replace('/', '.') + "."+s);
+				if (null == u.getProtocol()) {
+					throw new RuntimeException(
+						"Unknown protocol: " + u.getProtocol());
+				} else switch (u.getProtocol()) {
+					case "file":
+						getSourceFileGroup(urls, u.getFile(), wc);
+						break;
+					case "jar":
+						String s = u.toExternalForm();
+						ndx = s.indexOf('!');
+						if (ndx >= 0) {
+							URL ux = new URL(s.substring(4, ndx));
+							JarFile jf = new JarFile(ux.getFile());
+							Enumeration<JarEntry> je = jf.entries();
+							while (je.hasMoreElements()) {
+								s = je.nextElement().getName();
+								if (s.startsWith(dir + "/")
+									&& s.length() > dir.length() + 1) {
+									s = s.substring(dir.length() + 1);
+									if (NameWildCardFilter.chkWildcard(wc, s)) {
+										urls.add("classpath://"
+											+ dir.replace('/', '.') + "."+s);
+									}
 								}
 							}
 						}
-					}
-				} else {
-					throw new RuntimeException(
-						"Unknown protocol: " + u.getProtocol());
+						break;
+					default:
+						throw new RuntimeException(
+							"Unknown protocol: " + u.getProtocol());
 				}
 			}
 		} else if (src.startsWith("file:/")) {
@@ -1818,13 +1815,13 @@ public class FUtils {
 		if (f.exists()) {
 			try {
 				return f.getCanonicalFile().toURI().toURL();
-			} catch (Exception ex) {}
+			} catch (IOException ex) {}
 		}
 		URL u = new URL(s);
 		if ("file".equals(u.getProtocol())) {
 			try {
 				return new File(u.getFile()).getCanonicalFile().toURI().toURL();
-			} catch (Exception ex) {}
+			} catch (IOException ex) {}
 		}
 		return u;
 	}
@@ -2058,7 +2055,7 @@ public class FUtils {
 		for (String s: fnames) {
 			File[] list = getFileGroup(s);
 			for (File x: list) {
-				if (skipExtensions.size() > 0) {
+				if (!skipExtensions.isEmpty()) {
 					String fname = x.getName();
 					int k = fname.lastIndexOf('.');
 					if (k > 0) {
@@ -2243,9 +2240,7 @@ public class FUtils {
 						throw new SException(SYS.SYS028, f);
 					}
 				}
-				try {
-					src.close();
-				} catch (Exception ex) {
+				try {src.close();} catch (IOException ex) {
 					//IO error detected on &{0}&{1}{, reason: }
 					throw new SException(SYS.SYS034, f, " close");
 				}
@@ -2358,7 +2353,7 @@ public class FUtils {
 				while (len > 0) {
 					try {
 						fos.write(buf,0,len);
-					} catch (Exception ex) {
+					} catch (IOException ex) {
 						//Can't write to file: &{0}
 						throw new SException(SYS.SYS023, f);
 					}
@@ -2369,9 +2364,7 @@ public class FUtils {
 						throw new SException(SYS.SYS043);
 					}
 				}
-				try {
-					fos.close();
-				} catch (Exception ex) {
+				try {fos.close();} catch (IOException ex) {
 					 //Can't write to file: &{0}
 					throw new SException(SYS.SYS023, f);
 				}

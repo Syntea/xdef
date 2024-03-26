@@ -193,30 +193,32 @@ public class KXmlOutStream {
 		_writer.write(indent);
 		_writer.write(name);
 		_writer.write("=\"");
-		int len = val != null ? val.length() : 0;
-		for (int j = 0; j < len; j++) {
-			char c;
-			switch (c = val.charAt(j)) {
-				case '<':
-					_writer.write("&lt;");
-					break;
-				case '&':
-					_writer.write("&amp;");
-					break;
-				case '"':
-					_writer.write("&quot;");
-					break;
-				case ' ':
-					_writer.write(c); //default print char
-					break;
-				default:
-					if (c < ' ') {
-						_writer.write("&#");
-						_writer.write(Integer.toString(c));
-						_writer.write(';');
-					} else {
-						_writer.write(c);
-					}
+		if (val != null) {			
+			int len = val.length();
+			for (int j = 0; j < len; j++) {
+				char c;
+				switch (c = val.charAt(j)) {
+					case '<':
+						_writer.write("&lt;");
+						break;
+					case '&':
+						_writer.write("&amp;");
+						break;
+					case '"':
+						_writer.write("&quot;");
+						break;
+					case ' ':
+						_writer.write(c); //default print char
+						break;
+					default:
+						if (c < ' ') {
+							_writer.write("&#");
+							_writer.write(Integer.toString(c));
+							_writer.write(';');
+						} else {
+							_writer.write(c);
+						}
+				}
 			}
 		}
 		_writer.write('"');

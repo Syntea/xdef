@@ -283,7 +283,7 @@ public class Report {
 		if ((s = element.getAttribute("time")).length() > 0) {
 			try {
 				_timeMillis = Long.parseLong(s,16);
-			} catch(Exception ex) {
+			} catch(NumberFormatException ex) {
 				_timeMillis = System.currentTimeMillis();
 			}
 		} else {
@@ -418,7 +418,10 @@ public class Report {
 	 * is removed or if the argument is not null the original value is replaced.
 	 */
 	public final void setParameter(final String name, final String value) {
-		String p = name == null ? "" : name.trim();
+		String p;
+		if (name == null || (p=name.trim()).isEmpty()) {
+			return;
+		}
 		if (p.startsWith("&{")) {
 			if (!p.endsWith("}")) {
 				p = p + '}';

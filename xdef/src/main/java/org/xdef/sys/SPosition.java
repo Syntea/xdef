@@ -322,59 +322,52 @@ public class SPosition {
 					"" : "&{column}" + getColumnNumber()) +
 				((sysId = getSystemId()) == null || sysId.isEmpty() ?
 					"" : "&{sysId}" + sysId);
-			if (modification.indexOf("&{line}") >= 0 &&
-				text.indexOf("&{#SYS000}") < 0 &&
-				text.indexOf("&{line}") < 0) {
+			if (modification.contains("&{line}")
+				&& !text.contains("&{#SYS000}") && !text.contains("&{line}")) {
 				text += "&{line}{; line=}";
 			}
-			if (modification.indexOf("&{column}") >= 0 &&
-				text.indexOf("&{#SYS000}") < 0 &&
-				text.indexOf("&{column}") < 0) {
+			if (modification.contains("&{column}")
+				&&!text.contains("&{#SYS000}") && !text.contains("&{column}")) {
 				text += "&{column}{; column=}";
 			}
-			if (modification.indexOf("&{sysId}") >= 0 &&
-				text.indexOf("&{#SYS000}") < 0 &&
-				text.indexOf("&{sysId}") < 0) {
+			if (modification.contains("&{sysId}")
+				&& !text.contains("&{#SYS000}") && !text.contains("&{sysId}")) {
 				text += "&{sysId}{; source='}{'}";
 			}
 			report.setModification(modification);
 		} else {
-			if (modification.indexOf("&{line}") < 0	&& _line > 0) {
-				if (text.indexOf("&{line}") < 0 &&
-					text.indexOf("&{#SYS000}") < 0) {
+			if (!modification.contains("&{line}")	&& _line > 0) {
+				if (!text.contains("&{line}") && !text.contains("&{#SYS000}")) {
 					text += "&{line}{; line=}";
 				}
 				modification += "&{line}" + _line;
 			}
-			if (_line > 0 && modification.indexOf("&{column}") < 0 &&
+			if (_line > 0 && !modification.contains("&{column}") &&
 				getColumnNumber() > 0) {
-				if (text.indexOf("&{column}") < 0 &&
-					text.indexOf("&{#SYS000}") < 0) {
+				if (!text.contains("&{column}")&& !text.contains("&{#SYS000}")){
 					text += "&{column}{; column=}";
 				}
 				modification += "&{column}" + getColumnNumber();
 			}
-			if (modification.indexOf("&{sysId}") < 0 &&
+			if (!modification.contains("&{sysId}") &&
 				(sysId = getSystemId()) != null && sysId.length() > 0) {
-				if (text.indexOf("&{sysId}") < 0 &&
-					text.indexOf("&{#SYS000}") < 0) {
+				if (!text.contains("&{sysId}") && !text.contains("&{#SYS000}")){
 					text += "&{sysId}{; source='}{'}";
 				}
 				modification += "&{sysId}" + sysId;
 			}
-			if (modification.indexOf("&{pos}") < 0 &&
-				getSourcePosition() >= 0) {
-				if (text.indexOf("&{pos}") < 0) {
+			if (!modification.contains("&{pos}") && getSourcePosition() >= 0) {
+				if (!text.contains("&{pos}")) {
 					text += "&{pos}{; pos=}";
 				}
 				modification += "&{pos}" + getSourcePosition();
 			}
-			if (modification.indexOf("&{xpath}") >= 0 &&
-				text.indexOf("&{xpath}") < 0 && text.indexOf("&{#SYS000}") < 0){
+			if (modification.contains("&{xpath}") &&
+				!text.contains("&{xpath}") && !text.contains("&{#SYS000}")) {
 				text += "&{xpath}{; xpath=}";
 			}
-			if (modification.indexOf("&{xdpos}") >= 0 &&
-				text.indexOf("&{xdpos}") < 0 && text.indexOf("&{#SYS000}") < 0){
+			if (modification.contains("&{xdpos}") &&
+				!text.contains("&{xdpos}") && !text.contains("&{#SYS000}")) {
 				text += "&{xdpos}{; X-position=}";
 			}
 		}

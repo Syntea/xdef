@@ -1450,11 +1450,13 @@ public class SDatetime extends XMLGregorianCalendar
 	 */
 	public final String toString() {return toISO8601();}
 
-	@Override
 	/** Clone SDatetime object.
 	 * @return new SDatetime object as a clone this one.
 	 */
-	public final Object clone() {return new SDatetime(this);}
+	@Override
+	public final Object clone() {
+		return new SDatetime(this);
+	}
 
 	private static void setOptionInvalid(final Stack<Integer> options) {
 		int size;
@@ -2597,6 +2599,8 @@ public class SDatetime extends XMLGregorianCalendar
 	public final int compare(final XMLGregorianCalendar x) {
 		if (x instanceof SDatetime) {
 			return compareTo((SDatetime) x);
+		} else if (null == x) {
+			return compareTo(null);
 		} else {
 			SDatetime y = new SDatetime(x.toGregorianCalendar());
 			BigInteger e = x.getEon();
@@ -2790,11 +2794,12 @@ public class SDatetime extends XMLGregorianCalendar
 		if (_fraction != 0) {
 			result.set(Calendar.MILLISECOND, getMillisecond());
 		} else {
-			// use default if set
-			BigDecimal defaultFractionalSecond = (defaults != null) ?
-				defaults.getFractionalSecond() : null;
-			if (defaultFractionalSecond != null) {
-				result.set(Calendar.MILLISECOND, defaults.getMillisecond());
+			if (defaults != null) {
+				// use default if set
+				BigDecimal defaultFractSecond = defaults.getFractionalSecond();
+				if (defaultFractSecond != null) {
+					result.set(Calendar.MILLISECOND, defaults.getMillisecond());
+				}
 			}
 		}
 		return result;

@@ -213,7 +213,7 @@ public class FileReportReader implements ReportReader {
 					close();
 				}
 				throw new SIOException(SYS.SYS042);//Incorrect format of report
-			} catch (Exception ex) {
+			} catch (NumberFormatException | SIOException ex) {
 				throw new SRuntimeException(//Program exception&{0}{: }
 					SYS.SYS036, STester.printThrowable(ex));
 			}
@@ -241,7 +241,7 @@ public class FileReportReader implements ReportReader {
 					return null;
 				}
 			}
-		} catch (Exception ex) {
+		} catch (IOException ex) {
 			//Program exception&{0}{: }
 			throw new SRuntimeException(SYS.SYS036, ex);
 		}

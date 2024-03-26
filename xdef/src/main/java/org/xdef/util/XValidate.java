@@ -13,10 +13,12 @@ import org.xdef.XDPool;
 import org.xdef.impl.code.DefInStream;
 import org.xdef.impl.code.DefOutStream;
 import java.io.File;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
+import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.STester;
 
 /** Validation of XML document with X-definition.
@@ -161,17 +163,11 @@ public class XValidate {
 		final ReportWriter repw) {
 		XDPool xp = null;
 		if (xdefFiles != null && xdefFiles.length > 0) {
-			try {
-				xp = XDFactory.compileXD(props, xdefFiles);
-			} catch (Exception ex) {
-				 //Program exception &{0}
-				repw.fatal(SYS.SYS036, STester.printThrowable(ex));
-				return null;
-			}
+			xp = XDFactory.compileXD(props, xdefFiles);
 		} else if (poolFile != null) {
 			try {
 				xp = XDFactory.readXDPool(poolFile);
-			} catch (Exception ex) {
+			} catch (IOException ex) {
 				 //Program exception &{0}
 				repw.fatal(SYS.SYS036, STester.printThrowable(ex));
 				return null;
@@ -197,7 +193,7 @@ public class XValidate {
 		}
 		try {
 			return XDFactory.xparse(xmlFile.getCanonicalPath(), repw);
-		} catch (Exception ex) {
+		} catch (IOException | SRuntimeException ex) {
 			 //Program exception &{0}
 			repw.fatal(SYS.SYS036, STester.printThrowable(ex));
 			return null;
@@ -305,10 +301,10 @@ public class XValidate {
 							try {
 								File[] files =
 									SUtils.getFileGroup(st.nextToken());
-								for (int j = 0; j < files.length; j++) {
-									fileTab.add(files[j].getCanonicalFile());
+								for (File f : files) {
+									fileTab.add(f.getCanonicalFile());
 								}
-							} catch (Exception ex) {
+							} catch (IOException ex) {
 								throw new RuntimeException(
 									"Can't open file: " + args[i]);
 							}
@@ -396,7 +392,7 @@ public class XValidate {
 				}
 				repw.close();
 			}
-		} catch (Exception ex) {
+		} catch (IOException ex) {
 			throw new RuntimeException("Unexpected exception", ex);
 		}
 	}

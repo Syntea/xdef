@@ -11,9 +11,11 @@ import org.xdef.model.XMElement;
 import org.xdef.model.XMNode;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -538,7 +540,7 @@ public class GenDTD {
 						fileTab.put(file.getCanonicalFile(),
 							new FileInputStream(file));
 					}
-				} catch (Exception ex) {
+				} catch (IOException ex) {
 					throw new RuntimeException(
 						"Can't open file: " + args[i] +"\n" + info);
 				}
@@ -551,7 +553,7 @@ public class GenDTD {
 		try {
 			out = new java.io.OutputStreamWriter(
 				new java.io.FileOutputStream(args[1]), encoding);
-		} catch (Exception ex) {
+		} catch (FileNotFoundException | UnsupportedEncodingException ex) {
 			throw new RuntimeException(
 				"Invalid output file: " + args[1] + "\n" + info);
 		}
@@ -562,7 +564,7 @@ public class GenDTD {
 			fileTab.values().toArray(streams);
 			genDTD(streams, args[0], out);
 			out.close();
-		} catch (Exception ex) {
+		} catch (IOException ex) {
 			throw new RuntimeException("DTD not generated.", ex);
 		}
 	}

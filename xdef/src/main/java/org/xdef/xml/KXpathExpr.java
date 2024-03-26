@@ -1,5 +1,6 @@
 package org.xdef.xml;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.namespace.QName;
@@ -39,9 +40,10 @@ public class KXpathExpr {
 		try {
 			Class<?> cls = Class.forName("net.sf.saxon.xpath.XPathFactoryImpl");
 			x = (XPathFactory) cls.getConstructor().newInstance();
-		} catch (Exception ex) {
-			x = null;
-		} catch (Error ex) {
+		} catch (ClassNotFoundException | IllegalAccessException
+			| IllegalArgumentException | InstantiationException
+			| NoSuchMethodException | SecurityException
+			| InvocationTargetException | Error ex) {
 			x = null;
 		}
 		XPF = (x == null) ? XPathFactory.newInstance() : x;
@@ -100,7 +102,7 @@ public class KXpathExpr {
 		}
 		int ndx = s.charAt(0) == '@' ? 1 : s.startsWith("self::") ? 6 : 0;
 		s = s.substring(ndx);
-		return s.indexOf("::") < 0
+		return !s.contains("::")
 			&& StringParser.chkXMLName(s, StringParser.XMLVER1_0) ? ndx : -1;
 	}
 
@@ -233,7 +235,7 @@ public class KXpathExpr {
 		if (type == null || type.equals(XPathConstants.NODESET)) {
 			try {
 				return (NodeList) _value.evaluate(node, XPathConstants.NODESET);
-			} catch (Exception ex) {
+			} catch (XPathExpressionException ex) {
 				// !!!!!!!!!!!!!!!!!! This is very nasty code !!!!!!!!!!!!!!!!!!
 				if (type == null || type.equals(XPathConstants.NODESET)
 					&& ex instanceof XPathExpressionException) {
@@ -250,15 +252,15 @@ public class KXpathExpr {
 							if (s.toUpperCase().contains("NUMBER"))
 								return _value.evaluate(node,
 									XPathConstants.NUMBER);
-						} catch (Exception exx) {}// try evaluate STRING or NODE
+						} catch (XPathExpressionException exx) {}
 					}
 				}
 				try {
 					return _value.evaluate(node, XPathConstants.STRING);
-				} catch (Exception ex1) {
+				} catch (XPathExpressionException ex1) {
 					try {
 						return _value.evaluate(node, XPathConstants.NODE);
-					} catch (Exception ex2) {
+					} catch (XPathExpressionException ex2) {
 						if (node == null) {
 							return null;
 						}
@@ -272,7 +274,7 @@ public class KXpathExpr {
 		} else {
 			try {
 				return _value.evaluate(node, type);
-			} catch (Exception ex) {
+			} catch (XPathExpressionException ex) {
 				if (node == null) {
 					return null;
 				}
