@@ -177,14 +177,6 @@ public class XonTools {
 			if ((i=p.isOneOfTokens(new String[]{"null","true","false"}))>=0
 				&& (p.eos() || (ch=p.getCurrentChar())<=' '||ch==']'||ch==',')){
 					ar.add(i == 0 ? null : i==1);
-//			} else if((i=p.isOneOfTokens(new String[]{"NaN","INF","-INF"}))>=0){
-//				if (p.isChar('f')) {
-//					ar.add(i == 0 ? Float.NaN : i==1
-//						? Float.POSITIVE_INFINITY :Float.NEGATIVE_INFINITY);
-//				} else {
-//					ar.add(i == 0 ? Double.NaN : i==1
-//						?Double.POSITIVE_INFINITY:Double.NEGATIVE_INFINITY);
-//				}
 			} else {
 				char typCh; // character with type specification after a number
 				if (p.isSignedInteger() && (typCh=p.isOneOfChars("bsilND"))>=0
@@ -269,12 +261,6 @@ public class XonTools {
 			case "null": return null;
 			case "true": return Boolean.TRUE;
 			case "false": return Boolean.FALSE;
-//			case "NaN": return Double.NaN;
-//			case "INF": return Double.POSITIVE_INFINITY;
-//			case "-INF": return Double.NEGATIVE_INFINITY;
-//			case "NaNf": return Float.NaN;
-//			case "INFf": return Float.POSITIVE_INFINITY;
-//			case "-INFf": return Float.NEGATIVE_INFINITY;
 		}
 		if (s.charAt(0) == '[') {
 			List<Object> ar = new ArrayList<>();
@@ -318,25 +304,25 @@ public class XonTools {
 			} catch (Exception ex) {}
 		}
 		XDParseResult r;
-		if (ch == 'T' && endChar == '"') {
+		if (endChar == '"') {
 			try {
-				return new DefTelephone(s);
-			} catch (Exception ex) {}
-		} else if (ch == 'e' && endChar == '"') {
-			try {
-				return new DefEmailAddr(s);
-			} catch (Exception ex) {}
-		} else if (ch == 'c' && endChar == '"') {
-			if ((r = chkValue(s, new XDParseChar())).matches()) {
-				return r.getParsedValue().getObject();
-			}
-		} else if (ch == 'C' && endChar == ')') {
-			if ((r = chkValue(s, new XDParseCurrency())).matches()) {
-				return r.getParsedValue().getObject();
-			}
-		} else if (ch == 'u' && endChar == '"') {
-			try {
-				return new DefURI(s);
+				switch (ch) {
+					case 'T':
+						return new DefTelephone(s);
+					case 'e':
+						return new DefEmailAddr(s);
+					case 'u':
+						return new DefURI(s);
+					case 'C':
+						if ((r = chkValue(s, new XDParseCurrency())).matches()){
+							return r.getParsedValue().getObject();
+						}
+						break;
+					case 'c':
+						if ((r = chkValue(s, new XDParseChar())).matches()) {
+							return r.getParsedValue().getObject();
+						}
+				}
 			} catch (Exception ex) {}
 		}
 		return s; // XON/JSON String
@@ -454,9 +440,8 @@ public class XonTools {
 			return src;
 		}
 		// remove starting and ending '"'
-		String s = (src.charAt(0)=='"' && src.charAt(src.length() - 1)=='"')
-			? src.substring(1, src.length() - 1) : src;
-		return jstringToSource(s);
+		return jstringToSource(src.charAt(0) == '"' && src.endsWith("\"")
+			? src.substring(1, src.length() - 1) : src);
 	}
 
 	/** Convert a character to XON/JSON representation.
@@ -478,15 +463,6 @@ public class XonTools {
 	 * @return true if argument is a (signed) float number.
 	 */
 	public static final boolean isNumber(final String s) {
-//		switch (s) {
-//			case "NaN":
-//			case "INF":
-//			case "-INF":
-//			case "NaNf":
-//			case "INFf":
-//			case "-INFf":
-//				return true;
-//		}
 		StringParser p = new StringParser(s);
 		boolean minus = p.isChar('-');
 		if (p.isInteger() && p.eos()) {
@@ -496,7 +472,7 @@ public class XonTools {
 		return p.isFloat() && p.eos();
 	}
 
-	/** Chreate string from value.
+	/** Create string from value.
 	 * @param s original string value.
 	 * @return quoted string if necessary.
 	 */
@@ -549,8 +525,6 @@ public class XonTools {
 		} else if (x instanceof XDBytes) {
 			XDBytes y = (XDBytes) x;
 			return (y.isBase64() ? "b("+y.getBase64() : "x("+y.getHex()) + ")";
-//			String s = y.isBase64() ? y.getBase64() : y.getHex();
-//			return s.isEmpty() ? " " : s;
 		} else if (x instanceof byte[]) {
 			return genXMLString(new String(SUtils.encodeBase64((byte[]) x)));
 		} else if (x instanceof InetAddress) {
@@ -559,24 +533,6 @@ public class XonTools {
 			return genXMLString(((Currency) x).getCurrencyCode());
 		} else if (x instanceof XDTelephone) {
 			return "t\"" + x + '"';
-//		} else if (x instanceof Double) {
-//			Double y = (Double) x;
-//			if (y.isNaN()) {
-//				return "NaN";
-//			} else if (y.equals(Double.POSITIVE_INFINITY)) {
-//				return "INF";
-//			} else if (y.equals(Double.NEGATIVE_INFINITY)) {
-//				return "-INF";
-//			}
-//		} else if (x instanceof Float) {
-//			Float y = (Float) x;
-//			if (y.isNaN()) {
-//				return "NaNf";
-//			} else if (y.equals(Float.POSITIVE_INFINITY)) {
-//				return "INFf";
-//			} else if (y.equals(Float.NEGATIVE_INFINITY)) {
-//				return "-INFf";
-//			}
 		}
 		return x.toString();// Boolean, Number, etc...
 	}
@@ -826,13 +782,11 @@ public class XonTools {
 				return s;
 			}
 			return '"' + sb.toString() + '"';
-		} else if (val instanceof InetAddress) {
-			return val.toString().substring(1);
-		} else if (val instanceof XDBytes) {
-			XDBytes y = (XDBytes) val;
-			return (y.isBase64() ? "b(" : "x(") + y + ')';
-		} else {// Number or Boolean or othr objects
-			return val.toString();
+		} else {
+			return val instanceof XDBytes
+				? (((XDBytes) val).isBase64() ? "b(" : "x(") + val + ')'
+				: val instanceof InetAddress ? val.toString().substring(1)
+				: val.toString();
 		}
 	}
 
@@ -847,12 +801,10 @@ public class XonTools {
 		final String sysId) {
 		if (source instanceof String) {
 			File f = new File((String) source);
-			if (f.exists() && f.isFile()) {
-				return getInputFromObject(f, sysId);
-			}
 			try { // try if it is URL
-				return getInputFromObject(
-					SUtils.getExtendedURL((String)source), sysId);
+				return (f.exists() && f.isFile()) ? getInputFromObject(f, sysId)
+					: getInputFromObject(
+						SUtils.getExtendedURL((String)source), sysId);
 			} catch (RuntimeException | MalformedURLException ex) {
 				//not URL, file name, so create from string a reader
 				return new InputData(new StringReader((String) source),
@@ -890,18 +842,18 @@ public class XonTools {
 			source == null ? "null" : source.getClass().getName());
 	}
 
-	static final class InputData {
+	protected static final class InputData {
 		final Reader _reader;
 		final InputStream _in;
 		final String _sysId;
 
-		InputData(final Reader reader, final String sysId) {
+		protected InputData(final Reader reader, final String sysId) {
 			_reader = reader;
 			_in = null;
 			_sysId=sysId;
 		}
 
-		InputData(final InputStream in, final String sysId)
+		protected InputData(final InputStream in, final String sysId)
 			throws Exception{
 			_sysId = sysId;
 			_reader = null;

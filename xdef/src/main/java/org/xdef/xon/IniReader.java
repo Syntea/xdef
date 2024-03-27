@@ -346,10 +346,10 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 				case '\r' : sb.append("\\r"); continue;
 				case '\t' : sb.append("\\t"); continue;
 				default :
-					if (ch >= ' ' && ch <= 127) {
-						sb.append(ch);
-					} else {
+					if (ch < ' ' || !Character.isDefined(ch)) {
 						sb.append(XonTools.genCharAsUTF(ch));
+					} else {
+						sb.append(ch);
 					}
 			}
 		}

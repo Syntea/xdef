@@ -366,32 +366,23 @@ public final class XonReader extends StringParser implements XonParsers {
 				if ((ch=isOneOfChars("cuebxdpgiCtP"))== NOCHAR) {
 					return returnValue(spos, s);
 				}
-				switch(ch) {
-					case 'c': // character
-						return returnValue(spos, s.charAt(0));
-					case 'u': // URI
-						try {
-							return returnValue(spos, new URI(s));
-						} catch (URISyntaxException ex) {}
-						setIndex(pos);
-						break;
-					case 'e':
-						try {
+				try {
+					switch(ch) {
+						case 'c': // character
+							return returnValue(spos, s.charAt(0));
+						case 'u': // URI
+							try {
+								return returnValue(spos, new URI(s));
+							} catch (URISyntaxException ex) {}
+							setIndex(pos);
+							break;
+						case 'e':
 							return returnValue(spos, new DefEmailAddr(s));
-						} catch (Exception ex) {}
-						break;
-					case 'b':
-						try {
+						case 'b':
 							return returnValue(spos, SUtils.decodeBase64(s));
-						} catch (SException ex) {}
-						break;
-					case 'x':
-						try {
+						case 'x':
 							return returnValue(spos, SUtils.decodeHex(s));
-						} catch (SException ex) {}
-						break;
-					case 'd':
-						try {
+						case 'd':
 							return returnValue(spos, SDatetime.parse(s,
 								"yyyy-MM-dd['T'HH:mm:ss[.S]][Z]" +
 								"|HH:mm:ss[.S][Z]"+ //time
@@ -399,40 +390,20 @@ public final class XonReader extends StringParser implements XonParsers {
 								"|---dd[Z]"+ //day
 								"|yyyy-MM[Z]"+ // year month
 								"|yyyy[Z]")); // year
-						} catch (Exception ex) {}
-						break;
-					case 'p':
-						try {
+						case 'p':
 							return returnValue(spos, new Price(s));
-						} catch (SRuntimeException ex) {}
-						break;
-
-					case 'g':
-					case 'i':
-					case 'C':
-					case 't':
-					case 'P':
-					default:
-						return returnValue(spos, s);
-				}
+						case 'g':
+						case 'i':
+						case 'C':
+						case 't':
+						case 'P':
+						default:
+							return returnValue(spos, s);
+					}
+				} catch (SException ex) {}				
 			}
 		} else if ((i=isOneOfTokens(new String[]{"null","false","true"}))>=0) {
 			return returnValue(spos, i > 0 ? (i==2) : null);
-//		} else if (_xonMode
-//			&& (i=isOneOfTokens(new String[]{"NaN","INF","-INF"})) >= 0) {
-//			if (isChar('f')) {
-//				switch(i) {
-//					case 0: return returnValue(spos, Float.NaN);
-//					case 1: return returnValue(spos, Float.POSITIVE_INFINITY);
-//					case 2: return returnValue(spos, Float.NEGATIVE_INFINITY);
-//				}
-//			} else {
-//				switch(i) {
-//					case 0: return returnValue(spos, Double.NaN);
-//					case 1: return returnValue(spos, Double.POSITIVE_INFINITY);
-//					default: return returnValue(spos, Double.NEGATIVE_INFINITY);
-//				}
-//			}
 		} else if ((minus=isChar('-')) && ((floatNumber=isFloat())||isInteger())
 			|| ((floatNumber=isFloat()) || isInteger())) {
 			String s = getBufferPart(minus ? pos + 1 : pos, getIndex());
@@ -481,7 +452,6 @@ public final class XonReader extends StringParser implements XonParsers {
 								return returnValue(spos, new BigInteger(s));
 							} catch (Exception exx) {}
 						}
-
 					}
 				}
 			} else {
@@ -502,7 +472,6 @@ public final class XonReader extends StringParser implements XonParsers {
 			Object result;
 			char ch;
 			final String[] tokens = {"c\"","u\"","e\"","b(","x(","d","p(",
-//				"g(","/","C(","t\"","P","-P","NaN","INF","-INF"};
 				"g(","/","C(","t\"","P","-P"};
 			if (_xonMode&&(i=isOneOfTokens(tokens))>=0){
 				switch(tokens[i]) {
@@ -675,21 +644,6 @@ public final class XonReader extends StringParser implements XonParsers {
 						if (isXMLDuration()) {
 							return returnValue(spos, getParsedSDuration());
 						}
-						break;
-//					case "NaN":  // "NaN"
-//					case "INF":  // "INF"
-//					case "-INF": { // "-INF"
-//						String s = tokens[i];
-//						if (isChar('f')) {
-//							return returnValue(spos, "NaN".equals(s) ? Float.NaN
-//								: "INF".equals(s) ? Float.POSITIVE_INFINITY
-//								: Float.NEGATIVE_INFINITY);
-//						}
-//						isChar('d');
-//						return returnValue(spos, "NaN".equals(s) ? Double.NaN
-//							: "INF".equals(s) ? Double.POSITIVE_INFINITY
-//								: Double.NEGATIVE_INFINITY);
-//					}
 				}
 			}
 		}

@@ -107,7 +107,7 @@ public class KXqueryExpr implements KXquery {
 	}
 
 	@Override
-	/** Execute precompiled XQuery expression and return result.
+	/** Execute compiled XQuery expression and return result.
 	 * @param node node or null.
 	 * @return object with result of XQuery expression.
 	 * @throws SRuntimeException if an error occurs.
@@ -155,5 +155,4 @@ public class KXqueryExpr implements KXquery {
 	 * @return true if XQuery implementation is available.
 	 */
 	public static final boolean isXQueryImplementation() {return XDS != null;}
-
 }

@@ -57,7 +57,6 @@ class XonFromXml extends XonUtils {
 					}
 					while ((n = n.getNextSibling()) != null
 						&& n.getNodeType() != Node.TEXT_NODE
-						&& n.getNodeType() != Node.TEXT_NODE
 						&& n.getNodeType() == Node.CDATA_SECTION_NODE) {}
 					if (n == null || n.getNodeType() == Node.ELEMENT_NODE) {
 						break;
@@ -101,24 +100,20 @@ class XonFromXml extends XonUtils {
 	 */
 	private Object fromXmlW(final Element elem) {
 		String localName = elem.getLocalName();
-		if (X_ARRAY.equals(localName)) {
-			return createArrayW(elem);
-		} else if (X_MAP.equals(localName)) {
-			return createMapW(elem);
-		} else if (X_VALUE.equals(elem.getLocalName())) {
-			if (elem.hasAttribute(X_VALATTR)) {
-				return XonTools.xmlToJValue(elem.getAttribute(X_VALATTR));
+		switch (localName) {
+			case X_ARRAY: return createArrayW(elem);
+			case X_MAP: return createMapW(elem);
+			case X_VALUE: {
+				if (elem.hasAttribute(X_VALATTR)) {
+					return XonTools.xmlToJValue(elem.getAttribute(X_VALATTR));
+				}
+				String s = elem.getTextContent();
+				return s==null || s.isEmpty() ? null : XonTools.xmlToJValue(s);
 			}
-			String s = elem.getTextContent();
-			return s == null || s.isEmpty() ? null : XonTools.xmlToJValue(s);
-		} else if (J_BOOLEAN.equals(elem.getLocalName())) {
-			return ("true".equals(elem.getTextContent().trim()));
-		} else if (J_NULL.equals(elem.getLocalName())) {
-			return null;
-		} else if (J_NUMBER.equals(elem.getLocalName())) {
-			return new BigDecimal(elem.getTextContent().trim());
-		} else if (J_STRING.equals(elem.getLocalName())) {
-			return XonTools.xmlToJValue(elem.getTextContent());
+			case J_BOOLEAN: return "true".equals(elem.getTextContent().trim());
+			case J_NULL: return null; 
+			case J_NUMBER: return new BigDecimal(elem.getTextContent().trim());
+			case J_STRING: return XonTools.xmlToJValue(elem.getTextContent());			
 		}
 		throw new RuntimeException(
 			"Unsupported XON/JSON W element: " + elem.getLocalName());
@@ -162,8 +157,7 @@ class XonFromXml extends XonUtils {
 		String localName = nsURI==null ? elem.getNodeName():elem.getLocalName();
 		if (XDConstants.XON_NS_URI_XD.equals(nsURI)) {
 			if (null != localName) switch (localName) {
-				case X_VALUE:
-				{
+				case X_VALUE: {
 					String s;
 					if (elem.hasAttribute(X_VALATTR)) {
 						s = elem.getAttribute(X_VALATTR);
@@ -229,8 +223,7 @@ class XonFromXml extends XonUtils {
 					return null;
 				case J_STRING:
 				case J_NUMBER:
-				case J_BOOLEAN:
-				{
+				case J_BOOLEAN: {
 					if (elem.hasAttribute(X_VALATTR)) {
 						return XonTools.xmlToJValue(elem.getAttribute(X_VALATTR));
 					}

@@ -57,15 +57,8 @@ class XonToString extends XonTools {
 				} else if (x instanceof Double) {
 					return num.indexOf('.') < 0 && num.indexOf('e') < 0
 							&& num.indexOf('E') < 0 ?  num + 'd' : num;
-//					return ((Double) x).isInfinite()
-//						? num.charAt(0) == '-' ? "-INF" : "INF" :
-//						num.indexOf('.') < 0 && num.indexOf('e') < 0
-//							&& num.indexOf('E') < 0 ?  num + 'd' : num;
 				} else if (x instanceof Float) {
 					return num + 'f';
-//					return ((Float) x).isInfinite()
-//						? num.charAt(0) == '-' ? "-INFf" : "INFf" :
-//						((Float) x).isNaN() ? "NaNf" : num + 'f';
 				} else if (x instanceof Byte) {
 					return num + 'b';
 				} else if (x instanceof Short) {

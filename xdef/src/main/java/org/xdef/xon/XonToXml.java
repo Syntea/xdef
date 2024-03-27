@@ -252,8 +252,8 @@ class XonToXml extends XonTools {
 				_ns.popContext();
 				return;
 			}
-			Map mm;
 			if (len > 1 && array.get(1) instanceof Map) {
+				Map mm;
 				if ((mm = (Map) array.get(1)).size() != 1) {
 					addArrayItems(elem, array, 0);
 					return;
@@ -340,7 +340,7 @@ class XonToXml extends XonTools {
 				return;
 			}
 			if (array.size() > 1 && (array.get(1) instanceof Map)) {
-				mm = (Map) array.get(1);
+				Map mm = (Map) array.get(1);
 				if (mm.size() == 1) { // it is element
 					if (array.size() == 1) { // no oter items of array
 						// create element and return
@@ -351,7 +351,6 @@ class XonToXml extends XonTools {
 							_ns.getNamespaceURI(getNamePrefix(name));
 						addElem(elem, namespace, name);
 						_ns.popContext();
-						return;
 					} else {
 						//add to element this map and remaining items from array
 						addArrayItems(elem, array, 1);
@@ -372,7 +371,6 @@ class XonToXml extends XonTools {
 						// add remaining items
 						addArrayItems(elem, array, 1);
 					}
-					return;
 				}
 				return;
 			} else {
