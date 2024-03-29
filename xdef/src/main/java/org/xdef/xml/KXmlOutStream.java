@@ -193,7 +193,7 @@ public class KXmlOutStream {
 		_writer.write(indent);
 		_writer.write(name);
 		_writer.write("=\"");
-		if (val != null) {			
+		if (val != null) {
 			int len = val.length();
 			for (int j = 0; j < len; j++) {
 				char c;

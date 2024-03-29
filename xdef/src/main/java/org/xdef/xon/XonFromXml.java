@@ -111,9 +111,9 @@ class XonFromXml extends XonUtils {
 				return s==null || s.isEmpty() ? null : XonTools.xmlToJValue(s);
 			}
 			case J_BOOLEAN: return "true".equals(elem.getTextContent().trim());
-			case J_NULL: return null; 
+			case J_NULL: return null;
 			case J_NUMBER: return new BigDecimal(elem.getTextContent().trim());
-			case J_STRING: return XonTools.xmlToJValue(elem.getTextContent());			
+			case J_STRING: return XonTools.xmlToJValue(elem.getTextContent());
 		}
 		throw new RuntimeException(
 			"Unsupported XON/JSON W element: " + elem.getLocalName());

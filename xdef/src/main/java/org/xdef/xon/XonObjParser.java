@@ -57,7 +57,7 @@ public class XonObjParser implements XonParser {
 				_value = o;
 		}
 	}
-	
+
 	@Override
 	/** Set name of value pair.
 	 * @param name value name.
@@ -67,7 +67,7 @@ public class XonObjParser implements XonParser {
 		_names.push(name.getString());
 		return _maps.peek().containsKey(name.getString());
 	}
-	
+
 	@Override
 	/** Array started.
 	 * @param pos source position.
@@ -76,7 +76,7 @@ public class XonObjParser implements XonParser {
 		_kinds.push(_kind = 1);
 		_arrays.push(new ArrayList<>());
 	}
-	
+
 	@Override
 	/** Array ended.
 	 * @param pos source position.
@@ -92,7 +92,7 @@ public class XonObjParser implements XonParser {
 			_arrays.peek().add(_value);
 		}
 	}
-	
+
 	@Override
 	/** Map started.
 	 * @param pos source position.
@@ -101,7 +101,7 @@ public class XonObjParser implements XonParser {
 		_kinds.push(_kind = 2);
 		_maps.push(new LinkedHashMap<>());
 	}
-	
+
 	@Override
 	/** Map ended.
 	 * @param pos source position.
@@ -117,13 +117,13 @@ public class XonObjParser implements XonParser {
 			_arrays.peek().add(_value);
 		}
 	}
-	
+
 	@Override
 	/** Processed comment.
 	 * @param value SBuffer with the value of comment.
 	 */
 	public void comment(SBuffer value){/*we ingore it here*/}
-	
+
 	@Override
 	/** X-script item parsed, not used methods for XON/JSON parsing
 	 * (used in X-definition compiler).
@@ -131,7 +131,7 @@ public class XonObjParser implements XonParser {
 	 * @param value value of item.
 	 */
 	public void xdScript(SBuffer name, SBuffer value) {}
-	
+
 	@Override
 	/** Get result of parser.
 	 * @return parsed object.

@@ -400,7 +400,7 @@ public final class XonReader extends StringParser implements XonParsers {
 						default:
 							return returnValue(spos, s);
 					}
-				} catch (SException ex) {}				
+				} catch (SException ex) {}
 			}
 		} else if ((i=isOneOfTokens(new String[]{"null","false","true"}))>=0) {
 			return returnValue(spos, i > 0 ? (i==2) : null);

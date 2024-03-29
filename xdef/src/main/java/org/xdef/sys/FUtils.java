@@ -237,7 +237,7 @@ public class FUtils {
 			try {fs1.close();} catch (IOException ex) {}
 		}
 		if (fs2!= null) {
-			try {fs2.close();} catch (IOException ex) {}			
+			try {fs2.close();} catch (IOException ex) {}
 		}
 		return result;
 	}
