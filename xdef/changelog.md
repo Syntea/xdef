@@ -1,13 +1,14 @@
 # Version ${version}, release-date ${release.date}
 
 # Version 42.1.4, release-date 2024-04-04
+* corrected bug in conversion of parsed properties/INI data to string.
+* corrected bug in conversion of X-definition type `dec` to XML schema.
 * In the conversion of X-definition to XML schema (`org.xdef.util.XdefToXsd`)
   is added parameter `--xx`. If this parameter is used than from xdatetime
   X-definition validation method is used the mask from parameter `outFormat`
   (the second sequential parameter) for validation of XML data.
 * most of X-definition methods is now more converted to XML schema string type
   with `pattern` facets.
-* corrected conversion of X-definition type `dec` to XML schema.
 * Added error message `XDEF262` if occurrence was set to greater than 1
   in the text node model.
 
