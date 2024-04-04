@@ -225,7 +225,7 @@ public class CsvReader extends StringParser implements XonParsers {
 				first = false;
 			}
 			if (o != null) {
-				String s = (String) o;
+				String s = (o instanceof String) ? (String) o : o.toString();
 				if (s.indexOf('"') >= 0 || s.indexOf('"') >= 0) {
 					s = '"' + SUtils.modifyString(s, "\"", "\"\"") + '"';
 				}
