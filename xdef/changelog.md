@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.1.4, release-date 2024-04-04
+# Version 42.1.4, release-date 2024-04-05
 * corrected bug in conversion of parsed properties/INI data to string.
 * corrected bug in conversion of X-definition type `dec` to XML schema.
 * In the conversion of X-definition to XML schema (`org.xdef.util.XdefToXsd`)

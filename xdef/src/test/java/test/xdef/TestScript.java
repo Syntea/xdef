@@ -580,7 +580,8 @@ public final class TestScript extends XDTester {
 		test("2.5","{int i=1;float j=2.5;setResult(eq(toString(max(i,j))));}");
 		test("67","setResult(eq(toString(myCheck4()+3*2*10 + 3 + 2)));");
 		test("63","setResult(eq(toString(-myCheck4(1)+3*2*10 + 3 + 2)));");
-		test("Monday, 23 January 2006","setResult(xdatetime('EEEE, d MMMM y'))");
+		test("Monday, 23 January 2006",
+			"setResult(xdatetime('EEEE, d MMMM y'))");
 		test("Mon, 23 Jan 2006", "setResult(xdatetime('EEE, d MMM y'));");
 		test("1999-05-01T20:43:09.876+01:00", "setResult("
 			+ "eq(parseDate('1999-05-01T20:43:09.876+01:00').toString()));");
@@ -881,10 +882,10 @@ public final class TestScript extends XDTester {
 //		testAttr("+1.21","onTrue setResult(true); required decimal(3,2);"
 //			+ " onFalse setResult(false); ");
 ////////////////////////////////////////////////////////////////////////////////
-		testAttr2("ahoj","required enum('nazdar','ahoj');onTrue setResult(true);"
-			+ "onFalse {clearReports(); setResult(false);}");
-		testAttr2("hoj","required enum('nazdar','ahoj');onTrue setResult(false);"
-			+ "onFalse {clearReports(); setResult(true);}");
+		testAttr2("ahoj","required enum('nazdar','ahoj');onTrue"
+			+ " setResult(true);onFalse {clearReports(); setResult(false);}");
+		testAttr2("hoj","required enum('nazdar','ahoj');onTrue"
+			+ " setResult(false);onFalse {clearReports(); setResult(true);}");
 		testAttr2("Ahoj","required enum('nazdar','ahoj');"+
 			"onTrue setResult(false);"
 			+ "onFalse {clearReports(); setResult(true);}");
@@ -970,11 +971,19 @@ public final class TestScript extends XDTester {
 		testAttr2("Tue, 27 Nov 2001 12:17:54 +0100 (CET)",
 			"onTrue setResult(true); required emailDate();"
 			+ " onFalse setResult(false); ");
-		testAttr2("http://pes.eunet.cz","onTrue setResult(true); required url();"
+		testAttr2("http://pes.eunet.cz","onTrue setResult(true);required url();"
 			+ " onFalse setResult(false); ");
 		// test email
 		testAttr2("tr.ab@vol.cz","onTrue setResult(true); required emailAddr();"
 			+ " onFalse setResult(false); "); // OK
+		testAttr2("&lt;p-G@d-t.o&gt;","onTrue setResult(true);"
+			+ "required emailAddr();onFalse setResult(false); "); // OK
+		testAttr2("Pa Gr &lt;p-G@d-t.o&gt;","onTrue setResult(true);"
+			+ "required emailAddr();onFalse setResult(false); "); // OK
+		testAttr2("(Pa Gr)p-G@d-t.o","onTrue setResult(true);"
+			+ "required emailAddr();onFalse setResult(false); "); // OK
+		testAttr2("p-G@d-t.o(Pa Gr)","onTrue setResult(true);"
+			+ "required emailAddr();onFalse setResult(false); "); // OK
 		testAttr2("(a a) =?UTF-8?Q?Xx. Yy?=(b)&lt;1@2g>(c)","onTrue setResult("
 			+ "true); required emailAddr(); onFalse setResult(false); "); // OK
 		testAttr2("tro.cz","onTrue setResult(false); required emailAddr();"
@@ -1134,7 +1143,7 @@ public final class TestScript extends XDTester {
 "    }\n"+
 "    if (i != 1) out('ERROR 25, i= ' +  i); else out('OK 25 ');\n"+
 "    i = 0; k = 2;\n"+
-"    while(i+j == 1 || k + l == 5 || ((i==0) && (j==1) && (k==2) & (l==3)) ){\n"+
+"    while(i+j == 1 || k+l == 5 || ((i==0) && (j==1) && (k==2) & (l==3)) ){\n"+
 "      i++; k++;\n"+
 "    }\n"+
 "    if (i != 1) out('ERROR 26, i= ' +  i); else out('OK 26 ');\n"+
@@ -1246,10 +1255,12 @@ public final class TestScript extends XDTester {
 "</xd:component>\n" +
 "</xd:collection>";
 			genXComponent(xp = compile(xdef));
-			xml = "<b:a xmlns:b='a.b' a='1' b:b='2'><b:b  a='3' b:b='4'/></b:a>";
+			xml = 
+				"<b:a xmlns:b='a.b' a='1' b:b='2'><b:b  a='3' b:b='4'/></b:a>";
 			assertEq(xml, parse(xp, "A", xml, reporter));
 			assertNoErrorwarnings(reporter);
-			xml = "<b:a xmlns:b='c.d' a='1' b:b='2'><b:b  a='3' b:b='4'/></b:a>";
+			xml = 
+				"<b:a xmlns:b='c.d' a='1' b:b='2'><b:b  a='3' b:b='4'/></b:a>";
 			assertEq(xml, parse(xp, "B", xml, reporter));
 			assertNoErrorwarnings(reporter);
 			xdef = // Test reference to model with different namespace
