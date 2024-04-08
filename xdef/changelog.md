@@ -1,5 +1,8 @@
 # Version ${version}, release-date ${release.date}
 
+# Version 42.1.5, release-date 2024-04-08
+* .
+
 # Version 42.1.4, release-date 2024-04-08
 * corrected bug in conversion of parsed properties/INI data to string.
 * corrected bug in conversion of X-definition type `dec` to XML schema.
