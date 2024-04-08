@@ -1255,11 +1255,11 @@ public final class TestScript extends XDTester {
 "</xd:component>\n" +
 "</xd:collection>";
 			genXComponent(xp = compile(xdef));
-			xml = 
+			xml =
 				"<b:a xmlns:b='a.b' a='1' b:b='2'><b:b  a='3' b:b='4'/></b:a>";
 			assertEq(xml, parse(xp, "A", xml, reporter));
 			assertNoErrorwarnings(reporter);
-			xml = 
+			xml =
 				"<b:a xmlns:b='c.d' a='1' b:b='2'><b:b  a='3' b:b='4'/></b:a>";
 			assertEq(xml, parse(xp, "B", xml, reporter));
 			assertNoErrorwarnings(reporter);
