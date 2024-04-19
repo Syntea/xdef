@@ -11,6 +11,12 @@ public class TestDTDToXdef extends XDTester {
 
 	public TestDTDToXdef() {super();}
 
+	/** Test DTD data.
+	 * @param dtdData data with DTD.
+	 * @param root name of root element.
+	 * @param data to test.
+	 * @param display 1 .. display DTD, 2 .. display xdef 4 .. display xml data
+	 */
 	private void test(String dtdData,
 		String root,
 		String data,
@@ -58,7 +64,9 @@ public class TestDTDToXdef extends XDTester {
 		} catch (Exception ex) {fail(ex);}
 	}
 
-	/** Extended tests; don't run in in textAll. */
+	/** Extended tests; don't run in in textAll.
+	 * @param display 1 .. display DTD, 2 .. display xdef 4 .. display xml data
+	 */
 	private void test(int display) {
 		String xmlData;
 		String dtdData;
