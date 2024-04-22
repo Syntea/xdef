@@ -32,7 +32,7 @@ public class References {
 			}
 		}
 	}
-	
+
 	/** Run this example.
 	 * @param args the command line arguments
 	 */
@@ -48,5 +48,5 @@ public class References {
 		XMDefinition xd = xp.getXMDefinition("Ab");
 		XMElement xe = xd.getModel(null, "A");
 		displayRefs(xe);
-	}	
+	}
 }
