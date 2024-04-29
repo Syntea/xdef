@@ -1,0 +1,49 @@
+<xs:schema attributeFormDefault="unqualified"
+           elementFormDefault="qualified"
+           targetNamespace="http://example.com/carInfo"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="http://example.com/eshopInfo" schemaLocation="_XG_02.xsd"/>
+  <xs:element name="Car">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="VIN">
+          <xs:simpleType>
+            <xs:annotation>
+              <xs:documentation>Created from X-definition an()</xs:documentation>
+            </xs:annotation>
+            <xs:restriction base="xs:string">
+              <xs:pattern value="[A-Za-z0-9]+"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+        <xs:element name="Built">
+          <xs:simpleType>
+            <xs:annotation>
+              <xs:documentation>Created from X-definition xdatetime(yyyy/MM)</xs:documentation>
+            </xs:annotation>
+            <xs:restriction base="xs:string">
+              <xs:pattern value="(-)?\d{4}/(0[1-9]|1[0-2])"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+        <xs:element name="Mark">
+          <xs:simpleType>
+            <xs:annotation>
+              <xs:documentation>
+                Created from X-definition enum(Škoda,Audi,Mercedes-Benz,BMW)
+              </xs:documentation>
+            </xs:annotation>
+            <xs:restriction base="xs:string">
+              <xs:enumeration value="Mercedes-Benz"/>
+              <xs:enumeration value="Škoda"/>
+              <xs:enumeration value="Audi"/>
+              <xs:enumeration value="BMW"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+        <xs:element maxOccurs="1" minOccurs="0" ref="Info" xmlns="http://example.com/eshopInfo"/>
+      </xs:sequence>
+      <xs:attribute ref="from" use="required" xmlns="http://example.com/eshopInfo"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
