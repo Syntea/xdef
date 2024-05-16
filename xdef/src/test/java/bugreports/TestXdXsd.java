@@ -222,7 +222,7 @@ public class TestXdXsd extends XDTester {
 //"  <A><B xd:script='*;' c='regex(\"\\\\d{4}\") AAND regex(\"\\\\d{4}\")'/></A>\n"+
 "</xd:def>";
 			xml ="<A><B c='123'/></A>";
-			assertEq("",genAndTestSchema(xdef,"Ab","A",xml,outDir,"_XX",true));			
+			assertEq("",genAndTestSchema(xdef,"Ab","A",xml,outDir,"_XX",true));
 
 //			xdef =
 //"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' xd:name='Ab' xd:root='A'\n" +
@@ -472,7 +472,7 @@ if(true)return;
 "  <C c='? string()'>? string</C>\n"+
 "</xd:def>";
 			xml ="<A><B c='c'>d</B></A>";
-			assertEq("",genAndTestSchema(xdef,"Ab","A",xml,outDir,"_XK",true));			
+			assertEq("",genAndTestSchema(xdef,"Ab","A",xml,outDir,"_XK",true));
 			xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" name=\"Ab\" root=\"A\" >\n" +
 "  <A><B xd:script='*; ref C'/></A>\n"+
@@ -481,7 +481,7 @@ if(true)return;
 "  <E c='? string()'>? string</E>\n"+
 "</xd:def>";
 			xml ="<A><B c='c'>d</B></A>";
-			assertEq("",genAndTestSchema(xdef,"Ab","A",xml,outDir,"_XL",true));			
+			assertEq("",genAndTestSchema(xdef,"Ab","A",xml,outDir,"_XL",true));
 		} catch (Exception ex) {fail(ex);}
 		try {
 			assertEq("", checkAll_X(sourceDir + "X/"));

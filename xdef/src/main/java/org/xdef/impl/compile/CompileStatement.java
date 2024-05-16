@@ -3845,11 +3845,27 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		CodeI1 jmp = null;
 		int addr;
 		short type;
+		CompileVariable rVar = null;
 		switch (_sym) {
 			case IDENTIFIER_SYM: { // type method
-				CompileVariable rVar =
+				rVar =
 					(CompileVariable) _g._globalVariables.getXVariable(_idName);
 				int dx = addDebugInfo(true);
+//if (rVar != null && varKind == 'G') {
+//	System.out.println(rVar);
+//	CompileVariable v = _g.addVariable(name, rVar.getType(), varKind, spos);
+//	v.setCodeAddr(rVar.getCodeAddr());
+//	v.setExternal(rVar.isExternal());
+//	v.setFinal(rVar.isFinal());
+//	v.setParseMethodAddr(rVar.getParseMethodAddr());
+//	v.setParseResultType(rVar.getParseResultType());
+//	v.setKeyRefName(_idName);
+//	nextSymbol();
+//	if (_sym == SEMICOLON_SYM) {
+//		nextSymbol();
+//	}
+//	return;
+//}
 				if (rVar==null && varKind == 'X') {
 					if (!expression() || _g._tstack[_g._sp] != XD_PARSER) {
 						//Value of type &{0} expected
@@ -3934,6 +3950,9 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			_g.addVariable(name, X_PARSEITEM, varKind, spos);
 		var.setParseMethodAddr(addr);
 		var.setParseResultType(type);
+		if (rVar != null && var.getKeyIndex() == -1) {
+			var.setKeyRefName(rVar.getName()); // reference to other type
+		}
 	}
 
 	/** Compile check type as a method.

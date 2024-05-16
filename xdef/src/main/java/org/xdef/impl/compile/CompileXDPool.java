@@ -690,7 +690,7 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			}
 		}
 		//TODO Smid
-		// returns value of _ignoreUnresolvedExternals back to original
+		// set value of _ignoreUnresolvedExternals back to original
 		_codeGenerator._ignoreUnresolvedExternals = ignoreUnresolvedExternals;
 		// Smid
 		// set normal generation of code of external methods

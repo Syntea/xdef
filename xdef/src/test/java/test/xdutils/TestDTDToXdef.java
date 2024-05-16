@@ -586,26 +586,23 @@ public class TestDTDToXdef extends XDTester {
 		String tempDir = getTempDir();
 		clearTempDir();
 		String dataDir = getDataDir();
-		String xmlData;
-		String dtdData;
-
 //		test(display); //enable this line only when debugging without maven
 
-		dtdData =
-"<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'\n" +
-"   'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>\n" +
-"<html/>";
-		xmlData =
-"<html>\n" +
-"  <head>\n" +
-"    <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>\n" +
-"    <title>Kapitola 1. X-definice step-by-step: model XML elementu</title>\n" +
-"  </head>\n" +
-"  <body>\n" +
-"   <b>Obsah</b>\n" +
-"  </body>\n" +
-"</html>";
-		test(dtdData, "html", xmlData, display);
+//		String dtdData =
+//"<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'\n" +
+//"   'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>\n" +
+//"<html/>";
+//		String xmlData =
+//"<html>\n" +
+//"  <head>\n" +
+//"    <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>\n" +
+//"    <title>Kapitola 1. X-definice step-by-step: model XML elementu</title>\n" +
+//"  </head>\n" +
+//"  <body>\n" +
+//"   <b>Obsah</b>\n" +
+//"  </body>\n" +
+//"</html>";
+//		test(dtdData, "html", xmlData, display);
 
 		org.xdef.util.DTDToXdef.main(new String[]{"-in",
 			dataDir + "dtds/a.xml",

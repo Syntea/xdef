@@ -370,8 +370,8 @@ public final class CompileCode extends CompileBase {
 		_localVariablesLastIndex = -1;
 	}
 
-	/** Get flag to ignore external methods.
-	 * @param b flag ti ignore external methods.
+	/** Set flag to ignore external methods.
+	 * @param b flag to ignore external methods.
 	 */
 	final void setIgnoreExternalMethods(final boolean b) {
 		_ignoreExternalMethods = b;
