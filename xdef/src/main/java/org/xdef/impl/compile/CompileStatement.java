@@ -3845,27 +3845,35 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		CodeI1 jmp = null;
 		int addr;
 		short type;
-		CompileVariable rVar = null;
+		CompileVariable var;
 		switch (_sym) {
 			case IDENTIFIER_SYM: { // type method
-				rVar =
+				CompileVariable rVar =
 					(CompileVariable) _g._globalVariables.getXVariable(_idName);
+				if (rVar!=null&& !"Qname".equals(name)&& !"NCname".equals(name)
+					&& !"tokens".equals(name)&& !_idName.equals(name)
+					&& varKind==rVar.getKind() && X_PARSEITEM==rVar.getType()
+					&& rVar.getParseMethodAddr()!=-1 && rVar.getKeyIndex()==-1){
+					var = _g.addVariable(name, X_PARSEITEM, varKind, spos);
+					var.setKeyRefName(_idName); // reference to other type
+					var.setParseMethodAddr(rVar.getParseMethodAddr());
+					var.setCodeAddr(rVar.getCodeAddr());
+					var.setParseResultType(rVar.getParseResultType());
+					if (nextSymbol() == LPAR_SYM) {
+						if (nextSymbol() == RPAR_SYM) {
+							nextSymbol();
+						} else {
+							error(XDEF.XDEF384);//Parameters not allowed here
+						}
+					}
+					if (_sym == SEMICOLON_SYM) {
+						nextSymbol();
+					} else if(_sym != END_SYM && !eos()) {
+						error(XDEF.XDEF410, ';');//'&{0}' expected
+					}
+					return; // copy of referred CompileVariable added to table.
+				}
 				int dx = addDebugInfo(true);
-//if (rVar != null && varKind == 'G') {
-//	System.out.println(rVar);
-//	CompileVariable v = _g.addVariable(name, rVar.getType(), varKind, spos);
-//	v.setCodeAddr(rVar.getCodeAddr());
-//	v.setExternal(rVar.isExternal());
-//	v.setFinal(rVar.isFinal());
-//	v.setParseMethodAddr(rVar.getParseMethodAddr());
-//	v.setParseResultType(rVar.getParseResultType());
-//	v.setKeyRefName(_idName);
-//	nextSymbol();
-//	if (_sym == SEMICOLON_SYM) {
-//		nextSymbol();
-//	}
-//	return;
-//}
 				if (rVar==null && varKind == 'X') {
 					if (!expression() || _g._tstack[_g._sp] != XD_PARSER) {
 						//Value of type &{0} expected
@@ -3946,13 +3954,9 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		if (varKind == 'X') { // ModelVariable
 			jmp.setParam(_g._lastCodeIndex+1);
 		}
-		CompileVariable var =
-			_g.addVariable(name, X_PARSEITEM, varKind, spos);
+		var = _g.addVariable(name, X_PARSEITEM, varKind, spos);
 		var.setParseMethodAddr(addr);
 		var.setParseResultType(type);
-		if (rVar != null && var.getKeyIndex() == -1) {
-			var.setKeyRefName(rVar.getName()); // reference to other type
-		}
 	}
 
 	/** Compile check type as a method.
