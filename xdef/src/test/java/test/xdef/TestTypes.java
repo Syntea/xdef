@@ -1,5 +1,6 @@
 package test.xdef;
 
+import java.io.IOException;
 import test.XDTester;
 import org.xdef.XDConstants;
 import org.xdef.sys.ArrayReporter;
@@ -23,11 +24,14 @@ import org.xdef.proc.XXNode;
 import org.xdef.xml.KXmlUtils;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import org.w3c.dom.DOMException;
 import org.xdef.XDGPSPosition;
 import org.xdef.sys.Price;
 import org.xdef.XDPrice;
 import org.xdef.msg.XDEF;
 import org.xdef.proc.XXData;
+import org.xdef.sys.SException;
+import org.xdef.sys.SRuntimeException;
 import static org.xdef.sys.STester.runTest;
 import static test.XDTester._xdNS;
 
@@ -264,7 +268,7 @@ public final class TestTypes extends XDTester {
 "</A>";
 			assertEq(xml, parse(xd, xml, reporter));
 			assertNoErrorwarnings(reporter);
-		} catch (Exception ex) {fail(ex);}
+		} catch (SRuntimeException ex) {fail(ex);}
 		try { //element type
 			xdef =
 "<xd:def root='a' xmlns:xd='" + _xdNS + "'>\n"+
@@ -779,8 +783,8 @@ public final class TestTypes extends XDTester {
 "</message>";
 			parse(xp, "", xml, reporter, swr, null, null);
 			s = swr.toString();
-			assertFalse(s.indexOf("/body/abc;abc;abc") < 0 ||
-				s.indexOf("/abc;abc;abc") < 0, s);
+			assertFalse(!s.contains("/body/abc;abc;abc") ||
+				!s.contains("/abc;abc;abc"), s);
 			if (reporter.getErrorCount() == 0) {
 				fail("error not reported");
 			} else if (reporter.getErrorCount() != 1) {
@@ -799,11 +803,11 @@ public final class TestTypes extends XDTester {
 "</message>";
 			parse(xp, "", xml, reporter, swr, null, null);
 			s = swr.toString();
-			assertFalse(s.indexOf("/body/abc;abc;abc") < 0 ||
-				s.indexOf("esxsd/GetEndorsingBoarder/" +
-				"http://schemas.snowboard-info.com/EndorsementSearch.xsd;" +
-				"http://schemas.snowboard-info.com/EndorsementSearch.xsd;" +
-				"http://schemas.snowboard-info.com/EndorsementSearch.xsd") < 0,
+			assertFalse(!s.contains("/body/abc;abc;abc") ||
+				!s.contains("esxsd/GetEndorsingBoarder/" +
+					"http://schemas.snowboard-info.com/EndorsementSearch.xsd;" +
+					"http://schemas.snowboard-info.com/EndorsementSearch.xsd;" +
+					"http://schemas.snowboard-info.com/EndorsementSearch.xsd"),
 				s);
 				assertNoErrorwarnings(reporter);
 				setChkSyntax(false);
@@ -1011,7 +1015,6 @@ public final class TestTypes extends XDTester {
 "  <A a='string(*,3);'>string(1,*);</A>\n"+
 "</xd:def>";
 			xp = XDFactory.compileXD(null, xdef);
-			xd = xp.createXDDocument();
 			xml = "<A a='abc'>def</A>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
@@ -1020,7 +1023,6 @@ public final class TestTypes extends XDTester {
 "  <A a='string(*,3);'>string(1,*);</A>\n"+
 "</xd:def>";
 			xp = XDFactory.compileXD(null, xdef);
-			xd = xp.createXDDocument();
 			xml = "<A a='abc'>def</A>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
@@ -1029,7 +1031,6 @@ public final class TestTypes extends XDTester {
 "  <A a='int(*,123);'>int(123,*);</A>\n"+
 "</xd:def>";
 			xp = XDFactory.compileXD(null, xdef);
-			xd = xp.createXDDocument();
 			xml = "<A a='123'>123</A>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrors(reporter);
@@ -1070,38 +1071,32 @@ public final class TestTypes extends XDTester {
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <a a='string(3,%maxLength=3)'/>\n"+
 "</xd:def>";
-				xp = compile(xdef);
+				compile(xdef);
 				fail("error not reported");
 			} catch (Exception ex) {
-				if (ex.getMessage().indexOf("XDEF442") < 0) {
-					fail(ex);
-				}
+				if (!ex.getMessage().contains("XDEF442")) {fail(ex);}
 			}
 			try { // test error of combination of seq and key params
 				xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <a a='int(3, %minInclusive=3)' />\n"+
 "</xd:def>";
-				xp = compile(xdef);
+				compile(xdef);
 				fail("error not reported");
 			} catch (Exception ex) {
-				if (ex.getMessage().indexOf("XDEF442") < 0) {
-					fail(ex);
-				}
+				if (!ex.getMessage().contains("XDEF442")) {fail(ex);}
 			}
 			try { // test error of combination of seq and key params
 				xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <a a='uri(*, 3)'/>\n"+
 "</xd:def>";
-				xp = compile(xdef);
+				compile(xdef);
 				fail("error not reported");
 			} catch (Exception ex) {
-				if (ex.getMessage().indexOf("XDEF216") < 0) {
-					fail(ex);
-				}
+				if (!ex.getMessage().contains("XDEF216")) {fail(ex);}
 			}
-		} catch (Exception ex) {fail(ex);}
+		} catch (IOException | SRuntimeException ex) {fail(ex);}
 		try {//test ListOf with XDEF_3.1
 			setProperty(XDConstants.XDPROPERTY_WARNINGS,
 				XDConstants.XDPROPERTYVALUE_WARNINGS_FALSE);
@@ -1277,7 +1272,7 @@ public final class TestTypes extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			xml = "<a>[ g(12.50, 1.2), g(2.5, 3.5, -0.1, xxx) ]</a>";
-			assertEq(xml, el = parse(xp, "", xml, reporter));
+			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
@@ -1285,7 +1280,7 @@ public final class TestTypes extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			xml = "<a>[ p(12.50 CZK), p(2.5 USD) ]</a>";
-			assertEq(xml, el = parse(xp, "", xml, reporter));
+			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
@@ -1293,7 +1288,7 @@ public final class TestTypes extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			xml = "<a>[ g(2.5, 3.5, -0.1, xxx), p(12.50 CZK), p(2.5 USD) ]</a>";
-			assertEq(xml, el = parse(xp, "", xml, reporter));
+			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
@@ -1346,7 +1341,38 @@ public final class TestTypes extends XDTester {
 			xml = "<D a='a'/>";
 			assertEq(xml, parse(xd, xml, reporter));
 			assertNoErrorwarnings(reporter);
-
+			xdef = // country, countries
+"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
+"<A a=\"country()\" b=\"countries()\"/>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			xml =
+"<A a='cz' b='CZE gb US CA SK RUS IT LY GE FRA SE usa IL' />";
+			el = parse(xp, "", xml, reporter);
+			assertNoErrorwarnings(reporter);
+			assertEq(xml, el);
+			xdef = // test emailAddr
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"<xd:declaration>\n"+
+" final EmailAddr x=new EmailAddr('=?UTF-8?Q?Pavel B=C3=BDk?= &lt;p@s&gt;');\n"+
+"</xd:declaration>\n"+
+"<a email='emailAddr(); onTrue {\n"+
+"              EmailAddr e = (EmailAddr) getParsedValue();\n"+
+"              outln(getEmailUserName(e));\n"+
+"              outln(getEmailLocalPart(e));\n"+
+"              outln(getEmailDomain(e));\n"+
+"              outln(getEmailAddr(e));\n"+
+"              outln(getEmailUserName(x));\n"+
+"              outln(getEmailAddr(x));\n"+
+"            }' />\n"+
+"</xd:def>";
+			xml = "<a email='(T. tr) a@b'/>";
+			swr = new StringWriter();
+			assertEq(xml, parse(xdef, "", xml, reporter, swr, null, null));
+			swr.close();
+			assertNoErrorwarnings(reporter);
+			assertEq(swr.toString(),
+"T. tr\na\nb\n(T. tr) a@b\nPavel Býk\n=?UTF-8?Q?Pavel B=C3=BDk?= <p@s>\n");
 			xdef = // check xml schema types
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def xd:name='SchemaTypes'>\n"+
@@ -1425,6 +1451,8 @@ public final class TestTypes extends XDTester {
 " hexBinary = '01abcd'\n"+
 " float = '1.5e-7'\n"+
 "/>\n";
+			setProperty(XDConstants.XDPROPERTY_WARNINGS,
+				XDConstants.XDPROPERTYVALUE_WARNINGS_FALSE);
 			xp = compile(xdef);
 			el = parse(xp, "a", xml, reporter, null);
 			assertNoErrorwarnings(reporter);
@@ -1439,39 +1467,8 @@ public final class TestTypes extends XDTester {
 			assertEq(el.getAttribute("IDREF"), "cs");
 			assertEq("cs cs1", el.getAttribute("IDREFS"));
 			assertEq("1998-1-1T19:30", el.getAttribute("dateTime"));
-			xdef = // country, countries
-"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
-"<A a=\"country()\" b=\"countries()\"/>\n"+
-"</xd:def>";
-			xp = compile(xdef);
-			xml =
-"<A a='cz' b='CZE gb US CA SK RUS IT LY GE FRA SE usa IL' />";
-			el = parse(xp, "", xml, reporter);
-			assertNoErrorwarnings(reporter);
-			assertEq(xml, el);
-			xdef = // test emailAddr
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"<xd:declaration>\n"+
-" final EmailAddr x=new EmailAddr('=?UTF-8?Q?Pavel B=C3=BDk?= &lt;p@s&gt;');\n"+
-"</xd:declaration>\n"+
-"<a email='emailAddr(); onTrue {\n"+
-"              EmailAddr e = (EmailAddr) getParsedValue();\n"+
-"              outln(getEmailUserName(e));\n"+
-"              outln(getEmailLocalPart(e));\n"+
-"              outln(getEmailDomain(e));\n"+
-"              outln(getEmailAddr(e));\n"+
-"              outln(getEmailUserName(x));\n"+
-"              outln(getEmailAddr(x));\n"+
-"            }' />\n"+
-"</xd:def>";
-			xml = "<a email='(T. tr) a@b'/>";
-			swr = new StringWriter();
-			assertEq(xml, parse(xdef, "", xml, reporter, swr, null, null));
-			swr.close();
-			assertNoErrorwarnings(reporter);
-			assertEq(swr.toString(),
-"T. tr\na\nb\n(T. tr) a@b\nPavel Býk\n=?UTF-8?Q?Pavel B=C3=BDk?= <p@s>\n");
-		} catch (Exception ex) {fail(ex);}
+		} catch (IOException ex) {fail(ex);}
+		setProperty(XDConstants.XDPROPERTY_WARNINGS, oldProp);
 
 		resetTester();
 	}
@@ -1488,7 +1485,7 @@ public final class TestTypes extends XDTester {
 			XSAbstractParser d = new XSParseDecimal();
 			d.setNamedParams(null, c);
 			return !d.check(null, chkel.getXMLNode().getNodeValue()).errors();
-		} catch (Exception ex) {
+		} catch (DOMException | SException ex) {
 			chkel.error("", ex.getMessage());
 			return false;
 		}

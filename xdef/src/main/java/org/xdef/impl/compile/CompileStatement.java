@@ -3853,7 +3853,9 @@ class CompileStatement extends XScriptParser implements CodeTable {
 				if (rVar!=null&&varKind==rVar.getKind()&&rVar.getKeyIndex()==-1
 					&& rVar.getParseMethodAddr()!=-1
 					&& X_PARSEITEM==rVar.getType()) {
-					if (!_idName.equals(name) && !"Qname".equals(name)
+					if (_idName.equals(name)) {
+						warning(XDEF.XDEF385);
+					} else if (!"Qname".equals(name)
 						&& !"NCname".equals(name) && !"tokens".equals(name)) {
 						// it is a reference to other declared type
 						var = _g.addVariable(name, X_PARSEITEM, varKind, spos);
