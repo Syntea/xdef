@@ -3850,28 +3850,32 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			case IDENTIFIER_SYM: { // type method
 				CompileVariable rVar =
 					(CompileVariable) _g._globalVariables.getXVariable(_idName);
-				if (rVar!=null&& !"Qname".equals(name)&& !"NCname".equals(name)
-					&& !"tokens".equals(name)&& !_idName.equals(name)
-					&& varKind==rVar.getKind() && X_PARSEITEM==rVar.getType()
-					&& rVar.getParseMethodAddr()!=-1 && rVar.getKeyIndex()==-1){
-					var = _g.addVariable(name, X_PARSEITEM, varKind, spos);
-					var.setKeyRefName(_idName); // reference to other type
-					var.setParseMethodAddr(rVar.getParseMethodAddr());
-					var.setCodeAddr(rVar.getCodeAddr());
-					var.setParseResultType(rVar.getParseResultType());
-					if (nextSymbol() == LPAR_SYM) {
-						if (nextSymbol() == RPAR_SYM) {
-							nextSymbol();
-						} else {
-							error(XDEF.XDEF384);//Parameters not allowed here
+				if (rVar!=null&&varKind==rVar.getKind()&&rVar.getKeyIndex()==-1
+					&& rVar.getParseMethodAddr()!=-1
+					&& X_PARSEITEM==rVar.getType()) {
+					if (!_idName.equals(name) && !"Qname".equals(name)
+						&& !"NCname".equals(name) && !"tokens".equals(name)) {
+						// it is a reference to other declared type
+						var = _g.addVariable(name, X_PARSEITEM, varKind, spos);
+						var.setKeyRefName(_idName); // name of referenced type
+						var.setParseMethodAddr(rVar.getParseMethodAddr());
+						var.setCodeAddr(rVar.getCodeAddr());
+						var.setParseResultType(rVar.getParseResultType());
+						if (nextSymbol() == LPAR_SYM) {
+							if (nextSymbol() == RPAR_SYM) {
+								nextSymbol();
+							} else {//parameter list must be empty (if declared)
+								//Parameters not allowed here
+								error(XDEF.XDEF384);
+							}
 						}
+						if (_sym == SEMICOLON_SYM) {
+							nextSymbol();
+						} else if(_sym != END_SYM && !eos()) {
+							error(XDEF.XDEF410, ';');//'&{0}' expected
+						}
+						return;//copy of referred CompileVariable added to table
 					}
-					if (_sym == SEMICOLON_SYM) {
-						nextSymbol();
-					} else if(_sym != END_SYM && !eos()) {
-						error(XDEF.XDEF410, ';');//'&{0}' expected
-					}
-					return; // copy of referred CompileVariable added to table.
 				}
 				int dx = addDebugInfo(true);
 				if (rVar==null && varKind == 'X') {
@@ -3951,8 +3955,8 @@ class CompileStatement extends XScriptParser implements CodeTable {
 					X_PARSEITEM, varKind, spos);
 				return;
 		}
-		if (varKind == 'X') { // ModelVariable
-			jmp.setParam(_g._lastCodeIndex+1);
+		if (jmp != null && varKind == 'X') { // Model variable
+			jmp.setParam(_g._lastCodeIndex + 1); // update jump target
 		}
 		var = _g.addVariable(name, X_PARSEITEM, varKind, spos);
 		var.setParseMethodAddr(addr);
@@ -4179,8 +4183,8 @@ class CompileStatement extends XScriptParser implements CodeTable {
 					X_UNIQUESET_M, varKind, spos);
 				return;
 		}
-		if (varKind == 'X') { // ModelVariable
-			jmp.setParam(_g._lastCodeIndex+1);
+		if (jmp != null && varKind == 'X') { // Model variable
+			jmp.setParam(_g._lastCodeIndex + 1);  // update jump target
 		}
 		int keySize = keyItems.size();
 		if (keySize == 0) {
