@@ -13,14 +13,18 @@ import org.xdef.XDNamedValue;
 import org.xdef.XDParser;
 import org.xdef.XDPool;
 import org.xdef.XDValue;
+import org.xdef.impl.XData;
+import org.xdef.impl.XVariable;
 import org.xdef.impl.parsers.XSParseList;
 import org.xdef.impl.parsers.XSParseUnion;
 import org.xdef.model.XMData;
 import org.xdef.model.XMDefinition;
 import org.xdef.model.XMElement;
 import org.xdef.model.XMNode;
+import static org.xdef.model.XMNode.XMTEXT;
 import org.xdef.model.XMOccurrence;
 import org.xdef.model.XMSelector;
+import org.xdef.model.XMVariable;
 import org.xdef.xml.KXmlUtils;
 
 /** Convertor of X-definition to XML Schema.
@@ -29,11 +33,15 @@ import org.xdef.xml.KXmlUtils;
 public class Xd2Xsd {
 	/** Prefix used for the XML schema namespace. */
 	private static final String SCHEMA_PFX = "xs:";
+	/** Target namespace of XML schema with declared user types. */
+	private static final String USERTYPES_URI = "$_types_$";
 	/** QName of schema element. */
 	private static final QName SCHEMA_QNAME =
 		new QName(XMLConstants.W3C_XML_SCHEMA_NS_URI, "schema");
 	/** Name of root XML schema file. */
 	private final String _rootName;
+	/** Name of XML schema file with user declared types. */
+	private final String _typesName;
 	/** Map of file names and XML schema elements.*/
 	private final Map<String, Element> _xsdSources;
 	/** Switch if generate annotation with documentation information. */
@@ -42,14 +50,18 @@ public class Xd2Xsd {
 	private final boolean _genXdateOutFormat;
 	/** org.w3c.dom.Document used for creation of nodes. */
 	private final Document _doc;
+	/** XML schema element with of user declared types.*/
+	private final Element _types;
 
 	/** Create new instance of XsdGenerator.
+	 * @param xp XDPool with X-definitions.
 	 * @param xsdName name or XML schema root file
 	 * @param genInfo if true the annotations with documentation is generated.
 	 * @param genXdateOutFormat if true, from the xdatetime method the outFormat
 	 * parameter (the second sequential) is used as mask to validate datetime.
 	 */
-	private Xd2Xsd(final String xsdName,
+	private Xd2Xsd(final XDPool xp,
+		final String xsdName,
 		final boolean genInfo,
 		final boolean genXdateOutFormat) {
 		if (xsdName == null || xsdName.isEmpty()) {
@@ -60,6 +72,48 @@ public class Xd2Xsd {
 		_genXdateOutFormat = genXdateOutFormat;
 		_xsdSources = new HashMap<>();
 		_doc = KXmlUtils.newDocument();
+		_types = genDeclaredTypes(xp);
+		if (_types != null) {
+			_typesName = xsdName  +"$types";
+			addSchema(_typesName, _types);
+		} else {
+			_typesName = null;
+		}
+	}
+
+	private Element genDeclaredTypes(final XDPool xp) {
+		XMVariable[] vars = xp.getVariableTable().toArray();
+		Element types = genNewSchema();
+		types.setAttribute("targetNamespace", USERTYPES_URI);
+		types.setAttribute("xmlns", USERTYPES_URI);
+		for (XMVariable v : vars) {
+			if (v.getName().charAt(0) != '$') {
+				XData xdata = new XData("$text", null, xp, XMTEXT);
+				xdata._check = ((XVariable)v).getParseMethodAddr();
+				GenParser parserInfo =
+					GenParser.genParser( (XMData) xdata, _genXdateOutFormat);
+				String typeName = genDeclaredName(parserInfo);
+				if (findSchematype(types, typeName) != null) {
+					continue;
+				}
+				if (parserInfo.getParser().getNamedParams().isEmpty()) {
+					Element simpleType = genSchemaElem(types, "simpleType");
+					addDocumentation(simpleType, parserInfo.getInfo());
+					simpleType.setAttribute("name", typeName);
+					Element restr = genRestrictionElement(simpleType);
+					String parserName =
+						SCHEMA_PFX + parserInfo.getParser().parserName();
+					restr.setAttribute("base", parserName);
+				} else {
+					if (typeName != null && !typeName.isEmpty()) {
+						Element simpleType = genSchemaElem(types, "simpleType");
+						genRestrictions(simpleType, parserInfo);
+						simpleType.setAttribute("name", typeName);
+					}
+				}
+			}
+		}
+		return types.getChildNodes().getLength() > 0 ? types : null;
 	}
 
 	/** Get genXdateOutFormat swithch.
@@ -368,10 +422,10 @@ public class Xd2Xsd {
 				if (typeName == null) {
 					att.setAttribute("type",parserName);
 				} else {
-					Element simpletp = findSchematype(el, typeName);
+					Element tpel = _types == null ? getSchemaRoot(el) : _types;
+					Element simpletp = findSchematype(tpel, typeName);
 					if (simpletp == null) {
-						simpletp =
-							genSchemaElem(getSchemaRoot(el), "simpleType");
+						simpletp = genSchemaElem(tpel, "simpleType");
 						addDocumentation(simpletp, parserInfo.getInfo());
 						simpletp.setAttribute("name", typeName);
 						Element restr = genRestrictionElement(simpletp);
@@ -385,12 +439,12 @@ public class Xd2Xsd {
 					genRestrictions(simpletp, parserInfo);
 				} else {
 					att.setAttribute("type", typeName);
-					Element simpletp = findSchematype(el, typeName);
-					if (simpletp == null) {
-						simpletp =
-							genSchemaElem(getSchemaRoot(el), "simpleType");
-						genRestrictions(simpletp, parserInfo);
-						simpletp.setAttribute("name", typeName);
+					Element tpel = _types == null ? getSchemaRoot(el) : _types;
+					Element simpleType = findSchematype(tpel, typeName);
+					if (simpleType == null) {
+						simpleType = genSchemaElem(tpel, "simpleType");
+						genRestrictions(simpleType, parserInfo);
+						simpleType.setAttribute("name", typeName);
 					}
 				}
 			}
@@ -485,17 +539,17 @@ public class Xd2Xsd {
 		addDocumentation(el2, info);
 		String typeName = genDeclaredName(parserInfo);
 		String typeName1 = "_" + elem.getAttribute("name").replace(':', '_');
-		Element schema = getSchemaRoot(elem);
+		Element tpel = _types == null ? getSchemaRoot(elem) : _types;
 		Element simpleType;
 		if (typeName != null) {
-			if (findSchematype(schema, typeName) == null) {
-				simpleType = genSchemaElem(schema, "simpleType");
+			if (findSchematype(tpel, typeName) == null) {
+				simpleType = genSchemaElem(tpel, "simpleType");
 				simpleType.setAttribute("name", typeName);
 				genRestrictions(simpleType, parserInfo);
 				typeName1 = typeName + typeName1;
 			}
 		}
-		Element dummy = genSchemaElem(schema, "simpleType");
+		Element dummy = genSchemaElem(tpel, "simpleType");
 		dummy.setAttribute("name", typeName1);
 		Element union = genSchemaElem(dummy, "union");
 		Element simpleType2;
@@ -512,11 +566,11 @@ public class Xd2Xsd {
 		restriction.setAttribute("base", "xs:string");
 		Element pattern = genSchemaElem(restriction, "pattern");
 		pattern.setAttribute("value", "\\s*");
-		schema.removeChild(dummy);
+		tpel.removeChild(dummy);
 		int i = 0;
 		String s = typeName1;
 		Element e;
-		while ((e = findSchematype(schema, s)) != null) {
+		while ((e = findSchematype(tpel, s)) != null) {
 			if (KXmlUtils.compareElements(e, dummy).errors()) {
 				s = typeName1 + "_" + (++i);
 				dummy.setAttribute("name", s);
@@ -525,7 +579,7 @@ public class Xd2Xsd {
 			}
 		}
 		if (e == null) {
-			schema.appendChild(dummy);
+			tpel.appendChild(dummy);
 		}
 		el2 = genSchemaElem(el2, "extension") ;
 		el2.setAttribute("base", s);
@@ -623,10 +677,11 @@ public class Xd2Xsd {
 					if (!targetNs.isEmpty()) {
 						el.setAttribute("xmlns", targetNs);
 					}
-					simpleType = findSchematype(el, typeName);
+					Element tpel = _types == null ? schema : _types;
+					simpleType = findSchematype(tpel, typeName);
 					if (simpleType == null) {
 						// named simpletype not exists, create it!
-						simpleType = genSchemaElem(schema,"simpleType");
+						simpleType = genSchemaElem(tpel,"simpleType");
 						simpleType.setAttribute("name", typeName);
 						genRestrictions(simpleType, parserInfo);
 					}
@@ -660,8 +715,9 @@ public class Xd2Xsd {
 						}
 					}
 					if (typeName != null) {
-						if (findSchematype(el, typeName) == null) {
-							simpleType = genSchemaElem(schema,"simpleType");
+						Element tpel = _types==null ? schema : _types;
+						if (findSchematype(tpel, typeName) == null) {
+							simpleType = genSchemaElem(tpel, "simpleType");
 							simpleType.setAttribute("name", typeName);
 							genRestrictions(simpleType, parserInfo);
 						}
@@ -743,7 +799,7 @@ public class Xd2Xsd {
 	 * @param name name of item.
 	 * @param schema the XML element with schema.
 	 */
-	public void addSchema(final String name, final Element schema) {
+	public final void addSchema(final String name, final Element schema) {
 		if (_xsdSources.containsKey(name)) {
 			throw new RuntimeException("Schema " + name + " already exists");
 		}
@@ -765,14 +821,29 @@ public class Xd2Xsd {
 		return result;
 	}
 
+
+	/** Create new Schema element.
+	 * @return created element.
+	 */
+	private Element genNewSchema() {
+		Element schema = genSchemaElem(null, "schema");
+		schema.setAttribute("elementFormDefault", "qualified");
+		schema.setAttribute("attributeFormDefault", "unqualified");
+		if (_typesName!= null) {
+			schema.setAttribute("xmlns", USERTYPES_URI);
+			Element imprt = genSchemaElem(schema, "import");
+			imprt.setAttribute("namespace", USERTYPES_URI);
+			imprt.setAttribute("schemaLocation", _typesName + ".xsd");
+		}
+		return schema;
+	}
+
 	/** Create new Schema element and put it to the map of schema.
 	 * @param outName name of item in the map.
 	 * @return created element.
 	 */
 	private Element genNewSchema(final String outName) {
-		Element schema = genSchemaElem(null, "schema");
-		schema.setAttribute("elementFormDefault", "qualified");
-		schema.setAttribute("attributeFormDefault", "unqualified");
+		Element schema = genNewSchema();
 		addSchema(outName, schema);
 		return schema;
 	}
@@ -841,7 +912,7 @@ public class Xd2Xsd {
 		}
 		String oname = outName == null ? mname : outName;
 		oname = oname.replace(':', '_');
-		Xd2Xsd generator =  new Xd2Xsd(oname, genInfo, genXdateOutFormat);
+		Xd2Xsd generator = new Xd2Xsd(xp, oname, genInfo, genXdateOutFormat);
 		Element schema = generator.genNewSchema(oname);
 		XMElement xmel = roots[0];
 		String nsUri = xmel.getNSUri();
