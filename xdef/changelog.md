@@ -1,7 +1,10 @@
 # Version ${version}, release-date ${release.date}
 
 # Version 42.1.5, release-date 2024-05-19
-* .
+* It in reported an error if the name of type in the declaration section is same
+  as the referred type.
+* All declared user types in the conversion of X-definition to XML schema are
+  written to separated XML schema file.
 
 # Version 42.1.4, release-date 2024-04-08
 * corrected bug in conversion of parsed properties/INI data to string.
