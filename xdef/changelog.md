@@ -1,5 +1,8 @@
 # Version ${version}, release-date ${release.date}
 
+# Version 42.1.6, release-date 2024-05-20
+* .
+
 # Version 42.1.5, release-date 2024-05-20
 * It in reported an error if the name of type in the declaration section is same
   as the referred type.
