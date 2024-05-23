@@ -208,20 +208,6 @@ public final class TestTypes extends XDTester {
 			assertEq("<a><b a=\"31.12.3000\" b=\"30001231235959\"/></a>",
 				parse(xp, null, xml, reporter));
 			assertNoErrorwarnings(reporter);
-			xdef = //name of type equals to name of predefined validation method
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-" <xd:declaration scope='local'> type string string(1,2); </xd:declaration>\n"+
-"<a x='required string'>\n"+
-" required string;\n"+
-"</a>\n"+
-"</xd:def>";
-			xp = compile(xdef);
-			xml = "<a x='x'>x</a>";
-			parse(xp, "", xml, reporter);
-			assertNoErrorwarnings(reporter);
-			xml = "<a x='xxx'>xxx</a>";
-			parse(xp, "", xml, reporter);
-			assertErrors(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 " <xd:declaration> type int string(1,2); int i; </xd:declaration>\n"+
@@ -269,6 +255,46 @@ public final class TestTypes extends XDTester {
 			assertEq(xml, parse(xd, xml, reporter));
 			assertNoErrorwarnings(reporter);
 		} catch (SRuntimeException ex) {fail(ex);}
+		try { // name of type equals to name of predefined validation method
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+" <xd:declaration scope='local'> type string string(1,2); </xd:declaration>\n"+
+"<a x='required string'>\n"+
+" required string;\n"+
+"</a>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			fail("Not reported Error XDEF384 No parameter is allowed here");
+			xml = "<a x='x'>x</a>";
+			parse(xp, "", xml, reporter);
+			assertNoErrorwarnings(reporter);
+			xml = "<a x='xxx'>xxx</a>";
+			parse(xp, "", xml, reporter);
+			assertErrors(reporter);
+		} catch (SRuntimeException ex) {
+			// check error XDEF385: equal type name and referenced type name
+			if (!ex.getMessage().contains("XDEF385")) fail(ex);
+		}
+		try { // name of type equals to name of predefined validation method
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+" <xd:declaration scope='local'> type string string; </xd:declaration>\n"+
+"<a x='required string'>\n"+
+" required string;\n"+
+"</a>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			fail("Not reported Error XDEF384 No parameter is allowed here");
+			xml = "<a x='x'>x</a>";
+			parse(xp, "", xml, reporter);
+			assertNoErrorwarnings(reporter);
+			xml = "<a x='xxx'>xxx</a>";
+			parse(xp, "", xml, reporter);
+			assertErrors(reporter);
+		} catch (SRuntimeException ex) {
+			// check error XDEF385: equal type name and referenced type name
+			if (!ex.getMessage().contains("XDEF385")) fail(ex);
+		}
 		try { //element type
 			xdef =
 "<xd:def root='a' xmlns:xd='" + _xdNS + "'>\n"+

@@ -1,11 +1,12 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.1.6, release-date 2024-05-20
-* .
+# Version 42.1.6, release-date 2024-05-23
+* Fixed an error not reporting an error XDEF385 when the type name in the local
+  declaration section was the same as the referenced type.
 
 # Version 42.1.5, release-date 2024-05-20
-* It is reported an error if the name of type in the declaration section is same
-  as the referred type.
+* If the name of type in the declaration section is same as the referred
+  the error XDEF385 is now reported.
 * All declared user types in the conversion of X-definition to XML schema are
   written to separated XML schema file.
 

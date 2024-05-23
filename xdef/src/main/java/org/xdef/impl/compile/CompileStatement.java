@@ -3848,39 +3848,51 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		CompileVariable var;
 		switch (_sym) {
 			case IDENTIFIER_SYM: { // type method
+				int ndx = name.indexOf('#');
+				String gName = ndx >= 0 ? name.substring(ndx) : name;
+				String rName = ndx >= 0
+					? name.substring(0,ndx+1)+_idName : _idName;
+				if (name.equals(_idName) || gName.equals(_idName)
+					|| name.equals(rName)) {
+					//The type name must not match the name of the referenced
+					// type
+					warning(XDEF.XDEF385);
+				}
 				CompileVariable rVar =
-					(CompileVariable) _g._globalVariables.getXVariable(_idName);
+					(CompileVariable) _g._globalVariables.getXVariable(rName);
+				if (rVar == null && ndx >= 0) { // if local not found try global
+					rName = _idName;
+					rVar = (CompileVariable)
+						_g._globalVariables.getXVariable(rName);
+				}
 				if (rVar!=null&&varKind==rVar.getKind()&&rVar.getKeyIndex()==-1
 					&& rVar.getParseMethodAddr()!=-1
-					&& X_PARSEITEM==rVar.getType()) {
-					if (_idName.equals(name)) {
-						warning(XDEF.XDEF385);
-					} else if (!"Qname".equals(name)
-						&& !"NCname".equals(name) && !"tokens".equals(name)) {
-						// it is a reference to other declared type
-						var = _g.addVariable(name, X_PARSEITEM, varKind, spos);
-						var.setKeyRefName(_idName); // name of referenced type
-						var.setParseMethodAddr(rVar.getParseMethodAddr());
-						var.setCodeAddr(rVar.getCodeAddr());
-						var.setParseResultType(rVar.getParseResultType());
-						if (nextSymbol() == LPAR_SYM) {
-							if (nextSymbol() == RPAR_SYM) {
-								nextSymbol();
-							} else {//parameter list must be empty (if declared)
-								//Parameters not allowed here
-								error(XDEF.XDEF384);
-							}
-						}
-						if (_sym == SEMICOLON_SYM) {
+					&& X_PARSEITEM==rVar.getType()
+					&& !rName.equals(name) &&!"Qname".equals(name)
+					&& !"NCname".equals(name) && !"tokens".equals(name)) {
+					// it is a reference to an other declared type
+					var = _g.addVariable(name, X_PARSEITEM, varKind, spos);
+					var.setKeyRefName(rName); // name of referenced type
+					var.setParseMethodAddr(rVar.getParseMethodAddr());
+					var.setCodeAddr(rVar.getCodeAddr());
+					var.setParseResultType(rVar.getParseResultType());
+					if (nextSymbol() == LPAR_SYM) {
+						if (nextSymbol() == RPAR_SYM) {
 							nextSymbol();
-						} else if(_sym != END_SYM && !eos()) {
-							error(XDEF.XDEF410, ';');//'&{0}' expected
+						} else {//parameter list must be empty (if declared)
+							//Parameters not allowed here
+							error(XDEF.XDEF384);
 						}
-						return;//copy of referred CompileVariable added to table
 					}
+					if (_sym == SEMICOLON_SYM) {
+						nextSymbol();
+					} else if(_sym != END_SYM && !eos()) {
+						error(XDEF.XDEF410, ';');//'&{0}' expected
+					}
+					return;//copy of referred CompileVariable added to table
 				}
 				int dx = addDebugInfo(true);
-				if (rVar==null && varKind == 'X') {
+				if (rVar == null && varKind == 'X') {
 					if (!expression() || _g._tstack[_g._sp] != XD_PARSER) {
 						//Value of type &{0} expected
 						errorAndSkip(XDEF.XDEF423,
@@ -4541,7 +4553,9 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			/** Create instance of KeyPar. */
 			private KeyPar(final String name,
 				final short type,
-				final XDValue value) {_name=name; _type=type; _value=value;}
+				final XDValue value) {
+				_name = name; _type = type; _value = value;
+			}
 			/** Return true if the argument is same as this KeyPar instance. */
 			private boolean eq(KeyPar k) {
 				return _name.equals(k._name) && _type == k._type
