@@ -3859,10 +3859,6 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			errorAndSkip(XDEF.XDEF416, ';');//Identifier expected&
 			return;
 		}
-		CodeI1 jmp = null;
-		int addr;
-		short type;
-		CompileVariable var;
 		String rName = (local) ? _actDefName + '#' + _idName : _idName;
 		if (name.equals(_idName) || gName.equals(_idName)
 			|| name.equals(rName)) {
@@ -3875,6 +3871,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			rName = _idName;
 			rVar = (CompileVariable) _g._globalVariables.getXVariable(rName);
 		}
+		CompileVariable var;
 		if (rVar!=null&&varKind==rVar.getKind()&&rVar.getKeyIndex()==-1
 			&& rVar.getParseMethodAddr()!=-1
 			&& X_PARSEITEM==rVar.getType()
@@ -3907,20 +3904,21 @@ class CompileStatement extends XScriptParser implements CodeTable {
 				//Value of type &{0} expected
 				errorAndSkip(XDEF.XDEF423, String.valueOf(END_SYM), "Parser");
 			} else {
-				CompileVariable v =
-					_g.addVariable(name, _g._tstack[_g._sp], varKind, spos);
+				var = _g.addVariable(name, _g._tstack[_g._sp], varKind, spos);
 				if (_g._cstack[_g._sp] >= 0) {
-					v.setValue(_g._code.get(_g._cstack[_g._sp]));
-					v.setFinal(true);
+					var.setValue(_g._code.get(_g._cstack[_g._sp]));
+					var.setFinal(true);
 				}
 				_g.genST(name);
 			}
 			return;
 		}
+		CodeI1 jmp = null;
 		if (varKind == 'X') {
 			_g.addJump(jmp = new CodeI1(XD_VOID, JMP_OP));
 		}
-		addr = compileCheckMethod("").getParam();
+		int addr = compileCheckMethod("").getParam();
+		short type;
 		if (rVar!=null && rVar.getType()==X_PARSEITEM) {
 			type = rVar.getParseResultType();
 		} else {
@@ -3939,7 +3937,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			}
 		}
 		setDebugEndPosition(dx);
-		if (jmp != null && varKind == 'X') { // Model variable
+		if (jmp != null) { // Model variable
 			jmp.setParam(_g._lastCodeIndex + 1); // update jump target
 		}
 		var = _g.addVariable(name, X_PARSEITEM, varKind, spos);
