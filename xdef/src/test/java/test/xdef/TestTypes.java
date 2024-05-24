@@ -1403,13 +1403,9 @@ public final class TestTypes extends XDTester {
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def xd:name='SchemaTypes'>\n"+
 " <xd:declaration scope='global'>\n"+
-"   type ID ID();\n"+
-"   type normalizedString normalizedString();\n"+
 "   type tokens NMTOKENS();\n"+
-"   type language language();\n"+
 "   type Qname QName();\n"+
 "   type NCname NCName();\n"+
-"   type duration duration();\n"+
 "   type dateTime xdatetime('yyyy-M-dTH:m[:s][ Z]');\n"+
 "   type date xdatetime('yyyy-M-d');\n"+
 "   type time xdatetime('H:m[:s]');\n"+
@@ -1418,8 +1414,6 @@ public final class TestTypes extends XDTester {
 "   type gMonthDay xdatetime('M-d');\n"+
 "   type gDay xdatetime('d');\n"+
 "   type gMonth xdatetime('M');\n"+
-"   type base64Binary base64Binary(4);\n"+
-"   type hexBinary hexBinary(3);\n"+
 " </xd:declaration>\n"+
 "</xd:def>\n"+
 "<xd:def xd:script='options preserveAttrWhiteSpaces,noTrimAttr'\n"+
@@ -1477,8 +1471,6 @@ public final class TestTypes extends XDTester {
 " hexBinary = '01abcd'\n"+
 " float = '1.5e-7'\n"+
 "/>\n";
-			setProperty(XDConstants.XDPROPERTY_WARNINGS,
-				XDConstants.XDPROPERTYVALUE_WARNINGS_FALSE);
 			xp = compile(xdef);
 			el = parse(xp, "a", xml, reporter, null);
 			assertNoErrorwarnings(reporter);
@@ -1494,8 +1486,6 @@ public final class TestTypes extends XDTester {
 			assertEq("cs cs1", el.getAttribute("IDREFS"));
 			assertEq("1998-1-1T19:30", el.getAttribute("dateTime"));
 		} catch (IOException ex) {fail(ex);}
-		setProperty(XDConstants.XDPROPERTY_WARNINGS, oldProp);
-
 		resetTester();
 	}
 
