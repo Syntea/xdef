@@ -292,7 +292,8 @@ public class Xd2Xsd {
 								min++;
 							}
 							if (occ.maxOccurs() >= 1) {
-								max =  occ.maxOccurs() == Integer.MAX_VALUE
+								max = occ.maxOccurs() == Integer.MAX_VALUE
+									|| max==Integer.MAX_VALUE
 									? Integer.MAX_VALUE : max + occ.maxOccurs();
 							}
 					}

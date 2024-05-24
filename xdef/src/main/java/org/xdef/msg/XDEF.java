@@ -256,7 +256,7 @@ public interface XDEF {
 	public static final long XDEF383 = 31159025788L;
 	/** No parameter is allowed here&amp;{#SYS000} */
 	public static final long XDEF384 = 31159025789L;
-	/** The type name must not be the same as the referenced type name&amp;{#SYS000} */
+	/** The type name must not match the name of the referenced type&amp;{#SYS000} */
 	public static final long XDEF385 = 31159025790L;
 	/** '//' comment is not allowed in the X-script&amp;{#SYS000} */
 	public static final long XDEF400 = 31159025791L;

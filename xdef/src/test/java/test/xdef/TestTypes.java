@@ -208,20 +208,6 @@ public final class TestTypes extends XDTester {
 			assertEq("<a><b a=\"31.12.3000\" b=\"30001231235959\"/></a>",
 				parse(xp, null, xml, reporter));
 			assertNoErrorwarnings(reporter);
-			xdef = //name of type equals to name of predefined validation method
-"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-" <xd:declaration scope='local'> type string string(1,2); </xd:declaration>\n"+
-"<a x='required string'>\n"+
-" required string;\n"+
-"</a>\n"+
-"</xd:def>";
-			xp = compile(xdef);
-			xml = "<a x='x'>x</a>";
-			parse(xp, "", xml, reporter);
-			assertNoErrorwarnings(reporter);
-			xml = "<a x='xxx'>xxx</a>";
-			parse(xp, "", xml, reporter);
-			assertErrors(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 " <xd:declaration> type int string(1,2); int i; </xd:declaration>\n"+
@@ -269,6 +255,46 @@ public final class TestTypes extends XDTester {
 			assertEq(xml, parse(xd, xml, reporter));
 			assertNoErrorwarnings(reporter);
 		} catch (SRuntimeException ex) {fail(ex);}
+		try { // name of type equals to name of predefined validation method
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+" <xd:declaration scope='local'> type string string(1,2); </xd:declaration>\n"+
+"<a x='required string'>\n"+
+" required string;\n"+
+"</a>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			fail("Not reported Error XDEF384 No parameter is allowed here");
+			xml = "<a x='x'>x</a>";
+			parse(xp, "", xml, reporter);
+			assertNoErrorwarnings(reporter);
+			xml = "<a x='xxx'>xxx</a>";
+			parse(xp, "", xml, reporter);
+			assertErrors(reporter);
+		} catch (SRuntimeException ex) {
+			// check error XDEF385: equal type name and referenced type name
+			if (!ex.getMessage().contains("XDEF385")) fail(ex);
+		}
+		try { // name of type equals to name of predefined validation method
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+" <xd:declaration scope='local'> type string string; </xd:declaration>\n"+
+"<a x='required string'>\n"+
+" required string;\n"+
+"</a>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			fail("Not reported Error XDEF384 No parameter is allowed here");
+			xml = "<a x='x'>x</a>";
+			parse(xp, "", xml, reporter);
+			assertNoErrorwarnings(reporter);
+			xml = "<a x='xxx'>xxx</a>";
+			parse(xp, "", xml, reporter);
+			assertErrors(reporter);
+		} catch (SRuntimeException ex) {
+			// check error XDEF385: equal type name and referenced type name
+			if (!ex.getMessage().contains("XDEF385")) fail(ex);
+		}
 		try { //element type
 			xdef =
 "<xd:def root='a' xmlns:xd='" + _xdNS + "'>\n"+
@@ -1377,13 +1403,9 @@ public final class TestTypes extends XDTester {
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def xd:name='SchemaTypes'>\n"+
 " <xd:declaration scope='global'>\n"+
-"   type ID ID();\n"+
-"   type normalizedString normalizedString();\n"+
 "   type tokens NMTOKENS();\n"+
-"   type language language();\n"+
 "   type Qname QName();\n"+
 "   type NCname NCName();\n"+
-"   type duration duration();\n"+
 "   type dateTime xdatetime('yyyy-M-dTH:m[:s][ Z]');\n"+
 "   type date xdatetime('yyyy-M-d');\n"+
 "   type time xdatetime('H:m[:s]');\n"+
@@ -1392,8 +1414,6 @@ public final class TestTypes extends XDTester {
 "   type gMonthDay xdatetime('M-d');\n"+
 "   type gDay xdatetime('d');\n"+
 "   type gMonth xdatetime('M');\n"+
-"   type base64Binary base64Binary(4);\n"+
-"   type hexBinary hexBinary(3);\n"+
 " </xd:declaration>\n"+
 "</xd:def>\n"+
 "<xd:def xd:script='options preserveAttrWhiteSpaces,noTrimAttr'\n"+
@@ -1451,8 +1471,6 @@ public final class TestTypes extends XDTester {
 " hexBinary = '01abcd'\n"+
 " float = '1.5e-7'\n"+
 "/>\n";
-			setProperty(XDConstants.XDPROPERTY_WARNINGS,
-				XDConstants.XDPROPERTYVALUE_WARNINGS_FALSE);
 			xp = compile(xdef);
 			el = parse(xp, "a", xml, reporter, null);
 			assertNoErrorwarnings(reporter);
@@ -1468,8 +1486,6 @@ public final class TestTypes extends XDTester {
 			assertEq("cs cs1", el.getAttribute("IDREFS"));
 			assertEq("1998-1-1T19:30", el.getAttribute("dateTime"));
 		} catch (IOException ex) {fail(ex);}
-		setProperty(XDConstants.XDPROPERTY_WARNINGS, oldProp);
-
 		resetTester();
 	}
 

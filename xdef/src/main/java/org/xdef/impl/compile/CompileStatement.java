@@ -3832,156 +3832,20 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		}
 	}
 
-	/** Compile validation type as a method.
-	 * @param varKind variable kind ('G' .. global or 'X' .. model).
-	 * @param local true if it is in the declaration part with the local scope.
-	 * @param name the name of declared type.
-	 * @param spos source position where the type was declared.
-	 */
-	final void compileType(final byte varKind,
-		final boolean local,
-		final String name,
-		final SPosition spos) {
-		CodeI1 jmp = null;
-		int addr;
-		short type;
-		CompileVariable var;
-		switch (_sym) {
-			case IDENTIFIER_SYM: { // type method
-				CompileVariable rVar =
-					(CompileVariable) _g._globalVariables.getXVariable(_idName);
-				if (rVar!=null&&varKind==rVar.getKind()&&rVar.getKeyIndex()==-1
-					&& rVar.getParseMethodAddr()!=-1
-					&& X_PARSEITEM==rVar.getType()) {
-					if (_idName.equals(name)) {
-						warning(XDEF.XDEF385);
-					} else if (!"Qname".equals(name)
-						&& !"NCname".equals(name) && !"tokens".equals(name)) {
-						// it is a reference to other declared type
-						var = _g.addVariable(name, X_PARSEITEM, varKind, spos);
-						var.setKeyRefName(_idName); // name of referenced type
-						var.setParseMethodAddr(rVar.getParseMethodAddr());
-						var.setCodeAddr(rVar.getCodeAddr());
-						var.setParseResultType(rVar.getParseResultType());
-						if (nextSymbol() == LPAR_SYM) {
-							if (nextSymbol() == RPAR_SYM) {
-								nextSymbol();
-							} else {//parameter list must be empty (if declared)
-								//Parameters not allowed here
-								error(XDEF.XDEF384);
-							}
-						}
-						if (_sym == SEMICOLON_SYM) {
-							nextSymbol();
-						} else if(_sym != END_SYM && !eos()) {
-							error(XDEF.XDEF410, ';');//'&{0}' expected
-						}
-						return;//copy of referred CompileVariable added to table
-					}
-				}
-				int dx = addDebugInfo(true);
-				if (rVar==null && varKind == 'X') {
-					if (!expression() || _g._tstack[_g._sp] != XD_PARSER) {
-						//Value of type &{0} expected
-						errorAndSkip(XDEF.XDEF423,
-							String.valueOf(END_SYM), "Parser");
-					} else {
-						CompileVariable v = _g.addVariable(name,
-							_g._tstack[_g._sp], varKind, spos);
-						if (_g._cstack[_g._sp] >= 0) {
-							v.setValue(_g._code.get(_g._cstack[_g._sp]));
-							v.setFinal(true);
-						}
-						_g.genST(name);
-					}
-					return;
-				}
-				if (varKind == 'X') {
-					_g.addJump(jmp = new CodeI1(XD_VOID, JMP_OP));
-				}
-				addr = compileCheckMethod("").getParam();
-				if (rVar!=null && rVar.getType()==X_PARSEITEM) {
-					type = rVar.getParseResultType();
-				} else {
-					type = XD_STRING;
-					if (addr + 2 == _g._lastCodeIndex) {
-						if (_g._code.get(addr).getCode() == LD_CONST
-							&& _g._code.get(addr).getItemId() == XD_PARSER
-							&& _g._code.get(addr+1).getCode() == PARSE_OP
-							&& _g._code.get(addr+2).getCode() == STOP_OP) {
-							XDParser p = (XDParser) _g._code.get(addr);
-							type = p.parsedType();
-							String s = p.getDeclaredName();
-							s = (s!=null && !s.isEmpty() ? s + ";" : "") + name;
-							p.setDeclaredName(s);
-						}
-					}
-				}
-				setDebugEndPosition(dx);
-				break;
-			}
-			case BEG_SYM: { // explicit declaration of type method
-				skipBlanksAndComments();
-				if (isToken("parse")) {  // X-definition version 2.0
-					skipBlanksAndComments();
-					if (isChar(':')) {
-						nextSymbol();
-						compileType(varKind, local, name, spos);
-						if (_sym == SEMICOLON_SYM) {
-							nextSymbol();
-						}
-						checkSymbol(END_SYM);
-						if (_xdVersion >= XConstants.XD31) {
-							_g.reportDeprecated(
-								"parse:", "validation method call");
-						}
-						return;
-					} else {
-						_sym = IDENTIFIER_SYM;
-						_idName = "parse";
-					}
-				}
-				if (varKind == 'X') {
-					_g.addJump(jmp = new CodeI1(XD_VOID, JMP_OP));
-				}
-				int dx = addDebugInfo(true);
-				addr = compileCheckMethod("").getParam();
-				type = XD_STRING;
-				setDebugEndPosition(dx);
-				break;
-			}
-			default:
-				// Expected declaration 'type' or 'uniqueSet'
-				errorAndSkip(XDEF.XDEF489,String.valueOf(END_SYM));
-				_g.addVariable(name,
-					X_PARSEITEM, varKind, spos);
-				return;
-		}
-		if (jmp != null && varKind == 'X') { // Model variable
-			jmp.setParam(_g._lastCodeIndex + 1); // update jump target
-		}
-		var = _g.addVariable(name, X_PARSEITEM, varKind, spos);
-		var.setParseMethodAddr(addr);
-		var.setParseResultType(type);
-	}
-
-	/** Compile check type as a method.
+	/** Compile type declaration.
 	 * @param varKind variable kind ('G' .. global or 'X' .. model).
 	 * @param local true if it is in the declaration part with the local scope.
 	 */
 	final void compileType(final byte varKind, final boolean local) {
-		String name;
-		SPosition spos;
 		if (nextSymbol() != IDENTIFIER_SYM) {
-			error(XDEF.XDEF329); //Identifier expected
-			name = _g.genErrId(); // "UNDEF$$$";
-			spos = null;
-		} else {
-			name = _idName;
-			spos = getLastPosition();
-			if (local) {
-				name = _actDefName + '#' + name;
-			}
+			errorAndSkip(XDEF.XDEF416, ';');//Identifier expected&
+			return;
+		}
+		SPosition spos = getLastPosition();
+		String name, gName;
+		name = gName = _idName;
+		if (local) {
+			name = _actDefName + '#' + name;
 		}
 		if (varKind != 'X' && _g.getVariable(name) != null) {
 			//Repeated declaration of type '&{0}'&{#SYS000}&{1}
@@ -3991,7 +3855,96 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			name = _g.genErrId(); // "UNDEF$$$";
 		}
 		nextSymbol();
-		compileType(varKind, local, name, spos);
+		if (_sym != IDENTIFIER_SYM) {
+			errorAndSkip(XDEF.XDEF416, ';');//Identifier expected&
+			return;
+		}
+		CodeI1 jmp = null;
+		int addr;
+		short type;
+		CompileVariable var;
+		String rName = (local) ? _actDefName + '#' + _idName : _idName;
+		if (name.equals(_idName) || gName.equals(_idName)
+			|| name.equals(rName)) {
+			//The type name must not match the name of the referenced type
+			error(XDEF.XDEF385);
+		}
+		CompileVariable rVar =
+			(CompileVariable) _g._globalVariables.getXVariable(rName);
+		if (rVar == null && local) { // if local not found try global
+			rName = _idName;
+			rVar = (CompileVariable) _g._globalVariables.getXVariable(rName);
+		}
+		if (rVar!=null&&varKind==rVar.getKind()&&rVar.getKeyIndex()==-1
+			&& rVar.getParseMethodAddr()!=-1
+			&& X_PARSEITEM==rVar.getType()
+			&& !rName.equals(name) &&!"Qname".equals(name)
+			&& !"NCname".equals(name) && !"tokens".equals(name)) {
+			// it is a reference to an other declared type
+			var = _g.addVariable(name, X_PARSEITEM, varKind, spos);
+			var.setKeyRefName(rName); // name of referenced type
+			var.setParseMethodAddr(rVar.getParseMethodAddr());
+			var.setCodeAddr(rVar.getCodeAddr());
+			var.setParseResultType(rVar.getParseResultType());
+			if (nextSymbol() == LPAR_SYM) {
+				if (nextSymbol() == RPAR_SYM) {
+					nextSymbol();
+				} else {//parameter list must be empty (if declared)
+					//Parameters not allowed here
+					error(XDEF.XDEF384);
+				}
+			}
+			if (_sym == SEMICOLON_SYM) {
+				nextSymbol();
+			} else if(_sym != END_SYM && !eos()) {
+				error(XDEF.XDEF410, ';');//'&{0}' expected
+			}
+			return;//copy of referred CompileVariable added to table
+		}
+		int dx = addDebugInfo(true);
+		if (rVar == null && varKind == 'X') {
+			if (!expression() || _g._tstack[_g._sp] != XD_PARSER) {
+				//Value of type &{0} expected
+				errorAndSkip(XDEF.XDEF423, String.valueOf(END_SYM), "Parser");
+			} else {
+				CompileVariable v =
+					_g.addVariable(name, _g._tstack[_g._sp], varKind, spos);
+				if (_g._cstack[_g._sp] >= 0) {
+					v.setValue(_g._code.get(_g._cstack[_g._sp]));
+					v.setFinal(true);
+				}
+				_g.genST(name);
+			}
+			return;
+		}
+		if (varKind == 'X') {
+			_g.addJump(jmp = new CodeI1(XD_VOID, JMP_OP));
+		}
+		addr = compileCheckMethod("").getParam();
+		if (rVar!=null && rVar.getType()==X_PARSEITEM) {
+			type = rVar.getParseResultType();
+		} else {
+			type = XD_STRING;
+			if (addr + 2 == _g._lastCodeIndex) {
+				if (_g._code.get(addr).getCode() == LD_CONST
+					&& _g._code.get(addr).getItemId() == XD_PARSER
+					&& _g._code.get(addr+1).getCode() == PARSE_OP
+					&& _g._code.get(addr+2).getCode() == STOP_OP) {
+					XDParser p = (XDParser) _g._code.get(addr);
+					type = p.parsedType();
+					String s = p.getDeclaredName();
+					s = (s!=null && !s.isEmpty() ? s + ";" : "") + name;
+					p.setDeclaredName(s);
+				}
+			}
+		}
+		setDebugEndPosition(dx);
+		if (jmp != null && varKind == 'X') { // Model variable
+			jmp.setParam(_g._lastCodeIndex + 1); // update jump target
+		}
+		var = _g.addVariable(name, X_PARSEITEM, varKind, spos);
+		var.setParseMethodAddr(addr);
+		var.setParseResultType(type);
 	}
 
 	/** Compile "var" section of the uniqueSet declaration (the named values).
@@ -4113,7 +4066,8 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		String uniquesetName;
 		SPosition spos = null;
 		if (nextSymbol() != IDENTIFIER_SYM) {
-			error(XDEF.XDEF329); //Identifier expected
+			//Expected specification of set elements types
+			error(XDEF.XDEF329);
 			uniquesetName = _g.genErrId(); // "UNDEF$$$";
 		} else {
 			uniquesetName = _idName;
@@ -4541,7 +4495,9 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			/** Create instance of KeyPar. */
 			private KeyPar(final String name,
 				final short type,
-				final XDValue value) {_name=name; _type=type; _value=value;}
+				final XDValue value) {
+				_name = name; _type = type; _value = value;
+			}
 			/** Return true if the argument is same as this KeyPar instance. */
 			private boolean eq(KeyPar k) {
 				return _name.equals(k._name) && _type == k._type
