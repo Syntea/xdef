@@ -3838,7 +3838,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 	 */
 	final void compileType(final byte varKind, final boolean local) {
 		if (nextSymbol() != IDENTIFIER_SYM) {
-			errorAndSkip(XDEF.XDEF357, ';');//Identifier expected&
+			errorAndSkip(XDEF.XDEF416, ';');//Identifier expected&
 			return;
 		}
 		SPosition spos = getLastPosition();
@@ -3856,7 +3856,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		}
 		nextSymbol();
 		if (_sym != IDENTIFIER_SYM) {
-			errorAndSkip(XDEF.XDEF357, ';');//Identifier expected&
+			errorAndSkip(XDEF.XDEF416, ';');//Identifier expected&
 			return;
 		}
 		CodeI1 jmp = null;
@@ -4066,7 +4066,8 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		String uniquesetName;
 		SPosition spos = null;
 		if (nextSymbol() != IDENTIFIER_SYM) {
-			error(XDEF.XDEF329); //Identifier expected
+			//Expected specification of set elements types
+			error(XDEF.XDEF329);
 			uniquesetName = _g.genErrId(); // "UNDEF$$$";
 		} else {
 			uniquesetName = _idName;
