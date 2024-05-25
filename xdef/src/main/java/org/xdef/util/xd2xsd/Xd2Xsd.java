@@ -373,7 +373,6 @@ public class Xd2Xsd {
 	private static String genDeclaredName(final GenParser parserInfo) {
 		String s = parserInfo.getDeclaredName();
 		if (s != null) {
-	System.out.println("=*=*=* " + parserInfo.getParser() + "/" + s);
 			String[] parts = s.split(";");
 			if (parts.length>0&&!(s=parts[0].trim()).isEmpty()) {
 				int ndx = s.indexOf('#');
