@@ -25,6 +25,8 @@ import static org.xdef.model.XMNode.XMTEXT;
 import org.xdef.model.XMOccurrence;
 import org.xdef.model.XMSelector;
 import org.xdef.model.XMVariable;
+import org.xdef.msg.XDCONV;
+import org.xdef.sys.SRuntimeException;
 import org.xdef.xml.KXmlUtils;
 
 /** Convertor of X-definition to XML Schema.
@@ -65,7 +67,8 @@ public class Xd2Xsd {
 		final boolean genInfo,
 		final boolean genXdateOutFormat) {
 		if (xsdName == null || xsdName.isEmpty()) {
-			throw new RuntimeException("The name of xsd file is missing");
+			//The name of xsd file is missing
+			throw new SRuntimeException(XDCONV.XDCONV204);
 		}
 		_rootName = xsdName;
 		_genInfo = genInfo;
@@ -306,7 +309,8 @@ public class Xd2Xsd {
 				return genSequence(complt, sel, children, index, endIndex);
 			}
 			default:
-				throw new RuntimeException(xsel + " not implemented yet");
+				//"&{0}" not implemented
+				throw new SRuntimeException(XDCONV.XDCONV205, xsel);
 		}
 	}
 
@@ -369,8 +373,9 @@ public class Xd2Xsd {
 	private static String genDeclaredName(final GenParser parserInfo) {
 		String s = parserInfo.getDeclaredName();
 		if (s != null) {
+	System.out.println("=*=*=* " + parserInfo.getParser() + "/" + s);
 			String[] parts = s.split(";");
-			if (parts!=null&&parts.length>0&&!(s=parts[0].trim()).isEmpty()) {
+			if (parts.length>0&&!(s=parts[0].trim()).isEmpty()) {
 				int ndx = s.indexOf('#');
 				return ndx>=0 ? s.substring(0,ndx)+"_"+s.substring(ndx+1) : s;
 			}
@@ -507,7 +512,8 @@ public class Xd2Xsd {
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
 				schema = (Element) node;
 			} else {
-				throw new RuntimeException("Shema not found");
+				//XML shema not found
+				throw new SRuntimeException(XDCONV.XDCONV206);
 			}
 		}
 	}
@@ -802,7 +808,8 @@ public class Xd2Xsd {
 	 */
 	public final void addSchema(final String name, final Element schema) {
 		if (_xsdSources.containsKey(name)) {
-			throw new RuntimeException("Schema " + name + " already exists");
+			//XML schema "&{0}" already exists
+			throw new SRuntimeException(XDCONV.XDCONV207, name);
 		}
 		_xsdSources.put(name, schema);
 	}
@@ -867,7 +874,9 @@ public class Xd2Xsd {
 	/** Run XML schema generator.
 	 * @param xp compiled XDPool.
 	 * @param xdName name of root X-definition.
-	 * @param modelName name of root model.
+	 * @param modelName name of the root model. May be null, then all values
+	 * from "xs:root" parameter are used to create models. If modelName is
+	 * "?type", only the file with declared simple types is generated..
 	 * @param outName name of root XML schema file.
 	 * @param genInfo switch if generate annotation with documentation.
 	 * @param genXdateOutFormat if true, from the xdatetime method the outFormat
@@ -883,16 +892,20 @@ public class Xd2Xsd {
 		String xname = xdName == null ? xp.getXMDefinitionNames()[0] : xdName;
 		XMDefinition xdef = xp.getXMDefinition(xname);
 		if (xdef == null) {
-			throw new RuntimeException("can't find X-definition " + xname);
+			//Can't find an X-definition&{0}{ "}{"}
+			throw new SRuntimeException(XDCONV.XDCONV201, xname);
 		}
 		String mname = null;
 		XMElement[] roots;
-		if (modelName == null || modelName.isEmpty()) {
+		if ("?type".equals(modelName)) {
+			roots = null;
+		} else if (modelName == null || modelName.isEmpty()) {
 			roots = xp.getXMDefinition(xname).getRootModels();
 			if (roots != null && roots.length > 0) {
 				mname = roots[0].getLocalName();
 			} else {
-				throw new RuntimeException("No XML model specified");
+				//XML model not specified
+				throw new SRuntimeException(XDCONV.XDCONV202);
 			}
 		} else {
 			roots = xp.getXMDefinition(xname).getModels();
@@ -905,7 +918,8 @@ public class Xd2Xsd {
 				}
 			}
 			if (mname == null) {
-				throw new RuntimeException("Can't find model " + modelName);
+				//Can't find model "&{0}"
+				throw new SRuntimeException(XDCONV.XDCONV203, modelName);
 			}
 			XMDefinition xmdef = xp.getXMDefinition(xname);
 			roots = new XMElement[1];
@@ -914,15 +928,17 @@ public class Xd2Xsd {
 		String oname = outName == null ? mname : outName;
 		oname = oname.replace(':', '_');
 		Xd2Xsd generator = new Xd2Xsd(xp, oname, genInfo, genXdateOutFormat);
-		Element schema = generator.genNewSchema(oname);
-		XMElement xmel = roots[0];
-		String nsUri = xmel.getNSUri();
-		if (nsUri != null && !nsUri.isEmpty()) {
-			schema.setAttribute("targetNamespace", nsUri);
-		}
-		generator.genElem(schema, xmel);
-		for (int i = 1; i < roots.length; i++) {
-			generator.genElem(schema, roots[i]);
+		if (roots != null) {
+			Element schema = generator.genNewSchema(oname);
+			XMElement xmel = roots[0];
+			String nsUri = xmel.getNSUri();
+			if (nsUri != null && !nsUri.isEmpty()) {
+				schema.setAttribute("targetNamespace", nsUri);
+			}
+			generator.genElem(schema, xmel);
+			for (int i = 1; i < roots.length; i++) {
+				generator.genElem(schema, roots[i]);
+			}
 		}
 		return generator._xsdSources;
 	}

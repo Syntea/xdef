@@ -15,7 +15,9 @@ import org.xdef.impl.parsers.XSParseString;
 import org.xdef.impl.parsers.XSParseTime;
 import org.xdef.impl.parsers.XSParseUnion;
 import org.xdef.model.XMData;
+import org.xdef.msg.XDCONV;
 import org.xdef.sys.SException;
+import org.xdef.sys.SRuntimeException;
 
 /** Creates from the X-definition parser a parser compatible with XML schema.
  * @author Trojan
@@ -87,7 +89,7 @@ class GenParser {
 			result._xdp.setNamedParams(null, xdc);
 			return result;
 		} catch (SException ex) {
-			throw new RuntimeException(ex.getMessage(), ex);
+			throw new SRuntimeException(ex.getMessage(), ex);
 		}
 	}
 
@@ -422,7 +424,8 @@ class GenParser {
 				if (mask == null || mask.isEmpty()) {
 					mask = xdc.getXDNamedItemAsString("format");
 					if (mask == null || mask.isEmpty()) {
-						throw new RuntimeException("xdatetime params missing");
+						//Missing parameters of method "xdatetime"
+						throw new SRuntimeException(XDCONV.XDCONV208);
 					}
 				}
 				info += '(' + mask;

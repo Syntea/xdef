@@ -24,8 +24,24 @@ public interface XDCONV {
 	public static final long XDCONV113 = 22712806014984L;
 	/** Can't create convertor&amp;{0}{ } */
 	public static final long XDCONV114 = 22712806014985L;
+	/** Can't find an X-definition&amp;{0}{ "}{"} */
+	public static final long XDCONV201 = 22712806014986L;
+	/** XML model not specified */
+	public static final long XDCONV202 = 22712806014987L;
+	/** Can't find model "&amp;{0}" */
+	public static final long XDCONV203 = 22712806014988L;
+	/** The name of xsd file is missing */
+	public static final long XDCONV204 = 22712806014989L;
+	/** "&amp;{0}" not implemented */
+	public static final long XDCONV205 = 22712806014990L;
+	/** XML shema not found */
+	public static final long XDCONV206 = 22712806014991L;
+	/** XML schema "&amp;{0}" already exists */
+	public static final long XDCONV207 = 22712806014992L;
+	/** Missing parameters of method "xdatetime" */
+	public static final long XDCONV208 = 22712806014993L;
 	/** Error messages for XDefToXsd and XsdToXdef utilites */
-	public static final long XDCONV_DESCRIPTION = 22712806014986L;
+	public static final long XDCONV_DESCRIPTION = 22712806014994L;
 	/** English */
-	public static final long XDCONV_LANGUAGE = 22712806014987L;
+	public static final long XDCONV_LANGUAGE = 22712806014995L;
 }
