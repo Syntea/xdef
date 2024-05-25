@@ -96,22 +96,30 @@ public class Xd2Xsd {
 				GenParser parserInfo =
 					GenParser.genParser( (XMData) xdata, _genXdateOutFormat);
 				String typeName = genDeclaredName(parserInfo);
-				if (findSchematype(types, typeName) != null) {
-					continue;
-				}
-				if (parserInfo.getParser().getNamedParams().isEmpty()) {
-					Element simpleType = genSchemaElem(types, "simpleType");
-					addDocumentation(simpleType, parserInfo.getInfo());
-					simpleType.setAttribute("name", typeName);
-					Element restr = genRestrictionElement(simpleType);
-					String parserName =
-						SCHEMA_PFX + parserInfo.getParser().parserName();
-					restr.setAttribute("base", parserName);
-				} else {
-					if (typeName != null && !typeName.isEmpty()) {
+				String vName =  v.getName().replace('#', '_');
+				if (typeName != null && !typeName.isEmpty()
+					&& !vName.equals(typeName)) {
+					if (findSchematype(types, v.getName()) == null) {
 						Element simpleType = genSchemaElem(types, "simpleType");
+						simpleType.setAttribute("name", vName);
+						Element restr = genRestrictionElement(simpleType);
+						restr.setAttribute("base", typeName);
+					}
+				}
+				if (typeName != null && !typeName.isEmpty()) {
+					if (findSchematype(types, typeName) != null) {
+						continue;
+					}
+					Element simpleType = genSchemaElem(types, "simpleType");
+					simpleType.setAttribute("name", typeName);
+					if (parserInfo.getParser().getNamedParams().isEmpty()) {
+						addDocumentation(simpleType, parserInfo.getInfo());
+						Element restr = genRestrictionElement(simpleType);
+						String parserName =
+							SCHEMA_PFX + parserInfo.getParser().parserName();
+						restr.setAttribute("base", parserName);
+					} else {
 						genRestrictions(simpleType, parserInfo);
-						simpleType.setAttribute("name", typeName);
 					}
 				}
 			}
@@ -374,6 +382,7 @@ public class Xd2Xsd {
 		String s = parserInfo.getDeclaredName();
 		if (s != null) {
 			String[] parts = s.split(";");
+//System.out.println("=*=*=* " + parserInfo.getParser() + "/" + s);
 			if (parts.length>0&&!(s=parts[0].trim()).isEmpty()) {
 				int ndx = s.indexOf('#');
 				return ndx>=0 ? s.substring(0,ndx)+"_"+s.substring(ndx+1) : s;
