@@ -28,7 +28,7 @@ public interface XDCONV {
 	public static final long XDCONV201 = 22712806014986L;
 	/** XML model not specified */
 	public static final long XDCONV202 = 22712806014987L;
-	/** Can't find model "&amp;{0}" */
+	/** Can't find root model&amp;{0}{ "}{"} */
 	public static final long XDCONV203 = 22712806014988L;
 	/** The name of xsd file is missing */
 	public static final long XDCONV204 = 22712806014989L;

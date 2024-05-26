@@ -903,10 +903,11 @@ public class Xd2Xsd {
 			//Can't find an X-definition&{0}{ "}{"}
 			throw new SRuntimeException(XDCONV.XDCONV201, xname);
 		}
-		String mname = null;
+		String mname;
 		XMElement[] roots;
 		if ("?type".equals(modelName)) {
 			roots = null;
+			mname = "DeclaredTypes";
 		} else if (modelName == null || modelName.isEmpty()) {
 			roots = xp.getXMDefinition(xname).getRootModels();
 			if (roots != null && roots.length > 0) {
@@ -918,6 +919,7 @@ public class Xd2Xsd {
 		} else {
 			roots = xp.getXMDefinition(xname).getModels();
 			String mURI = null;
+			mname = null;
 			for (XMElement xel : roots) {
 				if (modelName.equals(xel.getName())) {
 					mname = xel.getLocalName();
@@ -926,15 +928,14 @@ public class Xd2Xsd {
 				}
 			}
 			if (mname == null) {
-				//Can't find model "&{0}"
+				//Can't find root model&{0}{ "}{"}
 				throw new SRuntimeException(XDCONV.XDCONV203, modelName);
 			}
 			XMDefinition xmdef = xp.getXMDefinition(xname);
 			roots = new XMElement[1];
 			roots[0] = xmdef.getModel(mURI, mname);
 		}
-		String oname = outName == null ? mname : outName;
-		oname = oname.replace(':', '_');
+		String oname = outName == null ? mname.replace(':', '_') : outName;
 		Xd2Xsd generator = new Xd2Xsd(xp, oname, genInfo, genXdateOutFormat);
 		if (roots != null) {
 			Element schema = generator.genNewSchema(oname);
