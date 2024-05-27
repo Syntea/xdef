@@ -77,7 +77,7 @@ public class Xd2Xsd {
 		_doc = KXmlUtils.newDocument();
 		_types = genDeclaredTypes(xp);
 		if (_types != null) {
-			_typesName = xsdName  +"$types";
+			_typesName = xsdName;
 			addSchema(_typesName, _types);
 		} else {
 			_typesName = null;
@@ -886,6 +886,8 @@ public class Xd2Xsd {
 	 * from "xs:root" parameter are used to create models. If modelName is
 	 * "?type", only the file with declared simple types is generated..
 	 * @param outName name of root XML schema file.
+	 * @param outType name of XML schema file with type declarations. May be
+	 * null, then local name of X-definition model is used.
 	 * @param genInfo switch if generate annotation with documentation.
 	 * @param genXdateOutFormat if true, from the xdatetime method the outFormat
 	 * parameter (the second sequential) is used as mask to validate datetime.
@@ -895,6 +897,7 @@ public class Xd2Xsd {
 		final String xdName,
 		final String modelName,
 		final String outName,
+		final String outType,
 		final boolean genInfo,
 		final boolean genXdateOutFormat) {
 		String xname = xdName == null ? xp.getXMDefinitionNames()[0] : xdName;
@@ -904,11 +907,8 @@ public class Xd2Xsd {
 			throw new SRuntimeException(XDCONV.XDCONV201, xname);
 		}
 		String mname;
-		XMElement[] roots;
-		if ("?type".equals(modelName)) {
-			roots = null;
-			mname = "DeclaredTypes";
-		} else if (modelName == null || modelName.isEmpty()) {
+		XMElement[] roots = null;
+		if (modelName == null || modelName.isEmpty()) {
 			roots = xp.getXMDefinition(xname).getRootModels();
 			if (roots != null && roots.length > 0) {
 				mname = roots[0].getLocalName();
@@ -936,7 +936,16 @@ public class Xd2Xsd {
 			roots[0] = xmdef.getModel(mURI, mname);
 		}
 		String oname = outName == null ? mname.replace(':', '_') : outName;
-		Xd2Xsd generator = new Xd2Xsd(xp, oname, genInfo, genXdateOutFormat);
+		String otype = outType;
+		if (otype != null && !otype.isEmpty()) {
+			if ((modelName == null || modelName.isEmpty())
+				&& (outName == null || outName.isEmpty())) {
+				roots = null;
+			}
+		} else {
+			otype = oname + "$types";
+		}
+		Xd2Xsd generator = new Xd2Xsd(xp, otype, genInfo, genXdateOutFormat);
 		if (roots != null) {
 			Element schema = generator.genNewSchema(oname);
 			XMElement xmel = roots[0];

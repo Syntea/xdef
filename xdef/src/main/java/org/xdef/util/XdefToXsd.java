@@ -30,7 +30,9 @@ public class XdefToXsd {
 	 * from "xs:root" parameter are used to create models. If modelName is
 	 * "?type", only the file with declared simple types is generated.
 	 * @param outName name of base XML schema file. May be null, then
-	 * local name of X-definition model is used.
+	 * outName and "_types" is used.
+	 * @param outType name of XML schema file with type declarations. May be
+	 * null, then local name of X-definition model is used.
 	 * @param genInfo if true documentation information is generated.
 	 * @param genXdateOutFormat if true, from the xdatetime method the outFormat
 	 * parameter (the second sequential) is used as mas to validate datetime.
@@ -40,6 +42,7 @@ public class XdefToXsd {
 		final String xdName,
 		final String modelName,
 		final String outName,
+		final String outType,
 		final boolean genInfo,
 		final boolean genXdateOutFormat) {
 		if (xdefs == null || xdefs.length == 0) {
@@ -55,7 +58,7 @@ public class XdefToXsd {
 			: xdName;
 		String oname = outName == null ? xname : outName;
 		Map<String, Element> schemaMap = Xd2Xsd.genSchema(xp,
-			xname, modelName, oname, genInfo, genXdateOutFormat);
+			xname, modelName, oname, outType, genInfo, genXdateOutFormat);
 		writeSchema(outDir, schemaMap);
 	}
 
@@ -87,6 +90,7 @@ public class XdefToXsd {
 	 * from "xs:root" parameter are used to create models. If modelName is
 	 * "?type", only the file with declared simple types is generated.
 	 * @param outName name of root XML schema file.
+	 * @param outType name of XML schema file with type declarations.
 	 * @param genAnnotation switch if generate annotation with documentation.
 	 * @param genXdateOutFormat if true, from the xdatetime method the outFormat
 	 * parameter (the second sequential) is used as mas to validate datetime.
@@ -96,10 +100,11 @@ public class XdefToXsd {
 		final String xdName,
 		final String modelName,
 		final String outName,
+		final String outType,
 		final boolean genAnnotation,
 		final boolean genXdateOutFormat) {
-		return Xd2Xsd.genSchema(xp,
-			xdName, modelName, outName, genAnnotation, genXdateOutFormat);
+		return Xd2Xsd.genSchema(xp, xdName, modelName,
+			outName, outType, genAnnotation, genXdateOutFormat);
 	}
 
 	/** Run XML schema generator from command line.
@@ -109,10 +114,9 @@ public class XdefToXsd {
 	 * <li>-i or --xdef: list of input source path names with X-definitions.</li>
 	 * <li>-o or --outDir:  pathname of output directory.</li>
 	 * <li>-s or --outName: name of main XML schema file (optional).</li>
-	 * <li>-r or --root: name of root model (optional). If name is
-	 * "?type", only the schema with declared simple types is generated. If this
-	 * argument is missing then all values from "xs:root" parameter are used to
-	 * create models. </li>
+	 * <li>-r or --root: name of root model (optional). If this argument is
+	 * missing then from all values from "xs:root" parameter are created
+	 * models. </li>
 	 * <li>-x or --xdName: name of X-definition (optional).</li>
 	 * <li>-v or --genInfo: generate documentation information.</li>
 	 * <li>-xx:  use output format of xdatetime method to create data type.</li>
@@ -126,10 +130,10 @@ public class XdefToXsd {
 " -i or --xdef:     list of input source pathnames with X-definitions\n" +
 " -o or --outDir:   pathname of output directory \n" +
 " -s or --outName:  name of main XML schema file (optional)\n" +
-" -r or --root:     name of root model (optional). If name is\n" +
-"                   \"?type\", only the schema with declared simple types\n"+
-"                   is generated. If this argument is missing then all values\n"+
-"                   from \"xs:root\" parameter are used to create models.\n" +
+" -t or --outType:  name of file with XML schema type declarations (optional)\n"+
+" -r or --root:     name of root model (optional). If this argument is missing\n"+
+"                   then from all values of \"xs:root\" parameter are created\n"+
+"                   models.\n" +
 " -x or --xdName:   name of X-definition (optional)\n" +
 " -v or --genInfo:  generate documentation information.\n" +
 " -xx:              use output format of xdatetime method to create data type";
@@ -137,6 +141,7 @@ public class XdefToXsd {
 		String modelName = null; // name of model
 		File outDir = null; // output directory
 		String outName = null; //name of output file
+		String outType = null; //name of file with declared types
 		boolean genDecInfo = false; // switch to generate documentation info
 		boolean genXdateOutFormat = false;// switch generate xdatatime outFormat
 		List<String> xdSources = new ArrayList<>(); // X-definition source
@@ -170,6 +175,14 @@ public class XdefToXsd {
 							"Redefinition of "+arg+".\n" + info);
 					}
 					outName = args[++i];
+					continue;
+				case "-t":
+				case "--outType":
+					if (outType != null) {
+						throw new RuntimeException(
+							"Redefinition of "+arg+".\n" + info);
+					}
+					outType = args[++i];
 					continue;
 				case "-i":
 				case "--xdef":
@@ -225,7 +238,7 @@ public class XdefToXsd {
 			throw new RuntimeException("Missing output directory.\n" + info);
 		}
 		File[] xdefs = SUtils.getFileGroup(xdSources.toArray(new String[0]));
-		genSchema(xdefs,
-			 outDir, xdName, modelName, outName, genDecInfo, genXdateOutFormat);
+		genSchema(xdefs, outDir, xdName, modelName,
+			outName, outType, genDecInfo, genXdateOutFormat);
 	}
 }

@@ -1,13 +1,14 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.1.6, release-date 2024-05-26
+# Version 42.1.6, release-date 2024-05-27
 * Fixed bug that did not report XDEF385 error when type name in local
   declaration section was the same as the referenced type.
 * Fixed bug generated negative value to `maxOccurs` attribute in 
   X-definition conversion to XML Schema.
-* If the name of root model in generator of XML schema from X-definition
-  (`org.xdef.util.XdefToXsd`) is set to `?type`, the only the schema with
-  declared simple types.
+* To the list of parameters of method `org.xdef.util.XdefToXsd.main(...)` was
+  added the parameter `--outType` with the name of the file where the types
+  declared in the X-definition are generated (note that the extension `.xsd` is
+  added to the name).
 
 # Version 42.1.5, release-date 2024-05-20
 * If the type name in the declaration section is the same as the referenced type

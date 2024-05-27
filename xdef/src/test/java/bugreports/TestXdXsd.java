@@ -155,7 +155,7 @@ public class TestXdXsd extends XDTester {
 					XDConstants.XDPROPERTYVALUE_IGNORE_UNDEF_EXT_TRUE);
 				XDPool xp = XDFactory.compileXD(props, xdef);
 				Map<String, Element> schemas = Xd2Xsd.genSchema(xp,
-					xdName, modelName, outName, true, outFormat);
+					xdName, modelName, outName, null, true, outFormat);
 				for (String key: schemas.keySet()) {
 					File f = new File(outDir, key + ".xsd");
 					KXmlUtils.writeXml(f,
