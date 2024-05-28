@@ -51,7 +51,7 @@
     <properties>
         <revision>42.1.6</revision><!-- when changed, change also ${release.date}, see below -->
         <changelist>-SNAPSHOT</changelist><!-- use profile "release" for build release-version -->
-        <release.date>2024-05-27</release.date><!-- update when changed version -->
+        <release.date>2024-05-28</release.date><!-- update when changed version -->
         <specification.version>4.2</specification.version>
         
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

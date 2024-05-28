@@ -57,30 +57,33 @@ public class Xd2Xsd {
 
 	/** Create new instance of XsdGenerator.
 	 * @param xp XDPool with X-definitions.
-	 * @param xsdName name or XML schema root file
+	 * @param outType name of XML schema file with type declarations. May be
 	 * @param genInfo if true the annotations with documentation is generated.
 	 * @param genXdateOutFormat if true, from the xdatetime method the outFormat
 	 * parameter (the second sequential) is used as mask to validate datetime.
 	 */
 	private Xd2Xsd(final XDPool xp,
-		final String xsdName,
+		final String outType,
 		final boolean genInfo,
 		final boolean genXdateOutFormat) {
-		if (xsdName == null || xsdName.isEmpty()) {
-			//The name of xsd file is missing
-			throw new SRuntimeException(XDCONV.XDCONV204);
-		}
-		_rootName = xsdName;
+		_rootName = outType;
 		_genInfo = genInfo;
 		_genXdateOutFormat = genXdateOutFormat;
 		_xsdSources = new HashMap<>();
 		_doc = KXmlUtils.newDocument();
-		_types = genDeclaredTypes(xp);
-		if (_types != null) {
-			_typesName = xsdName;
-			addSchema(_typesName, _types);
+		if (null != outType && !outType.isEmpty()) {
+			Element types = genDeclaredTypes(xp);
+			if (types != null && types.getChildNodes().getLength() > 0) {
+				_types = types;
+				_typesName = outType;
+				addSchema(_typesName, _types);
+			} else {
+				_types = null;
+				_typesName = null;
+			}
 		} else {
 			_typesName = null;
+			_types = null;
 		}
 	}
 
@@ -382,7 +385,6 @@ public class Xd2Xsd {
 		String s = parserInfo.getDeclaredName();
 		if (s != null) {
 			String[] parts = s.split(";");
-//System.out.println("=*=*=* " + parserInfo.getParser() + "/" + s);
 			if (parts.length>0&&!(s=parts[0].trim()).isEmpty()) {
 				int ndx = s.indexOf('#');
 				return ndx>=0 ? s.substring(0,ndx)+"_"+s.substring(ndx+1) : s;
@@ -883,11 +885,10 @@ public class Xd2Xsd {
 	 * @param xp compiled XDPool.
 	 * @param xdName name of root X-definition.
 	 * @param modelName name of the root model. May be null, then all values
-	 * from "xs:root" parameter are used to create models. If modelName is
-	 * "?type", only the file with declared simple types is generated..
+	 * from "xs:root" parameter are used to create models.
 	 * @param outName name of root XML schema file.
-	 * @param outType name of XML schema file with type declarations. May be
-	 * null, then local name of X-definition model is used.
+	 * @param outType name of XML schema file with type declarations (may be
+	 * null, then declared simple types are generated to the file with model).
 	 * @param genInfo switch if generate annotation with documentation.
 	 * @param genXdateOutFormat if true, from the xdatetime method the outFormat
 	 * parameter (the second sequential) is used as mask to validate datetime.
@@ -943,7 +944,11 @@ public class Xd2Xsd {
 				roots = null;
 			}
 		} else {
-			otype = oname + "$types";
+			otype = null;
+			if (mname == null || mname.isEmpty()) {
+				//The name of xsd file is missing
+				throw new SRuntimeException(XDCONV.XDCONV204);
+			}
 		}
 		Xd2Xsd generator = new Xd2Xsd(xp, otype, genInfo, genXdateOutFormat);
 		if (roots != null) {

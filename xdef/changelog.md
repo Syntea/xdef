@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.1.6, release-date 2024-05-27
+# Version 42.1.6, release-date 2024-05-28
 * Fixed bug that did not report XDEF385 error when type name in local
   declaration section was the same as the referenced type.
 * Fixed bug generated negative value to `maxOccurs` attribute in 

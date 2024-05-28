@@ -27,12 +27,10 @@ public class XdefToXsd {
 	 * @param xdName name of X-definition. May be null, then the nameless
 	 * X-definition or the first one X-definition is used.
 	 * @param modelName name of the root model. May be null, then all values
-	 * from "xs:root" parameter are used to create models. If modelName is
-	 * "?type", only the file with declared simple types is generated.
-	 * @param outName name of base XML schema file. May be null, then
-	 * outName and "_types" is used.
-	 * @param outType name of XML schema file with type declarations. May be
-	 * null, then local name of X-definition model is used.
+	 * from "xs:root" parameter are used to create models.
+	 * @param outName name of base XML schema file.
+	 * @param outType name of XML schema file with type declarations (may be
+	 * null, then declared simple types are generated to the file with model).
 	 * @param genInfo if true documentation information is generated.
 	 * @param genXdateOutFormat if true, from the xdatetime method the outFormat
 	 * parameter (the second sequential) is used as mas to validate datetime.
@@ -87,10 +85,10 @@ public class XdefToXsd {
 	 * @param xp compiled XDPool.
 	 * @param xdName name of root X-definition.
 	 * @param modelName name of the root model. May be null, then all values
-	 * from "xs:root" parameter are used to create models. If modelName is
-	 * "?type", only the file with declared simple types is generated.
+	 * from "xs:root" parameter are used to create models.
 	 * @param outName name of root XML schema file.
-	 * @param outType name of XML schema file with type declarations.
+	 * @param outType name of XML schema file with type declarations (may be
+	 * null, then declared simple types are generated to the file with model).
 	 * @param genAnnotation switch if generate annotation with documentation.
 	 * @param genXdateOutFormat if true, from the xdatetime method the outFormat
 	 * parameter (the second sequential) is used as mas to validate datetime.
@@ -114,6 +112,8 @@ public class XdefToXsd {
 	 * <li>-i or --xdef: list of input source path names with X-definitions.</li>
 	 * <li>-o or --outDir:  pathname of output directory.</li>
 	 * <li>-s or --outName: name of main XML schema file (optional).</li>
+	 * <li>-t or --outType: name of file with XML schema type declarations
+	 * (optional).</li>
 	 * <li>-r or --root: name of root model (optional). If this argument is
 	 * missing then from all values from "xs:root" parameter are created
 	 * models. </li>
@@ -145,7 +145,7 @@ public class XdefToXsd {
 		boolean genDecInfo = false; // switch to generate documentation info
 		boolean genXdateOutFormat = false;// switch generate xdatatime outFormat
 		List<String> xdSources = new ArrayList<>(); // X-definition source
-		if (args == null || args.length < 2) {
+		if (args == null || args.length == 0) {
 			throw new RuntimeException("Error: parameters missing.\n" + info);
 		}
 		for (int i = 0; i < args.length; i++) {
