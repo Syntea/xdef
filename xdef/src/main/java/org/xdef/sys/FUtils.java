@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.StringTokenizer;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
@@ -2381,6 +2383,77 @@ public class FUtils {
 		try {
 			zin.close();
 		} catch (IOException ex) {}
+		return flen;
+	}
+
+	/** Compress file to GZIP.
+	 * @param inFile File with data to be written.
+	 * @param outFile file where write data.
+	 * @return size of input data.
+	 * @throws IOException if an error occurs.
+	 */
+	public static final long fileToGZip(final File inFile,
+		final File outFile) throws IOException {
+		return fileToGZip(new FileOutputStream(outFile),
+			new FileInputStream(inFile));
+	}
+
+	/** Compress file to GZIP.
+	 * @param out output stream where to write data.
+	 * @param in Input stream with data.
+	 * @return size of input data.
+	 * @throws IOException if an error occurs.
+	 */
+	public static final long fileToGZip(final OutputStream out,
+		final InputStream in) throws IOException {
+		long flen;
+		try (GZIPOutputStream gzout = new GZIPOutputStream(out)) {
+			flen = 0;
+			byte[] buf = new byte[4096];
+			int len = in.read(buf);
+			while (len > 0) {
+				flen += len;
+				gzout.write(buf,0,len);
+				len = in.read(buf);
+			}
+			gzout.close();
+		}
+		in.close();
+		return flen;
+	}
+
+	/** Extract files from archive and store them to given directory.
+	 * @param archive GZIP data.
+	 * @param outFile file where to store extracted data.
+	 * @return sum of length of all extracted files.
+	 * @throws IOException if an error occurs.
+	 */
+	public static final long fileFromGZip(final File archive,
+		final File outFile) throws IOException {
+		return fileFromGZip(new FileInputStream(archive),
+			new FileOutputStream(outFile));
+	}
+
+	/** Extract files from archive and store them to given directory.
+	 * @param archive GZIP data.
+	 * @param outStream stream where to store extracted data.
+	 * @return length of extracted file.
+	 * @throws IOException if an error occurs.
+	 */
+	public static final long fileFromGZip(final InputStream archive,
+		final OutputStream outStream) throws IOException {
+		long flen = 0;
+		try (GZIPInputStream gzin = new GZIPInputStream(archive)) {
+			byte[] buf = new byte[4096];
+			int len = gzin.read(buf);
+			while (len > 0) {
+				flen += len;
+				outStream.write(buf,0,len);
+				len = gzin.read(buf);
+			}
+			gzin.close();
+		}
+		outStream.close();
 		return flen;
 	}
 }
