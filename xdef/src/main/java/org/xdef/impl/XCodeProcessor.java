@@ -521,8 +521,8 @@ public final class XCodeProcessor {
 	private CatchItem _catchItem;
 	/** Properties. */
 	private Properties _props;
-	/** True if and only if version of XML document is 1.0.*/
-	private boolean _xmlVersion1;
+//	/** True if and only if version of XML document is 1.0.*/
+//	private boolean _xmlVersion1;
 	/** Switch to debug mode. */
 	private boolean _debug = false; //debug switch
 	/** X-definition from which processor was created. */
@@ -702,7 +702,7 @@ public final class XCodeProcessor {
 	private void init(final XDefinition xd, final Properties props) {
 		_xd = xd;
 		XPool xp = (XPool) xd.getXDPool();
-		_xmlVersion1 = false;
+//		_xmlVersion1 = false;
 		_init = xp.getInitAddress();
 		_stack = new XDValue[xp.getStackSize()];
 		_localVariables = new XDValue[xp.getLocalVariablesSize()];
@@ -1753,26 +1753,29 @@ public final class XCodeProcessor {
 									node = chkNode.getElemValue();
 							}
 						}
-					} else {// params == 2
-						if (_stack[sp].getItemId() == XD_ELEMENT) {
-							node = _stack[sp--].getElement();
-						} else if (_stack[sp].getItemId() == XD_CONTAINER) {
-							XDContainer dc = ((XDContainer) _stack[sp--]);
-							if (dc.getXDItemsNumber() > 0 &&
-								dc.getXDItem(0).getItemId() == XD_ELEMENT){
-								node = dc.getXDElement(0);
-							} else {
-								_stack[sp]= new DefContainer();
+					} else { // params == 2
+						switch (_stack[sp].getItemId()) {
+							case XD_ELEMENT:
+								node = _stack[sp--].getElement();
+								break;
+							case XD_CONTAINER:
+								XDContainer dc = ((XDContainer) _stack[sp--]);
+								if (dc.getXDItemsNumber() > 0 &&
+									dc.getXDItem(0).getItemId() == XD_ELEMENT){
+									node = dc.getXDElement(0);
+								} else {
+									_stack[sp]= new DefContainer();
+									continue;
+								}	break;
+							default:
+								DefXQueryExpr x =
+									_stack[sp].getItemId()==XD_XQUERY
+									? (DefXQueryExpr) _stack[sp]
+									: new DefXQueryExpr(_stack[sp].toString());
+								sp--;
+								_stack[sp] =
+									x.exec(_stack[sp].getElement(), chkNode);
 								continue;
-							}
-						} else {
-							DefXQueryExpr x = _stack[sp].getItemId()==XD_XQUERY
-								? (DefXQueryExpr) _stack[sp]
-								: new DefXQueryExpr(_stack[sp].toString());
-							sp--;
-							_stack[sp] =
-								x.exec(_stack[sp].getElement(), chkNode);
-							continue;
 						}
 					}
 					try {
@@ -2896,8 +2899,7 @@ public final class XCodeProcessor {
 						case XD_STATEMENT:
 							ds = (XDStatement) dv;
 							break;
-						default:
-							//Null value of &{0}
+						default: //Null value of &{0}
 							throwInfo(chkNode, XDEF.XDEF573, "not Statement");
 							ds = null; // never executed
 					}
@@ -2976,7 +2978,7 @@ public final class XCodeProcessor {
 					try {
 						((XDService) dv).setProperty(name, value);
 						_stack[sp] = new DefBoolean(true);
-					} catch (Exception ex) {
+					} catch (RuntimeException ex) {
 						_stack[sp] = new DefBoolean(false);
 					}
 					continue;
@@ -3328,7 +3330,6 @@ public final class XCodeProcessor {
 						((XDParser) _stack[sp]).check(chkNode, s).matches());
 					continue;
 				}
-//				case CHECKPARSED_OP:
 				case PARSERESULT_MATCH:
 					_stack[sp] =
 						new DefBoolean(((XDParseResult)_stack[sp]).matches());
@@ -3752,12 +3753,8 @@ public final class XCodeProcessor {
 		final XXNode xNode) {
 		int result = _catchItem.getCatchAddr();
 		_localVariables = _catchItem.getVariables();
-		Report report;
-		if (ex instanceof SThrowable) {
-			report = ((SThrowable) ex).getReport();
-		} else {
-			report = Report.error(null, ex.toString());
-		}
+		Report report = (ex instanceof SThrowable)
+			? ((SThrowable) ex).getReport() : Report.error(null, ex.toString());
 		_stack[0] = new DefException(report,
 			xNode != null ? xNode.getXPos() : null, pc);
 		_catchItem = _catchItem.getPrevItem();

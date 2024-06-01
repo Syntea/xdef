@@ -114,7 +114,7 @@ public final class GenXDefXML {
 					_atts.put(qname, new XAttr(att.getNodeValue().trim()));
 				} else {
 					_atts.put(qname,
-						new XAttr(genType(this,att.getNodeValue().trim())));
+						new XAttr(genType(this, att.getNodeValue().trim())));
 				}
 			}
 			final NodeList nl = elem.getChildNodes();

@@ -23,6 +23,8 @@ import static org.xdef.XDValueID.XD_PARSERESULT;
 import static org.xdef.XDValueID.XX_ATTR;
 import static org.xdef.XDValueID.XX_ELEMENT;
 import static org.xdef.XDValueID.XX_TEXT;
+import static org.xdef.XDValueID.X_UNIQUESET;
+import static org.xdef.XDValueID.X_UNIQUESET_M;
 import org.xdef.XDValueType;
 import static org.xdef.XDValueType.XXATTR;
 import static org.xdef.XDValueType.XXELEMENT;
@@ -319,11 +321,6 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	 */
 	public final int getRefNum(final int index) {return _counters[index];}
 
-	/** Get counters of child nodes.
-	 * @return array of counters of child nodes.
-	 */
-	final int[] getCounters() {return _counters;}
-
 	@Override
 	/** Get occurrence of actual element
 	 * @return The reference number.
@@ -516,11 +513,6 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		}
 		copyTemporaryReports();
 	}
-
-	/** Get SqId of XElement.
-	 * @return SqId of XElement.
-	 */
-	final int getSqId() {return _xElement.getSqId();}
 
 	private String getTextPathIndex(final int index) {
 		int counter = 0;
@@ -2877,7 +2869,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 							exec(xtxt._onTrue, (byte) 'T');
 							copyTemporaryReports();
 							if (x != _data) {
-								item = exec(xtxt._check, (byte) 'T');
+								exec(xtxt._check, (byte) 'T');
 								copyTemporaryReports();
 							}
 						}
@@ -2888,7 +2880,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 							clearTemporaryReporter();
 							exec(xtxt._onFalse, (byte) 'T');
 							if (x != _data) {
-								item = exec(xtxt._check, (byte) 'T');
+								exec(xtxt._check, (byte) 'T');
 							}
 						} else {
 							if (!chkTemporaryErrors()) {
@@ -2989,6 +2981,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			&& (_forget || _xElement._forget == 'T' || _xComponent != null)) {
 			updateElement(null);
 			_parent.getChkChildNodes().remove(this);
+		/*???*/ _parent._parseResult=null; /*???*/
 			_chkChildNodes = null;
 			_xElement = null;
 			_element = null;
@@ -3023,6 +3016,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		_attNames = null;
 		_selector = null;
 		_userObject = null;
+		_attName = null;
+		_attURI = null;
+		_xdata = null;
 		if (_boundKeys != null) {
 			for (XDUniqueSetKey x: _boundKeys) {
 				if (x != null) {
@@ -3268,7 +3264,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 								String x = _data;
 								exec(xtxt1._onFalse, (byte) 'T');
 								if (x != _data) {
-									item = exec(xtxt1._check, (byte) 'T');
+									exec(xtxt1._check, (byte) 'T');
 								}
 							}
 							copyTemporaryReports();
@@ -3451,11 +3447,6 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 ////////////////////////////////////////////////////////////////////////////////
 // Auxiliary methods
 ////////////////////////////////////////////////////////////////////////////////
-
-	/** Set actual element.
-	 * @param e The element.
-	 */
-	final void setActElem(final Element e) {_element = e;}
 
 	@Override
 	/** Get work element value.
