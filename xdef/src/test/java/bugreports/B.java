@@ -149,19 +149,29 @@ public class B extends XDTester {
 "<xsd:restriction base=\"xsd:ID\"/>\n" +
 "</xsd:simpleType>\n" +
 "</xsd:schema>";
-			File dir = new File("C:/tempx/Y");
-			if (!dir.exists() || !dir.isDirectory()) {
-				dir.mkdirs();
+			File f = null;
+			for (char c = 'C'; c <= 'Z'; c++) {
+				f = new File(c + ":/C1/tempx/Y");
+				if (f.exists() && f.isDirectory()) {
+					break;
+				}
+				f = null;
 			}
-			String xdefFileName = new File(dir, "Test1a.xdef").getAbsolutePath();
+			if (f == null) {
+				throw new RuntimeException("Can't find tempx on flash");
+			}
+			f = new File(f, "Test1a.xdef");
 //			File schemaFile = new File(dir, "x.xsd");
 //			FUtils.writeString(schemaFile, xmlSchema);
 //			XsdToXdef.genCollection(schemaFile.getAbsolutePath(),
-//				xdefFileName, null, null);
-			XDPool xp = XDFactory.compileXD(null, xdefFileName);
-			xp.displayCode();
+//				f.getAbsolutePath(), null, null);
+			if (!f.exists() || !f.isFile()) {
+				throw new RuntimeException("Can't find Test1a.xdef on flash");
+			}
+			XDPool xp = XDFactory.compileXD(null, f);
+//			xp.displayCode();
 //if(true)return;
-			File f = null;
+			f = null;
 			for (char c = 'C'; c <= 'Z'; c++) {
 				f = new File(
 					c + ":/C1/Downloads/dnb_all_dnbmarc_20240213-3.mrc.xml.gz");
