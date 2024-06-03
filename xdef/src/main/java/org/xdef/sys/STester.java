@@ -54,7 +54,10 @@ import org.xdef.xml.KXmlUtils;
  * @author Vaclav Trojan
  */
 public abstract class STester {
-
+	private static final DecimalFormat DECFORMAT = new DecimalFormat("0.00");
+	static {
+		DECFORMAT.setDecimalSeparatorAlwaysShown(true);
+	}
 	/* Output printer. */
 	private PrintStream _out;
 	/** Log file printer. */
@@ -1222,17 +1225,21 @@ public abstract class STester {
 		int errors = 0;
 		long t = System.currentTimeMillis();
 		for (STester x: tests) {
-			errors += x.runTest(out, err, log, printOK, args);
+			long t1 = System.currentTimeMillis();
+			int errs = x.runTest(out, err, log, printOK, args);
+			errors += errs;
+			if (log != null) {
+				float d = ((float)((System.currentTimeMillis() - t1) / 1000.0));
+				log.println(x._className + "; " + DECFORMAT.format(d) + "s");
+			}
 		}
-		DecimalFormat df = new DecimalFormat("0.00");
-		df.setDecimalSeparatorAlwaysShown(true);
 		float duration = ((float)((System.currentTimeMillis() - t) / 1000.0));
 		System.err.flush();
 		out.flush();
 		String s = "[INFO] " +
 			(errors > 0 ? errors + " error" + (errors > 1 ? "s,": ",") : "OK")
 			+ " " + (info != null ? info + ", ": "") +
-			"total time: " + df.format(duration) + "s";
+			"total time: " + DECFORMAT.format(duration) + "s";
 		if (log != null) {
 			log.println(s);
 			log.flush();

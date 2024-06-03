@@ -2979,9 +2979,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		}
 		if (!getXDDocument().isCreateMode()
 			&& (_forget || _xElement._forget == 'T' || _xComponent != null)) {
+			// not create mode and forget or _xComponent != null
 			updateElement(null);
 			_parent.getChkChildNodes().remove(this);
-		/*???*/ _parent._parseResult=null; /*???*/
 			_chkChildNodes = null;
 			_xElement = null;
 			_element = null;
@@ -2989,7 +2989,6 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			_xonKey = null;
 			_xonMap = null;
 			_xonValue = null;
-			System.gc(); // force garbage collection
 		}
 		_xComponent = null;
 		if (_variables != null) {
