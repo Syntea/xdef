@@ -1031,7 +1031,7 @@ public final class XCodeProcessor {
 	/** Execute script code starting from given address.
 	 * @param start The index of starting code address.
 	 * @param chkNode The actual ChkElement object.
-	 * @return The XDValue return object or null.
+	 * @return XDValue object or null.
 	 */
 	final XDValue exec(final int start, final ChkElement chkNode) {
 		_callList = null; // list of call objects

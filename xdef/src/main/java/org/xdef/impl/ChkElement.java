@@ -2989,6 +2989,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			_xonKey = null;
 			_xonMap = null;
 			_xonValue = null;
+			System.gc(); // force garbage collection
 		}
 		_xComponent = null;
 		if (_variables != null) {
