@@ -158,14 +158,14 @@ public class FinalRestriction {
 	 */
 	public void addRestriction(Restriction restriction) {
 		if (!restriction.getEnumerations().isEmpty()) {
-			_enumerations = new HashSet();
+			_enumerations = new HashSet<String>();
 			for (String string : restriction.getEnumerations()) {
 				_enumerations.add(string);
 			}
 		}
 		//adding patterns values
 		if (!restriction.getPatterns().isEmpty()) {
-			HashSet<String> patterns = new HashSet();
+			HashSet<String> patterns = new HashSet<String>();
 			for (String string : restriction.getPatterns()) {
 				patterns.add(string);
 			}
@@ -297,7 +297,7 @@ public class FinalRestriction {
 		//resolving patterns
 		if (!_patterns.isEmpty()) {
 /*VT2*/
-			ArrayList<Expression> patternsList = new ArrayList();
+			ArrayList<Expression> patternsList = new ArrayList<Expression>();
 /*VT3*/
 			String xdParams = isXDMethod && ret.endsWith(")") ? "" : "";
 /*VT3*

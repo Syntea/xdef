@@ -130,8 +130,8 @@ public class Xd2Xsd {
 		return types.getChildNodes().getLength() > 0 ? types : null;
 	}
 
-	/** Get genXdateOutFormat swithch.
-	 * @return genXdateOutFormat swithch.
+	/** Get genXdateOutFormat switch.
+	 * @return genXdateOutFormat switch.
 	 */
 	protected final boolean isGenXdateOutFormat() { return _genXdateOutFormat;}
 
@@ -406,7 +406,7 @@ public class Xd2Xsd {
 	private void addAttrs(final Element el, final XMData[] attrs) {
 		for (XMNode x: attrs) {
 			XMOccurrence attOcc = x.getOccurence();
-			if (attOcc.isIgnore()) {
+			if (attOcc.isIllegal()) {
 				continue;
 			}
 			Element att = genSchemaElem(el, "attribute");
@@ -784,7 +784,9 @@ public class Xd2Xsd {
 					for (int i = 1; i < children.length; i++) {
 						XMNode y = children[i];
 						if (y.getKind() == XMNode.XMELEMENT) {
-							genElem(all, (XMElement) y);
+							if (!y.getOccurence().isIllegal()) {
+								genElem(all, (XMElement) y);
+							}
 						}
 					}
 					addAttrs(complt, attrs);
@@ -967,9 +969,13 @@ public class Xd2Xsd {
 			if (nsUri != null && !nsUri.isEmpty()) {
 				schema.setAttribute("targetNamespace", nsUri);
 			}
-			generator.genElem(schema, xmel);
+			if (!xmel.getOccurence().isIllegal()) {
+				generator.genElem(schema, xmel);
+			}
 			for (int i = 1; i < roots.length; i++) {
-				generator.genElem(schema, roots[i]);
+				if (!roots[i].getOccurence().isIllegal()) {
+					generator.genElem(schema, roots[i]);
+				}
 			}
 		}
 		return generator._xsdSources;
