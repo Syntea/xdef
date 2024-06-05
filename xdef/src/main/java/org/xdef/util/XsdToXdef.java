@@ -2,7 +2,6 @@ package org.xdef.util;
 
 import org.xdef.util.xsd2xd.Convertor;
 import org.xdef.sys.FileReportWriter;
-import org.xdef.util.xsd2xd.Reporter;
 import org.xdef.util.xsd2xd.xd.Schema_1_0_Processor;
 import java.io.File;
 import java.io.IOException;
@@ -13,6 +12,7 @@ import javax.xml.XMLConstants;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
+import org.xdef.sys.SReporter;
 import org.xml.sax.SAXException;
 
 /** Represents XML Schema to X-definition convertor.
@@ -28,7 +28,7 @@ public class XsdToXdef {
 	/** Input XML Schema version. */
 	private final byte _schemaVersion;
 	/** Reporter for reporting warnings and errors. */
-	private final Reporter _reporter;
+	private final SReporter _reporter;
 
 	/** Creates instance of Convertor with default settings. X-definition nodes
 	 * prefix as "xd", input XML Schema version as XML Schema 1.0, output
@@ -39,8 +39,8 @@ public class XsdToXdef {
 		PrintStream out) {
 		_xdefPrefix = xdefPrefix == null ? "xd" : xdefPrefix;
 		_schemaVersion = SCHEMA1_0;
-		_reporter = new Reporter(new FileReportWriter(
-			out == null ? System.out : out, false),false);
+		_reporter = new SReporter(new FileReportWriter(
+			out == null ? System.out : out, false));
 	}
 
 	/** Generates collection with X-definitions from root schema at given URL

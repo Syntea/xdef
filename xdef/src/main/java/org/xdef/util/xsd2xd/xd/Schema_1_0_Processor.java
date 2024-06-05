@@ -4,7 +4,6 @@ import org.xdef.XDConstants;
 import org.xdef.util.xsd2xd.Processor;
 import org.xdef.util.xsd2xd.Utils;
 import org.xdef.util.xsd2xd.DOMUtils;
-import org.xdef.util.xsd2xd.Reporter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Calendar;
@@ -12,6 +11,7 @@ import java.util.Set;
 import java.util.Stack;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.xdef.sys.SReporter;
 
 
 /** Represents XML Schema 1.0 to X-definition 2.0 convertor.
@@ -23,7 +23,7 @@ public class Schema_1_0_Processor extends Processor {
 	/** Representation of X-definition document. */
 	private final XdefDocument _xdef;
 	/** Error and warning reporter. */
-	private final Reporter _reporter;
+	private final SReporter _reporter;
 	/** Every def as file switch. */
 	private final boolean _separately;
 	/** Stack of referencing elements (Element). */
@@ -41,7 +41,7 @@ public class Schema_1_0_Processor extends Processor {
 	 * @param separately X-definitions as separate files.
 	 */
 	public Schema_1_0_Processor(String xdefPrefix,
-		Reporter reporter,
+		SReporter reporter,
 		URL rootSchemaURL,
 		boolean separately) {
 		super(rootSchemaURL);
@@ -60,14 +60,14 @@ public class Schema_1_0_Processor extends Processor {
 	@Override
 	protected void processAnnotation(Element annotationElement,
 		Element parentXdefElement) {
-		_reporter.warning("", getReportMessage(annotationElement));
+//		_reporter.warning("", getReportMessage(annotationElement));
 	}
 	@Override
 	protected void processAny(Element anyElement, Element parentXdefElement) {
 		Element any =
 			ProcessMethods.processAny(anyElement, parentXdefElement, _xdef);
-		_reporter.warning("", "Any element does not have namespace restriction "
-				+ "declaration in given Xdefnition version!");
+//		_reporter.warning("", "Any element does not have namespace restriction "
+//				+ "declaration in given Xdefnition version!");
 		processChildren(anyElement, any);
 	}
 	@Override
@@ -75,15 +75,15 @@ public class Schema_1_0_Processor extends Processor {
 		Element parentXdefElement) {
 		ProcessMethods.processAnyAttribute(anyAttributeElement,
 			parentXdefElement, _xdef);
-		_reporter.warning("",
-			"AnyAttribute element does not have namespace restriction "
-				+ "declaration in given Xdefnition version!");
+//		_reporter.warning("",
+//			"AnyAttribute element does not have namespace restriction "
+//				+ "declaration in given Xdefnition version!");
 		processChildren(anyAttributeElement, parentXdefElement);
 	}
 	@Override
 	protected void processAppInfo(Element appInfoElement,
 		Element parentXdefElement) {
-		_reporter.warning("", getReportMessage(appInfoElement));
+//		_reporter.warning("", getReportMessage(appInfoElement));
 	}
 	@Override
 	public void processAttribute(Element attributeElement,
@@ -129,7 +129,7 @@ public class Schema_1_0_Processor extends Processor {
 	@Override
 	protected void processDocumentation(Element documentationElement,
 		Element parentXdefElement) {
-		_reporter.warning("", getReportMessage(documentationElement));
+//		_reporter.warning("", getReportMessage(documentationElement));
 	}
 	@Override
 	protected void processElement(Element elementElement,
@@ -150,7 +150,7 @@ public class Schema_1_0_Processor extends Processor {
 	@Override
 	protected void processField(Element fieldElement,
 		Element parentXdefElement) {
-		_reporter.warning("", getReportMessage(fieldElement));
+//		_reporter.warning("", getReportMessage(fieldElement));
 	}
 	@Override
 	protected void processGroup(Element groupElement,
@@ -161,12 +161,12 @@ public class Schema_1_0_Processor extends Processor {
 	}
 	@Override
 	protected void processKey(Element keyElement, Element parentXdefElement) {
-		_reporter.warning("", getReportMessage(keyElement));
+//		_reporter.warning("", getReportMessage(keyElement));
 	}
 	@Override
 	protected void processKeyref(Element keyrefElement,
 		Element parentXdefElement) {
-		_reporter.warning("", getReportMessage(keyrefElement));
+//		_reporter.warning("", getReportMessage(keyrefElement));
 	}
 	@Override
 	protected void processNotation(Element notationElement,
@@ -214,7 +214,7 @@ public class Schema_1_0_Processor extends Processor {
 	@Override
 	protected void processUnique(Element uniqueElement,
 		Element parentXdefElement) {
-		_reporter.warning("", getReportMessage(uniqueElement));
+//		_reporter.warning("", getReportMessage(uniqueElement));
 	}
 	@Override
 	protected void processOtherSchemaElement(Element schemaElement,
@@ -224,10 +224,10 @@ public class Schema_1_0_Processor extends Processor {
 		Element parentXdefElement) {}
 	@Override
 	protected void resolveDebug(Element schemaElement, Element xdefElement) {
-		_reporter.warning("", getTime() + " Processing \""
-			+ DOMUtils.getXPosition(schemaElement) + "\" schema item "
-			+ "and adding declaration to \""
-			+ DOMUtils.getXPosition(xdefElement) + "\" X-definition item...");
+//		_reporter.warning("", getTime() + " Processing \""
+//			+ DOMUtils.getXPosition(schemaElement) + "\" schema item "
+//			+ "and adding declaration to \""
+//			+ DOMUtils.getXPosition(xdefElement) + "\" X-definition item...");
 	}
 	@Override
 	public void writeCollection(String collectionFileName)
@@ -281,8 +281,8 @@ public class Schema_1_0_Processor extends Processor {
 
 	@Override
 	protected void resolveDebugURL(URL schemaURL) {
-		_reporter.warning("", getTime()
-			+ " Processing schema at URL '" + schemaURL.getPath() + "'...");
+//		_reporter.warning("", getTime()
+//			+ " Processing schema at URL '" + schemaURL.getPath() + "'...");
 	}
 
 	/** Gets current time as string in [yyyy-mm-dd-hh:mm:ss.mmm] format.
@@ -302,6 +302,6 @@ public class Schema_1_0_Processor extends Processor {
 
 	@Override
 	protected void resolveDebugEnd() {
-		_reporter.warning("", getTime() + " End processing schema." + "\n");
+//		_reporter.warning("", getTime() + " End processing schema." + "\n");
 	}
 }

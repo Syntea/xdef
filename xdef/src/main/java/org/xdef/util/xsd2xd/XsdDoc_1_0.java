@@ -278,9 +278,9 @@ public class XsdDoc_1_0 {
 			String defName = xdDef.getName();
 			XsdSchemaContainer xsdSchemaContainer;
 			if (namespaces.size() > 1) {
-				_reporter.warning("", "X-definition '" + defName + "' contains "
-					+ "model declarations with different namespace URIs,"
-					+ " therefore single schema can not be created!");
+//				_reporter.warning("", "X-definition '" + defName + "' contains "
+//					+ "model declarations with different namespace URIs,"
+//					+ " therefore single schema can not be created!");
 				XsdSchema mainSchema =
 					new XsdSchema(getSchemaFileName(defName), null);
 				XsdSchemaSet schemaSet = new XsdSchemaSet(mainSchema);

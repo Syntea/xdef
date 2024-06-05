@@ -50,7 +50,6 @@ public class FinalRestriction {
 		{"gMonthDay", "gMonthDay", "n/a", "n/a"},
 		{"gYear", "gYear", "n/a", "n/a"},
 		{"gYearMonth", "gYearMonth", "n/a", "n/a"},
-		{"hexBinary", "hexBinary", "", "n/a"},
 		{"ID", "", "ID", "n/a"},
 		{"IDREF", "", "IDREF", "n/a"},
 		{"IDREFS", "", "n/a", "n/a"},
@@ -79,9 +78,10 @@ public class FinalRestriction {
 		{"unsignedShort", "unsignedShort", "decimal", ""}
 	};
 	/** Set of enumerations. */
-	private HashSet<String> _enumerations = new HashSet();
+	private HashSet<String> _enumerations = new HashSet<String>();
 	/** List of sets of patterns. */
-	private final ArrayList<HashSet<String>> _patterns = new ArrayList();
+	private final ArrayList<HashSet<String>> _patterns =
+		new ArrayList<HashSet<String>>();
 	/** Base XML schema type. */
 	private final BaseType _base;
 	/** Array of restrictions. */
@@ -102,7 +102,7 @@ public class FinalRestriction {
 		}
 		//adding patterns values
 		if (!restriction.getPatterns().isEmpty()) {
-			HashSet<String> patterns = new HashSet();
+			HashSet<String> patterns = new HashSet<String>();
 			for (String string : restriction.getPatterns()) {
 				patterns.add(string);
 			}
@@ -367,7 +367,6 @@ public class FinalRestriction {
 		//adding enumeration values is present
 		if (!_enumerations.isEmpty()) {
 			String xdParams = isXDMethod && ret.endsWith(")") ? "" : null;
-//			String patts = null;
 			TypeMethod enumerations = xdParams == null
 				? new TypeMethod("enum",'A',new String[0]) : null;
 			for (String enumeration : _enumerations) {

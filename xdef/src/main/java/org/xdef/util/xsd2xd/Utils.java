@@ -17,61 +17,61 @@ public class Utils {
 
 	/** Namespace URI for XML Schema 1.0. */
 	public static final String NSURI_SCHEMA = "http://www.w3.org/2001/XMLSchema";
-	/** Local name for XML schema <tt>all</tt> element. */
+	/** Local name for XML schema all element. */
 	public static final String ALL = "all";
-	/** Local name for XML schema <tt>annotation</tt> element. */
+	/** Local name for XML schema annotation element. */
 	public static final String ANNOTATION = "annotation";
-	/** Local name for XML schema <tt>any</tt> element. */
+	/** Local name for XML schema any element. */
 	public static final String ANY = "any";
-	/** Local name for XML schema <tt>anyAttribute</tt> element. */
+	/** Local name for XML schema anyAttribute element. */
 	public static final String ANY_ATTRIBUTE = "anyAttribute";
-	/** Local name for XML schema <tt>appInfo</tt> element. */
+	/** Local name for XML schema appInfo element. */
 	public static final String APP_INFO = "appInfo";
-	/** Local name for XML schema <tt>attribute</tt> element. */
+	/** Local name for XML schema attribute element. */
 	public static final String ATTRIBUTE = "attribute";
-	/** Local name for XML schema <tt>attributeGroup</tt> element. */
+	/** Local name for XML schema attributeGroup element. */
 	public static final String ATTRIBUTE_GROUP = "attributeGroup";
-	/** Local name for XML schema <tt>choice</tt> element. */
+	/** Local name for XML schema choice element. */
 	public static final String CHOICE = "choice";
-	/** Local name for XML schema <tt>complexContent</tt> element. */
+	/** Local name for XML schema complexContent element. */
 	public static final String COMPLEX_CONTENT = "complexContent";
-	/** Local name for XML schema <tt>complexType</tt> element. */
+	/** Local name for XML schema complexType element. */
 	public static final String COMPLEX_TYPE = "complexType";
-	/** Local name for XML schema <tt>documentation</tt> element. */
+	/** Local name for XML schema documentation element. */
 	public static final String DOCUMENTATION = "documentation";
-	/** Local name for XML schema <tt>element</tt> element. */
+	/** Local name for XML schema element element. */
 	public static final String ELEMENT = "element";
-	/** Local name for XML schema <tt>extension</tt> element. */
+	/** Local name for XML schema extension element. */
 	public static final String EXTENSION = "extension";
-	/** Local name for XML schema <tt>field</tt> element. */
+	/** Local name for XML schema field element. */
 	public static final String FIELD = "field";
-	/** Local name for XML schema <tt>group</tt> element. */
+	/** Local name for XML schema group element. */
 	public static final String GROUP = "group";
-	/** Local name for XML schema <tt>key</tt> element. */
+	/** Local name for XML schema key element. */
 	public static final String KEY = "key";
-	/** Local name for XML schema <tt>keyref</tt> element. */
+	/** Local name for XML schema keyref element. */
 	public static final String KEYREF = "keyref";
-	/** Local name for XML schema <tt>notation</tt> element. */
+	/** Local name for XML schema notation element. */
 	public static final String NOTATION = "notation";
-	/** Local name for XML schema <tt>redefine</tt> element. */
+	/** Local name for XML schema redefine element. */
 	public static final String REDEFINE = "redefine";
-	/** Local name for XML schema <tt>restriction</tt> element. */
+	/** Local name for XML schema restriction element. */
 	public static final String RESTRICTION = "restriction";
-	/** Local name for XML schema <tt>schema</tt> element. */
+	/** Local name for XML schema schema element. */
 	public static final String SCHEMA = "schema";
-	/** Local name for XML schema <tt>selector</tt> element. */
+	/** Local name for XML schema selector element. */
 	public static final String SELECTOR = "selector";
-	/** Local name for XML schema <tt>sequence</tt> element. */
+	/** Local name for XML schema sequence element. */
 	public static final String SEQUENCE = "sequence";
-	/** Local name for XML schema <tt>simpleContent</tt> element. */
+	/** Local name for XML schema simpleContent element. */
 	public static final String SIMPLE_CONTENT = "simpleContent";
-	/** Local name for XML schema <tt>simpleType</tt> element. */
+	/** Local name for XML schema simpleType element. */
 	public static final String SIMPLE_TYPE = "simpleType";
-	/** Local name for XML schema <tt>unique</tt> element. */
+	/** Local name for XML schema unique element. */
 	public static final String UNIQUE = "unique";
-	/** Local name for XML schema <tt>import</tt> element. */
+	/** Local name for XML schema import element. */
 	public static final String IMPORT = "import";
-	/** Local name for XML schema <tt>include</tt> element. */
+	/** Local name for XML schema include element. */
 	public static final String INCLUDE = "include";
 
 	/** Private constructor. */
@@ -118,7 +118,7 @@ public class Utils {
 	/** Returns true if given element (element or attribute) is set to be
 	 * qualified by default. If element is not XML schema attribute or element
 	 * declaration it throws exception.
-	 * @param element XML schema <tt>attribute</tt> or <tt>element</tt>
+	 * @param element XML schema attribute or element
 	 * declaration.
 	 * @return true if given node typoe is set to be qualified by default.
 	 */
@@ -133,28 +133,28 @@ public class Utils {
 				? "attributeFormDefault" : "elementFormDefault"));
 	}
 
-	/** Returns <tt>true</tt> if given node is a valid XML schema element.
+	/** Returns true if given node is a valid XML schema element.
 	 * @param node node to test.
-	 * @return <tt>true</tt> if given node is a valid XML schema element.
+	 * @return true if given node is a valid XML schema element.
 	 */
 	public static boolean isSchema(Node node) {
 		return DOMUtils.isElement(node, NSURI_SCHEMA, SCHEMA);
 	}
 
-	/** Returns <tt>true</tt> if given node is a valid XML schema element child.
+	/** Returns true if given node is a valid XML schema element child.
 	 * @param node node to test.
-	 * @return <tt>true</tt> if given node is a valid XML schema element child.
+	 * @return true if given node is a valid XML schema element child.
 	 */
 	public static boolean isSchemaChild(Node node) {
 		return DOMUtils.isChild(node, NSURI_SCHEMA, SCHEMA);
 	}
 
-	/** Returns <tt>true</tt> if given node is element node, that is child of
-	 * XML Schema <tt>group</tt> element, that is child of <tt>schema</tt>
+	/** Returns true if given node is element node, that is child of
+	 * XML Schema group element, that is child of schema
 	 * element.
 	 * @param node testing node.
-	 * @return <tt>true</tt> if given node is element node, that is child of
-	 * XML Schema <tt>group</tt> element, that is child of <tt>schema</tt>
+	 * @return true if given node is element node, that is child of
+	 * XML Schema group element, that is child of schema
 	 * element.
 	 */
 	public static boolean isSchemaGroupChild(Node node) {
@@ -162,21 +162,21 @@ public class Utils {
 			&& isSchemaChild(node.getParentNode()));
 	}
 
-	/** Returns <tt>true</tt> if given node is descendant of schema child, that
+	/** Returns true if given node is descendant of schema child, that
 	 * is attribute group declaration.
 	 * @param node node to test.
-	 * @return <tt>true</tt> if given node is descendant of schema child, that
+	 * @return true if given node is descendant of schema child, that
 	 * is attribute group declaration.
 	 */
 	public static boolean isSchemaDescendantAttrGroupChild(Node node) {
 		return isAttributeGroup(getSchemaChild(node));
 	}
 
-	/** Returns <tt>true</tt> if given node is XML schema
-	 * <tt>attributeGroup</tt> element.
+	/** Returns true if given node is XML schema
+	 * attributeGroup element.
 	 * @param node node to test.
-	 * @return <tt>true</tt> if given node is XML schema
-	 * <tt>attributeGroup</tt> element.
+	 * @return true if given node is XML schema
+	 * attributeGroup element.
 	 */
 	private static boolean isAttributeGroup(Node node) {
 		return DOMUtils.isElement(node, NSURI_SCHEMA, ATTRIBUTE_GROUP);
@@ -204,7 +204,7 @@ public class Utils {
 
 	/** Gets ancestor XML schema element of given node or throws exception.
 	 * @param node schema descendant node.
-	 * @return ancestor XML schema <tt>schema</tt> element.
+	 * @return ancestor XML schema schema element.
 	 * @throws IllegalArgumentException if node is not a schema descendant.
 	 */
 	public static Element getSchemaElement(Node node)
@@ -385,10 +385,10 @@ public class Utils {
 		return ret;
 	}
 
-	/** Returns <tt>true</tt> if given element is child of redefine element,
+	/** Returns true if given element is child of redefine element,
 	 * that is child of schema element.
 	 * @param element checked element.
-	 * @return <tt>true</tt> if given element is child of redefine element,
+	 * @return true if given element is child of redefine element,
 	 * that is child of schema element.
 	 */
 	public static boolean isRedefineSchemaChild(Element element) {
