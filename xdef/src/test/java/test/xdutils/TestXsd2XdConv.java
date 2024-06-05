@@ -70,7 +70,7 @@ public class TestXsd2XdConv extends XDTester {
 	private boolean prepare(String testName) {
 		_prepared = false;
 		//prepare schema
-		File schemaFile = new File(_dataDir.getAbsolutePath(),testName+".xsd");
+		File schemaFile = new File(_dataDir.getAbsolutePath(), testName+".xsd");
 		if (!schemaFile.exists() || !schemaFile.isFile()) {
 			setMessage(new ErrMessage(
 				"Schema file does not exist or is not a file",schemaFile,null));
@@ -348,10 +348,10 @@ public class TestXsd2XdConv extends XDTester {
 		assertTrue(parseFail("t990_3e"), popMessage());
 		assertTrue(parseFail("t990_4e"), popMessage());
 		assertTrue(parseFail("t990_5e"), popMessage());
-
 		assertTrue(prepare("test_00015"), popMessage());
 		assertTrue(parse("test_00015_data"), popMessage());
-
+		assertTrue(prepare("MARC21"), popMessage());
+		assertTrue(parse("MARC21"), popMessage());
 		//my tests
 		assertTrue(prepare("basicTestSchema"), popMessage());
 		assertTrue(parse("basicTest_valid_1"), popMessage());

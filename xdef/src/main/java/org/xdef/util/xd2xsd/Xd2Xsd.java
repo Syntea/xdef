@@ -326,14 +326,14 @@ public class Xd2Xsd {
 	}
 
 	/** Generate sequence of models.
-	 * @param complt complexType element.
+	 * @param complextype complexType element.
 	 * @param parent node where to add models.
 	 * @param children array with children.
 	 * @param index index of the first child.
 	 * @param endIndex index of the last child.
 	 * @return the index where to continue.
 	 */
-	private int genSequence(final Element complt,
+	private int genSequence(final Element complextype,
 		final Element parent,
 		final XMNode[] children,
 		final int index,
@@ -343,16 +343,22 @@ public class Xd2Xsd {
 			XMNode x = children[i];
 			switch (x.getKind()) {
 				case XMNode.XMELEMENT:
-					genElem(parent, (XMElement) x);
+					if (!x.getOccurence().isIllegal()) {
+						genElem(parent, (XMElement) x);
+					}
 					continue;
 				case XMNode.XMTEXT:
-					complt.setAttribute("mixed", "true");
+					if (!x.getOccurence().isIllegal()) {
+						complextype.setAttribute("mixed", "true");
+					}
 					continue;
 				case XMNode.XMMIXED:
 				case XMNode.XMCHOICE:
 				case XMNode.XMSEQUENCE: {
-					XMSelector xsel = (XMSelector) x;
-					i = genGroup(complt, parent, xsel, children, i);
+					if (!x.getOccurence().isIllegal()) {
+						XMSelector xsel = (XMSelector) x;
+						i = genGroup(complextype, parent, xsel, children, i);
+					}
 					continue;
 				}
 				case XMNode.XMSELECTOR_END:
@@ -399,10 +405,13 @@ public class Xd2Xsd {
 	 */
 	private void addAttrs(final Element el, final XMData[] attrs) {
 		for (XMNode x: attrs) {
+			XMOccurrence attOcc = x.getOccurence();
+			if (attOcc.isIgnore()) {
+				continue;
+			}
 			Element att = genSchemaElem(el, "attribute");
 			String targetNs =
 				getSchemaRoot(el).getAttribute("targetNamespace");
-			XMOccurrence attOcc = x.getOccurence();
 			att.setAttribute("use",	attOcc.isRequired()?"required":"optional");
 			String nsUri = x.getNSUri();
 			if (nsUri != null && !nsUri.isEmpty()) {
@@ -908,7 +917,7 @@ public class Xd2Xsd {
 			throw new SRuntimeException(XDCONV.XDCONV201, xname);
 		}
 		String mname;
-		XMElement[] roots = null;
+		XMElement[] roots;
 		if (modelName == null || modelName.isEmpty()) {
 			roots = xp.getXMDefinition(xname).getRootModels();
 			if (roots != null && roots.length > 0) {
