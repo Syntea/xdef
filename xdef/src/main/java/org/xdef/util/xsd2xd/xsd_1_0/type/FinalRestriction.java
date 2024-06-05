@@ -79,10 +79,9 @@ public class FinalRestriction {
 		{"unsignedShort", "unsignedShort", "decimal", ""}
 	};
 	/** Set of enumerations. */
-	private HashSet<String> _enumerations = new HashSet<String>();
+	private HashSet<String> _enumerations = new HashSet();
 	/** List of sets of patterns. */
-	private final ArrayList<HashSet<String>> _patterns =
-		new ArrayList<HashSet<String>>();
+	private final ArrayList<HashSet<String>> _patterns = new ArrayList();
 	/** Base XML schema type. */
 	private final BaseType _base;
 	/** Array of restrictions. */
@@ -97,18 +96,14 @@ public class FinalRestriction {
 		_base = (BaseType) restriction.getBase();
 		//adding enumeration values
 		if (!restriction.getEnumerations().isEmpty()) {
-			Iterator i = restriction.getEnumerations().iterator();
-			while (i.hasNext()) {
-				String string = (String) i.next();
+			for (String string : restriction.getEnumerations()) {
 				_enumerations.add(string);
 			}
 		}
 		//adding patterns values
 		if (!restriction.getPatterns().isEmpty()) {
-			HashSet<String> patterns = new HashSet<String>();
-			Iterator i = restriction.getPatterns().iterator();
-			while (i.hasNext()) {
-				String string = (String) i.next();
+			HashSet<String> patterns = new HashSet();
+			for (String string : restriction.getPatterns()) {
 				patterns.add(string);
 			}
 			_patterns.add(patterns);
@@ -163,19 +158,15 @@ public class FinalRestriction {
 	 */
 	public void addRestriction(Restriction restriction) {
 		if (!restriction.getEnumerations().isEmpty()) {
-			_enumerations = new HashSet<String>();
-			Iterator i = restriction.getEnumerations().iterator();
-			while (i.hasNext()) {
-				String string = (String) i.next();
+			_enumerations = new HashSet();
+			for (String string : restriction.getEnumerations()) {
 				_enumerations.add(string);
 			}
 		}
 		//adding patterns values
 		if (!restriction.getPatterns().isEmpty()) {
-			HashSet<String> patterns = new HashSet<String>();
-			Iterator i = restriction.getPatterns().iterator();
-			while (i.hasNext()) {
-				String string = (String) i.next();
+			HashSet<String> patterns = new HashSet();
+			for (String string : restriction.getPatterns()) {
 				patterns.add(string);
 			}
 			_patterns.add(patterns);
@@ -300,51 +291,74 @@ public class FinalRestriction {
 		}
 		String ret = methodAndRestrictions.toString();
 		if (ret.isEmpty()) {
-			ret = getMethodName(baseType, VALUE_METHOD);
+				ret = getMethodName(baseType, VALUE_METHOD);
 			ret = ret.isEmpty() || "n/a".equals(ret) ? "" : (ret + "()");
 		}
 		//resolving patterns
 		if (!_patterns.isEmpty()) {
 /*VT2*/
-			ArrayList<Expression> patternsList = new ArrayList<Expression>();
+			ArrayList<Expression> patternsList = new ArrayList();
+/*VT3*/
+			String xdParams = isXDMethod && ret.endsWith(")") ? "" : "";
+/*VT3*
 			String xdParams = isXDMethod && ret.endsWith(")") ? "" : null;
-			Iterator i = _patterns.iterator();
-			while (i.hasNext()) {
-				HashSet patternSet = (HashSet) i.next();
-				Expression patterns =
-					xdParams == null ? new Expression(Expression.OR) : null;
+/*VT3*/
+			for (HashSet patternSet : _patterns) {
 				Iterator it = patternSet.iterator();
 				while (it.hasNext()) {
 					String string = "'" +
 						SUtils.modifyString((String) it.next(), "'", "\\'")+"'";
+					/*VT3*
 					if (xdParams != null) {
-						if (xdParams.isEmpty()) {
-							xdParams = "%pattern=[";
-						} else {
-							xdParams += ", ";
-						}
-						xdParams+= SUtils.modifyString(string,"\\","\\\\");
+					/*VT3*/
+					if (xdParams.isEmpty()) {
+						xdParams = "%pattern=[";
 					} else {
-						patterns.addMethod(
-							new TypeMethod("regex", 'A', new String[]{string}));
-						patternsList.add(patterns);
+						xdParams += ", ";
 					}
+					xdParams+= SUtils.modifyString(string,"\\","\\\\");
+					/*VT3*
+					} else {
+					patterns.addMethod(
+					new TypeMethod("regex", 'A', new String[]{string}));
+					patternsList.add(patterns);
+					}
+					/*VT3*/
 				}
 			}
-			if (xdParams != null) {
-				ret = ret.substring(0, ret.length() - 1);
+/*VT3*/
+			String whiteSpaceParam = null;
+			if (_restrictions[Restriction.WHITE_SPACE] != null) {
+				whiteSpaceParam = "%whiteSpace='"
+					+ _restrictions[Restriction.WHITE_SPACE] + "'";
+			}
+/*VT3*/
+			if (!xdParams.isEmpty() || whiteSpaceParam != null) {
+				if (!ret.isEmpty()) {
+					ret = ret.substring(0, ret.length() - 1);
+/*VT3*/
+				} else {
+					ret = getMethodName(baseType, METHOD_NAME) + '(';
+/*VT3*/
+				}
 				if (!ret.endsWith("(")) {
 					ret += ", ";
 				}
+/*VT3*/
+				ret += xdParams + ']';
+				if (whiteSpaceParam != null) {
+					ret += ", " + whiteSpaceParam;
+				}
+				ret += ')';
+/*VT3*
 				ret += xdParams + "])";
+/*VT3*/
 			} else {
 				if (!ret.isEmpty()) {
 					ret += " & ";
 				}
 				ret += (patternsList.size() > 1 ? "(" : "");
-				Iterator it = patternsList.iterator();
-				while (it.hasNext()) {
-					Expression expression = (Expression) it.next();
+				for (Expression expression : patternsList) {
 					ret += expression.toString();
 				}
 				ret += patternsList.size() > 1 ? ")" : "";
@@ -356,9 +370,7 @@ public class FinalRestriction {
 //			String patts = null;
 			TypeMethod enumerations = xdParams == null
 				? new TypeMethod("enum",'A',new String[0]) : null;
-			Iterator i = _enumerations.iterator();
-			while (i.hasNext()) {
-				String enumeration = (String) i.next();
+			for (String enumeration : _enumerations) {
 				if (xdParams != null) {
 					if (xdParams.isEmpty()) {
 						xdParams = "%enumeration=[";

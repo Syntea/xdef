@@ -1,22 +1,16 @@
 package bugreports;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.zip.GZIPInputStream;
-import org.xdef.XDDocument;
 import org.xdef.XDFactory;
 import org.xdef.XDPool;
-import org.xdef.sys.NullReportWriter;
 import static org.xdef.sys.STester.runTest;
+import org.xdef.util.XsdToXdef;
 import test.XDTester;
 
 /**
  * @author Trojan
  */
-public class B extends XDTester {
-	public B() {super();}
-
+public class A extends XDTester {
 	@Override
 	/** Run test and display error information. */
 	public void test() {
@@ -32,23 +26,17 @@ public class B extends XDTester {
 			if (dir == null) {
 				throw new RuntimeException("Can't find tempx on flash");
 			}
+			File schemaFile = new File(dir, "_x_.xsd");
 			File xdFile = new File(dir, "_x_.xdef");
+			xdFile.delete();
+			XsdToXdef.genCollection(schemaFile.getAbsolutePath(),
+				xdFile.getAbsolutePath(), null, null);
 			if (!xdFile.exists() || !xdFile.isFile()) {
-				throw new RuntimeException("Can't find Test1a.xdef on flash");
+				throw new RuntimeException("File " + xdFile + " not exists");
 			}
 			XDPool xp = XDFactory.compileXD(null, xdFile);
 //			xp.displayCode();
-//if(true)return;
-			File data = new File(dir, "dnb_all_dnbmarc_20240213-3.mrc.xml.gz");
-			if (!data.exists() || !data.isFile()) {
-				throw new RuntimeException("Can't find archive file. on flash");
-			}
-			try (GZIPInputStream in =
-				new GZIPInputStream(new FileInputStream(data))) {
-				XDDocument xd = xp.createXDDocument();
-				xd.xparse(in, new NullReportWriter(true));
-			}
-		} catch (IOException | RuntimeException ex) {fail(ex);}
+		} catch (Exception ex) {fail(ex);}
 	}
 
 	/** Run test
