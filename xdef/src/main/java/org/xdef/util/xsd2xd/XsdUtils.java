@@ -192,10 +192,8 @@ public final class XsdUtils {
 	 */
 	public static MyQName getRefQName(Element schema, String modelName) {
 		String targetNS = getSchemaTargetNS(schema);
-		if (targetNS == null) {
-			return new MyQName(modelName);
-		}
-		return new MyQName(Utils.getNSPrefix(schema, targetNS), modelName);
+		return (targetNS == null) ? new MyQName(modelName)
+			: new MyQName(Utils.getNSPrefix(schema, targetNS), modelName);
 	}
 
 	/** Returns XML Schema annotation child element of given schema

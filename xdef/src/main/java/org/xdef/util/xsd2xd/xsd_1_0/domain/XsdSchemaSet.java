@@ -20,7 +20,7 @@ public class XsdSchemaSet implements XsdSchemaContainer {
 
 	/** Creates instance of schema set with main schema and no secondary schemas.
 	 * @param mainSchema schemas set main schema.
-	 * @throws NullPointerException if given main schema is <tt>null</tt>.
+	 * @throws NullPointerException if given main schema is null.
 	 */
 	public XsdSchemaSet(XsdSchema mainSchema) {
 		if (mainSchema == null) {
@@ -41,7 +41,7 @@ public class XsdSchemaSet implements XsdSchemaContainer {
 
 	/** Adds given schema to scheams map.
 	 * @param schema schema to add.
-	 * @throws NullPointerException if given schema is <tt>null</tt>.
+	 * @throws NullPointerException if given schema is null.
 	 */
 	public void addSchema(XsdSchema schema) {
 		if (schema == null) {
@@ -55,7 +55,7 @@ public class XsdSchemaSet implements XsdSchemaContainer {
 		_namespaces.put(schema.getTargetNS(), schema);
 	}
 
-	/** Gets schema from schemas set with given target namespace or <tt>null</tt>
+	/** Gets schema from schemas set with given target namespace or null
 	 * if there is no schema with such target namespace.
 	 * @param targetNS target namespace of schema.
 	 * @return schema representation.
@@ -63,8 +63,10 @@ public class XsdSchemaSet implements XsdSchemaContainer {
 	public XsdSchema getSchema(String targetNS) {
 		return _namespaces.get(targetNS);
 	}
+
 	@Override
 	public int getType() {return Type.SCHEMA_SET;}
+
 	@Override
 	public String toString() {
 		return "XsdSchemaSet[mainSchema='" + _mainSchema.toString() + "', "

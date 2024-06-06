@@ -11,6 +11,9 @@ import org.w3c.dom.*;
 /** Represents any XML schema data type. */
 public abstract class Type {
 
+	/** Type name. */
+	protected String _name;
+
 	/** Returns instance of type declaration given to type name and element,
 	 * containing reference to that type.
 	 * @param fullName full name of type.
@@ -36,7 +39,7 @@ public abstract class Type {
 	}
 
 	/** Returns instance of type declaration given to complex type element.
-	 * @param complexTypeElement <tt>complexType</tt> element.
+	 * @param complexTypeElement complexType element.
 	 * @param schemaURL URL of schema containing element.
 	 * @param schemaElements table of all schema elements.
 	 * @return type object.
@@ -63,7 +66,7 @@ public abstract class Type {
 		}
 		String base = derivation.getAttribute("base");
 		String prefix = DOMUtils.getQNamePrefix(base);
-		String namespace = null;
+		String namespace;
 		if ("".equals(prefix)) {
 			//default namespace
 			namespace = DOMUtils.getNSURI("", content);
@@ -74,14 +77,12 @@ public abstract class Type {
 		if (Utils.NSURI_SCHEMA.equals(namespace)) {
 			String type = DOMUtils.getQNameLocalpart(base);
 			if ("anyType".equals(type)) {
-				// no simple type
-				return null;
+				return null; // no simple type
 			}
-			//base type
-			return new BaseType(type);
+			return new BaseType(type); //base type
 		}
 		//getting base type
-		GlobalDeclaration decl = null;
+		GlobalDeclaration decl;
 		try {
 			if (Utils.isRedefineSchemaChild(complexTypeElement)) {
 				decl = GlobalDeclaration.getGlobalDeclarationInRedefinedSchema(
@@ -105,7 +106,7 @@ public abstract class Type {
 					decl.getSchemaURL(), schemaElements, decl.isRedefined());
 			}
 		}
-		Type baseType = null;
+		Type baseType;
 		if (Utils.COMPLEX_TYPE.equals(decl.getType())) {
 			baseType = getType(decl.getGlobalDeclarationElement(),
 				decl.getSchemaURL(), schemaElements);
@@ -118,8 +119,6 @@ public abstract class Type {
 		Restriction restriction = new Restriction(derivation, baseType);
 		return new SimpleType(restriction);
 	}
-	/** Type name. */
-	protected String _name;
 
 	/** Type name getter.
 	 * @return  type name.

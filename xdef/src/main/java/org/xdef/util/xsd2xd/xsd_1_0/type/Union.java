@@ -50,9 +50,7 @@ public class Union extends Specification {
 	@Override
 	public String getTypeMethod() {
 		String ret = "";
-		Iterator<Type>  i = _itemTypes.iterator();
-		while (i.hasNext()) {
-			Type type = i.next();
+		for (Type type : _itemTypes) {
 			ret += ("".equals(ret) ? "" : " | ") + type.getTypeMethod();
 		}
 		return ret;
@@ -62,11 +60,9 @@ public class Union extends Specification {
 	public String toString() {
 		String ret = "Union [";
 		int counter = 0;
-		Iterator<Type> i = _itemTypes.iterator();
-		while (i.hasNext()) {
-			Type type = i.next();
+		for (Type type : _itemTypes) {
 			ret += (counter == 0 ? "type=" + type.toString() : ", type="
-					+ type.toString());
+				+ type.toString());
 			counter++;
 		}
 		return ret;

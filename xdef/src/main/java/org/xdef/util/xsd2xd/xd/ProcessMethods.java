@@ -42,10 +42,8 @@ public class ProcessMethods {
 			if ("sequence".equals(groupType)
 				&& Utils.NSURI_SCHEMA.equals(parentElem.getNamespaceURI())
 				&& "complexType".equals(parentElem.getLocalName())
-				&& new Integer(1).equals(
-					Utils.getMinOccurrence(objectGroupElement))
-				&& new Integer(1).equals(
-					Utils.getMaxOccurrence(objectGroupElement))) {
+				&& Utils.getMinOccurrence(objectGroupElement) == 1
+				&& Utils.getMaxOccurrence(objectGroupElement) == 1) {
 				//add nothing (return current xdefinition context element)
 				return xdefContextElement;
 			}

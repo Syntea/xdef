@@ -38,7 +38,7 @@ public class SimpleType extends Type {
 			_specification =
 				new Union(specification, schemaURL, schemaElements);
 		} else if ("list".equals(specificationName)) {
-			_specification = new List(specification, schemaURL, schemaElements);
+			_specification = new XSList(specification, schemaURL, schemaElements);
 		}
 	}
 

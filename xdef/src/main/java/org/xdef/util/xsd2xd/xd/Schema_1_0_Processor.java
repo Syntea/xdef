@@ -285,21 +285,6 @@ public class Schema_1_0_Processor extends Processor {
 //			+ " Processing schema at URL '" + schemaURL.getPath() + "'...");
 	}
 
-	/** Gets current time as string in [yyyy-mm-dd-hh:mm:ss.mmm] format.
-	 * @return time as string.
-	 */
-	private String getTime() {
-		Calendar now = Calendar.getInstance();
-		now.setTime(Calendar.getInstance().getTime());
-		return "[" + now.get(Calendar.YEAR)
-			+ "-" + (now.get(Calendar.MONTH) + 1)
-			+ "-" + now.get(Calendar.DAY_OF_MONTH)
-			+ "T" + now.get(Calendar.HOUR_OF_DAY)
-			+ ":" + now.get(Calendar.MINUTE)
-			+ ":" + now.get(Calendar.SECOND) + "."
-			+ now.get(Calendar.MILLISECOND) + "]";
-	}
-
 	@Override
 	protected void resolveDebugEnd() {
 //		_reporter.warning("", getTime() + " End processing schema." + "\n");

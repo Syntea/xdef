@@ -53,8 +53,8 @@ public class GlobalDeclaration {
 				//namespace of referred declaration is other than target
 				//namespace of schema containing reference
 			} else {
-				return getGlobalDeclarationInImports(namespace, refLocalName,
-					schemaURL, type, schemaElements);
+				return getGlobalDeclarationInImports(
+					namespace, refLocalName, schemaURL, type, schemaElements);
 			}
 			//reference does not contain prefix
 		} else {

@@ -2,6 +2,7 @@ package org.xdef.util.xsd2xd.xsd_1_0.type;
 
 import org.xdef.sys.SUtils;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /** Represents type method */
 public class TypeMethod {
@@ -24,10 +25,7 @@ public class TypeMethod {
 		String[] parameters) {
 		_methodName = methodName;
 		_valueType = valueType;
-		for (int i = 0; i < parameters.length; i++) {
-			String string = parameters[i];
-			_parameters.add(string);
-		}
+		_parameters.addAll(Arrays.asList(parameters));
 	}
 
 	/** Gets method name.
@@ -35,7 +33,7 @@ public class TypeMethod {
 	 */
 	public String getMethodName() {return _methodName;}
 
-	/** Gets method parameter at given position or <tt>null</tt> if position
+	/** Gets method parameter at given position or null if position
 	 * is not in bounds of parameters list.
 	 * @param position  position of parameter.
 	 * @return          parameter value.
@@ -76,7 +74,7 @@ public class TypeMethod {
 		String ret = _methodName + "(";
 		for (int i = 0; i < _parameters.size(); i++) {
 			String parameter = _parameters.get(i);
-			if (parameter.indexOf("\\") >= 0) {
+			if (parameter.contains("\\")) {
 				parameter = SUtils.modifyString(parameter, "\\", "\\\\");
 			}
 			ret += (i == 0 ? "" : ", ") + parameter;

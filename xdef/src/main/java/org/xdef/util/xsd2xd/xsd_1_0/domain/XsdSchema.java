@@ -13,10 +13,9 @@ public final class XsdSchema implements XsdSchemaContainer {
 	private final String _targetNS;
 
 	/** Creates instance of schema.
-	 *
 	 * @param name schema file name.
 	 * @param targetNS schema target namespace URI.
-	 * @throws NullPointerException if given schema file name is <tt>null</tt>.
+	 * @throws NullPointerException if given schema file name is null.
 	 * @throws IllegalArgumentException if given schema file name is empty.
 	 */
 	public XsdSchema(String name, String targetNS) {
@@ -27,11 +26,7 @@ public final class XsdSchema implements XsdSchemaContainer {
 			throw new IllegalArgumentException("Given schema name is empty!");
 		}
 		_name = name;
-		if (targetNS != null && targetNS.length() == 0) {
-			_targetNS = null;
-		} else {
-			_targetNS = targetNS;
-		}
+		_targetNS = targetNS!=null && targetNS.length()==0 ? null : targetNS;
 	}
 
 	/** Schema file name getter.

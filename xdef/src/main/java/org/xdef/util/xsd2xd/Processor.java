@@ -222,12 +222,9 @@ public abstract class Processor implements Convertor {
 	 * schema elements.
 	 */
 	protected final void processSchemaElements(Map xdefElements)
-			throws RuntimeException {
+		throws RuntimeException {
 		checkXdefElements(xdefElements);
-		Iterator<Map.Entry<URL, Element>> i =
-			_schemaElements.entrySet().iterator();
-		while (i.hasNext()) {
-			Map.Entry<URL, Element> entry = i.next();
+		for (Map.Entry<URL, Element> entry : _schemaElements.entrySet()) {
 			if (!_schemaURLStack.isEmpty()) {
 				throw new RuntimeException(
 					"Illegal state of currently processing schema URLs stack!");

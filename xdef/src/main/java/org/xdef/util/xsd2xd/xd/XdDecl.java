@@ -14,9 +14,7 @@ public final class XdDecl extends XdModel {
 	 * name is null.
 	 * @throws IllegalArgumentException if given declaration name is empty.
 	 */
-	public XdDecl(XdDef def, String name) {
-		super(def, name);
-	}
+	public XdDecl(XdDef def, String name) {super(def, name);}
 
 	@Override
 	public int getType() {return Type.DECLARATION;}

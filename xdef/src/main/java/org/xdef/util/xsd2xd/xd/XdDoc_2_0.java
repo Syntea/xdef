@@ -66,8 +66,8 @@ public final class XdDoc_2_0 extends XdDoc {
 		}
 	}
 
-	/** Initiates given X-definition <tt>collection</tt> element.
-	 * @param collection X-definition <tt>collection</tt> element.
+	/** Initiates given X-definition collection element.
+	 * @param collection X-definition collection element.
 	 */
 	private void initCollection(Element collection) {
 		NodeList defs = Utils.getChildElementsNS(collection,
@@ -97,8 +97,8 @@ public final class XdDoc_2_0 extends XdDoc {
 		}
 	}
 
-	/** Initiates given X-definition <tt>def</tt> element.
-	 * @param def X-definition <tt>def</tt> element.
+	/** Initiates given X-definition def element.
+	 * @param def X-definition def element.
 	 * @throws RuntimeException if error occurs during creating X-definition
 	 * or model representation.
 	 */
@@ -114,9 +114,8 @@ public final class XdDoc_2_0 extends XdDoc {
 		NodeList models = Utils.getChildElements(def);
 		for (int i = 0; i < models.getLength(); i++) {
 			Element model = (Element) models.item(i);
-			XdModel xdModel = null;
 			try {
-				xdModel = XdUtils.createXdModel(model);
+				XdModel xdModel = XdUtils.createXdModel(model);
 				_xdModels.put(xdModel, model);
 			} catch (Exception ex) {
 				throw new RuntimeException(
@@ -165,9 +164,7 @@ public final class XdDoc_2_0 extends XdDoc {
 			throw new IllegalArgumentException(
 				"Given X-definition declaration name is empty");
 		}
-		Iterator<XdModel> it = _xdModels.keySet().iterator();
-		while (it.hasNext()) {
-			XdModel xdModel = it.next();
+		for (XdModel xdModel : _xdModels.keySet()) {
 			if (XdModel.Type.DECLARATION == xdModel.getType()) {
 				XdDecl xdDecl = (XdDecl) xdModel;
 				if (xdDeclName.equals(xdDecl.getName())) {

@@ -5,17 +5,13 @@ package org.xdef.util.xsd2xd.xsd_1_0.domain;
  */
 public final class XsdSType extends XsdModel {
 
-	/**
-	 * Hashcode.
-	 */
+	/** Hashcode. */
 	private int _hashCode = 0;
 
 	/** Creates instance of simple type model.
-	 *
 	 * @param schema model schema.
 	 * @param name simple type name.
-	 * @throws NullPointerException if given model schema or simple type name is
-	 * <tt>null</tt>.
+	 * @throws NullPointerException if model schema or simple type name is null.
 	 * @throws IllegalArgumentException if given simple type name is empty.
 	 */
 	public XsdSType(XsdSchema schema, String name) {

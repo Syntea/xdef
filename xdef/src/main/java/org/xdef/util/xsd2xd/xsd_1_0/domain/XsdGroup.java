@@ -9,11 +9,9 @@ public final class XsdGroup extends XsdModel {
 	private int _hashCode = 0;
 
 	/** Creates instance of group model.
-	 *
 	 * @param schema model schema.
 	 * @param name group name.
-	 * @throws NullPointerException if given model schema or group name is
-	 * <tt>null</tt>.
+	 * @throws NullPointerException if given model schema or group name is null.
 	 * @throws IllegalArgumentException if given group name is empty.
 	 */
 	public XsdGroup(XsdSchema schema, String name) {
@@ -21,6 +19,7 @@ public final class XsdGroup extends XsdModel {
 	}
 	@Override
 	public int getType() {return Type.GROUP;}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {

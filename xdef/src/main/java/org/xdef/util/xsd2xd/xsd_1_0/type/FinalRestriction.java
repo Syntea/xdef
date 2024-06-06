@@ -381,7 +381,7 @@ public class FinalRestriction {
 						enumeration = "'" + enumeration + "'";
 					}
 					xdParams += enumeration;
-				} else {
+				} else if (enumerations != null) {
 					enumerations.addParameter('"' + enumeration + '"');
 				}
 			}
@@ -391,7 +391,7 @@ public class FinalRestriction {
 					ret += ", ";
 				}
 				ret += xdParams + "])";
-			} else {
+			} else if (enumerations != null) {
 				if (!ret.isEmpty()) {
 					ret += " & ";
 				}

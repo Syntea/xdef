@@ -52,7 +52,7 @@ public abstract class XdDoc {
 	 * @param debugMode debug mode switch.
 	 * @return proper implementation of X-definition document.
 	 * @throws NullPointerException if given X-definition as string
-	 * is <tt>null</tt>.
+	 * is null.
 	 * @throws IllegalArgumentException if given X-definition as string is empty.
 	 * @throws RuntimeException if error occurs during creating
 	 * collection element.
@@ -82,7 +82,7 @@ public abstract class XdDoc {
 	 * @param reporter reporter for reporting warnings and errors.
 	 * @param debugMode debug mode switch.
 	 * @return proper implementation of X-definition document.
-	 * @throws NullPointerException if given X-definition URL is <tt>null</tt>.
+	 * @throws NullPointerException if given X-definition URL is null.
 	 * @throws RuntimeException if error occurs during creating collection
 	 * element.
 	 */
@@ -108,7 +108,7 @@ public abstract class XdDoc {
 	 * @param reporter reporter for reporting warnings and errors.
 	 * @param debugMode debug mode switch.
 	 * @return proper implementation of X-definition document.
-	 * @throws NullPointerException if given X-definition file is <tt>null</tt>.
+	 * @throws NullPointerException if given X-definition file is null.
 	 * @throws RuntimeException if error occurs during creating
 	 * collection element.
 	 */
@@ -135,7 +135,7 @@ public abstract class XdDoc {
 	 * @param debugMode debug mode switch.
 	 * @return proper implementation of X-definition document.
 	 * @throws NullPointerException if given X-definition input stream
-	 * is <tt>null</tt>.
+	 * is null.
 	 * @throws RuntimeException if error occurs during parsing X-definition from
 	 * input stream.
 	 */

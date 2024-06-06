@@ -63,9 +63,6 @@ public class Restriction extends Specification {
 	/** White space restriction facet. */
 	private String _whiteSpace;
 
-	/** Creates empty restriction. */
-	private Restriction() {}
-
 	/** Creates instance of restriction.
 	 * @param restrictionElement    restriction declaration element.
 	 * @param schemaURL URL of schema containing restriction.
@@ -100,30 +97,19 @@ public class Restriction extends Specification {
 			Element restriction = (Element) restrictions.item(i);
 			String name = restriction.getLocalName();
 			String value = restriction.getAttribute("value");
-			if ("enumeration".equals(name)) {
-				_enumerations.add(value);
-			} else if ("fractionDigits".equals(name)) {
-				_restrictions[FRACTION_DIGITS] = value;
-			} else if ("length".equals(name)) {
-				_restrictions[LENGTH] = value;
-			} else if ("maxExclusive".equals(name)) {
-				_restrictions[MAX_EXCLUSIVE] = value;
-			} else if ("maxInclusive".equals(name)) {
-				_restrictions[MAX_INCLUSIVE] = value;
-			} else if ("maxLength".equals(name)) {
-				_restrictions[MAX_LENGTH] = value;
-			} else if ("minExclusive".equals(name)) {
-				_restrictions[MIN_EXCLUSIVE] = value;
-			} else if ("minInclusive".equals(name)) {
-				_restrictions[MIN_INCLUSIVE] = value;
-			} else if ("minLength".equals(name)) {
-				_restrictions[MIN_LENGTH] = value;
-			} else if ("pattern".equals(name)) {
-				_patterns.add(value);
-			} else if ("totalDigits".equals(name)) {
-				_restrictions[TOTAL_DIGITS] = value;
-			} else if ("whiteSpace".equals(name)) {
-				_restrictions[WHITE_SPACE] = value;
+			switch (name) {
+				case "enumeration": _enumerations.add(value); break;
+				case"fractionDigits":_restrictions[FRACTION_DIGITS]=value;break;
+				case "length": _restrictions[LENGTH] = value; break;
+				case "maxExclusive": _restrictions[MAX_EXCLUSIVE] = value;break;
+				case "maxInclusive": _restrictions[MAX_INCLUSIVE] = value;break;
+				case "maxLength": _restrictions[MAX_LENGTH] = value; break;
+				case "minExclusive": _restrictions[MIN_EXCLUSIVE] = value;break;
+				case "minInclusive": _restrictions[MIN_INCLUSIVE] = value;break;
+				case "minLength": _restrictions[MIN_LENGTH] = value; break;
+				case "pattern": _patterns.add(value); break;
+				case "totalDigits": _restrictions[TOTAL_DIGITS] = value; break;
+				case "whiteSpace": _restrictions[WHITE_SPACE] = value; break;
 			}
 		}
 	}
@@ -214,108 +200,6 @@ public class Restriction extends Specification {
 	public String getWhiteSpace() {return _whiteSpace;}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (obj == null) {
-			return false;
-		}
-		if (getClass() != obj.getClass()) {
-			return false;
-		}
-		final Restriction other = (Restriction) obj;
-		if (this._base != other._base && (this._base == null
-			|| !this._base.equals(other._base))) {
-			return false;
-		}
-		if (this._enumerations != other._enumerations
-			&& (this._enumerations == null
-			|| !this._enumerations.equals(other._enumerations))) {
-			return false;
-		}
-		if (this._patterns != other._patterns && (this._patterns == null
-			|| !this._patterns.equals(other._patterns))) {
-			return false;
-		}
-		if ((this._fractionDigits == null) ?
-			(other._fractionDigits != null) :
-			!this._fractionDigits.equals(other._fractionDigits)) {
-			return false;
-		}
-		if ((this._length == null) ?
-			(other._length != null) :
-			!this._length.equals(other._length)) {
-			return false;
-		}
-		if ((this._maxExclusive == null) ?
-			(other._maxExclusive != null) :
-			!this._maxExclusive.equals(other._maxExclusive)) {
-			return false;
-		}
-		if ((this._maxInclusive == null) ?
-			(other._maxInclusive != null) :
-			!this._maxInclusive.equals(other._maxInclusive)) {
-			return false;
-		}
-		if ((this._maxLength == null) ?
-			(other._maxLength != null) :
-			!this._maxLength.equals(other._maxLength)) {
-			return false;
-		}
-		if ((this._minExclusive == null) ?
-			(other._minExclusive != null) :
-			!this._minExclusive.equals(other._minExclusive)) {
-			return false;
-		}
-		if ((this._minInclusive == null) ?
-			(other._minInclusive != null) :
-			!this._minInclusive.equals(other._minInclusive)) {
-			return false;
-		}
-		if ((this._minLength == null) ?
-			(other._minLength != null) :
-			!this._minLength.equals(other._minLength)) {
-			return false;
-		}
-		if ((this._totalDigits == null) ?
-			(other._totalDigits != null) :
-			!this._totalDigits.equals(other._totalDigits)) {
-			return false;
-		}
-		return !((this._whiteSpace == null) ?
-			(other._whiteSpace != null) :
-			!this._whiteSpace.equals(other._whiteSpace));
-	}
-
-	@Override
-	public int hashCode() {
-		int hash = (this._base != null ? this._base.hashCode() : 0);
-		hash = 53 * hash + (this._enumerations != null ?
-			this._enumerations.hashCode() : 0);
-		hash = 53 * hash + (this._patterns != null ?
-			this._patterns.hashCode() : 0);
-		hash = 53 * hash + (this._fractionDigits != null ?
-			this._fractionDigits.hashCode() : 0);
-		hash = 53 * hash + (this._length != null ?
-			this._length.hashCode() : 0);
-		hash = 53 * hash + (this._maxExclusive != null ?
-			this._maxExclusive.hashCode() : 0);
-		hash = 53 * hash + (this._maxInclusive != null ?
-			this._maxInclusive.hashCode() : 0);
-		hash = 53 * hash + (this._maxLength != null ?
-			this._maxLength.hashCode() : 0);
-		hash = 53 * hash + (this._minExclusive != null ?
-			this._minExclusive.hashCode() : 0);
-		hash = 53 * hash + (this._minInclusive != null ?
-			this._minInclusive.hashCode() : 0);
-		hash = 53 * hash + (this._minLength != null ?
-			this._minLength.hashCode() : 0);
-		hash = 53 * hash + (this._totalDigits != null ?
-			this._totalDigits.hashCode() : 0);
-		hash = 53 * hash + (this._whiteSpace != null ?
-			this._whiteSpace.hashCode() : 0);
-		return hash;
-	}
-
-	@Override
 	public String getTypeMethod() {
 		if (_base instanceof SimpleType) {
 			Stack<Specification> stack = getSpecificationStack();
@@ -369,7 +253,82 @@ public class Restriction extends Specification {
 	}
 
 	@Override
-	public String toString() {
-		return "Restriction [base=" + _base.toString() + "]";
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final Restriction other = (Restriction) obj;
+		if (_base!=other._base && (_base==null || !_base.equals(other._base))) {
+			return false;
+		}
+		if (_enumerations != other._enumerations && (_enumerations == null
+			|| !_enumerations.equals(other._enumerations))) {
+			return false;
+		}
+		if (_patterns != other._patterns && (_patterns == null
+			|| !_patterns.equals(other._patterns))) {
+			return false;
+		}
+		if ((_fractionDigits == null) ? (other._fractionDigits != null)
+			: !_fractionDigits.equals(other._fractionDigits)) {
+			return false;
+		}
+		if ((_length == null) ?
+			(other._length != null) : !_length.equals(other._length)) {
+			return false;
+		}
+		if ((_maxExclusive == null) ? (other._maxExclusive != null) :
+			!_maxExclusive.equals(other._maxExclusive)) {
+			return false;
+		}
+		if ((_maxInclusive == null) ? (other._maxInclusive != null) :
+			!_maxInclusive.equals(other._maxInclusive)) {
+			return false;
+		}
+		if ((_maxLength == null) ? (other._maxLength != null) :
+			!_maxLength.equals(other._maxLength)) {
+			return false;
+		}
+		if ((_minExclusive == null) ? (other._minExclusive != null) :
+			!_minExclusive.equals(other._minExclusive)) {
+			return false;
+		}
+		if ((_minInclusive == null) ? (other._minInclusive != null) :
+			!_minInclusive.equals(other._minInclusive)) {
+			return false;
+		}
+		if ((_minLength == null) ? (other._minLength != null) :
+			!_minLength.equals(other._minLength)) {
+			return false;
+		}
+		if ((_totalDigits == null) ? (other._totalDigits != null) :
+			!_totalDigits.equals(other._totalDigits)) {
+			return false;
+		}
+		return !((_whiteSpace == null) ? (other._whiteSpace != null) :
+			!_whiteSpace.equals(other._whiteSpace));
 	}
+	@Override
+	public int hashCode() {
+		int hash = (_base != null ? _base.hashCode() : 0);
+		hash = 53 * hash + (_enumerations != null ? _enumerations.hashCode():0);
+		hash = 53 * hash + (_patterns != null ? _patterns.hashCode() : 0);
+		hash = 53 * hash + (_fractionDigits != null
+			? _fractionDigits.hashCode() : 0);
+		hash = 53 * hash + (_length != null ? _length.hashCode() : 0);
+		hash = 53 * hash + (_maxExclusive != null ? _maxExclusive.hashCode():0);
+		hash = 53 * hash + (_maxInclusive != null ? _maxInclusive.hashCode():0);
+		hash = 53 * hash + (_maxLength != null ? _maxLength.hashCode() : 0);
+		hash = 53 * hash + (_minExclusive != null ? _minExclusive.hashCode():0);
+		hash = 53 * hash + (_minInclusive != null ? _minInclusive.hashCode():0);
+		hash = 53 * hash + (_minLength != null ? _minLength.hashCode() : 0);
+		hash = 53 * hash + (_totalDigits != null ? _totalDigits.hashCode() : 0);
+		hash = 53 * hash + (_whiteSpace != null ? _whiteSpace.hashCode() : 0);
+		return hash;
+	}
+	@Override
+	public String toString() {return "Restriction [base="+_base.toString()+"]";}
 }

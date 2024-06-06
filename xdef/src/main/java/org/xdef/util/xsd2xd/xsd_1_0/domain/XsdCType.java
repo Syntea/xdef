@@ -15,11 +15,10 @@ public final class XsdCType extends XsdModel {
 	private String _extSTypeName;
 
 	/** Creates instance of complex type model.
-	 *
 	 * @param schema model schema.
 	 * @param name complex type name.
 	 * @throws NullPointerException if given model schema or complex type name
-	 * is <tt>null</tt>.
+	 * is null.
 	 * @throws IllegalArgumentException if given complex type name is empty.
 	 */
 	public XsdCType(XsdSchema schema, String name) {
@@ -27,10 +26,8 @@ public final class XsdCType extends XsdModel {
 	}
 
 	/** Sets external attribute group name.
-	 *
 	 * @param attrGrpName external attribute group model name.
-	 * @throws NullPointerException if given attribute group name
-	 * is <tt>null</tt>.
+	 * @throws NullPointerException if given attribute group name is null.
 	 * @throws IllegalArgumentException if given attribute group name is empty.
 	 * @throws IllegalStateException if external attribute group name
 	 * is already set.
@@ -55,7 +52,7 @@ public final class XsdCType extends XsdModel {
 
 	/** Sets external group name.
 	 * @param groupName external group name.
-	 * @throws NullPointerException if given group name is <tt>null</tt>.
+	 * @throws NullPointerException if given group name is null.
 	 * @throws IllegalArgumentException if given group name is empty.
 	 * @throws IllegalStateException if external group name is already set.
 	 */
@@ -78,9 +75,8 @@ public final class XsdCType extends XsdModel {
 	public String getGroup() {return _extGroupName;}
 
 	/** Sets external simple type name.
-	 *
 	 * @param sTypeName external simple type name.
-	 * @throws NullPointerException if given simple type name is <tt>null</tt>.
+	 * @throws NullPointerException if given simple type name is null.
 	 * @throws IllegalArgumentException if given simple type name is empty.
 	 * @throws IllegalStateException if external simple type is already set.
 	 */
@@ -98,12 +94,13 @@ public final class XsdCType extends XsdModel {
 	}
 
 	/** Gets external simple type name.
-	 * @return external simple type name or <tt>null</tt>.
+	 * @return external simple type name or null.
 	 */
 	public String getSType() {return _extSTypeName;}
 
 	@Override
 	public int getType() {return Type.COMPLEX_TYPE;}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
@@ -118,7 +115,6 @@ public final class XsdCType extends XsdModel {
 		}
 		return _name.equals(c._name);
 	}
-
 	@Override
 	public int hashCode() {
 		if (_hashCode == 0) {

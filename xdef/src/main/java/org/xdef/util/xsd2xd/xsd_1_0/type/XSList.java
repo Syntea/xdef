@@ -9,7 +9,7 @@ import org.w3c.dom.*;
 /** Represents list of XML schema data type.
  * @author Ilia Alexandrov
  */
-public class List extends Specification {
+public class XSList extends Specification {
 
 	/** Type of list items. */
 	private final Type _itemType;
@@ -19,7 +19,7 @@ public class List extends Specification {
 	 * @param schemaURL URL of schema containing list.
 	 * @param schemaElements all schema elements.
 	 */
-	public List(Element listElement, URL schemaURL,
+	public XSList(Element listElement, URL schemaURL,
 		Map<URL, Element> schemaElements) {
 		String itemType = listElement.getAttribute("itemType");
 		if (!"".equals(itemType)) {

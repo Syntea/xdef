@@ -5,9 +5,8 @@ import org.xdef.xml.KDOMUtils;
 import javax.xml.namespace.QName;
 import org.xdef.xml.KXmlUtils;
 import java.io.File;
-import java.util.Iterator;
+import java.io.IOException;
 import java.util.Map;
-import java.util.Map.Entry;
 import javax.xml.XMLConstants;
 import org.w3c.dom.Attr;
 import org.w3c.dom.DOMException;
@@ -516,14 +515,12 @@ public final class Utils extends KDOMUtils {
 					"Could not create folder with given path");
 			}
 		}
-		Iterator it = schemas.entrySet().iterator();
-		while (it.hasNext()) {
-			Map.Entry entry = (Entry) it.next();
+		for (Map.Entry entry : schemas.entrySet()) {
 			String fName =
 				new File(path, (String) entry.getKey()).getAbsolutePath();
 			try {
 				KXmlUtils.writeXml(fName, (Document)entry.getValue(),true,true);
-			} catch (Exception ex) {
+			} catch (IOException ex) {
 				throw new RuntimeException(
 					"Could not write schema document", ex);
 			}

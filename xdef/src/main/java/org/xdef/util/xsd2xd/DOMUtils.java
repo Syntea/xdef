@@ -11,9 +11,6 @@ import org.w3c.dom.*;
  */
 public class DOMUtils extends KDOMUtils {
 
-	/** Private constructor. */
-	private DOMUtils() {}
-
 	/** Creates URL from given namespace.
 	 * @param namespace namespace.
 	 * @return URL representation of given namespace.

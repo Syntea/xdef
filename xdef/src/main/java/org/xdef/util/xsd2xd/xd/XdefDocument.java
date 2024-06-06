@@ -2,7 +2,6 @@ package org.xdef.util.xsd2xd.xd;
 
 import org.xdef.xml.KXmlUtils;
 import org.xdef.impl.util.gencollection.XDGenCollection;
-import org.xdef.util.xsd2xd.xd.XdNames;
 import org.xdef.util.xsd2xd.XsdUtils;
 import org.xdef.util.xsd2xd.Convertor;
 import org.xdef.util.xsd2xd.Utils;

@@ -32,7 +32,7 @@ public class Expression {
 	 * @param method method in expression.
 	 */
 	public Expression(TypeMethod method) {
-		this._methods = new ArrayList<TypeMethod>();
+		_methods = new ArrayList<TypeMethod>();
 		_methods.add(method);
 		_operand = AND;
 	}
@@ -42,7 +42,7 @@ public class Expression {
 	 * @param operand   operand in expression.
 	 */
 	public Expression(TypeMethod method, short operand) {
-		this._methods = new ArrayList<TypeMethod>();
+		_methods = new ArrayList<TypeMethod>();
 		_methods.add(method);
 		_operand = operand;
 	}
@@ -53,9 +53,7 @@ public class Expression {
 	 * @return              instance of method.
 	 */
 	public TypeMethod getMethod(String methodName) {
-		Iterator<TypeMethod> i = _methods.iterator();
-		while (i.hasNext()) {
-			TypeMethod method = i.next();
+		for (TypeMethod method : _methods) {
 			if (method.getMethodName().equals(methodName)) {
 				return method;
 			}

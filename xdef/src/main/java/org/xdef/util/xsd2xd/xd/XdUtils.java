@@ -590,9 +590,9 @@ public final class XdUtils {
 		}
 		String ref = getRef(element);
 		if (ref != null && ref.length() != 0) {
-			XdDef xdDef = null;
-			String namespace = null;
-			String name = null;
+			XdDef xdDef;
+			String namespace;
+			String name;
 			int ndx;
 			if ((ndx = ref.indexOf("#")) != -1) {
 				String defName = ref.substring(0, ndx);
