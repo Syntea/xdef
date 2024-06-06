@@ -230,7 +230,7 @@ public class Utils {
 	 */
 	public static Integer getMinOccurrence(Element schemaItem) {
 		String minOccurs = schemaItem.getAttribute("minOccurs");
-		return minOccurs.isEmpty() ? 1 : Integer.parseInt(minOccurs);
+		return minOccurs.isEmpty() ? 1 : Integer.valueOf(minOccurs);
 	}
 
 	/** Gets maximal occurrence of given schema item. If is unbounded
@@ -241,7 +241,7 @@ public class Utils {
 	public static Integer getMaxOccurrence(Element schemaItem) {
 		String maxOccurs = schemaItem.getAttribute("maxOccurs");
 		return maxOccurs.isEmpty() ? 1 :
-			"unbounded".equals(maxOccurs) ? -1 : Integer.parseInt(maxOccurs);
+			"unbounded".equals(maxOccurs) ? -1 : Integer.valueOf(maxOccurs);
 	}
 
 	/** Gets set of URLs of imported schemas in given schema element.

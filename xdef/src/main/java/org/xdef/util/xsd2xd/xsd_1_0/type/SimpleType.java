@@ -31,14 +31,18 @@ public class SimpleType extends Type {
 			Utils.NSURI_SCHEMA, new String[]{"restriction", "union", "list"});
 		Element specification = (Element) children.item(0);
 		String specificationName = specification.getLocalName();
-		if ("restriction".equals(specificationName)) {
-			_specification =
-				new Restriction(specification, schemaURL, schemaElements);
-		} else if ("union".equals(specificationName)) {
-			_specification =
-				new Union(specification, schemaURL, schemaElements);
-		} else if ("list".equals(specificationName)) {
-			_specification = new XSList(specification, schemaURL, schemaElements);
+		switch (specificationName) {
+			case "restriction":
+				_specification =
+					new Restriction(specification, schemaURL, schemaElements);
+				break;
+			case "union":
+				_specification =
+					new XSUnion(specification, schemaURL, schemaElements);
+				break;
+			case "list":
+				_specification = new XSList(specification, schemaURL, schemaElements);
+				break;
 		}
 	}
 

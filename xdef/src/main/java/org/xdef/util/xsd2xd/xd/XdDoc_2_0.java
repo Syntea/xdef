@@ -5,7 +5,6 @@ import org.xdef.XDConstants;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.impl.util.gencollection.XDGenCollection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

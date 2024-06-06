@@ -6,7 +6,6 @@ import org.xdef.util.xsd2xd.Utils;
 import org.xdef.util.xsd2xd.DOMUtils;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Calendar;
 import java.util.Set;
 import java.util.Stack;
 import org.w3c.dom.Document;

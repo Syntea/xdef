@@ -4,7 +4,6 @@ import org.xdef.xml.KDOMUtils;
 import org.xdef.util.xsd2xd.Utils;
 import java.net.URL;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
@@ -13,7 +12,7 @@ import org.w3c.dom.*;
 /** Represents XML schema construction - union of data types.
  * @author Ilia Alexandrov
  */
-public class Union extends Specification {
+public class XSUnion extends Specification {
 
 	/** Set of union types. */
 	private final Set<Type> _itemTypes = new HashSet<Type>();
@@ -23,7 +22,7 @@ public class Union extends Specification {
 	 * @param schemaURL URL of schema containing union.
 	 * @param schemaElements all schema elements.
 	 */
-	public Union(Element unionElement, URL schemaURL,
+	public XSUnion(Element unionElement, URL schemaURL,
 		Map<URL, Element> schemaElements) {
 		StringTokenizer st =
 			new StringTokenizer(unionElement.getAttribute("memberTypes"));

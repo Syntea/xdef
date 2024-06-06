@@ -78,10 +78,7 @@ public class XdefDocument implements Convertor {
 			//setting document node as root
 			root = document;
 		}
-		Iterator<Map.Entry<URL, Element>> i =
-			schemaElements.entrySet().iterator();
-		while (i.hasNext()) {
-			Map.Entry<URL, Element> entry = i.next();
+		for (Map.Entry<URL, Element> entry : schemaElements.entrySet()) {
 			//creating name from URL
 			String name = getNameFromURL(entry.getKey());
 			//adding name to names table
@@ -140,10 +137,7 @@ public class XdefDocument implements Convertor {
 	 */
 	public void createFiles(String location) throws IOException {
 		if (_separately) {
-			Iterator<Map.Entry<URL, Element>> i =
-				_xdefElements.entrySet().iterator();
-			while (i.hasNext()) {
-				Map.Entry<URL, Element> entry = i.next();
+			for (Map.Entry<URL, Element> entry : _xdefElements.entrySet()) {
 				Document doc = entry.getValue().getOwnerDocument();
 				File folder = new File(location);
 				folder.mkdir();
@@ -261,21 +255,24 @@ public class XdefDocument implements Convertor {
 	 */
 	private Element addDefElement(Node parent) {
 		//parent node is document node
-		if (Node.DOCUMENT_NODE == parent.getNodeType()) {
-			Document doc = (Document) parent;
-			Element def = doc.createElementNS(_xdefNamespaceURI,
-				_xdefPrefix + ":" + XdNames.DEF);
-			addXdefNamespaceDeclaration(def);
-			parent.appendChild(def);
-			return def;
-		} else if (Node.ELEMENT_NODE == parent.getNodeType()) {
-			Document doc = parent.getOwnerDocument();
-			Element def = doc.createElementNS(_xdefNamespaceURI,
-				_xdefPrefix + ":" + XdNames.DEF);
-			parent.appendChild(def);
-			return def;
-		} else {
-			throw new IllegalArgumentException("Node can not be <def> parent");
+		switch (parent.getNodeType()) {
+			case Node.DOCUMENT_NODE: {
+				Document doc = (Document) parent;
+				Element def = doc.createElementNS(_xdefNamespaceURI,
+					_xdefPrefix + ":" + XdNames.DEF);
+				addXdefNamespaceDeclaration(def);
+				parent.appendChild(def);
+				return def;
+			}
+			case Node.ELEMENT_NODE:	{
+				Document doc = parent.getOwnerDocument();
+				Element def = doc.createElementNS(_xdefNamespaceURI,
+					_xdefPrefix + ":" + XdNames.DEF);
+				parent.appendChild(def);
+				return def;
+			}
+			default:
+				throw new IllegalArgumentException("Node can not be <def> parent");
 		}
 	}
 
@@ -831,10 +828,7 @@ public class XdefDocument implements Convertor {
 		}
 		File folder = new File(directoryName);
 		folder.mkdir();
-		Iterator<Map.Entry<URL, Element>> i =
-			_xdefElements.entrySet().iterator();
-		while (i.hasNext()) {
-			Map.Entry<URL, Element> entry = i.next();
+		for (Map.Entry<URL, Element> entry : _xdefElements.entrySet()) {
 			Document doc = entry.getValue().getOwnerDocument();
 			String fName = new File(folder,
 				(String) _xdefNames.get(entry.getKey())).getAbsolutePath();
@@ -860,9 +854,7 @@ public class XdefDocument implements Convertor {
 				"Document state does not support this method");
 		}
 		Set<Document> ret = new HashSet<Document>();
-		Iterator<Element> i = _xdefElements.values().iterator();
-		while (i.hasNext()) {
-			Element defElement = i.next();
+		for (Element defElement : _xdefElements.values()) {
 			ret.add(defElement.getOwnerDocument());
 		}
 		return ret;

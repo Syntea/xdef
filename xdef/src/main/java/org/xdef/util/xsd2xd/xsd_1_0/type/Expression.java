@@ -1,7 +1,6 @@
 package org.xdef.util.xsd2xd.xsd_1_0.type;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 /** Represents expression, that contains one or more methods, joined by
  * specified operand (&amp; - AND as default).
