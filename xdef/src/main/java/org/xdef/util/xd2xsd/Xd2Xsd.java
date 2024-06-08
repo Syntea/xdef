@@ -72,9 +72,37 @@ public class Xd2Xsd {
 		_genXdateOutFormat = genXdateOutFormat;
 		_xsdSources = new HashMap<>();
 		_doc = KXmlUtils.newDocument();
-		_types = genDeclaredTypes(xp, outType);
-		_typesName = _types != null ? outType : null;
-		_rootName = outType == null ? outName : outType;
+		if (null != outType && !outType.isEmpty()) {
+			Element types = genDeclaredTypes(xp);
+			if (types != null && types.getChildNodes().getLength() > 0) {
+				_typesName = _rootName = outType;
+				_types = types;
+				addSchema(_typesName, _types);
+			} else {
+				_types = null;
+				_typesName = null;
+				_rootName = outType == null ? outName : outType;
+			}
+		} else {
+			_typesName = null;
+			_types = null;
+			_rootName = outType == null ? outName : outType;
+		}
+//
+//
+//
+//
+//		_genInfo = genInfo;
+//		_genXdateOutFormat = genXdateOutFormat;
+//		_xsdSources = new HashMap<>();
+//		_doc = KXmlUtils.newDocument();
+//		if (outType == null || outType.isEmpty()) {
+//			_typesName = outType;
+//			_types = genDeclaredTypes(xp);
+//		} else {
+//			_types = null;
+//			_typesName = null;
+//		}
 	}
 
 	/** Prepare XML schema element with declared types for XML schema file.
@@ -82,10 +110,7 @@ public class Xd2Xsd {
 	 * @param outType name of XML schema file with type declarations.
 	 * @return Element with XML schema with declared types or null.
 	 */
-	private Element genDeclaredTypes(final XDPool xp, final String outType) {
-		if (outType == null || outType.isEmpty()) {
-			return null;
-		}
+	private Element genDeclaredTypes(final XDPool xp) {
 		XMVariable[] vars = xp.getVariableTable().toArray();
 		Element types = genNewSchema();
 		types.setAttribute("targetNamespace", USERTYPES_URI);
