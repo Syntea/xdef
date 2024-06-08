@@ -57,37 +57,35 @@ public class Xd2Xsd {
 
 	/** Create new instance of XsdGenerator.
 	 * @param xp XDPool with X-definitions.
-	 * @param outType name of XML schema file with type declarations. May be
+	 * @param outName name base of XML schema names.
+	 * @param outType name of XML schema file with type declarations.
 	 * @param genInfo if true the annotations with documentation is generated.
 	 * @param genXdateOutFormat if true, from the xdatetime method the outFormat
 	 * parameter (the second sequential) is used as mask to validate datetime.
 	 */
 	private Xd2Xsd(final XDPool xp,
+		final String outName,
 		final String outType,
 		final boolean genInfo,
 		final boolean genXdateOutFormat) {
-		_rootName = outType;
 		_genInfo = genInfo;
 		_genXdateOutFormat = genXdateOutFormat;
 		_xsdSources = new HashMap<>();
 		_doc = KXmlUtils.newDocument();
-		if (null != outType && !outType.isEmpty()) {
-			Element types = genDeclaredTypes(xp);
-			if (types != null && types.getChildNodes().getLength() > 0) {
-				_types = types;
-				_typesName = outType;
-				addSchema(_typesName, _types);
-			} else {
-				_types = null;
-				_typesName = null;
-			}
-		} else {
-			_typesName = null;
-			_types = null;
-		}
+		_types = genDeclaredTypes(xp, outType);
+		_typesName = _types != null ? outType : null;
+		_rootName = outType == null ? outName : outType;
 	}
 
-	private Element genDeclaredTypes(final XDPool xp) {
+	/** Prepare XML schema element with declared types for XML schema file.
+	 * @param xp compiled pool with X-definitions.
+	 * @param outType name of XML schema file with type declarations.
+	 * @return Element with XML schema with declared types or null.
+	 */
+	private Element genDeclaredTypes(final XDPool xp, final String outType) {
+		if (outType == null || outType.isEmpty()) {
+			return null;
+		}
 		XMVariable[] vars = xp.getVariableTable().toArray();
 		Element types = genNewSchema();
 		types.setAttribute("targetNamespace", USERTYPES_URI);
@@ -961,7 +959,8 @@ public class Xd2Xsd {
 				throw new SRuntimeException(XDCONV.XDCONV204);
 			}
 		}
-		Xd2Xsd generator = new Xd2Xsd(xp, otype, genInfo, genXdateOutFormat);
+		Xd2Xsd generator =
+			new Xd2Xsd(xp, oname, otype, genInfo, genXdateOutFormat);
 		if (roots != null) {
 			Element schema = generator.genNewSchema(oname);
 			XMElement xmel = roots[0];

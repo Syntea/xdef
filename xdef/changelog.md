@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.1.7, release-date 2024-06-06
+# Version 42.1.7, release-date 2024-06-08
 * Fixed bug ignoring whitespace parameter in XML Schema to X-definition
   conversion.
 * Fixed bug incorrect generation of models in X-definition to XML Schema
