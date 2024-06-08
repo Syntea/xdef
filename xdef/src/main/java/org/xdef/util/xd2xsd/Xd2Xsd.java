@@ -72,37 +72,18 @@ public class Xd2Xsd {
 		_genXdateOutFormat = genXdateOutFormat;
 		_xsdSources = new HashMap<>();
 		_doc = KXmlUtils.newDocument();
-		if (null != outType && !outType.isEmpty()) {
-			Element types = genDeclaredTypes(xp);
-			if (types != null && types.getChildNodes().getLength() > 0) {
-				_typesName = _rootName = outType;
-				_types = types;
-				addSchema(_typesName, _types);
-			} else {
-				_types = null;
-				_typesName = null;
-				_rootName = outType == null ? outName : outType;
-			}
+		Element types;
+		if (null != outType && !outType.isEmpty()
+			&& (types = genDeclaredTypes(xp)) != null
+			&& types.getChildNodes().getLength() > 0) {
+			_typesName = _rootName = outType;
+			_types = types;
+			addSchema(_typesName, _types);
 		} else {
 			_typesName = null;
 			_types = null;
 			_rootName = outType == null ? outName : outType;
 		}
-//
-//
-//
-//
-//		_genInfo = genInfo;
-//		_genXdateOutFormat = genXdateOutFormat;
-//		_xsdSources = new HashMap<>();
-//		_doc = KXmlUtils.newDocument();
-//		if (outType == null || outType.isEmpty()) {
-//			_typesName = outType;
-//			_types = genDeclaredTypes(xp);
-//		} else {
-//			_types = null;
-//			_typesName = null;
-//		}
 	}
 
 	/** Prepare XML schema element with declared types for XML schema file.
