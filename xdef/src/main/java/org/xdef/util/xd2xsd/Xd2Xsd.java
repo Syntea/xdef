@@ -49,11 +49,11 @@ public class Xd2Xsd {
 	/** If true use as mask to validate XML data the parameter describing output
 	 * format from the "xdatetime" method. */
 	private final boolean _genXdateOutFormat;
-	/** XML schema element with of user declared types.*/
 	/** Name of root XML schema file. */
 	private final String _rootName;
 	/** Name of XML schema file with user declared types. */
 	private final String _typesName;
+	/** XML schema element with of user declared types.*/
 	private final Element _types;
 
 	/** Create new instance of XsdGenerator.
