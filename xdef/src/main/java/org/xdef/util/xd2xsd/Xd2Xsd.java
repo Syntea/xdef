@@ -46,7 +46,8 @@ public class Xd2Xsd {
 	private final Document _doc = KXmlUtils.newDocument();
 	/** Switch if generate annotation with documentation information. */
 	private final boolean _genInfo;
-	/**  Switch generate xdatatime outFormat. */
+	/** If true use as mask to validate XML data the parameter describing output
+	 * format from the "xdatetime" method. */
 	private final boolean _genXdateOutFormat;
 	/** XML schema element with of user declared types.*/
 	/** Name of root XML schema file. */

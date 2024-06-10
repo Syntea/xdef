@@ -111,7 +111,8 @@ class GenParser {
 	/** Create ParserInfo object with XML schema compatible parser from XMData.
 	 * @param xmd XMData object.
 	 * @param genXdOutFormat if true, from the xdatetime method the outFormat
-	 * parameter (the second sequential) is used as mask to validate datetime.
+	 * @param genXdateOutFormat if true, use as mask to validate XML data the
+	 * parameter describing output format from the "xdatetime" method.
 	 * @return ParserInfo object with XML schema compatible parser.
 	 */
 	protected static GenParser genParser(final XMData xmd,
@@ -132,8 +133,8 @@ class GenParser {
 	 * X-definition parser.
 	 * @param xdp X-definition parser.
 	 * @param generator instance of Xd2Xsd.
-	 * @param genXdOutFormat if true, from the xdatetime method the outFormat
-	 * parameter (the second sequential) is used as mask to validate datetime.
+	 * @param genXdateOutFormat if true, use as mask to validate XML data the
+	 * parameter describing output format from the "xdatetime" method.
 	 * @return ParserInfo object with XML schema compatible parser.
 	 */
 	private static GenParser genParser(final XDParser xdp,
