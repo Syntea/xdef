@@ -40,19 +40,19 @@ public class Xd2Xsd {
 	/** QName of schema element. */
 	private static final QName SCHEMA_QNAME =
 		new QName(XMLConstants.W3C_XML_SCHEMA_NS_URI, "schema");
-	/** Name of root XML schema file. */
-	private final String _rootName;
-	/** Name of XML schema file with user declared types. */
-	private final String _typesName;
 	/** Map of file names and XML schema elements.*/
-	private final Map<String, Element> _xsdSources;
+	private final Map<String, Element> _xsdSources = new HashMap<>();
+	/** org.w3c.dom.Document used for creation of nodes. */
+	private final Document _doc = KXmlUtils.newDocument();
 	/** Switch if generate annotation with documentation information. */
 	private final boolean _genInfo;
 	/**  Switch generate xdatatime outFormat. */
 	private final boolean _genXdateOutFormat;
-	/** org.w3c.dom.Document used for creation of nodes. */
-	private final Document _doc;
 	/** XML schema element with of user declared types.*/
+	/** Name of root XML schema file. */
+	private final String _rootName;
+	/** Name of XML schema file with user declared types. */
+	private final String _typesName;
 	private final Element _types;
 
 	/** Create new instance of XsdGenerator.
@@ -60,8 +60,8 @@ public class Xd2Xsd {
 	 * @param outName name base of XML schema names.
 	 * @param outType name of XML schema file with type declarations.
 	 * @param genInfo if true the annotations with documentation is generated.
-	 * @param genXdateOutFormat if true, from the xdatetime method the outFormat
-	 * parameter (the second sequential) is used as mask to validate datetime.
+	 * @param genXdateOutFormat if true, use as mask to validate XML data the
+	 * parameter describing output format from the "xdatetime" method.
 	 */
 	private Xd2Xsd(final XDPool xp,
 		final String outName,
@@ -70,19 +70,15 @@ public class Xd2Xsd {
 		final boolean genXdateOutFormat) {
 		_genInfo = genInfo;
 		_genXdateOutFormat = genXdateOutFormat;
-		_xsdSources = new HashMap<>();
-		_doc = KXmlUtils.newDocument();
 		Element types;
 		if (null != outType && !outType.isEmpty()
-			&& (types = genDeclaredTypes(xp)) != null
-			&& types.getChildNodes().getLength() > 0) {
-			_typesName = _rootName = outType;
-			_types = types;
-			addSchema(_typesName, _types);
+			&& (types = genDeclaredTypes(xp)).getChildNodes().getLength() > 0) {
+			// generate declared types to the separate file
+			addSchema(_typesName = _rootName = outType, _types = types);
 		} else {
 			_typesName = null;
 			_types = null;
-			_rootName = outType == null ? outName : outType;
+			_rootName = outName != null ? outName : outType;
 		}
 	}
 

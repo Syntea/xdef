@@ -32,8 +32,8 @@ public class XdefToXsd {
 	 * @param outType name of XML schema file with type declarations (may be
 	 * null, then declared simple types are generated to the file with model).
 	 * @param genInfo if true documentation information is generated.
-	 * @param genXdateOutFormat if true, from the xdatetime method the outFormat
-	 * parameter (the second sequential) is used as mas to validate datetime.
+	 * @param genXdateOutFormat if true, use as mask to validate XML data the
+	 * parameter describing output format from the "xdatetime" method.
 	 */
 	public static void genSchema(final File[] xdefs,
 		final File outDir,
@@ -136,15 +136,16 @@ public class XdefToXsd {
 "                   models.\n" +
 " -x or --xdName:   name of X-definition (optional)\n" +
 " -v or --genInfo:  generate documentation information.\n" +
-" -xx:              use output format of xdatetime method to create data type";
+" -xx:              use output format of xdatetime method to create XML schema\n"+
+"                   type";
 		String xdName = null; // name of X-definition
 		String modelName = null; // name of model
 		File outDir = null; // output directory
 		String outName = null; //name of output file
 		String outType = null; //name of file with declared types
-		boolean genDecInfo = false; // switch to generate documentation info
-		boolean genXdateOutFormat = false;// switch generate xdatatime outFormat
-		List<String> xdSources = new ArrayList<>(); // X-definition source
+		boolean genDecInfo = false; //switch to generate documentation info
+		boolean genXdateOutFormat = false; //switch generate xdatatime outFormat
+		List<String> xdSources = new ArrayList<>(); //X-definition source
 		if (args == null || args.length == 0) {
 			throw new RuntimeException("Error: parameters missing.\n" + info);
 		}

@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.1.7, release-date 2024-06-09
+# Version 42.1.7, release-date 2024-06-10
 * Fixed bug when ignoring `whitespace` type restrictions in XML Schema when
   converting XML Schema to X-definition.
 * Fixed bug of incorrect generation of X-definition models to XML Schema
