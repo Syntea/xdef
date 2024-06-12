@@ -2,7 +2,6 @@ package bugreports;
 
 import org.w3c.dom.Element;
 import org.xdef.XDDocument;
-import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.xdef.sys.ArrayReporter;
 import static org.xdef.sys.STester.runTest;
@@ -25,33 +24,43 @@ public class Koci extends XDTester {
 		try {// test %anyName in map
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root=\"A\">\n" +
-"  <A xd:script='option moreAttributes' x='illegal'/>" +
+"  <A xd:script='option moreAttributes' x='illegal int' y='ignore int' />" +
 "</xd:def>";
-			xml = "<A x='x' y='y'/>";
+			xml = "<A x='1' y='2' z='3' />";
 			parse(xdef, null, xml, reporter); //not reported!
-			assertTrue(reporter.errors());
+			if (reporter.errors()) {
+				System.out.println(reporter);
+			} else {
+				fail("error not reported");
+			}
 		} catch (Exception ex) {fail(ex);}
 		try {// test %anyName in map
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root=\"A\">\n" +
-"  <A xd:script='ref B; option moreAttributes' x='illegal'/>\n" +
-"  <B x='string()'>" +
-"  </B>" +
+"  <A xd:script='ref B; option moreAttributes' x='illegal' y='ignore int'/>\n" +
+"  <B x='string()'/>" +
 "</xd:def>";
-			xml = "<A x='x' y='y'/>";
+			xml = "<A x='1' y='2' z='3' />";
 			parse(xdef, null, xml, reporter);
-			assertTrue(reporter.errors());
+			if (reporter.errors()) {
+				System.out.println(reporter);
+			} else {
+				fail("error not reported");
+			}
 		} catch (Exception ex) {fail(ex);}
 		try {// test %anyName in map
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root=\"A\">\n" +
 "  <A xd:script='ref B;' x='illegal'/>\n" +
-"  <B xd:script='option moreAttributes' x='string()'>" +
-"  </B>" +
+"  <B xd:script='option moreAttributes' x='int()' y='ignore int' />" +
 "</xd:def>";
-			xml = "<A x='x' y='y'/>";
+			xml = "<A x='1' y='2' z='3' />";
 			parse(xdef, null, xml, reporter);
-			assertTrue(reporter.errors());
+			if (reporter.errors()) {
+				System.out.println(reporter);
+			} else {
+				fail("error not reported");
+			}
 		} catch (Exception ex) {fail(ex);}
 //if(true)return;
 
