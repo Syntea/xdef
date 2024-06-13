@@ -1333,7 +1333,7 @@ public final class TestOptions extends XDTester {
 			xml = "<A><A a=''/><B b=''/><C><C c=''/><D d=''/></C></A>";
 			parse(xdef, "NA", xml, reporter);
 			assertEq(4, reporter.getErrorCount());
-			// test illegal and moreAttributes.
+// test illegal and moreAttributes, moreText.
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root=\"A\">\n" +
 "  <A xd:script='option moreAttributes, moreText'" +
