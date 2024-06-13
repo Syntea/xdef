@@ -1441,33 +1441,33 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 						newNode = xcomment;
 					}
 					break;
-//				case "PI":.equals(_actPNode._localName)) { //TODO
-//					sval = pnode._value;
-//					XPI newPI = new XPI(xchildName, xdef.getDefPool());
-//					newPI.setSPosition(new SPosition(sval, false));
-//					_scriptCompiler.setSource(sval,
-//						_scriptCompiler._actDefName, pnode._nsPrefixes); //???=
-//					_scriptCompiler.isSpaces();
-//					if (_scriptCompiler.isToken("$$$script:")) {
+//					case "PI":.equals(_actPNode._localName)) { //TODO
+//						sval = pnode._value;
+//						XPI newPI = new XPI(xchildName, xdef.getDefPool());
+//						newPI.setSPosition(new SPosition(sval, false));
+//						_scriptCompiler.setSource(sval,
+//							_scriptCompiler._actDefName, pnode._nsPrefixes);
 //						_scriptCompiler.isSpaces();
-//						_scriptCompiler.isChar(';');
-//						_scriptCompiler.compileDataScript(newPI);
-//					} else {
-//						_scriptCompiler.genTemplateData(newPI, xel);
+//						if (_scriptCompiler.isToken("$$$script:")) {
+//							_scriptCompiler.isSpaces();
+//							_scriptCompiler.isChar(';');
+//							_scriptCompiler.compileDataScript(newPI);
+//						} else {
+//							_scriptCompiler.genTemplateData(newPI, xel);
+//						}
+//						newNode = newPI;
+//						break;
 //					}
-//					newNode = newPI;
-//					break;
-//					case "document".equals(_actPNode._localName))  //TODO
-//					newNode = new XDocument("$document", null, xdef);
-//					newNode = createReference(pnode, pnode._localName, xdef);
-//					break;
-//					case "value".equals(_actPNode._localName))  //TODO
-//					newNode = new XData("$text",
-//						null, xdef.getDefPool(), XMTEXT);
-//					break;
-//					case "attlist".equals(_actPNode._localName)) { //TODO
-//					newNode = createReference(pnode, pnode._localName, xdef);
-//					break;
+//					case "document".equals(_actPNode._localName)) //TODO
+//						newNode = new XDocument("$document", null, xdef);
+//						break;
+//					case "value".equals(_actPNode._localName)) //TODO
+//						newNode = new XData("$text",
+//							null, xdef.getDefPool(), XMTEXT);
+//						break;
+//					case "attlist".equals(_actPNode._localName)) //TODO
+//						newNode = createReference(pnode, pnode._localName,xdef);
+//						break;
 					default:
 						//Element from namespace of XDefinitions is not
 						//allowed here
@@ -1489,96 +1489,101 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 			pnode._xonMode = (XConstants.XON_MODE_W | XConstants.XON_ROOT);
 			return;
 		} else if (pnode._nsindex == XPreCompiler.NS_XDEF_INDEX) {
-			String dxname = pnode._localName; //name of Xdef node
-			if ("data".equals(dxname) || "text".equals(dxname)) {
-				_precomp.chkNestedElements(pnode);
-				if ("data".equals(dxname)) {
+			switch (pnode._localName) {
+				case "data":
 					reportDeprecated(pnode._name, "\"data\"", "\"text\"");
-				}
-				XData xtext =
-					new XData("$text", null, xdef.getXDPool(), XMTEXT);
-				xtext.setSPosition(copySPosition(pnode._name));
-				newNode = xtext;
-				PAttr pa = _precomp.getXdefAttr(pnode, "script", false, true);
-				sval = pa == null ? null : pa._value;
-				if (sval != null) {
-					reportDeprecated(sval, "<xd:text xd:script=...",
-						"declaration of text value of model");
-					_scriptCompiler.setSource(sval,
-						_scriptCompiler._actDefName,
-						xdef,
-						pnode._xdVersion,
-						pnode._nsPrefixes, pnode._xpathPos);
-					_scriptCompiler.compileDataScript(xtext);
-				} else if (pnode._value != null) {
-					_scriptCompiler.setSource(pnode._value,
-						_scriptCompiler._actDefName,
-						xdef,
-						pnode._xdVersion,
-						pnode._nsPrefixes, pnode._xpathPos+"/text()");
-					pnode._value = null;
-					_scriptCompiler.compileDataScript(xtext);
-					if (!xtext.getOccurence().isIgnore()
-						&& xtext.getOccurence().maxOccurs() > 1) {
-						//Occurrence of attribute or text value can't
-						//be more then 1
-						_scriptCompiler.error(XDEF.XDEF262);
+				case "text":
+					_precomp.chkNestedElements(pnode);
+					XData xtext =
+						new XData("$text", null, xdef.getXDPool(), XMTEXT);
+					xtext.setSPosition(copySPosition(pnode._name));
+					newNode = xtext;
+					PAttr pa = _precomp.getXdefAttr(pnode, "script", false, true);
+					sval = pa == null ? null : pa._value;
+					if (sval != null) {
+						reportDeprecated(sval, "<xd:text xd:script=...",
+							"declaration of text value of model");
+						_scriptCompiler.setSource(sval,
+							_scriptCompiler._actDefName,
+							xdef,
+							pnode._xdVersion,
+							pnode._nsPrefixes, pnode._xpathPos);
+						_scriptCompiler.compileDataScript(xtext);
+					} else if (pnode._value != null) {
+						_scriptCompiler.setSource(pnode._value,
+							_scriptCompiler._actDefName,
+							xdef,
+							pnode._xdVersion,
+							pnode._nsPrefixes, pnode._xpathPos+"/text()");
+						pnode._value = null;
+						_scriptCompiler.compileDataScript(xtext);
+						if (!xtext.getOccurence().isIgnore()
+							&& xtext.getOccurence().maxOccurs() > 1) {
+							//Occurrence of attribute or text value can't
+							//be more then 1
+							_scriptCompiler.error(XDEF.XDEF262);
+						}
+					} else { //default text script
+						_scriptCompiler.setSourceBuffer("optional string()");
+						_scriptCompiler.compileDataScript(xtext);
 					}
-				} else { //default text script
-					_scriptCompiler.setSourceBuffer("optional string()");
-					_scriptCompiler.compileDataScript(xtext);
-				}
-				_precomp.reportNotAllowedAttrs(pnode);
-			} else if ("list".equals(dxname)
-				|| "includeChildNodes".equals(dxname)){
-				if ("includeChildNodes".equals(dxname)) {
-					reportDeprecated(pnode._name,
-						"\"includeChildNodes\"", "\"list\"");
-				}
-				_precomp.chkNestedElements(pnode);
-				if (level == 1) {
-					//Node '&{0}' from the name space of X-definition
-					// is not allowed here
-					error(pnode._name, XDEF.XDEF265, dxname);
+					_precomp.reportNotAllowedAttrs(pnode);
+					break;
+				case "includeChildNodes":
+					reportDeprecated(
+						pnode._name, "\"includeChildNodes\"", "\"list\"");
+				case "list":
+					_precomp.chkNestedElements(pnode);
+					if (level == 1) {
+						//Node '&{0}' from the name space of X-definition
+						// is not allowed here
+						error(pnode._name, XDEF.XDEF265, pnode._localName);
+						return;
+					}
+					newNode = createReference(pnode, pnode._localName, xdef);
+					break;
+				case "mixed":
+				case "choice":
+				case "sequence":
+					newNode = createReference(pnode, pnode._localName, xdef);
+					newNode.setSPosition(copySPosition(pnode._name));
+					break;
+				case "any":
+					newNode = new XElement("$any", null, xdef);
+					_scriptCompiler._g._varBlock =
+						new XVariableTable(_scriptCompiler._g._varBlock,
+							((XElement)newNode).getSqId());
+					((XElement) newNode).setSPosition(
+						copySPosition(pnode._name));
+					if (level == 1) {
+						//Node '&{0}' from the name space of X-definition
+						// is not allowed here
+						error(pnode._name, XDEF.XDEF265, pnode._localName);
+						return;
+					}
+					break;
+//				case "PI": //TODO
+//					newNode = new XPI(pnode._name._source, xdef.getDefPool());
+//					break;
+//				case "comment": //TODO
+//					newNode = new XComment(xdef.getXDPool());
+//					break;
+//				case "document": //TODO
+//					newNode = new XDocument("$document", null, xdef);
+//					break;
+//				case "value": //TODO
+//					newNode = new XData("$text",null, xdef.getDefPool(),XMTEXT);
+//					break;
+//				case "attlist": //TODO
+//					newNode = createReference(pnode, pnode._localName, xdef);
+//					break;
+				default:
+					if (level > 1 || !"macro".equals(pnode._localName)) {
+						//Node '&{0}' from the name space of X-definition
+						// is not allowed here
+						error(pnode. _name, XDEF.XDEF265, xchildName);
+					}
 					return;
-				}
-				newNode = createReference(pnode, dxname, xdef);
-			} else if ("mixed".equals(dxname)
-				|| "choice".equals(dxname) || "sequence".equals(dxname)) {
-				newNode = createReference(pnode, dxname, xdef);
-				newNode.setSPosition(copySPosition(pnode._name));
-			} else if ("any".equals(dxname)) {
-				newNode = new XElement("$any", null, xdef);
-				_scriptCompiler._g._varBlock =
-					new XVariableTable(_scriptCompiler._g._varBlock,
-					((XElement)newNode).getSqId());
-				((XElement) newNode).setSPosition(copySPosition(pnode._name));
-				if (level == 1) {
-					//Node '&{0}' from the name space of X-definition
-					// is not allowed here
-					error(pnode._name, XDEF.XDEF265, dxname);
-					return;
-				}
-//			} else if ("PI".equals(_actPNode._localName)) { //TODO
-//				newNode = new XPI(pnode._name._source, xdef.getDefPool());
-//			} else if ("comment".equals(name)) { //TODO
-//				newNode = new XComment(xdef.getXDPool());
-//			} else if ("document".equals(_actPNode._localName)) { //TODO
-//				newNode = new XDocument("$document", null, xdef);
-//				newNode = createReference(pnode, pnode._localName, xdef);
-//			} else if ("value".equals(_actPNode._localName)) { //TODO
-//				newNode = new XData("$text",
-//					null, xdef.getDefPool(), XMTEXT);
-//			} else if ("attlist".equals(_actPNode._localName)) { //TODO
-//				newNode = createReference(pnode, pnode._localName, xdef);
-//			} else if ((pnode._xonMode & XConstants.XON_ROOT) != 0) {
-			} else {
-				if (level > 1 || !"macro".equals(pnode._localName)) {
-					//Node '&{0}' from the name space of X-definition
-					// is not allowed here
-					error(pnode. _name, XDEF.XDEF265, xchildName);
-				}
-				return;
 			}
 		} else {
 			XElement x = new XElement(xchildName, pnode._nsURI, xdef);
@@ -2034,9 +2039,8 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 								continue;
 							}
 							XDValue[] names = xc.getXDItems();
-							boolean wasError;
 							if (names!=null && names.length > 0) {
-								wasError = false;
+								boolean wasError = false;
 								for (XDValue item: names) {
 									s = item==null ? null : item.stringValue();
 									if (!StringParser.chkJavaName(s)) {
@@ -2048,19 +2052,17 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 											XDEF.XDEF382, name, clsname, s);
 									}
 								}
-							} else {
-								wasError = true;
-							}
-							s = clsname; // get as string
-							if (!classNames.add(s)) {
-								//Class name &{0} is used in other command
-								error(sbf, XDEF.XDEF383, s);
-							}
-							if (!wasError) {
-								for (XDValue item: names) {
-									s += " " + item.stringValue();
+								if (!wasError) {
+									s = clsname;
+									for (XDValue item: names) {
+										s += " " + item.stringValue();
+									}
+									x.put(p.getDeclaredName(), s);
 								}
-								x.put(p.getDeclaredName(), s);
+							}
+							if (!classNames.add(clsname)) {
+								//Class name &{0} is used in other command
+								error(sbf, XDEF.XDEF383, clsname);
 							}
 						} else {
 							//Enumeration &{0} is not declared as a type

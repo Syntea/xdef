@@ -252,7 +252,7 @@ public interface XDEF {
 	public static final long XDEF381 = 31159025786L;
 	/** Type &amp;{0} can't be converted to enumeration &amp;{1} because value "&amp;{2}" is not Java identifier&amp;{#SYS000} */
 	public static final long XDEF382 = 31159025787L;
-	/** Class name &amp;{0} is used in other command&amp;{#SYS000} */
+	/** Class name &amp;{0} is used in another command&amp;{#SYS000} */
 	public static final long XDEF383 = 31159025788L;
 	/** No parameter is allowed here&amp;{#SYS000} */
 	public static final long XDEF384 = 31159025789L;
