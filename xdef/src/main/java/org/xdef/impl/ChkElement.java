@@ -2008,7 +2008,6 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 				}
 			}
 		}
-		// attribute illegal
 		if ((_xElement._moreAttributes=='T' || _xElement._moreAttributes=='I')
 			&& (xatt == null || !xatt.isIllegal())) {
 			//more attributes allowed, add attribute as it is
