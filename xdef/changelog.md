@@ -1,10 +1,12 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.1.7, release-date 2024-06-10
+# Version 42.1.7, release-date 2024-06-13
 * Fixed bug when ignoring `whitespace` type restrictions in XML Schema when
   converting XML Schema to X-definition.
 * Fixed bug of incorrect generation of X-definition models to XML Schema
   if an item was declared as `illegal`.
+* Fixed a bug where no error was reported if an attribute is declared as
+  `illegal` in the X-definition and the `moreAttributes` option is set.
 
 # Version 42.1.6, release-date 2024-05-28
 * Fixed bug that did not report XDEF385 error when type name in local

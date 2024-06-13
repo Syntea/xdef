@@ -215,11 +215,6 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		return _scp.exec(addr, this);
 	}
 
-	/** Get list of child nodes.
-	 * @return list of child nodes.
-	 */
-	final XNode[] getDefList() {return _defList;}
-
 	@Override
 	/** Get name of actual node.
 	 * @return The name of node.
@@ -1774,7 +1769,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		final String nsURI,
 		final String qname) {
 		copyTemporaryReports();
-		if (_data != oldData) {
+		if (_data != oldData) { // _data was changed, even equal
 			if (_data == null) {
 				removeAttr(nsURI, qname);
 			} else {
@@ -1882,20 +1877,6 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 					_xPos = xPos;
 					return true;
 				case XOccurrence.ILLEGAL: // illegal
-					debugXPos(XDDebug.ONILLEGALATTR);
-					if (xatt._onIllegalAttr >= 0) {
-						_elemValue = _element;
-						_data = adata;
-						exec(xatt._onIllegalAttr, (byte) 'A');
-						copyTemporaryReports();
-						_attName = null;
-						_attURI = null;
-						_data = null;
-						_xdata = null;
-						_parseResult = null;
-						_xPos = xPos;
-						return false;
-					}
 					break; // report as it is undefined
 				default : {// required(1) or optional(0)
 					_data = adata;
@@ -2027,8 +2008,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 				}
 			}
 		}
-		// X-definition not found
-		if (_xElement._moreAttributes=='T' || _xElement._moreAttributes=='I') {
+		// attribute illegal
+		if ((_xElement._moreAttributes=='T' || _xElement._moreAttributes=='I')
+			&& (xatt == null || !xatt.isIllegal())) {
 			//more attributes allowed, add attribute as it is
 			//no X-definition for this attribute
 			_parseResult = new DefParseResult(data);
@@ -2868,7 +2850,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 							String x = _data;
 							exec(xtxt._onTrue, (byte) 'T');
 							copyTemporaryReports();
-							if (x != _data) {
+							if (x != _data) { // _data was changed, even equal
 								exec(xtxt._check, (byte) 'T');
 								copyTemporaryReports();
 							}
@@ -2879,7 +2861,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 							String x = _data;
 							clearTemporaryReporter();
 							exec(xtxt._onFalse, (byte) 'T');
-							if (x != _data) {
+							if (x != _data) { // _data was changed, even equal
 								exec(xtxt._check, (byte) 'T');
 							}
 						} else {
@@ -3234,7 +3216,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 							if (xtxt1._onTrue >= 0) {
 								String s = _data;
 								exec(xtxt1._onTrue, (byte) 'T');
-								if (s != _data) {
+								if (s != _data) {//_data was changed, even equal
 									item = exec(xtxt1._check, (byte) 'T');
 /*XX*/
 									if (item.getItemId() == XD_PARSERESULT) {
@@ -3263,7 +3245,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 								clearTemporaryReporter();
 								String x = _data;
 								exec(xtxt1._onFalse, (byte) 'T');
-								if (x != _data) {
+								if (x != _data) {//_data was changed, even equal
 									exec(xtxt1._check, (byte) 'T');
 								}
 							}
@@ -3279,7 +3261,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 							String x = _data;
 							exec(xtxt1._onTrue, (byte) 'T');
 							copyTemporaryReports();
-							if (x != _data) {
+							if (x != _data) {//_data was changed, even equal
 								exec(xtxt1._check, (byte) 'T');
 							}
 						}

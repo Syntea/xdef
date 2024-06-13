@@ -22,8 +22,7 @@ public final class TestOptions extends XDTester {
 	public void test() {
 		XDPool xp;
 		XDDocument xd;
-		String xdef;
-		String xml;
+		String s, xdef, xml;
 		ArrayReporter reporter = new ArrayReporter();
 		Element el;
 		StringWriter swr;
@@ -298,7 +297,6 @@ public final class TestOptions extends XDTester {
 "</rdf:RDF>\n" +
 "</xd:def>";
 			xp = compile(xdef);
-			xd = xp.createXDDocument();
 			xml =
 "<rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"\n"+
 " xmlns:dcterms=\"http://purl.org/dc/terms/\">\n" +
@@ -1335,6 +1333,93 @@ public final class TestOptions extends XDTester {
 			xml = "<A><A a=''/><B b=''/><C><C c=''/><D d=''/></C></A>";
 			parse(xdef, "NA", xml, reporter);
 			assertEq(4, reporter.getErrorCount());
+			// test illegal and moreAttributes.
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root=\"A\">\n" +
+"  <A xd:script='option moreAttributes, moreText'" +
+"     x='illegal int' y='ignore int' >" +
+"    illegal int" +
+"  </A>" +
+"</xd:def>";
+			xml = "<A x='1' y='2' z='3' > 4 </A>";
+			el = parse(xdef, null, xml, reporter); //not reported!
+			if (reporter.errors()) {
+				s = reporter.printToString();
+				if (s.contains("XDEF525") && s.contains("@x")
+					&& s.contains("XDEF528")) {
+					if (el.hasAttribute("y")) {
+						fail("Result contains @y");
+					}
+					if (!el.hasAttribute("z")) {
+						fail("Result not contains @z");
+					}
+					s = el.getTextContent();
+					if (s != null && !s.isEmpty()) {
+						fail("Result contains text");
+					}
+				} else {
+					fail(reporter);
+				}
+			} else {
+				fail("error not reported");
+			}
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root=\"A\">\n" +
+"  <A xd:script='ref B; option moreAttributes, moreText'\n" +
+"     x='illegal' y='ignore int'>\n" +
+"     illegal int" +
+"  </A>" +
+"  <B x='int()'></B>" +
+"</xd:def>";
+			xml = "<A x='1' y='2' z='3' > 4 </A>";
+			el = parse(xdef, null, xml, reporter); //not reported!
+			if (reporter.errors()) {
+				s = reporter.printToString();
+				if (s.contains("XDEF525") && s.contains("@x")
+					&& s.contains("XDEF528")) {
+					if (el.hasAttribute("y")) {
+						fail("Result contains @y");
+					}
+					if (!el.hasAttribute("z")) {
+						fail("Result not contains @z");
+					}
+					s = el.getTextContent();
+					if (s != null && !s.isEmpty()) {
+						fail("Result contains text");
+					}
+				} else {
+					fail(reporter);
+				}
+			} else {
+				fail("error not reported");
+			}
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root=\"A\">\n" +
+"  <A xd:script='ref B;' x='illegal'>illegal int</A>\n" +
+"  <B xd:script='option moreAttributes, moreText' x='int()' y='ignore int' />" +
+"</xd:def>";
+			xml = "<A x='1' y='2' z='3' > 4 </A>";
+			el = parse(xdef, null, xml, reporter); //not reported!
+			if (reporter.errors()) {
+				s = reporter.printToString();
+				if (s.contains("XDEF525") && s.contains("@x")
+					&& s.contains("XDEF528")) {
+					if (el.hasAttribute("y")) {
+						fail("Result contains @y");
+					}
+					if (!el.hasAttribute("z")) {
+						fail("Result not contains @z");
+					}
+					s = el.getTextContent();
+					if (s != null && !s.isEmpty()) {
+						fail("Result contains text");
+					}
+				} else {
+					fail(reporter);
+				}
+			} else {
+				fail("error not reported");
+			}
 			xdef = // moreText
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name='NA' root='A'>\n"+
