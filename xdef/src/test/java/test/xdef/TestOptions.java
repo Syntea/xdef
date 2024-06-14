@@ -1458,31 +1458,37 @@ public final class TestOptions extends XDTester {
 			assertEq("<A><A></A><B></B><C>c<C>c</C><D>d</D></C></A>",
 				parse(xdef, "NA", xml, reporter));
 			assertNoErrorwarnings(reporter);
-			xdef =//(moreAttributes moreText moreElements) and (illegal ignore).
+			xdef = //(moreAttributes moreText moreElements) and (illegal ignore)
 "<xd:def xmlns:xd='" + _xdNS + "' root=\"A|B|C\">\n" +
 "  <A xd:script='option moreAttributes, moreText, moreElements'" +
 "     x='illegal int'" +
 "     y='ignore int' >" +
 "    illegal int" +
 "    <I xd:script='illegal'/>" +
+"    <J xd:script='ignore'/>" +
+"    ignore int" +
 "  </A>" +
 "  <B xd:script='ref X; option moreAttributes, moreText, moreElements'\n" +
 "     x='illegal'\n" +
 "     y='ignore int'>\n" +
 "     illegal int" +
 "    <I xd:script='illegal'/>" +
+"    <J xd:script='ignore'/>" +
+"    ignore int" +
 "  </B>" +
 "  <X x='int()'></X>" +
 "  <C xd:script='ref Y;' x='illegal'>\n" +
 "    illegal int" +
 "    <I xd:script='illegal'/>" +
+"    <J xd:script='ignore'/>" +
+"    ignore int" +
 "  </C>\n" +
 "  <Y xd:script=' option moreAttributes, moreText, moreElements'\n" +
 "     x='int()'" +
 "     y='ignore int' />" +
 "</xd:def>";
 			for (char c='A'; c <= 'C'; c = (char) (c+1)) {
-				xml = "<"+c+" x='1' y='2' z='3' > 4 <I/> <J/> </"+c+">";
+				xml = "<"+c+" x='1' y='2' z='3' > 4 <I/> <J/> <K/> 5 </"+c+">";
 				el = parse(xdef, null, xml, reporter); //not reported!
 				if (reporter.errors()) {
 					s = reporter.printToString();
@@ -1499,8 +1505,8 @@ public final class TestOptions extends XDTester {
 							fail("<"+c+"> contains text");
 						}
 						if (el.getChildNodes().getLength() != 1 ||
-							!"J".equals(el.getChildNodes().item(0).getNodeName())){
-							fail("<"+c+"> not contains <J>");
+							!"K".equals(el.getChildNodes().item(0).getNodeName())){
+							fail("<"+c+"> not contains <K>");
 						}
 					} else {
 						fail(reporter);
