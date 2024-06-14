@@ -6,6 +6,7 @@ import org.w3c.dom.Node;
 import org.xdef.XDDocument;
 import org.xdef.XDPool;
 import org.xdef.sys.ArrayReporter;
+import static org.xdef.sys.STester.runTest;
 import org.xdef.xml.KXmlUtils;
 import test.XDTester;
 import static test.XDTester._xdNS;
@@ -1333,93 +1334,6 @@ public final class TestOptions extends XDTester {
 			xml = "<A><A a=''/><B b=''/><C><C c=''/><D d=''/></C></A>";
 			parse(xdef, "NA", xml, reporter);
 			assertEq(4, reporter.getErrorCount());
-// test illegal and moreAttributes, moreText.
-			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root=\"A\">\n" +
-"  <A xd:script='option moreAttributes, moreText'" +
-"     x='illegal int' y='ignore int' >" +
-"    illegal int" +
-"  </A>" +
-"</xd:def>";
-			xml = "<A x='1' y='2' z='3' > 4 </A>";
-			el = parse(xdef, null, xml, reporter); //not reported!
-			if (reporter.errors()) {
-				s = reporter.printToString();
-				if (s.contains("XDEF525") && s.contains("@x")
-					&& s.contains("XDEF528")) {
-					if (el.hasAttribute("y")) {
-						fail("Result contains @y");
-					}
-					if (!el.hasAttribute("z")) {
-						fail("Result not contains @z");
-					}
-					s = el.getTextContent();
-					if (s != null && !s.isEmpty()) {
-						fail("Result contains text");
-					}
-				} else {
-					fail(reporter);
-				}
-			} else {
-				fail("error not reported");
-			}
-			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root=\"A\">\n" +
-"  <A xd:script='ref B; option moreAttributes, moreText'\n" +
-"     x='illegal' y='ignore int'>\n" +
-"     illegal int" +
-"  </A>" +
-"  <B x='int()'></B>" +
-"</xd:def>";
-			xml = "<A x='1' y='2' z='3' > 4 </A>";
-			el = parse(xdef, null, xml, reporter); //not reported!
-			if (reporter.errors()) {
-				s = reporter.printToString();
-				if (s.contains("XDEF525") && s.contains("@x")
-					&& s.contains("XDEF528")) {
-					if (el.hasAttribute("y")) {
-						fail("Result contains @y");
-					}
-					if (!el.hasAttribute("z")) {
-						fail("Result not contains @z");
-					}
-					s = el.getTextContent();
-					if (s != null && !s.isEmpty()) {
-						fail("Result contains text");
-					}
-				} else {
-					fail(reporter);
-				}
-			} else {
-				fail("error not reported");
-			}
-			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root=\"A\">\n" +
-"  <A xd:script='ref B;' x='illegal'>illegal int</A>\n" +
-"  <B xd:script='option moreAttributes, moreText' x='int()' y='ignore int' />" +
-"</xd:def>";
-			xml = "<A x='1' y='2' z='3' > 4 </A>";
-			el = parse(xdef, null, xml, reporter); //not reported!
-			if (reporter.errors()) {
-				s = reporter.printToString();
-				if (s.contains("XDEF525") && s.contains("@x")
-					&& s.contains("XDEF528")) {
-					if (el.hasAttribute("y")) {
-						fail("Result contains @y");
-					}
-					if (!el.hasAttribute("z")) {
-						fail("Result not contains @z");
-					}
-					s = el.getTextContent();
-					if (s != null && !s.isEmpty()) {
-						fail("Result contains text");
-					}
-				} else {
-					fail(reporter);
-				}
-			} else {
-				fail("error not reported");
-			}
 			xdef = // moreText
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name='NA' root='A'>\n"+
@@ -1544,6 +1458,57 @@ public final class TestOptions extends XDTester {
 			assertEq("<A><A></A><B></B><C>c<C>c</C><D>d</D></C></A>",
 				parse(xdef, "NA", xml, reporter));
 			assertNoErrorwarnings(reporter);
+			xdef =//(moreAttributes moreText moreElements) and (illegal ignore).
+"<xd:def xmlns:xd='" + _xdNS + "' root=\"A|B|C\">\n" +
+"  <A xd:script='option moreAttributes, moreText, moreElements'" +
+"     x='illegal int'" +
+"     y='ignore int' >" +
+"    illegal int" +
+"    <I xd:script='illegal'/>" +
+"  </A>" +
+"  <B xd:script='ref X; option moreAttributes, moreText, moreElements'\n" +
+"     x='illegal'\n" +
+"     y='ignore int'>\n" +
+"     illegal int" +
+"    <I xd:script='illegal'/>" +
+"  </B>" +
+"  <X x='int()'></X>" +
+"  <C xd:script='ref Y;' x='illegal'>\n" +
+"    illegal int" +
+"    <I xd:script='illegal'/>" +
+"  </C>\n" +
+"  <Y xd:script=' option moreAttributes, moreText, moreElements'\n" +
+"     x='int()'" +
+"     y='ignore int' />" +
+"</xd:def>";
+			for (char c='A'; c <= 'C'; c = (char) (c+1)) {
+				xml = "<"+c+" x='1' y='2' z='3' > 4 <I/> <J/> </"+c+">";
+				el = parse(xdef, null, xml, reporter); //not reported!
+				if (reporter.errors()) {
+					s = reporter.printToString();
+					if (s.contains("F525") && s.contains("F528")
+						&& s.contains("XDEF557")) {
+						if (el.hasAttribute("x") || el.hasAttribute("y")) {
+							fail("Contains @y or @y: "
+								+ KXmlUtils.nodeToString(el));
+						}
+						if (!el.hasAttribute("z")) {
+							fail("<"+c+"> not contains @z");
+						}
+						if ((s = el.getTextContent()) != null && !s.isEmpty()) {
+							fail("<"+c+"> contains text");
+						}
+						if (el.getChildNodes().getLength() != 1 ||
+							!"J".equals(el.getChildNodes().item(0).getNodeName())){
+							fail("<"+c+"> not contains <J>");
+						}
+					} else {
+						fail(reporter);
+					}
+				} else {
+					fail("error not reported");
+				}
+			}
 			xdef =
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name='NA' root='A' script='options setAttrUpperCase'>\n"+
