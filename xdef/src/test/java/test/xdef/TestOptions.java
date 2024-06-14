@@ -1460,32 +1460,32 @@ public final class TestOptions extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xdef = //(moreAttributes moreText moreElements) and (illegal ignore)
 "<xd:def xmlns:xd='" + _xdNS + "' root=\"A|B|C\">\n" +
-"  <A xd:script='option moreAttributes, moreText, moreElements'" +
-"     x='illegal int'" +
-"     y='ignore int' >" +
-"    illegal int" +
-"    <I xd:script='illegal'/>" +
-"    <J xd:script='ignore'/>" +
-"    ignore int" +
-"  </A>" +
+"  <A xd:script='option moreAttributes, moreText, moreElements'\n" +
+"     x='illegal int'\n" +
+"     y='ignore int' >\n" +
+"    illegal int\n" +
+"    <I xd:script='illegal'/>\n" +
+"    <J xd:script='ignore'/>\n" +
+"    ignore int\n" +
+"  </A>\n" +
 "  <B xd:script='ref X; option moreAttributes, moreText, moreElements'\n" +
-"     x='illegal'\n" +
-"     y='ignore int'>\n" +
-"     illegal int" +
-"    <I xd:script='illegal'/>" +
-"    <J xd:script='ignore'/>" +
-"    ignore int" +
+"      x='illegal'\n" +
+"      y='ignore int'>\n" +
+"     illegal int\n" +
+"    <I xd:script='illegal'/>\n" +
+"    <J xd:script='ignore'/>\n" +
+"    ignore int\n" +
 "  </B>" +
-"  <X x='int()'></X>" +
+"  <X x='int()' y='int()'></X>" +
 "  <C xd:script='ref Y;' x='illegal'>\n" +
-"    illegal int" +
-"    <I xd:script='illegal'/>" +
-"    <J xd:script='ignore'/>" +
-"    ignore int" +
+"    illegal int\n" +
+"    <I xd:script='illegal'/>\n" +
+"    <J xd:script='ignore'/>\n" +
+"    ignore int\n" +
 "  </C>\n" +
 "  <Y xd:script=' option moreAttributes, moreText, moreElements'\n" +
-"     x='int()'" +
-"     y='ignore int' />" +
+"     x='int()'\n" +
+"     y='ignore int' />\n" +
 "</xd:def>";
 			for (char c='A'; c <= 'C'; c = (char) (c+1)) {
 				xml = "<"+c+" x='1' y='2' z='3' > 4 <I/> <J/> <K/> 5 </"+c+">";
