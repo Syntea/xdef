@@ -407,11 +407,30 @@ final class CompileXScript extends CompileStatement {
 						compileSection(CompileBase.TEXT_MODE, XD_VOID, sym);
 					continue;
 				case ON_ILLEGAL_ATTR_SYM:
-					if (sc._onIllegalAttr != -1) {
-						error(XDEF.XDEF422); //Duplicated script section
+					if ("$text".equals(sc.getName())) {
+						 //Script section{0}{ '}{'} is not allowed here
+						errorAndSkip(XDEF.XDEF364,
+							SCRIPT_SEPARATORS, "onIllegalAttr");
+					} else {
+						if (sc._onIllegalAttr != -1) {
+							error(XDEF.XDEF422); //Duplicated script section
+						}
+						sc._onIllegalAttr =
+							compileSection(CompileBase.ELEM_MODE,XD_VOID, sym);
 					}
-					sc._onIllegalAttr =
-						compileSection(CompileBase.ELEM_MODE,XD_VOID, sym);
+					continue;
+				case ON_ILLEGAL_TEXT_SYM:
+					if (!"$text".equals(sc.getName())) {
+						 //Script section{0}{ '}{'} is not allowed here
+						errorAndSkip(XDEF.XDEF364,
+							SCRIPT_SEPARATORS, "onIllegalText");
+					} else {
+						if (sc._onIllegalText != -1) {
+							error(XDEF.XDEF422); //Duplicated script section
+						}
+						sc._onIllegalText =
+							compileSection(CompileBase.ELEM_MODE,XD_VOID, sym);
+					}
 					continue;
 				case CREATE_SYM:
 					if (sc._compose != -1) {

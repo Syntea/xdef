@@ -226,7 +226,7 @@ public interface XDEF {
 	public static final long XDEF362 = 31159025773L;
 	/** '&amp;{0}' is not allowed here&amp;{#SYS000} */
 	public static final long XDEF363 = 31159025774L;
-	/** Script section &amp;{0}{ } is not allowed here&amp;{#SYS000} */
+	/** Script section&amp;{0}{ '}{'} is not allowed here&amp;{#SYS000} */
 	public static final long XDEF364 = 31159025775L;
 	/** Argument &amp;{0} must be a directory */
 	public static final long XDEF368 = 31159025776L;

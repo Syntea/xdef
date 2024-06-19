@@ -1,7 +1,8 @@
 # Version ${version}, release-date ${release.date}
 
 # Version 42.1.8, release-date 2024-06-19
-* .
+* Fixed bug in `onIllegalAttr` and `onIllegalText` section of script - code was
+  not executed or was not enabled.
 
 # Version 42.1.7, release-date 2024-06-13
 * Fixed bug when ignoring `whitespace` type restrictions in XML Schema when

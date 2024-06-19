@@ -1868,6 +1868,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			}
 			boolean result = true;
 			switch (xatt.minOccurs()) {
+				case XOccurrence.ILLEGAL: // illegal
+					break; // report as it is undefined
 				case XOccurrence.IGNORE: // ignore
 					_attName = null;
 					_attURI = null;
@@ -1876,8 +1878,6 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 					_xdata = null;
 					_xPos = xPos;
 					return true;
-				case XOccurrence.ILLEGAL: // illegal
-					break; // report as it is undefined
 				default : {// required(1) or optional(0)
 					_data = adata;
 					debugXPos(XDDebug.INIT);
@@ -2041,32 +2041,41 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			return true;
 		}
 		debugXPos(XDDebug.ONILLEGALATTR);
-		if (_xElement._onIllegalAttr >= 0) {
+		_data = adata = null;
+		if (xatt != null && xatt._onIllegalAttr > 0) {
+			//Attribute not allowed
+			putTemporaryReport(Report.error(XDEF.XDEF525,
+				qname, getPosMod(getXDPosition(), _xPos)));
+			exec(xatt._onIllegalAttr, (byte) 'T');
+			_parseResult = null;
+			copyTemporaryReports();
+		} else if (_xElement._onIllegalAttr >= 0) {
 			//Attribute not allowed
 			putTemporaryReport(Report.error(XDEF.XDEF525,
 				qname, getPosMod(getXDPosition(), _xPos)));
 			_elemValue = _element;
 			_data = adata;
 			exec(_xElement._onIllegalAttr, (byte) 'E');
-			if (_data != null) {
-				if (nsURI != null) {
-					_element.setAttributeNS(nsURI, qname, adata);
-					if (_xComponent != null && getXMNode() != null
-						&& getXMNode().getXDPosition() != null) {
-						_xComponent.xSetAttr(this, _parseResult);
-					}
-				} else {
-					_element.setAttribute(qname, adata);
-					if (_xComponent != null && getXMNode() != null
-						&& getXMNode().getXDPosition() != null) {
-						_xComponent.xSetAttr(this, _parseResult);
-					}
-				}
-			}
 			copyTemporaryReports();
 		} else {
 			//Attribute not allowed
 			error(XDEF.XDEF525, qname, getPosMod(getXDPosition(), _xPos));
+		}
+		if (_data != null) {
+			if (nsURI != null) {
+				_element.setAttributeNS(nsURI, qname, adata);
+				if (_xComponent != null && getXMNode() != null
+					&& getXMNode().getXDPosition() != null) {
+					_xComponent.xSetAttr(this, _parseResult);
+				}
+			} else {
+				_element.setAttribute(qname, adata);
+				if (_xComponent != null && getXMNode() != null
+					&& getXMNode().getXDPosition() != null) {
+					_xComponent.xSetAttr(this, _parseResult);
+				}
+			}
+		} else {
 			if (nsURI != null) {
 				_element.removeAttributeNS(nsURI, qname);
 			} else {
@@ -3160,13 +3169,12 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 					return true;
 				}
 				debugXPos(XDDebug.ONILLEGALTEXT);
-				if (xtxt1._onIllegalAttr >= 0) {
+				if (xtxt1._onIllegalText >= 0) {
 					//Illegal text
 					putTemporaryReport(Report.error(XDEF.XDEF528));
 					_elemValue = _element;
-					_data = value;
-					exec(xtxt1._onIllegalAttr, (byte) 'T');
 					_data = null;
+					exec(xtxt1._onIllegalText, (byte) 'T');
 					_parseResult = null;
 					copyTemporaryReports();
 					_xdata = null;

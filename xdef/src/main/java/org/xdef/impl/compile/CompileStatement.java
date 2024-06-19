@@ -4021,7 +4021,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 				keyName = keyName.substring(0, ndx);
 			}
 			if (nameIsDeclared(keyName, varMap, keyItems)) {
-				//Redefinition of section &{0}
+				//Redefinition of uniqueSet key &{0}
 				error(XDEF.XDEF324, uniquesetName + "." + keyName);
 				return false;
 			} else {
