@@ -25,7 +25,6 @@ import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.Price;
 import org.xdef.sys.GPSPosition;
 import org.xdef.sys.SDatetime;
-import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.xon.XonNames;
@@ -737,7 +736,21 @@ public final class TestXComponents extends XDTester {
 			assertEq("d/c", SUtils.getValueFromGetter(
 				SUtils.getValueFromGetter(SUtils.getValueFromGetter(
 				SUtils.getValueFromGetter(xc, "getB"),"getD"),"getC"),"getc"));
-			xp = compile(new String[]{
+			xdef = //test any, moreAttributes, moreElements, moreText
+"<xd:def  xmlns:xd='"+_xdNS+"' root='X'>\n"+
+"<xd:component>%class bugreports.data.M %link X</xd:component>\n"+
+"  <xd:any xd:name='X'\n"+
+"     xd:script='options moreAttributes, moreElements, moreText'/>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			genXComponent(xp, clearTempDir());
+			xml = "<A><X b='1'><X b='2'><X b='3'/></X><X b='4'/></X></A>";
+			assertEq(xml, parse(xp, "", xml , reporter));
+			assertNoErrorwarnings(reporter);
+			xc = parseXC(xp,"", xml , null, reporter);
+			assertNoErrorwarnings(reporter);
+			assertEq(xml, xc.toXml());
+			xp = compile(new String[] { // any, create mode
 "<xd:def  xmlns:xd='" + _xdNS + "' name='A' root='A'>\n" +
 " <A><xd:any xd:script='options moreElements,moreText,moreAttributes'/></A>\n" +
 " <xd:component> %class "+_package+".Kalcik %link A#A; </xd:component>\n" +
@@ -759,7 +772,7 @@ public final class TestXComponents extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root=\"A\">\n" +
 "<A a='int(-1) || int(0, 100);'/>\n" +
-"<xd:component> %class "+_package+".MyTestXKoci1 %link #A; </xd:component>\n" +
+"<xd:component> %class "+_package+".TestXKoci1 %link #A; </xd:component>\n" +
 "</xd:def>";
 			genXComponent(xp = compile(xdef));
 			xml = "<A a='20'/>";

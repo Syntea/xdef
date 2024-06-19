@@ -1,7 +1,5 @@
 package bugreports;
 
-import java.util.List;
-import java.util.Map;
 import org.xdef.XDDocument;
 import org.xdef.XDFactory;
 import org.xdef.XDPool;

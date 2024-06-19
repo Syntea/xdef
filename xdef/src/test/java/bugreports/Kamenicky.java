@@ -3,6 +3,7 @@ package bugreports;
 import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.xdef.sys.ArrayReporter;
+import org.xdef.sys.SRuntimeException;
 import static org.xdef.sys.STester.runTest;
 import test.XDTester;
 
@@ -40,7 +41,7 @@ public class Kamenicky extends XDTester {
 			xml = "<a a='12'/>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertErrors(reporter);
-		} catch (Exception ex) {fail(ex);}
+		} catch (SRuntimeException ex) {fail(ex);}
 	}
 
 	/** Run test
