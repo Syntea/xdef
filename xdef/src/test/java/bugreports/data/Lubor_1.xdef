@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="windows-1250" ?>
-<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' name='B' >
-<xd:component>
-  %class bugreports.data.C %link A#C;
-  %class bugreports.data.B extends bugreports.data.C %link A#B;
-  %class bugreports.data.A extends bugreports.data.C %link A#A;
-  %class bugreports.data.D %link A#D;
-</xd:component>
-</xd:def>

@@ -202,4 +202,3 @@
          KontrolaNositele    ="optional enum('A','N'); onAbsence setText('A')"
  />
 </xd:def>
-
