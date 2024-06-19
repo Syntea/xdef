@@ -53,11 +53,11 @@ public final class TestErrors extends XDTester {
 			boolean err = id == null ?  false : !id.equals(report.getMsgID());
 			if (report.getModification() != null) {
 				err |= line != null &&
-					report.getModification().indexOf("&{line}" + line) < 0;
+					!report.getModification().contains("&{line}" + line);
 				err |= column != null &&
-					report.getModification().indexOf("&{column}" + column) < 0;
+					!report.getModification().contains("&{column}" + column);
 				err |= source != null &&
-					report.getModification().indexOf(source) < 0;
+					!report.getModification().contains(source);
 			}
 			if (err) {
 				return report.toString() + "; '" + report.getModification()+"'";
@@ -375,7 +375,7 @@ public final class TestErrors extends XDTester {
 "</xd:def>";														//06
 			reporter = test(props, xdef);
 			assertEq("", chkReport(reporter, "XDEF422", "4", "3", null));
-			assertEq("", chkReport(reporter, "XDEF422", "4", "12", null));
+			assertEq("", chkReport(reporter, "XDEF425", "4", "12", null));
 			assertNull(reporter.getReport(), reporter.printToString());
 		} catch (Exception ex) {fail(ex);}
 		try { //test error reporting
@@ -581,7 +581,7 @@ public final class TestErrors extends XDTester {
 			assertEq(1, reporter.getErrorCount());
 			assertEq("", chkReport(reporter, "XDEF534", "1", "12", null));
 			assertNull(reporter.getReport(), reporter.printToString());
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 		try {
 			xdef =
 "<xd:def xmlns:xd = '" + _xdNS + "' root='test'>\n"+
@@ -694,7 +694,7 @@ public final class TestErrors extends XDTester {
 				assertEq("", chkReport(reporter, "XDEF424", "3", "6", null));
 				assertEq("", chkReport(reporter, "XDEF410", "3", "6", null));
 				assertEq("", chkReport(reporter, "XDEF422", "3", "12", null));
-				assertEq("", chkReport(reporter, "XDEF422", "3", "20", null));
+				assertEq("", chkReport(reporter, "XDEF425", "3", "20", null));
 				assertEq("", chkReport(reporter, "XDEF424", "3", "20", null));
 			}
 			reporter.clear();
@@ -742,7 +742,7 @@ public final class TestErrors extends XDTester {
 			xml = "<a/>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrorwarnings(reporter);
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 		try {
 			xdef =
 //        1         2         3         4        5          6         7
@@ -1031,7 +1031,7 @@ public final class TestErrors extends XDTester {
 			compile(dataDir + "bla/blabla.xdef");
 			fail("Error not reported");
 		} catch (Exception ex) {
-			if (ex.toString().indexOf("XDEF903") < 0) {
+			if (!ex.toString().contains("XDEF903")) {
 				fail(ex);
 			}
 		}

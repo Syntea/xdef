@@ -130,7 +130,7 @@ final class CompileXScript extends CompileStatement {
 				break;
 			}
 			if (locals.contains(idName)) {
-				error(XDEF.XDEF422); //Duplicated script section
+				error(XDEF.XDEF351, idName);//Duplicate declaration of &{0}
 			} else {
 				locals.add(idName);
 			}
@@ -522,7 +522,7 @@ final class CompileXScript extends CompileStatement {
 	 */
 	private void compileCheckExpression(final XData sc) {
 		if (sc._check != -1) {
-			error(XDEF.XDEF422); //Duplicated script section
+			error(XDEF.XDEF425); //Script error
 		}
 		sc._check = -2;
 		if (_sym == SEMICOLON_SYM) { //';'
