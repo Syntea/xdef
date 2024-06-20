@@ -20,7 +20,6 @@ import org.xdef.impl.xml.Reader_UCS_4_3412;
 import org.xdef.impl.xml.XAbstractInputStream;
 import static org.xdef.impl.xml.XAbstractInputStream.bytesToString;
 import static org.xdef.impl.xml.XAbstractInputStream.detectBOM;
-import static org.xdef.impl.xml.XAbstractInputStream.nextChar;
 import org.xdef.msg.JSON;
 import org.xdef.msg.SYS;
 import org.xdef.msg.XDEF;
@@ -40,6 +39,7 @@ import static org.xdef.xon.XonNames.ANY_NAME;
 import static org.xdef.xon.XonNames.ANY_OBJ;
 import static org.xdef.xon.XonNames.SCRIPT_DIRECTIVE;
 import static org.xdef.xon.XonNames.ONEOF_DIRECTIVE;
+import static org.xdef.impl.xml.XAbstractInputStream.readChar;
 
 /** Methods for JSON/XON data.
  * @author Vaclav Trojan
@@ -113,7 +113,7 @@ public final class XonReader extends StringParser implements XonParsers {
 	}
 
 	/** Read a directive.
-	 * @return
+	 * @return true if a directive was read.
 	 */
 	private boolean readDirective() {
 		if (!_jdef) { // no X-definition model
@@ -858,14 +858,14 @@ public final class XonReader extends StringParser implements XonParsers {
 				int i = -1;
 				while (s.length() < XonNames.ENCODING_DIRECTIVE.length()
 					&& XonNames.ENCODING_DIRECTIVE.startsWith(s)
-					&& (i = nextChar(in, encoding, buf, count, baos)) != -1) {
+					&& (i = readChar(in, encoding, buf, count, baos)) != -1) {
 					s += (char) i;
 				}
 				if (XonNames.ENCODING_DIRECTIVE.equals(s)) {
-					while((i = nextChar(in,encoding,buf,count,baos)) == ' '
+					while((i = readChar(in,encoding,buf,count,baos)) == ' '
 						|| i == '\t') {} // skip spaces
 					if (i == '=') {
-						while((i=nextChar(in,encoding,buf,count,baos)) == ' '
+						while((i=readChar(in,encoding,buf,count,baos)) == ' '
 							|| i == '\t') {}
 					} else { // missing eq sign
 						//Incorrect %encoding directive: "&{0}"
@@ -874,12 +874,12 @@ public final class XonReader extends StringParser implements XonParsers {
 					}
 					String enc = "";
 					if (i == '"') { // is quote
-						i = nextChar(in, encoding, buf, count, baos);
+						i = readChar(in, encoding, buf, count, baos);
 						while(i > ' ' && i != '"') { //read encoding name
 							enc += (char) i;
-							i = nextChar(in, encoding, buf, count, baos);
+							i = readChar(in, encoding, buf, count, baos);
 						}
-						if (i != '"') { // missing ending quote
+						if (i != '"') { // missing end quote
 							//Incorrect %encoding directive: "&{0}"
 							throw new SRuntimeException(
 								JSON.JSON081, baos.toByteArray());

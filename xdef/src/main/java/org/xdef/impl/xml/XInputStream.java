@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import static org.xdef.impl.xml.XAbstractInputStream.bytesToString;
 import static org.xdef.impl.xml.XAbstractInputStream.detectBOM;
-import static org.xdef.impl.xml.XAbstractInputStream.nextChar;
+import static org.xdef.impl.xml.XAbstractInputStream.readChar;
 
 /** Input stream used in SAX parser.
  * @author Vaclav Trojan
@@ -15,14 +15,23 @@ public class XInputStream extends XAbstractInputStream {
 	private final String _version;
 	private final boolean _standalone;
 
+	/** Create instance of XInputStream with given encoding.
+	 * @param in Input stream with data.
+	 * @param encoding name of encoding table.
+	 * @throws IOException if an error occurs.
+	 */
 	public XInputStream(final InputStream in, final String encoding)
 		throws IOException {
-		super(in, encoding);
+		super(in);
 		_encoding = encoding == null ? "UTF-8" : encoding;
 		_standalone = false;
 		_version = null;
 	}
 
+	/** Create instance of XInputStream, detect encoding and read XML head.
+	 * @param in Input stream with data.
+	 * @throws IOException if an error occurs.
+	 */
 	public XInputStream(final InputStream in) throws IOException {
 		super(in);
 		byte[] buf = new byte[4];
@@ -40,12 +49,12 @@ public class XInputStream extends XAbstractInputStream {
 			s = bytesToString(buf, 0, len, encoding);
 			int i;
 			while (s.length() < 2
-				&& (i = nextChar(in, encoding, buf, count, baos)) != -1) {
+				&& (i = readChar(in, encoding, buf, count, baos)) != -1) {
 				s += (char) i;
 			}
 			if (s.startsWith("<?")) {
 				while (s.length() < 5
-					&& (i=nextChar(in, encoding,buf,count,baos)) != -1) {
+					&& (i=readChar(in, encoding,buf,count,baos)) != -1) {
 					if (i == -1) {
 						break;
 					}
@@ -57,7 +66,7 @@ public class XInputStream extends XAbstractInputStream {
 			}
 			if ("<?xml".equals(s)) {
 				while (s.indexOf("?", 5) == -1) { // find "?"
-					i = nextChar(in, encoding,buf,count,baos);
+					i = readChar(in, encoding,buf,count,baos);
 					if (i == -1) {
 						break;
 					}
@@ -68,16 +77,18 @@ public class XInputStream extends XAbstractInputStream {
 				}
 			}
 		}
-		String val = getXMLDeclParam("encoding", s);
+		String val = getXMLHeaderParam("encoding", s);
 		_encoding = val != null ? val : encoding;
-		val = getXMLDeclParam("version", s);
+		val = getXMLHeaderParam("version", s);
 		_version = val != null ? val : "1.0";
-		_standalone = "yes".equals(getXMLDeclParam("standalone", s));
+		_standalone = "yes".equals(getXMLHeaderParam("standalone", s));
 		setBuffer(baos.toByteArray());
 	}
 
 	public final String getXMLEncoding() {return _encoding;}
+
 	public final String getXMLVersion() {return _version;}
+
 	public final boolean getXMLStandalone() {return _standalone;}
 
 	/** Get XMLDecl parameter.
@@ -85,7 +96,7 @@ public class XInputStream extends XAbstractInputStream {
 	 * @param source
 	 * @return value of required parameter or null.
 	 */
-	private static String getXMLDeclParam(final String paramName,
+	private static String getXMLHeaderParam(final String paramName,
 		final String source) {
 		int ndx = source.indexOf(paramName);
 		if (ndx > 0) {

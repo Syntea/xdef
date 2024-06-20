@@ -444,12 +444,14 @@ ValueScript ::= ("$$$script:"?) (ValueValidationSection | ValueInitSection
   | ValueOnTrueSection | ValueOnFalseSection | ValueOnErrorSection
   | ValueOnAbsenceSection | ValueDefaultSection | ValueCreateSection
   | ValueFinallySection | ValueMatchSection | AttributeOnStartSection
-   | AttributeOptions | Reference | S |";")*
+  | AttributeOptions | OnIllegalSection | Reference | S |";")*
   /* The keyword "$$$script" can be specified only in the template mode.
      Each section can be specified only once.*/
 
-AttributeOnStartSection ::= "onStartElement" S? Statement?
+OnIllegalSection ::= ("onIllegalAttr" | "onIllegalText") S? Statement?
 
+AttributeOnStartSection ::= "onStartElement" S? Statement?
+ 
 ValueValidationSection ::= ("fixed" S $rule (Expression | Block)
   | (Occurrence S? CheckValueSpecification?) | CheckValueSpecification)
 
@@ -520,7 +522,8 @@ ElementExecutivePart ::= "$$$script:"? S? (TemplateSection | Occurrence
   | ElementVarSection | ElementMatchSection | ElementInitSection
   | ElementOnAbsenceSection | ElementOnExcessSection | ElementCreateSection
   | ElementFinallySection | ElementOptions | Reference | ElementForgetSection
-  | ElementOnStartSection | ElementStructureCompare | ";")
+  | ElementOnStartSection | ElementOnIllegalSection | ElementStructureCompare
+  | ";")
   /* Each item can be specified only once. If the occurrence is not specified,
      the implicit value is "required". The keyword "$$$script" can be specified
      only in the template model. */
@@ -542,6 +545,8 @@ ElementOnStartSection ::= "onStartElement" S? Statement?
 ElementOnExcessSection ::= "onExcess" S? Statement?
 
 ElementOnAbsenceSection ::= "onAbsence" S? Statement?
+
+ElementOnIllegalSection ::= "onIllegalElement" S? Statement?
 
 ElementCreateSection ::= "create" ElementCreateCode
 

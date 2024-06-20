@@ -4,6 +4,7 @@ import java.io.StringWriter;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xdef.XDDocument;
+import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.xdef.sys.ArrayReporter;
 import static org.xdef.sys.STester.runTest;
@@ -1458,6 +1459,41 @@ public final class TestOptions extends XDTester {
 			assertEq("<A><A></A><B></B><C>c<C>c</C><D>d</D></C></A>",
 				parse(xdef, "NA", xml, reporter));
 			assertNoErrorwarnings(reporter);
+			xdef = //test property "xdef_saveReports" and onIllegal events
+"<xd:def xmlns:xd='" + _xdNS + "' root = \"A\">\n" +
+"<A xd:script='onIllegalElement out(\"e\");'\n" +
+"   a='illegal int; onIllegalAttr out(\"a\"); onAbsence out(\"b\");'>\n"+
+"  <B xd:script='illegal; onIllegalElement out(\"e\");'/>\n" +
+"  illegal int; onIllegalText out(\"t\");\n" +
+"</A>\n" +
+"</xd:def>";
+			assertTrue(compile(xdef).isClearReports());
+			System.setProperty("xdef_clearReports", "true");
+			xp = compile(xdef);
+			assertTrue(xp.isClearReports());
+			swr = new StringWriter();
+			xd = xp.createXDDocument();
+			xd.setStdOut(XDFactory.createXDOutput(swr, false));
+			el = parse(xd, "<A a='1'> <B/> 2 </A>", reporter);
+			assertNoErrors(reporter);
+			assertEq("abet", swr.toString());
+			if (el.getChildNodes().getLength() > 0
+				|| el.getAttributes().getLength() > 0) {
+				fail(KXmlUtils.nodeToString(el));
+			}
+			System.setProperty("xdef_clearReports", "false");
+			xp = compile(xdef);
+			assertFalse(xp.isClearReports());
+			swr = new StringWriter();
+			xd = xp.createXDDocument();
+			xd.setStdOut(XDFactory.createXDOutput(swr, false));
+			el = parse(xd, "<A a='1'> <B/> 2 </A>", reporter);
+			assertEq(3, reporter.getErrorCount());
+			assertEq("abet", swr.toString());
+			if (el.getChildNodes().getLength() > 0
+				|| el.getAttributes().getLength() > 0) {
+				fail(KXmlUtils.nodeToString(el));
+			}
 			xdef = //(moreAttributes moreText moreElements) and (illegal ignore)
 "<xd:def xmlns:xd='" + _xdNS + "' root=\"A|B|C\">\n" +
 "  <A xd:script='option moreAttributes, moreText, moreElements'\n" +

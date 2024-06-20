@@ -159,6 +159,13 @@ public interface XDPool extends Serializable {
 	 */
 	public boolean isChkWarnings();
 
+	/** Get switch if the actullal reporter is cleared in the executed code of
+	 * the 'onFalse', 'onIllegalAttr', 'onIllegalText', 'onEllegalElement'
+	 * sections. Default value is 'true'.
+	 * @return true if reporter will be cleared.
+	 */
+	public boolean isClearReports();
+
 	/** Get list of XComponents.
 	 * @return list of XComponents.
 	 */

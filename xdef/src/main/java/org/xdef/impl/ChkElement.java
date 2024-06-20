@@ -394,8 +394,17 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		} else if (result != null && (result.getXMElement().isIgnore()
 			|| result.getXMElement().isIllegal())) {
 			if (result.getXMElement().isIllegal()) {
-				//Illegal element '&{0}'
-				error(XDEF.XDEF557, element.getNodeName());
+				if (_xElement._onIllegalElement >= 0) {
+					if (!getXDPool().isClearReports()) {
+						//Illegal element '&{0}'
+						error(XDEF.XDEF557, element.getNodeName());
+					}
+					exec(_xElement._onIllegalElement, (byte) 'E');
+					copyTemporaryReports();
+				} else {
+					//Illegal element '&{0}'
+					error(XDEF.XDEF557, element.getNodeName());
+				}
 			}
 			result = new ChkElement(this,
 				el, _xElement.createAnyDefElement(), true);
@@ -409,9 +418,13 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 				debugXPos(XDDebug.ONILLEGALELEMENT);
 				if (_xElement._onIllegalElement >= 0) {
 					_elemValue = _element;
-					//Not allowed element '&{0}'
-					putTemporaryReport(Report.error(XDEF.XDEF501,
-						element.getNodeName()));
+					if (!getXDPool().isClearReports()) {
+						//Not allowed element '&{0}'
+						putTemporaryReport(Report.error(XDEF.XDEF501,
+							element.getNodeName()));
+					} else {
+						clearTemporaryReporter();
+					}
 					exec(_xElement._onIllegalElement, (byte) 'E');
 					copyTemporaryReports();
 				} else if (textcontent == null) {
@@ -775,6 +788,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 							//Minimum occurrence not reached for &amp;{0}
 							error(XDEF.XDEF555, "choice");
 							if (xch._onAbsence >= 0) {
+//								if (!getXDPool().isSaveReports()) {
+//									clearTemporaryReporter();
+//								}
 								exec(xch._onAbsence, (byte)'U');
 							}
 						}
@@ -1041,6 +1057,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 					XSelector xsel =
 						(XSelector) getDefElement(_selector._begIndex);
 					if (xsel._onAbsence >= 0) {
+//						if (!getXDPool().isSaveReports()) {
+//							clearTemporaryReporter();
+//						}
 						exec(xsel._onAbsence, (byte)'U');
 					}
 				}
@@ -1890,7 +1909,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 						if (xatt._onFalse >= 0) {
 							String x = _data;
 							_elemValue = _element;
-							clearTemporaryReporter();
+							if (getXDPool().isClearReports()) {
+								clearTemporaryReporter();
+							}
 							exec(xatt._onFalse, (byte) 'A');
 							updateAttrValue(xatt, x, nsURI, qname);
 						}
@@ -1951,7 +1972,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 							debugXPos(XDDebug.ONFALSE);
 							if (xatt._onFalse >= 0) {
 								String x = _data;
-								clearTemporaryReporter();
+								if (getXDPool().isClearReports()) {
+									clearTemporaryReporter();
+								}
 								exec(xatt._onFalse, (byte) 'A');
 								updateAttrValue(xatt, x, nsURI, qname);
 							} else {
@@ -2043,16 +2066,20 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		debugXPos(XDDebug.ONILLEGALATTR);
 		_data = adata = null;
 		if (xatt != null && xatt._onIllegalAttr > 0) {
-			//Attribute not allowed
-			putTemporaryReport(Report.error(XDEF.XDEF525,
-				qname, getPosMod(getXDPosition(), _xPos)));
+			if (!getXDPool().isClearReports()) {
+				//Attribute not allowed
+				putTemporaryReport(Report.error(XDEF.XDEF525,
+					qname, getPosMod(getXDPosition(), _xPos)));
+			}
 			exec(xatt._onIllegalAttr, (byte) 'T');
 			_parseResult = null;
 			copyTemporaryReports();
 		} else if (_xElement._onIllegalAttr >= 0) {
-			//Attribute not allowed
-			putTemporaryReport(Report.error(XDEF.XDEF525,
-				qname, getPosMod(getXDPosition(), _xPos)));
+			if (!getXDPool().isClearReports()) {
+				//Attribute not allowed
+				putTemporaryReport(Report.error(XDEF.XDEF525,
+					qname, getPosMod(getXDPosition(), _xPos)));
+			}
 			_elemValue = _element;
 			_data = adata;
 			exec(_xElement._onIllegalAttr, (byte) 'E');
@@ -2260,7 +2287,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 					_parseResult = null;
 					_attName = xname;
 					_elemValue = _element;
-					clearTemporaryReporter();
+					if (getXDPool().isClearReports()) {
+						clearTemporaryReporter();
+					}
 					Report rep = null;
 					if (xatt.minOccurs() == XData.REQUIRED) {
 						//Missing required attribute &{0}
@@ -2867,7 +2896,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 						debugXPos(XDDebug.ONFALSE);
 						if (xtxt._onFalse >= 0) {
 							String x = _data;
-							clearTemporaryReporter();
+							if (getXDPool().isClearReports()) {
+								clearTemporaryReporter();
+							}
 							exec(xtxt._onFalse, (byte) 'T');
 							if (x != _data) { // _data was changed, even equal
 								exec(xtxt._check, (byte) 'T');
@@ -3170,8 +3201,10 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 				}
 				debugXPos(XDDebug.ONILLEGALTEXT);
 				if (xtxt1._onIllegalText >= 0) {
-					//Illegal text
-					putTemporaryReport(Report.error(XDEF.XDEF528));
+					if (!getXDPool().isClearReports()) {
+						//Illegal text
+						putTemporaryReport(Report.error(XDEF.XDEF528));
+					}
 					_elemValue = _element;
 					_data = null;
 					exec(xtxt1._onIllegalText, (byte) 'T');
@@ -3194,7 +3227,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 					debugXPos(XDDebug.ONFALSE);
 					if (xtxt1._onFalse >= 0) {// value not exist
 						_elemValue = _element;
-						clearTemporaryReporter();
+						if (getXDPool().isClearReports()) {
+							clearTemporaryReporter();
+						}
 						exec(xtxt1._onFalse, (byte) 'T');
 						if (_data!=null) {
 							exec(xtxt1._check, (byte) 'T');
@@ -3249,7 +3284,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 							}
 							debugXPos(XDDebug.ONFALSE);
 							if (xtxt1._onFalse >= 0) {
-								clearTemporaryReporter();
+								if (getXDPool().isClearReports()) {
+									clearTemporaryReporter();
+								}
 								String x = _data;
 								exec(xtxt1._onFalse, (byte) 'T');
 								if (x != _data) {//_data was changed, even equal

@@ -77,7 +77,14 @@ public interface XDConstants {
 	public static final String XDPROPERTY_MAXYEAR = "xdef_maxyear";
 	/** Property defines legal values of dates if year is out of range.*/
 	public static final String XDPROPERTY_SPECDATES = "xdef_specdates";
-
+	/** Property defines if the actullal reporter is cleared in the executed
+	 * code of the 'onFalse', 'onIllegalAttr', 'onIllegalText',
+	 * 'onEllegalElement' sections. Default value is 'true'*/
+	public static final String XDPROPERTY_CLEAR_REPORTS = "xdef_clearReports";
+	/** Value "true" of property "xdef_clearReports" */
+	public static final String XDPROPERTYVALUE_CLEAR_REPORTS_TRUE = "true";
+	/** Value "false" of property "xdef_clearReports" */
+	public static final String XDPROPERTYVALUE_CLEAR_REPORTS_FALSE = "false";
 	/** Property defines if unresolved external methods are reported (used
 	 * for syntax checking of X-definition (default is "false"). */
 	public static final String XDPROPERTY_IGNORE_UNDEF_EXT =
@@ -92,14 +99,7 @@ public interface XDConstants {
 	/** Name of property for setting language of messages. */
 	public static final String XDPROPERTY_MSGLANGUAGE = "xdef_language";
 
-	/** Property defines X=component old version mode (default is false).*/
-	public static final String XDPROPERTY_OLDCOMPONENT = "xdef_oldcomponent";
-	/** Value "true" of property "xdef.oldcomponent" */
-	public static final String XDPROPERTYVALUE_OLDCOMPONENT_TRUE = "true";
-	/** Value "false" of property "xdef.oldcomponent" */
-	public static final String XDPROPERTYVALUE_OLDCOMPONENT_FALSE = "false";
-
-////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
 // XML constants
 ////////////////////////////////////////////////////////////////////////////////
 

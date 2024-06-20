@@ -100,7 +100,7 @@ public final class SManager implements XDConstants {
 			}
 		}
 		if (val == null || (val = val.trim()).isEmpty()) {
-			val = System.getenv(key);
+			val = System.getProperty(key);
 		}
 		return (val != null && (val=val.trim()).isEmpty()) ? null : val;
 	}

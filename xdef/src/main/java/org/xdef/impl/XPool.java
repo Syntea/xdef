@@ -61,6 +61,10 @@ public final class XPool implements XDPool, Serializable {
 	private boolean _chkWarnings;
 	/** Switch to allow/restrict DOCTYPE in XML.*/
 	private boolean _illegalDoctype;
+	/** Switch if the actullal reporter is cleared in the executed code of the
+	 * 'onFalse', 'onIllegalAttr', 'onIllegalText', 'onEllegalElement'
+	 * sections. Default value is 'true'. */
+	private boolean _clearReports;
 	/** Debug mode: 0 .. false, 1 .. true, 2 .. showResult.*/
 	private byte _debugMode;
 	/** Class name of debug editor.*/
@@ -75,8 +79,6 @@ public final class XPool implements XDPool, Serializable {
 	private boolean _locationdetails;
 	/** Switch to allow/restrict includes in XML.*/
 	private boolean _resolveIncludes;
-	/** Switch to generate old version of X-components.*/
-	public boolean _oldXomponents; // (will be removed!)
 	/** External objects.*/
 	private Class<?>[] _extClasses;
 	/** Properties.*/
@@ -172,6 +174,13 @@ public final class XPool implements XDPool, Serializable {
 			new String[] {XDConstants.XDPROPERTYVALUE_DOCTYPE_TRUE,
 				XDConstants.XDPROPERTYVALUE_DOCTYPE_FALSE},
 			XDConstants.XDPROPERTYVALUE_DOCTYPE_TRUE)== 0;
+		// Switch if the actullal reporter is cleared in the executed code
+		// of the 'onFalse', 'onIllegalAttr', 'onIllegalText',
+		// 'onEllegalElement' sections. Default value is 'true'
+		_clearReports=readProperty(_props,XDConstants.XDPROPERTY_CLEAR_REPORTS,
+			new String[] {XDConstants.XDPROPERTYVALUE_CLEAR_REPORTS_TRUE,
+				XDConstants.XDPROPERTYVALUE_CLEAR_REPORTS_FALSE},
+			XDConstants.XDPROPERTYVALUE_DOCTYPE_TRUE)== 0;
 		//ignore undefined external objects
 		_ignoreUnresolvedExternals = readProperty(_props,
 			XDConstants.XDPROPERTY_IGNORE_UNDEF_EXT,
@@ -193,12 +202,6 @@ public final class XPool implements XDPool, Serializable {
 			new String[] {XDConstants.XDPROPERTYVALUE_XINCLUDE_TRUE,
 				XDConstants.XDPROPERTYVALUE_XINCLUDE_FALSE},
 			XDConstants.XDPROPERTYVALUE_XINCLUDE_TRUE) == 0;
-		// old version of X-components (will be removed!)
-		_oldXomponents = readProperty(_props,
-			XDConstants.XDPROPERTY_OLDCOMPONENT,
-			new String[] {XDConstants.XDPROPERTYVALUE_OLDCOMPONENT_TRUE,
-				XDConstants.XDPROPERTYVALUE_OLDCOMPONENT_FALSE},
-			XDConstants.XDPROPERTYVALUE_OLDCOMPONENT_FALSE) == 0;
 		_minYear = readPropertyYear(_props, XDConstants.XDPROPERTY_MINYEAR);
 		_maxYear = readPropertyYear(_props, XDConstants.XDPROPERTY_MAXYEAR);
 		_specialDates = readPropertySpecDates(_props);
@@ -1055,6 +1058,14 @@ public final class XPool implements XDPool, Serializable {
 	@Override
 	final public boolean isChkWarnings() {return _chkWarnings;}
 
+	/** Get switch if the actullal reporter is cleared in the executed code of
+	 * the 'onFalse', 'onIllegalAttr', 'onIllegalText', 'onEllegalElement'
+	 * sections. Default value is 'true'.
+	 * @return true if reporter will be cleared.
+	 */
+	@Override
+	final public boolean isClearReports() {return _clearReports;}
+
 	/** Get list of XComponents.
 	 * @return list of XComponents.
 	 */
@@ -1135,7 +1146,7 @@ public final class XPool implements XDPool, Serializable {
 		xw.writeBoolean(_locationdetails);
 		xw.writeBoolean(_chkWarnings);
 		xw.writeBoolean(_resolveIncludes); // (will be removed!)
-		xw.writeBoolean(_oldXomponents);
+		xw.writeBoolean(_clearReports);
 		xw.writeByte(_displayMode);
 		xw.writeInt(_minYear);
 		xw.writeInt(_maxYear);
@@ -1279,7 +1290,7 @@ public final class XPool implements XDPool, Serializable {
 		_locationdetails =  xr.readBoolean();
 		_chkWarnings = xr.readBoolean();
 		_resolveIncludes = xr.readBoolean();
-		_oldXomponents = xr.readBoolean(); // (will be removed!)
+		_clearReports = xr.readBoolean();
 		_displayMode = xr.readByte();
 		_minYear = xr.readInt();
 		_maxYear = xr.readInt();

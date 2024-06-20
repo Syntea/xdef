@@ -10,15 +10,27 @@ import java.util.List;
  * @author Vaclav Trojan
  */
 public abstract class XAbstractReader extends Reader {
-	XHandler _handler;
-	boolean _closed;
-	private String _sysId;
-	private String _encoding;
-	private String _xinclude;
 	/** Gen detailed position flag. */
 	private boolean _genPositions = true;
+	XHandler _handler; // handler connected to reader
+	boolean _closed; // flag if reader is closed
+	private String _sysId; //  system ID name
+	private String _encoding; // encoding name
+	private String _xinclude;
 
-	public XAbstractReader() {}
+	////////////////////////////////////////////////////////////////////////////
+	// fields used in parser
+	////////////////////////////////////////////////////////////////////////////
+	private final StringBuilder _bf = new StringBuilder(8192);
+	private int _len = 0;
+	private int _pos = 0;
+	private long _line = 1;
+	private long _filePos = 0;
+	private long _startLine = 0;
+	private boolean _prologParsed = false;
+	private boolean _wasEndTag = false;
+	private boolean _includedText = false;
+	private boolean _unresolved = false;
 
 	public final void setEncoding(final String x) {_encoding = x;}
 
@@ -70,17 +82,6 @@ public abstract class XAbstractReader extends Reader {
 	////////////////////////////////////////////////////////////////////////////
 	// Methods used for parsing of character buffer
 	////////////////////////////////////////////////////////////////////////////
-
-	private final StringBuilder _bf = new StringBuilder();
-	private int _len = 0;
-	private int _pos = 0;
-	private long _line = 1;
-	private long _filePos = 0;
-	private long _startLine = 0;
-	private boolean _prologParsed = false;
-	private boolean _wasEndTag = false;
-	private boolean _includedText = false;
-	private boolean _unresolved = false;
 
 	public final int getPos() {return _pos;}
 
@@ -141,12 +142,8 @@ public abstract class XAbstractReader extends Reader {
 		}
 	}
 
-	public final boolean isEndBuf() {
-		return _pos >= _len;
-	}
-
 	public final void releaseScanned() {
-		if (_pos > 4) { // do it only if it makes sense
+		if (_pos > 512) { // do it only if it makes sense
 			_bf.delete(0, _pos);
 			_filePos +=  _pos;
 			_len = _bf.length();
@@ -155,20 +152,21 @@ public abstract class XAbstractReader extends Reader {
 	}
 
 	public final char nextChar() {
-		if (_pos >= _len) {
-			return 0;
-		}
-		char ch = _bf.charAt(_pos++);
-		if (ch == '\r') {
-			if (isChar('\n')) {
-				ch = '\n';
+		if (_pos < _len) {
+			char ch = _bf.charAt(_pos++);
+			if (ch == '\r') {
+				if (_pos < _len && _bf.charAt(_pos) == '\n') {
+					ch = '\n';
+					_pos++;
+				}
 			}
+			if (ch == '\n') {
+				_line++;
+				_startLine = _filePos + _pos;
+			}
+			return ch;
 		}
-		if (ch == '\n') {
-			_line++;
-			_startLine = _filePos + _pos;
-		}
-		return ch;
+		return 0;
 	}
 
 	public boolean isToken(final String s) {
@@ -181,20 +179,15 @@ public abstract class XAbstractReader extends Reader {
 	}
 
 	public final boolean isChar(final char c) {
-		if (_pos < _len) {
-			if (c == _bf.charAt(_pos)) {
-				_pos++;
-				return true;
-			}
+		if (_pos < _len && (c == _bf.charAt(_pos))) {
+			_pos++;
+			return true;
 		}
 		return false;
 	}
 
 	public final boolean chkChar(final char c) {
-		if (_pos < _len) {
-			return c == _bf.charAt(_pos);
-		}
-		return false;
+		return _pos < _len && c == _bf.charAt(_pos);
 	}
 
 	public int scanSpaces() {
@@ -234,12 +227,12 @@ public abstract class XAbstractReader extends Reader {
 		return start == _pos ? -1 : start;
 	}
 
-	public final int scanStringToChar(final char quote) {
+	public final int scanStringToChar(final char x) {
 		int pos = _pos;
 		long line = _line;
 		long startLine = _startLine;
 		char ch;
-		while ((ch = nextChar()) != 0 && ch != quote) {}
+		while ((ch = nextChar()) != 0 && ch != x) {}
 		if (ch != 0) {
 			return pos;
 		}
@@ -254,15 +247,25 @@ public abstract class XAbstractReader extends Reader {
 		long line = _line;
 		long startLine = _startLine;
 		char quote;
-		if (isChar('\'')) {
-			quote = '\'';
-		} else if (isChar('"')) {
-			quote = '"';
-		} else {
+		if (_pos >= _len || ((quote=_bf.charAt(_pos)) != '\'' && quote != '"')){
 			return -1;
 		}
-		if (skipTo(quote) > 0) {
-			return pos;
+		while (_pos + 1 < _len) {
+			char ch = _bf.charAt(++_pos);
+			if (ch == quote) {
+				_pos++;
+				return pos;
+			}
+			if (ch == '\r') {
+				if (_pos < _len && _bf.charAt(_pos) == '\n') {
+					ch = '\n';
+					_pos++;
+				}
+			}
+			if (ch == '\n') {
+				_line++;
+				_startLine = _filePos + _pos;
+			}
 		}
 		_pos = pos;
 		_line = line;
@@ -270,38 +273,59 @@ public abstract class XAbstractReader extends Reader {
 		return -1;
 	}
 
-	private long skipTo(final char c) {
+	private long skipTo(final char x) {
 		int pos = _pos;
 		long line = _line;
 		long startLine = _startLine;
-		for (;;) {
-			if (isChar(c)) {
+		while (_pos < _len) {
+			char ch = _bf.charAt(_pos++);
+			if (ch == x) {
 				return pos;
 			}
-			if (nextChar() == 0) {
-				_line = line;
-				_pos = pos;
-				_startLine = startLine;
-				return -1;
+			if (ch == '\r') {
+				if (_pos < _len && _bf.charAt(_pos) == '\n') {
+					ch = '\n';
+					_pos++;
+				}
+			}
+			if (ch == '\n') {
+				_line++;
+				_startLine = _filePos + _pos;
 			}
 		}
+		_pos = pos;
+		_line = line;
+		_startLine = startLine;
+		return -1;
 	}
 
 	private int skipTo(final String s) {
 		int pos = _pos;
 		long line = _line;
 		long startLine = _startLine;
-		for (;;) {
-			if (isToken(s)) {
+		int len = s.length();
+		char c = s.charAt(0);
+		while (_pos + len < _len) {
+			if (_bf.charAt(_pos) == c
+				&& s.equals(_bf.substring(_pos, _pos+len))) {
+				_pos += len;
 				return pos;
 			}
-			if (nextChar() == 0) {
-				_pos = pos;
-				_line = line;
-				_startLine = startLine;
-				return -1;
+			char ch = _bf.charAt(++_pos);
+			if (ch == '\r') {
+				if (_pos + 1 < _len && _bf.charAt(++_pos) == '\n') {
+					ch = '\n';
+				}
+			}
+			if (ch == '\n') {
+				_line++;
+				_startLine = _filePos + _pos;
 			}
 		}
+		_pos = pos;
+		_line = line;
+		_startLine = startLine;
+		return -1;
 	}
 
 	public final int scanPI() {
@@ -647,7 +671,7 @@ public abstract class XAbstractReader extends Reader {
 
 	public final int scanText() {
 		int start = _pos;
-		while(!chkChar('<') && !isEndBuf()) {
+		while(!chkChar('<') && _pos < _len) {
 			if (chkChar('&')) {
 				if (!isToken("&#")) {
 					break;
@@ -712,7 +736,8 @@ public abstract class XAbstractReader extends Reader {
 		}
 		// skip to the start of element
 		while (scanComment() > 0 || scanPI() > 0 || scanCDATA() >= 0
-			|| scanEndElement() >= 0 || scanText() > 0 || scanEntity() > 0) {}
+			|| scanEndElement() >= 0 || scanText() > 0 || scanEntity() > 0) {
+		}
 		List<Object[]> result = new ArrayList<>();
 		String name;
 		SPosition spos = getBufferPosition1();
@@ -727,11 +752,9 @@ public abstract class XAbstractReader extends Reader {
 		} else {
 			name = qName;
 		}
-		if (!"*".equals(qName)) {
-			releaseScanned();
-		}
+		releaseScanned();
 		result.add(new Object[]{name, spos});
-		while(!isEndBuf()) {
+		while(_pos < _len) {
 			int scanned = scanSpaces();
 			boolean wasEndTag = false;
 			if (isChar('>') || (wasEndTag = isToken("/>"))) { // attrs end

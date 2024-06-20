@@ -1,10 +1,14 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.1.8, release-date 2024-06-19
+# Version 42.1.8, release-date 2024-06-20
 * Fixed bug in `onIllegalAttr` and `onIllegalText` section of script - code was
   not executed or was not enabled.
-* Corrected report of incorrect error message:
-  `XDEF422 Duplicated script section`
+* Fixed incorrect error message `XDEF422 Duplicated part of script` to
+  `XDEF425 Script error`.
+* By setting the value of the pf property `xdef_clearReports` to `true` or
+  `false` it is now possible to set whether or not the actullal reporter
+  is cleared in the executed code of the `onFalse`, `onIllegalAttr`,
+  `onIllegalText`, `onEllegalElement` sections.
 
 # Version 42.1.7, release-date 2024-06-13
 * Fixed bug when ignoring `whitespace` type restrictions in XML Schema when

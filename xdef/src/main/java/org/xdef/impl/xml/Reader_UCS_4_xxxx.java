@@ -10,9 +10,9 @@ abstract class Reader_UCS_4_xxxx extends XAbstractReader {
 	/** byte input stream. */
 	private final InputStream _in;
 	/** byte buffer. */
-	private final byte[] _byteBuf = new byte[4096];
+	private final byte[] _byteBuf = new byte[8192];
 	/** char buffer. */
-	private final char[] _charBuf = new char[2048];
+	private final char[] _charBuf = new char[4096];
 	/** char buffer index. */
 	private int _charBufIndex = 0;
 	/** number of characters in char buffer. */

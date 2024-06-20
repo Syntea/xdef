@@ -13,14 +13,10 @@ public class XAbstractInputStream extends InputStream {
 	private int _len;
 	private byte[] _buf;
 
-	public XAbstractInputStream(final InputStream in,
-		final String encoding) throws IOException {
-		_in = in;
-		_len = -1;
-		_hdrIndex = 0;
-		_buf = null;
-	}
-
+	/** Create new instance of XAbstractInputStream.
+	 * @param in Input stream with data.
+	 * @throws IOException if an error occurs.
+	 */
 	public XAbstractInputStream(final InputStream in) throws IOException {
 		_in = in;
 		_len = -1;
@@ -184,7 +180,7 @@ public class XAbstractInputStream extends InputStream {
 	 * @return decoded character.
 	 * @throws IOException if an error occurs.
 	 */
-	public static final int nextChar(final InputStream in,
+	public static final int readChar(final InputStream in,
 		final String encoding,
 		final byte[] buf,
 		final int count,

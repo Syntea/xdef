@@ -52,7 +52,9 @@ public class XReader extends XAbstractReader {
 			return _in.read(cbuf);
 		}
 		int result = _in.read(cbuf);
-		if (result > 0) {
+		if (result == cbuf.length) {
+			addBuf(cbuf);
+		} else if (result > 0) {
 			addBuf(cbuf, 0, result);
 		}
 		return result;
