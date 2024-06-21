@@ -574,7 +574,7 @@ ElementOption ::= "moreAttributes" | "moreElements" | "moreText"
   | "trimText" | "noTrimText" | "resolveEntities" | "ignoreEntities"
   | "resolveIncludes" | "ignoreIncludes" | "preserveComments" | "ignoreComments"
   | "preserveTextCase" | "preserveAttrCase" | "acceptOther" | "ignoreOther"
-  | "nillable" | "noNillable"
+  | "clearReports" | "preserveReports" | "nillable" | "noNillable"
 
 /******************************************************************************/
 /* Script of the declaration part                                             */

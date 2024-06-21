@@ -69,7 +69,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 
 	/** The set containing marked unique sets. */
 	final Set<CodeUniqueset> _markedUniqueSets = new HashSet<>();
-	/** Switch if the actual reporter is cleared in actions. */
+	/** Switch if the actual reporter is cleared on invoked action. */
 	final private boolean _clearReports;
 	/** Array of bound keys.*/
 	XDUniqueSetKey[] _boundKeys;
@@ -133,26 +133,28 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	private XComponent _xComponent;
 
 	/** Creates a new empty instance of ChkElement - just for internal use.
-	 * @param xelement X-definition of element.
+	 * @param xelem XElement from X-definition.
 	 * @param parent ChkNode parent.
 	 * @param element element with attributes.
 	 * @param ignoreAll if true ignore this and all child nodes.
 	 */
 	ChkElement(final ChkNode parent,
 		Element element,
-		final XElement xelement,
+		final XElement xelem,
 		boolean ignoreAll) {
-		super(element==null ? xelement.getName(): element.getNodeName(),parent);
+		super(element==null ? xelem.getName(): element.getNodeName(),parent);
 //		_sourceElem=_elemValue=null; _selector=null; _nil=false;//Java makes it!
 //		Arrays.fill(_counters, 0); _nextDefIndex=_numText=0; //Java makes it!
 //		_boundKeys = null; _nextDefIndex=_numText=0; //Java makes it!
-		_clearReports = xelement._clearReports;
+		_clearReports = xelem._clearReports != 0
+			? xelem._clearReports == (byte) 'T'
+			: xelem.getXDPool().isClearReports();
 		_element = element;
-		_ignoreAll = ignoreAll || xelement.isIgnore() || xelement.isIllegal();
-		if (xelement.isIgnore() || xelement.isIllegal()) {
+		_ignoreAll = ignoreAll || xelem.isIgnore() || xelem.isIllegal();
+		if (xelem.isIgnore() || xelem.isIllegal()) {
 			_forget = true;
 		}
-		_xElement = xelement;
+		_xElement = xelem;
 		_xPosOccur = new LinkedHashMap<>();
 		_xPos = _parent.getXPos() + '/' + _name;
 		if (_parent.getParent() != null) {

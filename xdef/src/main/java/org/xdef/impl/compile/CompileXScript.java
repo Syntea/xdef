@@ -1145,13 +1145,13 @@ final class CompileXScript extends CompileStatement {
 				} else {
 					reportDeprecated("option forget", "forget (action)");
 					if (forget) {
-						error(XDEF.XDEF432); //Option redefinition
+						error(XDEF.XDEF432,_idName);//Option &{0} redefinition
 					}
 					((XElement) result)._forget = 'T';
 				}
 			} else if ("notForget".equals(_idName)) {
 				if (forget) {
-					error(XDEF.XDEF432); //Option redefinition
+					error(XDEF.XDEF432,_idName);//Option &{0} redefinition
 				}
 				if (kind != XMELEMENT) {
 					//The token '&{0}' is not allowed here
@@ -1159,7 +1159,7 @@ final class CompileXScript extends CompileStatement {
 				} else {
 					reportDeprecated("option notForget", "forget (action)");
 					if (forget) {
-						error(XDEF.XDEF432); //Option redefinition
+						error(XDEF.XDEF432,_idName);//Option &{0} redefinition
 					}
 				}
 			} else if ("clearAdoptedForgets".equals(_idName)) {
@@ -1180,7 +1180,7 @@ final class CompileXScript extends CompileStatement {
 					reportDeprecated(_idName, "preserveAttrWhiteSpaces");
 				}
 				if (attrWhiteSpaces) {
-					error(XDEF.XDEF432); //Option redefinition
+					error(XDEF.XDEF432,_idName);//Option &{0} redefinition
 				}
 				attrWhiteSpaces = true;
 				result._attrWhiteSpaces = (byte)
@@ -1192,14 +1192,14 @@ final class CompileXScript extends CompileStatement {
 					reportDeprecated(_idName, "preserveTextWhiteSpaces");
 				}
 				if (textWhiteSpaces) {
-					error(XDEF.XDEF432); //Option redefinition
+					error(XDEF.XDEF432,_idName);//Option &{0} redefinition
 				}
 				textWhiteSpaces = true;
 				result._textWhiteSpaces = (byte)
 					("ignoreTextWhiteSpaces".equals(_idName) ? 'T' : 'F');
 			} else if ("ignoreComments".equals(_idName)) {
 				if (ignoreComments) {
-					error(XDEF.XDEF432); //Option redefinition
+					error(XDEF.XDEF432,_idName);//Option &{0} redefinition
 				}
 				ignoreComments = true;
 				result._ignoreComments = 'T';
@@ -1209,7 +1209,7 @@ final class CompileXScript extends CompileStatement {
 					reportDeprecated(_idName,"preserveComments");
 				}
 				if (ignoreComments) {
-					error(XDEF.XDEF432); //Option redefinition
+					error(XDEF.XDEF432,_idName);//Option &{0} redefinition
 				}
 				ignoreComments = true;
 				result._ignoreComments = 'F';
@@ -1221,7 +1221,7 @@ final class CompileXScript extends CompileStatement {
 					reportDeprecated(_idName, "acceptEmptyAttributes");
 				}
 				if (ignoreEmptyAttributes) {
-					error(XDEF.XDEF432); //Option redefinition
+					error(XDEF.XDEF432,_idName);//Option &{0} redefinition
 				}
 				ignoreEmptyAttributes = true;
 				result._ignoreEmptyAttributes = (byte)
@@ -1234,7 +1234,7 @@ final class CompileXScript extends CompileStatement {
 				|| "noSetAttrCase".equals(_idName)
 				|| "preserveAttrCase".equals(_idName)) {
 				if (setAttrValuesCase) {
-					error(XDEF.XDEF432); //Option redefinition
+					error(XDEF.XDEF432,_idName);//Option &{0} redefinition
 				}
 				setAttrValuesCase = true;
 				result._attrValuesCase = (byte)
@@ -1246,7 +1246,7 @@ final class CompileXScript extends CompileStatement {
 				|| "noSetTextCase".equals(_idName)
 				|| "preserveTextCase".equals(_idName)) {
 				if (setTextValuesCase) {
-					error(XDEF.XDEF432); //Option redefinition
+					error(XDEF.XDEF432,_idName);//Option &{0} redefinition
 				}
 				setTextValuesCase = true;
 				result._textValuesCase = (byte)
@@ -1256,7 +1256,7 @@ final class CompileXScript extends CompileStatement {
 			} else if ("trimAttr".equals(_idName)
 				|| "noTrimAttr".equals(_idName)) {
 				if (trimAttr) {
-					error(XDEF.XDEF432); //Option redefinition
+					error(XDEF.XDEF432,_idName);//Option &{0} redefinition
 				}
 				trimAttr = true;
 				result._trimAttr =
@@ -1264,33 +1264,33 @@ final class CompileXScript extends CompileStatement {
 			} else if ("trimText".equals(_idName)
 				|| "noTrimText".equals(_idName)) {
 				if (trimText) {
-					error(XDEF.XDEF432); //Option redefinition
+					error(XDEF.XDEF432,_idName);//Option &{0} redefinition
 				}
 				trimText = true;
 				result._trimText =
 					(byte) ("trimText".equals(_idName) ? 'T' : 'F');
 			} else if ("moreAttributes".equals(_idName)) {
 				if (moreAttributes) {
-					error(XDEF.XDEF432); //Option redefinition
+					error(XDEF.XDEF432,_idName);//Option &{0} redefinition
 				}
 				moreAttributes = true;
 				result._moreAttributes = 'T';
 			} else if ("moreElements".equals(_idName)) {
 				if (moreElements) {
-					error(XDEF.XDEF432); //Option redefinition
+					error(XDEF.XDEF432,_idName);//Option &{0} redefinition
 				}
 				moreElements = true;
 				result._moreElements = 'T';
 			} else if ("moreText".equals(_idName)) {
 				if (moreText) {
-					error(XDEF.XDEF432); //Option redefinition
+					error(XDEF.XDEF432,_idName);//Option &{0} redefinition
 				}
 				moreText = true;
 				result._moreText = 'T';
 			} else if ("acceptOther".equals(_idName)
 				|| "ignoreOther".equals(_idName)) {
 				if (moreAttributes | moreElements | moreText) {
-					error(XDEF.XDEF432); //Option redefinition
+					error(XDEF.XDEF432,_idName);//Option &{0} redefinition
 				}
 				moreAttributes = moreElements = moreText = true;
 				byte b = "acceptOther".equals(_idName) ? (byte)'T' :(byte) 'I';
@@ -1298,7 +1298,7 @@ final class CompileXScript extends CompileStatement {
 			} else if ("nillable".equals(_idName)
 				|| "noNillable".equals(_idName)) {
 				if (nillable) {
-					error(XDEF.XDEF432); //Option redefinition
+					error(XDEF.XDEF432,_idName);//Option &{0} redefinition
 				} else if (kind != XMELEMENT) {
 					//The token '&{0}' is not allowed here
 					error(XDEF.XDEF411, _idName);
@@ -1309,7 +1309,7 @@ final class CompileXScript extends CompileStatement {
 			} else if ("ignoreEntities".equals(_idName)
 				|| "resolveEntities".equals(_idName)) {
 				if (ignoreEntities) {
-					error(XDEF.XDEF432); //Option redefinition
+					error(XDEF.XDEF432,_idName);//Option &{0} redefinition
 				}
 				ignoreEntities = true;
 				result._resolveEntities =
@@ -1317,7 +1317,7 @@ final class CompileXScript extends CompileStatement {
 			} else if ("acceptQualifiedAttr".equals(_idName)
 				|| "notAacceptQualifiedAttr".equals(_idName)) {
 				if (acceptQualifiedAttr) {
-					error(XDEF.XDEF432); //Option redefinition
+					error(XDEF.XDEF432,_idName);//Option &{0} redefinition
 				}
 				acceptQualifiedAttr = true;
 				result._acceptQualifiedAttr =
@@ -1343,6 +1343,20 @@ final class CompileXScript extends CompileStatement {
 				} else {
 					//The token '&{0}' is not allowed here
 					error(XDEF.XDEF411, _idName);
+				}
+			} else if ("clearReports".equals(_idName)
+				|| "preserveReports".equals(_idName)) {
+				if (kind != XMELEMENT) {
+					//The token '&{0}' is not allowed here
+					error(XDEF.XDEF411, _idName);
+				} else {
+					XElement xel = (XElement) result;
+					if (xel._clearReports != 0) {
+						error(XDEF.XDEF432,_idName);//Option &{0} redefinition
+					} else {
+						xel._clearReports =
+							"clearReports".equals(_idName) ?(byte)'T':(byte)'F';
+					}
 				}
 			} else {
 				error(XDEF.XDEF433, _idName); //Unknown option '&{0}'

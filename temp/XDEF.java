@@ -324,7 +324,7 @@ public interface XDEF {
 	public static final long XDEF430 = 31159025822L;
 	/** Option identifier expected&amp;{#SYS000} */
 	public static final long XDEF431 = 31159025823L;
-	/** Option redefinition&amp;{#SYS000} */
+	/** Option&amp;{0}{ '}{'} redefinition&amp;{#SYS000} */
 	public static final long XDEF432 = 31159025824L;
 	/** Unknown option '&amp;{0}'&amp;{#SYS000} */
 	public static final long XDEF433 = 31159025825L;

@@ -32,8 +32,6 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 	public Map<String,XNode> _rootSelection;
 	/** Array of X-definitions names from where to accept local declarations. */
 	public String[] _importLocal;
-	/** Switch if the actual reporter is cleared in actions. */
-	public boolean _clearReports;
 
 	/** Version of X-definition (see org.xdef.impl.XConstants.XDxx). */
 	private byte _xdVersion;
@@ -66,10 +64,6 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 		final SPosition sourcePosition,
 		final byte xmlVersion) {
 		super(name, nsURI, (XPool) xdp, XMDEFINITION);
-//		_clearReports = xdp == null ? false : xdp.isClearReports();
-		if (xdp != null) {
-			_clearReports = xdp.isClearReports();
-		}
 		_xElements = new ArrayList<>();
 		_properties = new Properties();
 		_namespaces = new LinkedHashMap<>();

@@ -55,13 +55,13 @@ public final class XPool implements XDPool, Serializable {
 	/** XDPool version.*/
 	private static final String XD_VERSION = "XD" + XDConstants.BUILD_VERSION;
 	/** Last compatible version of XDPool (e.g. 4.0.001.005). */
-	private static final String XD_MIN_VERSION = "4.1.000.006";
+	private static final String XD_MIN_VERSION = "4.2.001.008";
 
 	/** Flag if warnings should be checked.*/
 	private boolean _chkWarnings;
 	/** Switch to allow/restrict DOCTYPE in XML.*/
 	private boolean _illegalDoctype;
-	/** Switch if the actual reporter is cleared. */
+	/** Switch if the actual reporter is cleared on invoked action. */
 	private boolean _clearReports;
 	/** Debug mode: 0 .. false, 1 .. true, 2 .. showResult.*/
 	private byte _debugMode;
@@ -171,14 +171,12 @@ public final class XPool implements XDPool, Serializable {
 		_illegalDoctype = readProperty(_props,XDConstants.XDPROPERTY_DOCTYPE,
 			new String[] {XDConstants.XDPROPERTYVALUE_DOCTYPE_TRUE,
 				XDConstants.XDPROPERTYVALUE_DOCTYPE_FALSE},
-			XDConstants.XDPROPERTYVALUE_DOCTYPE_TRUE)== 0;
-		// Switch if the actullal reporter is cleared in the executed code
-		// of the 'onFalse', 'onIllegalAttr', 'onIllegalText',
-		// 'onEllegalElement' sections. Default value is 'true'
+			XDConstants.XDPROPERTYVALUE_DOCTYPE_TRUE)== 0;  //default is false
+		//switch if the actullal reporter is cleared on invoked action
 		_clearReports=readProperty(_props,XDConstants.XDPROPERTY_CLEAR_REPORTS,
 			new String[] {XDConstants.XDPROPERTYVALUE_CLEAR_REPORTS_TRUE,
 				XDConstants.XDPROPERTYVALUE_CLEAR_REPORTS_FALSE},
-			XDConstants.XDPROPERTYVALUE_DOCTYPE_TRUE)== 0;
+			XDConstants.XDPROPERTYVALUE_DOCTYPE_TRUE)== 0; //default is true
 		//ignore undefined external objects
 		_ignoreUnresolvedExternals = readProperty(_props,
 			XDConstants.XDPROPERTY_IGNORE_UNDEF_EXT,
@@ -199,7 +197,7 @@ public final class XPool implements XDPool, Serializable {
 		_resolveIncludes = readProperty(_props,XDConstants.XDPROPERTY_XINCLUDE,
 			new String[] {XDConstants.XDPROPERTYVALUE_XINCLUDE_TRUE,
 				XDConstants.XDPROPERTYVALUE_XINCLUDE_FALSE},
-			XDConstants.XDPROPERTYVALUE_XINCLUDE_TRUE) == 0;
+			XDConstants.XDPROPERTYVALUE_XINCLUDE_TRUE) == 0; //default is false
 		_minYear = readPropertyYear(_props, XDConstants.XDPROPERTY_MINYEAR);
 		_maxYear = readPropertyYear(_props, XDConstants.XDPROPERTY_MAXYEAR);
 		_specialDates = readPropertySpecDates(_props);

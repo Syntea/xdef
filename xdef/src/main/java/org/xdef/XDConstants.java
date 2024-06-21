@@ -77,9 +77,9 @@ public interface XDConstants {
 	public static final String XDPROPERTY_MAXYEAR = "xdef_maxyear";
 	/** Property defines legal values of dates if year is out of range.*/
 	public static final String XDPROPERTY_SPECDATES = "xdef_specdates";
-	/** Property defines if the actullal reporter is cleared in the executed
-	 * code of the 'onFalse', 'onIllegalAttr', 'onIllegalText',
-	 * 'onEllegalElement' sections. Default value is 'true'*/
+	/** Property defines if the actual reporter is cleared in the invoked
+	 * action 'onFalse', 'onIllegalAttr', 'onIllegalText',
+	 * 'onEllegalElement'. Default value is 'true'*/
 	public static final String XDPROPERTY_CLEAR_REPORTS = "xdef_clearReports";
 	/** Value "true" of property "xdef_clearReports" */
 	public static final String XDPROPERTYVALUE_CLEAR_REPORTS_TRUE = "true";

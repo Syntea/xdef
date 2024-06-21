@@ -1475,7 +1475,7 @@ public final class TestOptions extends XDTester {
 			xd = xp.createXDDocument();
 			xd.setStdOut(XDFactory.createXDOutput(swr, false));
 			el = parse(xd, "<A a='1'> <B/> 2 </A>", reporter);
-			assertNoErrors(reporter);
+			assertNoErrorsAndClear(reporter);
 			assertEq("abet", swr.toString());
 			if (el.getChildNodes().getLength() > 0
 				|| el.getAttributes().getLength() > 0) {
@@ -1489,6 +1489,46 @@ public final class TestOptions extends XDTester {
 			xd.setStdOut(XDFactory.createXDOutput(swr, false));
 			el = parse(xd, "<A a='1'> <B/> 2 </A>", reporter);
 			assertEq(3, reporter.getErrorCount());
+			reporter.clear();
+			assertEq("abet", swr.toString());
+			if (el.getChildNodes().getLength() > 0
+				|| el.getAttributes().getLength() > 0) {
+				fail(KXmlUtils.nodeToString(el));
+			}
+			xdef = //test property "xdef_saveReports" and onIllegal events
+"<xd:def xmlns:xd='" + _xdNS + "' root = \"A\">\n" +
+"<A xd:script='option clearReports; onIllegalElement out(\"e\");'\n" +
+"   a='illegal int; onIllegalAttr out(\"a\"); onAbsence out(\"b\");'>\n"+
+"  <B xd:script='illegal; option clearReports; onIllegalElement out(\"e\");'/>\n" +
+"  illegal int; onIllegalText out(\"t\");\n" +
+"</A>\n" +
+"</xd:def>";
+			xp = compile(xdef);
+			swr = new StringWriter();
+			xd = xp.createXDDocument();
+			xd.setStdOut(XDFactory.createXDOutput(swr, false));
+			el = parse(xd, "<A a='1'> <B/> 2 </A>", reporter);
+			assertNoErrorsAndClear(reporter);
+			assertEq("abet", swr.toString());
+			if (el.getChildNodes().getLength() > 0
+				|| el.getAttributes().getLength() > 0) {
+				fail(KXmlUtils.nodeToString(el));
+			}
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root = \"A\">\n" +
+"<A xd:script='option preserveReports; onIllegalElement out(\"e\");'\n" +
+"   a='illegal int; onIllegalAttr out(\"a\"); onAbsence out(\"b\");'>\n"+
+"  <B xd:script='illegal; option preserveReports; onIllegalElement out(\"e\");'/>\n" +
+"  illegal int; onIllegalText out(\"t\");\n" +
+"</A>\n" +
+"</xd:def>";
+			xp = compile(xdef);
+			swr = new StringWriter();
+			xd = xp.createXDDocument();
+			xd.setStdOut(XDFactory.createXDOutput(swr, false));
+			el = parse(xd, "<A a='1'> <B/> 2 </A>", reporter);
+			assertEq(3, reporter.getErrorCount());
+			reporter.clear();
 			assertEq("abet", swr.toString());
 			if (el.getChildNodes().getLength() > 0
 				|| el.getAttributes().getLength() > 0) {

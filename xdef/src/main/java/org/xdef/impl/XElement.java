@@ -47,10 +47,10 @@ public final class XElement extends XCodeDescriptor
 	/** "clearAdoptedForgets" flag - if true all forgets in referred nodes
 	 * are cleared. */
 	public byte _clearAdoptedForgets;
+	/** Switch if the actual reporter is cleared on invoked action. */
+	public byte _clearReports;
 	/** flag if node is template. */
 	public boolean _template;
-	/** Switch if the actual reporter is cleared in actions. */
-	public boolean _clearReports;
 	/** Not null if this object equal to a reference.*/
 	private boolean _reference;
 	/** Position of model reference.*/
@@ -69,7 +69,6 @@ public final class XElement extends XCodeDescriptor
 		final String nsURI,
 		final XDefinition xdef) {
 		super(name, nsURI, xdef.getXDPool(), XMELEMENT);
-		_clearReports = xdef._clearReports;
 		_sqId = ((XPool)xdef.getXDPool()).getSqId();
 		_definition = xdef;
 		_attrs = new LinkedHashMap<>();
@@ -83,6 +82,7 @@ public final class XElement extends XCodeDescriptor
 	 */
 	public XElement(final XElement x) {
 		super(x);
+		_clearReports = x._clearReports;
 		_sqId = ((XPool)x.getXDPool()).getSqId();
 		_definition = x._definition;
 		_attrs = new LinkedHashMap<>(x._attrs);
@@ -334,6 +334,7 @@ public final class XElement extends XCodeDescriptor
 		xw.writeByte(_forget);
 		//_definition ... from constructor
 		xw.writeByte(_clearAdoptedForgets);
+		xw.writeByte(_clearReports);
 		xw.writeBoolean(_template);
 		if (_nsContext == null) {
 			xw.writeLength(0);
@@ -381,6 +382,7 @@ public final class XElement extends XCodeDescriptor
 		x._forget = xr.readByte();
 		//_definition ... from constructor
 		x._clearAdoptedForgets = xr.readByte();
+		x._clearReports = xr.readByte();
 		x._template = xr.readBoolean();
 		len = xr.readLength();
 		if (len > 0) {
