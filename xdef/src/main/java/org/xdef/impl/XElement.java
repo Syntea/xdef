@@ -15,7 +15,11 @@ import org.xdef.model.XMData;
 import org.xdef.model.XMDefinition;
 import org.xdef.model.XMElement;
 import org.xdef.model.XMNode;
+import static org.xdef.model.XMNode.XMCHOICE;
 import static org.xdef.model.XMNode.XMELEMENT;
+import static org.xdef.model.XMNode.XMMIXED;
+import static org.xdef.model.XMNode.XMSEQUENCE;
+import static org.xdef.model.XMNode.XMTEXT;
 import org.xdef.msg.SYS;
 import org.xdef.msg.XDEF;
 import org.xdef.proc.XDLexicon;
@@ -45,6 +49,8 @@ public final class XElement extends XCodeDescriptor
 	public byte _clearAdoptedForgets;
 	/** flag if node is template. */
 	public boolean _template;
+	/** Switch if the actual reporter is cleared in actions. */
+	public boolean _clearReports;
 	/** Not null if this object equal to a reference.*/
 	private boolean _reference;
 	/** Position of model reference.*/
@@ -63,6 +69,7 @@ public final class XElement extends XCodeDescriptor
 		final String nsURI,
 		final XDefinition xdef) {
 		super(name, nsURI, xdef.getXDPool(), XMELEMENT);
+		_clearReports = xdef._clearReports;
 		_sqId = ((XPool)xdef.getXDPool()).getSqId();
 		_definition = xdef;
 		_attrs = new LinkedHashMap<>();

@@ -67,6 +67,26 @@ import static org.xdef.xon.XonNames.X_VALUE;
  */
 public final class ChkElement extends ChkNode implements XXElement, XXData {
 
+	/** The set containing marked unique sets. */
+	final Set<CodeUniqueset> _markedUniqueSets = new HashSet<>();
+	/** Switch if the actual reporter is cleared in actions. */
+	final private boolean _clearReports;
+	/** Array of bound keys.*/
+	XDUniqueSetKey[] _boundKeys;
+	/** Model of the processed data object.*/
+	XMData _xdata;
+	/** XON Map. */
+	Map<String, Object> _xonMap;
+	/** XON Array. */
+	List<Object> _xonArray;
+	/** XON item name. */
+	String _xonKey;
+	/** XON item value. */
+	Object _xonValue;
+	/** Index to actual X-definition. */
+	int _actDefIndex;
+	/** Index to next X-definition. */
+	int _nextDefIndex;
 	/** Text value (of actual text node or attribute). It is used
 	 * for communication with the XScript interpreter.
 	 * Important note: it should be cleared after invocation of
@@ -92,10 +112,6 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	private XNode[] _defList;
 	/** Array of occurrence counters. */
 	private int[] _counters;
-	/** Index to actual X-definition. */
-	int _actDefIndex;
-	/** Index to next X-definition. */
-	int _nextDefIndex;
 	/** Number of text nodes found. */
 	private int _numText;
 	/** Flag this element should be forgotten. */
@@ -113,23 +129,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	 /** mode: 'C' - comment, 'E' - element, 'A' - attribute, 'T' - text,
 	 * 'D' - document, 'P' - processing instruction,'U' undefined. */
 	private byte _mode;
-	/** Array of bound keys.*/
-	XDUniqueSetKey[] _boundKeys;
-	/** Model of the processed data object.*/
-	XMData _xdata;
-	/** XON Map. */
-	Map<String, Object> _xonMap;
-	/** XON Array. */
-	List<Object> _xonArray;
-	/** XON item name. */
-	String _xonKey;
-	/** XON item value. */
-	Object _xonValue;
 	/** XComponent if exists or null. */
 	private XComponent _xComponent;
-
-	/** The set containing marked unique sets. */
-	final Set<CodeUniqueset> _markedUniqueSets;
 
 	/** Creates a new empty instance of ChkElement - just for internal use.
 	 * @param xelement X-definition of element.
@@ -142,10 +143,10 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		final XElement xelement,
 		boolean ignoreAll) {
 		super(element==null ? xelement.getName(): element.getNodeName(),parent);
-		_markedUniqueSets = new HashSet<>();
 //		_sourceElem=_elemValue=null; _selector=null; _nil=false;//Java makes it!
 //		Arrays.fill(_counters, 0); _nextDefIndex=_numText=0; //Java makes it!
 //		_boundKeys = null; _nextDefIndex=_numText=0; //Java makes it!
+		_clearReports = xelement._clearReports;
 		_element = element;
 		_ignoreAll = ignoreAll || xelement.isIgnore() || xelement.isIllegal();
 		if (xelement.isIgnore() || xelement.isIllegal()) {
@@ -395,7 +396,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			|| result.getXMElement().isIllegal())) {
 			if (result.getXMElement().isIllegal()) {
 				if (_xElement._onIllegalElement >= 0) {
-					if (!getXDPool().isClearReports()) {
+					if (!_clearReports) {
 						//Illegal element '&{0}'
 						error(XDEF.XDEF557, element.getNodeName());
 					}
@@ -418,7 +419,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 				debugXPos(XDDebug.ONILLEGALELEMENT);
 				if (_xElement._onIllegalElement >= 0) {
 					_elemValue = _element;
-					if (!getXDPool().isClearReports()) {
+					if (!_clearReports) {
 						//Not allowed element '&{0}'
 						putTemporaryReport(Report.error(XDEF.XDEF501,
 							element.getNodeName()));
@@ -463,6 +464,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		if (_counters[index] >= xelem.minOccurs()) {
 			if (_counters[index] == 0 && xelem._onAbsence >= 0) {
 				ChkElement chkElem = new ChkElement(this, null, xelem, true);
+				if (_clearReports) {
+					clearTemporaryReporter();
+				}
 				_scp.exec(xelem._onAbsence, chkElem);
 			}
 			return;
@@ -475,6 +479,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 				//create "Pseudo" ChkElement
 				ChkElement chkElem = new ChkElement(this, null, xelem, true);
 				chkElem.setXXType((byte) 'E');
+				if (_clearReports) {
+					clearTemporaryReporter();
+				}
 				_scp.exec(xelem._onAbsence, chkElem);
 				if (chkElem._element != null) {
 					//save original reports and set clear new reporter
@@ -557,11 +564,13 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		String txtname = getTextPathIndex(index); // index or ""
 		_xPos += "/text()" + txtname;
 		txtname = "$text" + txtname;
-		if (!_attNames.contains(txtname)
-			&& xtxt._onAbsence >= 0) {//exec onAbsence
+		if (!_attNames.contains(txtname) && xtxt._onAbsence >= 0) {
 			_attNames.add(txtname);
 			_elemValue = _element;
-			exec(xtxt._onAbsence, (byte) 'T');
+			if (_clearReports) {
+				clearTemporaryReporter();
+			}
+			exec(xtxt._onAbsence, (byte) 'T'); //exec onAbsence
 			if (_data != null) {
 				checkDatatype(xtxt, true);
 			}
@@ -745,6 +754,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			XSelector xs = (XSelector) _defList[selector._begIndex];
 			if (xs._onAbsence >= 0) {
 				if (skipSelectors || !required) {
+					if (_clearReports) {
+						clearTemporaryReporter();
+					}
 					exec(xs._onAbsence, (byte) 'U');
 				}
 				return false;
@@ -785,13 +797,17 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 							k += _counters[n];
 						}
 						if (k < xch.minOccurs()) {
-							//Minimum occurrence not reached for &amp;{0}
-							error(XDEF.XDEF555, "choice");
 							if (xch._onAbsence >= 0) {
-//								if (!getXDPool().isSaveReports()) {
-//									clearTemporaryReporter();
-//								}
+								if (_clearReports) {
+									clearTemporaryReporter();
+								} else {
+									//Minimum occurrence not reached for &{0}
+									error(XDEF.XDEF555, "choice");
+								}
 								exec(xch._onAbsence, (byte)'U');
+							} else {
+								//Minimum occurrence not reached for &{0}
+								error(XDEF.XDEF555, "choice");
 							}
 						}
 						i = j;
@@ -1057,9 +1073,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 					XSelector xsel =
 						(XSelector) getDefElement(_selector._begIndex);
 					if (xsel._onAbsence >= 0) {
-//						if (!getXDPool().isSaveReports()) {
-//							clearTemporaryReporter();
-//						}
+						if (_clearReports) {
+							clearTemporaryReporter();
+						}
 						exec(xsel._onAbsence, (byte)'U');
 					}
 				}
@@ -1462,6 +1478,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		if (_data == null && xtxt.minOccurs() == XData.REQUIRED) {
 			//required && missing obligatory text
 			if (xtxt._onAbsence >= 0) {
+				if (_clearReports) {
+					clearTemporaryReporter();
+				}
 				//exec onAbsence
 				_elemValue = _element;
 				exec(xtxt._onAbsence, (byte) 'T');
@@ -1858,6 +1877,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 							qname, getPosMod(getXDPosition(), _xPos)));
 					}
 					if (xatt._onIllegalAttr >= 0) {
+						if (_clearReports) {
+							clearTemporaryReporter();
+						}
 						exec(xatt._onIllegalAttr, (byte) 'A');
 					}
 				}
@@ -1909,7 +1931,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 						if (xatt._onFalse >= 0) {
 							String x = _data;
 							_elemValue = _element;
-							if (getXDPool().isClearReports()) {
+							if (_clearReports) {
 								clearTemporaryReporter();
 							}
 							exec(xatt._onFalse, (byte) 'A');
@@ -1972,7 +1994,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 							debugXPos(XDDebug.ONFALSE);
 							if (xatt._onFalse >= 0) {
 								String x = _data;
-								if (getXDPool().isClearReports()) {
+								if (_clearReports) {
 									clearTemporaryReporter();
 								}
 								exec(xatt._onFalse, (byte) 'A');
@@ -2066,8 +2088,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		debugXPos(XDDebug.ONILLEGALATTR);
 		_data = adata = null;
 		if (xatt != null && xatt._onIllegalAttr > 0) {
-			if (!getXDPool().isClearReports()) {
-				//Attribute not allowed
+			if (_clearReports) {
+				clearTemporaryReporter();
+			} else {//Attribute not allowed
 				putTemporaryReport(Report.error(XDEF.XDEF525,
 					qname, getPosMod(getXDPosition(), _xPos)));
 			}
@@ -2075,7 +2098,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			_parseResult = null;
 			copyTemporaryReports();
 		} else if (_xElement._onIllegalAttr >= 0) {
-			if (!getXDPool().isClearReports()) {
+			if (_clearReports) {
+				clearTemporaryReporter();
+			} else {//Attribute not allowed
 				//Attribute not allowed
 				putTemporaryReport(Report.error(XDEF.XDEF525,
 					qname, getPosMod(getXDPosition(), _xPos)));
@@ -2287,9 +2312,6 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 					_parseResult = null;
 					_attName = xname;
 					_elemValue = _element;
-					if (getXDPool().isClearReports()) {
-						clearTemporaryReporter();
-					}
 					Report rep = null;
 					if (xatt.minOccurs() == XData.REQUIRED) {
 						//Missing required attribute &{0}
@@ -2896,7 +2918,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 						debugXPos(XDDebug.ONFALSE);
 						if (xtxt._onFalse >= 0) {
 							String x = _data;
-							if (getXDPool().isClearReports()) {
+							if (_clearReports) {
 								clearTemporaryReporter();
 							}
 							exec(xtxt._onFalse, (byte) 'T');
@@ -3201,7 +3223,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 				}
 				debugXPos(XDDebug.ONILLEGALTEXT);
 				if (xtxt1._onIllegalText >= 0) {
-					if (!getXDPool().isClearReports()) {
+					if (!_clearReports) {
 						//Illegal text
 						putTemporaryReport(Report.error(XDEF.XDEF528));
 					}
@@ -3227,7 +3249,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 					debugXPos(XDDebug.ONFALSE);
 					if (xtxt1._onFalse >= 0) {// value not exist
 						_elemValue = _element;
-						if (getXDPool().isClearReports()) {
+						if (_clearReports) {
 							clearTemporaryReporter();
 						}
 						exec(xtxt1._onFalse, (byte) 'T');
@@ -3284,7 +3306,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 							}
 							debugXPos(XDDebug.ONFALSE);
 							if (xtxt1._onFalse >= 0) {
-								if (getXDPool().isClearReports()) {
+								if (_clearReports) {
 									clearTemporaryReporter();
 								}
 								String x = _data;

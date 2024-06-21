@@ -31,13 +31,14 @@ import org.xdef.XDDocument;
 import org.xdef.XDParseResult;
 import org.xdef.XDPool;
 import org.xdef.XDValue;
+import static org.xdef.XDValueID.XD_PARSERESULT;
 import static org.xdef.XDValueID.XX_DOCUMENT;
+import static org.xdef.XDValueID.X_PARSEITEM;
+import static org.xdef.XDValueID.X_UNIQUESET_M;
 import org.xdef.XDValueType;
-import static org.xdef.XDValueType.XXDOCUMENT;
 import org.xdef.XDXmlOutStream;
 import org.xdef.component.XComponent;
 import org.xdef.component.XComponentUtil;
-import static org.xdef.impl.XConstants.JSON_ANYOBJECT;
 import org.xdef.impl.code.CodeUniqueset;
 import org.xdef.impl.code.DefOutStream;
 import org.xdef.impl.code.DefParseResult;
@@ -66,14 +67,14 @@ import org.xdef.sys.STester;
 import org.xdef.sys.SThrowable;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
-import static org.xdef.xon.XonNames.Q_ARRAY;
-import static org.xdef.xon.XonNames.Q_MAP;
 import org.xdef.xon.XonUtils;
-import static org.xdef.xon.XonNames.Q_VALUE;
-import static org.xdef.XDValueID.X_PARSEITEM;
-import static org.xdef.XDValueID.X_UNIQUESET_M;
+import static org.xdef.XDValueType.XXDOCUMENT;
+import static org.xdef.impl.XConstants.JSON_ANYOBJECT;
 import static org.xdef.model.XMNode.XMCHOICE;
 import static org.xdef.model.XMNode.XMELEMENT;
+import static org.xdef.xon.XonNames.Q_ARRAY;
+import static org.xdef.xon.XonNames.Q_MAP;
+import static org.xdef.xon.XonNames.Q_VALUE;
 
 /** Provides root check object for generation of check tree and processing
  * of the X-definition.
@@ -89,12 +90,14 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	byte _ignoreEmptyAttributes; //0 not set, 'T', 'A', 'P', 'F'
 	/** Flag set case of attribute values to upper(T) or lower(F). */
 	byte _setAttrValuesCase; //0 not set, 'I' ignore, 'T' or 'F'
-	/** Flag set case of text node values to upper(T) or lower(F). */
-	byte _setTextValuesCase; //0 not set, 'I' ignore, 'T' or 'F'
 	/** Flag to trim/not trim attribute value. */
 	byte _trimAttr; //0 not set, 'T' or 'F'
 	/** Flag to trim/not trim text values. */
 	byte _trimText; //0 not set 'T' or 'F'
+	/** Flag set case of text node values to upper(T) or lower(F). */
+	private byte _setTextValuesCase; //0 not set, 'I' ignore, 'T' or 'F'
+
+	////////////////////////////////////////////////////////////////////////////
 	/** Root definition. */
 	XDefinition _xdef;
 	/** Report generator. */
@@ -107,6 +110,11 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	int _sourceLanguageID = -1;
 	/** XDLexicon destination language ID.*/
 	int _destLanguageID = -1;
+	/** XON object, result of XON/JSON parsing */
+	Object _xon;
+	////////////////////////////////////////////////////////////////////////////
+	/** The list of child check elements. */
+	private final List<ChkElement> _chkChildNodes;
 	/** Reference number - max. 1 for root. */
 	private int _refNum;
 	/** true if we are running in create mode. */
@@ -117,11 +125,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	private XComponent _xComponent;
 	/** Switch to generate XComponent instead of Element; */
 	private boolean _genXComponent;
-	/** XON object, result of XON/JSON parsing */
-	Object _xon;
-	/** The list of child check elements. */
-	final List<ChkElement> _chkChildNodes;
-
+	////////////////////////////////////////////////////////////////////////////
 	// valid date parameters
 	/** Maximal accepted value of the year. */
 	private int _maxYear = Integer.MIN_VALUE;
@@ -430,11 +434,11 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 */
 	private boolean createXComponent(final Class<?> y) {
 		try {
-			Constructor<?> c = y.getDeclaredConstructor(
-				XComponent.class, XXNode.class);
+			Constructor<?> c =
+				y.getDeclaredConstructor(XComponent.class, XXNode.class);
 			c.setAccessible(true);
-			XComponent xc = (XComponent) c.newInstance(
-				(XComponent)null, _chkRoot);
+			XComponent xc =
+				(XComponent) c.newInstance((XComponent)null, _chkRoot);
 			_xclass = y;
 			_chkRoot.setXComponent(_xComponent=xc);
 			return true;

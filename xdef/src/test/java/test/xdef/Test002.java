@@ -326,8 +326,8 @@ public final class Test002 extends XDTester {
 			swr = new StringWriter();
 			parse(xdef, "", xml, reporter, swr, null, null);
 			assertEq(6, reporter.getErrorCount());
-			assertTrue(reporter.printToString().indexOf("XDEF526") > 0 &&
-				reporter.printToString().indexOf("XDEF534") > 0,
+			assertTrue(reporter.printToString().contains("XDEF526")
+				&& reporter.printToString().contains("XDEF534"),
 				"Error not reported");
 			assertEq("OK", swr.toString());
 			xdef =
@@ -464,10 +464,8 @@ public final class Test002 extends XDTester {
 			s = ((Element) el.getChildNodes().item(0).
 				getChildNodes().item(0)).getAttribute("IdPojistitel");
 			assertEq("0062", s, KXmlUtils.nodeToString(el, true));
-
 			// we try array of xdefinitions
-			String xdef0, xdef1, xdef2, xdef3, data;
-			xdef0 =
+			String[] xdefs = new String[] {
 "<x:declaration xmlns:x='" + _xdNS + "'>\n"+
 " external method boolean test.xdef.Test002.tab(String, String);\n"+
 " external method void test.xdef.Test002.setErr(XXNode, long);\n"+
@@ -477,8 +475,7 @@ public final class Test002 extends XDTester {
 " boolean myTest() {\n"+
 "   return fil0(2) AND tab('CC_DruhVozidla','KodDruhuVozidla');\n"+
 " }\n"+
-"</x:declaration>";
-			xdef1 =
+"</x:declaration>",
 "<x:def xmlns:x='" + _xdNS + "' name='P1_common'>\n"+
 "<Vozidlo\n"+
 "  CisloTP         =\"optional string(%pattern='[A-Z]{2}[0-9]{5,6}');\n" +
@@ -502,16 +499,14 @@ public final class Test002 extends XDTester {
 "  CelkovaHmotnost =\"optional int(1,999_999); onFalse setErr(4208)\"\n"+
 "  PocetMistCelkem =\"optional int(0,999); onTrue setNullIfZero();\n"+
 "                     onFalse setErr(4208)\"/>\n"+
-"</x:def>";
-			xdef2 =
+"</x:def>",
 "<x:def xmlns:x='" + _xdNS + "' name='test' root='a'>\n"+
 "<a>\n"+
 "<Vozidlo x:script='occurs 0..1; ref P1_common#Vozidlo'\n"+
 "   KodModeluVozidla=\"optional tab('CC_ModelVozidla','KodModeluVozidla');\n"+
 "                     onFalse setErr(4225)\" />\n"+
 "</a>\n"+
-"</x:def>";
-			xdef3 =
+"</x:def>",
 "<x:def xmlns:x='" + _xdNS + "' name='test1' root='a'>\n"+
 "<a>\n"+
 "  <Vozidlo x:script='occurs 0..1; ref P1_common#Vozidlo'\n"+
@@ -519,9 +514,8 @@ public final class Test002 extends XDTester {
 "    KodModeluVozidla=\"optional tab('CC_ModelVozidla','KodModeluVozidla');\n"+
 "                      onFalse setErr(4225)\" />\n"+
 "</a>\n"+
-"</x:def>\n";
-			String[] xdefs = new String[]{xdef0, xdef1, xdef2, xdef3};
-			data = "<a><Vozidlo SPZ=\"6A84013\" /></a>";
+"</x:def>\n"};
+			String data = "<a><Vozidlo SPZ=\"6A84013\" /></a>";
 			_errorCount = 0;
 			_errorCode = 0;
 			//should be reported 4202
@@ -604,9 +598,8 @@ public final class Test002 extends XDTester {
 			assertEq(swr.toString(),
 				"XDOUT: ISDN_LDN - ISDN4202/DnSearch/@KodNdnDuvodLustrace\n");
 			s = reporter.printToString("slk");
-			assertTrue(s.indexOf("ISDN4202:") > 0 &&
-//				s.indexOf("XDEF526:") > 0 && s.indexOf("riadok") > 0, s);
-				s.indexOf("XDEF526:") > 0, s);
+			assertTrue(s.contains("ISDN4202:")
+				&& s.contains("XDEF526:") && s.contains("riadok"), s);
 			xdef = // external methods
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
 "<A xd:script=\"finally {out(tab('a', 'b')); pp()}\" />\n"+
@@ -858,7 +851,7 @@ public final class Test002 extends XDTester {
 			assertNoErrorwarnings(reporter);
 			assertEq("<a a='abc'/>", parse(xp, "", "<a a='123'/>", reporter));
 			s = reporter.printToString();
-			assertTrue(s.indexOf("XDEF515") > 0, s);
+			assertTrue(s.contains("XDEF515"), s);
 			xdef =
 "<xd:def xmlns:xd = '" + _xdNS + "' root ='a'>\n"+
 "  <a a='fixed xx;'/>\n"+
@@ -873,7 +866,7 @@ public final class Test002 extends XDTester {
 			assertNoErrorwarnings(reporter);
 			assertEq("<a a='abc'/>", parse(xp, "", "<a a='123'/>", reporter));
 			s = reporter.printToString();
-			assertTrue(s.indexOf("XDEF515") > 0, s);
+			assertTrue(s.contains("XDEF515"), s);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <a a='fixed xx;'/>\n"+
@@ -886,7 +879,7 @@ public final class Test002 extends XDTester {
 			assertNoErrorwarnings(reporter);
 			assertEq("<a a='abc'/>", parse(xp, "", "<a a='123'/>", reporter));
 			s = reporter.printToString();
-			assertTrue(s.indexOf("XDEF515") > 0, s);
+			assertTrue(s.contains("XDEF515"), s);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root ='a'>\n"+
 "  <a a=\"fixed {return 'abc';}\" />\n"+
@@ -896,7 +889,7 @@ public final class Test002 extends XDTester {
 			assertNoErrorwarnings(reporter);
 			assertEq("<a a='abc'/>", parse(xp, "", "<a a='123'/>", reporter));
 			s = reporter.printToString();
-			assertTrue(s.indexOf("XDEF515") > 0, s);
+			assertTrue(s.contains("XDEF515"), s);
 			// test union in validation section
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+

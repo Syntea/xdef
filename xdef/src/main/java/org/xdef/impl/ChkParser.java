@@ -65,28 +65,6 @@ final class ChkParser extends DomBaseHandler implements XParser {
 	/** The namespace URI for X-definition instance (version 3.1; deprecated).*/
 	static final String XDEF31_INSTANCE_NS_URI =
 		"http://www.syntea.cz/xdef/instance";
-	static { // set features to SAXParserFactory.
-		try {
-			SPF.setNamespaceAware(true);
-			SPF.setXIncludeAware(true);
-			SPF.setValidating(false);
-			SPF.setFeature("http://xml.org/sax/features/namespaces", true);
-			SPF.setFeature("http://xml.org/sax/features/namespace-prefixes",
-				false);
-			SPF.setFeature("http://apache.org/xml/features/allow-java-encodings",
-				true);
-			SPF.setFeature("http://xml.org/sax/features/string-interning",
-				true);
-			SPF.setFeature("http://apache.org/xml/features/xinclude", true);
-			SPF.setFeature( // do not create xml:base attributes
-				"http://apache.org/xml/features/xinclude/fixup-base-uris",
-				false);
-			SPF.setSchema(null);
-		} catch (ParserConfigurationException | SAXNotRecognizedException
-			| SAXNotSupportedException ex) {
-			throw new RuntimeException(ex);
-		}
-	}
 	/** Allocation unit for node list. */
 	private static final int NODELIST_ALLOC_UNIT = 8;
 	/** Nested level of parsed object.*/
@@ -116,6 +94,29 @@ final class ChkParser extends DomBaseHandler implements XParser {
 	private boolean _illegalDoctype;
 	private boolean _resolveIncludes;
 	private boolean _locationDetails;
+
+	static { // set features to SAXParserFactory.
+		try {
+			SPF.setNamespaceAware(true);
+			SPF.setXIncludeAware(true);
+			SPF.setValidating(false);
+			SPF.setFeature("http://xml.org/sax/features/namespaces", true);
+			SPF.setFeature("http://xml.org/sax/features/namespace-prefixes",
+				false);
+			SPF.setFeature("http://apache.org/xml/features/allow-java-encodings",
+				true);
+			SPF.setFeature("http://xml.org/sax/features/string-interning",
+				true);
+			SPF.setFeature("http://apache.org/xml/features/xinclude", true);
+			SPF.setFeature( // do not create xml:base attributes
+				"http://apache.org/xml/features/xinclude/fixup-base-uris",
+				false);
+			SPF.setSchema(null);
+		} catch (ParserConfigurationException | SAXNotRecognizedException
+			| SAXNotSupportedException ex) {
+			throw new RuntimeException(ex);
+		}
+	}
 
 	private static class HandlerInfo {
 		private final XAbstractReader _mr;

@@ -61,9 +61,7 @@ public final class XPool implements XDPool, Serializable {
 	private boolean _chkWarnings;
 	/** Switch to allow/restrict DOCTYPE in XML.*/
 	private boolean _illegalDoctype;
-	/** Switch if the actullal reporter is cleared in the executed code of the
-	 * 'onFalse', 'onIllegalAttr', 'onIllegalText', 'onEllegalElement'
-	 * sections. Default value is 'true'. */
+	/** Switch if the actual reporter is cleared. */
 	private boolean _clearReports;
 	/** Debug mode: 0 .. false, 1 .. true, 2 .. showResult.*/
 	private byte _debugMode;
