@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.2.1, release-date 2024-06-21
+# Version 42.2.1-SNAPSHOT, date 2024-06-21
 * Fixed bug in `onIllegalAttr` and `onIllegalText` section of script - code was
   not executed or was not enabled.
 * Fixed incorrect error message `XDEF422 Duplicated part of script` to
@@ -12,7 +12,7 @@
 * The `clearReports` option and the `preserveReports` option are implemented
   in the X-script of the element model.
 
-# Version 42.1.7, release-date 2024-06-13
+# Version 42.1.7, release-date 2024-06-21
 * Fixed bug when ignoring `whitespace` type restrictions in XML Schema when
   converting XML Schema to X-definition.
 * Fixed bug of incorrect generation of X-definition models to XML Schema
