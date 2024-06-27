@@ -290,17 +290,18 @@ public class XScriptParser extends StringParser
 		IGNORE_SYM + ";ignore;" +
 		ILLEGAL_SYM + ";illegal;" +
 		OCCURS_SYM + ";occurs;" +
-		ON_TRUE_SYM + ";onTrue;" +
 		ON_FALSE_SYM + ";onFalse;" +
 		ON_FALSE_SYM + ";onError;" + //alias of onFalse
 		ON_ABSENCE_SYM + ";onAbsence;" +
 		DEFAULT_SYM + ";default;" +
 		ON_EXCESS_SYM + ";onExcess;" +
-		ON_START_ELEMENT_SYM + ";onStartElement;" +
 		ON_ILLEGAL_ATTR_SYM + ";onIllegalAttr;" +
 		ON_ILLEGAL_TEXT_SYM + ";onIllegalText;" +
 		ON_ILLEGAL_ELEMENT_SYM + ";onIllegalElement;" +
 		ON_ILLEGAL_ROOT_SYM + ";onIllegalRoot;" +
+		ON_START_ELEMENT_SYM + ";onStartElement;" +
+		ON_TRUE_SYM + ";onTrue;" +
+		ON_XML_ERROR_SYM + ";onXmlError;" +
 		CREATE_SYM + ";create;" +
 		INIT_SYM + ";init;" +
 		OPTIONS_SYM + ";options;" +

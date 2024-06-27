@@ -763,8 +763,16 @@ final class ChkParser extends DomBaseHandler implements XParser {
 			} catch (RuntimeException ex) {
 				throw ex;
 			} catch (SAXException ex) {
-				//XML parser was canceled by exception: &{0}
-				_sReporter.fatal(XML.XML080, "SAXException; "+ex.getMessage());
+				int adr;
+				if (_chkDoc != null && _chkDoc._xElement != null
+					&& _chkDoc._xElement._definition != null
+					&& (adr=_chkDoc._xElement._definition._onXmlError) >= 0) {
+					_chkDoc._scp.exec(adr, _chkDoc._chkRoot);
+				} else {
+					//XML parser was canceled by exception: &{0}
+					_sReporter.fatal(XML.XML080,
+						"SAXException; "+ex.getMessage());
+				}
 			} catch (Exception ex) {
 				throw new RuntimeException(ex);
 			}

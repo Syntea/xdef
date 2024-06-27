@@ -1,7 +1,8 @@
 `# Version ${version}, release-date ${release.date}
 
 # Version 42.2.0, release-date 2024-06-27
-* .
+* Fixed a bug that the `onXMLError` section in the X-script was not compiled and
+  an error was reported when compiling the X-definition.
 
 # Version 42.1.8, release-date 2024-06-27
 * Fixed bug in `onIllegalAttr` and `onIllegalText` section of script - code was

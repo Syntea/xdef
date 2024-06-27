@@ -371,6 +371,28 @@ public final class TestXdef extends XDTester {
 			}
 		}
 		try {
+			xdef = // test onXmlError, onIllegalRoot
+"<xd:def xmlns:xd='" + _xdNS + "' root = \"A|B\"\n" +
+"         xd:script='onXmlError out(1); onIllegalRoot out(2);'>\n" +
+"<A b='int'><B c='int'/>string()</A>\n" +
+"<B b='int'/>\n" +
+"</xd:def>";
+			xp = XDFactory.compileXD(null, xdef);
+			xd = xp.createXDDocument();
+			swr = new StringWriter();
+			xd.setStdOut(swr);
+			parse(xd, "<A b=''><B c='<'/>xxx<A/>", reporter); // XML error
+			assertErrorsAndClear(reporter);
+			assertEq("1", swr.toString());
+			xd = xp.createXDDocument();
+			swr = new StringWriter();
+			xd.setStdOut(swr);
+			parse(xd, "<C b='1'/>", reporter); // illegal root
+			assertErrorsAndClear(reporter);
+			assertEq("2", swr.toString());
+		} catch (Exception ex) {fail(ex);}
+		reporter.clear();
+		try {
 			xdef = // recursive reference
 "<xd:def  xmlns:xd='" + _xdNS + "' root='A' name='Y21'>\n"+
 "  <A><B b='? string()'><B xd:script='*; ref A/B'/></B></A>\n"+
