@@ -107,11 +107,11 @@ Keyword ::= "if" | "else" | "do" | "while" | "continue" | "break" | "switch"
   /* | "fixed" */ | "external" | "new" | "required" | "optional" | "ignore"
   | "illegal" | "occurs" | "onTrue" | "onError" | "onAbsence" | "default"
   | "onExcess" | "onStartElement" | "onIllegalAttr" | "onIllegalText" | "var"
-  | "onIllegalElement" | "onIllegalRoot" | "create" | "init" | "options"
-  | "option" | "ref" | "match" | "final" | "forget" | "template" | "type" 
-  | "uniqueSet" | "EQ" | "NE" | "LT" | "LE" | "GT" | "GE" | "LSH" | "RSH" 
-  | "RRSH" | "AND" | "OR" | "XOR" | "MOD" | "NOT" | "NEG" | "OOR" | "AAND"
-  | "CHECK" | "true" | "false" | "implements" | "extends" | "onFalse"
+  | "onIllegalElement" | "onIllegalRoot" | "onXmlError" | "create" | "init"
+  | "options" | "option" | "ref" | "match" | "final" | "forget" | "template"
+  | "type" | "uniqueSet" | "EQ" | "NE" | "LT" | "LE" | "GT" | "GE" | "LSH"
+  | "RSH"  | "RRSH" | "AND" | "OR" | "XOR" | "MOD" | "NOT" | "NEG" | "OOR"
+  | "AAND" | "CHECK" | "true" | "false" | "implements" | "extends" | "onFalse"
   | "$$$script"
   /* Note "fixed" is not the keyword since it is used also as the name of
    validation method. */
@@ -405,8 +405,8 @@ ExplicitCode ::= Block
 /* Script of X-definition header                                              */
 /******************************************************************************/
 
-XdefScript ::=
-  (S? (XdefInitSection | XdefOnIllegalRoot | XdefOnXmlError | XdefOptions)* S?)?
+XdefScript ::= (S | XdefInitSection | XdefOnIllegalRoot | XdefOnXmlError
+  | XdefOptions | ";")*
   /* Each item can be specified only once. */
 
 XdefInitSection ::= "init" S Statement

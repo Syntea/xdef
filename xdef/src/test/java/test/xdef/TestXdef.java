@@ -372,12 +372,12 @@ public final class TestXdef extends XDTester {
 		}
 		try {
 			xdef = // test onXmlError, onIllegalRoot
-"<xd:def xmlns:xd='" + _xdNS + "' root = \"A|B\"\n" +
-"         xd:script='onXmlError out(1); onIllegalRoot out(2);'>\n" +
+"<xd:def xmlns:xd='" + _xdNS + "' root='A|B'\n" +
+"        xd:script='onXmlError out(1); onIllegalRoot out(2);'>\n" +
 "<A b='int'><B c='int'/>string()</A>\n" +
 "<B b='int'/>\n" +
 "</xd:def>";
-			xp = XDFactory.compileXD(null, xdef);
+			xp = compile(xdef);
 			xd = xp.createXDDocument();
 			swr = new StringWriter();
 			xd.setStdOut(swr);
