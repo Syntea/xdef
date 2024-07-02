@@ -88,7 +88,7 @@ public final class TestXdef extends XDTester {
 		try {//no source
 			XDFactory.compileXD(null, "myxxx.xdef");
 			fail("Error not reported");
-		} catch (Exception ex) {
+		} catch (SRuntimeException ex) {
 			assertTrue(ex.getMessage().indexOf("XDEF903") > 0, ex);
 		}
 		try {
