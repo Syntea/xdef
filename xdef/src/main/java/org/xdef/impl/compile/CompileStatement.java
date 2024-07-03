@@ -3877,26 +3877,32 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			&& X_PARSEITEM==rVar.getType()
 			&& !rName.equals(name) &&!"Qname".equals(name)
 			&& !"NCname".equals(name) && !"tokens".equals(name)) {
-			// it is a reference to an other declared type
-			var = _g.addVariable(name, X_PARSEITEM, varKind, spos);
-			var.setKeyRefName(rName); // name of referenced type
-			var.setParseMethodAddr(rVar.getParseMethodAddr());
-			var.setCodeAddr(rVar.getCodeAddr());
-			var.setParseResultType(rVar.getParseResultType());
-			if (nextSymbol() == LPAR_SYM) {
-				if (nextSymbol() == RPAR_SYM) {
-					nextSymbol();
-				} else {//parameter list must be empty (if declared)
-					//Parameters not allowed here
-					error(XDEF.XDEF384);
+			SPosition spos1 = getPosition();
+			if (nextSymbol() != CHECK_SYM) {
+				// it is a reference to an other declared type
+				var = _g.addVariable(name, X_PARSEITEM, varKind, spos);
+				var.setKeyRefName(rName); // name of referenced type
+				var.setParseMethodAddr(rVar.getParseMethodAddr());
+				var.setCodeAddr(rVar.getCodeAddr());
+				var.setParseResultType(rVar.getParseResultType());
+				if (_sym == LPAR_SYM) {
+					if (nextSymbol() == RPAR_SYM) {
+						nextSymbol();
+					} else {//parameter list must be empty (if declared)
+						//Parameters not allowed here
+						error(XDEF.XDEF384);
+					}
 				}
+				if (_sym == SEMICOLON_SYM) {
+					nextSymbol();
+				} else if(_sym != END_SYM && !eos()) {
+					error(XDEF.XDEF410, ';');//'&{0}' expected
+				}
+				return;//copy of referred CompileVariable added to table
+			} else {
+				setPosition(spos1);
+				_sym = IDENTIFIER_SYM;
 			}
-			if (_sym == SEMICOLON_SYM) {
-				nextSymbol();
-			} else if(_sym != END_SYM && !eos()) {
-				error(XDEF.XDEF410, ';');//'&{0}' expected
-			}
-			return;//copy of referred CompileVariable added to table
 		}
 		int dx = addDebugInfo(true);
 		if (rVar == null && varKind == 'X') {

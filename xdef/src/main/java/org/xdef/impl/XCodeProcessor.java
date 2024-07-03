@@ -2520,6 +2520,12 @@ public final class XCodeProcessor {
 						_reporter.getWarningCount());
 					continue;
 				case CLEAR_REPORTS: //clear temp reports
+					try {// clear all reports if it is called from _onXmlError
+						if (chkNode._parent == chkNode._rootChkDocument
+							&& _reporter.toString().contains("XML080")) {
+							chkNode.getReporter().getReportWriter().clear();
+						}
+					} catch (Exception ex) {}
 					_reporter.clear();
 					continue;
 				case SET_TEXT: {//set string value

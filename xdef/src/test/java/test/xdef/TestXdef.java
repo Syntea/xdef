@@ -372,8 +372,8 @@ public final class TestXdef extends XDTester {
 		}
 		try {
 			xdef = // test onXmlError, onIllegalRoot
-"<xd:def xmlns:xd='" + _xdNS + "' root='A|B'\n" +
-"        xd:script='onXmlError out(1); onIllegalRoot out(2);'>\n" +
+"<xd:def xmlns:xd='" + _xdNS + "' root='A|B' xd:script=\n" +
+"          'onXmlError {clearReports();out(1);} onIllegalRoot out(2);'>\n" +
 "<A b='int'><B c='int'/>string()</A>\n" +
 "<B b='int'/>\n" +
 "</xd:def>";
@@ -382,13 +382,13 @@ public final class TestXdef extends XDTester {
 			swr = new StringWriter();
 			xd.setStdOut(swr);
 			parse(xd, "<A b=''><B c='<'/>xxx<A/>", reporter); // XML error
-			assertErrorsAndClear(reporter);
+			assertNoErrorsAndClear(reporter); // XML errors cleared
 			assertEq("1", swr.toString());
 			xd = xp.createXDDocument();
 			swr = new StringWriter();
 			xd.setStdOut(swr);
 			parse(xd, "<C b='1'/>", reporter); // illegal root
-			assertErrorsAndClear(reporter);
+			assertErrorsAndClear(reporter); // error illegal root reported
 			assertEq("2", swr.toString());
 		} catch (Exception ex) {fail(ex);}
 		reporter.clear();

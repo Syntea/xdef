@@ -12,7 +12,6 @@ import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.xdef.XDValue;
 import org.xdef.component.XComponent;
-import org.xdef.impl.XConstants;
 import org.xdef.proc.XXNode;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.FUtils;
@@ -98,11 +97,12 @@ public class MyTestX extends XDTester {
 	@Override
 	/** Run test and display error information. */
 	public void test() {
-/**/
+/**
 		System.setProperty(XConstants.XDPROPERTY_XDEF_DBGSWITCHES,
 			XConstants.XDPROPERTYVALUE_DBG_SHOWXON);
 		System.setProperty(XConstants.XDPROPERTY_XDEF_DBGSWITCHES,
 			"");
+/**/
 		Element el;
 		File file;
 		String ini, json, s, xml, xon;
@@ -138,34 +138,6 @@ public class MyTestX extends XDTester {
 ////////////////////////////////////////////////////////////////////////////////
 		boolean T = true; // if false, all tests are invoked
 ////////////////////////////////////////////////////////////////////////////////
-/**/
-		try {
-			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
-"  <xd:declaration>\n" +
-"    ParseResult a(){return new ParseResult(getText());}\n" +
-"    type b float();\n" +
-"    type x int();\n" +
-"    type y x CHECK c();\n" +
-"    boolean c(){\n" +
-"     return getText()=='1'||getText()=='2'||getText()=='3'||getText()=='4';\n"+
-"    }\n" +
-"  </xd:declaration>\n" +
-"  <xd:component>%class "+_package+".MytestX_CHK %link #A;</xd:component>\n" +
-"  <A a='x() CHECK c();' b='y();' c='a() CHECK c' d='b() CHECK c'/>\n" +
-"</xd:def>";
-			xp = compile(xdef);
-			xp.display();
-			genAndCopyXComponents(xp);
-			xml = "<A a='1' b='2' c='3' d='4'/>";
-			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrorwarningsAndClear(reporter);
-			xd = xp.createXDDocument();
-			xc = xd.xparseXComponent(xml, null, reporter);
-		} catch (Exception ex) {fail(ex); reporter.clear();}
-//if(true)return;
-if(T) return;
-clearSources();
 /**/
 		try {
 			xdef =

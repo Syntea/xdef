@@ -1356,6 +1356,27 @@ public final class TestScript extends XDTester {
 			xc = parseXC(xp,"", xml , null, reporter);
 			assertNoErrorsAndClear(reporter);
 			assertEq(xml, xc.toXml());
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
+"  <xd:declaration>\n" +
+"    ParseResult a(){return new ParseResult(getText());}\n" +
+"    type b long();\n" +
+"    boolean c() { return (getText() GE '1') AAND (getText() LE '4'); }\n" +
+"    type x string(1);\n" +
+"    type y x CHECK c();\n" +
+"  </xd:declaration>\n" +
+"  <xd:component>%class "+_package+".MytestX_CHK1 %link #A;</xd:component>\n" +
+"  <A a='x() CHECK c();' b='y();' c='a() CHECK c' d='b() CHECK c'/>\n" +
+"</xd:def>";
+			xp = compile(xdef);
+			genXComponent(xp);
+			xml = "<A a='1' b='2' c='3' d='4'/>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrorwarningsAndClear(reporter);
+			xd = xp.createXDDocument();
+			xc = xd.xparseXComponent(xml, null, reporter);
+			assertNoErrorsAndClear(reporter);
+			assertEq(xml, xc.toXml());
 		} catch (Exception ex) {fail(ex); reporter.clear();}
 
 		resetTester();
