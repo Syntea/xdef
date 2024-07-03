@@ -3,6 +3,8 @@
 # Version 42.2.1, release-date 2024-07-03
 * Fixed error in compilation of type declaration with expression containing
   `CHECK` operator.
+* Fixed bug where `clearReports` method in `onXmlError` section did not clear
+  all reports.
 
 # Version 42.2.0, release-date 2024-06-27
 * Fixed a bug that the `onXMLError` section in the X-script was not compiled and
