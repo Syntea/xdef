@@ -57,6 +57,7 @@
   type importLocal XDScript.rule('importLocal');
   type xon XDScript.rule('xon');
   type iniprops XDScript.rule('INIProps');
+  type xdHeaderAttr string() CHECK getAttrName().startsWith('impl-');
 
   /** Check element name and namespace URI (used in match section) */
   boolean xdName(String name) {

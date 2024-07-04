@@ -4230,7 +4230,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			if (_xdVersion >= XConstants.XD31) {
 				//&{0}" is deprecated. Please use "&{1}" instead
 				_g.reportDeprecated("explicit validation code",
-					"declaration of type method");
+					"declaration of validation type");
 			}
 			// generate call of following method
 			CodeI1 call = new CodeI1(XD_BOOLEAN, CALL_OP, start + 3);
@@ -4304,9 +4304,6 @@ class CompileStatement extends XScriptParser implements CodeTable {
 						}
 					}
 					break;
-
-
-
 				case XD_UNDEF:
 					break;
 				default:

@@ -113,35 +113,39 @@ public final class Test000 extends XDTester {
 "<xd:declaration>\n"+
 "  String targetNS='';\n"+
 "  String unq='';\n"+
-"  boolean chkUnique() {\n"+
+"  ParseResult chkUnique() {\n"+
+"    ParseResult pr = string();\n"+
 "    if (!NCName()) {\n"+
-"      return error('Value is not NCName');\n"+
+"      pr.error('Value is not NCName');\n"+
+"      return pr;\n"+
 "    }\n"+
 "    String s=getText();\n"+
 "    if (unq.indexOf(' ' + s + ' ') GE 0) {\n"+
-"      return error('Not Unique');\n"+
+"      pr.error('Not Unique');\n"+
 "    } else {\n"+
 "      unq+=s + ' ';\n"+
-"      return true;\n"+
 "    }\n"+
+"    return pr;\n"+
 "  }\n"+
-"  boolean chkRef() {\n"+
+"  ParseResult chkRef() {\n"+
+"    ParseResult pr = string();\n"+
 "    if (!QName()) {\n"+
-"      return error('Value is not QName');\n"+
+"      pr.error('Value is not QName');\n"+
+"      return pr;\n"+
 "    }\n"+
 "    String prefix=getQnamePrefix(getText());\n"+
 "    String localName=getQnameLocalpart(getText());\n"+
 "    String s=getNamespaceURI(prefix);\n"+
 "    if (targetNS NE s) {\n"+
-"      return error('Incorrect namespace: \\'' + s + '\\', ' + targetNS);\n"+
+"      pr.error('Incorrect namespace: \\'' + s + '\\', ' + targetNS);\n"+
 "    }\n"+
 "    if (unq.indexOf(' ' + localName + ' ') GT 0) {\n"+
 "      outln('targetNamespace=\"' + targetNS + '\", localName=\"' +\n"+
 			"localName + '\", prefix=\"' + prefix + '\"');\n"+
-"      return true;\n"+
 "    } else {\n"+
-"      return error('Unknown local name');\n"+
+"      pr.error('Unknown local name');\n"+
 "    }\n"+
+"    return pr;\n"+
 "  }\n"+
 "</xd:declaration>\n"+
 "\n"+
@@ -536,13 +540,13 @@ public final class Test000 extends XDTester {
 "  <xd:declaration>\n"+
 "    external method boolean test.xdef.Test000.known(XXNode, XDValue[]);\n"+
 "    external method boolean test.xdef.Test000.unknown(XXNode, XDValue[]);\n"+
-"    boolean x() {return unknown() OR string(%pattern='[A-Z0-9]{6,7}');}\n"+
-"    boolean y() {return known() AND string(1,26);}\n"+
-"    boolean z() {return unknown() OR string(%pattern='[A-Z]{2}.*');}\n"+
+"    type x string() CHECK (unknown() OR string(%pattern='[A-Z0-9]{6,7}'));\n"+
+"    type y string() CHECK (known() AND string(1,26));\n"+
+"    type z string() CHECK (unknown() OR string(%pattern='[A-Z]{2}.*'));\n"+
 "  </xd:declaration>\n"+
-"  <Vozidlo SPZ=\"optional x();\"\n"+
-"    VIN       =\"optional y();\"\n"+
-"    CisloTP   =\"optional z();\" />\n"+
+"  <Vozidlo SPZ=\"optional x;\"\n"+
+"    VIN       =\"optional y;\"\n"+
+"    CisloTP   =\"optional z;\" />\n"+
 "</xd:def>";
 			xp = XDFactory.compileXD(null, xdef);
 			xml = "<Vozidlo SPZ='ZA384CP' VIN='VF1C066MG19952957' "+
