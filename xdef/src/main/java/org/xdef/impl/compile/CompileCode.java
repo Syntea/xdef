@@ -1839,13 +1839,11 @@ public final class CompileCode extends CompileBase {
 		CompileVariable var = getVariable(name);
 		if (var != null) {
 			int addr;
-			if (var.getType() != X_UNIQUESET
+			if (var.getType() == X_PARSEITEM && numPar == 0
 				&& var.getCodeAddr() == -1
-				&& var.getType() == X_PARSEITEM && numPar == 0
 				&& (addr = var.getParseMethodAddr()) >= 0
-				&& _code.get(addr).getItemId()== XD_PARSER) {
-				if (var.getKind() == 'G'
-					&& _code.get(addr).getCode() == LD_CONST
+				&& _code.get(addr).getItemId() == XD_PARSER) {
+				if (var.getKind()=='G' && _code.get(addr).getCode()==LD_CONST
 					&& addr + 2 <= _lastCodeIndex
 					&& _code.get(addr+1).getCode() == PARSE_OP
 					&& _code.get(addr+2).getCode() == STOP_OP) {
@@ -1853,12 +1851,11 @@ public final class CompileCode extends CompileBase {
 					addCode(new CodeS1(XD_PARSER, LD_CODE, addr, name));
 					addCode(new CodeI1(XD_PARSERESULT, PARSE_OP, 1), 0);
 				} else {
-					addCode(new CodeI1(XD_BOOLEAN, CALL_OP, addr), 1);
+					addCode(new CodeI1(XD_PARSERESULT, CALL_OP, addr), 1);
 				}
 				return null; //OK
-			} else if ((var.getType() == X_UNIQUESET
-				&& var.getCodeAddr() == -1
-				|| var.getType() == X_PARSEITEM && numPar == 0)){
+			} else if (var.getType() == X_UNIQUESET && var.getCodeAddr() == -1
+				|| var.getType() == X_PARSEITEM && numPar == 0) {
 				//check type ID (unique type, unique value)
 				addCode(new CodeI1(XD_BOOLEAN,
 					CALL_OP, var.getParseMethodAddr()), 1);
@@ -1866,17 +1863,11 @@ public final class CompileCode extends CompileBase {
 				return numPar != 0 ? name : null;
 			}
 		}
-		if (scriptMethod(extName, numPar)) {
-			return null;
-		} else if (numPar > 0 && _tstack[_sp] == XD_CONTAINER) {
-			if (scriptMethod(name + typeList(numPar), numPar)) {
-				return null;
-			}
-		}
-		if (externalMethod(name, extName, numPar)) {
-			return null;
-		}
-		if (internalMethod(name, numPar)) {
+		if (scriptMethod(extName, numPar)
+			|| numPar > 0 && _tstack[_sp] == XD_CONTAINER
+				&& scriptMethod(name + typeList(numPar), numPar)
+			|| externalMethod(name, extName, numPar)
+			|| internalMethod(name, numPar)) {
 			return null;
 		}
 		String s = null;
@@ -3064,7 +3055,8 @@ final class ExternalMethod {
 	/** Get external method.
 	 * @return Java external method object.
 	 */
-	final Method getMethod() { return _method; }
+	final Method getMethod() {return _method;}
+
 	@Override
 	public final String toString() {return _name + "; " + _method;}
 }
