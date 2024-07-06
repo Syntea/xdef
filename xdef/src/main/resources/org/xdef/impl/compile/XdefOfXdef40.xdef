@@ -24,6 +24,8 @@
     include       = "optional uriList; options acceptQualifiedAttr"
     metaNamespace = "optional uri; options acceptQualifiedAttr"
     xd:attr        = "occurs * xdHeaderAttr;" >
+    <!-- Other attribute names (xd:attr) must begin with the prefix "impl-" -->
+
     <xd:mixed>
       <!-- Here may be objects from all versions of X-definition -->
       <XD3.1:def xd:script = "occurs *; ref Ver3.1#XD3.1:def" />
@@ -54,9 +56,9 @@
     script        = "optional xdefScript; options acceptQualifiedAttr"
     importLocal   = "optional importLocal; options acceptQualifiedAttr"
     xd:attr        = "occurs * xdHeaderAttr;" >
-    <!-- Names of other atributes (see xd:attr) must start with "impl-" -->
-
-    <xd:mixed>
+    <!-- Other attribute names (xd:attr) must begin with the prefix "impl-" -->
+    
+<xd:mixed>
       <XD4.0:macro xd:script = "occurs *; ref XD4.0:macro" />
       <XD4.0:declaration xd:script = "occurs *; ref XD4.0:declaration"
         scope = "optional enum('global','local'); options acceptQualifiedAttr"/>
@@ -123,7 +125,7 @@
   </XD4.0:component>
 
   <XD4.0:lexicon language = "javaIdentifier" default = "optional yesNo">
-    optional thesaurus;
+    optional lexicon;
   </XD4.0:lexicon>
 
   <!-- model of element -->

@@ -53,12 +53,15 @@
   type languageId XDScript.rule('LanguageId');
   type javaIdentifier XDScript.rule('JavaIdentifier');
   type yesNo XDScript.rule('YesNo');
-  type thesaurus XDScript.rule('Lexicon');
+  type lexicon XDScript.rule('Lexicon');
   type importLocal XDScript.rule('importLocal');
   type xon XDScript.rule('xon');
   type iniprops XDScript.rule('INIProps');
-  type xdHeaderAttr string() CHECK getAttrName().startsWith('impl-');
 
+  /* The attribute name must start with the prefix "impl-", the value
+     can be any string (even empty). */
+  type xdHeaderAttr string(0,*) CHECK getAttrName().startsWith('impl-');
+  
   /** Check element name and namespace URI (used in match section) */
   boolean xdName(String name) {
     return getElementLocalName() EQ name AND getNamespaceURI() EQ NS;
