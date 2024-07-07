@@ -43,10 +43,12 @@ import org.xdef.impl.XVariableTable;
 import org.xdef.impl.code.CodeS1;
 import static org.xdef.impl.code.CodeTable.CALL_OP;
 import static org.xdef.impl.code.CodeTable.INIT_NOPARAMS_OP;
+import static org.xdef.impl.code.CodeTable.JMPF_OP;
 import static org.xdef.impl.code.CodeTable.LD_CONST;
 import static org.xdef.impl.code.CodeTable.PARSERESULT_MATCH;
 import static org.xdef.impl.code.CodeTable.PARSE_OP;
 import static org.xdef.impl.code.CodeTable.RETV_OP;
+import static org.xdef.impl.code.CodeTable.STACK_DUP;
 import static org.xdef.impl.code.CodeTable.STOP_OP;
 import org.xdef.impl.code.DefBigInteger;
 import static org.xdef.impl.compile.XScriptParser.ASSGN_SYM;
@@ -553,6 +555,13 @@ final class CompileXScript extends CompileStatement {
 							j = _g._code.get(i+2).getCode();
 							if (j == PARSERESULT_MATCH || j == STOP_OP) {
 								p = (XDParser) y;
+							} else if (i + 4 < _g._code.size()
+								&& j == STACK_DUP // try CHECK expression
+								&&_g._code.get(i+3).getCode()==PARSERESULT_MATCH
+								&& _g._code.get(i+4).getCode() == JMPF_OP
+								&& _g._code.get(_g._code.get(i+4).getParam())
+									.getCode()== STOP_OP) {
+								p = (XDParser) y; // parser with CHECK operand
 							}
 						}
 					}
@@ -567,7 +576,7 @@ final class CompileXScript extends CompileStatement {
 					if (_g.getVariable(s) != null) {
 						sc.setRefTypeName(s);
 					}
-				} else if (typeName != null && _g.getVariable(typeName) != null) {
+				} else if (typeName!=null && _g.getVariable(typeName)!=null) {
 					sc.setRefTypeName(typeName);
 				}
 			}

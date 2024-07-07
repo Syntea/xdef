@@ -20,6 +20,7 @@ public final class XPI extends XData {
 	}
 
 	@Override
+	/** Write this XPI to XDWriter. */
 	public final void writeXNode(final XDWriter xw,
 		final List<XNode> list) throws IOException {
 		xw.writeString(getName());

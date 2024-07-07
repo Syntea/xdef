@@ -28,9 +28,11 @@ import static org.xdef.impl.code.CodeTable.LD_CONST;
 import static org.xdef.impl.code.CodeTable.LD_GLOBAL;
 import static org.xdef.impl.code.CodeTable.LD_XMODEL;
 import static org.xdef.impl.code.CodeTable.NEW_PARSER;
+import static org.xdef.impl.code.CodeTable.PARSERESULT_MATCH;
 import static org.xdef.impl.code.CodeTable.PARSE_OP;
 import static org.xdef.impl.code.CodeTable.RETV_OP;
 import static org.xdef.impl.code.CodeTable.SET_TEXT;
+import static org.xdef.impl.code.CodeTable.STACK_DUP;
 import static org.xdef.impl.code.CodeTable.STOP_OP;
 import static org.xdef.impl.code.CodeTable.UNIQUESET_CHKID;
 import static org.xdef.impl.code.CodeTable.UNIQUESET_CHKIDS;
@@ -96,6 +98,7 @@ public class XData extends XCodeDescriptor
 
 	@Override
 	// can't be final, can be overwritten!
+	/** Write this XDATA to XDWriter. */
 	public void writeXNode(final XDWriter xw,
 		final List<XNode> list) throws IOException {
 		writeXCodeDescriptor(xw);
@@ -266,20 +269,19 @@ public class XData extends XCodeDescriptor
 						if (xv[xi+1].getCode() == PARSE_OP) {
 							if (xv[xi+2].getCode() == STOP_OP) {
 								return y;
-							} else if (xv[xi+2].getCode() == STACK_DUP
+							} else if (xi + 4 < xv.length
+								&& xv[xi+2].getCode() == STACK_DUP
 								&& xi + 4 < xv.length
 								&& xv[xi+3].getCode() == PARSERESULT_MATCH
 								&& xv[xi+4].getCode() == JMPF_OP
 								&& xv[xv[xi+4].getParam()].getCode()==STOP_OP) {
-								return y; // CHECK parameter
+								return y; // parser with CHECK operand
 							}
-						} else {// ??? try to parse an espression.
-							// if all parsers are same return parser
-							//  without parameters
-							// ???
+						} else {// perhaps it is a boolean espression.
+							return DEFAULT_PARSER; // return XDParseCDATA parser
 						}
 					}
-					return DEFAULT_PARSER;
+					return DEFAULT_PARSER; // return XDParseCDATA parser
 			}
 		}
 	}

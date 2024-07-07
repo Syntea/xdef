@@ -780,7 +780,9 @@ public final class TestXComponents extends XDTester {
 			assertNoErrors(reporter);
 			xc = xp.createXDDocument().xparseXComponent(xml, null, reporter);
 			assertNoErrors(reporter);
-			assertEq("20", SUtils.getValueFromGetter(xc,"geta"));
+			o = SUtils.getValueFromGetter(xc,"geta");
+			assertTrue(o instanceof String);
+			assertEq("20", o);
 			assertEq(xml, xc.toXml());
 			xdef = // test union
 "<xd:def xmlns:xd='" + _xdNS + "' root=\"A\">\n" +

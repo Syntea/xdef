@@ -32,6 +32,7 @@ public final class XComment extends XData implements XMNode {
 //	public XMDefinition getXMDefinition() {return null;} //TODO!
 //
 	@Override
+	/** Write this XComment to XDWriter. */
 	public final void writeXNode(final XDWriter xw,
 		final List<XNode> list) throws IOException {
 		 //TODO!

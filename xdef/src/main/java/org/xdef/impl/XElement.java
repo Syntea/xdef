@@ -298,6 +298,7 @@ public final class XElement extends XCodeDescriptor
 
 ////////////////////////////////////////////////////////////////////////////////
 	@Override
+	/** Write this XElement to XDWriter. */
 	public final void writeXNode(final XDWriter xw,
 		final List<XNode> list) throws IOException{
 		if (list.indexOf(this) < 1) {

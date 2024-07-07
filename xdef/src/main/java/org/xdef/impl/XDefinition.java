@@ -216,7 +216,7 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 			"Attempt to add node to ScriptCodeDescriptor");
 	}
 	@Override
-	/** Write X-definition to XDWriter. */
+	/** Write this X-definition to XDWriter. */
 	public final void writeXNode(final XDWriter xw,
 		final List<XNode> list) throws IOException {
 		xw.writeSPosition(_sourcePosition);
