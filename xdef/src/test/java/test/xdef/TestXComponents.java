@@ -25,6 +25,7 @@ import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.Price;
 import org.xdef.sys.GPSPosition;
 import org.xdef.sys.SDatetime;
+import org.xdef.sys.SException;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
 import org.xdef.xon.XonNames;
@@ -639,7 +640,7 @@ public final class TestXComponents extends XDTester {
 "</xd:def>";
 			genXComponent(xp = compile(xdef));
 			xml = "<a/>";
-			assertEq(xml, el = parse(xp, "", xml, reporter));
+			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrorwarningsAndClear(reporter);
 			xc = parseXC(xp,"", xml , null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
@@ -781,8 +782,7 @@ public final class TestXComponents extends XDTester {
 			xc = xp.createXDDocument().xparseXComponent(xml, null, reporter);
 			assertNoErrors(reporter);
 			o = SUtils.getValueFromGetter(xc,"geta");
-			assertTrue(o instanceof String);
-			assertEq("20", o);
+			assertTrue(o instanceof String && "20".equals(o));
 			assertEq(xml, xc.toXml());
 			xdef = // test union
 "<xd:def xmlns:xd='" + _xdNS + "' root=\"A\">\n" +
@@ -799,11 +799,9 @@ public final class TestXComponents extends XDTester {
 			xc = xp.createXDDocument().xparseXComponent(xml, null, reporter);
 			assertNoErrors(reporter);
 			o = SUtils.getValueFromGetter(xc,"geta");
-			assertTrue(o instanceof Integer);
-			assertEq(-1, o);
+			assertTrue(o instanceof Integer && (-1 == (Integer) o));
 			o = SUtils.getValueFromGetter(xc,"get$value");
-			assertTrue(o instanceof Integer);
-			assertEq(20, o);
+			assertTrue(o instanceof Integer && (20 == (Integer) o));
 			assertEq(xml, xc.toXml());
 		} catch (RuntimeException ex) {fail(ex);}
 ////////////////////////////////////////////////////////////////////////////////
@@ -959,8 +957,8 @@ public final class TestXComponents extends XDTester {
 				el = xc.toXml();
 				xp.createXDDocument("A").xparse(el, null);
 				fail("Error not reported" + el);
-			} catch (Exception ex) {
-				if (ex.getMessage().indexOf("path=/A/@dec") < 0) {
+			} catch (RuntimeException ex) {
+				if (!ex.getMessage().contains("path=/A/@dec")) {
 					fail(ex);
 				}
 			}
@@ -1124,7 +1122,7 @@ public final class TestXComponents extends XDTester {
 				SUtils.getValueFromGetter(xc, "geta$T"), "geta$t"));
 			assertTrue(SUtils.getValueFromGetter(
 				SUtils.getValueFromGetter(xc, "geta$T"), "geta$I") != null);
-		} catch (Exception ex) {fail(ex);}
+		} catch (SException ex) {fail(ex);}
 		try {
 			xml = "<if><class try='t'/></if>";
 			xc = parseXC(xp, "E", xml, null, null);
@@ -1181,7 +1179,7 @@ public final class TestXComponents extends XDTester {
 			xd.setXDContext(xml);
 			xc = xd.xcreateXComponent(new QName("soap", "s:H"), null, null);
 			assertEq(xml, xc.toXml());
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 		try {
 			xml = "<Ping/>";
 			xc = parseXC(xp, "I", xml, null, null);
@@ -1806,7 +1804,7 @@ public final class TestXComponents extends XDTester {
 			assertEq(2, list.size());
 			assertEq(123, list.get(0));
 			assertEq(456, list.get(1));
-		} catch (Exception ex) {fail(ex); reporter.clear();}
+		} catch (RuntimeException ex) {fail(ex); reporter.clear();}
 		try { // test lexicon
 			xd = xp.createXDDocument("LEX");
 			xml = "<X x=\"x\"><Y y=\"1\"/><Y y=\"2\"/><Y y=\"3\"/></X>";
@@ -1845,7 +1843,7 @@ public final class TestXComponents extends XDTester {
 			assertEq(1, SUtils.getValueFromGetter(list.get(0), "gety"));
 			assertEq(3, SUtils.getValueFromGetter(list.get(2), "gety"));
 			assertEq(xml, xc.toXml());
-		} catch (Exception ex) {fail(ex); reporter.clear();}
+		} catch (RuntimeException ex) {fail(ex); reporter.clear();}
 		try {
 			xc = parseXC(xp, "SouborD1A",
 				getDataDir() + "test/TestXComponent_Z.xml", null, null);
