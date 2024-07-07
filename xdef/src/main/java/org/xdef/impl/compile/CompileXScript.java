@@ -554,6 +554,9 @@ final class CompileXScript extends CompileStatement {
 							&& y.getItemId() == XD_PARSER) {
 							j = _g._code.get(i+2).getCode();
 							if (j == PARSERESULT_MATCH || j == STOP_OP) {
+								if (j == STOP_OP) {
+									sc._check = i; /*XX - optimize*/
+								}
 								p = (XDParser) y;
 							} else if (i + 4 < _g._code.size()
 								&& j == STACK_DUP // try CHECK expression
@@ -561,6 +564,7 @@ final class CompileXScript extends CompileStatement {
 								&& _g._code.get(i+4).getCode() == JMPF_OP
 								&& _g._code.get(_g._code.get(i+4).getParam())
 									.getCode()== STOP_OP) {
+								sc._check = i; /*XX - optimize*/
 								p = (XDParser) y; // parser with CHECK operand
 							}
 						}
