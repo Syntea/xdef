@@ -3284,7 +3284,6 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 								exec(xtxt1._onTrue, (byte) 'T');
 								if (s != _data) {//_data was changed, even equal
 									item = exec(xtxt1._check, (byte) 'T');
-/*XX*/
 									if (item.getItemId() == XD_PARSERESULT) {
 										_parseResult = (XDParseResult) item;
 									} else {
@@ -3295,7 +3294,6 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 											_parseResult.putDefaultParseError();
 										}
 									}
-/*XX*/
 								}
 								copyTemporaryReports();
 							}
