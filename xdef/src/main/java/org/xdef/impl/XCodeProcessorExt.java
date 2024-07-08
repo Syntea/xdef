@@ -147,7 +147,6 @@ import static org.xdef.impl.code.CodeTable.GET_ZONEOFFSET;
 import static org.xdef.impl.code.CodeTable.INTEGER_FORMAT;
 import static org.xdef.impl.code.CodeTable.IS_CREATEMODE;
 import static org.xdef.impl.code.CodeTable.IS_LEAPYEAR;
-import static org.xdef.impl.code.CodeTable.LD_CONST_I;
 import static org.xdef.impl.code.CodeTable.LOWERCASE;
 import static org.xdef.impl.code.CodeTable.NEW_BNFGRAMAR;
 import static org.xdef.impl.code.CodeTable.NEW_BYTES;
@@ -946,7 +945,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 					//we MUST recompile this with actual data!!!
 					DefBNFGrammar x = new DefBNFGrammar(y,
 						extndx, new SBuffer(s), null);
-					x.setCode(LD_CONST_I); //However, we do it just first time!
+					x.setCode(LD_CONST); //However, we do it just first time!
 					stack[sp] = x;
 				} catch (SRuntimeException ex) {
 					cp.getTemporaryReporter().putReport(ex.getReport());

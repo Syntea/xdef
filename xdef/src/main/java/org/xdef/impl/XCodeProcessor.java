@@ -286,7 +286,6 @@ import static org.xdef.impl.code.CodeTable.JMPT_OP;
 import static org.xdef.impl.code.CodeTable.JMP_OP;
 import static org.xdef.impl.code.CodeTable.LD_CODE;
 import static org.xdef.impl.code.CodeTable.LD_CONST;
-import static org.xdef.impl.code.CodeTable.LD_CONST_I;
 import static org.xdef.impl.code.CodeTable.LD_GLOBAL;
 import static org.xdef.impl.code.CodeTable.LD_LOCAL;
 import static org.xdef.impl.code.CodeTable.LD_TRUE_AND_SKIP;
@@ -1050,11 +1049,10 @@ public final class XCodeProcessor {
 					throw new SError(XDEF.XDEF906); //X-definition canceled
 				}
 			}
-			switch (code =(item = _code[pc++]).getCode()) {
+			switch (code = (item = _code[pc++]).getCode()) {
+				case NO_OP: continue; //No operation
+////////////////////////////////////////////////////////////////////////////////
 				case LD_CONST:  //load clone of value (constant)
-					_stack[++sp] = item.cloneItem();
-					continue;
-				case LD_CONST_I: //load copy of value (constant)
 					_stack[++sp] = item.cloneItem();
 					continue;
 				case LD_CODE:
@@ -1103,14 +1101,10 @@ public final class XCodeProcessor {
 					_globalVariables[item.getParam()] = _stack[sp--];
 					continue;
 ////////////////////////////////////////////////////////////////////////////////
-				case NO_OP: //No operation
-					continue;
-////////////////////////////////////////////////////////////////////////////////
 //stack operations
 ////////////////////////////////////////////////////////////////////////////////
 				case STACK_DUP: //Duplicate top of stack
-					sp++;
-					_stack[sp] = _stack[sp - 1];
+					_stack[++sp] = _stack[sp - 1];
 					continue;
 				case POP_OP:
 					_stack[sp--] = null;
@@ -1194,8 +1188,7 @@ public final class XCodeProcessor {
 					}
 					continue;
 				case EQUALS_OP:
-					sp--;
-					_stack[sp]=new DefBoolean(_stack[sp].equals(_stack[sp+1]));
+					_stack[--sp]=new DefBoolean(_stack[sp].equals(_stack[sp+1]));
 					continue;
 				case TO_STRING_X:
 					_stack[sp - item.getParam()] =
@@ -1231,121 +1224,98 @@ public final class XCodeProcessor {
 //binary operators
 ////////////////////////////////////////////////////////////////////////////////
 				case AND_B:
-					sp--;
-					_stack[sp] = new DefBoolean(_stack[sp].booleanValue() &
+					_stack[--sp] = new DefBoolean(_stack[sp].booleanValue() &
 						_stack[sp + 1].booleanValue());
 					continue;
 				case MUL_I:
-					sp--;
-					_stack[sp] = new DefLong(_stack[sp].longValue() *
+					_stack[--sp] = new DefLong(_stack[sp].longValue() *
 						_stack[sp + 1].longValue());
 					continue;
 				case MUL_R:
-					sp--;
-					_stack[sp] = new DefDouble(_stack[sp].doubleValue() *
+					_stack[--sp] = new DefDouble(_stack[sp].doubleValue() *
 						_stack[sp + 1].doubleValue());
 					continue;
 				case DIV_I:
-					sp--;
-					_stack[sp] = new DefLong(_stack[sp].longValue() /
+					_stack[--sp] = new DefLong(_stack[sp].longValue() /
 						_stack[sp + 1].longValue());
 					continue;
 				case DIV_R:
-					sp--;
-					_stack[sp] = new DefDouble(_stack[sp].doubleValue() /
+					_stack[--sp] = new DefDouble(_stack[sp].doubleValue() /
 						_stack[sp + 1].doubleValue());
 					continue;
 				case ADD_I:
-					sp--;
-					_stack[sp] = new DefLong(_stack[sp].longValue() +
+					_stack[--sp] = new DefLong(_stack[sp].longValue() +
 						_stack[sp + 1].longValue());
 					continue;
 				case ADD_R:
-					sp--;
-					_stack[sp] = new DefDouble(_stack[sp].doubleValue() +
+					_stack[--sp] = new DefDouble(_stack[sp].doubleValue() +
 						_stack[sp + 1].doubleValue());
 					continue;
 				case ADD_S: //string concatenation
-					sp--;
-					_stack[sp] = new DefString(_stack[sp].toString() +
+					_stack[--sp] = new DefString(_stack[sp].toString() +
 						_stack[sp + 1].toString());
 					continue;
 				case SUB_I:
-					sp--;
-					_stack[sp] = new DefLong(_stack[sp].longValue() -
+					_stack[--sp] = new DefLong(_stack[sp].longValue() -
 						_stack[sp + 1].longValue());
 					continue;
 				case SUB_R:
-					sp--;
-					_stack[sp] = new DefDouble(_stack[sp].doubleValue() -
+					_stack[--sp] = new DefDouble(_stack[sp].doubleValue() -
 						_stack[sp + 1].doubleValue());
 					continue;
 				case OR_B:
-					sp--;
-					_stack[sp] = new DefBoolean(_stack[sp].booleanValue() |
+					_stack[--sp] = new DefBoolean(_stack[sp].booleanValue() |
 						_stack[sp + 1].booleanValue());
 					continue;
 				case XOR_B:
-					sp--;
-					_stack[sp] = new DefBoolean(_stack[sp].booleanValue() ^
+					_stack[--sp] = new DefBoolean(_stack[sp].booleanValue() ^
 						_stack[sp + 1].booleanValue());
 					continue;
 				case MOD_I:
-					sp--;
-					_stack[sp] = new DefLong(_stack[sp].longValue() %
+					_stack[--sp] = new DefLong(_stack[sp].longValue() %
 						_stack[sp + 1].longValue());
 					continue;
 				case MOD_R:
-					sp--;
-					_stack[sp] = new DefDouble(_stack[sp].doubleValue() %
+					_stack[--sp] = new DefDouble(_stack[sp].doubleValue() %
 						_stack[sp + 1].doubleValue());
 					continue;
 				case LSHIFT_I:/** Left bit shift. */
-					sp--;
-					_stack[sp] = new DefLong(_stack[sp].longValue() <<
+					_stack[--sp] = new DefLong(_stack[sp].longValue() <<
 						_stack[sp + 1].intValue());
 					continue;
 				case RSHIFT_I:/** Right bit shift. */
-					sp--;
-					_stack[sp] = new DefLong(_stack[sp].longValue() >>
+					_stack[--sp] = new DefLong(_stack[sp].longValue() >>
 						_stack[sp + 1].intValue());
 					continue;
 				case RRSHIFT_I:/** Right bit shift unsigned.*/
-					sp--;
-					_stack[sp] = new DefLong(_stack[sp].longValue() >>>
+					_stack[--sp] = new DefLong(_stack[sp].longValue() >>>
 						_stack[sp + 1].intValue());
 					continue;
 ////////////////////////////////////////////////////////////////////////////////
 //comparings
 ////////////////////////////////////////////////////////////////////////////////
 				case CMPEQ:
-					sp--;
-					_stack[sp] =
+					_stack[--sp] =
 						new DefBoolean((_stack[sp]).equals(_stack[sp + 1]));
 					continue;
 				case CMPNE:
-					sp--;
-					_stack[sp] = new DefBoolean(
+					_stack[--sp] = new DefBoolean(
 						!(_stack[sp]).equals(_stack[sp + 1]));
 					continue;
 				case CMPLE:
-					sp--;
-					_stack[sp] = new DefBoolean(
+					_stack[--sp] = new DefBoolean(
 						(_stack[sp]).compareTo(_stack[sp + 1]) <= 0);
 					continue;
 				case CMPGE:
-					sp--;
-					_stack[sp] = new DefBoolean(
+					_stack[--sp] = new DefBoolean(
 						(_stack[sp]).compareTo(_stack[sp + 1]) >= 0);
 					continue;
 				case CMPLT:
-					sp--;
-					_stack[sp] = new DefBoolean(
+					_stack[--sp] = new DefBoolean(
 						(_stack[sp]).compareTo(_stack[sp + 1]) < 0);
 					continue;
 				case CMPGT:
-					sp--;
-					_stack[sp] = new DefBoolean(
+					_stack[--sp] = new DefBoolean(
 						(_stack[sp]).compareTo(_stack[sp + 1]) > 0);
 					continue;
 ////////////////////////////////////////////////////////////////////////////////
@@ -1544,10 +1514,9 @@ public final class XCodeProcessor {
 						//Null value of &{0}
 						throwInfo(chkNode, XDEF.XDEF573, "GPSPosition");
 					}
-					_stack[sp - 1] = new DefDouble(
-						((DefGPSPosition) _stack[sp - 1]).distanceTo(
-							((DefGPSPosition) _stack[sp])));
-					sp--;
+					_stack[--sp] = new DefDouble(
+						((DefGPSPosition) _stack[sp]).distanceTo(
+							((DefGPSPosition) _stack[sp+1])));
 					continue;
 				case PRICE_AMOUNT:
 					if (_stack[sp].isNull()) {
@@ -1596,7 +1565,7 @@ public final class XCodeProcessor {
 					} catch (SRuntimeException ex) {
 						putReport(chkNode, ex.getReport());
 					}
-					x.setCode(LD_CONST_I);
+					x.setCode(LD_CONST);
 					_stack[++sp] = _code[pc - 1] = x;
 					continue;
 				}
@@ -1606,7 +1575,7 @@ public final class XCodeProcessor {
 					xp = new DefXPathExpr(xp.sourceValue(),
 						chkNode.getXXNamespaceContext(),
 						_functionResolver, _variableResolver);
-					xp.setCode(LD_CONST_I); //However, we do it just first time!
+					xp.setCode(LD_CONST); //However, we do it just first time!
 					_code[pc - 1] = _stack[++sp] = _code[pc-1] = xp;
 					continue;
 				}
@@ -1724,7 +1693,7 @@ public final class XCodeProcessor {
 									_functionResolver,
 									_variableResolver);
 								if (_code[pc-2].equals(_stack[sp])) {
-									x.setCode(LD_CONST_I);
+									x.setCode(LD_CONST);
 									_code[pc-2] = x;
 								}
 							}
@@ -1772,8 +1741,7 @@ public final class XCodeProcessor {
 									_stack[sp].getItemId()==XD_XQUERY
 									? (DefXQueryExpr) _stack[sp]
 									: new DefXQueryExpr(_stack[sp].toString());
-								sp--;
-								_stack[sp] =
+								_stack[--sp] =
 									x.exec(_stack[sp].getElement(), chkNode);
 								continue;
 						}
@@ -1904,11 +1872,7 @@ public final class XCodeProcessor {
 				case IS_INT:
 					try {
 						String s = _stack[sp].toString();
-						if (s.startsWith("+")) {
-							Long.valueOf(s.substring(1));
-						} else {
-							Long.valueOf(s);
-						}
+						Long.valueOf(s.startsWith("+") ? s.substring(1) : s);
 						_stack[sp] = new DefBoolean(true);
 						continue;
 					} catch (NumberFormatException ex) {
@@ -1936,8 +1900,7 @@ public final class XCodeProcessor {
 							((i=_textParser.getParsedSDatetime().getYear()) ==
 								Integer.MIN_VALUE || i > 1800 && i <= 3000));
 					} else {
-						sp--;
-						_textParser.setSourceBuffer(_stack[sp].stringValue());
+						_textParser.setSourceBuffer(_stack[--sp].stringValue());
 						int i;
 						_stack[sp] = new DefBoolean(_textParser.isDatetime(
 							_stack[sp+1].stringValue()) &&
@@ -2028,8 +1991,7 @@ public final class XCodeProcessor {
 					continue;
 				}
 				case GET_USEROBJECT:
-					sp++;
-					_stack[sp] = new DefObject(chkNode.getUserObject());
+					_stack[++sp] = new DefObject(chkNode.getUserObject());
 					continue;
 				case SET_USEROBJECT:
 					chkNode.setUserObject(_stack[sp].getObject());
@@ -2472,38 +2434,33 @@ public final class XCodeProcessor {
 							break;
 						case 2:  // error(id, txt)
 							putReport(chkNode,
-								Report.error(_stack[sp-1].stringValue(), //id
-								_stack[sp].stringValue())); // txt
-							sp--;
+								Report.error(_stack[--sp].stringValue(), //id
+								_stack[sp+1].stringValue())); // txt
 							break;
 						default: // // error(id, txt, modif)
 							putReport(chkNode,
-								Report.error(_stack[sp-2].stringValue(), //id
-								_stack[sp-1].stringValue(), // txt
-								_stack[sp].stringValue())); // modif
-							sp -= 2;
+								Report.error(_stack[sp-=2].stringValue(), //id
+								_stack[sp+1].stringValue(), // txt
+								_stack[sp+2].stringValue())); // modif
 					}
 					_stack[sp] = new DefBoolean(false);
 					continue;
 				case PUT_ERROR1: //Put error message to stdErr.
 					switch (item.getParam()) {
 						case 2: // error(txt);
-							((XDOutput) _stack[sp-1]).putReport(
-								Report.error(null, _stack[sp].stringValue()));
-							sp--;
+							((XDOutput) _stack[--sp]).putReport(
+								Report.error(null, _stack[sp+1].stringValue()));
 							break;
 						case 3: // error(id, txt);
-							((XDOutput) _stack[sp-2]).putReport(
-								Report.error(_stack[sp-1].stringValue(),
-									_stack[sp].stringValue()));
-							sp -= 2;
+							((XDOutput) _stack[sp-=2]).putReport(
+								Report.error(_stack[sp+1].stringValue(),
+									_stack[sp+2].stringValue()));
 							break;
 						default:  // error(id, txt, modif);
-							((XDOutput)_stack[sp-3]).putReport(
-								Report.error(_stack[sp-2].stringValue(),
-									_stack[sp-1].stringValue(),
-									_stack[sp].stringValue()));
-							sp -= 3;
+							((XDOutput)_stack[sp-=3]).putReport(
+								Report.error(_stack[sp+1].stringValue(),
+									_stack[sp+2].stringValue(),
+									_stack[sp+3].stringValue()));
 					}
 					_stack[sp] = new DefBoolean(false);
 					continue;
@@ -2552,8 +2509,8 @@ public final class XCodeProcessor {
 					if (el == null) {
 						//Required element is missing in setElement method
 						putError(chkNode, XDEF.XDEF529);
-						el = chkNode.getDocument().createElementNS(null,
-							UNDEF_ID);
+						el = chkNode.getDocument().createElementNS(
+							null, UNDEF_ID);
 					} else {
 						if (el.getOwnerDocument() != chkNode.getDocument()) {
 							el = (Element) chkNode.getDocument().importNode(
@@ -2594,8 +2551,7 @@ public final class XCodeProcessor {
 				}
 				case CONTEXT_GETELEMENTS: //getElements(container)
 					if (item.getParam() == 2) {
-						sp--;
-						_stack[sp] = ((XDContainer) _stack[sp]).getXDElements(
+						_stack[--sp] = ((XDContainer) _stack[sp]).getXDElements(
 							_stack[sp + 1].stringValue());
 					} else {
 						_stack[sp] = ((XDContainer) _stack[sp]).getXDElements();
@@ -2628,13 +2584,11 @@ public final class XCodeProcessor {
 				case CONTEXT_SORT: //container.sort()
 					switch (item.getParam()) {
 						case 2:
-							sp--;
-							((XDContainer) _stack[sp]).sortXD(
+							((XDContainer) _stack[--sp]).sortXD(
 								_stack[sp+1].toString(), true);
 							continue;
 						case 3:
-							sp -= 2;
-							((XDContainer) _stack[sp]).sortXD(
+							((XDContainer) _stack[sp -= 2]).sortXD(
 								_stack[sp+1].toString(),
 								_stack[sp+2].booleanValue());
 							continue;
@@ -2647,13 +2601,11 @@ public final class XCodeProcessor {
 					((XDContainer) _stack[sp + 1]).addXDItem(_stack[sp + 2]);
 					continue;
 				case CONTEXT_REMOVEITEM: //container.remove(index);
-					sp--;
-					_stack[sp] = ((XDContainer) _stack[sp]).removeXDItem(
+					_stack[--sp] = ((XDContainer) _stack[sp]).removeXDItem(
 						_stack[sp + 1].intValue());
 					continue;
 				case CONTEXT_ITEM: { //container.getXDItem(index)
-					sp--;
-					XDValue x = ((XDContainer) _stack[sp]).getXDItem(
+					XDValue x = ((XDContainer) _stack[--sp]).getXDItem(
 						_stack[sp + 1].intValue());
 					_stack[sp] = (x == null) ?  new DefNull() : x;
 					continue;
@@ -3222,8 +3174,7 @@ public final class XCodeProcessor {
 					continue;
 				}
 				case GET_REGEX_GROUP:
-					sp--;
-					_stack[sp] =
+					_stack[--sp] =
 						new DefString(((XDRegexResult) _stack[sp]).group(
 							_stack[sp + 1].intValue()));
 					continue;
@@ -3232,14 +3183,12 @@ public final class XCodeProcessor {
 						((XDRegexResult) _stack[sp]).groupCount());
 					continue;
 				case GET_REGEX_GROUP_START:
-					sp--;
-					_stack[sp] = new DefLong(
+					_stack[--sp] = new DefLong(
 						((XDRegexResult) _stack[sp]).groupStart(
 							_stack[sp + 1].intValue()));
 					continue;
 				case GET_REGEX_GROUP_END:
-					sp--;
-					_stack[sp] = new DefLong(
+					_stack[--sp] = new DefLong(
 						((XDRegexResult) _stack[sp]).groupEnd(
 							_stack[sp + 1].intValue()));
 					continue;
@@ -3384,15 +3333,14 @@ public final class XCodeProcessor {
 				}
 				case GET_PARSED_VALUE: {//get result of parsed value
 					XDParseResult pr = (item.getParam() == 1)
-						? (XDParseResult) _stack[sp--]
-						: chkNode._parseResult;
-					_stack[++sp] = pr.getParsedValue();
+						? (XDParseResult) _stack[sp--] : chkNode._parseResult;
+					_stack[++sp] =
+						null == pr ? new DefParseResult() : pr.getParsedValue();
 					continue;
 				}
 				case GET_PARSED_RESULT: {//get parsed ewsult
 					XDParseResult pr = (item.getParam() == 1)
-						? (XDParseResult) _stack[sp--]
-						: chkNode._parseResult;
+						? (XDParseResult) _stack[sp--] : chkNode._parseResult;
 					_stack[++sp] = pr;
 					continue;
 				}
@@ -3452,8 +3400,7 @@ public final class XCodeProcessor {
 					_stack[sp] = ((XDNamedValue) _stack[sp]).getValue();
 					continue;
 				case NAMEDVALUE_SET:
-					sp--;
-					_stack[sp] =
+					_stack[--sp] =
 						((XDNamedValue) _stack[sp]).setValue(_stack[sp + 1]);
 					continue;
 				case NAMEDVALUE_NAME:
@@ -3461,14 +3408,12 @@ public final class XCodeProcessor {
 						new DefString(((XDNamedValue) _stack[sp]).getName());
 					continue;
 				case EQ_NULL:
-					sp--;
-					 _stack[sp] = new DefBoolean(
+					 _stack[--sp] = new DefBoolean(
 						 (_stack[sp] == null || _stack[sp].isNull()) &&
 						 (_stack[sp+1] == null || _stack[sp+1].isNull()));
 					continue;
 				case NE_NULL:
-					sp--;
-					 _stack[sp] = new DefBoolean(
+					 _stack[--sp] = new DefBoolean(
 						 !((_stack[sp] == null ||_stack[sp].isNull()) &&
 						 (_stack[sp+1] == null ||_stack[sp+1].isNull())));
 					continue;
@@ -3542,9 +3487,8 @@ public final class XCodeProcessor {
 					if (item.getParam() == 1) {
 						_stack[sp] = new DefBytes(s.getBytes());
 					} else {
-						sp--;
-						_stack[sp] = new DefBytes(
-							_stack[sp].toString().getBytes(s));
+						_stack[--sp] =
+							new DefBytes(_stack[sp].toString().getBytes(s));
 					}
 					continue;
 				}
@@ -3649,8 +3593,7 @@ public final class XCodeProcessor {
 			//Report
 				case REPORT_TOSTRING:
 				case NEW_NAMEDVALUE:
-					sp--;
-					_stack[sp] = XCodeProcessorExt.perform2v(item,_stack[sp],
+					_stack[--sp] = XCodeProcessorExt.perform2v(item,_stack[sp],
 						_stack[sp+1]);
 					continue;
 			//Bytes

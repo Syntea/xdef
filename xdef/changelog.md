@@ -1,6 +1,6 @@
 `# Version ${version}, release-date ${release.date}
 
-# Version 42.2.1, release-date 2024-07-07
+# Version 42.2.1, release-date 2024-07-08
 * Fixed error in compilation of type declaration with expression containing
   `CHECK` operator.
 * Fixed bug where `clearReports` method in `onXmlError` section did not clear

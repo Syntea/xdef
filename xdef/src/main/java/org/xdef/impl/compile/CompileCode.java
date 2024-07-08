@@ -141,7 +141,6 @@ import static org.xdef.impl.code.CodeTable.JMPT_OP;
 import static org.xdef.impl.code.CodeTable.JMP_OP;
 import static org.xdef.impl.code.CodeTable.LD_CODE;
 import static org.xdef.impl.code.CodeTable.LD_CONST;
-import static org.xdef.impl.code.CodeTable.LD_CONST_I;
 import static org.xdef.impl.code.CodeTable.LD_GLOBAL;
 import static org.xdef.impl.code.CodeTable.LD_LOCAL;
 import static org.xdef.impl.code.CodeTable.LD_TRUE_AND_SKIP;
@@ -2453,7 +2452,7 @@ public final class CompileCode extends CompileBase {
 							DefXPathExpr xp = new DefXPathExpr(s,
 								getXDNamespaceContext(), null, null);
 							if (s.indexOf(':') < 0) {
-								xp.setCode(LD_CONST_I);
+								xp.setCode(LD_CONST);
 							}
 							_code.set(_lastCodeIndex, xp);
 							_tstack[_sp] = XD_XPATH;

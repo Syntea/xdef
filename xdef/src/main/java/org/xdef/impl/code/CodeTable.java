@@ -8,7 +8,7 @@ public interface CodeTable {
 	////////////////////////////////////////////////////////////////////////////
 	// Folowing code is desperate attempt to implement enum to Java 1.3/1.4.
 	////////////////////////////////////////////////////////////////////////////
-	/** Load clone of DefValue on the top of stack (load constant). */
+	/** Load clone of DefValue on the top of stack (load constant direct). */
 	static final short LD_CONST = 0; // 0
 	/** no operation. */
 	static final short NO_OP = LD_CONST + 1;
@@ -28,14 +28,12 @@ public interface CodeTable {
 	static final short ST_XMODEL = ST_LOCAL + 1;
 	/** Store global value. */
 	static final short ST_GLOBAL = ST_XMODEL + 1;
-	/** Load copy of DefValue on the top of stack (load constant direct). */
-	static final short LD_CONST_I = ST_GLOBAL + 1;
 
 	////////////////////////////////////////////////////////////////////////////
 	// Unary operators
 	////////////////////////////////////////////////////////////////////////////
 	/** Unary integer "minus". */
-	static final short NEG_I = LD_CONST_I + 1;
+	static final short NEG_I = ST_GLOBAL + 1;
 	/** Unary real "minus". */
 	static final short NEG_R = NEG_I + 1;
 	/** Logical "not". */
