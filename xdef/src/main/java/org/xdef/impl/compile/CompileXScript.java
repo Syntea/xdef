@@ -254,16 +254,16 @@ final class CompileXScript extends CompileStatement {
 			_g.topToBool();
 			_g.genStop();
 			sc.setValueType(XD_STRING, "eq");
-			sc._onAbsence = sc._onFalse = _g._lastCodeIndex + 1;
 			_g.genLDC(defTmp);
+			sc._onAbsence = sc._onFalse = _g._lastCodeIndex;
 			if ("$text".equals(sc.getName())) {
 				_g.internalMethod("setText", 1);
 			} else {
 				_g.internalMethod("setComent", 1);
 			}
 			_g.genStop();
-			sc._compose = _g._lastCodeIndex + 1;
 			_g.genLDC(defTmp);
+			sc._compose = _g._lastCodeIndex;
 			_g.genStop();
 			_g._sp  = -1;
 		}
@@ -366,21 +366,21 @@ final class CompileXScript extends CompileStatement {
 								sc.setValueType(XD_STRING, "string");
 							}
 						}
-						sc._check = _g._lastCodeIndex + 1;
 						_g.addCode(new CodeI1(XD_STRING, CALL_OP, addr), 1);
+						sc._check = _g._lastCodeIndex;
 						_g.internalMethod("eq",1);
 						_g.addCode(new CodeI1(XD_PARSERESULT,PARSE_OP,1),0);
 						_g.genStop();
 						_g._sp  = -1;
-						sc._onFalse = _g._lastCodeIndex + 1;
 						_g.genLDC(new DefString("XDEF515")); //Value error
+						sc._onFalse = _g._lastCodeIndex;
 						_g.genLDC(new DefString("Value error"));
 						_g.internalMethod("error", 2);
 						// let's continue with setting od _g.genStop();
 						//continues with setText, which is also onAbsence
 						_g._sp  = -1;
-						sc._onAbsence = _g._lastCodeIndex + 1;
 						_g.addCode(new CodeI1(XD_STRING, CALL_OP, addr), 1);
+						sc._onAbsence = _g._lastCodeIndex;
 						_g.internalMethod("setText",1);
 						_g.genStop();
 						_g._sp  = -1;
@@ -506,8 +506,8 @@ final class CompileXScript extends CompileStatement {
 		if (sc._check == -1) {
 			if (sc._onTrue != -1) {
 				_g._sp  = -1;
-				sc._check = _g._lastCodeIndex + 1;
 				_g.genLDC(new DefBoolean(true));
+				sc._check = _g._lastCodeIndex;
 				_g.genStop();
 				_g._sp  = -1;
 			}
@@ -601,9 +601,9 @@ final class CompileXScript extends CompileStatement {
 		}
 		sc.setRequired();
 		sc._template = true;
-		sc._compose = _g._lastCodeIndex + 1;
 		_g._sp  = -1;
 		_g.addCode(new DefBoolean(true));
+		sc._compose = _g._lastCodeIndex;
 		_g.genStop();
 		_g._sp  = -1;
 	}
