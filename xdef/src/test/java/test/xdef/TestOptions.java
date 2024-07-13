@@ -1459,7 +1459,7 @@ public final class TestOptions extends XDTester {
 			assertEq("<A><A></A><B></B><C>c<C>c</C><D>d</D></C></A>",
 				parse(xdef, "NA", xml, reporter));
 			assertNoErrorwarnings(reporter);
-			xdef = //test property "xdef_saveReports" and onIllegal events
+			xdef = //test property "xdef_clearReports" and onIllegal events
 "<xd:def xmlns:xd='" + _xdNS + "' root = \"A\">\n" +
 "<A xd:script='onIllegalElement out(\"e\");'\n" +
 "   a='illegal int; onIllegalAttr out(\"a\"); onAbsence out(\"b\");'>\n"+

@@ -218,30 +218,15 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		return _scp.exec(addr, this);
 	}
 
-	@Override
-	/** Get name of actual node.
-	 * @return The name of node.
-	 */
-	public final String getNodeName() {
-		if (getItemId() != XX_ELEMENT) {
-			return _attName;
-		} else {
-			if (_element != null) {
-				String s = _element.getLocalName();
-				return s == null ? _element.getNodeName() : s;
-			}
-			return null;
-		}
-	}
+	 /** Set mode: 'C' - comment, 'E' - element, 'A' - attribute, 'T' - text,
+	 * 'D' - document, 'P' - processing instruction,'U' undefined. */
+	final void setXXType(final byte mode) {_mode = mode;}
 
-	@Override
-	/** Get namespace URI of actual node.
-	 * @return namespace URI or <i>null</i>.
+	 /** Get mode: 'C' - comment, 'E' - element, 'A' - attribute, 'T' - text,
+	 * 'D' - document, 'P' - processing instruction,'U' undefined.
+	 * @return mode.
 	 */
-	public final String getNodeURI() {
-		return (getItemId() != XX_ELEMENT)
-			? _attURI : _element != null ? _element.getNamespaceURI() : null;
-	}
+	public final byte getXXType() {return _mode;}
 
 	/** Set name of the actually processed attribute or Text node.
 	 * @param name The name of the actually processed attribute or text node.
@@ -263,107 +248,6 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		}
 		XVariable v = _xElement._vartable.getXVariable(name);
 		return v == null || !v.isInitialized() ? -1 : v.getOffset();
-	}
-
-	@Override
-	/** Store model variable.
-	 * @param name name of variable.
-	 * @param val value to be stored.
-	 */
-	final void storeModelVariable(final String name, final XDValue val) {
-		int addr = findModelVariableOffset(name);
-		if (addr < 0) {
-			_parent.storeModelVariable(name, val);
-		} else {
-			_variables[addr] = val;
-		}
-	}
-
-	@Override
-	/** Load model variable.
-	 * @param name name of variable.
-	 * @return loaded value.
-	 */
-	public final XDValue loadModelVariable(final String name) {
-		int addr = findModelVariableOffset(name);
-		return addr < 0 ? _parent.loadModelVariable(name) : _variables[addr];
-	}
-
-	@Override
-	/** Set this element will be forgotten after being processed.*/
-	public final void forgetElement() {_forget = true;}
-
-	@Override
-	/** Increase reference counter by one.
-	 * @return The increased reference number.
-	 */
-	final int incRefNum() {return _actDefIndex < 0?0:++_counters[_actDefIndex];}
-
-	@Override
-	/** Decrease reference counter by one.
-	 * @return The increased reference number.
-	 */
-	final int decRefNum() {return _actDefIndex < 0?0:--_counters[_actDefIndex];}
-
-	@Override
-	/** Get reference counter of actual node
-	 * @return The reference number.
-	 */
-	public final int getRefNum() {
-		return _actDefIndex < 0 ? 0 : _counters[_actDefIndex];
-	}
-
-	/** Get reference counter of given node (with an index).
-	 * @param index the index of inspected node.
-	 * @return The reference number.
-	 */
-	public final int getRefNum(final int index) {return _counters[index];}
-
-	@Override
-	/** Get occurrence of actual element
-	 * @return The reference number.
-	 */
-	final int getOccurrence() {return _parent.getRefNum();}
-
-	@Override
-	/** Get ChkElement assigned to this node.
-	 * @return ChkElement assigned to this node.
-	 */
-	final ChkElement getChkElement() {return this;}
-
-	@Override
-	/** Prepare construction of the new element according to X-definition.
-	 * @param qname qualified name of the element (prefixed).
-	 * @param ns NameSpace URI of the element.
-	 * @return created check element object.
-	 */
-	public final XXElement prepareXXElementNS(final String ns,
-		final String qname) {
-		return createChkElement(ns == null
-			? _rootChkDocument._doc.createElement(qname)
-			: _rootChkDocument._doc.createElementNS(ns,qname));
-	}
-
-	@Override
-	/** Prepare construction of the new element according to X-definition.
-	 * @param name Tag name of the element.
-	 * @return created check element object.
-	 */
-	public final XXElement prepareXXElement(final String name) {
-		return prepareXXElementNS(null, name);
-	}
-
-	@Override
-	/** Prepare construction of the new child according to X-definition.
-	 * @param model child model.
-	 * @return created XXElemnt element object.
-	 */
-	public final XXElement createChildXXElement(final XMElement model) {
-		String ns = model.getNSUri();
-		String qname = model.getName();
-		Element el = ns == null ? _rootChkDocument._doc.createElement(qname)
-			: _rootChkDocument._doc.createElementNS(ns, qname);
-		return chkElem((XElement) model, el);
 	}
 
 	/** Create check element object.
@@ -795,17 +679,14 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 							k += _counters[n];
 						}
 						if (k < xch.minOccurs()) {
+							//Minimum occurrence not reached for &{0}
+							putTemporaryReport(
+								Report.error(XDEF.XDEF555, "choice"));
 							if (xch._onAbsence >= 0) {
 								if (_clearReports) {
 									clearTemporaryReporter();
-								} else {
-									//Minimum occurrence not reached for &{0}
-									error(XDEF.XDEF555, "choice");
 								}
 								exec(xch._onAbsence, (byte)'U');
-							} else {
-								//Minimum occurrence not reached for &{0}
-								error(XDEF.XDEF555, "choice");
 							}
 						}
 						i = j;
@@ -1067,7 +948,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 					&& _selector._prev._begIndex == _selector._begIndex + 1
 					&& _selector._prev._endIndex == _selector._endIndex - 1)) {
 					//Minimum occurrence not reached for &{0}
-					error(XDEF.XDEF555, "choice");
+					putReport(Report.error(XDEF.XDEF555, "choice"));
 					XSelector xsel =
 						(XSelector) getDefElement(_selector._begIndex);
 					if (xsel._onAbsence >= 0) {
@@ -1814,342 +1695,12 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		}
 	}
 
-	/** Add the new attribute to the current XXElement.
-	 * @param qname The qualified name of attribute (including prefix).
-	 * @param data The value of attribute.
-	 * @param nsURI The value of namespace URI.
-	 * @return true if attribute was created according to X-definition.
+////////////////////////////////////////////////////////////////////////////////
+	/** Get reference counter of given node (with an index).
+	 * @param index the index of inspected node.
+	 * @return The reference number.
 	 */
-	@Override
-	public final boolean addAttributeNS(final String nsURI,
-		final String qname,
-		final String data) {
-		if (_element == null) {
-			return _ignoreAll;
-		}
-		if ("xmlns".equals(qname) || qname.startsWith("xmlns:")
-			|| qname.startsWith("xml:")) {
-			String uri = qname.startsWith("xml:") ? XMLConstants.XML_NS_URI
-				: XMLConstants.XMLNS_ATTRIBUTE_NS_URI;
-			_element.setAttributeNS(uri, qname, data);
-			return true;
-		}
-		if (_ignoreAll) {
-			return true; //all checks areignored (undef element)
-		}
-		if (XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI.equals(nsURI)) {
-			return false;
-		}
-		if (_nil) {// XML schema; xsi:nil & options nillable
-			error(XDEF.XDEF525, //Attribute not allowed
-				qname, getPosMod(getXDPosition(), _xPos));
-			return false;
-		}
-		XData xatt = (nsURI != null) ? getXAttr(nsURI, qname) : getXAttr(qname);
-		if (xatt == null) {
-			xatt = _xElement.getDefAttr("$attr", -1); // any attr
-		}
-		String adata;
-		if ((adata = attrWhitespaces(xatt, data)) == null) {
-			removeAttr(nsURI, qname);
-			return true;
-		}
-		String xPos = _xPos;
-		_xPos += "/@" + qname;
-		_attName = qname;
-		_attURI = nsURI;
-		_xdata = xatt;
-		if (xatt!=null && xatt._match >=0 && !getXDDocument().isCreateMode()) {
-			_elemValue = _element;
-			_data = adata;
-			XDValue item = exec(xatt._match, (byte) 'A');
-			_elemValue = null;
-			_data = null;
-			_parseResult = null;
-			if (item != null && !item.booleanValue()) {//delete it
-				removeAttr(nsURI, qname);
-				if (xatt.minOccurs() != XOccurrence.IGNORE) {
-					if (xatt.minOccurs() != XOccurrence.ILLEGAL) {
-						//Attribute not allowed
-						putTemporaryReport(Report.error(XDEF.XDEF525,
-							qname, getPosMod(getXDPosition(), _xPos)));
-					}
-					if (xatt._onIllegalAttr >= 0) {
-						if (_clearReports) {
-							clearTemporaryReporter();
-						}
-						exec(xatt._onIllegalAttr, (byte) 'A');
-					}
-				}
-				copyTemporaryReports();
-				_xdata = null;
-				_parseResult = null;
-				_xPos = xPos;
-				return false;
-			}
-			copyTemporaryReports();
-		}
-		_parseResult = null;
-		if (xatt != null) {
-			String xname = xatt.getName();
-			//let's register that we processed this attribute
-			if (_attNames.contains(xatt.getName()) && !"$attr".equals(xname)
-				&& xatt._acceptQualifiedAttr == 'T') {
-				//Both, the qualified and unqualified attributes are not allowed
-				//with the option acceptQualifiedAttr: &{0}
-				error(XDEF.XDEF559, qname);
-			}
-			if ("$attr".equals(xname)) {
-				if (!_attNames.contains("$attr")) {
-					_attNames.add(xname);
-				}
-				xname += qname;
-			}
-			boolean result = true;
-			switch (xatt.minOccurs()) {
-				case XOccurrence.ILLEGAL: // illegal
-					break; // report as it is undefined
-				case XOccurrence.IGNORE: // ignore
-					_attName = null;
-					_attURI = null;
-					removeAttr(nsURI, qname);
-					_attNames.add(xname);
-					_xdata = null;
-					_xPos = xPos;
-					return true;
-				default : {// required(1) or optional(0)
-					_data = adata;
-					debugXPos(XDDebug.INIT);
-					if (xatt._init >= 0) {// execute "onInit" action
-						_elemValue = _element;
-						exec(xatt._init, (byte) 'A');
-						copyTemporaryReports();
-					}
-					if (_data == null) { // value not exist
-						if (xatt._onFalse >= 0) {
-							String x = _data;
-							_elemValue = _element;
-							if (_clearReports) {
-								clearTemporaryReporter();
-							}
-							exec(xatt._onFalse, (byte) 'A');
-							updateAttrValue(xatt, x, nsURI, qname);
-						}
-						_attNames.add(xname);
-						_parseResult = new DefParseResult(_data);
-					} else {
-						_elemValue = _element;
-						//if the value is an ampty string and the option is
-						//set to "acceptEmptyAttributes" at any level then
-						//set the result of the check method to "true" (do NOT
-						//report and/or process an error)!
-						if (_data.isEmpty()
-							&& ((xatt._ignoreEmptyAttributes == 'A'
-								|| xatt._ignoreEmptyAttributes == 'P'
-								&& xatt.isOptional())
-								|| xatt._ignoreEmptyAttributes == 0
-								&& (_xElement._ignoreEmptyAttributes == 'A'
-								||_xElement._ignoreEmptyAttributes == 'P'
-								&& xatt.isOptional())
-								|| _xElement._ignoreEmptyAttributes == 0
-								&& (_rootChkDocument._ignoreEmptyAttributes=='A'
-								|| _rootChkDocument._ignoreEmptyAttributes=='P'
-								&& xatt.isOptional()))) {
-							//accept empty attributes
-							_attNames.add(xname);
-							_parseResult = new DefParseResult(""); // empty attr
-						} else {
-							debugXPos(XDDebug.PARSE);
-							//we are now sure the length is > 0 because if
-							//the option was not set to "acceptEmptyAttributes"
-							//then an empty attribute value was set to null and
-							//the attribute had been ignored in attrWhitespaces!
-							_attNames.add(xname);
-							checkDatatype(xatt, false);
-						}
-						if (_parseResult.matches()) { // true
-							clearTemporaryReporter();
-							if (_data != null) {
-								if (!_data.equals(adata)) {
-									if (nsURI != null) {
-										_element.setAttributeNS(nsURI,
-											qname, _data);
-									} else {
-										_element.setAttribute(qname, _data);
-									}
-								}
-							} else {
-								removeAttr(nsURI, qname);
-							}
-							debugXPos(XDDebug.ONTRUE);
-							if (xatt._onTrue >= 0) {
-								String x = _data;
-								exec(xatt._onTrue, (byte) 'A');
-								updateAttrValue(xatt, x, nsURI, qname);
-							}
-						} else { // _parseResult.matches() == false
-							// put error reports to chkElement
-							debugXPos(XDDebug.ONFALSE);
-							if (xatt._onFalse >= 0) {
-								String x = _data;
-								if (_clearReports) {
-									clearTemporaryReporter();
-								}
-								exec(xatt._onFalse, (byte) 'A');
-								updateAttrValue(xatt, x, nsURI, qname);
-							} else {
-								result = false; // an error found
-								//copy reports from parsed result to
-								//the temporary reporter.
-								_scp.getTemporaryReporter().addReports(
-									_parseResult.getReporter());
-								if (!chkTemporaryErrors()) {
-									putTemporaryReport( //Incorrect value&{0}
-										Report.error(XDEF.XDEF515));
-								}
-							}
-							copyTemporaryReports();
-						}
-					}
-					if (_data != null && !_data.equals(adata)) {
-						if ((adata = attrWhitespaces(xatt, adata)) == null) {
-							removeAttr(nsURI, qname);
-							_attName = null;
-							_attURI = null;
-							_data = null;
-							_parseResult = null;
-							_attNames.add(xname);
-							_xdata = null;
-							_xPos = xPos;
-							return result; // ignore empty attributes
-						}
-					} else {
-						adata = _data;
-					}
-					if (_data != null && !_data.equals(adata)) {
-						adata = attrWhitespaces(xatt, _data);
-					}
-					_attName = null;
-					_attURI = null;
-					_data = null;
-					if (adata == null) {
-						removeAttr(nsURI, qname);
-						_xdata = null;
-						_parseResult = null;
-						_xPos = xPos;
-						return !xatt.isRequired();
-					}
-					if (nsURI != null) {
-						_element.setAttributeNS(nsURI, qname, adata);
-					} else {
-						_element.setAttribute(qname, adata);
-					}
-					_attNames.add(xname);
-					_xdata = null;
-					_xPos = xPos;
-					return result;
-				}
-			}
-		}
-		if ((_xElement._moreAttributes=='T' || _xElement._moreAttributes=='I')
-			&& (xatt == null || !xatt.isIllegal())) {
-			//more attributes allowed, add attribute as it is
-			//no X-definition for this attribute
-			_parseResult = new DefParseResult(data);
-			if (nsURI != null) {
-				if (_xElement._moreAttributes=='I') {
-					_element.removeAttributeNS(nsURI, qname);
-				} else {
-					_element.setAttributeNS(nsURI, qname, adata);
-					if (_xComponent != null && getXMNode() != null
-						&& getXMNode().getXDPosition() != null) {
-						_xComponent.xSetAttr(this, _parseResult);
-					}
-				}
-			} else {
-				if (_xElement._moreAttributes=='I') {
-					_element.removeAttribute(qname);
-				} else {
-					_element.setAttribute(qname, adata);
-					if (_xComponent != null && getXMNode() != null
-						&& getXMNode().getXDPosition() != null) {
-						_xComponent.xSetAttr(this, _parseResult);
-					}
-				}
-			}
-			_attName = null;
-			_attURI = null;
-			_xdata = null;
-			_xPos = xPos;
-			return true;
-		}
-		debugXPos(XDDebug.ONILLEGALATTR);
-		_data = adata = null;
-		if (xatt != null && xatt._onIllegalAttr > 0) {
-			if (_clearReports) {
-				clearTemporaryReporter();
-			} else {//Attribute not allowed
-				putTemporaryReport(Report.error(XDEF.XDEF525,
-					qname, getPosMod(getXDPosition(), _xPos)));
-			}
-			exec(xatt._onIllegalAttr, (byte) 'T');
-			_parseResult = null;
-			copyTemporaryReports();
-		} else if (_xElement._onIllegalAttr >= 0) {
-			if (_clearReports) {
-				clearTemporaryReporter();
-			} else {//Attribute not allowed
-				//Attribute not allowed
-				putTemporaryReport(Report.error(XDEF.XDEF525,
-					qname, getPosMod(getXDPosition(), _xPos)));
-			}
-			_elemValue = _element;
-			_data = adata;
-			exec(_xElement._onIllegalAttr, (byte) 'E');
-			copyTemporaryReports();
-		} else {
-			//Attribute not allowed
-			error(XDEF.XDEF525, qname, getPosMod(getXDPosition(), _xPos));
-		}
-		if (_data != null) {
-			if (nsURI != null) {
-				_element.setAttributeNS(nsURI, qname, adata);
-				if (_xComponent != null && getXMNode() != null
-					&& getXMNode().getXDPosition() != null) {
-					_xComponent.xSetAttr(this, _parseResult);
-				}
-			} else {
-				_element.setAttribute(qname, adata);
-				if (_xComponent != null && getXMNode() != null
-					&& getXMNode().getXDPosition() != null) {
-					_xComponent.xSetAttr(this, _parseResult);
-				}
-			}
-		} else {
-			if (nsURI != null) {
-				_element.removeAttributeNS(nsURI, qname);
-			} else {
-				_element.removeAttribute(qname);
-			}
-		}
-		_attName = null;
-		_attURI = null;
-		_data = null;
-		_parseResult = null;
-		_xdata = null;
-		_xPos = xPos;
-		return false;
-	}
-
-	@Override
-	/** Add the new attribute to the current XXElement.
-	 * @param name name of attribute.
-	 * @param data value of attribute.
-	 * @return true if attribute was created according to X-definition.
-	 */
-	public final boolean addAttribute(final String name, final String data) {
-		return addAttributeNS(null, name, data);
-	}
+	public final int getRefNum(final int index) {return _counters[index];}
 
 	/** Set attribute to the current element. First remove the original
 	 * attribute if exists to prevent report about attribute redefinition.
@@ -2233,153 +1784,6 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			}
 			_element = el2;
 		}
-	}
-
-	@Override
-	/** This method is called when the end of the current element attribute list
-	 * was parsed. The implementation may check the list of attributes and
-	 * may invoke appropriate actions.
-	 * @return true if element is compliant with X-definition.
-	 */
-	public final boolean checkElement() {
-		_parseResult = null;
-		if (_attsChecked) {
-			return true;
-		}
-		_attsChecked = true;
-		if (_ignoreAll) { // all checks are ignored (undef element)
-			return true;
-		}
-		boolean result = true;
-		//check if there are missing required attributes
-		XData[] xattrs = (XData[]) _xElement.getAttrs();
-		String xPos = _xPos;
-		for (int i = 0; i < xattrs.length && ! _nil; i++) {
-			XData xatt = xattrs[i];
-			_xdata = xatt;
-			String xname = xatt.getName();
-			if (xname.charAt(0) == '$') {//service attrs text, attr, textcontent
-				continue; // TODO
-			}
-			boolean processed = false; // true if attribute was processed
-			if (xatt.getNSUri() != null) {
-				if (_element.hasAttributeNS(xatt.getNSUri(),
-					xname.substring(xname.indexOf(':') + 1))) {
-					processed = true;
-				}
-			} else if (_element.hasAttribute(xname)) {
-				processed = true;
-			} else if (_attNames.contains(xname)) {
-				processed = true;
-			}
-			if (!processed) {
-				_xPos = xPos + "/@" + xname;
-				if (xatt._deflt >= 0) {// exec default method
-					_data = null;
-					_parseResult = null;
-					_attName = xname;
-					_elemValue = _element;
-					XDValue value = exec(xatt._deflt, (byte) 'A');
-					if (value != null) {
-						_data = value.toString();
-						checkDatatype(xatt, true);
-						if (xatt.getNSUri() == null) {
-							_element.setAttribute(xname, _data);
-						} else {
-							_element.setAttributeNS(
-								xatt.getNSUri(), xname, _data);
-						}
-					}
-					copyTemporaryReports();
-					if (xatt.getNSUri() == null) {
-						if (_element.hasAttribute(xname)) {
-							continue;
-						}
-					} else {
-						if (_element.hasAttributeNS(xatt.getNSUri(),
-							xname.substring(xname.indexOf(':') + 1))) {
-							continue;
-						}
-					}
-				}
-				//missing attribute
-				debugXPos(XDDebug.ONABSENCE);
-				if (xatt._onAbsence >= 0) {
-					// onAbsence method
-					_data = null;
-					_parseResult = null;
-					_attName = xname;
-					_elemValue = _element;
-					Report rep = null;
-					if (xatt.minOccurs() == XData.REQUIRED) {
-						//Missing required attribute &{0}
-						rep = Report.error(XDEF.XDEF526, xname);
-						putTemporaryReport(rep);
-					}
-					if (!_attNames.contains(xatt.getName())) {
-						String uri = xatt.getNSUri(); // was not processed
-						_xPos = xPos +"/@" + xname;
-						exec(xatt._onAbsence, (byte) 'A');
-						if (_data != null) {
-							checkDatatype(xatt, true);
-							if (uri == null) {
-								_element.setAttribute(xname, _data);
-							} else {
-								_element.setAttributeNS(uri, xname, _data);
-							}
-							_attNames.add(xname);
-						}
-						if (uri == null && _element.hasAttribute(xname)
-							|| uri != null && _element.hasAttributeNS(uri,
-							xname.substring(xname.indexOf(':') + 1))) {
-							//remove the message "missing"
-							removeTemporaryReport(rep);
-							continue; // attribute exists, don't invoke default
-						}
-					}
-					if (xatt._deflt < 0) {
-						copyTemporaryReports();
-						continue; // skip default method
-					}
-					removeTemporaryReport(rep); // don't report "missing" twice
-					copyTemporaryReports();
-				}
-				if (xatt.minOccurs() == XData.REQUIRED) {
-					//no method called; put error
-					error(XDEF.XDEF526, xname);//Missing required attribute &{0}
-					result = false;
-				}
-			}
-			_parseResult = null;
-			if (xatt._onStartElement >= 0) { // execute onStartElement action
-				_data = null;
-				_attName = xname;
-				_elemValue = _element;
-				exec(xatt._onStartElement, (byte) 'A');
-			}
-		}
-		_xPos = xPos;
-		_parseResult = null;
-		debugXPos(XDDebug.ONSTARTELEMENT);
-		if (_xElement._onStartElement >= 0) {// exec on end of attr list
-			_elemValue = _element;
-			exec(_xElement._onStartElement, (byte) 'E');
-			copyTemporaryReports();
-			updateElement(_elemValue);
-			if (_elemValue == null) {
-				result = false;
-			}
-		}
-		if (_scp.getXmlStreamWriter() != null) {
-			try {
-				_scp.getXmlStreamWriter().writeElementStart(_element);
-			} catch (SRuntimeException ex) {
-				putReport(ex.getReport());
-			}
-		}
-		_xdata = null;
-		_parseResult = null;
-		return result;
 	}
 
 	final void finishSelector() {
@@ -2686,6 +2090,743 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			b == 'F' ? result.toLowerCase() : result;
 	}
 
+	/** Destruct ChkElement. */
+	private void closeChkElement() {//just let's gc do the job
+		_scp.closeFinalList(getFinalList()); // close objects from final list
+		for (CodeUniqueset x: _markedUniqueSets) {
+			String s = x.checkNotMarked(this);
+			if (!s.isEmpty()) {
+				//Not referred keys found in the uniqueSet &{0}&{1}{: }
+				error(XDEF.XDEF524, x.getName(), s);
+			}
+		}
+		if (_scp.getXmlStreamWriter() != null) {
+			//write the end of element if XML stream writer exists.
+			try {
+				_scp.getXmlStreamWriter().writeElementEnd();
+			} catch (SRuntimeException ex) {
+				putReport(ex.getReport());
+			}
+		}
+		if (_xComponent != null) {
+			if (_xComponent.xGetModelPosition().indexOf("/$any") > 0
+				|| _xComponent.xGetModelPosition().endsWith("#*")) {
+				if (!(_forget || _xElement._forget == 'T')) { // not forget
+					_xComponent.xSetAny(_element);
+				}
+			}
+			if (_xComponent.xGetParent() != null
+				&& _xComponent != getParent().getXComponent()) {
+				if (!(_forget || _xElement._forget == 'T')) { // not forget
+					_xComponent.xGetParent().xAddXChild(_xComponent);
+				}
+			}
+		}
+		if (!getXDDocument().isCreateMode()
+			&& (_forget || _xElement._forget == 'T' || _xComponent != null)) {
+			// not create mode and forget or _xComponent != null
+			updateElement(null);
+			_parent.getChkChildNodes().remove(this);
+			_chkChildNodes = null;
+			_xElement = null;
+			_element = null;
+			_xonArray = null;
+			_xonKey = null;
+			_xonMap = null;
+			_xonValue = null;
+		}
+		_xComponent = null;
+		if (_variables != null) {
+			for(int i = 0; i < _variables.length; i++) {
+				XDValue x = _variables[i];
+				if (x != null && !x.isNull()
+					&& (x.getItemId() == X_UNIQUESET
+					|| x.getItemId() == X_UNIQUESET_M)) {
+					CodeUniqueset y = (CodeUniqueset)x;
+					y.checkAndClear(_scp.getTemporaryReporter());
+				}
+				_variables[i] = null;
+			}
+			_variables = null;
+		}
+		_xPosOccur.clear();
+		_defList = new XNode[0];
+		_counters = new int[0];
+		_actDefIndex = -1;
+		_xPos = null;
+		_elemValue = null;
+		_sourceElem = null;
+		_data = null;
+		_parseResult = null;
+		_attNames = null;
+		_selector = null;
+		_userObject = null;
+		_attName = null;
+		_attURI = null;
+		_xdata = null;
+		if (_boundKeys != null) {
+			for (XDUniqueSetKey x: _boundKeys) {
+				if (x != null) {
+					x.resetKey();
+				}
+			}
+		}
+	}
+/*XX ?? */
+	/** Mark unique set with this instance of ChkElement.
+	 * @param us unique set.
+	 */
+	public final void addMarkedUniqueset(CodeUniqueset us) {
+		_markedUniqueSets.add(us);
+		us.setMarker(this);
+	}
+/*XX ?? */
+////////////////////////////////////////////////////////////////////////////////
+// Methods to retrieve values from checked tree.
+////////////////////////////////////////////////////////////////////////////////
+
+	/** Look up for the X-Position (XPos) of the element set by <i>xPath</i>.
+	 * For look up is used the hash table with the XPaths and their
+	 * occurrences.
+	 * @param xPath the XPath to the current ChkElement (Element
+	 *	from the source XML document that is actually processed).
+	 * @return the position of this element in the source XML document
+	 *	to complete XPath identifier.
+	 */
+	private int getElemXPos(Map<String, XPosInfo> xPosOccur, String xPath) {
+		if(xPosOccur != null) { // never should happen!!
+			XPosInfo xPathInfo;
+			if ((xPathInfo = xPosOccur.get(xPath)) == null) {
+				// first occurrence of the xPath
+				xPosOccur.put(xPath, new XPosInfo());
+				return 1;
+			} else {
+				// another (second and more) occurrence of the xPath
+				return xPathInfo.addCount();
+			}
+		}
+		// Never should happen - internal error
+		throw new SRuntimeException(XDEF.XDEF569, //Fatal error&{0}{: }
+			"ChkElement:getElemXPos: _xPathOccur == null");
+	}
+
+	/** Saved counter object.*/
+	private static final class Counter {
+		int _itemIdex;
+		Counter(final int counter) {_itemIdex = counter;}
+	}
+
+	/** Class to represent short information about XPaths for all elements
+	 * present in the input XML source.
+	 * This class is not deleted after element processing when "forget"
+	 * option is specified !!!
+	 * This class is deleted (nulled) when the end of parent element is reached
+	 * in the XML source.
+	 * Maximum recommended size of object created from this class is 8 kB
+	 * to avoid OutOfMemory exception by processing very large XML sources.
+	 */
+	private static final class XPosInfo {
+		/** Field to count the amount of the same XPaths. */
+		private int _counter;
+
+		/** Creates info object in case of first occurrence of this XPath
+		 * in the input XML source.
+		 */
+		XPosInfo() {_counter = 1;}
+
+		/** Increase counter of occurrence of XPath .
+		 * @return increased occurrence of this XPath .
+		 */
+		int addCount() {return ++_counter;}
+
+		/** Decrease counter of occurrence of XPath.
+		 * @return decreased occurrence of this XPath .
+		 */
+		int subCount() {return --_counter;}
+	}
+
+////////////////////////////////////////////////////////////////////////////////
+
+
+	/** Add the new attribute to the current XXElement.
+	 * @param qname The qualified name of attribute (including prefix).
+	 * @param data The value of attribute.
+	 * @param nsURI The value of namespace URI.
+	 * @return true if attribute was created according to X-definition.
+	 */
+	@Override
+	public final boolean addAttributeNS(final String nsURI,
+		final String qname,
+		final String data) {
+		if (_element == null) {
+			return _ignoreAll;
+		}
+		if ("xmlns".equals(qname) || qname.startsWith("xmlns:")
+			|| qname.startsWith("xml:")) {
+			String uri = qname.startsWith("xml:") ? XMLConstants.XML_NS_URI
+				: XMLConstants.XMLNS_ATTRIBUTE_NS_URI;
+			_element.setAttributeNS(uri, qname, data);
+			return true;
+		}
+		if (_ignoreAll) {
+			return true; //all checks areignored (undef element)
+		}
+		if (XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI.equals(nsURI)) {
+			return false;
+		}
+		if (_nil) {// XML schema; xsi:nil & options nillable
+			error(XDEF.XDEF525, //Attribute not allowed
+				qname, getPosMod(getXDPosition(), _xPos));
+			return false;
+		}
+		XData xatt = (nsURI != null) ? getXAttr(nsURI, qname) : getXAttr(qname);
+		if (xatt == null) {
+			xatt = _xElement.getDefAttr("$attr", -1); // any attr
+		}
+		String adata;
+		if ((adata = attrWhitespaces(xatt, data)) == null) {
+			removeAttr(nsURI, qname);
+			return true;
+		}
+		String xPos = _xPos;
+		_xPos += "/@" + qname;
+		_attName = qname;
+		_attURI = nsURI;
+		_xdata = xatt;
+		if (xatt!=null && xatt._match >=0 && !getXDDocument().isCreateMode()) {
+			_elemValue = _element;
+			_data = adata;
+			XDValue item = exec(xatt._match, (byte) 'A');
+			_elemValue = null;
+			_data = null;
+			_parseResult = null;
+			if (item != null && !item.booleanValue()) {//delete it
+				removeAttr(nsURI, qname);
+				if (xatt.minOccurs() != XOccurrence.IGNORE) {
+					if (xatt.minOccurs() != XOccurrence.ILLEGAL) {
+						//Attribute not allowed
+						putTemporaryReport(Report.error(XDEF.XDEF525,
+							qname, getPosMod(getXDPosition(), _xPos)));
+					}
+					if (xatt._onIllegalAttr >= 0) {
+						if (_clearReports) {
+							clearTemporaryReporter();
+						}
+						exec(xatt._onIllegalAttr, (byte) 'A');
+					}
+				}
+				copyTemporaryReports();
+				_xdata = null;
+				_parseResult = null;
+				_xPos = xPos;
+				return false;
+			}
+			copyTemporaryReports();
+		}
+		_parseResult = null;
+		if (xatt != null) {
+			String xname = xatt.getName();
+			//let's register that we processed this attribute
+			if (_attNames.contains(xatt.getName()) && !"$attr".equals(xname)
+				&& xatt._acceptQualifiedAttr == 'T') {
+				//Both, the qualified and unqualified attributes are not allowed
+				//with the option acceptQualifiedAttr: &{0}
+				error(XDEF.XDEF559, qname);
+			}
+			if ("$attr".equals(xname)) {
+				if (!_attNames.contains("$attr")) {
+					_attNames.add(xname);
+				}
+				xname += qname;
+			}
+			boolean result = true;
+			switch (xatt.minOccurs()) {
+				case XOccurrence.ILLEGAL: // illegal
+					break; // report as it is undefined
+				case XOccurrence.IGNORE: // ignore
+					_attName = null;
+					_attURI = null;
+					removeAttr(nsURI, qname);
+					_attNames.add(xname);
+					_xdata = null;
+					_xPos = xPos;
+					return true;
+				default : {// required(1) or optional(0)
+					_data = adata;
+					debugXPos(XDDebug.INIT);
+					if (xatt._init >= 0) {// execute "onInit" action
+						_elemValue = _element;
+						exec(xatt._init, (byte) 'A');
+						copyTemporaryReports();
+					}
+					if (_data == null) { // value not exist
+						if (xatt._onFalse >= 0) {
+							String x = _data;
+							_elemValue = _element;
+							if (_clearReports) {
+								clearTemporaryReporter();
+							}
+							exec(xatt._onFalse, (byte) 'A');
+							updateAttrValue(xatt, x, nsURI, qname);
+						}
+						_attNames.add(xname);
+						_parseResult = new DefParseResult(_data);
+					} else {
+						_elemValue = _element;
+						//if the value is an ampty string and the option is
+						//set to "acceptEmptyAttributes" at any level then
+						//set the result of the check method to "true" (do NOT
+						//report and/or process an error)!
+						if (_data.isEmpty()
+							&& ((xatt._ignoreEmptyAttributes == 'A'
+								|| xatt._ignoreEmptyAttributes == 'P'
+								&& xatt.isOptional())
+								|| xatt._ignoreEmptyAttributes == 0
+								&& (_xElement._ignoreEmptyAttributes == 'A'
+								||_xElement._ignoreEmptyAttributes == 'P'
+								&& xatt.isOptional())
+								|| _xElement._ignoreEmptyAttributes == 0
+								&& (_rootChkDocument._ignoreEmptyAttributes=='A'
+								|| _rootChkDocument._ignoreEmptyAttributes=='P'
+								&& xatt.isOptional()))) {
+							//accept empty attributes
+							_attNames.add(xname);
+							_parseResult = new DefParseResult(""); // empty attr
+						} else {
+							debugXPos(XDDebug.PARSE);
+							//we are now sure the length is > 0 because if
+							//the option was not set to "acceptEmptyAttributes"
+							//then an empty attribute value was set to null and
+							//the attribute had been ignored in attrWhitespaces!
+							_attNames.add(xname);
+							checkDatatype(xatt, false);
+						}
+						if (_parseResult.matches()) { // true
+							clearTemporaryReporter();
+							if (_data != null) {
+								if (!_data.equals(adata)) {
+									if (nsURI != null) {
+										_element.setAttributeNS(nsURI,
+											qname, _data);
+									} else {
+										_element.setAttribute(qname, _data);
+									}
+								}
+							} else {
+								removeAttr(nsURI, qname);
+							}
+							debugXPos(XDDebug.ONTRUE);
+							if (xatt._onTrue >= 0) {
+								String x = _data;
+								exec(xatt._onTrue, (byte) 'A');
+								updateAttrValue(xatt, x, nsURI, qname);
+							}
+						} else { // _parseResult.matches() == false
+							// put error reports to chkElement
+							debugXPos(XDDebug.ONFALSE);
+							if (xatt._onFalse >= 0) {
+								String x = _data;
+								if (_clearReports) {
+									clearTemporaryReporter();
+								}
+								exec(xatt._onFalse, (byte) 'A');
+								updateAttrValue(xatt, x, nsURI, qname);
+							} else {
+								result = false; // an error found
+								//copy reports from parsed result to
+								//the temporary reporter.
+								_scp.getTemporaryReporter().addReports(
+									_parseResult.getReporter());
+								if (!chkTemporaryErrors()) {
+									putTemporaryReport( //Incorrect value&{0}
+										Report.error(XDEF.XDEF515));
+								}
+							}
+							copyTemporaryReports();
+						}
+					}
+					if (_data != null && !_data.equals(adata)) {
+						if ((adata = attrWhitespaces(xatt, adata)) == null) {
+							removeAttr(nsURI, qname);
+							_attName = null;
+							_attURI = null;
+							_data = null;
+							_parseResult = null;
+							_attNames.add(xname);
+							_xdata = null;
+							_xPos = xPos;
+							return result; // ignore empty attributes
+						}
+					} else {
+						adata = _data;
+					}
+					if (_data != null && !_data.equals(adata)) {
+						adata = attrWhitespaces(xatt, _data);
+					}
+					_attName = null;
+					_attURI = null;
+					_data = null;
+					if (adata == null) {
+						removeAttr(nsURI, qname);
+						_xdata = null;
+						_parseResult = null;
+						_xPos = xPos;
+						return !xatt.isRequired();
+					}
+					if (nsURI != null) {
+						_element.setAttributeNS(nsURI, qname, adata);
+					} else {
+						_element.setAttribute(qname, adata);
+					}
+					_attNames.add(xname);
+					_xdata = null;
+					_xPos = xPos;
+					return result;
+				}
+			}
+		}
+		if ((_xElement._moreAttributes=='T' || _xElement._moreAttributes=='I')
+			&& (xatt == null || !xatt.isIllegal())) {
+			//more attributes allowed, add attribute as it is
+			//no X-definition for this attribute
+			_parseResult = new DefParseResult(data);
+			if (nsURI != null) {
+				if (_xElement._moreAttributes=='I') {
+					_element.removeAttributeNS(nsURI, qname);
+				} else {
+					_element.setAttributeNS(nsURI, qname, adata);
+					if (_xComponent != null && getXMNode() != null
+						&& getXMNode().getXDPosition() != null) {
+						_xComponent.xSetAttr(this, _parseResult);
+					}
+				}
+			} else {
+				if (_xElement._moreAttributes=='I') {
+					_element.removeAttribute(qname);
+				} else {
+					_element.setAttribute(qname, adata);
+					if (_xComponent != null && getXMNode() != null
+						&& getXMNode().getXDPosition() != null) {
+						_xComponent.xSetAttr(this, _parseResult);
+					}
+				}
+			}
+			_attName = null;
+			_attURI = null;
+			_xdata = null;
+			_xPos = xPos;
+			return true;
+		}
+		debugXPos(XDDebug.ONILLEGALATTR);
+		_data = adata = null;
+		putTemporaryReport(Report.error( //Attribute not allowed
+			XDEF.XDEF525, qname, getPosMod(getXDPosition(), _xPos)));
+		if (xatt != null && xatt._onIllegalAttr > 0) {
+			if (_clearReports) {
+				clearTemporaryReporter();
+			}
+			exec(xatt._onIllegalAttr, (byte) 'T');
+			_parseResult = null;
+		} else if (_xElement._onIllegalAttr >= 0) {
+			if (_clearReports) {
+				clearTemporaryReporter();
+			}
+			_elemValue = _element;
+			_data = adata;
+			exec(_xElement._onIllegalAttr, (byte) 'E');
+		}
+		copyTemporaryReports();
+		if (_data != null) {
+			if (nsURI != null) {
+				_element.setAttributeNS(nsURI, qname, adata);
+				if (_xComponent != null && getXMNode() != null
+					&& getXMNode().getXDPosition() != null) {
+					_xComponent.xSetAttr(this, _parseResult);
+				}
+			} else {
+				_element.setAttribute(qname, adata);
+				if (_xComponent != null && getXMNode() != null
+					&& getXMNode().getXDPosition() != null) {
+					_xComponent.xSetAttr(this, _parseResult);
+				}
+			}
+		} else {
+			if (nsURI != null) {
+				_element.removeAttributeNS(nsURI, qname);
+			} else {
+				_element.removeAttribute(qname);
+			}
+		}
+		_attName = null;
+		_attURI = null;
+		_data = null;
+		_parseResult = null;
+		_xdata = null;
+		_xPos = xPos;
+		return false;
+	}
+	@Override
+	/** Get name of actual node.
+	 * @return The name of node.
+	 */
+	public final String getNodeName() {
+		if (getItemId() != XX_ELEMENT) {
+			return _attName;
+		} else {
+			if (_element != null) {
+				String s = _element.getLocalName();
+				return s == null ? _element.getNodeName() : s;
+			}
+			return null;
+		}
+	}
+	@Override
+	/** Get namespace URI of actual node.
+	 * @return namespace URI or <i>null</i>.
+	 */
+	public final String getNodeURI() {
+		return (getItemId() != XX_ELEMENT)
+			? _attURI : _element != null ? _element.getNamespaceURI() : null;
+	}
+	@Override
+	/** Store model variable.
+	 * @param name name of variable.
+	 * @param val value to be stored.
+	 */
+	final void storeModelVariable(final String name, final XDValue val) {
+		int addr = findModelVariableOffset(name);
+		if (addr < 0) {
+			_parent.storeModelVariable(name, val);
+		} else {
+			_variables[addr] = val;
+		}
+	}
+	@Override
+	/** Load model variable.
+	 * @param name name of variable.
+	 * @return loaded value.
+	 */
+	public final XDValue loadModelVariable(final String name) {
+		int addr = findModelVariableOffset(name);
+		return addr < 0 ? _parent.loadModelVariable(name) : _variables[addr];
+	}
+	@Override
+	/** Set this element will be forgotten after being processed.*/
+	public final void forgetElement() {_forget = true;}
+	@Override
+	/** Increase reference counter by one.
+	 * @return The increased reference number.
+	 */
+	final int incRefNum() {return _actDefIndex < 0?0:++_counters[_actDefIndex];}
+	@Override
+	/** Decrease reference counter by one.
+	 * @return The increased reference number.
+	 */
+	final int decRefNum() {return _actDefIndex < 0?0:--_counters[_actDefIndex];}
+	@Override
+	/** Get reference counter of actual node
+	 * @return The reference number.
+	 */
+	public final int getRefNum() {
+		return _actDefIndex < 0 ? 0 : _counters[_actDefIndex];
+	}
+	@Override
+	/** Get occurrence of actual element
+	 * @return The reference number.
+	 */
+	final int getOccurrence() {return _parent.getRefNum();}
+	@Override
+	/** Get ChkElement assigned to this node.
+	 * @return ChkElement assigned to this node.
+	 */
+	final ChkElement getChkElement() {return this;}
+	@Override
+	/** Prepare construction of the new element according to X-definition.
+	 * @param qname qualified name of the element (prefixed).
+	 * @param ns NameSpace URI of the element.
+	 * @return created check element object.
+	 */
+	public final XXElement prepareXXElementNS(final String ns,
+		final String qname) {
+		return createChkElement(ns == null
+			? _rootChkDocument._doc.createElement(qname)
+			: _rootChkDocument._doc.createElementNS(ns,qname));
+	}
+	@Override
+	/** Prepare construction of the new element according to X-definition.
+	 * @param name Tag name of the element.
+	 * @return created check element object.
+	 */
+	public final XXElement prepareXXElement(final String name) {
+		return prepareXXElementNS(null, name);
+	}
+	@Override
+	/** Prepare construction of the new child according to X-definition.
+	 * @param model child model.
+	 * @return created XXElemnt element object.
+	 */
+	public final XXElement createChildXXElement(final XMElement model) {
+		String ns = model.getNSUri();
+		String qname = model.getName();
+		Element el = ns == null ? _rootChkDocument._doc.createElement(qname)
+			: _rootChkDocument._doc.createElementNS(ns, qname);
+		return chkElem((XElement) model, el);
+	}
+	@Override
+	/** Add the new attribute to the current XXElement.
+	 * @param name name of attribute.
+	 * @param data value of attribute.
+	 * @return true if attribute was created according to X-definition.
+	 */
+	public final boolean addAttribute(final String name, final String data) {
+		return addAttributeNS(null, name, data);
+	}
+	@Override
+	/** This method is called when the end of the current element attribute list
+	 * was parsed. The implementation may check the list of attributes and
+	 * may invoke appropriate actions.
+	 * @return true if element is compliant with X-definition.
+	 */
+	public final boolean checkElement() {
+		_parseResult = null;
+		if (_attsChecked) {
+			return true;
+		}
+		_attsChecked = true;
+		if (_ignoreAll) { // all checks are ignored (undef element)
+			return true;
+		}
+		boolean result = true;
+		//check if there are missing required attributes
+		XData[] xattrs = (XData[]) _xElement.getAttrs();
+		String xPos = _xPos;
+		for (int i = 0; i < xattrs.length && ! _nil; i++) {
+			XData xatt = xattrs[i];
+			_xdata = xatt;
+			String xname = xatt.getName();
+			if (xname.charAt(0) == '$') {//service attrs text, attr, textcontent
+				continue; // TODO
+			}
+			boolean processed = false; // true if attribute was processed
+			if (xatt.getNSUri() != null) {
+				if (_element.hasAttributeNS(xatt.getNSUri(),
+					xname.substring(xname.indexOf(':') + 1))) {
+					processed = true;
+				}
+			} else if (_element.hasAttribute(xname)) {
+				processed = true;
+			} else if (_attNames.contains(xname)) {
+				processed = true;
+			}
+			if (!processed) {
+				_xPos = xPos + "/@" + xname;
+				if (xatt._deflt >= 0) {// exec default method
+					_data = null;
+					_parseResult = null;
+					_attName = xname;
+					_elemValue = _element;
+					XDValue value = exec(xatt._deflt, (byte) 'A');
+					if (value != null) {
+						_data = value.toString();
+						checkDatatype(xatt, true);
+						if (xatt.getNSUri() == null) {
+							_element.setAttribute(xname, _data);
+						} else {
+							_element.setAttributeNS(
+								xatt.getNSUri(), xname, _data);
+						}
+					}
+					copyTemporaryReports();
+					if (xatt.getNSUri() == null) {
+						if (_element.hasAttribute(xname)) {
+							continue;
+						}
+					} else {
+						if (_element.hasAttributeNS(xatt.getNSUri(),
+							xname.substring(xname.indexOf(':') + 1))) {
+							continue;
+						}
+					}
+				}
+				//missing attribute
+				debugXPos(XDDebug.ONABSENCE);
+				if (xatt._onAbsence >= 0) {
+					// onAbsence method
+					_data = null;
+					_parseResult = null;
+					_attName = xname;
+					_elemValue = _element;
+					Report rep = null;
+					if (xatt.minOccurs() == XData.REQUIRED) {
+						//Missing required attribute &{0}
+						rep = Report.error(XDEF.XDEF526, xname);
+						putTemporaryReport(rep);
+					}
+					if (!_attNames.contains(xatt.getName())) {
+						String uri = xatt.getNSUri(); // was not processed
+						_xPos = xPos +"/@" + xname;
+						exec(xatt._onAbsence, (byte) 'A');
+						if (_data != null) {
+							checkDatatype(xatt, true);
+							if (uri == null) {
+								_element.setAttribute(xname, _data);
+							} else {
+								_element.setAttributeNS(uri, xname, _data);
+							}
+							_attNames.add(xname);
+						}
+						if (uri == null && _element.hasAttribute(xname)
+							|| uri != null && _element.hasAttributeNS(uri,
+							xname.substring(xname.indexOf(':') + 1))) {
+							//remove the message "missing"
+							removeTemporaryReport(rep);
+							continue; // attribute exists, don't invoke default
+						}
+					}
+					if (xatt._deflt < 0) {
+						copyTemporaryReports();
+						continue; // skip default method
+					}
+					removeTemporaryReport(rep); // don't report "missing" twice
+					copyTemporaryReports();
+				}
+				if (xatt.minOccurs() == XData.REQUIRED) {
+					//no method called; put error
+					error(XDEF.XDEF526, xname);//Missing required attribute &{0}
+					result = false;
+				}
+			}
+			_parseResult = null;
+			if (xatt._onStartElement >= 0) { // execute onStartElement action
+				_data = null;
+				_attName = xname;
+				_elemValue = _element;
+				exec(xatt._onStartElement, (byte) 'A');
+			}
+		}
+		_xPos = xPos;
+		_parseResult = null;
+		debugXPos(XDDebug.ONSTARTELEMENT);
+		if (_xElement._onStartElement >= 0) {// exec on end of attr list
+			_elemValue = _element;
+			exec(_xElement._onStartElement, (byte) 'E');
+			copyTemporaryReports();
+			updateElement(_elemValue);
+			if (_elemValue == null) {
+				result = false;
+			}
+		}
+		if (_scp.getXmlStreamWriter() != null) {
+			try {
+				_scp.getXmlStreamWriter().writeElementStart(_element);
+			} catch (SRuntimeException ex) {
+				putReport(ex.getReport());
+			}
+		}
+		_xdata = null;
+		_parseResult = null;
+		return result;
+	}
 	@Override
 	/** Add new element as a child of the current element.
 	 * Checks all attributes and child elements for occurrence.
@@ -2985,90 +3126,6 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		closeChkElement();
 		return !error;
 	}
-
-	/** Destruct ChkElement. */
-	private void closeChkElement() {//just let's gc do the job
-		_scp.closeFinalList(getFinalList()); // close objects from final list
-		for (CodeUniqueset x: _markedUniqueSets) {
-			String s = x.checkNotMarked(this);
-			if (!s.isEmpty()) {
-				//Not referred keys found in the uniqueSet &{0}&{1}{: }
-				error(XDEF.XDEF524, x.getName(), s);
-			}
-		}
-		if (_scp.getXmlStreamWriter() != null) {
-			//write the end of element if XML stream writer exists.
-			try {
-				_scp.getXmlStreamWriter().writeElementEnd();
-			} catch (SRuntimeException ex) {
-				putReport(ex.getReport());
-			}
-		}
-		if (_xComponent != null) {
-			if (_xComponent.xGetModelPosition().indexOf("/$any") > 0
-				|| _xComponent.xGetModelPosition().endsWith("#*")) {
-				if (!(_forget || _xElement._forget == 'T')) { // not forget
-					_xComponent.xSetAny(_element);
-				}
-			}
-			if (_xComponent.xGetParent() != null
-				&& _xComponent != getParent().getXComponent()) {
-				if (!(_forget || _xElement._forget == 'T')) { // not forget
-					_xComponent.xGetParent().xAddXChild(_xComponent);
-				}
-			}
-		}
-		if (!getXDDocument().isCreateMode()
-			&& (_forget || _xElement._forget == 'T' || _xComponent != null)) {
-			// not create mode and forget or _xComponent != null
-			updateElement(null);
-			_parent.getChkChildNodes().remove(this);
-			_chkChildNodes = null;
-			_xElement = null;
-			_element = null;
-			_xonArray = null;
-			_xonKey = null;
-			_xonMap = null;
-			_xonValue = null;
-		}
-		_xComponent = null;
-		if (_variables != null) {
-			for(int i = 0; i < _variables.length; i++) {
-				XDValue x = _variables[i];
-				if (x != null && !x.isNull()
-					&& (x.getItemId() == X_UNIQUESET
-					|| x.getItemId() == X_UNIQUESET_M)) {
-					CodeUniqueset y = (CodeUniqueset)x;
-					y.checkAndClear(_scp.getTemporaryReporter());
-				}
-				_variables[i] = null;
-			}
-			_variables = null;
-		}
-		_xPosOccur.clear();
-		_defList = new XNode[0];
-		_counters = new int[0];
-		_actDefIndex = -1;
-		_xPos = null;
-		_elemValue = null;
-		_sourceElem = null;
-		_data = null;
-		_parseResult = null;
-		_attNames = null;
-		_selector = null;
-		_userObject = null;
-		_attName = null;
-		_attURI = null;
-		_xdata = null;
-		if (_boundKeys != null) {
-			for (XDUniqueSetKey x: _boundKeys) {
-				if (x != null) {
-					x.resetKey();
-				}
-			}
-		}
-	}
-
 	@Override
 	/** Add new Text node to current element.
 	 * @param data The value of text node.
@@ -3377,7 +3434,6 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			}
 		}
 	}
-
 	@Override
 	/** Add new Comment node to current element.
 	 * @param data The value of Comment node.
@@ -3385,7 +3441,6 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	 */
 	//TODO
 	public final boolean addComment(final String data) {return true;}
-
 	@Override
 	/** Add new Processing instruction node to current element.
 	 * @param name The name of the PI node.
@@ -3395,7 +3450,6 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	 */
 	//TODO
 	public final boolean addPI(final String name, final String x) {return true;}
-
 	@Override
 	/** Get text value of this node.
 	 * @return The string with value of node.
@@ -3403,7 +3457,6 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	public final String getTextValue() {
 		return (getItemId() != XX_ELEMENT) ? _data : null;
 	}
-
 	@Override
 	/** Set text value to this node.
 	 * @param data the text value to be set.
@@ -3416,22 +3469,10 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			throw new SRuntimeException(SYS.SYS083, "setText");
 		}
 	}
-
-	 /** Set mode: 'C' - comment, 'E' - element, 'A' - attribute, 'T' - text,
-	 * 'D' - document, 'P' - processing instruction,'U' undefined. */
-	final void setXXType(final byte mode) {_mode = mode;}
-
-	 /** Get mode: 'C' - comment, 'E' - element, 'A' - attribute, 'T' - text,
-	 * 'D' - document, 'P' - processing instruction,'U' undefined.
-	 * @return mode.
-	 */
-	public final byte getXXType() {return _mode;}
-
 	@Override
 	public final short getItemId() {
 		return _mode == 'T' ? XX_TEXT : _mode == 'A'? XX_ATTR : XX_ELEMENT;
 	}
-
 	@Override
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
@@ -3439,7 +3480,6 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	public final XDValueType getItemType() {
 		return _mode == 'T' ? XXTEXT : _mode == 'A'? XXATTR : XXELEMENT;
 	}
-
 	@Override
 	/** Get attribute with namespace from XXElement.
 	 * @param uri The namespace of attribute.
@@ -3474,7 +3514,6 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		//Attempt to get undeclared item
 		throw new SRuntimeException(XDEF.XDEF581, getXPos() + "/@" + name);
 	}
-
 	@Override
 	/** Get attribute from the XXElement object.
 	 * @param name The name of attribute.
@@ -3487,97 +3526,16 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	public final String getAttribute(final String name) {
 		return getAttributeNS(null, name);
 	}
-
-////////////////////////////////////////////////////////////////////////////////
-// Auxiliary methods
-////////////////////////////////////////////////////////////////////////////////
-
 	@Override
 	/** Get work element value.
 	 * @return work element value.
 	 */
 	public final Element getElemValue() {return _elemValue;}
-
 	@Override
 	/** Set work element value.
 	 * @param e The element.
 	 */
 	final void setElemValue(final Element e) {_elemValue = e;}
-
-////////////////////////////////////////////////////////////////////////////////
-// Methods to retrieve values from checked tree.
-////////////////////////////////////////////////////////////////////////////////
-
-	/** Look up for the X-Position (XPos) of the element set by <i>xPath</i>.
-	 * For look up is used the hash table with the XPaths and their
-	 * occurrences.
-	 * @param xPath the XPath to the current ChkElement (Element
-	 *	from the source XML document that is actually processed).
-	 * @return the position of this element in the source XML document
-	 *	to complete XPath identifier.
-	 */
-	private int getElemXPos(Map<String, XPosInfo> xPosOccur, String xPath) {
-		if(xPosOccur != null) { // never should happen!!
-			XPosInfo xPathInfo;
-			if ((xPathInfo = xPosOccur.get(xPath)) == null) {
-				// first occurrence of the xPath
-				xPosOccur.put(xPath, new XPosInfo());
-				return 1;
-			} else {
-				// another (second and more) occurrence of the xPath
-				return xPathInfo.addCount();
-			}
-		}
-		// Never should happen - internal error
-		throw new SRuntimeException(XDEF.XDEF569, //Fatal error&{0}{: }
-			"ChkElement:getElemXPos: _xPathOccur == null");
-	}
-
-	/** Saved counter object.*/
-	private static final class Counter {
-		int _itemIdex;
-		Counter(final int counter) {_itemIdex = counter;}
-	}
-
-	/** Class to represent short information about XPaths for all elements
-	 * present in the input XML source.
-	 * This class is not deleted after element processing when "forget"
-	 * option is specified !!!
-	 * This class is deleted (nulled) when the end of parent element is reached
-	 * in the XML source.
-	 * Maximum recommended size of object created from this class is 8 kB
-	 * to avoid OutOfMemory exception by processing very large XML sources.
-	 */
-	private static final class XPosInfo {
-		/** Field to count the amount of the same XPaths. */
-		private int _counter;
-
-		/** Creates info object in case of first occurrence of this XPath
-		 * in the input XML source.
-		 */
-		XPosInfo() {_counter = 1;}
-
-		/** Increase counter of occurrence of XPath .
-		 * @return increased occurrence of this XPath .
-		 */
-		int addCount() {return ++_counter;}
-
-		/** Decrease counter of occurrence of XPath.
-		 * @return decreased occurrence of this XPath .
-		 */
-		int subCount() {return --_counter;}
-	}
-
-	/** Mark unique set with this instance of ChkElement.
-	 * @param us unique set.
-	 */
-	public final void addMarkedUniqueset(CodeUniqueset us) {
-		_markedUniqueSets.add(us);
-		us.setMarker(this);
-	}
-
-////////////////////////////////////////////////////////////////////////////////
-
 	@Override
 	/** Get root XXElement.
 	 * @return root XXElement node.
@@ -3660,6 +3618,13 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	 * @param x XComponent object.
 	 */
 	public final void setXComponent(final XComponent x) {_xComponent = x;}
+	@Override
+	/** Get XON result of processed Element model.
+	 * @return result of XON parsing.
+	 */
+	public Object getXon() {
+		return _xonArray!=null ? _xonArray : _xonMap!=null ?_xonMap : _xonValue;
+	}
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -3752,13 +3717,5 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			_savedCounters = null;
 			return result;
 		}
-	}
-
-	/** Get XON result of processed Element model.
-	 * @return result of XON parsing.
-	 */
-	@Override
-	public Object getXon() {
-		return _xonArray!=null ? _xonArray : _xonMap!=null ?_xonMap : _xonValue;
 	}
 }
