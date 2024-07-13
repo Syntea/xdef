@@ -397,16 +397,14 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		} else if (result != null && (result.getXMElement().isIgnore()
 			|| result.getXMElement().isIllegal())) {
 			if (result.getXMElement().isIllegal()) {
+				putTemporaryReport(Report.error( //Illegal element '&{0}'
+					XDEF.XDEF557, element.getNodeName()));
 				if (_xElement._onIllegalElement >= 0) {
-					if (!_clearReports) {
-						//Illegal element '&{0}'
-						error(XDEF.XDEF557, element.getNodeName());
+					if (_clearReports) {
+						clearTemporaryReporter();
 					}
 					exec(_xElement._onIllegalElement, (byte) 'E');
 					copyTemporaryReports();
-				} else {
-					//Illegal element '&{0}'
-					error(XDEF.XDEF557, element.getNodeName());
 				}
 			}
 			result = new ChkElement(this,
@@ -421,11 +419,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 				debugXPos(XDDebug.ONILLEGALELEMENT);
 				if (_xElement._onIllegalElement >= 0) {
 					_elemValue = _element;
-					if (!_clearReports) {
-						//Not allowed element '&{0}'
-						putTemporaryReport(Report.error(XDEF.XDEF501,
-							element.getNodeName()));
-					} else {
+					putTemporaryReport(Report.error(//Not allowed element '&{0}'
+						XDEF.XDEF501, element.getNodeName()));
+					if (_clearReports) {
 						clearTemporaryReporter();
 					}
 					exec(_xElement._onIllegalElement, (byte) 'E');
@@ -3512,21 +3508,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 // Methods to retrieve values from checked tree.
 ////////////////////////////////////////////////////////////////////////////////
 
-	/** Update counters from values in the argument array.
-	 * @param cc array with values.
-	 * @param ndx index where to start.
-	 */
-	final void updateCounters(final int[] cc, final int ndx) {
-		if (cc != null) { // update counters.
-			int len = cc.length + ndx - 1;
-			for (int x = 0, y = ndx + 1; y < len; y++, x++) {
-				_counters[y] += cc[x];
-			}
-		}
-	}
-
-	/**
-	 * Look up for the X-Position (XPos) of the element set by <i>xPath</i>.
+	/** Look up for the X-Position (XPos) of the element set by <i>xPath</i>.
 	 * For look up is used the hash table with the XPaths and their
 	 * occurrences.
 	 * @param xPath the XPath to the current ChkElement (Element
@@ -3557,8 +3539,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		Counter(final int counter) {_itemIdex = counter;}
 	}
 
-	/**
-	 * Class to represent short information about XPaths for all elements
+	/** Class to represent short information about XPaths for all elements
 	 * present in the input XML source.
 	 * This class is not deleted after element processing when "forget"
 	 * option is specified !!!
@@ -3602,7 +3583,6 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	 * @return root XXElement node.
 	 */
 	public final XXElement getRootXXElement(){return _rootChkDocument._chkRoot;}
-
 	@Override
 	/** Get actual associated XXElement.
 	 * @return root XXElement node.
@@ -3614,7 +3594,6 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	 * @return the associated XML node.
 	 */
 	public final Node getXMLNode() {return _node;}
-
 	@Override
 	/** Get namespace context of corresponding XElement.
 	 * @return namespace context of the parent element.
@@ -3622,7 +3601,6 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	public final KNamespace getXXNamespaceContext() {
 		return _xElement.getXDNamespaceContext();
 	}
-
 	@Override
 	/** Check if attribute is legal in the XXElement.
 	 * @param name The name of attribute.
@@ -3633,7 +3611,6 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		XData xatt = getXAttr(name);
 		return xatt != null && !xatt.isIllegal();
 	}
-
 	@Override
 	/** Check if attribute with given namespace is legal in the XXElement.
 	 * @param uri namespace URI.
@@ -3647,7 +3624,6 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			? getXAttr(name) : getXAttr(uri, name);
 		return xatt != null && !xatt.isIllegal();
 	}
-
 	@Override
 	/** Get array of XXNodes or null.
 	 * @return array of XXNodes or null.
@@ -3657,16 +3633,13 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		_chkChildNodes.toArray(result);
 		return result;
 	}
-
 	@Override
 	final List<ChkElement> getChkChildNodes() {return _chkChildNodes;}
-
 	@Override
 	/** Get model of the processed data object.
 	 * @return model of the processed data object.
 	 */
 	public final XMData getXMData() {return _xdata;}
-
 	@Override
 	/** Get actual model.
 	 * @return actual model.
@@ -3677,13 +3650,11 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		return (_mode == (byte) 'A' || _mode == (byte) 'T') ?
 			(XMNode) _xdata : (XMNode) _xElement;
 	}
-
 	@Override
 	/** Get XComponent.
 	 * @return The XComponent object (may be <i>null</i>).
 	 */
 	public final XComponent getXComponent() {return _xComponent;}
-
 	@Override
 	/** Set XComponent.
 	 * @param x XComponent object.
