@@ -148,11 +148,12 @@ public final class KXmlUtils extends KDOMUtils {
 		}
 		return result;
 	}
-	/** Returns a string in the XML format. All occurrences
-	 * of special characters are replaced with entity references
-	 * <code>&lt;&gt;&amp;"'</code>. If the argument ignoreWhiteSpaces
-	 * is true then all ignorable white spaces are removed.
-	 * If the argument delimiter is &lt; then the result string is created for
+
+	/** Return a string in the XML format. All occurrences
+	 * of special characters (<code>&lt;,&gt;,&amp;,",'</code>) are replaced
+	 * with entity references. If the argument "ignoreWhiteSpaces"
+	 * is true all ignorable white spaces are removed.
+	 * If the argument delimiter is "&lt;" the result string is created for
 	 * a text node, otherwise it will be created as a value of attribute and
 	 * delimiter occurrence will be transformed to the appropriate predefined
 	 * entity. Note that the argument shouldn't contain an entity reference
@@ -285,8 +286,7 @@ public final class KXmlUtils extends KDOMUtils {
 		out.write(xmlVersion != null ? xmlVersion : "1.0");
 		out.write("\" encoding=\"");
 		out.write(xmlEncoding != null ? xmlEncoding : "UTF-8");
-		out.write('"');
-		out.write("?>");
+		out.write("\"?>");
 		if (indentStep != null) {
 			out.write('\n');
 		}
@@ -718,14 +718,13 @@ public final class KXmlUtils extends KDOMUtils {
 						if (item.getNodeType() == Node.TEXT_NODE) {
 							int len;
 							String s = item.getNodeValue();
-							if (s == null ||
-								(len = (s = removeIgnorableWhiteSpaces
-									|| indent!=null?s.trim():s).length()) == 0){
+							if (s == null || (len=(s=removeIgnorableWhiteSpaces
+								|| indent!=null ? s.trim() : s).length()) == 0){
 								continue;
 							}
-							if (numItems == 1 && indent != null &&
-								(len+tagName.length()*2+startLine.length()) + 4
-									< lineLen
+							if (numItems == 1 && indent != null
+								&& (len+tagName.length() * 2
+									+ startLine.length()) + 4 < lineLen
 								&& s.indexOf('<') < 0 && s.indexOf('&') < 0) {
 								if (removeIgnorableWhiteSpaces) {
 									out.write(newIndent);
