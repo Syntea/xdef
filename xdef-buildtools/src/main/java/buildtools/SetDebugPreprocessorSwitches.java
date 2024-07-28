@@ -1,6 +1,7 @@
 package buildtools;
 
 import java.io.File;
+import java.io.IOException;
 
 /** Modify sources with the "DEBUG" switch of prepocessor.
  * @author Vaclav Trojan
@@ -19,7 +20,7 @@ public class SetDebugPreprocessorSwitches {
 		String projectBase;
 		try {
 			projectBase = baseDir.getCanonicalPath().replace('\\', '/');
-		} catch (Exception ex) {
+		} catch (IOException ex) {
 			throw new RuntimeException("Incorect project base directory");
 		}
 		JavaPreprocessor.main(

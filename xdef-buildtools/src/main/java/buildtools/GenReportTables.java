@@ -3,6 +3,7 @@ package buildtools;
 import org.xdef.sys.FUtils;
 import org.xdef.sys.RegisterReportTables;
 import java.io.File;
+import java.io.IOException;
 
 /** Update registered message files.
  * @author Trojan
@@ -18,10 +19,10 @@ public class GenReportTables {
 			File baseDir = args == null || args.length == 0
 				? new File("../xdef") : new File(args[0]);
 			if (!baseDir.exists() || !baseDir.isDirectory()) {
-				throw new RuntimeException("Base is not directory.");
+				throw new IOException("Base is not directory.");
 			}
 			projectBase = baseDir.getCanonicalPath().replace('\\', '/');
-		} catch (Exception ex) {
+		} catch (IOException ex) {
 			throw new RuntimeException("Can't find project base directory");
 		}		
 		String packageName = "org.xdef.msg";

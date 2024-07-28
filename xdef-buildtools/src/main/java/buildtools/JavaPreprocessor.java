@@ -224,7 +224,7 @@ public class JavaPreprocessor {
 					new InputStreamReader(is) :
 					new InputStreamReader(is, _charset));
 			processFile(br);
-		} catch (Exception ex) {
+		} catch (IOException ex) {
 			error("Can't read input file " + fname, false);
 			_sb = null;
 			return false;
@@ -289,8 +289,7 @@ public class JavaPreprocessor {
 	public final void setKeys(String[] keys) {
 		_keys = new MyStringList();
 		if (keys != null) {
-			for (int i = 0; i < keys.length; i++) {
-				String s = keys[i];
+			for (String s : keys) {
 				if (s != null && s.length() > 0) {
 					_keys.add(s);
 				}
@@ -303,27 +302,21 @@ public class JavaPreprocessor {
 		final boolean dirTree,
 		final boolean createDirectory) {
 		int lines = 0;
-		for (int i = 0; i < files.length; i++) {
-			File f = files[i];
+		for (File f : files) {
 			if (!f.isDirectory() && f.getName().endsWith(".java")) {
 				lines += processFile(f, outDir, createDirectory);
 			}
 		}
 		if (dirTree) {
-			for (int i = 0; i < files.length; i++) {
-				if (files[i].isDirectory()) {
-					String s = files[i].getName();
+			for (File file : files) {
+				if (file.isDirectory()) {
+					String s = file.getName();
 					if (!s.startsWith(".")) {
-						if (outDir != null) {
-							s = outDir + s + File.separatorChar;
-						} else {
-							s = null;
-						}
+						s = outDir != null ? outDir+s+File.separatorChar : null;
 						//process file list
-						lines += processFiles(files[i].listFiles(),
-							s, //outDir
+						lines += processFiles(file.listFiles(), s, //outDir
 							true, //dirTree
-							true);// subdirectories can be created
+							true); // subdirectories can be created
 					}
 				}
 			}
@@ -347,7 +340,7 @@ public class JavaPreprocessor {
 					new InputStreamReader(
 						new FileInputStream(fi), _charset));
 			lines = processFile(br);
-		} catch (Exception ex) {
+		} catch (IOException ex) {
 			error("Can't read input file " + fi.getAbsolutePath(), false);
 			_sb = null;
 			return 0;
@@ -404,12 +397,12 @@ public class JavaPreprocessor {
 				}
 			}
 
-			Writer out = _charset == null
+			try (Writer out = _charset == null
 				? new OutputStreamWriter(new FileOutputStream(fo))
-				: new OutputStreamWriter(new FileOutputStream(fo), _charset);
-			out.write(_sb.toString());
-			_sb = null;
-			out.close();
+				: new OutputStreamWriter(new FileOutputStream(fo), _charset)) {
+				out.write(_sb.toString());
+				_sb = null;
+			}
 			_modifyCount++;
 			if (renamed != null) {
 				if (!renamed.delete()) {
@@ -428,7 +421,7 @@ public class JavaPreprocessor {
 				}
 				_out.flush();
 			}
-		} catch (Exception ex) {
+		} catch (IOException ex) {
 			error("[ERROR] Can't write to output file: "
 				+ fo.getAbsolutePath(), false);
 			_sb = null;
@@ -451,18 +444,22 @@ public class JavaPreprocessor {
 		while ((command = parseLine()) != EOF) {
 			lines++;
 			//process all commands until the IF command is found
-			if (command == IF_COMMAND) {
-				preproc = true;
-				ifCommand(evaluate());
-			} else if (command == SET_COMMAND || command == UNSET_COMMAND) {
-				commentLineEndUncomments();
-				setOrUnsetCommand(command);
-			} else {
-				if (command != SRC_LINE) {
-					//preprocessor command without "IF".
-					error("'if' command is missing.", true);
-				}
-				_sb.append(_line);
+			switch (command) {
+				case IF_COMMAND:
+					preproc = true;
+					ifCommand(evaluate());
+					break;
+				case SET_COMMAND:
+				case UNSET_COMMAND:
+					commentLineEndUncomments();
+					setOrUnsetCommand(command);
+					break;
+				default:
+					if (command != SRC_LINE) {
+						//preprocessor command without "IF".
+						error("'if' command is missing.", true);
+					}	_sb.append(_line);
+					break;
 			}
 		}
 		_in.close();
@@ -656,7 +653,7 @@ public class JavaPreprocessor {
 				break;
 			}
 		}
-		if (ignore ? _line.indexOf("*/") < 0 : _line.indexOf("*/") >= 0) {
+		if (ignore ? !_line.contains("*/") : _line.contains("*/")) {
 			//no modification of section
 			_sb.append(_line);
 			return false;
@@ -1088,9 +1085,9 @@ public class JavaPreprocessor {
 				if (f.isDirectory()) {
 					dir = new File(f.getCanonicalPath());
 				} else {
-					throw new RuntimeException("Actual path isn't accessable");
+					throw new IOException("Actual path isn't accessable");
 				}
-			} catch (Exception ex) {
+			} catch (IOException ex) {
 				throw new RuntimeException("Actual path isn't accessable");
 			}
 		}
@@ -1298,9 +1295,9 @@ public class JavaPreprocessor {
 				jp._out.flush();
 				return "Intput file doesn't exist: " + input;
 			}
-			for (int i = 0; i < files.length; i++) {
-				//not create first directory
-				lines += jp.processFile(files[i], s, false); //not create first directory
+			for (File file : files) {
+				lines += 
+					jp.processFile(file,s,false); //don't create first directory
 			}
 			if (dirTree) {
 				String inp = input.replace('\\', '/');
@@ -1315,15 +1312,14 @@ public class JavaPreprocessor {
 					try {
 						f = new File(f.getCanonicalPath());
 						files = f.listFiles();
-						for (int j = 0; j < files.length; j++) {
-							if (files[j].isDirectory()) {
-								lines += jp.processFiles(new File[]{files[j]},
-									s,
-									true,
-									false); //not create first directory
+						for (File file : files) {
+							if (file.isDirectory()) {
+								//don't create first directory
+								lines += jp.processFiles(
+									new File[]{file},s,true,false);
 							}
 						}
-					} catch (Exception ex) {
+					} catch (IOException ex) {
 						jp._err.flush();
 						jp._out.flush();
 						return "Path isn't accessable:" + f.getAbsolutePath();
@@ -1370,7 +1366,7 @@ public class JavaPreprocessor {
 		String charset = null;
 		boolean crlf = false;
 		boolean cutTrailingSpaces = false;
-		for (int i = 0; i < args.length; i++) {
+		for (int i = 0; args != null && i < args.length; i++) {
 			if ("-r".equals(args[i])) {
 				if (dirTree) {
 					return "[ERROR] '-r' redefined.";
