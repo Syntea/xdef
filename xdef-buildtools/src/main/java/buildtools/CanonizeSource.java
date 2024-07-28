@@ -106,11 +106,11 @@ public class CanonizeSource {
 			}
 			files = dir.listFiles();
 			if (files != null) {
-				for (int i = 0; i < files.length; i++) {
-					if (files[i].isDirectory()) {
-						processFiles(files[i], s, true);
-					}
-				}
+                for (File file : files) {
+                    if (file.isDirectory()) {
+                        processFiles(file, s, true);
+                    }
+                }
 			}
 		}
 	}
@@ -128,115 +128,122 @@ public class CanonizeSource {
 		_firstCommentStart = -1;
 		_firstCommentEnd = -1;
 		_linePos = -1;
-		BufferedReader in = _charset == null
-			? new BufferedReader(new InputStreamReader(
-				new FileInputStream(file)))
-			: new BufferedReader(new InputStreamReader(
-				new FileInputStream(file), _charset));
-		String line;
-		boolean modified = false;
-		while ((line = in.readLine()) != null) {
-			_lines++;
-			//cut final white spaces
-			int len = line.length();
-			int i = len;
-			int k;
-			while((len > 0)
-				&& line.charAt(len - 1) <= ' ') {
-				len--;
-			}
-			_linePos = _sb.length();
-			if (len == 0) {
-				if (_linePos == 0) { //ignore leading empty lines
-					modified = true;
-				} else {
-					modified |= i != len;
-					if (_genCR) {
-						_sb.append('\r'); //add CR
-					}
-					_sb.append('\n'); //add LF
-				}
-				continue;
-			}
-			if (_spacesToTab) { //makeTabsFromSpaces
-				//replace leading spaces by tabs
-				for (i = 0, k = 0; i < len; i++ ) {
-					char ch = line.charAt(i);
-					if (ch == '\t') {
-						k = (((k + _indentSize - 1)/_indentSize) + 1)
-							*_indentSize;
-					} else if (ch == ' ') {
-						k++;
-					} else {
-						break;
-					}
-				}
-				if (i < len) { //not empty line
-					for (int j = 0; j < (k / _indentSize); j++) {
-						_sb.append('\t');
-					}
-					if ((k = k % _indentSize) > 0) {
-						_sb.append(_indentSpaces.substring(0, k));
-					}
-					_sb.append(line.substring(i,len));
-				}
-			} else { //makeSpacesFromTabs
-				//replace leading tabs by spaces
-				for (i = 0, k = 0; i < len; i++ ) {
-					char ch = line.charAt(i);
-					if (ch == '\t') {
-						k = (((k+_oldIndent-1)/_oldIndent)+1)*_oldIndent;
-					 } else if (ch == ' ') {
-						k++;
-					 } else {
-						break;
-					 }
-				}
-				if (i < len) { //not empty line
-					for (int j = 0; j < (k / _oldIndent); j++) {
-						_sb.append(_indentSpaces);
-					}
-					if ((k = k % _oldIndent) > 0) {
-						_sb.append(_indentSpaces.substring(0, k));
-					}
-					_sb.append(line.substring(i,len));
-				}
-			}
-			modified |= !line.equals(_sb.substring(_linePos));
-			if (_lastCommentStart >= 0) {
-				if (line.indexOf("*/") >= 0) {
-					if (line.endsWith("*/")) { //only comment lines blocks
-						_lastCommentLine = _linePos;
-						_lastCommentEnd = _sb.length();
-						if (_firstCommentEnd == -1) {
-							_firstCommentEnd = _lastCommentEnd;
-						}
-					} else {
-						if (_firstCommentStart == _lastCommentStart) {
-							_firstCommentStart = -1;
-						}
-						_lastCommentStart = -1;
-						_lastCommentEnd = -1;
-						_lastCommentLine = -1;
-					}
-				}
-			}
-			if (line.trim().startsWith("/*")) {
-				if (line.indexOf("*/") < 0) { //only more lines blocks
-					_lastCommentStart = _linePos;
-					_lastCommentLine = -1;
-					_lastCommentEnd = -1;
-					if (_firstCommentStart == -1) {
-						_firstCommentStart = _linePos;
-					}
-				}
-			}
-			if (_genCR) {
-				_sb.append('\r'); //add CR
-			}
-			_sb.append('\n'); //add LF
-		}
-		in.close();
+        boolean modified;
+        try (BufferedReader in = _charset == null
+            ? new BufferedReader(new InputStreamReader(
+                new FileInputStream(file)))
+            : new BufferedReader(new InputStreamReader(
+                new FileInputStream(file), _charset))) {
+            String line;
+            modified = false;
+            while ((line = in.readLine()) != null) {
+                _lines++;
+                //cut final white spaces
+                int len = line.length();
+                int i = len;
+                int k;
+                while((len > 0)
+                    && line.charAt(len - 1) <= ' ') {
+                    len--;
+                }
+                _linePos = _sb.length();
+                if (len == 0) {
+                    if (_linePos == 0) { //ignore leading empty lines
+                        modified = true;
+                    } else {
+                        modified |= i != len;
+                        if (_genCR) {
+                            _sb.append('\r'); //add CR
+                        }
+                        _sb.append('\n'); //add LF
+                    }
+                    continue;
+                }
+                if (_spacesToTab) {
+                    OUTER:
+                    for (i = 0, k = 0; i < len; i++) {
+                        char ch = line.charAt(i);
+                        switch (ch) {
+                            case '\t':
+                                k = (((k + _indentSize - 1)/_indentSize) + 1)
+                                    *_indentSize;
+                                break;
+                            case ' ':
+                                k++;
+                                break;
+                            default:
+                                break OUTER;
+                        }
+                    }
+                    if (i < len) { //not empty line
+                        for (int j = 0; j < (k / _indentSize); j++) {
+                            _sb.append('\t');
+                        }
+                        if ((k = k % _indentSize) > 0) {
+                            _sb.append(_indentSpaces.substring(0, k));
+                        }
+                        _sb.append(line.substring(i,len));
+                    }
+                } else {
+                    OUTER_1:
+                    for (i = 0, k = 0; i < len; i++) {
+                        char ch = line.charAt(i);
+                        switch (ch) {
+                            case '\t':
+                                k = (((k+_oldIndent-1)/_oldIndent)+1)*_oldIndent;
+                                break;
+                            case ' ':
+                                k++;
+                                break;
+                            default:
+                                break OUTER_1;
+                        }
+                    }
+                    if (i < len) { //not empty line
+                        for (int j = 0; j < (k / _oldIndent); j++) {
+                            _sb.append(_indentSpaces);
+                        }
+                        if ((k = k % _oldIndent) > 0) {
+                            _sb.append(_indentSpaces.substring(0, k));
+                        }
+                        _sb.append(line.substring(i,len));
+                    }
+                }
+                modified |= !line.equals(_sb.substring(_linePos));
+                if (_lastCommentStart >= 0) {
+                    if (line.contains("*/")) {
+                        if (line.endsWith("*/")) { //only comment lines blocks
+                            _lastCommentLine = _linePos;
+                            _lastCommentEnd = _sb.length();
+                            if (_firstCommentEnd == -1) {
+                                _firstCommentEnd = _lastCommentEnd;
+                            }
+                        } else {
+                            if (_firstCommentStart == _lastCommentStart) {
+                                _firstCommentStart = -1;
+                            }
+                            _lastCommentStart = -1;
+                            _lastCommentEnd = -1;
+                            _lastCommentLine = -1;
+                        }
+                    }
+                }
+                if (line.trim().startsWith("/*")) {
+                    if (!line.contains("*/")) { //only more lines blocks
+                        _lastCommentStart = _linePos;
+                        _lastCommentLine = -1;
+                        _lastCommentEnd = -1;
+                        if (_firstCommentStart == -1) {
+                            _firstCommentStart = _linePos;
+                        }
+                    }
+                }
+                if (_genCR) {
+                    _sb.append('\r'); //add CR
+                }
+                _sb.append('\n'); //add LF
+            }
+        }
 		return modified;
 	}
 
@@ -424,10 +431,10 @@ public class CanonizeSource {
 						return;
 					}
 				}
-				Writer fw = _charset == null ? new FileWriter(fo)
-					: new OutputStreamWriter(new FileOutputStream(fo),_charset);
-				fw.write(_sb.toString());
-				fw.close();
+                try (Writer fw = _charset == null ? new FileWriter(fo)
+                    : new OutputStreamWriter(new FileOutputStream(fo),_charset)) {
+                    fw.write(_sb.toString());
+                }
 				_sb = null; //let's gc do the job
 				_modifyCount++;
 				if (renamed != null) {
@@ -445,7 +452,7 @@ public class CanonizeSource {
 					}
 					_out.flush();
 				}
-			} catch (Exception ex) {
+			} catch (IOException ex) {
 				ex.printStackTrace(System.out);
 				error("Can't write to output file: " + fo.getAbsolutePath());
 			}
@@ -486,9 +493,9 @@ public class CanonizeSource {
 				if (f.isDirectory()) {
 					dir = new File(f.getCanonicalPath());
 				} else {
-					throw new RuntimeException("Actual path isn't accessable");
+					throw new IOException("Actual path isn't accessable");
 				}
-			} catch (Exception ex) {
+			} catch (IOException ex) {
 				throw new RuntimeException("Actual path isn't accessable");
 			}
 
@@ -541,7 +548,7 @@ public class CanonizeSource {
 				sb.append(line.substring(0, len));
 				sb.append('\n'); //add new line
 			}
-		} catch (Exception ex) {
+		} catch (IOException ex) {
 			throw new Exception("Can't read "+name+" template file:\n"+info);
 		}
 		String result = sb.toString().trim();
@@ -717,9 +724,9 @@ public class CanonizeSource {
 			if (files == null || files.length == 0) {
 				return null;
 			}
-			for (int i = 0; i < files.length; i++) {
-				cs.processFile(files[i], s, false);
-			}
+            for (File file : files) {
+                cs.processFile(file, s, false);
+            }
 		}
 		if (err != null) {
 			err.flush();

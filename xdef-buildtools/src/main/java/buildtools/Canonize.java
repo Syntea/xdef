@@ -1,15 +1,7 @@
 package buildtools;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.Reader;
-import java.io.Writer;
-import java.nio.charset.Charset;
-import java.util.Date;
+import java.io.IOException;
 
 /** Canonize sources.
  * <p>1. Remove all white spaces after last non-blank character
@@ -20,10 +12,6 @@ import java.util.Date;
 public class Canonize {
 	/** Charset of sources. */
 	static final String JAVA_SOURCE_CHARSET = "UTF-8";
-	/** if true the header (copyright) info text is generated from the file. */
-	static boolean _hdr = false;
-	/** if true the _tail (modification) info text is generated from the file.*/
-	static boolean _tail = false;
 
 	/** just prevent user to create an instance of this class. */
 	private Canonize() {}
@@ -76,6 +64,7 @@ public class Canonize {
 			CanonizeSource.canonize(home + "*.java",
 				dirTree,
 				true,
+//				false,
 				4,
 				hdrTemplate, tailTemplate, JAVA_SOURCE_CHARSET, true);
 //			CanonizeSource.canonize(home + "*.xml",
@@ -98,51 +87,8 @@ public class Canonize {
 				false,
 				-1,
 				null, null, JAVA_SOURCE_CHARSET, true);
-		} catch (Exception ex) {
+		} catch (IOException ex) {
 			throw new RuntimeException(ex);
-		}
-	}
-
-	/** Update release date in the file changelog.md.
-	 * @param projectBase base project directory.
-	 * @param date actual date.
-	 */
-	private static void updateDateInChangeLog(final String projectBase,
-		final String date) {
-		try {
-			File f = new File(projectBase, "changelog.md");
-			Reader fr = new InputStreamReader(new FileInputStream(f),
-				Charset.forName("UTF-8"));
-			BufferedReader bufrdr = new BufferedReader(fr);
-			StringBuilder sb = new StringBuilder();
-			String line;
-			boolean wasVer = false;
-			boolean changed = false;
-			while ((line = bufrdr.readLine()) != null) {
-				int ndx;
-				if (!wasVer && line.indexOf('$') < 0
-					&& line.startsWith("# Version ")
-					&& (ndx = line.indexOf(" release-date")) > 0) {
-					String s =
-						line.substring(0, ndx) + " release-date " + date;
-					changed = !s.equals(line);
-					line = s;
-					wasVer = true;
-				}
-				sb.append(line).append('\n');
-			}
-			bufrdr.close();
-			if (changed) {
-				Writer wr = new OutputStreamWriter(new FileOutputStream(f),
-					Charset.forName("UTF-8"));
-				wr.write(sb.toString());
-				wr.close();
-				System.out.println("Updated date in changelog.md");
-			} else {
-				System.out.println("Date in changelog.md not changed");
-			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
 		}
 	}
 
@@ -155,15 +101,13 @@ public class Canonize {
 			File baseDir = args == null || args.length == 0
 				? new File("../xdef") : new File(args[0]);
 			if (!baseDir.exists() || !baseDir.isDirectory()) {
-				throw new RuntimeException("Base is not directory.");
+				throw new IOException("Base is not directory.");
 			}
 			projectBase = baseDir.getCanonicalPath().replace('\\', '/');
-		} catch (Exception ex) {
+		} catch (IOException ex) {
 			throw new RuntimeException("Can't find project base directory");
 		}
 		ResetPreprocessorSwitches.main(projectBase);
-		_hdr = false;
-		_tail = false;
 		int i = projectBase.lastIndexOf('/');
 		if (i < 0) {
 			throw new RuntimeException("Unknown build structure");
