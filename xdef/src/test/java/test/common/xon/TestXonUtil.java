@@ -43,7 +43,7 @@ public class TestXonUtil extends STester {
 			if (!XonUtils.xonEqual(o1, o2)) {
 				return "JSON toString -error- " + f.getName();
 			}
-		} catch (Exception ex) {
+		} catch (RuntimeException ex) {
 			return "JSON -error- " + f.getName() + "\n" + ex;
 		}
 		try {
@@ -67,7 +67,6 @@ public class TestXonUtil extends STester {
 			el = XonUtils.xonToXmlW(o1);
 			o2 = XonUtils.xmlToXon(el);
 			Element e2 = XonUtils.xonToXmlW(o2);
-			Object o2x = XonUtils.xmlToXon(e2);
 			if (KXmlUtils.compareElements(el, e2, true).errors()) {
 				return "XML conversion (W3C)-error- " + f.getName() + ": "
 					+ KXmlUtils.compareElements(el, e2, true)
@@ -112,8 +111,8 @@ public class TestXonUtil extends STester {
 	}
 
 	private boolean isExcluded(final String[] names, final String name) {
-		for (int i = 0; i < names.length; i++) {
-			if (names[i].equals(name)) {
+		for (String name1 : names) {
+			if (name1.equals(name)) {
 				return true;
 			}
 		}
@@ -121,8 +120,6 @@ public class TestXonUtil extends STester {
 	}
 
 	private static String testX(String s) {return testX1(XonUtils.parseXON(s));}
-
-	private static String testX(File f) {return testX1(XonUtils.parseXON(f));}
 
 	private static String testX1(Object o) {
 		Element el = XonUtils.xonToXml(o);
@@ -134,10 +131,6 @@ public class TestXonUtil extends STester {
 
 	private static String testXD(String s) {
 		return testXD1(XonUtils.parseXON(s));
-	}
-
-	private static String testXD(File f) {
-		return testXD1(XonUtils.parseXON(f));
 	}
 
 	private static String testXD1(Object o) {
@@ -162,7 +155,7 @@ public class TestXonUtil extends STester {
 			try {
 				XonUtils.parseXON(f);
 				fail(f.getName());
-			} catch (Exception ex) {}
+			} catch (RuntimeException ex) {}
 		}
 		File directory = new File(getDataDir() + "../../../xdef/data/json/");
 		for (File x: directory.listFiles()) {
@@ -175,12 +168,12 @@ public class TestXonUtil extends STester {
 			String name = x.getName();
 			if (x.isFile() && name.endsWith("xdef")) {
 				String s = testXConvert(x);
-				if (s.indexOf("-error-") >= 0) {
+				if (s.contains("-error-")) {
 					fail("XX XML " + x + " *\n" + s);
 				}
 			}
 		}
-		String[] excluded = new String[] {
+		String[] excluded = new String[] {// files to be excluded from tests
 			"Test000_01.xml",		// DTD error
 			"Test000_08.xml",		// xml error
 			"TestInclude_1_3.xml",	// xml include error
@@ -190,8 +183,7 @@ public class TestXonUtil extends STester {
 			"TestInclude_4_4.xml",	// xml include error
 			"TestInclude_6.xdef",	// xml include error
 			"TestInclude_7.xdef",	// xml include error
-/*#if DEBUG*#/
-/*#else*/
+/*#if !DEBUG*/
 			// exclude also files with not supported code ISO8859-5 and KOI8-R
 			"Test000_rus_2.xdef",	// xml error code ISO8859-5 error
 			"Test000_rus_2.xml",	// xml error code ISO8859-5 error
@@ -205,7 +197,7 @@ public class TestXonUtil extends STester {
 			if (x.isFile() && (name.endsWith("xdef") || name.endsWith("xml"))) {
 				if (!isExcluded(excluded, name)) {
 					String s = testXConvert(x);
-					if (s.indexOf("-error-:  ") >= 0) {
+					if (s.contains("-error-:  ")) {
 						fail("XX XML " + x + " *\n" + s);
 					}
 				}

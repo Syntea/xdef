@@ -419,10 +419,9 @@ public final class XonReader extends StringParser implements XonParsers {
 					switch(isOneOfChars("fDd")) {
 						case 'f':
 							return returnValue(spos, Float.valueOf(s));
-						case 'd':
-							return returnValue(spos, Double.valueOf(s));
 						case 'D':
 							return returnValue(spos, new BigDecimal(s));
+						case 'd':
 						default:
 							return returnValue(spos, Double.valueOf(s));
 					}
@@ -445,13 +444,13 @@ public final class XonReader extends StringParser implements XonParsers {
 						case 'd':
 							return returnValue(spos, Double.valueOf(s));
 						default:
-						try {
-							return returnValue(spos, Long.valueOf(s));
-						} catch (NumberFormatException ex) {
 							try {
-								return returnValue(spos, new BigInteger(s));
-							} catch (Exception exx) {}
-						}
+								return returnValue(spos, Long.valueOf(s));
+							} catch (NumberFormatException ex) {
+								try {
+									return returnValue(spos, new BigInteger(s));
+								} catch (Exception exx) {}
+							}
 					}
 				}
 			} else {
