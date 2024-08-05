@@ -251,6 +251,9 @@ public final class GenXDefXON {
 		} else if (x instanceof Boolean) {
 			return "jboolean()";
 		} else if (x instanceof Number) {
+			if (x instanceof Long) {
+				return "long()";
+			}
 			return "jnumber()";
 		} else if (x instanceof Character) {
 			return "char()";
