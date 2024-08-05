@@ -1,5 +1,6 @@
 package org.xdef.impl;
 
+import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.URI;
 import java.util.ArrayList;
@@ -251,7 +252,7 @@ public final class GenXDefXON {
 		} else if (x instanceof Boolean) {
 			return "jboolean()";
 		} else if (x instanceof Number) {
-			if (x instanceof Long) {
+			if (x instanceof Long || x instanceof BigInteger) {
 				return "integer()";
 			}
 			return "jnumber()";
