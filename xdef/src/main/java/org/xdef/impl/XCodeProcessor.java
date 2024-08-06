@@ -782,7 +782,6 @@ public final class XCodeProcessor {
 		}
 	}
 
-
 	/** Check if the value from argument is assigned to a global variable.
 	 * @param xv the value to be checked.
 	 * @return true if variable is assigned to a global variable.
@@ -837,7 +836,6 @@ public final class XCodeProcessor {
 	 * @return true if no unresolved references were found.
 	 */
 	final boolean endXDProcessing() {
-		// close debugger
 		XDDebug debuger = getDebugger();
 		if (_debug && debuger != null) { // close debugger
 			debuger.closeDebugger();
@@ -954,12 +952,6 @@ public final class XCodeProcessor {
 	 */
 	final XDXmlOutStream getXmlStreamWriter() {return _outWriter;}
 
-	/** Clear temporary reporter. */
-	final void clearReports() {_reporter.clear();}
-
-	/** Remove given report from temporary reporter. */
-	final void removeReport(final Report rep) {_reporter.removeReport(rep);}
-
 	/** Get the default uniqueSet (used for ID, IDREF etc).
 	 * @return the default uniqueSet object.
 	 */
@@ -1039,8 +1031,7 @@ public final class XCodeProcessor {
 		int sp = -1; //stack index (pointer)
 		int step = XDDebug.NOSTEP;
 		XDValue item; //actual instruction
-		while (true) {
-			int code;
+		for (;;)
 			try {
 			if (_debug && (_debugger.hasStopAddr(pc) || step!=XDDebug.NOSTEP)) {
 				step = _debugger.debug(chkNode, _code, pc, sp, _stack,
@@ -1049,6 +1040,7 @@ public final class XCodeProcessor {
 					throw new SError(XDEF.XDEF906); //X-definition canceled
 				}
 			}
+			int code;
 			switch (code = (item = _code[pc++]).getCode()) {
 				case NO_OP: continue; //No operation
 ////////////////////////////////////////////////////////////////////////////////
@@ -1397,7 +1389,7 @@ public final class XCodeProcessor {
 					continue;
 				case RETV_OP:
 					if (_callList == null) {
-						XDValue result = _stack[sp];
+						XDValue result = sp < 0 ? null : _stack[sp];
 						Arrays.fill(_stack, null); // clear stack
 						return result;
 					}
@@ -1656,16 +1648,8 @@ public final class XCodeProcessor {
 									 new DefString(KXmlUtils.getTextValue(e));
 								continue;
 							default: {
-								String name= chkNode.getXXElement().getXXName();
-								String uri= chkNode.getXXElement().getXXNSURI();
-								NodeList nl;
-								if (uri == null || uri.length() == 0) {
-									int ndx = name.indexOf(':');
-									nl = KXmlUtils.getChildElementsNS(e, uri,
-										ndx < 0 ? name : name.substring(ndx+1));
-								} else {
-									nl= KXmlUtils.getChildElementsNS(e,"",name);
-								}
+								NodeList nl = KXmlUtils.getChildElementsNS(e,
+									null, chkNode.getXXElement().getXXName());
 								DefContainer c = new DefContainer(nl);
 								if (nl.getLength() == 0) {
 									nl = KXmlUtils.getChildElements(e);
@@ -1816,8 +1800,8 @@ public final class XCodeProcessor {
 					Element el;
 					if (item.getParam() == 1) {
 						Object obj = chkNode.getCreateContext();
-						el = obj != null && (obj instanceof Element) ?
-							(Element) obj : chkNode.getElemValue();
+						el = obj != null && (obj instanceof Element)
+							? (Element) obj : chkNode.getElemValue();
 					} else {
 						el = _stack[sp--].getElement();
 					}
@@ -1827,9 +1811,9 @@ public final class XCodeProcessor {
 						String s;
 						int ndx = (s = item.stringValue()).lastIndexOf('}');
 						NodeList nl = ndx < 0
-							? KXmlUtils.getChildElementsNS(el,"",s)
-							: KXmlUtils.getChildElementsNS(el,
-								s.substring(1, ndx), s.substring(ndx + 1));
+							? KXmlUtils.getChildElementsNS(el, "", s)
+							: KXmlUtils.getChildElementsNS(
+								el, s.substring(1, ndx), s.substring(ndx + 1));
 						_stack[++sp] = new DefContainer(nl);
 					}
 					continue;
@@ -3681,7 +3665,7 @@ public final class XCodeProcessor {
 				}
 				throwError(pc, sp, ex, chkNode);
 			}
-		} //end of while statement
+		//end of for(;;)
 	}
 
 	private static Report updateReport(final Report rep, final ChkNode chkNode){

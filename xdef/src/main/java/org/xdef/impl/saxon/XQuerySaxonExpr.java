@@ -1,11 +1,6 @@
 package org.xdef.impl.saxon;
 
-import org.xdef.msg.XML;
-import org.xdef.sys.SDatetime;
-import org.xdef.sys.SDuration;
-import org.xdef.sys.SRuntimeException;
 import java.util.TimeZone;
-import org.w3c.dom.Node;
 import javax.xml.namespace.QName;
 import javax.xml.xquery.XQConnection;
 import javax.xml.xquery.XQConstants;
@@ -14,6 +9,12 @@ import javax.xml.xquery.XQException;
 import javax.xml.xquery.XQItemType;
 import javax.xml.xquery.XQPreparedExpression;
 import org.w3c.dom.DOMException;
+import org.w3c.dom.Node;
+import org.xdef.msg.XML;
+import org.xdef.sys.SDatetime;
+import org.xdef.sys.SDuration;
+import org.xdef.sys.SRuntimeException;
+import org.xdef.xml.KXmlUtils;
 import org.xdef.xml.KXquery;
 
 /** XQuery expression container.
@@ -195,13 +196,10 @@ public class XQuerySaxonExpr implements KXquery {
 					_conn.createDocumentType()));
 				return _value.executeQuery();
 			} else if (node.getNodeType() == Node.ELEMENT_NODE) {
-				QName qn;
-				String nsUri = node.getNamespaceURI();
-				qn = nsUri == null ? new QName(node.getNodeName()) :
-					new QName(nsUri, node.getLocalName());
 				_value.bindItem(XQConstants.CONTEXT_ITEM,
-					_conn.createItemFromNode(node, _conn.createElementType(qn,
-					XQItemType.XQBASETYPE_ANYTYPE)));
+					_conn.createItemFromNode(node,
+						_conn.createElementType(KXmlUtils.getQName(node),
+							XQItemType.XQBASETYPE_ANYTYPE)));
 				return _value.executeQuery();
 			} else if (node.getNodeType() == Node.TEXT_NODE) {
 				_value.bindItem(XQConstants.CONTEXT_ITEM,
@@ -218,12 +216,10 @@ public class XQuerySaxonExpr implements KXquery {
 					_conn.createItemFromNode(node, _conn.createCommentType()));
 				return _value.executeQuery();
 			} else if (node.getNodeType() == Node.ATTRIBUTE_NODE) {
-				String nsUri = node.getNamespaceURI();
-				QName qn = nsUri == null ? new QName(node.getNodeName()) :
-					new QName(nsUri, node.getLocalName());
 				_value.bindItem(XQConstants.CONTEXT_ITEM,
-					_conn.createItemFromNode(node, _conn.createAttributeType(qn,
-					XQItemType.XQBASETYPE_ANYATOMICTYPE)));
+					_conn.createItemFromNode(node,
+						_conn.createAttributeType(KXmlUtils.getQName(node),
+							XQItemType.XQBASETYPE_ANYATOMICTYPE)));
 				return _value.executeQuery();
 			} else {
 				//XQuery expression error&{0}{: }

@@ -2685,6 +2685,22 @@ final public class TestCompose extends XDTester {
 			el = create(xp, "", "A", reporter, null);
 			assertNoErrorwarnings(reporter);
 			assertEq(el,"<A><B/><C/><D/><E/><F/><G/></A>");
+			// test recursive reference
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
+"   <A><B xd:script='ref B' /></A>\n" +
+"   <B b='string()'>\n" +
+"      <B xd:script='?; ref B; create from(\"B\")'/>\n" +
+"   </B>\n" +
+"</xd:def>";
+			xp = compile(xdef);
+			xml = "<A><B b=\"x\"><B b=\"y\"/></B></A>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrorwarnings(reporter);
+			xd = xp.createXDDocument();
+			xd.setXDContext(xml);
+			assertEq(xml, create(xd, "A", reporter));
+			assertNoErrorwarnings(reporter);
 		} catch (SRuntimeException ex) {fail(ex);}
 		try {
 			xdef = //test of exception in external method.

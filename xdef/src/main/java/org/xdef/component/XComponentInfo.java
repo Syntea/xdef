@@ -19,8 +19,8 @@ public class XComponentInfo {
 	public boolean equals(final Object o) {
 		if (o instanceof XComponentInfo) {
 			XComponentInfo x = (XComponentInfo) o;
-			return (_ns == null) ?  x._ns == null && _name.equals(x._name)
-				: _ns.equals(x._ns) && _name.equals(x._name);
+			return _name.equals(x._name)
+				&& _ns == null ? x._ns == null : _ns.equals(x._ns);
 		}
 		return false;
 	}

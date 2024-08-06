@@ -373,11 +373,10 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 			_iterator = (XDResultSet) data;
 			return;
 		}
-		if (e != null) {
-			setXDContext(e);
-			return;
+		if (e == null) {
+			throw new SRuntimeException(XDEF.XDEF318); //Incorrect XON/JSON data
 		}
-		throw new SRuntimeException(XDEF.XDEF318); //Incorrect XON/JSON data
+		setXDContext(e);
 	}
 
 	@Override

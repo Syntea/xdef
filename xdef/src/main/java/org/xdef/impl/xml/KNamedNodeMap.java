@@ -4,6 +4,7 @@ import javax.xml.namespace.QName;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
+import org.xdef.xml.KXmlUtils;
 
 /** Simple implementation of org.w3c.dom.NodeList interface.
  * @author Vaclav Trojan
@@ -56,10 +57,7 @@ public class KNamedNodeMap extends KNodeList implements NamedNodeMap {
 		throws DOMException {
 		QName qname = new QName(ns, localName);
 		for (Node n: this) {
-			String u = n.getNamespaceURI();
-			QName qn = u == null ?
-				new QName(n.getNodeName()) : new QName(u, n.getLocalName());
-			if (qname.equals(qn)) {
+			if (qname.equals(KXmlUtils.getQName(n))) {
 				return n;
 			}
 		}

@@ -669,19 +669,17 @@ public class Xd2Xsd {
 		}
 		Element el = genSchemaElem(parent, "element");
 		el.setAttribute("name", xel.getLocalName());
-		if (!SCHEMA_QNAME.equals(new QName(parent.getNamespaceURI(),
-			parent.getLocalName()))) { // skip if root element model
-			setOccurrence(el, xel);
+		if (!SCHEMA_QNAME.equals(KXmlUtils.getQName(parent))) {
+			setOccurrence(el, xel); // skip if root element model
 		}
 		XMData[] attrs = xel.getAttrs();
 		XMNode[] children = xel.getChildNodeModels();
 		if (children.length == 1 && children[0].getKind() == XMNode.XMTEXT) {
-			XMData xData = (XMData) children[0];
-			GenParser parserInfo =
-				GenParser.genParser(xData, _genXdateOutFormat);
+			XMData xd = (XMData) children[0];
+			GenParser parserInfo = GenParser.genParser(xd, _genXdateOutFormat);
 			Element simpleType;
 			if (attrs.length == 0) {
-				Element extension = genOptionalTextType(el, xData, parserInfo);
+				Element extension = genOptionalTextType(el, xd, parserInfo);
 				if (extension != null) {
 					return el; // optional text item generated (no attributes)
 				}
@@ -714,7 +712,7 @@ public class Xd2Xsd {
 					}
 				}
 			} else { // attributes are there
-				Element extension = genOptionalTextType(el, xData, parserInfo);
+				Element extension = genOptionalTextType(el, xd, parserInfo);
 				if (extension == null) { // text item is NOT optional!
 					Element complexType = genSchemaElem(el, "complexType");
 					String typeName = genDeclaredName(parserInfo);
@@ -771,11 +769,11 @@ public class Xd2Xsd {
 				for (int i = 1; i < children.length; i++) {
 					XMNode y = children[i];
 					if (y.getKind() == XMNode.XMELEMENT) {
-							XMOccurrence occ = y.getOccurence();
-							if (occ.minOccurs() > 1 || occ.maxOccurs() > 1) {
-								allPossible = false;
-								break;
-							}
+						XMOccurrence occ = y.getOccurence();
+						if (occ.minOccurs() > 1 || occ.maxOccurs() > 1) {
+							allPossible = false;
+							break;
+						}
 					} else {
 						break;
 					}

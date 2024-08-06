@@ -2,14 +2,11 @@ package org.xdef.xml;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import org.xdef.impl.xml.KNodeList;
-import org.xdef.impl.xml.KNamespace;
-import org.xdef.impl.xml.KNamedNodeMap;
-import org.xdef.msg.XML;
-import org.xdef.sys.SRuntimeException;
-import org.xdef.sys.StringParser;
 import javax.xml.XMLConstants;
+import javax.xml.namespace.NamespaceContext;
+import javax.xml.namespace.QName;
 import org.w3c.dom.Attr;
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentType;
 import org.w3c.dom.Element;
@@ -19,8 +16,13 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.ProcessingInstruction;
 import org.w3c.dom.Text;
-import javax.xml.namespace.NamespaceContext;
-import org.w3c.dom.DOMException;
+import org.xdef.impl.xml.KNamedNodeMap;
+import org.xdef.impl.xml.KNamespace;
+import org.xdef.impl.xml.KNodeList;
+import org.xdef.msg.XML;
+import org.xdef.sys.SRuntimeException;
+import org.xdef.sys.StringParser;
+
 
 /** Collection of static methods extending methods from org.w3c.dom interfaces.
  * @author Vaclav Trojan
@@ -35,6 +37,16 @@ public class KDOMUtils {
 
 	/** Don't allow user to instantiate this class. */
 	protected KDOMUtils() {}
+
+	/** Get QName of node.
+	 * @param node node from which QName is created.
+	 * @return created QName of node.
+	 */
+	public static final QName getQName(final Node node) {
+		String uri = node.getNamespaceURI();
+		return uri == null
+			? new QName(node.getNodeName()):new QName(uri, node.getLocalName());
+	}
 
 	/** Get entities associated with a node.
 	 * @param node Object from which entities are returned.

@@ -23,15 +23,16 @@ import org.xdef.sys.SPosition;
 import org.xdef.sys.SReporter;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUnsupportedOperationException;
+import org.xdef.xml.KXmlUtils;
 import static org.xdef.xon.XonNames.X_ARRAY;
 import static org.xdef.xon.XonNames.X_KEYATTR;
 import static org.xdef.xon.XonNames.X_MAP;
+import static org.xdef.xon.XonNames.X_VALATTR;
+import static org.xdef.xon.XonNames.X_VALUE;
 import org.xdef.xon.XonParser;
 import org.xdef.xon.XonParsers;
 import org.xdef.xon.XonReader;
 import org.xdef.xon.XonTools;
-import static org.xdef.xon.XonNames.X_VALATTR;
-import static org.xdef.xon.XonNames.X_VALUE;
 
 /** Parse  XON/JSON object from XON/JSON source and generate XML (W3C format).
  * Reads source with XON/JSON and generates W3C XML methods invoked in
@@ -135,8 +136,7 @@ public final class XonSourceParser implements XonParser, XParser {
 			_el = e;
 			_el.setAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI,
 				"xmlns", XDConstants.XON_NS_URI_W);
-			QName qName = e.getNamespaceURI()==null ? new QName(e.getTagName())
-				: new QName(e.getNamespaceURI(), e.getLocalName());
+			QName qName = KXmlUtils.getQName(e);
 			_chkDoc._xElement = _chkDoc.findXElement(qName);
 			if (_chkDoc._xElement == null) {
 				//Text with &{0} model&{1}{ of "}{" } is missing in X-definition

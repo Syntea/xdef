@@ -1,7 +1,9 @@
 `# Version ${version}, release-date ${release.date}
 
-# Version 42.2.2, release-date 2024-08-05
-* Fixed bug in generator of X-definition from JSON data.
+# Version 42.2.2, release-date 2024-08-06
+* Fixed bug in generating X-definition from JSON data.
+* Fixed a bug in construction mode when there is a recursive reference
+  in the model.
 
 # Version 42.2.1, release-date 2024-07-08
 * Fixed error in compilation of type declaration with expression containing

@@ -36,9 +36,11 @@ import static org.xdef.XDValueID.XX_DOCUMENT;
 import static org.xdef.XDValueID.X_PARSEITEM;
 import static org.xdef.XDValueID.X_UNIQUESET_M;
 import org.xdef.XDValueType;
+import static org.xdef.XDValueType.XXDOCUMENT;
 import org.xdef.XDXmlOutStream;
 import org.xdef.component.XComponent;
 import org.xdef.component.XComponentUtil;
+import static org.xdef.impl.XConstants.JSON_ANYOBJECT;
 import org.xdef.impl.code.CodeUniqueset;
 import org.xdef.impl.code.DefOutStream;
 import org.xdef.impl.code.DefParseResult;
@@ -47,6 +49,8 @@ import org.xdef.impl.code.ParseItem;
 import org.xdef.impl.xml.KNamespace;
 import org.xdef.model.XMElement;
 import org.xdef.model.XMNode;
+import static org.xdef.model.XMNode.XMCHOICE;
+import static org.xdef.model.XMNode.XMELEMENT;
 import org.xdef.msg.SYS;
 import org.xdef.msg.XDEF;
 import org.xdef.proc.XDLexicon;
@@ -67,14 +71,10 @@ import org.xdef.sys.STester;
 import org.xdef.sys.SThrowable;
 import org.xdef.sys.SUtils;
 import org.xdef.xml.KXmlUtils;
-import org.xdef.xon.XonUtils;
-import static org.xdef.XDValueType.XXDOCUMENT;
-import static org.xdef.impl.XConstants.JSON_ANYOBJECT;
-import static org.xdef.model.XMNode.XMCHOICE;
-import static org.xdef.model.XMNode.XMELEMENT;
 import static org.xdef.xon.XonNames.Q_ARRAY;
 import static org.xdef.xon.XonNames.Q_MAP;
 import static org.xdef.xon.XonNames.Q_VALUE;
+import org.xdef.xon.XonUtils;
 
 /** Provides root check object for generation of check tree and processing
  * of the X-definition.
@@ -1468,8 +1468,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 			//Unsupported type of argument &{0}: &{1}
 			throw new SRuntimeException(SYS.SYS037,"source", source.getClass());
 		}
-		QName qName = e.getNamespaceURI() == null ? new QName(e.getTagName())
-			: new QName(e.getNamespaceURI(), e.getLocalName());
+		QName qName = KXmlUtils.getQName(e);
 		if ((_xElement = findXElement(qName)) != null) {
 			xparse(e, reporter);
 			return (Map<String, Object>) (_xon=_chkRoot.getXon());//prepare XON;
@@ -1700,8 +1699,7 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		} else {
 			throw new SRuntimeException(XDEF.XDEF318); //Incorrect XON/JSON data
 		}
-		QName qName = e.getNamespaceURI() == null ? new QName(e.getTagName())
-			: new QName(e.getNamespaceURI(), e.getLocalName());
+		QName qName = KXmlUtils.getQName(e);
 		if ((_xElement = findXElement(qName)) != null) {
 			xparse(e, reporter);
 			return (_xon = _chkRoot.getXon());//prepare XON

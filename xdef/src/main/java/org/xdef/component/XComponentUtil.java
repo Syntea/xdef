@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import javax.xml.namespace.QName;
 import org.w3c.dom.Element;
 import static org.xdef.XDConstants.XON_NS_PREFIX;
 import static org.xdef.XDConstants.XON_NS_URI_W;
@@ -97,7 +96,7 @@ public class XComponentUtil {
 	public static final Element toXml(final XComponent xc, final XMElement xm) {
 		XDDocument xd = xm.createXDDocument();
 		xd.setXDContext(xc.toXml());
-		return xd.xcreate(new QName(xm.getNSUri(), xm.getName()), null);
+		return xd.xcreate(xm.getQName(), null);
 	}
 
 	/** Create the new XML element from XComponent according to model.
@@ -139,8 +138,7 @@ public class XComponentUtil {
 		final XMElement xm) {
 		XDDocument xd = xm.createXDDocument();
 		xd.setXDContext(xc.toXml());
-		Element el = xd.xcreate(new QName(xm.getNSUri(), xm.getName()), null);
-		return xd.xparseXComponent(el, null,  null);
+		return xd.xparseXComponent(xd.xcreate(xm.getQName(), null), null, null);
 	}
 
 	/** Create XComponent from XComponent according to model.

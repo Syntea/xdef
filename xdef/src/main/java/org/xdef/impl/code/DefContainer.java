@@ -1,19 +1,11 @@
 package org.xdef.impl.code;
 
-import org.xdef.msg.SYS;
-import org.xdef.sys.SIllegalArgumentException;
-import org.xdef.sys.StringParser;
-import org.xdef.xml.KXmlUtils;
-import org.xdef.xml.KXpathExpr;
-import org.xdef.XDNamedValue;
-import org.xdef.XDValue;
-import org.xdef.XDValueAbstract;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.Properties;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 import org.w3c.dom.Attr;
 import org.w3c.dom.CharacterData;
 import org.w3c.dom.Document;
@@ -21,9 +13,29 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xdef.XDContainer;
+import org.xdef.XDNamedValue;
+import org.xdef.XDValue;
+import org.xdef.XDValueAbstract;
 import org.xdef.XDValueID;
+import static org.xdef.XDValueID.XD_ATTR;
+import static org.xdef.XDValueID.XD_BOOLEAN;
+import static org.xdef.XDValueID.XD_CONTAINER;
+import static org.xdef.XDValueID.XD_DATETIME;
+import static org.xdef.XDValueID.XD_DECIMAL;
+import static org.xdef.XDValueID.XD_DOUBLE;
+import static org.xdef.XDValueID.XD_ELEMENT;
+import static org.xdef.XDValueID.XD_LONG;
+import static org.xdef.XDValueID.XD_NAMEDVALUE;
+import static org.xdef.XDValueID.XD_REPORT;
+import static org.xdef.XDValueID.XD_STRING;
+import static org.xdef.XDValueID.XD_TEXT;
 import org.xdef.XDValueType;
 import static org.xdef.XDValueType.CONTAINER;
+import org.xdef.msg.SYS;
+import org.xdef.sys.SIllegalArgumentException;
+import org.xdef.sys.StringParser;
+import org.xdef.xml.KXmlUtils;
+import org.xdef.xml.KXpathExpr;
 
 /** The class DefContainer implements item with org.w3c.dom.NodeList value.
  * @author Vaclav Trojan
@@ -416,8 +428,7 @@ public final class DefContainer extends XDValueAbstract
 					ar.add(new DefString(node.getNodeValue()));
 			}
 		}
-		_array = new  XDValue[ar.size()];
-		ar.toArray(_array);
+		ar.toArray(_array = new  XDValue[ar.size()]);
 	}
 
 	private void setArrayListValue(final Object obj) {
@@ -443,8 +454,7 @@ public final class DefContainer extends XDValueAbstract
 				ar.add(new DefDouble(((Double) item)));
 			}
 		}
-		_array = new  XDValue[ar.size()];
-		ar.toArray(_array);
+		ar.toArray(_array = new  XDValue[ar.size()]);
 	}
 
 	/** Create element.

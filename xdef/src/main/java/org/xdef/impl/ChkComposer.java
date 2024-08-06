@@ -7,6 +7,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xdef.XDBytes;
 import static org.xdef.XDConstants.XON_NS_URI_W;
 import static org.xdef.XDConstants.XON_NS_URI_XD;
@@ -47,6 +48,7 @@ import org.xdef.msg.XDEF;
 import org.xdef.proc.XDLexicon;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.Report;
+import static org.xdef.sys.Report.error;
 import org.xdef.sys.ReportWriter;
 import org.xdef.sys.SError;
 import org.xdef.sys.SReporter;
@@ -810,7 +812,17 @@ final class ChkComposer extends SReporter {
 				chkEl._xElement.getNSUri(), qname, null).getDocumentElement());
 			return result;
 		}
-		//default contex (no script specified)
+		// default contex (no script specified)
+		Element el = chkEl._sourceElem != null
+			? chkEl._sourceElem : chkEl.getElemValue();
+		if (el != null
+			&& chkEl._xElement.getQName().equals(KXmlUtils.getQName(el))) {
+			NodeList nl = KXmlUtils.getChildElementsNS(el,
+				chkEl._xElement.getNSUri(), chkEl._xElement.getName());
+			if (nl.getLength() > 0) {
+				return new DefContainer(nl);
+			}
+		}
 		DefContainer result = new DefContainer();
 		if ("$any".equals(chkEl._xElement.getName())) { //any element
 			for (Node node = sourceElem.getFirstChild();
@@ -822,7 +834,7 @@ final class ChkComposer extends SReporter {
 		} else {//create result with child nodes found by name; nasty trick!!!
 			getChildElementsByName(result, chkEl, sourceElem, lastElement);
 		}
-		Element el = result.getXDElement(0);
+		el = result.getXDElement(0);
 		//if somethig found, let's set first element as source context,
 		//otherwise set source from the argument.
 		chkEl._sourceElem = el != null ? el : sourceElem;
@@ -1188,8 +1200,7 @@ final class ChkComposer extends SReporter {
 						prepareChkElement(chkEl, null, childDef, i);
 					//if selector is mixed set null to lastElem
 					Element lastEl = chkEl._selector != null
-							&& chkEl._selector._kind == XMMIXED
-						? null : lastElem;
+						&& chkEl._selector._kind == XMMIXED ? null : lastElem;
 					XDValue result = execComposeElement(
 						childChkEl, sourceEl, lastEl);
 					if (childChkEl._xElement.getXonMode() != 0
@@ -1316,7 +1327,6 @@ final class ChkComposer extends SReporter {
 						if (childChkEl._sourceElem == null) {
 							childChkEl._sourceElem = childChkEl.getElemValue();
 							lastElem = childChkEl._sourceElem;
-
 						}
 						switch (result.getItemId()) {
 							case XD_STRING:
@@ -1354,8 +1364,9 @@ final class ChkComposer extends SReporter {
 									&& result.getItemId() == XD_CONTAINER
 									&& childChkEl.getOccurrence() > 0) {
 									// set last processeed item to lastElem
-									lastElem = ((DefContainer)result).getXDElement(
-										childChkEl.getOccurrence() - 1);
+									lastElem =
+										((DefContainer)result).getXDElement(
+											childChkEl.getOccurrence() - 1);
 								}
 						}
 					}
