@@ -7,7 +7,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xdef.XDBytes;
 import static org.xdef.XDConstants.XON_NS_URI_W;
 import static org.xdef.XDConstants.XON_NS_URI_XD;
@@ -48,7 +47,6 @@ import org.xdef.msg.XDEF;
 import org.xdef.proc.XDLexicon;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.Report;
-import static org.xdef.sys.Report.error;
 import org.xdef.sys.ReportWriter;
 import org.xdef.sys.SError;
 import org.xdef.sys.SReporter;
@@ -747,14 +745,15 @@ final class ChkComposer extends SReporter {
 		final Element sourceElem,
 		final Element lastElement) {
 		chkEl.debugXPos(XDDebug.CREATE);
+		chkEl.setElemValue(sourceElem);
+		Element el;
 		int addr;
 		if ((addr = chkEl._xElement._compose) >= 0) {
 			chkEl.setElemValue(sourceElem);
-			chkEl.debugXPos(XDDebug.CREATE);
 			XDValue result = chkEl.exec(addr, (byte) 'E');
 			chkEl.copyTemporaryReports();
+			el = null;
 			if (result != null && !result.isNull()) {
-				Element el = null;
 				switch (result.getItemId()) {
 					case XD_RESULTSET: {
 						XDResultSet it = (XDResultSet) result;
@@ -775,8 +774,8 @@ final class ChkComposer extends SReporter {
 					case XD_NAMEDVALUE:
 						result = new DefContainer(result);
 					case XD_CONTAINER: {
-						DefContainer dc = (DefContainer) result;
-						if (dc.getXDItemsNumber() > 0) {
+						if (!((DefContainer) result).isEmpty()) {
+							DefContainer dc = (DefContainer) result;
 							el = dc.getXDElement(0);
 							if (el == null) {
 								result = new DefElement(el = dc.toElement(
@@ -813,16 +812,6 @@ final class ChkComposer extends SReporter {
 			return result;
 		}
 		// default contex (no script specified)
-		Element el = chkEl._sourceElem != null
-			? chkEl._sourceElem : chkEl.getElemValue();
-		if (el != null
-			&& chkEl._xElement.getQName().equals(KXmlUtils.getQName(el))) {
-			NodeList nl = KXmlUtils.getChildElementsNS(el,
-				chkEl._xElement.getNSUri(), chkEl._xElement.getName());
-			if (nl.getLength() > 0) {
-				return new DefContainer(nl);
-			}
-		}
 		DefContainer result = new DefContainer();
 		if ("$any".equals(chkEl._xElement.getName())) { //any element
 			for (Node node = sourceElem.getFirstChild();
@@ -1333,7 +1322,8 @@ final class ChkComposer extends SReporter {
 								//we create a dummy element with the text child
 								String text = result.stringValue();
 								if (text != null && !text.isEmpty()) {
-									Element el = stringToElement(childChkEl, text);
+									Element el =
+										stringToElement(childChkEl, text);
 									childChkEl.setElemValue(el);
 									composeElement(childChkEl, el);
 								} else {//empty string is no value!
@@ -1342,10 +1332,12 @@ final class ChkComposer extends SReporter {
 							case XD_BOOLEAN:
 								for (int j = 0;;) {
 									if (j < childChkEl._xElement.maxOccurs()
-										&& result != null && result.booleanValue()){
-										composeElement(childChkEl ,null);
-										if (childChkEl._xElement == null ||
-											++j>=childChkEl._xElement.maxOccurs()){
+										&& result != null
+										&& result.booleanValue()){
+										composeElement(childChkEl, null);
+										if (childChkEl._xElement == null
+											|| ++j >=
+											childChkEl._xElement.maxOccurs()){
 											break; // do not continue
 										}
 										childChkEl = prepareChkElement(chkEl,

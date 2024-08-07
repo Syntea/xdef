@@ -2696,11 +2696,67 @@ final public class TestCompose extends XDTester {
 			xp = compile(xdef);
 			xml = "<A><B b=\"x\"><B b=\"y\"/></B></A>";
 			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrorwarnings(reporter);
+			assertNoErrorwarningsAndClear(reporter);
 			xd = xp.createXDDocument();
 			xd.setXDContext(xml);
 			assertEq(xml, create(xd, "A", reporter));
-			assertNoErrorwarnings(reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root='Vehicle'>\n"+
+"   <Vehicle>\n" +
+"     <Part xd:script=\"1..; ref Part\" />\n" +
+"   </Vehicle>\n" +
+"   <Part name=\"string()\" xd:script=\"create from('Part')\">\n" +
+"      <Part xd:script=\"0..; ref Part2\"/>\n" +
+"   </Part>\n" +
+"   <Part2 name=\"string()\" xd:script=\"create from('Part')\">\n" +
+"      <Part xd:script=\"0..; ref Part3\"/>\n" +
+"   </Part2>\n" +
+"   <Part3 name=\"string()\" xd:script=\"create from('Part')\">\n" +
+"      <Part xd:script=\"0..; ref Part4\"/>\n" +
+"   </Part3>\n" +
+"   <Part4 xd:script=\"create from('Part')\"/>\n" +
+"</xd:def>";
+			xml =
+"<Vehicle>\n" +
+"   <Part name=\"a1\">\n" +
+"      <Part name=\"a2\" >\n" +
+"        <Part name=\"a3\" >\n" +
+"          <Part/>\n" +
+"        </Part>\n" +
+"     </Part>\n" +
+"   </Part>\n" +
+"</Vehicle>";
+			xp = compile(xdef);
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrorwarningsAndClear(reporter);
+			xd = xp.createXDDocument();
+			xd.setXDContext(xml);
+			assertEq(xml, create(xd, "Vehicle", reporter));
+			assertNoErrorwarningsAndClear(reporter);
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root='Vehicle'>\n"+
+"   <Vehicle>\n" +
+"     <Part xd:script=\"1..; ref Part\" />\n" +
+"   </Vehicle>\n" +
+"   <Part name=\"string()\">\n" +
+"      <Part xd:script=\"1; ref Part2\"/>\n" +
+"   </Part>\n" +
+"   <Part2 name=\"string()\">\n" +
+"      <Part xd:script=\"1; ref Part3\"/>\n" +
+"   </Part2>\n" +
+"   <Part3 name=\"string()\">\n" +
+"      <Part xd:script=\"1; ref Part4\"/>\n" +
+"   </Part3>\n" +
+"   <Part4/>\n" +
+"</xd:def>";
+			xp = compile(xdef);
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrorwarningsAndClear(reporter);
+			xd = xp.createXDDocument();
+			xd.setXDContext(xml);
+			assertEq(xml, create(xd, "Vehicle", reporter));
+			assertNoErrorwarningsAndClear(reporter);
 		} catch (SRuntimeException ex) {fail(ex);}
 		try {
 			xdef = //test of exception in external method.
