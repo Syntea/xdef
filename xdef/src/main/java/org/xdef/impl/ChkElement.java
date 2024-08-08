@@ -2521,7 +2521,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		_data = adata = null;
 		putTemporaryReport(Report.error( //Attribute not allowed
 			XDEF.XDEF525, qname, getPosMod(getXDPosition(), _xPos)));
-		if (xatt != null && xatt._onIllegalAttr > 0) {
+		if (xatt != null && xatt._onIllegalAttr >= 0) {
 			if (_clearReports) {
 				clearTemporaryReporter();
 			}
