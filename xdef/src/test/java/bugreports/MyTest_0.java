@@ -250,7 +250,7 @@ public class MyTest_0 extends XDTester {
 				fail(KXmlUtils.nodeToString(el));
 			}
 		} catch (Exception ex) {fail(ex);}
-if(true)return;
+//if(true)return;
 		try {
 			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
@@ -483,7 +483,7 @@ if(T)return;
 " </xd:declaration>\n"+
 "  <A id=\"? union(%item=[u.x]);\" />\n"+ // must be check if it is parser
 "</xd:def>";
-			xp = compile(null, xdef);
+			xp = compile(xdef);
 //			xp.displayCode();
 			xml =
 "<?xml version='1.0' encoding='UTF-8' standalone='no'?>\n\n\n<A id='123'/>\n";

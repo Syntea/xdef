@@ -681,7 +681,7 @@ public final class Test001  extends XDTester {
 "</s:Envelope>\n";
 			el = parse(xdef, "XDefSOAP", xml, reporter);
 			el = removeNs(el);
-			checkResult(el,
+			assertEq(el,
 "<Envelope encodingStyle=\"http://pis.ckp.cz/soap/encoding\">" +
   "<Header><asd/></Header>" +
   "<Body>" +
