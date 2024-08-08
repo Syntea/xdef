@@ -1318,43 +1318,48 @@ final class ChkComposer extends SReporter {
 							lastElem = childChkEl._sourceElem;
 
 						}
-						if (result.getItemId() == XD_STRING) {
-							//we create a dummy element with the text child
-							String text = result.stringValue();
-							if (text != null && !text.isEmpty()) {
-								Element el = stringToElement(childChkEl, text);
-								childChkEl.setElemValue(el);
-								composeElement(childChkEl, el);
-							} else {//empty string is no value!
-								childChkEl.updateElement(null);
-							}
-						} else if (result.getItemId() == XD_BOOLEAN) {
-							for (int j = 0;;) {
-								if (j < childChkEl._xElement.maxOccurs()
-									&& result != null && result.booleanValue()){
-									composeElement(childChkEl ,null);
-									if (childChkEl._xElement == null ||
-										++j>=childChkEl._xElement.maxOccurs()){
+						switch (result.getItemId()) {
+							case XD_STRING:
+								//we create a dummy element with the text child
+								String text = result.stringValue();
+								if (text != null && !text.isEmpty()) {
+									Element el =
+										stringToElement(childChkEl, text);
+									childChkEl.setElemValue(el);
+									composeElement(childChkEl, el);
+								} else {//empty string is no value!
+									childChkEl.updateElement(null);
+								}	break;
+							case XD_BOOLEAN:
+								for (int j = 0;;) {
+									if (j < childChkEl._xElement.maxOccurs()
+										&& result != null
+										&& result.booleanValue()) {
+										composeElement(childChkEl ,null);
+										if (childChkEl._xElement == null
+											|| ++j >=
+											childChkEl._xElement.maxOccurs()){
+											break; // do not continue
+										}
+										childChkEl = prepareChkElement(chkEl,
+											sourceEl, childDef, i);
+										result = execComposeElement(
+											childChkEl, sourceEl, lastElem);
+									} else { //delete this element
+										childChkEl.updateElement(null);
 										break; // do not continue
 									}
-									childChkEl = prepareChkElement(chkEl,
-										sourceEl, childDef, i);
-									result = execComposeElement(
-										childChkEl, sourceEl, lastElem);
-								} else { //delete this element
-									childChkEl.updateElement(null);
-									break; // do not continue
-								}
-							}
-						} else {
-							composeElement(chkEl, childChkEl, result, xtxt);
-							if (childDef._compose < 0
-								&& result.getItemId() == XD_CONTAINER
-								&& childChkEl.getOccurrence() > 0) {
-								// set last processeed item to lastElem
-								lastElem = ((DefContainer)result).getXDElement(
-									childChkEl.getOccurrence() - 1);
-							}
+								}	break;
+							default:
+								composeElement(chkEl, childChkEl, result, xtxt);
+								if (childDef._compose < 0
+									&& result.getItemId() == XD_CONTAINER
+									&& childChkEl.getOccurrence() > 0) {
+									// set last processeed item to lastElem
+									lastElem = ((DefContainer)result)
+										.getXDElement(
+											childChkEl.getOccurrence() - 1);
+								}	break;
 						}
 					}
 					if (chkEl._selector != null
