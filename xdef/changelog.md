@@ -1,4 +1,4 @@
-`# Version ${version}, release-date ${release.date}
+# Version ${version}, release-date ${release.date}
 
 # Version 42.2.2, release-date 2024-08-12
 * Fixed bug in generating X-definition from JSON data.
