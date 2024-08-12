@@ -103,6 +103,7 @@ public class MyTest extends XDTester {
 		XComponent xc;
 		ArrayReporter reporter = new ArrayReporter();
 		List list;
+/**/
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
@@ -121,6 +122,27 @@ public class MyTest extends XDTester {
 			(xd = xp.createXDDocument()).setXDContext(xml);
 			assertEq(xml, create(xd, "A", reporter));
 			assertNoErrorwarningsAndClear(reporter);
+		} catch (Exception ex) {fail(ex);}
+if (true) return;
+/**
+		try {
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "'>\n"+
+"<a>\n"+
+"  <b/>\n"+
+"  <xd:choice xd:script= 'create from(\"//c\")'>\n"+
+"    <c a = 'optional string();'/>\n"+
+"    <d a = 'optional string();'/>\n"+
+"  </xd:choice>\n"+
+"</a>\n"+
+"</xd:def>";
+			xp = XDFactory.compileXD(null, xdef);
+			assertEq(create(xp, null, "a",reporter,"<a><b><c a='x'/></b></a>"),
+				"<a><b/><c a='x'/></a>");
+			assertNoErrorwarnings(reporter);
+			assertEq(create(xp, null, reporter, "<a><b><d a='y'/></b></a>"),
+				"<a><b/></a>");
+			assertErrors(reporter);
 		} catch (Exception ex) {fail(ex);}
 if (true) return;
 /**
