@@ -103,6 +103,26 @@ public class MyTest extends XDTester {
 		XComponent xc;
 		ArrayReporter reporter = new ArrayReporter();
 		List list;
+		try {
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
+"   <A>\n" +
+"     <B xd:script='ref B;' />\n" +
+"   </A>\n" +
+"   <B b='string()'>\n" +
+//"      <B xd:script='?; ref B; create from(\"B\")'/>\n" +
+"      <B xd:script='?; ref B;'/>\n" +
+"   </B>\n" +
+"</xd:def>";
+			xml = "<A><B b=\"x\"><B b=\"y\"/></B></A>";
+			assertEq(xml, parse(xp = compile(xdef), "", xml, reporter));
+			xp.displayCode();
+			assertNoErrorwarningsAndClear(reporter);
+			(xd = xp.createXDDocument()).setXDContext(xml);
+			assertEq(xml, create(xd, "A", reporter));
+			assertNoErrorwarningsAndClear(reporter);
+		} catch (Exception ex) {fail(ex);}
+if (true) return;
 /**
 		try {
 			xdef =

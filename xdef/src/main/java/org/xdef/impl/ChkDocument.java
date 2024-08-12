@@ -707,12 +707,12 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	 */
 	public final boolean isCreateMode() {return _createMode;}
 	@Override
-	/** Create root check element for given name.
+	/** Create root check element with given name.
 	 * @param nsURI NameSpace URI of the element.
 	 * @param qname Qualified name of the element (with prefix).
 	 * @param checkRoot if true, the root check element is checked against
 	 * the root list, otherwise it is found as XElement on the base level.
-	 * @return The ChkElement object.
+	 * @return ChkElement object.
 	 */
 	public final XXElement prepareRootXXElementNS(final String nsURI,
 		final String qname,
@@ -732,11 +732,11 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 		}
 	}
 	@Override
-	/** Create root check element for given name.
+	/** Create root check element with given name.
 	 * @param name Tag name of the root element (with prefix).
 	 * @param checkRoot if true, the root check element is checked against
 	 * the root list, otherwise it is found as XElement on the base level.
-	 * @return The ChkElement object.
+	 * @return ChkElement object.
 	 */
 	public final XXElement prepareRootXXElement(final String name,
 		final boolean checkRoot) {

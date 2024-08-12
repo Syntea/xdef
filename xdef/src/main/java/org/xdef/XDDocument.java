@@ -192,24 +192,24 @@ public interface XDDocument extends XXNode {
 // Generation of XML objects
 ////////////////////////////////////////////////////////////////////////////////
 
-	/** Create root check element with namespace for given name.
+	/** Create root check element with namespace with given name.
 	 * @param nsURI Namespace URI of the element.
 	 * @param qname Qualified name of the element.
 	 * @param checkRoot If value of this argument is true then the root check
 	 * element is checked against the root list, otherwise it is found as
 	 * XElement on the base level.
-	 * @return The ChkElement object.
+	 * @return ChkElement object.
 	 */
 	public XXElement prepareRootXXElementNS(final String nsURI,
 		final String qname,
 		final boolean checkRoot);
 
-	/** Create root check element for given name.
+	/** Create root check element with given name.
 	 * @param name Tag name of the root element.
 	 * @param checkRoot If value of this argument is true then the root check
 	 * element is checked against the root list, otherwise it is found as
 	 * XElement on the base level.
-	 * @return The ChkElement object.
+	 * @return ChkElement object.
 	 */
 	public XXElement prepareRootXXElement(final String name, boolean checkRoot);
 

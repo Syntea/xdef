@@ -4,8 +4,10 @@ import test.XDTester;
 import org.xdef.XDDocument;
 import org.xdef.XDPool;
 import org.xdef.proc.XXElement;
+import static org.xdef.sys.STester.runTest;
+import static test.XDTester._xdNS;
 
-/** Test of construction of element from program.
+/** Test of construction of element from X-definition.
  * @author Vaclav Trojan
  */
 public final class TestConstruct extends XDTester {
@@ -21,17 +23,18 @@ public final class TestConstruct extends XDTester {
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='messages'>\n"+
-"<messages>\n"+
+"  <messages>\n"+
 "    <child/>\n"+
-"  <xd:any xd:script = \"occurs 0..\"\n"+
-"            ces     = \"optional; onTrue $stdErr.outln(getElementName()"+
-"                        + '(ces) ' + getText())\"\n"+
-"            eng     = \"optional; onTrue $stdErr.outln(getElementName()"+
-"                        + '(eng) ' + getText())\" />\n"+
-"</messages>\n"+
+"    <xd:any xd:script = \"occurs 0..\"\n"+
+"        ces=\"optional; onTrue $stdErr.outln(getElementName()"+
+"              + '(ces) ' + getText())\"\n"+
+"        eng=\"optional; onTrue $stdErr.outln(getElementName()"+
+"              + '(eng) ' + getText())\" />\n"+
+"  </messages>\n"+
 "</xd:def>\n";
 			xp = compile(xdef);
 			xd = xp.createXDDocument();
+			//Create root check element with given name.
 			rootChkel = xd.prepareRootXXElement("messages", true);
 			if (rootChkel.errors()) {
 				fail(rootChkel.getXPos());
@@ -53,17 +56,14 @@ public final class TestConstruct extends XDTester {
 				+ " ces=\"Toto je zprava\" eng=\"This is message\"/>"
 				+ "</messages>");
 			xdef =
-"<xd:def xmlns:xd = '" + _xdNS + "'\n"+
-"        xmlns:a  = \"a.a\"\n"+
-"        xmlns:b  = \"b.b\"\n"+
-"        xd:name  = \"test\"\n"+
-"        xd:root  = \"a:root\">\n"+
-"<a:root>\n"+
-"  <b:child/>\n"+
-"  <xd:any xd:script = \"occurs 0..\"\n"+
-"      a:a  = \"optional string()\"\n"+
-"      b:b  = \"optional string()\" />\n"+
-"</a:root>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' xmlns:a=\"a.a\" xmlns:b=\"b.b\"\n"+
+"        xd:name=\"test\" xd:root=\"a:root\">\n"+
+"  <a:root>\n"+
+"    <b:child/>\n"+
+"    <xd:any xd:script = \"occurs 0..\"\n"+
+"        a:a=\"optional string()\"\n"+
+"        b:b=\"optional string()\" />\n"+
+"  </a:root>\n"+
 "</xd:def>\n";
 			xp = compile(xdef);
 			xd = xp.createXDDocument("test");
