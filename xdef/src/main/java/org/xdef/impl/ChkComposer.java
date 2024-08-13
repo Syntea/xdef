@@ -629,24 +629,24 @@ final class ChkComposer extends SReporter {
 			return;
 		}
 		String uri = chkEl.getXMElement().getNSUri();
-		String qname = getSrcLexiconName(chkEl.getXMElement());
-		if (qname == null) {
-			qname = chkEl.getXMElement().getName();
+		String xeName = getSrcLexiconName(chkEl.getXMElement());
+		if (xeName == null) {
+			xeName = chkEl.getXMElement().getName();
 		}
-		int ndx = qname.indexOf(':');
-		String localName = ndx < 0 ? qname : qname.substring(ndx + 1);
-		String locnm = elem.getNamespaceURI() == null
+		int ndx = xeName.indexOf(':');
+		String localName = ndx < 0 ? xeName : xeName.substring(ndx + 1);
+		String locNam = elem.getNamespaceURI() == null
 			? elem.getNodeName() : elem.getLocalName();
 		final int max = chkEl.getXMElement().maxOccurs();
 		Node first = elem.getFirstChild();
-		if (localName.equals(locnm)
+		if (localName.equals(locNam)
 			&& (uri == null || uri.equals(elem.getNamespaceURI()))) {
 			// Find the node that matches the model
 			int m = 0;
-			for (Node node = first; node!=null;  node = node.getNextSibling()) {
+			for (Node node = first; node != null; node = node.getNextSibling()){
 				String u = node.getNamespaceURI();
-				locnm = u == null ? node.getNodeName() : node.getLocalName();
-				if ((u == null && "_".equals(locnm)||((localName.equals(locnm))
+				locNam = u == null ? node.getNodeName() : node.getLocalName();
+				if ((u==null && "_".equals(locNam)||((localName.equals(locNam))
 					&& ((uri == null || uri.equals(u)))))) {
 					if (chkEl._xElement._match >= 0) { // try matches section
 						Element el = chkEl.getElemValue(); // savet _elemValue
@@ -667,8 +667,7 @@ final class ChkComposer extends SReporter {
 				}
 			}
 			if (result.isEmpty()) {
-				result.addXDItem(new DefElement(elem));
-				return; //element is the element itself
+				return; //nothing found
 			}
 		}
 		if (first == null) {
@@ -678,9 +677,9 @@ final class ChkComposer extends SReporter {
 		for (int i = 0; i < result.getXDItemsNumber(); i++) {
 			Element e = result.getXDElement(i);
 			String u = e.getNamespaceURI();
-			locnm = u==null ? e.getNodeName() : e.getLocalName();
-			if ("_".equals(locnm) && u == null
-				|| (localName.equals(locnm) && ((uri==null || uri.equals(u))))){
+			locNam = u==null ? e.getNodeName() : e.getLocalName();
+			if ("_".equals(locNam) && u == null
+				|| (localName.equals(locNam) && ((uri==null || uri.equals(u))))){
 				if (chkEl._xElement._match >= 0) {
 					Element el = chkEl.getElemValue();
 					chkEl.setElemValue(e);
@@ -700,9 +699,9 @@ final class ChkComposer extends SReporter {
 			? lastElement.getNextSibling() : first;
 		for (Node node = next; node != null; node = node.getNextSibling()) {
 			String u = node.getNamespaceURI();
-			locnm = u==null ? node.getNodeName() : node.getLocalName();
-			if ("_".equals(locnm) && u==null
-				|| (localName.equals(locnm) && ((uri==null || uri.equals(u))))){
+			locNam = u==null ? node.getNodeName() : node.getLocalName();
+			if ("_".equals(locNam) && u==null
+				|| (localName.equals(locNam) && ((uri==null || uri.equals(u))))){
 				if (chkEl._xElement._match >= 0) {
 					Element el = chkEl.getElemValue();
 					chkEl.setElemValue((Element) node);
@@ -724,9 +723,9 @@ final class ChkComposer extends SReporter {
 		// nothing found, look again now from first
 		for (Node node = first; node != next; node = node.getNextSibling()) {
 			String u = node.getNamespaceURI();
-			locnm = u==null ? node.getNodeName() : node.getLocalName();
-			if ("_".equals(locnm) && u==null
-				|| (localName.equals(locnm) && ((uri==null || uri.equals(u))))){
+			locNam = u==null ? node.getNodeName() : node.getLocalName();
+			if ("_".equals(locNam) && u==null
+				|| (localName.equals(locNam) && ((uri==null || uri.equals(u))))){
 				if (chkEl._xElement._match >= 0) {
 					Element el = chkEl.getElemValue();
 					chkEl.setElemValue((Element) node);

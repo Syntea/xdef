@@ -123,16 +123,16 @@ public class MyTest extends XDTester {
 			assertEq(xml, create(xd, "A", reporter));
 			assertNoErrorwarningsAndClear(reporter);
 		} catch (Exception ex) {fail(ex);}
-if (true) return;
-/**
+/**/
 		try {
+			xdef =
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "'>\n"+
 "<a>\n"+
 "  <b/>\n"+
-"  <xd:choice xd:script= 'create from(\"//c\")'>\n"+
-"    <c a = 'optional string();'/>\n"+
-"    <d a = 'optional string();'/>\n"+
+"  <xd:choice>\n"+
+"    <c a = 'optional string();' xd:script= 'create from(\"//c\")'/>\n"+
+"    <d a = 'optional string();' xd:script= 'create from(\"//d\")'/>\n"+
 "  </xd:choice>\n"+
 "</a>\n"+
 "</xd:def>";
@@ -141,10 +141,10 @@ if (true) return;
 				"<a><b/><c a='x'/></a>");
 			assertNoErrorwarnings(reporter);
 			assertEq(create(xp, null, reporter, "<a><b><d a='y'/></b></a>"),
-				"<a><b/></a>");
-			assertErrors(reporter);
+				"<a><b/><d a=\"y\"/></a>");
+			assertNoErrorwarnings(reporter);
 		} catch (Exception ex) {fail(ex);}
-if (true) return;
+//if (true) return;
 /**
 		try {
 			xdef =

@@ -1,9 +1,11 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.2.2, release-date 2024-08-12
+# Version 42.2.2, release-date 2024-08-13
 * Fixed bug in generating X-definition from JSON data.
 * Fixed a bug in construction mode when there is a recursive reference
   in the model.
+ * Fixed bug StackOverflow exception in construction mode when there is
+   a recursive reference in the element model.
 
 # Version 42.2.1, release-date 2024-07-08
 * Fixed error in compilation of type declaration with expression containing
