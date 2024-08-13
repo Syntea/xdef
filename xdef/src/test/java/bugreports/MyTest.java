@@ -111,7 +111,6 @@ public class MyTest extends XDTester {
 "     <B xd:script='ref B;' />\n" +
 "   </A>\n" +
 "   <B b='string()'>\n" +
-//"      <B xd:script='?; ref B; create from(\"B\")'/>\n" +
 "      <B xd:script='?; ref B;'/>\n" +
 "   </B>\n" +
 "</xd:def>";
