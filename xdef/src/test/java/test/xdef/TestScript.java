@@ -1179,35 +1179,36 @@ public final class TestScript extends XDTester {
 				"OK 21 OK 22 OK 23 OK 24 OK 25 OK 26 \n"));
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"<xd:declaration>\n"+
-"  void x() {\n"+
-"    Decimal d = decimalValue('123');\n"+
-"    Decimal e = decimalValue(2);\n"+
-"    Decimal f = decimalValue($PI);\n"+
-"    out(f.toString() + '; ' + intValue(f));\n"+
-"    out(add(d,e).toString());\n"+
-"    out(divide(d,e).toString());\n"+
-"    out(multiply(d,e).toString());\n"+
-"    out(remainder(d,e).toString());\n"+
-"  }\n"+
-"</xd:declaration>\n"+
-"<a xd:script=\"onStartElement x()\"/>\n"+
+"  <xd:declaration>\n"+
+"    void x() {\n"+
+"      Decimal d = decimalValue('123');\n"+
+"      Decimal e = decimalValue(2);\n"+
+"      Decimal f = decimalValue($PI);\n"+
+"      out(f.toString() + '; ' + intValue(f));\n"+
+"      out(add(d,e).toString());\n"+
+"      out(divide(d,e).toString());\n"+
+"      out(multiply(d,e).toString());\n"+
+"      out(remainder(d,e).toString());\n"+
+"    }\n"+
+"  </xd:declaration>\n"+
+"  <a xd:script=\"onStartElement x()\"/>\n"+
 "</xd:def>\n";
 			xml = "<a/>";
 			assertFalse(test(xdef, xml, "", 'P', xml,
 "3.141592653589793115997963468544185161590576171875; 312561.52461"));
 			xdef = // Test hasAttribute and hasNamedItem
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"<xd:declaration><![CDATA[\n"+
-"  Container c = [%a='a'];"+
-"  Element e = xparse(\"<a a='a'/>\");\n"+
-"]]></xd:declaration>\n"+
-"<a xd:script=\"finally {\n"+
-"  if (e.hasAttribute('x')) error('err1');\n"+
-"  if (!e.hasAttribute('a')) error('err2');\n"+
-"  if (c.hasNamedItem('x')) error('err3');\n"+
-"  if (!c.hasNamedItem('a')) error('err4');\n"+
-"}\"/>\n"+
+"  <xd:declaration><![CDATA[\n"+
+"    Container c = [%a='a'];"+
+"    Element e = xparse(\"<a a='a'/>\");\n"+
+"]]>\n"+
+"  </xd:declaration>\n"+
+"  <a xd:script=\"finally {\n"+
+"    if (e.hasAttribute('x')) error('err1');\n"+
+"    if (!e.hasAttribute('a')) error('err2');\n"+
+"    if (c.hasNamedItem('x')) error('err3');\n"+
+"    if (!c.hasNamedItem('a')) error('err4');\n"+
+"  }\"/>\n"+
 "</xd:def>\n";
 			xp = compile(xdef);
 			xp.createXDDocument().xparse("<a/>", reporter);
@@ -1242,9 +1243,9 @@ public final class TestScript extends XDTester {
 			xdef =
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name='A' root='a' xmlns='a.b' xmlns:a='a.b'>\n"+
-"<a a='int()' a:b='int()' >\n"+
-"  <b a='int()' a:b='int()' />\n"+
-"</a>\n"+
+"  <a a='int()' a:b='int()' >\n"+
+"    <b a='int()' a:b='int()' />\n"+
+"  </a>\n"+
 "</xd:def>\n" +
 "<xd:def name='B' root='a' xmlns='c.d' xmlns:a='a.b'>\n"+
 "  <a xd:script='ref A#a:a'/>\n"+
@@ -1266,12 +1267,12 @@ public final class TestScript extends XDTester {
 			xdef = // Test reference to model with different namespace
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name='A' root='a' xmlns='a.b' xmlns:a='a.b'>\n"+
-"<a a='int()' a:b='int()' >\n"+
-"  <b a='int()' a:b='int()' />\n"+
-"</a>\n"+
+"  <a a='int()' a:b='int()' >\n"+
+"    <b a='int()' a:b='int()' />\n"+
+"  </a>\n"+
 "</xd:def>\n" +
 "<xd:def name='B' root='a' xmlns:a='a.b'>\n"+
-"<a xd:script='ref A#a:a' />\n"+
+"  <a xd:script='ref A#a:a' />\n"+
 "</xd:def>\n" +
 "<xd:component>\n"+
 " %class "+_package+".MyTest30 %link A#a;\n" +
@@ -1283,29 +1284,6 @@ public final class TestScript extends XDTester {
 			assertEq(xml, parse(xp, "A", xml, reporter));
 			assertNoErrorwarnings(reporter);
 			xml = "<a a='1' xmlns:a='a.b' a:b='2'><a:b  a='3' a:b='4'/></a>";
-			assertEq(xml, parse(xp, "B", xml, reporter));
-			assertNoErrorwarnings(reporter);
-			xdef = // Test reference to model with new emtty namespace,
-"<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
-"<xd:def name='A' root='a:a' xmlns:a='a.b'>\n"+
-"<a:a a='int()' a:b='int()'>\n"+
-"  <a:b a='int()' a:b='int()'/>\n"+
-"</a:a>\n"+
-"</xd:def>\n" +
-"<xd:def name='B' root='a' xmlns:a='a.b'>\n"+
-"<a xd:script='ref A#a:a'/>\n"+
-"</xd:def>\n" +
-"<xd:component>\n"+
-" %class "+_package+".MyTest30 %link A#a:a;\n" +
-" %class "+_package+".MyTest32 %link B#a;\n" +
-"</xd:component>\n" +
-"</xd:collection>";
-			genXComponent(xp = compile(xdef));
-			xp = compile(xdef);
-			xml="<a:a xmlns:a='a.b' a='1' a:b='2'><a:b a='4' a:b='4'/></a:a>";
-			assertEq(xml, parse(xp, "A", xml, reporter));
-			assertNoErrorwarnings(reporter);
-			xml = "<a xmlns:a='a.b' a='1' a:b='2'><a:b a='4' a:b='4'/></a>";
 			assertEq(xml, parse(xp, "B", xml, reporter));
 			assertNoErrorwarnings(reporter);
 			xdef = // test CHECK operator

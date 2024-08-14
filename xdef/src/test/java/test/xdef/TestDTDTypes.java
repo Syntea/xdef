@@ -511,40 +511,39 @@ public final class TestDTDTypes extends XDTester {
 			xdef =
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def xd:name=\"test1\">\n"+
-" <xd:declaration scope='global'>\n"+
-"   uniqueSet id2 {c: cislo};\n"+
-" </xd:declaration>\n"+
+"  <xd:declaration scope='global'>\n"+
+"    uniqueSet id2 {c: cislo};\n"+
+"  </xd:declaration>\n"+
 "</xd:def>\n"+
 "<xd:def xd:root='a' name='test'>\n"+
-" <xd:declaration scope='global'>\n"+
-"   int i = 1;\n"+
-"   uniqueSet id1 {s: string()};" +
-"   int j = 2;\n"+
-"   ParseResult cislo() { return int(); }\n"+
-"   type datum xdatetime('d. M. yyyy[ HH:mm[:ss]]');\n"+
-"   uniqueSet id3 {t: xdatetime('yyyyMMddHHmmss')};\n"+
-" </xd:declaration>\n"+
-" <a xd:script = \"finally id1.CLEAR()\">\n"+
-"   <b a = \"optional id1.s.IDREF()\"\n"+
-"      b = \"optional cislo();\"\n"+
-"      c = \"optional datum();\"/>\n"+
-"   <c xd:script = \"occurs 1..; finally id2.CLEAR()\"\n"+
-"     a = \"optional id2.c.IDREF()\"\n"+
-"     stamp = \"required id3.t.ID()\" >\n"+
-"     <d xd:script = \"occurs 1..\"\n"+
-"        a1 = \"required id1.s.ID()\" \n"+
-"        a2 = \"optional id2.c.ID()\"/>\n"+
-"     <e a3 = \"required id2.c.IDREF()\"/>\n"+
-"   </c>\n"+
-"   <f a4 = \"required id1.s.IDREF()\" a5 = \"optional id3.t.IDREF()\"/>\n"+
-" </a>\n"+
+"  <xd:declaration scope='global'>\n"+
+"    int i = 1;\n"+
+"    uniqueSet id1 {s: string()};" +
+"    int j = 2;\n"+
+"    ParseResult cislo() { return int(); }\n"+
+"    type datum xdatetime('d. M. yyyy[ HH:mm[:ss]]');\n"+
+"    uniqueSet id3 {t: xdatetime('yyyyMMddHHmmss')};\n"+
+"  </xd:declaration>\n"+
+"  <a xd:script = \"finally id1.CLEAR()\">\n"+
+"    <b a = \"optional id1.s.IDREF()\"\n"+
+"       b = \"optional cislo();\"\n"+
+"       c = \"optional datum();\"/>\n"+
+"    <c xd:script = \"occurs 1..; finally id2.CLEAR()\"\n"+
+"      a = \"optional id2.c.IDREF()\"\n"+
+"      stamp = \"required id3.t.ID()\" >\n"+
+"      <d xd:script = \"occurs 1..\"\n"+
+"         a1 = \"required id1.s.ID()\" \n"+
+"         a2 = \"optional id2.c.ID()\"/>\n"+
+"      <e a3 = \"required id2.c.IDREF()\"/>\n"+
+"    </c>\n"+
+"    <f a4 = \"required id1.s.IDREF()\" a5 = \"optional id3.t.IDREF()\"/>\n"+
+"  </a>\n"+
 "</xd:def>\n"+
 "</xd:collection>";
 			xp = compile(xdef);
 			xml =
 "<a>\n"+                                                    // 01
 "  <b a = \"b1\" b = \"123\" c = \"15. 3. 2007\"/>\n"+      // 02
-//"  <b a = \"xxx\" b = \"123\" c = \"15. 3. 2007\"/>\n"+     // 02
 "  <c stamp = \"20070101000000\" a = \"3\">\n"+             // 03
 "    <d a1 = \"a1\" a2 = \"1\" />\n"+                       // 04
 "    <d a1 = \"b1\" a2 = \"2\" />\n"+                       // 05

@@ -219,12 +219,11 @@ public final class TestDatabase extends XDTester {
 		try {
 			xdef =
 "<xd:def xmlns:xd = '" + _xdNS + "'>\n"+
-"<xd:declaration scope='local'>  \n"+
-"  Service service;\n"+
-"  ResultSet data = service.query('SELECT * FROM " + TABLE_A + "');\n"+
-"</xd:declaration>\n"+
-"\n"+
-"<A xd:script= \"create 1\">\n"+
+"  <xd:declaration scope='local'>  \n"+
+"    Service service;\n"+
+"    ResultSet data = service.query('SELECT * FROM " + TABLE_A + "');\n"+
+"  </xd:declaration>\n"+
+"  <A xd:script= \"create 1\">\n"+
 "    <" + TABLE_A + " xd:script= \"occurs *; create data\"\n"+
 "         a = \"int; create data.getItem('" + ATTR_A + "')\"\n"+
 "         b = \"string; create data.getItem('" + ATTR_B + "')\">\n"+
@@ -233,7 +232,6 @@ public final class TestDatabase extends XDTester {
 "      </P> \n"+
 "    </" + TABLE_A + ">\n"+
 "  </A>\n"+
-"\n"+
 "</xd:def>";
 			_con = getConnection();
 			el = create(xdef, null, null, "A", "#service",
@@ -261,11 +259,11 @@ public final class TestDatabase extends XDTester {
 		// Use external connection
 			xdef =
 "<xd:def xmlns:xd = '" + _xdNS + "'>\n"+
-"<xd:declaration scope='local'>  \n"+
-"  external Service service;\n"+
-"  ResultSet data = service.query('SELECT * FROM " + TABLE_A + "');\n"+
-"</xd:declaration>\n"+
-"<A xd:script= \"create 1\">\n"+
+"  <xd:declaration scope='local'>  \n"+
+"    external Service service;\n"+
+"    ResultSet data = service.query('SELECT * FROM " + TABLE_A + "');\n"+
+"  </xd:declaration>\n"+
+"  <A xd:script= \"create 1\">\n"+
 "    <" + TABLE_A + " xd:script= \"occurs *; create data\"\n"+
 "         a = \"int; create data.getItem('" + ATTR_A + "')\"\n"+
 "         b = \"string; create data.getItem('" + ATTR_B + "')\">\n"+
@@ -301,18 +299,14 @@ public final class TestDatabase extends XDTester {
 			// using ResultSet created implicitly
 			xdef =
 "<xd:def xmlns:xd = '" + _xdNS + "'>\n"+
-"<xd:declaration scope='local'>  \n"+
-"  external Service service;\n"+
-"</xd:declaration>\n"+
-"\n"+
-"<A xd:script= \"create 1\">\n"+
+"  <xd:declaration scope='local'>external Service service;</xd:declaration>\n"+
+"  <A xd:script= \"create 1\">\n"+
 "    <" + TABLE_A + " xd:script= \"occurs *; create service.query('SELECT * "
 					+ "FROM " + TABLE_A + "')\"\n"+
 "         a = \"int\"\n"+
 "         b = \"string\">\n"+
 "    </" + TABLE_A + ">\n"+
 "  </A>\n"+
-"\n"+
 "</xd:def>";
 			_con = getConnection();
 			el = create(xdef, null, null, "A", "#service",
@@ -337,22 +331,21 @@ public final class TestDatabase extends XDTester {
 		// using macro
 			xdef =
 "<xd:def xmlns:xd = '" + _xdNS + "'>\n"+
-"<xd:declaration scope='local'>  \n"+
-"  external Service service;\n"+
-"  ResultSet rs;"+
-"</xd:declaration>\n"+
-"\n"+
-"<A xd:script= \"create 1\">\n"+
+"  <xd:declaration scope='local'>  \n"+
+"    external Service service;\n"+
+"    ResultSet rs;"+
+"  </xd:declaration>\n"+
+"  <A xd:script= \"create 1\">\n"+
 "  <" + TABLE_A + " xd:script= \"occurs *; create {\n"+
 "    rs=${m_si};\n"+
 "    return rs}\"\n"+
 "    a = \"int\"\n"+
 "    b = \"string\">\n"+
 "    </" + TABLE_A + ">\n"+
-"</A>\n"+
-"<xd:macro name=\"m_si\">\n"+
+"  </A>\n"+
+"  <xd:macro name=\"m_si\">\n"+
 "    service.query('SELECT * FROM " + TABLE_A + "')\n"+
-"</xd:macro>\n"+
+"  </xd:macro>\n"+
 "</xd:def>";
 			_con = getConnection();
 			el = create(xdef, null, null, "A", "#service",
@@ -378,23 +371,21 @@ public final class TestDatabase extends XDTester {
 // test "boolean ResultSet.next()" and "boolean ResultSet.hasNext()" method
 			xdef =
 "<xd:def xmlns:xd = '" + _xdNS + "'>\n"+
-"<xd:declaration scope='local'>  \n"+
-"  external Service service;\n"+
-"  ResultSet rs = service.query('SELECT * FROM " + TABLE_A + "');\n"+
-"  Container ct = [];\n"+
-"  \n"+
-"  void doQ() {\n"+
-"    Container c;\n"+
-"    while(rs.hasNext()) {\n"+
-"      c = [%a=rs.getItem('" + ATTR_A + "'),\n"+
-"        %b=rs.getItem('" + ATTR_B + "')];\n"+
-"      ct.addItem(c);\n"+
-"      rs.next();\n"+
+"  <xd:declaration scope='local'>  \n"+
+"    external Service service;\n"+
+"    ResultSet rs = service.query('SELECT * FROM " + TABLE_A + "');\n"+
+"    Container ct = [];\n"+
+"    void doQ() {\n"+
+"      Container c;\n"+
+"      while(rs.hasNext()) {\n"+
+"        c = [%a=rs.getItem('" + ATTR_A + "'),\n"+
+"          %b=rs.getItem('" + ATTR_B + "')];\n"+
+"        ct.addItem(c);\n"+
+"        rs.next();\n"+
+"      }\n"+
 "    }\n"+
-"  }\n"+
-"</xd:declaration>\n"+
-"\n"+
-"<A xd:script= \"onStartElement doQ(); create 1\">\n"+
+"  </xd:declaration>\n"+
+"  <A xd:script= \"onStartElement doQ(); create 1\">\n"+
 "    <" + TABLE_A + " xd:script= \"occurs *; create ct\"\n"+
 "         a = \"int\"\n"+
 "         b = \"string\">\n"+
@@ -426,9 +417,7 @@ public final class TestDatabase extends XDTester {
 			//create database
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' xd:root='schema'>\n"+
-"  <xd:declaration scope='local'>\n"+
-"    external Service con;\n"+
-"  </xd:declaration>\n"+
+"  <xd:declaration scope='local'>external Service con;</xd:declaration>\n"+
 "  <schema name=\"string; onTrue con.execute('CREATE SCHEMA '+ getText())\">\n"+
 "    <table xd:script=\"occurs +\" name = \"string\">\n"+
 "      string;\n"+
@@ -475,7 +464,6 @@ public final class TestDatabase extends XDTester {
 			//insert 1
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' xd:root=\"Books|Book\">\n"+
-"\n"+
 "  <xd:declaration scope='local'>\n"+
 "    external Service service;\n"+
 "	int inserted = 0;\n"+
@@ -554,40 +542,39 @@ public final class TestDatabase extends XDTester {
 			// insert 2
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' xd:root=\"Books\">\n"+
-"<xd:declaration scope='local'>\n"+
-"external Service service;\n"+
-"int inserted = 0;\n"+
-"boolean ignored = false;\n"+
-"String isAuthor =\n"+
-"  \"SELECT AUTHOR FROM MYTEST.AUTHOR WHERE MYTEST.AUTHOR.AUTHOR = ?\";\n"+
-"Statement isTitle = service.prepareStatement(\n"+
-"  \"SELECT TITLE FROM MYTEST.TITLE WHERE MYTEST.TITLE.TITLE = ?\");\n"+
-"Statement insertAuthor = service.prepareStatement(\n"+
-"  \"INSERT INTO MYTEST.AUTHOR(AUTHOR) VALUES (?)\");\n"+
-"Statement insertTitle = service.prepareStatement(\n"+
-"  \"INSERT INTO MYTEST.TITLE(TITLE,EDITOR,ISBN,ISSUED) VALUES (?,?,?,?)\");\n"+
-"Statement insertTitleAuthor = service.prepareStatement(\n"+
-"  \"INSERT INTO MYTEST.TITLE_AUTHOR(IDAUTHOR,IDTITLE)\n"+
-"   VALUES ((SELECT IDAUTHOR FROM MYTEST.AUTHOR WHERE AUTHOR=?),\n"+
-"   (SELECT IDTITLE FROM MYTEST.TITLE WHERE TITLE=?))\");\n"+
-"\n"+
-"void insertTitle(String title, String editor, String isbn, String issued) {\n"+
-"  if (ignored = isTitle.hasItem(title)) {\n"+
-"     error('TEST001','Book \"&amp;{b}\" already exists','&amp;{b}'+title);\n"+
-"  } else {\n"+
-"     insertTitle.execute(title, editor, isbn, issued);\n"+
-"     inserted++;\n"+
-"  }\n"+
-"}\n"+
-"void insertAuthor(String title, String author) {\n"+
-"  if (!ignored) {\n"+
-"    if (!service.hasItem(isAuthor,author)) {\n"+
-"      insertAuthor.execute(author); /*new author*/\n"+
+"  <xd:declaration scope='local'>\n"+
+"    external Service service;\n"+
+"    int inserted = 0;\n"+
+"    boolean ignored = false;\n"+
+"    String isAuthor =\n"+
+"      \"SELECT AUTHOR FROM MYTEST.AUTHOR WHERE MYTEST.AUTHOR.AUTHOR = ?\";\n"+
+"    Statement isTitle = service.prepareStatement(\n"+
+"      \"SELECT TITLE FROM MYTEST.TITLE WHERE MYTEST.TITLE.TITLE = ?\");\n"+
+"    Statement insertAuthor = service.prepareStatement(\n"+
+"      \"INSERT INTO MYTEST.AUTHOR(AUTHOR) VALUES (?)\");\n"+
+"    Statement insertTitle = service.prepareStatement(\n"+
+"      \"INSERT INTO MYTEST.TITLE(TITLE,EDITOR,ISBN,ISSUED) VALUES (?,?,?,?)\");\n"+
+"    Statement insertTitleAuthor = service.prepareStatement(\n"+
+"     \"INSERT INTO MYTEST.TITLE_AUTHOR(IDAUTHOR,IDTITLE)\n"+
+"     VALUES ((SELECT IDAUTHOR FROM MYTEST.AUTHOR WHERE AUTHOR=?),\n"+
+"     (SELECT IDTITLE FROM MYTEST.TITLE WHERE TITLE=?))\");\n"+
+"    void insertTitle(String title,String editor,String isbn,String issued){\n"+
+"      if (ignored = isTitle.hasItem(title)) {\n"+
+"       error('TEST001','Book \"&amp;{b}\" already exists','&amp;{b}'+title);\n"+
+"      } else {\n"+
+"       insertTitle.execute(title, editor, isbn, issued);\n"+
+"       inserted++;\n"+
+"      }\n"+
 "    }\n"+
-"    insertTitleAuthor.execute(author, title);\n"+
-"  }\n"+
-"}\n"+
-"</xd:declaration>\n"+
+"    void insertAuthor(String title, String author) {\n"+
+"      if (!ignored) {\n"+
+"        if (!service.hasItem(isAuthor,author)) {\n"+
+"          insertAuthor.execute(author); /*new author*/\n"+
+"        }\n"+
+"        insertTitleAuthor.execute(author, title);\n"+
+"      }\n"+
+"    }\n"+
+"  </xd:declaration>\n"+
 "  <Books>\n"+
 "    <Book xd:script=\"occurs *; ref item\"/>\n"+
 "  </Books>\n"+
@@ -624,16 +611,16 @@ public final class TestDatabase extends XDTester {
 			// read 1
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "'>\n"+
-"<xd:declaration scope='local'>\n"+
-"external Service service;\n"+
-"String qry = \"SELECT AUTHOR\n"+
-"  FROM MYTEST.AUTHOR, MYTEST.TITLE_AUTHOR, MYTEST.TITLE\n"+
-"  WHERE MYTEST.AUTHOR.IDAUTHOR = MYTEST.TITLE_AUTHOR.IDAUTHOR AND\n"+
-"  MYTEST.TITLE.IDTITLE = MYTEST.TITLE_AUTHOR.IDTITLE AND\n"+
-"  MYTEST.TITLE.IDTITLE = ? ORDER BY AUTHOR ASC\";\n"+
-"ResultSet rs = \n"+
-"  service.query('SELECT * FROM MYTEST.TITLE ORDER BY TITLE ASC');\n"+
-"</xd:declaration>\n"+
+"  <xd:declaration scope='local'>\n"+
+"    external Service service;\n"+
+"    String qry = \"SELECT AUTHOR\n"+
+"      FROM MYTEST.AUTHOR, MYTEST.TITLE_AUTHOR, MYTEST.TITLE\n"+
+"      WHERE MYTEST.AUTHOR.IDAUTHOR = MYTEST.TITLE_AUTHOR.IDAUTHOR AND\n"+
+"      MYTEST.TITLE.IDTITLE = MYTEST.TITLE_AUTHOR.IDTITLE AND\n"+
+"      MYTEST.TITLE.IDTITLE = ? ORDER BY AUTHOR ASC\";\n"+
+"    ResultSet rs = \n"+
+"      service.query('SELECT * FROM MYTEST.TITLE ORDER BY TITLE ASC');\n"+
+"  </xd:declaration>\n"+
 "  <Books>\n"+
 "    <Book xd:script=\"occurs *; create rs\"\n"+
 "     TITLE=\"string\"\n"+
@@ -672,12 +659,12 @@ public final class TestDatabase extends XDTester {
 			// read 2
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' xd:name=\"query\" >\n"+
-"<xd:declaration scope='global'>\n"+
-"external String url;\n"+
-"external String usr;\n"+
-"external String passw;	  \n"+
-"Service service = new Service(\"jdbc\", url, usr, passw);\n"+
-"</xd:declaration>\n"+
+"  <xd:declaration scope='global'>\n"+
+"    external String url;\n"+
+"    external String usr;\n"+
+"    external String passw;	  \n"+
+"    Service service = new Service(\"jdbc\", url, usr, passw);\n"+
+"  </xd:declaration>\n"+
 "  <Books xd:script=\"\">\n"+
 "    <Book xd:script=\"occurs *;create service.query(\n"+
 "            'SELECT TITLE FROM MYTEST.TITLE ORDER BY TITLE ASC')\"\n"+
@@ -707,7 +694,7 @@ public final class TestDatabase extends XDTester {
 			//Drop database
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' xd:root=\"dropSchema\">\n"+
-"<xd:declaration scope='local'> external Service con; </xd:declaration>\n"+
+"  <xd:declaration scope='local'> external Service con; </xd:declaration>\n"+
 "  <dropSchema name=\"string; finally\n"+
 "              con.execute('DROP SCHEMA '+ getText() + ' RESTRICT');\" >\n"+
 "    <table xd:script=\"occurs *\"\n"+
@@ -731,21 +718,20 @@ public final class TestDatabase extends XDTester {
 		// test implicitly and manually closing of cursors
 			xdef =
 "<xd:def xmlns:xd = '" + _xdNS + "'>\n"+
-"<xd:declaration scope='local'>  \n"+
-"ResultSet rs;\n"+
-"external Service service;\n"+
-"int aVal;\n"+
-"void doSQL(int a) {\n"+
-"  aVal = a;\n"+
-"  xcreate('C');\n"+
-"}\n"+
-"void doCB() {\n"+
-"  for(int i=0; i LT " + RESULT_SET_NUM + "; i++) {\n"+
-"    rs = service.query(\"SELECT * FROM " + TABLE_B + " WHERE a=\" + i);\n"+
-"  }\n"+
-"}\n"+
-"</xd:declaration>\n"+
-"\n"+
+"  <xd:declaration scope='local'>  \n"+
+"    ResultSet rs;\n"+
+"    external Service service;\n"+
+"    int aVal;\n"+
+"    void doSQL(int a) {\n"+
+"      aVal = a;\n"+
+"      xcreate('C');\n"+
+"    }\n"+
+"    void doCB() {\n"+
+"      for(int i=0; i LT " + RESULT_SET_NUM + "; i++) {\n"+
+"        rs = service.query(\"SELECT * FROM " + TABLE_B + " WHERE a=\" + i);\n"+
+"      }\n"+
+"    }\n"+
+"  </xd:declaration>\n"+
 "  <A xd:script= \"create 1\">\n"+
 "    <BB xd:script= \"occurs *; create service.query('SELECT * \n"+
 "       FROM " + TABLE_B + "'); finally doSQL(parseInt(toString(@a)));\" \n"+
@@ -753,7 +739,6 @@ public final class TestDatabase extends XDTester {
 "         b = \"string\">\n"+
 "    </BB>\n"+
 "  </A>\n"+
-"  \n"+
 "  <C xd:script= \"occurs 1; create 1;\">"+
 "    <B xd:script= \"occurs *; create service.query('SELECT * \n"+
 "        FROM " + TABLE_B + " WHERE a=' + aVal); finally doCB()\"\n"+
@@ -761,7 +746,6 @@ public final class TestDatabase extends XDTester {
 "           b = \"? string\">\n"+
 "    </B>\n"+
 "  </C>"+
-"\n"+
 "</xd:def>";
 			_con = getConnection();
 			create(xdef, null, null, "A", "#service",
@@ -776,39 +760,37 @@ public final class TestDatabase extends XDTester {
 		// test close(), isClosed() and closeStatement() function
 			xdef =
 "<xd:def xmlns:xd = '" + _xdNS + "'>\n"+
-"<xd:declaration scope='local'>  \n"+
-"external Service service;\n"+
-"void doA() {\n"+
-"  Statement st = service.prepareStatement(\"SELECT * FROM " + TABLE_A +
-"      WHERE a=?\");\n"+
-"  ResultSet rs = st.query(\"1\");\n"+
-"  rs.close();\n"+
-"  st.close();\n"+
-"  if(!rs.isClosed()) {\n"+
-"    error(\"ResultSet isn't closed (close()).\");\n"+
-"  }\n"+
-"  if(!st.isClosed()) {\n"+
-"    error(\"Statement isn't closed (close()).\");\n"+
-"  }\n"+
-"  st = service.prepareStatement(\"SELECT * FROM " + TABLE_A +
-"      WHERE a=?\");\n"+
-"  rs = st.query(\"1\");\n"+
-"  rs.closeStatement();\n"+
-"  if(!rs.isClosed()) {\n"+
-"    error(\"ResultSet isn't closed (closeStatement()).\");\n"+
-"  }\n"+
-"  if(!st.isClosed()) {\n"+
-"    /*error(\"Statement isn't closed (closeStatement()).\");*/\n"+
-"  }\n"+
-"  service.close();\n"+
-"  if(!service.isClosed()) {\n"+
-"    error(\"Service isn't closed (close()).\");\n"+
-"  }\n"+
-"}\n"+
-"</xd:declaration>\n"+
-"\n"+
-"<A xd:script=\"finally doA()\"/>\n"+
-"\n"+
+"  <xd:declaration scope='local'>  \n"+
+"    external Service service;\n"+
+"    void doA() {\n"+
+"      Statement st = service.prepareStatement(\"SELECT * FROM " + TABLE_A +
+"          WHERE a=?\");\n"+
+"      ResultSet rs = st.query(\"1\");\n"+
+"      rs.close();\n"+
+"      st.close();\n"+
+"      if(!rs.isClosed()) {\n"+
+"        error(\"ResultSet isn't closed (close()).\");\n"+
+"      }\n"+
+"      if(!st.isClosed()) {\n"+
+"        error(\"Statement isn't closed (close()).\");\n"+
+"      }\n"+
+"      st = service.prepareStatement(\"SELECT * FROM " + TABLE_A +
+"          WHERE a=?\");\n"+
+"      rs = st.query(\"1\");\n"+
+"      rs.closeStatement();\n"+
+"      if(!rs.isClosed()) {\n"+
+"        error(\"ResultSet isn't closed (closeStatement()).\");\n"+
+"      }\n"+
+"      if(!st.isClosed()) {\n"+
+"        /*error(\"Statement isn't closed (closeStatement()).\");*/\n"+
+"      }\n"+
+"      service.close();\n"+
+"      if(!service.isClosed()) {\n"+
+"        error(\"Service isn't closed (close()).\");\n"+
+"      }\n"+
+"    }\n"+
+"  </xd:declaration>\n"+
+"  <A xd:script=\"finally doA()\"/>\n"+
 "</xd:def>";
 			_con = getConnection();
 			create(xdef, null, null, "A", "#service",

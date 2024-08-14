@@ -54,7 +54,7 @@ public final class TestDebug extends XDTester {
 			xdef =
 "<x:collection xmlns:x='" + _xdNS + "'>\n"+ 	                //01
 "<x:def name = 'a' root = 'a'>\n"+								//02
-"<a a = \"required eq('a');\n"+									//03
+"  <a a = \"required eq('a');\n"+								//03
 "         create 'a';\n"+										//04
 "         finally {\n"+											//04
 "           int i = 1; int j = 2;\n"+							//05
@@ -65,16 +65,16 @@ public final class TestDebug extends XDTester {
 "         }\" />\n"+											//11
 "</x:def>\n"+													//12
 "<x:def>\n"+													//13
-" <x:declaration scope='global'>\n"+							//14
-"  String x(int n, String s){\n"+								//15
-"    String result = s;\n"+										//16
-"    for (int i = 0; i LT n; i++) {\n"+							//17
+"  <x:declaration scope='global'>\n"+							//14
+"    String x(int n, String s){\n"+								//15
+"      String result = s;\n"+									//16
+"      for (int i = 0; i LT n; i++) {\n"+						//17
 "      result += ',' + i;\n"+									//18
-"    }\n"+														//19
-"    return result;\n"+											//20
-"  }\n"+														//21
+"      }\n"+													//19
+"      return result;\n"+										//20
+"    }\n"+														//21
 "  String s = 'a';\n"+											//22
-" </x:declaration>\n"+											//23
+"  </x:declaration>\n"+											//23
 "</x:def>\n"+													//24
 "</x:collection>";												//25
 			xp = compile(xdef);
@@ -126,12 +126,12 @@ public final class TestDebug extends XDTester {
 			// XPos breakpoints
 			xdef =
 "<x:def xmlns:x='" + _xdNS + "' root='a'>\n"+
-"<a a = \"required;\">\n"+
-"  <b x:script='*'/>\n"+
-"</a>\n"+
-" <x:declaration>\n"+
-"  String s = 'a';\n"+
-" </x:declaration>\n"+
+"  <a a = \"required;\">\n"+
+"    <b x:script='*'/>\n"+
+"  </a>\n"+
+"  <x:declaration>\n"+
+"    String s = 'a';\n"+
+"  </x:declaration>\n"+
 "</x:def>";
 			xp = compile(xdef);
 			byte[] dbgInput = "go\ngo\ngo\ngo\ngo\ngo\ngo".getBytes();
@@ -178,17 +178,17 @@ public final class TestDebug extends XDTester {
 		try {
 			xdef =
 "<xd:def xmlns:xd = '" + _xdNS + "' root = 'a'>\n"+
-" <a a='required'>\n"+
-"   <b xd:script = \"finally {\n"+
-"      trace(xpath('../@a').toString());\n"+
-"      trace(now().toString());\n"+
-"      trace('this'.toString());\n"+
-"      Regex x = new Regex('[A-Z]');\n"+
-"      trace(x.toString());\n"+
-"      RegexResult r = x.getMatcher('DCBA');\n"+
-"      trace(r.toString());\n"+
-"      }\" />\n"+
-"</a>\n"+
+"  <a a='required'>\n"+
+"    <b xd:script = \"finally {\n"+
+"       trace(xpath('../@a').toString());\n"+
+"       trace(now().toString());\n"+
+"       trace('this'.toString());\n"+
+"       Regex x = new Regex('[A-Z]');\n"+
+"       trace(x.toString());\n"+
+"       RegexResult r = x.getMatcher('DCBA');\n"+
+"       trace(r.toString());\n"+
+"       }\" />\n"+
+"  </a>\n"+
 "</xd:def>";
 			xml = "<a a='1'> <b/></a>";
 			xd = compile(xdef).createXDDocument();
@@ -206,7 +206,7 @@ public final class TestDebug extends XDTester {
 			assertEq("", baos.toString());
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='SouborY1A'>\n"+
-" <SouborY1A\n"+
+"  <SouborY1A\n"+
 "    Davka        = \"required\"\n"+
 "    ZeDne        = \"required\" > \n"+
 "    <a  xd:script = \"finally {\n"+
@@ -224,8 +224,8 @@ public final class TestDebug extends XDTester {
 "		+', typ=' + c.getItemType(0)\n"+
 "		+', value=' + c.getText(0));\n"+
 "      }\" /> \n"+
-" required\n"+
-" </SouborY1A>\n"+
+"    required\n"+
+"  </SouborY1A>\n"+
 "</xd:def>";
 			xml =
 "<SouborY1A Davka='davka' ZeDne='1.1.99'><a/>text</SouborY1A>";
@@ -251,22 +251,22 @@ public final class TestDebug extends XDTester {
 "       impl-version = \"1.0.0\"\n"+
 "       impl-date    = \"1.11.2000\"\n"+
 "       script=\"options ignoreEmptyAttributes\" >\n"+
-"<x:declaration>\n"+
-"   String $verze = '1.23';\n"+
-"   String $x = '???';\n"+
-"   void $myPause(String i, int j, Datetime k) {\n"+
-"     pause(i);\n"+
-"   }\n"+
-"</x:declaration>\n"+
-"<a>\n"+
-"<b x:script = \"occurs 1..\"\n"+
-"   a = \"required eq('b'); onFalse" +
-	" pause('Error setText to b!');\n"+
+"  <x:declaration>\n"+
+"    String $verze = '1.23';\n"+
+"    String $x = '???';\n"+
+"    void $myPause(String i, int j, Datetime k) {\n"+
+"      pause(i);\n"+
+"    }\n"+
+"  </x:declaration>\n"+
+"  <a>\n"+
+"    <b x:script = \"occurs 1..\"\n"+
+"       a = \"required eq('b'); onFalse" +
+			" pause('Error setText to b!');\n"+
 "       finally {\n"+
 "           String s = getImplProperty('version');\n"+
 "           trace('getImplProperty(\\'version\\'): ' + s);\n"+
-	"       }\" />\n"+
-"</a>\n"+
+"       }\" />\n"+
+  "</a>\n"+
 "</x:def>\n"+
 "<x:def name         = \"b\"\n"+
 "       impl-version = \"2.0.0\"\n"+
@@ -307,7 +307,7 @@ public final class TestDebug extends XDTester {
 "       impl-version = \"1.0.0\"\n"+
 "       impl-date    = \"1.11.2000\"\n"+
 "       script=\"options ignoreEmptyAttributes\" >\n"+
-"<a a = \"required eq('a');\n"+
+"  <a a = \"required eq('a');\n"+
 "         finally {\n"+
 "           String s = getImplProperty('version');\n"+
 "           trace(s);\n"+

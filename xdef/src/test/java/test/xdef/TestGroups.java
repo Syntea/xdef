@@ -1153,13 +1153,13 @@ public final class TestGroups extends XDTester {
 			assertFalse(test(xdef, xml, null, 'P', xml, ""));
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' xd:root='a'>\n"+
-"<a>\n"+
-"  <d/>\n"+
-"  <xd:sequence ref='d1'/>\n"+
-"</a>\n"+
-"<xd:sequence name='d1'>\n"+
-"  optional string(); <b xd:script='occurs ?'/> <c xd:script='occurs ?'/>\n"+
-"</xd:sequence>\n"+
+"  <a>\n"+
+"    <d/>\n"+
+"    <xd:sequence ref='d1'/>\n"+
+"  </a>\n"+
+"  <xd:sequence name='d1'>\n"+
+"    optional string(); <b xd:script='occurs ?'/> <c xd:script='occurs ?'/>\n"+
+"  </xd:sequence>\n"+
 "</xd:def>";
 			xml = "<a><d/>text</a>";
 			assertFalse(test(xdef, xml, null, 'P', xml, ""));
@@ -1178,12 +1178,12 @@ public final class TestGroups extends XDTester {
 			assertFalse(test(xdef, xml, null, 'P', xml, ""));
 			xdef =
 "<x:def xmlns:x='" + _xdNS + "' root='a'>\n"+
-"<a>\n"+
-"  <x:choice ref='n'/>\n"+
-"</a>\n"+
-"<x:choice name='n'>\n"+
-" <b x:script='occurs +'/> <c x:script='occurs +'/> <d x:script='occurs +'/>\n"+
-"</x:choice>\n"+
+"  <a>\n"+
+"    <x:choice ref='n'/>\n"+
+"  </a>\n"+
+"  <x:choice name='n'>\n"+
+"   <b x:script='occurs +'/><c x:script='occurs +'/><d x:script='occurs +'/>\n"+
+"  </x:choice>\n"+
 "</x:def>\n";
 			xml = "<a><c/><c/></a>";
 			assertFalse(test(xdef, xml, null, 'P', xml, ""));
@@ -1341,7 +1341,7 @@ public final class TestGroups extends XDTester {
 "      <c xd:script='required; create from(\"/a/c\")'/>\n"+
 "      <d xd:script='required; create from(\"/a/d\")'/>\n"+
 "    </xd:sequence>\n"+
-" </a>\n"+
+"  </a>\n"+
 "</xd:def>";
 			xml = "<a/>";
 			assertFalse(test(xdef, xml, null, 'P', xml, ""));
@@ -1553,11 +1553,9 @@ public final class TestGroups extends XDTester {
 "</Fault_>";
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "'>\n"+
-"\n"+
 "   <xd:macro name=\"moreAll\">\n"+
 "      options moreAttributes, moreElements, moreText\n"+
 "   </xd:macro>\n"+
-"\n"+
 "  <Envelope         xd:script=\"occurs 1; create from ('/Fault_')\">\n"+
 "    <Header         xd:script=\"occurs 1; create newElement()\">\n"+
 "      <Request      xd:script=\"occurs 1; create from ('//RequestId')\"\n"+
@@ -1611,10 +1609,8 @@ public final class TestGroups extends XDTester {
 ////////////////////////////////////////////////////////////////////////////////
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "'>\n"+
-"<xd:macro name=\"moreAll\">" +
-	"options moreAttributes, moreElements, moreText"+
-"</xd:macro>\n"+
-"\n"+
+"  <xd:macro name=\"moreAll\">" +
+		"options moreAttributes, moreElements, moreText</xd:macro>\n"+
 "  <Envelope         xd:script=\"occurs 1; create from ('/Fault_')\">\n"+
 "    <Header         xd:script=\"occurs 1; create newElement()\">\n"+
 "      <Request         xd:script=\"occurs 1; create from ('//RequestId')\"\n"+
@@ -1668,10 +1664,8 @@ public final class TestGroups extends XDTester {
 ////////////////////////////////////////////////////////////////////////////////
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "'>\n"+
-"\n"+
-"   <xd:macro name=\"moreAll\">" +
-				"options moreAttributes, moreElements, moreText</xd:macro>\n"+
-"\n"+
+"  <xd:macro name=\"moreAll\">" +
+		"options moreAttributes, moreElements, moreText</xd:macro>\n"+
 "  <Envelope           xd:script=\"occurs 1; create from ('/Fault_')\">\n"+
 "    <Header           xd:script=\"occurs 1; create newElement()\">\n"+
 "      <Request        xd:script=\"occurs 1; create from ('//RequestId')\"\n"+
@@ -1777,16 +1771,16 @@ public final class TestGroups extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xdef = //sequence
 "<x:def xmlns:x='" + _xdNS + "' root='a'>\n"+
-"<a>\n"+
-"  <x:mixed>\n"+
-"    <p x:script = \"occurs 1..\" />\n"+
-"    <x:sequence>\n"+
-"      <q x:script = \"occurs 1\" />\n"+
-"      required int()\n"+
-"      <q x:script = \"occurs 1\" />\n"+
-"    </x:sequence>\n"+
-"  </x:mixed>\n"+
-"</a>\n"+
+"  <a>\n"+
+"    <x:mixed>\n"+
+"      <p x:script = \"occurs 1..\" />\n"+
+"      <x:sequence>\n"+
+"        <q x:script = \"occurs 1\" />\n"+
+"        required int()\n"+
+"        <q x:script = \"occurs 1\" />\n"+
+"      </x:sequence>\n"+
+"    </x:mixed>\n"+
+"  </a>\n"+
 "</x:def>";
 			parse(xdef, null, "<a><p/><q/>123<q/><p/></a>", reporter);
 			assertNoErrorwarnings(reporter);
@@ -1816,27 +1810,27 @@ public final class TestGroups extends XDTester {
 			assertTrue(reporter.errorWarnings(), "Not reported missing p,q");
 			xdef = //test reference of groups.
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-" <a>\n"+
-"   <xd:choice> <a/> <b/> </xd:choice>\n"+
-"   <xd:mixed ref='a'/>\n"+
-" </a>\n"+
-" <xd:mixed empty='false' name='a'> <p/> <q/> </xd:mixed>\n"+
+"  <a>\n"+
+"    <xd:choice> <a/> <b/> </xd:choice>\n"+
+"    <xd:mixed ref='a'/>\n"+
+"  </a>\n"+
+"  <xd:mixed empty='false' name='a'> <p/> <q/> </xd:mixed>\n"+
 "</xd:def>";
 			parse(xdef, null, "<a><b/></a>", reporter);
 			assertTrue(reporter.errorWarnings(), "Not reported missing p,q");
 			xdef = //test sequence references witn nested group
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"<a> <b xd:script='occurs *; ref b'/> </a>\n"+
-"<b> <xd:sequence xd:script='optional; ref sq'/> </b>\n"+
-"<xd:sequence xd:name='sq'>\n"+
-"  <xd:choice xd:script='occurs *'>\n"+
-"    string()\n"+
-"    <c>\n"+
-"      <xd:sequence xd:script='occurs +; ref sq'/>\n"+
-"    </c>\n"+
-"    <b xd:script='ref b'/>\n"+
-"  </xd:choice>\n"+
-"</xd:sequence>\n"+
+"  <a> <b xd:script='occurs *; ref b'/> </a>\n"+
+"  <b> <xd:sequence xd:script='optional; ref sq'/> </b>\n"+
+"  <xd:sequence xd:name='sq'>\n"+
+"    <xd:choice xd:script='occurs *'>\n"+
+"      string()\n"+
+"      <c>\n"+
+"        <xd:sequence xd:script='occurs +; ref sq'/>\n"+
+"      </c>\n"+
+"      <b xd:script='ref b'/>\n"+
+"    </xd:choice>\n"+
+"  </xd:sequence>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			parse(xp, null, "<a/>", reporter);
@@ -1859,15 +1853,15 @@ public final class TestGroups extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xdef = //set choice "+" instead of "*"
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"<a> <b xd:script='optional; ref b'/> </a>\n"+
-"<b> <xd:sequence xd:script='optional; ref sq'/> </b>\n"+
-"<xd:sequence xd:name='sq'>\n"+
-"  <xd:choice xd:script='occurs +'>\n"+
-"    string()\n"+
-"    <c> <xd:sequence xd:script='occurs *; ref sq'/> </c>\n"+
-"    <b xd:script='ref b'/>\n"+
-"  </xd:choice>\n"+
-"</xd:sequence>\n"+
+"  <a> <b xd:script='optional; ref b'/> </a>\n"+
+"  <b> <xd:sequence xd:script='optional; ref sq'/> </b>\n"+
+"  <xd:sequence xd:name='sq'>\n"+
+"    <xd:choice xd:script='occurs +'>\n"+
+"      string()\n"+
+"      <c> <xd:sequence xd:script='occurs *; ref sq'/> </c>\n"+
+"      <b xd:script='ref b'/>\n"+
+"    </xd:choice>\n"+
+"  </xd:sequence>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			parse(xp, null, "<a/>", reporter);
@@ -1889,73 +1883,70 @@ public final class TestGroups extends XDTester {
 			parse(xp, null, "<a><b><c/>x<c/></b></a>", reporter);
 			assertNoErrorwarnings(reporter);
 			xdef = // check mixed, include 1
-"<x:collection xmlns:x='" + _xdNS + "'>\n"+
-"<xd:def name='a' xd:root='a' xmlns:xd='" + _xdNS + "'\n"+
-" script='options ignoreEmptyAttributes' >\n"+
-"<a xd:script='ref b'>\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' root='a' name='a'\n"+
+"    script='options ignoreEmptyAttributes' >\n"+
+"  <a xd:script='ref b'>\n"+
 "    <xd:sequence ref='sq1'/>\n"+
 "    required string()\n"+
 "    <xd:sequence ref='sq2'/>\n"+
-"</a>\n"+
-"<b attr='required'> <c/> </b>\n"+
-"<xd:sequence name='sq1'>\n"+
-"  <xd:mixed> <p/> <q/> </xd:mixed>\n"+
-"</xd:sequence>\n"+
-"<xd:sequence name='sq2'>\n"+
-"  <xd:choice> <r/> <s/> </xd:choice>\n"+
-"</xd:sequence>\n"+
-"</xd:def>\n"+
-"</x:collection>";
+"  </a>\n"+
+"  <b attr='required'> <c/> </b>\n"+
+"  <xd:sequence name='sq1'>\n"+
+"    <xd:mixed> <p/> <q/> </xd:mixed>\n"+
+"  </xd:sequence>\n"+
+"  <xd:sequence name='sq2'>\n"+
+"    <xd:choice> <r/> <s/> </xd:choice>\n"+
+"  </xd:sequence>\n"+
+"</xd:def>";
 			parse(xdef, "a", "<a attr='a'><c/><q/><p/>text<s/></a>", reporter);
 			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'\n"+
 " script='options ignoreEmptyAttributes'>\n"+
-"<a xd:script = 'ref b'>\n"+
-"  <xd:sequence ref='sq1'/>\n"+
-"  required\n"+
-"  <xd:sequence ref='sq2'/>\n"+
-"</a>\n"+
-"<b attr='required'> <c/> </b>\n"+
-"<xd:sequence name='sq1'>\n"+
-"  <xd:mixed> <p/> <q/> </xd:mixed>\n"+
-"</xd:sequence>\n"+
-"<xd:sequence name='sq2'>\n"+
-"  <xd:choice> <r/> <s/> </xd:choice>\n"+
-"</xd:sequence>\n"+
+"  <a xd:script = 'ref b'>\n"+
+"    <xd:sequence ref='sq1'/>\n"+
+"    required\n"+
+"    <xd:sequence ref='sq2'/>\n"+
+"  </a>\n"+
+"  <b attr='required'> <c/> </b>\n"+
+"  <xd:sequence name='sq1'>\n"+
+"    <xd:mixed> <p/> <q/> </xd:mixed>\n"+
+"  </xd:sequence>\n"+
+"  <xd:sequence name='sq2'>\n"+
+"    <xd:choice> <r/> <s/> </xd:choice>\n"+
+"  </xd:sequence>\n"+
 "</xd:def>";
 			parse(xdef, null, "<a attr='a'><c/><p/><q/>text<s/></a>", reporter);
 			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'\n"+
 "        script='options ignoreEmptyAttributes' >\n"+
-"<a xd:script = 'ref b'>\n"+
-"  <xd:mixed xd:ref='sq1'/>\n"+
-"  required string(4)\n"+
-"  <xd:choice ref='sq2'/>\n"+
-"</a>\n"+
-"<b attr='required'> <c/> </b>\n"+
-"\n"+
-"<xd:mixed name='sq1'> <p/> <q/> </xd:mixed>\n"+
-"<xd:choice name='sq2'> <r/> <s/> </xd:choice>\n"+
+"  <a xd:script = 'ref b'>\n"+
+"    <xd:mixed xd:ref='sq1'/>\n"+
+"    required string(4)\n"+
+"    <xd:choice ref='sq2'/>\n"+
+"  </a>\n"+
+"  <b attr='required'> <c/> </b>\n"+
+"  <xd:mixed name='sq1'> <p/> <q/> </xd:mixed>\n"+
+"  <xd:choice name='sq2'> <r/> <s/> </xd:choice>\n"+
 "</xd:def>";
 			parse(xdef, null, "<a attr='a'><c/><p/><q/>text<s/></a>", reporter);
 			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'\n"+
-" script= 'options ignoreEmptyAttributes' >\n"+
-"<a xd:script = 'ref b'>\n"+
-"  <xd:sequence xd:ref='sq1'/>\n"+
-"  required\n"+
-"  <xd:sequence ref='sq2'/>\n"+
-"</a>\n"+
-"<b attr='required'> <c/> </b>\n"+
-"<xd:sequence name = \"sq1\">\n"+
-"  <xd:mixed> <p/> <q/> </xd:mixed>\n"+
-"</xd:sequence>\n"+
-"<xd:sequence name='sq2'>\n"+
-"  <xd:choice> <r/> <s/> </xd:choice>\n"+
-"</xd:sequence>\n"+
+"   script='options ignoreEmptyAttributes' >\n"+
+"  <a xd:script = 'ref b'>\n"+
+"    <xd:sequence xd:ref='sq1'/>\n"+
+"    required\n"+
+"    <xd:sequence ref='sq2'/>\n"+
+"  </a>\n"+
+"  <b attr='required'> <c/> </b>\n"+
+"  <xd:sequence name = \"sq1\">\n"+
+"    <xd:mixed> <p/> <q/> </xd:mixed>\n"+
+"  </xd:sequence>\n"+
+"  <xd:sequence name='sq2'>\n"+
+"    <xd:choice> <r/> <s/> </xd:choice>\n"+
+"  </xd:sequence>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			parse(xp, null, "<a attr='a'><c/><p/><q/>text<s/></a>", reporter);
@@ -1977,29 +1968,29 @@ public final class TestGroups extends XDTester {
 			xdef = // check mixed, include
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name='a' root='a' script='options ignoreEmptyAttributes' >\n"+
-"<a>\n"+
-"  <p p = \"required xdatetime('ddMMyyyy')\"/>\n"+
-"  <xd:sequence ref='b#sq'/>\n"+
-"  <z/>\n"+
-"</a>\n"+
+"  <a>\n"+
+"    <p p = \"required xdatetime('ddMMyyyy')\"/>\n"+
+"    <xd:sequence ref='b#sq'/>\n"+
+"    <z/>\n"+
+"  </a>\n"+
 "</xd:def>\n"+
 "<xd:def name='b' script='options ignoreEmptyAttributes'>\n"+
-"<xd:sequence name='sq'>\n"+
-"  <xd:mixed>\n"+
-"    <b/>\n"+
-"    <c xd:script='occurs 0..' />\n"+
-"    <d/>\n"+
-"    <xd:sequence ref='sq1'/>\n"+
-"  </xd:mixed>\n"+
-"</xd:sequence>\n"+
-"<xd:sequence name='sq1'>\n"+
+"  <xd:sequence name='sq'>\n"+
+"    <xd:mixed>\n"+
+"      <b/>\n"+
+"      <c xd:script='occurs 0..' />\n"+
+"      <d/>\n"+
+"      <xd:sequence ref='sq1'/>\n"+
+"    </xd:mixed>\n"+
+"  </xd:sequence>\n"+
+"  <xd:sequence name='sq1'>\n"+
 "    <xd:sequence ref='sq2'/>\n"+
 "    <y/>\n"+
-"</xd:sequence>\n"+
-"<xd:sequence name='sq2'>\n"+
+"  </xd:sequence>\n"+
+"  <xd:sequence name='sq2'>\n"+
 "    <e xd:script='occurs 0..'/>\n"+
 "    <f xd:script='occurs 0..'/>\n"+
-"</xd:sequence>\n"+
+"  </xd:sequence>\n"+
 "</xd:def>\n"+
 "</xd:collection>";
 			xml = "<a>\n\n<p p='31122004'/>\n\n<y/>\n"+
@@ -2009,13 +2000,13 @@ public final class TestGroups extends XDTester {
 			// check mixed, include
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"<a>\n"+
-"  <xd:mixed empty='false'>\n"+
-"    <b xd:script = 'occurs 0..' />\n"+
-"    optional string()\n"+
-"    <c xd:script = 'occurs 0..'/>\n"+
-"  </xd:mixed>\n"+
-"</a>\n"+
+"  <a>\n"+
+"    <xd:mixed empty='false'>\n"+
+"      <b xd:script = 'occurs 0..' />\n"+
+"      optional string()\n"+
+"      <c xd:script = 'occurs 0..'/>\n"+
+"    </xd:mixed>\n"+
+"  </a>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			parse(xp, null, "<a>t1<b/></a>", reporter);
@@ -2028,7 +2019,7 @@ public final class TestGroups extends XDTester {
 				reporter.printToString());
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"<a> <xd:sequence> <xd:mixed> <p/> </xd:mixed> </xd:sequence> string(); </a>\n"+
+"  <a><xd:sequence> <xd:mixed><p/></xd:mixed> </xd:sequence> string(); </a>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xml = "<a><p/>x</a>";
@@ -2045,7 +2036,7 @@ public final class TestGroups extends XDTester {
 			assertErrors(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"<a> <xd:sequence> <xd:mixed> <p/> </xd:mixed> string(); </xd:sequence> </a>\n"+
+"  <a><xd:sequence> <xd:mixed> <p/> </xd:mixed> string(); </xd:sequence></a>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xml = "<a><p/>x</a>";
@@ -2108,7 +2099,7 @@ public final class TestGroups extends XDTester {
 			//test choice
 			xdef =
 "<x:def xmlns:x='" + _xdNS + "' root='a'>\n"+
-"<a> <x:choice> <b/> <c/> </x:choice> </a>\n"+
+"  <a> <x:choice> <b/> <c/> </x:choice> </a>\n"+
 "</x:def>";
 			xp = compile(xdef);
 			parse(xp, null, "<a/>", reporter);
@@ -2147,7 +2138,7 @@ public final class TestGroups extends XDTester {
 		try {//text checking inside sequence
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"<a> <xd:sequence> <c/> <b/> string(); </xd:sequence> </a>\n"+
+"  <a> <xd:sequence> <c/> <b/> string(); </xd:sequence> </a>\n"+
 "</xd:def>";
 			xml = "<a>\n  ahoj\n  <b/>\n  \n  <b/>\n  \n  <c/>\n</a>";
 			parse(xdef, null, xml, reporter);
@@ -2161,7 +2152,6 @@ public final class TestGroups extends XDTester {
 "    <xd:sequence xd:script='ref x#a'/>\n"+
 "  </a>\n"+
 "</xd:def>\n"+
-"\n"+
 "<xd:def xd:name='x'>\n"+
 "  <xd:sequence name='a'>\n"+
 "    <xd:choice xd:script='ref x#a'/>\n"+
@@ -2174,7 +2164,6 @@ public final class TestGroups extends XDTester {
 "  </xd:choice>\n"+
 "  <xd:mixed name='a' ref='b#a'/>\n"+
 "</xd:def>\n"+
-"\n"+
 "<xd:def xd:name='b'>\n"+
 "  <xd:sequence name='a'>\n"+
 "    <b/>\n"+
@@ -2217,9 +2206,9 @@ public final class TestGroups extends XDTester {
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"<xd:macro name='m' p='?'>\n"+
-"  init out('i#{p} ');finally out('f#{p} ')\n"+
-"</xd:macro>\n"+
+"  <xd:macro name='m' p='?'>\n"+
+"    init out('i#{p} ');finally out('f#{p} ')\n"+
+"  </xd:macro>\n"+
 "  <a xd:script=\"1; ${m(p='a')};\">\n"+
 "    <xd:choice>\n"+
 "      <xd:sequence>\n"+
@@ -2275,10 +2264,10 @@ public final class TestGroups extends XDTester {
 
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"<xd:macro name='m' p='?'>\n"+
-"  init out('i#{p} ');finally out('f#{p} ')\n"+
-"</xd:macro>\n"+
-"<a xd:script=\"${m(p='a')}\">\n"+
+"  <xd:macro name='m' p='?'>\n"+
+"    init out('i#{p} ');finally out('f#{p} ')\n"+
+"  </xd:macro>\n"+
+"  <a xd:script=\"${m(p='a')}\">\n"+
 "    <b xd:script=\"${m(p='b1')}\">required string();${m(p='T1')};</b>\n"+
 "    <xd:sequence script=\"*;${m(p='SQ1')}\">\n"+
 "      required string();${m(p='T2')}\n"+
@@ -2289,7 +2278,7 @@ public final class TestGroups extends XDTester {
 "	   required string();${m(p='T4')}\n"+
 "      <c xd:script=\"${m(p='c2')}\"/>\n"+
 "    </xd:sequence>\n"+
-"</a>\n"+
+"  </a>\n"+
 "</xd:def>\n";
 			xml = "<a><b>0</b>1<c/>2<c/><b>3</b>4<c/>5<c/></a>";
 			swr = new StringWriter();

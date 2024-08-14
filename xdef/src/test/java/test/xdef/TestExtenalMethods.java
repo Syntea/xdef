@@ -211,33 +211,33 @@ public final class TestExtenalMethods extends XDTester {
 "}\n"+
 "external method String test.xdef.TestExtenalMethods_2.m35(XXElement, int);\n"+
 "</xd:declaration>\n"+
-" <a\n"+
-"  m00=\"?string;finally{m();m(1);}\"\n"+
-"  m01=\"?string;finally{String s=m01(m01());if('1'!=s)setText(s);}\"\n"+
-"  m02=\"?string;finally{String s=m02(m02());if('1'!=s)setText(s);}\"\n"+
-"  m03=\"?string;finally{String s=m03(m03());if('1'!=s)setText(s);}\"\n"+
-"  m04=\"?string;finally{String s=m04(m04());if('1'!=s)setText(s);}\"\n"+
-"  m05=\"?string;finally{String s=m05(m05());if('1'!=s)setText(s);}\"\n"+
-"  m06=\"?string;finally{String s=m06(m06());if('1'!=s)setText(s);}\"\n"+
-"  m07=\"?string;finally{String s=m07(m07());if('1'!=s)setText(s);}\"\n"+
-"  m08=\"?string;finally{String s=m08(m08());if('1'!=s)setText(s);}\"\n"+
-"  m09=\"?string;finally{String s=m09(m09());if('1'!=s)setText(s);}\"\n"+
-"  m11=\"?string;finally{String s=m11(m11());if('1.0'!=s)setText(s);}\"\n"+
-"  m12=\"?string;finally{String s=m12(m12());if('1.0'!=s)setText(s);}\"\n"+
-"  m13=\"?string;finally{String s=m13(m13());if('1.0'!=s)setText(s);}\"\n"+
-"  m14=\"?string;finally{String s=m14(m14());if('1.0'!=s)setText(s);}\"\n"+
-"  m15=\"?string;finally{String s=m15(m15());if('true'!=s)setText(s);}\"\n"+
-"  m16=\"?string;finally{String s=m16(m16());if('true'!=s)setText(s);}\"\n"+
-"  m20=\"?string;finally{String s=m20(m20());if('1'!=s)setText(s);}\"\n"+
-"  m21=\"?string;finally{int i=m21(m21()+1);if(2!=i)setText(''+i);}\"\n"+
-"  m22=\"?string;finally{float f=m22(m22()+1.0);if(2.0!=f)setText(''+f);}\"\n"+
-"  m30=\"?string;finally{String s=m30(m30());if('1'!=s)setText(s);}\"\n"+
-"  m31=\"?string;finally{String s=m31(m31());if('1'!=s)setText(s);}\"\n"+
-"  m32=\"?string;finally{String s=m32(m32());if('1'!=s)setText(s);}\"\n"+
-"  m33=\"?string;finally{String s=m33(m33());if('1'!=s)setText(s);}\"\n"+
-"  m34=\"?string;finally{String s=m34(m34());if('1'!=s)setText(s);}\"\n"+
-"  m35=\"?string;finally{String s=m35(m35());if('1'!=s)setText(s);}\"\n"+
-" />\n"+
+"  <a\n"+
+"    m00=\"?string;finally{m();m(1);}\"\n"+
+"    m01=\"?string;finally{String s=m01(m01());if('1'!=s)setText(s);}\"\n"+
+"    m02=\"?string;finally{String s=m02(m02());if('1'!=s)setText(s);}\"\n"+
+"    m03=\"?string;finally{String s=m03(m03());if('1'!=s)setText(s);}\"\n"+
+"    m04=\"?string;finally{String s=m04(m04());if('1'!=s)setText(s);}\"\n"+
+"    m05=\"?string;finally{String s=m05(m05());if('1'!=s)setText(s);}\"\n"+
+"    m06=\"?string;finally{String s=m06(m06());if('1'!=s)setText(s);}\"\n"+
+"    m07=\"?string;finally{String s=m07(m07());if('1'!=s)setText(s);}\"\n"+
+"    m08=\"?string;finally{String s=m08(m08());if('1'!=s)setText(s);}\"\n"+
+"    m09=\"?string;finally{String s=m09(m09());if('1'!=s)setText(s);}\"\n"+
+"    m11=\"?string;finally{String s=m11(m11());if('1.0'!=s)setText(s);}\"\n"+
+"    m12=\"?string;finally{String s=m12(m12());if('1.0'!=s)setText(s);}\"\n"+
+"    m13=\"?string;finally{String s=m13(m13());if('1.0'!=s)setText(s);}\"\n"+
+"    m14=\"?string;finally{String s=m14(m14());if('1.0'!=s)setText(s);}\"\n"+
+"    m15=\"?string;finally{String s=m15(m15());if('true'!=s)setText(s);}\"\n"+
+"    m16=\"?string;finally{String s=m16(m16());if('true'!=s)setText(s);}\"\n"+
+"    m20=\"?string;finally{String s=m20(m20());if('1'!=s)setText(s);}\"\n"+
+"    m21=\"?string;finally{int i=m21(m21()+1);if(2!=i)setText(''+i);}\"\n"+
+"    m22=\"?string;finally{float f=m22(m22()+1.0);if(2.0!=f)setText(''+f);}\"\n"+
+"    m30=\"?string;finally{String s=m30(m30());if('1'!=s)setText(s);}\"\n"+
+"    m31=\"?string;finally{String s=m31(m31());if('1'!=s)setText(s);}\"\n"+
+"    m32=\"?string;finally{String s=m32(m32());if('1'!=s)setText(s);}\"\n"+
+"    m33=\"?string;finally{String s=m33(m33());if('1'!=s)setText(s);}\"\n"+
+"    m34=\"?string;finally{String s=m34(m34());if('1'!=s)setText(s);}\"\n"+
+"    m35=\"?string;finally{String s=m35(m35());if('1'!=s)setText(s);}\"\n"+
+"  />\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xml = "<a"
@@ -378,10 +378,10 @@ public final class TestExtenalMethods extends XDTester {
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
-"<xd:declaration>\n"+
-"  external method void test.xdef.TestExtenalMethods.g1(String);\n"+
-"  external method int test.xdef.TestExtenalMethods.p4(long);\n"+
-"</xd:declaration>\n"+
+"  <xd:declaration>\n"+
+"    external method void test.xdef.TestExtenalMethods.g1(String);\n"+
+"    external method int test.xdef.TestExtenalMethods.p4(long);\n"+
+"  </xd:declaration>\n"+
 "  <A a=\"string; finally {g1('g1'); toString(p4(4)); \n"+
 "      test.xdef.TestExtenalMethods.g1('.g1');\n"+
 "      toString(test.xdef.TestExtenalMethods.p4(4))}; \n"+
@@ -389,7 +389,6 @@ public final class TestExtenalMethods extends XDTester {
 "    xd:script=\"finally {g1('g1'); toString(p4(4)); \n"+
 "      test.xdef.TestExtenalMethods.g1('.g1');\n"+
 "      toString(test.xdef.TestExtenalMethods.p4(4)); fce()}\"/>\n"+
-"  \n"+
 "  <xd:declaration>\n"+
 "    void fce() {\n"+
 "      g1('g1'); \n"+
@@ -405,20 +404,20 @@ public final class TestExtenalMethods extends XDTester {
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root = 'a'>\n"+
-"<xd:declaration>\n"+
-"external method {\n"+
-"XDParseResult test.xdef.TestExtenalMethods.p1(XXData, String);\n"+
-"XDParseResult test.xdef.TestExtenalMethods.p2(XXNode, String, long);\n"+
-"int test.xdef.TestExtenalMethods.p3(XDValue[]);\n"+
-"int test.xdef.TestExtenalMethods.p4(long);\n"+
-"String test.xdef.TestExtenalMethods.p5(XXNode, long);\n"+
-"void test.xdef.TestExtenalMethods.p6(XXNode, XDValue);\n"+
-"void test.xdef.TestExtenalMethods.p7(XXElement, XDValue[]);\n"+
-"int test.xdef.TestExtenalMethods.p3(XDValue[]) as q;\n"+
-"void test.xdef.TestExtenalMethods.p7(XXElement, XDValue[]) as Q;\n"+
-"int test.xdef.TestExtenalMethods.p8(byte[]);\n"+
-"byte[] test.xdef.TestExtenalMethods.p9();\n"+
-"}\n"+
+"  <xd:declaration>\n"+
+"    external method {\n"+
+"      XDParseResult test.xdef.TestExtenalMethods.p1(XXData, String);\n"+
+"      XDParseResult test.xdef.TestExtenalMethods.p2(XXNode, String, long);\n"+
+"      int test.xdef.TestExtenalMethods.p3(XDValue[]);\n"+
+"      int test.xdef.TestExtenalMethods.p4(long);\n"+
+"      String test.xdef.TestExtenalMethods.p5(XXNode, long);\n"+
+"      void test.xdef.TestExtenalMethods.p6(XXNode, XDValue);\n"+
+"      void test.xdef.TestExtenalMethods.p7(XXElement, XDValue[]);\n"+
+"      int test.xdef.TestExtenalMethods.p3(XDValue[]) as q;\n"+
+"      void test.xdef.TestExtenalMethods.p7(XXElement, XDValue[]) as Q;\n"+
+"      int test.xdef.TestExtenalMethods.p8(byte[]);\n"+
+"      byte[] test.xdef.TestExtenalMethods.p9();\n"+
+"    }\n"+
 "</xd:declaration>\n"+
 "  <a xd:script = \"finally {Bytes b = p9();\n"+
 "     AnyValue a = '6'; out(''+p1('p1')+p2('2',1)+p3()+p3(3,3,3)+p4(4)+\n"+
@@ -439,10 +438,10 @@ public final class TestExtenalMethods extends XDTester {
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"<xd:declaration>\n"+
-"  external method XDValue test.xdef.TestExtenalMethods.y();\n"+
-"  external method org.xdef.XDValue test.xdef.TestExtenalMethods.z();\n"+
-"</xd:declaration>\n"+
+"  <xd:declaration>\n"+
+"    external method XDValue test.xdef.TestExtenalMethods.y();\n"+
+"    external method org.xdef.XDValue test.xdef.TestExtenalMethods.z();\n"+
+"  </xd:declaration>\n"+
 "  <a a=\"string;\n"+
 "        onTrue{if (y()==null) error('y'); error(z().toString());}\"/>\n"+
 "</xd:def>";
@@ -453,17 +452,16 @@ public final class TestExtenalMethods extends XDTester {
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"<xd:declaration>\n"+
-"external method {\n"+
-//"  XDValue test.xdef.TestExtenalMethods.x();\n"+
-"void test.xdef.TestExtenalMethods.x(org.xdef.proc.XXElement);\n"+
-"void test.xdef.TestExtenalMethods.x(XXElement, org.xdef.XDContainer);\n"+
-"void test.xdef.TestExtenalMethods.x(XXElement, XDContainer, XDContainer);\n"+
-"}\n"+
-"  Container p = null, q = null, r = null, s = null, t = null;\n"+
-"</xd:declaration>\n"+
-"  <a a = \"string; finally {x();x(p);x(p,q);}\">\n"+
-"  </a>\n"+
+"  <xd:declaration>\n"+
+"    external method {\n"+
+"      void test.xdef.TestExtenalMethods.x(org.xdef.proc.XXElement);\n"+
+"      void test.xdef.TestExtenalMethods.x(XXElement, org.xdef.XDContainer);\n"+
+"      void test.xdef.TestExtenalMethods.x(XXElement,\n"+
+"                                          XDContainer, XDContainer);\n"+
+"    }\n"+
+"    Container p = null, q = null, r = null, s = null, t = null;\n"+
+  "</xd:declaration>\n"+
+"  <a a = \"string; finally {x();x(p);x(p,q);}\"/>\n"+
 "</xd:def>";
 			parse(xdef, null, "<a a = 'a'></a>", reporter);
 			s = reporter.printToString();
@@ -473,20 +471,20 @@ public final class TestExtenalMethods extends XDTester {
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root = 'a'>\n"+
-"<xd:declaration>\n"+
-"external method {\n"+
-"void test.xdef.TestExtenalMethods.m1(XXNode);\n"+
-"void test.xdef.TestExtenalMethods.m2(XXNode, long);\n"+
-"long test.xdef.TestExtenalMethods.m3(XXNode);\n"+
-"long test.xdef.TestExtenalMethods.m4(XXNode);\n"+
-"void test.xdef.TestExtenalMethods.m5(XXNode, long);\n"+
-"void test.xdef.TestExtenalMethods.m6(XXNode, long);\n"+
-"void test.xdef.TestExtenalMethods.m7(XXNode, XDValue[]);\n"+
-"void test.xdef.TestExtenalMethods.m8(XXNode, long, XDContainer);\n"+
-"void test.xdef.TestExtenalMethods.m9(XXNode, long, XDContainer);\n"+
-"void test.xdef.TestExtenalMethods.m10(XXNode, XDValue[]);\n"+
-"}\n"+
-"</xd:declaration>\n"+
+"  <xd:declaration>\n"+
+"    external method {\n"+
+"      void test.xdef.TestExtenalMethods.m1(XXNode);\n"+
+"      void test.xdef.TestExtenalMethods.m2(XXNode, long);\n"+
+"      long test.xdef.TestExtenalMethods.m3(XXNode);\n"+
+"      long test.xdef.TestExtenalMethods.m4(XXNode);\n"+
+"      void test.xdef.TestExtenalMethods.m5(XXNode, long);\n"+
+"      void test.xdef.TestExtenalMethods.m6(XXNode, long);\n"+
+"      void test.xdef.TestExtenalMethods.m7(XXNode, XDValue[]);\n"+
+"      void test.xdef.TestExtenalMethods.m8(XXNode, long, XDContainer);\n"+
+"      void test.xdef.TestExtenalMethods.m9(XXNode, long, XDContainer);\n"+
+"      void test.xdef.TestExtenalMethods.m10(XXNode, XDValue[]);\n"+
+"    }\n"+
+"  </xd:declaration>\n"+
 "  <a a='string; finally {m1();m2(2); m5(m3()); m6(m4()); m7(7,8);\n"+
 "        m8(1, %a = 2); m9(9, []); m10(1, %a = 2);}' />\n"+
 "</xd:def>";
@@ -531,10 +529,10 @@ public final class TestExtenalMethods extends XDTester {
 "  }"+
 "  int e1=99;\n"+
 "</xd:declaration>\n"+
-" <a\n"+
-"  m00=\"?string;finally{m();m(1);e();e(e1);e(e2)}\"\n"+
-"  m01=\"?string;finally{String s=m01(m01());if('1'!=s)setText(s);}\"\n"+
-" />\n"+
+"  <a\n"+
+"    m00=\"?string;finally{m();m(1);e();e(e1);e(e2)}\"\n"+
+"    m01=\"?string;finally{String s=m01(m01());if('1'!=s)setText(s);}\"\n"+
+"  />\n"+
 "</xd:def>",
 "<xd:def xmlns:xd='" + _xdNS + "' name='B' root='b'>\n"+
 "<xd:declaration scope='global'>\n"+
@@ -547,9 +545,9 @@ public final class TestExtenalMethods extends XDTester {
 "  int e2 = 2;\n"+
 "  void e(int i) {outln('e(' + i +'); e1=' + e1 + ', e2=' + e2);}\n"+
 "</xd:declaration>\n"+
-" <b\n"+
-"  b=\"?string; onTrue{m();m(1); e(); e(e1); e(e2);}\"\n"+
-" />\n"+
+"  <b\n"+
+"    b=\"?string; onTrue{m();m(1); e(); e(e1); e(e2);}\"\n"+
+"  />\n"+
 "</xd:def>"});
 			xd = xp.createXDDocument("A");
 			xd.setVariable("e1", 3);

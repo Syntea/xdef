@@ -48,7 +48,7 @@ public final class TestOptions extends XDTester {
 			// ignoreTextWhiteSpaces
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'\n"+
-" xd:script='options ignoreAttrWhiteSpaces, ignoreTextWhiteSpaces'>\n"+
+"    xd:script='options ignoreAttrWhiteSpaces, ignoreTextWhiteSpaces'>\n"+
 "  <a a1 = 'optional string(0,100)' a2 = 'optional string(0,100)'>\n"+
 "    optional string(0,100)\n"+
 "  </a>\n"+
@@ -63,7 +63,7 @@ public final class TestOptions extends XDTester {
 			// setAttrLowerCase, setTextLowerCase
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'\n"+
-" xd:script='options setAttrLowerCase, setTextLowerCase'>\n"+
+"    xd:script='options setAttrLowerCase, setTextLowerCase'>\n"+
 "  <a a1 = 'optional string(0,100)' a2 = 'optional string(0,100)'>\n"+
 "    optional string(0,100)\n"+
 "  </a>\n"+
@@ -74,7 +74,7 @@ public final class TestOptions extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'\n"+
-" xd:script='options setAttrUpperCase, setTextUpperCase'>\n"+
+"    xd:script='options setAttrUpperCase, setTextUpperCase'>\n"+
 "  <a a1 = 'optional string(0,100)' a2 = 'optional string(0,100)'>\n"+
 "    optional string(0,100)\n"+
 "  </a>\n"+
@@ -205,9 +205,10 @@ public final class TestOptions extends XDTester {
 			assertTrue(reporter.errorWarnings());
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"<a xd:textcontent=\"required string; finally out(getText());create 'xyz'\">\n"+
-"  <b/>\n"+
-"</a>\n"+
+"  <a xd:textcontent=\"required string;\n"+
+"                     finally out(getText());create 'xyz'\">\n"+
+"    <b/>\n"+
+"  </a>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xml = "<a>aaa<b/></a>";
@@ -283,20 +284,20 @@ public final class TestOptions extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xdef = // option igenoreOther; forget
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.0' name='rdf' root='rdf:RDF'\n"+
-" xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"\n"+
-" xmlns:dcterms=\"http://purl.org/dc/terms/\">\n"+
-"<xd:declaration> String a; boolean b; </xd:declaration>\n" +
-"<rdf:RDF>\n" +
-"  <rdf:Description xd:script=\"occurs +;options ignoreOther;\n" +
-"    init {a='';b=false;} finally {if (b EQ true) outln(a);} forget;\">\n" +
-"    <dcterms:title xd:script=\"occurs +\">\n" +
-"      onTrue a = getText() + ': ';\n" +
-"    </dcterms:title>\n" +
-"    <dcterms:abstract>\n" +
-"      onTrue {a= a + getText();b=true;}\n" +
-"    </dcterms:abstract>\n" +
-"  </rdf:Description>\n" +
-"</rdf:RDF>\n" +
+"        xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"\n"+
+"        xmlns:dcterms=\"http://purl.org/dc/terms/\">\n"+
+"  <xd:declaration> String a; boolean b; </xd:declaration>\n" +
+"  <rdf:RDF>\n" +
+"    <rdf:Description xd:script=\"occurs +;options ignoreOther;\n" +
+"      init {a='';b=false;} finally {if (b EQ true) outln(a);} forget;\">\n" +
+"      <dcterms:title xd:script=\"occurs +\">\n" +
+"        onTrue a = getText() + ': ';\n" +
+"      </dcterms:title>\n" +
+"      <dcterms:abstract>\n" +
+"        onTrue {a= a + getText();b=true;}\n" +
+"      </dcterms:abstract>\n" +
+"    </rdf:Description>\n" +
+"  </rdf:RDF>\n" +
 "</xd:def>";
 			xp = compile(xdef);
 			xml =
@@ -395,8 +396,7 @@ public final class TestOptions extends XDTester {
 			}
 			xdef = //test option ignoreEmptyAttributes
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'\n"+
-"   xd:script='options ignoreEmptyAttributes'>\n"+
-"\n"+
+"        xd:script='options ignoreEmptyAttributes'>\n"+
 "  <a a='optional string(1,8)'>\n"+
 "    <b b='optional string(1,8)'/>\n"+
 "  </a>\n"+
@@ -411,10 +411,10 @@ public final class TestOptions extends XDTester {
 			}
 			xdef = //trimAttr, trimText
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"<a a='string; options noTrimAttr' b='string'>\n"+
-"  <b xd:script='2; options noTrimText'>string;</b>\n"+
-"  <c>string; options noTrimText</c>\n"+
-"</a>\n"+
+"  <a a='string; options noTrimAttr' b='string'>\n"+
+"    <b xd:script='2; options noTrimText'>string;</b>\n"+
+"    <c>string; options noTrimText</c>\n"+
+"  </a>\n"+
 "</xd:def>";
 			xml = "<a a=' Y ' b=' Z '><b>1</b><b> 2 </b><c> 3 </c></a>";
 			el = parse(xdef, "", xml, reporter);
@@ -462,7 +462,7 @@ public final class TestOptions extends XDTester {
 //ignore/preserve/accept empty attributes
 			xdef = //optional ignore
 "<xd:def xmlns:xd='" + _xdNS + "' xd:root='a'\n"+
-"  script='options ignoreEmptyAttributes'>\n"+
+"        script='options ignoreEmptyAttributes'>\n"+
 "  <a a='optional string;'/>\n"+
 "</xd:def>";
 			xp = compile(xdef);
@@ -479,7 +479,7 @@ public final class TestOptions extends XDTester {
 			assertFalse(el.hasAttribute("a"));
 			xdef = //optional preserve
 "<xd:def xmlns:xd='" + _xdNS + "' xd:root='a'\n"+
-"  script='options preserveEmptyAttributes'>\n"+
+"        script='options preserveEmptyAttributes'>\n"+
 "  <a a='optional string;'/>\n"+
 "</xd:def>";
 			xp = compile(xdef);
@@ -496,7 +496,7 @@ public final class TestOptions extends XDTester {
 			assertTrue(el.hasAttribute("a"));
 			xdef = //optional accept
 "<xd:def xmlns:xd='" + _xdNS + "' xd:root='a'\n"+
-"  script='options acceptEmptyAttributes'>\n"+
+"        script='options acceptEmptyAttributes'>\n"+
 "  <a a='optional string;'/>\n"+
 "</xd:def>";
 			xp = compile(xdef);
@@ -513,7 +513,7 @@ public final class TestOptions extends XDTester {
 			assertTrue(el.hasAttribute("a"));
 			xdef = //required accept
 "<xd:def xmlns:xd='" + _xdNS + "' xd:root='a'"+
-"  script='options acceptEmptyAttributes'>\n"+
+"        script='options acceptEmptyAttributes'>\n"+
 "  <a a='string;'/>\n"+
 "</xd:def>";
 			xp = compile(xdef);
@@ -530,10 +530,10 @@ public final class TestOptions extends XDTester {
 			assertTrue(el.hasAttribute("a"));
 			xdef =
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
-" <xd:def name='a' root='x#a' xd:script='options setAttrUpperCase'/>\n"+
-" <xd:def name='x' xd:script='options ignoreEmptyAttributes'>\n"+
+"<xd:def name='a' root='x#a' xd:script='options setAttrUpperCase'/>\n"+
+"<xd:def name='x' xd:script='options ignoreEmptyAttributes'>\n"+
 "  <a a1='optional string(0,100); match false' a2='optional string(0,100)'/>\n"+
-" </xd:def>\n"+
+"</xd:def>\n"+
 "</xd:collection>";
 			xp = compile(xdef);
 			xml = "<a a1='a' a2=''/>";
@@ -541,7 +541,7 @@ public final class TestOptions extends XDTester {
 			assertTrue(reporter.errorWarnings(), "Not reported: not allowed");
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "'\n"+
-" root='a' xd:script='options acceptEmptyAttributes'>\n"+
+"        root='a' xd:script='options acceptEmptyAttributes'>\n"+
 "  <a a1='optional string(0,100); match false' a2='optional string(0,100)'/>\n"+
 "</xd:def>";
 			xp = compile(xdef);
@@ -550,7 +550,7 @@ public final class TestOptions extends XDTester {
 			assertTrue(reporter.errorWarnings(), "Not reported: not allowed");
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "'\n"+
-" root='a' xd:script='options acceptEmptyAttributes'>\n"+
+"        root='a' xd:script='options acceptEmptyAttributes'>\n"+
 "  <a a1='optional string(0,100); match true' a2='optional string(0,100)'/>\n"+
 "</xd:def>";
 			xp = compile(xdef);
@@ -560,7 +560,7 @@ public final class TestOptions extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xdef = //uppercase, lowercase
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'\n"+
-"xd:script='options setTextUpperCase,setAttrUpperCase,trimText,trimAttr'>\n"+
+"  xd:script='options setTextUpperCase,setAttrUpperCase,trimText,trimAttr'>\n"+
 "  <A a='string' xd:script=''>\n"+
 "    string();\n"+
 "  </A>\n"+
@@ -571,7 +571,7 @@ public final class TestOptions extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'\n"+
-"xd:script='options setTextLowerCase,setAttrLowerCase,trimText,trimAttr'>\n"+
+"  xd:script='options setTextLowerCase,setAttrLowerCase,trimText,trimAttr'>\n"+
 "  <A a='string' xd:script=''>\n"+
 "    string()\n"+
 "  </A>\n"+
@@ -624,18 +624,18 @@ public final class TestOptions extends XDTester {
 			xdef = //test options in xdef header and in references
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name='A' root='A'\n"+
-"  xd:script='options setAttrUpperCase, setTextUpperCase'>\n"+
+"        xd:script='options setAttrUpperCase, setTextUpperCase'>\n"+
 "  <A v=\"fixed '  1a  B '\"\n"+
 "     a='required' b='required' c='required' d='required'>\n"+
 "    required\n"+
 "  </A>\n"+
 "</xd:def>\n"+
 "<xd:def xd:name='B' root='A'\n"+
-"  xd:script='options setAttrLowerCase, setTextLowerCase'>\n"+
+"        xd:script='options setAttrLowerCase, setTextLowerCase'>\n"+
 "  <A xd:script='ref A#A'/>\n"+
 "</xd:def>\n"+
 "<xd:def xd:script='options setAttrLowerCase, setTextUpperCase' root='B#A'\n"+
-" name='C'/>\n"+
+"        name='C'/>\n"+
 "<xd:def name='D' root='A'>\n"+
 "  <A xd:script='options setAttrLowerCase, setTextLowerCase; ref A#A' />\n"+
 "</xd:def>\n"+
@@ -650,7 +650,7 @@ public final class TestOptions extends XDTester {
 "     ref A#A'/>\n"+
 "</xd:def>\n"+
 "<xd:def name='H' root='A'\n"+
-"    xd:script='options ignoreAttrWhiteSpaces, ignoreTextWhiteSpaces'>\n"+
+"        xd:script='options ignoreAttrWhiteSpaces, ignoreTextWhiteSpaces'>\n"+
 "  <A xd:script='ref A#A'/>\n"+
 "</xd:def>\n"+
 "</xd:collection>";
@@ -680,11 +680,10 @@ public final class TestOptions extends XDTester {
 			xdef =
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name='Log'>\n"+
-"   <Log xd:script='init;'\n"+
-"      Verze='required' Misto='required' Code='required'/>\n"+
+" <Log xd:script='init;' Verze='required' Misto='required' Code='required'/>\n"+
 "</xd:def>\n"+
 "<xd:def name='DN'>\n"+
-"  <Log xd:script='ref Log#Log'/>\n"+
+" <Log xd:script='ref Log#Log'/>\n"+
 "</xd:def>\n"+
 "<xd:def name='P_LOG' root='DN#Log'/>\n"+
 "<xd:def name='Q_LOG' xd:script='options setAttrLowerCase' root='DN#Log'/>\n"+
@@ -714,7 +713,7 @@ public final class TestOptions extends XDTester {
 			xdef =
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name='NA' root='A'\n"+
-"  script='options ignoreEmptyAttributes, noTrimAttr'>\n"+
+"        script='options ignoreEmptyAttributes, noTrimAttr'>\n"+
 "  <A xd:script='ref NB#B; options preserveEmptyAttributes'\n"+
 "    a='string(2); options acceptEmptyAttributes'\n"+
 "    b='string(2); options ignoreEmptyAttributes, trimAttr'/>\n"+
@@ -742,7 +741,7 @@ public final class TestOptions extends XDTester {
 "    b='string(2); options ignoreEmptyAttributes, trimAttr'/>\n"+
 "</xd:def>"+
 "<xd:def name='NB' root='B'\n"+
-"  script='options trimAttr, ignoreEmptyAttributes'>\n"+
+"        script='options trimAttr, ignoreEmptyAttributes'>\n"+
 "  <B xd:script='ref C; options preserveEmptyAttributes'\n"+
 "    c='optional string(2)'/>\n"+
 "  <C xd:script='options ignoreEmptyAttributes'\n"+
@@ -823,12 +822,12 @@ public final class TestOptions extends XDTester {
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name='NA' root='A' script='options acceptEmptyAttributes'>\n"+
 "  <A xd:script='ref NB#B; options ignoreEmptyAttributes'\n"+
-"    a='string(2); options acceptEmptyAttributes, noTrimAttr'\n"+
-"    b='string(2); options ignoreEmptyAttributes, trimAttr'/>\n"+
+"     a='string(2); options acceptEmptyAttributes, noTrimAttr'\n"+
+"     b='string(2); options ignoreEmptyAttributes, trimAttr'/>\n"+
 "</xd:def>"+
 "<xd:def name='NB' root='B' script='options acceptEmptyAttributes'>\n"+
 "	<B xd:script='ref C; options acceptEmptyAttributes'\n"+
-"     c='optional string(2)'/>\n"+
+"      c='optional string(2)'/>\n"+
 "	<C xd:script='options acceptEmptyAttributes' d='string(2);'/>\n"+
 "</xd:def>"+
 "</xd:collection>";
@@ -841,12 +840,12 @@ public final class TestOptions extends XDTester {
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name='NA' root='A' script='options ignoreEmptyAttributes'>\n"+
 "  <A xd:script='ref NB#B;'\n"+
-"    a='string(2); options acceptEmptyAttributes, noTrimAttr'\n"+
-"    b='string(2); options ignoreEmptyAttributes, trimAttr'/>\n"+
+"     a='string(2); options acceptEmptyAttributes, noTrimAttr'\n"+
+"     b='string(2); options ignoreEmptyAttributes, trimAttr'/>\n"+
 "</xd:def>"+
 "<xd:def name='NB' root='B' xd:script='options acceptEmptyAttributes'>\n"+
 "  <B xd:script='ref C; options acceptEmptyAttributes'\n"+
-"    c='optional string(2)'/>\n"+
+"     c='optional string(2)'/>\n"+
 "  <C xd:script='options acceptEmptyAttributes' d='string(2);'/>\n"+
 "</xd:def>"+
 "</xd:collection>";
@@ -860,8 +859,8 @@ public final class TestOptions extends XDTester {
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name='NA' root='A' script=''>\n"+
 "  <A xd:script=\"ref NB#B\"\n"+
-"    a='string(2); options noTrimAttr, ignoreEmptyAttributes'\n"+
-"    b='string(2)'/>\n"+
+"     a='string(2); options noTrimAttr, ignoreEmptyAttributes'\n"+
+"     b='string(2)'/>\n"+
 "</xd:def>"+
 "<xd:def name='NB' root='B' script=''>\n"+
 "  <B xd:script='ref C' c='optional string(2); options trimAttr'/>\n"+
@@ -882,8 +881,8 @@ public final class TestOptions extends XDTester {
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name='NA' root='A'>\n"+
 "  <A xd:script='ref NB#B'\n"+
-"    a='string(2); options noTrimAttr, ignoreEmptyAttributes'\n"+
-"    b='string(2)'/>\n"+
+"     a='string(2); options noTrimAttr, ignoreEmptyAttributes'\n"+
+"     b='string(2)'/>\n"+
 "</xd:def>"+
 "<xd:def name='NB' root='B'>\n"+
 "  <B xd:script='ref C' c='optional string(2); options trimAttr'/>\n"+
@@ -905,13 +904,13 @@ public final class TestOptions extends XDTester {
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name='NA' xd:root='A'>\n"+
 "  <A xd:script='ref NB#B'\n"+
-"    a='string(2); options noTrimAttr, ignoreEmptyAttributes'\n"+
-"    b='string(2)'/>\n"+
+"     a='string(2); options noTrimAttr, ignoreEmptyAttributes'\n"+
+"     b='string(2)'/>\n"+
 "</xd:def>"+
 "<xd:def name='NB' root='B' script='options ignoreEmptyAttributes'>\n"+
 "  <B xd:script='ref C' c='optional string(2); options trimAttr'/>\n"+
 "  <C xd:script='options acceptEmptyAttributes'\n"+
-"    d='string(2); options noTrimAttr'/>\n"+
+"     d='string(2); options noTrimAttr'/>\n"+
 "</xd:def>"+
 "</xd:collection>";
 			xp = compile(xdef);
@@ -927,13 +926,13 @@ public final class TestOptions extends XDTester {
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name='NA' root='A'>\n"+
 "  <A xd:script='ref NB#B'\n"+
-"    a='string(2); options noTrimAttr, ignoreEmptyAttributes'\n"+
-"    b='string(2)'/>\n"+
+"     a='string(2); options noTrimAttr, ignoreEmptyAttributes'\n"+
+"     b='string(2)'/>\n"+
 "</xd:def>"+
 "<xd:def name='NB' root='B'>\n"+
 "  <B xd:script='ref C' c='optional string(2); options trimAttr'/>\n"+
 "  <C xd:script='options ignoreEmptyAttributes'\n"+
-"    d='string(2); options noTrimAttr'/>\n"+
+"     d='string(2); options noTrimAttr'/>\n"+
 "</xd:def>"+
 "</xd:collection>";
 			xp = compile(xdef);
@@ -948,7 +947,7 @@ public final class TestOptions extends XDTester {
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name='NA' root='A'>\n"+
 "  <A xd:script='ref NB#B' a='string(2); options setAttrUpperCase'\n"+
-"    b='string(2)'/>\n"+
+"     b='string(2)'/>\n"+
 "</xd:def>"+
 "<xd:def name='NB' root='B' script='options setAttrLowerCase'>\n"+
 "  <B xd:script='ref C' c='optional string(2);'/>\n"+
@@ -1612,16 +1611,18 @@ public final class TestOptions extends XDTester {
 " script='options setTextUpperCase'>\n"+
 "  <A xd:script='ref C; options setTextLowerCase'/>"+
 "    <C>\n"+
-"    <B>string</B>string</C>\n"+
+"    <B>string</B>\n"+
+"    string\n"+
+"    </C>\n"+
 "</xd:def>";
 			xml = "<A><B>bB</B>aA</A>";
 			assertEq("<A><B>BB</B>aa</A>", parse(xdef, "", xml, reporter));
 			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='A' script='options setAttrUpperCase'>\n"+
-"	<A xd:script='options setAttrLowerCase'>\n"+
-"		<B b='string'/>\n"+
-"	</A>\n"+
+"  <A xd:script='options setAttrLowerCase'>\n"+
+"    <B b='string'/>\n"+
+"  </A>\n"+
 "</xd:def>";
 			xml = "<A><B b='bB'/></A>";
 			assertEq("<A><B b='BB'/></A>", parse(xdef, "", xml, reporter));
@@ -1630,13 +1631,13 @@ public final class TestOptions extends XDTester {
 			xdef = // default => don't create empty attributes
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
 "  <A>\n"+
-"   <B a=\"optional; create ''\"/>\n"+
+"    <B a=\"optional; create ''\"/>\n"+
 "  </A>\n"+
 "</xd:def>";
 			assertEq("<A><B/></A>", create(xdef, "", "A", reporter, null));
 			xdef =  //IGNORE empty attributes
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'\n"+
-"  xd:script='options acceptEmptyAttributes'>\n"+
+"        xd:script='options acceptEmptyAttributes'>\n"+
 "  <A>\n"+
 "   <B xd:script='options ignoreEmptyAttributes' a=\"optional; create ''\"/>\n"+
 "  </A>\n"+
@@ -1644,7 +1645,7 @@ public final class TestOptions extends XDTester {
 			assertEq("<A><B/></A>", create(xdef, "", "A", reporter, null));
 			xdef = //ACCEPT empty attributes
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'\n"+
-"   xd:script='options acceptEmptyAttributes'>\n"+
+"        xd:script='options acceptEmptyAttributes'>\n"+
 "  <A>\n"+
 "   <B a=\"optional; create ''\"/>\n"+
 "  </A>\n"+

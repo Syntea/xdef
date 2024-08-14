@@ -45,10 +45,10 @@ public final class TestDOMParse extends XDTester {
 		try {
 			xdef =
 "<xd:def xmlns:xd = '" + _xdNS + "' root = \"root\" name = \"root\">\n"+
-"<root attr='required string()'\n"+
+"  <root attr='required string()'\n"+
 "      xd:script=\"finally out('xyz')\">\n"+
-"  <a xd:script=\"occurs 2\"/>\n"+
-"</root>\n"+
+"    <a xd:script=\"occurs 2\"/>\n"+
+"  </root>\n"+
 "</xd:def>\n";
 			xml = "<root attr='attr'><a/><a/></root>";
 			xp = compile(xdef);
@@ -68,11 +68,10 @@ public final class TestDOMParse extends XDTester {
 			}
 			xdef =
 "<xd:def xmlns:xd = '" + _xdNS + "' root = \"root\" name = \"root\">\n"+
-"<root attr='required string()'\n"+
+"  <root attr='required string()'\n"+
 "      xd:script=\"finally out('xyz')\">\n"+
-"  <a xd:script=\"occurs 2\"/>\n"+
-"</root>\n"+
-"\n"+
+"    <a xd:script=\"occurs 2\"/>\n"+
+"  </root>\n"+
 "</xd:def>\n";
 			xp = compile(xdef);
 			xml = "<root bttr='attr'><a/><a/></root>";
@@ -108,10 +107,10 @@ public final class TestDOMParse extends XDTester {
 			}
 			xdef =
 "<xd:def xmlns:xd = '" + _xdNS + "' root = \"root\" name = \"root\">\n"+
-"<root attr='required string()'\n"+
+"  <root attr='required string()'\n"+
 "      xd:script=\"finally out('xyz')\">\n"+
-"  <a xd:script=\"occurs 2\"/>\n"+
-"</root>\n"+
+"    <a xd:script=\"occurs 2\"/>\n"+
+"  </root>\n"+
 "</xd:def>\n";
 			xml = "<root bttr='attr'><a/><b/></root>";
 			xp = compile(xdef);
@@ -154,10 +153,9 @@ public final class TestDOMParse extends XDTester {
 			}
 			xdef =
 "<xd:def xmlns:xd = '" + _xdNS + "' root = \"root\" name = \"root\">\n"+
-"<root attr='required string()'>\n"+
-"  <a xd:script=\"occurs 2\"/>\n"+
-"</root>\n"+
-"\n"+
+"  <root attr='required string()'>\n"+
+"    <a xd:script=\"occurs 2\"/>\n"+
+"  </root>\n"+
 "</xd:def>\n";
 			xml = "<root bttr='attr'><a/><b/></root>";
 			xp = compile(xdef);
@@ -192,9 +190,9 @@ public final class TestDOMParse extends XDTester {
 			}
 			xdef =
 "<xd:def xmlns:xd = '" + _xdNS + "' root = \"root\" name = \"root\">\n"+
-"<root attr='required string()'>\n"+
-"  <a xd:script=\"occurs 2\"/>\n"+
-"</root>\n"+
+"  <root attr='required string()'>\n"+
+"    <a xd:script=\"occurs 2\"/>\n"+
+"  </root>\n"+
 "</xd:def>\n";
 			xml = "<root bttr='attr'><a/><b/></root>";
 			xp = compile(xdef);
@@ -210,21 +208,17 @@ public final class TestDOMParse extends XDTester {
 		}
 		try {
 			xdef =
-"<xd:collection xmlns:xd = '" + _xdNS + "' >\n"+
-"<xd:def\n"+
-"xmlns:s = \"http://www.w3c.org/2003/05/soap-envelope\"\n"+
-"impl-version = \"2.0.0.0\"\n"+
-"impl-date = \"18.9.2007\"\n"+
-"xd:name = \"XDefSOAPEnvelope\"\n"+
-"xd:root = \"s:Envelope\" >\n"+
-"\n"+
-"<s:Envelope xd:script=\"occurs 1\"\n"+
-"s:encodingStyle=\"fixed 'http://www.syntea.cz/skp/pis/encoding'\" >\n"+
-"  <s:Body a = \"required string()\" s:b = \"required string()\"/>\n"+
-"</s:Envelope>\n"+
-"\n"+
-"</xd:def>\n"+
-"</xd:collection>";
+"<xd:def xmlns:xd = '" + _xdNS + "'\n"+
+"    xmlns:s = \"http://www.w3c.org/2003/05/soap-envelope\"\n"+
+"    impl-version = \"2.0.0.0\"\n"+
+	"impl-date = \"18.9.2007\"\n"+
+"    xd:name = \"XDefSOAPEnvelope\"\n"+
+"    xd:root = \"s:Envelope\" >\n"+
+"  <s:Envelope xd:script=\"occurs 1\"\n"+
+"      s:encodingStyle=\"fixed 'http://www.syntea.cz/skp/pis/encoding'\" >\n"+
+"    <s:Body a = \"required string()\" s:b = \"required string()\"/>\n"+
+"  </s:Envelope>\n"+
+"</xd:def>";
 			xml =
 "<e:Envelope e:encodingStyle=\"http://www.syntea.cz/skp/pis/encoding\"\n"+
 "xmlns:e=\"http://www.w3c.org/2003/05/soap-envelope\">\n"+

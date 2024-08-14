@@ -1,5 +1,6 @@
 package test.xdef;
 
+import java.io.IOException;
 import test.XDTester;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.XDDocument;
@@ -101,7 +102,7 @@ public final class TestExternalVariables extends XDTester {
 			assertNoErrorwarnings(reporter);
 			assertEq(0, xd.getVariable("#i").intValue());
 			assertEq(swr.toString(),"1false1false");
-		} catch (Exception ex) {fail(ex);}
+		} catch (IOException | RuntimeException ex) {fail(ex);}
 
 		resetTester();
 	}

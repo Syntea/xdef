@@ -67,25 +67,25 @@ public final class Test000 extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xdef = //toString(obj) method
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-" <a a='finally if (!((String) 12).equals(\"12\")) error((String) 12);'/>\n"+
+"  <a a='finally if (!((String) 12).equals(\"12\")) error((String) 12);'/>\n"+
 "</xd:def>";
 			xml = "<a a='x'/>";
 			assertFalse(test(xdef, xml, "",'P'));
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-" <a a='required string; finally if (!(from(\"@a\").toString()==\"x\"))\n"+
-"       error(from(\"@a\").toString());'/>\n"+
+"  <a a='required string; finally if (!(from(\"@a\").toString()==\"x\"))\n"+
+"        error(from(\"@a\").toString());'/>\n"+
 "</xd:def>";
 			assertFalse(test(xdef, xml, "",'P'));
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-" <a a='required string; finally if (!from(\"@b\").toString().equals(\"\"))\n"+
-"       error(from(\"@b\").toString());'/>\n"+
+"  <a a='required string; finally if (!from(\"@b\").toString().equals(\"\"))\n"+
+"        error(from(\"@b\").toString());'/>\n"+
 "</xd:def>";
 			assertFalse(test(xdef, xml, "",'P'));
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-" <a a='finally if (!from(getElement(),\"@a\").toString().equals(\"x\"))\n"+
+"  <a a='finally if (!from(getElement(),\"@a\").toString().equals(\"x\"))\n"+
 "         error(from(\"@a\").toString());'/>\n"+
 "</xd:def>";
 			assertFalse(test(xdef, xml, "",'P'));
@@ -110,54 +110,53 @@ public final class Test000 extends XDTester {
 			assertFalse(test(xdef, xml, "test",'P'));
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"<xd:declaration>\n"+
-"  String targetNS='';\n"+
-"  String unq='';\n"+
-"  ParseResult chkUnique() {\n"+
+"  <xd:declaration>\n"+
+"    String targetNS='';\n"+
+"    String unq='';\n"+
+"    ParseResult chkUnique() {\n"+
 "    ParseResult pr = string();\n"+
-"    if (!NCName()) {\n"+
-"      pr.error('Value is not NCName');\n"+
+"      if (!NCName()) {\n"+
+"        pr.error('Value is not NCName');\n"+
+"        return pr;\n"+
+"      }\n"+
+"      String s=getText();\n"+
+"      if (unq.indexOf(' ' + s + ' ') GE 0) {\n"+
+"        pr.error('Not Unique');\n"+
+"      } else {\n"+
+"        unq+=s + ' ';\n"+
+"      }\n"+
 "      return pr;\n"+
 "    }\n"+
-"    String s=getText();\n"+
-"    if (unq.indexOf(' ' + s + ' ') GE 0) {\n"+
-"      pr.error('Not Unique');\n"+
-"    } else {\n"+
-"      unq+=s + ' ';\n"+
-"    }\n"+
-"    return pr;\n"+
-"  }\n"+
-"  ParseResult chkRef() {\n"+
-"    ParseResult pr = string();\n"+
-"    if (!QName()) {\n"+
-"      pr.error('Value is not QName');\n"+
+"    ParseResult chkRef() {\n"+
+"      ParseResult pr = string();\n"+
+"      if (!QName()) {\n"+
+"        pr.error('Value is not QName');\n"+
+"        return pr;\n"+
+"      }\n"+
+"      String prefix=getQnamePrefix(getText());\n"+
+"      String localName=getQnameLocalpart(getText());\n"+
+"      String s=getNamespaceURI(prefix);\n"+
+"      if (targetNS NE s) {\n"+
+"        pr.error('Incorrect namespace: \\'' + s + '\\', ' + targetNS);\n"+
+"      }\n"+
+"      if (unq.indexOf(' ' + localName + ' ') GT 0) {\n"+
+"        outln('targetNamespace=\"' + targetNS + '\", localName=\"' +\n"+
+"        localName + '\", prefix=\"' + prefix + '\"');\n"+
+"      } else {\n"+
+"        pr.error('Unknown local name');\n"+
+"      }\n"+
 "      return pr;\n"+
 "    }\n"+
-"    String prefix=getQnamePrefix(getText());\n"+
-"    String localName=getQnameLocalpart(getText());\n"+
-"    String s=getNamespaceURI(prefix);\n"+
-"    if (targetNS NE s) {\n"+
-"      pr.error('Incorrect namespace: \\'' + s + '\\', ' + targetNS);\n"+
-"    }\n"+
-"    if (unq.indexOf(' ' + localName + ' ') GT 0) {\n"+
-"      outln('targetNamespace=\"' + targetNS + '\", localName=\"' +\n"+
-			"localName + '\", prefix=\"' + prefix + '\"');\n"+
-"    } else {\n"+
-"      pr.error('Unknown local name');\n"+
-"    }\n"+
-"    return pr;\n"+
-"  }\n"+
-"</xd:declaration>\n"+
-"\n"+
-"<a>\n"+
-"<meta xd:script=\"init {targetNS=@targetNS; unq=' ';} finally out(unq)\"\n"+
-"     targetNS=\"required uri()\" >\n"+
-"  <msg xd:script=\"occurs 1..\" name=\"required chkUnique()\" />\n"+
-"  <input>\n"+
-"    <msg xd:script=\"occurs 1..\" name=\"required chkRef()\" />\n"+
-"  </input>\n"+
-"</meta>\n"+
-"</a>\n"+
+"  </xd:declaration>\n"+
+"  <a>\n"+
+"    <meta xd:script=\"init {targetNS=@targetNS;unq=' ';} finally out(unq)\"\n"+
+"          targetNS=\"required uri()\" >\n"+
+"      <msg xd:script=\"occurs 1..\" name=\"required chkUnique()\" />\n"+
+"      <input>\n"+
+"        <msg xd:script=\"occurs 1..\" name=\"required chkRef()\" />\n"+
+"      </input>\n"+
+"    </meta>\n"+
+"  </a>\n"+
 "</xd:def>\n";
 			xml =
 "<a xmlns:ab=\"cde\">" +
@@ -182,44 +181,44 @@ public final class Test000 extends XDTester {
 			xdef = // test recusive methods
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name='a' xd:root='a' >\n"+
-"<a>\n"+
-"  <b attr=\"required string()\"\n"+
-"           xd:script=\"occurs 0..1; finally outln(@attr)\" />\n"+
-"  optional string();finally{outln('text: '+getText());setText('text1');}\n"+
-"  <c xd:script=\"occurs 1; onAbsence setElement(newElement('c'))\"/>\n"+
-"  optional string(); finally {outln('text: '+getText()); setText('text2');\n"+
-"    hanoi(3); if ((test!=1) | (k!=1)) outln('error');}\n"+
-"</a>\n"+
-"<xd:declaration scope='global'>\n"+
-"  int test=1;\n"+
-"  int i=0, q=i;\n"+
-"  int j=i;\n"+
-"  int x;\n"+
-"  void move(int v, int o, int k, int h) {\n"+
-"    if (v GT 0) {\n"+
-"      move(v -1, o, h, k);\n"+
-"      outln(o + '->' + k);\n"+
-"      move(v -1, h, k, o);\n"+
+"  <a>\n"+
+"    <b attr=\"required string()\"\n"+
+"             xd:script=\"occurs 0..1; finally outln(@attr)\" />\n"+
+"    optional string();finally{outln('text: '+getText());setText('text1');}\n"+
+"    <c xd:script=\"occurs 1; onAbsence setElement(newElement('c'))\"/>\n"+
+"    optional string(); finally {outln('text: '+getText());setText('text2');\n"+
+"      hanoi(3); if ((test!=1) | (k!=1)) outln('error');}\n"+
+"  </a>\n"+
+"  <xd:declaration scope='global'>\n"+
+"    int test=1;\n"+
+"    int i=0, q=i;\n"+
+"    int j=i;\n"+
+"    int x;\n"+
+"    void move(int v, int o, int k, int h) {\n"+
+"      if (v GT 0) {\n"+
+"        move(v -1, o, h, k);\n"+
+"        outln(o + '->' + k);\n"+
+"        move(v -1, h, k, o);\n"+
+"      }\n"+
+"      if ((test!=1) | (j!=0)) outln('error');\n"+
+"      for(int i=1, j=1; i LT j; i++);\n"+
 "    }\n"+
-"    if ((test!=1) | (j!=0)) outln('error');\n"+
-"    for(int i=1, j=1; i LT j; i++);\n"+
-"  }\n"+
-"  int r;\n"+
-"  int s=1, f=r=1;\n"+
-"  int y;\n"+
-"  int z;\n"+
-"</xd:declaration>\n"+
+"    int r;\n"+
+"    int s=1, f=r=1;\n"+
+"    int y;\n"+
+"    int z;\n"+
+"  </xd:declaration>\n"+
 "</xd:def>\n"+
 "<xd:def xd:name='y'>\n"+
-"<xd:declaration scope='global'>\n"+
-"  void hanoi(int v) {\n"+
-"    outln('v=' + v + ':');\n"+
-"    move(v, 1, 2, 3);\n"+
-"  }\n"+
-"</xd:declaration>\n"+
+"  <xd:declaration scope='global'>\n"+
+"    void hanoi(int v) {\n"+
+"      outln('v=' + v + ':');\n"+
+"      move(v, 1, 2, 3);\n"+
+"    }\n"+
+"  </xd:declaration>\n"+
 "</xd:def>\n"+
 "<xd:def xd:name='z'>\n"+
-"<xd:declaration scope='global'>int k=1;</xd:declaration>\n"+
+"  <xd:declaration scope='global'>int k=1;</xd:declaration>\n"+
 "</xd:def>\n"+
 "</xd:collection>\n";
 			xml = "<a><b attr='x' />orig1</a>\n";
@@ -275,22 +274,22 @@ public final class Test000 extends XDTester {
 			assertFalse(test(xdef, xml, "",'P'));
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='People'>\n"+
-"<xd:declaration>int n=0; float sum=0.0; </xd:declaration>\n"+
-"<xd:macro name=\"tiskPerson\">finally {n++; outln('Person '+@FirstName\n"+
-"  + ' ' + @LastName + ' earns ' + @Salary + ' (' + getTextContent() + ')');\n"+
-" sum+=int.parse(@Salary.toString()).intValue();}\n"+
-"</xd:macro>\n"+
-"<xd:macro name=\"tisk:Total\">finally printf('Number of people = ' + n + \n"+
-" ', average salary = %2.1f\n', (sum/n));</xd:macro>\n"+
-"<People xd:script=\"${tisk:Total}\" >\n"+
-"  <Person xd:script=\"occurs 0..; ${tiskPerson}\" \n"+
-"        FirstName=\"required string(1, 50)\"\n"+
-"        LastName=\"required string(1, 50)\"\n"+
-"        BirthDate=\"required xdatetime('d.m.yyyy')\"\n"+
-"        Salary=\"optional int(2500, 1000000)\" >\n"+
-"    optional\n"+
-"  </Person>\n"+
-"</People>\n"+
+"  <xd:declaration>int n=0; float sum=0.0; </xd:declaration>\n"+
+"  <xd:macro name=\"tiskPerson\">finally {n++; outln('Person '+@FirstName\n"+
+"    +' '+@LastName + ' earns ' + @Salary + ' (' + getTextContent() + ')');\n"+
+"   sum+=int.parse(@Salary.toString()).intValue();}\n"+
+"  </xd:macro>\n"+
+"  <xd:macro name=\"tisk:Total\">finally printf('Number of people = ' + n + \n"+
+"   ', average salary = %2.1f\n', (sum/n));</xd:macro>\n"+
+"  <People xd:script=\"${tisk:Total}\" >\n"+
+"    <Person xd:script=\"occurs 0..; ${tiskPerson}\" \n"+
+"            FirstName=\"required string(1, 50)\"\n"+
+"            LastName=\"required string(1, 50)\"\n"+
+"            BirthDate=\"required xdatetime('d.m.yyyy')\"\n"+
+"            Salary=\"optional int(2500, 1000000)\" >\n"+
+"      optional;\n"+
+"    </Person>\n"+
+"  </People>\n"+
 "</xd:def>";
 			xml =
 "<People>" +
@@ -639,21 +638,21 @@ public final class Test000 extends XDTester {
 			xdef =
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def xmlns:s='soap' xmlns:b='request' name='a' root='s:Envelope'>\n"+
-" <s:Envelope\n"+
-"   s:encodingStyle=\"fixed 'encoding'\">\n"+
-"   <s:Header>\n"+
-"     <b:User xd:script=\"occurs 1; ref BM#User\"\n"+
-"       s:understand=\"fixed 'true'\" s:actor=\"illegal\"/>\n"+
-"     <b:Request xd:script=\"occurs 1; ref BM#Request\"\n"+
-"       s:understand=\"fixed 'true'\" s:actor=\"illegal\"/>\n"+
-"   </s:Header>\n"+
-"   <s:Body>\n"+
-"	  <xd:choice>\n"+
-"       <b:Ping xd:script=\"occurs 1; ref BM#Ping\"/>\n"+
-"       <b:PingFlow xd:script=\"occurs 1; ref BM#PingFlow\"/>\n"+
-"	  </xd:choice>\n"+
-"   </s:Body>\n"+
-" </s:Envelope>\n"+
+"  <s:Envelope\n"+
+"    s:encodingStyle=\"fixed 'encoding'\">\n"+
+"    <s:Header>\n"+
+"      <b:User xd:script=\"occurs 1; ref BM#User\"\n"+
+"        s:understand=\"fixed 'true'\" s:actor=\"illegal\"/>\n"+
+"      <b:Request xd:script=\"occurs 1; ref BM#Request\"\n"+
+"        s:understand=\"fixed 'true'\" s:actor=\"illegal\"/>\n"+
+"    </s:Header>\n"+
+"    <s:Body>\n"+
+"	   <xd:choice>\n"+
+"        <b:Ping xd:script=\"occurs 1; ref BM#Ping\"/>\n"+
+"        <b:PingFlow xd:script=\"occurs 1; ref BM#PingFlow\"/>\n"+
+" 	  </xd:choice>\n"+
+"    </s:Body>\n"+
+"  </s:Envelope>\n"+
 "</xd:def>\n"+
 "<xd:def xd:name='BM'>\n"+
 "  <User IdentUser=\"required string(1,32)\"/>\n"+
@@ -697,7 +696,7 @@ public final class Test000 extends XDTester {
 			}
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='PSP'\n"+
-"		xmlns        =\"http://ws.ckp.cz/pis/B1/2007/04\">\n"+
+"        xmlns        =\"http://ws.ckp.cz/pis/B1/2007/04\">\n"+
 "	<PSP ORD          =\"optional int()\"\n"+
 "		InfoDatum     =\"required xdatetime('yyyyMMdd')\"\n"+
 "		KodPojistitele=\"required num(4)\"\n"+
@@ -797,7 +796,7 @@ public final class Test000 extends XDTester {
 			assertNoErrorwarnings(reporter, xml);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='PSP'\n"+
-"		xmlns='http://ws.ckp.cz/pis/B1/2007/04'>\n"+
+"        xmlns='http://ws.ckp.cz/pis/B1/2007/04'>\n"+
 "	<PSP ORD          =\"optional int()\"\n"+
 "		InfoDatum     =\"required xdatetime('yyyyMMdd')\"\n"+
 "		KodPojistitele=\"required num(4)\"\n"+
@@ -838,29 +837,29 @@ public final class Test000 extends XDTester {
 			xdef =
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def xmlns:s='soap' xmlns:b='request' name='a' root='s:Envelope'>\n"+
-" <s:Envelope xd:script=\"init out('&lt;s:Envelope xmlns:s=&quot;soap&quot;');"
+"  <s:Envelope xd:script=\"init out('&lt;s:Envelope xmlns:s=&quot;soap&quot;');"
 				+ " finally out('&lt;/s:Envelope&gt;')\"\n"+
-"   s:encodingStyle=\"fixed 'encoding'; onTrue "
+"    s:encodingStyle=\"fixed 'encoding'; onTrue "
 				+ "out(' s:encodingStyle = &quot;encoding&quot; &gt;')\">\n"+
-"   <s:Header xd:script=\"init out('&lt;s:Header>');"
+"    <s:Header xd:script=\"init out('&lt;s:Header>');"
 				+ " finally out('&lt;/s:Header>')\">\n"+
-"     <b:User xd:script=\"occurs 1; init out('&lt;s:User'); onStartElement"
+"      <b:User xd:script=\"occurs 1; init out('&lt;s:User'); onStartElement"
 				+ " out('>'); ref BM#User; finally out('&lt;/s:User>')\"\n"+
-"       s:understand=\"fixed 'true';"
+"        s:understand=\"fixed 'true';"
 				+ " onTrue out(' s:understand = &quot;true&quot;');\"\n"+
-"       s:actor='illegal' />\n"+
-"     <b:Request xd:script='occurs 1; ref BM#Request'\n"+
-"       s:understand=\"fixed 'true';"
+"        s:actor='illegal' />\n"+
+"      <b:Request xd:script='occurs 1; ref BM#Request'\n"+
+"        s:understand=\"fixed 'true';"
 				+ " onTrue out(' s:understand = &quot;true&quot;')\"\n"+
-"       s:actor='illegal'/>\n"+
-"   </s:Header>\n"+
-"   <s:Body>\n"+
-"	  <xd:choice>\n"+
-"       <b:Ping xd:script='occurs 1; ref BM#Ping'/>\n"+
-"       <b:PingFlow xd:script='occurs 1; ref BM#PingFlow'/>\n"+
-"	  </xd:choice>\n"+
-"   </s:Body>\n"+
-" </s:Envelope>\n"+
+"        s:actor='illegal'/>\n"+
+"    </s:Header>\n"+
+"    <s:Body>\n"+
+"	   <xd:choice>\n"+
+"        <b:Ping xd:script='occurs 1; ref BM#Ping'/>\n"+
+"        <b:PingFlow xd:script='occurs 1; ref BM#PingFlow'/>\n"+
+"	   </xd:choice>\n"+
+"    </s:Body>\n"+
+"  </s:Envelope>\n"+
 "</xd:def>\n"+
 "<xd:def xd:name='BM'>\n"+
 "  <User IdentUser=\"required string(1,32)\"/>\n"+

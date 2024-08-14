@@ -558,16 +558,16 @@ public class TestJsonXdef extends XDTester {
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' name='Person' root='Person'>\n"+
-"<xd:xon name=\"Person\">\n"+
-"{ \"Person\": { \"Name\": \"jstring(1, 50);\",\n" +
-"    \"Pay\": \"int(1000, 99999);\",\n" +
-"    \"Birth date.\": \"date();\"\n" +
-"  }\n" +
-"}\n" +
-"</xd:xon>\n"+
-"<xd:component>\n"+
-"  %class "+_package+".XonPerson %link Person#Person;\n"+
-"</xd:component>\n"+
+"  <xd:xon name=\"Person\">\n"+
+"    { \"Person\": { \"Name\": \"jstring(1, 50);\",\n" +
+"        \"Pay\": \"int(1000, 99999);\",\n" +
+"        \"Birth date.\": \"date();\"\n" +
+"      }\n" +
+"    }\n" +
+"  </xd:xon>\n"+
+"  <xd:component>\n"+
+"    %class "+_package+".XonPerson %link Person#Person;\n"+
+"  </xd:component>\n"+
 "</xd:def>";
 			genXComponent(xp = compile(xdef));
 			json =
@@ -596,18 +596,18 @@ public class TestJsonXdef extends XDTester {
 			assertTrue(XonUtils.xonEqual(x, xc.toXon()));
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='Person_list'>\n"+
-"<xd:xon name=\"Person_list\">\n"+
-"{ \"Seznam\": \n"+
-"  [\n"+
-"    { %script= \"occurs 1..*;\",\n"+
-"      \"Person\": { \"Name\": \"string(1, 50)\",\n" +
-"         \"Pay\": \"int(1000, 99999)\",\n" +
-"         \"Birth date.\": \"date()\"\n" +
-"      }\n" +
-"   }\n"+
-"  ]\n"+
-"}\n"+
-"</xd:xon>\n"+
+"  <xd:xon name=\"Person_list\">\n"+
+"    { \"Seznam\": \n"+
+"      [\n"+
+"        { %script= \"occurs 1..*;\",\n"+
+"          \"Person\": { \"Name\": \"string(1, 50)\",\n" +
+"             \"Pay\": \"int(1000, 99999)\",\n" +
+"             \"Birth date.\": \"date()\"\n" +
+"          }\n" +
+"       }\n"+
+"      ]\n"+
+"    }\n"+
+"  </xd:xon>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xd = xp.createXDDocument("");
@@ -643,20 +643,20 @@ public class TestJsonXdef extends XDTester {
 			assertNoErrorwarningsAndClear(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='Person_list'>\n"+
-"<xd:xon name=\"Person_list\">\n"+
-"{ \"Seznam\": \n"+
-"  [\n"+
-"    { %script = \"occurs 1..*; ref Person\" }\n"+
-"  ]\n"+
-"}\n"+
-"</xd:xon>\n"+
-"<xd:xon name=\"Person\">\n"+
-"{ \"Person\": { \"Name\": \"string(1, 50)\",\n" +
-"    \"Pay\": \"int(1000, 99999)\",\n" +
-"    \"Birth date.\": \"date()\"\n" +
-"  }\n" +
-"}\n" +
-"</xd:xon>\n"+
+"  <xd:xon name=\"Person_list\">\n"+
+"    { \"Seznam\": \n"+
+"      [\n"+
+"        { %script = \"occurs 1..*; ref Person\" }\n"+
+"      ]\n"+
+"    }\n"+
+"  </xd:xon>\n"+
+"  <xd:xon name=\"Person\">\n"+
+"    { \"Person\": { \"Name\": \"string(1, 50)\",\n" +
+"        \"Pay\": \"int(1000, 99999)\",\n" +
+"        \"Birth date.\": \"date()\"\n" +
+"      }\n" +
+"    }\n" +
+"  </xd:xon>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xd = xp.createXDDocument("");
@@ -692,13 +692,13 @@ public class TestJsonXdef extends XDTester {
 			assertNoErrorwarningsAndClear(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='Matrix'>\n"+
-"<xd:xon name=\"Matrix\">\n"+
-"  [\n" +
-"    [ %script=\"occurs 3;\",\n" +
-"      \"occurs 3; float()\"\n" +
-"    ]\n" +
-"  ]\n"+
-"</xd:xon>\n"+
+"  <xd:xon name=\"Matrix\">\n"+
+"    [\n" +
+"      [ %script=\"occurs 3;\",\n" +
+"        \"occurs 3; float()\"\n" +
+"      ]\n" +
+"    ]\n"+
+"  </xd:xon>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xd = xp.createXDDocument("");
@@ -716,17 +716,17 @@ public class TestJsonXdef extends XDTester {
 			assertNoErrorwarningsAndClear(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='Skladby'>\n"+
-"<xd:xon name=\"Skladby\">\n"+
-"  [\n" +
-"    { %script= \"occurs 1..*;\",\n" +
-"       \"Name\": \"string()\",\n" +
-"       \"Style\": [ %oneOf,\n" +
-"         \"string()\",\n" +
-"         [ \"occurs 2..* string()\" ]\n" +
-"       ]\n" +
-"    }\n" +
-"  ]\n" +
-"</xd:xon>\n"+
+"  <xd:xon name=\"Skladby\">\n"+
+"    [\n" +
+"      { %script= \"occurs 1..*;\",\n" +
+"         \"Name\": \"string()\",\n" +
+"         \"Style\": [ %oneOf,\n" +
+"           \"string()\",\n" +
+"           [ \"occurs 2..* string()\" ]\n" +
+"         ]\n" +
+"      }\n" +
+"    ]\n" +
+"  </xd:xon>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xd = xp.createXDDocument();
@@ -747,22 +747,9 @@ public class TestJsonXdef extends XDTester {
 			assertNoErrorwarningsAndClear(reporter);
 			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='json'>\n"+
-"<xd:xon name='json'>\n"+
-"{\"\": \"optional jstring()\"}\n" +
-"</xd:xon>\n"+
-"</xd:def>";
-			xp = compile(xdef);
-			json = "{\"\":\"aaa\"}";
-			jparse(xp, "", json, reporter);
-			assertNoErrorwarningsAndClear(reporter);
-			json = "{}";
-			jparse(xp, "", json, reporter);
-			assertNoErrorwarningsAndClear(reporter);
-			xdef =
-"<xd:def xmlns:xd='"+_xdNS+"' root='json'>\n"+
-"<xd:xon name='json'>\n"+
-"{\"\": \"optional jstring()\"}\n" +
-"</xd:xon>\n"+
+"  <xd:xon name='json'>\n"+
+"    {\"\": \"optional jstring()\"}\n" +
+"  </xd:xon>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			json = "{\"\":\"aaa\"}";
@@ -773,12 +760,12 @@ public class TestJsonXdef extends XDTester {
 			assertNoErrorwarningsAndClear(reporter);
 			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='A|B|json'>\n"+
-"<xd:xon name='json'>\n"+
-"[{\"a\":\"boolean\"},\"string()\",\"int()\"]\n" +
-"</xd:xon>\n"+
-"<xd:xon name='B'>\n"+
-"{\"a\":\"int\"}\n"+
-"</xd:xon>\n"+
+"  <xd:xon name='json'>\n"+
+"    [{\"a\":\"boolean\"},\"string()\",\"int()\"]\n" +
+"  </xd:xon>\n"+
+"  <xd:xon name='B'>\n"+
+"    {\"a\":\"int\"}\n"+
+"  </xd:xon>\n"+
 "  <A/>\n"+
 "</xd:def>";
 			xp = compile(xdef);
@@ -803,9 +790,9 @@ public class TestJsonXdef extends XDTester {
 			assertNoErrorwarningsAndClear(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='B'>\n"+
-"<xd:xon name='B'>\n"+
-"[%script= \"init out('a'); finally out('b')\", \"int(); finally out('x')\"]\n"+
-"</xd:xon>\n"+
+"  <xd:xon name='B'>\n"+
+"    [%script=\"init out('a');finally out('b')\",\"int();finally out('x')\"]\n"+
+"  </xd:xon>\n"+
 "</xd:def>\n";
 			xd = compile(xdef).createXDDocument();
 			swr = new StringWriter();
@@ -971,27 +958,27 @@ public class TestJsonXdef extends XDTester {
 			assertEq("b", SUtils.getValueFromGetter(xc,"get$A"));
 			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
-"<xd:xon name='a'>\n" +
-"[\n" +
-"  {\n" +
-"    a : \"? short()\",\n" +
-"    i : [],\n" +
-"    Towns : [\n" +
-"      \"* gps()\"\n" +
-"    ],\n" +
-"    j : \"? char()\"\n" +
-"  },\n" +
-"  \"base64Binary()\",\n" +
-"  \"base64Binary()\",\n" +
-"  \"base64Binary()\",\n" +
-"  \"price()\",\n" +
-"  \"currency()\",\n" +
-"  \"* ipAddr()\"\n" +
-"]\n" +
-"</xd:xon>\n" +
-"<xd:component>\n"+
-"  %class "+_package+".X_on %link #a;\n"+
-"</xd:component>\n"+
+"  <xd:xon name='a'>\n" +
+"    [\n" +
+"      {\n" +
+"        a : \"? short()\",\n" +
+"        i : [],\n" +
+"        Towns : [\n" +
+"          \"* gps()\"\n" +
+"        ],\n" +
+"        j : \"? char()\"\n" +
+"      },\n" +
+"      \"base64Binary()\",\n" +
+"      \"base64Binary()\",\n" +
+"      \"base64Binary()\",\n" +
+"      \"price()\",\n" +
+"      \"currency()\",\n" +
+"      \"* ipAddr()\"\n" +
+"    ]\n" +
+"  </xd:xon>\n" +
+"  <xd:component>\n"+
+"    %class "+_package+".X_on %link #a;\n"+
+"  </xd:component>\n"+
 "</xd:def>";
 			genXComponent(xp = compile(xdef));
 			json =
@@ -1039,18 +1026,18 @@ public class TestJsonXdef extends XDTester {
 					"getjx$"+XonNames.X_ARRAY+"_1"), "toXon")).size());
 			xdef = // test data with different encodings
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" root=\"a\" >\n" +
-"<xd:xon name=\"a\">\n" +
-"  # test encodings\n" +
-"  { \"ěščřžýáíéúůĺ %u@#$\": {\n" +
-"      é: \"string()\",\n" +
-"      \"§&amp;&lt;&gt;\": \"date()\",\n" +
-"      \"%\": [ \"*; string()\", { \"čřé\": \"string()\" } ]\n" +
-"    }\n" +
-"  }\n" +
-"</xd:xon>\n" +
-"<xd:component>\n"+
-"  %class "+_package+".TestXonEncoding %link #a;\n"+
-"</xd:component>\n"+
+"  <xd:xon name=\"a\">\n" +
+"      # test encodings\n" +
+"      { \"ěščřžýáíéúůĺ %u@#$\": {\n" +
+"          é: \"string()\",\n" +
+"          \"§&amp;&lt;&gt;\": \"date()\",\n" +
+"          \"%\": [ \"*; string()\", { \"čřé\": \"string()\" } ]\n" +
+"        }\n" +
+"      }\n" +
+"  </xd:xon>\n" +
+"  <xd:component>\n"+
+"    %class "+_package+".TestXonEncoding %link #a;\n"+
+"  </xd:component>\n"+
 "</xd:def>";
 			genXComponent(xp = compile(xdef));
 			json =

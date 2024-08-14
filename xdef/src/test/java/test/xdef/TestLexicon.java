@@ -8,8 +8,6 @@ import org.xdef.component.XComponent;
 import java.io.File;
 import java.util.List;
 import org.w3c.dom.Element;
-import org.xdef.msg.SYS;
-import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
 
 /** Test of Lexicon.

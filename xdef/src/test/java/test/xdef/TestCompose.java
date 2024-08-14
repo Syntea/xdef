@@ -106,12 +106,12 @@ final public class TestCompose extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xdef = //test if default context refers to element with same name
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"<a xd:script=\"create from('/a')\">\n"+
-"  <B>\n"+
-"     <C xd:script=\"create from('X')\" c = 'string()' />\n"+
-"  </B>\n"+
-"  <D xd:script=\"create from('X')\"  c = 'string()'/>\n"+
-"</a>\n"+
+"  <a xd:script=\"create from('/a')\">\n"+
+"    <B>\n"+
+"      <C xd:script=\"create from('X')\" c = 'string()' />\n"+
+"    </B>\n"+
+"    <D xd:script=\"create from('X')\"  c = 'string()'/>\n"+
+"  </a>\n"+
 "</xd:def>";
 			assertEq(create(compile(xdef), null, reporter,
 				"<a><B><X b='b' c='x'/></B><X c='y'/></a>"),
@@ -119,13 +119,13 @@ final public class TestCompose extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"<a xd:script=\"create from('/a')\">\n"+
-"  <B xd:script=\"occurs 0..;\" a='required string()'>\n"+
-"     <C xd:script=\"occurs 0..; ref X; create from('X')\" />\n"+
-"  </B>\n"+
-"  <D xd:script=\"occurs 0..; ref X; create from('X')\" />\n"+
-"</a>\n"+
-"<X b = 'optional string()' c = 'optional string()'/>\n"+
+"  <a xd:script=\"create from('/a')\">\n"+
+"    <B xd:script=\"occurs 0..;\" a='required string()'>\n"+
+"      <C xd:script=\"occurs 0..; ref X; create from('X')\" />\n"+
+"    </B>\n"+
+"    <D xd:script=\"occurs 0..; ref X; create from('X')\" />\n"+
+"  </a>\n"+
+"  <X b = 'optional string()' c = 'optional string()'/>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			assertEq(create(xp, null, "a", reporter,
@@ -138,7 +138,7 @@ final public class TestCompose extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xdef = //in root children
 "<xd:def xmlns:xd='" + _xdNS + "'>\n"+
-"<a> <b xd:script=\"occurs 1..*; create from('b')\"/> </a>\n"+
+"  <a> <b xd:script=\"occurs 1..*; create from('b')\"/> </a>\n"+
 "</xd:def>";
 			create(xdef, null, "a", reporter, "<a/>");
 			//test if error "missing required element is reported"
@@ -146,19 +146,19 @@ final public class TestCompose extends XDTester {
 				"XDEF539".equals(reporter.getReport().getMsgID()));
 			xdef = // in nested nodes
 "<xd:def xmlns:xd='" + _xdNS + "'>\n"+
-"<a><b><c xd:script=\"occurs 1..*; create from('d')\"/></b></a>\n"+
+"  <a><b><c xd:script=\"occurs 1..*; create from('d')\"/></b></a>\n"+
 "</xd:def>";
 			create(xdef, null, "a", reporter, "<a/>");
 			assertTrue(reporter.errorWarnings() &&
 				"XDEF539".equals(reporter.getReport().getMsgID()));
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "'>\n"+
-"<a>\n"+
-" <b xd:script=\"occurs ?; create from('/a/b')\"/>\n"+
-" <c xd:script=\"occurs +; create from('/a/c')\"/>\n"+
-" <d xd:script=\"occurs *; create from('/a/d')\"/>\n"+
-" <e xd:script=\"occurs 1; create from('/a/d')\"/>\n"+
-"</a>\n"+
+"  <a>\n"+
+"    <b xd:script=\"occurs ?; create from('/a/b')\"/>\n"+
+"    <c xd:script=\"occurs +; create from('/a/c')\"/>\n"+
+"    <d xd:script=\"occurs *; create from('/a/d')\"/>\n"+
+"    <e xd:script=\"occurs 1; create from('/a/d')\"/>\n"+
+"  </a>\n"+
 "</xd:def>";
 			create(xdef, null, "a", reporter, "<a/>");
 			s = reporter.printToString();
@@ -284,17 +284,17 @@ final public class TestCompose extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"<a>\n"+
-"  <xd:choice script = \"*; create from('//a/*')\">\n"+
-"    <A xd:script = \"*; create {\n"+
-"         Element c = from('.').getElement();\n"+
-"         if (c.getTagName() != 'A') return false;\n"+
-"         return c;}\"/>\n"+
-"    <B xd:script = \"*; create {\n"+
-"         Element c = from('.').getElement();\n"+
-"         return (c.getTagName() == 'B') ? c : null;}\"/>\n"+
-"  </xd:choice>\n"+
-"</a>\n"+
+"  <a>\n"+
+"    <xd:choice script = \"*; create from('//a/*')\">\n"+
+"      <A xd:script = \"*; create {\n"+
+"           Element c = from('.').getElement();\n"+
+"           if (c.getTagName() != 'A') return false;\n"+
+"           return c;}\"/>\n"+
+"      <B xd:script = \"*; create {\n"+
+"           Element c = from('.').getElement();\n"+
+"           return (c.getTagName() == 'B') ? c : null;}\"/>\n"+
+"    </xd:choice>\n"+
+"  </a>\n"+
 "</xd:def>";
 			xml = "<a><A/><B/><A/><B/></a>";
 			assertEq(xml, parse(xdef, null, xml, reporter));
@@ -316,7 +316,7 @@ final public class TestCompose extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xdef = //check all generated elements from number
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"    <a> <B xd:script=\"*; create [3]\" a=\"string(); create 'x'\"/> </a>\n"+
+"  <a> <B xd:script=\"*; create [3]\" a=\"string(); create 'x'\"/> </a>\n"+
 "</xd:def>";
 			NodeList nl = create(xdef, "", "a", reporter,null).getChildNodes();
 			assertNoErrorwarnings(reporter);
@@ -329,28 +329,28 @@ final public class TestCompose extends XDTester {
 "<xd:declaration>\n"+
 "  external method long test.xdef.TestCompose.myMethod(long);\n"+
 "</xd:declaration>\n"+
-"<a pi='required float(); create $PI' >\n"+
-"  <B a='required num(); create myMethod(1)'\n"+
-"     b=\"required string(1,30); create 'c';\" >\n"+
-"    string(); create 'd'\n"+
-"  </B>\n"+
-"</a>\n"+
+"  <a pi='required float(); create $PI' >\n"+
+"    <B a='required num(); create myMethod(1)'\n"+
+"       b=\"required string(1,30); create 'c';\" >\n"+
+"      string(); create 'd'\n"+
+"    </B>\n"+
+"  </a>\n"+
 "</xd:def>";
 			assertEq(create(xdef, null, "a", reporter, null),
 				"<a pi='3.141592653589793'><B a='123457' b='c'>d</B></a>");
 			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd = '" + _xdNS + "'>\n"+
-"<a>\n"+
-"  <xd:choice script = \"*; create from('//a/*')\">\n"+
-"    <A xd:script = \"*; create {\n"+
-"       Element c = from('.').getElement();\n"+
-"       return (c.getTagName() == 'A') ? c : null;}\"/>\n"+
-"    <B xd:script = \"*; create {\n"+
-"       Element c = from('.').getElement();\n"+
-"       return (c.getTagName() == 'B') ? c : null;}\"/>\n"+
-"  </xd:choice>\n"+
-"</a>\n"+
+"  <a>\n"+
+"    <xd:choice script = \"*; create from('//a/*')\">\n"+
+"      <A xd:script = \"*; create {\n"+
+"         Element c = from('.').getElement();\n"+
+"         return (c.getTagName() == 'A') ? c : null;}\"/>\n"+
+"      <B xd:script = \"*; create {\n"+
+"         Element c = from('.').getElement();\n"+
+"         return (c.getTagName() == 'B') ? c : null;}\"/>\n"+
+"    </xd:choice>\n"+
+"  </a>\n"+
 "</xd:def>";
 			xml = "<a><A/><B/><A/><B/></a>";
 			assertEq(create(xdef, null, "a", reporter, xml), xml);

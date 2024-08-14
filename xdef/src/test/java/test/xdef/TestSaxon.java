@@ -62,12 +62,12 @@ public class TestSaxon extends XDTester {
 			assertEq("abcd.abc.ab.a..", swr.toString());
 			xdef =
 "<xd:def  xmlns:xd='"+_xdNS+"' root='a'>\n"+
-"<xd:declaration>\n" +
-"Container x=xpath(\"serialize(let $b := 'abcd'\n"+
+"  <xd:declaration>\n" +
+"    Container x=xpath(\"serialize(let $b := 'abcd'\n"+
 "            return (0 to string-length($b))\n"+
 "               ! ('&#10;' || substring($b,1,string-length($b) - .)))\");\n" +
-"</xd:declaration>\n" +
-"<a xd:script=\"occurs +;init out(x);\"/>\n" +
+"  </xd:declaration>\n" +
+"  <a xd:script=\"occurs +;init out(x);\"/>\n" +
 "</xd:def>";
 			xp = compile(xdef);
 			xml = "<a/>";
@@ -81,15 +81,15 @@ public class TestSaxon extends XDTester {
 		try {//fromXQ (xquery)
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='root'>\n"+
-"<root>\n"+
-" <xd:sequence xd:script=\"occurs *; create xquery('//a')\">\n"+
-"  <a a = \"required string; create xquery('@A')\">\n"+
-"    <b xd:script=\"occurs *; create xquery('B')\"\n"+
-"       x = \"required string; create xquery('@c')\"\n"+
-"       y = \"required string; create xquery('@d')\"/>\n"+
-"  </a>\n"+
-" </xd:sequence>\n"+
-"</root>\n"+
+"  <root>\n"+
+"    <xd:sequence xd:script=\"occurs *; create xquery('//a')\">\n"+
+"      <a a = \"required string; create xquery('@A')\">\n"+
+"         <b xd:script=\"occurs *; create xquery('B')\"\n"+
+"             x = \"required string; create xquery('@c')\"\n"+
+"             y = \"required string; create xquery('@d')\"/>\n"+
+"      </a>\n"+
+"    </xd:sequence>\n"+
+"  </root>\n"+
 "</xd:def>";
 			xml =
 "<x>" +
@@ -105,9 +105,9 @@ public class TestSaxon extends XDTester {
 				"</root>");
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'\n"+
-"    script='options ignoreAttrWhiteSpaces, ignoreTextWhiteSpaces'\n"+
-"    xmlns='N' xmlns:sod='N'>\n"+
-"<a>\n"+
+"        script='options ignoreAttrWhiteSpaces, ignoreTextWhiteSpaces'\n"+
+"        xmlns='N' xmlns:sod='N'>\n"+
+"  <a>\n"+
 "    <e f=\"optional string; create xpath('\\'\\'')\"/>\n"+
 "    <e f=\"string; create xpath('\\'2\\'')\"/>\n"+
 "    <f xd:script=\"occurs *; create xpath('../e')\"/>\n"+
@@ -116,7 +116,7 @@ public class TestSaxon extends XDTester {
 "    <h xd:script=\"occurs *; create xpath('preceding-sibling::e')\"/>\n"+
 "    <i xd:script=\"occurs *; create xpath('preceding-sibling::*:e')\"/>\n"+
 "    <j xd:script=\"occurs *; create xpath('preceding-sibling::sod:e')\"/>\n"+
-"</a>\n"+
+"  </a>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			el = xp.createXDDocument().xcreate(new QName("N", "a"), reporter);
@@ -125,15 +125,15 @@ public class TestSaxon extends XDTester {
 "<a xmlns=\"N\"><e/><e f=\"2\"/><x/><x/><g/><g/><i/><i/><j/><j/></a>", el);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'\n"+
-"    xmlns='N' xmlns:sod='N'\n"+
-"    script='options ignoreAttrWhiteSpaces,ignoreTextWhiteSpaces'>\n"+
-"<a>\n"+
-"  <e f=\"fixed '1'\"/>\n"+
-"  <e f=\"fixed '2'\"/>\n"+
-"  <f xd:script=\"occurs *; create xpath('../sod:e')\"/>\n"+
-"  <g xd:script=\"occurs *; create xpath('preceding-sibling::*:e')\"/>\n"+
-"  <h xd:script=\"occurs *; create xpath('preceding-sibling::sod:e')\"/>\n"+
-"</a>\n"+
+"        xmlns='N' xmlns:sod='N'\n"+
+"        script='options ignoreAttrWhiteSpaces,ignoreTextWhiteSpaces'>\n"+
+"  <a>\n"+
+"    <e f=\"fixed '1'\"/>\n"+
+"    <e f=\"fixed '2'\"/>\n"+
+"    <f xd:script=\"occurs *; create xpath('../sod:e')\"/>\n"+
+"    <g xd:script=\"occurs *; create xpath('preceding-sibling::*:e')\"/>\n"+
+"    <h xd:script=\"occurs *; create xpath('preceding-sibling::sod:e')\"/>\n"+
+"  </a>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			el = xp.createXDDocument().xcreate(new QName("N", "a"), reporter);

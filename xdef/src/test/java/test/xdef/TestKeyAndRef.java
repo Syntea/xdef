@@ -54,8 +54,8 @@ public final class TestKeyAndRef extends XDTester {
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"<xd:declaration>uniqueSet u {x: int()}</xd:declaration>\n"+
-"<a><b z='u.x.IDREFS'/><c x='u.x.ID' y='u.x.ID'/></a>\n"+
+"  <xd:declaration>uniqueSet u {x: int()}</xd:declaration>\n"+
+"  <a><b z='u.x.IDREFS'/><c x='u.x.ID' y='u.x.ID'/></a>\n"+
 "</xd:def>\n";
 			xp = compile(xdef);
 			xml = "<a><b z='1 2'/><c x='1' y='2'/></a>";
@@ -68,8 +68,8 @@ public final class TestKeyAndRef extends XDTester {
 				reporter.printToString());
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"<xd:declaration> type p QName(); uniqueSet u p;</xd:declaration>\n"+
-"<a><b z='SET'> u.IDREFS </b><c x='u.ID' y='u.ID'/></a>\n"+
+"  <xd:declaration> type p QName(); uniqueSet u p;</xd:declaration>\n"+
+"  <a><b z='SET'> u.IDREFS </b><c x='u.ID' y='u.ID'/></a>\n"+
 "</xd:def>\n";
 			xp = compile(xdef);
 			xml = "<a><b z='x'>a b</b><c x='a' y='b'/></a>";
@@ -87,8 +87,8 @@ public final class TestKeyAndRef extends XDTester {
 				reporter.printToString());
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"<xd:declaration scope='local'>uniqueSet u {x: int()}</xd:declaration>\n"+
-"<a><b x='u.x.ID' y='u.x.ID'/><c z='u.x.CHKIDS'/></a>\n"+
+"  <xd:declaration scope='local'>uniqueSet u {x: int()}</xd:declaration>\n"+
+"  <a><b x='u.x.ID' y='u.x.ID'/><c z='u.x.CHKIDS'/></a>\n"+
 "</xd:def>\n";
 			xp = compile(xdef);
 			xml = "<a><b x='1' y='2'/><c z='1 2'/></a>";
@@ -102,12 +102,12 @@ public final class TestKeyAndRef extends XDTester {
 			// uniqueSet declared as variable of model.
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
-"<A>\n"+
-"  <a xd:script='var uniqueSet v {x:int()}; occurs *'>\n"+
-"    <b x='v.x.ID()' y='v.x.ID()'/>\n"+
-"    <c z='v.x.IDREFS();'/>\n"+
-"  </a>\n"+
-"</A>\n"+
+"  <A>\n"+
+"    <a xd:script='var uniqueSet v {x:int()}; occurs *'>\n"+
+"      <b x='v.x.ID()' y='v.x.ID()'/>\n"+
+"      <c z='v.x.IDREFS();'/>\n"+
+"    </a>\n"+
+"  </A>\n"+
 "</xd:def>\n";
 			xp = compile(xdef);
 			xml = "<A/>";
@@ -132,14 +132,14 @@ public final class TestKeyAndRef extends XDTester {
 				reporter.printToString());
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
-"<xd:declaration scope='local'>\n"+
-"  type flt float(1,6);\n"+
-"  uniqueSet u {x: flt; y : optional flt;}\n"+
-"</xd:declaration>\n"+
-"<A xd:script='var uniqueSet v {x: u.x}'>\n"+
-"  <b xd:script='+' a='v.x.ID(u.x.ID())'/>\n"+
-"  <c xd:script='+' a='v.x.IDREF(u.x.IDREF())'/>\n"+
-"</A>\n"+
+"  <xd:declaration scope='local'>\n"+
+"    type flt float(1,6);\n"+
+"    uniqueSet u {x: flt; y : optional flt;}\n"+
+"  </xd:declaration>\n"+
+"  <A xd:script='var uniqueSet v {x: u.x}'>\n"+
+"    <b xd:script='+' a='v.x.ID(u.x.ID())'/>\n"+
+"    <c xd:script='+' a='v.x.IDREF(u.x.IDREF())'/>\n"+
+"  </A>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xml = "<A><b a='3.1'/><c a='3.1'/></A>";
@@ -153,36 +153,14 @@ public final class TestKeyAndRef extends XDTester {
 				reporter.printToString());
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
-"<xd:declaration> uniqueSet u int(); </xd:declaration>\n"+
-"<A>\n"+
-"  <a xd:script='?' a='u()'/>\n"+
-"  <b xd:script='+' a='u.ID()'/>\n"+
-"  <c xd:script='?' a='u.IDREF()'/>\n"+
-"  <d xd:script='?' a='u.CHKID()'/>\n"+
-"  <e xd:script='?' a='u.SET()'/>\n"+
-"</A>\n"+
-"</xd:def>\n";
-			xp = compile(xdef);
-			xml = "<A><a a='2'/><b a='1'/><c a='1'/><d a='1'/><e a='3'/></A>";
-			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrorwarnings(reporter);
-			xml = "<A><a a='2'/><b a='1'/><c a='2'/><d a='3'/><e a='4'/></A>";
-			assertEq(xml, parse(xp, "", xml, reporter));
-			assertTrue(reporter.getErrorCount() == 2
-				&& "XDEF522".equals(reporter.getReport().getMsgID()),
-				reporter);
-			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
-"<xd:declaration>\n"+
-"  uniqueSet u{x: int();}\n"+
-"</xd:declaration>\n"+
-"<A>\n"+
-"  <a xd:script='?' a='u.x()'/>\n"+
-"  <b xd:script='+' a='u.x.ID()'/>\n"+
-"  <c xd:script='?' a='u.x.IDREF()'/>\n"+
-"  <d xd:script='?' a='u.x.CHKID()'/>\n"+
-"  <e xd:script='?' a='u.x.SET()'/>\n"+
-"</A>\n"+
+"  <xd:declaration> uniqueSet u int(); </xd:declaration>\n"+
+"  <A>\n"+
+"    <a xd:script='?' a='u()'/>\n"+
+"    <b xd:script='+' a='u.ID()'/>\n"+
+"    <c xd:script='?' a='u.IDREF()'/>\n"+
+"    <d xd:script='?' a='u.CHKID()'/>\n"+
+"    <e xd:script='?' a='u.SET()'/>\n"+
+"  </A>\n"+
 "</xd:def>\n";
 			xp = compile(xdef);
 			xml = "<A><a a='2'/><b a='1'/><c a='1'/><d a='1'/><e a='3'/></A>";
@@ -195,13 +173,13 @@ public final class TestKeyAndRef extends XDTester {
 				reporter);
 			xdef = // test ID in onStartElement
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
-" <xd:declaration scope=\"local\">\n" +
-"   uniqueSet tabulka {sloupec: string(1,3)}; \n" +
-" </xd:declaration>\n" +
-" <A>\n" +
+"  <xd:declaration scope=\"local\">\n" +
+"    uniqueSet tabulka {sloupec: string(1,3)}; \n" +
+"  </xd:declaration>\n" +
+"  <A>\n" +
 "    <B xd:script=\"*; onStartElement tabulka.ID()\"\n" +
 "        b=\"tabulka.sloupec()\"/>\n" +
-" </A>\n" +
+"  </A>\n" +
 "</xd:def>";
 			xp = compile(xdef);
 			xml = "<A><B b='S-A'/><B b='S-B'/><B b='S-D'/></A>";
@@ -212,32 +190,14 @@ public final class TestKeyAndRef extends XDTester {
 			assertTrue(reporter.printToString().contains("XDEF523"));
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
-"<xd:declaration scope='local'>\n"+
-"  type flt float(1,6);\n"+
-"  uniqueSet u {x: flt} \n"+
-"</xd:declaration>\n"+
-"<A xd:script='var uniqueSet v {x: flt()}'>\n"+
-"  <b xd:script='+' a='v.x.ID(u.x.ID())'/>\n"+
-"  <c xd:script='+' a='v.x.IDREF(u.x.IDREF())'/>\n"+
-"</A>\n"+
-"</xd:def>";
-			xp = compile(xdef);
-			xml = "<A><b a='3.1'/><c a='3.1'/></A>";
-			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrorwarnings(reporter);
-			xml = "<A><b a='3.1'/><b a='3.1'/><c a='4.1'/></A>";
-			assertEq(xml, parse(xp, "", xml, reporter));
-			assertTrue(reporter.getErrorCount() == 3, reporter.printToString());
-			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
-"<xd:declaration scope='local'>\n"+
-"  type flt float(1,6);\n"+
-"  uniqueSet u {x: flt; y : ? flt;}\n"+
-"</xd:declaration>\n"+
-"<A xd:script='var uniqueSet v {x: flt}'>\n"+
-"  <b xd:script='+' a='v.x.ID(u.x.ID())'/>\n"+
-"  <c xd:script='+' a='v.x.IDREF(u.x.IDREF())'/>\n"+
-"</A>\n"+
+"  <xd:declaration scope='local'>\n"+
+"    type flt float(1,6);\n"+
+"    uniqueSet u {x: flt} \n"+
+"  </xd:declaration>\n"+
+"  <A xd:script='var uniqueSet v {x: flt()}'>\n"+
+"    <b xd:script='+' a='v.x.ID(u.x.ID())'/>\n"+
+"    <c xd:script='+' a='v.x.IDREF(u.x.IDREF())'/>\n"+
+"  </A>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xml = "<A><b a='3.1'/><c a='3.1'/></A>";
@@ -296,7 +256,7 @@ public final class TestKeyAndRef extends XDTester {
 				reporter.printToString());
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
-"<xd:declaration scope='local'>uniqueSet v {x: int(1,3)}</xd:declaration>\n"+
+"  <xd:declaration scope='local'>uniqueSet v {x: int(1,3)}</xd:declaration>\n"+
 "  <A><a xd:script='occurs *; ref a;'/></A>\n"+
 "  <a xd:script='finally v.CLEAR()'>\n"+
 "    <b x='v.x.ID' y='v.x.ID'/>\n"+
@@ -359,44 +319,12 @@ public final class TestKeyAndRef extends XDTester {
 				reporter.printToString());
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
-"<xd:declaration scope='local'>uniqueSet v {x:int(1,3)}</xd:declaration>\n"+
-"  <A><a xd:script='occurs *; ref a;'/></A>\n"+
-"  <a xd:script='var uniqueSet v {x: int(1,3)}'>\n"+
-"    <b x='v.x.ID' y='v.x.ID()'/>\n"+
-"    <c z='v.x.IDREFS'/>\n"+
-"  </a>\n"+
-"</xd:def>";
-			xp = compile(xdef);
-			xml = "<A/>";
-			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrorwarnings(reporter);
-			xml =
-"<A><a><b x='1' y='2'/><c z='1 2'/></a><a><b x='1' y='2'/><c z='1 2'/></a></A>";
-			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrorwarnings(reporter);
-			xml = "<A><a><b x='1' y='2'/><c z='1 3'/></a></A>";
-			parse(xp, "", xml, reporter);
-			assertTrue(reporter.errorWarnings()
-				&& "XDEF522".equals(reporter.getReport().getMsgID()),
-				reporter.printToString());
-			xml =
-"<A><a><b x='1' y='2'/><c z='1 3'/></a><a><b x='1' y='4'/><c z='2 4'/></a></A>";
-			parse(xp, "", xml, reporter);
-			assertEq(4, reporter.getErrorCount());
-			assertTrue(reporter.errorWarnings()
-				&& "XDEF522".equals(reporter.getReport().getMsgID())
-				&& "XDEF813".equals(reporter.getReport().getMsgID())
-				&& "XDEF813".equals(reporter.getReport().getMsgID())
-				&& "XDEF522".equals(reporter.getReport().getMsgID()),
-				reporter.printToString());
-			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
-"<A xd:script='var {type i int(1,3);uniqueSet v {p:i;q:? string(1,9)};}'>\n"+
-"  <a xd:script='occurs *;'>\n"+
-"    <b xd:script='finally v.ID' x='v.p()' y='v.q()'/>\n"+
-"    <c xd:script='finally v.IDREF' x='v.p()' y='v.q()'/>\n"+
-"  </a>\n"+
-"</A>\n"+
+"  <A xd:script='var {type i int(1,3);uniqueSet v {p:i;q:? string(1,9)};}'>\n"+
+"    <a xd:script='occurs *;'>\n"+
+"      <b xd:script='finally v.ID' x='v.p()' y='v.q()'/>\n"+
+"      <c xd:script='finally v.IDREF' x='v.p()' y='v.q()'/>\n"+
+"    </a>\n"+
+"  </A>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xml =
@@ -417,12 +345,12 @@ public final class TestKeyAndRef extends XDTester {
 				reporter.printToString());
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
-"<A xd:script='var{type i int(1,3);uniqueSet v{p:i;q:? string(1,9)};}'>\n"+
-"  <a xd:script='occurs *;'>\n"+
-"    <b xd:script='finally v.ID' x='v.p()' y='v.q()'/>\n"+
-"    <c xd:script='finally v.IDREF' x='v.p()' y='v.q()'/>\n"+
-"  </a>\n"+
-"</A>\n"+
+"  <A xd:script='var{type i int(1,3);uniqueSet v{p:i;q:? string(1,9)};}'>\n"+
+"    <a xd:script='occurs *;'>\n"+
+"      <b xd:script='finally v.ID' x='v.p()' y='v.q()'/>\n"+
+"      <c xd:script='finally v.IDREF' x='v.p()' y='v.q()'/>\n"+
+"    </a>\n"+
+"  </A>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xml =
@@ -443,18 +371,18 @@ public final class TestKeyAndRef extends XDTester {
 				reporter.printToString());
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
-"<xd:declaration scope='local'>\n"+
-"  type code string(3);\n"+
-"  uniqueSet FileCode {parse: code();}\n"+
-"  uniqueSet FileParam {Code: FileCode.parse.ID(); Param: string(1,10);}\n"+
-"</xd:declaration>\n"+
-"<A>\n"+
-"  <FileType xd:script='occurs 1..'\n"+
-"      FileCode='required FileParam.Code()'>\n"+
-"    <Param xd:script='occurs 1..'\n"+
-"      ParamName='required FileParam.Param.ID()'/>\n"+
-"  </FileType>\n"+
-"</A>\n"+
+"  <xd:declaration scope='local'>\n"+
+"    type code string(3);\n"+
+"    uniqueSet FileCode {parse: code();}\n"+
+"    uniqueSet FileParam {Code: FileCode.parse.ID(); Param: string(1,10);}\n"+
+"  </xd:declaration>\n"+
+"  <A>\n"+
+"    <FileType xd:script='occurs 1..'\n"+
+"        FileCode='required FileParam.Code()'>\n"+
+"      <Param xd:script='occurs 1..'\n"+
+"          ParamName='required FileParam.Param.ID()'/>\n"+
+"    </FileType>\n"+
+"  </A>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xml =
@@ -486,22 +414,22 @@ public final class TestKeyAndRef extends XDTester {
 				"Error not reported; " + reporter.printToString());
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='Country'>\n"+
-"<xd:declaration scope='local'>\n"+
-" /* tabulka slozenych klicu */\n"+
-" uniqueSet addr {country:string;town:string;street:string;house: int()};\n"+
-"</xd:declaration>\n"+
-"<Country name=\"addr.country()\">\n"+
-"  <Town xd:script = \"occurs +\" name=\" addr.town()\">\n"+
-"    <Street xd:script = \"occurs +\" name=\" addr.street()\">\n"+
-"      <House xd:script = \"occurs +\" number=\"addr.house.ID()\"/> \n"+
-"    </Street>\n"+
-"  </Town>\n"+
-"  <Address xd:script = \"occurs *; finally addr.IDREF();\"\n"+
-"    Country=\"addr.country()\"\n"+
-"    Town=\"addr.town()\"\n"+
-"    Street=\"addr.street()\"\n"+
-"    House=\"? addr.house()\" />\n"+
-"</Country>\n"+
+"  <xd:declaration scope='local'>\n"+
+"   /* tabulka slozenych klicu */\n"+
+"   uniqueSet addr {country:string;town:string;street:string;house: int()};\n"+
+"  </xd:declaration>\n"+
+"  <Country name=\"addr.country()\">\n"+
+"    <Town xd:script = \"occurs +\" name=\" addr.town()\">\n"+
+"      <Street xd:script = \"occurs +\" name=\" addr.street()\">\n"+
+"        <House xd:script = \"occurs +\" number=\"addr.house.ID()\"/> \n"+
+"      </Street>\n"+
+"    </Town>\n"+
+"    <Address xd:script = \"occurs *; finally addr.IDREF();\"\n"+
+"      Country=\"addr.country()\"\n"+
+"      Town=\"addr.town()\"\n"+
+"      Street=\"addr.street()\"\n"+
+"      House=\"? addr.house()\" />\n"+
+"  </Country>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xml =
@@ -535,29 +463,29 @@ public final class TestKeyAndRef extends XDTester {
 				&& s.indexOf("/Country/Address[3]") > 1, s);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='Country'>\n"+
-"<xd:declaration scope='local'>\n"+
-" /* tabulka slozenych klicu */\n"+
-" uniqueSet town {country: string; name: string};\n"+
-" uniqueSet addr {country: town.country;\n"+
-"					town: town.name;\n"+
-"					street: string;\n"+
-"					house:?int()};\n"+
-"</xd:declaration>\n"+
-"<Country name=\"addr.country(town.country())\">\n"+
-"  <Town xd:script=\"occurs +\" name=\"addr.town(town.name.SET());\">\n"+
-"    <Street xd:script = \"occurs +\" name=\"addr.street.SET()\">\n"+
-"      <House xd:script = \"occurs *\" number=\"addr.house.ID()\"/> \n"+
-"    </Street>\n"+
-"  </Town>\n"+
-"  <Address xd:script = \"occurs *; finally addr.IDREF();\"\n"+
-"    Country=\"addr.country()\"\n"+
-"    Town=\"addr.town()\"\n"+
-"    Street=\"addr.street()\"\n"+
-"    House=\"? addr.house()\" />\n"+
-"  <Locality xd:script=\"occurs *; finally town.IDREF();\"\n"+
-"    Country=\"town.country()\"\n"+
-"    Town=\"town.name()\"/>\n"+
-"</Country>\n"+
+"  <xd:declaration scope='local'>\n"+
+"   /* tabulka slozenych klicu */\n"+
+"   uniqueSet town {country: string; name: string};\n"+
+"   uniqueSet addr {country: town.country;\n"+
+"                   town: town.name;\n"+
+"                   street: string;\n"+
+"                   house:?int()};\n"+
+"  </xd:declaration>\n"+
+  "<Country name=\"addr.country(town.country())\">\n"+
+"    <Town xd:script=\"occurs +\" name=\"addr.town(town.name.SET());\">\n"+
+"      <Street xd:script = \"occurs +\" name=\"addr.street.SET()\">\n"+
+"        <House xd:script = \"occurs *\" number=\"addr.house.ID()\"/> \n"+
+"      </Street>\n"+
+"    </Town>\n"+
+"    <Address xd:script = \"occurs *; finally addr.IDREF();\"\n"+
+"      Country=\"addr.country()\"\n"+
+"      Town=\"addr.town()\"\n"+
+"      Street=\"addr.street()\"\n"+
+"      House=\"? addr.house()\" />\n"+
+"    <Locality xd:script=\"occurs *; finally town.IDREF();\"\n"+
+"      Country=\"town.country()\"\n"+
+"      Town=\"town.name()\"/>\n"+
+"  </Country>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xml =
@@ -612,28 +540,28 @@ public final class TestKeyAndRef extends XDTester {
 				&& s.indexOf("/Country/Address[3]") > 1, s);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='Country'>\n"+
-"<xd:declaration scope='local'>\n"+
-"   /* tabulka slozenych klicu */\n"+
-"   uniqueSet lokalita {country:string; town: ? string;};\n"+
-"   uniqueSet addr {country: lokalita.country.SET;\n"+
+"  <xd:declaration scope='local'>\n"+
+"    /* tabulka slozenych klicu */\n"+
+"    uniqueSet lokalita {country:string; town: ? string;};\n"+
+"    uniqueSet addr {country: lokalita.country.SET;\n"+
 "                     town: lokalita.town.SET;\n"+
 "                     street:string; house:int()};\n"+
-"</xd:declaration>\n"+
-"<Country name=\"addr.country()\">\n"+
-"  <Town xd:script = \"occurs +\" name=\" addr.town()\">\n"+
-"    <Street xd:script = \"occurs +\" name=\" addr.street()\">\n"+
-"      <House xd:script = \"occurs +\" number=\"addr.house.ID()\"/>\n"+
-"    </Street>\n"+
-"  </Town>\n"+
-"  <Address xd:script = \"occurs *; finally addr.IDREF();\"\n"+
-"    Country=\"addr.country()\"\n"+
-"    Town=\"addr.town()\"\n"+
-"    Street=\"addr.street()\"\n"+
-"    House=\"addr.house()\"/>\n"+
-"  <Locality xd:script = \"occurs *; finally lokalita.IDREF();\"\n"+
-"    Country=\"lokalita.country()\"\n"+
-"    Town=\"? lokalita.town()\"/>\n"+
-"</Country>\n"+
+"  </xd:declaration>\n"+
+"  <Country name=\"addr.country()\">\n"+
+"    <Town xd:script = \"occurs +\" name=\" addr.town()\">\n"+
+"      <Street xd:script = \"occurs +\" name=\" addr.street()\">\n"+
+"        <House xd:script = \"occurs +\" number=\"addr.house.ID()\"/>\n"+
+"      </Street>\n"+
+"    </Town>\n"+
+"    <Address xd:script = \"occurs *; finally addr.IDREF();\"\n"+
+"      Country=\"addr.country()\"\n"+
+"      Town=\"addr.town()\"\n"+
+"      Street=\"addr.street()\"\n"+
+"      House=\"addr.house()\"/>\n"+
+"    <Locality xd:script = \"occurs *; finally lokalita.IDREF();\"\n"+
+"      Country=\"lokalita.country()\"\n"+
+"      Town=\"? lokalita.town()\"/>\n"+
+"  </Country>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xml =
@@ -696,7 +624,6 @@ public final class TestKeyAndRef extends XDTester {
 "       street='optional addr.street();onAbsence addr.street.NEWKEY();'\n"+
 "       number='addr.house()' />\n"+
 "  </a>\n"+
-"\n"+
 "	<xd:declaration scope='local'>\n"+
 "		uniqueSet addr {town: string(); street: ? string(); house: int();}\n"+
 "	</xd:declaration>\n"+
@@ -781,8 +708,8 @@ public final class TestKeyAndRef extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xdef = // test CHIID
 "<xd:def xmlns:xd='" + _xdNS + "' root='A' >\n" +
-" <xd:declaration> uniqueSet s int(); </xd:declaration>\n" +
-" <A><a xd:script='*' a='s.ID()'/><b xd:script='*' a='s.CHKID()'/></A>\n" +
+"  <xd:declaration> uniqueSet s int(); </xd:declaration>\n" +
+"  <A><a xd:script='*' a='s.ID()'/><b xd:script='*' a='s.CHKID()'/></A>\n" +
 "</xd:def>";
 			xml =
 "<A>\n" +
@@ -795,17 +722,17 @@ public final class TestKeyAndRef extends XDTester {
 			assertEq(2, reporter.getErrorCount(), reporter);
 			xdef = // test CHIID
 "<xd:def xmlns:xd='" + _xdNS + "' root='A' >\n" +
-"<xd:declaration>\n" +
-" type a int(); type b string(); uniqueSet s2 {a: a(); b: b()};\n" +
-"</xd:declaration>\n" +
-" <A>\n" +
-"   <a xd:script='*' a='s2.a()'>\n" +
-"     <b xd:script='*; finally s2.ID();' b='s2.b()' /> \n" +
-"   </a>\n" +
-"   <b xd:script='*' a='s2.a()'>\n" +
-"     <c xd:script='*; finally s2.CHKID()' b='s2.b()' />\n" +
-"   </b>\n" +
-" </A>\n" +
+"  <xd:declaration>\n" +
+"    type a int(); type b string(); uniqueSet s2 {a: a(); b: b()};\n" +
+"  </xd:declaration>\n" +
+"  <A>\n" +
+"    <a xd:script='*' a='s2.a()'>\n" +
+"      <b xd:script='*; finally s2.ID();' b='s2.b()' /> \n" +
+"    </a>\n" +
+"    <b xd:script='*' a='s2.a()'>\n" +
+"      <c xd:script='*; finally s2.CHKID()' b='s2.b()' />\n" +
+"    </b>\n" +
+"  </A>\n" +
 "</xd:def>";
 			xml =
 "<A>\n" +
@@ -820,8 +747,8 @@ public final class TestKeyAndRef extends XDTester {
 			assertEq(2, reporter.getErrorCount(), reporter);
 			xdef = //test CHIID
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
-"<xd:declaration> uniqueSet u {a: string();} </xd:declaration>\n" +
-"<A><a xd:script='*' b='u.a.ID()'/><b xd:script='*' b='u.a.CHKID()'/></A>\n" +
+"  <xd:declaration> uniqueSet u {a: string();} </xd:declaration>\n" +
+"  <A><a xd:script='*' b='u.a.ID()'/><b xd:script='*' b='u.a.CHKID()'/></A>\n" +
 "</xd:def>";
 			xp = compile(xdef);
 			xml =
@@ -837,24 +764,24 @@ public final class TestKeyAndRef extends XDTester {
 				&& s.contains("/A/b[3]/@b"), reporter);
 			xdef = //test CHIID-
 "<xd:def xmlns:xd='" + _xdNS + "' root='Test'>\n" +
-" <xd:declaration>\n" +
-"    type at   int();\n" +
-"    type bt   string();\n" +
-"    type ct   enum('Y','N');\n" +
-"    uniqueSet s3 {a: at(); b: bt(); c: string()};\n" + // c accepts anything
-"    boolean x() {return ct() AND s3.c();}\n"+
-" </xd:declaration>\n" +
-" <Test> \n" +
-"   <A xd:script=\"*\" a=\"s3.a()\">\n" +
-"     <B xd:script=\"*; ref B; finally s3.ID()\"/>\n" +
-"   </A>\n" +
-"   <uA xd:script=\"*\" a=\"s3.a()\">\n" +
-"     <uB xd:script=\"*; finally s3.CHKID()\" \n" +
+"  <xd:declaration>\n" +
+"     type at   int();\n" +
+"     type bt   string();\n" +
+"     type ct   enum('Y','N');\n" +
+"     uniqueSet s3 {a: at(); b: bt(); c: string()};\n" + // c accepts anything
+"     boolean x() {return ct() AND s3.c();}\n"+
+"  </xd:declaration>\n" +
+"  <Test> \n" +
+"    <A xd:script=\"*\" a=\"s3.a()\">\n" +
+"      <B xd:script=\"*; ref B; finally s3.ID()\"/>\n" +
+"    </A>\n" +
+"    <uA xd:script=\"*\" a=\"s3.a()\">\n" +
+"      <uB xd:script=\"*; finally s3.CHKID()\" \n" +
 "          b=\"s3.b()\"\n" +
 "          c=\"x()\"/>\n" +
-"   </uA>\n" +
-" </Test>\n" +
-" <B b=\"s3.b()\" c=\"s3.c()\"/>\n" +
+"    </uA>\n" +
+"  </Test>\n" +
+"  <B b=\"s3.b()\" c=\"s3.c()\"/>\n" +
 "</xd:def>";
 			xp = compile(xdef);
 			xml =
@@ -1038,24 +965,24 @@ public final class TestKeyAndRef extends XDTester {
 			// method uniqueSet.toContainer()
 			xdef = // explicit variant
 "<xd:def xmlns:xd='" + _xdNS + "' root='List'>\n" +
-"<xd:declaration>\n" +
-"   Container c;\n" +
-"   int i=0;\n" +
-"   uniqueSet members {room: string()};\n" +
-"</xd:declaration> \n" +
-"<List xd:script='finally c = members.toContainer();'>\n" +
-"   <Member xd:script='occurs +'\n" +
-"     Name='string()'\n" +
-"     Room='members.room.SET()'/>\n" +
-"</List>\n" +
-"<School xd:script='var String s;'>\n" +
-"  <Group xd:script='*; create c.getLength()'\n" +
-"    Room='string(); create\n" +
-"             s = ((Container)c.item(i++)).getNamedString(\"room\");'>\n" +
-"    <Student xd:script=\"+; create xpath('//Member[@Room=\\''+s+'\\']');\"\n" +
-"      Name='string()'/> \n" +
-"  </Group>\n" +
-"</School>\n" +
+"  <xd:declaration>\n" +
+"    Container c;\n" +
+"    int i=0;\n" +
+"    uniqueSet members {room: string()};\n" +
+"  </xd:declaration> \n" +
+"  <List xd:script='finally c = members.toContainer();'>\n" +
+"    <Member xd:script='occurs +'\n" +
+"      Name='string()'\n" +
+"      Room='members.room.SET()'/>\n" +
+"  </List>\n" +
+"  <School xd:script='var String s;'>\n" +
+"    <Group xd:script='*; create c.getLength()'\n" +
+"      Room='string(); create\n" +
+"            s = ((Container)c.item(i++)).getNamedString(\"room\");'>\n" +
+"      <Student xd:script=\"+;create xpath('//Member[@Room=\\''+s+'\\']');\"\n"+
+"          Name='string()'/> \n" +
+"    </Group>\n" +
+"  </School>\n" +
 "</xd:def>";
 			xd = compile(xdef).createXDDocument();
 			xml = // source
@@ -1075,21 +1002,21 @@ public final class TestKeyAndRef extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xdef = // toContainer() - variant with container as context
 "<xd:def xmlns:xd='" + _xdNS + "' root='List' >\n" +
-"<xd:declaration>\n" +
-"   uniqueSet members {room: string()};\n" +
-"</xd:declaration>\n" +
-"<List xd:script='finally {returnElement(xcreate(\"School\"))}'>\n" +
-"   <Member xd:script='occurs +'\n" +
-"     Name='string()'\n" +
-"     Room='members.room.SET()'/>\n" +
-"</List>\n" +
-"<School>\n" +
-"  <Group xd:script='*; var String s; create members.toContainer();'\n" +
-"    Room='string(); create s=from(\"@room\");'>\n" +
-"    <Student xd:script=\"+; create xpath('//Member[@Room=\\''+s+'\\']');\"\n" +
-"      Name='string()'/> \n" +
-"  </Group>\n" +
-"</School>\n" +
+"  <xd:declaration>\n" +
+"    uniqueSet members {room: string()};\n" +
+"  </xd:declaration>\n" +
+"  <List xd:script='finally {returnElement(xcreate(\"School\"))}'>\n" +
+"     <Member xd:script='occurs +'\n" +
+"       Name='string()'\n" +
+"       Room='members.room.SET()'/>\n" +
+"  </List>\n" +
+"  <School>\n" +
+"    <Group xd:script='*; var String s; create members.toContainer();'\n" +
+"      Room='string(); create s=from(\"@room\");'>\n" +
+"      <Student xd:script=\"+;create xpath('//Member[@Room=\\''+s+'\\']');\"\n"+
+"          Name='string()'/> \n" +
+"    </Group>\n" +
+"  </School>\n" +
 "</xd:def>";
 			assertEq(parse(compile(xdef).createXDDocument(), xml, reporter), s);
 			assertNoErrorwarnings(reporter);
@@ -1169,7 +1096,7 @@ public final class TestKeyAndRef extends XDTester {
 		try { // test of uniqueSetKey and bindSet
 			xdef = // uniqueSetKey
 "<xd:def xmlns:xd='" + XDConstants.XDEF40_NS_URI + "' root='CodeBook'>\n"+
-" <xd:declaration scope=\"local\">\n" +
+"  <xd:declaration scope=\"local\">\n" +
 "     int  AttrCount;\n" +
 "     type attrValue           string(1,511);\n" +
 "     type description         string(1,511);\n" +
@@ -1181,27 +1108,26 @@ public final class TestKeyAndRef extends XDTester {
 "\n" +
 "     boolean idNode() {return nodeSet.Node.ID() AAND attrSet.Node();}\n"+
 "     boolean chkNode() {return nodeSet.Node.CHKID() AAND attrSet.Node();}\n"+
-" </xd:declaration>\n" +
-"\n" +
-"<CodeBook>\n" +
-"  <Def xd:script=\"0..1;\"> <!-- Code list definitions -->\n" +
-"    <Node  xd:script=\"1..;\" Name=\"idNode();\">\n" +
-"      <Attr xd:script=\"1..;\" Name=\"attrSet.Attr.ID()\"/>\n" +
-"      <Node xd:script=\"0..; ref CodeBook/Def/Node\"/>\n" +
+"  </xd:declaration>\n" +
+"  <CodeBook>\n" +
+"    <Def xd:script=\"0..1;\"> <!-- Code list definitions -->\n" +
+"      <Node  xd:script=\"1..;\" Name=\"idNode();\">\n" +
+"        <Attr xd:script=\"1..;\" Name=\"attrSet.Attr.ID()\"/>\n" +
+"        <Node xd:script=\"0..; ref CodeBook/Def/Node\"/>\n" +
+"      </Node>\n" +
+"    </Def>\n" +
+"    <Node xd:script=\"var uniqueSetKey x=attrSet.getActualKey(); 0..*;\"\n" +
+"          Name=\"chkNode();\">\n" +
+"      <xd:sequence xd:script=\"1..*\">\n" +
+"        <Row xd:script=\"1..*;\">\n" +
+"          <Attr xd:script=\"1..*;\" Name=\"attrSet.Attr.CHKID()\">\n" +
+"            attrValue()\n" +
+"          </Attr>\n" +
+"        </Row>\n" +
+"        <Node xd:script=\"0..*;ref CodeBook/Node; finally x.resetKey();\"/>\n"+
+"      </xd:sequence>\n" +
 "    </Node>\n" +
-"  </Def>\n" +
-"  <Node xd:script=\"var uniqueSetKey x=attrSet.getActualKey(); 0..*;\"\n" +
-"        Name=\"chkNode();\">\n" +
-"    <xd:sequence xd:script=\"1..*\">\n" +
-"      <Row xd:script=\"1..*;\">\n" +
-"        <Attr xd:script=\"1..*;\" Name=\"attrSet.Attr.CHKID()\">\n" +
-"          attrValue()\n" +
-"        </Attr>\n" +
-"      </Row>\n" +
-"      <Node xd:script=\"0..*; ref CodeBook/Node; finally x.resetKey();\"/>\n"+
-"    </xd:sequence>\n" +
-"  </Node>\n" +
-"</CodeBook>\n" +
+"  </CodeBook>\n" +
 "</xd:def>";
 			xp = compile(xdef);
 			xml =
@@ -1242,28 +1168,27 @@ public final class TestKeyAndRef extends XDTester {
 "    boolean idNode()  {return nodes.Node.ID() AAND atts.Node();}\n"+
 "    boolean chkNode() {return nodes.Node.CHKID() AAND atts.Node();}\n"+
 "  </xd:declaration>\n" +
-"\n" +
-"<CodeBook>\n" +
-"  <!-- Code list definitions -->\n" +
-"  <Def>\n" +
-"    <Node  xd:script=\"1..*;\" Name=\"idNode();\">\n" +
-"      <Attr xd:script=\"1..*;\" Name=\"atts.Attr.ID()\"/>\n" +
-"      <Node xd:script=\"0..*; ref CodeBook/Def/Node\"/>\n" +
+"  <CodeBook>\n" +
+"    <!-- Code list definitions -->\n" +
+"    <Def>\n" +
+"      <Node  xd:script=\"1..*;\" Name=\"idNode();\">\n" +
+"        <Attr xd:script=\"1..*;\" Name=\"atts.Attr.ID()\"/>\n" +
+"        <Node xd:script=\"0..*; ref CodeBook/Def/Node\"/>\n" +
+"      </Node>\n" +
+"    </Def>\n" +
+"    <!-- Code list values  -->\n" +
+"    <Node xd:script=\"0..*;\"\n" +
+"          Name=\"chkNode();\">\n" +
+"      <xd:sequence xd:script=\"1..*\">\n" +
+"        <Row xd:script=\"1..*;\">\n" +
+"          <Attr xd:script=\"1..*;\" Name=\"atts.Attr.CHKID()\">\n" +
+"            attrValue()\n" +
+"          </Attr>\n" +
+"        </Row>\n" +
+"        <Node xd:script=\"0..*; init bindSet(atts); ref CodeBook/Node;\"/>\n" +
+"      </xd:sequence>\n" +
 "    </Node>\n" +
-"  </Def>\n" +
-"  <!-- Code list values  -->\n" +
-"  <Node xd:script=\"0..*;\"\n" +
-"        Name=\"chkNode();\">\n" +
-"    <xd:sequence xd:script=\"1..*\">\n" +
-"      <Row xd:script=\"1..*;\">\n" +
-"        <Attr xd:script=\"1..*;\" Name=\"atts.Attr.CHKID()\">\n" +
-"          attrValue()\n" +
-"        </Attr>\n" +
-"      </Row>\n" +
-"      <Node xd:script=\"0..*; init bindSet(atts); ref CodeBook/Node;\"/>\n" +
-"    </xd:sequence>\n" +
-"  </Node>\n" +
-"</CodeBook>\n" +
+"  </CodeBook>\n" +
 "</xd:def>";
 			xp = compile(xdef);
 			assertEq(xml, parse(xp, "", xml, reporter));

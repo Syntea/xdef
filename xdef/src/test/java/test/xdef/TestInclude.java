@@ -39,7 +39,7 @@ public final class TestInclude extends XDTester {
 			//xd:include in XDefinition header
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' name='a' root='foo'"+
-"   xd:include = \"" + dataDir +"TestInclude_1.xdef\">\n"+
+"        xd:include = \"" + dataDir +"TestInclude_1.xdef\">\n"+
 "  <foo xd:script = \"finally out('f')\">\n"+
 "    <bar xd:script = '*; ref b#bar'/>\n"+ // b is xdefinition from include
 "  </foo>\n"+
@@ -95,7 +95,7 @@ public final class TestInclude extends XDTester {
 "  </foo>\n"+
 "</xd:def>\n"+
 "<xi:include xmlns:xi = '"+XDConstants.XINCLUDE_NS_URI+"'\n" +
-"   href = '" + dataDir + "TestInclude_1.xdef" + "' />\n" +
+"            href = '" + dataDir + "TestInclude_1.xdef" + "' />\n" +
 "</xd:collection>";
 			xp = compile(xdef);
 			swr = new StringWriter();
@@ -258,7 +258,6 @@ public final class TestInclude extends XDTester {
 			xp = compile(xdef); //here is default (not allowed)
 			setProperty(XDConstants.XDPROPERTY_XINCLUDE,
 				XDConstants.XDPROPERTYVALUE_XINCLUDE_FALSE);
-//			xp.setResolveIncludes(false);
 			xml = dataDir + "TestInclude_9.xml";
 			parse(xp, "", xml, reporter);
 			assertTrue(reporter.errors() &&
@@ -293,12 +292,10 @@ public final class TestInclude extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xp = compile(xdef);
 			 // from program
-//			xp.setResolveIncludes(true); //resove
 			assertEq("<A><b/></A>", parse(xp, "", xml, reporter));
 			assertNoErrorwarnings(reporter);
 			setProperty(XDConstants.XDPROPERTY_XINCLUDE,
 				XDConstants.XDPROPERTYVALUE_XINCLUDE_FALSE);
-//			xp.setResolveIncludes(false);  //not resove
 			parse(xp, "", xml, reporter);
 			assertTrue(reporter.errors() &&
 				reporter.printToString().indexOf("XML309") > 0);
@@ -323,7 +320,7 @@ public final class TestInclude extends XDTester {
 			assertEq("f", swr.toString());
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' name='A' root='foo'\n"+
-"xd:include='classpath://test.xdef.data.test.TestInclude_10.xdef'>\n"+
+"        xd:include='classpath://test.xdef.data.test.TestInclude_10.xdef'>\n"+
 "  <foo>\n"+
 "    <bar xd:script = '*; ref B#B'/>\n"+ // B is from include
 "  </foo>\n"+
