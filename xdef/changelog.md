@@ -1,5 +1,8 @@
 # Version ${version}, release-date ${release.date}
 
+# Version 42.2.3, release-date 2024-08-14
+* .
+
 # Version 42.2.2, release-date 2024-08-14
 * Fixed bug in generating X-definition from JSON data.
 * Fixed a bug in construction mode when there is a recursive reference
