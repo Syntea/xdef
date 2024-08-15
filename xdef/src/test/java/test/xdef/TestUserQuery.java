@@ -29,21 +29,21 @@ public final class TestUserQuery extends XDTester {
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' name='Example' root='root'>\n"+
-"<xd:declaration>\n"+
-"  external method {\n"+
-"    boolean test.xdef.TestUserQuery.userQuery(XXElement, String);\n"+
-"    boolean test.xdef.TestUserQuery.getNext(XXElement);\n"+
-"    String test.xdef.TestUserQuery.getValue(XXElement, String);\n"+
-"  }\n"+
-"</xd:declaration>\n"+
-"<root xd:script=\"create userQuery('some query expression')\">\n"+
-"  <firma xd:script='occurs *; create getNext()'\n"+
-"     name = \"required string; create getValue('name')\">\n"+
-"    <employee xd:script='occurs *; create getNext()'\n"+
-"       firstName = \"required string; create getValue('firstName')\"\n"+
-"       lastName = \"required string; create getValue('lastName')\"/>\n"+
-"  </firma>\n"+
-"</root>\n"+
+"  <xd:declaration>\n"+
+"    external method {\n"+
+"      boolean test.xdef.TestUserQuery.userQuery(XXElement, String);\n"+
+"      boolean test.xdef.TestUserQuery.getNext(XXElement);\n"+
+"      String test.xdef.TestUserQuery.getValue(XXElement, String);\n"+
+"    }\n"+
+"  </xd:declaration>\n"+
+"  <root xd:script=\"create userQuery('some query expression')\">\n"+
+"    <firma xd:script='occurs *; create getNext()'\n"+
+"       name = \"required string; create getValue('name')\">\n"+
+"      <employee xd:script='occurs *; create getNext()'\n"+
+"         firstName = \"required string; create getValue('firstName')\"\n"+
+"         lastName = \"required string; create getValue('lastName')\"/>\n"+
+"    </firma>\n"+
+"  </root>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			el = create(xp, "Example", (Element) null, "root");
@@ -64,20 +64,20 @@ public final class TestUserQuery extends XDTester {
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' name='Example' root='root'>\n"+
-"<xd:declaration>\n"+
-"  external method {\n"+
-"    boolean test.xdef.TestUserQuery.getNext(XXElement);\n"+
-"    String test.xdef.TestUserQuery.getValue(XXElement, String);\n"+
-"  }\n"+
-"</xd:declaration>\n"+
-"<root>\n"+
-"  <firma xd:script='occurs *; create getNext()'\n"+
-"     name = \"required string; create getValue('name')\">\n"+
-"    <employee xd:script='occurs *; create getNext()'\n"+
-"       firstName = \"required string; create getValue('firstName')\"\n"+
-"       lastName = \"required string; create getValue('lastName')\"/>\n"+
-"  </firma>\n"+
-"</root>\n"+
+"  <xd:declaration>\n"+
+"    external method {\n"+
+"      boolean test.xdef.TestUserQuery.getNext(XXElement);\n"+
+"      String test.xdef.TestUserQuery.getValue(XXElement, String);\n"+
+"    }\n"+
+"  </xd:declaration>\n"+
+"  <root>\n"+
+"    <firma xd:script='occurs *; create getNext()'\n"+
+"       name = \"required string; create getValue('name')\">\n"+
+"      <employee xd:script='occurs *; create getNext()'\n"+
+"         firstName = \"required string; create getValue('firstName')\"\n"+
+"         lastName = \"required string; create getValue('lastName')\"/>\n"+
+"    </firma>\n"+
+"  </root>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xd = xp.createXDDocument("Example");
@@ -93,27 +93,27 @@ public final class TestUserQuery extends XDTester {
 						"<employee lastName=\"Todt\" firstName=\"Ulrich\"/>" +
 					"</firma>" +
 				"</root>");
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 		//Here the user object is assigned at root element and create method
 		// is called in element
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' name='Example' root='root'>\n"+
-"<xd:declaration>\n"+
-"  external method {\n"+
-"    boolean test.xdef.TestUserQuery.userQuery(XXElement, String);\n"+
-"    boolean test.xdef.TestUserQuery.getNext(XXElement);\n"+
-"    String test.xdef.TestUserQuery.getValue(XXElement, String);\n"+
-"  }\n"+
-"</xd:declaration>\n"+
-"<root xd:script=\"create userQuery('some query expression')\">\n"+
-"  <firma xd:script='occurs *; create getNext()'\n"+
-"     name = \"required string; create getValue('name')\">\n"+
-"    <employee xd:script='occurs *; create getNext()'\n"+
-"       firstName = \"required string; create getValue('firstName')\"\n"+
-"       lastName = \"required string; create getValue('lastName')\"/>\n"+
-"  </firma>\n"+
-"</root>\n"+
+"  <xd:declaration>\n"+
+"    external method {\n"+
+"      boolean test.xdef.TestUserQuery.userQuery(XXElement, String);\n"+
+"      boolean test.xdef.TestUserQuery.getNext(XXElement);\n"+
+"      String test.xdef.TestUserQuery.getValue(XXElement, String);\n"+
+"    }\n"+
+"  </xd:declaration>\n"+
+"  <root xd:script=\"create userQuery('some query expression')\">\n"+
+"    <firma xd:script='occurs *; create getNext()'\n"+
+"       name = \"required string; create getValue('name')\">\n"+
+"      <employee xd:script='occurs *; create getNext()'\n"+
+"         firstName = \"required string; create getValue('firstName')\"\n"+
+"         lastName = \"required string; create getValue('lastName')\"/>\n"+
+"    </firma>\n"+
+"  </root>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xd = xp.createXDDocument("Example");
@@ -129,29 +129,29 @@ public final class TestUserQuery extends XDTester {
 						"<employee lastName=\"Todt\" firstName=\"Ulrich\"/>" +
 					"</firma>" +
 				"</root>");
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 		//Here the user object is assigned at root element and create method
 		// is called from sequence item
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' name='Example' root='root'>\n"+
-"<xd:declaration>\n"+
-"  external method {\n"+
-"    boolean test.xdef.TestUserQuery.userQuery(XXElement, String);\n"+
-"    boolean test.xdef.TestUserQuery.getNext(XXElement);\n"+
-"    String test.xdef.TestUserQuery.getValue(XXElement, String);\n"+
-"  }\n"+
-"</xd:declaration>\n"+
-"<root xd:script=\"create userQuery('some query expression')\">\n"+
-" <xd:sequence xd:script='occurs *; create getNext()'>\n"+
-"  <firma\n"+
-"     name = \"required string; create getValue('name')\">\n"+
-"    <employee xd:script='occurs *; create getNext()'\n"+
-"       firstName = \"required string; create getValue('firstName')\"\n"+
-"       lastName = \"required string; create getValue('lastName')\"/>\n"+
-"  </firma>\n"+
-" </xd:sequence>\n"+
-"</root>\n"+
+"  <xd:declaration>\n"+
+"    external method {\n"+
+"      boolean test.xdef.TestUserQuery.userQuery(XXElement, String);\n"+
+"      boolean test.xdef.TestUserQuery.getNext(XXElement);\n"+
+"      String test.xdef.TestUserQuery.getValue(XXElement, String);\n"+
+"    }\n"+
+"  </xd:declaration>\n"+
+"  <root xd:script=\"create userQuery('some query expression')\">\n"+
+"    <xd:sequence xd:script='occurs *; create getNext()'>\n"+
+"      <firma\n"+
+"          name = \"required string; create getValue('name')\">\n"+
+"        <employee xd:script='occurs *; create getNext()'\n"+
+"           firstName = \"required string; create getValue('firstName')\"\n"+
+"           lastName = \"required string; create getValue('lastName')\"/>\n"+
+"      </firma>\n"+
+"    </xd:sequence>\n"+
+"  </root>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xd = xp.createXDDocument("Example");
@@ -167,28 +167,28 @@ public final class TestUserQuery extends XDTester {
 						"<employee lastName=\"Todt\" firstName=\"Ulrich\"/>" +
 					"</firma>" +
 				"</root>");
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 		//Here the user object passed as parameter and items are generated
 		// inside of sequence block. User method is called inside of sequence.
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' name='Example' root='root'>\n"+
-"<xd:declaration>\n"+
-"  external method {\n"+
-"    boolean test.xdef.TestUserQuery.getNext(XXElement);\n"+
-"    String test.xdef.TestUserQuery.getValue(XXElement, String);\n"+
-"  }\n"+
-"</xd:declaration>\n"+
-"<root>\n"+
-" <xd:sequence>\n"+
-"  <firma xd:script='occurs *;create getNext()'\n"+
-"    name = \"required string; create getValue('name')\">\n"+
-"    <employee xd:script='occurs *; create getNext()'\n"+
-"      firstName = \"required string; create getValue('firstName')\"\n"+
-"      lastName = \"required string; create getValue('lastName')\"/>\n"+
-"  </firma>\n"+
-" </xd:sequence>\n"+
-"</root>\n"+
+"  <xd:declaration>\n"+
+"    external method {\n"+
+"      boolean test.xdef.TestUserQuery.getNext(XXElement);\n"+
+"      String test.xdef.TestUserQuery.getValue(XXElement, String);\n"+
+"    }\n"+
+"  </xd:declaration>\n"+
+"  <root>\n"+
+"    <xd:sequence>\n"+
+"      <firma xd:script='occurs *;create getNext()'\n"+
+"          name = \"required string; create getValue('name')\">\n"+
+"       <employee xd:script='occurs *; create getNext()'\n"+
+"          firstName = \"required string; create getValue('firstName')\"\n"+
+"          lastName = \"required string; create getValue('lastName')\"/>\n"+
+"      </firma>\n"+
+"    </xd:sequence>\n"+
+"  </root>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xd = xp.createXDDocument("Example");
@@ -204,32 +204,32 @@ public final class TestUserQuery extends XDTester {
 						"<employee lastName=\"Todt\" firstName=\"Ulrich\"/>" +
 					"</firma>" +
 				"</root>");
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' name='Example' root='root'>\n"+
-"<xd:declaration>\n"+
-"  external method {\n"+
-"    boolean test.xdef.TestUserQuery.userQuery(XXElement, String);\n"+
-"    boolean test.xdef.TestUserQuery.getNext(XXElement);\n"+
-"    String test.xdef.TestUserQuery.getValue(XXElement, String);\n"+
-"  }\n"+
-"</xd:declaration>\n"+
-"<root xd:script=\"create userQuery('some query expression')\">\n"+
-"  <firma xd:script='occurs *; create getNext()'\n"+
-"     name = \"required string; create getValue('name')\">\n"+
-"    <employee xd:script='occurs *; create getNext()'>\n"+
-"       <personaldata>\n"+
-"       <firstName>\n"+
-"         required string; create getValue('firstName')\n"+
-"       </firstName>\n"+
-"       <lastName>\n"+
-"         required string; create getValue('lastName')\n"+
-"       </lastName>\n"+
-"       </personaldata>\n"+
-"    </employee>\n"+
-"  </firma>\n"+
-"</root>\n"+
+"  <xd:declaration>\n"+
+"    external method {\n"+
+"      boolean test.xdef.TestUserQuery.userQuery(XXElement, String);\n"+
+"      boolean test.xdef.TestUserQuery.getNext(XXElement);\n"+
+"      String test.xdef.TestUserQuery.getValue(XXElement, String);\n"+
+"    }\n"+
+"  </xd:declaration>\n"+
+"  <root xd:script=\"create userQuery('some query expression')\">\n"+
+"    <firma xd:script='occurs *; create getNext()'\n"+
+"           name = \"required string; create getValue('name')\">\n"+
+"      <employee xd:script='occurs *; create getNext()'>\n"+
+"         <personaldata>\n"+
+"           <firstName>\n"+
+"             required string; create getValue('firstName')\n"+
+"           </firstName>\n"+
+"           <lastName>\n"+
+"             required string; create getValue('lastName')\n"+
+"           </lastName>\n"+
+"         </personaldata>\n"+
+"      </employee>\n"+
+"    </firma>\n"+
+"  </root>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xd = xp.createXDDocument("Example");
@@ -260,16 +260,16 @@ public final class TestUserQuery extends XDTester {
 						"</employee>" +
 					"</firma>" +
 				"</root>");
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 		try {//create books from simulated select (with element qualifier "*")
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' name='test' root='test'>\n"+
-"<xd:declaration>\n"+
-"  external method {\n"+
-"    String test.xdef.TestUserQuery.getColumn(XXElement, String);\n"+
-"    boolean test.xdef.TestUserQuery.select(XXElement, String);\n"+
-"  }\n"+
-"</xd:declaration>\n"+
+"  <xd:declaration>\n"+
+"    external method {\n"+
+"      String test.xdef.TestUserQuery.getColumn(XXElement, String);\n"+
+"      boolean test.xdef.TestUserQuery.select(XXElement, String);\n"+
+"    }\n"+
+"  </xd:declaration>\n"+
 "  <test>\n"+
 "    <book xd:script=\"occurs *; create select('here is probably a query')\""+
 "          cover=\"optional string(); create getColumn('cover')\">"+
@@ -284,16 +284,16 @@ public final class TestUserQuery extends XDTester {
 				"<book cover=\"paperback\"><title>Svejk</title></book>" +
 				"<book cover=\"gold\"><title>Klaus</title></book>" +
 				"</test>", s);
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 		try {// the same with sequence (qualifier "*")
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' name='test' root='test'>\n"+
-"<xd:declaration>\n"+
-"  external method {\n"+
-"    String test.xdef.TestUserQuery.getColumn(XXElement, String);\n"+
-"    boolean test.xdef.TestUserQuery.select(XXElement, String);\n"+
-"  }\n"+
-"</xd:declaration>\n"+
+"  <xd:declaration>\n"+
+"    external method {\n"+
+"      String test.xdef.TestUserQuery.getColumn(XXElement, String);\n"+
+"      boolean test.xdef.TestUserQuery.select(XXElement, String);\n"+
+"    }\n"+
+"  </xd:declaration>\n"+
 "  <test>\n"+
 "    <xd:sequence script = \"*; create select('??')\">\n"+
 "      <book cover=\"optional string(); create getColumn('cover')\">"+
@@ -312,16 +312,16 @@ public final class TestUserQuery extends XDTester {
 				"<book cover=\"gold\"><title>Klaus</title></book>" +
 				"</test>", KXmlUtils.nodeToString(el));
 
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 		try {//this is the example of an external user object passed to creator
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' name='test' root='test'>\n"+
-"<xd:declaration>\n"+
-"  external method {\n"+
-"    String test.xdef.TestUserQuery.getColumn(XXElement, String);\n"+
-"    boolean test.xdef.TestUserQuery.select(XXElement, String);\n"+
-"  }\n"+
-"</xd:declaration>\n"+
+"  <xd:declaration>\n"+
+"    external method {\n"+
+"      String test.xdef.TestUserQuery.getColumn(XXElement, String);\n"+
+"      boolean test.xdef.TestUserQuery.select(XXElement, String);\n"+
+"    }\n"+
+"  </xd:declaration>\n"+
 "  <test>\n"+
 "    <book xd:script=\"occurs *; create select('here is probably a query')\""+
 "          cover=\"optional string(); create getColumn('cover')\">"+
@@ -338,7 +338,7 @@ public final class TestUserQuery extends XDTester {
 				"<book cover=\"paperback\"><title>Svejk</title></book>" +
 				"<book cover=\"gold\"><title>Klaus</title></book>" +
 				"</test>", KXmlUtils.nodeToString(el));
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 
 		resetTester();
 	}
@@ -373,12 +373,12 @@ public final class TestUserQuery extends XDTester {
 		ArrayList<HashMap<String, String>> _lines;
 
 		SelectResult() {_index = -1;
-			_lines = new ArrayList<HashMap<String, String>>();
-			HashMap<String, String> ht = new HashMap<String, String>();
+			_lines = new ArrayList<>();
+			HashMap<String, String> ht = new HashMap<>();
 			ht.put("cover", "paperback");
 			ht.put("title", "Svejk");
 			_lines.add(ht);
-			ht = new HashMap<String, String>();
+			ht = new HashMap<>();
 			ht.put("cover", "gold");
 			ht.put("title", "Klaus");
 			_lines.add(ht);
@@ -455,22 +455,11 @@ public final class TestUserQuery extends XDTester {
 		public String value(XXElement chkEl, String name);
 	}
 
-	/** This is the interface implemented for each "user" query object. */
-	private class EmptyContext implements UserQuery {
-		EmptyContext() {}
-		@Override
-		public boolean next(XXElement chkEl) {return false;}
-		@Override
-		public UserQuery newContext(XXElement chkEl) {return this;}
-		@Override
-		public String value(XXElement chkEl, String name) {return "";}
-	}
-
 	/** Implementation of an object a table, contains raws and each raw
 	 * (describing a company) contains a table (of employees).
 	 * For each item it is implemented the UserQuery interface. */
 	private static class UserTable implements UserQuery {
-		ArrayList<Firma> _firmas = new ArrayList<Firma>();
+		ArrayList<Firma> _firmas = new ArrayList<>();
 		int _index = 0; //the iterator index.
 		/** This simulates a query. */
 		UserTable() {
@@ -524,7 +513,7 @@ public final class TestUserQuery extends XDTester {
 			String _name;
 			int _id;
 			private int _index = 0;
-			ArrayList<Employee> _persons = new ArrayList<Employee>();
+			ArrayList<Employee> _persons = new ArrayList<>();
 			Firma(String name, int id) {_name = name; _id = id;}
 
 			void addEmployee(String firstName, String lastName) {
@@ -579,7 +568,7 @@ public final class TestUserQuery extends XDTester {
 
 			/** Object describing "Employee". */
 			private class Employee implements UserQuery {
-				HashMap<String,String> _columns = new HashMap<String,String>();
+				HashMap<String,String> _columns = new HashMap<>();
 				Employee(String firstName, String lastName) {
 					_columns.put("firstName", firstName);
 					_columns.put("lastName", lastName);

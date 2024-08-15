@@ -163,20 +163,20 @@ public final class TestScript extends XDTester {
 		System.out.flush();
 		String xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"<xd:declaration>\n"+
-"  external method {\n"+
-"     void test.xdef.TestScript.setResult(XXNode, boolean);\n"+
-"     void test.xdef.TestScript.setResult(XXData, XDParser);\n"+
-"     void test.xdef.TestScript.setResult(XXNode, XDParseResult);\n"+
-"     boolean test.xdef.TestScript.myCheck(XXNode, XDValue[]);\n"+
-"     void test.xdef.TestScript.myCheck1(XXNode, XDValue[]);\n"+
-"     String test.xdef.TestScript.myCheck2(XXNode, XDValue[]);\n"+
-"     void test.xdef.TestScript.myCheck3();\n"+
-"     long test.xdef.TestScript.myCheck4();\n"+
-"     long test.xdef.TestScript.myCheck4(long);\n"+
-"     long test.xdef.TestScript.myCheck5(double, long, long, String);\n"+
-"   }\n"+
-"</xd:declaration>\n"+
+"  <xd:declaration>\n"+
+"    external method {\n"+
+"      void test.xdef.TestScript.setResult(XXNode, boolean);\n"+
+"      void test.xdef.TestScript.setResult(XXData, XDParser);\n"+
+"      void test.xdef.TestScript.setResult(XXNode, XDParseResult);\n"+
+"      boolean test.xdef.TestScript.myCheck(XXNode, XDValue[]);\n"+
+"      void test.xdef.TestScript.myCheck1(XXNode, XDValue[]);\n"+
+"      String test.xdef.TestScript.myCheck2(XXNode, XDValue[]);\n"+
+"      void test.xdef.TestScript.myCheck3();\n"+
+"      long test.xdef.TestScript.myCheck4();\n"+
+"      long test.xdef.TestScript.myCheck4(long);\n"+
+"      long test.xdef.TestScript.myCheck5(double, long, long, String);\n"+
+"    }\n"+
+"  </xd:declaration>\n"+
 "  <a a=\"" + source + "\"/>\n"+
 "</xd:def>\n";
 		String xml = "<a a=\"" + value + "\"/>";
@@ -216,20 +216,20 @@ public final class TestScript extends XDTester {
 		String xdef =
 			"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <xd:declaration>\n"+
-"  external method {\n"+
-"     void test.xdef.TestScript.setResult(XXNode, boolean);\n"+
-"     void test.xdef.TestScript.setResult(XXData, XDParser);\n"+
-"     void test.xdef.TestScript.setResult(XXNode, XDParseResult);\n"+
-"     boolean test.xdef.TestScript.myCheck(XXNode, XDValue[]);\n"+
-"     void test.xdef.TestScript.myCheck1(XXNode, XDValue[]);\n"+
-"     String test.xdef.TestScript.myCheck2(XXNode, XDValue[]);\n"+
-"     void test.xdef.TestScript.myCheck3();\n"+
-"     long test.xdef.TestScript.myCheck4();\n"+
-"     long test.xdef.TestScript.myCheck4(long);\n"+
-"     long test.xdef.TestScript.myCheck5(double, long, long, String);\n"+
-"  }\n"+
+"    external method {\n"+
+"      void test.xdef.TestScript.setResult(XXNode, boolean);\n"+
+"      void test.xdef.TestScript.setResult(XXData, XDParser);\n"+
+"      void test.xdef.TestScript.setResult(XXNode, XDParseResult);\n"+
+"      boolean test.xdef.TestScript.myCheck(XXNode, XDValue[]);\n"+
+"      void test.xdef.TestScript.myCheck1(XXNode, XDValue[]);\n"+
+"      String test.xdef.TestScript.myCheck2(XXNode, XDValue[]);\n"+
+"      void test.xdef.TestScript.myCheck3();\n"+
+"      long test.xdef.TestScript.myCheck4();\n"+
+"      long test.xdef.TestScript.myCheck4(long);\n"+
+"      long test.xdef.TestScript.myCheck5(double, long, long, String);\n"+
+"   }\n"+
  source +
-"</xd:declaration>\n"+
+"  </xd:declaration>\n"+
 			"\n"+
 			"  <a a=\"optional " + call + "\"/>\n"+
 			"</xd:def>\n";
@@ -280,9 +280,10 @@ public final class TestScript extends XDTester {
 ////////////////////////////////////////////////////////////////////////////////
 		xdef = // test rounding seconds acordint to milliseconds
 "<xd:def xmlns:xd='" + _xdNS + "' root='T'>\n" +
-"<xd:declaration>\n" +
-"type x xdatetime('{SSS000}yyyy-MM-dd HH:mm:ss[.S]','yyyy-MM-ddTHH:mm:ss');\n" +
-"</xd:declaration>\n" +
+"  <xd:declaration>\n" +
+"    type x xdatetime(\n"+
+"            '{SSS000}yyyy-MM-dd HH:mm:ss[.S]','yyyy-MM-ddTHH:mm:ss');\n"+
+"  </xd:declaration>\n" +
 "  <T D1='required x()' D2='required x()' D3='required x()'/>\n" +
 "</xd:def>";
 		assertEq("<T D1='2022-01-01T12:34:56'"+
@@ -304,9 +305,7 @@ public final class TestScript extends XDTester {
 		testAttr1("toString(@a == \"abc\")", "true");
 		testAttr1("toString(@a EQ \"abc\")", "true");
 		testAttr1("toString(@a LE \"abc\")", "true");
-//		testAttr1("toString(@a &lt;= \"abc\")", "true");
 		testAttr1("toString(@a GE \"abc\")", "true");
-//		testAttr1("toString(@a &gt;= \"abc\")", "true");
 		testAttr1("toString(@a == \"\")", "false");
 		testAttr1("toString(@a GT \"\")", "true");
 		testAttr1("toString(@a > \"\")", "true");
@@ -808,38 +807,6 @@ public final class TestScript extends XDTester {
 			+ "RegexResult x = r.getMatcher(s); boolean b = x.matches();"
 			+ "int i = x.groupCount();  b = b AND (i==1);"
 			+ "if (b) b = x.group(0) == 'AX 1234'; setResult(b);}");
-// \p{Lu} ... Letter, uppercase ([:upper:])
-// \p{Ll} ... Letter, lowercase ([:lower:])
-// \p{Lt} ... Letter, titlecase
-// \p{Lm} ... Letter, modifier
-// \p{Lo} ... Letter, other
-// \p{Mn} ... Mark, nonspacing
-// \p{Mc} ... Mark, spacing combining
-// \p{Me} ... Mark, enclosing
-// \p{Nd} ... Number, decimal digit ([:digit:])
-// \p{Nl} ... Number, letter
-// \p{No} ... Number, other
-// \p{Zs} ... Separator, space
-// \p{Zl} ... Separator, line
-// \p{Zp} ... Separator, paragraph
-// \p{Cc} ... Other, control
-// \p{Cf} ... Other, format
-// \p{Cs} ... Other, surrogate
-// \p{Co} ... Other, private use
-// \p{Cn} ... Other, not assigned (including noncharacters)
-// \p{Pc} ... Punctuation, connector
-// \p{Pd} ... Punctuation, dash
-// \p{Ps} ... Punctuation, open
-// \p{Pe} ... Punctuation, close
-// \p{Pi} ... Punctuation, initial quote
-//            (may behave like Ps or Pe depending on usage)
-// \p{Pf} ... Punctuation, final quote
-//            (may behave like Ps or Pe depending on usage)
-// \p{Po} ... Punctuation, other
-// \p{Sm} ... Symbol, math
-// \p{Sc} ... Symbol, currency
-// \p{Sk} ... Symbol, modifier
-// \p{So} ... Symbol, other
 		test("", "{Regex r = new Regex('\\\\d{1,10}'); String s='1234';"
 			+ "RegexResult x = r.getMatcher(s); boolean b = x.matches();"
 			+ "int i = x.groupCount();  b = b AND (i==1);"
@@ -877,10 +844,6 @@ public final class TestScript extends XDTester {
 ////////////////////////////////////////////////////////////////////////////////
 		testAttr2("+1.21","onTrue setResult(true); required decimal;"
 			+ " onFalse setResult(false); ");
-//		testAttr("+1.21","onTrue setResult(true); required decimal(3);"
-//			+ " onFalse setResult(false); ");
-//		testAttr("+1.21","onTrue setResult(true); required decimal(3,2);"
-//			+ " onFalse setResult(false); ");
 ////////////////////////////////////////////////////////////////////////////////
 		testAttr2("ahoj","required enum('nazdar','ahoj');onTrue"
 			+ " setResult(true);onFalse {clearReports(); setResult(false);}");
@@ -1041,7 +1004,6 @@ public final class TestScript extends XDTester {
 			+ "setResult(false); return false;}"
 			+ " switch(i){}setResult(true);return true;}",
 			"xxx(getText(),999);");
-
 		/* switch (String) tests */
 		testCheckMethod("12", "boolean m(){switch(getText()){case '12': " +
 				"setResult(true); return true; default: return false;}}",
@@ -1071,7 +1033,7 @@ public final class TestScript extends XDTester {
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-" <a date=\"required xdatetime('d.M.yyyy','HH:mm:ss')\"/>\n"+
+"  <a date=\"required xdatetime('d.M.yyyy','HH:mm:ss')\"/>\n"+
 "</xd:def>";
 			xml = "<a date= '1.1.2000'/>";
 			xp = compile(xdef);
@@ -1084,94 +1046,94 @@ public final class TestScript extends XDTester {
 			assertEq("00:00:00", el.getAttribute("date"));
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"<xd:declaration>\n"+
-"<![CDATA[\n"+
-"  int count;\n"+
-"  boolean T(int i) {\n"+
-"    count += i;\n"+
-"    return true;\n"+
-"  }\n"+
-"  boolean F(int i) {\n"+
-"    count += i;\n"+
-"    return false;\n"+
-"  }\n"+
-"  void test() {\n"+
-"    int i = 1; int j=1; int k=2; int l=3;\n"+
-"    if (i > 2 ? true : false || true ? true : false) \n"+
-"      out('OK 1 ');\n"+
-"    else out('ERROR 1 ');\n"+
-"    if (!(i > 2 ? true : false || true ? true : false)) \n"+
-"      out('ERROR 2 ');\n"+
-"    else out('OK 2 ');\n"+
-"    i = (i > 2 ? true : false) ? 1 : 2;\n"+
-"    if (i == 2) {\n"+
-"      i = l;\n"+
-"      out('OK 3 ');\n"+
-"    } else out('ERROR 3 ');\n"+
-"    if (!(i > 0 || i LT -1 && false)) out('ERROR 4 '); else out('OK 4 ');\n"+
-"    boolean result = i > 0 || i LT -1 && false;\n"+
-"    if (!result) out('ERROR 5 '); else out('OK 5 ');\n"+
-"    if (i < 2 ? true : false || false ? true : i > 2)\n"+
-"      out('OK 6 ');\n"+
-"    else out('ERROR 6 ');\n"+
-"    if (!(i < 2 ? true : false || false ? true : i > 2)) \n"+
-"      out('ERROR 7 ');\n"+
-"    else out('OK 7 ');\n"+
-"    i=0; k = 2;\n"+
-"    while((i==0) AND (j==1) OOR (k==2) AND (l==3)){\n"+
-"      i++; k++;\n"+
+"  <xd:declaration>\n"+
+"    <![CDATA[\n"+
+"    int count;\n"+
+"    boolean T(int i) {\n"+
+"      count += i;\n"+
+"      return true;\n"+
 "    }\n"+
-"    if (i != 1) out('ERROR 21, i= ' +  i); else out('OK 21 ');\n"+
-"    i = 0; k = 2;\n"+
-"    while((i==0) AAND (j==1) OOR (k==2) AND (l==3)){\n"+
-"      i++; k++;\n"+
+"    boolean F(int i) {\n"+
+"      count += i;\n"+
+"      return false;\n"+
 "    }\n"+
-"    if (i != 1) out('ERROR 22, i= ' +  i); else out('OK 22 ');\n"+
-"    i = 0; k = 2;\n"+
-"    while((i==0) AAND (j==1) OR (k==2) AAND (l==3)){\n"+
-"      i++; k++;\n"+
+"    void test() {\n"+
+"      int i = 1; int j=1; int k=2; int l=3;\n"+
+"      if (i > 2 ? true : false || true ? true : false) \n"+
+"        out('OK 1 ');\n"+
+"      else out('ERROR 1 ');\n"+
+"      if (!(i > 2 ? true : false || true ? true : false)) \n"+
+"        out('ERROR 2 ');\n"+
+"      else out('OK 2 ');\n"+
+"      i = (i > 2 ? true : false) ? 1 : 2;\n"+
+"      if (i == 2) {\n"+
+"        i = l;\n"+
+"        out('OK 3 ');\n"+
+"      } else out('ERROR 3 ');\n"+
+"      if (!(i > 0 || i LT -1 && false)) out('ERROR 4 '); else out('OK 4 ');\n"+
+"      boolean result = i > 0 || i LT -1 && false;\n"+
+"      if (!result) out('ERROR 5 '); else out('OK 5 ');\n"+
+"      if (i < 2 ? true : false || false ? true : i > 2)\n"+
+"        out('OK 6 ');\n"+
+"      else out('ERROR 6 ');\n"+
+"      if (!(i < 2 ? true : false || false ? true : i > 2)) \n"+
+"        out('ERROR 7 ');\n"+
+"      else out('OK 7 ');\n"+
+"      i=0; k = 2;\n"+
+"      while((i==0) AND (j==1) OOR (k==2) AND (l==3)){\n"+
+"        i++; k++;\n"+
+"      }\n"+
+"      if (i != 1) out('ERROR 21, i= ' +  i); else out('OK 21 ');\n"+
+"      i = 0; k = 2;\n"+
+"      while((i==0) AAND (j==1) OOR (k==2) AND (l==3)){\n"+
+"        i++; k++;\n"+
+"      }\n"+
+"      if (i != 1) out('ERROR 22, i= ' +  i); else out('OK 22 ');\n"+
+"      i = 0; k = 2;\n"+
+"      while((i==0) AAND (j==1) OR (k==2) AAND (l==3)){\n"+
+"        i++; k++;\n"+
+"      }\n"+
+"      if (i != 1) out('ERROR 23, i= ' +  i); else out('OK 23 ');\n"+
+"      i = 0; k = 2;\n"+
+"      while((i==0) AAND (j==1) OOR (k==2) AAND (l==3)){\n"+
+"        i++; k++;\n"+
+"      }\n"+
+"      if (i != 1) out('ERROR 24, i= ' +  i); else out('OK 24 ');\n"+
+"      i = 0; k = 2;\n"+
+"      while((i==0) && (j==1) && (k==2) && (l==3) || i+j==1 || k+l==5){\n"+
+"        i++; k++;\n"+
+"      }\n"+
+"      if (i != 1) out('ERROR 25, i= ' +  i); else out('OK 25 ');\n"+
+"      i = 0; k = 2;\n"+
+"      while(i+j == 1 || k+l == 5 || ((i==0) && (j==1) && (k==2) & (l==3))){\n"+
+"        i++; k++;\n"+
+"      }\n"+
+"      if (i != 1) out('ERROR 26, i= ' +  i); else out('OK 26 ');\n"+
+"      count = 0;\n"+
+"      if (i < 2 ? T(1) : F(2) || T(4) ? T(8) : F(16)) {\n"+
+"        if (count != 1) out('ERROR 40: ' + count);\n"+
+"      } else out('ERROR 41: ' + count);\n"+
+"      count = 0;\n"+
+"      if (i > 2 ? T(1) : F(2) || T(4) ? T(8) : F(16)) {\n"+
+"        if (count != 14) out('ERROR 42: ' + count);\n"+
+"      } else out('ERROR 43: ' + count);\n"+
+"      count = 0;\n"+
+"      if (T(1) || F(2) || T(4) && F(8) || T(16)) {\n"+
+"        if (count != 1) out('ERROR 44: ' + count);\n"+
+"      } else out('ERROR 45: ' + count);\n"+
+"      count = 0;\n"+
+"      if (F(1) || T(2) || T(4) && F(8) || T(16)) {\n"+
+"        if (count != 3) out('ERROR 46: ' + count);\n"+
+"      } else out('ERROR 47: ' + count);\n"+
+"      count = 0;\n"+
+"      if (F(1) && F(2) || T(4) && F(8) || T(16)) {\n"+
+"        if (count != 29) out('ERROR 48: ' + count);\n"+
+"      } else out('ERROR 49: ' + count);\n"+
+"      outln;\n"+
 "    }\n"+
-"    if (i != 1) out('ERROR 23, i= ' +  i); else out('OK 23 ');\n"+
-"    i = 0; k = 2;\n"+
-"    while((i==0) AAND (j==1) OOR (k==2) AAND (l==3)){\n"+
-"      i++; k++;\n"+
-"    }\n"+
-"    if (i != 1) out('ERROR 24, i= ' +  i); else out('OK 24 ');\n"+
-"    i = 0; k = 2;\n"+
-"    while((i==0) && (j==1) && (k==2) && (l==3) || i+j == 1 || k + l == 5){\n"+
-"      i++; k++;\n"+
-"    }\n"+
-"    if (i != 1) out('ERROR 25, i= ' +  i); else out('OK 25 ');\n"+
-"    i = 0; k = 2;\n"+
-"    while(i+j == 1 || k+l == 5 || ((i==0) && (j==1) && (k==2) & (l==3)) ){\n"+
-"      i++; k++;\n"+
-"    }\n"+
-"    if (i != 1) out('ERROR 26, i= ' +  i); else out('OK 26 ');\n"+
-"    count = 0;\n"+
-"    if (i < 2 ? T(1) : F(2) || T(4) ? T(8) : F(16)) {\n"+
-"      if (count != 1) out('ERROR 40: ' + count);\n"+
-"    } else out('ERROR 41: ' + count);\n"+
-"    count = 0;\n"+
-"    if (i > 2 ? T(1) : F(2) || T(4) ? T(8) : F(16)) {\n"+
-"      if (count != 14) out('ERROR 42: ' + count);\n"+
-"    } else out('ERROR 43: ' + count);\n"+
-"    count = 0;\n"+
-"    if (T(1) || F(2) || T(4) && F(8) || T(16)) {\n"+
-"      if (count != 1) out('ERROR 44: ' + count);\n"+
-"    } else out('ERROR 45: ' + count);\n"+
-"    count = 0;\n"+
-"    if (F(1) || T(2) || T(4) && F(8) || T(16)) {\n"+
-"      if (count != 3) out('ERROR 46: ' + count);\n"+
-"    } else out('ERROR 47: ' + count);\n"+
-"    count = 0;\n"+
-"    if (F(1) && F(2) || T(4) && F(8) || T(16)) {\n"+
-"      if (count != 29) out('ERROR 48: ' + count);\n"+
-"    } else out('ERROR 49: ' + count);\n"+
-"    outln;\n"+
-"  }\n"+
-"]]>\n"+
-"</xd:declaration>\n"+
-"<a xd:script=\"occurs 1..; finally test();\" />\n"+
+"    ]]>\n"+
+"  </xd:declaration>\n"+
+"  <a xd:script=\"occurs 1..; finally test();\" />\n"+
 "</xd:def>\n";
 			xml ="<a/>";
 			assertFalse(test(xdef, xml, "", 'P', xml,
@@ -1200,8 +1162,7 @@ public final class TestScript extends XDTester {
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <xd:declaration><![CDATA[\n"+
 "    Container c = [%a='a'];"+
-"    Element e = xparse(\"<a a='a'/>\");\n"+
-"]]>\n"+
+"    Element e = xparse(\"<a a='a'/>\");\n]]>\n"+
 "  </xd:declaration>\n"+
 "  <a xd:script=\"finally {\n"+
 "    if (e.hasAttribute('x')) error('err1');\n"+
@@ -1216,15 +1177,15 @@ public final class TestScript extends XDTester {
 
 			xdef = // Test reference to model with different namespace
 "<xd:def xmlns:xd='" + _xdNS + "' name='A' xmlns:a='a.b' xmlns:b='c.d'\n"+
-" root='a:a | b:a'>\n"+
-"<a:a a='int()' a:b='int()' >\n"+
-"  <a:b a='int()' a:b='int()' />\n"+
-"</a:a>\n"+
-"<b:a xd:script='ref A#a:a' b:c='int()'> int(); </b:a>\n"+
-"<xd:component>\n"+
-" %class "+_package+".MyTest10 %link A#a:a;\n" +
-" %class "+_package+".MyTest11 %link A#b:a;\n" +
-"</xd:component>\n" +
+"        root='a:a | b:a'>\n"+
+"  <a:a a='int()' a:b='int()' >\n"+
+"    <a:b a='int()' a:b='int()' />\n"+
+"  </a:a>\n"+
+"  <b:a xd:script='ref A#a:a' b:c='int()'> int(); </b:a>\n"+
+"  <xd:component>\n"+
+"   %class "+_package+".MyTest10 %link A#a:a;\n" +
+"   %class "+_package+".MyTest11 %link A#b:a;\n" +
+"  </xd:component>\n" +
 "</xd:def>";
 			genXComponent(xp = compile(xdef));
 			xml = "<a:a xmlns:a='a.b' a='1' a:b='2'><a:b a='3' a:b='4'/></a:a>";

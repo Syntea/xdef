@@ -1,5 +1,6 @@
 package test.xdef;
 
+import org.w3c.dom.DOMException;
 import test.XDTester;
 import org.xdef.XDStatement;
 import org.xdef.XDDocument;
@@ -74,7 +75,7 @@ public final class TestXDService extends XDTester {
 			//close database connection
 			service.close();
 			// Print created element
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 
 		resetTester();
 	}
@@ -334,7 +335,7 @@ public final class TestXDService extends XDTester {
 				close();
 				_ri = null;
 				return null;
-			} catch(Exception ex) {
+			} catch(DOMException ex) {
 				close();
 				//Database statement error&{msg}{: }
 				throw new SRuntimeException(XDEF.XDEF568, "&{msg}" + ex);

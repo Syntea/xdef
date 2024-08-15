@@ -40,13 +40,13 @@ public final class TestUserMethods extends XDTester {
 			assertEq(swr.toString(), "AB");
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"<xd:macro name='m' p='?'>\n"+
-"match {out('m#{p} '); return true;};\n"+
-"init out('i#{p} ');finally out('f#{p} ')\n"+
-"</xd:macro>\n"+
-"<xd:macro name='n' p='?'>\n"+
-"${m(p='#{p}')}; onStartElement out('s#{p} ')\n"+
-"</xd:macro>\n"+
+"  <xd:macro name='m' p='?'>\n"+
+"    match {out('m#{p} '); return true;};\n"+
+"    init out('i#{p} ');finally out('f#{p} ')\n"+
+"  </xd:macro>\n"+
+"  <xd:macro name='n' p='?'>\n"+
+"    ${m(p='#{p}')}; onStartElement out('s#{p} ')\n"+
+"  </xd:macro>\n"+
 "  <a xd:script=\"${n(p='a')}\">\n"+
 "   <xd:choice xd:script=\"1; ${m(p='CH')}\">\n"+
 "      <b xd:script=\"${n(p='b')}\"/>\n"+
@@ -70,20 +70,20 @@ public final class TestUserMethods extends XDTester {
 				"ia sa iCH mb ib sb fb fCH mc ic sc fc fa ");
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"<xd:macro name='m' p='?'>\n"+
-"match {out('m#{p} '); return true;};\n"+
-"init out('i#{p} ');finally out('f#{p} ')\n"+
-"</xd:macro>\n"+
-"<xd:macro name='n' p='?'>\n"+
-"${m(p='#{p}')}; onStartElement out('s#{p} ')\n"+
-"</xd:macro>\n"+
-"<a xd:script=\"${n(p='a')}\">\n"+
-"  <xd:mixed xd:script=\"1; ${m(p='MX')}\">\n"+
-"    <b xd:script=\"${n(p='b')}\"/>\n"+
-"    <x xd:script=\"?;${n(p='x')}; create from('/a/x')\"/>\n"+
-"  </xd:mixed>\n"+
-"  <c xd:script=\"${n(p='c')}\"/>\n"+
-"</a>\n"+
+"  <xd:macro name='m' p='?'>\n"+
+"    match {out('m#{p} '); return true;};\n"+
+"    init out('i#{p} ');finally out('f#{p} ')\n"+
+"  </xd:macro>\n"+
+"  <xd:macro name='n' p='?'>\n"+
+"    ${m(p='#{p}')}; onStartElement out('s#{p} ')\n"+
+"  </xd:macro>\n"+
+"  <a xd:script=\"${n(p='a')}\">\n"+
+"    <xd:mixed xd:script=\"1; ${m(p='MX')}\">\n"+
+"      <b xd:script=\"${n(p='b')}\"/>\n"+
+"      <x xd:script=\"?;${n(p='x')}; create from('/a/x')\"/>\n"+
+"    </xd:mixed>\n"+
+"    <c xd:script=\"${n(p='c')}\"/>\n"+
+"  </a>\n"+
 "</xd:def>";
 			xml = "<a><b/><c/></a>";
 			xp = compile(xdef);
@@ -109,24 +109,23 @@ public final class TestUserMethods extends XDTester {
 			assertNoErrorwarnings(reporter);
 			assertEq(swr.toString(),
 				"ia sa iMX mb ib sb fb ix sx fx fMX mc ic sc fc fa ");
-
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"<xd:macro name='m' p='?'>\n"+
-"match {out('m#{p} '); return true;};\n"+
-"init out('i#{p} ');finally out('f#{p} ')\n"+
-"</xd:macro>\n"+
-"<xd:macro name='n' p='?'>\n"+
-"${m(p='#{p}')}; onStartElement out('s#{p} ')\n"+
-"</xd:macro>\n"+
-"   <a xd:script=\"${n(p='a')}\">\n"+
-"   <p xd:script=\"?; ${n(p='p')}\"/>\n"+
-"   <xd:choice xd:script=\"1; ${m(p='CH')}\">\n"+
+"  <xd:macro name='m' p='?'>\n"+
+"    match {out('m#{p} '); return true;};\n"+
+"    init out('i#{p} ');finally out('f#{p} ')\n"+
+"  </xd:macro>\n"+
+"  <xd:macro name='n' p='?'>\n"+
+"    ${m(p='#{p}')}; onStartElement out('s#{p} ')\n"+
+"  </xd:macro>\n"+
+"  <a xd:script=\"${n(p='a')}\">\n"+
+"    <p xd:script=\"?; ${n(p='p')}\"/>\n"+
+"    <xd:choice xd:script=\"1; ${m(p='CH')}\">\n"+
 "      <b xd:script=\"${n(p='b')}; create from('/a/b')\"/>\n"+
 "      <x xd:script=\"1;${n(p='x')}; create from('/a/x')\"/>\n"+
-"   </xd:choice>\n"+
-"   <c xd:script=\"${n(p='c')}\"/>\n"+
-" </a>\n"+
+"    </xd:choice>\n"+
+"    <c xd:script=\"${n(p='c')}\"/>\n"+
+"  </a>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xml = "<a><x/><c/></a>";

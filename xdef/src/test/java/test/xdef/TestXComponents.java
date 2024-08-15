@@ -93,9 +93,9 @@ public final class TestXComponents extends XDTester {
 		try {
 			xdef = // test datetime with milliseconds = 0
 "<xd:def xmlns:xd='" + _xdNS + "' root='X'>\n"+
-"<xd:declaration>type gam xdatetime('yyyyMMddHHmmssSSS');</xd:declaration>\n"+
+"  <xd:declaration>type gam xdatetime('yyyyMMddHHmmssSSS');</xd:declaration>\n"+
 "  <X a='gam()'>int()<Y xd:script='*' a='int()'/>? date()</X>\n"+
-"<xd:component>%class "+_package+".Mgam %link X</xd:component>\n"+
+"  <xd:component>%class "+_package+".Mgam %link X</xd:component>\n"+
 "</xd:def>";
 			genXComponent(xp = compile(xdef));
 			xml =
@@ -111,7 +111,7 @@ public final class TestXComponents extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
 "  <A> <B b='string'/> <C> <B b='string'/> </C> </A>\n" +
-" <xd:component> %class "+_package+".MichalTest %link #A; </xd:component>\n" +
+"  <xd:component> %class "+_package+".MichalTest %link #A; </xd:component>\n" +
 "</xd:def>";
 			genXComponent(xp = compile(xdef));
 			xml = "<A><B b=\"1\"/><C><B b=\"2\"/></C></A>";
@@ -125,17 +125,15 @@ public final class TestXComponents extends XDTester {
 					xc,"getC"), "getB"), "getb"));
 			xdef = // GPSPosition, Price
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
-"<xd:declaration\n>\n"+
-"  Price a;\n"+
-"  GPSPosition p = new GPSPosition(50.08, 14.42, 399, 'Prague'), q;\n"+
-"  int d; /* distance in km */\n"+
-"</xd:declaration>\n"+
-"<A xd:script='finally d = round(p.distanceTo(q)/1000); /* km */'\n"+
-"   a='? price(); onTrue a= getParsedValue();'\n"+
-"   q='gps(); onTrue q=getParsedValue();'/>\n"+
-"<xd:component>\n"+
-"  %class "+_package+".TY_GPS %link #A;\n"+
-"</xd:component>\n"+
+"  <xd:declaration\n>\n"+
+"    Price a;\n"+
+"    GPSPosition p = new GPSPosition(50.08, 14.42, 399, 'Prague'), q;\n"+
+"    int d; /* distance in km */\n"+
+"  </xd:declaration>\n"+
+"  <A xd:script='finally d = round(p.distanceTo(q)/1000); /* km */'\n"+
+"     a='? price(); onTrue a= getParsedValue();'\n"+
+"     q='gps(); onTrue q=getParsedValue();'/>\n"+
+"  <xd:component>%class "+_package+".TY_GPS %link #A;</xd:component>\n"+
 "</xd:def>";
 			genXComponent(xp = compile(xdef));
 			xml = "<A a='1.25 CZK' q='48.2, 16.37, 151, Vienna'/>"; //
@@ -164,20 +162,20 @@ public final class TestXComponents extends XDTester {
 "  </xd:component>\n" +
 "</xd:def>",
 "<xd:def xmlns:xd='" + _xdNS + "' name='D7_' root='A | B'>\n" +
-"    <xd:declaration scope=\"global\">\n" +
-"        type  cisloDN num(5);\n" +
-"        type  cj      string(1,50);\n" +
-"        type  plan    gamDate();\n" +
-"        type  rokDN   gamYear();\n" +
-"    </xd:declaration>\n" +
-"    <A RokDN=\"rokDN()\" CisloDN=\"cisloDN()\"/>\n" +
-"    <B xd:script=\"ref A\" C=\"cj()\" P=\"? plan()\"/>\n" +
+"  <xd:declaration scope=\"global\">\n" +
+"    type  cisloDN num(5);\n" +
+"    type  cj      string(1,50);\n" +
+"    type  plan    gamDate();\n" +
+"    type  rokDN   gamYear();\n" +
+"  </xd:declaration>\n" +
+"  <A RokDN=\"rokDN()\" CisloDN=\"cisloDN()\"/>\n" +
+"  <B xd:script=\"ref A\" C=\"cj()\" P=\"? plan()\"/>\n" +
 "</xd:def>",
 "<xd:def xmlns:xd='" + _xdNS + "' name='D7_decl'>\n" +
-"    <xd:declaration scope=\"global\">\n" +
-"        type  gamYear  long(1800, 2200);\n" +
-"        type  gamDate  xdatetime('yyyyMMdd');\n" +
-"    </xd:declaration>\n" +
+"  <xd:declaration scope=\"global\">\n" +
+"    type  gamYear  long(1800, 2200);\n" +
+"    type  gamDate  xdatetime('yyyyMMdd');\n" +
+"  </xd:declaration>\n" +
 "</xd:def>"});
 			genXComponent(xp);
 			xml = "<A RokDN=\"2021\" CisloDN=\"12345\"/>";
@@ -201,8 +199,8 @@ public final class TestXComponents extends XDTester {
 				SUtils.getValueFromGetter(xc, "getP"));
 			xdef = // test base64/hex
 "<xd:def xmlns:xd='" + _xdNS + "' root='X'>\n"+
-"<X a='hex()' b='base64Binary()' c='SHA1()'/>\n"+
-"<xd:component> %class "+_package+".TestXexBase64 %link X; </xd:component>\n"+
+"  <X a='hex()' b='base64Binary()' c='SHA1()'/>\n"+
+"  <xd:component> %class "+_package+".TestXexBase64 %link X; </xd:component>\n"+
 "</xd:def>";
 			genXComponent(xp = compile(xdef));
 			xml =
@@ -217,19 +215,19 @@ public final class TestXComponents extends XDTester {
 			assertNoErrorwarningsAndClear(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' name='Person' root='Person'>\n"+
-"    <Person Name  = \"string()\"\n" +
-"            Birth = \"xdatetime('dd.MM.yyyy')\"\n" +
-"            Sex   = \"enum('M','W', 'X')\"/>\n" +
-"   <xd:component>\n" +
-"      %class "+_package+".xcomp.XCPerson\n" +
-"          extends test.xdef.TestXComponents_bindAbstract\n" +
-"          implements test.xdef.TestXComponents_bindInterface\n" +
-"      %link Person#Person;\n" +
-"      %bind Name %with test.xdef.obj.Person %link Person#Person/@Name;\n" +
-"      %bind SBirth %with test.xdef.obj.Person\n" +
-"            %link Person#Person/@Birth;\n" +
-"      %bind SexString %with test.xdef.obj.Person %link Person#Person/@Sex;\n" +
-"   </xd:component>\n" +
+"  <Person Name  = \"string()\"\n" +
+"          Birth = \"xdatetime('dd.MM.yyyy')\"\n" +
+"          Sex   = \"enum('M','W', 'X')\"/>\n" +
+"  <xd:component>\n" +
+"    %class "+_package+".xcomp.XCPerson\n" +
+"        extends test.xdef.TestXComponents_bindAbstract\n" +
+"        implements test.xdef.TestXComponents_bindInterface\n" +
+"    %link Person#Person;\n" +
+"    %bind Name %with test.xdef.obj.Person %link Person#Person/@Name;\n" +
+"    %bind SBirth %with test.xdef.obj.Person\n" +
+"          %link Person#Person/@Birth;\n" +
+"    %bind SexString %with test.xdef.obj.Person %link Person#Person/@Sex;\n" +
+"  </xd:component>\n" +
 "</xd:def>";
 			genXComponent(xp = compile(xdef));
 			o = SUtils.getNewInstance("test.xdef.xcomp.XCPerson");
@@ -335,8 +333,8 @@ public final class TestXComponents extends XDTester {
 			assertEq(xml, xc.toXml());
 			xdef = // test jcreateXComponent
 "<xd:def xmlns:xd='" + _xdNS + "' root='X'>\n"+
-"<xd:xon name = 'X'>{a:\"int();\", b:[\"boolean();\"]}</xd:xon>\n"+
-"<xd:component> %class bugreports.data.JCreateX1 %link X </xd:component>\n"+
+"  <xd:xon name = 'X'>{a:\"int();\", b:[\"boolean();\"]}</xd:xon>\n"+
+"  <xd:component> %class bugreports.data.JCreateX1 %link X </xd:component>\n"+
 "</xd:def>";
 			genXComponent(xp = compile(xdef));
 			xd = xp.createXDDocument();
@@ -357,8 +355,8 @@ public final class TestXComponents extends XDTester {
 				SUtils.getValueFromGetter(xc,"toXon")));
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='X'>\n"+
-"<xd:component> %class bugreports.data.JCreateX2 %link X </xd:component>\n"+
-"<xd:xon name = 'X'>[\"2 boolean()\", \"boolean()\"]</xd:xon>\n"+
+"  <xd:component> %class bugreports.data.JCreateX2 %link X </xd:component>\n"+
+"  <xd:xon name = 'X'>[\"2 boolean()\", \"boolean()\"]</xd:xon>\n"+
 "</xd:def>";
 			genXComponent(xp = compile(xdef));
 			xd = xp.createXDDocument();
@@ -374,8 +372,8 @@ public final class TestXComponents extends XDTester {
 				SUtils.getValueFromGetter(xc,"toXon")));
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='X'>\n"+
-"<xd:component>%class "+_package+".JCreateX3 %link X</xd:component>\n"+
-"<xd:xon name = 'X'>[\"2 boolean()\", \"boolean()\"]</xd:xon>\n"+
+"  <xd:component>%class "+_package+".JCreateX3 %link X</xd:component>\n"+
+"  <xd:xon name = 'X'>[\"2 boolean()\", \"boolean()\"]</xd:xon>\n"+
 "</xd:def>";
 			genXComponent(xp = compile(xdef));
 			xd = xp.createXDDocument();
@@ -391,8 +389,8 @@ public final class TestXComponents extends XDTester {
 				SUtils.getValueFromGetter(xc,"toXon")));
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='X'>\n"+
-"<xd:xon name=\"X\"> {b:[ \"int();\",[\"int();\"],\"string();\"]}</xd:xon>\n" +
-"<xd:component> %class "+_package+".JCreateX4 %link X </xd:component>\n"+
+"  <xd:xon name=\"X\"> {b:[ \"int();\",[\"int();\"],\"string();\"]}</xd:xon>\n"+
+"  <xd:component> %class "+_package+".JCreateX4 %link X </xd:component>\n"+
 "</xd:def>";
 			genXComponent(xp = compile(xdef));
 			xd = xp.createXDDocument();
@@ -410,10 +408,10 @@ public final class TestXComponents extends XDTester {
 				SUtils.getValueFromGetter(xc,"toXon")));
 			xdef = // jcreate with create section
 "<xd:def xmlns:xd='" + _xdNS + "' root='X'>\n"+
-"<xd:xon name = 'X'>\n"+
-" [ \"boolean(); create 'true'\", \"int(); create '2'\" ]\n"+
-"</xd:xon>\n"+
-"<xd:component>%class "+_package+".JCreateX5 %link X</xd:component>\n"+
+"  <xd:xon name = 'X'>\n"+
+"   [ \"boolean(); create 'true'\", \"int(); create '2'\" ]\n"+
+"  </xd:xon>\n"+
+"  <xd:component>%class "+_package+".JCreateX5 %link X</xd:component>\n"+
 "</xd:def>";
 			genXComponent(xp = compile(xdef));
 			xd = xp.createXDDocument();
@@ -427,12 +425,12 @@ public final class TestXComponents extends XDTester {
 				SUtils.getValueFromGetter(xc,"toXon")));
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='X'>\n"+
-"<xd:xon name = 'X'>\n"+
-"{ a:\"int(); create '1'\",\n"+
-"  b:[ \"boolean(); create 'true'\", \"int(); create '2'\" ]\n"+
-"}\n"+
-"</xd:xon>\n"+
-"<xd:component>%class "+_package+".JCreateX6 %link X</xd:component>\n"+
+"  <xd:xon name = 'X'>\n"+
+"    { a:\"int(); create '1'\",\n"+
+"      b:[ \"boolean(); create 'true'\", \"int(); create '2'\" ]\n"+
+"    }\n"+
+"  </xd:xon>\n"+
+"  <xd:component>%class "+_package+".JCreateX6 %link X</xd:component>\n"+
 "</xd:def>";
 			genXComponent(xp = compile(xdef));
 			xd = xp.createXDDocument();
@@ -447,13 +445,13 @@ public final class TestXComponents extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' xd:root='a'>\n" +
 "<xd:component>%class "+_package+".TestX_OneOfa %link a</xd:component>\n"+
-"<xd:xon name='a'>\n" +
-"{\n" +
-"  %oneOf= \"optional;\",\n" +
-"  \"manager\": \"string()\",\n" +
-"  \"subordinates\":[ \"* string();\" ]\n" +
-"}\n" +
-"</xd:xon>\n" +
+"  <xd:xon name='a'>\n" +
+"    {\n" +
+"      %oneOf= \"optional;\",\n" +
+"      \"manager\": \"string()\",\n" +
+"      \"subordinates\":[ \"* string();\" ]\n" +
+"    }\n" +
+"  </xd:xon>\n" +
 "</xd:def>";
 			genXComponent(xp = compile(xdef));
 			xd = xp.createXDDocument();
@@ -506,16 +504,16 @@ public final class TestXComponents extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root=\"test\">\n" +
 "<xd:component>%class "+_package+".MyTestX_OneOfb %link test</xd:component>\n"+
-"<xd:xon name=\"test\">\n" +
-"{ a:[ %oneOf=\"?\",\n" +
-"       \"jnull(); finally outln('null')\", \n" + // must be first
-"       \"date(); finally outln('date')\", \n" +
-"       \"ipAddr(); finally outln('ipAddr')\", \n" +
-"       [%script=\"finally outln('[...]')\",\"*int()\"], \n" +
-"       {%script=\"finally outln('{ . }')\",x:\"? int()\",y:\"? string()\"},\n"+
-"       \"string(); finally outln('string')\" \n" +
-"  ]\n" +
-"}\n" +
+"  <xd:xon name=\"test\">\n" +
+"    { a:[ %oneOf=\"?\",\n" +
+"        \"jnull(); finally outln('null')\", \n" + // must be first
+"        \"date(); finally outln('date')\", \n" +
+"        \"ipAddr(); finally outln('ipAddr')\", \n" +
+"        [%script=\"finally outln('[...]')\",\"*int()\"], \n" +
+"        {%script=\"finally outln('{ . }')\",x:\"?int()\",y:\"?string()\"},\n"+
+"        \"string(); finally outln('string')\" \n" +
+"      ]\n" +
+"    }\n" +
 "</xd:xon>\n" +
 "</xd:def>";
 			genXComponent(xp = compile(xdef));
@@ -633,10 +631,10 @@ public final class TestXComponents extends XDTester {
 			xdef = // sequence with separator
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <xd:component>%class "+_package+".MytestX_SQ %link #a;</xd:component>\n" +
-"<xd:declaration>\n"+
-"  type s sequence(%separator=',', %item=[int,long, long]);\n"+
-"</xd:declaration>\n"+
-" <a a='? s'> ? s; <b xd:script='?'> s; </b> </a>\n"+
+"  <xd:declaration>\n"+
+"    type s sequence(%separator=',', %item=[int,long, long]);\n"+
+"  </xd:declaration>\n"+
+"  <a a='? s'> ? s; <b xd:script='?'> s; </b> </a>\n"+
 "</xd:def>";
 			genXComponent(xp = compile(xdef));
 			xml = "<a/>";
@@ -681,7 +679,7 @@ public final class TestXComponents extends XDTester {
 			xdef = //Names of getters of A/B and A/C/B must be same
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
 "  <A> <B b='string'/> <C> <B b='string'/> </C> </A>\n" +
-" <xd:component> %class "+_package+".TestB %link #A; </xd:component>\n" +
+"  <xd:component> %class "+_package+".TestB %link #A; </xd:component>\n" +
 "</xd:def>";
 			genXComponent(xp = compile(xdef));
 			xml = "<A><B b=\"1\"/><C><B b=\"2\"/></C></A>";
@@ -695,11 +693,11 @@ public final class TestXComponents extends XDTester {
 					SUtils.getValueFromGetter(xc,"getC"), "getB"), "getb"));
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A0'>\n" +
-"<A0>\n" +
-"  <B><D xd:script=\"ref D\" /><C c=\"string(1)\"/></B>\n" +
-"</A0>\n"+
-"<D><C c=\"string(3)\"/></D>\n"+
-"<xd:component> %class "+_package+".A0 %link #A0; </xd:component>\n"+
+"  <A0>\n" +
+"    <B><D xd:script=\"ref D\" /><C c=\"string(1)\"/></B>\n" +
+"  </A0>\n"+
+"  <D><C c=\"string(3)\"/></D>\n"+
+"  <xd:component> %class "+_package+".A0 %link #A0; </xd:component>\n"+
 "</xd:def>";
 			genXComponent(xp = compile(xdef));
 			xml = "<A0><B><D><C c=\"d/c\"/></D><C c=\"c\"/></B></A0>";
@@ -717,11 +715,11 @@ public final class TestXComponents extends XDTester {
 				SUtils.getValueFromGetter(xc, "getB"),"getD"),"getC"),"getc"));
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A1'>\n" +
-"<A1>\n" +
-"  <B><C c=\"string(1)\"/><D xd:script=\"ref D\" /></B>\n" +
-"</A1>\n"+
-"<D><C c=\"string(3)\"/></D>\n"+
-"<xd:component> %class "+_package+".A1 %link #A1; </xd:component>\n"+
+"  <A1>\n" +
+"    <B><C c=\"string(1)\"/><D xd:script=\"ref D\" /></B>\n" +
+"  </A1>\n"+
+"  <D><C c=\"string(3)\"/></D>\n"+
+"  <xd:component> %class "+_package+".A1 %link #A1; </xd:component>\n"+
 "</xd:def>";
 			genXComponent(xp = compile(xdef));
 			xml = "<A1><B><C c=\"c\"/><D><C c=\"d/c\"/></D></B></A1>";
@@ -739,7 +737,7 @@ public final class TestXComponents extends XDTester {
 				SUtils.getValueFromGetter(xc, "getB"),"getD"),"getC"),"getc"));
 			xdef = //test any, moreAttributes, moreElements, moreText
 "<xd:def  xmlns:xd='"+_xdNS+"' root='X'>\n"+
-"<xd:component>%class bugreports.data.M %link X</xd:component>\n"+
+"  <xd:component>%class bugreports.data.M %link X</xd:component>\n"+
 "  <xd:any xd:name='X'\n"+
 "     xd:script='options moreAttributes, moreElements, moreText'/>\n"+
 "</xd:def>";
@@ -753,8 +751,8 @@ public final class TestXComponents extends XDTester {
 			assertEq(xml, xc.toXml());
 			xp = compile(new String[] { // any, create mode
 "<xd:def  xmlns:xd='" + _xdNS + "' name='A' root='A'>\n" +
-" <A><xd:any xd:script='options moreElements,moreText,moreAttributes'/></A>\n" +
-" <xd:component> %class "+_package+".Kalcik %link A#A; </xd:component>\n" +
+"  <A><xd:any xd:script='options moreElements,moreText,moreAttributes'/></A>\n"+
+"  <xd:component> %class "+_package+".Kalcik %link A#A; </xd:component>\n" +
 "</xd:def>",
 "<xd:def  xmlns:xd='" + _xdNS + "' name='B' root='X'>\n" +
 "  <X xd:script='create from(\"/*\")' a=\"string()\" b=\"date()\" />\n" +
@@ -764,7 +762,7 @@ public final class TestXComponents extends XDTester {
 			xml = "<A><B a='x' b='2000-01-21'/></A>";
 			xc = xd.xparseXComponent(xml, null, reporter);
 			assertNoErrorsAndClear(reporter);
-			el = ((XComponent) SUtils.getValueFromGetter(xc, "get$any")).toXml();
+			el = ((XComponent) SUtils.getValueFromGetter(xc,"get$any")).toXml();
 			xd = xp.getXMDefinition("B").createXDDocument();
 			xd.setXDContext(el);
 			el = xd.xcreate("X", reporter);
@@ -772,8 +770,8 @@ public final class TestXComponents extends XDTester {
 			assertEq("<X b='2000-01-21' a='x' />", el);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root=\"A\">\n" +
-"<A a='int(-1) || int(0, 100);'/>\n" +
-"<xd:component> %class "+_package+".TestXKoci1 %link #A; </xd:component>\n" +
+"  <A a='int(-1) || int(0, 100);'/>\n" +
+"  <xd:component> %class "+_package+".TestXKoci1 %link #A; </xd:component>\n" +
 "</xd:def>";
 			genXComponent(xp = compile(xdef));
 			xml = "<A a='20'/>";
@@ -786,11 +784,11 @@ public final class TestXComponents extends XDTester {
 			assertEq(xml, xc.toXml());
 			xdef = // test union
 "<xd:def xmlns:xd='" + _xdNS + "' root=\"A\">\n" +
-"<xd:declaration>\n"+
-"  type s union(%item=[byte(-1), int(1, 100)]);\n"+
-"</xd:declaration>\n"+
-"<A a='s'>s;</A>\n"+
-"<xd:component> %class "+_package+".TestXKoci2 %link #A; </xd:component>\n" +
+"  <xd:declaration>\n"+
+"    type s union(%item=[byte(-1), int(1, 100)]);\n"+
+"  </xd:declaration>\n"+
+"  <A a='s'>s;</A>\n"+
+"  <xd:component> %class "+_package+".TestXKoci2 %link #A; </xd:component>\n" +
 "</xd:def>";
 			genXComponent(xp = compile(xdef));
 			xml = "<A a='-1'>20</A>";

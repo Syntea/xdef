@@ -32,21 +32,21 @@ public final class TestTemplate extends XDTester {
 			//default trimtext
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"<a xd:script=\"template\"\n"+
-"  a1=\"a1\">" +
-"<b>" +
-"<c a2=\"a2\" />" +
-"</b>" +
-"<c>" +
-"<d/>" +
-"<e/>" +
-"<e>t</e>" +
-"<e/>" +
-"<f/>" +
-"<g/>" +
-"</c>" +
-"<c/>" +
-"</a>\n"+
+"  <a xd:script=\"template\"\n"+
+"     a1=\"a1\">" +
+"    <b>" +
+"      <c a2=\"a2\" />" +
+"    </b>" +
+"    <c>" +
+"      <d/>" +
+"      <e/>" +
+"      <e>t</e>" +
+"      <e/>" +
+"      <f/>" +
+"      <g/>" +
+"    </c>" +
+"    <c/>" +
+"  </a>\n"+
 "</xd:def>";
 			xml =
 "<a a1=\"a1\">" +
@@ -110,21 +110,21 @@ public final class TestTemplate extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xdef = //trimText
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-"<a xd:script=\"template; options trimText\"\n"+
-"   a1=\"a1\">\n"+
-"  <b>\n"+
-"  <c a2=\"a2\" />\n"+
-"  </b>\n"+
+"  <a xd:script=\"template; options trimText\"\n"+
+"     a1=\"a1\">\n"+
+"    <b>\n"+
+"      <c a2=\"a2\" />\n"+
+"    </b>\n"+
 "    <c>\n"+
-"    <d/>\n"+
-"    <e/>\n"+
-"    <e>t</e>\n"+
-"    <e/>\n"+
-"    <f/>\n"+
-"    <g/>\n"+
-"  </c>\n"+
-"  <c/>\n"+
-"</a>\n"+
+"      <d/>\n"+
+"      <e/>\n"+
+"      <e>t</e>\n"+
+"      <e/>\n"+
+"      <f/>\n"+
+"      <g/>\n"+
+"    </c>\n"+
+"    <c/>\n"+
+"  </a>\n"+
 "</xd:def>";
 			xml =
 "<a a1=\"a1\">" +
@@ -148,26 +148,24 @@ public final class TestTemplate extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xdef = //modification of template
 "<xd:def xmlns:xd='" + _xdNS + "' root='x'>\n"+
-"<a xd:script=\"template; options trimText\"\n"+
-"   a1=\"xxx\">\n"+
-"  <b>\n"+
-"  <c a2=\"a2\" />\n"+
-"  </b>\n"+
+"  <a xd:script=\"template; options trimText\"\n"+
+"     a1=\"xxx\">\n"+
+"    <b>\n"+
+"      <c a2=\"a2\" />\n"+
+"    </b>\n"+
 "    <c>\n"+
-"    <d/>\n"+
-"    <e/>\n"+
-"    <e>t</e>\n"+
-"    <e/>\n"+
-"    <f/>\n"+
-"    <g/>\n"+
-"  </c>\n"+
-"  <c/>\n"+
-"</a>\n"+
-"\n"+
-"<x xd:script=\"ref a\"\n"+
-"  a1=\"required string(); create 'a1'\"\n"+
-"  aa=\"required string(); create 'aa'\" >\n"+
-"</x>\n"+
+"      <d/>\n"+
+"      <e/>\n"+
+"      <e>t</e>\n"+
+"      <e/>\n"+
+"      <f/>\n"+
+"      <g/>\n"+
+"    </c>\n"+
+"    <c/>\n"+
+"  </a>\n"+
+"  <x xd:script=\"ref a\"\n"+
+"     a1=\"required string(); create 'a1'\"\n"+
+"     aa=\"required string(); create 'aa'\" />\n"+
 "</xd:def>";
 			xml =
 "<x a1=\"a1\" aa = \"aa\">" +
@@ -191,31 +189,29 @@ public final class TestTemplate extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xdef = // $$$script:
 "<xd:def xmlns:xd='" + _xdNS + "' root='x'>\n"+
-"<xd:declaration>\n"+
-"  String a1() {return 'a1';}\n"+
-"  String aa() {return 'aa';}\n"+
-"</xd:declaration>\n"+
-"<a xd:script=\"template; options trimText\"\n"+
-"   a1=\"aaa\" a2=\"$$$script: optional string(); create 'a2 a2'\">\n"+
-"   $$$script: optional string(); create 'a a'\n"+
-"  <b>\n"+
-"  <c a2=\"xxx\" />\n"+
-"  </b>\n"+
-"    <c>\n"+
-"    <d/>\n"+
-"    <e/>\n"+
-"    <e>t</e>\n"+
-"    <e/>\n"+
-"    <f/>\n"+
-"    <g></g>\n"+
-"  </c>\n"+
-"  <c/>\n"+
-"</a>\n"+
-"\n"+
+"  <xd:declaration>\n"+
+"    String a1() {return 'a1';}\n"+
+"    String aa() {return 'aa';}\n"+
+"  </xd:declaration>\n"+
+"  <a xd:script=\"template; options trimText\"\n"+
+"     a1=\"aaa\" a2=\"$$$script: optional string(); create 'a2 a2'\">\n"+
+"    $$$script: optional string(); create 'a a'\n"+
+"    <b>\n"+
+"      <c a2=\"xxx\" />\n"+
+"      </b>\n"+
+"      <c>\n"+
+"        <d/>\n"+
+"        <e/>\n"+
+"        <e>t</e>\n"+
+"        <e/>\n"+
+"        <f/>\n"+
+"        <g></g>\n"+
+"      </c>\n"+
+"    <c/>\n"+
+"  </a>\n"+
 "<x xd:script=\"ref a\"\n"+
-"  a1=\"required string(); create a1()\"\n"+
-"  aa=\"required string(); create aa()\" >\n"+
-"</x>\n"+
+"   a1=\"required string(); create a1()\"\n"+
+"   aa=\"required string(); create aa()\" />\n"+
 "</xd:def>";
 			xml =
 "<x a1=\"a1\" aa = \"aa\">" +
@@ -241,31 +237,28 @@ public final class TestTemplate extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xdef = //method call
 "<xd:def xmlns:xd='" + _xdNS + "' root='x'>\n"+
-"<xd:declaration>\n"+
-"  String a1() {return 'a1';}\n"+
-"  String aa() {return 'aa';}\n"+
-"</xd:declaration>\n"+
-"\n"+
-"<a xd:script=\"template; options trimText\"\n"+
-"   a1=\"syntea.cz\">\n"+
-"  <b>\n"+
-"  <c a2=\"xxx\" />\n"+
-"  </b>\n"+
+"  <xd:declaration>\n"+
+"    String a1() {return 'a1';}\n"+
+"    String aa() {return 'aa';}\n"+
+"  </xd:declaration>\n"+
+"  <a xd:script=\"template; options trimText\"\n"+
+"     a1=\"syntea.cz\">\n"+
+"    <b>\n"+
+"      <c a2=\"xxx\" />\n"+
+"    </b>\n"+
 "    <c>\n"+
-"    <d/>\n"+
-"    <e/>\n"+
-"    <e>text</e>\n"+
-"    <e/>\n"+
-"    <f/>\n"+
-"    <g/>\n"+
-"  </c>\n"+
-"  <c/>\n"+
-"</a>\n"+
-"\n"+
+"      <d/>\n"+
+"      <e/>\n"+
+"      <e>text</e>\n"+
+"      <e/>\n"+
+"      <f/>\n"+
+"      <g/>\n"+
+"    </c>\n"+
+"    <c/>\n"+
+"  </a>\n"+
 "<x xd:script=\"ref a\"\n"+
-"  a1=\"required string(); create a1()\"\n"+
-"  aa=\"required string(); create aa()\" >\n"+
-"</x>\n"+
+"   a1=\"required string(); create a1()\"\n"+
+"   aa=\"required string(); create aa()\" />\n"+
 "</xd:def>";
 			xml =
 "<x a1=\"a1\" aa = \"aa\">" +
@@ -290,34 +283,31 @@ public final class TestTemplate extends XDTester {
 			xdef = //collection
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n"+
 "<xd:def name='test1'>\n"+
-"<a xd:script=\"template; options trimText\"\n"+
-"   a1=\"syntea.cz\">\n"+
-"  <b>\n"+
-"  <c a2=\"xxx\" />\n"+
-"  </b>\n"+
+"  <a xd:script=\"template; options trimText\"\n"+
+"     a1=\"syntea.cz\">\n"+
+"    <b>\n"+
+"      <c a2=\"xxx\" />\n"+
+"    </b>\n"+
 "    <c>\n"+
-"    <d/>\n"+
-"    <e/>\n"+
-"    <e>text</e>\n"+
-"    <e/>\n"+
-"    <f/>\n"+
-"    <g/>\n"+
-"  </c>\n"+
-"  <c/>\n"+
-"</a>\n"+
+"      <d/>\n"+
+"      <e/>\n"+
+"      <e>text</e>\n"+
+"      <e/>\n"+
+"      <f/>\n"+
+"      <g/>\n"+
+"    </c>\n"+
+"    <c/>\n"+
+"  </a>\n"+
 "</xd:def>\n"+
-"\n"+
 "<xd:def xd:name = \"test2\" xd:root = \"x\" >\n"+
-"<xd:declaration>\n"+
-"  String a1() {return 'a1';}\n"+
-"  String aa() {return 'aa';}\n"+
-"</xd:declaration>\n"+
-"<x xd:script=\"ref test1#a\"\n"+
-"  a1=\"required string(); create a1()\"\n"+
-"  aa=\"required string(); create aa()\" >\n"+
-"</x>\n"+
+"  <xd:declaration>\n"+
+"    String a1() {return 'a1';}\n"+
+"    String aa() {return 'aa';}\n"+
+"  </xd:declaration>\n"+
+"  <x xd:script=\"ref test1#a\"\n"+
+"    a1=\"required string(); create a1()\"\n"+
+"    aa=\"required string(); create aa()\" />\n"+
 "</xd:def>\n"+
-"\n"+
 "</xd:collection>\n";
 			xp = compile(xdef);
 			xml =
@@ -341,15 +331,15 @@ public final class TestTemplate extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root = 'elem'>\n"+
-"<elem xd:script = \"template; options preserveTextWhiteSpaces, noTrimText\"\n"+
-"    a1 = \"ab cd\"\n"+
-"    a2 = \"$$$script: optional xdatetime('yyyy/M/d');\n"+
-"                      create now().toString('yyyy/M/d')\">"+
-"<child1/><child2>\n text  1 \n</child2><child2>text2</child2>"+
-"</elem>\n"+
+"  <elem xd:script=\"template; options preserveTextWhiteSpaces, noTrimText\"\n"+
+"      a1 = \"ab cd\"\n"+
+"      a2 = \"$$$script: optional xdatetime('yyyy/M/d');\n"+
+"                        create now().toString('yyyy/M/d')\">"+
+"    <child1/><child2>\n text  1 \n</child2><child2>text2</child2>"+
+"  </elem>\n"+
 "</xd:def>";
-			xml = "<elem a2=\"{d}\" a1=\"ab cd\">"
-				+ "<child1/><child2>\n text  1 \n</child2><child2>text2</child2>"
+			xml = "<elem a2=\"{d}\" a1=\"ab cd\"><child1/>"
+				+ "<child2>\n text  1 \n</child2><child2>text2</child2>"
 				+ "</elem>";
 			s = SUtils.modifyString(xml, "{d}", "2010/01/31");
 			xp = compile(xdef);
@@ -362,12 +352,12 @@ public final class TestTemplate extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root = 'elem'\n"+
 "        xd:script= 'options preserveTextWhiteSpaces, noTrimText' >\n"+
-"<elem xd:script = \"template\"\n"+
-"    a1 = \"ab cd\"\n"+
-"    a2 = \"$$$script: optional xdatetime('yyyy/M/d');\n"+
-"                      create now().toString('yyyy/M/d')\">"+
-"<child1/><child2>\n text  1 \n</child2><child2>text2</child2>"+
-"</elem>\n"+
+"  <elem xd:script = \"template\"\n"+
+"        a1 = \"ab cd\"\n"+
+"        a2 = \"$$$script: optional xdatetime('yyyy/M/d');\n"+
+"                           create now().toString('yyyy/M/d')\">"+
+"    <child1/><child2>\n text  1 \n</child2><child2>text2</child2>"+
+"  </elem>\n"+
 "</xd:def>";
 			s = SUtils.modifyString(xml, "{d}", "2010/01/31");
 			xp = compile(xdef);
@@ -381,12 +371,12 @@ public final class TestTemplate extends XDTester {
 "<xd:def xmlns:xd='" + _xdNS + "' root='elem'\n"+
 "        xd:script= 'options ignoreTextWhiteSpaces, trimText,\n"+
 "                    ignoreAttrWhiteSpaces, trimAttr' >\n"+
-"<elem xd:script = \"template\"\n"+
-"    a1 = \" ab  cd \"\n"+
-"    a2 = \"$$$script: optional xdatetime('yyyy/M/d');\n"+
-"                      create now().toString('yyyy/M/d')\">"+
-"<child1/><child2>\ntext  1\n</child2><child2>text2</child2>"+
-"</elem>\n"+
+"  <elem xd:script = \"template\"\n"+
+"        a1 = \" ab  cd \"\n"+
+"        a2 = \"$$$script: optional xdatetime('yyyy/M/d');\n"+
+"                          create now().toString('yyyy/M/d')\">"+
+"    <child1/><child2>\ntext  1\n</child2><child2>text2</child2>"+
+"  </elem>\n"+
 "</xd:def>";
 			xml = "<elem a2=\"{d}\" a1=\"ab cd\">"
 				+ "<child1/><child2>text 1</child2><child2>text2</child2>"
@@ -403,18 +393,18 @@ public final class TestTemplate extends XDTester {
 "<xd:def xmlns:xd='" + _xdNS + "' root = 'elem'\n"+
 "        xd:script= 'options ignoreTextWhiteSpaces, trimText,\n"+
 "                    ignoreAttrWhiteSpaces, trimAttr' >\n"+
-"<elem xd:script = \"template\"\n"+
-"    attr1 = \" ab  cd \"\n"+
-"    attr2 = \"$$$script: optional xdatetime('yyyy/M/d');\n"+
-"                         create now().toString('yyyy/M/d')\">\n"+
-"  <child1/>\n"+
-"  <child2>\n"+
-"    text  1 \n"+
-"  </child2>\n"+
-"  <child2>\n"+
-"    text2\n"+
-"  </child2>\n"+
-"</elem>\n"+
+"  <elem xd:script = \"template\"\n"+
+"        attr1 = \" ab  cd \"\n"+
+"        attr2 = \"$$$script: optional xdatetime('yyyy/M/d');\n"+
+"                             create now().toString('yyyy/M/d')\">\n"+
+"    <child1/>\n"+
+"    <child2>\n"+
+"      text  1 \n"+
+"    </child2>\n"+
+"    <child2>\n"+
+"      text2\n"+
+"    </child2>\n"+
+"  </elem>\n"+
 "</xd:def>";
 			xml = "<elem attr2=\"{d}\" attr1=\"ab cd\">"
 				+ "<child1/><child2>text 1</child2><child2>text2</child2>"
@@ -428,30 +418,31 @@ public final class TestTemplate extends XDTester {
 			assertNoErrorwarnings(reporter);
 			assertEq(SUtils.modifyString(xml, "{d}", s), el);
 			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "'\n"+
-" name = 'Example' root = 'html' xmlns='http://www.w3.org/1999/xhtml'>\n"+
-"<html>\n"+
-"<head xd:script='template'><title>Panovníci českých zemí</title></head>\n"+
-"<body>\n"+
-"  <table border=\"create 'border'\">\n"+
-"<tr xd:script='template'>"+
-"<td>Panovník</td>"+
-"<td>vládl od</td>"+
-"<td>vládl do</td>"+
-"<td>po dobu</td>"+
-"</tr>\n"+
-"    <tr xd:script=\"*;create from('//panovnik').sort('panoval/od/text()')\">\n"+
-"        <td>create from('jmeno/text()')</td>\n"+
-"        <td>create from('panoval/od/text()')</td>\n"+
-"        <td>optional string(); create from('panoval/do/text()')</td>\n"+
-"        <td>optional string();\n"+
-"           create from('panoval/do/text()').getLength() == 0 ? null :\n"+
+"<xd:def xmlns:xd='" + _xdNS + "' name = 'Example' root = 'html'\n"+
+"        xmlns='http://www.w3.org/1999/xhtml'>\n"+
+"  <html>\n"+
+"    <head xd:script='template'><title>Panovníci českých zemí</title></head>\n"+
+"    <body>\n"+
+"      <table border=\"create 'border'\">\n"+
+"        <tr xd:script='template'>"+
+"          <td>Panovník</td>"+
+"          <td>vládl od</td>"+
+"          <td>vládl do</td>"+
+"          <td>po dobu</td>"+
+"        </tr>\n"+
+"        <tr xd:script=\n"+
+"              \"*;create from('//panovnik').sort('panoval/od/text()')\">\n"+
+"          <td>create from('jmeno/text()')</td>\n"+
+"          <td>create from('panoval/od/text()')</td>\n"+
+"          <td>optional string(); create from('panoval/do/text()')</td>\n"+
+"          <td>optional string();\n"+
+"            create from('panoval/do/text()').getLength() == 0 ? null :\n"+
 "              from('number(panoval/do/text()) - number(panoval/od/text())')\n"+
-"        </td>\n"+
-"    </tr>\n"+
-"  </table>\n"+
-"</body>"+
-"</html>\n"+
+"          </td>\n"+
+"        </tr>\n"+
+"      </table>\n"+
+"    </body>"+
+"  </html>\n"+
 "</xd:def>";
 			xml =
 "<panovnici>\n"+
@@ -485,18 +476,18 @@ public final class TestTemplate extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "'\n"+
 "        xmlns='http://www.w3.org/1999/xhtml'>\n"+
-"<html>\n"+
-"   <head xd:script='template'><title>Panovníci českých zemí</title></head>\n"+
-"<body xd:script='template'>"+
-"<table border=\"border\">"+
-"<tr><td>Panovník</td></tr>"+
-"<tr xd:script='$$$script:*;\n"+
-"       create from(\"//panovnik\").sort(\"panoval/od/text()\")'>\n"+
-"         <td>create from('jmeno/text()')</td>\n"+
-"</tr>"+
-"</table>"+
-"</body>\n"+
-"</html>\n"+
+  "<html>\n"+
+"    <head xd:script='template'><title>Panovníci českých zemí</title></head>\n"+
+"    <body xd:script='template'>"+
+"      <table border=\"border\">"+
+"        <tr><td>Panovník</td></tr>"+
+"        <tr xd:script='$$$script:*;\n"+
+"              create from(\"//panovnik\").sort(\"panoval/od/text()\")'>\n"+
+"           <td>create from('jmeno/text()')</td>\n"+
+"        </tr>"+
+"      </table>"+
+"    </body>\n"+
+"  </html>\n"+
 "</xd:def>\n";
 			xml =
 "<panovnici>\n"+
@@ -529,18 +520,18 @@ public final class TestTemplate extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "'\n"+
 "        xmlns='http://www.w3.org/1999/xhtml'>\n"+
-"<html xd:script='template'>"+
-"<head><title>Panovníci českých zemí</title></head>"+
-"<body>"+
-"<table border=\"border\">"+
-"<tr><td>Panovník</td></tr>"+
-"<tr xd:script='$$$script:*;\n"+
-"           create from(\"//panovnik\").sort(\"panoval/od/text()\")'>\n"+
-"         <td>create from('jmeno/text()')</td>\n"+
-"</tr>"+
-"</table>"+
-"</body>"+
-"</html>\n"+
+"  <html xd:script='template'>"+
+"    <head><title>Panovníci českých zemí</title></head>"+
+"    <body>"+
+"      <table border=\"border\">"+
+"        <tr><td>Panovník</td></tr>"+
+"        <tr xd:script='$$$script:*;\n"+
+"               create from(\"//panovnik\").sort(\"panoval/od/text()\")'>\n"+
+"          <td>create from('jmeno/text()')</td>\n"+
+"        </tr>"+
+"      </table>"+
+"    </body>"+
+"  </html>\n"+
 "</xd:def>\n";
 			xp = compile(xdef);
 			xd = xp.createXDDocument();
@@ -551,19 +542,19 @@ public final class TestTemplate extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "'\n"+
 "        xmlns='http://www.w3.org/1999/xhtml'>\n"+
-"<xd:declaration>external Element source</xd:declaration>\n"+
-"<html xd:script='template'>\n"+
-"  <head><title>Panovníci českých zemí</title></head>\n"+
-"  <body>\n"+
-"    <table border=\"border\">\n"+
-"      <tr><td>Panovník</td></tr>\n"+
-"      <tr xd:script='$$$script:*;\n"+
-"           create from(source,\"//panovnik\").sort(\"panoval/od/text()\")'>\n"+
-"         <td>create from('jmeno/text()')</td>\n"+
-"      </tr>\n"+
-"    </table>\n"+
-"  </body>\n"+
-"</html>\n"+
+"  <xd:declaration>external Element source</xd:declaration>\n"+
+"  <html xd:script='template'>\n"+
+"    <head><title>Panovníci českých zemí</title></head>\n"+
+"    <body>\n"+
+"      <table border=\"border\">\n"+
+"        <tr><td>Panovník</td></tr>\n"+
+"        <tr xd:script='$$$script:*; create from(\n"+
+"                  source, \"//panovnik\").sort(\"panoval/od/text()\")'>\n"+
+"          <td>create from('jmeno/text()')</td>\n"+
+"        </tr>\n"+
+"      </table>\n"+
+"    </body>\n"+
+"  </html>\n"+
 "</xd:def>\n";
 			xp = compile(xdef);
 			xd = xp.createXDDocument();
@@ -576,19 +567,19 @@ public final class TestTemplate extends XDTester {
 "<xd:def xmlns:xd='" + _xdNS + "'\n"+
 "        xmlns='http://www.w3.org/1999/xhtml'\n"+
 "        script='options noTrimAttr,noTrimText'>\n"+
-"<xd:declaration>external Element source</xd:declaration>\n"+
-"<html xd:script='template'>\n"+
-"  <head><title>Panovníci českých zemí</title></head>\n"+
-"  <body>\n"+
-"    <table border=\"border\">\n"+
-"      <tr><td>Panovník</td></tr>\n"+
-"      <tr xd:script=\"$$$script:*;\n"+
-"           create from(source,'//panovnik').sort('panoval/od/text()')\">\n"+
-"         <td>create from('jmeno/text()')</td>\n"+
-"      </tr>\n"+
-"    </table>\n"+
-"  </body>\n"+
-"</html>\n"+
+"  <xd:declaration>external Element source</xd:declaration>\n"+
+"  <html xd:script='template'>\n"+
+"    <head><title>Panovníci českých zemí</title></head>\n"+
+"    <body>\n"+
+"      <table border=\"border\">\n"+
+"        <tr><td>Panovník</td></tr>\n"+
+"        <tr xd:script=\"$$$script:*;\n"+
+"             create from(source,'//panovnik').sort('panoval/od/text()')\">\n"+
+"           <td>create from('jmeno/text()')</td>\n"+
+"        </tr>\n"+
+"      </table>\n"+
+"    </body>\n"+
+"  </html>\n"+
 "</xd:def>\n";
 			xp = compile(xdef);
 			xd = xp.createXDDocument();

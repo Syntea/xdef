@@ -20,14 +20,20 @@ public class TestXComponents_G {
 	public static void genXC(XXNode xnode) {
 		String name = xnode.getXXName();
 		TestXComponents_G xm = (TestXComponents_G) xnode.getUserObject();
-		if ("G".equals(name)) {
-			xm._G = xnode.getXComponent();
-		} else if ("XXX".equals(name)) {
-			xm._X = xnode.getXComponent();
-		} else if ("YYY".equals(name)) {
-			xm._Y = xnode.getXComponent();
-		} else {
+		if (null == name) {
 			throw new RuntimeException("Unknown element:" + name);
+		} else switch (name) {
+			case "G":
+				xm._G = xnode.getXComponent();
+				break;
+			case "XXX":
+				xm._X = xnode.getXComponent();
+				break;
+			case "YYY":
+				xm._Y = xnode.getXComponent();
+				break;
+			default:
+				throw new RuntimeException("Unknown element:" + name);
 		}
 	}
 
@@ -39,7 +45,7 @@ public class TestXComponents_G {
 	}
 	public final int xGetFlags() {return _flags;}
 
-	private final List<XComponent> _YYY = new ArrayList<XComponent>();
+	private final List<XComponent> _YYY = new ArrayList<>();
 	private String _g;
 	private String XD_NAME_g;
 	private XComponent _XXX;

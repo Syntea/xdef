@@ -26,7 +26,6 @@ public final class TestTryCatch extends XDTester {
 		try {
 			xdef =
 "<xd:def xd:name='test' root='a' xmlns:xd='" + _xdNS + "'>\n"+
-"\n"+
 "  <xd:declaration>\n"+
 "    boolean mytype() {\n"+
 "        try {\n"+
@@ -44,7 +43,6 @@ public final class TestTryCatch extends XDTester {
 "        }\n"+
 "    }\n"+
 "  </xd:declaration>\n"+
-"\n"+
 "  <a att='required mytype'/>\n"+
 "</xd:def>";
 			xp = compile(xdef);
@@ -52,7 +50,7 @@ public final class TestTryCatch extends XDTester {
 			swr = new StringWriter();
 			parse(xp, "test", xml, reporter, swr, null, null);
 			assertNoErrorwarnings(reporter);
-			assertTrue((s = swr.toString()).indexOf("E: Hi") >= 0, s);
+			assertTrue((s = swr.toString()).contains("E: Hi"), s);
 		} catch (Exception ex) {fail(ex);}
 
 		resetTester();

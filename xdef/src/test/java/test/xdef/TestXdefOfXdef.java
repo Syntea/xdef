@@ -50,13 +50,13 @@ public final class TestXdefOfXdef extends XDTester {
 "  String s = ${a};\n"+
 "</xd:declaration>",
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-" <a xd:script=\"finally outln(${a})\"/>\n"+
+"  <a xd:script=\"finally outln(${a})\"/>\n"+
 "</xd:def>"});
 			assertNoErrorwarnings(parse(xml), xml);
 			assertNoErrorwarnings(parse(xml), genCollection(xml));
 			xml = genCollection(
 "<xd:def xmlns:xd='"+_xdNS+"' name = 'a' root = 'foo'"+
-"   xd:include = \"" + dataDir +"TestInclude_1.xdef\">\n"+
+"        xd:include = \"" + dataDir +"TestInclude_1.xdef\">\n"+
 "  <foo xd:script = \"finally out('f')\">\n"+
 "    <bar xd:script = '*; ref b#bar'/>\n"+ // b is xdefinition from include
 "  </foo>\n"+
@@ -71,26 +71,27 @@ public final class TestXdefOfXdef extends XDTester {
 			assertNoErrorwarnings(parse(xml), genCollection(xml));
 			xml = genCollection(
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
-" <a xd:script = \"\n" +
-"    var { int i = 1;\n" +
+"  <a xd:script = \"\n" +
+"       var { int i = 1;\n" +
 "          uniqueSet id1 {t: string()};\n" +
 "          type cislo int();\n" +
 "          uniqueSet id2 {t: cislo;}\n" +
 "          type datum xdatetime('d. M. yyyy[ HH:mm[:ss]]');\n" +
 "          uniqueSet id3 {t: xdatetime('yyyyMMddHHmmss')}\n" +
-"        }\n" +
-"    finally { id1.CLEAR();\n" +
+"       }\n" +
+"       finally { id1.CLEAR();\n" +
 "              for (int i = 0; i LT b.size(); i++) b.setAt(i,i);\n" +
 "            }\" >\n" +
-"  <b a = \"optional id1.t.IDREF()\"/>\n" +
-"  <c xd:script = \"occurs 1..; finally id2.CLEAR()\"\n" +
-"     stamp = \"required id3.t.ID()\" >\n" +
-"     <d xd:script = \"occurs 1..\"\n" +
-"        a1 = \"required id1.t.ID()\" a2 = \"optional id2.t.ID()\"/>\n" +
-"     <e a3 = \"required id2.t.IDREF()\"/>\n" +
-"  </c>\n" +
-"  <f a4 = \"required id1.t.IDREF()\" a5 = \"optional id3.t.IDREF()\"/>\n" +
-" </a>\n" +
+"    <b a = \"optional id1.t.IDREF()\"/>\n" +
+"    <c xd:script = \"occurs 1..; finally id2.CLEAR()\"\n" +
+"       stamp = \"required id3.t.ID()\" >\n" +
+"      <d xd:script = \"occurs 1..\"\n" +
+"         a1 = \"required id1.t.ID()\"\n" +
+"         a2 = \"optional id2.t.ID()\"/>\n" +
+"      <e a3 = \"required id2.t.IDREF()\"/>\n" +
+"    </c>\n" +
+"    <f a4 = \"required id1.t.IDREF()\" a5 = \"optional id3.t.IDREF()\"/>\n" +
+"  </a>\n" +
 "</xd:def>");
 			assertNoErrorwarnings(parse(xml), xml);
 			assertNoErrorwarnings(parse(xml), genCollection(xml));
@@ -102,25 +103,25 @@ public final class TestXdefOfXdef extends XDTester {
 			assertNoErrorwarnings(parse(xml), genCollection(xml));
 			xml = genCollection(
 "<xd:def xmlns:xd='" + _xdNS + "'>\n"+
-"<xd:declaration>uniqueSet id1 {t: string(); s: int;};\n"+
-"  uniqueSet id2 string\n"+
-"</xd:declaration>\n"+
+"  <xd:declaration>uniqueSet id1 {t: string(); s: int;};\n"+
+"    uniqueSet id2 string\n"+
+"  </xd:declaration>\n"+
 "</xd:def>");
 			assertNoErrorwarnings(parse(xml), xml);
 			assertNoErrorwarnings(parse(xml), genCollection(xml));
 			xml = genCollection(
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n" +
-"<xd:declaration>uniqueSet id1 {t: string(); s: int;};\n"+
-"  boolean x() {\n"+
+"  <xd:declaration>uniqueSet id1 {t: string(); s: int;};\n"+
+"    boolean x() {\n"+
 "     int i=1;\n" +
 "     switch(i) {\n" +
 "       case 1: i=2;\n" +
 "       default: return true;\n" +
 "     }\n" +
 "     return true;\n" +
-"  }\n" +
-"</xd:declaration>\n"+
-"<a b=\"optional x(); default 'abc'; finally outln();\"/>\n" +
+"    }\n" +
+"  </xd:declaration>\n"+
+"  <a b=\"optional x(); default 'abc'; finally outln();\"/>\n" +
 "</xd:def>");
 			assertNoErrorwarnings(parse(xml), xml);
 			assertNoErrorwarnings(parse(xml), genCollection(xml));
@@ -158,17 +159,17 @@ public final class TestXdefOfXdef extends XDTester {
 
 			xml = genCollection(new String[] {
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'><a a='myType'/></xd:def>",
-"<xd:BNFGrammar xmlns:xd='" + _xdNS + "' name='$base'>\n"+
+"<xd:BNFGrammar xmlns:xd='" + _xdNS + "' name='base'>\n"+
 "    integer  ::= [0-9]+\n"+
 "    S ::= [#9#10#13 ]+ /*skipped white spaces*/\n"+
 "    name ::= [A-Z] [a-z]+\n"+
 "</xd:BNFGrammar>",
-"<xd:BNFGrammar xmlns:xd='" + _xdNS + "' name='$rrr' extends='$base'>\n"+
+"<xd:BNFGrammar xmlns:xd='" + _xdNS + "' name='r' extends='base'>\n"+
 "    intList  ::= integer (S? \",\" S? integer)*\n"+
 "    fullName ::= name S ([A-Z] \".\")? S name\n"+
 "</xd:BNFGrammar>",
 "<xd:def xmlns:xd='" + _xdNS + "' xd:name='a'>\n"+
-"  <xd:declaration>type myType $rrr.parse('intList');</xd:declaration>\n"+
+"  <xd:declaration>type myType r.parse('intList');</xd:declaration>\n"+
 "</xd:def>"});
 			assertNoErrorwarnings(parse(xml), xml);
 			assertNoErrorwarnings(parse(xml), genCollection(xml));
@@ -181,11 +182,11 @@ public final class TestXdefOfXdef extends XDTester {
 			assertNoErrorwarnings(parse(xml), genCollection(xml));
 			xml = genCollection(
 "<xd:def xmlns:xd='" + _xdNS + "'>\n"+
-"<xd:declaration>\n"+
-" external method boolean a.b.a(int);\n"+
-" type an a(2)\n"+ // here is intentionally missing semicolon
-"</xd:declaration>\n"+
-"<A a='required an();'/>\n"+
+"  <xd:declaration>\n"+
+"    external method boolean a.b.a(int);\n"+
+"    type an a(2)\n"+ // here is intentionally missing semicolon
+"  </xd:declaration>\n"+
+"  <A a='required an();'/>\n"+
 "</xd:def>");
 			assertNoErrorwarnings(parse(xml), xml);
 			assertNoErrorwarnings(parse(xml), genCollection(xml));
@@ -212,11 +213,6 @@ public final class TestXdefOfXdef extends XDTester {
 "   <b><xd:any xd:script='ref x' b='int()' /></b>\n"+
 "</xd:def>");
 				assertNoErrorwarnings(parse(xml), genCollection(xml));
-
-//				// In this X-definition is <xd:def xmlns:xd = "METAXDef" ...
-//				xml = "classpath:"
-//					+ "//org.xdef.impl.compile.XdefOfXdefBase.xdef";
-//				assertNoErrorwarnings(parse(xml), xml);
 			}
 		} catch (Exception ex) {fail(ex);}
 

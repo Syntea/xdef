@@ -3,6 +3,7 @@ package test.xdef;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import test.XDTester;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.xml.KXmlUtils;
@@ -126,7 +127,7 @@ public final class TestXmlWriter extends XDTester {
 			bis = new ByteArrayInputStream(bos.toByteArray());
 			el = KXmlUtils.parseXml(bis).getDocumentElement();
 			assertEq(xml, el);
-		} catch (Exception ex) {fail(ex);}
+		} catch (IOException ex) {fail(ex);}
 
 		resetTester();
 		clearTempDir(); // delete created temporary files
