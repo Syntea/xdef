@@ -70,39 +70,38 @@ public final class TestTemplate extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xdef = //noTrimText in header
 "<xd:def xmlns:xd='" + _xdNS + "' script='options noTrimText' root='a'>\n"+
-"<a xd:script=\"template\"\n"+
-"   a1=\"a1\">\n"+
-"  <b>\n"+
-"  <c a2=\"a2\" />\n"+
-"<![CDATA[xx]]>\n"+
-" y </b>\n"+
+"  <a xd:script=\"template\" a1=\"a1\">\n"+
+"    <b>\n"+
+"      <c a2=\"a2\"/>\n"+
+"      <![CDATA[x]]>y\n"+
+"    </b>\n"+
 "    <c>\n"+
-"    <d/>\n"+
-"    <e/>\n"+
-"    <e>t</e>\n"+
-"    <e/>\n"+
-"    <f/>\n"+
-"    <g/>\n"+
-"  </c>\n"+
-"  <c/>\n"+
-"</a>\n"+
+"      <d/>\n"+
+"      <e/>\n"+
+"      <e>t</e>\n"+
+"      <e/>\n"+
+"      <f/>\n"+
+"      <g/>\n"+
+"    </c>\n"+
+"    <c/>\n"+
+"  </a>\n"+
 "</xd:def>";
 			xml =
 "<a a1=\"a1\">\n"+
-"  <b>\n"+
-"  <c a2=\"a2\" />\n"+
-"<![CDATA[xx]]>\n"+
-" y </b>\n"+
+"    <b>\n"+
+"      <c a2=\"a2\"/>\n"+
+"      <![CDATA[x]]>y\n"+
+"    </b>\n"+
 "    <c>\n"+
-"    <d/>\n"+
-"    <e/>\n"+
-"    <e>t</e>\n"+
-"    <e/>\n"+
-"    <f/>\n"+
-"    <g/>\n"+
-"  </c>\n"+
-"  <c/>\n"+
-"</a>";
+"      <d/>\n"+
+"      <e/>\n"+
+"      <e>t</e>\n"+
+"      <e/>\n"+
+"      <f/>\n"+
+"      <g/>\n"+
+"    </c>\n"+
+"    <c/>\n"+
+"  </a>";
 			xp = compile(xdef);
 			parse(xp, "", xml, reporter);
 			assertNoErrorwarnings(reporter);
