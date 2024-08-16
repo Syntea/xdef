@@ -1,7 +1,7 @@
 # Version ${version}, release-date ${release.date}
 
 # Version 42.2.3, release-date 2024-08-16
-* .
+* Fixed bug when generating X-components with `jlist` type.
 
 # Version 42.2.2, release-date 2024-08-14
 * Fixed bug in generating X-definition from JSON data.

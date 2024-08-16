@@ -192,20 +192,20 @@ public class XComponentUtil {
 		}
 	}
 
-	/** Add text the child list
+	/** Add text to child list
 	 * @param parent parent XComponent
 	 * @param xdPos XDPosition
 	 * @param xc XComponent.
-	 * @param txt text
-	 * @param index index where to add.
+	 * @param x object from which text will be created/
+	 * @param ndx index where to add.
 	 */
 	public static final void addText(final XComponent parent,
 		final String xdPos,
 		final List<XComponent> xc,
-		final Object txt,
-		final int index) {
-		if (txt != null) {
-			String s = txt.toString();
+		final Object x,
+		final int ndx) {
+		if (x != null) {
+			String s = x.toString();
 			if (s.length() > 0){
 				int xp = 1;
 				for (XComponent c : xc) {
@@ -214,7 +214,7 @@ public class XComponentUtil {
 					}
 				}
 				final String xpos = parent.xGetXPos() + "/$text[" + xp + "]";
-				addXC(xc, new XCTextComponent(txt.toString(),xdPos,xpos,index));
+				addXC(xc, new XCTextComponent(x.toString(), xdPos, xpos, ndx));
 			}
 		}
 	}
@@ -305,29 +305,46 @@ public class XComponentUtil {
 
 	/** Create list of items with separatort (value of parsed list).
 	 * @param list pasrsed list
-	 * @param separator separator character.
 	 * @return list of items with separatort.
 	 */
-	public static String listToString(final ArrayList list,
-		final char separator) {
+	public static String listToString(final ArrayList list) {
 		if (list == null) {
 			return "null";
 		}
 		if (list.isEmpty()) {
 			return "";
 		}
-		StringBuilder sb = new StringBuilder(list.get(0).toString());
-		for (int i = 1; i < list.size(); i++) {
-			sb.append(separator).append(list.get(i).toString());
+		Object o = list.get(0);
+		if (o == null) {
+			return "null";
+		} else if (o instanceof XDContainer) {
+			return containerJlist((XDContainer) o);
+		} else {
+			int len = list.size();
+			if (len == 0) {
+				return "";
+			}
+			StringBuilder sb = new StringBuilder();
+			for (int i = 0; i < len; i++) {
+				if (i > 0) {
+					sb.append(',');
+				}
+				Object y = list.get(i);
+				if (y == null) {
+					sb.append("null");
+				} else {
+					sb.append(y.toString());
+				}
+			}
+			return sb.toString();
 		}
-		return sb.toString();
 	}
 
 	/** Convert XDContainer to jlist string.
 	 * @param c XDContainer to be converted.
 	 * @return string with values of the container from argument.
 	 */
-	private static String containerJlist(final XDContainer c) {
+	public static String containerJlist(final XDContainer c) {
 		int len = c.getXDItemsNumber();
 		if (len == 0) {
 			return "[ ]";
@@ -355,6 +372,12 @@ public class XComponentUtil {
 			}
 		}
 		return sb.append(" ]").toString();
+	}
+
+	public static final ArrayList<XDContainer> toJlist(final XDParseResult x) {
+		ArrayList<XDContainer> y = new ArrayList<>();
+		y.add((XDContainer) x.getParsedValue());
+		return y;
 	}
 
 	/** Convert parsed value jlist to the jlist string (text of an XML element).

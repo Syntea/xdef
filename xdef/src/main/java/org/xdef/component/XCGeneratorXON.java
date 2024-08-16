@@ -168,7 +168,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 				"&{iname}", iType,
 				"&{name}", name,
 				"&{typ}", typ,
-				"&{typ1}", typ.replace("List<", "ArrayList<")));
+				"&{typ1}", "java.util.ArrayList<>"));
 		} else {
 			String x = isRoot ? "" : "_&{name}==null? null: _&{name}.";
 			sb.append(modify(

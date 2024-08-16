@@ -279,7 +279,7 @@ class XCGeneratorBase {
 		}
 		if (type == XD_CONTAINER) {
 			return "java.util.ArrayList<"
-				+getJavaType(xdata.getAlltemsType())+">";
+				+ getJavaType(xdata.getAlltemsType()) + ">";
 		} else if (type == XDValue.XD_ANY) {
 			type = xdata.getAlltemsType();
 		}
@@ -298,7 +298,7 @@ class XCGeneratorBase {
 			return enumType+".toEnum("+ result+"toString())";
 		}
 		if ("jlist".equals(xdata.getParserName())) {
-			return "org.xdef.component.XComponentUtil.jlistToString(value)";
+			return "org.xdef.component.XComponentUtil.toJlist(value)";
 		}
 		short type = xdata.getParserType();
 		if (type == XD_CONTAINER) {
@@ -487,8 +487,8 @@ class XCGeneratorBase {
 		final String descr,
 		final StringBuilder sb,
 		final StringBuilder sbi) {
-//		byte xon = xn instanceof XElement ? ((XElement) xn)._xon
-//			: ((XData) xn)._xon;
+//		byte xon = xn instanceof XElement
+//			? ((XElement) xn)._xon : ((XData) xn)._xon;
 //		String publ = xon == 0 ? "public" : "private";
 		String publ = "public";
 		final int ndx = typeName.lastIndexOf('.');
@@ -841,7 +841,7 @@ class XCGeneratorBase {
 					String s = xp.getSeparator();
 					char c = s == null || s.isEmpty() ? ' ' : s.charAt(0);
 					x = "org.xdef.component.XComponentUtil.listToString("
-						+ "get&{name}(),'"+c+"'))";
+						+ "get&{name}()))"; //
 					break;
 				}
 				default:
@@ -938,10 +938,7 @@ class XCGeneratorBase {
 					break;
 				}
 			case XD_CONTAINER: {
-				String s = xp.getSeparator();
-				char c = s == null || s.isEmpty() ? ' ' : s.charAt(0);
-				x = "org.xdef.component.XComponentUtil.listToString("
-					+ z + ",'"+c+"')";
+				x = "org.xdef.component.XComponentUtil.listToString("+ z + ")";
 				break;
 			}
 			default:

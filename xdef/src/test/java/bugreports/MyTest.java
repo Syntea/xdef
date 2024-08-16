@@ -17,6 +17,8 @@ import org.xdef.proc.XXNode;
 import org.xdef.xon.XonUtils;
 import org.xdef.sys.ArrayReporter;
 import static org.xdef.sys.STester.runTest;
+import org.xdef.sys.SUtils;
+import org.xdef.xml.KXmlUtils;
 import test.XDTester;
 import static test.XDTester._xdNS;
 
@@ -96,44 +98,13 @@ public class MyTest extends XDTester {
 ////////////////////////////////////////////////////////////////////////////////
 
 		Element el;
-		Object x,y,j;
+		Object o,x,y,j;
 		String json, xon, s, xdef, xml;
 		XDDocument xd;
 		XDPool xp;
 		XComponent xc;
 		ArrayReporter reporter = new ArrayReporter();
 		List list;
-/**/
-		try {
-			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='x|y|y1|y2'>\n"+
-"<x>\n"+
-"  <a xd:script='*'>\n"+
-"    jlist(%item=jvalue())\n"+
-"  </a>\n"+
-"</x>\n"+
-"<xd:component>\n"+
-"  %class bugreports.MyTestX %link x;\n"+
-"</xd:component>\n"+
-"</xd:def>";
-			xp = XDFactory.compileXD(null,xdef);
-			genXComponent(xp, clearTempDir());
-			xml =
-"<x xmlns:s='abc'>\n"+
-"  <a>[ \"false\" ]</a>\n"+
-"  <a>[ 123, null, false ]</a>\n"+
-"  <a>[ 123 ]</a>\n"+
-"  <a>[ 3.14E+3 ]</a>\n"+
-"  <a>[ false ]</a>\n"+
-"  <a>[ \"abc\" ]</a>\n"+
-"</x>";
-			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrorwarnings(reporter);
-			xc = parseXC(xp, "", xml , null, reporter);
-			assertNoErrorwarnings(reporter);
-			assertEq(xml, xc.toXml());
-		} catch (Exception ex) {fail(ex);}
-if (true) return;
 /**/
 		try {
 			xdef =
@@ -155,7 +126,6 @@ if (true) return;
 		} catch (Exception ex) {fail(ex);}
 /**/
 		try {
-			xdef =
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "'>\n"+
 "<a>\n"+
@@ -299,7 +269,7 @@ if(true) return;
 "{ b: {a: \"x\"} }";
 //"{ c:[1, {a:2}] }";
 //"{ a:\"fda88\", b: {a: \"xyz\"}, c:[1, {a:2}] }";
-			Object o = XonUtils.parseXON(json);
+			o = XonUtils.parseXON(json);
 			assertTrue(XonUtils.xonEqual(o, o = xd.jparse(json, reporter)),
 				XonUtils.toXonString(o, true));
 			assertNoErrors(reporter);

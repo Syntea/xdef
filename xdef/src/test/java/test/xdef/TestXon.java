@@ -1835,6 +1835,24 @@ public class TestXon extends XDTester {
 				fail(ex);
 			}
 		}
+		try { // test jlist
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root='x'>\n"+
+"  <x>\n"+
+"    <a xd:script='*'> jlist(%item=jvalue()) </a>\n"+
+"  </x>\n"+
+"  <xd:component> %class "+_package+".TestJList %link x; </xd:component>\n"+
+"</xd:def>";
+			xp = XDFactory.compileXD(null,xdef);
+			genXComponent(xp, clearTempDir());
+			xml =
+"<x><a>[ \"false\" ]</a><a>[ null ]</a><a>[ 12, -3.5, null, false ]</a></x>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrorwarnings(reporter);
+			xc = parseXC(xp, "", xml , null, reporter);
+			assertNoErrorwarnings(reporter);
+			assertEq(xml, xc.toXml());
+		} catch (RuntimeException ex) {fail(ex);}
 
 		clearTempDir(); // clear temporary directory
 	}
