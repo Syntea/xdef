@@ -106,6 +106,37 @@ public class MyTest extends XDTester {
 /**/
 		try {
 			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root='x|y|y1|y2'>\n"+
+"<x>\n"+
+"  <a xd:script='*'>\n"+
+"    jlist(%item=jvalue())\n"+
+"  </a>\n"+
+"</x>\n"+
+"<xd:component>\n"+
+"  %class bugreports.MyTestX %link x;\n"+
+"</xd:component>\n"+
+"</xd:def>";
+			xp = XDFactory.compileXD(null,xdef);
+			genXComponent(xp, clearTempDir());
+			xml =
+"<x xmlns:s='abc'>\n"+
+"  <a>[ \"false\" ]</a>\n"+
+"  <a>[ 123, null, false ]</a>\n"+
+"  <a>[ 123 ]</a>\n"+
+"  <a>[ 3.14E+3 ]</a>\n"+
+"  <a>[ false ]</a>\n"+
+"  <a>[ \"abc\" ]</a>\n"+
+"</x>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrorwarnings(reporter);
+			xc = parseXC(xp, "", xml , null, reporter);
+			assertNoErrorwarnings(reporter);
+			assertEq(xml, xc.toXml());
+		} catch (Exception ex) {fail(ex);}
+if (true) return;
+/**/
+		try {
+			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
 "   <A>\n" +
 "     <B xd:script='ref B;' />\n" +
