@@ -413,7 +413,7 @@ if(true) return;
 			xd = xp.createXDDocument("");
 			xd.jparseXComponent(json, null, reporter);
 			assertNoErrorwarnings(reporter);
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 //if(true)return;
 		try {
 			xdef =
