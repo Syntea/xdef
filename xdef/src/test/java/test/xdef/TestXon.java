@@ -1846,7 +1846,13 @@ public class TestXon extends XDTester {
 			xp = XDFactory.compileXD(null,xdef);
 			genXComponent(xp, clearTempDir());
 			xml =
-"<x><a>[ \"false\" ]</a><a>[ null ]</a><a>[ 12, -3.5, null, false ]</a></x>";
+"<x>\n"+
+"  <a>[]</a>\n"+
+"  <a>[\"false\"]</a>\n"+
+"  <a>[null]</a>\n"+
+"  <a>[12,-3.5,null,false]</a>\n"+
+"  <a>[\"ab\tc\",[2,[]],[-3.5,null,\"a\\nc\",\"\"],false]</a>\n"+
+"</x>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrorwarnings(reporter);
 			xc = parseXC(xp, "", xml , null, reporter);

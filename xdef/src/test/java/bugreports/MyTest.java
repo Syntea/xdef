@@ -14,11 +14,10 @@ import org.xdef.impl.XConstants;
 import org.xdef.model.XMData;
 import org.xdef.proc.XXData;
 import org.xdef.proc.XXNode;
-import org.xdef.xon.XonUtils;
 import org.xdef.sys.ArrayReporter;
 import static org.xdef.sys.STester.runTest;
 import org.xdef.sys.SUtils;
-import org.xdef.xml.KXmlUtils;
+import org.xdef.xon.XonUtils;
 import test.XDTester;
 import static test.XDTester._xdNS;
 
@@ -74,7 +73,7 @@ public class MyTest extends XDTester {
 				result += "** 4\n" +  o + "\n" + x + "\n";
 			}
 /**/
-		} catch (Exception ex) {
+		} catch (RuntimeException ex) {
 			result += ex + "\n";
 		}
 		return result;
@@ -105,6 +104,85 @@ public class MyTest extends XDTester {
 		XComponent xc;
 		ArrayReporter reporter = new ArrayReporter();
 		List list;
+/**/
+		try {
+			xdef = // sequence with separator
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"  <xd:component>%class "+_package+".MytestX_SQ %link #a;</xd:component>\n" +
+"  <xd:declaration>\n"+
+"    type s sequence(%separator=',', %item=[int,long, long]);\n"+
+"  </xd:declaration>\n"+
+"  <a a='? s'> ? s; <b xd:script='?'> s; </b> </a>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			genXComponent(xp);
+			xml = "<a/>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrorwarningsAndClear(reporter);
+			xc = parseXC(xp,"", xml , null, reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			assertNull(SUtils.getValueFromGetter(xc, "geta"));
+			xml = "<a a='1,2,3'>4,5,6</a>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrorwarningsAndClear(reporter);
+			assertEq(xml, (xc = parseXC(xp,"", xml , null, reporter)).toXml());
+			assertNoErrorwarningsAndClear(reporter);
+			if ((o = SUtils.getValueFromGetter(xc, "geta")) instanceof List) {
+				assertEq(1, ((List) o).get(0));
+				assertEq(2, ((List) o).get(1));
+				assertEq(3, ((List) o).get(2));
+			} else {
+				fail("incorrect type: " + o.getClass() + "; " + o);
+			}
+			if ((o=SUtils.getValueFromGetter(xc,"get$value")) instanceof List) {
+				assertEq(4, ((List) o).get(0));
+				assertEq(5, ((List) o).get(1));
+				assertEq(6, ((List) o).get(2));
+			} else {
+				fail("incorrect type: " + o.getClass() + "; " + o);
+			}
+			assertNull(SUtils.getValueFromGetter(xc, "get$b"));
+			xml = "<a><b>5,6,7</b></a>";
+			assertNoErrorwarningsAndClear(reporter);
+			assertEq(xml, (xc = parseXC(xp,"", xml , null, reporter)).toXml());
+			assertNoErrorwarningsAndClear(reporter);
+			assertNull(SUtils.getValueFromGetter(xc, "geta"));
+			assertNull(SUtils.getValueFromGetter(xc, "get$value"));
+			if ((o = SUtils.getValueFromGetter(xc, "get$b")) instanceof List) {
+				assertEq(5, ((List) o).get(0));
+				assertEq(6, ((List) o).get(1));
+				assertEq(7, ((List) o).get(2));
+			} else {
+				fail("incorrect type: " + o.getClass() + "; " + o);
+			}
+		} catch (Exception ex) {fail(ex);}
+//if(true)return;
+/**/
+		try {
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root='X'>\n"+
+"  <xd:xon name = 'X'>\n"+
+"     [\"* jvalue();\"]\n"+
+"  </xd:xon>\n"+
+"  <xd:component>%class "+_package+".MyTest_jnumber %link X</xd:component>\n"+
+"</xd:def>";
+			xp = compile(xdef);
+			genXComponent(xp);
+			xd = xp.createXDDocument();
+			s = "[2, null, \"abc\", 4.5]";
+			o = XonUtils.parseXON(s);
+			xd.setXONContext(s);
+			x = xd.jcreate("X", reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			assertTrue(XonUtils.xonEqual(o, x));
+			xd = xp.createXDDocument();
+			xd.setXONContext(s);
+			xc = xd.jcreateXComponent("X", null, reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			assertTrue(XonUtils.xonEqual(o,
+				SUtils.getValueFromGetter(xc,"toXon")));
+		} catch (RuntimeException ex) {fail(ex);}
+//if(true)return;
 /**/
 		try {
 			xdef =
@@ -143,7 +221,7 @@ public class MyTest extends XDTester {
 			assertEq(create(xp, null, reporter, "<a><b><d a='y'/></b></a>"),
 				"<a><b/><d a=\"y\"/></a>");
 			assertNoErrorwarnings(reporter);
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 //if (true) return;
 /**
 		try {
@@ -242,7 +320,7 @@ if(true) return;
 //			assertEq("", testAny(xp, "{ \"a\":1 }"));
 //			assertEq("", testAny(xp, "{ \"b\":[2,3] }"));
 //			assertEq("", testAny(xp, "{ \"a\":1, \"b\":[2,3] }"));
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 		reporter.clear();
 //if(true)return;
 /**/
@@ -273,7 +351,7 @@ if(true) return;
 			assertTrue(XonUtils.xonEqual(o, o = xd.jparse(json, reporter)),
 				XonUtils.toXonString(o, true));
 			assertNoErrors(reporter);
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 //if(true)return;
 //if(T)return;
 		System.setProperty(XConstants.XDPROPERTY_XDEF_DBGSWITCHES, "");
@@ -333,7 +411,8 @@ if(true) return;
 			jparse(xd, json, reporter);
 			assertNoErrorwarnings(reporter);
 			xd = xp.createXDDocument("");
-			xc = xd.jparseXComponent(json, null, reporter);
+			xd.jparseXComponent(json, null, reporter);
+			assertNoErrorwarnings(reporter);
 		} catch (Exception ex) {fail(ex);}
 //if(true)return;
 		try {
@@ -368,10 +447,10 @@ if(true) return;
 "  </e>\n"+
 "</x>\n"+
 "<xd:component>\n"+
-"  %class bugreports.MyTestX %link x;\n"+
-"  %class bugreports.MyTestY %link y;\n"+
-"  %class bugreports.MyTestY1 %link y1;\n"+
-"  %class bugreports.MyTestY2 %link y2;\n"+
+"  %class bugreports.MyTest_X %link x;\n"+
+"  %class bugreports.MyTest_Y %link y;\n"+
+"  %class bugreports.MyTest_Y1 %link y1;\n"+
+"  %class bugreports.MyTest_Y2 %link y2;\n"+
 "     %bind js$xxx %link #y2/jx:array/jx:item[2];\n"+
 "     %bind js$yyy %link #y2/jx:array/jx:item[3];\n"+
 "</xd:component>\n"+
@@ -380,25 +459,25 @@ if(true) return;
 			genXComponent(xp, clearTempDir());
 			xml =
 "<x xmlns:s='abc'>\n"+
-"  <a>[ \"false\" ]</a>\n"+
-"  <a>[ 123, null, false ]</a>\n"+
-"  <a>[ 123 ]</a>\n"+
-"  <a>[ 3.14E+3 ]</a>\n"+
-"  <a>[ false ]</a>\n"+
-"  <a>[ \"abc\" ]</a>\n"+
-"  <a>[ 1, \"a\\\"\\nbc\" ]</a>\n"+
-"  <a>[ 1, false, \"abc\" ]</a>\n"+
-"  <a>[ null, 123, 1, false ]</a>\n"+
-"  <a>[ null, 123, false, \"abc\" ]</a>\n"+
-//"  <a>[ null, 123, false, \"abc\", \"\" ]</a>\n"+
-//"  <a>[ ]</a>\n"+ // empty array
-"  <b>[ null ]</b>\n"+
-"  <b>[ true ]</b>\n"+
-"  <b>[ true, null ]</b>\n"+
-"  <b>[ null, true ]</b>\n"+
-"  <b>[ null, true, false, null ]</b>\n"+
-"  <e><s:array>[ 1, -2 ]</s:array>\n"+
-"     <s:array>[ null, 99 ]</s:array>\n"+
+"  <a>[]</a>\n"+ // empty array
+"  <a>[\"false\"]</a>\n"+
+"  <a>[123,null,false]</a>\n"+
+"  <a>[123]</a>\n"+
+"  <a>[3.14E+3]</a>\n"+
+"  <a>[false]</a>\n"+
+"  <a>[\"abc\"]</a>\n"+
+"  <a>[1,\"a\\\"\\nbc\"]</a>\n"+
+"  <a>[1,false,\"abc\"]</a>\n"+
+"  <a>[null,123,1,false]</a>\n"+
+"  <a>[null,123,false,\"abc\"]</a>\n"+
+"  <a>[\"\",\"a\\nc\",[2],[-3.5,null,\"\",\"a\\nc\"],false]</a>\n"+
+"  <b>[null]</b>\n"+
+"  <b>[true]</b>\n"+
+"  <b>[true,null]</b>\n"+
+"  <b>[null,true]</b>\n"+
+"  <b>[null,true,false,null]</b>\n"+
+"  <e><s:array>[1,-2]</s:array>\n"+
+"     <s:array>[null,99]</s:array>\n"+
 "  </e>\n"+
 "</x>";
 			assertEq(xml, parse(xp, "", xml, reporter));
@@ -412,7 +491,7 @@ if(true) return;
 			j = XonUtils.parseJSON(s);
 			assertTrue(XonUtils.xonEqual(j, xd.jparse(s, reporter)));
 			xc = xd.jparseXComponent(s,
-				Class.forName("bugreports.MyTestY"), reporter);
+				Class.forName("bugreports.MyTest_Y"), reporter);
 			assertTrue(XonUtils.xonEqual(j, toJson(xc)),
 				XonUtils.toJsonString(toJson(xc), true));
 
@@ -421,7 +500,7 @@ if(true) return;
 			j = XonUtils.parseJSON(s);
 			assertTrue(XonUtils.xonEqual(j, xd.jparse(s, reporter)));
 			xc = xd.jparseXComponent(s,
-				Class.forName("bugreports.MyTestY1"), reporter);
+				Class.forName("bugreports.MyTest_Y1"), reporter);
 			assertTrue(XonUtils.xonEqual(j, toJson(xc)),
 				XonUtils.toJsonString(toJson(xc), true));
 
@@ -430,7 +509,7 @@ if(true) return;
 			j = XonUtils.parseJSON(s);
 			assertTrue(XonUtils.xonEqual(j, xd.jparse(s, reporter)));
 			xc = xd.jparseXComponent(s,
-				Class.forName("bugreports.MyTestY2"), reporter);
+				Class.forName("bugreports.MyTest_Y2"), reporter);
 			assertTrue(XonUtils.xonEqual(j, toJson(xc)),
 				XonUtils.toJsonString(toJson(xc), true));
 			xd = xp.createXDDocument("");
@@ -438,7 +517,7 @@ if(true) return;
 			j = XonUtils.parseJSON(s);
 			assertTrue(XonUtils.xonEqual(j, xd.jparse(s, reporter)));
 				xc = xd.jparseXComponent(s,
-				Class.forName("bugreports.MyTestY2"), reporter);
+				Class.forName("bugreports.MyTest_Y2"), reporter);
 			assertTrue(XonUtils.xonEqual(j, toJson(xc)),
 				XonUtils.toJsonString(toJson(xc), true));
 			xd = xp.createXDDocument("");
@@ -446,7 +525,7 @@ if(true) return;
 			j = XonUtils.parseJSON(s);
 			assertTrue(XonUtils.xonEqual(j, xd.jparse(s, reporter)));
 			xc = xd.jparseXComponent(s,
-				Class.forName("bugreports.MyTestY2"), reporter);
+				Class.forName("bugreports.MyTest_Y2"), reporter);
 			assertTrue(XonUtils.xonEqual(j, toJson(xc)),
 				XonUtils.toJsonString(toJson(xc), true));
 		} catch (Exception ex) {fail(ex);}
@@ -515,7 +594,6 @@ if(true) return;
 			assertNoErrorwarnings(reporter);
 		} catch (Exception ex) {fail(ex);}
 //if(true)return;
-
 		clearTempDir(); // delete temporary files.
 	}
 

@@ -183,11 +183,11 @@ public class XComponentUtil {
 	 * @param xc XComponent list.
 	 */
 	public static final void addXC(final List<XComponent> childList,
-		final List<?> xc) {
+		final List xc) {
 		for (int i = 0; i < xc.size(); i++) {
-			XComponent y;
-			if ((y = (XComponent) xc.get(i)) != null) {
-				addXC(childList, y);
+			Object y;
+			if ((y =  xc.get(i)) != null) {
+				addXC(childList, (XComponent) y);
 			}
 		}
 	}
@@ -303,38 +303,64 @@ public class XComponentUtil {
 		return result;
 	}
 
+	private static void parseResultToList(final List<Object> result,
+		final XDValue value) {
+		if (value instanceof org.xdef.XDContainer) {
+			XDContainer x = (XDContainer) value;
+			List<Object> y = new ArrayList<>();
+			for (int i = 0; i < x.getXDItemsNumber(); i++) {
+				  parseResultToList(y, x.getXDItem(i));
+			}
+			result.add(y);
+		} else {
+			result.add(value);
+		}
+	}
+
+	public static ArrayList<Object> parseResultToList(final XDParseResult val) {
+		java.util.ArrayList<Object> result = new java.util.ArrayList<>();
+		org.xdef.XDContainer x = (org.xdef.XDContainer) val.getParsedValue();
+		for (int i = 0; i < x.getXDItemsNumber(); i++) {
+			parseResultToList(result, x.getXDItem(i));
+		}
+		return result;
+	}
+
 	/** Create list of items with separatort (value of parsed list).
 	 * @param list pasrsed list
+	 * @param isJlist if true generate jlist format, otherwise just list.
 	 * @return list of items with separatort.
 	 */
-	public static String listToString(final ArrayList list) {
+	public static String listToString(final List list, final boolean isJlist) {
 		if (list == null) {
 			return "null";
 		}
 		if (list.isEmpty()) {
-			return "";
+			return isJlist ? "[]" : "";
 		}
 		Object o = list.get(0);
 		if (o == null) {
-			return "null";
+			return isJlist ? "[null]" : "null";
 		} else if (o instanceof XDContainer) {
 			return containerJlist((XDContainer) o);
 		} else {
 			int len = list.size();
-			if (len == 0) {
-				return "";
-			}
-			StringBuilder sb = new StringBuilder();
+			StringBuilder sb = new StringBuilder(isJlist ? "[" : "");
 			for (int i = 0; i < len; i++) {
 				if (i > 0) {
-					sb.append(',');
+					sb.append(",");
 				}
 				Object y = list.get(i);
 				if (y == null) {
 					sb.append("null");
+				} else if (y instanceof List) {
+					sb.append(listToString((List) y, isJlist));
 				} else {
 					sb.append(y.toString());
 				}
+			}
+			if (isJlist) {
+				sb.append("]");
 			}
 			return sb.toString();
 		}
@@ -372,25 +398,6 @@ public class XComponentUtil {
 			}
 		}
 		return sb.append(" ]").toString();
-	}
-
-	public static final ArrayList<XDContainer> toJlist(final XDParseResult x) {
-		ArrayList<XDContainer> y = new ArrayList<>();
-		y.add((XDContainer) x.getParsedValue());
-		return y;
-	}
-
-	/** Convert parsed value jlist to the jlist string (text of an XML element).
-	 * @param parsedValue parsed value of jlist.
-	 * @return the string with parsed value converted to string in jlist form.
-	 */
-	public static final String jlistToString(final XDParseResult parsedValue) {
-		if (parsedValue == null) {
-			return "null";
-		}
-		XDValue x = parsedValue.getParsedValue();
-		return x.getItemId() == XD_CONTAINER
-			 ? containerJlist((XDContainer) x) : x.toString();
 	}
 
 	/** Convert XML name to Java name.

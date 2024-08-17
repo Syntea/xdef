@@ -477,7 +477,6 @@ final class XCGenerator extends XCGeneratorXON {
 					String xval = (max == 1 ? "1" : "2") + "," + iname + ";";
 					if (xcClass0 == null || xcClass0.startsWith("interface ")) {
 						xctab.put(node.getXDPosition(), xval + newClassName);
-//						classNames.add(newClassName);
 						innerClasses.append(genComponent(xe1, //Elememnt model
 							i, // index
 							newClassName, //class name

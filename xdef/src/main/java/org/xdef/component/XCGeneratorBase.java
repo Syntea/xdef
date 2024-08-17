@@ -257,8 +257,8 @@ class XCGeneratorBase {
 				return "byte[]";
 			case XD_TELEPHONE: return "org.xdef.XDTelephone";
 			case XD_NULL: //jnull
-			case XD_ANY: return "Object";
-			case XD_CONTAINER: return "org.xdef.XDContainer";
+			case XD_ANY:
+			case XD_CONTAINER: return "Object";
 		}
 		return "String"; // default
 	}
@@ -298,7 +298,7 @@ class XCGeneratorBase {
 			return enumType+".toEnum("+ result+"toString())";
 		}
 		if ("jlist".equals(xdata.getParserName())) {
-			return "org.xdef.component.XComponentUtil.toJlist(value)";
+			return "org.xdef.component.XComponentUtil.parseResultToList(value)";
 		}
 		short type = xdata.getParserType();
 		if (type == XD_CONTAINER) {
@@ -811,7 +811,8 @@ class XCGeneratorBase {
 			x = "get&{name}().name())";
 		} else {
 			XDParser xp  = (XDParser) xdata.getParseMethod();
-			switch ("union".equals(xp.parserName())
+			String parseName = xp.parserName();
+			switch ("union".equals(parseName)
 				? xp.getAlltemsType() : xdata.getParserType()) {
 				case XD_CHAR:
 					x = "org.xdef.xon.XonTools.genXMLValue(get&{name}()))";
@@ -838,12 +839,12 @@ class XCGeneratorBase {
 					x = "get&{name}())";
 					break;
 				case XD_CONTAINER: {
-					String s = xp.getSeparator();
-					char c = s == null || s.isEmpty() ? ' ' : s.charAt(0);
 					x = "org.xdef.component.XComponentUtil.listToString("
-						+ "get&{name}()))"; //
+						+ "get&{name}(), "
+						+ (parseName.equals("jlist") ? "true" : "false") + "))";
 					break;
 				}
+
 				default:
 					x = "get&{name}().toString())";
 			}
@@ -897,7 +898,8 @@ class XCGeneratorBase {
 		final String y = max > 1? ".get(i)" : "";
 		final String z = (max > 1 ? "listOf" : "get") + "&{name}()";
 		XDParser xp  = (XDParser) xdata.getParseMethod();
-		switch ("union".equals(xp.parserName())
+		String parseName = xp.parserName();
+		switch ("union".equals(parseName)
 				? xp.getAlltemsType() : xdata.getParserType()) {
 			case XD_BOOLEAN:
 			case XD_BYTE:
@@ -938,7 +940,8 @@ class XCGeneratorBase {
 					break;
 				}
 			case XD_CONTAINER: {
-				x = "org.xdef.component.XComponentUtil.listToString("+ z + ")";
+				x = "org.xdef.component.XComponentUtil.listToString(" + z +
+					"," + (parseName.equals("jlist") ? "true" : "false") + ")";
 				break;
 			}
 			default:
