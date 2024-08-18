@@ -303,17 +303,17 @@ public class XComponentUtil {
 		return result;
 	}
 
-	private static void parseResultToList(final List<Object> result,
+	private static void parseResultToList(final List<Object> list,
 		final XDValue value) {
 		if (value instanceof org.xdef.XDContainer) {
 			XDContainer x = (XDContainer) value;
 			List<Object> y = new ArrayList<>();
 			for (int i = 0; i < x.getXDItemsNumber(); i++) {
-				  parseResultToList(y, x.getXDItem(i));
+				parseResultToList(y, x.getXDItem(i));
 			}
-			result.add(y);
+			list.add(y);
 		} else {
-			result.add(value);
+			list.add(value);
 		}
 	}
 

@@ -98,12 +98,12 @@ public class MyTest extends XDTester {
 
 		Element el;
 		Object o,x,y,j;
+		List list;
 		String json, xon, s, xdef, xml;
 		XDDocument xd;
 		XDPool xp;
 		XComponent xc;
 		ArrayReporter reporter = new ArrayReporter();
-		List list;
 /**/
 		try {
 			xdef = // sequence with separator
