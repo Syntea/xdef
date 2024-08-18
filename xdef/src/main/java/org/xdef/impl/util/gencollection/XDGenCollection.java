@@ -784,8 +784,8 @@ public class XDGenCollection {
 	}
 
 	private static Element getRefModel(Element collection,
-		Element xdef,
-		String ref) {
+		final Element xdef,
+		final String ref) {
 		String modelName;
 		Element xd = xdef;
 		int ndx;
@@ -815,6 +815,10 @@ public class XDGenCollection {
 						}
 					}
 				}
+			}
+			if (xd == null) {
+				//XDEF269=X-definition &{0}{'}{' }doesn't exist
+				throw new SRuntimeException(XDEF.XDEF269);
 			}
 		}
 		String modelLocalName;
@@ -1242,11 +1246,12 @@ public class XDGenCollection {
 			}
 			canonizeCollection(x._collection, removeActions, genModelVariants);
 			NodeList nl = x._collection.getChildNodes();
+			String xdns = getXDNodeNS(x._collection);
 			boolean found = false;
 			for (int i = 0; i < nl.getLength(); i++) {
 				Node n = nl.item(i);
 				if ("def".equals(n.getLocalName()) &&
-					getXDNodeNS(n) != null) {
+					xdns.equals(getXDNodeNS(n)) ) {
 					found = true;
 					break;
 				}

@@ -292,7 +292,7 @@ public class XComponentUtil {
 	public static final List valueToList(final XDContainer c,
 		final int typeId) {
 		int len = c.getXDItemsNumber();
-		ArrayList<Object> result = new ArrayList<>();
+		List<Object> result = new ArrayList<>();
 		for (int i = 0; i < len; i++) {
 			Object o = c.getXDItem(i).getObject();
 			if (o instanceof XDContainer) {
@@ -318,7 +318,7 @@ public class XComponentUtil {
 	}
 
 	public static ArrayList<Object> parseResultToList(final XDParseResult val) {
-		java.util.ArrayList<Object> result = new java.util.ArrayList<>();
+		ArrayList<Object> result = new ArrayList<>();
 		org.xdef.XDContainer x = (org.xdef.XDContainer) val.getParsedValue();
 		for (int i = 0; i < x.getXDItemsNumber(); i++) {
 			parseResultToList(result, x.getXDItem(i));
@@ -528,8 +528,8 @@ public class XComponentUtil {
 						key = XonTools.xmlToJName((String) m.invoke(o));
 						result.put(key, ((XComponent) o).toXon());
 					} else {
-						if (o instanceof ArrayList) {
-							for(Object oo : (ArrayList)o) {
+						if (o instanceof List) {
+							for(Object oo : (List)o) {
 								if (oo instanceof XComponent) {
 									Method m = oo.getClass().getDeclaredMethod(
 										"get" + X_KEYATTR);

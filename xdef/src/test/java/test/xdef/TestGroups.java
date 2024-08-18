@@ -2199,12 +2199,10 @@ public final class TestGroups extends XDTester {
 			assertTrue(reporter.errorWarnings(), "Not reported missing p,q");
 			parse(xp, "a", "<a/>", reporter);
 			assertTrue(reporter.errorWarnings(), "Not reported missing p,q");
-		} catch(Exception ex) {
-			fail(ex);
-		}
+		} catch(Exception ex) {fail(ex);}
 //script methods
 		try {
-			xdef =
+			xdef = // choice in root
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <xd:macro name='m' p='?'>\n"+
 "    init out('i#{p} ');finally out('f#{p} ')\n"+
@@ -2261,7 +2259,6 @@ public final class TestGroups extends XDTester {
 				parse(xp, null, xml, reporter, swr, null, null));
 			assertTrue(reporter.getErrorCount() == 1, reporter);
 			assertEq("ia ic1 fc1 id1 fd1 ie1 fe1 fa ", swr.toString());
-
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <xd:macro name='m' p='?'>\n"+
@@ -2287,6 +2284,24 @@ public final class TestGroups extends XDTester {
 			assertEq("ia ib1 iT1 fT1 fb1 iSQ1 iT2 fT2 ic1 fc1 fSQ1 iT2 fT2 ic1"
 				+ " fc1 fSQ1 fSQ1 fSQ1 ib2 iT3 fT3 fb2 iSQ2 iT4 fT4 ic2 fc2"
 				+ " fSQ2 iT4 fT4 ic2 fc2 fSQ2 fa ", swr.toString());
+		} catch (Exception ex) {fail(ex);}
+		try {//Sisma
+			xml = dataDir + "TestGroups01.xml";
+			xdef = dataDir + "TestGroups01_1.xdef";
+			parse(xdef, "SODContainer_Template", xml, reporter);
+			assertNoErrorwarnings(reporter);
+			xdef = dataDir + "TestGroups01_2.xdef";
+			parse(xdef, "SODContainer_Template", xml, reporter);
+			assertNoErrorwarnings(reporter);
+			xdef = dataDir + "TestGroups01_3.xdef";
+			parse(xdef, "SODContainer_Template", xml, reporter);
+			assertNoErrorwarnings(reporter);
+		} catch (Exception ex) {fail(ex);}
+		if (_xdNS.contains("/xdef/3.")) {
+			return;// skip if version is less then 4.0
+		}
+		// only versions higher then version 3.2
+		try {
 			// test reference to choice from root selection
 			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
@@ -2310,18 +2325,6 @@ public final class TestGroups extends XDTester {
 			assertTrue(reporter.printToString().contains("XDEF502"));
 			parse(xp,"", "<Z/>", reporter);
 			assertTrue(reporter.printToString().contains("XDEF502"));
-		} catch (Exception ex) {fail(ex);}
-		try {//Sisma
-			xml = dataDir + "TestGroups01.xml";
-			xdef = dataDir + "TestGroups01_1.xdef";
-			parse(xdef, "SODContainer_Template", xml, reporter);
-			assertNoErrorwarnings(reporter);
-			xdef = dataDir + "TestGroups01_2.xdef";
-			parse(xdef, "SODContainer_Template", xml, reporter);
-			assertNoErrorwarnings(reporter);
-			xdef = dataDir + "TestGroups01_3.xdef";
-			parse(xdef, "SODContainer_Template", xml, reporter);
-			assertNoErrorwarnings(reporter);
 		} catch (Exception ex) {fail(ex);}
 
 		resetTester();

@@ -6,6 +6,9 @@ import org.xdef.xml.KXmlUtils;
 import org.xdef.XDPool;
 import org.xdef.impl.util.gencollection.XDGenCollection;
 import org.w3c.dom.Element;
+import static org.xdef.sys.STester.runTest;
+import static test.XDTester._xdNS;
+import static test.XDTester.getFulltestMode;
 
 /** Test of X-definitions by X-definition.
  * @author Vaclav Trojan
@@ -20,7 +23,7 @@ public final class TestXdefOfXdef extends XDTester {
 		_xp = compile("classpath://org.xdef.impl.compile.XdefOfXdef*.xdef");
 	}
 
-	final public ArrayReporter parse(final String xml) {
+	private ArrayReporter parse(final String xml) {
 		ArrayReporter reporter = new ArrayReporter();
 		_xp.createXDDocument().xparse(xml, reporter);
 		return reporter;
@@ -54,8 +57,10 @@ public final class TestXdefOfXdef extends XDTester {
 "</xd:def>"});
 			assertNoErrorwarnings(parse(xml), xml);
 			assertNoErrorwarnings(parse(xml), genCollection(xml));
+			String xdns = KXmlUtils.parseXml(dataDir + "TestInclude_1.xdef")
+				.getDocumentElement().getNamespaceURI();
 			xml = genCollection(
-"<xd:def xmlns:xd='"+_xdNS+"' name = 'a' root = 'foo'"+
+"<xd:def xmlns:xd='" + xdns + "' name = 'a' root = 'foo'"+
 "        xd:include = \"" + dataDir +"TestInclude_1.xdef\">\n"+
 "  <foo xd:script = \"finally out('f')\">\n"+
 "    <bar xd:script = '*; ref b#bar'/>\n"+ // b is xdefinition from include

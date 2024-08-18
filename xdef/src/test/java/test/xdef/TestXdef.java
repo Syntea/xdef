@@ -2956,42 +2956,6 @@ public final class TestXdef extends XDTester {
 			assertEq(xml, parse(xd, xml, reporter));
 			assertNoErrorwarnings(reporter);
 			assertEq("falsextruefalsetrue", swr.toString());
-			xdef = // test choice in root specification
-"<xd:def xmlns:xd='"+_xdNS+"' root='A|B|Z'>\n" +
-"  <xd:choice name='A'>\n" +
-"    <A/>\n" +
-"    <B xd:script='match !@a'/>\n" +
-"    <B a='int()'><X/></B>\n" +
-"  </xd:choice>\n" +
-"  <xd:choice name='B'>\n" +
-"    <C/>\n" +
-"    <D xd:script='match @b' b='int()'><Y/></D>\n" +
-"    <D/>\n" +
-"  </xd:choice>\n" +
-"  <Z/>\n" +
-"</xd:def>";
-			xp = compile(xdef);
-			xml = "<A/>";
-			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrorwarnings(reporter);
-			xml = "<B/>";
-			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrorwarnings(reporter);
-			xml = "<B a='1'><X/></B>";
-			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrorwarnings(reporter);
-			xml = "<C/>";
-			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrorwarnings(reporter);
-			xml = "<D/>";
-			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrorwarnings(reporter);
-			xml = "<D b='2'><Y/></D>";
-			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrorwarnings(reporter);
-			xml = "<Z/>";
-			assertEq(xml, parse(xp, "", xml, reporter));
-			assertNoErrorwarnings(reporter);
 			xdef = // test metanamespace
 "<xd:def xmlns:xd='meta.b.cz' xmlns:w='"+_xdNS+"'\n" +
 "        w:metaNamespace='meta.b.cz' name='X' xd:root='A'>\n" +
@@ -3223,6 +3187,48 @@ public final class TestXdef extends XDTester {
 			xp = XDFactory.compileXD(props, xdef);
 			xd = xp.createXDDocument();
 			xd.xparse("<a a='y' b='z'/>", null);
+		} catch (RuntimeException ex) {fail(ex);}
+		if (_xdNS.contains("/xdef/3.")) {
+			return;// skip if version is less then 4.0
+		}
+		// only versions higher then version 3.2
+		try {
+			xdef = // test choice in root specification
+"<xd:def xmlns:xd='"+_xdNS+"' root='A|B|Z'>\n" +
+"  <xd:choice name='A'>\n" +
+"    <A/>\n" +
+"    <B xd:script='match !@a'/>\n" +
+"    <B a='int()'><X/></B>\n" +
+"  </xd:choice>\n" +
+"  <xd:choice name='B'>\n" +
+"    <C/>\n" +
+"    <D xd:script='match @b' b='int()'><Y/></D>\n" +
+"    <D/>\n" +
+"  </xd:choice>\n" +
+"  <Z/>\n" +
+"</xd:def>";
+			xp = compile(xdef);
+			xml = "<A/>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrorwarnings(reporter);
+			xml = "<B/>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrorwarnings(reporter);
+			xml = "<B a='1'><X/></B>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrorwarnings(reporter);
+			xml = "<C/>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrorwarnings(reporter);
+			xml = "<D/>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrorwarnings(reporter);
+			xml = "<D b='2'><Y/></D>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrorwarnings(reporter);
+			xml = "<Z/>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrorwarnings(reporter);
 		} catch (RuntimeException ex) {fail(ex);}
 
 		clearTempDir(); // delete created temporary files

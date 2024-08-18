@@ -1,6 +1,8 @@
 package test.xdef;
 
+import java.io.IOException;
 import java.io.StringWriter;
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xdef.XDDocument;
@@ -699,9 +701,7 @@ public final class TestOptions extends XDTester {
 			assertEq(parse(xp, "R_LOG", xml, reporter),
 				"<Log Verze='2.0' Misto='PRAHA' Code='1A'/>");
 			assertNoErrorwarnings(reporter);
-		} catch (Exception ex) {
-			fail(ex);
-		}
+		} catch (DOMException ex) {fail(ex);}
 		try {
 			////////////////////////////////////////////////////////////////////
 			////////// the options inheritance of elements focused on //////////
@@ -1466,7 +1466,8 @@ public final class TestOptions extends XDTester {
 "  illegal int; onIllegalText out(\"t\");\n" +
 "</A>\n" +
 "</xd:def>";
-			assertTrue(compile(xdef).isClearReports());
+			System.setProperty("xdef_clearReports", "false");
+			assertFalse(compile(xdef).isClearReports());
 			System.setProperty("xdef_clearReports", "true");
 			xp = compile(xdef);
 			assertTrue(xp.isClearReports());
@@ -1802,7 +1803,7 @@ public final class TestOptions extends XDTester {
 				false, //removeIgnorableWhiteSpaces
 				true); //comments
 			assertEq("<a><![CDATA[t1]]><b/><![CDATA[1]]></a>",swr.toString());
-		} catch (Exception ex) {fail(ex);}
+		} catch (IOException | DOMException ex) {fail(ex);}
 
 		resetTester();
 	}
