@@ -278,7 +278,7 @@ class XCGeneratorBase {
 			_byteArrayEncoding |= "base64Binary".equals(parserName) ? 1 : 2;
 		}
 		if (type == XD_CONTAINER) {
-			return "java.util.ArrayList<"
+			return "java.util.List<"
 				+ getJavaType(xdata.getAlltemsType()) + ">";
 		} else if (type == XDValue.XD_ANY) {
 			type = xdata.getAlltemsType();
@@ -302,8 +302,7 @@ class XCGeneratorBase {
 		}
 		short type = xdata.getParserType();
 		if (type == XD_CONTAINER) {
-			return "(java.util.ArrayList<"
-				+ getJavaType(xdata.getAlltemsType())
+			return "(java.util.List<" + getJavaType(xdata.getAlltemsType())
 				+ ">) org.xdef.component.XComponentUtil.valueToList(value, "
 				+ ((XDParser)xdata.getParseMethod()).getAlltemsType() + ")";
 		}
@@ -380,8 +379,7 @@ class XCGeneratorBase {
 		String typ;
 		if (max > 1) {
 			d += 's';
-			String s = "new java.util.ArrayList<>()";
-			x = " =" + (s.length() > 40 ? LN + "\t\t" : " ") + s;
+			x = "=new java.util.ArrayList<>()";
 			typ = "java.util.List<" + typeName + ">";
 		} else {
 			x = "";
@@ -471,6 +469,8 @@ class XCGeneratorBase {
 	}
 
 	/** Generate java code of getter method for child element classes.
+	 * @param xn model of actual node.
+	 * @param typeName name of class representing the child element.
 	 * @param typeName name of class representing the child element.
 	 * @param name name of variable.
 	 * @param max maximal number of items .
@@ -549,7 +549,7 @@ class XCGeneratorBase {
 		if (ndx > 0) {
 			typ = (max > 1) ? "java.util.List<" + typeName + ">" : typeName;
 		}
-		if (typ.startsWith("java.util.List<")) {
+		if (typ.startsWith("java.util.List<") && max > 1) {
 			sb.append(modify(
 (_genJavadoc ? "\t/** Get list of &{d} \"&{xmlName}\"."+LN+
 "\t * @return value of &{d}"+LN+
@@ -867,11 +867,9 @@ class XCGeneratorBase {
 		final StringBuilder sb,
 		final boolean isList) {
 		if (sb.length() == 0) {
-			sb.append(
-"\t\tjava.util.List<org.xdef.component.XComponent> a=")
-			.append(LN).append(
-"\t\t\tnew java.util.ArrayList<>();")
-			.append(LN);
+			sb.append("\t\t").append(
+				"java.util.List<org.xdef.component.XComponent> a=")
+				.append("new java.util.ArrayList<>();").append(LN);
 		}
 		sb.append("\t\torg.xdef.component.XComponentUtil.addXC(a, ")
 			.append(isList ? "listOf" : "get")
@@ -889,10 +887,8 @@ class XCGeneratorBase {
 		final int max,
 		final StringBuilder sb) {
 		if (sb.length() == 0) {
-			sb.append(
-"\t\tjava.util.ArrayList<org.xdef.component.XComponent> a=").append(LN)
-				.append(
-"\t\t\tnew java.util.ArrayList<>();").append(LN);
+			sb.append("java.util.List<org.xdef.component.XComponent> a=")
+				.append("new java.util.ArrayList<>();").append(LN);
 		}
 		String x;
 		final String y = max > 1? ".get(i)" : "";

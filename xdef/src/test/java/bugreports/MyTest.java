@@ -1,7 +1,6 @@
 package bugreports;
 
 import java.util.List;
-import org.w3c.dom.Element;
 import org.xdef.XDConstants;
 import org.xdef.XDDocument;
 import org.xdef.XDFactory;
@@ -96,21 +95,19 @@ public class MyTest extends XDTester {
 			XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE); // true | false
 ////////////////////////////////////////////////////////////////////////////////
 
-		Element el;
-		Object o,x,y,j;
-		List list;
-		String json, xon, s, xdef, xml;
+		Object o,x,j;
+		String json, s, xdef, xml;
 		XDDocument xd;
 		XDPool xp;
 		XComponent xc;
 		ArrayReporter reporter = new ArrayReporter();
 /**/
-		try {
+	try {
 			xdef = // sequence with separator
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <xd:component>%class "+_package+".MytestX_SQ %link #a;</xd:component>\n" +
 "  <xd:declaration>\n"+
-"    type s sequence(%separator=',', %item=[int,long, long]);\n"+
+"    type s sequence(%separator=',', %item=[int, long, long]);\n"+
 "  </xd:declaration>\n"+
 "  <a a='? s'> ? s; <b xd:script='?'> s; </b> </a>\n"+
 "</xd:def>";
@@ -155,10 +152,28 @@ public class MyTest extends XDTester {
 			} else {
 				fail("incorrect type: " + o.getClass() + "; " + o);
 			}
-		} catch (Exception ex) {fail(ex);}
-//if(true)return;
-/**/
-		try {
+			xdef = // sequence with separator
+"<xd:def xmlns:xd='" + _xdNS + "' root='x'>\n"+
+"  <x>\n"+
+"    <a xd:script='*'> jlist(%item=jvalue()) </a>\n"+
+"  </x>\n"+
+"  <xd:component> %class "+_package+".TestJList %link x; </xd:component>\n"+
+"</xd:def>";
+			xp = XDFactory.compileXD(null,xdef);
+			genXComponent(xp, clearTempDir());
+			xml =
+"<x>\n"+
+"  <a>[]</a>\n"+
+"  <a>[\"false\"]</a>\n"+
+"  <a>[null]</a>\n"+
+"  <a>[12,-3.5,null,false]</a>\n"+
+"  <a>[\"ab\tc\",[2,[]],[-3.5,null,\"a\\nc\",\"\"],false]</a>\n"+
+"</x>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrorwarnings(reporter);
+			xc = parseXC(xp, "", xml , null, reporter);
+			assertNoErrorwarnings(reporter);
+			assertEq(xml, xc.toXml());
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='X'>\n"+
 "  <xd:xon name = 'X'>\n"+
@@ -528,7 +543,7 @@ if(true) return;
 				Class.forName("bugreports.MyTest_Y2"), reporter);
 			assertTrue(XonUtils.xonEqual(j, toJson(xc)),
 				XonUtils.toJsonString(toJson(xc), true));
-		} catch (Exception ex) {fail(ex);}
+		} catch (ClassNotFoundException | RuntimeException ex) {fail(ex);}
 //if(true)return;
 ////////////////////////////////////////////////////////////////////////////////
 		try {
@@ -549,7 +564,6 @@ if(true) return;
 "</xd:def>";
 			xp = compile(xdef);
 //			xp.displayCode();
-			xd = xp.createXDDocument();
 			XMData xmd;
 			XDValue xdv;
 			XDParser xdp;
@@ -562,7 +576,6 @@ if(true) return;
 			assertErrors(xdr.getReporter());
 			xmd = (XMData) xp.findModel("#a/@y");
 			assertEq("string", xmd.getParserName());
-			xdv = xmd.getParseMethod();
 			xml = "<a x='9' y='(a,b)' z='(c)'/>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrorwarnings(reporter);

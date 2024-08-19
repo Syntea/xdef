@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.2.3, release-date 2024-08-18
+# Version 42.2.3, release-date 2024-08-19
 * Fixed bug when generating X-components with `jlist` type.
 
 # Version 42.2.2, release-date 2024-08-14

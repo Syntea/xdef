@@ -150,14 +150,13 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 		if (ndx > 0) {
 			typ = (max > 1) ? "java.util.List<" + typeName + ">" : typeName;
 		}
-		if (typ.startsWith("java.util.List<")) {
+		if (typ.startsWith("java.util.List<") && max > 1) {
 			sb.append(modify(
 (_genJavadoc ? "\t/** Get list of &{d} \"&{xmlName}\"."+LN+
 "\t * @return value of &{d}"+LN+
 "\t */"+LN : "")+
 "\tpublic &{typ} get$&{name}() {"+LN+
-"\t\t&{typ} y ="+LN+
-"\t\t\tnew &{typ1}();"+LN+
+"\t\t&{typ} y=new &{typ1}();"+LN+
 "\t\tfor (&{iname} z : listOf&{name}()) {"+LN+
 "\t\t\ty.add(z.get$value());"+LN+
 "\t\t}"+LN+

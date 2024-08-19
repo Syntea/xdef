@@ -632,7 +632,7 @@ public final class TestXComponents extends XDTester {
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <xd:component>%class "+_package+".MytestX_SQ %link #a;</xd:component>\n" +
 "  <xd:declaration>\n"+
-"    type s sequence(%separator=',', %item=[int,long, long]);\n"+
+"    type s sequence(%separator=',', %item=[int, long, long]);\n"+
 "  </xd:declaration>\n"+
 "  <a a='? s'> ? s; <b xd:script='?'> s; </b> </a>\n"+
 "</xd:def>";
@@ -663,8 +663,8 @@ public final class TestXComponents extends XDTester {
 				fail("incorrect type: " + o.getClass() + "; " + o);
 			}
 			assertNull(SUtils.getValueFromGetter(xc, "get$b"));
-			xml = "<a><b>5,6,7</b></a>";
 			assertNoErrorwarningsAndClear(reporter);
+			xml = "<a><b>5,6,7</b></a>";
 			assertEq(xml, (xc = parseXC(xp,"", xml , null, reporter)).toXml());
 			assertNoErrorwarningsAndClear(reporter);
 			assertNull(SUtils.getValueFromGetter(xc, "geta"));

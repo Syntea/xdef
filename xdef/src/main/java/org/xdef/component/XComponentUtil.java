@@ -317,8 +317,8 @@ public class XComponentUtil {
 		}
 	}
 
-	public static ArrayList<Object> parseResultToList(final XDParseResult val) {
-		ArrayList<Object> result = new ArrayList<>();
+	public static List<Object> parseResultToList(final XDParseResult val) {
+		List<Object> result = new ArrayList<>();
 		org.xdef.XDContainer x = (org.xdef.XDContainer) val.getParsedValue();
 		for (int i = 0; i < x.getXDItemsNumber(); i++) {
 			parseResultToList(result, x.getXDItem(i));
