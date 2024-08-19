@@ -1,5 +1,8 @@
 # Version ${version}, release-date ${release.date}
 
+# Version 42.2.4, release-date 2024-08-19
+* .
+
 # Version 42.2.3, release-date 2024-08-19
 * Fixed bug when generating X-components with `jlist` and `sequence` value type.
 * The Java type`java.util.ArrayList` of the getter argument or the setter result
