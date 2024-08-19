@@ -1,7 +1,9 @@
 # Version ${version}, release-date ${release.date}
 
 # Version 42.2.3, release-date 2024-08-19
-* Fixed bug when generating X-components with `jlist` type.
+* Fixed bug when generating X-components with `jlist` and `sequence` value type.
+* The Java type`java.util.ArrayList` of the getter argument or the setter result
+  has been replaced by the Java type `java.util.List`.
 
 # Version 42.2.2, release-date 2024-08-14
 * Fixed bug in generating X-definition from JSON data.
