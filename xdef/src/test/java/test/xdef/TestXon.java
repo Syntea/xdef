@@ -1850,14 +1850,40 @@ public class TestXon extends XDTester {
 "  <a>[]</a>\n"+
 "  <a>[\"false\"]</a>\n"+
 "  <a>[null]</a>\n"+
-"  <a>[12,-3.5,null,false]</a>\n"+
-"  <a>[\"ab\tc\",[2,[]],[-3.5,null,\"a\\nc\",\"\"],false]</a>\n"+
+"  <a>[-9,\"\",\"\\\"\",[2,[],\"ab\\tc\"],\"-3.5\",-3.5,null,false]</a>\n"+
 "</x>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrorwarnings(reporter);
 			xc = parseXC(xp, "", xml , null, reporter);
 			assertNoErrorwarnings(reporter);
 			assertEq(xml, xc.toXml());
+//			x = SUtils.getValueFromGetter(
+//				((List) SUtils.getValueFromGetter(xc, "listOfa")).get(0),
+//					"get$value");
+//			assertEq(new ArrayList(), XComponentUtil.jlistToList(x));
+//			assertEq(new ArrayList(), x);
+//			x = SUtils.getValueFromGetter(
+//				((List) SUtils.getValueFromGetter(xc, "listOfa")).get(1),
+//					"get$value");
+//			assertEq("false", XComponentUtil.jlistToList(x).get(0));
+//			assertEq("false", XComponentUtil.jlistToList(x).get(0));
+//			x = SUtils.getValueFromGetter(
+//				((List) SUtils.getValueFromGetter(xc, "listOfa")).get(2),
+//					"get$value");
+//			assertEq(null, XComponentUtil.jlistToList(x).get(0));
+//			x = SUtils.getValueFromGetter(
+//				((List) SUtils.getValueFromGetter(xc, "listOfa")).get(3),
+//					"get$value");
+//				assertEq(-9, XComponentUtil.jlistToList(x).get(0));
+//			assertEq("", XComponentUtil.jlistToList(x).get(1));
+//			assertEq("\"", XComponentUtil.jlistToList(x).get(2));
+//			ArrayList<Object> alist = new ArrayList<>();
+//			alist.add(2);
+//			alist.add(new ArrayList<>());
+//			alist.add("ab\tc");
+//			assertTrue(
+//				XonUtils.xonEqual(alist, XComponentUtil.jlistToList(x).get(3)));
+//			assertEq("-3.5", XComponentUtil.jlistToList(x).get(4));
 		} catch (RuntimeException ex) {fail(ex);}
 
 		clearTempDir(); // clear temporary directory

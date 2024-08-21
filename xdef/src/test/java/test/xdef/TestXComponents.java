@@ -649,6 +649,7 @@ public final class TestXComponents extends XDTester {
 			assertEq(xml, (xc = parseXC(xp,"", xml , null, reporter)).toXml());
 			assertNoErrorwarningsAndClear(reporter);
 			if ((o = SUtils.getValueFromGetter(xc, "geta")) instanceof List) {
+				assertTrue(((List) o).get(0) instanceof Long);
 				assertEq(1, ((List) o).get(0));
 				assertEq(2, ((List) o).get(1));
 				assertEq(3, ((List) o).get(2));
@@ -656,6 +657,7 @@ public final class TestXComponents extends XDTester {
 				fail("incorrect type: " + o.getClass() + "; " + o);
 			}
 			if ((o=SUtils.getValueFromGetter(xc,"get$value")) instanceof List) {
+				assertTrue(((List) o).get(0) instanceof Long);
 				assertEq(4, ((List) o).get(0));
 				assertEq(5, ((List) o).get(1));
 				assertEq(6, ((List) o).get(2));

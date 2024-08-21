@@ -276,7 +276,7 @@ public class XComponentUtil {
 	 * @param typeId separator of items.
 	 * @return converted list.
 	 */
-	public static final List valueToList(final XDParseResult value,
+	public static final List<?> valueToList(final XDParseResult value,
 		final int typeId) {
 		if (value == null) {
 			return null;
@@ -289,7 +289,7 @@ public class XComponentUtil {
 	 * @param typeId type of items..
 	 * @return converted list.
 	 */
-	public static final List valueToList(final XDContainer c,
+	public static final List<?> valueToList(final XDContainer c,
 		final int typeId) {
 		int len = c.getXDItemsNumber();
 		List<Object> result = new ArrayList<>();
@@ -331,7 +331,8 @@ public class XComponentUtil {
 	 * @param isJlist if true generate jlist format, otherwise just list.
 	 * @return list of items with separatort.
 	 */
-	public static String listToString(final List list, final boolean isJlist) {
+	public static String listToString(final List<?> list,
+		final boolean isJlist) {
 		if (list == null) {
 			return "null";
 		}
@@ -440,7 +441,7 @@ public class XComponentUtil {
 	 */
 	public final static List<Object> toXonArray(final XComponent xc) {
 		List<Object> result = new ArrayList<>();
-		List list = (List) xc.xGetNodeList();
+		List<Object> list = (List) xc.xGetNodeList();
 		for (Object x : list) {
 			Object o = toXon((XComponent) x);
 			if (o instanceof String) {

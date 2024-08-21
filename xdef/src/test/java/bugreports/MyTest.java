@@ -16,6 +16,7 @@ import org.xdef.proc.XXNode;
 import org.xdef.sys.ArrayReporter;
 import static org.xdef.sys.STester.runTest;
 import org.xdef.sys.SUtils;
+import org.xdef.xml.KXmlUtils;
 import org.xdef.xon.XonUtils;
 import test.XDTester;
 import static test.XDTester._xdNS;
@@ -97,6 +98,7 @@ public class MyTest extends XDTester {
 
 		Object o,x,j;
 		String json, s, xdef, xml;
+		List list;
 		XDDocument xd;
 		XDPool xp;
 		XComponent xc;
@@ -125,6 +127,7 @@ public class MyTest extends XDTester {
 			assertEq(xml, (xc = parseXC(xp,"", xml , null, reporter)).toXml());
 			assertNoErrorwarningsAndClear(reporter);
 			if ((o = SUtils.getValueFromGetter(xc, "geta")) instanceof List) {
+				assertTrue(((List) o).get(0) instanceof Long);
 				assertEq(1, ((List) o).get(0));
 				assertEq(2, ((List) o).get(1));
 				assertEq(3, ((List) o).get(2));
@@ -132,6 +135,7 @@ public class MyTest extends XDTester {
 				fail("incorrect type: " + o.getClass() + "; " + o);
 			}
 			if ((o=SUtils.getValueFromGetter(xc,"get$value")) instanceof List) {
+				assertTrue(((List) o).get(0) instanceof Long);
 				assertEq(4, ((List) o).get(0));
 				assertEq(5, ((List) o).get(1));
 				assertEq(6, ((List) o).get(2));
@@ -139,8 +143,8 @@ public class MyTest extends XDTester {
 				fail("incorrect type: " + o.getClass() + "; " + o);
 			}
 			assertNull(SUtils.getValueFromGetter(xc, "get$b"));
-			xml = "<a><b>5,6,7</b></a>";
 			assertNoErrorwarningsAndClear(reporter);
+			xml = "<a><b>5,6,7</b></a>";
 			assertEq(xml, (xc = parseXC(xp,"", xml , null, reporter)).toXml());
 			assertNoErrorwarningsAndClear(reporter);
 			assertNull(SUtils.getValueFromGetter(xc, "geta"));
@@ -152,7 +156,58 @@ public class MyTest extends XDTester {
 			} else {
 				fail("incorrect type: " + o.getClass() + "; " + o);
 			}
-			xdef = // sequence with separator
+						xdef = // sequence with separator
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"  <xd:component>%class "+_package+".MytestX_SQ %link #a;</xd:component>\n" +
+"  <xd:declaration>\n"+
+"    type s sequence(%separator=',', %item=[int, long, long]);\n"+
+"  </xd:declaration>\n"+
+"  <a a='? s'> ? s; <b xd:script='?'> s; </b> </a>\n"+
+"</xd:def>";
+			genXComponent(xp = compile(xdef));
+			xml = "<a/>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrorwarningsAndClear(reporter);
+			xc = parseXC(xp,"", xml , null, reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			assertNull(SUtils.getValueFromGetter(xc, "geta"));
+			xml = "<a a='1,2,3'>4,5,6</a>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrorwarningsAndClear(reporter);
+			assertEq(xml, (xc = parseXC(xp,"", xml , null, reporter)).toXml());
+			assertNoErrorwarningsAndClear(reporter);
+			if ((o = SUtils.getValueFromGetter(xc, "geta")) instanceof List) {
+				assertTrue(((List) o).get(0) instanceof Long);
+				assertEq(1, ((List) o).get(0));
+				assertEq(2, ((List) o).get(1));
+				assertEq(3, ((List) o).get(2));
+			} else {
+				fail("incorrect type: " + o.getClass() + "; " + o);
+			}
+			if ((o=SUtils.getValueFromGetter(xc,"get$value")) instanceof List) {
+				assertTrue(((List) o).get(0) instanceof Long);
+				assertEq(4, ((List) o).get(0));
+				assertEq(5, ((List) o).get(1));
+				assertEq(6, ((List) o).get(2));
+			} else {
+				fail("incorrect type: " + o.getClass() + "; " + o);
+			}
+			assertNull(SUtils.getValueFromGetter(xc, "get$b"));
+			assertNoErrorwarningsAndClear(reporter);
+			xml = "<a><b>5,6,7</b></a>";
+			assertEq(xml, (xc = parseXC(xp,"", xml , null, reporter)).toXml());
+			assertNoErrorwarningsAndClear(reporter);
+			assertNull(SUtils.getValueFromGetter(xc, "geta"));
+			assertNull(SUtils.getValueFromGetter(xc, "get$value"));
+			if ((o = SUtils.getValueFromGetter(xc, "get$b")) instanceof List) {
+				assertEq(5, ((List) o).get(0));
+				assertEq(6, ((List) o).get(1));
+				assertEq(7, ((List) o).get(2));
+			} else {
+				fail("incorrect type: " + o.getClass() + "; " + o);
+			}
+//if(true)return;
+			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='x'>\n"+
 "  <x>\n"+
 "    <a xd:script='*'> jlist(%item=jvalue()) </a>\n"+
@@ -166,14 +221,41 @@ public class MyTest extends XDTester {
 "  <a>[]</a>\n"+
 "  <a>[\"false\"]</a>\n"+
 "  <a>[null]</a>\n"+
-"  <a>[12,-3.5,null,false]</a>\n"+
-"  <a>[\"ab\tc\",[2,[]],[-3.5,null,\"a\\nc\",\"\"],false]</a>\n"+
+"  <a>[-9,\"\",\"\\\"\",[2,[],\"ab\\tc\"],\"-3.5\",-3.5,null,false]</a>\n"+
 "</x>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrorwarnings(reporter);
 			xc = parseXC(xp, "", xml , null, reporter);
 			assertNoErrorwarnings(reporter);
 			assertEq(xml, xc.toXml());
+//			x = SUtils.getValueFromGetter(
+//				((List) SUtils.getValueFromGetter(xc, "listOfa")).get(0),
+//					"get$value");
+//			assertEq(new ArrayList(), XComponentUtil.jlistToList(x));
+//			assertEq(new ArrayList(), x);
+//			x = SUtils.getValueFromGetter(
+//				((List) SUtils.getValueFromGetter(xc, "listOfa")).get(1),
+//					"get$value");
+//			assertEq("false", XComponentUtil.jlistToList(x).get(0));
+//			assertEq("false", XComponentUtil.jlistToList(x).get(0));
+//			x = SUtils.getValueFromGetter(
+//				((List) SUtils.getValueFromGetter(xc, "listOfa")).get(2),
+//					"get$value");
+//			assertEq(null, XComponentUtil.jlistToList(x).get(0));
+//			x = SUtils.getValueFromGetter(
+//				((List) SUtils.getValueFromGetter(xc, "listOfa")).get(3),
+//					"get$value");
+//				assertEq(-9, XComponentUtil.jlistToList(x).get(0));
+//			assertEq("", XComponentUtil.jlistToList(x).get(1));
+//			assertEq("\"", XComponentUtil.jlistToList(x).get(2));
+//			ArrayList<Object> alist = new ArrayList<>();
+//			alist.add(2);
+//			alist.add(new ArrayList<>());
+//			alist.add("ab\tc");
+//			assertTrue(
+//				XonUtils.xonEqual(alist, XComponentUtil.jlistToList(x).get(3)));
+//			assertEq("-3.5", XComponentUtil.jlistToList(x).get(4));
+//if(true)return;
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='X'>\n"+
 "  <xd:xon name = 'X'>\n"+
@@ -499,6 +581,7 @@ if(true) return;
 			assertNoErrorwarnings(reporter);
 			xc = parseXC(xp, "", xml , null, reporter);
 			assertNoErrorwarnings(reporter);
+System.out.println(KXmlUtils.nodeToString(xc.toXml(), true));
 			assertEq(xml, xc.toXml());
 
 			xd = xp.createXDDocument("");
