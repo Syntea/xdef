@@ -1,5 +1,6 @@
 package bugreports;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.xdef.XDConstants;
 import org.xdef.XDDocument;
@@ -10,13 +11,17 @@ import org.xdef.XDPool;
 import org.xdef.XDValue;
 import org.xdef.component.XComponent;
 import org.xdef.impl.XConstants;
+import org.xdef.impl.code.DefJNull;
+import org.xdef.impl.code.DefString;
 import org.xdef.model.XMData;
 import org.xdef.proc.XXData;
 import org.xdef.proc.XXNode;
 import org.xdef.sys.ArrayReporter;
 import static org.xdef.sys.STester.runTest;
 import org.xdef.sys.SUtils;
+import org.xdef.sys.StringParser;
 import org.xdef.xml.KXmlUtils;
+import org.xdef.xon.XonTools;
 import org.xdef.xon.XonUtils;
 import test.XDTester;
 import static test.XDTester._xdNS;
@@ -75,6 +80,30 @@ public class MyTest extends XDTester {
 /**/
 		} catch (RuntimeException ex) {
 			result += ex + "\n";
+		}
+		return result;
+	}
+	private static List<?> jlistToList(Object x) {
+		List<Object> result = new ArrayList<>();
+		List list = (List) x;
+		for (Object o: list) {
+			if (o instanceof DefString) {
+				String s = o.toString();
+				if (s.startsWith("\"") && s.endsWith("\"")) {
+					StringParser p = new StringParser(s);
+					p.setIndex(1);
+					s = XonTools.readJString(p);
+				}
+				result.add(s);
+			} else if (o instanceof DefJNull) {
+				result.add(null);
+			} else if (o instanceof List) {
+				result.add(jlistToList(o));
+			} else if (o instanceof XDValue) {
+				result.add(((XDValue) o).getObject());
+			} else {
+				result.add(o);
+			}
 		}
 		return result;
 	}
@@ -228,33 +257,33 @@ public class MyTest extends XDTester {
 			xc = parseXC(xp, "", xml , null, reporter);
 			assertNoErrorwarnings(reporter);
 			assertEq(xml, xc.toXml());
-//			x = SUtils.getValueFromGetter(
-//				((List) SUtils.getValueFromGetter(xc, "listOfa")).get(0),
-//					"get$value");
-//			assertEq(new ArrayList(), XComponentUtil.jlistToList(x));
-//			assertEq(new ArrayList(), x);
-//			x = SUtils.getValueFromGetter(
-//				((List) SUtils.getValueFromGetter(xc, "listOfa")).get(1),
-//					"get$value");
-//			assertEq("false", XComponentUtil.jlistToList(x).get(0));
-//			assertEq("false", XComponentUtil.jlistToList(x).get(0));
-//			x = SUtils.getValueFromGetter(
-//				((List) SUtils.getValueFromGetter(xc, "listOfa")).get(2),
-//					"get$value");
-//			assertEq(null, XComponentUtil.jlistToList(x).get(0));
-//			x = SUtils.getValueFromGetter(
-//				((List) SUtils.getValueFromGetter(xc, "listOfa")).get(3),
-//					"get$value");
-//				assertEq(-9, XComponentUtil.jlistToList(x).get(0));
-//			assertEq("", XComponentUtil.jlistToList(x).get(1));
-//			assertEq("\"", XComponentUtil.jlistToList(x).get(2));
-//			ArrayList<Object> alist = new ArrayList<>();
-//			alist.add(2);
-//			alist.add(new ArrayList<>());
-//			alist.add("ab\tc");
-//			assertTrue(
-//				XonUtils.xonEqual(alist, XComponentUtil.jlistToList(x).get(3)));
-//			assertEq("-3.5", XComponentUtil.jlistToList(x).get(4));
+			x = SUtils.getValueFromGetter(
+				((List) SUtils.getValueFromGetter(xc, "listOfa")).get(0),
+					"get$value");
+			assertEq(new ArrayList(), jlistToList(x));
+			assertEq(new ArrayList(), x);
+			x = SUtils.getValueFromGetter(
+				((List) SUtils.getValueFromGetter(xc, "listOfa")).get(1),
+					"get$value");
+			assertEq("false", jlistToList(x).get(0));
+			assertEq("false", jlistToList(x).get(0));
+			x = SUtils.getValueFromGetter(
+				((List) SUtils.getValueFromGetter(xc, "listOfa")).get(2),
+					"get$value");
+			assertEq(null, jlistToList(x).get(0));
+			x = SUtils.getValueFromGetter(
+				((List) SUtils.getValueFromGetter(xc, "listOfa")).get(3),
+					"get$value");
+				assertEq(-9, jlistToList(x).get(0));
+			assertEq("", jlistToList(x).get(1));
+			assertEq("\"", jlistToList(x).get(2));
+			ArrayList<Object> alist = new ArrayList<>();
+			alist.add(2);
+			alist.add(new ArrayList<>());
+			alist.add("ab\tc");
+			assertTrue(
+				XonUtils.xonEqual(alist, jlistToList(x).get(3)));
+			assertEq("-3.5", jlistToList(x).get(4));
 //if(true)return;
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='X'>\n"+
