@@ -2,6 +2,7 @@ package org.xdef.component;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -18,6 +19,12 @@ import org.xdef.XDValue;
 import static org.xdef.XDValueID.XD_ANY;
 import static org.xdef.XDValueID.XD_CONTAINER;
 import static org.xdef.XDValueID.XD_STRING;
+import org.xdef.impl.code.DefBoolean;
+import org.xdef.impl.code.DefDecimal;
+import org.xdef.impl.code.DefDouble;
+import org.xdef.impl.code.DefJNull;
+import org.xdef.impl.code.DefLong;
+import org.xdef.impl.code.DefString;
 import org.xdef.impl.xml.KNamespace;
 import org.xdef.model.XMElement;
 import org.xdef.model.XMNode;
@@ -25,6 +32,7 @@ import static org.xdef.model.XMNode.XMELEMENT;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.SDatetime;
 import org.xdef.sys.SRuntimeException;
+import org.xdef.sys.StringParser;
 import static org.xdef.xon.XonNames.X_ARRAY;
 import static org.xdef.xon.XonNames.X_KEYATTR;
 import static org.xdef.xon.XonNames.X_MAP;
@@ -303,6 +311,39 @@ public class XComponentUtil {
 		return result;
 	}
 
+	public static List<Object> listToJlist(Object x) {
+		List<Object> result = new ArrayList<>();
+		List list = (List) x;
+		for (Object o: list) {
+			if (o == null) {
+				result.add(new DefJNull());
+			} else if (o instanceof String) {
+				String s = XonTools.jstringToSource((String) o);
+				if ("false".equals(s) || "true".equals(s) || "null".equals(s)
+					|| s.isEmpty() || s.indexOf('\\')>=0 || s.indexOf(' ')>=0
+					|| new StringParser(s).isSignedInteger()) {
+					s = '"' + XonTools.jstringToSource(s) + '"';
+				}
+				result.add(new DefString(s));
+			} else if (o instanceof Number) {
+				if (o instanceof BigDecimal) {
+					result.add(new DefDecimal((BigDecimal)o));
+				} else if (o instanceof Double) {
+					result.add(new DefDouble(((Number)o).doubleValue()));
+				} else {
+					result.add(new DefLong(((Number)o).longValue()));
+				}
+			} else if (o instanceof Boolean) {
+				result.add(new DefBoolean(((Boolean)o)));
+			} else if (o instanceof List) {
+				result.add(listToJlist(o));
+			} else {
+				result.add(o);
+			}
+		}
+		return result;
+	}
+
 	private static void parseResultToList(final List<Object> list,
 		final XDValue value) {
 		if (value instanceof org.xdef.XDContainer) {
@@ -317,13 +358,38 @@ public class XComponentUtil {
 		}
 	}
 
+	public static List<Object> jlistToList(Object x) {
+		List<Object> result = new ArrayList<>();
+		List list = (List) x;
+		for (Object o: list) {
+			if (o instanceof DefString) {
+				String s = o.toString();
+				if (s.startsWith("\"") && s.endsWith("\"")) {
+					StringParser p = new StringParser(s);
+					p.setIndex(1);
+					s = XonTools.readJString(p);
+				}
+				result.add(s);
+			} else if (o instanceof DefJNull) {
+				result.add(null);
+			} else if (o instanceof List) {
+				result.add(jlistToList(o));
+			} else if (o instanceof XDValue) {
+				result.add(((XDValue) o).getObject());
+			} else {
+				result.add(o);
+			}
+		}
+		return result;
+	}
+
 	public static List<Object> parseResultToList(final XDParseResult val) {
 		List<Object> result = new ArrayList<>();
 		org.xdef.XDContainer x = (org.xdef.XDContainer) val.getParsedValue();
 		for (int i = 0; i < x.getXDItemsNumber(); i++) {
 			parseResultToList(result, x.getXDItem(i));
 		}
-		return result;
+		return jlistToList(result);
 	}
 
 	/** Create list of items with separatort (value of parsed list).
@@ -331,40 +397,41 @@ public class XComponentUtil {
 	 * @param isJlist if true generate jlist format, otherwise just list.
 	 * @return list of items with separatort.
 	 */
-	public static String listToString(final List<?> list,
-		final boolean isJlist) {
+	public static String listToString(final List list, final boolean isJlist) {
 		if (list == null) {
 			return "null";
 		}
-		if (list.isEmpty()) {
-			return isJlist ? "[]" : "";
-		}
-		Object o = list.get(0);
-		if (o == null) {
-			return isJlist ? "[null]" : "null";
-		} else if (o instanceof XDContainer) {
-			return containerJlist((XDContainer) o);
-		} else {
-			int len = list.size();
-			StringBuilder sb = new StringBuilder(isJlist ? "[" : "");
-			for (int i = 0; i < len; i++) {
-				if (i > 0) {
-					sb.append(",");
-				}
-				Object y = list.get(i);
-				if (y == null) {
-					sb.append("null");
-				} else if (y instanceof List) {
-					sb.append(listToString((List) y, isJlist));
-				} else {
-					sb.append(y.toString());
-				}
+		StringBuilder sb = new StringBuilder(isJlist ? "[" : "");
+		boolean wasFirst = false;
+		for (Object o: list) {
+			if (wasFirst) {
+				sb.append(",");
+			} else {
+				wasFirst = true;
 			}
-			if (isJlist) {
-				sb.append("]");
+			if (o == null) {
+				sb.append("null");
+			} else if (o instanceof XDContainer) {
+				return containerJlist((XDContainer) o);
+			} else if (o instanceof List) {
+				sb.append(listToString((List) o, true));
+			} else if (o instanceof String) {
+				String s = (String) o;
+				if ("false".equals(s) || "true".equals(s) || "null".equals(s)
+				||s.isEmpty()||s.indexOf('\\')>=0||s.indexOf(' ')>=0
+				||s.indexOf('\t')>=0||s.indexOf('\n')>=0||s.indexOf('"')>=0
+				|| new StringParser(s).isSignedInteger()) {
+					s = '"' + XonTools.jstringToSource(s) + '"';
+				}
+				sb.append(s);
+			} else {
+				sb.append(o.toString());
 			}
-			return sb.toString();
 		}
+		if (isJlist) {
+			sb.append("]");
+		}
+		return sb.toString();
 	}
 
 	/** Convert XDContainer to jlist string.
@@ -441,7 +508,7 @@ public class XComponentUtil {
 	 */
 	public final static List<Object> toXonArray(final XComponent xc) {
 		List<Object> result = new ArrayList<>();
-		List<Object> list = (List) xc.xGetNodeList();
+		List list = (List) xc.xGetNodeList();
 		for (Object x : list) {
 			Object o = toXon((XComponent) x);
 			if (o instanceof String) {

@@ -443,6 +443,45 @@ public final class TestXComponents extends XDTester {
 			assertTrue(XonUtils.xonEqual(xon,
 				SUtils.getValueFromGetter(xc,"toXon")));
 			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root='x'>\n"+
+"<x>\n"+
+"  <a xd:script='*'>\n"+
+"    jlist(%item=jvalue())\n"+
+"  </a>\n"+
+"  <b xd:script='*'>\n"+
+"    jlist(%item=union(%item=[jnull,boolean()]))\n"+
+"  </b>\n"+
+"</x>\n"+
+"<xd:component> %class bugreports.JCreateX7 %link x; </xd:component>\n"+
+"</xd:def>";
+			xp = XDFactory.compileXD(null,xdef);
+			genXComponent(xp, clearTempDir());
+			xml =
+"<x>\n"+
+"  <a>[1,\"a\\\"\\nbc\"]</a>\n"+
+"  <a>[\"\",[-3.5,null,\"\\\"\"]]</a>\n"+
+"  <b>[null,true,false,null]</b>\n"+
+"</x>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrorwarnings(reporter);
+			xc = parseXC(xp, "", xml , null, reporter);
+			assertNoErrorwarnings(reporter);
+			assertEq(xml, xc.toXml());
+			list = (List)((List) SUtils.getValueFromGetter(xc, "get$a")).get(0);
+			assertEq(1, list.get(0));
+			assertEq("a\"\nbc", list.get(1));
+			list = (List)((List) SUtils.getValueFromGetter(xc, "get$a")).get(1);
+			assertEq("", list.get(0));
+			list = (List) list.get(1);
+			assertEq(-3.5, list.get(0));
+			assertNull(list.get(1));
+			assertEq("\"",list.get(2));
+			list = (List)((List) SUtils.getValueFromGetter(xc, "get$b")).get(0);
+			assertNull(list.get(0));
+			assertTrue((boolean)list.get(1));
+			assertFalse((boolean)list.get(2));
+			assertNull(list.get(3));
+			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' xd:root='a'>\n" +
 "<xd:component>%class "+_package+".TestX_OneOfa %link a</xd:component>\n"+
 "  <xd:xon name='a'>\n" +
