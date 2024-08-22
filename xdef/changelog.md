@@ -1,8 +1,8 @@
 # Version ${version}, release-date ${release.date}
 
 # Version 42.2.4, release-date 2024-08-22
-* Fixed a bug in the X-component generator for the value type declared as jvalue
-  in the X-definition model.
+* Fixed bug in X-component generator for value type declared as jvalue
+  in X-definition models.
 
 # Version 42.2.3, release-date 2024-08-19
 * Fixed bug when generating X-components with `jlist` and `sequence` value type.

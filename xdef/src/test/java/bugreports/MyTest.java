@@ -34,28 +34,20 @@ public class MyTest extends XDTester {
 	}
 
 	public static boolean a(boolean a, String b) {return true;}
-
 	public static int b(String b) {return 0;}
-
 	public static void c() {}
-
 	private static Object toJson(final XComponent xc) {
 		return XonUtils.xmlToXon(xc.toXml());
 	}
-
 	public static String xxx(XXNode xn) {return "" + xn.getXComponent();}
 	private static boolean _xxx;
-
 	final public static void setResult(XXNode xnode, boolean x) {_xxx = x;}
-
 	final public static void setResult(XXData xnode, XDParser parser) {
 		setResult(xnode, parser.check(null, xnode.getTextValue()));
 	}
-
 	final public static void setResult(XXNode xnode, XDParseResult result) {
 		setResult(xnode, !result.errors());
 	}
-
 	private static String testAny(XDPool xp, String s) {
 		String result = "";
 		try {
@@ -207,21 +199,21 @@ public class MyTest extends XDTester {
 			}
 //if(true)return;
 			xdef
-				= "<xd:def xmlns:xd='" + _xdNS + "' root='x'>\n"
-				+ "  <x>\n"
-				+ "    <a xd:script='*'> jlist(%item=jvalue()) </a>\n"
-				+ "  </x>\n"
-				+ "  <xd:component> %class " + _package + ".TestJList %link x; </xd:component>\n"
-				+ "</xd:def>";
+= "<xd:def xmlns:xd='" + _xdNS + "' root='x'>\n"
++ "  <x>\n"
++ "    <a xd:script='*'> jlist(%item=jvalue()) </a>\n"
++ "  </x>\n"
++ "  <xd:component> %class " + _package + ".TestJList %link x; </xd:component>\n"
++ "</xd:def>";
 			xp = XDFactory.compileXD(null, xdef);
 			genXComponent(xp, clearTempDir());
 			xml
-				= "<x>\n"
-				+ "  <a>[]</a>\n"
-				+ "  <a>[\"false\"]</a>\n"
-				+ "  <a>[null]</a>\n"
-				+ "  <a>[-9,\"\",\"\\\"\",[2,[],\"ab\\tc\"],\"-3.5\",-3.5,null,false]</a>\n"
-				+ "</x>";
+= "<x>\n"
++ "  <a>[]</a>\n"
++ "  <a>[\"false\"]</a>\n"
++ "  <a>[null]</a>\n"
++ "  <a>[-9,\"\",\"\\\"\",[2,[],\"ab\\tc\"],\"-3.5\",-3.5,null,false]</a>\n"
++ "</x>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrorwarnings(reporter);
 			xc = parseXC(xp, "", xml, null, reporter);
@@ -256,12 +248,12 @@ public class MyTest extends XDTester {
 			assertEq("-3.5", XComponentUtil.jlistToList(x).get(4));
 //if(true)return;
 			xdef
-				= "<xd:def xmlns:xd='" + _xdNS + "' root='X'>\n"
-				+ "  <xd:xon name = 'X'>\n"
-				+ "     [\"* jvalue();\"]\n"
-				+ "  </xd:xon>\n"
-				+ "  <xd:component>%class " + _package + ".MyTest_jnumber %link X</xd:component>\n"
-				+ "</xd:def>";
+= "<xd:def xmlns:xd='" + _xdNS + "' root='X'>\n"
++ "  <xd:xon name = 'X'>\n"
++ "     [\"* jvalue();\"]\n"
++ "  </xd:xon>\n"
++ "  <xd:component>%class "+_package+".MyTest_jvalue %link X</xd:component>\n"
++ "</xd:def>";
 			xp = compile(xdef);
 			genXComponent(xp);
 			xd = xp.createXDDocument();
@@ -570,26 +562,24 @@ public class MyTest extends XDTester {
 		} catch (ClassNotFoundException | RuntimeException ex) {
 			fail(ex);
 		}
-		if (true) {
-			return;
-		}
+//if (true) return;
 ////////////////////////////////////////////////////////////////////////////////
 		try {
-			xdef
-= "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"
-+ "<xd:BNFGrammar name=\"g\" scope=\"local\">\n"
-+ "   prvek      ::= 'a' | 'a' | 'b' | 'c'\n"
-+ "   prvekS     ::=  prvek ',' \n"
-+ "   seznam     ::= '(' prvekS* prvek ')'\n"
-+ " </xd:BNFGrammar>\n"
-+ "<xd:declaration>\n"
-+ " type mujtyp1 int(1,10);\n"
-+ " BNFRule r = g.rule('seznam');\n"
-+ " type rr r;\n"
-+ " type mujtyp2 g.rule('seznam');\n"
-+ "</xd:declaration>\n"
-+ "<a x='mujtyp1()' y='mujtyp2()' z='r'/>\n"
-+ "</xd:def>";
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
+"  <xd:BNFGrammar name=\"g\" scope=\"local\">\n"+
+"    prvek      ::= 'a' | 'a' | 'b' | 'c'\n"+
+"    prvekS     ::=  prvek ',' \n"+
+"    seznam     ::= '(' prvekS* prvek ')'\n"+
+"  </xd:BNFGrammar>\n"+
+"  <xd:declaration>\n"+
+"     type mujtyp1 int(1,10);\n"+
+"     BNFRule r = g.rule('seznam');\n"+
+"     type rr r;\n"+
+"     type mujtyp2 g.rule('seznam');\n"+
+"  </xd:declaration>\n"+
+"  <a x='mujtyp1()' y='mujtyp2()' z='r'/>\n"+
+"</xd:def>";
 			xp = compile(xdef);
 //			xp.displayCode();
 			XMData xmd;
@@ -640,7 +630,6 @@ public class MyTest extends XDTester {
 		} catch (Exception ex) {
 			fail(ex);
 		}
-//if(true)return;
 		clearTempDir(); // delete temporary files.
 	}
 
