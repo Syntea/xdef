@@ -492,11 +492,17 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 "\t * @return value of text nodes of &{d}"+LN+
 "\t */"+LN : "")+
 "\tpublic &{typ1} get$&{name}()";
-				s = jGet;
 				getters.append(modify(template +
 "{"+LN+
 "\t\t&{typ1} x=new java.util.ArrayList<>();"+LN+
-"\t\tfor(&{typeName} y: _&{iname}) x.add(" + s + ");"+LN+
+("Object".equals(typ) // if the typ is Object the value may be also JNull!!!
+? ("\t\tfor(&{typeName} y: _&{iname}) {"+LN+
+	"\t\t\tObject z=" + jGet +';'+LN+
+	"\t\t\tif (z instanceof org.xdef.xon.XonTools.JNull) x.add(null);"+LN+
+	"\t\t\telse x.add(z);"+LN+
+	"\t\t}")
+: "\t\tfor(&{typeName} y: _&{iname}) x.add(" + jGet + ");"
+)+LN+
 "\t\treturn x;"+LN+
 "\t}"+LN,
 					"&{name}", name,

@@ -92,26 +92,6 @@ public class MyTest extends XDTester {
 		XComponent xc;
 		StringWriter swr;
 		ArrayReporter reporter = new ArrayReporter();
-		try {
-			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='z'>\n" +
-"  <xd:xon name='z'> [\"* jvalue();\"] </xd:xon>\n" +
-"  <xd:component>%class "+_package+".X_jval %link #z;</xd:component>\n" +
-"</xd:def>";
-			xp = compile(xdef);
-			genXComponent(xp, clearTempDir());
-			json = "[1, null]";
-			xd = xp.createXDDocument("");
-			x = XonUtils.parseJSON(json);
-			assertTrue(XonUtils.xonEqual(x, xd.jparse(json, reporter)));
-			xc = xd.jparseXComponent(json, null, reporter);
-			assertNoErrorwarningsAndClear(reporter);
-			assertEq(
-				1,((List) SUtils.getValueFromGetter(xc,"get$item")).get(0));
-			assertNull(
-				((List) SUtils.getValueFromGetter(xc,"get$item")).get(1));
-		} catch (RuntimeException ex) {fail(ex);}
-if (true) return;
 /**/
 		try {
 			xdef = // sequence with separator
@@ -135,22 +115,16 @@ if (true) return;
 			assertNoErrorwarningsAndClear(reporter);
 			assertEq(xml, (xc = parseXC(xp, "", xml, null, reporter)).toXml());
 			assertNoErrorwarningsAndClear(reporter);
-			if ((o = SUtils.getValueFromGetter(xc, "geta")) instanceof List) {
-				assertTrue(((List) o).get(0) instanceof Long);
-				assertEq(1, ((List) o).get(0));
-				assertEq(2, ((List) o).get(1));
-				assertEq(3, ((List) o).get(2));
-			} else {
-				fail("incorrect type: " + o.getClass() + "; " + o);
-			}
-			if ((o = SUtils.getValueFromGetter(xc, "get$value")) instanceof List) {
-				assertTrue(((List) o).get(0) instanceof Long);
-				assertEq(4, ((List) o).get(0));
-				assertEq(5, ((List) o).get(1));
-				assertEq(6, ((List) o).get(2));
-			} else {
-				fail("incorrect type: " + o.getClass() + "; " + o);
-			}
+			list = (List) SUtils.getValueFromGetter(xc, "geta");
+			assertTrue(list.get(0) instanceof Long);
+			assertEq(1, list.get(0));
+			assertEq(2, list.get(1));
+			assertEq(3, list.get(2));
+			list = (List) SUtils.getValueFromGetter(xc, "get$value");
+			assertTrue(list.get(0) instanceof Long);
+			assertEq(4, list.get(0));
+			assertEq(5, list.get(1));
+			assertEq(6, list.get(2));
 			assertNull(SUtils.getValueFromGetter(xc, "get$b"));
 			assertNoErrorwarningsAndClear(reporter);
 			xml = "<a><b>5,6,7</b></a>";
@@ -158,13 +132,10 @@ if (true) return;
 			assertNoErrorwarningsAndClear(reporter);
 			assertNull(SUtils.getValueFromGetter(xc, "geta"));
 			assertNull(SUtils.getValueFromGetter(xc, "get$value"));
-			if ((o = SUtils.getValueFromGetter(xc, "get$b")) instanceof List) {
-				assertEq(5, ((List) o).get(0));
-				assertEq(6, ((List) o).get(1));
-				assertEq(7, ((List) o).get(2));
-			} else {
-				fail("incorrect type: " + o.getClass() + "; " + o);
-			}
+			list = (List) SUtils.getValueFromGetter(xc, "get$b");
+			assertEq(5, list.get(0));
+			assertEq(6, list.get(1));
+			assertEq(7, list.get(2));
 			xdef = // sequence with separator
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <xd:component>%class " + _package + ".MytestX_SQ %link #a;</xd:component>\n"+
@@ -592,7 +563,7 @@ if (true) return;
 				XonUtils.toJsonString(toJson(xc), true));
 
 		} catch (RuntimeException ex) {fail(ex);}
-if (true) return;
+//if (true) return;
 ////////////////////////////////////////////////////////////////////////////////
 		try {
 			xdef =

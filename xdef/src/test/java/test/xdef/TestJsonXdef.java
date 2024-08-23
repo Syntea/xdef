@@ -1033,18 +1033,20 @@ public class TestJsonXdef extends XDTester {
 "</xd:def>";
 			xp = compile(xdef);
 			genXComponent(xp, clearTempDir());
-			json = "[1, \"a b\"]"; // "[1, \"a b\", null]";
+			json = "[1, \"a b\", null]";
 			xd = xp.createXDDocument("");
 			x = XonUtils.parseJSON(json);
 			assertTrue(XonUtils.xonEqual(x, xd.jparse(json, reporter)));
 			xc = xd.jparseXComponent(json, null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
+			assertEq(3,
+				((List) SUtils.getValueFromGetter(xc, "get$item")).size());
 			assertEq(1,
 				((List) SUtils.getValueFromGetter(xc, "get$item")).get(0));
 			assertEq("a b",
 				((List) SUtils.getValueFromGetter(xc, "get$item")).get(1));
-//			assertNull(
-//				((List)SUtils.getValueFromGetter(xc,"get$item")).get(2));
+			assertNull(
+				((List)SUtils.getValueFromGetter(xc,"get$item")).get(2));
 			xdef = // test data with different encodings
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" root=\"a\" >\n" +
 "  <xd:xon name=\"a\">\n" +
