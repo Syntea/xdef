@@ -92,6 +92,26 @@ public class MyTest extends XDTester {
 		XComponent xc;
 		StringWriter swr;
 		ArrayReporter reporter = new ArrayReporter();
+		try {
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root='z'>\n" +
+"  <xd:xon name='z'> [\"* jvalue();\"] </xd:xon>\n" +
+"  <xd:component>%class "+_package+".X_jval %link #z;</xd:component>\n" +
+"</xd:def>";
+			xp = compile(xdef);
+			genXComponent(xp, clearTempDir());
+			json = "[1, null]";
+			xd = xp.createXDDocument("");
+			x = XonUtils.parseJSON(json);
+			assertTrue(XonUtils.xonEqual(x, xd.jparse(json, reporter)));
+			xc = xd.jparseXComponent(json, null, reporter);
+			assertNoErrorwarningsAndClear(reporter);
+			assertEq(
+				1,((List) SUtils.getValueFromGetter(xc,"get$item")).get(0));
+			assertNull(
+				((List) SUtils.getValueFromGetter(xc,"get$item")).get(1));
+		} catch (RuntimeException ex) {fail(ex);}
+if (true) return;
 /**/
 		try {
 			xdef = // sequence with separator
@@ -173,7 +193,7 @@ public class MyTest extends XDTester {
 			} else {
 				fail("incorrect type: " + o.getClass() + "; " + o);
 			}
-			if ((o = SUtils.getValueFromGetter(xc, "get$value")) instanceof List) {
+			if ((o=SUtils.getValueFromGetter(xc, "get$value")) instanceof List){
 				assertTrue(((List) o).get(0) instanceof Long);
 				assertEq(4, ((List) o).get(0));
 				assertEq(5, ((List) o).get(1));
@@ -444,15 +464,6 @@ public class MyTest extends XDTester {
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='x|y|y1|y2'>\n" +
-"<xd:xon name='y'>\n" +
-"  \"int();\"\n" +
-"</xd:xon>\n" +
-"<xd:xon name='y1'>\n" +
-"  {\"a\":\"int();\"}\n" +
-"</xd:xon>\n" +
-"<xd:xon name='y2'>\n" +
-"  [\"occurs 2 int();\", \"optional jnumber();\", \"optional string();\"]\n" +
-"</xd:xon>\n" +
 "<x>\n" +
 "  <a xd:script='*'>\n" +
 "    jlist(%item=jvalue())\n" +
@@ -472,6 +483,15 @@ public class MyTest extends XDTester {
 "    </s:array>\n" +
 "  </e>\n" +
 "</x>\n" +
+"<xd:xon name='y'>\n" +
+"  \"int();\"\n" +
+"</xd:xon>\n" +
+"<xd:xon name='y1'>\n" +
+"  {\"a\":\"int();\"}\n" +
+"</xd:xon>\n" +
+"<xd:xon name='y2'>\n" +
+"  [\"occurs 2 int();\", \"optional jnumber();\", \"optional string();\"]\n" +
+"</xd:xon>\n" +
 "<xd:component>\n" +
 "  %class bugreports.MyTest_X %link x;\n" +
 "  %class bugreports.MyTest_Y %link y;\n" +
@@ -510,7 +530,6 @@ public class MyTest extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xc = parseXC(xp, "", xml, null, reporter);
 			assertNoErrorwarnings(reporter);
-			xc.toXml();
 			assertEq(xml, xc.toXml());
 			xd = xp.createXDDocument("");
 			s = "123";
@@ -529,7 +548,6 @@ public class MyTest extends XDTester {
 				Class.forName("bugreports.MyTest_Y1"), reporter);
 			assertTrue(XonUtils.xonEqual(j, toJson(xc)),
 				XonUtils.toJsonString(toJson(xc), true));
-
 			xd = xp.createXDDocument("");
 			s = "[123, 123]";
 			j = XonUtils.parseJSON(s);
@@ -554,10 +572,27 @@ public class MyTest extends XDTester {
 				Class.forName("bugreports.MyTest_Y2"), reporter);
 			assertTrue(XonUtils.xonEqual(j, toJson(xc)),
 				XonUtils.toJsonString(toJson(xc), true));
-		} catch (ClassNotFoundException | RuntimeException ex) {
-			fail(ex);
-		}
-//if (true) return;
+		} catch (ClassNotFoundException | RuntimeException ex) {fail(ex);}
+		try {
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root='z'>\n" +
+"<xd:xon name='z'>\n" +
+"  [\"* int();\"]\n" +
+"</xd:xon>\n" +
+"<xd:component>%class bugreports.MyTest_Z %link z;</xd:component>\n" +
+"</xd:def>";
+			xp = compile(xdef);
+			genXComponent(xp, clearTempDir());
+			s = "[1,2,3]";
+			xd = xp.createXDDocument("");
+			j = XonUtils.parseJSON(s);
+			assertTrue(XonUtils.xonEqual(j, xd.jparse(s, reporter)));
+			xc = xd.jparseXComponent(s, null, reporter);
+			assertTrue(XonUtils.xonEqual(j, toJson(xc)),
+				XonUtils.toJsonString(toJson(xc), true));
+
+		} catch (RuntimeException ex) {fail(ex);}
+if (true) return;
 ////////////////////////////////////////////////////////////////////////////////
 		try {
 			xdef =

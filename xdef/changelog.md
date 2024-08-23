@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.2.4, release-date 2024-08-22
+# Version 42.2.4, release-date 2024-08-23
 * Fixed bug in X-component generator for value type declared as jvalue
   in X-definition models.
 

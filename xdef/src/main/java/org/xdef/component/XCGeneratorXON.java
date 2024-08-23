@@ -491,7 +491,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 (_genJavadoc ? "\t/** Get values of text nodes of &{d}."+LN+
 "\t * @return value of text nodes of &{d}"+LN+
 "\t */"+LN : "")+
-"\tpublic &{typ1} listOf$&{name}()";
+"\tpublic &{typ1} get$&{name}()";
 				s = jGet;
 				getters.append(modify(template +
 "{"+LN+
