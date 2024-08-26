@@ -49,7 +49,7 @@
     </scm>
     
     <properties>
-        <revision>42.2.4</revision><!-- when changed, change also ${release.date}, see below -->
+        <revision>42.2.5</revision><!-- when changed, change also ${release.date}, see below -->
         <changelist>-SNAPSHOT</changelist><!-- use profile "release" for build release-version -->
         <release.date>2024-08-26</release.date><!-- update when changed version -->
         <specification.version>4.2</specification.version>
