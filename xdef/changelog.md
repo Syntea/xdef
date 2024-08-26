@@ -1,11 +1,11 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.2.4, release-date 2024-08-23
-* Fixed bug in X-component generator for value type declared as jvalue
+# Version 42.2.4, release-date 2024-08-26
+* Fixed bug in X-component generator for value type declared as `jvalue`
   in X-definition models.
-* Fixed bug in X-component generator for array items type declared as jvalue
-  in X-definition if an item of array is null (result was incorrect: it was
-  object of type `org.xdef.xon.XonTools.JNull`).
+* Fixed bug in X-component generator for type of JSON array items declared as
+ `jvalue` in the X-definition if the field item is null (the result was
+  incorrect: it was object of type `org.xdef.xon.XonTools.JNull`).
 
 # Version 42.2.3, release-date 2024-08-19
 * Fixed bug when generating X-components with `jlist` and `sequence` value type.
