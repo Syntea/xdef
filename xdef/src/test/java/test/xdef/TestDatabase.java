@@ -562,7 +562,7 @@ public final class TestDatabase extends XDTester {
 "      if (ignored = isTitle.hasItem(title)) {\n"+
 "       error('TEST001','Book \"&amp;{b}\" already exists','&amp;{b}'+title);\n"+
 "      } else {\n"+
-//"       insertTitle.execute(title, editor, ISBN, issued);\n"+
+"       insertTitle.execute(title, editor, ISBN, issued);\n"+
 "       inserted++;\n"+
 "      }\n"+
 "    }\n"+
