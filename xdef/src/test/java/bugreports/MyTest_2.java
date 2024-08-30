@@ -323,7 +323,7 @@ if(T)return;
 "        \"category\": \"enum('reference', 'fiction')\",\n" +
 "        \"author\": \"string\",\n" +
 "        \"title\": \"string\",\n" +
-"        \"isbn\": \"? string\",\n" +
+"        \"ISBN\": \"? string\",\n" +
 "        \"price\": \"float\"\n" +
 "      }\n" +
 "    ],\n" +
@@ -362,7 +362,7 @@ $.store.book[0].title			$['store']['book'][0]['title']
 "        \"price\": 12.99\n" +
 "      },\n" +
 "      { \"price\": 8.99,\n" +
-"        \"isbn\": \"0-553-21311-3\",\n" +
+"        \"ISBN\": \"0-553-21311-3\",\n" +
 "        \"author\": \"Herman Melville\",\n" +
 "        \"title\": \"Moby Dick\",\n" +
 "        \"category\": \"fiction\"\n" +
@@ -370,7 +370,7 @@ $.store.book[0].title			$['store']['book'][0]['title']
 "      { \"category\": \"fiction\",\n" +
 "        \"author\": \"J. R. R. Tolkien\",\n" +
 "        \"title\": \"The Lord of the Rings\",\n" +
-"        \"isbn\": \"0-395-19395-8\",\n" +
+"        \"ISBN\": \"0-395-19395-8\",\n" +
 "        \"price\": 22.99\n" +
 "      }\n" +
 "    ],\n" +

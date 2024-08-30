@@ -54,16 +54,16 @@ public final class Test001  extends XDTester {
 				"false\nxxxx\nxxxx\ntext: orig1\ntext: \n"));
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='Book'>\n"+
-"  <Book isbn = \"int(0, 999999999)\"\n"+
+"  <Book ISBN = \"int(0, 999999999)\"\n"+
 "      published  = \"? gYear()\"\n " +
-"      xd:script = \"finally outln('isbn: '+@isbn+'; '+getElementText());\">\n"+
+"      xd:script = \"finally outln('ISBN: '+@ISBN+'; '+getElementText());\">\n"+
 "    string();\n"+
 "    <Author xd:script=\"*\"> string() </Author>\n"+
 "  </Book>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xml =
-"<Book isbn='123456789' published='2011'>\n"+
+"<Book ISBN='123456789' published='2011'>\n"+
 " The Crash\n"+
 " <Author>John Brown</Author>\n"+
 " <Author>Peter Smith</Author>\n"+
@@ -71,7 +71,7 @@ public final class Test001  extends XDTester {
 			swr = new StringWriter();
 			assertEq(xml, parse(xp, "", xml, reporter, swr, null, null));
 			assertNoErrorwarnings(reporter);
-			assertEq("isbn: 123456789; The Crash\n", swr.toString());
+			assertEq("ISBN: 123456789; The Crash\n", swr.toString());
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n"+
 "  <a>\n"+

@@ -37,7 +37,7 @@ public final class TestXmlWriter extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='books'>\n"+
 "  <books>\n"+
-"    <book xd:script='+; forget' isbn='int'>\n"+
+"    <book xd:script='+; forget' ISBN='int'>\n"+
 "      <title>string</title>\n"+
 "      <edited xd:script='?'>gYear</edited>\n"+
 "      <author xd:script='*'>string</author>\n"+
@@ -46,13 +46,13 @@ public final class TestXmlWriter extends XDTester {
 "</xd:def>";
 			xml =
 "<books>\n"+
-"  <book isbn='123456789'>\n"+
+"  <book ISBN='123456789'>\n"+
 "     <title>Tutorial</title>\n"+
 "     <edited>2016</edited>\n"+
 "     <author>John B. Brown</author>\n"+
 "     <author>Peter Smith</author>\n"+
 "  </book>\n"+
-"  <book isbn='123456789'>\n"+
+"  <book ISBN='123456789'>\n"+
 "     <title>The Bible</title>\n"+
 "  </book>\n"+
 "</books>";

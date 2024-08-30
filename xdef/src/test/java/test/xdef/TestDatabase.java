@@ -558,11 +558,11 @@ public final class TestDatabase extends XDTester {
 "     \"INSERT INTO MYTEST.TITLE_AUTHOR(IDAUTHOR,IDTITLE)\n"+
 "     VALUES ((SELECT IDAUTHOR FROM MYTEST.AUTHOR WHERE AUTHOR=?),\n"+
 "     (SELECT IDTITLE FROM MYTEST.TITLE WHERE TITLE=?))\");\n"+
-"    void insertTitle(String title,String editor,String isbn,String issued){\n"+
+"    void insertTitle(String title,String editor,String ISBN,String issued){\n"+
 "      if (ignored = isTitle.hasItem(title)) {\n"+
 "       error('TEST001','Book \"&amp;{b}\" already exists','&amp;{b}'+title);\n"+
 "      } else {\n"+
-"       insertTitle.execute(title, editor, isbn, issued);\n"+
+//"       insertTitle.execute(title, editor, ISBN, issued);\n"+
 "       inserted++;\n"+
 "      }\n"+
 "    }\n"+
