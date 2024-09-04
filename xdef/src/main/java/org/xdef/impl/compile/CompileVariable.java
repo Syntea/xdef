@@ -17,7 +17,7 @@ public final class CompileVariable extends XVariable {
 	private int _codeAddr;
 	/** List of code code addresses where method was called (or null). */
 	private int[] _postdefs;
-	/** Source position where the variable was declared. */
+	/** Source position where variable was declared. */
 	private final SPosition _spos;
 
 	/** Creates a new instance of ScriptVariable.
@@ -95,7 +95,7 @@ public final class CompileVariable extends XVariable {
 	/** Get source position where the variable was declared.
 	 * @return source position where the variable was declared.
 	 */
-	final SPosition getSourcePosition() {return _spos;}
+	public final SPosition getSourcePosition() {return _spos;}
 
 	@Override
 	/** Set value of variable. */
