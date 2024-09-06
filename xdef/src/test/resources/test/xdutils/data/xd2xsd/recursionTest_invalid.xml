@@ -1,0 +1,6 @@
+<!-- Testing recursion -->
+<tns:A xmlns:tns="http://ws.skp.sk/pis/cc/W4WS/2024/06"
+                        Name="TestDefinition"
+                        TimeStamp="2024-09-05T12:30:00">
+    <tns:R Name="DefinitionRoot1"/>
+</tns:A>

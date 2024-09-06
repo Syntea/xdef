@@ -29,7 +29,7 @@ import test.XDTester;
 public class TestXd2XsdConv extends XDTester {
 
 	private static final SchemaFactory XSDFACTORY =
-		SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+			SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 
 	private static final String MAIN_DEF_NAME = "main";
 	private static final String MAIN_SCHEMA_FILE_NAME = "main.xsd";
@@ -45,12 +45,12 @@ public class TestXd2XsdConv extends XDTester {
 		File dataDir = new File(getDataDir());
 		if (!dataDir.exists() || !dataDir.isDirectory()) {
 			throw new RuntimeException(
-				"Data directory does not exists or is not a directory!");
+					"Data directory does not exists or is not a directory!");
 		}
 		_dataDir = new File(dataDir.getAbsolutePath(), "xd2xsd");
 		if (!_dataDir.exists() || !_dataDir.isDirectory()) {
 			throw new RuntimeException(
-				"Xsd2xd directory does not exists or is not a directory!");
+					"Xsd2xd directory does not exists or is not a directory!");
 		}
 		File tempDir = clearTempDir();
 		if (!tempDir.exists()) {
@@ -58,7 +58,7 @@ public class TestXd2XsdConv extends XDTester {
 		} else {
 			if (!tempDir.isDirectory()) {
 				throw new RuntimeException(
-					"Temporary directory is not a directory!");
+						"Temporary directory is not a directory!");
 			}
 		}
 		_tempDir = new File(tempDir, "xd2xsd");
@@ -67,7 +67,7 @@ public class TestXd2XsdConv extends XDTester {
 		}
 		if (!_tempDir.isDirectory()) {
 			throw new RuntimeException(
-				"Temporary 'xd2xsd' directory is not a directory!");
+					"Temporary 'xd2xsd' directory is not a directory!");
 		}
 	}
 
@@ -94,26 +94,26 @@ public class TestXd2XsdConv extends XDTester {
 		_xdefFile = new File(_dataDir.getAbsolutePath(), testName+".xdef");
 		if (!_xdefFile.exists() || !_xdefFile.isFile()) {
 			setMessage(new ErrMessage("Test XDefinition file does not exists!",
-				_xdefFile, null));
+					_xdefFile, null));
 			return false;
 		}
 		try {
 			Properties props = new Properties();
 			props.setProperty(XDConstants.XDPROPERTY_WARNINGS, // xdef_warnings
-				 XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE);
+					XDConstants.XDPROPERTYVALUE_WARNINGS_TRUE);
 			props.put("xdef.warnings", "false");
 			XDPool xp = XDFactory.compileXD(props, _xdefFile);
 			if (!xp.exists(MAIN_DEF_NAME)) {
 				setMessage(new ErrMessage(
-					"Could not find main definition in XDefinition file!",
-					_xdefFile,
-					null));
+						"Could not find main definition in XDefinition file!",
+						_xdefFile,
+						null));
 				return false;
 			}
 			_chkDoc = xp.createXDDocument(MAIN_DEF_NAME);
 		} catch (RuntimeException ex) {
 			setMessage(new ErrMessage("Could not prepare XDefinition!",
-				_xdefFile, ex));
+					_xdefFile, ex));
 			return false;
 		}
 		//prepare schema
@@ -123,32 +123,32 @@ public class TestXd2XsdConv extends XDTester {
 		} else {
 			if (!schemaDir.isDirectory()) {
 				setMessage(new ErrMessage(
-					"Temporary directory for schema is not a directory!",
-					schemaDir,
-					null));
+						"Temporary directory for schema is not a directory!",
+						schemaDir,
+						null));
 				return false;
 			}
 		}
 		//generate schema
 		try {
 			XdefToXsd.genSchema(new File[] {_xdefFile},
-				schemaDir, null, null, "main", null, true, false);
+					schemaDir, null, null, "main", null, true, false);
 		} catch (Exception ex) {
 			displayFiles(_xdefFile);
 			try {
 				Element el = GenCollection.genCollection(
-					new String[]{_xdefFile.getAbsolutePath()}, true,true,true);
+						new String[]{_xdefFile.getAbsolutePath()}, true,true,true);
 				System.err.println(KXmlUtils.nodeToString(el, true));
 			} catch (Exception exx) {}
 			setMessage(new ErrMessage(
-				"Could not convert given XDefinition file!", _xdefFile, ex));
+					"Could not convert given XDefinition file!", _xdefFile, ex));
 			return false;
 		}
 		//get main schema
 		File mainSchema = new File(schemaDir, MAIN_SCHEMA_FILE_NAME);
 		if (!mainSchema.exists() || !mainSchema.isFile()) {
 			setMessage(new ErrMessage(
-				"Main schema file doesn't exist",mainSchema,null));
+					"Main schema file doesn't exist",mainSchema,null));
 			return false;
 		}
 		//prepare schema validator
@@ -161,7 +161,7 @@ public class TestXd2XsdConv extends XDTester {
 			System.err.println("============");
 			displayFiles(_tempDir);
 			setMessage(new ErrMessage("Can't prepare schema validator!\n"
-				+ ex.getMessage(),mainSchema, ex));
+					+ ex.getMessage(),mainSchema, ex));
 			return false;
 		}
 		return true;
@@ -174,7 +174,7 @@ public class TestXd2XsdConv extends XDTester {
 		File xmlFile = new File(_dataDir, xmlName + ".xml");
 		if (!xmlFile.exists() || !xmlFile.isFile()) {
 			setMessage(new ErrMessage(
-				"XML file doesn't exist or isn't file!", xmlFile, null));
+					"XML file doesn't exist or isn't file!", xmlFile, null));
 			return false;
 		}
 		//check by xdef
@@ -182,7 +182,7 @@ public class TestXd2XsdConv extends XDTester {
 		_chkDoc.xparse(xmlFile, _reporter);
 		if (_reporter.errors()) {
 			setMessage(new ErrMessage(
-				_reporter.getReportReader().printToString(), xmlFile, null));
+					_reporter.getReportReader().printToString(), xmlFile, null));
 			return false;
 		}
 		//check by schema
@@ -191,19 +191,19 @@ public class TestXd2XsdConv extends XDTester {
 			_validator.validate(source);
 		} catch (IOException ioex) {
 			setMessage(new ErrMessage("Can't read from XML file stream!",
-				xmlFile, ioex));
+					xmlFile, ioex));
 			return false;
 		} catch (SAXException sex) {
 			displayFiles(_xdefFile);
 			try {
 				Element el = XDGenCollection.genCollection(
-					new String[]{_xdefFile.getAbsolutePath()}, true,true,true);
+						new String[]{_xdefFile.getAbsolutePath()}, true,true,true);
 				System.err.println(KXmlUtils.nodeToString(el, true));
 			} catch (Exception exx) {}
 			System.err.println("============");
 			displayFiles(_tempDir);
 			setMessage(new ErrMessage(
-				"Error when validating XML file by schema!", xmlFile, sex));
+					"Error when validating XML file by schema!", xmlFile, sex));
 			return false;
 		}
 		return true;
@@ -217,7 +217,7 @@ public class TestXd2XsdConv extends XDTester {
 				+ xmlName + ".xml");
 		if (!xmlFile.exists() || !xmlFile.isFile()) {
 			setMessage(new ErrMessage(
-				"XML file doesn't exist or is not file!", xmlFile, null));
+					"XML file doesn't exist or is not file!", xmlFile, null));
 			return false;
 		}
 		//check by xdef
@@ -225,7 +225,7 @@ public class TestXd2XsdConv extends XDTester {
 		_chkDoc.xparse(xmlFile, _reporter);
 		if (!_reporter.errors()) {
 			setMessage(new ErrMessage("XML file is valid by XDefinition!",
-				xmlFile, null));
+					xmlFile, null));
 			return false;
 		}
 		//check by schema
@@ -233,11 +233,11 @@ public class TestXd2XsdConv extends XDTester {
 		try {
 			_validator.validate(source);
 			setMessage(new ErrMessage("XML file is valid against schema!",
-				xmlFile, null));
+					xmlFile, null));
 			return false;
 		} catch (IOException ioex) {
 			setMessage(new ErrMessage("Couldn't read from XML file!",
-				xmlFile, ioex));
+					xmlFile, ioex));
 			return false;
 		} catch (SAXException saxex) {
 			return  true;
@@ -258,7 +258,7 @@ public class TestXd2XsdConv extends XDTester {
 	private static class ErrMessage {
 
 		public static final ErrMessage NO_MESSAGE =
-			new ErrMessage("No message!", null, null);
+				new ErrMessage("No message!", null, null);
 		private final String _message;
 		private final File _file;
 		private final Exception _ex;
@@ -395,6 +395,21 @@ public class TestXd2XsdConv extends XDTester {
 			assertTrue(parse("xdTypeTest_valid_2"), popMessage());
 			assertTrue(parse("xdTypeTest_valid_3"), popMessage());
 			assertTrue(parse("xdTypeTest_valid_4"), popMessage());
+
+			/* AK */
+			assertTrue(prepare("recursionTest"), popMessage());
+			assertTrue(parse("recursionTest_valid"), popMessage());
+			assertTrue(parseFail("recursionTest_invalid"), popMessage());
+			assertTrue(parseFail("recursionTest_invalid_1"), popMessage());
+
+			assertTrue(prepare("textNodeTest"), popMessage());
+			assertTrue(parse("textNodeTest_valid"), popMessage());
+			assertTrue(parse("textNodeTest_valid_1"), popMessage());
+			assertTrue(parse("textNodeTest_valid_2"), popMessage());
+
+			assertTrue(prepare("exampleFromDocumentationTest"), popMessage());
+			assertTrue(parse("exampleFromDocumentationTest_valid"), popMessage());
+			/* AK */
 
 			_dataDir = new File(_dataDir, "P1A");
 			assertTrue(prepare("SouborP1A"), popMessage());

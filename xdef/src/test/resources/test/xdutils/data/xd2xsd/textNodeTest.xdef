@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<xd:def xmlns:xd       ="http://www.xdef.org/xdef/4.2"
+        impl-version   ="4.4.0_0" impl-date="2023-11-02"
+        xmlns          ="http://ws.skp.sk/pis/cc/W4WS/2024/06"
+        xd:name        ="main"
+        xd:root        ="A">
+
+ <xd:declaration scope="local">
+  type name                string(1,5);
+  type description         string(5,15);
+ </xd:declaration>
+
+ <A
+         Name               ="  name()">
+     <R                    xd:script="1;   ref B"/>
+     description()
+ </A>
+
+  <B
+          Name                ="  name()"
+  >
+   description()
+  </B>
+
+</xd:def>
+

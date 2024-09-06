@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<xd:def xmlns:xd       ="http://www.xdef.org/xdef/4.2"
+        impl-version   ="4.4.0_0" impl-date="2023-11-02"
+        xmlns          ="http://ws.skp.sk/pis/cc/W4WS/2024/06"
+        xd:name        ="main"
+        xd:root        ="A">
+
+ <xd:declaration scope="local">
+  type booleanYN           enum('Y','N');
+  type listName            string(1,30)        CHECK tab('CC_DefCiselnik','Ciselnik');
+  type name                string(1,30);
+  type valueType           enum('NUMBER','VARCHAR2','CHAR','DATETIME');
+  type xsDateTime          xdatetime('yyyy-MM-ddTHH:mm:ss');
+
+  boolean tab(String a, String b) {return true;}
+ </xd:declaration>
+
+
+ <A
+         Name               ="  listName()"
+         TimeStamp          ="  xsDateTime()">
+     <R                    xd:script="1;   ref R"/>
+ </A>
+
+ <R
+         Name                ="  name()">
+     <C                    xd:script="1..; ref C"
+         Nullable            ="  booleanYN()"
+         ValueType           ="  valueType()"
+     />
+     <R                    xd:script="0..; ref R"/>
+ </R>
+
+  <C
+          Name                ="  name()"
+  />
+</xd:def>
+

@@ -40,8 +40,16 @@ public interface XDCONV {
 	public static final long XDCONV207 = 22712806014992L;
 	/** Missing parameters of method "xdatetime" */
 	public static final long XDCONV208 = 22712806014993L;
+	/** Definition of simple types */
+	public static final long XDCONV301 = 22712806014994L;
+	/** Definition of attributes */
+	public static final long XDCONV302 = 22712806014995L;
+	/** Element Body structures */
+	public static final long XDCONV303 = 22712806014996L;
+	/** Partial substantive structures */
+	public static final long XDCONV304 = 22712806014997L;
 	/** Error messages for XDefToXsd and XsdToXdef utilites */
-	public static final long XDCONV_DESCRIPTION = 22712806014994L;
+	public static final long XDCONV_DESCRIPTION = 22712806014998L;
 	/** English */
-	public static final long XDCONV_LANGUAGE = 22712806014995L;
+	public static final long XDCONV_LANGUAGE = 22712806014999L;
 }
