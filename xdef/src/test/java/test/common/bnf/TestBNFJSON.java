@@ -143,7 +143,7 @@ public class TestBNFJSON extends STester {
 + "\t\"abc\\\"def\":[]}\n"
 + "]\n";
 			assertEq(s, parse(grammar, "value", s));
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 	}
 
 	/** Run test

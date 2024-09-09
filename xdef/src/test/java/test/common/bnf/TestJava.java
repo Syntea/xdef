@@ -52,9 +52,7 @@ public class TestJava extends STester {
 //"\n" +
 //"";
 //			assertEq(s, parse(g, "java_source", s));
-		} catch (Exception ex) {
-			fail(ex);
-		}
+		} catch (RuntimeException ex) {fail(ex);}
 	}
 
 	/** Run test

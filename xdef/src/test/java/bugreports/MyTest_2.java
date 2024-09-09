@@ -1,6 +1,7 @@
 package bugreports;
 
 import java.io.File;
+import java.io.IOException;
 import org.w3c.dom.Element;
 import org.xdef.XDConstants;
 import org.xdef.XDDocument;
@@ -80,7 +81,7 @@ public class MyTest_2 extends XDTester {
 			assertTrue(XonUtils.xonEqual(XonUtils.xonToJson(j),
 				XonUtils.xmlToXon(xc.toXml())));
 			assertTrue(XonUtils.xonEqual(j, xc.toXon()));
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 if (T)return;
 		try {
 			xdef =
@@ -228,7 +229,7 @@ if(T)return;
 //			System.err.println(KXmlUtils.nodeToString(XonUtils.xonToXmlW(o), true));
 //			assertNoErrorwarnings(reporter);
 //			assertTrue(XonUtils.xonEqual(j, o));
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 if(T)return;
 		try {
 			xdef =
@@ -243,13 +244,13 @@ if(T)return;
 			xp = compile(xdef);
 			genXComponent(xp, tempDir);
 			json = "[1, \"2\", 3]"; //error (not string but number!)
-			j = xp.createXDDocument().jparse(json, reporter);
+			xp.createXDDocument().jparse(json, reporter);
 			assertTrue(reporter.printToString().contains("XDEF809"));
 			reporter.clear();
-			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
+			xp.createXDDocument().jparseXComponent(json, null, reporter);
 			assertTrue(reporter.getErrorCount() == 2
 				&& reporter.printToString().contains("XDEF809"));
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 		reporter.clear();
 if(T)return;
 		try {
@@ -311,7 +312,7 @@ if(T)return;
 			assertNoErrors(reporter);
 			assertTrue(XonUtils.xonEqual(XonUtils.parseJSON(json), j),
 				XonUtils.toJsonString(j, true));
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 if(T)return;
 		try {
 			xdef =
@@ -387,7 +388,7 @@ $.store.book[0].title			$['store']['book'][0]['title']
 			assertTrue(XonUtils.xonEqual(XonUtils.parseJSON(json), j),
 				XonUtils.toJsonString(j, true));
 //System.out.println(XonUtils.toJsonString(j, true));
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 if(T)return;
 		try {
 			xdef =
@@ -427,7 +428,7 @@ if(T)return;
 			assertEq("xxx", SUtils.getValueFromGetter(xc, "get$item"));
 			assertEq(125, SUtils.getValueFromGetter(xc, "get$item_1"));
 			assertEq(true, SUtils.getValueFromGetter(xc, "get$item_2"));
-		} catch (Exception ex) {fail(ex);}
+		} catch (IOException | RuntimeException ex) {fail(ex);}
 if(T)return;
 		try {
 			xdef =
@@ -465,7 +466,7 @@ if(T)return;
 			assertEq("xxx", SUtils.getValueFromGetter(xc, "get$item"));
 			assertEq(125, SUtils.getValueFromGetter(xc, "get$item_1"));
 			assertEq(true, SUtils.getValueFromGetter(xc, "get$item_2"));
-		} catch (Exception ex) {fail(ex);}
+		} catch (IOException | RuntimeException ex) {fail(ex);}
 if(T )return;
 		try {
 			xdef =
@@ -500,7 +501,7 @@ if(T )return;
 			j = xp.createXDDocument().jparse(json, reporter);
 			assertNoErrorwarnings(reporter);
 			assertTrue(XonUtils.xonEqual(XonUtils.parseJSON(json), j));
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 if(T )return;
 		try {
 			xdef =
@@ -879,7 +880,7 @@ if(T )return;
 			assertNull(SUtils.getValueFromGetter(xc, "get$item"));
 			assertNull(SUtils.getValueFromGetter(xc, "get$item_1"));
 			assertEq("", SUtils.getValueFromGetter(xc, "get$item_2"));
-		} catch (Exception ex) {fail(ex);}
+		} catch (ClassNotFoundException | RuntimeException ex) {fail(ex);}
 if(T ){return;}
 		try {
 			xdef =
@@ -1006,7 +1007,7 @@ if(T ){return;}
 			el = XonUtils.xonToXmlW(j);
 			parse(xp, "", el, reporter);
 			assertNoErrorwarnings(reporter);
-		} catch (Exception ex) {fail(ex);}
+		} catch (ClassNotFoundException | RuntimeException ex) {fail(ex);}
 if(T ){return;}
 		try {
 			xdef =
@@ -1267,7 +1268,7 @@ if(T ){return;}
 //			System.out.println(KXmlUtils.nodeToString(el, true));
 			assertNoErrorwarnings(reporter);
 			assertEq(xml, el);
-		} catch (Exception ex) {fail(ex);}
+		} catch (ClassNotFoundException | RuntimeException ex) {fail(ex);}
 
 		clearTempDir(); // clear temporary directory
 	}

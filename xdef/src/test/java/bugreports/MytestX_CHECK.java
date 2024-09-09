@@ -5,8 +5,7 @@ package bugreports;
 public class MytestX_CHECK implements org.xdef.component.XComponent{
   public String geta() {return _a;}
   public java.util.List<String> get$b() {
-	java.util.List<String> y =
-	  new java.util.ArrayList<String>();
+	java.util.List<String> y = new java.util.ArrayList<>();
 	for (MytestX_CHECK.b z : listOfb()) {
 	  y.add(z.get$value());
 	}

@@ -1,5 +1,6 @@
 package test.common;
 
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import org.xdef.sys.STester;
@@ -64,7 +65,7 @@ public class TestAll {
 		PrintStream log;
 		try {
 			log = new PrintStream(new FileOutputStream("testCommon.log"));
-		} catch (Exception ex) {
+		} catch (FileNotFoundException ex) {
 			log = null;
 		}
 		STester[] tests = getTests();

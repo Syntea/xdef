@@ -1316,7 +1316,7 @@ public final class TestScript extends XDTester {
 			xc = xd.xparseXComponent(xml, null, reporter);
 			assertNoErrorsAndClear(reporter);
 			assertEq(xml, xc.toXml());
-		} catch (Exception ex) {fail(ex); reporter.clear();}
+		} catch (RuntimeException ex) {fail(ex); reporter.clear();}
 
 		resetTester();
 	}

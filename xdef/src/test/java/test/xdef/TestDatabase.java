@@ -7,6 +7,7 @@ import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.xdef.XDService;
 import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -172,7 +173,7 @@ public final class TestDatabase extends XDTester {
 			if (!tempDir.endsWith("/")) {
 				tempDir += '/';
 			}
-		} catch (Exception ex) {
+		} catch (IOException ex) {
 			fail(ex);
 			return;
 		}
@@ -244,7 +245,7 @@ public final class TestDatabase extends XDTester {
 			assertEq(nl.getLength(), ROWS_A);
 			for(int i=1; i<=nl.getLength(); i++) {
 				Element ele = (Element)nl.item(i-1);
-				assertEq(Integer.parseInt(ele.getAttribute("a")), i);
+				assertEq(Integer.valueOf(ele.getAttribute("a")), i);
 				assertEq(ATTR_B+i, ele.getAttribute("b"));
 				assertEq(ATTR_C+i,
 					((Element)ele.getChildNodes().item(0)).getTextContent());
@@ -284,7 +285,7 @@ public final class TestDatabase extends XDTester {
 			assertEq(nl.getLength(), ROWS_A);
 			for(int i=1; i<=nl.getLength(); i++) {
 				Element ele = (Element)nl.item(i-1);
-				assertEq(Integer.parseInt(ele.getAttribute("a")), i);
+				assertEq(Integer.valueOf(ele.getAttribute("a")), i);
 				assertEq(ATTR_B+i, ele.getAttribute("b"));
 				assertEq(ATTR_C+i,
 					((Element)ele.getChildNodes().item(0)).getTextContent());
@@ -319,7 +320,7 @@ public final class TestDatabase extends XDTester {
 			assertEq(nl.getLength(), ROWS_A);
 			for(int i=1; i<=nl.getLength(); i++) {
 				Element ele = (Element)nl.item(i-1);
-				assertEq(Integer.parseInt(ele.getAttribute("a")), i);
+				assertEq(Integer.valueOf(ele.getAttribute("a")), i);
 				assertEq(ele.getAttribute("b"), ATTR_B+i);
 			}
 			// check that external Service wasn't closed
@@ -358,7 +359,7 @@ public final class TestDatabase extends XDTester {
 			assertEq(nl.getLength(), ROWS_A);
 			for(int i=1; i<=nl.getLength(); i++) {
 				Element ele = (Element)nl.item(i-1);
-				assertEq(Integer.parseInt(ele.getAttribute("a")), i);
+				assertEq(Integer.valueOf(ele.getAttribute("a")), i);
 				assertEq(ele.getAttribute("b"), ATTR_B+i);
 			}
 
@@ -403,7 +404,7 @@ public final class TestDatabase extends XDTester {
 			assertEq(nl.getLength(), ROWS_A);
 			for(int i=1; i<=nl.getLength(); i++) {
 				Element ele = (Element)nl.item(i-1);
-				assertEq(Integer.parseInt(ele.getAttribute("a")), i);
+				assertEq(Integer.valueOf(ele.getAttribute("a")), i);
 				assertEq(ele.getAttribute("b"), ATTR_B+i);
 			}
 

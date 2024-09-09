@@ -2,11 +2,13 @@ package test.common.bnf;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.io.StringReader;
 import java.util.ArrayList;
 import org.w3c.dom.Element;
 import org.xdef.sys.BNFGrammar;
+import org.xdef.sys.SRuntimeException;
 import static org.xdef.sys.STester.runTest;
 import org.xdef.sys.StringParser;
 import org.xdef.xml.KXmlUtils;
@@ -72,7 +74,7 @@ public class TestXdScript extends XDTester {
 				g = BNFGrammar.compile(null, g.toString(), null);
 			}
 			assertEq(bnfOfBNF, parse(g, "BNFGrammar", bnfOfBNF));
-			s = g.toString();
+//			s = g.toString();
 //			assertEq(s, parse(g, "BNFGrammar", s));
 
 /*labels not implemented yet*
@@ -308,19 +310,21 @@ public class TestXdScript extends XDTester {
 			assertEq(s, parse(g, "ExternalMethod", s));
 ////////////////////////////////////////////////////////////////////////////////
 			java.io.ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			PrintStream ps = new PrintStream(baos, true, getEncoding());
-			g.trace(ps);
-			parse(g, "DeclarationScript", "external element x ?;");
-			ps.close();
-			BufferedReader in = new BufferedReader(
-				new StringReader(new String(baos.toByteArray(),getEncoding())));
-			String line;
-			int max = Integer.MIN_VALUE;
-			ArrayList<String> lines = new ArrayList<String>();
-			while((line = in.readLine()) != null) {
-				lines.add(line);
+			try (PrintStream ps = new PrintStream(baos, true, getEncoding())) {
+				g.trace(ps);
+				parse(g, "DeclarationScript", "external element x ?;");
 			}
-			in.close();
+			String line;
+			int max;
+			ArrayList<String> lines;
+			try (BufferedReader in = new BufferedReader(
+				new StringReader(new String(baos.toByteArray(),getEncoding())))) {
+				max = Integer.MIN_VALUE;
+				lines = new ArrayList<>();
+				while((line = in.readLine()) != null) {
+					lines.add(line);
+				}
+			}
 			int z = -1;
 			String[] x;
 			for(int i = 0; i < lines.size(); i++) {
@@ -355,7 +359,7 @@ public class TestXdScript extends XDTester {
 			assertEq("VariableModifier; (0,9); true", line);
 			g.trace(null);
 
-		} catch (Exception ex) {
+		} catch (IOException | NumberFormatException | SRuntimeException ex) {
 			fail(ex);
 		}
 	}

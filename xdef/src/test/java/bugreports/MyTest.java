@@ -258,9 +258,7 @@ public class MyTest extends XDTester {
 			assertNoErrorwarningsAndClear(reporter);
 			assertTrue(XonUtils.xonEqual(o,
 				SUtils.getValueFromGetter(xc, "toXon")));
-		} catch (RuntimeException ex) {
-			fail(ex);
-		}
+		} catch (RuntimeException ex) {fail(ex);}
 //if(true)return;
 /**/
 		try {
@@ -276,9 +274,7 @@ public class MyTest extends XDTester {
 			(xd = xp.createXDDocument()).setXDContext(xml);
 			assertEq(xml, create(xd, "A", reporter));
 			assertNoErrorwarningsAndClear(reporter);
-		} catch (Exception ex) {
-			fail(ex);
-		}
+		} catch (Exception ex) {fail(ex);}
 /**/
 		try {
 			xdef =
@@ -298,9 +294,7 @@ public class MyTest extends XDTester {
 			assertEq(create(xp, null, reporter, "<a><b><d a='y'/></b></a>"),
 				"<a><b/><d a=\"y\"/></a>");
 			assertNoErrorwarnings(reporter);
-		} catch (RuntimeException ex) {
-			fail(ex);
-		}
+		} catch (Exception ex) {fail(ex);}
 //if (true) return;
 		try {// test %anyName in map
 			xdef =
@@ -333,9 +327,7 @@ public class MyTest extends XDTester {
 			assertEq("", testAny(xp, "{ \"a\":1 }"));
 			assertEq("", testAny(xp, "{ \"b\":[2,3] }"));
 			assertEq("", testAny(xp, "{ \"a\":1, \"b\":[2,3] }"));
-		} catch (RuntimeException ex) {
-			fail(ex);
-		}
+		} catch (Exception ex) {fail(ex);}
 		reporter.clear();
 //if(true)return;
 /**/
@@ -359,9 +351,7 @@ public class MyTest extends XDTester {
 			assertTrue(XonUtils.xonEqual(o, o = xd.jparse(json, reporter)),
 				XonUtils.toXonString(o, true));
 			assertNoErrors(reporter);
-		} catch (RuntimeException ex) {
-			fail(ex);
-		}
+		} catch (RuntimeException ex) {fail(ex);}
 //if(true)return;
 //if(T)return;
 		System.setProperty(XConstants.XDPROPERTY_XDEF_DBGSWITCHES, "");
@@ -428,9 +418,7 @@ public class MyTest extends XDTester {
 			xd.jparseXComponent(json, null, reporter);
 			assertNoErrorwarnings(reporter);
 			assertEq("XComponent: #a/jx:array\n", swr.toString());
-		} catch (RuntimeException ex) {
-			fail(ex);
-		}
+		} catch (RuntimeException ex) {fail(ex);}
 //if(true)return;
 		try {
 			xdef =
@@ -543,7 +531,7 @@ public class MyTest extends XDTester {
 				Class.forName("bugreports.MyTest_Y2"), reporter);
 			assertTrue(XonUtils.xonEqual(j, toJson(xc)),
 				XonUtils.toJsonString(toJson(xc), true));
-		} catch (ClassNotFoundException | RuntimeException ex) {fail(ex);}
+		} catch (Exception ex) {fail(ex);}
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='z'>\n" +
@@ -598,9 +586,7 @@ public class MyTest extends XDTester {
 			xml = "<a x='9' y='(a,b)' z='(c)'/>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrorwarnings(reporter);
-		} catch (Exception ex) {
-			fail(ex);
-		}
+		} catch (Exception ex) {fail(ex);}
 //if(true)return;
 		try {
 			// \p{Lu} capital letters
@@ -628,9 +614,8 @@ public class MyTest extends XDTester {
 			xml = "<a a='F. X. Šalda'/>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrorwarnings(reporter);
-		} catch (Exception ex) {
-			fail(ex);
-		}
+		} catch (Exception ex) {fail(ex);}
+
 		clearTempDir(); // delete temporary files.
 	}
 

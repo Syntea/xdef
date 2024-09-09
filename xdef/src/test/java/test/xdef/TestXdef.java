@@ -25,8 +25,10 @@ import java.util.TimeZone;
 import org.w3c.dom.Element;
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Properties;
 import javax.xml.XMLConstants;
+import org.w3c.dom.DOMException;
 import org.xdef.XDParserAbstract;
 import org.xdef.proc.XXNode;
 import org.xdef.proc.XXElement;
@@ -344,7 +346,7 @@ public final class TestXdef extends XDTester {
 			parse(xd, xml, reporter);
 			assertNoErrorwarnings(reporter);
 			assertEq("abc", swr.toString());
-		} catch (Exception ex) {fail(ex);}
+		} catch (UnsupportedEncodingException | RuntimeException ex){fail(ex);}
 		try {
 			xdef = // check onIllegalRoot
 "<x:def xmlns:x ='" + _xdNS + "' root ='a'"+
@@ -2007,7 +2009,7 @@ public final class TestXdef extends XDTester {
 			parse(xp, "", "<a><b/><b/><b/><c/></a>", reporter, swr,null,null);
 			assertNoErrorwarnings(reporter);
 			assertEq("start\nend\n", swr.toString());
-		} catch(Exception ex) {fail(ex);}
+		} catch(IOException | DOMException | SRuntimeException ex) {fail(ex);}
 		try { //test collection, metaNamespace, any and match
 			setChkSyntax(false);
 			xdef = //test collection, metaNamespace, any and match
@@ -2258,7 +2260,7 @@ public final class TestXdef extends XDTester {
 			assertNoErrorwarnings(reporter);
 			out.close();
 			assertEq("x", swr.toString());
-		} catch (Exception ex) {fail(ex);}
+		} catch (DOMException | SRuntimeException ex) {fail(ex);}
 		String oldProperty = getProperty(XDConstants.XDPROPERTY_WARNINGS);
 		try {
 			setProperty(XDConstants.XDPROPERTY_WARNINGS,

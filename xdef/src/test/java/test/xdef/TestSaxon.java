@@ -140,7 +140,7 @@ public class TestSaxon extends XDTester {
 			assertNoErrorwarnings(reporter);
 			assertEq("<a xmlns='N'>" +
 				"<e f='1'/><e f='2'/><f/><f/><g/><g/><h/><h/></a>", el);
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 		try {//test of xquery
 			xp = compile(
 "<xd:def xmlns:xd='" + _xdNS + "' root='a' >\n"+
@@ -357,7 +357,7 @@ public class TestSaxon extends XDTester {
 					.getChildNodes().getLength());
 			assertEq(2, el.getElementsByTagName("Home").item(0)
 					.getChildNodes().getLength());
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 	}
 
 	@Override

@@ -7,6 +7,7 @@ import org.xdef.sys.BNFExtMethod;
 import org.xdef.sys.BNFGrammar;
 import org.xdef.sys.FUtils;
 import org.xdef.sys.Report;
+import org.xdef.sys.SException;
 import org.xdef.sys.StringParser;
 import org.xdef.sys.STester;
 
@@ -17,10 +18,9 @@ public class TestBNF extends STester {
 
 	public TestBNF() {super();}
 
-	private final Stack<Object> _stack = new Stack<Object>();
-	private final Stack<Object> _opers = new Stack<Object>();
-	private final HashMap<Object, Object> _variables =
-		new HashMap<Object, Object>();
+	private final Stack<Object> _stack = new Stack<>();
+	private final Stack<Object> _opers = new Stack<>();
+	private final HashMap<Object, Object> _variables = new HashMap<>();
 	private String _s;
 	private Object _result;
 
@@ -136,7 +136,7 @@ public class TestBNF extends STester {
 		return true;
 	}
 	public boolean exec(BNFExtMethod p) {
-		Stack<Object> stack = new Stack<Object>();
+		Stack<Object> stack = new Stack<>();
 		String varname = null;
 		for (int i = 0; i < _stack.size(); i++) {
 			String s = (String) _stack.get(i);
@@ -168,26 +168,40 @@ public class TestBNF extends STester {
 						long x = (Long) obj1;
 						if (obj instanceof Long) {
 							long y = (Long) obj;
-							if (ch == '+') {
-								stack.push(x + y);
-							} else if (ch == '-') {
-								stack.push(x - y);
-							} else if (ch == '*') {
-								stack.push(x * y);
-							} else if (ch == '/') {
-								stack.push(x / y);
+							switch (ch) {
+								case '+':
+									stack.push(x + y);
+									break;
+								case '-':
+									stack.push(x - y);
+									break;
+								case '*':
+									stack.push(x * y);
+									break;
+								case '/':
+									stack.push(x / y);
+									break;
+								default:
+									break;
 							}
 							continue;
 						} else if (obj instanceof Double) {
 							double y = (Double) obj;
-							if (ch == '+') {
-								stack.push(x + y);
-							} else if (ch == '-') {
-								stack.push(x - y);
-							} else if (ch == '*') {
-								stack.push(x * y);
-							} else if (ch == '/') {
-								stack.push(x / y);
+							switch (ch) {
+								case '+':
+									stack.push(x + y);
+									break;
+								case '-':
+									stack.push(x - y);
+									break;
+								case '*':
+									stack.push(x * y);
+									break;
+								case '/':
+									stack.push(x / y);
+									break;
+								default:
+									break;
 							}
 							continue;
 						}
@@ -195,26 +209,40 @@ public class TestBNF extends STester {
 						double x = ((Double) obj1);
 						if (obj instanceof Long) {
 							long y = (Long) obj;
-							if (ch == '+') {
-								stack.push(x + y);
-							} else if (ch == '-') {
-								stack.push(x - y);
-							} else if (ch == '*') {
-								stack.push(x * y);
-							} else if (ch == '/') {
-								stack.push(x / y);
+							switch (ch) {
+								case '+':
+									stack.push(x + y);
+									break;
+								case '-':
+									stack.push(x - y);
+									break;
+								case '*':
+									stack.push(x * y);
+									break;
+								case '/':
+									stack.push(x / y);
+									break;
+								default:
+									break;
 							}
 							continue;
 						} else if (obj instanceof Double) {
 							double y = (Double) obj;
-							if (ch == '+') {
-								stack.push(x + y);
-							} else if (ch == '-') {
-								stack.push(x - y);
-							} else if (ch == '*') {
-								stack.push(x * y);
-							} else if (ch == '/') {
-								stack.push(x / y);
+							switch (ch) {
+								case '+':
+									stack.push(x + y);
+									break;
+								case '-':
+									stack.push(x - y);
+									break;
+								case '*':
+									stack.push(x * y);
+									break;
+								case '/':
+									stack.push(x / y);
+									break;
+								default:
+									break;
 							}
 							continue;
 						}
@@ -232,9 +260,9 @@ public class TestBNF extends STester {
 					} else if (ch >= '0' && ch <= '9') { //integer or float
 						if (s.indexOf('.') < 0 &&
 							s.indexOf('e') < 0 && s.indexOf('R') < 0) {
-							stack.push(Long.parseLong(s));
+							stack.push(Long.valueOf(s));
 						} else {
-							stack.push(Double.parseDouble(s));
+							stack.push(Double.valueOf(s));
 						}
 					} else { //var name
 						if (s.equals("true")) {
@@ -319,15 +347,15 @@ public class TestBNF extends STester {
 			assertEq("ab", p(g, "x", "ab"));
 			g = BNFGrammar.compile("x ::= 'a' $anyChar");
 			assertEq("ax", p(g, "x", "ax"));
-			assertTrue(p(g, "x", "a").indexOf("x failed, ") >= 0);
-			assertTrue(p(g, "x", "bb").indexOf("x failed, ") >= 0);
+			assertTrue(p(g, "x", "a").contains("x failed, "));
+			assertTrue(p(g, "x", "bb").contains("x failed, "));
 			g = BNFGrammar.compile("x ::= 'a' $anyChar * ");
 			assertEq("a", p(g, "x", "a"));
 			assertNull(g.getParsedObjects());
 			assertEq("ax", p(g, "x", "ax"));
 			assertEq("axy", p(g, "x", "axy"));
-			assertTrue(p(g, "x", "b").indexOf("x failed, ") >= 0);
-			assertTrue(p(g, "x", "bb").indexOf("x failed, ") >= 0);
+			assertTrue(p(g, "x", "b").contains("x failed, "));
+			assertTrue(p(g, "x", "bb").contains("x failed, "));
 			g = BNFGrammar.compile("x ::= 'a' $stop 'b' ");
 			assertEq("a", p(g, "x", "abc"));
 			assertNull(g.getParsedObjects());
@@ -1242,7 +1270,7 @@ public class TestBNF extends STester {
 			assertEq("123", p(g1, "nmtokens", "123"));
 			assertEq("1.1.1990, 6.12.1945",
 				p(g, "mydate", "1.1.1990, 6.12.1945"));
-		} catch (Exception ex) {
+		} catch (SException | RuntimeException ex) {
 			fail(ex);
 		}
 	}

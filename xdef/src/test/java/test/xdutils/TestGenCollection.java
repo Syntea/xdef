@@ -4,6 +4,7 @@ import org.xdef.xml.KXmlUtils;
 import org.xdef.util.GenCollection;
 import org.xdef.impl.util.gencollection.XDGenCollection;
 import java.io.File;
+import java.io.IOException;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import static org.xdef.sys.STester.runTest;
@@ -189,7 +190,7 @@ public class TestGenCollection extends XDTester {
 				}
 			}
 			new File(outFile).delete();
-		} catch (Exception ex) {fail(ex);}
+		} catch (IOException ex) {fail(ex);}
 	}
 
 	/** Run test

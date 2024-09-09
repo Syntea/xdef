@@ -148,7 +148,7 @@ public class TestX extends XDTester {
 "}";
 			xd.jparse(json, reporter);
 			assertNoErrorwarnings(reporter);
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 		try {
 			xdef =
 "<xd:def xmlns:xd=\""+_xdNS+"\" name=\"X\" root=\"a\">\n"+
@@ -165,7 +165,7 @@ public class TestX extends XDTester {
 			reporter.clear();
 			xd.jparse(json, reporter);
 			assertNoErrorwarnings(reporter);
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 	}
 
 	/** Run test.

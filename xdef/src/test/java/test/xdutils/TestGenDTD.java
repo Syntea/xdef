@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
@@ -36,7 +37,7 @@ public class TestGenDTD extends XDTester {
 				"http://xml.org/sax/features/validation", //FeatureURI
 				true);
 			reader.setEntityResolver(_handler); // Register entity resolver
-		} catch (Exception ex) {
+		} catch (ParserConfigurationException | SAXException ex) {
 			fail(ex);
 		}
 		try {
@@ -135,7 +136,7 @@ public class TestGenDTD extends XDTester {
 			_handler._dtdInput.setSystemId("Data.dtd");
 			_handler._dtdInput.setEncoding("UTF-8");
 			reader.parse(inputSource);
-		} catch (Exception ex) {
+		} catch (IOException | SAXException ex) {
 			fail(ex);
 		}
 	}

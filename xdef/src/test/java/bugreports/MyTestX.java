@@ -70,9 +70,9 @@ public class MyTestX extends XDTester {
 
 	private void clearSources() {
 		if (_geneatedSources != null) {
-			for (int i = 0; i < _geneatedSources.length; i++) {
-				if (_geneatedSources[i] != null) {
-					_geneatedSources[i].delete();
+			for (File _geneatedSource : _geneatedSources) {
+				if (_geneatedSource != null) {
+					_geneatedSource.delete();
 				}
 			}
 			_geneatedSources = null;
@@ -136,7 +136,7 @@ public class MyTestX extends XDTester {
 		System.out.println(org.xdef.xon.XonTools.xmlToJName(s));
 /**/
 ////////////////////////////////////////////////////////////////////////////////
-		boolean T = true; // if false, all tests are invoked
+		boolean T = false; // if false, all tests are invoked
 ////////////////////////////////////////////////////////////////////////////////
 /**/
 		try {
@@ -152,7 +152,7 @@ public class MyTestX extends XDTester {
 			xon = "\"2021\"";
 			s = _package+".MytestX_num";
 			assertNull(testX(xp,"", s, xon));
-		} catch (Exception ex) {fail(ex); reporter.clear();}
+		} catch (RuntimeException ex) {fail(ex); reporter.clear();}
 //if(true)return;
 if(T) return;
 clearSources();
@@ -203,7 +203,7 @@ clearSources();
 				fail(XonUtils.toXonString(o, true)
 					+ "\n*****\n" + XonUtils.toXonString(x, true));
 			}
-		} catch (Exception ex) {fail(ex); reporter.clear();}
+		} catch (RuntimeException ex) {fail(ex); reporter.clear();}
 //if(true)return;
 if(T)return;
 clearSources();
@@ -277,7 +277,7 @@ clearSources();
 			xc = xd.jcreateXComponent("A", null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
 			assertTrue(XonUtils.xonEqual(x, xc.toXon()));
-		} catch (Exception ex) {fail(ex); reporter.clear();}
+		} catch (RuntimeException ex) {fail(ex); reporter.clear();}
 //if(true)return;
 if(T)return;
 clearSources();
@@ -384,7 +384,7 @@ clearSources();
 			assertNull(testM("int", "{ }"));
 			assertNull(testA("ipAddr", "[null, /::FFFF:129.144.52.38,/0.0.0]"));
 
-		} catch (Exception ex) {fail(ex); reporter.clear();}
+		} catch (RuntimeException ex) {fail(ex); reporter.clear();}
 //if(true)return;
 if(T)return;
 clearSources();
@@ -451,7 +451,7 @@ clearSources();
 					+ "\nnew =" + XonUtils.toXonString(o, true));
 				reporter.clear();
 			}
-		} catch (Exception ex) {fail(ex); reporter.clear();}
+		} catch (RuntimeException ex) {fail(ex); reporter.clear();}
 //if(true)return;
 if(T)return;
 clearSources();
@@ -561,7 +561,7 @@ clearSources();
 			assertNull(testX(xp,"x", s, "\" \\t\\n \""));
 //			assertNull(testX(xp,"x", s, "\"\\\"\""));
 //			assertNull(testX(xp,"x", s, "\"\\\"\\\"\""));
-		} catch (Exception ex) {fail(ex); reporter.clear();}
+		} catch (RuntimeException ex) {fail(ex); reporter.clear();}
 //if(true)return;
 clearSources();
 if(T)return;
@@ -578,7 +578,6 @@ if(T)return;
 "</xd:collection>";
 			xp = compile(xdef);
 			genAndCopyXComponents(xp);
-			s = _package+".MyTestXX12";
 			assertNull(testX(xp,"X", "[1]"));
 			assertNull(testX(xp,"X", "[ [] ]"));
 			assertNull(testX(xp,"X", "[ [1, true] ]"));
@@ -627,7 +626,7 @@ clearSources();
 			assertNull(testX(xp,"x", s, "\" ab\\tcd \""));
 			assertNull(testX(xp,"x", s, "\"\\\"\""));
 			assertNull(testX(xp,"x", s, "\"\\\"\\\"\""));
-		} catch (Exception ex) {fail(ex); reporter.clear();}
+		} catch (RuntimeException ex) {fail(ex); reporter.clear();}
 if(T)return;
 	clearSources();
 /**/
@@ -662,7 +661,7 @@ if(T)return;
 			xc = xd.jcreateXComponent("A", null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
 			assertTrue(XonUtils.xonEqual(x, xc.toXon()));
-		} catch (Exception ex) {fail(ex); reporter.clear();}
+		} catch (RuntimeException ex) {fail(ex); reporter.clear();}
 clearSources();
 if(T)return;
 /**/
@@ -841,7 +840,7 @@ clearSources();
 			assertNull(SUtils.getValueFromGetter(xc, "get$a"));
 			assertNull(((Map) xc.toXon()).get("a"));
 			assertFalse(((Map) xc.toXon()).containsKey("a"));
-	} catch (Exception ex) {fail(ex); reporter.clear();}
+	} catch (RuntimeException ex) {fail(ex); reporter.clear();}
 //if(true)return;
 clearSources();
 if(T)return;
@@ -929,7 +928,7 @@ list = (List) y;
 System.out.println(list.get(0).getClass() + "," + list.get(1).getClass());
 System.out.println(XonUtils.toXonString(y, true));
 			assertTrue(XonUtils.xonEqual(x,y));
-		} catch (Exception ex) {fail(ex); reporter.clear();}
+		} catch (RuntimeException ex) {fail(ex); reporter.clear();}
 if(T)return;
 clearSources();
 /**/
@@ -976,7 +975,7 @@ clearSources();
 			xc = xp.createXDDocument().xparseXComponent(xml, null, reporter);
 			assertNoErrors(reporter);
 			assertEq(xml, xc.toXml());
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 if(T)return;
 clearSources();
 		try {
@@ -1023,7 +1022,7 @@ clearSources();
 			xc = xp.createXDDocument().xparseXComponent(xml, null, reporter);
 			assertNoErrors(reporter);
 			assertEq(xml, xc.toXml());
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 if(T)return;
 clearSources();
 		try {
@@ -1042,7 +1041,7 @@ clearSources();
 			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
 			assertNoErrors(reporter);
 			System.out.println(xc.toXon());
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 if(T)return;
 clearSources();
 /**/
@@ -1062,7 +1061,7 @@ clearSources();
 			xc = xp.createXDDocument().jparseXComponent(json, null, reporter);
 			assertNoErrors(reporter);
 			System.out.println(xc.toXon());
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 if(T)return;
 clearSources();
 /**/
@@ -1088,7 +1087,7 @@ clearSources();
 //			setValueToSetter(xc, "setval", 2);
 			json = "null";
 			assertNotNull(testX(xp, "", s, json)); // error: not map
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 if(T)return;
 clearSources();
 /**/
@@ -1107,7 +1106,7 @@ clearSources();
 			assertEq(1, SUtils.getValueFromGetter(xc, "getval"));
 			SUtils.setValueToSetter(xc, "setval", 2);
 			assertEq(2, SUtils.getValueFromGetter(xc, "getval"));
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 if(T)return;
 clearSources();
 /**/
@@ -1128,7 +1127,7 @@ clearSources();
 			assertEq(1, ((List) xc.toXon()).size());
 			assertEq(2, ((List) xc.toXon()).get(0));
 			assertEq(xc.toXon(), SUtils.getValueFromGetter(xc, "getArray$"));
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 if(T)return;
 clearSources();
 /**/
@@ -1159,7 +1158,7 @@ clearSources();
 			assertEq(9, SUtils.getValueFromGetter(xc, "get$a"));
 			SUtils.setValueToSetter(xc, "set$a", null);
 			assertNull(SUtils.getValueFromGetter(xc, "get$a"));
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 if(T)return;
 clearSources();
 /**/
@@ -1240,7 +1239,7 @@ clearSources();
 			assertNull(testX(xp,"",s, "[[],{}]")); // OK
 			assertNotNull(testX(xp,"",s, "[]")); // error empty
 			assertNotNull(testX(xp,"",s, "{a:1,b:2}")); // error not array
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 if(T)return;
 clearSources();
 /**/
@@ -1409,7 +1408,7 @@ clearSources();
 			assertNoErrorwarningsAndClear(reporter);
 			assertTrue(XonUtils.xonEqual(XonUtils.parseINI(ini),
 				XonUtils.parseINI(XonUtils.toIniString(xini))));
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 		reporter.clear();
 if(T)return;
 clearSources();
@@ -1431,7 +1430,6 @@ clearSources();
 			genAndCopyXComponents(xp);
 			assertNull(testX(xp,"", s));
 			xd = xp.createXDDocument();
-			x = XonUtils.parseXON(s);
 			x = jparse(xd, s, reporter);
 			assertNoErrorwarnings(reporter);
 			xd = xp.createXDDocument("");
@@ -1441,7 +1439,7 @@ clearSources();
 			if (!XonUtils.xonEqual(x, o)) {
 				fail(x + "\n" + o + "\n");
 			}
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 if(T)return;
 clearSources();
 		try {
@@ -1456,7 +1454,6 @@ clearSources();
 			xp = compile(xdef);
 			genAndCopyXComponents(xp);
 			assertNull(testX(xp,"", s));
-			xd = xp.createXDDocument();
 			x = XonUtils.parseXON(s);
 			assertNoErrorwarnings(reporter);
 			xd = xp.createXDDocument("");
@@ -1466,7 +1463,7 @@ clearSources();
 			if (!XonUtils.xonEqual(x, o)) {
 				fail(x + "\n" + o + "\n");
 			}
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 if(T)return;
 clearSources();
 		try {
@@ -1487,7 +1484,6 @@ clearSources();
 			genAndCopyXComponents(xp);
 			assertNull(testX(xp,"", s));
 			xd = xp.createXDDocument();
-			x = XonUtils.parseXON(s);
 			x = jparse(xd, s, reporter);
 			assertNoErrorwarnings(reporter);
 			xd = xp.createXDDocument("");
@@ -1497,7 +1493,7 @@ clearSources();
 			if (!XonUtils.xonEqual(x, o)) {
 				fail(x + "\n" + o + "\n");
 			}
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 if(T)return;
 clearSources();
 		try {
@@ -1515,20 +1511,20 @@ clearSources();
 "</xd:xon>\n" +
 "<xd:component>%class "+_package+".MyTestXX16 %link a</xd:component>\n"+
 "</xd:def>";
-			s =
-"[\n" +
-"  {\n" +
-"    \"Genre\": [\"A1\"]\n" +
-"  },\n" +
-"  {\n" +
-"    \"Genre\": [\"B1\", \"B2\"]\n" +
-"  },\n" +
-"  {\n" +
-"    \"Genre\": \"C1\"\n" +
-"  }\n" +
-"]";
 			xp = compile(xdef);
 			genAndCopyXComponents(xp);
+//			s =
+//"[\n" +
+//"  {\n" +
+//"    \"Genre\": [\"A1\"]\n" +
+//"  },\n" +
+//"  {\n" +
+//"    \"Genre\": [\"B1\", \"B2\"]\n" +
+//"  },\n" +
+//"  {\n" +
+//"    \"Genre\": \"C1\"\n" +
+//"  }\n" +
+//"]";
 		} catch (Exception ex) {fail(ex);}
 if(T)return;
 clearSources();
@@ -1623,7 +1619,7 @@ clearSources();
 			assertNoErrorwarnings(reporter);
 			assertEq(((Map)xc.toXon()).get("date"),new SDatetime("2020-02-22"));
 			assertTrue(XonUtils.xonEqual(x, xc.toXon()));
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 if(T)return;
 clearSources();
 		try {
@@ -1671,12 +1667,12 @@ clearSources();
 			assertNoErrorwarnings(reporter);
 			reporter.clear();
 			assertTrue(XonUtils.xonEqual(xini,
-				xd.iparse(s = XonUtils.toIniString(xini), reporter)));
+				xd.iparse(XonUtils.toIniString(xini), reporter)));
 			assertNoErrorwarnings(reporter);
 			assertEq("/123.45.67.8",
 				"" + ((Map<String, Object>)xini.get("Server")).get("SeverIP"));
 			reporter.clear();
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 if(T)return;
 clearSources();
 		try { // test Windows INI
@@ -1696,7 +1692,7 @@ clearSources();
 			reporter.clear();
 			assertTrue(XonUtils.xonEqual(XonUtils.parseINI(s),
 				XonUtils.parseINI(XonUtils.toIniString(xini))));
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 		try {
 			xdef =
 "<xd:def  xmlns:xd='" + _xdNS + "' root='DefCiselnik' >\n" +
@@ -1711,7 +1707,7 @@ clearSources();
 "    <TransF   Column           =\"required string()\"/>\n" +
 "    <TransM   Column           =\"required string()\"/>\n" +
 "</xd:def>";
-			xp = XDFactory.compileXD(null,xdef);;
+			xp = XDFactory.compileXD(null,xdef);
 			xml =
 "<DefCiselnik_ IdFlow=\"181131058\">\n" +
 "    <ControlId IdDefPartner=\"163\"/>\n" +
@@ -1734,7 +1730,7 @@ clearSources();
 			el = create(xd, "DefCiselnik", reporter);
 			assertNoErrorsAndClear(reporter);
 			System.out.println(KXmlUtils.nodeToString(el,true));
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 if(T)return;
 clearSources();
 

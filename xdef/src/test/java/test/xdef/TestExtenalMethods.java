@@ -354,9 +354,9 @@ public final class TestExtenalMethods extends XDTester {
 		} catch (Exception ex) {
 			// fail state is correct, because the TestFailClassLoader hasn't
 			// found the class test.xdef.TestExtenalMethods
-			if ((s = ex.getMessage()) == null ||
-				s.indexOf("XDEF228") < 0 || // unknown class
-				s.indexOf("XDEF443") < 0) {// unknown method
+			if ((s = ex.getMessage()) == null
+				|| !s.contains("XDEF228") 				// unknown class
+				|| !s.contains("XDEF443")) {// unknown method
 				fail(ex);
 			}
 		}
@@ -499,7 +499,7 @@ public final class TestExtenalMethods extends XDTester {
 			assertEq(_m8, 3);
 			assertEq(_m9, 9);
 			assertEq(_m10, 3);
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+

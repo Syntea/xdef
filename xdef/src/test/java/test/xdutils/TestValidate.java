@@ -9,6 +9,8 @@ import org.xdef.sys.Report;
 import org.xdef.sys.ReportReader;
 import org.xdef.util.XValidate;
 import java.io.File;
+import java.io.IOException;
+import org.xdef.sys.SException;
 import test.XDTester;
 
 /** TestValidate.
@@ -98,7 +100,7 @@ public class TestValidate extends XDTester {
 
 			new File(tempDir, "TestValidate3.xp").delete();
 			new File(tempDir, "TestValidate3.log").delete();
-		} catch (Exception ex) {fail(ex);}
+		} catch (IOException | SException | RuntimeException ex) {fail(ex);}
 
 		clearTempDir(); // delete temporary files.
 	}

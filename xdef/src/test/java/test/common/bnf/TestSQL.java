@@ -127,7 +127,7 @@ public class TestSQL extends STester {
 //"  ;\n"+
 "";
 			assertEq(s, parse(g, "StatementList", s));
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 	}
 
 	/** Run test

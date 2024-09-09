@@ -28,8 +28,8 @@ public class TestGUIEditor  extends XDTester {
 ////////////////////////////////////////////////////////////////////////////////
 			File f = new File(clearTempDir(),  "newProject");
 			f.mkdirs(); // work directory for created project
-			String wdir = f.getCanonicalPath();
 ////////////////////////////////////////////////////////////////////////////////
+//			String wdir = f.getCanonicalPath();
 //			test("-v", "-workDir", wdir);
 //			test("-v", "-format", "JSON");
 //			test("-c", "-workDir", wdir);

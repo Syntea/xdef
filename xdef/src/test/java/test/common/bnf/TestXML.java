@@ -112,9 +112,7 @@ public class TestXML extends STester {
 "</Base>\n"+
 "</xd:def>";
 			assertEq(s, parse(grammar, "document", s));
-		} catch (Exception ex) {
-			fail(ex);
-		}
+		} catch (RuntimeException ex) {fail(ex);}
 	}
 
 	/** Run test

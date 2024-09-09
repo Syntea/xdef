@@ -1,12 +1,14 @@
 package test.xdutils;
 
 import java.io.File;
+import java.io.IOException;
 import org.w3c.dom.Element;
 import org.xdef.XDConstants;
 import org.xdef.XDDocument;
 import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.xdef.sys.ArrayReporter;
+import org.xdef.sys.SException;
 import static org.xdef.sys.STester.runTest;
 import org.xdef.sys.SUtils;
 import org.xdef.util.GenXDefinition;
@@ -50,7 +52,7 @@ public class TestGenXdef extends XDTester {
 					XonUtils.toXonString(x, true) + '\n' +
 					SUtils.readString(new File(fname)));
 			}
-		} catch (Exception ex) {
+		} catch (IOException | SException | RuntimeException ex) {
 			fail(f.getAbsolutePath());
 			fail(ex);
 		}
@@ -60,8 +62,6 @@ public class TestGenXdef extends XDTester {
 		String fname;
 		String xname;
 		XDPool xp;
-		XDDocument xd;
-		Object o,x;
 		String tempDir = getTempDir();
 		try {
 			data = "<A a='1f' b='b'><B>true</B><B/></A>";
@@ -73,7 +73,7 @@ public class TestGenXdef extends XDTester {
 			if (reporter.errorWarnings()) {
 				fail(id + ":\n" +reporter.printToString());
 			}
-		} catch (Exception ex) {
+		} catch (IOException | RuntimeException ex) {
 			fail(id + ":");
 			fail(ex);
 		}
@@ -208,7 +208,7 @@ dataDir + "TestValidate2.xml",
 "  <xd:Y y=\"z\"/>\n"+
 "  <xd:Y/>\n"+
 "</xd:X>";
-			el = GenXDefinition.genXdef(xml);
+			GenXDefinition.genXdef(xml);
 			fail("Exception not thrown");
 		} catch (Exception ex) {
 			if (!ex.getMessage().contains("XDEF881")) {
@@ -222,7 +222,7 @@ dataDir + "TestValidate2.xml",
 "  <d:Y y=\"z\"/>\n"+
 "  <d:Y/>\n"+
 "</d:X>";
-			el = GenXDefinition.genXdef(xml);
+			GenXDefinition.genXdef(xml);
 			fail("Exception not thrown");
 		} catch (Exception ex) {
 			if (!ex.getMessage().contains("XDEF882")) {

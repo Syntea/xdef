@@ -16,7 +16,6 @@ public class TestEmailAddr extends STester {
 //			System.out.println("'" + x.getUserName() + "'; "+x.getEmailAddr());
 			return x;
 		} catch (Exception ex) {
-			ex.printStackTrace();
 			return null;
 		}
 	}
@@ -25,32 +24,18 @@ public class TestEmailAddr extends STester {
 	@Override
 	public void test() {
 		try {
-			String s;
-			s = "1@2";
-			DefEmailAddr d;
-			assertNotNull(d = parse(s));
-			s = "<1E.-J@s-e_.z.cz>";
-			assertNotNull(d = parse(s));
-			s = "(ab)a@b";
-			assertNotNull(d = parse(s));
-			s = "(ab) (cd) a@b";
-			assertNotNull(d = parse(s));
-			s = "a@b(ab) (cd)";
-			assertNotNull(d = parse(s));
-			s = "a b <a@b>";
-			assertNotNull(d = parse(s));
-			s = "(a (c d) b)a@b (ef) (gh)";
-			assertNotNull(d = parse(s));
-			s = "El-,Ji. <EJ@sez.cz>";
-			assertNotNull(d = parse(s));
-			s = "=?UTF-8?B?xb5lbG92w6E=?= <ep@e.c>";
-			assertNotNull(d = parse(s));
-			s = "=?UTF-8?Q?P. B=C3=BDk?= <p@s>";
-			assertNotNull(d = parse(s));
-			s = "(V. T.)<tr@vo.xz>(u)";
-			assertNotNull(d = parse(s));
-			s = "(a b) \"V. T.\" (c d) <tr@vo.xz> (u v)";
-			assertNotNull(d = parse(s));
+			assertNotNull(parse("1@2"));
+			assertNotNull(parse("<1E.-J@s-e_.z.cz>"));
+			assertNotNull(parse("(ab)a@b"));
+			assertNotNull(parse("(ab) (cd) a@b"));
+			assertNotNull(parse("a@b(ab) (cd)"));
+			assertNotNull(parse("a b <a@b>"));
+			assertNotNull(parse("(a (c d) b)a@b (ef) (gh)"));
+			assertNotNull(parse("El-,Ji. <EJ@sez.cz>"));
+			assertNotNull(parse("=?UTF-8?B?xb5lbG92w6E=?= <ep@e.c>"));
+			assertNotNull(parse("=?UTF-8?Q?P. B=C3=BDk?= <p@s>"));
+			assertNotNull(parse("(V. T.)<tr@vo.xz>(u)"));
+			assertNotNull(parse("(a b) \"V. T.\" (c d) <tr@vo.xz> (u v)"));
 		} catch (Exception ex) {fail(ex);}
 	}
 

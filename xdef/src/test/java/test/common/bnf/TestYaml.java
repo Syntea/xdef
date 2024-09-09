@@ -54,51 +54,51 @@ public class TestYaml extends STester {
 //			g.trace(System.err);
 			assertEq(s, parse(g, "l_directive", s));
 //if(true) return;
-			s =
-"%TAG !e! tag:example.com,2000:app/\n" +
-"---\n" +
-"!e!foo \"bar\"\n";
+//			s =
+//"%TAG !e! tag:example.com,2000:app/\n" +
+//"---\n" +
+//"!e!foo \"bar\"\n";
 //			g.trace(System.err);
 //			assertEq(s, parse(g, "l_yaml_stream", s));
 //if(true) return;
-			s =
-"%YAML 1.2\n" +
-"---\n" +
-"!!map {\n" +
-"  ? !!str \"sequence\"\n" +
-"  : !!seq [ !!str \"one\", !!str \"two\" ],\n" +
-"  ? !!str \"mapping\"\n" +
-"  : !!map {\n" +
-"    ? !!str \"sky\" : !!str \"blue\",\n" +
-"    ? !!str \"sea\" : !!str \"green\",\n" +
-"  },\n" +
-"}\n";
+//			s =
+//"%YAML 1.2\n" +
+//"---\n" +
+//"!!map {\n" +
+//"  ? !!str \"sequence\"\n" +
+//"  : !!seq [ !!str \"one\", !!str \"two\" ],\n" +
+//"  ? !!str \"mapping\"\n" +
+//"  : !!map {\n" +
+//"    ? !!str \"sky\" : !!str \"blue\",\n" +
+//"    ? !!str \"sea\" : !!str \"green\",\n" +
+//"  },\n" +
+//"}\n";
 //			g.trace(System.err);
 //			assertEq(s, parse(g, "l_yaml_stream", s));
 //if(true) return;
-			s =
-"%YAML 1.2\n" +
-"---\n" +
-"!<tag:example.com,2000:app/int> \"1 - 3\"\n";
+//			s =
+//"%YAML 1.2\n" +
+//"---\n" +
+//"!<tag:example.com,2000:app/int> \"1 - 3\"\n";
 //			g.trace(System.err);
 //			assertEq(s, parse(g, "l_yaml_stream", s));
 //if(true) return;
-			s =
-"%YAML 1.2\n" +
-"---\n" +
-"!!str \"Document\"";
+//			s =
+//"%YAML 1.2\n" +
+//"---\n" +
+//"!!str \"Document\"";
 //			g.trace(System.err);
 //			assertEq(s, parse(g, "l_yaml_stream", s));
 //if(true) return;
-			s =
-"Block style: !!seq\n" +
-"- Clark Evans\n" +
-"- Ingy döt Net\n" +
-"- Oren Ben-Kiki";
+//			s =
+//"Block style: !!seq\n" +
+//"- Clark Evans\n" +
+//"- Ingy döt Net\n" +
+//"- Oren Ben-Kiki";
 //			g.trace(System.err);
 //			assertEq(s, parse(g, "l_yaml_stream", s));
 //if(true) return;
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 	}
 
 	/** Run test

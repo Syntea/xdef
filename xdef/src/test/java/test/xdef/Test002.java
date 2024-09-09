@@ -571,7 +571,7 @@ public final class Test002 extends XDTester {
 			if (_errorCount != 1 || _errorCode != 4202) {
 				fail("ErrorCount:"+_errorCount+", errorCode:"+_errorCode);
 			}
-		} catch (IOException ex) {fail(ex);}
+		} catch (IOException | RuntimeException ex) {fail(ex);}
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+

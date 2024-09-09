@@ -158,7 +158,7 @@ public final class TestNamespaces extends XDTester {
 			//XDEF236 Repeated name of element model '&{0}'
 			assertTrue(reporter.printToString().contains("XDEF236"),
 				"Error not reported");
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 
 		resetTester();
 	}

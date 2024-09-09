@@ -2,6 +2,7 @@ package test.common.bnf;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -73,7 +74,7 @@ public class TestExprCompiler {
 	static final byte FUNCTION_OP = METHOD_OP + 1;
 	static final byte COMMAND_OP = FUNCTION_OP + 1;
 
-	static final Map<String, Byte> _codes = new HashMap<String, Byte>();
+	static final Map<String, Byte> _codes = new HashMap<>();
 
 	static {
 		_codes.put("intConst", INTCONST_OP);
@@ -109,11 +110,11 @@ public class TestExprCompiler {
 			if ("intConst".equals(item)) {
 				String s = source.substring(Integer.parseInt(ii[1]),
 					Integer.parseInt(ii[2]));
-				result[i] = new CodeItem(item, Long.parseLong(s));
+				result[i] = new CodeItem(item, Long.valueOf(s));
 			} else if ("fltConst".equals(item)) {
 				String s = source.substring(Integer.parseInt(ii[1]),
 					Integer.parseInt(ii[2]));
-				result[i] = new CodeItem(item, Double.parseDouble(s));
+				result[i] = new CodeItem(item, Double.valueOf(s));
 			} else if ("boolConst".equals(item)) {
 				String s = source.substring(Integer.parseInt(ii[1]),
 					Integer.parseInt(ii[2]));
@@ -226,14 +227,16 @@ public class TestExprCompiler {
 		final Object[] code,
 		final Map<String, Object> variables,
 		ByteArrayOutputStream byteArray) {
-		final Stack<Object> stack = new Stack<Object>();
+		final Stack<Object> stack = new Stack<>();
 		PrintStream out;
 		variables.clear();
 		byteArray.reset();
 		byteArray.reset();
 		try { // prepare printing commands
 			out = new PrintStream(byteArray, true, "UTF-8");
-		} catch (Exception ex) {throw new RuntimeException(ex);}
+		} catch (UnsupportedEncodingException ex) {
+			out = new PrintStream(byteArray, true); // never happens
+		} // never happens
 		CodeItem[] pc = precompile(source, code);
 		for (int i = 0; i < pc.length; i++) {
 			CodeItem item = pc[i];
@@ -407,8 +410,7 @@ public class TestExprCompiler {
 						variables.put(name, x);
 					}
 				} else {
-					throw new RuntimeException("Error: Operand type "
-						+ x.getClass());
+					throw new RuntimeException("Error: Operand type " + x);
 				}
 			} else if ("ASS".equals(item._op)) {
 				Object x = stack.pop();

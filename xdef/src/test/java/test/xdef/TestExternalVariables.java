@@ -71,7 +71,7 @@ public final class TestExternalVariables extends XDTester {
 				fail("error not reported");
 			} catch (Exception ex) {
 				s = ex.getMessage();
-				if (s == null || s.indexOf("XDEF562") < 0) {
+				if (s == null || !s.contains("XDEF562")) {
 					fail(ex);
 				}
 			}

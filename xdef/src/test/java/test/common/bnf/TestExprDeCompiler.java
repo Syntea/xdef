@@ -25,10 +25,10 @@ public class TestExprDeCompiler {
 			SourceItem(final String s) {_s = s; _o = new Operation("");}
 		}
 
-		Stack<SourceItem> stack = new Stack<SourceItem>();
-		Stack<Stack<SourceItem>> stackOfStack = new Stack<Stack<SourceItem>>();
+		Stack<SourceItem> stack = new Stack<>();
+		Stack<Stack<SourceItem>> stackOfStack = new Stack<>();
 		StringBuilder result = new StringBuilder();
-		Map<String, SourceItem> variables = new TreeMap<String, SourceItem>();
+		Map<String, SourceItem> variables = new TreeMap<>();
 		for (int i = 0; i < code.length; i++) {
 			String item = code[i].toString();
 			if (item.startsWith("info: ")) { // parsed position
@@ -97,8 +97,8 @@ public class TestExprDeCompiler {
 				}
 			} else if ("paramList".equals(item)) { // parameter list
 				stackOfStack.push(stack);
-				stackOfStack.push(new Stack<SourceItem>());
-				stack = new Stack<SourceItem>();
+				stackOfStack.push(new Stack<>());
+				stack = new Stack<>();
 			} else if ("param".equals(item)) { // parameter
 				stackOfStack.peek().push(stack.pop());
 			} else if ("method".equals(item) || "function".equals(item)) {

@@ -3,7 +3,6 @@ package test.common.sys;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.Report;
 import org.xdef.sys.ReportPrinter;
-import org.xdef.sys.SPosition;
 import org.xdef.sys.StringParser;
 import java.io.PrintWriter;
 import java.io.StringReader;
@@ -62,7 +61,6 @@ public class TestErrorReporting extends STester {
 			" b\n" +    //04
 			"\n";       //05
 		StringParser p;
-		SPosition savedPos;
 
 		try {
 			p = new StringParser(source);
@@ -73,7 +71,6 @@ public class TestErrorReporting extends STester {
 
 		try {
 			p = new StringParser(source);
-			savedPos = p.getPosition(); //position with line info
 			p.setLineInfoFlag(true);
 			p.setSourceBuffer(source);
 			test2(p, source);

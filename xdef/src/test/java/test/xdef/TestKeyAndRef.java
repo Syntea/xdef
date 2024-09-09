@@ -1092,7 +1092,7 @@ public final class TestKeyAndRef extends XDTester {
 			assertEq(xml, parse(xd, xml, reporter));
 			assertNoErrorwarnings(reporter);
 			assertEq("1,2,3,4,5,2,5,1,4,3,", swr.toString());
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 		try { // test of uniqueSetKey and bindSet
 			xdef = // uniqueSetKey
 "<xd:def xmlns:xd='" + XDConstants.XDEF40_NS_URI + "' root='CodeBook'>\n"+

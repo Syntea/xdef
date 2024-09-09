@@ -13,11 +13,13 @@ import org.xdef.xml.KXmlUtils;
 import test.XDTester;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.List;
 import java.util.Properties;
 import java.util.Stack;
+import org.w3c.dom.DOMException;
 import org.xdef.XDContainer;
 import org.xdef.XDNamedValue;
 import org.xdef.XDOutput;
@@ -39,6 +41,7 @@ import org.xdef.proc.XXData;
 import org.xdef.proc.XXElement;
 import org.xdef.proc.XXNode;
 import org.xdef.sys.Report;
+import org.xdef.sys.SException;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SUtils;
 
@@ -71,7 +74,7 @@ pro prenos souboru download WINscp
  */
 public class MyTest_0 extends XDTester {
 
-	private final Stack<String> _stack = new Stack<String>();
+	private final Stack<String> _stack = new Stack<>();
 	private String _item;
 
 	public MyTest_0() {super();}
@@ -103,7 +106,7 @@ public class MyTest_0 extends XDTester {
 			XSAbstractParser d = new XSParseDecimal();
 			d.setNamedParams(null, c);
 			return d.check(null, chkel.getXMLNode().getNodeValue());
-		} catch (Exception ex) {
+		} catch (DOMException | SException ex) {
 			XDParseResult x = XDFactory.createParseResult("");
 			x.error("", ex.toString());
 			return x;
@@ -274,7 +277,7 @@ public class MyTest_0 extends XDTester {
 				fail(XonUtils.toXonString(o, true)
 					+ "\n*****\n" + XonUtils.toXonString(x, true));
 			}
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 if(T)return;
 		try {
 			xdef =
@@ -301,7 +304,7 @@ if(T)return;
 				fail(XonUtils.toXonString(o, true)
 					+ "\n*****\n" + XonUtils.toXonString(x, true));
 			}
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 if(T)return;
 		try {
 //			xdef =
@@ -440,7 +443,7 @@ if(T)return;
 			xml = "<root>\n<B b='123'/>\n<C c='wsdx:123'/>\n</root>";
 			parse(xp, "", xml, reporter);
 			assertErrors(reporter);
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 if(T){return;}
 		try {
 			xdef =
@@ -743,7 +746,7 @@ if(T){return;}
 			xout.close();
 			assertEq("<a><b/><c/>t1t2t3</a>", KXmlUtils.nodeToString(el));
 			assertEq("T:t1t2t3f:t1t2t3", bos.toString());
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 if(T){return;}
 		try {
 			xdef =
@@ -858,24 +861,24 @@ if(T){return;}
 			xml = "<A>1?xyz</A>";
 			assertEq(xml, parse(xp, "A", xml, reporter));
 			assertNoErrorwarnings(reporter);
-		} catch (Exception ex) {fail(ex);}
+		} catch (SException ex) {fail(ex);}
 if(T){return;}
 		try {
 			s = "D:/cvs/DEV/java/xdef31/resources/"
 				+ "cz/syntea/xdef/impl/compile/XdefOfXdef*.xdef";
 			// filepath
-			xp = XDFactory.compileXD(null, s);//with wildcards
-			xp = XDFactory.compileXD(null,
+			XDFactory.compileXD(null, s);//with wildcards
+			XDFactory.compileXD(null,
 "<xd:def xmlns:xd='" + _xdNS + "' xd:name='X' xd:include='" + s + "'/>");
-			xp = XDFactory.compileXD(null,
+			XDFactory.compileXD(null,
 "<xd:collection xmlns:xd='" + _xdNS + "' xd:include='" + s + "'/>");
 			// URL (file:/filepath)
-			xp = XDFactory.compileXD(null, "file:/" + s);
-			xp = XDFactory.compileXD((Properties) null,
+			XDFactory.compileXD(null, "file:/" + s);
+			XDFactory.compileXD((Properties) null,
 "<xd:def xmlns:xd='" + _xdNS + "' xd:name='X' xd:include='file:/" + s + "'/>");
-			xp = XDFactory.compileXD((Properties) null,
+			XDFactory.compileXD((Properties) null,
 "<xd:collection xmlns:xd='" + _xdNS + "' xd:include='file:/" + s + "'/>");
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 if(T){return;}
 		try {
 			reporter.clear();
@@ -902,7 +905,7 @@ if(T){return;}
 			xml = "<a/>";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrorwarnings(reporter);
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 if(T){return;}
 		try {
 			xdef =
@@ -939,7 +942,7 @@ if(T){return;}
 "</xd:def>";
 			xp = XDFactory.compileXD(null, xdef,
 "<xd:def xmlns:xd='" + _xdNS + "'\n" +
-"   xd:name=\"Test1\" xd:root=\"Test#json\"/>"
+"   xd:name=\"Test1\" xd/:root=\"Test#json\"/>"
 			);
 			xd = xp.createXDDocument("Test1");
 			s = "{\"A\":1234}";
@@ -951,7 +954,7 @@ if(T){return;}
 			xd.jparse(s, reporter);
 			assertErrors(reporter);
 			reporter.clear();
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 if(T){return;}
 		try {
 			xdef =
@@ -1087,22 +1090,23 @@ if(T){return;}
 "</xd:def>\n"+
 "</xd:collection>";
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			ObjectOutputStream oos = new ObjectOutputStream(baos);
-			oos.writeObject(xdef);
-			oos.writeObject(compile(xdef));
-			oos.writeObject("<A id=\"string()\"/>");
-			oos.close();
+			try (ObjectOutputStream oos = new ObjectOutputStream(baos)) {
+				oos.writeObject(xdef);
+				oos.writeObject(compile(xdef));
+				oos.writeObject("<A id=\"string()\"/>");
+			}
 			ByteArrayInputStream bais =
 				new ByteArrayInputStream(baos.toByteArray());
-			ObjectInputStream ois = new ObjectInputStream(bais);
-			ois.readObject();
-			xp = (XDPool) ois.readObject();
-			xml = (String) ois.readObject();
-			ois.close();
+			try (ObjectInputStream ois = new ObjectInputStream(bais)) {
+				ois.readObject();
+				xp = (XDPool) ois.readObject();
+				xml = (String) ois.readObject();
+			}
 			xd = xp.createXDDocument("B");
 			el = KXmlUtils.parseXml(xml).getDocumentElement();
 			assertEq(xml, xd.xparse(el, null));
-		} catch (Exception ex) {fail(ex);}
+		} catch (IOException | ClassNotFoundException
+			| RuntimeException ex) {fail(ex);}
 if(T){return;}
 		try {
 			xdef =
@@ -1114,7 +1118,7 @@ if(T){return;}
 "            }\n"+
 "</a>\n"+
 "</xd:def>";
-			xp = compile(xdef);
+			compile(xdef);
 			fail("deprecation not reported");
 		} catch (Exception ex) {}
 if(T){return;}
@@ -1130,7 +1134,7 @@ if(T){return;}
 "</xd:declaration>\n"+
 "<a>required t; </a>\n"+
 "</xd:def>";
-			xp = compile(xdef);
+			compile(xdef);
 			fail("deprecation not reported");
 		} catch (Exception ex) {}
 if(T){return;}
@@ -1241,7 +1245,7 @@ if(T){return;}
 				false, //removeIgnorableWhiteSpaces
 				true); //comments
 			assertEq("<a><![CDATA[123]]></a>",swr.toString());
-		} catch (Exception ex) {fail(ex);}
+		} catch (IOException ex) {fail(ex);}
 if(T){return;}
 		try {
 			xdef =
@@ -1384,11 +1388,11 @@ if(T){return;}
 			fail("Error not recognized");
 		} catch (Exception ex) {
 			s = ex.getMessage();
-			if (s == null || s.indexOf("SYS012") < 0
-				|| s.indexOf("XDEF410") < 0 || s.indexOf("XDEF362") < 0
-				|| s.indexOf("XDEF220") < 0 || s.indexOf("XDEF443") < 0
-				|| s.indexOf("XDEF412") < 0 || s.indexOf("XDEF225") < 0
-				|| s.indexOf("XDEF228") < 0) {
+			if (!s.contains("XDEF220") || !s.contains("SYS012")
+				|| !s.contains("XDEF410") || !s.contains("XDEF362")
+				|| !s.contains("XDEF443")
+				|| !s.contains("XDEF412") || !s.contains("XDEF225")
+				|| !s.contains("XDEF228")) {
 				fail(ex);
 			}
 		}
@@ -1473,7 +1477,7 @@ if(T){return;}
 			swr = new StringWriter();
 			el = parse(xp, "", xml, reporter, swr, null,null);
 			s = reporter.printToString();
-			assertTrue(reporter.getErrorCount()==1&&s.indexOf("XDEF501")>=0,s);
+			assertTrue(reporter.getErrorCount()==1 && s.contains("XDEF501"),s);
 			assertEq("iaic1fc1id1fd1ie1fe1fa", swr.toString());
 			assertEq(el, "<a><c/><d/><e/></a>");
 			xml = "<a><c/><d/><d/><e/><e/></a>";
@@ -1647,7 +1651,7 @@ if(T){return;}
 			xp = compile(xdef); //vytvořeni ze zdroju
 			create(xp, "", "a", reporter);
 			assertFalse(xd.errorWarnings(), reporter.printToString());
-		} catch (Exception ex) {fail(ex);}
+		} catch (IOException | RuntimeException ex) {fail(ex);}
 if(T){return;}
 		try {
 			xdef =
@@ -1663,7 +1667,7 @@ if(T){return;}
 			fail("Exception not thrown");
 		} catch (Exception ex) {
 			s = ex.getMessage();
-			assertTrue(s.indexOf("bla...") >= 0, s);
+			assertTrue(s.contains("bla..."), s);
 		}
 if(T){return;}
 		try {//union with base
@@ -2037,7 +2041,7 @@ if(T){return;}
 			assertTrue(reporter.errorWarnings(), "Error not recognized");
 			parse(xd, "<a a=' 1 2' />", reporter);
 			assertTrue(reporter.errorWarnings(), "Error not recognized");
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 if(T){return;}
 
 		clearTempDir();

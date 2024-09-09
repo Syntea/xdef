@@ -1,19 +1,24 @@
 package test.common.xml;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import org.w3c.dom.DOMException;
 import org.xdef.sys.STester;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
 
 /** Test XML writer.
  * @author Vaclav Trojan
@@ -58,7 +63,8 @@ public class TestXml extends STester  {
 				"kůň "+(char)9+"&#xd; úpěl</root>").equals(s.toLowerCase())) {
 				fail(s);
 			}
-		} catch (Exception ex) {
+		} catch (IllegalArgumentException | ParserConfigurationException
+			| TransformerException | DOMException ex) {
 			fail(ex);
 		}
 		try {
@@ -71,7 +77,8 @@ public class TestXml extends STester  {
 			assertEq("Kůň "+(char)9+(char)13+" úpěl", el.getAttribute("atr"));
 			assertEq("Kůň "+(char)9+(char)13+" úpěl",
 				el.getChildNodes().item(0).getNodeValue());
-		} catch (Exception ex) {
+		} catch (IOException | ParserConfigurationException
+			| DOMException | SAXException ex) {
 			fail(ex);
 		}
 	}

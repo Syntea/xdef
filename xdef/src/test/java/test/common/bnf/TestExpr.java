@@ -18,8 +18,7 @@ public class TestExpr extends STester {
 	public TestExpr() {super();}
 
 	/** Map of variables. */
-	private static final Map<String, Object> _variables =
-		new TreeMap<String, Object>();
+	private static final Map<String, Object> _variables = new TreeMap<>();
 	/** used to get printed text. */
 	private static final ByteArrayOutputStream _byteArray =
 		new ByteArrayOutputStream();
@@ -313,7 +312,6 @@ if (true) return;
 	 * @param args the command line arguments
 	 */
 	public static void main(String... args) {
-		int i = 1;
 		if (runTest(args) > 0) {System.exit(1);}
 	}
 }

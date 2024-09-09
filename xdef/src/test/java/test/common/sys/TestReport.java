@@ -11,9 +11,11 @@ import org.xdef.sys.Report;
 import org.xdef.sys.SManager;
 import org.xdef.xml.KXmlUtils;
 import java.io.File;
+import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.Properties;
+import org.xdef.sys.SException;
 
 /** Test reporter.
  * @author  Vaclav Trojan
@@ -322,7 +324,7 @@ public class TestReport extends STester {
 			}
 			fr.close();
 			f.delete();
-		} catch (Exception ex) {fail(ex);}
+		} catch (IOException | SException ex) {fail(ex);}
 		try {//check registered tables
 			r = Report.error("123", "par &{p} par &{q}",
 				"&{p}&{#456{a&{b}{:}{,}}{&{b}bc}}&{q}q");
@@ -406,7 +408,7 @@ public class TestReport extends STester {
 			s = Report.text(SYS.SYS012, "").toString("eng");
 			assertEq("Errors detected: ", s);
 			s = Report.text(SYS.SYS012, "").toString("sk");
-			assertTrue(s.indexOf("sa vyskytli chyby") >= 0, s);
+			assertTrue(s.contains("sa vyskytli chyby"), s);
 			s = Report.text(XML.XML_LANGUAGE).toString();
 			assertTrue("česky".equals(s), s); // Czech
 			s = Report.getReportText(XML.XML_LANGUAGE, "eng");

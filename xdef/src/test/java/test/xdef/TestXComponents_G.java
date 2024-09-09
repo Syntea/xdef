@@ -47,7 +47,6 @@ public class TestXComponents_G {
 
 	private final List<XComponent> _YYY = new ArrayList<>();
 	private String _g;
-	private String XD_NAME_g;
 	private XComponent _XXX;
 
 	public String getg() {return _g;}

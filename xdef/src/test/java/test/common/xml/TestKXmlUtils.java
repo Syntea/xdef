@@ -5,10 +5,12 @@ import org.xdef.xml.KXmlUtils;
 import org.xdef.xml.KXpathExpr;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import javax.xml.xpath.XPathConstants;
 import org.w3c.dom.Attr;
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -65,8 +67,8 @@ public class TestKXmlUtils extends STester {
 				KXmlUtils.parseXml("<a>]]></a>");
 				fail("error not reported");
 			} catch (Exception ex) {
-				if (ex.getMessage().indexOf("XML053") < 0 &&
-					ex.getMessage().indexOf("XML403") < 0) {
+				if (!ex.getMessage().contains("XML053") &&
+					!ex.getMessage().contains("XML403")) {
 					fail(ex);
 				}
 			}
@@ -78,7 +80,7 @@ public class TestKXmlUtils extends STester {
 				KXmlUtils.parseXml(s).getDocumentElement()).errorWarnings()) {
 				fail(s);
 			}
-		} catch (Exception ex) {fail(ex);}
+		} catch (DOMException ex) {fail(ex);}
 		try { // namespace
 			source = "<root atr=\"atr1\" xmlns=\"a\">\n"+
 				"  <child xmlns:u=\"t\" childAtr1='atr1' u:childAtr2='atr3'\n"+
@@ -97,8 +99,8 @@ public class TestKXmlUtils extends STester {
 					"Missing v:childAtr2");
 			} catch (Exception ex) {
 				// duplicity of attributes u:childAtr2 and v:childAtr2
-				if (ex.getMessage().indexOf("XML025") < 0 &&
-					ex.getMessage().indexOf("XML404") < 0) {
+				if (!ex.getMessage().contains("XML025") &&
+					!ex.getMessage().contains("XML404")) {
 					fail(ex);
 				}
 			}
@@ -124,7 +126,7 @@ public class TestKXmlUtils extends STester {
 			el = doc.getDocumentElement();
 			el = (Element) el.getChildNodes().item(0);
 			assertEq("a.b", el.getNamespaceURI());
-		} catch (Exception ex) {fail(ex);}
+		} catch (DOMException ex) {fail(ex);}
 		try {
 			source=
 "<?xml version=\"1.0\"?>\n" +
@@ -138,8 +140,8 @@ public class TestKXmlUtils extends STester {
 "</Envelope>";
 			KXmlUtils.parseXml(source);
 		} catch (Exception ex) {
-			if (ex.getMessage().indexOf("XML011") <0 &&
-				ex.getMessage().indexOf("XML404") < 0) {
+			if (!ex.getMessage().contains("XML011") &&
+				!ex.getMessage().contains("XML404")) {
 				fail(ex);
 			}
 		}
@@ -150,7 +152,7 @@ public class TestKXmlUtils extends STester {
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			OutputStreamWriter out = new OutputStreamWriter(baos, "Cp1252");
 			KXmlUtils.writeXml(out, doc.getDocumentElement());
-		} catch (Exception ex) {fail(ex);}
+		} catch (IOException ex) {fail(ex);}
 		try {
 			ByteArrayInputStream bais = new ByteArrayInputStream(
 			"<?xml version=\"1.0\" ?>\n<Envelope/>".getBytes());
@@ -158,7 +160,7 @@ public class TestKXmlUtils extends STester {
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			OutputStreamWriter out = new OutputStreamWriter(baos, "Cp1254");
 			KXmlUtils.writeXml(out, doc.getDocumentElement());
-		} catch (Exception ex) {fail(ex);}
+		} catch (IOException ex) {fail(ex);}
 		try { //check getXPathPosition and resolveXPosition
 			doc = KXmlUtils.parseXml("<a>x<b/>y<c/><b><c a = 'a'/></b></a>");
 			node = KXmlUtils.resolveXPosition(doc, "/a[1]/b[2]");
@@ -257,7 +259,7 @@ public class TestKXmlUtils extends STester {
 			if (cmpResult.errorWarnings()) {
 				fail(cmpResult.toString() + "\n" + s);
 			}
-		} catch (Exception ex) {fail(ex);}
+		} catch (DOMException ex) {fail(ex);}
 		try {
 			el = KXmlUtils.parseXml("<a>\r\nxxx\r\n  yy  y\r\n</a>").
 				getDocumentElement();
@@ -271,7 +273,7 @@ public class TestKXmlUtils extends STester {
 			KXmlUtils.writeXml(osw, el, false, false, true);
 			osw.close();
 			assertEq("<a>\nxxx\n  yy  y\n</a>", baos.toString());
-		} catch (Exception ex) {fail(ex);}
+		} catch (IOException ex) {fail(ex);}
 		try {
 			s = "<a><b a='a\"' b=\"b'\">\n\nxxx\n yy   y\n\n</b></a>";
 			el = KXmlUtils.parseXml(s).getDocumentElement();
@@ -312,7 +314,7 @@ public class TestKXmlUtils extends STester {
 				XPathConstants.NUMBER, "@b", null, null, null)).intValue());
 			assertFalse(((Boolean) KXpathExpr.evaluate(el,
 				XPathConstants.BOOLEAN, "@b", null, null, null)));
-		} catch (Exception ex) {fail(ex);}
+		} catch (DOMException ex) {fail(ex);}
 		try {
 			el = KXmlUtils.parseXml("<a/>").	getDocumentElement();
 			NamedNodeMap nnm = KXmlUtils.getAttributesNS(el, null);
@@ -332,7 +334,7 @@ public class TestKXmlUtils extends STester {
 			el.setAttributeNS("a.b","a:a", "a");
 			nnm = KXmlUtils.getAttributesNS(el, "a.b");
 			assertEq(1, nnm.getLength());
-		} catch (Exception ex) {fail(ex);}
+		} catch (DOMException ex) {fail(ex);}
 	}
 
 	/** Run test

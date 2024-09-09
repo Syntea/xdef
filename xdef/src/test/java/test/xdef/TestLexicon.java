@@ -5,7 +5,6 @@ import org.xdef.sys.ArrayReporter;
 import org.xdef.XDDocument;
 import org.xdef.XDPool;
 import org.xdef.component.XComponent;
-import java.io.File;
 import java.util.List;
 import org.w3c.dom.Element;
 import org.xdef.sys.SUtils;
@@ -20,7 +19,6 @@ public final class TestLexicon extends XDTester {
 	@Override
 	/** Run test and print error information. */
 	public void test() {
-		File tempDir = clearTempDir();
 		String xdef;
 		String xml;
 		Element el;
@@ -254,7 +252,7 @@ public final class TestLexicon extends XDTester {
 			assertEq("0123456789", SUtils.getValueFromGetter(xc,"getNumber"));
 			List<?> l = (List<?>)SUtils.getValueFromGetter(xc,"listOfClient");
 			assertEq(3, l.size());
-		} catch (Exception ex) {fail(ex);}
+		} catch (ClassNotFoundException | RuntimeException ex) {fail(ex);}
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='Town' name='town'>\n"+
@@ -353,7 +351,7 @@ public final class TestLexicon extends XDTester {
 			assertNoErrorwarnings(reporter);
 			assertEq(xml_deu, xc.toXml());
 			assertEq("Nonehill", SUtils.getValueFromGetter(xc,"getName"));
-		} catch (Exception ex) {fail(ex);}
+		} catch (RuntimeException ex) {fail(ex);}
 
 		clearTempDir(); // delete temporary files.
 		resetTester();
