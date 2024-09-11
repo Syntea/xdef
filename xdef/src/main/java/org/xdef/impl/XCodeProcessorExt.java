@@ -9,6 +9,9 @@ import java.util.Locale;
 import java.util.StringTokenizer;
 import javax.xml.XMLConstants;
 import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.xdef.XDContainer;
 import org.xdef.XDCurrency;
 import org.xdef.XDEmailAddr;
 import org.xdef.XDException;
@@ -92,6 +95,7 @@ import static org.xdef.impl.code.CodeTable.DURATION_GETSTART;
 import static org.xdef.impl.code.CodeTable.DURATION_GETYEARS;
 import static org.xdef.impl.code.CodeTable.ELEMENT_ADDELEMENT;
 import static org.xdef.impl.code.CodeTable.ELEMENT_ADDTEXT;
+import static org.xdef.impl.code.CodeTable.ELEMENT_ATTRS;
 import static org.xdef.impl.code.CodeTable.ELEMENT_CHILDNODES;
 import static org.xdef.impl.code.CodeTable.ELEMENT_GETATTR;
 import static org.xdef.impl.code.CodeTable.ELEMENT_HASATTR;
@@ -147,6 +151,7 @@ import static org.xdef.impl.code.CodeTable.GET_ZONEOFFSET;
 import static org.xdef.impl.code.CodeTable.INTEGER_FORMAT;
 import static org.xdef.impl.code.CodeTable.IS_CREATEMODE;
 import static org.xdef.impl.code.CodeTable.IS_LEAPYEAR;
+import static org.xdef.impl.code.CodeTable.LD_CONST;
 import static org.xdef.impl.code.CodeTable.LOWERCASE;
 import static org.xdef.impl.code.CodeTable.NEW_BNFGRAMAR;
 import static org.xdef.impl.code.CodeTable.NEW_BYTES;
@@ -352,6 +357,19 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 				Element el;
 				return p == null || p.isNull() || (el = p.getElement()) == null
 					? new DefContainer() : new DefContainer(el.getChildNodes());
+			}
+			case ELEMENT_ATTRS: {
+				Element el;
+				XDContainer c = new DefContainer();
+				if (p != null && !p.isNull() && (el = p.getElement()) != null) {
+					NamedNodeMap nnm = el.getAttributes();
+					for (int i = 0; i < nnm.getLength(); i++) {
+						Node n = nnm.item(i);
+						c.addXDItem(new DefNamedValue(n.getNodeName(),
+							new DefString(n.getNodeValue())));
+					}
+				}
+				return c;
 			}
 			case ELEMENT_NAME: {
 				Element el;

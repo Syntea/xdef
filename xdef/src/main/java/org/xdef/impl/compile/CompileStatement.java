@@ -2077,7 +2077,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			if (yType == XD_BOOLEAN && xType == XD_PARSERESULT) {
 				_g.topToBool(); // force conversion to boolean!!!
 			} else {
-				if (yType == X_UNIQUESET_NAMED) {
+				if (yType == X_UNIQUESET_NAMED && var != null) {
 					// named value of uniqueSet
 					yType = var.getParseResultType(); // type of result
 					_g.convertTopToType(yType); // convert to the required type
@@ -4368,7 +4368,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 // Private classes
 ////////////////////////////////////////////////////////////////////////////////
 
-	/** Contanis data assigneg to a block statement. */
+	/** Contains data assigned to a block statement. */
 	private static final class BlockInfo {
 		/** Map with variable names. */
 		private Map<String, CompileVariable> _variables;
@@ -4380,7 +4380,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		private BlockInfo _prevInfo;
 		/** True if it contains break jumps. */
 		private boolean _jumps;
-		/** Last index pof variables. */
+		/** Last index of variables. */
 		private final int _variablesLastIndex;
 
 		/** Create new instance of BlockInfo.

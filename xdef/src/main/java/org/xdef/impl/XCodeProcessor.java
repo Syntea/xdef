@@ -172,6 +172,7 @@ import static org.xdef.impl.code.CodeTable.DURATION_GETSTART;
 import static org.xdef.impl.code.CodeTable.DURATION_GETYEARS;
 import static org.xdef.impl.code.CodeTable.ELEMENT_ADDELEMENT;
 import static org.xdef.impl.code.CodeTable.ELEMENT_ADDTEXT;
+import static org.xdef.impl.code.CodeTable.ELEMENT_ATTRS;
 import static org.xdef.impl.code.CodeTable.ELEMENT_CHILDNODES;
 import static org.xdef.impl.code.CodeTable.ELEMENT_GETATTR;
 import static org.xdef.impl.code.CodeTable.ELEMENT_GETTEXT;
@@ -3500,6 +3501,7 @@ public final class XCodeProcessor {
 				case DURATION_GETNEXTTIME:
 			//Element
 				case ELEMENT_CHILDNODES:
+				case ELEMENT_ATTRS:
 				case ELEMENT_NAME:
 				case ELEMENT_NSURI:
 			//ParseResult

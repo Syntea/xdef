@@ -872,7 +872,8 @@ static final short UNUSED_CODE = PARSEANDCHECK + 1;
 	static final short PRICE_DISPLAY = PRICE_FRACTDIGITS + 1;
 
 	static final short ELEMENT_CHILDNODES = PRICE_DISPLAY + 1;
-	static final short ELEMENT_NAME = ELEMENT_CHILDNODES + 1;
+	static final short ELEMENT_ATTRS = ELEMENT_CHILDNODES + 1;
+	static final short ELEMENT_NAME = ELEMENT_ATTRS + 1;
 	static final short ELEMENT_NSURI = ELEMENT_NAME + 1;
 	static final short ELEMENT_GETTEXT = ELEMENT_NSURI + 1;
 	static final short ELEMENT_ADDELEMENT = ELEMENT_GETTEXT + 1;
