@@ -174,7 +174,7 @@ public final class TestGUIDebuger extends XDTester {
 "		trace(xpath('..'));\n"+
 "		outln('len=' + c.getLength()\n"+
 "		+', typ=' + c.getItemType(0)\n"+
-"		+', value=' + getText(c,0));\n"+
+"		+', value=' + c.getText(0));\n"+
 "      }\" /> \n"+
 "   string();\n"+
 " </SouborY1A>\n"+
@@ -221,8 +221,8 @@ public final class TestGUIDebuger extends XDTester {
 			xml = "<a><b a = 'b' /><b a = 'c' /></a>";
 			xd = xp.createXDDocument("a");
 			parse(xd, xml, reporter);
-			if (KXmlUtils.compareXML("<a><b a='b'/><b a='c'/></a>",
-				KXmlUtils.nodeToString(xd.getElement())).errorWarnings()) {
+			if (KXmlUtils.compareElements(
+				"<a><b a='b'/><b a='c'/></a>",xd.getElement()).errorWarnings()){
 				fail(KXmlUtils.nodeToString(xd.getElement()));
 			}
 		} catch (Exception ex) {fail(ex);}
@@ -282,8 +282,7 @@ public final class TestGUIDebuger extends XDTester {
 				reporter.checkAndThrowErrorWarnings();
 			} else {
 				el = xd.getDocument().getDocumentElement();
-				if (KXmlUtils.compareXML(xml,
-					KXmlUtils.nodeToString(el)).errorWarnings()) {
+				if (KXmlUtils.compareElements(xml, el).errorWarnings()) {
 					fail(KXmlUtils.nodeToString(
 						xd.getDocument().getDocumentElement()));
 				}

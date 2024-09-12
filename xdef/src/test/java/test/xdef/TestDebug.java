@@ -295,9 +295,9 @@ public final class TestDebug extends XDTester {
 			if (reporter.errors()) {
 				printReports(reporter.getReportReader(), xml);
 			}
-			if (KXmlUtils.compareXML(
-				"<a><b a=\"b\"/><b a=\"c\"/></a>",
-				KXmlUtils.nodeToString(xd.getElement())).errorWarnings()) {
+			if (KXmlUtils.compareElements(
+				"<a><b a=\"b\"/><b a=\"c\"/></a>",xd.getElement())
+				.errorWarnings()) {
 				fail(KXmlUtils.nodeToString(xd.getElement()));
 			}
 			// check impl properties and "*" in the root selection
@@ -379,8 +379,7 @@ public final class TestDebug extends XDTester {
 				reporter.checkAndThrowErrorWarnings();
 			} else {
 				el = xd.getDocument().getDocumentElement();
-				if (KXmlUtils.compareXML(xml,
-					KXmlUtils.nodeToString(el)).errorWarnings()) {
+				if (KXmlUtils.compareElements(xml,el).errorWarnings()) {
 					fail(KXmlUtils.nodeToString(
 						xd.getDocument().getDocumentElement()));
 				}

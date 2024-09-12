@@ -220,7 +220,7 @@ public class TestKXmlUtils extends STester {
 			doc.appendChild(root);
 			KXmlUtils.setNecessaryXmlnsAttrs(root);
 			s = KXmlUtils.nodeToString(root);
-			cmpResult = KXmlUtils.compareXML(
+			cmpResult = KXmlUtils.compareElements(
 				"<a:root a=\"a\" b:b=\"b\" c:c=\"c\" " +
 				"xmlns:a=\"syntea.cz\" " +
 				"xmlns:b=\"syntea.cz\" " +
@@ -237,7 +237,7 @@ public class TestKXmlUtils extends STester {
 			el = KXmlUtils.cloneWithChangedNamespace(
 				child, "syntea.com", "syntea.org");
 			s = KXmlUtils.nodeToString(el);
-			cmpResult = KXmlUtils.compareXML(
+			cmpResult = KXmlUtils.compareElements(
 				"<child2 xmlns=\"syntea.org\"/>", s);
 			if (cmpResult.errorWarnings()) {
 				fail(cmpResult.toString() + "\n" + s);
@@ -245,7 +245,7 @@ public class TestKXmlUtils extends STester {
 			el = KXmlUtils.cloneWithChangedNamespace(
 				root, "syntea.cz", "syntea.org");
 			s = KXmlUtils.nodeToString(el);
-			cmpResult = KXmlUtils.compareXML(
+			cmpResult = KXmlUtils.compareElements(
 				"<a:root a=\"a\" b:b=\"b\" c:c=\"c\" " +
 				"xmlns:a=\"syntea.org\" " +
 				"xmlns:b=\"syntea.org\" " +

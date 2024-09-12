@@ -19,7 +19,7 @@ public class TestPrettyXdef extends XDTester {
 		KDOMBuilder kd = new KDOMBuilder();
 		kd.setNamespaceAware(true);
 		kd.parse(params[1]); //just check XML
-		return KXmlUtils.compareXML(
+		return KXmlUtils.compareElements(
 			params[1], params[params.length - 1], true);
 	}
 

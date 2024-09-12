@@ -1301,21 +1301,50 @@ public final class KXmlUtils extends KDOMUtils {
 	 * @param xml_B file with the second document.
 	 * @return report writer with results of comparing.
 	 */
-	public static final ReportWriter compareXML(final File xml_A,
+	public static final ReportWriter compareElements(final File xml_A,
 		final File xml_B) {
-		return compareXML(xml_A, xml_B, null);
+		return compareElements(xml_A, xml_B, null);
 	}
 
 	/** Compare XML documents. The result is reporter which contains error
 	 * messages with differences.
 	 * @param xml_A file with the first document.
 	 * @param xml_B file with the second document.
-	 * @param reporter report writer or null (the ArrayReporter will be
-	 * created).
+	 * @param reporter report writer or null and ArrayReporter is created.
 	 * @return report writer with results of comparing.
 	 */
-	private static ReportWriter compareXML(final File xml_A,
+	public static ReportWriter compareElements(final File xml_A,
 		final File xml_B,
+		final ReportWriter reporter) {
+		return compareElements(xml_A, xml_B, false, reporter);
+	}
+
+	/** Compare XML documents. The result is reporter which contains error
+	 * messages with differences.
+	 * @param xml_A file with the first document.
+	 * @param xml_B file with the second document.
+	 * @param trimText if true then text values are trimmed before comparing
+	 * and empty text nodes are removed.
+	 * @return report writer with results of comparing.
+	 */
+	public static ReportWriter compareElements(final File xml_A,
+		final File xml_B,
+		final boolean trimText) {
+		return compareElements(xml_A, xml_B, trimText, null);
+	}
+
+	/** Compare XML documents. The result is reporter which contains error
+	 * messages with differences.
+	 * @param xml_A file with the first document.
+	 * @param xml_B file with the second document.
+	 * @param trimText if true then text values are trimmed before comparing
+	 * and empty text nodes are removed.
+	 * @param reporter report writer or null and ArrayReporter is created.
+	 * @return report writer with results of comparing.
+	 */
+	public static ReportWriter compareElements(final File xml_A,
+		final File xml_B,
+		final boolean trimText,
 		final ReportWriter reporter) {
 		ReportWriter r = reporter == null ? new ArrayReporter() : reporter;
 		Element elem_A = null;
@@ -1333,7 +1362,7 @@ public final class KXmlUtils extends KDOMUtils {
 		if (r.errors()) {
 			return r;
 		}
-		return compareElements(elem_A, elem_B, r);
+		return compareElements(elem_A, elem_B, trimText, r);
 	}
 
 	/** Compare XML documents. The result is reporter which contains error
@@ -1342,9 +1371,9 @@ public final class KXmlUtils extends KDOMUtils {
 	 * @param xml_B the second document (or element).
 	 * @return report writer with results of comparing.
 	 */
-	public static final ReportWriter compareXML(final String xml_A,
+	public static final ReportWriter compareElements(final String xml_A,
 		final String xml_B) {
-		return compareXML(xml_A, xml_B, false, null);
+		return compareElements(xml_A, xml_B, false, null);
 	}
 
 	/** Compare XML documents. The result is reporter which contains error
@@ -1354,10 +1383,10 @@ public final class KXmlUtils extends KDOMUtils {
 	 * @param trimText if true then all text values are rimmed before comparing.
 	 * @return report writer with results of comparing.
 	 */
-	public static final ReportWriter compareXML(final String xml_A,
+	public static final ReportWriter compareElements(final String xml_A,
 		final String xml_B,
 		final boolean trimText) {
-		return compareXML(xml_A, xml_B, trimText, null);
+		return compareElements(xml_A, xml_B, trimText, null);
 	}
 
 	/** Compare XML documents. The result is reporter which contains error
@@ -1366,11 +1395,10 @@ public final class KXmlUtils extends KDOMUtils {
 	 * @param xml_B the second document (or element).
 	 * @param trimText if true then text values are trimmed before comparing
 	 * and empty text nodes are removed.
-	 * @param reporter report writer or null (the ArrayReporter will be
-	 * created).
+	 * @param reporter report writer or null and ArrayReporter is created.
 	 * @return report writer with results of comparing.
 	 */
-	public static final ReportWriter compareXML(final String xml_A,
+	public static final ReportWriter compareElements(final String xml_A,
 		final String xml_B,
 		final boolean trimText,
 		final ReportWriter reporter) {
@@ -1424,8 +1452,7 @@ public final class KXmlUtils extends KDOMUtils {
 	 * @param elem_B the second element.
 	 * @param trimText if true then text values are trimmed before comparing
 	 * and empty text nodes are removed.
-	 * @param reporter report writer or null (the ArrayReporter will be
-	 * created).
+	 * @param reporter report writer or null and ArrayReporter is created.
 	 * @return report writer with results of comparing.
 	 */
 	public static final ReportWriter compareElements(final Element elem_A,
@@ -1464,11 +1491,10 @@ public final class KXmlUtils extends KDOMUtils {
 	 * messages with differences.
 	 * @param elem_A the first element.
 	 * @param elem_B the second element.
-	 * @param reporter report writer or null (the ArrayReporter will be
-	 * created).
+	 * @param reporter report writer or null and ArrayReporter is created.
 	 * @return report writer with results of comparing.
 	 */
-	private static ReportWriter compareElements(
+	public static ReportWriter compareElements(
 		final Element elem_A,
 		final Element elem_B,
 		final ReportWriter reporter) {
@@ -1492,9 +1518,34 @@ public final class KXmlUtils extends KDOMUtils {
 	 * messages with differences.
 	 * @param A source string with the first element.
 	 * @param elem_B the second element.
+	 * @return report writer with results of comparing.
+	 */
+	public static final ReportWriter compareElements(final String A,
+		final Element elem_B) {
+		return compareElements(parseXml(A).getDocumentElement(),
+			elem_B, false, null);
+	}
+
+	/** Compare XML elements. The result is reporter which contains error
+	 * messages with differences.
+	 * @param A source string with the first element.
+	 * @param elem_B the second element.
 	 * @param trimText if true then text values are trimmed before comparing.
-	 * @param reporter report writer or null (the ArrayReporter will be
-	 * created).
+	 * @return report writer with results of comparing.
+	 */
+	public static final ReportWriter compareElements(final String A,
+		final Element elem_B,
+		final boolean trimText) {
+		return compareElements(parseXml(A).getDocumentElement(),
+			elem_B, trimText, null);
+	}
+
+	/** Compare XML elements. The result is reporter which contains error
+	 * messages with differences.
+	 * @param A source string with the first element.
+	 * @param elem_B the second element.
+	 * @param trimText if true then text values are trimmed before comparing.
+	 * @param reporter report writer or null and ArrayReporter is created.
 	 * @return report writer with results of comparing.
 	 */
 	public static final ReportWriter compareElements(final String A,
@@ -1509,8 +1560,7 @@ public final class KXmlUtils extends KDOMUtils {
 	 * messages with differences.
 	 * @param A source string with the first element.
 	 * @param elem_B the second element.
-	 * @param reporter report writer or null (the ArrayReporter will be
-	 * created).
+	 * @param reporter report writer or null and ArrayReporter is created.
 	 * @return report writer with results of comparing.
 	 */
 	public static final ReportWriter compareElements(final String A,
@@ -1522,22 +1572,10 @@ public final class KXmlUtils extends KDOMUtils {
 
 	/** Compare XML elements. The result is reporter which contains error
 	 * messages with differences.
-	 * @param A source string with the first element.
-	 * @param elem_B the second element.
-	 * @return report writer with results of comparing.
-	 */
-	public static final ReportWriter compareElements(final String A,
-		final Element elem_B) {
-		return compareElements(parseXml(A).getDocumentElement(), elem_B);
-	}
-
-	/** Compare XML elements. The result is reporter which contains error
-	 * messages with differences.
 	 * @param elem_A the first element.
 	 * @param B source string with the second element.
 	 * @param trimText if true then text values are trimmed before comparing.
-	 * @param reporter report writer or null (the ArrayReporter will be
-	 * created).
+	 * @param reporter report writer or null and ArrayReporter is created.
 	 * @return report writer with results of comparing.
 	 */
 	public static final ReportWriter compareElements(final Element elem_A,
@@ -1552,8 +1590,21 @@ public final class KXmlUtils extends KDOMUtils {
 	 * messages with differences.
 	 * @param elem_A the first element.
 	 * @param B source string with the second element.
-	 * @param reporter report writer or null (the ArrayReporter will be
-	 * created).
+	 * @param trimText if true then text values are trimmed before comparing.
+	 * @return report writer with results of comparing.
+	 */
+	public static final ReportWriter compareElements(final Element elem_A,
+		final String B,
+		final boolean trimText) {
+		return compareElements(elem_A,
+			parseXml(B).getDocumentElement(), trimText, null);
+	}
+
+	/** Compare XML elements. The result is reporter which contains error
+	 * messages with differences.
+	 * @param elem_A the first element.
+	 * @param B source string with the second element.
+	 * @param reporter report writer or null and ArrayReporter is created.
 	 * @return report writer with results of comparing.
 	 */
 	public static final ReportWriter compareElements(final Element elem_A,
@@ -1582,7 +1633,7 @@ public final class KXmlUtils extends KDOMUtils {
 	 * @param reporter report writer.
 	 * @return true if elements are equal, otherwise false.
 	 */
-	private static boolean cmpElements(final Element elem_A,
+	public static boolean cmpElements(final Element elem_A,
 		final Element elem_B,
 		final ReportWriter reporter) {
 		try {
@@ -1726,5 +1777,83 @@ public final class KXmlUtils extends KDOMUtils {
 			}
 		}
 		return true;
+	}
+
+////////////////////////////////////////////////////////////////////////////////
+// DEPRECATED METHODS
+////////////////////////////////////////////////////////////////////////////////
+
+	@Deprecated
+	/** Compare XML documents. The result is reporter which contains error
+	 * messages with differences.
+	 * This method is deprecated. Use the method compareElements(...) instad.
+	 * @param xml_A file with the first document.
+	 * @param xml_B file with the second document.
+	 * @return report writer with results of comparing.
+	 */
+	public static final ReportWriter compareXML(final File xml_A,
+		final File xml_B) {
+		return compareElements(xml_A, xml_B);
+	}
+
+	@Deprecated
+	/** Compare XML documents. The result is reporter which contains error
+	 * messages with differences.
+	 * This method is deprecated. Use the method compareElements(...) instad.
+	 * @param xml_A file with the first document.
+	 * @param xml_B file with the second document.
+	 * @param reporter report writer or null and ArrayReporter is created.
+	 * @return report writer with results of comparing.
+	 */
+	private static ReportWriter compareXML(final File xml_A,
+		final File xml_B,
+		final ReportWriter reporter) {
+		return compareElements(xml_A, xml_B, reporter);
+	}
+
+	@Deprecated
+	/** Compare XML documents. The result is reporter which contains error
+	 * messages with differences.
+	 * This method is deprecated. Use the method compareElements(...) instad.
+	 * @param xml_A the first document (or element).
+	 * @param xml_B the second document (or element).
+	 * @return report writer with results of comparing.
+	 */
+	public static final ReportWriter compareXML(final String xml_A,
+		final String xml_B) {
+		return compareElements(xml_A, xml_B);
+	}
+
+	@Deprecated
+	/** Compare XML documents. The result is reporter which contains error
+	 * messages with differences.
+	 * This method is deprecated. Use the method compareElements(...) instad.
+	 * @param xml_A the first document (or element).
+	 * @param xml_B the second document (or element).
+	 * @param trimText if true then all text values are rimmed before comparing.
+	 * @return report writer with results of comparing.
+	 */
+	public static final ReportWriter compareXML(final String xml_A,
+		final String xml_B,
+		final boolean trimText) {
+		return compareElements(xml_A, xml_B, trimText);
+	}
+
+	@Deprecated
+	/** Compare XML documents. The result is reporter which contains error
+	 * messages with differences.
+	 * This method is deprecated. Use the method compareElements(...) instad.
+	 * @param xml_A the first document (or element).
+	 * @param xml_B the second document (or element).
+	 * @param trimText if true then text values are trimmed before comparing
+	 * and empty text nodes are removed.
+	 * @param reporter report writer or null and ArrayReporter is created.
+	 * @return report writer with results of comparing.
+	 */
+	public static final ReportWriter compareXML(final String xml_A,
+		final String xml_B,
+		final boolean trimText,
+		final ReportWriter reporter) {
+		return compareElements(xml_A, xml_B, trimText, reporter);
 	}
 }

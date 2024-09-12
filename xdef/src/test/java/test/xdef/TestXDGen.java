@@ -39,7 +39,7 @@ public class TestXDGen extends XDTester {
 		if (reporter.errors()) {
 			return reporter;
 		}
-		return KXmlUtils.compareXML(x, KXmlUtils.nodeToString(el), true);
+		return KXmlUtils.compareElements(x, el, true);
 	}
 
 	private ReportWriter genXDefXon(String x) throws Exception{
