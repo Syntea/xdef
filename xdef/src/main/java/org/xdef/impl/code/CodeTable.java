@@ -651,10 +651,12 @@ static final short UNUSED_CODE = PARSEANDCHECK + 1;
 	////////////////////////////////////////////////////////////////////////////
 	/** Set key value to to container. */
 	static final short SET_NAMEDVALUE = GET_PARSED_VALUE + 1;
+	/** Get list of named items from container. */
+	static final short GET_NAMEDITEMS = SET_NAMEDVALUE + 1;
 	/** Get key value from container. */
-	static final short GET_NAMEDVALUE = SET_NAMEDVALUE+ 1;
+	static final short GET_NAMEDVALUE = GET_NAMEDITEMS + 1;
 	/** Has key value in container. */
-	static final short HAS_NAMEDVALUE = GET_NAMEDVALUE+ 1;
+	static final short HAS_NAMEDVALUE = GET_NAMEDVALUE + 1;
 	/** Remove key value from container. */
 	static final short REMOVE_NAMEDVALUE = HAS_NAMEDVALUE + 1;
 	/** Get named item as string. */

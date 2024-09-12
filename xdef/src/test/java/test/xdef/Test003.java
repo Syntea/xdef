@@ -29,6 +29,7 @@ import java.io.Writer;
 import java.net.URL;
 import java.text.DecimalFormat;
 import static org.xdef.sys.STester.runTest;
+import org.xdef.xml.KXmlUtils;
 import static test.XDTester._xdNS;
 import static test.XDTester.getFulltestMode;
 
@@ -36,12 +37,11 @@ import static test.XDTester.getFulltestMode;
  * @author Vaclav Trojan
  */
 public final class Test003 extends XDTester {
-
-	public Test003() {super();}
-
 	static int _count = 0;
 	boolean _myErrFlg;
 	int _xx;
+	public Test003() {super();}
+
 	public static boolean skodaTisice(final XXData xdata,final XDValue[]params){
 		Test003 test2 = (Test003)xdata.getUserObject();
 		if (test2 != null) {
@@ -311,6 +311,100 @@ public final class Test003 extends XDTester {
 			assertEq(xml, xd.xparse(f.toURI().toURL(), reporter));
 			assertNoErrorsAndClear(reporter);
 		} catch (IOException | RuntimeException ex) {fail(ex);}
+		try {// Join elements "B" which can be joined.
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root = 'A'>\n"+
+"<xd:declaration>\n"+
+"  /** Test if the element f can be joined with the element e.\n" +
+"   * @param e first element.\n" +
+"  * @param f second element.\n" +
+"   * @param a name of attribute with datetime \"start\"\n" +
+"   * @param b name of attribute with datetime \"end\"\n" +
+"   * @param mask description of datetime format.\n" +
+"   * @return true if and only if f can be joined with e.\n" +
+"   */\n" +
+"  boolean join(Element e, Element f, String a, String b, String mask) {\n"+
+"    Datetime t1 = new Datetime(e.getAttribute(b));\n"+
+"    Datetime t2 = new Datetime(f.getAttribute(a));\n"+
+"    if (mask.endsWith(\"d\")) {\n" +
+"      t1 = t1.addDay(1);\n" +
+"    } else if (mask.endsWith(\"H\")) {\n" +
+"      t1 = t1.addHour(1);\n" +
+"    } else if (mask.endsWith(\"s\")) {\n" +
+"      t1 = t1.addSecond(1);\n" +
+"    } else {\n" +
+"       return false; /*can't join*/\n" +
+"    }\n" +
+"    Container eatrs = e.getAttributes();\n" +
+"    Container fatrs = f.getAttributes();\n" +
+"    if (!t1.equals(t2) || !e.hasAttribute(a) || !f.hasAttribute(a)\n" +
+"      || !e.hasAttribute(b) || !f.hasAttribute(b)\n" +
+"      || eatrs.getLength() != fatrs.getLength()) {\n" +
+"      return false; /*can't join*/\n"+
+"    }\n"+
+"    for (int i = 0; i LT eatrs.getLength(); i++) {\n" +
+"      String name = ((NamedValue) eatrs.item(i)).getName();\n" +
+"      if (!a.equals(name) AAND !b.equals(name) AAND\n" +
+"		 !e.getAttribute(name).equals(f.getAttribute(name)))\n" +
+"		 return false; /*can't join*/\n" +
+"    }\n" +
+"    return true;\n" +
+"  }\n"+
+"\n"+
+"  /** Create list of joined elements.\n" +
+"   * @param x container with elements.\n" +
+"   * @param a name of attribute with datetime \"start\"\n" +
+"   * @param b name of attribute with datetime \"end\"\n" +
+"   * @param mask description of datetime format.\n" +
+"   * @return Container with joined elements.\n" +
+"   */\n" +
+"  Container x(Container x, String a, String b, String mask) {\n"+
+"    Container y = new Container();\n" +
+"    if (!x.isEmpty()) {\n" +
+"      Element e = x.getElement(0);\n" +
+"      y.addItem(e);\n" +
+"      for (int i = 1; i LT x.getLength(); i++) {\n" +
+"        Element f = x.getElement(i);\n" +
+"        if (join(e, f, a, b, mask)) {\n" +
+"          e.setAttribute(b, f.getAttribute(b));\n" +
+"        } else {\n" +
+"          y.addItem(e = f);\n" +
+"        }\n" +
+"      }\n" +
+"    }\n" +
+"    return y;\n" +
+"  }\n"+
+"</xd:declaration>\n"+
+"\n"+
+"<A>\n"+
+"  <B xd:script=\"occurs *; create x(from('//B'), 'x', 'y', 'yyyy-MM-dd');\"\n"+
+"  a='string' b='string'\n"+
+"     x=\"xdatetime('yyyy-MM-dd')\" y=\"xdatetime('yyyy-MM-dd')\"/>\n"+
+"</A>\n"+
+"\n"+
+"</xd:def>";
+		xml =
+"<A>\n"+
+"  <B a='a' b='b' x='2023-12-08' y='2023-12-31'/>\n"+
+"  <B a='a' b='b' x='2024-01-01' y='2024-09-11'/>\n"+
+"  <B a='a' b='b' x='2024-09-12' y='2024-09-13'/>\n"+
+"  <B a='a' b='b' x='2024-09-20' y='2024-09-30'/>\n"+
+"  <B a='a' b='b' x='2024-10-01' y='2024-10-02'/>\n"+
+"</A>";
+			xd = compile(xdef).createXDDocument();
+			xd.setXDContext(xml);
+			el = xd.xcreate("A", null);
+			KXmlUtils.compareElements(el,
+"<A>" +
+"<B a=\"a\" b=\"b\" x=\"2023-12-08\" y=\"2024-09-13\"/>" +
+"<B a=\"a\" b=\"b\" x=\"2024-09-20\" y=\"2024-10-02\"/>" +
+"</A>").checkAndThrowErrorWarnings();
+			assertEq(el,
+"<A>\n" +
+"  <B a=\"a\" b=\"b\" x=\"2023-12-08\" y=\"2024-09-13\"/>\n" +
+"  <B a=\"a\" b=\"b\" x=\"2024-09-20\" y=\"2024-10-02\"/>\n" +
+"</A>");
+		} catch (RuntimeException ex) {fail(ex);}
 
 		resetTester();
 	}

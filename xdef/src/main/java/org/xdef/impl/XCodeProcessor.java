@@ -217,6 +217,7 @@ import static org.xdef.impl.code.CodeTable.GET_MESSAGE;
 import static org.xdef.impl.code.CodeTable.GET_MILLIS;
 import static org.xdef.impl.code.CodeTable.GET_MINUTE;
 import static org.xdef.impl.code.CodeTable.GET_MONTH;
+import static org.xdef.impl.code.CodeTable.GET_NAMEDITEMS;
 import static org.xdef.impl.code.CodeTable.GET_NAMEDVALUE;
 import static org.xdef.impl.code.CodeTable.GET_NAMED_AS_STRING;
 import static org.xdef.impl.code.CodeTable.GET_NANOS;
@@ -3346,6 +3347,15 @@ public final class XCodeProcessor {
 						XDValue val = _stack[sp--];
 						String key = _stack[sp--].stringValue();
 						((XDContainer)_stack[sp--]).setXDNamedItem(key, val);
+					}
+					continue;
+				}
+				case GET_NAMEDITEMS: {//get list of named items from Container
+					XDContainer c = (XDContainer) _stack[sp];
+					XDContainer d = new DefContainer();
+					_stack[sp] = d;
+					for (XDNamedValue x: c.getXDNamedItems()) {
+						d.setXDNamedItem(x);
 					}
 					continue;
 				}

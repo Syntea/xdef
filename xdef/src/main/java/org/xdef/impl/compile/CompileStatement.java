@@ -2196,6 +2196,13 @@ class CompileStatement extends XScriptParser implements CodeTable {
 //		}
 	}
 
+	/** Check if statement is unreachable. */
+	private void checkUnreachable() {
+		if (_wasReturn || _wasContinue || _wasBreak) {
+			error(XDEF.XDEF453); // Unreachable statement
+		}
+	}
+
 	/** Parse and compile statement.
 	 * ifStatement ::= "if" s? "(" s? expression s? ")" S? statement
 	 *		( s? "else" s? statement )?
@@ -2212,9 +2219,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		boolean isFinal = false;
 		switch (_sym) {
 			case BEG_SYM: // '{'
-				if (_wasReturn || _wasContinue || _wasBreak) {
-					error(XDEF.XDEF453); // Unreachable statement
-				}
+				checkUnreachable();
 				// compound statement
 				nextSymbol();
 				initBlock(false, -1);
@@ -2228,9 +2233,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 				return true;
 			case INC_SYM:
 			case DEC_SYM: {
-				if (_wasReturn || _wasContinue || _wasBreak) {
-					error(XDEF.XDEF453); //Unreachable statement
-				}
+				checkUnreachable();
 				int dx = addDebugInfo(false);
 				isIncStatement();
 				setDebugEndPosition(dx);
@@ -2266,9 +2269,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 				if (_sym != IDENTIFIER_SYM) {
 					error(XDEF.XDEF412); //Type identifier expected
 				} else {
-					if (_wasReturn || _wasContinue || _wasBreak) {
-						error(XDEF.XDEF453); //Unreachable statement
-					}
+					checkUnreachable();
 					short varType = getVarTypeCode(_idName);
 					if (nextSymbol() == IDENTIFIER_SYM) {
 						String name = _idName;
@@ -2283,9 +2284,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 				break;
 			}
 			case IDENTIFIER_SYM: {
-				if (_wasReturn || _wasContinue || _wasBreak) {
-					error(XDEF.XDEF453); //Unreachable statement
-				}
+				checkUnreachable();
 				separateMethodNameFromIdentifier();
 				int dx = addDebugInfo(false);
 				labelOrSimplestatement(isFinal);
@@ -2293,44 +2292,32 @@ class CompileStatement extends XScriptParser implements CodeTable {
 				break;
 			}
 			case IF_SYM:
-				if (_wasReturn || _wasContinue || _wasBreak) {
-					error(XDEF.XDEF453); //Unreachable statement
-				}
+				checkUnreachable();
 				nextSymbol();
 				ifStatement();
 				return true;
 			case DO_SYM:
-				if (_wasReturn || _wasContinue || _wasBreak) {
-					error(XDEF.XDEF453); //Unreachable statement
-				}
+				checkUnreachable();
 				nextSymbol();
 				doStatement();
 				break;
 			case WHILE_SYM:
-				if (_wasReturn || _wasContinue || _wasBreak) {
-					error(XDEF.XDEF453); //Unreachable statement
-				}
+				checkUnreachable();
 				nextSymbol();
 				whileStatement();
 				return true;
 			case FOR_SYM:
-				if (_wasReturn || _wasContinue || _wasBreak) {
-					error(XDEF.XDEF453); //Unreachable statement
-				}
+				checkUnreachable();
 				nextSymbol();
 				forStatement();
 				return true;
 			case SWITCH_SYM:
-				if (_wasReturn || _wasContinue || _wasBreak) {
-					error(XDEF.XDEF453); //Unreachable statement
-				}
+				checkUnreachable();
 				nextSymbol();
 				switchStatement();
 				return true;
 			case CONTINUE_SYM: {
-				if (_wasReturn || _wasContinue || _wasBreak) {
-					error(XDEF.XDEF453); //Unreachable statement
-				}
+				checkUnreachable();
 				_wasContinue = true;
 				int dx = addDebugInfo(true);
 				nextSymbol();
@@ -2339,9 +2326,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 				break;
 			}
 			case BREAK_SYM: {
-				if (_wasReturn || _wasContinue || _wasBreak) {
-					error(XDEF.XDEF453); //Unreachable statement
-				}
+				checkUnreachable();
 				_wasBreak = true;
 				int dx = addDebugInfo(true);
 				nextSymbol();
@@ -2350,9 +2335,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 				break;
 			}
 			case RETURN_SYM: {
-				if (_wasReturn || _wasContinue || _wasBreak) {
-					error(XDEF.XDEF453); //Unreachable statement
-				}
+				checkUnreachable();
 				_wasReturn = true;
 				int dx = addDebugInfo(true);
 				nextSymbol();
@@ -2556,9 +2539,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		if(_sym != INC_SYM && _sym != DEC_SYM) {
 			return false;
 		}
-		if (_wasReturn || _wasContinue || _wasBreak) {
-			error(XDEF.XDEF453); //Unreachable statement
-		}
+		checkUnreachable();
 		char op = _sym;
 		int dx = addDebugInfo(true);
 		nextSymbol();
@@ -2667,7 +2648,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		}
 		checkSymbol(SEMICOLON_SYM); // ';'
 		_blockInfo._breakJumps = new ArrayList<>();
-		_blockInfo._continueAddr = _g._lastCodeIndex + 1;
+		int loopAddr = _blockInfo._continueAddr = _g._lastCodeIndex + 1;
 		_blockInfo._jumps = true;
 		int sp = _g._sp;
 		CompileJumpVector jumpVector = null;
@@ -2705,6 +2686,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		if (!statement()) {
 			error(XDEF.XDEF447); //Statement expected
 		}
+		 _wasBreak = _wasContinue = false;
 		if (savedCode != null) {
 			// move code to the end
 			for (XDValue v: savedCode) {
@@ -2715,7 +2697,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 				_g._spMax = spMax;
 			}
 		}
-		genContinueJump(new CodeI1(XD_VOID, JMP_OP));
+		_g.addJump(new CodeI1(XD_VOID, JMP_OP, loopAddr)); // jump back to loop
 		if (jumpVector != null) {
 			jumpVector.resoveFalseJumps(_g._lastCodeIndex + 1);
 		}

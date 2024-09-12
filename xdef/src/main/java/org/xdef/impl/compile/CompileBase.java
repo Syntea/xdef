@@ -1184,6 +1184,8 @@ public class CompileBase implements CodeTable, XDValueID {
 			ANY_MODE, 1, 1, XD_CONTAINER), "getLength");
 		method(ti, genInternalMethod(GET_NAMEDVALUE, XD_ANY,
 			ANY_MODE, 2, 2, XD_CONTAINER, XD_STRING), "getNamedItem");
+		method(ti, genInternalMethod(GET_NAMEDITEMS, XD_CONTAINER,
+			ANY_MODE, 1, 1, XD_CONTAINER, XD_STRING), "getNamedItems");
 		method(ti, genInternalMethod(GET_NAMED_AS_STRING, XD_STRING, ANY_MODE,
 			2, 2, XD_CONTAINER, XD_STRING),"getNamedString", "?fromAttr");
 		method(ti, genInternalMethod(CONTEXT_GETTEXT, XD_STRING,
@@ -1344,6 +1346,8 @@ public class CompileBase implements CodeTable, XDValueID {
 			ANY_MODE, 2, 2, XD_ELEMENT, XD_STRING), "addText");
 		method(ti, genInternalMethod(ELEMENT_CHILDNODES, XD_CONTAINER,
 			ANY_MODE, 1, 1, XD_ELEMENT), "getChidNodes");
+		method(ti, genInternalMethod(ELEMENT_ATTRS, XD_CONTAINER,
+			ANY_MODE, 1, 1, XD_ELEMENT), "getAttributes");
 		method(ti, genInternalMethod(ELEMENT_NSURI, XD_STRING,
 			ANY_MODE, 1, 1, XD_ELEMENT), "getNamespaceURI");
 		method(ti, genInternalMethod(ELEMENT_NAME, XD_STRING,
