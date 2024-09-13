@@ -10,7 +10,6 @@ import org.xdef.XDParser;
 import org.xdef.proc.XXNode;
 import org.xdef.XDPool;
 import org.w3c.dom.Element;
-import org.xdef.XDFactory;
 import org.xdef.XDValue;
 import org.xdef.component.XComponent;
 import org.xdef.proc.XXData;
@@ -1324,57 +1323,56 @@ public final class TestScript extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
 "<xd:declaration>\n" +
-"  void x() {\n"+
-"    int j;\n"+
+"  void testLoop() {\n"+
 "    for (int i=0; ;) {\n"+
-"      if (i++ LE 1) continue;\n"+
 "      if (i GT 4) break;\n"+
+"      if (i++ LE 1) continue;\n"+
 "      if (i NE 3) out('ERR1: i = ' + i);\n"+
 "      break;\n"+
 "    }\n"+
 "    out('OK1');\n"+
 "    for (int i=0; i LT 5;) {\n"+
-"      if (i++ LE 1) continue;\n"+
 "      if (i GT 4) break;\n"+
+"      if (i++ LE 1) continue;\n"+
 "      if (i NE 3) out('ERR2: i = ' + i);\n"+
 "      break;\n"+
 "    }\n"+
 "    out('OK2');\n"+
 "    for (int i=0; ; i++) {\n"+
-"      if (i LE 1) {continue;}\n"+
 "      if (i GT 4) break;\n"+
+"      if (i LE 1) {continue;}\n"+
 "      if (i != 3) out('ERR3: i = ' + i);\n"+
 "      break;\n"+
 "    }\n"+
 "    out('OK3');\n"+
-"    for (int i = 0; i LT 5; i++) {\n"+
+"    for (int i = 0; i LT 6; i++) {\n"+
+"      if (i GT 4) break;\n"+
 "      if (i == 0) continue;\n"+
 "      if (i != 1) out('ERR4: i = ' + i);\n"+
 "      break;\n"+
 "    }\n"+
 "    out('OK4');\n"+
-"    j = 0;\n"+
-"    while (j LT 4) {\n"+
-"      if (j++ LE 1) continue;\n"+
+"    int j= 0;\n"+
+"    while (j LT 6) {\n"+
 "      if (j GE 4) break;\n"+
+"      if (j++ LE 1) continue;\n"+
 "      if (j NE 3) out('ERR5: j = ' + j);\n"+
 "      break;\n"+
 "    }\n"+
 "    out('OK5');\n"+
 "    j = 0;\n"+
 "    do {\n"+
-"      if (j++ LE 2) continue;\n"+
 "      if (j GE 4) break;\n"+
-"      if (j NE 3) out('ERR6: j = ' + j);\n"+
+"      if (j++ LE 2) continue;\n"+
+"      if (j NE 4) out('ERR6: j = ' + j);\n"+
 "      break;\n"+
-"    } while (j LT 4);\n"+
+"    } while (j LT 6);\n"+
 "    out('OK6');\n"+
 "  }\n"+
 "</xd:declaration>\n"+
-"  <A xd:script='finally x();' />\n" +
+"  <A xd:script='finally testLoop();' />\n" +
 "</xd:def>";
-			swr = new StringWriter();
-			parse(xdef, "", "<A/>", reporter, swr, null, null);
+			parse(xdef,"","<A/>",reporter,swr=new StringWriter(),null,null);
 			assertNoErrors(reporter);
 			assertEq("OK1OK2OK3OK4OK5OK6", swr.toString());
 		} catch (RuntimeException ex) {fail(ex); reporter.clear();}
