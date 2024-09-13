@@ -1,7 +1,11 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.2.5, release-date 2024-09-12
-* .
+# Version 42.2.5, release-date 2024-09-13
+* Fixed error in `continue` inside `for` command.
+* Implemented new method `getAttributes` of `Element` object.
+* Implemented new method `getNamedItems` of `Container` object.
+* Methods `KXmlUtils.compareXML(...)` are now deprecated and changed to
+  `KXmlUtils.compareElements(...)`.
 
 # Version 42.2.4, release-date 2024-08-26
 * Fixed bug in X-component generator for value type declared as `jvalue`

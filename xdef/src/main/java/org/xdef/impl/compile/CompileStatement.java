@@ -2162,6 +2162,9 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		if (jmp != null) {
 			jmp.setParam(_blockInfo._continueAddr);
 			_g.addJump(jmp); // gen jump false back to loop
+			if (_blockInfo._continueJumps != null) {
+				_blockInfo._continueJumps.add(jmp);
+			}
 		}
 	}
 
@@ -2284,7 +2287,6 @@ class CompileStatement extends XScriptParser implements CodeTable {
 				break;
 			}
 			case IDENTIFIER_SYM: {
-				checkUnreachable();
 				separateMethodNameFromIdentifier();
 				int dx = addDebugInfo(false);
 				labelOrSimplestatement(isFinal);
@@ -2679,6 +2681,9 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			for (int i = lastCodeIndex + 1; i < _g._code.size(); i++) {
 				savedCode.add(_g.getCodeItem(i));
 			}
+			if (!savedCode.isEmpty()) {
+				_blockInfo._continueJumps = new ArrayList<>();
+			}
 			_g.removeCodeFromIndexAndClearStack(lastCodeIndex, sp, spMax);
 		} else {
 			savedCode = null;
@@ -2687,8 +2692,9 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			error(XDEF.XDEF447); //Statement expected
 		}
 		 _wasBreak = _wasContinue = false;
-		if (savedCode != null) {
-			// move code to the end
+		if (savedCode != null && !savedCode.isEmpty()) {
+			_blockInfo._continueAddr = _g._lastCodeIndex + 1;
+			// move code to the end of loop
 			for (XDValue v: savedCode) {
 				_g.addCode(v);
 			}
@@ -4351,11 +4357,13 @@ class CompileStatement extends XScriptParser implements CodeTable {
 ////////////////////////////////////////////////////////////////////////////////
 
 	/** Contains data assigned to a block statement. */
-	private static final class BlockInfo {
+	private final class BlockInfo {
 		/** Map with variable names. */
 		private Map<String, CompileVariable> _variables;
-		/** Array with break jumps. */
+		/** Array with "break" jumps. */
 		private List<CodeI1> _breakJumps;
+		/** Array with "continue" jumps. */
+		private List<CodeI1> _continueJumps;
 		/** The address where to contimue. */
 		private int _continueAddr;
 		/** Parent BlockInfo. */
@@ -4364,6 +4372,8 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		private boolean _jumps;
 		/** Last index of variables. */
 		private final int _variablesLastIndex;
+		/** Saved information if break or contimue jump was compiled. */
+		private final boolean _wasBreak_, _wasContinue_;
 
 		/** Create new instance of BlockInfo.
 		 * @param jumps True if it contains break jumps.
@@ -4378,12 +4388,16 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			_variables = g._localVariables;
 			_variablesLastIndex = g._localVariablesLastIndex;
 			g._localVariables = new LinkedHashMap<>(_variables);
+			_wasBreak_ = _wasBreak; // save value
+			_wasContinue_ = _wasContinue; // save value
+			_continueJumps = null;
 			_jumps = jumps;
 			if (_jumps) {
 				_breakJumps = new ArrayList<>();
 				if (continueAddr == -1) {
 					if (prevInfo != null) {
 						_continueAddr = prevInfo._continueAddr;
+						_continueJumps = prevInfo._continueJumps;
 					} else {
 						_continueAddr = -1;
 					}
@@ -4394,6 +4408,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 				if (prevInfo != null) {
 					_breakJumps = prevInfo._breakJumps;
 					_continueAddr = prevInfo._continueAddr;
+					_continueJumps = prevInfo._continueJumps;
 				} else {
 					_breakJumps = null;
 					_continueAddr = -1;
@@ -4412,12 +4427,20 @@ class CompileStatement extends XScriptParser implements CodeTable {
 				for (int i = 0, j = _breakJumps.size(); i < j; i++) {
 					_breakJumps.get(i).setParam(g._lastCodeIndex + 1);
 				}
+				if (_continueJumps != null) {
+					for (int i = 0, j = _continueJumps.size(); i < j; i++) {
+						_continueJumps.get(i).setParam(g._lastCodeIndex + 1);
+					}
+				}
 			}
 			_breakJumps = null;
+			_continueJumps = null;
 			g._localVariablesLastIndex = _variablesLastIndex;
 			g._localVariables = _variables;
-			_variables = null;
 			BlockInfo result = _prevInfo;
+			_wasBreak = _wasBreak_; // reset value
+			_wasContinue = _wasContinue_; // reset value
+			_variables = null;
 			_prevInfo = null;
 			return result;
 		}
