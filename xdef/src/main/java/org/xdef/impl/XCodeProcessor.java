@@ -508,7 +508,7 @@ public final class XCodeProcessor {
 	private static final String UNDEF_ID = "__UNDEF_ID__";
 	/** Switch to allow/restrict DOCTYPE in XML. */
 	/** Executable code */
-	XDValue[] _code;
+	private XDValue[] _code;
 	/** Address of code initialization. */
 	private int _init;
 	/** Processor stack. */

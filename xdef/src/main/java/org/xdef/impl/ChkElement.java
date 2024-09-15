@@ -16,7 +16,6 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.xdef.XDDebug;
 import org.xdef.XDParseResult;
-import org.xdef.XDParser;
 import org.xdef.XDUniqueSetKey;
 import org.xdef.XDValue;
 import static org.xdef.XDValueID.XD_NULL;
@@ -31,7 +30,6 @@ import static org.xdef.XDValueType.XXATTR;
 import static org.xdef.XDValueType.XXELEMENT;
 import static org.xdef.XDValueType.XXTEXT;
 import org.xdef.component.XComponent;
-import static org.xdef.impl.code.CodeTable.PARSEANDRETURN;
 import org.xdef.impl.code.CodeUniqueset;
 import org.xdef.impl.code.DefBoolean;
 import org.xdef.impl.code.DefParseResult;
@@ -213,21 +211,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	 * otherwise 'U').
 	 */
 	final XDValue exec(final int addr, final byte type) {
-		if (addr < 0) {
-			return null;
-		}
-		setXXType(type);
-		if (_scp._code[addr].getCode() != PARSEANDRETURN) {
-			return _scp.exec(addr, this);
-		}
-		XDParseResult result = /*XX - optimize*/
-			((XDParser) _scp._code[addr+1]).check(this, getTextValue());
-		if (result.matches()) {
-			if (_scp._code[addr].getParam() == 1) {
-				setTextValue(result.getSourceBuffer());
-			}
-		}
-		return _parseResult = result;
+		_mode = type;
+		return addr < 0 ? null : _scp.exec(addr, this);
 	}
 
 	 /** Set mode: 'C' - comment, 'E' - element, 'A' - attribute, 'T' - text,
