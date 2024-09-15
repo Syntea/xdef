@@ -10,6 +10,7 @@ import org.xdef.XDParserAbstract;
 import org.xdef.XDPool;
 import org.xdef.XDValue;
 import org.xdef.impl.XPool;
+import static org.xdef.impl.code.CodeTable.LD_CONST;
 import static org.xdef.impl.code.CodeTable.STOP_OP;
 import static org.xdef.impl.code.CodeTable.ST_GLOBAL;
 import org.xdef.msg.XDEF;
@@ -39,7 +40,7 @@ public class XDParseXDType extends XDParserAbstract {
 			}
 			XDPool xp = XDFactory.compileXD(props, xdef);
 			XDValue[] code  =((XPool) xp).getCode();
-			if (code.length == 3 && code[0].getCode() == 0
+			if (code.length == 3 && code[0].getCode() == LD_CONST
 				&& code[0].getItemId() == XD_PARSER
 				&& code[1].getCode() == ST_GLOBAL
 				&& code[2].getCode() == STOP_OP) {

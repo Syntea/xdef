@@ -45,6 +45,7 @@ import static org.xdef.impl.code.CodeTable.CALL_OP;
 import static org.xdef.impl.code.CodeTable.INIT_NOPARAMS_OP;
 import static org.xdef.impl.code.CodeTable.JMPF_OP;
 import static org.xdef.impl.code.CodeTable.LD_CONST;
+import static org.xdef.impl.code.CodeTable.PARSEANDRETURN;
 import static org.xdef.impl.code.CodeTable.PARSERESULT_MATCH;
 import static org.xdef.impl.code.CodeTable.PARSE_OP;
 import static org.xdef.impl.code.CodeTable.RETV_OP;
@@ -346,17 +347,21 @@ final class CompileXScript extends CompileStatement {
 						int check = sc._check;
 						if (check >= 0
 							&&_g._code.get(_g._lastCodeIndex).getCode()==STOP_OP
-							&&_g._code.get(check).getCode() == 0
-							&& _g._code.get(check).getItemId() == XD_PARSER) {
+							&& (_g._code.get(check).getCode() == LD_CONST
+								&&_g._code.get(check).getItemId() == XD_PARSER
+							|| _g._code.get(check).getCode()==PARSEANDRETURN)) {
 							if (addr + 3 == _g._lastCodeIndex
 								&&_g._code.get(addr).getCode()==INIT_NOPARAMS_OP
 								&&_g._code.get(addr).getParam() == 0
-								&&_g._code.get(addr + 1).getCode() == 0
+								&&_g._code.get(addr + 1).getCode() == LD_CONST
 								&&_g._code.get(addr+1).getItemId() == XD_STRING
 								&& _g._code.get(addr + 2).getCode() == RETV_OP
 								&& _g._code.get(addr + 3).getCode() == STOP_OP){
 								XDValue value = _g._code.get(addr + 1);
-								XDParser p = (XDParser) _g._code.get(check);
+								XDParser p = (XDParser)
+									(_g._code.get(check).getCode()
+									== PARSEANDRETURN ? _g._code.get(check+1)
+									: _g._code.get(check));
 								XDParseResult r =
 									p.check(null,value.toString());
 								if (r.errors()) {
@@ -571,6 +576,15 @@ final class CompileXScript extends CompileStatement {
 					}
 				} else if (y instanceof XDParser) {
 					p = (XDParser) y;
+					if (_g._lastCodeIndex == check + 2  /*XX - optimize*/
+						&& _g._code.get(check + 1).getCode() == PARSE_OP
+						&& _g._code.get(check + 1).getCode() == PARSE_OP
+						&& _g._code.get(check + 2).getCode() == STOP_OP) {
+						_g._code.set(check,
+							new CodeI1(XD_PARSERESULT, PARSEANDRETURN,
+								_g._code.get(check + 1).getParam()));
+						_g._code.set(check + 1, y);
+					}
 				}
 				if (p != null) {
 					sc.setValueType(p.parsedType(), p.toString());

@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.2.5, release-date 2024-09-13
+# Version 42.2.5, release-date 2024-09-15
 * Fixed error in `continue` inside `for` command.
 * Implemented new method `getAttributes` of `Element` object.
 * Implemented new method `getNamedItems` of `Container` object.

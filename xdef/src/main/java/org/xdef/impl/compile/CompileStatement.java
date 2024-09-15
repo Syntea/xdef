@@ -916,7 +916,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 						} else if (var.getType()==X_PARSEITEM
 							&& var.getParseMethodAddr() >= 0//parse method exist
 							&& (x=_g._code.get(var.getParseMethodAddr()))
-								.getCode() == 0 // constant
+								.getCode() == LD_CONST // constant
 							&& x.getItemId() == XD_PARSER
 							&& _g._code.get(var.getParseMethodAddr() + 1)
 								.getCode() == PARSE_OP

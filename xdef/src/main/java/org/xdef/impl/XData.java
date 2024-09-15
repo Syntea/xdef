@@ -28,6 +28,7 @@ import static org.xdef.impl.code.CodeTable.LD_CONST;
 import static org.xdef.impl.code.CodeTable.LD_GLOBAL;
 import static org.xdef.impl.code.CodeTable.LD_XMODEL;
 import static org.xdef.impl.code.CodeTable.NEW_PARSER;
+import static org.xdef.impl.code.CodeTable.PARSEANDRETURN;
 import static org.xdef.impl.code.CodeTable.PARSERESULT_MATCH;
 import static org.xdef.impl.code.CodeTable.PARSE_OP;
 import static org.xdef.impl.code.CodeTable.RETV_OP;
@@ -60,8 +61,6 @@ import org.xdef.sys.SRuntimeException;
  */
 public class XData extends XCodeDescriptor
 	implements XMData, XDValueID, CodeTable {
-	/** Default parser. */
-	private static final XDParseCDATA DEFAULT_PARSER = new XDParseCDATA();
 	/** Type ID of value of data. */
 	short _valueType;
 	/** Type name of value of data. */
@@ -215,75 +214,7 @@ public class XData extends XCodeDescriptor
 	 * @return XDParser or XDValue of executed code.
 	 */
 	public final XDValue getParseMethod() {
-		if (_check < 0) {
-			return DEFAULT_PARSER;
-		}
-		int xi = _check; //start of code of parse method.
-		final XDValue[] xv = ((XPool) getXDPool()).getCode();
-		XDValue y = xv[xi];
-		if (y.getCode() == JMP_OP || (xi+1 < xv.length && y.getCode() == CALL_OP
-				&& xv[xi+1].getCode() == STOP_OP)) {
-			y = xv[xi = y.getParam()];
-		} else if (xi + 2 < xv.length
-			&& (y.getCode() == LD_GLOBAL || y.getCode() == LD_XMODEL)
-			&& (xv[xi+1].getCode() == UNIQUESET_KEY_SETKEY
-				|| xv[xi+1].getCode() == UNIQUESET_KEY_ID
-				|| xv[xi+1].getCode() == UNIQUESET_KEY_SET
-				|| xv[xi+1].getCode() == UNIQUESET_KEY_IDREF
-				|| xv[xi+1].getCode() == UNIQUESET_KEY_CHKID
-				|| xv[xi+1].getCode() == UNIQUESET_ID
-				|| xv[xi+1].getCode() == UNIQUESET_SET
-				|| xv[xi+1].getCode() == UNIQUESET_IDREF
-				|| xv[xi+1].getCode() == UNIQUESET_IDREFS
-				|| xv[xi+1].getCode() == UNIQUESET_CHKID
-				|| xv[xi+1].getCode() == UNIQUESET_CHKIDS)
-			&& xv[xi+2].getCode() == STOP_OP) {
-			y = xv[xi = xv[xi+1].intValue()]; // this should be parser
-		}
-		for (;;) {
-			switch (y.getCode()) {
-				case JMP_OP:
-					y = xv[xi = xv[xi].getParam()];
-					break;
-				case LD_CODE:
-					y = xv[y.getParam()];
-					break;
-				case CALL_OP:
-					if (y.getParam() >= 0 && xi + 3 < xv.length
-						&& xv[xi+1].getCode() == NEW_PARSER
-						&& "eq".equals(xv[xi+1].stringValue())
-						&& xv[xi+2].getCode() == PARSE_OP
-						&& xv[xi+3].getCode() == STOP_OP) {
-						return ((CodeParser) xv[xi+1]).getParser(); // fixed
-					} else {
-						y = xv[xi = y.getParam()];
-						if (y.getCode()==LD_CONST && y.getItemId()==XD_PARSER
-							&& xv[xi+1].getCode() == PARSE_OP
-							&& xv[xi+2].getCode() == STOP_OP) {
-							return y;
-						}
-					}	break;
-				default:
-					if (xi + 2 < xv.length
-						&& y.getCode()==LD_CONST && y.getItemId()==XD_PARSER) {
-						if (xv[xi+1].getCode() == PARSE_OP) {
-							if (xv[xi+2].getCode() == STOP_OP) {
-								return y;
-							} else if (xi + 4 < xv.length
-								&& xv[xi+2].getCode() == STACK_DUP
-								&& xi + 4 < xv.length
-								&& xv[xi+3].getCode() == PARSERESULT_MATCH
-								&& xv[xi+4].getCode() == JMPF_OP
-								&& xv[xv[xi+4].getParam()].getCode()==STOP_OP) {
-								return y; // parser with CHECK operand
-							}
-						} else {// perhaps it is a boolean espression.
-							return DEFAULT_PARSER; // return XDParseCDATA parser
-						}
-					}
-					return DEFAULT_PARSER; // return XDParseCDATA parser
-			}
-		}
+		return getParseMethod(_check, ((XPool) getXDPool()).getCode());
 	}
 
 	@Override
@@ -642,5 +573,85 @@ public class XData extends XCodeDescriptor
 			}
 		}
 		return false;
+	}
+
+////////////////////////////////////////////////////////////////////////////////
+
+	/** Get parser used for parsing of value.
+	 * @param check address of check section or -1.
+	 * @param xv array with code.
+	 * @return XDParser or XDValue of executed code.
+	 */
+	private static XDValue getParseMethod(final int check,
+		final XDValue[] xv) {
+		if (check < 0) {
+			return new XDParseCDATA(); // default parser
+		}
+		int xi = check; //start of code of parse method.
+		XDValue y = xv[xi];
+		if (y.getCode() == PARSEANDRETURN) {
+			return xv[++xi]; // it is Parser
+		} else if (y.getCode() == JMP_OP || (xi+1 < xv.length
+			&& y.getCode() == CALL_OP && xv[xi+1].getCode() == STOP_OP)) {
+			y = xv[xi = y.getParam()];
+		} else if (xi + 2 < xv.length
+			&& (y.getCode() == LD_GLOBAL || y.getCode() == LD_XMODEL)
+			&& (xv[xi+1].getCode() == UNIQUESET_KEY_SETKEY
+				|| xv[xi+1].getCode() == UNIQUESET_KEY_ID
+				|| xv[xi+1].getCode() == UNIQUESET_KEY_SET
+				|| xv[xi+1].getCode() == UNIQUESET_KEY_IDREF
+				|| xv[xi+1].getCode() == UNIQUESET_KEY_CHKID
+				|| xv[xi+1].getCode() == UNIQUESET_ID
+				|| xv[xi+1].getCode() == UNIQUESET_SET
+				|| xv[xi+1].getCode() == UNIQUESET_IDREF
+				|| xv[xi+1].getCode() == UNIQUESET_IDREFS
+				|| xv[xi+1].getCode() == UNIQUESET_CHKID
+				|| xv[xi+1].getCode() == UNIQUESET_CHKIDS)
+			&& xv[xi+2].getCode() == STOP_OP) {
+			y = xv[xi = xv[xi+1].intValue()]; // this should be parser
+		}
+		for (;;) {
+			switch (y.getCode()) {
+				case JMP_OP:
+					y = xv[xi = xv[xi].getParam()];
+					continue;
+				case LD_CODE:
+					y = xv[y.getParam()];
+					continue;
+				case CALL_OP:
+					if (y.getParam() >= 0 && xi + 3 < xv.length
+						&& xv[xi+1].getCode() == NEW_PARSER
+						&& "eq".equals(xv[xi+1].stringValue())
+						&& xv[xi+2].getCode() == PARSE_OP
+						&& xv[xi+3].getCode() == STOP_OP) {
+						return ((CodeParser) xv[xi+1]).getParser(); // fixed
+					} else {
+						y = xv[xi = y.getParam()];
+						if (y.getCode()==LD_CONST && y.getItemId()==XD_PARSER
+							&& xv[xi+1].getCode() == PARSE_OP
+							&& xv[xi+2].getCode() == STOP_OP) {
+							return y;
+						}
+					}
+					continue;
+				default:
+					if (xi + 2 < xv.length
+						&& y.getCode()==LD_CONST && y.getItemId()==XD_PARSER) {
+						if (xv[xi+1].getCode() == PARSE_OP) {
+							if (xv[xi+2].getCode() == STOP_OP) {
+								return y;
+							} else if (xi + 4 < xv.length
+								&& xv[xi+2].getCode() == STACK_DUP
+								&& xi + 4 < xv.length
+								&& xv[xi+3].getCode() == PARSERESULT_MATCH
+								&& xv[xi+4].getCode() == JMPF_OP
+								&& xv[xv[xi+4].getParam()].getCode()==STOP_OP) {
+								return y; // parser with CHECK operand
+							}
+						}
+					}
+			}
+			return new XDParseCDATA(); // return XDParseCDATA parser
+		}
 	}
 }

@@ -333,6 +333,7 @@ import static org.xdef.impl.code.CodeTable.OUTLN1_STREAM;
 import static org.xdef.impl.code.CodeTable.OUTLN_STREAM;
 import static org.xdef.impl.code.CodeTable.OUT_STREAM;
 import static org.xdef.impl.code.CodeTable.PARSEANDCHECK;
+import static org.xdef.impl.code.CodeTable.PARSEANDRETURN;
 import static org.xdef.impl.code.CodeTable.PARSERESULT_MATCH;
 import static org.xdef.impl.code.CodeTable.PARSE_DATE;
 import static org.xdef.impl.code.CodeTable.PARSE_DURATION;
@@ -506,8 +507,8 @@ public final class XCodeProcessor {
 	/** This identifier is created if it is undefined. */
 	private static final String UNDEF_ID = "__UNDEF_ID__";
 	/** Switch to allow/restrict DOCTYPE in XML. */
-	/** Program code */
-	private XDValue[] _code;
+	/** Executable code */
+	XDValue[] _code;
 	/** Address of code initialization. */
 	private int _init;
 	/** Processor stack. */
@@ -3263,6 +3264,14 @@ public final class XCodeProcessor {
 					}
 					_stack[sp] = result;
 					continue;
+				}
+				case PARSEANDRETURN: {// parser from next code, parse and return
+					XDParseResult result = ((XDParser) _code[pc]).check(chkEl,
+						chkEl.getTextValue());
+					if (result.matches() && item.getParam() == 1) {
+						chkEl.setTextValue(result.getSourceBuffer());
+					}
+					return chkEl._parseResult = result;
 				}
 				case PARSEANDCHECK: {
 					String s = item.getParam() == 1 ?
