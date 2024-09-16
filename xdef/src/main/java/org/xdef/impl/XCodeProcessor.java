@@ -3250,7 +3250,7 @@ public final class XCodeProcessor {
 					if (_stack[sp]==null || !(_stack[sp] instanceof XDParser)) {
 						result = new DefParseResult(s);
 						//Value of type "Parser" expected&{0}{, found: }
-						result.error(XDEF.XDEF820, 
+						result.error(XDEF.XDEF820,
 							_stack[sp]==null ? "null" : _stack[sp].getClass());
 					} else {
 						result = ((XDParser) _stack[sp]).check(chkEl, s);
@@ -3266,22 +3266,18 @@ public final class XCodeProcessor {
 					_stack[sp] = result;
 					continue;
 				}
-				case PARSEANDRETURN: // parser from next code, parse and return
-					if (item.getParam() == 1) {
-						XDParseResult result = ((XDParser)
-							_code[pc]).check(chkEl, chkEl.getTextValue());
-						if (result.matches()) {
-							chkEl.setTextValue(result.getSourceBuffer());
-						}
-						return chkEl._parseResult = result;
-					} else {
-						return ((XDParser)
-							_code[pc]).check(chkEl, _stack[sp--].toString());
+				case PARSEANDRETURN:{ // parser from next code, parse and return
+					XDParseResult result = ((XDParser) _code[pc]).check(
+						chkEl, chkEl.getTextValue());
+					if (result.matches()) {
+						chkEl.setTextValue(result.getSourceBuffer());
 					}
+					return chkEl._parseResult = result;
+				}
 				case PARSEANDCHECK:
 					_stack[sp] = new DefBoolean(
 						((XDParser) _stack[sp]).check(chkEl,
-							item.getParam() == 1 ? chkEl.getTextValue() 
+							item.getParam() == 1 ? chkEl.getTextValue()
 								: _stack[sp--].toString()).matches());
 					continue;
 				case PARSERESULT_MATCH:

@@ -2010,7 +2010,7 @@ method(ti, genInternalMethod(SET_PARSED_VALUE, XD_VOID,
 			return (XDParser) ((Constructor)PARSERS.get(name)).newInstance();
 		} catch (ReflectiveOperationException | RuntimeException ex) {
 			return null; // such parser not exists
-		} 
+		}
 	}
 
 	/** Get type name from type id.

@@ -579,10 +579,10 @@ final class CompileXScript extends CompileStatement {
 					if (_g._lastCodeIndex == check + 2  /*XX - optimize*/
 						&& _g._code.get(check).getCode() == LD_CONST
 						&& _g._code.get(check + 1).getCode() == PARSE_OP
+						&& _g._code.get(check + 1).getParam() == 1
 						&& _g._code.get(check + 2).getCode() == STOP_OP) {
-						_g._code.set(check,
-							new CodeI1(XD_PARSERESULT, PARSEANDRETURN,
-								_g._code.get(check + 1).getParam()));
+						_g._code.set(
+							check, new CodeI1(XD_PARSERESULT, PARSEANDRETURN));
 						_g._code.set(check + 1, y);
 					}
 				}
