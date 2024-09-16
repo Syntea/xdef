@@ -16,6 +16,7 @@ import static org.xdef.XDValueID.XD_BIGINTEGER;
 import static org.xdef.XDValueID.XD_BNFGRAMMAR;
 import static org.xdef.XDValueID.XD_BNFRULE;
 import static org.xdef.XDValueID.XD_BOOLEAN;
+import static org.xdef.XDValueID.XD_BYTE;
 import static org.xdef.XDValueID.XD_BYTES;
 import static org.xdef.XDValueID.XD_CHAR;
 import static org.xdef.XDValueID.XD_CONTAINER;
@@ -27,8 +28,10 @@ import static org.xdef.XDValueID.XD_DURATION;
 import static org.xdef.XDValueID.XD_ELEMENT;
 import static org.xdef.XDValueID.XD_EMAIL;
 import static org.xdef.XDValueID.XD_EXCEPTION;
+import static org.xdef.XDValueID.XD_FLOAT;
 import static org.xdef.XDValueID.XD_GPSPOSITION;
 import static org.xdef.XDValueID.XD_INPUT;
+import static org.xdef.XDValueID.XD_INT;
 import static org.xdef.XDValueID.XD_IPADDR;
 import static org.xdef.XDValueID.XD_LOCALE;
 import static org.xdef.XDValueID.XD_LONG;
@@ -44,6 +47,7 @@ import static org.xdef.XDValueID.XD_REGEXRESULT;
 import static org.xdef.XDValueID.XD_REPORT;
 import static org.xdef.XDValueID.XD_RESULTSET;
 import static org.xdef.XDValueID.XD_SERVICE;
+import static org.xdef.XDValueID.XD_SHORT;
 import static org.xdef.XDValueID.XD_STATEMENT;
 import static org.xdef.XDValueID.XD_STRING;
 import static org.xdef.XDValueID.XD_TELEPHONE;
@@ -71,10 +75,6 @@ import static org.xdef.impl.code.CodeTable.ADD_SECOND;
 import static org.xdef.impl.code.CodeTable.ADD_YEAR;
 import static org.xdef.impl.code.CodeTable.BNFRULE_PARSE;
 import static org.xdef.impl.code.CodeTable.BNFRULE_VALIDATE;
-import org.xdef.impl.code.DefContainer;
-import org.xdef.impl.code.DefLong;
-import org.xdef.impl.code.DefString;
-import org.xdef.impl.code.DefXQueryExpr;
 import static org.xdef.impl.code.CodeTable.BNF_PARSE;
 import static org.xdef.impl.code.CodeTable.BYTES_ADDBYTE;
 import static org.xdef.impl.code.CodeTable.BYTES_CLEAR;
@@ -82,6 +82,10 @@ import static org.xdef.impl.code.CodeTable.BYTES_GETAT;
 import static org.xdef.impl.code.CodeTable.BYTES_INSERT;
 import static org.xdef.impl.code.CodeTable.BYTES_REMOVE;
 import static org.xdef.impl.code.CodeTable.BYTES_SETAT;
+import org.xdef.impl.code.DefContainer;
+import org.xdef.impl.code.DefLong;
+import org.xdef.impl.code.DefString;
+import org.xdef.impl.code.DefXQueryExpr;
 import static org.xdef.impl.code.CodeTable.BYTES_SIZE;
 import static org.xdef.impl.code.CodeTable.BYTES_TO_BASE64;
 import static org.xdef.impl.code.CodeTable.BYTES_TO_HEX;
@@ -131,6 +135,7 @@ import static org.xdef.impl.code.CodeTable.DURATION_GETSTART;
 import static org.xdef.impl.code.CodeTable.DURATION_GETYEARS;
 import static org.xdef.impl.code.CodeTable.ELEMENT_ADDELEMENT;
 import static org.xdef.impl.code.CodeTable.ELEMENT_ADDTEXT;
+import static org.xdef.impl.code.CodeTable.ELEMENT_ATTRS;
 import static org.xdef.impl.code.CodeTable.ELEMENT_CHILDNODES;
 import static org.xdef.impl.code.CodeTable.ELEMENT_GETATTR;
 import static org.xdef.impl.code.CodeTable.ELEMENT_GETTEXT;
@@ -170,6 +175,7 @@ import static org.xdef.impl.code.CodeTable.GET_MESSAGE;
 import static org.xdef.impl.code.CodeTable.GET_MILLIS;
 import static org.xdef.impl.code.CodeTable.GET_MINUTE;
 import static org.xdef.impl.code.CodeTable.GET_MONTH;
+import static org.xdef.impl.code.CodeTable.GET_NAMEDITEMS;
 import static org.xdef.impl.code.CodeTable.GET_NAMEDVALUE;
 import static org.xdef.impl.code.CodeTable.GET_NAMED_AS_STRING;
 import static org.xdef.impl.code.CodeTable.GET_NANOS;
@@ -406,9 +412,13 @@ public class CompileBase implements CodeTable, XDValueID {
 		for (int i = 0; i < X_NOTYPE_VALUE + 1; i++) METHODS.add(null);
 		// Set type tables.
 		setType(XD_VOID, "void", Void.TYPE);
-		setType(XD_LONG, "int", Long.TYPE);
+		setType(XD_BYTE, "int", Long.TYPE); // internally int
+		setType(XD_INT, "int", Long.TYPE);
+		setType(XD_SHORT, "int", Long.TYPE); // internally int
+		setType(XD_LONG, "int", Long.TYPE); // internally int
 		setType(XD_CHAR, "char", Character.TYPE);
-		setType(XD_DOUBLE, "float", Double.TYPE);
+		setType(XD_FLOAT, "float", Double.TYPE);
+		setType(XD_DOUBLE, "float", Double.TYPE); // internally float
 		setType(XD_BOOLEAN, "boolean", Boolean.TYPE);
 		setType(XD_DECIMAL, "Decimal", java.math.BigDecimal.class);
 		setType(XD_BIGINTEGER, "BigInteger", java.math.BigInteger.class);
@@ -1998,7 +2008,9 @@ method(ti, genInternalMethod(SET_PARSED_VALUE, XD_VOID,
 	public static final XDParser getParser(final String name) {
 		try {
 			return (XDParser) ((Constructor)PARSERS.get(name)).newInstance();
-		} catch (Exception ex) { return null; } // such parser not exists
+		} catch (ReflectiveOperationException | RuntimeException ex) {
+			return null; // such parser not exists
+		} 
 	}
 
 	/** Get type name from type id.
@@ -2121,13 +2133,13 @@ method(ti, genInternalMethod(SET_PARSED_VALUE, XD_VOID,
 				return null;
 			}
 			XDContainer fixedParams = null;
-			for (int i = 0; i < _keyparams.length; i++) {
-				if (_keyparams[i].isFixed()) {
+			for (KeyParam _keyparam : _keyparams) {
+				if (_keyparam.isFixed()) {
 					if (fixedParams == null) {
-						 fixedParams = new DefContainer();
+						fixedParams = new DefContainer();
 					}
-					fixedParams.setXDNamedItem(_keyparams[i].getName(),
-						_keyparams[i].getLegalValues()[0]);
+					fixedParams.setXDNamedItem(_keyparam.getName(),
+						_keyparam.getLegalValues()[0]);
 				}
 			}
 			return fixedParams;

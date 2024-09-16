@@ -3250,36 +3250,40 @@ public final class XCodeProcessor {
 					if (_stack[sp]==null || !(_stack[sp] instanceof XDParser)) {
 						result = new DefParseResult(s);
 						//Value of type "Parser" expected&{0}{, found: }
-						result.error(XDEF.XDEF820, _stack[sp]);
+						result.error(XDEF.XDEF820, 
+							_stack[sp]==null ? "null" : _stack[sp].getClass());
 					} else {
 						result = ((XDParser) _stack[sp]).check(chkEl, s);
-					}
-					if (result.matches()) {
-						if (item.getParam() == 1) {
-							chkEl.setTextValue(result.getSourceBuffer());
+						if (result.matches()) {
+							if (item.getParam() == 1) {
+								chkEl.setTextValue(result.getSourceBuffer());
+							}
 						}
-					}
-					if (chkEl != null) {
-						chkEl._parseResult = result;
+						if (chkEl != null && item.getParam() == 1) {
+							chkEl._parseResult = result;
+						}
 					}
 					_stack[sp] = result;
 					continue;
 				}
-				case PARSEANDRETURN: {// parser from next code, parse and return
-					XDParseResult result = ((XDParser) _code[pc]).check(chkEl,
-						chkEl.getTextValue());
-					if (result.matches() && item.getParam() == 1) {
-						chkEl.setTextValue(result.getSourceBuffer());
+				case PARSEANDRETURN: // parser from next code, parse and return
+					if (item.getParam() == 1) {
+						XDParseResult result = ((XDParser)
+							_code[pc]).check(chkEl, chkEl.getTextValue());
+						if (result.matches()) {
+							chkEl.setTextValue(result.getSourceBuffer());
+						}
+						return chkEl._parseResult = result;
+					} else {
+						return ((XDParser)
+							_code[pc]).check(chkEl, _stack[sp--].toString());
 					}
-					return chkEl._parseResult = result;
-				}
-				case PARSEANDCHECK: {
-					String s = item.getParam() == 1 ?
-						chkEl.getTextValue() : _stack[sp--].toString();
+				case PARSEANDCHECK:
 					_stack[sp] = new DefBoolean(
-						((XDParser) _stack[sp]).check(chkEl, s).matches());
+						((XDParser) _stack[sp]).check(chkEl,
+							item.getParam() == 1 ? chkEl.getTextValue() 
+								: _stack[sp--].toString()).matches());
 					continue;
-				}
 				case PARSERESULT_MATCH:
 					_stack[sp] =
 						new DefBoolean(((XDParseResult)_stack[sp]).matches());

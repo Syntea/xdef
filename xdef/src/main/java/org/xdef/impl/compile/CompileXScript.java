@@ -577,7 +577,7 @@ final class CompileXScript extends CompileStatement {
 				} else if (y instanceof XDParser) {
 					p = (XDParser) y;
 					if (_g._lastCodeIndex == check + 2  /*XX - optimize*/
-						&& _g._code.get(check + 1).getCode() == PARSE_OP
+						&& _g._code.get(check).getCode() == LD_CONST
 						&& _g._code.get(check + 1).getCode() == PARSE_OP
 						&& _g._code.get(check + 2).getCode() == STOP_OP) {
 						_g._code.set(check,
