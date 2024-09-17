@@ -3266,9 +3266,9 @@ public final class XCodeProcessor {
 					_stack[sp] = result;
 					continue;
 				}
-				case PARSEANDRETURN:{ // parser from next code, parse and return
-					XDParseResult result = ((XDParser) _code[pc]).check(
-						chkEl, chkEl.getTextValue());
+				case PARSEANDRETURN: {// parser from next code, parse and return
+					XDParseResult result = ((XDParser) _code[pc])
+						.check(chkEl, chkEl.getTextValue());
 					if (result.matches()) {
 						chkEl.setTextValue(result.getSourceBuffer());
 					}
