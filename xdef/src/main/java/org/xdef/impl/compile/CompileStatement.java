@@ -388,13 +388,13 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		_g.genLDC(new DefString(name));
 		int sp = _g._sp;
 		if (readParam()) {
-			XDValue item =_g.removeLastCodeItem();
+			XDValue xv =_g.removeLastCodeItem();
 			if (plist != null) {
-				if (!plist.addKeyPar(name, item.getItemId(), item)) {
+				if (!plist.addKeyPar(name, xv.getItemId(), xv)) {
 					error(XDEF.XDEF420, name); //Parameter redefinition of &{0}
 				}
 			}
-			_g.replaceLastCodeItem(new DefNamedValue(name,item));
+			_g.replaceLastCodeItem(new DefNamedValue(name, xv));
 			_g._tstack[--_g._sp] = XD_NAMEDVALUE;
 			return true;
 		} else {
@@ -897,7 +897,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 					nextSymbol();
 				} else if (!assignment(name, true)) {
 					CompileVariable var = _g.getVariable(name);
-					XDValue x;
+					XDValue xv;
 					if (var != null) {
 						if (var.getType() == X_UNIQUESET_NAMED) {
 							// this is very nasty code. If the variable refers
@@ -915,14 +915,14 @@ class CompileStatement extends XScriptParser implements CodeTable {
 							break; // ??? error, probably unknown type or method
 						} else if (var.getType()==X_PARSEITEM
 							&& var.getParseMethodAddr() >= 0//parse method exist
-							&& (x=_g._code.get(var.getParseMethodAddr()))
+							&& (xv = _g._code.get(var.getParseMethodAddr()))
 								.getCode() == LD_CONST // constant
-							&& x.getItemId() == XD_PARSER
+							&& xv.getItemId() == XD_PARSER
 							&& _g._code.get(var.getParseMethodAddr() + 1)
 								.getCode() == PARSE_OP
 							&& _g._code.get(var.getParseMethodAddr() + 2)
 								.getCode() == STOP_OP) { // declared type
-							_g.addCode(x, 1);
+							_g.addCode(xv, 1);
 							_g._tstack[_g._sp] = XD_PARSER; //it is parser!
 							_g._cstack[_g._sp] = var.getParseMethodAddr();
 							break;
@@ -2695,8 +2695,8 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		if (savedCode != null && !savedCode.isEmpty()) {
 			_blockInfo._continueAddr = _g._lastCodeIndex + 1;
 			// move code to the end of loop
-			for (XDValue v: savedCode) {
-				_g.addCode(v);
+			for (XDValue xv: savedCode) {
+				_g.addCode(xv);
 			}
 			_g._sp = sp;
 			if (spMax > _g._spMax) {
@@ -2724,9 +2724,9 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		}
 		checkSymbol(RPAR_SYM); // ')'
 		setDebugEndPosition(dx);
-		XDValue code = xType == XD_STRING ?
+		XDValue xv = xType == XD_STRING ?
 			new CodeSWTableStr() : new CodeSWTableInt();
-		_g.addCode(code, -1);
+		_g.addCode(xv, -1);
 		checkSymbol(BEG_SYM);
 		initBlock(true, -1);
 		boolean wasDefault = false;
@@ -2827,7 +2827,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 			_wasContinue = wasContinue;
 		}
 		if (xType == XD_LONG) {
-			CodeSWTableInt icode = (CodeSWTableInt) code;
+			CodeSWTableInt icode = (CodeSWTableInt) xv;
 			icode.setParam(defaultAddr);
 			icode._adrs = new int[ht.size()];
 			icode._list = new long[ht.size()];
@@ -2839,7 +2839,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 				icode._adrs[i] = ht.get(key);
 			}
 		} else if (xType == XD_STRING) {
-			CodeSWTableStr scode = (CodeSWTableStr) code;
+			CodeSWTableStr scode = (CodeSWTableStr) xv;
 			scode.setParam(defaultAddr);
 			scode._adrs = new int[ht.size()];
 			scode._list = new String[ht.size()];
@@ -3100,18 +3100,18 @@ class CompileStatement extends XScriptParser implements CodeTable {
 						} else {
 							error(XDEF.XDEF412); //Type identifier expected
 						}
-						XDValue val;
+						XDValue xv;
 						if (_sym == CONSTANT_SYM) {
-							val = _parsedValue;
+							xv = _parsedValue;
 							nextSymbol();
 						} else if (_sym == IDENTIFIER_SYM
-							&& (paramType = getTypeId(_idName))>0) {
-							val = DefNull.genNullValue(paramType);
+							&& (paramType = getTypeId(_idName)) > 0) {
+							xv = DefNull.genNullValue(paramType);
 						} else {
-							val = new DefNull();
+							xv = new DefNull();
 							error(XDEF.XDEF412); //Type identifier expected
 						}
-						keyParams.setXDNamedItem(name, val);
+						keyParams.setXDNamedItem(name, xv);
 					} else {
 						error(XDEF.XDEF412); //Type identifier expected
 					}
@@ -4267,6 +4267,21 @@ class CompileStatement extends XScriptParser implements CodeTable {
 						String s = var.getKeyRefName();
 						result.setParam2(s != null ? s : typeName);
 					}
+					if ((start += 2) == _g._lastCodeIndex
+						&& _g._code.get(start).getCode() == PARSE_OP
+						&& _g._code.get(start).getParam() == 1) {
+						XDValue xv = _g._code.get(start - 1);
+						if (xv.getCode() == LD_CODE) {
+							xv = _g._code.get(xv.getParam());
+						}
+						if (xv.getCode() == LD_CONST
+							&& xv.getItemId() == XD_PARSER) { /*XX - optimize*/
+							_g._code.set(start - 1,
+								new CodeI1(XD_PARSERESULT, PARSEANDRETURN));
+							_g._code.set(start, xv);
+							break;
+						}
+					}
 					_g.genStop();
 					break;
 				}
@@ -4275,15 +4290,15 @@ class CompileStatement extends XScriptParser implements CodeTable {
 					break;
 				case X_PARSEITEM:
 					if (_g._lastCodeIndex == start + 1) {
-						XDValue val = _g.getLastCodeItem();
+						XDValue xv = _g.getLastCodeItem();
 						short code;
-						if (X_PARSEITEM == val.getItemId()
-							&& ((code = val.getCode()) == LD_GLOBAL
+						if (X_PARSEITEM == xv.getItemId()
+							&& ((code = xv.getCode()) == LD_GLOBAL
 							|| code == LD_LOCAL || code == LD_XMODEL)) {
 							result.setParam2(typeName);
 							_g.removeCodeFromIndexAndClearStack(start,
 								sp, _g._spMax);
-							String err = _g.genMethod(val.stringValue(), 0);
+							String err = _g.genMethod(xv.stringValue(), 0);
 							if (err != null) {
 								error(XDEF.XDEF443, err);//Unknown method:'&{0}'
 							}
@@ -4470,14 +4485,14 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		/** Add key parameter.
 		 * @param name name of parameter.
 		 * @param type type ID of parameter.
-		 * @param value value of parameter.
+		 * @param xv value of parameter.
 		 * @return true if parameter was added or if the same parameter already
 		 * exists. Return false if parameter exists with different parameters.
 		 */
 		private boolean addKeyPar(final String name,
-			final short type, final XDValue value) {
+			final short type, final XDValue xv) {
 			int len = _keyParams.length;
-			KeyPar keyPar = new KeyPar(name, type, value);
+			KeyPar keyPar = new KeyPar(name, type, xv);
 			if (len == 0) {
 				_keyParams = new KeyPar[]{keyPar};
 			}
@@ -4497,18 +4512,15 @@ class CompileStatement extends XScriptParser implements CodeTable {
 		private static final class KeyPar {
 			private final String _name;
 			private final short _type;
-			private final XDValue _value;
+			private final XDValue _xv;
 			/** Create instance of KeyPar. */
-			private KeyPar(final String name,
-				final short type,
-				final XDValue value) {
-				_name = name; _type = type; _value = value;
+			private KeyPar(final String name,final short type,final XDValue xv){
+				_name = name; _type = type; _xv = xv;
 			}
 			/** Return true if the argument is same as this KeyPar instance. */
 			private boolean eq(KeyPar k) {
 				return _name.equals(k._name) && _type == k._type
-					&& (_value != null && _value.equals(k._value)
-						|| _value == k._value);
+					&& (_xv != null && _xv.equals(k._xv) || _xv == k._xv);
 			}
 		}
 	}
