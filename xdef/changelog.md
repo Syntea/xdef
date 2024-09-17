@@ -1,5 +1,8 @@
 # Version ${version}, release-date ${release.date}
 
+# Version 42.2.6, release-date 2024-09-17
+* .
+
 # Version 42.2.5, release-date 2024-09-17
 * Fixed error in `continue` inside `for` command.
 * Implemented new method `getAttributes` of `Element` object.
