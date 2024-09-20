@@ -3267,18 +3267,17 @@ public final class XCodeProcessor {
 					continue;
 				}
 				case PARSEANDRETURN: {// parser from next code, parse and return
-					XDParseResult result = ((XDParser) _code[pc])
-						.check(chkEl, chkEl.getTextValue());
+					XDParseResult result = ((XDParser) _code[pc]).check(
+						chkEl, chkEl.getTextValue());
 					if (result.matches()) {
 						chkEl.setTextValue(result.getSourceBuffer());
 					}
 					return chkEl._parseResult = result;
 				}
 				case PARSEANDCHECK:
-					_stack[sp] = new DefBoolean(
-						((XDParser) _stack[sp]).check(chkEl,
-							item.getParam() == 1 ? chkEl.getTextValue()
-								: _stack[sp--].toString()).matches());
+					_stack[sp] = new DefBoolean(((XDParser) _stack[sp])
+						.check(chkEl, item.getParam()==1 ? chkEl.getTextValue()
+							: _stack[sp--].toString()).matches());
 					continue;
 				case PARSERESULT_MATCH:
 					_stack[sp] =
