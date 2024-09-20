@@ -1,5 +1,5 @@
 <xd:def xmlns:xd="http://www.xdef.org/xdef/4.0" xd:name="Externals">
- <xd:declaration scope="global">
-     boolean tab(String a, String b) {return true;}
- </xd:declaration>
+  <xd:declaration scope="global">
+    boolean tab(String a, String b) {return true;}
+  </xd:declaration>
 </xd:def>

@@ -509,11 +509,6 @@ public abstract class XSAbstractParser extends XDParserAbstract
 	 */
 	public XDValue cloneItem() {return this;}
 	@Override
-	/** Set code of operation (ignored here).
-	 * @param code the new code of operation.
-	 */
-	public void setCode(final short code) {}
-	@Override
 	/** Set result type of operation (ignored here).
 	 * @param resultType id of result type.
 	 */
