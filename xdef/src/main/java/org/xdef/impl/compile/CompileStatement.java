@@ -4277,7 +4277,7 @@ class CompileStatement extends XScriptParser implements CodeTable {
 						if (xv.getCode() == LD_CONST
 							&& xv.getItemId() == XD_PARSER) { /*XX - optimize*/
 							_g._code.set(start - 1,
-								new CodeI1(XD_PARSERESULT, PARSEANDRETURN));
+								new CodeI1(XD_PARSERESULT, PARSEANDSTOP));
 							_g._code.set(start, xv);
 							break;
 						}

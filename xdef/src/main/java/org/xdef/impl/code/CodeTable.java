@@ -631,9 +631,9 @@ public interface CodeTable {
 	/** Parse string with parser, result is BOOLEAN_VALUE. */
 	static final short PARSEANDCHECK = PARSE_OP + 1;
 	/** Use parser from following code item, check data, return parsed value. */
-	static final short PARSEANDRETURN = PARSEANDCHECK + 1;
+	static final short PARSEANDSTOP = PARSEANDCHECK + 1;
 	/** Set parsed error. */
-	static final short SET_PARSED_ERROR = PARSEANDRETURN + 1;
+	static final short SET_PARSED_ERROR = PARSEANDSTOP + 1;
 	/** Get parsed error. */
 	static final short GET_PARSED_ERROR = SET_PARSED_ERROR + 1;
 	/** Set parsed string. */

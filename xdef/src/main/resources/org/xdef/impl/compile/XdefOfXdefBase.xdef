@@ -677,21 +677,17 @@ BNFExpression ::= (BNFUnion S?)+
 /* XComponent                                                                 */
 /******************************************************************************/
 
-JavaTypeName ::= '<' S? $JavaQName (S? JavaTypeName)?
-  (S? "," S?  JavaTypeName)* S? '>'
+JavaTypedQName ::= $JavaQName
 
-JavaTypedQName ::= $JavaQName (S? JavaTypeName)?
-
-XCComponent ::= S? (XCComponentCommand
-  (S? ";" S? XCComponentCommand?)* )
+XCComponent ::= S? (XCComponentCommand (S? ";" S? XCComponentCommand?)*)
 
 XCComponentCommand ::= (XCBind | XCClass | XCEnum | XCInterface | XCRef)
 
-XCBind ::= "%bind" S XMLName (S "%with" S $JavaQName)? S XCLink
+XCBind ::= "%bind" S XMLName (S "%with" S $JavaQName)? S? XCLink
 
 XCClass ::= "%class" S JavaTypedQName (S "extends" S JavaTypedQName)?
   (S "implements" S JavaTypedQName (S? "," S? JavaTypedQName)* )?
-  (S "%interface" S JavaTypedQName)? S (XCWith S)? XCLink
+  (S "%interface" S JavaTypedQName)? (S? XCWith)? S? XCLink
 
 XCWith ::= "%with" S JavaTypedQName
 
@@ -723,7 +719,8 @@ INIOctalDigit ::= [0-7]
 INIEscapedChar ::=
    "\" ( INIOctalDigit | "n" | "t" | "t" | "f" | ":" | HexaDigit{4} )
 
-INIBaseChar ::= INISP | [ -Z^-~]/*ASCII - newline,backslash*/
+INIBaseChar ::= INISP | [ -Z^-~]
+  /* ASCII characters - control characters, backslash, square brackets */
 
 INIChar ::= INIEscapedChar | INIBaseChar
 

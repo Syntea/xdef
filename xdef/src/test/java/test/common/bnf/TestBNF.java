@@ -248,7 +248,7 @@ public class TestBNF extends STester {
 						}
 					}
 					if (ch == '+') {
-						stack.push(obj1.toString() + obj.toString());
+						stack.push(obj1 + obj.toString());
 					} else {
 						throw new RuntimeException("Incorrect object");
 					}

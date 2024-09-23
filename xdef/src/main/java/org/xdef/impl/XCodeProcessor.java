@@ -333,7 +333,6 @@ import static org.xdef.impl.code.CodeTable.OUTLN1_STREAM;
 import static org.xdef.impl.code.CodeTable.OUTLN_STREAM;
 import static org.xdef.impl.code.CodeTable.OUT_STREAM;
 import static org.xdef.impl.code.CodeTable.PARSEANDCHECK;
-import static org.xdef.impl.code.CodeTable.PARSEANDRETURN;
 import static org.xdef.impl.code.CodeTable.PARSERESULT_MATCH;
 import static org.xdef.impl.code.CodeTable.PARSE_DATE;
 import static org.xdef.impl.code.CodeTable.PARSE_DURATION;
@@ -498,6 +497,7 @@ import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.SThrowable;
 import org.xdef.sys.StringParser;
 import org.xdef.xml.KXmlUtils;
+import static org.xdef.impl.code.CodeTable.PARSEANDSTOP;
 
 /** Provides processor engine of script code.
  * @author Vaclav Trojan
@@ -3266,7 +3266,7 @@ public final class XCodeProcessor {
 					_stack[sp] = result;
 					continue;
 				}
-				case PARSEANDRETURN: {// parser from next code, parse and return
+				case PARSEANDSTOP: {// parser from next code, parse and return
 					XDParseResult result = ((XDParser) _code[pc]).check(
 						chkEl, chkEl.getTextValue());
 					if (result.matches()) {

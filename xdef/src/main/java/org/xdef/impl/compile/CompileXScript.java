@@ -45,7 +45,6 @@ import static org.xdef.impl.code.CodeTable.CALL_OP;
 import static org.xdef.impl.code.CodeTable.INIT_NOPARAMS_OP;
 import static org.xdef.impl.code.CodeTable.JMPF_OP;
 import static org.xdef.impl.code.CodeTable.LD_CONST;
-import static org.xdef.impl.code.CodeTable.PARSEANDRETURN;
 import static org.xdef.impl.code.CodeTable.PARSERESULT_MATCH;
 import static org.xdef.impl.code.CodeTable.PARSE_OP;
 import static org.xdef.impl.code.CodeTable.RETV_OP;
@@ -98,6 +97,7 @@ import static org.xdef.model.XMNode.XMATTRIBUTE;
 import static org.xdef.model.XMNode.XMELEMENT;
 import static org.xdef.model.XMNode.XMTEXT;
 import static org.xdef.sys.SParser.NOCHAR;
+import static org.xdef.impl.code.CodeTable.PARSEANDSTOP;
 
 /** Compiler of XD script of headers, elements and attributes.
  * @author Vaclav Trojan
@@ -349,7 +349,7 @@ final class CompileXScript extends CompileStatement {
 							&&_g._code.get(_g._lastCodeIndex).getCode()==STOP_OP
 							&& (_g._code.get(check).getCode() == LD_CONST
 								&&_g._code.get(check).getItemId() == XD_PARSER
-							|| _g._code.get(check).getCode()==PARSEANDRETURN)) {
+							|| _g._code.get(check).getCode()==PARSEANDSTOP)) {
 							if (addr + 3 == _g._lastCodeIndex
 								&&_g._code.get(addr).getCode()==INIT_NOPARAMS_OP
 								&&_g._code.get(addr).getParam() == 0
@@ -360,7 +360,7 @@ final class CompileXScript extends CompileStatement {
 								XDValue value = _g._code.get(addr + 1);
 								XDParser p = (XDParser)
 									(_g._code.get(check).getCode()
-									== PARSEANDRETURN ? _g._code.get(check+1)
+									== PARSEANDSTOP ? _g._code.get(check+1)
 									: _g._code.get(check));
 								XDParseResult r =
 									p.check(null,value.toString());
@@ -581,8 +581,7 @@ final class CompileXScript extends CompileStatement {
 						&& _g._code.get(check + 1).getCode() == PARSE_OP
 						&& _g._code.get(check + 1).getParam() == 1
 						&& _g._code.get(check + 2).getCode() == STOP_OP) {
-						_g._code.set(
-							check, new CodeI1(XD_PARSERESULT, PARSEANDRETURN));
+						_g._code.set(check, new CodeI1(XD_PARSERESULT, PARSEANDSTOP));
 						_g._code.set(check + 1, y);
 					}
 				}

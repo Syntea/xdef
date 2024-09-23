@@ -28,7 +28,6 @@ import static org.xdef.impl.code.CodeTable.LD_CONST;
 import static org.xdef.impl.code.CodeTable.LD_GLOBAL;
 import static org.xdef.impl.code.CodeTable.LD_XMODEL;
 import static org.xdef.impl.code.CodeTable.NEW_PARSER;
-import static org.xdef.impl.code.CodeTable.PARSEANDRETURN;
 import static org.xdef.impl.code.CodeTable.PARSERESULT_MATCH;
 import static org.xdef.impl.code.CodeTable.PARSE_OP;
 import static org.xdef.impl.code.CodeTable.RETV_OP;
@@ -55,6 +54,7 @@ import org.xdef.msg.SYS;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.SRuntimeException;
+import static org.xdef.impl.code.CodeTable.PARSEANDSTOP;
 
 /** Implementation of the model of attributes or text nodes.
  * @author Vaclav Trojan
@@ -589,7 +589,7 @@ public class XData extends XCodeDescriptor
 		}
 		int xi = check; //start of code of parse method.
 		XDValue y = xv[xi];
-		if (y.getCode() == PARSEANDRETURN) {
+		if (y.getCode() == PARSEANDSTOP) {
 			return xv[++xi]; // it is Parser
 		} else if (y.getCode() == JMP_OP || (xi+1 < xv.length
 			&& y.getCode() == CALL_OP && xv[xi+1].getCode() == STOP_OP)) {
