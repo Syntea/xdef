@@ -9,7 +9,7 @@
   xmlns:XD4.0     = "http://www.xdef.org/xdef/4.0"
   xmlns:XD4.1     = "http://www.xdef.org/xdef/4.1"
   xmlns:XD4.2     = "http://www.xdef.org/xdef/4.2"
-  xmlns:w         = "http://www.xdef.org/xdef/4.1"
+  xmlns:w         = "http://www.xdef.org/xdef/4.2"
   w:metaNamespace = "METAXD"
   xd:root         = "Ver3.1#XD3.1:def | Ver3.1#XD3.1:collection
                      | Ver3.1#XD3.1:declaration | Ver3.1#XD3.1:component
@@ -701,7 +701,7 @@ XCRef ::= "%ref" S ((JavaTypedQName S? XCLink)
 XCLink ::= "%link" S ("*" | XPosition (S? "," S? XPosition)*)
 
 /******************************************************************************/
-/* Lexicon grammar rules                                               */
+/* Lexicon grammar rules                                                      */
 /******************************************************************************/
 
 Lexicon ::= (S? $rule XPosition S? "=" S? XMLName)* S?
@@ -720,7 +720,7 @@ INIEscapedChar ::=
    "\" ( INIOctalDigit | "n" | "t" | "t" | "f" | ":" | HexaDigit{4} )
 
 INIBaseChar ::= INISP | [ -Z^-~]
-  /* ASCII characters - control characters, backslash, square brackets */
+  /* ASCII characters without control characters, backslash, brackets */
 
 INIChar ::= INIEscapedChar | INIBaseChar
 
