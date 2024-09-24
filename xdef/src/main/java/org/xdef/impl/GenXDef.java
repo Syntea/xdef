@@ -103,17 +103,20 @@ public final class GenXDef {
 	 * @return parsed object.
 	 */
 	private static Object objectFromStream(final InputStream in) {
-		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		ByteArrayInputStream is;
 		try {
+			ByteArrayOutputStream os = new ByteArrayOutputStream();
+			byte[] buf = new byte[4096];
 			int i;
-			while((i=in.read()) != -1) {
-				os.write(i);
+			while((i=in.read(buf)) != -1) {
+				os.write(buf, 0, i);
 			}
 			os.close();
+			in.close();
+			is = new ByteArrayInputStream(os.toByteArray());
 		} catch (IOException ex) {
 			throw new RuntimeException("Can't read data", ex);
 		}
-		ByteArrayInputStream is = new ByteArrayInputStream(os.toByteArray());
 		try {
 			return KXmlUtils.parseXml(is).getDocumentElement();
 		} catch (Exception ex) {}
