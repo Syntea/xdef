@@ -316,7 +316,7 @@ public final class GenXDefXON {
 		if (xdName != null && !xdName.isEmpty()) {
 			xdef.setAttribute("name", xdName);
 		}
-		Element xmodel = doc.createElementNS(XDEF42_NS_URI, "xd:xon");
+		Element xmodel = doc.createElementNS(XDEF42_NS_URI, "xd:json");
 		String modelName = "model";
 		xdef.setAttribute("root", modelName);
 		xmodel.setAttributeNS(XDEF42_NS_URI, "xd:name", modelName);
