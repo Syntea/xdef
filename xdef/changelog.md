@@ -1,5 +1,8 @@
 # Version ${version}, release-date ${release.date}
 
+# Version 42.2.7, release-date 2024-10-01
+* .
+
 # Version 42.2.6, release-date 2024-10-01
 * The format of the regular expression in the method of type `Regex` in
   the X-definition is now according to the regular expression in Java. However,
