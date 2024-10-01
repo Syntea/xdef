@@ -7,6 +7,7 @@ import org.xdef.XDRegexResult;
 import org.xdef.XDValueAbstract;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import static org.xdef.XDValueID.XD_REGEX;
 import org.xdef.XDValueType;
 import static org.xdef.XDValueType.REGEX;
 import org.xdef.msg.XDEF;
@@ -19,22 +20,23 @@ public final class DefRegex extends XDValueAbstract implements XDRegex {
 	private Pattern _value;
 
 	/** Creates a new instance of DefRegex. */
-	public DefRegex() {this(".*");}
+	public DefRegex() {this(".*", false);}
 
 	/** Creates a new instance of DefRegex.
-	 * @param source The string with regular expression.
+	 * @param s The string with regular expression.
+	 * @param xml if true it is XML schema expression, otherwise it is Java.
 	 */
-	public DefRegex(final String source) {
-		_source = source;
+	public DefRegex(final String s, final boolean xml) {
+		_source = s;
 		try {
-			_value = Pattern.compile(DefRegexTranslator.translate(source));
+			_value = Pattern.compile(xml ? DefRegexTranslator.translate(s) : s);
 		} catch (SRuntimeException ex) {
-			String s = ex.getMessage();
-			if (s == null) {
-				s = "" + ex;
+			String t = ex.getMessage();
+			if (t == null) {
+				t = "" + ex;
 			}
 			//Incorrect regular expression: &{0}
-			throw new SRuntimeException(XDEF.XDEF650, source + "; ("+s+")");
+			throw new SRuntimeException(XDEF.XDEF650, s + "; (" + t + ")");
 		}
 	}
 

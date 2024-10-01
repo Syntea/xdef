@@ -1822,7 +1822,7 @@ public final class XCodeProcessor {
 					continue;
 				}
 				case COMPILE_REGEX: //string to regex
-					_stack[sp] = new DefRegex(_stack[sp].toString());
+					_stack[sp] = new DefRegex(_stack[sp].toString(), false);
 					continue;
 				case CHAR_AT: { // charAt
 					int i = _stack[sp--].intValue();
@@ -1834,7 +1834,7 @@ public final class XCodeProcessor {
 					String s = _stack[sp--].stringValue();
 					String t = _stack[sp].stringValue();
 					_stack[sp] = new DefBoolean((s == null || t == null)
-						? false : t.indexOf(s) >= 0);
+						? false : t.contains(s));
 					continue;
 				}
 				case CONTAINSI: {

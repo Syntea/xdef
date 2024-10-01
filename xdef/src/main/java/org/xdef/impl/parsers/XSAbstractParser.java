@@ -366,7 +366,7 @@ public abstract class XSAbstractParser extends XDParserAbstract
 		} else {
 			_patterns = new DefRegex[pats.length];
 			for (int i = 0; i < pats.length; i++) {
-				_patterns[i] = new DefRegex(pats[i].toString());
+				_patterns[i] = new DefRegex(pats[i].toString(), true);
 			}
 		}
 	}

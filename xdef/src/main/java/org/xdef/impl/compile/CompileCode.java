@@ -2666,7 +2666,7 @@ public final class CompileCode extends CompileBase {
 					if (par1const >= 0) {//constant
 						try {
 							replaceTop(new DefRegex(
-								getCodeItem(par1const).toString()));
+								getCodeItem(par1const).toString(), false));
 						} catch (Exception ex) {
 							if (ex instanceof SThrowable) {
 								_parser.putReport(((SThrowable)ex).getReport());

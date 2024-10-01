@@ -11,6 +11,7 @@ import org.xdef.impl.code.DefContainer;
 import org.xdef.impl.code.DefRegex;
 import org.xdef.impl.code.DefString;
 import org.xdef.XDContainer;
+import static org.xdef.XDValueID.XD_STRING;
 import org.xdef.msg.XDEF;
 
 /** Parser of X-Script "regex" type.
@@ -49,7 +50,7 @@ public class XDParseRegex extends XDParserAbstract {
 					//Value of enumeration for 'eq' must be just one
 					throw new SException(XDEF.XDEF816);
 				}
-				_regex = new DefRegex(val.toString());
+				_regex = new DefRegex(val.toString(), false);
 			} else {
 				//Illegal parameter name '&{0}'
 				throw new SException(XDEF.XDEF801, name);

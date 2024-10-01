@@ -1,7 +1,8 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.2.6, release-date 2024-09-24
-* .
+# Version 42.2.6, release-date 2024-10-01
+* Format of regular expression in the X-definition `Regex` type method is now
+  the Java regulear expression (not XML schema format).
 
 # Version 42.2.5, release-date 2024-09-17
 * Fixed error in `continue` inside `for` command.
