@@ -718,6 +718,8 @@ public final class TestScript extends XDTester {
 		test("A","setResult(regex('[A-Z]'));");
 		test("A-A","setResult(regex("
 			+ "'([A-Z0-9]|[A-Z0-9](?!--)[-A-Z0-9]{0,8}[A-Z0-9])'));");
+		test("A--A","setResult(!regex("
+			+ "'([A-Z0-9]|[A-Z0-9](?!--)[-A-Z0-9]{0,8}[A-Z0-9])'));");
 		test("A","{String s='[A-Z]'; setResult(regex(s));}");
 		test("01","{int i=0; setResult(eq(toString(i++) + i));}");
 		test("11","{int i=0; setResult(eq(toString(++i) + i));}");
