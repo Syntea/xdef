@@ -721,6 +721,49 @@ public abstract class STester {
 			reporter.clear();
 		}
 	}
+	/** Check if the reporter contains errors or warnings. If not then
+	 * invoke the method <code>fail</code> with the argument msg.
+	 * @param msg message to be printed or null.
+	 * @param reporter the reporter to be checked for no errors and no warnings.
+	 */
+	public final void assertErrorwarnings(
+		final ArrayReporter reporter, final String msg) {
+		if (!reporter.errorWarnings()) {
+			fail(msg);
+		}
+	}
+	/** Check if the reporter contains errors or warnings. If not then
+	 * invoke the method <code>fail</code> with the argument msg. Finally
+	 * clear reporter.
+	 * @param msg message to be printed or null.
+	 * @param reporter the reporter to be checked for errors and no warnings.
+	 */
+	public final void assertErrorwarningsAndClear(
+		final ArrayReporter reporter, final String msg) {
+		if (!reporter.errorWarnings()) {
+			fail(msg);
+		} else {
+			reporter.clear();
+		}
+	}
+	/** Check if the reporter contains errors or warnings. If mot then
+	 * invoke the method <code>ffail("Errorwarnings not reported")</code>.
+	 * Finally clear reporter.
+	 * @param reporter the reporter to be checked for no errors and no warnings.
+	 */
+	public final void assertErrorwarnings(
+		final ArrayReporter reporter) {
+		assertErrorwarnings(reporter, "Errorwarnings not reported");
+	}
+	/** Check if the reporter contains errors or warnings. If not then
+	 * invoke the method <code>fail("Errorwarnings not reported")</code>.
+	 * Finally clear reporter.
+	 * @param reporter the reporter to be checked for errors and no warnings.
+	 */
+	public final void assertErrorwarningsAndClear(
+		final ArrayReporter reporter) {
+		assertErrorwarningsAndClear(reporter, "Errorwarnings not reported");
+	}
 	private static String getListing(final ReportWriter reporetr,
 		final Object msg) {
 		if (msg == null) {
