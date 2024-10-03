@@ -1,6 +1,5 @@
 package test.xdef;
 
-import java.io.StringWriter;
 import test.XDTester;
 import org.xdef.XDConstants;
 import org.xdef.sys.ArrayReporter;
@@ -270,7 +269,6 @@ public final class TestScript extends XDTester {
 		Element el;
 		XComponent xc;
 		XDPool xp;
-		StringWriter swr;
 
 		setDebug(true);
 		_printCode = true;
@@ -434,7 +432,7 @@ public final class TestScript extends XDTester {
 		test("12","{int i=1; int j=3*(i=3); setResult(eq(toString(i+j)));}");
 		test("12", "{String s = ''; int i = 1; int j = 2;"
 			+ "s = '' + (i) + (j); setResult(eq(s));}");
-		test("12", "{int i = 1 ; int j = 1; int k = j = 2;"
+		test("12", "{int i = 1; int j = 1; int k = j = 2;"
 			+ "String s = '' + i + j; setResult(eq(s));}");
 		test("6", "{int k = 0; int j = 0; int i = j = k = 2; String s='';"
 			+ "s = i + j + k; setResult(eq(s));}");
@@ -517,6 +515,8 @@ public final class TestScript extends XDTester {
 			+ "while(!(i GE 3)){s=s+i; i=i+1;} setResult(eq(s));}");
 		test("12", "{int i; String s='';"
 			+ "for (i=1; i LT 3; i=i+1) s=s+i; setResult(eq(s));}");
+		test("12", "{int i; String s='';"
+			+ "for (i=1; i != 3; i=i+1) s=s+i; setResult(eq(s));}");
 		test("12", "{int i; String s='';"
 			+ "for (i=1; !(i GE 3); i=i+1) s=s+i; setResult(eq(s));}");
 		test("12", "{String s=''; "
@@ -647,8 +647,8 @@ public final class TestScript extends XDTester {
 		setProperty(XDConstants.XDPROPERTY_SPECDATES,
 			"3000-12-31,3000-12-31T00:00:00,3000-12-31T23:59:59");
 		test("1999", "{setResult(gYear());}");
-		test("999", "{setResult(!gYear());}");
-		test("2999", "{setResult(!gYear());}");
+		test("1915", "{setResult(!gYear());}");
+		test("2217", "{setResult(!gYear());}");
 		test("1999-01", "{setResult(gYearMonth());}");
 		test("1999-12", "{setResult(gYearMonth());}");
 		test("1700-12", "{setResult(!gYearMonth());}");
@@ -665,10 +665,14 @@ public final class TestScript extends XDTester {
 		test("1999-12-31T12:31:59Z", "{setResult(dateTime());}");
 		test("1999-12-31T12:31:59", "{setResult(dateTime());}");
 		test("2999-12-31T12:31:59+01:00", "{setResult(!dateTime());}");
+		test("3000-12-31T00:00:00", "{setResult(dateTime());}");
+		test("3000-12-31T00:00:01", "{setResult(!dateTime());}");
 		test("01.03.1999", "{setResult(xdatetime('dd.MM.yyyy'));}");
 		test("01.03.1699", "{setResult(!xdatetime('dd.MM.yyyy'));}");
 		test("01.03.2999", "{setResult(!xdatetime('dd.MM.yyyy'));}");
 		test("01.03.1999", "{setResult(xdatetime('d.M.y'));}"); //???
+		test("31.12.3000", "{setResult(xdatetime('d.M.y'));}"); //???
+		test("30.12.3000", "{setResult(!xdatetime('d.M.y'));}"); //???
 		resetProperties();
 		test("","setResult(myCheck(pow(5,6) + 1 + 5,2,3,'haha'));");
 		test("","setResult(myCheck5(pow(5,6) + 1 + 5,2,3,'haha') != 3"
@@ -716,14 +720,10 @@ public final class TestScript extends XDTester {
 		test("01051999","setResult(eq('01051999') ? true : false);");
 		test("001234","setResult(eq(toString(1234,'000000')));");
 		test("A","setResult(regex('[A-Z]'));");
-		test("A-A","setResult(regex("
-			+ "'([A-Z0-9]|[A-Z0-9](?!--)[-A-Z0-9]{0,8}[A-Z0-9])'));");
-		test("A--A","setResult(!regex("
-			+ "'([A-Z0-9]|[A-Z0-9](?!--)[-A-Z0-9]{0,8}[A-Z0-9])'));");
-		test("A--A","setResult(regex("
-			+ "'([A-Z0-9]|[A-Z0-9](?=--)[-A-Z0-9]{0,8}[A-Z0-9])'));");
-		test("A-A","setResult(!regex("
-			+ "'([A-Z0-9]|[A-Z0-9](?=--)[-A-Z0-9]{0,8}[A-Z0-9])'));");
+		test("A-A","setResult(regex('([A-Z0-9](?!--)[-A-Z0-9]{0,8})'));");
+		test("A--A","setResult(!regex('([A-Z0-9](?!--)[-A-Z0-9]{0,8})'));");
+		test("A--A","setResult(regex('([A-Z0-9](?=--)[-A-Z0-9]{0,8})'));");
+		test("A-A","setResult(!regex('([A-Z0-9](?=--)[-A-Z0-9]{0,8})'));");
 		test("A","{String s='[A-Z]'; setResult(regex(s));}");
 		test("01","{int i=0; setResult(eq(toString(i++) + i));}");
 		test("11","{int i=0; setResult(eq(toString(++i) + i));}");
@@ -782,23 +782,39 @@ public final class TestScript extends XDTester {
 		test("aBcD", "{setResult(!contains('ab'));}");
 		test("aBcD", "{setResult(containsi('AB'));}");
 		test("aBcD", "{setResult(!containsi('xy'));}");
+		// test "continue" and "break" in "for"
+		test("","{for(int i=0;;){if(i GT 4)break;if(i++LE 1)continue;"
+			+ "if(i!=3)setResult(false);break;}setResult(true);}");
+		test("","{for(int i=0;i LT 5;){if(i GT 4)break;"
+			+ "if(i++LE 1)continue;if(i!=3)setResult(false);break;}"
+			+"setResult(true);}");
+		test("", "{for(int i=0;;i++){if(i GT 4)break;if(i LE 1){continue;}"
+			+ "if(i!=3)setResult(false);break;}setResult(true);}");
+		test("","{for(int i=0;i LT 6;i++){if(i GT 4)break;if(i==0)continue;"
+			+ "if(i!=1)setResult(false); break;}setResult(true);}");
+		// test "continue" and "break" in "while"
+		test("","{int j= 0;while(j LT 6){if(j GE 4)break;if(j++LE 1)continue;"
+			+ "if(j!=3)setResult(false); break;}setResult(true);}");
+		// test "continue" and "break" in "do"
+		test("","{int j=0;do{if(j GE 4)break;if(j++LE 2)continue;"
+			+"if(j!=4)setResult(false);break;}while(j LT 6);setResult(true);}");
 		// Test regular expression (XML schema expression is conterted
 		// jo Java form)
 		test("", "{Regex r = new Regex('(\\\\d{1,2})(:(\\\\d{1,2}))?');"
-			+ "String s='5:34'; RegexResult x=r.getMatcher(s);"
-			+ "boolean b=x.matches(); int i=x.groupCount(); b=b AND (i==4);"
-			+ "if (b){b= (x.group(0)=='5:34');"
-			+ " b=b AND (x.group(1)== '5');"
-			+ "b=b AND (x.group(2)==':34');"
-			+ "b=b AND (x.group(3)=='34');}"
+			+ "String s = '5:34'; RegexResult x = r.getMatcher(s);"
+			+ "boolean b = x.matches(); int i = x.groupCount(); b AND= (i==4);"
+			+ "if (b){b = (x.group(0)=='5:34');"
+			+ "b AND= (x.group(1)=='5');"
+			+ "b AND= (x.group(2)==':34');"
+			+ "b AND= (x.group(3)=='34');}"
 			+ "setResult(b);}");
 
 		test("",
 			"{Regex r = new Regex('(\\\\d{1,2})[\\\\-./](\\\\d{4}|\\\\d{2})');"
-			+ " String s = '6-2003'; RegexResult x = r.getMatcher(s);"
-			+ "boolean b=x.matches(); int i=x.groupCount(); b=b AND (i==3);"
-			+ "if (b){b= (x.group(0)=='6-2003'); b=b AND (x.group(1)== '6');"
-			+ "b=b AND (x.group(2)=='2003');}"
+			+ "String s = '6-2003'; RegexResult x = r.getMatcher(s);"
+			+ "boolean b=x.matches(); int i=x.groupCount(); b AND= (i==3);"
+			+ "if (b){b= (x.group(0)=='6-2003'); b AND= (x.group(1)== '6');"
+			+ "b AND= (x.group(2)=='2003');}"
 			+ "setResult(b);}");
 		test("",
 			"{Regex r = new Regex('(\\\\d{1,2})[\\\\-./](\\\\d{4}|\\\\d{2})');"
@@ -825,18 +841,17 @@ public final class TestScript extends XDTester {
 			+ "String s = '23H';"
 			+ "RegexResult x = r.getMatcher(s); boolean b = x.matches();"
 			+ "int i=x.groupCount(); b=b AAND (i==3);"
-			+ "if (b){b= x.group(0)=='23H'; b=b AAND (x.group(1)== '23');"
-			+ "b=b AAND (x.group(2)=='H');}"
+			+ "if (b){b = x.group(0)=='23H'; b = b AAND (x.group(1)== '23');"
+			+ "b = b AAND (x.group(2)=='H');}"
 			+ "setResult(b);}");
 		test("", "{Regex r = new Regex('([1-9]\\\\d*)?([mHDWM])');"
 			+ " String s = 'H';"
 			+ "RegexResult x = r.getMatcher(s); boolean b = x.matches();"
-			+ "int i=x.groupCount(); b=b AND (i==3);"
-			+ "if (b){b= x.group(0)=='H'; b=b AND (x.group(1)==null);}"
-			+ "b=b AND (x.group(2)=='H');"
+			+ "int i = x.groupCount(); b = b AND (i==3);"
+			+ "if (b){b = x.group(0)=='H'; b = b AND (x.group(1)==null);}"
+			+ "b = b AND (x.group(2)=='H');"
 			+ "setResult(b);}");
-////////////////////////////////////////////////////////////////////////////////
-		// XML schema gYear
+		// Test XML schema gYear
 		test("", "{Parser p = gYear(%minInclusive=1999);\n"
 			+ "setResult(p.parse('1999'));}");
 		test("", "{Parser p = gYear(%minInclusive=1999);\n"
@@ -851,10 +866,71 @@ public final class TestScript extends XDTester {
 		test("1999", "{setResult(gYear(%minInclusive=1999).parse());}");
 		test("1990", "{setResult(!gYear(%minInclusive=1999));}");
 		test("1990", "{setResult(!gYear(%minInclusive=1999).parse());}");
+		// test email
+		testAttr2("tr.ab@vol.cz", "onTrue setResult(true);required emailAddr();"
+			+ " onFalse setResult(false);"); // OK
+		testAttr2("&lt;p-G@d-t.o&gt;","onTrue setResult(true);"
+			+ "required emailAddr();onFalse setResult(false);"); // OK
+		testAttr2("Pa Gr &lt;p-G@d-t.o&gt;","onTrue setResult(true);"
+			+ "required emailAddr();onFalse setResult(false);"); // OK
+		testAttr2("(Pa Gr)p-G@d-t.o","onTrue setResult(true);"
+			+ "required emailAddr();onFalse setResult(false);"); // OK
+		testAttr2("p-G@d-t.o(Pa Gr)","onTrue setResult(true);"
+			+ "required emailAddr();onFalse setResult(false);"); // OK
+		testAttr2("(a a) =?UTF-8?Q?Xx. Yy?=(b)&lt;1@2g>(c)","onTrue setResult("
+			+ "true); required emailAddr(); onFalse setResult(false);"); // OK
+		testAttr2("tro.cz","onTrue setResult(false); required emailAddr();"
+			+ " onFalse setResult(true);"); // missing "@"
+		testAttr2("@trovolny.cz","onTrue setResult(false);required emailAddr();"
+			+ " onFalse setResult(true);"); // missing local name
+		testAttr2("trovolny.cz@","onTrue setResult(false);required emailAddr();"
+			+ " onFalse setResult(true);"); // missing domain
+		testAttr2("tr@@vol.cz","onTrue setResult(false); required emailAddr();"
+			+ " onFalse setResult(true);"); // more than one "@"
+		testAttr2("tr@vol@ny.cz","onTrue setResult(false);required emailAddr();"
+			+ " onFalse setResult(true);"); // more than one "@"
+		testAttr2("a b t@v","onTrue setResult(true); required emailAddr();"
+			+ " onFalse setResult(true);"); // OK
+		// emailAddrList
+		testAttr2("t@v.c(ab)","onTrue setResult(true);required emailAddrList();"
+			+ " onFalse setResult(true);"); // OK
+		testAttr2("t@v.cc,a@bb.cc","onTrue setResult(true);"
+			+ "required emailAddrList();onFalse setResult(false);"); // OK
+		testAttr2("@v","onTrue setResult(true); required emailAddrList();"
+			+ " onFalse setResult(true);"); // local part missing
+		testAttr2("t@v.","onTrue setResult(true); required emailAddrList();"
+			+ " onFalse setResult(true);"); // top domain part missing
+		testAttr2(" x &lt;t@v.cc>\t (a b) ;\n (c d) a@b.cc ", "onTrue setResult"
+			+ "(true); required emailAddrList();" // OK, white spaces allowed
+			+ " onFalse setResult(false);");
+		testAttr2("t@v.cc a@bb.cc","onTrue setResult(true);required"
+			+ " emailAddrList();onFalse setResult(true);"); //missing ";" or ","
+		// switch (String) tests
+		testCheckMethod("12", "boolean m(){switch(getText()){case '12': " +
+				"setResult(true); return true; default: return false;}}","m()");
+		testCheckMethod("ahoj", "boolean m(){switch(getText()){case 'ahoj'"
+			+ ": setResult(true);return true; default: setResult(false);"
+			+ " return false;}}", "m()");
+		testCheckMethod("ahoj", "boolean m(){switch(getText()){case'ahoj':"
+			+ "case'nazdar':setResult(true);return true;}setResult(false);"
+			+ "return false;}", "m()");
+		testCheckMethod("ahoj", "boolean xxx(String s, int i){"
+			+ "if (i != 999) {setResult(false); return false;}"
+			+ "switch(s){}setResult(true);return true;}",
+			"xxx(getText(),999);");
+		testCheckMethod("ahoj", "boolean xxx(String s, int i){if (i != 999) {"
+			+ "setResult(false); return false;} switch(s){"
+			+ "case'ahoj':case'nazdar':"
+			+ "setResult(true);return true;} setResult(false); return false;}",
+			"xxx('ahoj',999);");
+		testCheckMethod("ahoj", "boolean xxx(String s, int i){if (i != 999) {"
+			+ "setResult(false); return false;} switch(s){"
+			+ "case'ahoj': setResult(true);return true;"
+			+ "default: setResult(false); return false;}}",
+			"xxx(getText(),999);");
 ////////////////////////////////////////////////////////////////////////////////
 		testAttr2("+1.21","onTrue setResult(true); required decimal;"
 			+ " onFalse setResult(false); ");
-////////////////////////////////////////////////////////////////////////////////
 		testAttr2("ahoj","required enum('nazdar','ahoj');onTrue"
 			+ " setResult(true);onFalse {clearReports(); setResult(false);}");
 		testAttr2("hoj","required enum('nazdar','ahoj');onTrue"
@@ -865,8 +941,6 @@ public final class TestScript extends XDTester {
 		testAttr2("hoj","required  enum('nazdar','ahoj');" +
 			"onTrue setResult(false);"
 			+ "onFalse {clearReports(); setResult(true);}");
-		_printCode = true;
-		_printCode = false;
 		testAttr2("ahoj","required; onTrue setResult(true);"
 			+ "onFalse {clearReports(); setResult(false);}");
 		testAttr2("ahoj","required string(); onTrue setResult(true);"
@@ -946,45 +1020,6 @@ public final class TestScript extends XDTester {
 			+ " onFalse setResult(false); ");
 		testAttr2("http://pes.eunet.cz","onTrue setResult(true);required url();"
 			+ " onFalse setResult(false); ");
-		// test email
-		testAttr2("tr.ab@vol.cz","onTrue setResult(true); required emailAddr();"
-			+ " onFalse setResult(false); "); // OK
-		testAttr2("&lt;p-G@d-t.o&gt;","onTrue setResult(true);"
-			+ "required emailAddr();onFalse setResult(false); "); // OK
-		testAttr2("Pa Gr &lt;p-G@d-t.o&gt;","onTrue setResult(true);"
-			+ "required emailAddr();onFalse setResult(false); "); // OK
-		testAttr2("(Pa Gr)p-G@d-t.o","onTrue setResult(true);"
-			+ "required emailAddr();onFalse setResult(false); "); // OK
-		testAttr2("p-G@d-t.o(Pa Gr)","onTrue setResult(true);"
-			+ "required emailAddr();onFalse setResult(false); "); // OK
-		testAttr2("(a a) =?UTF-8?Q?Xx. Yy?=(b)&lt;1@2g>(c)","onTrue setResult("
-			+ "true); required emailAddr(); onFalse setResult(false); "); // OK
-		testAttr2("tro.cz","onTrue setResult(false); required emailAddr();"
-			+ " onFalse setResult(true); "); // missing "@"
-		testAttr2("@trovolny.cz","onTrue setResult(false);required emailAddr();"
-			+ " onFalse setResult(true); "); // missing local name
-		testAttr2("trovolny.cz@","onTrue setResult(false);required emailAddr();"
-			+ " onFalse setResult(true); "); // missing domain
-		testAttr2("tr@@vol.cz","onTrue setResult(false); required emailAddr();"
-			+ " onFalse setResult(true); "); // more than one "@"
-		testAttr2("tr@vol@ny.cz","onTrue setResult(false);required emailAddr();"
-			+ " onFalse setResult(true); "); // more than one "@"
-		testAttr2("a b t@v","onTrue setResult(true); required emailAddr();"
-			+ " onFalse setResult(true); "); // OK
-		// emailAddrList
-		testAttr2("t@v.c(ab)","onTrue setResult(true);required emailAddrList();"
-			+ " onFalse setResult(true); "); // OK
-		testAttr2("t@v.cc,a@bb.cc","onTrue setResult(true);"
-			+ "required emailAddrList();onFalse setResult(false); "); // OK
-		testAttr2("@v","onTrue setResult(true); required emailAddrList();"
-			+ " onFalse setResult(true); "); // local part missing
-		testAttr2("t@v.","onTrue setResult(true); required emailAddrList();"
-			+ " onFalse setResult(true); "); // top domain part missing
-		testAttr2(" x &lt;t@v.cc>\t (a b) ;\n (c d) a@b.cc ", "onTrue setResult"
-			+ "(true); required emailAddrList();" // OK, white spaces allowed
-			+ " onFalse setResult(false); ");
-		testAttr2("t@v.cc a@bb.cc","onTrue setResult(true);required"
-			+ " emailAddrList();onFalse setResult(true);"); //missing ";" or ","
 ////////////////////////////////////////////////////////////////////////////////
 // Test check methods
 ////////////////////////////////////////////////////////////////////////////////
@@ -1001,8 +1036,7 @@ public final class TestScript extends XDTester {
 			+ "setResult(result); return result;}\n", "m()");
 		testCheckMethod("ahoj",
 			"boolean m(){String val=getText(); setResult(val!='nazdar');"
-			+ "return val!='nazdar';}",
-				"m()");
+			+ "return val!='nazdar';}", "m()");
 		testCheckMethod("ahoj",
 			"boolean m(){setResult(eq('ahoj')); return eq('ahoj');}", "m()");
 		testCheckMethod("ahoj",
@@ -1013,31 +1047,6 @@ public final class TestScript extends XDTester {
 			"boolean xxx(String s, int i){if (s != 'ahoj') {"
 			+ "setResult(false); return false;}"
 			+ " switch(i){}setResult(true);return true;}",
-			"xxx(getText(),999);");
-		/* switch (String) tests */
-		testCheckMethod("12", "boolean m(){switch(getText()){case '12': " +
-				"setResult(true); return true; default: return false;}}",
-			"m()");
-		testCheckMethod("ahoj", "boolean m(){switch(getText()){case 'ahoj'"
-			+ ": setResult(true);return true; default: setResult(false);"
-			+ " return false;}}",
-			"m()");
-		testCheckMethod("ahoj", "boolean m(){switch(getText()){case'ahoj':"
-			+ "case'nazdar':setResult(true);return true;}setResult(false);"
-			+ "return false;}", "m()");
-		testCheckMethod("ahoj", "boolean xxx(String s, int i){"
-			+ "if (i != 999) {setResult(false); return false;}"
-			+ "switch(s){}setResult(true);return true;}",
-			"xxx(getText(),999);");
-		testCheckMethod("ahoj", "boolean xxx(String s, int i){if (i != 999) {"
-			+ "setResult(false); return false;} switch(s){"
-			+ "case'ahoj':case'nazdar':"
-			+ "setResult(true);return true;} setResult(false); return false;}",
-			"xxx('ahoj',999);");
-		testCheckMethod("ahoj", "boolean xxx(String s, int i){if (i != 999) {"
-			+ "setResult(false); return false;} switch(s){"
-			+ "case'ahoj': setResult(true);return true;"
-			+ "default: setResult(false); return false;}}",
 			"xxx(getText(),999);");
 ////////////////////////////////////////////////////////////////////////////////
 		try {
@@ -1327,64 +1336,6 @@ public final class TestScript extends XDTester {
 			assertNoErrorsAndClear(reporter);
 			assertEq(xml, xc.toXml());
 		} catch (RuntimeException ex) {fail(ex); reporter.clear();}
-		try { // test "continue" and "break" in "for", "while" and "do"
-			xdef =
-"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
-"<xd:declaration>\n" +
-"  void testLoop() {\n"+
-"    for (int i=0; ;) {\n"+
-"      if (i GT 4) break;\n"+
-"      if (i++ LE 1) continue;\n"+
-"      if (i NE 3) out('ERR1: i = ' + i);\n"+
-"      break;\n"+
-"    }\n"+
-"    out('1');\n"+
-"    for (int i=0; i LT 5;) {\n"+
-"      if (i GT 4) break;\n"+
-"      if (i++ LE 1) continue;\n"+
-"      if (i NE 3) out('ERR2: i = ' + i);\n"+
-"      break;\n"+
-"    }\n"+
-"    out('2');\n"+
-"    for (int i=0; ; i++) {\n"+
-"      if (i GT 4) break;\n"+
-"      if (i LE 1) {continue;}\n"+
-"      if (i != 3) out('ERR3: i = ' + i);\n"+
-"      break;\n"+
-"    }\n"+
-"    out('3');\n"+
-"    for (int i = 0; i LT 6; i++) {\n"+
-"      if (i GT 4) break;\n"+
-"      if (i == 0) continue;\n"+
-"      if (i != 1) out('ERR4: i = ' + i);\n"+
-"      break;\n"+
-"    }\n"+
-"    out('4');\n"+
-"    int j= 0;\n"+
-"    while (j LT 6) {\n"+
-"      if (j GE 4) break;\n"+
-"      if (j++ LE 1) continue;\n"+
-"      if (j NE 3) out('ERR5: j = ' + j);\n"+
-"      break;\n"+
-"    }\n"+
-"    out('5');\n"+
-"    j = 0;\n"+
-"    do {\n"+
-"      if (j GE 4) break;\n"+
-"      if (j++ LE 2) continue;\n"+
-"      if (j NE 4) out('ERR6: j = ' + j);\n"+
-"      break;\n"+
-"    } while (j LT 6);\n"+
-"    out('6');\n"+
-"  }\n"+
-"</xd:declaration>\n"+
-"  <A xd:script='finally testLoop();' />\n" +
-"</xd:def>";
-			parse(xdef,"","<A/>",reporter,swr=new StringWriter(),null,null);
-			assertNoErrors(reporter);
-			assertEq("123456", swr.toString());
-		} catch (RuntimeException ex) {fail(ex); reporter.clear();}
-
 		resetTester();
 	}
 
