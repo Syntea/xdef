@@ -187,9 +187,12 @@ public abstract class XNode implements XMNode {
 	}
 
 	//to be overriden!
-	/** Write this X object to XDWriter. */
-	public abstract void writeXNode(XDWriter xw, List<XNode> list)
-		throws IOException;
+	/** Write this X object to XDWriter.
+	 * @param w XDWriter uset for writing.
+	 * @param l list of XNodes to be written.
+	 * @throws IOException if an error occurs.
+	 */
+	public abstract void writeXNode(XDWriter w,List<XNode> l)throws IOException;
 
 	final static XNode readXNode(final XDReader xr,
 		final XDefinition xd,

@@ -32,12 +32,14 @@ public final class DefRegex extends XDValueAbstract implements XDRegex {
 
 	/** Creates a new instance of DefRegex.
 	 * @param s The string with regular expression.
-	 * @param xmlform if true it is XML schema expression, otherwise it is Java.
+	 * @param xmlform if true it is XML schema regular expression, otherwise
+	 * it is Java regular expression format.
+	 * @throws SRuntimeException if an error occurs.
 	 */
 	public DefRegex(final String s, final boolean xmlform) {
 		_source = s;
 		try {
-			_value = Pattern.compile(xmlform ? translate(s) : s);
+			_value = Pattern.compile(xmlform ? new Translator(s).translate():s);
 		} catch (SRuntimeException ex) {
 			String t = ex.getMessage();
 			if (t == null) {
@@ -50,29 +52,25 @@ public final class DefRegex extends XDValueAbstract implements XDRegex {
 
 	@Override
 	/** Check if given data matches the regular expression.
-	 * @param data The data to be checked.
+	 * @param x The data to be checked.
 	 * @return <i>true</i> if and only if the data matches regular expression.
 	 */
-	public boolean matches(final String data) {
-		return (_value.matcher(data)).matches();
-	}
+	public boolean matches(final String x) {return _value.matcher(x).matches();}
 
 	@Override
 	/** Return regular expression result.
-	 * @param source string to be processed with this regular expression.
+	 * @param x string to be processed with this regular expression.
 	 * @return XDRegexResult object.
 	 */
-	public final XDRegexResult getRegexResult(final String source) {
-		return new DefRegexResult(getMatchResult(source));
+	public final XDRegexResult getRegexResult(final String x) {
+		return new DefRegexResult(getMatchResult(x));
 	}
 
 	/** Get matcher from regular expression.
-	 * @param data data to be matched.
+	 * @param data x to be matched.
 	 * @return matcher from regular expression.
 	 */
-	private Matcher getMatchResult(final String data) {
-		return _value.matcher(data);
-	}
+	private Matcher getMatchResult(final String x) {return _value.matcher(x);}
 
 	@Override
 	/** Get value of item as String representation of value.
@@ -122,66 +120,61 @@ public final class DefRegex extends XDValueAbstract implements XDRegex {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-	/** Translate regular expression from XML schema format to Java format.
-	 * @param source string with regular expression in XML schema format.
-	 * @return string with regular expression in Java format.
-	 * @throws SRuntimeException if an error occurs.
-	 */
-	private static String translate(String source)
-		throws SRuntimeException {
-		return new Translator(source).translate();
-	}
-
-////////////////////////////////////////////////////////////////////////////////
-
 	/* Translates XML Schema regular expression syntax into JDK syntax.
 	 * @see java.util.regex.Pattern
 	 * @see <a href="http://www.w3.org/TR/xmlschema-2/#regexs">
 	 *   XML Schema Part 2</a>
-	 * Note this code if modified version of source code written by J. Clark.
-	 */
-	private static final class Translator extends StringParser {
+	 * (This code ia the modified version of source code originally written by
+	 * James Clark and modified by Michael Kay.)
+	 * *************************************************************************
+	 *     Syntax of XML schema regular expression
+	 * *************************************************************************
+	 * regExp ::= branch ( '|' branch )*
+	 * branch ::= piece*
+	 * piece ::= atom quantifier?
+	 * atom ::= normalChar | charClass | ( '(' regExp ')' )
+	 * quantifier ::= [?*+] | ( '{' quantity '}' )
+	 * quantity ::= quantRange | quantMin | quantExact
+	 * quantRange ::= quantExact ',' quantExact
+	 * quantMin ::=  quantExact ','
+	 * quantExact ::= [0-9]+
+	 * normalChar ::= [^.\?*+{}()|#x5B#x5D]
+	 * charClass ::= singleCharEsc | charClassEsc | charClassExpr | wildcardEsc
+	 * singleCharEsc ::= '\' [nrt\|.?*+(){}#x2D#x5B#x5D#x5E]
+	 * charClassEsc ::= ( multiCharEsc | catEsc | complEsc )
+	 * catEsc ::= '\p{' charProp '}'
+	 * complEsc ::= '\P{' charProp '}'
+	 * multiCharEsc ::=  '\' [sSiIcCdDwW]
+	 * singleCharNoEsc ::= [^\#x5B#x5D]
+	 * charClassExpr ::= '[' charGroup ']'
+	 * charGroup ::= ( posCharGroup | negCharGroup ) ( '-' charClassExpr )?
+	 * posCharGroup ::= ( charGroupPart )+
+	 * negCharGroup ::= '^' posCharGroup
+	 * charGroupPart ::= singleChar | charRange | charClassEsc
+	 * singleChar ::= singleCharEsc | singleCharNoEsc
+	 * charRange ::= singleChar '-' singleChar
+	 * charProp ::= isCategory | isBlock
+	 * isCategory ::= letters | marks | numbers | punctuation | separators
+	 *                | symbols | others
+	 * letters ::= 'L' [ultmo]?
+	 * marks ::= 'M' [nce]?
+	 * numbers ::= 'N' [dlo]?
+	 * punctuation ::= 'P' [cdseifo]?
+	 * separators ::= 'Z' [slp]?
+	 * symbols ::= 'S' [mcko]?
+	 * others ::= 'C' [cfon]?
+	 * isBlock  ::= 'Is' [a-zA-Z0-9#x2D]+
+	 * wildcardEsc ::=  '.'
+	*/
+	public static final class Translator extends StringParser {
 
-/*******************************************************************************
-*     Syntax of XML schema regular expression                                  *
-********************************************************************************
-regExp          ::= branch ( '|' branch )*
-branch          ::= piece*
-piece           ::= atom quantifier?
-atom            ::= normalChar | charClass | ( '(' regExp ')' )
-quantifier      ::= [?*+] | ( '{' quantity '}' )
-quantity        ::= quantRange | quantMin | quantExact
-quantRange      ::= quantExact ',' quantExact
-quantMin        ::=  quantExact ','
-quantExact      ::= [0-9]+
-normalChar      ::= [^.\?*+{}()|#x5B#x5D]
-charClass       ::= singleCharEsc | charClassEsc | charClassExpr | wildcardEsc
-singleCharEsc   ::= '\' [nrt\|.?*+(){}#x2D#x5B#x5D#x5E]
-charClassEsc    ::= ( multiCharEsc | catEsc | complEsc )
-catEsc          ::= '\p{' charProp '}'
-complEsc        ::= '\P{' charProp '}'
-multiCharEsc    ::=  '\' [sSiIcCdDwW]
-singleCharNoEsc ::= [^\#x5B#x5D]
-charClassExpr   ::= '[' charGroup ']'
-charGroup       ::= ( posCharGroup | negCharGroup ) ( '-' charClassExpr )?
-posCharGroup    ::= ( charGroupPart )+
-negCharGroup    ::= '^' posCharGroup
-charGroupPart   ::= singleChar | charRange | charClassEsc
-singleChar      ::= singleCharEsc | singleCharNoEsc
-charRange       ::= singleChar '-' singleChar
-charProp        ::= isCategory | isBlock
-isCategory      ::= letters | marks | numbers | punctuation | separators
-					| symbols | others
-letters         ::= 'L' [ultmo]?
-marks           ::= 'M' [nce]?
-numbers         ::= 'N' [dlo]?
-punctuation     ::= 'P' [cdseifo]?
-separators      ::= 'Z' [slp]?
-symbols         ::= 'S' [mcko]?
-others          ::= 'C' [cfon]?
-isBlock         ::= 'Is' [a-zA-Z0-9#x2D]+
-wildcardEsc     ::=  '.'
-*******************************************************************************/
+		/** Create instance of Translator.
+		 * @param source regular expression (XML schema format).
+		 */
+		public Translator(String source) {
+			super(source);
+			_result = new StringBuilder();
+		}
 
 		/** Charset block names which differs in XML schema and Java. */
 		static private final String[] BLOCKNAMESDIFFERENT = {
@@ -206,6 +199,7 @@ wildcardEsc     ::=  '.'
 			"PrivateUse", "[\ue000-\uf8ff\udb80\udc00-\udbbf\udffd\udbc0\udc00-\udbff\udffd]",
 			"^",
 		};
+
 		/** Charset block names which differs in XML schema and Java.
 		 * Each block name is represented by three items:
 		 * <p>1) block name
@@ -215,90 +209,36 @@ wildcardEsc     ::=  '.'
 		 * the complement of the string from 2)
 		 */
 		static private final String[] BLOCKNAMESNOTDIFFERENT = {
-			"Arabic",
-			"Armenian",
-			"Bengali",
-			"Cherokee",
-			"Cyrillic",
-			"Devanagari",
-			"Ethiopic",
-			"Georgian",
-			"Greek",
-			"GreekExtended",
-			"Gujarati",
-			"Gurmukhi",
-			"HangulJamo",
-			"Hebrew",
-			"Kannada",
-			"Khmer",
-			"Lao",
-			"Malayalam",
-			"Mongolian",
-			"Myanmar",
-			"Ogham",
-			"Oriya",
-			"Runic",
-			"Sinhala",
-			"Syriac",
-			"Tamil",
-			"Telugu",
-			"Thaana",
-			"Thai",
-			"Tibetan",
-			"UnifiedCanadianAboriginalSyllabics",
-			"ArabicPresentationForms-A",
-			"Arrows",
-			"BasicLatin",
-			"BlockElements",
-			"BoxDrawing",
-			"BraillePatterns",
-			"CJKCompatibilityIdeographs",
-			"CJKRadicalsSupplement",
-			"CJKSymbolsandPunctuation",
-			"CJKUnifiedIdeographs",
-			"CJKUnifiedIdeographsExtensionA",
-			"CombiningDiacriticalMarks",
-			"CombiningMarksforSymbols",
-			"ControlPictures",
-			"CurrencySymbols",
-			"Dingbats",
-			"EnclosedAlphanumerics",
-			"GeometricShapes",
-			"GeneralPunctuation",
-			"IdeographicDescriptionCharacters",
-			"IPAExtensions",
-			"Latin-1Supplement",
-			"LatinExtended-A",
-			"LatinExtended-B",
-			"LatinExtendedAdditional",
-			"SpacingModifierLetters",
-			"SuperscriptsandSubscripts",
-			"LetterlikeSymbols",
-			"NumberForms",
-			"MathematicalOperators",
-			"MiscellaneousTechnical",
-			"OpticalCharacterRecognition",
-			"MiscellaneousSymbols",
-			"KangxiRadicals",
-			"Hiragana",
-			"Katakana",
-			"Bopomofo",
-			"HangulCompatibilityJamo",
-			"Kanbun",
-			"BopomofoExtended",
-			"EnclosedCJKLettersandMonths",
-			"CJKCompatibility",
-			"YiSyllables",
-			"YiRadicals",
-			"HangulSyllables",
-			"AlphabeticPresentationForms",
-			"CombiningHalfMarks",
-			"CJKCompatibilityForms",
-			"SmallFormVariants",
-			"ArabicPresentationForms-B",
-			"HalfwidthandFullwidthForms",
+			"Arabic", "Armenian", "Bengali", "Cherokee", "Cyrillic",
+			"Devanagari", "Ethiopic", "Georgian", "Greek", "GreekExtended",
+			"Gujarati", "Gurmukhi", "HangulJamo", "Hebrew", "Kannada",
+			"Khmer", "Lao", "Malayalam", "Mongolian", "Myanmar", "Ogham",
+			"Oriya", "Runic", "Sinhala", "Syriac", "Tamil", "Telugu",
+			"Thaana", "Thai", "Tibetan", "UnifiedCanadianAboriginalSyllabics",
+			"ArabicPresentationForms-A", "Arrows", "BasicLatin",
+			"BlockElements", "BoxDrawing", "BraillePatterns",
+			"CJKCompatibilityIdeographs", "CJKRadicalsSupplement",
+			"CJKSymbolsandPunctuation", "CJKUnifiedIdeographs",
+			"CJKUnifiedIdeographsExtensionA", "CombiningDiacriticalMarks",
+			"CombiningMarksforSymbols", "ControlPictures",
+			"CurrencySymbols", "Dingbats", "EnclosedAlphanumerics",
+			"GeometricShapes", "GeneralPunctuation",
+			"IdeographicDescriptionCharacters", "IPAExtensions",
+			"Latin-1Supplement", "LatinExtended-A", "LatinExtended-B",
+			"LatinExtendedAdditional", "SpacingModifierLetters",
+			"SuperscriptsandSubscripts", "LetterlikeSymbols",
+			"NumberForms", "MathematicalOperators",
+			"MiscellaneousTechnical", "OpticalCharacterRecognition",
+			"MiscellaneousSymbols", "KangxiRadicals", "Hiragana",
+			"Katakana", "Bopomofo", "HangulCompatibilityJamo", "Kanbun",
+			"BopomofoExtended", "EnclosedCJKLettersandMonths",
+			"CJKCompatibility", "YiSyllables", "YiRadicals",
+			"HangulSyllables", "AlphabeticPresentationForms",
+			"CombiningHalfMarks", "CJKCompatibilityForms", "SmallFormVariants",
+			"ArabicPresentationForms-B", "HalfwidthandFullwidthForms",
 			"Specials",
 		};
+
 		/** Charset categories which not differs in XML schema and Java. */
 		private final String[] CATEGORIESNOTDIFFERENT = {
 			"Lm", "Lo", "Lt",
@@ -309,6 +249,7 @@ wildcardEsc     ::=  '.'
 			"S", "Sc", "Sk", "Sm", "So",
 			"Cc", "Cf", "Co",
 		};
+
 		/** Charset categories which differs in XML schema and Java.
 		 * Each block name is represented by three items:
 		 * <p>1) block name</p>
@@ -331,6 +272,7 @@ wildcardEsc     ::=  '.'
 			"C", "[\\p{C}[\\p{Cn}&&[^\u03f4\u03f5]]]", "[^\\p{C}&&[\\P{Cn}[\u03f4\u03f5]]]",
 			"Cn", "[\\p{Cn}&&[^\u03f4\u03f5]]", "[\\P{Cn}[\u03f4\u03f5]]",
 		};
+
 		/** Index is the sequence number of escape character in "sSiIcCdDwW" */
 		private final String[] MULTICHARESC = {
 			/*s*/
@@ -354,13 +296,9 @@ wildcardEsc     ::=  '.'
 			/*W*/
 			"[\\p{P}\\p{Z}\\p{C}]",
 		};
+
 		/** StringBuilder with the result of translation. */
 		private final StringBuilder _result;
-
-		private Translator(String source) {
-			super(source);
-			_result = new StringBuilder();
-		}
 
 		/** Translate XML Schema regular expression to Java format.
 		 * @return string with Java regular expression.
@@ -377,8 +315,8 @@ wildcardEsc     ::=  '.'
 		}
 
 		////////////////////////////////////////////////////////////////////////
+
 		// methods providing syntax rules
-		////////////////////////////////////////////////////////////////////////
 
 		/** regExp::= branch ( '|' branch )*
 		 * @return true if regExp parsed.
@@ -390,12 +328,14 @@ wildcardEsc     ::=  '.'
 				branch();
 			}
 		}
+
 		/** branch::= piece*
 		 * @return true if branch parsed.
 		 */
 		private void branch() {
 			while (piece()) {}
 		}
+
 		/** piece::= atom quantifier?
 		 * @return true if piece parsed.
 		 */
@@ -406,6 +346,7 @@ wildcardEsc     ::=  '.'
 			}
 			return false;
 		}
+
 		/** atom::= normalChar | charClass | ( '(' regExp ')' )
 		 * @return true if atom parsed.
 		 */
@@ -429,6 +370,7 @@ wildcardEsc     ::=  '.'
 			}
 			return false;
 		}
+
 		/** quantifier::= [?*+] | ( '{' quantity '}' )
 		 *  quantity::= quantRange | quantMin | quantExact
 		 *  quantRange::= quantExact ',' quantExact
@@ -468,6 +410,7 @@ wildcardEsc     ::=  '.'
 			}
 			return false;
 		}
+
 		/** normalChar::= [^.\?*+{}()|#x5B#x5D] /* N.B.:  #x5B = '[', #x5D = ']'
 		 * @return true if normalchar parsed.
 		 */
@@ -488,13 +431,7 @@ wildcardEsc     ::=  '.'
 			}
 			return false;
 		}
-		/** charClass::= singleCharEsc|charClassEsc|charClassExpr|wildcardEsc
-.		 * @return true if a charclass parsed.
-		 */
-		private boolean charClass() {
-			return singleCharEsc() || charClassEsc() || charClassExpr()
-				|| wildcardEsc();
-		}
+
 		/** singleCharEsc::= '\' [nrt\|.?*+(){}#x2D#x5B#x5D#x5E]
 		 * @return  true if a singleCharEsc parsed.
 		 */
@@ -510,6 +447,34 @@ wildcardEsc     ::=  '.'
 			setIndex(pos);
 			return false;
 		}
+
+		/** singleCharNoEsc::= [^\#x5B#x5D]  /*  N.B.:  #x5B = '[', #x5D = ']'
+		 * @return true if a singleCharNoEsc parsed.
+		 */
+		private boolean singleCharNoEsc() {
+			char ch;
+			if ((ch = notOneOfChars("\\[]")) > NOCHAR) {
+				_result.append(ch);
+				return true;
+			}
+			return false;
+		}
+
+		/** singleChar::= singleCharEsc | singleCharNoEsc
+		 * @return true if a singleChar parsed.
+		 */
+		private boolean singleChar() {
+			return singleCharEsc() || singleCharNoEsc();
+		}
+
+		/** charClass::= singleCharEsc|charClassEsc|charClassExpr|wildcardEsc
+.		 * @return true if a charclass parsed.
+		 */
+		private boolean charClass() {
+			return singleCharEsc() || charClassEsc() || charClassExpr()
+				|| wildcardEsc();
+		}
+
 		/** charClassEsc::= ( multiCharEsc | catEsc | complEsc )
 		 * 	multiCharEsc::= '\' [sSiIcCdDwW]
 		 *  catEsc::= '\p{' charProp '}'
@@ -650,6 +615,7 @@ wildcardEsc     ::=  '.'
 			//Regex: illegal escape char &{0}{x} near position &{1}
 			throw new SRuntimeException(XDEF653, escChar, getIndex());
 		}
+
 		/** charClassExpr::= '[' charGroup ']'
 		 * @return true if a charClassExpr parsed
 		 */
@@ -669,6 +635,7 @@ wildcardEsc     ::=  '.'
 			setIndex(pos);
 			return false;
 		}
+
 		/** wildcardEsc::= '.'
 		 * @return true if a wildcardEsc parsed.
 		 */
@@ -679,6 +646,7 @@ wildcardEsc     ::=  '.'
 			}
 			return false;
 		}
+
 		/** charGroup::= (negCharGroup | posCharGroup ) ('-' charClassExpr)?
 		 * @return true if a charGroup parsed.
 		 */
@@ -696,6 +664,7 @@ wildcardEsc     ::=  '.'
 			}
 			return false;
 		}
+
 		/** posCharGroup::= ( charGroupPart )+
 		 * @return true if a posCharGroup parsed.
 		 */
@@ -706,6 +675,7 @@ wildcardEsc     ::=  '.'
 			}
 			return false;
 		}
+
 		/** negCharGroup::= '^' posCharGroup
 		 * @return true if a negCharGroup parsed.
 		 */
@@ -720,12 +690,14 @@ wildcardEsc     ::=  '.'
 			}
 			return false;
 		}
+
 		/** charGroupPart::= singleChar | charRange | charClassEsc
 		 * @return true if a charGroupPart parsed.
 		 */
 		private boolean charGroupPart() {
 			return singleChar() || charRange() || charClassEsc();
 		}
+
 		/** charRange::= singleChar '-' singleChar
 		 * @return true if a charRange parsed.
 		 */
@@ -740,23 +712,6 @@ wildcardEsc     ::=  '.'
 					throw new SRuntimeException(XDEF654,
 						"singleChar", getIndex());
 				}
-			}
-			return false;
-		}
-		/** singleChar::= singleCharEsc | singleCharNoEsc
-		 * @return true if a singleChar parsed.
-		 */
-		private boolean singleChar() {
-			return singleCharEsc() || singleCharNoEsc();
-		}
-		/** singleCharNoEsc::= [^\#x5B#x5D]  /*  N.B.:  #x5B = '[', #x5D = ']'
-		 * @return true if a singleCharNoEsc parsed.
-		 */
-		private boolean singleCharNoEsc() {
-			char ch;
-			if ((ch = notOneOfChars("\\[]")) > NOCHAR) {
-				_result.append(ch);
-				return true;
 			}
 			return false;
 		}
