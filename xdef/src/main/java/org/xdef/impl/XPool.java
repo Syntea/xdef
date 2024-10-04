@@ -332,7 +332,7 @@ public final class XPool implements XDPool, Serializable {
 		try {
 			char c;
 			if ((c = source.charAt(0)) == '<' || c == '[') {
-				if (s == null || (s = sourceId.trim()).isEmpty()) {
+				if (s == null || (s = s.trim()).isEmpty()) {
 					s = "String_"+ (++_stringItem);
 				}
 				_sourceInfo.getMap().put(s, new XDSourceItem(source));
