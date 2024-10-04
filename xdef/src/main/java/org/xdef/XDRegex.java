@@ -21,4 +21,9 @@ public interface XDRegex extends XDValue {
 	 * @return The string representation of value of the object.
 	 */
 	public String sourceValue();
+
+	/** Get mode of regular expression source format.
+	 * @return true if it is XML schema format.
+	 */
+	public boolean isXML();
 }

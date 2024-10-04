@@ -245,6 +245,7 @@ public final class XDWriter extends SObjectWriter {
 					case XD_REGEX: {
 						DefRegex y = (DefRegex) x;
 						writeString(y.sourceValue());
+						writeBoolean(y.isXML());
 						return;
 					}
 					case XD_STRING:

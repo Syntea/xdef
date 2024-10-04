@@ -284,7 +284,7 @@ public final class XDReader extends SObjectReader {
 						return y;
 					}
 					case XD_REGEX:
-						return new DefRegex(readString(), false);
+						return new DefRegex(readString(), readBoolean());
 					case XD_STRING:
 						return new DefString(readString());
 					case XD_XQUERY: {

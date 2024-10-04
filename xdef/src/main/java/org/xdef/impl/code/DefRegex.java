@@ -23,23 +23,26 @@ import org.xdef.sys.StringParser;
 /** Regular expression (compilation). */
 public final class DefRegex extends XDValueAbstract implements XDRegex {
 	/** The source of regular expression. */
-	private String _source;
+	private final String _source;
 	/** Compiled pattern of regular expression. */
-	private Pattern _value;
+	private final Pattern _value;
+	/** Compiled pattern of regular expression. */
+	private boolean _mode;
 
 	/** Creates a new instance of DefRegex. */
 	public DefRegex() {this(".*", false);}
 
 	/** Creates a new instance of DefRegex.
 	 * @param s The string with regular expression.
-	 * @param xmlform if true it is XML schema regular expression, otherwise
+	 * @param mode if true it is XML schema regular expression, otherwise
 	 * it is Java regular expression format.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public DefRegex(final String s, final boolean xmlform) {
+	public DefRegex(final String s, final boolean mode) {
 		_source = s;
+		_mode = mode;
 		try {
-			_value = Pattern.compile(xmlform ? new Translator(s).translate():s);
+			_value = Pattern.compile(mode ? new Translator(s).translate() : s);
 		} catch (SRuntimeException ex) {
 			String t = ex.getMessage();
 			if (t == null) {
@@ -77,6 +80,12 @@ public final class DefRegex extends XDValueAbstract implements XDRegex {
 	 * @return The string representation of value of the object.
 	 */
 	public String sourceValue() {return _source;}
+
+	@Override
+	/** Get mode of regular expression source format.
+	 * @return true if it is XML schema format.
+	 */
+	public boolean isXML() {return _mode;}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDValue interface
