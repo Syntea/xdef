@@ -283,7 +283,7 @@ public class XonUtils {
 	 * @throws SRuntimeException if an error occurs.
 	 */
 	public final static Object parseXON(final Reader in) {
-		return _parseXON(in, null, true);
+		return parseXON(in, null, true);
 	}
 
 	/** Parse XON document from input reader.
@@ -293,7 +293,7 @@ public class XonUtils {
 	 * @throws SRuntimeException if an error occurs.
 	 */
 	public final static Object parseXON(final Reader in, final String sysid) {
-		return _parseXON(in, sysid, true);
+		return parseXON(in, sysid, true);
 	}
 
 	/** Parse XON document from input reader.
@@ -303,7 +303,7 @@ public class XonUtils {
 	 * @return parsed XON object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public final static Object _parseXON(final Reader in,
+	public final static Object parseXON(final Reader in,
 		final String sysid,
 		final boolean bytes) {
 		return XonReader.parseXON(in, sysid == null ? "READER" : sysid, bytes);
@@ -361,7 +361,7 @@ public class XonUtils {
 	 */
 	public final static Object parseXON(final InputStream source,
 		final String sysId) throws SRuntimeException {
-		return _parseXON(source, sysId, true);
+		return parseXON(source, sysId, true);
 	}
 
 	/** Parse XON document from InputStream.
@@ -371,7 +371,7 @@ public class XonUtils {
 	 * @return parsed XON object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	private static Object _parseXON(final InputStream source,
+	private static Object parseXON(final InputStream source,
 		final String sysId,
 		final boolean bytes) throws SRuntimeException {
 		return XonReader.parseXON(source,
@@ -622,8 +622,8 @@ public class XonUtils {
 	public final static Element xonToXmlW(final String source) {
 		XonTools.InputData indata = XonTools.getInputFromObject(source, null);
 		Object x = indata._reader != null
-			? _parseXON(indata._reader, indata._sysId, false)
-			: _parseXON(indata._in, indata._sysId, false);
+			? parseXON(indata._reader, indata._sysId, false)
+			: parseXON(indata._in, indata._sysId, false);
 		return XonToXml.toXmlW(x);
 	}
 
@@ -634,8 +634,8 @@ public class XonUtils {
 	public final static Element xonToXmlW(final File xon) {
 		XonTools.InputData indata = XonTools.getInputFromObject(xon, null);
 		Object x = indata._reader != null
-			? _parseXON(indata._reader, indata._sysId, false)
-			: _parseXON(indata._in, indata._sysId, false);
+			? parseXON(indata._reader, indata._sysId, false)
+			: parseXON(indata._in, indata._sysId, false);
 		return XonToXml.toXmlW(x);
 	}
 
@@ -646,8 +646,8 @@ public class XonUtils {
 	public final static Element xonToXmlW(final URL xon) {
 		XonTools.InputData indata = XonTools.getInputFromObject(xon, null);
 		Object x = indata._reader != null
-			? _parseXON(indata._reader, indata._sysId, false)
-			: _parseXON(indata._in, indata._sysId, false);
+			? parseXON(indata._reader, indata._sysId, false)
+			: parseXON(indata._in, indata._sysId, false);
 		return XonToXml.toXmlW(x);
 	}
 
@@ -658,8 +658,8 @@ public class XonUtils {
 	public final static Element xonToXmlW(final InputStream xon) {
 		XonTools.InputData indata = XonTools.getInputFromObject(xon, null);
 		Object x = indata._reader != null
-			? _parseXON(indata._reader, indata._sysId, false)
-			: _parseXON(indata._in, indata._sysId, false);
+			? parseXON(indata._reader, indata._sysId, false)
+			: parseXON(indata._in, indata._sysId, false);
 		return XonToXml.toXmlW(x);
 	}
 
@@ -678,8 +678,8 @@ public class XonUtils {
 	public final static Element xonToXml(final String xon) {
 		XonTools.InputData indata = XonTools.getInputFromObject(xon, null);
 		Object x = indata._reader != null
-			? _parseXON(indata._reader, indata._sysId, false)
-			: _parseXON(indata._in, indata._sysId, false);
+			? parseXON(indata._reader, indata._sysId, false)
+			: parseXON(indata._in, indata._sysId, false);
 		return XonToXml.toXmlXD(x);
 	}
 
@@ -690,8 +690,8 @@ public class XonUtils {
 	public final static Element xonToXml(final File xon) {
 		XonTools.InputData indata = XonTools.getInputFromObject(xon, null);
 		Object x = indata._reader != null
-			? _parseXON(indata._reader, indata._sysId, false)
-			: _parseXON(indata._in, indata._sysId, false);
+			? parseXON(indata._reader, indata._sysId, false)
+			: parseXON(indata._in, indata._sysId, false);
 		return XonToXml.toXmlXD(x);
 	}
 
@@ -702,8 +702,8 @@ public class XonUtils {
 	public final static Element xonToXml(final URL xon) {
 		XonTools.InputData indata = XonTools.getInputFromObject(xon, null);
 		Object x = indata._reader != null
-			? _parseXON(indata._reader, indata._sysId, false)
-			: _parseXON(indata._in, indata._sysId, false);
+			? parseXON(indata._reader, indata._sysId, false)
+			: parseXON(indata._in, indata._sysId, false);
 		return XonToXml.toXmlXD(x);
 	}
 
@@ -714,8 +714,8 @@ public class XonUtils {
 	public final static Element xonToXml(final InputStream xon) {
 		XonTools.InputData indata = XonTools.getInputFromObject(xon, null);
 		Object x = indata._reader != null
-			? _parseXON(indata._reader, indata._sysId, false)
-			: _parseXON(indata._in, indata._sysId, false);
+			? parseXON(indata._reader, indata._sysId, false)
+			: parseXON(indata._in, indata._sysId, false);
 		return XonToXml.toXmlXD(x);
 	}
 
