@@ -257,9 +257,9 @@ public class MyTest_0 extends XDTester {
 		try {
 			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
-"<xd:xon name='a'>\n" +
+"<xd:json name='a'>\n" +
 " [\"price()\"]\n"+
-"</xd:xon>\n"+
+"</xd:json>\n"+
 "<xd:component>\n"+
 "  %class bugreports.X_on %link #a;\n"+
 "</xd:component>\n"+
@@ -283,9 +283,9 @@ if(T)return;
 			xdef =
 "<xd:def xmlns:xd=\""+_xdNS+"\" name=\"X\" root=\"a\">\n"+
 "<xd:component>%class bugreports.Csvxx %link a</xd:component>\n"+
-" <xd:xon name='a'>\n"+
+" <xd:json name='a'>\n"+
 "    [ [%script=\"+\", \"int\", \"int\", \"string()\", \"boolean()\"] ]\n"+
-" </xd:xon>\n"+
+" </xd:json>\n"+
 "</xd:def>";
 			xp = XDFactory.compileXD(null, xdef); // no property
 			genXComponent(xp, clearTempDir());
@@ -938,7 +938,7 @@ if(T){return;}
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "'\n" +
 "   xd:name=\"Test\" xd:root=\"json\">\n" +
-"  <xd:xon name='json'>{\"A\":\"int();\"}</xd:xon>\n" +
+"  <xd:json name='json'>{\"A\":\"int();\"}</xd:json>\n" +
 "</xd:def>";
 			xp = XDFactory.compileXD(null, xdef,
 "<xd:def xmlns:xd='" + _xdNS + "'\n" +

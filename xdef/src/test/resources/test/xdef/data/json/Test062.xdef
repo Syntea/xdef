@@ -1,13 +1,13 @@
 <xd:def xmlns:xd="http://www.xdef.org/xdef/4.1" name="Test062" root="a" >
-<xd:xon name="a" >
+<xd:json name="a" >
   [ {%script="occurs *; ref B"} ]
-</xd:xon>
-<xd:xon name="B" >
+</xd:json>
+<xd:json name="B" >
   { "Genre": [%oneOf,
       "string()",
        ["occurs *; string()"]
     ]
   }
-</xd:xon>
+</xd:json>
 </xd:def>
 

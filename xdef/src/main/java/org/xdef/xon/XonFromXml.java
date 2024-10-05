@@ -272,7 +272,7 @@ class XonFromXml extends XonUtils {
 					|| XDConstants.XDEF40_NS_URI.equals(nsURI)
 					|| XDConstants.XDEF41_NS_URI.equals(nsURI)
 					|| XDConstants.XDEF42_NS_URI.equals(nsURI)) {
-					array.add(s); //don't convert text of xd:xon/jsaon elements!
+					array.add(s); //don't convert text of xd:json/xon elements!
 				} else {
 					addSimpleValue(array, s);
 				}

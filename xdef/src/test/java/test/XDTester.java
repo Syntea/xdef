@@ -1851,7 +1851,7 @@ public abstract class XDTester extends STester {
 	public final String testA(final String type, final String xon) {
 		return testX(
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
-"  <xd:xon name='A'> [\"* " + type + "()\"] </xd:xon>\n"+
+"  <xd:json name='A'> [\"* " + type + "()\"] </xd:json>\n"+
 "  <xd:component> %class test.TestGJ"+ type + " %link #A; </xd:component>\n"+
 "</xd:def>", "", xon);
 	}
@@ -1864,9 +1864,9 @@ public abstract class XDTester extends STester {
 	public final String testM(final String type, final String xon) {
 		return testX(
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' root='A'>\n"+
-"<xd:xon name='A'>\n" +
+"<xd:json name='A'>\n" +
 "{a:\"? "+type+"();\",b:\"? "+type+"();\",c:\"? "+type+"();\"}\n" +
-"</xd:xon>\n" +
+"</xd:json>\n" +
 "<xd:component>%class test.TestGM"+type+" %link A</xd:component>\n"+
 "</xd:def>", "", xon);
 	}

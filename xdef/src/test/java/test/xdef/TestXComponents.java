@@ -333,7 +333,7 @@ public final class TestXComponents extends XDTester {
 			assertEq(xml, xc.toXml());
 			xdef = // test jcreateXComponent
 "<xd:def xmlns:xd='" + _xdNS + "' root='X'>\n"+
-"  <xd:xon name = 'X'>{a:\"int();\", b:[\"boolean();\"]}</xd:xon>\n"+
+"  <xd:json name = 'X'>{a:\"int();\", b:[\"boolean();\"]}</xd:json>\n"+
 "  <xd:component> %class bugreports.data.JCreateX1 %link X </xd:component>\n"+
 "</xd:def>";
 			genXComponent(xp = compile(xdef));
@@ -356,7 +356,7 @@ public final class TestXComponents extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='X'>\n"+
 "  <xd:component> %class bugreports.data.JCreateX2 %link X </xd:component>\n"+
-"  <xd:xon name = 'X'>[\"2 boolean()\", \"boolean()\"]</xd:xon>\n"+
+"  <xd:json name = 'X'>[\"2 boolean()\", \"boolean()\"]</xd:json>\n"+
 "</xd:def>";
 			genXComponent(xp = compile(xdef));
 			xd = xp.createXDDocument();
@@ -373,7 +373,7 @@ public final class TestXComponents extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='X'>\n"+
 "  <xd:component>%class "+_package+".JCreateX3 %link X</xd:component>\n"+
-"  <xd:xon name = 'X'>[\"2 boolean()\", \"boolean()\"]</xd:xon>\n"+
+"  <xd:json name = 'X'>[\"2 boolean()\", \"boolean()\"]</xd:json>\n"+
 "</xd:def>";
 			genXComponent(xp = compile(xdef));
 			xd = xp.createXDDocument();
@@ -389,7 +389,7 @@ public final class TestXComponents extends XDTester {
 				SUtils.getValueFromGetter(xc,"toXon")));
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='X'>\n"+
-"  <xd:xon name=\"X\"> {b:[ \"int();\",[\"int();\"],\"string();\"]}</xd:xon>\n"+
+"  <xd:json name=\"X\"> {b:[ \"int();\",[\"int();\"],\"string();\"]}</xd:json>\n"+
 "  <xd:component> %class "+_package+".JCreateX4 %link X </xd:component>\n"+
 "</xd:def>";
 			genXComponent(xp = compile(xdef));
@@ -408,9 +408,9 @@ public final class TestXComponents extends XDTester {
 				SUtils.getValueFromGetter(xc,"toXon")));
 			xdef = // jcreate with create section
 "<xd:def xmlns:xd='" + _xdNS + "' root='X'>\n"+
-"  <xd:xon name = 'X'>\n"+
+"  <xd:json name = 'X'>\n"+
 "   [ \"boolean(); create 'true'\", \"int(); create '2'\" ]\n"+
-"  </xd:xon>\n"+
+"  </xd:json>\n"+
 "  <xd:component>%class "+_package+".JCreateX5 %link X</xd:component>\n"+
 "</xd:def>";
 			genXComponent(xp = compile(xdef));
@@ -425,11 +425,11 @@ public final class TestXComponents extends XDTester {
 				SUtils.getValueFromGetter(xc,"toXon")));
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='X'>\n"+
-"  <xd:xon name = 'X'>\n"+
+"  <xd:json name = 'X'>\n"+
 "    { a:\"int(); create '1'\",\n"+
 "      b:[ \"boolean(); create 'true'\", \"int(); create '2'\" ]\n"+
 "    }\n"+
-"  </xd:xon>\n"+
+"  </xd:json>\n"+
 "  <xd:component>%class "+_package+".JCreateX6 %link X</xd:component>\n"+
 "</xd:def>";
 			genXComponent(xp = compile(xdef));
@@ -484,13 +484,13 @@ public final class TestXComponents extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' xd:root='a'>\n" +
 "<xd:component>%class "+_package+".TestX_OneOfa %link a</xd:component>\n"+
-"  <xd:xon name='a'>\n" +
+"  <xd:json name='a'>\n" +
 "    {\n" +
 "      %oneOf= \"optional;\",\n" +
 "      \"manager\": \"string()\",\n" +
 "      \"subordinates\":[ \"* string();\" ]\n" +
 "    }\n" +
-"  </xd:xon>\n" +
+"  </xd:json>\n" +
 "</xd:def>";
 			genXComponent(xp = compile(xdef));
 			xd = xp.createXDDocument();
@@ -543,7 +543,7 @@ public final class TestXComponents extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root=\"test\">\n" +
 "<xd:component>%class "+_package+".MyTestX_OneOfb %link test</xd:component>\n"+
-"  <xd:xon name=\"test\">\n" +
+"  <xd:json name=\"test\">\n" +
 "    { a:[ %oneOf=\"?\",\n" +
 "        \"jnull(); finally outln('null')\", \n" + // must be first
 "        \"date(); finally outln('date')\", \n" +
@@ -553,7 +553,7 @@ public final class TestXComponents extends XDTester {
 "        \"string(); finally outln('string')\" \n" +
 "      ]\n" +
 "    }\n" +
-"</xd:xon>\n" +
+"</xd:json>\n" +
 "</xd:def>";
 			genXComponent(xp = compile(xdef));
 			s = "{a:\"2022-04-10\"}";

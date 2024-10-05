@@ -1,5 +1,5 @@
 <xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' xd:name='Test037' xd:root='a'>
-<xd:xon name='a'>
+<xd:json name='a'>
 {
     "plat":  "int(1000, 1000000);",
     "jmeno": "jstring(1, 50); onFalse outln('Chyba ve jmene')",
@@ -9,5 +9,5 @@
         "vek":   "optional int(1, 50);"
     }
 }
-</xd:xon>
+</xd:json>
 </xd:def>

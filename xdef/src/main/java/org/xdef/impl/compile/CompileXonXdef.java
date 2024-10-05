@@ -64,7 +64,7 @@ import org.xdef.xon.XonTools.JMap;
 import org.xdef.xon.XonTools.JObject;
 import org.xdef.xon.XonTools.JValue;
 
-/** Create X-definition model from xd:xon element.
+/** Create X-definition model from xd:json/xon element.
  * @author Vaclav Trojan
  */
 public final class CompileXonXdef extends XScriptParser {
@@ -264,7 +264,7 @@ public final class CompileXonXdef extends XScriptParser {
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
-// Create X-definition model from xd:xon (use W3C format)
+// Create X-definition model from xd:json/xon (use W3C format)
 ////////////////////////////////////////////////////////////////////////////////
 
 	/** Add match section to xd:script attribute. If match section already

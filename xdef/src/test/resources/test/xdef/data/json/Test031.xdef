@@ -1,5 +1,5 @@
 <xd:def xmlns:xd='http://www.xdef.org/xdef/4.1' xd:name='Test031' xd:root='a'>
-<xd:xon name='a'>
+<xd:json name='a'>
 {
   "desc"    : "string();",
   "updated" : "dateTime();",
@@ -20,5 +20,5 @@
     ]
   }
 }
-</xd:xon>
+</xd:json>
 </xd:def>

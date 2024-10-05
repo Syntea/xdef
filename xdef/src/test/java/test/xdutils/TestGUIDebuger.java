@@ -291,7 +291,7 @@ public final class TestGUIDebuger extends XDTester {
 		try {// JSON
 			xdef =
 "<xd:def xmlns:xd=\""+_xdNS+"\" name=\"JSON\" root=\"a\">\n"+
-"<xd:xon name=\"a\" >\n" +
+"<xd:json name=\"a\" >\n" +
 "{ \"personnel\": { \"person\": \n" +
 "      [\n" +
 "        {\n" +
@@ -300,8 +300,8 @@ public final class TestGUIDebuger extends XDTester {
 "      ]\n" +
 "  }\n" +
 "}\n" +
-"</xd:xon>\n" +
-"<xd:xon name=\"B\" >\n" +
+"</xd:json>\n" +
+"<xd:json name=\"B\" >\n" +
 "{ \"id\": \"string()\",\n" +
 "   \"name\":{\n"+
 "      \"family\":\"jstring()\",\n"+
@@ -310,15 +310,15 @@ public final class TestGUIDebuger extends XDTester {
 "   \"email\": \"emailAddr();\",\n" +
 "   \"link\": { %script= \"ref C\" }\n" +
 "}\n" +
-"</xd:xon>\n" +
-"<xd:xon name=\"C\" >\n" +
+"</xd:json>\n" +
+"<xd:json name=\"C\" >\n" +
 "{  %oneOf= \"optional;\",\n" +
 "   \"manager\": \"jstring()\",\n" +
 "   \"subordinates\":[\n" +
 "      \"* jstring();\"\n" +
 "   ]\n" +
 "}\n" +
-"</xd:xon>\n" +
+"</xd:json>\n" +
 "</xd:def>";
 			xp = compile(xdef);
 			xd = xp.createXDDocument("JSON");

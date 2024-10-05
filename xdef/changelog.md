@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.2.7, release-date 2024-10-04
+# Version 42.2.7, release-date 2024-10-05
 * Fixed bug in conversion from XML schema regular expression to Java regular
   expression in reading of XDPool object from a file.
 
@@ -265,7 +265,7 @@
 
 # Version 41.0.4, release-date 2022-01-13
 * implemented new type validation methods `country` and `countries`.
-* `<xd:json>` model in X-definition changed now to `<xd:xon>`.
+* `<xd:json>` model in X-definition now also can be `<xd:xon>`.
 * fixed bug in datetime formatting when mask of a xdatetime contains `SSS`
   and the value of milliseconds in datetime is zero.
 * fixed bug NullPointerException in parsing of incorrect JSON data.

@@ -3,7 +3,7 @@
   type genre enum("Classic", "Country", "Folk", "Jazz", "Pop", "Pop punk",
              "Punk", "Punk rock", "Rap", "Rock", "R&amp;B", "Other");
 </xd:declaration> 
-<xd:xon name='a'>
+<xd:json name='a'>
 {
   "Title": "optional jstring()",
   "Artists": [
@@ -30,5 +30,5 @@
     }
   ]
 }
-</xd:xon>
+</xd:json>
 </xd:def>

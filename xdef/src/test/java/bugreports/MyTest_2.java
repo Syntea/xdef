@@ -61,9 +61,9 @@ public class MyTest_2 extends XDTester {
 		try {// XON
 			xdef =
 "<xd:def xmlns:xd=\""+_xdNS+"\" root=\"A\">\n"+
-"<xd:xon name='A'>\n"+
+"<xd:json name='A'>\n"+
 "[\"int()\", \"int\", \"jstring()\"]\n"+
-"</xd:xon>\n"+
+"</xd:json>\n"+
 "<xd:component>\n"+
 "  %class bugreports.A %link #A;\n"+
 "</xd:component>\n"+
@@ -139,7 +139,7 @@ if(T)return;
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='Skladby'>\n"+
-"<xd:xon name=\"Skladby\">\n"+
+"<xd:json name=\"Skladby\">\n"+
 "  [\n" +
 "    { %script= \"occurs 1..*;\",\n" +
 "       \"Name\": \"string()\",\n" +
@@ -150,7 +150,7 @@ if(T)return;
 "       ]\n" +
 "    }\n" +
 "  ]\n" +
-"</xd:xon>\n"+
+"</xd:json>\n"+
 "</xd:def>";
 			xp = compile(xdef);
 			xd = xp.createXDDocument("");
@@ -180,7 +180,7 @@ if(T)return;
 		try {
 			xdef =
 "<xd:def xmlns:xd=\""+_xdNS+"\" name=\"Example\" root=\"test\">\n" +
-"  <xd:xon name=\"test\">\n" +
+"  <xd:json name=\"test\">\n" +
 "    { \"cities\"  : [\n" +
 "        {%script=\"occurs 1..*\",\n" +
 "          \"from\": [\n" +
@@ -190,7 +190,7 @@ if(T)return;
 "        }\n" +
 "      ]\n" +
 "    }\n" +
-"  </xd:xon> \n" +
+"  </xd:json> \n" +
 "</xd:def>";
 			xp = compile(xdef);
 			json =
@@ -234,9 +234,9 @@ if(T)return;
 		try {
 			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
-"<xd:xon name='A'>\n"+
+"<xd:json name='A'>\n"+
 "[\"int()\", \"int\", \"jstring()\"]\n"+
-"</xd:xon>\n"+
+"</xd:json>\n"+
 "<xd:component>\n"+
 "  %class bugreports.data.A002 %link #A;\n"+
 "</xd:component>\n"+
@@ -256,7 +256,7 @@ if(T)return;
 		try {
 			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
-"<xd:xon name='A'>\n"+
+"<xd:json name='A'>\n"+
 "[\n" +
 " { %script=\"+\",\n" +
 "  \"first name\": \"? string;\",\n" +
@@ -275,7 +275,7 @@ if(T)return;
 "  ]\n" +
 " }\n" +
 "]\n" +
-"</xd:xon>\n"+
+"</xd:json>\n"+
 "<xd:component>\n"+
 "  %class bugreports.data.A0 %link #A;\n"+
 "</xd:component>\n"+
@@ -317,7 +317,7 @@ if(T)return;
 		try {
 			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
-"<xd:xon name='A'>\n"+
+"<xd:json name='A'>\n"+
 "{ \"store\": {\n" +
 "    \"book\": [\n" +
 "      {%script= \"occurs +\",\n" +
@@ -334,7 +334,7 @@ if(T)return;
 "    }\n" +
 "  }\n" +
 "}\n" +
-"</xd:xon>\n"+
+"</xd:json>\n"+
 "<xd:component>\n"+
 "  %class bugreports.data.A1 %link #A;\n"+
 "</xd:component>\n"+
@@ -393,9 +393,9 @@ if(T)return;
 		try {
 			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='Y'>\n"+
-"<xd:xon name='Y'>\n"+
+"<xd:json name='Y'>\n"+
 "[{\"a\":\"jboolean\"},\"jstring()\",\"jnumber()\",\"? jboolean()\"]\n" +
-"</xd:xon>\n"+
+"</xd:json>\n"+
 "<xd:component>\n"+
 "  %class bugreports.data.TY_X %link #Y;\n"+
 "</xd:component>\n"+
@@ -433,9 +433,9 @@ if(T)return;
 		try {
 			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='Y'>\n"+
-"<xd:xon name='Y'>\n"+
+"<xd:json name='Y'>\n"+
 "[{\"a\":\"jboolean\"},\"jstring()\",\"jnumber()\",\"? jboolean()\"]\n" +
-"</xd:xon>\n"+
+"</xd:json>\n"+
 "<xd:component>\n"+
 "  %class bugreports.data.TY_X %link #Y;\n"+
 "</xd:component>\n"+
@@ -479,14 +479,14 @@ if(T )return;
 "             \"Punk\", \"Punk_rock\", \"Rap\", \"Rock\", \"R&amp;B\", \"Other\");\n" +
 "  boolean zz = p.parse('Country').matches();\n"+
 "</xd:declaration>\n" +
-"<xd:xon name='a'>\n" +
+"<xd:json name='a'>\n" +
 "{\n" +
 "  \"Genre\": [%oneOf,\n" +
 "     \"genre\",\n" +
 "     [\"occurs 1..*; genre\"]\n" +
 "  ]\n" +
 "}\n" +
-"</xd:xon>"+
+"</xd:json>"+
 "</xd:def>";
 			xp = compile(xdef);
 			json = "{\"Genre\": \"Classic\"}";
@@ -506,9 +506,9 @@ if(T )return;
 		try {
 			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
-"<xd:xon name='A'>\n"+
+"<xd:json name='A'>\n"+
 "{\"a\": \"? jvalue()\"}\n" +
-"</xd:xon>\n"+
+"</xd:json>\n"+
 "<xd:component>\n"+
 "  %class bugreports.data.XAA %link #A;\n"+
 "</xd:component>\n"+
@@ -630,12 +630,12 @@ if(T )return;
 
 			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='A | B'>\n"+
-"<xd:xon name='A'>\n"+
+"<xd:json name='A'>\n"+
 "{\"a\": \"? jvalue()\"}\n" +
-"</xd:xon>\n"+
-"<xd:xon name='B'>\n"+
+"</xd:json>\n"+
+"<xd:json name='B'>\n"+
 "[\"? jvalue()\"]\n" +
-"</xd:xon>\n"+
+"</xd:json>\n"+
 "<xd:component>\n"+
 "  %class bugreports.data.XA %link #A;\n"+
 "  %class bugreports.data.XB %link #B;\n"+
@@ -748,9 +748,9 @@ if(T )return;
 
 			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='json'>\n"+
-"<xd:xon name='json'>\n"+
+"<xd:json name='json'>\n"+
 "{\"a\": \"? jvalue()\"}\n" +
-"</xd:xon>\n"+
+"</xd:json>\n"+
 "<xd:component>\n"+
 "  %class bugreports.data.XD %link #json;\n"+
 "</xd:component>\n"+
@@ -814,13 +814,13 @@ if(T )return;
 
 			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='json'>\n"+
-"<xd:xon name='json'>\n"+
+"<xd:json name='json'>\n"+
 "[\n"+
 "    \"? jnull\",\n"+
 "    \"? int()\",\n"+
 "    \"? string()\"\n"+
 "]\n"+
-"</xd:xon>\n"+
+"</xd:json>\n"+
 "<xd:component>\n"+
 "  %class bugreports.data.TJ1 %link #json;\n"+
 "</xd:component>\n"+
@@ -886,22 +886,22 @@ if(T ){return;}
 			xdef =
 "<xd:collection xmlns:xd='"+_xdNS+"'>\n"+
 "<xd:def name='X' root='X'>\n"+
-"<xd:xon xd:name='X'>\n"+
+"<xd:json xd:name='X'>\n"+
 "[\"int()\"]\n"+
-"</xd:xon>\n"+
+"</xd:json>\n"+
 "</xd:def>\n"+
 "<xd:def name='Y' root='Y'>\n"+
-"<xd:xon name='Y'>\n"+
+"<xd:json name='Y'>\n"+
 "[{\"a\":\"jboolean\"},\"jstring()\",\"jnumber()\",\"? jboolean()\"]\n" +
-"</xd:xon>\n"+
+"</xd:json>\n"+
 "</xd:def>\n"+
 "<xd:def name='Z' root='Z | json'>\n"+
-"<xd:xon name='Z'>\n"+
+"<xd:json name='Z'>\n"+
 "{\"a\":\"string()\"}\n" +
-"</xd:xon>\n"+
-"<xd:xon xd:name='json'>\n"+
+"</xd:json>\n"+
+"<xd:json xd:name='json'>\n"+
 "[\"date()\"]\n"+
-"</xd:xon>\n"+
+"</xd:json>\n"+
 "</xd:def>\n"+
 "<xd:component>\n"+
 "  %class bugreports.data.TX %link X#X;\n"+
@@ -975,16 +975,16 @@ if(T ){return;}
 
 			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='A|B|json'>\n"+
-"<xd:xon name='json'>\n"+
+"<xd:json name='json'>\n"+
 "[\n"+
 "  {\"a\":\"boolean\"},\n"+
 "  \"string()\",\n"+
 "  \"int()\"\n"+
 "]\n" +
-"</xd:xon>\n"+
-"<xd:xon name='B'>\n"+
+"</xd:json>\n"+
+"<xd:json name='B'>\n"+
 "{\"a\":\"int\"}\n"+
-"</xd:xon>\n"+
+"</xd:json>\n"+
 "  <A/>\n"+
 "</xd:def>";
 			xp = compile(xdef);

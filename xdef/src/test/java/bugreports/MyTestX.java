@@ -143,9 +143,9 @@ public class MyTestX extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
 "  <xd:component>%class "+_package+".MytestX_num %link #A;</xd:component>\n" +
-"<xd:xon name='A'>\n" +
+"<xd:json name='A'>\n" +
 "\"eq('2021')\"\n" +
-"</xd:xon>\n" +
+"</xd:json>\n" +
 "</xd:def>";
 			xp = XDFactory.compileXD(null,xdef);
 			genAndCopyXComponents(xp);
@@ -161,9 +161,9 @@ clearSources();
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
 "  <xd:component>%class "+_package+".MytestX_Str %link #A;</xd:component>\n" +
-"<xd:xon name='A'>\n" +
+"<xd:json name='A'>\n" +
 "[ \"num()\" ]\n" +
-"</xd:xon>\n" +
+"</xd:json>\n" +
 "</xd:def>";
 			xp = XDFactory.compileXD(null,xdef);
 			genAndCopyXComponents(xp);
@@ -179,10 +179,10 @@ clearSources();
 			xdef =
 "<xd:def xmlns:xd=\""+_xdNS+"\" name=\"X\" root=\"a\">\n" +
 "<xd:component>%class " + _package + ".Csvxx1 %link a</xd:component>\n" +
-" <xd:xon name='a'>\n" +
+" <xd:json name='a'>\n" +
 "    [ [ %script =\"+\", \"string()\"] ]\n" +
 //"    [ [ %script =\"+\", \"int\", \"int\", \"string()\", \"boolean()\"] ]\n" +
-" </xd:xon>\n" +
+" </xd:json>\n" +
 "</xd:def>";
 			xp = compile(xdef); // no property
 			genAndCopyXComponents(xp);
@@ -212,9 +212,9 @@ clearSources();
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' name=\"X\" root=\"a\">\n" +
 "<xd:component>%class "+_package+".Csvxx2 %link a</xd:component>\n" +
-" <xd:xon name='a'>\n" +
+" <xd:json name='a'>\n" +
 "    [ [ %script =\"+\", \"int\", \"int\", \"string()\", \"boolean()\"] ]\n" +
-" </xd:xon>\n" +
+" </xd:json>\n" +
 "</xd:def>";
 			xp = compile(xdef);
 			genAndCopyXComponents(xp);
@@ -241,14 +241,14 @@ clearSources();
 		try {
 			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
-"<xd:xon name='A'>\n" +
+"<xd:json name='A'>\n" +
 "[\n" +
 "  \"base64Binary()\",\n" +
 "  \"base64Binary()\",\n" +
 "  \"hexBinary()\",\n" +
 "  \"hexBinary()\"\n" +
 "]\n" +
-"</xd:xon>\n" +
+"</xd:json>\n" +
 "<xd:component>\n" +
 "  %class "+_package+".Xon %link #A;\n" +
 "</xd:component>\n" +
@@ -330,9 +330,9 @@ clearSources();
 //			type = "emailAddr";
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
-//"  <xd:xon name='A'> [\"* " + type + "()\"] </xd:xon>\n"+
-//"  <xd:xon name='A'> [ \"" + type + "()\" ]</xd:xon>\n"+
-"  <xd:xon name='A'> \"" + type + "()\"</xd:xon>\n"+
+//"  <xd:json name='A'> [\"* " + type + "()\"] </xd:json>\n"+
+//"  <xd:json name='A'> [ \"" + type + "()\" ]</xd:json>\n"+
+"  <xd:json name='A'> \"" + type + "()\"</xd:json>\n"+
 "  <xd:component> %class "+_package+".Xon0 %link #A; </xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
@@ -392,9 +392,9 @@ clearSources();
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' name='X' root='Any'>\n" +
-"<xd:xon name=\"Any\">\n" +
+"<xd:json name=\"Any\">\n" +
 " \"jvalue();\"\n" +
-"</xd:xon>\n" +
+"</xd:json>\n" +
 "<xd:component>\n" +
 "  %class "+_package+".Xon0 %link X#Any;\n" +
 "</xd:component>\n" +
@@ -423,9 +423,9 @@ clearSources();
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
-"<xd:xon name='A'>\n" +
+"<xd:json name='A'>\n" +
 "[\"date()\", \"gYear()\"]\n" +
-"</xd:xon>\n" +
+"</xd:json>\n" +
 "<xd:component> %class " + _package + ".Xon0x %link #A; </xd:component>\n" +
 "</xd:def>";
 			xp = compile(xdef); // no property
@@ -459,18 +459,18 @@ clearSources();
 		try {
 			xdef = // test XON reference to %any in %oneOf
 "<xd:def xmlns:xd='" + _xdNS + "' name='X' root='Any'>\n" +
-"<xd:xon name=\"Any\">\n" +
+"<xd:json name=\"Any\">\n" +
 " [ %oneOf, \"jvalue();\",\n" +
 "   [ %script=\"*; ref anyA;\" ],\n" +
 "   { %script=\"*; ref anyM;\" }\n" +
 " ]\n" +
-"</xd:xon>\n" +
-"<xd:xon name=\"anyA\">\n" +
+"</xd:json>\n" +
+"<xd:json name=\"anyA\">\n" +
 " [ %anyObj=\"*\" ]\n" +
-"</xd:xon>\n" +
-"<xd:xon name=\"anyM\">\n" +
+"</xd:json>\n" +
+"<xd:json name=\"anyM\">\n" +
 " { %anyName: %anyObj=\"*;\" }\n" +
-"</xd:xon>\n" +
+"</xd:json>\n" +
 "<xd:component>\n" +
 "  %class "+_package+".MyTest_xxx %link X#Any;\n" +
 "</xd:component>\n" +
@@ -522,19 +522,19 @@ clearSources();
 			xdef = // test XON models in different X-definitions
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n" +
 "<xd:def name=\"a\" root=\"testX\">\n" +
-"  <xd:xon name=\"testX\"> [%anyObj=\"*\" ] </xd:xon>\n" + // array
+"  <xd:json name=\"testX\"> [%anyObj=\"*\" ] </xd:json>\n" + // array
 "</xd:def>\n" +
 "<xd:def name=\"m\" root=\"testX\">\n" + // map
-"  <xd:xon name=\"testX\"> { %anyName: %anyObj=\"*;\" } </xd:xon>\n"  +
+"  <xd:json name=\"testX\"> { %anyName: %anyObj=\"*;\" } </xd:json>\n"  +
 "</xd:def>\n" +
 "<xd:def name=\"x\" root=\"testX\">\n" + // any object
-"  <xd:xon name=\"testX\"> %anyObj </xd:xon>\n" +
+"  <xd:json name=\"testX\"> %anyObj </xd:json>\n" +
 "</xd:def>\n" +
 "<xd:def name=\"y\" root=\"testX\">\n" + // jstring
-"  <xd:xon name=\"testX\"> \"jstring();\" </xd:xon>\n" +
+"  <xd:json name=\"testX\"> \"jstring();\" </xd:json>\n" +
 "</xd:def>\n" +
 "<xd:def name=\"z\" root=\"testX\">\n" + // string
-"  <xd:xon name=\"testX\"> \"string();\" </xd:xon>\n" +
+"  <xd:json name=\"testX\"> \"string();\" </xd:json>\n" +
 "</xd:def>\n" +
 "<xd:component>\n" +
 "  %class "+_package+".MyTestX_AnyXXa %link a#testX;\n" +
@@ -570,9 +570,9 @@ if(T)return;
 			xdef =
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n" +
 "<xd:def name=\"X\" root=\"testI\">\n" +
-"<xd:xon name=\"testI\">\n"  +
+"<xd:json name=\"testI\">\n"  +
 "  [ %oneOf, \"jvalue()\", [%anyObj], {%anyName: %anyObj} ]\n"  +
-"</xd:xon>\n"  +
+"</xd:json>\n"  +
 "<xd:component> %class "+_package+".MyTestXX12 %link X#testI; </xd:component>\n"+
 "</xd:def>\n"+
 "</xd:collection>";
@@ -605,13 +605,13 @@ clearSources();
 			xdef = // test XON models in different X-definitions
 "<xd:collection xmlns:xd='" + _xdNS + "'>\n" +
 "<xd:def name=\"a\" root=\"testX\">\n" +
-"<xd:xon name=\"testX\"> [%anyObj=\"*\" ] </xd:xon>\n" + // array
+"<xd:json name=\"testX\"> [%anyObj=\"*\" ] </xd:json>\n" + // array
 "</xd:def>\n" +
 "<xd:def name=\"m\" root=\"testX\">\n" + // map
-"  <xd:xon name=\"testX\"> { %anyName: %anyObj=\"*;\" } </xd:xon>\n"  +
+"  <xd:json name=\"testX\"> { %anyName: %anyObj=\"*;\" } </xd:json>\n"  +
 "</xd:def>\n" +
 "<xd:def name=\"x\" root=\"testX\">\n" + // any object
-"<xd:xon name=\"testX\"> %anyObj </xd:xon>\n" +
+"<xd:json name=\"testX\"> %anyObj </xd:json>\n" +
 "<xd:component>\n" +
 "  %class "+_package+".MyTestX_AnyXXa %link a#testX;\n" +
 "  %class "+_package+".MyTestX_AnyXXm %link m#testX;\n" +
@@ -634,13 +634,13 @@ if(T)return;
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n"+
 "  <xd:component>%class "+_package+".MytestX_Hex0 %link #A;</xd:component>\n" +
-"<xd:xon name='A'>\n" +
+"<xd:json name='A'>\n" +
 "[\n" +
 "  \"base64Binary()\",\n" +
 "  \"hexBinary()\",\n" +
 "  \"? hexBinary()\"\n" +
 "]\n" +
-"</xd:xon>\n" +
+"</xd:json>\n" +
 "</xd:def>";
 			xp = XDFactory.compileXD(null,xdef);
 			genAndCopyXComponents(xp);
@@ -668,18 +668,18 @@ if(T)return;
 		try {
 			xdef = // test XON reference to %any in %oneOf
 "<xd:def xmlns:xd='" + _xdNS + "' name='X' root='Any'>\n" +
-"<xd:xon name=\"Any\">\n" +
+"<xd:json name=\"Any\">\n" +
 " [ %oneOf, \"jvalue();\",\n" +
 "   [ %script=\"*; ref anyA;\" ],\n" +
 "   { %script=\"*; ref anyM;\" }\n" +
 " ]\n" +
-"</xd:xon>\n" +
-"<xd:xon name=\"anyA\">\n" +
+"</xd:json>\n" +
+"<xd:json name=\"anyA\">\n" +
 " [ %anyObj ]\n" +
-"</xd:xon>\n" +
-"<xd:xon name=\"anyM\">\n" +
+"</xd:json>\n" +
+"<xd:json name=\"anyM\">\n" +
 " { %anyName: %anyObj }\n"+
-"</xd:xon>\n" +
+"</xd:json>\n" +
 "<xd:component> %class "+_package+".MyTestXX11 %link X#Any; </xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
@@ -705,7 +705,7 @@ clearSources();
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root=\"test\">\n" +
 "<xd:component>%class "+_package+".MyTestX_OneOfb %link test</xd:component>\n"+
-"<xd:xon name=\"test\">\n" +
+"<xd:json name=\"test\">\n" +
 "{ a:[ %oneOf=\"?\",\n" +
 "       \"jnull(); finally outln('null')\", \n" + // must be first
 "       \"date(); finally outln('date')\", \n" +
@@ -715,7 +715,7 @@ clearSources();
 "       \"string(); finally outln('string')\" \n" +
 "  ]\n" +
 "}\n" +
-"</xd:xon>\n" +
+"</xd:json>\n" +
 "</xd:def>";
 			xp = compile(xdef);
 			genXComponent(xp, clearTempDir());
@@ -901,9 +901,9 @@ if(T)return;
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root = \"A\">\n" +
 "  <xd:component>%class "+_package+".MytestX_Hex %link #A;</xd:component>\n" +
-"<xd:xon name=\"A\">\n" +
+"<xd:json name=\"A\">\n" +
 "  [ \"base64Binary()\", \"hexBinary()\" ]\n" +
-"</xd:xon>\n" +
+"</xd:json>\n" +
 "</xd:def>";
 			xp = compile(xdef);
 			genAndCopyXComponents(xp);
@@ -1028,9 +1028,9 @@ clearSources();
 		try {
 			xdef = // test occurrence for %anyName and %anyObj directives
 "<xd:def xmlns:xd='" + _xdNS + "' root=\"D\">\n" +
-"<xd:xon name=\"D\">\n" +
+"<xd:json name=\"D\">\n" +
 "  [ \"* int();\"]\n" +
-"</xd:xon>\n" +
+"</xd:json>\n" +
 "<xd:component> %class "+_package+".MyTestXonD %link #D; </xd:component>\n" +
 "</xd:def>";
 			xp = compile(xdef);
@@ -1048,9 +1048,9 @@ clearSources();
 		try {
 			xdef = // test occurrence for %anyName and %anyObj directives
 "<xd:def xmlns:xd='" + _xdNS + "' root=\"C\">\n" +
-"<xd:xon name=\"C\">\n" +
+"<xd:json name=\"C\">\n" +
 "  [ %anyObj, \"int();\"]\n" +
-"</xd:xon>\n" +
+"</xd:json>\n" +
 "<xd:component> %class "+_package+".MyTestXonC %link #C; </xd:component>\n" +
 "</xd:def>";
 			xp = compile(xdef);
@@ -1068,7 +1068,7 @@ clearSources();
 		try {
 			xdef = // test occurrence for %anyName and %anyObj directives
 "<xd:def xmlns:xd='" + _xdNS + "' root=\"A\">\n" +
-"<xd:xon name=\"A\">{ %anyName: %anyObj=\"occurs *;\" }</xd:xon>\n" +
+"<xd:json name=\"A\">{ %anyName: %anyObj=\"occurs *;\" }</xd:json>\n" +
 "<xd:component> %class "+_package+".MyTestXX00M %link #A; </xd:component>\n" +
 "</xd:def>";
 			xp = compile(xdef);
@@ -1094,7 +1094,7 @@ clearSources();
 		try {
 			xdef = // test occurrence for %anyName and %anyObj directives
 "<xd:def xmlns:xd='" + _xdNS + "' root=\"A\">\n" +
-"<xd:xon name=\"A\"> \"int()\" </xd:xon>\n" +
+"<xd:json name=\"A\"> \"int()\" </xd:json>\n" +
 "<xd:component> %class "+_package+".MyTestXX00 %link #A; </xd:component>\n" +
 "</xd:def>";
 			xp = compile(xdef);
@@ -1113,7 +1113,7 @@ clearSources();
 		try {
 			xdef = // test occurrence for %anyName and %anyObj directives
 "<xd:def xmlns:xd='" + _xdNS + "' root=\"A\">\n" +
-"<xd:xon name=\"A\"> [\"int()\"] </xd:xon>\n" +
+"<xd:json name=\"A\"> [\"int()\"] </xd:json>\n" +
 "<xd:component> %class "+_package+".MyTest_xxy %link #A; </xd:component>\n" +
 "</xd:def>";
 			xp = compile(xdef);
@@ -1134,7 +1134,7 @@ clearSources();
 		try {
 			xdef = // test occurrence for %anyName and %anyObj directives
 "<xd:def xmlns:xd='" + _xdNS + "' root=\"A\">\n" +
-"<xd:xon name=\"A\"> { a:\"? int()\" }</xd:xon>\n" +
+"<xd:json name=\"A\"> { a:\"? int()\" }</xd:json>\n" +
 "<xd:component> %class "+_package+".MyTestXX02 %link #A; </xd:component>\n" +
 "</xd:def>";
 			xp = compile(xdef);
@@ -1165,7 +1165,7 @@ clearSources();
 		try {
 			xdef = // test occurrence for %anyName and %anyObj directives
 "<xd:def xmlns:xd='" + _xdNS + "' root=\"A\">\n" +
-"<xd:xon name=\"A\"> [ \"occurs *; int()\" ] </xd:xon>\n" +
+"<xd:json name=\"A\"> [ \"occurs *; int()\" ] </xd:json>\n" +
 "<xd:component> %class "+_package+".MyTestXX03 %link #A; </xd:component>\n" +
 "</xd:def>";
 			xp = compile(xdef);
@@ -1181,7 +1181,7 @@ clearSources();
 		try {
 			xdef = // test occurrence for %anyName and %anyObj directives
 "<xd:def xmlns:xd='" + _xdNS + "' root=\"A\">\n" +
-"<xd:xon name=\"A\"> { a:\"? int()\" } </xd:xon>\n" +
+"<xd:json name=\"A\"> { a:\"? int()\" } </xd:json>\n" +
 "<xd:component> %class "+_package+".MyTestXX04 %link #A; </xd:component>\n" +
 "</xd:def>";
 			xp = compile(xdef);
@@ -1196,8 +1196,8 @@ clearSources();
 		try {
 			xdef = // test occurrence for %anyName and %anyObj directives
 "<xd:def xmlns:xd='" + _xdNS + "' root=\"A\">\n" +
-"<xd:xon name=\"A\"> [ %anyObj] </xd:xon>\n" +
-//"<xd:xon name=\"A\"> [ %anyObj=\"occurs 1;\", %anyObj=\"occurs ?;\" ] </xd:xon>\n" +
+"<xd:json name=\"A\"> [ %anyObj] </xd:json>\n" +
+//"<xd:json name=\"A\"> [ %anyObj=\"occurs 1;\", %anyObj=\"occurs ?;\" ] </xd:json>\n" +
 "<xd:component> %class "+_package+".MyTestXX05 %link #A; </xd:component>\n" +
 "</xd:def>";
 			xp = compile(xdef);
@@ -1220,7 +1220,7 @@ clearSources();
 		try {
 			xdef = // test occurrence for %anyName and %anyObj directives
 "<xd:def xmlns:xd='" + _xdNS + "' root=\"A\">\n" +
-"<xd:xon name=\"A\"> [ %anyObj=\"occurs +;\" ] </xd:xon>\n" +
+"<xd:json name=\"A\"> [ %anyObj=\"occurs +;\" ] </xd:json>\n" +
 "<xd:component> %class "+_package+".MyTestXX06 %link #A; </xd:component>\n" +
 "</xd:def>";
 			xp = compile(xdef);
@@ -1246,9 +1246,9 @@ clearSources();
 		try {
 			xdef = // test occurrence for %anyName and %anyObj directives
 "<xd:def xmlns:xd='" + _xdNS + "' root=\"A\">\n" +
-"<xd:xon name=\"A\">\n" +
+"<xd:json name=\"A\">\n" +
 "{ %anyName: %anyObj=\"occurs 2;\" }\n" +
-"</xd:xon>\n" +
+"</xd:json>\n" +
 "<xd:component> %class "+_package+".MyTestXX07 %link #A; </xd:component>\n" +
 "</xd:def>";
 			xp = compile(xdef);
@@ -1265,9 +1265,9 @@ clearSources();
 		try {
 			xdef = // test %anyObj in array
 "<xd:def xmlns:xd='" + _xdNS + "' root=\"A\">\n" +
-"<xd:xon name=\"A\">\n" +
+"<xd:json name=\"A\">\n" +
 "[ %anyObj = \"0..1;\" ]\n" +
-"</xd:xon>\n" +
+"</xd:json>\n" +
 "<xd:component> %class "+_package+".MyTestXX08 %link #A; </xd:component>\n" +
 "</xd:def>";
 			xp = compile(xdef);
@@ -1285,7 +1285,7 @@ clearSources();
 		try {
 			xdef = // test %anyObj in array
 "<xd:def xmlns:xd='" + _xdNS + "' root=\"A\">\n" +
-"<xd:xon name=\"A\">%anyObj</xd:xon>\n" +
+"<xd:json name=\"A\">%anyObj</xd:json>\n" +
 "<xd:component> %class "+_package+".MyTestXX09 %link #A; </xd:component>\n" +
 "</xd:def>";
 			xp = compile(xdef);
@@ -1303,24 +1303,24 @@ clearSources();
 		try {
 			xdef = // test XON models
 "<xd:def xmlns:xd='" + _xdNS + "' name='X' root='Any'>\n" +
-"<xd:xon name=\"Any\">\n" +
+"<xd:json name=\"Any\">\n" +
 " [ %oneOf, \"jvalue(); finally out('V')\",\n" +
 "   [ %script=\"*; ref anyA; finally out('A')\" ],\n" +
 "   { %script=\"*; ref anyM; finally out('M')\" }\n" +
 " ]\n" +
-"</xd:xon>\n" +
-"<xd:xon name=\"anyA\">\n" +
+"</xd:json>\n" +
+"<xd:json name=\"anyA\">\n" +
 " [ %anyObj=\"*;\" ]\n" +
 //" [ [%script=\"*; finally outln('AA');\", %anyObj ] ]\n" +
-"</xd:xon>\n" +
-"<xd:xon name=\"anyM\">\n" +
+"</xd:json>\n" +
+"<xd:json name=\"anyM\">\n" +
 //" { %anyName: %anyObj }\n"+
 " {%anyName:\n" +
 "   [%oneOf, \"jvalue()\",\n" +
 "     [%script=\"ref Any; finally outln('MM')\"],\n" +
 "   ]\n" +
 " }\n" +
-"</xd:xon>\n" +
+"</xd:json>\n" +
 "<xd:component> %class "+_package+".MyTestXX10 %link X#Any; </xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
@@ -1415,14 +1415,14 @@ clearSources();
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='Skladby'>\n"+
-"<xd:xon name=\"Skladby\">\n"+
+"<xd:json name=\"Skladby\">\n"+
 "  {\n" +
 "     \"Style\": [ %oneOf,\n" +
 "       [ \"occurs 2..* string()\" ],\n" +
 "       \"string()\"\n" +
 "     ]\n" +
 "  }\n" +
-"</xd:xon>\n"+
+"</xd:json>\n"+
 "<xd:component>%class "+_package+".MyTestXX13 %link Skladby</xd:component>\n"+
 "</xd:def>";
 			s ="{\"Style\": \"Classic\"}";
@@ -1445,9 +1445,9 @@ clearSources();
 		try {
 			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
-"<xd:xon name='A'>\n" +
+"<xd:json name='A'>\n" +
 "{ a:\"?int();\" }\n" +
-"</xd:xon>\n" +
+"</xd:json>\n" +
 "<xd:component>%class "+_package+".MyTestXX14 %link A</xd:component>\n"+
 "</xd:def>";
 			s = "{ }";
@@ -1469,14 +1469,14 @@ clearSources();
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='Skladby'>\n"+
-"<xd:xon name=\"Skladby\">\n"+
+"<xd:json name=\"Skladby\">\n"+
 "  {\n" +
 "     \"Style\": [ %oneOf,\n" +
 "       [ \"occurs 2..* string()\" ],\n" +
 "       \"string()\"\n" +
 "     ]\n" +
 "  }\n" +
-"</xd:xon>\n"+
+"</xd:json>\n"+
 "<xd:component>%class "+_package+".MyTestXX15 %link Skladby</xd:component>\n"+
 "</xd:def>";
 			s = "  { \"Style\": \"Classic\" }";
@@ -1499,7 +1499,7 @@ clearSources();
 		try {
 			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' xd:root='a'>\n" +
-"<xd:xon name='a'>\n" +
+"<xd:json name='a'>\n" +
 "[\n" +
 "  { %script= \"occurs 1..*\",\n" +
 "    \"Genre\": [ %oneOf,\n" +
@@ -1508,7 +1508,7 @@ clearSources();
 "    ]\n" +
 "  }\n" +
 "]\n" +
-"</xd:xon>\n" +
+"</xd:json>\n" +
 "<xd:component>%class "+_package+".MyTestXX16 %link a</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
@@ -1531,9 +1531,9 @@ clearSources();
 		try {
 			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n"+
-"<xd:xon name='A'>\n" +
+"<xd:json name='A'>\n" +
 "{ a:\" int();\" }\n" +
-"</xd:xon>\n" +
+"</xd:json>\n" +
 "<xd:component>%class "+_package+".MyTestXX17 %link A</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
@@ -1547,9 +1547,9 @@ clearSources();
 		try {
 			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' xd:root='a'>\n" +
-"<xd:xon name='a'>\n" +
+"<xd:json name='a'>\n" +
 "{ \"\": \"jstring()\" }\n" +
-"</xd:xon>\n" +
+"</xd:json>\n" +
 "<xd:component>%class "+_package+".MyTestXX18 %link a</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
@@ -1561,9 +1561,9 @@ clearSources();
 		try {
 			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' xd:root='a'>\n" +
-"<xd:xon name='a'>\n" +
+"<xd:json name='a'>\n" +
 "{ \"\": \"jstring()\" }\n" +
-"</xd:xon>\n" +
+"</xd:json>\n" +
 "<xd:component>%class "+_package+".MyTestXX19 %link a</xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
@@ -1576,7 +1576,7 @@ clearSources();
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' name=\"Example\" root=\"test\">\n" +
 "<xd:component>%class "+_package+".MyTestXX20 %link test</xd:component>\n"+
-"  <xd:xon name=\"test\">\n" +
+"  <xd:json name=\"test\">\n" +
 "    { date: \"date()\",\n" +
 "      cities: [\n" +
 "        { %script = \"occurs 1..*;\",\n" +
@@ -1590,7 +1590,7 @@ clearSources();
 "        }"+
 "      ]\n" +
 "    }\n" +
-"  </xd:xon>\n" +
+"  </xd:json>\n" +
 "</xd:def>";
 			xp = compile(xdef);
 			genAndCopyXComponents(xp);

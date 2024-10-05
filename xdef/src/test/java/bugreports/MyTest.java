@@ -298,9 +298,9 @@ if(true)return;
 //if(true)return;
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='X'>\n" +
-"  <xd:xon name = 'X'>\n" +
+"  <xd:json name = 'X'>\n" +
 "     [\"* jvalue();\"]\n" +
-"  </xd:xon>\n" +
+"  </xd:json>\n" +
 "  <xd:component>%class "+_package+".MyTest_jvalue %link X</xd:component>\n" +
 "</xd:def>";
 			xp = compile(xdef);
@@ -359,10 +359,10 @@ if(true)return;
 		try {// test %anyName in map
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' name=\"A\" root=\"test\">\n"+
-"<xd:xon name=\"test\">\n"+
+"<xd:json name=\"test\">\n"+
 "  [%oneOf=\"ref A\"]\n"+
-"</xd:xon>\n"+
-"<xd:xon name=\"A\">\n"+
+"</xd:json>\n"+
+"<xd:json name=\"A\">\n"+
 " [%oneOf,\n"+
 "    \"jvalue();\",\n"+
 "    [\"* jvalue();\" ],\n"+
@@ -374,7 +374,7 @@ if(true)return;
 "       ]\n"+
 "    }\n"+
 "  ]\n"+
-"</xd:xon>\n"+
+"</xd:json>\n"+
 "<xd:component> %class mytests.MyTestX_AnyX %link A#test; </xd:component>\n"+
 "</xd:def>";
 			xp = compile(xdef);
@@ -394,13 +394,13 @@ if(true)return;
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='network'>\n" +
-"<xd:xon name='network'>\n" +
+"<xd:json name='network'>\n" +
 "{\n" +
 "  a: \"optional string();\"\n" +
 "  b: {%script=\"optional\", a: \"optional string();\"}\n" +
 "  c: [%script=\"optional\", \"int();\", { a: \"int();\"}]\n" +
 "}\n" +
-"</xd:xon>\n" +
+"</xd:json>\n" +
 "</xd:def>";
 			System.setProperty(XConstants.XDPROPERTY_XDEF_DBGSWITCHES,
 				XConstants.XDPROPERTYVALUE_DBG_SHOWXON);
@@ -456,9 +456,9 @@ if(true)return;
 "<xd:declaration>\n" +
 "  external method String bugreports.MyTest.xxx(XXNode);\n" +
 "</xd:declaration>\n" +
-"<xd:xon name='a'>\n" +
+"<xd:json name='a'>\n" +
 "  [ %script=\"finally outln(xxx());\", \"gps();\", \"gps();\"]\n" +
-"</xd:xon>\n" +
+"</xd:json>\n" +
 "<xd:component>\n" +
 "  %class bugreports.MyTesta %link a;\n" +
 "</xd:component>\n" +
@@ -502,15 +502,15 @@ if(true)return;
 "    </s:array>\n" +
 "  </e>\n" +
 "</x>\n" +
-"<xd:xon name='y'>\n" +
+"<xd:json name='y'>\n" +
 "  \"int();\"\n" +
-"</xd:xon>\n" +
-"<xd:xon name='y1'>\n" +
+"</xd:json>\n" +
+"<xd:json name='y1'>\n" +
 "  {\"a\":\"int();\"}\n" +
-"</xd:xon>\n" +
-"<xd:xon name='y2'>\n" +
+"</xd:json>\n" +
+"<xd:json name='y2'>\n" +
 "  [\"occurs 2 int();\", \"optional jnumber();\", \"optional string();\"]\n" +
-"</xd:xon>\n" +
+"</xd:json>\n" +
 "<xd:component>\n" +
 "  %class bugreports.MyTest_X %link x;\n" +
 "  %class bugreports.MyTest_Y %link y;\n" +
@@ -595,9 +595,9 @@ if(true)return;
 		try {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='z'>\n" +
-"<xd:xon name='z'>\n" +
+"<xd:json name='z'>\n" +
 "  [\"* int();\"]\n" +
-"</xd:xon>\n" +
+"</xd:json>\n" +
 "<xd:component>%class bugreports.MyTest_Z %link z;</xd:component>\n" +
 "</xd:def>";
 			xp = compile(xdef);

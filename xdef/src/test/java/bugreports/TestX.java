@@ -34,7 +34,7 @@ public class TestX extends XDTester {
 				XConstants.XDPROPERTYVALUE_DBG_SHOWXON);
 			xdef =
 "<xd:def xmlns:xd=\""+_xdNS+"\" name=\"X\" root=\"a\">\n"+
-" <xd:xon name='a'>\n"+
+" <xd:json name='a'>\n"+
 "[\n" +
 "  { %script= \"occurs 1..*\",\n" +
 "    \"Name\": \"string()\",\n" +
@@ -44,7 +44,7 @@ public class TestX extends XDTester {
 "    ]\n" +
 "  }\n" +
 "]\n" +
-" </xd:xon>\n"+
+" </xd:json>\n"+
 "</xd:def>";
 			xp = XDFactory.compileXD(props, xdef); // no property
 			xd = xp.createXDDocument();
@@ -67,12 +67,12 @@ public class TestX extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd=\""+_xdNS+"\" name=\"X\" root=\"a\">\n"+
-" <xd:xon name='a'>\n"+
+" <xd:json name='a'>\n"+
 "{ %oneOf= \"optional;\",\n" +
 "  \"manager\": \"string()\",\n" +
 "  \"subordinates\":[ \"* string();\" ]\n" +
 "}\n" +
-" </xd:xon>\n"+
+" </xd:json>\n"+
 "</xd:def>";
 			xp = XDFactory.compileXD(props, xdef); // no property
 			xd = xp.createXDDocument();
@@ -94,13 +94,13 @@ public class TestX extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd=\""+_xdNS+"\" name=\"X\" root=\"a\">\n"+
-" <xd:xon name='a'>\n"+
+" <xd:json name='a'>\n"+
 "[\n" +
 "  {\n" +
 "    \"A\": [%oneOf= \"occurs *\", \"string()\", [\"occurs 1..* string()\"]]\n"+
 "  }\n" +
 "]\n" +
-" </xd:xon>\n"+
+" </xd:json>\n"+
 "</xd:def>";
 			xp = XDFactory.compileXD(props, xdef); // no property
 			xd = xp.createXDDocument();
@@ -118,7 +118,7 @@ public class TestX extends XDTester {
 			assertNoErrorwarnings(reporter);
 			xdef =
 "<xd:def xmlns:xd=\""+_xdNS+"\" name=\"X\" root=\"a\">\n"+
-" <xd:xon name='a'>\n"+
+" <xd:json name='a'>\n"+
 "   { \"date\" : \"date()\",\n" +
 "     \"cities\"  : [\n" +
 "       { %script= \"occurs 1..*\",\n" +
@@ -129,7 +129,7 @@ public class TestX extends XDTester {
 "        }\n" +
 "      ]\n" +
 "  }\n" +
-" </xd:xon>\n"+
+" </xd:json>\n"+
 "</xd:def>";
 			xp = XDFactory.compileXD(props, xdef); // no property
 			xd = xp.createXDDocument();
@@ -152,12 +152,12 @@ public class TestX extends XDTester {
 		try {
 			xdef =
 "<xd:def xmlns:xd=\""+_xdNS+"\" name=\"X\" root=\"a\">\n"+
-" <xd:xon name='a'>\n"+
+" <xd:json name='a'>\n"+
 "  {\n" +
 "    \"A\":  \"string()\",\n" +
 "    \"B\":  \"string()\",\n" +
 "  }\n" +
-" </xd:xon>\n"+
+" </xd:json>\n"+
 "</xd:def>";
 			xp = XDFactory.compileXD(props, xdef); // no property
 			xd = xp.createXDDocument();
