@@ -448,10 +448,10 @@ public final class TestErrors extends XDTester {
 //        1         2         3         4        5          6         7
 //234567890123456789012345678901234567890123456789012345678901234567890123456789
 "<xd:def xmlns:xd='"+_xdNS+"' root='A'>\n" +
-"<xd:xon name='A'>{\"\": \"5 int()\"}</xd:xon>\n" +
+"<xd:json name='A'>{\"\": \"5 int()\"}</xd:json>\n" +
 "</xd:def>";
 			reporter = test(props, xdef);
-			assertEq("", chkReport(reporter, "XDEF535", "2", "23", null));
+			assertEq("", chkReport(reporter, "XDEF535", "2", "24", null));
 			assertNull(reporter.getReport(), reporter.printToString());
 			xdef =
 //        1         2         3         4        5          6         7
