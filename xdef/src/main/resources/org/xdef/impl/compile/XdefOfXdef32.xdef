@@ -80,8 +80,7 @@
               name = "required QName; options acceptQualifiedAttr" >
               required xon;
           </XD3.2:xon>
-          <XD3.2:any xd:script = "occurs *;
-                            match @XD3.2:name; ref XD3.2:anyDef;
+          <XD3.2:any xd:script = "occurs *; match @XD3.2:name; ref XD3.2:anyDef;
                             options moreAttributes, moreElements"
               XD3.2:name = "required QName;" />
           <xd:any xd:script = "occurs *; ref xelement" />
@@ -138,8 +137,7 @@
     <XD3.2:sequence xd:script = "occurs *; ref XD3.2:sequenceDef" />
     <XD3.2:list xd:script = "occurs *;
                       match @ref || @XD3.2:ref; ref XD3.2:listRef"/>
-    <XD3.2:any xd:script = "occurs *;
-                      match @XD3.2:ref; ref XD3.2:anyRef"/>
+    <XD3.2:any xd:script = "occurs *; match @XD3.2:ref; ref XD3.2:anyRef"/>
     <XD3.2:any xd:script = "occurs *; match !@XD3.2:ref; ref xelement"/>
     <xd:any xd:script = "occurs *; ref xelement" />
     <XD3.2:text> optional valueScript; </XD3.2:text>

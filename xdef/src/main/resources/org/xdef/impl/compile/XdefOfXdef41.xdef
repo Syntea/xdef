@@ -96,8 +96,7 @@
               name = "required QName; options acceptQualifiedAttr" >
               required string; /*iniprops;*/
           </XD4.1:ini>
-          <XD4.1:any xd:script = "occurs *;
-                            match @XD4.1:name; ref XD4.1:anyDef;
+          <XD4.1:any xd:script = "occurs *; match @XD4.1:name; ref XD4.1:anyDef;
                             options moreAttributes, moreElements"
               XD4.1:name = "required QName;" />
           <xd:any xd:script = "occurs *; ref xelement" />
@@ -154,8 +153,7 @@
     <XD4.1:sequence xd:script = "occurs *; ref XD4.1:sequenceDef" />
     <XD4.1:list xd:script = "occurs *;
                       match @ref || @XD4.1:ref; ref XD4.1:listRef"/>
-    <XD4.1:any xd:script = "occurs *;
-                      match @XD4.1:ref; ref XD4.1:anyRef"/>
+    <XD4.1:any xd:script = "occurs *; match @XD4.1:ref; ref XD4.1:anyRef"/>
     <XD4.1:any xd:script = "occurs *; match !@XD4.1:ref; ref xelement"/>
     <xd:any xd:script = "occurs *; ref xelement" />
     <XD4.1:text> optional valueScript; </XD4.1:text>
