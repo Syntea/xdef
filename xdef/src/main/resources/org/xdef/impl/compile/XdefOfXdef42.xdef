@@ -99,11 +99,11 @@
               name = "required QName; options acceptQualifiedAttr" />
           <XD4.2:json xd:script = "occurs *;"
               name = "required QName; options acceptQualifiedAttr" >
-              required xon;
+              required xonScript;
           </XD4.2:json>
           <XD4.2:xon xd:script = "occurs *;"
               name = "required QName; options acceptQualifiedAttr" >
-              required xon;
+              required xonScript;
           </XD4.2:xon>
           <XD4.2:ini xd:script = "occurs *;"
               name = "required QName; options acceptQualifiedAttr" >

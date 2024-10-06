@@ -55,7 +55,7 @@
   type yesNo XDScript.rule('YesNo');
   type lexicon XDScript.rule('Lexicon');
   type importLocal XDScript.rule('importLocal');
-  type xon XDScript.rule('xon');
+  type xonScript XDScript.rule('XONScript');
   type iniprops XDScript.rule('INIProps');
 
   /* The attribute name must start with the prefix "impl-", the value
@@ -717,7 +717,7 @@ ININewLine ::= (#13 #10 | #10)+
 INIOctalDigit ::= [0-7]
 
 INIEscapedChar ::=
-   "\" ( INIOctalDigit | "n" | "t" | "t" | "f" | ":" | HexaDigit{4} )
+  "\" ( INIOctalDigit | "n" | "t" | "t" | "f" | ":" | HexaDigit{4} )
 
 INIBaseChar ::= INISP | [ -Z^-~]
   /* ASCII characters without control characters, backslash, brackets */
@@ -733,28 +733,17 @@ INIComment ::= "#" INIChar*
 INIProp ::= INISP? (INIChar  - "=")+ INISP? "=" (INIChar - ININewLine)*
 
 INISection::= INISP? "[" INISP? (INIChar - "]")+ INISP? "]"
-   INISP? ("%script" INISP? "=" INISP? (INIChar - ININewLine)* )?
+  INISP? ("%script" INISP? "=" INISP? (INIChar - ININewLine)* )?
 
 INIProps ::= INICommand*
 
-
 /******************************************************************************/
-/* XON BNF grammar rules                                                     */
+/* XON X-script                                                               */
 /******************************************************************************/
 
 XONComment ::= "/*" ([^*]+ | "*" - "*/")* "*/"
 
 XONSP ::= (WhiteSpace | XONComment)+ /* sequence of whitespaces and comments */
-
-XONInt ::= "-"? Digits
-
-XONExp ::= [eE] ("+" | "-")? Digits
-
-XONFrac ::= "." Digits
-
-XONFloat ::= XONInt XONFrac XONExp | XONInt XONFrac | XONInt XONExp
-
-XONNumber ::= XONFloat | XONInt
 
 XONControlchar ::= '\"' | '\\' | '\/' | '\b' | '\f' | '\n' | '\r' | '\t' |
   ('\u' [0-9a-fA-F]{4})
@@ -766,20 +755,19 @@ XONXscript ::= XONSP? ( ("%script" XONSP? "=" XONSP? XONString)
   | ( "%oneOf" (XONSP? "=" XONSP? XONString)? ) ) (XONSP? ",")?
 
 XONPair ::= ("%anyName" (XONSP? "=" XONSP? XONString)?
-  | $ncName | XONString) XONSP? ":" XONSP? XONValue
+  | $ncName | XONString) XONSP? ":" XONSP? XONScriptValue
 
 XONMembers ::= XONSP? XONPair (XONSP? "," XONSP? XONPair)* (XONSP? ",")?
 
 XONObject ::= "{" XONXscript? XONMembers? XONSP? "}"
 
-XONList ::= XONValue (XONSP? "," XONSP? XONValue )* (XONSP? ",")?
+XONList ::= XONScriptValue (XONSP? "," XONSP? XONScriptValue )* (XONSP? ",")?
 
 XONArray ::= "[" XONXscript? XONSP? XONList? XONSP? "]"
 
-XONValue ::= XONSP? ( XONPair | "null" | "true" | "false" | XONNumber | "%any"
-  | XONString | XONArray | XONObject) XONSP?
+XONScriptValue ::= XONSP? ( "%any" | XONString | XONArray | XONObject) XONSP?
 
-xon ::= XONSP? (XONArray | XONObject | XONString)
+XONScript ::= XONSP? (XONArray | XONObject | XONString)
 
 ]]>
   </xd:BNFGrammar>
