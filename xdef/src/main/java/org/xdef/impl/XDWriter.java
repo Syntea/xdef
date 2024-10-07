@@ -9,6 +9,7 @@ import org.xdef.XDBytes;
 import org.xdef.XDContainer;
 import org.xdef.XDNamedValue;
 import org.xdef.XDParser;
+import org.xdef.XDRegex;
 import org.xdef.XDValue;
 import static org.xdef.XDValueID.XD_ANYURI;
 import static org.xdef.XDValueID.XD_BIGINTEGER;
@@ -58,7 +59,6 @@ import org.xdef.impl.code.DefGPSPosition;
 import org.xdef.impl.code.DefLocale;
 import org.xdef.impl.code.DefParseResult;
 import org.xdef.impl.code.DefPrice;
-import org.xdef.impl.code.DefRegex;
 import org.xdef.impl.code.DefXPathExpr;
 import org.xdef.impl.code.ParseItem;
 import org.xdef.impl.xml.KNamespace;
@@ -243,9 +243,9 @@ public final class XDWriter extends SObjectWriter {
 						return;
 					}
 					case XD_REGEX: {
-						DefRegex y = (DefRegex) x;
+						XDRegex y = (XDRegex) x;
 						writeString(y.sourceValue());
-						writeBoolean(y.isXML());
+						writeBoolean(y.isXMLSchema());
 						return;
 					}
 					case XD_STRING:

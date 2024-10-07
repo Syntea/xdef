@@ -470,7 +470,6 @@ import org.xdef.impl.code.DefObject;
 import org.xdef.impl.code.DefOutStream;
 import org.xdef.impl.code.DefParseResult;
 import org.xdef.impl.code.DefPrice;
-import org.xdef.impl.code.DefRegex;
 import org.xdef.impl.code.DefReport;
 import org.xdef.impl.code.DefString;
 import org.xdef.impl.code.DefURI;
@@ -1822,7 +1821,7 @@ public final class XCodeProcessor {
 					continue;
 				}
 				case COMPILE_REGEX: //string to regex
-					_stack[sp] = new DefRegex(_stack[sp].toString(), false);
+					_stack[sp] = new XDRegex(_stack[sp].toString(), false);
 					continue;
 				case CHAR_AT: { // charAt
 					int i = _stack[sp--].intValue();

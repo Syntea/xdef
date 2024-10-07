@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.2.7, release-date 2024-10-06
+# Version 42.2.7, release-date 2024-10-07
 * Fixed bug in conversion from XML schema regular expression to Java regular
   expression in reading of XDPool object from a file.
 

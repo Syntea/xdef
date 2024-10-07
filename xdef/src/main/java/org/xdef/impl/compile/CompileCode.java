@@ -13,6 +13,7 @@ import org.xdef.XDConstants;
 import org.xdef.XDContainer;
 import org.xdef.XDNamedValue;
 import org.xdef.XDParser;
+import org.xdef.XDRegex;
 import org.xdef.XDValue;
 import static org.xdef.XDValueID.XD_ANY;
 import static org.xdef.XDValueID.XD_BIGINTEGER;
@@ -61,7 +62,6 @@ import org.xdef.impl.code.DefDouble;
 import org.xdef.impl.code.DefLocale;
 import org.xdef.impl.code.DefLong;
 import org.xdef.impl.code.DefNull;
-import org.xdef.impl.code.DefRegex;
 import org.xdef.impl.code.DefString;
 import org.xdef.impl.code.DefXPathExpr;
 import org.xdef.impl.code.DefXQueryExpr;
@@ -2665,7 +2665,7 @@ public final class CompileCode extends CompileBase {
 					}
 					if (par1const >= 0) {//constant
 						try {
-							replaceTop(new DefRegex(
+							replaceTop(new XDRegex(
 								getCodeItem(par1const).toString(), false));
 						} catch (Exception ex) {
 							if (ex instanceof SThrowable) {

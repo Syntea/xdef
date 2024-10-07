@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 import java.util.Iterator;
 import java.util.Set;
 import org.xdef.XDPool;
+import org.xdef.XDRegex;
 import org.xdef.XDValue;
 import org.xdef.XDValueID;
 import static org.xdef.XDValueID.XD_REGEX;
@@ -100,7 +101,7 @@ public class CodeDisplay implements CodeTable, XDValueID {
 				return "CONST" + getTypeAbbrev(type)
 					+ " " + (type == XD_STRING ? item instanceof DefString
 					? ((DefString) item).sourceValue() : item.toString()
-					: type == XD_REGEX ? ((DefRegex) item).sourceValue()
+					: type == XD_REGEX ? ((XDRegex) item).sourceValue()
 					: type == XD_XPATH ? ((DefXPathExpr) item).sourceValue()
 					: item.toString());
 			case LD_CODE:

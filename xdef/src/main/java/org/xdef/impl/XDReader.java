@@ -6,6 +6,7 @@ import java.lang.reflect.Method;
 import org.xdef.XDContainer;
 import org.xdef.XDNamedValue;
 import org.xdef.XDParser;
+import org.xdef.XDRegex;
 import org.xdef.XDValue;
 import static org.xdef.XDValueID.XD_ANYURI;
 import static org.xdef.XDValueID.XD_BIGINTEGER;
@@ -90,7 +91,6 @@ import org.xdef.impl.code.DefObject;
 import org.xdef.impl.code.DefOutStream;
 import org.xdef.impl.code.DefParseResult;
 import org.xdef.impl.code.DefPrice;
-import org.xdef.impl.code.DefRegex;
 import org.xdef.impl.code.DefSQLResultSet;
 import org.xdef.impl.code.DefSQLService;
 import org.xdef.impl.code.DefSQLStatement;
@@ -284,7 +284,7 @@ public final class XDReader extends SObjectReader {
 						return y;
 					}
 					case XD_REGEX:
-						return new DefRegex(readString(), readBoolean());
+						return new XDRegex(readString(), readBoolean());
 					case XD_STRING:
 						return new DefString(readString());
 					case XD_XQUERY: {

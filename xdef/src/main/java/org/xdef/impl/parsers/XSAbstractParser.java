@@ -13,7 +13,6 @@ import org.xdef.proc.XXNode;
 import org.xdef.impl.code.DefContainer;
 import org.xdef.impl.code.DefLong;
 import org.xdef.impl.code.DefParseResult;
-import org.xdef.impl.code.DefRegex;
 import org.xdef.impl.code.DefString;
 import org.xdef.XDContainer;
 import static org.xdef.XDParser.ARGUMENT;
@@ -35,6 +34,7 @@ import static org.xdef.XDParser.PATTERN;
 import static org.xdef.XDParser.SEPARATOR;
 import static org.xdef.XDParser.TOTALDIGITS;
 import static org.xdef.XDParser.WHITESPACE;
+import org.xdef.XDRegex;
 import static org.xdef.XDValueID.XD_CONTAINER;
 import org.xdef.impl.code.DefJNull;
 import org.xdef.xon.XonTools;
@@ -56,7 +56,7 @@ public abstract class XSAbstractParser extends XDParserAbstract
 	 * trailing #x20's are removed.
 	 */
 	protected byte _whiteSpace; //r replace, c collapse, 0 preserve
-	protected DefRegex[] _patterns;
+	protected XDRegex[] _patterns;
 
 	protected XSAbstractParser() {}
 
@@ -364,9 +364,9 @@ public abstract class XSAbstractParser extends XDParserAbstract
 		if (pats == null || pats.length == 0) {
 			_patterns = null;
 		} else {
-			_patterns = new DefRegex[pats.length];
+			_patterns = new XDRegex[pats.length];
 			for (int i = 0; i < pats.length; i++) {
-				_patterns[i] = new DefRegex(pats[i].toString(), true);
+				_patterns[i] = new XDRegex(pats[i].toString(), true);
 			}
 		}
 	}
@@ -375,7 +375,7 @@ public abstract class XSAbstractParser extends XDParserAbstract
 		if (_patterns == null || !p.matches()) {
 			return;
 		}
-		for (DefRegex x: _patterns) {
+		for (XDRegex x: _patterns) {
 			if (x.matches(p.getSourceBuffer())) {
 				return; // found pattern; OK
 			}
@@ -440,7 +440,7 @@ public abstract class XSAbstractParser extends XDParserAbstract
 		if (en != null && en.length > 0) {
 			map.setXDNamedItem("enumeration", new DefContainer(en));
 		}
-		DefRegex[] p = getPatterns();
+		XDRegex[] p = getPatterns();
 		if (p != null && p.length > 0) {
 			XDValue[] q = new XDValue[p.length];
 			for (int j = 0; j < p.length; j++) {
@@ -478,7 +478,7 @@ public abstract class XSAbstractParser extends XDParserAbstract
 			}
 		}
 	}
-	public DefRegex[] getPatterns() {return _patterns;}
+	public XDRegex[] getPatterns() {return _patterns;}
 
 	@Override
 	/** Get result type ID of parsing.
