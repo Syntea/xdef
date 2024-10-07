@@ -37,6 +37,7 @@ import org.xdef.XDParser;
 import org.xdef.XDPool;
 import org.xdef.XDRegex;
 import org.xdef.XDRegexResult;
+import org.xdef.XDReport;
 import org.xdef.XDResultSet;
 import org.xdef.XDService;
 import org.xdef.XDStatement;
@@ -470,7 +471,6 @@ import org.xdef.impl.code.DefObject;
 import org.xdef.impl.code.DefOutStream;
 import org.xdef.impl.code.DefParseResult;
 import org.xdef.impl.code.DefPrice;
-import org.xdef.impl.code.DefReport;
 import org.xdef.impl.code.DefString;
 import org.xdef.impl.code.DefURI;
 import org.xdef.impl.code.DefXPathExpr;
@@ -2410,7 +2410,7 @@ public final class XCodeProcessor {
 						case 1:
 							if (_stack[sp].getItemId() == XD_REPORT) {
 								Report r =  // report is in argument
-									((DefReport)_stack[sp]).reportValue();
+									((XDReport)_stack[sp]).reportValue();
 								_reporter.putReport(Report.error(r.getMsgID(),
 									r.getText(), r.getModification()));
 							} else { // text of report
@@ -3308,8 +3308,8 @@ public final class XCodeProcessor {
 				}
 				case GET_PARSED_ERROR: {//result.getError()
 					XDParseResult x = (XDParseResult) _stack[sp];
-					_stack[sp] = x.matches() ? new DefReport() :
-						new DefReport(x.getReporter().getLastErrorReport());
+					_stack[sp] = x.matches() ? new XDReport() :
+						new XDReport(x.getReporter().getLastErrorReport());
 					continue;
 				}
 				case SET_PARSED_STRING: {//result.setSourceString

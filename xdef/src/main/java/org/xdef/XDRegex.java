@@ -14,10 +14,11 @@ import static org.xdef.sys.SParser.NOCHAR;
 import org.xdef.sys.SRuntimeException;
 import org.xdef.sys.StringParser;
 
-/** Regular expression in x-script.
+/** Implementation of X-script value of regular expression.
  * @author Vaclav Trojan
  */
-public class XDRegex extends XDValueAbstract {
+public final class XDRegex extends XDValueAbstract {
+
 	/** The source of regular expression. */
 	private final String _source;
 	/** Compiled pattern of regular expression. */
@@ -25,13 +26,15 @@ public class XDRegex extends XDValueAbstract {
 	/** Compiled pattern of regular expression. */
 	private final boolean _mode;
 
-	/** Creates a new instance of DefRegex. */
-	public XDRegex() {this(".*", false);}
+	/** Creates null instance of XDRegex. */
+	public XDRegex() {
+		_source = null; _value = null; _mode = false;
+	}
 
-	/** Creates a new instance of DefRegex.
-	 * @param s The string with regular expression.
-	 * @param mode if true it is XML schema regular expression, otherwise
-	 * it is Java regular expression format.
+	/** Creates new instance of XDRegex.
+	 * @param s The string with regular expression source.
+	 * @param mode if true, then it is a regular expression in XML Schema
+	 * format, otherwise it is a regular expression in Java format.
 	 * @throws SRuntimeException if an error occurs.
 	 */
 	public XDRegex(final String s, final boolean mode) {
@@ -48,6 +51,10 @@ public class XDRegex extends XDValueAbstract {
 			throw new SRuntimeException(XDEF.XDEF650, s + "; (" + t + ")");
 		}
 	}
+
+////////////////////////////////////////////////////////////////////////////////
+// Implemented of methods of XDRegex
+////////////////////////////////////////////////////////////////////////////////
 
 	/** Check if given data matches the regular expression.
 	 * @param x The data to be checked.
@@ -78,6 +85,7 @@ public class XDRegex extends XDValueAbstract {
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDValue interface
 ////////////////////////////////////////////////////////////////////////////////
+
 	@Override
 	/** Get type of value.
 	 * @return The id of item type.
@@ -100,6 +108,9 @@ public class XDRegex extends XDValueAbstract {
 	 */
 	public final String stringValue() {return _source;}
 	@Override
+	/** Check whether some other XDValue object is "equal to" this one.
+	 * @return true if and only if the argument is equal to this one.
+	 */
 	public final boolean equals(final XDValue arg) {
 		if (isNull()) {
 			return arg == null || arg.isNull();
@@ -107,23 +118,25 @@ public class XDRegex extends XDValueAbstract {
 		if (arg == null || arg.isNull() || arg.getItemId() != XD_REGEX) {
 			return false;
 		}
-		return _source.equals(arg.stringValue());
+		return _source==null ? arg.isNull() : _source.equals(arg.stringValue());
 	}
 	@Override
-	/** Clone the item (here return just this item).
-	 * @return the object with the copy of this one.
+	/** Check if the object is null.
+	 * @return true if the object is null otherwise returns false.
 	 */
-	public final XDValue cloneItem() {return this;}
+	public boolean isNull() {return _source == null;}
 
 ////////////////////////////////////////////////////////////////////////////////
 
-	/* Translates XML Schema regular expression syntax into JDK syntax.
+	/* Translates a source of XML Schema regular expression into Java format.
+	 * (This code ia the modified version of the source code originally written
+	 * by James Clark and modified by Michael Kay.)
 	 * @see java.util.regex.Pattern
 	 * @see <a href="http://www.w3.org/TR/xmlschema-2/#regexs">
 	 *   XML Schema Part 2</a>
-	 * (This code ia the modified version of the source code originally written
-	 * by James Clark and modified by Michael Kay.)
-	 * *** Syntax of XML schema regular expression ***
+	 * ***********************************************
+	 * *   Syntax of XML schema regular expression   *
+	 * ***********************************************
 	 * regExp ::= branch ( '|' branch )*
 	 * branch ::= piece*
 	 * piece ::= atom quantifier?
@@ -506,29 +519,36 @@ public class XDRegex extends XDValueAbstract {
 					for (int i=0; i < BLOCKNAMESDIFFERENT.length; i+=3) {
 						if (name.equals(BLOCKNAMESDIFFERENT[i])) {
 							String p = BLOCKNAMESDIFFERENT[i + 1];
+							String s;
 							if (escChar == 'p') {
-								if (p == null) {
-									_result.append("\\").append(escChar)
-										.append('{').append("In")
-										.append(name).append('}');
-								} else {
-									_result.append(p);
-								}
+								s = p == null ? "\\"+escChar+"(In"+name+')' : p;
+//
+//								if (p == null) {
+//
+//									_result.append("\\").append(escChar)
+//										.append('{').append("In")
+//										.append(name).append('}');
+//								} else {
+//									_result.append(p);
+//								}
 							} else {
 								String q = BLOCKNAMESDIFFERENT[i + 2];
-								if (q == null) {
-									_result.append("\\").append(escChar)
-										.append('{').append("In")
-										.append(name).append('}');
-								} else {
-									if ("^".equals(q)) {
-										_result.append('[').append('^')
-											.append(p.substring(1));
-									} else {
-										_result.append(q);
-									}
-								}
+								s = q == null ? "\\"+escChar+"{In"+name+'}'
+									: "^".equals(q) ? "[^"+p.substring(1) : q;
+//								if (q == null) {
+//									_result.append("\\").append(escChar)
+//										.append('{').append("In")
+//										.append(name).append('}');
+//								} else {
+//									if ("^".equals(q)) {
+//										_result.append('[').append('^')
+//											.append(p.substring(1));
+//									} else {
+//										_result.append(q);
+//									}
+//								}
 							}
+							_result.append(s);
 							return true;
 						}
 					}
@@ -545,29 +565,33 @@ public class XDRegex extends XDValueAbstract {
 					}
 					for (int i=0; i < CATEGORIESDIFFERENT.length; i+=3) {
 						if (name.equals(CATEGORIESDIFFERENT[i])) {
+							String s;
 							String p = CATEGORIESDIFFERENT[i + 1];
 							if (escChar == 'p') {
-								if (p == null) {
-									_result.append("\\").append(escChar)
-										.append('{').append(name).append('}');
-								} else {
-									_result.append(p);
-								}
+								s = p == null ? "\\"+escChar+"{"+name+"}" : p;
+//								if (p == null) {
+//									_result.append("\\").append(escChar)
+//										.append('{').append(name).append('}');
+//								} else {
+//									_result.append(p);
+//								}
 							} else {
 								String q = CATEGORIESDIFFERENT[i + 2];
-								if (q == null) {
-									_result.append("\\").append(escChar)
-										.append('{').append(name).append('}');
-								} else {
-									if ("^".equals(q)) {
-										_result.append('[').append('^')
-											.append(p.substring(1));
-									} else {
-										_result.append(q);
-									}
-								}
+								s = q == null ? "\\"+escChar+"("+name+")"
+									: "^".equals(q) ? "[^"+p.substring(1) : q;
+//								if (q == null) {
+//									_result.append("\\").append(escChar)
+//										.append('{').append(name).append('}');
+//								} else {
+//									if ("^".equals(q)) {
+//										_result.append('[').append('^')
+//											.append(p.substring(1));
+//									} else {
+//										_result.append(q);
+//									}
+//								}
 							}
-							return true;
+							_result.append(s);
 						}
 					}
 					//regex: unrecognized Unicode block name: "&{0}"

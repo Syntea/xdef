@@ -4,21 +4,25 @@ import java.util.regex.Matcher;
 import static org.xdef.XDValueID.XD_REGEXRESULT;
 import static org.xdef.XDValueType.REGEXRESULT;
 
-/** Result of regular expression  in x-script.
+/** Implementation of X-script value of regular expression result.
  * @author Vaclav Trojan
  */
-public class XDRegexResult extends XDValueAbstract {
+public final class XDRegexResult extends XDValueAbstract {
 
 	/** Matcher object generated from the source expression. */
 	private Matcher _value;
 
-	/** Creates a new instance of XDRegexResult. */
+	/** Creates a null instance of XDRegexResult. */
 	public XDRegexResult() {}
 
-	/** Creates a new instance of XDRegexResult.
+	/** Creates new instance of XDRegexResult with matcher from the argument.
 	 * @param matcher The matcher object.
 	 */
 	public XDRegexResult(final Matcher matcher) {_value = matcher;}
+
+////////////////////////////////////////////////////////////////////////////////
+// Implemented methods of XDRegexResult
+////////////////////////////////////////////////////////////////////////////////
 
 	/** Check if given data matches the regular expression.
 	 * @return true if and only if the data matches regular expression.
@@ -73,6 +77,7 @@ public class XDRegexResult extends XDValueAbstract {
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDValue interface
 ////////////////////////////////////////////////////////////////////////////////
+
 	@Override
 	/** Get type of value.
 	 * @return The id of item type.
@@ -98,4 +103,23 @@ public class XDRegexResult extends XDValueAbstract {
 	 * string value.
 	 */
 	public String stringValue() {return String.valueOf(matches());}
+	@Override
+	/** Check whether some other XDValue object is "equal to" this one.
+	 * @return true if and only if the argument is equal to this one.
+	 */
+	public final boolean equals(final XDValue arg) {
+		if (isNull()) {
+			return arg == null || arg.isNull();
+		}
+		if (arg == null || arg.isNull() || arg.getItemId() != XD_REGEXRESULT) {
+			return false;
+		}
+		return _value == null ? arg.isNull()
+			: _value.equals(((XDRegexResult) arg)._value);
+	}
+	@Override
+	/** Check if the object is null.
+	 * @return true if the object is null otherwise returns false.
+	 */
+	public boolean isNull() {return _value == null;}
 }

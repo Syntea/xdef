@@ -14,6 +14,7 @@ import org.w3c.dom.Node;
 import org.xdef.XDContainer;
 import org.xdef.XDRegex;
 import org.xdef.XDRegexResult;
+import org.xdef.XDReport;
 import static org.xdef.XDValueID.XD_ATTR;
 import static org.xdef.XDValueID.XD_BIGINTEGER;
 import static org.xdef.XDValueID.XD_BNFGRAMMAR;
@@ -201,7 +202,7 @@ public final class DefNull extends XDValueAbstract {
 			case XD_ATTR: return new DefAttr();
 			case XD_TEXT: return new DefText();
 			case XD_EXCEPTION: return new DefException();
-			case XD_REPORT: return new DefReport();
+			case XD_REPORT: return new XDReport();
 			case XD_PARSERESULT: return new DefParseResult();
 			case XD_SERVICE: return new DefSQLService();
 			case XD_STATEMENT: return new DefSQLStatement();

@@ -221,7 +221,6 @@ import org.xdef.impl.code.DefObject;
 import org.xdef.impl.code.DefOutStream;
 import org.xdef.impl.code.DefParseResult;
 import org.xdef.impl.code.DefPrice;
-import org.xdef.impl.code.DefReport;
 import org.xdef.impl.code.DefSQLService;
 import org.xdef.impl.code.DefString;
 import org.xdef.impl.code.DefTelephone;
@@ -307,7 +306,6 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 				} catch (SRuntimeException ex) {
 					return DefNull.genNullValue(XD_DURATION);
 				}
-
 			case DURATION_GETYEARS:
 				return p == null || p.isNull()
 					? new DefLong(-1)
@@ -467,7 +465,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 					XDOutput out = (XDOutput) p;
 					rep = out.getLastErrorReport();
 				}
-				return new DefReport(rep);
+				return new XDReport(rep);
 			}
 		}
 		return null;
@@ -1000,14 +998,14 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 			case NEW_REPORT: {
 				int numPar = item.getParam();
 				if (numPar == 1) {
-					stack[sp] = new DefReport(stack[sp].toString());
+					stack[sp] = new XDReport(stack[sp].toString());
 				} else {
 					String modification =
 						numPar == 3 ? stack[sp--].stringValue() : null;
 					String text = stack[sp--].stringValue();
 					String id = stack[sp].stringValue();
 					stack[sp] =
-						new DefReport(Report.text(id, text, modification));
+						new XDReport(Report.text(id, text, modification));
 				}
 				return sp;
 			}
@@ -1156,7 +1154,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 				if (rep == null) {
 					rep = chkNode.getReportWriter().getLastErrorReport();
 				}
-				stack[++sp] = new DefReport(rep);
+				stack[++sp] = new XDReport(rep);
 				return sp;
 			}
 			case IS_CREATEMODE: {
