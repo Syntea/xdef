@@ -11,8 +11,11 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xdef.XDConstants;
 import org.xdef.XDContainer;
+import org.xdef.XDCurrency;
 import org.xdef.XDEmailAddr;
+import org.xdef.XDGPSPosition;
 import org.xdef.XDParseResult;
+import org.xdef.XDPrice;
 import org.xdef.XDValue;
 import static org.xdef.XDValueID.XD_ELEMENT;
 import static org.xdef.XDValueID.XX_ELEMENT;
@@ -21,16 +24,13 @@ import org.xdef.impl.code.DefBigInteger;
 import org.xdef.impl.code.DefBoolean;
 import org.xdef.impl.code.DefChar;
 import org.xdef.impl.code.DefContainer;
-import org.xdef.impl.code.DefCurrency;
 import org.xdef.impl.code.DefDate;
 import org.xdef.impl.code.DefDecimal;
 import org.xdef.impl.code.DefDouble;
 import org.xdef.impl.code.DefDuration;
-import org.xdef.impl.code.DefGPSPosition;
 import org.xdef.impl.code.DefIPAddr;
 import org.xdef.impl.code.DefLong;
 import org.xdef.impl.code.DefNull;
-import org.xdef.impl.code.DefPrice;
 import org.xdef.impl.code.DefString;
 import org.xdef.impl.code.DefXPathExpr;
 import org.xdef.msg.XDEF;
@@ -398,11 +398,11 @@ public final class XExtUtils {
 		} else if (o instanceof InetAddress) {
 			return new DefIPAddr((InetAddress) o);
 		} else if (o instanceof GPSPosition) {
-			return new DefGPSPosition((GPSPosition) o);
+			return new XDGPSPosition((GPSPosition) o);
 		} else if (o instanceof Price) {
-			return new DefPrice((Price) o);
+			return new XDPrice((Price) o);
 		} else if (o instanceof Currency) {
-			return new DefCurrency((Currency) o);
+			return new XDCurrency((Currency) o);
 		}
 		return DefNull.NULL_VALUE;
 	}

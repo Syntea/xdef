@@ -1,36 +1,95 @@
 package org.xdef;
 
+import static org.xdef.XDValueID.XD_GPSPOSITION;
+import static org.xdef.XDValueType.GPSPOSITION;
+import org.xdef.msg.SYS;
+import org.xdef.sys.GPSPosition;
+import org.xdef.sys.SIllegalArgumentException;
+
 /** Value of GPS position in X-script.
  * @author Vaclav Trojan
  */
-public interface XDGPSPosition extends XDValue {
+public final class XDGPSPosition extends XDValueAbstract {
+	/** Value of GPosition. */
+	private final GPSPosition _position;
+
+	/** Create instance of null XDGPSPosition. */
+	public XDGPSPosition() {_position = null;}
+
+	/** Create new instance of XDGPSPosition with given position.
+	 * @param position GPSPosition object.
+	 */
+	public XDGPSPosition(final GPSPosition position) {_position = position;}
+
+////////////////////////////////////////////////////////////////////////////////
+// Implemented methods of XDGPosition
+////////////////////////////////////////////////////////////////////////////////
 
 	/** Get latitude of this position.
-	 * @return latitude latitude of the location; range from -90.0 to 90.0.
+	 * @return latitude latitude of the location; range from -90.0 to 90.0
+	 * or MIN_VALUE if unknown.
 	 */
-	public double latitude();
+	public final double latitude() {return _position.latitude();}
 
 	/** Get longitude of this position.
-	 * @return longitude of the location; range from -180.0 to 180.0.
+	 * @return longitude of the location; range from -180.0 to 180.0
+	 * or MIN_VALUE if unknown.
 	 */
-	public double longitude();
+	public final double longitude() {return _position.longitude();}
 
 	/** Get altitude of this position.
-	 * @return altitude value is in meters may by in meters
-	 * (-6376500.0 to MAX_VALUE) or Double.MIN_VALUE if unknown; note
-	 * 6376500.0 is used as the Earth radius in meters).
+	 * @return altitude value is in meters in the range from -EARTH_RADIUS
+	 * in meters (-6376500) to MAX_VALUE (or MIN_VALUE if unknown).
 	 */
-	public double altitude();
+	public final double altitude() {return _position.altitude();}
+
+	/** Get distance in meters from this position to position from the argument
+	 * (altitude is ignored).
+	 * @param x GPS position to which the distance is computed.
+	 * @return distance from this position to given position (note the
+	 * Earth radius used in Haversine formula is 6376500 m).
+	 */
+	public final double distanceTo(final XDGPSPosition x) {
+		return _position.distanceTo((GPSPosition) x.getObject());
+	}
 
 	/** Get name of this position.
 	 * @return name of the position or null.
 	 */
-	public String name();
+	public String name() {return _position.name();}
 
-	/** Get distance in meters from this position to position from the argument.
-	 * @param x GPS position to which the distance is computed.
-	 * @return distance from this position to given position. Note the
-	 * Earth radius used in Haversine formula is 6376500 m.
-	 */
-	public double distanceTo(final XDGPSPosition x);
+////////////////////////////////////////////////////////////////////////////////
+// Implementation of methods from XDValue interface
+////////////////////////////////////////////////////////////////////////////////
+
+	@Override
+	public boolean equals(final XDValue arg) {
+		if (arg instanceof XDGPSPosition) {
+			XDGPSPosition x = (XDGPSPosition) arg;
+			return _position != null ? _position.equals(x._position)
+				: x._position == null;
+		}
+		return false;
+	}
+	@Override
+	public int compareTo(final XDValue arg) throws IllegalArgumentException {
+		if (arg instanceof XDGPSPosition) {
+			if (this.equals((XDGPSPosition) arg)) {
+				return 0;
+			}
+		}
+		throw new SIllegalArgumentException(SYS.SYS085);//Incomparable arguments
+	}
+	@Override
+	public short getItemId() {return XD_GPSPOSITION;}
+	@Override
+	public XDValueType getItemType() {return GPSPOSITION;}
+	@Override
+	public String stringValue() {return isNull() ? "" : _position.toString();}
+	@Override
+	public boolean isNull() {return _position == null;}
+	@Override
+	public GPSPosition getObject() {return _position;}
+	@Override
+	public String toString() {return _position.toString();}
 }

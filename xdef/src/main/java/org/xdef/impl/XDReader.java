@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import org.xdef.XDContainer;
+import org.xdef.XDGPSPosition;
 import org.xdef.XDNamedValue;
 import org.xdef.XDParser;
+import org.xdef.XDPrice;
 import org.xdef.XDRegex;
 import org.xdef.XDValue;
 import static org.xdef.XDValueID.XD_ANYURI;
@@ -82,7 +84,6 @@ import org.xdef.impl.code.DefDuration;
 import org.xdef.impl.code.DefElement;
 import org.xdef.impl.code.DefEmailAddr;
 import org.xdef.impl.code.DefException;
-import org.xdef.impl.code.DefGPSPosition;
 import org.xdef.impl.code.DefLocale;
 import org.xdef.impl.code.DefLong;
 import org.xdef.impl.code.DefNamedValue;
@@ -90,7 +91,6 @@ import org.xdef.impl.code.DefNull;
 import org.xdef.impl.code.DefObject;
 import org.xdef.impl.code.DefOutStream;
 import org.xdef.impl.code.DefParseResult;
-import org.xdef.impl.code.DefPrice;
 import org.xdef.impl.code.DefSQLResultSet;
 import org.xdef.impl.code.DefSQLService;
 import org.xdef.impl.code.DefSQLStatement;
@@ -240,10 +240,10 @@ public final class XDReader extends SObjectReader {
 						return y;
 					}
 					case XD_GPSPOSITION:
-						return new DefGPSPosition(new GPSPosition(readDouble(),
+						return new XDGPSPosition(new GPSPosition(readDouble(),
 							readDouble(), readDouble(), readString()));
 					case XD_PRICE:
-						return new DefPrice(
+						return new XDPrice(
 							new Price(readBigDecimal(), readString()));
 					case XD_LOCALE: {
 						return new DefLocale(

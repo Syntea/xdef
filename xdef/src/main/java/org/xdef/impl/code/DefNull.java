@@ -12,6 +12,9 @@ import java.math.BigDecimal;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xdef.XDContainer;
+import org.xdef.XDCurrency;
+import org.xdef.XDGPSPosition;
+import org.xdef.XDPrice;
 import org.xdef.XDRegex;
 import org.xdef.XDRegexResult;
 import org.xdef.XDReport;
@@ -77,104 +80,107 @@ public final class DefNull extends XDValueAbstract {
 	/** Get type of value.
 	 * @return The id of item type.
 	 */
-	public short getItemId() {return _type;}
+	public final short getItemId() {return _type;}
 	@Override
 	/** Get ID of the type of value
 	 * @return enumeration item of this type.
 	 */
-	public XDValueType getItemType() {return NULL;}
+	public final XDValueType getItemType() {return NULL;}
 	@Override
 	/** Check if the object is <i>null</i>.
 	 * @return <i>true</i> if the object is <i>null</i> otherwise returns
 	 * <i>false</i>.
 	 */
-	public boolean isNull() {return true;}
+	public final boolean isNull() {return true;}
 	@Override
 	/** Return DefBoolean object as boolean.
 	 * @return the DefBoolean object as boolean.
 	 */
-	public boolean booleanValue() {return false;}
+	public final boolean booleanValue() {return false;}
 	@Override
 	/** Get value as String.
 	 * @return The string from value.
 	 */
-	public String toString() {return "";}
+	public final String toString() {return "";}
 	@Override
 	/** Get string value of this object.
 	 * @return string value of this object.
 	 */
-	public String stringValue() {return null;}
+	public final String stringValue() {return null;}
 	@Override
 	/** Clone the item.
 	 * @return the object with the copy of this one.
 	 */
-	public XDValue cloneItem() {return this;}
+	public final XDValue cloneItem() {return this;}
 	@Override
-	public int hashCode() {return 1;}
+	public final int hashCode() {return 1;}
 	@Override
 	/** Check whether some other XDValue object is "equal to" this one.
 	 * @param arg other XDValue object to which is to be compared.
 	 * @return true if argument is same type as this XDValue and the value
 	 * of the object is comparable and equals to this one.
 	 */
-	public boolean equals(final XDValue arg) {return arg==null || arg.isNull();}
+	public final boolean equals(final XDValue arg) {
+		return arg==null || arg.isNull();
+	}
 	@Override
-	public boolean equals(final Object arg) {
+	public final boolean equals(final Object arg) {
 		if (arg instanceof XDValue) {
 			return ((XDValue) arg).isNull();
 		}
 		return arg == null;
 	}
 	@Override
-	public int intValue() {return 0;}
+	public final int intValue() {return 0;}
 	@Override
-	public long longValue() {return 0;}
+	public final long longValue() {return 0;}
 	@Override
-	public float floatValue() {return 0;}
+	public final float floatValue() {return 0;}
 	@Override
-	public double doubleValue() {return 0;}
+	public final double doubleValue() {return 0;}
 	@Override
-	public BigDecimal decimalValue() {return null;}
+	public final BigDecimal decimalValue() {return null;}
 	@Override
-	public Node getXMLNode() {return null;}
+	public final Node getXMLNode() {return null;}
 	@Override
-	public Element getElement() {return null;}
+	public final Element getElement() {return null;}
 	@Override
 	/** Get SDatetime value.
 	 * @return SDatetime value of this object or return <i>null</i>.
 	 */
-	public SDatetime datetimeValue() {return null;}
+	public final SDatetime datetimeValue() {return null;}
 	@Override
 	/** Get SDuration value.
 	 * @return SDuration value of this object or return <i>null</i>.
 	 */
-	public SDuration durationValue() {return null;}
+	public final SDuration durationValue() {return null;}
 	@Override
 	/** Get XDContainer value.
 	 * @return XDContext value of this object or return <i>null</i>.
 	 */
-	public XDContainer containerValue() {return null;}
+	public final XDContainer containerValue() {return null;}
 	@Override
 	/** Get XDService value.
 	 * @return XDService value of this object or return <i>null</i>.
 	 */
-	public XDService serviceValue() {return null;}
+	public final XDService serviceValue() {return null;}
 	@Override
 	/** Get XDStatement value.
 	 * @return XDStatement value of this object or return <i>null</i>.
 	 */
-	public XDStatement statementValue() {return null;}
+	public final XDStatement statementValue() {return null;}
 	@Override
 	/** Get XDResultSet value.
 	 * @return XDResultSet value of this object or return <i>null</i>.
 	 */
-	public XDResultSet resultSetValue() {return null;}
+	public final XDResultSet resultSetValue() {return null;}
 	@Override
 	/** Get XDParseResult value.
 	 * @return XDParseResult value of this object or return <i>null</i>.
 	 */
-	public XDParseResult parseResultValue() {return null;}
-	public static XDValue genNullValue(final short type) {
+	public final XDParseResult parseResultValue() {return null;}
+	/** Create "null" XD object of given type. */
+	public final static XDValue genNullValue(final short type) {
 		switch (type) {
 			case XD_LONG: return new DefLong();
 			case XD_DECIMAL: return new DefDecimal();
@@ -186,11 +192,11 @@ public final class DefNull extends XDValueAbstract {
 			case XD_DATETIME: return new DefDate();
 			case XD_DURATION: return new DefDuration();
 			case XD_CONTAINER: return new DefContainer();
-			case XD_GPSPOSITION: return new DefGPSPosition();
-			case XD_PRICE: return new DefPrice();
+			case XD_GPSPOSITION: return new XDGPSPosition();
+			case XD_PRICE: return new XDPrice();
 			case XD_EMAIL: return new DefEmailAddr();
 			case XD_IPADDR: return new DefIPAddr();
-			case XD_CURRENCY: return new DefCurrency();
+			case XD_CURRENCY: return new XDCurrency();
 			case XD_REGEX: return new XDRegex();
 			case XD_REGEXRESULT: return new XDRegexResult();
 			case XD_BNFGRAMMAR: return new DefBNFGrammar();

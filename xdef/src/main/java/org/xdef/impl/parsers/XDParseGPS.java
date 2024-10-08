@@ -1,8 +1,8 @@
 package org.xdef.impl.parsers;
 
+import org.xdef.XDGPSPosition;
 import org.xdef.XDParseResult;
 import org.xdef.XDParserAbstract;
-import org.xdef.impl.code.DefGPSPosition;
 import org.xdef.msg.XDEF;
 import org.xdef.proc.XXNode;
 import org.xdef.sys.GPSPosition;
@@ -54,7 +54,7 @@ public class XDParseGPS extends XDParserAbstract {
 						if (!xon || ((p.isSpaces()||true) && p.isChar(')'))) {
 							GPSPosition gpos = new GPSPosition(
 								latitude, longitude, altitude, name);
-							p.setParsedValue(new DefGPSPosition(gpos));
+							p.setParsedValue(new XDGPSPosition(gpos));
 							return;
 						}
 					}
@@ -64,7 +64,7 @@ public class XDParseGPS extends XDParserAbstract {
 			Report r = ex.getReport();
 			p.error(r.getMsgID(), r.getText(), r.getModification());
 		}
-		p.setParsedValue(new DefGPSPosition()); //null GPS
+		p.setParsedValue(new XDGPSPosition()); //null GPS
 		//Incorrect value of '&{0}'&{1}{: }
 		p.errorWithString(XDEF.XDEF809,
 			parserName(), p.getBufferPart(pos, p.getIndex()));

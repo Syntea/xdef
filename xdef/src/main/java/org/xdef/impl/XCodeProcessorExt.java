@@ -15,10 +15,12 @@ import org.xdef.XDContainer;
 import org.xdef.XDCurrency;
 import org.xdef.XDEmailAddr;
 import org.xdef.XDException;
+import org.xdef.XDGPSPosition;
 import org.xdef.XDIPAddr;
 import org.xdef.XDOutput;
 import org.xdef.XDParseResult;
 import org.xdef.XDParser;
+import org.xdef.XDPrice;
 import org.xdef.XDReport;
 import org.xdef.XDService;
 import org.xdef.XDTelephone;
@@ -211,7 +213,6 @@ import org.xdef.impl.code.DefDouble;
 import org.xdef.impl.code.DefDuration;
 import org.xdef.impl.code.DefElement;
 import org.xdef.impl.code.DefException;
-import org.xdef.impl.code.DefGPSPosition;
 import org.xdef.impl.code.DefInStream;
 import org.xdef.impl.code.DefLocale;
 import org.xdef.impl.code.DefLong;
@@ -220,7 +221,6 @@ import org.xdef.impl.code.DefNull;
 import org.xdef.impl.code.DefObject;
 import org.xdef.impl.code.DefOutStream;
 import org.xdef.impl.code.DefParseResult;
-import org.xdef.impl.code.DefPrice;
 import org.xdef.impl.code.DefSQLService;
 import org.xdef.impl.code.DefString;
 import org.xdef.impl.code.DefTelephone;
@@ -1221,7 +1221,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 						sp--;
 				}
 				try {
-					stack[sp] = new DefGPSPosition(
+					stack[sp] = new XDGPSPosition(
 						new GPSPosition(latitude, longitude, altitude, name));
 				} catch (Exception ex) {
 					 //Incorrect GPS position &amp;{0}
@@ -1233,7 +1233,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 			}
 			case NEW_CURRAMOOUNT: {
 				try {
-					stack[sp-1] = new DefPrice(new Price(
+					stack[sp-1] = new XDPrice(new Price(
 						stack[sp-1].decimalValue(), stack[sp].stringValue()));
 				} catch (SRuntimeException ex) {
 					//"Invalid currency code: "{0}"

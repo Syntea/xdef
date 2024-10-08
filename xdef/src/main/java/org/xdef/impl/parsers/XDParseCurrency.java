@@ -1,9 +1,9 @@
 package org.xdef.impl.parsers;
 
+import org.xdef.XDCurrency;
 import org.xdef.XDParseResult;
 import org.xdef.XDParserAbstract;
 import static org.xdef.XDValueID.XD_CURRENCY;
-import org.xdef.impl.code.DefCurrency;
 import org.xdef.msg.XDEF;
 import org.xdef.proc.XXNode;
 
@@ -31,12 +31,12 @@ public class XDParseCurrency extends XDParserAbstract {
 			String s = p.getBufferPart(pos1, pos2);
 			if (!xon || ((p.isSpaces()||true) && p.isChar(')'))) {
 				try {
-					p.setParsedValue(new DefCurrency(s));
+					p.setParsedValue(new XDCurrency(s));
 					return;
 				} catch (Exception ex) {} //inet addr error
 			}
 		}
-		p.setParsedValue(new DefCurrency()); //null Currency
+		p.setParsedValue(new XDCurrency()); //null Currency
 		//Incorrect value of '&{0}'&{1}{: }
 		p.errorWithString(XDEF.XDEF809,parserName(),p.getBufferPart(pos1,pos2));
 	}
