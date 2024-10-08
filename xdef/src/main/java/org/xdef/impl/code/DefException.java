@@ -7,22 +7,22 @@ import org.xdef.XDValueAbstract;
 import org.xdef.XDValueType;
 import static org.xdef.XDValueType.EXCEPTION;
 
-/** CodeException
+/** Implementation of Exception in X-script code.
  * @author  Vaclav Trojan
  */
 public final class DefException extends XDValueAbstract implements XDException {
 
 	/** The value of this item. */
-	private Report _value;
+	private final Report _value;
 	/** Address of code. */
-	private int _codeAddr;
-
+	private final int _codeAddr;
 	/** Address of code. */
-	private String _xpos;
+	private final String _xpos;
 
-	DefException() {}
+	/** Creates "null" instance of XDException. */
+	public DefException() {_value = null; _codeAddr = -1; _xpos = null;}
 
-	/** Creates a new instance of CodeException
+	/** Creates a new instance of XDException
 	 * @param report The message to be assigned with the item.
 	 * @param codeAddr Address of code.
 	 * @param xpos path of the actual node.
@@ -35,7 +35,7 @@ public final class DefException extends XDValueAbstract implements XDException {
 		_xpos = xpos;
 	}
 
-	/** Creates a new instance of CodeException
+	/** Creates a new instance of XDException
 	 * @param id The message ID.
 	 * @param msg The message to be assigned with the item.
 	 * @param codeAddr Address of code.
@@ -49,6 +49,10 @@ public final class DefException extends XDValueAbstract implements XDException {
 		final Object... mod) {
 		this(Report.error(id, msg, mod), xpos, codeAddr);
 	}
+
+////////////////////////////////////////////////////////////////////////////////
+// Implementation of methods of XDException
+////////////////////////////////////////////////////////////////////////////////
 
 	@Override
 	/** Return assigned Report.
@@ -72,33 +76,18 @@ public final class DefException extends XDValueAbstract implements XDException {
 // Implementation of XDValue interface
 ////////////////////////////////////////////////////////////////////////////////
 	@Override
-	/** Get type of value.
-	 * @return The id of item type.
-	 */
 	public short getItemId() {return XD_EXCEPTION;}
-
 	@Override
-	/** Get ID of the type of value
-	 * @return enumeration item of this type.
-	 */
 	public XDValueType getItemType() {return EXCEPTION;}
-
 	@Override
-	/** Get value as String.
-	 * @return The string from value.
-	 */
 	public String toString() {
 		return "PC:" + _codeAddr +
 			(_xpos != null ? ", xpos:" + _xpos : "") + "; " + _value.toString();
 	}
-
 	@Override
 	public String stringValue() {return toString();}
-
 	@Override
-	/** Clone the item (returns this object here).
-	 * @return this object.
-	 */
 	public XDValue cloneItem() {return this;}
-
+	@Override
+	public boolean isNull() {return _codeAddr == -1;}
 }

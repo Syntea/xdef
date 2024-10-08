@@ -13,7 +13,9 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xdef.XDContainer;
+import org.xdef.XDGPSPosition;
 import org.xdef.XDNamedValue;
+import org.xdef.XDPrice;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
 import org.xdef.XDValueID;
@@ -178,10 +180,10 @@ public final class DefContainer extends XDValueAbstract
 				_array[i] = new DefDouble(ss[i]);
 			}
 		} else if (obj instanceof org.xdef.sys.Price) {
-			_array = new XDValue[] {new DefPrice((org.xdef.sys.Price) obj)};
+			_array = new XDValue[] {new XDPrice((org.xdef.sys.Price) obj)};
 		} else if (obj instanceof org.xdef.sys.GPSPosition) {
 			_array = new XDValue[] {
-				new DefGPSPosition((org.xdef.sys.GPSPosition) obj)};
+				new XDGPSPosition((org.xdef.sys.GPSPosition) obj)};
 		} else if (obj instanceof java.net.URI) {
 			_array = new XDValue[] {new DefURI((java.net.URI) obj)};
 		} else {

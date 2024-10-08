@@ -26,15 +26,18 @@ import static org.xdef.XDConstants.XDPROPERTY_DEBUG;
 import static org.xdef.XDConstants.XDPROPERTY_MESSAGES;
 import static org.xdef.XDConstants.XDPROPERTY_MSGLANGUAGE;
 import org.xdef.XDContainer;
+import org.xdef.XDCurrency;
 import org.xdef.XDDebug;
 import org.xdef.XDElement;
 import org.xdef.XDException;
+import org.xdef.XDGPSPosition;
 import org.xdef.XDInput;
 import org.xdef.XDNamedValue;
 import org.xdef.XDOutput;
 import org.xdef.XDParseResult;
 import org.xdef.XDParser;
 import org.xdef.XDPool;
+import org.xdef.XDPrice;
 import org.xdef.XDRegex;
 import org.xdef.XDRegexResult;
 import org.xdef.XDReport;
@@ -453,14 +456,12 @@ import org.xdef.impl.code.DefBoolean;
 import org.xdef.impl.code.DefBytes;
 import org.xdef.impl.code.DefChar;
 import org.xdef.impl.code.DefContainer;
-import org.xdef.impl.code.DefCurrency;
 import org.xdef.impl.code.DefDate;
 import org.xdef.impl.code.DefDecimal;
 import org.xdef.impl.code.DefDouble;
 import org.xdef.impl.code.DefElement;
 import org.xdef.impl.code.DefEmailAddr;
 import org.xdef.impl.code.DefException;
-import org.xdef.impl.code.DefGPSPosition;
 import org.xdef.impl.code.DefIPAddr;
 import org.xdef.impl.code.DefInStream;
 import org.xdef.impl.code.DefLocale;
@@ -470,7 +471,6 @@ import org.xdef.impl.code.DefNull;
 import org.xdef.impl.code.DefObject;
 import org.xdef.impl.code.DefOutStream;
 import org.xdef.impl.code.DefParseResult;
-import org.xdef.impl.code.DefPrice;
 import org.xdef.impl.code.DefString;
 import org.xdef.impl.code.DefURI;
 import org.xdef.impl.code.DefXPathExpr;
@@ -1477,7 +1477,7 @@ public final class XCodeProcessor {
 						throwInfo(chkEl, XDEF.XDEF573, "GPSPosition");
 					}
 					_stack[sp] =
-						new DefDouble(((DefGPSPosition) _stack[sp]).latitude());
+						new DefDouble(((XDGPSPosition) _stack[sp]).latitude());
 					continue;
 				case GPS_LONGITUDE:
 					if (_stack[sp].isNull()) {
@@ -1485,7 +1485,7 @@ public final class XCodeProcessor {
 						throwInfo(chkEl, XDEF.XDEF573, "GPSPosition");
 					}
 					_stack[sp] =
-						new DefDouble(((DefGPSPosition)_stack[sp]).longitude());
+						new DefDouble(((XDGPSPosition)_stack[sp]).longitude());
 					continue;
 				case GPS_ALTITUDE:
 					if (_stack[sp].isNull()) {
@@ -1493,7 +1493,7 @@ public final class XCodeProcessor {
 						throwInfo(chkEl, XDEF.XDEF573, "GPSPosition");
 					}
 					_stack[sp] =
-						new DefDouble(((DefGPSPosition) _stack[sp]).altitude());
+						new DefDouble(((XDGPSPosition) _stack[sp]).altitude());
 					continue;
 				case GPS_NAME:
 					if (_stack[sp].isNull()) {
@@ -1501,7 +1501,7 @@ public final class XCodeProcessor {
 						throwInfo(chkEl, XDEF.XDEF573, "GPSPosition");
 					}
 					_stack[sp] =
-						new DefString(((DefGPSPosition) _stack[sp]).name());
+						new DefString(((XDGPSPosition) _stack[sp]).name());
 					continue;
 				case GPS_DISTANCETO:
 					if (_stack[sp - 1].isNull() || _stack[sp].isNull()) {
@@ -1509,8 +1509,8 @@ public final class XCodeProcessor {
 						throwInfo(chkEl, XDEF.XDEF573, "GPSPosition");
 					}
 					_stack[--sp] = new DefDouble(
-						((DefGPSPosition) _stack[sp]).distanceTo(
-							((DefGPSPosition) _stack[sp+1])));
+						((XDGPSPosition) _stack[sp]).distanceTo(
+							((XDGPSPosition) _stack[sp+1])));
 					continue;
 				case PRICE_AMOUNT:
 					if (_stack[sp].isNull()) {
@@ -1518,7 +1518,7 @@ public final class XCodeProcessor {
 						throwInfo(chkEl, XDEF.XDEF573, "Price");
 					}
 					_stack[sp] =
-						new DefDecimal(((DefPrice)_stack[sp]).amount());
+						new DefDecimal(((XDPrice)_stack[sp]).amount());
 					continue;
 				case PRICE_CURRENCY_CODE:
 					if (_stack[sp].isNull()) {
@@ -1526,7 +1526,7 @@ public final class XCodeProcessor {
 						throwInfo(chkEl, XDEF.XDEF573, "Price");
 					}
 					_stack[sp] =
-						new DefString(((DefPrice) _stack[sp]).currencyCode());
+						new DefString(((XDPrice) _stack[sp]).currencyCode());
 					continue;
 				case PRICE_FRACTDIGITS:
 					if (_stack[sp].isNull()) {
@@ -1534,7 +1534,7 @@ public final class XCodeProcessor {
 						throwInfo(chkEl, XDEF.XDEF573, "Price");
 					}
 					_stack[sp] = new DefLong(
-						((DefPrice) _stack[sp]).fractionDigits());
+						((XDPrice) _stack[sp]).fractionDigits());
 					continue;
 				case PRICE_DISPLAY:
 					if (_stack[sp].isNull()) {
@@ -1542,7 +1542,7 @@ public final class XCodeProcessor {
 						throwInfo(chkEl, XDEF.XDEF573, "Price");
 					}
 					_stack[sp] = new DefString(
-						((DefPrice) _stack[sp]).display());
+						((XDPrice) _stack[sp]).display());
 					continue;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -3444,7 +3444,7 @@ public final class XCodeProcessor {
 					_stack[sp] = new DefParseResult(_stack[sp].toString());
 					continue;
 				case NEW_CURRENCY:
-					_stack[sp] = new DefCurrency(_stack[sp].toString());
+					_stack[sp] = new XDCurrency(_stack[sp].toString());
 					continue;
 				case NEW_EMAIL:
 					_stack[sp] = new DefEmailAddr(_stack[sp].toString());

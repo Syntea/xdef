@@ -7,8 +7,10 @@ import java.net.URI;
 import java.util.Locale;
 import org.xdef.XDBytes;
 import org.xdef.XDContainer;
+import org.xdef.XDGPSPosition;
 import org.xdef.XDNamedValue;
 import org.xdef.XDParser;
+import org.xdef.XDPrice;
 import org.xdef.XDRegex;
 import org.xdef.XDValue;
 import static org.xdef.XDValueID.XD_ANYURI;
@@ -55,10 +57,8 @@ import org.xdef.impl.code.CodeXD;
 import org.xdef.impl.code.DefBNFGrammar;
 import org.xdef.impl.code.DefBNFRule;
 import org.xdef.impl.code.DefException;
-import org.xdef.impl.code.DefGPSPosition;
 import org.xdef.impl.code.DefLocale;
 import org.xdef.impl.code.DefParseResult;
-import org.xdef.impl.code.DefPrice;
 import org.xdef.impl.code.DefXPathExpr;
 import org.xdef.impl.code.ParseItem;
 import org.xdef.impl.xml.KNamespace;
@@ -207,14 +207,14 @@ public final class XDWriter extends SObjectWriter {
 						return;
 					}
 					case XD_GPSPOSITION: {
-						DefGPSPosition y = (DefGPSPosition) x;
+						XDGPSPosition y = (XDGPSPosition) x;
 						writeDouble(y.latitude());
 						writeDouble(y.longitude());
 						writeDouble(y.altitude());
 						writeString(y.name());
 					}
 					case XD_PRICE: {
-						DefPrice y = (DefPrice) x;
+						XDPrice y = (XDPrice) x;
 						writeBigDecimal(y.amount());
 						writeString(y.currencyCode());
 					}

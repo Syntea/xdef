@@ -19,12 +19,15 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xdef.XDContainer;
+import org.xdef.XDCurrency;
 import org.xdef.XDDocument;
+import org.xdef.XDGPSPosition;
 import org.xdef.XDInput;
 import org.xdef.XDOutput;
 import org.xdef.XDParseResult;
 import org.xdef.XDParser;
 import org.xdef.XDPool;
+import org.xdef.XDPrice;
 import org.xdef.XDResultSet;
 import org.xdef.XDValue;
 import org.xdef.XDValueAbstract;
@@ -43,20 +46,17 @@ import org.xdef.impl.code.CodeUniqueset;
 import org.xdef.impl.code.DefBigInteger;
 import org.xdef.impl.code.DefBoolean;
 import org.xdef.impl.code.DefContainer;
-import org.xdef.impl.code.DefCurrency;
 import org.xdef.impl.code.DefDate;
 import org.xdef.impl.code.DefDecimal;
 import org.xdef.impl.code.DefDouble;
 import org.xdef.impl.code.DefDuration;
 import org.xdef.impl.code.DefElement;
-import org.xdef.impl.code.DefGPSPosition;
 import org.xdef.impl.code.DefIPAddr;
 import org.xdef.impl.code.DefInStream;
 import org.xdef.impl.code.DefLocale;
 import org.xdef.impl.code.DefLong;
 import org.xdef.impl.code.DefNull;
 import org.xdef.impl.code.DefOutStream;
-import org.xdef.impl.code.DefPrice;
 import org.xdef.impl.code.DefString;
 import org.xdef.impl.xml.KNamespace;
 import org.xdef.model.XMData;
@@ -536,14 +536,14 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 		} else if (value instanceof Locale) {
 			setVariable(name, (new DefLocale((Locale) value)));
 		} else if (value instanceof GPSPosition) {
-			setVariable(name, (new DefGPSPosition((GPSPosition) value)));
+			setVariable(name, (new XDGPSPosition((GPSPosition) value)));
 		} else if (value instanceof Price) {
-			setVariable(name, (new DefPrice((Price) value)));
+			setVariable(name, (new XDPrice((Price) value)));
 		} else if (value instanceof InetAddress) {
 			setVariable(name, (new DefIPAddr((InetAddress) value)));
 		} else if (value instanceof Currency) {
 			setVariable(name,
-				new DefCurrency(((Currency) value).getCurrencyCode()));
+				new XDCurrency(((Currency) value).getCurrencyCode()));
 		} else {
 			//Value is not compatible with the type of variable '&{0}'
 			throw new SRuntimeException(XDEF.XDEF564, name);

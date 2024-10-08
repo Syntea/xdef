@@ -3,8 +3,8 @@ package org.xdef.impl.parsers;
 import java.math.BigDecimal;
 import org.xdef.XDParseResult;
 import org.xdef.XDParserAbstract;
+import org.xdef.XDPrice;
 import static org.xdef.XDValueID.XD_PRICE;
-import org.xdef.impl.code.DefPrice;
 import org.xdef.msg.XDEF;
 import org.xdef.proc.XXNode;
 import org.xdef.sys.Price;
@@ -44,7 +44,7 @@ public class XDParsePrice extends XDParserAbstract {
 				}
 				if (!xon || ((p.isSpaces()||true) && p.isChar(')'))) {
 					try {
-						p.setParsedValue(new DefPrice(new Price(d, code)));
+						p.setParsedValue(new XDPrice(new Price(d, code)));
 						return;
 					} catch (SRuntimeException ex) { // currency error
 						Report r = ex.getReport();
@@ -53,7 +53,7 @@ public class XDParsePrice extends XDParserAbstract {
 				}
 			}
 		}
-		p.setParsedValue(new DefPrice()); //null price
+		p.setParsedValue(new XDPrice()); //null price
 		//Incorrect value of '&{0}'&{1}{: }
 		p.errorWithString(XDEF.XDEF809,
 			parserName(), p.getBufferPart(pos, p.getIndex()));
