@@ -1,6 +1,11 @@
 package org.xdef;
 
 import java.util.Currency;
+import org.xdef.XDCurrency;
+import org.xdef.XDValue;
+import org.xdef.XDValueAbstract;
+import static org.xdef.XDValueID.XD_CURRENCY;
+import org.xdef.XDValueType;
 import static org.xdef.XDValueType.CURRENCY;
 import org.xdef.msg.SYS;
 import org.xdef.msg.XDEF;

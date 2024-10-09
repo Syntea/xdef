@@ -1225,6 +1225,8 @@ public class CompileBase implements CodeTable, XDValueID {
 		ti = XD_CURRENCY;
 		method(ti, genInternalMethod(NEW_CURRENCY, XD_CURRENCY,
 			ANY_MODE, 1, 1, XD_STRING), "#");
+		method(ti, genInternalMethod(CURRENCYCODE, XD_STRING, // currencyCode
+			ANY_MODE, 1, 1, XD_CURRENCY), "currencyCode");
 
 ////////////////////////////////////////////////////////////////////////////////
 // DATETIME

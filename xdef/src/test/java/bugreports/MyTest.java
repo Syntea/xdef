@@ -97,6 +97,24 @@ public class MyTest extends XDTester {
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
 "<xd:declaration>\n" +
+"  void x() {\n" +
+"    Currency c = new Currency('USD');\n" +
+"    out(c.currencyCode());\n" +
+"  }\n" +
+"</xd:declaration>\n"+
+"  <A xd:script='finally x();' a='currency();' />\n" +
+"</xd:def>";
+			xp = XDFactory.compileXD(null, xdef);
+			parse(xp, "", "<A a='USD'/>", reporter, swr=new StringWriter(), null, null);
+			assertNoErrors(reporter);
+			assertEq("USD", swr.toString());
+		} catch (RuntimeException ex) {fail(ex);}
+if(true)return;
+/**/
+		try {
+			xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
+"<xd:declaration>\n" +
 "  void testLoop() {\n"+
 "    for (int i=0; ;) {\n"+
 "      if (i GT 4) break;\n"+

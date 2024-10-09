@@ -145,6 +145,7 @@ import static org.xdef.impl.code.CodeTable.CONTEXT_TO_ELEMENT;
 import static org.xdef.impl.code.CodeTable.CREATE_ELEMENT;
 import static org.xdef.impl.code.CodeTable.CREATE_ELEMENTS;
 import static org.xdef.impl.code.CodeTable.CREATE_NAMEDVALUE;
+import static org.xdef.impl.code.CodeTable.CURRENCYCODE;
 import static org.xdef.impl.code.CodeTable.CUT_STRING;
 import static org.xdef.impl.code.CodeTable.DATE_FORMAT;
 import static org.xdef.impl.code.CodeTable.DB_CLOSE;
@@ -3140,6 +3141,10 @@ public final class XCodeProcessor {
 				case GET_ATTR_NAME:
 					_stack[++sp] = new DefString(chkEl.getItemId() == XX_ATTR
 						? chkEl.getNodeName() : null);
+					continue;
+				case CURRENCYCODE: //get currency code
+					_stack[sp] = new DefString(
+						((XDCurrency) _stack[sp]).getCurrencyCode());
 					continue;
 				case GET_REGEX_RESULT:
 					_stack[sp - 1] = ((XDRegex) _stack[sp - 1]).getRegexResult(

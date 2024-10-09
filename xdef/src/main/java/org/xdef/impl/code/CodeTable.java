@@ -575,10 +575,15 @@ public interface CodeTable {
 	/** getItemType(List, index) */
 	static final short CONTEXT_ITEMTYPE = CONTEXT_TO_ELEMENT + 1;
 	////////////////////////////////////////////////////////////////////////////
+	// Currency
+	////////////////////////////////////////////////////////////////////////////
+	/** get the ISO 4217 currency code. */
+	static final short CURRENCYCODE = CONTEXT_ITEMTYPE + 1;
+	////////////////////////////////////////////////////////////////////////////
 	// Regex
 	////////////////////////////////////////////////////////////////////////////
 	/** get result of regular expression. */
-	static final short GET_REGEX_RESULT = CONTEXT_ITEMTYPE + 1;
+	static final short GET_REGEX_RESULT = CURRENCYCODE + 1;
 	/** check if result of regular expression matches. */
 	static final short MATCHES_REGEX = GET_REGEX_RESULT + 1;
 	/** get group of result of regular expression. */

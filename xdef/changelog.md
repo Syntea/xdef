@@ -1,7 +1,8 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.2.8, release-date 2024-10-08
-* .
+# Version 42.2.8, release-date 2024-10-09
+* implemented new X-script method `currencyCode()` of `Currency` value
+  which returns string with ISO 4217 currency code. 
 
 # Version 42.2.7, release-date 2024-10-08
 * Fixed bug in conversion from XML schema regular expression to Java regular
