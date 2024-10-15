@@ -74,7 +74,7 @@ public class TestJsonXon extends XDTester {
 					fail("E: " + f.getName() + "\n" + s + "\n" + t); 
 				}
 			} catch (SException ex) {
-				fail("E: " + f.getName() + "\n" + ex); 
+				fail("E: " + f.getName() + "\n" + ex.getMessage()); 
 			}
 		}
 	}
