@@ -7,6 +7,7 @@ import org.xdef.sys.STester;
 import test.common.bnf.TestBNF;
 import test.common.bnf.TestBNFJSON;
 import test.common.bnf.TestExpr;
+import test.common.bnf.TestJsonXon;
 import test.common.bnf.TestSQL;
 import test.common.bnf.TestXML;
 import test.common.bnf.TestXdScript;
@@ -51,6 +52,7 @@ public class TestAll {
 			new TestBNFJSON(),
 			new TestEmailAddr(),
 			new TestExpr(),
+			new TestJsonXon(),
 			new TestSQL(),
 			new TestXML(),
 			new TestXdScript(),
