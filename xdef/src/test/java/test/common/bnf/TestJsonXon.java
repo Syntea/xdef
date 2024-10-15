@@ -97,7 +97,6 @@ public class TestJsonXon extends XDTester {
 	public void test() {
 		String bnf;
 		BNFGrammar g;
-		String s;
 		try {
 			bnf =  // JSON
 "S            ::= [#9#10#13 ]+ /*whitespace*/\n" +
@@ -298,10 +297,9 @@ public class TestJsonXon extends XDTester {
 				"d--01-",
 				"d11:20:31.123-020",
 				"P",
-				"PT+1H",
-				"PT+1H",
-			}, g, "xon");
-		} catch (Exception ex) {fail(ex);}
+				"P1.1Y",
+				"PT+1H"}, g, "xon");
+		} catch (RuntimeException ex) {fail(ex);}
 	}
 
 	/** Run test
