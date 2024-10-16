@@ -122,16 +122,16 @@ public class TestJsonXon extends XDTester {
 "Number       ::= FloatNumber | SignedInteger | 'NaN' | '-' ? 'INF'\n" +
 "/* String */\n" +
 "AnyChar      ::= Char - '\\' - '\"'\n" +//any UTF char but not '\\' or '\"'
-"UTFChar      ::= '\\u' HexDigit {4} /*hexadecimal specification of char*/\n" +
+"UTFSpec      ::= '\\u' HexDigit {4} /*hexadecimal specification of char*/\n" +
 "StringPart   ::= '\\\\' | '\\\"' | '\\n' | '\\r' | '\\t' | '\\f' | '\\b'\n" +
-"             | UTFChar | AnyChar\n" +				
+"             | UTFSpec | AnyChar\n" +				
 "String       ::= '\"' StringPart* '\"'\n" +
-"SimpleValue  ::= S? ( Number | String | Boolean | Null )\n" +
+"SimpleValue  ::= S? (Number | String | Boolean | Null)\n" +
 "/* Complex values */\n" +
 "Identifier   ::= ('_' | Letter) ([_0-9] | Letter)*\n" +
 "NamedValue   ::= S? String S? ':' Value\n" +
 "Array        ::= S? '[' (Value (S? ',' Value)*)? S? ']'\n" +
-"Map          ::= S? '{' (NamedValue (S? ',' NamedValue)* )?  S? '}'\n" +
+"Map          ::= S? '{' (NamedValue (S? ',' NamedValue)*)?  S? '}'\n" +
 "Value        ::= (Array | Map | SimpleValue)\n" + 
 "json         ::= Value S?\n";
 			g = BNFGrammar.compile(bnf);
@@ -163,14 +163,19 @@ public class TestJsonXon extends XDTester {
 				"[01]",
 				"[1.]",
 				"[.1]"}, g, "json");
+			
 			// XON
 			bnf =
-"Char         ::= $UTFChar\n" +//any UTF char
+"AnyChar      ::= $UTFChar - '\\' - '\"'\n" + //any UTF char but not '\' or '"'
 "Letter       ::= $letter\n" +
-"WhiteSpace ::= [#9#10#13 ]\n" +
+"AsciiChar    ::= [ -~]\n"+
+"WhiteSpace   ::= [#9#10#13 ]\n" +
+"W            ::= [#9 ]+ /* linear white space */\n"+
 "Comment ::= \"/*\" ([^*]+ | \"*\" - \"*/\")* \"*/\"\n" +
+"B64text      ::= ([-a-zA-Z0-9+/]+ '='? '='?) /* base64 */\n"+
+"CharsetName ::= ([a-zA-Z] ('-'? [a-zA-Z0-9]+)*) $rule \n"+
 "S ::= (WhiteSpace | Comment)+ /* Sequence of whitespaces or comments */\n" +
-"IntNumber    ::= [0-9]([0-9])*\n" +
+"IntNumber    ::= [0-9] [0-9]*\n" +
 "HexDigit     ::= [0-9] | [a-fA-F]\n" +
 "SignedInteger::= '-'? ('0' | [1-9] [0-9]*)\n" +
 "Exponent     ::= ('e' | 'E') ('+' | '-')? IntNumber\n" +
@@ -184,11 +189,12 @@ public class TestJsonXon extends XDTester {
 "Decimal      ::= SignedInteger 'D' | FloatNumber 'D'\n" +
 "Float        ::= SignedInteger 'f' | FloatNumber 'f' | 'NaNf' | '-'? 'INFf'\n"+
 "Double       ::= SignedInteger 'd' | FloatNumber 'd'? | 'NaN' | '-'? 'INF'\n" +
+"Number       ::= SignedInteger | FloatNumber | 'NaN' | '-'? 'INF'\n" +				
 "/* Date and time */\n" +
 "yearFrag     ::= '-'? [0-9]*\n" +
-"monthFrag    ::= ('0' [1-9]) | ('1' [0-2])\n" +
-"dayFrag      ::= ('0' [1-9]) | ([12] [0-9]) | ('3' [01])\n" +
-"hourFrag     ::= ([01] [0-9]) | ('2' [0-3])\n" +
+"monthFrag    ::= '0' [1-9] | '1' [0-2]\n" +
+"dayFrag      ::= '0' [1-9] | [12] [0-9] | '3' [01]\n" +
+"hourFrag     ::= [01] [0-9] | '2' [0-3]\n" +
 "minuteFrag   ::= [0-5] [0-9]\n" +
 "secondFrag   ::= ([0-5] [0-9]) ('.' [0-9]+)?\n" +
 "endOfDayFrag ::= '24:00:00' ('.' '0'+)?\n" +
@@ -198,10 +204,10 @@ public class TestJsonXon extends XDTester {
 "dateFrag     ::= yearFrag | yearFrag '-' monthFrag ('-' dayFrag)?\n" +
 "             | '--' monthFrag | '--' monthFrag '-' dayFrag\n" +
 "             | '---' dayFrag\n" +
-"date         ::= 'd' (yearFrag timezoneFrag? | ( yearFrag '-' monthFrag\n" +
-"             ('-' dayFrag)? timezoneFrag? | '--' monthFrag timezoneFrag?\n" +
+"date         ::= 'd' (yearFrag '-' monthFrag ('-' dayFrag)? timezoneFrag?\n"+
+"             | yearFrag timezoneFrag? | '--' monthFrag timezoneFrag?\n" +
 "             | '--' monthFrag '-' dayFrag timezoneFrag?\n" +
-"             | '---' dayFrag)  timezoneFrag?)\n" +
+"             | '---' dayFrag timezoneFrag?)\n" +
 "timeFrag     ::= ( (hourFrag ':' minuteFrag ':' secondFrag)\n" +
 "             | endOfDayFrag ) | (hourFrag ':' minuteFrag)\n" +
 "time         ::= 'd' timeFrag timezoneFrag?\n" +
@@ -218,23 +224,60 @@ public class TestJsonXon extends XDTester {
 "             | (duMinuteFrag duSecondFrag?) | duSecondFrag)\n" +
 "duDayTimeFrag::= (duDayFrag duTimeFrag?) | duTimeFrag\n" +
 "Duration     ::= '-'? 'P' ((duYMonthFrag duDayTimeFrag?) | duDayTimeFrag)\n" +
-"Null         ::= 'null'\n" +
-"Boolean      ::= 'true' | 'false'\n" +
+"/* bytes */\n" +
+"Bytes        ::= 'b(' B64text? ')'\n" +
+"/* GPS */\n" +			
+"GPS          ::= 'g(' W? Number W? ',' W? Number (W? ',' W? Number)?\n" +
+"             (W? (',' W)? (Identifier | '\"' AnyChar* '\"') )? W? ')'\n" +
+"/* Currency */\n" +			
+"Currency     ::= 'C('[A-Z]{3}')'\n" +
+"/* Price */\n" +			
+"Price        ::= 'p(' IntNumber FloatPart? ' ' [A-Z]{3}')'\n" +
+"/* Char */\n" +
+"Char         ::= 'c\"' StringPart '\"'\n" +
+"/* email address */\n" +
+"CommentList  ::= ( '(' CommentPart* ')' (W? '(' CommentPart* ')')* )\n"+
+"CommentPart  ::= (AsciiChar - [()])+ (W? CommentList)?\n"+
+"EmailComment ::=  W? ( CommentList $rule) W?\n"+
+"Atom         ::= ([-0-9a-zA-Z_])+\n"+
+"Domain       ::= '@' Atom ('.' Atom)*\n"+
+"LocalPart    ::= Atom ('.' Atom)*\n"+
+"EmailAddr    ::= LocalPart Domain\n"+
+"EnclosedEmail::= '<' EmailAddr '>' \n"+
+"Ptext        ::= ((AsciiChar - [@><()=])+)\n"+
+"EText        ::= ((EmailComment* (TextItem | EmailComment)*)\n"+
+"             | EmailComment* W? Ptext)? EmailComment*\n"+
+"HexOctet     ::= '=' [0-9A-F] [0-9A-F]\n"+
+"Qtext        ::= ((HexOctet | AsciiChar - [=?])+)/*quoted*/\n"+
+"TextItem     ::= W? '=?' CharsetName '?' ('Q?' Qtext | 'B?' B64text) '?='\n"+
+"Email        ::= 'e\"' ( (EText? W? EnclosedEmail\n"+
+"             | (EmailComment* EmailAddr)) (W? EmailComment)* ) '\"'\n" +
+"/* URI */\n" +
+"SchemeName   ::= [a-zA-Z]+ '://'\n" +
+"URI          ::= 'u\"' SchemeName AnyChar+ '\"'\n" +
+"/* IPAddr */\n" +
+"ByteNum        ::= '2' [0-5] [0-9] | [0-1] [0-9] {0,2} | [0-9]{1,2}\n" +
+"IPv4          ::= ByteNum '.' ByteNum '.' ByteNum '.' ByteNum\n" +
+"IPv6          ::= HexDigit{0,4} ':' HexDigit{0,4} ':' HexDigit{0,4}\n" +
+"              ':' HexDigit{0,4} ':' HexDigit{0,4} ':' HexDigit{0,4}\n" +
+"              ':' HexDigit{0,4} ':' HexDigit{0,4}\n" +
+"IPAddr        ::= '/' (IPv6 | IPv4)\n" +
 "/* String */\n" +
-"AnyChar      ::= Char - '\\' - '\"'\n" + //any UTF char but not '\' or '"'
 "UTFChar      ::= '\\u' HexDigit {4} /*hexadecimal specification of char*/\n" +
 "StringPart   ::= '\\\\' | '\\\"' | '\\n' | '\\r' | '\\t' | '\\f' | '\\b'\n" +
 "             | UTFChar | AnyChar\n" +				
 "String       ::= '\"' StringPart* '\"'\n" +
+"Null         ::= 'null'\n" +
+"Boolean      ::= 'true' | 'false'\n" +
 "SimpleValue  ::= S? (Double | Float | Decimal | Byte | Short | Integer\n" +
 "             | Long | BigInteger | dateTime | time | date | Duration\n" +
+"             | Email | Bytes | GPS | Currency | Price | Char | URI | IPAddr\n"+
 "             | String | Boolean | Null )\n" +
 "Array        ::= S? '[' (Value (S? ',' Value)*)? S? ']'\n" +
 "Identifier   ::= ('_' | Letter) ([_0-9] | Letter)*\n" +
 "NamedValue   ::= S? (Identifier | String) S? ':' Value\n" +
 "Map          ::= S? '{' (NamedValue (S? ',' NamedValue)* )?  S? '}'\n" +
 "Value        ::= Array | Map | SimpleValue\n" +
-"CharsetName  ::= [a-zA-Z] [0-9a-zA-Z-]*\n" +
 "Directive    ::= S? '%encoding' S? '=' S? '\"' CharsetName '\"' S?\n" +
 "xon          ::= Directive? Value S?\n";
 			g = BNFGrammar.compile(bnf);
@@ -242,10 +285,13 @@ public class TestJsonXon extends XDTester {
 				"\"true\"",
 				"null",
 				"1l /* long */ ",
-				"/* empty string */ \"\"",
+				"-1.25e-3f/*float*/",
+				"0N/*BigInteger*/",
+				"-3e-5D/*BigDecimal*/",
+				/* string */
+				"\"\"",
 				"\"\\u0045\" /* string with UTFChar */", 
 				"/* esccaped chars */ \"\\n\\t\\\\\\\"\\b\"", 
-				"-1.25e-3f",
 				"d1949-11-07 /* date */",
 				"d1949-11-07T15:59Z /* dateTime */",
 				"d1949-11-07T15:59:01.123",
@@ -255,7 +301,7 @@ public class TestJsonXon extends XDTester {
 				"d1945 /* GYear */",
 				"d---29 /* GDay */",
 				"d---29-02:00",
-				"d--12/* GMonth */",
+				"d--05/* GMonth */",
 				"d--12-02:00",
 				"d--12-29 /* GMonthDay */",
 				"d--12-29-02:00",
@@ -271,6 +317,35 @@ public class TestJsonXon extends XDTester {
 				"P1Y2M3DT10H30M123.123456S",
 				"-P1DT2H",
 				"P1Y1M1DT1H1M1.1234567S",
+				/* Email address */
+				"e\"a@b\"",
+				"e\"a@b (A. Bc)\"",
+				"e\"A. Bc <x-y.z@cd.ef>\"",
+				/* bytes */
+				"b()",
+				"b(Ax-y)",
+				/* gps */
+				"g(1,0)",
+				"g(1.5, -3, -5)",
+				"g(1.5, -3, -5 Lon)",
+				"g(1.5, -3, -5, Lon)",
+				"g( 0, 0 Lon)",
+				"g( -0, 0 \"a b\")",
+				"g( -0, 0, \"a b\")",
+				/*Currency*/
+				"C(CZK)",
+				"C(USD)",
+				/*price*/
+				"p(12 CZK)",
+				"p(0.0 USD)",
+				/*Character*/
+				"c\" \"",
+				"c\"\\u0045\"",
+				/*URI*/
+				"u\"https://org.xdef/ver1\"",
+				/*InetAddr*/
+				"/129.144.52.38",
+				"/1080:0:0:0:8:800:200C:417A",
 				/* Complex values */
 				"{}",
 				"{\"\":\"\"}",
