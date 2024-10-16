@@ -256,7 +256,7 @@ public class TestJsonXon extends XDTester {
 "SchemeName   ::= [a-zA-Z]+ '://'\n" +
 "URI          ::= 'u\"' SchemeName AnyChar+ '\"'\n" +
 "/* IPAddr */\n" +
-"ByteNum        ::= '2' [0-5] [0-9] | [0-1] [0-9] {0,2} | [0-9]{1,2}\n" +
+"ByteNum       ::= '25' [0-5] | '2' [0-4] [0-9] | [0-1]? [0-9] {0,2}\n" +
 "IPv4          ::= ByteNum '.' ByteNum '.' ByteNum '.' ByteNum\n" +
 "IPv6          ::= HexDigit{0,4} ':' HexDigit{0,4} ':' HexDigit{0,4}\n" +
 "              ':' HexDigit{0,4} ':' HexDigit{0,4} ':' HexDigit{0,4}\n" +
@@ -344,8 +344,9 @@ public class TestJsonXon extends XDTester {
 				/*URI*/
 				"u\"https://org.xdef/ver1\"",
 				/*InetAddr*/
-				"/129.144.52.38",
+				"/255.199.52.0",
 				"/1080:0:0:0:8:800:200C:417A",
+				"/1080:0:::8:800:200C:417A",
 				/* Complex values */
 				"{}",
 				"{\"\":\"\"}",
