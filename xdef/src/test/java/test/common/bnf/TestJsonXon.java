@@ -172,7 +172,7 @@ public class TestJsonXon extends XDTester {
 "WhiteSpace   ::= [#9#10#13 ]\n" +
 "W            ::= [#9 ]+ /* linear white space */\n"+
 "Comment ::= \"/*\" ([^*]+ | \"*\" - \"*/\")* \"*/\"\n" +
-"B64text      ::= ([-a-zA-Z0-9+/]+ '='? '='?) /* base64 */\n"+
+"B64text      ::= ((S | [-a-zA-Z0-9+/])+ '='? S? '='? S?) /* base64 */\n"+
 "CharsetName ::= ([a-zA-Z] ('-'? [a-zA-Z0-9]+)*) $rule \n"+
 "S ::= (WhiteSpace | Comment)+ /* Sequence of whitespaces or comments */\n" +
 "IntNumber    ::= [0-9] [0-9]*\n" +
@@ -227,8 +227,9 @@ public class TestJsonXon extends XDTester {
 "/* bytes */\n" +
 "Bytes        ::= 'b(' B64text? ')'\n" +
 "/* GPS */\n" +			
-"GPS          ::= 'g(' W? Number W? ',' W? Number (W? ',' W? Number)?\n" +
-"             (W? (',' W)? (Identifier | '\"' AnyChar* '\"') )? W? ')'\n" +
+"BPSName      ::= ('_' | Letter)+ ([- _.,/0-9] | Letter)*\n" +
+"GPS          ::= 'g(' Number ',' ' '? Number (',' ' '? Number)?\n" +
+"             (',' ' '? (BPSName | String) )? ')'\n" +
 "/* Currency */\n" +			
 "Currency     ::= 'C('[A-Z]{3}')'\n" +
 "/* Price */\n" +			
@@ -267,15 +268,16 @@ public class TestJsonXon extends XDTester {
 "StringPart   ::= '\\\\' | '\\\"' | '\\n' | '\\r' | '\\t' | '\\f' | '\\b'\n" +
 "             | UTFChar | AnyChar\n" +				
 "String       ::= '\"' StringPart* '\"'\n" +
-"Null         ::= 'null'\n" +
 "Boolean      ::= 'true' | 'false'\n" +
-"SimpleValue  ::= S? (Double | Float | Decimal | Byte | Short | Integer\n" +
-"             | Long | BigInteger | dateTime | time | date | Duration\n" +
-"             | Email | Bytes | GPS | Currency | Price | Char | URI | IPAddr\n"+
-"             | String | Boolean | Null )\n" +
+"SimpleValue  ::= S? ('null' | Boolean | String\n" +
+"             | Byte | Short | Integer | Long | BigInteger\n" +
+"             | Double | Float | Decimal\n" +
+"             | dateTime | time | date | Duration\n" +
+"             | Bytes | Char | URI | IPAddr | Email\n"+
+"             | GPS | Currency | Price)\n" +
 "Array        ::= S? '[' (Value (S? ',' Value)*)? S? ']'\n" +
-"Identifier   ::= ('_' | Letter) ([_0-9] | Letter)*\n" +
-"NamedValue   ::= S? (Identifier | String) S? ':' Value\n" +
+"NCName   ::= ('_' | Letter) ([-_.0-9] | Letter)*\n" +
+"NamedValue   ::= S? (NCName | String) S? ':' Value\n" +
 "Map          ::= S? '{' (NamedValue (S? ',' NamedValue)* )?  S? '}'\n" +
 "Value        ::= Array | Map | SimpleValue\n" +
 "Directive    ::= S? '%encoding' S? '=' S? '\"' CharsetName '\"' S?\n" +
@@ -284,72 +286,71 @@ public class TestJsonXon extends XDTester {
 			test(new String[] {
 				"\"true\"",
 				"null",
-				"1l /* long */ ",
-				"-1.25e-3f/*float*/",
-				"0N/*BigInteger*/",
-				"-3e-5D/*BigDecimal*/",
-				/* string */
+				"1l",
+				"-1.25e-3f",
+				"0N",
+				"-3e-5D",
+				// string
 				"\"\"",
-				"\"\\u0045\" /* string with UTFChar */", 
-				"/* esccaped chars */ \"\\n\\t\\\\\\\"\\b\"", 
-				"d1949-11-07 /* date */",
-				"d1949-11-07T15:59Z /* dateTime */",
+				"\"\\u0045\"", // string with UTFChar 
+				"\"\\n\\t\\\\\\\"\\b\"", // esccaped chars
+				"d1949-11-07", // date
+				"d1949-11-07T15:59:00Z",  // dateTime
 				"d1949-11-07T15:59:01.123",
 				"d1949-11-07T15:59:01.123-02:00",
-				"d1949-11-07T15:59:01.123-0200",
-				"d1949-11-07T15:59:01.123-02",
-				"d1945 /* GYear */",
-				"d---29 /* GDay */",
+				"d1945 ", //* GYear *
+				"d1945Z",
+				"d194+00:00",
+				"d---29", //* GDay *
 				"d---29-02:00",
-				"d--05/* GMonth */",
-				"d--12-02:00",
-				"d--12-29 /* GMonthDay */",
+				"d--05", //* GMonth *
+				"d--12-02-02:00",
+				"d--12-29 ", //* GMonthDay *
 				"d--12-29-02:00",
-				"d11:20 /* time */",
+				"d11:20:00 ", //* time *
 				"d11:20:31",
 				"d11:20:31.123",
 				"d11:20:31.123Z",
 				"d11:20:31.123-02:00",
-				"d11:20+02:00",
-				"d11:20:31-02:00",
-				/* Duration */
+				"d11:20:31+02:00",
+				// Duration
 				"P2Y6M5DT12H35M30S",
 				"P1Y2M3DT10H30M123.123456S",
 				"-P1DT2H",
 				"P1Y1M1DT1H1M1.1234567S",
-				/* Email address */
+				// Email address
 				"e\"a@b\"",
 				"e\"a@b (A. Bc)\"",
 				"e\"A. Bc <x-y.z@cd.ef>\"",
-				/* bytes */
+				// bytes
 				"b()",
-				"b(Ax-y)",
-				/* gps */
+				"b( a b\n\tc = )",
+				// GPS 
 				"g(1,0)",
 				"g(1.5, -3, -5)",
-				"g(1.5, -3, -5 Lon)",
 				"g(1.5, -3, -5, Lon)",
-				"g( 0, 0 Lon)",
-				"g( -0, 0 \"a b\")",
-				"g( -0, 0, \"a b\")",
-				/*Currency*/
+				"g(1.5, -3, -5, \"a b\")",
+				"g(0, 0, Lon)",
+				"g(-0, 0, \"a b\")",
+				"g(0, 0, Lon3, city/Center)",
+				// Currency
 				"C(CZK)",
 				"C(USD)",
-				/*price*/
+				// Price
 				"p(12 CZK)",
 				"p(0.0 USD)",
-				/*Character*/
+				// Character
 				"c\" \"",
 				"c\"\\u0045\"",
-				/*URI*/
+				// URI
 				"u\"https://org.xdef/ver1\"",
-				/*InetAddr*/
+				// InetAddr
 				"/0.00.000.038",
 				"/129.255.0.99",
 				"/0:0:0:0:0:0:0:0",
 				"/FFFF:0:0:0:8:800:000C:417A",
 				"/ffff:0:0:0:8:800:000C:417a",
-				/* Complex values */
+				// Complex values
 				"{}",
 				"{\"\":\"\"}",
 				"{\"A B\":{\"a b\":\"\"}}",
@@ -370,7 +371,7 @@ public class TestJsonXon extends XDTester {
 				"{ a:{}, _b:[], c_:null }",
 				"[[3,null,false],[3.14,\"\",false],[\"aa\",true,false]]",
 				"[1, { _x69_:1, _x5f_map:null, \"a_x\tb\":[null], item:{}}]",
-				"[1, { a : 1, b:\"a\", \"\":false, array:[], map:{}}, \"abc\"]",
+				"[1, {_a._b:1,b-c:\"a\",\"\":false,array:[],map:{}},\"abc\"]",
 				"[{a:[{},[1,2],{},[3,4]]}]",
 				"[{a:[{a:1},[1,2],{},[3,4]]}]",
 				"[{a:[[1,2],{},[3,4]]}]",
