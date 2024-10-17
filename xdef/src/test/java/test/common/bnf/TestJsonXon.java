@@ -258,9 +258,9 @@ public class TestJsonXon extends XDTester {
 "/* IPAddr */\n" +
 "ByteNum        ::= '2' [0-5] [0-9] | [0-1] [0-9] {0,2} | [0-9]{1,2}\n" +
 "IPv4          ::= ByteNum '.' ByteNum '.' ByteNum '.' ByteNum\n" +
-"IPv6          ::= HexDigit{0,4} ':' HexDigit{0,4} ':' HexDigit{0,4}\n" +
-"              ':' HexDigit{0,4} ':' HexDigit{0,4} ':' HexDigit{0,4}\n" +
-"              ':' HexDigit{0,4} ':' HexDigit{0,4}\n" +
+"IPv6          ::= HexDigit{1,4} ':' HexDigit{1,4} ':' HexDigit{1,4}\n" +
+"              ':' HexDigit{1,4} ':' HexDigit{1,4} ':' HexDigit{1,4}\n" +
+"              ':' HexDigit{1,4} ':' HexDigit{1,4}\n" +
 "IPAddr        ::= '/' (IPv6 | IPv4)\n" +
 "/* String */\n" +
 "UTFChar      ::= '\\u' HexDigit {4} /*hexadecimal specification of char*/\n" +
@@ -344,8 +344,11 @@ public class TestJsonXon extends XDTester {
 				/*URI*/
 				"u\"https://org.xdef/ver1\"",
 				/*InetAddr*/
-				"/129.144.52.38",
-				"/1080:0:0:0:8:800:200C:417A",
+				"/0.00.000.038",
+				"/129.255.0.99",
+				"/0:0:0:0:0:0:0:0",
+				"/FFFF:0:0:0:8:800:000C:417A",
+				"/ffff:0:0:0:8:800:000C:417a",
 				/* Complex values */
 				"{}",
 				"{\"\":\"\"}",
