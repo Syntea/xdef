@@ -332,10 +332,12 @@ public final class XonReader extends StringParser implements XonParsers {
 					sb.append(peekChar());
 				}
 			}
-		} else if ((ch = isLetter()) != SParser.NOCHAR) { //not quoted
+		} else if ((ch = isLetter()) != SParser.NOCHAR
+			|| (isChar('_') && (ch = '_') == '_')) { //not quoted
 			sb.append(ch);
 			while ((ch = getCurrentChar()) != SParser.NOCHAR
-				&& (Character.isLetter(ch) || ch == ' ')) {
+				&& (Character.isLetter(ch) || ch=='-' || ch==' ' || ch=='_'
+				|| ch=='.' || ch==',' || ch=='/' || (ch>='0' && ch<='9'))) {
 				sb.append(peekChar());
 			}
 		}
