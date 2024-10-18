@@ -637,6 +637,7 @@ public class JavaPreprocessor {
 	 */
 	private boolean canonizeAndChageCommand(final boolean ignore) {
 		int len =  _line.length() - 1;
+		String line = _line;
 		for (int i = len; i >= _pos - 1; i--) {
 			if (_line.charAt(i) <= ' ') {
 				continue; //skip leading whitespaces
@@ -648,7 +649,7 @@ public class JavaPreprocessor {
 			} else {
 				if (i + 1 < len) {
 					_line = _line.substring(0, i + 1) + _nl;
-					_modified = true;
+					_modified |= !_line.equals(line);
 				}
 				break;
 			}
@@ -717,12 +718,12 @@ public class JavaPreprocessor {
 		int ndx;
 		if ((ndx = _line.indexOf("*/")) >= 0 ||
 			(ndx = _line.indexOf("#/")) >= 0) {
-			_modified = true;
 			int i = 0;
 			String s = _line.trim();
 			if (s.startsWith("/*#") && s.endsWith("*#/")) {
 				return; //do not add unnecessary '#'!
 			}
+			_modified = true;
 			while (true) {
 				_sb.append(_line.substring(i, ndx + 1));
 				_sb.append("#");

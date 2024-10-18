@@ -87,8 +87,8 @@ public final class XonYaml {
 				&& ex.getCause().getMessage() != null ? ex.getCause() : ex);
 		}
 	}
-	
-	/** Convert YAML source format of data X-definition model to JSON format. 
+
+	/** Convert YAML source format of data X-definition model to JSON format.
 	 * @param yaml string with YAML format of data X-definition model.
 	 * @return JSON format of data X-definition model.
 	 */

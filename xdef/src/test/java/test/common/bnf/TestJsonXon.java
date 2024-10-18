@@ -33,7 +33,7 @@ public class TestJsonXon extends XDTester {
 		for (String t : x) {
 			String s = parse(g, rule, t);
 			if (!t.equals(s)) {
-				fail("E:\n" + s + "\n" + t); 
+				fail("E:\n" + s + "\n" + t);
 			}
 		}
 	}
@@ -55,10 +55,10 @@ public class TestJsonXon extends XDTester {
 					: FUtils.readString(f, "UTF-8");
 				String s = parse(g, rule, t);
 				if (!t.equals(s)) {
-					fail("E: " + f.getName() + "\n" + s + "\n" + t); 
+					fail("E: " + f.getName() + "\n" + s + "\n" + t);
 				}
 			} catch (SException ex) {
-				fail("E: " + f.getName() + "\n" + ex.getMessage()); 
+				fail("E: " + f.getName() + "\n" + ex.getMessage());
 			}
 		}
 	}
@@ -72,7 +72,7 @@ public class TestJsonXon extends XDTester {
 		for (String t : x) {
 			String s = parse(g, n, t);
 			if (t.equals(s)) {
-				fail("Error not recognized:\n" + s + "\n" + t); 
+				fail("Error not recognized:\n" + s + "\n" + t);
 			}
 		}
 	}
@@ -104,7 +104,7 @@ public class TestJsonXon extends XDTester {
 		BNFGrammar g;
 		try {
 			// JSON
-			bnf =  
+			bnf =
 "Char         ::= $UTFChar\n" +//any UTF char
 "S            ::= [#9#10#13 ]+ /*whitespace*/\n" +
 "HexDigit     ::= [0-9] | [a-fA-F]\n" +
@@ -124,7 +124,7 @@ public class TestJsonXon extends XDTester {
 "AnyChar      ::= Char - '\\' - '\"'\n" +//any UTF char but not '\\' or '\"'
 "UTFSpec      ::= '\\u' HexDigit {4} /*hexadecimal specification of char*/\n" +
 "StringPart   ::= '\\\\' | '\\\"' | '\\n' | '\\r' | '\\t' | '\\f' | '\\b'\n" +
-"             | UTFSpec | AnyChar\n" +				
+"             | UTFSpec | AnyChar\n" +
 "String       ::= '\"' StringPart* '\"'\n" +
 "SimpleValue  ::= S? (Number | String | Boolean | Null)\n" +
 "/* Complex values */\n" +
@@ -132,7 +132,7 @@ public class TestJsonXon extends XDTester {
 "NamedValue   ::= S? String S? ':' Value\n" +
 "Array        ::= S? '[' (Value (S? ',' Value)*)? S? ']'\n" +
 "Map          ::= S? '{' (NamedValue (S? ',' NamedValue)*)?  S? '}'\n" +
-"Value        ::= (Array | Map | SimpleValue)\n" + 
+"Value        ::= (Array | Map | SimpleValue)\n" +
 "json         ::= Value S?\n";
 			g = BNFGrammar.compile(bnf);
 			test(new String[] {
@@ -163,7 +163,7 @@ public class TestJsonXon extends XDTester {
 				"[01]",
 				"[1.]",
 				"[.1]"}, g, "json");
-			
+
 			// XON
 			bnf =
 "AnyChar      ::= $UTFChar - '\\' - '\"'\n" + //any UTF char but not '\' or '"'
@@ -189,7 +189,7 @@ public class TestJsonXon extends XDTester {
 "Decimal      ::= SignedInteger 'D' | FloatNumber 'D'\n" +
 "Float        ::= SignedInteger 'f' | FloatNumber 'f' | 'NaNf' | '-'? 'INFf'\n"+
 "Double       ::= SignedInteger 'd' | FloatNumber 'd'? | 'NaN' | '-'? 'INF'\n" +
-"Number       ::= SignedInteger | FloatNumber | 'NaN' | '-'? 'INF'\n" +				
+"Number       ::= SignedInteger | FloatNumber | 'NaN' | '-'? 'INF'\n" +
 "/* Date and time */\n" +
 "yearFrag     ::= '-'? [0-9]*\n" +
 "monthFrag    ::= '0' [1-9] | '1' [0-2]\n" +
@@ -226,13 +226,13 @@ public class TestJsonXon extends XDTester {
 "Duration     ::= '-'? 'P' ((duYMonthFrag duDayTimeFrag?) | duDayTimeFrag)\n" +
 "/* bytes */\n" +
 "Bytes        ::= 'b(' B64text? ')'\n" +
-"/* GPS */\n" +			
+"/* GPS */\n" +
 "BPSName      ::= ('_' | Letter)+ ([- _.,/0-9] | Letter)*\n" +
 "GPS          ::= 'g(' Number ',' ' '? Number (',' ' '? Number)?\n" +
 "             (',' ' '? (BPSName | String) )? ')'\n" +
-"/* Currency */\n" +			
+"/* Currency */\n" +
 "Currency     ::= 'C('[A-Z]{3}')'\n" +
-"/* Price */\n" +			
+"/* Price */\n" +
 "Price        ::= 'p(' IntNumber FloatPart? ' ' [A-Z]{3}')'\n" +
 "/* Char */\n" +
 "Char         ::= 'c\"' StringPart '\"'\n" +
@@ -266,7 +266,7 @@ public class TestJsonXon extends XDTester {
 "/* String */\n" +
 "UTFChar      ::= '\\u' HexDigit {4} /*hexadecimal specification of char*/\n" +
 "StringPart   ::= '\\\\' | '\\\"' | '\\n' | '\\r' | '\\t' | '\\f' | '\\b'\n" +
-"             | UTFChar | AnyChar\n" +				
+"             | UTFChar | AnyChar\n" +
 "String       ::= '\"' StringPart* '\"'\n" +
 "Boolean      ::= 'true' | 'false'\n" +
 "SimpleValue  ::= S? ('null' | Boolean | String\n" +
@@ -292,7 +292,7 @@ public class TestJsonXon extends XDTester {
 				"-3e-5D",
 				// string
 				"\"\"",
-				"\"\\u0045\"", // string with UTFChar 
+				"\"\\u0045\"", // string with UTFChar
 				"\"\\n\\t\\\\\\\"\\b\"", // esccaped chars
 				"d1949-11-07", // date
 				"d1949-11-07T15:59:00Z",  // dateTime
@@ -325,7 +325,7 @@ public class TestJsonXon extends XDTester {
 				// bytes
 				"b()",
 				"b( a b\n\tc = )",
-				// GPS 
+				// GPS
 				"g(1,0)",
 				"g(1.5, -3, -5)",
 				"g(1.5, -3, -5, Lon)",
