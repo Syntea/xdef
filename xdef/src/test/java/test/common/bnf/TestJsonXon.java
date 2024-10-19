@@ -257,11 +257,10 @@ public class TestJsonXon extends XDTester {
 "SchemeName   ::= [a-zA-Z]+ '://'\n" +
 "URI          ::= 'u\"' SchemeName AnyChar+ '\"'\n" +
 "/* IPAddr */\n" +
-"ByteNum        ::= '2' [0-5] [0-9] | [0-1] [0-9] [0-9] | [0-9]{1,2}\n" +
-"IPv4          ::= ByteNum '.' ByteNum '.' ByteNum '.' ByteNum\n" +
-"IPv6          ::= HexDigit{1,4} ':' HexDigit{1,4} ':' HexDigit{1,4}\n" +
-"              ':' HexDigit{1,4} ':' HexDigit{1,4} ':' HexDigit{1,4}\n" +
-"              ':' HexDigit{1,4} ':' HexDigit{1,4}\n" +
+"IPv4part        ::= '2' [0-5] [0-9] | [0-1] [0-9] [0-9] | [0-9]{1,2}\n" +
+"IPv4          ::= IPv4part ('.' IPv4part) {3}\n" +
+"IPv6part       ::= HexDigit {1,4}\n" +
+"IPv6          ::= IPv6part (':' IPv6part) {7}\n" +
 "IPAddr        ::= '/' (IPv6 | IPv4)\n" +
 "/* String */\n" +
 "UTFChar      ::= '\\u' HexDigit {4} /*hexadecimal specification of char*/\n" +
@@ -348,8 +347,8 @@ public class TestJsonXon extends XDTester {
 				"/0.00.000.038",
 				"/129.255.0.99",
 				"/0:0:0:0:0:0:0:0",
-				"/FFFF:0:0:0:8:800:000C:417A",
-				"/ffff:0:0:0:8:800:000C:417a",
+				"/FABC:0:01:002:0008:8000:000C:41DE",
+				"/fabc:0:01:002:0008:8000:000C:41de",
 				// Complex values
 				"{}",
 				"{\"\":\"\"}",
