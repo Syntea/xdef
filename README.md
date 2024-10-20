@@ -11,7 +11,8 @@ their processing and construction.
 
 Homepage: <http://www.xdef.org>
 
-This project is implementation for platform Java 1.6+.
+This project is an implementation for the platform Java 1.8+
+(moreover up to the version 41.0.4 for the platform Java 1.6+).
 
 
 # License
@@ -171,7 +172,7 @@ The term "X‑definition" we use in the two different meanings:
 either as a name of the programming language or as an XML element
 containing the code of X‑definition language.
 
-For the **complete documentation** see the directory **_xdef/src/documentation_**.
+For the **complete documentation** see the directory [xdef/src/documentation](/xdef/src/documentation).
 
 
 
