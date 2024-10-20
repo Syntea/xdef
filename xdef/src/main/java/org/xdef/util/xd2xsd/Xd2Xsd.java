@@ -445,14 +445,12 @@ public class Xd2Xsd {
 	 * @param attrs array with attribute models.
 	 */
 	private void addAttrs(final Element el, final XMData[] attrs) {
-		/* AK */
 		Element element = getElement(el);
 		for (XMData x : attrs) {
 			XMOccurrence attOcc = x.getOccurence();
 			if (attOcc.isIllegal()) {
 				continue;
 			}
-			/* AK */
 			String baseName = x.getRefTypeName();
 			if (baseName == null) {
 				baseName = getNameElement(x.getXDPosition());
@@ -489,27 +487,15 @@ public class Xd2Xsd {
 				String name = exElement.getAttribute("name");
 				baseType = namespace + name;
 			}
-			/* AK */
 			Element att = genSchemaElem(el, "attribute");
-			/* AK */
-//			String targetNs =
-//				getSchemaRoot(el).getAttribute("targetNamespace");
-			/* AK */
 			att.setAttribute("use",	attOcc.isRequired()?"required":"optional");
-			/* AK */
-//			String nsUri = x.getNSUri();
-			/* AK */
 			if (nsUri != null && !nsUri.isEmpty()) {
 				if (!targetNs.equals(nsUri)) {
-					/* AK */
-//					att.setAttribute("ref", x.getLocalName());
-//					att.setAttribute("xmlns", nsUri);
 					att.setAttribute("ref", namespace + x.getLocalName());
 					namespace = getNamespace(nsUri);
 					if (!namespace.isEmpty()) {
 						att.setAttribute("xmlns" + nameNamespace, nsUri);
 					}
-					/* AK */
 					String outName = findSchemaItem(nsUri);
 					Element schemaItem;
 					if (outName == null) {
@@ -520,8 +506,6 @@ public class Xd2Xsd {
 						schemaItem = _xsdSources.get(outName);
 					}
 					att = genSchemaElem(schemaItem, "attribute");
-				} else {
-//					att.setAttribute("form", "qualified");
 				}
 			}
 			/* AK */
@@ -544,12 +528,7 @@ public class Xd2Xsd {
 				att.setAttribute("type", baseType);
 				att.setAttribute("name", x.getLocalName());
 			}
-			/* AK */
-			GenParser parserInfo =
-					/* AK */
-//				GenParser.genParser((XMData) x, _genXdateOutFormat);
-					GenParser.genParser(x, _genXdateOutFormat);
-			/* AK */
+			GenParser parserInfo = GenParser.genParser(x, _genXdateOutFormat); /* AK */
 			if (parserInfo.getFixed() != null) {
 				att.setAttribute("fixed", parserInfo.getFixed());
 			} else if (parserInfo.getDefault() != null) {
@@ -567,42 +546,24 @@ public class Xd2Xsd {
 					if (simpletp == null) {
 						simpletp = genSchemaElem(tpel, "simpleType");
 						addDocumentation(simpletp, parserInfo.getInfo());
-						/* AK */
-//						simpletp.setAttribute("name", typeName);
 						simpletp.setAttribute("name", baseType);
-						/* AK */
 						Element restr = genRestrictionElement(simpletp);
 						restr.setAttribute("base", parserName);
 					}
-					/* AK */
-//					att.setAttribute("type", typeName);
 					att.setAttribute("type", parserName);
-					/* AK */
 				}
 			} else {
 				if (typeName == null) {
-					/* AK */
-//					Element simpletp = genSchemaElem(att, "simpleType");
 					Element simpletp = genSchemaElem(schema, "simpleType");
 					simpletp.setAttribute("name", baseType);
-					/* AK */
 					genRestrictions(simpletp, parserInfo);
 				} else {
-					/* AK */
-//					att.setAttribute("type", typeName);
-					/* AK */
 					Element tpel = _types == null ? getSchemaRoot(el) : _types;
 					Element simpleType = findSchematype(tpel, typeName);
 					if (simpleType == null) {
-						/* AK */
-//						simpleType = genSchemaElem(tpel, "simpleType");
 						simpleType = genSchemaElem(getSchemaRoot(tpel), "simpleType");
-						/* AK */
 						genRestrictions(simpleType, parserInfo);
-						/* AK */
-//						simpleType.setAttribute("name", typeName);
 						simpleType.setAttribute("name", baseType);
-						/* AK */
 					}
 				}
 			}
@@ -807,13 +768,9 @@ public class Xd2Xsd {
 				}
 				genElem(schemaItem, xel);
 				Element elem = genSchemaElem(parent, "element");
-				/* AK */
-//				elem.setAttribute("xmlns", nsUri);
-//				elem.setAttribute("ref", xel.getLocalName());
 				addXmlns(schema, elem, nsUri);
 				String namespace = getNamespace(nsUri);
 				elem.setAttribute("ref", namespace + xel.getLocalName());
-				/* AK */
 				setOccurrence(elem, xel);
 				return elem;
 			}
@@ -832,10 +789,7 @@ public class Xd2Xsd {
 				}
 				genElem(newSchema, xel);
 				Element elem = genSchemaElem(parent,"element");
-				/* AK */
-//				elem.setAttribute("ref", xel.getLocalName());
 				addXmlns(schema, elem, nsUri);
-				/* AK */
 				elem.setAttribute("ref", xel.getLocalName());
 				setOccurrence(elem, xel);
 				return elem;
@@ -876,7 +830,6 @@ public class Xd2Xsd {
 				break;
 			}
 		}
-		/* AK */
 		if (children.length > 0) {
 			XMNode x = children[0];
 			if (x.getKind()==XMNode.XMMIXED
@@ -908,10 +861,7 @@ public class Xd2Xsd {
 							}
 						}
 					}
-					/* AK */
-//					addAttrs(complt, attrs);
 					addAttrs(complexType, attrs);
-					/* AK */
 					return el;
 				}
 			}
@@ -920,28 +870,16 @@ public class Xd2Xsd {
 				case XMNode.XMMIXED:
 				case XMNode.XMSEQUENCE:
 					if (((XMSelector) x).getEndIndex() == children.length - 1) {
-						/* AK */
-//						genGroup(complt,
-//							complt, (XMSelector) children[0], children, 0);
-//						addAttrs(complt, attrs);
 						genGroup(complexType,
 								complexType, (XMSelector) children[0], children, 0);
 						addAttrs(complexType, attrs);
-						/* AK */
 						return el;
 					}
 			}
-			/* AK */
-//			Element seq = genSequenceElement(complt);
-//			genSequence(complt, seq, children, -1, children.length);
 			Element seq = genSequenceElement(complexType);
 			genSequence(complexType, seq, children, -1, children.length);
-			/* AK */
 		}
-		/* AK */
-//		addAttrs(complt, attrs);
 		addAttrs(complexType, attrs);
-		/* AK */
 		return el;
 	}
 
@@ -996,7 +934,9 @@ public class Xd2Xsd {
 						sequence = choice;
 						break;
 					case XMSELECTOR_END:
-						sequence = (Element) choice.getParentNode();
+						if (choice != null) {
+							sequence = (Element) choice.getParentNode();
+						}
 						break;
 					case XMELEMENT:
 						if (sequence == null) {
@@ -1248,15 +1188,12 @@ public class Xd2Xsd {
 		Element result = _doc.createElementNS(
 			XMLConstants.W3C_XML_SCHEMA_NS_URI, SCHEMA_PFX + name);
 		if (parent != null) {
-			/* AK */
-//			parent.appendChild(result);
 			if (name.equals("sequence")) {
 				Node firstChild = parent.getFirstChild();
 				parent.insertBefore(result, firstChild);
 			} else {
 				parent.appendChild(result);
 			}
-			/* AK */
 		}
 		return result;
 	}
@@ -1390,7 +1327,6 @@ public class Xd2Xsd {
 				}
 			}
 		}
-		/* AK */
 		Map<String, Element> sources = generator._xsdSources;
 		for (Map.Entry<String, Element> en : sources.entrySet()) {
 			String name = en.getKey();
@@ -1398,7 +1334,6 @@ public class Xd2Xsd {
 			schema = clearSchema(schema);
 			generator._xsdSources.put(name, schema);
 		}
-		/* AK */
 		return generator._xsdSources;
 	}
 

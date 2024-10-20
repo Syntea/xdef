@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.2.8, release-date 2024-10-19
+# Version 42.2.8, release-date 2024-10-20
 * implemented new X-script method `currencyCode()` of `Currency` value
   which returns string with ISO 4217 currency code. 
 
