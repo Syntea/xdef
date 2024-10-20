@@ -278,12 +278,12 @@ Prerequisities:
     * access to maven repository manager _oss.sonatype.org_ (having id "_ossrh_" in the file _pom.xml_)
 
 Deploying:
-* deploy snapshot packages to the snapshot-repository _oss.sonatype.org_:
+* deploy the snapshot-version to the repository _oss.sonatype.org_:
 
   ```shell
   mvn deploy -Pjavadoc,sources,dm-ossrh
   ```
-* release the version of X-definition to the maven central repository (throw the repository _oss.sonatype.org_):
+* deploy the X-definition release-version to the central maven repository (through the repository _oss.sonatype.org_):
 
   ```shell
   mvn deploy -Prelease,javadoc,sources,dm-ossrh
