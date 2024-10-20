@@ -15,6 +15,8 @@ import org.xdef.msg.XDEF;
 import org.xdef.sys.FUtils;
 import org.xdef.sys.ReportWriter;
 import org.xdef.sys.SRuntimeException;
+import org.xdef.xml.KXpathExpr;
+import org.xdef.xml.KXqueryExpr;
 
 /** Provides generation of {@link org.xdef.XDPool} from source
  * X-definitions. You can modify properties of compilation by parameters from
@@ -378,4 +380,14 @@ public final class XDFactory extends XDTools {
 	public final static XDPool readXDPool(final URL url) throws IOException {
 		return readXDPool(url.openStream());
 	}
+
+	/** Check if XQuery implementation is available.
+	 * @return true if XQuery implementation is available.
+	 */
+	public static final boolean isXQuerySupported() {return KXqueryExpr.isXQueryImplementation();}
+
+	/** Check if XPath2 implementation is available.
+	 * @return true if XPath2 implementation is available.
+	 */
+	public static final boolean isXPath2Supported() {return KXpathExpr.isXPath2();}
 }

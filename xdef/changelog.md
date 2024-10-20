@@ -1,8 +1,12 @@
 # Version ${version}, release-date ${release.date}
 
 # Version 42.2.8, release-date 2024-10-20
-* implemented new X-script method `currencyCode()` of `Currency` value
+* Implemented new X-script method `currencyCode()` of `Currency` value
   which returns string with ISO 4217 currency code. 
+* To the class `org.xdef.XDFactory` is added new static methods. The method
+  `isXQuerySupported()` returns true if XQuery language is supported
+  and the method `isXPath2Supported()` returns true if XPath2 expression format
+  is supported.
 
 # Version 42.2.7, release-date 2024-10-08
 * Fixed bug in conversion from XML schema regular expression to Java regular
