@@ -987,53 +987,54 @@ public class Xd2Xsd {
 			Element sequence = null;
 			Element choice = null;
 			for (XMNode child : children) {
-				if (child.getKind() == XMNode.XMTEXT) {
-					complexType.setAttribute("mixed", "true");
-				}
-				if (child.getKind() == XMCHOICE) {
-					choice = genSchemaElem(sequence, "choice");
-					sequence = choice;
-				} else if (child.getKind() == XMSELECTOR_END) {
-					sequence = (Element) choice.getParentNode();
-				} else if (child instanceof XMElement) {
-					if (sequence == null) {
-						sequence = genSequenceElement(complexType);
-					}
-					String childRefPos = ((XMElement) child).getReferencePos();
-					boolean alreadyDefined = false;
-					if (childRefPos != null) {
-						XMElement refXMElem =
-								(XMElement) xel.getXDPool().findModel(childRefPos);
-						NodeList nodes = schema.getChildNodes();
-						for (int i = 0; i < nodes.getLength(); i++) {
-							Node n = nodes.item(i);
-							if (n instanceof Element) {
-								Element el = (Element) n;
-								String elName = el.getAttribute("name");
-								if (elName.equals(refXMElem.getLocalName())) {
-									alreadyDefined = true;
-									Element refElem;
-									refElem = genSchemaElem(sequence, "element");
-									refElem.setAttribute("name", child.getLocalName());
-									setOccurrence(refElem, child);
-									if (child.getKind() == XMELEMENT
-											&& ((XMElement) child).getReferencePos() != null) {
-										genRef(refElem, (XMElement) child);
-									} else {
-										refElem.setAttribute(
-												"type",namespace+refXMElem.getLocalName());
-									}
-
-									break;
-								}
-								setOccurrence(el, xel);
-							}
+				switch (child.getKind()) {
+					case XMNode.XMTEXT:
+						complexType.setAttribute("mixed", "true");
+						break;
+					case XMCHOICE:
+						choice = genSchemaElem(sequence, "choice");
+						sequence = choice;
+						break;
+					case XMSELECTOR_END:
+						sequence = (Element) choice.getParentNode();
+						break;
+					case XMELEMENT:
+						if (sequence == null) {
+							sequence = genSequenceElement(complexType);
 						}
-					}
-
-					if (!alreadyDefined) {
-						genElem(sequence, (XMElement) child);
-					}
+						String childRefPos = ((XMElement) child).getReferencePos();
+						boolean alreadyDefined = false;
+						if (childRefPos != null) {
+							XMElement refXMElem =
+								(XMElement) xel.getXDPool().findModel(childRefPos);
+							NodeList nodes = schema.getChildNodes();
+							for (int i = 0; i < nodes.getLength(); i++) {
+								Node n = nodes.item(i);
+								if (n instanceof Element) {
+									Element el = (Element) n;
+									String elName = el.getAttribute("name");
+									if (elName.equals(refXMElem.getLocalName())) {
+										alreadyDefined = true;
+										Element refElem;
+										refElem = genSchemaElem(sequence, "element");
+										refElem.setAttribute("name", child.getLocalName());
+										setOccurrence(refElem, child);
+										if (child.getKind() == XMELEMENT
+											&& ((XMElement) child).getReferencePos() != null) {
+											genRef(refElem, (XMElement) child);
+										} else {
+											refElem.setAttribute(
+												"type",namespace+refXMElem.getLocalName());
+										}
+										break;
+									}
+									setOccurrence(el, xel);
+								}
+							}
+						}	if (!alreadyDefined) {
+							genElem(sequence, (XMElement) child);
+						}
+						break;
 				}
 			}
 			addAttrs(complexType, xel.getAttrs());
@@ -1060,8 +1061,8 @@ public class Xd2Xsd {
 			refRefElem = (XMElement) xel.getXDPool().findModel(refRefPos);
 		}
 		XMNode[] refChildren = refElement.getChildNodeModels();
-		Set<XMNode> filteredRefChildren = Arrays.stream(refChildren)
-										.collect(Collectors.toSet());
+		Set<XMNode> filteredRefChildren =
+			Arrays.stream(refChildren).collect(Collectors.toSet());
 		if (refRefElem != null) {
 			Set<XMNode> newFilteredChildren = new LinkedHashSet<>();
 			for (XMNode xmNode : filteredRefChildren) {

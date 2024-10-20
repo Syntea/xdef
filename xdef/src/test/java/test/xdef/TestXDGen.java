@@ -20,11 +20,11 @@ public class TestXDGen extends XDTester {
 
 	public TestXDGen() {super();}
 
-	private ReportWriter genXDefXml(String x) throws Exception{
+	private static ReportWriter genXDefXml(final String x) throws Exception{
 		return genXDefXml(x, false);
 	}
 
-	private ReportWriter genXDefXml(String x, boolean display)
+	private static ReportWriter genXDefXml(final String x, boolean display)
 		throws Exception{
 		String s = KXmlUtils.nodeToString(GenXDefinition.genXdef(x), true);
 		if (display) {
@@ -42,11 +42,11 @@ public class TestXDGen extends XDTester {
 		return KXmlUtils.compareElements(x, el, true);
 	}
 
-	private ReportWriter genXDefXon(String x) throws Exception{
+	private static ReportWriter genXDefXon(final String x) throws Exception{
 		return genXDefXon(x, false);
 	}
 
-	private ReportWriter genXDefXon(String x, boolean display)
+	private static ReportWriter genXDefXon(final String x, boolean display)
 		throws Exception{
 		String s = KXmlUtils.nodeToString(GenXDefinition.genXdef(x), true);
 		if (display) {
