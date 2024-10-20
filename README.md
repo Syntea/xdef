@@ -174,6 +174,12 @@ containing the code of X‑definition language.
 
 For the **complete documentation** see the directory [xdef/src/documentation](/xdef/src/documentation).
 
+You can try your examples online at:
+* validation mode: <http://xdef.syntea.cz/tutorial/examples/validate.html>
+* construction mode: <http://xdef.syntea.cz/tutorial/examples/compose.html>
+* bnf grammar: <http://xdef.syntea.cz/tutorial/examples/BNF.html>
+* template: <http://xdef.syntea.cz/tutorial/examples/template.html>
+
 
 
 # Usage in other projects
