@@ -12,7 +12,7 @@ their processing and construction.
 Homepage: <http://www.xdef.org>
 
 This project is an implementation for the platform Java 1.8+
-(moreover up to the version 41.0.4 for the platform Java 1.6+).
+(additional note: up to the version 41.0.4 for the platform Java 1.6+).
 
 
 # License
