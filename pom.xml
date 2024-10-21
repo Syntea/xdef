@@ -49,9 +49,16 @@
     </scm>
     
     <properties>
-        <revision>42.2.8</revision><!-- when changed, change also ${release.date}, see below -->
-        <changelist>-SNAPSHOT</changelist><!-- use profile "release" for build release-version -->
-        <release.date>2024-10-21</release.date><!-- update when changed version -->
+        <!-- update after release version, may change by:
+             > mvn versions:set-property -Dproperty=revision -DnewVersion=x.y.z
+        -->
+        <revision>42.2.8</revision>
+        <!-- use profile "release" for build release-version -->
+        <changelist>-SNAPSHOT</changelist>
+        <!-- update before release version, may change by:
+             > mvn versions:set-property -Dproperty=release.date -DnewVersion=yyyy-mm-dd
+        -->
+        <release.date>2024-10-21</release.date>
         <specification.version>4.2</specification.version>
         
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -236,24 +243,29 @@
                     <version>3.0.0-M1</version>
                 </plugin>
                 <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>flatten-maven-plugin</artifactId>
-                    <version>1.1.0</version>
-                </plugin>
-                <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-gpg-plugin</artifactId>
                     <version>3.2.7</version>
                 </plugin>
                 <plugin>
-                    <groupId>org.sonatype.plugins</groupId>
-                    <artifactId>nexus-staging-maven-plugin</artifactId>
-                    <version>1.6.8</version>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>flatten-maven-plugin</artifactId>
+                    <version>1.1.0</version>
                 </plugin>
                 <plugin>
                     <groupId>io.github.git-commit-id</groupId>
                     <artifactId>git-commit-id-maven-plugin</artifactId>
                     <version>4.9.9</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>versions-maven-plugin</artifactId>
+                    <version>2.17.1</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.sonatype.plugins</groupId>
+                    <artifactId>nexus-staging-maven-plugin</artifactId>
+                    <version>1.6.8</version>
                 </plugin>
             </plugins>
         </pluginManagement>
