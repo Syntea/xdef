@@ -13,15 +13,13 @@
     </parent>
 
     <artifactId>xdef-test11</artifactId>
-    <packaging>jar</packaging>
 
     <name>xdef-test11</name>
-    <description>executing test under java-11 for X-definition, alfa-version</description>
+    <description>executing tests in module xdef on java-11</description>
 
     <properties>
         <jdk.version>11</jdk.version>
         <jdk.vendor>sun</jdk.vendor>
-        <skipTests>true</skipTests>
     </properties>
 
     <dependencies>
@@ -72,14 +70,5 @@
         </dependency>
 
     </dependencies>
-
-    <profiles>
-        <profile>
-            <id>testAllJvm</id>
-            <properties>
-                <skipTests>false</skipTests>
-            </properties>
-        </profile>
-    </profiles>
 
 </project>

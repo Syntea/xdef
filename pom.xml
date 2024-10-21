@@ -86,8 +86,7 @@
         <!-- auxiliary module with buildtools -->
         <module>xdef-buildtools</module>
 
-        <!-- tests executing under java-11 -->
-        <module>xdef-test11</module>
+        <!--see also profile "testAllJvm"-->
     </modules>
 
     <build>
@@ -326,6 +325,13 @@
             <properties>
                 <skipTests>true</skipTests>
             </properties>
+        </profile>
+        <profile>
+            <id>testAllJvm</id>
+            <modules>
+                <!-- execute tests on java-11 -->
+                <module>xdef-test11</module>
+            </modules>
         </profile>
         <profile>
             <id>javadoc</id>
