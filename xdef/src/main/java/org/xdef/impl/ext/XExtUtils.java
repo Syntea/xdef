@@ -13,6 +13,7 @@ import org.xdef.XDConstants;
 import org.xdef.XDContainer;
 import org.xdef.XDCurrency;
 import org.xdef.XDEmailAddr;
+import org.xdef.XDFactory;
 import org.xdef.XDGPSPosition;
 import org.xdef.XDParseResult;
 import org.xdef.XDPrice;
@@ -61,6 +62,20 @@ public final class XExtUtils {
 		return XDConstants.BUILD_VERSION + " " + XDConstants.BUILD_DATETIME;
 	}
 
+	/** Check if XQuery implementation is available.
+	 * @return true if XQuery implementation is available.
+	 */
+	public static final boolean isXQuerySupported() {
+		return XDFactory.isXQuerySupported();
+	}
+
+	/** Check if XPath2 implementation is available.
+	 * @return true if XPath2 implementation is available.
+	 */
+	public static final boolean isXPath2Supported() {
+		return XDFactory.isXPath2Supported();
+	}
+
 	/**	Get name space URI of qualified name.
 	 * @param qname qualified name
 	 * @param elem element where name space URI is searched.
@@ -77,6 +92,7 @@ public final class XExtUtils {
 		prefix = (ndx = qname.indexOf(':')) > 0 ? qname.substring(0, ndx) : "";
 		return getNSUri(prefix, elem);
 	}
+
 	/** Get name space URI of given prefix from the context of an element.
 	 * @param pfx string with the prefix.
 	 * @param elem the element.
@@ -99,23 +115,22 @@ public final class XExtUtils {
 			el = (Element) n;
 		}
 	}
+
 	/** Get w3c.dom.Node from the XXNode. */
 	private static Node getActualNode(final XXNode x) {
 		Element el = x.getElement();
 		return x.getItemId() == XXNode.XX_ELEMENT ? el : el.getLastChild();
 	}
+
 	/** Add comment to the XXNode.
 	 * @param x where to add.
 	 * @param s text of comment.
 	 */
 	public static void addComment(final XXNode x, final String s) {
 		Node n = getActualNode(x);
-		if (n != null) {
-			addComment(n, s);
-		} else {
-			addComment(x.getElement(), s);
-		}
+		addComment((n != null ? n : x.getElement()), s);
 	}
+
 	/** Add comment to the org.w3c.dom.Node.
 	 * @param n where to add.
 	 * @param s text of comment.
@@ -124,6 +139,7 @@ public final class XExtUtils {
 		n.getParentNode().appendChild(
 			n.getOwnerDocument().createComment(s != null? s : ""));
 	}
+
 	/** Insert comment to XXNode.
 	 * @param x where to insert.
 	 * @param s text of comment.
@@ -136,6 +152,7 @@ public final class XExtUtils {
 			addComment(x.getElement(), s);
 		}
 	}
+
 	/** Insert comment to org.w3c.dom.Node.
 	 * @param n where to insert.
 	 * @param s text of comment.
@@ -144,6 +161,7 @@ public final class XExtUtils {
 		n.getParentNode().insertBefore(
 			n.getOwnerDocument().createComment(s), n);
 	}
+
 	/** Add programming instruction to the XXNode.
 	 * @param x where to add.
 	 * @param target target of PI.
@@ -159,6 +177,7 @@ public final class XExtUtils {
 			addPI(x.getElement(), target, data);
 		}
 	}
+
 	/** Add programming instruction to the org.w3c.dom.Node.
 	 * @param n where to add.
 	 * @param target target of PI.
@@ -170,6 +189,7 @@ public final class XExtUtils {
 		n.getParentNode().appendChild(
 			n.getOwnerDocument().createProcessingInstruction(target, data));
 	}
+
 	/** Insert programming instruction to the XXNode.
 	 * @param x where to insert.
 	 * @param target target of PI.
@@ -185,6 +205,7 @@ public final class XExtUtils {
 			addPI(x.getElement(), target, data);
 		}
 	}
+
 	/** Insert programming instruction to the org.w3c.dom.Node.
 	 * @param n where to insert.
 	 * @param target target of PI.
@@ -196,6 +217,7 @@ public final class XExtUtils {
 		n.getParentNode().insertBefore(
 			n.getOwnerDocument().createProcessingInstruction(target,data), n);
 	}
+
 	/** Add text to the XXNode.
 	 * @param x where to add.
 	 * @param s text value.
@@ -203,6 +225,7 @@ public final class XExtUtils {
 	public static void addText(final XXNode x, final String s) {
 		addText(x.getElement(), s);
 	}
+
 	/** Add text to the org.w3c.Element.
 	 * @param el where to add.
 	 * @param s text value.
@@ -212,6 +235,7 @@ public final class XExtUtils {
 			el.appendChild(el.getOwnerDocument().createTextNode(s));
 		}
 	}
+
 	/** Insert text to the XXNode.
 	 * @param x where to insert.
 	 * @param s text value.
@@ -224,6 +248,7 @@ public final class XExtUtils {
 			addText(x.getElement(), s);
 		}
 	}
+
 	/** Insert text to org.w3c.dom.Node.
 	 * @param n where to insert.
 	 * @param s text value.
@@ -234,6 +259,7 @@ public final class XExtUtils {
 				n.getOwnerDocument().createTextNode(s), n);
 		}
 	}
+
 	/** Get text content of XXNode.
 	 * @param x node with text content.
 	 * @return text content of XXNode.
@@ -241,6 +267,7 @@ public final class XExtUtils {
 	public static String getTextContent(final XXNode x) {
 		return getTextContent(x.getElement());
 	}
+
 	/** Get text content of org.w3c.do,.Element.
 	 * @param el element with text content.
 	 * @return text content of element.
@@ -248,11 +275,13 @@ public final class XExtUtils {
 	public static String getTextContent(final Element el) {
 		return el != null ? el.getTextContent() : null;
 	}
+
 	/** Get X-position of XXNode.
 	 * @param x node with position.
 	 * @return X-position of node.
 	 */
 	public static String getXPos(final XXNode x) {return x.getXPos();}
+
 	/** Get X-position of model in X-definition.
 	 * @param x node with position.
 	 * @return X-position of model of XXNode..
@@ -260,6 +289,7 @@ public final class XExtUtils {
 	public static String getXDPosition(final XXNode x) {
 		return x.getXMNode().getXDPosition();
 	}
+
 	/** Get source line number of XXNode.
 	 * @param x node with line number.
 	 * @return source line numer of node.
@@ -268,6 +298,7 @@ public final class XExtUtils {
 		SPosition spos = x.getSPosition();
 		return spos != null ? spos.getLineNumber() : 0;
 	}
+
 	/** Get source column number of XXNode.
 	 * @param x node.
 	 * @return source column numer of node.
@@ -276,6 +307,7 @@ public final class XExtUtils {
 		SPosition spos = x.getSPosition();
 		return spos != null ? spos.getColumnNumber() : 0;
 	}
+
 	/** Get system id of XXNode.
 	 * @param x node.
 	 * @return system id of XXNode.
@@ -284,6 +316,7 @@ public final class XExtUtils {
 		SPosition spos = x.getSPosition();
 		return spos != null ? spos.getSysId() : "";
 	}
+
 	/** Get source position of given node.
 	 * @param x node with source position.
 	 * @return source position of node or null if it is not available.
@@ -292,16 +325,19 @@ public final class XExtUtils {
 		SPosition spos = x.getSPosition();
 		return spos != null ? spos.toString() : "";
 	}
+
 	/**	Returns the current time in milliseconds (depends on underlying
 	 * operating system).
 	 * @return the current time in milliseconds.
 	 */
 	public static long currentTimeMillis() {return System.currentTimeMillis();}
+
 	/** Get value of environmental variable.
 	 * @param name of environmental variable.
 	 * @return value of environmental variable.
 	 */
 	public static String getEnv(final String name) {return System.getenv(name);}
+
 	/** Get user name from email address.
 	 * @param x email address.
 	 * @return user name from the email address.
@@ -309,6 +345,7 @@ public final class XExtUtils {
 	public static String getEmailUserName(final XDEmailAddr x) {
 		return x.getUserName();
 	}
+
 	/** Get local part from email address.
 	 * @param x email address.
 	 * @return local part from email address.
@@ -316,6 +353,7 @@ public final class XExtUtils {
 	public static String getEmailLocalPart(final XDEmailAddr x) {
 		return x.getLocalPart();
 	}
+
 	/** Get domain from email address.
 	 * @param x email address.
 	 * @return domain from email address.
@@ -323,6 +361,7 @@ public final class XExtUtils {
 	public static String getEmailDomain(final XDEmailAddr x) {
 		return x.getDomain();
 	}
+
 	/** Get string from email address.
 	 * @param x email address.
 	 * @return  string created from email address.
@@ -330,6 +369,7 @@ public final class XExtUtils {
 	public static String getEmailAddr(final XDEmailAddr x){
 		return x.getEmailAddr();
 	}
+
 	/** Get string from internet address.
 	 * @param x internet address.
 	 * @return  string created from internet address.
@@ -337,6 +377,7 @@ public final class XExtUtils {
 	public static String getHostAddress(final InetAddress x){
 		return x.getHostAddress();
 	}
+
 	/** Get bytes created from internet address.
 	 * @param x internet address.
 	 * @return bytes created from internet address.
@@ -345,6 +386,7 @@ public final class XExtUtils {
 	public static boolean isIPv6(final InetAddress x) {
 		return x == null ? false : x.getAddress().length > 4;
 	}
+
 	/** Get value of XON key from XXNoede as string.
 	 * @param x node.
 	 * @return value of XON key from XXNoede as string.
@@ -353,6 +395,7 @@ public final class XExtUtils {
 		String s = x.getElement().getAttribute(XonNames.X_KEYATTR);
 		return s != null ? XonTools.xmlToJName(s) : null;
 	}
+
 	/** Get XDValue from object.
 	 * @param o object.
 	 * @return XDValue created from object.
@@ -422,6 +465,7 @@ public final class XExtUtils {
 	public static void cancel() {
 		throw new SError(Report.error(XDEF.XDEF906)); //X-definition canceled
 	}
+
 	/** Cancel running X-definition process and throw message.
 	 * @param msg reason of cancelling.
 	 */
@@ -429,6 +473,7 @@ public final class XExtUtils {
 		 //X-definition canceled&{0}{; }
 		throw new SError(Report.error(XDEF.XDEF906, msg));
 	}
+
 	/** Parse base64 data.
 	 * @param s base64 data
 	 * @return parsed bytes from base64 data.
@@ -440,6 +485,7 @@ public final class XExtUtils {
 			return null;
 		}
 	}
+
 	/** Parse hexadecimal data.
 	 * @param s hexadecimal data
 	 * @return parsed bytes from hexadecimal data.
@@ -453,6 +499,9 @@ public final class XExtUtils {
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
+// Methods with XXElement
+////////////////////////////////////////////////////////////////////////////////
+
 	public static Element getCreateContextElement(final XXElement xElem) {
 		return ((ChkNode)xElem).getElemValue();
 	}
@@ -500,6 +549,26 @@ public final class XExtUtils {
 		final String x) {
 		return fromParent(e, x);
 	}
+	public static XDContainer fromRoot(final XXElement xElem,
+		final String expr,
+		final Element elem) {
+		DefXPathExpr xe = new DefXPathExpr(expr,
+			xElem.getXXNamespaceContext(),
+			xElem.getXXFunctionResolver(),
+			xElem.getXXVariableResolver());
+		return new DefContainer(xe.exec(elem));
+	}
+
+	public static XDContainer fromRootContext(final XXElement xElem,
+		final String expr,
+		final Element elem) {
+		return fromRoot(xElem, expr, elem);
+	}
+
+////////////////////////////////////////////////////////////////////////////////
+// Methods with XXNode
+////////////////////////////////////////////////////////////////////////////////
+
 	public static XDContainer fromRoot(final XXNode xElem, final String expr) {
 		XDValue val = xElem.getXDDocument().getXDContext();
 		if (val == null || val.getItemId() != XD_ELEMENT) {
@@ -515,20 +584,7 @@ public final class XExtUtils {
 	public static XDContainer fromRootContext(final XXNode xe,final String exp){
 		return fromRoot(xe, exp);
 	}
-	public static XDContainer fromRoot(final XXElement xElem,
-		final String expr,
-		final Element elem) {
-		DefXPathExpr xe = new DefXPathExpr(expr,
-			xElem.getXXNamespaceContext(),
-			xElem.getXXFunctionResolver(),
-			xElem.getXXVariableResolver());
-		return new DefContainer(xe.exec(elem));
-	}
-	public static XDContainer fromRootContext(final XXElement xElem,
-		final String expr,
-		final Element elem) {
-		return fromRoot(xElem, expr, elem);
-	}
+
 ////////////////////////////////////////////////////////////////////////////////
 // PARSERESULT
 ////////////////////////////////////////////////////////////////////////////////
@@ -586,7 +642,6 @@ public final class XExtUtils {
 // Implementation of predefined X-Script Math methods (ensure conversion
 // of arguments long -> double). Other math methods are available in Math.
 ////////////////////////////////////////////////////////////////////////////////
-//	public static long abs(long a) {return Math.abs(a);}
 	public static double acos(long a) {return Math.acos(a);}
 	public static double asin(long a) {return Math.asin(a);}
 	public static double atan(long a) {return Math.atan(a);}

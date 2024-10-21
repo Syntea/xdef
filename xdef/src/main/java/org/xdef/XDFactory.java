@@ -384,10 +384,14 @@ public final class XDFactory extends XDTools {
 	/** Check if XQuery implementation is available.
 	 * @return true if XQuery implementation is available.
 	 */
-	public static final boolean isXQuerySupported() {return KXqueryExpr.isXQueryImplementation();}
+	public static final boolean isXQuerySupported() {
+		return KXqueryExpr.isXQueryImplementation();
+	}
 
 	/** Check if XPath2 implementation is available.
 	 * @return true if XPath2 implementation is available.
 	 */
-	public static final boolean isXPath2Supported() {return KXpathExpr.isXPath2();}
+	public static final boolean isXPath2Supported() {
+		return KXpathExpr.isXPath2();
+	}
 }
