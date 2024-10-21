@@ -11,7 +11,8 @@ their processing and construction.
 
 Homepage: <http://www.xdef.org>
 
-This project is implementation for platform Java 1.6+.
+This project is an implementation for the platform Java 1.8+
+(additional note: up to the version 41.0.4 for the platform Java 1.6+).
 
 
 # License
@@ -51,24 +52,24 @@ Let´s have the following XML data:
 This is the complete X-definition file with the model of the XML data on the left:
 
 ```xml
-<xd:def xmlns:xd="http://www.xdef.org/xdef/3.2" xd:root="Employee">
-    <Employee
-        FirstName = "required string()"
-        LastName  = "required string()"
-        EnterDate = "required date()"
-        Salary    = "optional decimal()"
-    >
-        <Address
-            Street = "required string()"
-            Number = "required int()"
-            Town   = "required string()"
-            State  = "required string()"
-            Zip    = "required int()"
-        />
-        <Competence xd:script = "occurs 1..5">
-            required string()
-        </Competence>
-    </Employee>
+<xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" xd:root="Employee">
+<Employee
+    FirstName = "required string()"
+    LastName  = "required string()"
+    EnterDate = "required date()"
+    Salary    = "optional decimal()"
+>
+    <Address
+        Street = "required string()"
+        Number = "required int()"
+        Town   = "required string()"
+        State  = "required string()"
+        Zip    = "required int()"
+    />
+    <Competence xd:script = "occurs 1..5">
+        required string()
+    </Competence>
+</Employee>
 </xd:def>
 ```
 
@@ -105,6 +106,7 @@ XML data:
 Model of the XML data:
 
 ```xml
+<xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" xd:root="Family">
 <Family>
   <Father    xd:script = "occurs 0..1; ref Person" />
   <Mother    xd:script = "occurs 1..1; ref Person" />
@@ -121,6 +123,7 @@ Model of the XML data:
          Number = "int()"
          Town   = "string()"
          Zip    = "int()" />
+</xd:def>
 ```
 
 </td></tr></table>
@@ -171,7 +174,13 @@ The term "X‑definition" we use in the two different meanings:
 either as a name of the programming language or as an XML element
 containing the code of X‑definition language.
 
-For the **complete documentation** see the directory **_xdef/src/documentation_**.
+For the **complete documentation** see the directory [xdef/src/documentation](/xdef/src/documentation).
+
+You can try your examples online at:
+* validation mode: <http://xdef.syntea.cz/tutorial/examples/validate.html>
+* construction mode: <http://xdef.syntea.cz/tutorial/examples/compose.html>
+* BNF-grammar: <http://xdef.syntea.cz/tutorial/examples/BNF.html>
+* template: <http://xdef.syntea.cz/tutorial/examples/template.html>
 
 
 
@@ -277,12 +286,12 @@ Prerequisities:
     * access to maven repository manager _oss.sonatype.org_ (having id "_ossrh_" in the file _pom.xml_)
 
 Deploying:
-* deploy snapshot packages to the snapshot-repository _oss.sonatype.org_:
+* deploy the snapshot-version to the repository _oss.sonatype.org_:
 
   ```shell
   mvn deploy -Pjavadoc,sources,dm-ossrh
   ```
-* release the version of X-definition to the maven central repository (throw the repository _oss.sonatype.org_):
+* deploy the X-definition release-version to the central maven repository (through the repository _oss.sonatype.org_):
 
   ```shell
   mvn deploy -Prelease,javadoc,sources,dm-ossrh
