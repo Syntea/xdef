@@ -52,24 +52,24 @@ Let´s have the following XML data:
 This is the complete X-definition file with the model of the XML data on the left:
 
 ```xml
-<xd:def xmlns:xd="http://www.xdef.org/xdef/3.2" xd:root="Employee">
-    <Employee
-        FirstName = "required string()"
-        LastName  = "required string()"
-        EnterDate = "required date()"
-        Salary    = "optional decimal()"
-    >
-        <Address
-            Street = "required string()"
-            Number = "required int()"
-            Town   = "required string()"
-            State  = "required string()"
-            Zip    = "required int()"
-        />
-        <Competence xd:script = "occurs 1..5">
-            required string()
-        </Competence>
-    </Employee>
+<xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" xd:root="Employee">
+<Employee
+    FirstName = "required string()"
+    LastName  = "required string()"
+    EnterDate = "required date()"
+    Salary    = "optional decimal()"
+>
+    <Address
+        Street = "required string()"
+        Number = "required int()"
+        Town   = "required string()"
+        State  = "required string()"
+        Zip    = "required int()"
+    />
+    <Competence xd:script = "occurs 1..5">
+        required string()
+    </Competence>
+</Employee>
 </xd:def>
 ```
 
@@ -106,6 +106,7 @@ XML data:
 Model of the XML data:
 
 ```xml
+<xd:def xmlns:xd="http://www.xdef.org/xdef/4.2" xd:root="Family">
 <Family>
   <Father    xd:script = "occurs 0..1; ref Person" />
   <Mother    xd:script = "occurs 1..1; ref Person" />
@@ -122,6 +123,7 @@ Model of the XML data:
          Number = "int()"
          Town   = "string()"
          Zip    = "int()" />
+</xd:def>
 ```
 
 </td></tr></table>
