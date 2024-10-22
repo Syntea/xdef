@@ -88,8 +88,7 @@ public class XComponentUtil {
 		final String xdPosition) {
 		XMNode xm = xp.findModel(xdPosition);
 		if (xm.getKind() != XMELEMENT) {
-			//Argument is not model of element: &{0}
-			throw new SRuntimeException(XDEF.XDEF372, xm.getXDPosition());
+			throw new SRuntimeException(XDEF.XDEF372, xm.getXDPosition()); //Argument is not model of element: &{0}
 		}
 		Element el = toXml(xc, (XMElement) xm);
 		XDDocument xd = xp.createXDDocument(xdPosition);
@@ -131,8 +130,7 @@ public class XComponentUtil {
 		final String xdPosition) {
 		XMNode xm = xp.findModel(xdPosition);
 		if (xm.getKind() != XMELEMENT) {
-			//Argument is not model of element: &{0}
-			throw new SRuntimeException(XDEF.XDEF372, xm.getXDPosition());
+			throw new SRuntimeException(XDEF.XDEF372, xm.getXDPosition()); //Argument is not model of element: &{0}
 		}
 		return toXml(xc, (XMElement) xm);
 	}
@@ -279,8 +277,8 @@ public class XComponentUtil {
 		updateXPos(xc, "", 0);
 	}
 
-	/** Convert parsed value witn XDConnpainer to the java.util.List.
-	 * @param value parsed valuest.
+	/** Convert parsed value with XDConnpainer to java.util.List.
+	 * @param value parsed value.
 	 * @param typeId separator of items.
 	 * @return converted list.
 	 */
@@ -292,8 +290,8 @@ public class XComponentUtil {
 		return valueToList((XDContainer) value.getParsedValue(), typeId);
 	}
 
-	/** Convert XDConnpainer to the java.util.List.
-	 * @param  c Connpainer value.
+	/** Convert XDContainer to the java.util.List.
+	 * @param  c Container value.
 	 * @param typeId type of items..
 	 * @return converted list.
 	 */
@@ -319,26 +317,19 @@ public class XComponentUtil {
 				result.add(new DefJNull());
 			} else if (o instanceof String) {
 				String s = XonTools.jstringToSource((String) o);
-				if ("false".equals(s) || "true".equals(s) || "null".equals(s)
-					|| s.isEmpty() || s.indexOf('\\')>=0 || s.indexOf(' ')>=0
-					|| new StringParser(s).isSignedInteger()) {
+				if ("false".equals(s) || "true".equals(s) || "null".equals(s) || s.isEmpty()
+					|| s.indexOf('\\')>=0 || s.indexOf(' ')>=0 || new StringParser(s).isSignedInteger()) {
 					s = '"' + XonTools.jstringToSource(s) + '"';
 				}
 				result.add(new DefString(s));
 			} else if (o instanceof Number) {
-				if (o instanceof BigDecimal) {
-					result.add(new DefDecimal((BigDecimal)o));
-				} else if (o instanceof Double) {
-					result.add(new DefDouble(((Number)o).doubleValue()));
-				} else {
-					result.add(new DefLong(((Number)o).longValue()));
-				}
-			} else if (o instanceof Boolean) {
-				result.add(new DefBoolean(((Boolean)o)));
-			} else if (o instanceof List) {
-				result.add(listToJlist(o));
+				result.add(o instanceof BigDecimal ? new DefDecimal((BigDecimal)o)
+					: o instanceof Double ? new DefDouble(((Number)o).doubleValue())
+					: new DefLong(((Number)o).longValue()));
 			} else {
-				result.add(o);
+				result.add(o instanceof Boolean ? new DefBoolean((Boolean)o)
+					: o instanceof List ? listToJlist(o)
+					: o);
 			}
 		}
 		return result;
@@ -370,14 +361,11 @@ public class XComponentUtil {
 					s = XonTools.readJString(p);
 				}
 				result.add(s);
-			} else if (o instanceof DefJNull) {
-				result.add(null);
-			} else if (o instanceof List) {
-				result.add(jlistToList(o));
-			} else if (o instanceof XDValue) {
-				result.add(((XDValue) o).getObject());
 			} else {
-				result.add(o);
+				result.add(o instanceof DefJNull ? null
+					: o instanceof List ? jlistToList(o)
+					: o instanceof XDValue ? ((XDValue) o).getObject()
+					: o);
 			}
 		}
 		return result;
@@ -418,8 +406,8 @@ public class XComponentUtil {
 			} else if (o instanceof String) {
 				String s = (String) o;
 				if ("false".equals(s) || "true".equals(s) || "null".equals(s)
-				||s.isEmpty()||s.indexOf('\\')>=0||s.indexOf(' ')>=0
-				||s.indexOf('\t')>=0||s.indexOf('\n')>=0||s.indexOf('"')>=0
+				|| s.isEmpty() || s.indexOf('\\') >= 0 || s.indexOf(' ') >= 0
+				|| s.indexOf('\t') >= 0 || s.indexOf('\n') >=0 || s.indexOf('"') >= 0
 				|| new StringParser(s).isSignedInteger()) {
 					s = '"' + XonTools.jstringToSource(s) + '"';
 				}
@@ -474,15 +462,15 @@ public class XComponentUtil {
 	 */
 	public static final String xmlToJavaName(final String xmlName) {
 		return "_".equals(xmlName) ? "$_" // Java 9 not allows indentifiers "_"
-			: xmlName.replace(':','$').replace('-','_').replace('.','_');
+			: xmlName.replace(':', '$').replace('-', '_').replace('.', '_');
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Create XON object from X-component.
 ////////////////////////////////////////////////////////////////////////////////
 	private static Object toXonObject(final Object o) {
-		return o instanceof String ? XonTools.xmlToJValue((String) o)
-			: o instanceof XonTools.JNull ? null : o;
+		return o instanceof String
+			? XonTools.xmlToJValue((String) o) : o instanceof XonTools.JNull ? null : o;
 	}
 
 	/** Create XON simple value from XComponent.
@@ -496,8 +484,7 @@ public class XComponentUtil {
 			m.setAccessible(true);
 			return toXonObject(m.invoke(xc));
 		} catch (IllegalAccessException | IllegalArgumentException
-			| NoSuchMethodException | SecurityException
-			| InvocationTargetException ex) {
+			| NoSuchMethodException | SecurityException | InvocationTargetException ex) {
 			throw new RuntimeException("Can't access value", ex);
 		}
 	}
@@ -557,7 +544,7 @@ public class XComponentUtil {
 					if (o == null) {
 						continue;
 					}
-					Method m = o.getClass().getDeclaredMethod("get"+X_KEYATTR);
+					Method m = o.getClass().getDeclaredMethod("get" + X_KEYATTR);
 					m.setAccessible(true);
 					key = XonTools.xmlToJName((String) m.invoke(o));
 					if (o instanceof XComponent) {
@@ -566,8 +553,7 @@ public class XComponentUtil {
 						result.put(key, o);
 					}
 				} catch (IllegalAccessException | IllegalArgumentException
-					| NoSuchMethodException | SecurityException
-					| InvocationTargetException ex) {}
+					| NoSuchMethodException | SecurityException | InvocationTargetException ex) {}
 			} else if (methodName.startsWith("listOf$")) {
 				try {
 					x.setAccessible(true);
@@ -580,8 +566,7 @@ public class XComponentUtil {
 					break;
 				} catch (IllegalAccessException | IllegalArgumentException
 					| SecurityException | InvocationTargetException ex) {}
-			} else if (x.getParameterTypes().length == 0
-				&& methodName.startsWith("listOf"+XON_NS_PREFIX+"$")) {
+			} else if (x.getParameterTypes().length == 0 && methodName.startsWith("listOf" + XON_NS_PREFIX + "$")) {
 				String key;
 				try {
 					x.setAccessible(true);
@@ -590,8 +575,7 @@ public class XComponentUtil {
 						continue;
 					}
 					if (o instanceof XComponent) {
-						Method m = o.getClass().getDeclaredMethod(
-							"get" + X_KEYATTR);
+						Method m = o.getClass().getDeclaredMethod("get" + X_KEYATTR);
 						m.setAccessible(true);
 						key = XonTools.xmlToJName((String) m.invoke(o));
 						result.put(key, ((XComponent) o).toXon());
@@ -599,19 +583,16 @@ public class XComponentUtil {
 						if (o instanceof List) {
 							for(Object oo : (List)o) {
 								if (oo instanceof XComponent) {
-									Method m = oo.getClass().getDeclaredMethod(
-										"get" + X_KEYATTR);
+									Method m = oo.getClass().getDeclaredMethod("get" + X_KEYATTR);
 									m.setAccessible(true);
-									key = XonTools.xmlToJName(
-										(String) m.invoke(oo));
+									key = XonTools.xmlToJName((String) m.invoke(oo));
 									result.put(key, ((XComponent) oo).toXon());
 								}
 							}
 						}
 					}
 				} catch (IllegalAccessException | IllegalArgumentException
-					| NoSuchMethodException | SecurityException
-					| InvocationTargetException ex) {}
+					| NoSuchMethodException | SecurityException | InvocationTargetException ex) {}
 			}
 		}
 	}
@@ -638,16 +619,14 @@ public class XComponentUtil {
 		Map<String, Object> result = getXonAttrs(xc);
 		for (Method x: methods) {
 			String name = x.getName();
-			if (name.startsWith("get") && !name.startsWith("get$")
-				&& x.getParameterTypes().length == 0) {
+			if (name.startsWith("get") && !name.startsWith("get$") && x.getParameterTypes().length == 0) {
 				Object o = null;
 				try {
 					x.setAccessible(true);
 					o = x.invoke(xc);
 				} catch (IllegalAccessException | IllegalArgumentException
 					| SecurityException | InvocationTargetException ex) {
-					throw new RuntimeException(
-						"Can't access getter: " + x.getName());
+					throw new RuntimeException("Can't access getter: " + x.getName());
 				}
 				if (o instanceof XComponent) {
 					XComponent y = (XComponent) o;
@@ -658,8 +637,7 @@ public class XComponentUtil {
 							Method m = cls1.getDeclaredMethod("get"+X_KEYATTR);
 							m.setAccessible(true);
 							key = XonTools.xmlToJName((String) m.invoke(o));
-						} catch (IllegalAccessException
-							| IllegalArgumentException | NoSuchMethodException
+						} catch (IllegalAccessException | IllegalArgumentException | NoSuchMethodException
 							| SecurityException | InvocationTargetException ex){
 							throw new RuntimeException("Not key", ex);
 						}
@@ -674,8 +652,7 @@ public class XComponentUtil {
 							}
 						}
 						o = z.get(key);
-						if (o instanceof List && ((List) o).size()==1
-							 && ((List) o).get(0) instanceof String) {
+						if (o instanceof List && ((List) o).size()==1 && ((List) o).get(0) instanceof String) {
 							o = XonTools.xmlToJValue((String)((List) o).get(0));
 						}
 						result.put(XonTools.xmlToJName(key), o);
@@ -726,10 +703,8 @@ public class XComponentUtil {
 						}
 						result.add(o);
 					} catch (IllegalAccessException | IllegalArgumentException
-						| NoSuchMethodException | SecurityException
-						| InvocationTargetException ex) {
-						throw new RuntimeException(
-							"Can't access getter: " + mName);
+						| NoSuchMethodException | SecurityException | InvocationTargetException ex) {
+						throw new RuntimeException("Can't access getter: " + mName);
 					}
 				} else {
 					result.add(toXonXD(x, nsStack));
@@ -759,11 +734,9 @@ public class XComponentUtil {
 					o = m.invoke(xc);
 				} catch (IllegalAccessException | IllegalArgumentException
 					| SecurityException | InvocationTargetException ex) {
-					throw new RuntimeException(
-						"Can't access getter: " + m.getName());
+					throw new RuntimeException("Can't access getter: " + m.getName());
 				}
-				if (!(o instanceof XComponent || o instanceof List
-					|| o instanceof Map)) {
+				if (!(o instanceof XComponent || o instanceof List || o instanceof Map)) {
 					result.put(XonTools.xmlToJName(name.substring(3)), o);
 				}
 
@@ -808,8 +781,7 @@ public class XComponentUtil {
 					} catch (IllegalAccessException | IllegalArgumentException
 						| NoSuchMethodException | SecurityException
 						| InvocationTargetException ex) {
-						throw new RuntimeException(
-							"Can't access getter: " + mName);
+						throw new RuntimeException("Can't access getter: " + mName);
 					}
 				} else {
 					body.add(toXonXD(x, nsStack));

@@ -1,6 +1,7 @@
 package org.xdef.component;
 
 public interface XCEnumeration {
+
 	/** Get object associated with this item of enumeration.
 	 * @return object associated with this item of enumeration.
 	 */

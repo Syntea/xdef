@@ -95,7 +95,7 @@ public interface XDDebug {
 	 */
 	public void setInDebug(InputStream inDebug);
 
-	/** This method is called from x-script methods pause or trace.
+	/** This method is called from X-script methods pause or trace.
 	 * @param xnode actual XXNode.
 	 * @param code executive code.
 	 * @param pc program counter.

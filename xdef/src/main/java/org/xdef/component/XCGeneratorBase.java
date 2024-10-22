@@ -194,8 +194,7 @@ class XCGeneratorBase {
 	final static String modify(final String origin, final String... replace) {
 		if (replace.length % 2 != 0) {
 			//Internal error&{0}{: }
-			throw new SIllegalArgumentException(SYS.SYS066,
-				"Length of array of keys and replacemetns differs");
+			throw new SIllegalArgumentException(SYS.SYS066, "Length of array of keys and replacemetns differs");
 		}
 		String result = origin;
 		for (int i = 0; i < replace.length; i+=2) {
@@ -212,8 +211,7 @@ class XCGeneratorBase {
 		XDValue x = xdata.getParseMethod();
 		if (x != null && x instanceof XDParser) {
 			String typeName = ((XDParser) x).getDeclaredName();
-			Map<String, String> enums =
-				xdata.getXDPool().getXComponentEnums();
+			Map<String, String> enums = xdata.getXDPool().getXComponentEnums();
 			if (typeName == null || enums == null || enums.isEmpty()) {
 				return null;  // not declared enumeration
 			}
@@ -253,8 +251,7 @@ class XCGeneratorBase {
 			case XD_EMAIL: return "org.xdef.XDEmailAddr";
 			case XD_CURRENCY: return "java.util.Currency";
 			case XD_IPADDR: return "java.net.InetAddress";
-			case XD_BYTES:
-				return "byte[]";
+			case XD_BYTES: return "byte[]";
 			case XD_TELEPHONE: return "org.xdef.XDTelephone";
 			case XD_NULL: //jnull
 			case XD_ANY:
@@ -278,8 +275,7 @@ class XCGeneratorBase {
 			_byteArrayEncoding |= "base64Binary".equals(parserName) ? 1 : 2;
 		}
 		if (type == XD_CONTAINER) {
-			return "java.util.List<"
-				+ getJavaType(xdata.getAlltemsType()) + ">";
+			return "java.util.List<" + getJavaType(xdata.getAlltemsType()) + ">";
 		} else if (type == XDValue.XD_ANY) {
 			type = xdata.getAlltemsType();
 		}
@@ -291,8 +287,7 @@ class XCGeneratorBase {
 	 * @return getter of ParsedResult.
 	 */
 	final static String getParsedResultGetter(final XMData xdata) {
-		String result =
-			"value.getParsedValue().isNull()? null: value.getParsedValue().";
+		String result = "value.getParsedValue().isNull()? null: value.getParsedValue().";
 		String enumType = checkEnumType(xdata);
 		if (enumType != null) {
 			return enumType+".toEnum("+ result+"toString())";
@@ -323,21 +318,14 @@ class XCGeneratorBase {
 			case XD_NUMBER: return "(Number)(" + result + "getObject())";
 			case XD_DURATION: return result + "durationValue()";
 			case XD_DATETIME: return result + "datetimeValue()";
-			case XD_GPSPOSITION:
-				return "(org.xdef.sys.GPSPosition)(" + result + "getObject())";
-			case XD_PRICE:
-				return "(org.xdef.sys.Price)(" + result + "getObject())";
-			case XD_ANYURI:
-				return "(java.net.URI)(" + result + "getObject())";
-			case XD_EMAIL:
-				return "(org.xdef.XDEmailAddr)(" + result + "getObject())";
-			case XD_CURRENCY:
-				return "(java.util.Currency)(" + result + "getObject())";
-			case XD_IPADDR:
-				return "(java.net.InetAddress)(" + result + "getObject())";
+			case XD_GPSPOSITION: return "(org.xdef.sys.GPSPosition)(" + result + "getObject())";
+			case XD_PRICE: return "(org.xdef.sys.Price)(" + result + "getObject())";
+			case XD_ANYURI: return "(java.net.URI)(" + result + "getObject())";
+			case XD_EMAIL: return "(org.xdef.XDEmailAddr)(" + result + "getObject())";
+			case XD_CURRENCY: return "(java.util.Currency)(" + result + "getObject())";
+			case XD_IPADDR: return "(java.net.InetAddress)(" + result + "getObject())";
 			case XD_BYTES: return result + "getBytes()";
-			case XD_TELEPHONE:
-				return "(org.xdef.XDTelephone)(" + result + "getObject())";
+			case XD_TELEPHONE: return "(org.xdef.XDTelephone)(" + result + "getObject())";
 			case XD_PARSER: return "value.getParsedString()";
 			case XD_NULL: //jnull
 			case XD_ANY: return "value.getParsedValue().getObject()";
@@ -820,8 +808,7 @@ class XCGeneratorBase {
 				case XD_DATETIME: {
 					String s = xdata.getDateMask();
 					x = s == null
-						? "org.xdef.component.XComponentUtil"
-						+ ".dateToJstring(get&{name}()))"
+						? "org.xdef.component.XComponentUtil.dateToJstring(get&{name}()))"
 						: "get&{name}().formatDate("+s+"))";
 					break;
 				}
@@ -839,14 +826,13 @@ class XCGeneratorBase {
 					x = "get&{name}())";
 					break;
 				case XD_CONTAINER: {
-					x = "org.xdef.component.XComponentUtil.listToString("
-						+ "get&{name}(), "
-						+ (parseName.equals("jlist") ? "true" : "false") + "))";
+					x = "org.xdef.component.XComponentUtil.listToString(get&{name}(), "
+						+ (parseName.equals("jlist") ? "true" : "false")
+						+ "))";
 					break;
 				}
 
-				default:
-					x = "get&{name}().toString())";
+				default: x = "get&{name}().toString())";
 			}
 		}
 		sb.append(modify(
@@ -867,13 +853,15 @@ class XCGeneratorBase {
 		final StringBuilder sb,
 		final boolean isList) {
 		if (sb.length() == 0) {
-			sb.append("\t\t").append(
-				"java.util.List<org.xdef.component.XComponent> a=")
-				.append("new java.util.ArrayList<>();").append(LN);
+			sb.append("\t\t")
+				.append("java.util.List<org.xdef.component.XComponent> a=")
+				.append("new java.util.ArrayList<>();")
+				.append(LN);
 		}
 		sb.append("\t\torg.xdef.component.XComponentUtil.addXC(a, ")
 			.append(isList ? "listOf" : "get")
-			.append(name).append("());").append(LN);
+			.append(name).append("());")
+			.append(LN);
 	}
 
 	/** Generation Java code for creating child element with text node.
@@ -918,8 +906,7 @@ class XCGeneratorBase {
 			case XD_DATETIME: {
 				String s = xdata.getDateMask();
 				x = s == null
-					? "org.xdef.component.XComponentUtil.dateToJstring(" +
-						z+y + ")"
+					? "org.xdef.component.XComponentUtil.dateToJstring(" + z+y + ")"
 					: z+y+"." +	"formatDate(" + s + ")";
 				break;
 			}
@@ -936,8 +923,9 @@ class XCGeneratorBase {
 					break;
 				}
 			case XD_CONTAINER: {
-				x = "org.xdef.component.XComponentUtil.listToString(" + z +
-					"," + (parseName.equals("jlist") ? "true" : "false") + ")";
+				x = "org.xdef.component.XComponentUtil.listToString(" + z + ","
+					+ (parseName.equals("jlist") ? "true" : "false")
+					+ ")";
 				break;
 			}
 			default:
@@ -1001,8 +989,8 @@ class XCGeneratorBase {
 					XNode n = (XNode) xe.getXDPool().findModel(s);
 					if (n != null && n.getKind() == XMELEMENT) {
 						XComponentInfo x = _components.get(s);
-						QName u2 = x == null ? ((XElement) n).getQName()
-							: new QName(x.getNS(),((XElement)n).getLocalName());
+						QName u2 = x == null
+							? ((XElement) n).getQName() : new QName(x.getNS(),((XElement)n).getLocalName());
 						if (u1 == null ? u2 == null : u1.equals(u2)) {
 							t = x != null ? x.getName() : null;
 							return t;
@@ -1036,9 +1024,9 @@ class XCGeneratorBase {
 				final int ndxu, ndxv;
 				String uu = u.getName();
 				String vv = v.getName();
-				return ((ndxu = uu.indexOf(" implements ")) > 0
-					&& (ndxv = vv.indexOf(" interface ")) > 0 &&
-					uu.substring(ndxu+12).equals(vv.substring(ndxv+11)))
+				return (ndxu = uu.indexOf(" implements ")) > 0
+					&& (ndxv = vv.indexOf(" interface ")) > 0
+					&& uu.substring(ndxu+12).equals(vv.substring(ndxv+11))
 					? vv : uu;
 			}
 		}
@@ -1058,8 +1046,7 @@ class XCGeneratorBase {
 		if (ndx < 0) {
 			return null;
 		}
-		if (s == null
-			&& (s = xe.isReference() ? xe.getReferencePos() : null) != null) {
+		if (s == null && (s = xe.isReference() ? xe.getReferencePos() : null) != null) {
 			s = _binds.get(xe.getXDPosition() + xdPos.substring(ndx));
 		}
 		return s;
@@ -1109,7 +1096,7 @@ class XCGeneratorBase {
 		return s1.substring(ndx+1);
 	}
 
-	/** Add name of variable name to the set of varialble names.
+	/** Add name of variable name to the set of variable names.
 	 * @param varNames set of variable names.
 	 * @param name name to add.
 	 * @param xdPosition XDPosition of actual model.

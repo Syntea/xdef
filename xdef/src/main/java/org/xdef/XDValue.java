@@ -7,7 +7,7 @@ import java.math.BigInteger;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-/** Provides the interface for usage of internal objects of x-script.
+/** Provides the interface for usage of internal objects of X-script.
  * This interface provides general access methods to values of variables and
  * of parameters of methods in X-definitions.
  * @author Vaclav Trojan

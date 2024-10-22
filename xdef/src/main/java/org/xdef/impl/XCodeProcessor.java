@@ -3845,7 +3845,7 @@ public final class XCodeProcessor {
 		return _userObjects.get(id);
 	}
 
-	/** This method is revoked if an exception is thrown when x-script
+	/** This method is revoked if an exception is thrown when X-script
 	 * is processed and process X-definition is to be finished with fatal error.
 	 * @param pc program counter.
 	 * @param sp stack pointer.

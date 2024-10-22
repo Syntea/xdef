@@ -67,8 +67,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 		String typeName = getJavaObjectTypeName(xdata);
 		String descr = "text node from element";
 		int max = isRoot ? 1 : xel.maxOccurs(); // root is always 1
-		genDirectGetter(xel,
-			typeName, name, iName, isRoot, max, descr, getters, sbi);
+		genDirectGetter(xel, typeName, name, iName, isRoot, max, descr, getters, sbi);
 		genDirectSetter(typeName, name, iName, isRoot, max, descr, setters,sbi);
 	}
 
@@ -180,8 +179,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 				"&{name}", name,
 				"&{typ}", typ));
 			if (typeName.contains("org.xdef.sys.SDatetime")) {
-				// datetime getters
-				sb.append(modify(
+				sb.append(modify(// datetime getters
 (_genJavadoc ? "\t/** Get value of &{d} \"&{xmlName}\" as java.util.Date."+LN+
 "\t * @return value of &{d} as java.util.Date or null."+LN+
 "\t */"+LN : "")+
@@ -228,8 +226,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 			d += 's';
 			x = "if(x!=null)_&{name}.add(x);";
 		} else {
-			x = (isRoot ? "" : "if(_&{name}==null)_&{name}=new "
-				+ iName + "();_&{name}.") + "set$value(x);";
+			x = (isRoot ? "" : "if(_&{name}==null)_&{name}=new "+iName+"();_&{name}.") + "set$value(x);";
 		}
 		if (sbi != null) {
 			sb.append("\t@Override").append(LN);
@@ -423,8 +420,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 		final StringBuilder sbi,
 		final Set<String> varNames) {
 		String name = getXonItemName(xe, "get$", varNames);
-		String typ =
-			getJavaObjectTypeName((XData) xe.getAttr(X_VALATTR));
+		String typ = getJavaObjectTypeName((XData) xe.getAttr(X_VALATTR));
 		String template;
 		// has only a text child
 		String jGet, jSet;
@@ -433,8 +429,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 		if (max > 1) { // list of values
 			String typ1 = "java.util.List<" + typ + ">";
 			jGet = xe.getXonMode() != 0 && "String".equals(typ)
-				?"org.xdef.xon.XonTools.jstringFromSource(y.get"+X_VALATTR+"())"
-				: "y.get"+X_VALATTR+"()";
+				? "org.xdef.xon.XonTools.jstringFromSource(y.get"+X_VALATTR+"())" : "y.get"+X_VALATTR+"()";
 			if (keyAttr != null && keyAttr.getFixedValue() == null) {//%anyName
 				template =
 (_genJavadoc ? "\t/** Get map with %anyName entries of the map &{d}."+LN+
@@ -519,14 +514,10 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 				}
 			}
 			// setter
-			if (xe.getXonMode() != 0) {
-				if ("String".equals(typ)) {
-					jSet = "org.xdef.xon.XonUtils.toJsonString(x,false)";
-				} else {
-					jSet = "x";
-				}
-			} else {
+			if (xe.getXonMode() == 0) {
 				jSet = "x";
+			} else {
+				jSet = "String".equals(typ) ? "org.xdef.xon.XonUtils.toJsonString(x,false)" : "x";
 			}
 			template =
 (_genJavadoc ? "\t/** Add values of textnodes of &{d}. */"+LN : "")+
@@ -819,7 +810,6 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 "\t}"+LN;
 					break;
 				case X_MAP:
-					//X_MAP
 					typ = "java.util.Map<String, Object>";
 					template =
 (_genJavadoc ? "\t/** Get array from map entry &{name}."+LN+
@@ -902,8 +892,7 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 						s +=
 "o instanceof String? org.xdef.xon.XonTools.xmlToJValue((String) o): o;";
 						break;
-					default:
-						s += "("+typ+")o;";
+					default: s += "("+typ+")o;";
 				}
 				s += LN+"\t}"+LN;
 			} else {
