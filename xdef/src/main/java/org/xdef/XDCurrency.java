@@ -1,21 +1,18 @@
 package org.xdef;
 
 import java.util.Currency;
-import org.xdef.XDCurrency;
-import org.xdef.XDValue;
-import org.xdef.XDValueAbstract;
 import static org.xdef.XDValueID.XD_CURRENCY;
-import org.xdef.XDValueType;
 import static org.xdef.XDValueType.CURRENCY;
 import org.xdef.msg.SYS;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.SIllegalArgumentException;
 import org.xdef.sys.SRuntimeException;
 
-/** X-script object with currency (see ISO 4217).
+/** X-script Currency (see ISO 4217).
  * @author Vaclav Trojan
  */
 public final class XDCurrency extends XDValueAbstract {
+
 	/** Value of java.util.Currency. */
 	private final Currency _value;
 

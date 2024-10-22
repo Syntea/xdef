@@ -3,7 +3,7 @@ package org.xdef;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.SParser;
 
-/** Result of parsers in XScript.
+/** Result of parsers in X-script.
  * @author Vaclav Trojan
  */
 public interface XDParseResult extends XDValue, SParser {

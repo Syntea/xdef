@@ -3,12 +3,12 @@ package org.xdef;
 import org.xdef.proc.XXNode;
 import org.xdef.sys.SException;
 
-/** Parsers of string values.
+/** Parser interface - constants, keywords and methods.
  * @author Vaclav Trojan
  */
 public interface XDParser extends XDValue {
 	/** Keyword "pattern" id.*/
-	public final static int PATTERN =		0x00000000000001;
+	public final static int PATTERN =			0x00000000000001;
 	/** Keyword "enumeration" id.*/
 	public final static int ENUMERATION =		0x00000000000002;
 	/** Keyword "whiteSpace" id.*/

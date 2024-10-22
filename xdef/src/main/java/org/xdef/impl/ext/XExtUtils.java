@@ -499,20 +499,20 @@ public final class XExtUtils {
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
-// Methods with XXElement
+// Methods with XXNode
 ////////////////////////////////////////////////////////////////////////////////
 
-	public static Element getCreateContextElement(final XXElement xElem) {
-		return ((ChkNode)xElem).getElemValue();
+	public static Element getCreateContextElement(final XXNode xElem) {
+		return ((ChkNode) xElem).getElemValue();
 	}
-	public static Element getParentContextElement(final XXElement xElem) {
+	public static Element getParentContextElement(final XXNode xElem) {
 		XDValue val = ((XXElement) xElem.getParent()).getXDContext();
 		if (val == null || val.getItemId() != XD_ELEMENT) {
 			return null;
 		}
 		return val.getElement();
 	}
-	public static Element getParentContextElement(final XXElement xElem,
+	public static Element getParentContextElement(final XXNode xElem,
 		final long level) {
 		if (level == 0) {
 			return getParentContextElement(xElem);
@@ -533,7 +533,7 @@ public final class XExtUtils {
 		}
 		return null;
 	}
-	public static XDContainer fromParent(final XXElement xel,final String exp) {
+	public static XDContainer fromParent(final XXNode xel,final String exp) {
 		XDValue val = xel.getParent().getXDContext();
 		if (val == null || val.getItemId() != XD_ELEMENT) {
 			return new DefContainer();
@@ -545,11 +545,7 @@ public final class XExtUtils {
 			xel.getXXVariableResolver());
 		return new DefContainer(xe.exec(el));
 	}
-	public static XDContainer fromParentContext(final XXElement e,
-		final String x) {
-		return fromParent(e, x);
-	}
-	public static XDContainer fromRoot(final XXElement xElem,
+	public static XDContainer fromRoot(final XXNode xElem,
 		final String expr,
 		final Element elem) {
 		DefXPathExpr xe = new DefXPathExpr(expr,
@@ -558,31 +554,10 @@ public final class XExtUtils {
 			xElem.getXXVariableResolver());
 		return new DefContainer(xe.exec(elem));
 	}
-
-	public static XDContainer fromRootContext(final XXElement xElem,
-		final String expr,
-		final Element elem) {
-		return fromRoot(xElem, expr, elem);
-	}
-
-////////////////////////////////////////////////////////////////////////////////
-// Methods with XXNode
-////////////////////////////////////////////////////////////////////////////////
-
 	public static XDContainer fromRoot(final XXNode xElem, final String expr) {
 		XDValue val = xElem.getXDDocument().getXDContext();
-		if (val == null || val.getItemId() != XD_ELEMENT) {
-			return new DefContainer();
-		}
-		Element elem = val.getElement();
-		DefXPathExpr xe = new DefXPathExpr(expr,
-			xElem.getXXNamespaceContext(),
-			xElem.getXXFunctionResolver(),
-			xElem.getXXVariableResolver());
-		return new DefContainer(xe.exec(elem));
-	}
-	public static XDContainer fromRootContext(final XXNode xe,final String exp){
-		return fromRoot(xe, exp);
+		return (val == null || val.getItemId() != XD_ELEMENT)
+			? new DefContainer() : fromRoot(xElem, expr, val.getElement());
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -591,12 +566,9 @@ public final class XExtUtils {
 	public static void clearReports(final XDParseResult x) {
 		x.clearReports();
 	}
+
 	public static String getSource(final XDParseResult x) {
 		return x.getSourceBuffer();
-	}
-	public static boolean isSpaces(final XDParseResult x) {return x.isSpaces();}
-	public static boolean isToken(final XDParseResult x, final XDValue y){
-		return x.isToken(y.stringValue());
 	}
 ////////////////////////////////////////////////////////////////////////////////
 // dateTime

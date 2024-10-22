@@ -1,6 +1,6 @@
 package org.xdef;
 
-/** Email address.
+/** Email address in X-script.
  * @author Vaclav Trojan
  */
 public interface XDEmailAddr extends XDValue {

@@ -2,7 +2,7 @@ package org.xdef;
 
 import org.xdef.sys.Report;
 
-/** Exceptions in the x-script.
+/** Exceptions in the X-script.
  * @author Vaclav Trojan
  */
 public interface XDException extends XDValue {

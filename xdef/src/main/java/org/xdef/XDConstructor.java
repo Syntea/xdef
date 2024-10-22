@@ -2,9 +2,7 @@ package org.xdef;
 
 import org.xdef.proc.XXNode;
 
-/** Constructs XDValue from an iterated object fro XDResultSet. This interface
- * is used to construct x-script objects from XDResultSet.
- *
+/** Construct X-script objects from XDResultSet.
  * @author Vaclav Trojan
  */
 public interface XDConstructor {

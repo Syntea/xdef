@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.2.8, release-date 2024-10-21
+# Version 42.2.8, release-date 2024-10-22
 * Implemented new X-script method `currencyCode()` of `Currency` value
   which returns string with ISO 4217 currency code. 
 * To the class `org.xdef.XDFactory` is added new static methods. The method
