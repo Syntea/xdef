@@ -77,6 +77,8 @@ public interface XDConstants {
 	public static final String XDPROPERTY_MAXYEAR = "xdef_maxyear";
 	/** Property defines legal values of dates if year is out of range.*/
 	public static final String XDPROPERTY_SPECDATES = "xdef_specdates";
+	/** Property defines default time zone.*/
+	public static final String XDPROPERTY_DEFAULTZONE = "xdef_defaultZone";
 	/** Property defines if the actual reporter is cleared in the invoked
 	 * action 'onFalse', 'onIllegalAttr', 'onIllegalText',
 	 * 'onEllegalElement'. Default value is 'true'*/

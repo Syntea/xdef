@@ -1,8 +1,15 @@
 # Version ${version}, release-date ${release.date}
 
 # Version 42.2.8, release-date 2024-10-22
-* Implemented new X-script method `currencyCode()` of `Currency` value
-  which returns string with ISO 4217 currency code. 
+* New property `xdef_defaultZone` is used to set default TimeZone
+  in X-definition (see org.xdef.XDConstants.XDPROPERTY_DEFAULTZONE).
+* Implemented new method of XDPool `getDefaultZone()` which returns the default
+  time zone of date/time values where the time zone is not specified.
+* To date/time values where the time zone was not specified is set the time zone
+  from defaultZone. If it is not specified it is set to the time zone of the
+  system.
+* Implemented new X-script method `currencyCode()` of `Currency` value which
+  returns string with ISO 4217 currency code. 
 * To the class `org.xdef.XDFactory` is added new static methods. The method
   `isXQuerySupported()` returns true if XQuery language is supported
   and the method `isXPath2Supported()` returns true if XPath2 expression format

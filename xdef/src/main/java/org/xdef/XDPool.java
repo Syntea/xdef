@@ -12,6 +12,7 @@ import java.io.PrintStream;
 import java.io.Serializable;
 import java.util.Map;
 import java.util.Properties;
+import java.util.TimeZone;
 import org.xdef.sys.ArrayReporter;
 
 /** Provides the interface to object containing compiled code of set of
@@ -180,6 +181,11 @@ public interface XDPool extends Serializable {
 	 * @return list of XComponent enumerations.
 	 */
 	public Map<String, String> getXComponentEnums();
+
+	/** Get default TimeZone.
+	 * @return default TimeZone.
+	 */
+	public TimeZone getDefaultZone();
 
 	/** Get minimum valid year of date.
 	 * @return minimum valid year (Integer.MIN if not set).
