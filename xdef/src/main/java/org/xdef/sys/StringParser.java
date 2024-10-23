@@ -3837,7 +3837,7 @@ public class StringParser extends SReporter implements SParser {
 	 * @param format String with format data.
 	 * @return null or Report if format is not valid.
 	 */
-	public final static Report checkDateFormat(final String format) {
+	public static final Report checkDateFormat(final String format) {
 		StringParser p = new StringParser(format);
 		Report r;
 		if ((r = p.checkDateFormat()) == null) {

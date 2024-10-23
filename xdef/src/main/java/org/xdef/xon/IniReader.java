@@ -211,7 +211,7 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 	 * @param sysId system ID
 	 * @return map with parsed data.
 	 */
-	public final static Map<String, Object> parseINI(Reader in, String sysId) {
+	public static final Map<String, Object> parseINI(Reader in, String sysId) {
 		XonParser jp = new XonObjParser(true);
 		IniReader xr = new IniReader(in, jp);
 		if (sysId != null) {
@@ -388,7 +388,7 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 	 * @param map Map object with INI/Property data.
 	 * @return created string with INI/Property source.
 	 */
-	public final static String toIniString(final Map<String, Object> map) {
+	public static final String toIniString(final Map<String, Object> map) {
 		StringBuilder sb = new StringBuilder();
 		for (Map.Entry<String, Object> x: map.entrySet()) {
 			Object val = ((Map.Entry)x).getValue();
@@ -410,7 +410,7 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 	}
 
 	@SuppressWarnings("unchecked")
-	public final static Element iniToXml(final Object ini) {
+	public static final Element iniToXml(final Object ini) {
 		Document doc = KXmlUtils.newDocument(XDConstants.XON_NS_URI_W,
 			XDConstants.XON_NS_PREFIX+ ":"+XonNames.X_MAP, null);
 		Element el = doc.getDocumentElement();
@@ -456,7 +456,7 @@ public class IniReader extends StringParser implements XonParsers, XonNames {
 	}
 
 	@SuppressWarnings("unchecked")
-	public final static Element iniToXmlW(final Object ini) {
+	public static final Element iniToXmlW(final Object ini) {
 		Element el = KXmlUtils.newDocument(XDConstants.XON_NS_URI_W,
 			XDConstants.XON_NS_PREFIX + ":"+XonNames.X_MAP, null)
 			.getDocumentElement();

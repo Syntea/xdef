@@ -180,7 +180,7 @@ public final class DefNull extends XDValueAbstract {
 	 */
 	public final XDParseResult parseResultValue() {return null;}
 	/** Create "null" XD object of given type. */
-	public final static XDValue genNullValue(final short type) {
+	public static final XDValue genNullValue(final short type) {
 		switch (type) {
 			case XD_LONG: return new DefLong();
 			case XD_DECIMAL: return new DefDecimal();

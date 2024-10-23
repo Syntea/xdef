@@ -5,8 +5,8 @@ package org.xdef.component;
  */
 final class XComponentInfo {
 
-	final String _name;
-	final String _ns;
+	private final String _name;
+	private final String _ns;
 
 	/** Create new instance of XComponentInfo.
 	 * @param name name of XComponent model.

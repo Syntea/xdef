@@ -8,8 +8,7 @@ import org.xdef.sys.SRuntimeException;
  * implementation of XDResultSet interface.
  * @author Vaclav Trojan
  */
-public abstract class XDResultSetAbstract extends XDValueAbstract
-	implements XDResultSet {
+public abstract class XDResultSetAbstract extends XDValueAbstract implements XDResultSet {
 
 	@Override
 	/** Get ID of the type of this object (i.e. XDValueTypes.RESULTSET_VALUE).
@@ -70,7 +69,7 @@ public abstract class XDResultSetAbstract extends XDValueAbstract
 	 * @param index the index of item.
 	 * @return value of the specified item as a string or return null.
 	 */
-	public String itemAsString(int index) {return null;}
+	public String itemAsString(final int index) {return null;}
 
 	@Override
 	/** If the iterated object has named items then return relevant item value

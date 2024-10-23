@@ -44,8 +44,7 @@ public interface XDStatement extends XDValue {
 	 * @return XDResultSet with result of query on this statement.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public XDResultSet queryItems(String itemName, XDValue params)
-		throws SRuntimeException;
+	public XDResultSet queryItems(String itemName, XDValue params) throws SRuntimeException;
 
    /** Close this statement (release all allocated resources).*/
 	public void close();

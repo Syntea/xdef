@@ -1454,7 +1454,7 @@ public class FUtils {
 	 * <li>SYS036 Program exception: {msg}
 	 * </ul>
 	 */
-	public final static void secureCopy(final InputStream is,
+	public static final void secureCopy(final InputStream is,
 		final String pathname) throws SException {
 		secureCopy(is, new File(pathname));
 	}

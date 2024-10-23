@@ -25,7 +25,7 @@ public final class XDReport extends XDValueAbstract {
 	/** Creates a new instance of XDReport with text message.
 	 * @param report the value of report.
 	 */
-	public XDReport(Report report) {_value = report;}
+	public XDReport(final Report report) {_value = report;}
 
 	/** Creates a new instance of XDReport with message.
 	 * @param typ The kind of report.
@@ -33,10 +33,7 @@ public final class XDReport extends XDValueAbstract {
 	 * @param text The text of report.
 	 * @param mod Message modification parameters.
 	 */
-	public XDReport(final int typ,
-		final String id,
-		final String text,
-		final Object... mod) {
+	public XDReport(final int typ, final String id, final String text, final Object... mod) {
 		_value = Report.text(id, text, mod);
 	}
 
@@ -85,12 +82,12 @@ public final class XDReport extends XDValueAbstract {
 	/** Get report ID.
 	 * @return report ID or <i>null</i>.
 	 */
-	public final String getMsgID() {return _value==null?null:_value.getMsgID();}
+	public final String getMsgID() {return _value==null ? null : _value.getMsgID();}
 
 	/** Get primary text.
 	 * @return the primary text or of the report <i>null</i>.
 	 */
-	public final String getText() {return _value==null?null:_value.getText();}
+	public final String getText() {return _value==null ? null : _value.getText();}
 
 	/** Get type of the report.
 	 * @return type of the report :
@@ -109,10 +106,8 @@ public final class XDReport extends XDValueAbstract {
 	 * @return new report with given type.
 	 */
 	public final XDReport setType(final byte type) {
-		return _value == null
-			? new XDReport(new Report(type, "", null))
-			: new XDReport(new Report(type,
-				_value.getMsgID(), _value.getText(), _value.getModification()));
+		return new XDReport( _value == null ? new Report(type, "", null)
+			: new Report(type, _value.getMsgID(), _value.getText(), _value.getModification()));
 	}
 
 ////////////////////////////////////////////////////////////////////////////////

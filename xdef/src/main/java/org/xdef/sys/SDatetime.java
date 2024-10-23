@@ -29,10 +29,10 @@ public class SDatetime extends XMLGregorianCalendar
 	implements Comparable<SDatetime> {
 	private static final BigDecimal BILLION_D = new BigDecimal("1000000000");
 	private static final BigInteger BILLION_I = new BigInteger("1000000000");
-	public final static DateFormatSymbols DFS =
+	public static final DateFormatSymbols DFS =
 		new DateFormatSymbols(Locale.US);
-	public final static TimeZone UTC_ZONE = new SimpleTimeZone(0, "UTC");
-	public final static TimeZone NULL_ZONE = new SimpleTimeZone(0, "_null_");
+	public static final TimeZone UTC_ZONE = new SimpleTimeZone(0, "UTC");
+	public static final TimeZone NULL_ZONE = new SimpleTimeZone(0, "_null_");
 
 	int _day;
 	int _month;
@@ -204,7 +204,7 @@ public class SDatetime extends XMLGregorianCalendar
 	 * @param x SDatetime object from which SDatetime object will be created.
 	 * @return SDatetime new instance created from SDatetime object.
 	 */
-	public final static SDatetime createFrom(final SDatetime x) {
+	public static final SDatetime createFrom(final SDatetime x) {
 		return x == null ? null : new SDatetime(x);
 	}
 
@@ -212,7 +212,7 @@ public class SDatetime extends XMLGregorianCalendar
 	 * @param x Date object from which SDatetime object will be created.
 	 * @return SDatetime new instance created from Date object.
 	 */
-	public final static SDatetime createFrom(final Date x) {
+	public static final SDatetime createFrom(final Date x) {
 		return x == null ? null : new SDatetime(x);
 	}
 
@@ -220,7 +220,7 @@ public class SDatetime extends XMLGregorianCalendar
 	 * @param x Calendar object from which SDatetime object will be created.
 	 * @return SDatetime new instance created from Calendar object.
 	 */
-	public final static SDatetime createFrom(final Calendar x) {
+	public static final SDatetime createFrom(final Calendar x) {
 		return x == null ? null : new SDatetime(x);
 	}
 
@@ -228,7 +228,7 @@ public class SDatetime extends XMLGregorianCalendar
 	 * @param x Timestamp object from which SDatetime object will be created.
 	 * @return SDatetime new instance created from Timestamp object.
 	 */
-	public final static SDatetime createFrom(final Timestamp x) {
+	public static final SDatetime createFrom(final Timestamp x) {
 		return x == null ? null : new SDatetime(x);
 	}
 
@@ -236,7 +236,7 @@ public class SDatetime extends XMLGregorianCalendar
 	 * @param x String from which SDatetime object will be created.
 	 * @return SDatetime new instance created from String.
 	 */
-	public final static SDatetime createFrom(final String x) {
+	public static final SDatetime createFrom(final String x) {
 		return x == null ? null : new SDatetime(x);
 	}
 	/** fQuotient(a, b) = the greatest integer less than or equal to a/b */
@@ -2037,7 +2037,7 @@ public class SDatetime extends XMLGregorianCalendar
 	 * @param sd SDatetime object or null.
 	 * @return java.util.Calendar created from SDatetime object or null.
 	 */
-	public final static Calendar getCalendar(final SDatetime sd) {
+	public static final Calendar getCalendar(final SDatetime sd) {
 		return sd != null ? sd.getCalendar() : null;
 	}
 
@@ -2045,7 +2045,7 @@ public class SDatetime extends XMLGregorianCalendar
 	 * @param sd SDatetime object or null.
 	 * @return java.util.Date created from SDatetime object or null.
 	 */
-	public final static Date getDate(final SDatetime sd) {
+	public static final Date getDate(final SDatetime sd) {
 		return sd != null ? sd.getCalendar().getTime() : null;
 	}
 
@@ -2053,7 +2053,7 @@ public class SDatetime extends XMLGregorianCalendar
 	 * @param sd SDatetime object or null.
 	 * @return java.sql.Timestamp created from SDatetime object or null.
 	 */
-	public final static Timestamp getTimestamp(final SDatetime sd) {
+	public static final Timestamp getTimestamp(final SDatetime sd) {
 		if (sd == null) {
 			return null;
 		}
@@ -2065,7 +2065,7 @@ public class SDatetime extends XMLGregorianCalendar
 	/** Returns the current date and time.
 	 * @return A date representing the current date and time.
 	 */
-	public final static SDatetime now() {
+	public static final SDatetime now() {
 		return new SDatetime(new GregorianCalendar());
 	}
 
@@ -2074,7 +2074,7 @@ public class SDatetime extends XMLGregorianCalendar
 	 * @param date date from which last day of month is to be computed.
 	 * @return day of month.
 	 */
-	public final static int getLastDayOfMonth(final SDatetime date) {
+	public static final int getLastDayOfMonth(final SDatetime date) {
 		return date.getLastDayOfMonth();
 	}
 
@@ -2083,7 +2083,7 @@ public class SDatetime extends XMLGregorianCalendar
 	 * @param date date from which last day of month is to be computed.
 	 * @return day of month.
 	 */
-	public final static int getLastDayOfMonth(final Calendar date) {
+	public static final int getLastDayOfMonth(final Calendar date) {
 		return new SDatetime(date).getLastDayOfMonth();
 	}
 
@@ -2094,7 +2094,7 @@ public class SDatetime extends XMLGregorianCalendar
 	 * @return SDatetime object with Easter Monday.
 	 * @throws SRuntimeException if Easter Monday can't be computed.
 	 */
-	public final static SDatetime getEasterMonday(final Calendar date) {
+	public static final SDatetime getEasterMonday(final Calendar date) {
 		if (date.isSet(Calendar.YEAR)) {
 			return getEasterMonday(date.get(Calendar.YEAR));
 		}
@@ -2108,7 +2108,7 @@ public class SDatetime extends XMLGregorianCalendar
 	 * @return SDatetime object with Easter Monday. If Easter Monday can't
 	 * be computed then returns null.
 	 */
-	public final static SDatetime getEasterMonday(final int year) {
+	public static final SDatetime getEasterMonday(final int year) {
 		int julian_start = 325;
 //		int gregorian_start = 1583;
 		if (year < julian_start) {
@@ -2138,7 +2138,7 @@ public class SDatetime extends XMLGregorianCalendar
 	 * @return true if is year is a leap year, otherwise returns
 	 * false.
 	 */
-	public final static boolean isLeapYear(final int year) {
+	public static final boolean isLeapYear(final int year) {
 		return ((year % 4 == 0) && (year % 100 != 0)) || year % 400 == 0;
 	}
 
@@ -2151,7 +2151,7 @@ public class SDatetime extends XMLGregorianCalendar
 	 * @return The number of years date2 is isAfter date1. If date2 is before
 	 * date1 returns negative integer.
 	 */
-	public final static int getCalendarYearsDifference(final SDatetime date1,
+	public static final int getCalendarYearsDifference(final SDatetime date1,
 		final SDatetime date2) {
 		return date2._year - date1._year;
 	}
@@ -2165,7 +2165,7 @@ public class SDatetime extends XMLGregorianCalendar
 	 * @return The number of months date2 is isAfter date1. If date2 is before
 	 * date1 returns negative integer.
 	 */
-	public final static int getCalendarMonthsDifference(final SDatetime date1,
+	public static final int getCalendarMonthsDifference(final SDatetime date1,
 		final SDatetime date2) {
 		if (date1._year == date2._year) {
 			return date2._month - date1._month;
@@ -2198,7 +2198,7 @@ public class SDatetime extends XMLGregorianCalendar
 	 * @return The number of months date2 is isAfter date1. If date2 is before
 	 * date1 returns negative integer.
 	 */
-	public final static int getCalendarDaysDifference(final SDatetime date1,
+	public static final int getCalendarDaysDifference(final SDatetime date1,
 		final SDatetime date2) {
 		SDatetime c1 = new SDatetime(date1._year,
 			date1._month -1 , date1._day, 0, 0, 0, 0.0D, date1._tz);
@@ -2212,7 +2212,7 @@ public class SDatetime extends XMLGregorianCalendar
 	 * @param format The format of created date.
 	 * @return The string with formatted date.
 	 */
-	public final static String formatDate(final Calendar calendar,
+	public static final String formatDate(final Calendar calendar,
 		final String format) {
 		StringBuffer sb = new StringBuffer();
 		new SDatetime(calendar).formatDate(sb, format);
@@ -2223,7 +2223,7 @@ public class SDatetime extends XMLGregorianCalendar
 	 * @param time the Calendar object with date and time.
 	 * @return string with ISO 8601 date and time format.
 	 */
-	public final static String toISO8601(final Calendar time) {
+	public static final String toISO8601(final Calendar time) {
 		return formatDate(time, "yyyy-MM-ddTHH:mm:ssZ");
 	}
 
@@ -2231,7 +2231,7 @@ public class SDatetime extends XMLGregorianCalendar
 	 * @param time the Calendar object with date and time.
 	 * @return string with RFC822 date and time format.
 	 */
-	public final static String toRFC822(final Calendar time) {
+	public static final String toRFC822(final Calendar time) {
 		return new SDatetime(time).toRFC822();
 	}
 
@@ -2239,7 +2239,7 @@ public class SDatetime extends XMLGregorianCalendar
 	 * @param source The string with date.
 	 * @return The Calendar object.
 	 */
-	public final static Calendar fromISO8601(final String source) {
+	public static final Calendar fromISO8601(final String source) {
 		StringParser p = new StringParser(source);
 		return p.isISO8601Datetime() && p.testParsedDatetime() ? p.getParsedCalendar() : null;
 	}
@@ -2248,7 +2248,7 @@ public class SDatetime extends XMLGregorianCalendar
 	 * @param source The string with date.
 	 * @return The Calendar object.
 	 */
-	public final static Calendar fromRFC822(final String source) {
+	public static final Calendar fromRFC822(final String source) {
 		StringParser p = new StringParser(source);
 		return p.isRFC822Datetime() && p.testParsedDatetime() ? p.getParsedCalendar() : null;
 	}
@@ -2263,7 +2263,7 @@ public class SDatetime extends XMLGregorianCalendar
 	 * <br>SYS050 Incorrect zone specification in declaration of date and/or
 	 * time format.
 	 */
-	public final static Calendar parseDatetime(final String source,
+	public static final Calendar parseDatetime(final String source,
 		final String format) {
 		StringParser p = new StringParser(source);
 		return p.isDatetime(format) && p.testParsedDatetime() ? p.getParsedCalendar() : null;
@@ -2289,7 +2289,7 @@ public class SDatetime extends XMLGregorianCalendar
 	 * @return parsed SDatetime object if date on current position suits to
 	 * required format, otherwise return false.
 	 */
-	public final static SDatetime parseISO8601(final String src, final int pos){
+	public static final SDatetime parseISO8601(final String src, final int pos){
 		StringParser p = new StringParser(src);
 		p.setIndex(pos);
 		return p.isISO8601Datetime() ? p.getParsedSDatetime() : null;
@@ -2302,7 +2302,7 @@ public class SDatetime extends XMLGregorianCalendar
 	 * @return parsed SDatetime object if date on current position suits to
 	 * required format, otherwise return false.
 	 */
-	public final static SDatetime parseISO8601(final String src) {
+	public static final SDatetime parseISO8601(final String src) {
 		return parseISO8601(src, 0);
 	}
 
@@ -2312,7 +2312,7 @@ public class SDatetime extends XMLGregorianCalendar
 	 * @return parsed SDatetime object if date on current position suits to
 	 * required format, otherwise return false.
 	 */
-	public final static SDatetime parseRFC822(final String src, final int pos) {
+	public static final SDatetime parseRFC822(final String src, final int pos) {
 		StringParser p = new StringParser(src);
 		p.setIndex(pos);
 		return p.isRFC822Datetime() ? p.getParsedSDatetime() : null;
@@ -2323,7 +2323,7 @@ public class SDatetime extends XMLGregorianCalendar
 	 * @return parsed SDatetime object if date on current position suits to
 	 * required format, otherwise return false.
 	 */
-	public final static SDatetime parseRFC822(final String src) {
+	public static final SDatetime parseRFC822(final String src) {
 		return parseRFC822(src, 0);
 	}
 
@@ -2332,7 +2332,7 @@ public class SDatetime extends XMLGregorianCalendar
 	 * @param format the format of source data.
 	 * @return the SDatetime object.
 	 */
-	public final static SDatetime parse(final String src, final String format) {
+	public static final SDatetime parse(final String src, final String format) {
 		return parse(src, 0, format);
 	}
 
@@ -2342,7 +2342,7 @@ public class SDatetime extends XMLGregorianCalendar
 	 * @param format the format of source data.
 	 * @return the SDatetime object.
 	 */
-	public final static SDatetime parse(final String src,
+	public static final SDatetime parse(final String src,
 		int pos,
 		final String format) {
 		StringParser p = new StringParser(src);
@@ -2392,7 +2392,7 @@ public class SDatetime extends XMLGregorianCalendar
 		}
 	}
 
-	public final static SDatetime readObj(final SObjectReader r)
+	public static final SDatetime readObj(final SObjectReader r)
 		throws IOException {
 		SDatetime x = new SDatetime();
 		x._year = r.readInt();

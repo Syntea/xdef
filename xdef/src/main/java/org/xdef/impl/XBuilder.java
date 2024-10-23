@@ -332,7 +332,7 @@ public final class XBuilder implements XDBuilder {
 	 * @return created XDDocument object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public final static XDDocument xparse(final InputStream source,
+	public static final XDDocument xparse(final InputStream source,
 		final ReportWriter reporter) throws SRuntimeException {
 		ChkDocument chkdoc = new ChkDocument((Properties) null);
 		chkdoc.xparse(source, null, reporter);
@@ -345,7 +345,7 @@ public final class XBuilder implements XDBuilder {
 	 * @return created XDDocument object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public final static XDDocument xparse(final String source,
+	public static final XDDocument xparse(final String source,
 		final ReportWriter reporter) throws SRuntimeException {
 		ChkDocument chkdoc = new ChkDocument((Properties) null);
 		chkdoc.xparse(source, reporter);
@@ -371,7 +371,7 @@ public final class XBuilder implements XDBuilder {
 	 * @throws RuntimeException if the object from argument is not possible
 	 * to convert to XDValue object.
 	 */
-	public final static XDValue createXDValue(final Object obj) {
+	public static final XDValue createXDValue(final Object obj) {
 		if (obj == null) {
 			return new DefNull();
 		} else if (obj instanceof XDValue) {

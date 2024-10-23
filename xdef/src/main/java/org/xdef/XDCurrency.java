@@ -40,7 +40,7 @@ public final class XDCurrency extends XDValueAbstract {
 ////////////////////////////////////////////////////////////////////////////////
 
 	/** Gets the ISO 4217 currency code of this currency.
-	 * @return currency code of this currency.
+	 * @return ISO 4217 currency code of this currency.
 	 */
 	public final String getCurrencyCode() {return _value.getCurrencyCode();}
 
@@ -63,8 +63,7 @@ public final class XDCurrency extends XDValueAbstract {
 		return false;
 	}
 	@Override
-	public final int compareTo(final XDValue arg)
-		throws IllegalArgumentException {
+	public final int compareTo(final XDValue arg) throws IllegalArgumentException {
 		if (arg instanceof XDCurrency) {
 			if (this.equals((XDCurrency) arg)) {
 				return 0;
@@ -77,9 +76,7 @@ public final class XDCurrency extends XDValueAbstract {
 	@Override
 	public final XDValueType getItemType() {return CURRENCY;}
 	@Override
-	public final String stringValue() {
-		return isNull()?"":_value.getCurrencyCode();
-	}
+	public final String stringValue() {return isNull()?"":_value.getCurrencyCode();}
 	@Override
 	public final boolean isNull() {return _value == null;}
 	@Override

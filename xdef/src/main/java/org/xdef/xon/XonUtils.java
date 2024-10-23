@@ -30,7 +30,7 @@ public class XonUtils {
 	 * @return parsed CSV object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public final static List<Object> parseCSV(final InputStream source,
+	public static final List<Object> parseCSV(final InputStream source,
 		final char separator,
 		final boolean skipHeader) {
 		return parseCSV(source, separator, skipHeader, null);
@@ -44,7 +44,7 @@ public class XonUtils {
 	 * @return parsed CSV object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public final static List<Object> parseCSV(final InputStream source,
+	public static final List<Object> parseCSV(final InputStream source,
 		final char separator,
 		final boolean skipHeader,
 		final String sysid) {
@@ -59,7 +59,7 @@ public class XonUtils {
 	 * @return parsed CSV object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public final static List<Object> parseCSV(final Reader source,
+	public static final List<Object> parseCSV(final Reader source,
 		final char separator,
 		final boolean skipHeader) {
 		return parseCSV(source, separator, skipHeader, null);
@@ -73,7 +73,7 @@ public class XonUtils {
 	 * @return parsed CSV object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public final static List<Object> parseCSV(final Reader source,
+	public static final List<Object> parseCSV(final Reader source,
 		final char separator,
 		final boolean skipHeader,
 		final String sysid) {
@@ -88,7 +88,7 @@ public class XonUtils {
 	 * @return parsed CSV object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public final static List<Object> parseCSV(final File source,
+	public static final List<Object> parseCSV(final File source,
 		final char separator,
 		final boolean skipHeader) {
 		return CsvReader.parseCSV(source, separator, skipHeader);
@@ -101,7 +101,7 @@ public class XonUtils {
 	 * @return parsed CSV object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public final static List<Object> parseCSV(final URL source,
+	public static final List<Object> parseCSV(final URL source,
 		final char separator,
 		final boolean skipHeader) {
 		return CsvReader.parseCSV(source, separator, skipHeader);
@@ -114,7 +114,7 @@ public class XonUtils {
 	 * @return parsed CSV object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public final static List<Object> parseCSV(final String source,
+	public static final List<Object> parseCSV(final String source,
 		final char separator,
 		final boolean skipHeader)
 		throws SRuntimeException {
@@ -126,7 +126,7 @@ public class XonUtils {
 	 * @return parsed INI/Properties object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public final static Map<String, Object> parseINI(final Reader in) {
+	public static final Map<String, Object> parseINI(final Reader in) {
 		return IniReader.parseINI(in, null);
 	}
 
@@ -136,7 +136,7 @@ public class XonUtils {
 	 * @return parsed INI/Properties object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public final static Map<String, Object> parseINI(final Reader in,
+	public static final Map<String, Object> parseINI(final Reader in,
 		final String sysid) {
 		return IniReader.parseINI(in, sysid == null ? "READER" : sysid);
 	}
@@ -146,7 +146,7 @@ public class XonUtils {
 	 * @return parsed INI/Properties object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public final static Map<String, Object> parseINI(final String source)
+	public static final Map<String, Object> parseINI(final String source)
 		throws SRuntimeException {
 		XonTools.InputData indata = XonTools.getInputFromObject(source, null);
 		return indata._reader != null
@@ -159,7 +159,7 @@ public class XonUtils {
 	 * @return parsed INI/Properties object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public final static Map<String, Object> parseINI(final File source)
+	public static final Map<String, Object> parseINI(final File source)
 		throws SRuntimeException{
 		XonTools.InputData indata = XonTools.getInputFromObject(source, null);
 		return parseINI(indata._in, indata._sysId);
@@ -170,7 +170,7 @@ public class XonUtils {
 	 * @return parsed INI/Properties object.
 	 * @throws SRuntimeException if an error occurs,
 	 */
-	public final static Map<String, Object> parseINI(final URL source)
+	public static final Map<String, Object> parseINI(final URL source)
 		throws SRuntimeException{
 		XonTools.InputData indata = XonTools.getInputFromObject(source, null);
 		return parseINI(indata._in, indata._sysId);
@@ -181,7 +181,7 @@ public class XonUtils {
 	 * @return parsed INI/Properties object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public final static Map<String, Object> parseINI(final InputStream source)
+	public static final Map<String, Object> parseINI(final InputStream source)
 		throws SRuntimeException {
 		return parseINI(source, null);
 	}
@@ -192,7 +192,7 @@ public class XonUtils {
 	 * @return parsed INI/Properties object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public final static Map<String, Object> parseINI(final InputStream source,
+	public static final Map<String, Object> parseINI(final InputStream source,
 		final String sysid) throws SRuntimeException {
 		return IniReader.parseINI(
 			new InputStreamReader(source,Charset.forName("ISO-8859-1")),
@@ -204,7 +204,7 @@ public class XonUtils {
 	 * @return parsed JSON object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public final static Object parseJSON(final Reader in) {
+	public static final Object parseJSON(final Reader in) {
 		return XonReader.parseJSON(in, null, true);
 	}
 
@@ -214,7 +214,7 @@ public class XonUtils {
 	 * @return parsed JSON object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public final static Object parseJSON(final Reader in, final String sysid) {
+	public static final Object parseJSON(final Reader in, final String sysid) {
 		return XonReader.parseJSON(in, sysid == null ? "READER" : sysid, true);
 	}
 
@@ -224,7 +224,7 @@ public class XonUtils {
 	 * @return parsed JSON object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public final static Object parseJSON(final String source)
+	public static final Object parseJSON(final String source)
 		throws SRuntimeException {
 		XonTools.InputData indata = XonTools.getInputFromObject(source, null);
 		return indata._reader != null
@@ -237,7 +237,7 @@ public class XonUtils {
 	 * @return parsed JSON object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public final static Object parseJSON(final File source)
+	public static final Object parseJSON(final File source)
 		throws SRuntimeException{
 		XonTools.InputData indata = XonTools.getInputFromObject(source, null);
 		return parseJSON(indata._in, indata._sysId);
@@ -248,7 +248,7 @@ public class XonUtils {
 	 * @return parsed JSON object.
 	 * @throws SRuntimeException if an error occurs,
 	 */
-	public final static Object parseJSON(final URL source)
+	public static final Object parseJSON(final URL source)
 		throws SRuntimeException{
 		XonTools.InputData indata = XonTools.getInputFromObject(source, null);
 		return parseJSON(indata._in, indata._sysId);
@@ -259,7 +259,7 @@ public class XonUtils {
 	 * @return parsed JSON object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public final static Object parseJSON(final InputStream source)
+	public static final Object parseJSON(final InputStream source)
 		throws SRuntimeException {
 		return parseJSON(source, null);
 	}
@@ -270,7 +270,7 @@ public class XonUtils {
 	 * @return parsed JSON object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public final static Object parseJSON(final InputStream source,
+	public static final Object parseJSON(final InputStream source,
 		final String sysId)
 		throws SRuntimeException {
 		return XonReader.parseJSON(
@@ -282,7 +282,7 @@ public class XonUtils {
 	 * @return parsed XON object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public final static Object parseXON(final Reader in) {
+	public static final Object parseXON(final Reader in) {
 		return parseXON(in, null, true);
 	}
 
@@ -292,7 +292,7 @@ public class XonUtils {
 	 * @return parsed XON object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public final static Object parseXON(final Reader in, final String sysid) {
+	public static final Object parseXON(final Reader in, final String sysid) {
 		return parseXON(in, sysid, true);
 	}
 
@@ -303,7 +303,7 @@ public class XonUtils {
 	 * @return parsed XON object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public final static Object parseXON(final Reader in,
+	public static final Object parseXON(final Reader in,
 		final String sysid,
 		final boolean bytes) {
 		return XonReader.parseXON(in, sysid == null ? "READER" : sysid, bytes);
@@ -315,7 +315,7 @@ public class XonUtils {
 	 * @return parsed XON object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public final static Object parseXON(final String source)
+	public static final Object parseXON(final String source)
 		throws SRuntimeException{
 		XonTools.InputData indata = XonTools.getInputFromObject(source, null);
 		return indata._reader != null ? parseXON(indata._reader, indata._sysId)
@@ -327,7 +327,7 @@ public class XonUtils {
 	 * @return parsed XON object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public final static Object parseXON(final File source)
+	public static final Object parseXON(final File source)
 		throws SRuntimeException{
 		XonTools.InputData indata = XonTools.getInputFromObject(source, null);
 		return parseXON(indata._in, indata._sysId);
@@ -338,7 +338,7 @@ public class XonUtils {
 	 * @return parsed XON object.
 	 * @throws SRuntimeException if an error occurs,
 	 */
-	public final static Object parseXON(final URL url) throws SRuntimeException{
+	public static final Object parseXON(final URL url) throws SRuntimeException{
 		XonTools.InputData indata = XonTools.getInputFromObject(url, null);
 		return parseXON(indata._in, indata._sysId);
 	}
@@ -348,7 +348,7 @@ public class XonUtils {
 	 * @return parsed XON object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public final static Object parseXON(final InputStream in)
+	public static final Object parseXON(final InputStream in)
 		throws SRuntimeException {
 		return parseXON(in, null);
 	}
@@ -359,7 +359,7 @@ public class XonUtils {
 	 * @return parsed XON object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public final static Object parseXON(final InputStream source,
+	public static final Object parseXON(final InputStream source,
 		final String sysId) throws SRuntimeException {
 		return parseXON(source, sysId, true);
 	}
@@ -384,7 +384,7 @@ public class XonUtils {
 	 * @return parsed YAML object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public final static Object parseYAML(final Reader in, final String sysid) {
+	public static final Object parseYAML(final Reader in, final String sysid) {
 		return XonYaml.parseYAML(in);
 	}
 
@@ -394,7 +394,7 @@ public class XonUtils {
 	 * @return parsed YAML object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public final static Object parseYAML(final String s)
+	public static final Object parseYAML(final String s)
 		throws SRuntimeException {
 		XonTools.InputData indata = XonTools.getInputFromObject(s, null);
 		return indata._reader != null
@@ -407,7 +407,7 @@ public class XonUtils {
 	 * @return parsed YAML object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public final static Object parseYAML(final File f) throws SRuntimeException{
+	public static final Object parseYAML(final File f) throws SRuntimeException{
 		XonTools.InputData indata = XonTools.getInputFromObject(f, null);
 		return parseYAML(indata._in, indata._sysId);
 	}
@@ -417,7 +417,7 @@ public class XonUtils {
 	 * @return parsed YAML object.
 	 * @throws SRuntimeException if an error occurs,
 	 */
-	public final static Object parseYAML(final URL url)throws SRuntimeException{
+	public static final Object parseYAML(final URL url)throws SRuntimeException{
 		XonTools.InputData indata = XonTools.getInputFromObject(url, null);
 		return parseYAML(indata._in, indata._sysId);
 	}
@@ -427,7 +427,7 @@ public class XonUtils {
 	 * @return parsed YAML object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public final static Object parseYAML(final InputStream in)
+	public static final Object parseYAML(final InputStream in)
 		throws SRuntimeException {
 		return parseYAML(in, null);
 	}
@@ -438,7 +438,7 @@ public class XonUtils {
 	 * @return parsed YAML object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public final static Object parseYAML(final InputStream in,
+	public static final Object parseYAML(final InputStream in,
 		final String sysId) throws SRuntimeException {
 		return parseYAML(new InputStreamReader(in,
 			Charset.forName("UTF-8")), sysId == null ? "INPUTSTREAM" : sysId);
@@ -452,7 +452,7 @@ public class XonUtils {
 	 * @param x CSV object.
 	 * @return CSV string created from CSV object.
 	 */
-	public final static String toCsvString(final List<Object> x) {
+	public static final String toCsvString(final List<Object> x) {
 		return CsvReader.toCsvString(x);
 	}
 
@@ -460,14 +460,14 @@ public class XonUtils {
 	 * @param x INI/Properties object.
 	 * @return string with INI/Properties format.
 	 */
-	public final static String toIniString(final Map<String, Object> x) {
+	public static final String toIniString(final Map<String, Object> x) {
 		return IniReader.toIniString(x);
 	}
 	/** Create JSON string from object (no indentation).
 	 * @param x JSON object.
 	 * @return string with JSON source format.
 	 */
-	public final static String toJsonString(final Object x) {
+	public static final String toJsonString(final Object x) {
 		return toJsonString(x, false);
 	}
 
@@ -476,7 +476,7 @@ public class XonUtils {
 	 * @param indent if true then result will be indented.
 	 * @return string with JSON source format.
 	 */
-	public final static String toJsonString(final Object x, boolean indent) {
+	public static final String toJsonString(final Object x, boolean indent) {
 		StringBuilder sb = new StringBuilder();
 		XonToString.objectToString(x, indent ? "\n" : null, sb, false);
 		return sb.toString();
@@ -515,7 +515,7 @@ public class XonUtils {
 	 * @param x XON object.
 	 * @return string with YAML source format.
 	 */
-	public final static String toYamlString(final Object x) {
+	public static final String toYamlString(final Object x) {
 		return XonYaml.toYamlString(x);
 	}
 
@@ -527,7 +527,7 @@ public class XonUtils {
 	 * @param x object with CSV data.
 	 * @return Element created from CSV data.
 	 */
-	public final static Element csvToXml(final List x) {
+	public static final Element csvToXml(final List x) {
 		return CsvReader.csvToXml(x);
 	}
 
@@ -535,7 +535,7 @@ public class XonUtils {
 	 * @param node XML element or document.
 	 * @return JSON object.
 	 */
-	public final static Object xmlToXon(final Node node) {
+	public static final Object xmlToXon(final Node node) {
 		return XonFromXml.toXon(node);
 	}
 
@@ -543,7 +543,7 @@ public class XonUtils {
 	 * @param source path or string with source of XML document.
 	 * @return object with JSON data.
 	 */
-	public final static Object xmlToXon(final String source) {
+	public static final Object xmlToXon(final String source) {
 		return xmlToXon(KXmlUtils.parseXml(source).getDocumentElement());
 	}
 
@@ -551,7 +551,7 @@ public class XonUtils {
 	 * @param file file with XML document.
 	 * @return object with JSON data.
 	 */
-	public final static Object xmlToXon(final File file) {
+	public static final Object xmlToXon(final File file) {
 		return xmlToXon(KXmlUtils.parseXml(file).getDocumentElement());
 	}
 
@@ -559,7 +559,7 @@ public class XonUtils {
 	 * @param url URL containing XML document.
 	 * @return object with JSON data.
 	 */
-	public final static Object xmlToXon(final URL url) {
+	public static final Object xmlToXon(final URL url) {
 		return xmlToXon(KXmlUtils.parseXml(url).getDocumentElement());
 	}
 
@@ -567,7 +567,7 @@ public class XonUtils {
 	 * @param in InputStream with XML document.
 	 * @return object with JSON data.
 	 */
-	public final static Object xmlToXon(final InputStream in) {
+	public static final Object xmlToXon(final InputStream in) {
 		return xmlToXon(KXmlUtils.parseXml(in).getDocumentElement());
 	}
 
@@ -579,7 +579,7 @@ public class XonUtils {
 	 * @param ini path toINI/Properties source data.
 	 * @return XML element created from INI/Properties data.
 	 */
-	public final static Element iniToXml(final String ini) {
+	public static final Element iniToXml(final String ini) {
 		return IniReader.iniToXml(parseINI(ini));
 	}
 
@@ -587,7 +587,7 @@ public class XonUtils {
 	 * @param ini file with INI/Properties source data.
 	 * @return XML element created from INI/Properties data.
 	 */
-	public final static Element iniToXml(final File ini) {
+	public static final Element iniToXml(final File ini) {
 		return IniReader.iniToXml(parseINI(ini));
 	}
 
@@ -595,7 +595,7 @@ public class XonUtils {
 	 * @param ini URL where is INI/Properties source data.
 	 * @return XML element created from INI/Properties data.
 	 */
-	public final static Element iniToXml(final URL ini) {
+	public static final Element iniToXml(final URL ini) {
 		return IniReader.iniToXml(parseINI(ini));
 	}
 
@@ -603,7 +603,7 @@ public class XonUtils {
 	 * @param ini Input stream where is INI/Properties source data.
 	 * @return XML element created from INI/Properties data.
 	 */
-	public final static Element iniToXml(final InputStream ini) {
+	public static final Element iniToXml(final InputStream ini) {
 		return IniReader.iniToXml(parseINI(ini));
 	}
 
@@ -611,7 +611,7 @@ public class XonUtils {
 	 * @param ini INI/Properties object.
 	 * @return XML element created from INI/Properties object.
 	 */
-	public final static Element iniToXml(final Object ini) {
+	public static final Element iniToXml(final Object ini) {
 		return IniReader.iniToXml(ini);
 	}
 
@@ -619,7 +619,7 @@ public class XonUtils {
 	 * @param source path to XON/JSON source data.
 	 * @return XML element created from XON/JSON data.
 	 */
-	public final static Element xonToXmlW(final String source) {
+	public static final Element xonToXmlW(final String source) {
 		XonTools.InputData indata = XonTools.getInputFromObject(source, null);
 		Object x = indata._reader != null
 			? parseXON(indata._reader, indata._sysId, false)
@@ -631,7 +631,7 @@ public class XonUtils {
 	 * @param xon file with XON/JSON source data.
 	 * @return XML element created from XON/JSON data.
 	 */
-	public final static Element xonToXmlW(final File xon) {
+	public static final Element xonToXmlW(final File xon) {
 		XonTools.InputData indata = XonTools.getInputFromObject(xon, null);
 		Object x = indata._reader != null
 			? parseXON(indata._reader, indata._sysId, false)
@@ -643,7 +643,7 @@ public class XonUtils {
 	 * @param xon URL where is XON/JSON source data.
 	 * @return XML element created from XON/JSON data.
 	 */
-	public final static Element xonToXmlW(final URL xon) {
+	public static final Element xonToXmlW(final URL xon) {
 		XonTools.InputData indata = XonTools.getInputFromObject(xon, null);
 		Object x = indata._reader != null
 			? parseXON(indata._reader, indata._sysId, false)
@@ -655,7 +655,7 @@ public class XonUtils {
 	 * @param xon Input stream where is XON/JSON source data.
 	 * @return XML element created from XON/JSON data.
 	 */
-	public final static Element xonToXmlW(final InputStream xon) {
+	public static final Element xonToXmlW(final InputStream xon) {
 		XonTools.InputData indata = XonTools.getInputFromObject(xon, null);
 		Object x = indata._reader != null
 			? parseXON(indata._reader, indata._sysId, false)
@@ -667,7 +667,7 @@ public class XonUtils {
 	 * @param xon XON/JSON object.
 	 * @return XML element created from XON/JSON data.
 	 */
-	public final static Element xonToXmlW(final Object xon) {
+	public static final Element xonToXmlW(final Object xon) {
 		return XonToXml.toXmlW(xon);
 	}
 
@@ -675,7 +675,7 @@ public class XonUtils {
 	 * @param xon path to XON source data.
 	 * @return XML element created from XON/JSON data.
 	 */
-	public final static Element xonToXml(final String xon) {
+	public static final Element xonToXml(final String xon) {
 		XonTools.InputData indata = XonTools.getInputFromObject(xon, null);
 		Object x = indata._reader != null
 			? parseXON(indata._reader, indata._sysId, false)
@@ -687,7 +687,7 @@ public class XonUtils {
 	 * @param xon File with XON/JSON source data.
 	 * @return XML element created from XON/JSON data.
 	 */
-	public final static Element xonToXml(final File xon) {
+	public static final Element xonToXml(final File xon) {
 		XonTools.InputData indata = XonTools.getInputFromObject(xon, null);
 		Object x = indata._reader != null
 			? parseXON(indata._reader, indata._sysId, false)
@@ -699,7 +699,7 @@ public class XonUtils {
 	 * @param xon URL with XON/JSON source data.
 	 * @return XML element created from JSON XON/data.
 	 */
-	public final static Element xonToXml(final URL xon) {
+	public static final Element xonToXml(final URL xon) {
 		XonTools.InputData indata = XonTools.getInputFromObject(xon, null);
 		Object x = indata._reader != null
 			? parseXON(indata._reader, indata._sysId, false)
@@ -711,7 +711,7 @@ public class XonUtils {
 	 * @param xon InputStream with XON/JSON source data.
 	 * @return XML element created from JSON XON/data.
 	 */
-	public final static Element xonToXml(final InputStream xon) {
+	public static final Element xonToXml(final InputStream xon) {
 		XonTools.InputData indata = XonTools.getInputFromObject(xon, null);
 		Object x = indata._reader != null
 			? parseXON(indata._reader, indata._sysId, false)
@@ -723,7 +723,7 @@ public class XonUtils {
 	 * @param xon XON/JSON object.
 	 * @return XML element created from XON/JSON data.
 	 */
-	public final static Element xonToXml(final Object xon) {
+	public static final Element xonToXml(final Object xon) {
 		return XonToXml.toXmlXD(xon);
 	}
 
@@ -736,7 +736,7 @@ public class XonUtils {
 	 * @param b second object with XON/JSON data.
 	 * @return true if and only if both objects contains equal data.
 	 */
-	public final static boolean xonEqual(final Object a, final Object b) {
+	public static final boolean xonEqual(final Object a, final Object b) {
 		return (a == null && b == null) ||
 			(a != null && b != null && XonCompare.equalValue(a,b));
 	}
@@ -747,7 +747,7 @@ public class XonUtils {
 	 * @param b second object with XON/JSON data.
 	 * @return true if and only if both objects contains equal data.
 	 */
-	public final static String xonDiff(final Object a, final Object b) {
+	public static final String xonDiff(final Object a, final Object b) {
 		return XonCompare.xonDiff(a, b);
 	}
 }

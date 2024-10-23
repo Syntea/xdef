@@ -193,8 +193,8 @@ class XCGeneratorBase {
 	 */
 	final static String modify(final String origin, final String... replace) {
 		if (replace.length % 2 != 0) {
-			//Internal error&{0}{: }
-			throw new SIllegalArgumentException(SYS.SYS066, "Length of array of keys and replacemetns differs");
+			throw new SIllegalArgumentException(SYS.SYS066, //Internal error&{0}{: }
+				"Length of array of keys and replacemetns differs");
 		}
 		String result = origin;
 		for (int i = 0; i < replace.length; i+=2) {
@@ -989,8 +989,8 @@ class XCGeneratorBase {
 					XNode n = (XNode) xe.getXDPool().findModel(s);
 					if (n != null && n.getKind() == XMELEMENT) {
 						XComponentInfo x = _components.get(s);
-						QName u2 = x == null
-							? ((XElement) n).getQName() : new QName(x.getNS(),((XElement)n).getLocalName());
+						QName u2 = x == null ? ((XElement) n).getQName()
+							: new QName(x.getNS(),((XElement)n).getLocalName());
 						if (u1 == null ? u2 == null : u1.equals(u2)) {
 							t = x != null ? x.getName() : null;
 							return t;

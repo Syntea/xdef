@@ -1,8 +1,8 @@
 package org.xdef;
 
-
 /** Unique set (table of unique items - rows). It is used for validation methods
  * ID, IDREF, CHECKID etc.
+ * @author Vaclav Trojan
  */
 public interface XDUniqueSet extends XDValue {
 

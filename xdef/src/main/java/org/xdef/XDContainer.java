@@ -173,10 +173,8 @@ public interface XDContainer extends XDValue {
 	public boolean isEmpty();
 
 	/** Sorts this XDContainer.
-	 * If an item is an org.w3c.Node object then as a key it is used
-	 * the text value of an item).
-	 * @param asc if true the XDContainer will be sorted ascendant,
-	 * otherwise descendant.
+	 * If an item is an org.w3c.Node object then as a key it is used the text value of an item).
+	 * @param asc if true the XDContainer will be sorted ascendant, otherwise descendant.
 	 * @return this XDContainer sorted.
 	 */
 	public XDContainer sortXD(boolean asc);
@@ -184,10 +182,8 @@ public interface XDContainer extends XDValue {
 	/** Sorts this XDContainer.
 	 * @param key String with xpath expression or null (if null or empty string
 	 * then for org.w3c.Node items it is used as a key the text value of
-	 * an item). For items other then  org.w3c.Node objects this parameter is
-	 * ignored.
-	 * @param asc if true the XDContainer will be sorted ascendant,
-	 * otherwise descendant.
+	 * an item). For items other then  org.w3c.Node objects this parameter is ignored.
+	 * @param asc if true the XDContainer will be sorted ascendant, otherwise descendant.
 	 * @return this XDContainer sorted.
 	 */
 	public XDContainer sortXD(String key, boolean asc);

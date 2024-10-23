@@ -69,7 +69,7 @@ public class CsvReader extends StringParser implements XonParsers {
 	 * @param skipHeader if true the header line is skipped.
 	 * @return list with parsed CSV data.
 	 */
-	public final static List<Object> parseCSV(final Object source,
+	public static final List<Object> parseCSV(final Object source,
 		final char separator,
 		final boolean skipHeader) {
 		return parseCSV(source, separator, skipHeader, null);
@@ -84,7 +84,7 @@ public class CsvReader extends StringParser implements XonParsers {
 	 * @param sysId System ID (or null).
 	 * @return list with parsed CSV data.
 	 */
-	public final static List<Object> parseCSV(final Object source,
+	public static final List<Object> parseCSV(final Object source,
 		final char separator,
 		final boolean skipHeader,
 		final String sysId) {
@@ -239,7 +239,7 @@ public class CsvReader extends StringParser implements XonParsers {
 	 * @param csv CSV object.
 	 * @return CSV string created from CSV object.
 	 */
-	public final static String toCsvString(final List<Object> csv) {
+	public static final String toCsvString(final List<Object> csv) {
 		StringBuilder sb = new StringBuilder();
 		for (Object o : csv) {
 			if (o instanceof List) {
@@ -256,7 +256,7 @@ public class CsvReader extends StringParser implements XonParsers {
 	 * @param separator separator character.
 	 * @return CSV string created from CSV object.
 	 */
-	public final static String toCsvString(final List<Object> csv,
+	public static final String toCsvString(final List<Object> csv,
 		final char separator) {
 		StringBuilder sb = new StringBuilder();
 		for (Object o : csv) {
@@ -277,7 +277,7 @@ public class CsvReader extends StringParser implements XonParsers {
 	 * @param csv object with CSV data.
 	 * @return Element created from CSV data.
 	 */
-	public final static Element csvToXml(final List csv) {
+	public static final Element csvToXml(final List csv) {
 		Document doc = KXmlUtils.newDocument(null, "csv", null);
 		Element root = doc.getDocumentElement();
 		StringBuilder sb = new StringBuilder("[\n");
@@ -303,7 +303,7 @@ public class CsvReader extends StringParser implements XonParsers {
 	 * @param el element from which the CSV object is created.
 	 * @return created CSV object.
 	 */
-	public final static List<Object> xmlToCsv(final Element el) {
+	public static final List<Object> xmlToCsv(final Element el) {
 		String s = el.getTextContent();
 		return (List<Object>) XonUtils.parseXON(s);
 	}

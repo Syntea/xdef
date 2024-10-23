@@ -14,8 +14,7 @@ import org.w3c.dom.Node;
  */
 public interface XDValue extends Comparable<XDValue>, XDValueID {
 
-	/** Get ID of the type of value (int, float, boolean, date, regex
-	 * see enumeration org.xdef.XDValueID).
+	/** Get ID of the type of value (int, float, boolean, date, regex see org.xfef.XDValueID).
 	 * @return item type.
 	 */
 	public short getItemId();

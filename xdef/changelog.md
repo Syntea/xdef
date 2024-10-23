@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.2.8, release-date 2024-10-22
+# Version 42.2.8, release-date 2024-10-23
 * New property `xdef_defaultZone` is used to set default TimeZone
   in X-definition (see org.xdef.XDConstants.XDPROPERTY_DEFAULTZONE).
 * Implemented new method of XDPool `getDefaultZone()` which returns the default

@@ -204,7 +204,7 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 "\t */"+LN : "") +
 "\tpublic int xGetModelIndex() {return "+index+";}"+LN+
 (_genJavadoc?"\t/** Get XON version: 0 not set, 1 .. W mode.*/"+LN:"")+
-"\tpublic final static byte XON = " + xe._xon + ";" +LN;
+"\tpublic static final byte XON = " + xe._xon + ";" +LN;
 
 ////////////////////////////////////////////////////////////////////////////////
 		result += genSeparator("Private methods", _genJavadoc) +

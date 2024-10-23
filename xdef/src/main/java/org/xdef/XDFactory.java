@@ -49,7 +49,7 @@ public final class XDFactory extends XDTools {
 	 * @param props Properties or null - see {@link org.xdef.XDConstants}.
 	 * @return created XDBuilder.
 	 */
-	public final static XDBuilder getXDBuilder(final Properties props) {
+	public static final XDBuilder getXDBuilder(final Properties props) {
 		return getXDBuilder(null, props);
 	}
 
@@ -58,8 +58,7 @@ public final class XDFactory extends XDTools {
 	 * @param props Properties or null - see {@link org.xdef.XDConstants}.
 	 * @return created XDBuilder.
 	 */
-	public final static XDBuilder getXDBuilder(final ReportWriter reporter,
-		final Properties props) {
+	public static final XDBuilder getXDBuilder(final ReportWriter reporter, final Properties props){
 		XDBuilder result = new org.xdef.impl.XBuilder(reporter, props);
 		return result;
 	}
@@ -179,8 +178,8 @@ public final class XDFactory extends XDTools {
 	 * @return generated XDPool.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public final static XDPool compileXD(final Properties props,
-		final String... params) throws SRuntimeException {
+	public static final XDPool compileXD(final Properties props, final String... params)
+		throws SRuntimeException {
 		XDBuilder builder = getXDBuilder(props);
 		setParam(builder, params);
 		return builder.compileXD();
@@ -192,8 +191,8 @@ public final class XDFactory extends XDTools {
 	 * @return generated XDPool.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public final static XDPool compileXD(final Properties props,
-		final URL... params) throws SRuntimeException {
+	public static final XDPool compileXD(final Properties props, final URL... params)
+		throws SRuntimeException {
 		XDBuilder builder = getXDBuilder(props);
 		setParam(builder, params);
 		return builder.compileXD();
@@ -205,8 +204,8 @@ public final class XDFactory extends XDTools {
 	 * @return generated XDPool.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public final static XDPool compileXD(final Properties props,
-		final File... params) throws SRuntimeException {
+	public static final XDPool compileXD(final Properties props, final File... params)
+		throws SRuntimeException {
 		XDBuilder builder = getXDBuilder(props);
 		setParam(builder, params);
 		return builder.compileXD();
@@ -218,8 +217,8 @@ public final class XDFactory extends XDTools {
 	 * @return generated XDPool.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public final static XDPool compileXD(final Properties props,
-		final InputStream... params) throws SRuntimeException {
+	public static final XDPool compileXD(final Properties props, final InputStream... params)
+		throws SRuntimeException {
 		XDBuilder builder = getXDBuilder(props);
 		setParam(builder, params);
 		return builder.compileXD();
@@ -235,7 +234,7 @@ public final class XDFactory extends XDTools {
 	 * @return generated XDPool.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public final static XDPool compileXD(final Properties props,
+	public static final XDPool compileXD(final Properties props,
 		final Object[] sources,
 		final String[] sourceIds) throws SRuntimeException {
 		XDBuilder builder = XDFactory.getXDBuilder(props);
@@ -249,8 +248,8 @@ public final class XDFactory extends XDTools {
 	 * @return generated XDPool.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public final static XDPool compileXD(final Properties props,
-		final Object... params)	throws SRuntimeException {
+	public static final XDPool compileXD(final Properties props, final Object... params)
+		throws SRuntimeException {
 		return compileXD((ReportWriter) null, props, params);
 	}
 
@@ -261,7 +260,7 @@ public final class XDFactory extends XDTools {
 	 * @return generated XDPool.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public final static XDPool compileXD(final ReportWriter reporter,
+	public static final XDPool compileXD(final ReportWriter reporter,
 		final Properties props,
 		final Object... params)	throws SRuntimeException {
 		if (params == null || params.length == 0) {
@@ -279,8 +278,8 @@ public final class XDFactory extends XDTools {
 	 * @return created XDDocument object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public final static XDDocument xparse(final InputStream source,
-		final ReportWriter reporter) throws SRuntimeException {
+	public static final XDDocument xparse(final InputStream source, final ReportWriter reporter)
+		throws SRuntimeException {
 		return XBuilder.xparse(source, reporter);
 	}
 
@@ -290,8 +289,8 @@ public final class XDFactory extends XDTools {
 	 * @return created XDDocument object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public final static XDDocument xparse(final String source,
-		final ReportWriter reporter) throws SRuntimeException {
+	public static final XDDocument xparse(final String source, final ReportWriter reporter)
+		throws SRuntimeException {
 		return XBuilder.xparse(source, reporter);
 	}
 
@@ -300,8 +299,8 @@ public final class XDFactory extends XDTools {
 	 * @param xp XDPool object.
 	 * @throws IOException if an error occurs.
 	 */
-	public final static void writeXDPool(final OutputStream out,
-		final XDPool xp) throws IOException {
+	public static final void writeXDPool(final OutputStream out, final XDPool xp)
+		throws IOException {
 		try (ObjectOutputStream oout = new ObjectOutputStream(out)) {
 			oout.writeObject(xp);
 		}
@@ -312,8 +311,7 @@ public final class XDFactory extends XDTools {
 	 * @param xp XDPool object.
 	 * @throws IOException if an error occurs.
 	 */
-	public final static void writeXDPool(final File file, final XDPool xp)
-		throws IOException {
+	public static final void writeXDPool(final File file, final XDPool xp) throws IOException {
 		FileOutputStream fos = new FileOutputStream(file);
 		writeXDPool(fos, xp);
 	}
@@ -323,8 +321,7 @@ public final class XDFactory extends XDTools {
 	 * @param xp XDPool object.
 	 * @throws IOException if an error occurs.
 	 */
-	public final static void writeXDPool(final String fname, final XDPool xp)
-		throws IOException {
+	public static final void writeXDPool(final String fname, final XDPool xp) throws IOException {
 		FileOutputStream fos = new FileOutputStream(fname);
 		writeXDPool(fos, xp);
 	}
@@ -334,14 +331,11 @@ public final class XDFactory extends XDTools {
 	 * @return XDPool object.
 	 * @throws IOException if an error occurs.
 	 */
-	public final static XDPool readXDPool(final InputStream in)
-		throws IOException {
+	public static final XDPool readXDPool(final InputStream in) throws IOException {
 		try {
-			XDPool result;
-			try (ObjectInputStream oin = new ObjectInputStream(in)) {
-				result = (XDPool) oin.readObject();
+			try (ObjectInputStream x = new ObjectInputStream(in)) {
+				return (XDPool) x.readObject();
 			}
-			return result;
 		} catch (ClassNotFoundException ex) {
 			in.close();
 			throw new IOException(ex);
@@ -353,7 +347,7 @@ public final class XDFactory extends XDTools {
 	 * @return XDPool object.
 	 * @throws IOException if an error occurs.
 	 */
-	public final static XDPool readXDPool(final File file) throws IOException {
+	public static final XDPool readXDPool(final File file) throws IOException {
 		return readXDPool(new FileInputStream(file));
 	}
 
@@ -363,8 +357,7 @@ public final class XDFactory extends XDTools {
 	 * @return XDPool object.
 	 * @throws IOException if an error occurs.
 	 */
-	public final static XDPool readXDPool(final String fname)
-		throws IOException {
+	public static final XDPool readXDPool(final String fname) throws IOException {
 		if (!new File(fname).exists() && fname.indexOf("://") > 0) {
 			return readXDPool(FUtils.getExtendedURL(fname).openStream());
 		} else {
@@ -377,21 +370,17 @@ public final class XDFactory extends XDTools {
 	 * @return XDPool object.
 	 * @throws IOException if an error occurs.
 	 */
-	public final static XDPool readXDPool(final URL url) throws IOException {
+	public static final XDPool readXDPool(final URL url) throws IOException {
 		return readXDPool(url.openStream());
 	}
 
 	/** Check if XQuery implementation is available.
 	 * @return true if XQuery implementation is available.
 	 */
-	public static final boolean isXQuerySupported() {
-		return KXqueryExpr.isXQueryImplementation();
-	}
+	public static final boolean isXQuerySupported() {return KXqueryExpr.isXQueryImplementation();}
 
 	/** Check if XPath2 implementation is available.
 	 * @return true if XPath2 implementation is available.
 	 */
-	public static final boolean isXPath2Supported() {
-		return KXpathExpr.isXPath2();
-	}
+	public static final boolean isXPath2Supported() {return KXpathExpr.isXPath2();}
 }

@@ -81,7 +81,7 @@ public final class SManager implements XDConstants {
 	 * @param key name of property.
 	 * @return value property or environment variable.
 	 */
-	public final static String getProperty(final Properties props,
+	public static final String getProperty(final Properties props,
 		final String key) {
 		String val = null;
 		if (props != null) {
@@ -200,7 +200,7 @@ public final class SManager implements XDConstants {
 	/** Add package with registered reports.
 	 * @param packageName new package to be added.
 	 */
-	public final static void addReportPackage(final String packageName) {
+	public static final void addReportPackage(final String packageName) {
 		SManager sm = getInstance();
 		synchronized (sm) {
 			for (String s : sm._packages) {
@@ -216,7 +216,7 @@ public final class SManager implements XDConstants {
 	/** Remove package with registered reports.
 	 * @param packageName package to be removed.
 	 */
-	public final static void removeReportPackage(final String packageName) {
+	public static final void removeReportPackage(final String packageName) {
 		SManager sm = getInstance();
 		synchronized (sm) {
 			String[] newPackages = new String[sm._packages.length - 1];
@@ -335,7 +335,7 @@ public final class SManager implements XDConstants {
 	/** Get instance of SManager.
 	 * @return instance of SManager.
 	 */
-	public final static SManager getInstance() {return MANAGER;}
+	public static final SManager getInstance() {return MANAGER;}
 
 	/** Modify given text with modification string (see description
 	 * above {@link Report}).
@@ -344,7 +344,7 @@ public final class SManager implements XDConstants {
 	 * @param language language id (ISO-639).
 	 * @return The modified text.
 	 */
-	public final static String getModifiedText(final String text,
+	public static final String getModifiedText(final String text,
 		final String modification,
 		final String language) {
 		int indx1, indx;

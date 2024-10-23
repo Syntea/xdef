@@ -746,12 +746,14 @@ public interface CodeTable {
 	static final short UNIQUESET_GET_ACTUAL_KEY = UNIQUESET_BIND + 1;
 	/** Reset actual key of the uniqueSet from saved key. */
 	static final short UNIQUESET_KEY_RESET = UNIQUESET_GET_ACTUAL_KEY + 1;
+	/** UNUSED items - can be used in the future. */
+	static final short UNUSED = UNIQUESET_KEY_RESET + 1;
 
 	////////////////////////////////////////////////////////////////////////////
 	//Object
 	////////////////////////////////////////////////////////////////////////////
 	/** Get User Object. */
-	static final short GET_USEROBJECT = UNIQUESET_KEY_RESET + 1;
+	static final short GET_USEROBJECT = UNUSED + 10;
 	/** Get User Object. */
 	static final short SET_USEROBJECT = GET_USEROBJECT + 1;
 

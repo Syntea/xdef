@@ -148,7 +148,8 @@ final class XCGenerator extends XCGeneratorXON {
 			name = addVarName(varNames, name, xdata.getXDPosition(), ext);
 			genAttrNameVariable(name, xdata, vars);
 			if (!ext) {
-				genBaseVarsGettersSetters(xdata, name, 1, "attribute", vars, getters, setters, xpathes, sbi);
+				genBaseVarsGettersSetters(
+					xdata, name, 1, "attribute", vars, getters, setters, xpathes, sbi);
 			}
 			genCreatorOfAttribute(xdata, name, creators);
 			atttab.put(xdata.getXDPosition(),
@@ -214,11 +215,12 @@ final class XCGenerator extends XCGeneratorXON {
 							XElement xe1 = (XElement) nodes[k];
 							boolean ext = (Boolean) choiceStack.pop();
 							if (!ext) {
-								genChildElementGetterSetter(
-									xe1, typeName, iname, max, "element", getters, setters, sbi, xclear);
+								genChildElementGetterSetter(xe1,
+									typeName, iname, max, "element", getters, setters, sbi, xclear);
 							}
 							XMData keyAttr;
-							if (xe1.getXonMode() != 0 && (keyAttr=xe1.getAttr(XonNames.X_KEYATTR)) != null
+							if (xe1.getXonMode() != 0
+								&& (keyAttr=xe1.getAttr(XonNames.X_KEYATTR)) != null
 								&& keyAttr.getFixedValue() != null) {
 								keys.add(keyAttr.getFixedValue().stringValue());
 								keys.add(typeName);
@@ -278,8 +280,8 @@ final class XCGenerator extends XCGeneratorXON {
 					}
 					name = addVarName(varNames, name,xdata.getXDPosition(),ext);
 					if (!ext) {
-						genBaseVarsGettersSetters(
-							xdata, name, groupMax, "text node", vars, getters, setters, xpathes, sbi);
+						genBaseVarsGettersSetters(xdata,
+							name, groupMax, "text node", vars, getters, setters, xpathes, sbi);
 					}
 					String s =
 ((_genJavadoc ? "\t/** Indexes of values of &{d} \""+name.replace('$', ':')+
@@ -393,7 +395,8 @@ final class XCGenerator extends XCGeneratorXON {
 					String typeName;
 					if (xcClass != null) {
 						typeName = xcClass;
-						if ((ndx = xcClass.lastIndexOf('.')) > 0 && (xcClass.substring(ndx + 1)).equals(className)) {
+						if ((ndx = xcClass.lastIndexOf('.')) > 0
+							&& (xcClass.substring(ndx + 1)).equals(className)) {
 							typeName = xcClass.substring(ndx + 1);
 						}
 					} else {
@@ -422,7 +425,8 @@ final class XCGenerator extends XCGeneratorXON {
 							&& groupKind != XMCHOICE
 							&& xe1.getAttrs().length == 0) {//no attrs,only text
 							// direct getters/setters for text child
-							genDirectSetterAndGetter(xe1, iname, typeName, false, setters, getters, sbi);
+							genDirectSetterAndGetter(xe1,
+								iname, typeName, false, setters, getters, sbi);
 						}
 						if (groupKind != XMCHOICE){
 							genChildElementGetterSetter(
@@ -437,7 +441,8 @@ final class XCGenerator extends XCGeneratorXON {
 									genXonItemGetterAndSetter(
 										xe1, typeName, iname, max, setters, getters, sbi, varNames);
 								} else if (xe1.getAttr(X_KEYATTR) != null) {
-									genXonEntryMethod(xe1, typeName, iname, max, getters, sbi, varNames);
+									genXonEntryMethod(xe1,
+										typeName, iname, max, getters, sbi, varNames);
 								}
 							}
 						} else { // XON map items
@@ -456,7 +461,8 @@ final class XCGenerator extends XCGeneratorXON {
 							newClassName, //class name
 							"", //no class extension and interfaces
 							(xcClass0 != null)? xcClass0.substring(10): "",
-							(packageName.length()>0?packageName+".":"")+classNameBase+'#'+newClassName, //interface
+							(packageName.length() > 0
+								? packageName+"." : "")+classNameBase+'#'+newClassName, //interface
 							"", //classNameBase
 							_components, //Map with components
 							classNames, //Set with class names or null
@@ -500,7 +506,8 @@ final class XCGenerator extends XCGeneratorXON {
 		}
 		_interfaces = sbi;
 		// generate Java source
-		return genSource(xe, xelName, model, index, xdname, isRoot, clazz, extClazz, interfcName, vars,
+		return genSource(xe,
+			xelName, model, index, xdname, isRoot, clazz, extClazz, interfcName, vars,
 			creators, getters, setters, xpathes, listNodes, innerClasses, atttab, txttab, xctab);
 	}
 
@@ -556,7 +563,8 @@ final class XCGenerator extends XCGeneratorXON {
 			if (packageName1 != null && packageName1.length() > 0) {
 				s += "package " + packageName1 + ";"+LN;
 			}
-			s += LN+"public interface "+interfaceName1+" extends org.xdef.component.XComponent {"+LN;
+			s += LN+
+"public interface "+interfaceName1+" extends org.xdef.component.XComponent {"+LN;
 			_interfaces.insert(0, s).append("}");
 		}
 		if (className.isEmpty()) {

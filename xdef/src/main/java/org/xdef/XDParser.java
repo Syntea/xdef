@@ -8,44 +8,44 @@ import org.xdef.sys.SException;
  */
 public interface XDParser extends XDValue {
 	/** Keyword "pattern" id.*/
-	public final static int PATTERN =			0x00000000000001;
+	public static final int PATTERN =			0x00000000000001;
 	/** Keyword "enumeration" id.*/
-	public final static int ENUMERATION =		0x00000000000002;
+	public static final int ENUMERATION =		0x00000000000002;
 	/** Keyword "whiteSpace" id.*/
-	public final static int WHITESPACE =		0x00000000000004;
+	public static final int WHITESPACE =		0x00000000000004;
 	/** Keyword "maxInclusive" id.*/
-	public final static int MAXINCLUSIVE =		0x00000000000008;
+	public static final int MAXINCLUSIVE =		0x00000000000008;
 	/** Keyword "maxExclusive" id.*/
-	public final static int MAXEXCLUSIVE =		0x00000000000010;
+	public static final int MAXEXCLUSIVE =		0x00000000000010;
 	/** Keyword "minInclusive" id.*/
-	public final static int MININCLUSIVE =		0x00000000000020;
+	public static final int MININCLUSIVE =		0x00000000000020;
 	/** Keyword "minExclusive" id.*/
-	public final static int MINEXCLUSIVE =		0x00000000000040;
+	public static final int MINEXCLUSIVE =		0x00000000000040;
 	/** Keyword "totalDigits" id.*/
-	public final static int TOTALDIGITS =		0x00000000000080;
+	public static final int TOTALDIGITS =		0x00000000000080;
 	/** Keyword "fractionDigits" id.*/
-	public final static int FRACTIONDIGITS =	0x00000000000100;
+	public static final int FRACTIONDIGITS =	0x00000000000100;
 	/** Keyword "length" id.*/
-	public final static int LENGTH =			0x00000000000200;
+	public static final int LENGTH =			0x00000000000200;
 	/** Keyword "maxLength" id.*/
-	public final static int MAXLENGTH =			0x00000000000400;
+	public static final int MAXLENGTH =			0x00000000000400;
 	/** Keyword "minLength" id.*/
-	public final static int MINLENGTH =			0x00000000000800;
+	public static final int MINLENGTH =			0x00000000000800;
 	/** Keyword "item" id.*/
-	public final static int ITEM =				0x00000000001000;
+	public static final int ITEM =				0x00000000001000;
 	/** Keyword "base" id.*/
-	public final static int BASE =				0x00000000002000;
+	public static final int BASE =				0x00000000002000;
 	/** Keyword "separator" id.*/
-	public final static int SEPARATOR =			0x00000000004000;
+	public static final int SEPARATOR =			0x00000000004000;
 	/** Keyword "format" id.*/
-	public final static int FORMAT =			0x00000000008000;
+	public static final int FORMAT =			0x00000000008000;
 	/** Keyword "outFormat" id.*/
-	public final static int OUTFORMAT =			0x00000000010000;
+	public static final int OUTFORMAT =			0x00000000010000;
 	/** Keyword "argument" id.*/
-	public final static int ARGUMENT =			0x00000000020000;
+	public static final int ARGUMENT =			0x00000000020000;
 
 	/** Table of keyword parameters.*/
-	public final static String[] PARAM_NAMES = new String[] {
+	public static final String[] PARAM_NAMES = new String[] {
 		"pattern",
 		"enumeration",
 		"whiteSpace",
@@ -66,11 +66,11 @@ public interface XDParser extends XDValue {
 		"argument",
 	};
 	/** White space preserve. */
-	public final static byte WS_PRESERVE = 0;
+	public static final byte WS_PRESERVE = 0;
 	/** White space collapse. */
-	public final static byte WS_COLLAPSE = 'c';
+	public static final byte WS_COLLAPSE = 'c';
 	/** White space replace. */
-	public final static byte WS_REPLACE = 'r';
+	public static final byte WS_REPLACE = 'r';
 
 	/** Get base parser.
 	 * @return base XDParser or null.
@@ -104,9 +104,8 @@ public interface XDParser extends XDValue {
 	 */
 	public void parseObject(XXNode xnode, XDParseResult p);
 
-	/** This method provides some final checks which are dependent on the
-	 * context of parsing (such as ENTITY, ENTITIES, ID, IDREF, IDREFS).
-	 * Usually this method is empty.
+	/** This method provides some final checks which are dependent on the context of parsing
+	 * (such as ENTITY, ENTITIES, ID, IDREF, IDREFS). Usually this method is empty.
 	 * @param p Parsed result to be checked.
 	 * @param xnode Actual check node or null.
 	 */

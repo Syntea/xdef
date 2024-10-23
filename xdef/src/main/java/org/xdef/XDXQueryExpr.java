@@ -3,7 +3,7 @@ package org.xdef;
 import org.xdef.proc.XXNode;
 import org.w3c.dom.Node;
 
-/** Interface of compiled XQuery expression.
+/** Interface of compiled XQuery expression in X-script.
  * @author Vaclav Trojan
  */
 public interface XDXQueryExpr extends XDValue {

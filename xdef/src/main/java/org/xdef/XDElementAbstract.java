@@ -21,6 +21,9 @@ import org.w3c.dom.TypeInfo;
 import org.w3c.dom.UserDataHandler;
 import org.w3c.dom.DOMConfiguration;
 import static org.xdef.XDValueType.ELEMENT;
+import org.xdef.impl.code.DefContainer;
+import org.xdef.impl.code.DefNamedValue;
+import org.xdef.impl.code.DefString;
 import org.xdef.sys.SUnsupportedOperationException;
 import org.xdef.xml.KXmlUtils;
 
@@ -30,7 +33,7 @@ import org.xdef.xml.KXmlUtils;
 public abstract class XDElementAbstract extends XDValueAbstract
 implements Element, XDElement, XDValue, NamedNodeMap {
 
-	private static final NodeList EMPTYNODELIST = new NodeList() {
+	private final static NodeList EMPTYNODELIST = new NodeList() {
 		@Override
 		public Node item(int index) {return null;}
 		@Override
@@ -40,7 +43,7 @@ implements Element, XDElement, XDValue, NamedNodeMap {
 	private Document _doc;
 	private final String _name;
 	private final String _uri;
-	Map<String, Attr> _attrs;
+	private Map<String, Attr> _attrs;
 
 	public XDElementAbstract() {_name = "_"; _uri = null;}
 	public XDElementAbstract(String name) {_name = name; _uri = null;}
@@ -57,74 +60,64 @@ implements Element, XDElement, XDValue, NamedNodeMap {
 	@Override
 	public final String getTagName() {return _name;}
 	@Override
-	public void setAttribute(String name, String value) {
+	public void setAttribute(final String name, final String value) {
 		throw new SUnsupportedOperationException();
 	}
 	@Override
-	public void removeAttribute(String name) {
-		throw new SUnsupportedOperationException();
-	}
+	public void removeAttribute(final String name) {throw new SUnsupportedOperationException();}
 	@Override
-	public Attr getAttributeNode(String name) {
+	public Attr getAttributeNode(final String name) {
 		if (_attrs == null) {
 			createAttrs();
 		}
 		return _attrs.get(name);
 	}
 	@Override
-	public Attr setAttributeNode(Attr newAttr) {
-		throw new SUnsupportedOperationException();
-	}
+	public Attr setAttributeNode(final Attr newAttr) {throw new SUnsupportedOperationException();}
 	@Override
-	public Attr removeAttributeNode(Attr oldAttr) {
-		throw new SUnsupportedOperationException();
-	}
+	public Attr removeAttributeNode(final Attr oldAttr){throw new SUnsupportedOperationException();}
 	@Override
-	public NodeList getElementsByTagName(String name) {return EMPTYNODELIST;}
+	public NodeList getElementsByTagName(final String name) {return EMPTYNODELIST;}
 	@Override
-	public String getAttributeNS(String namespaceURI, String localName) {
+	public String getAttributeNS(final String namespaceURI, final String localName) {
 		return namespaceURI != null ? "" : getAttribute(localName);
 	}
 	@Override
-	public void setAttributeNS(String nsURI, String qName, String value) {
+	public void setAttributeNS(final String nsURI, final String qName, final String value) {
 		throw new SUnsupportedOperationException();
 	}
 	@Override
-	public void removeAttributeNS(String namespaceURI, String localName) {
+	public void removeAttributeNS(final String namespaceURI, final String localName) {
 		throw new SUnsupportedOperationException();
 	}
 	@Override
-	public Attr getAttributeNodeNS(String namespaceURI, String localName) {
+	public Attr getAttributeNodeNS(final String namespaceURI, final String localName) {
 		return namespaceURI != null ? null : getAttributeNode(localName);
 	}
 	@Override
-	public Attr setAttributeNodeNS(Attr newAttr) {
-		throw new SUnsupportedOperationException();
-	}
+	public Attr setAttributeNodeNS(final Attr newAttr) {throw new SUnsupportedOperationException();}
 	@Override
-	public NodeList getElementsByTagNameNS(String nsURI, String localName) {
+	public NodeList getElementsByTagNameNS(final String nsURI, final String localName) {
 		return EMPTYNODELIST;
 	}
 	@Override
-	public boolean hasAttributeNS(String namespaceURI, String localName) {
+	public boolean hasAttributeNS(final String namespaceURI, final String localName) {
 		return namespaceURI != null ? false : hasAttribute(localName);
 	}
 	@Override
-	public TypeInfo getSchemaTypeInfo() {
+	public TypeInfo getSchemaTypeInfo() {throw new SUnsupportedOperationException();}
+	@Override
+	public void setIdAttribute(final String name, final boolean isId) {
 		throw new SUnsupportedOperationException();
 	}
 	@Override
-	public void setIdAttribute(String name, boolean isId) {
+	public void setIdAttributeNS(final String namespaceURI,
+		final String localName,
+		final boolean isId) {
 		throw new SUnsupportedOperationException();
 	}
 	@Override
-	public void setIdAttributeNS(String namespaceURI,
-		String localName,
-		boolean isId) {
-		throw new SUnsupportedOperationException();
-	}
-	@Override
-	public void setIdAttributeNode(Attr idAttr, boolean isId) {
+	public void setIdAttributeNode(final Attr idAttr, final boolean isId) {
 		throw new SUnsupportedOperationException();
 	}
 	@Override
@@ -132,15 +125,11 @@ implements Element, XDElement, XDValue, NamedNodeMap {
 	@Override
 	public String getNodeValue() {return null;}
 	@Override
-	public void setNodeValue(String nodeValue) {
-		throw new SUnsupportedOperationException();
-	}
+	public void setNodeValue(final String nodeValue) {throw new SUnsupportedOperationException();}
 	@Override
-	public short getNodeType() {return ELEMENT_NODE;}
+	public final short getNodeType() {return ELEMENT_NODE;}
 	@Override
-	public final Node getParentNode() {
-		return _doc == null ? _doc = new MyDocument(this) : _doc;
-	}
+	public Node getParentNode() {return _doc == null ? _doc = new MyDocument(this) : _doc;}
 	@Override
 	public NodeList getChildNodes() {return EMPTYNODELIST;}
 	@Override
@@ -152,52 +141,35 @@ implements Element, XDElement, XDValue, NamedNodeMap {
 	@Override
 	public Node getNextSibling() {return null;}
 	@Override
-	public final NamedNodeMap getAttributes() {
-		return this;
-	}
+	public final NamedNodeMap getAttributes() {return this;}
 	@Override
-	public final Document getOwnerDocument() {
-		if (_doc == null) {
-			_doc = new MyDocument(this);
-		}
-		return _doc;
-	}
+	public final Document getOwnerDocument() {return _doc == null ? new MyDocument(this) : _doc;}
 	@Override
-	public Node insertBefore(Node newChild, Node refChild) {
+	public Node insertBefore(final Node newChild, final Node refChild) {
 		throw new SUnsupportedOperationException();
 	}
 	@Override
-	public Node replaceChild(Node newChild, Node oldChild) {
+	public Node replaceChild(final Node newChild, final Node oldChild) {
 		throw new SUnsupportedOperationException();
 	}
 	@Override
-	public Node removeChild(Node oldChild) {
-		throw new SUnsupportedOperationException();
-	}
+	public Node removeChild(final Node oldChild) {throw new SUnsupportedOperationException();}
 	@Override
-	public Node appendChild(Node newChild) {
-		throw new SUnsupportedOperationException();
-	}
+	public Node appendChild(final Node newChild) {throw new SUnsupportedOperationException();}
 	@Override
 	public boolean hasChildNodes() {return false;}
 	@Override
-	public Node cloneNode(boolean deep) {
-		throw new SUnsupportedOperationException();
-	}
+	public Node cloneNode(final boolean deep) {throw new SUnsupportedOperationException();}
 	@Override
-	public void normalize() {
-		throw new SUnsupportedOperationException();
-	}
+	public void normalize() {throw new SUnsupportedOperationException();}
 	@Override
-	public boolean isSupported(String feature, String version) {return false;}
+	public boolean isSupported(final String feature, final String version) {return false;}
 	@Override
 	public String getNamespaceURI() {return null;}
 	@Override
 	public String getPrefix() {return null;}
 	@Override
-	public void setPrefix(String prefix) {
-		throw new SUnsupportedOperationException();
-	}
+	public void setPrefix(final String prefix) {throw new SUnsupportedOperationException();}
 	@Override
 	public String getLocalName() {return _name;}
 	@Override
@@ -205,43 +177,37 @@ implements Element, XDElement, XDValue, NamedNodeMap {
 	@Override
 	public String getBaseURI() {return null;}
 	@Override
-	public short compareDocumentPosition(Node other) {
+	public short compareDocumentPosition(final Node other) {
 		throw new SUnsupportedOperationException();
 	}
 	@Override
 	public String getTextContent() {return null;}
 	@Override
-	public void setTextContent(String textContent) {
-		throw new SUnsupportedOperationException();
-	}
+	public void setTextContent(final String content) {throw new SUnsupportedOperationException();}
 	@Override
 	public boolean isSameNode(Node other) {return other == this;}
 	@Override
-	public String lookupPrefix(String namespaceURI) {return null;}
+	public String lookupPrefix(final String namespaceURI) {return null;}
 	@Override
-	public boolean isDefaultNamespace(String namespaceURI) {
-		return namespaceURI == null;
-	}
+	public boolean isDefaultNamespace(final String namespaceURI) {return namespaceURI == null;}
 	@Override
-	public String lookupNamespaceURI(String prefix) {return null;}
+	public String lookupNamespaceURI(final String prefix) {return null;}
 	@Override
 	public boolean isEqualNode(Node arg) {return arg == this;}
 	@Override
-	public Object getFeature(String feature, String version) {return null;}
+	public Object getFeature(final String feature, final String version) {return null;}
 	@Override
-	public Object setUserData(String key, Object data, UserDataHandler handler) {
+	public Object setUserData(final String key, final Object data, final UserDataHandler handler) {
 		throw new SUnsupportedOperationException();
 	}
 	@Override
-	public Object getUserData(String key) {return null;}
+	public Object getUserData(final String key) {return null;}
 
 	////////////////////////////////////////////////////////////////////////////
 	// NamedNodeMap interface
 	////////////////////////////////////////////////////////////////////////////
 	@Override
-	public final Node getNamedItem(final String name) {
-		return getAttributeNode(name);
-	}
+	public final Node getNamedItem(final String name) {return getAttributeNode(name);}
 	@Override
 	public final Node item(final int index) {
 		if (_attrs == null) {
@@ -259,23 +225,23 @@ implements Element, XDElement, XDValue, NamedNodeMap {
 	}
 
 	@Override
-	public Node setNamedItem(Node arg) throws DOMException {
+	public Node setNamedItem(final Node arg) throws DOMException {
 		throw new SUnsupportedOperationException();
 	}
 	@Override
-	public Node removeNamedItem(String name) throws DOMException {
+	public Node removeNamedItem(final String name) throws DOMException {
 		throw new SUnsupportedOperationException();
 	}
 	@Override
-	public Node getNamedItemNS(String nsURI, String localName) {
+	public Node getNamedItemNS(final String nsURI, final String localName) {
 		return getAttributeNodeNS(nsURI, localName);
 	}
 	@Override
-	public Node setNamedItemNS(Node arg) throws DOMException {
+	public Node setNamedItemNS(final Node arg) throws DOMException {
 		throw new SUnsupportedOperationException();
 	}
 	@Override
-	public Node removeNamedItemNS(String nsURI, String localName) {
+	public Node removeNamedItemNS(final String nsURI, final String localName) {
 		throw new SUnsupportedOperationException();
 	}
 
@@ -285,7 +251,7 @@ implements Element, XDElement, XDValue, NamedNodeMap {
 	@Override
 	public final short getItemId() {return XD_ELEMENT;}
 	@Override
-	public XDValueType getItemType() {return ELEMENT;}
+	public final XDValueType getItemType() {return ELEMENT;}
 	@Override
 	public Element getElement() {return this;}
 	@Override
@@ -299,96 +265,77 @@ implements Element, XDElement, XDValue, NamedNodeMap {
 		throw new SUnsupportedOperationException();
 	}
 	@Override
-	public void addXDItem(String value) {
+	public void addXDItem(final String value) {throw new SUnsupportedOperationException();}
+	@Override
+	public void addXDItem(final Element value) {throw new SUnsupportedOperationException();}
+	@Override
+	public XDValue replaceXDItem(final int index, final XDValue value) {
 		throw new SUnsupportedOperationException();
 	}
 	@Override
-	public void addXDItem(Element value) {
+	public void insertXDItemBefore(final int index, final XDValue value) {
 		throw new SUnsupportedOperationException();
 	}
 	@Override
-	public XDValue replaceXDItem(final int index, XDValue value) {
-		throw new SUnsupportedOperationException();
-	}
-	@Override
-	public void insertXDItemBefore(int index, XDValue value) {
-		throw new SUnsupportedOperationException();
-	}
-	@Override
-	public XDValue removeXDItem(int index) {
-		throw new SUnsupportedOperationException();
-	}
+	public XDValue removeXDItem(final int index) {throw new SUnsupportedOperationException();}
 	@Override
 	public int getXDItemsNumber() {return 0;}
 	@Override
 	public XDValue[] getXDItems() {return new XDValue[0];}
 	@Override
-	public XDValue setXDNamedItem(XDNamedValue item) {
+	public XDValue setXDNamedItem(final XDNamedValue item) {
 		throw new SUnsupportedOperationException();
 	}
 	@Override
-	public XDValue setXDNamedItem(String name, XDValue value) {
+	public XDValue setXDNamedItem(final String name, final XDValue value) {
 		throw new SUnsupportedOperationException();
 	}
 	@Override
-	public boolean hasXDNamedItem(String name) {return hasAttribute(name);}
+	public boolean hasXDNamedItem(final String name) {return hasAttribute(name);}
 	@Override
-	public XDNamedValue getXDNamedItem(String name) {
-		return hasAttribute(name) ?
-			new org.xdef.impl.code.DefNamedValue(name,
-				new org.xdef.impl.code.DefString(getAttribute(name))) : null;
+	public XDNamedValue getXDNamedItem(final String name) {
+		return hasAttribute(name)? new DefNamedValue(name,new DefString(getAttribute(name))) : null;
 	}
 	@Override
-	public String getXDNamedItemAsString(String name) {
+	public String getXDNamedItemAsString(final String name) {
 		String s = getAttribute(name);
 		return s.isEmpty() && !hasAttribute(name) ? null : s;
 	}
 	@Override
-	public XDValue getXDNamedItemValue(String name) {
-		return hasAttribute(name) ?
-			new org.xdef.impl.code.DefString(getAttribute(name)) : null;
+	public XDValue getXDNamedItemValue(final String name) {
+		return hasAttribute(name) ? new org.xdef.impl.code.DefString(getAttribute(name)) : null;
 	}
 	@Override
-	public XDValue removeXDNamedItem(String name) {
-		throw new SUnsupportedOperationException();
-	}
+	public XDValue removeXDNamedItem(final String name){throw new SUnsupportedOperationException();}
 	@Override
-	public XDContainer getXDElements() {
-		return new org.xdef.impl.code.DefContainer();
-	}
+	public XDContainer getXDElements() {return new DefContainer();}
 	@Override
-	public Element getXDElement(int n) {return null;}
+	public Element getXDElement(final int n) {return null;}
 	@Override
-	public XDContainer getXDElements(String name) {
-		return new org.xdef.impl.code.DefContainer();
-	}
+	public XDContainer getXDElements(final String name) {return new DefContainer();}
 	@Override
-	public XDContainer getXDElementsNS(String nsURI, String localName) {
-		return new org.xdef.impl.code.DefContainer();
+	public XDContainer getXDElementsNS(final String nsURI, final String localName) {
+		return new DefContainer();
 	}
 	@Override
 	public String getXDText() {return null;}
 	@Override
-	public String getXDTextItem(int n) {return null;}
+	public String getXDTextItem(final int n) {return null;}
 	@Override
-	public XDContainer sortXD(boolean asc) {return this;}
+	public XDContainer sortXD(final boolean asc) {return this;}
 	@Override
-	public XDContainer sortXD(String key, boolean asc) {return this;}
+	public XDContainer sortXD(final String key, final boolean asc) {return this;}
 	@Override
-	public Element toElement(String nsUri, String name) {return this;}
+	public Element toElement(final String nsUri, final String name) {return this;}
 
 	@Override
-	public String toString() {
-		return KXmlUtils.nodeToString(this);
-	}
+	public String toString() {return KXmlUtils.nodeToString(this);}
 
 	@Override
 	/** Create XDContainer from this object.
 	 * @return XDContainer constructed from this object.
 	 */
-	public XDContainer toContainer() {
-		throw new SUnsupportedOperationException();
-	}
+	public XDContainer toContainer() {throw new SUnsupportedOperationException();}
 
 	////////////////////////////////////////////////////////////////////////////
 
@@ -396,67 +343,67 @@ implements Element, XDElement, XDValue, NamedNodeMap {
 
 		private final XDElementAbstract _elem;
 
-		MyDocument(XDElementAbstract elem) {_elem = elem;}
+		MyDocument(final XDElementAbstract elem) {_elem = elem;}
 
 		@Override
-		public DocumentType getDoctype() {return null;}
+		public final DocumentType getDoctype() {return null;}
 		@Override
-		public DOMImplementation getImplementation() {
+		public final DOMImplementation getImplementation() {
 			throw new SUnsupportedOperationException();
 		}
 		@Override
 		public final Element getDocumentElement() {return _elem;}
 		@Override
-		public Element createElement(String tagName) {
+		public final Element createElement(final String tagName) {
 			throw new SUnsupportedOperationException();
 		}
 		@Override
-		public DocumentFragment createDocumentFragment() {
+		public final DocumentFragment createDocumentFragment() {
 			throw new SUnsupportedOperationException();
 		}
 		@Override
-		public Text createTextNode(String data) {
+		public final Text createTextNode(final String data) {
 			throw new SUnsupportedOperationException();
 		}
 		@Override
-		public Comment createComment(String data) {
+		public final Comment createComment(final String data) {
 			throw new SUnsupportedOperationException();
 		}
 		@Override
-		public CDATASection createCDATASection(String data) {
+		public final CDATASection createCDATASection(final String data) {
 			throw new SUnsupportedOperationException();
 		}
 		@Override
-		public ProcessingInstruction createProcessingInstruction(String target,
-			String data) {
+		public final ProcessingInstruction createProcessingInstruction(final String target,
+			final String data) {
 			throw new SUnsupportedOperationException();
 		}
 		@Override
-		public Attr createAttribute(String name) {
+		public final Attr createAttribute(final String name) {
 			throw new SUnsupportedOperationException();
 		}
 		@Override
-		public EntityReference createEntityReference(String name) {
+		public final EntityReference createEntityReference(final String name) {
 			throw new SUnsupportedOperationException();
 		}
 		@Override
-		public NodeList getElementsByTagName(String tagname) {
+		public final NodeList getElementsByTagName(final String tagname) {
 			throw new SUnsupportedOperationException();
 		}
 		@Override
-		public Node importNode(Node importedNode, boolean deep) {
+		public final Node importNode(final Node importedNode, final boolean deep) {
 			throw new SUnsupportedOperationException();
 		}
 		@Override
-		public Element createElementNS(String namespaceURI, String qName) {
+		public final Element createElementNS(final String namespaceURI, final String qName) {
 			throw new SUnsupportedOperationException();
 		}
 		@Override
-		public Attr createAttributeNS(String namespaceURI, String qName) {
+		public final Attr createAttributeNS(final String namespaceURI, final String qName) {
 			throw new SUnsupportedOperationException();
 		}
 		@Override
-		public NodeList getElementsByTagNameNS(String uri, String localName) {
+		public final NodeList getElementsByTagNameNS(final String uri, final String localName) {
 			if (localName.equals(_name) &&
 				(uri==null && _uri==null ||	uri!=null && uri.equals(_uri))) {
 				return getChildNodes();
@@ -464,43 +411,43 @@ implements Element, XDElement, XDValue, NamedNodeMap {
 			return EMPTYNODELIST;
 		}
 		@Override
-		public Element getElementById(String elementId) {return null;}
+		public final Element getElementById(String elementId) {return null;}
 		@Override
-		public String getInputEncoding() {return "UTF-8";}
+		public final String getInputEncoding() {return "UTF-8";}
 		@Override
 		public final String getXmlEncoding() {return "UTF-8";}
 		@Override
-		public boolean getXmlStandalone() {return true;	}
+		public final boolean getXmlStandalone() {return true;	}
 		@Override
-		public void setXmlStandalone(boolean xmlStandalone) {}
+		public final void setXmlStandalone(boolean xmlStandalone) {}
 		@Override
 		public final String getXmlVersion() {return "1.0";}
 		@Override
-		public void setXmlVersion(String xmlVersion) {}
+		public final void setXmlVersion(String xmlVersion) {}
 		@Override
-		public boolean getStrictErrorChecking() {return false;}
+		public final boolean getStrictErrorChecking() {return false;}
 		@Override
-		public void setStrictErrorChecking(boolean strictErrorChecking) {
+		public void setStrictErrorChecking(final boolean strictErrorChecking) {
 			throw new SUnsupportedOperationException();
 		}
 		@Override
 		public final String getDocumentURI() {return null;}
 		@Override
-		public void setDocumentURI(String documentURI) {
+		public final void setDocumentURI(final String documentURI) {
 			throw new SUnsupportedOperationException();
 		}
 		@Override
-		public Node adoptNode(Node source) {
+		public final Node adoptNode(final Node source) {
 			throw new SUnsupportedOperationException();
 		}
 		@Override
-		public DOMConfiguration getDomConfig() {return null;}
+		public final DOMConfiguration getDomConfig() {return null;}
 		@Override
-		public void normalizeDocument() {
-			throw new SUnsupportedOperationException();
-		}
+		public final void normalizeDocument() {throw new SUnsupportedOperationException();}
 		@Override
-		public Node renameNode(Node n, String namespaceURI, String qualifiedName) {
+		public final Node renameNode(final Node n,
+			final String namespaceURI,
+			final String qualifiedName) {
 			throw new SUnsupportedOperationException();
 		}
 		@Override
@@ -508,7 +455,7 @@ implements Element, XDElement, XDValue, NamedNodeMap {
 		@Override
 		public final String getNodeValue() {return null;}
 		@Override
-		public void setNodeValue(String nodeValue) {
+		public final void setNodeValue(final String nodeValue) {
 			throw new SUnsupportedOperationException();
 		}
 		@Override
@@ -519,7 +466,7 @@ implements Element, XDElement, XDValue, NamedNodeMap {
 		public final NodeList getChildNodes() {
 			return new NodeList() {
 				@Override
-				public final Node item(int index) {
+				public final Node item(final int index) {
 					return index == 0 ? _elem : null;
 				}
 				@Override
@@ -535,87 +482,81 @@ implements Element, XDElement, XDValue, NamedNodeMap {
 		@Override
 		public final Node getNextSibling() {return null;}
 		@Override
-		public NamedNodeMap getAttributes() {return null;}
+		public final NamedNodeMap getAttributes() {return null;}
 		@Override
-		public Document getOwnerDocument() {return this;}
+		public final Document getOwnerDocument() {return this;}
 		@Override
-		public Node insertBefore(Node newChild, Node refChild) {
+		public final Node insertBefore(final Node newChild, final Node refChild) {
 			throw new SUnsupportedOperationException();
 		}
 		@Override
-		public Node replaceChild(Node newChild, Node oldChild) {
+		public final Node replaceChild(final Node newChild, final Node oldChild) {
 			throw new SUnsupportedOperationException();
 		}
 		@Override
-		public Node removeChild(Node oldChild) {
+		public final Node removeChild(final Node oldChild) {
 			throw new SUnsupportedOperationException();
 		}
 		@Override
-		public Node appendChild(Node newChild) {
+		public final Node appendChild(final Node newChild) {
 			throw new SUnsupportedOperationException();
 		}
 		@Override
 		public final boolean hasChildNodes() {return true;}
 		@Override
-		public Node cloneNode(boolean deep) {
-			throw new SUnsupportedOperationException();
-		}
+		public final Node cloneNode(final boolean deep){throw new SUnsupportedOperationException();}
 		@Override
-		public void normalize() {
-			throw new SUnsupportedOperationException();
-		}
+		public final void normalize() {throw new SUnsupportedOperationException();}
 		@Override
-		public boolean isSupported(String feature, String version) {
-			return false;
-		}
+		public final boolean isSupported(final String feature, final String version) {return false;}
 		@Override
 		public final String getNamespaceURI() {return null;}
 		@Override
 		public final String getPrefix() {return null;}
 		@Override
-		public void setPrefix(String prefix) {
+		public final void setPrefix(final String prefix) {
 			throw new SUnsupportedOperationException();
 		}
 		@Override
 		public final String getLocalName() {return "#document";}
 		@Override
-		public boolean hasAttributes() {return false;}
+		public final boolean hasAttributes() {return false;}
 		@Override
-		public String getBaseURI() {return null;}
+		public final String getBaseURI() {return null;}
 		@Override
-		public short compareDocumentPosition(Node other) {
+		public final short compareDocumentPosition(final Node other) {
 			throw new SUnsupportedOperationException();
 		}
 		@Override
-		public String getTextContent() {return null;}
+		public final String getTextContent() {return null;}
 		@Override
-		public void setTextContent(String textContent) {
+		public final void setTextContent(final String textContent) {
 			throw new SUnsupportedOperationException();
 		}
 		@Override
 		public boolean isSameNode(Node other) {return other == this;}
 		@Override
-		public String lookupPrefix(String namespaceURI) {return null;}
+		public final String lookupPrefix(final String namespaceURI) {return null;}
 		@Override
-		public boolean isDefaultNamespace(String namespaceURI) {
+		public final boolean isDefaultNamespace(final String namespaceURI) {
 			throw new SUnsupportedOperationException();
 		}
 		@Override
-		public String lookupNamespaceURI(String prefix) {
+		public final String lookupNamespaceURI(final String prefix) {
 			throw new SUnsupportedOperationException();
 		}
 		@Override
-		public boolean isEqualNode(Node arg) {return arg == this;}
+		public final boolean isEqualNode(final Node arg) {return arg == this;}
 		@Override
-		public Object getFeature(String feature, String version) {
-			return null;
-		}
+		public final Object getFeature(final String feature, final String version) {return null;}
 		@Override
-		public Object setUserData(String key, Object data, UserDataHandler h) {
+		public final Object setUserData(final String key,
+			final Object data,
+			final UserDataHandler h) {
 			throw new SUnsupportedOperationException();
 		}
 		@Override
-		public Object getUserData(String key) {return null;}
+		public final Object getUserData(final String key) {return null;}
 	}
 
 	private void createAttrs() {
@@ -629,7 +570,7 @@ implements Element, XDElement, XDValue, NamedNodeMap {
 		}
 	}
 
-	protected Attr createAttr(String name, String val) {
+	protected Attr createAttr(final String name,final  String val) {
 		return new MyAttr(name, val, this);
 	}
 
@@ -645,122 +586,112 @@ implements Element, XDElement, XDValue, NamedNodeMap {
 			_elem = elem;
 		}
 		@Override
-		public String getName() {return _name;}
+		public final String getName() {return _name;}
 		@Override
-		public boolean getSpecified() {return true;}
+		public final boolean getSpecified() {return true;}
 		@Override
-		public String getValue() {return _value;}
+		public final String getValue() {return _value;}
 		@Override
-		public void setValue(String value) {
+		public final void setValue(final String value) {throw new SUnsupportedOperationException();}
+		@Override
+		public final Element getOwnerElement() {return _elem;}
+		@Override
+		public final TypeInfo getSchemaTypeInfo() {return null;}
+		@Override
+		public final boolean isId() {return false;}
+		@Override
+		public final String getNodeName() {return _name;}
+		@Override
+		public final String getNodeValue() {return _value;}
+		@Override
+		public final void setNodeValue(final String nodeValue) {
 			throw new SUnsupportedOperationException();
 		}
 		@Override
-		public Element getOwnerElement() {return _elem;}
+		public final short getNodeType() {return ATTRIBUTE_NODE;}
 		@Override
-		public TypeInfo getSchemaTypeInfo() {return null;}
+		public final Node getParentNode() {return _elem;}
 		@Override
-		public boolean isId() {return false;}
+		public final NodeList getChildNodes() {return null;}
 		@Override
-		public String getNodeName() {return _name;}
+		public final Node getFirstChild() {return null;}
 		@Override
-		public String getNodeValue() {return _value;}
+		public final Node getLastChild() {return null;}
 		@Override
-		public void setNodeValue(String nodeValue) {
+		public final Node getPreviousSibling() {return null;}
+		@Override
+		public final Node getNextSibling() {return null;}
+		@Override
+		public final NamedNodeMap getAttributes() {return null;}
+		@Override
+		public final Document getOwnerDocument() {return _elem.getOwnerDocument();}
+		@Override
+		public final Node insertBefore(final Node newChild, final Node refChild) {
 			throw new SUnsupportedOperationException();
 		}
 		@Override
-		public short getNodeType() {return ATTRIBUTE_NODE;}
-		@Override
-		public Node getParentNode() {return _elem;}
-		@Override
-		public NodeList getChildNodes() {return null;}
-		@Override
-		public Node getFirstChild() {return null;}
-		@Override
-		public Node getLastChild() {return null;}
-		@Override
-		public Node getPreviousSibling() {return null;}
-		@Override
-		public Node getNextSibling() {return null;}
-		@Override
-		public NamedNodeMap getAttributes() {return null;}
-		@Override
-		public Document getOwnerDocument() {return _elem.getOwnerDocument();}
-		@Override
-		public Node insertBefore(Node newChild, Node refChild) {
+		public final Node replaceChild(final Node newChild, final Node oldChild) {
 			throw new SUnsupportedOperationException();
 		}
 		@Override
-		public Node replaceChild(Node newChild, Node oldChild) {
+		public final Node removeChild(final Node oldChild) {
 			throw new SUnsupportedOperationException();
 		}
 		@Override
-		public Node removeChild(Node oldChild) {
+		public final Node appendChild(final Node newChild) {
 			throw new SUnsupportedOperationException();
 		}
 		@Override
-		public Node appendChild(Node newChild) {
+		public final boolean hasChildNodes() {return false;}
+		@Override
+		public final Node cloneNode(final boolean deep){throw new SUnsupportedOperationException();}
+		@Override
+		public final void normalize() {throw new SUnsupportedOperationException();}
+		@Override
+		public final boolean isSupported(final String feature, final String version) {return false;}
+		@Override
+		public final String getNamespaceURI() {return null;}
+		@Override
+		public final String getPrefix() {return null;}
+		@Override
+		public final void setPrefix(final String prefix) {
 			throw new SUnsupportedOperationException();
 		}
 		@Override
-		public boolean hasChildNodes() {return false;}
+		public final String getLocalName() {return _name;}
 		@Override
-		public Node cloneNode(boolean deep) {
+		public final boolean hasAttributes() {return false;}
+		@Override
+		public final String getBaseURI() {return null;}
+		@Override
+		public final short compareDocumentPosition(final Node other) {
 			throw new SUnsupportedOperationException();
 		}
 		@Override
-		public void normalize() {
+		public final String getTextContent() {return null;}
+		@Override
+		public final void setTextContent(final String textContent) {
 			throw new SUnsupportedOperationException();
 		}
 		@Override
-		public boolean isSupported(String feature, String version) {
-			return false;
-		}
+		public final boolean isSameNode(final Node other) {return other == this;}
 		@Override
-		public String getNamespaceURI() {return null;}
+		public final String lookupPrefix(final String namespaceURI) {return null;}
 		@Override
-		public String getPrefix() {return null;}
+		public final boolean isDefaultNamespace(final String nsURI) {return nsURI == null;}
 		@Override
-		public void setPrefix(String prefix) {
+		public final String lookupNamespaceURI(final String prefix) {return null;}
+		@Override
+		public final boolean isEqualNode(final Node arg) {return arg == this;}
+		@Override
+		public final Object getFeature(final String feature, final String version) {return null;}
+		@Override
+		public final Object setUserData(final String key,
+			final Object data,
+			final UserDataHandler h) {
 			throw new SUnsupportedOperationException();
 		}
 		@Override
-		public String getLocalName() {return _name;}
-		@Override
-		public boolean hasAttributes() {return false;}
-		@Override
-		public String getBaseURI() {return null;}
-		@Override
-		public short compareDocumentPosition(Node other) {
-			throw new SUnsupportedOperationException();
-		}
-		@Override
-		public String getTextContent() {return null;}
-		@Override
-		public void setTextContent(String textContent) {
-			throw new SUnsupportedOperationException();
-		}
-		@Override
-		public boolean isSameNode(Node other) {return other == this;}
-		@Override
-		public String lookupPrefix(String namespaceURI) {return null;}
-		@Override
-		public boolean isDefaultNamespace(String namespaceURI) {
-			return namespaceURI == null;
-		}
-		@Override
-		public String lookupNamespaceURI(String prefix) {return null;}
-		@Override
-		public boolean isEqualNode(Node arg) {return arg == this;}
-		@Override
-		public Object getFeature(String feature, String version) {
-			return null;
-		}
-		@Override
-		public Object setUserData(String key, Object data, UserDataHandler h) {
-			throw new SUnsupportedOperationException();
-		}
-		@Override
-		public Object getUserData(String key) {return null;}
+		public final Object getUserData(final String key) {return null;}
 	}
 }

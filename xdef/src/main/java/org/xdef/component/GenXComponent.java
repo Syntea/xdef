@@ -80,9 +80,11 @@ public final class GenXComponent {
 						out.write("package " + packageName +";"+LN);
 					}
 					if (genJavadoc) {
-						out.write(LN+"/** This enumeration represents the type "+e.getKey()+" from X-definition.*/"+LN);
+						out.write(LN+"/** This enumeration represents the type "
+							+ e.getKey() + " from X-definition.*/"+LN);
 					}
-					out.write("public enum "+enumName+" implements org.xdef.component.XCEnumeration{"+LN);
+					out.write("public enum "
+						+ enumName + " implements org.xdef.component.XCEnumeration{"+LN);
 					boolean notFirst = false;
 					StringTokenizer st = new StringTokenizer(values);
 					while (st.hasMoreTokens()) {
@@ -141,7 +143,7 @@ public final class GenXComponent {
 	 * @return ArrayReporter with errors and warnings
 	 * @throws IOException if an error occurs.
 	 */
-	public final static ArrayReporter genXComponent(final XDPool xdpool,
+	public static final ArrayReporter genXComponent(final XDPool xdpool,
 		final String fdir,
 		final String charset,
 		final boolean genJavadoc,
@@ -175,7 +177,7 @@ public final class GenXComponent {
 		for (Entry<String, String> e: xdpool.getXComponents().entrySet()) {
 			String key = e.getKey();
 			XMNode xn = xdpool.findModel(key);
-			String ns = (xn != null && xn.getKind() == XMELEMENT) ? ((XElement) xn).getNSUri() : null;
+			String ns = (xn!=null && xn.getKind()==XMELEMENT) ? ((XElement) xn).getNSUri() : null;
 			components.put(e.getKey(), new XComponentInfo(e.getValue(), ns));
 		}
 		for (int runCount = 0; runCount < 2; runCount++) {
@@ -332,7 +334,7 @@ public final class GenXComponent {
 	 * the system character set name).
 	 * @throws IOException if an error occurs.
 	 */
-	public final static void genXComponent(final XDPool xdpool,
+	public static final void genXComponent(final XDPool xdpool,
 		final String dir,
 		final String charset) throws IOException {
 		genXComponent(xdpool, dir, charset, false, false);
@@ -385,7 +387,7 @@ public final class GenXComponent {
 		while (i < args.length) {
 			String arg = args[i];
 			if (arg == null || arg.isEmpty() || arg.charAt(0) != '-' || arg.length() != 2) {
-				throw new RuntimeException("Incorrect parameter " + (i+1) + ": " + arg + '\n' + info);
+				throw new RuntimeException("Incorrect parameter " + ++i + ": " + arg + '\n' +info);
 			}
 			switch (arg.charAt(1)) {
 				case 'd': // Generate JavaDoc
@@ -411,7 +413,7 @@ public final class GenXComponent {
 					}
 					continue;
 				case 'j': // JAXB annotations
-					System.err.println("Warning JAXB annotations swith is ignored in this version!");
+					System.err.println("Warning JAXB annotations swith ignored in this version!");
 					continue;
 				case 'h': // help
 					System.out.println(info);
@@ -429,9 +431,11 @@ public final class GenXComponent {
 								continue;
 							}
 						} catch (Exception ex) {}
-						throw new RuntimeException("Parameter '-o' is not output directory.\n" + info);
+						throw new RuntimeException(
+							"Parameter '-o' is not output directory.\n" + info);
 					} else {
-						throw new RuntimeException("Parameter '-o' is not output directory.\n" + info);
+						throw new RuntimeException(
+							"Parameter '-o' is not output directory.\n" + info);
 					}
 				case 'p': // where to write the XDPool
 					if (xpFile != null) {
@@ -448,14 +452,15 @@ public final class GenXComponent {
 							xpFile = new FileOutputStream(f);
 							continue;
 						} catch (FileNotFoundException ex) {
-							throw new RuntimeException("Can't write to the file from tne key \"-p\"\n"
-									+ info, ex);
+							throw new RuntimeException(
+								"Can't write to the file from tne key \"-p\"\n" + info, ex);
 						}
 					} else {
 						throw new RuntimeException("Parameter '-p' is not file\n" + info);
 					}
 				default:
-					throw new RuntimeException("Incorrect parameter \""+arg+"\" on position "+(i+1)+".\n" + info);
+					throw new RuntimeException(
+						"Incorrect parameter \""+arg+"\" on position "+(i+1)+".\n" + info);
 			}
 		}
 		if (sources.isEmpty()) {

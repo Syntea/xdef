@@ -1096,7 +1096,7 @@ public class XDGenCollection {
 	 * @param n the node to be checked.
 	 * @return X-definition where the node is declared..
 	 */
-	public final static Element getXdef(final Node n) {
+	public static final Element getXdef(final Node n) {
 		if (n == null || n.getNodeType() != Node.ELEMENT_NODE) {
 			return null;
 		}
@@ -1116,7 +1116,7 @@ public class XDGenCollection {
 	 * @param n the node to be checked.
 	 * @return name of X-definition of X-definition where the node is declared.
 	 */
-	public final static String getXDName(final Node n) {
+	public static final String getXDName(final Node n) {
 		Element xd = getXdef(n);
 		if (xd == null) {
 			return null;
@@ -1132,7 +1132,7 @@ public class XDGenCollection {
 	 * @param n the node to be checked.
 	 * @return namespace URI of X-definition where the node is declared.
 	 */
-	public final static String getXDNodeNS(final Node n) {
+	public static final String getXDNodeNS(final Node n) {
 		Element e;
 		switch (n.getNodeType()) {
 			case Node.ATTRIBUTE_NODE:

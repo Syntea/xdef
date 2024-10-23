@@ -226,7 +226,8 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 			d += 's';
 			x = "if(x!=null)_&{name}.add(x);";
 		} else {
-			x = (isRoot ? "" : "if(_&{name}==null)_&{name}=new "+iName+"();_&{name}.") + "set$value(x);";
+			x = (isRoot ? "" : "if(_&{name}==null)_&{name}=new "+iName+"();_&{name}.")
+				+ "set$value(x);";
 		}
 		if (sbi != null) {
 			sb.append("\t@Override").append(LN);
@@ -429,7 +430,8 @@ class XCGeneratorXON extends XCGeneratorBase1 {
 		if (max > 1) { // list of values
 			String typ1 = "java.util.List<" + typ + ">";
 			jGet = xe.getXonMode() != 0 && "String".equals(typ)
-				? "org.xdef.xon.XonTools.jstringFromSource(y.get"+X_VALATTR+"())" : "y.get"+X_VALATTR+"()";
+				? "org.xdef.xon.XonTools.jstringFromSource(y.get"+X_VALATTR+"())"
+				: "y.get"+X_VALATTR+"()";
 			if (keyAttr != null && keyAttr.getFixedValue() == null) {//%anyName
 				template =
 (_genJavadoc ? "\t/** Get map with %anyName entries of the map &{d}."+LN+

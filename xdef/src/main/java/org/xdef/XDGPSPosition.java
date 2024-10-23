@@ -10,6 +10,7 @@ import org.xdef.sys.SIllegalArgumentException;
  * @author Vaclav Trojan
  */
 public final class XDGPSPosition extends XDValueAbstract {
+
 	/** Value of GPosition. */
 	private final GPSPosition _position;
 
@@ -56,23 +57,22 @@ public final class XDGPSPosition extends XDValueAbstract {
 	/** Get name of this position.
 	 * @return name of the position or null.
 	 */
-	public String name() {return _position.name();}
+	public final String name() {return _position.name();}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of methods from XDValue interface
 ////////////////////////////////////////////////////////////////////////////////
 
 	@Override
-	public boolean equals(final XDValue arg) {
+	public final boolean equals(final XDValue arg) {
 		if (arg instanceof XDGPSPosition) {
 			XDGPSPosition x = (XDGPSPosition) arg;
-			return _position != null ? _position.equals(x._position)
-				: x._position == null;
+			return _position != null ? _position.equals(x._position) : x._position == null;
 		}
 		return false;
 	}
 	@Override
-	public int compareTo(final XDValue arg) throws IllegalArgumentException {
+	public final int compareTo(final XDValue arg) throws IllegalArgumentException {
 		if (arg instanceof XDGPSPosition) {
 			if (this.equals((XDGPSPosition) arg)) {
 				return 0;
@@ -81,15 +81,15 @@ public final class XDGPSPosition extends XDValueAbstract {
 		throw new SIllegalArgumentException(SYS.SYS085);//Incomparable arguments
 	}
 	@Override
-	public short getItemId() {return XD_GPSPOSITION;}
+	public final short getItemId() {return XD_GPSPOSITION;}
 	@Override
-	public XDValueType getItemType() {return GPSPOSITION;}
+	public final XDValueType getItemType() {return GPSPOSITION;}
 	@Override
-	public String stringValue() {return isNull() ? "" : _position.toString();}
+	public final String stringValue() {return isNull() ? "" : _position.toString();}
 	@Override
-	public boolean isNull() {return _position == null;}
+	public final boolean isNull() {return _position == null;}
 	@Override
-	public GPSPosition getObject() {return _position;}
+	public final GPSPosition getObject() {return _position;}
 	@Override
-	public String toString() {return _position.toString();}
+	public final String toString() {return _position.toString();}
 }

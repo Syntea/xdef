@@ -845,7 +845,7 @@ out.write("}");
 	 * @param file file name of properties.
 	 * @return ReportTable created from properties.
 	 */
-	public final static ReportTable readReporTable(final String file) {
+	public static final ReportTable readReporTable(final String file) {
 		return genReportTable(ReportTable.readProperties(file));
 	}
 
@@ -854,7 +854,7 @@ out.write("}");
 	 * @param reporter where to write messages.
 	 * @return array with ReportTable objects created from properties.
 	 */
-	public final static ReportTable[] readReporTables(final String[] files,
+	public static final ReportTable[] readReporTables(final String[] files,
 		ReportWriter reporter) {
 		ReportTableImpl[] msgTables = null;
 		for (String file : files) {
@@ -915,7 +915,7 @@ out.write("}");
 	 * @return created ReportTable.
 	 * @throws RuntimeException if an error occurs.
 	 */
-	public final static ReportTable genReportTable(
+	public static final ReportTable genReportTable(
 		final Properties reportTable) {
 		String prefix = reportTable.getProperty("_prefix");
 		if (prefix == null || prefix.length() < 3) {
