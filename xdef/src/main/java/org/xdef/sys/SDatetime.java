@@ -804,10 +804,31 @@ public class SDatetime extends XMLGregorianCalendar
 	/** Set time zone value.
 	 * @param tz the TimeZone to be set.
 	 */
-	public final void setTZ(final TimeZone tz) {
+	public final void setTZ(final TimeZone tz) {setTZ(_tz, tz);}
+
+	/** Set time zone value.
+	 * @param defaultZone default TimeZone.
+	 * @param newZone the TimeZone to be set.
+	 */
+	public final void setTZ(final TimeZone defaultZone, final TimeZone newZone) {
 		synchronized(this) {
-			_tz = tz == null ? null : (TimeZone) tz.clone();
-			_calendar = null;
+			if (newZone == null) {
+				_tz = null;
+				return;
+			}
+			if (_tz == null || "UTC".equals(_tz.getID())) {
+				TimeZone dftz = defaultZone;
+				if (dftz == null) {
+					dftz = GregorianCalendar.getInstance().getTimeZone();
+				}
+				_tz = dftz;
+			}
+			if (!_tz.equals(newZone)) {
+				Calendar c = getCalendar();
+				c.setTimeZone(newZone);
+				setCalendar(c);
+				_tz = (TimeZone) newZone.clone();
+			}
 		}
 	}
 

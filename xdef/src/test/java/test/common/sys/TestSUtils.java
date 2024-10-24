@@ -102,17 +102,39 @@ public class TestSUtils extends STester {
 	/** Run test and print error information. */
 	public void test() {
 		try {
+			// Test datetime .setTZ(...)
+			SDatetime d = new SDatetime("2024-10-22T11:00:00.005+02:00");
+			assertEq("2024-10-22T11:00:00.005+02:00", d.toString());
+			d.setTZ(TimeZone.getTimeZone("CET"), TimeZone.getTimeZone("GMT"));
+			assertEq("2024-10-22T09:00:00.005Z", d.toString());
+			d.setTZ(TimeZone.getTimeZone("GMT"));
+			assertEq("2024-10-22T09:00:00.005Z", d.toString());
+			d.setTZ(TimeZone.getTimeZone("CET"), null);
+			assertNull(d.getTZ());
+			assertEq("2024-10-22T09:00:00.005", d.toString());
+			d.setTZ(TimeZone.getTimeZone("CET"));
+			assertEq("2024-10-22T11:00:00.005+02:00", d.toString());
+			d = new SDatetime("2024-10-22T11:00:00.005");
+			assertNull(d.getTZ());
+			assertEq("2024-10-22T11:00:00.005", d.toString());
+			d.setTZ(null);
+			assertEq("2024-10-22T11:00:00.005", d.toString());
+			d.setTZ(TimeZone.getTimeZone("GMT"));
+			assertEq("2024-10-22T09:00:00.005Z", d.toString());
+			d = new SDatetime("2024-10-22T11:00:00.005");
+			assertEq("2024-10-22T11:00:00.005", d.toString());
+			d.setTZ(TimeZone.getTimeZone("CET"), TimeZone.getTimeZone("GMT"));
+			assertEq("2024-10-22T09:00:00.005Z", d.toString());
 			String s, s1;
 			StringParser p;
 			Calendar c;
 			s = (SUtils.getActualPath()+"aaa.aaa").replace('\\','/');
-			if (!s.equalsIgnoreCase(new File("aaa.aaa").getAbsolutePath()
-				.replace('\\','/'))) {
+			if (!s.equalsIgnoreCase(new File("aaa.aaa").getAbsolutePath().replace('\\','/'))) {
 				fail("getAbsolutePath(): " + s + ", file= " +
 					new File("aaa.aaa").getAbsolutePath().replace('\\','/'));
 			}
 			c = new java.util.GregorianCalendar(2004,8,16,17,5,43);
-			c.set(Calendar.MILLISECOND,85);
+			c.set(Calendar.MILLISECOND, 85);
 			TimeZone tz = new SimpleTimeZone(-3600000*3, //rawOffset
 				"XX", //String ID
 				Calendar.APRIL, //startMonth
@@ -131,45 +153,35 @@ public class TestSUtils extends STester {
 			assertEq("2004-09-16T17:05:43-02:00", s);
 			s = SDatetime.toISO8601(c);
 			p = new StringParser(s);
-			assertTrue(p.isISO8601Date() &&
-				s.equals(SDatetime.toISO8601(c)),
+			assertTrue(p.isISO8601Date() && s.equals(SDatetime.toISO8601(c)),
 				"parsed date: " + s);
 			assertEq("T17:05:43-02:00", p.getUnparsedBufferPart());
 			s = "2004-09-16-02:00";
 			p = new StringParser(s);
-			assertTrue(p.isISO8601Date() && p.eos(),
-				"parsed date: " + s);
+			assertTrue(p.isISO8601Date() && p.eos(), "parsed date: " + s);
 			c = Calendar.getInstance();
 			s = SDatetime.toISO8601(c);
 			p = new StringParser(s);
-			assertTrue(p.isISO8601Date() &&
-				s.equals(SDatetime.toISO8601(c)),
+			assertTrue(p.isISO8601Date() && s.equals(SDatetime.toISO8601(c)),
 				"parsed date now: " + s);
 			s = "MMddHH2004xxxx0531235943+02:00aaaa Z";
 			s1 = "'MMddHH'yyyyxxxxMMddHHmmssZ'aaaa Z'";
 			p = new StringParser(s);
-			if (!p.isDatetime(s1) || !p.eos() ||
-				!s.equals(p.getParsedSDatetime().formatDate(s1))) {
-				fail("parse/format date 1: " +
-					p.getParsedSDatetime().formatDate(s1));
+			if (!p.isDatetime(s1) || !p.eos() || !s.equals(p.getParsedSDatetime().formatDate(s1))) {
+				fail("parse/format date 1: " + p.getParsedSDatetime().formatDate(s1));
 			}
 			s = "20040531235943+01:00";
 			s1 = "yyyyMMddHHmmssZ";
 			p = new StringParser(s);
-			if (!p.isDatetime(s1) ||
-				!s.equals(p.getParsedSDatetime().formatDate(s1))) {
-				fail("parse/format date 2: " +
-					p.getParsedSDatetime().formatDate(s1));
+			if (!p.isDatetime(s1) || !s.equals(p.getParsedSDatetime().formatDate(s1))) {
+				fail("parse/format date 2: " + p.getParsedSDatetime().formatDate(s1));
 			}
 			s = "20040531235943+01:00";
 			s1 = "yyyyMMddHHmmssZ";
 			p = new StringParser(s);
-			if (!p.isDatetime(s1) ||
-				!s.equals(p.getParsedSDatetime().formatDate(s1))) {
-				fail("parse/format date 3: " +
-					p.getParsedSDatetime().formatDate(s1));
+			if (!p.isDatetime(s1) || !s.equals(p.getParsedSDatetime().formatDate(s1))) {
+				fail("parse/format date 3: " + p.getParsedSDatetime().formatDate(s1));
 			}
-
 			//Test local setings
 			assertEq("May", p.getParsedSDatetime().formatDate( "{L(en)}MMM"));
 			assertEq("Mai", p.getParsedSDatetime().formatDate( "{L(de)}MMM"));
@@ -185,10 +197,8 @@ public class TestSUtils extends STester {
 			} else {
 				assertEq("po",s1);
 			}
-			s1 = p.getParsedSDatetime().formatDate(
-				"{L(es,ES,Traditional_WIN)}MMM");
-			if (SUtils.JAVA_RUNTIME_VERSION_ID <= 108
-				|| SUtils.JAVA_RUNTIME_VERSION_ID >= 1600) {
+			s1 = p.getParsedSDatetime().formatDate("{L(es,ES,Traditional_WIN)}MMM");
+			if (SUtils.JAVA_RUNTIME_VERSION_ID <= 108 || SUtils.JAVA_RUNTIME_VERSION_ID >= 1600) {
 				assertEq("may", s1);
 			} else {
 				assertEq("may.", s1);
@@ -200,10 +210,8 @@ public class TestSUtils extends STester {
 			}
 			s1 = "{L(cs,CZ)}E, yyyy MMM. dd HHmmssZ";
 			p = new StringParser(s);
-			if (!p.isDatetime(s1) ||
-				!s.equals(p.getParsedSDatetime().formatDate(s1))) {
-				fail("parse/format date 3: " +
-					p.getParsedSDatetime().formatDate(s1));
+			if (!p.isDatetime(s1) || !s.equals(p.getParsedSDatetime().formatDate(s1))) {
+				fail("parse/format date 3: " + p.getParsedSDatetime().formatDate(s1));
 			}
 			if (SUtils.JAVA_RUNTIME_VERSION_ID <= 108) {
 				s = "Pondělí, 2004 května 31 235943+01:00";
@@ -212,10 +220,8 @@ public class TestSUtils extends STester {
 			}
 			s1 = "{L(cs,CZ)}EEEE, yyyy MMMM dd HHmmssZ";
 			p = new StringParser(s);
-			if (!p.isDatetime(s1) ||
-				!s.equals(p.getParsedSDatetime().formatDate(s1))) {
-				fail("parse/format date 3: " +
-					p.getParsedSDatetime().formatDate(s1));
+			if (!p.isDatetime(s1) || !s.equals(p.getParsedSDatetime().formatDate(s1))) {
+				fail("parse/format date 3: " + p.getParsedSDatetime().formatDate(s1));
 			}
 			s = "20040531235943Z";
 			s1 = "yyyyMMddHHmmssZ";
@@ -223,16 +229,13 @@ public class TestSUtils extends STester {
 			if (!p.isDatetime(s1)) {
 				fail();
 			} else if (!s.equals(p.getParsedSDatetime().formatDate(s1))) {
-				fail("parse/format date: " + s + " -> " +
-					p.getParsedSDatetime().formatDate(s1));
+				fail("parse/format date: " + s + " -> " + p.getParsedSDatetime().formatDate(s1));
 			}
 			s = "20040531235943Z";
 			s1 = "yyyyMMddHHmmssZ";
 			p = new StringParser(s);
-			if (!p.isDatetime(s1) ||
-				!s.equals(p.getParsedSDatetime().formatDate(s1))) {
-				fail("parse/format date: " +
-					p.getParsedSDatetime().formatDate(s1));
+			if (!p.isDatetime(s1) || !s.equals(p.getParsedSDatetime().formatDate(s1))) {
+				fail("parse/format date: " + p.getParsedSDatetime().formatDate(s1));
 			}
 			// test output format with optional sections
 			s = "2055-07-15";
@@ -289,8 +292,7 @@ public class TestSUtils extends STester {
 			} catch (SException ex) {fail(ex);}
 			try {
 				byte[] bytes1 = SUtils.readBytes(f);
-				assertTrue(Arrays.equals(bytes, bytes1),
-					"readBytes - incorrect content.");
+				assertTrue(Arrays.equals(bytes, bytes1), "readBytes - incorrect content.");
 			} catch (SException ex) {fail(ex);}
 			f.delete();
 		} catch (Exception ex) {fail(ex);}
@@ -351,7 +353,6 @@ public class TestSUtils extends STester {
 			result = SUtils.modifyString(orig,"c","xyz");
 			assertEq("xyzabxyzdxyz", result);
 		} catch (Exception ex) {fail(ex);}
-
 		//modifyStringBuffer
 		try {
 			StringBuffer sb;
@@ -392,280 +393,15 @@ public class TestSUtils extends STester {
 			SUtils.modifyStringBuffer(sb,"c","");
 			assertEq("abd", sb.toString());
 		} catch (Exception ex) {fail(ex);}
-		//encodeHex, decodeHex
+		//getActualPath
 		try {
-			byte[] b1 = new byte[0];
-			byte[] b2;
-			b2 = SUtils.encodeHex(b1);
-			assertTrue(Arrays.equals(b1, SUtils.decodeHex(b2)),
-				"Hex encoding/decoding error");
-			b1 = new byte[1];
-			b1[0] = 0;
-			b2 = SUtils.encodeHex(b1);
-			assertTrue(Arrays.equals(b1, SUtils.decodeHex(b2)),
-				"Hex encoding/decoding error");
-			b1 = new byte[2];
-			for (int i = 0; i < b1.length; i++) {
-				b1[i] = (byte)i;
-			}
-			b2 = SUtils.encodeHex(b1);
-			assertTrue(Arrays.equals(b1, SUtils.decodeHex(b2)),
-				"Hex encoding/decoding error");
-			b1 = new byte[3];
-			for (int i = 0; i < b1.length; i++) {
-				b1[i] = (byte)i;
-			}
-			b2 = SUtils.encodeHex(b1);
-			assertTrue(Arrays.equals(b1, SUtils.decodeHex(b2)),
-				"Hex encoding/decoding error");
-			b1 = new byte[4];
-			for (int i = 0; i < b1.length; i++) {
-				b1[i] = (byte)i;
-			}
-			b2 = SUtils.encodeHex(b1);
-			assertTrue(Arrays.equals(b1, SUtils.decodeHex(b2)),
-				"Hex encoding/decoding error");
-			b1 = new byte[300];
-			for (int i = 0; i < b1.length; i++) {
-				b1[i] = (byte)i;
-			}
-			b2 = SUtils.encodeHex(b1);
-			assertTrue(Arrays.equals(b1, SUtils.decodeHex(b2)),
-				"Hex encoding/decoding error");
-			b1 = new byte[0];
-			for (int i = 0; i < b1.length; i++) {
-				b1[i] = (byte)i;
-			}
-			b2 = SUtils.encodeHex(b1);
-			assertTrue(Arrays.equals(b1, SUtils.decodeHex(b2)),
-				"Hex encoding/decoding error");
-			b1 = new byte[1];
-			for (int i = 0; i < b1.length; i++) {
-				b1[i] = (byte)i;
-			}
-			b2 = SUtils.encodeHex(b1);
-			assertTrue(Arrays.equals(b1, SUtils.decodeHex(b2)),
-				"Hex encoding/decoding error");
-			b1 = new byte[35];
-			for (int i = 0; i < b1.length; i++) {
-				b1[i] = (byte)i;
-			}
-			b2 = SUtils.encodeHex(b1);
-			assertTrue(Arrays.equals(b1, SUtils.decodeHex(b2)),
-				"Hex encoding/decoding error");
-			b1 = new byte[36];
-			for (int i = 0; i < b1.length; i++) {
-				b1[i] = (byte)i;
-			}
-			b2 = SUtils.encodeHex(b1);
-			assertTrue(Arrays.equals(b1, SUtils.decodeHex(b2)),
-				"Hex encoding/decoding error");
-			b1 = new byte[37];
-			for (int i = 0; i < b1.length; i++) {
-				b1[i] = (byte)i;
-			}
-			b2 = SUtils.encodeHex(b1);
-			assertTrue(Arrays.equals(b1, SUtils.decodeHex(b2)),
-				"Hex encoding/decoding error");
-			b1 = new byte[300];
-			for (int i = 0; i < b1.length; i++) {
-				b1[i] = (byte)i;
-			}
-			b2 = SUtils.encodeHex(b1);
-			assertTrue(Arrays.equals(b1, SUtils.decodeHex(b2)),
-				"Hex encoding/decoding error");
-			for (int i = 0; i < b1.length; i++) {
-				b1[i] = (byte)i;
-			}
-			b2 = SUtils.decodeHex("\t\r 0F7f0001 \t\r ".getBytes());
-			assertTrue(Arrays.equals(new byte[]{15, 127, 0, 1}, b2),
-				"Hex encoding/decoding error");
-			try {
-				SUtils.decodeHex("0w7f0001".getBytes());
-				fail("Error not thrown (not hexa digit)");
-			} catch (SException ex) {
-				assertEq("SYS047", ex.getMsgID(), ex.toString());
-			}
-			try {
-				SUtils.decodeHex("0F70001".getBytes());
-				fail("Error not thrown (odd number of digits)");
-			} catch (SException ex) {
-				assertEq("SYS047", ex.getMsgID(), ex.toString());
-			}
-		} catch (Exception ex) {fail(ex);}
-		try { //encodeBase64, decodeBase64
-			assertEq("", testBinary(new byte[0]));
-			byte[] b1 = new byte[1];
-			for (int i = 0; i < 256; i++) {
-				b1[0] = (byte) i;
-				assertEq("", testBinary(b1));
-			}
-			b1 = new byte[2];
-			for (int i = 0; i < b1.length; i++) {
-				b1[i] = (byte)i;
-			}
-			assertEq("", testBinary(b1));
-			b1 = new byte[3];
-			for (int i = 0; i < b1.length; i++) {
-				b1[i] = (byte)i;
-			}
-			assertEq("", testBinary(b1));
-			b1 = new byte[4];
-			for (int i = 0; i < b1.length; i++) {
-				b1[i] = (byte)i;
-			}
-			b1 = new byte[100];
-			for (int i = 0; i < b1.length; i++) {
-				b1[i] = (byte)i;
-			}
-			assertEq("", testBinary(b1));
-
-			assertEq("", testBase64(""));
-			assertEq("", testBase64("AA=="));
-			assertEq("", testBase64("AAA="));
-			assertEq("", testBase64("ABCD"));
-			assertEq("", testBase64("D66Z"));
-			assertEq("", testBase64("YQB1AAAA"));
-			assertEq("", testBase64("NwA1ADkAAAA="));
-			assertEq("", testBase64("VABSAFUARQAAAA=="));
-			assertEq("", testBase64("VABSAFUARQAAAAA="));
-		} catch (Exception ex) {fail(ex);}
-		try {//random test of encoding/decoding both base64 and hex
-			Random rnd = new Random(System.currentTimeMillis());
-			for (int i = 0; i < 1000; i++) {
-				byte[] b1,b2;
-				String en1, en2, en3;
-				ByteArrayInputStream bis;
-				ByteArrayOutputStream bos;
-				CharArrayReader car;
-				CharArrayWriter caw;
-				//hex
-				b1 = new byte[rnd.nextInt(128)];
-				rnd.nextBytes(b1);
-				en1 = new String(SUtils.encodeHex(b1));
-				b2 = SUtils.decodeHex(en1);
-				assertTrue(Arrays.equals(b1, b2), "Decoded data not equal.");
-				en2 = new String(SUtils.encodeHex(b1));
-				b2 = SUtils.decodeHex(en2);
-				assertTrue(Arrays.equals(b1, b2), "Decoded data not equal.");
-				bis = new ByteArrayInputStream(b1);
-				bos = new ByteArrayOutputStream();
-				SUtils.encodeHex(bis, bos);
-				bos.close();
-				en3 = bos.toString();
-				assertEq(en1, en3, "Error differs:\n"+
-					"s1 = '" + en1 + "'\n" + "s2 = '" + en3 + "'");
-				bis = new ByteArrayInputStream(en3.getBytes());
-				bos = new ByteArrayOutputStream();
-				SUtils.decodeHex(bis, bos);
-				bos.close();
-				b2 = bos.toByteArray();
-				assertTrue(Arrays.equals(b1, b2), "Decoded data not equal.");
-				StringWriter sw = new StringWriter();
-				bis = new ByteArrayInputStream(b1);
-				SUtils.encodeHex(bis, sw);
-				sw.close();
-				en3 = sw.toString();
-				assertEq(en1, en3, "Error differs:\n"+
-					"s1 = '" + en1 + "'\n" + "s2 = '" + en3 + "'");
-				StringReader sr = new StringReader(en3);
-				bos = new ByteArrayOutputStream();
-				SUtils.decodeHex(sr, bos);
-				bos.close();
-				b2 = bos.toByteArray();
-				assertTrue(Arrays.equals(b1, b2), "Decoded data not equal.");
-				bis = new ByteArrayInputStream(b1);
-				bos = new ByteArrayOutputStream();
-				SUtils.encodeHex(bis, bos);
-				bos.close();
-				en3 = bos.toString();
-				assertEq(en2, en3, "Error differs:\n"
-					+ "s1 = '" + en2 + "'\n" + "s2 = '" + en3 + "'");
-				bis = new ByteArrayInputStream(en3.getBytes());
-				bos = new ByteArrayOutputStream();
-				SUtils.decodeHex(bis, bos);
-				bos.close();
-				b2 = bos.toByteArray();
-				assertTrue(Arrays.equals(b1, b2), "Decoded data not equal.");
-				caw = new CharArrayWriter();
-				bis = new ByteArrayInputStream(b1);
-				SUtils.encodeHex(bis, caw);
-				caw.close();
-				en3 = caw.toString();
-				assertEq(en2, en3, "Error differs:\n"
-					+ "s1 = '" + en2 + "'\n" + "s2 = '" + en3 + "'");
-				car = new CharArrayReader(en1.toCharArray());
-				bos = new ByteArrayOutputStream();
-				SUtils.decodeHex(car, bos);
-				bos.close();
-				b2 = bos.toByteArray();
-				assertTrue(Arrays.equals(b1, b2), "Decoded data not equal.");
-				//base64
-				en1 = new String(SUtils.encodeBase64(b1, false));
-				b1 = SUtils.decodeBase64(en1);
-				bis = new ByteArrayInputStream(b1);
-				bos = new ByteArrayOutputStream();
-				SUtils.encodeBase64(bis, bos, false);
-				bos.close();
-				en3 = bos.toString();
-				assertEq(en1, en3, "Error differs:\n"
-					+ "s1 = '" + en1 + "'\n" + "s2 = '" + en3 + "'");
-				bis = new ByteArrayInputStream(en3.getBytes());
-				bos = new ByteArrayOutputStream();
-				SUtils.decodeBase64(bis, bos);
-				bos.close();
-				b2 = bos.toByteArray();
-				assertTrue(Arrays.equals(b1, b2), "Decoded data not equal.");
-				caw = new CharArrayWriter();
-				bis = new ByteArrayInputStream(b1);
-				SUtils.encodeBase64(bis, caw, false);
-				caw.close();
-				en3 = caw.toString();
-				assertEq(en1, en3, "Error differs:\n"
-					+ "s1 = '" + en1 + "'\n" + "s2 = '" + en3 + "'");
-				car = new CharArrayReader(en3.toCharArray());
-				bos = new ByteArrayOutputStream();
-				SUtils.decodeBase64(car, bos);
-				bos.close();
-				b2 = bos.toByteArray();
-				assertTrue(Arrays.equals(b1, b2), "Decoded data not equal.");
-				bis = new ByteArrayInputStream(b1);
-				bos = new ByteArrayOutputStream();
-				SUtils.encodeBase64(bis, bos, false);
-				bos.close();
-				en3 = bos.toString();
-				en2 = new String(SUtils.encodeBase64(b2, false));
-				assertEq(en2, en3, "Error differs:\n" + "s1 = '" + en2
-					+ "'\n" + "s2 = '" + en3 + "'");
-				bis = new ByteArrayInputStream(en3.getBytes());
-				bos = new ByteArrayOutputStream();
-				SUtils.decodeBase64(bis, bos);
-				bos.close();
-				b2 = bos.toByteArray();
-				assertTrue(Arrays.equals(b1, b2), "Decoded data not equal.");
-				caw = new CharArrayWriter();
-				bis = new ByteArrayInputStream(b1);
-				SUtils.encodeBase64(bis, caw, true);
-				en2 = new String(SUtils.encodeBase64(b2, true));
-				caw.close();
-				en3 = caw.toString();
-				assertEq(en2, en3, "Error differs:\n"+
-					"s1 = '" + en2 + "'\n" + "s2 = '" + en3 + "'");
-				car = new CharArrayReader(en1.toCharArray());
-				bos = new ByteArrayOutputStream();
-				SUtils.decodeBase64(car, bos);
-				bos.close();
-				b2 = bos.toByteArray();
-				assertTrue(Arrays.equals(b1, b2), "Decoded data not equal.");
-			}
-		} catch (Exception ex) {fail(ex);}
-		try { //getActualPath
 			File f1 = new File(SUtils.getActualPath());
 			File f2 = new File(".");
-			assertEq(f1.getCanonicalPath(), f2.getCanonicalPath(),
-				"getActualPath error: "+ f1 + ", " + f2);
+			assertEq(f1.getCanonicalPath(),
+				f2.getCanonicalPath(), "getActualPath error: "+ f1 + ", " + f2);
 		} catch (Exception ex) {fail(ex);}
-		try {//getFileGroup
+		//getFileGroup
+		try {
 			String s = SUtils.getTempDir();
 			if (s == null) {
 				fail("SUtils.getTempDir() returns null!");
@@ -698,41 +434,29 @@ public class TestSUtils extends STester {
 				SUtils.writeString(new File(s + "f.g.h.1"), "f.g.h.1");
 				File[] files;
 				files = SUtils.getFileGroup(s + "*.*");
-				assertEq(files.length, 8,
-					"getFileGroup - expected 8 files, found" + files.length);
+				assertEq(files.length, 8, "getFileGroup - expected 8 files, found" + files.length);
 				files = SUtils.getFileGroup(s + "f*.*");
-				assertEq(files.length, 8,
-					"getFileGroup - expected 8 files, found" + files.length);
+				assertEq(files.length, 8, "getFileGroup - expected 8 files, found" + files.length);
 				files = SUtils.getFileGroup(s + "f*.1");
-				assertEq(files.length, 4,
-					"getFileGroup - expected 4 files, found" + files.length);
+				assertEq(files.length, 4, "getFileGroup - expected 4 files, found" + files.length);
 				files = SUtils.getFileGroup(s + "f1.*");
-				assertEq(files.length, 1,
-					"getFileGroup - expected 1 file, found" + files.length);
+				assertEq(files.length, 1, "getFileGroup - expected 1 file, found" + files.length);
 				files = SUtils.getFileGroup(s + "*.1");
-				assertEq(files.length, 4,
-					"getFileGroup - expected 4 files, found" + files.length);
+				assertEq(files.length, 4, "getFileGroup - expected 4 files, found" + files.length);
 				files = SUtils.getFileGroup(s + "f.*");
-				assertEq(files.length, 5,
-					"getFileGroup - expected 5 files, found" + files.length);
+				assertEq(files.length, 5, "getFileGroup - expected 5 files, found" + files.length);
 				files = SUtils.getFileGroup(s + "f.*.*");
-				assertEq(files.length, 2,
-					"getFileGroup - expected 2 files, found" + files.length);
+				assertEq(files.length, 2, "getFileGroup - expected 2 files, found" + files.length);
 				files = SUtils.getFileGroup(s + "f.*.*.*");
-				assertEq(files.length, 1,
-					"getFileGroup - expected 1 file, found" + files.length);
+				assertEq(files.length, 1, "getFileGroup - expected 1 file, found" + files.length);
 				files = SUtils.getFileGroup(s + "?.1");
-				assertEq(files.length, 1,
-					"getFileGroup - expected 1 file, found" + files.length);
+				assertEq(files.length, 1, "getFileGroup - expected 1 file, found" + files.length);
 				files = SUtils.getFileGroup(s + "f?.1");
-				assertEq(files.length, 1,
-					"getFileGroup - expected 1 file, found" + files.length);
+				assertEq(files.length, 1, "getFileGroup - expected 1 file, found" + files.length);
 				files = SUtils.getFileGroup(s + "f?.?");
-				assertEq(files.length, 3,
-					"getFileGroup - expected 3 files, found" + files.length);
+				assertEq(files.length, 3, "getFileGroup - expected 3 files, found" + files.length);
 				files = SUtils.getFileGroup(s + "f.1");
-				assertEq(files.length, 1,
-					"getFileGroup - expected 1 file, found" + files.length);
+				assertEq(files.length, 1, "getFileGroup - expected 1 file, found" + files.length);
 				try {
 					SUtils.deleteAll(f, true);
 					if (f.exists()) {
@@ -741,17 +465,16 @@ public class TestSUtils extends STester {
 				} catch (Exception ex) {fail(ex);}
 			}
 		} catch (Exception ex) {fail(ex);}
-		try { //formatDate
+		//formatDate
+		try {
 			Calendar c;
 			String s;
 			c = SDatetime.parseDatetime("28.2.1999 19:20:21.220 +01:00",
 				"d.M.yyyy HH:mm:ss.S Z");
 			if (c.get(Calendar.DATE) != 28 || c.get(Calendar.MONTH) != 1 ||
-				c.get(Calendar.YEAR) != 1999 ||
-				c.get(Calendar.HOUR_OF_DAY) != 19 ||
+				c.get(Calendar.YEAR) != 1999 || c.get(Calendar.HOUR_OF_DAY) != 19 ||
 				c.get(Calendar.MINUTE) != 20 || c.get(Calendar.SECOND) != 21 ||
-				c.get(Calendar.MILLISECOND) != 220 ||
-				c.get(Calendar.ZONE_OFFSET) != 60*60*1000) {
+				c.get(Calendar.MILLISECOND) != 220 || c.get(Calendar.ZONE_OFFSET) != 60*60*1000) {
 				fail("parseDate error: " + displayDate(c));
 			}
 			s = SDatetime.formatDate(c, "dd/MM/yyyy HH:mm:ss.SSS Z");
@@ -760,11 +483,11 @@ public class TestSUtils extends STester {
 				"d.M.yyyy HH:mm:ss.S Z");
 			assertNull(c, "parseDate error - null result expected: "+c);
 		} catch (Exception ex) {fail(ex);}
-		try { //parseDate - dateFromISO8601, dateToISO8601
+		//parseDate - dateFromISO8601, dateToISO8601
+		try {
 			Calendar c;
 			String s;
-			c = SDatetime.parseDatetime("28.2.1999 19:20:21 +01:00",
-				"d.M.yyyy HH:mm:ss Z");
+			c = SDatetime.parseDatetime("28.2.1999 19:20:21 +01:00", "d.M.yyyy HH:mm:ss Z");
 			s = SDatetime.toISO8601(c);
 			assertEq("1999-02-28T19:20:21+01:00", s);
 			Calendar c1 = SDatetime.fromISO8601(s);
@@ -773,24 +496,18 @@ public class TestSUtils extends STester {
 			s = SDatetime.toISO8601(c);
 			c1 = SDatetime.fromISO8601(s);
 			assertEq(c, c1, "dateFromISO8601 error: "+displayDate(c1));
-			assertEq(c1.get(Calendar.YEAR), 1999,
-				"dateFromISO8601 error: " + displayDate(c1));
-			assertEq(c1.get(Calendar.MONTH), 11,
-				"dateFromISO8601 error: " + displayDate(c1));
-			assertEq(c1.get(Calendar.DATE), 31,
-				"dateFromISO8601 error: " + displayDate(c1));
-			assertEq(c1.get(Calendar.HOUR_OF_DAY), 13,
-				"dateFromISO8601 error: " + displayDate(c1));
-			assertEq(c1.get(Calendar.MINUTE), 14,
-				"dateFromISO8601 error: " + displayDate(c1));
-			assertEq(c1.get(Calendar.SECOND), 15,
-				"dateFromISO8601 error: " + displayDate(c1));
-//			assertEq(c1.get(Calendar.MILLISECOND), 16,
-//				"dateFromISO8601 error: " + displayDate(c1));
+			assertEq(c1.get(Calendar.YEAR), 1999, "dateFromISO8601 error: " + displayDate(c1));
+			assertEq(c1.get(Calendar.MONTH), 11, "dateFromISO8601 error: " + displayDate(c1));
+			assertEq(c1.get(Calendar.DATE), 31, "dateFromISO8601 error: " + displayDate(c1));
+			assertEq(c1.get(Calendar.HOUR_OF_DAY), 13, "dateFromISO8601 error: " + displayDate(c1));
+			assertEq(c1.get(Calendar.MINUTE), 14, "dateFromISO8601 error: " + displayDate(c1));
+			assertEq(c1.get(Calendar.SECOND), 15, "dateFromISO8601 error: " + displayDate(c1));
+//			assertEq(c1.get(Calendar.MILLISECOND), 16, "dateFromISO8601 error: " + displayDate(c1));
 			assertEq(c1.get(Calendar.ZONE_OFFSET), 3600000,
 				"dateFromISO8601 error: " + displayDate(c1));
 		} catch (Exception ex) {fail(ex);}
-		try { // date format RFC822
+		// date format RFC822
+		try {
 			Calendar c;
 			String s;
 			c = SDatetime.fromRFC822("Tue, 27 Nov 2001 14:05:12 +0100 (CET)");
@@ -820,17 +537,16 @@ public class TestSUtils extends STester {
 			String s;
 			s = "Tue, 27 Nov 2001 14:05:12 +0100 (CET)";
 			p = new StringParser(s);
-			if (p.isDatetime("EEE, dd MMM yyyy HH:mm:ss ZZZZZ[ (z)]") &&
-				p.eos()) {
+			if (p.isDatetime("EEE, dd MMM yyyy HH:mm:ss ZZZZZ[ (z)]") && p.eos()) {
 				Calendar c = p.getParsedSDatetime().getCalendar();
-				String s2 = SDatetime.formatDate(c,
-					"EEE, dd MMM yyyy HH:mm:ss ZZZZZ");
+				String s2 = SDatetime.formatDate(c, "EEE, dd MMM yyyy HH:mm:ss ZZZZZ");
 				assertEq("Tue, 27 Nov 2001 14:05:12 +0100", s2);
 			} else {
 				fail();
 			}
 		} catch (Exception ex) {fail(ex);}
-		try { // date format ISO 8601e
+		// date format ISO 8601e
+		try {
 			Calendar c;
 			StringParser p;
 			String s;
@@ -864,8 +580,7 @@ public class TestSUtils extends STester {
 			s1 = "{H10m11s13Z-08:30}EEEE, d MMMM y";
 			if (p.isDatetime(s1) && p.eos()) {
 				c = p.getParsedSDatetime().getCalendar();
-				s2 = SDatetime.formatDate(c,
-					"EEE, dd MMM yyyy HH:mm:ss ZZZZZ (z)");
+				s2 = SDatetime.formatDate(c, "EEE, dd MMM yyyy HH:mm:ss ZZZZZ (z)");
 				assertEq("Mon, 23 Jan 2006 10:11:13 -0830 (UTC)", s2);
 			} else {
 				fail();
@@ -874,8 +589,7 @@ public class TestSUtils extends STester {
 			s1 = "{H10m11s13Z-08:30}EEEE, d MMMM y";
 			if (p.isDatetime(s1) && p.eos()) {
 				c = p.getParsedSDatetime().getCalendar();
-				s2 = SDatetime.formatDate(c,
-					"EEE, dd MMM yyyy HH:mm:ss ZZZZZ (z)");
+				s2 = SDatetime.formatDate(c, "EEE, dd MMM yyyy HH:mm:ss ZZZZZ (z)");
 				assertEq("Mon, 23 Jan 2006 10:11:13 -0830 (UTC)", s2);
 			} else {
 				fail();
@@ -884,8 +598,7 @@ public class TestSUtils extends STester {
 			s1 = "{H10m11s13Z-08:30}EEEE, d MMMM y";
 			if (p.isDatetime(s1) && p.eos()) {
 				c = p.getParsedSDatetime().getCalendar();
-				s2 = SDatetime.formatDate(c,
-					"EEE, dd MMM yyyy HH:mm:ss ZZZZZ (z)");
+				s2 = SDatetime.formatDate(c, "EEE, dd MMM yyyy HH:mm:ss ZZZZZ (z)");
 				assertEq("Mon, 23 Jan 2006 10:11:13 -0830 (UTC)", s2);
 			} else {
 				fail();
@@ -894,8 +607,7 @@ public class TestSUtils extends STester {
 			s1 = "{L(en)H10m11s13z(Europe/Prague)}EEEE, d MMMM y";
 			if (p.isDatetime(s1) && p.eos()) {
 				c = p.getParsedSDatetime().getCalendar();
-				s2 = SDatetime.formatDate(c,
-					"{L(en)}EEE, dd MMM yyyy HH:mm:ss ZZZZZ");
+				s2 = SDatetime.formatDate(c, "{L(en)}EEE, dd MMM yyyy HH:mm:ss ZZZZZ");
 				assertEq("Mon, 23 Jan 2006 10:11:13 +0100", s2);
 			} else {
 				fail();
@@ -907,11 +619,9 @@ public class TestSUtils extends STester {
 				c = p.getParsedSDatetime().getCalendar();
 				s2 = SDatetime.formatDate(c, s1);
 				assertEq(s,s2);
-				s2 = SDatetime.formatDate(c,
-					"{L(fr)}EEE, dd. MMMM yyyy HH:mm:ss ZZZZZ");
+				s2 = SDatetime.formatDate(c, "{L(fr)}EEE, dd. MMMM yyyy HH:mm:ss ZZZZZ");
 				assertEq("lun., 23. janvier 2006 10:11:13 +0100", s2);
-				s2 = SDatetime.formatDate(c,
-					"{L(cs)}EEE, dd. MMMM yyyy HH:mm:ss ZZZZZ");
+				s2 = SDatetime.formatDate(c, "{L(cs)}EEE, dd. MMMM yyyy HH:mm:ss ZZZZZ");
 				if (SUtils.JAVA_RUNTIME_VERSION_ID <= 108) {
 					assertEq("Po, 23. ledna 2006 10:11:13 +0100", s2);
 				} else {
@@ -930,11 +640,9 @@ public class TestSUtils extends STester {
 				"{L(cs)H10m11s13z(Europe/Prague)}EEE, d. MMMM y";
 			if (p.isDatetime(s1) && p.eos()) {
 				c = p.getParsedSDatetime().getCalendar();
-				s2 = SDatetime.formatDate(c,
-					"{L(fr)}EEE, dd. MMMM yyyy HH:mm:ss ZZZZZ");
+				s2 = SDatetime.formatDate(c, "{L(fr)}EEE, dd. MMMM yyyy HH:mm:ss ZZZZZ");
 				assertEq("lun., 23. janvier 2006 10:11:13 +0100", s2);
-				s2 = SDatetime.formatDate(c,
-					"{L(cs)}EEE, dd. MMMM yyyy HH:mm:ss ZZZZZ");
+				s2 = SDatetime.formatDate(c, "{L(cs)}EEE, dd. MMMM yyyy HH:mm:ss ZZZZZ");
 				if (SUtils.JAVA_RUNTIME_VERSION_ID <= 108) {
 					assertEq("Po, 23. ledna 2006 10:11:13 +0100", s2);
 				} else {
@@ -948,15 +656,13 @@ public class TestSUtils extends STester {
 				"{L(en)H10m11s13z(Europe/Prague)}EEEE, d MMMM y";
 			if (p.isDatetime(s1) && p.eos()) {
 				c = p.getParsedSDatetime().getCalendar();
-				s2 = SDatetime.formatDate(c,
-					"{L(fr)}EEE, dd. MMMM yyyy HH:mm:ss ZZZZZ");
+				s2 = SDatetime.formatDate(c, "{L(fr)}EEE, dd. MMMM yyyy HH:mm:ss ZZZZZ");
 				if (SUtils.JAVA_RUNTIME_VERSION_ID <= 108) {
 					assertEq("lun., 23. janvier 2006 10:11:13 +0100",s2);
 				} else {
 					assertEq("lun., 23. janvier 2006 10:11:13 +0100",s2);
 				}
-				s2 = SDatetime.formatDate(c,
-					"{L(cs)}EEE, dd. MMMM yyyy HH:mm:ss ZZZZZ");
+				s2 = SDatetime.formatDate(c, "{L(cs)}EEE, dd. MMMM yyyy HH:mm:ss ZZZZZ");
 				if (SUtils.JAVA_RUNTIME_VERSION_ID <= 108) {
 					assertEq("Po, 23. ledna 2006 10:11:13 +0100", s2);
 				} else {
@@ -1032,7 +738,8 @@ public class TestSUtils extends STester {
 				fail();
 			}
 		} catch (Exception ex) {fail(ex);}
-		try { // date format ISO 8601e
+		// date format ISO 8601e
+		try { 
 			StringParser p;
 			String s;
 			s = "1992-05-26T13:30:15-04:00";
@@ -1173,7 +880,8 @@ public class TestSUtils extends STester {
 				fail();
 			}
 		} catch (Exception ex) {fail(ex);}
-		try { //SDatetime
+		// SDatetime
+		try {
 			String s1 = "2005-03-01T23:59:59+02:00";
 			String s2 = "2006-03-01T13:59:59+02:00";
 			SDatetime d1 = SDatetime.parseISO8601(s1);
@@ -1199,7 +907,8 @@ public class TestSUtils extends STester {
 			assertEq(d1.getHour(), 23);
 			assertEq(d1.getDayOfYear(), 61);
 		} catch (Exception ex) {fail(ex);}
-		try {//EasterMonday
+		// EasterMonday
+		try {
 			SDatetime d;
 			d = SDatetime.getEasterMonday(1980);
 			assertEq(d.getDay(), 7);
@@ -1308,17 +1017,16 @@ public class TestSUtils extends STester {
 				assertEq(len, 135, "filesToZip - incorrect length = " + len);
 				SUtils.filesFromZip(f1, result, null);
 				assertEq(f1.list().length, 6,
-					"filesToZip incorrect number of files: " +f1.list().length);
+					"filesToZip incorrect number of files: " + f1.list().length);
 			} catch (SException ex) {fail(ex);}
 			result = new File(s + "f.zip");
 			try {
 				long len = SUtils.filesToZip(s + "f1.1;" + s + "f2.2;" +
-					s + "f3.3;" + s + "f.1;" + s + "f.2;" + s + "f.3",
-					null, result);
+					s + "f3.3;" + s + "f.1;" + s + "f.2;" + s + "f.3", null, result);
 				assertEq(len, 135, "filesToZip - incorrect length = " + len);
 				SUtils.filesFromZip(f1, result, null);
 				assertEq(f1.list().length, 6,
-					"filesToZip incorrect number of files: " +f1.list().length);
+					"filesToZip incorrect number of files: " + f1.list().length);
 			} catch (SException ex) {fail(ex);}
 			result = new File(s + "f.zip");
 			try {
@@ -1326,7 +1034,7 @@ public class TestSUtils extends STester {
 				assertEq(len, 45, "filesToZip - incorrect length = " + len);
 				SUtils.filesFromZip(f1, result, null);
 				assertEq(f1.list().length, 6,
-					"filesToZip incorrect number of files: " +f1.list().length);
+					"filesToZip incorrect number of files: " + f1.list().length);
 			} catch (Exception ex) {fail(ex);}
 			result = new File(s + "f.zip");
 			try {
@@ -1342,7 +1050,8 @@ public class TestSUtils extends STester {
 				SUtils.deleteAll(f1, true);
 			} catch (Exception ex) {}
 		} catch (Exception ex) {fail(ex);}
-		try {//getISO3language
+		//getISO3language
+		try {
 			try {
 				SUtils.getISO3Language("pqrs");
 				fail("getISO3Language - expected exception SYS18 is missing");
@@ -1355,11 +1064,11 @@ public class TestSUtils extends STester {
 				System.getProperties().getProperty("user.language"));
 			if (s != null && s.length() != 3) {
 				fail("getISO3Language error '"
-					+ System.getProperties().getProperty("user.language")
-					+ "' -> '" + s + "'");
+					+ System.getProperties().getProperty("user.language") + "' -> '" + s + "'");
 			}
 		} catch (Exception ex) {fail(ex);}
-		try {//getISO2language
+		//getISO2language
+		try {
 			try {
 				SUtils.getISO3Language("pqrs");
 				fail("getISO3Language - expected exception SYS18 is missing");
@@ -1368,43 +1077,38 @@ public class TestSUtils extends STester {
 					fail(ex);
 				}
 			}
-			String s = SUtils.getISO2Language(
-				System.getProperties().getProperty("user.language"));
+			String s = SUtils.getISO2Language(System.getProperties().getProperty("user.language"));
 			if (s != null && s.length() != 2) {
-				fail("getISO2Language error '"
-					+ System.getProperties().getProperty("user.language")
+				fail("getISO2Language error '" + System.getProperties().getProperty("user.language")
 					+ "' -> '" + s + "'");
 			}
 			s = SUtils.getISO2Language("CES");
 			if (s != null && s.length() != 2) {
-				fail("getISO2Language error '"
-					+ System.getProperties().getProperty("user.language")
+				fail("getISO2Language error '" + System.getProperties().getProperty("user.language")
 					+ "' -> '" + s + "'");
 			}
 			s = SUtils.getISO2Language("he");
 			if (s != null && s.length() != 2) {
-				fail("getISO2Language error '"
-					+ System.getProperties().getProperty("user.language")
+				fail("getISO2Language error '" + System.getProperties().getProperty("user.language")
 					+ "' -> '" + s + "'");
 			}
 		} catch (Exception ex) {fail(ex);}
-		try {// test StringParser.checkDateFormat
+		// test StringParser.checkDateFormat
+		try {
 			Report r;
-			r = StringParser.checkDateFormat(
-				"{L(de)}'Hello, today is 'EEEE, d. MMMM GG yyyy.");
+			r = StringParser.checkDateFormat("{L(de)}'Hello, today is 'EEEE, d. MMMM GG yyyy.");
 			if (r != null) {
 				fail(r);
 			}
-			r = StringParser.checkDateFormat("{L(de)Z+0100H1m99L(*)}" +
-				"'Hello, today is 'EEEE, d. MMMM GG yyyy.");
+			r = StringParser.checkDateFormat(
+				"{L(de)Z+0100H1m99L(*)}'Hello, today is 'EEEE, d. MMMM GG yyyy.");
 			if (r == null) {
 				fail("error not reported");
 			} else {
 				assertEq("SYS062", r.getMsgID());
 			}
 			r = StringParser.checkDateFormat("{L(cs,CZ,akjshdlf,g)" +
-				"z(America/New_York)Z+01:00H1m59L(*)}" +
-				"EEEE.d[.MMMM[.GG[.yyyy]][z]|{L(*)}yyyy");
+				"z(America/New_York)Z+01:00H1m59L(*)}EEEE.d[.MMMM[.GG[.yyyy]][z]|{L(*)}yyyy");
 			if (r == null) {
 				fail("error not reported");
 			} else {
@@ -1469,10 +1173,318 @@ public class TestSUtils extends STester {
 				"Z+01:00m59H1}EEEE.d[.MMMM[.GG[.yyyy]]][z]|{L(*)}yyyy");
 			assertEq(r, null);
 		} catch (Exception ex) {fail(ex);}
+		// date,time
+		try { 
+			String s = "2015-12-06";
+			SDatetime sd = new SDatetime(s);
+			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+			Date d = df.parse(s);
+			assertEq(sd.getCalendar().getTime(), d);
+			s = "2015-12-06T01:02:03";
+			sd = new SDatetime(s);
+			df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+			d = df.parse(s);
+			assertEq(sd.getCalendar().getTime(), d);
+		} catch (Exception ex) {fail(ex);}
+		// isLeapYear
+		try { 
+			assertTrue(SDatetime.isLeapYear(2000));
+			assertTrue(SDatetime.isLeapYear(2004));
+			assertTrue(SDatetime.isLeapYear(2400));
+			assertTrue(SDatetime.isLeapYear(2400));
+			assertFalse(SDatetime.isLeapYear(2005));
+			assertFalse(SDatetime.isLeapYear(1900));
+			assertFalse(SDatetime.isLeapYear(2100));
+			assertFalse(SDatetime.isLeapYear(2200));
+			assertFalse(SDatetime.isLeapYear(2300));
+			// getEasterMonday
+			assertEq(SDatetime.getEasterMonday(2000), new SDatetime("2000-04-24"));
+			assertEq(SDatetime.getEasterMonday(2002), new SDatetime("2002-04-01"));
+			// Timestamp
+			SDatetime sd = new SDatetime("2000-01-01T01:01:02.999");
+			java.sql.Timestamp tstamp = new java.sql.Timestamp(sd.getTimeInMillis());
+			assertEq(sd.getTimeInMillis(), tstamp.getTime());
+			assertEq(sd.getNanos(), tstamp.getNanos());
+			assertEq(sd,tstamp);
+			assertEq(new SDatetime(tstamp), tstamp);
+			tstamp.setNanos(999);
+			sd.setNanos(999);
+			assertEq(sd.getTimeInMillis(), tstamp.getTime());
+			assertEq(sd.getNanos(), tstamp.getNanos());
+			assertEq(sd, tstamp);
+			assertEq(new SDatetime(tstamp), tstamp);
+			tstamp.setNanos(100000999);
+			sd.setNanos(100000999);
+			assertEq(sd.getTimeInMillis(), tstamp.getTime());
+			assertEq(sd.getNanos(), tstamp.getNanos());
+			assertEq(sd, tstamp);
+			assertEq(new SDatetime(tstamp), tstamp);
+			tstamp.setNanos(999499999);
+			sd.setNanos(999499999);
+			assertEq(sd.getTimeInMillis(), tstamp.getTime());
+			assertEq(sd.getNanos(), tstamp.getNanos());
+			assertEq(sd, tstamp);
+			assertEq(new SDatetime(tstamp), tstamp);
+			tstamp.setNanos(999999999);
+			sd.setNanos(999999999);
+			assertEq(sd.getTimeInMillis(), ((Date)tstamp).getTime());
+			assertEq(sd.getNanos(), tstamp.getNanos());
+			assertEq(sd, tstamp);
+			assertEq(new SDatetime(tstamp), tstamp);
+		} catch (Exception ex) {fail(ex);}
+		//encodeHex, decodeHex
+		try {
+			byte[] b1 = new byte[0];
+			byte[] b2;
+			b2 = SUtils.encodeHex(b1);
+			assertTrue(Arrays.equals(b1, SUtils.decodeHex(b2)), "Hex encoding/decoding error");
+			b1 = new byte[1];
+			b1[0] = 0;
+			b2 = SUtils.encodeHex(b1);
+			assertTrue(Arrays.equals(b1, SUtils.decodeHex(b2)), "Hex encoding/decoding error");
+			b1 = new byte[2];
+			for (int i = 0; i < b1.length; i++) {
+				b1[i] = (byte)i;
+			}
+			b2 = SUtils.encodeHex(b1);
+			assertTrue(Arrays.equals(b1, SUtils.decodeHex(b2)), "Hex encoding/decoding error");
+			b1 = new byte[3];
+			for (int i = 0; i < b1.length; i++) {
+				b1[i] = (byte)i;
+			}
+			b2 = SUtils.encodeHex(b1);
+			assertTrue(Arrays.equals(b1, SUtils.decodeHex(b2)), "Hex encoding/decoding error");
+			b1 = new byte[4];
+			for (int i = 0; i < b1.length; i++) {
+				b1[i] = (byte)i;
+			}
+			b2 = SUtils.encodeHex(b1);
+			assertTrue(Arrays.equals(b1, SUtils.decodeHex(b2)), "Hex encoding/decoding error");
+			b1 = new byte[300];
+			for (int i = 0; i < b1.length; i++) {
+				b1[i] = (byte)i;
+			}
+			b2 = SUtils.encodeHex(b1);
+			assertTrue(Arrays.equals(b1, SUtils.decodeHex(b2)), "Hex encoding/decoding error");
+			b1 = new byte[0];
+			for (int i = 0; i < b1.length; i++) {
+				b1[i] = (byte)i;
+			}
+			b2 = SUtils.encodeHex(b1);
+			assertTrue(Arrays.equals(b1, SUtils.decodeHex(b2)), "Hex encoding/decoding error");
+			b1 = new byte[1];
+			for (int i = 0; i < b1.length; i++) {
+				b1[i] = (byte)i;
+			}
+			b2 = SUtils.encodeHex(b1);
+			assertTrue(Arrays.equals(b1, SUtils.decodeHex(b2)), "Hex encoding/decoding error");
+			b1 = new byte[35];
+			for (int i = 0; i < b1.length; i++) {
+				b1[i] = (byte)i;
+			}
+			b2 = SUtils.encodeHex(b1);
+			assertTrue(Arrays.equals(b1, SUtils.decodeHex(b2)), "Hex encoding/decoding error");
+			b1 = new byte[36];
+			for (int i = 0; i < b1.length; i++) {
+				b1[i] = (byte)i;
+			}
+			b2 = SUtils.encodeHex(b1);
+			assertTrue(Arrays.equals(b1, SUtils.decodeHex(b2)), "Hex encoding/decoding error");
+			b1 = new byte[37];
+			for (int i = 0; i < b1.length; i++) {
+				b1[i] = (byte)i;
+			}
+			b2 = SUtils.encodeHex(b1);
+			assertTrue(Arrays.equals(b1, SUtils.decodeHex(b2)), "Hex encoding/decoding error");
+			b1 = new byte[300];
+			for (int i = 0; i < b1.length; i++) {
+				b1[i] = (byte)i;
+			}
+			b2 = SUtils.encodeHex(b1);
+			assertTrue(Arrays.equals(b1, SUtils.decodeHex(b2)), "Hex encoding/decoding error");
+			for (int i = 0; i < b1.length; i++) {
+				b1[i] = (byte)i;
+			}
+			b2 = SUtils.decodeHex("\t\r 0F7f0001 \t\r ".getBytes());
+			assertTrue(Arrays.equals(new byte[]{15, 127, 0, 1}, b2),
+				"Hex encoding/decoding error");
+			try {
+				SUtils.decodeHex("0w7f0001".getBytes());
+				fail("Error not thrown (not hexa digit)");
+			} catch (SException ex) {
+				assertEq("SYS047", ex.getMsgID(), ex.toString());
+			}
+			try {
+				SUtils.decodeHex("0F70001".getBytes());
+				fail("Error not thrown (odd number of digits)");
+			} catch (SException ex) {
+				assertEq("SYS047", ex.getMsgID(), ex.toString());
+			}
+		} catch (Exception ex) {fail(ex);}
+		//encodeBase64, decodeBase64
+		try {
+			assertEq("", testBinary(new byte[0]));
+			byte[] b1 = new byte[1];
+			for (int i = 0; i < 256; i++) {
+				b1[0] = (byte) i;
+				assertEq("", testBinary(b1));
+			}
+			b1 = new byte[2];
+			for (int i = 0; i < b1.length; i++) {
+				b1[i] = (byte)i;
+			}
+			assertEq("", testBinary(b1));
+			b1 = new byte[3];
+			for (int i = 0; i < b1.length; i++) {
+				b1[i] = (byte)i;
+			}
+			assertEq("", testBinary(b1));
+			b1 = new byte[4];
+			for (int i = 0; i < b1.length; i++) {
+				b1[i] = (byte)i;
+			}
+			b1 = new byte[100];
+			for (int i = 0; i < b1.length; i++) {
+				b1[i] = (byte)i;
+			}
+			assertEq("", testBinary(b1));
+			assertEq("", testBase64(""));
+			assertEq("", testBase64("AA=="));
+			assertEq("", testBase64("AAA="));
+			assertEq("", testBase64("ABCD"));
+			assertEq("", testBase64("D66Z"));
+			assertEq("", testBase64("YQB1AAAA"));
+			assertEq("", testBase64("NwA1ADkAAAA="));
+			assertEq("", testBase64("VABSAFUARQAAAA=="));
+			assertEq("", testBase64("VABSAFUARQAAAAA="));
+		} catch (Exception ex) {fail(ex);}
+		//random test of encoding/decoding both base64 and hex
+		try {
+			Random rnd = new Random(System.currentTimeMillis());
+			for (int i = 0; i < 1000; i++) {
+				byte[] b1,b2;
+				String en1, en2, en3;
+				ByteArrayInputStream bis;
+				ByteArrayOutputStream bos;
+				CharArrayReader car;
+				CharArrayWriter caw;
+				//hex
+				b1 = new byte[rnd.nextInt(128)];
+				rnd.nextBytes(b1);
+				en1 = new String(SUtils.encodeHex(b1));
+				b2 = SUtils.decodeHex(en1);
+				assertTrue(Arrays.equals(b1, b2), "Decoded data not equal.");
+				en2 = new String(SUtils.encodeHex(b1));
+				b2 = SUtils.decodeHex(en2);
+				assertTrue(Arrays.equals(b1, b2), "Decoded data not equal.");
+				bis = new ByteArrayInputStream(b1);
+				bos = new ByteArrayOutputStream();
+				SUtils.encodeHex(bis, bos);
+				bos.close();
+				en3 = bos.toString();
+				assertEq(en1, en3, "Error differs:\n"+
+					"s1 = '" + en1 + "'\n" + "s2 = '" + en3 + "'");
+				bis = new ByteArrayInputStream(en3.getBytes());
+				bos = new ByteArrayOutputStream();
+				SUtils.decodeHex(bis, bos);
+				bos.close();
+				b2 = bos.toByteArray();
+				assertTrue(Arrays.equals(b1, b2), "Decoded data not equal.");
+				StringWriter sw = new StringWriter();
+				bis = new ByteArrayInputStream(b1);
+				SUtils.encodeHex(bis, sw);
+				sw.close();
+				en3 = sw.toString();
+				assertEq(en1, en3, "Error differs:\ns1 = '" + en1 + "'\ns2 = '" + en3 + "'");
+				StringReader sr = new StringReader(en3);
+				bos = new ByteArrayOutputStream();
+				SUtils.decodeHex(sr, bos);
+				bos.close();
+				b2 = bos.toByteArray();
+				assertTrue(Arrays.equals(b1, b2), "Decoded data not equal.");
+				bis = new ByteArrayInputStream(b1);
+				bos = new ByteArrayOutputStream();
+				SUtils.encodeHex(bis, bos);
+				bos.close();
+				en3 = bos.toString();
+				assertEq(en2, en3, "Error differs:\ns1 = '" + en2 + "'\ns2 = '" + en3 + "'");
+				bis = new ByteArrayInputStream(en3.getBytes());
+				bos = new ByteArrayOutputStream();
+				SUtils.decodeHex(bis, bos);
+				bos.close();
+				b2 = bos.toByteArray();
+				assertTrue(Arrays.equals(b1, b2), "Decoded data not equal.");
+				caw = new CharArrayWriter();
+				bis = new ByteArrayInputStream(b1);
+				SUtils.encodeHex(bis, caw);
+				caw.close();
+				en3 = caw.toString();
+				assertEq(en2, en3, "Error differs:\ns1 = '" + en2 + "'\ns2 = '" + en3 + "'");
+				car = new CharArrayReader(en1.toCharArray());
+				bos = new ByteArrayOutputStream();
+				SUtils.decodeHex(car, bos);
+				bos.close();
+				b2 = bos.toByteArray();
+				assertTrue(Arrays.equals(b1, b2), "Decoded data not equal.");
+				//base64
+				en1 = new String(SUtils.encodeBase64(b1, false));
+				b1 = SUtils.decodeBase64(en1);
+				bis = new ByteArrayInputStream(b1);
+				bos = new ByteArrayOutputStream();
+				SUtils.encodeBase64(bis, bos, false);
+				bos.close();
+				en3 = bos.toString();
+				assertEq(en1, en3, "Error differs:\ns1 = '" + en1 + "'\ns2 = '" + en3 + "'");
+				bis = new ByteArrayInputStream(en3.getBytes());
+				bos = new ByteArrayOutputStream();
+				SUtils.decodeBase64(bis, bos);
+				bos.close();
+				b2 = bos.toByteArray();
+				assertTrue(Arrays.equals(b1, b2), "Decoded data not equal.");
+				caw = new CharArrayWriter();
+				bis = new ByteArrayInputStream(b1);
+				SUtils.encodeBase64(bis, caw, false);
+				caw.close();
+				en3 = caw.toString();
+				assertEq(en1, en3, "Error differs:\ns1 = '" + en1 + "'\ns2 = '" + en3 + "'");
+				car = new CharArrayReader(en3.toCharArray());
+				bos = new ByteArrayOutputStream();
+				SUtils.decodeBase64(car, bos);
+				bos.close();
+				b2 = bos.toByteArray();
+				assertTrue(Arrays.equals(b1, b2), "Decoded data not equal.");
+				bis = new ByteArrayInputStream(b1);
+				bos = new ByteArrayOutputStream();
+				SUtils.encodeBase64(bis, bos, false);
+				bos.close();
+				en3 = bos.toString();
+				en2 = new String(SUtils.encodeBase64(b2, false));
+				assertEq(en2, en3, "Error differs:\ns1 = '" + en2 + "'\ns2 = '" + en3 + "'");
+				bis = new ByteArrayInputStream(en3.getBytes());
+				bos = new ByteArrayOutputStream();
+				SUtils.decodeBase64(bis, bos);
+				bos.close();
+				b2 = bos.toByteArray();
+				assertTrue(Arrays.equals(b1, b2), "Decoded data not equal.");
+				caw = new CharArrayWriter();
+				bis = new ByteArrayInputStream(b1);
+				SUtils.encodeBase64(bis, caw, true);
+				en2 = new String(SUtils.encodeBase64(b2, true));
+				caw.close();
+				en3 = caw.toString();
+				assertEq(en2, en3, "Error differs:\ns1 = '" + en2 + "'\ns2 = '" + en3 + "'");
+				car = new CharArrayReader(en1.toCharArray());
+				bos = new ByteArrayOutputStream();
+				SUtils.decodeBase64(car, bos);
+				bos.close();
+				b2 = bos.toByteArray();
+				assertTrue(Arrays.equals(b1, b2), "Decoded data not equal.");
+			}
+		} catch (Exception ex) {fail(ex);}
+		// encodeBase64, decodeBase64 input stream, output stream
 		try {
 			final String s1 = "asjh kjhf kldjah ;aoihfo;weihf" +
-				"awuioehf awileufh ilawuchilaweubncilawe bufail"+
-				"weubfwilaeubfailwebukbiwfwe";
+				"awuioehf awileufh ilawuchilaweubncilawe bufailweubfwilaeubfailwebukbiwfwe";
 			InputStream is = new InputStream() {
 				private int i = 0;
 				final private byte[] buf = s1.getBytes();
@@ -1538,66 +1550,6 @@ public class TestSUtils extends STester {
 			bos.close();
 			String s = bos.toString();
 			assertEq(s1, s);
-		} catch (Exception ex) {fail(ex);}
-		try { // date,time
-			String s = "2015-12-06";
-			SDatetime sd = new SDatetime(s);
-			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-			Date d = df.parse(s);
-			assertEq(sd.getCalendar().getTime(), d);
-			s = "2015-12-06T01:02:03";
-			sd = new SDatetime(s);
-			df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-			d = df.parse(s);
-			assertEq(sd.getCalendar().getTime(), d);
-		} catch (Exception ex) {fail(ex);}
-		try { // isLeapYear
-			assertTrue(SDatetime.isLeapYear(2000));
-			assertTrue(SDatetime.isLeapYear(2004));
-			assertTrue(SDatetime.isLeapYear(2400));
-			assertTrue(SDatetime.isLeapYear(2400));
-			assertFalse(SDatetime.isLeapYear(2005));
-			assertFalse(SDatetime.isLeapYear(1900));
-			assertFalse(SDatetime.isLeapYear(2100));
-			assertFalse(SDatetime.isLeapYear(2200));
-			assertFalse(SDatetime.isLeapYear(2300));
-			// getEasterMonday
-			assertEq(SDatetime.getEasterMonday(2000),
-				new SDatetime("2000-04-24"));
-			assertEq(SDatetime.getEasterMonday(2002),
-				new SDatetime("2002-04-01"));
-			// Timestamp
-			SDatetime sd = new SDatetime("2000-01-01T01:01:02.999");
-			java.sql.Timestamp tstamp =
-				new java.sql.Timestamp(sd.getTimeInMillis());
-			assertEq(sd.getTimeInMillis(), tstamp.getTime());
-			assertEq(sd.getNanos(), tstamp.getNanos());
-			assertEq(sd,tstamp);
-			assertEq(new SDatetime(tstamp), tstamp);
-			tstamp.setNanos(999);
-			sd.setNanos(999);
-			assertEq(sd.getTimeInMillis(), tstamp.getTime());
-			assertEq(sd.getNanos(), tstamp.getNanos());
-			assertEq(sd, tstamp);
-			assertEq(new SDatetime(tstamp), tstamp);
-			tstamp.setNanos(100000999);
-			sd.setNanos(100000999);
-			assertEq(sd.getTimeInMillis(), tstamp.getTime());
-			assertEq(sd.getNanos(), tstamp.getNanos());
-			assertEq(sd, tstamp);
-			assertEq(new SDatetime(tstamp), tstamp);
-			tstamp.setNanos(999499999);
-			sd.setNanos(999499999);
-			assertEq(sd.getTimeInMillis(), tstamp.getTime());
-			assertEq(sd.getNanos(), tstamp.getNanos());
-			assertEq(sd, tstamp);
-			assertEq(new SDatetime(tstamp), tstamp);
-			tstamp.setNanos(999999999);
-			sd.setNanos(999999999);
-			assertEq(sd.getTimeInMillis(), ((Date)tstamp).getTime());
-			assertEq(sd.getNanos(), tstamp.getNanos());
-			assertEq(sd, tstamp);
-			assertEq(new SDatetime(tstamp), tstamp);
 		} catch (Exception ex) {fail(ex);}
 	}
 

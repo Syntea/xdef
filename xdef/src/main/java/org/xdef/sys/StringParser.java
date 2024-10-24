@@ -3144,14 +3144,10 @@ public class StringParser extends SReporter implements SParser {
 				return null; //not parsed
 			}
 			String s = _source.substring(getIndex(), newPos);
-			TimeZone tz = TimeZone.getTimeZone(s);
+			TimeZone tz = TimeZone.getTimeZone(("CEST".equals(s) ? "CET" : s));
 			if (tz == null || "GMT".equals(tz.getID()) &&
 				!(s.equalsIgnoreCase("GMT") || s.equalsIgnoreCase("UTC"))) {
-				if ("CEST". equals(s)) {
-					tz =  TimeZone.getTimeZone("CET");
-				} else {
-					return null; //?????
-				}
+				return null; // error ?????
 			}
 			// parsed OK
 			if (!zoneOffsetSpec) {
