@@ -2007,7 +2007,7 @@ public class SDatetime extends XMLGregorianCalendar
 					formatInt(sb, zoneMinute, 2);
 					continue;
 				}
-				case 'z': { // RFC822 zone (CEST etc...)
+				case 'z': { // RFC822 zone (CET etc...)
 					if (_tz == null || "_null_".equals(_tz.getID())
 						// if zone is UTC and field is optional then skip it
 						|| "UTC".equals(_tz.getID()) && !optionals.empty()) {

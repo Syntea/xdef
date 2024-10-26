@@ -110,7 +110,6 @@ public class TestSUtils extends STester {
 			d.setTZ(TimeZone.getTimeZone("GMT"));
 			assertEq("2024-10-22T09:00:00.005Z", d.toString());
 			d.setTZ(TimeZone.getTimeZone("CET"), null);
-			assertNull(d.getTZ());
 			assertEq("2024-10-22T09:00:00.005", d.toString());
 			d.setTZ(TimeZone.getTimeZone("CET"));
 			assertEq("2024-10-22T11:00:00.005+02:00", d.toString());
@@ -123,8 +122,20 @@ public class TestSUtils extends STester {
 			assertEq("2024-10-22T09:00:00.005Z", d.toString());
 			d = new SDatetime("2024-10-22T11:00:00.005");
 			assertEq("2024-10-22T11:00:00.005", d.toString());
+			assertNull(d.getTZ());
 			d.setTZ(TimeZone.getTimeZone("CET"), TimeZone.getTimeZone("GMT"));
-			assertEq("2024-10-22T09:00:00.005Z", d.toString());
+			assertEq("2024-10-22T09:00:00.005Z", d.toString());			
+			assertEq(d.getTZ(), TimeZone.getTimeZone("GMT"));
+			d.setTZ(TimeZone.getTimeZone("CET"), TimeZone.getTimeZone("CET"));
+			assertEq("2024-10-22T11:00:00.005+02:00", d.toString());
+			assertEq(d.getTZ(), TimeZone.getTimeZone("CET"));
+			d.setTZ(TimeZone.getTimeZone("CET"), TimeZone.getTimeZone("GMT"));
+			assertEq("2024-10-22T09:00:00.005Z", d.toString());			
+			d = new SDatetime("2024-10-22T11:00:00.005");
+			d.setTZ(TimeZone.getTimeZone("CET"), TimeZone.getTimeZone("CET"));
+			assertEq("2024-10-22T11:00:00.005+02:00", d.toString());
+			assertEq(d.getTZ(), TimeZone.getTimeZone("CET"));
+			
 			String s, s1;
 			StringParser p;
 			Calendar c;
