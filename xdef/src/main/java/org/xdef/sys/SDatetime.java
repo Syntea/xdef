@@ -1144,8 +1144,7 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 			}
 		} else if (tz2 == null) {
 			BigDecimal diff = new BigDecimal(50400000);
-			if (t2.subtract(diff).compareTo(t1) <= 0 &&
-				t1.compareTo(t2.add(diff)) <= 0) {
+			if (t2.subtract(diff).compareTo(t1) <= 0 && t1.compareTo(t2.add(diff)) <= 0) {
 				throw new SIllegalArgumentException(SYS.SYS085); //Incomparable arguments
 			}
 		}
