@@ -124,18 +124,29 @@ public class TestSUtils extends STester {
 			assertEq("2024-10-22T11:00:00.005", d.toString());
 			assertNull(d.getTZ());
 			d.setTZ(TimeZone.getTimeZone("CET"), TimeZone.getTimeZone("GMT"));
-			assertEq("2024-10-22T09:00:00.005Z", d.toString());			
+			assertEq("2024-10-22T09:00:00.005Z", d.toString());
 			assertEq(d.getTZ(), TimeZone.getTimeZone("GMT"));
 			d.setTZ(TimeZone.getTimeZone("CET"), TimeZone.getTimeZone("CET"));
 			assertEq("2024-10-22T11:00:00.005+02:00", d.toString());
 			assertEq(d.getTZ(), TimeZone.getTimeZone("CET"));
 			d.setTZ(TimeZone.getTimeZone("CET"), TimeZone.getTimeZone("GMT"));
-			assertEq("2024-10-22T09:00:00.005Z", d.toString());			
+			assertEq("2024-10-22T09:00:00.005Z", d.toString());
 			d = new SDatetime("2024-10-22T11:00:00.005");
 			d.setTZ(TimeZone.getTimeZone("CET"), TimeZone.getTimeZone("CET"));
 			assertEq("2024-10-22T11:00:00.005+02:00", d.toString());
 			assertEq(d.getTZ(), TimeZone.getTimeZone("CET"));
-			
+			d = new SDatetime("2024-10-22T11:00:00.005-05:00");
+			assertNotNull(d.getTZ());
+			d.setTZ(TimeZone.getTimeZone("CET"));
+			assertEq("2024-10-22T18:00:00.005+02:00", d.toString());
+			d = new SDatetime("2024-10-22T11:00:00.005+05:00");
+			assertNotNull(d.getTZ());
+			d.setTZ(TimeZone.getTimeZone("CET"));
+			assertEq("2024-10-22T08:00:00.005+02:00", d.toString());
+			d = new SDatetime("2024-10-22T11:00:00.005Z");
+			assertNotNull(d.getTZ());
+			d.setTZ(TimeZone.getTimeZone("CET"));
+			assertEq("2024-10-22T13:00:00.005+02:00", d.toString());
 			String s, s1;
 			StringParser p;
 			Calendar c;
@@ -750,7 +761,7 @@ public class TestSUtils extends STester {
 			}
 		} catch (Exception ex) {fail(ex);}
 		// date format ISO 8601e
-		try { 
+		try {
 			StringParser p;
 			String s;
 			s = "1992-05-26T13:30:15-04:00";
@@ -1185,7 +1196,7 @@ public class TestSUtils extends STester {
 			assertEq(r, null);
 		} catch (Exception ex) {fail(ex);}
 		// date,time
-		try { 
+		try {
 			String s = "2015-12-06";
 			SDatetime sd = new SDatetime(s);
 			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
@@ -1198,7 +1209,7 @@ public class TestSUtils extends STester {
 			assertEq(sd.getCalendar().getTime(), d);
 		} catch (Exception ex) {fail(ex);}
 		// isLeapYear
-		try { 
+		try {
 			assertTrue(SDatetime.isLeapYear(2000));
 			assertTrue(SDatetime.isLeapYear(2004));
 			assertTrue(SDatetime.isLeapYear(2400));

@@ -3185,7 +3185,7 @@ public class StringParser extends SReporter implements SParser {
 		if (isChar('R')) {
 			if (isInteger()) {
 				_parsedDuration.setRecurrence(getParsedInt());
-			} else {				
+			} else {
 				throw new SRuntimeException(SYS.SYS056); //Icorrect format of time period
 			}
 			if (!isChar('/')) {
@@ -3221,7 +3221,7 @@ public class StringParser extends SReporter implements SParser {
 						throw new SRuntimeException(SYS.SYS056); //Icorrect format of time period
 					}
 					_parsedDuration.setEnd(getParsedSDatetime());
-				} else {					
+				} else {
 					throw new SRuntimeException(SYS.SYS056); //Icorrect format of time period
 				}
 			}
@@ -4625,7 +4625,7 @@ public class StringParser extends SReporter implements SParser {
 		int max;
 		byte type;
 		if (name == null || (max = name.length()) == 0
-			|| (type = getXmlCharType(name.charAt(0), xmlVersion)) != XML_CHAR_NAME_START 
+			|| (type = getXmlCharType(name.charAt(0), xmlVersion)) != XML_CHAR_NAME_START
 			&& type != XML_CHAR_COLON) {
 			return false;
 		}
