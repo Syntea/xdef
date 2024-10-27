@@ -219,7 +219,7 @@ public final class XPool implements XDPool, Serializable {
 	 */
 	private static TimeZone readPropertyDefaultZone(final Properties props) {
 		String val = SManager.getProperty(props, XDConstants.XDPROPERTY_DEFAULTZONE);
-		return val == null ? null : TimeZone.getTimeZone(val);
+		return val != null && !(val=val.trim()).isEmpty() ? TimeZone.getTimeZone(val) : null;
 	}
 
 	/** Read MIN_YEAR or MAX_YEAR from properties.

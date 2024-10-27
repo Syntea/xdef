@@ -1,13 +1,13 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.2.8, release-date 2024-10-26
+# Version 42.2.8, release-date 2024-10-27
 * New property `xdef_defaultZone` is used to set default TimeZone
   in X-definition (see org.xdef.XDConstants.XDPROPERTY_DEFAULTZONE).
 * Implemented new method of XDPool `getDefaultZone()` which returns the default
   time zone of date/time values where the time zone is not specified.
-* To date/time values where the time zone was not specified is set the time zone
-  from defaultZone. If it is not specified it is set to the time zone of the
-  system.
+* To date/time values from input data where the time zone was not specified
+  is when such value is printed the zone is set defaultZone. If it is not
+  specified it is set to the time zone of the System of Java VM.
 * Implemented new X-script method `currencyCode()` of `Currency` value which
   returns string with ISO 4217 currency code. 
 * To the class `org.xdef.XDFactory` is added new static methods. The method

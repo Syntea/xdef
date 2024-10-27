@@ -80,15 +80,12 @@ public class XDParseXDatetime extends XSAbstractParseComparable {
 		p.setParsedValue(new DefDate(d));
 		checkDate(xnode, p);
 		if (_outFormat != null) {
-			if ((SDatetime.checkFormat(_outFormat) & 0xffff0000) != 0) {
-				TimeZone tz = d.getTZ();
-				TimeZone defaulttz = xnode.getXDPool().getDefaultZone();
-				if (tz == null) {
-					if (defaulttz != null) {
-						d.setTZ(defaulttz);
+			if (xnode != null && (SDatetime.checkFormat(_outFormat) & 0xffff0000) != 0) { // is zone
+				if (d.getTZ() == null) {
+					TimeZone defaulttz = xnode.getXDPool().getDefaultZone();
+					if (defaulttz != null) { // default zone is set
+						d.setTZ(defaulttz); // set this zone datetime
 					}
-				} else if (defaulttz != null && !tz.equals(defaulttz)) {
-					d.setTZ(defaulttz, tz);
 				}
 			}
 			s = d.formatDate(_outFormat);
@@ -102,12 +99,10 @@ public class XDParseXDatetime extends XSAbstractParseComparable {
 	 * @param xnode actual XXNode object.
 	 * @throws SException if an error occurs.
 	 */
-	public void setNamedParams(final XXNode xnode, final XDContainer params)
-		throws SException {
+	public void setNamedParams(final XXNode xnode, final XDContainer params) throws SException {
 		super.setNamedParams(xnode, params);
 		if (_format == null) {
-			//Missing required parameter: &{0}
-			throw new SException(XDEF.XDEF545, "format");
+			throw new SException(XDEF.XDEF545, "format"); //Missing required parameter: &{0}
 		}
 	}
 	@Override
