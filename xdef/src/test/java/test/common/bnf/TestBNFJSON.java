@@ -203,7 +203,7 @@ public class TestBNFJSON extends STester {
 			assertEq(s, parse(g, "json", s));
 		} catch (RuntimeException ex) {fail(ex);}
 		try { // XON
-			g = BNFGrammar.compile(null, new File(getDataDir() + "TestXON.bnf"), null);
+			g = BNFGrammar.compile(null, new File(getDataDir() + "TestJSON_XON.bnf"), null);
 			test(new String[] {
 				"\"true\"",
 				"null",
