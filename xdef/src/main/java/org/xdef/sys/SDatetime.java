@@ -1423,7 +1423,7 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 					if (pat == 'S') {
 						ms = i;
 					} else if (pat == 'Z' || pat == 'z') {
-						if (i != 1 && i != 2 && i != 5 && i != 6) {
+						if (pat=='Z' && i != 1 && i != 2 && i != 5 && i != 6 | pat=='z' && i > 6) {
 							//Datetime mask format: incorrect zone format&{0}{, position: }
 							throw new SRuntimeException(SYS.SYS050, fpos - i);
 						}
