@@ -19,18 +19,18 @@ final class XonCompare {
 			return "";
 		}
 		if (a == null) {
-			return "A:null, B:" + b.getClass() + "\n";
+			return "A: null, B: " + b.getClass() + "\n";
 		} else if (b == null) {
-			return "A:" + a.getClass() +", B:null\n";
+			return "A: " + a.getClass() +", B: null\n";
 		} else {
 			if (!a.getClass().equals(b.getClass())) {
-				return "A:"+a.getClass()+", B:"+b.getClass()+"\n";
+				return "A: "+a.getClass()+", B: "+b.getClass()+"\n";
 			} else if (a instanceof List) {
 				return listDiff((List) a, (List) b);
 			} else if (a instanceof Map) {
 				return mapDiff((Map) a, (Map) b);
 			} else {
-				return "A:"+a+", B:"+b+"\n";
+				return "A: "+a+", B: "+b+"\n";
 			}
 		}
 	}
@@ -50,13 +50,13 @@ final class XonCompare {
 			boolean keydiff = false;
 			for (Object akey: ae) {
 				if (!b.containsKey(akey)) {
-					s += "A:" + akey + ", B missing\n";
+					s += "A: " + akey + ", B missing\n";
 					keydiff = true;
 				}
 			}
 			for (Object bkey: be) {
 				if (!a.containsKey(bkey)) {
-					s += "B:" + bkey + ", A missing\n";
+					s += "B: " + bkey + ", A missing\n";
 					keydiff = true;
 				}
 			}
@@ -187,10 +187,8 @@ final class XonCompare {
 			} else if (n2 instanceof Double || n2 instanceof Float) {
 				return equalNumber(new BigDecimal((BigInteger)n1), n2);
 			}
-		} else if (n1 instanceof Long || n1 instanceof Integer
-			|| n1 instanceof Short || n1 instanceof Byte) {
-			if (n2 instanceof Long || n2 instanceof Integer
-				|| n2 instanceof Short || n2 instanceof Byte) {
+		} else if (n1 instanceof Long || n1 instanceof Integer || n1 instanceof Short || n1 instanceof Byte) {
+			if (n2 instanceof Long || n2 instanceof Integer || n2 instanceof Short || n2 instanceof Byte) {
 				return n1.longValue() == n2.longValue();
 			} else if (n2 instanceof Double || n2 instanceof Float
 				|| n2 instanceof BigInteger || n2 instanceof BigDecimal) {
@@ -218,8 +216,7 @@ final class XonCompare {
 		} else if (o1 instanceof List) {
 			return o2 instanceof List ? equalArray((List) o1,(List) o2) : false;
 		} else if (o1 instanceof Number) {
-			return o2 instanceof Number
-				? equalNumber((Number) o1, (Number) o2) : false;
+			return o2 instanceof Number ? equalNumber((Number) o1, (Number) o2) : false;
 		} else if (o1 instanceof byte[]) {
 			if (o2 instanceof byte[]) {
 				return Arrays.equals((byte[]) o1, (byte[]) o2);
@@ -231,6 +228,10 @@ final class XonCompare {
 		} else if (o1==null||o1 instanceof XDValue&&((XDValue) o1).isNull()) {
 			return o2==null||o2 instanceof XDValue&&((XDValue) o2).isNull();
 		}
-		return o1.equals(o2);
+		try {
+			return o1.equals(o2);
+		} catch (Exception ex) {
+			return false;
+		}
 	}
 }

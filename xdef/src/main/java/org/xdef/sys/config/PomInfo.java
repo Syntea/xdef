@@ -77,11 +77,11 @@ public class PomInfo {
 		return
 			groupId + ":" + artifactId + ":" + version + " (" +
 			(isVersionSnapshot() ? "built " + buildTimestamp : "released " + releaseDate) +
-            (gitCommitIdAbbrev.isEmpty() ? "" :
-                ", commit " + gitCommitIdAbbrev + " " + gitCommitTime +
-                ", tags: "   + (gitTags  .isEmpty() ? "[NoTags]"   : gitTags  ) +
-                ", branch: " + (gitBranch.isEmpty() ? "[NoBranch]" : gitBranch)
-            ) +
+			(gitCommitIdAbbrev.isEmpty() ? "" :
+				", commit " + gitCommitIdAbbrev + " " + gitCommitTime +
+				", tags: "   + (gitTags  .isEmpty() ? "[NoTags]"   : gitTags  ) +
+				", branch: " + (gitBranch.isEmpty() ? "[NoBranch]" : gitBranch)
+			) +
 			")"
 		;
 	}
@@ -102,30 +102,30 @@ public class PomInfo {
 
 	public String getGitTags() {return gitTags;}
 
-    public String getGitBranch() {return gitBranch;}
+	public String getGitBranch() {return gitBranch;}
 
-    public String getGitDirty() {return gitDirty;}
+	public String getGitDirty() {return gitDirty;}
 
-    public String getGitCommitId() {return gitCommitId;}
+	public String getGitCommitId() {return gitCommitId;}
 
-    public String getGitCommitIdAbbrev() {return gitCommitIdAbbrev;}
+	public String getGitCommitIdAbbrev() {return gitCommitIdAbbrev;}
 
-    public String getGitCommitTime() {return gitCommitTime;}
+	public String getGitCommitTime() {return gitCommitTime;}
 
 
-    private String groupId             = null;
+	private String groupId             = null;
 	private String artifactId          = null;
 	private String version             = null;
 	private String name                = null;
 	private String description         = null;
 	private String releaseDate         = null;
 	private String buildTimestamp      = null;
-    private String gitTags             = null;
-    private String gitBranch           = null;
-    private String gitDirty            = null;
-    private String gitCommitId         = null;
-    private String gitCommitIdAbbrev   = null;
-    private String gitCommitTime       = null;
+	private String gitTags             = null;
+	private String gitBranch           = null;
+	private String gitDirty            = null;
+	private String gitCommitId         = null;
+	private String gitCommitIdAbbrev   = null;
+	private String gitCommitTime       = null;
 
 	private static final String     POMINFOPROPSNAME = "pominfo.properties";
 	/** singleton instance */

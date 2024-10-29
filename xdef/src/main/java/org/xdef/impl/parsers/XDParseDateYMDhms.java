@@ -1,13 +1,6 @@
 package org.xdef.impl.parsers;
 
-import java.util.TimeZone;
-import org.xdef.msg.XDEF;
-import org.xdef.sys.ArrayReporter;
-import org.xdef.sys.SDatetime;
 import org.xdef.sys.StringParser;
-import org.xdef.XDParseResult;
-import org.xdef.proc.XXNode;
-import org.xdef.impl.code.DefDate;
 
 /** Parser of Schema "date" type.
  * @author Vaclav Trojan
@@ -15,33 +8,6 @@ import org.xdef.impl.code.DefDate;
 public class XDParseDateYMDhms extends XSParseDatetime {
 	private static final String ROOTBASENAME = "dateYMDhms";
 	public XDParseDateYMDhms() {super();}
-
-	@Override
-	public void parseObject(final XXNode xnode, final XDParseResult p){
-		int pos0 = p.getIndex();
-		p.isSpaces();
-		int pos = p.getIndex();
-		StringParser parser = new StringParser(p.getSourceBuffer(), pos);
-		if (!parse(parser)) {
-			//Incorrect value of '&{0}'&{1}{: }
-			p.errorWithString(XDEF.XDEF809, parserName());
-			return;
-		}
-		SDatetime d = parser.getParsedSDatetime();
-		TimeZone defaulttz;
-		TimeZone tz;
-		if (xnode != null && (tz=d.getTZ()) != null
-			&& (defaulttz=xnode.getXDPool().getDefaultZone()) != null) {
-			d.setTZ(defaulttz);
-		}
-		p.addReports((ArrayReporter) parser.getReportWriter());//datetime errors
-		p.setIndex(parser.getIndex());
-		String s = p.getParsedBufferPartFrom(pos);
-		p.isSpaces();
-		p.replaceParsedBufferFrom(pos0, s);
-		p.setParsedValue(new DefDate(d));
-		checkDate(xnode, p);
-	}
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 	@Override

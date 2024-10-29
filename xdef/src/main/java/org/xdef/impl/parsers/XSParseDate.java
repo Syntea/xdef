@@ -1,6 +1,5 @@
 package org.xdef.impl.parsers;
 
-import java.util.TimeZone;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.SDatetime;
@@ -55,24 +54,16 @@ public class XSParseDate extends XSAbstractParseComparable {
 			p.errorWithString(XDEF.XDEF809, parserName());
 			return;
 		}
-		SDatetime d = parser.getParsedSDatetime();
-		if (xnode != null) {
-			TimeZone defaulttz;
-			if (d.getTZ() != null && (defaulttz=xnode.getXDPool().getDefaultZone()) != null) {
-				d.setTZ(defaulttz);
-			}
-		}
-		p.setParsedValue(new DefDate(d));
 		p.setIndex(parser.getIndex());
 		String s = p.getParsedBufferPartFrom(pos);
+		SDatetime d = parser.getParsedSDatetime();
 		p.isSpaces();
 		p.replaceParsedBufferFrom(pos0, s);
+		p.setParsedValue(new DefDate(d));
 		p.addReports((ArrayReporter) parser.getReportWriter());//datetime errors
 		checkDate(xnode, p);
 	}
-	// This method is overwritten in different date/time parsers
 	boolean parse(final StringParser parser) {return parser.isXMLDate();}
-
 	@Override
 	public short parsedType() {return XD_DATETIME;}
 	@Override

@@ -33,14 +33,14 @@ public class TestAll {
 	@Test
 //	@Test(dependsOnMethods = {"testCommon"})
 	public void testXdef() {
-	    Assertions.assertEquals(test.xdef.TestAll.runTests(new String[0]), 0);
+		Assertions.assertEquals(test.xdef.TestAll.runTests(new String[0]), 0);
 	}
 
 	/** run TestAll in test.xdutil */
 	@Test
 //	@Test(dependsOnMethods = {"testXdef"})
 	public void testXDUtils() {
-	    Assertions.assertEquals(test.xdutils.TestAll.runTests(new String[0]), 0);
+		Assertions.assertEquals(test.xdutils.TestAll.runTests(new String[0]), 0);
 	}
 
 	/** Run all tests directly */
@@ -53,6 +53,6 @@ public class TestAll {
 
 	/** @param args the command line arguments. */
 	public static void main(String... args) {
-	    new TestAll().mainTest();
+		new TestAll().mainTest();
 	}
 }

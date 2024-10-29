@@ -118,11 +118,9 @@ public final class TestXComponents extends XDTester {
 			xc = xp.createXDDocument().xparseXComponent(xml, null, reporter);
 			assertNoErrorsAndClear(reporter);
 			assertEq(xml, xc.toXml());
-			assertEq("1", SUtils.getValueFromGetter(
-				SUtils.getValueFromGetter(xc,"getB"), "getb"));
+			assertEq("1", SUtils.getValueFromGetter(SUtils.getValueFromGetter(xc,"getB"), "getb"));
 			assertEq("2", SUtils.getValueFromGetter(
-				SUtils.getValueFromGetter(SUtils.getValueFromGetter(
-					xc,"getC"), "getB"), "getb"));
+				SUtils.getValueFromGetter(SUtils.getValueFromGetter(xc, "getC"), "getB"), "getb"));
 			xdef = // GPSPosition, Price
 "<xd:def xmlns:xd='" + _xdNS + "' root='A'>\n" +
 "  <xd:declaration\n>\n"+
@@ -142,18 +140,15 @@ public final class TestXComponents extends XDTester {
 			assertNoErrorwarningsAndClear(reporter);
 			assertEq("1.25 CZK", xd.getVariable("a").stringValue());
 			assertEq(252, xd.getVariable("d").intValue());
-			assertEq(new GPSPosition(48.2, 16.37, 151, null),
-				SUtils.getValueFromGetter(xc, "getq"));
-			SUtils.setValueToSetter(xc, "seta",
-				new Price(new BigDecimal("456.001"), "USD"));
+			assertEq(new GPSPosition(48.2, 16.37, 151, null), SUtils.getValueFromGetter(xc, "getq"));
+			SUtils.setValueToSetter(xc, "seta", new Price(new BigDecimal("456.001"), "USD"));
 			assertEq("456.001 USD", xc.toXml().getAttribute("a"));
 			xml = "<A q='51.52,-0.09,0,\"London\"'/>"; //,
 			el = parse(xd, xml, reporter);
 			assertNoErrorwarningsAndClear(reporter);
 			assertEq(xml, el);
 			assertEq(1030, xd.getVariable("d").intValue());
-			assertEq("51.52, -0.09, 0.0, London",
-				xd.getVariable("q").toString());
+			assertEq("51.52, -0.09, 0.0, London", xd.getVariable("q").toString());
 			xp = compile(new String[] { // nested declaration of type
 "<xd:def xmlns:xd='" + _xdNS + "' name='D7_xc'>\n" +
 "  <xd:component>\n" +
