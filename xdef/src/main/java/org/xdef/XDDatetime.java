@@ -3,7 +3,7 @@ package org.xdef;
 import org.xdef.sys.SDatetime;
 import java.util.Calendar;
 
-/** Datetime in x-script.
+/** Datetime in X-script.
  * @author Vaclav Trojan
  */
 public interface XDDatetime extends XDValue {

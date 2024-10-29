@@ -812,7 +812,7 @@ public final class XdUtils {
 	}
 
 	/** Represents X-definition attribute properties. */
-	public final static class AttrProps {
+	public static final class AttrProps {
 
 		/** Attribute required occurrence. */
 		public static final String REQUIRED = "required";
@@ -872,7 +872,7 @@ public final class XdUtils {
 	}
 
 	/** Represents X-definition element properties.*/
-	public final static class ElemProps {
+	public static final class ElemProps {
 
 		/** Element default value. */
 		private final String _default;

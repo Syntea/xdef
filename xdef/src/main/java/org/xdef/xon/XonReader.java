@@ -792,7 +792,7 @@ public final class XonReader extends StringParser implements XonParsers {
 	 * @param convertXDBytes flag if XDBytes objects are conterted to byte[].
 	 * @return parsed XON object.
 	 */
-	public final static Object parseXON(final Reader in,
+	public static final Object parseXON(final Reader in,
 		final String sysId,
 		final boolean convertXDBytes) {
 		return parseXonJson(in, sysId, true, convertXDBytes);
@@ -804,7 +804,7 @@ public final class XonReader extends StringParser implements XonParsers {
 	 * @param convertXDBytes flag if XDBytes objects are conterted to byte[].
 	 * @return parsed JSON object.
 	 */
-	public final static Object parseJSON(final Reader in,
+	public static final Object parseJSON(final Reader in,
 		final String sysId,
 		final boolean convertXDBytes) {
 		return parseXonJson(in, sysId, false, convertXDBytes);
@@ -816,7 +816,7 @@ public final class XonReader extends StringParser implements XonParsers {
 	 * @param convertXDBytes flag if XDBytes objects are conterted to byte[].
 	 * @return parsed XON object.
 	 */
-	public final static Object parseXON(final InputStream in,
+	public static final Object parseXON(final InputStream in,
 		final String sysId,
 		final boolean convertXDBytes) {
 		return parseXonJson(getXonReader(in),sysId,true, convertXDBytes);
@@ -828,7 +828,7 @@ public final class XonReader extends StringParser implements XonParsers {
 	 * @param convertXDBytes flag if XDBytes objects are conterted to byte[].
 	 * @return parsed JSON object.
 	 */
-	public final static Object parseJSON(final InputStream in,
+	public static final Object parseJSON(final InputStream in,
 		final String sysId,
 		final boolean convertXDBytes) {
 		return parseXonJson(getXonReader(in),sysId,false, convertXDBytes);
@@ -904,7 +904,7 @@ public final class XonReader extends StringParser implements XonParsers {
 	 * @param in input stream wit XON/JSON data.
 	 * @return reader with detected encoding.
 	 */
-	public final static Reader getXonReader(final InputStream in) {
+	public static final Reader getXonReader(final InputStream in) {
 		try {
 			XonInputStream x = new XonInputStream(in);
 			if ("X-ISO-10646-UCS-4-2143".equals(x._encoding)) {

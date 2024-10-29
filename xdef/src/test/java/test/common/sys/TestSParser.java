@@ -9,6 +9,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import org.xdef.sys.SDatetime;
 import org.xdef.sys.SDuration;
 import org.xdef.sys.STester;
+import static org.xdef.sys.STester.runTest;
 import org.xdef.sys.SUtils;
 import org.xdef.sys.StringParser;
 
@@ -609,7 +610,7 @@ public class TestSParser extends STester {
 				c = p.getParsedCalendar();
 				assertEq(c.getTimeZone().getRawOffset(), 3600000);
 			}
-			s = "11/10/2005 17:56:46.395 CESTXYZ";
+			s = "11/10/2005 17:56:46.395 CETXYZ";
 			p = new StringParser(s);
 			if (!p.isDatetime("d/M/yyyy HH:mm:ss?',.'S z")) {
 				fail();
@@ -618,8 +619,7 @@ public class TestSParser extends STester {
 				assertTrue(p.eos());
 				c = p.getParsedCalendar();
 				TimeZone tz = c.getTimeZone();
-				assertEq("CEST",
-					tz.getDisplayName(tz.useDaylightTime(), TimeZone.SHORT));
+				assertEq("CEST",tz.getDisplayName(tz.useDaylightTime(), TimeZone.SHORT));
 				assertEq(c.getTimeZone().getRawOffset(), 3600000);
 			}
 			s = "11/10/2005 17:56:46.395 GMT+01:00";
@@ -1115,7 +1115,7 @@ public class TestSParser extends STester {
 			assertTrue(p.isDatetime("d/M|d.M|d.M.yyyy[:H]|d/M/yyyy")&&p.eos());
 			p = new StringParser("7.6.2020:16");
 			assertTrue(p.isDatetime("d/M|d.M|d.M.yyyy[:H]|d/M/yyyy")&&p.eos());
-			p = new StringParser("Sun Jun 07 18:00:00 CEST 2020");
+			p = new StringParser("Sun Jun 07 18:00:00 CET 2020");
 			assertTrue(p.isPrintableDatetime()&&p.eos());
 			p = new StringParser("12/6/1961");
 			assertTrue(p.isDatetime("d/M/y|{L(cs)}d/MMM/y|{L(en)}d/MMM/y")

@@ -4,7 +4,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-/** Interface for incremental writing XML data to a stream in script.
+/** Interface for incremental writing XML data to a stream in X-script.
  * @author Vaclav Trojan
  */
 public interface XDXmlOutStream extends XDValue {

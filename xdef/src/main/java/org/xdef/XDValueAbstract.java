@@ -24,8 +24,10 @@ public abstract class XDValueAbstract implements XDValue {
 	public boolean equals(final XDValue arg) {return arg == this;}
 	@Override
 	public int compareTo(final XDValue arg) throws IllegalArgumentException {
-		if (arg == this) return 0;
-		throw new SIllegalArgumentException(SYS.SYS085);//Incomparable arguments
+		if (arg != this) {
+			throw new SIllegalArgumentException(SYS.SYS085);//Incomparable arguments
+		}
+		return 0;
 	}
 	@Override
 	public String stringValue() {return null;}
@@ -87,15 +89,9 @@ public abstract class XDValueAbstract implements XDValue {
 	@Override
 	public String toString() {return stringValue();}
 	@Override
-	public void setItemType(final short type) {
-		throw new SUnsupportedOperationException();
-	}
+	public void setItemType(final short type) {throw new SUnsupportedOperationException();}
 	@Override
-	public void setCode(final short code) {
-		throw new SUnsupportedOperationException();
-	}
+	public void setCode(final short code) {throw new SUnsupportedOperationException();}
 	@Override
-	public void setParam(final int param) {
-		throw new SUnsupportedOperationException();
-	}
+	public void setParam(final int param) {throw new SUnsupportedOperationException();}
 }

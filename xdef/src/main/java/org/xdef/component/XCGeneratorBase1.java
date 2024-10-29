@@ -13,16 +13,26 @@ import org.xdef.sys.ArrayReporter;
  */
 class XCGeneratorBase1 extends XCGeneratorBase {
 
-	XCGeneratorBase1(final XDPool xp,
-		final ArrayReporter reporter,
-		final boolean genJavadoc) {
+	/** Create new instance of XCGeneratorBase1.
+	 * @param xp compiled XDPool.
+	 * @param reporter reporter where to write reports.
+	 * @param genJavadoc if true the Javadoc source is generated.
+	 */
+	XCGeneratorBase1(final XDPool xp, final ArrayReporter reporter, final boolean genJavadoc) {
 		super(xp, reporter, genJavadoc);
 	}
 
+	/** Generate toXml method.
+	 * @param xe model from which to generate.
+	 * @param isRoot if true it is the root model.
+	 * @param creators StringBuilder where to generate creators.
+	 * @param listNodes StringBuilder with generated list nodes.
+	 * @return string with generated code of toXml method.
+	 */
 	private String genToXmlMethods(final XElement xe,
 		final boolean isRoot,
 		final StringBuilder creators,
-		final StringBuilder genNodeList) {
+		final StringBuilder listNodes) {
 		String toXml =
 "\t@Override"+LN+
 (_genJavadoc ? "\t/** Create XML element or text node from default model"+LN+
@@ -38,8 +48,8 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 "\t\treturn doc==null? XD_Any"+LN+
 "\t\t\t: (org.w3c.dom.Element) doc.importNode(XD_Any,true);"+LN+
 "\t}"+LN;
-		} else if (creators.length() == 0 && genNodeList.length() == 0) {
-			toXml +=
+		} else if (creators.length() == 0 && listNodes.length() == 0) {
+			toXml +=  // no creators and no node list
 "\t\treturn doc!=null? doc.createElementNS(XD_NamespaceURI, XD_NodeName)"+LN+
 "\t\t\t: org.xdef.xml.KXmlUtils.newDocument("+LN+
 "\t\t\t\tXD_NamespaceURI, XD_NodeName, null).getDocumentElement();"+LN+
@@ -57,7 +67,7 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 : "\t\t\tel = doc.createElementNS(XD_NamespaceURI, XD_NodeName);"+LN
 )+
 "\t\t}"+LN+ creators;
-			if (genNodeList.length() > 0) {
+			if (listNodes.length() > 0) { // not empty list of nodes
 				toXml += "\t\tfor (org.xdef.component.XComponent x:"+
 					" xGetNodeList())"+LN+
 "\t\t\tel.appendChild(x.toXml(doc));"+LN;
@@ -194,7 +204,7 @@ class XCGeneratorBase1 extends XCGeneratorBase {
 "\t */"+LN : "") +
 "\tpublic int xGetModelIndex() {return "+index+";}"+LN+
 (_genJavadoc?"\t/** Get XON version: 0 not set, 1 .. W mode.*/"+LN:"")+
-"\tpublic final static byte XON = " + xe._xon + ";" +LN;
+"\tpublic static final byte XON = " + xe._xon + ";" +LN;
 
 ////////////////////////////////////////////////////////////////////////////////
 		result += genSeparator("Private methods", _genJavadoc) +

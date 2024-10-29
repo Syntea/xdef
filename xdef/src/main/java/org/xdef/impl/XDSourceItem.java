@@ -69,7 +69,7 @@ public final class XDSourceItem {
 	 * @return XDSourceItem object
 	 * @throws IOException if an error occurs.
 	 */
-	public final static XDSourceItem readXDSourceItem(final XDReader xr)
+	public static final XDSourceItem readXDSourceItem(final XDReader xr)
 		throws IOException{
 		XDSourceItem result = new XDSourceItem();
 		String s = xr.readString();

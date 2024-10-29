@@ -1093,7 +1093,7 @@ public class SUtils extends FUtils {
 	 * @return ISO 3166-1 alpha-2 code (two letters).
 	 * @throws SRuntimeException code SYS018 if language code is not found.
 	 */
-	public final static String getISO2Country(final String code) {
+	public static final String getISO2Country(final String code) {
 		String s = code.toUpperCase();
 		Locale loc = COUNTRIES.get(s);
 		if (loc != null) {
@@ -1116,7 +1116,7 @@ public class SUtils extends FUtils {
 	 * @return ISO 3166-1 alpha-3 code (three letters).
 	 * @throws SRuntimeException code SYS018 if language code is not found.
 	 */
-	public final static String getISO3Country(final String code) {
+	public static final String getISO3Country(final String code) {
 		String s = code.toUpperCase();
 		Locale loc = COUNTRIES.get(s);
 		if (loc != null) {
@@ -1184,7 +1184,7 @@ public class SUtils extends FUtils {
 	 * @return new instance of object.
 	 * @throws SRuntimeException if the constructor was not found in the class.
 	 */
-	public final static Object getNewInstance(String className, Object... pars){
+	public static final Object getNewInstance(String className, Object... pars){
 		try {
 			Class<?> cls = Class.forName(className);
 			Class<?>[] paramTypes = new Class<?>[pars.length];
@@ -1207,7 +1207,7 @@ public class SUtils extends FUtils {
 	 * @throws SRuntimeException if the class or field was not found in
 	 * given class.
 	 */
-	public final static Object getObjectField(String className, String name) {
+	public static final Object getObjectField(String className, String name) {
 		Class<?> cls;
 		try {
 			cls = Class.forName(className);
@@ -1237,7 +1237,7 @@ public class SUtils extends FUtils {
 	 * @throws SRuntimeException if the field was not found in the object's
 	 * class.
 	 */
-	public final static Object getObjectField(Object o, String name) {
+	public static final Object getObjectField(Object o, String name) {
 		Class<?> cls = o.getClass();
 		for (;;) {
 			try {
@@ -1265,7 +1265,7 @@ public class SUtils extends FUtils {
 	 * @throws SRuntimeException if the field was not found in the object's
 	 * class or it is not accessible.
 	 */
-	public final static void setObjectField(Object o, String name, Object v) {
+	public static final void setObjectField(Object o, String name, Object v) {
 		Class<?> cls = o.getClass();
 		for (;;) {
 			try {
@@ -1294,7 +1294,7 @@ public class SUtils extends FUtils {
 	 * @return value of getter.
 	 * @throws SRuntimeException if the getter was not found.
 	 */
-	public final static Object getValueFromGetter(Object o, String name) {
+	public static final Object getValueFromGetter(Object o, String name) {
 		Class<?> cls = o.getClass();
 		for (;;) {
 			try {
@@ -1322,7 +1322,7 @@ public class SUtils extends FUtils {
 	 * @throws SRuntimeException if the setter was not found or it is not
 	 * accessible.
 	 */
-	public final static void setValueToSetter(Object o, String name, Object v) {
+	public static final void setValueToSetter(Object o, String name, Object v) {
 		Class<?> cls = o.getClass();
 		for (;;) {
 			for (Method m: cls.getDeclaredMethods()) {

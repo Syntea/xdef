@@ -19,15 +19,14 @@ import org.xdef.sys.SRuntimeException;
 /** DefParseResult contains the source and results of parsing.
  * @author Vaclav Trojan
  */
-public final class DefParseResult extends XDValueAbstract
-	implements XDParseResult {
+public final class DefParseResult extends XDValueAbstract implements XDParseResult {
 	/** Actual index to source buffer. */
 	private int _srcIndex;
 	/** Parsed source string (null if parsed result failed). */
 	private String _source;
 	/** Parsed result object. */
 	private Object _value;
-	/* Messages reported by parser or <i>null</i>. */
+	/** Messages reported by parser or null. */
 	private ArrayReporter _ar;
 
 	/** Creates a new empty instance of DefParseResult. */
@@ -40,11 +39,10 @@ public final class DefParseResult extends XDValueAbstract
 	public DefParseResult(final String source) {_source = source;}
 
 	/** Creates a new instance of DefParseResult.
-	 * @param parsedString the parsed string.
-	 * @param parsedObject the parsed object.
+	 * @param parsedString parsed string.
+	 * @param parsedObject  parsed object.
 	 */
-	public DefParseResult(final String parsedString,
-		final XDValue parsedObject) {
+	public DefParseResult(final String parsedString, final XDValue parsedObject) {
 		_source = parsedString;
 		_value = parsedObject;
 	}
@@ -72,10 +70,9 @@ public final class DefParseResult extends XDValueAbstract
 	public final void setParsedValue(final XDValue obj) {_value = obj;}
 	@Override
 	public final XDValue getParsedValue() {
-		return errors() ? (XDValue) (_value = null) :
-			_value == null ? (XDValue)(_value=new DefString(_source)) :
-			_value instanceof String ?
-			(XDValue)(_value=new DefString((String) _value)) : (XDValue)_value;
+		return errors() ? (XDValue) (_value = null) : _value == null
+			? (XDValue)(_value=new DefString(_source)) : _value instanceof String
+			? (XDValue)(_value=new DefString((String) _value)) : (XDValue)_value;
 	}
 	@Override
 	public String getParsedString() {return _source.substring(0, _srcIndex);}
@@ -86,7 +83,7 @@ public final class DefParseResult extends XDValueAbstract
 	public final int getParsedInt() {
 		try {
 			return Integer.parseInt(_source.charAt(0) == '+'
-				?_source.substring(1,_srcIndex):_source.substring(0,_srcIndex));
+				? _source.substring(1,_srcIndex) : _source.substring(0,_srcIndex));
 		} catch(NumberFormatException ex) {
 			throw new SRuntimeException(SYS.SYS072, ex); //Data error&{0}{: }
 		}
@@ -102,14 +99,13 @@ public final class DefParseResult extends XDValueAbstract
 	}
 	@Override
 	public final String getParsedBufferPartFrom(final int pos) {
-		return (pos < _srcIndex && _source != null
-			&& _srcIndex <= _source.length()) ?
-			_source.substring(pos, _srcIndex) : "";
+		return (pos < _srcIndex && _source != null && _srcIndex <= _source.length())
+			? _source.substring(pos, _srcIndex) : "";
 	}
 	@Override
 	public final String getBufferPart(final int from, final int to) {
-		return (_source != null && from < _srcIndex
-			&& _srcIndex<=_source.length()) ? _source.substring(from, to): "";
+		return (_source != null && from < _srcIndex && _srcIndex<=_source.length())
+			? _source.substring(from, to): "";
 	}
 	@Override
 	public final ArrayReporter getReporter() {return _ar;}
@@ -120,8 +116,8 @@ public final class DefParseResult extends XDValueAbstract
 	@Override
 	public final boolean isSpace() {
 		char ch;
-		if (_srcIndex < _source.length() && ((ch=_source.charAt(_srcIndex))==' '
-			|| ch == '\n' || ch == '\r' || ch == '\t')) {
+		if (_srcIndex < _source.length()
+			&& ((ch= _source.charAt(_srcIndex)) == ' ' || ch == '\n' || ch == '\r' || ch == '\t')) {
 			_srcIndex++;
 			return true;
 		}
@@ -130,12 +126,11 @@ public final class DefParseResult extends XDValueAbstract
 	@Override
 	public final boolean isSpaces() {
 		char ch;
-		if (_srcIndex < _source.length() && ((ch=_source.charAt(_srcIndex))==' '
-			|| ch == '\n' || ch == '\r' || ch == '\t')) {
+		if (_srcIndex < _source.length()
+			&& ((ch=_source.charAt(_srcIndex))==' ' || ch=='\n' || ch=='\r' || ch=='\t')) {
 			_srcIndex++;
 			while (_srcIndex < _source.length()
-				&& ((ch=_source.charAt(_srcIndex)) == ' '
-				|| ch == '\n' || ch == '\r' || ch == '\t')) {
+				&& ((ch=_source.charAt(_srcIndex))==' ' || ch=='\n' || ch=='\r' || ch=='\t')) {
 				_srcIndex++;
 			}
 			return true;
@@ -161,8 +156,7 @@ public final class DefParseResult extends XDValueAbstract
 	}
 	@Override
 	public final char isOneOfChars(String chars) {
-		if (_srcIndex >= _source.length()
-			|| (chars.indexOf(_source.charAt(_srcIndex))) < 0) {
+		if (_srcIndex >= _source.length() || (chars.indexOf(_source.charAt(_srcIndex))) < 0) {
 			return NOCHAR;
 		}
 		return _source.charAt(_srcIndex++);
@@ -183,8 +177,7 @@ public final class DefParseResult extends XDValueAbstract
 	public final char isLowerCaseLetter() {
 		char ch;
 		if (_srcIndex < _source.length()) {
-			if (Character.isLetter(ch = _source.charAt(_srcIndex))
-				&& ch == Character.toLowerCase(ch)) {
+			if (Character.isLetter(ch=_source.charAt(_srcIndex)) && ch==Character.toLowerCase(ch)) {
 				char c = ch;
 				return c;
 			}
@@ -194,8 +187,7 @@ public final class DefParseResult extends XDValueAbstract
 	@Override
 	public final char isInInterval(final char minCh, final char maxCh) {
 		char c;
-		if (_srcIndex >= _source.length()
-			|| (c = _source.charAt(_srcIndex)) < minCh || c > maxCh) {
+		if (_srcIndex >= _source.length() || (c=_source.charAt(_srcIndex)) < minCh || c > maxCh) {
 			return NOCHAR;
 		}
 		_srcIndex++;
@@ -204,8 +196,7 @@ public final class DefParseResult extends XDValueAbstract
 	@Override
 	public final char notInInterval(final char minCh, final char maxCh) {
 		char c;
-		if (_srcIndex >= _source.length()
-			|| (c = _source.charAt(_srcIndex)) >= minCh || c <= maxCh) {
+		if (_srcIndex >= _source.length() || (c=_source.charAt(_srcIndex)) >= minCh || c <= maxCh) {
 			return NOCHAR;
 		}
 		_srcIndex++;
@@ -214,8 +205,7 @@ public final class DefParseResult extends XDValueAbstract
 	@Override
 	public final int isDigit() {
 		char c;
-		if (_srcIndex>=_source.length()
-			|| (c=_source.charAt(_srcIndex))<'0' || c>'9') {
+		if (_srcIndex>=_source.length() || (c=_source.charAt(_srcIndex))<'0' || c>'9') {
 			return -1;
 		}
 		_srcIndex++;
@@ -224,12 +214,10 @@ public final class DefParseResult extends XDValueAbstract
 	@Override
 	public final boolean isInteger() {
 		char c;
-		if (_srcIndex >= _source.length()
-			|| (c=_source.charAt(_srcIndex))<'0' || c>'9') {
+		if (_srcIndex >= _source.length() || (c=_source.charAt(_srcIndex))<'0' || c>'9') {
 			return false;
 		}
-		while (++_srcIndex < _source.length()
-			&& (c=_source.charAt(_srcIndex)) >= '0' && c <= '9') {}
+		while (++_srcIndex < _source.length() && (c=_source.charAt(_srcIndex)) >= '0' && c <= '9'){}
 		return true;
 	}
 	@Override
@@ -273,8 +261,7 @@ public final class DefParseResult extends XDValueAbstract
 	@Override
 	public final char isLetter() {
 		char c;
-		if (_srcIndex >= _source.length()
-			|| !Character.isLetter(c = _source.charAt(_srcIndex))) {
+		if (_srcIndex >= _source.length() || !Character.isLetter(c = _source.charAt(_srcIndex))) {
 			return NOCHAR;
 		}
 		_srcIndex++;
@@ -292,7 +279,7 @@ public final class DefParseResult extends XDValueAbstract
 	}
 	@Override
 	public final char peekChar() {
-		return _srcIndex>=_source.length()?NOCHAR:_source.charAt(_srcIndex++);
+		return _srcIndex >= _source.length() ? NOCHAR : _source.charAt(_srcIndex++);
 	}
 	@Override
 	public final char getCurrentChar() {
@@ -304,7 +291,7 @@ public final class DefParseResult extends XDValueAbstract
 	}
 	@Override
 	public final boolean isToken(final String s) {
-		if (_srcIndex >= _source.length() || !_source.startsWith(s, _srcIndex)){
+		if (_srcIndex >= _source.length() || !_source.startsWith(s, _srcIndex)) {
 			return false;
 		}
 		_srcIndex += s.length();
@@ -332,8 +319,8 @@ public final class DefParseResult extends XDValueAbstract
 		for (int i = 0; i < tokens.length; i++) {
 			String token = tokens[i];
 			int tlen = token.length();
-			if (_srcIndex + tlen < _source.length() && token.equalsIgnoreCase(
-					_source.substring(_srcIndex, _srcIndex + tlen))) {
+			if (_srcIndex + tlen < _source.length()
+				&& token.equalsIgnoreCase(_source.substring(_srcIndex, _srcIndex + tlen))) {
 				if (tlen > len) {
 					result = i;
 					len = tlen;
@@ -349,7 +336,7 @@ public final class DefParseResult extends XDValueAbstract
 	public final boolean isTokenIgnoreCase(String token) {
 		int len = token.length();
 		if (_srcIndex + len <= _source.length() &&
-			token.equalsIgnoreCase(_source.substring(_srcIndex,_srcIndex+len))){
+			token.equalsIgnoreCase(_source.substring(_srcIndex, _srcIndex + len))) {
 			_srcIndex+= len;
 			return true;
 		}
@@ -362,8 +349,7 @@ public final class DefParseResult extends XDValueAbstract
 		}
 		int start = _srcIndex;
 		char ch;
-		while ((ch=_source.charAt(_srcIndex)) != ' '
-			&& ch != '\n' && ch != '\t'&&ch!='\r') {
+		while ((ch=_source.charAt(_srcIndex)) != ' ' && ch != '\n' && ch != '\t'&&ch!='\r') {
 			if (++_srcIndex >= _source.length()) {
 				break;
 			}
@@ -419,9 +405,7 @@ public final class DefParseResult extends XDValueAbstract
 		return false;
 	}
 	@Override
-	public final boolean eos() {
-		return _source == null ? true : _srcIndex >=_source.length();
-	}
+	public final boolean eos() {return _source == null ? true : _srcIndex >=_source.length();}
 	@Override
 	public final void setEos() {_srcIndex=_source==null ? -1: _source.length();}
 	@Override
@@ -439,9 +423,7 @@ public final class DefParseResult extends XDValueAbstract
 	@Override
 	public final void error(final String id) {error(id, null);}
 	@Override
-	public final void error(final String id,
-		final String msg,
-		final Object... mod) {
+	public final void error(final String id, final String msg, final Object... mod) {
 		putReport(Report.error(id, msg, mod));
 	}
 	@Override
@@ -467,9 +449,9 @@ public final class DefParseResult extends XDValueAbstract
 		if (len > 1) {
 			System.arraycopy(mod, 0, modpars, 0, len - 1);
 		}
-		modpars[len-1] = _source == null ? "null"
-			: (_source.length() > 32 ? _source.substring(0,24)+" ... "
-				+ _source.substring(_source.length() - 3): _source);
+		modpars[len-1] = _source == null
+			? "null" : (_source.length() > 32
+			? _source.substring(0,24)+" ... " + _source.substring(_source.length() - 3): _source);
 		error(registeredID, modpars);
 	}
 	@Override
@@ -492,45 +474,25 @@ public final class DefParseResult extends XDValueAbstract
 		return _value == null ? false : ((XDValue)_value).booleanValue();
 	}
 	@Override
-	public byte byteValue() {
-		return _value == null ? 0 : ((XDValue)_value).byteValue();
-	}
+	public byte byteValue() {return _value == null ? 0 : ((XDValue)_value).byteValue();}
 	@Override
-	public short shortValue() {
-		return _value == null ? 0 : ((XDValue)_value).shortValue();
-	}
+	public short shortValue() {return _value == null ? 0 : ((XDValue)_value).shortValue();}
 	@Override
-	public int intValue() {
-		return _value == null ? 0 : ((XDValue)_value).intValue();
-	}
+	public int intValue() {return _value == null ? 0 : ((XDValue)_value).intValue();}
 	@Override
-	public long longValue() {
-		return _value == null ? 0 : ((XDValue)_value).longValue();
-	}
+	public long longValue() {return _value == null ? 0 : ((XDValue)_value).longValue();}
 	@Override
-	public float floatValue() {
-		return _value == null ? 0 : ((XDValue)_value).floatValue();
-	}
+	public float floatValue() {return _value == null ? 0 : ((XDValue)_value).floatValue();}
 	@Override
-	public double doubleValue() {
-		return _value == null ? 0 : ((XDValue)_value).doubleValue();
-	}
+	public double doubleValue() {return _value == null ? 0 : ((XDValue)_value).doubleValue();}
 	@Override
-	public BigDecimal decimalValue() {
-		return _value == null ? null : ((XDValue)_value).decimalValue();
-	}
+	public BigDecimal decimalValue() {return _value==null ?null :((XDValue)_value).decimalValue();}
 	@Override
-	public String stringValue() {
-		return _value == null ? null : ((XDValue)_value).stringValue();
-	}
+	public String stringValue() {return _value == null ? null : ((XDValue)_value).stringValue();}
 	@Override
-	public SDatetime datetimeValue() {
-		return _value == null ? null : ((XDValue)_value).datetimeValue();
-	}
+	public SDatetime datetimeValue() {return _value==null ?null :((XDValue)_value).datetimeValue();}
 	@Override
-	public SDuration durationValue() {
-		return _value == null ? null : ((XDValue)_value).durationValue();
-	}
+	public SDuration durationValue() {return _value==null ?null :((XDValue)_value).durationValue();}
 ////////////////////////////////////////////////////////////////////////////////
 // Implementation of XDValue interface
 ////////////////////////////////////////////////////////////////////////////////
@@ -539,7 +501,7 @@ public final class DefParseResult extends XDValueAbstract
 	@Override
 	public XDValueType getItemType() {return PARSERESULT;}
 	@Override
-	public final String toString() {return _value==null ? "" : _source;}
+	public final String toString() {return _value == null ? "" : _source;}
 	@Override
 	public final void clearReports() {_ar = null;}
 	@Override

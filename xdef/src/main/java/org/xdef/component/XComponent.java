@@ -7,25 +7,21 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-/** Interface of XComponent (Java class generated from X-definitions according
- * to a model of Element). Java source of the XComponent is possible to generate
- * by {@link org.xdef.component.GenXComponent}.
+/** Interface of XComponent (Java class generated from X-definitions according to model of Element).
+ * Java source of XComponent is possible to generate by {@link org.xdef.component.GenXComponent}.
  * @author Vaclav Trojan
  */
 public interface XComponent {
 
 	/** Create XML element from this XComponent (marshal).
-	 * If the argument is null null then document is created with
-	 * created document element.
+	 * If the argument is null null then document is created with created document element.
 	 * @return XML element created from this object.
 	 */
 	public Element toXml();
 
-	/** Create XML element or text node from default model
-	 * as an element created from given document.
+	/** Create XML element or text node from default model as element created from given document.
 	 * @param doc XML Document or null.
-	 * If the argument is null null then document is created with
-	 * created document element.
+	 * If the argument is null null then document is created with created document element.
 	 * @return XML node belonging to given document from this XComponent.
 	 */
 	public Node toXml(Document doc);

@@ -84,8 +84,7 @@ public final class GenXComponent {
 							+ e.getKey() + " from X-definition.*/"+LN);
 					}
 					out.write("public enum "
-						+ enumName
-						+ " implements org.xdef.component.XCEnumeration{"+LN);
+						+ enumName + " implements org.xdef.component.XCEnumeration{"+LN);
 					boolean notFirst = false;
 					StringTokenizer st = new StringTokenizer(values);
 					while (st.hasMoreTokens()) {
@@ -128,8 +127,7 @@ public final class GenXComponent {
 						fos.close();
 					} catch (IOException exx) {}
 				}
-				 //Program exception &{0}
-				reporter.error(SYS.SYS036, STester.printThrowable(ex));
+				reporter.error(SYS.SYS036, STester.printThrowable(ex)); //Program exception &{0}
 			}
 		}
 	}
@@ -145,13 +143,12 @@ public final class GenXComponent {
 	 * @return ArrayReporter with errors and warnings
 	 * @throws IOException if an error occurs.
 	 */
-	public final static ArrayReporter genXComponent(final XDPool xdpool,
+	public static final ArrayReporter genXComponent(final XDPool xdpool,
 		final String fdir,
 		final String charset,
 		final boolean genJavadoc,
 		final boolean suppressPrintWarnings) throws IOException {
-		return genXComponent(xdpool,
-			new File(fdir), charset, genJavadoc, suppressPrintWarnings);
+		return genXComponent(xdpool, new File(fdir), charset, genJavadoc, suppressPrintWarnings);
 	}
 
 	/** Generate XComponent Java source classes from XDPool.
@@ -180,8 +177,7 @@ public final class GenXComponent {
 		for (Entry<String, String> e: xdpool.getXComponents().entrySet()) {
 			String key = e.getKey();
 			XMNode xn = xdpool.findModel(key);
-			String ns = (xn != null && xn.getKind() == XMELEMENT)
-				? ((XElement) xn).getNSUri() : null;
+			String ns = (xn!=null && xn.getKind()==XMELEMENT) ? ((XElement) xn).getNSUri() : null;
 			components.put(e.getKey(), new XComponentInfo(e.getValue(), ns));
 		}
 		for (int runCount = 0; runCount < 2; runCount++) {
@@ -276,8 +272,7 @@ public final class GenXComponent {
 					fparent = new File(fdir, packageName.replace('.', '/'));
 					fparent.mkdirs();
 				}
-				String fName = className.replace('\n', ' ')
-					.replace('\r', ' ').replace('\t', ' ');
+				String fName = className.replace('\n', ' ').replace('\r', ' ').replace('\t', ' ');
 				if ((ndx = fName.indexOf(' ')) > 0) {
 					fName = className.substring(0 , ndx);
 				}
@@ -292,24 +287,17 @@ public final class GenXComponent {
 				}
 				XMNode xn = xdpool.findModel(model);
 				if (xn == null || xn.getKind() != XMELEMENT) {
-					//Model "&{0}" not exsists.
-					reporter.add(Report.fatal(XDEF.XDEF373, model));
+					reporter.add(Report.fatal(XDEF.XDEF373, model)); //Model "&{0}" not exsists.
 					continue;
 				}
-				XCGenerator genxc =
-					new XCGenerator(xdpool, reporter, genJavadoc);
-				final String result = genxc.genXComponent(model, //model name
-					className, //name of generated class
-					extClass, //class extension
-					interfaceName, //name of interface
-					packageName, //package of generated class
-					components); // Map with components
+				XCGenerator genxc = new XCGenerator(xdpool, reporter, genJavadoc);
+				final String result = genxc.genXComponent(
+					model, className, extClass, interfaceName, packageName, components);
 				if (result != null) {
 					File f = new File(fparent, fName + ".java");
 					FileOutputStream fos = new FileOutputStream(f);
-					Writer out = charset == null || charset.isEmpty() ?
-						new OutputStreamWriter(fos) :
-						new OutputStreamWriter(fos, charset);
+					Writer out = charset == null || charset.isEmpty()
+						? new OutputStreamWriter(fos) : new OutputStreamWriter(fos, charset);
 					out.append(SUtils.modifyString(result, "\t", "  ")).close();
 				}
 				if (genxc._interfaces != null) {
@@ -322,11 +310,11 @@ public final class GenXComponent {
 					fparent.mkdirs();
 					File f = new File(fparent, interfaceName + ".java");
 					FileOutputStream fos = new FileOutputStream(f);
-					Writer out = charset == null || charset.isEmpty() ?
-						new OutputStreamWriter(fos) :
-						new OutputStreamWriter(fos, charset);
+					Writer out = charset == null || charset.isEmpty()
+						? new OutputStreamWriter(fos) : new OutputStreamWriter(fos, charset);
 					out.append(SUtils.modifyString(
-						genxc._interfaces.toString(), "\t", "  ")).close();
+						genxc._interfaces.toString(),
+						"\t", "  ")).close();
 				}
 			}
 		}
@@ -346,7 +334,7 @@ public final class GenXComponent {
 	 * the system character set name).
 	 * @throws IOException if an error occurs.
 	 */
-	public final static void genXComponent(final XDPool xdpool,
+	public static final void genXComponent(final XDPool xdpool,
 		final String dir,
 		final String charset) throws IOException {
 		genXComponent(xdpool, dir, charset, false, false);
@@ -398,42 +386,34 @@ public final class GenXComponent {
 		int i = 0;
 		while (i < args.length) {
 			String arg = args[i];
-			if (arg == null || arg.isEmpty()
-				|| arg.charAt(0) != '-' || arg.length() != 2) {
-				throw new RuntimeException(
-					"Incorrect parameter " + (i+1) + ": " + arg + '\n' + info);
+			if (arg == null || arg.isEmpty() || arg.charAt(0) != '-' || arg.length() != 2) {
+				throw new RuntimeException("Incorrect parameter " + ++i + ": " + arg + '\n' +info);
 			}
 			switch (arg.charAt(1)) {
 				case 'd': // Generate JavaDoc
 					if (javadoc) {
-						throw new RuntimeException(
-							"Redefinition of key \"-d\"\n" + info);
+						throw new RuntimeException("Redefinition of key \"-d\"\n" + info);
 					}
 					javadoc = true;
 					continue;
 				case 'e': // Encoding
 					if (encoding != null) {
-						throw new RuntimeException(
-							"Redefinition of key \"-e\".\n" + info);
+						throw new RuntimeException("Redefinition of key \"-e\".\n" + info);
 					}
-					if (++i < args.length && (arg = args[i]) != null &&
-						!arg.startsWith("-")) {
+					if (++i < args.length && (arg = args[i]) != null && !arg.startsWith("-")) {
 						encoding = arg;
 						i++;
 						continue;
 					} else {
-						throw new RuntimeException(
-							"Parameter '-e' is not encoding name.\n" + info);
+						throw new RuntimeException("Parameter '-e' is not encoding name.\n" + info);
 					}
 				case 'i': // X-definitions list of files
-					while (++i < args.length && (arg = args[i]) != null &&
-						!arg.startsWith("-")) {
+					while (++i < args.length && (arg = args[i]) != null && !arg.startsWith("-")) {
 						sources.add(arg);
 					}
 					continue;
 				case 'j': // JAXB annotations
-					System.err.println("Warning JAXB annotations swith"
-						+ " is ignored in this version!");
+					System.err.println("Warning JAXB annotations swith ignored in this version!");
 					continue;
 				case 'h': // help
 					System.out.println(info);
@@ -441,11 +421,9 @@ public final class GenXComponent {
 					continue;
 				case 'o': // Output directory
 					if (xcDir != null) {
-						throw new RuntimeException(
-							"Redefinition of key \"-o\"\n" + info);
+						throw new RuntimeException("Redefinition of key \"-o\"\n" + info);
 					}
-					if (++i < args.length && (arg = args[i]) != null &&
-						!arg.startsWith("-")) {
+					if (++i < args.length && (arg = args[i]) != null && !arg.startsWith("-")) {
 						try {
 							xcDir = new File(arg);
 							if (xcDir.exists() && xcDir.isDirectory()) {
@@ -461,15 +439,13 @@ public final class GenXComponent {
 					}
 				case 'p': // where to write the XDPool
 					if (xpFile != null) {
-						throw new RuntimeException(
-							"Redefinition of key \"-p\"\n" + info);
+						throw new RuntimeException("Redefinition of key \"-p\"\n" + info);
 					}
 					if (++i < args.length && (arg = args[i]) != null &&
 						!arg.startsWith("-")) {
 						File f = new File(arg);
 						if (f.exists() && f.isDirectory()) {
-							throw new RuntimeException(
-								"The key \"-p\" must be file\n" + info);
+							throw new RuntimeException("The key \"-p\" must be file\n" + info);
 						}
 						try {
 							i++;
@@ -477,25 +453,21 @@ public final class GenXComponent {
 							continue;
 						} catch (FileNotFoundException ex) {
 							throw new RuntimeException(
-								"Can't write to the file from tne key \"-p\"\n"
-									+ info, ex);
+								"Can't write to the file from tne key \"-p\"\n" + info, ex);
 						}
 					} else {
-						throw new RuntimeException(
-							"Parameter '-p' is not file\n" + info);
+						throw new RuntimeException("Parameter '-p' is not file\n" + info);
 					}
 				default:
-					throw new RuntimeException("Incorrect parameter \""
-						+arg+"\" on position " + (i+1)+".\n" + info);
+					throw new RuntimeException(
+						"Incorrect parameter \""+arg+"\" on position "+(i+1)+".\n" + info);
 			}
 		}
 		if (sources.isEmpty()) {
-			throw new RuntimeException(
-				"No XDPool source is specified.\n" + info);
+			throw new RuntimeException("No XDPool source is specified.\n" + info);
 		}
 		if (xcDir == null) {
-			throw new RuntimeException(
-				"No output directory specified.\n" + info);
+			throw new RuntimeException("No output directory specified.\n" + info);
 		}
 		try {
 			Object[] xdefs = new String[sources.size()];

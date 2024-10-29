@@ -129,7 +129,7 @@ public abstract class ExternalXDEditor implements XEditor {
 	 * @return XDPool generated from the file from the argument defPool.
 	 * @throws IOException if an error occurs.
 	 */
-	public final static XDPool readXDPool(final String defPool)
+	public static final XDPool readXDPool(final String defPool)
 		throws IOException {
 		File pool = new File(defPool);
 		pool.deleteOnExit(); // we do not need this file more.
@@ -149,7 +149,7 @@ public abstract class ExternalXDEditor implements XEditor {
 	 * @return ArrayReporter created from the file from the argument defPool.
 	 * @throws Exception if an error occurs.
 	 */
-	public final static ArrayReporter readReporter(final String reports)
+	public static final ArrayReporter readReporter(final String reports)
 		throws Exception {
 		File reps = new File(reports);
 		reps.deleteOnExit(); // we do not need this file more.
@@ -169,7 +169,7 @@ public abstract class ExternalXDEditor implements XEditor {
 	 * @param sourceItems map of description of items returned from the editor.
 	 * @throws Exception if an error occurs.
 	 */
-	public final static void genResultFile(final String fileName,
+	public static final void genResultFile(final String fileName,
 		final boolean editingFinished,
 		final Map<String, XDSourceItem> sourceItems) throws Exception {
 		// create the tmp file

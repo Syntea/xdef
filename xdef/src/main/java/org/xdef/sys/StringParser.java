@@ -870,8 +870,7 @@ public class StringParser extends SReporter implements SParser {
 	 * @param source The string with source data.
 	 * @param reporter Report writer.
 	 */
-	public StringParser(final String source,
-		final ReportWriter reporter) {
+	public StringParser(final String source, final ReportWriter reporter) {
 		super(reporter);
 		// all fields are set to null by Java VM
 		setLineNumber(1L);
@@ -879,7 +878,6 @@ public class StringParser extends SReporter implements SParser {
 		_ch = _endPos > 0 ? _source.charAt(0) : NOCHAR;
 	}
 ////////////////////////////////////////////////////////////////////////////////
-
 	/** Max. size of source buffer for stream parser. */
 	private static final int SOURCE_BUFFER_SIZE = 2048;
 
@@ -918,8 +916,8 @@ public class StringParser extends SReporter implements SParser {
 				con.getContentEncoding()), filePos);
 			setSysId(url.toExternalForm());
 		} catch (IOException ex) {
-			throw new SRuntimeException(SYS.SYS076,//URL &{0} error: &{1}{; }
-				url.toExternalForm(), ex.getMessage());
+			//URL &{0} error: &{1}{; }
+			throw new SRuntimeException(SYS.SYS076, url.toExternalForm(), ex.getMessage());
 		}
 	}
 
@@ -928,9 +926,7 @@ public class StringParser extends SReporter implements SParser {
 	 * @param reporter Report writer connected to parser.
 	 * @param filePos RBA position of the start.
 	 */
-	public StringParser(final Reader reader,
-		final ReportWriter reporter,
-		final long filePos) {
+	public StringParser(final Reader reader, final ReportWriter reporter, final long filePos) {
 		super(reporter);
 		setSourceReader(reader, filePos);
 	}
@@ -952,12 +948,10 @@ public class StringParser extends SReporter implements SParser {
 			setSysId("file:" + file.getCanonicalPath().replace('\\','/'));
 		} catch (UnsupportedEncodingException ex) {
 			setSourceBuffer("");
-			//Unsupported character set name: &{0}
-			throw new SRuntimeException(SYS.SYS035, charset);
+			throw new SRuntimeException(SYS.SYS035, charset); //Unsupported character set name: &{0}
 		} catch (IOException ex) {
 			setSourceBuffer("");
-			//File doesn't exist: &{0}
-			throw new SRuntimeException(SYS.SYS024, file);
+			throw new SRuntimeException(SYS.SYS024, file); //File doesn't exist: &{0}
 		}
 	}
 
@@ -969,13 +963,11 @@ public class StringParser extends SReporter implements SParser {
 		String s = url.toExternalForm();
 		try {
 			URLConnection con = url.openConnection();
-			setSourceReader(new InputStreamReader(con.getInputStream(),
-				con.getContentEncoding()));
+			setSourceReader(new InputStreamReader(con.getInputStream(), con.getContentEncoding()));
 			setSysId(s);
 		} catch (IOException ex) {
 			setSourceBuffer("");
-			//URL &{0} error: &{1}{; }
-			throw new SRuntimeException(SYS.SYS076, s,ex);
+			throw new SRuntimeException(SYS.SYS076, s,ex); //URL &{0} error: &{1}{; }
 		}
 	}
 
@@ -992,8 +984,7 @@ public class StringParser extends SReporter implements SParser {
 	 * @param sourceName the name of source file.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	final void setSourceReader(final Reader reader,
-		final String sourceName) {
+	final void setSourceReader(final Reader reader, final String sourceName) {
 		setSourceReader(reader, 0L, null);
 		setSysId(sourceName);
 	}
@@ -1011,11 +1002,8 @@ public class StringParser extends SReporter implements SParser {
 	 * @param reader The reader.
 	 * @param pos Starting position of the file.
 	 * @param source Initial source buffer.
-	 * @throws SRuntimeException if an error occurs.
 	 */
-	public final void setSourceReader(final Reader reader,
-		final long pos,
-		final String source) {
+	public final void setSourceReader(final Reader reader, final long pos, final String source) {
 		setLineNumber(1L);
 		setFilePos(pos);
 		setStartLine(getFilePos());
@@ -1035,8 +1023,8 @@ public class StringParser extends SReporter implements SParser {
 			try {
 				_reader.skip(pos);
 			} catch (IOException ex) {
-				throw new SRuntimeException(//Program exception&{0}{: }
-					SYS.SYS036, STester.printThrowable(ex));
+				//Program exception&{0}{: }
+				throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex));
 			}
 		}
 		setIndex(0);
@@ -1099,8 +1087,7 @@ public class StringParser extends SReporter implements SParser {
 				while (len == 0) {//some streams may return length == 0 ???
 					if (count++ > 1000) {
 						//IO error detected on &{0}&{1}{, reason: }
-						throw new SIOException(SYS.SYS034,
-							getSystemId(), "block length=0");
+						throw new SIOException(SYS.SYS034, getSystemId(), "block length=0");
 					}
 					try {
 						sleepwile();
@@ -1127,18 +1114,14 @@ public class StringParser extends SReporter implements SParser {
 				setEndBuffer(remains + len);
 				if (len == _cbuf.length) {
 					setBuffer(new StringBuilder(_endPos).
-						append(getBuffer().substring(getIndex(),
-							getIndex() + remains))
+						append(getBuffer().substring(getIndex(), getIndex() + remains))
 						.append(_cbuf).toString());
 				} else {
-					setBuffer(new StringBuilder(_endPos).
-						append(getBuffer().substring(getIndex(),
-							getIndex() + remains))
-						.append(_cbuf, 0, len).toString());
+					setBuffer(new StringBuilder(_endPos).append(getBuffer().substring(getIndex(),
+						getIndex() + remains)).append(_cbuf, 0, len).toString());
 				}
 			} else {
-				setBuffer(len == _cbuf.length ?
-					new String(_cbuf) :	new String(_cbuf, 0, len));
+				setBuffer(len == _cbuf.length ? new String(_cbuf) : new String(_cbuf, 0, len));
 			}
 			setFilePos(getFilePos() + getIndex());
 			setIndex(0);
@@ -1150,9 +1133,7 @@ public class StringParser extends SReporter implements SParser {
 			throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex));
 		}
 	}
-	private void sleepwile() throws InterruptedException {
-		Thread.sleep(5);
-	}
+	private void sleepwile() throws InterruptedException {Thread.sleep(5);}
 
 	/** Add character to actual buffer from input stream (if necessary and
 	 * if available and).
@@ -1211,8 +1192,8 @@ public class StringParser extends SReporter implements SParser {
 				setBuffer(sb.toString());
 				//this should never happen
 				closeReader();
-				throw new SRuntimeException(//Program exception&{0}{: }
-					SYS.SYS036, STester.printThrowable(ex));
+				//Program exception&{0}{: }
+				throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex));
 			}
 		} while (n > _endPos);
 		setBuffer(sb.toString());
@@ -1261,14 +1242,11 @@ public class StringParser extends SReporter implements SParser {
 		parser.setLineNumber(getLineNumber());
 		parser.setBuffer(getBuffer());
 		parser.setIndex(getIndex());
-
 		parser.setSysId(getSysId());
 		parser.copyModificationInfo(this);
 		parser.setLineInfoFlag(isLineInfoFlag());
 		parser._reader = _reader;
-//		parser._savedObject = _savedObject;
 		_parserStack.push(parser);
-//		_savedObject = savedObject;
 		setLineNumber(0L);
 		setStartLine(0L);
 		setFilePos(0L);
@@ -1323,9 +1301,7 @@ public class StringParser extends SReporter implements SParser {
 	 * the value of this is set to false.
 	 * @param lineInfo set the lineInfo flag.
 	 */
-	public final void setLineInfoFlag(final boolean lineInfo) {
-		_lineInfo = lineInfo;
-	}
+	public final void setLineInfoFlag(final boolean lineInfo) {_lineInfo = lineInfo;}
 
 	/** Check if the detailed line positions are required.
 	 * @return true if and only if the detailed line positions are required.
@@ -1640,8 +1616,7 @@ public class StringParser extends SReporter implements SParser {
 		int pos = getIndex();
 		for (int i = 0; i < tokens.length; i++) {
 			int tlen;
-			if (ensureBuffer(tlen = tokens[i].length()) &&
-				_source.startsWith(tokens[i], pos)) {
+			if (ensureBuffer(tlen = tokens[i].length()) && _source.startsWith(tokens[i], pos)) {
 				if (tlen > len) {
 					result = i;
 					len = tokens[i].length();
@@ -1651,8 +1626,7 @@ public class StringParser extends SReporter implements SParser {
 		if (result != -1) {
 			ensureBuffer(len+1);
 			super.setIndex(pos += len);
-			_ch = pos + len < _endPos || readNextBuffer()
-				? _source.charAt(getIndex()) : NOCHAR;
+			_ch = pos + len < _endPos || readNextBuffer() ? _source.charAt(getIndex()) : NOCHAR;
 		}
 		return result;
 	}
@@ -1670,8 +1644,7 @@ public class StringParser extends SReporter implements SParser {
 		for (int i = 0; i < tokens.length; i++) {
 			String token = tokens[i];
 			int tlen = token.length();
-			if (ensureBuffer(tlen) &&
-				token.equalsIgnoreCase(_source.substring(pos, pos + tlen))) {
+			if (ensureBuffer(tlen) && token.equalsIgnoreCase(_source.substring(pos, pos + tlen))) {
 				if (tlen > len) {
 					result = i;
 					len = tlen;
@@ -1681,8 +1654,7 @@ public class StringParser extends SReporter implements SParser {
 		if (result != -1) {
 			ensureBuffer(len+1);
 			super.setIndex(pos += len);
-			_ch = pos + len < _endPos || readNextBuffer()
-				? _source.charAt(getIndex()) : NOCHAR;
+			_ch = pos + len < _endPos || readNextBuffer() ? _source.charAt(getIndex()) : NOCHAR;
 		}
 		return result;
 	}
@@ -1700,12 +1672,10 @@ public class StringParser extends SReporter implements SParser {
 			int len = token.length();
 			int pos = getIndex();
 			if (pos + len <= _endPos || ensureBuffer(len)) {
-				if (token.equalsIgnoreCase(
-					_source.substring(pos, pos + len))) {
+				if (token.equalsIgnoreCase(_source.substring(pos, pos + len))) {
 					ensureBuffer(len+1);
 					super.setIndex(pos += len);
-					_ch = pos<_endPos || readNextBuffer()
-						? _source.charAt(getIndex()) : NOCHAR;
+					_ch = pos<_endPos || readNextBuffer() ? _source.charAt(getIndex()) : NOCHAR;
 					return true;
 				}
 			}
@@ -1875,8 +1845,7 @@ public class StringParser extends SReporter implements SParser {
 			}
 			int i = incIndex();
 			if (chars.indexOf(c) >= 0) {
-				_ch = i <_endPos || readNextBuffer()
-					? _source.charAt(getIndex()) : NOCHAR;
+				_ch = i <_endPos || readNextBuffer() ? _source.charAt(getIndex()) : NOCHAR;
 				return c;
 			}
 		}
@@ -1978,8 +1947,7 @@ public class StringParser extends SReporter implements SParser {
 	 * @return string with part of the source buffer from index to end.
 	 */
 	public final String getBufferPart(final int start, final int end) {
-		return start < _endPos ?
-			_source.substring(start, end < _endPos ? end : _endPos) : "";
+		return start < _endPos ? _source.substring(start, end < _endPos ? end : _endPos) : "";
 	}
 
 	@Override
@@ -2143,9 +2111,7 @@ public class StringParser extends SReporter implements SParser {
 	/** Check if parsed datetime is valid .
 	 * @return true if parsed date is OK.
 	 */
-	public boolean testParsedDatetime() {
-		return _parsedDatetime != null && _parsedDatetime.check();
-	}
+	public boolean testParsedDatetime() {return _parsedDatetime != null && _parsedDatetime.check();}
 
 	@Override
 	/** Check if parser reached the end of source.
@@ -2191,8 +2157,7 @@ public class StringParser extends SReporter implements SParser {
 			setNewLine();
 		}
 		if (incIndex() < _endPos || readNextBuffer()) {
-			while (XML_CHARTAB0[_ch = _source.charAt(getIndex())] ==
-				XML_CHAR_WHITESPACE) {
+			while (XML_CHARTAB0[_ch = _source.charAt(getIndex())] == XML_CHAR_WHITESPACE) {
 				if (_ch == '\n') {
 					setNewLine();
 				}
@@ -2295,8 +2260,7 @@ public class StringParser extends SReporter implements SParser {
 	public final boolean isToken(final String token) {
 		if (_ch == token.charAt(0)) {
 			int len;
-			if (getIndex() + (len =  token.length()) <= _endPos
-				|| ensureBuffer(len)){
+			if (getIndex() + (len =  token.length()) <= _endPos || ensureBuffer(len)){
 				int x = getIndex();
 				if (!_source.startsWith(token, x)) {
 					return false;
@@ -2403,8 +2367,7 @@ public class StringParser extends SReporter implements SParser {
 	 * date format.
 	 */
 	public final boolean isISO8601Date() {
-		return isDatetime(
-			"yyyy-MM-dd[Z]|yyyy-DDD[Z]|yyyy-'W'w-e[Z]|yyyy'W'wwe[Z]");
+		return isDatetime("yyyy-MM-dd[Z]|yyyy-DDD[Z]|yyyy-'W'w-e[Z]|yyyy'W'wwe[Z]");
 	}
 
 	/** Parse time in ISO8601 format (see
@@ -2413,9 +2376,7 @@ public class StringParser extends SReporter implements SParser {
 	 * @return true if date on current position suits to ISO8601
 	 * time format.
 	 */
-	public final boolean isISO8601Time() {
-		return isDatetime("HH:mm[:ss[.S]][Z]");
-	}
+	public final boolean isISO8601Time() {return isDatetime("HH:mm[:ss[.S]][Z]");}
 
 	/** Parse date according to RFC822 (email format). (see
 	 * <a href = "http://www.w3.org/Protocols/rfc822/">rfc822</a>).
@@ -2569,8 +2530,7 @@ public class StringParser extends SReporter implements SParser {
 						} else if (pat == '\'' || pat == '"') {// literal
 							while (fpos + 1 < flen) {
 								if (mask.charAt(fpos++) == pat) {
-									if (fpos < flen
-										&& mask.charAt(fpos) == pat) {
+									if (fpos < flen && mask.charAt(fpos) == pat) {
 										fpos++;
 										continue;
 									}
@@ -2590,8 +2550,7 @@ public class StringParser extends SReporter implements SParser {
 							fpos++;
 							while (fpos < flen) {
 								if (mask.charAt(fpos++) == '\'') {
-									if (fpos < flen &&
-										mask.charAt(fpos) == '\'') {
+									if (fpos < flen && mask.charAt(fpos) == '\'') {
 										fpos++;
 										continue;
 									}
@@ -2680,8 +2639,7 @@ public class StringParser extends SReporter implements SParser {
 					myDate._weekInMonth = i;
 					continue;
 				case 'G': //era designator (BC, AD)
-					i = isOneOfTokens(
-						myDate.getLocaleFormatSymbols().getEras());
+					i = isOneOfTokens(myDate.getLocaleFormatSymbols().getEras());
 					if (i < 0) { //error
 						failVariant = true;
 						continue;
@@ -2696,11 +2654,9 @@ public class StringParser extends SReporter implements SParser {
 					myDate._day = i;
 					continue;
 				case 'M': //month in year
-					i = n < 3 ? readUnsignedIntSpecifiedLength(n) :
-						n == 3 ? isOneOfTokens(myDate.
-							getLocaleFormatSymbols().getShortMonths()) :
-						isOneOfTokens(myDate.
-							getLocaleFormatSymbols().getMonths());
+					i = n < 3 ? readUnsignedIntSpecifiedLength(n)
+						: n == 3 ? isOneOfTokens(myDate.getLocaleFormatSymbols().getShortMonths())
+						: isOneOfTokens(myDate.getLocaleFormatSymbols().getMonths());
 					if (i < 0) {
 						failVariant = true;
 						continue;
@@ -2750,8 +2706,7 @@ public class StringParser extends SReporter implements SParser {
 					continue;
 				}
 				case 'a': { //AM/PM marker
-					int pm = isOneOfTokens(myDate.
-						getLocaleFormatSymbols().getAmPmStrings());
+					int pm = isOneOfTokens(myDate.getLocaleFormatSymbols().getAmPmStrings());
 					if (pm < 0) { //error
 						failVariant = true;
 						continue;
@@ -2760,10 +2715,8 @@ public class StringParser extends SReporter implements SParser {
 					continue;
 				}
 				case 'E': //day of week (text)
-					i = (n > 3) ? isOneOfTokens(myDate.
-							getLocaleFormatSymbols().getWeekdays())
-						: isOneOfTokens(myDate.
-							getLocaleFormatSymbols().getShortWeekdays());
+					i = (n > 3) ? isOneOfTokens(myDate.getLocaleFormatSymbols().getWeekdays())
+						: isOneOfTokens(myDate.getLocaleFormatSymbols().getShortWeekdays());
 					if (i < 0) {//error
 						failVariant = true;
 						continue;
@@ -2853,8 +2806,7 @@ public class StringParser extends SReporter implements SParser {
 						if ((sign = _ch == '-' ? -1 : 1) == -1) {
 							nextChar();
 						}
-						int q = (fpos >= flen ||
-							"MD".indexOf(mask.charAt(fpos)) < 0) ? 0 : n;
+						int q = (fpos >= flen || "MD".indexOf(mask.charAt(fpos)) < 0) ? 0 : n;
 						int k = getIndex();
 						i = readUnsignedIntSpecifiedLength(q);
 						if (i >= 0 && n == 4 && getIndex() - k < 4) {
@@ -2868,8 +2820,7 @@ public class StringParser extends SReporter implements SParser {
 						continue;
 					}
 					if (n == 2 && i < 100) { // this is a nasty feature
-						int century =
-							new GregorianCalendar().get(Calendar.YEAR);
+						int century = new GregorianCalendar().get(Calendar.YEAR);
 						int year = century % 100; // actual year in century;
 						century /= 100; // actual century
 						// decrease century if the actual year in in century
@@ -2894,8 +2845,7 @@ public class StringParser extends SReporter implements SParser {
 	 from the actual year.
 */
 					if (n != 2) {
-						//Datetime mask: incorrect year specification
-						// &{0}{, position: }
+						//Datetime mask: incorrect year specification &{0}{, position: }
 						throw new SRuntimeException(SYS.SYS059, fpos-3);
 					}
 					if ((i = readUnsignedIntSpecifiedLength(n)) < 0) {
@@ -2915,8 +2865,7 @@ public class StringParser extends SReporter implements SParser {
 				case 'z': {//RFC822 zone
 					if (n != 0 && n != 2 && n != 5 && n != 6) {
 						freeBuffer();
-						//Datetime mask: incorrect zone format
-						// &{0}{, position: }
+						//Datetime mask: incorrect zone format &{0}{, position: }
 						throw new SRuntimeException(SYS.SYS050, fpos-n);
 					}
 					TimeZone tz = readTimeZone(n, pat);
@@ -2959,8 +2908,7 @@ public class StringParser extends SReporter implements SParser {
 					}
 					if (pat != delim) {
 						freeBuffer();
-						//Datetime mask: unclosed quoted
-						// literal&{0}{, position: }
+						//Datetime mask: unclosed quoted literal&{0}{, position: }
 						throw new SRuntimeException(SYS.SYS049, (beg+1));
 					}
 					continue;
@@ -2997,8 +2945,7 @@ public class StringParser extends SReporter implements SParser {
 						}
 						if (pat != delim) {
 							freeBuffer();
-							//Datetime mask: unclosed quoted
-							// literal&{0}{, position: }
+							//Datetime mask: unclosed quoted literal&{0}{, position: }
 							throw new SRuntimeException(SYS.SYS049, beg);
 						}
 						if (foundChar) {
@@ -3061,24 +3008,22 @@ public class StringParser extends SReporter implements SParser {
 			myDate._month == Integer.MIN_VALUE &&
 			myDate._day == Integer.MIN_VALUE) {
 			if (myDate._yearDay != Integer.MIN_VALUE) {
-				GregorianCalendar gc =//compute month and date from year day
-					new GregorianCalendar(myDate._year, 0, 1);
+				//compute month and date from year day
+				GregorianCalendar gc = new GregorianCalendar(myDate._year, 0, 1);
 				gc.add(Calendar.DAY_OF_YEAR, myDate._yearDay - 1);
 				myDate._yearDay = Integer.MIN_VALUE;
 				myDate._year = gc.get(Calendar.YEAR);
 				myDate._month = gc.get(Calendar.MONTH) + 1;
 				myDate._day = gc.get(Calendar.DAY_OF_MONTH);
-			} else if (myDate._weekInYear != Integer.MIN_VALUE &&
-				myDate._weekDay != Integer.MIN_VALUE) {
-				GregorianCalendar gc =//compute month and date from week and day
-					new GregorianCalendar(myDate._year, 0, 1);
+			} else if (myDate._weekInYear!=Integer.MIN_VALUE && myDate._weekDay!=Integer.MIN_VALUE){
+				//compute month and date from week and day
+				GregorianCalendar gc = new GregorianCalendar(myDate._year, 0, 1);
 				if (Calendar.SUNDAY == myDate._weekDay) {
 					myDate._weekInYear++;
 				}
 				//Week is between 1 to 52 (or 53 the last week in year)
 				gc.add(Calendar.WEEK_OF_YEAR, myDate._weekInYear -1);
-				gc.add(Calendar.DATE,
-					myDate._weekDay - gc.get(Calendar.DAY_OF_WEEK));
+				gc.add(Calendar.DATE, myDate._weekDay - gc.get(Calendar.DAY_OF_WEEK));
 				myDate._weekInYear = Integer.MIN_VALUE;
 				myDate._weekDay = Integer.MIN_VALUE;
 				myDate._year = gc.get(Calendar.YEAR);
@@ -3125,12 +3070,11 @@ public class StringParser extends SReporter implements SParser {
 			return TimeZone.getTimeZone("UTC");
 		}
 		char ch;
-		if ((ch = isOneOfChars("+-")) == NOCHAR
-			&& (pat == 'Z' && (n > 0 && n < 6) || pat == 'z')) {//zone name
+		if ((ch = isOneOfChars("+-")) == NOCHAR && (pat == 'Z' && (n > 0 && n < 6) || pat == 'z')) {
+			//zone name
 			ParsePosition pp = new ParsePosition(getIndex());
 			boolean zoneOffsetSpec = false;
-			new SimpleDateFormat(
-				SUtils.makeStringOfChars(n==0 ? 1 : n, 'z')).parse(_source, pp);
+			new SimpleDateFormat(SUtils.makeStringOfChars(n==0 ? 1 : n, 'z')).parse(_source, pp);
 			int newPos = pp.getIndex();
 			if (newPos != getIndex()) {
 				String s = _source.substring(getIndex(), pp.getIndex());
@@ -3144,20 +3088,17 @@ public class StringParser extends SReporter implements SParser {
 				return null; //not parsed
 			}
 			String s = _source.substring(getIndex(), newPos);
-			TimeZone tz = TimeZone.getTimeZone(s);
-			if (tz == null || "GMT".equals(tz.getID()) &&
-				!(s.equalsIgnoreCase("GMT") || s.equalsIgnoreCase("UTC"))) {
-				if ("CEST". equals(s)) {
-					tz =  TimeZone.getTimeZone("CET");
-				} else {
-					return null; //?????
-				}
+			TimeZone tz = TimeZone.getTimeZone(("CEST".equals(s) ? "CET" : s));
+			if (tz == null || "GMT".equals(tz.getID()) && !(s.equalsIgnoreCase("GMT")
+				|| s.equalsIgnoreCase("UTC"))) {
+				return null; // error ?????
 			}
 			// parsed OK
 			if (!zoneOffsetSpec) {
 				setIndex(newPos);
 				return tz;
-			}//after UTC or GMT we still try to read offset!
+			}
+			//after UTC or GMT we still try to read offset!
 			setIndex(newPos + 1);
 		}
 		if (eos() || ch == NOCHAR) {
@@ -3187,8 +3128,7 @@ public class StringParser extends SReporter implements SParser {
 					return null; //number expected after ':'
 				}
 				pos = getIndex();
-				if ((j = readUnsignedIntSpecifiedLength(nn)) < 0
-					|| getIndex() - pos > 2) {
+				if ((j = readUnsignedIntSpecifiedLength(nn)) < 0 || getIndex() - pos > 2) {
 					return null; //number expected
 				}
 			} else {
@@ -3202,8 +3142,7 @@ public class StringParser extends SReporter implements SParser {
 				i /= 100;
 			}
 		}
-		if (i == Integer.MIN_VALUE || j == Integer.MIN_VALUE
-			|| i > 14 || j > 59) {
+		if (i == Integer.MIN_VALUE || j == Integer.MIN_VALUE || i > 14 || j > 59) {
 			return null; //something wrong
 		}
 		i *= 3600000;
@@ -3247,8 +3186,7 @@ public class StringParser extends SReporter implements SParser {
 			if (isInteger()) {
 				_parsedDuration.setRecurrence(getParsedInt());
 			} else {
-				//Icorrect format of time period
-				throw new SRuntimeException(SYS.SYS056);
+				throw new SRuntimeException(SYS.SYS056); //Icorrect format of time period
 			}
 			if (!isChar('/')) {
 				//Icorrect format of time period
@@ -3257,27 +3195,22 @@ public class StringParser extends SReporter implements SParser {
 		}
 		if (isISO8601Datetime()) {
 			if (!testParsedDatetime()) {
-				//Icorrect format of time period
-				throw new SRuntimeException(SYS.SYS056);
+				throw new SRuntimeException(SYS.SYS056); //Icorrect format of time period
 			}
 			_parsedDuration.setStart(getParsedSDatetime());
 			if (!isChar('/')) {
-				//Icorrect format of time period
-				throw new SRuntimeException(SYS.SYS056);
+				throw new SRuntimeException(SYS.SYS056); //Icorrect format of time period
 			}
 			if (isISO8601Datetime()) {
 				if (!testParsedDatetime()) {
-					//Icorrect format of time period
-					throw new SRuntimeException(SYS.SYS056);
+					throw new SRuntimeException(SYS.SYS056); //Icorrect format of time period
 				}
 				_parsedDuration.setEnd(getParsedSDatetime());
 			} else if (!chkInterval(xmlSchema)) {
-					//Icorrect format of time period
-					throw new SRuntimeException(SYS.SYS056);
+					throw new SRuntimeException(SYS.SYS056); //Icorrect format of time period
 				} else if (isChar('/')) {
 				if (!isISO8601Datetime()) {
-					//Icorrect format of time period
-					throw new SRuntimeException(SYS.SYS056);
+					throw new SRuntimeException(SYS.SYS056); //Icorrect format of time period
 				}
 				_parsedDuration.setEnd(getParsedSDatetime());
 			}
@@ -3285,18 +3218,15 @@ public class StringParser extends SReporter implements SParser {
 			if (isChar('/')) {
 				if (isISO8601Datetime()) {
 					if (!testParsedDatetime()) {
-						//Icorrect format of time period
-						throw new SRuntimeException(SYS.SYS056);
+						throw new SRuntimeException(SYS.SYS056); //Icorrect format of time period
 					}
 					_parsedDuration.setEnd(getParsedSDatetime());
 				} else {
-					//Icorrect format of time period
-					throw new SRuntimeException(SYS.SYS056);
+					throw new SRuntimeException(SYS.SYS056); //Icorrect format of time period
 				}
 			}
 		} else {
-			//Icorrect format of time period
-			throw new SRuntimeException(SYS.SYS056);
+			throw new SRuntimeException(SYS.SYS056); //Icorrect format of time period
 		}
 		return true;
 	}
@@ -3395,8 +3325,7 @@ public class StringParser extends SReporter implements SParser {
 		}
 		if (isChar('T')) {
 			if (time) {
-				//Icorrect format of time period
-				throw new SRuntimeException(SYS.SYS056);
+				throw new SRuntimeException(SYS.SYS056); //Icorrect format of time period
 			}
 			time = true;
 			if (!xmlSchema && isDatetime("TH:m[:s[.S]]][Z]")) {
@@ -3406,8 +3335,7 @@ public class StringParser extends SReporter implements SParser {
 				_parsedDuration.setFraction(_parsedDatetime.getFraction());
 			} else {
 				if (!isInteger()) {
-					//Icorrect format of time period
-					throw new SRuntimeException(SYS.SYS056);
+					throw new SRuntimeException(SYS.SYS056); //Icorrect format of time period
 				}
 				boolean hours = false;
 				boolean minutes = false;
@@ -3420,7 +3348,8 @@ public class StringParser extends SReporter implements SParser {
 							if (hours) {
 								//Icorrect format of time period
 								throw new SRuntimeException(SYS.SYS056);
-							}	hours = true;
+							}
+							hours = true;
 							if (minutes || seconds || millis) {
 								//Icorrect format of time period
 								throw new SRuntimeException(SYS.SYS056);
@@ -3430,7 +3359,8 @@ public class StringParser extends SReporter implements SParser {
 							if (minutes) {
 								//Icorrect format of time period
 								throw new SRuntimeException(SYS.SYS056);
-							}	minutes = true;
+							}
+							minutes = true;
 							if (seconds || millis) {
 								//Icorrect format of time period
 								throw new SRuntimeException(SYS.SYS056);
@@ -3440,7 +3370,8 @@ public class StringParser extends SReporter implements SParser {
 							if (seconds) {
 								//Icorrect format of time period
 								throw new SRuntimeException(SYS.SYS056);
-							}	seconds = true;
+							}
+							seconds = true;
 							if (millis) {
 								//Icorrect format of time period
 								throw new SRuntimeException(SYS.SYS056);
@@ -3461,13 +3392,16 @@ public class StringParser extends SReporter implements SParser {
 							}
 							if (fraction != 0.0) {
 								_parsedDuration.setFraction(fraction);
-							}	if (exp == 1.0) {//no digits after '.'
+							}
+							if (exp == 1.0) {//no digits after '.'
 								//Icorrect format of time period
 								throw new SRuntimeException(SYS.SYS056);
-							}	if (!isChar('S')) {
+							}
+							if (!isChar('S')) {
 								//Icorrect format of time period
 								throw new SRuntimeException(SYS.SYS056);
-							}	break;
+							}
+							break;
 						default:
 							break;
 					}
@@ -3489,8 +3423,7 @@ public class StringParser extends SReporter implements SParser {
 		for (;;) {
 			switch (_ch) {
 				case NOCHAR:
-					//Datetime mask: missing closing character
-					//&{0}{: '}{'}&{1}{, position: }
+					//Datetime mask: missing closing character&{0}{: '}{'}&{1}{, position: }
 					return Report.error(SYS.SYS064, null, beg);
 				case '}':
 					nextChar();
@@ -3500,14 +3433,12 @@ public class StringParser extends SReporter implements SParser {
 					char ch = _ch;
 					nextChar();
 					if (!isChar('(')) {
-						//Datetime mask: expected character
-						//&{0}{: '}{'}&{1}{, position: }
+						//Datetime mask: expected character&{0}{: '}{'}&{1}{, position: }
 						return Report.error(SYS.SYS079, "(", getIndex());
 					}
 					if (isChar('*')) {
 						if (!isChar(')')) {
-							//Datetime mask: missing closing character
-							//&{0}{: '}{'}&{1}{, position: }
+							//Datetime mask: missing closing character&{0}{: '}{'}&{1}{, position: }
 							return Report.error(SYS.SYS064, ")", beg);
 						}
 						if (ch == 'z') {// zone
@@ -3530,8 +3461,7 @@ public class StringParser extends SReporter implements SParser {
 							return Report.error(SYS.SYS064, null, beg);
 						}
 						char c;
-						if ((c = isOneOfChars(
-							"\t\n\r |;!@#$%^&(=[]{}\"'?><\\")) != NOCHAR) {
+						if ((c = isOneOfChars("\t\n\r |;!@#$%^&(=[]{}\"'?><\\")) != NOCHAR) {
 							//Datetime mask: incorrect control
 							//character&{0}{: '}{'}&{1}{, position: }
 							return Report.error(SYS.SYS063, c, getIndex());
@@ -3546,8 +3476,7 @@ public class StringParser extends SReporter implements SParser {
 								continue;
 							}
 							if (i++ <= 1) {
-								String s =
-									_source.substring(start, getIndex() - 1);
+								String s = _source.substring(start, getIndex() - 1);
 								if (i == 1) {
 									p1 = s;
 								} else {
@@ -3576,10 +3505,8 @@ public class StringParser extends SReporter implements SParser {
 							if (ch == 'z') {
 								TimeZone tz;
 								if ((tz = TimeZone.getTimeZone(p1)) == null ||
-									("GMT".equals(tz.getID()) &&
-									!"GMT".equalsIgnoreCase(p1))) {
-									//Datetime mask error:
-									// unsupported timezone name
+									("GMT".equals(tz.getID()) && !"GMT".equalsIgnoreCase(p1))) {
+									//Datetime mask error: unsupported timezone name
 									//&{0}{: '}{'}&{1}{, position: }
 									return Report.error(SYS.SYS061, p1, start);
 								}
@@ -3588,24 +3515,20 @@ public class StringParser extends SReporter implements SParser {
 								try { //check language code
 									SUtils.getISO3Language(p1);
 								} catch (SRuntimeException ex) {
-									//Datetime mask error:
-									// unsupported language code
+									//Datetime mask error: unsupported language code
 									//&{0}{: '}{'}&{1}{, position: }
 									return Report.error(SYS.SYS060,
-										"" + p1, "" + (i == 2 ?
-										start - p3.length() - p2.length() :
-										i == 1 ? start - p2.length() : start));
+										"" + p1, "" + (i == 2 ? start - p3.length() - p2.length()
+											: i == 1 ? start - p2.length() : start));
 								}
 								if ( i > 0 && !SUtils.isCountryCode(p2)) {
-									//Datetime mask error:
-									// unsupported country code
+									//Datetime mask error: unsupported country code
 									//&{0}{: '}{'}&{1}{, position: }
 									return Report.error(SYS.SYS067, p2,
 										(i==2 ? start-p2.length() : start));
 								}
-								_parsedDatetime.setLocaleFormatSymbols(
-									new DateFormatSymbols(
-										new Locale(p1,p2,p3)));
+								_parsedDatetime.setLocaleFormatSymbols(new DateFormatSymbols(
+									new Locale(p1,p2,p3)));
 							}
 							break;
 						} else {
@@ -3634,16 +3557,13 @@ public class StringParser extends SReporter implements SParser {
 					_parsedDatetime = null;
 					try {
 						if (!isDatetime(s) || !_parsedDatetime.chkDatetime()) {
-							//Datetime mask: incorrect initial value
-							//{0}{: '}{'}&{1}{, position: }
+							//Datetime mask: incorrect initial value{0}{: '}{'}&{1}{, position: }
 							return Report.error(SYS.SYS062,
 								_source.substring(start, getIndex()), start);
 						}
 					} catch (SRuntimeException ex) {
-						//Datetime mask: incorrect initial value
-						//{0}{: '}{'}&{1}{, position: }
-						return Report.error(SYS.SYS062,
-							_source.substring(start, getIndex()), start);
+						//Datetime mask: incorrect initial value{0}{: '}{'}&{1}{, position: }
+						return Report.error(SYS.SYS062, _source.substring(start, getIndex()),start);
 					}
 					switch (ch) {
 						case 'Y': //year ISO
@@ -3676,8 +3596,7 @@ public class StringParser extends SReporter implements SParser {
 					continue;
 				}
 				default:
-					//Datetime mask: incorrect control character
-					//&{0}{: '}{'}&{1}{, position: }
+					//Datetime mask: incorrect control character&{0}{: '}{'}&{1}{, position: }
 					return Report.error(SYS.SYS063, _ch, getIndex());
 			}
 		}
@@ -3707,8 +3626,7 @@ public class StringParser extends SReporter implements SParser {
 	 */
 	private Report checkDateFormatMask() {
 		if (_ch == '|') {
-			//Datetime mask: section can't start with '|' (variant)
-			// &{0}{, position: }
+			//Datetime mask: section can't start with '|' (variant) &{0}{, position: }
 			return Report.error(SYS.SYS078, getIndex());
 		}
 		Report r;
@@ -3771,8 +3689,7 @@ public class StringParser extends SReporter implements SParser {
 					if (ch == 'y' && n == 3 ||
 						ch == 'Y' && n != 1 && n != 2 ||
 						ch == 'R'&& n != 2) {
-						//Datetime mask: incorrect year specification
-						//&{0}{, position: }
+						//Datetime mask: incorrect year specification&{0}{, position: }
 						return Report.error(SYS.SYS059, getIndex() - 3);
 					}
 					continue;
@@ -3780,8 +3697,7 @@ public class StringParser extends SReporter implements SParser {
 				case '?': //one of chars
 					nextChar();
 					if (_ch != '\'') {
-						//Datetime mask: expected character
-						//&{0}{: '}{'}&{1}{, position: }
+						//Datetime mask: expected character&{0}{: '}{'}&{1}{, position: }
 						return Report.error(SYS.SYS079, "'", getIndex());
 					}
 					if ((r = checkLiteral()) != null) {
@@ -3813,8 +3729,7 @@ public class StringParser extends SReporter implements SParser {
 			return r;
 		}
 		if (!isChar(']')) {
-			//Datetime mask: missing closing character
-			//&{0}{: '}{'}&{1}{, position: }
+			//Datetime mask: missing closing character&{0}{: '}{'}&{1}{, position: }
 			return Report.error(SYS.SYS064, "]", beg);
 		}
 		return null;
@@ -3837,13 +3752,12 @@ public class StringParser extends SReporter implements SParser {
 	 * @param format String with format data.
 	 * @return null or Report if format is not valid.
 	 */
-	public final static Report checkDateFormat(final String format) {
+	public static final Report checkDateFormat(final String format) {
 		StringParser p = new StringParser(format);
 		Report r;
 		if ((r = p.checkDateFormat()) == null) {
 			if (!p.eos()) {
-				//Datetime mask: incorrect control character
-				//&{0}{: '}{'}&{1}{, position: }
+				//Datetime mask: incorrect control character&{0}{: '}{'}&{1}{, position: }
 				r = Report.error(SYS.SYS063, p._ch, p.getIndex());
 			}
 		}
@@ -3900,14 +3814,12 @@ public class StringParser extends SReporter implements SParser {
 	 * @return type of character.
 	 */
 	public final byte getXmlCharType(final byte xmlVersion) {
-		return xmlVersion == XMLVER1_1
-			? XML_CHARTAB1[_ch] : XML_CHARTAB0[_ch];
+		return xmlVersion == XMLVER1_1 ? XML_CHARTAB1[_ch] : XML_CHARTAB0[_ch];
 	}
 
 	/** Parse Nmtoken.
 	 * [7] Nmtoken::= (NameChar)+
-	 * [4] NameChar::= Letter | Digit | '.' | '-' | '_' | ':'
-	 *                 | CombiningChar | Extender
+	 * [4] NameChar::= Letter | Digit | '.' | '-' | '_' | ':' | CombiningChar | Extender
 	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1" (see XMLVER1_0 and XMLVER1_1).
 	 * @return true if rule passed.
 	 */
@@ -3939,8 +3851,7 @@ public class StringParser extends SReporter implements SParser {
 
 	/** Parse NCName according to Namespaces in W3C.
 	 * [4] NCName::= (Letter | '_') (NCNameChar)* //An XML Name, minus the ":"
-	 * [5] NCNameChar::= Letter | Digit | '.' | '-' | '_'
-	 *     | CombiningChar | Extender
+	 * [5] NCNameChar::= Letter | Digit | '.' | '-' | '_' | CombiningChar | Extender
 	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1" (see XMLVER1_0 and XMLVER1_1).
 	 * @return true if NCNname was recognized.
 	 */
@@ -4077,10 +3988,7 @@ public class StringParser extends SReporter implements SParser {
 	 * @return character table (byte[65536]).
 	 */
 	protected final byte[] getXMLCharTab(final boolean xmlVersion1) {
-		if (xmlVersion1) {
-			return XML_CHARTAB1;
-		}
-		return XML_CHARTAB0;
+		return xmlVersion1 ? XML_CHARTAB1 : XML_CHARTAB0;
 	}
 
 	/** Parse duration in format format ISO 8061.
@@ -4276,8 +4184,7 @@ public class StringParser extends SReporter implements SParser {
 					setIndex(start);
 					return false;
 				}
-				_parsedDatetime._fraction =
-					Double.parseDouble("0."+_parsedString);
+				_parsedDatetime._fraction = Double.parseDouble("0."+_parsedString);
 			}
 		}
 		readXMLZone();
@@ -4300,7 +4207,7 @@ public class StringParser extends SReporter implements SParser {
 
 	private boolean readXMLYear() {
 		int start = getIndex();
-		boolean wasQuote = isChar('"');//year without zone may be quoted in JSON
+		boolean wasQuote = isChar('"'); //year without zone may be quoted in JSON
 		boolean negative = isChar('-');
 		if (!isInteger()) {
 			setIndex(start);
@@ -4623,21 +4530,17 @@ public class StringParser extends SReporter implements SParser {
 			if (!chkDatetime()) {
 				return false;
 			}
-			if (_weekDay >= 0
-				&& getCalendar().get(Calendar.DAY_OF_WEEK) != _weekDay) {
+			if (_weekDay >= 0 && getCalendar().get(Calendar.DAY_OF_WEEK) != _weekDay) {
 				return false;
 			}
-			if (_yearDay >= 0
-				&& getCalendar().get(Calendar.DAY_OF_YEAR) != _yearDay) {
+			if (_yearDay >= 0 && getCalendar().get(Calendar.DAY_OF_YEAR) != _yearDay) {
 				return false;
 			}
 			if (_dayOfWeekInMonth >= 0
-				&& getCalendar().get(Calendar.DAY_OF_WEEK_IN_MONTH) !=
-					_dayOfWeekInMonth) {
+				&& getCalendar().get(Calendar.DAY_OF_WEEK_IN_MONTH) != _dayOfWeekInMonth) {
 				return false;
 			}
-			if (_weekInYear >= 0
-				&& getCalendar().get(Calendar.WEEK_OF_YEAR) != _weekInYear) {
+			if (_weekInYear >= 0 && getCalendar().get(Calendar.WEEK_OF_YEAR) != _weekInYear) {
 				return false;
 			}
 			return _weekInMonth < 0
@@ -4692,8 +4595,7 @@ public class StringParser extends SReporter implements SParser {
 	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1" (see XMLVER1_0 and XMLVER1_1).
 	 * @return type of character.
 	 */
-	public static final byte getXmlCharType(final char ch,
-		final byte xmlVersion) {
+	public static final byte getXmlCharType(final char ch, final byte xmlVersion) {
 		return xmlVersion == XMLVER1_1 ? XML_CHARTAB1[ch] : XML_CHARTAB0[ch];
 	}
 
@@ -4702,16 +4604,14 @@ public class StringParser extends SReporter implements SParser {
 	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1" (see XMLVER1_0 and XMLVER1_1).
 	 * @return true if the argument is NCName according to XML specification.
 	 */
-	public static final boolean chkNCName(final String name,
-		final byte xmlVersion) {
+	public static final boolean chkNCName(final String name, final byte xmlVersion) {
 		int max;
 		if (name == null || (max = name.length()) == 0 ||
 			getXmlCharType(name.charAt(0), xmlVersion) != XML_CHAR_NAME_START) {
 			return false;
 		}
 		int i = 0;
-		while ((++i < max) &&
-			getXmlCharType(name.charAt(i), xmlVersion) >= XML_CHAR_NAME_START){}
+		while ((++i < max) && getXmlCharType(name.charAt(i), xmlVersion) >= XML_CHAR_NAME_START){}
 		return i == max;
 	}
 
@@ -4721,18 +4621,16 @@ public class StringParser extends SReporter implements SParser {
 	 * @return true if the argument is XML name according to XML specification.
 	 * {@link StringParser#isXMLName(byte)}.
 	 */
-	public static final boolean chkXMLName(final String name,
-		final byte xmlVersion) {
+	public static final boolean chkXMLName(final String name, final byte xmlVersion) {
 		int max;
 		byte type;
-		if (name == null || (max = name.length()) == 0 ||
-			(type = getXmlCharType(name.charAt(0), xmlVersion)) !=
-			XML_CHAR_NAME_START && type != XML_CHAR_COLON) {
+		if (name == null || (max = name.length()) == 0
+			|| (type = getXmlCharType(name.charAt(0), xmlVersion)) != XML_CHAR_NAME_START
+			&& type != XML_CHAR_COLON) {
 			return false;
 		}
 		int i = 0;
-		while ((++i < max) &&
-			getXmlCharType(name.charAt(i), xmlVersion) >= XML_CHAR_COLON) {}
+		while ((++i < max) && getXmlCharType(name.charAt(i), xmlVersion) >= XML_CHAR_COLON) {}
 		return i == max;
 	}
 
@@ -4742,16 +4640,14 @@ public class StringParser extends SReporter implements SParser {
 	 * @return true if the argument is NMToken according to XML specification.
 	 * {@link StringParser#isNMToken(byte)}.
 	 */
-	public static final boolean chkNMToken(final String name,
-		final byte xmlVersion) {
+	public static final boolean chkNMToken(final String name, final byte xmlVersion) {
 		int max;
 		if (name == null || (max = name.length()) == 0 ||
 			getXmlCharType(name.charAt(0),  xmlVersion) < XML_CHAR_COLON) {
 			return false;
 		}
 		int i = 0;
-		while ((++i < max) &&
-			getXmlCharType(name.charAt(i),  xmlVersion) >= XML_CHAR_COLON) {}
+		while ((++i < max) && getXmlCharType(name.charAt(i),  xmlVersion) >= XML_CHAR_COLON) {}
 		return i == max;
 	}
 

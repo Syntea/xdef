@@ -111,7 +111,7 @@ public class XonTools {
 	 * @param s XON/JSON string.
 	 * @return string created from XON/JSON string data.
 	 */
-	public final static String jstringToSource(final String s) {
+	public static final String jstringToSource(final String s) {
 		StringBuilder sb = new StringBuilder();
 		char[] chars = s.toCharArray();
 		for (int i = 0; i < chars.length; i++) {
@@ -252,7 +252,7 @@ public class XonTools {
 	 * @param s string with XON simple value source
 	 * @return object with XON value
 	 */
-	public final static Object xmlToJValue(final String s) {
+	public static final Object xmlToJValue(final String s) {
 		if (s == null) {
 			return null;
 		}
@@ -332,7 +332,7 @@ public class XonTools {
 	 * @param s XON/JSON pair name.
 	 * @return XML name.
 	 */
-	public final static String toXmlName(final String s) {
+	public static final String toXmlName(final String s) {
 		if (s.isEmpty()) {
 			return "_x_"; // empty string
 		} else if (("_x_").equals(s)) {
@@ -374,7 +374,7 @@ public class XonTools {
 	 * @param name XML name.
 	 * @return XON/JSON name.
 	 */
-	public final static String xmlToJName(final String name) {
+	public static final String xmlToJName(final String name) {
 		if ("_x_".equals(name)) {
 			return "";
 		}
@@ -435,7 +435,7 @@ public class XonTools {
 	 * @param src XML form of string.
 	 * @return XML form of string converted to XON/JSON.
 	 */
-	public final static String jstringFromSource(final String src) {
+	public static final String jstringFromSource(final String src) {
 		if (src == null || src.isEmpty()) {
 			return src;
 		}
@@ -448,7 +448,7 @@ public class XonTools {
 	 * @param c character to be converted.
 	 * @return string with converted character.
 	 */
-	public final static String charToJSource(final char c) {
+	public static final String charToJSource(final char c) {
 		int i = "\"\\/bfnrt".indexOf(c);
 		if (i >= 0) {
 			return "\\" + "\"\\/bfnrt".charAt(i);
@@ -476,7 +476,7 @@ public class XonTools {
 	 * @param s original string value.
 	 * @return quoted string if necessary.
 	 */
-	public final static String genXMLString(final String s) {
+	public static final String genXMLString(final String s) {
 		switch (s) {
 			case "":
 			case "-":
@@ -515,7 +515,7 @@ public class XonTools {
 	 * @param x the object to be converted.
 	 * @return XML form of the of attribute value created from argument.
 	 */
-	public final static String genXMLValue(final Object x) {
+	public static final String genXMLValue(final Object x) {
 		if (x == null) {
 			return "null";
 		} else if (x instanceof String) {
@@ -541,7 +541,7 @@ public class XonTools {
 	 * @param p parser where the string is on the actual position.
 	 * @return the parsed string.
 	 */
-	public final static String readJString(final SParser p) {
+	public static final String readJString(final SParser p) {
 		StringBuilder sb = new StringBuilder();
 		while (!p.eos()) {
 			if (p.isChar('"')) {
@@ -639,7 +639,7 @@ public class XonTools {
 	 * @param val Object to be tested.
 	 * @return true if the argument is a simple value.
 	 */
-	public final static boolean isSimpleValue(final Object val) {
+	public static final boolean isSimpleValue(final Object val) {
 		Object o;
 		return val == null || val instanceof Number || val instanceof Boolean
 			|| val instanceof String || val instanceof XonTools.JValue
@@ -653,7 +653,7 @@ public class XonTools {
 	 * @param mode 0 .. text node, 1.. attribute, 2.. array of simple items
 	 * @return XML form of string from the argument val,
 	 */
-	public final static String jstringToXML(final Object val, final int mode) {
+	public static final String jstringToXML(final Object val, final int mode) {
 		if (val == null) {
 			return "null";
 		}

@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.TimeZone;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 import org.xdef.XDConstants;
@@ -119,6 +120,8 @@ public final class XPool implements XDPool, Serializable {
 	/** Table of source objects.*/
 	private XDSourceInfo _sourceInfo;
 
+	/** Default time zone.*/
+	private TimeZone _defaultZone = null;
 	// valid date parameters
 	/** Maximal accepted value of the year.*/
 	private int _maxYear;
@@ -198,6 +201,7 @@ public final class XPool implements XDPool, Serializable {
 			new String[] {XDConstants.XDPROPERTYVALUE_XINCLUDE_TRUE,
 				XDConstants.XDPROPERTYVALUE_XINCLUDE_FALSE},
 			XDConstants.XDPROPERTYVALUE_XINCLUDE_TRUE) == 0; //default is false
+		_defaultZone = readPropertyDefaultZone(_props);
 		_minYear = readPropertyYear(_props, XDConstants.XDPROPERTY_MINYEAR);
 		_maxYear = readPropertyYear(_props, XDConstants.XDPROPERTY_MAXYEAR);
 		_specialDates = readPropertySpecDates(_props);
@@ -208,6 +212,15 @@ public final class XPool implements XDPool, Serializable {
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
+
+	/** Read default time zone from properties.
+	 * @param props Properties where to read.
+	 * @return array with special dates or null.
+	 */
+	private static TimeZone readPropertyDefaultZone(final Properties props) {
+		String val = SManager.getProperty(props, XDConstants.XDPROPERTY_DEFAULTZONE);
+		return val != null && !(val=val.trim()).isEmpty() ? TimeZone.getTimeZone(val) : null;
+	}
 
 	/** Read MIN_YEAR or MAX_YEAR from properties.
 	 * @param props properties
@@ -234,8 +247,7 @@ public final class XPool implements XDPool, Serializable {
 	 * @return array with special dates or null.
 	 */
 	private static SDatetime[] readPropertySpecDates(final Properties props) {
-		String val =
-			SManager.getProperty(props, XDConstants.XDPROPERTY_SPECDATES);
+		String val = SManager.getProperty(props, XDConstants.XDPROPERTY_SPECDATES);
 		if (val == null) {
 			return null;
 		} else {
@@ -248,11 +260,8 @@ public final class XPool implements XDPool, Serializable {
 				try {
 					result[i] = new SDatetime(st.nextToken());
 				} catch (SRuntimeException ex) {
-					//Error of property &{0} = &{1} (it must be &{2}
-					throw new SRuntimeException(XDEF.XDEF214,
-						XDConstants.XDPROPERTY_SPECDATES,
-						val,
-						"datetime [, datetime ...]");
+					throw new SRuntimeException(XDEF.XDEF214, //Error of property &{0} = &{1} (it must be &{2}
+						XDConstants.XDPROPERTY_SPECDATES, val, "datetime [, datetime ...]");
 				}
 			}
 			return result;
@@ -1079,11 +1088,18 @@ public final class XPool implements XDPool, Serializable {
 	@Override
 	public final Map<String, String> getXComponentBinds() {return _binds;}
 
+
 	/** Get list of XComponent enumerations.
 	 * @return list of XComponent enumerations.
 	 */
 	@Override
-	public Map<String, String> getXComponentEnums() {return _enums;}
+	public final Map<String, String> getXComponentEnums() {return _enums;}
+
+	/** Get default TimeZone.
+	 * @return default TimeZone.
+	 */
+	@Override
+	public final TimeZone getDefaultZone() {return _defaultZone;}
 
 	/** Get minimum valid year of date.
 	 * @return minimum valid year (Integer.MIN if not set).
@@ -1144,6 +1160,7 @@ public final class XPool implements XDPool, Serializable {
 		xw.writeBoolean(_resolveIncludes); // (will be removed!)
 		xw.writeBoolean(_clearReports);
 		xw.writeByte(_displayMode);
+		xw.writeString(_defaultZone == null ? null : _defaultZone.getID());
 		xw.writeInt(_minYear);
 		xw.writeInt(_maxYear);
 		int len = _specialDates == null ? 0 : _specialDates.length;
@@ -1288,6 +1305,8 @@ public final class XPool implements XDPool, Serializable {
 		_resolveIncludes = xr.readBoolean();
 		_clearReports = xr.readBoolean();
 		_displayMode = xr.readByte();
+		String tz = xr.readString();
+		_defaultZone = tz == null ? null : TimeZone.getTimeZone(tz);
 		_minYear = xr.readInt();
 		_maxYear = xr.readInt();
 		int len = xr.readLength();

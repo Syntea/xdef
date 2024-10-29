@@ -632,7 +632,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 			}
 			case SET_ZONEOFFSET: {//shift to GMT
 				SDatetime t = p1.datetimeValue();
-				t.setTimeZoneOffset(p2.intValue());
+				t.setRawZoneOffset(p2.intValue());
 				return new DefDate(t);
 			}
 			case SET_ZONEID: { //Set time zone name

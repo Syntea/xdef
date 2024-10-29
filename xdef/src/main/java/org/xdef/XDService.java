@@ -12,8 +12,7 @@ public interface XDService extends XDValue {
 	 * @return prepared statement.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public XDStatement prepareStatement(String statement)
-		throws SRuntimeException;
+	public XDStatement prepareStatement(String statement) throws SRuntimeException;
 
 	/** Execute statement with parameters.
 	 * @param statement source statement or null.
@@ -21,8 +20,7 @@ public interface XDService extends XDValue {
 	 * @return result of execution.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public XDValue execute(String statement, XDValue params)
-		throws SRuntimeException;
+	public XDValue execute(String statement, XDValue params) throws SRuntimeException;
 
 	/** Invoke query statement with parameters.
 	 * @param statement source statement.
@@ -30,8 +28,7 @@ public interface XDService extends XDValue {
 	 * @return XDResultSet with result of query on this statement.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public XDResultSet query(String statement, XDValue params)
-		throws SRuntimeException;
+	public XDResultSet query(String statement, XDValue params) throws SRuntimeException;
 
 	/** Execute query and return the specified items.
 	 * @param statement source statement.
@@ -46,9 +43,6 @@ public interface XDService extends XDValue {
 
    /** Close this service all allocated resources.*/
 	public void close();
-
-//   /** Start transaction.*/
-//	public void startTransaction();
 
 	/** Commit.
 	 * @throws Exception if an error occurs.

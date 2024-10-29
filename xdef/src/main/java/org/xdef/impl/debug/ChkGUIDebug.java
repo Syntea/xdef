@@ -742,7 +742,7 @@ public class ChkGUIDebug extends GUIBase implements XDDebug {
 	}
 
 	@Override
-	/** This method is called from x-script on breakpoint or
+	/** This method is called from X-script on break point or
 	 * from methods pause and trace.
 	 * @param xnode actual XXNode object.
 	 * @param code executive code.

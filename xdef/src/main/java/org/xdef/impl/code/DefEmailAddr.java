@@ -113,7 +113,7 @@ public final class DefEmailAddr extends XDValueAbstract implements XDEmailAddr {
 	 * [2] .. domain part of internet address.<p>
 	 * [3] .. string with personal information.
 	 */
-	public final static String[] parseEmail(final StringParser p) {
+	public static final String[] parseEmail(final StringParser p) {
 		BNFGrammar g = BNFGrammar.compile(
 "S ::= [ #9]+ /* linear white space */\n"+
 "asciiChar ::= [ -~]\n"+

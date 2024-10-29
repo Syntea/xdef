@@ -4,6 +4,7 @@ import org.w3c.dom.Element;
 import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.xdef.sys.ArrayReporter;
+import static org.xdef.sys.STester.runTest;
 import org.xdef.util.GenXDefinition;
 import org.xdef.xml.KXmlUtils;
 import test.XDTester;
@@ -157,8 +158,8 @@ System.out.println("===========");
 				assertEq(xml, parse(xp, "", xml, reporter));
 				assertNoErrorwarnings(reporter);
 			} catch (Exception ex) {
-System.out.println(KXmlUtils.nodeToString(KXmlUtils.parseXml(xml),true));
-System.out.println("xdef:\n"+ xdef);
+System.out.println(KXmlUtils.nodeToString(KXmlUtils.parseXml(xml), true));
+System.out.println("xdef:\n" + xdef);
 System.out.println("===========");
 				fail(ex);
 			}

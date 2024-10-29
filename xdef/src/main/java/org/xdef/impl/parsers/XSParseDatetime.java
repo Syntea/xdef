@@ -1,14 +1,15 @@
 package org.xdef.impl.parsers;
 
+import static org.xdef.XDValueID.XD_DATETIME;
 import org.xdef.sys.StringParser;
 
-/** Parser of Schema "dateTime" type.
+/** Parser of XML Schema "dateTime" type.
  * @author Vaclav Trojan
  */
 public class XSParseDatetime extends XSParseDate {
 	private static final String ROOTBASENAME = "dateTime";
-
 	public XSParseDatetime() {super();}
+
 	@Override
 	boolean parse(final StringParser parser) {return parser.isXMLDatetime();}
 	@Override

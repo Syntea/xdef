@@ -575,7 +575,7 @@ public abstract class STester {
 	 * @param a2 second object.
 	 * @return true if and only if both objects are equal.
 	 */
-	public final static boolean equals(final Object a1, final Object a2) {
+	public static final boolean equals(final Object a1, final Object a2) {
 		if (a1 instanceof Number && a2 instanceof Number) {
 			if (a1 instanceof BigDecimal) {
 				return (a2 instanceof BigDecimal)
@@ -997,7 +997,7 @@ public abstract class STester {
 	 * @param exception the Exception object to be printed.
 	 * @return string with printable representation of Throwable.
 	 */
-	public final static String printThrowable(final Throwable exception) {
+	public static final String printThrowable(final Throwable exception) {
 		java.io.CharArrayWriter chw = new java.io.CharArrayWriter();
 		try (java.io.PrintWriter pw = new java.io.PrintWriter(chw)) {
 			exception.printStackTrace(pw);
@@ -1037,7 +1037,7 @@ public abstract class STester {
 	 * @param clazz the class to be checked.
 	 * @return Get string with path where the class is in the current classpath.
 	 */
-	public final static String getClassSource(final Class<?> clazz) {
+	public static final String getClassSource(final Class<?> clazz) {
 		String className = clazz.getName().replace('.', '/') + ".class";
 		URL u = clazz.getClassLoader().getResource(className);
 		String classpath = u.toExternalForm();
@@ -1117,7 +1117,7 @@ public abstract class STester {
 	 * [-h] help.
 	 * @return the number of errors.
 	 */
-	public final static int runTest(final String... args) {
+	public static final int runTest(final String... args) {
 		STester at = getInstance();
 		PrintStream out = System.out;
 		PrintStream err = System.err;
@@ -1258,7 +1258,7 @@ public abstract class STester {
 	 * @param args list of arguments.
 	 * @return the number of errors.
 	 */
-	public final static int runTests(final PrintStream out,
+	public static final int runTests(final PrintStream out,
 		final PrintStream err,
 		final PrintStream log,
 		final STester[] tests,

@@ -75,11 +75,9 @@ public interface XDDocument extends XXNode {
 	 */
 	public void setProperties(Properties props);
 
-	/** Set property. If properties are null the new Properties object
-	 * will be created.
+	/** Set property. If properties are null the new Properties object will be created.
 	 * @param key name of property.
-	 * @param value value of property or null. If the value is null the property
-	 * is removed from properties.
+	 * @param value value of property or null. If the value is null the property is removed.
 	 */
 	public void setProperty(final String key, final String value);
 
@@ -103,17 +101,17 @@ public interface XDDocument extends XXNode {
 	 */
 	public void setRootModel(XMElement xmodel);
 
-	/** get StdOut.
+	/** get StdOut output.
 	 * @return std out XDOutput.
 	 */
 	public XDOutput getStdOut();
 
-	/** get StdErr.
+	/** get StdErr output.
 	 * @return std err XDOutput.
 	 */
 	public XDOutput getStdErr();
 
-	/** get StdIn.
+	/** get StdIn intput.
 	 * @return std in XDInput.
 	 */
 	public XDInput getStdIn();
@@ -121,23 +119,18 @@ public interface XDDocument extends XXNode {
 	/** Set XML writer.
 	 * @param out output stream.
 	 * @param encoding encoding of output.
-	 * @param writeDocumentHeader if true full document is written, otherwise
-	 * only root element.
+	 * @param writeDocumentHeader if true full document is written, otherwise only root element.
 	 * @throws IOException if an error occurs.
 	 */
-	public void setStreamWriter(OutputStream out,
-		String encoding,
-		boolean writeDocumentHeader) throws IOException;
+	public void setStreamWriter(OutputStream out, String encoding, boolean writeDocumentHeader)
+		throws IOException;
 
 	/** Set XML writer.
 	 * @param out stream writer.
 	 * @param encoding encoding of output.
-	 * @param writeDocumentHeader if true full document is written, otherwise
-	 * only root element.
+	 * @param writeDocumentHeader if true full document is written, otherwise only root element.
 	 */
-	public void setStreamWriter(Writer out,
-		String encoding,
-		boolean writeDocumentHeader);
+	public void setStreamWriter(Writer out, String encoding, boolean writeDocumentHeader);
 	/** Set XML writer.
 	 * @param xmlWriter XML writer.
 	 */
@@ -195,23 +188,19 @@ public interface XDDocument extends XXNode {
 	/** Create root check element with namespace with given name.
 	 * @param nsURI Namespace URI of the element.
 	 * @param qname Qualified name of the element.
-	 * @param checkRoot If value of this argument is true then the root check
-	 * element is checked against the root list, otherwise it is found as
-	 * XElement on the base level.
+	 * @param checkRoot If value of this argument is true then the root element is checked
+	 * against the root list, otherwise it is found as XElement on the base level.
 	 * @return ChkElement object.
 	 */
-	public XXElement prepareRootXXElementNS(final String nsURI,
-		final String qname,
-		final boolean checkRoot);
+	public XXElement prepareRootXXElementNS(String nsURI, String qname, boolean checkRoot);
 
 	/** Create root check element with given name.
 	 * @param name Tag name of the root element.
-	 * @param checkRoot If value of this argument is true then the root check
-	 * element is checked against the root list, otherwise it is found as
-	 * XElement on the base level.
+	 * @param checkRoot If value of this argument is true then the root element
+	 * is checked against the root list, otherwise it is found as XElement on the base level.
 	 * @return ChkElement object.
 	 */
-	public XXElement prepareRootXXElement(final String name, boolean checkRoot);
+	public XXElement prepareRootXXElement(String name, boolean checkRoot);
 
 	/** Get implementation properties of X-definition.
 	 * @return the implementation properties of X-definition.
@@ -225,8 +214,7 @@ public interface XDDocument extends XXNode {
 	public String getImplProperty(String name);
 
 	/** Check value of datetime.
-	 * Check if the year of date in the interval
-	 * (YEAR_MIN .. YEAR_MAX) or the value of date is
+	 * Check if the year of date in the interval (YEAR_MIN .. YEAR_MAX) or the value of date is
 	 * one of UNDEF_YEAR[] values.
 	 * @param date value to be checked.
 	 * @return true if date is legal.
@@ -281,15 +269,13 @@ public interface XDDocument extends XXNode {
 
 	/** Set actual source language used for lexicon.
 	 * @param language string with language or null.
-	 * @throws SRuntimeException if lexicon not specified
-	 * or if language is not specified.
+	 * @throws SRuntimeException if lexicon not specified or if language is not specified.
 	 */
 	public void setLexiconLanguage(String language) throws SRuntimeException;
 
 	/** Translate the input element from the source language to the destination
 	 * language according to lexicon.
-	 * @param elem path to the source element or the string
-	 * with element.
+	 * @param elem path to the source element or the string with element.
 	 * @param sourceLanguage name of source language.
 	 * @param destLanguage name of destination language.
 	 * @param reporter the reporter where to write errors or null.
@@ -320,7 +306,7 @@ public interface XDDocument extends XXNode {
 	 * @param data string with data to be parsed.
 	 * @return XDParseResult object with parsed data.
 	 */
-	public XDParseResult parseXDType(final String typeName, final String data);
+	public XDParseResult parseXDType(String typeName, String data);
 
 	/** Get XON result.
 	 * @return XON result or null.
@@ -338,9 +324,8 @@ public interface XDDocument extends XXNode {
 	 * @return List with processed data.
 	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
-	public List<Object> cparse(Reader data,
-		String sourceId,
-		ReportWriter reporter) throws SRuntimeException;
+	public List<Object> cparse(Reader data, String sourceId, ReportWriter reporter)
+		throws SRuntimeException;
 
 	/** Parse and process CSV data and return processed object.
 	 * @param data reader with CSV data
@@ -365,8 +350,7 @@ public interface XDDocument extends XXNode {
 	 * @return Map with processed data.
 	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
-	public Map<String, Object> iparse(String data, ReportWriter reporter)
-		throws SRuntimeException;
+	public Map<String, Object> iparse(String data, ReportWriter reporter) throws SRuntimeException;
 
 	/** Parse and process INI/Properties data and return processed object.
 	 * @param data File with INI/Properties data.
@@ -375,8 +359,7 @@ public interface XDDocument extends XXNode {
 	 * @return Map with processed data.
 	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
-	public Map<String, Object> iparse(File data, ReportWriter reporter)
-		throws SRuntimeException;
+	public Map<String, Object> iparse(File data, ReportWriter reporter) throws SRuntimeException;
 
 	/** Parse and process INI/Properties data and return processed object.
 	 * @param data URL pointing to INI/Properties data.
@@ -385,8 +368,7 @@ public interface XDDocument extends XXNode {
 	 * @return Map with processed data.
 	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
-	public Map<String, Object> iparse(URL data, ReportWriter reporter)
-		throws SRuntimeException;
+	public Map<String, Object> iparse(URL data, ReportWriter reporter) throws SRuntimeException;
 
 	/** Parse and process INI/Properties data and return processed object.
 	 * @param data InputStream with INI/Properties data.
@@ -399,24 +381,19 @@ public interface XDDocument extends XXNode {
 		throws SRuntimeException;
 
 	/** Parse source INI/Properties and return XComponent as result.
-	 * @param ini string with pathname of INI/Properties file
-	 * or INI/Properties source data.
-	 * @param xClass XComponent class (if null, then XComponent class
-	 * is searched in XDPool).
+	 * @param ini string with pathname of INI/Properties file or INI/Properties source data.
+	 * @param xClass XComponent class (if null, then XComponent class is searched in XDPool).
 	 * @param reporter report writer or null. If this argument is
 	 * null and error reports occurs then SRuntimeException is thrown.
 	 * @return XComponent with parsed data.
 	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
-	public XComponent iparseXComponent(Object ini,
-		Class<?> xClass,
-		ReportWriter reporter) throws SRuntimeException;
+	public XComponent iparseXComponent(Object ini, Class<?> xClass, ReportWriter reporter)
+		throws SRuntimeException;
 
 	/** Parse source INI/Properties and return XComponent as result.
-	 * @param ini string with pathname of INI/Properties file
-	 * or INI/Properties source data.
-	 * @param xClass XComponent class (if null, then XComponent class
-	 * is searched in XDPool).
+	 * @param ini string with pathname of INI/Properties file or INI/Properties source data.
+	 * @param xClass XComponent class (if null, then XComponent class is searched in XDPool).
 	 * @param sourceId name of source or null.
 	 * @param reporter report writer or null. If this argument is
 	 * null and error reports occurs then SRuntimeException is thrown.
@@ -429,8 +406,7 @@ public interface XDDocument extends XXNode {
 		ReportWriter reporter) throws SRuntimeException;
 
 	/** Validate and process INI/Properties data and return processed object.
-	 * @param data INI/Properties object or XML representation of object
-	 * to validate.
+	 * @param data INI/Properties object or XML representation of object to validate.
 	 * @param reporter report writer or null. If this argument is
 	 * null and error reports occurs then SRuntimeException is thrown.
 	 * @return Map with processed data.
@@ -446,21 +422,19 @@ public interface XDDocument extends XXNode {
 	 * @return Object with the constructed XON/JSON data.
 	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
-	public Object jcreate(String name, ReportWriter reporter)
-		throws SRuntimeException;
+	public Object jcreate(String name, ReportWriter reporter) throws SRuntimeException;
 
 	/** Create XComponent from XON/JSON according to the X-definition model.
 	 * NOTE this method is experimental.
 	 * @param name the name of required model.
-	 * @param xClass XComponent class (if <i>null</i>, then XComponent class
+	 * @param xClass XComponent class (if <i>null</i>, then XComponent class.
 	 * @param reporter report writer or <i>null</i>. If this argument is
 	 * <i>null</i> and error reports occurs then SRuntimeException is thrown.
 	 * @return XComponent with created data.
 	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
-	public XComponent jcreateXComponent(final String name,
-		final Class xClass,
-		final ReportWriter reporter) throws SRuntimeException;
+	public XComponent jcreateXComponent(String name, Class xClass, ReportWriter reporter)
+		throws SRuntimeException;
 
 	/** Parse and process XON/JSON data and return processed XON object.
 	 * @param data XON/JSON data or file pathname
@@ -469,8 +443,7 @@ public interface XDDocument extends XXNode {
 	 * @return XON object with processed data.
 	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
-	public Object jparse(String data, ReportWriter reporter)
-		throws SRuntimeException;
+	public Object jparse(String data, ReportWriter reporter) throws SRuntimeException;
 
 	/** Parse and process XON/JSON data and return processed XON object.
 	 * @param data File with XON/JSON data.
@@ -479,8 +452,7 @@ public interface XDDocument extends XXNode {
 	 * @return XON object with processed data.
 	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
-	public Object jparse(File data, ReportWriter reporter)
-		throws SRuntimeException;
+	public Object jparse(File data, ReportWriter reporter) throws SRuntimeException;
 
 	/** Parse and process XON/JSON data and return processed XON object.
 	 * @param data URL pointing to XON/JSON data.
@@ -489,8 +461,7 @@ public interface XDDocument extends XXNode {
 	 * @return XON object with processed data.
 	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
-	public Object jparse(URL data, ReportWriter reporter)
-		throws SRuntimeException;
+	public Object jparse(URL data, ReportWriter reporter) throws SRuntimeException;
 
 	/** Parse and process XON/JSON data and return processed XON object.
 	 * @param data InputStream with XON/JSON data.
@@ -499,26 +470,22 @@ public interface XDDocument extends XXNode {
 	 * @return XON object with processed data.
 	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
-	public Object jparse(InputStream data, ReportWriter reporter)
-		throws SRuntimeException;
+	public Object jparse(InputStream data, ReportWriter reporter) throws SRuntimeException;
 
 	/** Parse source XON/JSON and return XComponent as result.
 	 * @param data string with pathname of XON/JSON source data.
-	 * @param xClass XComponent class (if null, then XComponent class
-	 * is searched in XDPool).
+	 * @param xClass XComponent class (if null, then XComponent class is searched in XDPool).
 	 * @param reporter report writer or null. If this argument is
 	 * null and error reports occurs then SRuntimeException is thrown.
 	 * @return XComponent with parsed data.
 	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
-	public XComponent jparseXComponent(Object data,
-		Class<?> xClass,
-		ReportWriter reporter) throws SRuntimeException;
+	public XComponent jparseXComponent(Object data, Class<?> xClass, ReportWriter reporter)
+		throws SRuntimeException;
 
 	/** Parse source JSON/XON and return XComponent as result.
 	 * @param data string with pathname of XON/JSON source data.
-	 * @param xClass XComponent class (if null, then XComponent class
-	 * is searched in XDPool).
+	 * @param xClass XComponent class (if null, then XComponent class is searched in XDPool).
 	 * @param sourceId name of source or null.
 	 * @param reporter report writer or null. If this argument is
 	 * null and error reports occurs then SRuntimeException is thrown.
@@ -537,8 +504,7 @@ public interface XDDocument extends XXNode {
 	 * @return XON object with processed data.
 	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
-	public Object jvalidate(Object data, ReportWriter reporter)
-		throws SRuntimeException;
+	public Object jvalidate(Object data, ReportWriter reporter) throws SRuntimeException;
 
 	/** Run create mode - create element according to the X-definition model.
 	 * @param name the name of model of required element.
@@ -547,13 +513,11 @@ public interface XDDocument extends XXNode {
 	 * @return root element of created XML document.
 	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
-	public Element xcreate(String name, ReportWriter reporter)
-		throws SRuntimeException;
+	public Element xcreate(String name, ReportWriter reporter) throws SRuntimeException;
 
 	/** Run create mode - create element according to the X-definition model.
-	 * If the parameter nsUri is not null then its assigned the model
-	 * with given namespaceURI; in this case the parameter name may be
-	 * qualified with a prefix.
+	 * If the parameter nsUri is not null then its assigned the model with given namespaceURI;
+	 * in this case the parameter name may be qualified with a prefix.
 	 * @param nsUri the namespace URI of result element (may be null).
 	 * @param name the name of model of required element (may contain prefix).
 	 * @param reporter report writer or null. If this argument is
@@ -561,9 +525,8 @@ public interface XDDocument extends XXNode {
 	 * @return root element of created XML document.
 	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
-	public Element xcreate(final String nsUri,
-		final String name,
-		final ReportWriter reporter) throws SRuntimeException;
+	public Element xcreate(String nsUri, String name, ReportWriter reporter)
+		throws SRuntimeException;
 
 	/** Run create mode - create element according to the X-definition model.
 	 * @param qname the QName of model of required element.
@@ -572,8 +535,7 @@ public interface XDDocument extends XXNode {
 	 * @return root element of created XML document.
 	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
-	public Element xcreate(QName qname, ReportWriter reporter)
-		throws SRuntimeException;
+	public Element xcreate(QName qname, ReportWriter reporter) throws SRuntimeException;
 
 	/** Parse and process XML source and return org.w3c.dom.Element.
 	 * @param data string with pathname of XML file or XML source data.
@@ -582,8 +544,7 @@ public interface XDDocument extends XXNode {
 	 * @return root element of parsed data.
 	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
-	public Element xparse(Object data, ReportWriter reporter)
-		throws SRuntimeException;
+	public Element xparse(Object data, ReportWriter reporter) throws SRuntimeException;
 
 	/** Parse and process XML source and return org.w3c.dom.Element.
 	 * @param xmlData string with pathname of XML file or XML source data.
@@ -593,27 +554,23 @@ public interface XDDocument extends XXNode {
 	 * @return root element of parsed data.
 	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
-	public Element xparse(Object xmlData,
-		String sourceId,
-		ReportWriter reporter) throws SRuntimeException;
+	public Element xparse(Object xmlData, String sourceId, ReportWriter reporter)
+		throws SRuntimeException;
 
 	/** Parse source XML and return XComponent as result.
 	 * @param data string with pathname of XML file or XML source data.
-	 * @param xClass XComponent class (if null, then XComponent class
-	 * is searched in XDPool).
+	 * @param xClass XComponent class (if null, then XComponent class is searched in XDPool).
 	 * @param reporter report writer or null. If this argument is
 	 * null and error reports occurs then SRuntimeException is thrown.
 	 * @return XComponent with parsed data.
 	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
-	public XComponent xparseXComponent(Object data,
-		Class<?> xClass,
-		ReportWriter reporter) throws SRuntimeException;
+	public XComponent xparseXComponent(Object data, Class<?> xClass, ReportWriter reporter)
+		throws SRuntimeException;
 
 	/** Parse source XML and return XComponent as result.
 	 * @param data string with pathname of XML file or XML source data.
-	 * @param xClass XComponent class (if null, then XComponent class
-	 * is searched in XDPool).
+	 * @param xClass XComponent class (if null, then XComponent class is searched in XDPool).
 	 * @param sourceId name of source or null.
 	 * @param reporter report writer or null. If this argument is
 	 * null and error reports occurs then SRuntimeException is thrown.
@@ -627,8 +584,7 @@ public interface XDDocument extends XXNode {
 
 	/** Run create mode - create element according to the X-definition model.
 	 * If the parameter nsUri is not <i>null</i> then its assigned the model
-	 * with given namespaceURI; in this case the parameter qname may be
-	 * qualified with a prefix.
+	 * with given namespaceURI (in this case the parameter qname may be qualified with a prefix).
 	 * @param nsUri the namespace URI of result element (may be <i>null</i>).
 	 * @param name the name of model of required element (may contain prefix).
 	 * @param xClass XComponent class (if <i>null</i>, then XComponent class
@@ -637,35 +593,32 @@ public interface XDDocument extends XXNode {
 	 * @return XComponent with created data.
 	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
-	public XComponent xcreateXComponent(final String nsUri,
-		final String name,
-		final Class xClass,
-		final ReportWriter reporter) throws SRuntimeException;
+	public XComponent xcreateXComponent(String nsUri,
+		String name,
+		Class xClass,
+		ReportWriter reporter) throws SRuntimeException;
 
 	/** Run create mode - create XComponent according to the X-definition model.
 	 * @param name the name of model of required element.
-	 * @param xClass XComponent class (if <i>null</i>, then XComponent class
+	 * @param xClass XComponent class (if <i>null</i>, then XComponent class.
 	 * @param reporter report writer or <i>null</i>. If this argument is
 	 * <i>null</i> and error reports occurs then SRuntimeException is thrown.
 	 * @return XComponent with created data.
 	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
-	public XComponent xcreateXComponent(final String name,
-		final Class xClass,
-		final ReportWriter reporter) throws SRuntimeException;
+	public XComponent xcreateXComponent(String name, Class xClass, ReportWriter reporter)
+		throws SRuntimeException;
 
 	/** Run create mode - create XComponent according to the X-definition model.
 	 * @param qname the QName of model of required element.
-	 * @param xClass XComponent class (if <i>null</i>, then XComponent class
+	 * @param xClass XComponent class (if <i>null</i>, then XComponent class.
 	 * @param reporter report writer or <i>null</i>. If this argument is
 	 * <i>null</i> and error reports occurs then SRuntimeException is thrown.
 	 * @return XComponent with created data.
-	 * @throws SRuntimeException if reporter is <i>null</i> and an error
-	 * was reported.
+	 * @throws SRuntimeException if reporter is <i>null</i> and an error was reported.
 	 */
-	public XComponent xcreateXComponent(final QName qname,
-		final Class xClass,
-		final ReportWriter reporter) throws SRuntimeException;
+	public XComponent xcreateXComponent(QName qname, Class xClass, ReportWriter reporter)
+		throws SRuntimeException;
 
 	/** Run create XAML according to the X-definition XON model.
 	 * @param name name of XON model.
@@ -674,8 +627,7 @@ public interface XDDocument extends XXNode {
 	 * @return XON object with processed data.
 	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
-	public Object ycreate(String name, ReportWriter reporter)
-		throws SRuntimeException;
+	public Object ycreate(String name, ReportWriter reporter) throws SRuntimeException;
 
 	/** Parse and process YAML data and return processed XON object.
 	 * @param data YAML data or file pathname
@@ -684,8 +636,7 @@ public interface XDDocument extends XXNode {
 	 * @return XON object with processed data.
 	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
-	public Object yparse(String data, ReportWriter reporter)
-		throws SRuntimeException;
+	public Object yparse(String data, ReportWriter reporter) throws SRuntimeException;
 
 	/** Parse and process YAML data and return processed XON object.
 	 * @param data File with YAML data.
@@ -694,8 +645,7 @@ public interface XDDocument extends XXNode {
 	 * @return XON object with processed data.
 	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
-	public Object yparse(File data, ReportWriter reporter)
-		throws SRuntimeException;
+	public Object yparse(File data, ReportWriter reporter) throws SRuntimeException;
 
 	/** Parse and process YAML data and return processed XON object.
 	 * @param data URL pointing to YAML data.
@@ -704,8 +654,7 @@ public interface XDDocument extends XXNode {
 	 * @return XON object with processed data.
 	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
-	public Object yparse(URL data, ReportWriter reporter)
-		throws SRuntimeException;
+	public Object yparse(URL data, ReportWriter reporter) throws SRuntimeException;
 
 	/** Parse and process YAML data and return processed XON object.
 	 * @param data InputStream with YAML data.
@@ -714,8 +663,7 @@ public interface XDDocument extends XXNode {
 	 * @return XON object with processed data.
 	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
-	public Object yparse(InputStream data, ReportWriter reporter)
-		throws SRuntimeException;
+	public Object yparse(InputStream data, ReportWriter reporter) throws SRuntimeException;
 
 	/** Parse source YAML and return XComponent as result.
 	 * @param data string with pathname of YAML file or YAML source data.
@@ -726,14 +674,12 @@ public interface XDDocument extends XXNode {
 	 * @return XComponent with parsed data.
 	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
-	public XComponent yparseXComponent(Object data,
-		Class<?> xClass,
-		ReportWriter reporter) throws SRuntimeException;
+	public XComponent yparseXComponent(Object data, Class<?> xClass, ReportWriter reporter)
+		throws SRuntimeException;
 
 	/** Parse source YAML and return XComponent as result.
 	 * @param data string with pathname of YAML file or YAML source data.
-	 * @param xClass XComponent class (if null, then XComponent class
-	 * is searched in XDPool).
+	 * @param xClass XComponent class (if null, then XComponent class is searched in XDPool).
 	 * @param sourceId name of source or null.
 	 * @param reporter report writer or null. If this argument is
 	 * null and error reports occurs then SRuntimeException is thrown.
@@ -750,22 +696,19 @@ public interface XDDocument extends XXNode {
 	/** Parse source XML and return XComponent as result.
 	 * @deprecated please use xparseXComponent instead
 	 * @param data string with pathname of XML file or XML source data.
-	 * @param xClass XComponent class (if null, then XComponent class
-	 * is searched in XDPool).
+	 * @param xClass XComponent class (if null, then XComponent class is searched in XDPool).
 	 * @param reporter report writer or null. If this argument is
 	 * null and error reports occurs then SRuntimeException is thrown.
 	 * @return XComponent with parsed data.
 	 * @throws SRuntimeException if reporter is null and an error is reported.
 	 */
-	public XComponent parseXComponent(Object data,
-		Class<?> xClass,
-		ReportWriter reporter) throws SRuntimeException;
+	public XComponent parseXComponent(Object data, Class<?> xClass, ReportWriter reporter)
+		throws SRuntimeException;
 
 	/** Parse source XML and return XComponent as result.
 	 * @deprecated please use xparseXComponent instead
 	 * @param data string with pathname of XML file or XML source data.
-	 * @param xClass XComponent class (if null, then XComponent class
-	 * is searched in XDPool).
+	 * @param xClass XComponent class (if null, then XComponent class is searched in XDPool).
 	 * @param sourceId name of source or null.
 	 * @param reporter report writer or null. If this argument is
 	 * null and error reports occurs then SRuntimeException is thrown.

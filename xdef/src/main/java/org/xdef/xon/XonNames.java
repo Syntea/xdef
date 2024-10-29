@@ -11,24 +11,24 @@ public interface XonNames {
 // names used in XON DX and W3C format
 ////////////////////////////////////////////////////////////////////////////////
 	/** XML element name of XON/JSON map. */
-	public final static String X_MAP = "map";
+	public static final String X_MAP = "map";
 	/** XML attribute name of XON/JSON named item in a map. */
-	public final static String X_KEYATTR = "key";
+	public static final String X_KEYATTR = "key";
 	/** XML element name of XON/JSON array. */
-	public final static String X_ARRAY = "array";
+	public static final String X_ARRAY = "array";
 	/** XML element name XON/JSON value (value is in attribute. */
-	public final static String X_VALUE = "item";
+	public static final String X_VALUE = "item";
 	/** XML attribute name of XON/JSON value (in the X_VALUE element). */
-	public final static String X_VALATTR = "val";
+	public static final String X_VALATTR = "val";
 
 	/** QName of of XON/JSON map. */
-	public final static QName Q_MAP =
+	public static final QName Q_MAP =
 		new QName(XDConstants.XON_NS_URI_W, X_MAP);
 	/** QName of of XON/JSON array. */
-	public final static QName Q_ARRAY =
+	public static final QName Q_ARRAY =
 		new QName(XDConstants.XON_NS_URI_W, X_ARRAY);
 	/** QName of of XON/JSON value. */
-	public final static QName Q_VALUE =
+	public static final QName Q_VALUE =
 		new QName(XDConstants.XON_NS_URI_W, X_VALUE);
 
 ////////////////////////////////////////////////////////////////////////////////

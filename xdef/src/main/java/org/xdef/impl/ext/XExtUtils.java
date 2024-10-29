@@ -58,38 +58,33 @@ public final class XExtUtils {
 	/** Get information about actual version of X-definition.
 	 * @return build version and datetime.
 	 */
-	public static String getVersionInfo() {
+	public static final String getVersionInfo() {
 		return XDConstants.BUILD_VERSION + " " + XDConstants.BUILD_DATETIME;
 	}
 
 	/** Check if XQuery implementation is available.
 	 * @return true if XQuery implementation is available.
 	 */
-	public static final boolean isXQuerySupported() {
-		return XDFactory.isXQuerySupported();
-	}
+	public static final boolean isXQuerySupported() {return XDFactory.isXQuerySupported();}
 
 	/** Check if XPath2 implementation is available.
 	 * @return true if XPath2 implementation is available.
 	 */
-	public static final boolean isXPath2Supported() {
-		return XDFactory.isXPath2Supported();
-	}
+	public static final boolean isXPath2Supported() {return XDFactory.isXPath2Supported();}
 
 	/**	Get name space URI of qualified name.
 	 * @param qname qualified name
 	 * @param elem element where name space URI is searched.
 	 * @return name space URI or an empty string.
 	 */
-	public static String getQnameNSUri(final String qname, final Element elem) {
+	public static final String getQnameNSUri(final String qname, final Element elem) {
 		byte xmlVersion = "1.1".equals(elem.getOwnerDocument().getXmlVersion())
 			? StringParser.XMLVER1_1 : StringParser.XMLVER1_0;
 		if (!StringParser.chkXMLName(qname, xmlVersion)) {
 			return "";
 		}
-		String prefix;
-		int ndx;
-		prefix = (ndx = qname.indexOf(':')) > 0 ? qname.substring(0, ndx) : "";
+		int ndx = qname.indexOf(':');
+		String prefix = ndx > 0 ? qname.substring(0, ndx) : "";
 		return getNSUri(prefix, elem);
 	}
 
@@ -98,7 +93,7 @@ public final class XExtUtils {
 	 * @param elem the element.
 	 * @return name space URI.
 	 */
-	public static String getNSUri(final String pfx, final Element elem) {
+	public static final String getNSUri(final String pfx, final Element elem) {
 		Element el;
 		if ((el = elem) == null) {
 			return "";
@@ -117,7 +112,7 @@ public final class XExtUtils {
 	}
 
 	/** Get w3c.dom.Node from the XXNode. */
-	private static Node getActualNode(final XXNode x) {
+	private final static Node getActualNode(final XXNode x) {
 		Element el = x.getElement();
 		return x.getItemId() == XXNode.XX_ELEMENT ? el : el.getLastChild();
 	}
@@ -126,7 +121,7 @@ public final class XExtUtils {
 	 * @param x where to add.
 	 * @param s text of comment.
 	 */
-	public static void addComment(final XXNode x, final String s) {
+	public static final void addComment(final XXNode x, final String s) {
 		Node n = getActualNode(x);
 		addComment((n != null ? n : x.getElement()), s);
 	}
@@ -135,7 +130,7 @@ public final class XExtUtils {
 	 * @param n where to add.
 	 * @param s text of comment.
 	 */
-	public static void addComment(final Node n, final String s) {
+	public static final void addComment(final Node n, final String s) {
 		n.getParentNode().appendChild(
 			n.getOwnerDocument().createComment(s != null? s : ""));
 	}
@@ -144,7 +139,7 @@ public final class XExtUtils {
 	 * @param x where to insert.
 	 * @param s text of comment.
 	 */
-	public static void insertComment(final XXNode x, final String s) {
+	public static final void insertComment(final XXNode x, final String s) {
 		Node n = getActualNode(x);
 		if (n != null) {
 			insertComment(n, s);
@@ -157,9 +152,8 @@ public final class XExtUtils {
 	 * @param n where to insert.
 	 * @param s text of comment.
 	 */
-	public static void insertComment(final Node n, final String s) {
-		n.getParentNode().insertBefore(
-			n.getOwnerDocument().createComment(s), n);
+	public static final void insertComment(final Node n, final String s) {
+		n.getParentNode().insertBefore(n.getOwnerDocument().createComment(s), n);
 	}
 
 	/** Add programming instruction to the XXNode.
@@ -167,15 +161,9 @@ public final class XExtUtils {
 	 * @param target target of PI.
 	 * @param data data of PI.
 	 */
-	public static void addPI(final XXNode x,
-		final String target,
-		final String data) {
+	public static final void addPI(final XXNode x, final String target, final String data) {
 		Node n = getActualNode(x);
-		if (n != null) {
-			addPI(n, target, data);
-		} else {
-			addPI(x.getElement(), target, data);
-		}
+		addPI(n != null ? n : x.getElement(), target, data);
 	}
 
 	/** Add programming instruction to the org.w3c.dom.Node.
@@ -183,9 +171,7 @@ public final class XExtUtils {
 	 * @param target target of PI.
 	 * @param data data of PI.
 	 */
-	public static void addPI(final Node n,
-		final String target,
-		final String data) {
+	public static final void addPI(final Node n, final String target, final String data) {
 		n.getParentNode().appendChild(
 			n.getOwnerDocument().createProcessingInstruction(target, data));
 	}
@@ -195,9 +181,7 @@ public final class XExtUtils {
 	 * @param target target of PI.
 	 * @param data data of PI.
 	 */
-	public static void insertPI(final XXNode x,
-		final String target,
-		final String data) {
+	public static final void insertPI(final XXNode x, final String target, final String data) {
 		Node n = getActualNode(x);
 		if (n != null) {
 			insertPI(n, target, data);
@@ -211,9 +195,7 @@ public final class XExtUtils {
 	 * @param target target of PI.
 	 * @param data data of PI.
 	 */
-	public static void insertPI(final Node n,
-		final String target,
-		final String data) {
+	public static final void insertPI(final Node n, final String target, final String data) {
 		n.getParentNode().insertBefore(
 			n.getOwnerDocument().createProcessingInstruction(target,data), n);
 	}
@@ -222,15 +204,13 @@ public final class XExtUtils {
 	 * @param x where to add.
 	 * @param s text value.
 	 */
-	public static void addText(final XXNode x, final String s) {
-		addText(x.getElement(), s);
-	}
+	public static final void addText(final XXNode x, final String s) {addText(x.getElement(), s);}
 
 	/** Add text to the org.w3c.Element.
 	 * @param el where to add.
 	 * @param s text value.
 	 */
-	public static void addText(final Element el, final String s) {
+	public static final void addText(final Element el, final String s) {
 		if (s != null && !s.isEmpty()) {
 			el.appendChild(el.getOwnerDocument().createTextNode(s));
 		}
@@ -240,7 +220,7 @@ public final class XExtUtils {
 	 * @param x where to insert.
 	 * @param s text value.
 	 */
-	public static void insertText(final XXNode x, final String s) {
+	public static final void insertText(final XXNode x, final String s) {
 		Node n = getActualNode(x);
 		if (n != null) {
 			insertText(n, s);
@@ -253,10 +233,9 @@ public final class XExtUtils {
 	 * @param n where to insert.
 	 * @param s text value.
 	 */
-	public static void insertText(final Node n, final String s) {
+	public static final void insertText(final Node n, final String s) {
 		if (s != null && !s.isEmpty()) {
-			n.getParentNode().insertBefore(
-				n.getOwnerDocument().createTextNode(s), n);
+			n.getParentNode().insertBefore(n.getOwnerDocument().createTextNode(s), n);
 		}
 	}
 
@@ -264,7 +243,7 @@ public final class XExtUtils {
 	 * @param x node with text content.
 	 * @return text content of XXNode.
 	 */
-	public static String getTextContent(final XXNode x) {
+	public static final String getTextContent(final XXNode x) {
 		return getTextContent(x.getElement());
 	}
 
@@ -272,7 +251,7 @@ public final class XExtUtils {
 	 * @param el element with text content.
 	 * @return text content of element.
 	 */
-	public static String getTextContent(final Element el) {
+	public static final String getTextContent(final Element el) {
 		return el != null ? el.getTextContent() : null;
 	}
 
@@ -280,21 +259,19 @@ public final class XExtUtils {
 	 * @param x node with position.
 	 * @return X-position of node.
 	 */
-	public static String getXPos(final XXNode x) {return x.getXPos();}
+	public static final String getXPos(final XXNode x) {return x.getXPos();}
 
 	/** Get X-position of model in X-definition.
 	 * @param x node with position.
 	 * @return X-position of model of XXNode..
 	 */
-	public static String getXDPosition(final XXNode x) {
-		return x.getXMNode().getXDPosition();
-	}
+	public static final String getXDPosition(final XXNode x) {return x.getXMNode().getXDPosition();}
 
 	/** Get source line number of XXNode.
 	 * @param x node with line number.
 	 * @return source line numer of node.
 	 */
-	public static long getSourceLine(final XXNode x) {
+	public static final long getSourceLine(final XXNode x) {
 		SPosition spos = x.getSPosition();
 		return spos != null ? spos.getLineNumber() : 0;
 	}
@@ -303,7 +280,7 @@ public final class XExtUtils {
 	 * @param x node.
 	 * @return source column numer of node.
 	 */
-	public static long getSourceColumn(final XXNode x) {
+	public static final long getSourceColumn(final XXNode x) {
 		SPosition spos = x.getSPosition();
 		return spos != null ? spos.getColumnNumber() : 0;
 	}
@@ -312,7 +289,7 @@ public final class XExtUtils {
 	 * @param x node.
 	 * @return system id of XXNode.
 	 */
-	public static String getSysId(final XXNode x) {
+	public static final String getSysId(final XXNode x) {
 		SPosition spos = x.getSPosition();
 		return spos != null ? spos.getSysId() : "";
 	}
@@ -321,7 +298,7 @@ public final class XExtUtils {
 	 * @param x node with source position.
 	 * @return source position of node or null if it is not available.
 	 */
-	public static String getSourcePosition(final XXNode x) {
+	public static final String getSourcePosition(final XXNode x) {
 		SPosition spos = x.getSPosition();
 		return spos != null ? spos.toString() : "";
 	}
@@ -330,51 +307,43 @@ public final class XExtUtils {
 	 * operating system).
 	 * @return the current time in milliseconds.
 	 */
-	public static long currentTimeMillis() {return System.currentTimeMillis();}
+	public static final long currentTimeMillis() {return System.currentTimeMillis();}
 
 	/** Get value of environmental variable.
 	 * @param name of environmental variable.
 	 * @return value of environmental variable.
 	 */
-	public static String getEnv(final String name) {return System.getenv(name);}
+	public static final String getEnv(final String name) {return System.getenv(name);}
 
 	/** Get user name from email address.
 	 * @param x email address.
 	 * @return user name from the email address.
 	 */
-	public static String getEmailUserName(final XDEmailAddr x) {
-		return x.getUserName();
-	}
+	public static final String getEmailUserName(final XDEmailAddr x) {return x.getUserName();}
 
 	/** Get local part from email address.
 	 * @param x email address.
 	 * @return local part from email address.
 	 */
-	public static String getEmailLocalPart(final XDEmailAddr x) {
-		return x.getLocalPart();
-	}
+	public static final String getEmailLocalPart(final XDEmailAddr x) {return x.getLocalPart();}
 
 	/** Get domain from email address.
 	 * @param x email address.
 	 * @return domain from email address.
 	 */
-	public static String getEmailDomain(final XDEmailAddr x) {
-		return x.getDomain();
-	}
+	public static final String getEmailDomain(final XDEmailAddr x) {return x.getDomain();}
 
 	/** Get string from email address.
 	 * @param x email address.
 	 * @return  string created from email address.
 	 */
-	public static String getEmailAddr(final XDEmailAddr x){
-		return x.getEmailAddr();
-	}
+	public static final String getEmailAddr(final XDEmailAddr x){return x.getEmailAddr();}
 
 	/** Get string from internet address.
 	 * @param x internet address.
 	 * @return  string created from internet address.
 	 */
-	public static String getHostAddress(final InetAddress x){
+	public static final String getHostAddress(final InetAddress x){
 		return x.getHostAddress();
 	}
 
@@ -382,8 +351,13 @@ public final class XExtUtils {
 	 * @param x internet address.
 	 * @return bytes created from internet address.
 	 */
-	public static byte[] getBytes(final InetAddress x) {return x.getAddress();}
-	public static boolean isIPv6(final InetAddress x) {
+	public static final byte[] getBytes(final InetAddress x) {return x.getAddress();}
+
+	/** Check if InetAddres from argument is version 6.
+	 * @param x InetAddres to be checked
+	 * @return if InetAddres from argument is version 6.
+	 */
+	public static final boolean isIPv6(final InetAddress x) {
 		return x == null ? false : x.getAddress().length > 4;
 	}
 
@@ -391,7 +365,7 @@ public final class XExtUtils {
 	 * @param x node.
 	 * @return value of XON key from XXNoede as string.
 	 */
-	public static String getXonKey(final XXNode x) {
+	public static final String getXonKey(final XXNode x) {
 		String s = x.getElement().getAttribute(XonNames.X_KEYATTR);
 		return s != null ? XonTools.xmlToJName(s) : null;
 	}
@@ -400,7 +374,7 @@ public final class XExtUtils {
 	 * @param o object.
 	 * @return XDValue created from object.
 	 */
-	public static XDValue getXDValueOfObject(final Object o) {
+	public static final XDValue getXDValueOfObject(final Object o) {
 		if (o instanceof Map) {
 			DefContainer c = new DefContainer();
 			Map x = (Map) o;
@@ -453,7 +427,7 @@ public final class XExtUtils {
 	 * @param xel XXElement with XON value..
 	 * @return XDValue created from XXElement containg XON value.
 	 */
-	public static XDValue getXDValueOfXon(final XXElement xel) {
+	public static final XDValue getXDValueOfXon(final XXElement xel) {
 		return getXDValueOfObject(xel.getXon());
 	}
 
@@ -462,23 +436,22 @@ public final class XExtUtils {
 ////////////////////////////////////////////////////////////////////////////////
 
 	/** Cancel running X-definition process. */
-	public static void cancel() {
+	public static final void cancel() {
 		throw new SError(Report.error(XDEF.XDEF906)); //X-definition canceled
 	}
 
 	/** Cancel running X-definition process and throw message.
 	 * @param msg reason of cancelling.
 	 */
-	public static void cancel(final String msg) {
-		 //X-definition canceled&{0}{; }
-		throw new SError(Report.error(XDEF.XDEF906, msg));
+	public static final void cancel(final String msg) {
+		throw new SError(Report.error(XDEF.XDEF906, msg));  //X-definition canceled&{0}{; }
 	}
 
 	/** Parse base64 data.
 	 * @param s base64 data
 	 * @return parsed bytes from base64 data.
 	 */
-	public static byte[] parseBase64(final String s) {
+	public static final byte[] parseBase64(final String s) {
 		try {
 			return SUtils.decodeBase64(s);
 		} catch (SException ex) {
@@ -490,7 +463,7 @@ public final class XExtUtils {
 	 * @param s hexadecimal data
 	 * @return parsed bytes from hexadecimal data.
 	 */
-	public static byte[] parseHex(final String s) {
+	public static final byte[] parseHex(final String s) {
 		try {
 			return SUtils.decodeHex(s);
 		} catch (SException ex) {
@@ -499,20 +472,20 @@ public final class XExtUtils {
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
-// Methods with XXElement
+// Methods with XXNode
 ////////////////////////////////////////////////////////////////////////////////
 
-	public static Element getCreateContextElement(final XXElement xElem) {
-		return ((ChkNode)xElem).getElemValue();
+	public static final Element getCreateContextElement(final XXNode xElem) {
+		return ((ChkNode) xElem).getElemValue();
 	}
-	public static Element getParentContextElement(final XXElement xElem) {
+	public static final Element getParentContextElement(final XXNode xElem) {
 		XDValue val = ((XXElement) xElem.getParent()).getXDContext();
 		if (val == null || val.getItemId() != XD_ELEMENT) {
 			return null;
 		}
 		return val.getElement();
 	}
-	public static Element getParentContextElement(final XXElement xElem,
+	public static final Element getParentContextElement(final XXNode xElem,
 		final long level) {
 		if (level == 0) {
 			return getParentContextElement(xElem);
@@ -533,7 +506,7 @@ public final class XExtUtils {
 		}
 		return null;
 	}
-	public static XDContainer fromParent(final XXElement xel,final String exp) {
+	public static final XDContainer fromParent(final XXNode xel,final String exp) {
 		XDValue val = xel.getParent().getXDContext();
 		if (val == null || val.getItemId() != XD_ELEMENT) {
 			return new DefContainer();
@@ -545,11 +518,7 @@ public final class XExtUtils {
 			xel.getXXVariableResolver());
 		return new DefContainer(xe.exec(el));
 	}
-	public static XDContainer fromParentContext(final XXElement e,
-		final String x) {
-		return fromParent(e, x);
-	}
-	public static XDContainer fromRoot(final XXElement xElem,
+	public static final XDContainer fromRoot(final XXNode xElem,
 		final String expr,
 		final Element elem) {
 		DefXPathExpr xe = new DefXPathExpr(expr,
@@ -558,62 +527,30 @@ public final class XExtUtils {
 			xElem.getXXVariableResolver());
 		return new DefContainer(xe.exec(elem));
 	}
-
-	public static XDContainer fromRootContext(final XXElement xElem,
-		final String expr,
-		final Element elem) {
-		return fromRoot(xElem, expr, elem);
-	}
-
-////////////////////////////////////////////////////////////////////////////////
-// Methods with XXNode
-////////////////////////////////////////////////////////////////////////////////
-
-	public static XDContainer fromRoot(final XXNode xElem, final String expr) {
+	public static final XDContainer fromRoot(final XXNode xElem, final String expr) {
 		XDValue val = xElem.getXDDocument().getXDContext();
-		if (val == null || val.getItemId() != XD_ELEMENT) {
-			return new DefContainer();
-		}
-		Element elem = val.getElement();
-		DefXPathExpr xe = new DefXPathExpr(expr,
-			xElem.getXXNamespaceContext(),
-			xElem.getXXFunctionResolver(),
-			xElem.getXXVariableResolver());
-		return new DefContainer(xe.exec(elem));
-	}
-	public static XDContainer fromRootContext(final XXNode xe,final String exp){
-		return fromRoot(xe, exp);
+		return (val == null || val.getItemId() != XD_ELEMENT)
+			? new DefContainer() : fromRoot(xElem, expr, val.getElement());
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
 // PARSERESULT
 ////////////////////////////////////////////////////////////////////////////////
-	public static void clearReports(final XDParseResult x) {
-		x.clearReports();
-	}
-	public static String getSource(final XDParseResult x) {
-		return x.getSourceBuffer();
-	}
-	public static boolean isSpaces(final XDParseResult x) {return x.isSpaces();}
-	public static boolean isToken(final XDParseResult x, final XDValue y){
-		return x.isToken(y.stringValue());
-	}
+	public static final void clearReports(final XDParseResult x) {x.clearReports();}
+
+	public static final String getSource(final XDParseResult x) {return x.getSourceBuffer();}
 ////////////////////////////////////////////////////////////////////////////////
 // dateTime
 ////////////////////////////////////////////////////////////////////////////////
-	public static int getMaxYear(XXNode xnode) {
-		return xnode.getXDPool().getMaxYear();
-	}
-	public static void setMaxYear(XXNode xnode, int i) {
+	public static final int getMaxYear(final XXNode xnode) {return xnode.getXDPool().getMaxYear();}
+	public static final void setMaxYear(XXNode xnode, int i) {
 		xnode.getXDDocument().setMaxYear(i);
 	}
-	public static int getMinYear(XXNode xnode) {
-		return xnode.getXDPool().getMaxYear();
-	}
-	public static void setMinYear(XXNode xnode, int i) {
+	public static final int getMinYear(final XXNode xnode) {return xnode.getXDPool().getMaxYear();}
+	public static final void setMinYear(final XXNode xnode, int i) {
 		xnode.getXDDocument().setMinYear(i);
 	}
-	public static XDContainer getSpecialDates(XXNode xnode) {
+	public static final XDContainer getSpecialDates(final XXNode xnode) {
 		SDatetime[] dates = xnode.getXDDocument().getSpecialDates();
 		DefContainer c = new DefContainer();
 		if (dates != null) {
@@ -623,7 +560,7 @@ public final class XExtUtils {
 		}
 		return c;
 	}
-	public static void setSpecialDates(XXNode xnode, XDContainer c) {
+	public static final void setSpecialDates(final XXNode xnode, final XDContainer c) {
 		SDatetime[] dates = new SDatetime[c.getXDItemsNumber()];
 		for (int i = 0; i < dates.length; i++) {
 			dates[i] = c.getXDItem(i).datetimeValue();
@@ -631,7 +568,7 @@ public final class XExtUtils {
 		xnode.getXDDocument().setSpecialDates(dates);
 	}
 
-	public static SDatetime parseEmailDate(final String x) {
+	public static final SDatetime parseEmailDate(final String x) {
 		StringParser p = new StringParser((x == null) ? "" : x.trim());
 		return p.isRFC822Datetime() && p.eos() &&
 			p.testParsedDatetime()
@@ -642,189 +579,158 @@ public final class XExtUtils {
 // Implementation of predefined X-Script Math methods (ensure conversion
 // of arguments long -> double). Other math methods are available in Math.
 ////////////////////////////////////////////////////////////////////////////////
-	public static double acos(long a) {return Math.acos(a);}
-	public static double asin(long a) {return Math.asin(a);}
-	public static double atan(long a) {return Math.atan(a);}
-	public static double atan2(long a, long b) {return Math.atan2(a,b);}
-	public static double atan2(long a, double b) {return Math.atan2(a,b);}
-	public static double atan2(double a, long b) {return Math.atan2(a,b);}
-	public static double cbrt(long a) {return Math.cbrt(a);}
-	public static double ceil(long a) {return Math.ceil(a);}
-	public static double cos(long a) {return Math.cos(a);}
-	public static double cosh(long a) {return Math.cosh(a);}
-	public static double exp(long a) {return Math.exp(a);}
-	public static double expm1(long a) {return Math.expm1(a);}
-	public static double floor(long a) {return Math.floor(a);}
-	public static double hypot(long a, long b) {return Math.hypot(a, b);}
-	public static double hypot(long a, double b) {return Math.hypot(a,b);}
-	public static double hypot(double a, long b) {return Math.hypot(a,b);}
-	public static double IEEEremainder(long a, long b) {
+	public static final double acos(final long a) {return Math.acos(a);}
+	public static final double asin(final long a) {return Math.asin(a);}
+	public static final double atan(final long a) {return Math.atan(a);}
+	public static final double atan2(final long a, long b) {return Math.atan2(a,b);}
+	public static final double atan2(final long a, double b) {return Math.atan2(a,b);}
+	public static final double atan2(double a, long b) {return Math.atan2(a,b);}
+	public static final double cbrt(final long a) {return Math.cbrt(a);}
+	public static final double ceil(final long a) {return Math.ceil(a);}
+	public static final double cos(final long a) {return Math.cos(a);}
+	public static final double cosh(final long a) {return Math.cosh(a);}
+	public static final double exp(final long a) {return Math.exp(a);}
+	public static final double expm1(final long a) {return Math.expm1(a);}
+	public static final double floor(final long a) {return Math.floor(a);}
+	public static final double hypot(final long a, long b) {return Math.hypot(a, b);}
+	public static final double hypot(final long a, double b) {return Math.hypot(a,b);}
+	public static final double hypot(double a, long b) {return Math.hypot(a,b);}
+	public static final double IEEEremainder(final long a, long b) {
 		return Math.IEEEremainder(a,b);
 	}
-	public static double IEEEremainder(long a, double b) {
+	public static final double IEEEremainder(final long a, double b) {
 		return Math.IEEEremainder(a,b);
 	}
-	public static double IEEEremainder(double a, long b) {
+	public static final double IEEEremainder(double a, long b) {
 		return Math.IEEEremainder(a,b);
 	}
-	public static double log(long a) {return Math.log(a);}
-	public static double log10(long a) {return Math.log10(a);}
-	public static double log1p(long a) {return Math.log1p(a);}
-	public static long max(long a, long b) {return Math.max(a, b);}
-	public static double max(double a, long b) {return Math.max(a, b);}
-	public static double max(long a, double b) {return Math.max(a, b);}
-	public static long min(long a, long b) {return Math.min(a, b);}
-	public static double min(double a, long b) {return Math.min(a, b);}
-	public static double min(long a, double b) {return Math.min(a, b);}
-	public static double pow(long a, long b) {return Math.pow(a, b);}
-	public static double pow(long a, double b) {return Math.pow(a, b);}
-	public static double pow(double a, long b) {return Math.pow(a, b);}
-	public static double rint(long a) {return Math.rint(a);}
-	public static long round(long a) {return Math.round(a);}
-	public static double signum(long a) {return Math.signum(a);}
-	public static double sin(long a) {return Math.sin(a);}
-	public static double sinh(long a) {return Math.sinh(a);}
-	public static double sqrt(long a) {return Math.sqrt(a);}
-	public static double tan(long a) {return Math.tan(a);}
-	public static double tanh(long a) {return Math.tanh(a);}
-	public static double toDegrees(long a) {return Math.toDegrees(a);}
-	public static double toRadians(long a) {return Math.toRadians(a);}
-	public static double ulp(long a) {return Math.ulp(a);}
+	public static final double log(final long a) {return Math.log(a);}
+	public static final double log10(final long a) {return Math.log10(a);}
+	public static final double log1p(final long a) {return Math.log1p(a);}
+	public static final long max(final long a, long b) {return Math.max(a, b);}
+	public static final double max(final double a, long b) {return Math.max(a, b);}
+	public static final double max(final long a, double b) {return Math.max(a, b);}
+	public static final long min(final long a, long b) {return Math.min(a, b);}
+	public static final double min(final double a, long b) {return Math.min(a, b);}
+	public static final double min(final long a, double b) {return Math.min(a, b);}
+	public static final double pow(final long a, long b) {return Math.pow(a, b);}
+	public static final double pow(final long a, double b) {return Math.pow(a, b);}
+	public static final double pow(final double a, long b) {return Math.pow(a, b);}
+	public static final double rint(final long a) {return Math.rint(a);}
+	public static final long round(final long a) {return Math.round(a);}
+	public static final double signum(final long a) {return Math.signum(a);}
+	public static final double sin(final long a) {return Math.sin(a);}
+	public static final double sinh(final long a) {return Math.sinh(a);}
+	public static final double sqrt(final long a) {return Math.sqrt(a);}
+	public static final double tan(final long a) {return Math.tan(a);}
+	public static final double tanh(final long a) {return Math.tanh(a);}
+	public static final double toDegrees(final long a) {return Math.toDegrees(a);}
+	public static final double toRadians(final long a) {return Math.toRadians(a);}
+	public static final double ulp(final long a) {return Math.ulp(a);}
 	// Decimal constructors
-	public static BigDecimal decimalValue(final BigDecimal a) {
+	public static final BigDecimal decimalValue(final BigDecimal a) {
 		return new BigDecimal(a.toString());
 	}
-	public static BigDecimal decimalValue(final String a) {
-		return new BigDecimal(a);
-	}
-	public static BigDecimal decimalValue(final long a) {
-		return new BigDecimal(a);
-	}
-	public static BigDecimal decimalValue(final double a) {
-		return new BigDecimal(a);
-	}
+	public static final BigDecimal decimalValue(final String a) {return new BigDecimal(a);}
+	public static final BigDecimal decimalValue(final long a) {return new BigDecimal(a);}
+	public static final BigDecimal decimalValue(final double a) {return new BigDecimal(a);}
 	// Decimal methods
-	public static BigDecimal abs(final BigDecimal a) {return a.abs();}
-	public static BigDecimal add(final BigDecimal a, final BigDecimal b) {
-		return a.add(b);
-	}
-	public static BigDecimal add(final BigDecimal a, final long b) {
+	public static final BigDecimal abs(final BigDecimal a) {return a.abs();}
+	public static final BigDecimal add(final BigDecimal a, final BigDecimal b) {return a.add(b);}
+	public static final BigDecimal add(final BigDecimal a, final long b) {
 		return a.add(new BigDecimal(b));
 	}
-	public static BigDecimal add(final BigDecimal a, final double b) {
+	public static final BigDecimal add(final BigDecimal a, final double b) {
 		return a.add(new BigDecimal(b));
 	}
-	public static long compare(final BigDecimal a, final BigDecimal b) {
-		return a.compareTo(a);
-	}
-	public static long compare(final BigDecimal a, final long b) {
-		return a.compareTo(a);
-	}
-	public static long compare(final BigDecimal a, final double b) {
-		return a.compareTo(a);
-	}
-	public static BigDecimal divide(final BigDecimal a, final BigDecimal b) {
+	public static final long compare(final BigDecimal a, final BigDecimal b){return a.compareTo(a);}
+	public static final long compare(final BigDecimal a, final long b) {return a.compareTo(a);}
+	public static final long compare(final BigDecimal a, final double b) {return a.compareTo(a);}
+	public static final BigDecimal divide(final BigDecimal a, final BigDecimal b) {
 		return a.divide(b);
 	}
-	public static BigDecimal divide(final BigDecimal a, final long b) {
+	public static final BigDecimal divide(final BigDecimal a, final long b) {
 		return a.divide(new BigDecimal(b));
 	}
-	public static BigDecimal divide(final BigDecimal a, final double b) {
+	public static final BigDecimal divide(final BigDecimal a, final double b) {
 		return a.divide(new BigDecimal(b));
 	}
-	public static boolean equals(final BigDecimal a, final BigDecimal b) {
-		return a.equals(b);
-	}
-	public static boolean equals(final BigDecimal a, final long b) {
-		return a.equals(b);
-	}
-	public static boolean equals(final BigDecimal a, final double b) {
-		return a.equals(b);
-	}
-	public static long intValue(final BigDecimal a){return a.longValue();}
-	public static double floatValue(final BigDecimal a){
-		return a.doubleValue();
-	}
-	public static BigDecimal max(final BigDecimal a, final BigDecimal b) {
-		return a.max(b);
-	}
-	public static BigDecimal max(final BigDecimal a, final long b) {
+	public static final boolean equals(final BigDecimal a, final BigDecimal b) {return a.equals(b);}
+	public static final boolean equals(final BigDecimal a, final long b) {return a.equals(b);}
+	public static final boolean equals(final BigDecimal a, final double b) {return a.equals(b);}
+	public static final long intValue(final BigDecimal a){return a.longValue();}
+	public static final double floatValue(final BigDecimal a) {return a.doubleValue();}
+	public static final BigDecimal max(final BigDecimal a, final BigDecimal b) {return a.max(b);}
+	public static final BigDecimal max(final BigDecimal a, final long b) {
 		return a.max(new BigDecimal(b));
 	}
-	public static BigDecimal max(final BigDecimal a, final double b) {
+	public static final BigDecimal max(final BigDecimal a, final double b) {
 		return a.max(new BigDecimal(b));
 	}
-	public static BigDecimal max(final long a, final BigDecimal b) {
+	public static final BigDecimal max(final long a, final BigDecimal b) {
 		return new BigDecimal(a).max(b);
 	}
-	public static BigDecimal max(final double a, final BigDecimal b) {
+	public static final BigDecimal max(final double a, final BigDecimal b) {
 		return new BigDecimal(a).max(b);
 	}
-	public static BigDecimal min(final BigDecimal a, final BigDecimal b) {
-		return a.min(b);
-	}
-	public static BigDecimal min(final BigDecimal a, final long b) {
+	public static final BigDecimal min(final BigDecimal a, final BigDecimal b) {return a.min(b);}
+	public static final BigDecimal min(final BigDecimal a, final long b) {
 		return a.min(new BigDecimal(b));
 	}
-	public static BigDecimal min(final BigDecimal a, final double b) {
+	public static final BigDecimal min(final BigDecimal a, final double b) {
 		return a.min(new BigDecimal(b));
 	}
-	public static BigDecimal min(final long a, final BigDecimal b) {
+	public static final BigDecimal min(final long a, final BigDecimal b) {
 		return new BigDecimal(a).min(b);
 	}
-	public static BigDecimal min(final double a, final BigDecimal b) {
+	public static final BigDecimal min(final double a, final BigDecimal b) {
 		return new BigDecimal(a).min(b);
 	}
-	public static BigDecimal movePointLeft(final BigDecimal a,
-		final long b) {
+	public static final BigDecimal movePointLeft(final BigDecimal a, final long b) {
 		return a.movePointLeft((int) b);
 	}
-	public static BigDecimal movePointRight(final BigDecimal a, final long b) {
+	public static final BigDecimal movePointRight(final BigDecimal a, final long b) {
 		return a.movePointRight((int) b);
 	}
-	public static BigDecimal multiply(final BigDecimal a, final BigDecimal b) {
+	public static final BigDecimal multiply(final BigDecimal a, final BigDecimal b) {
 		return a.multiply(b);
 	}
-	public static BigDecimal multiply(final BigDecimal a, final long b) {
+	public static final BigDecimal multiply(final BigDecimal a, final long b) {
 		return a.multiply(new BigDecimal(b));
 	}
-	public static BigDecimal multiply(final BigDecimal a, final double b){
+	public static final BigDecimal multiply(final BigDecimal a, final double b){
 		return a.multiply(new BigDecimal(b));
 	}
-	public static BigDecimal negate(final BigDecimal a) {return a.negate();}
-	public static BigDecimal plus(final BigDecimal a) {return a.plus();}
-	public static BigDecimal pow(final BigDecimal a, final long b) {
-		return a.pow((int) b);
-	}
-	public static BigDecimal remainder(final BigDecimal a, final BigDecimal b) {
+	public static final BigDecimal negate(final BigDecimal a) {return a.negate();}
+	public static final BigDecimal plus(final BigDecimal a) {return a.plus();}
+	public static final BigDecimal pow(final BigDecimal a, final long b) {return a.pow((int) b);}
+	public static final BigDecimal remainder(final BigDecimal a, final BigDecimal b) {
 		return a.remainder(b);
 	}
-	public static BigDecimal remainder(final BigDecimal a, final long b) {
+	public static final BigDecimal remainder(final BigDecimal a, final long b) {
 		return a.remainder(new BigDecimal(b));
 	}
-	public static BigDecimal remainder(final BigDecimal a,final double b){
+	public static final BigDecimal remainder(final BigDecimal a,final double b) {
 		return a.remainder(new BigDecimal(b));
 	}
-	public static BigDecimal round(final BigDecimal a) {
-		return a.round(MathContext.UNLIMITED);
-	}
-	public static BigDecimal scaleByPowerOfTen(final BigDecimal a,final long b){
+	public static final BigDecimal round(final BigDecimal a){return a.round(MathContext.UNLIMITED);}
+	public static final BigDecimal scaleByPowerOfTen(final BigDecimal a,final long b){
 		return a.scaleByPowerOfTen((int) b);
 	}
-	public static BigDecimal setScale(final BigDecimal a, final long b) {
+	public static final BigDecimal setScale(final BigDecimal a, final long b) {
 		return a.setScale((int) b);
 	}
-	public static BigDecimal stripTrailingZeros(final BigDecimal a) {
+	public static final BigDecimal stripTrailingZeros(final BigDecimal a) {
 		return a.stripTrailingZeros();
 	}
-	public static BigDecimal subtract(final BigDecimal a, final BigDecimal b) {
+	public static final BigDecimal subtract(final BigDecimal a, final BigDecimal b) {
 		return a.subtract(b);
 	}
-	public static BigDecimal subtract(final BigDecimal a, final long b) {
+	public static final BigDecimal subtract(final BigDecimal a, final long b) {
 		return a.subtract(new BigDecimal(b));
 	}
-	public static BigDecimal subtract(final BigDecimal a, final double b){
+	public static final BigDecimal subtract(final BigDecimal a, final double b){
 		return a.subtract(new BigDecimal(b));
 	}
-	public static BigDecimal ulp(final BigDecimal a) {return a.ulp();}
+	public static final BigDecimal ulp(final BigDecimal a) {return a.ulp();}
 }

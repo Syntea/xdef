@@ -31,8 +31,7 @@ import org.xdef.xon.XonTools;
 /** Abstract parser of string values.
  * @author Vaclav Trojan
  */
-public abstract class XDParserAbstract extends XDValueAbstract
-	implements XDParser {
+public abstract class XDParserAbstract extends XDValueAbstract implements XDParser {
 
 	/** Name of type how it was declared, */
 	private String _declaredName;

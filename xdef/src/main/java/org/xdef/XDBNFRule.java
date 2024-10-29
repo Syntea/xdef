@@ -4,7 +4,7 @@ import org.xdef.sys.BNFRule;
 import org.xdef.sys.SBuffer;
 import org.xdef.sys.StringParser;
 
-/** BNF rule in x-script.
+/** BNF rule in X-script.
  * @author Vaclav Trojan
  */
 public interface XDBNFRule extends XDValue {

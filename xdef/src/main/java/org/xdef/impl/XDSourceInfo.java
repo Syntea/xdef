@@ -69,7 +69,7 @@ public final class XDSourceInfo {
 	 * @return XDSourceInfo object
 	 * @throws IOException if an error occurs.
 	 */
-	public final static XDSourceInfo readXDSourceInfo(final XDReader xr)
+	public static final XDSourceInfo readXDSourceInfo(final XDReader xr)
 		throws IOException {
 		XDSourceInfo result = new XDSourceInfo();
 		result._xpos = xr.readInt();

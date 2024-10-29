@@ -1,5 +1,6 @@
 package org.xdef.impl.parsers;
 
+import java.util.TimeZone;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.SDatetime;
@@ -10,6 +11,16 @@ import org.xdef.proc.XXNode;
 import org.xdef.impl.code.DefDate;
 import org.xdef.impl.code.DefString;
 import org.xdef.XDContainer;
+import static org.xdef.XDParser.ENUMERATION;
+import static org.xdef.XDParser.FORMAT;
+import static org.xdef.XDParser.MAXEXCLUSIVE;
+import static org.xdef.XDParser.MAXINCLUSIVE;
+import static org.xdef.XDParser.MINEXCLUSIVE;
+import static org.xdef.XDParser.MININCLUSIVE;
+import static org.xdef.XDParser.OUTFORMAT;
+import static org.xdef.XDParser.PATTERN;
+import static org.xdef.XDParser.WHITESPACE;
+import static org.xdef.XDValueID.XD_DATETIME;
 
 /** Parser of X-Script "xdatetime" type.
  * @author Vaclav Trojan
@@ -69,6 +80,14 @@ public class XDParseXDatetime extends XSAbstractParseComparable {
 		p.setParsedValue(new DefDate(d));
 		checkDate(xnode, p);
 		if (_outFormat != null) {
+			if (xnode != null && (SDatetime.checkFormat(_outFormat) & 0xffff0000) != 0) { // is zone
+				if (d.getTZ() == null) {
+					TimeZone defaulttz = xnode.getXDPool().getDefaultZone();
+					if (defaulttz != null) { // default zone is set
+						d.setTZ(defaulttz); // set this zone datetime
+					}
+				}
+			}
 			s = d.formatDate(_outFormat);
 		}
 		p.replaceParsedBufferFrom(pos0, s);
@@ -80,12 +99,10 @@ public class XDParseXDatetime extends XSAbstractParseComparable {
 	 * @param xnode actual XXNode object.
 	 * @throws SException if an error occurs.
 	 */
-	public void setNamedParams(final XXNode xnode, final XDContainer params)
-		throws SException {
+	public void setNamedParams(final XXNode xnode, final XDContainer params) throws SException {
 		super.setNamedParams(xnode, params);
 		if (_format == null) {
-			//Missing required parameter: &{0}
-			throw new SException(XDEF.XDEF545, "format");
+			throw new SException(XDEF.XDEF545, "format"); //Missing required parameter: &{0}
 		}
 	}
 	@Override

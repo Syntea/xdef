@@ -3,25 +3,48 @@ package org.xdef.component;
 /** Information about XComponent class.
  * @author Trojan
  */
-public class XComponentInfo {
-	final String _name;
-	String _ns;
-	public XComponentInfo(final String name) {_name = name;}
-	public XComponentInfo(final String name,final String ns){_name=name;_ns=ns;}
+final class XComponentInfo {
+
+	private final String _name;
+	private final String _ns;
+
+	/** Create new instance of XComponentInfo.
+	 * @param name name of XComponent model.
+	 */
+	public XComponentInfo(final String name) {_name = name; _ns = null;}
+
+	/** Create new instance of XComponentInfo.
+	 * @param name name of XComponent model.
+	 * @param ns namespace URI of XComponent model.
+	 */
+	XComponentInfo(final String name,final String ns){_name = name;_ns = ns;}
+
+	/** Get name of XComponent model.
+	 * @return name of XComponent model.
+	 */
 	public final String getName() {return _name;}
+
+	/** Get namespace of XComponent model.
+	 * @return namespace of XComponent model.
+	 */
 	public final String getNS() {return _ns;}
-	public final void setNS(final String ns) {_ns = ns;}
+
 	@Override
-	public int hashCode() {
+	public final int hashCode() {
 		return _name.hashCode() * 3 + _ns == null ? 0 : _ns.hashCode();
 	}
+
 	@Override
-	public boolean equals(final Object o) {
+	public final boolean equals(final Object o) {
 		if (o instanceof XComponentInfo) {
 			XComponentInfo x = (XComponentInfo) o;
-			return _name.equals(x._name)
-				&& _ns == null ? x._ns == null : _ns.equals(x._ns);
+			return _name.equals(x._name) && _ns == null ? x._ns == null : _ns.equals(x._ns);
 		}
 		return false;
+	}
+
+	@Override
+	public final String toString() {
+		return _ns != null ? "{" + _ns + "}" + _name : _name;
 	}
 }

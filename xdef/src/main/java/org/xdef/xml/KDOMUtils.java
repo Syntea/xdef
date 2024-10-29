@@ -30,10 +30,10 @@ import org.xdef.sys.StringParser;
 public class KDOMUtils {
 
 	/** Instance of final empty NodeList. */
-	public final static NodeList EMPTYNODELIST = new EmptyNodeList();
+	public static final NodeList EMPTYNODELIST = new EmptyNodeList();
 
 	/** Instance of final empty NamedNodeMap. */
-	public final static NamedNodeMap EMPTYNODEMAP = new EmptyNamedNodeMap();
+	public static final NamedNodeMap EMPTYNODEMAP = new EmptyNamedNodeMap();
 
 	/** Don't allow user to instantiate this class. */
 	protected KDOMUtils() {}

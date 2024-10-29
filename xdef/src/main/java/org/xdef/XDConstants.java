@@ -77,6 +77,8 @@ public interface XDConstants {
 	public static final String XDPROPERTY_MAXYEAR = "xdef_maxyear";
 	/** Property defines legal values of dates if year is out of range.*/
 	public static final String XDPROPERTY_SPECDATES = "xdef_specdates";
+	/** Property defines default time zone.*/
+	public static final String XDPROPERTY_DEFAULTZONE = "xdef_defaultZone";
 	/** Property defines if the actual reporter is cleared in the invoked
 	 * action 'onFalse', 'onIllegalAttr', 'onIllegalText',
 	 * 'onEllegalElement'. Default value is 'true'*/
@@ -106,8 +108,7 @@ public interface XDConstants {
 	/** URI of w3c XLink */
 	public static final String XLINK_NS_URI = "http://www.w3.org/1999/xlink";
 	/** URI of w3c XInclude */
-	public static final String XINCLUDE_NS_URI =
-		"http://www.w3.org/2001/XInclude";
+	public static final String XINCLUDE_NS_URI = "http://www.w3.org/2001/XInclude";
 
 ////////////////////////////////////////////////////////////////////////////////
 // X-definition
@@ -127,8 +128,7 @@ public interface XDConstants {
 	public static final String XDEF42_NS_URI = "http://www.xdef.org/xdef/4.2";
 
 	/** The namespace URI for X-definition instance. */
-	public static final String XDEF_INSTANCE_NS_URI =
-		"http://www.xdef.org/xdef/instance";
+	public static final String XDEF_INSTANCE_NS_URI = "http://www.xdef.org/xdef/instance";
 
 ////////////////////////////////////////////////////////////////////////////////
 // XON/JSON/INI
@@ -155,6 +155,5 @@ public interface XDConstants {
 	/** Build version of software build from pom.xml */
 	public static final String BUILD_VERSION = PomInfo.POMINFO.getVersion();
 	/** Datetime of build version from pom.xml */
-	public static final String BUILD_DATETIME =
-		PomInfo.POMINFO.getBuildTimestamp();
+	public static final String BUILD_DATETIME = PomInfo.POMINFO.getBuildTimestamp();
 }
