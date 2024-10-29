@@ -13,48 +13,62 @@
     </parent>
 
     <artifactId>xdef-test11</artifactId>
-    <packaging>jar</packaging>
 
     <name>xdef-test11</name>
-    <description>executing test under java-11 for X-definition, alfa-version</description>
+    <description>executing tests in module xdef on java-11</description>
 
     <properties>
-        <!-- use default java instead of java-11 temporarily - ->
         <jdk.version>11</jdk.version>
         <jdk.vendor>sun</jdk.vendor>
-        <!- - -->
     </properties>
 
     <dependencies>
         <!-- xdef modules -->
-        <!-- test11 is alfa-version, including xdef-test is disabled for now - ->
         <dependency>
             <groupId>org.xdef</groupId>
-            <artifactId>xdef-test</artifactId>
-            <type>test-jar</type>
+            <artifactId>xdef</artifactId>
         </dependency>
-        <!- - -->
         
+        <!-- test-phase -->
+        <!-- ========== -->
+        
+        <!-- third parties -->
+        <dependency>
+            <groupId>net.sf.saxon</groupId>
+            <artifactId>Saxon-HE</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.derby</groupId>
+            <artifactId>derby</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <version>1.29</version>
+            <scope>test</scope>
+        </dependency>
+        
+        <!-- logging -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <scope>test</scope>
+        </dependency>
+
         <!-- junit-test -->
         <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <scope>test</scope>
         </dependency>
-    </dependencies>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <forkedProcessExitTimeoutInSeconds>0</forkedProcessExitTimeoutInSeconds>
-                    <suiteXmlFiles>
-                        <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
-                    </suiteXmlFiles>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+    </dependencies>
 
 </project>

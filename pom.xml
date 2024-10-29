@@ -49,9 +49,16 @@
     </scm>
     
     <properties>
-        <revision>42.2.8</revision><!-- when changed, change also ${release.date}, see below -->
-        <changelist>-SNAPSHOT</changelist><!-- use profile "release" for build release-version -->
-        <release.date>2024-10-27</release.date><!-- update when changed version -->
+        <!-- update after release version, may change by:
+             > mvn versions:set-property -Dproperty=revision -DnewVersion=x.y.z
+        -->
+        <revision>42.2.8</revision>
+        <!-- use profile "release" for build release-version -->
+        <changelist>-SNAPSHOT</changelist>
+        <!-- update before release version, may change by:
+             > mvn versions:set-property -Dproperty=release.date -DnewVersion=yyyy-mm-dd
+        -->
+        <release.date>2024-10-27</release.date>
         <specification.version>4.2</specification.version>
         
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -71,8 +78,7 @@
         <derby.version>10.12.1.1</derby.version>
         <slf4j.version>1.7.25</slf4j.version>
         <logback.version>1.2.3</logback.version>
-        <logback-testng.version>1.0.0</logback-testng.version>
-        <testng.version>6.8.21</testng.version> <!-- last version supports java-1.6 -->
+        <junit5-jupiter.version>5.11.3</junit5-jupiter.version>
 
         <maven.build.timestamp.format>yyyy-MM-dd'T'HH:mm:ss'Z'</maven.build.timestamp.format>
     </properties>
@@ -87,8 +93,7 @@
         <!-- auxiliary module with buildtools -->
         <module>xdef-buildtools</module>
 
-        <!-- tests executing under java-11 -->
-        <module>xdef-test11</module>
+        <!--see also profile "testAllJvm"-->
     </modules>
 
     <build>
@@ -180,7 +185,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
-                    <forkedProcessExitTimeoutInSeconds>0</forkedProcessExitTimeoutInSeconds>
+                    <!--<forkedProcessExitTimeoutInSeconds>0</forkedProcessExitTimeoutInSeconds>-->
                 </configuration>
             </plugin>
         </plugins>
@@ -210,7 +215,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>3.0.0-M3</version>
+                    <version>3.5.1</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -238,14 +243,24 @@
                     <version>3.0.0-M1</version>
                 </plugin>
                 <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-gpg-plugin</artifactId>
+                    <version>3.2.7</version>
+                </plugin>
+                <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>flatten-maven-plugin</artifactId>
                     <version>1.1.0</version>
                 </plugin>
                 <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-gpg-plugin</artifactId>
-                    <version>3.2.7</version>
+                    <groupId>io.github.git-commit-id</groupId>
+                    <artifactId>git-commit-id-maven-plugin</artifactId>
+                    <version>4.9.9</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>versions-maven-plugin</artifactId>
+                    <version>2.17.1</version>
                 </plugin>
                 <plugin>
                     <groupId>org.sonatype.plugins</groupId>
@@ -290,9 +305,9 @@
             
             <!-- test-phase -->
             <dependency>
-                <groupId>org.testng</groupId>
-                <artifactId>testng</artifactId>
-                <version>${testng.version}</version>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-engine</artifactId>
+                <version>${junit5-jupiter.version}</version>
             </dependency>
             
             <!-- logging -->
@@ -306,12 +321,7 @@
                 <artifactId>logback-classic</artifactId>
                 <version>${logback.version}</version>
             </dependency>
-            <dependency>
-                <groupId>com.github.sbabcoc</groupId>
-                <artifactId>logback-testng</artifactId>
-                <version>${logback-testng.version}</version>
-            </dependency>
-        
+
         </dependencies>
     </dependencyManagement>
     
@@ -327,6 +337,13 @@
             <properties>
                 <skipTests>true</skipTests>
             </properties>
+        </profile>
+        <profile>
+            <id>testAllJvm</id>
+            <modules>
+                <!-- execute tests on java-11 -->
+                <module>xdef-test11</module>
+            </modules>
         </profile>
         <profile>
             <id>javadoc</id>
