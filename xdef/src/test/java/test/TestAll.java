@@ -47,15 +47,15 @@ public class TestAll {
 	}
 
 	/** Run all tests directly */
-	private void mainTest() {
+	private static void mainTest() {
 		beforeTests();
-		testCommon();
-		testXdef();
-		testXDUtils();
+		new TestAll().testCommon();
+		new TestAll().testXdef();
+		new TestAll().testXDUtils();
 	}
 
 	/** @param args the command line arguments. */
 	public static void main(String... args) {
-		new TestAll().mainTest();
+		mainTest();
 	}
 }
