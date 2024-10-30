@@ -765,11 +765,10 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 				return;
 			}
 			if (_tz == null) {
-				TimeZone dftz = defaultZone;
-				if (dftz == null) {
-					dftz = GregorianCalendar.getInstance().getTimeZone();
-				}
-				_tz = dftz;
+				_tz = newZone;
+				_calendar = null;
+				getCalendar();
+				return;
 			}
 			if (!_tz.equals(newZone)) {
 				int diff = newZone.getRawOffset() + newZone.getDSTSavings()
@@ -780,7 +779,7 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 				c.setTimeZone(newZone);
 				_tz = (TimeZone) newZone.clone();
 				setCalendar(c);
-				if (diff != 0 && _hour == hour && _minute == minute) { //??????????
+				if (diff != 0 && _hour == hour && _minute == minute) {
 					c.add(Calendar.MILLISECOND, diff);
 				}
 			}

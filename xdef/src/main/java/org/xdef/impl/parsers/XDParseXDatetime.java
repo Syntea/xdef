@@ -79,11 +79,10 @@ public class XDParseXDatetime extends XSAbstractParseComparable {
 		p.isSpaces();
 		p.setParsedValue(new DefDate(d));
 		checkDate(xnode, p);
-		TimeZone defaulttz;
-		if (d.getTZ() == null && xnode != null && d.getYear() != Integer.MIN_VALUE
+		TimeZone defaulttz = xnode == null ? null : xnode.getXDPool().getDefaultZone();
+		if (d.getTZ() == null && defaulttz != null && d.getYear() != Integer.MIN_VALUE
 			&& d.getMonth() != Integer.MIN_VALUE && d.getDay()  != Integer.MIN_VALUE
-			&& d.getHour() != Integer.MIN_VALUE && d.getMinute() != Integer.MIN_VALUE
-			&& (defaulttz = xnode.getXDPool().getDefaultZone()) != null) {
+			&& d.getHour() != Integer.MIN_VALUE && d.getMinute() != Integer.MIN_VALUE) {
 			// zone not specified, but both date and time values are prezent
 			int seconds = d.getSecond();
 			d.setSecond(0);
@@ -91,6 +90,12 @@ public class XDParseXDatetime extends XSAbstractParseComparable {
 			d.setSecond(seconds);
 		}
 		if (_outFormat != null) {
+			if (defaulttz != null && (SDatetime.checkFormat(_outFormat) & 0xffff0000) != 0) {
+				TimeZone tz = d.getTZ();
+				if (tz != null && !tz.equals(defaulttz)) {
+					d.setTZ(defaulttz, tz);
+				}
+			}
 			s = d.formatDate(_outFormat);
 		}
 		p.replaceParsedBufferFrom(pos0, s);

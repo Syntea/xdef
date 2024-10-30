@@ -101,18 +101,22 @@ public class TestSUtils extends STester {
 	@Override
 	/** Run test and print error information. */
 	public void test() {
+		Calendar c;
+		String s, s1, s2;
+		SDatetime d, d1, d2;
+		StringParser p;
 		try {
 			//  Test datetime setTZ - CET summer (CEST)
-			SDatetime d = new SDatetime("2024-08-22T11:00:00.005+02:00"); // explicit offset for CEST
+			d = new SDatetime("2024-08-22T11:00:00.005+02:00");
 			assertEq("2024-08-22T11:00:00.005+02:00", d.toString());
-			d.setTZ(TimeZone.getTimeZone("CET"), TimeZone.getTimeZone("GMT")); // or "CEST"
+			d.setTZ(TimeZone.getTimeZone("CET"), TimeZone.getTimeZone("GMT"));
 			assertEq("2024-08-22T09:00:00.005Z", d.toString());
 			d.setTZ(TimeZone.getTimeZone("GMT"));
 			assertEq("2024-08-22T09:00:00.005Z", d.toString());
 			d.setTZ(TimeZone.getTimeZone("CET"), null);
 			assertEq("2024-08-22T09:00:00.005", d.toString());
 			d.setTZ(TimeZone.getTimeZone("CET"));
-			assertEq("2024-08-22T11:00:00.005+02:00", d.toString());
+			assertEq("2024-08-22T09:00:00.005+02:00", d.toString());
 
 			d = new SDatetime("2024-08-22T11:00:00.005");
 			assertNull(d.getTZ());
@@ -120,19 +124,19 @@ public class TestSUtils extends STester {
 			d.setTZ(null);
 			assertEq("2024-08-22T11:00:00.005", d.toString());
 			d.setTZ(TimeZone.getTimeZone("GMT"));
-			assertEq("2024-08-22T09:00:00.005Z", d.toString());
+			assertEq("2024-08-22T11:00:00.005Z", d.toString());
 
 			d = new SDatetime("2024-08-22T11:00:00.005");
 			assertEq("2024-08-22T11:00:00.005", d.toString());
 			assertNull(d.getTZ());
 			d.setTZ(TimeZone.getTimeZone("CET"), TimeZone.getTimeZone("GMT"));
-			assertEq("2024-08-22T09:00:00.005Z", d.toString());
+			assertEq("2024-08-22T11:00:00.005Z", d.toString());
 			assertEq(d.getTZ(), TimeZone.getTimeZone("GMT"));
 			d.setTZ(TimeZone.getTimeZone("CET"), TimeZone.getTimeZone("CET"));
-			assertEq("2024-08-22T11:00:00.005+02:00", d.toString());
+			assertEq("2024-08-22T13:00:00.005+02:00", d.toString());
 			assertEq(d.getTZ(), TimeZone.getTimeZone("CET"));
 			d.setTZ(TimeZone.getTimeZone("CET"), TimeZone.getTimeZone("GMT"));
-			assertEq("2024-08-22T09:00:00.005Z", d.toString());
+			assertEq("2024-08-22T11:00:00.005Z", d.toString());
 
 			d = new SDatetime("2024-08-22T11:00:00.005");
 			d.setTZ(TimeZone.getTimeZone("CET"), TimeZone.getTimeZone("CET"));
@@ -144,47 +148,7 @@ public class TestSUtils extends STester {
 			d.setTZ(TimeZone.getTimeZone("CET"));
 			assertEq("2024-08-22T18:00:00.005+02:00", d.toString());
 
-			//  Test datetime setTZ - CET winter (CET)
-			d = new SDatetime("2024-11-22T11:00:00.005+01:00");  // explicit offset for CET
-			assertEq("2024-11-22T11:00:00.005+01:00", d.toString());
-			d.setTZ(TimeZone.getTimeZone("CET"), TimeZone.getTimeZone("GMT"));
-			assertEq("2024-11-22T10:00:00.005Z", d.toString());
-			d.setTZ(TimeZone.getTimeZone("GMT"));
-			assertEq("2024-11-22T10:00:00.005Z", d.toString());
-			d.setTZ(TimeZone.getTimeZone("CET"), null);
-			assertEq("2024-11-22T10:00:00.005", d.toString());
-			d.setTZ(TimeZone.getTimeZone("CET"));
-			assertEq("2024-11-22T11:00:00.005+01:00", d.toString());
-
-			d = new SDatetime("2024-11-22T11:00:00.005");
-			assertNull(d.getTZ());
-			assertEq("2024-11-22T11:00:00.005", d.toString());
-			d.setTZ(null);
-			assertEq("2024-11-22T11:00:00.005", d.toString());
-			d.setTZ(TimeZone.getTimeZone("GMT"));
-			assertEq("2024-11-22T10:00:00.005Z", d.toString());
-
-			d = new SDatetime("2024-11-22T11:00:00.005");
-			assertEq("2024-11-22T11:00:00.005", d.toString());
-			assertNull(d.getTZ());
-			d.setTZ(TimeZone.getTimeZone("CET"), TimeZone.getTimeZone("GMT"));
-			assertEq("2024-11-22T10:00:00.005Z", d.toString());
-			assertEq(d.getTZ(), TimeZone.getTimeZone("GMT"));
-			d.setTZ(TimeZone.getTimeZone("CET"), TimeZone.getTimeZone("CET"));
-			assertEq("2024-11-22T11:00:00.005+01:00", d.toString());
-			assertEq(d.getTZ(), TimeZone.getTimeZone("CET"));
-			d.setTZ(TimeZone.getTimeZone("CET"), TimeZone.getTimeZone("GMT"));
-			assertEq("2024-11-22T10:00:00.005Z", d.toString());
-
-			d = new SDatetime("2024-11-22T11:00:00.005");
-			d.setTZ(TimeZone.getTimeZone("CET"), TimeZone.getTimeZone("CET"));
-			assertEq("2024-11-22T11:00:00.005+01:00", d.toString());
-			assertEq(d.getTZ(), TimeZone.getTimeZone("CET"));
-
-			d = new SDatetime("2024-11-22T11:00:00.005Z");
-			assertNotNull(d.getTZ());
-			d.setTZ(TimeZone.getTimeZone("CET"));
-			assertEq("2024-11-22T13:00:00.005+01:00", d.toString());
+			// CET winter DST
 			d = new SDatetime("2024-11-22T11:00:00.005-05:00");
 			assertNotNull(d.getTZ());
 			d.setTZ(TimeZone.getTimeZone("CET"));
@@ -205,9 +169,47 @@ public class TestSUtils extends STester {
 			d.setTZ(TimeZone.getTimeZone("CET"));
 			assertEq("2024-08-22T13:00:00.005+02:00", d.toString());
 
-			String s, s1;
-			StringParser p;
-			Calendar c;
+			d = new SDatetime("2024-11-22T11:00:00.005+01:00");
+			assertEq("2024-11-22T11:00:00.005+01:00", d.toString());
+			d.setTZ(TimeZone.getTimeZone("CET"), TimeZone.getTimeZone("GMT"));
+			assertEq("2024-11-22T10:00:00.005Z", d.toString());
+			d.setTZ(TimeZone.getTimeZone("GMT"));
+			assertEq("2024-11-22T10:00:00.005Z", d.toString());
+			d.setTZ(TimeZone.getTimeZone("CET"), null);
+			assertEq("2024-11-22T10:00:00.005", d.toString());
+			d.setTZ(TimeZone.getTimeZone("CET"));
+			assertEq("2024-11-22T10:00:00.005+01:00", d.toString());
+
+			d = new SDatetime("2024-11-22T11:00:00.005");
+			assertNull(d.getTZ());
+			assertEq("2024-11-22T11:00:00.005", d.toString());
+			d.setTZ(null);
+			assertEq("2024-11-22T11:00:00.005", d.toString());
+			d.setTZ(TimeZone.getTimeZone("GMT"));
+			assertEq("2024-11-22T11:00:00.005Z", d.toString());
+
+			d = new SDatetime("2024-11-22T11:00:00.005");
+			assertEq("2024-11-22T11:00:00.005", d.toString());
+			assertNull(d.getTZ());
+			d.setTZ(TimeZone.getTimeZone("CET"), TimeZone.getTimeZone("GMT"));
+			assertEq("2024-11-22T11:00:00.005Z", d.toString());
+			assertEq(d.getTZ(), TimeZone.getTimeZone("GMT"));
+			d.setTZ(TimeZone.getTimeZone("CET"), TimeZone.getTimeZone("CET"));
+			assertEq("2024-11-22T12:00:00.005+01:00", d.toString());
+			assertEq(d.getTZ(), TimeZone.getTimeZone("CET"));
+			d.setTZ(TimeZone.getTimeZone("CET"), TimeZone.getTimeZone("GMT"));
+			assertEq("2024-11-22T11:00:00.005Z", d.toString());
+
+			d = new SDatetime("2024-11-22T11:00:00.005");
+			d.setTZ(TimeZone.getTimeZone("CET"), TimeZone.getTimeZone("CET"));
+			assertEq("2024-11-22T11:00:00.005+01:00", d.toString());
+			assertEq(d.getTZ(), TimeZone.getTimeZone("CET"));
+
+			d = new SDatetime("2024-11-22T11:00:00.005Z");
+			assertNotNull(d.getTZ());
+			d.setTZ(TimeZone.getTimeZone("CET"));
+			assertEq("2024-11-22T13:00:00.005+01:00", d.toString());
+
 			s = (SUtils.getActualPath()+"aaa.aaa").replace('\\','/');
 			if (!s.equalsIgnoreCase(new File("aaa.aaa").getAbsolutePath().replace('\\','/'))) {
 				fail("getAbsolutePath(): " + s + ", file= " +
@@ -482,7 +484,7 @@ public class TestSUtils extends STester {
 		} catch (Exception ex) {fail(ex);}
 		//getFileGroup
 		try {
-			String s = SUtils.getTempDir();
+			s = SUtils.getTempDir();
 			if (s == null) {
 				fail("SUtils.getTempDir() returns null!");
 			} else {
@@ -547,8 +549,6 @@ public class TestSUtils extends STester {
 		} catch (Exception ex) {fail(ex);}
 		//formatDate
 		try {
-			Calendar c;
-			String s;
 			c = SDatetime.parseDatetime("28.2.1999 19:20:21.220 +01:00",
 				"d.M.yyyy HH:mm:ss.S Z");
 			if (c.get(Calendar.DATE) != 28 || c.get(Calendar.MONTH) != 1 ||
@@ -565,8 +565,6 @@ public class TestSUtils extends STester {
 		} catch (Exception ex) {fail(ex);}
 		//parseDate - dateFromISO8601, dateToISO8601
 		try {
-			Calendar c;
-			String s;
 			c = SDatetime.parseDatetime("28.2.1999 19:20:21 +01:00", "d.M.yyyy HH:mm:ss Z");
 			s = SDatetime.toISO8601(c);
 			assertEq("1999-02-28T19:20:21+01:00", s);
@@ -588,8 +586,6 @@ public class TestSUtils extends STester {
 		} catch (Exception ex) {fail(ex);}
 		// date format RFC822
 		try {
-			Calendar c;
-			String s;
 			c = SDatetime.fromRFC822("Tue, 27 Nov 2001 14:05:12 +0100 (CET)");
 			s = SDatetime.toRFC822(c); // zone name is ignored!
 			assertEq("Tue, 27 Nov 2001 14:05:12 +0100", s);
@@ -613,13 +609,11 @@ public class TestSUtils extends STester {
 			assertEq("Sun, 18 Feb 2007 18:45:09 +0100", s);
 		} catch (Exception ex) {fail(ex);}
 		try { // date format RFC822
-			StringParser p;
-			String s;
 			s = "Tue, 27 Nov 2001 14:05:12 +0100 (CET)";
 			p = new StringParser(s);
 			if (p.isDatetime("EEE, dd MMM yyyy HH:mm:ss ZZZZZ[ (z)]") && p.eos()) {
-				Calendar c = p.getParsedSDatetime().getCalendar();
-				String s2 = SDatetime.formatDate(c, "EEE, dd MMM yyyy HH:mm:ss ZZZZZ");
+				c = p.getParsedSDatetime().getCalendar();
+				s2 = SDatetime.formatDate(c, "EEE, dd MMM yyyy HH:mm:ss ZZZZZ");
 				assertEq("Tue, 27 Nov 2001 14:05:12 +0100", s2);
 			} else {
 				fail();
@@ -627,11 +621,6 @@ public class TestSUtils extends STester {
 		} catch (Exception ex) {fail(ex);}
 		// date format ISO 8601e
 		try {
-			Calendar c;
-			StringParser p;
-			String s;
-			String s1;
-			String s2;
 			s = "1992-05-26 1:30:15AM-04:00";
 			p = new StringParser(s);
 			s1 = "yyyy-MM-dd h:m:saZ";
@@ -820,19 +809,17 @@ public class TestSUtils extends STester {
 		} catch (Exception ex) {fail(ex);}
 		// date format ISO 8601e
 		try {
-			StringParser p;
-			String s;
 			s = "1992-05-26T13:30:15-04:00";
 			p = new StringParser(s);
 			if (p.isISO8601Datetime() && p.eos()) {
-				Calendar c = p.getParsedSDatetime().getCalendar();
+				c = p.getParsedSDatetime().getCalendar();
 				assertEq(s, SDatetime.toISO8601(c));
 			} else {
 				fail();
 			}
 			p = new StringParser("1992-05-26T13:30:15-04:00");
 			if (p.isISO8601Datetime() && p.eos()) {
-				Calendar c = p.getParsedSDatetime().getCalendar();
+				c = p.getParsedSDatetime().getCalendar();
 				assertEq(s, SDatetime.toISO8601(c));
 			} else {
 				fail();
@@ -840,21 +827,21 @@ public class TestSUtils extends STester {
 			s = "1992-05-26T13:30:15Z";
 			p = new StringParser(s);
 			if (p.isISO8601Datetime() && p.eos()) {
-				Calendar c = p.getParsedSDatetime().getCalendar();
+				c = p.getParsedSDatetime().getCalendar();
 				assertEq(s, SDatetime.toISO8601(c));
 			} else {
 				fail();
 			}
 			p = new StringParser("1992-05-26T13:30:15Z");
 			if (p.isISO8601Datetime() && p.eos()) {
-				Calendar c = p.getParsedSDatetime().getCalendar();
+				c = p.getParsedSDatetime().getCalendar();
 				assertEq(s, SDatetime.toISO8601(c));
 			} else {
 				fail();
 			}
 			p = new StringParser("2005-03-01T14:48:59.956+02:00");
 			if (p.isDatetime("y-M-dTH:m:s.SZ") && p.eos()) {
-				Calendar c = p.getParsedSDatetime().getCalendar();
+				c = p.getParsedSDatetime().getCalendar();
 				s = SDatetime.formatDate(c, "yyyy-MM-ddTHH:mm:ss.SZ");
 				assertEq("2005-03-01T14:48:59.956+02:00", s);
 				s = SDatetime.formatDate(c, "yyyy-MM-ddTHH:mm:ss.SSZZ");
@@ -870,7 +857,7 @@ public class TestSUtils extends STester {
 			}
 			p = new StringParser("2005-03-01T14:48:59.996+02:00");
 			if (p.isDatetime("y-M-dTH:m:s.SZ") && p.eos()) {
-				Calendar c = p.getParsedSDatetime().getCalendar();
+				c = p.getParsedSDatetime().getCalendar();
 				s = SDatetime.formatDate(c, "yyyy-MM-ddTHH:mm:ss.SZ");
 				assertEq("2005-03-01T14:48:59.996+02:00", s);
 				s = SDatetime.formatDate(c, "yyyy-MM-ddTHH:mm:ss.SSZZZZZZ");
@@ -882,7 +869,7 @@ public class TestSUtils extends STester {
 			}
 			p = new StringParser("2005-03-01T23:59:59.996+02:00");
 			if (p.isDatetime("y-M-dTH:m:s.SZ") && p.eos()) {
-				Calendar c = p.getParsedSDatetime().getCalendar();
+				c = p.getParsedSDatetime().getCalendar();
 				s = SDatetime.formatDate(c, "yyyy-MM-ddTHH:mm:ss.SZ");
 				assertEq("2005-03-01T23:59:59.996+02:00", s);
 				s = SDatetime.formatDate(c, "yyyy-MM-ddTHH:mm:ss.SSZZZZZZ");
@@ -894,7 +881,7 @@ public class TestSUtils extends STester {
 			}
 			p = new StringParser("2005-03-01T14:48:59.996+02:00");
 			if (p.isDatetime("y-M-dTH:m:s.SZ") && p.eos()) {
-				Calendar c = p.getParsedSDatetime().getCalendar();
+				c = p.getParsedSDatetime().getCalendar();
 				s = SDatetime.formatDate(c, "yyyy-MM-ddTHH:mm:ssZ");
 				assertEq("2005-03-01T14:49:00+02:00", s);
 			} else {
@@ -902,7 +889,7 @@ public class TestSUtils extends STester {
 			}
 			p = new StringParser("2005-03-01T23:59:59.996+02:00");
 			if (p.isDatetime("y-M-dTH:m:s.SZ") && p.eos()) {
-				Calendar c = p.getParsedSDatetime().getCalendar();
+				c = p.getParsedSDatetime().getCalendar();
 				s = SDatetime.formatDate(c, "yyyy-MM-ddTHH:mm:ssZ");
 				assertEq("2005-03-01T24:00:00+02:00", s);
 			} else {
@@ -910,7 +897,7 @@ public class TestSUtils extends STester {
 			}
 			p = new StringParser("2005-03-01T22:59:59.999+02:00");
 			if (p.isDatetime("y-M-dTH:m:s.SZ") && p.eos()) {
-				Calendar c = p.getParsedSDatetime().getCalendar();
+				c = p.getParsedSDatetime().getCalendar();
 				s = SDatetime.formatDate(c, "yyyy-MM-ddTHH:mm:ssZ");
 				assertEq("2005-03-01T23:00:00+02:00", s);
 			} else {
@@ -918,7 +905,7 @@ public class TestSUtils extends STester {
 			}
 			p = new StringParser("2005-03-01T23:59:59.499+02:00");
 			if (p.isDatetime("y-M-dTH:m:s.SZ") && p.eos()) {
-				Calendar c = p.getParsedSDatetime().getCalendar();
+				c = p.getParsedSDatetime().getCalendar();
 				s = SDatetime.formatDate(c, "yyyy-MM-ddTHH:mm:ssZ");
 				assertEq("2005-03-01T23:59:59+02:00", s);
 			} else {
@@ -926,35 +913,35 @@ public class TestSUtils extends STester {
 			}
 			p = new StringParser("05");
 			if (p.isDatetime("yy") && p.eos()) {
-				Calendar c = p.getParsedSDatetime().getCalendar();
+				c = p.getParsedSDatetime().getCalendar();
 				assertEq(2005,c.get(Calendar.YEAR));
 			} else {
 				fail();
 			}
 			p = new StringParser("95");
 			if (p.isDatetime("y") && p.eos()) {
-				Calendar c = p.getParsedSDatetime().getCalendar();
+				c = p.getParsedSDatetime().getCalendar();
 				assertEq(95,c.get(Calendar.YEAR));
 			} else {
 				fail();
 			}
 			p = new StringParser("95");
 			if (p.isDatetime("yy") && p.eos()) {
-				Calendar c = p.getParsedSDatetime().getCalendar();
+				c = p.getParsedSDatetime().getCalendar();
 				assertEq(1995,c.get(Calendar.YEAR));
 			} else {
 				fail();
 			}
 			p = new StringParser("05");
 			if (p.isDatetime("RR") && p.eos()) {
-				Calendar c = p.getParsedSDatetime().getCalendar();
+				c = p.getParsedSDatetime().getCalendar();
 				assertEq(2005,c.get(Calendar.YEAR));
 			} else {
 				fail();
 			}
 			p = new StringParser("95");
 			if (p.isDatetime("RR") && p.eos()) {
-				Calendar c = p.getParsedSDatetime().getCalendar();
+				c = p.getParsedSDatetime().getCalendar();
 				assertEq(1995,c.get(Calendar.YEAR));
 			} else {
 				fail();
@@ -962,10 +949,10 @@ public class TestSUtils extends STester {
 		} catch (Exception ex) {fail(ex);}
 		// SDatetime
 		try {
-			String s1 = "2005-03-01T23:59:59+02:00";
-			String s2 = "2006-03-01T13:59:59+02:00";
-			SDatetime d1 = SDatetime.parseISO8601(s1);
-			SDatetime d2 = SDatetime.parseISO8601(s2);
+			s1 = "2005-03-01T23:59:59+02:00";
+			s2 = "2006-03-01T13:59:59+02:00";
+			d1 = SDatetime.parseISO8601(s1);
+			d2 = SDatetime.parseISO8601(s2);
 			assertEq(SDatetime.getCalendarDaysDifference(d1, d2), 365);
 			assertEq(SDatetime.getCalendarMonthsDifference(d1, d2), 12);
 			assertEq(SDatetime.getCalendarYearsDifference(d1, d2), 1);
@@ -989,7 +976,6 @@ public class TestSUtils extends STester {
 		} catch (Exception ex) {fail(ex);}
 		// EasterMonday
 		try {
-			SDatetime d;
 			d = SDatetime.getEasterMonday(1980);
 			assertEq(d.getDay(), 7);
 			assertEq(d.getMonth(), 4);
@@ -1059,7 +1045,7 @@ public class TestSUtils extends STester {
 			}
 			f.mkdir();
 			try {
-				String s = SUtils.getDirPath(f);
+				s = SUtils.getDirPath(f);
 				new File(s + "f1").createNewFile();
 				new File(s + "f2").createNewFile();
 			} catch (Exception ex) {
@@ -1084,7 +1070,7 @@ public class TestSUtils extends STester {
 				SUtils.deleteAll(f1, true);
 			} catch (SException ex) {}
 			f1.mkdir();
-			String s = SUtils.getDirPath(f);
+			s = SUtils.getDirPath(f);
 			SUtils.writeString(new File(s + "f1.1"), "f1.1 abcabcabcabcabcabc");
 			SUtils.writeString(new File(s + "f2.2"), "f2.2 abcabcabcabcabcabc");
 			SUtils.writeString(new File(s + "f3.3"), "f3.3 abcabcabcabcabcabc");
@@ -1140,8 +1126,7 @@ public class TestSUtils extends STester {
 					fail(ex);
 				}
 			}
-			String s = SUtils.getISO3Language(
-				System.getProperties().getProperty("user.language"));
+			s = SUtils.getISO3Language(System.getProperties().getProperty("user.language"));
 			if (s != null && s.length() != 3) {
 				fail("getISO3Language error '"
 					+ System.getProperties().getProperty("user.language") + "' -> '" + s + "'");
@@ -1157,7 +1142,7 @@ public class TestSUtils extends STester {
 					fail(ex);
 				}
 			}
-			String s = SUtils.getISO2Language(System.getProperties().getProperty("user.language"));
+			s = SUtils.getISO2Language(System.getProperties().getProperty("user.language"));
 			if (s != null && s.length() != 2) {
 				fail("getISO2Language error '" + System.getProperties().getProperty("user.language")
 					+ "' -> '" + s + "'");
@@ -1255,16 +1240,14 @@ public class TestSUtils extends STester {
 		} catch (Exception ex) {fail(ex);}
 		// date,time
 		try {
-			String s = "2015-12-06";
-			SDatetime sd = new SDatetime(s);
+			s = "2015-12-06";
+			d = new SDatetime(s);
 			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-			Date d = df.parse(s);
-			assertEq(sd.getCalendar().getTime(), d);
+			assertEq(d.getCalendar().getTime(), df.parse(s));
 			s = "2015-12-06T01:02:03";
-			sd = new SDatetime(s);
+			d = new SDatetime(s);
 			df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-			d = df.parse(s);
-			assertEq(sd.getCalendar().getTime(), d);
+			assertEq(d.getCalendar().getTime(), df.parse(s));
 		} catch (Exception ex) {fail(ex);}
 		// isLeapYear
 		try {
@@ -1281,35 +1264,35 @@ public class TestSUtils extends STester {
 			assertEq(SDatetime.getEasterMonday(2000), new SDatetime("2000-04-24"));
 			assertEq(SDatetime.getEasterMonday(2002), new SDatetime("2002-04-01"));
 			// Timestamp
-			SDatetime sd = new SDatetime("2000-01-01T01:01:02.999");
-			java.sql.Timestamp tstamp = new java.sql.Timestamp(sd.getTimeInMillis());
-			assertEq(sd.getTimeInMillis(), tstamp.getTime());
-			assertEq(sd.getNanos(), tstamp.getNanos());
-			assertEq(sd,tstamp);
+			d = new SDatetime("2000-01-01T01:01:02.999");
+			java.sql.Timestamp tstamp = new java.sql.Timestamp(d.getTimeInMillis());
+			assertEq(d.getTimeInMillis(), tstamp.getTime());
+			assertEq(d.getNanos(), tstamp.getNanos());
+			assertEq(d,tstamp);
 			assertEq(new SDatetime(tstamp), tstamp);
 			tstamp.setNanos(999);
-			sd.setNanos(999);
-			assertEq(sd.getTimeInMillis(), tstamp.getTime());
-			assertEq(sd.getNanos(), tstamp.getNanos());
-			assertEq(sd, tstamp);
+			d.setNanos(999);
+			assertEq(d.getTimeInMillis(), tstamp.getTime());
+			assertEq(d.getNanos(), tstamp.getNanos());
+			assertEq(d, tstamp);
 			assertEq(new SDatetime(tstamp), tstamp);
 			tstamp.setNanos(100000999);
-			sd.setNanos(100000999);
-			assertEq(sd.getTimeInMillis(), tstamp.getTime());
-			assertEq(sd.getNanos(), tstamp.getNanos());
-			assertEq(sd, tstamp);
+			d.setNanos(100000999);
+			assertEq(d.getTimeInMillis(), tstamp.getTime());
+			assertEq(d.getNanos(), tstamp.getNanos());
+			assertEq(d, tstamp);
 			assertEq(new SDatetime(tstamp), tstamp);
 			tstamp.setNanos(999499999);
-			sd.setNanos(999499999);
-			assertEq(sd.getTimeInMillis(), tstamp.getTime());
-			assertEq(sd.getNanos(), tstamp.getNanos());
-			assertEq(sd, tstamp);
+			d.setNanos(999499999);
+			assertEq(d.getTimeInMillis(), tstamp.getTime());
+			assertEq(d.getNanos(), tstamp.getNanos());
+			assertEq(d, tstamp);
 			assertEq(new SDatetime(tstamp), tstamp);
 			tstamp.setNanos(999999999);
-			sd.setNanos(999999999);
-			assertEq(sd.getTimeInMillis(), ((Date)tstamp).getTime());
-			assertEq(sd.getNanos(), tstamp.getNanos());
-			assertEq(sd, tstamp);
+			d.setNanos(999999999);
+			assertEq(d.getTimeInMillis(), ((Date)tstamp).getTime());
+			assertEq(d.getNanos(), tstamp.getNanos());
+			assertEq(d, tstamp);
 			assertEq(new SDatetime(tstamp), tstamp);
 		} catch (Exception ex) {fail(ex);}
 		//encodeHex, decodeHex
@@ -1563,11 +1546,11 @@ public class TestSUtils extends STester {
 		} catch (Exception ex) {fail(ex);}
 		// encodeBase64, decodeBase64 input stream, output stream
 		try {
-			final String s1 = "asjh kjhf kldjah ;aoihfo;weihf" +
+			final String fs = "asjh kjhf kldjah ;aoihfo;weihf" +
 				"awuioehf awileufh ilawuchilaweubncilawe bufailweubfwilaeubfailwebukbiwfwe";
 			InputStream is = new InputStream() {
 				private int i = 0;
-				final private byte[] buf = s1.getBytes();
+				final private byte[] buf = fs.getBytes();
 				@Override
 				public int read() throws IOException {
 					if (i >= buf.length) {
@@ -1595,13 +1578,13 @@ public class TestSUtils extends STester {
 			SUtils.encodeBase64(is, osw, true);
 			is.close();
 			osw.close();
-			final String s2 = bos.toString();
-			if (s2.indexOf(' ') > 0) {
+			final String fs2 = bos.toString();
+			if (fs2.indexOf(' ') > 0) {
 				fail();
 			}
 			is = new InputStream() {
 				private int i = 0;
-				final private byte[] buf = s2.getBytes();
+				final private byte[] buf = fs2.getBytes();
 				@Override
 				public int read() throws IOException {
 					if (i >= buf.length) {
@@ -1628,8 +1611,8 @@ public class TestSUtils extends STester {
 			SUtils.decodeBase64(is, bos);
 			is.close();
 			bos.close();
-			String s = bos.toString();
-			assertEq(s1, s);
+			s = bos.toString();
+			assertEq(fs, s);
 		} catch (Exception ex) {fail(ex);}
 	}
 
