@@ -341,8 +341,10 @@
         <profile>
             <id>testAllJvm</id>
             <modules>
-                <!-- execute tests on java-11 -->
+                <!-- run tests on Java-11, Java-17, Java-21 -->
                 <module>xdef-test11</module>
+                <module>xdef-test17</module>
+                <module>xdef-test21</module>
             </modules>
         </profile>
         <profile>

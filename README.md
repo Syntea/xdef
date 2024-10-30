@@ -254,22 +254,29 @@ Frequent building operations:
   ```shell
   mvn compile
   ```
-* build snapshot package:
+* build the snapshot package:
 
   ```shell
   mvn package
   ```
-* build snapshot package avoiding junit-tests:
+* by using the "skipTests" profile, avoid junit-tests:
 
   ```shell
   mvn package -PskipTests
   ```
-* build release package:
+* by using the "testAllJvm" profile, junit-tests will be run on all configured Java platforms,
+  i.e. Java-8 (it is run by default), Java-11 (through the xdef-test11 module),
+  Java-17 (through the xdef-test17 module), Java-21 (through the xdef-test21 module):
+
+  ```shell
+  mvn package -PtestAllJvm
+  ```
+* build the release package:
 
   ```shell
   mvn package -Prelease
   ```
-* build release packages including javadoc, sources, documentation:
+* build the release package including javadoc, sources, documentation:
 
   ```shell
   mvn package -Prelease,javadoc,sources
