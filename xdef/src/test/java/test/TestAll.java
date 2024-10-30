@@ -3,17 +3,14 @@ package test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
 import org.xdef.XDFactory;
 import org.xdef.impl.code.DefXQueryExpr;
 
 /** Execute all tests fast.
  * @author Vaclav Trojan
  */
-@TestMethodOrder(OrderAnnotation.class)
 public class TestAll {
 
 	/** prepare tests */
