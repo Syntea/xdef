@@ -266,7 +266,7 @@ Frequent building operations:
   ```
 * by using the "testAllJvm" profile, junit-tests will be run on all configured Java platforms,
   i.e. Java-8 (it is run by default), Java-11 (through the xdef-test11 module),
-  Java-17 (through the xdef-test17 module), Java-21 (through the xdef-test21 module):
+  Java-17 (using the xdef-test17 module), Java-21 (using the xdef-test21 module):
 
   ```shell
   mvn package -PtestAllJvm
