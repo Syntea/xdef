@@ -41,7 +41,6 @@ public class PomInfo {
 
 	private void loadProps(InputStream ppIs) throws IOException {
 		Properties properties = new Properties();
-		properties.load(new InputStreamReader(ppIs, StandardCharsets.UTF_8));
 		try {
 			properties.load(new InputStreamReader(ppIs,StandardCharsets.UTF_8));
 		} finally {
