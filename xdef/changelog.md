@@ -1,15 +1,18 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.2.8, release-date 2024-10-29
-* New property name `xdef_defaultZone` is used to set default TimeZone
+# Version 42.2.8, release-date 2024-10-30
+* The new property `xdef_defaultZone` is used to set the default time zone
   (see org.xdef.XDConstants.XDPROPERTY_DEFAULTZONE).
-* A new method `getDefaultZone()` has been implemented in the XDPool class,
-  which returns  the specified default time zone, or null if it was not
+* A new method `getDefaultZone()` has been implemented in the `XDPool` class,
+  which returns the specified default time zone or null if none has been
   specified.
-* If a default time zone is specified and the data being analyzed does not have
-  a time zone then the time zone is set to the default time zone value. This can
-  happen in `dateTime` parsing method, `dateYMDhms` {and in the `xdatetime`
-  parsing method only if the parsed data contains a date along with the time}.
+* If the result of the `dateTime` method does not contain a time zone and
+  a default time zone is set, then this default time zone is set
+  in the resulting date.
+* The default time zone, if set, is added to the result of the `dateYMDhms` method.
+* The default timezone is added to the result of the `xdatetime` parsing method
+  if it is non-zero and if it is not in the parsed data or if the output format
+  does not have a timezone output requirement.
 * Implemented new X-script method `currencyCode()` of `Currency` value which
   returns string with ISO 4217 currency code. 
 * To the class `org.xdef.XDFactory` is added new static methods. The method
