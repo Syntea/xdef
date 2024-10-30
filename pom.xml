@@ -52,13 +52,13 @@
         <!-- update after release version, may change by:
              > mvn versions:set-property -Dproperty=revision -DnewVersion=x.y.z
         -->
-        <revision>42.2.8</revision>
+        <revision>42.2.9</revision>
         <!-- use profile "release" for build release-version -->
         <changelist>-SNAPSHOT</changelist>
         <!-- update before release version, may change by:
              > mvn versions:set-property -Dproperty=release.date -DnewVersion=yyyy-mm-dd
         -->
-        <release.date>2024-10-29</release.date>
+        <release.date>2024-10-30</release.date>
         <specification.version>4.2</specification.version>
         
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

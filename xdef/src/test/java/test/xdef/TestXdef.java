@@ -3256,7 +3256,7 @@ public final class TestXdef extends XDTester {
 			assertEq("<a a='2024-10-22T11:55:30+02:00'/>", xc.toXml());
 			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' name='a' root='a'>\n"+
-"<a a='xdatetime(\"yyyy-MM-ddTHH:mm[Z]\", \"yyyy-MM-ddZ\");'/>\n" + // date and time (no seconds)
+"<a a='xdatetime(\"yyyy-MM-ddTHH:mm[Z]\", \"yyyy-MM-ddTHH:mmZ\");'/>\n" + // date and time (no seconds)
 "  <xd:component>\n"+
 "    %class test.xdef.TestTZ1%link a;\n"+
 "  </xd:component>\n"+
@@ -3264,12 +3264,12 @@ public final class TestXdef extends XDTester {
 			xp = XDFactory.compileXD(props, xdef);
 			genXComponent(xp, clearTempDir());
 			xml = "<a a='2024-10-22T11:55'/>";
-			assertEq("<a a='2024-10-22+02:00'/>", parse(xp, "", xml));
+			assertEq("<a a='2024-10-22T11:55+02:00'/>", parse(xp, "", xml));
 			xd = xp.createXDDocument();
 			xc = xd.xparseXComponent(xml, null, reporter);
 			assertEq("<a a='2024-10-22T11:55+02:00'/>", xc.toXml());
 			xml = "<a a='2024-10-22T11:55Z'/>";
-			assertEq("<a a='2024-10-22Z'/>", parse(xp, "", xml));
+			assertEq("<a a='2024-10-22T11:55Z'/>", parse(xp, "", xml));
 			xd = xp.createXDDocument();
 			xc = xd.xparseXComponent(xml, null, reporter);
 			assertEq("<a a='2024-10-22T11:55Z'/>", xc.toXml());
@@ -3288,7 +3288,8 @@ public final class TestXdef extends XDTester {
 			xd = xp.createXDDocument();
 			xc = xd.xparseXComponent(xml, null, reporter);
 			assertEq("<a a='20241022115530'/>", xc.toXml());
-			assertEq("CET", ((SDatetime) SUtils.getValueFromGetter(xc,"geta")).getTZ().getID());
+			assertEq("2024-10-22T11:55:30+02:00",
+				((SDatetime) SUtils.getValueFromGetter(xc,"geta")).toString());
 		} catch (RuntimeException ex) {fail(ex);}
 
 		clearTempDir(); // delete created temporary files
