@@ -238,10 +238,12 @@ Source code at GitHub:
 
 Prerequisities:
 * download project X-definition, eg. from GitHub
-* install _java_
-* install _maven_
-* configure _maven_
-    * configure maven-plugin _toolchain_
+* install _java_ (at least version 8)
+* install _maven_ (at least version 3.6)
+* configure:
+    * configure maven-plugin _toolchains_
+        * configuration xml-file in the home directory _~/.m2/toolchains.xml_
+        * see template-file [configure/maven/toolchains.xml](configure/maven/toolchains.xml)
 
 Frequent building operations:
 * cleaning before any compiling, building, deploying, etc.:
@@ -288,9 +290,15 @@ Frequent building operations:
 Prerequisities:
 * satisfy prerequisities for building
 * install the pgp-managing software GnuPG (<https://gnupg.org/>)
-* configure _maven_:
-    * access to pgp-key
-    * access to maven repository manager _oss.sonatype.org_ (having id "_ossrh_" in the file _pom.xml_)
+* configure:
+    * access to the appropriate pgp-key
+        * insert the appropriate key to the the pgp-manager
+        * enter the pgp-key-password for the pgp-key:
+            * when prompted by the pgp-agent during the package build
+            * or beforehand to the _MAVEN_GPG_PASSPHRASE_ environment variable
+    * access to maven repository manager _oss.sonatype.org_ (having id "_ossrh_" in the file [xdef/pom.xml](xdef/pom.xml))
+        * configure maven-configuration-file in the home directory _~/.m2/settings.xml_
+        * see template-file [configure/maven/settings.xml](configure/maven/settings.xml)
 
 Deploying:
 * deploy the snapshot-version to the repository _oss.sonatype.org_:
