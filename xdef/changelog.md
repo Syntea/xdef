@@ -1,19 +1,21 @@
 # Version ${version}, release-date ${release.date}
 
+# Version 42.2.9, release-date 2024-10-31
+* .
+
 # Version 42.2.8, release-date 2024-10-30
-* The new property `xdef_defaultZone` is used to set the default time zone
-  (see org.xdef.XDConstants.XDPROPERTY_DEFAULTZONE).
-* A new method `getDefaultZone()` has been implemented in the `XDPool` class,
-  which returns the specified default time zone or null if none has been
-  specified.
-* If the result of the `dateTime` method does not contain a time zone and
-  a default time zone is set, then this default time zone is set
-  in the resulting date.
-* The default time zone, if set, is added to the result of the `dateYMDhms` method.
-* The default timezone is added to the result of the `xdatetime` parsing method
-  if it is non-zero and if it is not in the parsed data or if the output format
-  does not have a timezone output requirement.
-* Implemented new X-script method `currencyCode()` of `Currency` value which
+* The new property `xdef_defaultZone` is used to set the default time zone (see
+  `org.xdef.XDConstants.XDPROPERTY_DEFAULTZONE`).
+* A new method `getDefaultZone()` has been implemented in the XDPool class,
+  which returns the default time zone or null if none has been specified.
+* Method `dateTime`: if the result does not contain a time zone and a default
+  time zone is set, then this default time zone is set to the result value.
+* The parsing method `dateYMDhms`: if the default time zone is set, it is set
+  in the result.
+* The parsing method`xdatetime`: if the time zone of the result is zero,
+  the default time zone is added to the result.  If there is no time zone output
+  requirement in the output format, the time zone is set to the default value.
+* Implemented the new X-script method `currencyCode()` of `Currency` value which
   returns string with ISO 4217 currency code. 
 * To the class `org.xdef.XDFactory` is added new static methods. The method
   `isXQuerySupported()` returns true if XQuery language is supported
