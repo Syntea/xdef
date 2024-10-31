@@ -196,6 +196,7 @@
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
                         <configuration>
+                            <keyname>info@syntea.cz</keyname>
                             <!--may enter gpg-passphrase into this system-variable, default value is MAVEN_GPG_PASSPHRASE
                             <passphraseEnvName>MAVEN_GPG_PASSPHRASE</passphraseEnvName>
                             -->

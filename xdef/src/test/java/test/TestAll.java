@@ -1,7 +1,9 @@
 package test;
 
-import org.junit.jupiter.api.Assertions;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.xdef.XDFactory;
 import org.xdef.impl.code.DefXQueryExpr;
@@ -25,34 +27,35 @@ public class TestAll {
 
 	/** run TestAll in test.common */
 	@Test
+	@Order(1)
 	public void testCommon() {
-		Assertions.assertEquals(test.common.TestAll.runTests(), 0);
+		assertEquals(test.common.TestAll.runTests(), 0);
 	}
 
 	/** run TestAll in test.xdef */
 	@Test
-//	@Test(dependsOnMethods = {"testCommon"})
+	@Order(2)
 	public void testXdef() {
-		Assertions.assertEquals(test.xdef.TestAll.runTests(new String[0]), 0);
+		assertEquals(test.xdef.TestAll.runTests(new String[0]), 0);
 	}
 
 	/** run TestAll in test.xdutil */
 	@Test
-//	@Test(dependsOnMethods = {"testXdef"})
+	@Order(3)
 	public void testXDUtils() {
-		Assertions.assertEquals(test.xdutils.TestAll.runTests(new String[0]), 0);
+		assertEquals(test.xdutils.TestAll.runTests(new String[0]), 0);
 	}
 
 	/** Run all tests directly */
-	private void mainTest() {
+	private static void mainTest() {
 		beforeTests();
-		testCommon();
-		testXdef();
-		testXDUtils();
+		new TestAll().testCommon();
+		new TestAll().testXdef();
+		new TestAll().testXDUtils();
 	}
 
 	/** @param args the command line arguments. */
 	public static void main(String... args) {
-		new TestAll().mainTest();
+		mainTest();
 	}
 }
