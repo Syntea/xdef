@@ -1,5 +1,8 @@
 # Version ${version}, release-date ${release.date}
 
+# Version 42.2.9, release-date 2024-10-31
+* .
+
 # Version 42.2.8, release-date 2024-10-30
 * The new property `xdef_defaultZone` is used to set the default time zone
   (see org.xdef.XDConstants.XDPROPERTY_DEFAULTZONE).

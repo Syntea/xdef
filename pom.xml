@@ -58,7 +58,7 @@
         <!-- update before release version, may change by:
              > mvn versions:set-property -Dproperty=release.date -DnewVersion=yyyy-mm-dd
         -->
-        <release.date>2024-10-30</release.date>
+        <release.date>2024-10-31</release.date>
         <specification.version>4.2</specification.version>
         
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
