@@ -762,12 +762,12 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 		synchronized(this) {
 			if (newZone == null) {
 				_tz = null;
+				_calendar = null;
 				return;
 			}
 			if (_tz == null) {
 				_tz = newZone;
 				_calendar = null;
-				getCalendar();
 				return;
 			}
 			if (!_tz.equals(newZone)) {
@@ -902,17 +902,15 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 	}
 
 	/** Get the day of week in month.
-	 * Get the ordinal number of the day of the week within the current month.
-	 * Together with the DAY_OF_WEEK field, this uniquely specifies a day within a month.
-	 * Unlike WEEK_OF_MONTH and WEEK_OF_YEAR, this field value does not depend
-	 * on getFirstDayOfWeek() or getMinimalDaysInFirstWeek(). DAY_OF_MONTH 1 through 7 always
-	 * correspond to DAY_OF_WEEK_IN_MONTH 1; 8 through 14 correspond to DAY_OF_WEEK_IN_MONTH 2,
-	 * and so on. DAY_OF_WEEK_IN_MONTH 0 indicates the week before DAY_OF_WEEK_IN_MONTH 1.
-	 * Negative values count back from the end of the month, so the last Sunday* of a month
-	 * is specified as DAY_OF_WEEK = SUNDAY, DAY_OF_WEEK_IN_MONTH=-1. Because negative values count
-	 * backward they will usually be aligned differently within the month than positive values.
-	 * For example, if a month has 31 days, DAY_OF_WEEK_IN_MONTH -1 will overlap
-	 * DAY_OF_WEEK_IN_MONTH 5 and the end of 4.
+	 * Get the ordinal number of the day of the week within the current month. Together with the DAY_OF_WEEK
+	 * field, this uniquely specifies a day within a month. Unlike WEEK_OF_MONTH and WEEK_OF_YEAR, this field
+	 * value does not depend on getFirstDayOfWeek() or getMinimalDaysInFirstWeek(). DAY_OF_MONTH 1 through 7
+	 * always correspond to DAY_OF_WEEK_IN_MONTH 1; 8 through 14 correspond to DAY_OF_WEEK_IN_MONTH 2,
+	 * and so on. DAY_OF_WEEK_IN_MONTH 0 indicates the week before DAY_OF_WEEK_IN_MONTH 1. Negative values
+	 * count back from the end of the month, so the last Sunday* of a month is specified as
+	 * DAY_OF_WEEK = SUNDAY, DAY_OF_WEEK_IN_MONTH=-1. Because negative values count backward they will usually
+	 * be aligned differently within the month than positive values. For example, if a month has 31 days,
+	 * DAY_OF_WEEK_IN_MONTH -1 will overlap DAY_OF_WEEK_IN_MONTH 5 and the end of 4.
 	 * @return day of week in month.
 	 */
 	public final int getDayOfWeekInMonth() {
@@ -1099,14 +1097,14 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 	@Override
 	/** Compare this SDatetime with the other one.
 	 * <p>Return:
-	 *  <br>-1 if this <i>SDatetime</i> is smaler than <i>other</i>
+	 *  <br>-1 if this <i>SDatetime</i> is smaller than <i>other</i>
 	 *  <br>0 if this <i>SDatetime</i> is equal to <i>other</i>
 	 *  <br>+1 if this <i>SDatetime</i> is bigger than <i>other</i>
 	 *  <br>throws SIllegalArgumentException if one of arguments has zone and
 	 *  the second one has no zone and the difference is less then 14 hours
 	 * @param arg the other SDatetime
 	 * @return the relationship between this SDatetime and the parameter.
-	 * @throws SIllegalArgumentException if  this object is not comparamble with the argument.
+	 * @throws SIllegalArgumentException if  this object is not comparable with the argument.
 	 */
 	public final int compareTo(final SDatetime arg)
 		throws SIllegalArgumentException {
@@ -1195,8 +1193,7 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 	@Override
 	public final int hashCode() {
 		synchronized(this) {
-			int hash = ((((((3 * _day + _month) * 5 + _year) * 7
-				+ _hour) * 11 + _minute) * 13 + _second) * 17 + getMillisecond()) * 23;
+			int hash = ((((((_day*3+_month)*5+_year)*7+_hour)*11+_minute)*13+_second)*17+getMillisecond())*23;
 			return  (_tz != null ? hash * 31 + _tz.hashCode() : hash);
 		}
 	}
@@ -1220,8 +1217,7 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 			} else {
 				c = (Calendar) obj;
 			}
-			return c.get(Calendar.DAY_OF_MONTH)==_day
-				&& (c.get(Calendar.MONTH)+1)==_month
+			return c.get(Calendar.DAY_OF_MONTH)==_day && (c.get(Calendar.MONTH)+1)==_month
 				&& (c.get(Calendar.ERA)==0 ?-(c.get(Calendar.YEAR)-1) :c.get(Calendar.YEAR))==_year;
 		}
 	}
@@ -1278,10 +1274,10 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 				throw new IllegalArgumentException(obj == null ? "null" : obj.getClass().getName());
 			}
 		}
-		GregorianCalendar cc1 = new GregorianCalendar(c1.get(Calendar.YEAR),
-			c1.get(Calendar.MONTH), c1.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
-		GregorianCalendar cc2 = new GregorianCalendar(c2.get(Calendar.YEAR),
-			c2.get(Calendar.MONTH), c2.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
+		GregorianCalendar cc1 = new GregorianCalendar(
+			c1.get(Calendar.YEAR), c1.get(Calendar.MONTH), c1.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
+		GregorianCalendar cc2 = new GregorianCalendar(
+			c2.get(Calendar.YEAR), c2.get(Calendar.MONTH), c2.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
 		cc1.set(Calendar.MILLISECOND, 0);
 		cc2.set(Calendar.MILLISECOND, 0);
 		cc1.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -1502,7 +1498,7 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 		int min = calendar.get(Calendar.MINUTE);
 		int hour = calendar.get(Calendar.HOUR_OF_DAY);
 		String millis = null;
-		double fraction = _fraction>0.0D && _hour>=0 && _minute>= 0 && _second>=0 ?_fraction :0.0D;
+		double fraction = _fraction>0.0D && _hour>=0 && _minute>=0 && _second>=0 ? _fraction : 0.0D;
 		if (ms == 0) {// round seconds according to fraction
 			if (fraction >= 0.5D) {
 				sec++; //seconds can be 60 now - we solve it later!
