@@ -1,7 +1,8 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.2.9, release-date 2024-10-31
-* .
+# Version 42.2.9, release-date 2024-11-01
+* In the X-script method `now` if the default time zone is not null it is set
+  to the result.
 
 # Version 42.2.8, release-date 2024-10-30
 * The new property `xdef_defaultZone` is used to set the default time zone (see
@@ -12,7 +13,7 @@
   time zone is set, then this default time zone is set to the result value.
 * The parsing method `dateYMDhms`: if the default time zone is set, it is set
   in the result.
-* The parsing method`xdatetime`: if the time zone of the result is zero,
+* The parsing method `xdatetime`: if the time zone of the result is zero,
   the default time zone is added to the result.  If there is no time zone output
   requirement in the output format, the time zone is set to the default value.
 * Implemented the new X-script method `currencyCode()` of `Currency` value which

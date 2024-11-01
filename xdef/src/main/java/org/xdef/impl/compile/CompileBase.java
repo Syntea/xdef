@@ -1146,7 +1146,7 @@ public class CompileBase implements CodeTable, XDValueID {
 		method(ti, genInternalMethod(SET_FRACTIONSECOND, XD_DATETIME,
 			ANY_MODE, 2, 2, XD_DATETIME,XD_DOUBLE),"setFractionalSecond");
 		method(ti, genInternalMethod(SET_HOUR, XD_DATETIME, ANY_MODE, 2, 2, XD_DATETIME,XD_LONG), "setHour");
-		method(ti, genInternalMethod(SET_MINUTE, XD_DATETIME, 
+		method(ti, genInternalMethod(SET_MINUTE, XD_DATETIME,
 			ANY_MODE, 2, 2, XD_DATETIME,XD_LONG), "setMinute");
 		method(ti, genInternalMethod(SET_MILLIS, XD_DATETIME,
 			ANY_MODE, 2, 2, XD_DATETIME,XD_LONG),"setMillis","?setMillisecond");
@@ -1375,7 +1375,7 @@ public class CompileBase implements CodeTable, XDValueID {
 // REPORT (see org.xdef.sys.Report)
 ////////////////////////////////////////////////////////////////////////////////
 		ti = XD_REPORT;
-		method(ti, genInternalMethod(NEW_REPORT, XD_REPORT, 
+		method(ti, genInternalMethod(NEW_REPORT, XD_REPORT,
 			ANY_MODE, 1, 3, XD_STRING, XD_STRING, XD_STRING), "#");
 		method(ti, genInternalMethod(REPORT_GETPARAM, XD_STRING,
 			ANY_MODE, 2, 2, XD_REPORT, XD_STRING), "getParameter");
