@@ -23,7 +23,7 @@ public class TestAllFull {
 		try {
 			fis = new FileOutputStream("testXdef.log");
 			log = new PrintStream(fis);
-		} catch (Exception ex) {
+		} catch (IOException ex) {
 			if (fis != null) {
 				try {
 					fis.close();

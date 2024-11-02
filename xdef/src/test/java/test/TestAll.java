@@ -17,34 +17,25 @@ public class TestAll {
 	@BeforeAll
 	public static void beforeTests() {
 		XDTester.setFulltestMode(false);
-		System.out.println("[INFO] Java version: "
-			+ System.getProperty("java.version") + " ("
-			+ (DefXQueryExpr.isXQueryImplementation() ? "with" : "without")
-			+ " Saxon library) ...");
-		System.out.println(
-			"[INFO] X-definition version: " + XDFactory.getXDVersion());
+		System.out.println("[INFO] Java version: " + System.getProperty("java.version") + " ("
+			+ (DefXQueryExpr.isXQueryImplementation() ? "with" : "without") + " Saxon library) ...");
+		System.out.println("[INFO] X-definition version: " + XDFactory.getXDVersion());
 	}
 
 	/** run TestAll in test.common */
 	@Test
 	@Order(1)
-	public void testCommon() {
-		assertEquals(test.common.TestAll.runTests(), 0);
-	}
+	public void testCommon() {assertEquals(test.common.TestAll.runTests(), 0);}
 
 	/** run TestAll in test.xdef */
 	@Test
 	@Order(2)
-	public void testXdef() {
-		assertEquals(test.xdef.TestAll.runTests(new String[0]), 0);
-	}
+	public void testXdef() {assertEquals(test.xdef.TestAll.runTests(new String[0]), 0);}
 
 	/** run TestAll in test.xdutil */
 	@Test
 	@Order(3)
-	public void testXDUtils() {
-		assertEquals(test.xdutils.TestAll.runTests(new String[0]), 0);
-	}
+	public void testXDUtils() {assertEquals(test.xdutils.TestAll.runTests(new String[0]), 0);}
 
 	/** Run all tests directly */
 	private static void mainTest() {
@@ -55,7 +46,5 @@ public class TestAll {
 	}
 
 	/** @param args the command line arguments. */
-	public static void main(String... args) {
-		mainTest();
-	}
+	public static void main(String... args) {mainTest();}
 }
