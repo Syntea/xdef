@@ -6,8 +6,7 @@ import java.io.PrintStream;
 import org.xdef.XDConstants;
 import test.XDTester;
 
-/** Run all available tests for package org.xdef.util  with all features
- * of the tester.
+/** Run all available tests for package org.xdef.util  with all features of the tester.
  * @author Vaclav Trojan
  */
 public class TestAllFull {
