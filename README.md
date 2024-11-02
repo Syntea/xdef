@@ -242,7 +242,7 @@ Prerequisities:
 * install _maven_ (at least version 3.6)
 * configure:
     * configure maven-plugin _toolchains_
-      (see https://maven.apache.org/plugins/maven-toolchains-plugin/usage.html):
+      (see <https://maven.apache.org/plugins/maven-toolchains-plugin/usage.html>):
         * configuration xml-file in the home directory _~/.m2/toolchains.xml_
         * see template-file [configure/maven/toolchains.xml](configure/maven/toolchains.xml)
 
@@ -295,7 +295,7 @@ Prerequisities:
     * access to the appropriate pgp-key
         * insert the appropriate key to the the pgp-manager
         * enter the pgp-key-password for the pgp-key
-          (see https://maven.apache.org/plugins/maven-gpg-plugin/sign-mojo.html#passphraseEnvName):
+          (see <https://maven.apache.org/plugins/maven-gpg-plugin/sign-mojo.html#passphraseEnvName>):
             * when prompted by the pgp-agent during the package build
             * or beforehand to the _MAVEN_GPG_PASSPHRASE_ environment variable
     * access to maven repository manager _oss.sonatype.org_ (having id "_ossrh_" in the file [xdef/pom.xml](xdef/pom.xml))
