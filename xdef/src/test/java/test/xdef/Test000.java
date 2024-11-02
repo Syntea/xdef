@@ -48,7 +48,7 @@ public final class Test000 extends XDTester {
 
 	@Override
 	/** Run tests and print error information. */
-	public void test() {
+	public final void test() {
 		String xdef;
 		String xml;
 		ArrayReporter reporter = new ArrayReporter();
@@ -1207,64 +1207,62 @@ public final class Test000 extends XDTester {
 			return s + ")";
 		}
 	}
-	public static String b(XXNode c, XDValue[] x) {return d(x);}
-	public static String bx(XDValue[] x) {return "b" + d(x);}
+	public static final String b(final XXNode c, final XDValue[] x) {return d(x);}
+	public static final String bx(final XDValue[] x) {return "b" + d(x);}
 ////////////////////////////////////////////////////////////////////////////////
 // methods and objects for Matej2
 ////////////////////////////////////////////////////////////////////////////////
-	public static void fail(XXNode c, XDValue[] p) {}
-	public static void setErr(XXNode c, XDValue... p) {_myError++;}
-	public static boolean unknown(XXNode c, XDValue[] e) {return false;}
-	public static boolean known(XXNode c, XDValue... e) {return true;}
-	public static boolean tab(XXNode c, XDValue... p) {return true;}
-	public static void setDefault_ifEx(XXNode c, XDValue... p){}
-	public static void emptySubjHasAddr(XXNode c, XDValue... p){}
-	public static void notEmptyMisto(XXNode c, XDValue[] p){}
-	public static void isEqual(XXNode c, XDValue[] p) {}
-	public static boolean fil0(XXNode c, XDValue[] p) {return true;}
-	public static boolean kvadrant(XXNode c, XDValue[] p) {return true;}
-	public static void exactlyOneAttr(XXNode c, XDValue[] p){}
-	public static void outputIVR(XXNode c, XDValue[] p) {}
-	public static String getIdAdresa(XXNode c, XDValue[] p) {return "-1";}
-	public static String getIdOsoba(XXNode c, XDValue[] p) {return "-1";}
-	public static String getIdSubjekt(XXNode c,XDValue[] p) {return "-1";}
-	public static String getTab(XXNode c, XDValue[] p) {return "-1";}
-	public static String getNonEmptyAttr(XXNode c,XDValue[]p){return"-1";}
-	public static String getIdModelText(XXNode c,XDValue[] p){return"-1";}
-	public static String getIdBarvaText(XXNode c,XDValue[]p){return "-1";}
-	public static String getIdPojistitel(XXNode c,XDValue[]p){return"-1";}
-	public static String getIdPrace(XXNode c,XDValue[] p) {return "-1";}
-	public static String getSeqRec(XXNode c, XDValue[] p) {return "-1";}
+	public static final void setErr(final XXNode c, final XDValue... p) {_myError++;}
+	public static final boolean unknown(final XXNode c, final XDValue[] e) {return false;}
+	public static final boolean known(final XXNode c, final XDValue... e) {return true;}
+	public static final boolean tab(final XXNode c, final XDValue... p) {return true;}
+	public static final void setDefault_ifEx(final XXNode c, final XDValue... p){}
+	public static final void emptySubjHasAddr(final XXNode c, final XDValue... p){}
+	public static final void notEmptyMisto(final XXNode c, final XDValue[] p){}
+	public static final void isEqual(final XXNode c, final XDValue[] p) {}
+	public static final boolean fil0(final XXNode c, final XDValue[] p) {return true;}
+	public static final boolean kvadrant(final XXNode c, final XDValue[] p) {return true;}
+	public static final void exactlyOneAttr(final XXNode c, final XDValue[] p){}
+	public static final void outputIVR(final XXNode c, final XDValue[] p) {}
+	public static final String getIdAdresa(final XXNode c, final XDValue[] p) {return "-1";}
+	public static final String getIdOsoba(final XXNode c, final XDValue[] p) {return "-1";}
+	public static final String getIdSubjekt(final XXNode c, final XDValue[] p) {return "-1";}
+	public static final String getTab(final XXNode c, final XDValue[] p) {return "-1";}
+	public static final String getNonEmptyAttr(final XXNode c, final XDValue[]p){return"-1";}
+	public static final String getIdModelText(final XXNode c, final XDValue[] p){return"-1";}
+	public static final String getIdBarvaText(final XXNode c, final XDValue[] p){return "-1";}
+	public static final String getIdPojistitel(final XXNode c, final XDValue[] p){return"-1";}
+	public static final String getIdPrace(final XXNode c, final XDValue[] p) {return "-1";}
+	public static final String getSeqRec(final XXNode c, final XDValue[] p) {return "-1";}
 ////////////////////////////////////////////////////////////////////////////////
 // methods and objects for Matej3
 ////////////////////////////////////////////////////////////////////////////////
-	public static String getTabId(XXNode c, XDValue[] p) {return "-1";}
+	public static final String getTabId(final XXNode c, final XDValue[] p) {return "-1";}
 ////////////////////////////////////////////////////////////////////////////////
 // methods and objects for Igor02
 ////////////////////////////////////////////////////////////////////////////////
-	public static String getTab(XXNode x, String s1, String s2,String s3){
+	public static final String getTab(final XXNode x, final String s1, final String s2, final String s3) {
 		return "-1";
 	}
-	public static String getIdPrace(XXNode x) {return "-1";}
-	public static String getAppName(XXNode x) {return "-1";}
-	public static String getAppVersion(XXNode x) {return "-1";}
-	public static String getAppInstallationDate(XXNode x){return "-1";}
-	public static String getRequestAccepted(XXNode x) {return "-1";}
-	public static String getPending(XXNode x) {return "-1";}
-	public static void outputIOR(XXNode x, String s) {}
-	public static void setPreRequest(XXNode x) {}
-	public static void setPreBody(XXNode x) {}
-	public static void answerIOR(XXNode x, String s) {}
-	public static void ctlIOR(XXNode x) {}
-	public static String convertBoolean(XXElement el, XDContainer boolContainer){
-		return boolContainer.getXDItemsNumber() == 1
-			&& "1".equals(boolContainer.getXDItem(0).toString()) ? "A" : "N";
+	public static final String getIdPrace(final XXNode x) {return "-1";}
+	public static final String getAppName(final XXNode x) {return "-1";}
+	public static final String getAppVersion(final XXNode x) {return "-1";}
+	public static final String getAppInstallationDate(final XXNode x){return "-1";}
+	public static final String getRequestAccepted(final XXNode x) {return "-1";}
+	public static final String getPending(final XXNode x) {return "-1";}
+	public static final void outputIOR(final XXNode x, final String s) {}
+	public static final void setPreRequest(final XXNode x) {}
+	public static final void setPreBody(final XXNode x) {}
+	public static final void answerIOR(final XXNode x, final String s) {}
+	public static final void ctlIOR(final XXNode x) {}
+	public static final String convertBoolean(final XXElement el, final XDContainer boolContainer) {
+		return boolContainer.getXDItemsNumber()==1&&"1".equals(boolContainer.getXDItem(0).toString())?"A":"N";
 	}
 ////////////////////////////////////////////////////////////////////////////////
 	/** Run test
 	 * @param args the command line arguments
 	 */
-	public static void main(String... args) {
+	public final static void main(final String... args) {
 		XDTester.setFulltestMode(true);
 		if (runTest(args) > 0) {System.exit(1);}
 	}

@@ -51,7 +51,7 @@ public final class TestXdef extends XDTester {
 	private static int _myX;
 
 	@Override
-	public void test() {
+	public final void test() {
 		final String dataDir = getDataDir() + "test/";
 		XDPool xp;
 		String xdef;
@@ -113,43 +113,32 @@ public final class TestXdef extends XDTester {
 			if (!reporter.printToString().contains("XML080")) {fail(ex);}
 		}
 		try { // compile InputStream, String and more
-			props = new Properties();
-			xdef =
-"<x:def xmlns:x ='" + _xdNS + "' name='a' root='a'>\n"+
-"  <a/>\n"+
-"</x:def>";
+			xdef = "<x:def xmlns:x ='" + _xdNS + "' name='a' root='a'><a/></x:def>";
 			Object[][] params = new Object[1][2];
 			params[0][0] = new ByteArrayInputStream(xdef.getBytes("UTF-8"));
 			params[0][1] = "Osoba xdef";
-			xp = XDFactory.compileXD(props, (Object[]) params);
+			xp = XDFactory.compileXD(null, (Object[]) params);
 			assertEq("<a/>", parse(xp, "a", "<a/>", reporter));
 			assertNoErrorwarnings(reporter);
 			params = new Object[2][2];
 			params[0][0] = new ByteArrayInputStream(xdef.getBytes("UTF-8"));
 			params[0][1] = "Osoba xdef";
-			params[1][0] = new ByteArrayInputStream((
-"<x:def xmlns:x ='" + _xdNS + "' name='b' root='b'>\n"+
-"  <b/>\n"+
-"</x:def>").getBytes("UTF-8"));
+			params[1][0] = new ByteArrayInputStream(
+				("<x:def xmlns:x ='"+_xdNS+"' name='b' root='b'><b/></x:def>").getBytes("UTF-8"));
 			params[1][1] = "Osoba2 xdef";
-			xp = XDFactory.compileXD(props, (Object[]) params);
+			xp = XDFactory.compileXD(null, (Object[]) params);
 			assertEq("<a/>", parse(xp, "a", "<a/>", reporter));
 			assertNoErrorwarnings(reporter);
 			assertEq("<b/>", parse(xp, "b", "<b/>", reporter));
 			assertNoErrorwarnings(reporter);
 			params = new Object[2][2];
-
 			params[0][0] = new ByteArrayInputStream(xdef.getBytes("UTF-8"));
 			params[0][1] = "Osoba xdef";
-			params[1][0] = new ByteArrayInputStream((
-"<x:def xmlns:x ='" + _xdNS + "' name='b' root='b'>\n"+
-"  <b/>\n"+
-"</x:def>").getBytes("UTF-8"));
+			params[1][0] = new ByteArrayInputStream(
+				("<x:def xmlns:x ='"+_xdNS+"' name='b' root='b'><b/></x:def>").getBytes("UTF-8"));
 			params[1][1] = "Osoba2 xdef";
-			xp = XDFactory.compileXD(props, (Object[]) params,
-"<x:def xmlns:x ='" + _xdNS + "' name='c' root='c'>\n"+
-"  <c/>\n"+
-"</x:def>");
+			xp = XDFactory.compileXD(null, (Object[]) params,
+				"<x:def xmlns:x ='"+_xdNS+"' name='c' root='c'><c/></x:def>");
 			assertEq("<a/>", parse(xp, "a", "<a/>", reporter));
 			assertNoErrorwarnings(reporter);
 			assertEq("<b/>", parse(xp, "b", "<b/>", reporter));
@@ -173,7 +162,7 @@ public final class TestXdef extends XDTester {
 "/*comment*/\n"+
 "</xd:def>");
 			xdef = // check the sequence of processing of attributes
-"<xd:def xmlns:xd=\"" + _xdNS + "\" xd:root=\"A\">\n" +
+"<xd:def xmlns:xd='" + _xdNS + "' xd:root='A'>\n" +
 "  <A a='onTrue out(@a)' b='onTrue out(@b)' c='onTrue out(@c)' />\n" +
 "</xd:def>";
 			xd = compile(xdef).createXDDocument();
@@ -196,7 +185,7 @@ public final class TestXdef extends XDTester {
 			assertNoErrorwarnings(reporter);
 			assertEq("abc", swr.toString());
 			xdef =
-"<xd:def xmlns:xd=\"" + _xdNS + "\" xd:root=\"A\">\n" +
+"<xd:def xmlns:xd='" + _xdNS + "' xd:root='A'>\n" +
 "  <A a='finally out(@a)' b='finally out(@b)' c='finally out(@c)' />\n" +
 "</xd:def>";
 			xd = compile(xdef).createXDDocument();
@@ -219,7 +208,7 @@ public final class TestXdef extends XDTester {
 			assertNoErrorwarnings(reporter);
 			assertEq("abc", swr.toString());
 			xdef =
-"<xd:def xmlns:xd=\"" + _xdNS + "\" xd:root=\"A\">\n" +
+"<xd:def xmlns:xd='" + _xdNS + "' xd:root='A'>\n" +
 "  <A a='init out(@a)' b='init out(@b)' c='init out(@c)' />\n" +
 "</xd:def>";
 			xd = compile(xdef).createXDDocument();
@@ -242,7 +231,7 @@ public final class TestXdef extends XDTester {
 			assertNoErrorwarnings(reporter);
 			assertEq("abc", swr.toString());
 			xdef = // check the sequence of processed attribute
-"<xd:def xmlns:xd=\"" + _xdNS + "\" xd:root=\"A\">\n" +
+"<xd:def xmlns:xd='" + _xdNS + "' xd:root='A'>\n" +
 "  <A a='onStartElement out(@a)'\n" +
 "     b='onStartElement out(@b)'\n" +
 "     c='onStartElement out(@c)' />\n" +
@@ -267,7 +256,7 @@ public final class TestXdef extends XDTester {
 			assertNoErrorwarnings(reporter);
 			assertEq("abc", swr.toString());
 			xdef = // check the sequence of processing of attributes
-"<xd:def xmlns:xd=\"" + _xdNS + "\" xd:root=\"A\">\n" +
+"<xd:def xmlns:xd='" + _xdNS + "' xd:root='A'>\n" +
 "  <A b='onTrue out(@b)' c='onTrue out(@c)' a='onTrue out(@a)' />\n" +
 "</xd:def>";
 			xd = compile(xdef).createXDDocument();
@@ -290,7 +279,7 @@ public final class TestXdef extends XDTester {
 			assertNoErrorwarnings(reporter);
 			assertEq("bca", swr.toString());
 			xdef =
-"<xd:def xmlns:xd=\"" + _xdNS + "\" xd:root=\"A\">\n" +
+"<xd:def xmlns:xd='" + _xdNS + "' xd:root='A'>\n" +
 "  <A b='finally out(@b)' c='finally out(@c)' a='finally out(@a)' />\n" +
 "</xd:def>";
 			xd = compile(xdef).createXDDocument();
@@ -313,7 +302,7 @@ public final class TestXdef extends XDTester {
 			assertNoErrorwarnings(reporter);
 			assertEq("bca", swr.toString());
 			xdef = // check the sequence of processed attribute
-"<xd:def xmlns:xd=\"" + _xdNS + "\" xd:root=\"A\">\n" +
+"<xd:def xmlns:xd='" + _xdNS + "' xd:root='A'>\n" +
 "  <A b='onStartElement out(@b)'\n" +
 "     c='onStartElement out(@c)'\n" +
 "     a='onStartElement out(@a)' />\n" +
@@ -3135,20 +3124,19 @@ public final class TestXdef extends XDTester {
 			assertTrue(el.getOwnerDocument().getDoctype() != null, "NULL");
 			assertNoErrorwarnings(reporter);
 		} catch (Exception ex) {
-			if (!ex.getMessage().contains("XML099"))fail(ex);
+			if ((s = ex.getMessage()) == null || !s.contains("XML099")) {fail(ex);}
 		}
 		try {// test "classpath" and "file" protocol in URL
-			XDFactory.compileXD((Properties) null, //without wildcards
+			XDFactory.compileXD(null, //without wildcards
 				"classpath://org.xdef.impl.compile.XdefOfXdefBase.xdef",
 				"classpath://org.xdef.impl.compile.XdefOfXdef31.xdef",
 				"classpath://org.xdef.impl.compile.XdefOfXdef32.xdef",
 				"classpath://org.xdef.impl.compile.XdefOfXdef40.xdef",
 				"classpath://org.xdef.impl.compile.XdefOfXdef41.xdef",
 				"classpath://org.xdef.impl.compile.XdefOfXdef42.xdef");
-			XDFactory.compileXD((Properties) null, //with wildcards
+			XDFactory.compileXD(null, //with wildcards
 				"classpath://org.xdef.impl.compile.XdefOfXdef*.xdef");
-			 //collection without wildcards
-			XDFactory.compileXD((Properties) null,
+			XDFactory.compileXD(null, //collection without wildcards
 "<xd:collection xmlns:xd='" + _xdNS + "'\n"+
 "  xd:include='classpath://org.xdef.impl.compile.XdefOfXdef31.xdef;\n"+
 "    classpath://org.xdef.impl.compile.XdefOfXdef32.xdef;\n"+
@@ -3156,17 +3144,14 @@ public final class TestXdef extends XDTester {
 "    classpath://org.xdef.impl.compile.XdefOfXdef41.xdef;\n"+
 "    classpath://org.xdef.impl.compile.XdefOfXdef42.xdef;\n"+
 "    classpath://org.xdef.impl.compile.XdefOfXdefBase.xdef;'/>");
-			//collection with wildcards
-			XDFactory.compileXD((Properties) null,
+			XDFactory.compileXD(null, //collection with wildcards
 "<xd:collection xmlns:xd='" + _xdNS + "'\n"+
 "  xd:include='classpath://org.xdef.impl.compile.XdefOfXdef*.xdef'/>");
-			//X-definition with imports with wildcards
-			XDFactory.compileXD((Properties) null, //with wildcards
+			XDFactory.compileXD(null, //X-definition with imports with wildcards
 "<xd:def xmlns:xd='" + _xdNS + "' name='xxx'\n"+
 "  xd:include='classpath://org.xdef.impl.compile.XdefOfXdef*.xdef'/>");
 		} catch (RuntimeException ex) {fail(ex);}
-//Test default property "xdef_warning"s and values "true" and "false".
-		try {
+		try { //Test default property "xdef_warning"s and values "true" and "false".
 			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' name='X' root='a'>\n"+
 "  <a a=\"list('x','y')\" b=\"x()\"> </a>\n"+
@@ -3176,8 +3161,7 @@ public final class TestXdef extends XDTester {
 			xd.xparse("<a a='y' b='z'/>", null);
 			fail("Error not thrown");
 		} catch (RuntimeException ex) {
-			s = ex.getMessage();
-			if (s == null || !s.contains("XDEF998")) {fail(ex);}
+			if ((s = ex.getMessage()) == null || !s.contains("XDEF998")) {fail(ex);}
 		}
 		try { // test with property xdef_warnings=false
 			xdef =
@@ -3188,8 +3172,7 @@ public final class TestXdef extends XDTester {
 "  <a a=\"list('x','y')\" b=\"x()\"> </a>\n"+
 "</xd:def>";
 			props = new Properties();
-			props.setProperty(XDConstants.XDPROPERTY_WARNINGS,// xdef_warnings
-				XDConstants.XDPROPERTYVALUE_WARNINGS_FALSE); // false
+			props.setProperty(XDConstants.XDPROPERTY_WARNINGS, XDConstants.XDPROPERTYVALUE_WARNINGS_FALSE);
 			xp = XDFactory.compileXD(props, xdef);
 			xd = xp.createXDDocument();
 			xd.xparse("<a a='y' b='z'/>", null);
@@ -3236,22 +3219,22 @@ public final class TestXdef extends XDTester {
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertNoErrorwarnings(reporter);
 		} catch (RuntimeException ex) {fail(ex);}
-		try { // test X-script method now()
-			props = new Properties();
-			props.setProperty(XDConstants.XDPROPERTY_DEFAULTZONE, "UTC");
+		try { // test X-script method now() and default zone
 			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
-"  <xd:declaration> String s = now.toString() + ', ' + getDefaultZone(); </xd:declaration>\n" +
-"  <a xd:script='finally out(s);'/>\n" +
+"  <xd:declaration> String s = now.toString() + getDefaultZone();</xd:declaration>\n" +
+"  <a xd:script='init out(s);'/>\n" +
 "</xd:def>";
-			xp = XDFactory.compileXD(props, xdef);
+			xp = compile(xdef);
 			xd = xp.createXDDocument();
 			xml = "<a/>";
 			swr = new StringWriter();
+			xd.setProperty(XDConstants.XDPROPERTY_DEFAULTZONE, "GMT");
 			assertEq(xml, parse(xd, xml, reporter, swr));
 			s = swr.toString();
-			assertTrue(s.endsWith("Z, UTC"), s);
+			assertTrue(s.endsWith("ZGMT"), s);
 			assertNoErrorwarningsAndClear(reporter);
+			props = new Properties();
 			props.setProperty(XDConstants.XDPROPERTY_DEFAULTZONE, "ACT");
 			xp = XDFactory.compileXD(props, xdef);
 			xd = xp.createXDDocument();
@@ -3259,30 +3242,31 @@ public final class TestXdef extends XDTester {
 			swr = new StringWriter();
 			assertEq(xml, parse(xd, xml, reporter, swr));
 			s = swr.toString();
-			assertTrue(s.endsWith("+09:30, ACT"), s);
+			assertTrue(s.endsWith("+09:30ACT"), s);
 			assertNoErrorwarningsAndClear(reporter);
 		} catch (RuntimeException ex) {fail(ex);}
 		try { // test property  "xdef_defaultZone"
-			props = new Properties();
-			props.setProperty(XDConstants.XDPROPERTY_DEFAULTZONE, "CET");
 			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
-  "<a a='dateTime();'/>\n" +
+"  <a a='dateTime();'/>\n" +
 "  <xd:component> %class test.xdef.TestTZ%link a; </xd:component>\n"+
 "</xd:def>";
-			xp = XDFactory.compileXD(props, xdef);
-			assertEq(TimeZone.getTimeZone("CET"), xp.getDefaultZone());
+			xp = compile(xdef);
 			genXComponent(xp, clearTempDir());
 			xml = "<a a='2024-10-22T11:55:30+02:00'/>";
-			assertEq(xml, parse(xp, "", xml));
 			xd = xp.createXDDocument();
+			xd.setProperty(XDConstants.XDPROPERTY_DEFAULTZONE, "CET");
+			assertEq(TimeZone.getTimeZone("CET"), xd.getDefaultZone());
+			assertEq(xml, parse(xd, xml, reporter));
 			xc = xd.xparseXComponent(xml, null, reporter);
 			assertEq("<a a='2024-10-22T11:55:30+02:00'/>", xc.toXml());
 			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
-"  <a a='xdatetime(\"yyyy-MM-ddTHH:mm[Z]\", \"yyyy-MM-ddTHH:mmZ\");'/>\n" + // date and time (no seconds)
+  "<a a='xdatetime(\"yyyy-MM-ddTHH:mm[Z]\", \"yyyy-MM-ddTHH:mmZ\");'/>\n" + // date and time (no seconds)
 "  <xd:component> %class test.xdef.TestTZ1%link a; </xd:component>\n"+
 "</xd:def>";
+			props = new Properties();
+			props.setProperty(XDConstants.XDPROPERTY_DEFAULTZONE, "CET");
 			xp = XDFactory.compileXD(props, xdef);
 			genXComponent(xp, clearTempDir());
 			xml = "<a a='2024-10-22T11:55'/>";
@@ -3319,8 +3303,8 @@ public final class TestXdef extends XDTester {
 ////////////////////////////////////////////////////////////////////////////////
 // methods and objects used in X-definitions as external.
 ////////////////////////////////////////////////////////////////////////////////
-	public static long getInt5() {return 5;}
-	public static void testOldx(XXNode xnode, XDValue[] params) {
+	public static final long getInt5() {return 5;}
+	public static final void testOldx(final XXNode xnode, final XDValue[] params) {
 		Element el = xnode.getElement();
 		if (el == null) {
 			xnode.error("", "Object is null");
@@ -3328,7 +3312,7 @@ public final class TestXdef extends XDTester {
 			xnode.error("","Object is not element 'a'");
 		}
 	}
-	public static void testOldy(XXData xdata, XDValue[] params) {
+	public static final void testOldy(final XXData xdata, final XDValue[] params) {
 		String s = xdata.getTextValue();
 		if (s == null) {
 			xdata.error("", "Object is null");
@@ -3336,27 +3320,26 @@ public final class TestXdef extends XDTester {
 			xdata.error("", "Object is not String '1'");
 		}
 	}
-	public static void myCheck(final XXElement xel,
-		final String s, final byte[] b) {
+	public static final void myCheck(final XXElement xel, final String s, final byte[] b) {
 		if (!s.equals(new String(b))) {
 			((TestXdef) xel.getXDDocument().getUserObject()).fail("Check");
 		}
 	}
-	public void myProc(final String s) {_myX = 1;}
-	public static void myProc(final XXNode xnode, final String s) {_myX = 2;}
-	public static void myProc(final XDValue[] p) {_myX = 3;}
-	public static void setDateProc(XXData xdata, XDValue[] params) {
+	public final void myProc(final String s) {_myX = 1;}
+	public static final void myProc(final XXNode xnode, final String s) {_myX = 2;}
+	public static final void myProc(final XDValue[] p) {_myX = 3;}
+	public static final void setDateProc(final XXData xdata, final XDValue[] params) {
 		String s = params[0].datetimeValue().formatDate("yyyy-MM-dd");
 		xdata.setTextValue(s);
 	}
-	public static boolean testExt(XXElement xel, String a, String b, String c){
+	public final static boolean testExt(final XXElement xel, final String a, final String b, final String c) {
 		if (_myX == 1 && "a".equals(a) && "b".equals(b) && "c".equals(c)) {
 			_myX = 0;
 			return true;
 		}
 		return false;
 	}
-	public static void myErr(XXNode xel, XDValue[] params) {
+	public final static void myErr(final XXNode xel, final XDValue[] params) {
 		xel.getTemporaryReporter().clear();
 		if (params.length == 1
 			&& params[0].getItemId() == XDValueID.XD_LONG
@@ -3367,17 +3350,16 @@ public final class TestXdef extends XDTester {
 			_myX = 1;
 		}
 	}
-	public static long myError() {throw new RuntimeException("MyError");}
-	final public static void testPos(final XXNode xnode) {}
+	public final static long myError() {throw new RuntimeException("MyError");}
+	public final static void testPos(final XXNode xnode) {}
 	/** Check datetime according to mask1. If parsed value has time zone UTC,
 	 * then convert date to the local time. Format of result is given by mask2.
 	 * @param xdata actual XXData object.
 	 * @param args array of parameters.
 	 * @return true if format is OK.
 	 */
-	final public static XDParseResult dateToLocal(XXData xdata, XDValue[] args){
-		String mask1 =
-			args.length >= 1 ? args[0].toString() : "yyyyMMddTHHmmss[Z]";
+	public final static XDParseResult dateToLocal(final XXData xdata, final XDValue[] args) {
+		String mask1 = args.length >= 1 ? args[0].toString() : "yyyyMMddTHHmmss[Z]";
 		String s = xdata.getTextValue();
 		StringParser p = new StringParser(s);
 		if (!p.isDatetime(mask1)) {
@@ -3392,15 +3374,14 @@ public final class TestXdef extends XDTester {
 		}
 		SDatetime sd = p.getParsedSDatetime();
 		sd.toTimeZone(TimeZone.getTimeZone("GMT"));
-		String mask2 =
-			args.length >= 2 ? args[1].toString() : "yyyyMMddTHHmmssZ";
+		String mask2 = args.length >= 2 ? args[1].toString() : "yyyyMMddTHHmmssZ";
 		xdata.setTextValue(sd.formatDate(mask2));
 		return new DefParseResult(s,new DefDate(sd));
 	}
-	private static class LicheCislo extends XDParserAbstract {
+	private static final class LicheCislo extends XDParserAbstract {
 		LicheCislo() {}
 		@Override
-		final public void parseObject(final XXNode xnode,
+		public final void parseObject(final XXNode xnode,
 			final XDParseResult p) {
 			StringParser parser = new StringParser(p.getSourceBuffer());
 			parser.isSpaces();
@@ -3418,15 +3399,15 @@ public final class TestXdef extends XDTester {
 			}
 		}
 		@Override
-		public String parserName() {return "licheCislo";}
+		public final String parserName() {return "licheCislo";}
 	}
-	final public static XDParser licheCislo() {return new LicheCislo();}
-	public static boolean x(XXData x) {return true;}
+	public final static XDParser licheCislo() {return new LicheCislo();}
+	public final static boolean x(final XXData x) {return true;}
 
 	/** Run test
 	 * @param args the command line arguments
 	 */
-	public static void main(String... args) {
+	public final static void main(final String... args) {
 		XDTester.setFulltestMode(true);
 		if (runTest(args) > 0) {System.exit(1);}
 	}
