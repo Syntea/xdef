@@ -3241,10 +3241,8 @@ public final class TestXdef extends XDTester {
 			props.setProperty(XDConstants.XDPROPERTY_DEFAULTZONE, "UTC");
 			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
-"<xd:declaration>\n" +
-"  String s = now.toString();\n" +
-"</xd:declaration>\n" +
-"<a xd:script='finally out(s);'/>\n" +
+"  <xd:declaration> String s = now.toString() + ', ' + getDefaultZone(); </xd:declaration>\n" +
+"  <a xd:script='finally out(s);'/>\n" +
 "</xd:def>";
 			xp = XDFactory.compileXD(props, xdef);
 			xd = xp.createXDDocument();
@@ -3252,7 +3250,7 @@ public final class TestXdef extends XDTester {
 			swr = new StringWriter();
 			assertEq(xml, parse(xd, xml, reporter, swr));
 			s = swr.toString();
-			assertTrue(s.endsWith("Z"), s);
+			assertTrue(s.endsWith("Z, UTC"), s);
 			assertNoErrorwarningsAndClear(reporter);
 			props.setProperty(XDConstants.XDPROPERTY_DEFAULTZONE, "ACT");
 			xp = XDFactory.compileXD(props, xdef);
@@ -3261,15 +3259,15 @@ public final class TestXdef extends XDTester {
 			swr = new StringWriter();
 			assertEq(xml, parse(xd, xml, reporter, swr));
 			s = swr.toString();
-			assertTrue(s.endsWith("+09:30"), s);
+			assertTrue(s.endsWith("+09:30, ACT"), s);
 			assertNoErrorwarningsAndClear(reporter);
 		} catch (RuntimeException ex) {fail(ex);}
 		try { // test property  "xdef_defaultZone"
 			props = new Properties();
 			props.setProperty(XDConstants.XDPROPERTY_DEFAULTZONE, "CET");
 			xdef =
-"<xd:def xmlns:xd='"+_xdNS+"' name='a' root='a'>\n"+
-"<a a='dateTime();'/>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
+  "<a a='dateTime();'/>\n" +
 "  <xd:component> %class test.xdef.TestTZ%link a; </xd:component>\n"+
 "</xd:def>";
 			xp = XDFactory.compileXD(props, xdef);
@@ -3281,8 +3279,8 @@ public final class TestXdef extends XDTester {
 			xc = xd.xparseXComponent(xml, null, reporter);
 			assertEq("<a a='2024-10-22T11:55:30+02:00'/>", xc.toXml());
 			xdef =
-"<xd:def xmlns:xd='"+_xdNS+"' name='a' root='a'>\n"+
-"<a a='xdatetime(\"yyyy-MM-ddTHH:mm[Z]\", \"yyyy-MM-ddTHH:mmZ\");'/>\n" + // date and time (no seconds)
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
+"  <a a='xdatetime(\"yyyy-MM-ddTHH:mm[Z]\", \"yyyy-MM-ddTHH:mmZ\");'/>\n" + // date and time (no seconds)
 "  <xd:component> %class test.xdef.TestTZ1%link a; </xd:component>\n"+
 "</xd:def>";
 			xp = XDFactory.compileXD(props, xdef);
@@ -3299,8 +3297,8 @@ public final class TestXdef extends XDTester {
 			assertEq("<a a='2024-10-22T11:55Z'/>", xc.toXml());
 			assertEq(null, compile("<def xmlns='"+_xdNS+"'/>").getDefaultZone());
 			xdef =
-"<xd:def xmlns:xd='"+_xdNS+"' name='a' root='a'>\n"+
-"<a a='dateYMDhms();'/>\n" +
+"<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
+"  <a a='dateYMDhms();'/>\n" +
 "  <xd:component> %class test.xdef.TestTZ2%link a; </xd:component>\n"+
 "</xd:def>";
 			xp = XDFactory.compileXD(props, xdef);

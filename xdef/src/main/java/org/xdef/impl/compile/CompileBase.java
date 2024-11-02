@@ -87,12 +87,12 @@ import static org.xdef.impl.code.CodeTable.BYTES_SIZE;
 import static org.xdef.impl.code.CodeTable.BYTES_TO_BASE64;
 import static org.xdef.impl.code.CodeTable.BYTES_TO_HEX;
 import static org.xdef.impl.code.CodeTable.CHAR_AT;
+import static org.xdef.impl.code.CodeTable.CLEAR_REPORTS;
+import static org.xdef.impl.code.CodeTable.CLOSE_XMLWRITER;
 import org.xdef.impl.code.DefContainer;
 import org.xdef.impl.code.DefLong;
 import org.xdef.impl.code.DefString;
 import org.xdef.impl.code.DefXQueryExpr;
-import static org.xdef.impl.code.CodeTable.CLEAR_REPORTS;
-import static org.xdef.impl.code.CodeTable.CLOSE_XMLWRITER;
 import static org.xdef.impl.code.CodeTable.COMPILE_REGEX;
 import static org.xdef.impl.code.CodeTable.COMPOSE_OP;
 import static org.xdef.impl.code.CodeTable.CONTAINS;
@@ -161,6 +161,7 @@ import static org.xdef.impl.code.CodeTable.GET_DAY;
 import static org.xdef.impl.code.CodeTable.GET_DAYTIMEMILLIS;
 import static org.xdef.impl.code.CodeTable.GET_DBQUERY;
 import static org.xdef.impl.code.CodeTable.GET_DBQUERY_ITEM;
+import static org.xdef.impl.code.CodeTable.GET_DEFAULTZONE;
 import static org.xdef.impl.code.CodeTable.GET_EASTERMONDAY;
 import static org.xdef.impl.code.CodeTable.GET_ELEMENT;
 import static org.xdef.impl.code.CodeTable.GET_ELEMENT_LOCALNAME;
@@ -889,6 +890,7 @@ public class CompileBase implements CodeTable, XDValueID {
 		method(ti, genInternalMethod(GET_ATTR, XD_STRING,
 			(byte)(TEXT_MODE+ELEM_MODE),1,2,XD_STRING,XD_STRING), "getAttr");
 		method(ti, genInternalMethod(GET_ATTR_NAME, XD_STRING, TEXT_MODE, 0, 0), "getAttrName");
+		method(ti, genInternalMethod(GET_DEFAULTZONE, XD_STRING, ANY_MODE, 0, 0), "getDefaultZone");
 		method(ti, genInternalMethod(GET_ELEMENT, XD_ELEMENT, ANY_MODE, 0, 0), "getElement");
 		method(ti, genInternalMethod(GET_ELEMENT_NAME, XD_STRING,ANY_MODE, 0, 0), "getElementName");
 		method(ti, genInternalMethod(GET_ELEMENT_LOCALNAME, XD_STRING,
@@ -900,14 +902,12 @@ public class CompileBase implements CodeTable, XDValueID {
 			(byte)(TEXT_MODE+ELEM_MODE),1,1,XD_STRING), "getItem", "?fromAttr");
 		method(ti, genInternalMethod(GET_LASTERROR, XD_REPORT,
 			(byte)(TEXT_MODE+ELEM_MODE), 0, 0), "getLastError");
-		method(ti, genInternalMethod(GET_NS,XD_STRING, ANY_MODE, 0, 2,
-			XD_ANY, XD_ELEMENT), "getNamespaceURI");
+		method(ti, genInternalMethod(GET_NS,XD_STRING, ANY_MODE, 0, 2, XD_ANY, XD_ELEMENT),"getNamespaceURI");
 // ELEM_MODE?
 		method(ti, genInternalMethod(GET_COUNTER, XD_LONG, ANY_MODE, 0, 0), "getOccurrence", "?getCounter");
 		method(ti, genInternalMethod(GET_PARSED_BOOLEAN, XD_BOOLEAN, TEXT_MODE, 0, 0), "getParsedBoolean");
 		method(ti, genInternalMethod(GET_PARSED_BYTES, XD_BYTES, TEXT_MODE, 0,0), "getParsedBytes");
-		method(ti, genInternalMethod(GET_PARSED_DATETIME, XD_DATETIME,
-			TEXT_MODE, 0, 0), "getParsedDatetime");
+		method(ti, genInternalMethod(GET_PARSED_DATETIME, XD_DATETIME, TEXT_MODE, 0, 0), "getParsedDatetime");
 		method(ti, genInternalMethod(GET_PARSED_DECIMAL, XD_DECIMAL, TEXT_MODE, 0, 0), "getParsedDecimal");
 		method(ti, genInternalMethod(GET_PARSED_DURATION, XD_DATETIME, TEXT_MODE, 0, 0), "getParsedDuration");
 		method(ti, genInternalMethod(GET_PARSED_DOUBLE, XD_DOUBLE, TEXT_MODE, 0, 0), "getParsedFloat");

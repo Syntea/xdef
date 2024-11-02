@@ -179,8 +179,11 @@ final class ChkDocument extends ChkNode	implements XDDocument {
 	ChkDocument(final XDefinition xd, final ChkElement chkel) {
 		this();
 		setDateRestrictions(xd.getXDPool());
-		init(xd, chkel._rootChkDocument._doc,
-			chkel._rootChkDocument._reporter, chkel._scp.getProperties(), chkel.getUserObject());
+		init(xd,
+			chkel._rootChkDocument._doc,
+			chkel._rootChkDocument._reporter,
+			chkel._scp.getProperties(),
+			chkel.getUserObject());
 		_xComponent = chkel.getXComponent();
 		_scp = new XCodeProcessor(xd, chkel);
 	}

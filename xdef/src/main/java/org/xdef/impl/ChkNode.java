@@ -13,6 +13,7 @@ import java.util.Currency;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 import javax.xml.xpath.XPathFunctionResolver;
 import javax.xml.xpath.XPathVariableResolver;
 import org.w3c.dom.Document;
@@ -63,7 +64,6 @@ import org.xdef.model.XMData;
 import org.xdef.model.XMDefinition;
 import org.xdef.model.XMElement;
 import org.xdef.model.XMNode;
-import org.xdef.model.XMVariableTable;
 import org.xdef.msg.XDEF;
 import org.xdef.proc.XXNode;
 import org.xdef.sys.ArrayReporter;
@@ -165,9 +165,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	/** Get namespace URI of the X-model.
 	 * @return namespace URI of node or <i>null</i>.
 	 */
-	public String getXXNSURI() {
-		return (_xElement == null) ? null : _xElement.getNSUri();
-	}
+	public String getXXNSURI() {return (_xElement == null) ? null : _xElement.getNSUri();}
 
 	@Override
 	/** get User object.
@@ -187,27 +185,21 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	 * @param obj user object.
 	 * @return previous value of the object or <i>null</i>.
 	 */
-	public final Object setUserObject(final String id, final Object obj) {
-		return _scp.setUserObject(id, obj);
-	}
+	public final Object setUserObject(final String id, final Object obj) {return _scp.setUserObject(id, obj);}
 
 	@Override
 	/** Remove named user object.
 	 * @param id identifier of the object.
 	 * @return value of the object or <i>null</i>.
 	 */
-	public Object removeUserObject(final String id) {
-		return _scp.removeUserObject(id);
-	}
+	public Object removeUserObject(final String id) {return _scp.removeUserObject(id);}
 
 	@Override
 	/** Get named user object.
 	 * @param id identifier of the object.
 	 * @return value of the object or <i>null</i>.
 	 */
-	public final Object getUserObject(final String id) {
-		return _scp.getUserObject(id);
-	}
+	public final Object getUserObject(final String id) {return _scp.getUserObject(id);}
 
 	@Override
 	/** Return parent node.
@@ -239,9 +231,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	/** Set standard output stream.
 	 * @param out PrintStream object.
 	 */
-	public final void setStdOut(final PrintStream out) {
-		setStdOut(new DefOutStream(out));
-	}
+	public final void setStdOut(final PrintStream out) {setStdOut(new DefOutStream(out));}
 
 	/** Set standard output stream.
 	 * @param out PrintStream object.
@@ -256,9 +246,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	/** Set standard input stream.
 	 * @param in InputStream object.
 	 */
-	public final void setStdIn(final InputStream in) {
-		setStdIn(new DefInStream(in, false));
-	}
+	public final void setStdIn(final InputStream in) {setStdIn(new DefInStream(in, false));}
 
 	/** Set standard input stream.
 	 * @param in XDInputStream object.
@@ -274,9 +262,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	/** Set source element as context for create mode.
 	 * @param sourceElem source element to be set (create mode).
 	 */
-	public final void setCreateContext(final Element sourceElem) {
-		_sourceElem = sourceElem;
-	}
+	public final void setCreateContext(final Element sourceElem) {_sourceElem = sourceElem;}
 
 	/** Get actual source context for create mode.
 	 * @return source context or null if not available.
@@ -286,8 +272,8 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	final void debugXPos(final char action) {
 		if (_scp.isDebugMode()) {
 			if (_scp.getDebugger().hasXPos(action + _xPos)) {
-				_scp.getDebugger().debug(this, null, -1, -1, null, null,
-					getXDPool().getDebugInfo(), null, (byte) 0);
+				_scp.getDebugger().debug(
+					this, null, -1, -1, null, null,getXDPool().getDebugInfo(), null, (byte) 0);
 			}
 		}
 	}
@@ -328,15 +314,10 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	 * Element then it represents Document element of owner document.
 	 */
 	public final void setXDContext(final Node node) {
-		if (node == null) {
-			_sourceElem = null;
-		} else if (node.getNodeType() == Node.ELEMENT_NODE) {
-			_sourceElem = (Element) node;
-		} else if (node.getNodeType() == Node.DOCUMENT_NODE) {
-			_sourceElem = ((Document) node).getDocumentElement();
-		} else {
-			_sourceElem = node.getOwnerDocument().getDocumentElement();
-		}
+		_sourceElem = node == null ? null
+			: node.getNodeType() == Node.ELEMENT_NODE ? (Element) node
+			: node.getNodeType() == Node.DOCUMENT_NODE ? ((Document) node).getDocumentElement()
+			: node.getOwnerDocument().getDocumentElement();
 	}
 
 	@Override
@@ -344,8 +325,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	 * @param data the XON/JSON data. It can be either pathname or URL.
 	 * @throws SRuntimeException if data is incorrect or if model is not found.
 	 */
-	public final void setXONContext(final String data)
-		throws SRuntimeException {
+	public final void setXONContext(final String data) throws SRuntimeException {
 		setXDContext(XonUtils.xonToXmlW(data));
 	}
 
@@ -359,8 +339,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	public final void setXONContext(final Object data) throws SRuntimeException{
 		Element e = null;
 		if (data == null || data instanceof Map || data instanceof List
-			|| data instanceof String || data instanceof Number
-			|| data instanceof Boolean) {
+			|| data instanceof String || data instanceof Number || data instanceof Boolean) {
 			e = XonUtils.xonToXmlW(data);
 		} else if (data instanceof File || data instanceof URL
 			|| data instanceof InputStream || data instanceof String) {
@@ -383,17 +362,14 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	/** Set source element as context for create mode.
 	 * @param source string with pathname, URL or source of XML node.
 	 */
-	public final void setXDContext(final String source) {
-		setXDContext(KXmlUtils.parseXml(source));
-	}
+	public final void setXDContext(final String source) {setXDContext(KXmlUtils.parseXml(source));}
 
 	@Override
 	/** Get names of variables.
 	 * @return array of names of variables.
 	 */
 	public final String[] getVariableNames() {
-		XMVariableTable t=_rootChkDocument._xdef.getXDPool().getVariableTable();
-		return  t.getVariableNames();
+		return _rootChkDocument._xdef.getXDPool().getVariableTable().getVariableNames();
 	}
 
 	@Override
@@ -406,18 +382,14 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	/** Get XDPool.
 	 * @return XDPool.
 	 */
-	public final XDPool getXDPool() {
-		return _rootChkDocument.getXMDefinition().getXDPool();
-	}
+	public final XDPool getXDPool() {return _rootChkDocument.getXMDefinition().getXDPool();}
 
 	@Override
 	/** Get value of variable from XMDefinition.
 	 * @param name name of variable.
 	 * @return XDValue object or <i>null</i>.
 	 */
-	public final XDValue getVariable(final String name) {
-		return _scp.getVariable(name);
-	}
+	public final XDValue getVariable(final String name) {return _scp.getVariable(name);}
 
 	/** Find variable for setVariable (it Can't be final).
 	 * @param name name of variable.
@@ -436,8 +408,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 			}
 			return xv;
 		}
-		//Variable '&{0}' doesn't exist
-		throw new SRuntimeException(XDEF.XDEF563, name);
+		throw new SRuntimeException(XDEF.XDEF563, name); //Variable '&{0}' doesn't exist
 	}
 
 	@Override
@@ -559,20 +530,15 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 		XVariable xv = findVariable(name);
 		switch (xv.getType()) {
 			case XD_DOUBLE:
-				_scp.setVariable(xv, new DefDouble(value));
-				return;
+				_scp.setVariable(xv, new DefDouble(value)); return;
 			case XD_LONG:
-				_scp.setVariable(xv, new DefLong(value));
-				return;
+				_scp.setVariable(xv, new DefLong(value)); return;
 			case XD_DECIMAL:
-				_scp.setVariable(xv, new DefDecimal(value));
-				return;
+				_scp.setVariable(xv, new DefDecimal(value)); return;
 			case XD_BIGINTEGER:
-				_scp.setVariable(xv, new DefBigInteger(value));
-				return;
+				_scp.setVariable(xv, new DefBigInteger(value)); return;
 			case XD_STRING:
-				_scp.setVariable(xv, new DefString(String.valueOf(value)));
-				return;
+				_scp.setVariable(xv, new DefString(String.valueOf(value))); return;
 		}
 		//Value is not compatible with the type of variable '&{0}'
 		throw new SRuntimeException(XDEF.XDEF564, name);
@@ -587,14 +553,11 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 		XVariable xv = findVariable(name);
 		switch (xv.getType()) {
 			case XD_DOUBLE:
-				_scp.setVariable(xv, new DefDouble(value));
-				return;
+				_scp.setVariable(xv, new DefDouble(value)); return;
 			case XD_STRING:
-				_scp.setVariable(xv, new DefString(String.valueOf(value)));
-				return;
+				_scp.setVariable(xv, new DefString(String.valueOf(value))); return;
 			case XD_DECIMAL:
-				_scp.setVariable(xv, new DefDecimal(String.valueOf(value)));
-				return;
+				_scp.setVariable(xv, new DefDecimal(String.valueOf(value))); return;
 		}
 		//Value is not compatible with the type of variable '&{0}'
 		throw new SRuntimeException(XDEF.XDEF564, name);
@@ -609,11 +572,9 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 		XVariable xv = findVariable(name);
 		switch (xv.getType()) {
 			case XD_BOOLEAN:
-				_scp.setVariable(xv, new DefBoolean(value));
-				return;
+				_scp.setVariable(xv, new DefBoolean(value)); return;
 			case XD_STRING:
-				_scp.setVariable(xv, new DefString(String.valueOf(value)));
-				return;
+				_scp.setVariable(xv, new DefString(String.valueOf(value))); return;
 		}
 		//Value is not compatible with the type of variable '&{0}'
 		throw new SRuntimeException(XDEF.XDEF564, name);
@@ -630,32 +591,26 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 		} else {
 			switch (xv.getType()) {
 				case XD_CONTAINER:
-					_scp.setVariable(xv, new DefContainer(value));
-					return;
+					_scp.setVariable(xv, new DefContainer(value)); return;
 				case XD_STRING:
-					setVariable(name, value.toString());
-					return;
+					setVariable(name, value.toString()); return;
 				case XD_DOUBLE:
 					if (value.getItemId() == XD_LONG) {
-						setVariable(name, value.doubleValue());
-						return;
+						setVariable(name, value.doubleValue()); return;
 					}
 					break;
 				case XD_LONG:
 					if (value.getItemId() == XD_DOUBLE) {
-						setVariable(name, value.longValue());
-						return;
+						setVariable(name, value.longValue()); return;
 					}
 					break;
 				case XD_BOOLEAN:
 					if (value.getItemId() == XD_STRING) {
-						_scp.setVariable(xv, new DefBoolean(value.toString()));
-						return;
+						_scp.setVariable(xv, new DefBoolean(value.toString())); return;
 					}
 					break;
 				case XD_PARSER:
-					_scp.setVariable(xv, (XDParser) value);
-					return;
+					_scp.setVariable(xv, (XDParser) value); return;
 			}
 			//Value is not compatible with the type of variable '&{0}'
 			throw new SRuntimeException(XDEF.XDEF564, name);
@@ -671,27 +626,19 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 		switch (xv.getType()) {
 			case XD_STRING:
 			case XD_CONTAINER:
-				_scp.setVariable(xv, new DefString(value));
-				return;
+				_scp.setVariable(xv, new DefString(value)); return;
 			case XD_BOOLEAN:
-				_scp.setVariable(xv, new DefBoolean(value));
-				return;
+				_scp.setVariable(xv, new DefBoolean(value)); return;
 			case XD_DOUBLE:
-				_scp.setVariable(xv, new DefDouble(value));
-				return;
+				_scp.setVariable(xv, new DefDouble(value)); return;
 			case XD_LONG:
-				_scp.setVariable(xv, new DefLong(value));
-				return;
+				_scp.setVariable(xv, new DefLong(value)); return;
 			case XD_DECIMAL:
-				_scp.setVariable(xv, new DefDecimal(value));
-				return;
+				_scp.setVariable(xv, new DefDecimal(value)); return;
 			case XD_BIGINTEGER:
-				_scp.setVariable(xv, new DefBigInteger(value));
-				return;
+				_scp.setVariable(xv, new DefBigInteger(value)); return;
 			case XD_ELEMENT:
-				_scp.setVariable(xv, new DefElement(
-					KXmlUtils.parseXml(value).getDocumentElement()));
-				return;
+				_scp.setVariable(xv, new DefElement(KXmlUtils.parseXml(value).getDocumentElement())); return;
 		}
 		//Value is not compatible with the type of variable '&{0}'
 		throw new SRuntimeException(XDEF.XDEF564, name);
@@ -705,17 +652,13 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 		XVariable xv = findVariable(name);
 		switch (xv.getType()) {
 			case XD_LONG:
-				_scp.setVariable(xv, new DefLong(value.longValue()));
-				return;
+				_scp.setVariable(xv, new DefLong(value.longValue())); return;
 			case XD_DOUBLE:
-				_scp.setVariable(xv, new DefDouble(value.doubleValue()));
-				return;
+				_scp.setVariable(xv, new DefDouble(value.doubleValue())); return;
 			case XD_DECIMAL:
-				_scp.setVariable(xv, new DefDecimal(value));
-				return;
+				_scp.setVariable(xv, new DefDecimal(value)); return;
 			case XD_STRING:
-				_scp.setVariable(xv, new DefString(value.toString()));
-				return;
+				_scp.setVariable(xv, new DefString(value.toString())); return;
 		}
 		//Value is not compatible with the type of variable '&{0}'
 		throw new SRuntimeException(XDEF.XDEF564, name);
@@ -737,14 +680,10 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	public abstract KNamespace getXXNamespaceContext();
 
 	@Override
-	public final XPathFunctionResolver getXXFunctionResolver() {
-		return _scp._functionResolver;
-	}
+	public final XPathFunctionResolver getXXFunctionResolver() {return _scp._functionResolver;}
 
 	@Override
-	public final XPathVariableResolver getXXVariableResolver() {
-		return _scp._variableResolver;
-	}
+	public final XPathVariableResolver getXXVariableResolver() {return _scp._variableResolver;}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Methods to retrieve values from checked tree.
@@ -758,9 +697,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	/** Get document element.
 	 * @return root element of the document.
 	 */
-	public final Element getDocumentElement() {
-		return _rootChkDocument._element;
-	}
+	public final Element getDocumentElement() {return _rootChkDocument._element;}
 
 	/** Increase reference counter by one.
 	 * @return The increased reference number.
@@ -781,6 +718,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	 * @return The reference number.
 	 */
 	abstract int getRefNum();
+
 	/** Get ChkElement assigned to this node.
 	 * @return ChkElement assigned to this node.
 	 */
@@ -830,9 +768,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	/** Get report writer assigned to the report generator.
 	 * @return The report writer.
 	 */
-	public final ReportWriter getReportWriter() {
-		return _rootChkDocument._reporter.getReportWriter();
-	}
+	public final ReportWriter getReportWriter() {return _rootChkDocument._reporter.getReportWriter();}
 
 	@Override
 	/** Copy temporary reports to global reporter.
@@ -851,9 +787,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 
 	@Override
 	/** Clear temporary reporter. */
-	public final void clearTemporaryReporter() {
-		_scp.getTemporaryReporter().clear();
-	}
+	public final void clearTemporaryReporter() {_scp.getTemporaryReporter().clear();}
 
 	@Override
 	/** Put message to temporary reporter.
@@ -877,17 +811,13 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	/** Get temporary reporter.
 	 * @return ArrayReporter used as temporary reporter.
 	 */
-	public final ArrayReporter getTemporaryReporter() {
-		return _scp.getTemporaryReporter();
-	}
+	public final ArrayReporter getTemporaryReporter() {return _scp.getTemporaryReporter();}
 
 	@Override
 	/** Check if temporary reporter has errors.
 	 * @return true if temporary reporter has errors.
 	 */
-	public final boolean chkTemporaryErrors() {
-		return _scp.getTemporaryReporter().errors();
-	}
+	public final boolean chkTemporaryErrors() {return _scp.getTemporaryReporter().errors();}
 
 	@Override
 	/** Set new temporary reporter.
@@ -911,9 +841,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	 * @return <i>true</i> if errors, fatal errors, light errors
 	 * or warnings were reported.
 	 */
-	public boolean errorWarnings() {
-		return _rootChkDocument._reporter.errorWarnings();
-	}
+	public boolean errorWarnings() {return _rootChkDocument._reporter.errorWarnings();}
 
 	@Override
 	/** Check if errors, fatal errors or light errors were reported.
@@ -928,9 +856,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	 * @param msg The message text.
 	 * @param mod Message modification parameters.
 	 */
-	public final void fatal(final String id,
-		final String msg,
-		final Object... mod) {
+	public final void fatal(final String id, final String msg, final Object... mod) {
 		putReport(Report.fatal(id, msg, mod));
 	}
 
@@ -940,9 +866,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	 * @param msg The message text.
 	 * @param mod Message modification parameters.
 	 */
-	public final void error(final String id,
-		final String msg,
-		final Object... mod) {
+	public final void error(final String id, final String msg, final Object... mod) {
 		putReport(Report.error(id, msg, mod));
 	}
 
@@ -952,9 +876,7 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	 * @param msg The message text.
 	 * @param mod Message modification parameters.
 	 */
-	public final void warning(final String id,
-		final String msg,
-		final Object... mod) {
+	public final void warning(final String id, final String msg, final Object... mod) {
 		putReport(Report.warning(id, msg, mod));
 	}
 
@@ -963,27 +885,21 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	 * @param id registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public final void fatal(final long id, final Object... mod) {
-		putReport(Report.fatal(id, mod));
-	}
+	public final void fatal(final long id, final Object... mod) {putReport(Report.fatal(id, mod));}
 
 	@Override
 	/** Put error message with modification parameters.
 	 * @param id registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public void error(final long id, final Object... mod) {
-		putReport(Report.error(id, mod));
-	}
+	public void error(final long id, final Object... mod) {putReport(Report.error(id, mod));}
 
 	@Override
 	/** Put warning message with modification parameters.
 	 * @param id registered report id.
 	 * @param mod Message modification parameters.
 	 */
-	public void warning(final long id, final Object... mod) {
-		putReport(Report.warning(id, mod));
-	}
+	public void warning(final long id, final Object... mod) {putReport(Report.warning(id, mod));}
 
 	@Override
 	/** Put report.
@@ -1032,13 +948,19 @@ public abstract class ChkNode extends XDValueAbstract implements XXNode {
 	/** Get parsed result of an attribute or text node.
 	 * @return parsed result of an attribute or text node.
 	 */
-	public XDParseResult getParseResult() {return _parseResult;}
+	public final XDParseResult getParseResult() {return _parseResult;}
 
 	@Override
 	/** Get XON mode.
 	 * @return XON mode or zero.
 	 */
-	public byte getXonMode() {return _xElement == null ? 0 : _xElement._xon;}
+	public final byte getXonMode() {return _xElement == null ? 0 : _xElement._xon;}
+
+	@Override
+	/** Get actual value of default time zone.
+	 * @return actual value of default time zone.
+	 */
+	public final TimeZone getDefaultZone() {return _scp.getDefaultZone();}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Message reporting

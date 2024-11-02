@@ -470,8 +470,10 @@ public interface CodeTable {
 	static final short SET_ELEMENT = REMOVE_TEXT + 1;
 	/** Set value of "now" date. */
 	static final short GET_NOW = SET_ELEMENT + 1;
+	/** Get ID of default zone or null if it is not defined. */
+	static final short GET_DEFAULTZONE = GET_NOW + 1;
 	/** Get prefix from QName. */
-	static final short GET_QNPREFIX = GET_NOW + 1;
+	static final short GET_QNPREFIX = GET_DEFAULTZONE + 1;
 	/** Get local part from QName. */
 	static final short GET_QNLOCALPART = GET_QNPREFIX + 1;
 	/** Cut string to max size. */
