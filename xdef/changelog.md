@@ -1,17 +1,17 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.2.10, release-date 2024-11-01
+# Version 42.2.10, release-date 2024-11-02
 * .
 
 # Version 42.2.9, release-date 2024-11-01
 * In the X-script method `now` if the default time zone is not null it is set
-  to the result.
+  to the result. 
 
 # Version 42.2.8, release-date 2024-10-30
 * The new property `xdef_defaultZone` is used to set the default time zone (see
   `org.xdef.XDConstants.XDPROPERTY_DEFAULTZONE`).
-* A new method `getDefaultZone()` has been implemented in the XDPool class,
-  which returns the default time zone or null if none has been specified.
+* A new method `getDefaultZone()` has been implemented in the XDPool class. This
+  method returns the object `java.util.TimeZone` or null if it is not specified.
 * Method `dateTime`: if the result does not contain a time zone and a default
   time zone is set, then this default time zone is set to the result value.
 * The parsing method `dateYMDhms`: if the default time zone is set, it is set

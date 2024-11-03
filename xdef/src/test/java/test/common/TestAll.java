@@ -1,7 +1,7 @@
 package test.common;
 
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
 import org.xdef.sys.STester;
 import test.common.bnf.TestBNF;
@@ -23,7 +23,6 @@ import test.common.xml.TestXml;
 import test.XDTester;
 import test.common.bnf.TestEmailAddr;
 import test.common.xon.TestIni;
-
 
 /** Run all available basic tests for package org.xdef.sys.
  * @author Vaclav Trojan
@@ -63,9 +62,16 @@ public class TestAll {
 	 */
 	public static int runTests(String... args) {
 		PrintStream log;
+		FileOutputStream fis = null;
 		try {
-			log = new PrintStream(new FileOutputStream("testCommon.log"));
-		} catch (FileNotFoundException ex) {
+			fis = new FileOutputStream("testCommon.log");
+			log = new PrintStream(fis);
+		} catch (IOException ex) {
+			if (fis != null) {
+				try {
+					fis.close();
+				} catch (IOException x) {}
+			}
 			log = null;
 		}
 		STester[] tests = getTests();

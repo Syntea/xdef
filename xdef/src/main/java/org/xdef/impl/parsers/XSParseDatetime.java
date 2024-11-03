@@ -58,7 +58,7 @@ public class XSParseDatetime extends XSAbstractParseComparable {
 		SDatetime d = parser.getParsedSDatetime();
 		if (xnode != null) {
 			TimeZone defaulttz;
-			if (d.getTZ() == null && (defaulttz=xnode.getXDPool().getDefaultZone()) != null) {
+			if (d.getTZ() == null && (defaulttz=xnode.getDefaultZone()) != null) {
 				d.setTZ(defaulttz);
 			}
 		}

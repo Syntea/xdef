@@ -65,7 +65,7 @@ public class TestAll {
 		try {
 			fis = new FileOutputStream("testXdef.log");
 			log = new PrintStream(fis);
-		} catch (Exception ex) {
+		} catch (IOException ex) {
 			if (fis != null) {
 				try {
 					fis.close();
@@ -76,8 +76,7 @@ public class TestAll {
 		STester[] tests = getTests();
 		String xdNS = XDTester._xdNS;
 		XDTester._xdNS = XDConstants.XDEF42_NS_URI;
-		System.out.println("[INFO] Testing X-definition version " +
-			XDConstants.BUILD_VERSION);
+		System.out.println("[INFO] Testing X-definition version " + XDConstants.BUILD_VERSION);
 		int result = STester.runTests(System.out, System.err, log,
 			tests, "package xdef", XDTester.getFulltestMode(), args);
 		if (log != null) {

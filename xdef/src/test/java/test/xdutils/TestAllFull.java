@@ -1,12 +1,12 @@
 package test.xdutils;
 
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
 import org.xdef.XDConstants;
 import test.XDTester;
 
-/** Run all available tests for package org.xdef.util  with all features
- * of the tester.
+/** Run all available tests for package org.xdef.util  with all features of the tester.
  * @author Vaclav Trojan
  */
 public class TestAllFull {
@@ -18,9 +18,16 @@ public class TestAllFull {
 	public static int runTests(String... args) {
 		XDTester.setFulltestMode(true);
 		PrintStream log;
+		FileOutputStream fis = null;
 		try {
-			log = new PrintStream(new FileOutputStream("testUtils.log"));
-		} catch (Exception ex) {
+			fis = new FileOutputStream("testUtils.log");
+			log = new PrintStream(fis);
+		} catch (IOException ex) {
+			if (fis != null) {
+				try {
+					fis.close();
+				} catch (IOException x) {}
+			}
 			log = null;
 		}
 		String xdNS = XDTester._xdNS;

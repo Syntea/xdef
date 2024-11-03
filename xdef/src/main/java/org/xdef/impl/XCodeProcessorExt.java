@@ -250,56 +250,36 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 
 	static final XDValue perform1v(final XDValue item, final XDValue p) {
 		switch (item.getCode()) {
-			case GET_TYPEID: //get type of a value (as integer type id)
-				return new DefLong(p.getItemId());
-			case GET_TYPENAME: // get name of type of a value
-				return new DefString(getTypeName(p.getItemId()));
+			case GET_TYPEID: return new DefLong(p.getItemId()); //get type of a value (as integer type id)
+			case GET_TYPENAME: return new DefString(getTypeName(p.getItemId())); //get name of type of a value
 			case CHECK_TYPE: // check type conversion
 				if (p != null && !p.isNull() &&
 					p.getItemId() != item.getParam()) {
 					switch (p.getItemId()) {
-						case XD_BOOLEAN:
-							return new DefBoolean(p.booleanValue());
-						case XD_LONG:
-							return new DefLong(p.intValue());
-						case XD_DOUBLE:
-							return new DefDouble(p.floatValue());
-						case XD_DECIMAL:
-							return new DefDecimal(p.decimalValue());
-						case XD_BIGINTEGER:
-							return new DefBigInteger(p.integerValue());
-						case XD_DATETIME:
-							return new DefDate(p.datetimeValue());
-						case XD_DURATION:
-							return new DefDuration(p.durationValue());
-						case XD_STRING:
-							return new DefString(p.stringValue());
-						case XD_ELEMENT:
-							if (item.getParam() == XD_CONTAINER) {
-								return new DefContainer(p);
-							}
-						case XD_EMAIL:
-							return (XDEmailAddr) p;
-						case XD_CURRENCY:
-							return (XDCurrency) p;
-						case XD_TELEPHONE:
-							return (XDTelephone) p;
-						case XD_IPADDR:
-							return (XDIPAddr) p;
+						case XD_BOOLEAN: return new DefBoolean(p.booleanValue());
+						case XD_LONG: return new DefLong(p.intValue());
+						case XD_DOUBLE: return new DefDouble(p.floatValue());
+						case XD_DECIMAL: return new DefDecimal(p.decimalValue());
+						case XD_BIGINTEGER: return new DefBigInteger(p.integerValue());
+						case XD_DATETIME: return new DefDate(p.datetimeValue());
+						case XD_DURATION: return new DefDuration(p.durationValue());
+						case XD_STRING: return new DefString(p.stringValue());
+						case XD_ELEMENT: return item.getParam() == XD_CONTAINER
+							? new DefContainer(p) : DefNull.genNullValue(XD_ELEMENT);
+						case XD_EMAIL: return (XDEmailAddr) p;
+						case XD_CURRENCY: return (XDCurrency) p;
+						case XD_TELEPHONE: return (XDTelephone) p;
+						case XD_IPADDR: return (XDIPAddr) p;
 					}
-					//Icorrect type conversion from AnyValue
-					throw new SRuntimeException(XDEF.XDEF536);
+					throw new SRuntimeException(XDEF.XDEF536); //Icorrect type conversion from AnyValue
 				}
 				return p;
 			case BYTES_CLEAR: //Clear byte array
 				((DefBytes) p).clear();
 				return p;
-			case BYTES_SIZE: //size of byte array
-				return new DefLong(((DefBytes) p).size());
-			case BYTES_TO_BASE64:
-				return new DefString(((DefBytes) p).getBase64());
-			case BYTES_TO_HEX:
-				return new DefString(((DefBytes) p).getHex());
+			case BYTES_SIZE: return new DefLong(((DefBytes) p).size()); //size of byte array
+			case BYTES_TO_BASE64: return new DefString(((DefBytes) p).getBase64());
+			case BYTES_TO_HEX: return new DefString(((DefBytes) p).getHex());
 			case PARSE_DURATION: //Duration
 				try {
 					return new DefDuration(p.toString());
@@ -307,49 +287,28 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 					return DefNull.genNullValue(XD_DURATION);
 				}
 			case DURATION_GETYEARS:
-				return p == null || p.isNull()
-					? new DefLong(-1)
-					: new DefLong(p.durationValue().getYears());
+				return p==null || p.isNull() ? new DefLong(-1) : new DefLong(p.durationValue().getYears());
 			case DURATION_GETMONTHS:
-				return p == null || p.isNull()
-					? new DefLong(-1)
-					: new DefLong(p.durationValue().getMonths());
+				return p==null || p.isNull() ? new DefLong(-1) : new DefLong(p.durationValue().getMonths());
 			case DURATION_GETDAYS:
-				return p == null || p.isNull()
-					? new DefLong(-1)
-					: new DefLong(p.durationValue().getDays());
+				return p==null || p.isNull() ? new DefLong(-1) : new DefLong(p.durationValue().getDays());
 			case DURATION_GETHOURS:
-				return p == null || p.isNull()
-					? new DefLong(-1)
-					: new DefLong(p.durationValue().getHours());
+				return p==null || p.isNull() ? new DefLong(-1) : new DefLong(p.durationValue().getHours());
 			case DURATION_GETMINUTES:
-				return p == null || p.isNull()
-					? new DefLong(-1)
-					: new DefLong(p.durationValue().getMinutes());
+				return p==null || p.isNull() ? new DefLong(-1) : new DefLong(p.durationValue().getMinutes());
 			case DURATION_GETSECONDS:
-				return p == null || p.isNull()
-					? new DefLong(-1)
-					: new DefLong(p.durationValue().getSeconds());
+				return p==null || p.isNull() ? new DefLong(-1) : new DefLong(p.durationValue().getSeconds());
 			case DURATION_GETRECURRENCE:
-				return p == null || p.isNull()
-					? new DefLong(-1)
-					: new DefLong(p.durationValue().getRecurrence());
+				return p==null || p.isNull() ? new DefLong(-1):new DefLong(p.durationValue().getRecurrence());
 			case DURATION_GETFRACTION:
-				return p == null || p.isNull()
-					? new DefDouble(-1)
-					: new DefDouble(p.durationValue().getFraction());
+				return p==null || p.isNull()
+					? new DefDouble(-1) : new DefDouble(p.durationValue().getFraction());
 			case DURATION_GETSTART:
-				return p == null || p.isNull()
-					? new DefDate()
-					: new DefDate(p.durationValue().getStart());
+				return p==null || p.isNull() ? new DefDate() : new DefDate(p.durationValue().getStart());
 			case DURATION_GETEND:
-				return p == null || p.isNull()
-					? new DefDate()
-					: new DefDate(p.durationValue().getEnd());
+				return p==null || p.isNull() ? new DefDate() : new DefDate(p.durationValue().getEnd());
 			case DURATION_GETNEXTTIME:
-				return p == null || p.isNull()
-					? new DefDate()
-					: new DefDate(p.durationValue().getNextTime());
+				return p==null || p.isNull() ? new DefDate() : new DefDate(p.durationValue().getNextTime());
 		//Element
 			case ELEMENT_CHILDNODES: {
 				Element el;
@@ -363,8 +322,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 					NamedNodeMap nnm = el.getAttributes();
 					for (int i = 0; i < nnm.getLength(); i++) {
 						Node n = nnm.item(i);
-						c.addXDItem(new DefNamedValue(n.getNodeName(),
-							new DefString(n.getNodeValue())));
+						c.addXDItem(new DefNamedValue(n.getNodeName(), new DefString(n.getNodeValue())));
 					}
 				}
 				return c;
@@ -379,49 +337,27 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 				return p == null || p.isNull() || (el = p.getElement()) == null
 					? new DefString(null) : new DefString(el.getNamespaceURI());
 			}
-			//ParseResult
-			case GET_PARSED_STRING:
-				return new DefString(((DefParseResult) p).getSourceBuffer());
-			//datetime
-			case GET_DAY: //Get day from date
-				return new DefLong(p.datetimeValue().getDay());
-			case GET_WEEKDAY: //Get week day
-				return new DefLong(p.datetimeValue().getDayOfWeek());
-			case GET_MONTH: //Get month from date
-				return new DefLong(p.datetimeValue().getMonth());
-			case GET_YEAR: //Get year from date
-				return new DefLong(p.datetimeValue().getYear());
-			case GET_HOUR: //Get hour from date
-				return new DefLong(p.datetimeValue().getHour());
-			case GET_MINUTE: //Get minute from date
-				return new DefLong(p.datetimeValue().getMinute());
-			case GET_SECOND: //Get second
-				return new DefLong(p.datetimeValue().getSecond());
-			case GET_MILLIS: //Get millisecond
-				return new DefLong(p.datetimeValue().getMillisecond());
-			case GET_NANOS:
-				return new DefLong(p.datetimeValue().getNanos());
-			case GET_FRACTIONSECOND: //get fraction of second
-				return new DefDouble(p.datetimeValue().getFraction());
+			case GET_PARSED_STRING: return new DefString(((DefParseResult) p).getSourceBuffer());//ParseResult
+			case GET_DAY: return new DefLong(p.datetimeValue().getDay()); //Get day from date
+			case GET_WEEKDAY: return new DefLong(p.datetimeValue().getDayOfWeek());//Get week day
+			case GET_MONTH: return new DefLong(p.datetimeValue().getMonth());//Get month from date
+			case GET_YEAR: return new DefLong(p.datetimeValue().getYear());//Get year from date
+			case GET_HOUR: return new DefLong(p.datetimeValue().getHour());//Get hour from date
+			case GET_MINUTE: return new DefLong(p.datetimeValue().getMinute());//Get minute from date
+			case GET_SECOND: return new DefLong(p.datetimeValue().getSecond());//Get second
+			case GET_MILLIS: return new DefLong(p.datetimeValue().getMillisecond());//Get millisecond
+			case GET_NANOS: return new DefLong(p.datetimeValue().getNanos());
+			case GET_FRACTIONSECOND: return new DefDouble(p.datetimeValue().getFraction());
 			case GET_EASTERMONDAY:
 				return new DefDate(p.getItemId() == XD_DATETIME
-					? p.datetimeValue().getEasterMonday()
-					: SDatetime.getEasterMonday(p.intValue()));
-			case GET_LASTDAYOFMONTH:
-				return new DefLong(
-					SDatetime.getLastDayOfMonth(p.datetimeValue()));
-			case GET_DAYTIMEMILLIS: //get daytime
-				return new DefLong(p.datetimeValue().getDaytimeInMillis());
-			case GET_ZONEOFFSET: //zone shift to GMT
-				return new DefLong(p.datetimeValue().getTimeZoneOffset());
-			case GET_ZONEID: //get time zone name
-				return new DefString(p.datetimeValue().getTZ().getID());
+					? p.datetimeValue().getEasterMonday() : SDatetime.getEasterMonday(p.intValue()));
+			case GET_LASTDAYOFMONTH: return new DefLong(SDatetime.getLastDayOfMonth(p.datetimeValue()));
+			case GET_DAYTIMEMILLIS: return new DefLong(p.datetimeValue().getDaytimeInMillis());
+			case GET_ZONEOFFSET: return new DefLong(p.datetimeValue().getTimeZoneOffset());//zone shift to GMT
+			case GET_ZONEID: return new DefString(p.datetimeValue().getTZ().getID());//get time zone name
 			case IS_LEAPYEAR: //check leap year.
-				// Return true if date is leap year.
 				return new DefBoolean(SDatetime.isLeapYear(
-					p.getItemId() == XD_LONG
-						? p.intValue() : p.datetimeValue().getYear()));
-			//String
+					p.getItemId() == XD_LONG ? p.intValue() : p.datetimeValue().getYear()));
 			case LOWERCASE: { //set to lower case
 				String s = p.stringValue();
 				return s != null ? new DefString(s.toLowerCase()) : p;
@@ -471,9 +407,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 		return null;
 	}
 
-	static final void perform2(final XDValue cmd,
-		final XDValue p1,
-		final XDValue p2) {
+	static final void perform2(final XDValue cmd, final XDValue p1, final XDValue p2) {
 		switch (cmd.getCode()) {
 			//Element
 			case ELEMENT_ADDELEMENT: { // Add element to element as child
@@ -491,9 +425,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 				return;
 			}
 			//Bytes
-			case BYTES_ADDBYTE: //Add byte
-				((DefBytes) p1).add(p2.intValue());
-				return;
+			case BYTES_ADDBYTE: ((DefBytes) p1).add(p2.intValue()); return; //Add byte
 			//Report
 			case PUT_REPORT:
 				if (!p2.isNull()) {
@@ -501,17 +433,12 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 				}
 				return;
 			//XmlWriter
-			case SET_XMLWRITER_INDENTING:  // Set writer indenting.
-				((XDXmlOutStream) p1).setIndenting(p2.booleanValue());
-				return;
-			case WRITE_TEXTNODE: // Write text node.
-				((XDXmlOutStream) p1).writeText(p2.stringValue());
+			case SET_XMLWRITER_INDENTING: ((XDXmlOutStream) p1).setIndenting(p2.booleanValue()); return;
+			case WRITE_TEXTNODE: ((XDXmlOutStream) p1).writeText(p2.stringValue());
 		}
 	}
 
-	static final XDValue perform2v(final XDValue cmd,
-		final XDValue p1,
-		final XDValue p2) {
+	static final XDValue perform2v(final XDValue cmd, final XDValue p1, final XDValue p2) {
 		switch (cmd.getCode()) {
 			//formating number to string
 			case INTEGER_FORMAT:
@@ -544,31 +471,14 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 				return new DefString(cmd.getCode() == INTEGER_FORMAT ?
 					ds.format(p1.longValue()):ds.format(p1.doubleValue()));
 			}
-		//Bytes
-			case BYTES_GETAT: //Get byte at position
-				return new DefLong(((DefBytes) p1).getAt(p2.intValue()));
-		//datetime
-			case DATE_FORMAT: //format date
-				return new DefString(
-					p1.datetimeValue().formatDate(p2.toString()));
-			case ADD_DAY: //Add days to date.
-				return new DefDate(p1.datetimeValue().add(
-					0, 0, p2.intValue(), 0, 0, 0, 0.0));
-			case ADD_MONTH: //Add months to date.
-				return new DefDate(p1.datetimeValue().add(
-					0, p2.intValue(), 0, 0, 0, 0, 0.0));
-			case ADD_YEAR: //Add years to date.
-				return new DefDate(p1.datetimeValue().add(
-					p2.intValue(), 0, 0, 0, 0, 0, 0.0));
-			case ADD_HOUR: //Add hours to date.
-				return new DefDate(p1.datetimeValue().add(
-					0, 0, 0, p2.intValue(), 0, 0, 0.0));
-			case ADD_MINUTE: //Add minutes to date.
-				return new DefDate(p1.datetimeValue().add(
-					0, 0, 0, 0, p2.intValue(), 0, 0.0));
-			case ADD_SECOND: //Add seconds to date.
-				return new DefDate(p1.datetimeValue().add(
-					0, 0, 0, 0, 0, p2.intValue(), 0.0));
+			case BYTES_GETAT: return new DefLong(((DefBytes) p1).getAt(p2.intValue()));
+			case DATE_FORMAT: return new DefString(p1.datetimeValue().formatDate(p2.toString()));
+			case ADD_DAY: return new DefDate(p1.datetimeValue().add(0, 0, p2.intValue(), 0, 0, 0, 0.0));
+			case ADD_MONTH: return new DefDate(p1.datetimeValue().add(0, p2.intValue(), 0, 0, 0, 0, 0.0));
+			case ADD_YEAR: return new DefDate(p1.datetimeValue().add(p2.intValue(), 0, 0, 0, 0, 0, 0.0));
+			case ADD_HOUR: return new DefDate(p1.datetimeValue().add(0, 0, 0, p2.intValue(), 0, 0, 0.0));
+			case ADD_MINUTE: return new DefDate(p1.datetimeValue().add(0, 0, 0, 0, p2.intValue(), 0, 0.0));
+			case ADD_SECOND: return new DefDate(p1.datetimeValue().add(	0, 0, 0, 0, 0, p2.intValue(), 0.0));
 			case ADD_MILLIS: {//Add millisecs to date.
 				long amount = p2.longValue();
 				return new DefDate(p1.datetimeValue().add(0, 0, 0, 0, 0,
@@ -664,16 +574,9 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 				return (s != null && s.length() >  i) ?
 					new DefString(s.substring(0, i)) : new DefString(s);
 			}
-			//Report
-			case REPORT_TOSTRING:
-				return new DefString(
-					((XDReport) p2).toString(p1.stringValue()));
-			case REPORT_GETPARAM:
-				return new DefString(
-					((XDReport) p1).getParameter(p2.stringValue()));
-			//constructors
-			case NEW_NAMEDVALUE:
-				return new DefNamedValue(p1.stringValue(),p2);
+			case REPORT_TOSTRING: return new DefString( ((XDReport) p2).toString(p1.stringValue()));
+			case REPORT_GETPARAM: return new DefString(((XDReport) p1).getParameter(p2.stringValue()));
+			case NEW_NAMEDVALUE: return new DefNamedValue(p1.stringValue(),p2);
 		}
 		return null;
 	}
@@ -720,8 +623,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 				s = s == null ? "" : s.trim();
 				StringParser p = cp.getStringParser();
 				p.setSourceBuffer(s);
-				boolean parsed =
-					mask == null ? p.isISO8601Datetime() : p.isDatetime(mask);
+				boolean parsed = mask == null ? p.isISO8601Datetime() : p.isDatetime(mask);
 				stack[sp] = parsed && p.eos() && p.testParsedDatetime()
 					? new DefDate(p.getParsedSDatetime())
 					: DefNull.genNullValue(XD_DATETIME);
@@ -729,12 +631,10 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 			}
 			// Element
 			case ELEMENT_TOSTRING: { //Get text value of the element
-				boolean indent =
-					item.getParam() == 2 ? stack[sp--].booleanValue() : false;
+				boolean indent = item.getParam() == 2 ? stack[sp--].booleanValue() : false;
 				Element el = stack[sp].getElement();
 				stack[sp] = el != null
-					? new DefString(KXmlUtils.nodeToString(el, indent))
-					: DefNull.genNullValue(XD_ELEMENT);
+					? new DefString(KXmlUtils.nodeToString(el, indent)) : DefNull.genNullValue(XD_ELEMENT);
 				return sp;
 			}
 			case ELEMENT_TOCONTAINER: { // Element to container
@@ -744,8 +644,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 			}
 			case ELEMENT_GETATTR: { // Get attribute of the element
 				String name = stack[sp--].toString();
-				String uri = item.getParam() == 3
-					? stack[sp--].stringValue() : null;
+				String uri = item.getParam() == 3 ? stack[sp--].stringValue() : null;
 				Element el = stack[sp].getElement();
 				if (uri == null) {
 					stack[sp] = new DefString(el.getAttribute(name));
@@ -760,8 +659,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 			}
 			case ELEMENT_HASATTR: { // has attribute of the element
 				String name = stack[sp--].toString();
-				String uri =
-					item.getParam() == 3 ? stack[sp--].stringValue() : null;
+				String uri = item.getParam() == 3 ? stack[sp--].stringValue() : null;
 				Element el = stack[sp].getElement();
 				if (uri == null) {
 					stack[sp] = new DefBoolean(el.hasAttribute(name));
@@ -777,8 +675,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 			case ELEMENT_SETATTR: { // Set attribute to element
 				String value = stack[sp--].stringValue();
 				String name = stack[sp--].toString();
-				String uri =
-					item.getParam() == 4 ? stack[sp--].stringValue() : null;
+				String uri = item.getParam() == 4 ? stack[sp--].stringValue() : null;
 				Element el = stack[sp--].getElement();
 				if (uri != null) {
 					if (value == null) {
@@ -806,24 +703,20 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 				String q = stack[sp--].stringValue();
 				String p = stack[sp--].stringValue();
 				String s = stack[sp].stringValue();
-				stack[sp] = new DefString(item.getCode() == TRANSLATE_S ?
-					SUtils.translate(s,p,q) :
-					item.getCode() == REPLACEFIRST_S ?
-						SUtils.modifyFirst(s, p, q) :
-						SUtils.modifyString(s, p, q));
+				stack[sp] = new DefString(item.getCode() == TRANSLATE_S ? SUtils.translate(s,p,q)
+					: item.getCode() == REPLACEFIRST_S ? SUtils.modifyFirst(s, p, q)
+						: SUtils.modifyString(s, p, q));
 				return sp;
 			}
 			case GET_SUBSTRING: {//s.substring(i[,j]);
 				int j = stack[sp--].intValue();
 				if (item.getParam() == 2) {//s.substring(i)
 					String s = stack[sp].stringValue();
-					stack[sp] = new DefString(s != null && s.length() >  j
-						? s.substring(j) : "");
+					stack[sp] = new DefString(s != null && s.length() >  j ? s.substring(j) : "");
 				} else {
 					int i = stack[sp--].intValue();
 					String s = stack[sp].stringValue();
-					stack[sp] = new DefString(s != null && s.length() >  i
-						? s.substring(i, j) : "");
+					stack[sp] = new DefString(s != null && s.length() >  i ? s.substring(i, j) : "");
 				}
 				return sp;
 			}
@@ -833,14 +726,12 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 				if (item.getParam() == 2) {//s.indexOf(s)
 					String s = stack[sp--].stringValue();
 					String t = stack[sp].stringValue();
-					ndx = item.getCode() == GET_INDEXOFSTRING
-						? t.indexOf(s) : t.lastIndexOf(s);
+					ndx = item.getCode() == GET_INDEXOFSTRING ? t.indexOf(s) : t.lastIndexOf(s);
 				} else {//s.indexOf(s, pos)
 					int i = stack[sp--].intValue();
 					String s = stack[sp--].stringValue();
 					String t = stack[sp].stringValue();
-					ndx = item.getCode() == GET_INDEXOFSTRING
-						? t.indexOf(s, i) : t.lastIndexOf(s, i);
+					ndx = item.getCode() == GET_INDEXOFSTRING ? t.indexOf(s, i) : t.lastIndexOf(s, i);
 				}
 				stack[sp] = new DefLong(ndx);
 				return sp;
@@ -875,16 +766,14 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 			case NEW_ELEMENT: {
 				String name = stack[sp].toString();
 				String uri = item.getParam()==1 ? null : stack[--sp].toString();
-				Element el =
-					KXmlUtils.newDocument(uri, name, null).getDocumentElement();
+				Element el = KXmlUtils.newDocument(uri, name, null).getDocumentElement();
 				if (uri != null) {
 					String nsAttr = "xmlns";
 					int i = name.indexOf(':');
 					if (i > 0) {
 						nsAttr += ':' + name.substring(0, i);
 					}
-					el.setAttributeNS(
-						XMLConstants.XMLNS_ATTRIBUTE_NS_URI, nsAttr, uri);
+					el.setAttributeNS(XMLConstants.XMLNS_ATTRIBUTE_NS_URI, nsAttr, uri);
 				}
 				stack[sp] = new DefElement(el);
 				return sp;
@@ -893,8 +782,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 				if (item.getParam() == 0) {
 					stack[++sp] = new DefBytes(new byte[0]);
 				} else {
-					stack[sp] =
-						new DefBytes(new byte[stack[sp].intValue()]);
+					stack[sp] = new DefBytes(new byte[stack[sp].intValue()]);
 				}
 				return sp;
 			case NEW_INSTREAM:
@@ -902,25 +790,20 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 					case 3: {
 						boolean xmlFormat = stack[sp--].booleanValue();
 						String s = stack[sp--].toString();
-						stack[sp] = new DefInStream(
-							stack[sp].toString(), s, xmlFormat);
+						stack[sp] = new DefInStream(stack[sp].toString(), s, xmlFormat);
 						break;
 					}
 					case 2: {
 						XDValue v = stack[sp--];
 						if (v.getItemId() == XD_BOOLEAN) {
-							stack[sp] = new DefInStream(stack[sp].toString(),
-								v.booleanValue());
-
+							stack[sp] = new DefInStream(stack[sp].toString(), v.booleanValue());
 						} else {
-							stack[sp] =	new DefInStream(stack[sp].toString(),
-								v.toString(), false);
+							stack[sp] =	new DefInStream(stack[sp].toString(), v.toString(), false);
 						}
 						break;
 					}
 					default:
-						stack[sp] =
-							new DefInStream(stack[sp].toString(), false);
+						stack[sp] = new DefInStream(stack[sp].toString(), false);
 						break;
 				}
 				return sp;
@@ -929,8 +812,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 					case 3: {
 						boolean xmlFormat = stack[sp--].booleanValue();
 						String s = stack[sp--].toString();
-						stack[sp] = new DefOutStream(
-							stack[sp].toString(),s, xmlFormat);
+						stack[sp] = new DefOutStream(stack[sp].toString(),s, xmlFormat);
 						break;
 					}
 					case 2: {
@@ -959,8 +841,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 				}
 				try {
 					//we MUST recompile this with actual data!!!
-					DefBNFGrammar x = new DefBNFGrammar(y,
-						extndx, new SBuffer(s), null);
+					DefBNFGrammar x = new DefBNFGrammar(y, extndx, new SBuffer(s), null);
 					x.setCode(LD_CONST); //However, we do it just first time!
 					stack[sp] = x;
 				} catch (SRuntimeException ex) {
@@ -987,10 +868,8 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 				stack[sp] = new DefTelephone(stack[sp].stringValue());
 				return sp;
 			case NEW_XMLWRITER: {
-				boolean writehdr =
-					item.getParam() == 3 ? stack[sp--].booleanValue() : true;
-				String encoding =
-					item.getParam() >= 2 ? stack[sp--].stringValue() : null;
+				boolean writehdr = item.getParam() == 3 ? stack[sp--].booleanValue() : true;
+				String encoding = item.getParam() >= 2 ? stack[sp--].stringValue() : null;
 				String name = stack[sp].stringValue();
 				stack[sp] = new DefXmlWriter(name, encoding, writehdr);
 				return sp;
@@ -1000,12 +879,10 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 				if (numPar == 1) {
 					stack[sp] = new XDReport(stack[sp].toString());
 				} else {
-					String modification =
-						numPar == 3 ? stack[sp--].stringValue() : null;
+					String modification = numPar == 3 ? stack[sp--].stringValue() : null;
 					String text = stack[sp--].stringValue();
 					String id = stack[sp].stringValue();
-					stack[sp] =
-						new XDReport(Report.text(id, text, modification));
+					stack[sp] = new XDReport(Report.text(id, text, modification));
 				}
 				return sp;
 			}
@@ -1013,20 +890,16 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 				int numPar = item.getParam();
 				switch (numPar) {
 					case 1:
-						stack[sp] =
-							new DefLocale(stack[sp].toString().toLowerCase());
+						stack[sp] = new DefLocale(stack[sp].toString().toLowerCase());
 						break;
 					case 2:
-						stack[sp - 1] =
-							new DefLocale(stack[sp-1].toString().toLowerCase(),
-								stack[sp].toString().toUpperCase());
+						stack[sp - 1] = new DefLocale(
+							stack[sp-1].toString().toLowerCase(), stack[sp].toString().toUpperCase());
 						sp--;
 						break;
 					default:
-						stack[sp - 2] =
-							new DefLocale(stack[sp-2].toString().toLowerCase(),
-								stack[sp-1].toString().toUpperCase(),
-								stack[sp].toString());
+						stack[sp - 2] = new DefLocale(stack[sp-2].toString().toLowerCase(),
+							stack[sp-1].toString().toUpperCase(), stack[sp].toString());
 						sp -= 2;
 				}
 			}
@@ -1059,8 +932,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 				StringParser p = cp.getStringParser();
 				p.setSourceBuffer(s);
 				stack[sp] = p.isSignedInteger() && p.eos()
-					? new DefLong(p.getParsedLong())
-					: DefNull.genNullValue(XD_LONG);
+					? new DefLong(p.getParsedLong()) : DefNull.genNullValue(XD_LONG);
 				return sp;
 			}
 			case PARSE_FLOAT: {
@@ -1069,8 +941,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 				StringParser p = cp.getStringParser();
 				p.setSourceBuffer(s);
 				stack[sp] = p.isSignedFloat() && p.eos()
-					? new DefDouble(p.getParsedDouble())
-					: DefNull.genNullValue(XD_DOUBLE);
+					? new DefDouble(p.getParsedDouble()) : DefNull.genNullValue(XD_DOUBLE);
 				return sp;
 			}
 			case GET_PARSED_BOOLEAN:
@@ -1080,8 +951,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 			case GET_PARSED_DOUBLE:
 			case GET_PARSED_DATETIME:
 			case GET_PARSED_DURATION: {
-				XDParseResult pr = (cmd.getParam() == 1)
-					? (XDParseResult) stack[sp--] : chkNode._parseResult;
+				XDParseResult pr = (cmd.getParam() == 1) ? (XDParseResult) stack[sp--] : chkNode._parseResult;
 				XDValue val = pr.getParsedValue();
 				if (val == null) {
 					val = new DefNull();
@@ -1122,17 +992,15 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 				return sp;
 			case GET_QNAMEURI: {//getQnameURI(s[,e])
 				String prefix = stack[sp].isNull()? "" : stack[sp].toString();
-				Element el = cmd.getParam() == 1 ? chkNode.getElement()
-					: ((DefElement) stack[--sp]).getElement();
+				Element el = cmd.getParam() == 1
+					? chkNode.getElement() : ((DefElement) stack[--sp]).getElement();
 				int ndx;
-				prefix = (ndx = prefix.indexOf(':')) <= 0 ?
-					"" : prefix.substring(0, ndx);
+				prefix = (ndx = prefix.indexOf(':')) <= 0 ? "" : prefix.substring(0, ndx);
 				stack[sp] = new DefString(XExtUtils.getNSUri(prefix, el));
 				return sp;
 			}
 			case WRITE_ELEMENT_START: { // Write element start.
-				Element el = cmd.getParam() == 2 ?
-					stack[sp--].getElement() : chkNode.getElement();
+				Element el = cmd.getParam() == 2 ? stack[sp--].getElement() : chkNode.getElement();
 				((XDXmlOutStream) stack[sp--]).writeElementStart(el);
 				return sp;
 			}
@@ -1144,8 +1012,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 				return sp;
 			}
 			case WRITE_ELEMENT: {// Write element.
-				Element el = cmd.getParam() == 2 ?
-					stack[sp--].getElement() : chkNode.getElement();
+				Element el = cmd.getParam() == 2 ? stack[sp--].getElement() : chkNode.getElement();
 				((XDXmlOutStream) stack[sp--]).writeNode(el);
 				return sp;
 			}
@@ -1158,8 +1025,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 				return sp;
 			}
 			case IS_CREATEMODE: {
-				stack[++sp] =
-					new DefBoolean(chkNode.getXDDocument().isCreateMode());
+				stack[++sp] = new DefBoolean(chkNode.getXDDocument().isCreateMode());
 				return sp;
 			}
 ////////////////////////////////////////////////////////////////////////////////
@@ -1173,19 +1039,16 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 						break;
 					case 2:
 						sp--;
-						rep = Report.error(
-							stack[sp].toString(), stack[sp].toString());
+						rep = Report.error(stack[sp].toString(), stack[sp].toString());
 						break;
 					default:
 						//if (item.getParam() == 3)
 						sp -= 2;
-						rep = Report.error(stack[sp].toString(),
-							stack[sp + 1].toString(),
-							stack[sp + 2].toString());
+						rep = Report.error(
+							stack[sp].toString(), stack[sp + 1].toString(), stack[sp + 2].toString());
 						break;
 				}
-				stack[sp] = new DefException(rep,
-					chkNode != null ? chkNode.getXPos() : null, pc);
+				stack[sp] = new DefException(rep, chkNode != null ? chkNode.getXPos() : null, pc);
 				return sp;
 			}
 			case NEW_GPSPOSITION: {
@@ -1198,15 +1061,12 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 						latitude = stack[sp-3].doubleValue();
 						longitude = stack[sp-2].doubleValue();
 						altitude = stack[sp-1].doubleValue();
-						name = stack[sp].isNull()
-							? null : stack[sp].stringValue();
+						name = stack[sp].isNull() ? null : stack[sp].stringValue();
 						sp -= 3;
 						break;
 					case 3:
-						if (!stack[sp].isNull()
-							|| stack[sp].getItemId()==XD_DOUBLE
-							|| stack[sp].getItemId()==XD_DECIMAL
-							|| stack[sp].getItemId()==XD_LONG){
+						if (!stack[sp].isNull() || stack[sp].getItemId()==XD_DOUBLE
+							|| stack[sp].getItemId()==XD_DECIMAL || stack[sp].getItemId()==XD_LONG){
 							altitude = stack[sp].doubleValue();
 						} else {
 							name = stack[sp].stringValue();
@@ -1221,11 +1081,9 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 						sp--;
 				}
 				try {
-					stack[sp] = new XDGPSPosition(
-						new GPSPosition(latitude, longitude, altitude, name));
+					stack[sp] = new XDGPSPosition(new GPSPosition(latitude, longitude, altitude, name));
 				} catch (Exception ex) {
-					 //Incorrect GPS position &amp;{0}
-					 cp.putError(chkNode, XDEF.XDEF222,
+					 cp.putError(chkNode, XDEF.XDEF222, //Incorrect GPS position &amp;{0}
 						latitude+","+longitude+","+altitude+","+name);
 					stack[sp] = DefNull.genNullValue(XD_GPSPOSITION);
 				}
@@ -1233,11 +1091,9 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 			}
 			case NEW_CURRAMOOUNT: {
 				try {
-					stack[sp-1] = new XDPrice(new Price(
-						stack[sp-1].decimalValue(), stack[sp].stringValue()));
+					stack[sp-1] = new XDPrice(new Price(stack[sp-1].decimalValue(), stack[sp].stringValue()));
 				} catch (SRuntimeException ex) {
-					//"Invalid currency code: "{0}"
-					cp.putError(chkNode, XDEF.XDEF575,
+					cp.putError(chkNode, XDEF.XDEF575, //"Invalid currency code: "{0}"
 						stack[sp-1].toString() + " " + stack[sp].stringValue());
 					stack[sp-1] = DefNull.genNullValue(XD_PRICE);
 				}
@@ -1261,50 +1117,30 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 				XDValue[] parlist;
 				CodeExtMethod dm = (CodeExtMethod) cmd;
 				Method m = dm.getExtMethod();
-				if (code == EXTMETHOD ||
-					code == EXTMETHOD_CHKEL ||
-					code == EXTMETHOD_XXNODE ||
-					code == EXTMETHOD_ARRAY ||
-					code == EXTMETHOD_XDARRAY ||
-					code == EXTMETHOD_CHKEL_XDARRAY ||
-					code == EXTMETHOD_XXNODE_XDARRAY ||
-					code == EXTMETHOD_CHKEL_ARRAY ||
-					code == EXTMETHOD_XXELEM) {
+				if (code == EXTMETHOD || code == EXTMETHOD_CHKEL || code == EXTMETHOD_XXNODE
+					|| code == EXTMETHOD_ARRAY || code == EXTMETHOD_XDARRAY || code == EXTMETHOD_CHKEL_XDARRAY
+					|| code == EXTMETHOD_XXNODE_XDARRAY || code == EXTMETHOD_CHKEL_ARRAY
+					|| code == EXTMETHOD_XXELEM) {
 					if (paramCount == 0) {
 						switch (code) {
 							case EXTMETHOD_CHKEL_XDARRAY:
-								pars = new Object[] {chkNode, new XDValue[0]};
-								break;
+								pars = new Object[] {chkNode, new XDValue[0]};break;
 							case EXTMETHOD_XXNODE_XDARRAY:
-								pars = new Object[] {
-									(XXNode) chkNode, new XDValue[0]};
-								break;
-							case EXTMETHOD_XDARRAY:
-								pars = new Object[] {new XDValue[0]};
-								break;
-							case EXTMETHOD_CHKEL:
-								pars = new Object[] {chkNode};
-								break;
-							case EXTMETHOD_XXNODE:
-								pars = new Object[] {(XXNode) chkNode};
-								break;
-							case EXTMETHOD_XXELEM:
-								pars = new Object[] {(XXElement) chkNode};
-								break;
-							default:
-								pars = new Object[0];
+								pars = new Object[] {(XXNode) chkNode, new XDValue[0]}; break;
+							case EXTMETHOD_XDARRAY: pars = new Object[] {new XDValue[0]}; break;
+							case EXTMETHOD_CHKEL: pars = new Object[] {chkNode}; break;
+							case EXTMETHOD_XXNODE: pars = new Object[] {(XXNode) chkNode}; break;
+							case EXTMETHOD_XXELEM: pars = new Object[] {(XXElement) chkNode}; break;
+							default: pars = new Object[0];
 						}
 					} else {
 						int k;
-						if (code == EXTMETHOD_CHKEL ||
-							code == EXTMETHOD_XXNODE ||
-							code == EXTMETHOD_XXNODE_XDARRAY ||
-							code == EXTMETHOD_CHKEL_XDARRAY ||
-							code == EXTMETHOD_CHKEL_ARRAY) {
+						if (code == EXTMETHOD_CHKEL || code == EXTMETHOD_XXNODE
+							|| code == EXTMETHOD_XXNODE_XDARRAY || code == EXTMETHOD_CHKEL_XDARRAY
+							|| code == EXTMETHOD_CHKEL_ARRAY) {
 							pars = new Object[paramCount + 1];
 							pars[0] = chkNode;
-							if (code == EXTMETHOD_XXNODE ||
-								code == EXTMETHOD_XXNODE_XDARRAY) {
+							if (code == EXTMETHOD_XXNODE || code == EXTMETHOD_XXNODE_XDARRAY) {
 								pars[0] = (XXNode) chkNode;
 							}
 							k = 1;
@@ -1312,10 +1148,8 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 							pars = new Object[paramCount];
 							k = 0;
 						}
-						if (code == EXTMETHOD ||
-							code == EXTMETHOD_CHKEL ||
-							code == EXTMETHOD_XXELEM ||
-							code == EXTMETHOD_XXNODE) {
+						if (code == EXTMETHOD || code == EXTMETHOD_CHKEL || code == EXTMETHOD_XXELEM
+							|| code == EXTMETHOD_XXNODE) {
 							Class<?>[] p = m.getParameterTypes();
 							for (int i = sp - paramCount + 1, j = 0;
 								i <= sp; i++, j++) {
@@ -1324,68 +1158,41 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 									continue;
 								}
 								switch (stack[i].getItemId()) {
-									case XD_DECIMAL:
-										pars[j + k] = stack[i].decimalValue();
-										break;
-									case XD_BIGINTEGER:
-										pars[j + k] = stack[i].integerValue();
-										break;
+									case XD_DECIMAL: pars[j + k] = stack[i].decimalValue(); break;
+									case XD_BIGINTEGER: pars[j + k] = stack[i].integerValue(); break;
 									case XD_LONG: {
 										Class<?> x;
-										if ((x = p[j+k]).equals(Long.TYPE) ||
-											x.equals(Long.class)) {
+										if ((x = p[j+k]).equals(Long.TYPE) || x.equals(Long.class)) {
 											pars[j+k] = stack[i].longValue();
-										} else if (x.equals(Integer.TYPE)
-											|| x.equals(Integer.class)){
+										} else if (x.equals(Integer.TYPE) || x.equals(Integer.class)) {
 											pars[j+k] = stack[i].intValue();
-										} else if (x.equals(Short.TYPE)
-											|| x.equals(Short.class)){
+										} else if (x.equals(Short.TYPE) || x.equals(Short.class)) {
 											pars[j+k] = stack[i].shortValue();
-										} else if (x.equals(Byte.TYPE) ||
-											x.equals(Byte.class)){
+										} else if (x.equals(Byte.TYPE) || x.equals(Byte.class)) {
 											pars[j+k] = stack[i].byteValue();
 										}
 										break;
 									}
 									case XD_DOUBLE:
 										Class<?> x;
-										if ((x=p[j+k]).equals(Double.TYPE)
-											|| x.equals(Double.class)) {
+										if ((x=p[j+k]).equals(Double.TYPE) || x.equals(Double.class)) {
 											pars[j+k] = stack[i].doubleValue();
-										} else if (x.equals(Float.TYPE)
-											|| x.equals(Float.class)) {
+										} else if (x.equals(Float.TYPE) || x.equals(Float.class)) {
 											pars[j+k] = stack[i].floatValue();
 										}
 										break;
 									case XD_BOOLEAN:
-										pars[j + k] = stack[i].booleanValue() ?
-											Boolean.TRUE : Boolean.FALSE;
+										pars[j + k] = stack[i].booleanValue() ? Boolean.TRUE : Boolean.FALSE;
 										break;
-									case XD_STRING:
-										pars[j + k]= stack[i].stringValue();
-										break;
-									case XD_DATETIME:
-										pars[j + k] = stack[i].datetimeValue();
-										break;
-									case XD_DURATION:
-										pars[j + k] = stack[i].durationValue();
-										break;
-									case XD_ELEMENT:
-										pars[j + k] = stack[i].getElement();
-										break;
-									case XD_CONTAINER:
-										pars[j + k] = stack[i];
-										break;
-									case XD_BYTES:
-										pars[j + k] = stack[i].getBytes();
-										break;
-									case XD_XPATH:
-										pars[j + k] = stack[i].stringValue();
-										break;
+									case XD_STRING: pars[j + k]= stack[i].stringValue(); break;
+									case XD_DATETIME: pars[j + k] = stack[i].datetimeValue(); break;
+									case XD_DURATION: pars[j + k] = stack[i].durationValue(); break;
+									case XD_ELEMENT: pars[j + k] = stack[i].getElement(); break;
+									case XD_CONTAINER: pars[j + k] = stack[i]; break;
+									case XD_BYTES: pars[j + k] = stack[i].getBytes(); break;
+									case XD_XPATH: pars[j + k] = stack[i].stringValue(); break;
 									case XD_IPADDR:
-									case XD_CURRENCY:
-										pars[j + k] = stack[i].getObject();
-										break;
+									case XD_CURRENCY: pars[j + k] = stack[i].getObject(); break;
 									case XD_REGEX:
 									case XD_REGEXRESULT:
 									case XD_INPUT:
@@ -1402,16 +1209,11 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 									case XD_PARSER:
 									case XD_GPSPOSITION:
 									case XD_PRICE:
-									case XD_EMAIL:
-										pars[j + k] = stack[i];
-										break;
+									case XD_EMAIL: pars[j + k] = stack[i]; break;
 									default:
-										//Internal error: &{0}
-										throw new SError(XDEF.XDEF202,
-											"Undefined type on PC=" +
-											(pc - 1) + "; " +
-											cmd.getClass().getName() +
-											"; code= " + code);
+										throw new SError(XDEF.XDEF202,//Internal error: &{0}
+											"Undefined type on PC=" + (pc - 1) + "; "
+												+ cmd.getClass().getName() + "; code= " + code);
 								}
 							}
 						} else {
@@ -1420,16 +1222,11 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 								sp - paramCount + 1, parlist, 0, paramCount);
 							switch (code) {
 								case EXTMETHOD_CHKEL_XDARRAY:
-								case EXTMETHOD_CHKEL_ARRAY:
-									pars = new Object[] {chkNode, parlist};
-									break;
+								case EXTMETHOD_CHKEL_ARRAY: pars = new Object[] {chkNode, parlist}; break;
 								case EXTMETHOD_XXNODE_XDARRAY:
-									pars=new Object[]{(XXNode)chkNode, parlist};
-									break;
-								default:
-									//EXTERNAL_METHOD_ARRAY_CODE
+									pars=new Object[]{(XXNode)chkNode, parlist}; break;
+								default: //EXTERNAL_METHOD_ARRAY_CODE
 									pars = new Object[]	{parlist};
-									break;
 							}
 						}
 						sp -= paramCount;
@@ -1445,98 +1242,41 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 								stack[++sp] = x;
 							} else {
 								switch (dm.getItemId()) {
-									case XD_VOID:
-										break;
+									case XD_VOID: break;
 									case XD_DECIMAL:
-										stack[++sp] = new DefDecimal(
-											(BigDecimal) o);
-										break;
+										stack[++sp] = new DefDecimal((BigDecimal) o); break;
 									case XD_BIGINTEGER:
-										stack[++sp] = new DefBigInteger(
-											(BigInteger) o);
-										break;
-									case XD_LONG:
-										stack[++sp] =
-											new DefLong(x.longValue());
-										break;
-									case XD_DOUBLE:
-										stack[++sp] =
-											new DefDouble(x.doubleValue());
-										break;
-									case XD_BOOLEAN:
-										stack[++sp] =
-											new DefBoolean(x.booleanValue());
-										break;
-									case XD_STRING:
-										stack[++sp] =
-											new DefString(x.stringValue());
-										break;
-									default:
-										stack[++sp] = x;
-										break;
+										stack[++sp] = new DefBigInteger((BigInteger) o); break;
+									case XD_LONG: stack[++sp] = new DefLong(x.longValue()); break;
+									case XD_DOUBLE: stack[++sp] = new DefDouble(x.doubleValue()); break;
+									case XD_BOOLEAN:stack[++sp] = new DefBoolean(x.booleanValue()); break;
+									case XD_STRING: stack[++sp] = new DefString(x.stringValue()); break;
+									default: stack[++sp] = x; break;
 								}
 							}
 						}
 					} else {
 						switch (dm.getItemId()) {
-							case XD_VOID:
-								break;
-							case XD_DECIMAL:
-								stack[++sp] = new DefDecimal((BigDecimal) o);
-								break;
-							case XD_BIGINTEGER:
-								stack[++sp] = new DefBigInteger((BigInteger) o);
-								break;
-							case XD_LONG:
-								stack[++sp] =
-									new DefLong(((Number) o).longValue());
-								break;
-							case XD_DOUBLE:
-								stack[++sp] =
-									new DefDouble(((Number) o).doubleValue());
-								break;
-							case XD_BOOLEAN:
-								stack[++sp] = new DefBoolean(((Boolean) o));
-								break;
-							case XD_STRING:
-								stack[++sp] = new DefString((String) o);
-								break;
-							case XD_DATETIME: {
-								stack[++sp] = new DefDate((SDatetime) o);
-								break;
-							}
-							case XD_DURATION: {
-								stack[++sp] = new DefDuration((SDuration) o);
-								break;
-							}
-							case XD_ELEMENT:
-								stack[++sp] = new DefElement((Element) o);
-								break;
-							case XD_CONTAINER:
-								stack[++sp] = (DefContainer) o;
-								break;
-							case XD_BYTES:
-								stack[++sp] = new DefBytes((byte[]) o);
-								break;
-							case XD_OBJECT:
-								stack[++sp] = (DefObject) o;
-								break;
-							case XD_PARSER:
-								stack[++sp] = (XDParser) o;
-								break;
-							case XD_PARSERESULT:
-								stack[++sp] = (XDParseResult) o;
-								break;
-							case XD_ANY:
-								stack[++sp] = (XDValue) o;
-								break;
+							case XD_VOID: break;
+							case XD_DECIMAL: stack[++sp] = new DefDecimal((BigDecimal) o); break;
+							case XD_BIGINTEGER: stack[++sp] = new DefBigInteger((BigInteger) o); break;
+							case XD_LONG: stack[++sp] = new DefLong(((Number) o).longValue()); break;
+							case XD_DOUBLE: stack[++sp] = new DefDouble(((Number) o).doubleValue()); break;
+							case XD_BOOLEAN: stack[++sp] = new DefBoolean(((Boolean) o)); break;
+							case XD_STRING: stack[++sp] = new DefString((String) o); break;
+							case XD_DATETIME: stack[++sp] = new DefDate((SDatetime) o); break;
+							case XD_DURATION: stack[++sp] = new DefDuration((SDuration) o); break;
+							case XD_ELEMENT: stack[++sp] = new DefElement((Element) o); break;
+							case XD_CONTAINER: stack[++sp] = (DefContainer) o; break;
+							case XD_BYTES: stack[++sp] = new DefBytes((byte[]) o); break;
+							case XD_OBJECT: stack[++sp] = (DefObject) o; break;
+							case XD_PARSER: stack[++sp] = (XDParser) o; break;
+							case XD_PARSERESULT: stack[++sp] = (XDParseResult) o; break;
+							case XD_ANY: stack[++sp] = (XDValue) o; break;
 							default:
-								//Internal error: &{0}
-								throw new SError(XDEF.XDEF202,
-									"Undefined result type on PC = "+
-									(pc - 1) + "; " +
-									cmd.getClass().getName() + "; code= " +
-									code + "; type= " + dm.getItemId());
+								throw new SError(XDEF.XDEF202,//Internal error: &{0}
+									"Undefined result type on PC = " + (pc-1) +"; "+ cmd.getClass().getName()
+										 + "; code= " + code + "; type= " + dm.getItemId());
 						}
 					}
 					return sp;
@@ -1549,11 +1289,10 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 				return sp;
 			}
 			default:
-				//Internal error: &{0}
-				throw new XXException(XDEF.XDEF202,
-					"Undefined code on PC = " + (pc - 1) + "; " +
-					cmd.toString() + "; code=" +
-					CodeDisplay.getCodeName(cmd.getCode()));
+
+				throw new XXException(XDEF.XDEF202, //Internal error: &{0}
+					"Undefined code on PC = " + (pc - 1) + "; " + cmd.toString() + "; code="
+					+ CodeDisplay.getCodeName(cmd.getCode()));
 		}
 	}
 }

@@ -1,5 +1,6 @@
 package org.xdef.proc;
 
+import java.util.TimeZone;
 import org.xdef.model.XMElement;
 import org.xdef.sys.ArrayReporter;
 import org.xdef.sys.Report;
@@ -346,4 +347,9 @@ public interface XXNode extends XDValue {
 	 * @return 0 or XON mode.
 	 */
 	public byte getXonMode();
+
+	/** Get actual value of default time zone.
+	 * @return actual value of default time zone.
+	 */
+	public TimeZone getDefaultZone();
 }
