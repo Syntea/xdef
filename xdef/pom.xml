@@ -170,8 +170,8 @@
                         <artifactId>maven-assembly-plugin</artifactId>
                         <configuration>
                             <descriptors>
-                                <descriptor>maven/assembly/src.xml</descriptor>
-                                <descriptor>maven/assembly/userdoc.xml</descriptor>
+                                <descriptor>configuration/maven-assembly/src.xml</descriptor>
+                                <descriptor>configuration/maven-assembly/userdoc.xml</descriptor>
                             </descriptors>
                         </configuration>
                         <executions>

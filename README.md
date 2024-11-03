@@ -241,10 +241,10 @@ Prerequisities:
 * install _java_ (at least version 8)
 * install _maven_ (at least version 3.6)
 * configure:
-    * configure maven-plugin _toolchains_
+    * configure the maven-plugin _toolchains_
       (see <https://maven.apache.org/plugins/maven-toolchains-plugin/usage.html>):
-        * configuration xml-file in the home directory _~/.m2/toolchains.xml_
-        * see template-file [configure/maven/toolchains.xml](configure/maven/toolchains.xml)
+        * configuration the xml-file _~/.m2/toolchains.xml_ in the home directory
+        * see the template-file [configure/maven/toolchains.xml](configure/maven/toolchains.xml)
 
 Frequent building operations:
 * cleaning before any compiling, building, deploying, etc.:
@@ -292,14 +292,15 @@ Prerequisities:
 * satisfy prerequisities for building
 * install the pgp-managing software GnuPG (<https://gnupg.org/>)
 * configure:
-    * access to the appropriate pgp-key
+    * unlocking the appropriate pgp-key
         * insert the appropriate key to the the pgp-manager
-        * enter the pgp-key-password for the pgp-key
-          (see <https://maven.apache.org/plugins/maven-gpg-plugin/sign-mojo.html#passphraseEnvName>):
-            * when prompted by the pgp-agent during the package build
-            * or beforehand to the _MAVEN_GPG_PASSPHRASE_ environment variable
-    * access to maven repository manager _oss.sonatype.org_ (having id "_ossrh_" in the file [xdef/pom.xml](xdef/pom.xml))
-        * configure maven-configuration-file in the home directory _~/.m2/settings.xml_
+        * enter the pgp-key-password for the pgp-key:
+            * during the package build by the user when prompted by the pgp-agent
+            * or beforehand to the environment variable _MAVEN_GPG_PASSPHRASE_
+              (see <https://maven.apache.org/plugins/maven-gpg-plugin/sign-mojo.html#passphraseEnvName>)
+    * authentication to the maven repository manager _oss.sonatype.org_
+      (having id _"ossrh"_ in the file [xdef/pom.xml](xdef/pom.xml))
+        * configure the maven-configuration-file in the home directory _~/.m2/settings.xml_
         * see template-file [configure/maven/settings.xml](configure/maven/settings.xml)
 
 Deploying:

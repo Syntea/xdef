@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings
+    xmlns="http://maven.apache.org/settings/1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd"
+>
+    <!-- ... -->
+    
+    <servers>
+        <!-- authentication to the maven repository manager oss.sonatype.org -->
+        <server>
+            <id>ossrh</id>
+            <username>[user-token-name]</username>
+            <password>[user-token-password]</password>
+        </server>
+
+        <!-- ... -->
+    </servers>
+    
+    <!-- ... -->
+
+    <profiles>
+        <profile>
+            <id>dm-ossrh</id>
+            <properties>
+                <!-- configuration maven-gpg-plugin -->
+                <!-- pgp-manager executable command, plugin default value: gpg or gpg.exe by the platform
+                <gpg.executable>gpg</gpg.executable>
+                -->
+                <!-- pgp-key, default value in xdef/pom.xml: info@syntea.cz
+                <gpg.keyname>info@syntea.cz</gpg.keyname>
+                -->
+                <!--
+                pgp-private-key passphrase
+                may be entered by the user during the package build when prompted by the pgp-agent 
+                or may be entered into system-variable with name in the property "gpg.passphraseEnvName"
+                (plugin default value: MAVEN_GPG_PASSPHRASE,
+                see https://maven.apache.org/plugins/maven-gpg-plugin/sign-mojo.html#passphraseEnvName)
+                <gpg.passphraseEnvName>MAVEN_GPG_PASSPHRASE</gpg.passphraseEnvName>
+                or may be entered into property "gpg.passphrase" (as fallback, it is deprecated)
+                <gpg.passphrase>[pgp-private-key passphrase]</gpg.passphrase>
+                -->
+            </properties>
+        </profile>
+    </profiles>
+    
+</settings>
