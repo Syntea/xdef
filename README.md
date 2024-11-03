@@ -304,12 +304,12 @@ Prerequisities:
         * see template-file [configure/maven/settings.xml](configure/maven/settings.xml)
 
 Deploying:
-* deploy the snapshot-version to the repository _oss.sonatype.org_:
+* build and deploy the snapshot-version to the repository _oss.sonatype.org_:
 
   ```shell
   mvn deploy -Pjavadoc,sources,dm-ossrh
   ```
-* deploy the X-definition release-version to the central maven repository (through the repository _oss.sonatype.org_):
+* build and deploy the X-definition release-version to the central maven repository (through the repository _oss.sonatype.org_):
 
   ```shell
   mvn deploy -Prelease,javadoc,sources,dm-ossrh
