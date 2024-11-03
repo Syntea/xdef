@@ -262,6 +262,11 @@ Frequent building operations:
   ```shell
   mvn package
   ```
+* build the snapshot package including javadoc, sources, documentation:
+
+  ```shell
+  mvn package -Pjavadoc,sources
+  ```
 * by using the "skipTests" profile, avoid junit-tests:
 
   ```shell
@@ -304,12 +309,12 @@ Prerequisities:
         * see template-file [configure/maven/settings.xml](configure/maven/settings.xml)
 
 Deploying:
-* build and deploy the snapshot-version to the repository _oss.sonatype.org_:
+* build and deploy the snapshot package to the repository _oss.sonatype.org_:
 
   ```shell
   mvn deploy -Pjavadoc,sources,dm-ossrh
   ```
-* build and deploy the X-definition release-version to the central maven repository (through the repository _oss.sonatype.org_):
+* build and deploy the X-definition release package to the central maven repository (through the repository _oss.sonatype.org_):
 
   ```shell
   mvn deploy -Prelease,javadoc,sources,dm-ossrh
