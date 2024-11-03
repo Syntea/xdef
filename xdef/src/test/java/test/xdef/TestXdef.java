@@ -3262,18 +3262,18 @@ public final class TestXdef extends XDTester {
 			assertEq("<a a='2024-10-22T11:55:30+02:00'/>", xc.toXml());
 			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
-  "<a a='xdatetime(\"yyyy-MM-ddTHH:mm[Z]\", \"yyyy-MM-ddTHH:mmZ\");'/>\n" + // date and time (no seconds)
+"  <a a=\"xdatetime('yyyy-MM-ddTHH:mm[:ss][Z]', 'yyyy-MM-ddTHH:mmZ'); /* date and time, no seconds */\"/>\n" +
 "  <xd:component> %class test.xdef.TestTZ1%link a; </xd:component>\n"+
 "</xd:def>";
 			props = new Properties();
 			props.setProperty(XDConstants.XDPROPERTY_DEFAULTZONE, "CET");
 			xp = XDFactory.compileXD(props, xdef);
 			genXComponent(xp, clearTempDir());
-			xml = "<a a='2024-10-22T11:55'/>";
+			xml = "<a a='2024-10-22T11:55:15'/>";
 			assertEq("<a a='2024-10-22T11:55+02:00'/>", parse(xp, "", xml));
 			xd = xp.createXDDocument();
 			xc = xd.xparseXComponent(xml, null, reporter);
-			assertEq("<a a='2024-10-22T11:55+02:00'/>", xc.toXml());
+			assertEq("<a a='2024-10-22T11:55:15+02:00'/>", xc.toXml());
 			xml = "<a a='2024-10-22T11:55Z'/>";
 			assertEq("<a a='2024-10-22T11:55Z'/>", parse(xp, "", xml));
 			xd = xp.createXDDocument();
