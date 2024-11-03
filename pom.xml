@@ -37,6 +37,16 @@
             <email>trojan@syntea.cz</email>
             <roles><role>leader</role></roles>
         </developer>
+        <developer>
+            <id>smid</id>
+            <name>Tomáš Šmíd</name>
+            <email>smid@syntea.cz</email>
+        </developer>
+        <developer>
+            <id>sisma</id>
+            <name>Vladimír Šišma</name>
+            <email>sisma@syntea.cz</email>
+        </developer>
     </developers>
     <scm>
         <!-- nasledujici atributy jsou potreba pro nemodifikovani URL, connection,
