@@ -103,7 +103,7 @@
         <!-- auxiliary module with buildtools -->
         <module>xdef-buildtools</module>
 
-        <!--see also profile "testAllJvm"-->
+        <!--see also profile "testOnAllJvm"-->
     </modules>
 
     <dependencyManagement>
@@ -349,7 +349,7 @@
             </properties>
         </profile>
         <profile>
-            <id>testAllJvm</id>
+            <id>testOnAllJvm</id>
             <modules>
                 <!-- run tests on Java-11, Java-17, Java-21 -->
                 <module>xdef-test11</module>
