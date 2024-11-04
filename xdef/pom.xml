@@ -170,8 +170,8 @@
                         <artifactId>maven-assembly-plugin</artifactId>
                         <configuration>
                             <descriptors>
-                                <descriptor>maven/assembly/src.xml</descriptor>
-                                <descriptor>maven/assembly/userdoc.xml</descriptor>
+                                <descriptor>configuration/maven-assembly/src.xml</descriptor>
+                                <descriptor>configuration/maven-assembly/userdoc.xml</descriptor>
                             </descriptors>
                         </configuration>
                         <executions>
@@ -197,7 +197,8 @@
                         <artifactId>maven-gpg-plugin</artifactId>
                         <configuration>
                             <keyname>info@syntea.cz</keyname>
-                            <!--may enter gpg-passphrase into this system-variable, default value is MAVEN_GPG_PASSPHRASE
+                            <!--may enter gpg-passphrase into this system-variable, default value is MAVEN_GPG_PASSPHRASE,
+                                see https://maven.apache.org/plugins/maven-gpg-plugin/sign-mojo.html#passphraseEnvName
                             <passphraseEnvName>MAVEN_GPG_PASSPHRASE</passphraseEnvName>
                             -->
                         </configuration>

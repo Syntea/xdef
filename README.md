@@ -23,7 +23,7 @@ The source code for this project is licensed under
 
 # Examples
 
-You can try following examples online at: <http://xdef.syntea.cz/tutorial/examples/validate.html>
+You can try the following examples online at: <http://xdef.syntea.cz/tutorial/examples/validate.html>
 
 Example 1: **Essential concepts**
 <table><tr style="vertical-align: top;"><td>
@@ -241,9 +241,10 @@ Prerequisities:
 * install _java_ (at least version 8)
 * install _maven_ (at least version 3.6)
 * configure:
-    * configure maven-plugin _toolchains_
-        * configuration xml-file in the home directory _~/.m2/toolchains.xml_
-        * see template-file [configure/maven/toolchains.xml](configure/maven/toolchains.xml)
+    * configure the maven-plugin _toolchains_
+      (see <https://maven.apache.org/plugins/maven-toolchains-plugin/usage.html>):
+        * configuration the xml-file _~/.m2/toolchains.xml_ in the home directory
+        * see the template-file [configure/maven/toolchains.xml](configure/maven/toolchains.xml)
 
 Frequent building operations:
 * cleaning before any compiling, building, deploying, etc.:
@@ -261,17 +262,22 @@ Frequent building operations:
   ```shell
   mvn package
   ```
+* build the snapshot package including javadoc, sources, documentation:
+
+  ```shell
+  mvn package -Pjavadoc,sources
+  ```
 * by using the "skipTests" profile, avoid junit-tests:
 
   ```shell
   mvn package -PskipTests
   ```
-* by using the "testAllJvm" profile, junit-tests will be run on all configured Java platforms,
+* by using the "testOnAllJvm" profile, junit-tests will be run on all configured Java platforms,
   i.e. Java-8 (it is run by default in xdef module), Java-11 (using the xdef-test11 module),
   Java-17 (using the xdef-test17 module), Java-21 (using the xdef-test21 module):
 
   ```shell
-  mvn package -PtestAllJvm
+  mvn package -PtestOnAllJvm
   ```
 * build the release package:
 
@@ -291,22 +297,24 @@ Prerequisities:
 * satisfy prerequisities for building
 * install the pgp-managing software GnuPG (<https://gnupg.org/>)
 * configure:
-    * access to the appropriate pgp-key
+    * unlocking the appropriate pgp-key
         * insert the appropriate key to the the pgp-manager
         * enter the pgp-key-password for the pgp-key:
-            * when prompted by the pgp-agent during the package build
-            * or beforehand to the _MAVEN_GPG_PASSPHRASE_ environment variable
-    * access to maven repository manager _oss.sonatype.org_ (having id "_ossrh_" in the file [xdef/pom.xml](xdef/pom.xml))
-        * configure maven-configuration-file in the home directory _~/.m2/settings.xml_
+            * during the package build by the user when prompted by the pgp-agent
+            * or beforehand to the environment variable _MAVEN_GPG_PASSPHRASE_
+              (see <https://maven.apache.org/plugins/maven-gpg-plugin/sign-mojo.html#passphraseEnvName>)
+    * authentication to the maven repository manager _oss.sonatype.org_
+      (having id _"ossrh"_ in the file [xdef/pom.xml](xdef/pom.xml))
+        * configure the maven-configuration-file in the home directory _~/.m2/settings.xml_
         * see template-file [configure/maven/settings.xml](configure/maven/settings.xml)
 
 Deploying:
-* deploy the snapshot-version to the repository _oss.sonatype.org_:
+* build and deploy the snapshot package to the repository _oss.sonatype.org_:
 
   ```shell
   mvn deploy -Pjavadoc,sources,dm-ossrh
   ```
-* deploy the X-definition release-version to the central maven repository (through the repository _oss.sonatype.org_):
+* build and deploy the X-definition release package to the central maven repository (through the repository _oss.sonatype.org_):
 
   ```shell
   mvn deploy -Prelease,javadoc,sources,dm-ossrh
