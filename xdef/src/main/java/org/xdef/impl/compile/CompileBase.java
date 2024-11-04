@@ -89,14 +89,14 @@ import static org.xdef.impl.code.CodeTable.BYTES_TO_HEX;
 import static org.xdef.impl.code.CodeTable.CHAR_AT;
 import static org.xdef.impl.code.CodeTable.CLEAR_REPORTS;
 import static org.xdef.impl.code.CodeTable.CLOSE_XMLWRITER;
-import org.xdef.impl.code.DefContainer;
-import org.xdef.impl.code.DefLong;
-import org.xdef.impl.code.DefString;
-import org.xdef.impl.code.DefXQueryExpr;
 import static org.xdef.impl.code.CodeTable.COMPILE_REGEX;
 import static org.xdef.impl.code.CodeTable.COMPOSE_OP;
 import static org.xdef.impl.code.CodeTable.CONTAINS;
 import static org.xdef.impl.code.CodeTable.CONTAINSI;
+import org.xdef.impl.code.DefContainer;
+import org.xdef.impl.code.DefLong;
+import org.xdef.impl.code.DefString;
+import org.xdef.impl.code.DefXQueryExpr;
 import static org.xdef.impl.code.CodeTable.CONTEXT_ADDITEM;
 import static org.xdef.impl.code.CodeTable.CONTEXT_GETELEMENTS;
 import static org.xdef.impl.code.CodeTable.CONTEXT_GETELEMENT_X;
@@ -1135,8 +1135,9 @@ public class CompileBase implements CodeTable, XDValueID {
 		method(ti, genInternalMethod(GET_YEAR, XD_LONG, ANY_MODE, 1, 1, XD_DATETIME), "getYear");
 		method(ti, genInternalMethod(GET_DAYTIMEMILLIS, XD_LONG,
 			ANY_MODE, 1, 1, XD_DATETIME), "getDaytimeMillis");
+		method(ti, genInternalMethod(GET_ZONEID, XD_STRING,
+			ANY_MODE, 1, 1, XD_DATETIME), "getZoneID", "?getZoneName");
 		method(ti, genInternalMethod(GET_ZONEOFFSET, XD_LONG, ANY_MODE, 1, 1, XD_DATETIME), "getZoneOffset");
-		method(ti, genInternalMethod(GET_ZONEID, XD_STRING, ANY_MODE, 1, 1, XD_DATETIME), "getZoneName");
 		method(ti, genInternalMethod(IS_LEAPYEAR, XD_BOOLEAN, ANY_MODE, 1, 1, XD_DATETIME), "isLeapYear");
 		method(ti, genInternalMethod(GET_LASTDAYOFMONTH, XD_LONG,
 			ANY_MODE, 1, 1, XD_DATETIME), "lastDayOfMonth");
@@ -1157,10 +1158,10 @@ public class CompileBase implements CodeTable, XDValueID {
 		method(ti, genInternalMethod(SET_SECOND, XD_DATETIME,
 			ANY_MODE, 2, 2, XD_DATETIME, XD_LONG), "setSecond");
 		method(ti, genInternalMethod(SET_YEAR, XD_DATETIME, ANY_MODE, 2, 2, XD_DATETIME,XD_LONG), "setYear");
+		method(ti, genInternalMethod(SET_ZONEID, XD_DATETIME,
+			ANY_MODE, 2, 2, XD_DATETIME,XD_STRING), "setZoneID", "?setZoneName");
 		method(ti, genInternalMethod(SET_ZONEOFFSET, XD_DATETIME,
 			ANY_MODE, 2, 2, XD_DATETIME,XD_LONG), "setZoneOffset");
-		method(ti, genInternalMethod(SET_ZONEID, XD_DATETIME,
-			ANY_MODE, 2, 2, XD_DATETIME,XD_STRING), "setZoneName");
 		method(ti, genInternalMethod(TO_MILLIS, XD_LONG, ANY_MODE, 1, 1, XD_DATETIME), "toMillis");
 		method(ti, genInternalMethod(TO_STRING, XD_STRING,
 			ANY_MODE, 1, 2, XD_DATETIME, XD_STRING), "toString");
