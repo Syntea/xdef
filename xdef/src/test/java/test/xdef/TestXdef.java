@@ -3237,6 +3237,7 @@ public final class TestXdef extends XDTester {
 			props.setProperty(XDConstants.XDPROPERTY_DEFAULTZONE, "CET");
 			xp = XDFactory.compileXD(props, xdef);
 			xml = "<a a='2024-10-22T11:55:30'/>";
+//			xml = "<a a='2024-10-22T11:55:30NZ'/>";
 			xd = xp.createXDDocument();
 			xd.setStdOut(XDFactory.createXDOutput(swr = new StringWriter(), false));
 			assertEq(TimeZone.getTimeZone("CET"), xd.getDefaultZone());
