@@ -301,7 +301,7 @@ public class TestSUtils extends STester {
 			d.setTZ(TimeZone.getTimeZone("NZ"));
 			assertEq("2024-08-23T05:00:00.005+12:00", d.toString());
 			assertEq(d.getTZ(), TimeZone.getTimeZone("NZ"));
-		
+
 			d = new SDatetime("2024-08-22T11:00:00.005-05:00");
 			assertNotNull(d.getTZ());
 			d.setTZ(TimeZone.getTimeZone("Etc/GMT-14"));
@@ -371,7 +371,7 @@ public class TestSUtils extends STester {
 			d.setTZ(TimeZone.getTimeZone("NZ"));
 			assertEq("2024-11-23T05:00:00.005+13:00", d.toString());
 			assertEq(d.getTZ(), TimeZone.getTimeZone("NZ"));
-		
+
 			d = new SDatetime("2024-11-22T11:00:00.005-05:00");
 			assertNotNull(d.getTZ());
 			d.setTZ(TimeZone.getTimeZone("Etc/GMT-14"));

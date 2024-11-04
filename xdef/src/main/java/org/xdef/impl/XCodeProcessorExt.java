@@ -7,6 +7,7 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 import java.util.StringTokenizer;
+import java.util.TimeZone;
 import javax.xml.XMLConstants;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -354,7 +355,11 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 			case GET_LASTDAYOFMONTH: return new DefLong(SDatetime.getLastDayOfMonth(p.datetimeValue()));
 			case GET_DAYTIMEMILLIS: return new DefLong(p.datetimeValue().getDaytimeInMillis());
 			case GET_ZONEOFFSET: return new DefLong(p.datetimeValue().getTimeZoneOffset());//zone shift to GMT
-			case GET_ZONEID: return new DefString(p.datetimeValue().getTZ().getID());//get time zone name
+			case GET_ZONEID: {
+				SDatetime d = p.datetimeValue();
+				TimeZone tz;
+				return d == null || (tz = d.getTZ()) == null ? new DefString() : new DefString(tz.getID());
+			}
 			case IS_LEAPYEAR: //check leap year.
 				return new DefBoolean(SDatetime.isLeapYear(
 					p.getItemId() == XD_LONG ? p.intValue() : p.datetimeValue().getYear()));
@@ -547,7 +552,8 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 			}
 			case SET_ZONEID: { //Set time zone name
 				SDatetime t = p1.datetimeValue();
-				t.setTimeZoneID(p2.stringValue());
+				String s = p2.stringValue();
+				t.setTZ(s == null || s.trim().isEmpty() ? null : TimeZone.getTimeZone(s));
 				return new DefDate(t);
 			}
 			//String
