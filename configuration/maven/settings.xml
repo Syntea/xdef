@@ -38,7 +38,7 @@
                 see https://maven.apache.org/plugins/maven-gpg-plugin/sign-mojo.html#passphraseEnvName)
                 <gpg.passphraseEnvName>MAVEN_GPG_PASSPHRASE</gpg.passphraseEnvName>
                 or as fallback may be entered into property "gpg.passphrase"
-                (it is deprecated, unrecommended, insecure and unreliable on all platforms)
+                (it is deprecated, unrecommended, insecure and unreliable on any platforms)
                 <gpg.passphrase>[pgp-private-key passphrase]</gpg.passphrase>
                 -->
             </properties>
