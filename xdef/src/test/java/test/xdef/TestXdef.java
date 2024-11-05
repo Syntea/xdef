@@ -3225,11 +3225,11 @@ public final class TestXdef extends XDTester {
 "  <a a='dateTime();\n" +
 "        onTrue {\n" +
 "          Datetime d = (Datetime) getParsedValue();\n" +
-"          outln(d.getZoneID());\n" +
+"          outln(d.getZoneName());\n" +
 "          outln(d.toString());\n" +
-"          d.setZoneID(\"GMT\");\n" +
+"          d.setZoneName(\"GMT\");\n" +
 "          outln(d.toString());\n" +
-"          outln(d.getZoneID());\n" +
+"          outln(d.getZoneName());\n" +
 "          d.setZoneOffset(-3600000);\n" +
 "          outln(d.toString());\n" +
 "        }'/>\n" +
