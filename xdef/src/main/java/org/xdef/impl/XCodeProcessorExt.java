@@ -553,7 +553,33 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 			case SET_ZONEID: { //Set time zone name
 				SDatetime t = p1.datetimeValue();
 				String s = p2.stringValue();
-				t.setTZ(s == null || s.trim().isEmpty() ? null : TimeZone.getTimeZone(s));
+				TimeZone tz;
+				if (s == null || (s = s.trim()).isEmpty()) {
+					 tz = null;
+				} else {
+					tz = TimeZone.getTimeZone(s);
+					if (!s.equals(tz.getID())) { // try explicit zone specification (e.g. "+02:00")
+						StringParser p = new StringParser(s);
+						char c;
+						int hour;
+						int min;
+						if (s.length() == 6 && ((c = p.isOneOfChars("-+")) == '+' || c == '-')
+							&& p.isInteger() && (hour = p.getParsedInt()) <= 14 && p.getIndex() == 3
+							&& p.isChar(':') && p.isInteger() && ((hour < 14 && (min=p.getParsedInt()) < 60)
+							|| (hour == 14 && (min=p.getParsedInt()) == 0))) {
+							int offset = hour * 3600000 + min * 60000;
+							if (c == '-') {
+								offset = -offset;
+							}
+							tz = (TimeZone) TimeZone.getTimeZone("UTC").clone();
+							tz.setRawOffset(offset);
+							tz.setID(s);
+						} else {
+							throw new SRuntimeException("Incorrect zone: " + s);
+						}
+					}
+				}
+				t.setTZ(tz);
 				return new DefDate(t);
 			}
 			//String

@@ -2329,11 +2329,23 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 	 */
 	public final void setRawZoneOffset(final int offset) {
 		synchronized(this) {
-			if (_tz == null) {
-				_tz = TimeZone.getTimeZone("GMT");
+			Calendar c = getCalendar();
+			TimeZone tz = (TimeZone) TimeZone.getTimeZone("UTC").clone();
+			tz.setRawOffset(offset);
+			final int maxOffset = 14*24*60*60*1000;
+			if (offset > maxOffset || maxOffset < -maxOffset || (offset % 1000) != 0) {
+				throw new RuntimeException("Incorrect time zone RawOffset: " + offset);
 			}
-			_tz.setRawOffset(offset);
-			_calendar = null;
+			tz.setID("");
+			int diff = offset - (_tz != null ? _tz.getRawOffset() + _tz.getDSTSavings() : 0);
+			int hour = _hour;
+			int minute = _minute;
+			c.setTimeZone(tz);
+			_tz = (TimeZone) tz.clone();
+			setCalendar(c);
+			if (diff != 0 && _hour == hour && _minute == minute) {
+				c.add(Calendar.MILLISECOND, diff);
+			}
 		}
 	}
 

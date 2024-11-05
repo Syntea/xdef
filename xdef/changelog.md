@@ -1,7 +1,9 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.2.10, release-date 2024-11-04
-* .
+# Version 42.2.10, release-date 2024-11-05
+* Corrected bug in the method 'org.xdef.sys.SDatetime.setRawOffset(int)'
+  and in the X-script method `setRawOffset(int)`.
+* Corrected bug in the method in the X-script method `setZoneId(String)`.
 
 # Version 42.2.9, release-date 2024-11-01
 * In the X-script method `now` if the default time zone is not null it is set
