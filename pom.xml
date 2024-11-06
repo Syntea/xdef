@@ -4,17 +4,17 @@
     xmlns:xsi         ="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
 >
-    <!-- nasledujici atribut je potreba pro nemodifikovani URL, ale windows-maven na tom pada ("neznamy atribut") 
+    <!-- nasledujici atribut je potreba pro nemodifikovani URL, ale windows-maven na tom pada ("neznamy atribut")
         ./@child.project.url.inherit.append.path="false"
     -->
 
     <modelVersion>4.0.0</modelVersion>
-    
+
     <groupId>org.xdef</groupId>
     <artifactId>xdef-parent</artifactId>
     <version>${revision}${changelist}</version>
     <packaging>pom</packaging>
-    
+
     <licenses>
         <license>
             <name>Apache License, Version 2.0</name>
@@ -50,14 +50,14 @@
     </developers>
     <scm>
         <!-- nasledujici atributy jsou potreba pro nemodifikovani URL, connection,
-            ale windows-maven na tom pada ("neznamy atribut") 
+            ale windows-maven na tom pada ("neznamy atribut")
             child.scm.url.inherit.append.path       ="false"
             child.scm.connection.inherit.append.path="false"
         -->
         <url>https://github.com/Syntea/xdef</url>
         <connection>scm:git:git@github.com:Syntea/xdef.git</connection>
     </scm>
-    
+
     <properties>
         <!-- update after release version, may change by:
              > mvn versions:set-property -Dproperty=revision -DnewVersion=x.y.z
@@ -70,20 +70,20 @@
         -->
         <release.date>2024-11-04</release.date>
         <specification.version>4.2</specification.version>
-        
+
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        
+
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.testTarget>1.8</maven.compiler.testTarget>
         <maven.compiler.testSource>1.8</maven.compiler.testSource>
         <jdk.version>1.8</jdk.version>
         <jdk.vendor>sun</jdk.vendor>
-        
+
         <!-- default skip install and deploy -->
         <maven.install.skip>true</maven.install.skip>
         <maven.deploy.skip>true</maven.deploy.skip>
-        
+
         <saxon-he.version>9.7.0-18</saxon-he.version>
         <derby.version>10.12.1.1</derby.version>
         <slf4j.version>1.7.25</slf4j.version>
@@ -119,7 +119,7 @@
                 <artifactId>xdef-buildtools</artifactId>
                 <version>${revision}${changelist}</version>
             </dependency>
-            
+
             <!-- third parties -->
             <dependency>
                 <groupId>net.sf.saxon</groupId>
@@ -137,14 +137,14 @@
                 <artifactId>derby</artifactId>
                 <version>${derby.version}</version>
             </dependency>
-            
+
             <!-- test-phase -->
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter-engine</artifactId>
                 <version>${junit5-jupiter.version}</version>
             </dependency>
-            
+
             <!-- logging -->
             <dependency>
                 <groupId>org.slf4j</groupId>
@@ -207,7 +207,7 @@
                     </execution>
                 </executions>
             </plugin>
-            
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -244,7 +244,7 @@
                     </archive>
                 </configuration>
             </plugin>
-            
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
