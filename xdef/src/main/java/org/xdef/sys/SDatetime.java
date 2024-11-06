@@ -80,7 +80,7 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 			_tz = _origtz;
 		}
 	}
-	
+
 	/** Create new instance of SDatetime with empty parameters.*/
 	public SDatetime() {init();}
 
