@@ -1,9 +1,13 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.2.10, release-date 2024-11-05
+# Version 42.2.11, release-date 2024-11-06
 * Corrected bug in the method 'org.xdef.sys.SDatetime.setRawOffset(int)'
   and in the X-script method `setRawOffset(int)`.
-* Corrected bug in the X-script method `setZoneName(String)`.
+* Corrected bug in the method in the X-script method `setZoneId(String)`.
+* Added parsing method `ydatetime` for special use in Syntea software group.
+
+# Version 42.2.10, release-date 2024-11-06
+* Incorrect version, DO NOT USE IT!
 
 # Version 42.2.9, release-date 2024-11-01
 * In the X-script method `now` if the default time zone is not null it is set
@@ -14,13 +18,9 @@
   `org.xdef.XDConstants.XDPROPERTY_DEFAULTZONE`).
 * A new method `getDefaultZone()` has been implemented in the XDPool class. This
   method returns the object `java.util.TimeZone` or null if it is not specified.
-* Method `dateTime`: if the result does not contain a time zone and a default
-  time zone is set, then this default time zone is set to the result value.
-* The parsing method `dateYMDhms`: if the default time zone is set, it is set
-  in the result.
-* The parsing method `xdatetime`: if the time zone of the result is zero,
-  the default time zone is added to the result.  If there is no time zone output
-  requirement in the output format, the time zone is set to the default value.
+* X-script methods `dateTime`, `dateYMDhms`, and `xdatetime`: if the result does
+  not contain a time zone and the default time zone is set, then this default
+  time zone is set to the result datetime value.
 * Implemented the new X-script method `currencyCode()` of `Currency` value which
   returns string with ISO 4217 currency code. 
 * To the class `org.xdef.XDFactory` is added new static methods. The method

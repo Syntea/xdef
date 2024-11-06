@@ -80,7 +80,7 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 			_tz = _origtz;
 		}
 	}
-	
+
 	/** Create new instance of SDatetime with empty parameters.*/
 	public SDatetime() {init();}
 
@@ -734,16 +734,10 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 		}
 	}
 
-	/** Set time zone value.
-	 * @param tz TimeZone to be set.
-	 */
-	public final void setTZ(final TimeZone tz) {setTZ(_tz, tz);}
-
-	/** Set time zone value.
-	 * @param defaultZone default TimeZone.
+	/** Set time zone.
 	 * @param newZone TimeZone to be set.
 	 */
-	public final void setTZ(final TimeZone defaultZone, final TimeZone newZone) {
+	public final void setTZ(final TimeZone newZone) {
 		synchronized(this) {
 			if (newZone == null) {
 				_tz = null;
@@ -758,14 +752,16 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 			if (!_tz.equals(newZone)) {
 				int diff = newZone.getRawOffset() + newZone.getDSTSavings()
 					- (_tz.getRawOffset()  + _tz.getDSTSavings());
-				int hour = _hour;
-				int minute = _minute;
-				Calendar c = getCalendar();
-				c.setTimeZone(newZone);
-				_tz = (TimeZone) newZone.clone();
-				setCalendar(c);
-				if (diff != 0 && _hour == hour && _minute == minute) {
-					c.add(Calendar.MILLISECOND, diff);
+				if (diff != 0) {
+					int hour = _hour;
+					int minute = _minute;
+					Calendar c = getCalendar();
+					c.setTimeZone(newZone);
+					_tz = (TimeZone) newZone.clone();
+					setCalendar(c);
+					if (_hour == hour && _minute == minute) {
+						c.add(Calendar.MILLISECOND, diff);
+					}
 				}
 			}
 		}
