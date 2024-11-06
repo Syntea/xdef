@@ -1136,8 +1136,7 @@ public class CompileBase implements CodeTable, XDValueID {
 		method(ti, genInternalMethod(GET_YEAR, XD_LONG, ANY_MODE, 1, 1, XD_DATETIME), "getYear");
 		method(ti, genInternalMethod(GET_DAYTIMEMILLIS, XD_LONG,
 			ANY_MODE, 1, 1, XD_DATETIME), "getDaytimeMillis");
-		method(ti, genInternalMethod(GET_ZONEID, XD_STRING,
-			ANY_MODE, 1, 1, XD_DATETIME), "getZoneID", "?getZoneName");
+		method(ti, genInternalMethod(GET_ZONEID, XD_STRING, ANY_MODE, 1, 1, XD_DATETIME), "getZoneName");
 		method(ti, genInternalMethod(GET_ZONEOFFSET, XD_LONG, ANY_MODE, 1, 1, XD_DATETIME), "getZoneOffset");
 		method(ti, genInternalMethod(IS_LEAPYEAR, XD_BOOLEAN, ANY_MODE, 1, 1, XD_DATETIME), "isLeapYear");
 		method(ti, genInternalMethod(GET_LASTDAYOFMONTH, XD_LONG,
@@ -1160,7 +1159,7 @@ public class CompileBase implements CodeTable, XDValueID {
 			ANY_MODE, 2, 2, XD_DATETIME, XD_LONG), "setSecond");
 		method(ti, genInternalMethod(SET_YEAR, XD_DATETIME, ANY_MODE, 2, 2, XD_DATETIME,XD_LONG), "setYear");
 		method(ti, genInternalMethod(SET_ZONEID, XD_DATETIME,
-			ANY_MODE, 2, 2, XD_DATETIME,XD_STRING), "setZoneID", "?setZoneName");
+			ANY_MODE, 2, 2, XD_DATETIME,XD_STRING), "setZoneName");
 		method(ti, genInternalMethod(SET_ZONEOFFSET, XD_DATETIME,
 			ANY_MODE, 2, 2, XD_DATETIME,XD_LONG), "setZoneOffset");
 		method(ti, genInternalMethod(TO_MILLIS, XD_LONG, ANY_MODE, 1, 1, XD_DATETIME), "toMillis");
