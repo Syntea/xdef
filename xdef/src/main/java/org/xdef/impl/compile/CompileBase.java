@@ -829,6 +829,7 @@ public class CompileBase implements CodeTable, XDValueID {
 			keyParam("format", XD_STRING, true, 0,false),
 			keyParam("outFormat", XD_STRING, true, 1,false));
 		parser(im, org.xdef.impl.parsers.XDParseXDatetime.class, "xdatetime", "?datetime");
+		parser(im, org.xdef.impl.parsers.XDParseYDatetime.class, "ydatetime");
 		im = genParserMetnod(0, 0, null, XD_STRING);
 		parser(im, org.xdef.impl.parsers.XDParseEmpty.class, "empty");
 		im = genParserMetnod(1, 1, new short[] {XD_STRING}, XD_STRING,

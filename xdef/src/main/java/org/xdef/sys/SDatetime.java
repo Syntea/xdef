@@ -749,16 +749,10 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 		}
 	}
 
-	/** Set time zone value.
-	 * @param tz TimeZone to be set.
-	 */
-	public final void setTZ(final TimeZone tz) {setTZ(_tz, tz);}
-
-	/** Set time zone value.
-	 * @param defaultZone default TimeZone.
+	/** Set time zone.
 	 * @param newZone TimeZone to be set.
 	 */
-	public final void setTZ(final TimeZone defaultZone, final TimeZone newZone) {
+	public final void setTZ(final TimeZone newZone) {
 		synchronized(this) {
 			if (newZone == null) {
 				_tz = null;
@@ -773,14 +767,16 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 			if (!_tz.equals(newZone)) {
 				int diff = newZone.getRawOffset() + newZone.getDSTSavings()
 					- (_tz.getRawOffset()  + _tz.getDSTSavings());
-				int hour = _hour;
-				int minute = _minute;
-				Calendar c = getCalendar();
-				c.setTimeZone(newZone);
-				_tz = (TimeZone) newZone.clone();
-				setCalendar(c);
-				if (diff != 0 && _hour == hour && _minute == minute) {
-					c.add(Calendar.MILLISECOND, diff);
+				if (diff != 0) {
+					int hour = _hour;
+					int minute = _minute;
+					Calendar c = getCalendar();
+					c.setTimeZone(newZone);
+					_tz = (TimeZone) newZone.clone();
+					setCalendar(c);
+					if (_hour == hour && _minute == minute) {
+						c.add(Calendar.MILLISECOND, diff);
+					}
 				}
 			}
 		}
@@ -2329,11 +2325,23 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 	 */
 	public final void setRawZoneOffset(final int offset) {
 		synchronized(this) {
-			if (_tz == null) {
-				_tz = TimeZone.getTimeZone("GMT");
+			Calendar c = getCalendar();
+			TimeZone tz = (TimeZone) TimeZone.getTimeZone("UTC").clone();
+			tz.setRawOffset(offset);
+			final int maxOffset = 14*24*60*60*1000;
+			if (offset > maxOffset || maxOffset < -maxOffset || (offset % 1000) != 0) {
+				throw new RuntimeException("Incorrect time zone RawOffset: " + offset);
 			}
-			_tz.setRawOffset(offset);
-			_calendar = null;
+			tz.setID("");
+			int diff = offset - (_tz != null ? _tz.getRawOffset() + _tz.getDSTSavings() : 0);
+			int hour = _hour;
+			int minute = _minute;
+			c.setTimeZone(tz);
+			_tz = (TimeZone) tz.clone();
+			setCalendar(c);
+			if (diff != 0 && _hour == hour && _minute == minute) {
+				c.add(Calendar.MILLISECOND, diff);
+			}
 		}
 	}
 
