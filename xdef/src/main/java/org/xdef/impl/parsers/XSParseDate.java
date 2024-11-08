@@ -22,7 +22,9 @@ import org.xdef.impl.code.DefDate;
  */
 public class XSParseDate extends XSAbstractParseComparable {
 	private static final String ROOTBASENAME = "date";
+
 	public XSParseDate() {super();}
+
 	@Override
 	public int getLegalKeys() {
 		return PATTERN +
@@ -43,15 +45,15 @@ public class XSParseDate extends XSAbstractParseComparable {
 			BASE +
 			0;
 	}
+
 	@Override
-	public void parseObject(final XXNode xnode, final XDParseResult p){
+	public void parseObject(final XXNode xnode, final XDParseResult p) {
 		int pos0 = p.getIndex();
 		p.isSpaces();
 		int pos = p.getIndex();
 		StringParser parser = new StringParser(p.getSourceBuffer(), pos);
 		if (!parse(parser)) {
-			//Incorrect value of '&{0}'&{1}{: }
-			p.errorWithString(XDEF.XDEF809, parserName());
+			p.errorWithString(XDEF.XDEF809, parserName()); //Incorrect value of '&{0}'&{1}{: }
 			return;
 		}
 		p.setIndex(parser.getIndex());
@@ -63,9 +65,12 @@ public class XSParseDate extends XSAbstractParseComparable {
 		p.addReports((ArrayReporter) parser.getReportWriter());//datetime errors
 		checkDate(xnode, p);
 	}
+
 	boolean parse(final StringParser parser) {return parser.isXMLDate();}
+
 	@Override
 	public short parsedType() {return XD_DATETIME;}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 }
