@@ -58,11 +58,9 @@ public class XSParseDatetime extends XSAbstractParseComparable {
 			return;
 		}
 		SDatetime d = parser.getParsedSDatetime();
-		if (xnode != null) {
-			TimeZone defaulttz;
-			if (d.getTZ() == null && (defaulttz=xnode.getDefaultZone()) != null) {
-				d.setTZ(defaulttz);
-			}
+		TimeZone defaulttz;
+		if (d.getTZ() == null && xnode != null && (defaulttz = xnode.getDefaultZone()) != null) {
+			d.setTZ(defaulttz);
 		}
 		p.setParsedValue(new DefDate(d));
 		p.setIndex(parser.getIndex());
