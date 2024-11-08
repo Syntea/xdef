@@ -750,19 +750,11 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 				return;
 			}
 			if (!_tz.equals(newZone)) {
-				int diff = newZone.getRawOffset() + newZone.getDSTSavings()
-					- (_tz.getRawOffset()  + _tz.getDSTSavings());
-				if (diff != 0) {
-					int hour = _hour;
-					int minute = _minute;
-					Calendar c = getCalendar();
-					c.setTimeZone(newZone);
-					_tz = (TimeZone) newZone.clone();
-					setCalendar(c);
-					if (_hour == hour && _minute == minute) {
-						c.add(Calendar.MILLISECOND, diff);
-					}
-				}
+				Calendar c = getCalendar();
+				c.get(Calendar.ZONE_OFFSET); // just update Calendar ???
+				c.setTimeZone(newZone);
+				c.get(Calendar.ZONE_OFFSET); // just update Calendar ???
+				setCalendar(c);
 			}
 		}
 	}
