@@ -1,20 +1,21 @@
 # Version ${version}, release-date ${release.date}
 
 # Version 42.2.12, release-date 2024-11-08
-  Corrected bug in the method `setTZ` use to set time zone.
-
-# Version 42.2.11, release-date 2024-11-06
 * Corrected bug in the method 'org.xdef.sys.SDatetime.setRawOffset(int)'
   and in the X-script method `setRawOffset(int)`.
-* Corrected bug in the method in the X-script method `setZoneId(String)`.
+* Corrected bug in the method in the X-script method `setZoneName(String)`.
 * Added parsing method `ydatetime` for special use in Syntea software group.
+* Corrected bug in the method `org.xdef.sys.SDatetine.setTZ(TimeZone)`.
+
+# Version 42.2.11, release-date 2024-11-06
+* Incorrect version, DO NOT USE IT!
 
 # Version 42.2.10, release-date 2024-11-06
 * Incorrect version, DO NOT USE IT!
 
 # Version 42.2.9, release-date 2024-11-01
-* In the X-script method `now` if the default time zone is not null it is set
-  to the result. 
+* If the default time zone is set, then in the X-script method `now` it is
+  applied to the result.
 
 # Version 42.2.8, release-date 2024-10-30
 * The new property `xdef_defaultZone` is used to set the default time zone (see
