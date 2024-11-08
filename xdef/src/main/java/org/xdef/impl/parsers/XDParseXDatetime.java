@@ -80,16 +80,9 @@ public class XDParseXDatetime extends XSAbstractParseComparable {
 		if (p.errors()) {
 			return; // an error occurs
 		}
-		TimeZone defaulttz = xnode == null ? null : xnode.getDefaultZone();
-		TimeZone tz = d.getTZ();
-		if (tz == null && defaulttz != null && d.getYear() != Integer.MIN_VALUE
-			&& d.getMonth() != Integer.MIN_VALUE && d.getDay()  != Integer.MIN_VALUE
-			&& d.getHour() != Integer.MIN_VALUE && d.getMinute() != Integer.MIN_VALUE) {
-			// zone not specified and both date and time values are specified
-			int seconds = d.getSecond();
-			d.setSecond(0);
-			d.setTZ(tz = defaulttz); // set default zone to parsed datetime
-			d.setSecond(seconds);
+		TimeZone defaulttz;
+		if (d.getTZ() == null && xnode != null && (defaulttz = xnode.getDefaultZone()) != null) {
+			d.setTZ(defaulttz);
 		}
 		if (_outFormat != null) {
 			s = d.formatDate(_outFormat);
