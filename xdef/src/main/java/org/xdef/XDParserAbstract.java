@@ -67,8 +67,7 @@ public abstract class XDParserAbstract extends XDValueAbstract implements XDPars
 	 * @param xnode actual XXNode object or null.
 	 */
 	public void check(final XXNode xnode, final XDParseResult p) {
-		if (xnode != null && xnode.getXMElement().getXonMode() != 0
-			&& "null".equals(p.getSourceBuffer())) {
+		if (xnode != null && xnode.getXMElement().getXonMode() != 0 && "null".equals(p.getSourceBuffer())) {
 			p.setParsedValue(new DefJNull(XonTools.JNULL)); // set null
 			p.setEos();
 			return;
@@ -76,8 +75,8 @@ public abstract class XDParserAbstract extends XDValueAbstract implements XDPars
 		parseObject(xnode, p);
 		if (p.matches()) {
 			if (!p.eos()) {
-				//After the item '&{0}' follows an illegal character&{1}{: }
-				p.errorWithString(XDEF.XDEF804, parserName());
+				p.errorWithString(XDEF.XDEF804,//After the item '&{0}' follows an illegal character&{1}{: }
+					parserName());
 			} else {
 				finalCheck(xnode, p);
 			}
@@ -111,8 +110,7 @@ public abstract class XDParserAbstract extends XDValueAbstract implements XDPars
 	 * @param params container with named items of parameters.
 	 * @throws SException if an error occurs.
 	 */
-	public void setNamedParams(final XXNode xnode, final XDContainer params)
-		throws SException {
+	public void setNamedParams(final XXNode xnode, final XDContainer params) throws SException {
 		for (XDNamedValue nv: params.getXDNamedItems()) {
 			XDValue val = nv.getValue();
 			if (val != null) {
@@ -121,8 +119,7 @@ public abstract class XDParserAbstract extends XDValueAbstract implements XDPars
 						if (val.getItemId() == XD_CONTAINER) {
 							XDContainer c = (XDContainer) val;
 							for (int i = 0; i <= c.getXDItemsNumber(); i++) {
-								c.replaceXDItem(i,
-									valueToParser(c.getXDItem(i)));
+								c.replaceXDItem(i, valueToParser(c.getXDItem(i)));
 							}
 							break;
 						}
@@ -146,14 +143,19 @@ public abstract class XDParserAbstract extends XDValueAbstract implements XDPars
 
 	@Override
 	public final short getItemId() {return XD_PARSER;} // do not override
+
 	@Override
 	public XDValueType getItemType() {return PARSER;}
+
 	@Override
 	public short parsedType() {return XD_STRING;}  // may be overrided
+
 	@Override
 	public final short getCode() {return LD_CONST;}
+
 	@Override
 	public String toString() {return parserName();}
+
 	@Override
 	public boolean equals(final XDValue arg) {
 		if (arg != null && (arg instanceof XDParser)) {
@@ -185,8 +187,7 @@ public abstract class XDParserAbstract extends XDValueAbstract implements XDPars
 	 */
 	public int getLegalKeys() {return 0;}
 
-	/** Check if value is parser and return it as a Parser
-	 * or convert it to Parser (if it is possible).
+	/** Check if value is parser and return it as a Parser or convert it to Parser (if it is possible).
 	 * @param x value to be checked.
 	 * @return return argument as a Parser.
 	 * @throws SRuntimeException with message XDEF474
@@ -202,8 +203,7 @@ public abstract class XDParserAbstract extends XDValueAbstract implements XDPars
 						public void parseObject(XXNode xnode, XDParseResult p) {
 							p.setEos();
 							if (!x.booleanValue()) {
-								//Inorrect value&{0}{ of '}{'}&{1}{: '}{'}
-								p.error(XDEF.XDEF809, parserName());
+								p.error(XDEF.XDEF809, parserName());//Inorrect value&{0}{ of '}{'}&{1}{: '}{'}
 							}
 						}
 						@Override
@@ -231,14 +231,14 @@ public abstract class XDParserAbstract extends XDValueAbstract implements XDPars
 				}
 			}
 		}
-		//The value type in the named parameter '&{0}' of the parser&{1}{ '}{'}
-		// must be Parser
+		//The value type in the named parameter '&{0}' of the parser&{1}{ '}{'} must be Parser
 		throw new SRuntimeException(XDEF.XDEF474, "%item", parserName());
 	}
 	@Override
 	public short getAlltemsType() {return parsedType();} // default parsedType
 	@Override
 	public String getSeparator() {return null;} // default null (not set)
+
 	public void setSeparator(final String x) {} // default do nothing
 	/** Check if separator follows.
 	 * @param p parser used for parsing.
@@ -280,9 +280,7 @@ public abstract class XDParserAbstract extends XDValueAbstract implements XDPars
 	 * @param types array of names.
 	 * @return index or -1.
 	 */
-	private static short getTypeIndex(final short type,
-		final short newType,
-		final short[] types) {
+	private static short getTypeIndex(final short type, final short newType, final short[] types) {
 		int j = isTypeOf(type, types);
 		if (j >= 0) {
 			int k = isTypeOf(newType, types);
@@ -293,8 +291,7 @@ public abstract class XDParserAbstract extends XDValueAbstract implements XDPars
 		return -1;
 	}
 
-	private static final short[] INTTYPES =
-		{XD_BYTE, XD_SHORT, XD_INT, XD_LONG, XD_BIGINTEGER};
+	private static final short[] INTTYPES = {XD_BYTE, XD_SHORT, XD_INT, XD_LONG, XD_BIGINTEGER};
 	private static final short[] FLOATTYPES = {XD_FLOAT, XD_DOUBLE, XD_DECIMAL};
 
 	public static final short getItemsType(final XDParser[] x) {

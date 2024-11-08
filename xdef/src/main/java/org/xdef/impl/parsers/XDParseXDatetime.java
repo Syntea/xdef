@@ -67,24 +67,25 @@ public class XDParseXDatetime extends XSAbstractParseComparable {
 		int pos = p.getIndex();
 		StringParser parser = new StringParser(p.getSourceBuffer(), pos);
 		if (!(parser.isDatetime(_format) && parser.testParsedDatetime())) {
-			//Incorrect value of '&{0}'&{1}{: }
-			p.errorWithString(XDEF.XDEF809, parserName() + " ("+_format+")");
+			p.errorWithString(XDEF.XDEF809, parserName()+" ("+_format+")");//Incorrect value of '&{0}'&{1}{: }
 			return;
 		}
 		SDatetime d = parser.getParsedSDatetime();
-		//xdatetime errors
-		p.addReports((ArrayReporter) parser.getReportWriter());
+		p.addReports((ArrayReporter) parser.getReportWriter());// add errors from parser
 		p.setIndex(parser.getIndex());
 		String s = p.getParsedBufferPartFrom(pos);
 		p.isSpaces();
 		p.setParsedValue(new DefDate(d));
 		checkDate(xnode, p);
+		if (p.errors()) {
+			return; // an error occurs
+		}
 		TimeZone defaulttz = xnode == null ? null : xnode.getDefaultZone();
 		TimeZone tz = d.getTZ();
 		if (tz == null && defaulttz != null && d.getYear() != Integer.MIN_VALUE
 			&& d.getMonth() != Integer.MIN_VALUE && d.getDay()  != Integer.MIN_VALUE
 			&& d.getHour() != Integer.MIN_VALUE && d.getMinute() != Integer.MIN_VALUE) {
-			// zone not specified, but both date and time values are prezent
+			// zone not specified and both date and time values are specified
 			int seconds = d.getSecond();
 			d.setSecond(0);
 			d.setTZ(tz = defaulttz); // set default zone to parsed datetime
