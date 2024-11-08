@@ -1,7 +1,7 @@
 # Version ${version}, release-date ${release.date}
 
 # Version 42.2.12, release-date 2024-11-08
-  .
+  Corrected bug in the method `setTZ` use to set time zone.
 
 # Version 42.2.11, release-date 2024-11-06
 * Corrected bug in the method 'org.xdef.sys.SDatetime.setRawOffset(int)'
