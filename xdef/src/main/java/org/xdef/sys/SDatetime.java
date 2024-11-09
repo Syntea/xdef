@@ -752,9 +752,8 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 			}
 			if (!_tz.equals(tz)) {
 				Calendar c = getCalendar();
-				c.get(Calendar.ZONE_OFFSET); // just update Calendar ???
+				c.get(Calendar.ZONE_OFFSET);//to update the calendar it is necessary to call the get method???
 				c.setTimeZone(tz);
-				c.get(Calendar.ZONE_OFFSET); // just update Calendar ???
 				setCalendar(c);
 			}
 		}
