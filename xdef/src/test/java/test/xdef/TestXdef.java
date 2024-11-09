@@ -3297,6 +3297,33 @@ public final class TestXdef extends XDTester {
 			assertEq("2024-10-22T11:55:30+02:00",
 				((SDatetime) SUtils.getValueFromGetter(xc,"geta")).toString());
 		} catch (RuntimeException ex) {fail(ex);}
+		try {
+			xdef =
+"<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='a'>\n"+
+"  <a a=\"ydatetime('yyyy-MM-ddTHH:mm:ss[ZZ]', 'yyyy-MM-ddTHH:mm:ssZ');\"/>\n" +
+"</xd:def>";
+			props = new Properties();
+			props.setProperty(XDConstants.XDPROPERTY_DEFAULTZONE, "CET");
+			xp = XDFactory.compileXD(props, xdef);
+			xml = "<a a='2024-10-22T11:55:30'/>"; // zone NOT specified
+			xd = xp.createXDDocument();
+			assertEq("<a a=\"2024-10-22T11:55:30+02:00\"/>", xd.xparse(xml, null));
+			xml = "<a a='2024-10-22T11:55:30Europe/Prague'/>"; // zone specified
+			xd = xp.createXDDocument();
+			assertEq("<a a=\"2024-10-22T11:55:30+02:00\"/>", xd.xparse(xml, null));
+			xml = "<a a='2024-10-22T11:55:30-03:30'/>"; // zone specified
+			xd = xp.createXDDocument();
+			assertEq("<a a=\"2024-10-22T17:25:30+02:00\"/>", xd.xparse(xml, null));
+			xml = "<a a='2024-10-22T11:55:30GB'/>"; // zone specified
+			xd = xp.createXDDocument();
+			assertEq("<a a=\"2024-10-22T12:55:30+02:00\"/>", xd.xparse(xml, null));
+			xml = "<a a='2024-10-22T11:55:30Etc/GMT-14'/>"; // zone specified
+			xd = xp.createXDDocument();
+			assertEq("<a a=\"2024-10-21T23:55:30+02:00\"/>", xd.xparse(xml, null));
+			xml = "<a a='2024-10-22T11:55:30NZ'/>"; // zone specified
+			xd = xp.createXDDocument();
+			assertEq("<a a=\"2024-10-22T00:55:30+02:00\"/>", xd.xparse(xml, null));
+		} catch (RuntimeException ex) {fail(ex);}
 
 		clearTempDir(); // delete created temporary files
 		resetTester();
