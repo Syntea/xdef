@@ -735,25 +735,25 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 	}
 
 	/** Set time zone.
-	 * @param newZone TimeZone to be set.
+	 * @param newZone TimeZone or String with zone ID to be set.
 	 */
-	public final void setTZ(final TimeZone newZone) {
+	public final void setTZ(final Object newZone) {
+		TimeZone tz = newZone instanceof String ? TimeZone.getTimeZone((String) newZone) : (TimeZone) newZone;
 		synchronized(this) {
-			if (newZone == null) {
+			if (tz == null) {
 				_tz = null;
 				_calendar = null;
 				return;
 			}
 			if (_tz == null) {
-				_tz = newZone;
+				_tz = tz;
 				_calendar = null;
 				return;
 			}
-			if (!_tz.equals(newZone)) {
+			if (!_tz.equals(tz)) {
 				Calendar c = getCalendar();
-				c.get(Calendar.ZONE_OFFSET); // just update Calendar ???
-				c.setTimeZone(newZone);
-				c.get(Calendar.ZONE_OFFSET); // just update Calendar ???
+				c.get(Calendar.ZONE_OFFSET);//to update the calendar it is necessary to call the get method???
+				c.setTimeZone(tz);
 				setCalendar(c);
 			}
 		}
@@ -833,19 +833,6 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 	 * @return time zone ID or the empty string.
 	 */
 	public final String getTimeZoneID() {return _tz == null ? "" : _tz.getID();}
-
-	/** Set time zone ID.
-	 * @param id time zone ID.
-	 */
-	public final void setTimeZoneName(final String id) {
-		synchronized (this) {
-			if (_tz == null) {
-				_tz = TimeZone.getTimeZone("GMT");
-			}
-			_tz.setID(id);
-			_calendar = null;
-		}
-	}
 
 	/** Get a day of month which represents the last date of the month in this date.
 	 * @return day of month which represents the last date of the month.

@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.2.12, release-date 2024-11-08
+# Version 42.2.12, release-date 2024-11-10
 * Corrected bug in the method 'org.xdef.sys.SDatetime.setRawOffset(int)'
   and in the X-script method `setRawOffset(int)`.
 * Corrected bug in the method in the X-script method `setZoneName(String)`.
