@@ -26,7 +26,29 @@ import java.util.Map;
  * @author Vaclav Trojan
  */
 public class SUtils extends FUtils {
+	/** Length of line of encoded hex format and base64 format. */
+	private static final int ENCODED_LINE_LENGTH = 72;
+	/** length of input buffer in the line of base64 encoded data. */
+	private static final int INPUT_B64BUFFER_LENGTH = (ENCODED_LINE_LENGTH/4)*3;
+	/** Code table for values 0..63 for BASE64 encoding. */
+	private static final byte[] ENCODE_BASE64 = new byte[] {
+		'A','B','C','D','E','F','G','H','I','J','K','L','M', //0..12
+		'N','O','P','Q','R','S','T','U','V','W','X','Y','Z', //13..25
+		'a','b','c','d','e','f','g','h','i','j','k','l','m', //26..38
+		'n','o','p','q','r','s','t','u','v','w','x','y','z', //39..51
+		'0','1','2','3','4','5','6','7','8','9',             //52..61
+		'+','/'};                                            //62,63
+	/** Hexadecimal digits. */
+	private static final byte[] HEXDIGITS =
+		new byte[] {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
+	/** Cache to accelerate 2 letters/3 letter language methods.*/
+	private static final Map<String, Locale> LANGUAGES = new LinkedHashMap<>();
+	/** Cache to accelerate 2 letters/3 letter country methods.*/
+	private static final Map<String, Locale> COUNTRIES = new LinkedHashMap<>();
 
+////////////////////////////////////////////////////////////////////////////////
+// initialize static final variables
+////////////////////////////////////////////////////////////////////////////////
 	/** Version of Java VM as an integer composed from the string where
 	 * the version part is multiplied by 100 and subversion part is added.
 	 * E.g. "1.6" is converted to 106. The build version is ignored.
@@ -36,23 +58,6 @@ public class SUtils extends FUtils {
 	 * E.g. if version information is "1.6.0_45" it will be "0_45".
 	 */
 	public static final String JAVA_RUNTIME_BUILD;
-
-	/** Length of line of encoded hex format and base64 format. */
-	private static final int ENCODED_LINE_LENGTH = 72;
-	/** ength of input buffer in the line of hexadecimal encoded data. */
-	private static final int INPUT_HEXBUFFER_LENGTH = ENCODED_LINE_LENGTH/2;
-	/** Hexadecimal digits. */
-	private static final byte[] HEXDIGITS = new byte[] {
-		'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
-
-	/** Cache to accelerate 2 letters/3 letter language methods.*/
-	private static final Map<String, Locale> LANGUAGES = new LinkedHashMap<>();
-	/** Cache to accelerate 2 letters/3 letter country methods.*/
-	private static final Map<String, Locale> COUNTRIES = new LinkedHashMap<>();
-
-////////////////////////////////////////////////////////////////////////////////
-// initialize static variables
-////////////////////////////////////////////////////////////////////////////////
 	static {
 		String s;
 		try {
@@ -72,8 +77,7 @@ public class SUtils extends FUtils {
 			s = "1." + s;
 		}
 		String[] ss = s.split("\\.");
-		JAVA_RUNTIME_VERSION_ID = Integer.parseInt(ss[0]) * 100
-			+ Integer.parseInt(ss[1]);
+		JAVA_RUNTIME_VERSION_ID = Integer.parseInt(ss[0]) * 100 + Integer.parseInt(ss[1]);
 		s = "";
 		for (int i = 2; i < ss.length; i++) {
 			if (!s.isEmpty()) {
@@ -88,26 +92,20 @@ public class SUtils extends FUtils {
 // enconding/decoding of hexadecimal format
 ////////////////////////////////////////////////////////////////////////////////
 
-	/** Encodes a byte array to hexadecimal format, no blanks or line breaks
-	 * are inserted.
+	/** Encodes a byte array to hexadecimal format, no blanks or line breaks are inserted.
 	 * @param bytes The array of bytes to be encoded.
 	 * @return the array of hexadecimal digits.
 	 */
-	public static final byte[] encodeHex(final byte[] bytes) {
-		return encodeHex(bytes, 0, bytes.length);
-	}
+	public static final byte[] encodeHex(final byte[] bytes) {return encodeHex(bytes, 0, bytes.length);}
 
-	/** Encodes a byte array to hexadecimal format, no blanks or line breaks
-	 * are inserted.
+	/** Encodes a byte array to hexadecimal format, no blanks or line breaks are inserted.
 	 * @param bytes array of bytes to be encoded.
 	 * @param offset offset in the buffer of the first byte to encode.
 	 * @param length number of bytes to read from the buffer.
 	 * @return byte array with the encoded data to hexadecimal digits.
 	 * @throws SRuntimeException when an error occurs.
 	 */
-	public static final byte[] encodeHex(final byte[] bytes,
-		final int offset,
-		final int length) {
+	public static final byte[] encodeHex(final byte[] bytes, final int offset, final int length) {
 		if (offset + length > bytes.length) {
 			throw new SRuntimeException(SYS.SYS080); //Index out of array
 		}
@@ -163,25 +161,25 @@ public class SUtils extends FUtils {
 		return lx;
 	}
 
-	/** Encodes binary input byte stream <b>in</b> to the output text writer
-	 * <b>out</b> as a stream of hexadecimal digits.
+	/** Encodes binary input byte stream in to the output stream out as a stream of hexadecimal digits.
 	 * @param in InputStream with binary origin bytes.
 	 * @param out OutputStream where hexadecimal digits are written.
 	 * @throws SException when I/O error occurs.
 	 */
-	public static final void encodeHex(final InputStream in,
-		final OutputStream out) throws SException {
-		final byte[] ibuf = new byte[INPUT_HEXBUFFER_LENGTH];
+	public static final void encodeHex(final InputStream in, final OutputStream out) throws SException {
+		final int bufInLen = ENCODED_LINE_LENGTH/2; //Length of input buffer
+		final int bufOutLen = bufInLen; //Length of input buffer
+		final byte[] ibuf = new byte[bufInLen];
 		final byte[] obuf;
 		obuf = new byte[ENCODED_LINE_LENGTH];
 		int len;
 		try {
-			if ((len = in.read(ibuf)) == INPUT_HEXBUFFER_LENGTH) {
+			if ((len = in.read(ibuf)) == bufOutLen) {
 				for (;;) {
-					encodeHex(obuf, 0, ibuf, 0, INPUT_HEXBUFFER_LENGTH);
+					encodeHex(obuf, 0, ibuf, 0, bufOutLen);
 					if ((len = in.read(ibuf)) > 0) {
 						out.write(obuf);
-						if (len < INPUT_HEXBUFFER_LENGTH) {
+						if (len < bufOutLen) {
 							break;
 						}
 					} else {
@@ -205,19 +203,19 @@ public class SUtils extends FUtils {
 	 * @param out Writer where hexadecimal digits are written.
 	 * @throws SException when I/O error occurs.
 	 */
-	public static final void encodeHex(final InputStream in,
-		final Writer out) throws SException {
-		final byte[] ibuf = new byte[INPUT_HEXBUFFER_LENGTH];
+	public static final void encodeHex(final InputStream in, final Writer out) throws SException {
+		final int bufLen = ENCODED_LINE_LENGTH/2; //Length of input buffer
+		final byte[] ibuf = new byte[bufLen];
 		final char[] obuf;
 		obuf = new char[ENCODED_LINE_LENGTH];
 		int len;
 		try {
-			if ((len = in.read(ibuf)) == INPUT_HEXBUFFER_LENGTH) {
+			if ((len = in.read(ibuf)) == bufLen) {
 				for (;;) {
-					encodeHex(obuf, 0, ibuf, 0, INPUT_HEXBUFFER_LENGTH);
+					encodeHex(obuf, 0, ibuf, 0, bufLen);
 					if ((len = in.read(ibuf)) > 0) {
 						out.write(obuf);
-						if (len < INPUT_HEXBUFFER_LENGTH) {
+						if (len < bufLen) {
 							break;
 						}
 					} else {
@@ -231,8 +229,7 @@ public class SUtils extends FUtils {
 				out.write(obuf, 0, len);
 			}
 		} catch (IOException ex) {
-			//Program exception&{0}{: }
-			throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex));
+			throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex));//Program exception&{0}{: }
 		}
 	}
 
@@ -241,8 +238,7 @@ public class SUtils extends FUtils {
 	 * @param out decoded byte stream.
 	 * @throws SException SYS047 HEX format error.
 	 */
-	public static final void decodeHex(final InputStream in,
-		final OutputStream out) throws SException {
+	public static final void decodeHex(final InputStream in, final OutputStream out) throws SException {
 		try {
 			int i;
 			while ((i = in.read())==' ' || i=='\n' || i=='\r' || i=='\t') {}
@@ -265,8 +261,7 @@ public class SUtils extends FUtils {
 				}
 			}
 		} catch (IOException ex) {
-			//Program exception&{0}{: }
-			throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex));
+			throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex));//Program exception&{0}{: }
 		}
 	}
 
@@ -275,8 +270,7 @@ public class SUtils extends FUtils {
 	 * @param out decoded byte stream.
 	 * @throws SException SYS047 HEX format error.
 	 */
-	public static final void decodeHex(final Reader in,
-		final OutputStream out) throws SException {
+	public static final void decodeHex(final Reader in, final OutputStream out) throws SException {
 		try {
 			int i;
 			while ((i = in.read())==' ' || i=='\n' || i=='\r' || i=='\t') {}
@@ -302,8 +296,7 @@ public class SUtils extends FUtils {
 				}
 			}
 		} catch (IOException ex) {
-			//Program exception&{0}{: }
-			throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex));
+			throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex));//Program exception&{0}{: }
 		}
 	}
 
@@ -329,8 +322,7 @@ public class SUtils extends FUtils {
 		return out.toByteArray();
 	}
 
-	/** Decodes binary input HEX stream <b>fi</b> to the output stream
-	 * of bytes.
+	/** Decodes binary input HEX stream <b>fi</b> to the output stream of bytes.
 	 * @param src The string with hexadecimal data.
 	 * @return The byte array decoded from source.
 	 * @throws SException SYS047 HEX format error.
@@ -345,38 +337,22 @@ public class SUtils extends FUtils {
 // enconding/decoding of base64 format
 ////////////////////////////////////////////////////////////////////////////////
 
-	/** length of input buffer in the line of base64 encoded data. */
-	private static final int INPUT_B64BUFFER_LENGTH = (ENCODED_LINE_LENGTH/4)*3;
-	/** Code table for values 0..63 for BASE64 encoding. */
-	private static final byte[] ENCODE_BASE64 = new byte[] {
-		'A','B','C','D','E','F','G','H','I','J','K','L','M', //0..12
-		'N','O','P','Q','R','S','T','U','V','W','X','Y','Z', //13..25
-		'a','b','c','d','e','f','g','h','i','j','k','l','m', //26..38
-		'n','o','p','q','r','s','t','u','v','w','x','y','z', //39..51
-		'0','1','2','3','4','5','6','7','8','9',             //52..61
-		'+','/'};                                            //62,63
-
 	/** Encodes a byte array to Base64 format, no blanks or line breaks
 	 * are inserted.
 	 * @param bytes array of bytes to be encoded.
 	 * @return byte array with the Base64 encoded data.
 	 * @throws SRuntimeException when an error occurs.
 	 */
-	public static final byte[] encodeBase64(final byte[] bytes) {
-		return encodeBase64(bytes, 0, bytes.length);
-	}
+	public static final byte[] encodeBase64(final byte[] bytes) {return encodeBase64(bytes, 0, bytes.length);}
 
-	/** Encodes a byte array to Base64 format, no blanks or line breaks
-	 * are inserted.
+	/** Encodes a byte array to Base64 format, no blanks or line breaks are inserted.
 	 * @param bytes array of bytes to be encoded.
 	 * @param offset offset in the buffer of the first byte to encode.
 	 * @param length number of bytes to read from the buffer.
 	 * @return byte array with the Base64 encoded data.
 	 * @throws SRuntimeException when error occurs:
 	 */
-	public static final byte[] encodeBase64(final byte[] bytes,
-		final int offset,
-		final int length) {
+	public static final byte[] encodeBase64(final byte[] bytes, final int offset, final int length) {
 		if (offset + length > bytes.length) {
 			throw new SRuntimeException(SYS.SYS080); //Index out of array
 		}
@@ -386,8 +362,7 @@ public class SUtils extends FUtils {
 		return outbuf;
 	}
 
-	/** Encodes a byte array to byte array in the Base64 format, no blanks
-	 * or line breaks are inserted.
+	/** Encodes a byte array to byte array in the Base64 format, no blanks or line breaks are inserted.
 	 * @param outbuf output buffer where encoded data will be stored.
 	 * @param outoff offset to output buffer where to start.
 	 * @param inbuf input buffer with bytes to be encoded.
@@ -429,8 +404,7 @@ public class SUtils extends FUtils {
 		return lx;
 	}
 
-	/** Encodes a byte array to char array in the Base64 format, no blanks
-	 * or line breaks are inserted.
+	/** Encodes a byte array to char array in the Base64 format, no blanks or line breaks are inserted.
 	 * @param outbuf output buffer where encoded data will be stored.
 	 * @param outoff offset to output buffer where to start.
 	 * @param inbuf input buffer with bytes to be encoded.
@@ -464,8 +438,7 @@ public class SUtils extends FUtils {
 				outbuf[lx++] = '=';
 			} else {// two bytes
 				int b2 = inbuf[i] & 0xff;
-				outbuf[lx++] =
-					(char) ENCODE_BASE64[((b1 << 4) | (b2 >> 4)) & 0x3F];
+				outbuf[lx++] = (char) ENCODE_BASE64[((b1 << 4) | (b2 >> 4)) & 0x3F];
 				outbuf[lx++] = (char) ENCODE_BASE64[((b2 & 0xf) << 2)];
 			}
 			outbuf[lx++] = '=';
@@ -473,16 +446,14 @@ public class SUtils extends FUtils {
 		return lx;
 	}
 
-	/** Encodes binary input byte stream <b>in</b> to the output stream
-	 * <b>fo</b> in the form of MIME/BASE64.
+	/** Encodes binary input byte stream in to the output stream out in the form of MIME/BASE64.
 	 * @param in InputStream with binary origin bytes.
 	 * @param out OutputStream for encoded Base64 result.
 	 * @param lines if true the output is break to lines (72 bytes).
 	 * @throws SException when I/O error occurs.
 	 */
-	public static final void encodeBase64(final InputStream in,
-		final OutputStream out,
-		final boolean lines) throws SException {
+	public static final void encodeBase64(final InputStream in, final OutputStream out, final boolean lines)
+		throws SException {
 		byte[] ibuf = new byte[INPUT_B64BUFFER_LENGTH];
 		byte[] obuf;
 		if (lines) {
@@ -512,21 +483,18 @@ public class SUtils extends FUtils {
 				out.write(obuf, 0, len);
 			}
 		} catch (IOException ex) {
-			//Program exception&{0}{: }
-			throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex));
+			throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex));//Program exception&{0}{: }
 		}
 	}
 
-	/** Encodes binary input byte stream <b>in</b> to the output stream
-	 * <b>fo</b> in the form of MIME/BASE64.
+	/** Encodes binary input byte stream in to the writer out in the form of MIME/BASE64.
 	 * @param in InputStream with binary origin bytes.
 	 * @param out Writer for encoded Base64 resulting character stream.
 	 * @param lines if true the output is broken into lines (72 bytes).
 	 * @throws SException when I/O error occurs.
 	 */
-	public static final void encodeBase64(final InputStream in,
-		final Writer out,
-		final boolean lines) throws SException {
+	public static final void encodeBase64(final InputStream in, final Writer out, final boolean lines)
+		throws SException {
 		byte[] ibuf = new byte[INPUT_B64BUFFER_LENGTH];
 		char[] obuf;
 		if (lines) {
@@ -556,35 +524,30 @@ public class SUtils extends FUtils {
 				out.write(obuf, 0, len);
 			}
 		} catch (IOException ex) {
-			//Program exception&{0}{: }
-			throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex));
+			throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex));//Program exception&{0}{: }
 		}
 	}
 
-	/** Encodes binary input byte array to the output array in the form
-	 * of MIME/BASE64.
+	/** Encodes binary input byte array to the output array in the form of MIME/BASE64.
 	 * @param bytes array of bytes to be encoded.
 	 * @param lines if true the output is broken into lines (72 bytes).
 	 * @return string with encoded Base64.
 	 */
-	public static final byte[] encodeBase64(final byte[] bytes,
-		final boolean lines) {
+	public static final byte[] encodeBase64(final byte[] bytes, final boolean lines) {
 		if (lines) {
 			try {
 				ByteArrayOutputStream out = new ByteArrayOutputStream();
 				encodeBase64(new ByteArrayInputStream(bytes), out, lines);
 				return out.toByteArray();
 			} catch (Exception ex) {// never should happen
-				throw new SRuntimeException(//Program exception&{0}{: }
-					SYS.SYS036, STester.printThrowable(ex));
+				throw new SRuntimeException(SYS.SYS036,STester.printThrowable(ex));//Program exception&{0}{: }
 			}
 		} else {
 			return encodeBase64(bytes);
 		}
 	}
 
-	/** Encodes binary input byte array to the output array in the form
-	 * of MIME/BASE64.
+	/** Encodes binary input byte array to the output array in the form of MIME/BASE64.
 	 * @param bytes array of bytes to be encoded.
 	 * @param offset offset in the buffer of the first byte to encode.
 	 * @param len maximum number of bytes to read from the buffer.
@@ -598,12 +561,10 @@ public class SUtils extends FUtils {
 		if (lines) {
 			try {
 				ByteArrayOutputStream out = new ByteArrayOutputStream();
-				encodeBase64(
-					new ByteArrayInputStream(bytes, offset, len), out, lines);
+				encodeBase64(new ByteArrayInputStream(bytes, offset, len), out, lines);
 				return out.toByteArray();
-			} catch (Exception ex) {// never should happen
-				throw new SRuntimeException(//Program exception&{0}{: }
-					SYS.SYS036, STester.printThrowable(ex));
+			} catch (SException ex) {// never should happen
+				throw new SRuntimeException(SYS.SYS036,STester.printThrowable(ex));//Program exception&{0}{: }
 			}
 		} else {
 			return encodeBase64(bytes, offset, len);
@@ -674,8 +635,7 @@ public class SUtils extends FUtils {
 	 * <br>SYS036 .. Program exception: {msg}.
 	 * <br>SYS048 .. Base64 format error.
 	 */
-	public static final void decodeBase64(final SReader in,
-		final OutputStream out) throws SException {
+	public static final void decodeBase64(final SReader in, final OutputStream out) throws SException {
 		final int bufmax = 960; //must be multiple of 3!
 		int bx = 0;
 		byte[] buf = new byte[bufmax];
@@ -739,38 +699,34 @@ public class SUtils extends FUtils {
 				}
 			}
 		} catch (IOException ex) {
-			//Program exception&{0}{: }
-			throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex));
+			throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex));//Program exception&{0}{: }
 		}
 	}
 
-	/** Decodes binary input MIME/BASE64 stream <b>in</b> to the output stream
-	 * of bytes.
+	/** Decodes binary input MIME/BASE64 stream <b>in</b> to the output stream of bytes.
 	 * @param in java.io.Reader with Base64 character stream.
 	 * @param out Output stream for decoded byte stream.
 	 * @throws SException
 	 * <br>SYS036 .. Program exception: {msg}.
 	 * <br>SYS048 .. Base64 format error.
 	 */
-	public static final void decodeBase64(final InputStream in,
-		final OutputStream out) throws SException {
+	public static final void decodeBase64(final InputStream in, final OutputStream out) throws SException {
 		decodeBase64(new SReader() {
 			@Override
-			public int read() throws IOException {return in.read();}}, out);
+			public final int read() throws IOException {return in.read();}}, out);
 	}
 
 	/** Decodes input MIME/BASE64 Reader <b>in</b> to output stream.
 	 * @param in java.io.Reader with Base64 data.
-		 * @param out Output stream for decoded byte stream.
+	 * @param out Output stream for decoded byte stream.
 	 * @throws SException
 	 * <br>SYS036 .. Program exception {msg}.
 	 * <br>SYS048 .. Base64 format error.
 	 */
-	public static final void decodeBase64(final Reader in,
-		final OutputStream out) throws SException {
+	public static final void decodeBase64(final Reader in, final OutputStream out) throws SException {
 		decodeBase64(new SReader() {
 			@Override
-			public int read() throws IOException {return in.read();}}, out);
+			public final int read() throws IOException {return in.read();}}, out);
 	}
 
 	/** Decodes input MIME/BASE64 from SPaser <b>in</b> to the output stream.
@@ -780,11 +736,10 @@ public class SUtils extends FUtils {
 	 * <br>SYS036 .. Program exception: {msg}.
 	 * <br>SYS048 .. Base64 format error.
 	 */
-	public static final void decodeBase64(final SParser in,
-		final OutputStream out) throws SException {
+	public static final void decodeBase64(final SParser in, final OutputStream out) throws SException {
 		decodeBase64(new SReader() {
 			@Override
-			public int read() {return in.eos() ? -1 : in.peekChar();}}, out);
+			public final int read() {return in.eos() ? -1 : in.peekChar();}}, out);
 	}
 
 	/** Decodes input MIME/BASE64 from SPaser <b>in</b> to byte array.
@@ -841,11 +796,9 @@ public class SUtils extends FUtils {
 	 * If argument "length" is less or equal zero then returns the empty string.
 	 * @param length required length of result.
 	 * @param ch character used for creation of the result.
-	 * @return string of required length created from characters from
-	 * the argument "ch".
+	 * @return string of required length created from characters from the argument "ch".
 	 */
-	public static final String makeStringOfChars(final int length,
-		final char ch) {
+	public static final String makeStringOfChars(final int length, final char ch) {
 		if (length <= 0) {
 			return "";
 		}
@@ -860,9 +813,7 @@ public class SUtils extends FUtils {
 	 * @param replacement string which replaces the first key occurrence.
 	 * @return modified string.
 	 */
-	public static final String modifyFirst(final String source,
-		final String key,
-		final String replacement) {
+	public static final String modifyFirst(final String source, final String key, final String replacement) {
 		int ndx, keylen;
 		if (source == null ||
 			(keylen = key.length()) == 0 ||
@@ -876,23 +827,21 @@ public class SUtils extends FUtils {
 	/** Replace all occurrences of the key in the source by the value.
 	 * @param source string source.
 	 * @param key string to be replaced.
-	 * @param replacement replaces all key occurrences in the source.
+	 * @param rep replaces all key occurrences in the source.
 	 * @return modified string.
 	 */
-	public static final String modifyString(final String source,
-		final String key,
-		final String replacement) {
+	public static final String modifyString(final String source, final String key, final String rep) {
 		int pos, keylen, strlen;
 		if (source == null || (strlen = source.length()) == 0 ||
 			(keylen = key.length()) == 0 ||
 			(pos = source.indexOf(key)) < 0) {
 			return source;
 		}
-		StringBuilder result = pos == 0 ? new StringBuilder(replacement) :
-			new StringBuilder(source.substring(0, pos)).append(replacement);
+		StringBuilder result = pos == 0
+			? new StringBuilder(rep) : new StringBuilder(source.substring(0, pos)).append(rep);
 		int lastpos = pos += keylen;
 		while (lastpos < strlen && (pos = source.indexOf(key, lastpos)) > 0) {
-			result.append(source.substring(lastpos, pos)).append(replacement);
+			result.append(source.substring(lastpos, pos)).append(rep);
 			lastpos = pos += keylen;
 		}
 		if (lastpos < strlen) {
@@ -901,55 +850,49 @@ public class SUtils extends FUtils {
 		return result.toString();
 	}
 
-	/** Replace all occurrences of the argument "key" in the StringBuffer
-	 * by value from the argument "rep".
+	/** Replace all occurrences of the argument "key" in the StringBuffer by value from the argument "rep".
 	 * @param s StringBuffer with source data.
 	 * @param key string to be replaced.
-	 * @param replacement replaces all key occurrences in the source.
+	 * @param rep replaces all key occurrences in the source.
 	 */
-	public static final void modifyStringBuffer(final StringBuffer s,
-		final String key,
-		final String replacement) {
+	public static final void modifyStringBuffer(final StringBuffer s, final String key, final String rep) {
 		int keylen;
 		if ((keylen = key.length()) == 0) {
 			return;
 		}
-		int replen = replacement.length();
+		int replen = rep.length();
 		int ndx = s.indexOf(key); //java 1.4 and higher
 		if (ndx < 0) {
 			return;
 		}
 		do {
-			s.replace(ndx, ndx + keylen, replacement);
+			s.replace(ndx, ndx + keylen, rep);
 		} while ((ndx = s.indexOf(key, ndx + replen)) >= 0); //java 1.4, ...
 	}
 
-	/** Replace all occurrences of the argument "key" in the StringBuilder "s"
-	 * by value from the argument "rep".
+	/** Replace all occurrences of the argument "key" in the StringBuilder "s"* by value from argument "rep".
 	 * @param s StringBuilder with source data.
 	 * @param key string to be replaced.
-	 * @param replacement replaces all key occurrences in the source.
+	 * @param rep replaces all key occurrences in the source.
 	 */
-	public static final void modifyStringBuilder(final StringBuilder s,
-		final String key,
-		final String replacement) {
+	public static final void modifyStringBuilder(final StringBuilder s, final String key, final String rep) {
 		int keylen;
 		if ((keylen = key.length()) == 0) {
 			return;
 		}
-		int replen = replacement.length();
+		int replen = rep.length();
 		int ndx = s.indexOf(key); //java 1.4 and higher
 		if (ndx < 0) {
 			return;
 		}
 		do {
-			s.replace(ndx, ndx + keylen, replacement);
+			s.replace(ndx, ndx + keylen, rep);
 		} while ((ndx = s.indexOf(key, ndx + replen)) >= 0);
 	}
 
-	/**	Replace in the string from argument s all occurrences of characters in
-	 * the argument p by the character on the same position in the argument q.
-	 * If no character is on the position of q then this character is removed.
+	/**	Replace in the string from argument s all occurrences of characters in the argument p by the character
+	 * on the same position in the argument q. If no character is on the position of q then this character
+	 * is removed.
 	 * <p>Examples:
 	 * <br>translate(“bcr”,“abc”,”ABa”) returns “Bar”.
 	 * <br>translate("-abc-","ab-","BA") returns "BAc".
@@ -958,9 +901,7 @@ public class SUtils extends FUtils {
 	 * @param q string with characters which will be in the result.
 	 * @return translated string.
 	 */
-	public static final String translate(final String s,
-		final String p,
-		final String q) {
+	public static final String translate(final String s, final String p, final String q) {
 		if (s == null) {
 			return null;
 		}
@@ -979,24 +920,22 @@ public class SUtils extends FUtils {
 		return sb.toString();
 	}
 
-	/** Return trimmed string from argument and replace there all multiple
-	 * sequences of white spaces by one regular space character.
+	/** Return trimmed string from argument and replace there all multiple* sequences of white spaces
+	 * by one regular space character.
 	 * @param value input string.
 	 * @return trimmed string with multiple white spaces replaced by the
 	 * space character.
 	 */
-	public static final String trimAndRemoveMultipleWhiteSpaces(
-		final String value) {
+	public static final String trimAndRemoveMultipleWhiteSpaces(final String value) {
 		StringBuilder sb = new StringBuilder(value.trim());
 		int len = sb.length();
 		for (int i = 0; i < len; i++) {
 			char c;
 			// \t\n\r\f - space, tab, carriage-return, form-feed character
-			if ((c = sb.charAt(i)) <= ' ' && (c == ' ' || c == '\r' ||
-				c == '\n' || c == '\t' || c == '\f')) {
+			if ((c = sb.charAt(i)) <= ' ' && (c == ' ' || c == '\r' || c == '\n' || c == '\t' || c == '\f')) {
 				int j = i;
-				while (++j < len && ((c = sb.charAt(j)) <= ' ' && (c == ' ' ||
-					c == '\r' || c == '\n' || c == '\t' || c == '\f'))) {}
+				while (++j < len && ((c = sb.charAt(j)) <= ' '
+					&& (c == ' ' || c == '\r' || c == '\n' || c == '\t' || c == '\f'))) {}
 				if (j > i + 1) {
 					sb.replace(i, j, " ");
 					len -= j - i - 1;
@@ -1013,13 +952,11 @@ public class SUtils extends FUtils {
 ////////////////////////////////////////////////////////////////////////////////
 
 	/** Get ISO 639-2 (3 letters) language ID.
-	 * @param language The language code (ISO 639 3 letters) or
-	 * (ISO 639-2 3 letters).
+	 * @param language The language code (ISO 639 3 letters) or (ISO 639-2 3 letters).
 	 * @return the ISO 639-2 language ID (three letters).
 	 * @throws SRuntimeException code SYS018 if language code is not found.
 	 */
-	public static final String getISO2Language(final String language)
-	throws SRuntimeException {
+	public static final String getISO2Language(final String language) throws SRuntimeException {
 		String s = language.toLowerCase();
 		Locale loc = LANGUAGES.get(s);
 		if (loc != null) {
@@ -1041,18 +978,15 @@ public class SUtils extends FUtils {
 				}
 			}
 		}
-		//Unsupported language code: &{0}
-		throw new SRuntimeException(SYS.SYS018, language);
+		throw new SRuntimeException(SYS.SYS018, language); //Unsupported language code: &{0}
 	}
 
 	/** Get ISO 639-2 (3 letters) language ID.
-	 * @param language The language code (ISO 639 2 letters) or
-	 * (ISO 639-2 3 letters).
+	 * @param language The language code (ISO 639 2 letters) or (ISO 639-2 3 letters).
 	 * @return the ISO 639-2 language ID (three letters).
 	 * @throws SRuntimeException code SYS018 if language code is not found.
 	 */
-	public static final String getISO3Language(final String language)
-	throws SRuntimeException {
+	public static final String getISO3Language(final String language) throws SRuntimeException {
 		String s = language.toLowerCase();
 		Locale loc = LANGUAGES.get(s);
 		if (loc != null) {
@@ -1075,8 +1009,7 @@ public class SUtils extends FUtils {
 				return result;
 			}
 		} catch (Exception ex) {}
-		//Unsupported language code: &{0}
-		throw new SRuntimeException(SYS.SYS018, language);
+		throw new SRuntimeException(SYS.SYS018, language);//Unsupported language code: &{0}
 	}
 
 	/** Check if given argument is supported country code (2-letter).
@@ -1088,8 +1021,7 @@ public class SUtils extends FUtils {
 	}
 
 	/** Get ISO 3166-1 alpha-2 country code.
-	 * @param code The country code ISO 3166-1 alpha-2 or
-	 * ISO 3166-1 alpha-2-3 or display name.
+	 * @param code The country code ISO 3166-1 alpha-2 or ISO 3166-1 alpha-2-3 or display name.
 	 * @return ISO 3166-1 alpha-2 code (two letters).
 	 * @throws SRuntimeException code SYS018 if language code is not found.
 	 */
@@ -1106,13 +1038,11 @@ public class SUtils extends FUtils {
 				return country;
 			}
 		}
-		//Unsupported country code: &{0}
-		throw new SRuntimeException(SYS.SYS017, code);
+		throw new SRuntimeException(SYS.SYS017, code);//Unsupported country code: &{0}
 	}
 
 	/** Get ISO 3166-1 alpha-3 country code.
-	 * @param code The country code ISO 3166-1 alpha-2 or
-	 * ISO 3166-1 alpha-3 or display name.
+	 * @param code The country code ISO 3166-1 alpha-2 or ISO 3166-1 alpha-3 or display name.
 	 * @return ISO 3166-1 alpha-3 code (three letters).
 	 * @throws SRuntimeException code SYS018 if language code is not found.
 	 */
@@ -1137,8 +1067,7 @@ public class SUtils extends FUtils {
 				return country;
 			}
 		}
-		//Unsupported country code: &{0}
-		throw new SRuntimeException(SYS.SYS017, code);
+		throw new SRuntimeException(SYS.SYS017, code);//Unsupported country code: &{0}
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1151,8 +1080,7 @@ public class SUtils extends FUtils {
 	 * specification).
 	 * @return true if the class implements interface from argument.
 	 */
-	public static final boolean implementsInterface(final Class<?> clazz,
-		String interfaceName) {
+	public static final boolean implementsInterface(final Class<?> clazz, final String interfaceName) {
 		for (Class<?> x: clazz.getInterfaces()) {
 			if (x.getName().equals(interfaceName)
 				|| implementsInterface(x, interfaceName)) {
@@ -1167,11 +1095,9 @@ public class SUtils extends FUtils {
 	 * @param interfaceClass the class with an interface.
 	 * @return true if the class implements the interface from argument.
 	 */
-	public static final boolean implementsInterface(final Class<?> clazz,
-		Class<?> interfaceClass) {
+	public static final boolean implementsInterface(final Class<?> clazz, Class<?> interfaceClass) {
 		for (Class<?> x: clazz.getInterfaces()) {
-			if (x.getName().equals(interfaceClass.getName())
-				|| implementsInterface(x, interfaceClass)) {
+			if (x.getName().equals(interfaceClass.getName()) || implementsInterface(x, interfaceClass)) {
 				return true;
 			}
 		}
@@ -1184,7 +1110,7 @@ public class SUtils extends FUtils {
 	 * @return new instance of object.
 	 * @throws SRuntimeException if the constructor was not found in the class.
 	 */
-	public static final Object getNewInstance(String className, Object... pars){
+	public static final Object getNewInstance(final String className, final Object... pars) {
 		try {
 			Class<?> cls = Class.forName(className);
 			Class<?>[] paramTypes = new Class<?>[pars.length];
@@ -1195,8 +1121,7 @@ public class SUtils extends FUtils {
 			constructor.setAccessible(true);
 			return constructor.newInstance(pars);
 		} catch (Exception ex) {
-			//Constructor in the class &{0} not found
-			throw new SRuntimeException(SYS.SYS101, className);
+			throw new SRuntimeException(SYS.SYS101, className);//Constructor in the class &{0} not found
 		}
 	}
 
@@ -1207,13 +1132,12 @@ public class SUtils extends FUtils {
 	 * @throws SRuntimeException if the class or field was not found in
 	 * given class.
 	 */
-	public static final Object getObjectField(String className, String name) {
+	public static final Object getObjectField(final String className, final String name) {
 		Class<?> cls;
 		try {
 			cls = Class.forName(className);
 		} catch (Exception ex) {
-			//Class &{0} not found
-			throw new SRuntimeException(SYS.SYS102, className);
+			throw new SRuntimeException(SYS.SYS102, className);//Class &{0} not found
 		}
 		for (;;) {
 			try {
@@ -1226,8 +1150,7 @@ public class SUtils extends FUtils {
 				}
 			}
 		}
-		//Field &{0} not found in class &{1}
-		throw new SRuntimeException(SYS.SYS103, name, className);
+		throw new SRuntimeException(SYS.SYS103, name, className);//Field &{0} not found in class &{1}
 	}
 
 	/** Get value of the field of the class of an object.
@@ -1237,7 +1160,7 @@ public class SUtils extends FUtils {
 	 * @throws SRuntimeException if the field was not found in the object's
 	 * class.
 	 */
-	public static final Object getObjectField(Object o, String name) {
+	public static final Object getObjectField(final Object o, final String name) {
 		Class<?> cls = o.getClass();
 		for (;;) {
 			try {
@@ -1254,8 +1177,7 @@ public class SUtils extends FUtils {
 				}
 			}
 		}
-		//Field &{0} not found in class &{1}
-		throw new SRuntimeException(SYS.SYS103, name, cls.getName());
+		throw new SRuntimeException(SYS.SYS103, name, cls.getName());//Field &{0} not found in class &{1}
 	}
 
 	/** Set to the field of the class of an object.
@@ -1265,7 +1187,7 @@ public class SUtils extends FUtils {
 	 * @throws SRuntimeException if the field was not found in the object's
 	 * class or it is not accessible.
 	 */
-	public static final void setObjectField(Object o, String name, Object v) {
+	public static final void setObjectField(final Object o, final String name, final Object v) {
 		Class<?> cls = o.getClass();
 		for (;;) {
 			try {
@@ -1284,8 +1206,7 @@ public class SUtils extends FUtils {
 				}
 			}
 		}
-		//Field &{0} not found in class &{1}
-		throw new SRuntimeException(SYS.SYS103, name, cls.getName());
+		throw new SRuntimeException(SYS.SYS103, name, cls.getName());//Field &{0} not found in class &{1}
 	}
 
 	/** Invoke a getter on the object.
@@ -1294,7 +1215,7 @@ public class SUtils extends FUtils {
 	 * @return value of getter.
 	 * @throws SRuntimeException if the getter was not found.
 	 */
-	public static final Object getValueFromGetter(Object o, String name) {
+	public static final Object getValueFromGetter(final Object o, final String name) {
 		Class<?> cls = o.getClass();
 		for (;;) {
 			try {
@@ -1311,8 +1232,7 @@ public class SUtils extends FUtils {
 				}
 			}
 		}
-		//Getter &{0} not found in class &{1}
-		throw new SRuntimeException(SYS.SYS104, name, cls.getName());
+		throw new SRuntimeException(SYS.SYS104, name, cls.getName());//Getter &{0} not found in class &{1}
 	}
 
 	/** Invoke a setter on the object.
@@ -1322,7 +1242,7 @@ public class SUtils extends FUtils {
 	 * @throws SRuntimeException if the setter was not found or it is not
 	 * accessible.
 	 */
-	public static final void setValueToSetter(Object o, String name, Object v) {
+	public static final void setValueToSetter(final Object o, final String name, final Object v) {
 		Class<?> cls = o.getClass();
 		for (;;) {
 			for (Method m: cls.getDeclaredMethods()) {
@@ -1344,8 +1264,7 @@ public class SUtils extends FUtils {
 				break;
 			}
 		}
-		//SYS105=Setter &{0} not found in class &{1}
-		throw new SRuntimeException(SYS.SYS105, name, cls.getName());
+		throw new SRuntimeException(SYS.SYS105, name, cls.getName());//Setter &{0} not found in class &{1}
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1357,7 +1276,7 @@ public class SUtils extends FUtils {
 	private static final class PipedOutStream extends Thread {
 		private final BufferedReader _in;
 		private final PrintStream _out;
-		PipedOutStream(InputStream in, PrintStream out, boolean wait) {
+		PipedOutStream(final InputStream in, final PrintStream out, final boolean wait) {
 			_in = new BufferedReader(new InputStreamReader(in));
 			_out = out;
 			if (!wait) {
@@ -1380,28 +1299,21 @@ public class SUtils extends FUtils {
 		}
 	}
 
-	/** Executes the specified command and arguments in a separate process with
-	 * the specified environment and working directory.
-	 * If there is a security manager, its checkExec method is called with the
-	 * first component of the array cmdArray as its argument. This may result
-	 * in a security exception.
-	 * Given an array of strings cmdArray, representing the tokens of a command
-	 * line, and an array of strings envVars, representing "environment"
-	 * variable settings, this method creates a new process in which to execute
-	 * the specified command.
-	 * If envVars is null, the sub-process inherits the environment settings of
-	 * the current process.
-	 * The working directory of the new sub-process is specified by actDir. If
-	 * actDir is null, the sub-process inherits the current working directory
-	 * of the current process.
-	 * If out is null the output stream is printed to System.out, otherwise it
-	 * is written to given stream out.
-	 * If err is null the output stream is printed to System.err, otherwise it
-	 * is written to given stream err.
-	 * If stdIn is null the input stream passed to program is empty, otherwise
-	 * it is passed from the stream from the parameter.
-	 * If waitFlag is true the current thread waits until the executed
-	 * process has been terminated.
+	/** Executes the specified command and arguments in a separate process with the specified environment
+	 * and working directory.
+	 * If there is a security manager, its checkExec method is called with the first component of the array
+	 * cmdArray as its argument. This may result in a security exception.
+	 * Given an array of strings cmdArray, representing the tokens of a command line, and an array of strings
+	 * envVars, representing "environment" variable settings, this method creates a new process
+	 * in which to execute the specified command.
+	 * If envVars is null, the sub-process inherits the environment settings of the current process.
+	 * The working directory of the new sub-process is specified by actDir. If actDir is null, the sub-process
+	 * inherits the current working directory of the current process.
+	 * If out is null the output stream is printed to System.out, otherwise it is written to given stream out.
+	 * If err is null the output stream is printed to System.err, otherwise it is written to given stream err.
+	 * If stdIn is null the input stream passed to program is empty, otherwise it is passed from the stream
+	 * from the parameter.
+	 * If waitFlag is true the current thread waits until the executed process has been terminated.
 	 * @param command array containing a command and its arguments.
 	 * @param envVars array of strings, each element of which has environment
 	 * variable settings in format name=value.
@@ -1410,8 +1322,7 @@ public class SUtils extends FUtils {
 	 * @param stdOut output stream for standard output stream or null.
 	 * @param stdErr output stream for standard error stream or null.
 	 * @param stdIn input stream with standard input data or null.
-	 * @param waitFlag if true the current thread waits until
-	 * the executed process has been terminated.
+	 * @param waitFlag if true the current thread waits until the executed process has been terminated.
 	 * @return Process object for managing the executed sub-process.
 	 * @throws Exception if an error occurs.
 	 */
@@ -1426,14 +1337,14 @@ public class SUtils extends FUtils {
 		Process process = runtime.exec(command, envVars, actDir);
 		new PipedOutStream(process.getErrorStream(), stdErr, waitFlag).start();
 		new PipedOutStream(process.getInputStream(), stdOut, waitFlag).start();
-		OutputStream os = process.getOutputStream();  //piped input
-		if (stdIn != null) {//system input is specified
-			int i;
-			while ((i = stdIn.read()) >= 0) {
-				os.write(i);
+		try (OutputStream os = process.getOutputStream()) { //piped input
+			if (stdIn != null) {//system input is specified
+				int i;
+				while ((i = stdIn.read()) >= 0) {
+					os.write(i);
+				}
 			}
 		}
-		os.close();
 		if (waitFlag) {
 			process.waitFor();
 		}
@@ -1454,38 +1365,29 @@ public class SUtils extends FUtils {
 ////////////////////////////////////////////////////////////////////////////////
 
 	/** Get ISO 639-2 (3 letters) System language ID.
-	 * @deprecated please use
-	 * getISO3Language(System.getProperties().getProperty("user.language"))
+	 * @deprecated please use getISO3Language(System.getProperties().getProperty("user.language"))
 	 * @return ISO 639-2 (3 letters) language ID.
 	 * @throws SRuntimeException code SYS018 if language code is not found.
 	 */
 	public static final String getISO3Language() throws SRuntimeException {
-		return getISO3Language(
-			System.getProperties().getProperty("user.language"));
+		return getISO3Language(System.getProperties().getProperty("user.language"));
 	}
 
 	/** Get user name from System properties.
 	 * @deprecated please use System.getProperties().getProperty("user.name")
 	 * @return SYSTEM user name.
 	 */
-	public static final String getUserName() {
-		return System.getProperties().getProperty("user.name");
-	}
+	public static final String getUserName() {return System.getProperties().getProperty("user.name");}
 
 	/** Get system country id from System properties.
 	 * @deprecated please use System.getProperties().getProperty("user.country")
 	 * @return The country id.
 	 */
-	public static final String getCountry() {
-		return System.getProperties().getProperty("user.country");
-	}
+	public static final String getCountry() {return System.getProperties().getProperty("user.country");}
 
 	/** Get System language from System properties.
-	 * @deprecated please use
-	 * System.getProperties().getProperty("user.language")
+	 * @deprecated please use System.getProperties().getProperty("user.language")
 	 * @return language id.
 	 */
-	public static final String getLanguage() {
-		return System.getProperties().getProperty("user.language");
-	}
+	public static final String getLanguage() {return System.getProperties().getProperty("user.language");}
 }
