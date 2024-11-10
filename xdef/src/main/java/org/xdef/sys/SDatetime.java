@@ -2532,12 +2532,4 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 
 	@Override
 	public final TimeZone getTimeZone(final int defaultZoneoffset) {return _tz;}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//	@Deprecated
-//	/** Get the first day of the week is; e.g., SUNDAY in the U.S., MONDAY in France.
-//	 * This method is deprecated, will be removed in future versions.
-//	 * @return first day of the week (e.g., SUNDAY in the U.S., MONDAY in France).
-//	 */
-//	public final int getFirstDayOfWeek() {return getCalendar().getFirstDayOfWeek();}
 }
