@@ -1,5 +1,8 @@
 # Version ${version}, release-date ${release.date}
 
+# Version 42.2.13, release-date 2024-11-10
+* .
+
 # Version 42.2.12, release-date 2024-11-10
 * Corrected bug in the method 'org.xdef.sys.SDatetime.setRawOffset(int)'
   and in the X-script method `setRawOffset(int)`.
