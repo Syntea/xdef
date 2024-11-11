@@ -25,12 +25,12 @@ import static org.xdef.XDValueID.XD_DATETIME;
 /** Parser of X-Script "xdatetime" type.
  * @author Vaclav Trojan
  */
-public class XDParseXDatetime extends XSAbstractParseComparable {
+public class XDParseYDatetime extends XSAbstractParseComparable {
 	private static final String ROOTBASENAME = "xdatetime";
 	private String _format;
 	private String _outFormat;
 
-	public XDParseXDatetime() {super();}
+	public XDParseYDatetime() {super();}
 	@Override
 	public void initParams() {
 		super.initParams();
@@ -71,7 +71,7 @@ public class XDParseXDatetime extends XSAbstractParseComparable {
 			return;
 		}
 		SDatetime d = parser.getParsedSDatetime();
-		p.addReports((ArrayReporter) parser.getReportWriter());// add errors from parser
+		p.addReports((ArrayReporter) parser.getReportWriter()); // add errors from parser
 		p.setIndex(parser.getIndex());
 		String s = p.getParsedBufferPartFrom(pos);
 		p.isSpaces();
@@ -81,7 +81,7 @@ public class XDParseXDatetime extends XSAbstractParseComparable {
 			return; // an error occurs
 		}
 		TimeZone defaulttz;
-		if (d.getTZ() == null && xnode != null && (defaulttz = xnode.getDefaultZone()) != null) {
+		if (xnode!=null && (defaulttz = xnode.getDefaultZone()) !=null && !defaulttz.equals(d.getTZ())) {
 			d.setTZ(defaulttz);
 		}
 		if (_outFormat != null) {

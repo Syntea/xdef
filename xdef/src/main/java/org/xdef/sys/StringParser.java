@@ -994,9 +994,7 @@ public class StringParser extends SReporter implements SParser {
 	 * @param pos Starting position of the file.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	private void setSourceReader(final Reader reader, final long pos) {
-		setSourceReader(reader, pos, null);
-	}
+	private void setSourceReader(final Reader reader, final long pos) {setSourceReader(reader, pos, null);}
 
 	/** Set source reader with reader and initial buffer.
 	 * @param reader The reader.
@@ -1023,8 +1021,7 @@ public class StringParser extends SReporter implements SParser {
 			try {
 				_reader.skip(pos);
 			} catch (IOException ex) {
-				//Program exception&{0}{: }
-				throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex));
+				throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex));//Program exception&{0}{:}
 			}
 		}
 		setIndex(0);
@@ -1086,14 +1083,14 @@ public class StringParser extends SReporter implements SParser {
 				int count = 0;
 				while (len == 0) {//some streams may return length == 0 ???
 					if (count++ > 1000) {
-						//IO error detected on &{0}&{1}{, reason: }
-						throw new SIOException(SYS.SYS034, getSystemId(), "block length=0");
+						throw new SIOException(SYS.SYS034,//IO error detected on &{0}&{1}{, reason: }
+							getSystemId(), "block length=0");
 					}
 					try {
 						sleepwile();
 					} catch (InterruptedException ex) {
-						//IO error detected on &{0}&{1}{, reason: }
-						throw new SIOException(SYS.SYS034, getSystemId(), ex);
+						throw new SIOException(SYS.SYS034,//IO error detected on &{0}&{1}{, reason: }
+							getSystemId(), ex);
 					}
 					len = _reader.read(_cbuf);
 				}
@@ -1113,12 +1110,11 @@ public class StringParser extends SReporter implements SParser {
 			if ((remains = _endPos - getIndex()) > 0) {
 				setEndBuffer(remains + len);
 				if (len == _cbuf.length) {
-					setBuffer(new StringBuilder(_endPos).
-						append(getBuffer().substring(getIndex(), getIndex() + remains))
-						.append(_cbuf).toString());
+					setBuffer(new StringBuilder(_endPos).append(getBuffer()
+						.substring(getIndex(), getIndex() + remains)).append(_cbuf).toString());
 				} else {
-					setBuffer(new StringBuilder(_endPos).append(getBuffer().substring(getIndex(),
-						getIndex() + remains)).append(_cbuf, 0, len).toString());
+					setBuffer(new StringBuilder(_endPos).append(getBuffer()
+						.substring(getIndex(), getIndex() + remains)).append(_cbuf, 0, len).toString());
 				}
 			} else {
 				setBuffer(len == _cbuf.length ? new String(_cbuf) : new String(_cbuf, 0, len));
@@ -1126,11 +1122,9 @@ public class StringParser extends SReporter implements SParser {
 			setFilePos(getFilePos() + getIndex());
 			setIndex(0);
 			return true;
-		} catch (IOException ex) {
-			//this should never happen
+		} catch (IOException ex) { //this should never happen
 			closeReader();
-			//Program exception&{0}{: }
-			throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex));
+			throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex));//Program exception&{0}{: }
 		}
 	}
 	private void sleepwile() throws InterruptedException {Thread.sleep(5);}
@@ -1188,12 +1182,10 @@ public class StringParser extends SReporter implements SParser {
 					super.setIndex(pos); //restore bufffer position
 					break; // we have no more parsers.
 				}
-			} catch (IOException ex) {
+			} catch (IOException ex) {//this should never happen
 				setBuffer(sb.toString());
-				//this should never happen
 				closeReader();
-				//Program exception&{0}{: }
-				throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex));
+				throw new SRuntimeException(SYS.SYS036, STester.printThrowable(ex));//Program exception&{0}{:}
 			}
 		} while (n > _endPos);
 		setBuffer(sb.toString());
@@ -1261,9 +1253,7 @@ public class StringParser extends SReporter implements SParser {
 	/** Get size of internal parser stack.
 	 * @return size of internal parser stack.
 	 */
-	public final int getParserStackSize() {
-		return _parserStack == null ? 0 : _parserStack.size();
-	}
+	public final int getParserStackSize() {return _parserStack == null ? 0 : _parserStack.size();}
 
 	/** Save old parser and set new source buffer.
 	 * @param reader The reader.
@@ -1287,14 +1277,12 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	/** Save old parser and set new source buffer.
-	 * @param reader The reader.
-	 * @param sourceName Name of source (may be null).
-	 * @param savedObject a SParserSavedObject with saved parameters or null.
+	 * @param in The reader.
+	 * @param srcName Name of source (may be null).
+	 * @param obj SParserSavedObject with saved parameters or null.
 	*/
-	public final void pushSourceReader(final Reader reader,
-		final String sourceName,
-		final SParserSavedObject savedObject) {
-		pushSourceReader(reader, 0, null, sourceName, savedObject);
+	public final void pushSourceReader(final Reader in, final String srcName, final SParserSavedObject obj) {
+		pushSourceReader(in, 0, null, srcName, obj);
 	}
 
 	/** Set the parser to create detailed line positions. By default
@@ -1376,9 +1364,7 @@ public class StringParser extends SReporter implements SParser {
 	 * @param pos position of required character in the source buffer.
 	 * @return required character or <code>NOCHAR</code>.
 	 */
-	public final char getCharAtPos(int pos) {
-		return pos < _endPos ? _source.charAt(pos) : NOCHAR;
-	}
+	public final char getCharAtPos(int pos) {return pos < _endPos ? _source.charAt(pos) : NOCHAR;}
 
 	@Override
 	/** Set source buffer position.
@@ -1418,8 +1404,7 @@ public class StringParser extends SReporter implements SParser {
 		if (x > _endPos || filePos != getFilePos() ||
 			mySysId != null && !mySysId.equals(sysId) ||
 			mySysId == null && sysId != null) {
-			//"Can't set this buffer position for this parser&{0}{: }",
-			throw new SRuntimeException(SYS.SYS081, x);
+			throw new SRuntimeException(SYS.SYS081, x);//Can't set this buffer position for this parser&{0}{:}
 		}
 		setLineNumber(pos.getLineNumber());
 		setStartLine(pos.getStartLine());
@@ -1985,8 +1970,7 @@ public class StringParser extends SReporter implements SParser {
 	 */
 	public final void setSourceBuffer(final SBuffer source) {
 		super.setIndex(0);
-		_source = source.getString();
-		_endPos = _source.length();
+		_endPos = (_source = source.getString()).length();
 		setFilePos(source.getFilePos());
 		setLineNumber(source.getLineNumber());
 		setStartLine(source.getStartLine());
@@ -2002,29 +1986,24 @@ public class StringParser extends SReporter implements SParser {
 
 	/** Change source buffer and position info.
 	 * @param pos position where to make change.
-	 * @param length number of characters to be changed.
-	 * @param replacement string with the replacement data.
+	 * @param len number of characters to be changed.
+	 * @param replace string with the replacement data.
 	 * @param fixed if true one position will be used for whole range.
 	 */
-	public final void changeBuffer(final int pos,
-		final int length,
-		final String replacement,
-		final boolean fixed) {
-		int newLength = replacement == null ? 0 : replacement.length();
+	public final void changeBuffer(final int pos, final int len, final String replace, final boolean fixed) {
+		int newLength = replace == null ? 0 : replace.length();
 		if (newLength == 0) {
-			if (length > 0) { //delete
+			if (len > 0) { //delete
 				if (isLineInfoFlag()) {
-					updatePositions(pos, length, 0, fixed);
+					updatePositions(pos, len, 0, fixed);
 				}
-				_endPos = (_source = new StringBuilder(_source)
-					.delete(pos, pos + length).toString()).length();
+				_endPos = (_source=new StringBuilder(_source).delete(pos, pos + len).toString()).length();
 			}
 		} else {
 			if (isLineInfoFlag()) {
-				updatePositions(pos, length, newLength, fixed);
+				updatePositions(pos, len, newLength, fixed);
 			}
-			_endPos = (_source = new StringBuilder(_source)
-				.replace(pos, pos + length, replacement).toString()).length();
+			_endPos = (_source=new StringBuilder(_source).replace(pos,pos + len,replace).toString()).length();
 		}
 		setIndex(pos);
 	}
@@ -2035,8 +2014,7 @@ public class StringParser extends SReporter implements SParser {
 	 */
 	public final int getParsedInt() {
 		try {
-			return Integer.parseInt(_parsedString.charAt(0) == '+'
-				? _parsedString.substring(1):_parsedString);
+			return Integer.parseInt(_parsedString.charAt(0)=='+' ? _parsedString.substring(1):_parsedString);
 		} catch(NumberFormatException ex) {
 			throw new SRuntimeException(SYS.SYS072, ex); //Data error&{0}{: }
 		}
@@ -2048,8 +2026,7 @@ public class StringParser extends SReporter implements SParser {
 	 */
 	public final long getParsedLong() {
 		try {
-			return Long.parseLong(_parsedString.charAt(0) == '+'
-				? _parsedString.substring(1):_parsedString);
+			return Long.parseLong(_parsedString.charAt(0) == '+' ? _parsedString.substring(1):_parsedString);
 		} catch(NumberFormatException ex) {
 			throw new SRuntimeException(SYS.SYS072, ex);//Data error&{0}{: }
 		}
@@ -2061,8 +2038,7 @@ public class StringParser extends SReporter implements SParser {
 	 */
 	public final float getParsedFloat() throws SRuntimeException {
 		try {
-			return Float.parseFloat(_parsedString.charAt(0) == '+'
-				? _parsedString.substring(1) : _parsedString);
+			return Float.parseFloat(_parsedString.charAt(0)=='+' ? _parsedString.substring(1):_parsedString);
 		} catch(NumberFormatException ex) {
 			throw new SRuntimeException(SYS.SYS072, ex); //Data error&{0}{: }
 
@@ -2075,8 +2051,7 @@ public class StringParser extends SReporter implements SParser {
 	 */
 	public final double getParsedDouble() throws SRuntimeException {
 		try {
-			return Double.parseDouble(_parsedString.charAt(0) == '+'
-				? _parsedString.substring(1) : _parsedString);
+			return Double.parseDouble(_parsedString.charAt(0)=='+'? _parsedString.substring(1):_parsedString);
 		} catch(NumberFormatException ex) {
 			throw new SRuntimeException(SYS.SYS072, ex); //Data error&{0}{: }
 		}
@@ -2088,8 +2063,7 @@ public class StringParser extends SReporter implements SParser {
 	 */
 	public final BigInteger getParsedBigIteger() throws SRuntimeException {
 		try {
-			return new BigInteger(_parsedString.charAt(0) == '+'
-				? _parsedString.substring(1) : _parsedString);
+			return new BigInteger(_parsedString.charAt(0)=='+' ? _parsedString.substring(1) : _parsedString);
 		} catch(Exception ex) {
 			throw new SRuntimeException(SYS.SYS072, ex); //Data error&{0}{: }
 		}
@@ -2101,8 +2075,7 @@ public class StringParser extends SReporter implements SParser {
 	 */
 	public final BigDecimal getParsedDecimal() throws SRuntimeException {
 		try {
-			return new BigDecimal(_parsedString.charAt(0) == '+'
-				? _parsedString.substring(1) : _parsedString);
+			return new BigDecimal(_parsedString.charAt(0)=='+' ? _parsedString.substring(1) : _parsedString);
 		} catch(Exception ex) {
 			throw new SRuntimeException(SYS.SYS072, ex); //Data error&{0}{: }
 		}
@@ -2124,9 +2097,7 @@ public class StringParser extends SReporter implements SParser {
 	 * @param index index to source buffer.
 	 * @return character or <code>NOCHAR</code>.
 	 */
-	public final char charFromBuffer(final int index) {
-		return index < _endPos ? _source.charAt(index) : NOCHAR;
-	}
+	public final char charFromBuffer(final int index) {return index<_endPos ? _source.charAt(index) : NOCHAR;}
 
 	@Override
 	/** Parse white space.
@@ -2384,16 +2355,16 @@ public class StringParser extends SReporter implements SParser {
 	 * and time format.
 	 */
 	public final boolean isRFC822Datetime() {
-		return isDatetime("[EEE, ]d MMM yyyy HH:mm[:ss][ ZZZZZ][ (z)]"
-			+ "|[EEE, ]d MMM YY HH:mm[:ss][ ZZZZZ][ (z)]");
+		return isDatetime(
+			"[EEE, ]d MMM yyyy HH:mm[:ss][ ZZZZZ][ (z)]|[EEE, ]d MMM YY HH:mm[:ss][ ZZZZZ][ (z)]");
 	}
 
 	/** Parse date in the printable form.
 	 * @return true if date on current position is in printable form.
 	 */
 	public final boolean isPrintableDatetime() {
-		return isDatetime("[EEE ]MMM d HH:mm[:ss[.S]][ ZZZZZ] y"
-			+ "|{L(*)}[EEE ]MMM d HH:mm[:ss[.S]][ ZZZZZ] y");
+		return isDatetime(
+			"[EEE ]MMM d HH:mm[:ss[.S]][ ZZZZZ] y|{L(*)}[EEE ]MMM d HH:mm[:ss[.S]][ ZZZZZ] y");
 	}
 
 	/** Parse date in ISO8601 date or date and time (see
@@ -2729,31 +2700,15 @@ public class StringParser extends SReporter implements SParser {
 						continue;
 					}
 					switch (i) {
-						case 1:
-							myDate._weekDay = Calendar.MONDAY;
-							break;
-						case 2:
-							myDate._weekDay = Calendar.TUESDAY;
-							break;
-						case 3:
-							myDate._weekDay = Calendar.WEDNESDAY;
-							break;
-						case 4:
-							myDate._weekDay = Calendar.THURSDAY;
-							break;
-						case 5:
-							myDate._weekDay = Calendar.FRIDAY;
-							break;
-						case 6:
-							myDate._weekDay = Calendar.SATURDAY;
-							break;
-						case 7:
-							myDate._weekDay = Calendar.SUNDAY;
-							break;
-						default:
-							failVariant = true;
-							continue;
+						case 1: myDate._weekDay = Calendar.MONDAY; continue;
+						case 2: myDate._weekDay = Calendar.TUESDAY; continue;
+						case 3: myDate._weekDay = Calendar.WEDNESDAY; continue;
+						case 4: myDate._weekDay = Calendar.THURSDAY; continue;
+						case 5: myDate._weekDay = Calendar.FRIDAY; continue;
+						case 6: myDate._weekDay = Calendar.SATURDAY; continue;
+						case 7: myDate._weekDay = Calendar.SUNDAY; continue;
 					}
+					failVariant = true;
 					continue;
 				case 'K': //hour 0..11
 				case 'k': //hour in day (1..24)
@@ -2797,8 +2752,7 @@ public class StringParser extends SReporter implements SParser {
 				case 'y': //year
 					if (n == 3) {
 						freeBuffer();
-						//Datetime mask: incorrect year
-						// specification&{0}{, position: }
+						//Datetime mask: incorrect year specification&{0}{, position: }
 						throw new SRuntimeException(SYS.SYS059, fpos-3);
 					}
 					int sign = 1;
@@ -2934,11 +2888,7 @@ public class StringParser extends SReporter implements SParser {
 									if (_ch != pat) {
 										foundChar = false;
 									} else {
-										if (incIndex() < _endPos) {
-											_ch = _source.charAt(getIndex());
-										} else {
-											_ch = NOCHAR;
-										}
+										_ch = incIndex() < _endPos ? _source.charAt(getIndex()) : NOCHAR;
 									}
 								} while (--n > 0);
 							}
@@ -2959,11 +2909,7 @@ public class StringParser extends SReporter implements SParser {
 						if (_ch != pat) {
 							failVariant = true;
 						} else {
-							if (incIndex() < _endPos) {
-								_ch = _source.charAt(getIndex());
-							} else {
-								_ch = NOCHAR;
-							}
+							_ch = incIndex() < _endPos ? _source.charAt(getIndex()) : NOCHAR;
 						}
 					} while (--n > 0);
 					continue;
@@ -3084,6 +3030,24 @@ public class StringParser extends SReporter implements SParser {
 					newPos = getIndex() + ndx;
 					zoneOffsetSpec = true;
 				}
+			} else if (n==2 && pat == 'Z') { // zz -> try TO FIND zone id
+				String id = null;
+				TimeZone tz = null;
+				int pos = getIndex(); // position
+				for (String t : TimeZone.getAvailableIDs()) { // find zone id
+					TimeZone x = TimeZone.getTimeZone(t);
+					t = x.getID();
+					if ((id == null || t.length() > id.length()) && isToken(t)) {
+						id = t; // zone id found.
+						tz = x; // save TimeZone
+						setIndex(pos); // reset position for next test
+					}
+				}
+				if (id == null) {
+					return null; //zone name not found
+				}
+				isToken(id);
+				return tz;
 			} else {
 				return null; //not parsed
 			}
@@ -3189,8 +3153,7 @@ public class StringParser extends SReporter implements SParser {
 				throw new SRuntimeException(SYS.SYS056); //Icorrect format of time period
 			}
 			if (!isChar('/')) {
-				//Icorrect format of time period
-				throw new SRuntimeException(SYS.SYS056);
+				throw new SRuntimeException(SYS.SYS056); //Icorrect format of time period
 			}
 		}
 		if (isISO8601Datetime()) {
@@ -3270,36 +3233,30 @@ public class StringParser extends SReporter implements SParser {
 					switch (c) {
 						case 'Y':
 							if (years) {
-								//Icorrect format of time period
-								throw new SRuntimeException(SYS.SYS056);
+								throw new SRuntimeException(SYS.SYS056);//Icorrect format of time period
 							}
 							if (months || weeks || days) {
-								//Icorrect format of time period
-								throw new SRuntimeException(SYS.SYS056);
+								throw new SRuntimeException(SYS.SYS056);//Icorrect format of time period
 							}
 							years = true;
 							_parsedDuration.setYears(getParsedInt());
 							break;
 						case 'M':
 							if (months) {
-								//Icorrect format of time period
-								throw new SRuntimeException(SYS.SYS056);
+								throw new SRuntimeException(SYS.SYS056);//Icorrect format of time period
 							}
 							if (weeks || days) {
-								//Icorrect format of time period
-								throw new SRuntimeException(SYS.SYS056);
+								throw new SRuntimeException(SYS.SYS056);//Icorrect format of time period
 							}
 							months = true;
 							_parsedDuration.setMonths(getParsedInt());
 							break;
 						case 'W':
 							if (weeks) {
-								//Icorrect format of time period
-								throw new SRuntimeException(SYS.SYS056);
+								throw new SRuntimeException(SYS.SYS056);//Icorrect format of time period
 							}
 							if (days) {
-								//Icorrect format of time period
-								throw new SRuntimeException(SYS.SYS056);
+								throw new SRuntimeException(SYS.SYS056);//Icorrect format of time period
 							}
 							weeks = true;
 							iweeks = getParsedInt();
@@ -3307,8 +3264,7 @@ public class StringParser extends SReporter implements SParser {
 						default:
 							//if(c == 'D') {
 							if (days) {
-								//Icorrect format of time period
-								throw new SRuntimeException(SYS.SYS056);
+								throw new SRuntimeException(SYS.SYS056);//Icorrect format of time period
 							}
 							days = true;
 							_parsedDuration.setDays(getParsedInt());
@@ -3346,42 +3302,39 @@ public class StringParser extends SReporter implements SParser {
 					switch (c) {
 						case 'H':
 							if (hours) {
-								//Icorrect format of time period
-								throw new SRuntimeException(SYS.SYS056);
+								throw new SRuntimeException(SYS.SYS056);//Icorrect format of time period
 							}
 							hours = true;
 							if (minutes || seconds || millis) {
-								//Icorrect format of time period
-								throw new SRuntimeException(SYS.SYS056);
-							}	_parsedDuration.setHours(getParsedInt());
+								throw new SRuntimeException(SYS.SYS056);//Icorrect format of time period
+							}
+							_parsedDuration.setHours(getParsedInt());
 							break;
 						case 'M':
 							if (minutes) {
-								//Icorrect format of time period
-								throw new SRuntimeException(SYS.SYS056);
+								throw new SRuntimeException(SYS.SYS056);//Icorrect format of time period
 							}
 							minutes = true;
 							if (seconds || millis) {
-								//Icorrect format of time period
-								throw new SRuntimeException(SYS.SYS056);
-							}	_parsedDuration.setMinutes(getParsedInt());
+								throw new SRuntimeException(SYS.SYS056);//Icorrect format of time period
+							}
+							_parsedDuration.setMinutes(getParsedInt());
 							break;
 						case 'S':
 							if (seconds) {
-								//Icorrect format of time period
-								throw new SRuntimeException(SYS.SYS056);
+								throw new SRuntimeException(SYS.SYS056);//Icorrect format of time period
 							}
 							seconds = true;
 							if (millis) {
-								//Icorrect format of time period
-								throw new SRuntimeException(SYS.SYS056);
-							}	_parsedDuration.setSeconds(getParsedInt());
+								throw new SRuntimeException(SYS.SYS056);//Icorrect format of time period
+							}
+							_parsedDuration.setSeconds(getParsedInt());
 							break;
 						case '.':
 							if (seconds || millis) {
-								//Icorrect format of time period
-								throw new SRuntimeException(SYS.SYS056);
-							}	seconds = true;
+								throw new SRuntimeException(SYS.SYS056);//Icorrect format of time period
+							}
+							seconds = true;
 							millis = true;
 							_parsedDuration.setSeconds(getParsedInt());
 							double fraction =  0.0;
@@ -3394,12 +3347,10 @@ public class StringParser extends SReporter implements SParser {
 								_parsedDuration.setFraction(fraction);
 							}
 							if (exp == 1.0) {//no digits after '.'
-								//Icorrect format of time period
-								throw new SRuntimeException(SYS.SYS056);
+								throw new SRuntimeException(SYS.SYS056);//Icorrect format of time period
 							}
 							if (!isChar('S')) {
-								//Icorrect format of time period
-								throw new SRuntimeException(SYS.SYS056);
+								throw new SRuntimeException(SYS.SYS056);//Icorrect format of time period
 							}
 							break;
 						default:
@@ -3462,14 +3413,12 @@ public class StringParser extends SReporter implements SParser {
 						}
 						char c;
 						if ((c = isOneOfChars("\t\n\r |;!@#$%^&(=[]{}\"'?><\\")) != NOCHAR) {
-							//Datetime mask: incorrect control
-							//character&{0}{: '}{'}&{1}{, position: }
+							//Datetime mask: incorrect control character&{0}{: '}{'}&{1}{, position: }
 							return Report.error(SYS.SYS063, c, getIndex());
 						}
 						if (isChar(',')) {
 							if (ch == 'z') {
-								//Datetime mask: incorrect control
-								//character&{0}{: '}{'}&{1}{, position: }
+								//Datetime mask: incorrect control character&{0}{: '}{'}&{1}{, position: }
 								return Report.error(SYS.SYS063, null, start);
 							}
 							if(i == 2) {
@@ -3483,24 +3432,16 @@ public class StringParser extends SReporter implements SParser {
 									p2 = s;
 								}
 							} else {
-								//Datetime mask: incorrect control
-								//character&{0}{: '}{'}&{1}{, position: }
+								//Datetime mask: incorrect control character&{0}{: '}{'}&{1}{, position: }
 								return Report.error(SYS.SYS063,null,getIndex());
 							}
 							start = getIndex();
 						} else if (isChar(')')) {
 							switch (i) {
-								case 2:
-									p3 = _source.substring(start, getIndex()-1);
-									break;
-								case 1:
-									p2 = _source.substring(start, getIndex()-1);
-									break;
-								case 0:
-									p1 = _source.substring(start, getIndex()-1);
-									break;
-								default:
-									break;
+								case 2: p3 = _source.substring(start, getIndex()-1); break;
+								case 1: p2 = _source.substring(start, getIndex()-1); break;
+								case 0: p1 = _source.substring(start, getIndex()-1); break;
+								default: break;
 							}
 							if (ch == 'z') {
 								TimeZone tz;
@@ -3527,8 +3468,8 @@ public class StringParser extends SReporter implements SParser {
 									return Report.error(SYS.SYS067, p2,
 										(i==2 ? start-p2.length() : start));
 								}
-								_parsedDatetime.setLocaleFormatSymbols(new DateFormatSymbols(
-									new Locale(p1,p2,p3)));
+								_parsedDatetime.setLocaleFormatSymbols(
+									new DateFormatSymbols(new Locale(p1,p2,p3)));
 							}
 							break;
 						} else {
@@ -3558,8 +3499,7 @@ public class StringParser extends SReporter implements SParser {
 					try {
 						if (!isDatetime(s) || !_parsedDatetime.chkDatetime()) {
 							//Datetime mask: incorrect initial value{0}{: '}{'}&{1}{, position: }
-							return Report.error(SYS.SYS062,
-								_source.substring(start, getIndex()), start);
+							return Report.error(SYS.SYS062, _source.substring(start, getIndex()), start);
 						}
 					} catch (SRuntimeException ex) {
 						//Datetime mask: incorrect initial value{0}{: '}{'}&{1}{, position: }
@@ -3567,30 +3507,14 @@ public class StringParser extends SReporter implements SParser {
 					}
 					switch (ch) {
 						case 'Y': //year ISO
-						case 'y': //year
-							parsedDatetime._year = _parsedDatetime._year;
-							break;
-						case 'M': //month in year
-							parsedDatetime._month = _parsedDatetime._month;
-							break;
-						case 'd': //day in month
-							parsedDatetime._day = _parsedDatetime._day;
-							break;
-						case 'H': //hour in day (0..23)
-							parsedDatetime._hour = _parsedDatetime._hour;
-							break;
-						case 'm': //minute
-							parsedDatetime._minute = _parsedDatetime._minute;
-							break;
-						case 's': //second
-							parsedDatetime._second = _parsedDatetime._second;
-							break;
-						case 'S': //millisecond
-							parsedDatetime._fraction =_parsedDatetime._fraction;
-							break;
-						case 'Z': //RFC822 zone (-0800)
-							parsedDatetime._tz = _parsedDatetime._tz;
-							break;
+						case 'y': parsedDatetime._year = _parsedDatetime._year; break;
+						case 'M': parsedDatetime._month = _parsedDatetime._month; break;
+						case 'd': parsedDatetime._day = _parsedDatetime._day; break;
+						case 'H': parsedDatetime._hour = _parsedDatetime._hour; break;
+						case 'm': parsedDatetime._minute = _parsedDatetime._minute; break;
+						case 's': parsedDatetime._second = _parsedDatetime._second; break;
+						case 'S': parsedDatetime._fraction =_parsedDatetime._fraction; break; //millisecond
+						case 'Z': parsedDatetime._tz = _parsedDatetime._tz; //RFC822 zone (-0800)
 					}
 					_parsedDatetime = parsedDatetime;
 					continue;
@@ -3617,8 +3541,7 @@ public class StringParser extends SReporter implements SParser {
 				nextChar();
 			}
 		}
-		//Datetime mask: unclosed quoted literal &{0}{, position: }
-		return Report.error(SYS.SYS049, pos + 1);
+		return Report.error(SYS.SYS049, pos + 1);//Datetime mask: unclosed quoted literal &{0}{, position: }
 	}
 
 	/** Check executable part of mask.
@@ -3632,8 +3555,7 @@ public class StringParser extends SReporter implements SParser {
 		Report r;
 		for(;;) {
 			switch (_ch) {
-				case NOCHAR:
-					return null;
+				case NOCHAR: return null;
 				case '|':
 					nextChar();
 					if (isChar('{')) {
@@ -3653,11 +3575,9 @@ public class StringParser extends SReporter implements SParser {
 					continue;
 				case '{':
 				case '}':
-					//Datetime mask:  format: incorrect control character
-					//&{0}{: '}{'}&{1}{, position: }
+					//Datetime mask:  format: incorrect control character&{0}{: '}{'}&{1}{, position: }
 					return Report.error(SYS.SYS063, _ch, getIndex());
-				case ']':
-					return null;
+				case ']': return null;
 				case 'D': //day in year
 				case 'F': //day of week in month
 				case 'w': //week in year
@@ -4543,8 +4463,7 @@ public class StringParser extends SReporter implements SParser {
 			if (_weekInYear >= 0 && getCalendar().get(Calendar.WEEK_OF_YEAR) != _weekInYear) {
 				return false;
 			}
-			return _weekInMonth < 0
-				|| getCalendar().get(Calendar.WEEK_OF_MONTH) == _weekInYear;
+			return _weekInMonth < 0 || getCalendar().get(Calendar.WEEK_OF_MONTH) == _weekInYear;
 		}
 	}
 

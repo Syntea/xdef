@@ -4,6 +4,7 @@ import org.xdef.msg.XDEF;
 import org.xdef.sys.Report;
 import org.xdef.sys.SIllegalArgumentException;
 import org.xdef.XDParseResult;
+import static org.xdef.XDParser.WS_COLLAPSE;
 import org.xdef.XDValue;
 import org.xdef.proc.XXNode;
 import org.xdef.sys.SDatetime;
@@ -47,37 +48,29 @@ public abstract class XSAbstractParseComparable extends XSAbstractParser {
 		if (p.matches()) {
 			XDValue val = p.getParsedValue();
 			try {
-				if (_minIncl != null && _minIncl.compareTo(val) > 0 ||
-					_minExcl != null && _minExcl.compareTo(val) >= 0) {
-					//Value of '&{0}' doesn't fit to '&{1}'&{2}{: }
-					p.error(XDEF.XDEF813, parserName(),
-						"min" +(_minIncl != null ? "Inclusive" : "Exclusive"),
-						p.getParsedString());
+				if (_minIncl != null && _minIncl.compareTo(val) > 0
+					|| _minExcl != null && _minExcl.compareTo(val) >= 0) {
+					p.error(XDEF.XDEF813,//Value of '&{0}' doesn't fit to '&{1}'&{2}{: }
+						parserName(),"min" +(_minIncl!=null ? "Inclusive" : "Exclusive"),p.getParsedString());
 					return;
 				}
 			} catch (SIllegalArgumentException ex) {
-				//Value of '&{0}' doesn't fit to '&{1}'&{2}{: }
-				p.error(XDEF.XDEF813, parserName(),
-					"min" + (_minIncl != null ? "Inclusive" : "Exclusive"),
-					p.getParsedString());
+				p.error(XDEF.XDEF813,//Value of '&{0}' doesn't fit to '&{1}'&{2}{: }
+					parserName(), "min" + (_minIncl!=null ? "Inclusive" : "Exclusive"), p.getParsedString());
 				Report r = ex.getReport();
 				p.error(r.getMsgID(), r.getText(), r.getModification());
 				return;
 			}
 			try {
-				if (_maxIncl != null && _maxIncl.compareTo(val) < 0 ||
-					_maxExcl != null && _maxExcl.compareTo(val) <= 0) {
-					//Value of '&{0}' doesn't fit to '&{1}'&{2}{: }
-					p.error(XDEF.XDEF813, parserName(),
-						"max" + (_maxIncl != null ? "Inclusive" : "Exclusive"),
-						p.getParsedString());
+				if (_maxIncl != null && _maxIncl.compareTo(val) < 0
+					|| _maxExcl != null && _maxExcl.compareTo(val) <= 0) {
+					p.error(XDEF.XDEF813,//Value of '&{0}' doesn't fit to '&{1}'&{2}{: }
+						parserName(),"max" +(_maxIncl!=null ? "Inclusive" : "Exclusive"),p.getParsedString());
 					return;
 				}
 			} catch (SIllegalArgumentException ex) {
-				//Value of '&{0}' doesn't fit to '&{1}'&{2}{: }
-				p.error(XDEF.XDEF813, parserName(),
-					"max" + (_maxIncl != null ? "Inclusive" : "Exclusive"),
-					p.getParsedString());
+				p.error(XDEF.XDEF813,//Value of '&{0}' doesn't fit to '&{1}'&{2}{: }
+					parserName(), "max" + (_maxIncl!=null ? "Inclusive" : "Exclusive"), p.getParsedString());
 				Report r = ex.getReport();
 				p.error(r.getMsgID(), r.getText(), r.getModification());
 				return;
@@ -96,17 +89,23 @@ public abstract class XSAbstractParseComparable extends XSAbstractParser {
 			return;
 		}
 		SDatetime d = (SDatetime) p.getParsedValue().getObject();
+		if (_whiteSpace == 'c') {
+			p.isSpaces();
+		}
+		if (!p.eos()) {
+			//After the item '&{0}' follows an illegal character&{1}{: }
+			p.errorWithString(XDEF.XDEF804, parserName());
+			return;
+		}
 		if (!d.chkDatetime()) {
-			//Incorrect value of '&{0}'&{1}{: }
-			p.errorWithString(XDEF.XDEF809, parserName());
+			p.errorWithString(XDEF.XDEF809, parserName());//Incorrect value of '&{0}'&{1}{: }
 			return;
 		}
 		if (_minIncl==null&&_minExcl==null&&_maxIncl==null&&_maxExcl==null) {
 			if (xnode!=null) { // no min, max and xnode != null
 				if (!xnode.getXDDocument().isLegalDate(d)) {
-					//Range of values of year of date must be from &{0} to &{1}'
-					p.error(XDEF.XDEF818, xnode.getXDDocument().getMinYear(),
-						xnode.getXDDocument().getMaxYear());
+					p.error(XDEF.XDEF818,//Range of values of year of date must be from &{0} to &{1}'
+						xnode.getXDDocument().getMinYear(),xnode.getXDDocument().getMaxYear());
 					return;
 				}
 			}
@@ -133,21 +132,13 @@ public abstract class XSAbstractParseComparable extends XSAbstractParser {
 	@Override
 	public XDValue[] getEnumeration() {return _enumeration;}
 	@Override
-	public final void setMinExclusive(final XDValue x) {
-		checkValue(_minExcl = iObject(null, x));
-	}
+	public final void setMinExclusive(final XDValue x) {checkValue(_minExcl = iObject(null, x));}
 	@Override
-	public final void setMaxExclusive(final XDValue x) {
-		checkValue(_maxExcl = iObject(null, x));
-	}
+	public final void setMaxExclusive(final XDValue x) {checkValue(_maxExcl = iObject(null, x));}
 	@Override
-	public final void setMinInclusive(final XDValue x) {
-		checkValue(_minIncl = iObject(null, x));
-	}
+	public final void setMinInclusive(final XDValue x) {checkValue(_minIncl = iObject(null, x));}
 	@Override
-	public final void setMaxInclusive(final XDValue x) {
-		checkValue(_maxIncl = iObject(null, x));
-	}
+	public final void setMaxInclusive(final XDValue x) {checkValue(_maxIncl = iObject(null, x));}
 	@Override
 	public final void setEnumeration(final Object[] o) {
 		_enumeration = null;

@@ -23,7 +23,9 @@ import org.xdef.sys.StringParser;
  */
 public class XSParseDatetime extends XSAbstractParseComparable {
 	private static final String ROOTBASENAME = "dateTime";
+
 	public XSParseDatetime() {super();}
+
 	@Override
 	public int getLegalKeys() {
 		return PATTERN +
@@ -44,6 +46,7 @@ public class XSParseDatetime extends XSAbstractParseComparable {
 			BASE +
 			0;
 	}
+
 	@Override
 	public void parseObject(final XXNode xnode, final XDParseResult p){
 		int pos0 = p.getIndex();
@@ -51,16 +54,13 @@ public class XSParseDatetime extends XSAbstractParseComparable {
 		int pos = p.getIndex();
 		StringParser parser = new StringParser(p.getSourceBuffer(), pos);
 		if (!parse(parser)) {
-			//Incorrect value of '&{0}'&{1}{: }
-			p.errorWithString(XDEF.XDEF809, parserName());
+			p.errorWithString(XDEF.XDEF809, parserName());//Incorrect value of '&{0}'&{1}{: }
 			return;
 		}
 		SDatetime d = parser.getParsedSDatetime();
-		if (xnode != null) {
-			TimeZone defaulttz;
-			if (d.getTZ() == null && (defaulttz=xnode.getDefaultZone()) != null) {
-				d.setTZ(defaulttz);
-			}
+		TimeZone defaulttz;
+		if (d.getTZ() == null && xnode != null && (defaulttz = xnode.getDefaultZone()) != null) {
+			d.setTZ(defaulttz);
 		}
 		p.setParsedValue(new DefDate(d));
 		p.setIndex(parser.getIndex());
@@ -70,11 +70,13 @@ public class XSParseDatetime extends XSAbstractParseComparable {
 		p.addReports((ArrayReporter) parser.getReportWriter());//datetime errors
 		checkDate(xnode, p);
 	}
+
 	// This method is overwritten in different date/time parsers
 	boolean parse(final StringParser parser) {return parser.isXMLDatetime();}
 
 	@Override
 	public short parsedType() {return XD_DATETIME;}
+
 	@Override
 	public String parserName() {return ROOTBASENAME;}
 }
