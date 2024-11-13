@@ -685,9 +685,10 @@ XCComponentCommand ::= (XCBind | XCClass | XCEnum | XCInterface | XCRef)
 
 XCBind ::= "%bind" S XMLName (S? "%with" S $JavaQName)? S? XCLink
 
-XCClass ::= "%class" S JavaTypedQName (S "extends" S JavaTypedQName)?
-  (S "implements" S JavaTypedQName (S? "," S? JavaTypedQName)* )?
-  (S "%interface" S JavaTypedQName)? (S? XCWith)? S? XCLink
+XCClass ::= "%class" S JavaTypedQName 
+  (S "extends" S JavaTypedQName (S? "<" JavaTypedQName ">")? )?
+  (S "implements" S JavaTypedQName (S? "," S? JavaTypedQName)*)?
+  (S "%interface" S JavaTypedQName)? S? (XCWith)? (XCLink)?
 
 XCWith ::= "%with" S JavaTypedQName
 

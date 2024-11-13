@@ -389,10 +389,8 @@
 <xd:def name='Y06' root='A'>
   <xd:component>
     %class test.xdef.component.Y06
-      extends test.xdef.TestXComponents_Y06Container
-        &lt;test.xdef.TestXComponents_Y06Domain&gt; %link A;
-    %class test.xdef.component.Y06B
-      implements test.xdef.TestXComponents_Y06XCDomain %link A/B;
+      extends test.xdef.TestXComponents_Y06Container &lt;test.xdef.TestXComponents_Y06Domain&gt; %link A;
+    %class test.xdef.component.Y06B implements test.xdef.TestXComponents_Y06XCDomain %link A/B;
     %bind Domain %with test.xdef.TestXComponents_Y06Container %link A/B;
   </xd:component>
   <A>

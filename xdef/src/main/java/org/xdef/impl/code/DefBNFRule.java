@@ -59,8 +59,7 @@ public final class DefBNFRule extends XDValueAbstract implements XDBNFRule {
 						} else if (o instanceof Long || o instanceof Integer) {
 							c.addXDItem(new DefLong(o.toString()));
 						} else if (o instanceof Float) {
-							c.addXDItem(
-								new DefDouble(((Float)o).doubleValue()));
+							c.addXDItem(new DefDouble(((Float)o).doubleValue()));
 						} else if (o instanceof Double) {
 							c.addXDItem(new DefDouble(((Double)o)));
 						} else {
@@ -131,9 +130,7 @@ public final class DefBNFRule extends XDValueAbstract implements XDBNFRule {
 	 * @return string value of this object.
 	 * string value.
 	 */
-	public String stringValue() {
-		return _rule == null ? "null" : _rule.toString();
-	}
+	public String stringValue() {return _rule == null ? "null" : _rule.toString();}
 
 	@Override
 	/** Clone the item (returns this object here).

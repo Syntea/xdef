@@ -129,8 +129,7 @@ final class XCGenerator extends XCGeneratorXON {
 							ext = true;
 							extClazz=" extends "+name.substring(ndx+7)+extClazz;
 							//"In command "%class &{0}" is missing parameter
-							//"extends". In command "%bind &{2}" is
-							//parameter "%with &{1}!
+							//"extends". In command "%bind &{2}" is parameter "%with &{1}!
 							_reporter.error(XDEF.XDEF375,
 								className, name.substring(ndx+7), name.substring(0, ndx));
 							name = name.substring(0, ndx);
@@ -148,8 +147,7 @@ final class XCGenerator extends XCGeneratorXON {
 			name = addVarName(varNames, name, xdata.getXDPosition(), ext);
 			genAttrNameVariable(name, xdata, vars);
 			if (!ext) {
-				genBaseVarsGettersSetters(
-					xdata, name, 1, "attribute", vars, getters, setters, xpathes, sbi);
+				genBaseVarsGettersSetters(xdata, name, 1, "attribute", vars, getters, setters, xpathes, sbi);
 			}
 			genCreatorOfAttribute(xdata, name, creators);
 			atttab.put(xdata.getXDPosition(),
@@ -255,8 +253,7 @@ final class XCGenerator extends XCGeneratorXON {
 									ext = true;
 									extClazz = " extends " + name.substring(ndx+7) + extClazz;
 									//"In command "%class &{0}" is missing parameter
-									//"extends". In command "%bind &{2}" is
-									//parameter "%with &{1}!
+									//"extends". In command "%bind &{2}" is parameter "%with &{1}!
 									_reporter.error(XDEF.XDEF375,
 										className, name.substring(ndx+7), name.substring(0, ndx));
 									name = name.substring(0, ndx);
@@ -293,8 +290,7 @@ final class XCGenerator extends XCGeneratorXON {
 					txttab.put(node.getXDPosition(), (groupMax == 1 ? "1" : "2")
 						+ "," + getParsedResultGetter(xdata) + ";" + name);
 					if (isRoot && nodes.length==1 && xe.getAttrs().length==0) {
-						 // no attrs,only text; direct getters/setters
-						 // for text child
+						 // no attrs,only text; direct getters/setters for text child
 						genDirectSetterAndGetter(
 							xe, xmlToJavaName(xe.getName()), null, true, setters, getters, sbi);
 					}
@@ -324,8 +320,7 @@ final class XCGenerator extends XCGeneratorXON {
 									ext = true;
 									extClazz = " extends "
 										+ name.substring(ndx+7)+extClazz;
-									//"In command "%class &{0}" is missing
-									//parameter "extends". In command
+									//"In command "%class &{0}" is missing parameter "extends". In command
 									// "%bind &{2}" is parameter "%with &{1}!
 									_reporter.error(XDEF.XDEF375,
 										className, name.substring(ndx+7), name.substring(0, ndx));
@@ -342,12 +337,10 @@ final class XCGenerator extends XCGeneratorXON {
 					} else {
 						newClassName = name = xmlToJavaName(xe1.getName());
 					}
-					//if this element is not processed by user XComponent and
-					//if it is unique and if the only child node of this node
-					//is text node and if it has no attributes then process
+					//if this element is not processed by user XComponent and if it is unique and if the only
+					// child node of this node is text node and if it has no attributes then process
 					//it is processed same way as an attribute of parent class.
-					final String xcClass0 = isRecurseRef
-						? name : getXDPosition(xe1, interfcName.length() > 0);
+					final String xcClass0 = isRecurseRef ? name : getXDPosition(xe1, interfcName.length()>0);
 					String xcClass = xcClass0;
 					if (xcClass0 != null) {
 						if (xcClass.indexOf("%ref ") ==0) {
@@ -373,8 +366,7 @@ final class XCGenerator extends XCGeneratorXON {
 					String iname = correctClassName(newClassName,
 						classNameBase, classNames);
 					if (!newClassName.equals(iname)) {
-						//The name of the inner class of the X-component &{0}
-						//has been changed to &{1}
+						//The name of the inner class of the X-component &{0} has been changed to &{1}
 						_reporter.info(XDEF.XDEF377, node.getXDPosition(), iname);
 						newClassName = iname;
 					}
@@ -386,8 +378,8 @@ final class XCGenerator extends XCGeneratorXON {
 							//Please change name by command %bind
 							_reporter.error(XDEF.XDEF371, name, node.getXDPosition());
 						} else {
-							//Getter/setter name &{0} in &{1} was changed to
-							//&{2}. You can define other name by command %bind
+							//Getter/setter name &{0} in &{1} was changed to &{2}.
+							// You can define other name by command %bind
 							_reporter.warning(XDEF.XDEF360, name, node.getXDPosition(), iname);
 						}
 					}
@@ -425,8 +417,7 @@ final class XCGenerator extends XCGeneratorXON {
 							&& groupKind != XMCHOICE
 							&& xe1.getAttrs().length == 0) {//no attrs,only text
 							// direct getters/setters for text child
-							genDirectSetterAndGetter(xe1,
-								iname, typeName, false, setters, getters, sbi);
+							genDirectSetterAndGetter(xe1, iname, typeName, false, setters, getters, sbi);
 						}
 						if (groupKind != XMCHOICE){
 							genChildElementGetterSetter(
@@ -441,8 +432,7 @@ final class XCGenerator extends XCGeneratorXON {
 									genXonItemGetterAndSetter(
 										xe1, typeName, iname, max, setters, getters, sbi, varNames);
 								} else if (xe1.getAttr(X_KEYATTR) != null) {
-									genXonEntryMethod(xe1,
-										typeName, iname, max, getters, sbi, varNames);
+									genXonEntryMethod(xe1, typeName, iname, max, getters, sbi, varNames);
 								}
 							}
 						} else { // XON map items
@@ -495,8 +485,7 @@ final class XCGenerator extends XCGeneratorXON {
 					ndx = extClazz.indexOf("implements ");
 					if (ndx >= 0) {
 						if (!extClazz.contains(xpos)) {
-							extClazz = extClazz.substring(0, ndx+11)
-								+ xpos + "," + extClazz.substring(ndx+11);
+							extClazz = extClazz.substring(0, ndx+11)+ xpos +","+ extClazz.substring(ndx+11);
 						}
 					} else {
 						extClazz += " implements " + xpos;
@@ -572,8 +561,7 @@ final class XCGenerator extends XCGeneratorXON {
 		}
 		StringBuilder sb = new StringBuilder(
 			SUtils.modifyString(hdrTemplate,
-				"&{xdpos}",
-				(definitionName != null ? "" : definitionName) + '#' + modelName));
+				"&{xdpos}", (definitionName != null ? "" : definitionName) + '#' + modelName));
 		if (packageName1 != null && packageName1.length() > 0) {
 			sb.append("package ").append(packageName1).append(';').append(LN);
 		}
