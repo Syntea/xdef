@@ -429,7 +429,7 @@ public final class XExtUtils {
 
 	/** Cancel running X-definition process. */
 	public static final void cancel() {throw new SError(Report.error(XDEF.XDEF906));} //X-definition canceled
-	
+
 
 	/** Cancel running X-definition process and throw message.
 	 * @param msg reason of cancelling.

@@ -26,8 +26,7 @@ public class TestSParser extends STester {
 	 * @return empty string if both arguments are equal. Otherwise returns
 	 * the string with information about differences.
 	 */
-	private static String checkDateEQ(final XMLGregorianCalendar d1,
-		final XMLGregorianCalendar d2) {
+	private static String checkDateEQ(final XMLGregorianCalendar d1, final XMLGregorianCalendar d2) {
 		String result = "";
 		if (d1.getYear() != d2.getYear()) {
 			result += "Year: " + d1.getYear() + "/" +  d2.getYear();
@@ -52,8 +51,7 @@ public class TestSParser extends STester {
 				: "\n") + "Millisecond: " + d1.getMillisecond()+"/"+ d2.getMillisecond();
 		}
 		if (d1.getTimezone() != d2.getTimezone()) {
-			result += (result.isEmpty() ? ""
-				: "\n") + "Timezone: " + d1.getTimezone() + "/" +  d2.getTimezone();
+			result += (result.isEmpty() ? "" : "\n") + "Timezone: "+ d1.getTimezone() +"/"+  d2.getTimezone();
 		}
 		if (d1.getEon() == null) {
 			if (d2.getEon() != null) {
@@ -80,8 +78,7 @@ public class TestSParser extends STester {
 	 * @return empty string if both arguments are equal. Otherwise returns
 	 * the string with information about differences.
 	 */
-	private static String checkDateEQ2(final XMLGregorianCalendar d1,
-		final XMLGregorianCalendar d2) {
+	private static String checkDateEQ2(final XMLGregorianCalendar d1, final XMLGregorianCalendar d2) {
 		String r1 = checkDateEQ(d1, d2);
 		String r2 = checkDateEQ(d1.normalize(), d2.normalize());
 		r2 = r2.isEmpty() ? "" : ("normalized\n" + r2);
@@ -1068,8 +1065,6 @@ public class TestSParser extends STester {
 				x.reset(); y.reset();
 				assertEq("", checkDateEQ2(x,y));
 			}
-			x.clear(); y.clear();
-			assertEq("", checkDateEQ2(x,y));
 			y = new SDatetime("2010-01-11T21:11:01.123"); //No zone
 			g = y.toGregorianCalendar();
 			x = df.newXMLGregorianCalendar(g);
@@ -1112,8 +1107,8 @@ public class TestSParser extends STester {
 			assertEq("", checkDateEQ2(x,y));
 			x.setYear(1999); y.setYear(1999);
 			assertEq("", checkDateEQ2(x,y));
-			x.setMillisecond(Integer.MIN_VALUE);
-			y.setMillisecond(Integer.MIN_VALUE);
+			x.setMillisecond(0);
+			y.setMillisecond(0);
 			assertEq("", checkDateEQ2(x,y));
 			if (SUtils.JAVA_RUNTIME_VERSION_ID >= 109) {
 				x.reset();

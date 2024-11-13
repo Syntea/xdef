@@ -559,7 +559,7 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 				} else {
 					TimeZone tz;
 					if ((tz = TimeZone.getTimeZone(s)) == null || !s.equals(tz.getID())) {
-						if ((TimeZone.getTimeZone("GMT" + s)) == null || !("GMT" + s).equals(tz.getID())) {							
+						if ((TimeZone.getTimeZone("GMT" + s)) == null || !("GMT" + s).equals(tz.getID())) {
 							throw new SRuntimeException(SYS.SYS057, s);//Incorrect timezone name{0}{: "}{"}
 						}
 					}

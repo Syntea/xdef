@@ -816,10 +816,10 @@ public class StringParser extends SReporter implements SParser {
 	/** Switch to close or not close reader. */
 	boolean _closeReader = true;
 
-	/** Creates a new instance of StringParser */
+	/** Create new instance of StringParser */
 	public StringParser() {}// all fields are set to null by Java VM
 
-	/** Creates a new instance of StringParser.
+	/** Create new instance of StringParser.
 	 * @param source The string with source data.
 	 */
 	public StringParser(final String source) {
@@ -829,7 +829,7 @@ public class StringParser extends SReporter implements SParser {
 		_ch = _endPos > 0 ? _source.charAt(0) : NOCHAR;
 	}
 
-	/** Creates a new instance of StringParser.
+	/** Create new instance of StringParser.
 	 * @param source The string with source data.
 	 * @param pos position in source data.
 	 */
@@ -840,7 +840,7 @@ public class StringParser extends SReporter implements SParser {
 		setIndex(pos);
 	}
 
-	/** Creates a new instance of StringParser.
+	/** Create new instance of StringParser.
 	 * @param source The source parsed data.
 	 */
 	public StringParser(final SBuffer source) {
@@ -862,17 +862,14 @@ public class StringParser extends SReporter implements SParser {
 	/** Creates a new instance of StringParser.
 	 * @param reporter Report writer.
 	 */
-	public StringParser(final ReportWriter reporter) {
-		super(reporter); // all fields are set to null by Java VM
-	}
+	public StringParser(final ReportWriter reporter) {super(reporter);}//all fields are set to null by Java VM
 
 	/** Creates a new instance of StringParser.
 	 * @param source The string with source data.
 	 * @param reporter Report writer.
 	 */
 	public StringParser(final String source, final ReportWriter reporter) {
-		super(reporter);
-		// all fields are set to null by Java VM
+		super(reporter); // all fields are set to null by Java VM
 		setLineNumber(1L);
 		_endPos = (_source = source).length();
 		_ch = _endPos > 0 ? _source.charAt(0) : NOCHAR;
@@ -912,8 +909,7 @@ public class StringParser extends SReporter implements SParser {
 		super(reporter);
 		try {
 			URLConnection con = url.openConnection();
-			setSourceReader(new InputStreamReader(con.getInputStream(),
-				con.getContentEncoding()), filePos);
+			setSourceReader(new InputStreamReader(con.getInputStream(), con.getContentEncoding()), filePos);
 			setSysId(url.toExternalForm());
 		} catch (IOException ex) {
 			//URL &{0} error: &{1}{; }
@@ -942,8 +938,7 @@ public class StringParser extends SReporter implements SParser {
 				setSourceReader(new InputStreamReader(
 				new FileInputStream(file)));
 			} else {
-				setSourceReader(new InputStreamReader(
-					new FileInputStream(file),charset));
+				setSourceReader(new InputStreamReader(new FileInputStream(file),charset));
 			}
 			setSysId("file:" + file.getCanonicalPath().replace('\\','/'));
 		} catch (UnsupportedEncodingException ex) {
@@ -1129,9 +1124,8 @@ public class StringParser extends SReporter implements SParser {
 	}
 	private void sleepwile() throws InterruptedException {Thread.sleep(5);}
 
-	/** Add character to actual buffer from input stream (if necessary and
-	 * if available and).
-	 * @return true if character was added to buffer.
+	/** Increase buffer for next character.
+	 * @return true if next character is available in buffer.
 	 */
 	public final boolean increaseBuffer() {
 		if (getIndex() + 1 < _endPos) {
@@ -1247,7 +1241,6 @@ public class StringParser extends SReporter implements SParser {
 		setIndex(0);
 		clearModificationInfo();
 		_reader = null;
-//		_cbuf = null;
 	}
 
 	/** Get size of internal parser stack.
@@ -1256,11 +1249,11 @@ public class StringParser extends SReporter implements SParser {
 	public final int getParserStackSize() {return _parserStack == null ? 0 : _parserStack.size();}
 
 	/** Save old parser and set new source buffer.
-	 * @param reader The reader.
+	 * @param reader reader with source data.
 	 * @param pos Starting position of the file.
 	 * @param source Initial source buffer.
 	 * @param sourceName Name of source (may be null).
-	 * @param savedObject a SParserSavedObject with saved parameters or null.
+	 * @param savedObject SParserSavedObject with saved parameters or null.
 	*/
 	public final void pushSourceReader(final Reader reader,
 		final int pos,
@@ -1285,8 +1278,7 @@ public class StringParser extends SReporter implements SParser {
 		pushSourceReader(in, 0, null, srcName, obj);
 	}
 
-	/** Set the parser to create detailed line positions. By default
-	 * the value of this is set to false.
+	/** Set the parser to create detailed line positions. By default the value of this is set to false.
 	 * @param lineInfo set the lineInfo flag.
 	 */
 	public final void setLineInfoFlag(final boolean lineInfo) {_lineInfo = lineInfo;}
@@ -1329,8 +1321,7 @@ public class StringParser extends SReporter implements SParser {
 
 	@Override
 	/** Prepare character from the next position.
-	 * @return next character or NOCHAR if the position is at
-	 * the end of source.
+	 * @return next character or NOCHAR if the position is at the end of source.
 	 */
 	public final char nextChar() {
 		int index = incIndex();
@@ -1339,11 +1330,9 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	@Override
-	/** Get character at the current position and set position to the next
-	 * character in the source. If the position is at the end of source
-	 * return NOCHAR.
-	 * @return character at the current position or if the position is at
-	 * the end of source return NOCHAR.
+	/** Get character at the current position and set position to the next character in the source. If
+	 * the position is at the end of source return NOCHAR.
+	 * @return character at the current position or if the position is at the end of source return NOCHAR.
 	 */
 	public final char peekChar() {
 		char result;
@@ -1390,9 +1379,9 @@ public class StringParser extends SReporter implements SParser {
 	 */
 	public final SPosition getPosition() {return new SPosition(this);}
 
-	/** Reset buffer position to the previous position from parameter. If
-	 * buffer was changed this method throws an exception. The position MUST be
-	 * a position previously generated by this parser and MUST NOT be modified!
+	/** Reset buffer position to the previous position from parameter. If buffer was changed this method
+	 * throws an exception. The position MUST be a position previously generated by this parser and
+	 * MUST NOT be modified!
 	 * @param pos a position previously generated by this parser.
 	 * @throws SRuntimeException if position can't be set.
 	 */
@@ -1423,8 +1412,7 @@ public class StringParser extends SReporter implements SParser {
 	 */
 	public final String getParsedString() { return _parsedString; }
 
-	/** Set parsed string. This value will be returned by method
-	 * getParsedString().
+	/** Set parsed string. This value will be returned by method getParsedString().
 	 * @param s string to be set as parsed string.
 	 */
 	public final void setParsedString(final String s){_parsedString = s;}
@@ -1451,13 +1439,11 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	@Override
-	/** Check if actual position points to a character in given interval. Set
-	 * the actual position to the next character if given character was
-	 * in the specified interval.
+	/** Check if actual position points to a character in given interval. Set the actual position to the next
+	 * character if given character was in the specified interval.
 	 * @param minCh minimum of checked interval.
 	 * @param maxCh maximum of checked interval.
-	 * @return the actual character character from actual position,
-	 * otherwise return <code>NOCHAR</code>.
+	 * @return the actual character character from actual position, otherwise return NOCHAR.
 	 */
 	public final char isInInterval(final char minCh, final char maxCh) {
 		if (_ch < minCh || _ch > maxCh) {
@@ -1472,13 +1458,11 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	@Override
-	/** Check if actual position points to a character out of given interval.
-	 * Set the actual position to the next character if given character was
-	 * recognized.
+	/** Check if actual position points to a character out of given interval. Set the actual position to the
+	 * next character if given character was recognized.
 	 * @param minCh minimum of checked interval.
 	 * @param maxCh maximum of checked interval.
-	 * @return the actual character character from actual position,
-	 * otherwise return <code>NOCHAR</code>.
+	 * @return the actual character character from actual position, otherwise return NOCHAR.
 	 */
 	public final char notInInterval(final char minCh, final char maxCh) {
 		if (_ch >= minCh && _ch <= maxCh) {
@@ -1492,12 +1476,10 @@ public class StringParser extends SReporter implements SParser {
 		return c;
 	}
 
-	/** Check if actual position points to given character ignoring case. Set
-	 * the actual position to the next character if given character was
-	 * not in specified interval.
+	/** Check if actual position points to given character ignoring case. Set the actual position to the next
+	 * character if given character was not in specified interval.
 	 * @param ch Character to be checked.
-	 * @return true if character was present at actual position,
-	 * otherwise return false.
+	 * @return true if character was present at actual position, otherwise return false.
 	 */
 	public final boolean isCharIgnoreCase(final char ch) {
 		if (Character.toLowerCase(_ch)!=Character.toLowerCase(ch)) {
@@ -1508,10 +1490,8 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	@Override
-	/** If character on actual position is not character specified by
-	 * argument the method returns the actual character and sets
-	 * position to next character. Otherwise it returns NOCHAR and actual
-	 * position remains unchanged.
+	/** If character on actual position is not character specified by argument the method returns the actual
+	 * character and sets position to next character. Otherwise returns NOCHAR and position remains unchanged.
 	 * @param ch Character to be checked.
 	 * @return character on actual position or NOCHAR.
 	 */
@@ -1527,8 +1507,8 @@ public class StringParser extends SReporter implements SParser {
 		return c;
 	}
 
-	/** Check if actual position points to new line. If check is successful
-	 * set the actual position to the next character.
+	/** Check if actual position points to new line. If check is successful* set the actual position
+	 * to the next character.
 	 * @return true if new line is at actual position, otherwise return false.
 	 */
 	public final boolean isNewLine() {
@@ -1540,10 +1520,9 @@ public class StringParser extends SReporter implements SParser {
 		return true;
 	}
 
-	/** If character on actual position is not one of characters specified by
-	 * given string argument the method returns the actual character and sets
-	 * position to next character. Otherwise it returns NOCHAR and actual
-	 * position remains unchanged.
+	/** If character on actual position is not one of characters specified by given string argument
+	 * the method returns the actual character and sets position to next character. Otherwise it returns
+	 * NOCHAR and actual position remains unchanged.
 	 * @param chars String with set of characters to be checked.
 	 * @return character on actual position or NOCHAR.
 	 */
@@ -1560,9 +1539,9 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	@Override
-	/** Check if actual position points to upper case letter. Set the source
-	 * position to the next character if letter was recognized and return the
-	 * character otherwise return NOCHAR and source position remains unchanged.
+	/** Check if actual position points to upper case letter. Set the source position to the next character
+	 * if letter was recognized and return the character otherwise return NOCHAR and source position
+	 * remains unchanged.
 	 * @return character or NOCHAR.
 	 */
 	public final char isUpperCaseLetter() {
@@ -1575,9 +1554,9 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	@Override
-	/** Check if actual position points to lower case letter. Set the source
-	 * position to the next character if letter was recognized and return the
-	 * character otherwise return NOCHAR and source position remains unchanged.
+	/** Check if actual position points to lower case letter. Set the source position to the next character
+	 * if letter was recognized and return the character otherwise return NOCHAR and source position
+	 * remains unchanged.
 	 * @return character or NOCHAR.
 	 */
 	public final char isLowerCaseLetter() {
@@ -1590,9 +1569,8 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	@Override
-	/** If on source position is one of tokens specified in the argument the
-	 * method returns index to this item and sets position to the next position
-	 * after a token. Otherwise it returns -1.
+	/** If on source position is one of tokens specified in the argument the method return index to this item
+	 * and set position to the next position after a token. Otherwise it return -1.
 	 * @param tokens Array of tokens be checked.
 	 * @return Index of found token or -1.
 	 */
@@ -1617,9 +1595,8 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	@Override
-	/** If on source position is one of tokens (ignored case) specified
-	 * in the argument the method returns index to this item and sets position
-	 * to the next position after a token. Otherwise it returns -1.
+	/** If on source position is one of tokens (ignored case) specified in the argument the method return
+	 * index to this item and sets position to the next position after a token. Otherwise it returns -1.
 	 * @param tokens Array of tokens be checked.
 	 * @return Index of found token or -1.
 	 */
@@ -1645,9 +1622,8 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	@Override
-	/** Check if actual position points to given token (case insensitive). Set
-	 * the actual position to the next character after the token if given token
-	 * was recognized.
+	/** Check if actual position points to given token (case insensitive). Set the actual position
+	 * to the next character after the token if given token was recognized.
 	 * @param token The token to be checked case insensitive.
 	 * @return <i>true</i> if token was present at actual position.
 	 */
@@ -1669,8 +1645,8 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	@Override
-	/** Check if actual position points to signed integer number. Set the actual
-	 * position to the next character after the number if number was recognized.
+	/** Check if actual position points to signed integer number. Set the actual position to the
+	 * next character after the number if number was recognized.
 	 * @return true if signed integer was parsed, otherwise return false.
 	 */
 	public final boolean isSignedInteger() {
@@ -1693,8 +1669,8 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	@Override
-	/** Check if actual position points to signed float number. Set the actual
-	 * position to the next character after the number if number was recognized.
+	/** Check if actual position points to signed float number. Set the actual position to the next character
+	 * after the number if number was recognized.
 	 * @return true if number was parsed, otherwise return false.
 	 */
 	public final boolean isSignedFloat() {
@@ -1739,10 +1715,8 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	@Override
-	/** Skip to specified character. The position is set <b>to</b> the found
-	 * character. Returns true and sets position <b>to</b>
-	 * the position of character. Otherwise returns false and sets
-	 * position to the end of source.
+	/** Skip to specified character. The position is set to the found character. Return true and set position
+	 * to the position of character. Otherwise return false and set position to the end of source.
 	 * @param ch Character to be searched for.
 	 * @return <i>true</i> if the character was found.
 	 */
@@ -1763,10 +1737,8 @@ public class StringParser extends SReporter implements SParser {
 		return false;
 	}
 
-	/** Skip to next character after the argument. The position is set
-	 * <b>after</b> the found character. Returns true and sets
-	 * position <b>after</b> the position of character. Otherwise returns
-	 * false and sets position to the end of source.
+	/** Skip to next character after the argument. The position is set after the found character. Return true
+	 * and set position after the position of character. Otherwise return false and set position to the end.
 	 * @param ch Character to be searched for.
 	 * @return true if the character was found.
 	 */
@@ -1794,10 +1766,9 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	@Override
-	/** Skip to first occurrence of one of specified character set. The position
-	 * is set <b>to</b> the found character.Return the character from the list
-	 * of characters if the character was found, otherwise return NOCHAR and
-	 *  set the position to the end of source.
+	/** Skip to first occurrence of one of specified character set. The position is set to the
+	 * found character.Return the character from the list of characters if the character was found, otherwise
+	 * return NOCHAR and set the position to the end of source.
 	 * @param chars String with set of characters.
 	 * @return found character or NOCHAR.
 	 */
@@ -1815,10 +1786,9 @@ public class StringParser extends SReporter implements SParser {
 		return NOCHAR;
 	}
 
-	/** Skip to next character after the first occurrence of one of specified
-	 * character set. Return the character from the list of characters if the
-	 * character was found, otherwise return NOCHAR and set position
-	 * to the end of source.
+	/** Skip to next character after the first occurrence of one of specified character set. Return the
+	 * character from the list of characters if the character was found, otherwise return NOCHAR
+	 * and set position* to the end of source.
 	 * @param chars String with set of characters.
 	 * @return found character or NOCHAR.
 	 */
@@ -1839,9 +1809,8 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	@Override
-	/** Find token. If the token was found returns true and sets
-	 * position <b>to</b> the position of token. Otherwise returns
-	 * false and sets position to the end of source.
+	/** Find token. If the token was found returns true and sets position to the position of token.
+	 * Otherwise return false and set position to the end of source.
 	 * @param token Token to be found.
 	 * @return true if the token was found.
 	 */
@@ -1875,9 +1844,8 @@ public class StringParser extends SReporter implements SParser {
 		return false;
 	}
 
-	/** Find token in source text and set position to next character after
-	 * the found token. Returns true if the token was found, otherwise
-	 * returns false and sets position to the end of source.
+	/** Find token in source text and set position to next character after the found token.
+	 * Return true if the token was found, otherwise return false and sets position to the end of source.
 	 * @param token Token to be found.
 	 * @return true if the token was found.
 	 */
@@ -1896,8 +1864,7 @@ public class StringParser extends SReporter implements SParser {
 	 */
 	public final int getEndBufferIndex() { return _endPos; }
 
-	/** Get parsed part of source buffer from starting position to
-	 * the actual position.
+	/** Get parsed part of source buffer from starting position to the actual position.
 	 * @return string with parsed part of the source buffer from beginning.
 	 */
 	public String getParsedBufferPart() {
@@ -1906,8 +1873,7 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	@Override
-	/** Get parsed part of source buffer from given position to actual
-	 * position.
+	/** Get parsed part of source buffer from given position to actual position.
 	 * @param index starting position.
 	 * @return string with parsed part of the source buffer starting from index.
 	 */
@@ -1997,13 +1963,13 @@ public class StringParser extends SReporter implements SParser {
 				if (isLineInfoFlag()) {
 					updatePositions(pos, len, 0, fixed);
 				}
-				_endPos = (_source=new StringBuilder(_source).delete(pos, pos + len).toString()).length();
+				_endPos = (_source=new StringBuilder(_source).delete(pos, pos+len).toString()).length();
 			}
 		} else {
 			if (isLineInfoFlag()) {
 				updatePositions(pos, len, newLength, fixed);
 			}
-			_endPos = (_source=new StringBuilder(_source).replace(pos,pos + len,replace).toString()).length();
+			_endPos = (_source=new StringBuilder(_source).replace(pos, pos+len, replace).toString()).length();
 		}
 		setIndex(pos);
 	}
@@ -2081,7 +2047,7 @@ public class StringParser extends SReporter implements SParser {
 		}
 	}
 
-	/** Check if parsed datetime is valid .
+	/** Check if parsed datetime is valid.
 	 * @return true if parsed date is OK.
 	 */
 	public boolean testParsedDatetime() {return _parsedDatetime != null && _parsedDatetime.check();}
@@ -2144,11 +2110,10 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	@Override
-	/** Check if actual position points to given character. Set the actual
-	 * position to the next character if given character was recognized.
+	/** Check if actual position points to given character. Set the actual position to the next character
+	 * if given character was recognized.
 	 * @param ch Character to be checked.
-	 * @return true if character was present at actual position,
-	 * otherwise return false.
+	 * @return true if character was present at actual position, otherwise return false.
 	 */
 	public final boolean isChar(final char ch) {
 		if (_ch != ch)  {
@@ -2159,9 +2124,8 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	@Override
-	/** If actual character is one of characters specified in given string the
-	 * method returns this character and sets position to the next
-	 * character. Otherwise it returns NOCHAR.
+	/** If actual character is one of characters specified in given string the method returns this character
+	 * and sets position to the next character. Otherwise return NOCHAR.
 	 * @param chars String with characters to be checked.
 	 * @return the actual character or NOCHAR.
 	 */
@@ -2191,9 +2155,8 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	@Override
-	/** Check if actual position points to letter. Set the source position
-	 * to the next character if letter was recognized and return the character
-	 * otherwise return NOCHAR and source position remains unchanged.
+	/** Check if actual position points to letter. Set the source position to the next character if letter
+	 * was recognized and return the character otherwise return NOCHAR and source position remains unchanged.
 	 * @return character or NOCHAR.
 	 */
 	public final char isLetter() {
@@ -2310,8 +2273,7 @@ public class StringParser extends SReporter implements SParser {
 				nextChar();
 			}
 			x = getIndex();
-			_ch = x < _endPos || readNextBuffer()
-				? _source.charAt(x = getIndex()) : NOCHAR;
+			_ch = x < _endPos || readNextBuffer() ? _source.charAt(x = getIndex()) : NOCHAR;
 		}
 		if (isOneOfChars("eE") > 0) {//exponent
 			isOneOfChars("+-");
@@ -2363,8 +2325,7 @@ public class StringParser extends SReporter implements SParser {
 	 * @return true if date on current position is in printable form.
 	 */
 	public final boolean isPrintableDatetime() {
-		return isDatetime(
-			"[EEE ]MMM d HH:mm[:ss[.S]][ ZZZZZ] y|{L(*)}[EEE ]MMM d HH:mm[:ss[.S]][ ZZZZZ] y");
+		return isDatetime("[EEE ]MMM d HH:mm[:ss[.S]][ ZZZZZ] y|{L(*)}[EEE ]MMM d HH:mm[:ss[.S]][ ZZZZZ] y");
 	}
 
 	/** Parse date in ISO8601 date or date and time (see
@@ -2724,8 +2685,7 @@ public class StringParser extends SReporter implements SParser {
 				case 'Y': //year - two digits, century from the actual year
 					if (n != 0 && n != 2) {
 						freeBuffer();
-						// Datetime mask: incorrect year
-						// specification&{0}{, position: }
+						// Datetime mask: incorrect year specification&{0}{, position: }
 						throw new SRuntimeException(SYS.SYS059,	fpos-3);
 					}
 					boolean minus;
@@ -2738,9 +2698,8 @@ public class StringParser extends SReporter implements SParser {
 						failVariant = true;
 						continue;
 					}
-					if (n == 2) {
-						//actual century
-						int c = new GregorianCalendar().get(Calendar.YEAR)/100;
+					if (n == 2) { //actual century
+						int c = new GregorianCalendar().get(Calendar.YEAR) / 100;
 						myDate._year = c * 100 + i;
 					} else if (pos - getIndex() > 4 && first == '0') {
 						failVariant = true;
@@ -2777,8 +2736,7 @@ public class StringParser extends SReporter implements SParser {
 						int century = new GregorianCalendar().get(Calendar.YEAR);
 						int year = century % 100; // actual year in century;
 						century /= 100; // actual century
-						// decrease century if the actual year in in century
-						// is lower then the parsed value.
+						// decrease century if the actual year in in century is lower then the parsed value.
 						i += ((year < i) ? century - 1 : century) * 100;
 					}
 					myDate._year = i * sign;
@@ -2810,9 +2768,9 @@ public class StringParser extends SReporter implements SParser {
 					int c = y /100; //actual century
 					y = y % 100; //last two digits of the actual year
 					//actual years in the actual century < 50
-					myDate._year = i < 50
-						? y < 50 ? c * 100 + i : ((c + 1) * 100 + i)
-						: y < 50 ? (c - 1) * 100 + i : (c * 100 + i);
+					myDate._year = i < 50 ? y < 50 ? c * 100 + i : ((c + 1) * 100 + i)
+						: y < 50 ? (c - 1) * 100 + i
+						: (c * 100 + i);
 					continue;
 				}
 				case 'Z': //ISO
@@ -2847,8 +2805,7 @@ public class StringParser extends SReporter implements SParser {
 						} else {
 							while (fpos < flen) {
 								if (mask.charAt(fpos++) == delim) {
-									if (fpos < flen
-										&& mask.charAt(fpos) == delim) {
+									if (fpos < flen && mask.charAt(fpos) == delim) {
 										fpos++;
 										continue;
 									}
@@ -2869,15 +2826,13 @@ public class StringParser extends SReporter implements SParser {
 				}
 				case '?': {//one of chars
 					char delim;
-					if (fpos < flen
-						&& ((delim=mask.charAt(fpos))=='\'' || delim == '"')) {
+					if (fpos < flen && ((delim=mask.charAt(fpos))=='\'' || delim == '"')) {
 						//follows string specification
 						int beg = fpos++;
 						boolean foundChar = false;
 						while (fpos < flen) {
 							if ((pat = mask.charAt(fpos++)) == delim) {
-								if (fpos >= flen ||
-									mask.charAt(fpos) != delim) {
+								if (fpos >= flen || mask.charAt(fpos) != delim) {
 									break;
 								}
 								pat = mask.charAt(fpos++); //double apos
@@ -2982,10 +2937,9 @@ public class StringParser extends SReporter implements SParser {
 		return true;
 	}
 
-	/** Read from source an unsigned integer with specified number of digits.
-	 * If the argument with number of digits is 0 the number of digits is
-	 * considered as unspecified. If on the current source position is not
-	 * required integer number the method returns value of Integer.MIN_VALUE.
+	/** Read from source an unsigned integer with specified number of digits. If the argument with number
+	 * of digits is 0 the number of digits is considered as unspecified. If on the current source position
+	 * is not required integer number the method returns value of Integer.MIN_VALUE.
 	 * @param digits Required number of digits.
 	 * @return Parsed integer value of unsigned integer or Integer.MIN_VALUE.
 	 */
@@ -3227,8 +3181,7 @@ public class StringParser extends SReporter implements SParser {
 				boolean months = false;
 				boolean days = false;
 				char c;
-				while ((c = isOneOfChars(
-					xmlSchema ? "YMD" : "YMDW")) != StringParser.NOCHAR) {
+				while ((c = isOneOfChars(xmlSchema ? "YMD" : "YMDW")) != StringParser.NOCHAR) {
 					date = true;
 					switch (c) {
 						case 'Y':
@@ -3465,8 +3418,7 @@ public class StringParser extends SReporter implements SParser {
 								if ( i > 0 && !SUtils.isCountryCode(p2)) {
 									//Datetime mask error: unsupported country code
 									//&{0}{: '}{'}&{1}{, position: }
-									return Report.error(SYS.SYS067, p2,
-										(i==2 ? start-p2.length() : start));
+									return Report.error(SYS.SYS067, p2, (i==2 ? start-p2.length() : start));
 								}
 								_parsedDatetime.setLocaleFormatSymbols(
 									new DateFormatSymbols(new Locale(p1,p2,p3)));
@@ -3513,7 +3465,7 @@ public class StringParser extends SReporter implements SParser {
 						case 'H': parsedDatetime._hour = _parsedDatetime._hour; break;
 						case 'm': parsedDatetime._minute = _parsedDatetime._minute; break;
 						case 's': parsedDatetime._second = _parsedDatetime._second; break;
-						case 'S': parsedDatetime._fraction =_parsedDatetime._fraction; break; //millisecond
+						case 'S': parsedDatetime._fraction = _parsedDatetime._fraction; break; //millisecond
 						case 'Z': parsedDatetime._tz = _parsedDatetime._tz; //RFC822 zone (-0800)
 					}
 					_parsedDatetime = parsedDatetime;
@@ -3964,6 +3916,9 @@ public class StringParser extends SReporter implements SParser {
 		return true;
 	}
 
+	/** Read XML form of time zone.
+	 * @return true if zone was parsed.
+	 */
 	private boolean readXMLZone() {
 		_parsedDatetime._tz = null;
 		int start = getIndex();
@@ -4017,6 +3972,9 @@ public class StringParser extends SReporter implements SParser {
 		return true;
 	}
 
+	/** Read XML form od date.
+	 * @return true if date was parsed.
+	 */
 	private boolean readXMLDate() {
 		int start = getIndex();
 		boolean wasQuote = isChar('"');//year without zone may be quoted in JSON
@@ -4094,7 +4052,7 @@ public class StringParser extends SReporter implements SParser {
 		}
 		_parsedDatetime._minute = getParsedInt();
 		 pos = getIndex();
-		if (!isChar(':') || !isInteger() || getIndex() - pos != 3){
+		if (!isChar(':') || !isInteger() || getIndex() - pos != 3) {
 			setIndex(start);
 			return false;
 		} else {
@@ -4125,6 +4083,9 @@ public class StringParser extends SReporter implements SParser {
 		return result;
 	}
 
+	/** Read XML format of year.
+	 * @return true if year was parsed.
+	 */
 	private boolean readXMLYear() {
 		int start = getIndex();
 		boolean wasQuote = isChar('"'); //year without zone may be quoted in JSON
@@ -4309,7 +4270,7 @@ public class StringParser extends SReporter implements SParser {
 		return true;
 	}
 
-	/** Read string enclosed in delimiters (' or ").
+	/** Read string enclosed in delimiters (' or ").<br/>
 	 * string::=  S ('"' ^['"']* '"' | "'" ^["'"]* "'")
 	 * @return string or null if on the source position is not a valid
 	 * string declaration.
@@ -4501,15 +4462,13 @@ public class StringParser extends SReporter implements SParser {
 
 	/** Check if argument is a whitespace - see {@link StringParser#isSpace()}.
 	 * @param ch character to be checked.
-	 * @return true is only if argument is a whitespace according to
-	 * XML specification..
+	 * @return true is only if argument is a whitespace according to XML specification..
 	 */
 	public static final boolean chkXmlWhiteSpaceChar(final char ch) {
 		return XML_CHARTAB0[ch] == XML_CHAR_WHITESPACE;
 	}
 
-	/** Get type of character - static version of {@link
-	 * StringParser#getXmlCharType(byte)}.
+	/** Get type of character - static version of {@link StringParser#getXmlCharType(byte)}.
 	 * @param ch character to be checked.
 	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1" (see XMLVER1_0 and XMLVER1_1).
 	 * @return type of character.
@@ -4579,9 +4538,7 @@ public class StringParser extends SReporter implements SParser {
 	 * @param s the string to be checked.
 	 * @return true if argument is Java identifier.
 	 */
-	public static final boolean isJavaName(final String s) {
-		return chkJavaName(s);
-	}
+	public static final boolean isJavaName(final String s) {return chkJavaName(s);}
 
 	/** Check if the string in argument is Java qualified identifier.
 	 * @deprecated Please use StringParser.chkJavaQName instead.

@@ -3244,10 +3244,10 @@ public final class TestXdef extends XDTester {
 			assertEq(TimeZone.getTimeZone("CET"), xd.getDefaultZone());
 			assertEq(xml, parse(xd, xml, reporter));
 			assertEq(swr.toString(),
-				"CET\n2024-10-22T11:55:30+02:00\n2024-10-22T09:55:30.0Z\nGMT\n2024-10-22T08:55:30.0-01:00\n");
+				"CET\n2024-10-22T11:55:30+02:00\n2024-10-22T09:55:30Z\nGMT\n2024-10-22T08:55:30-01:00\n");
 			genXComponent(xp, clearTempDir());
 			xc = xd.xparseXComponent(xml, null, reporter);
-			assertEq("<a a='2024-10-22T08:55:30.0-01:00'/>", xc.toXml());
+			assertEq("<a a='2024-10-22T08:55:30-01:00'/>", xc.toXml());
 
 			xml = "<a a='2024-10-22T11:55:30+03:30'/>"; // zone SPECIFIED
 			xd = xp.createXDDocument();
@@ -3256,10 +3256,10 @@ public final class TestXdef extends XDTester {
 			assertNoErrorsAndClear(reporter);
 			assertEq(xml, parse(xd, xml, reporter));
 			assertEq(swr.toString(),
-				"GMT\n2024-10-22T11:55:30+03:30\n2024-10-22T08:25:30.0Z\nGMT\n2024-10-22T07:25:30.0-01:00\n");
+				"GMT\n2024-10-22T11:55:30+03:30\n2024-10-22T08:25:30Z\nGMT\n2024-10-22T07:25:30-01:00\n");
 			genXComponent(xp, clearTempDir());
 			xc = xd.xparseXComponent(xml, null, reporter);
-			assertEq("<a a='2024-10-22T07:25:30.0-01:00'/>", xc.toXml());
+			assertEq("<a a='2024-10-22T07:25:30-01:00'/>", xc.toXml());
 
 			xdef =
 "<xd:def xmlns:xd='"+_xdNS+"' root='a'>\n"+
