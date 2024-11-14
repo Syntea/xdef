@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.2.13, release-date 2024-11-13
+# Version 42.2.13, release-date 2024-11-14
 * Corrected bug in `org.xdef.sys.SDatetime` if no milliseconds are specified
   in a datetime walue it was set to 0.
 

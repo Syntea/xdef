@@ -4271,7 +4271,7 @@ public class StringParser extends SReporter implements SParser {
 	}
 
 	/** Read string enclosed in delimiters (' or ").
-	 * string::=  S ('"' ^['"']* '"' | "'" ^["'"]* "'")
+	 * <p>string::=  S ('"' ^['"']* '"' | "'" ^["'"]* "'")</p>
 	 * @return string or null if on the source position is not a valid
 	 * string declaration.
 	 */

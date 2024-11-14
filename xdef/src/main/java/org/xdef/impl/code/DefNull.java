@@ -179,7 +179,10 @@ public final class DefNull extends XDValueAbstract {
 	 * @return XDParseResult value of this object or return <i>null</i>.
 	 */
 	public final XDParseResult parseResultValue() {return null;}
-	/** Create "null" XD object of given type. */
+	/** Create "null" XD object of given type.
+	 * @param type type ID of DefNull object.
+	 * @return created null XDValue object.
+	 */
 	public static final XDValue genNullValue(final short type) {
 		switch (type) {
 			case XD_LONG: return new DefLong();
