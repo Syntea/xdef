@@ -3120,6 +3120,98 @@ public final class TestXdef extends XDTester {
 			assertEq("<a a='2024-10-21T23:55:30+02:00'/>",
 				parse(xp, "", "<a a='2024-10-22T11:55:30Etc/GMT-14'/>", null)); // zone specified
 		} catch (RuntimeException ex) {fail(ex);}
+		try { // test minYear, maxYear, specDates
+			props = new Properties();
+			props.setProperty(XDConstants.XDPROPERTY_MINYEAR, "1900");
+			props.setProperty(XDConstants.XDPROPERTY_MAXYEAR, "2100");
+			props.setProperty(XDConstants.XDPROPERTY_SPECDATES, "3000-12-31T23:59:59");
+			xp = XDFactory.compileXD(props, //ydatetime
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" root=\"root\">\n" +
+"  <root datum=\"ydatetime('yyyy-MM-ddTHH:mm:ss[Z]', 'yyyy-MM-ddTHH:mm:ss');\" />\n" +
+"</xd:def>");
+			xml = "<root datum=\"2024-11-04T10:00:00\" />";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrorsAndClear(reporter);
+			xml = "<root datum=\"3024-11-04T10:00:00\"/>";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertTrue(reporter.printToString().contains("XDEF818"));
+			reporter.clear();
+			xml = "<root datum=\"a3024-11-04T10:00:00\" />";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertTrue(reporter.printToString().contains("XDEF809"));
+			reporter.clear();
+			xml = "<root datum=\"2024-11-04T10:00:00a\" />";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertTrue(reporter.printToString().contains("XDEF804"));
+			reporter.clear();
+			xml = "<root datum=\"3024-11-04T10:00:00a\" />";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertTrue(reporter.printToString().contains("XDEF804"));
+			reporter.clear();
+			xp = XDFactory.compileXD(props,//datetime
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" root=\"root\"><root datum=\"dateTime();\" /></xd:def>");
+			xml = "<root datum=\"2024-11-04T10:00:00\" />";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrorsAndClear(reporter);
+			xml = "<root datum=\"3024-11-04T10:00:00\" />";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertTrue(reporter.printToString().contains("XDEF818"));
+			reporter.clear();
+			xml = "<root datum=\"a3024-11-04T10:00:00\" />";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertTrue(reporter.printToString().contains("XDEF809"));
+			reporter.clear();
+			xml = "<root datum=\"2024-11-04T10:00:00a\" />";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertTrue(reporter.printToString().contains("XDEF804"));
+			reporter.clear();
+			xml = "<root datum=\"3024-11-04T10:00:00a\" />";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertTrue(reporter.printToString().contains("XDEF804"));
+			reporter.clear();
+			xp = XDFactory.compileXD(props, //date
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" root=\"root\"><root datum=\"date();\"/></xd:def>");
+			xml = "<root datum=\"2024-11-04\" />";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrorsAndClear(reporter);
+			xml = "<root datum=\"3024-11-04\" />";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertTrue(reporter.printToString().contains("XDEF818"));
+			reporter.clear();
+			xml = "<root datum=\"a3024-11-04\" />";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertTrue(reporter.printToString().contains("XDEF809"));
+			reporter.clear();
+			xml = "<root datum=\"2024-11-04a\" />";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertTrue(reporter.printToString().contains("XDEF804"));
+			reporter.clear();
+			xml = "<root datum=\"3024-11-04a\" />";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertTrue(reporter.printToString().contains("XDEF804"));
+			reporter.clear();
+			xp = XDFactory.compileXD(props, //dateYMDhms
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" root=\"root\"><root datum=\"dateYMDhms();\" /></xd:def>");
+			xml = "<root datum=\"20241104100000\" />";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrorsAndClear(reporter);
+			xml = "<root datum=\"30241104100000\" />";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertTrue(reporter.printToString().contains("XDEF818"));
+			reporter.clear();
+			xml = "<root datum=\"a30241104100000\" />";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertTrue(reporter.printToString().contains("XDEF809"));
+			reporter.clear();
+			xml = "<root datum=\"20241104100000a\" />";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertTrue(reporter.printToString().contains("XDEF804"));
+			reporter.clear();
+			xml = "<root datum=\"30241104100000a\" />";
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertTrue(reporter.printToString().contains("XDEF804"));
+			reporter.clear();
+		} catch (Exception ex) {reporter.clear(); fail(ex);}
 		try { // test "implements"
 			xp = compile(new String[] {
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.0\" xd:name=\"Types\">\n" +
