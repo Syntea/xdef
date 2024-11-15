@@ -1,5 +1,8 @@
 # Version ${version}, release-date ${release.date}
 
+# Version 42.2.14, release-date 2024-11-15
+* .
+
 # Version 42.2.13, release-date 2024-11-15
 * Corrected bug in `org.xdef.sys.SDatetime` if milliseconds are not specified (it was set to 0).
 * Corrected bug in comparing models with X-script command `implements`.
