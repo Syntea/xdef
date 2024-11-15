@@ -2925,6 +2925,7 @@ public final class TestXdef extends XDTester {
 		} catch (Exception ex) {
 			if ((s = ex.getMessage()) == null || !s.contains("XML099")) {fail(ex);}
 		}
+		resetProperties();
 		try {// test "classpath" and "file" protocol in URL
 			XDFactory.compileXD(null, //without wildcards
 				"classpath://org.xdef.impl.compile.XdefOfXdefBase.xdef",
@@ -2962,16 +2963,15 @@ public final class TestXdef extends XDTester {
 			if ((s = ex.getMessage()) == null || !s.contains("XDEF998")) {fail(ex);}
 		}
 		try { // test with property xdef_warnings=false
-			xdef =
+			props = new Properties();
+			props.setProperty(XDConstants.XDPROPERTY_WARNINGS, XDConstants.XDPROPERTYVALUE_WARNINGS_FALSE);
+			xp = XDFactory.compileXD(props,
 "<xd:def xmlns:xd='"+_xdNS+"' name='X' root='a'>\n"+
 "  <xd:declaration>\n"+
 "    external method boolean test.xdef.TestXdef.x(XXData x);\n"+
 "  </xd:declaration>\n"+
 "  <a a=\"list('x','y')\" b=\"x()\"> </a>\n"+
-"</xd:def>";
-			props = new Properties();
-			props.setProperty(XDConstants.XDPROPERTY_WARNINGS, XDConstants.XDPROPERTYVALUE_WARNINGS_FALSE);
-			xp = XDFactory.compileXD(props, xdef);
+"</xd:def>");
 			xd = xp.createXDDocument();
 			xd.xparse("<a a='y' b='z'/>", null);
 		} catch (RuntimeException ex) {fail(ex);}
@@ -3107,8 +3107,9 @@ public final class TestXdef extends XDTester {
 			assertEq("<a a=\"2024-10-22T00:55:30+02:00\"/>", xd.xparse(xml, null));
 		} catch (RuntimeException ex) {fail(ex);}
 		try { // test default zone and ydatetime
-			setProperty(XDConstants.XDPROPERTY_DEFAULTZONE, "CET");
-			xp = compile(
+			props = new Properties();
+			props.setProperty(XDConstants.XDPROPERTY_DEFAULTZONE, "CET");
+			xp = XDFactory.compileXD(props,
 "<xd:def xmlns:xd='http://www.xdef.org/xdef/4.2' root='a'>\n"+
 "  <a a=\"ydatetime('yyyy-MM-ddTHH:mm:ss[ZZ]', 'yyyy-MM-ddTHH:mm:ssZ');\"/>\n" +
 "</xd:def>");
@@ -3119,12 +3120,12 @@ public final class TestXdef extends XDTester {
 			assertEq("<a a='2024-10-21T23:55:30+02:00'/>",
 				parse(xp, "", "<a a='2024-10-22T11:55:30Etc/GMT-14'/>", null)); // zone specified
 		} catch (RuntimeException ex) {fail(ex);}
-		setProperty(XDConstants.XDPROPERTY_DEFAULTZONE, null);
 		try { // test minYear, maxYear, specDates
-			setProperty(XDConstants.XDPROPERTY_MINYEAR, "1900");
-			setProperty(XDConstants.XDPROPERTY_MAXYEAR, "2100");
-			setProperty(XDConstants.XDPROPERTY_SPECDATES, "3000-12-31T23:59:59");
-			xp = compile( //ydatetime
+			props = new Properties();
+			props.setProperty(XDConstants.XDPROPERTY_MINYEAR, "1900");
+			props.setProperty(XDConstants.XDPROPERTY_MAXYEAR, "2100");
+			props.setProperty(XDConstants.XDPROPERTY_SPECDATES, "3000-12-31T23:59:59");
+			xp = XDFactory.compileXD(props, //ydatetime
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" root=\"root\">\n" +
 "  <root datum=\"ydatetime('yyyy-MM-ddTHH:mm:ss[Z]', 'yyyy-MM-ddTHH:mm:ss');\" />\n" +
 "</xd:def>");
@@ -3146,7 +3147,7 @@ public final class TestXdef extends XDTester {
 			xml = "<root datum=\"3024-11-04T10:00:00a\" />";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertTrue(reporter.printToString().contains("XDEF804"));
-			xp = compile( //datetime
+			xp = XDFactory.compileXD(props, //datetime
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" root=\"root\"><root datum=\"dateTime();\" /></xd:def>");
 			xml = "<root datum=\"2024-11-04T10:00:00\" />";
 			assertEq(xml, parse(xp, "", xml, reporter));
@@ -3166,7 +3167,7 @@ public final class TestXdef extends XDTester {
 			xml = "<root datum=\"3024-11-04T10:00:00a\" />";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertTrue(reporter.printToString().contains("XDEF804"));
-			xp = compile( //date
+			xp = XDFactory.compileXD(props, //date
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" root=\"root\"><root datum=\"date();\"/></xd:def>");
 			xml = "<root datum=\"2024-11-04\" />";
 			assertEq(xml, parse(xp, "", xml, reporter));
@@ -3186,7 +3187,7 @@ public final class TestXdef extends XDTester {
 			xml = "<root datum=\"3024-11-04a\" />";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertTrue(reporter.printToString().contains("XDEF804"));
-			xp = compile( //dateYMDhms
+			xp = XDFactory.compileXD(props, //dateYMDhms
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.2\" root=\"root\"><root datum=\"dateYMDhms();\" /></xd:def>");
 			xml = "<root datum=\"20241104100000\" />";
 			assertEq(xml, parse(xp, "", xml, reporter));
@@ -3206,10 +3207,7 @@ public final class TestXdef extends XDTester {
 			xml = "<root datum=\"30241104100000a\" />";
 			assertEq(xml, parse(xp, "", xml, reporter));
 			assertTrue(reporter.printToString().contains("XDEF804"));
-		} catch (Exception ex) {fail(ex);}
-		setProperty(XDConstants.XDPROPERTY_MINYEAR, null);
-		setProperty(XDConstants.XDPROPERTY_MAXYEAR, null);
-		setProperty(XDConstants.XDPROPERTY_SPECDATES, null);
+		} catch (RuntimeException ex) {fail(ex);}
 		try { // test "implements"
 			xp = compile(new String[] {
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.0\" xd:name=\"Types\">\n" +
