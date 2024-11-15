@@ -3120,6 +3120,30 @@ public final class TestXdef extends XDTester {
 			assertEq("<a a='2024-10-21T23:55:30+02:00'/>",
 				parse(xp, "", "<a a='2024-10-22T11:55:30Etc/GMT-14'/>", null)); // zone specified
 		} catch (RuntimeException ex) {fail(ex);}
+		try { // test "implements"
+			xp = compile(new String[] {
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.0\" xd:name=\"Types\">\n" +
+"    <xd:declaration scope=\"global\">\n" +
+"        type  cisloSmlouvy  string(1,35);\n" +
+"        type  id            long(-1,999_999_999_999); /* Gam_Type */\n" +
+"        type  poradiVozidla string(1,10);\n" +
+"    </xd:declaration>\n" +
+"</xd:def>\n",
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.0\" xd:root=\"IdentSmlouvy\" xd:name=\"Common\">\n" +
+"  <IdentSmlouvy CisloSmlouvy=\"cisloSmlouvy()\" IdPojistitel=\"id()\" PoradiVozidla=\"poradiVozidla()\"/>\n"+
+"</xd:def>\n",
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.0\" xd:root=\"IdentSmlouvy\" xd:name=\"Example\">\n" +
+"    <IdentSmlouvy IdPojistitel=\"id()\" CisloSmlouvy=\"cisloSmlouvy()\" PoradiVozidla=\"poradiVozidla()\"\n"+
+"                  xd:script = \"implements Common#IdentSmlouvy\"/>\n" +
+"</xd:def>\n"});
+			xml = "<IdentSmlouvy CisloSmlouvy=\"c\" IdPojistitel=\"1\" PoradiVozidla=\"p\"/>";
+			xd = xp.createXDDocument("Common");
+			assertEq(xml, parse(xd,xml, reporter));
+			assertNoErrorsAndClear(reporter);
+			xd = xp.createXDDocument("Example");
+			assertEq(xml, parse(xd,xml, reporter));
+			assertNoErrorsAndClear(reporter);
+		} catch (RuntimeException ex) {fail(ex);}
 
 		clearTempDir(); // delete created temporary files
 		resetTester();
