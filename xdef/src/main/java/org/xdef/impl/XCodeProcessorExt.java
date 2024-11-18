@@ -228,6 +228,7 @@ import org.xdef.impl.code.DefTelephone;
 import org.xdef.impl.code.DefXmlWriter;
 import static org.xdef.impl.compile.CompileBase.getTypeName;
 import org.xdef.impl.ext.XExtUtils;
+import org.xdef.msg.SYS;
 import org.xdef.msg.XDEF;
 import org.xdef.proc.XXElement;
 import org.xdef.proc.XXException;
@@ -553,33 +554,17 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 			case SET_ZONEID: { //Set time zone name
 				SDatetime t = p1.datetimeValue();
 				String s = p2.stringValue();
-				TimeZone tz;
 				if (s == null || (s = s.trim()).isEmpty()) {
-					 tz = null;
+					t.setTZ(null);
 				} else {
-					tz = TimeZone.getTimeZone(s);
-					if (!s.equals(tz.getID())) { // try explicit zone specification (e.g. "+02:00")
-						StringParser p = new StringParser(s);
-						char c;
-						int hour;
-						int min;
-						if (s.length() == 6 && ((c = p.isOneOfChars("-+")) == '+' || c == '-')
-							&& p.isInteger() && (hour = p.getParsedInt()) <= 14 && p.getIndex() == 3
-							&& p.isChar(':') && p.isInteger() && ((hour < 14 && (min=p.getParsedInt()) < 60)
-							|| (hour == 14 && (min=p.getParsedInt()) == 0))) {
-							int offset = hour * 3600000 + min * 60000;
-							if (c == '-') {
-								offset = -offset;
-							}
-							tz = (TimeZone) TimeZone.getTimeZone("UTC").clone();
-							tz.setRawOffset(offset);
-							tz.setID(s);
-						} else {
-							throw new SRuntimeException("Incorrect zone: " + s);
+					TimeZone tz;
+					if ((tz = TimeZone.getTimeZone(s)) == null || !s.equals(tz.getID())) {
+						if ((TimeZone.getTimeZone("GMT" + s)) == null || !("GMT" + s).equals(tz.getID())) {
+							throw new SRuntimeException(SYS.SYS057, s);//Incorrect timezone name{0}{: "}{"}
 						}
 					}
+					t.setTZ(tz);
 				}
-				t.setTZ(tz);
 				return new DefDate(t);
 			}
 			//String
@@ -597,14 +582,12 @@ final class XCodeProcessorExt implements CodeTable, XDValueID {
 			case GET_SUBSTRING: {//s.substring(i);
 				int i = p2.intValue();
 				String s = p1.stringValue();
-				return (s != null && s.length() >  i) ?
-					new DefString(s.substring(i)) : new DefString("");
+				return (s != null && s.length() >  i) ? new DefString(s.substring(i)) : new DefString("");
 			}
 			case CUT_STRING: {//cut(s,i);
 				int i = p2.intValue();
 				String s = p1.stringValue();
-				return (s != null && s.length() >  i) ?
-					new DefString(s.substring(0, i)) : new DefString(s);
+				return (s != null && s.length() >  i) ? new DefString(s.substring(0, i)) : new DefString(s);
 			}
 			case REPORT_TOSTRING: return new DefString( ((XDReport) p2).toString(p1.stringValue()));
 			case REPORT_GETPARAM: return new DefString(((XDReport) p1).getParameter(p2.stringValue()));

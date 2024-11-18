@@ -1558,9 +1558,7 @@ public class CompileBase implements CodeTable, XDValueID {
 	 * that item is deprecated (and the previous item is a recommended parser
 	 * name - i.e. alias name can't be the first one).
 	 */
-	private static void parser(final InternalMethod im,
-		final Class<?> clazz,
-		final String... names) {
+	private static void parser(final InternalMethod im, final Class<?> clazz, final String... names) {
 		try {
 			Constructor<?> c = ((Class<?>) clazz).getConstructor();
 			Map<String, InternalMethod> hm;
@@ -1594,9 +1592,7 @@ public class CompileBase implements CodeTable, XDValueID {
 	 * name - i.e. alias name can't be the first one).
 	 * @param im Internal method object.
 	 */
-	private static void method(final short typeId,
-		final InternalMethod im,
-		final String... names) {
+	private static void method(final short typeId, final InternalMethod im, final String... names) {
 		Map<String, InternalMethod> hm;
 		if ((hm = getTypeMethods(typeId)) == null) {
 			METHODS.set(typeId, hm = new LinkedHashMap<>());
@@ -1635,9 +1631,8 @@ public class CompileBase implements CodeTable, XDValueID {
 		return new KeyParam(key,type,list,seqIndex,fixed,false,legalValues);
 	}
 
-	/** Create internal method descriptor of parser with keyword parameters.
-	 * Note the parameter code is fixed value LD_CONST,
-	 * parameter restrictions is ANY_MODE and resultType is XD_PARSER.
+	/** Create internal method descriptor of parser with keyword parameters. Note the parameter code is fixed
+	 * value LD_CONST, parameter restrictions is ANY_MODE and resultType is XD_PARSER.
 	 * @param minPars Minimal number of parameters.
 	 * @param maxPars Maximal number of parameters.
 	 * @param paramTypes List of type id's of parameters.
@@ -1680,8 +1675,7 @@ public class CompileBase implements CodeTable, XDValueID {
 	 * @param classLoader the class loader used for the project.
 	 * @return type ID or XD_UNDEF.
 	 */
-	static short getClassTypeID(final String className,
-		final ClassLoader classLoader) {
+	static short getClassTypeID(final String className, final ClassLoader classLoader) {
 		int ndx = TYPEIDS.indexOf(';' + className + ';');
 		if (ndx > 0) { //names of X-script types
 			return (short) TYPEIDS.charAt(ndx - 1);
@@ -1753,31 +1747,27 @@ public class CompileBase implements CodeTable, XDValueID {
 	}
 
 	/** Get type methods.
-	 * @param type base type.
+	 * @param typ base type.
 	 * @return map with method names and internal method objects.
 	 */
-	public static final Map<String, InternalMethod> getTypeMethods(
-		final short type) {
-		return METHODS.get(type);
-	}
+	public static final Map<String, InternalMethod> getTypeMethods(final short typ) {return METHODS.get(typ);}
 
 	/** Get internal method.
-	 * @param type base type.
+	 * @param typ base type.
 	 * @param name name of method.
 	 * @return InternalMethod object.
 	 */
-	public static final InternalMethod getTypeMethod(final short type,
-		final String name) {
-		Map<String, InternalMethod> hm = getTypeMethods(type);
+	public static final InternalMethod getTypeMethod(final short typ, final String name) {
+		Map<String, InternalMethod> hm = getTypeMethods(typ);
 		return hm == null ? null : hm.get(name);
 	}
 
 	/** Get class object corresponding to the type.
-	 * @param type type id.
+	 * @param typ type id.
 	 * @return the Class object corresponding to type argument.
 	 */
-	static Class<?> getTypeClass(short type) {
-		Class<?> result = TYPECLASSES[type];
+	static Class<?> getTypeClass(short typ) {
+		Class<?> result = TYPECLASSES[typ];
 		return result == null ? org.xdef.impl.compile.CodeUndefined.class : result;
 	}
 
@@ -1828,8 +1818,7 @@ public class CompileBase implements CodeTable, XDValueID {
 		/** Text of recommendation for deprecated methods. */
 		private final String _recommended;
 
-		/** Create new internal method descriptor of method with
-		 * keyword parameters.
+		/** Create new internal method descriptor of method with keyword parameters.
 		 * @param code The code of method.
 		 * @param restrictions Modes where the method is allowed.
 		 * @param minPars Minimal number of parameters.
@@ -1876,13 +1865,11 @@ public class CompileBase implements CodeTable, XDValueID {
 			 _recommended = null;
 		}
 
-		/** Create clone of deprecated InternalMethod object and add the
-		 * recommended name.
+		/** Create clone of deprecated InternalMethod object and add the recommended name.
 		 * @param x original InternalMethod.
 		 * @param recommended name of recommended method instead of this one.
 		 */
-		private InternalMethod (final InternalMethod x,
-			final String recommended) {
+		private InternalMethod (final InternalMethod x, final String recommended) {
 			_code = x._code;
 			_minParams = x._minParams;
 			_maxParams = x._maxParams;

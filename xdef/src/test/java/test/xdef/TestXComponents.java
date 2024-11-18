@@ -40,7 +40,7 @@ public final class TestXComponents extends XDTester {
 
 	public TestXComponents() {super();}
 
-	private static void genXPosList(final XComponent xc, StringBuilder sb) {
+	private static void genXPosList(final XComponent xc, final StringBuilder sb) {
 		sb.append(xc.xGetXPos()).append('\n');
 		java.util.List<XComponent> childNodes = xc.xGetNodeList();
 		if (childNodes != null && !childNodes.isEmpty()) {
@@ -190,8 +190,7 @@ public final class TestXComponents extends XDTester {
 			assertEq(2021L, SUtils.getValueFromGetter(xc, "getRokDN"));
 			assertEq("12345", SUtils.getValueFromGetter(xc, "getCisloDN"));
 			assertEq("x", SUtils.getValueFromGetter(xc, "getC"));
-			assertEq(new SDatetime("2021-05-24"),
-				SUtils.getValueFromGetter(xc, "getP"));
+			assertEq(new SDatetime("2021-05-24"), SUtils.getValueFromGetter(xc, "getP"));
 			xdef = // test base64/hex
 "<xd:def xmlns:xd='" + _xdNS + "' root='X'>\n"+
 "  <X a='hex()' b='base64Binary()' c='SHA1()'/>\n"+
@@ -227,8 +226,7 @@ public final class TestXComponents extends XDTester {
 			genXComponent(xp = compile(xdef));
 			o = SUtils.getNewInstance("test.xdef.xcomp.XCPerson");
 			SUtils.setValueToSetter(o, "setName", "John Brown");
-			SUtils.setValueToSetter(o, "setBirth",
-				new Timestamp(new Date(0).getTime()));
+			SUtils.setValueToSetter(o, "setBirth", new Timestamp(new Date(0).getTime()));
 			SUtils.setValueToSetter(o, "setSex", TestXComponents_bindEnum.M);
 			xml = "<Person Birth='01.01.1970' Name='John Brown' Sex='M'/>";
 			assertEq(xml, ((XComponent) o).toXml());
@@ -340,14 +338,12 @@ public final class TestXComponents extends XDTester {
 			xd = xp.createXDDocument();
 			xc = xd.jparseXComponent(s, null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
-			assertTrue(XonUtils.xonEqual(xon,
-				SUtils.getValueFromGetter(xc,"toXon")));
+			assertTrue(XonUtils.xonEqual(xon, SUtils.getValueFromGetter(xc,"toXon")));
 			xd = xp.createXDDocument();
 			xd.setXDContext(xc.toXml());
 			xc = xd.jcreateXComponent("X", null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
-			assertTrue(XonUtils.xonEqual(xon,
-				SUtils.getValueFromGetter(xc,"toXon")));
+			assertTrue(XonUtils.xonEqual(xon, SUtils.getValueFromGetter(xc,"toXon")));
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='X'>\n"+
 "  <xd:component> %class bugreports.data.JCreateX2 %link X </xd:component>\n"+
@@ -363,8 +359,7 @@ public final class TestXComponents extends XDTester {
 			xd.setXONContext(XonUtils.xonToJson(xon));
 			xc = xd.jcreateXComponent("X", null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
-			assertTrue(XonUtils.xonEqual(xon,
-				SUtils.getValueFromGetter(xc,"toXon")));
+			assertTrue(XonUtils.xonEqual(xon, SUtils.getValueFromGetter(xc,"toXon")));
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='X'>\n"+
 "  <xd:component>%class "+_package+".JCreateX3 %link X</xd:component>\n"+
@@ -380,8 +375,7 @@ public final class TestXComponents extends XDTester {
 			xd.setXONContext(XonUtils.xonToJson(xon));
 			xc = xd.jcreateXComponent("X", null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
-			assertTrue(XonUtils.xonEqual(xon,
-				SUtils.getValueFromGetter(xc,"toXon")));
+			assertTrue(XonUtils.xonEqual(xon, SUtils.getValueFromGetter(xc,"toXon")));
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='X'>\n"+
 "  <xd:json name=\"X\"> {b:[ \"int();\",[\"int();\"],\"string();\"]}</xd:json>\n"+
@@ -393,14 +387,12 @@ public final class TestXComponents extends XDTester {
 			xon = XonUtils.parseXON(s);
 			xc = xd.jparseXComponent(s, null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
-			assertTrue(XonUtils.xonEqual(xon,
-				SUtils.getValueFromGetter(xc,"toXon")));
+			assertTrue(XonUtils.xonEqual(xon, SUtils.getValueFromGetter(xc,"toXon")));
 			xd = xp.createXDDocument();
 			xd.setXONContext(xon);
 			xc = xd.jcreateXComponent("X", null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
-			assertTrue(XonUtils.xonEqual(xon,
-				SUtils.getValueFromGetter(xc,"toXon")));
+			assertTrue(XonUtils.xonEqual(xon, SUtils.getValueFromGetter(xc,"toXon")));
 			xdef = // jcreate with create section
 "<xd:def xmlns:xd='" + _xdNS + "' root='X'>\n"+
 "  <xd:json name = 'X'>\n"+
@@ -416,8 +408,7 @@ public final class TestXComponents extends XDTester {
 			xd = xp.createXDDocument();
 			xc = xd.jcreateXComponent("X", null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
-			assertTrue(XonUtils.xonEqual(xon,
-				SUtils.getValueFromGetter(xc,"toXon")));
+			assertTrue(XonUtils.xonEqual(xon, SUtils.getValueFromGetter(xc,"toXon")));
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='X'>\n"+
 "  <xd:json name = 'X'>\n"+
@@ -435,8 +426,7 @@ public final class TestXComponents extends XDTester {
 			xd = xp.createXDDocument();
 			xc = xd.jcreateXComponent("X", null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
-			assertTrue(XonUtils.xonEqual(xon,
-				SUtils.getValueFromGetter(xc,"toXon")));
+			assertTrue(XonUtils.xonEqual(xon, SUtils.getValueFromGetter(xc,"toXon")));
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='x'>\n"+
 "<x>\n"+
@@ -722,11 +712,9 @@ public final class TestXComponents extends XDTester {
 			xc = xp.createXDDocument().xparseXComponent(xml, null, reporter);
 			assertNoErrorsAndClear(reporter);
 			assertEq(xml, xc.toXml());
-			assertEq("1", SUtils.getValueFromGetter(
-				SUtils.getValueFromGetter(xc,"getB"), "getb"));
+			assertEq("1", SUtils.getValueFromGetter(SUtils.getValueFromGetter(xc,"getB"), "getb"));
 			assertEq("2", SUtils.getValueFromGetter(
-				SUtils.getValueFromGetter(
-					SUtils.getValueFromGetter(xc,"getC"), "getB"), "getb"));
+				SUtils.getValueFromGetter(SUtils.getValueFromGetter(xc,"getC"), "getB"), "getb"));
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A0'>\n" +
 "  <A0>\n" +
@@ -743,11 +731,9 @@ public final class TestXComponents extends XDTester {
 			xc = xd.xparseXComponent(xml, null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
 			assertEq(xml, xc.toXml());
-			assertEq("c",
-				SUtils.getValueFromGetter(SUtils.getValueFromGetter(
+			assertEq("c", SUtils.getValueFromGetter(SUtils.getValueFromGetter(
 				SUtils.getValueFromGetter(xc, "getB"), "getC"), "getc"));
-			assertEq("d/c", SUtils.getValueFromGetter(
-				SUtils.getValueFromGetter(SUtils.getValueFromGetter(
+			assertEq("d/c", SUtils.getValueFromGetter(SUtils.getValueFromGetter(SUtils.getValueFromGetter(
 				SUtils.getValueFromGetter(xc, "getB"),"getD"),"getC"),"getc"));
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='A1'>\n" +
@@ -765,11 +751,9 @@ public final class TestXComponents extends XDTester {
 			xc = xd.xparseXComponent(xml, null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
 			assertEq(xml, xc.toXml());
-			assertEq("c",
-				SUtils.getValueFromGetter(SUtils.getValueFromGetter(
+			assertEq("c", SUtils.getValueFromGetter(SUtils.getValueFromGetter(
 				SUtils.getValueFromGetter(xc, "getB"), "getC"), "getc"));
-			assertEq("d/c", SUtils.getValueFromGetter(
-				SUtils.getValueFromGetter(SUtils.getValueFromGetter(
+			assertEq("d/c", SUtils.getValueFromGetter(SUtils.getValueFromGetter(SUtils.getValueFromGetter(
 				SUtils.getValueFromGetter(xc, "getB"),"getD"),"getC"),"getc"));
 			xdef = //test any, moreAttributes, moreElements, moreText
 "<xd:def  xmlns:xd='"+_xdNS+"' root='X'>\n"+
@@ -840,8 +824,9 @@ public final class TestXComponents extends XDTester {
 		} catch (RuntimeException ex) {fail(ex);}
 ////////////////////////////////////////////////////////////////////////////////
 		try {// generate XCDPool from sources used in next tests
-			xp = compile(new String[] {getDataDir()+"test/TestXComponents.xdef",
-				getDataDir() + "test/TestXComponent_Z.xdef"});
+			xp = compile(new String[] {
+				getDataDir()+"test/TestXComponents.xdef", getDataDir() + "test/TestXComponent_Z.xdef"}
+			);
 			// generate and compile XComponents from xp
 			assertNoErrors(genXComponent(xp));
 		} catch (Exception ex) {
@@ -871,48 +856,33 @@ public final class TestXComponents extends XDTester {
 			assertEq(xml, xc.toXml());
 			assertEq("/A/@a", SUtils.getValueFromGetter(xc, "xposOfa"));
 			assertEq("/A/d[1]/$text",
-				SUtils.getValueFromGetter(SUtils.getValueFromGetter(
-					xc, "getd"), "xposOf$value").toString());
+				SUtils.getValueFromGetter(SUtils.getValueFromGetter(xc, "getd"), "xposOf$value").toString());
 			list = (List) SUtils.getValueFromGetter(xc,"get$Y");
 			assertEq("1", list.get(0));
 			assertEq("2", list.get(1));
 			assertEq("3", SUtils.getValueFromGetter(xc,"get$Y_1"));
-			assertEq(SUtils.getValueFromGetter(
-				SUtils.getValueFromGetter(xc, "getd"),
+			assertEq(SUtils.getValueFromGetter(SUtils.getValueFromGetter(xc, "getd"),
 				"get$value").toString(), "2013-09-14");
-			assertEq(SUtils.getValueFromGetter(
-				SUtils.getValueFromGetter(xc, "getd"), "get$value"),
-				SUtils.getValueFromGetter(
-					SUtils.getValueFromGetter(xc, "getd"), "dateOf$value"));
-			assertEq(SUtils.getValueFromGetter(
-				SUtils.getValueFromGetter(xc, "getd"), "get$value"),
-				SUtils.getValueFromGetter(
-					SUtils.getValueFromGetter(xc, "getd"),"timestampOf$value"));
-			assertEq(SUtils.getValueFromGetter(
-				SUtils.getValueFromGetter(xc, "getd"), "get$value"),
-				SUtils.getValueFromGetter(SUtils.getValueFromGetter(xc, "getd"),
-				"calendarOf$value"));
+			assertEq(SUtils.getValueFromGetter(SUtils.getValueFromGetter(xc, "getd"), "get$value"),
+				SUtils.getValueFromGetter(SUtils.getValueFromGetter(xc, "getd"), "dateOf$value"));
+			assertEq(SUtils.getValueFromGetter(SUtils.getValueFromGetter(xc, "getd"), "get$value"),
+				SUtils.getValueFromGetter(SUtils.getValueFromGetter(xc, "getd"),"timestampOf$value"));
+			assertEq(SUtils.getValueFromGetter(SUtils.getValueFromGetter(xc, "getd"), "get$value"),
+				SUtils.getValueFromGetter(SUtils.getValueFromGetter(xc, "getd"), "calendarOf$value"));
 			assertEq(SUtils.getValueFromGetter(
 				SUtils.getValueFromGetter(xc, "geti"),
 				"get$value").toString(), "1");
-			assertEq(SUtils.getValueFromGetter(
-				SUtils.getValueFromGetter(xc, "gett"),
+			assertEq(SUtils.getValueFromGetter(SUtils.getValueFromGetter(xc, "gett"),
 				"get$value").toString(), "10:20:30");
-			SUtils.setValueToSetter(SUtils.getValueFromGetter(xc, "geti"),
-				"set$value", BigInteger.valueOf(2));
-			assertEq("Franta", SUtils.getValueFromGetter(
-				SUtils.getValueFromGetter(xc,"gets"), "get$value"));
-			SUtils.setValueToSetter(SUtils.getValueFromGetter(xc, "gets"),
-				"set$value", "Pepik");
+			SUtils.setValueToSetter(SUtils.getValueFromGetter(xc, "geti"),"set$value", BigInteger.valueOf(2));
+			assertEq("Franta", SUtils.getValueFromGetter(SUtils.getValueFromGetter(xc,"gets"), "get$value"));
+			SUtils.setValueToSetter(SUtils.getValueFromGetter(xc, "gets"), "set$value", "Pepik");
 			assertTrue(BigInteger.valueOf(2).equals(SUtils.getValueFromGetter(
 				SUtils.getValueFromGetter(xc, "geti"), "get$value")));
-			assertEq("Pepik", SUtils.getValueFromGetter(
-				SUtils.getValueFromGetter(xc, "gets"), "get$value"));
+			assertEq("Pepik", SUtils.getValueFromGetter( SUtils.getValueFromGetter(xc, "gets"), "get$value"));
 			list = (List)SUtils.getValueFromGetter(xc, "listOfd2");
-			assertEq("/A/d2[1]",
-				SUtils.getValueFromGetter(list.get(0),"xGetXPos"));
-			assertEq("/A/d2[2]",
-				SUtils.getValueFromGetter(list.get(1),"xGetXPos"));
+			assertEq("/A/d2[1]", SUtils.getValueFromGetter(list.get(0),"xGetXPos"));
+			assertEq("/A/d2[2]", SUtils.getValueFromGetter(list.get(1),"xGetXPos"));
 			assertEq(xc.toXml(),
 "<A a='a' dec = '123.45'>"+
 "<W w='w'/><W w='w1'>blabla</W><Y>1</Y><Y>2</Y><i>2</i><Y>3</Y>"+
@@ -922,18 +892,14 @@ public final class TestXComponents extends XDTester {
 "<d2 d='Thu, 15 Oct 2009 01:02:03 +0200'>Thu, 15 Oct 2009 01:02:04 +0200</d2>"+
 "<d-e.f d-e.f='xx'>yy</d-e.f><g-h.i>zz</g-h.i>"+
 "</A>");
-			SUtils.setValueToSetter(SUtils.getValueFromGetter(xc, "geti"),
-				"set$value", BigInteger.valueOf(3));
+			SUtils.setValueToSetter(SUtils.getValueFromGetter(xc, "geti"), "set$value", BigInteger.valueOf(3));
 			SDatetime date =  new SDatetime("2013-09-01");
-			SUtils.setValueToSetter(SUtils.getValueFromGetter(xc, "getd"),
-				"set$value", date);
+			SUtils.setValueToSetter(SUtils.getValueFromGetter(xc, "getd"), "set$value", date);
 			SDatetime time =  new SDatetime("11:21:31");
-			SUtils.setValueToSetter(SUtils.getValueFromGetter(xc, "gett"),
-				"set$value", time);
+			SUtils.setValueToSetter(SUtils.getValueFromGetter(xc, "gett"), "set$value", time);
 			assertTrue(BigInteger.valueOf(3).equals(SUtils.getValueFromGetter(
 				SUtils.getValueFromGetter(xc, "geti"), "get$value")));
-			assertEq(SUtils.getValueFromGetter(
-				SUtils.getValueFromGetter(xc, "getd"), "get$value"), date);
+			assertEq(SUtils.getValueFromGetter(SUtils.getValueFromGetter(xc, "getd"), "get$value"), date);
 			el = xc.toXml();
 			assertEq(el,
 "<A a='a' dec = '123.45'>"+
@@ -969,12 +935,10 @@ public final class TestXComponents extends XDTester {
 			SUtils.setValueToSetter(xc, "setdec", new BigDecimal("123.45"));
 			list = (List) SUtils.getValueFromGetter(xc, "listOfW");
 			assertNull(SUtils.getValueFromGetter(list.get(0),"get$value"));
-			assertEq("blabla",
-				SUtils.getValueFromGetter(list.get(1),"get$value"));
+			assertEq("blabla", SUtils.getValueFromGetter(list.get(1),"get$value"));
 			list.clear();
 			((List) SUtils.getValueFromGetter(xc, "listOfY")).clear();
-			SUtils.setValueToSetter(SUtils.getValueFromGetter(xc, "geti"),
-				"set$value", BigInteger.valueOf(99));
+			SUtils.setValueToSetter(SUtils.getValueFromGetter(xc, "geti"),"set$value",BigInteger.valueOf(99));
 			assertEq(xc.toXml(), //clone
 "<A a='a' dec='123.45'>"+
 "<i>99</i><Y>3</Y><d>2013-09-01</d><t>11:21:31</t><s>Pepik</s><Z z='z'/>"+
@@ -1119,20 +1083,16 @@ public final class TestXComponents extends XDTester {
 			xc = parseXC(xp, "D", xml, null, null);
 			el = xc.toXml();
 			assertEq(el, xml);
-			assertEq("1", SUtils.getValueFromGetter(
-				SUtils.getValueFromGetter(xc, "getB"), "get$value"));
+			assertEq("1", SUtils.getValueFromGetter(SUtils.getValueFromGetter(xc, "getB"), "get$value"));
 			assertEq("/a:A/B[1]/$text", SUtils.getValueFromGetter(
 				SUtils.getValueFromGetter(xc, "getB"), "xposOf$value"));
-			assertEq("2", SUtils.getValueFromGetter(
-				SUtils.getValueFromGetter(xc, "getB"), "get$value1"));
+			assertEq("2", SUtils.getValueFromGetter(SUtils.getValueFromGetter(xc, "getB"), "get$value1"));
 			assertEq("/a:A/B[1]/$text", SUtils.getValueFromGetter(
 				SUtils.getValueFromGetter(xc, "getB"), "xposOf$value1"));
 			byte[] bytes;
 			bytes = SUtils.decodeBase64("ahgkjfd01Q==");
-			assertEq(bytes, SUtils.getValueFromGetter(
-				SUtils.getValueFromGetter(xc, "getG"), "getA"));
-			list = (List) SUtils.getValueFromGetter(
-				SUtils.getValueFromGetter(xc,"getG"), "listOfX");
+			assertEq(bytes, SUtils.getValueFromGetter(SUtils.getValueFromGetter(xc, "getG"), "getA"));
+			list = (List) SUtils.getValueFromGetter(SUtils.getValueFromGetter(xc,"getG"), "listOfX");
 			assertEq(2,list.size());
 			bytes = SUtils.decodeBase64("bhgkjfd01Q==");
 			assertEq(bytes, SUtils.getValueFromGetter(list.get(0),"get$value"));
@@ -1140,10 +1100,8 @@ public final class TestXComponents extends XDTester {
 			assertEq(bytes, SUtils.getValueFromGetter(SUtils.getValueFromGetter(
 				SUtils.getValueFromGetter(xc,"getG"), "getY"), "get$value"));
 			bytes = SUtils.decodeHex("0123456789ABCDEF");
-			assertEq(bytes, SUtils.getValueFromGetter(
-				SUtils.getValueFromGetter(xc,"getH"), "getA"));
-			list = (List) SUtils.getValueFromGetter(
-				SUtils.getValueFromGetter(xc,"getH"), "listOfX");
+			assertEq(bytes, SUtils.getValueFromGetter(SUtils.getValueFromGetter(xc,"getH"), "getA"));
+			list = (List) SUtils.getValueFromGetter(SUtils.getValueFromGetter(xc,"getH"), "listOfX");
 			assertEq(2, list.size());
 			bytes = SUtils.decodeHex("ABCDEF03456789");
 			assertEq(bytes, SUtils.getValueFromGetter(list.get(0),"get$value"));
@@ -1154,15 +1112,13 @@ public final class TestXComponents extends XDTester {
 				SUtils.getValueFromGetter(xc, "getH"), "getY"), "get$value"));
 			assertEq("t", SUtils.getValueFromGetter(
 				SUtils.getValueFromGetter(xc, "geta$T"), "geta$t"));
-			assertTrue(SUtils.getValueFromGetter(
-				SUtils.getValueFromGetter(xc, "geta$T"), "geta$I") != null);
+			assertTrue(SUtils.getValueFromGetter(SUtils.getValueFromGetter(xc, "geta$T"), "geta$I") != null);
 		} catch (SException ex) {fail(ex);}
 		try {
 			xml = "<if><class try='t'/></if>";
 			xc = parseXC(xp, "E", xml, null, null);
 			assertEq(xc.toXml(), xml);
-			assertEq("t", SUtils.getValueFromGetter(
-				SUtils.getValueFromGetter(xc, "getClazz"), "gettry"));
+			assertEq("t", SUtils.getValueFromGetter(SUtils.getValueFromGetter(xc, "getClazz"), "gettry"));
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xml = "<X><A/></X>";
@@ -1170,8 +1126,7 @@ public final class TestXComponents extends XDTester {
 			assertEq(xc.toXml(), xml);
 			xc = (XComponent) SUtils.getNewInstance("test.xdef.component.F");
 			SUtils.setValueToSetter(xc, "setB", null);
-			SUtils.setValueToSetter(xc, "setA",
-				SUtils.getNewInstance("test.xdef.component.F$A"));
+			SUtils.setValueToSetter(xc, "setA", SUtils.getNewInstance("test.xdef.component.F$A"));
 			assertEq(xc.toXml(), "<X><A/></X>");
 		} catch (Exception ex) {fail(ex);}
 		try {
@@ -1179,10 +1134,8 @@ public final class TestXComponents extends XDTester {
 			xc = parseXC(xp, "F", xml, null, null);
 			assertEq(xml, xc.toXml());
 			o = (XComponent) SUtils.getNewInstance("test.xdef.component.F1");
-			SUtils.setValueToSetter(o, "setA",
-				SUtils.getValueFromGetter(xc, "getA"));
-			XComponentUtil.setVariable((XComponent) o,
-				"B", SUtils.getValueFromGetter(xc, "getB"));
+			SUtils.setValueToSetter(o, "setA", SUtils.getValueFromGetter(xc, "getA"));
+			XComponentUtil.setVariable((XComponent) o, "B", SUtils.getValueFromGetter(xc, "getB"));
 			assertEq(((XComponent) o).toXml(), xml);
 		} catch (Exception ex) {fail(ex);}
 		try {
@@ -1191,12 +1144,9 @@ public final class TestXComponents extends XDTester {
 			o = SUtils.getNewInstance("test.xdef.component.G");
 			xd.setUserObject(o);
 			xc = parseXC(xd, xml, null, null);
-			assertEq("<G g='g_'><XXX x='x'/><YYY y='y'/><YYY y='z'/></G>",
-				xc.toXml());
-			assertEq("x", SUtils.getValueFromGetter(
-				SUtils.getObjectField(o, "_X"), "getx"));
-			assertEq("z", XComponentUtil.getVariable(
-				(XComponent) SUtils.getObjectField(o, "_Y"),"y"));
+			assertEq("<G g='g_'><XXX x='x'/><YYY y='y'/><YYY y='z'/></G>", xc.toXml());
+			assertEq("x", SUtils.getValueFromGetter(SUtils.getObjectField(o, "_X"), "getx"));
+			assertEq("z", XComponentUtil.getVariable((XComponent) SUtils.getObjectField(o, "_Y"),"y"));
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xml =
@@ -1241,8 +1191,7 @@ public final class TestXComponents extends XDTester {
 			xml = "<B><X>a</X><C/><X x='x'/><C c='c'/><X xx='xx'/></B>";
 			xc = parseXC(xp, "J", xml, null, null);
 			assertEq(xml, xc.toXml());
-			xml =
-				"<B><X>a</X><C/><X x='x'/><X x='x'/><C c='c'/><X xx='xx'/></B>";
+			xml = "<B><X>a</X><C/><X x='x'/><X x='x'/><C c='c'/><X xx='xx'/></B>";
 			xc = parseXC(xp, "J", xml, null, null);
 			assertEq(xml, xc.toXml());
 			xml = "<B><X>a</X><C/><C/><X x='x'/><C c='c'/><X xx='xx'/></B>";
@@ -1362,17 +1311,14 @@ public final class TestXComponents extends XDTester {
 			assertEq(xml, xc.toXml());
 			list = (List) SUtils.getValueFromGetter(xc, "listOfA");
 			assertEq(3, list.size());
-			assertEq(1, ((List)SUtils.getValueFromGetter(
-				list.get(0), "listOfC")).size());
-			assertEq(1, ((List)SUtils.getValueFromGetter(
-				list.get(0), "listOfB")).size());
+			assertEq(1, ((List)SUtils.getValueFromGetter(list.get(0), "listOfC")).size());
+			assertEq(1, ((List)SUtils.getValueFromGetter(list.get(0), "listOfB")).size());
 			xml = "<Y><A V='2'/>xx<B/></Y>";
 			xc = parseXC(xp, "X", xml, null, null);
 			assertEq(xml, xc.toXml());
 			el = xc.toXml();
 			xc = parseXC(xp, "X", el, null, null);
 			assertEq(el, xc.toXml());
-
 			xml = "<Y><A V='2'/>xx<B/></Y>";
 			xc = parseXC(xp, "X", xml, null, null);
 			assertEq(xml, xc.toXml());
@@ -1401,10 +1347,8 @@ public final class TestXComponents extends XDTester {
 			xml = "<Part><PartOne One='one'/><PartTwo One='1'/></Part>";
 			xc = parseXC(xp, "Y03", xml, null, null);
 			assertEq(xml, xc.toXml());
-			assertEq("one", SUtils.getValueFromGetter(SUtils.getValueFromGetter(
-				xc, "getPartOne"), "getOne"));
-			assertEq(1, SUtils.getValueFromGetter(SUtils.getValueFromGetter(
-				xc, "getPartTwo"), "getOne"));
+			assertEq("one", SUtils.getValueFromGetter(SUtils.getValueFromGetter(xc, "getPartOne"), "getOne"));
+			assertEq(1, SUtils.getValueFromGetter(SUtils.getValueFromGetter(xc, "getPartTwo"), "getOne"));
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xml = "<Part One='1' Two='Two'/>";
@@ -1428,8 +1372,7 @@ public final class TestXComponents extends XDTester {
 			xml = "<A><B One='Jedna' Two='Dve'/></A>";
 			xc = parseXC(xp, "Y06", xml, null, null);
 			assertEq("<B One='Jedna' Two='Dve'/>",
-				((XComponent) SUtils.getValueFromGetter(
-					xc, "getDomain")).toXml());
+				((XComponent) SUtils.getValueFromGetter(xc, "getDomain")).toXml());
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xml = "<A Id='123'><Domain One='Jedna' Two='Dve'/></A>";
@@ -1443,12 +1386,10 @@ public final class TestXComponents extends XDTester {
 			xml = "<A x='X' y='Y'><a b='x'><b/></a></A>";
 			xc = parseXC(xp, "Y09", xml, null, null);
 			assertEq(xml, xc.toXml());
-			assertEq("<a b='x'><b/></a>",
-				((XComponent) SUtils.getValueFromGetter(xc,"get$any")).toXml());
+			assertEq("<a b='x'><b/></a>", ((XComponent) SUtils.getValueFromGetter(xc,"get$any")).toXml());
 			assertEq("<a b='x'><b/></a>",
 				((XComponent) SUtils.getValueFromGetter(
-					xc, "get$any")).toXml()
-					.getOwnerDocument().getDocumentElement());
+					xc, "get$any")).toXml().getOwnerDocument().getDocumentElement());
 			assertEq("/A", SUtils.getValueFromGetter(xc, "xGetXPos"));
 			assertEq("/A/a[1]", SUtils.getValueFromGetter(
 				SUtils.getValueFromGetter(xc, "get$any"), "xGetXPos"));
@@ -1457,10 +1398,8 @@ public final class TestXComponents extends XDTester {
 			xml = "<A a='A' b='B' c='XX'><a x='x'/><b x='xx'/></A>";
 			xc = parseXC(xp, "Y10", xml, null, null);
 			assertEq(xml, xc.toXml());
-			assertEq("x",SUtils.getValueFromGetter(SUtils.getValueFromGetter(
-				xc, "getp"), "getx"));
-			assertEq("xx",SUtils.getValueFromGetter(SUtils.getValueFromGetter(
-				xc, "getq"), "getx"));
+			assertEq("x",SUtils.getValueFromGetter(SUtils.getValueFromGetter(xc, "getp"), "getx"));
+			assertEq("xx",SUtils.getValueFromGetter(SUtils.getValueFromGetter(xc, "getq"), "getx"));
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xml =
@@ -1487,21 +1426,18 @@ public final class TestXComponents extends XDTester {
 		try {
 			try {
 				Class.forName("test.xdef.component.Y13$A$B");
-				fail("Error Y13: "
-					+ "class test.xdef.component.Y13.A.B was generated.");
+				fail("Error Y13: class test.xdef.component.Y13.A.B was generated.");
 			} catch (ClassNotFoundException ex) {}
 			xml = "<A><B a='1'/></A>";
 			xc = parseXC(xp, "Y13", xml,null,null);
 			assertEq(xml, xc.toXml());
-			assertEq("1",SUtils.getValueFromGetter(SUtils.getValueFromGetter(
-				xc, "getB"), "geta"));
+			assertEq("1",SUtils.getValueFromGetter(SUtils.getValueFromGetter(xc, "getB"), "geta"));
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xml = "<C><X a='1'/></C>";
 			xc = parseXC(xp, "Y14", xml, null, null);
 			assertEq(xml, xc.toXml());
-			assertEq("1",SUtils.getValueFromGetter(SUtils.getValueFromGetter(
-				xc, "getX"), "geta"));
+			assertEq("1",SUtils.getValueFromGetter(SUtils.getValueFromGetter(xc, "getX"), "geta"));
 		} catch (Exception ex) {fail(ex);}
 		try {
 			xml = "<a>1<b/>2</a>";
@@ -1547,8 +1483,7 @@ public final class TestXComponents extends XDTester {
 			Object y = SUtils.getNewInstance("test.xdef.component.Y16a");
 			SUtils.setValueToSetter(y, "sety", 1);
 			SUtils.setValueToSetter(x, "setx$b", y);
-			xon = XonUtils.xmlToXon(KXmlUtils.parseXml(xml)
-				.getDocumentElement());
+			xon = XonUtils.xmlToXon(KXmlUtils.parseXml(xml).getDocumentElement());
 			el = ((XComponent)x).toXml();
 			assertEq(xml, el);
 			if (!XonUtils.xonEqual(xon, XonUtils.xmlToXon(el))) {
@@ -1571,29 +1506,22 @@ public final class TestXComponents extends XDTester {
 			xml = "<a><b a='1'/><c/><b a='x'/></a>";
 			xc = parseXC(xp, "Y17", xml, null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
-			xon = XonUtils.xmlToXon(KXmlUtils.parseXml(xml)
-				.getDocumentElement());
+			xon = XonUtils.xmlToXon(KXmlUtils.parseXml(xml).getDocumentElement());
 			el = xc.toXml();
 			assertEq(xml, el);
-			assertEq(1, SUtils.getValueFromGetter(SUtils.getValueFromGetter(xc,
-				"getb_1"), "geta"));
-			assertEq("x", SUtils.getValueFromGetter(
-				SUtils.getValueFromGetter(xc, "getb_2"), "geta"));
+			assertEq(1, SUtils.getValueFromGetter(SUtils.getValueFromGetter(xc, "getb_1"), "geta"));
+			assertEq("x", SUtils.getValueFromGetter(SUtils.getValueFromGetter(xc, "getb_2"), "geta"));
 			if (!XonUtils.xonEqual(xon, XonUtils.xmlToXon(el))) {fail();}
 		} catch (Exception ex) {fail(ex); reporter.clear();}
 		try {
 			xml = "<A a='a' b='b'><C c='c' d='d' e='e'>f</C></A>";
 			xc = parseXC(xp, "Y18", xml, null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
-			assertEq("e", SUtils.getValueFromGetter(
-				SUtils.getValueFromGetter(xc, "getC"), "gete"));
-			assertEq("f", SUtils.getValueFromGetter(
-				SUtils.getValueFromGetter(xc, "getC"), "getx"));
+			assertEq("e", SUtils.getValueFromGetter(SUtils.getValueFromGetter(xc, "getC"), "gete"));
+			assertEq("f", SUtils.getValueFromGetter(SUtils.getValueFromGetter(xc, "getC"), "getx"));
 			assertEq(xml, xc.toXml());
-			SUtils.setValueToSetter(
-				SUtils.getValueFromGetter(xc, "getC"), "sete", "x");
-			SUtils.setValueToSetter(
-				SUtils.getValueFromGetter(xc, "getC"), "setx", null);
+			SUtils.setValueToSetter(SUtils.getValueFromGetter(xc, "getC"), "sete", "x");
+			SUtils.setValueToSetter(SUtils.getValueFromGetter(xc, "getC"), "setx", null);
 			assertEq("<A a='a' b='b'><C c='c' d='d' e='x'/></A>", xc.toXml());
 		} catch (Exception ex) {fail(ex);reporter.clear();}
 		try {
@@ -1601,10 +1529,8 @@ public final class TestXComponents extends XDTester {
 			xc = parseXC(xp,"Y20", xml , null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
 			assertEq(xml, xc.toXml());
-			assertEq("1", SUtils.getValueFromGetter(
-				SUtils.getValueFromGetter(xc, "getX"), "getb"));
-			list = (List) SUtils.getValueFromGetter(
-				SUtils.getValueFromGetter(xc, "getX"), "listOfX");
+			assertEq("1", SUtils.getValueFromGetter(SUtils.getValueFromGetter(xc, "getX"), "getb"));
+			list = (List) SUtils.getValueFromGetter(SUtils.getValueFromGetter(xc, "getX"), "listOfX");
 			assertEq(2, list.size());
 			assertEq("2", SUtils.getValueFromGetter(list.get(0), "getb"));
 			list1 = (List) SUtils.getValueFromGetter(list.get(0), "listOfX");
@@ -1617,10 +1543,8 @@ public final class TestXComponents extends XDTester {
 			xc = parseXC(xp,"Y20", xml , null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
 			assertEq(xml, xc.toXml());
-			assertEq("1", SUtils.getValueFromGetter(
-				SUtils.getValueFromGetter(xc, "getX"), "getb"));
-			list = (List) SUtils.getValueFromGetter(
-				SUtils.getValueFromGetter(xc, "getX"), "listOfX");
+			assertEq("1", SUtils.getValueFromGetter(SUtils.getValueFromGetter(xc, "getX"), "getb"));
+			list = (List) SUtils.getValueFromGetter(SUtils.getValueFromGetter(xc, "getX"), "listOfX");
 			assertEq(2, list.size());
 			assertEq("2", SUtils.getValueFromGetter(list.get(0), "getb"));
 			list1 = (List) SUtils.getValueFromGetter(list.get(0), "listOfX");
@@ -1635,10 +1559,8 @@ public final class TestXComponents extends XDTester {
 			xc = parseXC(xp,"Y20", xml , null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
 			assertEq(xml, xc.toXml());
-			assertEq("1", SUtils.getValueFromGetter(
-				SUtils.getValueFromGetter(xc, "getB"), "getb"));
-			list = (List) SUtils.getValueFromGetter(
-				SUtils.getValueFromGetter(xc, "getB"), "listOfY");
+			assertEq("1", SUtils.getValueFromGetter(SUtils.getValueFromGetter(xc, "getB"), "getb"));
+			list = (List) SUtils.getValueFromGetter(SUtils.getValueFromGetter(xc, "getB"), "listOfY");
 			assertEq(2, list.size());
 			assertEq("2", SUtils.getValueFromGetter(list.get(0), "getb"));
 			list1 = (List) SUtils.getValueFromGetter(list.get(0), "listOfY");
@@ -1652,14 +1574,12 @@ public final class TestXComponents extends XDTester {
 			xc = parseXC(xp,"Y20", xml , null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
 			assertEq(xml, xc.toXml());
-			assertEq("1", SUtils.getValueFromGetter(
-				SUtils.getValueFromGetter(xc, "getZ"), "getb"));
+			assertEq("1", SUtils.getValueFromGetter(SUtils.getValueFromGetter(xc, "getZ"), "getb"));
 			list = (List) SUtils.getValueFromGetter(SUtils.getValueFromGetter(
 				SUtils.getValueFromGetter(xc, "getZ"), "getC"), "listOfZ");
 			assertEq(1, list.size());
 			assertEq("2", SUtils.getValueFromGetter(list.get(0), "getb"));
-			list1 = (List) SUtils.getValueFromGetter(
-				SUtils.getValueFromGetter(list.get(0), "getC"), "listOfZ");
+			list1 = (List) SUtils.getValueFromGetter(SUtils.getValueFromGetter(list.get(0),"getC"),"listOfZ");
 			assertEq(1, list1.size());
 			assertEq("3", SUtils.getValueFromGetter(list1.get(0), "getb"));
 		} catch (Exception ex) {fail(ex); reporter.clear();}
@@ -1705,51 +1625,37 @@ public final class TestXComponents extends XDTester {
 			xc = parseXC(xp,"Y23",xml, null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
 			assertEq(xml, xc.toXml());
-			assertEq("p", SUtils.getValueFromGetter(
-				SUtils.getValueFromGetter(xc, "gets"), "getk"));
-			assertEq("t1", SUtils.getValueFromGetter(
-				SUtils.getValueFromGetter(xc, "gets"), "get$value"));
-			assertEq("q", SUtils.getValueFromGetter(
-				SUtils.getValueFromGetter(xc, "gets_1"), "getk"));
-			assertEq("t2", SUtils.getValueFromGetter(
-				SUtils.getValueFromGetter(xc, "gets_1"), "get$value"));
+			assertEq("p", SUtils.getValueFromGetter(SUtils.getValueFromGetter(xc, "gets"), "getk"));
+			assertEq("t1", SUtils.getValueFromGetter(SUtils.getValueFromGetter(xc, "gets"), "get$value"));
+			assertEq("q", SUtils.getValueFromGetter(SUtils.getValueFromGetter(xc, "gets_1"), "getk"));
+			assertEq("t2", SUtils.getValueFromGetter(SUtils.getValueFromGetter(xc, "gets_1"), "get$value"));
 			xml = "<b><c>xx</c></b>";
 			xc = parseXC(xp, "Y23", xml, null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
 			assertEq(xml, xc.toXml());
-			SUtils.setValueToSetter(
-				SUtils.getValueFromGetter(xc, "getc"), "set$value", "yy");
+			SUtils.setValueToSetter(SUtils.getValueFromGetter(xc, "getc"), "set$value", "yy");
 			assertEq("<b><c>yy</c></b>", xc.toXml());
 			xml = "<d><e>2019-04-01+02:00</e></d>";
 			xc = parseXC(xp, "Y23", xml, null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
 			assertEq(xml, xc.toXml());
 			assertEq(new SDatetime("2019-04-01+02:00"),
-				SUtils.getValueFromGetter(
-					SUtils.getValueFromGetter(xc,"gete"), "get$value"));
+				SUtils.getValueFromGetter(SUtils.getValueFromGetter(xc,"gete"), "get$value"));
 			sd = new SDatetime("2019-04-02+02:00");
-			SUtils.setValueToSetter(
-				SUtils.getValueFromGetter(xc, "gete"), "set$value", sd);
-			assertTrue(SUtils.getValueFromGetter(SUtils.getValueFromGetter(
-				xc,"gete"), "get$value").equals(sd));
+			SUtils.setValueToSetter(SUtils.getValueFromGetter(xc, "gete"), "set$value", sd);
+			assertTrue(
+				SUtils.getValueFromGetter(SUtils.getValueFromGetter(xc,"gete"), "get$value").equals(sd));
 			assertTrue(new SDatetime((Timestamp)SUtils.getValueFromGetter(
-				SUtils.getValueFromGetter(xc, "gete"), "timestampOf$value"))
-				.equals(sd));
+				SUtils.getValueFromGetter(xc, "gete"), "timestampOf$value")) .equals(sd));
 			assertTrue(new SDatetime((Calendar)SUtils.getValueFromGetter(
-				SUtils.getValueFromGetter(xc, "gete"), "calendarOf$value"))
-				.equals(sd));
+				SUtils.getValueFromGetter(xc, "gete"), "calendarOf$value")) .equals(sd));
 			assertEq("<d><e>2019-04-02+02:00</e></d>", xc.toXml());
 			sd = new SDatetime("2019-04-03+02:00");
-			SUtils.setValueToSetter(
-				SUtils.getValueFromGetter(xc, "gete"), "set$value", sd);
-			assertEq(sd,
-				SUtils.getValueFromGetter(
-					SUtils.getValueFromGetter(xc,"gete"), "get$value"));
+			SUtils.setValueToSetter( SUtils.getValueFromGetter(xc, "gete"), "set$value", sd);
+			assertEq(sd, SUtils.getValueFromGetter(SUtils.getValueFromGetter(xc,"gete"), "get$value"));
 			assertEq("<d><e>2019-04-03+02:00</e></d>", xc.toXml());
-			SUtils.setValueToSetter(SUtils.getValueFromGetter(xc, "gete"),
-				"set$value", sd.getCalendar());
-			assertEq(sd, SUtils.getValueFromGetter(
-				SUtils.getValueFromGetter(xc,"gete"), "get$value"));
+			SUtils.setValueToSetter(SUtils.getValueFromGetter(xc, "gete"), "set$value", sd.getCalendar());
+			assertEq(sd, SUtils.getValueFromGetter(SUtils.getValueFromGetter(xc,"gete"), "get$value"));
 			assertEq("<d><e>2019-04-03+02:00</e></d>", xc.toXml());
 			xml = "<e>2019-04-01+02:00</e>";
 			xc = parseXC(xp, "Y23", xml, null, reporter);
@@ -1771,8 +1677,7 @@ public final class TestXComponents extends XDTester {
 			SUtils.setValueToSetter(xc, "addg", o);
 			assertEq(2, list.size());
 			assertEq(sd, SUtils.getValueFromGetter(list.get(1), "get$value"));
-			assertEq("<f><g>2019-04-02+02:00</g><g>2019-04-03+02:00</g></f>",
-				xc.toXml());
+			assertEq("<f><g>2019-04-02+02:00</g><g>2019-04-03+02:00</g></f>", xc.toXml());
 			list.clear();
 			assertEq("<f/>", xc.toXml());
 			o = SUtils.getNewInstance("test.xdef.component.XCf$g");
@@ -1780,8 +1685,7 @@ public final class TestXComponents extends XDTester {
 			list.add(o);
 			assertEq("<f><g>2019-04-03+02:00</g></f>", xc.toXml());
 			list = (List) SUtils.getValueFromGetter(xc, "listOfg");
-			SUtils.setValueToSetter(list.get(0), "set$value",
-				new SDatetime("2019-04-01+02:00"));
+			SUtils.setValueToSetter(list.get(0), "set$value", new SDatetime("2019-04-01+02:00"));
 			assertEq("<f><g>2019-04-01+02:00</g></f>", xc.toXml());
 			list.clear();
 			assertEq("<f/>", xc.toXml());
@@ -1790,15 +1694,13 @@ public final class TestXComponents extends XDTester {
 			assertNoErrorwarningsAndClear(reporter);
 			assertEq(xml, xc.toXml());
 			o = SUtils.getValueFromGetter(xc, "getd");
-			assertTrue(o !=null && "test.xdef.component.Y24$d".equals(
-				o.getClass().getName()));
+			assertTrue(o !=null && "test.xdef.component.Y24$d".equals(o.getClass().getName()));
 			xml = "<c><d/></c>";
 			xc = parseXC(xp,"Y24", xml , null, reporter);
 			assertNoErrorwarningsAndClear(reporter);
 			assertEq(xml, xc.toXml());
 			o = SUtils.getValueFromGetter(xc, "getd");
-			assertTrue(o !=null && "test.xdef.component.Y24$d".equals(
-				o.getClass().getName()));
+			assertTrue(o !=null && "test.xdef.component.Y24$d".equals(o.getClass().getName()));
 			xml = "<Y24d Y24d='Y24d'><Y24d/></Y24d>";
 			assertEq(xml, parseXC(xp,"Y24",xml,null,reporter).toXml());
 			assertNoErrorwarningsAndClear(reporter);
@@ -1820,8 +1722,7 @@ public final class TestXComponents extends XDTester {
 			assertEq(xml, xc.toXml());
 			list = (List) SUtils.getValueFromGetter(
 				SUtils.getValueFromGetter(xc, "getDefParams"), "listOfParam");
-			assertEq("decimal()",
-				SUtils.getValueFromGetter(list.get(1), "getType"));
+			assertEq("decimal()", SUtils.getValueFromGetter(list.get(1), "getType"));
 			list = (List) SUtils.getValueFromGetter(xc, "listOfParams");
 			list = (List) SUtils.getValueFromGetter(list.get(0), "listOfParam");
 			assertEq("14.8",SUtils.getValueFromGetter(list.get(1), "getValue"));
@@ -1882,14 +1783,12 @@ public final class TestXComponents extends XDTester {
 			xc = parseXC(xp, "SouborD1A",
 				getDataDir() + "test/TestXComponent_Z.xml", null, null);
 			list = (List) SUtils.getValueFromGetter(xc, "listOfZaznamPDN");
-			list1 = (List) SUtils.getValueFromGetter(
-				list.get(1), "listOfVozidlo");
+			list1 = (List) SUtils.getValueFromGetter(list.get(1), "listOfVozidlo");
 			assertEq(2, list1.size());
 			el = xc.toXml();
 			xc = parseXC(xp, "SouborD1A", el, null,null);
 			list = (List) SUtils.getValueFromGetter(xc, "listOfZaznamPDN");
-			list1 = (List) SUtils.getValueFromGetter(
-				list.get(1), "listOfVozidlo");
+			list1 = (List) SUtils.getValueFromGetter(list.get(1), "listOfVozidlo");
 			assertEq(2, list1.size());
 			assertEq(xc.toXml(), el);
 			assertEq("", checkXPos(xc));

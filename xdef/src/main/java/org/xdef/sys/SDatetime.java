@@ -2,6 +2,7 @@ package org.xdef.sys;
 
 import org.xdef.msg.SYS;
 import java.io.IOException;
+import static java.lang.Math.round;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Timestamp;
@@ -87,7 +88,7 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 	/** Initialize object - set default values. */
 	private void init() {
 		_day = _month = _year = _hour = _minute = _second = Integer.MIN_VALUE;
-		_fraction = 0.0D;
+		_fraction = Double.MIN_NORMAL;
 		_eon = 0;
 		_tz = null;
 		_dfs = null;
@@ -167,7 +168,7 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 		_hour = Integer.MIN_VALUE;
 		_minute = Integer.MIN_VALUE;
 		_second = Integer.MIN_VALUE;
-//		_fraction = 0.0D; _tz = null;
+		_fraction = Double.MIN_NORMAL;
 		setOriginalValues();
 	}
 
@@ -275,7 +276,7 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 		if (fraction >= 1.0D || fraction <= -1.0D) {
 			throw new IllegalArgumentException("Fraction is not in interval -1.0 .. +1.0");
 		}
-		double fract = fraction + _fraction;
+		double fract = fraction + (_fraction<=Double.MIN_NORMAL ? 0 : _fraction);
 		if (fract > 1.0D) {
 			fract -= 1.0D;
 			nseconds++;
@@ -327,7 +328,7 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 			}
 		}
 		if (_hour >= 24) {
-			if (_hour > 24 || _minute > 0 || _second > 0 ||	_fraction > 0.0D) {
+			if (_hour > 24 || _minute > 0 || _second > 0 || _fraction > Double.MIN_NORMAL) {
 				return false;
 			}
 		}
@@ -393,9 +394,9 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 			_hour = c.isSet(Calendar.HOUR_OF_DAY) ? c.get(Calendar.HOUR_OF_DAY) : Integer.MIN_VALUE;
 			_minute = c.isSet(Calendar.MINUTE) ? c.get(Calendar.MINUTE) : Integer.MIN_VALUE;
 			_second = c.isSet(Calendar.MINUTE) ? c.get(Calendar.SECOND) : Integer.MIN_VALUE;
-			if (c.isSet(Calendar.MILLISECOND )) {
+			if (c.isSet(Calendar.MILLISECOND)) {
 				_fraction = c.get(Calendar.MILLISECOND)/1000.0D;
-				_fraction = _fraction == 0.0D ? Double.MIN_NORMAL : _fraction;
+//				_fraction = _fraction == 0.0D ? Double.MIN_NORMAL : _fraction;
 			}
 			if ((_tz=c.getTimeZone()) != null && "_null_".equals(_tz.getID())) {
 				_tz = null;
@@ -439,7 +440,7 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 						if (_tz != null) {
 							_calendar.setTimeZone(_tz);
 						}
-						if (_fraction != 0.0D) {// set milliseconds
+						if (_fraction > Double.MIN_NORMAL) {// set milliseconds
 							_calendar.set(Calendar.MILLISECOND, (int) (_fraction * 1000.0D));
 						}
 						return _calendar;
@@ -471,9 +472,8 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 				if (_second >= 0) {
 					_calendar.set(Calendar.SECOND, _second);
 				}
-				if (_fraction != 0.0D) {
-					_calendar.set(Calendar.MILLISECOND,
-						(int) (_fraction*1000.0D));
+				if (_fraction > Double.MIN_NORMAL) {
+					_calendar.set(Calendar.MILLISECOND, (int) (_fraction*1000.0D));
 				}
 				return _calendar;
 			}
@@ -533,9 +533,10 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 			if (_second == Integer.MIN_VALUE) {
 				return formatDate("HH:mm" + (_tz==null?"":"Z"));
 			}
-			return formatDate("HH:mm:ss" + (_fraction==0.0D? "":".S") + (_tz==null?"":"Z"));
+			return formatDate("HH:mm:ss"
+				+ (_fraction > Double.MIN_NORMAL ? ".S" : "") + (_tz==null ? "" : "Z"));
 		}
-		return formatDate("yyyy-MM-ddTHH:mm:ss" + (_fraction==0.0D? "":".S") + (_tz==null?"":"Z"));
+		return formatDate("yyyy-MM-ddTHH:mm:ss"+(_fraction>Double.MIN_NORMAL ? ".S":"") + (_tz==null?"":"Z"));
 	}
 
 	/** Conversion to RFC822 string,
@@ -584,20 +585,20 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 	 * @return millisecond from this date or 0.
 	 */
 	public final int getMillisecond() {
-		return _fraction!=0.0D ? (int) java.lang.Math.round(_fraction*1000.0D) : Integer.MIN_VALUE;
+		return _fraction > Double.MIN_NORMAL ? (int) round(_fraction*1000.0D) : 0;
 	}
 
 	/** Get nanoseconds from this date. If nanosecond is undefined return 0.
 	 * @return millisecond from this date or 0.
 	 */
 	public final int getNanos() {
-		return (int) java.lang.Math.round(_fraction * 1000000000.0D);
+		return _fraction>Double.MIN_NORMAL ? (int) java.lang.Math.round(_fraction*1000000000.0D) : 0;
 	}
 
 	/** Get the fraction of second from this date.
 	 * @return fraction of the second.
 	 */
-	public final double getFraction() {return _fraction;}
+	public final double getFraction() {return _fraction > Double.MIN_NORMAL ? _fraction : 0.0D;}
 
 	/** Get TimeZone from this date. If TimeZone is undefined returns null.
 	 * @return TimeZone from this date or null.
@@ -627,7 +628,7 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 	 */
 	public final void setDaytimeInMillis(final int millis) {
 		synchronized(this) {
-			_fraction = millis != 0 ? (millis%1000)/1000.0D : Double.MIN_NORMAL;
+			_fraction = millis != 0 ? (millis % 1000) / 1000.0D : 0.0D; //Double.MIN_NORMAL ???
 			int nmillis;
 			_second = (nmillis = millis/1000)%60;
 			_minute = (nmillis = nmillis/60)%60;
@@ -699,7 +700,7 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 			throw new SRuntimeException(SYS.SYS072, "milliseconds out of interval 0..999");
 		}
 		synchronized(this) {
-			_fraction = millis != Integer.MIN_VALUE ? millis/1000.0D : 0.0D;
+			_fraction = millis == Integer.MIN_VALUE ? Double.MIN_NORMAL : millis/1000.0D;
 			chkAndThrow();
 		}
 	}
@@ -714,7 +715,7 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 			throw new SRuntimeException(SYS.SYS072, "milliseconds out of interval 0..999");
 		}
 		synchronized(this) {
-			_fraction = nanos!=Integer.MIN_VALUE ? nanos/1000000000.0D : Double.MIN_NORMAL;
+			_fraction = nanos==Integer.MIN_VALUE ? Double.MIN_NORMAL : nanos/1000000000.0D;
 			chkAndThrow();
 		}
 	}
@@ -729,7 +730,7 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 			throw new SRuntimeException(SYS.SYS072, "fraction of second out of interval 0..1");
 		}
 		synchronized(this) {
-			_fraction = fract == 0.0D ? Double.MIN_NORMAL : fract;
+			_fraction = fract;
 			chkAndThrow();
 		}
 	}
@@ -1451,15 +1452,15 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 		int min = calendar.get(Calendar.MINUTE);
 		int hour = calendar.get(Calendar.HOUR_OF_DAY);
 		String millis = null;
-		double fraction = _fraction>0.0D && _hour>=0 && _minute>=0 && _second>=0 ? _fraction : 0.0D;
+		double fraction = _fraction > Double.MIN_NORMAL
+			&& _hour >= 0 && _minute >= 0 && _second >= 0 ? _fraction : 0.0D;
 		if (ms == 0) {// round seconds according to fraction
 			if (fraction >= 0.5D) {
 				sec++; //seconds can be 60 now - we solve it later!
 			}
 		} else {
 			DecimalFormat df = ms == 1 ? new DecimalFormat("0.0##############")
-				: new DecimalFormat("0."+SUtils.makeStringOfChars(ms==1 ? 3
-					: ms, ms==1 ? '#' : '0'));
+				: new DecimalFormat("0."+SUtils.makeStringOfChars(ms==1 ? 3 : ms, ms==1 ? '#' : '0'));
 			millis = df.format(fraction);
 			if (millis.charAt(0) == '1') {
 				sec++; //seconds can be 60 now - we solve it later!
@@ -1710,9 +1711,9 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 					continue;
 				}
 				case 'S': //millisecond
-					if (_second == Integer.MIN_VALUE || (_fraction == 0.0D && ms <= 1)) {
+					if (_second == Integer.MIN_VALUE && ms <= 1) {
 						if (optionals.empty()) {
-							sb.append('0'); // not oprional -> force 0 millis
+							sb.append('0'); // not optional -> force 0 millis
 						} else { //skip this option if it is optional
 							setOptionInvalid(optionals);
 							valid = false;
@@ -2385,12 +2386,9 @@ public class SDatetime extends XMLGregorianCalendar implements Comparable<SDatet
 
 	@Override
 	public final QName getXMLSchemaType() {
-		switch ((_year!=Integer.MIN_VALUE ? 0x20 : 0)
-			| (_month!=Integer.MIN_VALUE ? 0x10 : 0)
-			| (_day!=Integer.MIN_VALUE ? 0x08 : 0)
-			| (_hour!=Integer.MIN_VALUE ? 0x04 : 0)
-			| (_minute!= Integer.MIN_VALUE ? 0x02 : 0)
-			| (_second!=Integer.MIN_VALUE ? 0x01 : 0)) {
+		switch ((_year!=Integer.MIN_VALUE ? 0x20 : 0) | (_month!=Integer.MIN_VALUE ? 0x10 : 0)
+			| (_day!=Integer.MIN_VALUE ? 0x08 : 0) | (_hour!=Integer.MIN_VALUE ? 0x04 : 0)
+			| (_minute!= Integer.MIN_VALUE ? 0x02 : 0) | (_second!=Integer.MIN_VALUE ? 0x01 : 0)) {
 			case 0x3F: return DatatypeConstants.DATETIME;
 			case 0x38: return DatatypeConstants.DATE;
 			case 0x07: return DatatypeConstants.TIME;

@@ -131,8 +131,7 @@ public final class XExtUtils {
 	 * @param s text of comment.
 	 */
 	public static final void addComment(final Node n, final String s) {
-		n.getParentNode().appendChild(
-			n.getOwnerDocument().createComment(s != null? s : ""));
+		n.getParentNode().appendChild(n.getOwnerDocument().createComment(s != null? s : ""));
 	}
 
 	/** Insert comment to XXNode.
@@ -172,8 +171,7 @@ public final class XExtUtils {
 	 * @param data data of PI.
 	 */
 	public static final void addPI(final Node n, final String target, final String data) {
-		n.getParentNode().appendChild(
-			n.getOwnerDocument().createProcessingInstruction(target, data));
+		n.getParentNode().appendChild(n.getOwnerDocument().createProcessingInstruction(target, data));
 	}
 
 	/** Insert programming instruction to the XXNode.
@@ -196,8 +194,7 @@ public final class XExtUtils {
 	 * @param data data of PI.
 	 */
 	public static final void insertPI(final Node n, final String target, final String data) {
-		n.getParentNode().insertBefore(
-			n.getOwnerDocument().createProcessingInstruction(target,data), n);
+		n.getParentNode().insertBefore(n.getOwnerDocument().createProcessingInstruction(target,data), n);
 	}
 
 	/** Add text to the XXNode.
@@ -243,9 +240,7 @@ public final class XExtUtils {
 	 * @param x node with text content.
 	 * @return text content of XXNode.
 	 */
-	public static final String getTextContent(final XXNode x) {
-		return getTextContent(x.getElement());
-	}
+	public static final String getTextContent(final XXNode x) {return getTextContent(x.getElement());}
 
 	/** Get text content of org.w3c.do,.Element.
 	 * @param el element with text content.
@@ -343,9 +338,7 @@ public final class XExtUtils {
 	 * @param x internet address.
 	 * @return  string created from internet address.
 	 */
-	public static final String getHostAddress(final InetAddress x){
-		return x.getHostAddress();
-	}
+	public static final String getHostAddress(final InetAddress x){return x.getHostAddress();}
 
 	/** Get bytes created from internet address.
 	 * @param x internet address.
@@ -380,8 +373,7 @@ public final class XExtUtils {
 			Map x = (Map) o;
 			for (Object y : x.entrySet()) {
 				Map.Entry en = (Map.Entry) y;
-				c.setXDNamedItem((String)en.getKey(),
-					getXDValueOfObject(en.getValue()));
+				c.setXDNamedItem((String)en.getKey(), getXDValueOfObject(en.getValue()));
 			}
 			return c;
 		} else if (o instanceof List) {
@@ -436,16 +428,13 @@ public final class XExtUtils {
 ////////////////////////////////////////////////////////////////////////////////
 
 	/** Cancel running X-definition process. */
-	public static final void cancel() {
-		throw new SError(Report.error(XDEF.XDEF906)); //X-definition canceled
-	}
+	public static final void cancel() {throw new SError(Report.error(XDEF.XDEF906));} //X-definition canceled
+
 
 	/** Cancel running X-definition process and throw message.
 	 * @param msg reason of cancelling.
 	 */
-	public static final void cancel(final String msg) {
-		throw new SError(Report.error(XDEF.XDEF906, msg));  //X-definition canceled&{0}{; }
-	}
+	public static final void cancel(final String msg) {throw new SError(Report.error(XDEF.XDEF906, msg));}
 
 	/** Parse base64 data.
 	 * @param s base64 data
@@ -485,8 +474,7 @@ public final class XExtUtils {
 		}
 		return val.getElement();
 	}
-	public static final Element getParentContextElement(final XXNode xElem,
-		final long level) {
+	public static final Element getParentContextElement(final XXNode xElem, final long level) {
 		if (level == 0) {
 			return getParentContextElement(xElem);
 		}
@@ -512,19 +500,15 @@ public final class XExtUtils {
 			return new DefContainer();
 		}
 		Element el = val.getElement();
-		DefXPathExpr xe = new DefXPathExpr(exp,
-			xel.getXXNamespaceContext(),
-			xel.getXXFunctionResolver(),
-			xel.getXXVariableResolver());
+		DefXPathExpr xe = new DefXPathExpr(
+			exp, xel.getXXNamespaceContext(), xel.getXXFunctionResolver(), xel.getXXVariableResolver());
 		return new DefContainer(xe.exec(el));
 	}
 	public static final XDContainer fromRoot(final XXNode xElem,
-		final String expr,
+		final String exp,
 		final Element elem) {
-		DefXPathExpr xe = new DefXPathExpr(expr,
-			xElem.getXXNamespaceContext(),
-			xElem.getXXFunctionResolver(),
-			xElem.getXXVariableResolver());
+		DefXPathExpr xe = new DefXPathExpr(
+			exp, xElem.getXXNamespaceContext(), xElem.getXXFunctionResolver(), xElem.getXXVariableResolver());
 		return new DefContainer(xe.exec(elem));
 	}
 	public static final XDContainer fromRoot(final XXNode xElem, final String expr) {
@@ -543,13 +527,9 @@ public final class XExtUtils {
 // dateTime
 ////////////////////////////////////////////////////////////////////////////////
 	public static final int getMaxYear(final XXNode xnode) {return xnode.getXDPool().getMaxYear();}
-	public static final void setMaxYear(XXNode xnode, int i) {
-		xnode.getXDDocument().setMaxYear(i);
-	}
+	public static final void setMaxYear(XXNode xnode, int i) {xnode.getXDDocument().setMaxYear(i);}
 	public static final int getMinYear(final XXNode xnode) {return xnode.getXDPool().getMaxYear();}
-	public static final void setMinYear(final XXNode xnode, int i) {
-		xnode.getXDDocument().setMinYear(i);
-	}
+	public static final void setMinYear(final XXNode xnode, int i) {xnode.getXDDocument().setMinYear(i);}
 	public static final XDContainer getSpecialDates(final XXNode xnode) {
 		SDatetime[] dates = xnode.getXDDocument().getSpecialDates();
 		DefContainer c = new DefContainer();
@@ -628,27 +608,19 @@ public final class XExtUtils {
 	public static final double toRadians(final long a) {return Math.toRadians(a);}
 	public static final double ulp(final long a) {return Math.ulp(a);}
 	// Decimal constructors
-	public static final BigDecimal decimalValue(final BigDecimal a) {
-		return new BigDecimal(a.toString());
-	}
+	public static final BigDecimal decimalValue(final BigDecimal a) {return new BigDecimal(a.toString());}
 	public static final BigDecimal decimalValue(final String a) {return new BigDecimal(a);}
 	public static final BigDecimal decimalValue(final long a) {return new BigDecimal(a);}
 	public static final BigDecimal decimalValue(final double a) {return new BigDecimal(a);}
 	// Decimal methods
 	public static final BigDecimal abs(final BigDecimal a) {return a.abs();}
 	public static final BigDecimal add(final BigDecimal a, final BigDecimal b) {return a.add(b);}
-	public static final BigDecimal add(final BigDecimal a, final long b) {
-		return a.add(new BigDecimal(b));
-	}
-	public static final BigDecimal add(final BigDecimal a, final double b) {
-		return a.add(new BigDecimal(b));
-	}
+	public static final BigDecimal add(final BigDecimal a, final long b) {return a.add(new BigDecimal(b));}
+	public static final BigDecimal add(final BigDecimal a, final double b) {return a.add(new BigDecimal(b));}
 	public static final long compare(final BigDecimal a, final BigDecimal b){return a.compareTo(a);}
 	public static final long compare(final BigDecimal a, final long b) {return a.compareTo(a);}
 	public static final long compare(final BigDecimal a, final double b) {return a.compareTo(a);}
-	public static final BigDecimal divide(final BigDecimal a, final BigDecimal b) {
-		return a.divide(b);
-	}
+	public static final BigDecimal divide(final BigDecimal a, final BigDecimal b) {return a.divide(b);}
 	public static final BigDecimal divide(final BigDecimal a, final long b) {
 		return a.divide(new BigDecimal(b));
 	}
@@ -661,40 +633,22 @@ public final class XExtUtils {
 	public static final long intValue(final BigDecimal a){return a.longValue();}
 	public static final double floatValue(final BigDecimal a) {return a.doubleValue();}
 	public static final BigDecimal max(final BigDecimal a, final BigDecimal b) {return a.max(b);}
-	public static final BigDecimal max(final BigDecimal a, final long b) {
-		return a.max(new BigDecimal(b));
-	}
-	public static final BigDecimal max(final BigDecimal a, final double b) {
-		return a.max(new BigDecimal(b));
-	}
-	public static final BigDecimal max(final long a, final BigDecimal b) {
-		return new BigDecimal(a).max(b);
-	}
-	public static final BigDecimal max(final double a, final BigDecimal b) {
-		return new BigDecimal(a).max(b);
-	}
+	public static final BigDecimal max(final BigDecimal a, final long b) {return a.max(new BigDecimal(b));}
+	public static final BigDecimal max(final BigDecimal a, final double b) {return a.max(new BigDecimal(b));}
+	public static final BigDecimal max(final long a, final BigDecimal b) {return new BigDecimal(a).max(b);}
+	public static final BigDecimal max(final double a, final BigDecimal b) {return new BigDecimal(a).max(b);}
 	public static final BigDecimal min(final BigDecimal a, final BigDecimal b) {return a.min(b);}
-	public static final BigDecimal min(final BigDecimal a, final long b) {
-		return a.min(new BigDecimal(b));
-	}
-	public static final BigDecimal min(final BigDecimal a, final double b) {
-		return a.min(new BigDecimal(b));
-	}
-	public static final BigDecimal min(final long a, final BigDecimal b) {
-		return new BigDecimal(a).min(b);
-	}
-	public static final BigDecimal min(final double a, final BigDecimal b) {
-		return new BigDecimal(a).min(b);
-	}
+	public static final BigDecimal min(final BigDecimal a, final long b) {return a.min(new BigDecimal(b));}
+	public static final BigDecimal min(final BigDecimal a, final double b) {return a.min(new BigDecimal(b));}
+	public static final BigDecimal min(final long a, final BigDecimal b) {return new BigDecimal(a).min(b);}
+	public static final BigDecimal min(final double a, final BigDecimal b) {return new BigDecimal(a).min(b);}
 	public static final BigDecimal movePointLeft(final BigDecimal a, final long b) {
 		return a.movePointLeft((int) b);
 	}
 	public static final BigDecimal movePointRight(final BigDecimal a, final long b) {
 		return a.movePointRight((int) b);
 	}
-	public static final BigDecimal multiply(final BigDecimal a, final BigDecimal b) {
-		return a.multiply(b);
-	}
+	public static final BigDecimal multiply(final BigDecimal a, final BigDecimal b) {return a.multiply(b);}
 	public static final BigDecimal multiply(final BigDecimal a, final long b) {
 		return a.multiply(new BigDecimal(b));
 	}
@@ -704,9 +658,7 @@ public final class XExtUtils {
 	public static final BigDecimal negate(final BigDecimal a) {return a.negate();}
 	public static final BigDecimal plus(final BigDecimal a) {return a.plus();}
 	public static final BigDecimal pow(final BigDecimal a, final long b) {return a.pow((int) b);}
-	public static final BigDecimal remainder(final BigDecimal a, final BigDecimal b) {
-		return a.remainder(b);
-	}
+	public static final BigDecimal remainder(final BigDecimal a, final BigDecimal b) {return a.remainder(b);}
 	public static final BigDecimal remainder(final BigDecimal a, final long b) {
 		return a.remainder(new BigDecimal(b));
 	}
@@ -717,15 +669,9 @@ public final class XExtUtils {
 	public static final BigDecimal scaleByPowerOfTen(final BigDecimal a,final long b){
 		return a.scaleByPowerOfTen((int) b);
 	}
-	public static final BigDecimal setScale(final BigDecimal a, final long b) {
-		return a.setScale((int) b);
-	}
-	public static final BigDecimal stripTrailingZeros(final BigDecimal a) {
-		return a.stripTrailingZeros();
-	}
-	public static final BigDecimal subtract(final BigDecimal a, final BigDecimal b) {
-		return a.subtract(b);
-	}
+	public static final BigDecimal setScale(final BigDecimal a, final long b) {return a.setScale((int) b);}
+	public static final BigDecimal stripTrailingZeros(final BigDecimal a) {return a.stripTrailingZeros();}
+	public static final BigDecimal subtract(final BigDecimal a, final BigDecimal b) {return a.subtract(b);}
 	public static final BigDecimal subtract(final BigDecimal a, final long b) {
 		return a.subtract(new BigDecimal(b));
 	}

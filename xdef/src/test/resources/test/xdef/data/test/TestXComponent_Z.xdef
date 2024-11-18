@@ -1,10 +1,6 @@
-<?xml version="1.0" encoding="Windows-1250" ?>
-<xd:def xmlns:xd = "http://www.xdef.org/xdef/4.1"
-        name = "SouborD1A" root = "SouborD1A">
-
+<xd:def xmlns:xd="http://www.xdef.org/xdef/4.1" name="SouborD1A" root="SouborD1A">
 <xd:declaration>
-<![CDATA[
-/* typ kontrolujici validitu rodneho cisla. */
+<![CDATA[/* typ kontrolujici validitu rodneho cisla. */
   boolean rodneCislo() {
       String s = getText(); /* ziskame hodnotu testovaneho typu*/
       int rok = parseInt(s.substring(0,2));
@@ -63,9 +59,7 @@
 ]]>
 </xd:declaration>
 
-   <SouborD1A>
-      <ZaznamPDN xd:script = "occurs +; ref ZaznamPDN" />
-   </SouborD1A>
+   <SouborD1A><ZaznamPDN xd:script = "occurs +; ref ZaznamPDN" /></SouborD1A>
 
    <ZaznamPDN xd:script   = "finally konecZaznamu();"
               Verze       = "fixed '2.0'"
@@ -115,7 +109,7 @@
       <Misto xd:script = "occurs 0..1; ref text" />
    </ObjStrankaDN>
 
-   <FotoDN       Foto_Ref = "required blobref()" />
+   <FotoDN Foto_Ref = "required blobref()" />
 
    <VozidloDN OznSegmentu           = "required string()"
               DruhVozidla           = "required string()"
@@ -253,7 +247,7 @@
           TitulPred         = "optional string()"
           TitulZa           = "optional string()"
           RC                = "optional rodneCislo()"
-          Pohlavi           = "optional enum('M','Ž˝')"
+          Pohlavi           = "optional enum('M','Ĺ˝Ëť')"
           OsobniStav        = "optional string()"
           DatumNarozeni     = "optional xdatetime('d.M.yy')"
           MistoNarozeni     = "optional string()"
@@ -290,7 +284,5 @@
    <Skoda xd:script = "occurs 0..1" TisKc = "optional skodaTisice()" >
       optional string(); onTrue trString(4101,4000)
    </Skoda>
-
    <text>required string;</text>
-
 </xd:def>

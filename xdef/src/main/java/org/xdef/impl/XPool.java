@@ -136,16 +136,12 @@ public final class XPool implements XDPool, Serializable {
 		_sourceInfo = new XDSourceInfo();
 	}
 
-	/** Creates instance of XDPool with properties, external objects and
-	 * reporter.
+	/** Creates instance of XDPool with properties, external objects and reporter.
 	 * @param props Properties or <i>null</i>.
-	 * @param extClasses The array of classes where are available methods
-	 * referred from definitions.
+	 * @param extClasses The array of classes where are available methods referred from definitions.
 	 * @param reporter report writer or <i>null</i>.
 	 */
-	XPool(final Properties props,
-		final ReportWriter reporter,
-		final Class<?>... extClasses) {
+	XPool(final Properties props, final ReportWriter reporter, final Class<?>... extClasses) {
 		this();
 		_extClasses = extClasses;
 		_reporter = reporter;
@@ -200,8 +196,8 @@ public final class XPool implements XDPool, Serializable {
 		_minYear = readPropertyYear(_props, XDConstants.XDPROPERTY_MINYEAR);
 		_maxYear = readPropertyYear(_props, XDConstants.XDPROPERTY_MAXYEAR);
 		_specialDates = readPropertySpecDates(_props);
-		_compiler =
-			new CompileXDPool(this, _reporter!=null ? _reporter : new ArrayReporter(), _extClasses, _xdefs);
+		_compiler = new CompileXDPool(this,
+			_reporter!=null ? _reporter : new ArrayReporter(), _extClasses, _xdefs);
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -279,14 +275,11 @@ public final class XPool implements XDPool, Serializable {
 		return 0; // default value
 	}
 
-	/** Add source data of X-definition or collection. If the argument starts
-	 * with "&lt;" character then it is interpreted as source X-definition data,
-	 * otherwise it can be the pathname of the file or URL. If it is a pathname
-	 * format then it may contain also wildcard characters representing a group
-	 * of files.
+	/** Add source data of X-definition or collection. If the argument starts with "&lt;" character then
+	 * it is interpreted as source X-definition data, otherwise it can be the pathname of the file or URL.
+	 * If it is a pathname format then it may contain also wildcard characters representing a group of files.
 	 * @param source The string with source X-definition.
-	 * @param sourceId name of source source data corresponding to
-	 * the argument source (may be null) used in reporting.
+	 * @param sourceId name of source source data corresponding to the argument source used in reporting.
 	 * @throws RuntimeException if source is missing or if an error occurs.
 	 */
 	final void setSource(final String source, final String sourceId) {
@@ -362,15 +355,12 @@ public final class XPool implements XDPool, Serializable {
 		}
 	}
 
-	/** Add source data of X-definitions or collections. If an item starts with
-	 * "&lt;" character then it is interpreted as source data, otherwise
-	 * it can be the pathname of the file or URL. If it is a pathname format,
-	 * then it may contain also wildcard characters representing a group
-	 * of files.
+	/** Add source data of X-definitions or collections. If an item starts with "&lt;" character then
+	 * it is interpreted as source data, otherwise it can be the pathname of the file or URL. If it
+	 * is a pathname format, then it may contain also wildcard characters representing a group of files.
 	 * @param sources The string with sources.
 	 * @param sourceIds array of names of source source data corresponding to
-	 * the sources argument used in reporting (any item or even this argument
-	 * may be <i>null</i>).
+	 * the sources argument used in reporting (any item or even this argument may be <i>null</i>).
 	 * @throws RuntimeException if source is missing or if an error occurs.
 	 */
 	final void setSource(final String[] sources, final String[] sourceIds) {
@@ -462,8 +452,7 @@ public final class XPool implements XDPool, Serializable {
 
 	/** Add input stream with source data of a X-definition or collection.
 	 * @param source The input stream with source.
-	 * @param sourceId name of source source data corresponding to
-	 * stream (may be null).
+	 * @param sourceId name of source source data corresponding to the stream (may be null).
 	 */
 	final void setSource(final InputStream source, final String sourceId) {
 		String s = sourceId;
@@ -737,8 +726,7 @@ public final class XPool implements XDPool, Serializable {
 	@Override
 	/** Check compatibility of this instance of XDPool with given version.
 	 * @param version the version to be checked.
-	 * @return true if this instance of XDPool is compatible with given version.
-	 * Otherwise return false.
+	 * @return true if this instance of XDPool is compatible with given version. Otherwise return false.
 	 */
 	public final boolean chkCompatibility(final String version) {
 		return getXDVersionID(version) >= getXDVersionID(XD_MIN_VERSION);
@@ -879,10 +867,8 @@ public final class XPool implements XDPool, Serializable {
 	@Override
 	public final boolean isIgnoreUnresolvedExternals() {return _ignoreUnresolvedExternals;}
 	/** Check if exists the X-definition of given name.
-	 * @param name the name of X-definition (or <i>null</i>) if
-	 * noname X-definition is checked.
-	 * @return true if and only if the X-definition of given name exists in
-	 * the XDPool.
+	 * @param name the name of X-definition (or <i>null</i>) if noname X-definition is checked.
+	 * @return true if and only if the X-definition of given name exists in the XDPool.
 	 */
 	@Override
 	public final boolean exists(final String name) {return _xdefs.containsKey(name == null ? "" : name);}
@@ -973,8 +959,7 @@ public final class XPool implements XDPool, Serializable {
 	@Override
 	public final boolean isLocationsdetails() {return _locationdetails;}
 	/** Get switch if the parser do not allow DOCTYPE.
-	 * @return true if the parser do not allow DOCTYPE or return false
-	 * if DOCTYPE is processed.
+	 * @return true if the parser do not allow DOCTYPE or return false if DOCTYPE is processed.
 	 */
 	@Override
 	final public boolean isIllegalDoctype() {return _illegalDoctype;}
@@ -983,9 +968,8 @@ public final class XPool implements XDPool, Serializable {
 	 */
 	@Override
 	final public boolean isChkWarnings() {return _chkWarnings;}
-	/** Get switch if the actullal reporter is cleared in the executed code of
-	 * the 'onFalse', 'onIllegalAttr', 'onIllegalText', 'onEllegalElement'
-	 * sections. Default value is 'true'.
+	/** Get switch if the actullal reporter is cleared in the executed code of sections
+	 * 'onFalse', 'onIllegalAttr', 'onIllegalText', 'onEllegalElement'. Default value is 'true'.
 	 * @return true if reporter will be cleared.
 	 */
 	@Override
@@ -1029,30 +1013,26 @@ public final class XPool implements XDPool, Serializable {
 	 */
 	@Override
 	public final SDatetime[] getSpecialDates() {return _specialDates;}
-	/** Get the object with the map of source items of compiled X-definitions
-	 * and with editing information.
+	/** Get the object with the map of source items of compiled X-definitions and with editing information.
 	 * @return object with the map of source items of compiled X-definitions
 	 * and with editing information.
 	 */
 	@Override
 	public XDSourceInfo getXDSourceInfo() {return _sourceInfo;}
 	/** Get debug editor class name.
-	 * @return debug editor class name (if null. the default debug editor
-	 * will be used).
+	 * @return debug editor class name (if null. the default debug editor will be used).
 	 */
 	@Override
 	public final String getDebugEditor() {return _debugEditor;}
 	/** Get class name of the editor of X-definition.
-	 * @return class name of the editor of X-definition which
-	 * will be used).
+	 * @return class name of the editor of X-definition which will be used).
 	 */
 	@Override
 	public final String getXdefEditor() {return _xdefEditor;}
 	/** Generate XComponent Java source classes from XDPool.
-	 * @param fdir directory where write the source code. The file names
-	 * will be constructed from %class statements as "className.java".
-	 * @param charset the character set name or null (if null then it is used
-	 * the system character set name).
+	 * @param fdir directory where write the source code. The file names will be constructed from
+	 * %class statements as "className.java".
+	 * @param charset the character set name or null (if null then it is used the system character set name).
 	 * @param genJavadoc switch to generate JavaDoc.
 	 * @param suppressPrintWarnings switch suppress print of warnings.
 	 * @return ArrayReporter with errors and warnings
@@ -1063,8 +1043,7 @@ public final class XPool implements XDPool, Serializable {
 		final String charset,
 		final boolean genJavadoc,
 		final boolean suppressPrintWarnings) throws IOException {
-		return GenXComponent.genXComponent(
-			this, fdir, charset, genJavadoc, suppressPrintWarnings);
+		return GenXComponent.genXComponent(this, fdir, charset, genJavadoc, suppressPrintWarnings);
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1207,7 +1186,7 @@ public final class XPool implements XDPool, Serializable {
 	 * @throws IOException if an error occurs.
 	 * @throws ClassNotFoundException if class not found.
 	 */
-	private void readObject(final java.io.ObjectInputStream input) throws IOException, ClassNotFoundException{
+	private void readObject(final java.io.ObjectInputStream input) throws IOException,ClassNotFoundException {
 		_xdefs = new LinkedHashMap<>();
 		_sourceInfo = new XDSourceInfo();
 		GZIPInputStream in = new GZIPInputStream(input);

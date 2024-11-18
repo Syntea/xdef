@@ -86,8 +86,7 @@ public final class TestScript extends XDTester {
 		String xml = "<a a=\"" + value + "\"/>";
 		XDPool xp = null;
 		try {
-			setProperty(XDConstants.XDPROPERTY_WARNINGS, // xdef_warnings
-				XDConstants.XDPROPERTYVALUE_WARNINGS_FALSE); // false
+			setProperty(XDConstants.XDPROPERTY_WARNINGS, XDConstants.XDPROPERTYVALUE_WARNINGS_FALSE);
 			xp = compile(xdef);
 			ArrayReporter rep = new ArrayReporter();
 			_result = false;
@@ -143,8 +142,7 @@ public final class TestScript extends XDTester {
 			System.out.flush();
 			_result = expected.equals(xd.getVariable("result").toString());
 			if (!_result) {
-				throw new Exception("Incorrect result:" +
-					xd.getVariable("result"));
+				throw new Exception("Incorrect result:" + xd.getVariable("result"));
 			}
 			if (_printCode) {
 				display(xp, xdef, xml);
@@ -330,8 +328,7 @@ public final class TestScript extends XDTester {
 		test("","/*koment*/setResult(true);/*koment*/;");
 		test("","/*koment*/setResult/*koment*/(/*koment*/true/*koment*/OR"
 			+ "/*koment*/false/*koment*/)/*koment*/;/*koment*/");
-		test("","setResult(toString(9223372036854775807)"
-			+ "== '9223372036854775807');");
+		test("","setResult(toString(9223372036854775807) == '9223372036854775807');");
 		test("","setResult(1 == 1 AND 1 != 2);");
 		test("","setResult(2 GT 1 AND 1 LT 2);");
 		test("","setResult(2 GE 1 AND 1 LE 2);");
@@ -352,27 +349,20 @@ public final class TestScript extends XDTester {
 		test("","setResult('a'.equals('a'));");
 		test("","setResult(!'a'.equals('aa'));");
 		test("","setResult('aB'.equalsIgnoreCase('Ab'));");
-		test("","setResult(toString(-9223372036854775808)"
-			+ "== '-9223372036854775808');");
+		test("","setResult(toString(-9223372036854775808) == '-9223372036854775808');");
 		test("","setResult(toString(9_223_372_036_854_775_807)"
 			+ "== '9223372036854775807');");
-		test("","setResult(toString(-9_223_372_036_854_775_808)"
-			+ "== '-9223372036854775808');");
+		test("","setResult(toString(-9_223_372_036_854_775_808) == '-9223372036854775808');");
 		test("","setResult(toString(0xf0) == '240');");
 		test("","setResult(toString(0XF0) == '240');");
 		test("","setResult(toString(0xffffffffffffffff) == '-1');");
 		test("","setResult(toString(-0xffffffffffffffff) == '1');");
 		test("","setResult(toString(-0xff_ff_ff_ff_ff_ff_ff_ff) == '1');");
-		test("","setResult(toString(0x8000000000000000)"
-			+ "== '-9223372036854775808');");
-		test("","setResult(toString(0x8_000_000_000_000_000)"
-			+ "== '-9223372036854775808');");
-		test("", "setResult(toString(0x8000000000000000 - 1)"
-			+ "== '9223372036854775807');");
-		test("","setResult(toString(0x7fffffffffffffff)"
-			+ "== '9223372036854775807');");
-		test("","setResult(toString(-0x7fffffffffffffff)"
-			+ "== '-9223372036854775807');");
+		test("","setResult(toString(0x8000000000000000) == '-9223372036854775808');");
+		test("","setResult(toString(0x8_000_000_000_000_000) == '-9223372036854775808');");
+		test("", "setResult(toString(0x8000000000000000 - 1) == '9223372036854775807');");
+		test("","setResult(toString(0x7fffffffffffffff) == '9223372036854775807');");
+		test("","setResult(toString(-0x7fffffffffffffff) == '-9223372036854775807');");
 		test("","setResult(toString(-0d999.99) == '-999.99');");
 		test("","setResult(toString(-0i999999) == '-999999');");
 		test("","setResult(toString(0) == '0');");
@@ -397,11 +387,9 @@ public final class TestScript extends XDTester {
 		test("aAa","setResult(eq('a\\u0041a'));");
 		test("ab'cd","setResult(eq('ab\\'cd'));");
 		test("ab''cd","setResult(eq('ab\\'\\'cd'));");
-		test("ab''cd",
-			"{setText(getText().toUpper()); setResult(eq('AB\\'\\'CD'));}");
+		test("ab''cd", "{setText(getText().toUpper()); setResult(eq('AB\\'\\'CD'));}");
 		test("AB''CD","{setResult(eq('ab\\'\\'cd'.toUpper()));}");
-		test("AB''CD",
-			"{setText(getText().toLower());setResult(eq('ab\\'\\'cd'));}");
+		test("AB''CD", "{setText(getText().toLower());setResult(eq('ab\\'\\'cd'));}");
 		test("M","setResult(enum('M'));");
 		test("","setResult(enum('M',''));");
 		test("XY","setResult(enum('XY','ABC','DE'));");
@@ -430,42 +418,26 @@ public final class TestScript extends XDTester {
 
 		test("12","{int i=1; int j=(i=3)*3; setResult(eq(toString(i+j)));}");
 		test("12","{int i=1; int j=3*(i=3); setResult(eq(toString(i+j)));}");
-		test("12", "{String s = ''; int i = 1; int j = 2;"
-			+ "s = '' + (i) + (j); setResult(eq(s));}");
-		test("12", "{int i = 1; int j = 1; int k = j = 2;"
-			+ "String s = '' + i + j; setResult(eq(s));}");
-		test("6", "{int k = 0; int j = 0; int i = j = k = 2; String s='';"
-			+ "s = i + j + k; setResult(eq(s));}");
-		test("6", "{int i = 2, j = i, k = i; String s = '';"
-			+ "s = i + j + k; setResult(eq(s));}");
-		test("7", "{int l, i, j, k = j = i = 2; String s = '';"
-			+ "s = i + j + k + l= 1; setResult(eq(s));}");
-		test("2", "{int i, j, k, l; i = 0; j = k = i++; String s='';"
-			+ "s = i + j + k + l = 1; setResult(eq(s));}");
-		test("4", "{int i, j, k, l; i = 0; j = k = ++i; String s='';"
-			+ "s = i + j + k + l = 1; setResult(eq(s));}");
-		test("false",
-			"{int i=2+3*2; setResult(eq(toString(i > 3 == true == false)));}");
-		test("12", "{int i=0; String s='';"
-			+ "for (i=1; i LT 3; i=i+1) s = s + i; setResult(eq(s));}");
-		test("12", "{int i=0; String s='';"
-			+ "for (i=1; i LT 3; i++) s += i; setResult(eq(s));}");
-		test("12", "{int i=0; String s='';"
-			+ "for (i=1; i LT 3; ++i) s += i; setResult(eq(s));}");
+		test("12", "{String s = ''; int i = 1; int j = 2; s = '' + (i) + (j); setResult(eq(s));}");
+		test("12", "{int i = 1; int j = 1; int k = j = 2; String s = '' + i + j; setResult(eq(s));}");
+		test("6", "{int k = 0; int j = 0; int i = j = k = 2; String s=''; s = i + j + k; setResult(eq(s));}");
+		test("6", "{int i = 2, j = i, k = i; String s = ''; s = i + j + k; setResult(eq(s));}");
+		test("7", "{int l, i, j, k = j = i = 2; String s = ''; s = i + j + k + l= 1; setResult(eq(s));}");
+		test("2", "{int i, j, k, l; i = 0; j = k = i++; String s='';s=i + j + k + l = 1; setResult(eq(s));}");
+		test("4", "{int i, j, k, l; i = 0; j = k = ++i; String s='';s=i + j + k + l = 1; setResult(eq(s));}");
+		test("false", "{int i=2+3*2; setResult(eq(toString(i > 3 == true == false)));}");
+		test("12", "{int i=0; String s=''; for (i=1; i LT 3; i=i+1) s = s + i; setResult(eq(s));}");
+		test("12", "{int i=0; String s=''; for (i=1; i LT 3; i++) s += i; setResult(eq(s));}");
+		test("12", "{int i=0; String s=''; for (i=1; i LT 3; ++i) s += i; setResult(eq(s));}");
 		test("67", "setResult(eq(toString(2 + 3 * 2 * 10 + 3 + 2)));");
 		test("67", "setResult(eq('' + (2 + 3 * 2 * 10 + 3 + 2)));");
 		test("26032", "setResult(eq('' + 2 + 3 * 2 * 10 + 3 + 2));");
 		test("67", "{String s = ''; s += 2+3*2*10 + 3 + 2; setResult(eq(s));}");
-		test("true", "{int i = 0; setResult(" +
-			"eq(toString(i != 1 AND i != 2 AND i != 3)));}");
-		test("true", "{int i = 0; setResult(" +
-			"eq(toString(i != 1 AAND i != 2 AAND i != 3)));}");
-		test("true", "{int i = 0; setResult(" +
-			"eq(toString(i != 1 OR i != 2 OR i != 3)));}");
-		test("true", "{int i = 0; setResult(" +
-			"eq(toString(i != 1 OOR i != 2 OOR i != 3)));}");
-		test("true", "{int i = 0; setResult(" +
-			"eq(toString(i != 1 XOR i != 2 XOR i != 3)));}");
+		test("true", "{int i = 0; setResult(eq(toString(i != 1 AND i != 2 AND i != 3)));}");
+		test("true", "{int i = 0; setResult(eq(toString(i != 1 AAND i != 2 AAND i != 3)));}");
+		test("true", "{int i = 0; setResult(eq(toString(i != 1 OR i != 2 OR i != 3)));}");
+		test("true", "{int i = 0; setResult(eq(toString(i != 1 OOR i != 2 OOR i != 3)));}");
+		test("true", "{int i = 0; setResult(eq(toString(i != 1 XOR i != 2 XOR i != 3)));}");
 		test("true", "{int i = 0; setResult(eq(toString(i == 0)));}");
 		test("false", "{int i = 1; setResult(eq(toString(i == 0)));}");
 		test("false", "{int i = 0; setResult(eq(toString(i != 0)));}");
@@ -489,47 +461,30 @@ public final class TestScript extends XDTester {
 		test("true", "{int i=8;i=i RSH 3; setResult(eq(toString(i==1)));}");
 		test("true", "{int i=8;i RSH=3; setResult(eq(toString(i==1)));}");
 		test("true", "{int i=8;i &gt;&gt;=3; setResult(eq(toString(i==1)));}");
-		test("true",
-			"{int i=$MININT;i=i RRSH 60;setResult(eq(toString(i==8)));}");
-		test("true",
-			"{int i=$MININT; i RRSH=60;setResult(eq(toString(i==8)));}");
-		test("true",
-			"{int i=$MININT;i=i&gt;&gt;&gt;60;setResult(eq(toString(i==8)));}");
-		test("true",
-			"{int i=$MININT;i&gt;&gt;&gt;=60;setResult(eq(toString(i==8)));}");
-		test("false",
-			"{int i=2+3*2; setResult(eq(toString(i GT 3 == true == false)));}");
-		test("true", "{int i = 1; if (i LT 1) i = 2;"
-			+ " else i = -1; setResult(eq(toString(i == -1)));}");
+		test("true", "{int i=$MININT;i=i RRSH 60;setResult(eq(toString(i==8)));}");
+		test("true", "{int i=$MININT; i RRSH=60;setResult(eq(toString(i==8)));}");
+		test("true", "{int i=$MININT;i=i&gt;&gt;&gt;60;setResult(eq(toString(i==8)));}");
+		test("true", "{int i=$MININT;i&gt;&gt;&gt;=60;setResult(eq(toString(i==8)));}");
+		test("false", "{int i=2+3*2; setResult(eq(toString(i GT 3 == true == false)));}");
+		test("true", "{int i = 1; if (i LT 1) i = 2; else i = -1; setResult(eq(toString(i == -1)));}");
 		test("true0", "{boolean i = 1 LT 0; int j = 0; String s = '';"
 			+ "if (i) i=false; else i=true; s=s+i; s=s+j; setResult(eq(s));}");
 		test("false2", "{boolean i = 1 LT 0; int j = i ? 1 : 2; String s = '';"
 			+ "if (i) i=false; else s=s+i; s=s+j; setResult(eq(s));}");
 		test("false2", "{boolean i = !(1 GE 0); int j = i ? 1 : 2; String s='';"
 			+ "if (i) i=false; else s=s+i; s=s+j; setResult(eq(s));}");
-		test("109", "{int i = 10; String s = '';" +
-			"while (i GT 8) { s = s + i; i = i - 1; } setResult(eq(s));}");
-		test("12", "{int i=0; i=1; String s='';"
-			+ "while(i LT 3){s=s+i; i=i+1;} setResult(eq(s));}");
-		test("12", "{int i=0; i=1; String s='';"
-			+ "while(!(i GE 3)){s=s+i; i=i+1;} setResult(eq(s));}");
-		test("12", "{int i; String s='';"
-			+ "for (i=1; i LT 3; i=i+1) s=s+i; setResult(eq(s));}");
-		test("12", "{int i; String s='';"
-			+ "for (i=1; i != 3; i=i+1) s=s+i; setResult(eq(s));}");
-		test("12", "{int i; String s='';"
-			+ "for (i=1; !(i GE 3); i=i+1) s=s+i; setResult(eq(s));}");
-		test("12", "{String s=''; "
-			+ "for (int i=1; i LT 3; i=i+1) s=s+i; setResult(eq(s));}");
-		test("01", "{int i=0; String s='';"
-			+ "do {s=s+i; i=i+1;} while(i==1); setResult(eq(s));}");
-		test("01", "{int i=0; String s='';"
-			+ "do {s=s+i; i=i+1;} while(!(i!=1)); setResult(eq(s));}");
-		test("8","{int i=0;int j=1;int k=2;int l=3;" +
-			"while((i==0)AND(j==1)OR(k==2)AND(l==3)){i++;k++;}" +
+		test("109", "{int i = 10; String s=''; while (i GT 8) { s = s + i; i = i - 1; } setResult(eq(s));}");
+		test("12", "{int i=0; i=1; String s=''; while(i LT 3){s=s+i; i=i+1;} setResult(eq(s));}");
+		test("12", "{int i=0; i=1; String s=''; while(!(i GE 3)){s=s+i; i=i+1;} setResult(eq(s));}");
+		test("12", "{int i; String s=''; for (i=1; i LT 3; i=i+1) s=s+i; setResult(eq(s));}");
+		test("12", "{int i; String s=''; for (i=1; i != 3; i=i+1) s=s+i; setResult(eq(s));}");
+		test("12", "{int i; String s=''; for (i=1; !(i GE 3); i=i+1) s=s+i; setResult(eq(s));}");
+		test("12", "{String s=''; for (int i=1; i LT 3; i=i+1) s=s+i; setResult(eq(s));}");
+		test("01", "{int i=0; String s=''; do {s=s+i; i=i+1;} while(i==1); setResult(eq(s));}");
+		test("01", "{int i=0; String s=''; do {s=s+i; i=i+1;} while(!(i!=1)); setResult(eq(s));}");
+		test("8","{int i=0;int j=1;int k=2;int l=3; while((i==0)AND(j==1)OR(k==2)AND(l==3)){i++;k++;}" +
 			"setResult(eq(toString(i+j+k+l)));}");
-		test("8","{int i=0;int j=1;int k=2;int l=3;" +
-			"while((i==0)AAND(j==1)OOR(k==2)AAND(l==3)){i++;k++;}" +
+		test("8","{int i=0;int j=1;int k=2;int l=3; while((i==0)AAND(j==1)OOR(k==2)AAND(l==3)){i++;k++;}" +
 			"setResult(eq(toString(i+j+k+l)));}");
 		test("","{int i=0;int j=1; setResult((i==0 | j==0));}");
 		test("","{int i=0;int j=1; setResult((i==0 || j==0));}");
@@ -542,8 +497,7 @@ public final class TestScript extends XDTester {
 		test("false","setResult(eq(toString(2+3*2 GT 3 == true == false)));");
 		test("","setResult((2+3*2 > 3 == empty().parse() == false) == false);");
 		test("false","{String s = toString(2+3*2 GT 3 == true == false);"
-			+ "s = s != '' ? s = toString(2+3*2 GT 3 == true == false)"
-			+ ": 'no'; setResult(eq(s));}");
+			+ "s = s != '' ? s = toString(2+3*2 GT 3 == true == false) : 'no'; setResult(eq(s));}");
 		test("BAc","setResult(eq(translate('--abc--','ab-','BA')));");
 		test("1","setResult(eq(toString(abs(-1))));");
 		test("1","setResult(eq(toString(abs(1))));");
@@ -553,8 +507,7 @@ public final class TestScript extends XDTester {
 		test("1","{ int i = -1; setResult(!(!eq(toString(abs(i)))));}");
 		test("1","{ int i = -1; setResult(!eq(toString(i)));}");
 		test("1.5","{float r = -1.5; setResult(eq(toString(abs(r))));}");
-		test("1.0","{float r = -1.5; float s = -2.5; " +
-			" setResult(eq(toString(IEEEremainder(r,s))));}");
+		test("1.0","{float r = -1.5; float s = -2.5; setResult(eq(toString(IEEEremainder(r,s))));}");
 		test("1.0", "setResult(eq(toString(sin($PI/2))));");
 		test("1.0", "setResult(eq(toString(cos(0.0))));");
 		test("0.0", "setResult(eq(toString(tan(0.0))));");
@@ -565,36 +518,27 @@ public final class TestScript extends XDTester {
 		test("1.0", "setResult(eq(toString(exp(0.0))));");
 		test("180.0", "setResult(eq(toString(toDegrees($PI))));");
 		test("-1.0", "setResult(eq(toString(cos(toRadians(180.0)))));");
-		test("1.0", "{int i = 1; setResult(eq(" + //casting
-			"(String)(float)(int)round((float)(int)i)));}");
+		test("1.0", "{int i = 1; setResult(eq((String)(float)(int)round((float)(int)i)));}");//casting
 		test("1.4142135623730951","setResult(eq(toString(sqrt(2))));");
 		test("1.4142135623730951","setResult(eq(toString(pow(2,1.0/2))));");
-		test("1.4142135623730951",
-			"setResult(eq(toString(pow(myCheck4(),1.0/2))));");
+		test("1.4142135623730951", "setResult(eq(toString(pow(myCheck4(),1.0/2))));");
 		test("1","{int i=1; int j=2; setResult(eq(toString(min(i,j))));}");
 		test("2","{int i=1; int j=2; setResult(eq(toString(max(i,j))));}");
-		test("1.5",
-			"{float i=1.5;float j=2.5;setResult(eq(toString(min(i,j))));}");
-		test("2.5",
-			"{float i=1.5;float j=2.5;setResult(eq(toString(max(i,j))));}");
+		test("1.5", "{float i=1.5;float j=2.5;setResult(eq(toString(min(i,j))));}");
+		test("2.5", "{float i=1.5;float j=2.5;setResult(eq(toString(max(i,j))));}");
 		test("1.5","{float i=1.5;int j=2;setResult(eq(toString(min(i,j))));}");
 		test("2.5","{int i=1;float j=2.5;setResult(eq(toString(max(i,j))));}");
 		test("67","setResult(eq(toString(myCheck4()+3*2*10 + 3 + 2)));");
 		test("63","setResult(eq(toString(-myCheck4(1)+3*2*10 + 3 + 2)));");
-		test("Monday, 23 January 2006",
-			"setResult(xdatetime('EEEE, d MMMM y'))");
+		test("Monday, 23 January 2006", "setResult(xdatetime('EEEE, d MMMM y'))");
 		test("Mon, 23 Jan 2006", "setResult(xdatetime('EEE, d MMM y'));");
-		test("1999-05-01T20:43:09.876+01:00", "setResult("
-			+ "eq(parseDate('1999-05-01T20:43:09.876+01:00').toString()));");
-		test("1999-05-01T20:43:09+01:00", "setResult("
-			+ "eq(toString(parseDate('1999-05-01T20:43:09+01:00'))));");
-		test("1999-05-01", "setResult("
-			+ "eq(parseDate(getText(), 'yyyy-MM-dd').toString()));");
+		test("1999-05-01T20:43:09.876+01:00",
+			"setResult(eq(parseDate('1999-05-01T20:43:09.876+01:00').toString()));");
+		test("1999-05-01T20:43:09+01:00", "setResult(eq(toString(parseDate('1999-05-01T20:43:09+01:00'))));");
+		test("1999-05-01", "setResult(eq(parseDate(getText(), 'yyyy-MM-dd').toString()));");
 		test("1999-04-05", "setResult(eq(easterMonday(1999).toString()));");
-		test("1999-04-05", "setResult(eq(parseDate("+
-			"getText()).easterMonday().toString()));");
-		test("1999-04-05", "setResult("+
-			"parseDate(getText()).lastDayOfMonth() == 30);");
+		test("1999-04-05", "setResult(eq(parseDate(getText()).easterMonday().toString()));");
+		test("1999-04-05", "setResult(parseDate(getText()).lastDayOfMonth() == 30);");
 		test("Mon, 23 Jan 2006 20:26:46", "setResult(emailDate());");
 		test("Mon, 23 Jan 2006 20:26:46 +0100", "setResult(emailDate());");
 		test("Mon, 23 Jan 2006 20:26:46 +0100 (CET)","setResult(emailDate());");
@@ -604,19 +548,13 @@ public final class TestScript extends XDTester {
 		test("ahoj 2","setResult(eq('ahoj ' + 002));");
 		test("2 nazdar","setResult(eq(002 + ' nazdar'));");
 		test("3.5.2004", "setResult((xdatetime('d.M.y')? 123 : 456) == 123);");
-		test("ho","{boolean b = eq('ho');"
-			+ "myCheck1(pow(5,6) + 1 + 5,2,3,'haha'); setResult(b);}");
-		test("ho","{boolean b = eq('ho') AAND "
-			+ "(myCheck2(pow(5,6) + 1 + 5,2,3,'haha') == '24');setResult(b);}");
+		test("ho","{boolean b = eq('ho'); myCheck1(pow(5,6) + 1 + 5,2,3,'haha'); setResult(b);}");
+		test("ho","{boolean b = eq('ho') AAND (myCheck2(pow(5,6) + 1 + 5,2,3,'haha')=='24');setResult(b);}");
 		test("ho","{boolean b = eq('ho'); myCheck3(); setResult(b);}");
-		test("ho",
-			"{boolean b=eq('ho'); b=b AND (myCheck4() == 2); setResult(b);};");
-		test("ho",
-			"{boolean b=eq('ho'); b=b AND (myCheck4(4) == 5); setResult(b);}");
-		test("nazdar","{boolean b = eq('nazdar');"
-			+ "b = (2+3*2 GT 3) | (2 GT 3) == true; setResult(b);}");
-		test("nazdar","{boolean b = eq('nazdar');"
-			+ "b = !(!((2+3*2 GT 3) ^ (2 GT 3)));setResult(b);}");
+		test("ho", "{boolean b=eq('ho'); b=b AND (myCheck4() == 2); setResult(b);};");
+		test("ho", "{boolean b=eq('ho'); b=b AND (myCheck4(4) == 5); setResult(b);}");
+		test("nazdar","{boolean b = eq('nazdar'); b = (2+3*2 GT 3) | (2 GT 3) == true; setResult(b);}");
+		test("nazdar","{boolean b = eq('nazdar'); b = !(!((2+3*2 GT 3) ^ (2 GT 3)));setResult(b);}");
 		test("nazdar","setResult(eq('nazdar')? true : false);");
 		test("1.4","setResult(eq(toString(1.4)) ? true : false);");
 		test("1.4","setResult(eq(toString(1.4,'')) ? true : false);");
@@ -644,8 +582,7 @@ public final class TestScript extends XDTester {
 		test("--0230", "{setResult(!gMonthDay());}");
 		setProperty(XDConstants.XDPROPERTY_MINYEAR, "1916");
 		setProperty(XDConstants.XDPROPERTY_MAXYEAR, "2216");
-		setProperty(XDConstants.XDPROPERTY_SPECDATES,
-			"3000-12-31,3000-12-31T00:00:00,3000-12-31T23:59:59");
+		setProperty(XDConstants.XDPROPERTY_SPECDATES, "3000-12-31,3000-12-31T00:00:00,3000-12-31T23:59:59");
 		test("1999", "{setResult(gYear());}");
 		test("1915", "{setResult(!gYear());}");
 		test("2217", "{setResult(!gYear());}");
@@ -675,47 +612,35 @@ public final class TestScript extends XDTester {
 		test("30.12.3000", "{setResult(!xdatetime('d.M.y'));}"); //???
 		resetProperties();
 		test("","setResult(myCheck(pow(5,6) + 1 + 5,2,3,'haha'));");
-		test("","setResult(myCheck5(pow(5,6) + 1 + 5,2,3,'haha') != 3"
-			+ "? false: true);");
-		test("false",
-			"setResult(eq(parseDate('1999-5-1T20:43+01:00') == now()));");
+		test("","setResult(myCheck5(pow(5,6) + 1 + 5,2,3,'haha') != 3 ? false: true);");
+		test("false", "setResult(eq(parseDate('1999-5-1T20:43+01:00') == now()));");
 		test("3.5.2004", "setResult(xdatetime('d.M.y')? true : false);");
-		test("a.5.2004", "{if (xdatetime('d.M.y')) setResult(false); else"
-			+ "{clearReports(); setResult(true);}}");
+		test("a.5.2004", "{if (xdatetime('d.M.y')) setResult(false);else{clearReports(); setResult(true);}}");
 		test("19480010", "setResult(xdatetime('yyyyMMdd')? false : true);");
-		test("01051999","setResult("
-			+ "eq(toString(parseDate('1999-5-1','y-M-d'),'ddMMy')));");
-		test("01051999","setResult("
-			+ "eq(toString(parseDate('1999-5-1','yyyy-M-d'),'ddMMyyyy')));");
-		test("1.5.1999","setResult("
-			+ "eq(toString(parseDate('19990501','yyyyMMdd'),'d.M.yyyy')));");
-		test("010599",
-			"setResult(eq(toString("+
-				"parseDate('99-05-01','YY-MM-dd'),'ddMMyy')));");
-		test("","{Datetime d = parseDate('2005-03-01T14:48:40.352');"+
+		test("01051999","setResult(eq(toString(parseDate('1999-5-1','y-M-d'),'ddMMy')));");
+		test("01051999","setResult(eq(toString(parseDate('1999-5-1','yyyy-M-d'),'ddMMyyyy')));");
+		test("1.5.1999","setResult(eq(toString(parseDate('19990501','yyyyMMdd'),'d.M.yyyy')));");
+		test("010599", "setResult(eq(toString(parseDate('99-05-01','YY-MM-dd'),'ddMMyy')));");
+		test("", "{Datetime d = parseDate('2005-03-01T14:48:40.352');"+
 			"String s = 'datum: 01/03/2005, čas: 14:48:40.352';" +
 			"String m='\\'datum: \\'dd/MM/yyyy\\', čas: \\'HH:mm:ss.SSS';" +
 			"setResult(toString(d,m) == s);}");
-		test("2008",
-			"setResult(eq(toString(parseDate('2008','yyyy'),'yyyy')));");
-		test("2008-01",
-			"setResult(eq(toString(parseDate('1/2008','M/yyyy'),'yyyy-MM')));");
-		test("","{Datetime d = now(); int i = d.getDaytimeMillis();"
-			+ "d=d.setDaytimeMillis(31601);"
-			+ "setResult(d.getDaytimeMillis() LT i);}");
+		test("2008", "setResult(eq(toString(parseDate('2008','yyyy'),'yyyy')));");
+		test("2008-01", "setResult(eq(toString(parseDate('1/2008','M/yyyy'),'yyyy-MM')));");
+		test("","{Datetime d = now(); int i = d.getDaytimeMillis(); d=d.setDaytimeMillis(31601);"
+			+ " setResult(d.getDaytimeMillis() LT i);}");
 		test("","{Datetime d = parseDate('2005-03-01T20:10:01+01:00');"
 			+ "d = d.setDaytimeMillis(0);"
 			+ "if (d.getDaytimeMillis() == 0) setResult(true);"
 			+ "else {outln('m='+d.getDaytimeMillis()); setResult(false);}}");
-		test("","{int i = now().getDaytimeMillis();"
-			+ "setResult((i GE 0) AND (i LE 36*60*60*1000));}"); //zone change!
+		test("","{int i=now().getDaytimeMillis();setResult((i GE 0) AND (i LE 36*60*60*1000));}");//zone chg!
 		test("","{Datetime d = parseDate('2005-03-01T23:10:01+01:00');"
 			+ "int i = d.getDaytimeMillis(); d = d.addMillisecond(3600000); "
 			+ " if (d.getDaytimeMillis() == 601000) setResult(true); "
 			+ "else {outln('m='+(d.getDaytimeMillis()-i));setResult(false);}}");
 		test("","{Datetime d = parseDate('2005-03-01T20:10:01+01:00');"
 			+ "int i = d.getDaytimeMillis(); d = d.addMillisecond(3600000);"
-			+ "if (d.getDaytimeMillis() - i ==3600000) setResult(true); "
+			+ "if (d.getDaytimeMillis() - i == 3600000) setResult(true); "
 			+ "else {outln('m='+(d.getDaytimeMillis()-i));setResult(false);}}");
 		test("01051999","setResult(eq('01051999') ? true : false);");
 		test("001234","setResult(eq(toString(1234,'000000')));");
@@ -729,10 +654,8 @@ public final class TestScript extends XDTester {
 		test("11","{int i=0; setResult(eq(toString(++i) + i));}");
 		test("1","{int i=0; ++i; setResult(eq(i));}");
 		test("1","{int i=0; i++; setResult(eq(i));}");
-		test("01",
-			"{float i=0.0; setResult(eq(toString(round(i++)) + round(i)));}");
-		test("11",
-			"{float i=0.0; setResult(eq(toString(round(++i))+round(i)));}");
+		test("01", "{float i=0.0; setResult(eq(toString(round(i++)) + round(i)));}");
+		test("11", "{float i=0.0; setResult(eq(toString(round(++i))+round(i)));}");
 		test("1", "{String s='1'; if(false) {s += 1;} setResult(eq(s));}");
 		test("12", "{String s='1'; if(true) {s += 2;} setResult(eq(s));}");
 		test("12", "{String s='1';if(false)s+=1; else s+=2;setResult(eq(s));}");
@@ -742,30 +665,19 @@ public final class TestScript extends XDTester {
 		test("12", "{String s; if((s='12') == '1'){s += 2;}setResult(eq(s));}");
 		test("12", "{String s; if('1' == (s='1')){s += 2;} setResult(eq(s));}");
 		test("12", "{String s; if('1' == (s='12')){s += 2;}setResult(eq(s));}");
-		test("12", "{int i=1; String s=''; do {s +=i; i++; if (i GE 3) break;}"
-			+ "while(true); setResult(eq(s));}");
-		test("1", "{int i=1; String s=''; do {s +=i; i++; if (i GE 3) break;}"
-			+ "while(false); setResult(eq(s));}");
-		test("12", "{int i=1; String s=''; while(i LT 3) {s +=i; i++;}"
-			+ "setResult(eq(s));}");
-		test("12", "{int i=1; String s='';"
-			+ "for(;;) {s += i; i++; if (i GE 3) break;} setResult(eq(s));}");
-		test("12", "{int i=1; String s='';"
-			+ "for(;true;) {s += i; i++; if(i GE 3)break;}setResult(eq(s));}");
-		test("1", "{int i=1; String s='1';"
-			+ "for(;false;) {s += i; i++; if(i GE 3)break;}setResult(eq(s));}");
-		test("12", "{int i=1; String s='';"
-			+ "while(true) {s += i; i++; if(i GE 3)break;} setResult(eq(s));}");
-		test("1", "{int i=1; String s='1';"
-			+ "while(false) {s += i; i++; if(i GE 3)break;}setResult(eq(s));}");
-		test("12", "{String s=''; for(int i=1;; i++){s +=i; if (i GE 2) break;}"
-			+ "setResult(eq(s));}");
-		test("12", "{String s=''; for(int i=1; i LE 2; i++) s +=i;"
-			+ "setResult(eq(s));}");
-		test("12", "{String s='???'; int i=0; switch(i){case 1: break; case 2:"
-			+ "break; default: s = '12';} setResult(eq(s));}");
-		test("a b c d", "{String s=' \na  b\nc \t d \n';"
-			+ " setResult(eq(removeWhiteSpaces(s)));}");
+		test("12", "{int i=1; String s=''; do {s +=i; i++;if (i GE 3) break;}while(true);setResult(eq(s));}");
+		test("1", "{int i=1; String s=''; do {s +=i; i++;if (i GE 3) break;}while(false);setResult(eq(s));}");
+		test("12", "{int i=1; String s=''; while(i LT 3) {s +=i; i++;} setResult(eq(s));}");
+		test("12", "{int i=1; String s=''; for(;;) {s += i; i++; if (i GE 3) break;} setResult(eq(s));}");
+		test("12", "{int i=1; String s=''; for(;true;) {s += i; i++; if(i GE 3)break;}setResult(eq(s));}");
+		test("1", "{int i=1; String s='1'; for(;false;) {s += i; i++; if(i GE 3)break;}setResult(eq(s));}");
+		test("12", "{int i=1; String s=''; while(true) {s += i; i++; if(i GE 3)break;} setResult(eq(s));}");
+		test("1", "{int i=1; String s='1'; while(false) {s += i; i++; if(i GE 3)break;}setResult(eq(s));}");
+		test("12", "{String s=''; for(int i=1;; i++){s +=i; if (i GE 2) break;} setResult(eq(s));}");
+		test("12", "{String s=''; for(int i=1; i LE 2; i++) s +=i; setResult(eq(s));}");
+		test("12", "{String s='???'; int i=0; switch(i){"
+			+ "case 1: break; case 2: break; default: s = '12';} setResult(eq(s));}");
+		test("a b c d", "{String s=' \na  b\nc \t d \n'; setResult(eq(removeWhiteSpaces(s)));}");
 		test("12", "{int i=parseInt(getText()); setResult(i == 12);}");
 		test("23", "{String s='123'; setResult(eq(tail(s,2)));}");
 		test("23", "{String s='23'; setResult(eq(tail(s,2)));}");
@@ -786,8 +698,7 @@ public final class TestScript extends XDTester {
 		test("","{for(int i=0;;){if(i GT 4)break;if(i++LE 1)continue;"
 			+ "if(i!=3)setResult(false);break;}setResult(true);}");
 		test("","{for(int i=0;i LT 5;){if(i GT 4)break;"
-			+ "if(i++LE 1)continue;if(i!=3)setResult(false);break;}"
-			+"setResult(true);}");
+			+ "if(i++LE 1)continue;if(i!=3)setResult(false);break;} setResult(true);}");
 		test("", "{for(int i=0;;i++){if(i GT 4)break;if(i LE 1){continue;}"
 			+ "if(i!=3)setResult(false);break;}setResult(true);}");
 		test("","{for(int i=0;i LT 6;i++){if(i GT 4)break;if(i==0)continue;"
@@ -798,8 +709,7 @@ public final class TestScript extends XDTester {
 		// test "continue" and "break" in "do"
 		test("","{int j=0;do{if(j GE 4)break;if(j++LE 2)continue;"
 			+"if(j!=4)setResult(false);break;}while(j LT 6);setResult(true);}");
-		// Test regular expression (XML schema expression is conterted
-		// jo Java form)
+		// Test regular expression (XML schema expression is conterted to Java form)
 		test("", "{Regex r = new Regex('(\\\\d{1,2})(:(\\\\d{1,2}))?');"
 			+ "String s = '5:34'; RegexResult x = r.getMatcher(s);"
 			+ "boolean b = x.matches(); int i = x.groupCount(); b AND= (i==4);"
@@ -808,16 +718,13 @@ public final class TestScript extends XDTester {
 			+ "b AND= (x.group(2)==':34');"
 			+ "b AND= (x.group(3)=='34');}"
 			+ "setResult(b);}");
-
-		test("",
-			"{Regex r = new Regex('(\\\\d{1,2})[\\\\-./](\\\\d{4}|\\\\d{2})');"
+		test("", "{Regex r = new Regex('(\\\\d{1,2})[\\\\-./](\\\\d{4}|\\\\d{2})');"
 			+ "String s = '6-2003'; RegexResult x = r.getMatcher(s);"
 			+ "boolean b=x.matches(); int i=x.groupCount(); b AND= (i==3);"
 			+ "if (b){b= (x.group(0)=='6-2003'); b AND= (x.group(1)== '6');"
 			+ "b AND= (x.group(2)=='2003');}"
 			+ "setResult(b);}");
-		test("",
-			"{Regex r = new Regex('(\\\\d{1,2})[\\\\-./](\\\\d{4}|\\\\d{2})');"
+		test("", "{Regex r = new Regex('(\\\\d{1,2})[\\\\-./](\\\\d{4}|\\\\d{2})');"
 			+ "String s = '6-05'; RegexResult x = r.getMatcher(s);"
 			+ "boolean b=x.matches(); int i=x.groupCount(); b=b AND (i==3);"
 			+ "if (b){b= (x.group(0)=='6-05'); b=b AND (x.group(1)== '6');"
@@ -852,23 +759,18 @@ public final class TestScript extends XDTester {
 			+ "b = b AND (x.group(2)=='H');"
 			+ "setResult(b);}");
 		// Test XML schema gYear
-		test("", "{Parser p = gYear(%minInclusive=1999);\n"
-			+ "setResult(p.parse('1999'));}");
-		test("", "{Parser p = gYear(%minInclusive=1999);\n"
-			+ "setResult(!p.parse('1998'));}");
-		test("", "{Parser p = gYear(%minInclusive=1999);\n"
-			+ "ParseResult r = p.parse('1999');\n"
+		test("", "{Parser p = gYear(%minInclusive=1999);\nsetResult(p.parse('1999'));}");
+		test("", "{Parser p = gYear(%minInclusive=1999);\nsetResult(!p.parse('1998'));}");
+		test("", "{Parser p = gYear(%minInclusive=1999);\nParseResult r = p.parse('1999');\n"
 			+ "setResult(r.matches());}");
-		test("", "{Parser p = gYear(%minInclusive=1999);\n"
-			+ "ParseResult r = p.parse('1998');\n"
+		test("", "{Parser p = gYear(%minInclusive=1999);\nParseResult r = p.parse('1998');\n"
 			+ "setResult(!r.matches());}");
 		test("1999", "{setResult(gYear(%minInclusive=1999));}");
 		test("1999", "{setResult(gYear(%minInclusive=1999).parse());}");
 		test("1990", "{setResult(!gYear(%minInclusive=1999));}");
 		test("1990", "{setResult(!gYear(%minInclusive=1999).parse());}");
 		// test email
-		testAttr2("tr.ab@vol.cz", "onTrue setResult(true);required emailAddr();"
-			+ " onFalse setResult(false);"); // OK
+		testAttr2("tr.ab@vol.cz","onTrue setResult(true);required emailAddr();onFalse setResult(false);");//OK
 		testAttr2("&lt;p-G@d-t.o&gt;","onTrue setResult(true);"
 			+ "required emailAddr();onFalse setResult(false);"); // OK
 		testAttr2("Pa Gr &lt;p-G@d-t.o&gt;","onTrue setResult(true);"
@@ -929,122 +831,80 @@ public final class TestScript extends XDTester {
 			+ "default: setResult(false); return false;}}",
 			"xxx(getText(),999);");
 ////////////////////////////////////////////////////////////////////////////////
-		testAttr2("+1.21","onTrue setResult(true); required decimal;"
-			+ " onFalse setResult(false); ");
+		testAttr2("+1.21","onTrue setResult(true); required decimal; onFalse setResult(false); ");
 		testAttr2("ahoj","required enum('nazdar','ahoj');onTrue"
 			+ " setResult(true);onFalse {clearReports(); setResult(false);}");
 		testAttr2("hoj","required enum('nazdar','ahoj');onTrue"
 			+ " setResult(false);onFalse {clearReports(); setResult(true);}");
 		testAttr2("Ahoj","required enum('nazdar','ahoj');"+
-			"onTrue setResult(false);"
-			+ "onFalse {clearReports(); setResult(true);}");
+			"onTrue setResult(false); onFalse {clearReports(); setResult(true);}");
 		testAttr2("hoj","required  enum('nazdar','ahoj');" +
-			"onTrue setResult(false);"
-			+ "onFalse {clearReports(); setResult(true);}");
-		testAttr2("ahoj","required; onTrue setResult(true);"
-			+ "onFalse {clearReports(); setResult(false);}");
+			"onTrue setResult(false); onFalse {clearReports(); setResult(true);}");
+		testAttr2("ahoj","required; onTrue setResult(true); onFalse {clearReports(); setResult(false);}");
 		testAttr2("ahoj","required string(); onTrue setResult(true);"
 			+ "onFalse {clearReports(); setResult(false);}");
 		testAttr2("ahoj", "required; finally setResult(true);");
 		testAttr2("ahoj", "required; onTrue setResult(true);");
-		testAttr2("ahoj", "required eq('ahoj');"
-			+ "onTrue setResult(true); onFalse setResult(false);");
+		testAttr2("ahoj", "required eq('ahoj'); onTrue setResult(true); onFalse setResult(false);");
 		testAttr2("ahoj", "required eq('nazdar'); onTrue setResult(false);"
 			+ "onFalse {clearReports(); setResult(true);}");
 		testAttr2("ahoj", "required eq('ahoj'); onTrue setResult(false);"
 			+ "onFalse setResult(false); finally setResult(true);");
-		testAttr2("nazdar","required eq('nazdar');\n"
-			+ " onFalse setResult(false); onTrue setResult(true);");
-		testAttr2("nazdar","onTrue setResult(true); required string(1,100);\n"
-			+ " onFalse setResult(false); ");
-		testAttr2("+1.21","onTrue setResult(true); required dec(3,2);"
-			+ " onFalse setResult(false); ");
-		testAttr2("+1,21","onTrue setResult(true); required dec(3,2);"
-			+ " onFalse setResult(false); ");
-		testAttr2("+0.21","onTrue setResult(true); required dec(3,2);"
-			+ " onFalse setResult(false); ");
-		testAttr2("+0,21","onTrue setResult(true); required dec(3,2);"
-			+ " onFalse setResult(false); ");
-		testAttr2("+0000000000.21", "onTrue setResult(true); required dec(3,2);"
-			+ " onFalse setResult(false); ");
-		testAttr2("+00000000001.21",
-			"onTrue setResult(true); required dec(3,2);"
-			+ " onFalse setResult(false); ");
-		testAttr2("+0000000.00","onTrue setResult(true); required dec(3,2);"
-			+ " onFalse setResult(false); ");
-		testAttr2("+0000000,00","onTrue setResult(true); required dec(3,2);"
-			+ " onFalse setResult(false); ");
-		testAttr2("+10.21","onTrue setResult(false); required dec(3,2);"
-			+ " onFalse setResult(true); ");
-		testAttr2("10.21","onTrue setResult(true); required dec(4);"
-			+ " onFalse setResult(false); ");
-		testAttr2("0","onTrue setResult(true); required dec(4);"
-			+ " onFalse setResult(false); ");
-		testAttr2("1234","onTrue setResult(true); required dec(4);"
-			+ " onFalse setResult(false); ");
-		testAttr2(".1234","onTrue setResult(true); required dec(4);"
-			+ " onFalse setResult(false); ");
-		testAttr2(",1234","onTrue setResult(true); required dec(4);"
-			+ " onFalse setResult(false); ");
-		testAttr2("0.","onTrue setResult(true); required dec(4);"
-			+ " onFalse setResult(false); ");
-		testAttr2("0,","onTrue setResult(true); required dec(4);"
-			+ " onFalse setResult(false); ");
-		testAttr2("12.1234","onTrue {setResult(false);} required dec(4);"
-			+ " onFalse setResult(true); ");
-		testAttr2("123456.12345","onTrue setResult(true);required dec(11,5);"
-			+ " onFalse setResult(false); ");
-		testAttr2("1234567.1234", "onTrue setResult(false); required dec(11,5);"
-			+ " onFalse setResult(true); ");
-		testAttr2("1234567,1234", "onTrue setResult(false); required dec(11,5);"
-			+ " onFalse setResult(true); ");
-		testAttr2("aaacaaacaaa",
-			"onTrue {setResult(replace(getText(),'aaa','ab') EQ 'abcabcab');}"
+		testAttr2("nazdar","required eq('nazdar');\nonFalse setResult(false); onTrue setResult(true);");
+		testAttr2("nazdar","onTrue setResult(true); required string(1,100); onFalse setResult(false);");
+		testAttr2("+1.21","onTrue setResult(true); required dec(3,2); onFalse setResult(false); ");
+		testAttr2("+1,21","onTrue setResult(true); required dec(3,2); onFalse setResult(false); ");
+		testAttr2("+0.21","onTrue setResult(true); required dec(3,2); onFalse setResult(false); ");
+		testAttr2("+0,21","onTrue setResult(true); required dec(3,2); onFalse setResult(false); ");
+		testAttr2("+0000000000.21", "onTrue setResult(true); required dec(3,2); onFalse setResult(false); ");
+		testAttr2("+00000000001.21", "onTrue setResult(true); required dec(3,2); onFalse setResult(false); ");
+		testAttr2("+0000000.00","onTrue setResult(true); required dec(3,2); onFalse setResult(false); ");
+		testAttr2("+0000000,00","onTrue setResult(true); required dec(3,2); onFalse setResult(false); ");
+		testAttr2("+10.21","onTrue setResult(false); required dec(3,2); onFalse setResult(true); ");
+		testAttr2("10.21","onTrue setResult(true); required dec(4); onFalse setResult(false); ");
+		testAttr2("0","onTrue setResult(true); required dec(4); onFalse setResult(false); ");
+		testAttr2("1234","onTrue setResult(true); required dec(4); onFalse setResult(false); ");
+		testAttr2(".1234","onTrue setResult(true); required dec(4); onFalse setResult(false); ");
+		testAttr2(",1234","onTrue setResult(true); required dec(4); onFalse setResult(false); ");
+		testAttr2("0.","onTrue setResult(true); required dec(4); onFalse setResult(false); ");
+		testAttr2("0,","onTrue setResult(true); required dec(4); onFalse setResult(false); ");
+		testAttr2("12.1234","onTrue {setResult(false);} required dec(4); onFalse setResult(true); ");
+		testAttr2("123456.12345","onTrue setResult(true);required dec(11,5); onFalse setResult(false); ");
+		testAttr2("1234567.1234", "onTrue setResult(false); required dec(11,5); onFalse setResult(true); ");
+		testAttr2("1234567,1234", "onTrue setResult(false); required dec(11,5); onFalse setResult(true); ");
+		testAttr2("aaacaaacaaa", "onTrue {setResult(replace(getText(),'aaa','ab') EQ 'abcabcab');}"
 			+ "required string(); onFalse setResult(false); ");
-		testAttr2("aaacaaa",
-			"onTrue {setResult(replaceFirst(getText(),'aaa','a') EQ 'acaaa');}"
+		testAttr2("aaacaaa", "onTrue {setResult(replaceFirst(getText(),'aaa','a') EQ 'acaaa');}"
 			+ "required string(); onFalse setResult(false); ");
-		testAttr2("bcr",
-			"onTrue {setResult(translate(getText(),'abc','ABa') EQ 'Bar');}"
+		testAttr2("bcr", "onTrue {setResult(translate(getText(),'abc','ABa') EQ 'Bar');}"
 			+ "required string(); onFalse setResult(false); ");
-		testAttr2("-abc-",
-			"onTrue {setResult(translate(getText(),'ab-','BA') EQ 'BAc');}"
+		testAttr2("-abc-", "onTrue {setResult(translate(getText(),'ab-','BA') EQ 'BAc');}"
 			+ "required string(); onFalse setResult(false); ");
-		testAttr2("//X/y","onTrue setResult(true); required file();"
-			+ " onFalse setResult(false); ");
+		testAttr2("//X/y","onTrue setResult(true); required file(); onFalse setResult(false); ");
 		testAttr2("Sun, 18 Nov 2001 23:42:39 +0100",
-			"onTrue setResult(true); required emailDate();"
+			"onTrue setResult(true); required emailDate(); onFalse setResult(false); ");
+		testAttr2("Tue, 27 Nov 2001 12:17:54 +0100 (CET)", "onTrue setResult(true); required emailDate();"
 			+ " onFalse setResult(false); ");
-		testAttr2("Tue, 27 Nov 2001 12:17:54 +0100 (CET)",
-			"onTrue setResult(true); required emailDate();"
-			+ " onFalse setResult(false); ");
-		testAttr2("http://pes.eunet.cz","onTrue setResult(true);required url();"
-			+ " onFalse setResult(false); ");
+		testAttr2("http://pes.eunet.cz","onTrue setResult(true);required url(); onFalse setResult(false); ");
 ////////////////////////////////////////////////////////////////////////////////
 // Test check methods
 ////////////////////////////////////////////////////////////////////////////////
 //		_printCode = true;
 		_printCode = false;
-		testCheckMethod("ahoj",
-			"boolean m(){setResult(true); return true;}", "m()");
+		testCheckMethod("ahoj", "boolean m(){setResult(true); return true;}", "m()");
 		testCheckMethod("ahoj", "boolean m(){String val = getText();\n"
 			+ "boolean result = val=='ahoj';\n"
 			+ "setResult(result); return result;}\n", "m()");
-		testCheckMethod("ahoj",
-			"boolean m(){String val = getText(); boolean result = false;\n"
+		testCheckMethod("ahoj", "boolean m(){String val = getText(); boolean result = false;\n"
 			+ "result = (val=='nazdar') | (val=='ahoj');\n"
 			+ "setResult(result); return result;}\n", "m()");
-		testCheckMethod("ahoj",
-			"boolean m(){String val=getText(); setResult(val!='nazdar');"
+		testCheckMethod("ahoj", "boolean m(){String val=getText(); setResult(val!='nazdar');"
 			+ "return val!='nazdar';}", "m()");
-		testCheckMethod("ahoj",
-			"boolean m(){setResult(eq('ahoj')); return eq('ahoj');}", "m()");
-		testCheckMethod("ahoj",
-			"boolean m(){String val=getText(); if(val == 'ahoj')"
+		testCheckMethod("ahoj", "boolean m(){setResult(eq('ahoj')); return eq('ahoj');}", "m()");
+		testCheckMethod("ahoj", "boolean m(){String val=getText(); if(val == 'ahoj')"
 			+ "{setResult(true);return true;} setResult(false); return false;}",
 			"m()");
-		testCheckMethod("ahoj",
-			"boolean xxx(String s, int i){if (s != 'ahoj') {"
+		testCheckMethod("ahoj", "boolean xxx(String s, int i){if (s != 'ahoj') {"
 			+ "setResult(false); return false;}"
 			+ " switch(i){}setResult(true);return true;}",
 			"xxx(getText(),999);");
@@ -1156,8 +1016,7 @@ public final class TestScript extends XDTester {
 "</xd:def>\n";
 			xml ="<a/>";
 			assertFalse(test(xdef, xml, "", 'P', xml,
-				"OK 1 OK 2 OK 3 OK 4 OK 5 OK 6 OK 7 " +
-				"OK 21 OK 22 OK 23 OK 24 OK 25 OK 26 \n"));
+				"OK 1 OK 2 OK 3 OK 4 OK 5 OK 6 OK 7 OK 21 OK 22 OK 23 OK 24 OK 25 OK 26 \n"));
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root='a'>\n"+
 "  <xd:declaration>\n"+
@@ -1193,7 +1052,6 @@ public final class TestScript extends XDTester {
 			xp = compile(xdef);
 			xp.createXDDocument().xparse("<a/>", reporter);
 			assertNoErrorwarnings(reporter);
-
 			xdef = // Test reference to model with different namespace
 "<xd:def xmlns:xd='" + _xdNS + "' name='A' xmlns:a='a.b' xmlns:b='c.d'\n"+
 "        root='a:a | b:a'>\n"+
@@ -1213,8 +1071,7 @@ public final class TestScript extends XDTester {
 			xc = xp.createXDDocument().xparseXComponent(xml, null, reporter);
 			assertNoErrors(reporter);
 			assertEq(xml, xc.toXml());
-			xml =
-"<b:a xmlns:b='c.d' a='1' b:b='2' b:c='3'><b:b a='4' b:b='5'/>6</b:a>";
+			xml = "<b:a xmlns:b='c.d' a='1' b:b='2' b:c='3'><b:b a='4' b:b='5'/>6</b:a>";
 			assertEq(xml, parse(xp, "A", xml, reporter));
 			assertNoErrorwarnings(reporter);
 			xc = xp.createXDDocument().xparseXComponent(xml, null, reporter);
@@ -1236,12 +1093,10 @@ public final class TestScript extends XDTester {
 "</xd:component>\n" +
 "</xd:collection>";
 			genXComponent(xp = compile(xdef));
-			xml =
-				"<b:a xmlns:b='a.b' a='1' b:b='2'><b:b  a='3' b:b='4'/></b:a>";
+			xml = "<b:a xmlns:b='a.b' a='1' b:b='2'><b:b  a='3' b:b='4'/></b:a>";
 			assertEq(xml, parse(xp, "A", xml, reporter));
 			assertNoErrorwarnings(reporter);
-			xml =
-				"<b:a xmlns:b='c.d' a='1' b:b='2'><b:b  a='3' b:b='4'/></b:a>";
+			xml = "<b:a xmlns:b='c.d' a='1' b:b='2'><b:b  a='3' b:b='4'/></b:a>";
 			assertEq(xml, parse(xp, "B", xml, reporter));
 			assertNoErrorwarnings(reporter);
 			xdef = // Test reference to model with different namespace
