@@ -272,9 +272,9 @@ Frequent building operations:
   ```shell
   mvn package -PskipTests
   ```
-* by using the "testOnAllJvms" profile, junit-tests will be run on all configured Java platforms,
-  i.e. Java-8 (it is run by default in xdef module), Java-11 (using the xdef-test11 module),
-  Java-17 (using the xdef-test17 module), Java-21 (using the xdef-test21 module):
+* by using the profile "testOnAllJvms", junit-tests will be run on all configured Java platforms,
+  i.e. Java-8 (it is run by default in module "xdef"), Java-11 (using the module "xdef-test11"),
+  Java-17 (using the module "xdef-test17"), Java-21 (using the module "xdef-test21"):
 
   ```shell
   mvn package -PtestOnAllJvms
