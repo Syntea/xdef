@@ -501,7 +501,7 @@ public class XData extends XCodeDescriptor implements XMData, XDValueID, CodeTab
 			switch (p) {
 				case STOP_OP: return true;
 				case CALL_OP: {
-					if (cx == cy && xx.getParam() == xy.getParam()
+					if (cx==cy && xx.getParam()==xy.getParam()
 						|| !full && compareCode(cx, cy, xx.getParam(), xy.getParam(), full)) {
 						ix++;
 						iy++;
@@ -520,9 +520,7 @@ public class XData extends XCodeDescriptor implements XMData, XDValueID, CodeTab
 				case JMP_OP:
 				case JMPF_OP:
 				case JMPT_OP: {
-					int m = xx.getParam();
-					int n = xy.getParam();
-					if (m - ix == n - iy) {
+					if (xx.getParam() - ix == xy.getParam() - iy) {
 						ix++;
 						iy++;
 					} else {
@@ -570,30 +568,32 @@ public class XData extends XCodeDescriptor implements XMData, XDValueID, CodeTab
 		}
 		for (;;) {
 			switch (y.getCode()) {
-				case JMP_OP:
-					y = xv[xi = xv[xi].getParam()]; continue;
-				case LD_CODE:
-					y = xv[y.getParam()]; continue;
+				case JMP_OP: y = xv[xi = xv[xi].getParam()]; continue;
+				case LD_CODE: y = xv[y.getParam()]; continue;
 				case CALL_OP:
-					if (y.getParam() >= 0 && xi + 3 < xv.length && xv[xi+1].getCode()==NEW_PARSER
+					if (y.getParam()>=0 && xi+3 < xv.length && xv[xi+1].getCode()==NEW_PARSER
 						&& "eq".equals(xv[xi+1].stringValue()) && xv[xi+2].getCode()==PARSE_OP
 						&& xv[xi+3].getCode()==STOP_OP) {
 						return ((CodeParser) xv[xi+1]).getParser(); // fixed
 					} else {
 						y = xv[xi = y.getParam()];
-						if (y.getCode()==LD_CONST && y.getItemId()==XD_PARSER && xv[xi+1].getCode()==PARSE_OP
-							&& xv[xi+2].getCode() == STOP_OP) {
+						if (xi+1<xv.length && y.getCode()==PARSEANDSTOP
+							&& xv[xi+1].getCode()==LD_CONST && xv[xi+1].getItemId()==XD_PARSER) {
+							return xv[xi+1];
+						}
+						if (xi+2<xv.length && y.getCode()==LD_CONST && y.getItemId()==XD_PARSER
+							&& xv[xi+1].getCode()==PARSE_OP && xv[xi+2].getCode() == STOP_OP) {
 							return y;
 						}
 					}
-					continue;
+					return new XDParseCDATA(); // return XDParseCDATA parser
 				default:
-					if (xi + 2 < xv.length && y.getCode()==LD_CONST && y.getItemId()==XD_PARSER) {
+					if (xi+2< xv.length && y.getCode()==LD_CONST && y.getItemId()==XD_PARSER) {
 						if (xv[xi+1].getCode()==PARSE_OP) {
 							if (xv[xi+2].getCode()==STOP_OP) {
 								return y;
-							} else if (xi+4 < xv.length && xv[xi+2].getCode()==STACK_DUP
-								&& xi+4 < xv.length && xv[xi+3].getCode()==PARSERESULT_MATCH
+							} else if (xi+4<xv.length && xv[xi+2].getCode()==STACK_DUP
+								&& xi+4<xv.length && xv[xi+3].getCode()==PARSERESULT_MATCH
 								&& xv[xi+4].getCode()==JMPF_OP && xv[xv[xi+4].getParam()].getCode()==STOP_OP){
 								return y; // parser with CHECK operand
 							}

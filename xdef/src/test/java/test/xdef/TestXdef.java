@@ -2121,9 +2121,10 @@ public final class TestXdef extends XDTester {
 "     <xd:any xd:script='ref def'/>\n"+
 "   </x>\n"+
 "</xd:def>");
-//			swr = new StringWriter();
-			parse(xp, "", "<f a='a' name='b' script='c'><b/></f>", reporter);
+			swr = new StringWriter();
+			parse(xp, "", "<f a='a' name='b' script='c'><b/></f>", reporter, swr, null, null);
 			assertErrors(reporter);
+			assertEq(",f", swr.toString());
 			xml = "<xd:f xmlns:xd='u' a='a' name='b' script='c'><b/></xd:f>";
 			swr = new StringWriter();
 			parse(xp, "", xml, reporter, swr, null, null);
@@ -2132,6 +2133,7 @@ public final class TestXdef extends XDTester {
 			xml = "<x><f a='a' name='b' script='c'><b/></f></x>";
 			swr = new StringWriter();
 			parse(xp, "", xml, reporter, swr, null, null);
+			assertEq("", swr.toString());
 			assertErrors(reporter);
 			xml = "<x><xd:f xmlns:xd='u' a='a' name='b' script='c'><b/></xd:f></x>";
 			swr = new StringWriter();
