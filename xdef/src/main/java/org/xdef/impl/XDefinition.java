@@ -35,9 +35,7 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 
 	/** Version of X-definition (see org.xdef.impl.XConstants.XDxx). */
 	private byte _xdVersion;
-	/** Version of XML from which the X-definition was created
-	 *  (see org.xdef.impl.XConstants.XDxx).
-	 */
+	/** Version of XML from which the X-definition was created (see org.xdef.impl.XConstants.XDxx). */
 	private byte _xmlVersion;
 
 	////////////////////////////////////////////////////////////////////////////
@@ -47,34 +45,29 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 	public int _onIllegalRoot;
 	/** Action if an XML error occurs. */
 	public int _onXmlError;
-
 	/** Source ID of this X-definition. */
 	private final SPosition _sourcePosition;
 
 	/** Creates a new instance of Definition
 	 * @param name name of definition.
-	 * @param xdp XPool object.
-	 * @param nsURI Name space URI of X-definition.
-	 * @param sourcePosition source position of X-definition.
-	 * @param xmlVersion XML version of X-definition source.
+	 * @param xp XPool object.
+	 * @param uri Name space URI of X-definition.
+	 * @param pos source position of X-definition.
+	 * @param ver XML version of X-definition source.
 	 */
-	public XDefinition(final String name,
-		final XDPool xdp,
-		final String nsURI,
-		final SPosition sourcePosition,
-		final byte xmlVersion) {
-		super(name, nsURI, (XPool) xdp, XMDEFINITION);
+	public XDefinition(final String name,final XDPool xp,final String uri,final SPosition pos,final byte ver){
+		super(name, uri, (XPool) xp, XMDEFINITION);
 		_xElements = new ArrayList<>();
 		_properties = new Properties();
 		_namespaces = new LinkedHashMap<>();
 		_rootSelection = new LinkedHashMap<>();
-		_xdVersion = XDConstants.XDEF31_NS_URI.equals(nsURI) ? XConstants.XD31
-			: XDConstants.XDEF32_NS_URI.equals(nsURI) ? XConstants.XD32
-			: XDConstants.XDEF40_NS_URI.equals(nsURI) ? XConstants.XD40
-			: XDConstants.XDEF41_NS_URI.equals(nsURI) ? XConstants.XD41
-			: XDConstants.XDEF42_NS_URI.equals(nsURI) ? XConstants.XD42 : 0;
-		_xmlVersion = xmlVersion;
-		_sourcePosition = sourcePosition;
+		_xdVersion = XDConstants.XDEF31_NS_URI.equals(uri) ? XConstants.XD31
+			: XDConstants.XDEF32_NS_URI.equals(uri) ? XConstants.XD32
+			: XDConstants.XDEF40_NS_URI.equals(uri) ? XConstants.XD40
+			: XDConstants.XDEF41_NS_URI.equals(uri) ? XConstants.XD41
+			: XDConstants.XDEF42_NS_URI.equals(uri) ? XConstants.XD42 : 0;
+		_xmlVersion = ver;
+		_sourcePosition = pos;
 		setXDPosition(name + '#');
 		///////////////////////////////
 		_onIllegalRoot = -1;
@@ -86,6 +79,7 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 	 * @return source ID of this X-definition..
 	 */
 	public final SPosition getSourcePosition() {return _sourcePosition;}
+
 	@Override
 	/** Get all Element models from this X-definition.
 	 * @return The array of element models.
@@ -95,6 +89,7 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 		_xElements.toArray(result);
 		return result;
 	}
+
 	@Override
 	/** Get all Element models defined as root from this X-definition.
 	 * @return The array of root element models.
@@ -104,6 +99,7 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 		_rootSelection.values().toArray(result);
 		return (XMElement[]) result;
 	}
+
 	@Override
 	/** Get Element model with given namespace and name.
 	 * @param nsURI namespace URI of element or <i>null</i>.
@@ -151,11 +147,13 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 	 * @return root XMDefinition node.
 	 */
 	public final XMDefinition getXMDefinition() {return this;}
+
 	@Override
 	/** Create XDDocument.
 	 * @return XDDocument created from this XMDefinition.
 	 */
 	public final XDDocument createXDDocument() {return new ChkDocument(this);}
+
 	@Override
 	/** Get version of X-definition.
 	 * @return version of X-definition
@@ -163,11 +161,13 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 	 * or {@link org.xdef.XDConstants#XD3_1}).
 	 */
 	public final byte getXDVersion() {return _xdVersion;}
+
 	@Override
 	/** Get XML version of X-definition source.
 	 * @return XML version of X-definition source ("1.0" -> 10, "1.1" -> 11).
 	 */
 	public final byte getXmlVersion() {return _xmlVersion;}
+
 	@Override
 	/** Check if given name is declared as local in this X-definition.
 	 * @param name the name to be checked.
@@ -193,19 +193,20 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 		}
 		return false;
 	}
+
 	@Override
 	/** Get implementation properties of X-definition.
 	 * @return the implementation properties of X-definition.
 	 */
 	public final Properties getImplProperties() {return _properties;}
+
 	@Override
 	/** Get implementation property of X-definition.
 	 * @param name The name of property.
 	 * @return the value implementation property of X-definition.
 	 */
-	public final String getImplProperty(final String name) {
-		return _properties.getProperty(name);
-	}
+	public final String getImplProperty(final String name) {return _properties.getProperty(name);}
+
 	@Override
 	/** Add node as child.
 	 * @param xnode The node to be added.
@@ -215,10 +216,14 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 		throw new SRuntimeException(SYS.SYS066, //Internal error: &{0}
 			"Attempt to add node to ScriptCodeDescriptor");
 	}
+
 	@Override
-	/** Write this X-definition to XDWriter. */
-	public final void writeXNode(final XDWriter xw,
-		final List<XNode> list) throws IOException {
+	/** Write this X-definition to XDWriter.
+	 * @param wr where to write.
+	 * @param list list of nodes..
+	 * @throws IOException if an error occurs.
+	 */
+	public final void writeXNode(final XDWriter xw, final List<XNode> list) throws IOException {
 		xw.writeSPosition(_sourcePosition);
 		writeXCodeDescriptor(xw);
 		xw.writeByte(_xdVersion);
@@ -248,6 +253,7 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 			xw.writeString(s);
 		}
 	}
+
 	@Override
 	/** Compare X-definition with an object.
 	 * @param o object to be compared.
@@ -261,6 +267,7 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 		return o instanceof XDefinition &&
 			getName().equals(((XDefinition)o).getName());
 	}
+
 	@Override
 	public final int hashCode() {return getName().hashCode();}
 
@@ -307,10 +314,15 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 		return xp.getVariable(name); // not found in locals, get global
 	}
 
-	/** Read XDefinition from XDReader. */
-	final static XDefinition readXDefinition(final XDReader xr,
-		final XPool xp,
-		final List<XNode> list) throws IOException {
+	/** Read XDefinition from XDReader. 
+	 * @param xr Reader with data.
+	 * @param xp base xPool,
+	 * @param list list of nodes.
+	 * @return created XDefinition.
+	 * @throws IOException if an error occurs.
+	 */
+	public final static XDefinition readXDefinition(final XDReader xr, final XPool xp, final List<XNode> list)
+		throws IOException {
 		SPosition sourcePos = xr.readSPosition();
 		if (xr.readShort() != XMDEFINITION) {//must be X-definition
 			//SObject reader: incorrect format of data&{0}{: }
