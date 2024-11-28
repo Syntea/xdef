@@ -1771,14 +1771,19 @@ public abstract class XDTester extends STester {
 		try {
 			ArrayReporter result = xp.genXComponent(dir, getEncoding(), false, true);
 			result.checkAndThrowErrors(); // throw exception if error reported
-			// create classpath item with org.xdef directory
-			String classpath = getClassSource(XDConstants.class);
-			String classDir = getClassSource(XDTester.class);
-			compileSources(classpath, classDir, dir);
+			compileSources(dir);
 			return result;
 		} catch (IOException ex) {
 			throw new SRuntimeException(ex);
 		}
+	}
+
+	/** Compile sources from a directory to actual class directory. Use actual classpath. */
+	public final void compileSources(final File dir) {
+			// create classpath item with org.xdef directory
+		String classpath = getClassSource(XDConstants.class);
+		String classDir = getClassSource(XDTester.class);
+		compileSources(classpath, classDir, dir);
 	}
 
 	/** Simple type test in the Array

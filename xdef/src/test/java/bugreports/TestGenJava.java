@@ -16,6 +16,9 @@ import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.xdef.XDContainer;
 import org.xdef.XDFactory;
 import org.xdef.XDPool;
 import org.xdef.XDValue;
@@ -29,6 +32,7 @@ import org.xdef.impl.XLexicon;
 import org.xdef.impl.XNode;
 import org.xdef.impl.XPool;
 import org.xdef.impl.XVariableTable;
+import org.xdef.impl.code.DefContainer;
 import org.xdef.model.XMDefinition;
 import org.xdef.msg.SYS;
 import org.xdef.proc.XDLexicon;
@@ -37,7 +41,9 @@ import org.xdef.sys.SDatetime;
 import org.xdef.sys.SRuntimeException;
 import static org.xdef.sys.STester.runTest;
 import org.xdef.sys.SUtils;
+import org.xdef.sys.StringParser;
 import test.XDTester;
+import static test.XDTester._xdNS;
 
 /**
  * @author Trojan
@@ -46,66 +52,50 @@ public class TestGenJava extends XDTester {
 
 	public TestGenJava() {super();}
 
-	private static void setFieldBool(final XPool p, final Object x, final String name) throws Exception{
-		Class<?> c = x.getClass();
-		Field y = c.getDeclaredField(name);
-		boolean z = y.getBoolean(x);
+	private static void setFieldBool(final XPool p, final Class<?> x, final String name) throws Exception {
+		Field y = x.getDeclaredField(name);
+		boolean z = y.getBoolean(null);
 		if (z) {
-			c = p.getClass();
-			y = c.getDeclaredField(name);
+			y = p.getClass().getDeclaredField(name);
 			y.setAccessible(true);
 			y.setBoolean(p, z);
 		}
 	}
 
-	private static void setFieldByte(final XPool p, final Object x, final String name) throws Exception{
-		Class<?> c = x.getClass();
-		Field y = c.getDeclaredField(name);
-		byte z = y.getByte(x);
+	private static void setFieldByte(final XPool p, final Class<?> x, final String name) throws Exception {
+		Field y = x.getDeclaredField(name);
+		byte z = y.getByte(null);
 		if (z != 0) {
-			c = p.getClass();
-			y = c.getDeclaredField(name);
+			y = p.getClass().getDeclaredField(name);
 			y.setAccessible(true);
 			y.setByte(p, z);
 		}
 	}
 
-	private static void setFieldInt(final XPool p, final Object x, final String name) throws Exception{
-		Class<?> c = x.getClass();
-		Field y = c.getDeclaredField(name);
-		int z = y.getInt(x);
+	private static void setFieldInt(final XPool p, final Class<?> x, final String name) throws Exception {
+		Field y = x.getDeclaredField(name);
+		int z = y.getInt(null);
 		if (z != 0) {
-			c = p.getClass();
-			y = c.getDeclaredField(name);
+			y = p.getClass().getDeclaredField(name);
 			y.setAccessible(true);
 			y.setInt(p, z);
 		}
 	}
 
-	private static void setFieldString(final XPool p, final Object x, final String name) throws Exception {
-		Class<?> c = x.getClass();
-		Field y = c.getDeclaredField(name);
-		String z = (String) y.get(x);
+	private static void setFieldString(final XPool p, final Class<?> x, final String name) throws Exception {
+		Field y = x.getDeclaredField(name);
+		String z = (String) y.get(null);
 		if (z != null) {
-			c = p.getClass();
-			y = c.getDeclaredField(name);
+			y = p.getClass().getDeclaredField(name);
 			y.setAccessible(true);
 			y.set(p, z);
 		}
 	}
 
-	private static Object getField(final Object x, final String name) throws Exception {
-		Class<?> c = x.getClass();
-		Field y = c.getDeclaredField(name);
+	private static Object getField(final Class<?> x, final String name) throws Exception {
+		Field y = x.getDeclaredField(name);
 		y.setAccessible(true);
-		return y.get(x);
-	}
-
-	private static int getIntField(final Object x, final String name) throws Exception {
-		Class<?> c = x.getClass();
-		Field y = c.getDeclaredField(name);
-		y.setAccessible(true);
-		return y.getInt(x);
+		return y.get(null);
 	}
 
 	private static void setField(final XPool p, final Object z, final String name) throws Exception{
@@ -117,7 +107,7 @@ public class TestGenJava extends XDTester {
 		}
 	}
 
-	public static final XPool genPool(final Object x) {
+	public static final XPool genPool(final Class<?> x) {
 		ByteArrayInputStream bais;
 		GZIPInputStream in;
 		XDReader xr;
@@ -529,48 +519,136 @@ public class TestGenJava extends XDTester {
 		}
 		pw.print("}");
 	}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	public void copySourceToDir(final File file, final String dir, final String name) {
-		try {
-			File f1 = new File(new File(file, dir), name + ".java");
-			File f2 = new File(getSourceDir(), name + ".java");
-			org.xdef.sys.FUtils.copyToFile(f1, f2);
-		} catch (org.xdef.sys.SException ex) {
-			throw new RuntimeException(ex);
+	/** Get SDatetime from the string according to mask.
+	 * @param mask datetime mask.
+	 * @param s string data.
+	 * @return parsed SDatetime object.
+	 */
+	private static SDatetime readTime(String mask, String s) {
+		StringParser p = new StringParser(s);
+		return p.isDatetime(mask) ? p.getParsedSDatetime() : new SDatetime();
+	}
+
+	/** Test if the element f can be joined with the element e.
+	 * @param e first element.
+	 * @param f second element.
+	 * @param a name of attribute with datetime "start"
+	 * @param b name of attribute with datetime "end"
+	 * @param mask description of datetime format.
+	 * @return true if and only if f can be joined with e.
+	 */
+	private static boolean join(Element e, Element f, String a, String b, String mask) {
+		NamedNodeMap eatrs = e.getAttributes();
+		NamedNodeMap fatrs = f.getAttributes();
+		if (!e.hasAttribute(a) || !f.hasAttribute(a)
+			|| !e.hasAttribute(b) || !f.hasAttribute(b)
+			|| eatrs.getLength() != fatrs.getLength()) {
+			return false;
 		}
+		SDatetime t1 = readTime(mask, e.getAttribute(b)); // e.do
+		if (mask.endsWith("d")) {
+			t1.addDay(1);
+		} else if (mask.endsWith("H")) {
+			t1.addHour(1);
+		} else if (mask.endsWith("s")) {
+			t1.addSecond(1);
+		} else {
+			return false;
+		}
+		if (!t1.equals(readTime(mask, f.getAttribute(a)))) { // f.od
+			return false;
+		}
+		for (int i = 0; i < eatrs.getLength(); i++) {
+			String name = eatrs.item(i).getNodeName();
+			if (!a.equals(name) && !b.equals(name)
+				 && !e.getAttribute(name).equals(f.getAttribute(name))) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/** Create list of joined elements.
+	 * @param x container with elements.
+	 * @param a name of attribute with datetime "start"
+	 * @param b name of attribute with datetime "end"
+	 * @param mask description of datetime format.
+	 * @return Container with joined elements.
+	 */
+	public static XDContainer x(XDContainer x, String a, String b, String mask) {
+		XDContainer y = new DefContainer();
+		if (!x.isEmpty()) {
+			Element e = x.getXDElement(0);
+			y.addXDItem(e);
+			for (int i = 1; i < x.getXDItemsNumber(); i++) {
+				Element f = x.getXDElement(i);
+				if (join(e, f, a, b, mask)) {
+					e.setAttribute(b, f.getAttribute(b));
+				} else {
+					y.addXDItem(e = f);
+				}
+			}
+		}
+		return y;
+	}
+
+	private void test(String packageName, String className , String xdef, String xml) {
+		try {
+			// 1. create java source with compied XDPool from xdef
+			StringWriter swr = new StringWriter();
+			try (PrintWriter pwr = new PrintWriter(swr)) {
+				genXDPoolClass(pwr, className, packageName, XDFactory.compileXD(null, xdef));
+				pwr.close();
+			}
+			ByteArrayInputStream bais = new ByteArrayInputStream(swr.toString().getBytes());
+			// compile created class
+			File f = clearTempDir();
+			copyToTempDir(bais, packageName, className);
+			compileSources(f);
+
+			// get XDPool from the created class and run it with xml.
+			XDPool xp = genPool(ClassLoader.getSystemClassLoader().loadClass(packageName + "." + className));
+			ArrayReporter reporter = new ArrayReporter();
+			assertEq(xml, parse(xp, "", xml, reporter));
+			assertNoErrorsAndClear(reporter);
+		} catch (Exception ex) {fail(ex);}
 	}
 
 	@Override
 	/** Run test and display error information. */
 	public void test() {
-		ByteArrayOutputStream baos;
-		GZIPOutputStream gzo;
-		XDWriter xw;
-		String b64, xdef, xml;
-		XDPool xp;
-		ArrayReporter reporter = new ArrayReporter();
-		try {
-			xdef = // conainer to root, maps is child items
-"<xd:def xmlns:xd     =\"http://www.xdef.org/xdef/4.0\" name=\"Vehicle\" root=\"Vehicle\"\n" +
-"        impl-version =\"2024/06.0\" impl-date=\"2024-07-31\">\n" +
+		String xdef, xml;
+		xdef =
+"<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.0\" root=\"Vehicle\">\n" +
 "   <Vehicle>\n" +
-"     <Part xd:script=\"+;\" name=\"string()\" />\n" +
+"     <Part xd:script=\"+;\" a=\"? int(1,2)\" />\n" +
 "   </Vehicle>\n" +
 "</xd:def>";
-			xp = XDFactory.compileXD(null,xdef);
-			StringWriter swr = new StringWriter();
-			try (PrintWriter pwr = new PrintWriter(swr)) {
-				genXDPoolClass(pwr, "TestGenJava1", "bugreports", (XPool) xp);
-				pwr.close();
-			}
-			System.out.println(swr.toString());
+		xml = "<Vehicle><Part a='1'/><Part a='2'/><Part/></Vehicle>";
+		test("bugreports", "TestGenJava1", xdef, xml);
 
-
-			xp = genPool(new TestGenJava1());
-			xml = "<Vehicle><Part name=\"xxx\" /></Vehicle>";
-			assertEq(xml, parse(xp, "Vehicle", xml, reporter));
-			assertNoErrorsAndClear(reporter);
-		} catch (Exception ex) {fail(ex);}
+		xdef =
+"<xd:def xmlns:xd='" + _xdNS + "' root = 'A'>\n"+
+"<xd:declaration>\n"+
+"   external method XDContainer bugreports.TestGenJava.x(XDContainer x, String a, String b, String mask);\n"+
+"</xd:declaration>\n"+
+"<A>\n"+
+"  <B xd:script=\"occurs *; create x(from('//B'), 'x', 'y', 'yyyy-MM-dd');\"\n"+
+"  a='string' b='string'\n"+
+"     x=\"xdatetime('yyyy-MM-dd')\" y=\"xdatetime('yyyy-MM-dd')\"/>\n"+
+"</A>\n"+
+"</xd:def>";
+		xml =
+"<A>\n"+
+"  <B a='a' b='b' x='2023-12-08' y='2023-12-31'/>\n"+
+"  <B a='a' b='b' x='2024-01-01' y='2024-09-11'/>\n"+
+"  <B a='a' b='b' x='2024-09-12' y='2024-09-13'/>\n"+
+"  <B a='a' b='b' x='2024-09-20' y='2024-09-30'/>\n"+
+"  <B a='a' b='b' x='2024-10-01' y='2024-10-02'/>\n"+
+"</A>";
+		test("bugreports", "TestGenJava2", xdef, xml);
 	}
 
 	/** Run test

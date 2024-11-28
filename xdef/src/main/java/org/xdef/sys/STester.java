@@ -4,10 +4,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.text.DecimalFormat;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringWriter;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -64,8 +66,7 @@ public abstract class STester {
 	private PrintStream _outStream;
 	/* Error printer. */
 	private PrintStream _err;
-	/* Debug flag. If true the method <i>error(exception)</i> prints stack
-	 * trace information on <i>System.err</i>. Default value is true. */
+	/* Debug flag (if true the method error(exception) prints stack trace on System.err). Default is true. */
 	private boolean _debug;
 	/** Start time of test. */
 	private long _timeStamp;
@@ -113,8 +114,7 @@ public abstract class STester {
 	 * @param args list of command line arguments.
 	 */
 	public final void setArguments(final String... args) {_arguments = args;}
-	/** Get path to project home directory. If the directory doesn't exist put
-	 *  an error message and return null.
+	/** Get path to project home directory. If the directory doesn't exist put error message and return null.
 	 * @return The string with the path to data directory or null.
 	 */
 	public final String getHomeDir() {return _homeDir;}
@@ -122,19 +122,17 @@ public abstract class STester {
 	 * @return character encoding of tests.
 	 */
 	public final String getEncoding() {return _encoding;}
-	/** Get path to Java source directory of this class source. If the directory
-	 * doesn't exist put an error message and return null.
+	/** Get path to Java source directory of this class source. If the directory doesn't exist
+	 * put an error message and return null.
 	 * @return The string with the path to source directory or null.
 	 */
 	public final String getSourceDir() {return _sourceDir;}
-	/** Get path to data directory. If data doesn't exist put an error
-	 * message and return null.
+	/** Get path to data directory. If data doesn't exist put an error message and return null.
 	 * @return The string with the path to data directory or null.
 	 */
 	public final String getDataDir() {return _dataDir;}
-	/** Get path to temporary directory. If the directory doesn't exist try
-	 * to create it. If the directory can't be created put error message
-	 * and return null.
+	/** Get path to temporary directory. If the directory doesn't exist try to create it. If the directory
+	 * can't be created put error message and return null.
 	 * @return The string with the path to temporary directory.
 	 * @throws SRuntimeException if temporary directory is not available.
 	 */
@@ -143,8 +141,7 @@ public abstract class STester {
 			_tempDir = new File(_homeDir + "temp/");
 			if (!_tempDir.exists()) {
 				if (!_tempDir.mkdirs()) {
-					//Can't create directory: &{0}
-					throw new SRuntimeException(SYS.SYS020, _tempDir);
+					throw new SRuntimeException(SYS.SYS020, _tempDir);//Can't create directory: &{0}
 				}
 			}
 			try {
@@ -155,12 +152,10 @@ public abstract class STester {
 			}
 		} else {
 			_tempDir = null;
-			//Can't create directory: &{0}
-			throw new SRuntimeException(SYS.SYS020, "null");
+			throw new SRuntimeException(SYS.SYS020, "null");//Can't create directory: &{0}
 		}
 	}
-	/** Delete all files and subdirectories from temporary directory (only those
-	 * which can be deleted).
+	/** Delete all files and subdirectories from temporary directory (only those which can be deleted).
 	 * @return File object with temporary directory.
 	 * @throws SRuntimeException if temporary directory is not available.
 	 */
@@ -180,8 +175,7 @@ public abstract class STester {
 				} catch (SException ex) {}
 			}
 		} else {
-			//Can't create directory: &{0}
-			throw new SRuntimeException(SYS.SYS020, _tempDir.getAbsolutePath());
+			throw new SRuntimeException(SYS.SYS020, _tempDir.getAbsolutePath());//Can't create directory: &{0}
 		}
 		return _tempDir;
 	}
@@ -213,19 +207,14 @@ public abstract class STester {
 			_err = System.err;
 		}
 	}
-	/** Get time in milliseconds when the instance of this object
-	 * was initialized.
-	 * @return The time in milliseconds when the instance of this object was
-	 * created.
+	/** Get time in milliseconds when the instance of this object was initialized.
+	 * @return The time in milliseconds when the instance of this object was created.
 	 */
 	public final long getTimeStamp() {return _timeStamp;}
-	/** Set new value of time in time stamp which is considered as the initial
-	 * time of test.
+	/** Set new value of time in time stamp which is considered as the initial time of test.
 	 * @return The value of time stamp (in milliseconds).
 	 */
-	public final long newTimeStamp() {
-		return _timeStamp = System.currentTimeMillis();
-	}
+	public final long newTimeStamp() {return _timeStamp = System.currentTimeMillis();}
 	/** Get number of errors.
 	 * @return The number of errors.
 	 */
@@ -238,13 +227,12 @@ public abstract class STester {
 	 * @return The debug flag.
 	 */
 	public final boolean isDebug() {return _debug;}
-	/** Set debug flag. If true some additional information is printed (such as
-	 * the stack trace after fail method with an exception is invoked).
+	/** Set debug flag. If true some additional information is printed (such as the stack trace after
+	 * fail method with an exception is invoked).
 	 * @param debug the debug flag.
 	 */
 	public final void setDebug(final boolean debug) {_debug = debug;}
-	/** Set additional result information (printed after test method
-	 * is finished).
+	/** Set additional result information (printed after test method is finished).
 	 * @param info the string with result information.
 	 */
 	public final void setResultInfo(final String info) {
@@ -282,18 +270,15 @@ public abstract class STester {
 		}
 		flushAll();
 	}
-	/** Write the information message to the out stream.
-	 * The class from which an error was reported is taken from the field
-	 * <code>_className</code>.
+	/** Write the information message to the out stream. The class from which an error was reported
+	 * is taken from the field _className.
 	 * @param msg Text of information message.
 	 */
 	public final void putInfo(final String msg) {
-		printlnOut("[INFO] " + _name +
-			(msg != null && !msg.trim().isEmpty() ? ": " + msg : ""));
+		printlnOut("[INFO] " + _name + (msg != null && !msg.trim().isEmpty() ? ": " + msg : ""));
 	}
 	/** Increase error counter and write the information to the error stream.
-	 * The class from which the error was reported is taken from
-	 * <code>_className</code> field.
+	 * The class from which the error was reported is taken from _className field.
 	 * @param ex Exception to be printed.
 	 */
 	public final void putErrMsg(final Throwable ex) {
@@ -303,17 +288,14 @@ public abstract class STester {
 		printErr(s.substring(i+1));
 	}
 	/** Increase error counter and write the information to the error stream.
-	 * The class from which an error was reported is taken from the field
-	 * <code>_className</code>.
+	 * The class from which an error was reported is taken from the field _className.
 	 * @param msg Text of error message.
 	 */
 	public final void putErrMsg(final String msg) {
-		String text = "[ERROR] " + _name +
-			(msg != null && !msg.trim().isEmpty() ? '\n' + msg.trim() : "");
+		String text = "[ERROR] " + _name + (msg != null && !msg.trim().isEmpty() ? '\n' + msg.trim() : "");
 		_errors++;
-		// in Java 1.6 is not avalable the method Throwable.getStackTrace()
-		// so we grab the information from printStackTrace and we create
-		// the info string from it.
+		// in Java 1.6 is not avalable the method Throwable.getStackTrace() so we grab the information
+		// from printStackTrace and we create the info string from it.
 		String s = printThrowable(new Throwable(""));
 		int i = s.indexOf(_className + ".");
 		i = s.indexOf('\n', i);
@@ -326,12 +308,12 @@ public abstract class STester {
 		}
 		printErr(text + "\n" + s + '\n');
 	}
-	/** Increase error counter and write the default information to the print
-	 * stream. If the print stream is null the message is ignored.
+	/** Increase error counter and write the default information to the print stream. If the print stream
+	 * is null the message is ignored.
 	 */
 	public final void fail() {putErrMsg("*");}
-	/** Increase error counter and write information of given object.
-	 * If the print stream is null the message is ignored.
+	/** Increase error counter and write information of given object.* If the print stream is null
+	 * the message is ignored.
 	 * @param obj the report to be displayed as a fail information.
 	 */
 	public final void fail(final Object obj) {
@@ -355,123 +337,90 @@ public abstract class STester {
 	 * @param a1 first value.
 	 * @param a2 second value.
 	 */
-	public final void assertEq(final Boolean a1, final Boolean a2) {
-		assertEq(a1, a2, null);
-	}
+	public final void assertEq(final Boolean a1, final Boolean a2) {assertEq(a1, a2, null);}
 	/** Check booleans.
 	 * @param a1 first value.
 	 * @param a2 second value.
 	 * @param msg message to be printed or null.
 	 */
-	public final  void assertEq(final Boolean a1,
-		final Boolean a2,
-		final Object msg) {
-		if (a1 != null && a2 != null && !a1.equals(a2)
-			|| a1 == null && a2 != null || a1 != null && a2 == null) {
-			fail((msg != null ? msg.toString().trim() + '\n' : "")
-				+ "a1=" + a1 + "; a2=" + a2);
+	public final  void assertEq(final Boolean a1, final Boolean a2, final Object msg) {
+		if (a1!=null && a2!=null && !a1.equals(a2) || a1==null && a2!=null || a1!=null && a2==null) {
+			fail((msg != null ? msg.toString().trim() + '\n' : "") + "a1=" + a1 + "; a2=" + a2);
 		}
 	}
 	/** Check characters.
 	 * @param a1 first value.
 	 * @param a2 second value.
 	 */
-	public final void assertEq(final Character a1, final Character a2) {
-		assertEq(a1, a2, null);
-	}
+	public final void assertEq(final Character a1, final Character a2) {assertEq(a1, a2, null);}
 	/** Check characters.
 	 * @param a1 first value.
 	 * @param a2 second value.
 	 * @param msg message to be printed or null.
 	 */
-	public final void assertEq(final Character a1,
-		final Character a2,
-		final Object msg) {
-		if (a1 != null && a2 != null && !a1.equals(a2)
-			|| a1 == null && a2 != null || a1 != null && a2 == null) {
+	public final void assertEq(final Character a1, final Character a2, final Object msg) {
+		if (a1!=null && a2!=null && !a1.equals(a2) || a1==null && a2!=null || a1!=null && a2==null) {
 			fail((msg != null ? msg.toString().trim() + '\n' : "")
-				+"a1='" + a1 + "'(" + ((int) a1) + "); a2='" +
-				a2 + "'(" + ((int) a2) + ")");
+				+"a1='" + a1 + "'(" + ((int) a1) + "); a2='" + a2 + "'(" + ((int) a2) + ")");
 		}
 	}
 	/** Check integer numbers.
 	 * @param a1 first value.
 	 * @param a2 second value.
 	 */
-	public final void assertEq(final Long a1, final Long a2) {
-		assertEq(a1, a2, null);
-	}
+	public final void assertEq(final Long a1, final Long a2) {assertEq(a1, a2, null);}
 	/** Check integer numbers.
 	 * @param a1 first value.
 	 * @param a2 second value.
 	 * @param msg message to be printed or null.
 	 */
 	public final void assertEq(final Long a1, final Long a2, final Object msg) {
-		if (a1 != null && a2 != null && a1.compareTo(a2) != 0
-			|| a1 == null && a2 != null || a1 != null && a2 == null) {
-			fail((msg != null ? msg.toString().trim() + '\n' : "")
-				+ "a1=" + a1 + "; a2=" + a2);
+		if (a1!=null && a2!=null && a1.compareTo(a2)!=0 || a1==null && a2!=null || a1!=null && a2==null) {
+			fail((msg != null ? msg.toString().trim() + '\n' : "") + "a1=" + a1 + "; a2=" + a2);
 		}
 	}
 	/** Check float numbers.
 	 * @param a1 first value.
 	 * @param a2 second value.
 	 */
-	public final void assertEq(final Double a1, final Double a2) {
-		assertEq(a1, a2, null);
-	}
+	public final void assertEq(final Double a1, final Double a2) {assertEq(a1, a2, null);}
 	/** Check float numbers.
 	 * @param a1 first value.
 	 * @param a2 second value.
 	 * @param msg message to be printed or null.
 	 */
-	public final void assertEq(final Double a1,
-		final Double a2,
-		final Object msg) {
-		if ((a1 != null && a2 != null && a1.compareTo(a2) != 0)
-			|| a1 == null && a2 != null || a1 != null && a2 == null) {
-			fail((msg != null ? msg.toString().trim() + '\n' : "")
-				+ "a1=" + a1 + "; a2=" + a2);
+	public final void assertEq(final Double a1, final Double a2, final Object msg) {
+		if ((a1!=null && a2!=null && a1.compareTo(a2)!=0) || a1==null && a2!=null || a1!=null && a2==null) {
+			fail((msg != null ? msg.toString().trim() + '\n' : "") + "a1=" + a1 + "; a2=" + a2);
 		}
 	}
 	/** Check BigDecimal numbers.
 	 * @param a1 first value.
 	 * @param a2 second value.
 	 */
-	public final void assertEq(final BigDecimal a1, final BigDecimal a2) {
-		assertEq(a1, a2, null);
-	}
+	public final void assertEq(final BigDecimal a1, final BigDecimal a2) {assertEq(a1, a2, null);}
 	/** Check BigDecimal numbers.
 	 * @param a1 first value.
 	 * @param a2 second value.
 	 * @param msg message to be printed or null.
 	 */
-	public final void assertEq(final BigDecimal a1,
-		final BigDecimal a2,
-		final Object msg) {
-		if ((a1 != null && a2 != null && a1.compareTo(a2) != 0)
-			|| a1 == null && a2 != null || a1 != null && a2 == null) {
-			fail((msg != null ? msg.toString().trim() + '\n' : "")
-				+ "a1=" + a1 + "; a2=" + a2);
+	public final void assertEq(final BigDecimal a1, final BigDecimal a2, final Object msg) {
+		if ((a1!=null && a2!=null && a1.compareTo(a2)!=0) || a1==null && a2!=null || a1!=null && a2==null) {
+			fail((msg != null ? msg.toString().trim() + '\n' : "") + "a1=" + a1 + "; a2=" + a2);
 		}
 	}
 	/** Check strings.
 	 * @param a1 first value.
 	 * @param a2 second value.
 	 */
-	public final void assertEq(final String a1, final String a2) {
-		assertEq(a1, a2, null);
-	}
+	public final void assertEq(final String a1, final String a2) {assertEq(a1, a2, null);}
 	/** Check strings.
 	 * @param a1 first value.
 	 * @param a2 second value.
 	 * @param msg message to be printed or null.
 	 */
-	public final void assertEq(final String a1,
-		final String a2,
-		final Object msg) {
-		if ((a1 != null && a2 != null && !a1.equals(a2))
-			|| a1 == null && a2 != null || a1 != null && a2 == null) {
+	public final void assertEq(final String a1, final String a2, final Object msg) {
+		if ((a1!=null && a2!=null && !a1.equals(a2)) || a1==null && a2!=null || a1!=null && a2==null) {
 			fail((msg != null ? msg.toString().trim() + '\n' : "")
 				+ "a1=" + (a1 == null ? "null" : "'" + a1 + "'")
 				+ "; a2=" + (a2 == null ? "null" : "'" + a2 + "'"));
@@ -489,9 +438,7 @@ public abstract class STester {
 	 * @param a2 second value.
 	 * @param msg message to be printed or null.
 	 */
-	public final void assertEq(final String a1,
-		final Element a2,
-		final String msg) {
+	public final void assertEq(final String a1, final Element a2, final String msg) {
 		assertEq(KXmlUtils.parseXml(a1).getDocumentElement(), a2, msg);
 	}
 	/** Check elements.
@@ -506,68 +453,49 @@ public abstract class STester {
 	 * @param a2 second value.
 	 * @param msg message to be printed or null.
 	 */
-	public final void assertEq(final Element a1,
-		final String a2,
-		final String msg) {
+	public final void assertEq(final Element a1, final String a2, final String msg) {
 		assertEq(a1, KXmlUtils.parseXml(a2).getDocumentElement(), msg);
 	}
 	/** Check elements.
 	 * @param a1 first value.
 	 * @param a2 second value.
 	 */
-	public void assertEq(final Element a1, final Element a2) {
-		assertEq(a1, a2, null);
-	}
+	public void assertEq(final Element a1, final Element a2) {assertEq(a1, a2, null);}
 	/** Check elements are equal (text nodes are trimmed).
 	 * @param a1 first value.
 	 * @param a2 second value.
 	 * @param msg message to be printed or null.
 	 */
-	public final void assertEq(final Element a1,
-		final Element a2,
-		final String msg) {
-		assertEq(a1, a2, msg, true);
-	}
-	/** Check elements are equal (text nodes are trimmed if argument trim
-	 * is true).
+	public final void assertEq(final Element a1,final Element a2,final String msg) {assertEq(a1,a2,msg,true);}
+	/** Check elements are equal (text nodes are trimmed if argument trim is true).
 	 * @param a1 first value.
 	 * @param a2 second value.
 	 * @param msg message to be printed or null.
 	 * @param trim if true elements are trimmed.
 	 */
-	public final void assertEq(final Element a1,
-		final Element a2,
-		final Object msg,
-		final boolean trim) {
+	public final void assertEq(final Element a1, final Element a2, final Object msg, final boolean trim) {
 		if (KXmlUtils.compareElements(a1, a2, true, null).errorWarnings()) {
-			fail((msg != null ? msg.toString().trim() + '\n' : "")
-				+ "arg1:\n"+KXmlUtils.nodeToString(a1)+
-				"\narg2:\n"+KXmlUtils.nodeToString(a2));
+			fail((msg != null ? msg.toString().trim() + '\n' : "") + "arg1:\n"+KXmlUtils.nodeToString(a1)
+				+ "\narg2:\n"+KXmlUtils.nodeToString(a2));
 		}
 	}
 	/** Check objects.
 	 * @param a1 first value.
 	 * @param a2 second value.
 	 */
-	public void assertEq(final Object a1, final Object a2) {
-		assertEq(a1, a2, null);
-	}
+	public void assertEq(final Object a1, final Object a2) {assertEq(a1, a2, null);}
 	/** Check objects.
 	 * @param a1 first value.
 	 * @param a2 second value.
 	 * @param msg message to be printed or null.
 	 */
-	public final void assertEq(final Object a1,
-		final Object a2,
-		final Object msg) {
+	public final void assertEq(final Object a1, final Object a2, final Object msg) {
 		if (a1 != null) {
 			if (!equals(a1, a2)) {
-				fail((msg != null ? msg.toString().trim() + '\n' : "")
-					+ "a1=" + a1 + "; a2=" + a2);
+				fail((msg != null ? msg.toString().trim() + '\n' : "") + "a1=" + a1 + "; a2=" + a2);
 			}
 		} else if (a2 != null) {
-			fail((msg != null ? msg.toString().trim() + '\n' : "")
-				+ "a1=" + a1 + "; a2=" + a2);
+			fail((msg != null ? msg.toString().trim() + '\n' : "") + "a1=" + a1 + "; a2=" + a2);
 		}
 	}
 	/** Check if objects are equal.
@@ -578,24 +506,19 @@ public abstract class STester {
 	public static final boolean equals(final Object a1, final Object a2) {
 		if (a1 instanceof Number && a2 instanceof Number) {
 			if (a1 instanceof BigDecimal) {
-				return (a2 instanceof BigDecimal)
-					? a1.equals(a2) : a1.equals(new BigDecimal(a2.toString()));
+				return (a2 instanceof BigDecimal) ? a1.equals(a2) : a1.equals(new BigDecimal(a2.toString()));
 			} else if (a2 instanceof BigDecimal) {
-				return (a1 instanceof BigDecimal)
-					? a2.equals(a1) : a2.equals(new BigDecimal(a1.toString()));
+				return (a1 instanceof BigDecimal) ? a2.equals(a1) : a2.equals(new BigDecimal(a1.toString()));
 			} else if (a1 instanceof BigInteger) {
-				return (a2 instanceof BigInteger)
-					? a1.equals(a2) : a1.equals(new BigInteger(a2.toString()));
+				return (a2 instanceof BigInteger) ? a1.equals(a2) : a1.equals(new BigInteger(a2.toString()));
 			} else if (a2 instanceof BigInteger) {
-				return (a1 instanceof BigInteger)
-					? a2.equals(a1) : a2.equals(new BigInteger(a1.toString()));
-			} else if ((a1 instanceof Byte || a1 instanceof Short ||
-				a1 instanceof Integer || a1 instanceof Long)
-				&& (a2 instanceof Byte || a2 instanceof Short ||
-				a2 instanceof Integer || a2 instanceof Long)) {
+				return (a1 instanceof BigInteger) ? a2.equals(a1) : a2.equals(new BigInteger(a1.toString()));
+			} else if ((a1 instanceof Byte || a1 instanceof Short || a1 instanceof Integer
+				|| a1 instanceof Long) &&
+				(a2 instanceof Byte || a2 instanceof Short || a2 instanceof Integer || a2 instanceof Long)) {
 				return ((Number) a1).longValue() == ((Number) a2).longValue();
-			} else if ((a1 instanceof Float || a1 instanceof Double)
-				&& (a2 instanceof Float || a2 instanceof Double)) {
+			} else if ((a1 instanceof Float || a1 instanceof Double) && (a2 instanceof Float
+				|| a2 instanceof Double)) {
 				return ((Number) a1).doubleValue()==((Number) a2).doubleValue();
 			}
 		} else if (a1 instanceof byte[] && a2 instanceof byte[]) {
@@ -619,79 +542,53 @@ public abstract class STester {
 		}
 		return a1.equals(a2);
 	}
-	/** Check if the argument is null. If not then invoke the method
-	 * <code>fail</code>.
+	/** Check if the argument is null. If not then invoke the method fail.
 	 * @param x argument to be checked for true.
 	 */
 	public final void assertNull(final Object x) {assertNull(x, "" + x);}
-	/** Check if the argument is null. If not then invoke the method
-	 * <code>fail</code>.
+	/** Check if the argument is null. If not then invoke the method fail.
 	 * @param x argument to be checked for true.
 	 * @param msg message to be printed or null.
 	 */
-	public final void assertNull(final Object x, final Object msg) {
-		if (x != null) {
-			fail(msg);
-		}
-	}
-	/** Check if the argument is not null. If it is null then invoke the method
-	 * <code>fail</code>.
+	public final void assertNull(final Object x, final Object msg) {if (x != null) fail(msg);}
+	/** Check if the argument is not null. If it is null then invoke the method fail.
 	 * @param x argument to be checked.
 	 */
 	public final void assertNotNull(final Object x) {assertNotNull(x, "null");}
-	/** Check if the argument is not null. If it is null then invoke the method
-	 * <code>fail</code>.
+	/** Check if the argument is not null. If it is null then invoke the method fail.
 	 * @param x argument to be checked.
 	 * @param msg message to be printed or null.
 	 */
-	public final void assertNotNull(final Object x, final Object msg) {
-		if (x == null) {
-			fail(msg);
-		}
-	}
-	/** Check if the argument is true. If not then invoke the method
-	 * <code>fail</code>.
+	public final void assertNotNull(final Object x, final Object msg) {if (x == null) fail(msg);}
+	/** Check if the argument is true. If not then invoke the method fail.
 	 * @param x argument to be checked for true.
 	 */
 	public final void assertTrue(final boolean x) {assertFalse(!x, null);}
-	/** Check if the argument <code>x</code> is true. If not then invoke
-	 * the method <code>fail</code> with the argument msg.
+	/** Check if the argument x is true. If not then invoke the method fail with the argument msg.
 	 * @param x argument to be checked for true.
 	 * @param msg message to be printed or null.
 	 */
-	public final void assertTrue(final boolean x, final Object msg) {
-		assertFalse(!x, msg);
-	}
-	/** Check if the argument is false. If not then invoke the method
-	 * <code>fail</code>.
+	public final void assertTrue(final boolean x, final Object msg) {assertFalse(!x, msg);}
+	/** Check if the argument is false. If not then invoke the method fail.
 	 * @param x argument to be checked for false.
 	 */
 	public final void assertFalse(final boolean x) {assertFalse(x, null);}
-	/** Check if the argument <code>x</code> is false. If not then invoke
-	 * the method <code>fail</code> with the argument msg.
+	/** Check if the argument x is false. If not then invoke the method fail with the argument msg.
 	 * @param x argument to be checked for false.
 	 * @param msg message to be printed or null.
 	 */
-	public final void assertFalse(final boolean x, final Object msg) {
-		if (x) {
-			fail(msg);
-		}
-	}
+	public final void assertFalse(final boolean x, final Object msg) {if (x)  fail(msg);}
 	/** Check if the reporter does not contain an error.
 	 * @param reporter the reporter to be checked for no errors.
 	 */
 	public final void assertNoErrors(final ReportWriter reporter) {
-		if (reporter.errors()) {
-			fail(reporter.toString());
-		}
+		if (reporter.errors()) fail(reporter.toString());
 	}
 	/** Check if the reporter contains an error.
 	 * @param reporter reporter to be checked for no errors.
 	 */
 	public final void assertErrors(final ReportWriter reporter) {
-		if (!reporter.errors()) {
-			fail("Error not reported");
-		}
+		if (!reporter.errors()) fail("Error not reported");
 	}
 	/** Check if the reporter contains an error and clear reporter.
 	 * @param reporter reporter to be checked for no errors.
@@ -710,8 +607,7 @@ public abstract class STester {
 		}
 	}
 	/** Check if the reporter does not contain an error or warning. If yes then
-	 * invoke the method <code>fail</code> with the argument msg. Clear reporter
-	 * after message is reported.
+	 * invoke the method fail with the argument msg. Clear reporter after message is reported.
 	 * @param reporter the reporter to be checked for no errors and no warnings.
 	 */
 	public final void assertNoErrorwarningsAndClear(
@@ -721,8 +617,8 @@ public abstract class STester {
 			reporter.clear();
 		}
 	}
-	/** Check if the reporter contains errors or warnings. If not then
-	 * invoke the method <code>fail</code> with the argument msg.
+	/** Check if the reporter contains errors or warnings. If not then invoke the method
+	 * fail with the argument msg.
 	 * @param msg message to be printed or null.
 	 * @param reporter the reporter to be checked for no errors and no warnings.
 	 */
@@ -733,8 +629,7 @@ public abstract class STester {
 		}
 	}
 	/** Check if the reporter contains errors or warnings. If not then
-	 * invoke the method <code>fail</code> with the argument msg. Finally
-	 * clear reporter.
+	 * invoke the method fail with the argument msg. Finally clear reporter.
 	 * @param msg message to be printed or null.
 	 * @param reporter the reporter to be checked for errors and no warnings.
 	 */
@@ -747,25 +642,20 @@ public abstract class STester {
 		}
 	}
 	/** Check if the reporter contains errors or warnings. If mot then
-	 * invoke the method <code>ffail("Errorwarnings not reported")</code>.
-	 * Finally clear reporter.
+	 * invoke the method fail("Errorwarnings not reported"). Finally clear reporter.
 	 * @param reporter the reporter to be checked for no errors and no warnings.
 	 */
-	public final void assertErrorwarnings(
-		final ArrayReporter reporter) {
+	public final void assertErrorwarnings(final ArrayReporter reporter) {
 		assertErrorwarnings(reporter, "Errorwarnings not reported");
 	}
 	/** Check if the reporter contains errors or warnings. If not then
-	 * invoke the method <code>fail("Errorwarnings not reported")</code>.
-	 * Finally clear reporter.
+	 * invoke the method fail("Errorwarnings not reported"). Finally clear reporter.
 	 * @param reporter the reporter to be checked for errors and no warnings.
 	 */
-	public final void assertErrorwarningsAndClear(
-		final ArrayReporter reporter) {
+	public final void assertErrorwarningsAndClear(final ArrayReporter reporter) {
 		assertErrorwarningsAndClear(reporter, "Errorwarnings not reported");
 	}
-	private static String getListing(final ReportWriter reporetr,
-		final Object msg) {
+	private static String getListing(final ReportWriter reporetr, final Object msg) {
 		if (msg == null) {
 			return null;
 		}
@@ -780,12 +670,10 @@ public abstract class STester {
 		if (reporetr instanceof ArrayReporter) {
 			StringWriter strw = new StringWriter();
 			if (xml.charAt(0) == '<') {
-				ReportPrinter.printListing(strw,
-					xml, (ArrayReporter)reporetr, true);
+				ReportPrinter.printListing(strw, xml, (ArrayReporter)reporetr, true);
 			} else {
 				try {
-					ReportPrinter.printListing(strw,
-						new FileReader(xml), (ArrayReporter) reporetr, true);
+					ReportPrinter.printListing(strw, new FileReader(xml), (ArrayReporter) reporetr, true);
 				} catch (FileNotFoundException ex) {
 					return xml;
 				}
@@ -794,8 +682,7 @@ public abstract class STester {
 		}
 		return xml;
 	}
-	/** Check if the reporter does not contain an error. If yes then invoke
-	 * the method <code>fail</code> with the argument msg.
+	/** Check if the reporter does not contain an error. If yes then invoke the method fail with argument msg.
 	 * @param reporter reporter to be checked for no errors.
 	 * @param msg message to be printed or null.
 	 */
@@ -809,24 +696,19 @@ public abstract class STester {
 			}
 		}
 	}
-	/** Check if the reporter does not contain an error or warning. If yes then
-	 * invoke the method <code>fail</code> with the argument msg.
+	/** Check if the reporter does not contain an error or warning. If yes then invoke the method fail
+	 * with argument msg.
 	 * @param reporter the reporter to be checked for no errors and no warnings.
 	 */
-	public final void assertNoErrorwarnings(
-		final ReportWriter reporter) {
-		if (reporter.errorWarnings()) {
-			fail(reporter.toString());
-		}
+	public final void assertNoErrorwarnings(final ReportWriter reporter) {
+		if (reporter.errorWarnings()) fail(reporter.toString());
 	}
 	/** Check if the reporter does not contain an error or warning. If yes then
-	 * invoke the method <code>fail</code> with the argument msg.
+	 * invoke the method fail with the argument msg.
 	 * @param reporter the reporter to be checked for no errors and no warnings.
 	 * @param msg message to be printed or null.
 	 */
-	public final void assertNoErrorwarnings(
-		final ReportWriter reporter,
-		final Object msg) {
+	public final void assertNoErrorwarnings(final ReportWriter reporter, final Object msg) {
 		if (reporter.errorWarnings()) {
 			if (msg == null) {
 				fail();
@@ -925,20 +807,17 @@ public abstract class STester {
 			return;
 		}
 		File f;
-		if (_sourceDir.contains("src/test/java/test/")
-			&& (f = new File(s = SUtils.modifyString(_sourceDir,
-			"src/test/java/test/" ,
-			"src/test/resources/test/")+"data/")).exists() && f.isDirectory()) {
+		if (_sourceDir.contains("src/test/java/test/") && (f = new File(s = SUtils.modifyString(_sourceDir,
+				"src/test/java/test/" ,
+				"src/test/resources/test/")+"data/")).exists() && f.isDirectory()) {
 			_dataDir = s;
-		} else if (_sourceDir.contains("/test/test/")
-			&& (f = new File(s = SUtils.modifyString(
-			_sourceDir, "test/test/" ,
-			"test/resources/test/") + "data/")).exists() && f.isDirectory()) {
+		} else if (_sourceDir.contains("/test/test/") && (f = new File(s = SUtils.modifyString(
+				_sourceDir, "test/test/" ,
+				"test/resources/test/") + "data/")).exists() && f.isDirectory()) {
 			_dataDir = s;
-		} else if (_sourceDir.contains("/test/test/")
-			&& (f = new File(s = SUtils.modifyString(
-			_sourceDir, "test/test/" ,
-			"resources/test/") + "data/")).exists() && f.isDirectory()) {
+		} else if (_sourceDir.contains("/test/test/") && (f = new File(s = SUtils.modifyString(
+				_sourceDir, "test/test/" ,
+				"resources/test/") + "data/")).exists() && f.isDirectory()) {
 			_dataDir = s;
 		} else {
 			f = new File(s = _homeDir + "test/data/");
@@ -967,13 +846,11 @@ public abstract class STester {
 		}
 		className = st[i].getClassName();
 		try {
-			Constructor c = Class.forName(className).getDeclaredConstructor(
-				new Class<?>[0]);
+			Constructor c = Class.forName(className).getDeclaredConstructor(new Class<?>[0]);
 			c.setAccessible(true);
 			return (STester) c.newInstance(new Object[0]);
-		} catch (ClassNotFoundException | IllegalAccessException
-			| IllegalArgumentException | InstantiationException
-			| NoSuchMethodException | SecurityException
+		} catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException
+			| InstantiationException | NoSuchMethodException | SecurityException
 			| InvocationTargetException ex) {
 			throw new RuntimeException("Can't invoke: new " + className + "()");
 		}
@@ -1017,16 +894,13 @@ public abstract class STester {
 			params.add(f.getAbsolutePath());
 		}
 	}
-	/** Compile sources from parameter and save files to the classes directory
-	 *  of tester.
+	/** Compile sources from parameter and save files to the classes directory of tester.
 	 * @param classpath the string with classpath.
 	 * @param classDir the string with directory where to create classes.
 	 * @param files files with Java sources (may be a file or a directory).
 	 * @return string with path to compiled classes.
 	 */
-	public final String compileSources(final String classpath,
-		final String classDir,
-		final File... files) {
+	public final String compileSources(final String classpath, final String classDir, final File... files) {
 		String sources[] = new String[files.length];
 		for (int i = 0; i < files.length; i++) {
 			sources[i] = files[i].getAbsolutePath();
@@ -1045,21 +919,17 @@ public abstract class STester {
 			classpath = classpath.substring(9,classpath.lastIndexOf('!'));
 			return new File(classpath).getAbsolutePath().replace('\\','/');
 		} else {
-			classpath =
-				new File(u.getFile()).getAbsolutePath().replace('\\','/');
+			classpath = new File(u.getFile()).getAbsolutePath().replace('\\','/');
 			return classpath.substring(0, classpath.indexOf(className));
 		}
 	}
-	/** Compile sources from parameter and save files to the classes directory
-	 *  of tester.
+	/** Compile sources from parameter and save files to the classes directory of tester.
 	 * @param classpath the string with classpath.
 	 * @param classDir the string with directory where to create classes.
-	 * @param sources paths of Java sources (may be a file or a directory).
+	 * @param src list of Java sources (may be a file or a directory).
 	 * @return string with path to compiled classes.
 	 */
-	public final String compileSources(final String classpath,
-		final String classDir,
-		final String... sources) {
+	public final String compileSources(final String classpath, final String classDir, final String... src) {
 		// where are compiled classes of X-definitions
 		// prepare parameters
 		List<String> ar = new ArrayList<>();
@@ -1071,7 +941,7 @@ public abstract class STester {
 		ar.add("-d");
 		ar.add(classDir); // where to write compiled classes
 		// source files
-		for (String source: sources) {
+		for (String source: src) {
 			addJavaSource(new File (source), ar);
 		}
 		// prepare compiler
@@ -1096,6 +966,46 @@ public abstract class STester {
 		return classDir;
 	}
 
+	public final File copyToSourceDir(final File file, final String dir, final String name) {
+		try {
+			InputStream in = new FileInputStream(new File(new File(file, dir), name+".java"));
+			return copyToSourceDir(in, dir, name);
+		} catch (Exception ex) {
+			throw new RuntimeException(ex);
+		}
+	}
+
+	public final File copyToSourceDir(final InputStream in, final String dir, final String name) {
+		try {
+			File f2 = new File(getSourceDir(), name + ".java");
+			FUtils.copyToFile(in, f2, false);
+			return f2;
+		} catch (SException ex) {
+			throw new RuntimeException(ex);
+		}
+	}
+
+	public final File copyToTempDir(final File file, final String dir, final String name) {
+		try {
+			InputStream in = new FileInputStream(new File(new File(file, dir), name+".java"));
+			return copyToTempDir(in, dir, name);
+		} catch (Exception ex) {
+			throw new RuntimeException(ex);
+		}
+	}
+
+	public final File copyToTempDir(final InputStream in, final String dir, final String name) {
+		try {
+			File f = new File(getTempDir() + dir);
+			f.mkdirs();
+			File f2 = new File(f, name + ".java");
+			FUtils.copyToFile(in, f2, false);
+			return f2;
+		} catch (SException ex) {
+			throw new RuntimeException(ex);
+		}
+	}
+
 ////////////////////////////////////////////////////////////////////////////////
 //This method must be implemented in the class with test(extended from STester)
 ////////////////////////////////////////////////////////////////////////////////
@@ -1106,8 +1016,7 @@ public abstract class STester {
 ////////////////////////////////////////////////////////////////////////////////
 //This methods executes tests
 ////////////////////////////////////////////////////////////////////////////////
-	/** Run test and print result information on System.out (both, OK and error
-	 * information).
+	/** Run test and print result information on System.out (both, OK and error information).
 	 * @param args the command line arguments (the first one is home directory).
 	 * Usage:
 	 * [-d home directory] the home directory.
@@ -1157,8 +1066,7 @@ public abstract class STester {
 					case 'o':
 						s = args[++i];
 						try {
-							FileOutputStream fos =
-								new FileOutputStream(s, true);
+							FileOutputStream fos = new FileOutputStream(s, true);
 							out = new PrintStream(fos, true);
 						} catch (FileNotFoundException ex) {
 							cancel("Can't create output stream:" + s);
@@ -1168,8 +1076,7 @@ public abstract class STester {
 					case 'e':
 						s = args[++i];
 						try {
-							FileOutputStream fos =
-								new FileOutputStream(s, true);
+							FileOutputStream fos = new FileOutputStream(s, true);
 							err = new PrintStream(fos, true);
 						} catch (FileNotFoundException ex) {
 							cancel("Can't create error stream:" + s);
@@ -1179,8 +1086,7 @@ public abstract class STester {
 					case 'l':
 						s = args[++i];
 						try {
-							FileOutputStream fos =
-								new FileOutputStream(s, true);
+							FileOutputStream fos = new FileOutputStream(s, true);
 							log = new PrintStream(fos, true);
 						} catch (FileNotFoundException ex) {
 							cancel("Can't create log stream:" + s);
@@ -1202,8 +1108,7 @@ public abstract class STester {
 	 * @param out The print stream for result information or null
 	 * @param err The print stream for error messages or null.
 	 * @param log The print stream all messages or null.
-	 * @param printOK if false then the result if printed only if
-	 * an error was reported.
+	 * @param printOK if false then the result if printed only if an error was reported.
 	 * @param arguments array with arguments or null.
 	 * @return the number of errors.
 	 */
@@ -1232,8 +1137,7 @@ public abstract class STester {
 		if (printOK && out != null) {
 			float duration =
 				((float) ((System.currentTimeMillis() - _timeStamp) / 1000.0));
-			String s = "[INFO] " + (_errors == 0
-				? "OK " : _errors + " error"+(_errors>1?"s":"") + " in ");
+			String s = "[INFO] " + (_errors == 0 ? "OK " : _errors + " error"+(_errors>1?"s":"") + " in ");
 			s += _name + (_resultInfo.isEmpty() ? "" : ", " + _resultInfo)
 				+ ", time=" + new DecimalFormat("0.00").format(duration) + "s";
 			out.flush();
@@ -1247,6 +1151,7 @@ public abstract class STester {
 		}
 		return _errors;
 	}
+
 	/** Run tests of the object given by argument and print result information.
 	 * @param out The print stream for result information or null
 	 * @param err The print stream for error messages or null.
@@ -1279,10 +1184,8 @@ public abstract class STester {
 		float duration = ((float)((System.currentTimeMillis() - t) / 1000.0));
 		System.err.flush();
 		out.flush();
-		String s = "[INFO] " +
-			(errors > 0 ? errors + " error" + (errors > 1 ? "s,": ",") : "OK")
-			+ " " + (info != null ? info + ", ": "") +
-			"total time: " + DECFORMAT.format(duration) + "s";
+		String s = "[INFO] " + (errors>0 ? errors+" error"+(errors>1 ? "s,": ",") : "OK")
+			+ " " + (info != null ? info + ", ": "") + "total time: " + DECFORMAT.format(duration) + "s";
 		if (log != null) {
 			log.println(s);
 			log.flush();
