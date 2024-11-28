@@ -33,7 +33,6 @@ import org.xdef.impl.XNode;
 import org.xdef.impl.XPool;
 import org.xdef.impl.XVariableTable;
 import org.xdef.impl.code.DefContainer;
-import org.xdef.model.XMDefinition;
 import org.xdef.msg.SYS;
 import org.xdef.proc.XDLexicon;
 import org.xdef.sys.ArrayReporter;
@@ -136,8 +135,7 @@ public class TestGenJava extends XDTester {
 				ss = (String[]) o;
 				Class<?>[] z = new Class<?>[ss.length];
 				for (int i = 0; i < ss.length; i++) {
-					z[i] = Class.forName(ss[i],
-						false, Thread.currentThread().getContextClassLoader());
+					z[i] = Class.forName(ss[i], false, Thread.currentThread().getContextClassLoader());
 				}
 				setField(p, z, "_extClasses");
 			}
@@ -226,10 +224,11 @@ public class TestGenJava extends XDTester {
 				}
 				setField(p, z, "_enums");
 			}
+
 			Map<String, XDefinition> xdefs = new LinkedHashMap<>();
+			setField(p, xdefs, "_xdefs");
 			if ((o = getField(x, "_xdefs")) != null) {
-				bais = new ByteArrayInputStream(
-					SUtils.decodeBase64(((String) getField(x, "_xdefs")).toCharArray()));
+				bais = new ByteArrayInputStream(SUtils.decodeBase64(((String) o).toCharArray()));
 				in = new GZIPInputStream(bais);
 				xr = new XDReader(in);
 				n = xr.readLength();
@@ -238,10 +237,10 @@ public class TestGenJava extends XDTester {
 					try {
 						xdefs.put(xr.readString(), XDefinition.readXDefinition(xr, p, list));
 					} catch (IOException ex) {
-						throw new SRuntimeException(SYS.SYS039, ex);//SObject reader: incorrect format of data&{0}{: }
+						//SObject reader: incorrect format of data&{0}{: }
+						throw new SRuntimeException(SYS.SYS039, ex);
 					}
 				}
-				setField(p, xdefs, "_xdefs");
 				//resolve root selections - references to models!
 				for (int i = 0; i < n; i++) {
 					String name = xr.readString();
@@ -342,6 +341,8 @@ public class TestGenJava extends XDTester {
 		String b64;
 		Map<String, String> map;
 		Field y;
+		int len;
+
 		pw.println("package " + pckg + ";");
 		pw.println();
 		pw.println("public final class " + cname + " {");
@@ -456,25 +457,27 @@ public class TestGenJava extends XDTester {
 			pw.print("\"" + key + "\",\"" + map.get(key) + "\",");
 		}
 		pw.println("};");
-
-		XMDefinition[] xmds = p.getXMDefinitions();
+		y = c.getDeclaredField("_xdefs");
+		y.setAccessible(true);
+		Map xmds = (Map) y.get(p);
 		baos = new ByteArrayOutputStream();
 		gzo = new GZIPOutputStream(baos);
 		xw = new XDWriter(gzo);
-		xw.writeLength(xmds.length);
+		len = xmds.size();
+		xw.writeLength(len);
 		List<XNode> list = new ArrayList<>();
-		y = c.getDeclaredField("_xdefs");
-		y.setAccessible(true);
-		for(XMDefinition xmd: xmds) {
-			xw.writeString(xmd.getName());
-			((XDefinition) xmd).writeXNode(xw, list);
-		}
-		for(XMDefinition xmd: xmds) {
-			String name = xmd.getName();
+		for(Object o: xmds.keySet()) {
+			String name = (String) o;
 			xw.writeString(name);
-			XDefinition xd = (XDefinition) xmd;
-			int len;
-			xw.writeLength(len = xd._rootSelection.size());
+			((XDefinition) p.getXMDefinition(name)).writeXNode(xw, list);
+		}
+		//we must write root selections after X-definitions are processed!
+		for(Object o: xmds.keySet()) {
+			String name = (String) o;
+			xw.writeString(name);
+			XDefinition xd = (XDefinition) p.getXMDefinition(name);
+			len = xd._rootSelection.size();
+			xw.writeLength(len);
 			//here are references to models, so we write names and XPositions!
 			for (String key: xd._rootSelection.keySet()){
 				xw.writeString(key);
@@ -498,7 +501,6 @@ public class TestGenJava extends XDTester {
 			pw.println("\tpublic static final String _lexicon = null;");
 		} else {
 			String[] languages = lex.getLanguages();
-			int len;
 			xw.writeLength(len = languages.length);
 			for (int i = 0; i < len; i++) {
 				xw.writeString(languages[i]);
@@ -542,8 +544,7 @@ public class TestGenJava extends XDTester {
 	private static boolean join(Element e, Element f, String a, String b, String mask) {
 		NamedNodeMap eatrs = e.getAttributes();
 		NamedNodeMap fatrs = f.getAttributes();
-		if (!e.hasAttribute(a) || !f.hasAttribute(a)
-			|| !e.hasAttribute(b) || !f.hasAttribute(b)
+		if (!e.hasAttribute(a) || !f.hasAttribute(a) | !e.hasAttribute(b) || !f.hasAttribute(b)
 			|| eatrs.getLength() != fatrs.getLength()) {
 			return false;
 		}
@@ -562,8 +563,7 @@ public class TestGenJava extends XDTester {
 		}
 		for (int i = 0; i < eatrs.getLength(); i++) {
 			String name = eatrs.item(i).getNodeName();
-			if (!a.equals(name) && !b.equals(name)
-				 && !e.getAttribute(name).equals(f.getAttribute(name))) {
+			if (!a.equals(name) && !b.equals(name) && !e.getAttribute(name).equals(f.getAttribute(name))) {
 				return false;
 			}
 		}
@@ -594,7 +594,7 @@ public class TestGenJava extends XDTester {
 		return y;
 	}
 
-	private void test(String packageName, String className , String xdef, String xml) {
+	private void test(String packageName, String className, String xdef, String xdName, String xml) {
 		try {
 			// 1. create java source with compied XDPool from xdef
 			StringWriter swr = new StringWriter();
@@ -602,6 +602,7 @@ public class TestGenJava extends XDTester {
 				genXDPoolClass(pwr, className, packageName, XDFactory.compileXD(null, xdef));
 				pwr.close();
 			}
+			System.out.println(swr.toString());
 			ByteArrayInputStream bais = new ByteArrayInputStream(swr.toString().getBytes());
 			// compile created class
 			File f = clearTempDir();
@@ -610,8 +611,9 @@ public class TestGenJava extends XDTester {
 
 			// get XDPool from the created class and run it with xml.
 			XDPool xp = genPool(ClassLoader.getSystemClassLoader().loadClass(packageName + "." + className));
+//			xp = XDFactory.compileXD(null, xdef);
 			ArrayReporter reporter = new ArrayReporter();
-			assertEq(xml, parse(xp, "", xml, reporter));
+			assertEq(xml, parse(xp, xdName, xml, reporter));
 			assertNoErrorsAndClear(reporter);
 		} catch (Exception ex) {fail(ex);}
 	}
@@ -620,6 +622,44 @@ public class TestGenJava extends XDTester {
 	/** Run test and display error information. */
 	public void test() {
 		String xdef, xml;
+/**
+		xdef =
+"<xd:collection xmlns:xd=\"http://www.syntea.cz/xdef/3.1\">\n" +
+"  <xd:def name=\"A\" root=\"A\" >\n" +
+"    <A>\n" +
+"       <B xd:script=\"ref B#B; occurs +\"/>\n" +
+"    </A>\n" +
+"  </xd:def>\n" +
+"  <xd:def name=\"B\" root=\"B\">\n" +
+"    <xd:declaration>type xxx xdatetime('dd.MM.yyyy','yyyy-MM-yy');</xd:declaration>\n" +
+"    <B b='? xxx'/>\n" +
+"  </xd:def>\n" +
+"</xd:collection>";
+		xml = "<B/>";
+		XDPool xp = compile(xdef);
+		assertEq(xml, parse(xp, "B", xml));
+		test("bugreports", "TestGenJava3", xdef, "B", xml);
+		xml = "<A><B/></A>";
+		assertEq(xml, parse(xp, "A", xml));
+		test("bugreports", "TestGenJava3", xdef, "A", xml);
+		xdef =
+"<xd:collection xmlns:xd='http://www.xdef.org/xdef/4.2'>\n" +
+"<xd:def name='A' root='A|B#B'>\n" +
+"<A a='string()'>\n" +
+"  <B xd:script='*; ref B'/>\n" +
+"</A>\n" +
+"<B b='? string();'/>\n" +
+"</xd:def>\n" +
+"<xd:def name='B'>\n" +
+"<B a='string();'>\n" +
+"  <C xd:script='*; ref C'/>\n" +
+"</B>\n" +
+"<C b='? string();'/>\n" +
+"</xd:def>\n" +
+"</xd:collection>";
+		xml = "<A a='a'><B b='b'/></A>";
+		test("bugreports", "TestGenJava3", xdef, "A", xml);
+/**/
 		xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.0\" root=\"Vehicle\">\n" +
 "   <Vehicle>\n" +
@@ -627,28 +667,22 @@ public class TestGenJava extends XDTester {
 "   </Vehicle>\n" +
 "</xd:def>";
 		xml = "<Vehicle><Part a='1'/><Part a='2'/><Part/></Vehicle>";
-		test("bugreports", "TestGenJava1", xdef, xml);
+		test("bugreports", "TestGenJava1", xdef, "", xml);
 
 		xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root = 'A'>\n"+
 "<xd:declaration>\n"+
 "   external method XDContainer bugreports.TestGenJava.x(XDContainer x, String a, String b, String mask);\n"+
+"   type xx xdatetime('yyyy-MM-dd');\n"+
 "</xd:declaration>\n"+
 "<A>\n"+
-"  <B xd:script=\"occurs *; create x(from('//B'), 'x', 'y', 'yyyy-MM-dd');\"\n"+
-"  a='string' b='string'\n"+
-"     x=\"xdatetime('yyyy-MM-dd')\" y=\"xdatetime('yyyy-MM-dd')\"/>\n"+
+"  <B xd:script=\"occurs *; create x(from('//B'),'x','y','yyyy-MM-dd');\"\n"+
+"    a='string' b='string' x=\"? xx\" y=\"? xx\"/>\n"+
 "</A>\n"+
 "</xd:def>";
-		xml =
-"<A>\n"+
-"  <B a='a' b='b' x='2023-12-08' y='2023-12-31'/>\n"+
-"  <B a='a' b='b' x='2024-01-01' y='2024-09-11'/>\n"+
-"  <B a='a' b='b' x='2024-09-12' y='2024-09-13'/>\n"+
-"  <B a='a' b='b' x='2024-09-20' y='2024-09-30'/>\n"+
-"  <B a='a' b='b' x='2024-10-01' y='2024-10-02'/>\n"+
-"</A>";
-		test("bugreports", "TestGenJava2", xdef, xml);
+		xml = "<A><B a='a' b='b' x='2023-12-08' y='2023-12-31'/><B a='a' b='b'/></A>";
+		test("bugreports", "TestGenJava2", xdef, "", xml);
+/**/
 	}
 
 	/** Run test

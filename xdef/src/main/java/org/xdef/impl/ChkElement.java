@@ -106,8 +106,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	private Set<String> _attNames;
 	/** Map with child XPath occurrences. */
 	private final Map<String, XPosInfo> _xPosOccur;
-	/** Array of X-definitions. */
-	private XNode[] _defList;
+	/** Array of child nodes. */
+	private XNode[] _childList;
 	/** Array of occurrence counters. */
 	private int[] _counters;
 	/** Number of text nodes found. */
@@ -159,9 +159,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			_xPos += '[' + String.valueOf(xPosCnt)+ ']';
 		}
 		_errCount=getReporter().getErrorCount()+_scp._reporter.getErrorCount();
-		_defList = _xElement._childNodes;
+		_childList = _xElement._childNodes;
 		_actDefIndex = -1; //index of actual X-definition
-		_counters = new int[_defList.length + 1]; //one more for '*'
+		_counters = new int[_childList.length + 1]; //one more for '*'
 		_chkChildNodes = new ArrayList<>();
 		_attNames = new HashSet<>();
 		if (ignoreAll) {
@@ -396,7 +396,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	private String getTextPathIndex(final int index) {
 		int counter = 0;
 		for (int i = 0; i < index; i++) {
-			if (_defList[i].getKind() == XMTEXT) {
+			if (_childList[i].getKind() == XMTEXT) {
 				counter++;
 			}
 		}
@@ -490,7 +490,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 
 	private boolean isEmptyGroup(final int begIndex, final int endIndex) {
 		for (int i = begIndex; i <= endIndex; i++) {
-			switch (_defList[i].getKind()) {
+			switch (_childList[i].getKind()) {
 				case XMSEQUENCE:
 				case XMCHOICE:
 				case XMMIXED:
@@ -521,7 +521,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		int endIndex = selector._endIndex;
 		for (int i = selector._begIndex + 1; i < endIndex; i++) {
 			XNode xnode;
-			switch ((xnode = _defList[i]).getKind()) {
+			switch ((xnode = _childList[i]).getKind()) {
 				case XMTEXT: {
 					chkTextAbsence(i, (XData) xnode, false, c);
 					required &= ((XData) xnode).minOccurs() > 0;
@@ -544,7 +544,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 					if (skipSelectors) {
 						int j = ((XSelector) xnode)._endIndex;
 						while (++i < j) {
-							switch ((_defList[i]).getKind()) {
+							switch ((_childList[i]).getKind()) {
 								case XMCHOICE:
 								case XMMIXED:
 								case XMSEQUENCE:
@@ -569,7 +569,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 					if (skipSelectors) {
 						int j = ((XSelector) xnode)._endIndex;
 						while (++i < j) {
-							switch ((_defList[i]).getKind()) {
+							switch ((_childList[i]).getKind()) {
 								case XMCHOICE:
 								case XMMIXED:
 								case XMSEQUENCE:
@@ -614,7 +614,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		boolean required = selector.minOccurs() > 0;
 		boolean empty = isEmptyGroup(begIndex, endIndex);
 		if (empty) {
-			XSelector xs = (XSelector) _defList[selector._begIndex];
+			XSelector xs = (XSelector) _childList[selector._begIndex];
 			if (xs._onAbsence >= 0) {
 				if (skipSelectors || !required) {
 					if (_clearReports) {
@@ -634,7 +634,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		if (!empty) {
 			for (int i = begIndex; i < endIndex; i++) {
 				XNode xnode;
-				switch ((xnode = _defList[i]).getKind()) {
+				switch ((xnode = _childList[i]).getKind()) {
 					case XMTEXT: {
 						chkTextAbsence(i, (XData) xnode, false, c);
 						required &= ((XData) xnode).minOccurs() > 0;
@@ -678,7 +678,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 						if (skipSelectors) {
 							int j = ((XSelector) xnode)._endIndex;
 							while (++i < j) {
-								switch ((_defList[i]).getKind()) {
+								switch ((_childList[i]).getKind()) {
 									case XMCHOICE:
 									case XMMIXED:
 									case XMSEQUENCE:
@@ -703,7 +703,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 						if (skipSelectors) {
 							int j = ((XSelector) xnode)._endIndex;
 							while (++i < j) {
-								switch ((_defList[i]).getKind()) {
+								switch ((_childList[i]).getKind()) {
 									case XMCHOICE:
 									case XMMIXED:
 									case XMSEQUENCE:
@@ -741,7 +741,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 				error(XDEF.XDEF541, _xElement.getLocalName()); //Missing required item(s) in &{0}
 			} else {
 				error(XDEF.XDEF520, //Sequence "xd:mixed" has no required item
-					getPosMod(_defList[selector._begIndex].getXDPosition(), _xPos));
+					getPosMod(_childList[selector._begIndex].getXDPosition(), _xPos));
 			}
 		}
 		return required;
@@ -763,7 +763,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		int endIndex = selector._endIndex;
 		for (int i = selector._begIndex + 1; i < endIndex; i++) {
 			XNode xnode;
-			switch ((xnode = _defList[i]).getKind()) {
+			switch ((xnode = _childList[i]).getKind()) {
 				case XMTEXT: {
 					XData xtxt = (XData) xnode;
 					if (_counters[i] == 0) {
@@ -792,7 +792,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 					if (skipSelectors) {
 						int j = ((XSelector) xnode)._endIndex;
 						while (++i < j) {
-							switch ((_defList[i]).getKind()) {
+							switch ((_childList[i]).getKind()) {
 								case XMCHOICE:
 								case XMMIXED:
 								case XMSEQUENCE:
@@ -817,7 +817,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 					if (skipSelectors) {
 						int j = ((XSelector) xnode)._endIndex;
 						while (++i < j) {
-							switch ((_defList[i]).getKind()) {
+							switch ((_childList[i]).getKind()) {
 								case XMCHOICE:
 								case XMMIXED:
 								case XMSEQUENCE:
@@ -847,7 +847,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		if (!skipSelectors && selector._occur == false
 			&& selector._count == 0 && required) {
 			// do not report error if onAbsence
-			if (((XSelector) _defList[selector._begIndex])._onAbsence < 0) {
+			if (((XSelector) _childList[selector._begIndex])._onAbsence < 0) {
 				error(XDEF.XDEF541, //Missing required item(s0 in &{0}
 					getPosMod(getXDPosition()+"/#choice",_xPos));
 			}
@@ -1057,10 +1057,10 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	 * counter of occurrences of the sequence is increased.
 	 */
 	private void checkMixedAll() {
-		if (_selector._prev != null && _defList[_selector._prev._begIndex].maxOccurs() > 0
+		if (_selector._prev != null && _childList[_selector._prev._begIndex].maxOccurs() > 0
 			&& _selector._kind == XMMIXED) {
 			for (int i = _selector._begIndex + 1; i < _selector._endIndex; i++) {
-				if (_counters[i] < _defList[i].maxOccurs()) {
+				if (_counters[i] < _childList[i].maxOccurs()) {
 					return;
 				}
 			}
@@ -1068,7 +1068,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			_selector._occur = true;
 			_selector._count++;
 			_nextDefIndex = _selector._endIndex + 1;
-			if (_selector._prev._kind != XMSEQUENCE || _defList[_nextDefIndex].getKind()!=XMSELECTOR_END) {
+			if (_selector._prev._kind!=XMSEQUENCE || _childList[_nextDefIndex].getKind()!=XMSELECTOR_END) {
 				finishGroup();
 				return;
 			}
@@ -1101,18 +1101,18 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	private Object findXNode(final Element el) {
 		XNode xn;
 		ChkElement result;
-		int defLength = _defList.length;
+		int defLength = _childList.length;
 		int lastNextDefIndex = _nextDefIndex;
 		int lastActDefIndex = _actDefIndex;
 		if (el == null) { // element is null => text node
-			if (_nextDefIndex < defLength && _defList[_nextDefIndex].getKind() != XMTEXT) {
+			if (_nextDefIndex < defLength && _childList[_nextDefIndex].getKind() != XMTEXT) {
 				if ((xn = _xElement.getDefAttr("$text", -1)) != null) {
 					return xn;
 				} else if ((xn=_xElement.getDefAttr("$textcontent",-1))!=null) {
 					return new XData("$text", null, xn.getXDPool(), XMTEXT); //dummy, just process string()
 				}
 			}
-		} else if (_actDefIndex >= 0 && (xn = _defList[_actDefIndex]).getKind() == XMELEMENT
+		} else if (_actDefIndex >= 0 && (xn = _childList[_actDefIndex]).getKind() == XMELEMENT
 			&& xn.maxOccurs() > 1 && (_selector == null || _selector._kind != XMMIXED)) {
 			if ((result = chkElem((XElement) xn, el)) != null) {
 				// repeated nodes
@@ -1124,7 +1124,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 					}
 					// maxOccurrence exceeded, so check if the next node in
 					// is an element with the same name.
-					XNode x = _defList[_actDefIndex+1];
+					XNode x = _childList[_actDefIndex+1];
 					if (x.getKind() != XMELEMENT || !xn.getName().equals(x.getName())) {
 						return result; // not XElement node or not same name
 					}
@@ -1144,7 +1144,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		_actDefIndex = -1;
 		while (_nextDefIndex < defLength) {
 			short kind;
-			switch (kind = (xn = _defList[_nextDefIndex]).getKind()) {
+			switch (kind = (xn = _childList[_nextDefIndex]).getKind()) {
 				case XMTEXT: {
 					if (el == null) {// is text node
 						int oldDefIndex = _actDefIndex;
@@ -1215,8 +1215,8 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 							continue;
 						}
 						if (counter < xel.minOccurs()) {//required element is missing
-							while (_nextDefIndex + 1 < _defList.length) {
-								XNode x = _defList[_nextDefIndex + 1];
+							while (_nextDefIndex + 1 < _childList.length) {
+								XNode x = _childList[_nextDefIndex + 1];
 								if (x.getKind()==XMELEMENT && el!=null) {
 									if ((result=chkElem((XElement)x,el))!=null){
 										chkElementAbsence(index, xel, null);
@@ -1253,7 +1253,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 						return null;
 					}
 					if (el == null && _selector._prev == null && _selector._kind == XMMIXED
-						&& (_nextDefIndex == defLength -1 || _defList[_nextDefIndex+1].getKind()!=XMTEXT)) {
+						&& (_nextDefIndex==defLength -1 || _childList[_nextDefIndex+1].getKind()!=XMTEXT)) {
 						//just to improve error reporting ???
 						_nextDefIndex = lastNextDefIndex;
 						_actDefIndex = lastActDefIndex;
@@ -1424,13 +1424,13 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 	 * @return The actual definition or null.
 	 */
 	public final XNode getDefElement(final int index) {
-		return index < _defList.length ? _defList[index] : null;
+		return index < _childList.length ? _childList[index] : null;
 	}
 
 	/** Get maximal index of X-definition in the list.
 	 * @return Max index of definition list.
 	 */
-	final int getDefinitionMaxIndex() {return _defList.length;}
+	final int getDefinitionMaxIndex() {return _childList.length;}
 
 	/** Add the new attribute to the current element.
 	 * @param att The object with attribute.
@@ -1742,8 +1742,9 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			}
 			//check absence within a group. If actual node is the end of a group
 			// then set "skipselector" to true, othewise to false.
-			checkAbsence(_selector, null,
-				_nextDefIndex<_defList.length && _defList[_nextDefIndex].getKind()==XMSELECTOR_END && nested);
+			checkAbsence(_selector,
+				null,
+				_nextDefIndex<_childList.length&&_childList[_nextDefIndex].getKind()==XMSELECTOR_END&&nested);
 			if (_selector._kind == XMSEQUENCE && _selector._count <_selector.minOccurs()) {
 				error(XDEF.XDEF555, "sequence"); //Minimum occurrence not reached for &{0}
 			}
@@ -1769,7 +1770,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		_parseResult = null;
 		//1. check if last element occurrence
 		if (_actDefIndex >= 0) { // check last processed item
-			XNode xn = _defList[_actDefIndex];
+			XNode xn = _childList[_actDefIndex];
 			if (xn.getKind() == XMELEMENT) {
 				if (xn.minOccurs() > _counters[_actDefIndex]) {
 					chkElementAbsence(_actDefIndex, (XElement) xn, null);
@@ -1784,10 +1785,10 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 		finishSelector();
 		//3. check remaining part of model.
 		int nextDefIndex = _nextDefIndex;
-		while (_nextDefIndex < _defList.length) {
+		while (_nextDefIndex < _childList.length) {
 			short kind;
 			XNode xnode;
-			switch (kind = (xnode = _defList[_nextDefIndex]).getKind()) {
+			switch (kind = (xnode = _childList[_nextDefIndex]).getKind()) {
 				case XMTEXT:
 				case XMELEMENT: {
 					if (_selector != null && _selector._selective) {
@@ -1952,11 +1953,11 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			break;
 		}
 		//check absence of items in root selection
-		if ((_nextDefIndex = nextDefIndex) < _defList.length) {
+		if ((_nextDefIndex = nextDefIndex) < _childList.length) {
 			XSequence xs = new XSequence();
 			xs.setOccurrence(1, 1);
 			xs._begIndex = _nextDefIndex - 1;
-			xs._endIndex = _defList.length;
+			xs._endIndex = _childList.length;
 			_selector = new SelectorState(null, xs);
 			checkAbsence(_selector, new Counter(_element.getChildNodes().getLength()), false);
 			_selector = null;
@@ -2047,7 +2048,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			_variables = null;
 		}
 		_xPosOccur.clear();
-		_defList = new XNode[0];
+		_childList = new XNode[0];
 		_counters = new int[0];
 		_actDefIndex = -1;
 		_xPos = null;
@@ -2732,7 +2733,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 			_attNames = null;
 			_xElement = null;
 			_element = null;
-			_defList = new XNode[0];
+			_childList = new XNode[0];
 			_counters = new int[0];
 			_xPos = null;
 			_elemValue = null;
@@ -3260,7 +3261,7 @@ public final class ChkElement extends ChkNode implements XXElement, XXData {
 						}
 					}
 					if (value != null && !value.isEmpty()) {
-						if (_actDefIndex >= 0 && _defList[_actDefIndex].getKind() == XMTEXT) {
+						if (_actDefIndex >= 0 && _childList[_actDefIndex].getKind() == XMTEXT) {
 							int n = xtxt == xtxt1 ? incRefNum() : getRefNum();
 							if (_actDefIndex > 0 && n > xtxt1.maxOccurs()) {
 								error(XDEF.XDEF558, "text"); //Maximum occurrence limit of &amp;{0} exceeded
