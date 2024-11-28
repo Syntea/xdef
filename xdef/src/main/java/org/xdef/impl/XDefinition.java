@@ -314,7 +314,7 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 		return xp.getVariable(name); // not found in locals, get global
 	}
 
-	/** Read XDefinition from XDReader. 
+	/** Read XDefinition from XDReader.
 	 * @param xr Reader with data.
 	 * @param xp base xPool,
 	 * @param list list of nodes.

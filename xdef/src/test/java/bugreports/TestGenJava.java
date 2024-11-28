@@ -2,6 +2,7 @@ package bugreports;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -73,7 +74,7 @@ public class TestGenJava extends XDTester {
 		Class<?> c = x.getClass();
 		Field y = c.getDeclaredField(name);
 		int z = y.getInt(x);
-		if (z != 0) { 
+		if (z != 0) {
 			c = p.getClass();
 			y = c.getDeclaredField(name);
 			y.setAccessible(true);
@@ -106,16 +107,16 @@ public class TestGenJava extends XDTester {
 		y.setAccessible(true);
 		return y.getInt(x);
 	}
-	
+
 	private static void setField(final XPool p, final Object z, final String name) throws Exception{
 		if (z != null) {
 			Class<?> c = p.getClass();
 			Field y = c.getDeclaredField(name);
 			y.setAccessible(true);
 			y.set(p, z);
-		}			
+		}
 	}
-	
+
 	public static final XPool genPool(final Object x) {
 		ByteArrayInputStream bais;
 		GZIPInputStream in;
@@ -170,7 +171,7 @@ public class TestGenJava extends XDTester {
 			if ((o = getField(x, "_code")) != null) {
 				bais = new ByteArrayInputStream(SUtils.decodeBase64(((String) o).toCharArray()));
 				in = new GZIPInputStream(bais);
-				xr = new XDReader(in);				
+				xr = new XDReader(in);
 				n = xr.readLength();
 				XDValue[] z = new XDValue[n];
 				for (int i = 0; i < n; i++) {
@@ -242,7 +243,7 @@ public class TestGenJava extends XDTester {
 				in = new GZIPInputStream(bais);
 				xr = new XDReader(in);
 				n = xr.readLength();
-				List<XNode> list = new ArrayList<>();			
+				List<XNode> list = new ArrayList<>();
 				for(int i = 0; i < n; i++) {
 					try {
 						xdefs.put(xr.readString(), XDefinition.readXDefinition(xr, p, list));
@@ -279,7 +280,7 @@ public class TestGenJava extends XDTester {
 			if ((o = getField(x, "_lexicon")) != null) {
 				bais = new ByteArrayInputStream(SUtils.decodeBase64(((String) o).toCharArray()));
 				in = new GZIPInputStream(bais);
-				xr = new XDReader(in);		
+				xr = new XDReader(in);
 				n = xr.readLength();
 				if (n > 0) {
 					String[] languages = new String[n];
@@ -309,7 +310,7 @@ public class TestGenJava extends XDTester {
 			Field y = c.getDeclaredField(s);
 			y.setAccessible(true);
 			pw.println("\tpublic static final boolean " + s + " = " + y.getBoolean(p) + ";");
-		}		
+		}
 	}
 
 	private void genByteFields(final PrintWriter pw, final XPool p, final String[] names) throws Exception {
@@ -318,7 +319,7 @@ public class TestGenJava extends XDTester {
 			Field y = c.getDeclaredField(s);
 			y.setAccessible(true);
 			pw.println("\tpublic static final byte " + s + " = (byte) " + y.getByte(p) + ";");
-		}		
+		}
 	}
 
 	private void genIntFields(final PrintWriter pw, final XPool p, final String[] names) throws Exception {
@@ -327,7 +328,7 @@ public class TestGenJava extends XDTester {
 			Field y = c.getDeclaredField(s);
 			y.setAccessible(true);
 			pw.println("\tpublic static final int " + s + " = " + y.getInt(p) + ";");
-		}		
+		}
 	}
 
 	private void genStringFields(final PrintWriter pw, final XPool p, final String[] names) throws Exception {
@@ -340,9 +341,9 @@ public class TestGenJava extends XDTester {
 				t = '"' + t + '"';
 			}
 			pw.println("\tpublic static final String " + s + " = " + t + ";");
-		}		
+		}
 	}
-	
+
 	private void genXDPoolClass(final PrintWriter pw, final String cname, final String pckg, final XDPool xdp)
 		throws Exception {
 		ByteArrayOutputStream baos;
@@ -356,7 +357,7 @@ public class TestGenJava extends XDTester {
 		pw.println("public final class " + cname + " {");
 		pw.println();
 		pw.println("\tpublic " + cname + "() {}");
-		pw.println();		
+		pw.println();
 		XPool p = (XPool) xdp;
 		Class c = p.getClass();
 		genBoolFields(pw, p, new String[] {"_chkWarnings","_illegalDoctype","_clearReports",
@@ -367,7 +368,7 @@ public class TestGenJava extends XDTester {
 		genStringFields(pw, p, new String[] {"_debugEditor", "_xdefEditor"});
 		String t = p.getDefaultZone() != null ? '"' + p.getDefaultZone().getID() + '"' : "null";
 		pw.println("\tpublic static final String _defaultZone = " + t + ";");
-		baos = new ByteArrayOutputStream();			
+		baos = new ByteArrayOutputStream();
 		gzo = new GZIPOutputStream(baos);
 		xw = new XDWriter(gzo);
 		((XDebugInfo)p.getDebugInfo()).writeXD(xw);
@@ -375,16 +376,16 @@ public class TestGenJava extends XDTester {
 		b64 = new String(SUtils.encodeBase64(baos.toByteArray()));
 		pw.println("\tpublic static final String _debugInfo = \"" + b64 + "\";");
 
-		baos = new ByteArrayOutputStream();			
+		baos = new ByteArrayOutputStream();
 		gzo = new GZIPOutputStream(baos);
 		xw = new XDWriter(gzo);
 		p.getXDSourceInfo().writeXDSourceInfo(xw);
 		xw.close();
 		b64 = new String(SUtils.encodeBase64(baos.toByteArray()));
 		pw.println("\tpublic static final String _sourceInfo = \"" + b64 + "\";");
-		
+
 		XDValue[] code = p.getCode();
-		baos = new ByteArrayOutputStream();			
+		baos = new ByteArrayOutputStream();
 		gzo = new GZIPOutputStream(baos);
 		xw = new XDWriter(gzo);
 		xw.writeLength(code.length);
@@ -398,7 +399,7 @@ public class TestGenJava extends XDTester {
 		y.setAccessible(true);
 		XVariableTable v = (XVariableTable) y.get(p);
 		if (v != null) {
-			baos = new ByteArrayOutputStream();			
+			baos = new ByteArrayOutputStream();
 			gzo = new GZIPOutputStream(baos);
 			xw = new XDWriter(gzo);
 			v.writeXD(xw);
@@ -432,7 +433,7 @@ public class TestGenJava extends XDTester {
 		} else {
 			pw.println("null;");
 		}
-		
+
 		pw.print("\tpublic static final String[] _extClasses = ");
 		y = c.getDeclaredField("_extClasses");
 		y.setAccessible(true);
@@ -446,7 +447,7 @@ public class TestGenJava extends XDTester {
 		} else {
 			pw.println("null;");
 		}
-		
+
 		pw.print("\tpublic static final String[] _components = new String[] {");
 		map = p.getXComponents();
 		for (String key: map.keySet()) {
@@ -465,9 +466,9 @@ public class TestGenJava extends XDTester {
 			pw.print("\"" + key + "\",\"" + map.get(key) + "\",");
 		}
 		pw.println("};");
-		
+
 		XMDefinition[] xmds = p.getXMDefinitions();
-		baos = new ByteArrayOutputStream();			
+		baos = new ByteArrayOutputStream();
 		gzo = new GZIPOutputStream(baos);
 		xw = new XDWriter(gzo);
 		xw.writeLength(xmds.length);
@@ -496,15 +497,15 @@ public class TestGenJava extends XDTester {
 		}
 		xw.close();
 		b64 = new String(SUtils.encodeBase64(baos.toByteArray()));
-		pw.println("\tpublic static final String _xdefs = \"" + b64 + "\";");		
+		pw.println("\tpublic static final String _xdefs = \"" + b64 + "\";");
 		y = c.getDeclaredField("_lexicon");
 		y.setAccessible(true);
 		XDLexicon lex = (XDLexicon) y.get(p);
-		baos = new ByteArrayOutputStream();			
+		baos = new ByteArrayOutputStream();
 		gzo = new GZIPOutputStream(baos);
 		xw = new XDWriter(gzo);
 		if (lex == null) {
-			pw.println("\tpublic static final String _lexicon = null;");		
+			pw.println("\tpublic static final String _lexicon = null;");
 		} else {
 			String[] languages = lex.getLanguages();
 			int len;
@@ -524,9 +525,19 @@ public class TestGenJava extends XDTester {
 			}
 			xw.close();
 			b64 = new String(SUtils.encodeBase64(baos.toByteArray()));
-			pw.println("\tpublic static final String _lexicon = \"" + b64 + "\";");		
-		}		
+			pw.println("\tpublic static final String _lexicon = \"" + b64 + "\";");
+		}
 		pw.print("}");
+	}
+
+	public void copySourceToDir(final File file, final String dir, final String name) {
+		try {
+			File f1 = new File(new File(file, dir), name + ".java");
+			File f2 = new File(getSourceDir(), name + ".java");
+			org.xdef.sys.FUtils.copyToFile(f1, f2);
+		} catch (org.xdef.sys.SException ex) {
+			throw new RuntimeException(ex);
+		}
 	}
 
 	@Override
@@ -551,13 +562,14 @@ public class TestGenJava extends XDTester {
 			try (PrintWriter pwr = new PrintWriter(swr)) {
 				genXDPoolClass(pwr, "TestGenJava1", "bugreports", (XPool) xp);
 				pwr.close();
-			}			
+			}
 			System.out.println(swr.toString());
-			
+
+
 			xp = genPool(new TestGenJava1());
 			xml = "<Vehicle><Part name=\"xxx\" /></Vehicle>";
 			assertEq(xml, parse(xp, "Vehicle", xml, reporter));
-			assertNoErrorsAndClear(reporter);			
+			assertNoErrorsAndClear(reporter);
 		} catch (Exception ex) {fail(ex);}
 	}
 
@@ -568,5 +580,4 @@ public class TestGenJava extends XDTester {
 		XDTester.setFulltestMode(true);
 		if (runTest(args) > 0) {System.exit(1);}
 	}
-	
 }
