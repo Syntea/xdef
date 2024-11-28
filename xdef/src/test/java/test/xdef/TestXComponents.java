@@ -824,9 +824,8 @@ public final class TestXComponents extends XDTester {
 		} catch (RuntimeException ex) {fail(ex);}
 ////////////////////////////////////////////////////////////////////////////////
 		try {// generate XCDPool from sources used in next tests
-			xp = compile(new String[] {
-				getDataDir()+"test/TestXComponents.xdef", getDataDir() + "test/TestXComponent_Z.xdef"}
-			);
+			xp = XDFactory.compileXD(null, new String[] {
+				getDataDir()+"test/TestXComponents.xdef", getDataDir() + "test/TestXComponent_Z.xdef"});
 			// generate and compile XComponents from xp
 			assertNoErrors(genXComponent(xp));
 		} catch (Exception ex) {
