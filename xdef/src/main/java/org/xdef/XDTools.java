@@ -1,10 +1,13 @@
 package org.xdef;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.io.Writer;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -22,6 +25,7 @@ import org.xdef.impl.code.DefXmlWriter;
 import org.xdef.sys.ReportReader;
 import org.xdef.sys.ReportWriter;
 import org.xdef.sys.SRuntimeException;
+import org.xdef.sys.SUtils;
 
 /** Collection of methods supporting X-definition programming.
  * @author Vaclav Trojan
@@ -205,4 +209,48 @@ public class XDTools {
 	 * to convert to XDValue object.
 	 */
 	public static final XDValue createXDValue(final Object o) {return XBuilder.createXDValue(o);}
+
+	private static final int BUFLEN = 32000;
+
+	/** Write source Java code with given XDPool.
+	 * @param pw where to write.
+	 * @param cname name of created class.
+	 * @param pckg package of created class.
+	 * @param xp XDPool to be written to class.
+	 */
+	public static void XDPoolClassWriter(final PrintWriter pw,
+		final String cname,
+		final String pckg,
+		final XDPool xp) {
+		pw.println("package " + pckg + ";");
+		pw.println("public final class " + cname + " extends org.xdef.XDPoolFromClass {");
+		pw.println("\tpublic static final org.xdef.XDPool getXDPool() {return getXDPool("
+			+ pckg + '.' + cname + ".class);}");
+		pw.println("\tpublic " + cname + "() {}");
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		try (ObjectOutputStream out = new ObjectOutputStream(baos)) {
+			out.writeObject(xp);
+			out.close();
+			byte[] bytes = baos.toByteArray();
+			int len = bytes.length;
+			int pos = 0;
+			for (int i = 1; ; i++) {
+				int dif = len - pos;
+				if (dif <= 0) {
+					break;
+				}
+				int bufLen = dif > BUFLEN ? BUFLEN : dif;
+				byte[] buf = new byte[bufLen];
+				System.arraycopy(bytes, pos, buf, 0, bufLen);
+				pos += bufLen;
+				pw.println("\tprivate static final class B" + i + " {");
+				String b = new String(SUtils.encodeBase64(buf));
+				pw.println("\t\tpublic static final String b = \"" + b + "\";");
+				pw.println("\t}");
+			}
+			pw.print("}");
+		} catch (IOException ex) {
+			throw new RuntimeException(ex);
+		}
+	}
 }
