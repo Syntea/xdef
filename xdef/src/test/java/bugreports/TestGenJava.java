@@ -33,7 +33,6 @@ public class TestGenJava extends XDTester {
 				XDFactory.XDPoolClassWriter(pwr, className, packageName, xp);
 				pwr.close();
 			}
-//			System.out.println(swr);
 			System.out.println(className + ", len = " + swr.toString().length());
 			ByteArrayInputStream bais = new ByteArrayInputStream(swr.toString().getBytes());
 
@@ -41,6 +40,12 @@ public class TestGenJava extends XDTester {
 			File f = clearTempDir();
 			copyToTempDir(bais, packageName, className);
 			compileSources(f);
+			try {
+				bais = new ByteArrayInputStream(swr.toString().getBytes());
+				f = new File(getSourceDir(), className + ".java");
+				System.out.println(f);
+//				org.xdef.sys.FUtils.copyToFile(bais, f, false);
+			} catch (Exception ex) {fail(ex);}
 
 			// get XDPool from the created class.
 			Class<?> c = ClassLoader.getSystemClassLoader().loadClass(packageName + "." + className);
