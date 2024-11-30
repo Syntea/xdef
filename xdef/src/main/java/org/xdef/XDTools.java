@@ -204,7 +204,7 @@ public class XDTools {
 	 * @param pckg package of created class.
 	 * @param xp XDPool to be written to class.
 	 */
-	public static void writeXDPoolClass(final Writer w,final String cls,final String pckg,final XDPool xp) {
+	public static void writeXDPoolClass(final Writer w, final String cls, final String pckg, final XDPool xp){
 		PrintWriter pw = new PrintWriter(w);
 		pw.println("package " + pckg + ";");
 		pw.println("public final class " + cls + " extends org.xdef.XDPoolFromClass {");

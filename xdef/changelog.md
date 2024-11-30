@@ -1,9 +1,9 @@
 # Version ${version}, release-date ${release.date}
 
 # Version 42.2.14, release-date 2024-11-30
-* A new method `org.xdef.XDTools.writeXDPoolClass(...)` has been implemented. This method generates the source
-  code of the Java class class created from the XDPool object. This class contains a method `getXDPool()`
-  that returns the specified XDPool object.
+* A new static method `XDFactory.writeXDPoolClass(...)` has been implemented. This method generates the source
+  code of the Java class class created from the XDPool object. This class contains astatic  method
+  `getXDPool()` that returns the specified XDPool object.
 
 # Version 42.2.13, release-date 2024-11-15
 * Corrected bug in `org.xdef.sys.SDatetime` if milliseconds are not specified (it was set to 0).
