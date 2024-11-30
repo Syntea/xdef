@@ -12,6 +12,8 @@ import java.io.Writer;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import org.w3c.dom.Element;
+import static org.xdef.XDConstants.BUILD_DATETIME;
+import static org.xdef.XDConstants.BUILD_VERSION;
 import org.xdef.impl.XBuilder;
 import org.xdef.impl.code.DefContainer;
 import org.xdef.impl.code.DefElement;
@@ -35,18 +37,14 @@ public class XDTools {
 	/** Get version of this implementation of X-definition.
 	 * @return version of this implementation of X-definition.
 	 */
-	public static final String getXDVersion() {
-		return XDConstants.BUILD_VERSION + " (" + XDConstants.BUILD_DATETIME + ")";
-	}
+	public static final String getXDVersion() {	return BUILD_VERSION + " (" + BUILD_DATETIME + ")";}
 
 	/** Creates XDInput from InputStream.
 	 * @param value the stream.
-	 * @param xmlFormat if true the input data are in XML format,
-	 * otherwise in string format.
+	 * @param xmlFormat if true the input data are in XML format, otherwise in string format.
 	 * @return the XDInput object.
 	 */
-	public static final XDInput createXDInput(final InputStream value,
-		final boolean xmlFormat) {
+	public static final XDInput createXDInput(final InputStream value, final boolean xmlFormat) {
 		return new DefInStream(value, xmlFormat);
 	}
 
@@ -94,12 +92,11 @@ public class XDTools {
 
 	/** Creates named value.
 	 * @param key the name of named value.
-	 * @param value value of named value (may be null)
+	 * @param x value of named value (may be null)
 	 * @return named value.
 	 */
-	public static final XDNamedValue createXDNamedValue(final String key, final Object value) {
-		return new DefNamedValue(key,
-			value == null || value instanceof XDValue ? (XDValue) value : createXDValue(value));
+	public static final XDNamedValue createXDNamedValue(final String key, final Object x) {
+		return new DefNamedValue(key, x == null || x instanceof XDValue ? (XDValue) x : createXDValue(x));
 	}
 
 	/** Creates the empty XDContainer.
@@ -120,27 +117,22 @@ public class XDTools {
 	 * @return XDService object.
 	 * @throws SRuntimeException if an error occurs.
 	 */
-	public static final XDService createSQLService(final String url,
-		final String user,
-		final String passw) throws SRuntimeException {
+	public static final XDService createSQLService(final String url, final String user, final String passw) {
 		return new DefSQLService(url, user, passw);
 	}
 
 	/** Creates DefSQLService object with JDBC support.
 	 * @param conn Database connection.
 	 * @return XDService object.
+	 * @throws SRuntimeException if an error occurs.
 	 */
-	public static final XDService createSQLService(final Connection conn) throws SRuntimeException {
-		return new DefSQLService(conn);
-	}
+	public static final XDService createSQLService(final Connection conn) {return new DefSQLService(conn);}
 
 	/** Creates XDResultSet object from java.sql.ResultSet.
-	 * @param sqlResultSet the ResultSet object.
+	 * @param x the ResultSet object.
 	 * @return XDResultSet object.
 	 */
-	public static final XDResultSet createXDResultSet(final ResultSet sqlResultSet) {
-		return new DefSQLResultSet(sqlResultSet);
-	}
+	public static final XDResultSet createXDResultSet(final ResultSet x) {return new DefSQLResultSet(x);}
 
 	/** Creates XDResultSet object from java.sql.ResultSet extracting value of
 	 * specified column from each raw.
@@ -148,16 +140,14 @@ public class XDTools {
 	 * @param sqlResultSet the ResultSet object.
 	 * @return XDResultSet object.
 	 */
-	public static final XDResultSet createXDResultSet(final String itemName,
-		final ResultSet sqlResultSet) {
+	public static final XDResultSet createXDResultSet(final String itemName, final ResultSet sqlResultSet) {
 		return new DefSQLResultSet(itemName, sqlResultSet);
 	}
 
 	/** Creates XDXmlStream writer object from java.io.Writer.
 	 * @param out where to write XML.
 	 * @param encoding encoding of XML stream.
-	 * @param writeDocumentHeader if true then the XML header is
-	 * written, otherwise no XML header is written.
+	 * @param writeDocumentHeader if true then the XML header is written, otherwise no XML header is written.
 	 * @return XDXmlOutStream object.
 	 * @throws IOException if an error occurs.
 	 */
@@ -170,8 +160,7 @@ public class XDTools {
 	/** Creates XDXmlStream writer object from java.io.Writer.
 	 * @param fname where to write XML.
 	 * @param encoding encoding of XML stream.
-	 * @param writeDocumentHeader if true then the XML header is
-	 * written, otherwise no XML header is written.
+	 * @param writeDocumentHeader if true then the XML header is written, otherwise no XML header is written.
 	 * @return XDXmlOutStream object.
 	 * @throws IOException if an error occurs.
 	 */
@@ -182,12 +171,10 @@ public class XDTools {
 	}
 
 	/** Creates XDParseResult object.
-	 * @param source source which will be set as parsed object.
+	 * @param src source which will be set as parsed object.
 	 * @return XDParseResult object.
 	 */
-	public static final XDParseResult createParseResult(final String source) {
-		return new DefParseResult(source);
-	}
+	public static final XDParseResult createParseResult(final String src) {return new DefParseResult(src);}
 
 	/** Create XDValue object.
 	 * @param o the object from which XDValue will be created.
@@ -210,23 +197,20 @@ public class XDTools {
 	 */
 	public static final XDValue createXDValue(final Object o) {return XBuilder.createXDValue(o);}
 
-	private static final int BUFLEN = 32000;
-
+	private static final int BUFLEN = 20000;
 	/** Write source Java code with given XDPool.
-	 * @param pw where to write.
-	 * @param cname name of created class.
+	 * @param w where to write.
+	 * @param cls name of created class.
 	 * @param pckg package of created class.
 	 * @param xp XDPool to be written to class.
 	 */
-	public static void XDPoolClassWriter(final PrintWriter pw,
-		final String cname,
-		final String pckg,
-		final XDPool xp) {
+	public static void writeXDPoolClass(final Writer w,final String cls,final String pckg,final XDPool xp) {
+		PrintWriter pw = new PrintWriter(w);
 		pw.println("package " + pckg + ";");
-		pw.println("public final class " + cname + " extends org.xdef.XDPoolFromClass {");
+		pw.println("public final class " + cls + " extends org.xdef.XDPoolFromClass {");
 		pw.println("\tpublic static final org.xdef.XDPool getXDPool() {return getXDPool("
-			+ pckg + '.' + cname + ".class);}");
-		pw.println("\tpublic " + cname + "() {}");
+			+ pckg + '.' + cls + ".class);}");
+		pw.println("\tpublic " + cls + "() {}");
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		try (ObjectOutputStream out = new ObjectOutputStream(baos)) {
 			out.writeObject(xp);
