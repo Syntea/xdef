@@ -211,7 +211,7 @@ public class XDTools {
 		}
 		pw.println("public final class " + cls + " extends org.xdef.XDPoolFromClass {");
 		pw.println("\tpublic static final org.xdef.XDPool getXDPool() {return getXDPool("
-			+ pckg + '.' + cls + ".class);}");
+			+ (!pckg.trim().isEmpty()? pckg + '.' : "") + cls + ".class);}");
 		pw.println("\tpublic " + cls + "() {}");
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		try (ObjectOutputStream out = new ObjectOutputStream(baos)) {
