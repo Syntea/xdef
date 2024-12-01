@@ -206,7 +206,9 @@ public class XDTools {
 	 */
 	public static void writeXDPoolClass(final Writer w, final String cls, final String pckg, final XDPool xp){
 		PrintWriter pw = new PrintWriter(w);
-		pw.println("package " + pckg + ";");
+		if (pckg != null && !pckg.trim().isEmpty()) {
+			pw.println("package " + pckg + ";");
+		}
 		pw.println("public final class " + cls + " extends org.xdef.XDPoolFromClass {");
 		pw.println("\tpublic static final org.xdef.XDPool getXDPool() {return getXDPool("
 			+ pckg + '.' + cls + ".class);}");
