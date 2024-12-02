@@ -2,7 +2,6 @@ package bugreports;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.io.Writer;
 import java.lang.reflect.Method;
 import org.xdef.XDContainer;
 import org.xdef.XDFactory;
@@ -24,19 +23,14 @@ public class TestGenJava extends XDTester {
 	public static XDContainer x(XDContainer x, String a, String b, String mask) {return new DefContainer();}
 
 	private void test(String pckgName, String clsName, XDPool xp, String xdName, String xml) throws Exception{
-		File f = clearTempDir();
-
-		// create java source with compied XDPool from xdef
-		f = new File(f, pckgName);
+		// create java source with XDPool compiled from xdef
+		File f = new File(clearTempDir(), pckgName);
 		f.mkdir();
-		f = new File(f, clsName + ".java");
-		Writer swr = new FileWriter(f);
-		XDFactory.writeXDPoolClass(swr, clsName, pckgName, xp);
-		swr.close();
-
+		try (FileWriter swr = new FileWriter(new File(f, clsName + ".java"))) {
+			XDFactory.writeXDPoolClass(swr, clsName, pckgName, xp);
+		}
 		// compile created Java source
 		compileSources(f);
-
 /*********************************************************************************************************
 		// copy Java source file to source directory.
 		File f1 = new File(getSourceDir(), clsName + ".java");
@@ -46,7 +40,6 @@ public class TestGenJava extends XDTester {
 			org.xdef.sys.FUtils.copyToFile(f, f1);
 		}
  /**********************************************************************************************************/
-
 		// get XDPool from the created class and run xparse of XML.
 		test1(pckgName, clsName, xdName, xml);
 	}
