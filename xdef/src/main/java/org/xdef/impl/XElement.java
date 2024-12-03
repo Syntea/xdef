@@ -494,7 +494,7 @@ public final class XElement extends XCodeDescriptor
 	 * @return true if structures are compatible.
 	 */
 	private boolean compareElement(final XElement y, final ArrayReporter reporter, final boolean full) {
-		return compareNameAndOccurrence(y, reporter) & compareElementStructure(y, reporter, full);
+		return compareNameAndOccurrence(y, reporter) && compareElementStructure(y, reporter, full);
 	}
 
 	/** Compare structure of this element model with the model from argument.

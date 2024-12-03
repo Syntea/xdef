@@ -109,8 +109,7 @@ final class CompileXScript extends CompileStatement {
 
 	/** Creates a new instance of CompileScript
 	 * @param g The code generator.
-	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1"
-	 * (see org.xdef.impl.XConstants.XMLxx).
+	 * @param xmlVersion 10 .. "1.0", 11 .. "1.1" (see org.xdef.impl.XConstants.XMLxx).
 	 * @param nsPrefixes array with name space prefixes.
 	 * @param clsLoader The Class loader (used for external objects).
 	 */
@@ -188,17 +187,14 @@ final class CompileXScript extends CompileStatement {
 					if (def._onIllegalRoot != -1) {
 						error(XDEF.XDEF422); //Duplicated script section
 					}
-					def._onIllegalRoot =
-						compileSection(CompileBase.ANY_MODE, XD_VOID, sym);
+					def._onIllegalRoot = compileSection(CompileBase.ANY_MODE, XD_VOID, sym);
 					continue;
 				case ON_XML_ERROR_SYM:
 					if (def._onXmlError != -1) {
 						error(XDEF.XDEF422); //Duplicated script section
 					}
-					def._onXmlError =
-						compileSection(CompileBase.ANY_MODE, XD_VOID, sym);
+					def._onXmlError = compileSection(CompileBase.ANY_MODE, XD_VOID, sym);
 					continue;
-				default:
 			}
 			if (_sym == NOCHAR) {
 				break;
@@ -228,20 +224,19 @@ final class CompileXScript extends CompileStatement {
 			} else if (sc._trimText  != 'F') {
 				result = result.trim();
 			}
-			result = sc._textValuesCase == 'T' ? result.toUpperCase() :
-				sc._textValuesCase == 'F' ? result.toLowerCase() : result;
+			result = sc._textValuesCase == 'T'
+				? result.toUpperCase() : sc._textValuesCase == 'F' ? result.toLowerCase() : result;
 		} else {
 			if (sc._attrWhiteSpaces == 'T') {
 				result = SUtils.trimAndRemoveMultipleWhiteSpaces(result);
 			} else if (sc._trimAttr  != 'F') {
 				result = result.trim();
 			}
-			result = sc._attrValuesCase == 'T' ? result.toUpperCase() :
-				sc._attrValuesCase == 'F' ? result.toLowerCase() : result;
+			result = sc._attrValuesCase == 'T'
+				? result.toUpperCase() : sc._attrValuesCase == 'F' ? result.toLowerCase() : result;
 		}
-		if (result.length() == 0 && ("$text".equals(sc.getName())
-			|| "$comment".equals(sc.getName())
-			|| sc._ignoreEmptyAttributes == 'T')){
+		if (result.length() == 0 && ("$text".equals(sc.getName()) || "$comment".equals(sc.getName())
+			|| sc._ignoreEmptyAttributes == 'T')) {
 			sc.setOccurrence(0, 1);
 			sc._check = -1;
 		} else {
@@ -314,15 +309,12 @@ final class CompileXScript extends CompileStatement {
 			if (isOccurrence(occ)) {
 				if (!occ.isIgnore() && occ.maxOccurs() > 1
 					&& !sc.getName().startsWith("$")) {
-					//Occurrence of attribute or text value can't be more then 1
-					error (XDEF.XDEF262);
+					error (XDEF.XDEF262);//Occurrence of attribute or text value can't be more then 1
 				}
 				compileTypeCheck(sc);
 				continue;
-			} else if (_sym == IDENTIFIER_SYM || _sym == LPAR_SYM
-				|| _sym == NOT_SYM || (_sym == CONSTANT_SYM
-				&& (_parsedValue.getItemId() == XD_STRING
-				|| _parsedValue.getItemId() == XD_BOOLEAN))) {
+			} else if (_sym == IDENTIFIER_SYM || _sym == LPAR_SYM || _sym == NOT_SYM || (_sym == CONSTANT_SYM
+				&& (_parsedValue.getItemId() == XD_STRING || _parsedValue.getItemId() == XD_BOOLEAN))) {
 				if (!occ.isSpecified()) {
 					occ.setRequired();
 				}
@@ -348,22 +340,18 @@ final class CompileXScript extends CompileStatement {
 						if (check >= 0
 							&&_g._code.get(_g._lastCodeIndex).getCode()==STOP_OP
 							&& (_g._code.get(check).getCode() == LD_CONST
-								&&_g._code.get(check).getItemId() == XD_PARSER
+							&&_g._code.get(check).getItemId() == XD_PARSER
 							|| _g._code.get(check).getCode()==PARSEANDSTOP)) {
-							if (addr + 3 == _g._lastCodeIndex
-								&&_g._code.get(addr).getCode()==INIT_NOPARAMS_OP
-								&&_g._code.get(addr).getParam() == 0
-								&&_g._code.get(addr + 1).getCode() == LD_CONST
-								&&_g._code.get(addr+1).getItemId() == XD_STRING
+							if (addr + 3 == _g._lastCodeIndex &&_g._code.get(addr).getCode()==INIT_NOPARAMS_OP
+								&& _g._code.get(addr).getParam() == 0
+								&& _g._code.get(addr + 1).getCode() == LD_CONST
+								&& _g._code.get(addr+1).getItemId() == XD_STRING
 								&& _g._code.get(addr + 2).getCode() == RETV_OP
-								&& _g._code.get(addr + 3).getCode() == STOP_OP){
+								&& _g._code.get(addr + 3).getCode() == STOP_OP) {
 								XDValue value = _g._code.get(addr + 1);
-								XDParser p = (XDParser)
-									(_g._code.get(check).getCode()
-									== PARSEANDSTOP ? _g._code.get(check+1)
-									: _g._code.get(check));
-								XDParseResult r =
-									p.check(null,value.toString());
+								XDParser p = (XDParser) (_g._code.get(check).getCode() == PARSEANDSTOP
+									? _g._code.get(check+1) : _g._code.get(check));
+								XDParseResult r = p.check(null,value.toString());
 								if (r.errors()) {
 									error(XDEF.XDEF481); //Incorrect fixed value
 								}
@@ -396,99 +384,85 @@ final class CompileXScript extends CompileStatement {
 					if (sc._onTrue != -1) {
 						error(XDEF.XDEF422); //Duplicated script section
 					}
-					sc._onTrue =
-						compileSection(CompileBase.TEXT_MODE, XD_VOID, sym);
+					sc._onTrue = compileSection(CompileBase.TEXT_MODE, XD_VOID, sym);
 					continue;
 				case ON_FALSE_SYM:
 					if (sc._onFalse != -1) {
 						error(XDEF.XDEF422); //Duplicated script section
 					}
-					sc._onFalse =
-						compileSection(CompileBase.TEXT_MODE, XD_VOID, sym);
+					sc._onFalse = compileSection(CompileBase.TEXT_MODE, XD_VOID, sym);
 					continue;
 				case ON_ABSENCE_SYM:
 					if (sc._onAbsence != -1) {
 						error(XDEF.XDEF422); //Duplicated script section
 					}
-					sc._onAbsence =
-						compileSection(CompileBase.TEXT_MODE, XD_VOID, sym);
+					sc._onAbsence = compileSection(CompileBase.TEXT_MODE, XD_VOID, sym);
 					continue;
 				case ON_ILLEGAL_ATTR_SYM:
 					if ("$text".equals(sc.getName())) {
-						 //Script section{0}{ '}{'} is not allowed here
-						errorAndSkip(XDEF.XDEF364,
-							SCRIPT_SEPARATORS, "onIllegalAttr");
+						//Script section{0}{ '}{'} is not allowed here
+						errorAndSkip(XDEF.XDEF364, SCRIPT_SEPARATORS, "onIllegalAttr");
 					} else {
 						if (sc._onIllegalAttr != -1) {
 							error(XDEF.XDEF422); //Duplicated script section
 						}
-						sc._onIllegalAttr =
-							compileSection(CompileBase.ELEM_MODE,XD_VOID, sym);
+						sc._onIllegalAttr = compileSection(CompileBase.ELEM_MODE,XD_VOID, sym);
 					}
 					continue;
 				case ON_ILLEGAL_TEXT_SYM:
 					if (!"$text".equals(sc.getName())) {
 						 //Script section{0}{ '}{'} is not allowed here
-						errorAndSkip(XDEF.XDEF364,
-							SCRIPT_SEPARATORS, "onIllegalText");
+						errorAndSkip(XDEF.XDEF364, SCRIPT_SEPARATORS, "onIllegalText");
 					} else {
 						if (sc._onIllegalText != -1) {
 							error(XDEF.XDEF422); //Duplicated script section
 						}
-						sc._onIllegalText =
-							compileSection(CompileBase.ELEM_MODE,XD_VOID, sym);
+						sc._onIllegalText = compileSection(CompileBase.ELEM_MODE,XD_VOID, sym);
 					}
 					continue;
 				case CREATE_SYM:
 					if (sc._compose != -1) {
 						error(XDEF.XDEF422); //Duplicated script section
 					}
-					sc._compose =
-						compileSection(CompileBase.TEXT_MODE, XD_STRING, sym);
+					sc._compose = compileSection(CompileBase.TEXT_MODE, XD_STRING, sym);
 					continue;
 				case ON_START_ELEMENT_SYM:
 					if (sc._onStartElement != -1) {
 						error(XDEF.XDEF422); //Duplicated script section
 					}
-					sc._onStartElement =
-						compileSection(CompileBase.TEXT_MODE, XD_VOID, sym);
+					sc._onStartElement = compileSection(CompileBase.TEXT_MODE, XD_VOID, sym);
 					continue;
 				case INIT_SYM:
 					if (sc._init != -1) {
 						error(XDEF.XDEF422); //Duplicated script section
 					}
-					sc._init =
-						compileSection(CompileBase.TEXT_MODE, XD_VOID, sym);
+					sc._init = compileSection(CompileBase.TEXT_MODE, XD_VOID, sym);
 					continue;
 				case DEFAULT_SYM:
 					if (sc._deflt != -1) {
 						error(XDEF.XDEF422); //Duplicated script section
 					}
 					occ.setOptional();
-					sc._deflt =
-						compileSection(CompileBase.TEXT_MODE, XD_STRING, sym);
+					sc._deflt = compileSection(CompileBase.TEXT_MODE, XD_STRING, sym);
 					continue;
 				case FINALLY_SYM:
 					if (sc._finaly != -1) {
 						error(XDEF.XDEF422); //Duplicated script section
 					}
-					sc._finaly =
-						compileSection(CompileBase.TEXT_MODE, XD_VOID, sym);
+					sc._finaly = compileSection(CompileBase.TEXT_MODE, XD_VOID, sym);
 					continue;
 				case MATCH_SYM:
 					if (sc._match != -1) {
 						error(XDEF.XDEF422); //Duplicated script section
 					}
-					sc._match =
-						compileSection(CompileBase.TEXT_MODE,XD_BOOLEAN, sym);
+					sc._match = compileSection(CompileBase.TEXT_MODE,XD_BOOLEAN, sym);
 					continue;
 				case ON_EXCESS_SYM: //only for xd:attrs or text
 					if (sc.getName().startsWith("$")) {
 						if (sc._onExcess != -1) {
 							error(XDEF.XDEF422); //Duplicated script section
 						}
-						sc._onExcess = compileSection(CompileBase.TEXT_MODE,
-							XD_VOID, sym);
+						sc._onExcess = compileSection(CompileBase.TEXT_MODE, XD_VOID, sym);
 						continue;
 					}
 					errToken(sym);
@@ -504,8 +478,7 @@ final class CompileXScript extends CompileStatement {
 		if (!sc.isSpecified()) {
 			sc.setOptional();
 		} else if (sc.isFixed() && sc._deflt >= 0) {
-			//Both actions 'fixed' and 'default' can't be specified
-			error(XDEF.XDEF415);
+			error(XDEF.XDEF415); //Both actions 'fixed' and 'default' can't be specified
 			return;
 		}
 		if (sc._check == -1) {
@@ -563,21 +536,18 @@ final class CompileXScript extends CompileStatement {
 									sc._check = i; /*XX - optimize*/
 								}
 								p = (XDParser) y;
-							} else if (i + 4 < _g._code.size()
-								&& j == STACK_DUP // try CHECK expression
+							} else if (i + 4 < _g._code.size() && j == STACK_DUP // try CHECK expression
 								&&_g._code.get(i+3).getCode()==PARSERESULT_MATCH
 								&& _g._code.get(i+4).getCode() == JMPF_OP
-								&& _g._code.get(_g._code.get(i+4).getParam())
-									.getCode()== STOP_OP) {
-								sc._check = i; /*XX - optimize*/
+								&& _g._code.get(_g._code.get(i+4).getParam()).getCode()== STOP_OP) {
+								sc._check = i;
 								p = (XDParser) y; // parser with CHECK operand
 							}
 						}
 					}
 				} else if (y instanceof XDParser) {
 					p = (XDParser) y;
-					if (_g._lastCodeIndex == check + 2  /*XX - optimize*/
-						&& _g._code.get(check).getCode() == LD_CONST
+					if (_g._lastCodeIndex == check + 2 && _g._code.get(check).getCode() == LD_CONST
 						&& _g._code.get(check + 1).getCode() == PARSE_OP
 						&& _g._code.get(check + 1).getParam() == 1
 						&& _g._code.get(check + 2).getCode() == STOP_OP) {
@@ -630,8 +600,7 @@ final class CompileXScript extends CompileStatement {
 		if (isFinal = _sym == FINAL_SYM) {
 			nextSymbol();
 		} else if (_sym == EXTERNAL_SYM) {
-			//The token '&{0}' is not allowed here
-			error(XDEF.XDEF411, "external");
+			error(XDEF.XDEF411, "external"); //The token '&{0}' is not allowed here
 			nextSymbol();
 		}
 		switch (_sym) {
@@ -643,12 +612,10 @@ final class CompileXScript extends CompileStatement {
 					name = _idName;
 					SPosition spos = getLastPosition();
 					nextSymbol();
-					if (_sym == NOCHAR || _sym == SEMICOLON_SYM
-						|| _sym == COLON_SYM || _sym == ASSGN_SYM
+					if (_sym == NOCHAR || _sym == SEMICOLON_SYM || _sym == COLON_SYM || _sym == ASSGN_SYM
 						|| _sym == COMMA_SYM) {
 						//declaration of variable
-						varDeclaration(varType,
-							name, isFinal, false, (byte) 'X', spos);
+						varDeclaration(varType, name, isFinal, false, (byte) 'X', spos);
 						checkSemicolon(String.valueOf(IDENTIFIER_SYM));
 					}
 				}
@@ -662,8 +629,7 @@ final class CompileXScript extends CompileStatement {
 				break;
 			}
 			default:
-				//Error in variable declaration
-				errorAndSkip(XDEF.XDEF121, String.valueOf(END_SYM));
+				errorAndSkip(XDEF.XDEF121, String.valueOf(END_SYM)); //Error in variable declaration
 		}
 		while (_sym == SEMICOLON_SYM) {
 			nextSymbol();
@@ -782,9 +748,8 @@ final class CompileXScript extends CompileStatement {
 				if (!isXModelPosition()) {
 					_sym = UNDEF_SYM;
 				} else {
-					_implList.add(new CompileReference(
-						_sym == IMPLEMENTS_SYM ? (short) 1 : (short) 0,
-						xel, null, getParsedString(), getPosition()));
+					_implList.add(new CompileReference(_sym == IMPLEMENTS_SYM
+						? (short) 1 : (short) 0, xel, null, getParsedString(), getPosition()));
 				}
 				nextSymbol();
 				continue;
@@ -792,8 +757,7 @@ final class CompileXScript extends CompileStatement {
 			nextSymbol();
 			switch (sym) {
 				case VAR_SYM:
-					//"var" section must be declared before a varialbe is
-					// refered
+					//"var" section must be declared before a varialbe is refered
 					elementVarDeclaration(xel);
 					continue;
 				case OPTION_SYM:
@@ -804,66 +768,57 @@ final class CompileXScript extends CompileStatement {
 					if (xel._onAbsence != -1) {
 						error(XDEF.XDEF422); //Duplicated script section
 					}
-					xel._onAbsence =
-						compileSection(CompileBase.ELEM_MODE, XD_VOID, sym);
+					xel._onAbsence = compileSection(CompileBase.ELEM_MODE, XD_VOID, sym);
 					continue;
 				case CREATE_SYM:
 					if (xel._compose != -1) {
 						error(XDEF.XDEF422); //Duplicated script section
 					}
-					xel._compose =
-						compileSection(CompileBase.ELEM_MODE, XD_ANY, sym);
+					xel._compose = compileSection(CompileBase.ELEM_MODE, XD_ANY, sym);
 					continue;
 				case INIT_SYM:
 					if (xel._init != -1) {
 						error(XDEF.XDEF422); //Duplicated script section
 					}
 					_g._allowBindSet = true; // allow bindSet method
-					xel._init =
-						compileSection(CompileBase.ELEM_MODE, XD_VOID, sym);
+					xel._init = compileSection(CompileBase.ELEM_MODE, XD_VOID, sym);
 					_g._allowBindSet = false;
 					continue;
 				case ON_EXCESS_SYM:
 					if (xel._onExcess != -1) {
 						error(XDEF.XDEF422); //Duplicated script section
 					}
-					xel._onExcess =
-						compileSection(CompileBase.ELEM_MODE, XD_VOID, sym);
+					xel._onExcess = compileSection(CompileBase.ELEM_MODE, XD_VOID, sym);
 					continue;
 				case ON_START_ELEMENT_SYM:
 					if (xel._onStartElement != -1) {
 						error(XDEF.XDEF422); //Duplicated script section
 					}
-					xel._onStartElement =
-						compileSection(CompileBase.ELEM_MODE, XD_VOID, sym);
+					xel._onStartElement = compileSection(CompileBase.ELEM_MODE, XD_VOID, sym);
 					continue;
 				case MATCH_SYM:
 					if (xel._match != -1) {
 						error(XDEF.XDEF422); //Duplicated script section
 					}
-					xel._match = compileSection(CompileBase.ELEM_MODE,
-						XD_BOOLEAN, sym);
+					xel._match = compileSection(CompileBase.ELEM_MODE, XD_BOOLEAN, sym);
 					continue;
 				case ON_ILLEGAL_ATTR_SYM:
 					if (xel._onIllegalAttr != -1) {
 						error(XDEF.XDEF422); //Duplicated script section
 					}
-					xel._onIllegalAttr =
-						compileSection(CompileBase.ELEM_MODE, XD_VOID, sym);
+					xel._onIllegalAttr = compileSection(CompileBase.ELEM_MODE, XD_VOID, sym);
 					continue;
 				case ON_ILLEGAL_TEXT_SYM:
 					if (xel._onIllegalText != -1) {
 						error(XDEF.XDEF422); //Duplicated script section
 					}
-					xel._onIllegalText =
-						compileSection(CompileBase.ELEM_MODE, XD_VOID, sym);
+					xel._onIllegalText = compileSection(CompileBase.ELEM_MODE, XD_VOID, sym);
 					continue;
 				case ON_ILLEGAL_ELEMENT_SYM:
 					if (xel._onIllegalElement != -1) {
 						error(XDEF.XDEF422); //Duplicated script section
 					}
-					xel._onIllegalElement =
-						compileSection(CompileBase.ELEM_MODE, XD_VOID, sym);
+					xel._onIllegalElement = compileSection(CompileBase.ELEM_MODE, XD_VOID, sym);
 					continue;
 				case REF_SYM:
 					if (wasRef) {
@@ -872,8 +827,7 @@ final class CompileXScript extends CompileStatement {
 						wasRef = true;
 					}
 					if (_g._varBlock.size() > 0) {
-						//In model with reference can't be variable declaration
-						error(XDEF.XDEF237);
+						error(XDEF.XDEF237); //In model with reference can't be variable declaration
 					}
 					if (_sym == REFERENCE_SYM) {
 						int ndx = _idName.indexOf('#') + 1;
@@ -884,14 +838,11 @@ final class CompileXScript extends CompileStatement {
 						} else {
 							String prefix = _idName.substring(ndx, ndx1);
 							if ((ns = _g._nsPrefixes.get(prefix)) == null) {
-								//Namespace for prefix '&{0}' is undefined
-								error(XDEF.XDEF257, prefix);
+								error(XDEF.XDEF257, prefix); //Namespace for prefix '&{0}' is undefined
 							}
 						}
-						String nsUri =
-							ns != null ? _g._namespaceURIs.get(ns) : null;
-						xel.addNode(
-							new CompileReference(CompileReference.XMREFERENCE,
+						String nsUri = ns != null ? _g._namespaceURIs.get(ns) : null;
+						xel.addNode(new CompileReference(CompileReference.XMREFERENCE,
 							xel, nsUri, _idName, new SPosition(this)));
 						nextSymbol();
 					} else {
@@ -903,8 +854,7 @@ final class CompileXScript extends CompileStatement {
 					if (xel._finaly != -1) {
 						error(XDEF.XDEF422); //Duplicated script section
 					}
-					xel._finaly =
-						compileSection(CompileBase.ELEM_MODE, XD_VOID, sym);
+					xel._finaly = compileSection(CompileBase.ELEM_MODE, XD_VOID, sym);
 					continue;
 				case FORGET_SYM:
 					if (xel._forget != 0) {
@@ -914,12 +864,10 @@ final class CompileXScript extends CompileStatement {
 					checkSemicolon(SCRIPT_SEPARATORS);
 					continue;
 				case ON_TRUE_SYM:
-					//The token '&{0}' is not allowed here
-					error(XDEF.XDEF411, "onTrue");
+					error(XDEF.XDEF411, "onTrue"); //The token '&{0}' is not allowed here
 					break;
 				case ON_FALSE_SYM:
-					//The token '&{0}' is not allowed here
-					error(XDEF.XDEF411, "onFalse");
+					error(XDEF.XDEF411, "onFalse"); //The token '&{0}' is not allowed here
 					break;
 				default:
 			}
@@ -962,8 +910,7 @@ final class CompileXScript extends CompileStatement {
 			if (returnType == XD_VOID) {//statement
 				int dx = addDebugInfo(false);
 				if (!statement()) {
-					//Action &{0} expected,
-					errorAndSkip(XDEF.XDEF426,
+					errorAndSkip(XDEF.XDEF426,//Action &{0} expected
 						SCRIPT_SEPARATORS+';',"statement");
 					result = -2; //error
 				}
@@ -971,8 +918,8 @@ final class CompileXScript extends CompileStatement {
 			} else {
 				int dx = addDebugInfo(false);
 				if (!expression()) {//expression
-					errorAndSkip(XDEF.XDEF426, //Action &{0} expected,
-						SCRIPT_SEPARATORS + ';', symToName(section));
+					errorAndSkip(XDEF.XDEF426,//Action &{0} expected
+						SCRIPT_SEPARATORS+';', symToName(section));
 					result = -2; //error
 				} else {
 					setDebugEndPosition(dx);
@@ -984,8 +931,7 @@ final class CompileXScript extends CompileStatement {
 						} else {
 							short xType = _g._tstack[_g._sp];
 							if (xType == CompileBase.X_ATTR_REF) {
-								if (returnType == XD_BOOLEAN
-									|| returnType == XD_ANY) {
+								if (returnType == XD_BOOLEAN || returnType == XD_ANY) {
 									_g.topToBool();
 								} else {
 									_g.topToString();
@@ -993,8 +939,7 @@ final class CompileXScript extends CompileStatement {
 								xType = _g._tstack[_g._sp];
 							}
 							if (returnType == XD_STRING && xType != XD_STRING) {
-								if (mode == CompileBase.TEXT_MODE
-									&& section == CREATE_SYM) {
+								if (mode == CompileBase.TEXT_MODE && section == CREATE_SYM) {
 									_g.topToNullOrString();
 								} else {
 									_g.topToString();
@@ -1003,31 +948,22 @@ final class CompileXScript extends CompileStatement {
 							}
 							if (section == CREATE_SYM) {
 								if (returnType==XD_ANY) {//group or elelement
-									if (xType != XD_ELEMENT
-										&& xType != XD_CONTAINER
-										&& xType != XD_RESULTSET
-										&& xType != XD_LONG
-										&& xType != XD_BOOLEAN
-										&& xType != XD_STRING
+									if (xType != XD_ELEMENT && xType != XD_CONTAINER && xType != XD_RESULTSET
+										&& xType != XD_LONG && xType != XD_BOOLEAN && xType != XD_STRING
 										&& xType != XD_NULL) {
-										if (xType != XD_ANY
-											&& xType != CompileBase.XD_UNDEF) {
+										if (xType != XD_ANY && xType != CompileBase.XD_UNDEF) {
 											//Value of type '&{0}' expected
-											error(XDEF.XDEF423,
-												"\"create element\"");
+											error(XDEF.XDEF423, "\"create element\"");
 											result = -2; //error
 										}
 									}
 								}
-							} else if (xType == XD_CONTAINER
-								&& section == MATCH_SYM) {// only match
+							} else if (xType == XD_CONTAINER && section == MATCH_SYM) {// only match
 								_g.topToBool();
 							} else if (xType != returnType) {
-								if (xType != XD_ANY
-									&& xType != CompileBase.XD_UNDEF) {
+								if (xType != XD_ANY && xType != CompileBase.XD_UNDEF) {
 									//Value of type '&{0}' expected
-									error(XDEF.XDEF423,
-										CompileBase.getTypeName(returnType));
+									error(XDEF.XDEF423, CompileBase.getTypeName(returnType));
 									result = -2; //error
 								}
 							}
@@ -1066,36 +1002,31 @@ final class CompileXScript extends CompileStatement {
 					if (sc.getMatchCode() != -1) {
 						error(XDEF.XDEF422); //Duplicated script section
 					}
-					sc.setMatchCode(compileSection(CompileBase.ELEM_MODE,
-						XD_BOOLEAN, sym));
+					sc.setMatchCode(compileSection(CompileBase.ELEM_MODE, XD_BOOLEAN, sym));
 				continue;
 				case INIT_SYM:
 					if (sc.getInitCode() != -1) {
 						error(XDEF.XDEF422); //Duplicated script section
 					}
-					sc.setInitCode(compileSection(CompileBase.ELEM_MODE,
-						XD_VOID, sym));
+					sc.setInitCode(compileSection(CompileBase.ELEM_MODE, XD_VOID, sym));
 					continue;
 				case ON_ABSENCE_SYM:
 					if (sc.getOnAbsenceCode() != -1) {
 						error(XDEF.XDEF422); //Duplicated script section
 					}
-					sc.setOnAbsenceCode(compileSection(CompileBase.ELEM_MODE,
-						XD_VOID, sym));
+					sc.setOnAbsenceCode(compileSection(CompileBase.ELEM_MODE, XD_VOID, sym));
 					continue;
 				case ON_EXCESS_SYM:
 					if (sc.getOnExcessCode() != -1) {
 						error(XDEF.XDEF422); //Duplicated script section
 					}
-					sc.setOnExcessCode(compileSection(CompileBase.ELEM_MODE,
-						XD_VOID, sym));
+					sc.setOnExcessCode(compileSection(CompileBase.ELEM_MODE, XD_VOID, sym));
 					continue;
 				case CREATE_SYM:
 					if (sc.getComposeCode() != -1) {
 						error(XDEF.XDEF422); //Duplicated script section
 					}
-					sc.setComposeCode(compileSection(CompileBase.ELEM_MODE,
-						XD_ANY, sym));
+					sc.setComposeCode(compileSection(CompileBase.ELEM_MODE, XD_ANY, sym));
 					continue;
 				case REF_SYM:
 					if (_sym == REFERENCE_SYM) {
@@ -1107,8 +1038,7 @@ final class CompileXScript extends CompileStatement {
 					if (sc.getFinallyCode() != -1) {
 						error(XDEF.XDEF422); //Duplicated script section
 					}
-					sc.setFinallyCode(compileSection(CompileBase.ELEM_MODE,
-						XD_VOID, sym));
+					sc.setFinallyCode(compileSection(CompileBase.ELEM_MODE, XD_VOID, sym));
 					continue;
 				default:
 			}
@@ -1166,8 +1096,7 @@ final class CompileXScript extends CompileStatement {
 		while (_sym == IDENTIFIER_SYM || _sym == FORGET_SYM) {
 			if (_sym == FORGET_SYM) {
 				if (kind != XMELEMENT) {
-					//The token '&{0}' is not allowed here
-					error(XDEF.XDEF411, symToName(FORGET_SYM));
+					error(XDEF.XDEF411, symToName(FORGET_SYM)); //The token '&{0}' is not allowed here
 				} else {
 					reportDeprecated("option forget", "forget (action)");
 					if (forget) {
@@ -1180,8 +1109,7 @@ final class CompileXScript extends CompileStatement {
 					error(XDEF.XDEF432,_idName);//Option &{0} redefinition
 				}
 				if (kind != XMELEMENT) {
-					//The token '&{0}' is not allowed here
-					error(XDEF.XDEF411, "notForget");
+					error(XDEF.XDEF411, "notForget"); //The token '&{0}' is not allowed here
 				} else {
 					reportDeprecated("option notForget", "forget (action)");
 					if (forget) {
@@ -1190,8 +1118,7 @@ final class CompileXScript extends CompileStatement {
 				}
 			} else if ("clearAdoptedForgets".equals(_idName)) {
 				if (kind != XMELEMENT) {
-					//The token '&{0}' is not allowed here
-					error(XDEF.XDEF411, "clearAdoptedForgets");
+					error(XDEF.XDEF411, "clearAdoptedForgets"); //The token '&{0}' is not allowed here
 				} else {
 					if (clearAdoptedForgets) {
 						error(XDEF.XDEF422); //Duplicated script section
@@ -1209,10 +1136,8 @@ final class CompileXScript extends CompileStatement {
 					error(XDEF.XDEF432,_idName);//Option &{0} redefinition
 				}
 				attrWhiteSpaces = true;
-				result._attrWhiteSpaces = (byte)
-					("ignoreAttrWhiteSpaces".equals(_idName) ? 'T' : 'F');
-			} else if ("copyTextWhiteSpaces".equals(_idName)
-				|| "preserveTextWhiteSpaces".equals(_idName)
+				result._attrWhiteSpaces = (byte) ("ignoreAttrWhiteSpaces".equals(_idName) ? 'T' : 'F');
+			} else if ("copyTextWhiteSpaces".equals(_idName) || "preserveTextWhiteSpaces".equals(_idName)
 				|| "ignoreTextWhiteSpaces".equals(_idName)) {
 				if("copyTextWhiteSpaces".equals(_idName)) {
 					reportDeprecated(_idName, "preserveTextWhiteSpaces");
@@ -1221,16 +1146,14 @@ final class CompileXScript extends CompileStatement {
 					error(XDEF.XDEF432,_idName);//Option &{0} redefinition
 				}
 				textWhiteSpaces = true;
-				result._textWhiteSpaces = (byte)
-					("ignoreTextWhiteSpaces".equals(_idName) ? 'T' : 'F');
+				result._textWhiteSpaces = (byte) ("ignoreTextWhiteSpaces".equals(_idName) ? 'T' : 'F');
 			} else if ("ignoreComments".equals(_idName)) {
 				if (ignoreComments) {
 					error(XDEF.XDEF432,_idName);//Option &{0} redefinition
 				}
 				ignoreComments = true;
 				result._ignoreComments = 'T';
-			} else if ("copyComments".equals(_idName)
-				|| "preserveComments".equals(_idName)) {
+			} else if ("copyComments".equals(_idName) || "preserveComments".equals(_idName)) {
 				if ("copyComments".equals(_idName)) {
 					reportDeprecated(_idName,"preserveComments");
 				}
@@ -1239,10 +1162,8 @@ final class CompileXScript extends CompileStatement {
 				}
 				ignoreComments = true;
 				result._ignoreComments = 'F';
-			} else if ("copyEmptyAttributes".equals(_idName)
-				|| "acceptEmptyAttributes".equals(_idName)
-				|| "preserveEmptyAttributes".equals(_idName)
-				|| "ignoreEmptyAttributes".equals(_idName)) {
+			} else if ("copyEmptyAttributes".equals(_idName) || "acceptEmptyAttributes".equals(_idName)
+				|| "preserveEmptyAttributes".equals(_idName) || "ignoreEmptyAttributes".equals(_idName)) {
 				if("copyEmptyAttributes".equals(_idName)) {
 					reportDeprecated(_idName, "acceptEmptyAttributes");
 				}
@@ -1250,51 +1171,40 @@ final class CompileXScript extends CompileStatement {
 					error(XDEF.XDEF432,_idName);//Option &{0} redefinition
 				}
 				ignoreEmptyAttributes = true;
-				result._ignoreEmptyAttributes = (byte)
-					 ("ignoreEmptyAttributes".equals(_idName) ? 'T' :
-					"acceptEmptyAttributes".equals(_idName) ? 'A' :
-					"preserveEmptyAttributes".equals(_idName) ? 'P' :
-					'F');
-			} else if ("setAttrUpperCase".equals(_idName)
-				|| "setAttrLowerCase".equals(_idName)
-				|| "noSetAttrCase".equals(_idName)
-				|| "preserveAttrCase".equals(_idName)) {
+				result._ignoreEmptyAttributes = (byte) ("ignoreEmptyAttributes".equals(_idName) ? 'T'
+					: "acceptEmptyAttributes".equals(_idName) ? 'A'
+					: "preserveEmptyAttributes".equals(_idName) ? 'P'
+					: 'F');
+			} else if ("setAttrUpperCase".equals(_idName) || "setAttrLowerCase".equals(_idName)
+				|| "noSetAttrCase".equals(_idName) || "preserveAttrCase".equals(_idName)) {
 				if (setAttrValuesCase) {
 					error(XDEF.XDEF432,_idName);//Option &{0} redefinition
 				}
 				setAttrValuesCase = true;
-				result._attrValuesCase = (byte)
-					("setAttrUpperCase".equals(_idName) ? 'T' :
-					("noSetAttrCase".equals(_idName)
-					|| "preserveAttrCase".equals(_idName)) ? 'I' : 'F');
-			} else if ("setTextUpperCase".equals(_idName)
-				|| "setTextLowerCase".equals(_idName)
-				|| "noSetTextCase".equals(_idName)
-				|| "preserveTextCase".equals(_idName)) {
+				result._attrValuesCase = (byte) ("setAttrUpperCase".equals(_idName) ? 'T'
+					: ("noSetAttrCase".equals(_idName) || "preserveAttrCase".equals(_idName)) ? 'I'
+					: 'F');
+			} else if ("setTextUpperCase".equals(_idName) || "setTextLowerCase".equals(_idName)
+				|| "noSetTextCase".equals(_idName) || "preserveTextCase".equals(_idName)) {
 				if (setTextValuesCase) {
 					error(XDEF.XDEF432,_idName);//Option &{0} redefinition
 				}
 				setTextValuesCase = true;
-				result._textValuesCase = (byte)
-					("setTextUpperCase".equals(_idName) ? 'T' :
-					("notSetTextCase".equals(_idName)
-					|| "preserveTextCase".equals(_idName)) ? 'I' : 'F');
-			} else if ("trimAttr".equals(_idName)
-				|| "noTrimAttr".equals(_idName)) {
+				result._textValuesCase = (byte) ("setTextUpperCase".equals(_idName) ? 'T'
+					: ("notSetTextCase".equals(_idName) || "preserveTextCase".equals(_idName)) ? 'I'
+					: 'F');
+			} else if ("trimAttr".equals(_idName) || "noTrimAttr".equals(_idName)) {
 				if (trimAttr) {
 					error(XDEF.XDEF432,_idName);//Option &{0} redefinition
 				}
 				trimAttr = true;
-				result._trimAttr =
-					(byte) ("trimAttr".equals(_idName) ? 'T' : 'F');
-			} else if ("trimText".equals(_idName)
-				|| "noTrimText".equals(_idName)) {
+				result._trimAttr = (byte) ("trimAttr".equals(_idName) ? 'T' : 'F');
+			} else if ("trimText".equals(_idName) || "noTrimText".equals(_idName)) {
 				if (trimText) {
 					error(XDEF.XDEF432,_idName);//Option &{0} redefinition
 				}
 				trimText = true;
-				result._trimText =
-					(byte) ("trimText".equals(_idName) ? 'T' : 'F');
+				result._trimText = (byte) ("trimText".equals(_idName) ? 'T' : 'F');
 			} else if ("moreAttributes".equals(_idName)) {
 				if (moreAttributes) {
 					error(XDEF.XDEF432,_idName);//Option &{0} redefinition
@@ -1313,62 +1223,50 @@ final class CompileXScript extends CompileStatement {
 				}
 				moreText = true;
 				result._moreText = 'T';
-			} else if ("acceptOther".equals(_idName)
-				|| "ignoreOther".equals(_idName)) {
+			} else if ("acceptOther".equals(_idName) || "ignoreOther".equals(_idName)) {
 				if (moreAttributes | moreElements | moreText) {
 					error(XDEF.XDEF432,_idName);//Option &{0} redefinition
 				}
 				moreAttributes = moreElements = moreText = true;
 				byte b = "acceptOther".equals(_idName) ? (byte)'T' :(byte) 'I';
 				result._moreAttributes=result._moreElements=result._moreText= b;
-			} else if ("nillable".equals(_idName)
-				|| "noNillable".equals(_idName)) {
+			} else if ("nillable".equals(_idName) || "noNillable".equals(_idName)) {
 				if (nillable) {
 					error(XDEF.XDEF432,_idName);//Option &{0} redefinition
 				} else if (kind != XMELEMENT) {
-					//The token '&{0}' is not allowed here
-					error(XDEF.XDEF411, _idName);
+					error(XDEF.XDEF411, _idName); //The token '&{0}' is not allowed here
 				}
 				nillable = true;
-				result._nillable =
-					(byte) ("nillable".equals(_idName) ? 'T' : 'F');
-			} else if ("ignoreEntities".equals(_idName)
-				|| "resolveEntities".equals(_idName)) {
+				result._nillable = (byte) ("nillable".equals(_idName) ? 'T' : 'F');
+			} else if ("ignoreEntities".equals(_idName) || "resolveEntities".equals(_idName)) {
 				if (ignoreEntities) {
 					error(XDEF.XDEF432,_idName);//Option &{0} redefinition
 				}
 				ignoreEntities = true;
-				result._resolveEntities =
-					(byte) ("resolveEntities".equals(_idName) ? 'T' : 'F');
-			} else if ("acceptQualifiedAttr".equals(_idName)
-				|| "notAacceptQualifiedAttr".equals(_idName)) {
+				result._resolveEntities = (byte) ("resolveEntities".equals(_idName) ? 'T' : 'F');
+			} else if ("acceptQualifiedAttr".equals(_idName) || "notAacceptQualifiedAttr".equals(_idName)) {
 				if (acceptQualifiedAttr) {
 					error(XDEF.XDEF432,_idName);//Option &{0} redefinition
 				}
 				acceptQualifiedAttr = true;
-				result._acceptQualifiedAttr =
-					(byte) ("acceptQualifiedAttr".equals(_idName) ? 'T' : 'F');
+				result._acceptQualifiedAttr = (byte) ("acceptQualifiedAttr".equals(_idName) ? 'T' : 'F');
 			} else if ("cdata".equals(_idName)) {
 				if (cdata) {
 					error(XDEF.XDEF432); // option redefinition
 				}
 				cdata = true;
-				if (kind == XMTEXT || kind == XMATTRIBUTE
-					&& (result.getName().equals("$text")
+				if (kind == XMTEXT || kind == XMATTRIBUTE && (result.getName().equals("$text")
 					|| result.getName().equals("$textcontent"))) {
 					result._cdata = 'T';
-					if ("textcontent".equals(result.getName())
-						&& result.maxOccurs() > 1) {
+					if ("textcontent".equals(result.getName()) && result.maxOccurs() > 1) {
 						if (_g._chkWarnings) {
-							//Maximum occurrence of item "&{0}" can not be
-							// higher then 1
+							//Maximum occurrence of item "&{0}" can not be higher then 1
 							error(XDEF.XDEF535, "textcontent");
 						}
 						result.setOccurrence(result.minOccurs(), 1);
 					}
 				} else {
-					//The token '&{0}' is not allowed here
-					error(XDEF.XDEF411, _idName);
+					error(XDEF.XDEF411, _idName); //The token '&{0}' is not allowed here
 				}
 			} else if ("clearReports".equals(_idName)
 				|| "preserveReports".equals(_idName)) {

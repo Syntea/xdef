@@ -51,10 +51,7 @@ public abstract class XNode implements XMNode {
 	 * @param xp XPool.
 	 * @param kind kind of node.
 	 */
-	public XNode(final String nsURI,
-		final String name,
-		final XDPool xp,
-		final short kind) {
+	public XNode(final String nsURI, final String name, final XDPool xp, final short kind) {
 		_occ = new XOccurrence();
 		_name = name == null ? "" : name.intern();
 		_nsURI = nsURI == null ? null : nsURI.intern();
@@ -67,8 +64,8 @@ public abstract class XNode implements XMNode {
 	 */
 	public final void setName(String name) {_name = name;}
 
-	/** Change namespace of node. Both the new namespace and tho old one
-	 * must not be empty. Otherwise the command is ignored.
+	/** Change namespace of node. Both the new namespace and tho old one must not be empty. Otherwise
+	 * the command is ignored.
 	 * @param ns the new name of node.
 	 */
 	public final void changeNS(String ns) {
@@ -139,9 +136,7 @@ public abstract class XNode implements XMNode {
 	/** Get position to source X-definition.
 	 * @return position to source X-definition or <i>null</i>.
 	 */
-	public final SPosition getSPosition() {
-		return _spos == null ? new SPosition() : _spos;
-	}
+	public final SPosition getSPosition() {return _spos == null ? new SPosition() : _spos;}
 
 	/** Set position of this node in XDPool.
 	 * @param xpos position to XDPool.
@@ -160,67 +155,43 @@ public abstract class XNode implements XMNode {
 	 */
 	public String toString() {
 		switch (_kind) {
-			case XMDEFINITION:
-				return "XMDEFINITION: " + (_name.isEmpty()?"(nameless)":_name);
-			case XMATTRIBUTE:
-				return "XMATTRIBUTE: " + _name + (_nsURI!=null?" : "+_nsURI:"");
-			case XMELEMENT:
-				return "XMELEMENT: " + _name + (_nsURI!=null?" : "+_nsURI:"");
-			case XMTEXT:
-				return "XMTEXT: text()";
-			case XMSEQUENCE:
-				return "XMSEQUENCE: " + _name;
-			case XMCHOICE:
-				return "XMCHOICE: " + _name;
-			case XMMIXED:
-				return "XMMIXED: " + _name;
-			case XMCOMMENT:
-				return "XMCOMMENT: " + _name;
-			case XMPI:
-				return "XMPI: " + _name;
-			case XMSELECTOR_END:
-				return "XMSELECTOR_END: " + _name;
-			case XMSELECTOR_END + 1:
-				return "REFERENCE: " + _name;
+			case XMDEFINITION: return "XMDEFINITION: " + (_name.isEmpty()?"(nameless)":_name);
+			case XMATTRIBUTE: return "XMATTRIBUTE: " + _name + (_nsURI!=null?" : "+_nsURI:"");
+			case XMELEMENT: return "XMELEMENT: " + _name + (_nsURI!=null?" : "+_nsURI:"");
+			case XMTEXT: return "XMTEXT: text()";
+			case XMSEQUENCE: return "XMSEQUENCE: " + _name;
+			case XMCHOICE: return "XMCHOICE: " + _name;
+			case XMMIXED: return "XMMIXED: " + _name;
+			case XMCOMMENT: return "XMCOMMENT: " + _name;
+			case XMPI: return "XMPI: " + _name;
+			case XMSELECTOR_END: return "XMSELECTOR_END: " + _name;
+			case XMSELECTOR_END + 1: return "REFERENCE: " + _name;
 		}
 		return "???";
 	}
 
-	//to be overriden!
 	/** Write this X object to XDWriter.
-	 * @param w XDWriter uset for writing.
+	 * @param w XDWriter used for writing.
 	 * @param l list of XNodes to be written.
 	 * @throws IOException if an error occurs.
 	 */
 	public abstract void writeXNode(XDWriter w,List<XNode> l)throws IOException;
 
-	final static XNode readXNode(final XDReader xr,
-		final XDefinition xd,
-		final List<XNode> list)
+	final static XNode readXNode(final XDReader xr, final XDefinition xd, final List<XNode> list)
 		throws IOException {
 		short kind = xr.readShort();
 		switch (kind) {
-			case -1:
-				return list.get(xr.readInt());
-			case XMATTRIBUTE:
-				return XData.readXData(xr, XMATTRIBUTE, xd);
-			case XMCOMMENT:
-				return XComment.readXComment(xr, xd);
-			case XMELEMENT:
-				return XElement.readXElement(xr, xd, list);
-			case XMPI:
-				return XPI.readXPI(xr, xd);
-			case XMTEXT:
-				return XData.readXData(xr, XMTEXT, xd);
+			case -1: return list.get(xr.readInt());
+			case XMATTRIBUTE: return XData.readXData(xr, XMATTRIBUTE, xd);
+			case XMCOMMENT: return XComment.readXComment(xr, xd);
+			case XMELEMENT: return XElement.readXElement(xr, xd, list);
+			case XMPI: return XPI.readXPI(xr, xd);
+			case XMTEXT: return XData.readXData(xr, XMTEXT, xd);
 			case XMSEQUENCE:
 			case XMCHOICE:
-			case XMMIXED:
-				return XSelector.readXSelector(xr, kind);
-			case XMSELECTOR_END:
-				return new XSelectorEnd();
-			default:
-				//Internal error&{0}{: }
-				throw new SIOException(SYS.SYS066,"Unexpected kind: "+kind);
+			case XMMIXED: return XSelector.readXSelector(xr, kind);
+			case XMSELECTOR_END: return new XSelectorEnd();
+			default: throw new SIOException(SYS.SYS066,"Unexpected kind: "+kind); //Internal error&{0}{: }
 		}
 	}
 
@@ -249,60 +220,58 @@ public abstract class XNode implements XMNode {
 
 	@Override
 	/** Return true if value of occurrence had been specified.
-	 * @return <i>true</i> if and only if occurrence is specified.
+	 * @return true if and only if occurrence is specified.
 	 */
 	public final boolean isSpecified() {return _occ.isSpecified();}
 
 	@Override
 	/** Return true if value of occurrence is set as illegal.
-	 * @return <i>true</i> if and only if occurrence is set as illegal.
+	 * @return true if and only if occurrence is set as illegal.
 	 */
 	public final boolean isIllegal() {return _occ.isIllegal();}
 
 	@Override
 	/** Return true if value of occurrence is set as ignored.
-	 * @return <i>true</i> if and only if occurrence is set as ignored.
+	 * @return true if and only if occurrence is set as ignored.
 	 */
 	public final boolean isIgnore() {return _occ.isIgnore();}
 
 	@Override
 	/** Return true if value of occurrence is set as fixed.
-	 * @return <i>true</i> if and only if occurrence is set as fixed.
+	 * @return true if and only if occurrence is set as fixed.
 	 */
 	public final boolean isFixed() {return _occ.isFixed();}
 
 	@Override
 	/** Return true if value of occurrence is set as required.
-	 * @return <i>true</i> if and only if occurrence is set as required.
+	 * @return true if and only if occurrence is set as required.
 	 */
 	public final boolean isRequired() {return _occ.isRequired();}
 
 	@Override
 	/** Return true if value of occurrence is set as optional.
-	 * @return <i>true</i> if and only if occurrence is set as optional.
+	 * @return true if and only if occurrence is set as optional.
 	 */
 	public final boolean isOptional() {return _occ.isOptional();}
 
 	@Override
 	/** Return true if value of occurrence is set as unbounded.
-	 * @return <i>true</i> if and only if occurrence is set as unbounded.
+	 * @return true if and only if occurrence is set as unbounded.
 	 */
 	public final boolean isUnbounded() {return _occ.isUnbounded();}
 
 	@Override
 	/** Return true if minimum is greater then 0 and maximum is unbounded.
-	 * @return <i>true</i> if and only if minimum is greater then 0 and
-	 * maximum is unbounded..
+	 * @return true if and only if minimum is greater then 0 and maximum is unbounded.
 	 */
 	public final boolean isMaxUnlimited() {return _occ.isMaxUnlimited();}
 
 	@Override
 	/** Get occurrence.
-	 * @return Occurrence of the node.
+	 * @return Occurrence of this node.
 	 */
-	public final XMOccurrence getOccurence() {
-		return new XOccurrence(_occ);
-	}
+	public final XMOccurrence getOccurence() {return new XOccurrence(_occ);}
+
 ////////////////////////////////////////////////////////////////////////////////
 // Protected methods
 ////////////////////////////////////////////////////////////////////////////////
@@ -312,13 +281,11 @@ public abstract class XNode implements XMNode {
 	 * @param rep reporter where to put errors.
 	 * @return true if both local names are equal.
 	 */
-	protected final boolean compareNameAndNS(final XNode y
-		, final ArrayReporter rep){
+	protected final boolean compareNameAndNS(final XNode y, final ArrayReporter rep) {
 		if (!getLocalName().equals(y.getLocalName())
 			|| getNSUri() != null && !getNSUri().equals(y.getNSUri())
 			|| getNSUri() == null && y.getNSUri() != null) {
-			//Names differs: &{0} and &{1}
-			rep.error(XDEF.XDEF289, getXDPosition(), y.getXDPosition());
+			rep.error(XDEF.XDEF289, getXDPosition(), y.getXDPosition()); //Names differs: &{0} and &{1}
 			compareNamespace(y, rep);
 			return false;
 		}
@@ -340,31 +307,25 @@ public abstract class XNode implements XMNode {
 		} else if (ux.equals(uy)) {
 			return true;
 		}
-		//Namespace differs: &{0} and &{1}
-		rep.error(XDEF.XDEF288, getXDPosition(), y.getXDPosition());
+		rep.error(XDEF.XDEF288, getXDPosition(), y.getXDPosition()); //Namespace differs: &{0} and &{1}
 		return false;
 	}
 
-	protected final boolean compareOccurrence(final XNode y,
-		final ArrayReporter rep) {
+	protected final boolean compareOccurrence(final XNode y, final ArrayReporter rep) {
 		if (maxOccurs()==y.maxOccurs() && minOccurs()==y.minOccurs()) {
 			return true;
 		}
-		//Occurrence differs: &{0} and &{1}
-		rep.error(XDEF.XDEF287, getXDPosition(), y.getXDPosition());
+		rep.error(XDEF.XDEF287, getXDPosition(), y.getXDPosition()); //Occurrence differs: &{0} and &{1}
 		return false;
 	}
 
-	/** Compare name, namespace and occurrence of the node from argument with
-	 * the this node.
+	/** Compare name, namespace and occurrence of the node from argument with the this node.
 	 * @param y XNode to be compared.
 	 * @param rep reporter where to put errors.
 	 * @return true names, namespaces and occurrences are equal.
 	 */
-	protected final boolean compareNameAndOccurrence(final XNode y,
-		final ArrayReporter rep) {
-		return compareNameAndNS(y, rep)
-			&& compareNamespace(y, rep) && compareOccurrence(y, rep);
+	protected final boolean compareNameAndOccurrence(final XNode y, final ArrayReporter rep) {
+		return compareNameAndNS(y, rep) && compareNamespace(y, rep) && compareOccurrence(y, rep);
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -374,17 +335,13 @@ public abstract class XNode implements XMNode {
 	/** Set occurrence values.
 	 * @param o occurrence object from which values are imported.
 	 */
-	public final void setOccurrence(final XMOccurrence o) {
-		_occ.setOccurrence(o);
-	}
+	public final void setOccurrence(final XMOccurrence o) {_occ.setOccurrence(o);}
 
 	/** Set occurrence from parameters.
 	 * @param min minimum.
 	 * @param max maximum.
 	 */
-	public final void setOccurrence(final int min, final int max) {
-		_occ.setOccurrence(min, max);
-	}
+	public final void setOccurrence(final int min, final int max) {_occ.setOccurrence(min, max);}
 
 	/** Set min occurrence.
 	 * @param min value of minimal occurrence.

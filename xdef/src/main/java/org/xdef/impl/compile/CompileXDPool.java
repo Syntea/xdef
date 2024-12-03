@@ -180,32 +180,32 @@ public final class CompileXDPool implements CodeTable, XDValueID {
 	 */
 	public final void parseURL(final URL url) {_precomp.parseURL(url);}
 
-	/** Get precompiled sources (PNodes) of X-definition items.
+	/** Get prepared sources (PNodes) of X-definition items.
 	 * @return array with PNodes with X-definitions.
 	 */
 	public List<PNode> getPXDefs() {return _xdefPNodes;}
 
-	/** Get precompiled sources (PNodes) of XDLexicon items.
+	/** Get prepared sources (PNodes) of XDLexicon items.
 	 * @return array with PNodes.
 	 */
 	public final List<PNode> getPLexicons() {return _lexicon;}
 
-	/** Get precompiled sources (PNodes) of collection items.
+	/** Get prepared sources (PNodes) of collection items.
 	 * @return array with PNodes.
 	 */
 	public final List<PNode> getPCollections() {return _listCollection;}
 
-	/** Get precompiled sources (PNodes) of declaration items.
+	/** Get prepared sources (PNodes) of declaration items.
 	 * @return array with PNodes.
 	 */
 	public final List<PNode> getPDeclarations() {return _listDecl;}
 
-	/** Get precompiled sources (PNodes) of components items.
+	/** Get prepared sources (PNodes) of components items.
 	 * @return array with PNodes.
 	 */
 	public final List<PNode> getPComponents() {return _listComponent;}
 
-	/** Get precompiled sources (PNodes) of BNF Grammar items.
+	/** Get prepared sources (PNodes) of BNF Grammar items.
 	 * @return array with PNodes.
 	 */
 	public final List<PNode> getPBNFs() {return _listBNF;}
