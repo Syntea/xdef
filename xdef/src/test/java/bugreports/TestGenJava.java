@@ -22,12 +22,17 @@ public class TestGenJava extends XDTester {
 
 	public static XDContainer x(XDContainer x, String a, String b, String mask) {return new DefContainer();}
 
-	private void test(String pckgName, String clsName, XDPool xp, String xdName, String xml) throws Exception{
+	private void test(String className, XDPool xp, String xdName, String xml) throws Exception{
+		int ndx = className.lastIndexOf('.');
+		final String pckg = ndx > 0 ? className.substring(0, ndx) : "";
+		final String cls = ndx > 0 ? className.substring(ndx + 1) : className;
 		// create java source with XDPool compiled from xdef
-		File f = new File(clearTempDir(), pckgName);
-		f.mkdir();
-		try (FileWriter swr = new FileWriter(new File(f, clsName + ".java"))) {
-			XDFactory.writeXDPoolClass(swr, clsName, pckgName, xp);
+		File f = ndx > 0 ? new File(clearTempDir(), pckg) : clearTempDir();
+		if (ndx > 0) {
+			f.mkdir();
+		}
+		try (FileWriter swr = new FileWriter(new File(f, cls + ".java"))) {
+			XDFactory.writeXDPoolClass(swr, cls, pckg, xp);
 		}
 		// compile created Java source
 		compileSources(f);
@@ -41,12 +46,12 @@ public class TestGenJava extends XDTester {
 		}
  /**********************************************************************************************************/
 		// get XDPool from the created class and run xparse of XML.
-		test1(pckgName, clsName, xdName, xml);
+		test1(className, xdName, xml);
 	}
 
-	private void test1(String pckgName, String clsName, String xdName, String xml) throws Exception {
+	private void test1(String className, String xdName, String xml) throws Exception {
 		// get XDPool from the created class.
-		Class<?> c = ClassLoader.getSystemClassLoader().loadClass(pckgName + "." + clsName);
+		Class<?> c = ClassLoader.getSystemClassLoader().loadClass(className);
 		Method m = c.getMethod("getXDPool");
 		m.setAccessible(true);
 		XDPool xp = (XDPool) m.invoke(null);
@@ -63,14 +68,19 @@ public class TestGenJava extends XDTester {
 		try {
 			xdef = "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.0\" root=\"A\"><A/></xd:def>";
 			xml = "<A/>";
-			test("bugreports", "TestGenJava_1", compile(xdef), "", xml);
+			test("TestGenJava_0", compile(xdef), "", xml);
+
+
+			xdef = "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.0\" root=\"A\"><A/></xd:def>";
+			xml = "<A/>";
+			test("bugreports.TestGenJava_1", compile(xdef), "", xml);
 
 			xdef =
 "<xd:def xmlns:xd=\"http://www.xdef.org/xdef/4.0\" root=\"A\">\n" +
 "   <A> <Part xd:script=\"+;\" a=\"? int(1,2)\" /> </A>\n" +
 "</xd:def>";
 			xml = "<A><Part a='1'/><Part a='2'/><Part/></A>";
-			test("bugreports", "TestGenJava_2", compile(xdef), "", xml);
+			test("bugreports.TestGenJava_2", compile(xdef), "", xml);
 
 			xdef =
 "<xd:def xmlns:xd='" + _xdNS + "' root = 'A'>\n"+
@@ -84,7 +94,7 @@ public class TestGenJava extends XDTester {
 "</A>\n"+
 "</xd:def>";
 			xml = "<A><B a='a' b='b' x='2023-12-08' y='2023-12-31'/><B/></A>";
-			test("bugreports", "TestGenJava_3", compile(xdef), "", xml);
+			test("bugreports.TestGenJava_3", compile(xdef), "", xml);
 
 			xdef =
 "<xd:collection xmlns:xd=\"http://www.syntea.cz/xdef/3.1\">\n" +
@@ -97,9 +107,9 @@ public class TestGenJava extends XDTester {
 "  </xd:def>\n" +
 "</xd:collection>";
 			xml = "<B/>";
-			test("bugreports", "TestGenJava_4", compile(xdef), "B", xml);
+			test("bugreports.TestGenJava_4", compile(xdef), "B", xml);
 			xml = "<A><B b='18.12.2023'/></A>";
-			test1("bugreports", "TestGenJava_4", "A", xml);
+			test1("bugreports.TestGenJava_4", "A", xml);
 
 			xdef =
 "<xd:collection xmlns:xd='http://www.xdef.org/xdef/4.2'>\n" +
@@ -117,7 +127,7 @@ public class TestGenJava extends XDTester {
 "</xd:def>\n" +
 "</xd:collection>";
 			xml = "<A a='a'><B b='b'/></A>";
-			test("bugreports", "TestGenJava_5", compile(xdef), "A", xml);
+			test("bugreports.TestGenJava_5", compile(xdef), "A", xml);
 		} catch (Exception ex) {fail(ex);}
 	}
 
