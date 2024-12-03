@@ -198,7 +198,7 @@ public class XDTools {
 	public static final XDValue createXDValue(final Object o) {return XBuilder.createXDValue(o);}
 
 	private static final int BUFLEN = 20000;
-	/** Write source Java code with given XDPool.
+	/** Create source Java code with given XDPool.
 	 * @param w where to write.
 	 * @param cls name of created class.
 	 * @param pckg package of created class.
@@ -212,7 +212,6 @@ public class XDTools {
 		pw.println("public final class " + cls + " extends org.xdef.XDPoolFromClass {");
 		pw.println("\tpublic static final org.xdef.XDPool getXDPool() {return getXDPool("
 			+ (!pckg.trim().isEmpty()? pckg + '.' : "") + cls + ".class);}");
-		pw.println("\tpublic " + cls + "() {}");
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		try (ObjectOutputStream out = new ObjectOutputStream(baos)) {
 			out.writeObject(xp);
@@ -231,7 +230,7 @@ public class XDTools {
 				pos += bufLen;
 				pw.println("\tprivate static final class B" + i + " {");
 				String b = new String(SUtils.encodeBase64(buf));
-				pw.println("\t\tpublic static final String b = \"" + b + "\";");
+				pw.println("\t\tprivate static final String b = \"" + b + "\";");
 				pw.println("\t}");
 			}
 			pw.print("}");
