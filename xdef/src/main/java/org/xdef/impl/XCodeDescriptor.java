@@ -2,10 +2,9 @@ package org.xdef.impl;
 
 import java.io.IOException;
 import org.xdef.XDPool;
-import org.xdef.sys.SRuntimeException;
 
 /** Script code descriptor.
- * @author  Vaclav Trojan
+ * @author Vaclav Trojan
  */
 public abstract class XCodeDescriptor extends XNode {
 
@@ -185,12 +184,6 @@ public abstract class XCodeDescriptor extends XNode {
 		_deflt = _onStartElement = _onAbsence = _onExcess = _onIllegalAttr =
 		_onIllegalText = _onIllegalElement = _varinit = -1;
 	}
-
-	/** Add node as child.
-	 * @param xnode The node to be added.
-	 * @throws SRuntimeException if an error occurs.
-	 */
-	abstract public void addNode(final XNode xnode);
 
 	final void writeXCodeDescriptor(XDWriter xw) throws IOException {
 		xw.writeShort(getKind());

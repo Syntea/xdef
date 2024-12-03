@@ -16,7 +16,6 @@ import static org.xdef.model.XMNode.XMELEMENT;
 import org.xdef.msg.SYS;
 import org.xdef.sys.SIOException;
 import org.xdef.sys.SPosition;
-import org.xdef.sys.SRuntimeException;
 
 /** Implementation of XMDefinition.
  * @author Vaclav Trojan
@@ -104,8 +103,7 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 	/** Get Element model with given namespace and name.
 	 * @param nsURI namespace URI of element or <i>null</i>.
 	 * @param name name of element (may be prefixed).
-	 * @return Element model with given namespace and name or return
-	 * <i>null</i> if such model not exists.
+	 * @return Element model with given namespace and name or return null if such model not exists.
 	 */
 	public final XMElement getModel(final String nsURI, final String name) {
 		String lockey;
@@ -157,8 +155,7 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 	@Override
 	/** Get version of X-definition.
 	 * @return version of X-definition
-	 * (see {@link org.xdef.XDConstants#XD2_0}
-	 * or {@link org.xdef.XDConstants#XD3_1}).
+	 * (see {@link org.xdef.XDConstants#XD2_0} or {@link org.xdef.XDConstants#XD3_1}).
 	 */
 	public final byte getXDVersion() {return _xdVersion;}
 
@@ -208,16 +205,6 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 	public final String getImplProperty(final String name) {return _properties.getProperty(name);}
 
 	@Override
-	/** Add node as child.
-	 * @param xnode The node to be added.
-	 * @throws SRuntimeException if this method is invoked here.
-	 */
-	public final void addNode(final XNode xnode) {
-		throw new SRuntimeException(SYS.SYS066, //Internal error: &{0}
-			"Attempt to add node to ScriptCodeDescriptor");
-	}
-
-	@Override
 	/** Write this X-definition to XDWriter.
 	 * @param wr where to write.
 	 * @param list list of nodes..
@@ -257,15 +244,13 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 	@Override
 	/** Compare X-definition with an object.
 	 * @param o object to be compared.
-	 * @return <i>true</i> if and only if the compared object is an
-	 * X-definition and if the name of it is equal to this.
+	 * @return true if and only if the compared object is an X-definition and if it's name equals to this.
 	 */
 	public final boolean equals(final Object o) {
 		if (o instanceof String) {
 			return getName().equals((String)o);
 		}
-		return o instanceof XDefinition &&
-			getName().equals(((XDefinition)o).getName());
+		return o instanceof XDefinition && getName().equals(((XDefinition)o).getName());
 	}
 
 	@Override
@@ -305,8 +290,7 @@ public final class XDefinition extends XCodeDescriptor implements XMDefinition {
 	public XVariable findVariable(final String name) {
 		XPool xp = (XPool) getXDPool();
 		for (String s: _importLocal) {
-			// first look to the list of local declarations
-			XVariable xv = xp.getVariable(s + name);
+			XVariable xv = xp.getVariable(s + name); // first look to the list of local declarations
 			if (xv != null) {
 				return xv;
 			}

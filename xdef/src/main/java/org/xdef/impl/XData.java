@@ -50,10 +50,8 @@ import static org.xdef.impl.compile.CompileBase.getTypeName;
 import org.xdef.impl.parsers.XDParseCDATA;
 import org.xdef.model.XMData;
 import org.xdef.model.XMDefinition;
-import org.xdef.msg.SYS;
 import org.xdef.msg.XDEF;
 import org.xdef.sys.ArrayReporter;
-import org.xdef.sys.SRuntimeException;
 import static org.xdef.impl.code.CodeTable.PARSEANDSTOP;
 
 /** Implementation of the model of attributes or text nodes.
@@ -93,7 +91,7 @@ public class XData extends XCodeDescriptor implements XMData, XDValueID, CodeTab
 
 	@Override
 	/** Write this XDATA to XDWriter. */
-	// This method can't be final, can be overwritten!
+	// This method can't be final, it can be overwritten!
 	public void writeXNode(final XDWriter xw, final List<XNode> list) throws IOException {
 		writeXCodeDescriptor(xw);
 		xw.writeShort(_valueType);
@@ -103,8 +101,7 @@ public class XData extends XCodeDescriptor implements XMData, XDValueID, CodeTab
 
 	@Override
 	/** Get value specified as default.
-	 * @return value specified as default or return <i>null</i>
-	 * if there was not specified a default value.
+	 * @return value specified as default or return null if there was not specified a default value.
 	 */
 	public final XDValue getDefaultValue() {
 		if (_deflt < 0) {
@@ -120,8 +117,7 @@ public class XData extends XCodeDescriptor implements XMData, XDValueID, CodeTab
 
 	@Override
 	/** Get value specified as fixed.
-	 * @return value specified as fixed or return <i>null</i>
-	 * if there was not specified a default value.
+	 * @return value specified as fixed or return null if there was not specified a default value.
 	 */
 	public final XDValue getFixedValue() {
 		if (_onAbsence < 0) {
@@ -160,7 +156,7 @@ public class XData extends XCodeDescriptor implements XMData, XDValueID, CodeTab
 			final XDValue[] xv = ((XPool) getXDPool()).getCode();
 			XDValue y = xv[xs];
 			if (y.getCode() == JMP_OP || (xs + 1 < xv.length && y.getCode() == CALL_OP
-					&& xv[xs+1].getCode() == STOP_OP)) {
+				&& xv[xs+1].getCode() == STOP_OP)) {
 			} else if (xs + 2 < xv.length && (y.getCode() == LD_GLOBAL || y.getCode() == LD_XMODEL)) {
 				String uniquesetName = "";
 				switch (xv[xs+1].getCode()) {
@@ -275,16 +271,6 @@ public class XData extends XCodeDescriptor implements XMData, XDValueID, CodeTab
 		XDValue p = getParseMethod();
 		return p != null && p.getItemId() == XD_PARSER && p instanceof XDParser
 			? ((XDParser) p).parserName() : "string";
-	}
-
-	@Override
-	/** Add node as child.
-	 * @param xnode The node to be added.
-	 * @throws SRuntimeException if an error occurs.
-	 */
-	public final void addNode(final XNode xnode) {
-		throw new SRuntimeException(SYS.SYS066, //Internal error: &{0}
-			"Attempt to add node to ScriptCodeDescriptor");
 	}
 
 	@Override
@@ -483,8 +469,7 @@ public class XData extends XCodeDescriptor implements XMData, XDValueID, CodeTab
 	 * @param x address to code of XDPool x.
 	 * @param y address to code of XDPool y.
 	 * @param full of all must be tested (implements/uses).
-	 * @return true if cods in both objects are compatible. Otherwise
-	 * return false.
+	 * @return true if cods in both objects are compatible. Otherwise return false.
 	 */
 	private static boolean compareCode(final XDValue[] cx,
 		final XDValue[] cy,
