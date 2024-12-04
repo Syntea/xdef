@@ -37,7 +37,7 @@ public class TestGenJava extends XDTester {
 		// compile created Java source
 		compileSources(f);
 /*********************************************************************************************************
-		// copy Java source file to source directory.
+		// copy Java source file to the test source directory.
 		File f1 = new File(getSourceDir(), clsName + ".java");
 		if (!f1.exists()) {
 			System.out.println(f1);
