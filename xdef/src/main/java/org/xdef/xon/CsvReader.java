@@ -77,8 +77,8 @@ public class CsvReader extends StringParser implements XonParsers {
 
 	@SuppressWarnings("unchecked")
 	/** Parse CSV from reader
-	 * @param source if it is string check file name, URL or input data
-	 * otherwise it can be a File, InputStream or Reader.
+	 * @param source if it is string check file name, URL or input data otherwise it can be a File,
+	 * InputStream or Reader.
 	 * @param separator value separator character.
 	 * @param skipHeader if true the header line is skipped.
 	 * @param sysId System ID (or null).
@@ -88,8 +88,7 @@ public class CsvReader extends StringParser implements XonParsers {
 		final char separator,
 		final boolean skipHeader,
 		final String sysId) {
-		XonTools.InputData indata =
-			XonTools.getInputFromObject(source, sysId);
+		XonTools.InputData indata = XonTools.getInputFromObject(source, sysId);
 		XonParser jp = new XonObjParser(true);
 		CsvReader xr = new CsvReader(indata._reader, jp);
 		xr._separator = separator;
@@ -150,15 +149,13 @@ public class CsvReader extends StringParser implements XonParsers {
 					if (c == _separator || c == '"') {
 						sb.append(c);
 					} else {
-						throw new RuntimeException(
-							"CSV Escape character error");
+						throw new RuntimeException(	"CSV Escape character error");
 					}
 					c = getCurrentChar();
 				} else if (c == '\"') {
 					peekChar();
 					if (eos()) {
-						throw new RuntimeException(
-							"CSV Quote character missing");
+						throw new RuntimeException("CSV Quote character missing");
 					}
 					for(;;) {
 						if (isChar('\"')) {
@@ -214,9 +211,7 @@ public class CsvReader extends StringParser implements XonParsers {
 	 * @param sb StringBuilder to which line is added.
 	 * @param separator separator character.
 	 */
-	private static void addCsvLine(final List csvLine,
-		final StringBuilder sb,
-		final char separator) {
+	private static void addCsvLine(final List csvLine, final StringBuilder sb, final char separator) {
 		boolean first = true;
 		for (Object o: csvLine) {
 			if (!first) {
@@ -256,8 +251,7 @@ public class CsvReader extends StringParser implements XonParsers {
 	 * @param separator separator character.
 	 * @return CSV string created from CSV object.
 	 */
-	public static final String toCsvString(final List<Object> csv,
-		final char separator) {
+	public static final String toCsvString(final List<Object> csv, final char separator) {
 		StringBuilder sb = new StringBuilder();
 		for (Object o : csv) {
 			if (o instanceof List) {

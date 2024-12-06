@@ -1,6 +1,6 @@
 # Version ${version}, release-date ${release.date}
 
-# Version 42.2.14, release-date 2024-12-04
+# Version 42.2.14, release-date 2024-12-06
 * A new static method `XDFactory.writeXDPoolClass(...)` has been implemented. This method generates the source
   code of the Java class class created from the XDPool object. This class contains astatic  method
   `getXDPool()` that returns the specified XDPool object.

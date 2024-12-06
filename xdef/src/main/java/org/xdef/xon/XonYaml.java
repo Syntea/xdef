@@ -8,9 +8,7 @@ import java.lang.reflect.Method;
 import org.xdef.msg.JSON;
 import org.xdef.sys.SRuntimeException;
 
-/** Tools for YAML.
- * Processing YAML objects requires the org.yaml.snakeyaml package
- * in the classpath.
+/** Tools for YAML. Processing YAML objects requires the org.yaml.snakeyaml package in the classpath.
  * @author Vaclav Trojan
  */
 public final class XonYaml {
@@ -22,8 +20,7 @@ public final class XonYaml {
 
 	/** Prepare YAML object, load  methods and dump method.
 	 * @return instance of org.yaml.snakeyaml.Yaml object.
-	 * @throws SRuntimeException if the package org.yaml.snakeyaml
-	 * is not available.
+	 * @throws SRuntimeException if the package org.yaml.snakeyaml is not available.
 	 */
 	private static void prepareYAML() throws SRuntimeException {
 		if (_yaml == null) {
@@ -32,20 +29,14 @@ public final class XonYaml {
 				_yamlConstructor = _yamlClass.getConstructor();
 				_yaml = _yamlConstructor.newInstance();
 				_yamlDump = _yamlClass.getDeclaredMethod("dump", Object.class);
-				_yamlLoadReader =
-					_yamlClass.getDeclaredMethod("load", Reader.class);
-				_yamlLoadInputStream =
-					_yamlClass.getDeclaredMethod("load", InputStream.class);
+				_yamlLoadReader = _yamlClass.getDeclaredMethod("load", Reader.class);
+				_yamlLoadInputStream = _yamlClass.getDeclaredMethod("load", InputStream.class);
 			} catch (ClassNotFoundException ex) {
-				//The package org.yaml.snakeyaml is not available.
-				//Please add it to classPath
+				//The package org.yaml.snakeyaml is not available. Please add it to classPath
 				throw new SRuntimeException(JSON.JSON101);
-			} catch (IllegalAccessException | IllegalArgumentException
-				| InstantiationException | NoSuchMethodException
-				| SecurityException | InvocationTargetException ex) {
-				throw new RuntimeException(
-					"Error when creating instance of org.yaml.snakeyaml.Yaml",
-					ex);
+			} catch (IllegalAccessException | IllegalArgumentException | InstantiationException
+				| NoSuchMethodException | SecurityException | InvocationTargetException ex) {
+				throw new RuntimeException("Error when creating instance of org.yaml.snakeyaml.Yaml", ex);
 			}
 		}
 	}
@@ -54,10 +45,9 @@ public final class XonYaml {
 		prepareYAML();
 		try {
 			return (String) _yamlDump.invoke(_yaml, XonUtils.xonToJson(o));
-		} catch (IllegalAccessException | IllegalArgumentException
-			| InvocationTargetException ex) {
-			throw new RuntimeException(ex.getCause() != null
-				&& ex.getCause().getMessage() != null ? ex.getCause() : ex);
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+			throw new RuntimeException(
+				ex.getCause() != null && ex.getCause().getMessage() != null ? ex.getCause() : ex);
 		}
 	}
 
@@ -70,10 +60,9 @@ public final class XonYaml {
 		prepareYAML();
 		try {
 			return _yamlLoadReader.invoke(_yaml, source);
-		} catch (IllegalAccessException | IllegalArgumentException
-			| InvocationTargetException ex) {
-			throw new RuntimeException(ex.getCause() != null
-				&& ex.getCause().getMessage() != null ? ex.getCause() : ex);
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+			throw new RuntimeException(
+				ex.getCause() != null && ex.getCause().getMessage() != null ? ex.getCause() : ex);
 		}
 	}
 
@@ -81,10 +70,9 @@ public final class XonYaml {
 		prepareYAML();
 		try {
 			return _yamlLoadInputStream.invoke(_yaml, source);
-		} catch (IllegalAccessException | IllegalArgumentException
-			| InvocationTargetException ex) {
-			throw new RuntimeException(ex.getCause() != null
-				&& ex.getCause().getMessage() != null ? ex.getCause() : ex);
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+			throw new RuntimeException(
+				ex.getCause() != null && ex.getCause().getMessage() != null ? ex.getCause() : ex);
 		}
 	}
 
@@ -106,9 +94,8 @@ public final class XonYaml {
 						s = s.substring(0, ndx) + key+"=\"" + s.substring(ndx1);
 						break;
 					case '"':
-						s = ("%script".equals(key) && ndx1 < s.length()
-							&& s.charAt(ndx1) == ':') //%script: -> %script=
-							? s.substring(0,ndx) + key+"=" + s.substring(++ndx1)
+						s = ("%script".equals(key) && ndx1 < s.length() && s.charAt(ndx1) == ':')
+							? s.substring(0,ndx) + key+"=" + s.substring(++ndx1) //%script: -> %script=
 							: s.substring(0, ndx) + key + s.substring(ndx1);
 				}
 			}
