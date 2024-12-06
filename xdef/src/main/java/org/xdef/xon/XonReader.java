@@ -3,6 +3,7 @@ package org.xdef.xon;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -120,8 +121,7 @@ public final class XonReader extends StringParser implements XonParsers {
 			return false;
 		}
 		SPosition spos = getPosition();
-		final String[] directives =
-			new String[]{SCRIPT_DIRECTIVE, ONEOF_DIRECTIVE};
+		final String[] directives = new String[]{SCRIPT_DIRECTIVE, ONEOF_DIRECTIVE};
 		int i = isOneOfTokens(directives);
 		if (i < 0) {
 			return false;
@@ -134,8 +134,7 @@ public final class XonReader extends StringParser implements XonParsers {
 			XonTools.JValue jv = readSimpleValue();
 			value = jv.getSBuffer();
 			if (!(jv.getValue() instanceof String)) {
-				//Value must be string with X-script
-				error(JSON.JSON018);
+				error(JSON.JSON018); //Value must be string with X-script
 			}
 		} else if (i == 0) { // $script
 			error(JSON.JSON002, "=");//"&{0}"&{1}{ or "}{"} expected
@@ -165,8 +164,7 @@ public final class XonReader extends StringParser implements XonParsers {
 				spos = getPosition();
 				if (_jdef && isToken(ANY_NAME)) {
 					if (wasAnyName) {
-						//Value pair &{0} already exists
-						error(JSON.JSON022, new SBuffer(ANY_NAME, spos));
+						error(JSON.JSON022, new SBuffer(ANY_NAME, spos)); //Value pair &{0} already exists
 					}
 					wasAnyName = true;
 					skipSpacesOrComments();
@@ -190,8 +188,7 @@ public final class XonReader extends StringParser implements XonParsers {
 				}
 				if (name != null) {
 					if (_jp.namedValue(name)) {
-						//Value pair &{0} already exists
-						error(JSON.JSON022, name);
+						error(JSON.JSON022, name); //Value pair &{0} already exists
 					}
 				}
 				readItem();
@@ -271,8 +268,7 @@ public final class XonReader extends StringParser implements XonParsers {
 				if (wasErrorReported) {
 					break;
 				}
-				 //"&{0}"&{1}{ or "}{"} expected
-				error(JSON.JSON002,",","]");
+				error(JSON.JSON002,",","]"); //"&{0}"&{1}{ or "}{"} expected
 				if (eos()) {
 					break;
 				}
@@ -291,9 +287,7 @@ public final class XonReader extends StringParser implements XonParsers {
 	 * @return parsed simpleValue. If the switch _genJObjects is true, then
 	 * the parsed simpleValue contains source position.
 	 */
-	private XonTools.JValue returnValue(SPosition spos, final Object x) {
-		return new XonTools.JValue(spos, x);
-	}
+	private XonTools.JValue returnValue(SPosition spos, final Object x) {return new XonTools.JValue(spos, x);}
 
 	/** Returns error and parsed simpleValue.
 	 * @param x parsed simpleValue to be returned.
@@ -335,16 +329,14 @@ public final class XonReader extends StringParser implements XonParsers {
 		} else if ((ch = isLetter()) != SParser.NOCHAR
 			|| (isChar('_') && (ch = '_') == '_')) { //not quoted
 			sb.append(ch);
-			while ((ch = getCurrentChar()) != SParser.NOCHAR
-				&& (Character.isLetter(ch) || ch=='-' || ch==' ' || ch=='_'
-				|| ch=='.' || ch==',' || ch=='/' || (ch>='0' && ch<='9'))) {
+			while ((ch = getCurrentChar()) != SParser.NOCHAR && (Character.isLetter(ch)
+				|| ch=='-' || ch==' ' || ch=='_' || ch=='.' || ch==',' || ch=='/' || (ch>='0' && ch<='9'))) {
 				sb.append(peekChar());
 			}
 		}
 		String result = sb.toString().trim();
 		if (result.isEmpty()) {
-			// Incorrect GPosition &{0}{: }
-			throw new SRuntimeException(XDEF.XDEF222, "name: " + result);
+			throw new SRuntimeException(XDEF.XDEF222, "name: " + result); // Incorrect GPosition &{0}{: }
 		}
 		return result;
 	}
@@ -409,9 +401,8 @@ public final class XonReader extends StringParser implements XonParsers {
 		} else if ((minus=isChar('-')) && ((floatNumber=isFloat())||isInteger())
 			|| ((floatNumber=isFloat()) || isInteger())) {
 			String s = getBufferPart(minus ? pos + 1 : pos, getIndex());
-			if (s.charAt(0) == '0' && s.length() > 1 &&
-				Character.isDigit(s.charAt(1))) {
-					error(JSON.JSON014); // Illegal leading zero in number
+			if (s.charAt(0) == '0' && s.length() > 1 && Character.isDigit(s.charAt(1))) {
+				error(JSON.JSON014); // Illegal leading zero in number
 			}
 			if (minus) {
 				s = '-' + s;
@@ -472,8 +463,7 @@ public final class XonReader extends StringParser implements XonParsers {
 		} else {
 			Object result;
 			char ch;
-			final String[] tokens = {"c\"","u\"","e\"","b(","x(","d","p(",
-				"g(","/","C(","t\"","P","-P"};
+			final String[] tokens = {"c\"","u\"","e\"","b(","x(","d","p(","g(","/","C(","t\"","P","-P"};
 			if (_xonMode&&(i=isOneOfTokens(tokens))>=0){
 				switch(tokens[i]) {
 					case "c\"": // character
@@ -491,13 +481,11 @@ public final class XonReader extends StringParser implements XonParsers {
 								new URI(XonTools.readJString(this)));
 						} catch (URISyntaxException ex) {}
 						setIndex(pos);
-						//XON/JSON value expected
-						return returnError(spos, null, JSON.JSON010, "[]{}");
+						return returnError(spos, null, JSON.JSON010, "[]{}"); //XON/JSON value expected
 
 					case "e\"": // Email address
 						try {
-							return returnValue(spos, new DefEmailAddr(
-								XonTools.readJString(this)));
+							return returnValue(spos, new DefEmailAddr(XonTools.readJString(this)));
 						} catch (Exception ex) {}
 						break;
 					case "b(": // base64 byte array
@@ -508,8 +496,7 @@ public final class XonReader extends StringParser implements XonParsers {
 									sb.append(ch);
 								}
 							}
-							result = new DefBytes(
-								SUtils.decodeBase64(sb.toString()), true);
+							result = new DefBytes(SUtils.decodeBase64(sb.toString()), true);
 							if (ch == ')') {
 								return returnValue(spos, result);
 							}
@@ -518,14 +505,12 @@ public final class XonReader extends StringParser implements XonParsers {
 					case "x(": // hexadecimal byte array
 						try {
 							StringBuilder sb = new StringBuilder();
-							while ((ch=isOneOfChars(
-								" \n\r0123456789ABCDEFabcdef")) != NOCHAR) {
+							while ((ch=isOneOfChars(" \n\r0123456789ABCDEFabcdef")) != NOCHAR) {
 								if (ch > ' ') {
 									sb.append(ch);
 								}
 							}
-							result = new DefBytes(
-								SUtils.decodeHex(sb.toString()), false);
+							result = new DefBytes(SUtils.decodeHex(sb.toString()), false);
 							if (isChar(')')) {
 								return returnValue(spos, result);
 							}
@@ -570,8 +555,8 @@ public final class XonReader extends StringParser implements XonParsers {
 					case "g(": // GPS position
 						if (isSignedFloat() || isSignedInteger()) {
 							double latitude = getParsedDouble();
-							if (isChar(',') && (isChar(' ') || true)
-								&& (isSignedFloat() || isSignedInteger())) {
+							if (isChar(',') && (isChar(' ')
+								|| true) && (isSignedFloat() || isSignedInteger())) {
 								double longitude = getParsedDouble();
 								double altitude = Double.MIN_VALUE;
 								String name = null;
@@ -599,15 +584,13 @@ public final class XonReader extends StringParser implements XonParsers {
 						break;
 					case "/": { // ipAddr
 						String s = "";
-						while ("0123456789abcdefABCDEF:.".indexOf(
-							getCurrentChar()) >= 0) {
+						while ("0123456789abcdefABCDEF:.".indexOf(getCurrentChar()) >= 0) {
 							s += peekChar();
 						}
 						try {
 							return returnValue(spos, InetAddress.getByName(s));
 						} catch(UnknownHostException ex) {
-							//invalid InetAddr
-							error(XDEF.XDEF809,	"ipAddr", s);
+							error(XDEF.XDEF809,	"ipAddr", s); //invalid InetAddr
 							return returnValue(spos, null);
 						}
 					}
@@ -621,8 +604,7 @@ public final class XonReader extends StringParser implements XonParsers {
 							if (curr != null) {
 								return returnValue(spos, curr);
 							}
-							//invalid currency
-							error(XDEF.XDEF809,	"currency",	s);
+							error(XDEF.XDEF809,	"currency",	s); //invalid currency
 							return returnValue(spos, null);
 						}
 						break;
@@ -635,8 +617,7 @@ public final class XonReader extends StringParser implements XonParsers {
 						if (ch =='"') {
 							return returnValue(spos, new DefTelephone(s));
 						}
-						//invalid telephone number
-						error(XDEF.XDEF809,	"telephone", s);
+						error(XDEF.XDEF809,	"telephone", s); //invalid telephone number
 						return returnValue(spos, null);
 					}
 					case "P":  // 'P' duration
@@ -649,8 +630,7 @@ public final class XonReader extends StringParser implements XonParsers {
 			}
 		}
 		setIndex(pos); // error
-		//JSON simpleValue expected
-		return returnError(spos, null, JSON.JSON010, "[]{}");
+		return returnError(spos, null, JSON.JSON010, "[]{}"); //JSON simpleValue expected
 	}
 
 	/** Read XON/JSON item.
@@ -674,8 +654,7 @@ public final class XonReader extends StringParser implements XonParsers {
 				skipSpacesOrComments();
 				XonTools.JValue jv = readSimpleValue();
 				if (!(((XonTools.JValue) jv).getValue() instanceof String)) {
-					//After ":" in the command %anyObj must follow simpleValue
-					error(JSON.JSON021);
+					error(JSON.JSON021); //After ":" in the command %anyObj must follow simpleValue
 				} else {
 					val = jv.getSBuffer();
 				}
@@ -683,10 +662,8 @@ public final class XonReader extends StringParser implements XonParsers {
 			_jp.xdScript(name, val);
 		} else {
 			XonTools.JValue jv = readSimpleValue();
-			if (_jdef && (jv == null || jv.getValue() == null
-				|| !(jv.getValue() instanceof String))) {
-				//Value in X-definition must be a string with X-script
-				error(JSON.JSON018);
+			if (_jdef && (jv == null || jv.getValue() == null || !(jv.getValue() instanceof String))) {
+				error(JSON.JSON018); //Value in X-definition must be a string with X-script
 				if (jv != null) {
 					Object val = jv.getValue();
 					jv = new XonTools.JValue(jv.getPosition(),
@@ -792,9 +769,7 @@ public final class XonReader extends StringParser implements XonParsers {
 	 * @param convertXDBytes flag if XDBytes objects are conterted to byte[].
 	 * @return parsed XON object.
 	 */
-	public static final Object parseXON(final Reader in,
-		final String sysId,
-		final boolean convertXDBytes) {
+	public static final Object parseXON(final Reader in, final String sysId, final boolean convertXDBytes) {
 		return parseXonJson(in, sysId, true, convertXDBytes);
 	}
 
@@ -804,34 +779,28 @@ public final class XonReader extends StringParser implements XonParsers {
 	 * @param convertXDBytes flag if XDBytes objects are conterted to byte[].
 	 * @return parsed JSON object.
 	 */
-	public static final Object parseJSON(final Reader in,
-		final String sysId,
-		final boolean convertXDBytes) {
+	public static final Object parseJSON(final Reader in, final String sysId, final boolean convertXDBytes) {
 		return parseXonJson(in, sysId, false, convertXDBytes);
 	}
 
 	/** Parse XON source data.
 	 * @param in input stream with XON source data.
 	 * @param sysId System ID of source position or null.
-	 * @param convertXDBytes flag if XDBytes objects are conterted to byte[].
+	 * @param convertBytes flag if XDBytes objects are conterted to byte[].
 	 * @return parsed XON object.
 	 */
-	public static final Object parseXON(final InputStream in,
-		final String sysId,
-		final boolean convertXDBytes) {
-		return parseXonJson(getXonReader(in),sysId,true, convertXDBytes);
+	public static final Object parseXON(final InputStream in, final String sysId, final boolean convertBytes){
+		return parseXonJson(getXonReader(in),sysId,true, convertBytes);
 	}
 
 	/** Parse JSON source data.
 	 * @param in Reader with JSON source data.
 	 * @param sysId System ID of source position or null.
-	 * @param convertXDBytes flag if XDBytes objects are conterted to byte[].
+	 * @param convertBytes flag if XDBytes objects are conterted to byte[].
 	 * @return parsed JSON object.
 	 */
-	public static final Object parseJSON(final InputStream in,
-		final String sysId,
-		final boolean convertXDBytes) {
-		return parseXonJson(getXonReader(in),sysId,false, convertXDBytes);
+	public static final Object parseJSON(final InputStream in, final String sysId,final boolean convertBytes){
+		return parseXonJson(getXonReader(in),sysId,false, convertBytes);
 	}
 
 	/** This class reads charset directive and creates Reader if the data
@@ -863,15 +832,12 @@ public final class XonReader extends StringParser implements XonParsers {
 					s += (char) i;
 				}
 				if (XonNames.ENCODING_DIRECTIVE.equals(s)) {
-					while((i = readChar(in,encoding,buf,count,baos)) == ' '
-						|| i == '\t') {} // skip spaces
+					while((i = readChar(in,encoding,buf,count,baos)) == ' ' || i == '\t') {} // skip spaces
 					if (i == '=') {
-						while((i=readChar(in,encoding,buf,count,baos)) == ' '
-							|| i == '\t') {}
+						while((i=readChar(in,encoding,buf,count,baos)) == ' ' || i == '\t') {}
 					} else { // missing eq sign
 						//Incorrect %encoding directive: "&{0}"
-						throw new SRuntimeException(
-							JSON.JSON081, baos.toByteArray());
+						throw new SRuntimeException(JSON.JSON081, baos.toByteArray());
 					}
 					String enc = "";
 					if (i == '"') { // is quote
@@ -882,13 +848,11 @@ public final class XonReader extends StringParser implements XonParsers {
 						}
 						if (i != '"') { // missing end quote
 							//Incorrect %encoding directive: "&{0}"
-							throw new SRuntimeException(
-								JSON.JSON081, baos.toByteArray());
+							throw new SRuntimeException(JSON.JSON081, baos.toByteArray());
 						}
 					}
 					if (enc.isEmpty()) {
-						//Charset name is missing
-						throw new SRuntimeException(JSON.JSON083);
+						throw new SRuntimeException(JSON.JSON083); //Charset name is missing
 					}
 					encoding = enc;
 				}
@@ -898,9 +862,8 @@ public final class XonReader extends StringParser implements XonParsers {
 		}
 	}
 
-	/** Creates Reader from input stream. If data starts with %encoding
-	 * directive the reader is created with the specified encoding. Otherwise,
-	 * the UTF-8 encoding is used.
+	/** Creates Reader from input stream. If data starts with %encoding directive the reader is created with
+	 * the specified encoding. Otherwise, the UTF-8 encoding is used.
 	 * @param in input stream wit XON/JSON data.
 	 * @return reader with detected encoding.
 	 */
@@ -912,11 +875,9 @@ public final class XonReader extends StringParser implements XonParsers {
 			} else if ("X-ISO-10646-UCS-4-3412".equals(x._encoding)) {
 				return new Reader_UCS_4_3412(x.getInputStream());
 			}
-			return new java.io.InputStreamReader(x.getInputStream(),
-				java.nio.charset.Charset.forName(x._encoding));
+			return new InputStreamReader(x.getInputStream(), Charset.forName(x._encoding));
 		} catch (IOException ex) {
-			//Unsupported encoding name&{0}{: "}{"}
-			throw new SRuntimeException(SYS.SYS052, ex);
+			throw new SRuntimeException(SYS.SYS052, ex); //Unsupported encoding name&{0}{: "}{"}
 		}
 	}
 }

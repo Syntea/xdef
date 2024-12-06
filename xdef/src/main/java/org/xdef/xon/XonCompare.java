@@ -97,8 +97,8 @@ final class XonCompare {
 		return s + "]\n";
 	}
 
-	/** Compare two XON/JSON objects. Return an empty string if both objects
-	 * are equal, otherwise, return string with different items.
+	/** Compare two XON/JSON objects. Return an empty string if both objects are equal.
+	 * Otherwise, return string with different items.
 	 * @param a first object with XON/JSON data.
 	 * @param b second object with XON/JSON data.
 	 * @return true if and only if both objects contains equal data.
@@ -225,8 +225,8 @@ final class XonCompare {
 			} else {
 				return false;
 			}
-		} else if (o1==null||o1 instanceof XDValue&&((XDValue) o1).isNull()) {
-			return o2==null||o2 instanceof XDValue&&((XDValue) o2).isNull();
+		} else if (o1==null || o1 instanceof XDValue&&((XDValue) o1).isNull()) {
+			return o2==null || o2 instanceof XDValue&&((XDValue) o2).isNull();
 		}
 		try {
 			return o1.equals(o2);

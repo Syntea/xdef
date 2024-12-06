@@ -46,9 +46,7 @@ public class XonObjParser implements XonParser {
 			o = ((XDBytes) o).getBytes();
 		}
 		switch (_kind) {
-			case 1:
-				_arrays.peek().add(o);
-				break;
+			case 1: _arrays.peek().add(o);break;
 			case 2:
 				String name = _names.pop();
 				_maps.peek().put(name, o);
