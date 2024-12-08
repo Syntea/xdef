@@ -144,10 +144,8 @@ public final class XonReader extends StringParser implements XonParsers {
 		return true;
 	}
 
-	/** Read XON/JSON map.
-	 * @throws SRuntimeException is an error occurs.
-	 */
-	private void readMap() throws SRuntimeException {
+	/** Read XON/JSON map. */
+	private void readMap() {
 		_jp.mapStart(getPosition());
 		skipSpacesOrComments();
 		SPosition spos = getPosition();
@@ -229,10 +227,8 @@ public final class XonReader extends StringParser implements XonParsers {
 		_jp.mapEnd(this);
 	}
 
-	/** Read JSON/XON array.
-	 * @throws SRuntimeException is an error occurs.
-	 */
-	private void readArray() throws SRuntimeException {
+	/** Read JSON/XON array. */
+	private void readArray() {
 		skipSpacesOrComments();
 		_jp.arrayStart(getPosition());
 		if (isChar(']')) { // empty array
@@ -344,9 +340,8 @@ public final class XonReader extends StringParser implements XonParsers {
 	/** Read XON/JSON simple simpleValue.
 	 * @return parsed simpleValue: String, Number, Boolean or null
 	 * (or XON object).
-	 * @throws SRuntimeException is an error occurs.
 	 */
-	private XonTools.JValue readSimpleValue() throws SRuntimeException {
+	private XonTools.JValue readSimpleValue() {
 		SPosition spos = getPosition();
 		int i;
 		boolean minus, floatNumber;
@@ -633,10 +628,8 @@ public final class XonReader extends StringParser implements XonParsers {
 		return returnError(spos, null, JSON.JSON010, "[]{}"); //JSON simpleValue expected
 	}
 
-	/** Read XON/JSON item.
-	 * @throws SRuntimeException if an error occurs.
-	 */
-	private void readItem() throws SRuntimeException {
+	/** Read XON/JSON item. */
+	private void readItem() {
 		skipSpacesOrComments();
 		if (eos()) {
 			fatal(JSON.JSON007); //unexpected eof
@@ -694,10 +687,8 @@ public final class XonReader extends StringParser implements XonParsers {
 	public final void setJsonMode() {_acceptComments=_xonMode=_jdef=false;}
 
 	@Override
-	/** Parse XON/JSON source data (depends on the flag "_xon").
-	 * @throws SRuntimeException if an error occurs,
-	 */
-	public final void parse() throws SRuntimeException {
+	/** Parse XON/JSON source data (depends on the flag "_xon"). */
+	public final void parse() {
 		if (!_jdef && isToken(XonNames.ENCODING_DIRECTIVE)) { //encoding
 			int pos1 = getIndex() - XonNames.ENCODING_DIRECTIVE.length();
 			while(isOneOfChars(" \t") > 0){}
